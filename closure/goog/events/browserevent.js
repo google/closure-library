@@ -62,7 +62,8 @@ goog.require('goog.userAgent');
  * reflow. If layerX or layerY is not defined, offsetX and offsetY will be used
  * as usual.
  */
-goog.define('goog.events.USE_LAYER_XY_AS_OFFSET_XY', false);
+goog.events.USE_LAYER_XY_AS_OFFSET_XY =
+    goog.define('goog.events.USE_LAYER_XY_AS_OFFSET_XY', false);
 
 /**
  * Accepts a browser event object and creates a patched, cross browser event

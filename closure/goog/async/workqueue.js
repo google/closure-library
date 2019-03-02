@@ -40,7 +40,8 @@ goog.async.WorkQueue = function() {
 
 
 /** @define {number} The maximum number of entries to keep for recycling. */
-goog.define('goog.async.WorkQueue.DEFAULT_MAX_UNUSED', 100);
+goog.async.WorkQueue.DEFAULT_MAX_UNUSED =
+    goog.define('goog.async.WorkQueue.DEFAULT_MAX_UNUSED', 100);
 
 
 /** @const @private {goog.async.FreeList<goog.async.WorkItem>} */

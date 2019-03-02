@@ -38,7 +38,7 @@ goog.net.tmpnetwork.GOOGLECOM_TIMEOUT = 10000;
  * @define {string} url to use to test for internet connectivity.
  * Use protocol-relative URLs to avoid insecure content warnings in IE.
  */
-goog.define(
+goog.net.tmpnetwork.TEST_URL = goog.define(
     'goog.net.tmpnetwork.TEST_URL', '//www.google.com/images/cleardot.gif');
 
 

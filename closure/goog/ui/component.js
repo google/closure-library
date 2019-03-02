@@ -160,7 +160,8 @@ goog.inherits(goog.ui.Component, goog.events.EventTarget);
  *     document, and avoid calling enterDocument if it isn't. If false, we
  *     maintain legacy behavior (always call enterDocument from decorate).
  */
-goog.define('goog.ui.Component.ALLOW_DETACHED_DECORATION', false);
+goog.ui.Component.ALLOW_DETACHED_DECORATION =
+    goog.define('goog.ui.Component.ALLOW_DETACHED_DECORATION', false);
 
 
 /**
@@ -178,7 +179,8 @@ goog.ui.Component.prototype.idGenerator_ = goog.ui.IdGenerator.getInstance();
  *     1: Left-to-right.
  *     -1: Right-to-left.
  */
-goog.define('goog.ui.Component.DEFAULT_BIDI_DIR', 0);
+goog.ui.Component.DEFAULT_BIDI_DIR =
+    goog.define('goog.ui.Component.DEFAULT_BIDI_DIR', 0);
 
 
 /**

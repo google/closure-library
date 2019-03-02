@@ -31,7 +31,7 @@ goog.provide('goog.json.Serializer');
  * anymore so this is safe to enable for parsing JSPB. Using native JSON is
  * faster and safer than the default implementation using `eval`.
  */
-goog.define('goog.json.USE_NATIVE_JSON', false);
+goog.json.USE_NATIVE_JSON = goog.define('goog.json.USE_NATIVE_JSON', false);
 
 /**
  * @define {boolean} If true, try the native JSON parsing API first. If it
@@ -40,7 +40,7 @@ goog.define('goog.json.USE_NATIVE_JSON', false);
  * be set by `goog.json.setErrorLogger`. If it is not set then the error
  * is ignored.
  */
-goog.define('goog.json.TRY_NATIVE_JSON', false);
+goog.json.TRY_NATIVE_JSON = goog.define('goog.json.TRY_NATIVE_JSON', false);
 
 
 /**

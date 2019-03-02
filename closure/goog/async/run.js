@@ -23,7 +23,7 @@ goog.require('goog.async.throwException');
  * assuming either the native, or polyfill version will be used. Does still
  * permit tests to use forceNextTick.
  */
-goog.define('goog.ASSUME_NATIVE_PROMISE', false);
+goog.ASSUME_NATIVE_PROMISE = goog.define('goog.ASSUME_NATIVE_PROMISE', false);
 
 /**
  * Fires the provided callback just before the current callstack unwinds, or as

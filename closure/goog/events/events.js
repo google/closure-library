@@ -133,7 +133,8 @@ goog.events.CaptureSimulationMode = {
  * @define {number} The capture simulation mode for IE8-. By default,
  *     this is ON.
  */
-goog.define('goog.events.CAPTURE_SIMULATION_MODE', 2);
+goog.events.CAPTURE_SIMULATION_MODE =
+    goog.define('goog.events.CAPTURE_SIMULATION_MODE', 2);
 
 
 /**

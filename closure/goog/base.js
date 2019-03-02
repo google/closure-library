@@ -210,7 +210,7 @@ goog.define = function(name, defaultValue) {
  * purposes and it is difficult for the JSCompiler to statically determine
  * whether they are used.
  */
-goog.define('goog.DEBUG', true);
+goog.DEBUG = goog.define('goog.DEBUG', true);
 
 
 /**
@@ -233,7 +233,7 @@ goog.define('goog.DEBUG', true);
  * be used instead of the new code (he).
  *
  */
-goog.define('goog.LOCALE', 'en');  // default to en
+goog.LOCALE = goog.define('goog.LOCALE', 'en');  // default to en
 
 
 /**
@@ -247,7 +247,7 @@ goog.define('goog.LOCALE', 'en');  // default to en
  * relying on non-standard implementations, specify
  * "--define goog.TRUSTED_SITE=false" to the compiler.
  */
-goog.define('goog.TRUSTED_SITE', true);
+goog.TRUSTED_SITE = goog.define('goog.TRUSTED_SITE', true);
 
 
 /**
@@ -258,21 +258,23 @@ goog.define('goog.TRUSTED_SITE', true);
  * @see https://goo.gl/PudQ4y
  *
  */
-goog.define('goog.STRICT_MODE_COMPATIBLE', false);
+goog.STRICT_MODE_COMPATIBLE = goog.define('goog.STRICT_MODE_COMPATIBLE', false);
 
 
 /**
  * @define {boolean} Whether code that calls {@link goog.setTestOnly} should
  *     be disallowed in the compilation unit.
  */
-goog.define('goog.DISALLOW_TEST_ONLY_CODE', COMPILED && !goog.DEBUG);
+goog.DISALLOW_TEST_ONLY_CODE =
+    goog.define('goog.DISALLOW_TEST_ONLY_CODE', COMPILED && !goog.DEBUG);
 
 
 /**
  * @define {boolean} Whether to use a Chrome app CSP-compliant method for
  *     loading scripts via goog.require. @see appendScriptSrcNode_.
  */
-goog.define('goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING', false);
+goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING =
+    goog.define('goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING', false);
 
 
 /**
@@ -821,7 +823,7 @@ goog.addDependency = function(relPath, provides, requires, opt_loadFlags) {
  * provided (and depend on the fact that some outside tool correctly ordered
  * the script).
  */
-goog.define('goog.ENABLE_DEBUG_LOADER', true);
+goog.ENABLE_DEBUG_LOADER = goog.define('goog.ENABLE_DEBUG_LOADER', true);
 
 
 /**
@@ -1004,14 +1006,14 @@ goog.instantiatedSingletons_ = [];
  * However in some environments the use of `eval` is banned
  * so we provide an alternative.
  */
-goog.define('goog.LOAD_MODULE_USING_EVAL', true);
+goog.LOAD_MODULE_USING_EVAL = goog.define('goog.LOAD_MODULE_USING_EVAL', true);
 
 
 /**
  * @define {boolean} Whether the exports of goog.modules should be sealed when
  * possible.
  */
-goog.define('goog.SEAL_MODULE_EXPORTS', goog.DEBUG);
+goog.SEAL_MODULE_EXPORTS = goog.define('goog.SEAL_MODULE_EXPORTS', goog.DEBUG);
 
 
 /**
@@ -1038,7 +1040,7 @@ goog.DEPENDENCIES_ENABLED = !COMPILED && goog.ENABLE_DEBUG_LOADER;
 // NOTE(sdh): we could expand this to accept a language level to bypass
 // detection: e.g. goog.TRANSPILE == 'es5' would transpile ES6 files but
 // would leave ES3 and ES5 files alone.
-goog.define('goog.TRANSPILE', 'detect');
+goog.TRANSPILE = goog.define('goog.TRANSPILE', 'detect');
 
 /**
  * @define {boolean} If true assume that ES modules have already been
@@ -1047,7 +1049,8 @@ goog.define('goog.TRANSPILE', 'detect');
  * the debug loader and transpile server side. Thus this is only respected if
  * goog.TRANSPILE is "never".
  */
-goog.define('goog.ASSUME_ES_MODULES_TRANSPILED', false);
+goog.ASSUME_ES_MODULES_TRANSPILED =
+    goog.define('goog.ASSUME_ES_MODULES_TRANSPILED', false);
 
 
 /**
@@ -1066,14 +1069,14 @@ goog.define('goog.ASSUME_ES_MODULES_TRANSPILED', false);
  * goog.TRANSPILE is set to 'always' and then forcing the language level to be
  * something lower than what the environment detects.
  */
-goog.define('goog.TRANSPILE_TO_LANGUAGE', '');
+goog.TRANSPILE_TO_LANGUAGE = goog.define('goog.TRANSPILE_TO_LANGUAGE', '');
 
 
 /**
  * @define {string} Path to the transpiler.  Executing the script at this
  * path (relative to base.js) should define a function $jscomp.transpile.
  */
-goog.define('goog.TRANSPILER', 'transpile.js');
+goog.TRANSPILER = goog.define('goog.TRANSPILER', 'transpile.js');
 
 
 /**
@@ -2332,7 +2335,8 @@ goog.defineClass.ClassDescriptor;
  * When sealing is disabled the constructor function will not be wrapped by
  * goog.defineClass, making it incompatible with ES6 class methods.
  */
-goog.define('goog.defineClass.SEAL_CLASS_INSTANCES', goog.DEBUG);
+goog.defineClass.SEAL_CLASS_INSTANCES =
+    goog.define('goog.defineClass.SEAL_CLASS_INSTANCES', goog.DEBUG);
 
 
 /**

@@ -46,7 +46,8 @@ goog.net.XmlHttp = function() {
  * `goog.net.XmlHttpDefines.ASSUME_NATIVE_XHR` instead.
  * TODO(ruilopes): Collapse both defines.
  */
-goog.define('goog.net.XmlHttp.ASSUME_NATIVE_XHR', false);
+goog.net.XmlHttp.ASSUME_NATIVE_XHR =
+    goog.define('goog.net.XmlHttp.ASSUME_NATIVE_XHR', false);
 
 
 /** @const */
@@ -57,7 +58,8 @@ goog.net.XmlHttpDefines = {};
  * @define {boolean} Whether to assume XMLHttpRequest exists. Setting this to
  *     true eliminates the ActiveX probing code.
  */
-goog.define('goog.net.XmlHttpDefines.ASSUME_NATIVE_XHR', false);
+goog.net.XmlHttpDefines.ASSUME_NATIVE_XHR =
+    goog.define('goog.net.XmlHttpDefines.ASSUME_NATIVE_XHR', false);
 
 
 /**

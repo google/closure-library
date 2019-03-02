@@ -26,7 +26,8 @@ goog.require('goog.string');
  * @define {boolean} Whether we know at compile-time that the browser doesn't
  * have flash.
  */
-goog.define('goog.userAgent.flash.ASSUME_NO_FLASH', false);
+goog.userAgent.flash.ASSUME_NO_FLASH =
+    goog.define('goog.userAgent.flash.ASSUME_NO_FLASH', false);
 
 
 /**

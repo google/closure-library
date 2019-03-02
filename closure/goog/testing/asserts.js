@@ -1500,7 +1500,7 @@ goog.testing.asserts.isArrayIndexProp_ = function(prop) {
 };
 
 /** @define {boolean} */
-goog.define('goog.EXPORT_ASSERTIONS', true);
+goog.EXPORT_ASSERTIONS = goog.define('goog.EXPORT_ASSERTIONS', true);
 /*
  * These symbols are both exported in the global namespace (for legacy
  * reasons) and as part of the goog.testing.asserts namespace. Although they

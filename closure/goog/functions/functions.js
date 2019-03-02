@@ -335,7 +335,8 @@ goog.functions.create = function(constructor, var_args) {
  * @define {boolean} Whether the return value cache should be used.
  *    This should only be used to disable caches when testing.
  */
-goog.define('goog.functions.CACHE_RETURN_VALUE', true);
+goog.functions.CACHE_RETURN_VALUE =
+    goog.define('goog.functions.CACHE_RETURN_VALUE', true);
 
 
 /**

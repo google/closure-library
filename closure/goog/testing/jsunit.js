@@ -34,7 +34,8 @@ goog.require('goog.userAgent');
  * @define {boolean} If this code is being parsed by JsTestC, we let it disable
  * the onload handler to avoid running the test in JsTestC.
  */
-goog.define('goog.testing.jsunit.AUTO_RUN_ONLOAD', true);
+goog.testing.jsunit.AUTO_RUN_ONLOAD =
+    goog.define('goog.testing.jsunit.AUTO_RUN_ONLOAD', true);
 
 
 /**
@@ -43,7 +44,8 @@ goog.define('goog.testing.jsunit.AUTO_RUN_ONLOAD', true);
  * event if the page has iframes.  The appropriate value is zero;
  * maximum should be 500.  Do not use this value to support asynchronous tests.
  */
-goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 0);
+goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS =
+    goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 0);
 
 
 (function() {

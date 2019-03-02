@@ -34,7 +34,7 @@ goog.provide('goog.i18n.bidi.Format');
  *
  * {@see goog.i18n.bidi.IS_RTL}
  */
-goog.define('goog.i18n.bidi.FORCE_RTL', false);
+goog.i18n.bidi.FORCE_RTL = goog.define('goog.i18n.bidi.FORCE_RTL', false);
 
 
 /**

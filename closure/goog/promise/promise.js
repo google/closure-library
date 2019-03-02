@@ -203,7 +203,8 @@ goog.Promise = function(resolver, opt_context) {
  * @define {boolean} Whether traces of `then` calls should be included in
  * exceptions thrown
  */
-goog.define('goog.Promise.LONG_STACK_TRACES', false);
+goog.Promise.LONG_STACK_TRACES =
+    goog.define('goog.Promise.LONG_STACK_TRACES', false);
 
 
 /**
@@ -215,7 +216,8 @@ goog.define('goog.Promise.LONG_STACK_TRACES', false);
  * Rejections are rethrown as quickly as possible by default. A negative value
  * disables rejection handling entirely.
  */
-goog.define('goog.Promise.UNHANDLED_REJECTION_DELAY', 0);
+goog.Promise.UNHANDLED_REJECTION_DELAY =
+    goog.define('goog.Promise.UNHANDLED_REJECTION_DELAY', 0);
 
 
 /**
@@ -284,7 +286,8 @@ goog.Promise.CallbackEntry_.prototype.reset = function() {
  * @define {number} The number of currently unused objects to keep around for
  *    reuse.
  */
-goog.define('goog.Promise.DEFAULT_MAX_UNUSED', 100);
+goog.Promise.DEFAULT_MAX_UNUSED =
+    goog.define('goog.Promise.DEFAULT_MAX_UNUSED', 100);
 
 
 /** @const @private {goog.async.FreeList<!goog.Promise.CallbackEntry_>} */

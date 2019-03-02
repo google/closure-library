@@ -24,7 +24,8 @@ goog.provide('goog.dom.animationFrame.polyfill');
 /**
  * @define {boolean} If true, will install the requestAnimationFrame polyfill.
  */
-goog.define('goog.dom.animationFrame.polyfill.ENABLED', true);
+goog.dom.animationFrame.polyfill.ENABLED =
+    goog.define('goog.dom.animationFrame.polyfill.ENABLED', true);
 
 
 /**

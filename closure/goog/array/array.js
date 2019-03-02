@@ -39,7 +39,8 @@ goog.require('goog.asserts');
  * Setting goog.TRUSTED_SITE to false will automatically set
  * NATIVE_ARRAY_PROTOTYPES to false.
  */
-goog.define('goog.NATIVE_ARRAY_PROTOTYPES', goog.TRUSTED_SITE);
+goog.NATIVE_ARRAY_PROTOTYPES =
+    goog.define('goog.NATIVE_ARRAY_PROTOTYPES', goog.TRUSTED_SITE);
 
 
 /**
@@ -47,7 +48,8 @@ goog.define('goog.NATIVE_ARRAY_PROTOTYPES', goog.TRUSTED_SITE);
  * array functions where appropriate (e.g., `Array#filter`) and remove the
  * unused pure JS implementation.
  */
-goog.define('goog.array.ASSUME_NATIVE_FUNCTIONS', false);
+goog.array.ASSUME_NATIVE_FUNCTIONS =
+    goog.define('goog.array.ASSUME_NATIVE_FUNCTIONS', false);
 
 
 /**

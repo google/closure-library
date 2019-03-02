@@ -31,13 +31,15 @@ goog.require('goog.string.internal');
  * @define {boolean} Enables HTML escaping of lowercase letter "e" which helps
  * with detection of double-escaping as this letter is frequently used.
  */
-goog.define('goog.string.DETECT_DOUBLE_ESCAPING', false);
+goog.string.DETECT_DOUBLE_ESCAPING =
+    goog.define('goog.string.DETECT_DOUBLE_ESCAPING', false);
 
 
 /**
  * @define {boolean} Whether to force non-dom html unescaping.
  */
-goog.define('goog.string.FORCE_NON_DOM_HTML_UNESCAPING', false);
+goog.string.FORCE_NON_DOM_HTML_UNESCAPING =
+    goog.define('goog.string.FORCE_NON_DOM_HTML_UNESCAPING', false);
 
 
 /**
