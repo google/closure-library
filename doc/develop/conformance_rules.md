@@ -373,7 +373,7 @@ Closure (as well as some libraries built on top of
 Closure)
 include several APIs that consume plain strings, and pass them on to an API that
 process that string in an injection-vulnerability-prone way (most commonly, an
-assigmnent to `.innerHTML`). Thus, use of such APIs incurs similar risks of
+assignment to `.innerHTML`). Thus, use of such APIs incurs similar risks of
 injection vulnerabilities as the underlying DOM API (e.g., `innerHTML`
 assignment). Due to these risks, conformance rules disallow the use of such
 APIs. The respective conformance rules' error message refers to the equivalent,
