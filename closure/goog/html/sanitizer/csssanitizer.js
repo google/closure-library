@@ -185,15 +185,16 @@ goog.html.sanitizer.CssSanitizer.getOnlyStyleRules_ = function(cssRules) {
  */
 goog.html.sanitizer.CssSanitizer.sanitizeStyleSheetString = function(
     textContent, opt_containerId, opt_uriRewriter) {
-  var styleTag =
-      goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement(
-          '<style>' + textContent + '</style>');
-  if (styleTag == null) {
+  var styleTag = /** @type {?HTMLStyleElement} */
+      (goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement(
+          '<style>' + textContent + '</style>'));
+  if (styleTag == null || styleTag.sheet == null) {
     return goog.html.SafeStyleSheet.EMPTY;
   }
   var containerId = opt_containerId != undefined ? opt_containerId : null;
   return goog.html.sanitizer.CssSanitizer.sanitizeStyleSheet_(
-      styleTag.sheet, containerId, opt_uriRewriter);
+      /** @type {!CSSStyleSheet} */ (styleTag.sheet), containerId,
+      opt_uriRewriter);
 };
 
 
