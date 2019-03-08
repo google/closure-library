@@ -460,7 +460,7 @@ goog.dom.setProperties = function(element, properties) {
     if (key == 'style') {
       element.style.cssText = val;
     } else if (key == 'class') {
-      element.className = val;
+      element.className = goog.asserts.assertString(val);
     } else if (key == 'for') {
       element.htmlFor = val;
     } else if (goog.dom.DIRECT_ATTRIBUTE_MAP_.hasOwnProperty(key)) {
