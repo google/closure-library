@@ -3567,7 +3567,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     // 2) A src node for this, which just hopefully lets the browser load it a
     //    little early (no need to parse #3).
     // 3) Import the module and register it.
-    // 4) Clear the module state at the correct time. Guarnteed to run even
+    // 4) Clear the module state at the correct time. Guaranteed to run even
     //    if there is an error in the module (#3 will not run if there is an
     //    error in the module).
     var beforeKey = goog.Dependency.registerCallback_(function() {
