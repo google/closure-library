@@ -30,6 +30,7 @@ goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
+goog.require('goog.html.trustedtypes');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
 goog.require('goog.labs.userAgent.browser');
@@ -84,7 +85,7 @@ goog.html.SafeHtml = function() {
    * The contained value of this SafeHtml.  The field has a purposely ugly
    * name to make (non-compiled) code that attempts to directly access this
    * field stand out.
-   * @private {string}
+   * @private {!TrustedHTML|string}
    */
   this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = '';
 
@@ -147,7 +148,7 @@ goog.html.SafeHtml.prototype.implementsGoogStringTypedString = true;
  * @override
  */
 goog.html.SafeHtml.prototype.getTypedStringValue = function() {
-  return this.privateDoNotAccessOrElseSafeHtmlWrappedValue_;
+  return this.privateDoNotAccessOrElseSafeHtmlWrappedValue_.toString();
 };
 
 
@@ -178,6 +179,17 @@ if (goog.DEBUG) {
  *     `goog.asserts.AssertionError`.
  */
 goog.html.SafeHtml.unwrap = function(safeHtml) {
+  return goog.html.SafeHtml.unwrapTrustedHTML(safeHtml).toString();
+};
+
+
+/**
+ * Unwraps value as TrustedHTML if supported or as a string if not.
+ * @param {!goog.html.SafeHtml} safeHtml
+ * @return {!TrustedHTML|string}
+ * @see goog.html.SafeHtml.unwrap
+ */
+goog.html.SafeHtml.unwrapTrustedHTML = function(safeHtml) {
   // Perform additional run-time type-checking to ensure that safeHtml is indeed
   // an instance of the expected type.  This provides some additional protection
   // against security bugs due to application code that disables type checks.
@@ -858,7 +870,11 @@ goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse = function(
  */
 goog.html.SafeHtml.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(
     html, dir) {
-  this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = html;
+  this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ =
+      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
+      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createHTML(
+          html) :
+      html;
   this.dir_ = dir;
   return this;
 };

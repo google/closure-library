@@ -21,13 +21,23 @@ goog.provide('goog.html.safeUrlTest');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.safeUrlTestVectors');
+goog.require('goog.html.trustedtypes');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.object');
 goog.require('goog.string.Const');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
 goog.setTestOnly('goog.html.safeUrlTest');
+
+
+var stubs = new goog.testing.PropertyReplacer();
+var policy = goog.createTrustedTypesPolicy('closure_test');
+
+function tearDown() {
+  stubs.reset();
+}
 
 
 function testSafeUrl() {
@@ -273,6 +283,21 @@ function testUnwrap() {
 
   var exception = assertThrows(function() { goog.html.SafeUrl.unwrap(evil); });
   assertContains('expected object of type SafeUrl', exception.message);
+}
+
+
+function testUnwrapTrustedURL() {
+  var safeValue = goog.html.SafeUrl.sanitize('https://example.com/');
+  var trustedValue = goog.html.SafeUrl.unwrapTrustedURL(safeValue);
+  assertEquals(safeValue.getTypedStringValue(), trustedValue);
+  stubs.set(
+      goog.html.trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
+  safeValue = goog.html.SafeUrl.sanitize('https://example.com/');
+  trustedValue = goog.html.SafeUrl.unwrapTrustedURL(safeValue);
+  assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
+  assertTrue(
+      goog.global.TrustedURL ? trustedValue instanceof TrustedURL :
+                               goog.isString(trustedValue));
 }
 
 
