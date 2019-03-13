@@ -70,7 +70,6 @@ requirement: {
   whitelist_regexp: '.+/closure/goog/testing/'
   whitelist_regexp: '.+/closure/goog/ui/editor/bubble.js'
   whitelist_regexp: '.+/closure/goog/ui/editor/toolbarcontroller.js'
-  whitelist: 'javascript/jsaction/actionflow.js'
   whitelist: 'javascript/jfk/activityindicator/activityindicator.js' # Compiler bug? Line 193
 }
 
