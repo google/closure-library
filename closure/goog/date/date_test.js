@@ -726,6 +726,16 @@ function testDateTime_fromIsoString() {
   assertEquals('Got 11 hours from ' + iso, 11, date.getHours());
   assertEquals('Got 22 minutes from ' + iso, 22, date.getMinutes());
   assertEquals('Got 33 seconds from ' + iso, 33, date.getSeconds());
+
+  // On a DST boundary, using a UTC timestamp
+  iso = '2019-03-10T11:22:33Z';
+  date = goog.date.DateTime.fromIsoString(iso);
+  assertEquals('Got 2019 from ' + iso, 2019, date.getUTCFullYear());
+  assertEquals('Got March from ' + iso, 2, date.getUTCMonth());
+  assertEquals('Got 10th from ' + iso, 10, date.getUTCDate());
+  assertEquals('Got 11 hours from ' + iso, 11, date.getUTCHours());
+  assertEquals('Got 22 minutes from ' + iso, 22, date.getUTCMinutes());
+  assertEquals('Got 33 seconds from ' + iso, 33, date.getUTCSeconds());
 }
 
 
