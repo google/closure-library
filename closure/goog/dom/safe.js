@@ -111,10 +111,13 @@ goog.dom.safe.isInnerHtmlCleanupRecursive_ =
       if (goog.DEBUG && typeof document === 'undefined') {
         return false;
       }
+      // Create 3 nested <div>s without using innerHTML.
+      // We're not chaining the appendChilds in one call,  as this breaks
+      // in a DocumentFragment.
       var div = document.createElement('div');
-      div.innerHTML =
-          goog.html.SafeHtml.unwrapTrustedHTML(goog.html.SafeHtml.create(
-              'div', {}, goog.html.SafeHtml.create('div')));
+      var childDiv = document.createElement('div');
+      childDiv.appendChild(document.createElement('div'));
+      div.appendChild(childDiv);
       // `firstChild` is null in Google Js Test.
       if (goog.DEBUG && !div.firstChild) {
         return false;
