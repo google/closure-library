@@ -36,6 +36,7 @@ goog.require('goog.events.KeyNames');
 goog.require('goog.events.Keys');
 goog.require('goog.object');
 goog.require('goog.ui.KeyboardEventData');
+goog.require('goog.ui.SyntheticKeyboardEvent');
 goog.require('goog.userAgent');
 
 
@@ -690,6 +691,9 @@ goog.ui.KeyboardShortcutHandler.prototype.initializeKeyListener = function(
   goog.events.listen(
       this.keyTarget_, goog.events.EventType.KEYDOWN,
       this.handleBrowserKeyDown_, undefined /* opt_capture */, this);
+  goog.events.listen(
+      this.keyTarget_, goog.ui.SyntheticKeyboardEvent.Type.KEYDOWN,
+      this.handleSyntheticKeyDown_, undefined /* opt_capture */, this);
 
   // Windows uses ctrl+alt keys (a.k.a. alt-graph keys) for typing characters
   // on European keyboards (e.g. ctrl+alt+e for an an euro sign.) Unfortunately,
@@ -701,11 +705,18 @@ goog.ui.KeyboardShortcutHandler.prototype.initializeKeyListener = function(
     goog.events.listen(
         this.keyTarget_, goog.events.EventType.KEYPRESS,
         this.handleWindowsBrowserKeyPress_, undefined /* opt_capture */, this);
+    goog.events.listen(
+        this.keyTarget_, goog.ui.SyntheticKeyboardEvent.Type.KEYPRESS,
+        this.handleWindowsSyntheticKeyPress_, undefined /* opt_capture */,
+        this);
   }
 
   goog.events.listen(
       this.keyTarget_, goog.events.EventType.KEYUP, this.handleBrowserKeyUp_,
       undefined /* opt_capture */, this);
+  goog.events.listen(
+      this.keyTarget_, goog.ui.SyntheticKeyboardEvent.Type.KEYUP,
+      this.handleSyntheticKeyUp_, undefined /* opt_capture */, this);
 };
 
 
@@ -716,6 +727,16 @@ goog.ui.KeyboardShortcutHandler.prototype.initializeKeyListener = function(
  */
 goog.ui.KeyboardShortcutHandler.prototype.handleBrowserKeyUp_ = function(e) {
   this.handleKeyUp_(goog.ui.KeyboardEventData.fromBrowserEvent(e));
+};
+
+
+/**
+ * Keyup handler for synthetic events.
+ * @param {!goog.ui.SyntheticKeyboardEvent} e
+ * @private
+ */
+goog.ui.KeyboardShortcutHandler.prototype.handleSyntheticKeyUp_ = function(e) {
+  this.handleKeyUp_(e.getData());
 };
 
 
@@ -781,6 +802,17 @@ goog.ui.KeyboardShortcutHandler.prototype.handleWindowsBrowserKeyPress_ =
 
 
 /**
+ * Handler for when a synthetic keypress event is fired on Windows.
+ * @param {!goog.ui.SyntheticKeyboardEvent} e
+ * @private
+ */
+goog.ui.KeyboardShortcutHandler.prototype.handleWindowsSyntheticKeyPress_ =
+    function(e) {
+  this.handleWindowsKeyPress_(e.getData());
+};
+
+
+/**
  * Handler for when a keypress event is fired on Windows.
  * @param {!goog.ui.KeyboardEventData} data
  * @private
@@ -822,14 +854,23 @@ goog.ui.KeyboardShortcutHandler.prototype.clearKeyListener = function() {
   goog.events.unlisten(
       this.keyTarget_, goog.events.EventType.KEYDOWN,
       this.handleBrowserKeyDown_, false, this);
+  goog.events.unlisten(
+      this.keyTarget_, goog.ui.SyntheticKeyboardEvent.Type.KEYDOWN,
+      this.handleSyntheticKeyDown_, false, this);
   if (goog.userAgent.WINDOWS) {
     goog.events.unlisten(
         this.keyTarget_, goog.events.EventType.KEYPRESS,
         this.handleWindowsBrowserKeyPress_, false, this);
+    goog.events.unlisten(
+        this.keyTarget_, goog.ui.SyntheticKeyboardEvent.Type.KEYPRESS,
+        this.handleWindowsSyntheticKeyPress_, false, this);
   }
   goog.events.unlisten(
       this.keyTarget_, goog.events.EventType.KEYUP, this.handleBrowserKeyUp_,
       false, this);
+  goog.events.unlisten(
+      this.keyTarget_, goog.ui.SyntheticKeyboardEvent.Type.KEYUP,
+      this.handleSyntheticKeyUp_, false, this);
   this.keyTarget_ = null;
 };
 
@@ -1002,6 +1043,17 @@ goog.ui.KeyboardShortcutHandler.makeStroke_ = function(
 goog.ui.KeyboardShortcutHandler.prototype.handleBrowserKeyDown_ = function(
     event) {
   this.handleKeyDown_(goog.ui.KeyboardEventData.fromBrowserEvent(event));
+};
+
+
+/**
+ * Keydown handler for synthetic events.
+ * @param {!goog.ui.SyntheticKeyboardEvent} event
+ * @private
+ */
+goog.ui.KeyboardShortcutHandler.prototype.handleSyntheticKeyDown_ = function(
+    event) {
+  this.handleKeyDown_(event.getData());
 };
 
 
