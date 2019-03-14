@@ -972,6 +972,7 @@ function testInactiveTransaction() {
     var assertCorrectError = function(err) {
       assertEquals(expectedCode, err.getName());
     };
+    var keyRange = goog.db.KeyRange.bound('a', 'a');
     promises.push(
         store.put({key: 'another', value: 'thing'})
             .then(failOp('putting'), assertCorrectError));
@@ -999,6 +1000,10 @@ function testInactiveTransaction() {
     promises.push(
         index.getAllKeys('anything')
             .then(failOp('getting all keys from index'), assertCorrectError));
+    promises.push(index.getAll(keyRange).then(
+        failOp('getting all from index'), assertCorrectError));
+    promises.push(index.getAllKeys(keyRange).then(
+        failOp('getting all from index'), assertCorrectError));
     return goog.Promise.all(promises);
   };
 
@@ -1158,6 +1163,7 @@ function testGetMultipleRecordsFromIndex() {
     var index =
         db.createTransaction(['store']).objectStore('store').getIndex('index');
     var promises = [];
+    var keyRange = goog.db.KeyRange.bound('a', 'a');
     promises.push(index.getAll().addCallback(function(results) {
       assertNotUndefined(results);
       assertEquals(3, results.length);
@@ -1176,6 +1182,16 @@ function testGetMultipleRecordsFromIndex() {
       assertEquals(1, results.length);
       assertArrayEquals(['3'], results);
     }));
+    promises.push(index.getAll(keyRange).addCallback(function(results) {
+      assertNotUndefined(results);
+      assertEquals(2, results.length);
+    }));
+    promises.push(index.getAllKeys(keyRange).addCallback(function(results) {
+      assertNotUndefined(results);
+      assertEquals(2, results.length);
+      assertArrayEquals(['1', '2'], results);
+    }));
+
 
     return goog.Promise.all(promises).then(function() { return db; });
   };
