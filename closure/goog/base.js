@@ -2631,13 +2631,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
       return evalCheck('(()=>{"use strict";' + es6fullTest + '})()');
     });
-    // TODO(joeltine): Remove es6-impl references for b/31340605.
-    // Consider es6-impl (widely-implemented es6 features) to be supported
-    // whenever es6 is supported. Technically es6-impl is a lower level of
-    // support than es6, but we don't have tests specifically for it.
-    addNewerLanguageTranspilationCheck('es6-impl', function() {
-      return true;
-    });
     // ** and **= are the only new features in 'es7'
     addNewerLanguageTranspilationCheck('es7', function() {
       return evalCheck('2 ** 2 == 4');
