@@ -821,6 +821,29 @@ function testIsWindow() {
   }
 }
 
+function testIsInDocument() {
+  assertThrows(function() {
+    goog.dom.isInDocument(document);
+  });
+
+  assertTrue(goog.dom.isInDocument(document.documentElement));
+
+  var div = document.createElement('div');
+  assertFalse(goog.dom.isInDocument(div));
+  document.body.appendChild(div);
+  assertTrue(goog.dom.isInDocument(div));
+
+  var textNode = document.createTextNode('');
+  assertFalse(goog.dom.isInDocument(textNode));
+  div.appendChild(textNode);
+  assertTrue(goog.dom.isInDocument(textNode));
+
+  var attribute = document.createAttribute('a');
+  assertFalse(goog.dom.isInDocument(attribute));
+  div.setAttributeNode(attribute);
+  assertTrue(goog.dom.isInDocument(attribute));
+}
+
 function testGetOwnerDocument() {
   assertEquals(goog.dom.getOwnerDocument($('p1')), document);
   assertEquals(goog.dom.getOwnerDocument(document.body), document);

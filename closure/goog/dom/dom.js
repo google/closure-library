@@ -1713,6 +1713,20 @@ goog.dom.findCommonAncestor = function(var_args) {
 
 
 /**
+ * Returns whether node is in a document or detached. Throws an error if node
+ * itself is a document. This specifically handles two cases beyond naive use of
+ * builtins: (1) it works correctly in IE, and (2) it works for elements from
+ * different documents/iframes. If neither of these considerations are relevant
+ * then a simple `document.contains(node)` may be used instead.
+ * @param {!Node} node
+ * @return {boolean}
+ */
+goog.dom.isInDocument = function(node) {
+  return (node.ownerDocument.compareDocumentPosition(node) & 16) == 16;
+};
+
+
+/**
  * Returns the owner document for a node.
  * @param {Node|Window} node The node to get the document for.
  * @return {!Document} The document owning the node.
