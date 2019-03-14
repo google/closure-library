@@ -172,11 +172,13 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
  * has the property specified, and otherwise used the defined defaultValue.
  * When compiled the default can be overridden using the compiler options or the
  * value set in the CLOSURE_DEFINES object. Returns the defined value so that it
- * can be used safely in modules.
+ * can be used safely in modules. Note that the value type MUST be either
+ * boolean, number, or string.
  *
  * @param {string} name The distinguished name to provide.
- * @param {string|number|boolean} defaultValue
- * @return {string|number|boolean} The defined value.
+ * @param {T} defaultValue
+ * @return {T} The defined value.
+ * @template T
  */
 goog.define = function(name, defaultValue) {
   var value = defaultValue;
