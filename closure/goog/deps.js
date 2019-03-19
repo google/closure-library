@@ -650,7 +650,7 @@ goog.addDependency('labs/mock/mock.js', ['goog.labs.mock', 'goog.labs.mock.Verif
 goog.addDependency('labs/mock/mock_test.js', ['goog.labs.mockTest'], ['goog.array', 'goog.labs.mock', 'goog.labs.mock.VerificationError', 'goog.labs.testing.AnythingMatcher', 'goog.labs.testing.GreaterThanMatcher', 'goog.string', 'goog.testing.jsunit'], {'lang': 'es6'});
 goog.addDependency('labs/mock/verificationmode.js', ['goog.labs.mock.verification', 'goog.labs.mock.verification.VerificationMode'], [], {});
 goog.addDependency('labs/mock/verificationmode_test.js', ['goog.labs.mock.VerificationModeTest'], ['goog.labs.mock.verification', 'goog.testing.testSuite'], {'module': 'goog'});
-goog.addDependency('labs/net/image.js', ['goog.labs.net.image'], ['goog.Promise', 'goog.events.EventHandler', 'goog.events.EventType', 'goog.net.EventType', 'goog.userAgent'], {});
+goog.addDependency('labs/net/image.js', ['goog.labs.net.image'], ['goog.Promise', 'goog.events.EventHandler', 'goog.events.EventType', 'goog.html.SafeUrl', 'goog.net.EventType', 'goog.userAgent'], {});
 goog.addDependency('labs/net/image_test.js', ['goog.labs.net.imageTest'], ['goog.labs.net.image', 'goog.string', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.testing.recordFunction'], {});
 goog.addDependency('labs/net/webchannel.js', ['goog.net.WebChannel'], ['goog.events', 'goog.events.Event', 'goog.events.Listenable', 'goog.net.XmlHttpFactory'], {});
 goog.addDependency('labs/net/webchannel/basetestchannel.js', ['goog.labs.net.webChannel.BaseTestChannel'], ['goog.labs.net.webChannel.Channel', 'goog.labs.net.webChannel.ChannelRequest', 'goog.labs.net.webChannel.WebChannelDebug', 'goog.labs.net.webChannel.requestStats', 'goog.net.WebChannel'], {});
