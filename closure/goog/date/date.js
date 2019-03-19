@@ -460,63 +460,32 @@ goog.date.setDateFromIso8601Week_ = function(d, week, dayOfWeek) {
  */
 goog.date.setIso8601TimeOnly_ = function(d, formatted) {
   // first strip timezone info from the end
-  var timezoneParts = formatted.match(goog.date.splitTimezoneStringRegex_);
+  var parts = formatted.match(goog.date.splitTimezoneStringRegex_);
 
-  var offsetMinutes;  // Offset from UTC if not local time
-  var formattedTime;  // The time components of the input string; no timezone.
-
-  if (timezoneParts) {
-    // Trim off the timezone characters.
-    formattedTime =
-        formatted.substring(0, formatted.length - timezoneParts[0].length);
-
-    // 'Z' indicates a UTC timestring.
-    if (timezoneParts[0] === 'Z') {
-      offsetMinutes = 0;
-    } else {
-      offsetMinutes = Number(timezoneParts[2]) * 60 + Number(timezoneParts[3]);
-      offsetMinutes *= (timezoneParts[1] == '-') ? 1 : -1;
+  var offset = 0;  // local time if no timezone info
+  if (parts) {
+    if (parts[0] != 'Z') {
+      offset = Number(parts[2]) * 60 + Number(parts[3]);
+      offset *= parts[1] == '-' ? 1 : -1;
     }
-  } else {
-    formattedTime = formatted;
+    offset -= d.getTimezoneOffset();
+    formatted = formatted.substr(0, formatted.length - parts[0].length);
   }
 
-  var timeParts = formattedTime.match(goog.date.splitTimeStringRegex_);
-  if (!timeParts) {
+  // then work out the time
+  parts = formatted.match(goog.date.splitTimeStringRegex_);
+  if (!parts) {
     return false;
   }
 
-  // We have to branch on local vs non-local times because we can't always
-  // calculate the correct UTC offset for the specified time. Specifically, the
-  // offset for daylight-savings time depends on the date being set. Therefore,
-  // when an offset is specified, we apply it verbatim.
-  if (timezoneParts) {
-    goog.asserts.assertNumber(offsetMinutes);
+  d.setHours(Number(parts[1]));
+  d.setMinutes(Number(parts[2]) || 0);
+  d.setSeconds(Number(parts[3]) || 0);
+  d.setMilliseconds(parts[4] ? Number(parts[4]) * 1000 : 0);
 
-    // Convert the date part into UTC. This is important because the local date
-    // can differ from the UTC date, and the date part of an ISO 8601 string is
-    // always set in terms of the local date.
-    var localYear = d.getYear();
-    var localMonth = d.getMonth();
-    var localDate = d.getDate();
-    d.setUTCFullYear(localYear);
-    d.setUTCMonth(localMonth);
-    d.setUTCDate(localDate);
-
-    d.setUTCHours(Number(timeParts[1]));
-    d.setUTCMinutes(Number(timeParts[2]) || 0);
-    d.setUTCSeconds(Number(timeParts[3]) || 0);
-    d.setUTCMilliseconds(timeParts[4] ? Number(timeParts[4]) * 1000 : 0);
-
-    if (offsetMinutes != 0) {
-      // Adjust the date and time according to the specified timezone.
-      d.setTime(d.getTime() + offsetMinutes * 60000);
-    }
-  } else {
-    d.setHours(Number(timeParts[1]));
-    d.setMinutes(Number(timeParts[2]) || 0);
-    d.setSeconds(Number(timeParts[3]) || 0);
-    d.setMilliseconds(timeParts[4] ? Number(timeParts[4]) * 1000 : 0);
+  if (offset != 0) {
+    // adjust the date and time according to the specified timezone
+    d.setTime(d.getTime() + offset * 60000);
   }
 
   return true;
