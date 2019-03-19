@@ -121,13 +121,13 @@ var formatDirectionTestData = [
       'en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.SECOND, 'now'),
   new DirectionData(
       'en', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.SECOND, '1 second ago'),
+
   new DirectionData(
       'en', RelativeDateTimeFormat.Style.LONG, 1, RelativeDateTimeFormat.Unit.MINUTE, 'in 1 minute'),
-
   new DirectionData(
       'en', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.MINUTE, '1 minute ago'),
-  new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 1, RelativeDateTimeFormat.Unit.HOUR, 'in 1 hour'),
 
+  new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 1, RelativeDateTimeFormat.Unit.HOUR, 'in 1 hour'),
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.HOUR, '1 hour ago'),
 
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 1, RelativeDateTimeFormat.Unit.MONTH, 'next month'),
@@ -153,6 +153,18 @@ var formatDirectionTestData = [
   new DirectionData('fr', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.SECOND, 'maintenant')
 ];
 
+// TODO(icu/12171): re-examine when ICU4J and CLDR data are updated.
+var forcedNumericTestData = [
+  // Special cases for MINUTE and HOUR, and SECOND != 0, forced numeric mode.
+    new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 0.0, RelativeDateTimeFormat.Unit.SECOND, 'now'),
+  new DirectionData(
+      'en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.MINUTE, 'in 0 minutes'),  // Not "this minute"
+  new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.SECOND, 'now'),
+  new DirectionData(
+      'en', RelativeDateTimeFormat.Style.LONG, 1, RelativeDateTimeFormat.Unit.MINUTE, 'in 1 minute'),
+  new DirectionData(
+      'en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.HOUR, 'in 0 hours'),  // Not "this hour"
+];
 
 var formatNumericTestData = [
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 7, RelativeDateTimeFormat.Unit.DAY, 'in 7 days'),
@@ -162,6 +174,12 @@ var formatNumericTestData = [
 
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.DAY, 'in 0 days'),
   new DirectionData('en', RelativeDateTimeFormat.Style.SHORT, 2, RelativeDateTimeFormat.Unit.HOUR, 'in 2 hr.'),
+
+  new DirectionData('en', RelativeDateTimeFormat.Style.SHORT, 0, RelativeDateTimeFormat.Unit.HOUR, 'in 0 hr.'),  // Not "this hour"
+
+    new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.SECOND, 'in 0 seconds'),
+
+    new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -0, RelativeDateTimeFormat.Unit.SECOND, '0 seconds ago'),
 
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 2, RelativeDateTimeFormat.Unit.DAY, 'in 2 days'),
 
@@ -179,6 +197,8 @@ var formatNumericTestData = [
   new DirectionData('en', RelativeDateTimeFormat.Style.SHORT, 6, RelativeDateTimeFormat.Unit.WEEK, 'in 6 wk.'),
   new DirectionData('en', RelativeDateTimeFormat.Style.NARROW, 2, RelativeDateTimeFormat.Unit.WEEK, 'in 2 wk.'),
   // TODO: Lots more needed.
+
+  new DirectionData('fr', RelativeDateTimeFormat.Style.NARROW, 2, RelativeDateTimeFormat.Unit.SECOND, '+2 s'),
 
   new DirectionData('fr', RelativeDateTimeFormat.Style.NARROW, 2, RelativeDateTimeFormat.Unit.SECOND, '+2 s'),
   new DirectionData('fr', RelativeDateTimeFormat.Style.LONG, 2, RelativeDateTimeFormat.Unit.SECOND, 'dans 2 secondes'),
@@ -364,6 +384,20 @@ testSuite({
       var symbols = localeSymbols[data.locale];
       var fmt = new RelativeDateTimeFormat(
           RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+          symbols.RelativeDateTimeFormatSymbols);
+
+      var result = fmt.format(data.direction, data.unit);
+      assertEquals(data.getErrorDescription(), data.expected, result);
+    }
+  },
+
+  testForcedNumeric: function() {
+    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
+    for (var i = 0; i < forcedNumericTestData.length; i++) {
+      var data = forcedNumericTestData[i];
+      var symbols = localeSymbols[data.locale];
+      var fmt = new RelativeDateTimeFormat(
+          RelativeDateTimeFormat.NumericOption.AUTO, data.style,
           symbols.RelativeDateTimeFormatSymbols);
 
       var result = fmt.format(data.direction, data.unit);
