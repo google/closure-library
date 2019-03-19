@@ -4103,7 +4103,7 @@ goog.identity_ = function(s) {
  * @throws {!TypeError} If called with a name which is already registered.
  */
 goog.createTrustedTypesPolicy = function(name) {
-  if (typeof TrustedTypes === 'undefined') {
+  if (typeof TrustedTypes === 'undefined' || !TrustedTypes.createPolicy) {
     return null;
   }
   return TrustedTypes.createPolicy(name, {
