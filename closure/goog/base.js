@@ -4078,7 +4078,8 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
  * @define {string} Trusted Types policy name. If non-empty then Closure will
  * use Trusted Types.
  */
-goog.define('goog.TRUSTED_TYPES_POLICY_NAME', '');
+goog.TRUSTED_TYPES_POLICY_NAME =
+    goog.define('goog.TRUSTED_TYPES_POLICY_NAME', '');
 
 
 /**
