@@ -15,7 +15,6 @@
 goog.provide('goog.dbTest');
 goog.setTestOnly('goog.dbTest');
 
-goog.require('goog.Disposable');
 goog.require('goog.Promise');
 goog.require('goog.array');
 goog.require('goog.db');
@@ -25,7 +24,6 @@ goog.require('goog.db.IndexedDb');
 goog.require('goog.db.KeyRange');
 goog.require('goog.db.Transaction');
 goog.require('goog.events');
-goog.require('goog.object');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
@@ -121,20 +119,6 @@ function assertStoreObjectValues(values, db) {
     var retrievedValues =
         goog.array.map(results, function(result) { return result['value']; });
     assertSameElements(values, retrievedValues);
-  });
-}
-
-function assertStoreValuesAndCursorsDisposed(values, cursors, db) {
-  var assertStoreTx = db.createTransaction(['store']);
-  assertStoreTx.objectStore('store').getAll().addCallback(function(results) {
-    assertSameElements(values, results);
-    assertTrue(cursors.length > 0);
-    goog.array.forEach(cursors, function(elem, index, array) {
-      console.log(elem);
-      assertTrue(
-          'array[' + index + '] (' + elem + ') is not disposed',
-          goog.Disposable.isDisposed(elem));
-    });
   });
 }
 
@@ -735,38 +719,6 @@ function testGetAllKeys() {
       .addCallback(addStore)
       .addCallback(addData)
       .addCallback(checkStore);
-}
-
-function testGetAllFreesCursor() {
-  if (!idbSupported) {
-    return;
-  }
-  var values = ['1', '2', '3'];
-  var keys = ['a', 'b', 'c'];
-
-  var addData = goog.partial(populateStore, values, keys);
-  var origCursor = goog.db.Cursor;
-  var cursors = [];
-  /** @constructor */
-  var testCursor = function() {
-    origCursor.call(this);
-    cursors.push(this);
-  };
-  goog.object.extend(testCursor, origCursor);
-  // We don't use goog.inherits here because we are going to be overwriting
-  // goog.db.Cursor and we don't want a new "base" method as
-  // goog.db.Cursor.base(this, 'constructor') would be a call to
-  // testCursor.base(this, 'constructor') which would be goog.db.Cursor and be
-  // an infinite loop.
-  testCursor.prototype = origCursor.prototype;
-  propertyReplacer.replace(goog.db, 'Cursor', testCursor);
-  var checkStoreAndCursorDisposed =
-      goog.partial(assertStoreValuesAndCursorsDisposed, values, cursors);
-
-  return globalDb.branch()
-      .addCallback(addStore)
-      .addCallback(addData)
-      .addCallback(checkStoreAndCursorDisposed);
 }
 
 function testObjectStoreCursorGet() {

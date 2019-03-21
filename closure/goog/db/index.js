@@ -130,9 +130,47 @@ goog.db.Index.prototype.getKey = function(key) {
 
 
 /**
- * Helper function for native getAll and getAllKeys on IDBIndex that takes in
- * IDBKeyRange as params. Returns the result of the native method in a Deferred
- * object.
+ * Returns the values matching `opt_key` up to `opt_count`.
+ *
+ * If `obt_key` is a `KeyRange`, returns all keys in that range. If it is
+ * `undefined`, returns all known keys.
+ *
+ * @param {!IDBKeyType|!goog.db.KeyRange=} opt_key Key or KeyRange to look up in
+ *     the index.
+ * @param {number=} opt_count The number records to return
+ * @return {!goog.async.Deferred} A deferred array of objects that match the
+ *     key.
+ */
+goog.db.Index.prototype.getAll = function(opt_key, opt_count) {
+  return this.getAll_(
+      'getAll', 'getting all from index ' + this.getName(), opt_key, opt_count);
+};
+
+
+/**
+ * Returns the keys matching `opt_key` up to `opt_count`.
+ *
+ * If `obt_key` is a `KeyRange`, returns all keys in that range. If it is
+ * `undefined`, returns all known keys.
+ *
+ * @param {!IDBKeyType|!goog.db.KeyRange=} opt_key Key or KeyRange to look up in
+ *     the index.
+ * @param {number=} opt_count The number records to return
+ * @return {!goog.async.Deferred} A deferred array of keys for objects that
+ *     match the key.
+ */
+goog.db.Index.prototype.getAllKeys = function(opt_key, opt_count) {
+  return this.getAll_(
+      'getAllKeys', 'getting all keys index ' + this.getName(), opt_key,
+      opt_count);
+};
+
+
+/**
+ * Helper function for native `getAll` and `getAllKeys` on `IDBObjectStore` that
+ * takes in `IDBKeyRange` as params.
+ *
+ * Returns the result of the native method in a `Deferred` object.
  *
  * @param {string} fn Function name to call on the index to get the request.
  * @param {string} msg Message to give to the error.
@@ -171,41 +209,6 @@ goog.db.Index.prototype.getAll_ = function(fn, msg, keyOrRange, count) {
     d.errback(goog.db.Error.fromRequest(ev.target, msg));
   };
   return d;
-};
-
-
-/**
- * Gets all indexed objects. If the IDBKeyType is provided, gets all indexed
- * objects that match the key, if KeyRange is provided, gets all indexed objects
- * in that range.
- *
- * @param {!IDBKeyType|!goog.db.KeyRange=} opt_key Key or KeyRange to look up in
- *     the index.
- * @param {number=} opt_count The number records to return
- * @return {!goog.async.Deferred} A deferred array of objects that match the
- *     key.
- */
-goog.db.Index.prototype.getAll = function(opt_key, opt_count) {
-  return this.getAll_(
-      'getAll', 'getting all from index ' + this.getName(), opt_key, opt_count);
-};
-
-
-/**
- * Gets the keys to look up all the indexed objects. If the key is provided,
- * gets all records for objects that match the key, if KeyRange is provided,
- * gets all records for objects in that range.
- *
- * @param {!IDBKeyType|!goog.db.KeyRange=} opt_key Key or KeyRange to look up in
- *     the index.
- * @param {number=} opt_count The number records to return
- * @return {!goog.async.Deferred} A deferred array of keys for objects that
- *     match the key.
- */
-goog.db.Index.prototype.getAllKeys = function(opt_key, opt_count) {
-  return this.getAll_(
-      'getAllKeys', 'getting all keys index ' + this.getName(), opt_key,
-      opt_count);
 };
 
 
