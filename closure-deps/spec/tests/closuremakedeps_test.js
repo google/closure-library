@@ -23,11 +23,13 @@ const jasmineDiff = require('jasmine-diff');
 // This test isn't that slow unless you're debugging.
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
-const CLOSURE_SUB_DIR = 'closure/goog';
-
-// The entry point of the module is bootstrap/nodejs.js. Need to back out.
+// By default assume this is running based on the structure of the git repo.
+// closure_deps/ lives in the save repo as Closure, and the library's code is in
+// closure/goog and third_party/closure/goog.
+const CLOSURE_SUB_DIR = process.env.CLOSURE_SUB_DIR || 'closure/goog';
 const CLOSURE_LIBRARY_PATH =
-    path.resolve(require.resolve('google-closure-library'), '../../../../');
+    process.env.CLOSURE_LIBRARY_PATH || path.resolve(__dirname, '../../../');
+
 const CLOSURE_PATH = path.resolve(CLOSURE_LIBRARY_PATH, CLOSURE_SUB_DIR);
 const THIRD_PARTY_PATH =
     path.resolve(CLOSURE_LIBRARY_PATH, 'third_party', CLOSURE_SUB_DIR);
