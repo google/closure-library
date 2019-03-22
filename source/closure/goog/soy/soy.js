@@ -24,6 +24,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
 goog.require('goog.string');
@@ -38,7 +39,8 @@ goog.require('goog.string');
  * If this flag is enabled, Soy templates will fail to render if a template
  * returns plain text -- indicating it is a non-strict template.
  */
-goog.define('goog.soy.REQUIRE_STRICT_AUTOESCAPE', false);
+goog.soy.REQUIRE_STRICT_AUTOESCAPE =
+    goog.define('goog.soy.REQUIRE_STRICT_AUTOESCAPE', false);
 
 
 /**
@@ -72,7 +74,11 @@ goog.soy.StrictHtmlTemplate;
  */
 goog.soy.renderHtml = function(element, templateResult) {
   goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
-      element, goog.soy.ensureTemplateOutputHtml_(templateResult));
+      goog.asserts.assert(element),
+      goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from('Soy HTML template.'),
+              goog.soy.ensureTemplateOutputHtml_(templateResult)));
 };
 
 
@@ -94,11 +100,14 @@ goog.soy.renderElement = function(
     element, template, opt_templateData, opt_injectedData) {
   // Soy template parameter is only nullable for historical reasons.
   goog.asserts.assert(template, 'Soy template may not be null.');
+  var html = goog.soy.ensureTemplateOutputHtml_(template(
+      opt_templateData || goog.soy.defaultTemplateData_, undefined,
+      opt_injectedData));
   goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
-      element,
-      goog.soy.ensureTemplateOutputHtml_(template(
-          opt_templateData || goog.soy.defaultTemplateData_, undefined,
-          opt_injectedData)));
+      goog.asserts.assert(element),
+      goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from('Soy HTML template.'), html));
 };
 
 
@@ -196,7 +205,11 @@ goog.soy.convertToElement_ = function(templateResult, opt_domHelper) {
   var wrapper = dom.createElement(goog.dom.TagName.DIV);
   var html = goog.soy.ensureTemplateOutputHtml_(templateResult);
   goog.soy.assertFirstTagValid_(html);
-  goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(wrapper, html);
+  goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
+      wrapper,
+      goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from('Soy HTML template.'), html));
 
   // If the template renders as a single element, return it.
   if (wrapper.childNodes.length == 1) {

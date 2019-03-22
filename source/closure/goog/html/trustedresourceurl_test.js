@@ -19,12 +19,22 @@
 goog.provide('goog.html.trustedResourceUrlTest');
 
 goog.require('goog.html.TrustedResourceUrl');
+goog.require('goog.html.trustedtypes');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.object');
 goog.require('goog.string.Const');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
 goog.setTestOnly('goog.html.trustedResourceUrlTest');
+
+
+var stubs = new goog.testing.PropertyReplacer();
+var policy = goog.createTrustedTypesPolicy('closure_test');
+
+function tearDown() {
+  stubs.reset();
+}
 
 
 function testTrustedResourceUrl() {
@@ -337,4 +347,39 @@ function testUnwrap() {
       assertThrows(function() { goog.html.TrustedResourceUrl.unwrap(evil); });
   assertContains(
       'expected object of type TrustedResourceUrl', exception.message);
+}
+
+
+function testUnwrapTrustedScriptURL() {
+  var safeValue = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('https://example.com/'));
+  var trustedValue =
+      goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(safeValue);
+  assertEquals(safeValue.getTypedStringValue(), trustedValue);
+  stubs.set(
+      goog.html.trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
+  safeValue = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('https://example.com/'));
+  trustedValue = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(safeValue);
+  assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
+  assertTrue(
+      goog.global.TrustedScriptURL ? trustedValue instanceof TrustedScriptURL :
+                                     goog.isString(trustedValue));
+}
+
+
+function testUnwrapTrustedURL() {
+  var safeValue = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('https://example.com/'));
+  var trustedValue = goog.html.TrustedResourceUrl.unwrapTrustedURL(safeValue);
+  assertEquals(safeValue.getTypedStringValue(), trustedValue);
+  stubs.set(
+      goog.html.trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
+  safeValue = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('https://example.com/'));
+  trustedValue = goog.html.TrustedResourceUrl.unwrapTrustedURL(safeValue);
+  assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
+  assertTrue(
+      goog.global.TrustedURL ? trustedValue instanceof TrustedURL :
+                               goog.isString(trustedValue));
 }

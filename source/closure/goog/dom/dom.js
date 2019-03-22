@@ -54,14 +54,15 @@ goog.require('goog.userAgent');
  * @define {boolean} Whether we know at compile time that the browser is in
  * quirks mode.
  */
-goog.define('goog.dom.ASSUME_QUIRKS_MODE', false);
+goog.dom.ASSUME_QUIRKS_MODE = goog.define('goog.dom.ASSUME_QUIRKS_MODE', false);
 
 
 /**
  * @define {boolean} Whether we know at compile time that the browser is in
  * standards compliance mode.
  */
-goog.define('goog.dom.ASSUME_STANDARDS_MODE', false);
+goog.dom.ASSUME_STANDARDS_MODE =
+    goog.define('goog.dom.ASSUME_STANDARDS_MODE', false);
 
 
 /**
@@ -194,11 +195,9 @@ goog.dom.getElementsByTagName = function(tagName, opt_parent) {
  * (`querySelectorAll`, `getElementsByTagName` or
  * `getElementsByClassName`) where possible. This function
  * is a useful, if limited, way of collecting a list of DOM elements
- * with certain characteristics.  `goog.dom.query` offers a
+ * with certain characteristics.  `querySelectorAll` offers a
  * more powerful and general solution which allows matching on CSS3
- * selector expressions, but at increased cost in code size. If all you
- * need is particular tags belonging to a single class, this function
- * is fast and sleek.
+ * selector expressions.
  *
  * Note that tag names are case sensitive in the SVG namespace, and this
  * function converts opt_tag to uppercase for comparisons. For queries in the
@@ -206,7 +205,7 @@ goog.dom.getElementsByTagName = function(tagName, opt_parent) {
  * https://bugzilla.mozilla.org/show_bug.cgi?id=963870
  * https://bugs.webkit.org/show_bug.cgi?id=83438
  *
- * @see {goog.dom.query}
+ * @see {https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll}
  *
  * @param {(string|?goog.dom.TagName<T>)=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.
@@ -246,7 +245,7 @@ goog.dom.getElementByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
 /**
  * Returns a static, array-like list of the elements with the provided
  * className.
- * @see {goog.dom.query}
+ *
  * @param {string} className the name of the class to look for.
  * @param {(Document|Element)=} opt_el Optional element to look in.
  * @return {!IArrayLike<!Element>} The items found with the class name provided.
@@ -263,7 +262,7 @@ goog.dom.getElementsByClass = function(className, opt_el) {
 
 /**
  * Returns the first element with the provided className.
- * @see {goog.dom.query}
+ *
  * @param {string} className the name of the class to look for.
  * @param {Element|Document=} opt_el Optional element to look in.
  * @return {Element} The first item with the class name provided.
@@ -284,7 +283,7 @@ goog.dom.getElementByClass = function(className, opt_el) {
 /**
  * Ensures an element with the given className exists, and then returns the
  * first element with the provided className.
- * @see {goog.dom.query}
+ *
  * @param {string} className the name of the class to look for.
  * @param {!Element|!Document=} opt_root Optional element or document to look
  *     in.
@@ -1714,6 +1713,20 @@ goog.dom.findCommonAncestor = function(var_args) {
 
 
 /**
+ * Returns whether node is in a document or detached. Throws an error if node
+ * itself is a document. This specifically handles two cases beyond naive use of
+ * builtins: (1) it works correctly in IE, and (2) it works for elements from
+ * different documents/iframes. If neither of these considerations are relevant
+ * then a simple `document.contains(node)` may be used instead.
+ * @param {!Node} node
+ * @return {boolean}
+ */
+goog.dom.isInDocument = function(node) {
+  return (node.ownerDocument.compareDocumentPosition(node) & 16) == 16;
+};
+
+
+/**
  * Returns the owner document for a node.
  * @param {Node|Window} node The node to get the document for.
  * @return {!Document} The document owning the node.
@@ -1812,13 +1825,13 @@ goog.dom.getOuterHtml = function(element) {
 
 
 /**
- * Finds the first descendant node that matches the filter function, using
- * a depth first search. This function offers the most general purpose way
- * of finding a matching element. You may also wish to consider
- * `goog.dom.query` which can express many matching criteria using
- * CSS selector expressions. These expressions often result in a more
- * compact representation of the desired result.
- * @see goog.dom.query
+ * Finds the first descendant node that matches the filter function, using depth
+ * first search. This function offers the most general purpose way of finding a
+ * matching element.
+ *
+ * Prefer using `querySelector` if the matching criteria can be expressed as a
+ * CSS selector, or `goog.dom.findElement` if you would filter for `nodeType ==
+ * Node.ELEMENT_NODE`.
  *
  * @param {Node} root The root of the tree to search.
  * @param {function(Node) : boolean} p The filter function.
@@ -1832,13 +1845,14 @@ goog.dom.findNode = function(root, p) {
 
 
 /**
- * Finds all the descendant nodes that match the filter function, using a
- * a depth first search. This function offers the most general-purpose way
- * of finding a set of matching elements. You may also wish to consider
- * `goog.dom.query` which can express many matching criteria using
- * CSS selector expressions. These expressions often result in a more
- * compact representation of the desired result.
-
+ * Finds all the descendant nodes that match the filter function, using depth
+ * first search. This function offers the most general-purpose way
+ * of finding a set of matching elements.
+ *
+ * Prefer using `querySelectorAll` if the matching criteria can be expressed as
+ * a CSS selector, or `goog.dom.findElements` if you would filter for
+ * `nodeType == Node.ELEMENT_NODE`.
+ *
  * @param {Node} root The root of the tree to search.
  * @param {function(Node) : boolean} p The filter function.
  * @return {!Array<!Node>} The found nodes or an empty array if none are found.
@@ -1878,6 +1892,70 @@ goog.dom.findNodes_ = function(root, p, rv, findOne) {
     }
   }
   return false;
+};
+
+
+/**
+ * Finds the first descendant element (excluding `root`) that matches the filter
+ * function, using depth first search. Prefer using `querySelector` if the
+ * matching criteria can be expressed as a CSS selector.
+ *
+ * @param {!Element | !Document} root
+ * @param {function(!Element): boolean} pred Filter function.
+ * @return {?Element} First matching element or null if there is none.
+ */
+goog.dom.findElement = function(root, pred) {
+  var stack = goog.dom.getChildrenReverse_(root);
+  while (stack.length > 0) {
+    var next = stack.pop();
+    if (pred(next)) return next;
+    for (var c = next.lastElementChild; c; c = c.previousElementSibling) {
+      stack.push(c);
+    }
+  }
+  return null;
+};
+
+
+/**
+ * Finds all the descendant elements (excluding `root`) that match the filter
+ * function, using depth first search. Prefer using `querySelectorAll` if the
+ * matching criteria can be expressed as a CSS selector.
+ *
+ * @param {!Element | !Document} root
+ * @param {function(!Element): boolean} pred Filter function.
+ * @return {!Array<!Element>}
+ */
+goog.dom.findElements = function(root, pred) {
+  var result = [], stack = goog.dom.getChildrenReverse_(root);
+  while (stack.length > 0) {
+    var next = stack.pop();
+    if (pred(next)) result.push(next);
+    for (var c = next.lastElementChild; c; c = c.previousElementSibling) {
+      stack.push(c);
+    }
+  }
+  return result;
+};
+
+
+/**
+ * @param {!Element | !Document} node
+ * @return {!Array<!Element>} node's child elements in reverse order.
+ * @private
+ */
+goog.dom.getChildrenReverse_ = function(node) {
+  // document.lastElementChild doesn't exist in IE9; fall back to
+  // documentElement.
+  if (node.nodeType == goog.dom.NodeType.DOCUMENT) {
+    return [node.documentElement];
+  } else {
+    var children = [];
+    for (var c = node.lastElementChild; c; c = c.previousElementSibling) {
+      children.push(c);
+    }
+    return children;
+  }
 };
 
 
@@ -2505,8 +2583,6 @@ goog.dom.DomHelper.prototype.getElementsByTagName =
  * `getElementsByClassName`) where possible. The returned array is a live
  * NodeList or a static list depending on the code path taken.
  *
- * @see goog.dom.query
- *
  * @param {(string|?goog.dom.TagName<T>)=} opt_tag Element tag name or * for all
  *     tags.
  * @param {?string=} opt_class Optional class name.
@@ -2547,7 +2623,6 @@ goog.dom.DomHelper.prototype.getElementByTagNameAndClass = function(
 
 /**
  * Returns an array of all the elements with the provided className.
- * @see {goog.dom.query}
  * @param {string} className the name of the class to look for.
  * @param {Element|Document=} opt_el Optional element to look in.
  * @return {!IArrayLike<!Element>} The items found with the class name provided.
@@ -2560,7 +2635,6 @@ goog.dom.DomHelper.prototype.getElementsByClass = function(className, opt_el) {
 
 /**
  * Returns the first element we find matching the provided class name.
- * @see {goog.dom.query}
  * @param {string} className the name of the class to look for.
  * @param {(Element|Document)=} opt_el Optional element to look in.
  * @return {Element} The first item found with the class name provided.
@@ -2574,7 +2648,6 @@ goog.dom.DomHelper.prototype.getElementByClass = function(className, opt_el) {
 /**
  * Ensures an element with the given className exists, and then returns the
  * first element with the provided className.
- * @see {goog.dom.query}
  * @param {string} className the name of the class to look for.
  * @param {(!Element|!Document)=} opt_root Optional element or document to look
  *     in.
@@ -2591,7 +2664,6 @@ goog.dom.DomHelper.prototype.getRequiredElementByClass = function(
 /**
  * Alias for `getElementsByTagNameAndClass`.
  * @deprecated Use DomHelper getElementsByTagNameAndClass.
- * @see goog.dom.query
  *
  * @param {(string|?goog.dom.TagName<T>)=} opt_tag Element tag name.
  * @param {?string=} opt_class Optional class name.

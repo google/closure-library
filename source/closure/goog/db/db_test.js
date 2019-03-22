@@ -15,7 +15,6 @@
 goog.provide('goog.dbTest');
 goog.setTestOnly('goog.dbTest');
 
-goog.require('goog.Disposable');
 goog.require('goog.Promise');
 goog.require('goog.array');
 goog.require('goog.db');
@@ -25,7 +24,6 @@ goog.require('goog.db.IndexedDb');
 goog.require('goog.db.KeyRange');
 goog.require('goog.db.Transaction');
 goog.require('goog.events');
-goog.require('goog.object');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
@@ -121,20 +119,6 @@ function assertStoreObjectValues(values, db) {
     var retrievedValues =
         goog.array.map(results, function(result) { return result['value']; });
     assertSameElements(values, retrievedValues);
-  });
-}
-
-function assertStoreValuesAndCursorsDisposed(values, cursors, db) {
-  var assertStoreTx = db.createTransaction(['store']);
-  assertStoreTx.objectStore('store').getAll().addCallback(function(results) {
-    assertSameElements(values, results);
-    assertTrue(cursors.length > 0);
-    goog.array.forEach(cursors, function(elem, index, array) {
-      console.log(elem);
-      assertTrue(
-          'array[' + index + '] (' + elem + ') is not disposed',
-          goog.Disposable.isDisposed(elem));
-    });
   });
 }
 
@@ -737,38 +721,6 @@ function testGetAllKeys() {
       .addCallback(checkStore);
 }
 
-function testGetAllFreesCursor() {
-  if (!idbSupported) {
-    return;
-  }
-  var values = ['1', '2', '3'];
-  var keys = ['a', 'b', 'c'];
-
-  var addData = goog.partial(populateStore, values, keys);
-  var origCursor = goog.db.Cursor;
-  var cursors = [];
-  /** @constructor */
-  var testCursor = function() {
-    origCursor.call(this);
-    cursors.push(this);
-  };
-  goog.object.extend(testCursor, origCursor);
-  // We don't use goog.inherits here because we are going to be overwriting
-  // goog.db.Cursor and we don't want a new "base" method as
-  // goog.db.Cursor.base(this, 'constructor') would be a call to
-  // testCursor.base(this, 'constructor') which would be goog.db.Cursor and be
-  // an infinite loop.
-  testCursor.prototype = origCursor.prototype;
-  propertyReplacer.replace(goog.db, 'Cursor', testCursor);
-  var checkStoreAndCursorDisposed =
-      goog.partial(assertStoreValuesAndCursorsDisposed, values, cursors);
-
-  return globalDb.branch()
-      .addCallback(addStore)
-      .addCallback(addData)
-      .addCallback(checkStoreAndCursorDisposed);
-}
-
 function testObjectStoreCursorGet() {
   if (!idbSupported) {
     return;
@@ -972,6 +924,7 @@ function testInactiveTransaction() {
     var assertCorrectError = function(err) {
       assertEquals(expectedCode, err.getName());
     };
+    var keyRange = goog.db.KeyRange.bound('a', 'a');
     promises.push(
         store.put({key: 'another', value: 'thing'})
             .then(failOp('putting'), assertCorrectError));
@@ -999,6 +952,10 @@ function testInactiveTransaction() {
     promises.push(
         index.getAllKeys('anything')
             .then(failOp('getting all keys from index'), assertCorrectError));
+    promises.push(index.getAll(keyRange).then(
+        failOp('getting all from index'), assertCorrectError));
+    promises.push(index.getAllKeys(keyRange).then(
+        failOp('getting all from index'), assertCorrectError));
     return goog.Promise.all(promises);
   };
 
@@ -1158,6 +1115,7 @@ function testGetMultipleRecordsFromIndex() {
     var index =
         db.createTransaction(['store']).objectStore('store').getIndex('index');
     var promises = [];
+    var keyRange = goog.db.KeyRange.bound('a', 'a');
     promises.push(index.getAll().addCallback(function(results) {
       assertNotUndefined(results);
       assertEquals(3, results.length);
@@ -1176,6 +1134,16 @@ function testGetMultipleRecordsFromIndex() {
       assertEquals(1, results.length);
       assertArrayEquals(['3'], results);
     }));
+    promises.push(index.getAll(keyRange).addCallback(function(results) {
+      assertNotUndefined(results);
+      assertEquals(2, results.length);
+    }));
+    promises.push(index.getAllKeys(keyRange).addCallback(function(results) {
+      assertNotUndefined(results);
+      assertEquals(2, results.length);
+      assertArrayEquals(['1', '2'], results);
+    }));
+
 
     return goog.Promise.all(promises).then(function() { return db; });
   };

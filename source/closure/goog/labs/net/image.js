@@ -22,6 +22,7 @@ goog.provide('goog.labs.net.image');
 goog.require('goog.Promise');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
+goog.require('goog.html.SafeUrl');
 goog.require('goog.net.EventType');
 goog.require('goog.userAgent');
 
@@ -29,7 +30,7 @@ goog.require('goog.userAgent');
 /**
  * Loads a single image.  Useful for preloading images.
  *
- * @param {string} uri URI of the image.
+ * @param {!goog.html.SafeUrl|string} uri URI of the image.
  * @param {(!Image|function(): !Image)=} opt_image If present, instead of
  *     creating a new Image instance the function will use the passed Image
  *     instance or the result of calling the Image factory respectively. This
@@ -90,6 +91,6 @@ goog.labs.net.image.load = function(uri, opt_image) {
         });
 
     // Initiate the image request.
-    image.src = uri;
+    image.src = goog.isString(uri) ? uri : goog.html.SafeUrl.unwrap(uri);
   });
 };

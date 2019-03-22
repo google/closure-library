@@ -203,10 +203,17 @@ goog.ui.editor.LinkDialog = function(domHelper, link) {
   /**
    * Whether to stop leaking the page's url via the referrer header when the
    * "test this link" link is clicked.
-   * @type {boolean}
-   * @private
+   * @private {boolean}
    */
   this.stopReferrerLeaks_ = false;
+
+  /**
+   * Whether to remove access to the current window object in the newly created
+   * window when the "test this link" is clicked, since it can be used to launch
+   * a reverse tabnabbing attack.
+   * @private {boolean}
+   */
+  this.stopTabNabbing_ = false;
 };
 goog.inherits(goog.ui.editor.LinkDialog, goog.ui.editor.AbstractDialog);
 
@@ -392,6 +399,18 @@ goog.ui.editor.LinkDialog.prototype.setTextToDisplayVisible = function(
  */
 goog.ui.editor.LinkDialog.prototype.setStopReferrerLeaks = function(stop) {
   this.stopReferrerLeaks_ = stop;
+};
+
+
+/**
+ * Tells the plugin whether to remove access to the current window object in the
+ * newly created window when the "test this link" is clicked, since it can be
+ * used to launch a reverse tabnabbing attack.
+ * @param {boolean} stop Whether to remove the reference to the current window
+ *     in the new window.
+ */
+goog.ui.editor.LinkDialog.prototype.setStopTabNabbing = function(stop) {
+  this.stopTabNabbing_ = stop;
 };
 
 
@@ -925,7 +944,10 @@ goog.ui.editor.LinkDialog.prototype.onWebTestLink_ = function() {
       scrollbars: true,
       location: true,
       statusbar: false,
-      menubar: true, 'resizable': true, 'noreferrer': this.stopReferrerLeaks_
+      menubar: true,
+      resizable: true,
+      noreferrer: this.stopReferrerLeaks_,
+      noopener: this.stopTabNabbing_
     };
     goog.window.open(url, openOptions, win);
   }

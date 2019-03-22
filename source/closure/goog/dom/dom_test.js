@@ -20,6 +20,7 @@
 goog.provide('goog.dom.dom_test');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.DomHelper');
@@ -821,6 +822,29 @@ function testIsWindow() {
   }
 }
 
+function testIsInDocument() {
+  assertThrows(function() {
+    goog.dom.isInDocument(document);
+  });
+
+  assertTrue(goog.dom.isInDocument(document.documentElement));
+
+  var div = document.createElement('div');
+  assertFalse(goog.dom.isInDocument(div));
+  document.body.appendChild(div);
+  assertTrue(goog.dom.isInDocument(div));
+
+  var textNode = document.createTextNode('');
+  assertFalse(goog.dom.isInDocument(textNode));
+  div.appendChild(textNode);
+  assertTrue(goog.dom.isInDocument(textNode));
+
+  var attribute = document.createAttribute('a');
+  assertFalse(goog.dom.isInDocument(attribute));
+  div.setAttributeNode(attribute);
+  assertTrue(goog.dom.isInDocument(attribute));
+}
+
 function testGetOwnerDocument() {
   assertEquals(goog.dom.getOwnerDocument($('p1')), document);
   assertEquals(goog.dom.getOwnerDocument(document.body), document);
@@ -1087,6 +1111,41 @@ function testFindNode() {
   assertUndefined(result);
 }
 
+function testFindElement_works() {
+  var isBody = function(element) {
+    return element.tagName == 'BODY';
+  };
+  var isP = function(element) {
+    return element.tagName == 'P';
+  };
+  var firstP = document.querySelector('p');
+  var htmlElement = document.documentElement;
+
+  // root is an element
+  assertNull(goog.dom.findElement(document.body, goog.functions.FALSE));
+  assertEquals(firstP, goog.dom.findElement(document.body, isP));
+
+  // root is the document
+  assertEquals(
+      htmlElement, goog.dom.findElement(document, goog.functions.TRUE));
+  assertNull(goog.dom.findElement(document, goog.functions.FALSE));
+  assertEquals(document.body, goog.dom.findElement(document, isBody));
+  assertEquals(firstP, goog.dom.findElement(document, isP));
+}
+
+function testFindElement_excludesRootElement() {
+  assertNull(goog.dom.findElement(document.body, function(element) {
+    return element.tagName == 'BODY';
+  }));
+}
+
+function testFindElement_onlyCallsFilterFunctionWithElements() {
+  goog.dom.findElement(document, function(param) {
+    goog.asserts.assertElement(param);
+    return false;  // to visit all nodes
+  });
+}
+
 function testFindNodes() {
   var expected = goog.dom.getElementsByTagName(goog.dom.TagName.P);
   var result = goog.dom.findNodes(document, function(n) {
@@ -1099,6 +1158,42 @@ function testFindNodes() {
 
   result = goog.dom.findNodes(document, function(n) { return false; }).length;
   assertEquals(0, result);
+}
+
+function testFindElements_works() {
+  var isP = function(element) {
+    return element.tagName == 'P';
+  };
+
+  assertArrayEquals([], goog.dom.findElements(document, goog.functions.FALSE));
+
+  // Should return the elements in the same order as getElementsByTagName.
+  assertArrayEquals(
+      goog.array.toArray(document.getElementsByTagName('p')),
+      goog.dom.findElements(document, isP));
+  assertArrayEquals(
+      goog.array.toArray(document.getElementsByTagName('*')),
+      goog.dom.findElements(document, goog.functions.TRUE));
+  assertArrayEquals(
+      goog.array.toArray(document.body.getElementsByTagName('*')),
+      goog.dom.findElements(document.body, goog.functions.TRUE));
+}
+
+function testFindElements_excludesRootElement() {
+  var isBody = function(element) {
+    return element.tagName == 'BODY';
+  };
+
+  assertArrayEquals(
+      [document.body], goog.dom.findElements(document.documentElement, isBody));
+  assertArrayEquals([], goog.dom.findElements(document.body, isBody));
+}
+
+function testFindElements_onlyCallsFilterFunctionWithElements() {
+  goog.dom.findElements(document, function(param) {
+    goog.asserts.assertElement(param);
+    return false;  // to visit all nodes
+  });
 }
 
 function createTestDom(txt) {

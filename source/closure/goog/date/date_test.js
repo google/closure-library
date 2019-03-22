@@ -726,6 +726,76 @@ function testDateTime_fromIsoString() {
   assertEquals('Got 11 hours from ' + iso, 11, date.getHours());
   assertEquals('Got 22 minutes from ' + iso, 22, date.getMinutes());
   assertEquals('Got 33 seconds from ' + iso, 33, date.getSeconds());
+
+  // YYYY-MM-DDTHH:MM:SS+03:00
+  iso = '2005-02-22T11:22:33+03:00';
+  date = goog.date.DateTime.fromIsoString(iso);
+  assertEquals('Got 2005 from ' + iso, 2005, date.getUTCFullYear());
+  assertEquals('Got February from ' + iso, 1, date.getUTCMonth());
+  assertEquals('Got 22nd from ' + iso, 22, date.getUTCDate());
+  assertEquals('Got 08 hours from ' + iso, 8, date.getUTCHours());
+  assertEquals('Got 22 minutes from ' + iso, 22, date.getUTCMinutes());
+  assertEquals('Got 33 seconds from ' + iso, 33, date.getUTCSeconds());
+
+  // On a DST boundary, using a UTC timestamp
+  iso = '2019-03-10T11:22:33Z';
+  date = goog.date.DateTime.fromIsoString(iso);
+  assertEquals('Got 2019 from ' + iso, 2019, date.getUTCFullYear());
+  assertEquals('Got March from ' + iso, 2, date.getUTCMonth());
+  assertEquals('Got 10th from ' + iso, 10, date.getUTCDate());
+  assertEquals('Got 11 hours from ' + iso, 11, date.getUTCHours());
+  assertEquals('Got 22 minutes from ' + iso, 22, date.getUTCMinutes());
+  assertEquals('Got 33 seconds from ' + iso, 33, date.getUTCSeconds());
+
+  // Parsing ISO string in local time zone.
+  iso = '2019-04-01T01:00:00';
+  date = goog.date.DateTime.fromIsoString(iso);
+  assertEquals('Got 2019 from ' + iso, 2019, date.getFullYear());
+  assertEquals('Got April from ' + iso, 3, date.getMonth());
+  assertEquals('Got 1st from ' + iso, 1, date.getDate());
+  assertEquals('Got 01 hours from ' + iso, 1, date.getHours());
+  assertEquals('Got 00 minutes from ' + iso, 0, date.getMinutes());
+  assertEquals('Got 00 seconds from ' + iso, 0, date.getSeconds());
+
+  // Parsing ISO string in local time zone.
+  iso = '2019-03-31T23:59:59';
+  date = goog.date.DateTime.fromIsoString(iso);
+  assertEquals('Got 2019 from ' + iso, 2019, date.getFullYear());
+  assertEquals('Got March from ' + iso, 2, date.getMonth());
+  assertEquals('Got 31st from ' + iso, 31, date.getDate());
+  assertEquals('Got 23 hours from ' + iso, 23, date.getHours());
+  assertEquals('Got 59 minutes from ' + iso, 59, date.getMinutes());
+  assertEquals('Got 59 seconds from ' + iso, 59, date.getSeconds());
+
+  // Parsing ISO string at month boundary.
+  iso = '2019-04-01T00:00:01Z';
+  date = goog.date.DateTime.fromIsoString(iso);
+  assertEquals('Got 2019 from ' + iso, 2019, date.getUTCFullYear());
+  assertEquals('Got April from ' + iso, 3, date.getUTCMonth());
+  assertEquals('Got 1st from ' + iso, 1, date.getUTCDate());
+  assertEquals('Got 00 hours from ' + iso, 0, date.getUTCHours());
+  assertEquals('Got 00 minutes from ' + iso, 0, date.getUTCMinutes());
+  assertEquals('Got 01 seconds from ' + iso, 1, date.getUTCSeconds());
+
+  // Parsing ISO string at month boundary.
+  iso = '2019-03-31T23:59:59Z';
+  date = goog.date.DateTime.fromIsoString(iso);
+  assertEquals('Got 2019 from ' + iso, 2019, date.getUTCFullYear());
+  assertEquals('Got March from ' + iso, 2, date.getUTCMonth());
+  assertEquals('Got 31st from ' + iso, 31, date.getUTCDate());
+  assertEquals('Got 23 hours from ' + iso, 23, date.getUTCHours());
+  assertEquals('Got 59 minutes from ' + iso, 59, date.getUTCMinutes());
+  assertEquals('Got 59 seconds from ' + iso, 59, date.getUTCSeconds());
+
+  // Parsing ISO string with differing UTC date.
+  iso = '2019-03-31T23:00:00-02:00';
+  date = goog.date.DateTime.fromIsoString(iso);
+  assertEquals('Got 2019 from ' + iso, 2019, date.getUTCFullYear());
+  assertEquals('Got April from ' + iso, 3, date.getUTCMonth());
+  assertEquals('Got 1st from ' + iso, 1, date.getUTCDate());
+  assertEquals('Got 01 hours from ' + iso, 1, date.getUTCHours());
+  assertEquals('Got 00 minutes from ' + iso, 0, date.getUTCMinutes());
+  assertEquals('Got 00 seconds from ' + iso, 0, date.getUTCSeconds());
 }
 
 

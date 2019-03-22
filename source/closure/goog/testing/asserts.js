@@ -296,7 +296,8 @@ var assert = goog.testing.asserts.assert = function(a, opt_b) {
  * @param {!(string|Function)} a The assertion comment or the function to call.
  * @param {!Function=} opt_b The function to call (if the first argument of
  *     `assertThrows` was the comment).
- * @return {*} The error thrown by the function.
+ * @return {!Error} The error thrown by the function. Beware that code may throw
+ *     other types in strange scenarios.
  * @throws {goog.testing.JsUnitException} If the assertion failed.
  */
 var assertThrows = goog.testing.asserts.assertThrows = function(a, opt_b) {
@@ -326,6 +327,7 @@ var assertThrows = goog.testing.asserts.assertThrows = function(a, opt_b) {
   }
   goog.testing.asserts.raiseException(
       comment, 'No exception thrown from function passed to assertThrows');
+  throw new Error('Should have thrown an error.');  // Make the compiler happy.
 };
 
 
@@ -1500,7 +1502,7 @@ goog.testing.asserts.isArrayIndexProp_ = function(prop) {
 };
 
 /** @define {boolean} */
-goog.define('goog.EXPORT_ASSERTIONS', true);
+goog.EXPORT_ASSERTIONS = goog.define('goog.EXPORT_ASSERTIONS', true);
 /*
  * These symbols are both exported in the global namespace (for legacy
  * reasons) and as part of the goog.testing.asserts namespace. Although they

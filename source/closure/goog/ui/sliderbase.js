@@ -1598,12 +1598,12 @@ goog.ui.SliderBase.prototype.enableMouseWheelHandling_ = function(enable) {
     this.getHandler().listen(
         this.mouseWheelHandler_,
         goog.events.MouseWheelHandler.EventType.MOUSEWHEEL,
-        this.handleMouseWheel_);
+        this.handleMouseWheel_, {passive: false});
   } else {
     this.getHandler().unlisten(
         this.mouseWheelHandler_,
         goog.events.MouseWheelHandler.EventType.MOUSEWHEEL,
-        this.handleMouseWheel_);
+        this.handleMouseWheel_, {passive: false});
   }
 };
 

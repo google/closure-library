@@ -128,7 +128,8 @@ goog.inherits(goog.debug.ErrorReporter, goog.events.EventTarget);
  *     bringing in a lot of code from ErrorHandler and entryPointRegistry in
  *     compiled mode.
  */
-goog.define('goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT', true);
+goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT =
+    goog.define('goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT', true);
 
 
 

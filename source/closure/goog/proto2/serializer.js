@@ -38,7 +38,8 @@ goog.proto2.Serializer = function() {};
  * @define {boolean} Whether to decode and convert symbolic enum values to
  * actual enum values or leave them as strings.
  */
-goog.define('goog.proto2.Serializer.DECODE_SYMBOLIC_ENUMS', false);
+goog.proto2.Serializer.DECODE_SYMBOLIC_ENUMS =
+    goog.define('goog.proto2.Serializer.DECODE_SYMBOLIC_ENUMS', false);
 
 
 /**

@@ -56,7 +56,8 @@ goog.require('goog.dom.NodeType');
 /**
  * @define {boolean} Whether to strip out asserts or to leave them in.
  */
-goog.define('goog.asserts.ENABLE_ASSERTS', goog.DEBUG);
+goog.asserts.ENABLE_ASSERTS =
+    goog.define('goog.asserts.ENABLE_ASSERTS', goog.DEBUG);
 
 
 

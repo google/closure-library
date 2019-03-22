@@ -73,7 +73,7 @@ goog.memoize = function(f, opt_serializer) {
 /**
  * @define {boolean} Flag to disable memoization in unit tests.
  */
-goog.define('goog.memoize.ENABLE_MEMOIZE', true);
+goog.memoize.ENABLE_MEMOIZE = goog.define('goog.memoize.ENABLE_MEMOIZE', true);
 
 
 /**

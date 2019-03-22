@@ -62,14 +62,14 @@ goog.window.createFakeWindow_ = function() {
 /**
  * Opens a new window.
  *
- * @param {goog.html.SafeUrl|string|Object|null} linkRef If an Object with an 'href'
- *     attribute (such as HTMLAnchorElement) is passed then the value of 'href'
- *     is used, otherwise its toString method is called. Note that if a
+ * @param {!goog.html.SafeUrl|string|!Object|null} linkRef If an Object with an
+ *     'href' attribute (such as HTMLAnchorElement) is passed then the value of
+ *     'href' is used, otherwise its toString method is called. Note that if a
  *     string|Object is used, it will be sanitized with SafeUrl.sanitize().
  *
  * @param {?Object=} opt_options supports the following options:
  *  'target': (string) target (window name). If null, linkRef.target will
- *          be used.
+ *      be used.
  *  'width': (number) window width.
  *  'height': (number) window height.
  *  'top': (number) distance from top of screen
@@ -83,6 +83,10 @@ goog.window.createFakeWindow_ = function() {
  *  'noreferrer': (boolean) whether to attempt to remove the referrer header
  *      from the request headers. Does this by opening a blank window that
  *      then redirects to the target url, so users may see some flickering.
+ *  'noopener': (boolean) whether to remove the `opener` property from the
+ *      window object of the newly created window. The property contains a
+ *      reference to the original window, and can be used to launch a
+ *      reverse tabnabbing attack.
  *
  * @param {?Window=} opt_parentWin Parent window that should be used to open the
  *                 new window.

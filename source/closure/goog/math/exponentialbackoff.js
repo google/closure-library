@@ -40,7 +40,7 @@ goog.require('goog.asserts');
  * @param {number=} opt_backoffFactor The factor to backoff by. Defaults to 2.
  *     Should be a number greater than 1.
  * @param {number=} opt_decayFactor The factor to decay by. Defaults to 2.
- *     Should be a number between greater than one.
+ *     Should be a number greater than one.
  */
 goog.math.ExponentialBackoff = function(
     initialValue, maxValue, opt_randomFactor, opt_backoffFactor,

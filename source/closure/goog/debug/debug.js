@@ -26,11 +26,13 @@ goog.require('goog.userAgent');
 
 
 /** @define {boolean} Whether logging should be enabled. */
-goog.define('goog.debug.LOGGING_ENABLED', goog.DEBUG);
+goog.debug.LOGGING_ENABLED =
+    goog.define('goog.debug.LOGGING_ENABLED', goog.DEBUG);
 
 
 /** @define {boolean} Whether to force "sloppy" stack building. */
-goog.define('goog.debug.FORCE_SLOPPY_STACKS', false);
+goog.debug.FORCE_SLOPPY_STACKS =
+    goog.define('goog.debug.FORCE_SLOPPY_STACKS', false);
 
 
 /**

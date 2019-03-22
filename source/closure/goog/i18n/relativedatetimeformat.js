@@ -149,8 +149,25 @@ RelativeDateTimeFormat.prototype.format = function(quantity, relativeUnit) {
 
   var dirString = quantity.toString();
 
+  /**
+   * Special cases to force numeric units, in order
+   * to match ICU4J as described in
+   * http://unicode.org/cldr/trac/ticket/9165
+   * http://bugs.icu-project.org/trac/ticket/12171
+   */
+
+  /**
+   * TODO(icu/12171): re-examine this if/when ICU4J and CLDR data are
+   *  updated with correct correct relative strings.
+   */
+  var useNumeric = this.alwaysNumeric_;
+  if ((relativeUnit == RelativeDateTimeFormat.Unit.MINUTE) ||
+      (relativeUnit == RelativeDateTimeFormat.Unit.HOUR)) {
+    useNumeric = true;
+  }
+
   // Check for force numeric and having relative value with the given quantity.
-  if (!this.alwaysNumeric_ && rdtfUnitPattern && rdtfUnitPattern.R &&
+  if (!useNumeric && rdtfUnitPattern && rdtfUnitPattern.R &&
       rdtfUnitPattern.R[dirString]) {
     return rdtfUnitPattern.R[dirString];
   } else {

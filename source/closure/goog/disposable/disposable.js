@@ -86,14 +86,16 @@ goog.Disposable.MonitoringMode = {
  *     performance and memory usage. If switched off, the monitoring code
  *     compiles down to 0 bytes.
  */
-goog.define('goog.Disposable.MONITORING_MODE', 0);
+goog.Disposable.MONITORING_MODE =
+    goog.define('goog.Disposable.MONITORING_MODE', 0);
 
 
 /**
  * @define {boolean} Whether to attach creation stack to each created disposable
  *     instance; This is only relevant for when MonitoringMode != OFF.
  */
-goog.define('goog.Disposable.INCLUDE_STACK_ON_CREATION', true);
+goog.Disposable.INCLUDE_STACK_ON_CREATION =
+    goog.define('goog.Disposable.INCLUDE_STACK_ON_CREATION', true);
 
 
 /**

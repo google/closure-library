@@ -232,7 +232,7 @@ SafeDomTreeProcessor.prototype.createNode_ = function(originalNode) {
   var nodeType = noclobber.getNodeType(originalNode);
   switch (nodeType) {
     case NodeType.TEXT:
-      return this.createTextNode(originalNode);
+      return this.createTextNode(/** @type {!Text} */ (originalNode));
     case NodeType.ELEMENT:
       return this.createElement_(noclobber.assertNodeIsElement(originalNode));
     default:
@@ -244,8 +244,8 @@ SafeDomTreeProcessor.prototype.createNode_ = function(originalNode) {
 /**
  * Creates a new text node from the original text node, or null if the node
  * should not be copied over to the new tree.
- * @param {!Node} originalNode
- * @return {?Node}
+ * @param {!Text} originalNode
+ * @return {?Text}
  * @protected @abstract
  */
 SafeDomTreeProcessor.prototype.createTextNode = function(originalNode) {};

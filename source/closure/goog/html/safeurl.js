@@ -23,6 +23,7 @@ goog.provide('goog.html.SafeUrl');
 goog.require('goog.asserts');
 goog.require('goog.fs.url');
 goog.require('goog.html.TrustedResourceUrl');
+goog.require('goog.html.trustedtypes');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
 goog.require('goog.string.Const');
@@ -74,7 +75,7 @@ goog.html.SafeUrl = function() {
    * The contained value of this SafeUrl.  The field has a purposely ugly
    * name to make (non-compiled) code that attempts to directly access this
    * field stand out.
-   * @private {string}
+   * @private {!TrustedURL|string}
    */
   this.privateDoNotAccessOrElseSafeUrlWrappedValue_ = '';
 
@@ -139,7 +140,7 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
  * @override
  */
 goog.html.SafeUrl.prototype.getTypedStringValue = function() {
-  return this.privateDoNotAccessOrElseSafeUrlWrappedValue_;
+  return this.privateDoNotAccessOrElseSafeUrlWrappedValue_.toString();
 };
 
 
@@ -193,6 +194,17 @@ if (goog.DEBUG) {
  *     `goog.asserts.AssertionError`.
  */
 goog.html.SafeUrl.unwrap = function(safeUrl) {
+  return goog.html.SafeUrl.unwrapTrustedURL(safeUrl).toString();
+};
+
+
+/**
+ * Unwraps value as TrustedURL if supported or as a string if not.
+ * @param {!goog.html.SafeUrl} safeUrl
+ * @return {!TrustedURL|string}
+ * @see goog.html.SafeUrl.unwrap
+ */
+goog.html.SafeUrl.unwrapTrustedURL = function(safeUrl) {
   // Perform additional Run-time type-checking to ensure that safeUrl is indeed
   // an instance of the expected type.  This provides some additional protection
   // against security bugs due to application code that disables type checks.
@@ -665,7 +677,11 @@ goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
     url) {
   var safeUrl = new goog.html.SafeUrl();
-  safeUrl.privateDoNotAccessOrElseSafeUrlWrappedValue_ = url;
+  safeUrl.privateDoNotAccessOrElseSafeUrlWrappedValue_ =
+      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
+      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createURL(
+          url) :
+      url;
   return safeUrl;
 };
 

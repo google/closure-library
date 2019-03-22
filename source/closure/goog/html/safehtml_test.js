@@ -25,13 +25,23 @@ goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.testing');
+goog.require('goog.html.trustedtypes');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.object');
 goog.require('goog.string.Const');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
 goog.setTestOnly('goog.html.safeHtmlTest');
+
+
+var stubs = new goog.testing.PropertyReplacer();
+var policy = goog.createTrustedTypesPolicy('closure_test');
+
+function tearDown() {
+  stubs.reset();
+}
 
 
 function testSafeHtml() {
@@ -73,6 +83,21 @@ function testUnwrap() {
 
   var exception = assertThrows(function() { goog.html.SafeHtml.unwrap(evil); });
   assertContains('expected object of type SafeHtml', exception.message);
+}
+
+
+function testUnwrapTrustedHTML() {
+  var safeValue = goog.html.SafeHtml.htmlEscape('HTML');
+  var trustedValue = goog.html.SafeHtml.unwrapTrustedHTML(safeValue);
+  assertEquals(safeValue.getTypedStringValue(), trustedValue);
+  stubs.set(
+      goog.html.trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
+  safeValue = goog.html.SafeHtml.htmlEscape('HTML');
+  trustedValue = goog.html.SafeHtml.unwrapTrustedHTML(safeValue);
+  assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
+  assertTrue(
+      goog.global.TrustedHTML ? trustedValue instanceof TrustedHTML :
+                                goog.isString(trustedValue));
 }
 
 

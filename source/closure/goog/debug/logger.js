@@ -106,14 +106,16 @@ goog.debug.Logger.ROOT_LOGGER_NAME = '';
  *     log handlers attached to them and whether they can have their log level
  *     set. Logging is a bit faster when this is set to false.
  */
-goog.define('goog.debug.Logger.ENABLE_HIERARCHY', true);
+goog.debug.Logger.ENABLE_HIERARCHY =
+    goog.define('goog.debug.Logger.ENABLE_HIERARCHY', true);
 
 
 /**
  * @define {boolean} Toggles whether active log statements are also recorded
  *     to the profiler.
  */
-goog.define('goog.debug.Logger.ENABLE_PROFILER_LOGGING', false);
+goog.debug.Logger.ENABLE_PROFILER_LOGGING =
+    goog.define('goog.debug.Logger.ENABLE_PROFILER_LOGGING', false);
 
 
 if (!goog.debug.Logger.ENABLE_HIERARCHY) {

@@ -125,6 +125,14 @@ goog.editor.plugins.LinkDialogPlugin.prototype.stopReferrerLeaks_ = false;
 
 
 /**
+ * Whether to prevent access to the opener window in the new window to prevent
+ * reverse tabnabbing. Defaults to false.
+ * @private {boolean}
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.stopTabNabbing_ = false;
+
+
+/**
  * Whether to block opening links with a non-whitelisted URL scheme.
  * @type {boolean}
  * @private
@@ -228,6 +236,16 @@ goog.editor.plugins.LinkDialogPlugin.prototype.stopReferrerLeaks = function() {
 
 
 /**
+ * Tells the plugin to stop leaving a reference to the current window in windows
+ * opened when "Test this link" is clicked. Otherwise, the reference can be used
+ * to launch a reverse tabnabbing attack.
+ */
+goog.editor.plugins.LinkDialogPlugin.prototype.stopTabNabbing = function() {
+  this.stopTabNabbing_ = true;
+};
+
+
+/**
  * Sets the warning message to show to users about including email addresses on
  * public web pages.
  * @param {!goog.html.SafeHtml} emailWarning Warning message to show users about
@@ -315,6 +333,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
     dialog.showRelNoFollow();
   }
   dialog.setStopReferrerLeaks(this.stopReferrerLeaks_);
+  dialog.setStopTabNabbing(this.stopTabNabbing_);
   this.eventHandler_
       .listen(dialog, goog.ui.editor.AbstractDialog.EventType.OK, this.handleOk)
       .listen(
