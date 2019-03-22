@@ -20,7 +20,15 @@ goog.provide('goog.crypt');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.userAgent');
 
+/**
+ * Removes the TextDecoder polyfill if there is no need to support IE11.
+ * @define {boolean}
+ */
+goog.crypt.ASSUME_ENCODING_API = goog.define(
+    'goog.crypt.ASSUME_ENCODING_API',
+    goog.userAgent.ASSUME_WEBKIT || goog.userAgent.ASSUME_GECKO);
 
 /**
  * Turns a string into an array of bytes; a "byte" being a JS number in the
@@ -142,39 +150,92 @@ goog.crypt.stringToUtf8ByteArray = function(str) {
   return out;
 };
 
-
 /**
- * Converts a UTF-8 byte array to JavaScript's 16-bit Unicode.
- * @param {Uint8Array|Array<number>} bytes UTF-8 byte array.
- * @return {string} 16-bit Unicode string.
+ * Converts a byte array, interpreted as a sequence of UTF-8 code units, to a
+ * JavaScript string (i.e., a sequence of UTF-16 code units), as specified in
+ * https://encoding.spec.whatwg.org/#utf-8-decode.
+ * @param {!Uint8Array|!Array<number>} bytes UTF-8 byte array.
+ * @return {string} JavaScript string (UTF-16).
  */
 goog.crypt.utf8ByteArrayToString = function(bytes) {
-  // TODO(user): Use native implementations if/when available
-  var out = [], pos = 0, c = 0;
-  while (pos < bytes.length) {
-    var c1 = bytes[pos++];
-    if (c1 < 128) {
-      out[c++] = String.fromCharCode(c1);
-    } else if (c1 > 191 && c1 < 224) {
-      var c2 = bytes[pos++];
-      out[c++] = String.fromCharCode((c1 & 31) << 6 | c2 & 63);
-    } else if (c1 > 239 && c1 < 365) {
-      // Surrogate Pair
-      var c2 = bytes[pos++];
-      var c3 = bytes[pos++];
-      var c4 = bytes[pos++];
-      var u = ((c1 & 7) << 18 | (c2 & 63) << 12 | (c3 & 63) << 6 | c4 & 63) -
-          0x10000;
-      out[c++] = String.fromCharCode(0xD800 + (u >> 10));
-      out[c++] = String.fromCharCode(0xDC00 + (u & 1023));
+  if (goog.crypt.ASSUME_ENCODING_API || goog.global.TextDecoder) {
+    if (goog.isArray(bytes)) {
+      bytes = new Uint8Array(bytes);
+    }
+    return new TextDecoder().decode(bytes);
+  }
+  // In JavaScript, unlike many other languages, string concatenation in a loop
+  // generally isn't O(n^2). See https://jsperf.com/string-building-options.
+  var output = '';
+  var position = 0;
+  if (bytes.length >= 3 && bytes[0] === 0xEF && bytes[1] === 0xBB &&
+      bytes[2] === 0xBF) {
+    position = 3;
+  }
+  var codePoint = 0;
+  var bytesSeen = 0;
+  var bytesNeeded = 0;
+  var lowerBoundary = 0x80;
+  var upperBoundary = 0xBF;
+  for (; position < bytes.length; position++) {
+    var byt = bytes[position];
+    if (bytesNeeded === 0) {
+      if (byt >= 0x00 && byt <= 0x7F) {
+        output += String.fromCharCode(byt);
+      } else if (byt >= 0xC2 && byt <= 0xDF) {
+        bytesNeeded = 1;
+        codePoint = byt & 0x1F;
+      } else if (byt >= 0xE0 && byt <= 0xEF) {
+        if (byt === 0xE0) {
+          lowerBoundary = 0xA0;
+        } else if (byt === 0xED) {
+          upperBoundary = 0x9F;
+        }
+        bytesNeeded = 2;
+        codePoint = byt & 0xF;
+      } else if (byt >= 0xF0 && byt <= 0xF4) {
+        if (byt === 0xF0) {
+          lowerBoundary = 0x90;
+        } else if (byt === 0xF4) {
+          upperBoundary = 0x8F;
+        }
+        bytesNeeded = 3;
+        codePoint = byt & 0x7;
+      } else {
+        output += '\uFFFD';
+      }
+    } else if (byt < lowerBoundary || byt > upperBoundary) {
+      codePoint = 0;
+      bytesNeeded = 0;
+      bytesSeen = 0;
+      lowerBoundary = 0x80;
+      upperBoundary = 0xBF;
+      position--;
+      output += '\uFFFD';
     } else {
-      var c2 = bytes[pos++];
-      var c3 = bytes[pos++];
-      out[c++] =
-          String.fromCharCode((c1 & 15) << 12 | (c2 & 63) << 6 | c3 & 63);
+      lowerBoundary = 0x80;
+      upperBoundary = 0xBF;
+      codePoint = (codePoint << 6) | (byt & 0x3F);
+      bytesSeen++;
+      if (bytesSeen === bytesNeeded) {
+        if (codePoint < 0x10000) {
+          output += String.fromCharCode(codePoint);
+        } else {
+          // UTF-16 surrogate pair
+          output +=
+              String.fromCharCode(((codePoint - 0x10000) >> 10) + 0xD800) +
+              String.fromCharCode(((codePoint - 0x10000) & 0x3FF) + 0xDC00);
+        }
+        codePoint = 0;
+        bytesNeeded = 0;
+        bytesSeen = 0;
+      }
     }
   }
-  return out.join('');
+  if (bytesNeeded !== 0) {
+    output += '\uFFFD';
+  }
+  return output;
 };
 
 
