@@ -238,7 +238,6 @@ describe('depgraph', function() {
             [new depGraph.Es6Import('@wacky+id')]);
         const r = new depGraph.Dependency(
             depGraph.DependencyType.ES6_MODULE, '/required.js', [], []);
-        debugger;
         expect(makeValidatedGraph([d, r], resolver).order(d)).toEqual([r, d]);
         expect(makeValidatedGraph([r, d], resolver).order(d)).toEqual([r, d]);
       });

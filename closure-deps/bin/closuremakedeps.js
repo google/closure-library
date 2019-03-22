@@ -21,66 +21,91 @@
  * when using Closure Library's debug code loader in a web browser.
  */
 
-const ArgumentParser = require('argparse').ArgumentParser;
 const depFile = require('../lib/depfile');
 const depGraph = require('../lib/depgraph');
 const fs = require('fs');
 const parser = require('../lib/parser');
 const path = require('path');
 const process = require('process');
+const yargs = require('yargs');
 
-const argparser = new ArgumentParser({
-  version: '20180910.1.0',
-  addHelp: true,
-  description: 'Utility for Closure Library dependency calculation.'
-});
+/**
+ * @typedef {{
+ *   file: !Array<string>,
+ *   root: !Array<string>,
+ *   exclude: !Array<string>,
+ *   closurePath: (string|undefined),
+ *   validate: boolean,
+ *   mergeDeps: boolean,
+ * }}
+ */
+let Arguments;
 
-argparser.addArgument(['-f', '--file'], {
-  dest: 'inputs',
-  action: 'append',
-  defaultValue: [],
-  help: 'One or more input files to calculate dependencies ' +
-      'for.  The namespaces in these file will be combined with ' +
-      'those given with the --root flag to form the set of ' +
-      'namespaces to find dependencies for.',
-});
+/**
+ * @param {string|undefined} args
+ * @return {!Arguments}
+ */
+function parseArgs(args) {
+  return yargs
+      .command('*', 'Utility for Closure Library dependency calculation.')
+      .option('file', {
+        alias: 'f',
+        default: [],
+        array: true,
+        description: 'One or more input files to calculate dependencies ' +
+            'for. The namespaces in these files will be combined with ' +
+            'those given with the --root flag to form the set of ' +
+            'namespaces to find dependencies for. If this is a file that' +
+            'contains repeated calls to goog.addDependency, then the calls ' +
+            'will be used as forward declarations. e.g. if you include ' +
+            'Closure Library\'s deps.js file, then there is no need to ' +
+            'include closure/goog/array/array.js as an input file as well.' +
+            'If you wish to merge these deps files in the output, see the ' +
+            '--merge-deps option.',
+      })
+      .option('root', {
+        alias: 'r',
+        default: [],
+        array: true,
 
-argparser.addArgument(['-e', '--exclude'], {
-  dest: 'exclude',
-  action: 'append',
-  defaultValue: [],
-  help: 'One or more path prefixes to ignore. Useful when  combined with the ' +
-      '--root flag to ignore specific subfiles or subdirectories.',
-});
-
-argparser.addArgument('--root', {
-  dest: 'roots',
-  action: 'append',
-  defaultValue: [],
-  help: 'Directories to scan for JavaScript (.js) files to include as ' +
-      'inputs. These directories are scanned recursivley.',
-});
-
-argparser.addArgument('--closure-path', {
-  dest: 'closurePath',
-  help: 'Path to the Closure Library (folder containing the base.js file). ' +
-      'Required unless the path can be determined automatically by base.js ' +
-      'being included among the input files.'
-});
-
-argparser.addArgument('--validate', {
-  dest: 'validate',
-  defaultValue: true,
-  action: 'storeTrue',
-  help: 'Enables validation the dependency graph before generating the ' +
-      'dependency file.'
-});
-
-argparser.addArgument('--no-validate', {
-  dest: 'validate',
-  defaultValue: true,
-  action: 'storeFalse',
-});
+        description:
+            'Directories to scan for JavaScript (.js) files to include as ' +
+            'inputs. These directories are scanned recursivley.',
+      })
+      .option('exclude', {
+        alias: 'e',
+        default: [],
+        array: true,
+        description:
+            'One or more path prefixes to ignore. Useful when  combined ' +
+            'with the --root flag to ignore specific subfiles or ' +
+            'subdirectories.'
+      })
+      .option('closure-path', {
+        default: undefined,
+        string: true,
+        description:
+            'Path to the Closure Library (folder containing the base.js ' +
+            'file). Required unless the path can be determined ' +
+            'automatically by base.js ' +
+            'being included among the input files.',
+      })
+      .option('validate', {
+        default: true,
+        boolean: true,
+        description:
+            'Enables validation the dependency graph before generating the ' +
+            'dependency file.'
+      })
+      .option('merge-deps', {
+        default: false,
+        boolean: true,
+        description: 'If true, then any deps files (files with calls to ' +
+            'goog.addDependency included in the input wll be also included ' +
+            'in the output.'
+      })
+      .parse(args);
+}
 
 /**
  * Resolves the given path against the working directory.
@@ -134,19 +159,62 @@ async function findAllJsFiles(pathToScan, excluded) {
 }
 
 /**
+ * Finds or creates a dependency for Closure's base.js (which provides the
+ * `goog` symbol).
+ *
+ * @param {!Array<!depGraph.Dependency>} deps
+ * @param {!Arguments} args
+ * @return {!depGraph.Dependency}
+ */
+function getClosureDep(deps, args) {
+  let closureDep = deps.find(d => d.closureSymbols.indexOf('goog') >= 0);
+
+  // We need the path to Closure Library to be able to write a dependency file.
+  // Note that if we find base.js via a dependency file (like Closure's deps.js)
+  // it doesn't help us - we need the actual path of base.js, but the dependency
+  // only knows the relative path from Closure Library to base.js, which is
+  // always "base.js".
+  if (!args.closurePath && (!closureDep || closureDep.isParsedFromDepsFile())) {
+    throw new Error(
+        'Could not find path to Closure. Closure\'s base.js either needs to ' +
+        'be included or --closure-path provided.');
+  }
+
+  if (args.closurePath && closureDep && !closureDep.isParsedFromDepsFile()) {
+    throw new Error(
+        'Both --closure-path and Closure\'s base.js file should not be ' +
+        'inputs.');
+  }
+
+  if (args.closurePath && closureDep && closureDep.isParsedFromDepsFile()) {
+    closureDep.setClosurePath(args.closurePath);
+  }
+
+  if (!closureDep) {
+    closureDep = new depGraph.Dependency(
+        depGraph.DependencyType.SCRIPT, path.join(args.closurePath, 'base.js'),
+        ['goog'], []);
+    deps.push(closureDep);
+  }
+
+  return closureDep;
+}
+
+/**
  * @param {!Array<string>=} opt_args
  * @return {!Promise<{errors:!Array<!ParseError>,text:(string|undefined)}>}
  */
 async function main(opt_args) {
-  const args = argparser.parseArgs(opt_args);
+  const args = parseArgs(opt_args);
 
-  if (!args.inputs && !args.roots) {
-    argparser.error('Must supply inputs and/or roots.');
+  if (!args.file && !args.root) {
+    console.error('Must supply inputs and/or roots.');
+    yargs.showHelp();
     return;
   }
 
-  const sources = new Set((args.inputs || []).map(resolve));
-  const roots = (args.roots || []).map(resolve);
+  const sources = new Set((args.file || []).map(resolve));
+  const roots = (args.root || []).map(resolve);
   const excluded = new Set((args.exclude || []).map(resolve));
 
   const allFiles =
@@ -169,34 +237,37 @@ async function main(opt_args) {
     return {errors};
   }
 
-  const deps = results.map(r => r.dependency);
-  const closureDep = deps.find(d => d.closureSymbols.indexOf('goog') >= 0);
+  const deps = [];
+  const depsFromDepFiles = new Set();
 
-  if (!args.closurePath && !closureDep) {
-    throw new Error(
-        'Could not find path to Closure. Closure\'s base.js either needs to ' +
-        'be included or --closure-path provided.');
+  for (const result of results) {
+    for (const dep of result.dependencies) {
+      if (result.isFromDepsFile) {
+        depsFromDepFiles.add(dep);
+      }
+      deps.push(dep);
+    }
   }
 
-  if (args.closurePath && closureDep) {
-    throw new Error(
-        'Both --closure-path and Closure\'s base.js file should not be ' +
-        'inputs.');
-  }
+  const closureDep = getClosureDep(deps, args);
+  const closurePath = path.dirname(closureDep.path);
 
-  if (!closureDep) {
-    deps.push(new depGraph.Dependency(
-        depGraph.DependencyType.SCRIPT, path.join(args.closurePath, 'base.js'),
-        ['goog'], []));
+  // Update the path to closure for any files that we don't know the full path
+  // of (parsed from a goog.addDependency call).
+  for (const dep of deps) {
+    dep.setClosurePath(closurePath);
   }
 
   if (args.validate) {
     new depGraph.Graph(deps).validate();
   }
 
-  const closurePath = args.closurePath || path.dirname(closureDep.path);
+  const depsToWrite = args.mergeDeps
+      ? deps
+      // `deps` - `depsFromFiles`.
+      : deps.filter(d => !depsFromDepFiles.has(d));
 
-  const text = depFile.getDepFileText(closurePath, deps);
+  const text = depFile.getDepFileText(closurePath, depsToWrite);
   return {errors, text};
 }
 

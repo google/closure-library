@@ -24,19 +24,40 @@ const path = require('path');
 
 class ParseResult {
   /**
-   * @param {!depGraph.Dependency} dependency
+   * @param {!Array<!depGraph.Dependency>} dependencies
    * @param {!Array<!ParseError>} errors
+   * @param {!ParseResult.Source} source
    */
-  constructor(dependency, errors) {
+  constructor(dependencies, errors, source) {
     /** @const */
-    this.dependency = dependency;
+    this.dependencies = dependencies;
     /** @const */
     this.errors = errors;
+    /** @const */
+    this.source = source;
+    /** @const */
+    this.isFromDepsFile = source === ParseResult.Source.GOOG_ADD_DEPENDENCY;
     /** @const {boolean} */
     this.hasFatalError = errors.some(e => e.fatal);
   }
 }
 exports.ParseResult = ParseResult;
+
+
+/**
+ * @enum {string}
+ */
+ParseResult.Source = {
+  /**
+   * Scanned from an actual source file.
+   */
+  SOURCE_FILE: 'f',
+
+  /**
+   * A goog.addDependency statement.
+   */
+  GOOG_ADD_DEPENDENCY: 'd',
+};
 
 
 class ParseError {
@@ -121,6 +142,99 @@ const MultipleSymbolsInEs6ModuleError =
   }
 };
 
+/**
+ * @return {!RegExp} A fresh regular expression object to test for
+ *     goog.addDependnecy statements.
+ */
+function googAddDependency() {
+  return /^goog\.addDependency\('(.*?)', (\[.*?\]), (\[.*?\])(?:, ({.*}|true|false))?\);$/mg;
+}
+
+/**
+ * @param {string} fileContent
+ * @return {boolean}
+ */
+function isDepFile(fileContent) {
+  return googAddDependency().test(fileContent);
+}
+
+/**
+ * @param {string} closureRelativePath
+ * @param {string} providesText
+ * @param {string} requiresText
+ * @param {string} optionsText
+ * @return {!depGraph.Dependency}
+ */
+const parseDependencyResult = function(
+    closureRelativePath, providesText, requiresText, optionsText) {
+  const provides = JSON.parse(providesText.replace(/'/g, '"'));
+  const requires = JSON.parse(requiresText.replace(/'/g, '"'));
+  const options = optionsText ? JSON.parse(optionsText.replace(/'/g, '"')) : {};
+
+  let type = depGraph.DependencyType.SCRIPT;
+
+  if (provides.length) {
+    type = depGraph.DependencyType.CLOSURE_PROVIDE;
+  }
+
+  // true and false are legacy flags that mean a goog.module or not.
+  if (options === true) {
+    type = depGraph.DependencyType.CLOSURE_MODULE;
+  } else if (options !== false) {
+    switch (options.module) {
+      case 'es6':
+        type = depGraph.DependencyType.ES6_MODULE;
+        break;
+      case 'goog':
+        type = depGraph.DependencyType.CLOSURE_MODULE;
+        break;
+      default:
+        break;
+    }
+  }
+
+  const imports = requires.map(
+      // Assume if there is a slash it is an ES import, otherwise
+      // goog.require. Any import should have a slash, except for those inside
+      // the root of Closure Library (so just goog.js, which we also need to
+      // check for). Admittedly not 100% accurate.
+      (require) => require.indexOf('/') > -1 || require === 'goog.js' ?
+          new depGraph.Es6Import(require) :
+          new depGraph.GoogRequire(require));
+
+  return new depGraph.ParsedDependency(
+      type, closureRelativePath, provides, imports, options.lang);
+};
+
+
+/**
+ * Parses a file that contains only goog.addDependency statements. This is regex
+ * based to be lightweight and avoid addtional dependencies.
+ *
+ * @param {string} text
+ * @param {string} filePath
+ * @return {!ParseResult}
+ */
+const parseDependencyFile = function(text, filePath) {
+  const dependencies = [];
+  const errors = [];
+  let regexResult;
+  const regex = googAddDependency();
+
+  while (regexResult = regex.exec(text)) {
+    try {
+      dependencies.push(parseDependencyResult(
+          regexResult[1], regexResult[2], regexResult[3], regexResult[4]));
+    } catch (e) {
+      errors.push(new SourceError(e.toString(), filePath));
+    }
+  }
+
+  return new ParseResult(
+      dependencies, errors, ParseResult.Source.GOOG_ADD_DEPENDENCY);
+};
+exports.parseDependencyFile = parseDependencyFile;
+
 
 /**
  * @param {string} text
@@ -141,13 +255,17 @@ const parseText = exports.parseText = function(text, filePath) {
     errors.push(new ParseError(fatal, message, sourceName, line, lineOffset));
   }
 
+  if (isDepFile(text)) {
+    return parseDependencyFile(text, filePath, report);
+  }
+
   const data = gjd(text, filePath, report);
 
   if (errors.some(e => e.fatal)) {
     return new ParseResult(
-        new depGraph.Dependency(
-            depGraph.DependencyType.SCRIPT, filePath, [], []),
-        errors);
+        [new depGraph.Dependency(
+            depGraph.DependencyType.SCRIPT, filePath, [], [])],
+        errors, ParseResult.Source.SOURCE_FILE);
   }
 
   function getLoadFlag(key, defaultValue) {
@@ -202,5 +320,5 @@ const parseText = exports.parseText = function(text, filePath) {
         depGraph.DependencyType.SCRIPT, filePath, provides, imports, language);
   }
 
-  return new ParseResult(dependency, errors);
+  return new ParseResult([dependency], errors, ParseResult.Source.SOURCE_FILE);
 };

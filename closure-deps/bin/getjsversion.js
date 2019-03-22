@@ -40,6 +40,6 @@ rl.on('close', () => {
     console.error(error.toString());
   }
   if (!fatal) {
-    console.log(result.dependency.language);
+    console.log(result.dependencies[0].language);
   }
 });

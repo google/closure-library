@@ -76,6 +76,70 @@ class Dependency {
      */
     this.language = language;
   }
+
+  /**
+   * Updates the path to Closure Library for this file. This is useful for
+   * ParsedDependency, which cannot know the full path of a file on until it
+   * knows the path to Closure Library, as the path in the goog.addDependency
+   * call is relative from Closure Library.
+   *
+   * @param {string} path
+   */
+  setClosurePath(path) {}
+
+  /**
+   * @return {boolean}
+   */
+  isParsedFromDepsFile() { return false; }
+}
+
+
+/**
+ * A dependency that was parsed from an goog.addDependnecy call.
+ */
+class ParsedDependency extends Dependency {
+  /**
+   * @param {!DependencyType} type
+   * @param {string} closureRelativePath
+   * @param {!Array<string>} closureSymbols
+   * @param {!Array<!Import>} imports
+   * @param {string=} language
+   */
+  constructor(
+      type, closureRelativePath, closureSymbols, imports, language = 'es3') {
+    super(type, /* filepath= */ '', closureSymbols, imports, language);
+    /** @private {string|undefined} */
+    this.path_ = undefined;
+
+    /**
+     * Relative path from Closure Library to this file.
+     * @const
+     */
+    this.closureRelativePath = closureRelativePath;
+  }
+
+  /** @return {string} */
+  get path() {
+    if (!this.path_) {
+      throw new Error(
+          'Must call setClosurePath in order to determine the ' +
+          'actual path of this dependency.');
+    }
+    return this.path_;
+  }
+
+  /** @param {string} value */
+  set path(value) {
+    // Ignore, only here to satisfy super constructor.
+  }
+
+  /** @override */
+  setClosurePath(closurePath) {
+    this.path_ = path.resolve(closurePath, this.closureRelativePath);
+  }
+
+  /** @override */
+  isParsedFromDepsFile() { return true; }
 }
 
 
@@ -382,6 +446,7 @@ class Graph {
 module.exports = {
   DependencyType,
   Dependency,
+  ParsedDependency,
   GoogRequire,
   Es6Import,
   Graph,

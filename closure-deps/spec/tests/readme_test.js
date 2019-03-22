@@ -25,17 +25,18 @@ function lines(...lines) {
   return lines.join('\n');
 }
 
-const goog = parser.parseText('/** @provideGoog */', '/base.js').dependency;
+const [goog] = parser.parseText('/** @provideGoog */', '/base.js').dependencies;
 
 describe('examples in README', function() {
   it('goog modules', function() {
-    const firstFile =
-        parser.parseText(`goog.module('first.module')`, '/first.js').dependency;
-    const secondFile = parser.parseText(
+    const [firstFile] =
+        parser.parseText(`goog.module('first.module')`, '/first.js')
+            .dependencies;
+    const [secondFile] = parser.parseText(
         lines(
             'goog.module(\'second.module\');',
             'const firstModule = goog.require(\'first.module\');'),
-        '/second.js').dependency;
+        '/second.js').dependencies;
     const graph = new depGraph.Graph([goog, firstFile, secondFile]);
     expect(graph.order(secondFile)).toEqual([goog, firstFile, secondFile]);
     expect(graph.depsBySymbol.get('first.module')).toBe(firstFile);
@@ -43,23 +44,23 @@ describe('examples in README', function() {
   });
 
   it('es6 modules', function() {
-    const firstFile = parser
+    const [firstFile] = parser
                           .parseText(
                               lines(
                                   'goog.declareModuleId(\'first.module\');',
                                   'export const FOO = \'foo\';'),
                               '/first.js')
-                          .dependency;
+                          .dependencies;
 
-    const secondFile =
+    const [secondFile] =
         parser.parseText('import {FOO} from "./first.js";', '/second.js')
-            .dependency;
+            .dependencies;
 
-    const thirdFile = parser.parseText(
+    const [thirdFile] = parser.parseText(
         lines(
             'goog.module("third.module");',
             'const firstModule = goog.require("first.module");'),
-        '/third.js').dependency;
+        '/third.js').dependencies;
 
     const graph = new depGraph.Graph([goog, firstFile, secondFile, thirdFile]);
     expect(graph.order(secondFile, thirdFile)).toEqual([
