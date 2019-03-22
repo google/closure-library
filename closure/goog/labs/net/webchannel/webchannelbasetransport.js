@@ -29,6 +29,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.json');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.labs.net.webChannel.WebChannelBase');
+goog.require('goog.labs.net.webChannel.Wire');
 goog.require('goog.log');
 goog.require('goog.net.WebChannel');
 goog.require('goog.net.WebChannelTransport');
@@ -58,6 +59,7 @@ goog.labs.net.webChannel.WebChannelBaseTransport = function() {
 goog.scope(function() {
 var WebChannelBaseTransport = goog.labs.net.webChannel.WebChannelBaseTransport;
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
+var Wire = goog.labs.net.webChannel.Wire;
 
 
 /**
@@ -275,11 +277,11 @@ WebChannelBaseTransport.Channel.prototype.send = function(message) {
 
   if (goog.isString(message)) {
     var rawJson = {};
-    rawJson['__data__'] = message;
+    rawJson[Wire.RAW_DATA_KEY] = message;
     this.channel_.sendMap(rawJson);
   } else if (this.sendRawJson_) {
     var rawJson = {};
-    rawJson['__data__'] = goog.json.serialize(message);
+    rawJson[Wire.RAW_DATA_KEY] = goog.json.serialize(message);
     this.channel_.sendMap(rawJson);
   } else {
     this.channel_.sendMap(message);

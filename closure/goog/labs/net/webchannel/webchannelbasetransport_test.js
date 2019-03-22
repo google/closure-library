@@ -27,6 +27,7 @@ goog.require('goog.json');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.labs.net.webChannel.WebChannelBase');
 goog.require('goog.labs.net.webChannel.WebChannelBaseTransport');
+goog.require('goog.labs.net.webChannel.Wire');
 goog.require('goog.net.WebChannel');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
@@ -248,11 +249,53 @@ function testOpenWithCorsEnabled() {
   assertTrue(webChannel.channel_.supportsCrossDomainXhrs_);
 }
 
-function testSendRawJson() {
+function testSendRawJsonDefaultValue() {
   var channelMsg;
   stubs.set(
       goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
-      function(message) { channelMsg = message; });
+      function(message) {
+        channelMsg = message;
+      });
+
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  webChannel = webChannelTransport.createWebChannel(channelUrl);
+  webChannel.open();
+
+  webChannel.send({foo: 'bar'});
+  assertEquals('bar', channelMsg.foo);
+}
+
+function testSendRawJsonUndefinedValue() {
+  var channelMsg;
+  stubs.set(
+      goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
+      function(message) {
+        channelMsg = message;
+      });
+
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {};
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  webChannel.send({foo: 'bar'});
+  assertEquals('bar', channelMsg.foo);
+}
+
+function testSendRawJsonExplicitTrueValue() {
+  var channelMsg;
+  stubs.set(
+      goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
+      function(message) {
+        channelMsg = message;
+      });
+  stubs.set(
+      goog.labs.net.webChannel.WebChannelBase.prototype, 'getServerVersion',
+      function() {
+        return 12;
+      });
 
   var webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
@@ -262,8 +305,32 @@ function testSendRawJson() {
 
   webChannel.send({foo: 'bar'});
 
-  var receivedMsg = goog.json.parse(channelMsg['__data__']);
+  var receivedMsg =
+      goog.json.parse(channelMsg[goog.labs.net.webChannel.Wire.RAW_DATA_KEY]);
   assertEquals('bar', receivedMsg.foo);
+}
+
+function testSendRawJsonExplicitFalseValue() {
+  var channelMsg;
+  stubs.set(
+      goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
+      function(message) {
+        channelMsg = message;
+      });
+  stubs.set(
+      goog.labs.net.webChannel.WebChannelBase.prototype, 'getServerVersion',
+      function() {
+        return 12;
+      });
+
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {'sendRawJson': false};
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  webChannel.send({foo: 'bar'});
+  assertEquals('bar', channelMsg.foo);
 }
 
 function testOpenThenCloseChannel() {
