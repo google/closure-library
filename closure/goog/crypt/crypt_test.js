@@ -55,6 +55,7 @@ function testStringToUtf8ByteArray() {
 }
 
 function testUtf8ByteArrayToString() {
+  // Known encodings taken from Java's String.getBytes("UTF8")
 
   assertEquals('ASCII', 'Hello, world', goog.crypt.utf8ByteArrayToString([
     72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100
@@ -71,22 +72,6 @@ function testUtf8ByteArrayToString() {
   assertEquals(
       'Surrogate Pair', UTF8_SURROGATE_PAIR_RANGES_STRING,
       goog.crypt.utf8ByteArrayToString(UTF8_SURROGATE_PAIR_RANGES_BYTE_ARRAY));
-
-  assertEquals(
-      'Bytes close to surrogates', 'ힰ',
-      goog.crypt.utf8ByteArrayToString([0xED, 0x9E, 0xB0]));
-
-  assertEquals('BOM', 'Hello', goog.crypt.utf8ByteArrayToString([
-    0xEF, 0xBB, 0xBF, 0x48, 0x65, 0x6C, 0x6C, 0x6F
-  ]));
-
-  assertEquals(
-      'Invalid surrogate byte sequence', '\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD',
-      goog.crypt.utf8ByteArrayToString([0xED, 0xA0, 0xBE, 0xED, 0xB4, 0x94]));
-
-  assertEquals(
-      'Truncated multibyte sequence', '\uFFFD',
-      goog.crypt.utf8ByteArrayToString([0xF0]));
 }
 
 
@@ -111,32 +96,6 @@ function testUint8ArrayToString() {
   assertEquals(
       'limits of the first 3 UTF-8 character ranges', UTF8_RANGES_STRING,
       goog.crypt.utf8ByteArrayToString(arr));
-
-  arr = new Uint8Array([0xED, 0x9E, 0xB0]);
-  assertEquals(
-      'Bytes close to surrogates', 'ힰ', goog.crypt.utf8ByteArrayToString(arr));
-
-  arr = new Uint8Array([0xEF, 0xBB, 0xBF, 0x48, 0x65, 0x6C, 0x6C, 0x6F]);
-  assertEquals('BOM', 'Hello', goog.crypt.utf8ByteArrayToString(arr));
-
-  arr = new Uint8Array([0xED, 0xA0, 0xBE, 0xED, 0xB4, 0x94]);
-  assertEquals(
-      'Invalid surrogate byte sequence', '\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD',
-      goog.crypt.utf8ByteArrayToString(arr));
-
-  arr = new Uint8Array([0xF0]);
-  assertEquals(
-      'Truncated multibyte sequence', '\uFFFD',
-      goog.crypt.utf8ByteArrayToString(arr));
-}
-
-function testRoundTripEncodingThenDecoding() {
-  // This a randomly generated string selected to cover a broad range of chars.
-  var expected =
-      '帹åꙋ蜭俻˃W`㖔阩¸*ึ駌ꄘ䐺ࢠꝎ¯䣟䇻셖P«ᠿ꧲䞫蘴劏쁒©ศöP·ᑉæ}Z萃Úý뮸յ빔蓿Û󠻁멜Nү⧣牰W䠑뤘^亱꠴';
-  var actual = goog.crypt.utf8ByteArrayToString(
-      goog.crypt.stringToUtf8ByteArray(expected));
-  assertEquals(expected, actual);
 }
 
 function testByteArrayToString() {

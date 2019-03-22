@@ -78,7 +78,7 @@ goog.addDependency('crypt/blockcipher.js', ['goog.crypt.BlockCipher'], [], {});
 goog.addDependency('crypt/bytestring_perf.js', ['goog.crypt.byteArrayToStringPerf'], ['goog.array', 'goog.dom', 'goog.testing.PerformanceTable'], {});
 goog.addDependency('crypt/cbc.js', ['goog.crypt.Cbc'], ['goog.array', 'goog.asserts', 'goog.crypt', 'goog.crypt.BlockCipher'], {});
 goog.addDependency('crypt/cbc_test.js', ['goog.crypt.CbcTest'], ['goog.crypt', 'goog.crypt.Aes', 'goog.crypt.Cbc', 'goog.testing.jsunit'], {});
-goog.addDependency('crypt/crypt.js', ['goog.crypt'], ['goog.array', 'goog.asserts', 'goog.userAgent'], {});
+goog.addDependency('crypt/crypt.js', ['goog.crypt'], ['goog.array', 'goog.asserts'], {});
 goog.addDependency('crypt/crypt_test.js', ['goog.cryptTest'], ['goog.crypt', 'goog.string', 'goog.testing.jsunit'], {});
 goog.addDependency('crypt/ctr.js', ['goog.crypt.Ctr'], ['goog.array', 'goog.asserts', 'goog.crypt'], {});
 goog.addDependency('crypt/ctr_test.js', ['goog.crypt.CtrTest'], ['goog.crypt', 'goog.crypt.Aes', 'goog.crypt.Ctr', 'goog.testing.jsunit'], {});
