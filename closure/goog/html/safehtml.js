@@ -784,14 +784,18 @@ goog.html.SafeHtml.createWithDir = function(
 
 
 /**
- * Creates a new SafeHtml object by concatenating values.
- * @param {...(!goog.html.SafeHtml.TextOrHtml_|
- *     !Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args Values to concatenate.
+ * Creates a new SafeHtml object by joining the parts with separator.
+ * @param {!goog.html.SafeHtml.TextOrHtml_} separator
+ * @param {!Array<!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>>} parts Parts to join. If a part
+ *     contains an array then each member of this array is also joined with the
+ *     separator.
  * @return {!goog.html.SafeHtml}
  */
-goog.html.SafeHtml.concat = function(var_args) {
-  var dir = goog.i18n.bidi.Dir.NEUTRAL;
-  var content = '';
+goog.html.SafeHtml.join = function(separator, parts) {
+  var separatorHtml = goog.html.SafeHtml.htmlEscape(separator);
+  var dir = separatorHtml.getDirection();
+  var content = [];
 
   /**
    * @param {!goog.html.SafeHtml.TextOrHtml_|
@@ -802,7 +806,7 @@ goog.html.SafeHtml.concat = function(var_args) {
       goog.array.forEach(argument, addArgument);
     } else {
       var html = goog.html.SafeHtml.htmlEscape(argument);
-      content += goog.html.SafeHtml.unwrap(html);
+      content.push(goog.html.SafeHtml.unwrap(html));
       var htmlDir = html.getDirection();
       if (dir == goog.i18n.bidi.Dir.NEUTRAL) {
         dir = htmlDir;
@@ -812,9 +816,21 @@ goog.html.SafeHtml.concat = function(var_args) {
     }
   };
 
-  goog.array.forEach(arguments, addArgument);
+  goog.array.forEach(parts, addArgument);
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
-      content, dir);
+      content.join(goog.html.SafeHtml.unwrap(separatorHtml)), dir);
+};
+
+
+/**
+ * Creates a new SafeHtml object by concatenating values.
+ * @param {...(!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args Values to concatenate.
+ * @return {!goog.html.SafeHtml}
+ */
+goog.html.SafeHtml.concat = function(var_args) {
+  return goog.html.SafeHtml.join(
+      goog.html.SafeHtml.EMPTY, Array.prototype.slice.call(arguments));
 };
 
 

@@ -588,6 +588,21 @@ function testSafeHtmlCreateWithDir() {
 }
 
 
+function testSafeHtmlJoin() {
+  var br = goog.html.SafeHtml.BR;
+  assertSameHtml(
+      'Hello<br>World', goog.html.SafeHtml.join(br, ['Hello', 'World']));
+  assertSameHtml(
+      'Hello<br>World', goog.html.SafeHtml.join(br, ['Hello', ['World']]));
+  assertSameHtml('Hello<br>', goog.html.SafeHtml.join('Hello', ['', br]));
+
+  var ltr = goog.html.testing.newSafeHtmlForTest('', goog.i18n.bidi.Dir.LTR);
+  assertEquals(
+      goog.i18n.bidi.Dir.LTR,
+      goog.html.SafeHtml.join(br, [ltr, ltr]).getDirection());
+}
+
+
 function testSafeHtmlConcat() {
   var br = goog.html.testing.newSafeHtmlForTest('<br>');
 
