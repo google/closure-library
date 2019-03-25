@@ -555,6 +555,15 @@ WebChannelBase.MAX_MAPS_PER_REQUEST_ = 1000;
 
 
 /**
+ * The maximum number of utf-8 chars that can be sent in one GET to enable 0-RTT
+ * handshake.
+ *
+ *  @const @private {number}
+ */
+WebChannelBase.MAX_CHARS_PER_GET_ = 4 * 1024;
+
+
+/**
  * A guess at a cutoff at which to no longer assume the backchannel is dead
  * when we are slow to receive data. Number in bytes.
  *
@@ -563,6 +572,14 @@ WebChannelBase.MAX_MAPS_PER_REQUEST_ = 1000;
  * @type {number}
  */
 WebChannelBase.OUTSTANDING_DATA_BACKCHANNEL_RETRY_CUTOFF = 37500;
+
+
+/**
+ * @return {number} The server version or 0 if undefined
+ */
+WebChannelBase.prototype.getServerVersion = function() {
+  return this.serverVersion_;
+};
 
 
 /**
@@ -1269,7 +1286,11 @@ WebChannelBase.prototype.open_ = function() {
     request.setExtraHeaders(extraHeaders);
   }
 
-  var requestText = this.dequeueOutgoingMaps_(request);
+  var requestText = this.dequeueOutgoingMaps_(
+      request,
+      this.fastHandshake_ ? this.getMaxNumMessagesForFastHandshake_() :
+                            WebChannelBase.MAX_MAPS_PER_REQUEST_);
+
   var uri = this.forwardChannelUri_.clone();
   uri.setParameterValue('RID', rid);
 
@@ -1306,6 +1327,37 @@ WebChannelBase.prototype.open_ = function() {
     request.xmlHttpPost(uri, requestText, true);
   }
 };
+
+
+/**
+ * @return {number} The number of raw JSON messages to be encoded
+ * with the fast-handshake (GET) request, including zero. If messages are not
+ * encoded as raw JSON data, return WebChannelBase.MAX_MAPS_PER_REQUEST_
+ * @private
+ */
+WebChannelBase.prototype.getMaxNumMessagesForFastHandshake_ = function() {
+  var total = 0;
+  for (var i = 0; i < this.outgoingMaps_.length; i++) {
+    var map = this.outgoingMaps_[i];
+    var size = map.getRawDataSize();
+    if (size === undefined) {
+      break;
+    }
+    total += size;
+
+    if (total > WebChannelBase.MAX_CHARS_PER_GET_) {
+      return i;
+    }
+
+    if (total === WebChannelBase.MAX_CHARS_PER_GET_ ||
+        i === this.outgoingMaps_.length - 1) {
+      return i + 1;
+    }
+  }
+
+  return WebChannelBase.MAX_MAPS_PER_REQUEST_;
+};
+
 
 
 /**
@@ -1346,7 +1398,8 @@ WebChannelBase.prototype.makeForwardChannelRequest_ = function(
   if (opt_retryRequest) {
     this.requeuePendingMaps_(opt_retryRequest);
   }
-  requestText = this.dequeueOutgoingMaps_(request);
+  requestText =
+      this.dequeueOutgoingMaps_(request, WebChannelBase.MAX_MAPS_PER_REQUEST_);
 
   // Randomize from 50%-100% of the forward channel timeout to avoid
   // a big hit if servers happen to die at once.
@@ -1378,14 +1431,15 @@ WebChannelBase.prototype.addAdditionalParams_ = function(uri) {
 
 /**
  * Returns the request text from the outgoing maps and resets it.
- * @param {!ChannelRequest=} request The new request for sending the messages.
+ * @param {!ChannelRequest} request The new request for sending the messages.
+ * @param {number} maxNum The maximum number of messages to be encoded
  * @return {string} The encoded request text created from all the currently
  *                  queued outgoing maps.
  * @private
  */
-WebChannelBase.prototype.dequeueOutgoingMaps_ = function(request) {
-  var count =
-      Math.min(this.outgoingMaps_.length, WebChannelBase.MAX_MAPS_PER_REQUEST_);
+WebChannelBase.prototype.dequeueOutgoingMaps_ = function(request, maxNum) {
+  var count = Math.min(this.outgoingMaps_.length, maxNum);
+
   var badMapHandler = this.handler_ ?
       goog.bind(this.handler_.badMapError, this.handler_, this) :
       null;
@@ -1969,6 +2023,10 @@ WebChannelBase.prototype.onInput_ = function(respArray, request) {
         }
 
         this.startBackchannelAfterHandshake_(request);
+
+        if (this.outgoingMaps_.length > 0) {
+          this.ensureForwardChannel_();
+        }
       } else if (nextArray[0] == 'stop' || nextArray[0] == 'close') {
         // treat close also as an abort
         this.signalError_(WebChannelBase.Error.STOP);

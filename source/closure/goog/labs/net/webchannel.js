@@ -131,9 +131,9 @@ goog.net.WebChannel.FailureRecovery = function() {};
  * testUrl: the test URL for detecting connectivity during the initial
  * handshake. This parameter defaults to "/<channel_url>/test".
  *
- * sendRawJson: whether to bypass v8 encoding of client-sent messages. Will be
- * deprecated after v9 wire protocol is introduced. Only safe to set if the
- * server is known to support this feature.
+ * sendRawJson: whether to bypass v8 encoding of client-sent messages.
+ * This defaults to false now due to legacy servers. New applications should
+ * always configure this option to true.
  *
  * httpSessionIdParam: the URL parameter name that contains the session id (
  * for sticky routing of HTTP requests). When this param is specified, a server
@@ -156,14 +156,16 @@ goog.net.WebChannel.FailureRecovery = function() {};
  * This defaults to false. Long-polling may be necessary when a (MITM) proxy
  * is buffering data sent by the server.
  *
- * fastHandshake: experimental feature to enable true 0-RTT message delivery,
- * e.g. by leveraging QUIC 0-RTT (which requires GET to be used). This option
- * defaults to false. When this option is enabled, backgroundChannelTest will
- * be forced to true. Note it is allowed to send messages before Open event is
- * received, after a channel has been connected. In order to enable 0-RTT,
- * messages need be encoded as part of URL and therefore there needs be a size
- * limit (e.g. 16KB) for messages that need be sent immediately
- * as part of the handshake.
+ * fastHandshake: enable true 0-RTT message delivery, including
+ * leveraging QUIC 0-RTT (which requires GET to be used). This option
+ * defaults to false. Note it is allowed to send messages before Open event is
+ * received, after a channel has been opened. In order to enable 0-RTT,
+ * messages will be encoded as part of URL and therefore there needs be a size
+ * limit for those initial messages that are sent immediately as part of the
+ * GET handshake request. With sendRawJson=true, this limit is currently set
+ * to 4K chars and data beyond this limit will be buffered till the handshake
+ * (1-RTT) finishes. With sendRawJson=false, it's up to the application
+ * to limit the amount of data that is sent as part of the handshake.
  *
  * disableRedact: whether to disable logging redact. By default, redact is
  * enabled to remove any message payload or user-provided info
