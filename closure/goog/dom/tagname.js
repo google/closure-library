@@ -14,8 +14,8 @@
 
 /**
  * @fileoverview Defines the goog.dom.TagName class. Its constants enumerate
- * all HTML tag names specified in either the the W3C HTML 4.01 index of
- * elements or the HTML5.1 specification.
+ * all HTML tag names specified in either the W3C HTML 4.01 index of elements
+ * or the HTML5.1 specification.
  *
  * References:
  * https://www.w3.org/TR/html401/index/elements.html
