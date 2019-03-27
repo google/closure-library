@@ -1606,7 +1606,7 @@ goog.array.zip = function(var_args) {
  * Shuffles the values in the specified array using the Fisher-Yates in-place
  * shuffle (also known as the Knuth Shuffle). By default, calls Math.random()
  * and so resets the state of that random number generator. Similarly, may reset
- * the state of the any other specified random number generator.
+ * the state of any other specified random number generator.
  *
  * Runtime: O(n)
  *

@@ -451,11 +451,14 @@ goog.net.WebSocket.prototype.onClose_ = function(event) {
 /**
  * Called when a new message arrives from the server.
  *
- * @param {MessageEvent<string>} event The web socket message event.
+ * @param {!MessageEvent<string|!ArrayBuffer|!Blob>} event The web socket
+ *     message event.
+ * @return {void}
  * @private
  */
 goog.net.WebSocket.prototype.onMessage_ = function(event) {
-  var message = event.data;
+  // This code only uses string messages
+  var message = goog.asserts.assertString(event.data);
   this.dispatchEvent(new goog.net.WebSocket.MessageEvent(message));
 };
 
