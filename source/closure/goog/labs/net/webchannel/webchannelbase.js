@@ -427,6 +427,13 @@ goog.labs.net.webChannel.WebChannelBase = function(
   if (opt_options && opt_options.forceLongPolling) {
     this.allowChunkedMode_ = false;
   }
+
+  /**
+   * Callback when all the pending client-sent messages have been flushed.
+   *
+   * @private {function()|undefined}
+   */
+  this.forwardChannelFlushedCallback_ = undefined;
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
@@ -1650,6 +1657,7 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
     }
     if (goog.isArray(response) && response.length == 3) {
       this.handlePostResponse_(/** @type {!Array<?>} */ (response), request);
+      this.onForwardChannelFlushed_();
     } else {
       this.channelDebug_.debug('Bad POST response data returned');
       this.signalError_(WebChannelBase.Error.BAD_RESPONSE);
@@ -1662,6 +1670,27 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
     if (!goog.string.isEmptyOrWhitespace(responseText)) {
       var response = this.wireCodec_.decodeMessage(responseText);
       this.onInput_(/** @type {!Array<?>} */ (response), request);
+    }
+  }
+};
+
+
+/**
+ * Checks if we need call the flush callback.
+ *
+ * @private
+ */
+WebChannelBase.prototype.onForwardChannelFlushed_ = function() {
+  if (this.forwardChannelRequestPool_.getRequestCount() <= 1) {
+    if (this.forwardChannelFlushedCallback_) {
+      try {
+        this.forwardChannelFlushedCallback_();
+      } catch (ex) {
+        this.channelDebug_.dumpException(
+            ex, 'Exception from forwardChannelFlushedCallback_ ');
+      }
+      // reset
+      this.forwardChannelFlushedCallback_ = undefined;
     }
   }
 };
@@ -2305,6 +2334,16 @@ WebChannelBase.prototype.isActive = function() {
  */
 WebChannelBase.prototype.shouldUseSecondaryDomains = function() {
   return this.supportsCrossDomainXhrs_;
+};
+
+
+/**
+ * Sets (overwrites) the forward channel flush callback.
+ *
+ * @param {function()} callback The callback to be invoked.
+ */
+WebChannelBase.prototype.setForwardChannelFlushCallback = function(callback) {
+  this.forwardChannelFlushedCallback_ = callback;
 };
 
 

@@ -493,8 +493,10 @@ WebChannelBaseTransport.ChannelProperties.prototype.getHttpSessionId =
 /**
  * @override
  */
-WebChannelBaseTransport.ChannelProperties.prototype.commit =
-    goog.abstractMethod;
+WebChannelBaseTransport.ChannelProperties.prototype.commit = function(
+    callback) {
+  this.channel_.setForwardChannelFlushCallback(callback);
+};
 
 
 /**
