@@ -485,6 +485,8 @@ goog.net.WebChannel.RuntimeProperties.prototype.getHttpSessionId =
 
 
 /**
+ * Experimental API.
+ *
  * This method generates an in-band commit request to the server, which will
  * ack the commit request as soon as all messages sent prior to this commit
  * request have been committed by the application.
@@ -496,6 +498,21 @@ goog.net.WebChannel.RuntimeProperties.prototype.getHttpSessionId =
  * Timeout or cancellation is not supported and the application may have to
  * abort the channel if the commit-ack fails to arrive in time.
  *
+ * ===
+ *
+ * This is currently implemented only in the client layer and the commit
+ * callback will be invoked after _all_ pending client-sent messages have been
+ * delivered by the server-side webchannel end-point. This semantics is
+ * different and weaker than what's required for end-to-end ack which requires
+ * the server application to ack the delivery (of messages that are sent
+ * before the commit is scheduled).
+ *
+ * In addition to the ack semantics, the current implementation may be used to
+ * enable client-side flow-control too, as the callback effectively signals the
+ * _flush_ of all pending messages.
+ *
+ * Messaged delivered with 0-RTT handshake will not trigger the callback.
+ *
  * @param {function()} callback The callback will be invoked once an
  * ack has been received for the current commit or any newly issued commit.
  */
@@ -503,10 +520,14 @@ goog.net.WebChannel.RuntimeProperties.prototype.commit = goog.abstractMethod;
 
 
 /**
+ * Experimental API.
+ *
  * This method may be used by the application to recover from a peer failure
  * or to enable sender-initiated flow-control.
  *
  * Detail spec: https://github.com/bidiweb/webchannel/blob/master/commit.md
+ *
+ * This is not yet implemented.
  *
  * @return {number} The total number of messages that have not received
  * commit-ack from the server; or if no commit has been issued, the number
@@ -517,6 +538,8 @@ goog.net.WebChannel.RuntimeProperties.prototype.getNonAckedMessageCount =
 
 
 /**
+ * Experimental API.
+ *
  * A low water-mark message count to notify the application when the
  * flow-control condition is cleared, that is, when the application is
  * able to send more messages.
@@ -525,6 +548,8 @@ goog.net.WebChannel.RuntimeProperties.prototype.getNonAckedMessageCount =
  * which is checked via getNonAckedMessageCount(). When the high water-mark
  * is exceeded, the application should install a callback via this method
  * to be notified when to start to send new messages.
+ *
+ * This is not yet implemented.
  *
  * @param {number} count The low water-mark count. It is an error to pass
  * a non-positive value.
@@ -538,9 +563,13 @@ goog.net.WebChannel.RuntimeProperties.prototype.notifyNonAckedMessageCount =
 
 
 /**
+ * Experimental API.
+ *
  * This method registers a callback to handle the commit request sent
  * by the server. Commit protocol spec:
  * https://github.com/bidiweb/webchannel/blob/master/commit.md
+ *
+ * This is not yet implemented.
  *
  * @param {function(!Object)} callback The callback will take an opaque
  * commitId which needs be passed back to the server when an ack-commit
@@ -550,9 +579,13 @@ goog.net.WebChannel.RuntimeProperties.prototype.onCommit = goog.abstractMethod;
 
 
 /**
+ * Experimental API.
+ *
  * This method is used by the application to generate an ack-commit response
  * for the given commitId. Commit protocol spec:
  * https://github.com/bidiweb/webchannel/blob/master/commit.md
+ *
+ * This is not yet implemented.
  *
  * @param {!Object} commitId The commitId which denotes the commit request
  * from the server that needs be ack'ed.
