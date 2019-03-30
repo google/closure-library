@@ -36,3 +36,8 @@ sha1.update("foobar");
 var hash = sha1.digest();
 ```
 
+## Contributing
+Please read the [CONTRIBUTING] for details on how to contribute to this project.
+
+[CONTRIBUTING]: https://github.com/google/closure-library/blob/master/CONTRIBUTING
+
