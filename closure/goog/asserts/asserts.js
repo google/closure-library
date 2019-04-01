@@ -178,6 +178,7 @@ goog.asserts.setErrorHandler = function(errorHandler) {
  * @param {...*} var_args The items to substitute into the failure message.
  * @return {T} The value of the condition.
  * @throws {goog.asserts.AssertionError} When the condition evaluates to false.
+ * @closurePrimitive {asserts.truthy}
  */
 goog.asserts.assert = function(condition, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !condition) {
@@ -205,6 +206,7 @@ goog.asserts.assert = function(condition, opt_message, var_args) {
  * @param {string=} opt_message Error message in case of failure.
  * @param {...*} var_args The items to substitute into the failure message.
  * @throws {goog.asserts.AssertionError} Failure.
+ * @closurePrimitive {asserts.fail}
  */
 goog.asserts.fail = function(opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS) {
@@ -223,6 +225,7 @@ goog.asserts.fail = function(opt_message, var_args) {
  * @param {...*} var_args The items to substitute into the failure message.
  * @return {number} The value, guaranteed to be a number when asserts enabled.
  * @throws {goog.asserts.AssertionError} When the value is not a number.
+ * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertNumber = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isNumber(value)) {
@@ -241,6 +244,7 @@ goog.asserts.assertNumber = function(value, opt_message, var_args) {
  * @param {...*} var_args The items to substitute into the failure message.
  * @return {string} The value, guaranteed to be a string when asserts enabled.
  * @throws {goog.asserts.AssertionError} When the value is not a string.
+ * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertString = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isString(value)) {
@@ -260,6 +264,7 @@ goog.asserts.assertString = function(value, opt_message, var_args) {
  * @return {!Function} The value, guaranteed to be a function when asserts
  *     enabled.
  * @throws {goog.asserts.AssertionError} When the value is not a function.
+ * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertFunction = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isFunction(value)) {
@@ -278,6 +283,7 @@ goog.asserts.assertFunction = function(value, opt_message, var_args) {
  * @param {...*} var_args The items to substitute into the failure message.
  * @return {!Object} The value, guaranteed to be a non-null object.
  * @throws {goog.asserts.AssertionError} When the value is not an object.
+ * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertObject = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isObject(value)) {
@@ -296,6 +302,7 @@ goog.asserts.assertObject = function(value, opt_message, var_args) {
  * @param {...*} var_args The items to substitute into the failure message.
  * @return {!Array<?>} The value, guaranteed to be a non-null array.
  * @throws {goog.asserts.AssertionError} When the value is not an array.
+ * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertArray = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isArray(value)) {
@@ -315,6 +322,7 @@ goog.asserts.assertArray = function(value, opt_message, var_args) {
  * @return {boolean} The value, guaranteed to be a boolean when asserts are
  *     enabled.
  * @throws {goog.asserts.AssertionError} When the value is not a boolean.
+ * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertBoolean = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isBoolean(value)) {
@@ -334,6 +342,7 @@ goog.asserts.assertBoolean = function(value, opt_message, var_args) {
  * @return {!Element} The value, likely to be a DOM Element when asserts are
  *     enabled.
  * @throws {goog.asserts.AssertionError} When the value is not an Element.
+ * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertElement = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS &&
@@ -360,6 +369,7 @@ goog.asserts.assertElement = function(value, opt_message, var_args) {
  *     type.
  * @return {T}
  * @template T
+ * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertInstanceof = function(value, type, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !(value instanceof type)) {
