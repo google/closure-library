@@ -162,7 +162,7 @@ goog.inherits(
 /**
  * A matcher that always returns true. It is useful when the user does not care
  * for some arguments.
- * For example: mockFunction('username', 'password', IgnoreArgument);
+ * For example: mockFunction('username', 'password', new IgnoreArgument());
  * @constructor
  * @extends {goog.testing.mockmatchers.ArgumentMatcher}
  * @final
