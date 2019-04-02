@@ -20,12 +20,16 @@ goog.require('goog.date.DateTime');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimePatterns');
 goog.require('goog.i18n.DateTimePatterns_ar_EG');
+goog.require('goog.i18n.DateTimePatterns_bg');
 goog.require('goog.i18n.DateTimePatterns_de');
 goog.require('goog.i18n.DateTimePatterns_en');
+goog.require('goog.i18n.DateTimePatterns_en_XA');
 goog.require('goog.i18n.DateTimePatterns_fa');
 goog.require('goog.i18n.DateTimePatterns_fr');
 goog.require('goog.i18n.DateTimePatterns_ja');
 goog.require('goog.i18n.DateTimePatterns_sv');
+goog.require('goog.i18n.DateTimePatterns_zh_HK');
+goog.require('goog.i18n.DateTimePatterns_zh_Hant_TW');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.i18n.DateTimeSymbols_ar_AE');
 goog.require('goog.i18n.DateTimeSymbols_ar_EG');
@@ -58,17 +62,32 @@ function tearDown() {
   goog.i18n.DateTimeFormat.setEnforceAsciiDigits(false);
 }
 
-// Helpers to make tests work regardless of the timeZone we're in.
+/**
+ * Helpers to make tests work regardless of the timeZone we're in.
+ * Gets timezone string of the date.
+ * @param {!goog.date.Date} date
+ * @return {string}
+ */
 function timezoneString(date) {
   var timeZone = goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
   return timeZone.getShortName(date);
 }
 
+/**
+ * Gets timezone id from the date.
+ * @param {!goog.date.Date} date
+ * @return {string}
+ */
 function timezoneId(date) {
   var timeZone = goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
   return timeZone.getTimeZoneId(date);
 }
 
+/**
+ * Gets timezone RFC string from the date.
+ * @param {!goog.date.Date} date
+ * @return {string}
+ */
 function timezoneStringRFC(date) {
   var timeZone = goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
   return timeZone.getRFCTimeZoneString(date);
@@ -339,6 +358,44 @@ function testPatternDayOfWeekMonthDayYearMedium() {
   var fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimePatterns.MONTH_DAY_YEAR_MEDIUM);
   assertEquals('28 juni 2012', fmt.format(date));
+}
+
+function testMonthDayHourMinuteTimezone() {
+  // Include various locales.
+  var date = new Date(2012, 5, 28, 13, 10, 10, 250);
+  var fmt = new goog.i18n.DateTimeFormat(
+      goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+  assertEquals('Jun 28, 1:10 PM UTC-7', fmt.format(date));
+
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_sv;
+  var fmtSv = new goog.i18n.DateTimeFormat(
+      goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+  assertEquals('28 Jun 13:10 UTC-7', fmtSv.format(date));
+
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_bg;
+  var fmtBg = new goog.i18n.DateTimeFormat(
+      goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+  assertEquals('28.06, 13:10 ч. UTC-7', fmtBg.format(date));
+
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_zh_HK;
+  var fmtZhHk = new goog.i18n.DateTimeFormat(
+      goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+  assertEquals('6月28日 PM1:10 [UTC-7]', fmtZhHk.format(date));
+
+  // And with explicit timezone.
+  var timeZone = goog.i18n.TimeZone.createTimeZone(-600);
+  assertEquals('6月29日 AM6:10 [UTC+10]', fmtZhHk.format(date, timeZone));
+
+  // And some from the extended patterns.
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_en_XA;
+  var fmtEnXa = new goog.i18n.DateTimeFormat(
+      goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+  assertEquals('[[Jun 28], [1:10 PM UTC-7]]', fmtEnXa.format(date));
+
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_zh_Hant_TW;
+  var fmtZhHantTw = new goog.i18n.DateTimeFormat(
+      goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+  assertEquals('6月28日 PM1:10 [UTC-7]', fmtZhHantTw.format(date));
 }
 
 function testQuote() {
@@ -856,7 +913,10 @@ function testSupportForYearAndEra() {
   assertEquals('紀元前213年', fmt.format(date));
 }
 
-// Creates a string by concatenating the week number for 7 successive days
+/**
+ * Creates a string by concatenating the week number for 7 successive days
+ * @return {string}
+ */
 function weekInYearFor7Days() {
   var date = new Date(2013, 0, 1);  // January
   var fmt = new goog.i18n.DateTimeFormat('w');
