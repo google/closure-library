@@ -507,11 +507,7 @@ goog.net.WebChannel.RuntimeProperties.prototype.getHttpSessionId =
  * the server application to ack the delivery (of messages that are sent
  * before the commit is scheduled).
  *
- * In addition to the ack semantics, the current implementation may be used to
- * enable client-side flow-control too, as the callback effectively signals the
- * _flush_ of all pending messages.
- *
- * Messaged delivered with 0-RTT handshake will not trigger the callback.
+ * Commit should only be called after the channel open event is received.
  *
  * @param {function()} callback The callback will be invoked once an
  * ack has been received for the current commit or any newly issued commit.
@@ -520,8 +516,6 @@ goog.net.WebChannel.RuntimeProperties.prototype.commit = goog.abstractMethod;
 
 
 /**
- * Experimental API.
- *
  * This method may be used by the application to recover from a peer failure
  * or to enable sender-initiated flow-control.
  *
@@ -538,8 +532,6 @@ goog.net.WebChannel.RuntimeProperties.prototype.getNonAckedMessageCount =
 
 
 /**
- * Experimental API.
- *
  * A low water-mark message count to notify the application when the
  * flow-control condition is cleared, that is, when the application is
  * able to send more messages.
