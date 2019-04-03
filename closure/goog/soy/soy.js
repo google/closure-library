@@ -62,6 +62,14 @@ goog.soy.StrictHtmlTemplate;
 
 
 /**
+ * Type definition for text templates.
+ * @typedef {function(?, null=, ?Object<string, *>=):
+ *     (!goog.soy.data.UnsanitizedText|string)}
+ */
+goog.soy.TextTemplate;
+
+
+/**
  * Sets the processed template as the innerHTML of an element. It is recommended
  * to use this helper function instead of directly setting innerHTML in your
  * hand-written code, so that it will be easier to audit the code for cross-site
