@@ -73,7 +73,7 @@ goog.math.Long = function(low, high) {
 /**
  * A cache of the Long representations of small integer values.
  * @type {!Object<number, !goog.math.Long>}
- * @private
+ * @private @const
  */
 goog.math.Long.IntCache_ = {};
 
@@ -241,7 +241,7 @@ goog.math.Long.fromBits = function(lowBits, highBits) {
  * TODO(goktug): Replace with Number.MAX_SAFE_INTEGER when polyfil is guaranteed
  * to be removed.
  * @type {number}
- * @private
+ * @private @const
  */
 goog.math.Long.MAX_SAFE_INTEGER_ = 0x1fffffffffffff;
 
