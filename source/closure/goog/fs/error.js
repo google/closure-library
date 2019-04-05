@@ -32,7 +32,7 @@ goog.fs.DOMErrorLike = function() {};
 /** @type {string|undefined} */
 goog.fs.DOMErrorLike.prototype.name;
 
-/** @type {goog.fs.Error.ErrorCode|undefined} */
+/** @type {!goog.fs.Error.ErrorCode|undefined} */
 goog.fs.DOMErrorLike.prototype.code;
 
 
@@ -53,7 +53,7 @@ goog.fs.Error = function(error, action) {
   this.name;
 
   /**
-   * @type {goog.fs.Error.ErrorCode}
+   * @type {!goog.fs.Error.ErrorCode}
    * @deprecated Use the 'name' or 'message' field instead.
    */
   this.code;
@@ -65,8 +65,10 @@ goog.fs.Error = function(error, action) {
     /** @suppress {deprecated} */
     this.code = goog.fs.Error.getCodeFromName_(error.name);
   } else {
-    this.code = goog.asserts.assertNumber(error.code);
-    this.name = goog.fs.Error.getNameFromCode_(error.code);
+    var code = /** @type {!goog.fs.Error.ErrorCode} */ (
+        goog.asserts.assertNumber(error.code));
+    this.code = code;
+    this.name = goog.fs.Error.getNameFromCode_(code);
   }
   goog.fs.Error.base(
       this, 'constructor', goog.string.subs('%s %s', this.name, action));
