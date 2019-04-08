@@ -194,9 +194,13 @@ goog.events.KeyCodes.isTextModifyingKeyEvent = function(e) {
     return false;
   }
 
-  // The following keys are quite harmless, even in combination with
-  // CTRL, ALT or SHIFT.
+  if (goog.events.KeyCodes.isCharacterKey(e.keyCode)) {
+    return true;
+  }
+
   switch (e.keyCode) {
+    // The following keys are quite harmless, even in combination with
+    // CTRL, ALT or SHIFT.
     case goog.events.KeyCodes.ALT:
     case goog.events.KeyCodes.CAPS_LOCK:
     case goog.events.KeyCodes.CONTEXT_MENU:
@@ -403,6 +407,8 @@ goog.events.KeyCodes.isCharacterKey = function(keyCode) {
     case goog.events.KeyCodes.CLOSE_SQUARE_BRACKET:
     case goog.events.KeyCodes.FF_HASH:
       return true;
+    case goog.events.KeyCodes.FF_DASH:
+      return goog.userAgent.GECKO;
     default:
       return false;
   }

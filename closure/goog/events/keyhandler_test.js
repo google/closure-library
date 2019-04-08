@@ -831,6 +831,35 @@ function testGeckoEqualSign() {
       goog.events.KeyCodes.FF_EQUALS, keyEvent.charCode);
 }
 
+function testGeckoDash() {
+  goog.userAgent.OPERA = false;
+  goog.userAgent.IE = false;
+  goog.userAgent.GECKO = true;
+  goog.userAgent.WEBKIT = false;
+  goog.userAgent.MAC = false;
+  goog.userAgent.WINDOWS = true;
+  goog.userAgent.LINUX = false;
+  goog.events.KeyHandler.USES_KEYDOWN_ = true;
+
+  var keyEvents = [];
+  var keyHandler = new goog.events.KeyHandler();
+  goog.events.listen(
+      keyHandler, goog.events.KeyHandler.EventType.KEY, function(e) {
+        keyEvents.push(e);
+      });
+
+  fireKeyDown(keyHandler, goog.events.KeyCodes.FF_DASH, 0);
+  fireKeyPress(keyHandler, 0, goog.events.KeyCodes.FF_DASH);
+
+  assertEquals('expected one key event to be fired', 1, keyEvents.length);
+  assertEquals(
+      '= should fire a key event with the keyCode 189',
+      goog.events.KeyCodes.DASH, keyEvents[0].keyCode);
+  assertEquals(
+      '= should fire a key event with the charCode 173',
+      goog.events.KeyCodes.FF_DASH, keyEvents[0].charCode);
+}
+
 function testMacGeckoSlash() {
   goog.userAgent.OPERA = false;
   goog.userAgent.IE = false;

@@ -43,6 +43,7 @@ function testTextModifyingKeys() {
     specialTextModifiers[KeyCodes.WIN_KEY_FF_LINUX] = 1;
   }
 
+  var keysToTest = {};
   for (var keyId in KeyCodes) {
     var key = KeyCodes[keyId];
     if (goog.isFunction(key)) {
@@ -50,6 +51,15 @@ function testTextModifyingKeys() {
       continue;
     }
 
+    keysToTest[keyId] = key;
+  }
+  for (var i = KeyCodes.FIRST_MEDIA_KEY; i <= KeyCodes.LAST_MEDIA_KEY; i++) {
+    keysToTest['MEDIA_KEY_' + i] = i;
+  }
+
+
+  for (var keyId in keysToTest) {
+    var key = keysToTest[keyId];
     var fakeEvent = createEventWithKeyCode(key);
 
     if (KeyCodes.isCharacterKey(key) || (key in specialTextModifiers)) {
@@ -61,13 +71,6 @@ function testTextModifyingKeys() {
           'Expected key to not modify text: ' + keyId,
           KeyCodes.isTextModifyingKeyEvent(fakeEvent));
     }
-  }
-
-  for (var i = KeyCodes.FIRST_MEDIA_KEY; i <= KeyCodes.LAST_MEDIA_KEY; i++) {
-    var fakeEvent = createEventWithKeyCode(i);
-    assertFalse(
-        'Expected key to not modify text: ' + i,
-        KeyCodes.isTextModifyingKeyEvent(fakeEvent));
   }
 }
 
