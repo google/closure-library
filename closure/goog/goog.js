@@ -92,9 +92,6 @@ export const declareModuleId = goog.declareModuleId;
 // goog.module.declareLegacyNamespace.
 export const module = {
   get: goog.module.get,
-  // TODO(johnplaisted): Delete this once people have migrated to
-  // declareModuleId.
-  declareNamespace: goog.module.declareNamespace,
 };
 
 // Omissions include:
