@@ -179,7 +179,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
   /**
    * Creates a basic strict mock of a `toMock`. For more advanced mocking,
    * please use the MockControl directly.
-   * @param {?Function} toMock
+   * @param {?Function|?Object} toMock
    * @return {?}
    */
   mock: function(toMock) {

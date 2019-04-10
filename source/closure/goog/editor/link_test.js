@@ -143,6 +143,13 @@ function testLinkImgTag() {
       anchor.firstChild.getAttribute('alt'));
 }
 
+function testLinkImgTagWithNoAlt() {
+  anchor.innerHTML = '<img src="www.google.com">';
+  var link =
+      goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
+  assertEquals('Test getCurrentText', '', link.getCurrentText());
+}
+
 function testSetMixed() {
   anchor.innerHTML = '<b>A</b>B';
   var link =

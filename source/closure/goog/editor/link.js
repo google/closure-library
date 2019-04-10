@@ -96,7 +96,7 @@ goog.editor.Link.prototype.getCurrentText = function() {
 
     var leaf = goog.editor.node.getLeftMostLeaf(anchor);
     if (leaf.tagName && leaf.tagName == goog.dom.TagName.IMG) {
-      this.currentText_ = leaf.getAttribute('alt');
+      this.currentText_ = leaf.getAttribute('alt') || '';
     } else {
       this.currentText_ = goog.dom.getRawTextContent(this.getAnchor());
     }

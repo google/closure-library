@@ -495,19 +495,21 @@ goog.net.WebChannel.RuntimeProperties.prototype.getHttpSessionId =
  * to the application. Detail spec:
  * https://github.com/bidiweb/webchannel/blob/master/commit.md
  *
- * Timeout or cancellation is not supported and the application may have to
+ * Timeout or cancellation is not supported and the application is expected to
  * abort the channel if the commit-ack fails to arrive in time.
  *
  * ===
  *
  * This is currently implemented only in the client layer and the commit
- * callback will be invoked after _all_ pending client-sent messages have been
+ * callback will be invoked after all the pending client-sent messages have been
  * delivered by the server-side webchannel end-point. This semantics is
  * different and weaker than what's required for end-to-end ack which requires
- * the server application to ack the delivery (of messages that are sent
- * before the commit is scheduled).
+ * the server application to ack the in-order delivery of messages that are sent
+ * before the commit request is issued.
  *
  * Commit should only be called after the channel open event is received.
+ * Duplicated commits are allowed and only the last callback is guaranteed.
+ * Commit called after the channel has been closed will be ignored.
  *
  * @param {function()} callback The callback will be invoked once an
  * ack has been received for the current commit or any newly issued commit.

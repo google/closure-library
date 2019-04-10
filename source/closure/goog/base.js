@@ -670,16 +670,6 @@ goog.declareModuleId = function(namespace) {
 
 
 /**
- * Deprecated old name for goog.declareModuleId. This function is being renamed
- * to help disambiguate with goog.module.declareLegacyNamespace.
- *
- * @type {function(string): undefined}
- * @suppress {missingProvide}
- */
-goog.module.declareNamespace = goog.declareModuleId;
-
-
-/**
  * Marks that the current file should only be used for testing, and never for
  * live code in production.
  *
