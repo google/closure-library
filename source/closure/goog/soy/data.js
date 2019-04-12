@@ -208,17 +208,16 @@ goog.soy.data.SanitizedContent.prototype.toSafeUrl = function() {
  * sometimes used to mark that should never be used unescaped.
  *
  * @param {*} content Plain text with no guarantees.
- * @param {?goog.i18n.bidi.Dir=} opt_contentDir The content direction; null if
- *     unknown and thus to be estimated when necessary. Default: null.
+ * @param {?goog.i18n.bidi.Dir=} contentDir ignored
  * @extends {goog.soy.data.SanitizedContent}
  * @constructor
  */
-goog.soy.data.UnsanitizedText = function(content, opt_contentDir) {
+goog.soy.data.UnsanitizedText = function(content, contentDir) {
   // Not calling the superclass constructor which just throws an exception.
 
   /** @override */
   this.content = String(content);
-  this.contentDir = opt_contentDir != null ? opt_contentDir : null;
+  this.contentDir = null;
 };
 goog.inherits(goog.soy.data.UnsanitizedText, goog.soy.data.SanitizedContent);
 
