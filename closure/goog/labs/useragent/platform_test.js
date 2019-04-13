@@ -266,7 +266,7 @@ function testKaiOS() {
 
   goog.labs.userAgent.util.setUserAgent(uaString);
   assertTrue(goog.labs.userAgent.platform.isKaiOS());
-  assertVersion('');
+  assertVersion('2.5');
 }
 
 function testGo2Phone() {
