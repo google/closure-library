@@ -85,7 +85,7 @@ goog.addDependency('crypt/ctr_test.js', ['goog.crypt.CtrTest'], ['goog.crypt', '
 goog.addDependency('crypt/hash.js', ['goog.crypt.Hash'], [], {});
 goog.addDependency('crypt/hash32.js', ['goog.crypt.hash32'], ['goog.crypt'], {});
 goog.addDependency('crypt/hash32_test.js', ['goog.crypt.hash32Test'], ['goog.crypt.hash32', 'goog.testing.TestCase', 'goog.testing.jsunit'], {});
-goog.addDependency('crypt/hashtester.js', ['goog.crypt.hashTester'], ['goog.array', 'goog.crypt', 'goog.dom', 'goog.dom.TagName', 'goog.testing.PerformanceTable', 'goog.testing.PseudoRandom', 'goog.testing.asserts'], {});
+goog.addDependency('crypt/hashtester.js', ['goog.crypt.hashTester'], ['goog.array', 'goog.crypt', 'goog.dom', 'goog.dom.TagName', 'goog.reflect', 'goog.testing.PerformanceTable', 'goog.testing.PseudoRandom', 'goog.testing.asserts'], {});
 goog.addDependency('crypt/hmac.js', ['goog.crypt.Hmac'], ['goog.crypt.Hash'], {});
 goog.addDependency('crypt/hmac_test.js', ['goog.crypt.HmacTest'], ['goog.crypt.Hmac', 'goog.crypt.Sha1', 'goog.crypt.hashTester', 'goog.testing.jsunit'], {});
 goog.addDependency('crypt/md5.js', ['goog.crypt.Md5'], ['goog.crypt.Hash'], {});
