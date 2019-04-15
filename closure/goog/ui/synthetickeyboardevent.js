@@ -49,6 +49,7 @@ goog.ui.SyntheticKeyboardEvent = function(
                    .ctrlKey(ctrlKey)
                    .metaKey(metaKey)
                    .target(target)
+                   .rootTarget(target)
                    .preventDefaultFn(preventDefaultFn)
                    .stopPropagationFn(stopPropagationFn)
                    .build();
