@@ -33,8 +33,8 @@ goog.require('goog.string');
 /**
  * Type definition for strict Soy templates. Very useful when passing a template
  * as an argument.
- * @typedef {function(?, null=, ?Object<string, *>=):
- *     !goog.soy.data.SanitizedContent}
+ * @typedef {function(?, ?Object<string, *>=): !goog.soy.data.SanitizedContent|
+ *     function(?, null=, ?Object<string, *>=): !goog.soy.data.SanitizedContent}
  */
 goog.soy.StrictTemplate;
 
@@ -42,18 +42,25 @@ goog.soy.StrictTemplate;
 /**
  * Type definition for strict Soy HTML templates. Very useful when passing
  * a template as an argument.
- * @typedef {function(?, null=, ?Object<string, *>=):
- *     !goog.soy.data.SanitizedHtml}
+ * @typedef {function(?, ?Object<string, *>=): !goog.soy.data.SanitizedHtml|
+ *     function(?, null=, ?Object<string, *>=): !goog.soy.data.SanitizedHtml}
  */
 goog.soy.StrictHtmlTemplate;
 
 
 /**
  * Type definition for text templates.
- * @typedef {function(?, null=, ?Object<string, *>=):
- *     (!goog.soy.data.UnsanitizedText|string)}
+ * @typedef {function(?, ?Object<string, *>=): !goog.soy.TextType|
+ *     function(?, null=, ?Object<string, *>=): !goog.soy.TextType}
  */
 goog.soy.TextTemplate;
+
+
+/**
+ * Text templates return value.
+ * @typedef {string|!goog.soy.data.UnsanitizedText}
+ */
+goog.soy.TextType;
 
 
 /**
