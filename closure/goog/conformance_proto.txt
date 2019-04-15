@@ -93,7 +93,7 @@ requirement: {
   # Internal-only code: go/g3doc-widgets#screenshots-widget-html.
   whitelist: 'java/com/google/frameworks/testing/infrastructure/screenshot/ui/carousel/carouselcontroller.js'
   # security reviewed (b/118451926)
-  whitelist: 'java/com/google/gaia/frontend/closure/common/service/nativebridge/kaios/kaiosbridgeservice.js'
+  whitelist: 'java/com/google/gaia/frontend/closure/common/service/nativebridge/kaios/basekaiosbridgeservice.js'
 }
 
 ### Security: forbid DOM properties and functions which can cause XSS ###
