@@ -31,19 +31,6 @@ goog.require('goog.string');
 
 
 /**
- * @define {boolean} Whether to require all Soy templates to be "strict html".
- * Soy templates that use strict autoescaping forbid noAutoescape along with
- * many dangerous directives, and return a runtime type SanitizedContent that
- * marks them as safe.
- *
- * If this flag is enabled, Soy templates will fail to render if a template
- * returns plain text -- indicating it is a non-strict template.
- */
-goog.soy.REQUIRE_STRICT_AUTOESCAPE =
-    goog.define('goog.soy.REQUIRE_STRICT_AUTOESCAPE', false);
-
-
-/**
  * Type definition for strict Soy templates. Very useful when passing a template
  * as an argument.
  * @typedef {function(?, null=, ?Object<string, *>=):
@@ -235,10 +222,6 @@ goog.soy.convertToElement_ = function(templateResult, opt_domHelper) {
 /**
  * Ensures the result is "safe" to insert as HTML.
  *
- * Note if the template has non-strict autoescape, the guarantees here are very
- * weak. It is recommended applications switch to requiring strict
- * autoescaping over time by tweaking goog.soy.REQUIRE_STRICT_AUTOESCAPE.
- *
  * In the case the argument is a SanitizedContent object, it either must
  * already be of kind HTML, or if it is kind="text", the output will be HTML
  * escaped.
@@ -248,19 +231,16 @@ goog.soy.convertToElement_ = function(templateResult, opt_domHelper) {
  * @private
  */
 goog.soy.ensureTemplateOutputHtml_ = function(templateResult) {
-  // Allow strings as long as strict autoescaping is not mandated. Note we
-  // allow everything that isn't an object, because some non-escaping templates
-  // end up returning non-strings if their only print statement is a
+  // Note we allow everything that isn't an object, because some non-escaping
+  // templates end up returning non-strings if their only print statement is a
   // non-escaped argument, plus some unit tests spoof templates.
   // TODO(gboyer): Track down and fix these cases.
-  if (!goog.soy.REQUIRE_STRICT_AUTOESCAPE && !goog.isObject(templateResult)) {
-    return String(templateResult);
+  if (!goog.isObject(templateResult)) {
+    return goog.string.htmlEscape(String(templateResult));
   }
 
   // Allow SanitizedContent of kind HTML.
   if (templateResult instanceof goog.soy.data.SanitizedContent) {
-    templateResult =
-        /** @type {!goog.soy.data.SanitizedContent} */ (templateResult);
     var ContentKind = goog.soy.data.SanitizedContentKind;
     if (templateResult.contentKind === ContentKind.HTML) {
       return goog.asserts.assertString(templateResult.getContent());

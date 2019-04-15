@@ -333,10 +333,11 @@ example.tableRowTemplate = function(data, opt_sb, opt_injectedData) {
  * @param {{name: string}} data
  * @param {null=} opt_sb
  * @param {Object<string, *>=} opt_injectedData
- * @return {string}
+ * @return {!goog.soy.data.SanitizedContent}
  */
 example.colGroupTemplateCaps = function(data, opt_sb, opt_injectedData) {
-  return '<COLGROUP></COLGROUP>';
+  return makeSanitizedContent(
+      '<COLGROUP></COLGROUP>', goog.soy.data.SanitizedContentKind.HTML);
 };
 
 
