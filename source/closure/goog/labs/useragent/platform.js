@@ -156,6 +156,10 @@ goog.labs.userAgent.platform.getVersion = function() {
     // Note: some old versions of Camino do not report an OSX version.
     // Default to 10.
     version = match ? match[1].replace(/_/g, '.') : '10';
+  } else if (goog.labs.userAgent.platform.isKaiOS()) {
+    re = /(?:KaiOS)\/(\S+)/i;
+    var match = re.exec(userAgentString);
+    version = match && match[1];
   } else if (goog.labs.userAgent.platform.isAndroid()) {
     re = /Android\s+([^\);]+)(\)|;)/;
     var match = re.exec(userAgentString);

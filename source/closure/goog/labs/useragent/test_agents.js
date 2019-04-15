@@ -405,8 +405,8 @@ testAgents.FIREFOX_ANDROID_TABLET =
 
 /** @const {string} */
 testAgents.KAIOS =
-    'Mozilla/5.0 (Mobile; LYF/LF-2403N/LYF-LF2403N-000-01-18-270717; rv:48.0)' +
-    ' Gecko/48.0 Firefox/48.0 KaiOS/2.0';
+    'Mozilla/5.0 (Mobile; LYF/F90M/LYF_F90M_000-03-19-240319; Android; ' +
+    'rv:48.0) Gecko/48.0 Firefox/48.0 KAIOS/2.5';
 
 /** @const {string} */
 testAgents.GO2PHONE =
