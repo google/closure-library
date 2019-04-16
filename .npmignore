@@ -1,5 +1,6 @@
 *.html
 *_test.*
+*_perf.js
 .*
 /*.js
 /*.json
