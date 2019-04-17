@@ -65,10 +65,11 @@ goog.dom.asserts.assertIsLocation = function(o) {
     var win = goog.dom.asserts.getWindow_(o);
     if (typeof win.Location != 'undefined' &&
         typeof win.Element != 'undefined') {
-      goog.asserts.assert(
-          o && (o instanceof win.Location || !(o instanceof win.Element)),
-          'Argument is not a Location (or a non-Element mock); got: %s',
-          goog.dom.asserts.debugStringForType_(o));
+      if (!o || (!(o instanceof win.Location) && o instanceof win.Element)) {
+        goog.asserts.fail(
+            'Argument is not a Location (or a non-Element mock); got: %s',
+            goog.dom.asserts.debugStringForType_(o));
+      }
     }
   }
   return /** @type {!Location} */ (o);
@@ -103,12 +104,14 @@ goog.dom.asserts.assertIsElementType_ = function(o, typename) {
     if (typeof win[typename] != 'undefined' &&
         typeof win.Location != 'undefined' &&
         typeof win.Element != 'undefined') {
-      goog.asserts.assert(
-          o &&
-              (o instanceof win[typename] ||
-               !((o instanceof win.Location) || (o instanceof win.Element))),
-          'Argument is not a %s (or a non-Element, non-Location mock); got: %s',
-          typename, goog.dom.asserts.debugStringForType_(o));
+      if (!o ||
+          (!(o instanceof win[typename]) &&
+           (o instanceof win.Location || o instanceof win.Element))) {
+        goog.asserts.fail(
+            'Argument is not a %s (or a non-Element, non-Location mock); ' +
+                'got: %s',
+            typename, goog.dom.asserts.debugStringForType_(o));
+      }
     }
   }
   return /** @type {!Element} */ (o);
@@ -334,8 +337,12 @@ goog.dom.asserts.assertIsHTMLScriptElement = function(o) {
  */
 goog.dom.asserts.debugStringForType_ = function(value) {
   if (goog.isObject(value)) {
-    return value.constructor.displayName || value.constructor.name ||
-        Object.prototype.toString.call(value);
+    try {
+      return value.constructor.displayName || value.constructor.name ||
+          Object.prototype.toString.call(value);
+    } catch (e) {
+      return '<object could not be stringified>';
+    }
   } else {
     return value === undefined ? 'undefined' :
                                  value === null ? 'null' : typeof value;
