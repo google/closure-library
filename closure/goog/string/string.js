@@ -24,6 +24,9 @@
 goog.provide('goog.string');
 goog.provide('goog.string.Unicode');
 
+goog.require('goog.dom.safe');
+goog.require('goog.html.uncheckedconversions');
+goog.require('goog.string.Const');
 goog.require('goog.string.internal');
 
 
@@ -641,7 +644,11 @@ goog.string.unescapeEntitiesUsingDom_ = function(str, opt_document) {
     if (!value) {
       // Append a non-entity character to avoid a bug in Webkit that parses
       // an invalid entity at the end of innerHTML text as the empty string.
-      div.innerHTML = s + ' ';
+      goog.dom.safe.setInnerHtml(
+          div,
+          goog.html.uncheckedconversions
+              .safeHtmlFromStringKnownToSatisfyTypeContract(
+                  goog.string.Const.from('Single HTML entity.'), s + ' '));
       // Then remove the trailing character from the result.
       value = div.firstChild.nodeValue.slice(0, -1);
     }

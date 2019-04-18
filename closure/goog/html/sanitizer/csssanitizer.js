@@ -25,6 +25,7 @@ goog.provide('goog.html.sanitizer.CssSanitizer');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.html.CssSpecificity');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
@@ -34,6 +35,7 @@ goog.require('goog.html.sanitizer.noclobber');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
@@ -214,10 +216,11 @@ goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement = function(
       typeof goog.global.DOMParser != 'function') {
     return null;
   }
-  var parser = new DOMParser();
-  return parser
-      .parseFromString(
-          '<html><head></head><body>' + html + '</body></html>', 'text/html')
+  var safeHtml = goog.html.uncheckedconversions
+                     .safeHtmlFromStringKnownToSatisfyTypeContract(
+                         goog.string.Const.from('Never attached to DOM.'),
+                         '<html><head></head><body>' + html + '</body></html>');
+  return goog.dom.safe.parseFromStringHtml(new DOMParser(), safeHtml)
       .body.children[0];
 };
 

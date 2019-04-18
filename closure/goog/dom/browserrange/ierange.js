@@ -31,6 +31,8 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.RangeEndpoint');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.browserrange.AbstractRange');
+goog.require('goog.dom.safe');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.log');
 goog.require('goog.string');
 
@@ -849,8 +851,14 @@ goog.dom.browserrange.IeRange.prototype.surroundContents = function(element) {
   // Make sure the element is detached from the document.
   goog.dom.removeNode(element);
 
-  // IE more or less guarantees that range.htmlText is well-formed & valid.
-  element.innerHTML = this.range_.htmlText;
+  goog.dom.safe.setInnerHtml(
+      goog.asserts.assert(element),
+      goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from(
+                  'IE more or less guarantees that range.htmlText is ' +
+                  'well-formed & valid.'),
+              this.range_.htmlText));
   element = goog.dom.browserrange.IeRange.pasteElement_(this.range_, element);
 
   // If element is null here, we failed.

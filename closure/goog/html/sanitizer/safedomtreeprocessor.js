@@ -26,12 +26,15 @@
 goog.module('goog.html.sanitizer.SafeDomTreeProcessor');
 goog.module.declareLegacyNamespace();
 
+var Const = goog.require('goog.string.Const');
 var ElementWeakMap = goog.require('goog.html.sanitizer.ElementWeakMap');
 var NodeType = goog.require('goog.dom.NodeType');
 var TagName = goog.require('goog.dom.TagName');
 var googDom = goog.require('goog.dom');
 var googLog = goog.require('goog.log');
 var noclobber = goog.require('goog.html.sanitizer.noclobber');
+var safe = goog.require('goog.dom.safe');
+var uncheckedconversions = goog.require('goog.html.uncheckedconversions');
 var userAgent = goog.require('goog.userAgent');
 
 /** @const {?googLog.Logger} */
@@ -56,17 +59,20 @@ var SAFE_PARSING_SUPPORTED =
  */
 function getDomTreeWalker(html) {
   var iteratorParent;
+  var safeHtml =
+      uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract(
+          Const.from('Never attached to DOM.'), html);
   // Use a <template> element if possible.
   var templateElement = document.createElement('template');
   if ('content' in templateElement) {
-    templateElement.innerHTML = html;
+    safe.unsafeSetInnerHtmlDoNotUseOrElse(templateElement, safeHtml);
     iteratorParent = templateElement.content;
   } else {
     // In browsers where <template> is not implemented, use an inert
     // HTMLDocument.
     var doc = document.implementation.createHTMLDocument('x');
     iteratorParent = doc.body;
-    doc.body.innerHTML = html;
+    safe.unsafeSetInnerHtmlDoNotUseOrElse(doc.body, safeHtml);
   }
   return document.createTreeWalker(
       iteratorParent, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,

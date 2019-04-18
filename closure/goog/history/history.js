@@ -733,15 +733,14 @@ goog.History.prototype.setHash_ = function(token, opt_replace) {
   }
 
   if (url != loc.href) {
+    var safeUrl =
+        goog.html.uncheckedconversions
+            .safeUrlFromStringKnownToSatisfyTypeContract(
+                goog.string.Const.from('URL taken from location.href.'), url);
     if (opt_replace) {
-      loc.replace(url);
+      goog.dom.safe.replaceLocation(loc, safeUrl);
     } else {
-      goog.dom.safe.setLocationHref(
-          loc,
-          goog.html.uncheckedconversions
-              .safeUrlFromStringKnownToSatisfyTypeContract(
-                  goog.string.Const.from('URL taken from location.href.'),
-                  url));
+      goog.dom.safe.setLocationHref(loc, safeUrl);
     }
   }
 };
@@ -793,7 +792,7 @@ goog.History.prototype.setIframeToken_ = function(
       var contentWindow = this.iframe_.contentWindow;
       if (contentWindow) {
         if (opt_replace) {
-          contentWindow.location.replace(url);
+          goog.dom.safe.replaceLocation(contentWindow.location, url);
         } else {
           goog.dom.safe.setLocationHref(contentWindow.location, url);
         }

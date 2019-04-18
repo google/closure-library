@@ -24,9 +24,13 @@ goog.provide('goog.async.throwException');
 
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.functions');
+goog.require('goog.html.SafeHtml');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.labs.userAgent.browser');
 goog.require('goog.labs.userAgent.engine');
+goog.require('goog.string.Const');
 
 
 /**
@@ -161,12 +165,14 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       var iframe = /** @type {!HTMLIFrameElement} */ (
           document.createElement(String(goog.dom.TagName.IFRAME)));
       iframe.style.display = 'none';
-      iframe.src = '';
+      goog.dom.safe.setIframeSrc(
+          iframe,
+          goog.html.TrustedResourceUrl.fromConstant(goog.string.Const.EMPTY));
       document.documentElement.appendChild(iframe);
       var win = iframe.contentWindow;
       var doc = win.document;
       doc.open();
-      doc.write('');
+      goog.dom.safe.documentWrite(doc, goog.html.SafeHtml.EMPTY);
       doc.close();
       // Do not post anything sensitive over this channel, as the workaround for
       // pages with file: origin could allow that information to be modified or
