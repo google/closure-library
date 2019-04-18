@@ -31,14 +31,15 @@ goog.require('goog.events.BrowserEvent');
  * @param {boolean} ctrlKey
  * @param {boolean} metaKey
  * @param {!Node} target
+ * @param {!EventTarget} rootTarget
  * @param {function(): void} preventDefaultFn
  * @param {function(): void} stopPropagationFn
  * @constructor @struct @final
  * @package
  */
 goog.ui.KeyboardEventData = function(
-    keyCode, key, shiftKey, altKey, ctrlKey, metaKey, target, preventDefaultFn,
-    stopPropagationFn) {
+    keyCode, key, shiftKey, altKey, ctrlKey, metaKey, target, rootTarget,
+    preventDefaultFn, stopPropagationFn) {
   /** @private @const {number} */
   this.keyCode_ = keyCode;
 
@@ -59,6 +60,14 @@ goog.ui.KeyboardEventData = function(
 
   /** @private @const {!Node} */
   this.target_ = target;
+
+  /**
+   * The `real` target where event triggers. It equals to
+   * `event.composedPath()[0]`, and in most cases, this should be the same as
+   * this.target_, with the exception of shadow dom where the target is scoped.
+   * @private @const {!EventTarget}
+   */
+  this.rootTarget_ = rootTarget;
 
   /** @private @const {function(): void} */
   this.preventDefaultFn_ = preventDefaultFn;
@@ -110,6 +119,12 @@ goog.ui.KeyboardEventData.prototype.getTarget = function() {
 };
 
 
+/** @return {!EventTarget} The rootTarget of the event or `null` if not one. */
+goog.ui.KeyboardEventData.prototype.getRootTarget = function() {
+  return this.rootTarget_;
+};
+
+
 /** @return {function(): void} Callback to prevent default. */
 goog.ui.KeyboardEventData.prototype.getPreventDefaultFn = function() {
   return this.preventDefaultFn_;
@@ -127,6 +142,16 @@ goog.ui.KeyboardEventData.prototype.getStopPropagationFn = function() {
  * @return {!goog.ui.KeyboardEventData}
  */
 goog.ui.KeyboardEventData.fromBrowserEvent = function(event) {
+  // TODO(user): quick fix for now. revert non null checking and update all
+  // broken mocking tests in next CL.
+  var rootTarget = event.target;
+  if (event.getBrowserEvent) {
+    var e = event.getBrowserEvent();
+    if (e.composed) {
+      rootTarget = e.composedPath()[0];
+    }
+  }
+
   return new goog.ui.KeyboardEventData.Builder()
       .keyCode(event.keyCode || 0)
       .key(event.key || '')
@@ -135,6 +160,7 @@ goog.ui.KeyboardEventData.fromBrowserEvent = function(event) {
       .ctrlKey(!!event.ctrlKey)
       .metaKey(!!event.metaKey)
       .target(event.target)
+      .rootTarget(rootTarget)
       .preventDefaultFn(() => event.preventDefault())
       .stopPropagationFn(() => event.stopPropagation())
       .build();
@@ -168,6 +194,9 @@ goog.ui.KeyboardEventData.Builder = function() {
 
   /** @private {?Node} */
   this.target_ = null;
+
+  /** @private {?EventTarget} */
+  this.rootTarget_ = null;
 
   /** @private {?function(): void} */
   this.preventDefaultFn_ = null;
@@ -248,6 +277,16 @@ goog.ui.KeyboardEventData.Builder.prototype.target = function(target) {
 
 
 /**
+ * @param {?EventTarget} rootTarget
+ * @return {!goog.ui.KeyboardEventData.Builder}
+ */
+goog.ui.KeyboardEventData.Builder.prototype.rootTarget = function(rootTarget) {
+  this.rootTarget_ = rootTarget;
+  return this;
+};
+
+
+/**
  * @param {function(): void} preventDefaultFn
  * @return {!goog.ui.KeyboardEventData.Builder}
  */
@@ -277,7 +316,7 @@ goog.ui.KeyboardEventData.Builder.prototype.build = function() {
       goog.asserts.assertBoolean(this.altKey_),
       goog.asserts.assertBoolean(this.ctrlKey_),
       goog.asserts.assertBoolean(this.metaKey_),
-      goog.asserts.assert(this.target_),
+      goog.asserts.assert(this.target_), goog.asserts.assert(this.rootTarget_),
       goog.asserts.assertFunction(this.preventDefaultFn_),
       goog.asserts.assertFunction(this.stopPropagationFn_));
 };
