@@ -42,11 +42,25 @@ var COMPILED = false;
 var goog = goog || {};
 
 /**
- * Reference to the global context.  In most cases this will be 'window'.
+ * Reference to the global object.
+ * https://www.ecma-international.org/ecma-262/9.0/index.html#sec-global-object
+ *
+ * More info on this implementation here:
+ * https://docs.google.com/document/d/1NAeW4Wk7I7FV0Y2tcUFvQdGMc89k2vdgSXInw8_nvCI/edit
+ *
  * @const
- * @suppress {newCheckTypes}
+ * @suppress {undefinedVars} self won't be referenced unless `this` is falsy.
+ * @type {!Global}
  */
-goog.global = this;
+goog.global =
+    // Check `this` first for backwards compatibility.
+    // Valid unless running as an ES module or in a function wrapper called
+    //   without setting `this` properly.
+    this ||
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/self
+    // For in-page browser environments and workers.
+    self;
+
 
 
 /**
