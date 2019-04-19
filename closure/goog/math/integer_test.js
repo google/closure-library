@@ -1485,6 +1485,14 @@ function testNegation() {
   }
 }
 
+function testAbs() {
+  for (const str of TEST_STRINGS) {
+    const signed = goog.math.Integer.fromString(str, 10);
+    const abs = goog.math.Integer.fromString(str.replace('-', ''), 10);
+    assertTrue(signed.abs().equals(abs));
+  }
+}
+
 function createTestAdd(i, count) {
   return function() {
     var vi = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
@@ -1545,12 +1553,16 @@ function createTestDivMod(i, count) {
     for (var j = 0; j < TEST_BITS.length; j += 2) {
       var vj = goog.math.Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
       if (!vj.isZero()) {
-        var divResult = vi.divide(vj);
-        assertEquals(TEST_DIV_BITS[count++], divResult.getBits(1));
-        assertEquals(TEST_DIV_BITS[count++], divResult.getBits(0));
+        const {quotient, remainder} = vi.divideAndRemainder(vj);
 
-        var modResult = vi.modulo(vj);
-        var combinedResult = divResult.multiply(vj).add(modResult);
+        assertEquals(TEST_DIV_BITS[count++], quotient.getBits(1));
+        assertEquals(TEST_DIV_BITS[count++], quotient.getBits(0));
+
+        // Verify that the related methods agree with `divideAndRemainder`.
+        assertTrue(quotient.equals(vi.divide(vj)));
+        assertTrue(remainder.equals(vi.modulo(vj)));
+
+        var combinedResult = quotient.multiply(vj).add(remainder);
         assertTrue(vi.equals(combinedResult));
       }
     }
