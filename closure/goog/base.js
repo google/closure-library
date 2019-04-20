@@ -56,11 +56,12 @@ goog.global =
     // Check `this` first for backwards compatibility.
     // Valid unless running as an ES module or in a function wrapper called
     //   without setting `this` properly.
+    // Note that base.js can't usefully be imported as an ES module, but it may
+    // be compiled into bundles that are loadable as ES modules.
     this ||
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/self
     // For in-page browser environments and workers.
     self;
-
 
 
 /**
