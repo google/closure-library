@@ -728,7 +728,7 @@ goog.dom.safe.openInWindow = function(
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  var win = opt_openerWin || window;
+  var win = opt_openerWin || goog.global;
   return win.open(
       goog.html.SafeUrl.unwrapTrustedURL(safeUrl),
       // If opt_name is undefined, simply passing that in to open() causes IE to
@@ -784,10 +784,10 @@ goog.dom.safe.createImageFromBlob = function(blob) {
     throw new Error(
         'goog.dom.safe.createImageFromBlob only accepts MIME type image/.*.');
   }
-  var objectUrl = window.URL.createObjectURL(blob);
-  var image = new Image();
+  var objectUrl = goog.global.URL.createObjectURL(blob);
+  var image = new goog.global.Image();
   image.onload = function() {
-    window.URL.revokeObjectURL(objectUrl);
+    goog.global.URL.revokeObjectURL(objectUrl);
   };
   goog.dom.safe.setImageSrc(
       image,

@@ -1092,8 +1092,7 @@ goog.net.ChannelRequest.prototype.sendUsingImgTag = function(uri) {
  * @private
  */
 goog.net.ChannelRequest.prototype.imgTagGet_ = function() {
-  var eltImg = new Image();
-  eltImg.src = this.baseUri_;
+  goog.dom.safe.setImageSrc(new Image(), this.baseUri_.toString());
   this.requestStartTime_ = goog.now();
   this.ensureWatchDogTimer_();
 };

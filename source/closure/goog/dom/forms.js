@@ -23,6 +23,7 @@ goog.provide('goog.dom.forms');
 
 goog.require('goog.dom.InputType');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.structs.Map');
 goog.require('goog.window');
 
@@ -95,7 +96,7 @@ goog.dom.forms.submitFormDataInNewWindow = function(
   var newForm =
       /** @type {!HTMLFormElement} */ (newDocument.createElement('form'));
   newForm.method = method;
-  newForm.action = actionUri;
+  goog.dom.safe.setFormElementAction(newForm, actionUri);
 
   // After this point, do not directly reference the form object's functions as
   // field names can shadow the form's properties.

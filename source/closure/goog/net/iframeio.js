@@ -148,6 +148,8 @@ goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+goog.require('goog.html.SafeUrl');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.json');
 goog.require('goog.log');
@@ -568,7 +570,9 @@ goog.net.IframeIo.prototype.send = function(
   }
 
   // Set the URI that the form will be posted
-  this.form_.action = uriObj.toString();
+  goog.dom.safe.setFormElementAction(
+      this.form_,
+      goog.html.legacyconversions.safeUrlFromString(uriObj.toString()));
   this.form_.method = method;
 
   this.sendFormInternal_();
@@ -613,7 +617,8 @@ goog.net.IframeIo.prototype.sendFromForm = function(
 
   this.lastUri_ = uri;
   this.form_ = form;
-  this.form_.action = uri.toString();
+  goog.dom.safe.setFormElementAction(
+      goog.asserts.assert(this.form_), uri.toString());
   this.sendFormInternal_();
 };
 
@@ -1214,7 +1219,10 @@ goog.net.IframeIo.prototype.createIframe_ = function() {
   // Setting the source to javascript:"" is a fix to remove IE6 mixed content
   // warnings when being used in an https page.
   if (goog.userAgent.IE && Number(goog.userAgent.VERSION) < 7) {
-    this.iframe_.src = 'javascript:""';
+    goog.dom.safe.setFormElementAction(
+        this.iframe_,
+        goog.html.SafeUrl.fromConstant(
+            goog.string.Const.from('javascript:""')));
   }
 
   var s = this.iframe_.style;

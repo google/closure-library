@@ -24,6 +24,7 @@
 goog.provide('goog.net.tmpnetwork');
 
 goog.require('goog.Uri');
+goog.require('goog.dom.safe');
 goog.require('goog.net.ChannelDebug');
 
 
@@ -106,7 +107,7 @@ goog.net.tmpnetwork.testLoadImageWithRetries = function(
 
 /**
  * Test loading the given image.
- * @param {string} url URL to the iamge.
+ * @param {string} url URL to the image.
  * @param {number} timeout Milliseconds before giving up.
  * @param {Function} callback Function to call with results.
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
@@ -157,7 +158,7 @@ goog.net.tmpnetwork.testLoadImage = function(url, timeout, callback) {
       img.ontimeout();
     }
   }, timeout);
-  img.src = url;
+  goog.dom.safe.setImageSrc(img, url);
 };
 
 

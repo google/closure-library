@@ -23,6 +23,7 @@ goog.require('goog.array');
 goog.require('goog.crypt');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.reflect');
 goog.require('goog.testing.PerformanceTable');
 goog.require('goog.testing.PseudoRandom');
 goog.require('goog.testing.asserts');
@@ -196,7 +197,8 @@ goog.crypt.hashTester.runPerfTests = function(hashFactory, hashName) {
         for (var i = 0; i < updateCount; i++) {
           hash.update(data, byteLength);
         }
-        var digest = hash.digest();
+        // Prevent JsCompiler optimizations from invalidating the benchmark.
+        goog.reflect.sinkValue(hash.digest());
       }, label + ' (' + dataType + ')');
     }
 

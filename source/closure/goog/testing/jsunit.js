@@ -122,7 +122,7 @@ goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS =
     }
     var stack = maybeGetStack(errObj || messageOrEvent);
     if (stack) {
-      tr.logError(stack);
+      tr.logError(String(messageOrEvent) + '\n' + stack);
     } else if (typeof messageOrEvent == 'object') {
       var error = messageOrEvent;
       // Some older webkit browsers pass an event object as the only argument

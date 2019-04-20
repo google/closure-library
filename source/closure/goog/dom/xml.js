@@ -22,6 +22,8 @@ goog.provide('goog.dom.xml');
 
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.safe');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.userAgent');
 
 
@@ -124,7 +126,9 @@ goog.dom.xml.createDocument = function(
 goog.dom.xml.loadXml = function(xml, opt_preferActiveX) {
   if (typeof DOMParser != 'undefined' &&
       !(goog.dom.xml.ACTIVEX_SUPPORT && opt_preferActiveX)) {
-    return new DOMParser().parseFromString(xml, 'application/xml');
+    return goog.dom.safe.parseFromString(
+        new DOMParser(), goog.html.legacyconversions.safeHtmlFromString(xml),
+        'application/xml');
   } else if (goog.dom.xml.ACTIVEX_SUPPORT) {
     var doc = goog.dom.xml.createMsXmlDocument_();
     doc.loadXML(xml);

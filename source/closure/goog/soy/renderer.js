@@ -162,9 +162,9 @@ goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
  * of kinds other than "text".
  *
  * @param {
- *   ?function(ARG_TYPES, ?Object<string,*>=): ?goog.soy.data.UnsanitizedText|
- *   ?function(ARG_TYPES, ?Object=, ?Object<string, *>=):
- *       ?goog.soy.data.UnsanitizedText} template The Soy template to render.
+ *     ?function(ARG_TYPES, ?Object<string,*>=): ?goog.soy.TextType|
+ *     ?function(ARG_TYPES, null=, ?Object<string, *>=): ?goog.soy.TextType}
+ *     template The Soy template to render.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @return {string} The return value of rendering the template directly.
  * @template ARG_TYPES

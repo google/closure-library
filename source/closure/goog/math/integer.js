@@ -454,6 +454,12 @@ goog.math.Integer.prototype.negate = function() {
 };
 
 
+/** @return {!goog.math.Integer} The absolute value of this value. */
+goog.math.Integer.prototype.abs = function() {
+  return this.isNegative() ? this.negate() : this;
+};
+
+
 /**
  * Returns the sum of this and the given Integer.
  * @param {goog.math.Integer} other The Integer to add to this.
@@ -584,7 +590,7 @@ goog.math.Integer.carry16_ = function(bits, index) {
  * the issue linked above.
  *
  * @param {!goog.math.Integer} other The Integer to divide "this" by.
- * @return {!goog.math.Integer} "this" value divided by the given one.
+ * @return {!goog.math.Integer.DivisionResult}
  * @private
  */
 goog.math.Integer.prototype.slowDivide_ = function(other) {
@@ -625,7 +631,13 @@ goog.math.Integer.prototype.slowDivide_ = function(other) {
     multiple = multiple.shiftRight(1);
     twoPower = twoPower.shiftRight(1);
   }
-  return res;
+
+
+  // TODO(b/130639293): Calculate this more efficiently during the division.
+  // This is kind of a waste since it isn't always needed, but it keeps the
+  // API smooth. Since this is already a slow path it probably isn't a big deal.
+  var remainder = this.subtract(res.multiply(other));
+  return new goog.math.Integer.DivisionResult(res, remainder);
 };
 
 
@@ -635,20 +647,60 @@ goog.math.Integer.prototype.slowDivide_ = function(other) {
  * @return {!goog.math.Integer} This value divided by the given one.
  */
 goog.math.Integer.prototype.divide = function(other) {
+  return this.divideAndRemainder(other).quotient;
+};
+
+
+/**
+ * A struct for holding the quotient and remainder of a division.
+ *
+ * @constructor
+ * @final
+ * @struct
+ *
+ * @param {!goog.math.Integer} quotient
+ * @param {!goog.math.Integer} remainder
+ */
+goog.math.Integer.DivisionResult = function(quotient, remainder) {
+  /** @const */
+  this.quotient = quotient;
+
+  /** @const */
+  this.remainder = remainder;
+};
+
+
+/**
+ * Returns this Integer divided by the given one, as well as the remainder of
+ * that division.
+ *
+ * @param {!goog.math.Integer} other The Integer to divide this by.
+ * @return {!goog.math.Integer.DivisionResult}
+ */
+goog.math.Integer.prototype.divideAndRemainder = function(other) {
   if (other.isZero()) {
     throw new Error('division by zero');
   } else if (this.isZero()) {
-    return goog.math.Integer.ZERO;
+    return new goog.math.Integer.DivisionResult(
+        goog.math.Integer.ZERO, goog.math.Integer.ZERO);
   }
 
   if (this.isNegative()) {
-    if (other.isNegative()) {
-      return this.negate().divide(other.negate());
-    } else {
-      return this.negate().divide(other).negate();
-    }
+    // Do the division on the negative of the numerator...
+    var result = this.negate().divideAndRemainder(other);
+    return new goog.math.Integer.DivisionResult(
+        // ...and flip the sign back after.
+        result.quotient.negate(),
+        // The remainder must always have the same sign as the numerator.
+        result.remainder.negate());
   } else if (other.isNegative()) {
-    return this.divide(other.negate()).negate();
+    // Do the division on the negative of the denominator...
+    var result = this.divideAndRemainder(other.negate());
+    return new goog.math.Integer.DivisionResult(
+        // ...and flip the sign back after.
+        result.quotient.negate(),
+        // The remainder must always have the same sign as the numerator.
+        result.remainder);
   }
 
   // Have to degrade to slowDivide for Very Large Numbers, because
@@ -694,7 +746,7 @@ goog.math.Integer.prototype.divide = function(other) {
     res = res.add(approxRes);
     rem = rem.subtract(approxRem);
   }
-  return res;
+  return new goog.math.Integer.DivisionResult(res, rem);
 };
 
 
@@ -704,7 +756,7 @@ goog.math.Integer.prototype.divide = function(other) {
  * @return {!goog.math.Integer} This value modulo the given one.
  */
 goog.math.Integer.prototype.modulo = function(other) {
-  return this.subtract(this.divide(other).multiply(other));
+  return this.divideAndRemainder(other).remainder;
 };
 
 
