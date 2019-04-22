@@ -15,7 +15,7 @@
 /**
  * @fileoverview Relative date time formatting symbols.
  *
- * File generated from CLDR ver. 34
+ * File generated from CLDR ver. 35
  *
  * This file covers those locales that are not covered in
  * "relativedatetimesymbols.js".
@@ -330,8 +330,13 @@ exports.RelativeDateTimeSymbols_ar_XB =  {
       P:'one{# ؜‮day‬؜ ؜‮ago‬؜}other{# ؜‮days‬؜ ؜‮ago‬؜}',
       F:'one{؜‮in‬؜ # ؜‮day‬؜}other{؜‮in‬؜ # ؜‮days‬؜}',
     },
+    SHORT:{
+      R:{'-1':'أمس','-2':'أول أمس','0':'اليوم','1':'غدًا','2':'بعد الغد'},
+      P:'one{# ؜‮day‬؜ ؜‮ago‬؜}other{# ؜‮days‬؜ ؜‮ago‬؜}',
+      F:'one{؜‮in‬؜ # ؜‮day‬؜}other{؜‮in‬؜ # ؜‮days‬؜}',
+    },
     NARROW:{
-      R:{'-1':'؜‮yesterday‬؜','0':'؜‮today‬؜','1':'؜‮tomorrow‬؜'},
+      R:{'-1':'أمس','-2':'أول أمس','0':'اليوم','1':'غدًا','2':'بعد الغد'},
       P:'few{قبل # أيام}many{قبل # يومًا}one{قبل يوم واحد}other{قبل # يوم}two{قبل يومين}zero{قبل # يوم}',
       F:'few{خلال # أيام}many{خلال # يومًا}one{خلال يوم واحد}other{خلال # يوم}two{خلال يومين}zero{خلال # يوم}',
     },
@@ -1594,6 +1599,69 @@ exports.RelativeDateTimeSymbols_ce =  {
 exports.RelativeDateTimeSymbols_ce_RU = exports.RelativeDateTimeSymbols_ce;
 
 /** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ceb =  {
+  DAY: {
+    LONG:{
+      R:{'-1':'Kagahapon','0':'Karon nga Adlaw','1':'Ugma'},
+      P:'other{-# d}',
+      F:'other{+# d}',
+    },
+  },
+  HOUR: {
+    LONG:{
+      R:{'0':'this hour'},
+      P:'other{-# h}',
+      F:'other{+# h}',
+    },
+  },
+  MINUTE: {
+    LONG:{
+      R:{'0':'this minute'},
+      P:'other{-# min}',
+      F:'other{+# min}',
+    },
+  },
+  MONTH: {
+    LONG:{
+      R:{'-1':'last month','0':'this month','1':'next month'},
+      P:'other{-# m}',
+      F:'other{+# m}',
+    },
+  },
+  QUARTER: {
+    LONG:{
+      R:{'-1':'last quarter','0':'this quarter','1':'next quarter'},
+      P:'other{-# Q}',
+      F:'other{+# Q}',
+    },
+  },
+  SECOND: {
+    LONG:{
+      R:{'0':'now'},
+      P:'other{-# s}',
+      F:'other{+# s}',
+    },
+  },
+  WEEK: {
+    LONG:{
+      R:{'-1':'last week','0':'this week','1':'next week'},
+      P:'other{-# w}',
+      F:'other{+# w}',
+    },
+  },
+  YEAR: {
+    LONG:{
+      R:{'-1':'last year','0':'this year','1':'next year'},
+      P:'other{-# y}',
+      F:'other{+# y}',
+    },
+  },
+};
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ceb_PH = exports.RelativeDateTimeSymbols_ceb;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_cgg =  {
   DAY: {
     LONG:{
@@ -2534,6 +2602,9 @@ exports.RelativeDateTimeSymbols_en_150 =  {
     },
   },
 };
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_en_AE = relativeDateTimeSymbols.RelativeDateTimeSymbols_en;
 
 /** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_en_AG =  {
@@ -5465,7 +5536,7 @@ exports.RelativeDateTimeSymbols_en_HK =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'last week','0':'this week','1':'next week'},
+      R:{'1':'next week'},
       P:'one{# week ago}other{# weeks ago}',
       F:'one{in # week}other{in # weeks}',
     },
@@ -10888,15 +10959,18 @@ exports.RelativeDateTimeSymbols_eo =  {
 };
 
 /** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_eo_001 = exports.RelativeDateTimeSymbols_eo;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_es_AR =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # días}other{hace # días}',
       F:'one{dentro de # días}other{dentro de # días}',
     },
@@ -10963,24 +11037,29 @@ exports.RelativeDateTimeSymbols_es_AR =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -10991,12 +11070,12 @@ exports.RelativeDateTimeSymbols_es_AR =  {
 exports.RelativeDateTimeSymbols_es_BO =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -11063,24 +11142,29 @@ exports.RelativeDateTimeSymbols_es_BO =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -11091,12 +11175,12 @@ exports.RelativeDateTimeSymbols_es_BO =  {
 exports.RelativeDateTimeSymbols_es_BR =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -11163,24 +11247,29 @@ exports.RelativeDateTimeSymbols_es_BR =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -11191,12 +11280,12 @@ exports.RelativeDateTimeSymbols_es_BR =  {
 exports.RelativeDateTimeSymbols_es_BZ =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -11263,24 +11352,29 @@ exports.RelativeDateTimeSymbols_es_BZ =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -11291,12 +11385,12 @@ exports.RelativeDateTimeSymbols_es_BZ =  {
 exports.RelativeDateTimeSymbols_es_CL =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -11363,24 +11457,29 @@ exports.RelativeDateTimeSymbols_es_CL =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -11391,12 +11490,12 @@ exports.RelativeDateTimeSymbols_es_CL =  {
 exports.RelativeDateTimeSymbols_es_CO =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -11463,24 +11562,29 @@ exports.RelativeDateTimeSymbols_es_CO =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -11495,11 +11599,6 @@ exports.RelativeDateTimeSymbols_es_CR =  {
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
-    SHORT:{
-      R:{'2':'pasado mañana'},
-      P:'one{hace # día}other{hace # días}',
-      F:'one{dentro de # día}other{dentro de # días}',
-    },
   },
   HOUR: {
     LONG:{
@@ -11563,24 +11662,29 @@ exports.RelativeDateTimeSymbols_es_CR =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -11591,12 +11695,12 @@ exports.RelativeDateTimeSymbols_es_CR =  {
 exports.RelativeDateTimeSymbols_es_CU =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -11663,24 +11767,29 @@ exports.RelativeDateTimeSymbols_es_CU =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -11691,12 +11800,12 @@ exports.RelativeDateTimeSymbols_es_CU =  {
 exports.RelativeDateTimeSymbols_es_DO =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -11763,24 +11872,29 @@ exports.RelativeDateTimeSymbols_es_DO =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -11794,12 +11908,12 @@ exports.RelativeDateTimeSymbols_es_EA = relativeDateTimeSymbols.RelativeDateTime
 exports.RelativeDateTimeSymbols_es_EC =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -11866,24 +11980,29 @@ exports.RelativeDateTimeSymbols_es_EC =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -11901,11 +12020,6 @@ exports.RelativeDateTimeSymbols_es_GT =  {
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
-    SHORT:{
-      R:{'2':'pasado mañana'},
-      P:'one{hace # día}other{hace # días}',
-      F:'one{dentro de # día}other{dentro de # días}',
-    },
   },
   HOUR: {
     LONG:{
@@ -11969,24 +12083,29 @@ exports.RelativeDateTimeSymbols_es_GT =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -12001,11 +12120,6 @@ exports.RelativeDateTimeSymbols_es_HN =  {
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
-    SHORT:{
-      R:{'2':'pasado mañana'},
-      P:'one{hace # día}other{hace # días}',
-      F:'one{dentro de # día}other{dentro de # días}',
-    },
   },
   HOUR: {
     LONG:{
@@ -12069,24 +12183,29 @@ exports.RelativeDateTimeSymbols_es_HN =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -12104,11 +12223,6 @@ exports.RelativeDateTimeSymbols_es_NI =  {
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
-    SHORT:{
-      R:{'2':'pasado mañana'},
-      P:'one{hace # día}other{hace # días}',
-      F:'one{dentro de # día}other{dentro de # días}',
-    },
   },
   HOUR: {
     LONG:{
@@ -12172,24 +12286,29 @@ exports.RelativeDateTimeSymbols_es_NI =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -12204,11 +12323,6 @@ exports.RelativeDateTimeSymbols_es_PA =  {
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
-    SHORT:{
-      R:{'2':'pasado mañana'},
-      P:'one{hace # día}other{hace # días}',
-      F:'one{dentro de # día}other{dentro de # días}',
-    },
   },
   HOUR: {
     LONG:{
@@ -12272,24 +12386,29 @@ exports.RelativeDateTimeSymbols_es_PA =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -12300,12 +12419,12 @@ exports.RelativeDateTimeSymbols_es_PA =  {
 exports.RelativeDateTimeSymbols_es_PE =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -12372,24 +12491,29 @@ exports.RelativeDateTimeSymbols_es_PE =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -12403,12 +12527,12 @@ exports.RelativeDateTimeSymbols_es_PH = relativeDateTimeSymbols.RelativeDateTime
 exports.RelativeDateTimeSymbols_es_PR =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -12475,24 +12599,29 @@ exports.RelativeDateTimeSymbols_es_PR =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -12504,11 +12633,6 @@ exports.RelativeDateTimeSymbols_es_PY =  {
   DAY: {
     LONG:{
       R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
-      P:'one{hace # día}other{hace # días}',
-      F:'one{dentro de # día}other{dentro de # días}',
-    },
-    SHORT:{
-      R:{'2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -12575,24 +12699,29 @@ exports.RelativeDateTimeSymbols_es_PY =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -12608,7 +12737,7 @@ exports.RelativeDateTimeSymbols_es_SV =  {
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -12675,24 +12804,29 @@ exports.RelativeDateTimeSymbols_es_SV =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -12703,12 +12837,12 @@ exports.RelativeDateTimeSymbols_es_SV =  {
 exports.RelativeDateTimeSymbols_es_UY =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -12775,24 +12909,29 @@ exports.RelativeDateTimeSymbols_es_UY =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -12803,12 +12942,12 @@ exports.RelativeDateTimeSymbols_es_UY =  {
 exports.RelativeDateTimeSymbols_es_VE =  {
   DAY: {
     LONG:{
-      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
+      R:{'-1':'ayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
     SHORT:{
-      R:{'2':'pasado mañana'},
+      R:{'-1':'ayer','-2':'anteayer','0':'hoy','1':'mañana','2':'pasado mañana'},
       P:'one{hace # día}other{hace # días}',
       F:'one{dentro de # día}other{dentro de # días}',
     },
@@ -12875,24 +13014,29 @@ exports.RelativeDateTimeSymbols_es_VE =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # semana}other{hace # semanas}',
       F:'one{dentro de # semana}other{dentro de # semanas}',
     },
     SHORT:{
-      R:{'-1':'la semana pasada','0':'esta semana','1':'la próxima semana'},
+      R:{'-1':'la semana pasada','0':'esta semana'},
       P:'one{hace # sem.}other{hace # sem.}',
+      F:'one{dentro de # sem.}other{dentro de # sem.}',
+    },
+    NARROW:{
+      R:{'-1':'la semana pasada','0':'esta semana'},
+      P:'one{hace # sem.}',
       F:'one{dentro de # sem.}other{dentro de # sem.}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
+      R:{'-1':'el año pasado','0':'este año'},
       P:'one{hace # año}other{hace # años}',
       F:'one{dentro de # año}other{dentro de # años}',
     },
     SHORT:{
-      R:{'-1':'el año pasado','0':'este año'},
+      R:{'-1':'el año pasado','0':'este año','1':'el próximo año'},
       P:'one{hace # a}other{hace # a}',
       F:'one{dentro de # a}other{dentro de # a}',
     },
@@ -13033,6 +13177,45 @@ exports.RelativeDateTimeSymbols_ff =  {
     },
   },
 };
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_BF = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_CM = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_GH = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_GM = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_GN = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_GW = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_LR = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_MR = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_NE = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_NG = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_SL = exports.RelativeDateTimeSymbols_ff;
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ff_Latn_SN = exports.RelativeDateTimeSymbols_ff;
 
 /** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_fi_FI = relativeDateTimeSymbols.RelativeDateTimeSymbols_fi;
@@ -13932,57 +14115,92 @@ exports.RelativeDateTimeSymbols_ia =  {
   DAY: {
     LONG:{
       R:{'-1':'heri','0':'hodie','1':'deman'},
-      P:'other{-# d}',
-      F:'other{+# d}',
+      P:'one{# dies retro}other{# dies retro}',
+      F:'one{in # dies}other{in # dies}',
     },
   },
   HOUR: {
     LONG:{
       R:{'0':'iste hora'},
-      P:'other{-# h}',
-      F:'other{+# h}',
+      P:'one{# horas retro}other{# horas retro}',
+      F:'one{in # horas}other{in # horas}',
+    },
+    SHORT:{
+      R:{'0':'iste hora'},
+      P:'one{# horas retro}other{# hr. retro}',
+      F:'one{in # horas}other{in # hr.}',
     },
   },
   MINUTE: {
     LONG:{
       R:{'0':'iste minuta'},
-      P:'other{-# min}',
-      F:'other{+# min}',
+      P:'one{# minutas retro}other{# minutas retro}',
+      F:'one{in # minutas}other{in # minutas}',
+    },
+    SHORT:{
+      R:{'0':'iste minuta'},
+      P:'one{# minutas retro}other{# min. retro}',
+      F:'one{in # minutas}other{in # min.}',
     },
   },
   MONTH: {
     LONG:{
       R:{'-1':'le mense passate','0':'iste mense','1':'le mense proxime'},
-      P:'other{-# m}',
-      F:'other{+# m}',
+      P:'one{# menses retro}other{# menses retro}',
+      F:'one{in # menses}other{in # menses}',
+    },
+    SHORT:{
+      R:{'-1':'le mense passate','0':'iste mense','1':'le mense proxime'},
+      P:'one{# menses retro}other{# mns. retro}',
+      F:'one{in # menses}other{in # mns.}',
     },
   },
   QUARTER: {
     LONG:{
       R:{'-1':'le trimestre passate','0':'iste trimestre','1':'le trimestre proxime'},
-      P:'other{-# Q}',
-      F:'other{+# Q}',
+      P:'one{in # trimestres}other{in # trimestres}',
+      F:'one{in # trimestres}other{in # trimestres}',
+    },
+    SHORT:{
+      R:{'-1':'le trimestre passate','0':'iste trimestre','1':'le trimestre proxime'},
+      P:'one{in # trimestres}other{# trim. retro}',
+      F:'one{in # trimestres}other{in # trim.}',
     },
   },
   SECOND: {
     LONG:{
       R:{'0':'ora'},
-      P:'other{-# s}',
-      F:'other{+# s}',
+      P:'one{# secundas retro}other{# secundas retro}',
+      F:'one{in # secundas}other{in # secundas}',
+    },
+    SHORT:{
+      R:{'0':'ora'},
+      P:'one{# secundas retro}other{# sec. retro}',
+      F:'one{in # secundas}other{in # sec.}',
     },
   },
   WEEK: {
     LONG:{
       R:{'-1':'le septimana passate','0':'iste septimana','1':'le septimana proxime'},
-      P:'other{-# w}',
-      F:'other{+# w}',
+      P:'one{# septimanas retro}other{# septimanas retro}',
+      F:'one{in # septimanas}other{in # septimanas}',
+    },
+    SHORT:{
+      R:{'-1':'le septimana passate','0':'iste septimana','1':'le septimana proxime'},
+      P:'one{# septimanas retro}other{# sept. retro}',
+      F:'one{in # septimanas}other{in # sept.}',
     },
   },
   YEAR: {
     LONG:{
       R:{'-1':'le anno passate','0':'iste anno','1':'le anno proxime'},
-      P:'other{-# y}',
-      F:'other{+# y}',
+      P:'one{# annos retro}other{# annos retro}',
+      F:'one{in # annos}other{in # annos}',
+    },
+    SHORT:{
+      R:{'-1':'le anno passate','0':'iste anno','1':'le anno proxime'},
+      P:'one{# annos retro}other{# an. retro}',
+      F:'one{in # annos}other{in # an.}',
     },
   },
 };
@@ -13997,6 +14215,11 @@ exports.RelativeDateTimeSymbols_id_ID = relativeDateTimeSymbols.RelativeDateTime
 exports.RelativeDateTimeSymbols_ig =  {
   DAY: {
     LONG:{
+      R:{'-1':'Ụnyaahụ','0':'Taa','1':'Echi'},
+      P:'other{-# d}',
+      F:'other{+# d}',
+    },
+    SHORT:{
       R:{'-1':'Nnyaafụ','0':'Taata','1':'Echi'},
       P:'other{-# d}',
       F:'other{+# d}',
@@ -14268,20 +14491,40 @@ exports.RelativeDateTimeSymbols_jv =  {
   DAY: {
     LONG:{
       R:{'-1':'wingi','0':'saiki','1':'sesuk'},
+      P:'other{# dina kepungkur}',
+      F:'other{ing # dina}',
+    },
+    SHORT:{
+      R:{'-1':'wingi','0':'saiki','1':'sesuk'},
+      P:'other{-# d}',
+      F:'other{ing # dina}',
+    },
+    NARROW:{
+      R:{'-1':'wingi','0':'saiki','1':'sesuk'},
       P:'other{-# d}',
       F:'other{+# d}',
     },
   },
   HOUR: {
     LONG:{
-      R:{'0':'this hour'},
+      R:{'0':'jam iki'},
+      P:'other{# jam kepungkur}',
+      F:'other{ing # jam}',
+    },
+    SHORT:{
+      R:{'0':'jam iki'},
       P:'other{-# h}',
       F:'other{+# h}',
     },
   },
   MINUTE: {
     LONG:{
-      R:{'0':'this minute'},
+      R:{'0':'menit iki'},
+      P:'other{# men. kepungkur}',
+      F:'other{ing # mnt}',
+    },
+    SHORT:{
+      R:{'0':'menit iki'},
       P:'other{-# min}',
       F:'other{+# min}',
     },
@@ -14289,19 +14532,49 @@ exports.RelativeDateTimeSymbols_jv =  {
   MONTH: {
     LONG:{
       R:{'-1':'sasi wingi','0':'sasi iki','1':'sasi ngarep'},
+      P:'other{# sasi kepungkur}',
+      F:'other{ing # sasi}',
+    },
+    SHORT:{
+      R:{'-1':'sasi wingi','0':'sasi iki','1':'sasi ngarep'},
+      P:'other{# s. kepungkur}',
+      F:'other{ing # s.}',
+    },
+    NARROW:{
+      R:{'-1':'sasi wingi','0':'sasi iki','1':'sasi ngarep'},
       P:'other{-# m}',
       F:'other{+# m}',
     },
   },
   QUARTER: {
     LONG:{
-      R:{'-1':'last quarter','0':'this quarter','1':'next quarter'},
+      R:{'-1':'kwartal wingi','0':'kwartal iki','1':'kwartal ngarep'},
+      P:'other{# kwartal kepungkur}',
+      F:'other{ing # kwartal}',
+    },
+    SHORT:{
+      R:{'-1':'kwartal wingi','0':'kwartal iki','1':'kwartal ngarep'},
+      P:'other{# kwrt. kepungkur}',
+      F:'other{ing # kwrt.}',
+    },
+    NARROW:{
+      R:{'-1':'kwartal wingi','0':'kwartal iki','1':'kwartal ngarep'},
       P:'other{-# Q}',
       F:'other{+# Q}',
     },
   },
   SECOND: {
     LONG:{
+      R:{'0':'now'},
+      P:'other{# detik kepungkur}',
+      F:'other{ing # detik}',
+    },
+    SHORT:{
+      R:{'0':'now'},
+      P:'other{# det. kepungkur}',
+      F:'other{ing # dtk}',
+    },
+    NARROW:{
       R:{'0':'now'},
       P:'other{-# s}',
       F:'other{+# s}',
@@ -14310,12 +14583,32 @@ exports.RelativeDateTimeSymbols_jv =  {
   WEEK: {
     LONG:{
       R:{'-1':'pekan wingi','0':'pekan iki','1':'pekan ngarep'},
+      P:'other{# minggu kepungkur}',
+      F:'other{ing # minggu}',
+    },
+    SHORT:{
+      R:{'-1':'pekan wingi','0':'pekan iki','1':'pekan ngarep'},
+      P:'other{# mgg. kepungkur}',
+      F:'other{ing # mgg.}',
+    },
+    NARROW:{
+      R:{'-1':'pekan wingi','0':'pekan iki','1':'pekan ngarep'},
       P:'other{-# w}',
       F:'other{+# w}',
     },
   },
   YEAR: {
     LONG:{
+      R:{'-1':'taun wingi','0':'taun iki','1':'taun ngarep'},
+      P:'other{# taun kepungkur}',
+      F:'other{ing # taun}',
+    },
+    SHORT:{
+      R:{'-1':'taun wingi','0':'taun iki','1':'taun ngarep'},
+      P:'other{# tn kepungkur}',
+      F:'other{ing # tn}',
+    },
+    NARROW:{
       R:{'-1':'taun wingi','0':'taun iki','1':'taun ngarep'},
       P:'other{-# y}',
       F:'other{+# y}',
@@ -17499,50 +17792,50 @@ exports.RelativeDateTimeSymbols_ps =  {
   DAY: {
     LONG:{
       R:{'-1':'yesterday','0':'today','1':'tomorrow'},
-      P:'one{-# d}other{-# d}',
-      F:'one{+# d}other{+# d}',
+      P:'other{-# d}',
+      F:'other{+# d}',
     },
   },
   HOUR: {
     LONG:{
       R:{'0':'this hour'},
-      P:'one{-# h}other{-# h}',
-      F:'one{+# h}other{+# h}',
+      P:'other{-# h}',
+      F:'other{+# h}',
     },
   },
   MINUTE: {
     LONG:{
       R:{'0':'this minute'},
-      P:'one{-# min}other{-# min}',
-      F:'one{+# min}other{+# min}',
+      P:'other{-# min}',
+      F:'other{+# min}',
     },
   },
   MONTH: {
     LONG:{
       R:{'-1':'last month','0':'this month','1':'next month'},
-      P:'one{-# m}other{-# m}',
-      F:'one{+# m}other{+# m}',
+      P:'other{-# m}',
+      F:'other{+# m}',
     },
   },
   QUARTER: {
     LONG:{
       R:{'-1':'last quarter','0':'this quarter','1':'next quarter'},
-      P:'one{-# Q}other{-# Q}',
-      F:'one{+# Q}other{+# Q}',
+      P:'other{-# Q}',
+      F:'other{+# Q}',
     },
   },
   SECOND: {
     LONG:{
       R:{'0':'now'},
-      P:'one{-# s}other{-# s}',
-      F:'one{+# s}other{+# s}',
+      P:'other{-# s}',
+      F:'other{+# s}',
     },
   },
   WEEK: {
     LONG:{
       R:{'-1':'last week','0':'this week','1':'next week'},
-      P:'one{-# w}other{-# w}',
-      F:'one{+# w}other{+# w}',
+      P:'other{-# w}',
+      F:'other{+# w}',
     },
   },
   YEAR: {
@@ -17558,6 +17851,66 @@ exports.RelativeDateTimeSymbols_ps =  {
 exports.RelativeDateTimeSymbols_ps_AF = exports.RelativeDateTimeSymbols_ps;
 
 /** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_ps_PK =  {
+  DAY: {
+    LONG:{
+      R:{'-1':'yesterday','0':'today','1':'tomorrow'},
+      P:'other{-# d}',
+      F:'other{+# d}',
+    },
+  },
+  HOUR: {
+    LONG:{
+      R:{'0':'this hour'},
+      P:'other{-# h}',
+      F:'other{+# h}',
+    },
+  },
+  MINUTE: {
+    LONG:{
+      R:{'0':'this minute'},
+      P:'other{-# min}',
+      F:'other{+# min}',
+    },
+  },
+  MONTH: {
+    LONG:{
+      R:{'-1':'last month','0':'this month','1':'next month'},
+      P:'other{-# m}',
+      F:'other{+# m}',
+    },
+  },
+  QUARTER: {
+    LONG:{
+      R:{'-1':'last quarter','0':'this quarter','1':'next quarter'},
+      P:'other{-# Q}',
+      F:'other{+# Q}',
+    },
+  },
+  SECOND: {
+    LONG:{
+      R:{'0':'now'},
+      P:'other{-# s}',
+      F:'other{+# s}',
+    },
+  },
+  WEEK: {
+    LONG:{
+      R:{'-1':'last week','0':'this week','1':'next week'},
+      P:'other{-# w}',
+      F:'other{+# w}',
+    },
+  },
+  YEAR: {
+    LONG:{
+      R:{'-1':'پروسږکال','0':'سږکال','1':'بل کال'},
+      P:'one{# کال مخکے}other{# کاله مخکے}',
+      F:'one{په # کال کے}other{په # کالونو کے}',
+    },
+  },
+};
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_pt_AO =  {
   DAY: {
     LONG:{
@@ -17565,8 +17918,13 @@ exports.RelativeDateTimeSymbols_pt_AO =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
+    SHORT:{
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
+      P:'one{há # dia}other{há # dias}',
+      F:'one{dentro de # dia}other{dentro de # dias}',
+    },
     NARROW:{
-      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
       P:'one{há # dias}other{há # dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -17690,8 +18048,13 @@ exports.RelativeDateTimeSymbols_pt_CH =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
+    SHORT:{
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
+      P:'one{há # dia}other{há # dias}',
+      F:'one{dentro de # dia}other{dentro de # dias}',
+    },
     NARROW:{
-      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
       P:'one{há # dias}other{há # dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -17815,8 +18178,13 @@ exports.RelativeDateTimeSymbols_pt_CV =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
+    SHORT:{
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
+      P:'one{há # dia}other{há # dias}',
+      F:'one{dentro de # dia}other{dentro de # dias}',
+    },
     NARROW:{
-      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
       P:'one{há # dias}other{há # dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -17940,8 +18308,13 @@ exports.RelativeDateTimeSymbols_pt_GQ =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
+    SHORT:{
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
+      P:'one{há # dia}other{há # dias}',
+      F:'one{dentro de # dia}other{dentro de # dias}',
+    },
     NARROW:{
-      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
       P:'one{há # dias}other{há # dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -18065,8 +18438,13 @@ exports.RelativeDateTimeSymbols_pt_GW =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
+    SHORT:{
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
+      P:'one{há # dia}other{há # dias}',
+      F:'one{dentro de # dia}other{dentro de # dias}',
+    },
     NARROW:{
-      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
       P:'one{há # dias}other{há # dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -18190,8 +18568,13 @@ exports.RelativeDateTimeSymbols_pt_LU =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
+    SHORT:{
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
+      P:'one{há # dia}other{há # dias}',
+      F:'one{dentro de # dia}other{dentro de # dias}',
+    },
     NARROW:{
-      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
       P:'one{há # dias}other{há # dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -18315,8 +18698,13 @@ exports.RelativeDateTimeSymbols_pt_MO =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
+    SHORT:{
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
+      P:'one{há # dia}other{há # dias}',
+      F:'one{dentro de # dia}other{dentro de # dias}',
+    },
     NARROW:{
-      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
       P:'one{há # dias}other{há # dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -18440,8 +18828,13 @@ exports.RelativeDateTimeSymbols_pt_MZ =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
+    SHORT:{
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
+      P:'one{há # dia}other{há # dias}',
+      F:'one{dentro de # dia}other{dentro de # dias}',
+    },
     NARROW:{
-      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
       P:'one{há # dias}other{há # dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -18565,8 +18958,13 @@ exports.RelativeDateTimeSymbols_pt_ST =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
+    SHORT:{
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
+      P:'one{há # dia}other{há # dias}',
+      F:'one{dentro de # dia}other{dentro de # dias}',
+    },
     NARROW:{
-      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
       P:'one{há # dias}other{há # dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -18690,8 +19088,13 @@ exports.RelativeDateTimeSymbols_pt_TL =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
+    SHORT:{
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
+      P:'one{há # dia}other{há # dias}',
+      F:'one{dentro de # dia}other{dentro de # dias}',
+    },
     NARROW:{
-      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
+      R:{'-2':'anteontem','0':'hoje','2':'depois de amanhã'},
       P:'one{há # dias}other{há # dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -20173,57 +20576,102 @@ exports.RelativeDateTimeSymbols_so =  {
   DAY: {
     LONG:{
       R:{'-1':'Shalay','0':'Maanta','1':'Berri'},
-      P:'one{-# d}other{-# d}',
-      F:'one{+# d}other{+# d}',
+      P:'one{# maalin kahor}other{# maalmood kahor}',
+      F:'one{# maalin}other{# maalmood}',
+    },
+    SHORT:{
+      R:{'-1':'Shalay','0':'Maanta','1':'Berri'},
+      P:'one{# mln khr}other{# mlmd khr}',
+      F:'one{# mln}other{# mlmd}',
     },
   },
   HOUR: {
     LONG:{
-      R:{'0':'this hour'},
-      P:'one{-# h}other{-# h}',
-      F:'one{+# h}other{+# h}',
+      R:{'0':'Saacadan'},
+      P:'one{# saacad kahor}other{# saacadood kahor}',
+      F:'one{# saacad}other{# saacadood}',
+    },
+    SHORT:{
+      R:{'0':'Saacadan'},
+      P:'one{# scd khr}other{# scd khr}',
+      F:'one{# scd}other{# scd}',
     },
   },
   MINUTE: {
     LONG:{
-      R:{'0':'this minute'},
-      P:'one{-# min}other{-# min}',
-      F:'one{+# min}other{+# min}',
+      R:{'0':'Daqiiqadan'},
+      P:'one{# daqiiqad kahor}other{# daqiiqadood kahor}',
+      F:'one{# daqiiqad}other{# daqiidadood}',
+    },
+    SHORT:{
+      R:{'0':'Daqiiqadan'},
+      P:'one{# dqqd khr}other{# dqqd khr}',
+      F:'one{# dqqd}other{# dqqd}',
     },
   },
   MONTH: {
     LONG:{
-      R:{'-1':'Bishii la soo dhaafay','0':'Bishan','1':'Bisha xigta'},
-      P:'one{-# m}other{-# m}',
-      F:'one{+# m}other{+# m}',
+      R:{'-1':'Bishii hore','0':'Bishan','1':'Bisha danbe'},
+      P:'one{# bil kahor}other{# bilood kahor}',
+      F:'one{# bil}other{# bilood}',
+    },
+    SHORT:{
+      R:{'-1':'Bishii hore','0':'Bishan','1':'Bisha danbe'},
+      P:'one{# bil khr}other{# bil khr}',
+      F:'one{# bil}other{# bil}',
     },
   },
   QUARTER: {
     LONG:{
-      R:{'-1':'last quarter','0':'this quarter','1':'next quarter'},
-      P:'one{-# Q}other{-# Q}',
-      F:'one{+# Q}other{+# Q}',
+      R:{'-1':'Rubucii hore','0':'Rubucan','1':'Rubuca danbe'},
+      P:'one{# rubuc kahor}other{# rubuc kahor}',
+      F:'one{# rubuc}other{# rubuc}',
+    },
+    SHORT:{
+      R:{'-1':'Rubucii hore','0':'Rubucan','1':'Rubuca danbe'},
+      P:'one{# rbc khr}other{# rbc khr}',
+      F:'one{# rbc}other{# rbc}',
     },
   },
   SECOND: {
     LONG:{
-      R:{'0':'now'},
-      P:'one{-# s}other{-# s}',
-      F:'one{+# s}other{+# s}',
+      R:{'0':'Imika'},
+      P:'one{# ilbiriqsi kahor}other{# ilbiriqsi kahor}',
+      F:'one{# ilbiriqsi}other{# ilbiriqsi}',
+    },
+    SHORT:{
+      R:{'0':'Imika'},
+      P:'one{# ilbrqsi khr}other{# ilbrqsi khr}',
+      F:'one{# ilbrqsi}other{# ilbrqsi}',
     },
   },
   WEEK: {
     LONG:{
-      R:{'-1':'Usbuucii la soo dhaafay','0':'Usbuucan','1':'Usbuuca xiga'},
-      P:'one{-# w}other{-# w}',
-      F:'one{+# w}other{+# w}',
+      R:{'-1':'Toddobaadkii hore','0':'Usbuucan','1':'Toddobaadka danbe'},
+      P:'one{# toddobaad kahor}other{# toddobaad kahor}',
+      F:'one{# toddobaad}other{# toddobaad}',
+    },
+    SHORT:{
+      R:{'-1':'Toddobaadkii hore','0':'Usbuucan','1':'Toddobaadka danbe'},
+      P:'one{# tdbd khr}other{# tdbd khr}',
+      F:'one{# tdbd}other{# tdbd}',
     },
   },
   YEAR: {
     LONG:{
+      R:{'-1':'Sannadkii hore','0':'Sannadkan','1':'Sannadka danbe'},
+      P:'one{# sannad kahor}other{# sannadood kahor}',
+      F:'one{# sannad}other{# sannadood}',
+    },
+    SHORT:{
+      R:{'-1':'Sannadkii hore','0':'Sannadkan','1':'Sannadka danbe'},
+      P:'one{# snd khr}other{# Snd khr}',
+      F:'one{# snd}other{# snd}',
+    },
+    NARROW:{
       R:{'-1':'Sannadkii la soo dhaafay','0':'Sannadkan','1':'Sannadka xiga'},
-      P:'one{-# y}other{-# y}',
-      F:'one{+# y}other{+# y}',
+      P:'one{# snd khr}other{# Snd khr}',
+      F:'one{# snd}other{# snd}',
     },
   },
 };
@@ -20253,7 +20701,124 @@ exports.RelativeDateTimeSymbols_sq_XK = relativeDateTimeSymbols.RelativeDateTime
 exports.RelativeDateTimeSymbols_sr_Cyrl = relativeDateTimeSymbols.RelativeDateTimeSymbols_sr;
 
 /** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
-exports.RelativeDateTimeSymbols_sr_Cyrl_BA = relativeDateTimeSymbols.RelativeDateTimeSymbols_sr;
+exports.RelativeDateTimeSymbols_sr_Cyrl_BA =  {
+  DAY: {
+    LONG:{
+      R:{'-1':'јуче','-2':'прекјуче','0':'данас','1':'сутра','2':'прекосутра'},
+      P:'few{пре # дана}one{пре # дана}other{пре # дана}',
+      F:'few{за # дана}one{за # дан}other{за # дана}',
+    },
+    SHORT:{
+      R:{'-1':'јуче','-2':'прекјуче','0':'данас','1':'сутра','2':'прекосутра'},
+      P:'few{пре # д.}one{пре # д.}other{пре # д.}',
+      F:'few{за # д.}one{за # д.}other{за # д.}',
+    },
+  },
+  HOUR: {
+    LONG:{
+      R:{'0':'овог сата'},
+      P:'few{пре # сата}one{пре # сата}other{пре # сати}',
+      F:'few{за # сата}one{за # сат}other{за # сати}',
+    },
+    SHORT:{
+      R:{'0':'овог сата'},
+      P:'few{пре # ч.}one{пре # ч.}other{пре # ч.}',
+      F:'few{за # ч.}one{за # ч.}other{за # ч.}',
+    },
+  },
+  MINUTE: {
+    LONG:{
+      R:{'0':'овог минута'},
+      P:'few{пре # минута}one{пре # минута}other{пре # минута}',
+      F:'few{за # минута}one{за # минут}other{за # минута}',
+    },
+    SHORT:{
+      R:{'0':'овог минута'},
+      P:'few{пре # мин.}one{пре # мин.}other{пре # мин.}',
+      F:'few{за # мин.}one{за # мин.}other{за # мин.}',
+    },
+  },
+  MONTH: {
+    LONG:{
+      R:{'-1':'прошлог месеца','0':'овог месеца','1':'следећег месеца'},
+      P:'few{пре # месеца}one{пре # месеца}other{пре # месеци}',
+      F:'few{за # месеца}one{за # месец}other{за # месеци}',
+    },
+    SHORT:{
+      R:{'-1':'прошлог мес.','0':'овог мес.','1':'следећег мес.'},
+      P:'few{пре # мес.}one{пре # мес.}other{пре # мес.}',
+      F:'few{за # мес.}one{за # мес.}other{за # мес.}',
+    },
+    NARROW:{
+      R:{'-1':'прошлог м.','0':'овог м.','1':'следећег м.'},
+      P:'few{пре # м.}one{пре # м.}other{пре # м.}',
+      F:'few{за # м.}one{за # м.}other{за # м.}',
+    },
+  },
+  QUARTER: {
+    LONG:{
+      R:{'-1':'прошлог квартала','0':'овог квартала','1':'следећег квартала'},
+      P:'few{пре # квартала}one{пре # квартала}other{пре # квартала}',
+      F:'few{за # квартала}one{за # квартал}other{за # квартала}',
+    },
+    SHORT:{
+      R:{'-1':'прошлог квартала','0':'овог квартала','1':'следећег квартала'},
+      P:'few{пре # кв.}one{пре # кв.}other{пре # кв.}',
+      F:'few{за # кв.}one{за # кв.}other{за # кв.}',
+    },
+  },
+  SECOND: {
+    LONG:{
+      R:{'0':'сада'},
+      P:'few{пре # секунде}one{пре # секунде}other{пре # секунди}',
+      F:'few{за # секунде}one{за # секунду}other{за # секунди}',
+    },
+    SHORT:{
+      R:{'0':'сада'},
+      P:'few{пре # сек.}one{пре # сек.}other{пре # сек.}',
+      F:'few{за # сек.}one{за # сек.}other{за # сек.}',
+    },
+    NARROW:{
+      R:{'0':'сада'},
+      P:'few{пре # с.}one{пре # с.}other{пре # с.}',
+      F:'few{за # с.}one{за # с.}other{за # с.}',
+    },
+  },
+  WEEK: {
+    LONG:{
+      R:{'-1':'претходне недеље','1':'наредне недеље'},
+      P:'few{пре # недеље}one{пре # недеље}other{пре # недеља}',
+      F:'few{за # недеље}one{за # недељу}other{за # недеља}',
+    },
+    SHORT:{
+      R:{'-1':'прошле нед.','0':'ове нед.','1':'следеће нед.'},
+      P:'few{пре # нед.}one{пре # нед.}other{пре # нед.}',
+      F:'few{за # нед.}one{за # нед.}other{за # нед.}',
+    },
+    NARROW:{
+      R:{'-1':'прошле н.','0':'ове н.','1':'следеће н.'},
+      P:'few{пре # н.}one{пре # н.}other{пре # н.}',
+      F:'few{за # н.}one{за # н.}other{за # н.}',
+    },
+  },
+  YEAR: {
+    LONG:{
+      R:{'-1':'прошле године','0':'ове године','1':'следеће године'},
+      P:'few{пре # године}one{пре # године}other{пре # година}',
+      F:'few{за # године}one{за # годину}other{за # година}',
+    },
+    SHORT:{
+      R:{'-1':'прошле год.','0':'ове год.','1':'следеће год.'},
+      P:'few{пре # год.}one{пре # год.}other{пре # год.}',
+      F:'few{за # год.}one{за # год.}other{за # год.}',
+    },
+    NARROW:{
+      R:{'-1':'прошле г.','0':'ове г.','1':'следеће г.'},
+      P:'few{пре # г.}one{пре # г.}other{пре # г.}',
+      F:'few{за # г.}one{за # г.}other{за # г.}',
+    },
+  },
+};
 
 /** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_sr_Cyrl_ME = relativeDateTimeSymbols.RelativeDateTimeSymbols_sr;
@@ -20350,7 +20915,7 @@ exports.RelativeDateTimeSymbols_sr_Latn_BA =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'prošle nedelje','0':'ove nedelje','1':'sledeće nedelje'},
+      R:{'-1':'prethodne nedelje','1':'naredne nedelje'},
       P:'few{pre # nedelje}one{pre # nedelje}other{pre # nedelja}',
       F:'few{za # nedelje}one{za # nedelju}other{za # nedelja}',
     },
@@ -22437,63 +23002,8 @@ exports.RelativeDateTimeSymbols_yo =  {
       P:'other{-# d}',
       F:'other{+# d}',
     },
-  },
-  HOUR: {
-    LONG:{
-      R:{'0':'this hour'},
-      P:'other{-# h}',
-      F:'other{+# h}',
-    },
-  },
-  MINUTE: {
-    LONG:{
-      R:{'0':'this minute'},
-      P:'other{-# min}',
-      F:'other{+# min}',
-    },
-  },
-  MONTH: {
-    LONG:{
-      R:{'-1':'last month','0':'this month','1':'next month'},
-      P:'other{-# m}',
-      F:'other{+# m}',
-    },
-  },
-  QUARTER: {
-    LONG:{
-      R:{'-1':'last quarter','0':'this quarter','1':'next quarter'},
-      P:'other{-# Q}',
-      F:'other{+# Q}',
-    },
-  },
-  SECOND: {
-    LONG:{
-      R:{'0':'now'},
-      P:'other{-# s}',
-      F:'other{+# s}',
-    },
-  },
-  WEEK: {
-    LONG:{
-      R:{'-1':'last week','0':'this week','1':'next week'},
-      P:'other{-# w}',
-      F:'other{+# w}',
-    },
-  },
-  YEAR: {
-    LONG:{
-      R:{'-1':'last year','0':'this year','1':'next year'},
-      P:'other{-# y}',
-      F:'other{+# y}',
-    },
-  },
-};
-
-/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
-exports.RelativeDateTimeSymbols_yo_BJ =  {
-  DAY: {
-    LONG:{
-      R:{'-1':'Àná','-2':'íjɛta','0':'Òní','1':'Ɔ̀la','2':'òtúùnla'},
+    SHORT:{
+      R:{'-1':'Àná','0':'Òní','1':'Ọ̀la'},
       P:'other{-# d}',
       F:'other{+# d}',
     },
@@ -22514,7 +23024,7 @@ exports.RelativeDateTimeSymbols_yo_BJ =  {
   },
   MONTH: {
     LONG:{
-      R:{'-1':'last month','0':'this month','1':'next month'},
+      R:{'-1':'óṣù tó kọjá','0':'oṣù yìí','1':'óṣù tó ń bọ̀,'},
       P:'other{-# m}',
       F:'other{+# m}',
     },
@@ -22535,14 +23045,79 @@ exports.RelativeDateTimeSymbols_yo_BJ =  {
   },
   WEEK: {
     LONG:{
-      R:{'-1':'last week','0':'this week','1':'next week'},
+      R:{'-1':'ọ̀sẹ̀ tó kọjá','0':'ọ̀sẹ̀ yìí','1':'ọ́sẹ̀ tó ń bọ̀'},
       P:'other{-# w}',
       F:'other{+# w}',
     },
   },
   YEAR: {
     LONG:{
-      R:{'-1':'last year','0':'this year','1':'next year'},
+      R:{'-1':'ọ́dún tó kọjá','0':'ọ́dún yìí','1':'ọ́dún tó ń bọ̀'},
+      P:'other{-# y}',
+      F:'other{+# y}',
+    },
+  },
+};
+
+/** const {relativeDateTimeSymbols.RelativeDateTimeSymbols} */
+exports.RelativeDateTimeSymbols_yo_BJ =  {
+  DAY: {
+    LONG:{
+      R:{'-1':'Àná','-2':'íjɛta','0':'Òní','1':'Ɔ̀la','2':'òtúùnla'},
+      P:'other{-# d}',
+      F:'other{+# d}',
+    },
+    SHORT:{
+      R:{'-1':'Àná','0':'Òní','1':'Ɔ̀la'},
+      P:'other{-# d}',
+      F:'other{+# d}',
+    },
+  },
+  HOUR: {
+    LONG:{
+      R:{'0':'this hour'},
+      P:'other{-# h}',
+      F:'other{+# h}',
+    },
+  },
+  MINUTE: {
+    LONG:{
+      R:{'0':'this minute'},
+      P:'other{-# min}',
+      F:'other{+# min}',
+    },
+  },
+  MONTH: {
+    LONG:{
+      R:{'-1':'óshù tó kɔjá','0':'oshù yìí','1':'óshù tó ń bɔ̀,'},
+      P:'other{-# m}',
+      F:'other{+# m}',
+    },
+  },
+  QUARTER: {
+    LONG:{
+      R:{'-1':'last quarter','0':'this quarter','1':'next quarter'},
+      P:'other{-# Q}',
+      F:'other{+# Q}',
+    },
+  },
+  SECOND: {
+    LONG:{
+      R:{'0':'now'},
+      P:'other{-# s}',
+      F:'other{+# s}',
+    },
+  },
+  WEEK: {
+    LONG:{
+      R:{'-1':'ɔ̀sɛ̀ tó kɔjá','0':'ɔ̀sɛ̀ yìí','1':'ɔ́sɛ̀ tó ń bɔ̀'},
+      P:'other{-# w}',
+      F:'other{+# w}',
+    },
+  },
+  YEAR: {
+    LONG:{
+      R:{'-1':'ɔ́dún tó kɔjá','0':'ɔ́dún yìí','1':'ɔ́dún tó ń bɔ̀'},
       P:'other{-# y}',
       F:'other{+# y}',
     },
@@ -23623,6 +24198,13 @@ switch (goog.LOCALE) {
   case 'ce-RU':
     defaultSymbols = exports.RelativeDateTimeSymbols_ce_RU;
     break;
+  case 'ceb':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ceb;
+    break;
+  case 'ceb_PH':
+  case 'ceb-PH':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ceb_PH;
+    break;
   case 'cgg':
     defaultSymbols = exports.RelativeDateTimeSymbols_cgg;
     break;
@@ -23756,6 +24338,10 @@ switch (goog.LOCALE) {
   case 'en_150':
   case 'en-150':
     defaultSymbols = exports.RelativeDateTimeSymbols_en_150;
+    break;
+  case 'en_AE':
+  case 'en-AE':
+    defaultSymbols = exports.RelativeDateTimeSymbols_en_AE;
     break;
   case 'en_AG':
   case 'en-AG':
@@ -24144,6 +24730,10 @@ switch (goog.LOCALE) {
   case 'eo':
     defaultSymbols = exports.RelativeDateTimeSymbols_eo;
     break;
+  case 'eo_001':
+  case 'eo-001':
+    defaultSymbols = exports.RelativeDateTimeSymbols_eo_001;
+    break;
   case 'es_AR':
   case 'es-AR':
     defaultSymbols = exports.RelativeDateTimeSymbols_es_AR;
@@ -24265,6 +24855,58 @@ switch (goog.LOCALE) {
     break;
   case 'ff':
     defaultSymbols = exports.RelativeDateTimeSymbols_ff;
+    break;
+  case 'ff_Latn':
+  case 'ff-Latn':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn;
+    break;
+  case 'ff_Latn_BF':
+  case 'ff-Latn-BF':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_BF;
+    break;
+  case 'ff_Latn_CM':
+  case 'ff-Latn-CM':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_CM;
+    break;
+  case 'ff_Latn_GH':
+  case 'ff-Latn-GH':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_GH;
+    break;
+  case 'ff_Latn_GM':
+  case 'ff-Latn-GM':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_GM;
+    break;
+  case 'ff_Latn_GN':
+  case 'ff-Latn-GN':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_GN;
+    break;
+  case 'ff_Latn_GW':
+  case 'ff-Latn-GW':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_GW;
+    break;
+  case 'ff_Latn_LR':
+  case 'ff-Latn-LR':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_LR;
+    break;
+  case 'ff_Latn_MR':
+  case 'ff-Latn-MR':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_MR;
+    break;
+  case 'ff_Latn_NE':
+  case 'ff-Latn-NE':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_NE;
+    break;
+  case 'ff_Latn_NG':
+  case 'ff-Latn-NG':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_NG;
+    break;
+  case 'ff_Latn_SL':
+  case 'ff-Latn-SL':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_SL;
+    break;
+  case 'ff_Latn_SN':
+  case 'ff-Latn-SN':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ff_Latn_SN;
     break;
   case 'fi_FI':
   case 'fi-FI':
@@ -25131,6 +25773,10 @@ switch (goog.LOCALE) {
   case 'ps_AF':
   case 'ps-AF':
     defaultSymbols = exports.RelativeDateTimeSymbols_ps_AF;
+    break;
+  case 'ps_PK':
+  case 'ps-PK':
+    defaultSymbols = exports.RelativeDateTimeSymbols_ps_PK;
     break;
   case 'pt_AO':
   case 'pt-AO':

@@ -15,7 +15,7 @@
 /**
  * @fileoverview Date interval formatting symbols for all locales.
  *
- * File generated from CLDR ver. 34
+ * File generated from CLDR ver. 35
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -3255,8 +3255,7 @@ exports.DateIntervalSymbols_ln = {
 /** @const {!DateIntervalSymbols} */
 exports.DateIntervalSymbols_lo = {
   FULL_DATE: {
-    'Md': 'G y MMMM d, EEEE – MMMM d, EEEE',
-    'y': 'G y MMMM d, EEEE – y MMMM d, EEEE',
+    'Mdy': 'G EEEE, dd/MM/y – EEEE, dd/MM/y',
     '_': 'EEEE ທີ d MMMM G y'
   },
   LONG_DATE: {
