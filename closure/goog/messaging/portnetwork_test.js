@@ -34,7 +34,7 @@ function shouldRunTests() {
 
 function setUpPage() {
   // Use a relatively long timeout because workers can take a while to start up.
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 5 * 1000;
+  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 60 * 1000;
 }
 
 function setUp() {
