@@ -56,7 +56,7 @@ goog.addDependency('async/workqueue.js', ['goog.async.WorkItem', 'goog.async.Wor
 goog.addDependency('async/workqueue_test.js', ['goog.async.WorkQueueTest'], ['goog.async.WorkQueue', 'goog.testing.jsunit'], {});
 goog.addDependency('base.js', ['goog'], [], {});
 goog.addDependency('base_module_test.js', ['goog.baseModuleTest'], ['goog.Timer', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'module': 'goog'});
-goog.addDependency('base_test.js', ['goog.baseTest'], ['goog.Promise', 'goog.Timer', 'goog.Uri', 'goog.dom', 'goog.dom.TagName', 'goog.object', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {'lang': 'es5'});
+goog.addDependency('base_test.js', ['goog.baseTest'], ['goog.Promise', 'goog.Timer', 'goog.Uri', 'goog.dom', 'goog.dom.TagName', 'goog.object', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {'lang': 'es6'});
 goog.addDependency('collections/sets.js', ['goog.collections.sets'], ['goog.labs.collections.iterables'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('collections/sets_test.js', ['goog.collections.setsTest'], ['goog.collections.sets', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color'], {});

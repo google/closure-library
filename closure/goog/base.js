@@ -2237,12 +2237,12 @@ goog.base = function(me, opt_methodName, var_args) {
     args[i - 2] = arguments[i];
   }
   var foundCaller = false;
-  for (var ctor = me.constructor; ctor;
-       ctor = ctor.superClass_ && ctor.superClass_.constructor) {
-    if (ctor.prototype[opt_methodName] === caller) {
+  for (var proto = me.constructor.prototype; proto;
+       proto = Object.getPrototypeOf(proto)) {
+    if (proto[opt_methodName] === caller) {
       foundCaller = true;
     } else if (foundCaller) {
-      return ctor.prototype[opt_methodName].apply(me, args);
+      return proto[opt_methodName].apply(me, args);
     }
   }
 
