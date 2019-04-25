@@ -16,7 +16,7 @@
  * @fileoverview Plural rules.
  *
  *
- * File generated from CLDR ver. 34
+ * File generated from CLDR ver. 35
  *
  * Before check in, this file could have been manually edited. This is to
  * incorporate changes before we could fix CLDR. All manual modification must be
@@ -177,26 +177,6 @@ goog.i18n.pluralRules.srSelect_ = function(n, opt_precision) {
     return goog.i18n.pluralRules.Keyword.ONE;
   }
   if (vf.v == 0 && i % 10 >= 2 && i % 10 <= 4 && (i % 100 < 12 || i % 100 > 14) || vf.f % 10 >= 2 && vf.f % 10 <= 4 && (vf.f % 100 < 12 || vf.f % 100 > 14)) {
-    return goog.i18n.pluralRules.Keyword.FEW;
-  }
-  return goog.i18n.pluralRules.Keyword.OTHER;
-};
-
-/**
- * Plural select rules for ro locale
- *
- * @param {number} n  The count of items.
- * @param {number=} opt_precision Precision for number formatting, if not default.
- * @return {goog.i18n.pluralRules.Keyword} Locale-specific plural value.
- * @private
- */
-goog.i18n.pluralRules.roSelect_ = function(n, opt_precision) {
-  var i = n | 0;
-  var vf = goog.i18n.pluralRules.get_vf_(n, opt_precision);
-  if (i == 1 && vf.v == 0) {
-    return goog.i18n.pluralRules.Keyword.ONE;
-  }
-  if (vf.v != 0 || n == 0 || n != 1 && n % 100 >= 1 && n % 100 <= 19) {
     return goog.i18n.pluralRules.Keyword.FEW;
   }
   return goog.i18n.pluralRules.Keyword.OTHER;
@@ -663,6 +643,26 @@ goog.i18n.pluralRules.kshSelect_ = function(n, opt_precision) {
 };
 
 /**
+ * Plural select rules for ro locale
+ *
+ * @param {number} n  The count of items.
+ * @param {number=} opt_precision Precision for number formatting, if not default.
+ * @return {goog.i18n.pluralRules.Keyword} Locale-specific plural value.
+ * @private
+ */
+goog.i18n.pluralRules.roSelect_ = function(n, opt_precision) {
+  var i = n | 0;
+  var vf = goog.i18n.pluralRules.get_vf_(n, opt_precision);
+  if (i == 1 && vf.v == 0) {
+    return goog.i18n.pluralRules.Keyword.ONE;
+  }
+  if (vf.v != 0 || n == 0 || n % 100 >= 2 && n % 100 <= 19) {
+    return goog.i18n.pluralRules.Keyword.FEW;
+  }
+  return goog.i18n.pluralRules.Keyword.OTHER;
+};
+
+/**
  * Plural select rules for ar locale
  *
  * @param {number} n  The count of items.
@@ -783,6 +783,33 @@ goog.i18n.pluralRules.enSelect_ = function(n, opt_precision) {
   var vf = goog.i18n.pluralRules.get_vf_(n, opt_precision);
   if (i == 1 && vf.v == 0) {
     return goog.i18n.pluralRules.Keyword.ONE;
+  }
+  return goog.i18n.pluralRules.Keyword.OTHER;
+};
+
+/**
+ * Plural select rules for kw locale
+ *
+ * @param {number} n  The count of items.
+ * @param {number=} opt_precision Precision for number formatting, if not default.
+ * @return {goog.i18n.pluralRules.Keyword} Locale-specific plural value.
+ * @private
+ */
+goog.i18n.pluralRules.kwSelect_ = function(n, opt_precision) {
+  if (n == 0) {
+    return goog.i18n.pluralRules.Keyword.ZERO;
+  }
+  if (n == 1) {
+    return goog.i18n.pluralRules.Keyword.ONE;
+  }
+  if ((n % 100 == 2 || n % 100 == 22 || n % 100 == 42 || n % 100 == 62 || n % 100 == 82) || n % 1000 == 0 && (n % 100000 >= 1000 && n % 100000 <= 20000 || n % 100000 == 40000 || n % 100000 == 60000 || n % 100000 == 80000) || n != 0 && n % 1000000 == 100000) {
+    return goog.i18n.pluralRules.Keyword.TWO;
+  }
+  if (n % 100 == 3 || n % 100 == 23 || n % 100 == 43 || n % 100 == 63 || n % 100 == 83) {
+    return goog.i18n.pluralRules.Keyword.FEW;
+  }
+  if (n != 1 && (n % 100 == 1 || n % 100 == 21 || n % 100 == 41 || n % 100 == 61 || n % 100 == 81)) {
+    return goog.i18n.pluralRules.Keyword.MANY;
   }
   return goog.i18n.pluralRules.Keyword.OTHER;
 };
@@ -1020,7 +1047,7 @@ if (goog.LOCALE == 'mo') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.roSelect_;
 }
 if (goog.LOCALE == 'mr') {
-  goog.i18n.pluralRules.select = goog.i18n.pluralRules.hiSelect_;
+  goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
 }
 if (goog.LOCALE == 'ms') {
   goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;

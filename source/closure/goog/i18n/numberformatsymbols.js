@@ -15,7 +15,7 @@
 /**
  * @fileoverview Number formatting symbols.
  *
- * File generated from CLDR ver. 34
+ * File generated from CLDR ver. 35
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -2408,7 +2408,7 @@ goog.i18n.NumberFormatSymbols_sv = {
   EXP_SYMBOL: '×10^',
   PERMILL: '‰',
   INFINITY: '∞',
-  NAN: '¤¤¤',
+  NAN: 'NaN',
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0 %',

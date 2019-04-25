@@ -16,7 +16,7 @@
  * @fileoverview Ordinal rules.
  *
  *
- * File generated from CLDR ver. 34
+ * File generated from CLDR ver. 35
  *
  * Before check in, this file could have been manually edited. This is to
  * incorporate changes before we could fix CLDR. All manual modification must be
@@ -492,6 +492,24 @@ goog.i18n.ordinalRules.gdSelect_ = function(n, opt_precision) {
   }
   if (n == 3 || n == 13) {
     return goog.i18n.ordinalRules.Keyword.FEW;
+  }
+  return goog.i18n.ordinalRules.Keyword.OTHER;
+};
+
+/**
+ * Ordinal select rules for kw locale
+ *
+ * @param {number} n  The count of items.
+ * @param {number=} opt_precision Precision for number formatting, if not default.
+ * @return {goog.i18n.ordinalRules.Keyword} Locale-specific ordinal value.
+ * @private
+ */
+goog.i18n.ordinalRules.kwSelect_ = function(n, opt_precision) {
+  if (n >= 1 && n <= 4 || (n % 100 >= 1 && n % 100 <= 4 || n % 100 >= 21 && n % 100 <= 24 || n % 100 >= 41 && n % 100 <= 44 || n % 100 >= 61 && n % 100 <= 64 || n % 100 >= 81 && n % 100 <= 84)) {
+    return goog.i18n.ordinalRules.Keyword.ONE;
+  }
+  if (n == 5 || n % 100 == 5) {
+    return goog.i18n.ordinalRules.Keyword.MANY;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
 };

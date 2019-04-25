@@ -15,7 +15,7 @@
 /**
  * @fileoverview Compact number formatting symbols.
  *
- * File generated from CLDR ver. 34
+ * File generated from CLDR ver. 35
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -660,40 +660,40 @@ goog.i18n.CompactNumberFormatSymbols_bg = {
 goog.i18n.CompactNumberFormatSymbols_bn = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0 হাজার'
+      'other': '0 হা'
     },
     '10000': {
-      'other': '00 হাজার'
+      'other': '00 হা'
     },
     '100000': {
-      'other': '0 লাখ'
+      'other': '0 লা'
     },
     '1000000': {
-      'other': '0M'
+      'other': '00 লা'
     },
     '10000000': {
-      'other': '00M'
+      'other': '0 কো'
     },
     '100000000': {
-      'other': '000M'
+      'other': '00 কো'
     },
     '1000000000': {
-      'other': '0B'
+      'other': '000 কো'
     },
     '10000000000': {
-      'other': '00B'
+      'other': '0000 কো'
     },
     '100000000000': {
-      'other': '000B'
+      'other': '00000 কো'
     },
     '1000000000000': {
-      'other': '0T'
+      'other': '0 লা.কো.'
     },
     '10000000000000': {
-      'other': '00T'
+      'other': '00 লা.কো.'
     },
     '100000000000000': {
-      'other': '000T'
+      'other': '000 লা.কো.'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -707,31 +707,31 @@ goog.i18n.CompactNumberFormatSymbols_bn = {
       'other': '0 লাখ'
     },
     '1000000': {
-      'other': '0 মিলিয়ন'
+      'other': '00 লাখ'
     },
     '10000000': {
-      'other': '00 মিলিয়ন'
+      'other': '0 কোটি'
     },
     '100000000': {
-      'other': '000 মিলিয়ন'
+      'other': '00 কোটি'
     },
     '1000000000': {
-      'other': '0 বিলিয়ন'
+      'other': '000 কোটি'
     },
     '10000000000': {
-      'other': '00 বিলিয়ন'
+      'other': '0000 কোটি'
     },
     '100000000000': {
-      'other': '000 বিলিয়ন'
+      'other': '00000 কোটি'
     },
     '1000000000000': {
-      'other': '0 ট্রিলিয়ন'
+      'other': '0 লাখ কোটি'
     },
     '10000000000000': {
-      'other': '00 ট্রিলিয়ন'
+      'other': '00 লাখ কোটি'
     },
     '100000000000000': {
-      'other': '000 ট্রিলিয়ন'
+      'other': '000 লাখ কোটি'
     }
   }
 };
@@ -1791,9 +1791,6 @@ goog.i18n.CompactNumberFormatSymbols_es_MX = {
  */
 goog.i18n.CompactNumberFormatSymbols_es_US = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      'other': '0 K'
-    },
     '10000': {
       'other': '00 K'
     },
@@ -7646,11 +7643,41 @@ goog.i18n.CompactNumberFormatSymbols_zh_HK = {
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
+    '1000': {
+      'other': '0'
+    },
     '10000': {
       'other': '0萬'
     },
     '100000': {
       'other': '00萬'
+    },
+    '1000000': {
+      'other': '000萬'
+    },
+    '10000000': {
+      'other': '0000萬'
+    },
+    '100000000': {
+      'other': '0億'
+    },
+    '1000000000': {
+      'other': '00億'
+    },
+    '10000000000': {
+      'other': '000億'
+    },
+    '100000000000': {
+      'other': '0000億'
+    },
+    '1000000000000': {
+      'other': '0兆'
+    },
+    '10000000000000': {
+      'other': '00兆'
+    },
+    '100000000000000': {
+      'other': '000兆'
     }
   }
 };

@@ -56,11 +56,12 @@ goog.global =
     // Check `this` first for backwards compatibility.
     // Valid unless running as an ES module or in a function wrapper called
     //   without setting `this` properly.
+    // Note that base.js can't usefully be imported as an ES module, but it may
+    // be compiled into bundles that are loadable as ES modules.
     this ||
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/self
     // For in-page browser environments and workers.
     self;
-
 
 
 /**
@@ -2236,12 +2237,12 @@ goog.base = function(me, opt_methodName, var_args) {
     args[i - 2] = arguments[i];
   }
   var foundCaller = false;
-  for (var ctor = me.constructor; ctor;
-       ctor = ctor.superClass_ && ctor.superClass_.constructor) {
-    if (ctor.prototype[opt_methodName] === caller) {
+  for (var proto = me.constructor.prototype; proto;
+       proto = Object.getPrototypeOf(proto)) {
+    if (proto[opt_methodName] === caller) {
       foundCaller = true;
     } else if (foundCaller) {
-      return ctor.prototype[opt_methodName].apply(me, args);
+      return proto[opt_methodName].apply(me, args);
     }
   }
 

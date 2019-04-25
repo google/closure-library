@@ -246,7 +246,7 @@ function testFormatSpanish() {
   goog.date.relative.setCasingMode(true);
 
   assertEquals('Pasado mañana', fn(timestamp('25 March 2009 20:59:59')));
-  assertEquals('Anteayer', fn(timestamp('21 March 2009 19::00:02')));
+  assertEquals('Anteayer', fn(timestamp('21 March 2009 19:00:02')));
 
   assertEquals('Ayer', fn(timestamp('22 March 2009 04:11:23')));
   assertEquals('Hoy', fn(timestamp('23 March 2009 14:11:23')));
@@ -254,7 +254,7 @@ function testFormatSpanish() {
 
   goog.date.relative.setCasingMode(false);
   assertEquals('pasado mañana', fn(timestamp('25 March 2009 20:59:59')));
-  assertEquals('anteayer', fn(timestamp('21 March 2009 19::00:02')));
+  assertEquals('anteayer', fn(timestamp('21 March 2009 19:00:02')));
 
   assertEquals('ayer', fn(timestamp('22 March 2009 04:11:23')));
   assertEquals('hoy', fn(timestamp('23 March 2009 14:11:23')));
@@ -302,7 +302,7 @@ function testFormatFrench() {
   // Check for casing results.
   goog.date.relative.setCasingMode(true);
   assertEquals('Après-demain', fn(timestamp('25 March 2009 20:59:59')));
-  assertEquals('Avant-hier', fn(timestamp('21 March 2009 19::00:02')));
+  assertEquals('Avant-hier', fn(timestamp('21 March 2009 19:00:02')));
 
   assertEquals('Hier', fn(timestamp('22 March 2009 04:11:23')));
   assertEquals('Aujourd’hui', fn(timestamp('23 March 2009 14:11:23')));
@@ -310,7 +310,7 @@ function testFormatFrench() {
 
   goog.date.relative.setCasingMode(false);
   assertEquals('après-demain', fn(timestamp('25 March 2009 20:59:59')));
-  assertEquals('avant-hier', fn(timestamp('21 March 2009 19::00:02')));
+  assertEquals('avant-hier', fn(timestamp('21 March 2009 19:00:02')));
 
   assertEquals('hier', fn(timestamp('22 March 2009 04:11:23')));
   assertEquals('aujourd’hui', fn(timestamp('23 March 2009 14:11:23')));
@@ -355,7 +355,7 @@ function testFormatArabic() {
       RelativeDateTimeSymbols.RelativeDateTimeSymbols_ar);
 
   assertEquals('بعد الغد', fn(timestamp('25 March 2009 20:59:59')));
-  assertEquals('أول أمس', fn(timestamp('21 March 2009 19::00:02')));
+  assertEquals('أول أمس', fn(timestamp('21 March 2009 19:00:02')));
 
   assertEquals('أمس', fn(timestamp('22 March 2009 04:11:23')));
   assertEquals('اليوم', fn(timestamp('23 March 2009 14:11:23')));

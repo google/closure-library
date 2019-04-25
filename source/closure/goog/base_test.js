@@ -1242,6 +1242,42 @@ function testBaseClass() {
   assertEquals(3, (new B(1, 0)).foo);
 }
 
+function testBaseMethodWithEs6Subclass() {
+  function A() {}
+  A.prototype.foo = function(x, y) {
+    return x + y;
+  };
+
+  function B() {}
+  goog.inherits(B, A);
+  B.prototype.foo = function(x, y) {
+    return 2 + goog.base(this, 'foo', x, y);
+  };
+
+  class C extends B {
+    foo(x, y) {
+      return 4 + super.foo(x, y);
+    }
+
+    useBase(x, y) {
+      return 4 + goog.base(this, 'foo', x, y);
+    }
+  }
+
+  const c = new C();
+
+  assertEquals(7, c.foo(1, 0));
+  assertEquals(8, c.foo(1, 1));
+  assertEquals(8, c.foo(2, 0));
+  assertEquals(7, (new C()).foo(1, 0));
+  assertThrows(function() {
+    goog.base(c, 'foo', 1, 0);
+  });
+  assertThrows(function() {
+    c.useBase(0, 0);
+  });
+}
+
 function testClassBaseOnMethod() {
   function A() {}
   A.prototype.foo = function(x, y) {

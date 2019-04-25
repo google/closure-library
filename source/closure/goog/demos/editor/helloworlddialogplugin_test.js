@@ -11,6 +11,7 @@ goog.require('goog.demos.editor.HelloWorldDialogPlugin.Command');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.editor.Field');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.MockRange');
@@ -141,7 +142,8 @@ function tearDownRealEditableField() {
 function testRestoreSelectionOnOk() {
   setUpRealEditableField();
 
-  fieldObj.setHtml(false, '12345');
+  fieldObj.setSafeHtml(false, goog.html.SafeHtml.htmlEscape('12345'));
+
   var elem = fieldObj.getElement();
   var helper = new goog.testing.editor.TestHelper(elem);
   helper.select('12345', 1, '12345', 4); // Selects '234'.
