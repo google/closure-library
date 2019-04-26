@@ -1186,10 +1186,7 @@ goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(data) {
     }
   }
 
-  // rootTarget is used specifically to handle the case of shadow dom.
-  // Note, the type of shadow dom root is limited, and could never be
-  // INPUT, TEXTAREA, BUTTON, SELECT, etc.
-  var el = /** @type {!Element} */ (data.getRootTarget());
+  var el = /** @type {!Element} */ (data.getTarget());
   var isFormElement = el.tagName == goog.dom.TagName.TEXTAREA ||
       el.tagName == goog.dom.TagName.INPUT ||
       el.tagName == goog.dom.TagName.BUTTON ||
