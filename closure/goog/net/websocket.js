@@ -457,9 +457,7 @@ goog.net.WebSocket.prototype.onClose_ = function(event) {
  * @private
  */
 goog.net.WebSocket.prototype.onMessage_ = function(event) {
-  // This code only uses string messages
-  var message = goog.asserts.assertString(event.data);
-  this.dispatchEvent(new goog.net.WebSocket.MessageEvent(message));
+  this.dispatchEvent(new goog.net.WebSocket.MessageEvent(event.data));
 };
 
 
@@ -499,7 +497,8 @@ goog.net.WebSocket.prototype.disposeInternal = function() {
 /**
  * Object representing a new incoming message event.
  *
- * @param {string} message The raw message coming from the web socket.
+ * @param {string|!ArrayBuffer|!Blob} message The raw message coming from the
+ *     web socket.
  * @extends {goog.events.Event}
  * @constructor
  * @final
@@ -508,9 +507,11 @@ goog.net.WebSocket.MessageEvent = function(message) {
   goog.net.WebSocket.MessageEvent.base(
       this, 'constructor', goog.net.WebSocket.EventType.MESSAGE);
 
+  // TODO this used to be just `string`, but that is incorrect. Until all usages
+  // have been cleaned up we need to leave this as ?.
   /**
    * The new message from the web socket.
-   * @type {string}
+   * @type {?}
    */
   this.message = message;
 };
