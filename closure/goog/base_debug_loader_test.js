@@ -331,9 +331,9 @@ function testAddDependencyTranspile() {
 
   goog.addDependency(
       'fancy.js', ['testDep.fancy'], [],
-      {'lang': 'es6-impl', 'module': 'goog'});
+      {'lang': 'es6', 'module': 'goog'});
   requireTranspilation = true;
-  goog.addDependency('super.js', ['testDep.superFancy'], [], {'lang': 'es6'});
+  goog.addDependency('super.js', ['testDep.superFancy'], [], {'lang': 'es7'});
 
   assertFalse(testDependencies[0].needsTranspile);
   assertTrue(testDependencies[1].needsTranspile);
