@@ -157,7 +157,7 @@ goog.debug.ErrorHandler.prototype.protectEntryPoint = function(fn) {
 /**
  * Helps {@link #protectEntryPoint} by actually creating the protected
  * wrapper function, after {@link #protectEntryPoint} determines that one does
- * not already exist for the given function.  Can be overriden by subclasses
+ * not already exist for the given function.  Can be overridden by subclasses
  * that may want to implement different error handling, or add additional
  * entry point hooks.
  * @param {!Function} fn An entry point function to be protected.
@@ -183,42 +183,7 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
     try {
       return fn.apply(self, arguments);
     } catch (e) {
-      // Don't re-report errors that have already been handled by this code.
-      var MESSAGE_PREFIX =
-          goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX;
-      if ((e && typeof e === 'object' && e.message &&
-           e.message.indexOf(MESSAGE_PREFIX) == 0) ||
-          (typeof e === 'string' && e.indexOf(MESSAGE_PREFIX) == 0)) {
-        return;
-      }
-      that.errorHandlerFn_(e);
-      if (!that.wrapErrors_) {
-        // Add the prefix to the existing message.
-        if (that.prefixErrorMessages_) {
-          if (typeof e === 'object' && e && 'message' in e) {
-            e.message = MESSAGE_PREFIX + e.message;
-          } else {
-            e = MESSAGE_PREFIX + e;
-          }
-        }
-        if (goog.DEBUG) {
-          // Work around for https://code.google.com/p/v8/issues/detail?id=2625
-          // and https://code.google.com/p/chromium/issues/detail?id=237059
-          // Custom errors and errors with custom stack traces show the wrong
-          // stack trace
-          // If it has a stack and Error.captureStackTrace is supported (only
-          // supported in V8 as of May 2013) log the stack to the console.
-          if (e && e.stack && Error.captureStackTrace &&
-              goog.global['console']) {
-            goog.global['console']['error'](e.message, e.stack);
-          }
-        }
-        // Re-throw original error. This is great for debugging as it makes
-        // browser JS dev consoles show the correct error and stack trace.
-        throw e;
-      }
-      // Re-throw it since this may be expected by the caller.
-      throw new goog.debug.ErrorHandler.ProtectedFunctionError(e);
+      that.handleError_(e);
     } finally {
       if (tracers) {
         goog.debug.Trace.stopTracer(tracer);
@@ -227,6 +192,50 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
   };
   googDebugErrorHandlerProtectedFunction[this.getFunctionIndex_(false)] = fn;
   return googDebugErrorHandlerProtectedFunction;
+};
+
+
+/**
+ * Internal error handler.
+ * @param {?} e The error string or an Error-like object.
+ * @private
+ */
+goog.debug.ErrorHandler.prototype.handleError_ = function(e) {
+  // Don't re-report errors that have already been handled by this code.
+  var MESSAGE_PREFIX =
+      goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX;
+  if ((e && typeof e === 'object' && e.message &&
+       e.message.indexOf(MESSAGE_PREFIX) == 0) ||
+      (typeof e === 'string' && e.indexOf(MESSAGE_PREFIX) == 0)) {
+    return;
+  }
+  this.errorHandlerFn_(e);
+  if (!this.wrapErrors_) {
+    // Add the prefix to the existing message.
+    if (this.prefixErrorMessages_) {
+      if (typeof e === 'object' && e && 'message' in e) {
+        e.message = MESSAGE_PREFIX + e.message;
+      } else {
+        e = MESSAGE_PREFIX + e;
+      }
+    }
+    if (goog.DEBUG) {
+      // Work around for https://code.google.com/p/v8/issues/detail?id=2625
+      // and https://code.google.com/p/chromium/issues/detail?id=237059
+      // Custom errors and errors with custom stack traces show the wrong
+      // stack trace
+      // If it has a stack and Error.captureStackTrace is supported (only
+      // supported in V8 as of May 2013) log the stack to the console.
+      if (e && e.stack && Error.captureStackTrace && goog.global['console']) {
+        goog.global['console']['error'](e.message, e.stack);
+      }
+    }
+    // Re-throw original error. This is great for debugging as it makes
+    // browser JS dev consoles show the correct error and stack trace.
+    throw e;
+  }
+  // Re-throw it since this may be expected by the caller.
+  throw new goog.debug.ErrorHandler.ProtectedFunctionError(e);
 };
 
 
@@ -244,6 +253,46 @@ goog.debug.ErrorHandler.prototype.protectWindowSetTimeout = function() {
  */
 goog.debug.ErrorHandler.prototype.protectWindowSetInterval = function() {
   this.protectWindowFunctionsHelper_('setInterval');
+};
+
+
+/**
+ * Install exception protection for native promises and async/await functions.
+ */
+goog.debug.ErrorHandler.prototype.protectPromiseAndAsyncFunctions = function() {
+  if (this.catchUnhandledRejections_()) {
+    return;
+  }
+  const oldPromiseThen = Promise.prototype.then;
+  const that = this;
+  /** @override */
+  Promise.prototype.then = function(callback, errorHandler) {
+    callback = callback ? that.protectEntryPoint(callback) : callback;
+    errorHandler =
+        errorHandler ? that.protectEntryPoint(errorHandler) : errorHandler;
+    return oldPromiseThen.call(this, callback, errorHandler);
+  };
+};
+
+
+/**
+ * Install an unhandledrejection event listener that reports rejected promises.
+ * Note: this will only work with Chrome 49+ and friends, but so far is the only
+ * way to report uncaught errors in aysnc/await functions.
+ * @private
+ * @return {boolean} Whether an exception handler could be installed.
+ */
+goog.debug.ErrorHandler.prototype.catchUnhandledRejections_ = function() {
+  var win = goog.getObjectByName('window');
+  if ('onunhandledrejection' in win) {
+    win.onunhandledrejection = (event) => {
+      // event.reason contains the rejection reason. When an Error is
+      // thrown, this is the Error object.
+      this.handleError_(event.reason);
+    };
+    return true;
+  }
+  return false;
 };
 
 

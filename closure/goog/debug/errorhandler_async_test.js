@@ -36,10 +36,14 @@ testCase.setUpPage = function() {
   // Whether requestAnimationFrame is available for testing.
   this.testingReqAnimFrame = !!window.requestAnimationFrame;
 
+  // Whether a rejection handler is available for testing.
+  this.testingUnhandledRejection = 'onunhandledrejection' in window;
+
   this.handler = new goog.debug.ErrorHandler(goog.bind(this.onException, this));
   this.handler.protectWindowSetTimeout();
   this.handler.protectWindowSetInterval();
   this.handler.protectWindowRequestAnimationFrame();
+  this.handler.protectPromiseAndAsyncFunctions();
   this.exceptions = [];
   this.errors = 0;
 
@@ -54,6 +58,13 @@ testCase.setUpPage = function() {
   if (this.testingReqAnimFrame) {
     window.requestAnimationFrame(goog.bind(this.animFrame, this));
   }
+
+  this.promise();
+
+  if (this.testingUnhandledRejection) {
+    this.async();
+  }
+
   this.promiseTimeout = 10000;  // 10s.
 };
 
@@ -65,8 +76,9 @@ testCase.tearDownPage = function() {
 
 testCase.onException = function(e) {
   this.exceptions.push(e);
-  if (this.timeoutHit && this.intervalHit &&
-      (!this.testingReqAnimFrame || this.animFrameHit)) {
+  if (this.timeoutHit && this.intervalHit && this.promiseHit &&
+      (!this.testingReqAnimFrame || this.animFrameHit) &&
+      (!this.testingUnhandledRejection || this.async)) {
     resolver.resolve();
   }
 };
@@ -92,9 +104,26 @@ testCase.animFrame = function() {
   throw arguments.callee;
 };
 
+/** Test uncaught errors in native promises */
+testCase.promise = function() {
+  this.promiseHit = true;
+  const p = Promise.resolve();
+  p.then(() => {
+    throw arguments.callee;
+  });
+};
+
+/** Test uncaught errors in async/await */
+testCase.async = async function() {
+  this.asyncHit = true;
+  const p = Promise.resolve();
+  await p;
+  throw arguments.callee;
+};
+
 testCase.addNewTest('testResults', function() {
   return resolver.promise.then(function() {
-    var timeoutHit, intervalHit, animFrameHit;
+    var timeoutHit, intervalHit, animFrameHit, promiseHit, asyncHit;
 
     for (var i = 0; i < this.exceptions.length; ++i) {
       switch (this.exceptions[i]) {
@@ -107,6 +136,12 @@ testCase.addNewTest('testResults', function() {
         case this.animFrame:
           animFrameHit = true;
           break;
+        case this.promise:
+          promiseHit = true;
+          break;
+        case this.async:
+          asyncHit = true;
+          break;
       }
     }
 
@@ -118,9 +153,15 @@ testCase.addNewTest('testResults', function() {
       assertTrue('anim frame exception not received', animFrameHit);
       assertTrue('animFrame not called', this.animFrameHit);
     }
+    assertTrue('Promise exception not received', promiseHit);
+    if (this.testingUnhandledRejection) {
+      assertTrue('Unhandled Rejection exception not received', asyncHit);
+    }
 
     if (!goog.userAgent.WEBKIT) {
-      var expectedRethrownCount = this.testingReqAnimFrame ? 3 : 2;
+      var expectedRethrownCount = 2;
+      if (this.testingReqAnimFrame) expectedRethrownCount++;
+      if (this.testingUnhandledRejection) expectedRethrownCount++;
       assertEquals(
           expectedRethrownCount + ' exceptions should have been rethrown',
           expectedRethrownCount, this.errors);
