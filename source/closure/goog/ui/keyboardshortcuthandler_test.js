@@ -36,6 +36,7 @@ var listener;
 var mockClock;
 var stubs = new goog.testing.PropertyReplacer();
 
+
 /**
  * Fires a keypress on the target div.
  * @return {boolean} The returnValue of the sequence: false if
@@ -485,19 +486,13 @@ function registerEnterSpaceXF1AltY() {
 /**
  * Fires enter, space, X, F1, and Alt-Y keys on a widget.
  * @param {Element} target The element on which to fire the events.
- * @param {Object?=} extraProperties Event properties to be mixed into the
- *     BrowserEvent.
  */
-function fireEnterSpaceXF1AltY(target, extraProperties) {
-  if (!extraProperties) {
-    extraProperties = {};
-  }
-
-  fire(KeyCodes.ENTER, extraProperties, target);
-  fire(KeyCodes.SPACE, extraProperties, target);
-  fire(KeyCodes.X, extraProperties, target);
-  fire(KeyCodes.F1, extraProperties, target);
-  fire(KeyCodes.Y, Object.assign({}, {altKey: true}, extraProperties), target);
+function fireEnterSpaceXF1AltY(target) {
+  fire(KeyCodes.ENTER, undefined, target);
+  fire(KeyCodes.SPACE, undefined, target);
+  fire(KeyCodes.X, undefined, target);
+  fire(KeyCodes.F1, undefined, target);
+  fire(KeyCodes.Y, {altKey: true}, target);
 }
 
 function testIgnoreNonGlobalShortcutsInSelect() {
@@ -553,34 +548,6 @@ function testIgnoreShortcutsExceptEnterInTextInputFields() {
   registerEnterSpaceXF1AltY();
   expectShortcutsOnTargets(
       ['enter', 'global', 'withAlt'], targets, fireEnterSpaceXF1AltY);
-}
-
-function testIgnoreShortcutsInShadowTextInputFields() {
-  var shadowDiv = goog.dom.getElement('targetShadow');
-  // skip if shadow dom is not supported
-  if (!shadowDiv.attachShadow) {
-    return;
-  }
-  var shadowInput = goog.dom.createElement('input');
-  shadowDiv.attachShadow({mode: 'open'});
-  shadowDiv.shadowRoot.appendChild(shadowInput);
-
-  registerEnterSpaceXF1AltY();
-  listener.shortcutFired('enter');
-  listener.shortcutFired('global');
-  listener.shortcutFired('withAlt');
-  listener.$replay();
-
-  var shadowProps = {
-    composed: true,
-    composedPath: function() {
-      return [shadowInput];
-    }
-  };
-
-  fireEnterSpaceXF1AltY(shadowDiv, shadowProps);
-
-  listener.$verify();
 }
 
 function testIgnoreSpaceInCheckBoxAndButton() {
