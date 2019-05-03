@@ -283,12 +283,14 @@ goog.debug.ErrorHandler.prototype.protectPromiseAndAsyncFunctions = function() {
  * @return {boolean} Whether an exception handler could be installed.
  */
 goog.debug.ErrorHandler.prototype.catchUnhandledRejections_ = function() {
-  var win = goog.getObjectByName('window');
-  if ('onunhandledrejection' in win) {
-    win.onunhandledrejection = (event) => {
+  if ('onunhandledrejection' in goog.global) {
+    goog.global.onunhandledrejection = (event) => {
       // event.reason contains the rejection reason. When an Error is
-      // thrown, this is the Error object.
-      this.handleError_(event.reason);
+      // thrown, this is the Error object. If it is undefined, create a new
+      // error object.
+      const e =
+          event && event.reason ? event.reason : new Error('uncaught error');
+      this.handleError_(e);
     };
     return true;
   }
