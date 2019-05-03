@@ -27,9 +27,11 @@ goog.require('goog.async.Delay');
 goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.json');
 goog.require('goog.log');
 goog.require('goog.messaging.AbstractChannel');
@@ -487,12 +489,18 @@ goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(
     // is present in Safari and Gecko.
     window.setTimeout(goog.bind(function() {
       parentElm.appendChild(iframeElm);
-      iframeElm.src = peerUri.toString();
+      goog.dom.safe.setIframeSrc(
+          iframeElm,
+          goog.html.legacyconversions.trustedResourceUrlFromString(
+              peerUri.toString()));
       goog.log.info(
           goog.net.xpc.logger, 'peer iframe created (' + iframeId + ')');
     }, this), 1);
   } else {
-    iframeElm.src = peerUri.toString();
+    goog.dom.safe.setIframeSrc(
+        iframeElm,
+        goog.html.legacyconversions.trustedResourceUrlFromString(
+            peerUri.toString()));
     parentElm.appendChild(iframeElm);
     goog.log.info(
         goog.net.xpc.logger, 'peer iframe created (' + iframeId + ')');
