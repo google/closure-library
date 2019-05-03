@@ -63,8 +63,7 @@ goog.require('goog.asserts');
 goog.dom.asserts.assertIsLocation = function(o) {
   if (goog.asserts.ENABLE_ASSERTS) {
     var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win.Location != 'undefined' &&
-        typeof win.Element != 'undefined') {
+    if (win) {
       if (!o || (!(o instanceof win.Location) && o instanceof win.Element)) {
         goog.asserts.fail(
             'Argument is not a Location (or a non-Element mock); got: %s',
@@ -101,9 +100,7 @@ goog.dom.asserts.assertIsLocation = function(o) {
 goog.dom.asserts.assertIsElementType_ = function(o, typename) {
   if (goog.asserts.ENABLE_ASSERTS) {
     var win = goog.dom.asserts.getWindow_(o);
-    if (typeof win[typename] != 'undefined' &&
-        typeof win.Location != 'undefined' &&
-        typeof win.Element != 'undefined') {
+    if (win && typeof win[typename] != 'undefined') {
       if (!o ||
           (!(o instanceof win[typename]) &&
            (o instanceof win.Location || o instanceof win.Element))) {
@@ -352,12 +349,24 @@ goog.dom.asserts.debugStringForType_ = function(value) {
 /**
  * Gets window of element.
  * @param {?Object} o
- * @return {!Window}
+ * @return {?Window}
  * @private
  * @suppress {strictMissingProperties} ownerDocument not defined on Object
  */
 goog.dom.asserts.getWindow_ = function(o) {
-  var doc = o && o.ownerDocument;
-  var win = doc && /** @type {?Window} */ (doc.defaultView || doc.parentWindow);
-  return win || /** @type {!Window} */ (goog.global);
+  try {
+    var doc = o && o.ownerDocument;
+    // This can throw “Blocked a frame with origin "chrome-extension://..." from
+    // accessing a cross-origin frame” in Chrome extension.
+    var win =
+        doc && /** @type {?Window} */ (doc.defaultView || doc.parentWindow);
+    win = win || /** @type {!Window} */ (goog.global);
+    // This can throw “Permission denied to access property "Element" on
+    // cross-origin object”.
+    if (win.Element && win.Location) {
+      return win;
+    }
+  } catch (ex) {
+  }
+  return null;
 };

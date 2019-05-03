@@ -196,7 +196,7 @@ goog.addDependency('dom/animationframe/polyfill.js', ['goog.dom.animationFrame.p
 goog.addDependency('dom/annotate.js', ['goog.dom.annotate', 'goog.dom.annotate.AnnotateFn'], ['goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.object'], {});
 goog.addDependency('dom/annotate_test.js', ['goog.dom.annotateTest'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.annotate', 'goog.html.SafeHtml', 'goog.testing.jsunit'], {});
 goog.addDependency('dom/asserts.js', ['goog.dom.asserts'], ['goog.asserts'], {});
-goog.addDependency('dom/asserts_test.js', ['goog.dom.assertsTest'], ['goog.dom.asserts', 'goog.testing.StrictMock', 'goog.testing.jsunit', 'goog.userAgent'], {});
+goog.addDependency('dom/asserts_test.js', ['goog.dom.assertsTest'], ['goog.dom.asserts', 'goog.testing.PropertyReplacer', 'goog.testing.StrictMock', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('dom/attr.js', ['goog.dom.Attr'], [], {});
 goog.addDependency('dom/browserfeature.js', ['goog.dom.BrowserFeature'], ['goog.userAgent'], {});
 goog.addDependency('dom/browserrange/abstractrange.js', ['goog.dom.browserrange.AbstractRange'], ['goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.RangeEndpoint', 'goog.dom.TagName', 'goog.dom.TextRangeIterator', 'goog.iter', 'goog.math.Coordinate', 'goog.string', 'goog.string.StringBuffer', 'goog.userAgent'], {});
