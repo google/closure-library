@@ -43,11 +43,21 @@ requestStats.Event = {};
 
 /**
  * Singleton event target for firing stat events
- * @type {goog.events.EventTarget}
+ * @type {?goog.events.EventTarget}
  * @private
  */
-requestStats.statEventTarget_ = new goog.events.EventTarget();
+requestStats.eventTarget_ = null;
 
+/**
+ * Singleton event target for firing stat events
+ * @return {!goog.events.EventTarget}
+ * @private
+ */
+requestStats.getStatEventTarget_ = function() {
+  requestStats.eventTarget_ =
+      requestStats.eventTarget_ || new goog.events.EventTarget();
+  return requestStats.eventTarget_;
+};
 
 /**
  * The type of event that occurs every time some information about how reachable
@@ -99,7 +109,7 @@ goog.inherits(requestStats.ServerReachabilityEvent, goog.events.Event);
  *     The reachability event type.
  */
 requestStats.notifyServerReachabilityEvent = function(reachabilityType) {
-  var target = requestStats.statEventTarget_;
+  var target = requestStats.getStatEventTarget_();
   target.dispatchEvent(
       new requestStats.ServerReachabilityEvent(target, reachabilityType));
 };
@@ -231,7 +241,7 @@ goog.inherits(requestStats.StatEvent, goog.events.Event);
  * @return {goog.events.EventTarget} The event target for stat events.
  */
 requestStats.getStatEventTarget = function() {
-  return requestStats.statEventTarget_;
+  return requestStats.getStatEventTarget_();
 };
 
 
@@ -240,7 +250,7 @@ requestStats.getStatEventTarget = function() {
  * @param {requestStats.Stat} stat The stat.
  */
 requestStats.notifyStatEvent = function(stat) {
-  var target = requestStats.statEventTarget_;
+  var target = requestStats.getStatEventTarget_();
   target.dispatchEvent(new requestStats.StatEvent(target, stat));
 };
 
@@ -294,7 +304,7 @@ goog.inherits(requestStats.TimingEvent, goog.events.Event);
  * @param {number} retries The number of times the POST had to be retried.
  */
 requestStats.notifyTimingEvent = function(size, rtt, retries) {
-  var target = requestStats.statEventTarget_;
+  var target = requestStats.getStatEventTarget_();
   target.dispatchEvent(
       new requestStats.TimingEvent(target, size, rtt, retries));
 };
