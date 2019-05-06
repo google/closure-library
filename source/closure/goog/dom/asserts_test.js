@@ -16,10 +16,20 @@ goog.provide('goog.dom.assertsTest');
 goog.setTestOnly('goog.dom.assertsTest');
 
 goog.require('goog.dom.asserts');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.StrictMock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
+var stubs;
+
+function setUpPage() {
+  stubs = new goog.testing.PropertyReplacer();
+}
+
+function tearDown() {
+  stubs.reset();
+}
 
 function testAssertIsLocation() {
   assertNotThrows(function() {
@@ -299,4 +309,14 @@ function testInOtherWindow() {
   }
 
   document.body.removeChild(iframe);
+}
+
+function testAssertIsElementType() {
+  stubs.set(goog.dom.asserts, 'getWindow_', function() {
+    return null;
+  });
+  assertNotThrows(function() {
+    goog.dom.asserts.assertIsLocation(null);
+    goog.dom.asserts.assertIsHTMLAnchorElement(null);
+  });
 }
