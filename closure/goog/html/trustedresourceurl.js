@@ -256,14 +256,7 @@ goog.html.TrustedResourceUrl.unwrapTrustedURL = function(trustedResourceUrl) {
  * to be interpolated with the valued mapped to the given label. `<label>`
  * must contain only alphanumeric and `_` characters.
  *
- * The format string must start with one of the following:
- * - `https://<origin>/`
- * - `//<origin>/`
- * - `/<pathStart>`
- * - `about:blank#`
- *
- * `<origin>` must contain only alphanumeric or any of the following: `-.:[]`.
- * `<pathStart>` is any character except `/` and `\`.
+ * The format string must match goog.html.TrustedResourceUrl.BASE_URL_.
  *
  * Example usage:
  *
