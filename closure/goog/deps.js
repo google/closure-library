@@ -747,7 +747,7 @@ goog.addDependency('math/coordinate3_test.js', ['goog.math.Coordinate3Test'], ['
 goog.addDependency('math/coordinate_test.js', ['goog.math.CoordinateTest'], ['goog.math.Coordinate', 'goog.testing.jsunit'], {});
 goog.addDependency('math/exponentialbackoff.js', ['goog.math.ExponentialBackoff'], ['goog.asserts'], {});
 goog.addDependency('math/exponentialbackoff_test.js', ['goog.math.ExponentialBackoffTest'], ['goog.math.ExponentialBackoff', 'goog.testing.jsunit'], {});
-goog.addDependency('math/integer.js', ['goog.math.Integer'], [], {});
+goog.addDependency('math/integer.js', ['goog.math.Integer'], ['goog.reflect'], {});
 goog.addDependency('math/integer_test.js', ['goog.math.IntegerTest'], ['goog.math.Integer', 'goog.testing.jsunit'], {'lang': 'es6'});
 goog.addDependency('math/interpolator/interpolator1.js', ['goog.math.interpolator.Interpolator1'], [], {});
 goog.addDependency('math/interpolator/linear1.js', ['goog.math.interpolator.Linear1'], ['goog.array', 'goog.asserts', 'goog.math', 'goog.math.interpolator.Interpolator1'], {});

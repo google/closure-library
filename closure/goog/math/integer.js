@@ -23,7 +23,7 @@
 
 goog.provide('goog.math.Integer');
 
-
+goog.require('goog.reflect');
 
 /**
  * Constructs a two's-complement integer an array containing bits of the
@@ -48,11 +48,6 @@ goog.provide('goog.math.Integer');
  * @final
  */
 goog.math.Integer = function(bits, sign) {
-  /**
-   * @type {!Array<number>}
-   * @private
-   */
-  this.bits_ = [];
 
   /**
    * @type {number}
@@ -60,16 +55,29 @@ goog.math.Integer = function(bits, sign) {
    */
   this.sign_ = sign;
 
+  // Note: using a local variable while initializing the array helps the
+  // compiler understand that assigning to the array is local side-effect and
+  // that enables the entire constructor to be seen as side-effect free.
+  var localBits = [];
+
   // Copy the 32-bit signed integer values passed in.  We prune out those at the
   // top that equal the sign since they are redundant.
   var top = true;
+
   for (var i = bits.length - 1; i >= 0; i--) {
     var val = bits[i] | 0;
     if (!top || val != sign) {
-      this.bits_[i] = val;
+      localBits[i] = val;
       top = false;
     }
   }
+
+  /**
+   * @type {!Array<number>}
+   * @private
+   * @const
+   */
+  this.bits_ = localBits;
 };
 
 
@@ -79,7 +87,7 @@ goog.math.Integer = function(bits, sign) {
 
 /**
  * A cache of the Integer representations of small integer values.
- * @type {!Object}
+ * @type {!Object<number, !goog.math.Integer>}
  * @private
  */
 goog.math.Integer.IntCache_ = {};
@@ -92,17 +100,12 @@ goog.math.Integer.IntCache_ = {};
  */
 goog.math.Integer.fromInt = function(value) {
   if (-128 <= value && value < 128) {
-    var cachedObj = goog.math.Integer.IntCache_[value];
-    if (cachedObj) {
-      return cachedObj;
-    }
+    return goog.reflect.cache(
+        goog.math.Integer.IntCache_, value, function(val) {
+          return new goog.math.Integer([val | 0], val < 0 ? -1 : 0);
+        });
   }
-
-  var obj = new goog.math.Integer([value | 0], value < 0 ? -1 : 0);
-  if (-128 <= value && value < 128) {
-    goog.math.Integer.IntCache_[value] = obj;
-  }
-  return obj;
+  return new goog.math.Integer([value | 0], value < 0 ? -1 : 0);
 };
 
 
@@ -196,20 +199,19 @@ goog.math.Integer.fromString = function(str, opt_radix) {
 goog.math.Integer.TWO_PWR_32_DBL_ = (1 << 16) * (1 << 16);
 
 
-/** @type {!goog.math.Integer} */
+/**  @type {!goog.math.Integer} */
 goog.math.Integer.ZERO = goog.math.Integer.fromInt(0);
 
-
-/** @type {!goog.math.Integer} */
+/**  @type {!goog.math.Integer} */
 goog.math.Integer.ONE = goog.math.Integer.fromInt(1);
 
 
 /**
+ * @const
  * @type {!goog.math.Integer}
  * @private
  */
 goog.math.Integer.TWO_PWR_24_ = goog.math.Integer.fromInt(1 << 24);
-
 
 /**
  * Returns the value, assuming it is a 32-bit integer.
