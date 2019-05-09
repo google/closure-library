@@ -996,7 +996,8 @@ goog.editor.Field.prototype.disposeInternal = function() {
     this.execCommand(goog.editor.Command.CLEAR_LOREM);
   }
 
-  this.tearDownFieldObject_();
+  this.field = null;
+  this.editableDomHelper = null;
   this.clearListeners();
   this.clearFieldLoadListener_();
   this.originalDomHelper = null;
@@ -1016,6 +1017,10 @@ goog.editor.Field.prototype.disposeInternal = function() {
     var plugin = this.plugins_[classId];
     if (plugin.isAutoDispose()) {
       plugin.dispose();
+    } else {
+      // When the plugin is not auto-disposable, at least unregister this field
+      // object from it.
+      plugin.unregisterFieldObject(this);
     }
   }
   delete (this.plugins_);

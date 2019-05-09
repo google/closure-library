@@ -102,10 +102,11 @@ goog.inherits(TestPlugin, goog.editor.Plugin);
  * Tests that calling registerPlugin will add the plugin to the
  * plugin map.
  */
-function testRegisterPlugin() {
+function testRegisterPluginOnEditableField() {
   var editableField = new FieldConstructor('testField');
   var plugin = new TestPlugin();
 
+  editableField.makeEditable();
   editableField.registerPlugin(plugin);
 
   assertEquals(
@@ -152,7 +153,14 @@ function testRegisterPlugin() {
       editableField.indexedPlugins_[goog.editor.Plugin.Op.CLEAN_CONTENTS_HTML]
                                    [0]);
 
+  // Registering the plugin into the editor also enabled the plugin.
+  assertTrue(plugin.isEnabled(editableField));
+
   editableField.dispose();
+
+  // Disposing the editor will also dispose the registered plugin.
+  assertFalse(plugin.isEnabled(editableField));
+  assertTrue(plugin.isDisposed());
 }
 
 
@@ -172,6 +180,10 @@ function testUnregisterPlugin() {
       editableField.plugins_[plugin.getTrogClassId()]);
 
   editableField.dispose();
+
+  // When the editor is disposed, it does not dispose the plugin because it does
+  // not have a reference of it anymore.
+  assertFalse(plugin.isDisposed());
 }
 
 
@@ -209,10 +221,18 @@ function testDisposed_PluginAutoDispose() {
 
   editableField.registerPlugin(plugin);
   editableField.registerPlugin(noDisposePlugin);
+  editableField.makeEditable();
+
+  assertTrue(plugin.isEnabled(editableField));
+  assertTrue(noDisposePlugin.isEnabled(editableField));
+
   editableField.dispose();
+
   assert(editableField.isDisposed());
   assertTrue(plugin.isDisposed());
   assertFalse(noDisposePlugin.isDisposed());
+  assertFalse(plugin.isEnabled(editableField));
+  assertFalse(noDisposePlugin.isEnabled(editableField));
 }
 
 var STRING_KEY = String.fromCharCode(goog.events.KeyCodes.A).toLowerCase();
@@ -276,25 +296,27 @@ function assertClickDefaultActionIsNotCanceled(editableField) {
 /**
  * Tests that plugins are disabled when the field is made uneditable.
  */
-
 function testMakeUneditableDisablesPlugins() {
   var editableField = new FieldConstructor('testField');
   var plugin = new TestPlugin();
 
-  var calls = 0;
-  plugin.disable = function(field) {
-    assertEquals(editableField, field);
-    assertTrue(field.isUneditable());
-    calls++;
-  };
-
   editableField.registerPlugin(plugin);
+
+  // The plugin is not enabled because the field is not editable yet.
+  assertTrue(editableField.isUneditable());
+  assertFalse(plugin.isEnabled(editableField));
+
   editableField.makeEditable();
+  assertFalse(editableField.isUneditable());
 
-  assertEquals(0, calls);
+  // The plugin becomes editable.
+  assertTrue(plugin.isEnabled(editableField));
+
   editableField.makeUneditable();
+  assertTrue(editableField.isUneditable());
 
-  assertEquals(1, calls);
+  // The plugin is not disabled.
+  assertFalse(plugin.isEnabled(editableField));
 
   editableField.dispose();
 }
