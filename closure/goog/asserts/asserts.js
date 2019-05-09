@@ -190,6 +190,38 @@ goog.asserts.assert = function(condition, opt_message, var_args) {
 
 
 /**
+ * Checks if `value` is `null` or `undefined` if goog.asserts.ENABLE_ASSERTS is
+ * true.
+ *
+ * @param {T} value The value to check.
+ * @param {string=} opt_message Error message in case of failure.
+ * @param {...*} var_args The items to substitute into the failure message.
+ * @return {R} `value` with its type narrowed to exclude `null` and `undefined`.
+ *
+ * @template T
+ * @template R :=
+ *     mapunion(T, (V) =>
+ *         cond(eq(V, 'null'),
+ *             none(),
+ *             cond(eq(V, 'undefined'),
+ *                 none(),
+ *                 V)))
+ *  =:
+ *
+ * @throws {!goog.asserts.AssertionError} When `value` is `null` or `undefined`.
+ * @closurePrimitive {asserts.matchesReturn}
+ */
+goog.asserts.assertExists = function(value, opt_message, var_args) {
+  if (goog.asserts.ENABLE_ASSERTS && value == null) {
+    goog.asserts.doAssertFailure_(
+        'Expected to exist: %s.', [value], opt_message,
+        Array.prototype.slice.call(arguments, 2));
+  }
+  return value;
+};
+
+
+/**
  * Fails if goog.asserts.ENABLE_ASSERTS is true. This function is useful in case
  * when we want to add a check in the unreachable area like switch-case
  * statement:
