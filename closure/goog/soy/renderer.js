@@ -171,12 +171,14 @@ goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
  */
 goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
   var result = template(opt_templateData || {}, this.getInjectedData_());
-  goog.asserts.assertInstanceof(
-      result, goog.soy.data.SanitizedContent,
-      'renderText cannot be called on a non-strict soy template');
-  goog.asserts.assert(
-      result.contentKind === goog.soy.data.SanitizedContentKind.TEXT,
-      'renderText was called with a template of kind other than "text"');
+  if (!goog.isString(result)) {
+    goog.asserts.assertInstanceof(
+        result, goog.soy.data.SanitizedContent,
+        'renderText cannot be called on a non-strict soy template');
+    goog.asserts.assert(
+        result.contentKind === goog.soy.data.SanitizedContentKind.TEXT,
+        'renderText was called with a template of kind other than "text"');
+  }
   this.handleRender();
   return String(result);
 };
