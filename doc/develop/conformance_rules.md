@@ -211,19 +211,6 @@ For this reason, we ban creating untyped `'script'`, `'iframe'`, `'frame'`,
 `goog.dom.TagName` with them.
 
 
-{: #soyDeprecatedAutoescaping}
-### Non-strict escaping in Soy templates 
-
-Rendering non-strict templates is prohibited for security reasons. We check if
-functions `soy.renderAsElement`, `soy.renderAsFragment` and `soy.renderElement`
-plus their versions in `goog.soy` and `goog.soy.Renderer` are called with
-strict-autoescaping templates. Calling them with non-strict templates is banned.
-
-This violation might be a false positive if you pass strict templates around
-with type `{Function}` or `function(): *`. Pass them with type
-`{goog.soy.StrictTemplate}` instead.
-
-
 {: #location}
 ### Assignment to Location.prototype.href and Window.prototype.location 
 
