@@ -278,6 +278,7 @@ requirement: {
 
   whitelist_regexp: '.+/closure/goog/base.js'
   whitelist_regexp: '.+/closure/goog/dom/safe.js'
+  whitelist: 'javascript/security/csp_compatible.js'
 }
 
 requirement: {
