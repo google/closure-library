@@ -16,6 +16,7 @@ goog.provide('goog.ui.PopupMenuTest');
 goog.setTestOnly('goog.ui.PopupMenuTest');
 
 goog.require('goog.dom');
+goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -443,4 +444,32 @@ function testKeyPressWithNoHighlightedItem() {
         'Crash attempting to reference null selected menu item after ' +
         'keyboard event.');
   }
+}
+
+/**
+ * Tests that the menu is not shown (i.e. the browser context menu overrides the
+ * menu) if the SHIFT key is pressed when the menu is right-clicked and the
+ * popup has shiftOverride set.
+ */
+function testShiftOverride() {
+  popup.decorate(menu);
+  popup.attach(
+      anchor,
+      /* opt_targetCorner */ undefined,
+      /* opt_menuCorner */ undefined,
+      /* opt_contextMenu */ false);
+
+  popup.setShiftOverride(true);
+  goog.testing.events.fireMouseDownEvent(
+      anchor, goog.events.BrowserEvent.MouseButton.RIGHT,
+      /* opt_coords */ null,
+      /* opt_eventProperties */ {shiftKey: true});
+  assertFalse(popup.isVisible());
+
+  popup.setShiftOverride(false);
+  goog.testing.events.fireMouseDownEvent(
+      anchor, goog.events.BrowserEvent.MouseButton.RIGHT,
+      /* opt_coords */ null,
+      /* opt_eventProperties */ {shiftKey: true});
+  assertTrue(popup.isVisible());
 }

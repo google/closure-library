@@ -41,6 +41,7 @@ goog.provide('goog.ui.PopupMenu');
 
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
+goog.require('goog.events.BrowserEvent.MouseButton');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.positioning.AnchoredViewportPosition');
@@ -89,6 +90,14 @@ goog.tagUnsealableClass(goog.ui.PopupMenu);
  * @private
  */
 goog.ui.PopupMenu.prototype.toggleMode_ = false;
+
+/**
+ * If true, then the browser context menu will override the menu activation when
+ * the shift key is held down.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.PopupMenu.prototype.shiftOverride_ = false;
 
 
 /**
@@ -384,6 +393,14 @@ goog.ui.PopupMenu.prototype.setToggleMode = function(toggle) {
   this.toggleMode_ = toggle;
 };
 
+/**
+ * Sets whether the browser context menu will override the menu activation when
+ * the shift key is held down.
+ * @param {boolean} shiftOverride
+ */
+goog.ui.PopupMenu.prototype.setShiftOverride = function(shiftOverride) {
+  this.shiftOverride_ = shiftOverride;
+};
 
 /**
  * Gets whether the menu is in toggle mode
@@ -391,6 +408,15 @@ goog.ui.PopupMenu.prototype.setToggleMode = function(toggle) {
  */
 goog.ui.PopupMenu.prototype.getToggleMode = function() {
   return this.toggleMode_;
+};
+
+/**
+ * Gets whether the browser context menu will override the menu activation when
+ * the shift key is held down.
+ * @return {boolean}
+ */
+goog.ui.PopupMenu.prototype.getShiftOverride = function() {
+  return this.shiftOverride_;
 };
 
 
@@ -561,6 +587,10 @@ goog.ui.PopupMenu.prototype.onAction_ = function(opt_e) {
  * @private
  */
 goog.ui.PopupMenu.prototype.onTargetClick_ = function(e) {
+  if (this.shiftOverride_ && e.shiftKey &&
+      e.button == goog.events.BrowserEvent.MouseButton.RIGHT) {
+    return;
+  }
   this.onTargetActivation_(e);
 };
 

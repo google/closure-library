@@ -278,6 +278,7 @@ requirement: {
 
   whitelist_regexp: '.+/closure/goog/base.js'
   whitelist_regexp: '.+/closure/goog/dom/safe.js'
+  whitelist: 'javascript/security/csp_compatible.js'
 }
 
 requirement: {
@@ -493,29 +494,6 @@ requirement: {
 #
 # These rules allow projects to have compile-time errors for legacyconversions
 # functions and to progressively move away from them by using the whitelist.
-
-requirement: {
-  rule_id: 'closure:soyDeprecatedAutoescaping'
-  type: RESTRICTED_NAME_CALL
-  # This allows only call sites passing strict templates (which return SanitizedContent) and not non-strict templates (which return string).
-  error_message: 'Soy may be rendered only from templates with strict autoescaping. See https://google.github.io/closure-library/develop/conformance_rules.html#soyDeprecatedAutoescaping'
-
-  value: 'goog.soy.renderAsElement:function(function(...?): goog.soy.data.SanitizedContent, ...?)'
-  value: 'goog.soy.renderAsFragment:function(function(...?): goog.soy.data.SanitizedContent, ...?)'
-  value: 'goog.soy.renderElement:function(Element, function(...?): goog.soy.data.SanitizedContent, ...?)'
-
-  whitelist_regexp: '.+/closure/goog/soy/renderer.js'
-}
-
-requirement: {
-  rule_id: 'closure:soyRendererDeprecatedAutoescaping'
-  type: RESTRICTED_METHOD_CALL
-  error_message: 'Soy may be rendered only from templates with strict autoescaping. See https://google.github.io/closure-library/develop/conformance_rules.html#soyDeprecatedAutoescaping'
-
-  value: 'goog.soy.Renderer.prototype.renderAsElement:function(function(...?): goog.soy.data.SanitizedContent, ...?)'
-  value: 'goog.soy.Renderer.prototype.renderAsFragment:function(function(...?): goog.soy.data.SanitizedContent, ...?)'
-  value: 'goog.soy.Renderer.prototype.renderElement:function(Element, function(...?): goog.soy.data.SanitizedContent, ...?)'
-}
 
 
 

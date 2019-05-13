@@ -858,3 +858,23 @@ function testOsxGeckoCopyShortcuts() {
 
   listener.$verify();
 }
+
+function testHandleEmptyBrowserEvent() {
+  var rootDiv = goog.dom.getElement('rootDiv');
+  var emptyEvent = new goog.events.BrowserEvent();
+  emptyEvent.type = goog.events.EventType.KEYDOWN;
+  emptyEvent.target = rootDiv;
+  emptyEvent.key = 'g';
+  emptyEvent.keyCode = KeyCodes.G;
+  emptyEvent.preventDefault = goog.nullFunction;
+  emptyEvent.stopPropagation = goog.nullFunction;
+
+  handler.registerShortcut('lettergee', 'g');
+
+  listener.shortcutFired('lettergee');
+  listener.$replay();
+
+  goog.events.fireListeners(rootDiv, emptyEvent.type, false, emptyEvent);
+
+  listener.$verify();
+}

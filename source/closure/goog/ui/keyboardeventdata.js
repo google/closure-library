@@ -144,8 +144,8 @@ goog.ui.KeyboardEventData.prototype.getStopPropagationFn = function() {
 goog.ui.KeyboardEventData.fromBrowserEvent = function(event) {
   var e = event.getBrowserEvent();
   // Check existence to prevent classic FF reference error in strict mode.
-  var hasComposed = 'composed' in e;
-  var hasComposedPath = 'composedPath' in e;
+  var hasComposed = e && 'composed' in e;
+  var hasComposedPath = e && 'composedPath' in e;
   // EventTarget is updated, when browser supports shadow dom and event is
   // triggered inside `open` shadow root.
   var path = hasComposed && hasComposedPath && e.composed && e.composedPath();

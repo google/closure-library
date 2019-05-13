@@ -19,6 +19,7 @@ goog.require('goog.asserts');
 goog.require('goog.asserts.AssertionError');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.reflect');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -54,6 +55,43 @@ function testAssert() {
       'Assertion failed: ouch 1');
 }
 
+function testAssertExists() {
+  // None of them may throw exception
+  goog.asserts.assertExists(true);
+  goog.asserts.assertExists(false);
+  goog.asserts.assertExists(1);
+  goog.asserts.assertExists(0);
+  goog.asserts.assertExists(NaN);
+  goog.asserts.assertExists('Hello');
+  goog.asserts.assertExists('');
+  goog.asserts.assertExists(/Hello/);
+  goog.asserts.assertExists([]);
+  goog.asserts.assertExists({});
+
+  assertThrows(
+      'assertExists(null)', goog.partial(goog.asserts.assertExists, null));
+  assertThrows(
+      'assertExists(undefined)',
+      goog.partial(goog.asserts.assertExists, undefined));
+
+  // Test error messages.
+  doTestMessage(
+      goog.partial(goog.asserts.assertExists, null),
+      'Assertion failed: Expected to exist: null.');
+  doTestMessage(
+      goog.partial(goog.asserts.assertExists, null, 'ouch %s', 1),
+      'Assertion failed: ouch 1');
+}
+
+function testAssertExists_narrowing() {
+  var /** number|null|undefined */ wideValue = 0;
+
+  var /** number */ narrowReturn = goog.asserts.assertExists(wideValue);
+  var /** number */ narrowInScope = wideValue;
+
+  goog.reflect.sinkValue(narrowReturn);
+  goog.reflect.sinkValue(narrowInScope);
+}
 
 function testFail() {
   assertThrows('fail()', goog.asserts.fail);

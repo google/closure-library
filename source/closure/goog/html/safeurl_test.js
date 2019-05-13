@@ -92,6 +92,11 @@ function testSafeUrlFromBlob_withSafeType() {
   assertBlobTypeIsSafe('video/ogg', true);
   assertBlobTypeIsSafe('video/webm', true);
   assertBlobTypeIsSafe('video/quicktime', true);
+
+  assertBlobTypeIsSafe('image/png;foo=bar', true);
+  assertBlobTypeIsSafe('image/png;foo="bar"', true);
+  assertBlobTypeIsSafe('image/png;foo="bar;baz"', true);
+  assertBlobTypeIsSafe('image/png;foo="bar";baz=bar', true);
 }
 
 
@@ -104,6 +109,15 @@ function testSafeUrlFromBlob_withUnsafeType() {
   assertBlobTypeIsSafe('image/pngx', false);
   assertBlobTypeIsSafe('video/whatever', false);
   assertBlobTypeIsSafe('video/', false);
+
+  assertBlobTypeIsSafe('image/png;foo', false);
+  assertBlobTypeIsSafe('image/png;foo=', false);
+  assertBlobTypeIsSafe('image/png;foo=bar;', false);
+  assertBlobTypeIsSafe('image/png;foo=bar;baz', false);
+
+  // Maybe not wrong, but we reject nonetheless for simplicity.
+  assertBlobTypeIsSafe('image/png;foo=bar&', false);
+  assertBlobTypeIsSafe('image/png;foo=%3Cbar', false);
 }
 
 

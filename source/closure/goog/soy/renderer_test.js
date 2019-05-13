@@ -194,13 +194,8 @@ function testRenderText() {
       'Output of renderText should be a string', 'I <3 Puppies & Kittens',
       renderer.renderText(example.unsanitizedTextTemplate));
   assertUndefined(handleRender.getLastCall().getArguments()[0]);
-  // RenderText on non-strict template fails.
-  assertEquals(
-      'Assertion failed: ' +
-          'renderText cannot be called on a non-strict soy template',
-      assertThrows(function() {
-        renderer.renderText(example.stringTemplate, {});
-      }).message);
+  // RenderText works on string templates.
+  assertEquals('<b>XSS</b>', renderer.renderText(example.stringTemplate));
   // RenderText on non-text template fails.
   assertEquals(
       'Assertion failed: ' +
@@ -208,7 +203,7 @@ function testRenderText() {
       assertThrows(function() {
         renderer.renderText(example.sanitizedHtmlTemplate, {});
       }).message);
-  handleRender.assertCallCount(1);
+  handleRender.assertCallCount(2);
 }
 
 function testRenderSafeHtml() {

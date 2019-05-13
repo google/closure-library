@@ -246,6 +246,16 @@ goog.html.SafeUrl.fromConstant = function(url) {
 /**
  * A pattern that matches Blob or data types that can have SafeUrls created
  * from URL.createObjectURL(blob) or via a data: URI.
+ *
+ * This has some parameter support (most notably, we haven't implemented the
+ * more complex parts like %-encoded characters or non-alphanumerical ones for
+ * simplicity's sake). The specs are fairly complex, and they don't
+ * always match Chrome's behavior: we settled on a subset where we're confident
+ * all parties involved agree.
+ *
+ * The spec is available at https://mimesniff.spec.whatwg.org/ (and see
+ * https://tools.ietf.org/html/rfc2397 for data: urls, which override some of
+ * it).
  * @const
  * @private
  */
@@ -257,7 +267,8 @@ goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
         // TODO(b/68188949): Due to content-sniffing concerns, text/csv should
         // be removed from the whitelist.
         'text/csv|' +
-        'video/(?:mpeg|mp4|ogg|webm|quicktime))$',
+        'video/(?:mpeg|mp4|ogg|webm|quicktime))' +
+        '(?:;\\w+=(?:\\w+|"[\\w;=]+"))*$',  // MIME type parameters
     'i');
 
 
@@ -297,7 +308,7 @@ goog.html.SafeUrl.fromBlob = function(blob) {
  * @const
  * @private
  */
-goog.html.DATA_URL_PATTERN_ = /^data:([^;,]*);base64,[a-z0-9+\/]+=*$/i;
+goog.html.DATA_URL_PATTERN_ = /^data:([^,]*);base64,[a-z0-9+\/]+=*$/i;
 
 
 /**
