@@ -1310,7 +1310,7 @@ goog.transpile_ = function(code, path, target) {
       // so a normal script-tag load will be too slow. Wrapped in a function
       // so that code is eval'd in the global scope.
       (function() {
-        eval(transpilerCode + '\n//# sourceURL=' + transpilerPath);
+        (0, eval)(transpilerCode + '\n//# sourceURL=' + transpilerPath);
       }).call(goog.global);
       // Even though the transpiler is optional, if $gwtExport is found, it's
       // a sign the transpiler was loaded and the $jscomp.transpile *should*
