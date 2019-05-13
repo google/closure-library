@@ -210,6 +210,32 @@ function testLoadDebugModuleAThenB() {
       });
 }
 
+function testLoadScriptTagModuleA() {
+  moduleLoader.setUseScriptTags(true);
+  return new goog
+      .Promise(function(resolve, reject) {
+        moduleManager.execOnLoad('modA', resolve);
+      })
+      .then(function() {
+        assertLoaded('modA');
+        assertNotLoaded('modB');
+        assertTrue(modA1Loaded);
+      });
+}
+
+function testLoadScriptTagModuleB() {
+  moduleLoader.setUseScriptTags(true);
+  return new goog
+      .Promise(function(resolve, reject) {
+        moduleManager.execOnLoad('modB', resolve);
+      })
+      .then(function() {
+        assertLoaded('modA');
+        assertLoaded('modB');
+        assertTrue(modA1Loaded);
+      });
+}
+
 function testSourceInjection() {
   moduleLoader.setSourceUrlInjection(true);
   return assertSourceInjection();

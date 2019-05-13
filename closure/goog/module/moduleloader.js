@@ -31,6 +31,9 @@ goog.provide('goog.module.ModuleLoader');
 
 goog.require('goog.Timer');
 goog.require('goog.array');
+goog.require('goog.asserts');
+goog.require('goog.dom');
+goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
@@ -100,6 +103,14 @@ goog.module.ModuleLoader.prototype.sourceUrlInjection_ = false;
 
 
 /**
+ * Whether to load modules with non-async script tags.
+ * @type {boolean}
+ * @private
+ */
+goog.module.ModuleLoader.prototype.useScriptTags_ = false;
+
+
+/**
  * @return {boolean} Whether sourceURL affects stack traces.
  */
 goog.module.ModuleLoader.supportsSourceUrlStackTraces = function() {
@@ -118,6 +129,46 @@ goog.module.ModuleLoader.supportsSourceUrlDebugger = function() {
 
 
 /**
+ * URLs have a browser-dependent max character limit. IE9-IE11 are the lowest
+ * common denominators for what we support - with a limit of 4043:
+ * https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers#31250734
+ * If the URL constructed by the loader exceeds this limit, we will try to split
+ * it into multiple requests.
+ * TODO(user): Make this configurable since not all users care about IE.
+ * @const {number}
+ * @private
+ */
+goog.module.ModuleLoader.URL_MAX_LENGTH_ = 4043;
+
+
+/**
+ * Error code for javascript syntax and network errors.
+ * TODO(user): Detect more accurate error info.
+ * @const {number}
+ * @private
+ */
+goog.module.ModuleLoader.SYNTAX_OR_NETWORK_ERROR_CODE_ = -1;
+
+
+
+/**
+ * @param {!goog.html.TrustedResourceUrl} url The url to be loaded.
+ * @return {!HTMLScriptElement}
+ * @private
+ */
+goog.module.ModuleLoader.createScriptElement_ = function(url) {
+  const script = goog.dom.createElement(goog.dom.TagName.SCRIPT);
+  goog.dom.safe.setScriptSrc(script, url);
+
+  // Set scriptElt.async = false to guarantee
+  // that scripts are loaded in parallel but executed in the insertion order.
+  // For more details, check
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script
+  script.async = false;
+  return script;
+};
+
+/**
  * Gets the debug mode for the loader.
  * @return {boolean} Whether the debug mode is enabled.
  */
@@ -127,7 +178,26 @@ goog.module.ModuleLoader.prototype.getDebugMode = function() {
 
 
 /**
- * Sets the debug mode for the loader.
+ * @param {boolean} useScriptTags Whether or not to use script tags
+ *     (with async=false) for loading.
+ */
+goog.module.ModuleLoader.prototype.setUseScriptTags = function(useScriptTags) {
+  this.useScriptTags_ = useScriptTags;
+};
+
+
+/**
+ * Gets whether we're using non-async script tags for loading.
+ * @return {boolean} Whether or not we're using non-async script tags for
+ *     loading.
+ */
+goog.module.ModuleLoader.prototype.getUseScriptTags = function() {
+  return this.useScriptTags_;
+};
+
+
+/**
+ * Sets whether we're using non-async script tags for loading.
  * @param {boolean} debugMode Whether the debug mode is enabled.
  */
 goog.module.ModuleLoader.prototype.setDebugMode = function(debugMode) {
@@ -268,8 +338,10 @@ goog.module.ModuleLoader.prototype.handleSuccess_ = function(
 
 /** @override */
 goog.module.ModuleLoader.prototype.prefetchModule = function(id, moduleInfo) {
-  // Do not prefetch in debug mode.
-  if (this.getDebugMode()) {
+  // TODO(user): Add logic to insert <link> preload tags when in
+  // "useScriptTags" mode
+  // Do not prefetch in debug mode
+  if (this.getDebugMode() || this.getUseScriptTags()) {
     return;
   }
   var loadStatus = this.loadingModulesStatus_[[id]];
@@ -298,10 +370,24 @@ goog.module.ModuleLoader.prototype.downloadModules_ = function(
   for (var i = 0; i < ids.length; i++) {
     goog.array.extend(trustedUris, moduleInfoMap[ids[i]].getUris());
   }
-  var uris = goog.array.map(trustedUris, goog.html.TrustedResourceUrl.unwrap);
-  goog.log.info(this.logger, 'downloadModules ids:' + ids + ' uris:' + uris);
-
-  if (this.getDebugMode() && !this.usingSourceUrlInjection_()) {
+  const debugMode = this.getDebugMode();
+  const sourceUrlInjection = this.usingSourceUrlInjection_();
+  const useScriptTags = this.getUseScriptTags();
+  if (debugMode || sourceUrlInjection || useScriptTags) {
+    const effectiveFlag = useScriptTags ?
+        'useScriptTags' :
+        (debugMode && !sourceUrlInjection) ? 'debug' : 'sourceUrlInjection';
+    goog.log.warning(
+        this.logger,
+        `More than one of debugMode (set to ${debugMode}), ` +
+            `useScriptTags (set to ${useScriptTags}), ` +
+            `and sourceUrlInjection (set to ${sourceUrlInjection}) ` +
+            `is enabled. Proceeding with download as if ` +
+            `${effectiveFlag} is set to true and the rest to false.`);
+  }
+  if (useScriptTags) {
+    this.loadWithNonAsyncScriptTag_(trustedUris, ids);
+  } else if (debugMode && !sourceUrlInjection) {
     // In debug mode use <script> tags rather than XHRs to load the files.
     // This makes it possible to debug and inspect stack traces more easily.
     // It's also possible to use it to load JavaScript files that are hosted on
@@ -310,6 +396,8 @@ goog.module.ModuleLoader.prototype.downloadModules_ = function(
     // script loads with source url injection.
     goog.net.jsloader.safeLoadMany(trustedUris);
   } else {
+    var uris = goog.array.map(trustedUris, goog.html.TrustedResourceUrl.unwrap);
+    goog.log.info(this.logger, 'downloadModules ids:' + ids + ' uris:' + uris);
     var loadStatus = this.loadingModulesStatus_[ids];
     loadStatus.requestUris = uris;
 
@@ -323,6 +411,82 @@ goog.module.ModuleLoader.prototype.downloadModules_ = function(
         bulkLoader, goog.net.EventType.ERROR,
         goog.bind(this.handleError_, this, bulkLoader, ids));
     bulkLoader.load();
+  }
+};
+
+
+/**
+ * Downloads a list of script URIS using <script async=false.../>, which
+ * guarantees executuion order.
+ * @param {!Array<!goog.html.TrustedResourceUrl>} trustedUris
+ * @param {?Array<string>} ids The module ids in dependency order.
+ * @private
+ */
+goog.module.ModuleLoader.prototype.loadWithNonAsyncScriptTag_ = function(
+    trustedUris, ids) {
+  goog.log.info(this.logger, `Loading initiated for: ${ids}`);
+  const loadStatus = this.loadingModulesStatus_[ids];
+  if (trustedUris.length == 0) {
+    if (loadStatus.successFn) {
+      loadStatus.successFn();
+      return;
+    }
+  }
+
+  // We'll execute the success callback when the last script enqueed reaches
+  // onLoad.
+  let lastScript = null;
+  const insertPos = document.head || document.documentElement;
+
+  for (var i = 0; i < trustedUris.length; i++) {
+    const url = trustedUris[i];
+    const urlLength = goog.html.TrustedResourceUrl.unwrap(url).length;
+    goog.asserts.assert(
+        urlLength <= goog.module.ModuleLoader.URL_MAX_LENGTH_,
+        `Module url length is ${urlLength}, which is greater than limit of ` +
+            `${goog.module.ModuleLoader.URL_MAX_LENGTH_}. This should never ` +
+            `happen.`);
+
+    const scriptElement = goog.module.ModuleLoader.createScriptElement_(url);
+
+    scriptElement.onload = () => {
+      scriptElement.onload = null;
+      scriptElement.onerror = null;
+      if (insertPos.contains(scriptElement)) {
+        insertPos.removeChild(scriptElement);
+      }
+      if (scriptElement == lastScript) {
+        goog.log.info(this.logger, `Loading complete for: ${ids}`);
+        lastScript = null;
+        if (loadStatus.successFn) {
+          loadStatus.successFn();
+        }
+      }
+    };
+
+    scriptElement.onerror = () => {
+      goog.log.error(
+          this.logger, `Network error when loading module(s): ${ids}`);
+      scriptElement.onload = null;
+      scriptElement.onerror = null;
+      if (insertPos.contains(scriptElement)) {
+        insertPos.removeChild(scriptElement);
+      }
+      this.handleErrorHelper_(
+          ids, loadStatus.errorFn,
+          goog.module.ModuleLoader.SYNTAX_OR_NETWORK_ERROR_CODE_);
+      if (lastScript == scriptElement) {
+        lastScript = null;
+      } else {
+        goog.log.error(
+            this.logger,
+            `Dependent requests were made in parallel with failed request ` +
+                `for module(s) "${ids}". Non-recoverable out-of-order ` +
+                `execution may occur.`);
+      }
+    };
+    lastScript = scriptElement;
+    insertPos.insertBefore(scriptElement, insertPos.firstChild);
   }
 };
 
