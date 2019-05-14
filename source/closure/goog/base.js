@@ -1310,7 +1310,7 @@ goog.transpile_ = function(code, path, target) {
       // so a normal script-tag load will be too slow. Wrapped in a function
       // so that code is eval'd in the global scope.
       (function() {
-        eval(transpilerCode + '\n//# sourceURL=' + transpilerPath);
+        (0, eval)(transpilerCode + '\n//# sourceURL=' + transpilerPath);
       }).call(goog.global);
       // Even though the transpiler is optional, if $gwtExport is found, it's
       // a sign the transpiler was loaded and the $jscomp.transpile *should*
@@ -4134,18 +4134,28 @@ goog.identity_ = function(s) {
  * reference to the created policy should be visibility restricted.
  * @param {string} name
  * @return {?TrustedTypePolicy}
- * @throws {!TypeError} If called with a name which is already registered.
  */
 goog.createTrustedTypesPolicy = function(name) {
+  var policy = null;
   if (typeof TrustedTypes === 'undefined' || !TrustedTypes.createPolicy) {
-    return null;
+    return policy;
   }
-  return TrustedTypes.createPolicy(name, {
-    createHTML: goog.identity_,
-    createScript: goog.identity_,
-    createScriptURL: goog.identity_,
-    createURL: goog.identity_
-  });
+  // TrustedTypes.createPolicy throws if called with a name that is already
+  // registered, even in report-only mode. Until the API changes, catch the
+  // error not to break the applications functionally. In such case, the code
+  // will fall back to using regular Safe Types.
+  // TODO(koto): Remove catching once createPolicy API stops throwing.
+  try {
+    policy = TrustedTypes.createPolicy(name, {
+      createHTML: goog.identity_,
+      createScript: goog.identity_,
+      createScriptURL: goog.identity_,
+      createURL: goog.identity_
+    });
+  } catch (e) {
+    goog.logToConsole_(e.message);
+  }
+  return policy;
 };
 
 

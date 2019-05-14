@@ -24,7 +24,6 @@ goog.require('goog.Uri');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.async.run');
-goog.require('goog.debug.TextFormatter');
 goog.require('goog.json');
 goog.require('goog.labs.net.webChannel.BaseTestChannel');
 goog.require('goog.labs.net.webChannel.Channel');
@@ -36,7 +35,6 @@ goog.require('goog.labs.net.webChannel.Wire');
 goog.require('goog.labs.net.webChannel.WireV8');
 goog.require('goog.labs.net.webChannel.netUtils');
 goog.require('goog.labs.net.webChannel.requestStats');
-goog.require('goog.log');
 goog.require('goog.net.WebChannel');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.XmlHttpFactory');
@@ -44,7 +42,6 @@ goog.require('goog.net.rpc.HttpCors');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs');
-goog.require('goog.structs.CircularBuffer');
 
 goog.scope(function() {
 var WebChannel = goog.net.WebChannel;
@@ -2345,94 +2342,6 @@ WebChannelBase.prototype.shouldUseSecondaryDomains = function() {
 WebChannelBase.prototype.setForwardChannelFlushCallback = function(callback) {
   this.forwardChannelFlushedCallback_ = callback;
 };
-
-
-/**
- * A LogSaver that can be used to accumulate all the debug logs so they
- * can be sent to the server when a problem is detected.
- * @const
- */
-WebChannelBase.LogSaver = {};
-
-
-/**
- * Buffer for accumulating the debug log
- * @type {goog.structs.CircularBuffer}
- * @private
- */
-WebChannelBase.LogSaver.buffer_ = new goog.structs.CircularBuffer(1000);
-
-
-/**
- * Whether we're currently accumulating the debug log.
- * @type {boolean}
- * @private
- */
-WebChannelBase.LogSaver.enabled_ = false;
-
-
-/**
- * Formatter for saving logs.
- * @type {goog.debug.Formatter}
- * @private
- */
-WebChannelBase.LogSaver.formatter_ = new goog.debug.TextFormatter();
-
-
-/**
- * Returns whether the LogSaver is enabled.
- * @return {boolean} Whether saving is enabled or disabled.
- */
-WebChannelBase.LogSaver.isEnabled = function() {
-  return WebChannelBase.LogSaver.enabled_;
-};
-
-
-/**
- * Enables of disables the LogSaver.
- * @param {boolean} enable Whether to enable or disable saving.
- */
-WebChannelBase.LogSaver.setEnabled = function(enable) {
-  if (enable == WebChannelBase.LogSaver.enabled_) {
-    return;
-  }
-
-  var fn = WebChannelBase.LogSaver.addLogRecord;
-  var logger = goog.log.getLogger('goog.net');
-  if (enable) {
-    goog.log.addHandler(logger, fn);
-  } else {
-    goog.log.removeHandler(logger, fn);
-  }
-};
-
-
-/**
- * Adds a log record.
- * @param {goog.log.LogRecord} logRecord the LogRecord.
- */
-WebChannelBase.LogSaver.addLogRecord = function(logRecord) {
-  WebChannelBase.LogSaver.buffer_.add(
-      WebChannelBase.LogSaver.formatter_.formatRecord(logRecord));
-};
-
-
-/**
- * Returns the log as a single string.
- * @return {string} The log as a single string.
- */
-WebChannelBase.LogSaver.getBuffer = function() {
-  return WebChannelBase.LogSaver.buffer_.getValues().join('');
-};
-
-
-/**
- * Clears the buffer
- */
-WebChannelBase.LogSaver.clearBuffer = function() {
-  WebChannelBase.LogSaver.buffer_.clear();
-};
-
 
 
 /**
