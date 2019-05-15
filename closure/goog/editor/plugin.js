@@ -18,7 +18,7 @@
  *
  * This is done to create a target for `goog.editor.PluginImpl` that also pulls
  * in `goog.editor.Field` without creating a cycle. Doing so allows downstream
- * targets to depend only on `goog.editor.Plugin` without js_lib complaining
+ * targets to depend only on `goog.editor.Plugin` without js_library complaining
  * about unfullfilled forward declarations.
  */
 
