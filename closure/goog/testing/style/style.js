@@ -58,10 +58,14 @@ goog.testing.style.hasVisibleDimensions = function(element) {
 
 /**
  * Determines whether the CSS style of the element renders it visible.
+ * Elements detached from the document are considered invisible.
  * @param {!Element} element The element to check.
  * @return {boolean} Whether the CSS style of the element renders it visible.
  */
 goog.testing.style.isVisible = function(element) {
+  if (!goog.dom.isInDocument(element)) {
+    return false;
+  }
   var style = getComputedStyle(element);
   return style.visibility != 'hidden' && style.display != 'none';
 };
