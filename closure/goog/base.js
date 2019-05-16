@@ -213,6 +213,7 @@ goog.define = function(name, defaultValue) {
       value = defines[name];
     }
   }
+  goog.exportPath_(name, value);
   return value;
 };
 

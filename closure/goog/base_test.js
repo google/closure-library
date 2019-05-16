@@ -95,33 +95,33 @@ function testLibrary() {
 function testDefine() {
   var result;
   result = goog.define('SOME_DEFINE', 123);  // overridden by 456
+  assertEquals(456, SOME_DEFINE);
   assertEquals(456, result);
-  assertEquals('undefined', typeof SOME_DEFINE);
 
   result = goog.define('SOME_OTHER_DEFINE', 123);  // not overridden
+  assertEquals(123, SOME_OTHER_DEFINE);
   assertEquals(123, result);
-  assertEquals('undefined', typeof SOME_OTHER_DEFINE);
 
   // alias to avoid the being picked up by the deps scanner.
   var provide = goog.provide;
   provide('ns');
 
   result = goog.define('ns.SOME_NAMESPACED_DEFINE', 123);  // overridden by 789
+  assertEquals(789, ns.SOME_NAMESPACED_DEFINE);
   assertEquals(789, result);
-  assertEquals('undefined', typeof ns.SOME_NAMESPACED_DEFINE);
 
   result = goog.define('ns.SOME_OTHER_NAMESPACED_DEFINE', 123);  // untouched
+  assertEquals(123, ns.SOME_OTHER_NAMESPACED_DEFINE);
   assertEquals(123, result);
-  assertEquals('undefined', typeof ns.SOME_OTHER_NAMESPACED_DEFINE);
 
   // still works even if namespace not provided.
   result = goog.define('ns2.SOME_UNPROVIDED_DEFINE', 123);  // overridden by 159
+  assertEquals(159, ns2.SOME_UNPROVIDED_DEFINE);
   assertEquals(159, result);
-  assertEquals('undefined', typeof ns2);
 
   result = goog.define('ns3.SOME_OTHER_UNPROVIDED_DEFINE', 123);  // untouched
+  assertEquals(123, ns3.SOME_OTHER_UNPROVIDED_DEFINE);
   assertEquals(123, result);
-  assertEquals('undefined', typeof ns3);
 }
 
 function testProvide() {
