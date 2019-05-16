@@ -373,7 +373,7 @@ goog.module.ModuleLoader.prototype.downloadModules_ = function(
   const debugMode = this.getDebugMode();
   const sourceUrlInjection = this.usingSourceUrlInjection_();
   const useScriptTags = this.getUseScriptTags();
-  if (debugMode || sourceUrlInjection || useScriptTags) {
+  if ((debugMode + sourceUrlInjection + useScriptTags) > 1) {
     const effectiveFlag = useScriptTags ?
         'useScriptTags' :
         (debugMode && !sourceUrlInjection) ? 'debug' : 'sourceUrlInjection';

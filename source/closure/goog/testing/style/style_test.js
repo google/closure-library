@@ -60,6 +60,10 @@ function testIsVisible() {
   assertFalse(
       'The div should be detected as not visible.',
       goog.testing.style.isVisible(div1));
+
+  // Detached elements are invisible.
+  var detached = document.createElement('div');
+  assertFalse(goog.testing.style.isVisible(detached));
 }
 
 function testIsOnScreen() {
