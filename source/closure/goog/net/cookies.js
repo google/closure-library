@@ -200,9 +200,8 @@ goog.net.Cookies.prototype.get = function(name, opt_default) {
 /**
  * Removes and expires a cookie.
  * @param {string} name  The cookie name.
- * @param {?string=} opt_path  The path of the cookie, or null to expire a cookie
- *     set at the full request path. If not provided, the default is '/'
- *     (i.e. path=/).
+ * @param {?string=} opt_path  The path of the cookie. If null or not present,
+ *     expires the cookie set at the full request path.
  * @param {?string=} opt_domain  The domain of the cookie, or null to expire a
  *     cookie set at the full request host name. If not provided, the default is
  *     null (i.e. cookie at full request host name).
