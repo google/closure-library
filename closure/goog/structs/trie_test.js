@@ -430,9 +430,12 @@ function testPrefixOptionOnGetKeys() {
 function testGetKeyAndPrefixes() {
   var trie = makeTrie();
   // Note: trie has one of its keys as ''
+  const results = trie.getKeyAndPrefixes('world');
   assertEquals(
       'getKeyAndPrefixes, should be 2', 2,
-      goog.object.getCount(trie.getKeyAndPrefixes('world')));
+      goog.object.getCount(results));
+  assertEquals('an empty string key', results[0]);
+  assertEquals({}, results['world'.length-1]);
   assertEquals(
       'getKeyAndPrefixes, should be 2', 2,
       goog.object.getCount(trie.getKeyAndPrefixes('hello')));
