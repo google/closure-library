@@ -49,6 +49,13 @@ var SAFE_PARSING_SUPPORTED =
     !userAgent.IE || userAgent.isDocumentModeOrHigher(10);
 
 /**
+ * Whether the template tag is supported.
+ * @const {boolean}
+ */
+var HTML_SANITIZER_TEMPLATE_SUPPORTED =
+    !userAgent.IE || document.documentMode == null;
+
+/**
  * Parses a string of unsanitized HTML and provides an iterator over the
  * resulting DOM tree nodes. The parsing operation is inert (that is,
  * it does not cause execution of any active content or cause the browser to
@@ -62,9 +69,8 @@ function getDomTreeWalker(html) {
   var safeHtml =
       uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract(
           Const.from('Never attached to DOM.'), html);
-  // Use a <template> element if possible.
   var templateElement = document.createElement('template');
-  if ('content' in templateElement) {
+  if (HTML_SANITIZER_TEMPLATE_SUPPORTED && 'content' in templateElement) {
     safe.unsafeSetInnerHtmlDoNotUseOrElse(templateElement, safeHtml);
     iteratorParent = templateElement.content;
   } else {
