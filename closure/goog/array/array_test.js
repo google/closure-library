@@ -240,8 +240,10 @@ function testArrayReduce() {
     return rval + val;
   }, 0));
 
+  /** @const */
   var scope = {
     last: 0,
+    /** @this {?} */
     testFn: function(r, v, i, arr) {
       assertEquals('number', typeof i);
       assertEquals(a, arr);
@@ -264,8 +266,10 @@ function testArrayReduceOmitDeleted() {
     return rval + val;
   }, 0));
 
+  /** @const */
   var scope = {
     last: 0,
+    /** @this {?} */
     testFn: function(r, v, i, arr) {
       assertEquals('number', typeof i);
       assertEquals(a, arr);
@@ -286,8 +290,10 @@ function testArrayReduceRight() {
     return rval + val;
   }, ''));
 
+  /** @const */
   var scope = {
     last: '',
+    /** @this {?} */
     testFn: function(r, v, i, arr) {
       assertEquals('number', typeof i);
       assertEquals(a, arr);
@@ -311,8 +317,10 @@ function testArrayReduceRightOmitsDeleted() {
     return rval + val;
   }, ''));
 
-  scope = {
+  /** @const */
+  var scope = {
     last: '',
+    /** @this {?} */
     testFn: function(r, v, i, arr) {
       assertEquals('number', typeof i);
       assertEquals(a, arr);
@@ -668,11 +676,11 @@ function testArrayInsertArrayAt() {
       'insertArrayAt, insert 0 elements', [0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, ['y', 'z']);
   assertArrayEquals(
-      'insertArrayAt, undefined value should insert at 0',
+      'insertArrayAt, undefined value should insert as 0',
       ['y', 'z', 0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
-  goog.array.insertArrayAt(a, ['a'], null);
+  goog.array.insertArrayAt(a, ['a'], /** @type {?} */ (null));
   assertArrayEquals(
-      'insertArrayAt, null value should insert at 0',
+      'insertArrayAt, null value should insert as 0',
       ['a', 'y', 'z', 0, 1, 2, 3, 'x', 4, 5, 6, 7], a);
   goog.array.insertArrayAt(a, ['b'], 100);
   assertArrayEquals(
@@ -738,7 +746,7 @@ function testArrayRemoveIf() {
   assertArrayEquals('removeIf, remove existing element', [0, 1, 3], a);
 
   a = [0, 1, 2, 3];
-  var b = goog.array.removeIf(a, function(val, index, a2) {
+  b = goog.array.removeIf(a, function(val, index, a2) {
     assertEquals(a, a2);
     assertEquals('index is not a number', 'number', typeof index);
     return val > 100;
@@ -774,12 +782,12 @@ function testToArrayOnNonArrayLike() {
   var nonArrayLike = {};
   assertArrayEquals(
       'toArray on non ArrayLike should return an empty array', [],
-      goog.array.toArray(nonArrayLike));
+      goog.array.toArray(/** @type {?} */ (nonArrayLike)));
 
   var nonArrayLike2 = {length: 'hello world'};
   assertArrayEquals(
       'toArray on non ArrayLike should return an empty array', [],
-      goog.array.toArray(nonArrayLike2));
+      goog.array.toArray(/** @type {?} */ (nonArrayLike2)));
 }
 
 function testExtend() {
@@ -836,7 +844,9 @@ function testExtend() {
 }
 
 function testExtendWithArguments() {
-  function f() { return arguments; }
+  function f(var_args) {
+    return arguments;
+  }
   var a = [0];
   var a2 = [0, 1, 2, 3, 4, 5];
   goog.array.extend(a, f(1, 2, 3), f(4, 5));
@@ -1184,7 +1194,7 @@ function testBinarySelect() {
   assertEquals(
       '{n:-3} should be found at index 5', 5,
       goog.array.binarySelect(objects, makeEvaluator(-3)));
-  pos = goog.array.binarySelect(objects, makeEvaluator(0));
+  var pos = goog.array.binarySelect(objects, makeEvaluator(0));
   assertTrue(
       '{n:0} should be found at index 6 || 7 || 8',
       pos == 6 || pos == 7 || pos == 8);
@@ -1263,7 +1273,8 @@ function testArrayEquals() {
       'obj [5, 6] == [5, 6]',
       goog.array.equals({0: 5, 1: 6, length: 2}, [5, 6]));
   assertFalse(
-      '{0: 5, 1: 6} == [5, 6]', goog.array.equals({0: 5, 1: 6}, [5, 6]));
+      '{0: 5, 1: 6} == [5, 6]',
+      goog.array.equals(/** @type {?} */ ({0: 5, 1: 6}), [5, 6]));
 }
 
 
@@ -1365,6 +1376,7 @@ function testSort() {
 
   // Test sorting array of custom Object(s) of length > 1 that have
   // an overriden toString
+  /** @constructor */
   function ComparedObject(value) {
     this.value = value;
   }
@@ -1463,6 +1475,7 @@ function testStableSort() {
 }
 
 function testSortByKey() {
+  /** @constructor */
   function Item(value) {
     this.getValue = function() { return value; };
   }
@@ -1532,6 +1545,7 @@ function testArrayBucketUsingThisObject() {
 
   var obj = {specialValue: 2};
 
+  /** @this {?} */
   function isSpecialValue(value, index, array) {
     return value == this.specialValue ? 1 : 0;
   }
@@ -1701,7 +1715,7 @@ function testMoveItemWithArray() {
 }
 
 function testMoveItemWithArgumentsObject() {
-  var f = function() {
+  var f = function(var_args) {
     goog.array.moveItem(arguments, 0, 1);
     return arguments;
   };
