@@ -408,6 +408,11 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
       color = '#333';
     }
     var div = goog.dom.createElement(goog.dom.TagName.DIV);
+    // Empty divs don't take up any space, use \n to take up space and preserve
+    // newlines when copying the logs.
+    if (line == '') {
+      line = '\n';
+    }
     if (line.substr(0, 2) == '> ') {
       // The stack trace may contain links so it has to be interpreted as HTML.
       div.innerHTML = line;
