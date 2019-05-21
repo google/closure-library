@@ -57,7 +57,6 @@ goog.require('goog.html.uncheckedconversions');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.string.Const');
-goog.require('goog.userAgent');
 
 
 /**
@@ -107,14 +106,6 @@ goog.html.sanitizer.HtmlSanitizerUrlPolicy;
  * }}
  */
 goog.html.sanitizer.HtmlSanitizerAttributePolicy;
-
-
-/**
- * Whether the template tag is supported.
- * @package @const {boolean}
- */
-goog.html.sanitizer.HTML_SANITIZER_TEMPLATE_SUPPORTED =
-    !goog.userAgent.IE || document.documentMode == null;
 
 
 /**
