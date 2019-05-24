@@ -40,7 +40,8 @@ var Browser = {
   IOS_WEBVIEW: goog.labs.userAgent.browser.isIosWebview,
   SAFARI: goog.labs.userAgent.browser.isSafari,
   SILK: goog.labs.userAgent.browser.isSilk,
-  EDGE: goog.labs.userAgent.browser.isEdge
+  EDGE: goog.labs.userAgent.browser.isEdge,
+  EDGE_CHROMIUM: goog.labs.userAgent.browser.isEdgeChromium
 };
 
 
@@ -55,7 +56,9 @@ function assertBrowser(browser) {
   // Verify that the method is true for the given browser
   // and false for all others.
   goog.object.forEach(Browser, function(f, name) {
-    if (f == browser) {
+    if (f == Browser.CHROME && browser == Browser.EDGE_CHROMIUM) {
+      assertTrue('Value for browser ' + name, f());
+    } else if (f == browser) {
       assertTrue('Value for browser ' + name, f());
     } else {
       assertFalse('Value for browser ' + name, f());
@@ -205,6 +208,14 @@ function testEdge() {
   assertBrowser(Browser.EDGE);
   assertVersion('12.9600');
   assertVersionBetween('11.0', '13.0');
+}
+
+function testEdgeChromium() {
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.EDGE_CHROMIUM);
+  assertBrowser(Browser.EDGE_CHROMIUM);
+  assertVersion('74.1.96.24');
+  assertVersionBetween('74.1', '74.2');
 }
 
 function testFirefox19() {

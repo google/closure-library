@@ -38,7 +38,8 @@ goog.userAgent.ASSUME_IE = goog.define('goog.userAgent.ASSUME_IE', false);
 
 
 /**
- * @define {boolean} Whether we know at compile-time that the browser is EDGE.
+ * @define {boolean} Whether we know at compile-time that the browser is EDGE,
+ * referring to EdgeHTML based Edge.
  */
 goog.userAgent.ASSUME_EDGE = goog.define('goog.userAgent.ASSUME_EDGE', false);
 
@@ -65,7 +66,8 @@ goog.userAgent.ASSUME_MOBILE_WEBKIT =
 
 
 /**
- * @define {boolean} Whether we know at compile-time that the browser is OPERA.
+ * @define {boolean} Whether we know at compile-time that the browser is OPERA,
+ * referring to Presto-based Opera.
  */
 goog.userAgent.ASSUME_OPERA = goog.define('goog.userAgent.ASSUME_OPERA', false);
 
@@ -121,7 +123,7 @@ goog.userAgent.getNavigator = function() {
 
 
 /**
- * Whether the user agent is Opera.
+ * Whether the user agent is Presto-based Opera.
  * @type {boolean}
  */
 goog.userAgent.OPERA = goog.userAgent.BROWSER_KNOWN_ ?
@@ -139,7 +141,7 @@ goog.userAgent.IE = goog.userAgent.BROWSER_KNOWN_ ?
 
 
 /**
- * Whether the user agent is Microsoft Edge.
+ * Whether the user agent is Microsoft Edge (EdgeHTML based).
  * @type {boolean}
  */
 goog.userAgent.EDGE = goog.userAgent.BROWSER_KNOWN_ ?
@@ -148,7 +150,7 @@ goog.userAgent.EDGE = goog.userAgent.BROWSER_KNOWN_ ?
 
 
 /**
- * Whether the user agent is MS Internet Explorer or MS Edge.
+ * Whether the user agent is MS Internet Explorer or MS Edge (EdgeHTML based).
  * @type {boolean}
  */
 goog.userAgent.EDGE_OR_IE = goog.userAgent.EDGE || goog.userAgent.IE;
@@ -166,7 +168,7 @@ goog.userAgent.GECKO = goog.userAgent.BROWSER_KNOWN_ ?
 
 /**
  * Whether the user agent is WebKit. WebKit is the rendering engine that
- * Safari, Android and others use.
+ * Safari, Edge Chromium, Opera Chromium, Android and others use.
  * @type {boolean}
  */
 goog.userAgent.WEBKIT = goog.userAgent.BROWSER_KNOWN_ ?

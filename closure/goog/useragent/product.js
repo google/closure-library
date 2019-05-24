@@ -100,7 +100,7 @@ goog.userAgent.product.IE = goog.userAgent.IE;
 
 
 /**
- * Whether the code is running on an Edge web browser.
+ * Whether the code is running on an Edge web browser (EdgeHTML based).
  * @type {boolean}
  */
 goog.userAgent.product.EDGE = goog.userAgent.EDGE;
@@ -157,7 +157,7 @@ goog.userAgent.product.ANDROID = goog.userAgent.product.PRODUCT_KNOWN_ ?
 
 
 /**
- * Whether the code is running on the Chrome web browser on any platform
+ * Whether the code is running on any Chromium-based web browser on any platform
  * or AOSP browser or WebView in a KitKat+ Android phone or tablet.
  * @type {boolean}
  */
