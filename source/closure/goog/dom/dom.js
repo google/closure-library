@@ -789,8 +789,8 @@ goog.dom.getWindow_ = function(doc) {
  * createDom(goog.dom.TagName.P));</code> would return a div with two child
  * paragraphs
  *
- * For passing properties, please see {@link goog.dom.setProperties} for more
- * information.
+ * This function uses {@link goog.dom.setProperties} to set attributes: the
+ * `opt_attributes` parameter follows the same rules.
  *
  * @param {string|!goog.dom.TagName<T>} tagName Tag to create.
  * @param {?Object|?Array<string>|string=} opt_attributes If object, then a map
