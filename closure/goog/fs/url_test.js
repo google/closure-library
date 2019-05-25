@@ -12,34 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.urlTest');
-goog.setTestOnly('goog.urlTest');
+goog.module('goog.urlTest');
+goog.setTestOnly();
 
-goog.require('goog.fs.url');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const testSuite = goog.require('goog.testing.testSuite');
+const url = goog.require('goog.fs.url');
 
-var stubs = new goog.testing.PropertyReplacer();
+const stubs = new PropertyReplacer();
 
-function testBrowserSupportsObjectUrls() {
-  stubs.remove(goog.global, 'URL');
-  stubs.remove(goog.global, 'webkitURL');
-  stubs.remove(goog.global, 'createObjectURL');
+testSuite({
+  testBrowserSupportsObjectUrls() {
+    stubs.remove(goog.global, 'URL');
+    stubs.remove(goog.global, 'webkitURL');
+    stubs.remove(goog.global, 'createObjectURL');
 
-  assertFalse(goog.fs.url.browserSupportsObjectUrls());
-  try {
-    goog.fs.url.createObjectUrl();
-    fail();
-  } catch (e) {
-    assertEquals('This browser doesn\'t seem to support blob URLs', e.message);
-  }
+    assertFalse(url.browserSupportsObjectUrls());
+    try {
+      url.createObjectUrl();
+      fail();
+    } catch (e) {
+      assertEquals(
+          'This browser doesn\'t seem to support blob URLs', e.message);
+    }
 
-  var objectUrl = {};
-  function createObjectURL() { return objectUrl; }
-  stubs.set(goog.global, 'createObjectURL', createObjectURL);
+    const objectUrl = {};
+    function createObjectURL() {
+      return objectUrl;
+    }
+    stubs.set(goog.global, 'createObjectURL', createObjectURL);
 
-  assertTrue(goog.fs.url.browserSupportsObjectUrls());
-  assertEquals(objectUrl, goog.fs.url.createObjectUrl());
+    assertTrue(url.browserSupportsObjectUrls());
+    assertEquals(objectUrl, url.createObjectUrl());
 
-  stubs.reset();
-}
+    stubs.reset();
+  },
+});

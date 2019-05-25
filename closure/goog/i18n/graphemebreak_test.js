@@ -12,123 +12,123 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.i18n.GraphemeBreakTest');
-goog.setTestOnly('goog.i18n.GraphemeBreakTest');
+goog.module('goog.i18n.GraphemeBreakTest');
+goog.setTestOnly();
 
-goog.require('goog.i18n.GraphemeBreak');
-goog.require('goog.i18n.uChar');
-goog.require('goog.testing.jsunit');
+const GraphemeBreak = goog.require('goog.i18n.GraphemeBreak');
+const testSuite = goog.require('goog.testing.testSuite');
+const uChar = goog.require('goog.i18n.uChar');
 
-/** @private @const {function(number):?string} */
-var fromCharCode_ = goog.i18n.uChar.fromCharCode;
+/** @const {function(number):?string} */
+const fromCharCode = uChar.fromCharCode;
 
-function testEmptyInput() {
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings('a', ''));
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings('', 'b'));
-}
+testSuite({
+  testEmptyInput() {
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings('a', ''));
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings('', 'b'));
+  },
 
-function testBreakNormalAscii() {
-  assertTrue(
-      goog.i18n.GraphemeBreak.hasGraphemeBreak(
-          'a'.charCodeAt(0), 'b'.charCodeAt(0), true));
+  testBreakNormalAscii() {
+    assertTrue(GraphemeBreak.hasGraphemeBreak(
+        'a'.charCodeAt(0), 'b'.charCodeAt(0), true));
 
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings('a', 'b', true));
-}
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings('a', 'b', true));
+  },
 
-function testBreakAsciiWithExtendedChar() {
-  assertFalse(
-      goog.i18n.GraphemeBreak.hasGraphemeBreak(
-          'a'.charCodeAt(0), 0x0300, true));
+  testBreakAsciiWithExtendedChar() {
+    assertFalse(
+        GraphemeBreak.hasGraphemeBreak('a'.charCodeAt(0), 0x0300, true));
 
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      'a', fromCharCode_(0x0300), true));
-}
+    assertFalse(
+        GraphemeBreak.hasGraphemeBreakStrings('a', fromCharCode(0x0300), true));
+  },
 
-function testBreakSurrogates() {
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xDA00, 0xDC00, true));
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xDBFF, 0xDFFF, true));
+  testBreakSurrogates() {
+    assertFalse(GraphemeBreak.hasGraphemeBreak(0xDA00, 0xDC00, true));
+    assertFalse(GraphemeBreak.hasGraphemeBreak(0xDBFF, 0xDFFF, true));
 
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0xDA00), fromCharCode_(0xDC00), true));
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0xDBFF), fromCharCode_(0xDFFF), true));
-}
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0xDA00), fromCharCode(0xDC00), true));
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0xDBFF), fromCharCode(0xDFFF), true));
+  },
 
-function testBreakHangLxL() {
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x1100, 0x1100, true));
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0x1100), fromCharCode_(0x1100), true));
-}
+  testBreakHangLxL() {
+    assertFalse(GraphemeBreak.hasGraphemeBreak(0x1100, 0x1100, true));
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0x1100), fromCharCode(0x1100), true));
+  },
 
-function testBreakHangL_T() {
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x1100, 0x11A8));
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0x1100), fromCharCode_(0x11A8)));
-}
+  testBreakHangL_T() {
+    assertTrue(GraphemeBreak.hasGraphemeBreak(0x1100, 0x11A8));
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0x1100), fromCharCode(0x11A8)));
+  },
 
-function testBreakHangLVxV() {
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xAC00, 0x1160, true));
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0xAC00), fromCharCode_(0x1160), true));
-}
+  testBreakHangLVxV() {
+    assertFalse(GraphemeBreak.hasGraphemeBreak(0xAC00, 0x1160, true));
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0xAC00), fromCharCode(0x1160), true));
+  },
 
-function testBreakHangLV_L() {
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xAC00, 0x1100, true));
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0xAC00), fromCharCode_(0x1100), true));
-}
+  testBreakHangLV_L() {
+    assertTrue(GraphemeBreak.hasGraphemeBreak(0xAC00, 0x1100, true));
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0xAC00), fromCharCode(0x1100), true));
+  },
 
-function testBreakHangLVTxT() {
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xAC01, 0x11A8, true));
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0xAC01), fromCharCode_(0x11A8), true));
-}
+  testBreakHangLVTxT() {
+    assertFalse(GraphemeBreak.hasGraphemeBreak(0xAC01, 0x11A8, true));
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0xAC01), fromCharCode(0x11A8), true));
+  },
 
-function testBreakThaiPrependLegacy() {
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x0E40, 0x0E01, false));
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0x0E40), fromCharCode_(0x0E01), false));
-}
+  testBreakThaiPrependLegacy() {
+    assertTrue(GraphemeBreak.hasGraphemeBreak(0x0E40, 0x0E01, false));
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0x0E40), fromCharCode(0x0E01), false));
+  },
 
-function testBreakThaiPrependExtended() {
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x0E40, 0x0E01, true));
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0x0E40), fromCharCode_(0x0E01), true));
-}
+  testBreakThaiPrependExtended() {
+    assertTrue(GraphemeBreak.hasGraphemeBreak(0x0E40, 0x0E01, true));
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0x0E40), fromCharCode(0x0E01), true));
+  },
 
-function testBreakDevaSpacingMarkLegacy() {
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x0915, 0x093E, false));
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0x0915), fromCharCode_(0x093E), false));
-}
+  testBreakDevaSpacingMarkLegacy() {
+    assertTrue(GraphemeBreak.hasGraphemeBreak(0x0915, 0x093E, false));
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0x0915), fromCharCode(0x093E), false));
+  },
 
-function testBreakDevaSpacingMarkExtended() {
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x0915, 0x093E, true));
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0x0915), fromCharCode_(0x093E), true));
-}
+  testBreakDevaSpacingMarkExtended() {
+    assertFalse(GraphemeBreak.hasGraphemeBreak(0x0915, 0x093E, true));
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0x0915), fromCharCode(0x093E), true));
+  },
 
-function testBreakDevaViramaSpace() {
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x094D, 0x0020));
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0x094D), fromCharCode_(0x0020)));
-}
+  testBreakDevaViramaSpace() {
+    assertTrue(GraphemeBreak.hasGraphemeBreak(0x094D, 0x0020));
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0x094D), fromCharCode(0x0020)));
+  },
 
-function testBreakDevaViramaConsonant() {
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x094D, 0x0915));
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      fromCharCode_(0x094D), fromCharCode_(0x0915)));
-}
+  testBreakDevaViramaConsonant() {
+    assertFalse(GraphemeBreak.hasGraphemeBreak(0x094D, 0x0915));
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings(
+        fromCharCode(0x094D), fromCharCode(0x0915)));
+  },
 
-function testEmojiSequences() {
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings('👦', '🏼'));
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings('👨\u200D', '🚒'));
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings('👨', '\u200D🚒'));
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings(
-      '🕵️‍♀️', '👨‍🚒'));
-}
+  testEmojiSequences() {
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings('👦', '🏼'));
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings('👨\u200D', '🚒'));
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings('👨', '\u200D🚒'));
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings(
+        '🕵️‍♀️', '👨‍🚒'));
+  },
 
-function testEmojiFlagSequences() {
-  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings('🇦🇨🇦', '🇨'));
-  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreakStrings('🇦🇨', '🇦🇨'));
-}
+  testEmojiFlagSequences() {
+    assertFalse(GraphemeBreak.hasGraphemeBreakStrings('🇦🇨🇦', '🇨'));
+    assertTrue(GraphemeBreak.hasGraphemeBreakStrings('🇦🇨', '🇦🇨'));
+  },
+});

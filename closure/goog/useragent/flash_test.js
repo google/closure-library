@@ -12,18 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.userAgent.flashTest');
-goog.setTestOnly('goog.userAgent.flashTest');
+goog.module('goog.userAgent.flashTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent.flash');
+const flash = goog.require('goog.userAgent.flash');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // For now, just test that the flash variables exist, the test runner will
 // pick up any runtime errors.
 // TODO(user): Mock out each browser implementation and test the code path
 // correctly detects the flash version for each case.
-function testFlash() {
-  assertNotUndefined(goog.userAgent.flash.HAS_FLASH);
-  assertNotUndefined(goog.userAgent.flash.VERSION);
-  assertEquals(typeof goog.userAgent.flash.isVersion('5'), 'boolean');
-}
+
+testSuite({
+  testFlash() {
+    assertNotUndefined(flash.HAS_FLASH);
+    assertNotUndefined(flash.VERSION);
+    assertEquals(typeof flash.isVersion('5'), 'boolean');
+  },
+});

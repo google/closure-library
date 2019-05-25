@@ -12,308 +12,332 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.fx.AnimationQueueTest');
-goog.setTestOnly('goog.fx.AnimationQueueTest');
+goog.module('goog.fx.AnimationQueueTest');
+goog.setTestOnly();
 
-goog.require('goog.events');
-goog.require('goog.fx.Animation');
-goog.require('goog.fx.AnimationParallelQueue');
-goog.require('goog.fx.AnimationSerialQueue');
-goog.require('goog.fx.Transition');
-goog.require('goog.fx.anim');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
+const Animation = goog.require('goog.fx.Animation');
+const AnimationParallelQueue = goog.require('goog.fx.AnimationParallelQueue');
+const AnimationSerialQueue = goog.require('goog.fx.AnimationSerialQueue');
+const MockClock = goog.require('goog.testing.MockClock');
+const Transition = goog.require('goog.fx.Transition');
+const events = goog.require('goog.events');
+const fxAnim = goog.require('goog.fx.anim');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var clock;
+let clock;
 
-function setUpPage() {
-  clock = new goog.testing.MockClock(true);
-  goog.fx.anim.setAnimationWindow(null);
-}
+testSuite({
+  setUpPage() {
+    clock = new MockClock(true);
+    fxAnim.setAnimationWindow(null);
+  },
 
-function tearDownPage() {
-  clock.dispose();
-}
+  tearDownPage() {
+    clock.dispose();
+  },
 
-function testParallelEvents() {
-  var anim = new goog.fx.AnimationParallelQueue();
-  anim.add(new goog.fx.Animation([0], [100], 200));
-  anim.add(new goog.fx.Animation([0], [100], 400));
-  anim.add(new goog.fx.Animation([0], [100], 600));
+  testParallelEvents() {
+    const anim = new AnimationParallelQueue();
+    anim.add(new Animation([0], [100], 200));
+    anim.add(new Animation([0], [100], 400));
+    anim.add(new Animation([0], [100], 600));
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isStopped());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isStopped());
 
-  var playEvents = 0, beginEvents = 0, resumeEvents = 0, pauseEvents = 0;
-  var endEvents = 0, stopEvents = 0, finishEvents = 0;
+    let beginEvents = 0;
+    let pauseEvents = 0;
+    let playEvents = 0;
+    let resumeEvents = 0;
 
-  goog.events.listen(
-      anim, goog.fx.Transition.EventType.PLAY, function() { ++playEvents; });
-  goog.events.listen(
-      anim, goog.fx.Transition.EventType.BEGIN, function() { ++beginEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.RESUME, function() {
-    ++resumeEvents;
-  });
-  goog.events.listen(
-      anim, goog.fx.Transition.EventType.PAUSE, function() { ++pauseEvents; });
-  goog.events.listen(
-      anim, goog.fx.Transition.EventType.END, function() { ++endEvents; });
-  goog.events.listen(
-      anim, goog.fx.Transition.EventType.STOP, function() { ++stopEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.FINISH, function() {
-    ++finishEvents;
-  });
+    let endEvents = 0;
+    let finishEvents = 0;
+    let stopEvents = 0;
 
-  // PLAY, BEGIN
-  anim.play();
-  // No queue events.
-  clock.tick(100);
-  // PAUSE
-  anim.pause();
-  // No queue events
-  clock.tick(200);
-  // PLAY, RESUME
-  anim.play();
-  // No queue events.
-  clock.tick(400);
-  // END, STOP
-  anim.stop();
-  // PLAY, BEGIN
-  anim.play();
-  // No queue events.
-  clock.tick(400);
-  // END, FINISH
-  clock.tick(200);
+    events.listen(anim, Transition.EventType.PLAY, () => {
+      ++playEvents;
+    });
+    events.listen(anim, Transition.EventType.BEGIN, () => {
+      ++beginEvents;
+    });
+    events.listen(anim, Transition.EventType.RESUME, () => {
+      ++resumeEvents;
+    });
+    events.listen(anim, Transition.EventType.PAUSE, () => {
+      ++pauseEvents;
+    });
+    events.listen(anim, Transition.EventType.END, () => {
+      ++endEvents;
+    });
+    events.listen(anim, Transition.EventType.STOP, () => {
+      ++stopEvents;
+    });
+    events.listen(anim, Transition.EventType.FINISH, () => {
+      ++finishEvents;
+    });
 
-  // Make sure the event counts are right.
-  assertEquals(3, playEvents);
-  assertEquals(2, beginEvents);
-  assertEquals(1, resumeEvents);
-  assertEquals(1, pauseEvents);
-  assertEquals(2, endEvents);
-  assertEquals(1, stopEvents);
-  assertEquals(1, finishEvents);
-}
+    // PLAY, BEGIN
+    anim.play();
+    // No queue events.
+    clock.tick(100);
+    // PAUSE
+    anim.pause();
+    // No queue events
+    clock.tick(200);
+    // PLAY, RESUME
+    anim.play();
+    // No queue events.
+    clock.tick(400);
+    // END, STOP
+    anim.stop();
+    // PLAY, BEGIN
+    anim.play();
+    // No queue events.
+    clock.tick(400);
+    // END, FINISH
+    clock.tick(200);
 
-function testSerialEvents() {
-  var anim = new goog.fx.AnimationSerialQueue();
-  anim.add(new goog.fx.Animation([0], [100], 100));
-  anim.add(new goog.fx.Animation([0], [100], 200));
-  anim.add(new goog.fx.Animation([0], [100], 300));
+    // Make sure the event counts are right.
+    assertEquals(3, playEvents);
+    assertEquals(2, beginEvents);
+    assertEquals(1, resumeEvents);
+    assertEquals(1, pauseEvents);
+    assertEquals(2, endEvents);
+    assertEquals(1, stopEvents);
+    assertEquals(1, finishEvents);
+  },
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isStopped());
+  testSerialEvents() {
+    const anim = new AnimationSerialQueue();
+    anim.add(new Animation([0], [100], 100));
+    anim.add(new Animation([0], [100], 200));
+    anim.add(new Animation([0], [100], 300));
 
-  var playEvents = 0, beginEvents = 0, resumeEvents = 0, pauseEvents = 0;
-  var endEvents = 0, stopEvents = 0, finishEvents = 0;
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isStopped());
 
-  goog.events.listen(
-      anim, goog.fx.Transition.EventType.PLAY, function() { ++playEvents; });
-  goog.events.listen(
-      anim, goog.fx.Transition.EventType.BEGIN, function() { ++beginEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.RESUME, function() {
-    ++resumeEvents;
-  });
-  goog.events.listen(
-      anim, goog.fx.Transition.EventType.PAUSE, function() { ++pauseEvents; });
-  goog.events.listen(
-      anim, goog.fx.Transition.EventType.END, function() { ++endEvents; });
-  goog.events.listen(
-      anim, goog.fx.Transition.EventType.STOP, function() { ++stopEvents; });
-  goog.events.listen(anim, goog.fx.Transition.EventType.FINISH, function() {
-    ++finishEvents;
-  });
+    let beginEvents = 0;
+    let pauseEvents = 0;
+    let playEvents = 0;
+    let resumeEvents = 0;
 
-  // PLAY, BEGIN
-  anim.play();
-  // No queue events.
-  clock.tick(100);
-  // PAUSE
-  anim.pause();
-  // No queue events
-  clock.tick(200);
-  // PLAY, RESUME
-  anim.play();
-  // No queue events.
-  clock.tick(400);
-  // END, STOP
-  anim.stop();
-  // PLAY, BEGIN
-  anim.play(true);
-  // No queue events.
-  clock.tick(400);
-  // END, FINISH
-  clock.tick(200);
+    let endEvents = 0;
+    let finishEvents = 0;
+    let stopEvents = 0;
 
-  // Make sure the event counts are right.
-  assertEquals(3, playEvents);
-  assertEquals(2, beginEvents);
-  assertEquals(1, resumeEvents);
-  assertEquals(1, pauseEvents);
-  assertEquals(2, endEvents);
-  assertEquals(1, stopEvents);
-  assertEquals(1, finishEvents);
-}
+    events.listen(anim, Transition.EventType.PLAY, () => {
+      ++playEvents;
+    });
+    events.listen(anim, Transition.EventType.BEGIN, () => {
+      ++beginEvents;
+    });
+    events.listen(anim, Transition.EventType.RESUME, () => {
+      ++resumeEvents;
+    });
+    events.listen(anim, Transition.EventType.PAUSE, () => {
+      ++pauseEvents;
+    });
+    events.listen(anim, Transition.EventType.END, () => {
+      ++endEvents;
+    });
+    events.listen(anim, Transition.EventType.STOP, () => {
+      ++stopEvents;
+    });
+    events.listen(anim, Transition.EventType.FINISH, () => {
+      ++finishEvents;
+    });
 
-function testParallelPause() {
-  var anim = new goog.fx.AnimationParallelQueue();
-  anim.add(new goog.fx.Animation([0], [100], 100));
-  anim.add(new goog.fx.Animation([0], [100], 200));
-  anim.add(new goog.fx.Animation([0], [100], 300));
+    // PLAY, BEGIN
+    anim.play();
+    // No queue events.
+    clock.tick(100);
+    // PAUSE
+    anim.pause();
+    // No queue events
+    clock.tick(200);
+    // PLAY, RESUME
+    anim.play();
+    // No queue events.
+    clock.tick(400);
+    // END, STOP
+    anim.stop();
+    // PLAY, BEGIN
+    anim.play(true);
+    // No queue events.
+    clock.tick(400);
+    // END, FINISH
+    clock.tick(200);
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isStopped());
+    // Make sure the event counts are right.
+    assertEquals(3, playEvents);
+    assertEquals(2, beginEvents);
+    assertEquals(1, resumeEvents);
+    assertEquals(1, pauseEvents);
+    assertEquals(2, endEvents);
+    assertEquals(1, stopEvents);
+    assertEquals(1, finishEvents);
+  },
 
-  anim.play();
+  testParallelPause() {
+    const anim = new AnimationParallelQueue();
+    anim.add(new Animation([0], [100], 100));
+    anim.add(new Animation([0], [100], 200));
+    anim.add(new Animation([0], [100], 300));
 
-  assertTrue(anim.queue[0].isPlaying());
-  assertTrue(anim.queue[1].isPlaying());
-  assertTrue(anim.queue[2].isPlaying());
-  assertTrue(anim.isPlaying());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isStopped());
 
-  clock.tick(100);
+    anim.play();
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isPlaying());
-  assertTrue(anim.queue[2].isPlaying());
-  assertTrue(anim.isPlaying());
+    assertTrue(anim.queue[0].isPlaying());
+    assertTrue(anim.queue[1].isPlaying());
+    assertTrue(anim.queue[2].isPlaying());
+    assertTrue(anim.isPlaying());
 
-  anim.pause();
+    clock.tick(100);
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isPaused());
-  assertTrue(anim.queue[2].isPaused());
-  assertTrue(anim.isPaused());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isPlaying());
+    assertTrue(anim.queue[2].isPlaying());
+    assertTrue(anim.isPlaying());
 
-  clock.tick(200);
+    anim.pause();
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isPaused());
-  assertTrue(anim.queue[2].isPaused());
-  assertTrue(anim.isPaused());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isPaused());
+    assertTrue(anim.queue[2].isPaused());
+    assertTrue(anim.isPaused());
 
-  anim.play();
+    clock.tick(200);
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isPlaying());
-  assertTrue(anim.queue[2].isPlaying());
-  assertTrue(anim.isPlaying());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isPaused());
+    assertTrue(anim.queue[2].isPaused());
+    assertTrue(anim.isPaused());
 
-  clock.tick(100);
+    anim.play();
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isPlaying());
-  assertTrue(anim.isPlaying());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isPlaying());
+    assertTrue(anim.queue[2].isPlaying());
+    assertTrue(anim.isPlaying());
 
-  anim.pause();
+    clock.tick(100);
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isPaused());
-  assertTrue(anim.isPaused());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isPlaying());
+    assertTrue(anim.isPlaying());
 
-  clock.tick(200);
+    anim.pause();
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isPaused());
-  assertTrue(anim.isPaused());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isPaused());
+    assertTrue(anim.isPaused());
 
-  anim.play();
+    clock.tick(200);
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isPlaying());
-  assertTrue(anim.isPlaying());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isPaused());
+    assertTrue(anim.isPaused());
 
-  clock.tick(100);
+    anim.play();
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isStopped());
-}
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isPlaying());
+    assertTrue(anim.isPlaying());
 
-function testSerialPause() {
-  var anim = new goog.fx.AnimationSerialQueue();
-  anim.add(new goog.fx.Animation([0], [100], 100));
-  anim.add(new goog.fx.Animation([0], [100], 200));
-  anim.add(new goog.fx.Animation([0], [100], 300));
+    clock.tick(100);
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isStopped());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isStopped());
+  },
 
-  anim.play();
+  testSerialPause() {
+    const anim = new AnimationSerialQueue();
+    anim.add(new Animation([0], [100], 100));
+    anim.add(new Animation([0], [100], 200));
+    anim.add(new Animation([0], [100], 300));
 
-  assertTrue(anim.queue[0].isPlaying());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isPlaying());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isStopped());
 
-  clock.tick(100);
+    anim.play();
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isPlaying());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isPlaying());
+    assertTrue(anim.queue[0].isPlaying());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isPlaying());
 
-  anim.pause();
+    clock.tick(100);
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isPaused());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isPaused());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isPlaying());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isPlaying());
 
-  clock.tick(400);
+    anim.pause();
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isPaused());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isPaused());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isPaused());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isPaused());
 
-  anim.play();
+    clock.tick(400);
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isPlaying());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isPlaying());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isPaused());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isPaused());
 
-  clock.tick(200);
+    anim.play();
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isPlaying());
-  assertTrue(anim.isPlaying());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isPlaying());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isPlaying());
 
-  anim.pause();
+    clock.tick(200);
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isPaused());
-  assertTrue(anim.isPaused());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isPlaying());
+    assertTrue(anim.isPlaying());
 
-  clock.tick(300);
+    anim.pause();
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isPaused());
-  assertTrue(anim.isPaused());
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isPaused());
+    assertTrue(anim.isPaused());
 
-  anim.play();
+    clock.tick(300);
 
-  clock.tick(300);
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isPaused());
+    assertTrue(anim.isPaused());
 
-  assertTrue(anim.queue[0].isStopped());
-  assertTrue(anim.queue[1].isStopped());
-  assertTrue(anim.queue[2].isStopped());
-  assertTrue(anim.isStopped());
-}
+    anim.play();
+
+    clock.tick(300);
+
+    assertTrue(anim.queue[0].isStopped());
+    assertTrue(anim.queue[1].isStopped());
+    assertTrue(anim.queue[2].isStopped());
+    assertTrue(anim.isStopped());
+  },
+});

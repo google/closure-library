@@ -12,38 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.TestRunnerTest');
+goog.module('goog.testing.TestRunnerTest');
 goog.setTestOnly();
 
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.TestRunner');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
-
+const TestCase = goog.require('goog.testing.TestCase');
+const TestRunner = goog.require('goog.testing.TestRunner');
+const asserts = goog.require('goog.testing.asserts');
+const testSuite = goog.require('goog.testing.testSuite');
 
 let testRunner;
 let testCase;
 
-function setUp() {
-  testRunner = new goog.testing.TestRunner();
-  testCase = new goog.testing.TestCase();
-}
+testSuite({
+  setUp() {
+    testRunner = new TestRunner();
+    testCase = new TestCase();
+  },
 
-function testInitialize() {
-  assert(!testRunner.isInitialized());
-  testRunner.initialize(testCase);
-  assert(testRunner.isInitialized());
-}
+  testInitialize() {
+    assert(!testRunner.isInitialized());
+    testRunner.initialize(testCase);
+    assert(testRunner.isInitialized());
+  },
 
-function testIsFinished() {
-  testRunner.initialize(testCase);
-  assert(!testRunner.isFinished());
-  testRunner.logError('oops');
-  assert(testRunner.isFinished());
-}
+  testIsFinished() {
+    testRunner.initialize(testCase);
+    assert(!testRunner.isFinished());
+    testRunner.logError('oops');
+    assert(testRunner.isFinished());
+  },
 
-function testGetUniqueId() {
-  // We only really care that this string is unique to instances.
-  const anotherRunner = new goog.testing.TestRunner();
-  assert(anotherRunner.getUniqueId() != testRunner.getUniqueId());
-}
+  testGetUniqueId() {
+    // We only really care that this string is unique to instances.
+    const anotherRunner = new TestRunner();
+    assert(anotherRunner.getUniqueId() != testRunner.getUniqueId());
+  },
+});

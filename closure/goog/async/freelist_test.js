@@ -12,67 +12,69 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.async.FreeListTest');
-goog.setTestOnly('goog.async.FreeListTest');
+goog.module('goog.async.FreeListTest');
+goog.setTestOnly();
 
-goog.require('goog.async.FreeList');
-goog.require('goog.testing.jsunit');
+const FreeList = goog.require('goog.async.FreeList');
+const testSuite = goog.require('goog.testing.testSuite');
 
+let id = 0;
+let list = null;
 
-var id = 0;
-var list = null;
+testSuite({
+  setUp() {
+    let id = 0;
+    let data = 1;
+    list = new FreeList(
+        () => {
+          data *= 2;
+          return {id: id++, data: data, next: null};
+        },
+        (item) => {
+          item.data = null;
+        },
+        2);  // max occupancy
+  },
 
-function setUp() {
-  var id = 0;
-  var data = 1;
-  list = new goog.async.FreeList(
-      function() {
-        data *= 2;
-        return {id: id++, data: data, next: null};
-      },
-      function(item) { item.data = null; },
-      2);  // max occupancy
-}
+  tearDown() {
+    list = null;
+  },
 
+  testItemsCreatedAsNeeded() {
+    assertEquals(0, list.occupants());
+    const item1 = list.get();
+    assertNotNullNorUndefined(item1);
+    const item2 = list.get();
+    assertNotNullNorUndefined(item2);
+    assertNotEquals(item1, item2);
+    assertEquals(0, list.occupants());
+  },
 
-function tearDown() {
-  list = null;
-}
+  testMaxOccupancy() {
+    assertEquals(0, list.occupants());
+    const item1 = list.get();
+    const item2 = list.get();
+    const item3 = list.get();
 
-function testItemsCreatedAsNeeded() {
-  assertEquals(0, list.occupants());
-  var item1 = list.get();
-  assertNotNullNorUndefined(item1);
-  var item2 = list.get();
-  assertNotNullNorUndefined(item2);
-  assertNotEquals(item1, item2);
-  assertEquals(0, list.occupants());
-}
+    list.put(item1);
+    list.put(item2);
+    list.put(item3);
 
-function testMaxOccupancy() {
-  assertEquals(0, list.occupants());
-  var item1 = list.get();
-  var item2 = list.get();
-  var item3 = list.get();
+    assertEquals(2, list.occupants());
+  },
 
-  list.put(item1);
-  list.put(item2);
-  list.put(item3);
+  testRecycling() {
+    assertEquals(0, list.occupants());
+    const item1 = list.get();
+    assertNotNull(item1.data);
 
-  assertEquals(2, list.occupants());
-}
+    list.put(item1);
 
-function testRecycling() {
-  assertEquals(0, list.occupants());
-  var item1 = list.get();
-  assertNotNull(item1.data);
+    const item2 = list.get();
 
-  list.put(item1);
-
-  var item2 = list.get();
-
-  // Item recycled
-  assertEquals(item1, item2);
-  // reset method called
-  assertNull(item2.data);
-}
+    // Item recycled
+    assertEquals(item1, item2);
+    // reset method called
+    assertNull(item2.data);
+  },
+});

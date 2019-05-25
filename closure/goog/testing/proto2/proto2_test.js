@@ -12,143 +12,140 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.proto2Test');
-goog.setTestOnly('goog.testing.proto2Test');
+goog.module('goog.testing.proto2Test');
+goog.setTestOnly();
 
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.proto2');
-goog.require('proto2.TestAllTypes');
+const TestAllTypes = goog.require('proto2.TestAllTypes');
+const TestCase = goog.require('goog.testing.TestCase');
+const proto2 = goog.require('goog.testing.proto2');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function setUp() {
-  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-}
+testSuite({
+  setUp() {
+    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+  },
 
-function testAssertEquals() {
-  var assertProto2Equals = goog.testing.proto2.assertEquals;
-  assertProto2Equals(new proto2.TestAllTypes, new proto2.TestAllTypes);
-  assertProto2Equals(new proto2.TestAllTypes, new proto2.TestAllTypes, 'oops');
+  testAssertEquals() {
+    const assertProto2Equals = proto2.assertEquals;
+    assertProto2Equals(new TestAllTypes, new TestAllTypes);
+    assertProto2Equals(new TestAllTypes, new TestAllTypes, 'oops');
 
-  var ex = assertThrows(
-      goog.partial(
-          assertProto2Equals, new proto2.TestAllTypes,
-          new proto2.TestAllTypes.NestedMessage));
-  assertEquals(
-      'Message type mismatch: TestAllTypes != TestAllTypes.NestedMessage',
-      ex.message);
+    let ex = assertThrows(goog.partial(
+        assertProto2Equals, new TestAllTypes, new TestAllTypes.NestedMessage));
+    assertEquals(
+        'Message type mismatch: TestAllTypes != TestAllTypes.NestedMessage',
+        ex.message);
 
-  var message = new proto2.TestAllTypes;
-  message.setOptionalInt32(1);
-  ex = assertThrows(
-      goog.partial(assertProto2Equals, new proto2.TestAllTypes, message));
-  assertEquals('optional_int32 should not be present', ex.message);
+    const message = new TestAllTypes;
+    message.setOptionalInt32(1);
+    ex = assertThrows(
+        goog.partial(assertProto2Equals, new TestAllTypes, message));
+    assertEquals('optional_int32 should not be present', ex.message);
 
-  ex = assertThrows(
-      goog.partial(
-          assertProto2Equals, new proto2.TestAllTypes, message, 'oops'));
-  assertEquals('oops\noptional_int32 should not be present', ex.message);
-}
+    ex = assertThrows(
+        goog.partial(assertProto2Equals, new TestAllTypes, message, 'oops'));
+    assertEquals('oops\noptional_int32 should not be present', ex.message);
+  },
 
-function testFindDifferences_EmptyMessages() {
-  assertEquals(
-      '', goog.testing.proto2.findDifferences_(
-              new proto2.TestAllTypes, new proto2.TestAllTypes, ''));
-}
+  testFindDifferences_EmptyMessages() {
+    assertEquals(
+        '', proto2.findDifferences_(new TestAllTypes, new TestAllTypes, ''));
+  },
 
-function testFindDifferences_FieldNotPresent() {
-  var message = new proto2.TestAllTypes;
-  message.setOptionalInt32(0);
-  var empty = new proto2.TestAllTypes;
-  assertEquals(
-      'optional_int32 should not be present',
-      goog.testing.proto2.findDifferences_(empty, message, ''));
-  assertEquals(
-      'optional_int32 should be present',
-      goog.testing.proto2.findDifferences_(message, empty, ''));
-  assertEquals(
-      'path/optional_int32 should be present',
-      goog.testing.proto2.findDifferences_(message, empty, 'path'));
-}
+  testFindDifferences_FieldNotPresent() {
+    const message = new TestAllTypes;
+    message.setOptionalInt32(0);
+    const empty = new TestAllTypes;
+    assertEquals(
+        'optional_int32 should not be present',
+        proto2.findDifferences_(empty, message, ''));
+    assertEquals(
+        'optional_int32 should be present',
+        proto2.findDifferences_(message, empty, ''));
+    assertEquals(
+        'path/optional_int32 should be present',
+        proto2.findDifferences_(message, empty, 'path'));
+  },
 
-function testFindDifferences_IntFieldDiffers() {
-  var message1 = new proto2.TestAllTypes;
-  message1.setOptionalInt32(1);
-  var message2 = new proto2.TestAllTypes;
-  message2.setOptionalInt32(2);
-  assertEquals(
-      'optional_int32 should be 1, but was 2',
-      goog.testing.proto2.findDifferences_(message1, message2, ''));
-}
+  testFindDifferences_IntFieldDiffers() {
+    const message1 = new TestAllTypes;
+    message1.setOptionalInt32(1);
+    const message2 = new TestAllTypes;
+    message2.setOptionalInt32(2);
+    assertEquals(
+        'optional_int32 should be 1, but was 2',
+        proto2.findDifferences_(message1, message2, ''));
+  },
 
-function testFindDifferences_NestedIntFieldDiffers() {
-  var message1 = new proto2.TestAllTypes;
-  var nested1 = new proto2.TestAllTypes.NestedMessage();
-  nested1.setB(1);
-  message1.setOptionalNestedMessage(nested1);
-  var message2 = new proto2.TestAllTypes;
-  var nested2 = new proto2.TestAllTypes.NestedMessage();
-  nested2.setB(2);
-  message2.setOptionalNestedMessage(nested2);
-  assertEquals(
-      'optional_nested_message/b should be 1, but was 2',
-      goog.testing.proto2.findDifferences_(message1, message2, ''));
-}
+  testFindDifferences_NestedIntFieldDiffers() {
+    const message1 = new TestAllTypes;
+    const nested1 = new TestAllTypes.NestedMessage();
+    nested1.setB(1);
+    message1.setOptionalNestedMessage(nested1);
+    const message2 = new TestAllTypes;
+    const nested2 = new TestAllTypes.NestedMessage();
+    nested2.setB(2);
+    message2.setOptionalNestedMessage(nested2);
+    assertEquals(
+        'optional_nested_message/b should be 1, but was 2',
+        proto2.findDifferences_(message1, message2, ''));
+  },
 
-function testFindDifferences_RepeatedFieldLengthDiffers() {
-  var message1 = new proto2.TestAllTypes;
-  message1.addRepeatedInt32(1);
-  var message2 = new proto2.TestAllTypes;
-  message2.addRepeatedInt32(1);
-  message2.addRepeatedInt32(2);
-  assertEquals(
-      'repeated_int32 should have 1 items, but has 2',
-      goog.testing.proto2.findDifferences_(message1, message2, ''));
-}
+  testFindDifferences_RepeatedFieldLengthDiffers() {
+    const message1 = new TestAllTypes;
+    message1.addRepeatedInt32(1);
+    const message2 = new TestAllTypes;
+    message2.addRepeatedInt32(1);
+    message2.addRepeatedInt32(2);
+    assertEquals(
+        'repeated_int32 should have 1 items, but has 2',
+        proto2.findDifferences_(message1, message2, ''));
+  },
 
-function testFindDifferences_RepeatedFieldItemDiffers() {
-  var message1 = new proto2.TestAllTypes;
-  message1.addRepeatedInt32(1);
-  var message2 = new proto2.TestAllTypes;
-  message2.addRepeatedInt32(2);
-  assertEquals(
-      'repeated_int32[0] should be 1, but was 2',
-      goog.testing.proto2.findDifferences_(message1, message2, ''));
-}
+  testFindDifferences_RepeatedFieldItemDiffers() {
+    const message1 = new TestAllTypes;
+    message1.addRepeatedInt32(1);
+    const message2 = new TestAllTypes;
+    message2.addRepeatedInt32(2);
+    assertEquals(
+        'repeated_int32[0] should be 1, but was 2',
+        proto2.findDifferences_(message1, message2, ''));
+  },
 
-function testFindDifferences_RepeatedNestedMessageDiffers() {
-  var message1 = new proto2.TestAllTypes;
-  var nested1 = new proto2.TestAllTypes.NestedMessage();
-  nested1.setB(1);
-  message1.addRepeatedNestedMessage(nested1);
-  var message2 = new proto2.TestAllTypes;
-  var nested2 = new proto2.TestAllTypes.NestedMessage();
-  nested2.setB(2);
-  message2.addRepeatedNestedMessage(nested2);
-  assertEquals(
-      'repeated_nested_message[0]/b should be 1, but was 2',
-      goog.testing.proto2.findDifferences_(message1, message2, ''));
-}
+  testFindDifferences_RepeatedNestedMessageDiffers() {
+    const message1 = new TestAllTypes;
+    const nested1 = new TestAllTypes.NestedMessage();
+    nested1.setB(1);
+    message1.addRepeatedNestedMessage(nested1);
+    const message2 = new TestAllTypes;
+    const nested2 = new TestAllTypes.NestedMessage();
+    nested2.setB(2);
+    message2.addRepeatedNestedMessage(nested2);
+    assertEquals(
+        'repeated_nested_message[0]/b should be 1, but was 2',
+        proto2.findDifferences_(message1, message2, ''));
+  },
 
-function testFromObject() {
-  var nested = new proto2.TestAllTypes.NestedMessage();
-  nested.setB(1);
-  var message = new proto2.TestAllTypes;
-  message.addRepeatedNestedMessage(nested);
-  message.setOptionalInt32(2);
-  // Successfully deserializes simple as well as message fields.
-  assertObjectEquals(
-      message,
-      goog.testing.proto2.fromObject(
-          proto2.TestAllTypes,
-          {'optional_int32': 2, 'repeated_nested_message': [{'b': 1}]}));
-  // Fails if the field name is not recognized.
-  assertThrows(function() {
-    goog.testing.proto2.fromObject(proto2.TestAllTypes, {'unknown': 1});
-  });
-  // Fails if the value type is wrong in the JSON object.
-  assertThrows(function() {
-    goog.testing.proto2.fromObject(
-        proto2.TestAllTypes, {'optional_int32': '1'});
-  });
-}
+  testFromObject() {
+    const nested = new TestAllTypes.NestedMessage();
+    nested.setB(1);
+    const message = new TestAllTypes;
+    message.addRepeatedNestedMessage(nested);
+    message.setOptionalInt32(2);
+    // Successfully deserializes simple as well as message fields.
+    assertObjectEquals(
+        message,
+        proto2.fromObject(
+            TestAllTypes,
+            {'optional_int32': 2, 'repeated_nested_message': [{'b': 1}]}));
+    // Fails if the field name is not recognized.
+    assertThrows(() => {
+      proto2.fromObject(TestAllTypes, {'unknown': 1});
+    });
+    // Fails if the value type is wrong in the JSON object.
+    assertThrows(() => {
+      proto2.fromObject(TestAllTypes, {'optional_int32': '1'});
+    });
+  },
+});

@@ -12,64 +12,71 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.ui.styleTest');
-goog.setTestOnly('goog.testing.ui.styleTest');
+goog.module('goog.testing.ui.styleTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.ui.style');
+const TestCase = goog.require('goog.testing.TestCase');
+const dom = goog.require('goog.dom');
+const style = goog.require('goog.testing.ui.style');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // Write iFrame tag to load reference FastUI markup. Then, our tests will
 // compare the generated markup to the reference markup.
-var refPath = 'style_reference.html';
-goog.testing.ui.style.writeReferenceFrame(refPath);
-
-function setUp() {
-  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-}
+const refPath = 'style_reference.html';
+style.writeReferenceFrame(refPath);
 
 // assertStructureMatchesReference should succeed if the structure, node
 // names, and classes match.
-function testCorrect() {
-  var el = goog.dom.getFirstElementChild(goog.dom.getElement('correct'));
-  goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
-}
 
 // assertStructureMatchesReference should fail if one of the nodes is
 // missing a class.
-function testMissingClass() {
-  var el = goog.dom.getFirstElementChild(goog.dom.getElement('missing-class'));
-  var e = assertThrows(function() {
-    goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
-  });
-  assertContains('all reference classes', e.message);
-}
 
 // assertStructureMatchesReference should NOT fail if one of the nodes has
 // an additional class.
-function testExtraClass() {
-  var el = goog.dom.getFirstElementChild(goog.dom.getElement('extra-class'));
-  goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
-}
 
 // assertStructureMatchesReference should fail if there is a missing child
 // node somewhere in the DOM structure.
-function testMissingChild() {
-  var el = goog.dom.getFirstElementChild(goog.dom.getElement('missing-child'));
-  var e = assertThrows(function() {
-    goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
-  });
-  assertContains('same number of children', e.message);
-}
 
 // assertStructureMatchesReference should fail if there is an extra child
 // node somewhere in the DOM structure.
-function testExtraChild() {
-  var el = goog.dom.getFirstElementChild(goog.dom.getElement('extra-child'));
-  var e = assertThrows(function() {
-    goog.testing.ui.style.assertStructureMatchesReference(el, 'reference');
-  });
-  assertContains('same number of children', e.message);
-}
+
+testSuite({
+  setUp() {
+    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
+  },
+
+  testCorrect() {
+    const el = dom.getFirstElementChild(dom.getElement('correct'));
+    style.assertStructureMatchesReference(el, 'reference');
+  },
+
+  testMissingClass() {
+    const el = dom.getFirstElementChild(dom.getElement('missing-class'));
+    const e = assertThrows(() => {
+      style.assertStructureMatchesReference(el, 'reference');
+    });
+    assertContains('all reference classes', e.message);
+  },
+
+  testExtraClass() {
+    const el = dom.getFirstElementChild(dom.getElement('extra-class'));
+    style.assertStructureMatchesReference(el, 'reference');
+  },
+
+  testMissingChild() {
+    const el = dom.getFirstElementChild(dom.getElement('missing-child'));
+    const e = assertThrows(() => {
+      style.assertStructureMatchesReference(el, 'reference');
+    });
+    assertContains('same number of children', e.message);
+  },
+
+  testExtraChild() {
+    const el = dom.getFirstElementChild(dom.getElement('extra-child'));
+    const e = assertThrows(() => {
+      style.assertStructureMatchesReference(el, 'reference');
+    });
+    assertContains('same number of children', e.message);
+  },
+});

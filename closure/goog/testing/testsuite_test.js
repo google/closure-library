@@ -12,31 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.testSuiteTest');
+goog.module('goog.testing.testSuiteTest');
 goog.setTestOnly();
+
 /** @suppress {extraRequire} */
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.testSuite');
+const TestCase = goog.require('goog.testing.TestCase');
+const asserts = goog.require('goog.testing.asserts');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var calls;
-function setUp() {
-  calls = 0;
-  goog.testing.TestCase.initializeTestRunner = function() {
-    calls++;
-  };
-  goog.testing.testSuite.initialized_ = false;
-}
+let calls;
 
-function testTestSuiteInitializesRunner() {
-  goog.testing.testSuite({testOne: function() {}});
-  assert(calls == 1);
-}
+testSuite({
+  setUp() {
+    calls = 0;
+    TestCase.initializeTestRunner = () => {
+      calls++;
+    };
+    testSuite.initialized_ = false;
+  },
 
-function testTestSuiteInitializesRunnerThrowsOnSecondCall() {
-  goog.testing.testSuite({testOne: function() {}});
-  assertThrows(function() {
-    goog.testing.testSuite({testTwo: function() {}});
-  });
-}
+  testTestSuiteInitializesRunner() {
+    testSuite({testOne: function() {}});
+    assert(calls == 1);
+  },
+
+  testTestSuiteInitializesRunnerThrowsOnSecondCall() {
+    testSuite({testOne: function() {}});
+    assertThrows(() => {
+      testSuite({testTwo: function() {}});
+    });
+  },
+});

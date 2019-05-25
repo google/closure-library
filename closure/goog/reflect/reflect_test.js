@@ -12,35 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.reflectTest');
-goog.setTestOnly('goog.reflectTest');
+goog.module('goog.reflectTest');
+goog.setTestOnly();
 
-goog.require('goog.object');
-goog.require('goog.reflect');
-goog.require('goog.testing.jsunit');
-
-
+const googObject = goog.require('goog.object');
+const reflect = goog.require('goog.reflect');
+const testSuite = goog.require('goog.testing.testSuite');
 
 /**
  * @param {number} key
  * @return {number}
  */
-var doubleFn = function(key) {
-  return key * 2;
-};
+const doubleFn = (key) => key * 2;
 
 /**
  * @param {number} key
  * @return {number}
  */
-var tripleFn = function(key) {
-  return key * 3;
-};
+const tripleFn = (key) => key * 3;
 
-/**
- * @param {number} key
- */
-var throwsFn = function(key) {
+/** @param {number} key */
+const throwsFn = (key) => {
   throw new Error("Shouldn't be called.");
 };
 
@@ -48,49 +40,49 @@ var throwsFn = function(key) {
  * @param {string} key
  * @return {string}
  */
-var passthroughFn = function(key) {
-  return key;
-};
+const passthroughFn = (key) => key;
 
-function testCache() {
-  var cacheObj = {};
+testSuite({
+  testCache() {
+    const cacheObj = {};
 
-  assertEquals(2, goog.reflect.cache(cacheObj, 1, doubleFn));
-  assertEquals(2, cacheObj[1]);
-  assertEquals(1, goog.object.getCount(cacheObj));
+    assertEquals(2, reflect.cache(cacheObj, 1, doubleFn));
+    assertEquals(2, cacheObj[1]);
+    assertEquals(1, googObject.getCount(cacheObj));
 
-  // Ensure we get the same value with a different valueFn.
-  assertEquals(2, goog.reflect.cache(cacheObj, 1, throwsFn));
-  assertEquals(2, cacheObj[1]);
-  assertEquals(1, goog.object.getCount(cacheObj));
+    // Ensure we get the same value with a different valueFn.
+    assertEquals(2, reflect.cache(cacheObj, 1, throwsFn));
+    assertEquals(2, cacheObj[1]);
+    assertEquals(1, googObject.getCount(cacheObj));
 
-  // Ensure cache works with all string keys.
-  assertEquals(
-      'toString', goog.reflect.cache(cacheObj, 'toString', passthroughFn));
-  assertEquals('toString', goog.reflect.cache(cacheObj, 'toString', throwsFn));
-  // Not checking count as it is not correct for IE8 (doesn't enumerate
-  // toString).
-}
+    // Ensure cache works with all string keys.
+    assertEquals(
+        'toString', reflect.cache(cacheObj, 'toString', passthroughFn));
+    assertEquals('toString', reflect.cache(cacheObj, 'toString', throwsFn));
+    // Not checking count as it is not correct for IE8 (doesn't enumerate
+    // toString).
+  },
 
-function testCache_keyFn() {
-  var cacheObj = {};
+  testCache_keyFn() {
+    const cacheObj = {};
 
-  assertEquals(3, goog.reflect.cache(cacheObj, 1, tripleFn, doubleFn));
-  assertEquals(3, cacheObj[2]);
-  assertEquals(1, goog.object.getCount(cacheObj));
+    assertEquals(3, reflect.cache(cacheObj, 1, tripleFn, doubleFn));
+    assertEquals(3, cacheObj[2]);
+    assertEquals(1, googObject.getCount(cacheObj));
 
-  // Ensure we get the same value with a different valueFn.
-  assertEquals(3, goog.reflect.cache(cacheObj, 1, throwsFn, doubleFn));
-  assertEquals(3, cacheObj[2]);
-  assertEquals(1, goog.object.getCount(cacheObj));
+    // Ensure we get the same value with a different valueFn.
+    assertEquals(3, reflect.cache(cacheObj, 1, throwsFn, doubleFn));
+    assertEquals(3, cacheObj[2]);
+    assertEquals(1, googObject.getCount(cacheObj));
 
-  // Ensure we set a new value if we provide a different keyFn.
-  assertEquals(2, goog.reflect.cache(cacheObj, 1, doubleFn, tripleFn));
-  assertEquals(2, cacheObj[3]);
-  assertEquals(2, goog.object.getCount(cacheObj));
+    // Ensure we set a new value if we provide a different keyFn.
+    assertEquals(2, reflect.cache(cacheObj, 1, doubleFn, tripleFn));
+    assertEquals(2, cacheObj[3]);
+    assertEquals(2, googObject.getCount(cacheObj));
 
-  // Ensure the keyFn is always called.
-  assertThrows(function() {
-    goog.reflect.cache(cacheObj, 1, tripleFn, throwsFn);
-  });
-}
+    // Ensure the keyFn is always called.
+    assertThrows(() => {
+      reflect.cache(cacheObj, 1, tripleFn, throwsFn);
+    });
+  },
+});

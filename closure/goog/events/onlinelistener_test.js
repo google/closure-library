@@ -12,143 +12,135 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.events.OnlineHandlerTest');
-goog.setTestOnly('goog.events.OnlineHandlerTest');
+goog.module('goog.events.OnlineHandlerTest');
+goog.setTestOnly();
 
-goog.require('goog.events');
-goog.require('goog.events.BrowserFeature');
-goog.require('goog.events.Event');
-goog.require('goog.events.EventHandler');
-goog.require('goog.events.OnlineHandler');
-goog.require('goog.net.NetworkStatusMonitor');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const BrowserFeature = goog.require('goog.events.BrowserFeature');
+const EventHandler = goog.require('goog.events.EventHandler');
+const GoogEvent = goog.require('goog.events.Event');
+const MockClock = goog.require('goog.testing.MockClock');
+const NetworkStatusMonitor = goog.require('goog.net.NetworkStatusMonitor');
+const OnlineHandler = goog.require('goog.events.OnlineHandler');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const events = goog.require('goog.events');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var stubs = new goog.testing.PropertyReplacer();
-var clock = new goog.testing.MockClock();
-var online = true;
-var onlineCount;
-var offlineCount;
+const stubs = new PropertyReplacer();
+const clock = new MockClock();
+let online = true;
+let onlineCount;
+let offlineCount;
 
 function listenToEvents(oh) {
   onlineCount = 0;
   offlineCount = 0;
 
-  goog.events.listen(
-      oh, goog.net.NetworkStatusMonitor.EventType.ONLINE, function(e) {
-        assertTrue(oh.isOnline());
-        onlineCount++;
-      });
-  goog.events.listen(
-      oh, goog.net.NetworkStatusMonitor.EventType.OFFLINE, function(e) {
-        assertFalse(oh.isOnline());
-        offlineCount++;
-      });
-}
-
-function setUp() {
-  stubs.set(goog.events.OnlineHandler.prototype, 'isOnline', function() {
-    return online;
+  events.listen(oh, NetworkStatusMonitor.EventType.ONLINE, (e) => {
+    assertTrue(oh.isOnline());
+    onlineCount++;
+  });
+  events.listen(oh, NetworkStatusMonitor.EventType.OFFLINE, (e) => {
+    assertFalse(oh.isOnline());
+    offlineCount++;
   });
 }
 
-function tearDown() {
-  stubs.reset();
-  clock.uninstall();
-}
+testSuite({
+  setUp() {
+    stubs.set(OnlineHandler.prototype, 'isOnline', () => online);
+  },
 
-function testConstructAndDispose() {
-  var oh = new goog.events.OnlineHandler();
-  oh.dispose();
-}
+  tearDown() {
+    stubs.reset();
+    clock.uninstall();
+  },
 
-function testNoOnlineProperty() {
-  stubs.set(goog.events.BrowserFeature, 'HAS_NAVIGATOR_ONLINE_PROPERTY', false);
-  stubs.set(
-      goog.events.EventHandler.prototype, 'listen',
-      goog.testing.recordFunction());
+  testConstructAndDispose() {
+    const oh = new OnlineHandler();
+    oh.dispose();
+  },
 
-  var oh = new goog.events.OnlineHandler();
+  testNoOnlineProperty() {
+    stubs.set(BrowserFeature, 'HAS_NAVIGATOR_ONLINE_PROPERTY', false);
+    stubs.set(EventHandler.prototype, 'listen', recordFunction());
 
-  assertEquals(0, oh.eventHandler_.listen.getCallCount());
+    const oh = new OnlineHandler();
 
-  oh.dispose();
-}
+    assertEquals(0, oh.eventHandler_.listen.getCallCount());
 
-function testNonHtml5() {
-  clock.install();
-  stubs.set(
-      goog.events.BrowserFeature, 'HAS_HTML5_NETWORK_EVENT_SUPPORT', false);
+    oh.dispose();
+  },
 
-  var oh = new goog.events.OnlineHandler();
-  listenToEvents(oh);
+  testNonHtml5() {
+    clock.install();
+    stubs.set(BrowserFeature, 'HAS_HTML5_NETWORK_EVENT_SUPPORT', false);
 
-  clock.tick(500);
-  online = false;
-  clock.tick(500);
+    const oh = new OnlineHandler();
+    listenToEvents(oh);
 
-  assertEquals(0, onlineCount);
-  assertEquals(1, offlineCount);
+    clock.tick(500);
+    online = false;
+    clock.tick(500);
 
-  online = true;
-  clock.tick(500);
+    assertEquals(0, onlineCount);
+    assertEquals(1, offlineCount);
 
-  assertEquals(1, onlineCount);
-  assertEquals(1, offlineCount);
+    online = true;
+    clock.tick(500);
 
-  oh.dispose();
-  clock.dispose();
-}
+    assertEquals(1, onlineCount);
+    assertEquals(1, offlineCount);
 
-function testHtml5() {
-  stubs.set(
-      goog.events.BrowserFeature, 'HAS_HTML5_NETWORK_EVENT_SUPPORT', true);
+    oh.dispose();
+    clock.dispose();
+  },
 
-  // Test for browsers that fire network events on document.body.
-  stubs.set(
-      goog.events.BrowserFeature, 'HTML5_NETWORK_EVENTS_FIRE_ON_BODY', true);
+  testHtml5() {
+    stubs.set(BrowserFeature, 'HAS_HTML5_NETWORK_EVENT_SUPPORT', true);
 
-  var oh = new goog.events.OnlineHandler();
-  listenToEvents(oh);
+    // Test for browsers that fire network events on document.body.
+    stubs.set(BrowserFeature, 'HTML5_NETWORK_EVENTS_FIRE_ON_BODY', true);
 
-  online = false;
-  var e = new goog.events.Event('offline');
-  goog.events.fireListeners(document.body, e.type, false, e);
+    let oh = new OnlineHandler();
+    listenToEvents(oh);
 
-  assertEquals(0, onlineCount);
-  assertEquals(1, offlineCount);
+    online = false;
+    let e = new GoogEvent('offline');
+    events.fireListeners(document.body, e.type, false, e);
 
-  online = true;
-  e = new goog.events.Event('online');
-  goog.events.fireListeners(document.body, e.type, false, e);
+    assertEquals(0, onlineCount);
+    assertEquals(1, offlineCount);
 
-  assertEquals(1, onlineCount);
-  assertEquals(1, offlineCount);
+    online = true;
+    e = new GoogEvent('online');
+    events.fireListeners(document.body, e.type, false, e);
 
-  oh.dispose();
+    assertEquals(1, onlineCount);
+    assertEquals(1, offlineCount);
 
-  // Test for browsers that fire network events on window.
-  stubs.set(
-      goog.events.BrowserFeature, 'HTML5_NETWORK_EVENTS_FIRE_ON_BODY', false);
+    oh.dispose();
 
-  oh = new goog.events.OnlineHandler();
-  listenToEvents(oh);
+    // Test for browsers that fire network events on window.
+    stubs.set(BrowserFeature, 'HTML5_NETWORK_EVENTS_FIRE_ON_BODY', false);
 
-  online = false;
-  e = new goog.events.Event('offline');
-  goog.events.fireListeners(window, e.type, false, e);
+    oh = new OnlineHandler();
+    listenToEvents(oh);
 
-  assertEquals(0, onlineCount);
-  assertEquals(1, offlineCount);
+    online = false;
+    e = new GoogEvent('offline');
+    events.fireListeners(window, e.type, false, e);
 
-  online = true;
-  e = new goog.events.Event('online');
-  goog.events.fireListeners(window, e.type, false, e);
+    assertEquals(0, onlineCount);
+    assertEquals(1, offlineCount);
 
-  assertEquals(1, onlineCount);
-  assertEquals(1, offlineCount);
+    online = true;
+    e = new GoogEvent('online');
+    events.fireListeners(window, e.type, false, e);
 
-  oh.dispose();
-}
+    assertEquals(1, onlineCount);
+    assertEquals(1, offlineCount);
+
+    oh.dispose();
+  },
+});

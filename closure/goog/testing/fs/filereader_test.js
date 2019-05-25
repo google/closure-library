@@ -12,166 +12,159 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.fs.FileReaderTest');
-goog.setTestOnly('goog.testing.fs.FileReaderTest');
+goog.module('goog.testing.fs.FileReaderTest');
+goog.setTestOnly();
 
-goog.require('goog.Promise');
-goog.require('goog.array');
-goog.require('goog.events');
-goog.require('goog.fs.Error');
-goog.require('goog.fs.FileReader');
-goog.require('goog.object');
-goog.require('goog.testing.events.EventObserver');
-goog.require('goog.testing.fs.FileReader');
-goog.require('goog.testing.fs.FileSystem');
-goog.require('goog.testing.jsunit');
+const EventObserver = goog.require('goog.testing.events.EventObserver');
+const FsError = goog.require('goog.fs.Error');
+const FsFileReader = goog.require('goog.fs.FileReader');
+const FsFileSystem = goog.require('goog.testing.fs.FileSystem');
+const GoogPromise = goog.require('goog.Promise');
+const TestingFsFileReader = goog.require('goog.testing.fs.FileReader');
+const events = goog.require('goog.events');
+const googArray = goog.require('goog.array');
+const googObject = goog.require('goog.object');
+const testSuite = goog.require('goog.testing.testSuite');
 
-
-var EventType = goog.fs.FileReader.EventType;
-var ReadyState = goog.fs.FileReader.ReadyState;
-
+const EventType = FsFileReader.EventType;
+const ReadyState = FsFileReader.ReadyState;
 
 /** @type {!goog.testing.fs.File} */
-var file;
+let file;
 
+/** @type {!TestingFsFileReader} */
+let reader;
 
-/** @type {!goog.testing.fs.FileReader} */
-var reader;
-
-
-/** @type {!goog.testing.events.EventObserver} */
-var observer;
-
+/** @type {!EventObserver} */
+let observer;
 
 /** @const */
-var hasArrayBuffer = goog.isDef(goog.global.ArrayBuffer);
+const hasArrayBuffer = goog.isDef(goog.global.ArrayBuffer);
 
+testSuite({
+  setUp() {
+    const observedEvents = [];
+    const fs = new FsFileSystem();
+    const fileEntry =
+        fs.getRoot().createDirectorySync('foo').createFileSync('bar');
 
-function setUp() {
-  var observedEvents = [];
-  var fs = new goog.testing.fs.FileSystem();
-  var fileEntry = fs.getRoot().createDirectorySync('foo').createFileSync('bar');
+    file = fileEntry.fileSync();
+    file.setDataInternal('test content');
 
-  file = fileEntry.fileSync();
-  file.setDataInternal('test content');
+    reader = new TestingFsFileReader();
 
-  reader = new goog.testing.fs.FileReader();
+    // Observe all file events fired by the FileReader.
+    observer = new EventObserver();
+    events.listen(reader, googObject.getValues(EventType), observer);
+  },
 
-  // Observe all file events fired by the FileReader.
-  observer = new goog.testing.events.EventObserver();
-  goog.events.listen(reader, goog.object.getValues(EventType), observer);
-}
+  tearDown() {
+    goog.dispose(reader);
+  },
 
+  testRead() {
+    assertEquals(ReadyState.INIT, reader.getReadyState());
+    assertUndefined(reader.getResult());
 
-function tearDown() {
-  goog.dispose(reader);
-}
+    return new GoogPromise((resolve, reject) => {
+             events.listen(reader, EventType.LOAD_END, resolve);
+             reader.readAsText(file);
+             assertEquals(ReadyState.LOADING, reader.getReadyState());
+           })
+        .then((result) => {
+          assertEquals(file.toString(), reader.getResult());
 
+          assertEquals(ReadyState.DONE, reader.getReadyState());
+          assertArrayEquals(
+              [
+                EventType.LOAD_START,
+                EventType.LOAD,
+                EventType.LOAD,
+                EventType.LOAD,
+                EventType.LOAD_END,
+              ],
+              googArray.map(observer.getEvents(), (e) => e.type));
+        });
+  },
 
-function testRead() {
-  assertEquals(ReadyState.INIT, reader.getReadyState());
-  assertUndefined(reader.getResult());
+  testReadAsArrayBuffer() {
+    if (!hasArrayBuffer) {
+      // Skip if array buffer is not supported
+      return;
+    }
 
-  return new goog
-      .Promise(function(resolve, reject) {
-        goog.events.listen(reader, EventType.LOAD_END, resolve);
-        reader.readAsText(file);
-        assertEquals(ReadyState.LOADING, reader.getReadyState());
-      })
-      .then(function(result) {
-        assertEquals(file.toString(), reader.getResult());
+    return new GoogPromise((resolve, reject) => {
+             events.listen(reader, EventType.LOAD_END, resolve);
+             reader.readAsArrayBuffer(file);
+             assertEquals(ReadyState.LOADING, reader.getReadyState());
+           })
+        .then((result) => {
+          assertElementsEquals(file.toArrayBuffer(), reader.getResult());
 
-        assertEquals(ReadyState.DONE, reader.getReadyState());
-        assertArrayEquals(
-            [
-              EventType.LOAD_START, EventType.LOAD, EventType.LOAD,
-              EventType.LOAD, EventType.LOAD_END
-            ],
-            goog.array.map(
-                observer.getEvents(), function(e) { return e.type; }));
-      });
-}
+          assertEquals(ReadyState.DONE, reader.getReadyState());
+          assertArrayEquals(
+              [
+                EventType.LOAD_START,
+                EventType.LOAD,
+                EventType.LOAD,
+                EventType.LOAD,
+                EventType.LOAD_END,
+              ],
+              googArray.map(observer.getEvents(), (e) => e.type));
+        });
+  },
 
+  testReadAsDataUrl() {
+    return new GoogPromise((resolve, reject) => {
+             events.listen(reader, EventType.LOAD_END, resolve);
+             reader.readAsDataUrl(file);
+             assertEquals(ReadyState.LOADING, reader.getReadyState());
+           })
+        .then((result) => {
+          assertEquals(file.toDataUrl(), reader.getResult());
 
-function testReadAsArrayBuffer() {
-  if (!hasArrayBuffer) {
-    // Skip if array buffer is not supported
-    return;
-  }
+          assertEquals(ReadyState.DONE, reader.getReadyState());
+          assertArrayEquals(
+              [
+                EventType.LOAD_START,
+                EventType.LOAD,
+                EventType.LOAD,
+                EventType.LOAD,
+                EventType.LOAD_END,
+              ],
+              googArray.map(observer.getEvents(), (e) => e.type));
+        });
+  },
 
-  return new goog
-      .Promise(function(resolve, reject) {
-        goog.events.listen(reader, EventType.LOAD_END, resolve);
-        reader.readAsArrayBuffer(file);
-        assertEquals(ReadyState.LOADING, reader.getReadyState());
-      })
-      .then(function(result) {
-        assertElementsEquals(file.toArrayBuffer(), reader.getResult());
+  testAbort() {
+    return new GoogPromise((resolve, reject) => {
+             events.listen(reader, EventType.LOAD_END, resolve);
+             reader.readAsText(file);
+             assertEquals(ReadyState.LOADING, reader.getReadyState());
+             reader.abort();
+           })
+        .then((result) => {
+          assertUndefined(reader.getResult());
 
-        assertEquals(ReadyState.DONE, reader.getReadyState());
-        assertArrayEquals(
-            [
-              EventType.LOAD_START, EventType.LOAD, EventType.LOAD,
-              EventType.LOAD, EventType.LOAD_END
-            ],
-            goog.array.map(
-                observer.getEvents(), function(e) { return e.type; }));
-      });
-}
+          assertEquals(ReadyState.DONE, reader.getReadyState());
+          assertArrayEquals(
+              [EventType.ERROR, EventType.ABORT, EventType.LOAD_END],
+              googArray.map(observer.getEvents(), (e) => e.type));
+        });
+  },
 
+  testAbortBeforeRead() {
+    const err = assertThrows(() => {
+      reader.abort();
+    });
+    assertEquals(FsError.ErrorCode.INVALID_STATE, err.code);
+  },
 
-function testReadAsDataUrl() {
-  return new goog
-      .Promise(function(resolve, reject) {
-        goog.events.listen(reader, EventType.LOAD_END, resolve);
-        reader.readAsDataUrl(file);
-        assertEquals(ReadyState.LOADING, reader.getReadyState());
-      })
-      .then(function(result) {
-        assertEquals(file.toDataUrl(), reader.getResult());
-
-        assertEquals(ReadyState.DONE, reader.getReadyState());
-        assertArrayEquals(
-            [
-              EventType.LOAD_START, EventType.LOAD, EventType.LOAD,
-              EventType.LOAD, EventType.LOAD_END
-            ],
-            goog.array.map(
-                observer.getEvents(), function(e) { return e.type; }));
-      });
-}
-
-
-function testAbort() {
-  return new goog
-      .Promise(function(resolve, reject) {
-        goog.events.listen(reader, EventType.LOAD_END, resolve);
-        reader.readAsText(file);
-        assertEquals(ReadyState.LOADING, reader.getReadyState());
-        reader.abort();
-      })
-      .then(function(result) {
-        assertUndefined(reader.getResult());
-
-        assertEquals(ReadyState.DONE, reader.getReadyState());
-        assertArrayEquals(
-            [EventType.ERROR, EventType.ABORT, EventType.LOAD_END],
-            goog.array.map(
-                observer.getEvents(), function(e) { return e.type; }));
-      });
-}
-
-
-function testAbortBeforeRead() {
-  var err = assertThrows(function() { reader.abort(); });
-  assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
-}
-
-
-function testReadDuringRead() {
-  var err = assertThrows(function() {
-    reader.readAsText(file);
-    reader.readAsText(file);
-  });
-  assertEquals(goog.fs.Error.ErrorCode.INVALID_STATE, err.code);
-}
+  testReadDuringRead() {
+    const err = assertThrows(() => {
+      reader.readAsText(file);
+      reader.readAsText(file);
+    });
+    assertEquals(FsError.ErrorCode.INVALID_STATE, err.code);
+  },
+});

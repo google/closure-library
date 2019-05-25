@@ -12,161 +12,161 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.positioning.ViewportClientPositionTest');
-goog.setTestOnly('goog.positioning.ViewportClientPositionTest');
+goog.module('goog.positioning.ViewportClientPositionTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.positioning.Corner');
-goog.require('goog.positioning.Overflow');
-goog.require('goog.positioning.ViewportClientPosition');
-goog.require('goog.style');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const Corner = goog.require('goog.positioning.Corner');
+const Overflow = goog.require('goog.positioning.Overflow');
+const ViewportClientPosition = goog.require('goog.positioning.ViewportClientPosition');
+const googDom = goog.require('goog.dom');
+const style = goog.require('goog.style');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var viewportSize, anchor, popup, dom, frameRect;
-var corner = goog.positioning.Corner;
+let anchor;
+let dom;
+let frameRect;
+let popup;
+let viewportSize;
 
 // Allow positions to be off by one in gecko as it reports scrolling
 // offsets in steps of 2.
-var ALLOWED_OFFSET = goog.userAgent.GECKO ? 1 : 0;
+const ALLOWED_OFFSET = userAgent.GECKO ? 1 : 0;
 
+testSuite({
+  setUp() {
+    const frame = document.getElementById('frame1');
+    const doc = googDom.getFrameContentDocument(frame);
 
-function setUp() {
-  var frame = document.getElementById('frame1');
-  var doc = goog.dom.getFrameContentDocument(frame);
+    dom = googDom.getDomHelper(doc);
+    viewportSize = dom.getViewportSize();
+    anchor = dom.getElement('anchor');
+    popup = dom.getElement('popup');
+    popup.style.overflowY = 'visible';
+    style.setSize(popup, 20, 20);
+    frameRect = style.getVisibleRectForElement(doc.body);
+  },
 
-  dom = goog.dom.getDomHelper(doc);
-  viewportSize = dom.getViewportSize();
-  anchor = dom.getElement('anchor');
-  popup = dom.getElement('popup');
-  popup.style.overflowY = 'visible';
-  goog.style.setSize(popup, 20, 20);
-  frameRect = goog.style.getVisibleRectForElement(doc.body);
-}
+  testPositionAtCoordinateTopLeft() {
+    const pos = new ViewportClientPosition(100, 100);
+    pos.reposition(popup, Corner.TOP_LEFT);
 
+    const offset = style.getPageOffset(popup);
+    assertEquals(
+        'Left edge of popup should be at specified x coordinate.', 100,
+        offset.x);
+    assertEquals(
+        'Top edge of popup should be at specified y coordinate.', 100,
+        offset.y);
+  },
 
-function testPositionAtCoordinateTopLeft() {
-  var pos = new goog.positioning.ViewportClientPosition(100, 100);
-  pos.reposition(popup, corner.TOP_LEFT);
+  testPositionAtCoordinateBottomRight() {
+    const pos = new ViewportClientPosition(100, 100);
+    pos.reposition(popup, Corner.BOTTOM_RIGHT);
 
-  var offset = goog.style.getPageOffset(popup);
-  assertEquals(
-      'Left edge of popup should be at specified x coordinate.', 100, offset.x);
-  assertEquals(
-      'Top edge of popup should be at specified y coordinate.', 100, offset.y);
-}
+    const bounds = style.getBounds(popup);
+    assertEquals(
+        'Right edge of popup should be at specified x coordinate.', 100,
+        bounds.left + bounds.width);
+    assertEquals(
+        'Bottom edge of popup should be at specified x coordinate.', 100,
+        bounds.top + bounds.height);
+  },
 
+  testPositionAtCoordinateTopLeftWithScroll() {
+    dom.getDocument().body.style.paddingTop = '300px';
+    dom.getDocument().body.style.height = '3000px';
+    dom.getDocumentScrollElement().scrollTop = 50;
+    dom.getDocument().body.scrollTop = 50;
 
-function testPositionAtCoordinateBottomRight() {
-  var pos = new goog.positioning.ViewportClientPosition(100, 100);
-  pos.reposition(popup, corner.BOTTOM_RIGHT);
+    const pos = new ViewportClientPosition(0, 0);
+    pos.reposition(popup, Corner.TOP_LEFT);
 
-  var bounds = goog.style.getBounds(popup);
-  assertEquals(
-      'Right edge of popup should be at specified x coordinate.', 100,
-      bounds.left + bounds.width);
-  assertEquals(
-      'Bottom edge of popup should be at specified x coordinate.', 100,
-      bounds.top + bounds.height);
-}
+    let offset = style.getPageOffset(popup);
+    assertEquals(
+        'Left edge of popup should be at specified x coordinate.', 0, offset.x);
+    assertTrue(
+        'Top edge of popup should be at specified y coordinate ' +
+            'adjusted for scroll.',
+        Math.abs(offset.y - 50) <= ALLOWED_OFFSET);
 
+    dom.getDocument().body.style.paddingLeft = '1000px';
+    dom.getDocumentScrollElement().scrollLeft = 500;
 
-function testPositionAtCoordinateTopLeftWithScroll() {
-  dom.getDocument().body.style.paddingTop = '300px';
-  dom.getDocument().body.style.height = '3000px';
-  dom.getDocumentScrollElement().scrollTop = 50;
-  dom.getDocument().body.scrollTop = 50;
+    pos.reposition(popup, Corner.TOP_LEFT);
+    offset = style.getPageOffset(popup);
+    assertTrue(
+        'Left edge of popup should be at specified x coordinate ' +
+            'adjusted for scroll.',
+        Math.abs(offset.x - 500) <= ALLOWED_OFFSET);
 
-  var pos = new goog.positioning.ViewportClientPosition(0, 0);
-  pos.reposition(popup, corner.TOP_LEFT);
+    dom.getDocumentScrollElement().scrollLeft = 0;
+    dom.getDocumentScrollElement().scrollTop = 0;
+    dom.getDocument().body.style.paddingLeft = '';
+    dom.getDocument().body.style.paddingTop = '';
 
-  var offset = goog.style.getPageOffset(popup);
-  assertEquals(
-      'Left edge of popup should be at specified x coordinate.', 0, offset.x);
-  assertTrue(
-      'Top edge of popup should be at specified y coordinate ' +
-          'adjusted for scroll.',
-      Math.abs(offset.y - 50) <= ALLOWED_OFFSET);
+    pos.reposition(popup, Corner.TOP_LEFT);
+    offset = style.getPageOffset(popup);
+    assertEquals(
+        'Left edge of popup should be at specified x coordinate.', 0, offset.x);
+    assertEquals(
+        'Top edge of popup should be at specified y coordinate.', 0, offset.y);
+  },
 
-  dom.getDocument().body.style.paddingLeft = '1000px';
-  dom.getDocumentScrollElement().scrollLeft = 500;
+  testOverflowRightFlipHor() {
+    const pos = new ViewportClientPosition(frameRect.right, 100);
+    pos.reposition(popup, Corner.TOP_LEFT);
 
-  pos.reposition(popup, corner.TOP_LEFT);
-  offset = goog.style.getPageOffset(popup);
-  assertTrue(
-      'Left edge of popup should be at specified x coordinate ' +
-          'adjusted for scroll.',
-      Math.abs(offset.x - 500) <= ALLOWED_OFFSET);
+    const offset = style.getPageOffset(popup);
+    assertEquals(
+        'Left edge of popup should have been adjusted so that it ' +
+            'fits inside the viewport.',
+        frameRect.right - popup.offsetWidth, offset.x);
+    assertEquals(
+        'Top edge of popup should be at specified y coordinate.', 100,
+        offset.y);
+  },
 
-  dom.getDocumentScrollElement().scrollLeft = 0;
-  dom.getDocumentScrollElement().scrollTop = 0;
-  dom.getDocument().body.style.paddingLeft = '';
-  dom.getDocument().body.style.paddingTop = '';
+  testOverflowTopFlipVer() {
+    const pos = new ViewportClientPosition(100, 0);
+    pos.reposition(popup, Corner.TOP_RIGHT);
 
-  pos.reposition(popup, corner.TOP_LEFT);
-  offset = goog.style.getPageOffset(popup);
-  assertEquals(
-      'Left edge of popup should be at specified x coordinate.', 0, offset.x);
-  assertEquals(
-      'Top edge of popup should be at specified y coordinate.', 0, offset.y);
-}
+    const offset = style.getPageOffset(popup);
+    assertEquals(
+        'Left edge of popup should be at specified x coordinate.', 80,
+        offset.x);
+    assertEquals(
+        'Top edge of popup should have been adjusted so that it ' +
+            'fits inside the viewport.',
+        0, offset.y);
+  },
 
+  testOverflowBottomRightFlipBoth() {
+    const pos = new ViewportClientPosition(frameRect.right, frameRect.bottom);
+    pos.reposition(popup, Corner.TOP_LEFT);
 
-function testOverflowRightFlipHor() {
-  var pos = new goog.positioning.ViewportClientPosition(frameRect.right, 100);
-  pos.reposition(popup, corner.TOP_LEFT);
+    const offset = style.getPageOffset(popup);
+    assertEquals(
+        'Left edge of popup should have been adjusted so that it ' +
+            'fits inside the viewport.',
+        frameRect.right - popup.offsetWidth, offset.x);
+    assertEquals(
+        'Top edge of popup should have been adjusted so that it ' +
+            'fits inside the viewport.',
+        frameRect.bottom - popup.offsetHeight, offset.y);
+  },
 
-  var offset = goog.style.getPageOffset(popup);
-  assertEquals(
-      'Left edge of popup should have been adjusted so that it ' +
-          'fits inside the viewport.',
-      frameRect.right - popup.offsetWidth, offset.x);
-  assertEquals(
-      'Top edge of popup should be at specified y coordinate.', 100, offset.y);
-}
+  testLastRespotOverflow() {
+    const large = 2000;
+    style.setSize(popup, 20, large);
+    popup.style.overflowY = 'auto';
 
+    const pos = new ViewportClientPosition(0, 0);
+    pos.reposition(popup, Corner.TOP_LEFT);
 
-function testOverflowTopFlipVer() {
-  var pos = new goog.positioning.ViewportClientPosition(100, 0);
-  pos.reposition(popup, corner.TOP_RIGHT);
-
-  var offset = goog.style.getPageOffset(popup);
-  assertEquals(
-      'Left edge of popup should be at specified x coordinate.', 80, offset.x);
-  assertEquals(
-      'Top edge of popup should have been adjusted so that it ' +
-          'fits inside the viewport.',
-      0, offset.y);
-}
-
-
-function testOverflowBottomRightFlipBoth() {
-  var pos = new goog.positioning.ViewportClientPosition(
-      frameRect.right, frameRect.bottom);
-  pos.reposition(popup, corner.TOP_LEFT);
-
-  var offset = goog.style.getPageOffset(popup);
-  assertEquals(
-      'Left edge of popup should have been adjusted so that it ' +
-          'fits inside the viewport.',
-      frameRect.right - popup.offsetWidth, offset.x);
-  assertEquals(
-      'Top edge of popup should have been adjusted so that it ' +
-          'fits inside the viewport.',
-      frameRect.bottom - popup.offsetHeight, offset.y);
-}
-
-
-function testLastRespotOverflow() {
-  var large = 2000;
-  goog.style.setSize(popup, 20, large);
-  popup.style.overflowY = 'auto';
-
-  var pos = new goog.positioning.ViewportClientPosition(0, 0);
-  pos.reposition(popup, corner.TOP_LEFT);
-
-  assertEquals(large, popup.offsetHeight);
-  pos.setLastResortOverflow(goog.positioning.Overflow.RESIZE_HEIGHT);
-  pos.reposition(popup, corner.TOP_LEFT);
-  assertNotEquals(large, popup.offsetHeight);
-}
+    assertEquals(large, popup.offsetHeight);
+    pos.setLastResortOverflow(Overflow.RESIZE_HEIGHT);
+    pos.reposition(popup, Corner.TOP_LEFT);
+    assertNotEquals(large, popup.offsetHeight);
+  },
+});

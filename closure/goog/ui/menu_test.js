@@ -12,104 +12,106 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.MenuTest');
-goog.setTestOnly('goog.ui.MenuTest');
+goog.module('goog.ui.MenuTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.events');
-goog.require('goog.math.Coordinate');
-goog.require('goog.testing.events');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.Component');
-goog.require('goog.ui.Menu');
+const Component = goog.require('goog.ui.Component');
+const Coordinate = goog.require('goog.math.Coordinate');
+const Menu = goog.require('goog.ui.Menu');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingEvents = goog.require('goog.testing.events');
 
-var menu;
-var clonedMenuDom;
+let menu;
+let clonedMenuDom;
 
-function setUp() {
-  clonedMenuDom = goog.dom.getElement('demoMenu').cloneNode(true);
+testSuite({
+  setUp() {
+    clonedMenuDom = dom.getElement('demoMenu').cloneNode(true);
 
-  menu = new goog.ui.Menu();
-}
+    menu = new Menu();
+  },
 
-function tearDown() {
-  menu.dispose();
+  tearDown() {
+    menu.dispose();
 
-  var element = goog.dom.getElement('demoMenu');
-  element.parentNode.replaceChild(clonedMenuDom, element);
-}
+    const element = dom.getElement('demoMenu');
+    element.parentNode.replaceChild(clonedMenuDom, element);
+  },
 
+  /** @bug 1463524 */
+  testMouseupDoesntActivateMenuItemImmediately() {
+    menu.decorate(dom.getElement('demoMenu'));
 
-/** @bug 1463524 */
-function testMouseupDoesntActivateMenuItemImmediately() {
-  menu.decorate(goog.dom.getElement('demoMenu'));
+    const fakeEvent = {clientX: 42, clientY: 42};
+    const itemElem = dom.getElement('menuItem2');
+    const coords = new Coordinate(42, 42);
 
-  var fakeEvent = {clientX: 42, clientY: 42};
-  var itemElem = goog.dom.getElement('menuItem2');
-  var coords = new goog.math.Coordinate(42, 42);
+    const menuItem = menu.getChildAt(1);
+    let actionDispatched = false;
+    events.listen(menuItem, Component.EventType.ACTION, (e) => {
+      actionDispatched = true;
+    });
 
-  var menuItem = menu.getChildAt(1);
-  var actionDispatched = false;
-  goog.events.listen(menuItem, goog.ui.Component.EventType.ACTION, function(e) {
-    actionDispatched = true;
-  });
+    menu.setVisible(true, false, fakeEvent);
+    // Makes the menu item active so it can be selected on mouseup.
+    menuItem.setActive(true);
 
-  menu.setVisible(true, false, fakeEvent);
-  // Makes the menu item active so it can be selected on mouseup.
-  menuItem.setActive(true);
+    testingEvents.fireMouseUpEvent(itemElem, undefined, coords);
+    assertFalse(
+        'ACTION should not be dispatched after the initial mouseup',
+        actionDispatched);
 
-  goog.testing.events.fireMouseUpEvent(itemElem, undefined, coords);
-  assertFalse(
-      'ACTION should not be dispatched after the initial mouseup',
-      actionDispatched);
+    testingEvents.fireMouseUpEvent(itemElem, undefined, coords);
+    assertTrue(
+        'ACTION should be dispatched after the second mouseup',
+        actionDispatched);
+  },
 
-  goog.testing.events.fireMouseUpEvent(itemElem, undefined, coords);
-  assertTrue(
-      'ACTION should be dispatched after the second mouseup', actionDispatched);
-}
+  testHoverBehavior() {
+    menu.decorate(dom.getElement('demoMenu'));
 
-function testHoverBehavior() {
-  menu.decorate(goog.dom.getElement('demoMenu'));
+    testingEvents.fireMouseOverEvent(
+        dom.getElement('menuItem2'), document.body);
+    assertEquals(1, menu.getHighlightedIndex());
 
-  goog.testing.events.fireMouseOverEvent(
-      goog.dom.getElement('menuItem2'), document.body);
-  assertEquals(1, menu.getHighlightedIndex());
+    menu.exitDocument();
+    assertEquals(-1, menu.getHighlightedIndex());
+  },
 
-  menu.exitDocument();
-  assertEquals(-1, menu.getHighlightedIndex());
-}
+  testIndirectionDecoration() {
+    menu.decorate(dom.getElement('complexMenu'));
 
-function testIndirectionDecoration() {
-  menu.decorate(goog.dom.getElement('complexMenu'));
+    testingEvents.fireMouseOverEvent(
+        dom.getElement('complexItem3'), document.body);
+    assertEquals(2, menu.getHighlightedIndex());
 
-  goog.testing.events.fireMouseOverEvent(
-      goog.dom.getElement('complexItem3'), document.body);
-  assertEquals(2, menu.getHighlightedIndex());
+    menu.exitDocument();
+    assertEquals(-1, menu.getHighlightedIndex());
+  },
 
-  menu.exitDocument();
-  assertEquals(-1, menu.getHighlightedIndex());
-}
+  testSetHighlightedIndex() {
+    menu.decorate(dom.getElement('scrollableMenu'));
+    assertEquals(0, menu.getElement().scrollTop);
 
-function testSetHighlightedIndex() {
-  menu.decorate(goog.dom.getElement('scrollableMenu'));
-  assertEquals(0, menu.getElement().scrollTop);
+    // Scroll down
+    let element = dom.getElement('scrollableMenuItem4');
+    menu.setHighlightedIndex(3);
+    assertTrue(element.offsetTop >= menu.getElement().scrollTop);
+    assertTrue(
+        element.offsetTop <=
+        menu.getElement().scrollTop + menu.getElement().offsetHeight);
 
-  // Scroll down
-  var element = goog.dom.getElement('scrollableMenuItem4');
-  menu.setHighlightedIndex(3);
-  assertTrue(element.offsetTop >= menu.getElement().scrollTop);
-  assertTrue(
-      element.offsetTop <=
-      menu.getElement().scrollTop + menu.getElement().offsetHeight);
+    // Scroll up
+    element = dom.getElement('scrollableMenuItem3');
+    menu.setHighlightedIndex(2);
+    assertTrue(element.offsetTop >= menu.getElement().scrollTop);
+    assertTrue(
+        element.offsetTop <=
+        menu.getElement().scrollTop + menu.getElement().offsetHeight);
 
-  // Scroll up
-  element = goog.dom.getElement('scrollableMenuItem3');
-  menu.setHighlightedIndex(2);
-  assertTrue(element.offsetTop >= menu.getElement().scrollTop);
-  assertTrue(
-      element.offsetTop <=
-      menu.getElement().scrollTop + menu.getElement().offsetHeight);
-
-  menu.exitDocument();
-  assertEquals(-1, menu.getHighlightedIndex());
-}
+    menu.exitDocument();
+    assertEquals(-1, menu.getHighlightedIndex());
+  },
+});

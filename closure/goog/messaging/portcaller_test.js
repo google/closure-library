@@ -12,47 +12,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.messaging.PortCallerTest');
-goog.setTestOnly('goog.messaging.PortCallerTest');
+goog.module('goog.messaging.PortCallerTest');
+goog.setTestOnly();
 
-goog.require('goog.events.EventTarget');
-goog.require('goog.messaging.PortCaller');
-goog.require('goog.messaging.PortNetwork');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.messaging.MockMessageChannel');
+const GoogEventTarget = goog.require('goog.events.EventTarget');
+const MockControl = goog.require('goog.testing.MockControl');
+const MockMessageChannel = goog.require('goog.testing.messaging.MockMessageChannel');
+const PortCaller = goog.require('goog.messaging.PortCaller');
+const PortNetwork = goog.require('goog.messaging.PortNetwork');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var mockControl;
-var mockChannel;
-var caller;
+let mockControl;
+let mockChannel;
+let caller;
 
-function setUp() {
-  mockControl = new goog.testing.MockControl();
-  mockChannel = new goog.testing.messaging.MockMessageChannel(mockControl);
-  caller = new goog.messaging.PortCaller(mockChannel);
+class MockMessagePort extends GoogEventTarget {
+  constructor(index, port) {
+    super();
+    this.index = index;
+    this.port = port;
+    this.started = false;
+  }
+
+  start() {
+    this.started = true;
+  }
 }
 
-function tearDown() {
-  goog.dispose(caller);
-  mockControl.$verifyAll();
-}
+testSuite({
+  setUp() {
+    mockControl = new MockControl();
+    mockChannel = new MockMessageChannel(mockControl);
+    caller = new PortCaller(mockChannel);
+  },
 
-function MockMessagePort(index, port) {
-  MockMessagePort.base(this, 'constructor');
-  this.index = index;
-  this.port = port;
-  this.started = false;
-}
-goog.inherits(MockMessagePort, goog.events.EventTarget);
+  tearDown() {
+    goog.dispose(caller);
+    mockControl.$verifyAll();
+  },
 
-
-MockMessagePort.prototype.start = function() {
-  this.started = true;
-};
-
-function testGetPort() {
-  mockChannel.send(
-      goog.messaging.PortNetwork.REQUEST_CONNECTION_SERVICE, 'foo');
-  mockControl.$replayAll();
-  caller.dial('foo');
-}
+  testGetPort() {
+    mockChannel.send(PortNetwork.REQUEST_CONNECTION_SERVICE, 'foo');
+    mockControl.$replayAll();
+    caller.dial('foo');
+  },
+});

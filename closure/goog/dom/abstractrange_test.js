@@ -12,56 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.AbstractRangeTest');
-goog.setTestOnly('goog.dom.AbstractRangeTest');
+goog.module('goog.dom.AbstractRangeTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.AbstractRange');
-goog.require('goog.dom.Range');
-goog.require('goog.dom.TagName');
-goog.require('goog.testing.jsunit');
+const AbstractRange = goog.require('goog.dom.AbstractRange');
+const Range = goog.require('goog.dom.Range');
+const TagName = goog.require('goog.dom.TagName');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testCorrectDocument() {
-  var a = goog.dom.getElement('a').contentWindow;
-  var b = goog.dom.getElement('b').contentWindow;
+testSuite({
+  testCorrectDocument() {
+    const a = dom.getElement('a').contentWindow;
+    const b = dom.getElement('b').contentWindow;
 
-  a.document.body.focus();
-  var selection = goog.dom.AbstractRange.getBrowserSelectionForWindow(a);
-  assertNotNull('Selection must not be null', selection);
-  var range = goog.dom.Range.createFromBrowserSelection(selection);
-  assertEquals(
-      'getBrowserSelectionForWindow must return selection in the ' +
-          'correct document',
-      a.document, range.getDocument());
-
-  // This is intended to trip up Internet Explorer --
-  // see http://b/2048934
-  b.document.body.focus();
-  selection = goog.dom.AbstractRange.getBrowserSelectionForWindow(a);
-  // Some (non-IE) browsers keep a separate selection state for each document
-  // in the same browser window. That's fine, as long as the selection object
-  // requested from the window object is correctly associated with that
-  // window's document.
-  if (selection != null && selection.rangeCount != 0) {
-    range = goog.dom.Range.createFromBrowserSelection(selection);
-    assertEquals(
-        'getBrowserSelectionForWindow must return selection in ' +
-            'the correct document',
-        a.document, range.getDocument());
-  } else {
-    assertTrue(selection == null || selection.rangeCount == 0);
-  }
-}
-
-function testSelectionIsControlRange() {
-  var c = goog.dom.getElement('c').contentWindow;
-  // Only IE supports control ranges
-  if (c.document.body.createControlRange) {
-    var controlRange = c.document.body.createControlRange();
-    controlRange.add(
-        goog.dom.getElementsByTagName(goog.dom.TagName.IMG, c.document)[0]);
-    controlRange.select();
-    var selection = goog.dom.AbstractRange.getBrowserSelectionForWindow(c);
+    a.document.body.focus();
+    let selection = AbstractRange.getBrowserSelectionForWindow(a);
     assertNotNull('Selection must not be null', selection);
-  }
-}
+    let range = Range.createFromBrowserSelection(selection);
+    assertEquals(
+        'getBrowserSelectionForWindow must return selection in the ' +
+            'correct document',
+        a.document, range.getDocument());
+
+    // This is intended to trip up Internet Explorer --
+    // see http://b/2048934
+    b.document.body.focus();
+    selection = AbstractRange.getBrowserSelectionForWindow(a);
+    // Some (non-IE) browsers keep a separate selection state for each document
+    // in the same browser window. That's fine, as long as the selection object
+    // requested from the window object is correctly associated with that
+    // window's document.
+    if (selection != null && selection.rangeCount != 0) {
+      range = Range.createFromBrowserSelection(selection);
+      assertEquals(
+          'getBrowserSelectionForWindow must return selection in ' +
+              'the correct document',
+          a.document, range.getDocument());
+    } else {
+      assertTrue(selection == null || selection.rangeCount == 0);
+    }
+  },
+
+  testSelectionIsControlRange() {
+    const c = dom.getElement('c').contentWindow;
+    // Only IE supports control ranges
+    if (c.document.body.createControlRange) {
+      const controlRange = c.document.body.createControlRange();
+      controlRange.add(dom.getElementsByTagName(TagName.IMG, c.document)[0]);
+      controlRange.select();
+      const selection = AbstractRange.getBrowserSelectionForWindow(c);
+      assertNotNull('Selection must not be null', selection);
+    }
+  },
+});

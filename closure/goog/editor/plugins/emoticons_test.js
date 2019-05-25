@@ -12,73 +12,74 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.plugins.EmoticonsTest');
-goog.setTestOnly('goog.editor.plugins.EmoticonsTest');
+goog.module('goog.editor.plugins.EmoticonsTest');
+goog.setTestOnly();
 
-goog.require('goog.Uri');
-goog.require('goog.array');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.editor.Field');
-goog.require('goog.editor.plugins.Emoticons');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.emoji.Emoji');
-goog.require('goog.userAgent');
+const Emoji = goog.require('goog.ui.emoji.Emoji');
+const Emoticons = goog.require('goog.editor.plugins.Emoticons');
+const Field = goog.require('goog.editor.Field');
+const TagName = goog.require('goog.dom.TagName');
+const Uri = goog.require('goog.Uri');
+const dom = goog.require('goog.dom');
+const googArray = goog.require('goog.array');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var HTML;
-
-function setUp() {
-  HTML = goog.dom.getElement('parent').innerHTML;
-}
-
-function tearDown() {
-  goog.dom.getElement('parent').innerHTML = HTML;
-}
-
-function testEmojiWithEmoticonsPlugin() {
-  var plugin = new goog.editor.plugins.Emoticons();
-  var field = new goog.editor.Field('testField');
-  field.registerPlugin(plugin);
-  field.makeEditable();
-  field.focusAndPlaceCursorAtStart();
-
-  var src = 'testdata/emoji/4F4.gif';
-  var id = '4F4';
-  var emoji = new goog.ui.emoji.Emoji(src, id);
-  field.execCommand(goog.editor.plugins.Emoticons.COMMAND, emoji);
-
-  // The url may be relative or absolute.
-  var imgs = field.getEditableDomHelper().getElementsByTagNameAndClass(
-      goog.dom.TagName.IMG);
-  assertEquals(1, imgs.length);
-
-  var img = imgs[0];
-  assertUriEquals(src, img.getAttribute('src'));
-  assertEquals(id, img.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE));
-  assertEquals(id, img.getAttribute(goog.ui.emoji.Emoji.DATA_ATTRIBUTE));
-
-  var range = field.getRange();
-  assertNotNull('must have a selection', range);
-  assertTrue('range must be a cursor', range.isCollapsed());
-
-  if (!goog.userAgent.IE) {
-    var webkitValid = (2 == range.getStartOffset());
-    var otherValid =
-        (2 ==
-         goog.array.indexOf(
-             range.getContainerElement().childNodes, range.getStartNode()));
-
-    assertTrue('range starts after image', webkitValid || otherValid);
-  }
-
-  assertEquals(
-      'range must be around image', img.parentElement,
-      range.getContainerElement());
-}
+let HTML;
 
 function assertUriEquals(expected, actual) {
-  var winUri = new goog.Uri(window.location);
+  const winUri = new Uri(window.location);
   assertEquals(
-      winUri.resolve(new goog.Uri(expected)).toString(),
-      winUri.resolve(new goog.Uri(actual)).toString());
+      winUri.resolve(new Uri(expected)).toString(),
+      winUri.resolve(new Uri(actual)).toString());
 }
+testSuite({
+  setUp() {
+    HTML = dom.getElement('parent').innerHTML;
+  },
+
+  tearDown() {
+    dom.getElement('parent').innerHTML = HTML;
+  },
+
+  testEmojiWithEmoticonsPlugin() {
+    const plugin = new Emoticons();
+    const field = new Field('testField');
+    field.registerPlugin(plugin);
+    field.makeEditable();
+    field.focusAndPlaceCursorAtStart();
+
+    const src = 'testdata/emoji/4F4.gif';
+    const id = '4F4';
+    const emoji = new Emoji(src, id);
+    field.execCommand(Emoticons.COMMAND, emoji);
+
+    // The url may be relative or absolute.
+    const imgs =
+        field.getEditableDomHelper().getElementsByTagNameAndClass(TagName.IMG);
+    assertEquals(1, imgs.length);
+
+    const img = imgs[0];
+    assertUriEquals(src, img.getAttribute('src'));
+    assertEquals(id, img.getAttribute(Emoji.ATTRIBUTE));
+    assertEquals(id, img.getAttribute(Emoji.DATA_ATTRIBUTE));
+
+    const range = field.getRange();
+    assertNotNull('must have a selection', range);
+    assertTrue('range must be a cursor', range.isCollapsed());
+
+    if (!userAgent.IE) {
+      const webkitValid = (2 == range.getStartOffset());
+      const otherValid =
+          (2 ==
+           googArray.indexOf(
+               range.getContainerElement().childNodes, range.getStartNode()));
+
+      assertTrue('range starts after image', webkitValid || otherValid);
+    }
+
+    assertEquals(
+        'range must be around image', img.parentElement,
+        range.getContainerElement());
+  },
+});

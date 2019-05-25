@@ -12,74 +12,76 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ds.JsXmlHttpDataSourceTest');
-goog.setTestOnly('goog.ds.JsXmlHttpDataSourceTest');
+goog.module('goog.ds.JsXmlHttpDataSourceTest');
+goog.setTestOnly();
 
-goog.require('goog.ds.JsXmlHttpDataSource');
-goog.require('goog.testing.TestQueue');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.net.XhrIo');
+const JsXmlHttpDataSource = goog.require('goog.ds.JsXmlHttpDataSource');
+const TestQueue = goog.require('goog.testing.TestQueue');
+const XhrIo = goog.require('goog.testing.net.XhrIo');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var TEXT_PREFIX = null;
-var TEXT_POSTFIX = null;
+const TEXT_PREFIX = null;
+const TEXT_POSTFIX = null;
 
-var INDEX_OF_URI_ENTRY = 1;
-var INDEX_OF_CONTENT_ENTRY = 3;
+const INDEX_OF_URI_ENTRY = 1;
+const INDEX_OF_CONTENT_ENTRY = 3;
 
-function setUp() {}
+testSuite({
+  setUp() {},
 
-function tearDown() {}
+  tearDown() {},
 
-function testLoad_WithPostAndQueryDataSet() {
-  var USE_POST = true;
-  var dataSource = new goog.ds.JsXmlHttpDataSource(
-      'uri', 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
+  testLoad_WithPostAndQueryDataSet() {
+    const USE_POST = true;
+    const dataSource = new JsXmlHttpDataSource(
+        'uri', 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
 
-  var testQueue = new goog.testing.TestQueue();
-  dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
+    const testQueue = new TestQueue();
+    dataSource.xhr_ = new XhrIo(testQueue);
 
-  var expectedContent = 'Some test content';
-  dataSource.setQueryData(expectedContent);
-  dataSource.load();
+    const expectedContent = 'Some test content';
+    dataSource.setQueryData(expectedContent);
+    dataSource.load();
 
-  assertFalse(testQueue.isEmpty());
+    assertFalse(testQueue.isEmpty());
 
-  var actualRequest = testQueue.dequeue();
-  assertEquals(expectedContent, actualRequest[INDEX_OF_CONTENT_ENTRY]);
-  assertTrue(testQueue.isEmpty());
-}
+    const actualRequest = testQueue.dequeue();
+    assertEquals(expectedContent, actualRequest[INDEX_OF_CONTENT_ENTRY]);
+    assertTrue(testQueue.isEmpty());
+  },
 
-function testLoad_WithPostAndNoQueryDataSet() {
-  var USE_POST = true;
-  var dataSource = new goog.ds.JsXmlHttpDataSource(
-      'uri?a=1&b=2', 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
+  testLoad_WithPostAndNoQueryDataSet() {
+    const USE_POST = true;
+    const dataSource = new JsXmlHttpDataSource(
+        'uri?a=1&b=2', 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
 
-  var testQueue = new goog.testing.TestQueue();
-  dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
+    const testQueue = new TestQueue();
+    dataSource.xhr_ = new XhrIo(testQueue);
 
-  dataSource.load();
+    dataSource.load();
 
-  assertFalse(testQueue.isEmpty());
+    assertFalse(testQueue.isEmpty());
 
-  var actualRequest = testQueue.dequeue();
-  assertEquals('a=1&b=2', actualRequest[INDEX_OF_CONTENT_ENTRY].toString());
-  assertTrue(testQueue.isEmpty());
-}
+    const actualRequest = testQueue.dequeue();
+    assertEquals('a=1&b=2', actualRequest[INDEX_OF_CONTENT_ENTRY].toString());
+    assertTrue(testQueue.isEmpty());
+  },
 
-function testLoad_WithGet() {
-  var USE_GET = false;
-  var expectedUri = 'uri?a=1&b=2';
-  var dataSource = new goog.ds.JsXmlHttpDataSource(
-      expectedUri, 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_GET);
+  testLoad_WithGet() {
+    const USE_GET = false;
+    const expectedUri = 'uri?a=1&b=2';
+    const dataSource = new JsXmlHttpDataSource(
+        expectedUri, 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_GET);
 
-  var testQueue = new goog.testing.TestQueue();
-  dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
+    const testQueue = new TestQueue();
+    dataSource.xhr_ = new XhrIo(testQueue);
 
-  dataSource.load();
+    dataSource.load();
 
-  assertFalse(testQueue.isEmpty());
+    assertFalse(testQueue.isEmpty());
 
-  var actualRequest = testQueue.dequeue();
-  assertEquals(expectedUri, actualRequest[INDEX_OF_URI_ENTRY].toString());
-  assertTrue(testQueue.isEmpty());
-}
+    const actualRequest = testQueue.dequeue();
+    assertEquals(expectedUri, actualRequest[INDEX_OF_URI_ENTRY].toString());
+    assertTrue(testQueue.isEmpty());
+  },
+});

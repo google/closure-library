@@ -12,254 +12,250 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.net.streams.JsonStreamParserTest');
-goog.setTestOnly('goog.net.streams.JsonStreamParserTest');
+goog.module('goog.net.streams.JsonStreamParserTest');
+goog.setTestOnly();
 
-goog.require('goog.array');
-goog.require('goog.json');
-goog.require('goog.labs.testing.JsonFuzzing');
-goog.require('goog.net.streams.JsonStreamParser');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
-goog.require('goog.uri.utils');
+const JsonFuzzing = goog.require('goog.labs.testing.JsonFuzzing');
+const JsonStreamParser = goog.require('goog.net.streams.JsonStreamParser');
+const asserts = goog.require('goog.testing.asserts');
+const googArray = goog.require('goog.array');
+const googJson = goog.require('goog.json');
+const testSuite = goog.require('goog.testing.testSuite');
+const utils = goog.require('goog.uri.utils');
 
-
-var debug;
-
-
-function setUp() {
-  var uri = window.document.URL;
-  if (uri) {
-    var debugFlag = goog.uri.utils.getParamValue(uri, 'debug');
-    if (debugFlag) {
-      debug = window.document.getElementById('debug');
-    }
-  }
-}
-
+let debug;
 
 /**
  * Debug is enabled with "&debug=on" on the URL.
- *
  * @param {string} info The debug info
  */
 function print(info) {
   if (debug) {
-    debug.innerHTML += '<p><p>' + info;
+    debug.innerHTML += `<p><p>${info}`;
   }
 }
-
-function testEmptyStream() {
-  var parser = new goog.net.streams.JsonStreamParser();
-  var result = parser.parse('[]');
-  assertNull(result);
-}
-
-function testEmptyStreamMore() {
-  var parser = new goog.net.streams.JsonStreamParser();
-  var result = parser.parse('  [   ]  ');
-  assertNull(result);
-
-  parser = new goog.net.streams.JsonStreamParser();
-  result = parser.parse('  [   ');
-  assertNull(result);
-
-  result = parser.parse('  ]   ');
-  assertNull(result);
-
-  parser = new goog.net.streams.JsonStreamParser();
-  assertThrows(function() { parser.parse(' a [   '); });
-  assertThrows(function() { parser.parse(' [ ] '); });
-}
-
-function testSingleMessage() {
-  var parser = new goog.net.streams.JsonStreamParser();
-  var result = parser.parse('[{"a" : "b"}]');
-  assertEquals(1, result.length);
-  assertEquals('b', result[0].a);
-}
-
-function testEnclosingArray() {
-  var parser = new goog.net.streams.JsonStreamParser();
-  var result = parser.parse('[\n');
-  assertNull(result);
-
-  result = parser.parse('{"a" : "b"}');
-  assertEquals(1, result.length);
-  assertEquals('b', result[0].a);
-
-  result = parser.parse('\n]');
-  assertNull(result);
-}
-
-function testSingleMessageInChunks() {
-  var parser = new goog.net.streams.JsonStreamParser();
-  var result = parser.parse('[{"a" : ');
-  assertNull(result);
-  result = parser.parse('"b"}]');
-  assertEquals(1, result.length);
-  assertEquals('b', result[0].a);
-
-  parser = new goog.net.streams.JsonStreamParser();
-  result = parser.parse('[ {  "a" : ');
-  assertNull(result);
-  result = parser.parse('"b"} ');
-  assertEquals(1, result.length);
-  assertEquals('b', result[0].a);
-
-  result = parser.parse('] ');
-  assertNull(result);
-}
-
-function testTwoMessages() {
-  var parser = new goog.net.streams.JsonStreamParser();
-  var result = parser.parse('[{"a" : "b"}, {"c" : "d"}]');
-  assertEquals(2, result.length);
-  assertEquals('b', result[0].a);
-  assertEquals('d', result[1].c);
-}
-
-function testTwoMessagesInChunks() {
-  var parser = new goog.net.streams.JsonStreamParser();
-  var result = parser.parse('[{"a" : "b"}, ');
-  assertEquals(1, result.length);
-  assertEquals('b', result[0].a);
-  result = parser.parse('{"c" : "d"} ');
-  assertEquals(1, result.length);
-  assertEquals('d', result[0].c);
-  result = parser.parse('] ');
-  assertNull(result);
-  assertThrows(function() { parser.parse('  a   '); });
-}
-
-
-/**
- * Parse a fuzzy json string only once.
- */
-function testSingleFuzzyMessages() {
-  var fuzzing = new goog.labs.testing.JsonFuzzing();
-
-  // total # of tests
-  for (var i = 0; i < 5; i++) {
-    var data = fuzzing.newArray();
-    var dataString = goog.json.serialize(data);
-    var parser = new goog.net.streams.JsonStreamParser();
-    var result = parser.parse(dataString);
-
-    assertEquals(data.length, result.length);
-    goog.array.forEach(data, function(elm, index) {
-      assertNotNull(elm);
-      assertObjectEquals(dataString, elm, result[index]);
-    });
-  }
-}
-
-
-/**
- * Parse a fuzzy json string split (in two chunks) at each index of the string.
- *
- * This is a VERY expensive test, so change the fuzzing options for manual runs
- * as required.
- */
-function testChunkedFuzzyMessages() {
-  var options = {jsonSize: 5, numFields: 5, arraySize: 4, maxDepth: 3};
-  var fuzzing = new goog.labs.testing.JsonFuzzing(options);
-
-  var data = fuzzing.newArray();
-  var dataString = goog.json.serialize(data);
-
-  print(dataString);
-
-  for (var j = 1; j < dataString.length; j++) {
-    var parser = new goog.net.streams.JsonStreamParser();
-    var result = [];
-
-    var string1 = dataString.substring(0, j);
-
-    var parsed = parser.parse(string1);
-    if (parsed) {
-      result = goog.array.concat(result, parsed);
-    }
-
-    var string2 = dataString.substring(j);
-
-    parsed = parser.parse(string2);
-    if (parsed) {
-      result = goog.array.concat(result, parsed);
-    }
-
-    assertEquals(data.length, result.length);
-    goog.array.forEach(data, function(elm, index) {
-      assertObjectEquals(dataString, elm, result[index]);
-    });
-  }
-}
-
-
-/**
- * Parse a fuzzy json string in randomly generated chunks.
- */
-function testRandomlyChunkedFuzzyMessages() {
-  var fuzzing = new goog.labs.testing.JsonFuzzing();
-
-  var data = fuzzing.newArray();
-  var dataString = goog.json.serialize(data);
-
-  var parser = new goog.net.streams.JsonStreamParser();
-
-  var result = [];
-
-  print(dataString);
-
-  // randomly generated chunks
-  var pos = 0;
-  while (pos < dataString.length) {
-    var num = fuzzing.nextInt(1, dataString.length - pos);
-    var next = pos + num;
-    var subString = dataString.substring(pos, next);
-
-    print(subString);
-
-    pos = next;
-    var parsed = parser.parse(subString);
-    if (parsed) {
-      result = goog.array.concat(result, parsed);
-    }
-  }
-
-  assertEquals(data.length, result.length);
-  goog.array.forEach(data, function(elm, index) {
-    assertObjectEquals(dataString + '\n@' + index, elm, result[index]);
-  });
-}
-
 
 // TODO(user): add a fuzzy test for this.
 
-function testGetExtraInput() {
-  var parser = new goog.net.streams.JsonStreamParser();
-  var result = parser.parse('[] , [[1, 2, 3]]');
-  assertNull(result);
-  assertTrue(parser.done());
-  assertEquals(' , [[1, 2, 3]]', parser.getExtraInput());
+testSuite({
+  setUp() {
+    const uri = window.document.URL;
+    if (uri) {
+      const debugFlag = utils.getParamValue(uri, 'debug');
+      if (debugFlag) {
+        debug = window.document.getElementById('debug');
+      }
+    }
+  },
 
-  parser = new goog.net.streams.JsonStreamParser();
-  assertFalse(parser.done());
-  parser.parse(' [{"a" : "b"}, {"c" : "d"   ');
-  assertFalse(parser.done());
-  parser.parse(' } ]  a   ');
-  assertTrue(parser.done());
-  assertEquals('  a   ', parser.getExtraInput());
-}
+  testEmptyStream() {
+    const parser = new JsonStreamParser();
+    const result = parser.parse('[]');
+    assertNull(result);
+  },
 
+  testEmptyStreamMore() {
+    let parser = new JsonStreamParser();
+    let result = parser.parse('  [   ]  ');
+    assertNull(result);
 
-function testDeliverMessageAsRawString() {
-  var parser = new goog.net.streams.JsonStreamParser(
-      {'deliverMessageAsRawString': true});
-  var result = parser.parse(' [{"a" : "b"}, {"c" : "d"},[],{}] ');
-  assertEquals(4, result.length);
-  assertEquals('{"a" : "b"}', result[0]);
-  assertEquals(' {"c" : "d"}', result[1]);
-  assertEquals('[]', result[2]);
-  assertEquals('{}', result[3]);
-}
+    parser = new JsonStreamParser();
+    result = parser.parse('  [   ');
+    assertNull(result);
+
+    result = parser.parse('  ]   ');
+    assertNull(result);
+
+    parser = new JsonStreamParser();
+    assertThrows(() => {
+      parser.parse(' a [   ');
+    });
+    assertThrows(() => {
+      parser.parse(' [ ] ');
+    });
+  },
+
+  testSingleMessage() {
+    const parser = new JsonStreamParser();
+    const result = parser.parse('[{"a" : "b"}]');
+    assertEquals(1, result.length);
+    assertEquals('b', result[0].a);
+  },
+
+  testEnclosingArray() {
+    const parser = new JsonStreamParser();
+    let result = parser.parse('[\n');
+    assertNull(result);
+
+    result = parser.parse('{"a" : "b"}');
+    assertEquals(1, result.length);
+    assertEquals('b', result[0].a);
+
+    result = parser.parse('\n]');
+    assertNull(result);
+  },
+
+  testSingleMessageInChunks() {
+    let parser = new JsonStreamParser();
+    let result = parser.parse('[{"a" : ');
+    assertNull(result);
+    result = parser.parse('"b"}]');
+    assertEquals(1, result.length);
+    assertEquals('b', result[0].a);
+
+    parser = new JsonStreamParser();
+    result = parser.parse('[ {  "a" : ');
+    assertNull(result);
+    result = parser.parse('"b"} ');
+    assertEquals(1, result.length);
+    assertEquals('b', result[0].a);
+
+    result = parser.parse('] ');
+    assertNull(result);
+  },
+
+  testTwoMessages() {
+    const parser = new JsonStreamParser();
+    const result = parser.parse('[{"a" : "b"}, {"c" : "d"}]');
+    assertEquals(2, result.length);
+    assertEquals('b', result[0].a);
+    assertEquals('d', result[1].c);
+  },
+
+  testTwoMessagesInChunks() {
+    const parser = new JsonStreamParser();
+    let result = parser.parse('[{"a" : "b"}, ');
+    assertEquals(1, result.length);
+    assertEquals('b', result[0].a);
+    result = parser.parse('{"c" : "d"} ');
+    assertEquals(1, result.length);
+    assertEquals('d', result[0].c);
+    result = parser.parse('] ');
+    assertNull(result);
+    assertThrows(() => {
+      parser.parse('  a   ');
+    });
+  },
+
+  /** Parse a fuzzy json string only once. */
+  testSingleFuzzyMessages() {
+    const fuzzing = new JsonFuzzing();
+
+    // total # of tests
+    for (let i = 0; i < 5; i++) {
+      const data = fuzzing.newArray();
+      const dataString = googJson.serialize(data);
+      const parser = new JsonStreamParser();
+      const result = parser.parse(dataString);
+
+      assertEquals(data.length, result.length);
+      googArray.forEach(data, (elm, index) => {
+        assertNotNull(elm);
+        assertObjectEquals(dataString, elm, result[index]);
+      });
+    }
+  },
+
+  /**
+   * Parse a fuzzy json string split (in two chunks) at each index of the
+   * string. This is a VERY expensive test, so change the fuzzing options for
+   * manual runs as required.
+   */
+  testChunkedFuzzyMessages() {
+    const options = {jsonSize: 5, numFields: 5, arraySize: 4, maxDepth: 3};
+    const fuzzing = new JsonFuzzing(options);
+
+    const data = fuzzing.newArray();
+    const dataString = googJson.serialize(data);
+
+    print(dataString);
+
+    for (let j = 1; j < dataString.length; j++) {
+      const parser = new JsonStreamParser();
+      let result = [];
+
+      const string1 = dataString.substring(0, j);
+
+      let parsed = parser.parse(string1);
+      if (parsed) {
+        result = googArray.concat(result, parsed);
+      }
+
+      const string2 = dataString.substring(j);
+
+      parsed = parser.parse(string2);
+      if (parsed) {
+        result = googArray.concat(result, parsed);
+      }
+
+      assertEquals(data.length, result.length);
+      googArray.forEach(data, (elm, index) => {
+        assertObjectEquals(dataString, elm, result[index]);
+      });
+    }
+  },
+
+  /** Parse a fuzzy json string in randomly generated chunks. */
+  testRandomlyChunkedFuzzyMessages() {
+    const fuzzing = new JsonFuzzing();
+
+    const data = fuzzing.newArray();
+    const dataString = googJson.serialize(data);
+
+    const parser = new JsonStreamParser();
+
+    let result = [];
+
+    print(dataString);
+
+    // randomly generated chunks
+    let pos = 0;
+    while (pos < dataString.length) {
+      const num = fuzzing.nextInt(1, dataString.length - pos);
+      const next = pos + num;
+      const subString = dataString.substring(pos, next);
+
+      print(subString);
+
+      pos = next;
+      const parsed = parser.parse(subString);
+      if (parsed) {
+        result = googArray.concat(result, parsed);
+      }
+    }
+
+    assertEquals(data.length, result.length);
+    googArray.forEach(data, (elm, index) => {
+      assertObjectEquals(
+          `${dataString}
+@${index}`,
+          elm, result[index]);
+    });
+  },
+
+  testGetExtraInput() {
+    let parser = new JsonStreamParser();
+    const result = parser.parse('[] , [[1, 2, 3]]');
+    assertNull(result);
+    assertTrue(parser.done());
+    assertEquals(' , [[1, 2, 3]]', parser.getExtraInput());
+
+    parser = new JsonStreamParser();
+    assertFalse(parser.done());
+    parser.parse(' [{"a" : "b"}, {"c" : "d"   ');
+    assertFalse(parser.done());
+    parser.parse(' } ]  a   ');
+    assertTrue(parser.done());
+    assertEquals('  a   ', parser.getExtraInput());
+  },
+
+  testDeliverMessageAsRawString() {
+    const parser = new JsonStreamParser({'deliverMessageAsRawString': true});
+    const result = parser.parse(' [{"a" : "b"}, {"c" : "d"},[],{}] ');
+    assertEquals(4, result.length);
+    assertEquals('{"a" : "b"}', result[0]);
+    assertEquals(' {"c" : "d"}', result[1]);
+    assertEquals('[]', result[2]);
+    assertEquals('{}', result[3]);
+  },
+});

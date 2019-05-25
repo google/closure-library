@@ -12,48 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Unit tests for goog.string.Const.
- */
+/** @fileoverview Unit tests for Const. */
 
-goog.provide('goog.string.constTest');
+goog.module('goog.string.constTest');
+goog.setTestOnly();
 
-goog.require('goog.string.Const');
-goog.require('goog.testing.jsunit');
+const Const = goog.require('goog.string.Const');
+const testSuite = goog.require('goog.testing.testSuite');
 
-goog.setTestOnly('goog.string.constTest');
+testSuite({
+  testConst() {
+    const constString = Const.from('blah');
+    const extracted = Const.unwrap(constString);
+    assertEquals('blah', extracted);
+    assertEquals('blah', constString.getTypedStringValue());
+    assertEquals('Const{blah}', String(constString));
 
+    // Interface marker is present.
+    assertTrue(constString.implementsGoogStringTypedString);
+  },
 
+  /** @suppress {checkTypes} */
+  testUnwrap() {
+    const evil = {};
+    evil.constStringValueWithSecurityContract__googStringSecurityPrivate_ =
+        'evil';
+    evil.CONST_STRING_TYPE_MARKER__GOOG_STRING_SECURITY_PRIVATE_ = {};
 
-function testConst() {
-  var constString = goog.string.Const.from('blah');
-  var extracted = goog.string.Const.unwrap(constString);
-  assertEquals('blah', extracted);
-  assertEquals('blah', constString.getTypedStringValue());
-  assertEquals('Const{blah}', String(constString));
+    const exception = assertThrows(() => {
+      Const.unwrap(evil);
+    });
+    assertTrue(exception.message.indexOf('expected object of type Const') > 0);
+  },
 
-  // Interface marker is present.
-  assertTrue(constString.implementsGoogStringTypedString);
-}
+  testExplicitConstructorInvocation() {
+    assertEquals('', Const.unwrap(new Const({}, 'foo')));
+  },
 
-
-/** @suppress {checkTypes} */
-function testUnwrap() {
-  var evil = {};
-  evil.constStringValueWithSecurityContract__googStringSecurityPrivate_ =
-      'evil';
-  evil.CONST_STRING_TYPE_MARKER__GOOG_STRING_SECURITY_PRIVATE_ = {};
-
-  var exception = assertThrows(function() { goog.string.Const.unwrap(evil); });
-  assertTrue(exception.message.indexOf('expected object of type Const') > 0);
-}
-
-
-function testExplicitConstructorInvocation() {
-  assertEquals('', goog.string.Const.unwrap(new goog.string.Const({}, 'foo')));
-}
-
-
-function testBackwardsCompatibility() {
-  assertEquals('', goog.string.Const.unwrap(new goog.string.Const()));
-}
+  testBackwardsCompatibility() {
+    assertEquals('', Const.unwrap(new Const()));
+  },
+});

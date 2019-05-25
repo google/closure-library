@@ -12,22 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.singletonTest');
-goog.setTestOnly('goog.testing.singletonTest');
+goog.module('goog.testing.singletonTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.singleton');
+const asserts = goog.require('goog.testing.asserts');
+const singleton = goog.require('goog.testing.singleton');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testGetInstance() {
-  function SingletonClass() {}
-  goog.addSingletonGetter(SingletonClass);
+testSuite({
+  testGetInstance() {
+    function SingletonClass() {}
+    goog.addSingletonGetter(SingletonClass);
 
-  var s1 = SingletonClass.getInstance();
-  var s2 = SingletonClass.getInstance();
-  assertEquals('second getInstance call returns the same instance', s1, s2);
+    const s1 = SingletonClass.getInstance();
+    const s2 = SingletonClass.getInstance();
+    assertEquals('second getInstance call returns the same instance', s1, s2);
 
-  goog.testing.singleton.reset();
-  var s3 = SingletonClass.getInstance();
-  assertNotEquals('getInstance returns a new instance after reset', s1, s3);
-}
+    singleton.reset();
+    const s3 = SingletonClass.getInstance();
+    assertNotEquals('getInstance returns a new instance after reset', s1, s3);
+  },
+});

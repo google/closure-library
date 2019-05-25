@@ -12,25 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.TwoThumbSliderTest');
-goog.setTestOnly('goog.ui.TwoThumbSliderTest');
+goog.module('goog.ui.TwoThumbSliderTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.SliderBase');
-goog.require('goog.ui.TwoThumbSlider');
+const SliderBase = goog.require('goog.ui.SliderBase');
+const TwoThumbSlider = goog.require('goog.ui.TwoThumbSlider');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var slider;
+let slider;
 
-function tearDown() {
-  goog.dispose(slider);
-}
+testSuite({
+  tearDown() {
+    goog.dispose(slider);
+  },
 
-function testGetCssClass() {
-  slider = new goog.ui.TwoThumbSlider();
-  assertEquals(
-      'goog-twothumbslider-horizontal',
-      slider.getCssClass(goog.ui.SliderBase.Orientation.HORIZONTAL));
-  assertEquals(
-      'goog-twothumbslider-vertical',
-      slider.getCssClass(goog.ui.SliderBase.Orientation.VERTICAL));
-}
+  testGetCssClass() {
+    slider = new TwoThumbSlider();
+    assertEquals(
+        'goog-twothumbslider-horizontal',
+        slider.getCssClass(SliderBase.Orientation.HORIZONTAL));
+    assertEquals(
+        'goog-twothumbslider-vertical',
+        slider.getCssClass(SliderBase.Orientation.VERTICAL));
+  },
+});

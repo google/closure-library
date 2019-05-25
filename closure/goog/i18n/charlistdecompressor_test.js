@@ -12,47 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.i18n.CharListDecompressorTest');
-goog.setTestOnly('goog.i18n.CharListDecompressorTest');
+goog.module('goog.i18n.CharListDecompressorTest');
+goog.setTestOnly();
 
-goog.require('goog.i18n.CharListDecompressor');
-goog.require('goog.testing.jsunit');
+const CharListDecompressor = goog.require('goog.i18n.CharListDecompressor');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var decompressor = new goog.i18n.CharListDecompressor();
+const decompressor = new CharListDecompressor();
 
-function testBuildCharMap() {
-  assertEquals(0, decompressor.charMap_['0']);
-  assertEquals(10, decompressor.charMap_['A']);
-  assertEquals(87, decompressor.charMap_['}']);
-}
+testSuite({
+  testBuildCharMap() {
+    assertEquals(0, decompressor.charMap_['0']);
+    assertEquals(10, decompressor.charMap_['A']);
+    assertEquals(87, decompressor.charMap_['}']);
+  },
 
-function testGetCodeAt() {
-  var code = decompressor.getCodeAt_('321', 1, 2);
-  assertEquals(90, code);
-}
+  testGetCodeAt() {
+    const code = decompressor.getCodeAt_('321', 1, 2);
+    assertEquals(90, code);
+  },
 
-function testAddCharsForType0() {
-  var list = ['a'];
-  var lastcode = decompressor.addChars_(list, 97, 0, 0);
-  assertArrayEquals(['a', 'b'], list);
-  assertEquals(98, lastcode);
-}
+  testAddCharsForType0() {
+    const list = ['a'];
+    const lastcode = decompressor.addChars_(list, 97, 0, 0);
+    assertArrayEquals(['a', 'b'], list);
+    assertEquals(98, lastcode);
+  },
 
-function testAddCharsForType1() {
-  var list = ['a'];
-  var lastcode = decompressor.addChars_(list, 98, 0, 1);
-  assertArrayEquals(['a', 'a'], list);
-  assertEquals(97, lastcode);
-}
+  testAddCharsForType1() {
+    const list = ['a'];
+    const lastcode = decompressor.addChars_(list, 98, 0, 1);
+    assertArrayEquals(['a', 'a'], list);
+    assertEquals(97, lastcode);
+  },
 
-function testAddCharsForType2() {
-  var list = ['a'];
-  var lastcode = decompressor.addChars_(list, 97, 1, 2);
-  assertArrayEquals(['a', 'b', 'c'], list);
-  assertEquals(99, lastcode);
-}
+  testAddCharsForType2() {
+    const list = ['a'];
+    const lastcode = decompressor.addChars_(list, 97, 1, 2);
+    assertArrayEquals(['a', 'b', 'c'], list);
+    assertEquals(99, lastcode);
+  },
 
-function testToCharList() {
-  var list = decompressor.toCharList('%812E<E');  // a, x-z, p-r
-  assertArrayEquals(['a', 'x', 'y', 'z', 'p', 'q', 'r'], list);
-}
+  testToCharList() {
+    const list = decompressor.toCharList('%812E<E');  // a, x-z, p-r
+    assertArrayEquals(['a', 'x', 'y', 'z', 'p', 'q', 'r'], list);
+  },
+});

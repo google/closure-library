@@ -12,62 +12,65 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.emoji.PopupEmojiPickerTest');
-goog.setTestOnly('goog.ui.emoji.PopupEmojiPickerTest');
+goog.module('goog.ui.emoji.PopupEmojiPickerTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.emoji.PopupEmojiPicker');
-var emojiGroup1 = [
+const PopupEmojiPicker = goog.require('goog.ui.emoji.PopupEmojiPicker');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
+
+const emojiGroup1 = [
   'Emoji 1',
   [
     ['../../demos/emoji/200.gif', 'std.200'],
-    ['../../demos/emoji/201.gif', 'std.201']
-  ]
+    ['../../demos/emoji/201.gif', 'std.201'],
+  ],
 ];
 
-var emojiGroup2 = [
+const emojiGroup2 = [
   'Emoji 2',
   [
     ['../../demos/emoji/2D0.gif', 'std.2D0'],
-    ['../../demos/emoji/2D1.gif', 'std.2D1']
-  ]
+    ['../../demos/emoji/2D1.gif', 'std.2D1'],
+  ],
 ];
 
-var emojiGroup3 = [
+const emojiGroup3 = [
   'Emoji 3',
   [
     ['../../demos/emoji/2E4.gif', 'std.2E4'],
-    ['../../demos/emoji/2E5.gif', 'std.2E5']
-  ]
+    ['../../demos/emoji/2E5.gif', 'std.2E5'],
+  ],
 ];
 
-function testConstructAndRenderPopupEmojiPicker() {
-  var picker = new goog.ui.emoji.PopupEmojiPicker('../../demos/emoji/none.gif');
-  picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
-  picker.addEmojiGroup(emojiGroup2[0], emojiGroup2[1]);
-  picker.addEmojiGroup(emojiGroup3[0], emojiGroup3[1]);
-  picker.render();
-  picker.attach(document.getElementById('button1'));
-  picker.dispose();
-}
-
 // Unittest to ensure that the popup gets created in createDom().
-function testPopupCreation() {
-  var picker = new goog.ui.emoji.PopupEmojiPicker();
-  picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
-  picker.createDom();
-  assertNotNull(picker.getPopup());
-}
 
+testSuite({
+  testConstructAndRenderPopupEmojiPicker() {
+    const picker = new PopupEmojiPicker('../../demos/emoji/none.gif');
+    picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
+    picker.addEmojiGroup(emojiGroup2[0], emojiGroup2[1]);
+    picker.addEmojiGroup(emojiGroup3[0], emojiGroup3[1]);
+    picker.render();
+    picker.attach(document.getElementById('button1'));
+    picker.dispose();
+  },
 
-function testAutoHideIsSetProperly() {
-  var picker = new goog.ui.emoji.PopupEmojiPicker();
-  picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
-  picker.createDom();
-  picker.setAutoHide(true);
-  var containingDiv = goog.dom.getElement('containingDiv');
-  picker.setAutoHideRegion(containingDiv);
-  assertTrue(picker.getAutoHide());
-  assertEquals(containingDiv, picker.getAutoHideRegion());
-}
+  testPopupCreation() {
+    const picker = new PopupEmojiPicker();
+    picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
+    picker.createDom();
+    assertNotNull(picker.getPopup());
+  },
+
+  testAutoHideIsSetProperly() {
+    const picker = new PopupEmojiPicker();
+    picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
+    picker.createDom();
+    picker.setAutoHide(true);
+    const containingDiv = dom.getElement('containingDiv');
+    picker.setAutoHideRegion(containingDiv);
+    assertTrue(picker.getAutoHide());
+    assertEquals(containingDiv, picker.getAutoHideRegion());
+  },
+});

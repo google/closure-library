@@ -12,176 +12,171 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.PluginTest');
-goog.setTestOnly('goog.editor.PluginTest');
+goog.module('goog.editor.PluginTest');
+goog.setTestOnly();
 
-goog.require('goog.editor.Field');
-goog.require('goog.editor.Plugin');
-goog.require('goog.functions');
-goog.require('goog.testing.StrictMock');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const Field = goog.require('goog.editor.Field');
+const Plugin = goog.require('goog.editor.Plugin');
+const StrictMock = goog.require('goog.testing.StrictMock');
+const functions = goog.require('goog.functions');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var plugin;
-var fieldObject;
+let plugin;
+let fieldObject;
 
+testSuite({
+  setUp() {
+    plugin = new Plugin();
+    fieldObject = {};
+  },
 
-function setUp() {
-  plugin = new goog.editor.Plugin();
-  fieldObject = {};
-}
+  tearDown() {
+    plugin.dispose();
+  },
 
+  testRegisterFieldObject() {
+    plugin.registerFieldObject(fieldObject);
+    assertEquals(
+        'Register field object must be stored in protected field.', fieldObject,
+        plugin.fieldObject);
 
-function tearDown() {
-  plugin.dispose();
-}
+    assertFalse(
+        'Newly registered plugin must not be enabled.',
+        plugin.isEnabled(fieldObject));
+  },
 
+  testUnregisterFieldObject() {
+    plugin.registerFieldObject(fieldObject);
+    plugin.enable(fieldObject);
+    plugin.unregisterFieldObject(fieldObject);
 
-function testRegisterFieldObject() {
-  plugin.registerFieldObject(fieldObject);
-  assertEquals(
-      'Register field object must be stored in protected field.', fieldObject,
-      plugin.fieldObject);
+    assertNull(
+        'fieldObject property must be undefined after ' +
+            'unregistering a field object.',
+        plugin.fieldObject);
+    assertFalse(
+        'Unregistered field object must not be enabled',
+        plugin.isEnabled(fieldObject));
+  },
 
-  assertFalse(
-      'Newly registered plugin must not be enabled.',
-      plugin.isEnabled(fieldObject));
-}
+  testEnable() {
+    plugin.registerFieldObject(fieldObject);
+    plugin.enable(fieldObject);
 
+    assertTrue(
+        'Enabled field object must be enabled according to isEnabled().',
+        plugin.isEnabled(fieldObject));
+  },
 
-function testUnregisterFieldObject() {
-  plugin.registerFieldObject(fieldObject);
-  plugin.enable(fieldObject);
-  plugin.unregisterFieldObject(fieldObject);
+  testDisable() {
+    plugin.registerFieldObject(fieldObject);
+    plugin.enable(fieldObject);
+    plugin.disable(fieldObject);
 
-  assertNull(
-      'fieldObject property must be undefined after ' +
-          'unregistering a field object.',
-      plugin.fieldObject);
-  assertFalse(
-      'Unregistered field object must not be enabled',
-      plugin.isEnabled(fieldObject));
-}
+    assertFalse(
+        'Disabled field object must be disabled according to ' +
+            'isEnabled().',
+        plugin.isEnabled(fieldObject));
+  },
 
+  testIsEnabled() {
+    // Other base cases covered while testing enable() and disable().
 
-function testEnable() {
-  plugin.registerFieldObject(fieldObject);
-  plugin.enable(fieldObject);
+    assertFalse(
+        'Unregistered field object must be disabled according ' +
+            'to isEnabled().',
+        plugin.isEnabled(fieldObject));
+  },
 
-  assertTrue(
-      'Enabled field object must be enabled according to isEnabled().',
-      plugin.isEnabled(fieldObject));
-}
+  testIsSupportedCommand() {
+    assertFalse(
+        'Base plugin class must not support any commands.',
+        plugin.isSupportedCommand('+indent'));
+  },
 
+  testExecCommand() {
+    const mockField = new StrictMock(Field);
+    plugin.registerFieldObject(mockField);
 
-function testDisable() {
-  plugin.registerFieldObject(fieldObject);
-  plugin.enable(fieldObject);
-  plugin.disable(fieldObject);
+    if (userAgent.GECKO) {
+      mockField.stopChangeEvents(true, true);
+    }
+    mockField.dispatchBeforeChange();
+    // Note(user): dispatch change turns back on (delayed) change events.
+    mockField.dispatchChange();
+    mockField.dispatchSelectionChangeEvent();
+    mockField.$replay();
 
-  assertFalse(
-      'Disabled field object must be disabled according to ' +
-          'isEnabled().',
-      plugin.isEnabled(fieldObject));
-}
+    let passedArg;
+    let passedCommand;
 
+    plugin.execCommandInternal = (command, arg) => {
+      passedCommand = command;
+      passedArg = arg;
+    };
+    plugin.execCommand('+indent', true);
 
-function testIsEnabled() {
-  // Other base cases covered while testing enable() and disable().
+    // Verify that execCommand dispatched the expected events.
+    mockField.$verify();
+    mockField.$reset();
+    // Verify that execCommandInternal was called with the correct arguments.
+    assertEquals('+indent', passedCommand);
+    assertTrue(passedArg);
 
-  assertFalse(
-      'Unregistered field object must be disabled according ' +
-          'to isEnabled().',
-      plugin.isEnabled(fieldObject));
-}
+    plugin.isSilentCommand = functions.constant(true);
+    mockField.$replay();
+    plugin.execCommand('+outdent', false);
+    // Verify that execCommand on a silent plugin dispatched no events.
+    mockField.$verify();
+    // Verify that execCommandInternal was called with the correct arguments.
+    assertEquals('+outdent', passedCommand);
+    assertFalse(passedArg);
+  },
 
+  /** Regression test for http://b/issue?id=1471355 . */
+  testExecCommandException() {
+    const mockField = new StrictMock(Field);
+    plugin.registerFieldObject(mockField);
+    plugin.execCommandInternal = () => {
+      throw 1;
+    };
 
-function testIsSupportedCommand() {
-  assertFalse(
-      'Base plugin class must not support any commands.',
-      plugin.isSupportedCommand('+indent'));
-}
+    if (userAgent.GECKO) {
+      mockField.stopChangeEvents(true, true);
+    }
+    mockField.dispatchBeforeChange();
+    // Note(user): dispatch change turns back on (delayed) change events.
+    mockField.dispatchChange();
+    mockField.dispatchSelectionChangeEvent();
+    mockField.$replay();
 
-function testExecCommand() {
-  var mockField = new goog.testing.StrictMock(goog.editor.Field);
-  plugin.registerFieldObject(mockField);
+    assertThrows('Exception should not be swallowed', () => {
+      plugin.execCommand();
+    });
 
-  if (goog.userAgent.GECKO) {
-    mockField.stopChangeEvents(true, true);
-  }
-  mockField.dispatchBeforeChange();
-  // Note(user): dispatch change turns back on (delayed) change events.
-  mockField.dispatchChange();
-  mockField.dispatchSelectionChangeEvent();
-  mockField.$replay();
+    // Verifies that cleanup is done despite the exception.
+    mockField.$verify();
+  },
 
-  var passedCommand, passedArg;
-  plugin.execCommandInternal = function(command, arg) {
-    passedCommand = command;
-    passedArg = arg;
-  };
-  plugin.execCommand('+indent', true);
+  testDisposed() {
+    plugin.registerFieldObject(fieldObject);
+    plugin.dispose();
+    assert(plugin.getDisposed());
+    assertNull(
+        'Disposed plugin must not have a field object.', plugin.fieldObject);
+    assertFalse(
+        'Disposed plugin must not have an enabled field object.',
+        plugin.isEnabled(fieldObject));
+  },
 
-  // Verify that execCommand dispatched the expected events.
-  mockField.$verify();
-  mockField.$reset();
-  // Verify that execCommandInternal was called with the correct arguments.
-  assertEquals('+indent', passedCommand);
-  assertTrue(passedArg);
+  testIsAndSetAutoDispose() {
+    assertTrue('Plugin must start auto-disposable', plugin.isAutoDispose());
 
-  plugin.isSilentCommand = goog.functions.constant(true);
-  mockField.$replay();
-  plugin.execCommand('+outdent', false);
-  // Verify that execCommand on a silent plugin dispatched no events.
-  mockField.$verify();
-  // Verify that execCommandInternal was called with the correct arguments.
-  assertEquals('+outdent', passedCommand);
-  assertFalse(passedArg);
-}
+    plugin.setAutoDispose(false);
+    assertFalse(plugin.isAutoDispose());
 
-
-/**
- * Regression test for http://b/issue?id=1471355 .
- */
-function testExecCommandException() {
-  var mockField = new goog.testing.StrictMock(goog.editor.Field);
-  plugin.registerFieldObject(mockField);
-  plugin.execCommandInternal = function() { throw 1; };
-
-  if (goog.userAgent.GECKO) {
-    mockField.stopChangeEvents(true, true);
-  }
-  mockField.dispatchBeforeChange();
-  // Note(user): dispatch change turns back on (delayed) change events.
-  mockField.dispatchChange();
-  mockField.dispatchSelectionChangeEvent();
-  mockField.$replay();
-
-  assertThrows('Exception should not be swallowed', function() {
-    plugin.execCommand();
-  });
-
-  // Verifies that cleanup is done despite the exception.
-  mockField.$verify();
-}
-
-function testDisposed() {
-  plugin.registerFieldObject(fieldObject);
-  plugin.dispose();
-  assert(plugin.getDisposed());
-  assertNull(
-      'Disposed plugin must not have a field object.', plugin.fieldObject);
-  assertFalse(
-      'Disposed plugin must not have an enabled field object.',
-      plugin.isEnabled(fieldObject));
-}
-
-function testIsAndSetAutoDispose() {
-  assertTrue('Plugin must start auto-disposable', plugin.isAutoDispose());
-
-  plugin.setAutoDispose(false);
-  assertFalse(plugin.isAutoDispose());
-
-  plugin.setAutoDispose(true);
-  assertTrue(plugin.isAutoDispose());
-}
+    plugin.setAutoDispose(true);
+    assertTrue(plugin.isAutoDispose());
+  },
+});

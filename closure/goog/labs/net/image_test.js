@@ -12,63 +12,63 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Unit tests for goog.labs.net.Image.
- *
- * @author nnaze@google.com (Nathan Naze)
- */
+/** @fileoverview Unit tests for goog.labs.net.Image. */
 
-goog.provide('goog.labs.net.imageTest');
+goog.module('goog.labs.net.imageTest');
+goog.setTestOnly();
 
-goog.require('goog.labs.net.image');
-goog.require('goog.string');
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const TestCase = goog.require('goog.testing.TestCase');
+const googString = goog.require('goog.string');
+const netImage = goog.require('goog.labs.net.image');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
-goog.setTestOnly('goog.labs.net.imageTest');
+testSuite({
+  setUpPage() {
+    TestCase.getActiveTestCase().promiseTimeout = 10000;  // 10s
+  },
 
+  testValidImage() {
+    const url = 'testdata/cleardot.gif';
 
-function setUpPage() {
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000;  // 10s
-}
+    return netImage.load(url).then((value) => {
+      assertEquals('IMG', value.tagName);
+      assertTrue(googString.endsWith(value.src, url));
+    });
+  },
 
-function testValidImage() {
-  var url = 'testdata/cleardot.gif';
+  testInvalidImage() {
+    const url = 'testdata/invalid.gif';  // This file does not exist.
 
-  return goog.labs.net.image.load(url).then(function(value) {
-    assertEquals('IMG', value.tagName);
-    assertTrue(goog.string.endsWith(value.src, url));
-  });
-}
+    return netImage.load(url).then(
+        () => {
+          fail('Invalid image should not resolve');
+        },
+        (errResult) => {
+          assertNull(errResult);
+        });
+  },
 
-function testInvalidImage() {
-  var url = 'testdata/invalid.gif';  // This file does not exist.
+  testImageFactory() {
+    const returnedImage = new Image();
+    const factory = () => returnedImage;
+    const countedFactory = recordFunction(factory);
 
-  return goog.labs.net.image.load(url).then(
-      function() { fail('Invalid image should not resolve'); },
-      function(errResult) { assertNull(errResult); });
-}
+    const url = 'testdata/cleardot.gif';
 
-function testImageFactory() {
-  var returnedImage = new Image();
-  var factory = function() { return returnedImage; };
-  var countedFactory = goog.testing.recordFunction(factory);
+    return netImage.load(url, countedFactory).then((value) => {
+      assertEquals(returnedImage, value);
+      assertEquals(1, countedFactory.getCallCount());
+    });
+  },
 
-  var url = 'testdata/cleardot.gif';
+  testExistingImage() {
+    const image = new Image();
 
-  return goog.labs.net.image.load(url, countedFactory).then(function(value) {
-    assertEquals(returnedImage, value);
-    assertEquals(1, countedFactory.getCallCount());
-  });
-}
+    const url = 'testdata/cleardot.gif';
 
-function testExistingImage() {
-  var image = new Image();
-
-  var url = 'testdata/cleardot.gif';
-
-  return goog.labs.net.image.load(url, image).then(function(value) {
-    assertEquals(image, value);
-  });
-}
+    return netImage.load(url, image).then((value) => {
+      assertEquals(image, value);
+    });
+  },
+});

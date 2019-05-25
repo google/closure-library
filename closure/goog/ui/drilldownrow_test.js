@@ -12,39 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.DrilldownRowTest');
-goog.setTestOnly('goog.ui.DrilldownRowTest');
+goog.module('goog.ui.DrilldownRowTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.html.SafeHtml');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.DrilldownRow');
-
-function testMakeRows() {
-  var ff = goog.dom.getElement('firstRow');
-  var d = new goog.ui.DrilldownRow({});
-  var d1 = new goog.ui.DrilldownRow({html: createHtmlForRow('Second row')});
-  var d2 = new goog.ui.DrilldownRow({html: createHtmlForRow('Third row')});
-  var d21 = new goog.ui.DrilldownRow({html: createHtmlForRow('Fourth row')});
-  var d22 = new goog.ui.DrilldownRow(goog.ui.DrilldownRow.sampleProperties);
-  d.decorate(ff);
-  d.addChild(d1, true);
-  d.addChild(d2, true);
-  d2.addChild(d21, true);
-  d2.addChild(d22, true);
-
-  assertThrows(function() { d.findIndex(); });
-
-  assertEquals(0, d1.findIndex());
-  assertEquals(1, d2.findIndex());
-}
+const DrilldownRow = goog.require('goog.ui.DrilldownRow');
+const SafeHtml = goog.require('goog.html.SafeHtml');
+const TagName = goog.require('goog.dom.TagName');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
 function createHtmlForRow(rowText) {
-  var SafeHtml = goog.html.SafeHtml;
   return SafeHtml.create(
-      goog.dom.TagName.TR, {},
+      TagName.TR, {},
       SafeHtml.concat(
-          goog.html.SafeHtml.create(goog.dom.TagName.TD, {}, rowText),
-          goog.html.SafeHtml.create(goog.dom.TagName.TD, {}, 'Second column')));
+          SafeHtml.create(TagName.TD, {}, rowText),
+          SafeHtml.create(TagName.TD, {}, 'Second column')));
 }
+testSuite({
+  testMakeRows() {
+    const ff = dom.getElement('firstRow');
+    const d = new DrilldownRow({});
+    const d1 = new DrilldownRow({html: createHtmlForRow('Second row')});
+    const d2 = new DrilldownRow({html: createHtmlForRow('Third row')});
+    const d21 = new DrilldownRow({html: createHtmlForRow('Fourth row')});
+    const d22 = new DrilldownRow(DrilldownRow.sampleProperties);
+    d.decorate(ff);
+    d.addChild(d1, true);
+    d.addChild(d2, true);
+    d2.addChild(d21, true);
+    d2.addChild(d22, true);
+
+    assertThrows(() => {
+      d.findIndex();
+    });
+
+    assertEquals(0, d1.findIndex());
+    assertEquals(1, d2.findIndex());
+  },
+});

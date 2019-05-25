@@ -12,55 +12,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.media.Mp3Test');
-goog.setTestOnly('goog.ui.media.Mp3Test');
+goog.module('goog.ui.media.Mp3Test');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.html.testing');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.media.FlashObject');
-goog.require('goog.ui.media.Media');
-goog.require('goog.ui.media.MediaModel');
-goog.require('goog.ui.media.Mp3');
-var mp3;
-var control;
-var MP3_URL = 'http://www.shellworld.net/~davidsky/surf-oxy.mp3';
-var parent = goog.dom.createElement(goog.dom.TagName.DIV);
+const FlashObject = goog.require('goog.ui.media.FlashObject');
+const Media = goog.require('goog.ui.media.Media');
+const MediaModel = goog.require('goog.ui.media.MediaModel');
+const Mp3 = goog.require('goog.ui.media.Mp3');
+const TagName = goog.require('goog.dom.TagName');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
+const testing = goog.require('goog.html.testing');
 
-function setUp() {
-  mp3 = goog.ui.media.Mp3.getInstance();
-  var flashUrl = goog.ui.media.Mp3.buildFlashUrl(MP3_URL);
-  var model = new goog.ui.media.MediaModel(MP3_URL, 'mp3 caption', '');
-  model.setPlayer(new goog.ui.media.MediaModel.Player(
-      goog.html.testing.newTrustedResourceUrlForTest(flashUrl)));
-  control = new goog.ui.media.Media(model, mp3);
-  control.setSelected(true);
-}
+let mp3;
+let control;
+const MP3_URL = 'http://www.shellworld.net/~davidsky/surf-oxy.mp3';
+const parent = dom.createElement(TagName.DIV);
 
-function tearDown() {
-  control.dispose();
-}
+testSuite({
+  setUp() {
+    mp3 = Mp3.getInstance();
+    const flashUrl = Mp3.buildFlashUrl(MP3_URL);
+    const model = new MediaModel(MP3_URL, 'mp3 caption', '');
+    model.setPlayer(
+        new MediaModel.Player(testing.newTrustedResourceUrlForTest(flashUrl)));
+    control = new Media(model, mp3);
+    control.setSelected(true);
+  },
 
-function testBasicRendering() {
-  control.render(parent);
-  var el = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV, goog.ui.media.Mp3.CSS_CLASS, parent);
-  assertEquals(1, el.length);
-}
+  tearDown() {
+    control.dispose();
+  },
 
-function testParsingUrl() {
-  assertTrue(goog.ui.media.Mp3.MATCHER.test(MP3_URL));
-  assertFalse(goog.ui.media.Mp3.MATCHER.test('http://invalidUrl/filename.doc'));
-}
+  testBasicRendering() {
+    control.render(parent);
+    const el =
+        dom.getElementsByTagNameAndClass(TagName.DIV, Mp3.CSS_CLASS, parent);
+    assertEquals(1, el.length);
+  },
 
-function testCreatingDomOnInitialState() {
-  control.render(parent);
-  var caption = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV, goog.ui.media.Mp3.CSS_CLASS + '-caption', parent);
-  assertEquals(1, caption.length);
+  testParsingUrl() {
+    assertTrue(Mp3.MATCHER.test(MP3_URL));
+    assertFalse(Mp3.MATCHER.test('http://invalidUrl/filename.doc'));
+  },
 
-  var flash = goog.dom.getElementsByTagNameAndClass(
-      undefined, goog.ui.media.FlashObject.CSS_CLASS, parent);
-  assertEquals(1, flash.length);
-}
+  testCreatingDomOnInitialState() {
+    control.render(parent);
+    const caption = dom.getElementsByTagNameAndClass(
+        TagName.DIV, Mp3.CSS_CLASS + '-caption', parent);
+    assertEquals(1, caption.length);
+
+    const flash = dom.getElementsByTagNameAndClass(
+        undefined, FlashObject.CSS_CLASS, parent);
+    assertEquals(1, flash.length);
+  },
+});

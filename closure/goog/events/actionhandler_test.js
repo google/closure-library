@@ -12,65 +12,69 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.events.ActionHandlerTest');
-goog.setTestOnly('goog.events.ActionHandlerTest');
+goog.module('goog.events.ActionHandlerTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.events');
-goog.require('goog.events.ActionHandler');
-goog.require('goog.testing.events');
-goog.require('goog.testing.jsunit');
+const ActionHandler = goog.require('goog.events.ActionHandler');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingEvents = goog.require('goog.testing.events');
 
-var actionHandler;
-function setUp() {
-  actionHandler =
-      new goog.events.ActionHandler(goog.dom.getElement('actionDiv'));
-}
-function tearDown() {
-  actionHandler.dispose();
-}
+let actionHandler;
 
 // Tests to see that both the BEFOREACTION and ACTION events are fired
-function testActionHandlerWithBeforeActionHandler() {
-  var actionEventFired = false;
-  var beforeActionFired = false;
-  goog.events.listen(
-      actionHandler, goog.events.ActionHandler.EventType.ACTION,
-      function(e) { actionEventFired = true; });
-  goog.events.listen(
-      actionHandler, goog.events.ActionHandler.EventType.BEFOREACTION,
-      function(e) { beforeActionFired = true; });
-  goog.testing.events.fireClickSequence(goog.dom.getElement('actionDiv'));
-  assertTrue('BEFOREACTION event was not fired', beforeActionFired);
-  assertTrue('ACTION event was not fired', actionEventFired);
-}
 
 // Tests to see that the ACTION event is fired, even if there is no
 // BEFOREACTION handler.
-function testActionHandlerWithoutBeforeActionHandler() {
-  var actionEventFired = false;
-  goog.events.listen(
-      actionHandler, goog.events.ActionHandler.EventType.ACTION,
-      function(e) { actionEventFired = true; });
-  goog.testing.events.fireClickSequence(goog.dom.getElement('actionDiv'));
-  assertTrue('ACTION event was not fired', actionEventFired);
-}
 
 // If the BEFOREACTION listener swallows the event, it should cancel the
 // ACTION event.
-function testBeforeActionCancel() {
-  var actionEventFired = false;
-  var beforeActionFired = false;
-  goog.events.listen(
-      actionHandler, goog.events.ActionHandler.EventType.ACTION,
-      function(e) { actionEvent = e; });
-  goog.events.listen(
-      actionHandler, goog.events.ActionHandler.EventType.BEFOREACTION,
-      function(e) {
-        beforeActionFired = true;
-        e.preventDefault();
-      });
-  goog.testing.events.fireClickSequence(goog.dom.getElement('actionDiv'));
-  assertTrue(beforeActionFired);
-  assertFalse(actionEventFired);
-}
+
+testSuite({
+  setUp() {
+    actionHandler = new ActionHandler(dom.getElement('actionDiv'));
+  },
+
+  tearDown() {
+    actionHandler.dispose();
+  },
+
+  testActionHandlerWithBeforeActionHandler() {
+    let actionEventFired = false;
+    let beforeActionFired = false;
+    events.listen(actionHandler, ActionHandler.EventType.ACTION, (e) => {
+      actionEventFired = true;
+    });
+    events.listen(actionHandler, ActionHandler.EventType.BEFOREACTION, (e) => {
+      beforeActionFired = true;
+    });
+    testingEvents.fireClickSequence(dom.getElement('actionDiv'));
+    assertTrue('BEFOREACTION event was not fired', beforeActionFired);
+    assertTrue('ACTION event was not fired', actionEventFired);
+  },
+
+  testActionHandlerWithoutBeforeActionHandler() {
+    let actionEventFired = false;
+    events.listen(actionHandler, ActionHandler.EventType.ACTION, (e) => {
+      actionEventFired = true;
+    });
+    testingEvents.fireClickSequence(dom.getElement('actionDiv'));
+    assertTrue('ACTION event was not fired', actionEventFired);
+  },
+
+  testBeforeActionCancel() {
+    const actionEventFired = false;
+    let beforeActionFired = false;
+    events.listen(actionHandler, ActionHandler.EventType.ACTION, (e) => {
+      actionEvent = e;
+    });
+    events.listen(actionHandler, ActionHandler.EventType.BEFOREACTION, (e) => {
+      beforeActionFired = true;
+      e.preventDefault();
+    });
+    testingEvents.fireClickSequence(dom.getElement('actionDiv'));
+    assertTrue(beforeActionFired);
+    assertFalse(actionEventFired);
+  },
+});

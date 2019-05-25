@@ -12,23 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.plugins.UndoRedoStateTest');
-goog.setTestOnly('goog.editor.plugins.UndoRedoStateTest');
+goog.module('goog.editor.plugins.UndoRedoStateTest');
+goog.setTestOnly();
 
-goog.require('goog.editor.plugins.UndoRedoState');
-goog.require('goog.testing.jsunit');
+const UndoRedoState = goog.require('goog.editor.plugins.UndoRedoState');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var asyncState;
-var syncState;
+let asyncState;
+let syncState;
 
-function setUp() {
-  asyncState = new goog.editor.plugins.UndoRedoState(true);
-  syncState = new goog.editor.plugins.UndoRedoState(false);
-}
+testSuite({
+  setUp() {
+    asyncState = new UndoRedoState(true);
+    syncState = new UndoRedoState(false);
+  },
 
-function testIsAsynchronous() {
-  assertTrue(
-      'Must return true for asynchronous state', asyncState.isAsynchronous());
-  assertFalse(
-      'Must return false for synchronous state', syncState.isAsynchronous());
-}
+  testIsAsynchronous() {
+    assertTrue(
+        'Must return true for asynchronous state', asyncState.isAsynchronous());
+    assertFalse(
+        'Must return false for synchronous state', syncState.isAsynchronous());
+  },
+});

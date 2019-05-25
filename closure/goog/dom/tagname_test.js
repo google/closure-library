@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.TagNameTest');
-goog.setTestOnly('goog.dom.TagNameTest');
+goog.module('goog.dom.TagNameTest');
+goog.setTestOnly();
 
-goog.require('goog.dom.TagName');
-goog.require('goog.object');
-goog.require('goog.testing.jsunit');
+const TagName = goog.require('goog.dom.TagName');
+const googObject = goog.require('goog.object');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testCorrectNumberOfTagNames() {
-  assertEquals(130, goog.object.getCount(goog.dom.TagName));
-}
+testSuite({
+  testCorrectNumberOfTagNames() {
+    assertEquals(130, googObject.getCount(TagName));
+  },
 
-function testPropertyNamesEqualValues() {
-  for (var propertyName in goog.dom.TagName) {
-    assertEquals(propertyName, String(goog.dom.TagName[propertyName]));
-  }
-}
+  testPropertyNamesEqualValues() {
+    for (let propertyName in TagName) {
+      assertEquals(propertyName, String(TagName[propertyName]));
+    }
+  },
+});

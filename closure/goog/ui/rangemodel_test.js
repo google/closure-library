@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.RangeModelTest');
-goog.setTestOnly('goog.ui.RangeModelTest');
+goog.module('goog.ui.RangeModelTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.RangeModel');
+const RangeModel = goog.require('goog.ui.RangeModel');
+const testSuite = goog.require('goog.testing.testSuite');
 
 function reset(rm, step) {
   rm.setStep(step || 1);
@@ -31,235 +31,237 @@ function getDescriptiveString(rm) {
       '] < ' + rm.getMaximum();
 }
 
-function testValue() {
-  var rm = new goog.ui.RangeModel;
+testSuite({
+  testValue() {
+    const rm = new RangeModel;
 
-  assertEquals(0, rm.getValue());
-  rm.setValue(50);
-  assertEquals(50, rm.getValue());
+    assertEquals(0, rm.getValue());
+    rm.setValue(50);
+    assertEquals(50, rm.getValue());
 
-  // setting smaller than min should keep min
-  rm.setValue(-1);
-  assertEquals(0, rm.getValue());
+    // setting smaller than min should keep min
+    rm.setValue(-1);
+    assertEquals(0, rm.getValue());
 
-  // setting larger than max should keep max - extent
-  rm.setValue(101);
-  assertEquals(100, rm.getValue());
-  rm.setValue(0);
-  rm.setExtent(10);
-  rm.setValue(100);
-  assertEquals(90, rm.getValue());
+    // setting larger than max should keep max - extent
+    rm.setValue(101);
+    assertEquals(100, rm.getValue());
+    rm.setValue(0);
+    rm.setExtent(10);
+    rm.setValue(100);
+    assertEquals(90, rm.getValue());
 
-  ////////////////
-  // Change step
-  reset(rm, 3);
+    ////////////////
+    // Change step
+    reset(rm, 3);
 
-  assertEquals(0, rm.getValue());
-  rm.setValue(50);
-  assertEquals(51, rm.getValue());
+    assertEquals(0, rm.getValue());
+    rm.setValue(50);
+    assertEquals(51, rm.getValue());
 
-  // setting smaller than min should keep min
-  rm.setValue(-1);
-  assertEquals(0, rm.getValue());
+    // setting smaller than min should keep min
+    rm.setValue(-1);
+    assertEquals(0, rm.getValue());
 
-  // setting larger than max should keep max - extent
-  rm.setValue(101);
-  assertEquals(99, rm.getValue());
-  rm.setValue(0);
-  rm.setExtent(10);
-  rm.setValue(100);
-  assertEquals(90, rm.getValue());
-}
+    // setting larger than max should keep max - extent
+    rm.setValue(101);
+    assertEquals(99, rm.getValue());
+    rm.setValue(0);
+    rm.setExtent(10);
+    rm.setValue(100);
+    assertEquals(90, rm.getValue());
+  },
 
-function testMinium() {
-  var rm = new goog.ui.RangeModel;
+  testMinium() {
+    const rm = new RangeModel;
 
-  rm.setValue(50);
-  rm.setMinimum(10);
-  assertEquals(10, rm.getMinimum());
+    rm.setValue(50);
+    rm.setMinimum(10);
+    assertEquals(10, rm.getMinimum());
 
-  reset(rm);
+    reset(rm);
 
-  // setting larger than value should change value
-  rm.setMinimum(10);
-  assertEquals(10, rm.getMinimum());
-  assertEquals(10, rm.getValue());
+    // setting larger than value should change value
+    rm.setMinimum(10);
+    assertEquals(10, rm.getMinimum());
+    assertEquals(10, rm.getValue());
 
-  // setting larger than max should set max = min
-  rm.setMinimum(200);
-  assertEquals(200, rm.getMinimum());
-  assertEquals(200, rm.getValue());
-  assertEquals(200, rm.getMaximum());
-  assertEquals(0, rm.getExtent());
+    // setting larger than max should set max = min
+    rm.setMinimum(200);
+    assertEquals(200, rm.getMinimum());
+    assertEquals(200, rm.getValue());
+    assertEquals(200, rm.getMaximum());
+    assertEquals(0, rm.getExtent());
 
-  reset(rm);
+    reset(rm);
 
-  // should change extent
-  rm.setExtent(10);
-  rm.setMinimum(95);
-  assertEquals(95, rm.getMinimum());
-  assertEquals(95, rm.getValue());
-  assertEquals(100, rm.getMaximum());
-  assertEquals(5, rm.getExtent());
+    // should change extent
+    rm.setExtent(10);
+    rm.setMinimum(95);
+    assertEquals(95, rm.getMinimum());
+    assertEquals(95, rm.getValue());
+    assertEquals(100, rm.getMaximum());
+    assertEquals(5, rm.getExtent());
 
-  ////////////////
-  // Change step
-  reset(rm, 3);
+    ////////////////
+    // Change step
+    reset(rm, 3);
 
-  rm.setValue(50);
-  rm.setMinimum(10);
-  assertEquals(10, rm.getMinimum());
+    rm.setValue(50);
+    rm.setMinimum(10);
+    assertEquals(10, rm.getMinimum());
 
-  reset(rm, 3);
+    reset(rm, 3);
 
-  // setting larger than value should change value
-  rm.setMinimum(10);
-  assertEquals(10, rm.getMinimum());
-  assertEquals(10, rm.getValue());
+    // setting larger than value should change value
+    rm.setMinimum(10);
+    assertEquals(10, rm.getMinimum());
+    assertEquals(10, rm.getValue());
 
-  // setting larger than max should set max = min
-  rm.setMinimum(200);
-  assertEquals(200, rm.getMinimum());
-  assertEquals(200, rm.getValue());
-  assertEquals(200, rm.getMaximum());
-  assertEquals(0, rm.getExtent());
+    // setting larger than max should set max = min
+    rm.setMinimum(200);
+    assertEquals(200, rm.getMinimum());
+    assertEquals(200, rm.getValue());
+    assertEquals(200, rm.getMaximum());
+    assertEquals(0, rm.getExtent());
 
-  reset(rm, 3);
+    reset(rm, 3);
 
-  // should change extent
-  rm.setExtent(10);   // 0 < 0[9] < 99
-  rm.setMinimum(95);  // 95 < 95[3] < 98
-  assertEquals(95, rm.getMinimum());
-  assertEquals(95, rm.getValue());
-  assertEquals(98, rm.getMaximum());
-  assertEquals(3, rm.getExtent());
-}
+    // should change extent
+    rm.setExtent(10);   // 0 < 0[9] < 99
+    rm.setMinimum(95);  // 95 < 95[3] < 98
+    assertEquals(95, rm.getMinimum());
+    assertEquals(95, rm.getValue());
+    assertEquals(98, rm.getMaximum());
+    assertEquals(3, rm.getExtent());
+  },
 
-function testMaximum() {
-  var rm = new goog.ui.RangeModel;
+  testMaximum() {
+    const rm = new RangeModel;
 
-  rm.setMaximum(50);
-  assertEquals(50, rm.getMaximum());
+    rm.setMaximum(50);
+    assertEquals(50, rm.getMaximum());
 
-  reset(rm);
+    reset(rm);
 
-  // setting to smaller than minimum should change minimum, value and extent
-  rm.setValue(5);
-  rm.setExtent(10);
-  rm.setMinimum(50);
-  rm.setMaximum(40);
-  assertEquals(40, rm.getMaximum());
-  assertEquals(0, rm.getExtent());
-  assertEquals(40, rm.getValue());
-  assertEquals(40, rm.getMinimum());
+    // setting to smaller than minimum should change minimum, value and extent
+    rm.setValue(5);
+    rm.setExtent(10);
+    rm.setMinimum(50);
+    rm.setMaximum(40);
+    assertEquals(40, rm.getMaximum());
+    assertEquals(0, rm.getExtent());
+    assertEquals(40, rm.getValue());
+    assertEquals(40, rm.getMinimum());
 
-  reset(rm);
+    reset(rm);
 
-  // setting smaller than value should change value to max - extent
-  rm.setExtent(10);
-  rm.setValue(50);
-  rm.setMaximum(40);
-  assertEquals(40, rm.getMaximum());
-  assertEquals(30, rm.getValue());
+    // setting smaller than value should change value to max - extent
+    rm.setExtent(10);
+    rm.setValue(50);
+    rm.setMaximum(40);
+    assertEquals(40, rm.getMaximum());
+    assertEquals(30, rm.getValue());
 
-  reset(rm);
+    reset(rm);
 
-  // should change value, and keep extent constant,
-  // unless extent is > max - min.
-  rm.setExtent(10);
-  rm.setValue(90);
-  rm.setMaximum(95);
-  assertEquals(95, rm.getMaximum());
-  assertEquals(10, rm.getExtent());
-  assertEquals(85, rm.getValue());
+    // should change value, and keep extent constant,
+    // unless extent is > max - min.
+    rm.setExtent(10);
+    rm.setValue(90);
+    rm.setMaximum(95);
+    assertEquals(95, rm.getMaximum());
+    assertEquals(10, rm.getExtent());
+    assertEquals(85, rm.getValue());
 
-  ////////////////
-  // Change step
-  reset(rm, 3);
+    ////////////////
+    // Change step
+    reset(rm, 3);
 
-  rm.setMaximum(50);  // 0 < 0[0] < 51
-  assertEquals(51, rm.getMaximum());
+    rm.setMaximum(50);  // 0 < 0[0] < 51
+    assertEquals(51, rm.getMaximum());
 
-  reset(rm, 3);
+    reset(rm, 3);
 
-  // setting to smaller than minimum should change minimum, value and extent
-  rm.setValue(5);     // 0 < 6[0] < 99
-  rm.setExtent(10);   // 0 < 6[9] < 99
-  rm.setMinimum(50);  // 50 < 50[9] < 98
-  rm.setMaximum(40);  // 41 < 41[0] < 41
-  assertEquals(41, rm.getMaximum());
-  assertEquals(0, rm.getExtent());
-  assertEquals(41, rm.getValue());
-  assertEquals(41, rm.getMinimum());
+    // setting to smaller than minimum should change minimum, value and extent
+    rm.setValue(5);     // 0 < 6[0] < 99
+    rm.setExtent(10);   // 0 < 6[9] < 99
+    rm.setMinimum(50);  // 50 < 50[9] < 98
+    rm.setMaximum(40);  // 41 < 41[0] < 41
+    assertEquals(41, rm.getMaximum());
+    assertEquals(0, rm.getExtent());
+    assertEquals(41, rm.getValue());
+    assertEquals(41, rm.getMinimum());
 
-  reset(rm, 3);
+    reset(rm, 3);
 
-  // setting smaller than value should change value to max - extent
-  rm.setExtent(10);   // 0 < 0[9] < 99
-  rm.setValue(50);    // 0 < 51[9] < 99
-  rm.setMaximum(40);  // 0 < 30[9] < 39
-  assertEquals(39, rm.getMaximum());
-  assertEquals(30, rm.getValue());
+    // setting smaller than value should change value to max - extent
+    rm.setExtent(10);   // 0 < 0[9] < 99
+    rm.setValue(50);    // 0 < 51[9] < 99
+    rm.setMaximum(40);  // 0 < 30[9] < 39
+    assertEquals(39, rm.getMaximum());
+    assertEquals(30, rm.getValue());
 
-  reset(rm, 3);
+    reset(rm, 3);
 
-  // should change value, and keep extent constant,
-  // unless extent is > max - min.
-  rm.setExtent(10);   // 0 < 0[9] < 99
-  rm.setValue(90);    // 0 < 90[9] < 99
-  rm.setMaximum(95);  // 0 < 90[6] < 96
-  assertEquals(96, rm.getMaximum());
-  assertEquals(87, rm.getValue());
-  assertEquals(9, rm.getExtent());
-}
+    // should change value, and keep extent constant,
+    // unless extent is > max - min.
+    rm.setExtent(10);   // 0 < 0[9] < 99
+    rm.setValue(90);    // 0 < 90[9] < 99
+    rm.setMaximum(95);  // 0 < 90[6] < 96
+    assertEquals(96, rm.getMaximum());
+    assertEquals(87, rm.getValue());
+    assertEquals(9, rm.getExtent());
+  },
 
-function testExtent() {
-  var rm = new goog.ui.RangeModel;
+  testExtent() {
+    const rm = new RangeModel;
 
-  rm.setExtent(10);
-  assertEquals(10, rm.getExtent());
+    rm.setExtent(10);
+    assertEquals(10, rm.getExtent());
 
-  rm.setExtent(-10);
-  assertEquals(0, rm.getExtent());
+    rm.setExtent(-10);
+    assertEquals(0, rm.getExtent());
 
-  rm.setValue(50);
-  rm.setExtent(100);
-  assertEquals(50, rm.getExtent());
-  assertEquals(50, rm.getValue());
+    rm.setValue(50);
+    rm.setExtent(100);
+    assertEquals(50, rm.getExtent());
+    assertEquals(50, rm.getValue());
 
-  ////////////////
-  // Change step
-  reset(rm, 3);
+    ////////////////
+    // Change step
+    reset(rm, 3);
 
-  rm.setExtent(10);  // 0 < 0[9] < 99
-  assertEquals(9, rm.getExtent());
+    rm.setExtent(10);  // 0 < 0[9] < 99
+    assertEquals(9, rm.getExtent());
 
-  rm.setExtent(-10);
-  assertEquals(0, rm.getExtent());
+    rm.setExtent(-10);
+    assertEquals(0, rm.getExtent());
 
-  rm.setValue(50);    // 0 < 51[9] < 99
-  rm.setExtent(100);  // 0 < 51[48] < 99
-  assertEquals(48, rm.getExtent());
-  assertEquals(51, rm.getValue());
-}
+    rm.setValue(50);    // 0 < 51[9] < 99
+    rm.setExtent(100);  // 0 < 51[48] < 99
+    assertEquals(48, rm.getExtent());
+    assertEquals(51, rm.getValue());
+  },
 
-function testRoundToStep() {
-  var rm = new goog.ui.RangeModel;
-  rm.setStep(0.5);
+  testRoundToStep() {
+    const rm = new RangeModel;
+    rm.setStep(0.5);
 
-  assertEquals(1, rm.roundToStep(1));
-  assertEquals(0.5, rm.roundToStep(0.5));
-  assertEquals(1, rm.roundToStep(0.75));
-  assertEquals(0.5, rm.roundToStep(0.74));
-}
+    assertEquals(1, rm.roundToStep(1));
+    assertEquals(0.5, rm.roundToStep(0.5));
+    assertEquals(1, rm.roundToStep(0.75));
+    assertEquals(0.5, rm.roundToStep(0.74));
+  },
 
-function testRoundToStepWithMin() {
-  var rm = new goog.ui.RangeModel;
-  rm.setStep(0.5);
-  rm.setMinimum(0.25);
+  testRoundToStepWithMin() {
+    const rm = new RangeModel;
+    rm.setStep(0.5);
+    rm.setMinimum(0.25);
 
-  assertEquals(1.25, rm.roundToStepWithMin(1));
-  assertEquals(0.75, rm.roundToStepWithMin(0.5));
-  assertEquals(0.75, rm.roundToStepWithMin(0.75));
-  assertEquals(0.75, rm.roundToStepWithMin(0.74));
-}
+    assertEquals(1.25, rm.roundToStepWithMin(1));
+    assertEquals(0.75, rm.roundToStepWithMin(0.5));
+    assertEquals(0.75, rm.roundToStepWithMin(0.75));
+    assertEquals(0.75, rm.roundToStepWithMin(0.74));
+  },
+});

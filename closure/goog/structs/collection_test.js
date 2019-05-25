@@ -12,28 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.structs.CollectionTest');
-goog.setTestOnly('goog.structs.CollectionTest');
+goog.module('goog.structs.CollectionTest');
+goog.setTestOnly();
 
-goog.require('goog.structs.AvlTree');
-goog.require('goog.structs.Set');
-goog.require('goog.testing.jsunit');
-
-function testSet() {
-  var set = new goog.structs.Set();
-  exerciseCollection(set);
-}
-
-function testAvlTree() {
-  var tree = new goog.structs.AvlTree();
-  exerciseCollection(tree);
-}
+const AvlTree = goog.require('goog.structs.AvlTree');
+const StructsSet = goog.require('goog.structs.Set');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // Simple exercise of a collection object.
 function exerciseCollection(collection) {
   assertEquals(0, collection.getCount());
 
-  for (var i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 10; i++) {
     assertFalse(collection.contains(i));
     collection.add(i);
     assertTrue(collection.contains(i));
@@ -42,7 +32,7 @@ function exerciseCollection(collection) {
 
   assertEquals(10, collection.getCount());
 
-  for (var i = 10; i > 0; i--) {
+  for (let i = 10; i > 0; i--) {
     assertTrue(collection.contains(i));
     collection.remove(i);
     assertFalse(collection.contains(i));
@@ -51,3 +41,14 @@ function exerciseCollection(collection) {
 
   assertEquals(0, collection.getCount());
 }
+testSuite({
+  testSet() {
+    const set = new StructsSet();
+    exerciseCollection(set);
+  },
+
+  testAvlTree() {
+    const tree = new AvlTree();
+    exerciseCollection(tree);
+  },
+});

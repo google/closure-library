@@ -17,46 +17,43 @@
 goog.module('goog.html.sanitizer.SafeDomTreeProcessorTest');
 goog.setTestOnly();
 
-var SafeDomTreeProcessor = goog.require('goog.html.sanitizer.SafeDomTreeProcessor');
-var noclobber = goog.require('goog.html.sanitizer.noclobber');
-var testSuite = goog.require('goog.testing.testSuite');
-var testingDom = goog.require('goog.testing.dom');
+const SafeDomTreeProcessor = goog.require('goog.html.sanitizer.SafeDomTreeProcessor');
+const noclobber = goog.require('goog.html.sanitizer.noclobber');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingDom = goog.require('goog.testing.dom');
 
 /**
  * Concrete subclass that defines an identity transformation function.
- * @final @constructor @struct
- * @extends {SafeDomTreeProcessor}
+ * @final
  */
-var NoopProcessor = function() {};
-goog.inherits(NoopProcessor, SafeDomTreeProcessor);
+class NoopProcessor extends SafeDomTreeProcessor {
+  /** @override */
+  processRoot(newRoot) {}
 
-/** @override */
-NoopProcessor.prototype.processRoot = function(newRoot) {};
+  /** @override */
+  preProcessHtml(html) {
+    return html;
+  }
 
-/** @override */
-NoopProcessor.prototype.preProcessHtml = function(html) {
-  return html;
-};
+  /** @override */
+  createTextNode(originalNode) {
+    return document.createTextNode(originalNode.data);
+  }
 
-/** @override */
-NoopProcessor.prototype.createTextNode = function(originalNode) {
-  return document.createTextNode(originalNode.data);
-};
+  /** @override */
+  createElementWithoutAttributes(originalElement) {
+    return document.createElement(noclobber.getNodeName(originalElement));
+  }
 
-/** @override */
-NoopProcessor.prototype.createElementWithoutAttributes = function(
-    originalElement) {
-  return document.createElement(noclobber.getNodeName(originalElement));
-};
-
-/** @override */
-NoopProcessor.prototype.processElementAttribute = function(element, attribute) {
-  return attribute.value;
-};
+  /** @override */
+  processElementAttribute(element, attribute) {
+    return attribute.value;
+  }
+}
 
 testSuite({
   testBasic() {
-    var input = '';
+    let input = '';
     assertHtmlMatchesOnSupportedBrowser(
         input, new NoopProcessor().processToString(input));
 
@@ -74,24 +71,23 @@ testSuite({
   },
 
   testTagChanged() {
-    var processor = new NoopProcessor();
+    const processor = new NoopProcessor();
     processor.createElementWithoutAttributes = anchorToFoo;
-    var input = '<a href="bar"><p>baz</p></a>';
-    var expected = '<foo href="bar"><p>baz</p></foo>';
+    const input = '<a href="bar"><p>baz</p></a>';
+    const expected = '<foo href="bar"><p>baz</p></foo>';
     assertHtmlMatchesOnSupportedBrowser(
         expected, processor.processToString(input));
   },
 
   testTagDropped() {
-    var processor = new NoopProcessor();
-    processor.createElementWithoutAttributes = function(originalElement) {
-      return originalElement.tagName.toUpperCase() == 'A' ?
-          null :
-          document.createElement(originalElement.tagName);
-    };
+    const processor = new NoopProcessor();
+    processor.createElementWithoutAttributes = (originalElement) =>
+        originalElement.tagName.toUpperCase() == 'A' ?
+        null :
+        document.createElement(originalElement.tagName);
 
-    var input = '<a href="bar"><p>baz</p></a>';
-    var expected = '';
+    let input = '<a href="bar"><p>baz</p></a>';
+    let expected = '';
     assertHtmlMatchesOnSupportedBrowser(
         expected, processor.processToString(input));
 
@@ -112,47 +108,44 @@ testSuite({
   },
 
   testAttributeDropped() {
-    var processor = new NoopProcessor();
-    processor.processElementAttribute = function(element, attribute) {
-      return attribute.name == 'src' ? null : attribute.value;
-    };
+    const processor = new NoopProcessor();
+    processor.processElementAttribute = (element, attribute) =>
+        attribute.name == 'src' ? null : attribute.value;
 
-    var input = '<img src="aaa" id="foo" />';
-    var expected = '<img id="foo" />';
+    const input = '<img src="aaa" id="foo" />';
+    const expected = '<img id="foo" />';
     assertHtmlMatchesOnSupportedBrowser(
         expected, processor.processToString(input));
   },
 
   testTemplateDropped() {
-    var input = '<div><template id="foo"><p>foo</p></template></div>';
-    var expected = '<div></div>';
+    const input = '<div><template id="foo"><p>foo</p></template></div>';
+    const expected = '<div></div>';
     assertHtmlMatchesOnSupportedBrowser(
         expected, new NoopProcessor().processToString(input));
   },
 
   testProcessRoot() {
-    var processor = new NoopProcessor();
-    processor.processRoot = function(spanElement) {
+    const processor = new NoopProcessor();
+    processor.processRoot = (spanElement) => {
       spanElement.id = 'bar';
     };
 
-    var input = '<p>foo</p>';
-    var expected = '<span id="bar"><p>foo</p></span>';
+    const input = '<p>foo</p>';
+    const expected = '<span id="bar"><p>foo</p></span>';
     assertHtmlMatchesOnSupportedBrowser(
         expected, processor.processToString(input));
   },
 
   testPreprocessHtml() {
-    var processor = new NoopProcessor();
-    processor.preProcessHtml = function(html) {
-      return html.toLowerCase();
-    };
+    const processor = new NoopProcessor();
+    processor.preProcessHtml = (html) => html.toLowerCase();
 
-    var input = '<p id="BAR">FOO</p>';
-    var expected = '<p id="bar">foo</p>';
+    const input = '<p id="BAR">FOO</p>';
+    const expected = '<p id="bar">foo</p>';
     assertHtmlMatchesOnSupportedBrowser(
         expected, processor.processToString(input));
-  }
+  },
 });
 
 /**

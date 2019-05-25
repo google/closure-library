@@ -12,110 +12,110 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.DeferredTestCaseTest');
-goog.setTestOnly('goog.testing.DeferredTestCaseTest');
+goog.module('goog.testing.DeferredTestCaseTest');
+goog.setTestOnly();
 
-goog.require('goog.async.Deferred');
-goog.require('goog.testing.DeferredTestCase');
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.TestRunner');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const Deferred = goog.require('goog.async.Deferred');
+const DeferredTestCase = goog.require('goog.testing.DeferredTestCase');
+const TestCase = goog.require('goog.testing.TestCase');
+const TestRunner = goog.require('goog.testing.TestRunner');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var deferredTestCase =
-    goog.testing.DeferredTestCase.createAndInstall(document.title);
-var testTestCase;
-var runner;
+const deferredTestCase = DeferredTestCase.createAndInstall(document.title);
+let testTestCase;
+let runner;
 
 // Optionally, set a longer-than-usual step timeout.
 deferredTestCase.stepTimeout = 15 * 1000;  // 15 seconds
 
 // This is the sample code in deferredtestcase.js
-function testDeferredCallbacks() {
-  var callbackTime = goog.now();
-  var callbacks = new goog.async.Deferred();
-  deferredTestCase.addWaitForAsync('Waiting for 1st callback', callbacks);
-  callbacks.addCallback(function() {
-    assertTrue('We\'re going back in time!', goog.now() >= callbackTime);
-    callbackTime = goog.now();
-  });
-  deferredTestCase.addWaitForAsync('Waiting for 2nd callback', callbacks);
-  callbacks.addCallback(function() {
-    assertTrue('We\'re going back in time!', goog.now() >= callbackTime);
-    callbackTime = goog.now();
-  });
-  deferredTestCase.addWaitForAsync('Waiting for last callback', callbacks);
-  callbacks.addCallback(function() {
-    assertTrue('We\'re going back in time!', goog.now() >= callbackTime);
-    callbackTime = goog.now();
-  });
-
-  deferredTestCase.waitForDeferred(callbacks);
-}
 
 function createDeferredTestCase(d) {
-  testTestCase = new goog.testing.DeferredTestCase('Foobar TestCase');
-  testTestCase.add(new goog.testing.TestCase.Test('Foobar Test', function() {
+  testTestCase = new DeferredTestCase('Foobar TestCase');
+  testTestCase.add(new TestCase.Test('Foobar Test', function() {
     this.waitForDeferred(d);
   }, testTestCase));
 
-  var testCompleteCallback = new goog.async.Deferred();
-  testTestCase.addCompletedCallback(function() {
+  const testCompleteCallback = new Deferred();
+  testTestCase.addCompletedCallback(() => {
     testCompleteCallback.callback(true);
   });
 
   // We're not going to use the runner to run the test, but we attach one
   // here anyway because without a runner TestCase throws an exception in
   // finalize().
-  var runner = new goog.testing.TestRunner();
+  const runner = new TestRunner();
   runner.initialize(testTestCase);
 
   return testCompleteCallback;
 }
 
-function testDeferredWait() {
-  var d = new goog.async.Deferred();
-  deferredTestCase.addWaitForAsync('Foobar', d);
-  d.addCallback(function() { return goog.async.Deferred.succeed(true); });
-  deferredTestCase.waitForDeferred(d);
-}
+testSuite({
+  testDeferredCallbacks() {
+    let callbackTime = goog.now();
+    const callbacks = new Deferred();
+    deferredTestCase.addWaitForAsync('Waiting for 1st callback', callbacks);
+    callbacks.addCallback(() => {
+      assertTrue('We\'re going back in time!', goog.now() >= callbackTime);
+      callbackTime = goog.now();
+    });
+    deferredTestCase.addWaitForAsync('Waiting for 2nd callback', callbacks);
+    callbacks.addCallback(() => {
+      assertTrue('We\'re going back in time!', goog.now() >= callbackTime);
+      callbackTime = goog.now();
+    });
+    deferredTestCase.addWaitForAsync('Waiting for last callback', callbacks);
+    callbacks.addCallback(() => {
+      assertTrue('We\'re going back in time!', goog.now() >= callbackTime);
+      callbackTime = goog.now();
+    });
 
-function testNonAsync() {
-  assertTrue(true);
-}
+    deferredTestCase.waitForDeferred(callbacks);
+  },
 
-function testPassWithTestRunner() {
-  var d = new goog.async.Deferred();
-  d.addCallback(function() { return goog.async.Deferred.succeed(true); });
+  testDeferredWait() {
+    const d = new Deferred();
+    deferredTestCase.addWaitForAsync('Foobar', d);
+    d.addCallback(() => Deferred.succeed(true));
+    deferredTestCase.waitForDeferred(d);
+  },
 
-  var testCompleteDeferred = createDeferredTestCase(d);
-  testTestCase.execute();
+  testNonAsync() {
+    assertTrue(true);
+  },
 
-  var deferredCallbackOnPass = new goog.async.Deferred();
-  deferredCallbackOnPass.addCallback(function() {
-    return testCompleteDeferred;
-  });
-  deferredCallbackOnPass.addCallback(function() {
-    assertTrue('Test case should have succeeded.', testTestCase.isSuccess());
-  });
+  testPassWithTestRunner() {
+    const d = new Deferred();
+    d.addCallback(() => Deferred.succeed(true));
 
-  deferredTestCase.waitForDeferred(deferredCallbackOnPass);
-}
+    const testCompleteDeferred = createDeferredTestCase(d);
+    testTestCase.execute();
 
-function testFailWithTestRunner() {
-  var d = new goog.async.Deferred();
-  d.addCallback(function() { return goog.async.Deferred.fail(true); });
+    const deferredCallbackOnPass = new Deferred();
+    deferredCallbackOnPass.addCallback(() => testCompleteDeferred);
+    deferredCallbackOnPass.addCallback(() => {
+      assertTrue('Test case should have succeeded.', testTestCase.isSuccess());
+    });
 
-  createDeferredTestCase(d);
+    deferredTestCase.waitForDeferred(deferredCallbackOnPass);
+  },
 
-  // Mock doAsyncError to instead let the test completes successfully,
-  // but record the failure. The test works as is because the failing
-  // deferred is not actually asynchronous.
-  var mockDoAsyncError = goog.testing.recordFunction(function() {
-    testTestCase.continueTesting();
-  });
-  testTestCase.doAsyncError = mockDoAsyncError;
+  testFailWithTestRunner() {
+    const d = new Deferred();
+    d.addCallback(() => Deferred.fail(true));
 
-  testTestCase.execute();
-  assertEquals(1, mockDoAsyncError.getCallCount());
-}
+    createDeferredTestCase(d);
+
+    // Mock doAsyncError to instead let the test completes successfully,
+    // but record the failure. The test works as is because the failing
+    // deferred is not actually asynchronous.
+    const mockDoAsyncError = recordFunction(() => {
+      testTestCase.continueTesting();
+    });
+    testTestCase.doAsyncError = mockDoAsyncError;
+
+    testTestCase.execute();
+    assertEquals(1, mockDoAsyncError.getCallCount());
+  },
+});

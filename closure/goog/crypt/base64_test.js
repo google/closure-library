@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.crypt.base64Test');
-goog.setTestOnly('goog.crypt.base64Test');
+goog.module('goog.crypt.base64Test');
+goog.setTestOnly();
 
-goog.require('goog.crypt');
-goog.require('goog.crypt.base64');
-goog.require('goog.testing.jsunit');
+const base64 = goog.require('goog.crypt.base64');
+const crypt = goog.require('goog.crypt');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // Static test data
 // clang-format off
-var tests = [
+const tests = [
   '', '',
   'f', 'Zg==',
   'fo', 'Zm8=',
@@ -40,13 +40,12 @@ var tests = [
  * Asserts that `encoded` matches `expected` when base64 decoded as byte array.
  * @param {!Array<number>} expected The expected binary decoded content.
  * @param {string} encoded The base64 encoded content to check.
- * @param {boolean=} opt_webSafe True if we should use the web-safe alphabet.
+ * @param {boolean=} webSafe True if we should use the web-safe alphabet.
  */
-function assertDecodeToByteArrayEquals(expected, encoded, opt_webSafe) {
-  var dec = goog.crypt.base64.decodeStringToByteArray(encoded, opt_webSafe);
+function assertDecodeToByteArrayEquals(expected, encoded, webSafe = undefined) {
+  const dec = base64.decodeStringToByteArray(encoded, webSafe);
   assertArrayEquals(expected, dec);
 }
-
 
 /**
  * Asserts that `encoded` matches `expected` when base64 decoded as uint8array,
@@ -56,138 +55,143 @@ function assertDecodeToByteArrayEquals(expected, encoded, opt_webSafe) {
  */
 function assertDecodeToUint8ArrayEquals(expected, encoded) {
   if (goog.global.Uint8Array) {
-    var dec = goog.crypt.base64.decodeStringToUint8Array(encoded);
+    const dec = base64.decodeStringToUint8Array(encoded);
     assertArrayEquals(expected, Array.prototype.slice.call(dec));
   }
-}
-
-
-function testByteArrayEncoding() {
-  // Let's see if it's sane by feeding it some well-known values. Index i
-  // has the input and index i+1 has the expected value.
-  for (var i = 0; i < tests.length; i += 2) {
-    var enc = goog.crypt.base64.encodeByteArray(
-        goog.crypt.stringToByteArray(tests[i]));
-    assertEquals(tests[i + 1], enc);
-    var expected = goog.crypt.stringToByteArray(tests[i]);
-    assertDecodeToByteArrayEquals(expected, enc);
-    assertDecodeToUint8ArrayEquals(expected, enc);
-
-    // Check that obsolete websafe param has no effect.
-    assertDecodeToByteArrayEquals(expected, enc, true /* websafe */);
-
-    // Re-encode as websafe.
-    enc = goog.crypt.base64.encodeByteArray(
-        goog.crypt.stringToByteArray(tests[i], true /* websafe */));
-
-    // Check that decoding accepts websafe codes.
-    assertDecodeToByteArrayEquals(expected, enc);
-    assertDecodeToUint8ArrayEquals(expected, enc);
-
-    // Check that obsolete websafe param has no effect.
-    assertDecodeToByteArrayEquals(expected, enc, true /* websafe */);
-  }
-}
-
-function testOddLengthByteArrayEncoding() {
-  var buffer = [0, 0, 0];
-  var encodedBuffer = goog.crypt.base64.encodeByteArray(buffer);
-  assertEquals('AAAA', encodedBuffer);
-
-  assertDecodeToByteArrayEquals(buffer, encodedBuffer);
-  assertDecodeToUint8ArrayEquals(buffer, encodedBuffer);
 }
 
 // Tests that decoding a string where the length is not a multiple of 4 does
 // not produce spurious trailing zeroes.  This is a regression test for
 // cl/65120705, which fixes a bug that was introduced when support for
 // non-padded base64 encoding was added in cl/20209336.
-function testOddLengthByteArrayDecoding() {
-  // The base-64 encoding of the bytes [97, 98, 99, 100], with no padding.
-  // The padded version would be "YWJjZA==" (length 8), or "YWJjZA.." if
-  // web-safe.
-  var encodedBuffer = 'YWJjZA';
 
-  var expected = goog.crypt.stringToByteArray('abcd');
-  assertDecodeToByteArrayEquals(expected, encodedBuffer);
-  assertDecodeToUint8ArrayEquals(expected, encodedBuffer);
+testSuite({
+  testByteArrayEncoding() {
+    // Let's see if it's sane by feeding it some well-known values. Index i
+    // has the input and index i+1 has the expected value.
+    for (let i = 0; i < tests.length; i += 2) {
+      let enc = base64.encodeByteArray(crypt.stringToByteArray(tests[i]));
+      assertEquals(tests[i + 1], enc);
+      const expected = crypt.stringToByteArray(tests[i]);
+      assertDecodeToByteArrayEquals(expected, enc);
+      assertDecodeToUint8ArrayEquals(expected, enc);
 
-  // Repeat the test in web-safe decoding mode.
-  assertDecodeToByteArrayEquals(expected, encodedBuffer, true /* web-safe */);
-}
+      // Check that obsolete websafe param has no effect.
+      assertDecodeToByteArrayEquals(expected, enc, true /* websafe */);
 
-function testShortcutPathEncoding() {
-  // Test the higher-level API (tests the btoa/atob shortcut path)
-  for (var i = 0; i < tests.length; i += 2) {
-    var enc = goog.crypt.base64.encodeString(tests[i]);
-    assertEquals(tests[i + 1], enc);
-    var dec = goog.crypt.base64.decodeString(enc);
-    assertEquals(tests[i], dec);
-  }
-}
+      // Re-encode as websafe.
+      enc = base64.encodeByteArray(
+          crypt.stringToByteArray(tests[i], true /* websafe */));
 
-function testMultipleIterations() {
-  // Now run it through its paces
+      // Check that decoding accepts websafe codes.
+      assertDecodeToByteArrayEquals(expected, enc);
+      assertDecodeToUint8ArrayEquals(expected, enc);
 
-  var numIterations = 100;
-  for (var i = 0; i < numIterations; i++) {
-    var input = [];
-    for (var j = 0; j < i; j++) input[j] = j % 256;
+      // Check that obsolete websafe param has no effect.
+      assertDecodeToByteArrayEquals(expected, enc, true /* websafe */);
+    }
+  },
 
-    var encoded = goog.crypt.base64.encodeByteArray(input);
-    assertDecodeToByteArrayEquals(input, encoded);
-    assertDecodeToUint8ArrayEquals(input, encoded);
-  }
-}
+  testOddLengthByteArrayEncoding() {
+    const buffer = [0, 0, 0];
+    const encodedBuffer = base64.encodeByteArray(buffer);
+    assertEquals('AAAA', encodedBuffer);
 
-function testWebSafeEncoding() {
-  // Test non-websafe / websafe difference
-  var test = '>>>???>>>???=/+';
-  var testArr = goog.crypt.stringToByteArray(test);
+    assertDecodeToByteArrayEquals(buffer, encodedBuffer);
+    assertDecodeToUint8ArrayEquals(buffer, encodedBuffer);
+  },
 
-  var enc = goog.crypt.base64.encodeByteArray(testArr);
-  assertEquals('Non-websafe broken?', 'Pj4+Pz8/Pj4+Pz8/PS8r', enc);
+  testOddLengthByteArrayDecoding() {
+    // The base-64 encoding of the bytes [97, 98, 99, 100], with no padding.
+    // The padded version would be "YWJjZA==" (length 8), or "YWJjZA.." if
+    // web-safe.
+    const encodedBuffer = 'YWJjZA';
 
-  enc = goog.crypt.base64.encodeString(test);
-  assertEquals('Non-websafe broken?', 'Pj4+Pz8/Pj4+Pz8/PS8r', enc);
+    const expected = crypt.stringToByteArray('abcd');
+    assertDecodeToByteArrayEquals(expected, encodedBuffer);
+    assertDecodeToUint8ArrayEquals(expected, encodedBuffer);
 
-  enc = goog.crypt.base64.encodeByteArray(testArr, true /* websafe */);
-  assertEquals('Websafe encoding broken', 'Pj4-Pz8_Pj4-Pz8_PS8r', enc);
+    // Repeat the test in web-safe decoding mode.
+    assertDecodeToByteArrayEquals(expected, encodedBuffer, true /* web-safe */);
+  },
 
-  enc = goog.crypt.base64.encodeString(test, true);
-  assertEquals('Non-websafe broken?', 'Pj4-Pz8_Pj4-Pz8_PS8r', enc);
-  assertDecodeToByteArrayEquals(testArr, enc);
-  assertDecodeToUint8ArrayEquals(testArr, enc);
+  testShortcutPathEncoding() {
+    // Test the higher-level API (tests the btoa/atob shortcut path)
+    for (let i = 0; i < tests.length; i += 2) {
+      const enc = base64.encodeString(tests[i]);
+      assertEquals(tests[i + 1], enc);
+      const dec = base64.decodeString(enc);
+      assertEquals(tests[i], dec);
+    }
+  },
 
-  var dec = goog.crypt.base64.decodeString(enc, true /* websafe */);
-  assertEquals('Websafe decoding broken', test, dec);
+  testMultipleIterations() {
+    // Now run it through its paces
 
-  // Test parsing malformed characters
-  assertThrows('Didn\'t throw on malformed input', function() {
-    goog.crypt.base64.decodeStringToByteArray('foooooo)oooo');
-  });
-  // Test parsing malformed characters
-  assertThrows('Didn\'t throw on malformed input', function() {
-    goog.crypt.base64.decodeStringToUint8Array('foooooo)oooo');
-  });
-}
+    const numIterations = 100;
+    for (let i = 0; i < numIterations; i++) {
+      const input = [];
+      for (let j = 0; j < i; j++) input[j] = j % 256;
 
-function testDecodeIgnoresSpace() {
-  var spaceTests = [
-    // [encoded, expected decoded]
-    [' \n\t\r', ''], ['Z g =\n=', 'f'], ['Zm 8=', 'fo'], [' Zm 9v', 'foo'],
-    ['Zm9v Yg ==\t ', 'foob'], ['\nZ m9  vYm\n E=', 'fooba'],
-    ['  \nZ \tm9v YmFy  ', 'foobar']
-  ];
+      const encoded = base64.encodeByteArray(input);
+      assertDecodeToByteArrayEquals(input, encoded);
+      assertDecodeToUint8ArrayEquals(input, encoded);
+    }
+  },
 
-  for (var i = 0; i < spaceTests.length; i++) {
-    var thisTest = spaceTests[i];
-    var encoded = thisTest[0];
-    var expectedStr = thisTest[1];
-    var expected = goog.crypt.stringToByteArray(expectedStr);
+  testWebSafeEncoding() {
+    // Test non-websafe / websafe difference
+    const test = '>>>???>>>???=/+';
+    const testArr = crypt.stringToByteArray(test);
 
-    assertDecodeToByteArrayEquals(expected, encoded);
-    assertDecodeToUint8ArrayEquals(expected, encoded);
-    assertEquals(expectedStr, goog.crypt.base64.decodeString(encoded));
-  }
-}
+    let enc = base64.encodeByteArray(testArr);
+    assertEquals('Non-websafe broken?', 'Pj4+Pz8/Pj4+Pz8/PS8r', enc);
+
+    enc = base64.encodeString(test);
+    assertEquals('Non-websafe broken?', 'Pj4+Pz8/Pj4+Pz8/PS8r', enc);
+
+    enc = base64.encodeByteArray(testArr, true /* websafe */);
+    assertEquals('Websafe encoding broken', 'Pj4-Pz8_Pj4-Pz8_PS8r', enc);
+
+    enc = base64.encodeString(test, true);
+    assertEquals('Non-websafe broken?', 'Pj4-Pz8_Pj4-Pz8_PS8r', enc);
+    assertDecodeToByteArrayEquals(testArr, enc);
+    assertDecodeToUint8ArrayEquals(testArr, enc);
+
+    const dec = base64.decodeString(enc, true /* websafe */);
+    assertEquals('Websafe decoding broken', test, dec);
+
+    // Test parsing malformed characters
+    assertThrows('Didn\'t throw on malformed input', () => {
+      base64.decodeStringToByteArray('foooooo)oooo');
+    });
+    // Test parsing malformed characters
+    assertThrows('Didn\'t throw on malformed input', () => {
+      base64.decodeStringToUint8Array('foooooo)oooo');
+    });
+  },
+
+  testDecodeIgnoresSpace() {
+    const spaceTests = [
+      // [encoded, expected decoded]
+      [' \n\t\r', ''],
+      ['Z g =\n=', 'f'],
+      ['Zm 8=', 'fo'],
+      [' Zm 9v', 'foo'],
+      ['Zm9v Yg ==\t ', 'foob'],
+      ['\nZ m9  vYm\n E=', 'fooba'],
+      ['  \nZ \tm9v YmFy  ', 'foobar'],
+    ];
+
+    for (let i = 0; i < spaceTests.length; i++) {
+      const thisTest = spaceTests[i];
+      const encoded = thisTest[0];
+      const expectedStr = thisTest[1];
+      const expected = crypt.stringToByteArray(expectedStr);
+
+      assertDecodeToByteArrayEquals(expected, encoded);
+      assertDecodeToUint8ArrayEquals(expected, encoded);
+      assertEquals(expectedStr, base64.decodeString(encoded));
+    }
+  },
+});

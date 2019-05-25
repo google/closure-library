@@ -17,51 +17,50 @@
  */
 
 /** @suppress {extraProvide} */
-goog.provide('goog.HistoryTest');
+goog.module('goog.HistoryTest');
+goog.setTestOnly();
 
-goog.require('goog.History');
-goog.require('goog.dispose');
-goog.require('goog.dom');
-goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.string.Const');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
-
-goog.setTestOnly('goog.HistoryTest');
-
+const Const = goog.require('goog.string.Const');
+const GoogHistory = goog.require('goog.History');
+const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
+const dispose = goog.require('goog.dispose');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
 // Mimimal function to exercise construction.
-function testCreation() {
-  var input = goog.dom.getElement('hidden-input');
-  var iframe = goog.dom.getElement('hidden-iframe');
-
-  try {
-    var history = new goog.History(undefined, undefined, input, iframe);
-  } finally {
-    goog.dispose(history);
-  }
-
-  // Test that SafeHtml.create() calls in constructor succeed.
-  try {
-    // Undefined opt_input and opt_iframe will result in use document.write(),
-    // which in some browsers overrides the current page and causes the
-    // test to fail.
-    var history = new goog.History(
-        true, goog.html.TrustedResourceUrl.fromConstant(
-                  goog.string.Const.from('blank_test_helper.html')),
-        input, iframe);
-  } finally {
-    goog.dispose(history);
-  }
-}
-
-function testIsHashChangeSupported() {
-  // This is the policy currently implemented.
-  var supportsOnHashChange =
-      (goog.userAgent.IE ? document.documentMode >= 8 :
-                           'onhashchange' in window);
-
-  assertEquals(supportsOnHashChange, goog.History.isOnHashChangeSupported());
-}
 
 // TODO(nnaze): Test additional behavior.
+testSuite({
+  testCreation() {
+    const input = dom.getElement('hidden-input');
+    const iframe = dom.getElement('hidden-iframe');
+
+    try {
+      const history = new GoogHistory(undefined, undefined, input, iframe);
+    } finally {
+      dispose(history);
+    }
+
+    // Test that SafeHtml.create() calls in constructor succeed.
+    try {
+      // Undefined opt_input and opt_iframe will result in use document.write(),
+      // which in some browsers overrides the current page and causes the
+      // test to fail.
+      const history = new GoogHistory(
+          true,
+          TrustedResourceUrl.fromConstant(Const.from('blank_test_helper.html')),
+          input, iframe);
+    } finally {
+      dispose(history);
+    }
+  },
+
+  testIsHashChangeSupported() {
+    // This is the policy currently implemented.
+    const supportsOnHashChange =
+        (userAgent.IE ? document.documentMode >= 8 : 'onhashchange' in window);
+
+    assertEquals(supportsOnHashChange, GoogHistory.isOnHashChangeSupported());
+  },
+});

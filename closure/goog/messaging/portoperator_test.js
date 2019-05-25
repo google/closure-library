@@ -12,96 +12,94 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.messaging.PortOperatorTest');
-goog.setTestOnly('goog.messaging.PortOperatorTest');
+goog.module('goog.messaging.PortOperatorTest');
+goog.setTestOnly();
 
-goog.require('goog.messaging.PortNetwork');
-goog.require('goog.messaging.PortOperator');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.messaging.MockMessageChannel');
-goog.require('goog.testing.messaging.MockMessagePort');
+const MockControl = goog.require('goog.testing.MockControl');
+const MockMessageChannel = goog.require('goog.testing.messaging.MockMessageChannel');
+const MockMessagePort = goog.require('goog.testing.messaging.MockMessagePort');
+const PortNetwork = goog.require('goog.messaging.PortNetwork');
+const PortOperator = goog.require('goog.messaging.PortOperator');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var stubs;
+let stubs;
 
-var mockControl;
-var mockChannel1;
-var mockChannel2;
-var operator;
-
-function setUpPage() {
-  stubs = new goog.testing.PropertyReplacer();
-}
-
-function setUp() {
-  mockControl = new goog.testing.MockControl();
-  var index = 0;
-  stubs.set(goog.global, 'MessageChannel', function() {
-    this.port1 = makeMockPort(index, 1);
-    this.port2 = makeMockPort(index, 2);
-    index += 1;
-  });
-
-  mockChannel1 = new goog.testing.messaging.MockMessageChannel(mockControl);
-  mockChannel2 = new goog.testing.messaging.MockMessageChannel(mockControl);
-  operator = new goog.messaging.PortOperator('operator');
-  operator.addPort('1', mockChannel1);
-  operator.addPort('2', mockChannel2);
-}
-
-function tearDown() {
-  goog.dispose(operator);
-  mockControl.$verifyAll();
-  stubs.reset();
-}
+let mockControl;
+let mockChannel1;
+let mockChannel2;
+let operator;
 
 function makeMockPort(index, port) {
-  return new goog.testing.messaging.MockMessagePort(
-      {index: index, port: port}, mockControl);
+  return new MockMessagePort({index: index, port: port}, mockControl);
 }
 
-function testConnectSelfToPortViaRequestConnection() {
-  mockChannel1.send(
-      goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE,
-      {success: true, name: 'operator', port: makeMockPort(0, 1)});
-  mockControl.$replayAll();
-  mockChannel1.receive(
-      goog.messaging.PortNetwork.REQUEST_CONNECTION_SERVICE, 'operator');
-  var port = operator.dial('1').port_;
-  assertObjectEquals({index: 0, port: 2}, port.id);
-  assertEquals(true, port.started);
-}
+testSuite({
+  setUpPage() {
+    stubs = new PropertyReplacer();
+  },
 
-function testConnectSelfToPortViaGetPort() {
-  mockChannel1.send(
-      goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE,
-      {success: true, name: 'operator', port: makeMockPort(0, 1)});
-  mockControl.$replayAll();
-  var port = operator.dial('1').port_;
-  assertObjectEquals({index: 0, port: 2}, port.id);
-  assertEquals(true, port.started);
-}
+  setUp() {
+    mockControl = new MockControl();
+    let index = 0;
+    stubs.set(goog.global, 'MessageChannel', function() {
+      this.port1 = makeMockPort(index, 1);
+      this.port2 = makeMockPort(index, 2);
+      index += 1;
+    });
 
-function testConnectTwoCallers() {
-  mockChannel1.send(
-      goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE,
-      {success: true, name: '2', port: makeMockPort(0, 1)});
-  mockChannel2.send(
-      goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE,
-      {success: true, name: '1', port: makeMockPort(0, 2)});
-  mockControl.$replayAll();
-  mockChannel1.receive(
-      goog.messaging.PortNetwork.REQUEST_CONNECTION_SERVICE, '2');
-}
+    mockChannel1 = new MockMessageChannel(mockControl);
+    mockChannel2 = new MockMessageChannel(mockControl);
+    operator = new PortOperator('operator');
+    operator.addPort('1', mockChannel1);
+    operator.addPort('2', mockChannel2);
+  },
 
-function testConnectCallerToNonexistentCaller() {
-  mockChannel1.send(goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE, {
-    success: false,
-    message: 'Port "1" requested a connection to port "no", which doesn\'t ' +
-        'exist'
-  });
-  mockControl.$replayAll();
-  mockChannel1.receive(
-      goog.messaging.PortNetwork.REQUEST_CONNECTION_SERVICE, 'no');
-}
+  tearDown() {
+    goog.dispose(operator);
+    mockControl.$verifyAll();
+    stubs.reset();
+  },
+
+  testConnectSelfToPortViaRequestConnection() {
+    mockChannel1.send(
+        PortNetwork.GRANT_CONNECTION_SERVICE,
+        {success: true, name: 'operator', port: makeMockPort(0, 1)});
+    mockControl.$replayAll();
+    mockChannel1.receive(PortNetwork.REQUEST_CONNECTION_SERVICE, 'operator');
+    const port = operator.dial('1').port_;
+    assertObjectEquals({index: 0, port: 2}, port.id);
+    assertEquals(true, port.started);
+  },
+
+  testConnectSelfToPortViaGetPort() {
+    mockChannel1.send(
+        PortNetwork.GRANT_CONNECTION_SERVICE,
+        {success: true, name: 'operator', port: makeMockPort(0, 1)});
+    mockControl.$replayAll();
+    const port = operator.dial('1').port_;
+    assertObjectEquals({index: 0, port: 2}, port.id);
+    assertEquals(true, port.started);
+  },
+
+  testConnectTwoCallers() {
+    mockChannel1.send(
+        PortNetwork.GRANT_CONNECTION_SERVICE,
+        {success: true, name: '2', port: makeMockPort(0, 1)});
+    mockChannel2.send(
+        PortNetwork.GRANT_CONNECTION_SERVICE,
+        {success: true, name: '1', port: makeMockPort(0, 2)});
+    mockControl.$replayAll();
+    mockChannel1.receive(PortNetwork.REQUEST_CONNECTION_SERVICE, '2');
+  },
+
+  testConnectCallerToNonexistentCaller() {
+    mockChannel1.send(PortNetwork.GRANT_CONNECTION_SERVICE, {
+      success: false,
+      message: 'Port "1" requested a connection to port "no", which doesn\'t ' +
+          'exist',
+    });
+    mockControl.$replayAll();
+    mockChannel1.receive(PortNetwork.REQUEST_CONNECTION_SERVICE, 'no');
+  },
+});

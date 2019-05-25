@@ -12,24 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.messaging.MockMessageChannelTest');
-goog.setTestOnly('goog.testing.messaging.MockMessageChannelTest');
+goog.module('goog.testing.messaging.MockMessageChannelTest');
+goog.setTestOnly();
 
-goog.require('goog.messaging');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.messaging.MockMessageChannel');
+const MockControl = goog.require('goog.testing.MockControl');
+const MockMessageChannel = goog.require('goog.testing.messaging.MockMessageChannel');
+const messaging = goog.require('goog.messaging');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testPipe() {
-  var mockControl = new goog.testing.MockControl();
-  var ch1 = new goog.testing.messaging.MockMessageChannel(mockControl);
-  var ch2 = new goog.testing.messaging.MockMessageChannel(mockControl);
-  ch1.send('ping', 'HELLO');
-  ch2.send('pong', {key: 'value'});
-  goog.messaging.pipe(ch1, ch2);
+testSuite({
+  testPipe() {
+    const mockControl = new MockControl();
+    const ch1 = new MockMessageChannel(mockControl);
+    const ch2 = new MockMessageChannel(mockControl);
+    ch1.send('ping', 'HELLO');
+    ch2.send('pong', {key: 'value'});
+    messaging.pipe(ch1, ch2);
 
-  mockControl.$replayAll();
-  ch2.receive('ping', 'HELLO');
-  ch1.receive('pong', {key: 'value'});
-  mockControl.$verifyAll();
-}
+    mockControl.$replayAll();
+    ch2.receive('ping', 'HELLO');
+    ch1.receive('pong', {key: 'value'});
+    mockControl.$verifyAll();
+  },
+});

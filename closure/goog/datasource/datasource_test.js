@@ -12,229 +12,235 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ds.JsDataSourceTest');
-goog.setTestOnly('goog.ds.JsDataSourceTest');
+goog.module('goog.ds.JsDataSourceTest');
+goog.setTestOnly();
 
-goog.require('goog.dom.xml');
-goog.require('goog.ds.DataManager');
-goog.require('goog.ds.JsDataSource');
-goog.require('goog.ds.SortedNodeList');
-goog.require('goog.ds.XmlDataSource');
-goog.require('goog.testing.jsunit');
+const DataManager = goog.require('goog.ds.DataManager');
+const JsDataSource = goog.require('goog.ds.JsDataSource');
+const SortedNodeList = goog.require('goog.ds.SortedNodeList');
+const XmlDataSource = goog.require('goog.ds.XmlDataSource');
+const testSuite = goog.require('goog.testing.testSuite');
+const xml = goog.require('goog.dom.xml');
 
-var xmlDs;
-var jsDs;
+let xmlDs;
+let jsDs;
 
-function setUp() {
-  var xmltext = '<test><node value="5">some data</node></test>';
-  var doc = goog.dom.xml.loadXml(xmltext);
-  xmlDs = new goog.ds.XmlDataSource(doc.documentElement, null, null);
-
-  var jsObj = {
-    node: {
-      '@value': 5,
-      '#text': 'some data',
-      name: 'bob',
-      age: 35,
-      alive: true,
-      aliases: ['bobbo', 'robbo']
-    }
-  };
-  jsDs = new goog.ds.JsDataSource(jsObj, 'JSDS', null);
-}
-
-function testJsDataSource() {
-  var child = jsDs.getChildNode('node');
-  var attr = child.getChildNode('@value');
-  var text = child.getChildNode('#text');
-  var name = child.getChildNode('name');
-  var age = child.getChildNode('age');
-  var alive = child.getChildNode('alive');
-  var aliases = child.getChildNode('aliases');
-
-  assertEquals('Attribute get', attr.get(), 5);
-  assertEquals('Text get', text.get(), 'some data');
-  assertEquals('string node get', name.get(), 'bob');
-  assertEquals('Number get', age.get(), 35);
-  assertEquals('Boolean get', alive.get(), true);
-  assertEquals('Array value', aliases.get().getByIndex(1).get(), 'robbo');
-  assertEquals('Array length', aliases.get().getCount(), 2);
-
-  assertEquals('Datasource name', jsDs.getDataName(), 'JSDS');
-}
-
-function testXmlDataSource() {
-  var child = xmlDs.getChildNode('node');
-  var attr = child.getChildNode('@value');
-  var text = child.getChildNode('#text');
-
-  assertEquals('Attribute get', attr.get(), '5');
-  assertEquals('Text get', text.get(), 'some data');
-  assertEquals('Attr child node value', child.getChildNodeValue('@value'), '5');
-}
-
-function testChildNodeValue() {
-  var child = jsDs.getChildNode('node');
-  assertEquals('Child node value', child.getChildNodeValue('age'), 35);
-}
-
-function testJsSet() {
-  assertNull('Get new child node is null', jsDs.getChildNode('Newt'));
-
-  jsDs.setChildNode('Newt', 'A newt');
-  assertEquals(
-      'New string child node', jsDs.getChildNode('Newt').get(), 'A newt');
-
-  jsDs.setChildNode('Number', 35);
-  assertEquals('New number child node', jsDs.getChildNodeValue('Number'), 35);
-
-  var numNode = jsDs.getChildNode('Number');
-  jsDs.getChildNode('Number').set(38);
-  assertEquals('Changed number child node', numNode.get(), 38);
-
-  assertThrows('Shouldn\'t be able to set a group node yet', function() {
-    jsDs.set(5);
-  });
-}
-
-function testDataManager() {
-  var dm = goog.ds.DataManager.getInstance();
-  assertNotNull('DataManager exists', dm);
-  assertTrue('No datasources yet', dm.getChildNodes().getCount() == 0);
-  dm.addDataSource(jsDs, true);
-  assertTrue('One data source', dm.getChildNodes().getCount() == 1);
-  assertEquals(
-      'Renamed to global prefix', '$JSDS',
-      dm.getChildNodes().getByIndex(0).getDataName());
-}
-
-
-/**
- * Constructs an array of data nodes from a javascript array.
- */
+/** Constructs an array of data nodes from a javascript array. */
 function createDataNodesArrayFromJs(jsObj) {
-  var jsds = new goog.ds.JsDataSource(jsObj, 'MYJSDS', null);
-  var dataNodes = jsds.getChildNodes();
-  var dataNodesArray = [];
-  var dataNodesCount = dataNodes.getCount();
-  for (var i = 0; i < dataNodesCount; i++) {
+  const jsds = new JsDataSource(jsObj, 'MYJSDS', null);
+  const dataNodes = jsds.getChildNodes();
+  const dataNodesArray = [];
+  const dataNodesCount = dataNodes.getCount();
+  for (let i = 0; i < dataNodesCount; i++) {
     dataNodesArray[i] = dataNodes.getByIndex(i);
   }
   return dataNodesArray;
 }
 
-
-function testSortedNodeListConstruction() {
-  var dataNodesArray = createDataNodesArrayFromJs([
-    {'Value': 2, 'id': 'C'}, {'Value': 0, 'id': 'A'}, {'Value': 1, 'id': 'B'},
-    {'Value': 3, 'id': 'D'}
-  ]);
-
-  var sortedNodeList = new goog.ds.SortedNodeList(valueSort, dataNodesArray);
-
-  assertEquals('SortedNodeList count', 4, sortedNodeList.getCount());
-
-  var expectedValues = [0, 1, 2, 3];
-  for (var i = 0; i < expectedValues.length; i++) {
-    assertEquals(
-        'SortedNodeList position after construction', expectedValues[i],
-        sortedNodeList.getByIndex(i).getChildNode('Value').get());
-  }
-}
-
-
-function testSortedNodeListAdd() {
-  var sortedNodeList = new goog.ds.SortedNodeList(valueSort);
-
-  var dataNodesArray = createDataNodesArrayFromJs([
-    {'Value': 2, 'id': 'C'}, {'Value': 0, 'id': 'A'}, {'Value': 1, 'id': 'B'},
-    {'Value': 3, 'id': 'D'}
-  ]);
-
-  for (var i = 0; i < dataNodesArray.length; i++) {
-    sortedNodeList.add(dataNodesArray[i]);
-  }
-
-  assertEquals('SortedNodeList count', 4, sortedNodeList.getCount());
-
-  var expectedValues = [0, 1, 2, 3];
-  for (var i = 0; i < expectedValues.length; i++) {
-    assertEquals(
-        'SortedNodeList position after construction', expectedValues[i],
-        sortedNodeList.getByIndex(i).getChildNode('Value').get());
-  }
-}
-
-
-function testSortedNodeListAppend() {
-  var sortedNodeList = new goog.ds.SortedNodeList(valueSort);
-
-  var dataNodesArray = createDataNodesArrayFromJs([
-    {'Value': 2, 'id': 'C'}, {'Value': 0, 'id': 'A'}, {'Value': 1, 'id': 'B'},
-    {'Value': 3, 'id': 'D'}
-  ]);
-
-  for (var i = 0; i < dataNodesArray.length; i++) {
-    sortedNodeList.append(dataNodesArray[i]);
-  }
-
-  assertEquals(
-      'SortedNodeList count', dataNodesArray.length, sortedNodeList.getCount());
-
-  var expectedValues = [2, 0, 1, 3];
-  for (var i = 0; i < expectedValues.length; i++) {
-    assertEquals(
-        'SortedNodeList position after construction', expectedValues[i],
-        sortedNodeList.getByIndex(i).getChildNode('Value').get());
-  }
-}
-
-function testSortedNodeListSet() {
-  var dataNodesArray = createDataNodesArrayFromJs([
-    {'Value': 4, 'id': 'C'}, {'Value': 0, 'id': 'A'}, {'Value': 2, 'id': 'B'},
-    {'Value': 6, 'id': 'D'}
-  ]);
-
-  var sortedNodeList = new goog.ds.SortedNodeList(valueSort, dataNodesArray);
-
-  assertEquals('SortedNodeList count', 4, sortedNodeList.getCount());
-
-  // test set that replaces an existing node
-  var replaceNode = createDataNodesArrayFromJs([{'Value': 5, 'id': 'B'}])[0];
-  sortedNodeList.setNode('B', replaceNode);
-
-  assertEquals('SortedNodeList count', 4, sortedNodeList.getCount());
-  assertEquals(
-      'SortedNodeList replacement node correct', replaceNode,
-      sortedNodeList.get('B'));
-
-  var expectedValues = [0, 4, 5, 6];
-  for (var i = 0; i < expectedValues.length; i++) {
-    assertEquals(
-        'SortedNodeList position after set', expectedValues[i],
-        sortedNodeList.getByIndex(i).getChildNode('Value').get());
-  }
-
-  // test a set that adds a new node
-  var addedNode = createDataNodesArrayFromJs([{'Value': 1, 'id': 'E'}])[0];
-  sortedNodeList.setNode('E', addedNode);
-
-  assertEquals('SortedNodeList count', 5, sortedNodeList.getCount());
-  assertEquals(
-      'SortedNodeList added node correct', addedNode, sortedNodeList.get('E'));
-
-  var expectedValues = [0, 1, 4, 5, 6];
-  for (var i = 0; i < expectedValues.length; i++) {
-    assertEquals(
-        'SortedNodeList position after set', expectedValues[i],
-        sortedNodeList.getByIndex(i).getChildNode('Value').get());
-  }
-}
-
-
 function valueSort(a, b) {
-  var valueA = a.getChildNode('Value').get();
-  var valueB = b.getChildNode('Value').get();
+  const valueA = a.getChildNode('Value').get();
+  const valueB = b.getChildNode('Value').get();
 
   return (valueA - valueB);
 }
+testSuite({
+  setUp() {
+    const xmltext = '<test><node value="5">some data</node></test>';
+    const doc = xml.loadXml(xmltext);
+    xmlDs = new XmlDataSource(doc.documentElement, null, null);
+
+    const jsObj = {
+      node: {
+        '@value': 5,
+        '#text': 'some data',
+        name: 'bob',
+        age: 35,
+        alive: true,
+        aliases: ['bobbo', 'robbo'],
+      },
+    };
+    jsDs = new JsDataSource(jsObj, 'JSDS', null);
+  },
+
+  testJsDataSource() {
+    const child = jsDs.getChildNode('node');
+    const attr = child.getChildNode('@value');
+    const text = child.getChildNode('#text');
+    const name = child.getChildNode('name');
+    const age = child.getChildNode('age');
+    const alive = child.getChildNode('alive');
+    const aliases = child.getChildNode('aliases');
+
+    assertEquals('Attribute get', attr.get(), 5);
+    assertEquals('Text get', text.get(), 'some data');
+    assertEquals('string node get', name.get(), 'bob');
+    assertEquals('Number get', age.get(), 35);
+    assertEquals('Boolean get', alive.get(), true);
+    assertEquals('Array value', aliases.get().getByIndex(1).get(), 'robbo');
+    assertEquals('Array length', aliases.get().getCount(), 2);
+
+    assertEquals('Datasource name', jsDs.getDataName(), 'JSDS');
+  },
+
+  testXmlDataSource() {
+    const child = xmlDs.getChildNode('node');
+    const attr = child.getChildNode('@value');
+    const text = child.getChildNode('#text');
+
+    assertEquals('Attribute get', attr.get(), '5');
+    assertEquals('Text get', text.get(), 'some data');
+    assertEquals(
+        'Attr child node value', child.getChildNodeValue('@value'), '5');
+  },
+
+  testChildNodeValue() {
+    const child = jsDs.getChildNode('node');
+    assertEquals('Child node value', child.getChildNodeValue('age'), 35);
+  },
+
+  testJsSet() {
+    assertNull('Get new child node is null', jsDs.getChildNode('Newt'));
+
+    jsDs.setChildNode('Newt', 'A newt');
+    assertEquals(
+        'New string child node', jsDs.getChildNode('Newt').get(), 'A newt');
+
+    jsDs.setChildNode('Number', 35);
+    assertEquals('New number child node', jsDs.getChildNodeValue('Number'), 35);
+
+    const numNode = jsDs.getChildNode('Number');
+    jsDs.getChildNode('Number').set(38);
+    assertEquals('Changed number child node', numNode.get(), 38);
+
+    assertThrows('Shouldn\'t be able to set a group node yet', () => {
+      jsDs.set(5);
+    });
+  },
+
+  testDataManager() {
+    const dm = DataManager.getInstance();
+    assertNotNull('DataManager exists', dm);
+    assertTrue('No datasources yet', dm.getChildNodes().getCount() == 0);
+    dm.addDataSource(jsDs, true);
+    assertTrue('One data source', dm.getChildNodes().getCount() == 1);
+    assertEquals(
+        'Renamed to global prefix', '$JSDS',
+        dm.getChildNodes().getByIndex(0).getDataName());
+  },
+
+  testSortedNodeListConstruction() {
+    const dataNodesArray = createDataNodesArrayFromJs([
+      {'Value': 2, 'id': 'C'},
+      {'Value': 0, 'id': 'A'},
+      {'Value': 1, 'id': 'B'},
+      {'Value': 3, 'id': 'D'},
+    ]);
+
+    const sortedNodeList = new SortedNodeList(valueSort, dataNodesArray);
+
+    assertEquals('SortedNodeList count', 4, sortedNodeList.getCount());
+
+    const expectedValues = [0, 1, 2, 3];
+    for (let i = 0; i < expectedValues.length; i++) {
+      assertEquals(
+          'SortedNodeList position after construction', expectedValues[i],
+          sortedNodeList.getByIndex(i).getChildNode('Value').get());
+    }
+  },
+
+  testSortedNodeListAdd() {
+    const sortedNodeList = new SortedNodeList(valueSort);
+
+    const dataNodesArray = createDataNodesArrayFromJs([
+      {'Value': 2, 'id': 'C'},
+      {'Value': 0, 'id': 'A'},
+      {'Value': 1, 'id': 'B'},
+      {'Value': 3, 'id': 'D'},
+    ]);
+
+    for (let i = 0; i < dataNodesArray.length; i++) {
+      sortedNodeList.add(dataNodesArray[i]);
+    }
+
+    assertEquals('SortedNodeList count', 4, sortedNodeList.getCount());
+
+    const expectedValues = [0, 1, 2, 3];
+    for (let i = 0; i < expectedValues.length; i++) {
+      assertEquals(
+          'SortedNodeList position after construction', expectedValues[i],
+          sortedNodeList.getByIndex(i).getChildNode('Value').get());
+    }
+  },
+
+  testSortedNodeListAppend() {
+    const sortedNodeList = new SortedNodeList(valueSort);
+
+    const dataNodesArray = createDataNodesArrayFromJs([
+      {'Value': 2, 'id': 'C'},
+      {'Value': 0, 'id': 'A'},
+      {'Value': 1, 'id': 'B'},
+      {'Value': 3, 'id': 'D'},
+    ]);
+
+    for (let i = 0; i < dataNodesArray.length; i++) {
+      sortedNodeList.append(dataNodesArray[i]);
+    }
+
+    assertEquals(
+        'SortedNodeList count', dataNodesArray.length,
+        sortedNodeList.getCount());
+
+    const expectedValues = [2, 0, 1, 3];
+    for (let i = 0; i < expectedValues.length; i++) {
+      assertEquals(
+          'SortedNodeList position after construction', expectedValues[i],
+          sortedNodeList.getByIndex(i).getChildNode('Value').get());
+    }
+  },
+
+  testSortedNodeListSet() {
+    const dataNodesArray = createDataNodesArrayFromJs([
+      {'Value': 4, 'id': 'C'},
+      {'Value': 0, 'id': 'A'},
+      {'Value': 2, 'id': 'B'},
+      {'Value': 6, 'id': 'D'},
+    ]);
+
+    const sortedNodeList = new SortedNodeList(valueSort, dataNodesArray);
+
+    assertEquals('SortedNodeList count', 4, sortedNodeList.getCount());
+
+    // test set that replaces an existing node
+    const replaceNode =
+        createDataNodesArrayFromJs([{'Value': 5, 'id': 'B'}])[0];
+    sortedNodeList.setNode('B', replaceNode);
+
+    assertEquals('SortedNodeList count', 4, sortedNodeList.getCount());
+    assertEquals(
+        'SortedNodeList replacement node correct', replaceNode,
+        sortedNodeList.get('B'));
+
+    let expectedValues = [0, 4, 5, 6];
+    for (let i = 0; i < expectedValues.length; i++) {
+      assertEquals(
+          'SortedNodeList position after set', expectedValues[i],
+          sortedNodeList.getByIndex(i).getChildNode('Value').get());
+    }
+
+    // test a set that adds a new node
+    const addedNode = createDataNodesArrayFromJs([{'Value': 1, 'id': 'E'}])[0];
+    sortedNodeList.setNode('E', addedNode);
+
+    assertEquals('SortedNodeList count', 5, sortedNodeList.getCount());
+    assertEquals(
+        'SortedNodeList added node correct', addedNode,
+        sortedNodeList.get('E'));
+
+    expectedValues = [0, 1, 4, 5, 6];
+    for (let i = 0; i < expectedValues.length; i++) {
+      assertEquals(
+          'SortedNodeList position after set', expectedValues[i],
+          sortedNodeList.getByIndex(i).getChildNode('Value').get());
+    }
+  },
+});

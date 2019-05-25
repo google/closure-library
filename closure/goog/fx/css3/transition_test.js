@@ -12,197 +12,188 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.fx.css3.TransitionTest');
-goog.setTestOnly('goog.fx.css3.TransitionTest');
+goog.module('goog.fx.css3.TransitionTest');
+goog.setTestOnly();
 
-goog.require('goog.dispose');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.events');
-goog.require('goog.fx.Transition');
-goog.require('goog.fx.css3.Transition');
-goog.require('goog.style.transition');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const Css3Transition = goog.require('goog.fx.css3.Transition');
+const MockClock = goog.require('goog.testing.MockClock');
+const TagName = goog.require('goog.dom.TagName');
+const Transition = goog.require('goog.fx.Transition');
+const dispose = goog.require('goog.dispose');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.events');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const styleTransition = goog.require('goog.style.transition');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var transition;
-var element;
-var mockClock;
-
+let transition;
+let element;
+let mockClock;
 
 function createTransition(element, duration) {
-  return new goog.fx.css3.Transition(
+  return new Css3Transition(
       element, duration, {'opacity': 0}, {'opacity': 1},
       {property: 'opacity', duration: duration, timing: 'ease-in', delay: 0});
 }
 
+testSuite({
+  setUp() {
+    mockClock = new MockClock(true);
+    element = dom.createElement(TagName.DIV);
+    document.body.appendChild(element);
+  },
 
-function setUp() {
-  mockClock = new goog.testing.MockClock(true);
-  element = goog.dom.createElement(goog.dom.TagName.DIV);
-  document.body.appendChild(element);
-}
+  tearDown() {
+    dispose(transition);
+    dispose(mockClock);
+    dom.removeNode(element);
+  },
 
+  testPlayEventFiredOnPlay() {
+    if (!styleTransition.isSupported()) return;
 
-function tearDown() {
-  goog.dispose(transition);
-  goog.dispose(mockClock);
-  goog.dom.removeNode(element);
-}
+    transition = createTransition(element, 10);
+    let handlerCalled = false;
+    events.listen(transition, Transition.EventType.PLAY, () => {
+      handlerCalled = true;
+    });
 
+    transition.play();
+    assertTrue(handlerCalled);
+  },
 
-function testPlayEventFiredOnPlay() {
-  if (!goog.style.transition.isSupported()) return;
+  testBeginEventFiredOnPlay() {
+    if (!styleTransition.isSupported()) return;
 
-  transition = createTransition(element, 10);
-  var handlerCalled = false;
-  goog.events.listen(transition, goog.fx.Transition.EventType.PLAY, function() {
-    handlerCalled = true;
-  });
+    transition = createTransition(element, 10);
+    let handlerCalled = false;
+    events.listen(transition, Transition.EventType.BEGIN, () => {
+      handlerCalled = true;
+    });
 
-  transition.play();
-  assertTrue(handlerCalled);
-}
+    transition.play();
+    assertTrue(handlerCalled);
+  },
 
+  testFinishEventsFiredAfterFinish() {
+    if (!styleTransition.isSupported()) return;
 
-function testBeginEventFiredOnPlay() {
-  if (!goog.style.transition.isSupported()) return;
+    transition = createTransition(element, 10);
+    let finishHandlerCalled = false;
+    let endHandlerCalled = false;
+    events.listen(transition, Transition.EventType.FINISH, () => {
+      finishHandlerCalled = true;
+    });
+    events.listen(transition, Transition.EventType.END, () => {
+      endHandlerCalled = true;
+    });
 
-  transition = createTransition(element, 10);
-  var handlerCalled = false;
-  goog.events.listen(
-      transition, goog.fx.Transition.EventType.BEGIN,
-      function() { handlerCalled = true; });
+    transition.play();
 
-  transition.play();
-  assertTrue(handlerCalled);
-}
+    mockClock.tick(10000);
 
+    assertTrue(finishHandlerCalled);
+    assertTrue(endHandlerCalled);
+  },
 
-function testFinishEventsFiredAfterFinish() {
-  if (!goog.style.transition.isSupported()) return;
+  testEventsWhenTransitionIsUnsupported() {
+    if (styleTransition.isSupported()) return;
 
-  transition = createTransition(element, 10);
-  var finishHandlerCalled = false;
-  var endHandlerCalled = false;
-  goog.events.listen(
-      transition, goog.fx.Transition.EventType.FINISH,
-      function() { finishHandlerCalled = true; });
-  goog.events.listen(transition, goog.fx.Transition.EventType.END, function() {
-    endHandlerCalled = true;
-  });
+    transition = createTransition(element, 10);
 
-  transition.play();
+    let stopHandlerCalled = false;
+    let endHandlerCalled = false;
+    let finishHandlerCalled = false;
 
-  mockClock.tick(10000);
+    let beginHandlerCalled = false;
+    let playHandlerCalled = false;
 
-  assertTrue(finishHandlerCalled);
-  assertTrue(endHandlerCalled);
-}
+    events.listen(transition, Transition.EventType.BEGIN, () => {
+      beginHandlerCalled = true;
+    });
+    events.listen(transition, Transition.EventType.PLAY, () => {
+      playHandlerCalled = true;
+    });
+    events.listen(transition, Transition.EventType.FINISH, () => {
+      finishHandlerCalled = true;
+    });
+    events.listen(transition, Transition.EventType.END, () => {
+      endHandlerCalled = true;
+    });
+    events.listen(transition, Transition.EventType.STOP, () => {
+      stopHandlerCalled = true;
+    });
 
+    assertFalse(transition.play());
 
-function testEventsWhenTransitionIsUnsupported() {
-  if (goog.style.transition.isSupported()) return;
+    assertTrue(beginHandlerCalled);
+    assertTrue(playHandlerCalled);
+    assertTrue(endHandlerCalled);
+    assertTrue(finishHandlerCalled);
 
-  transition = createTransition(element, 10);
+    transition.stop();
 
-  var stopHandlerCalled = false;
-  var finishHandlerCalled = false, endHandlerCalled = false;
-  var beginHandlerCalled = false, playHandlerCalled = false;
-  goog.events.listen(
-      transition, goog.fx.Transition.EventType.BEGIN,
-      function() { beginHandlerCalled = true; });
-  goog.events.listen(transition, goog.fx.Transition.EventType.PLAY, function() {
-    playHandlerCalled = true;
-  });
-  goog.events.listen(
-      transition, goog.fx.Transition.EventType.FINISH,
-      function() { finishHandlerCalled = true; });
-  goog.events.listen(transition, goog.fx.Transition.EventType.END, function() {
-    endHandlerCalled = true;
-  });
-  goog.events.listen(transition, goog.fx.Transition.EventType.STOP, function() {
-    stopHandlerCalled = true;
-  });
+    assertFalse(stopHandlerCalled);
+  },
 
-  assertFalse(transition.play());
+  testCallingStopDuringAnimationWorks() {
+    if (!styleTransition.isSupported()) return;
 
-  assertTrue(beginHandlerCalled);
-  assertTrue(playHandlerCalled);
-  assertTrue(endHandlerCalled);
-  assertTrue(finishHandlerCalled);
+    transition = createTransition(element, 10);
 
-  transition.stop();
+    const stopHandler = recordFunction();
+    const endHandler = recordFunction();
+    const finishHandler = recordFunction();
+    events.listen(transition, Transition.EventType.STOP, stopHandler);
+    events.listen(transition, Transition.EventType.END, endHandler);
+    events.listen(transition, Transition.EventType.FINISH, finishHandler);
 
-  assertFalse(stopHandlerCalled);
-}
+    transition.play();
+    mockClock.tick(1);
+    transition.stop();
+    assertEquals(1, stopHandler.getCallCount());
+    assertEquals(1, endHandler.getCallCount());
+    mockClock.tick(10000);
+    assertEquals(0, finishHandler.getCallCount());
+  },
 
+  testCallingStopImmediatelyWorks() {
+    if (!styleTransition.isSupported()) return;
 
-function testCallingStopDuringAnimationWorks() {
-  if (!goog.style.transition.isSupported()) return;
+    transition = createTransition(element, 10);
 
-  transition = createTransition(element, 10);
+    const stopHandler = recordFunction();
+    const endHandler = recordFunction();
+    const finishHandler = recordFunction();
+    events.listen(transition, Transition.EventType.STOP, stopHandler);
+    events.listen(transition, Transition.EventType.END, endHandler);
+    events.listen(transition, Transition.EventType.FINISH, finishHandler);
 
-  var stopHandler = goog.testing.recordFunction();
-  var endHandler = goog.testing.recordFunction();
-  var finishHandler = goog.testing.recordFunction();
-  goog.events.listen(
-      transition, goog.fx.Transition.EventType.STOP, stopHandler);
-  goog.events.listen(transition, goog.fx.Transition.EventType.END, endHandler);
-  goog.events.listen(
-      transition, goog.fx.Transition.EventType.FINISH, finishHandler);
+    transition.play();
+    transition.stop();
+    assertEquals(1, stopHandler.getCallCount());
+    assertEquals(1, endHandler.getCallCount());
+    mockClock.tick(10000);
+    assertEquals(0, finishHandler.getCallCount());
+  },
 
-  transition.play();
-  mockClock.tick(1);
-  transition.stop();
-  assertEquals(1, stopHandler.getCallCount());
-  assertEquals(1, endHandler.getCallCount());
-  mockClock.tick(10000);
-  assertEquals(0, finishHandler.getCallCount());
-}
+  testCallingStopAfterAnimationDoesNothing() {
+    if (!styleTransition.isSupported()) return;
 
+    transition = createTransition(element, 10);
 
-function testCallingStopImmediatelyWorks() {
-  if (!goog.style.transition.isSupported()) return;
+    const stopHandler = recordFunction();
+    const endHandler = recordFunction();
+    const finishHandler = recordFunction();
+    events.listen(transition, Transition.EventType.STOP, stopHandler);
+    events.listen(transition, Transition.EventType.END, endHandler);
+    events.listen(transition, Transition.EventType.FINISH, finishHandler);
 
-  transition = createTransition(element, 10);
-
-  var stopHandler = goog.testing.recordFunction();
-  var endHandler = goog.testing.recordFunction();
-  var finishHandler = goog.testing.recordFunction();
-  goog.events.listen(
-      transition, goog.fx.Transition.EventType.STOP, stopHandler);
-  goog.events.listen(transition, goog.fx.Transition.EventType.END, endHandler);
-  goog.events.listen(
-      transition, goog.fx.Transition.EventType.FINISH, finishHandler);
-
-  transition.play();
-  transition.stop();
-  assertEquals(1, stopHandler.getCallCount());
-  assertEquals(1, endHandler.getCallCount());
-  mockClock.tick(10000);
-  assertEquals(0, finishHandler.getCallCount());
-}
-
-function testCallingStopAfterAnimationDoesNothing() {
-  if (!goog.style.transition.isSupported()) return;
-
-  transition = createTransition(element, 10);
-
-  var stopHandler = goog.testing.recordFunction();
-  var endHandler = goog.testing.recordFunction();
-  var finishHandler = goog.testing.recordFunction();
-  goog.events.listen(
-      transition, goog.fx.Transition.EventType.STOP, stopHandler);
-  goog.events.listen(transition, goog.fx.Transition.EventType.END, endHandler);
-  goog.events.listen(
-      transition, goog.fx.Transition.EventType.FINISH, finishHandler);
-
-  transition.play();
-  mockClock.tick(10000);
-  transition.stop();
-  assertEquals(0, stopHandler.getCallCount());
-  assertEquals(1, endHandler.getCallCount());
-  assertEquals(1, finishHandler.getCallCount());
-}
+    transition.play();
+    mockClock.tick(10000);
+    transition.stop();
+    assertEquals(0, stopHandler.getCallCount());
+    assertEquals(1, endHandler.getCallCount());
+    assertEquals(1, finishHandler.getCallCount());
+  },
+});

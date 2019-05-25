@@ -12,48 +12,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.soy.dataTest');
-goog.setTestOnly('goog.soy.dataTest');
+goog.module('goog.soy.dataTest');
+goog.setTestOnly();
 
-goog.require('goog.html.SafeHtml');
-goog.require('goog.html.SafeStyleSheet');
-goog.require('goog.html.SafeUrl');
-goog.require('goog.html.TrustedResourceUrl');
+const SafeHtml = goog.require('goog.html.SafeHtml');
+const SafeStyleSheet = goog.require('goog.html.SafeStyleSheet');
+const SafeUrl = goog.require('goog.html.SafeUrl');
+const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
 /** @suppress {extraRequire} */
-goog.require('goog.soy.testHelper');
-goog.require('goog.testing.jsunit');
+const testHelper = goog.require('goog.soy.testHelper');
+const testSuite = goog.require('goog.testing.testSuite');
 
+testSuite({
+  testToSafeHtml() {
+    let html;
 
-function testToSafeHtml() {
-  var html;
+    html = example.unsanitizedTextTemplate().toSafeHtml();
+    assertEquals('I &lt;3 Puppies &amp; Kittens', SafeHtml.unwrap(html));
 
-  html = example.unsanitizedTextTemplate().toSafeHtml();
-  assertEquals(
-      'I &lt;3 Puppies &amp; Kittens', goog.html.SafeHtml.unwrap(html));
+    html = example.sanitizedHtmlTemplate().toSafeHtml();
+    assertEquals('Hello <b>World</b>', SafeHtml.unwrap(html));
+  },
 
-  html = example.sanitizedHtmlTemplate().toSafeHtml();
-  assertEquals('Hello <b>World</b>', goog.html.SafeHtml.unwrap(html));
-}
+  testToSafeUrl() {
+    let url;
 
-function testToSafeUrl() {
-  var url;
+    url = example.sanitizedSmsUrlTemplate().toSafeUrl();
+    assertEquals('sms:123456789', SafeUrl.unwrap(url));
 
-  url = example.sanitizedSmsUrlTemplate().toSafeUrl();
-  assertEquals('sms:123456789', goog.html.SafeUrl.unwrap(url));
+    url = example.sanitizedHttpUrlTemplate().toSafeUrl();
+    assertEquals('https://google.com/foo?n=917', SafeUrl.unwrap(url));
+  },
 
-  url = example.sanitizedHttpUrlTemplate().toSafeUrl();
-  assertEquals('https://google.com/foo?n=917', goog.html.SafeUrl.unwrap(url));
-}
+  testToSafeStyleSheet() {
+    const url = example.sanitizedCssTemplate().toSafeStyleSheet();
+    assertEquals('html{display:none}', SafeStyleSheet.unwrap(url));
+  },
 
-function testToSafeStyleSheet() {
-  var url = example.sanitizedCssTemplate().toSafeStyleSheet();
-  assertEquals('html{display:none}', goog.html.SafeStyleSheet.unwrap(url));
-}
+  testToTrustedResourceUrl() {
+    let url;
 
-function testToTrustedResourceUrl() {
-  var url;
-
-  url = example.sanitizedTrustedResourceUriTemplate({}).toTrustedResourceUrl();
-  assertEquals(
-      'https://google.com/a.js', goog.html.TrustedResourceUrl.unwrap(url));
-}
+    url =
+        example.sanitizedTrustedResourceUriTemplate({}).toTrustedResourceUrl();
+    assertEquals('https://google.com/a.js', TrustedResourceUrl.unwrap(url));
+  },
+});

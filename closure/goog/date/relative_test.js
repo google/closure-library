@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.date.relativeTest');
-goog.setTestOnly('goog.date.relativeTest');
-
+goog.module('goog.date.relativeTest');
+goog.setTestOnly();
 
 /** @suppress {extraRequire} */
-goog.require('goog.date.relativeCommonTests');
+const relativeCommonTests = goog.require('goog.date.relativeCommonTests');

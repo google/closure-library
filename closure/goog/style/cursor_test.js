@@ -12,128 +12,122 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.style.cursorTest');
-goog.setTestOnly('goog.style.cursorTest');
+goog.module('goog.style.cursorTest');
+goog.setTestOnly();
 
-goog.require('goog.style.cursor');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const cursor = goog.require('goog.style.cursor');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var baseCursorUrl = '/images/2/';
-var origWindowsUserAgentValue;
-var origGeckoUserAgentValue;
-var origWebkitUserAgentValue;
+const baseCursorUrl = '/images/2/';
+let origWindowsUserAgentValue;
+let origGeckoUserAgentValue;
+let origWebkitUserAgentValue;
 
+testSuite({
+  setUp() {
+    origWindowsUserAgentValue = userAgent.WINDOWS;
+    origGeckoUserAgentValue = userAgent.GECKO;
+    origWebkitUserAgentValue = userAgent.WEBKIT;
+  },
 
-function setUp() {
-  origWindowsUserAgentValue = goog.userAgent.WINDOWS;
-  origGeckoUserAgentValue = goog.userAgent.GECKO;
-  origWebkitUserAgentValue = goog.userAgent.WEBKIT;
-}
+  tearDown() {
+    userAgent.WINDOWS = origWindowsUserAgentValue;
+    userAgent.GECKO = origGeckoUserAgentValue;
+    userAgent.WEBKIT = origWebkitUserAgentValue;
+  },
 
+  testGetCursorStylesWebkit() {
+    userAgent.GECKO = false;
+    userAgent.WEBKIT = true;
 
-function tearDown() {
-  goog.userAgent.WINDOWS = origWindowsUserAgentValue;
-  goog.userAgent.GECKO = origGeckoUserAgentValue;
-  goog.userAgent.WEBKIT = origWebkitUserAgentValue;
-}
+    assertEquals(
+        'Webkit should get a cursor style with moved hot-spot.',
+        'url("/images/2/openhand.cur") 7 5, default',
+        cursor.getDraggableCursorStyle(baseCursorUrl));
+    assertEquals(
+        'Webkit should get a cursor style with moved hot-spot.',
+        'url("/images/2/openhand.cur") 7 5, default',
+        cursor.getDraggableCursorStyle(baseCursorUrl, true));
 
+    assertEquals(
+        'Webkit should get a cursor style with moved hot-spot.',
+        'url("/images/2/closedhand.cur") 7 5, move',
+        cursor.getDraggingCursorStyle(baseCursorUrl));
+    assertEquals(
+        'Webkit should get a cursor style with moved hot-spot.',
+        'url("/images/2/closedhand.cur") 7 5, move',
+        cursor.getDraggingCursorStyle(baseCursorUrl, true));
+  },
 
-function testGetCursorStylesWebkit() {
-  goog.userAgent.GECKO = false;
-  goog.userAgent.WEBKIT = true;
+  testGetCursorStylesFireFoxNonWin() {
+    userAgent.GECKO = true;
+    userAgent.WEBKIT = false;
+    userAgent.WINDOWS = false;
 
-  assertEquals(
-      'Webkit should get a cursor style with moved hot-spot.',
-      'url("/images/2/openhand.cur") 7 5, default',
-      goog.style.cursor.getDraggableCursorStyle(baseCursorUrl));
-  assertEquals(
-      'Webkit should get a cursor style with moved hot-spot.',
-      'url("/images/2/openhand.cur") 7 5, default',
-      goog.style.cursor.getDraggableCursorStyle(baseCursorUrl, true));
+    assertEquals(
+        'FireFox on non Windows should get a custom cursor style.', '-moz-grab',
+        cursor.getDraggableCursorStyle(baseCursorUrl));
+    assertEquals(
+        'FireFox on non Windows should get a custom cursor style and ' +
+            'no !important modifier.',
+        '-moz-grab', cursor.getDraggableCursorStyle(baseCursorUrl, true));
 
-  assertEquals(
-      'Webkit should get a cursor style with moved hot-spot.',
-      'url("/images/2/closedhand.cur") 7 5, move',
-      goog.style.cursor.getDraggingCursorStyle(baseCursorUrl));
-  assertEquals(
-      'Webkit should get a cursor style with moved hot-spot.',
-      'url("/images/2/closedhand.cur") 7 5, move',
-      goog.style.cursor.getDraggingCursorStyle(baseCursorUrl, true));
-}
+    assertEquals(
+        'FireFox on non Windows should get a custom cursor style.',
+        '-moz-grabbing', cursor.getDraggingCursorStyle(baseCursorUrl));
+    assertEquals(
+        'FireFox on non Windows should get a custom cursor style and ' +
+            'no !important modifier.',
+        '-moz-grabbing', cursor.getDraggingCursorStyle(baseCursorUrl, true));
+  },
 
+  testGetCursorStylesFireFoxWin() {
+    userAgent.GECKO = true;
+    userAgent.WEBKIT = false;
+    userAgent.WINDOWS = true;
 
-function testGetCursorStylesFireFoxNonWin() {
-  goog.userAgent.GECKO = true;
-  goog.userAgent.WEBKIT = false;
-  goog.userAgent.WINDOWS = false;
+    assertEquals(
+        'FireFox should get a cursor style with URL.',
+        'url("/images/2/openhand.cur"), default',
+        cursor.getDraggableCursorStyle(baseCursorUrl));
+    assertEquals(
+        'FireFox should get a cursor style with URL and no !important' +
+            ' modifier.',
+        'url("/images/2/openhand.cur"), default',
+        cursor.getDraggableCursorStyle(baseCursorUrl, true));
 
-  assertEquals(
-      'FireFox on non Windows should get a custom cursor style.', '-moz-grab',
-      goog.style.cursor.getDraggableCursorStyle(baseCursorUrl));
-  assertEquals(
-      'FireFox on non Windows should get a custom cursor style and ' +
-          'no !important modifier.',
-      '-moz-grab',
-      goog.style.cursor.getDraggableCursorStyle(baseCursorUrl, true));
+    assertEquals(
+        'FireFox should get a cursor style with URL.',
+        'url("/images/2/closedhand.cur"), move',
+        cursor.getDraggingCursorStyle(baseCursorUrl));
+    assertEquals(
+        'FireFox should get a cursor style with URL and no !important' +
+            ' modifier.',
+        'url("/images/2/closedhand.cur"), move',
+        cursor.getDraggingCursorStyle(baseCursorUrl, true));
+  },
 
-  assertEquals(
-      'FireFox on non Windows should get a custom cursor style.',
-      '-moz-grabbing', goog.style.cursor.getDraggingCursorStyle(baseCursorUrl));
-  assertEquals(
-      'FireFox on non Windows should get a custom cursor style and ' +
-          'no !important modifier.',
-      '-moz-grabbing',
-      goog.style.cursor.getDraggingCursorStyle(baseCursorUrl, true));
-}
+  testGetCursorStylesOther() {
+    userAgent.GECKO = false;
+    userAgent.WEBKIT = false;
 
+    assertEquals(
+        'Other browsers (IE) should get a cursor style with URL.',
+        'url("/images/2/openhand.cur"), default',
+        cursor.getDraggableCursorStyle(baseCursorUrl));
+    assertEquals(
+        'Other browsers (IE) should get a cursor style with URL.',
+        'url("/images/2/openhand.cur"), default',
+        cursor.getDraggableCursorStyle(baseCursorUrl, true));
 
-function testGetCursorStylesFireFoxWin() {
-  goog.userAgent.GECKO = true;
-  goog.userAgent.WEBKIT = false;
-  goog.userAgent.WINDOWS = true;
-
-  assertEquals(
-      'FireFox should get a cursor style with URL.',
-      'url("/images/2/openhand.cur"), default',
-      goog.style.cursor.getDraggableCursorStyle(baseCursorUrl));
-  assertEquals(
-      'FireFox should get a cursor style with URL and no !important' +
-          ' modifier.',
-      'url("/images/2/openhand.cur"), default',
-      goog.style.cursor.getDraggableCursorStyle(baseCursorUrl, true));
-
-  assertEquals(
-      'FireFox should get a cursor style with URL.',
-      'url("/images/2/closedhand.cur"), move',
-      goog.style.cursor.getDraggingCursorStyle(baseCursorUrl));
-  assertEquals(
-      'FireFox should get a cursor style with URL and no !important' +
-          ' modifier.',
-      'url("/images/2/closedhand.cur"), move',
-      goog.style.cursor.getDraggingCursorStyle(baseCursorUrl, true));
-}
-
-
-function testGetCursorStylesOther() {
-  goog.userAgent.GECKO = false;
-  goog.userAgent.WEBKIT = false;
-
-  assertEquals(
-      'Other browsers (IE) should get a cursor style with URL.',
-      'url("/images/2/openhand.cur"), default',
-      goog.style.cursor.getDraggableCursorStyle(baseCursorUrl));
-  assertEquals(
-      'Other browsers (IE) should get a cursor style with URL.',
-      'url("/images/2/openhand.cur"), default',
-      goog.style.cursor.getDraggableCursorStyle(baseCursorUrl, true));
-
-  assertEquals(
-      'Other browsers (IE) should get a cursor style with URL.',
-      'url("/images/2/closedhand.cur"), move',
-      goog.style.cursor.getDraggingCursorStyle(baseCursorUrl));
-  assertEquals(
-      'Other browsers (IE) should get a cursor style with URL.',
-      'url("/images/2/closedhand.cur"), move',
-      goog.style.cursor.getDraggingCursorStyle(baseCursorUrl, true));
-}
+    assertEquals(
+        'Other browsers (IE) should get a cursor style with URL.',
+        'url("/images/2/closedhand.cur"), move',
+        cursor.getDraggingCursorStyle(baseCursorUrl));
+    assertEquals(
+        'Other browsers (IE) should get a cursor style with URL.',
+        'url("/images/2/closedhand.cur"), move',
+        cursor.getDraggingCursorStyle(baseCursorUrl, true));
+  },
+});

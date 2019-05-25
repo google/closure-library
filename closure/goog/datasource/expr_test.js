@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ds.ExprTest');
-goog.setTestOnly('goog.ds.ExprTest');
+goog.module('goog.ds.ExprTest');
+goog.setTestOnly();
 
-goog.require('goog.ds.DataManager');
-goog.require('goog.ds.Expr');
-goog.require('goog.ds.JsDataSource');
-goog.require('goog.testing.jsunit');
+const DataManager = goog.require('goog.ds.DataManager');
+const Expr = goog.require('goog.ds.Expr');
+const JsDataSource = goog.require('goog.ds.JsDataSource');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var jsDs;
-var jsObj = {
+let jsDs;
+const jsObj = {
   Success: true,
   Errors: [],
   Body: {
@@ -31,45 +31,45 @@ var jsObj = {
       {Name: 'Steve Smith', Email: 'steve@gmail.com', EmailCount: 305},
       {Name: 'John Smith', Email: 'smith@gmail.com'},
       {Name: 'Homer Simpson', Email: 'homer@gmail.com'},
-      {Name: 'Bart Simpson', Email: 'bart@gmail.com'}
-    ]
-  }
+      {Name: 'Bart Simpson', Email: 'bart@gmail.com'},
+    ],
+  },
 };
 
-function setUp() {
-  jsDs = new goog.ds.JsDataSource(jsObj, 'JS', null);
-  var dm = goog.ds.DataManager.getInstance();
-  dm.addDataSource(jsDs, true);
-}
+testSuite({
+  setUp() {
+    jsDs = new JsDataSource(jsObj, 'JS', null);
+    const dm = DataManager.getInstance();
+    dm.addDataSource(jsDs, true);
+  },
 
-function testBasicStuff() {
-  assertNotNull('Get Body', goog.ds.Expr.create('$JS/Body').getNode());
-}
+  testBasicStuff() {
+    assertNotNull('Get Body', Expr.create('$JS/Body').getNode());
+  },
 
-function testArrayExpressions() {
-  assertEquals(
-      6, goog.ds.Expr.create('$JS/Body/Contacts/*').getNodes().getCount());
-  assertEquals(
-      'John Doe', goog.ds.Expr.create('$JS/Body/Contacts/[0]/Name').getValue());
-  assertEquals(
-      305, goog.ds.Expr.create('$JS/Body/Contacts/[2]/EmailCount').getValue());
-  assertEquals(
-      6, goog.ds.Expr.create('$JS/Body/Contacts/*/count()').getValue());
-  assertEquals(0, goog.ds.Expr.create('$JS/Errors/*/count()').getValue());
-}
+  testArrayExpressions() {
+    assertEquals(6, Expr.create('$JS/Body/Contacts/*').getNodes().getCount());
+    assertEquals(
+        'John Doe', Expr.create('$JS/Body/Contacts/[0]/Name').getValue());
+    assertEquals(
+        305, Expr.create('$JS/Body/Contacts/[2]/EmailCount').getValue());
+    assertEquals(6, Expr.create('$JS/Body/Contacts/*/count()').getValue());
+    assertEquals(0, Expr.create('$JS/Errors/*/count()').getValue());
+  },
 
-function testCommonExpressions() {
-  assertTrue(goog.ds.Expr.create('.').isCurrent_);
-  assertFalse(goog.ds.Expr.create('Bob').isCurrent_);
-  assertTrue(goog.ds.Expr.create('*|text()').isAllChildNodes_);
-  assertFalse(goog.ds.Expr.create('Bob').isAllChildNodes_);
-  assertTrue(goog.ds.Expr.create('@*').isAllAttributes_);
-  assertFalse(goog.ds.Expr.create('Bob').isAllAttributes_);
-  assertTrue(goog.ds.Expr.create('*').isAllElements_);
-  assertFalse(goog.ds.Expr.create('Bob').isAllElements_);
-}
+  testCommonExpressions() {
+    assertTrue(Expr.create('.').isCurrent_);
+    assertFalse(Expr.create('Bob').isCurrent_);
+    assertTrue(Expr.create('*|text()').isAllChildNodes_);
+    assertFalse(Expr.create('Bob').isAllChildNodes_);
+    assertTrue(Expr.create('@*').isAllAttributes_);
+    assertFalse(Expr.create('Bob').isAllAttributes_);
+    assertTrue(Expr.create('*').isAllElements_);
+    assertFalse(Expr.create('Bob').isAllElements_);
+  },
 
-function testIndexExpressions() {
-  assertEquals(goog.ds.Expr.create('node/[5]').getNext().size_, 1);
-  assertEquals(goog.ds.Expr.create('node/[5]').getNext().parts_[0], '[5]');
-}
+  testIndexExpressions() {
+    assertEquals(Expr.create('node/[5]').getNext().size_, 1);
+    assertEquals(Expr.create('node/[5]').getNext().parts_[0], '[5]');
+  },
+});

@@ -12,62 +12,73 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.storage.mechanism.ErrorHandlingMechanismTest');
-goog.setTestOnly('goog.storage.mechanism.ErrorHandlingMechanismTest');
+goog.module('goog.storage.mechanism.ErrorHandlingMechanismTest');
+goog.setTestOnly();
 
-goog.require('goog.storage.mechanism.ErrorHandlingMechanism');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const ErrorHandlingMechanism = goog.require('goog.storage.mechanism.ErrorHandlingMechanism');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var error = new Error();
+const error = new Error();
 
-var submechanism = {
-  get: function() { throw error; },
-  set: function() { throw error; },
-  remove: function() { throw error; }
+const submechanism = {
+  get: function() {
+    throw error;
+  },
+  set: function() {
+    throw error;
+  },
+  remove: function() {
+    throw error;
+  },
 };
 
-var handler = goog.testing.recordFunction(goog.nullFunction);
-var mechanism;
+const handler = recordFunction(goog.nullFunction);
+let mechanism;
 
-function setUp() {
-  mechanism =
-      new goog.storage.mechanism.ErrorHandlingMechanism(submechanism, handler);
-}
+testSuite({
+  setUp() {
+    mechanism = new ErrorHandlingMechanism(submechanism, handler);
+  },
 
-function tearDown() {
-  handler.reset();
-}
+  tearDown() {
+    handler.reset();
+  },
 
-function testSet() {
-  mechanism.set('foo', 'bar');
-  assertEquals(1, handler.getCallCount());
-  assertArrayEquals(
-      [
-        error, goog.storage.mechanism.ErrorHandlingMechanism.Operation.SET,
-        'foo', 'bar'
-      ],
-      handler.getLastCall().getArguments());
-}
+  testSet() {
+    mechanism.set('foo', 'bar');
+    assertEquals(1, handler.getCallCount());
+    assertArrayEquals(
+        [
+          error,
+          ErrorHandlingMechanism.Operation.SET,
+          'foo',
+          'bar',
+        ],
+        handler.getLastCall().getArguments());
+  },
 
-function testGet() {
-  mechanism.get('foo');
-  assertEquals(1, handler.getCallCount());
-  assertArrayEquals(
-      [
-        error, goog.storage.mechanism.ErrorHandlingMechanism.Operation.GET,
-        'foo'
-      ],
-      handler.getLastCall().getArguments());
-}
+  testGet() {
+    mechanism.get('foo');
+    assertEquals(1, handler.getCallCount());
+    assertArrayEquals(
+        [
+          error,
+          ErrorHandlingMechanism.Operation.GET,
+          'foo',
+        ],
+        handler.getLastCall().getArguments());
+  },
 
-function testRemove() {
-  mechanism.remove('foo');
-  assertEquals(1, handler.getCallCount());
-  assertArrayEquals(
-      [
-        error, goog.storage.mechanism.ErrorHandlingMechanism.Operation.REMOVE,
-        'foo'
-      ],
-      handler.getLastCall().getArguments());
-}
+  testRemove() {
+    mechanism.remove('foo');
+    assertEquals(1, handler.getCallCount());
+    assertArrayEquals(
+        [
+          error,
+          ErrorHandlingMechanism.Operation.REMOVE,
+          'foo',
+        ],
+        handler.getLastCall().getArguments());
+  },
+});

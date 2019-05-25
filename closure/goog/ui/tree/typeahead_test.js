@@ -12,29 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.tree.TypeAheadTest');
-goog.setTestOnly('goog.ui.tree.TypeAheadTest');
+goog.module('goog.ui.tree.TypeAheadTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.events.KeyCodes');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.tree.TreeControl');
-goog.require('goog.ui.tree.TypeAhead');
+const KeyCodes = goog.require('goog.events.KeyCodes');
+const TreeControl = goog.require('goog.ui.tree.TreeControl');
+const TypeAhead = goog.require('goog.ui.tree.TypeAhead');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
 function makeATree() {
-  var tree = new goog.ui.tree.TreeControl('root');
-  var testData = [
+  const tree = new TreeControl('root');
+  const testData = [
     'level1',
     [
       ['level2', [['eve', []], ['eve2', [['eve4', []]]]]],
-      ['level22', [['eve', []], ['eve3', []], ['eve5', []]]]
-    ]
+      ['level22', [['eve', []], ['eve3', []], ['eve5', []]]],
+    ],
   ];
 
   createTreeNodeFromTestData(tree, testData, 3);
 
   tree.createDom();
-  goog.dom.getElement('treeContainer').appendChild(tree.getElement());
+  dom.getElement('treeContainer').appendChild(tree.getElement());
   tree.enterDocument();
 
   return tree;
@@ -46,114 +46,109 @@ function createTreeNodeFromTestData(node, data, maxLevels) {
     return;
   }
 
-  var children = data[1];
-  for (var i = 0; i < children.length; i++) {
-    var child = children[i];
-    var childNode = node.getTree().createNode('');
+  const children = data[1];
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+    const childNode = node.getTree().createNode('');
     node.add(childNode);
     createTreeNodeFromTestData(childNode, child, maxLevels - 1);
   }
 }
 
+testSuite({
+  /** Test jumpToLabel_ functionality. */
+  testJumpToLabel() {
+    const tree = makeATree();
+    const typeAhead = tree.typeAhead_;
 
-/**
- * Test jumpToLabel_ functionality.
- */
-function testJumpToLabel() {
-  var tree = makeATree();
-  var typeAhead = tree.typeAhead_;
+    // Test the case when only one matching entry exists.
+    let handled = typeAhead.jumpToLabel_('level1');
+    let selectedItem = tree.getSelectedItem();
+    assertTrue(handled && selectedItem.getHtml() == 'level1');
 
-  // Test the case when only one matching entry exists.
-  var handled = typeAhead.jumpToLabel_('level1');
-  var selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.getHtml() == 'level1');
+    // Test the case when more than one matching entry exists.
+    handled = typeAhead.jumpToLabel_('eve');
+    selectedItem = tree.getSelectedItem();
+    assertTrue(handled && selectedItem.getHtml() == 'eve');
+    const firstEveNode = selectedItem;
 
-  // Test the case when more than one matching entry exists.
-  handled = typeAhead.jumpToLabel_('eve');
-  selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.getHtml() == 'eve');
-  var firstEveNode = selectedItem;
+    // Test the case when the matching entry is at a deeper level.
+    handled = typeAhead.jumpToLabel_('eve3');
+    selectedItem = tree.getSelectedItem();
+    assertTrue(handled && selectedItem.getHtml() == 'eve3');
+    const leafNode = selectedItem;  // eve3 is a leaf
 
-  // Test the case when the matching entry is at a deeper level.
-  handled = typeAhead.jumpToLabel_('eve3');
-  selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.getHtml() == 'eve3');
-  var leafNode = selectedItem;  // eve3 is a leaf
+    // Test the case after leaf node removal; ensure no node is picked.
+    leafNode.getParent().removeChild(leafNode);
+    handled = typeAhead.jumpToLabel_('eve3');
+    selectedItem = tree.getSelectedItem();
+    assertTrue(!handled);
 
-  // Test the case after leaf node removal; ensure no node is picked.
-  leafNode.getParent().removeChild(leafNode);
-  handled = typeAhead.jumpToLabel_('eve3');
-  selectedItem = tree.getSelectedItem();
-  assertTrue(!handled);
+    // Test the case after duplicate node removal; ensure another node is
+    // picked.
+    firstEveNode.getParent().removeChild(firstEveNode);
+    handled = typeAhead.jumpToLabel_('eve');
+    selectedItem = tree.getSelectedItem();
+    assertTrue(handled && selectedItem.getHtml() == 'eve');
+    const secondEveNode = selectedItem;
 
-  // Test the case after duplicate node removal; ensure another node is picked.
-  firstEveNode.getParent().removeChild(firstEveNode);
-  handled = typeAhead.jumpToLabel_('eve');
-  selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.getHtml() == 'eve');
-  var secondEveNode = selectedItem;
+    // Test the case after all exact matching node removal.
+    secondEveNode.getParent().removeChild(secondEveNode);
+    handled = typeAhead.jumpToLabel_('eve');
+    selectedItem = tree.getSelectedItem();
+    assertTrue(handled && selectedItem.getHtml() == 'eve2');
+    const parentNode = selectedItem;  // eve2 is a parent
 
-  // Test the case after all exact matching node removal.
-  secondEveNode.getParent().removeChild(secondEveNode);
-  handled = typeAhead.jumpToLabel_('eve');
-  selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.getHtml() == 'eve2');
-  var parentNode = selectedItem;  // eve2 is a parent
+    // Test the case after prior parent node removal of node with similar
+    // prefix.
+    parentNode.getParent().removeChild(parentNode);
+    handled = typeAhead.jumpToLabel_('eve');
+    selectedItem = tree.getSelectedItem();
+    assertTrue(handled && selectedItem.getHtml() == 'eve5');
+  },
 
-  // Test the case after prior parent node removal of node with similar prefix.
-  parentNode.getParent().removeChild(parentNode);
-  handled = typeAhead.jumpToLabel_('eve');
-  selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.getHtml() == 'eve5');
-}
+  /** Test jumpTo_ functionality. */
+  testJumpTo() {
+    const tree = makeATree();
+    const typeAhead = tree.typeAhead_;
 
+    // Jump to the first matching 'eve', followed by Ctrl+DOWN to jump to
+    // second matching 'eve'
+    let handled = typeAhead.jumpToLabel_('eve') &&
+        typeAhead.jumpTo_(TypeAhead.Offset.DOWN);
+    let selectedItem = tree.getSelectedItem();
+    assertTrue(handled && selectedItem.getHtml() == 'eve');
 
-/**
- * Test jumpTo_ functionality.
- */
-function testJumpTo() {
-  var tree = makeATree();
-  var typeAhead = tree.typeAhead_;
+    // Simulate a DOWN key on the tree, now the selection should be on 'eve3'
+    const e = new Object();
+    e.keyCode = KeyCodes.DOWN;
+    e.preventDefault = () => {};
+    handled = tree.handleKeyEvent(e);
+    selectedItem = tree.getSelectedItem();
+    assertTrue(handled && selectedItem.getHtml() == 'eve3');
+  },
 
-  // Jump to the first matching 'eve', followed by Ctrl+DOWN to jump to
-  // second matching 'eve'
-  var handled = typeAhead.jumpToLabel_('eve') &&
-      typeAhead.jumpTo_(goog.ui.tree.TypeAhead.Offset.DOWN);
-  var selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.getHtml() == 'eve');
+  /** Test handleTypeAheadChar functionality. */
+  testHandleTypeAheadChar() {
+    const tree = makeATree();
+    const typeAhead = tree.typeAhead_;
+    const e = new Object();
 
-  // Simulate a DOWN key on the tree, now the selection should be on 'eve3'
-  var e = new Object();
-  e.keyCode = goog.events.KeyCodes.DOWN;
-  e.preventDefault = function() {};
-  handled = tree.handleKeyEvent(e);
-  selectedItem = tree.getSelectedItem();
-  assertTrue(handled && selectedItem.getHtml() == 'eve3');
-}
+    // Period character('.'): keyCode = 190, charCode = 46
+    // String.fromCharCode(190) = '3/4'  <-- incorrect
+    // String.fromCharCode(46) = '.'  <-- correct
+    e.keyCode = KeyCodes.PERIOD;
+    e.charCode = 46;
+    e.preventDefault = () => {};
+    typeAhead.handleTypeAheadChar(e);
+    assertEquals('.', typeAhead.buffer_);
 
-
-/**
- * Test handleTypeAheadChar functionality.
- */
-function testHandleTypeAheadChar() {
-  var tree = makeATree();
-  var typeAhead = tree.typeAhead_;
-  var e = new Object();
-
-  // Period character('.'): keyCode = 190, charCode = 46
-  // String.fromCharCode(190) = '3/4'  <-- incorrect
-  // String.fromCharCode(46) = '.'  <-- correct
-  e.keyCode = goog.events.KeyCodes.PERIOD;
-  e.charCode = 46;
-  e.preventDefault = function() {};
-  typeAhead.handleTypeAheadChar(e);
-  assertEquals('.', typeAhead.buffer_);
-
-  // charCode not supplied.
-  // This is expected to work only for alpha-num characters.
-  e.keyCode = goog.events.KeyCodes.A;
-  e.charCode = undefined;
-  typeAhead.buffer_ = '';
-  typeAhead.handleTypeAheadChar(e);
-  assertEquals('a', typeAhead.buffer_);
-}
+    // charCode not supplied.
+    // This is expected to work only for alpha-num characters.
+    e.keyCode = KeyCodes.A;
+    e.charCode = undefined;
+    typeAhead.buffer_ = '';
+    typeAhead.handleTypeAheadChar(e);
+    assertEquals('a', typeAhead.buffer_);
+  },
+});

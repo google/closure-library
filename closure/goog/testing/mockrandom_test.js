@@ -12,56 +12,64 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.MockRandomTest');
-goog.setTestOnly('goog.testing.MockRandomTest');
+goog.module('goog.testing.MockRandomTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.MockRandom');
-goog.require('goog.testing.jsunit');
+const MockRandom = goog.require('goog.testing.MockRandom');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testMockRandomInstall() {
-  var random = new goog.testing.MockRandom([]);
-  var originalRandom = Math.random;
+testSuite({
+  testMockRandomInstall() {
+    const random = new MockRandom([]);
+    const originalRandom = Math.random;
 
-  assertFalse(!!random.installed_);
+    assertFalse(!!random.installed_);
 
-  random.install();
-  assertTrue(random.installed_);
-  assertNotEquals(Math.random, originalRandom);
+    random.install();
+    assertTrue(random.installed_);
+    assertNotEquals(Math.random, originalRandom);
 
-  random.uninstall();
-  assertFalse(random.installed_);
-  assertEquals(originalRandom, Math.random);
-}
+    random.uninstall();
+    assertFalse(random.installed_);
+    assertEquals(originalRandom, Math.random);
+  },
 
-function testMockRandomRandom() {
-  var random = new goog.testing.MockRandom([], true);
+  testMockRandomRandom() {
+    const random = new MockRandom([], true);
 
-  assertFalse(random.hasMoreValues());
+    assertFalse(random.hasMoreValues());
 
-  random.inject(2);
-  assertTrue(random.hasMoreValues());
-  assertEquals(2, Math.random());
+    random.inject(2);
+    assertTrue(random.hasMoreValues());
+    assertEquals(2, Math.random());
 
-  random.inject([1, 2, 3]);
-  assertTrue(random.hasMoreValues());
-  assertEquals(1, Math.random());
-  assertEquals(2, Math.random());
-  assertEquals(3, Math.random());
-  assertFalse(random.hasMoreValues());
-  assertNotUndefined(Math.random());
-}
+    random.inject([1, 2, 3]);
+    assertTrue(random.hasMoreValues());
+    assertEquals(1, Math.random());
+    assertEquals(2, Math.random());
+    assertEquals(3, Math.random());
+    assertFalse(random.hasMoreValues());
+    assertNotUndefined(Math.random());
+  },
 
-function testRandomStrictlyFromSequence() {
-  var random = new goog.testing.MockRandom([], /* install */ true);
-  random.setStrictlyFromSequence(true);
-  assertFalse(random.hasMoreValues());
-  assertThrows(function() { Math.random(); });
+  testRandomStrictlyFromSequence() {
+    const random = new MockRandom([], /* install */ true);
+    random.setStrictlyFromSequence(true);
+    assertFalse(random.hasMoreValues());
+    assertThrows(() => {
+      Math.random();
+    });
 
-  random.inject(3);
-  assertTrue(random.hasMoreValues());
-  assertNotThrows(function() { Math.random(); });
+    random.inject(3);
+    assertTrue(random.hasMoreValues());
+    assertNotThrows(() => {
+      Math.random();
+    });
 
-  random.setStrictlyFromSequence(false);
-  assertFalse(random.hasMoreValues());
-  assertNotThrows(function() { Math.random(); });
-}
+    random.setStrictlyFromSequence(false);
+    assertFalse(random.hasMoreValues());
+    assertNotThrows(() => {
+      Math.random();
+    });
+  },
+});

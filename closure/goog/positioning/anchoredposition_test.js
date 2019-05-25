@@ -12,55 +12,64 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.positioning.AnchoredPositionTest');
-goog.setTestOnly('goog.positioning.AnchoredPositionTest');
+goog.module('goog.positioning.AnchoredPositionTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.positioning.AnchoredPosition');
-goog.require('goog.positioning.Corner');
-goog.require('goog.positioning.Overflow');
-goog.require('goog.style');
-goog.require('goog.testing.jsunit');
+const AnchoredPosition = goog.require('goog.positioning.AnchoredPosition');
+const Corner = goog.require('goog.positioning.Corner');
+const Overflow = goog.require('goog.positioning.Overflow');
+const googDom = goog.require('goog.dom');
+const style = goog.require('goog.style');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var frame, doc, dom, viewportSize, anchor, popup;
-var corner = goog.positioning.Corner;
-var popupLength = 20;
-var anchorLength = 100;
+let anchor;
+let doc;
+let dom;
+let frame;
+let popup;
+let viewportSize;
 
-function setUp() {
-  frame = document.getElementById('frame1');
-  doc = goog.dom.getFrameContentDocument(frame);
-  dom = goog.dom.getDomHelper(doc);
-  viewportSize = dom.getViewportSize();
-  anchor = dom.getElement('anchor');
-  popup = dom.getElement('popup');
-  goog.style.setSize(popup, popupLength, popupLength);
-  goog.style.setPosition(popup, popupLength, popupLength);
-  goog.style.setSize(anchor, anchorLength, anchorLength);
-}
+const popupLength = 20;
+const anchorLength = 100;
 
 // No enough space at the bottom and no overflow adjustment.
-function testRepositionWithDefaultOverflow() {
-  var avp = new goog.positioning.AnchoredPosition(anchor, corner.BOTTOM_LEFT);
-  var newTop = viewportSize.height - anchorLength;
-  goog.style.setPosition(anchor, 50, newTop);
-  var anchorRect = goog.style.getBounds(anchor);
-
-  avp.reposition(popup, corner.TOP_LEFT);
-  var popupRect = goog.style.getBounds(popup);
-  assertEquals(anchorRect.top + anchorRect.height, popupRect.top);
-}
 
 // No enough space at the bottom and ADJUST_Y overflow adjustment.
-function testRepositionWithOverflow() {
-  var avp = new goog.positioning.AnchoredPosition(
-      anchor, corner.BOTTOM_LEFT, goog.positioning.Overflow.ADJUST_Y);
-  var newTop = viewportSize.height - anchorLength;
-  goog.style.setPosition(anchor, 50, newTop);
-  var anchorRect = goog.style.getBounds(anchor);
 
-  avp.reposition(popup, corner.TOP_LEFT);
-  var popupRect = goog.style.getBounds(popup);
-  assertEquals(
-      anchorRect.top + anchorRect.height, popupRect.top + popupRect.height);
-}
+testSuite({
+  setUp() {
+    frame = document.getElementById('frame1');
+    doc = googDom.getFrameContentDocument(frame);
+    dom = googDom.getDomHelper(doc);
+    viewportSize = dom.getViewportSize();
+    anchor = dom.getElement('anchor');
+    popup = dom.getElement('popup');
+    style.setSize(popup, popupLength, popupLength);
+    style.setPosition(popup, popupLength, popupLength);
+    style.setSize(anchor, anchorLength, anchorLength);
+  },
+
+  testRepositionWithDefaultOverflow() {
+    const avp = new AnchoredPosition(anchor, Corner.BOTTOM_LEFT);
+    const newTop = viewportSize.height - anchorLength;
+    style.setPosition(anchor, 50, newTop);
+    const anchorRect = style.getBounds(anchor);
+
+    avp.reposition(popup, Corner.TOP_LEFT);
+    const popupRect = style.getBounds(popup);
+    assertEquals(anchorRect.top + anchorRect.height, popupRect.top);
+  },
+
+  testRepositionWithOverflow() {
+    const avp =
+        new AnchoredPosition(anchor, Corner.BOTTOM_LEFT, Overflow.ADJUST_Y);
+    const newTop = viewportSize.height - anchorLength;
+    style.setPosition(anchor, 50, newTop);
+    const anchorRect = style.getBounds(anchor);
+
+    avp.reposition(popup, Corner.TOP_LEFT);
+    const popupRect = style.getBounds(popup);
+    assertEquals(
+        anchorRect.top + anchorRect.height, popupRect.top + popupRect.height);
+  },
+});

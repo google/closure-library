@@ -12,63 +12,60 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.plugins.LinkShortcutPluginTest');
-goog.setTestOnly('goog.editor.plugins.LinkShortcutPluginTest');
+goog.module('goog.editor.plugins.LinkShortcutPluginTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.editor.Field');
-goog.require('goog.editor.plugins.BasicTextFormatter');
-goog.require('goog.editor.plugins.LinkBubble');
-goog.require('goog.editor.plugins.LinkShortcutPlugin');
-goog.require('goog.events.KeyCodes');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.dom');
-goog.require('goog.testing.events');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent.product');
+const BasicTextFormatter = goog.require('goog.editor.plugins.BasicTextFormatter');
+const Field = goog.require('goog.editor.Field');
+const KeyCodes = goog.require('goog.events.KeyCodes');
+const LinkBubble = goog.require('goog.editor.plugins.LinkBubble');
+const LinkShortcutPlugin = goog.require('goog.editor.plugins.LinkShortcutPlugin');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const TagName = goog.require('goog.dom.TagName');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.testing.events');
+const product = goog.require('goog.userAgent.product');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingDom = goog.require('goog.testing.dom');
 
-var propertyReplacer;
+let propertyReplacer;
 
-function setUp() {
-  propertyReplacer = new goog.testing.PropertyReplacer();
-}
+testSuite({
+  setUp() {
+    propertyReplacer = new PropertyReplacer();
+  },
 
-function tearDown() {
-  propertyReplacer.reset();
-  var field = document.getElementById('cleanup');
-  goog.dom.removeChildren(field);
-  field.innerHTML = '<div id="field">http://www.google.com/</div>';
-}
+  tearDown() {
+    propertyReplacer.reset();
+    const field = document.getElementById('cleanup');
+    dom.removeChildren(field);
+    field.innerHTML = '<div id="field">http://www.google.com/</div>';
+  },
 
-function testShortcutCreatesALink() {
-  if (goog.userAgent.product.SAFARI) {
-    // TODO(b/20733468): Disabled so we can get the rest of the Closure test
-    // suite running in a continuous build. Will investigate later.
-    return;
-  }
+  testShortcutCreatesALink() {
+    if (product.SAFARI) {
+      // TODO(b/20733468): Disabled so we can get the rest of the Closure test
+      // suite running in a continuous build. Will investigate later.
+      return;
+    }
 
-  propertyReplacer.set(
-      window, 'prompt', function() { return 'http://www.google.com/'; });
-  var linkBubble = new goog.editor.plugins.LinkBubble();
-  var formatter = new goog.editor.plugins.BasicTextFormatter();
-  var plugin = new goog.editor.plugins.LinkShortcutPlugin();
-  var fieldEl = document.getElementById('field');
-  var field = new goog.editor.Field('field');
-  field.registerPlugin(formatter);
-  field.registerPlugin(linkBubble);
-  field.registerPlugin(plugin);
-  field.makeEditable();
-  field.focusAndPlaceCursorAtStart();
-  var textNode =
-      goog.testing.dom.findTextNode('http://www.google.com/', fieldEl);
-  goog.testing.events.fireKeySequence(
-      field.getElement(), goog.events.KeyCodes.K, {ctrlKey: true});
+    propertyReplacer.set(window, 'prompt', () => 'http://www.google.com/');
+    const linkBubble = new LinkBubble();
+    const formatter = new BasicTextFormatter();
+    const plugin = new LinkShortcutPlugin();
+    const fieldEl = document.getElementById('field');
+    const field = new Field('field');
+    field.registerPlugin(formatter);
+    field.registerPlugin(linkBubble);
+    field.registerPlugin(plugin);
+    field.makeEditable();
+    field.focusAndPlaceCursorAtStart();
+    const textNode = testingDom.findTextNode('http://www.google.com/', fieldEl);
+    events.fireKeySequence(field.getElement(), KeyCodes.K, {ctrlKey: true});
 
-  var href =
-      goog.dom.getElementsByTagName(goog.dom.TagName.A, field.getElement())[0];
-  assertEquals('http://www.google.com/', href.href);
-  var bubbleLink =
-      document.getElementById(goog.editor.plugins.LinkBubble.TEST_LINK_ID_);
-  assertEquals('http://www.google.com/', bubbleLink.innerHTML);
-}
+    const href = dom.getElementsByTagName(TagName.A, field.getElement())[0];
+    assertEquals('http://www.google.com/', href.href);
+    const bubbleLink = document.getElementById(LinkBubble.TEST_LINK_ID_);
+    assertEquals('http://www.google.com/', bubbleLink.innerHTML);
+  },
+});

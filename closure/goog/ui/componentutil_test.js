@@ -12,35 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.ComponentUtilTest');
-goog.setTestOnly('goog.ui.ComponentUtilTest');
+goog.module('goog.ui.ComponentUtilTest');
+goog.setTestOnly();
 
-goog.require('goog.events.MouseAsMouseEventType');
-goog.require('goog.events.PointerAsMouseEventType');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.Component');
-goog.require('goog.ui.ComponentUtil');
+const Component = goog.require('goog.ui.Component');
+const ComponentUtil = goog.require('goog.ui.ComponentUtil');
+const MouseAsMouseEventType = goog.require('goog.events.MouseAsMouseEventType');
+const PointerAsMouseEventType = goog.require('goog.events.PointerAsMouseEventType');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var component;
+let component;
 
-function setUp() {
-  component = new goog.ui.Component();
-}
+testSuite({
+  setUp() {
+    component = new Component();
+  },
 
-function tearDown() {
-  component.dispose();
-}
+  tearDown() {
+    component.dispose();
+  },
 
-function testGetMouseEventType() {
-  component.setPointerEventsEnabled(false);
-  assertEquals(
-      'Component must use mouse events when specified.',
-      goog.ui.ComponentUtil.getMouseEventType(component),
-      goog.events.MouseAsMouseEventType);
+  testGetMouseEventType() {
+    component.setPointerEventsEnabled(false);
+    assertEquals(
+        'Component must use mouse events when specified.',
+        ComponentUtil.getMouseEventType(component), MouseAsMouseEventType);
 
-  component.setPointerEventsEnabled(true);
-  assertEquals(
-      'Component must use pointer events when specified.',
-      goog.ui.ComponentUtil.getMouseEventType(component),
-      goog.events.PointerAsMouseEventType);
-}
+    component.setPointerEventsEnabled(true);
+    assertEquals(
+        'Component must use pointer events when specified.',
+        ComponentUtil.getMouseEventType(component), PointerAsMouseEventType);
+  },
+});

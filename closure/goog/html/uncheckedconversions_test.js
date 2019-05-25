@@ -12,143 +12,123 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Unit tests for goog.html.uncheckedconversions.
- */
+/** @fileoverview Unit tests for uncheckedconversions. */
 
-goog.provide('goog.html.uncheckedconversionsTest');
+goog.module('goog.html.uncheckedconversionsTest');
+goog.setTestOnly();
 
-goog.require('goog.html.SafeHtml');
-goog.require('goog.html.SafeScript');
-goog.require('goog.html.SafeStyle');
-goog.require('goog.html.SafeStyleSheet');
-goog.require('goog.html.SafeUrl');
-goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.html.uncheckedconversions');
-goog.require('goog.i18n.bidi.Dir');
-goog.require('goog.string.Const');
-goog.require('goog.testing.jsunit');
+const Const = goog.require('goog.string.Const');
+const Dir = goog.require('goog.i18n.bidi.Dir');
+const SafeHtml = goog.require('goog.html.SafeHtml');
+const SafeScript = goog.require('goog.html.SafeScript');
+const SafeStyle = goog.require('goog.html.SafeStyle');
+const SafeStyleSheet = goog.require('goog.html.SafeStyleSheet');
+const SafeUrl = goog.require('goog.html.SafeUrl');
+const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
+const testSuite = goog.require('goog.testing.testSuite');
+const uncheckedconversions = goog.require('goog.html.uncheckedconversions');
 
-goog.setTestOnly('goog.html.uncheckedconversionsTest');
+testSuite({
+  testSafeHtmlFromStringKnownToSatisfyTypeContract_ok() {
+    const html = '<div>irrelevant</div>';
+    const safeHtml =
+        uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract(
+            Const.from('Test'), html, Dir.LTR);
+    assertEquals(html, SafeHtml.unwrap(safeHtml));
+    assertEquals(Dir.LTR, safeHtml.getDirection());
+  },
 
+  testSafeHtmlFromStringKnownToSatisfyTypeContract_error() {
+    assertThrows(() => {
+      uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract(
+          Const.from(''), 'irrelevant');
+    });
+  },
 
-function testSafeHtmlFromStringKnownToSatisfyTypeContract_ok() {
-  var html = '<div>irrelevant</div>';
-  var safeHtml =
-      goog.html.uncheckedconversions
-          .safeHtmlFromStringKnownToSatisfyTypeContract(
-              goog.string.Const.from('Test'), html, goog.i18n.bidi.Dir.LTR);
-  assertEquals(html, goog.html.SafeHtml.unwrap(safeHtml));
-  assertEquals(goog.i18n.bidi.Dir.LTR, safeHtml.getDirection());
-}
+  testSafeScriptFromStringKnownToSatisfyTypeContract_ok() {
+    const script = 'functionCall(\'irrelevant\');';
+    const safeScript =
+        uncheckedconversions.safeScriptFromStringKnownToSatisfyTypeContract(
+            Const.from(
+                'Safe because value is constant. Security review: b/7685625.'),
+            script);
+    assertEquals(script, SafeScript.unwrap(safeScript));
+  },
 
+  testSafeScriptFromStringKnownToSatisfyTypeContract_error() {
+    assertThrows(() => {
+      uncheckedconversions.safeScriptFromStringKnownToSatisfyTypeContract(
+          Const.from(''), 'irrelevant');
+    });
+  },
 
-function testSafeHtmlFromStringKnownToSatisfyTypeContract_error() {
-  assertThrows(function() {
-    goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract(
-        goog.string.Const.from(''), 'irrelevant');
-  });
-}
+  testSafeStyleFromStringKnownToSatisfyTypeContract_ok() {
+    const style = 'P.special { color:red ; }';
+    const safeStyle =
+        uncheckedconversions.safeStyleFromStringKnownToSatisfyTypeContract(
+            Const.from(
+                'Safe because value is constant. Security review: b/7685625.'),
+            style);
+    assertEquals(style, SafeStyle.unwrap(safeStyle));
+  },
 
+  testSafeStyleFromStringKnownToSatisfyTypeContract_error() {
+    assertThrows(() => {
+      uncheckedconversions.safeStyleFromStringKnownToSatisfyTypeContract(
+          Const.from(''), 'irrelevant');
+    });
+  },
 
-function testSafeScriptFromStringKnownToSatisfyTypeContract_ok() {
-  var script = 'functionCall(\'irrelevant\');';
-  var safeScript =
-      goog.html.uncheckedconversions
-          .safeScriptFromStringKnownToSatisfyTypeContract(
-              goog.string.Const.from(
-                  'Safe because value is constant. Security review: b/7685625.'),
-              script);
-  assertEquals(script, goog.html.SafeScript.unwrap(safeScript));
-}
+  testSafeStyleSheetFromStringKnownToSatisfyTypeContract_ok() {
+    const styleSheet = 'P.special { color:red ; }';
+    const safeStyleSheet =
+        uncheckedconversions.safeStyleSheetFromStringKnownToSatisfyTypeContract(
+            Const.from(
+                'Safe because value is constant. Security review: b/7685625.'),
+            styleSheet);
+    assertEquals(styleSheet, SafeStyleSheet.unwrap(safeStyleSheet));
+  },
 
+  testSafeStyleSheetFromStringKnownToSatisfyTypeContract_error() {
+    assertThrows(() => {
+      uncheckedconversions.safeStyleSheetFromStringKnownToSatisfyTypeContract(
+          Const.from(''), 'irrelevant');
+    });
+  },
 
-function testSafeScriptFromStringKnownToSatisfyTypeContract_error() {
-  assertThrows(function() {
-    goog.html.uncheckedconversions
-        .safeScriptFromStringKnownToSatisfyTypeContract(
-            goog.string.Const.from(''), 'irrelevant');
-  });
-}
+  testSafeUrlFromStringKnownToSatisfyTypeContract_ok() {
+    const url = 'http://www.irrelevant.com';
+    const safeUrl =
+        uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract(
+            Const.from(
+                'Safe because value is constant. Security review: b/7685625.'),
+            url);
+    assertEquals(url, SafeUrl.unwrap(safeUrl));
+  },
 
+  testSafeUrlFromStringKnownToSatisfyTypeContract_error() {
+    assertThrows(() => {
+      uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract(
+          Const.from(''), 'http://irrelevant.com');
+    });
+  },
 
-function testSafeStyleFromStringKnownToSatisfyTypeContract_ok() {
-  var style = 'P.special { color:red ; }';
-  var safeStyle =
-      goog.html.uncheckedconversions
-          .safeStyleFromStringKnownToSatisfyTypeContract(
-              goog.string.Const.from(
-                  'Safe because value is constant. Security review: b/7685625.'),
-              style);
-  assertEquals(style, goog.html.SafeStyle.unwrap(safeStyle));
-}
+  testTrustedResourceUrlFromStringKnownToSatisfyTypeContract_ok() {
+    const url = 'http://www.irrelevant.com';
+    const trustedResourceUrl =
+        uncheckedconversions
+            .trustedResourceUrlFromStringKnownToSatisfyTypeContract(
+                Const.from(
+                    'Safe because value is constant. Security review: b/7685625.'),
+                url);
+    assertEquals(url, TrustedResourceUrl.unwrap(trustedResourceUrl));
+  },
 
-
-function testSafeStyleFromStringKnownToSatisfyTypeContract_error() {
-  assertThrows(function() {
-    goog.html.uncheckedconversions
-        .safeStyleFromStringKnownToSatisfyTypeContract(
-            goog.string.Const.from(''), 'irrelevant');
-  });
-}
-
-
-function testSafeStyleSheetFromStringKnownToSatisfyTypeContract_ok() {
-  var styleSheet = 'P.special { color:red ; }';
-  var safeStyleSheet =
-      goog.html.uncheckedconversions
-          .safeStyleSheetFromStringKnownToSatisfyTypeContract(
-              goog.string.Const.from(
-                  'Safe because value is constant. Security review: b/7685625.'),
-              styleSheet);
-  assertEquals(styleSheet, goog.html.SafeStyleSheet.unwrap(safeStyleSheet));
-}
-
-
-function testSafeStyleSheetFromStringKnownToSatisfyTypeContract_error() {
-  assertThrows(function() {
-    goog.html.uncheckedconversions
-        .safeStyleSheetFromStringKnownToSatisfyTypeContract(
-            goog.string.Const.from(''), 'irrelevant');
-  });
-}
-
-
-function testSafeUrlFromStringKnownToSatisfyTypeContract_ok() {
-  var url = 'http://www.irrelevant.com';
-  var safeUrl =
-      goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract(
-          goog.string.Const.from(
-              'Safe because value is constant. Security review: b/7685625.'),
-          url);
-  assertEquals(url, goog.html.SafeUrl.unwrap(safeUrl));
-}
-
-
-function testSafeUrlFromStringKnownToSatisfyTypeContract_error() {
-  assertThrows(function() {
-    goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract(
-        goog.string.Const.from(''), 'http://irrelevant.com');
-  });
-}
-
-
-function testTrustedResourceUrlFromStringKnownToSatisfyTypeContract_ok() {
-  var url = 'http://www.irrelevant.com';
-  var trustedResourceUrl =
-      goog.html.uncheckedconversions
+  testTrustedResourceFromStringKnownToSatisfyTypeContract_error() {
+    assertThrows(() => {
+      uncheckedconversions
           .trustedResourceUrlFromStringKnownToSatisfyTypeContract(
-              goog.string.Const.from(
-                  'Safe because value is constant. Security review: b/7685625.'),
-              url);
-  assertEquals(url, goog.html.TrustedResourceUrl.unwrap(trustedResourceUrl));
-}
-
-
-function testTrustedResourceFromStringKnownToSatisfyTypeContract_error() {
-  assertThrows(function() {
-    goog.html.uncheckedconversions
-        .trustedResourceUrlFromStringKnownToSatisfyTypeContract(
-            goog.string.Const.from(''), 'http://irrelevant.com');
-  });
-}
+              Const.from(''), 'http://irrelevant.com');
+    });
+  },
+});

@@ -12,201 +12,181 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Unit Test for the unsafe API of the HTML Sanitizer.
- */
+/** @fileoverview Unit Test for the unsafe API of the HTML Sanitizer. */
 
-goog.provide('goog.html.UnsafeTest');
+goog.module('goog.html.UnsafeTest');
 goog.setTestOnly();
 
-goog.require('goog.html.SafeHtml');
-goog.require('goog.html.sanitizer.AttributeWhitelist');
-goog.require('goog.html.sanitizer.HtmlSanitizer');
-goog.require('goog.html.sanitizer.TagWhitelist');
-goog.require('goog.html.sanitizer.unsafe');
+const AttributeWhitelist = goog.require('goog.html.sanitizer.AttributeWhitelist');
+const Const = goog.require('goog.string.Const');
+const HtmlSanitizer = goog.require('goog.html.sanitizer.HtmlSanitizer');
+const SafeHtml = goog.require('goog.html.SafeHtml');
+const TagWhitelist = goog.require('goog.html.sanitizer.TagWhitelist');
+const dom = goog.require('goog.testing.dom');
+const testSuite = goog.require('goog.testing.testSuite');
+const unsafe = goog.require('goog.html.sanitizer.unsafe');
+const userAgent = goog.require('goog.userAgent');
 
-goog.require('goog.string.Const');
-goog.require('goog.testing.dom');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const isSupported = !userAgent.IE || userAgent.isVersionOrHigher(10);
 
-
-var isSupported = !goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10);
-
-
-var just = goog.string.Const.from('test');
-
+const just = Const.from('test');
 
 /**
  * Sanitizes the original HTML and asserts that it is the same as the expected
  * HTML. Supports adding tags and attributes through the unsafe API.
  * @param {string} originalHtml
  * @param {string} expectedHtml
- * @param {?Array<string>=} opt_tags
+ * @param {?Array<string>=} tags
  * @param {?Array<(string|!goog.html.sanitizer.HtmlSanitizerAttributePolicy)>=}
- *     opt_attrs
- * @param {?goog.html.sanitizer.HtmlSanitizer.Builder=} opt_builder
+ *     attrs
+ * @param {?HtmlSanitizer.Builder=} opt_builder
  */
 function assertSanitizedHtml(
-    originalHtml, expectedHtml, opt_tags, opt_attrs, opt_builder) {
-  var builder = opt_builder || new goog.html.sanitizer.HtmlSanitizer.Builder();
-  if (opt_tags)
-    builder = goog.html.sanitizer.unsafe.alsoAllowTags(just, builder, opt_tags);
-  if (opt_attrs)
-    builder = goog.html.sanitizer.unsafe.alsoAllowAttributes(
-        just, builder, opt_attrs);
-  var sanitizer = builder.build();
-  var sanitized = sanitizer.sanitize(originalHtml);
+    originalHtml, expectedHtml, tags = undefined, attrs = undefined,
+    opt_builder) {
+  let builder = opt_builder || new HtmlSanitizer.Builder();
+  if (tags) builder = unsafe.alsoAllowTags(just, builder, tags);
+  if (attrs) builder = unsafe.alsoAllowAttributes(just, builder, attrs);
+  const sanitizer = builder.build();
+  const sanitized = sanitizer.sanitize(originalHtml);
   if (!isSupported) {
-    assertEquals('', goog.html.SafeHtml.unwrap(sanitized));
+    assertEquals('', SafeHtml.unwrap(sanitized));
     return;
   }
-  goog.testing.dom.assertHtmlMatches(
-      expectedHtml, goog.html.SafeHtml.unwrap(sanitized),
+  dom.assertHtmlMatches(
+      expectedHtml, SafeHtml.unwrap(sanitized),
       true /* opt_strictAttributes */);
 }
 
+testSuite({
+  testAllowEmptyTagList() {
+    const input = '<sdf><aaa></aaa></sdf><b></b>';
+    const expected = '<span><span></span></span><b></b>';
+    assertSanitizedHtml(input, expected, []);
+  },
 
-function testAllowEmptyTagList() {
-  var input = '<sdf><aaa></aaa></sdf><b></b>';
-  var expected = '<span><span></span></span><b></b>';
-  assertSanitizedHtml(input, expected, []);
-}
+  testAllowBlacklistedTag() {
+    const input = '<div><script>aaa</script></div>';
+    assertSanitizedHtml(input, input, ['SCriPT']);
+  },
 
+  testAllowUnknownTags() {
+    const input = '<hello><bye>aaa</bye></hello><zzz></zzz>';
+    const expected = '<hello><span>aaa</span></hello><zzz></zzz>';
+    assertSanitizedHtml(input, expected, ['HElLO', 'zZZ']);
+  },
 
-function testAllowBlacklistedTag() {
-  var input = '<div><script>aaa</script></div>';
-  assertSanitizedHtml(input, input, ['SCriPT']);
-}
+  testAllowAlreadyWhiteListedTag() {
+    const input = '<hello><p><zzz></zzz></p></hello>';
+    const expected = '<span><p><zzz></zzz></p></span>';
+    assertSanitizedHtml(input, expected, ['p', 'ZZZ']);
+  },
 
+  testAllowEmptyAttrList() {
+    const input = '<a href="#" qwe="nope">b</a>';
+    const expected = '<a href="#">b</a>';
+    assertSanitizedHtml(input, expected, null, []);
+  },
 
-function testAllowUnknownTags() {
-  var input = '<hello><bye>aaa</bye></hello><zzz></zzz>';
-  var expected = '<hello><span>aaa</span></hello><zzz></zzz>';
-  assertSanitizedHtml(input, expected, ['HElLO', 'zZZ']);
-}
+  testAllowUnknownAttributeSimple() {
+    const input = '<qqq zzz="3" nnn="no"></qqq>';
+    const expected = '<span zzz="3"></span>';
+    assertSanitizedHtml(input, expected, null, ['Zzz']);
+  },
 
+  testAllowUnknownAttributeWildCard() {
+    const input = '<div ab="yes" bb="no"><img ab="yep" bb="no" /></div>';
+    const expected = '<div ab="yes"><img ab="yep" /></div>';
+    assertSanitizedHtml(
+        input, expected, null, [{tagName: '*', attributeName: 'aB'}]);
+  },
 
-function testAllowAlreadyWhiteListedTag() {
-  var input = '<hello><p><zzz></zzz></p></hello>';
-  var expected = '<span><p><zzz></zzz></p></span>';
-  assertSanitizedHtml(input, expected, ['p', 'ZZZ']);
-}
+  testAllowUnknownAttributeOnSpecificTag() {
+    const input = '<a www="3" zzz="4">fff</a><img www="3" />';
+    const expected = '<a www="3">fff</a><img />';
+    assertSanitizedHtml(
+        input, expected, null, [{tagName: 'a', attributeName: 'WwW'}]);
+  },
 
+  testAllowUnknownAttributePolicy() {
+    const input = '<img ab="yes" /><img ab="no" />';
+    const expected = '<img ab="yes" /><img />';
+    assertSanitizedHtml(input, expected, null, [{
+                          tagName: '*',
+                          attributeName: 'aB',
+                          policy: function(value, hints) {
+                            assertEquals(hints.attributeName, 'ab');
+                            return value === 'yes' ? value : null;
+                          },
+                        }]);
+  },
 
-function testAllowEmptyAttrList() {
-  var input = '<a href="#" qwe="nope">b</a>';
-  var expected = '<a href="#">b</a>';
-  assertSanitizedHtml(input, expected, null, []);
-}
+  testAllowOverwriteAttrPolicy() {
+    const input = '<a href="yes"></a><a href="no"></a>';
+    const expected = '<a href="yes"></a><a></a>';
+    assertSanitizedHtml(input, expected, null, [{
+                          tagName: 'a',
+                          attributeName: 'href',
+                          policy: function(value) {
+                            return value === 'yes' ? value : null;
+                          },
+                        }]);
+  },
 
+  testAllowDAttribute() {
+    const input = '<path d="1.5 1.5 1.5 14.5 14.5 14.5 14.5 1.5"/>';
+    const expected = '<path d="1.5 1.5 1.5 14.5 14.5 14.5 14.5 1.5"/>';
+    assertSanitizedHtml(
+        input, expected, ['path'], [{tagName: 'path', attributeName: 'd'}]);
+  },
 
-function testAllowUnknownAttributeSimple() {
-  var input = '<qqq zzz="3" nnn="no"></qqq>';
-  var expected = '<span zzz="3"></span>';
-  assertSanitizedHtml(input, expected, null, ['Zzz']);
-}
+  testWhitelistAliasing() {
+    const builder = new HtmlSanitizer.Builder();
+    unsafe.alsoAllowTags(just, builder, ['QqQ']);
+    unsafe.alsoAllowAttributes(just, builder, ['QqQ']);
+    builder.build();
+    assertUndefined(TagWhitelist['QQQ']);
+    assertUndefined(TagWhitelist['QqQ']);
+    assertUndefined(TagWhitelist['qqq']);
+    assertUndefined(AttributeWhitelist['* QQQ']);
+    assertUndefined(AttributeWhitelist['* QqQ']);
+    assertUndefined(AttributeWhitelist['* qqq']);
+  },
 
+  testAllowRelaxExistingAttributePolicyWildcard() {
+    const input = '<a href="javascript:alert(1)"></a>';
+    // define a tag-specific one, takes precedence
+    assertSanitizedHtml(input, input, null, [
+      {tagName: 'a', attributeName: 'href', policy: goog.functions.identity}
+    ]);
+    // overwrite the global one
+    assertSanitizedHtml(input, input, null, [
+      {tagName: '*', attributeName: 'href', policy: goog.functions.identity}
+    ]);
+  },
 
-function testAllowUnknownAttributeWildCard() {
-  var input = '<div ab="yes" bb="no"><img ab="yep" bb="no" /></div>';
-  var expected = '<div ab="yes"><img ab="yep" /></div>';
-  assertSanitizedHtml(
-      input, expected, null, [{tagName: '*', attributeName: 'aB'}]);
-}
+  testAllowRelaxExistingAttributePolicySpecific() {
+    const input = '<a target="foo"></a>';
+    const expected = '<a></a>';
+    // overwrite the global one, the specific one still has precedence
+    assertSanitizedHtml(input, expected, null, [
+      {tagName: '*', attributeName: 'target', policy: goog.functions.identity},
+    ]);
+    // overwrite the tag-specific one, this one should take precedence
+    assertSanitizedHtml(input, input, null, [
+      {tagName: 'a', attributeName: 'target', policy: goog.functions.identity},
+    ]);
+  },
 
-
-function testAllowUnknownAttributeOnSpecificTag() {
-  var input = '<a www="3" zzz="4">fff</a><img www="3" />';
-  var expected = '<a www="3">fff</a><img />';
-  assertSanitizedHtml(
-      input, expected, null, [{tagName: 'a', attributeName: 'WwW'}]);
-}
-
-
-function testAllowUnknownAttributePolicy() {
-  var input = '<img ab="yes" /><img ab="no" />';
-  var expected = '<img ab="yes" /><img />';
-  assertSanitizedHtml(input, expected, null, [{
-                        tagName: '*',
-                        attributeName: 'aB',
-                        policy: function(value, hints) {
-                          assertEquals(hints.attributeName, 'ab');
-                          return value === 'yes' ? value : null;
-                        }
-                      }]);
-}
-
-
-function testAllowOverwriteAttrPolicy() {
-  var input = '<a href="yes"></a><a href="no"></a>';
-  var expected = '<a href="yes"></a><a></a>';
-  assertSanitizedHtml(
-      input, expected, null, [{
-        tagName: 'a',
-        attributeName: 'href',
-        policy: function(value) { return value === 'yes' ? value : null; }
-      }]);
-}
-
-
-function testAllowDAttribute() {
-  var input = '<path d="1.5 1.5 1.5 14.5 14.5 14.5 14.5 1.5"/>';
-  var expected = '<path d="1.5 1.5 1.5 14.5 14.5 14.5 14.5 1.5"/>';
-  assertSanitizedHtml(
-      input, expected, ['path'], [{tagName: 'path', attributeName: 'd'}]);
-}
-
-
-function testWhitelistAliasing() {
-  var builder = new goog.html.sanitizer.HtmlSanitizer.Builder();
-  goog.html.sanitizer.unsafe.alsoAllowTags(just, builder, ['QqQ']);
-  goog.html.sanitizer.unsafe.alsoAllowAttributes(just, builder, ['QqQ']);
-  builder.build();
-  assertUndefined(goog.html.sanitizer.TagWhitelist['QQQ']);
-  assertUndefined(goog.html.sanitizer.TagWhitelist['QqQ']);
-  assertUndefined(goog.html.sanitizer.TagWhitelist['qqq']);
-  assertUndefined(goog.html.sanitizer.AttributeWhitelist['* QQQ']);
-  assertUndefined(goog.html.sanitizer.AttributeWhitelist['* QqQ']);
-  assertUndefined(goog.html.sanitizer.AttributeWhitelist['* qqq']);
-}
-
-
-function testAllowRelaxExistingAttributePolicyWildcard() {
-  var input = '<a href="javascript:alert(1)"></a>';
-  // define a tag-specific one, takes precedence
-  assertSanitizedHtml(
-      input, input, null,
-      [{tagName: 'a', attributeName: 'href', policy: goog.functions.identity}]);
-  // overwrite the global one
-  assertSanitizedHtml(
-      input, input, null,
-      [{tagName: '*', attributeName: 'href', policy: goog.functions.identity}]);
-}
-
-
-function testAllowRelaxExistingAttributePolicySpecific() {
-  var input = '<a target="foo"></a>';
-  var expected = '<a></a>';
-  // overwrite the global one, the specific one still has precedence
-  assertSanitizedHtml(input, expected, null, [
-    {tagName: '*', attributeName: 'target', policy: goog.functions.identity}
-  ]);
-  // overwrite the tag-specific one, this one should take precedence
-  assertSanitizedHtml(input, input, null, [
-    {tagName: 'a', attributeName: 'target', policy: goog.functions.identity}
-  ]);
-}
-
-
-function testAlsoAllowTagsInBlacklist() {
-  // Simplified use case taken from KaTex output HTML. The real configuration
-  // would allow more attributes and apply a stricter policy on their values to
-  // reduce the attack surface.
-  var input = '<svg width="1px"><line x1="3" /><path d="M 10 30" /></svg>';
-  assertSanitizedHtml(input, input, ['svg', 'line', 'path'], [
-    {tagName: 'svg', attributeName: 'width', policy: goog.functions.identity},
-    {tagName: 'line', attributeName: 'x1', policy: goog.functions.identity},
-    {tagName: 'path', attributeName: 'd', policy: goog.functions.identity},
-  ]);
-}
+  testAlsoAllowTagsInBlacklist() {
+    // Simplified use case taken from KaTex output HTML. The real configuration
+    // would allow more attributes and apply a stricter policy on their values
+    // to reduce the attack surface.
+    const input = '<svg width="1px"><line x1="3" /><path d="M 10 30" /></svg>';
+    assertSanitizedHtml(input, input, ['svg', 'line', 'path'], [
+      {tagName: 'svg', attributeName: 'width', policy: goog.functions.identity},
+      {tagName: 'line', attributeName: 'x1', policy: goog.functions.identity},
+      {tagName: 'path', attributeName: 'd', policy: goog.functions.identity},
+    ]);
+  },
+});

@@ -12,55 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Unit tests for the storage interface.
- *
- */
+/** @fileoverview Unit tests for the storage interface. */
 
-goog.provide('goog.storage.storage_test');
-goog.setTestOnly('goog.storage.storage_test');
+goog.module('goog.storage.storage_test');
+goog.setTestOnly();
 
-goog.require('goog.functions');
-goog.require('goog.storage.ErrorCode');
-goog.require('goog.storage.Storage');
-goog.require('goog.storage.storageTester');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.storage.FakeMechanism');
+const ErrorCode = goog.require('goog.storage.ErrorCode');
+const FakeMechanism = goog.require('goog.testing.storage.FakeMechanism');
+const StorageStorage = goog.require('goog.storage.Storage');
+const asserts = goog.require('goog.testing.asserts');
+const functions = goog.require('goog.functions');
+const storageTester = goog.require('goog.storage.storageTester');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testBasicOperations() {
-  var mechanism = new goog.testing.storage.FakeMechanism();
-  var storage = new goog.storage.Storage(mechanism);
-  goog.storage.storageTester.runBasicTests(storage);
-}
+testSuite({
+  testBasicOperations() {
+    const mechanism = new FakeMechanism();
+    const storage = new StorageStorage(mechanism);
+    storageTester.runBasicTests(storage);
+  },
 
-function testMechanismCommunication() {
-  var mechanism = new goog.testing.storage.FakeMechanism();
-  var storage = new goog.storage.Storage(mechanism);
+  testMechanismCommunication() {
+    const mechanism = new FakeMechanism();
+    const storage = new StorageStorage(mechanism);
 
-  // Invalid JSON.
-  mechanism.set('first', '');
-  assertEquals(goog.storage.ErrorCode.INVALID_VALUE, assertThrows(function() {
-                 storage.get('first');
-               }));
-  mechanism.set('second', '(');
-  assertEquals(goog.storage.ErrorCode.INVALID_VALUE, assertThrows(function() {
-                 storage.get('second');
-               }));
+    // Invalid JSON.
+    mechanism.set('first', '');
+    assertEquals(ErrorCode.INVALID_VALUE, assertThrows(() => {
+                   storage.get('first');
+                 }));
+    mechanism.set('second', '(');
+    assertEquals(ErrorCode.INVALID_VALUE, assertThrows(() => {
+                   storage.get('second');
+                 }));
 
-  // Cleaning up.
-  storage.remove('first');
-  storage.remove('second');
-  assertUndefined(storage.get('first'));
-  assertUndefined(storage.get('second'));
-  assertNull(mechanism.get('first'));
-  assertNull(mechanism.get('second'));
-}
+    // Cleaning up.
+    storage.remove('first');
+    storage.remove('second');
+    assertUndefined(storage.get('first'));
+    assertUndefined(storage.get('second'));
+    assertNull(mechanism.get('first'));
+    assertNull(mechanism.get('second'));
+  },
 
-function testMechanismFailsGracefullyOnInvalidValue() {
-  var mechanism = {
-    get: goog.functions.error('Invalid value')
-  };
-  var storage = new goog.storage.Storage(mechanism);
-  assertUndefined(storage.get('foobar'));
-}
+  testMechanismFailsGracefullyOnInvalidValue() {
+    const mechanism = {
+      get: functions.error('Invalid value'),
+    };
+    const storage = new StorageStorage(mechanism);
+    assertUndefined(storage.get('foobar'));
+  },
+});

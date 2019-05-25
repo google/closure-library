@@ -12,36 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.emoji.SpriteInfoTest');
-goog.setTestOnly('goog.ui.emoji.SpriteInfoTest');
+goog.module('goog.ui.emoji.SpriteInfoTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.emoji.SpriteInfo');
-function testGetCssValues() {
-  var si = new goog.ui.emoji.SpriteInfo(null, 'im/s.png', 10, 10, 0, 128);
-  assertEquals('10px', si.getWidthCssValue());
-  assertEquals('10px', si.getHeightCssValue());
-  assertEquals('0', si.getXOffsetCssValue());
-  assertEquals('-128px', si.getYOffsetCssValue());
-}
+const SpriteInfo = goog.require('goog.ui.emoji.SpriteInfo');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testIncompletelySpecifiedSpriteInfoFails() {
-  assertThrows(
-      'CSS class can\'t be null if the rest of the metadata ' +
-          'isn\'t specified',
-      function() {
-        new goog.ui.emoji.SpriteInfo(null);
-      });
+testSuite({
+  testGetCssValues() {
+    const si = new SpriteInfo(null, 'im/s.png', 10, 10, 0, 128);
+    assertEquals('10px', si.getWidthCssValue());
+    assertEquals('10px', si.getHeightCssValue());
+    assertEquals('0', si.getXOffsetCssValue());
+    assertEquals('-128px', si.getYOffsetCssValue());
+  },
 
-  assertThrows(
-      'Can\'t create an incompletely specified sprite info',
-      function() { new goog.ui.emoji.SpriteInfo(null, 's.png', 10); });
+  testIncompletelySpecifiedSpriteInfoFails() {
+    assertThrows(
+        'CSS class can\'t be null if the rest of the metadata ' +
+            'isn\'t specified',
+        () => {
+          new SpriteInfo(null);
+        });
 
-  assertThrows(
-      'Can\'t create an incompletely specified sprite info',
-      function() { new goog.ui.emoji.SpriteInfo(null, 's.png', 10, 10); });
+    assertThrows('Can\'t create an incompletely specified sprite info', () => {
+      new SpriteInfo(null, 's.png', 10);
+    });
 
-  assertThrows(
-      'Can\'t create an incompletely specified sprite info',
-      function() { new goog.ui.emoji.SpriteInfo(null, 's.png', 10, 10, 0); });
-}
+    assertThrows('Can\'t create an incompletely specified sprite info', () => {
+      new SpriteInfo(null, 's.png', 10, 10);
+    });
+
+    assertThrows('Can\'t create an incompletely specified sprite info', () => {
+      new SpriteInfo(null, 's.png', 10, 10, 0);
+    });
+  },
+});

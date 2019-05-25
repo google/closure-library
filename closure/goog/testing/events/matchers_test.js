@@ -12,22 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.events.EventMatcherTest');
-goog.setTestOnly('goog.testing.events.EventMatcherTest');
+goog.module('goog.testing.events.EventMatcherTest');
+goog.setTestOnly();
 
-goog.require('goog.events.Event');
-goog.require('goog.testing.events.EventMatcher');
-goog.require('goog.testing.jsunit');
+const EventMatcher = goog.require('goog.testing.events.EventMatcher');
+const GoogEvent = goog.require('goog.events.Event');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testEventMatcher() {
-  var matcher = new goog.testing.events.EventMatcher('foo');
-  assertFalse(matcher.matches(undefined));
-  assertFalse(matcher.matches(null));
-  assertFalse(matcher.matches({type: 'foo'}));
-  assertFalse(matcher.matches(new goog.events.Event('bar')));
+testSuite({
+  testEventMatcher() {
+    const matcher = new EventMatcher('foo');
+    assertFalse(matcher.matches(undefined));
+    assertFalse(matcher.matches(null));
+    assertFalse(matcher.matches({type: 'foo'}));
+    assertFalse(matcher.matches(new GoogEvent('bar')));
 
-  assertTrue(matcher.matches(new goog.events.Event('foo')));
-  var FooEvent = function() { goog.events.Event.call(this, 'foo'); };
-  goog.inherits(FooEvent, goog.events.Event);
-  assertTrue(matcher.matches(new FooEvent()));
-}
+    assertTrue(matcher.matches(new GoogEvent('foo')));
+    const FooEvent = function() {
+      GoogEvent.call(this, 'foo');
+    };
+    goog.inherits(FooEvent, GoogEvent);
+    assertTrue(matcher.matches(new FooEvent()));
+  },
+});

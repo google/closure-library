@@ -12,66 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.AdvancedTooltipTest');
-goog.setTestOnly('goog.ui.AdvancedTooltipTest');
+goog.module('goog.ui.AdvancedTooltipTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.events.Event');
-goog.require('goog.events.EventType');
-goog.require('goog.math.Box');
-goog.require('goog.math.Coordinate');
-goog.require('goog.style');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.events');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.AdvancedTooltip');
-goog.require('goog.ui.Tooltip');
-goog.require('goog.userAgent');
+const AdvancedTooltip = goog.require('goog.ui.AdvancedTooltip');
+const Box = goog.require('goog.math.Box');
+const Coordinate = goog.require('goog.math.Coordinate');
+const EventType = goog.require('goog.events.EventType');
+const GoogEvent = goog.require('goog.events.Event');
+const MockClock = goog.require('goog.testing.MockClock');
+const TagName = goog.require('goog.dom.TagName');
+const Tooltip = goog.require('goog.ui.Tooltip');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.testing.events');
+const style = goog.require('goog.style');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var att;
-var clock;
-var anchor;
-var elsewhere;
-var popup;
+let att;
+let clock;
+let anchor;
+let elsewhere;
+let popup;
 
-var SHOWDELAY = 50;
-var HIDEDELAY = 250;
-var TRACKINGDELAY = 100;
+const SHOWDELAY = 50;
+const HIDEDELAY = 250;
+const TRACKINGDELAY = 100;
 
 function isWindowTooSmall() {
   // Firefox 3 fails if the window is too small.
-  return goog.userAgent.GECKO &&
+  return userAgent.GECKO &&
       (window.innerWidth < 350 || window.innerHeight < 100);
-}
-
-function setUp() {
-  popup = goog.dom.createDom(
-      goog.dom.TagName.SPAN,
-      {id: 'popup', style: 'position:absolute;top:300;left:300'}, 'Hello');
-  att = new goog.ui.AdvancedTooltip('hovertarget');
-  att.setElement(popup);
-  att.setCursorTracking(true);
-  att.setHotSpotPadding(new goog.math.Box(10, 10, 10, 10));
-  att.setShowDelayMs(SHOWDELAY);
-  att.setHideDelayMs(HIDEDELAY);
-  att.setCursorTrackingHideDelayMs(TRACKINGDELAY);
-  att.setMargin(new goog.math.Box(300, 0, 0, 300));
-
-  clock = new goog.testing.MockClock(true);
-
-  anchor = goog.dom.getElement('hovertarget');
-  elsewhere = goog.dom.getElement('notpopup');
-}
-
-function tearDown() {
-  // tooltip needs to be hidden as well as disposed of so that it doesn't
-  // leave global state hanging around to trip up other tests.
-  if (att.isVisible()) {
-    att.onHide();
-  }
-  att.dispose();
-  clock.uninstall();
 }
 
 function assertVisible(msg, element) {
@@ -90,7 +61,6 @@ function assertHidden(msg, element) {
   }
 }
 
-
 /**
  * Helper function to fire events related to moving a mouse from one element
  * to another. Fires mouseout, mouseover, and mousemove event.
@@ -98,133 +68,24 @@ function assertHidden(msg, element) {
  * @param {Element} to Element the mouse is moving to.
  */
 function fireMouseEvents(from, to) {
-  goog.testing.events.fireMouseOutEvent(from, to);
-  goog.testing.events.fireMouseOverEvent(to, from);
-  var bounds = goog.style.getBounds(to);
-  goog.testing.events.fireMouseMoveEvent(
-      document, new goog.math.Coordinate(bounds.left + 1, bounds.top + 1));
-}
-
-function testCursorTracking() {
-  if (isWindowTooSmall()) {
-    return;
-  }
-
-  var oneThirdOfTheWay, twoThirdsOfTheWay;
-
-  oneThirdOfTheWay = new goog.math.Coordinate(100, 100);
-  twoThirdsOfTheWay = new goog.math.Coordinate(200, 200);
-
-  goog.testing.events.fireMouseOverEvent(anchor, elsewhere);
-  clock.tick(SHOWDELAY);
-  assertVisible('Mouse over anchor should show popup', popup);
-
-  goog.testing.events.fireMouseOutEvent(anchor, elsewhere);
-  goog.testing.events.fireMouseMoveEvent(document, oneThirdOfTheWay);
-  clock.tick(HIDEDELAY);
-  assertVisible("Moving mouse towards popup shouldn't hide it", popup);
-
-  goog.testing.events.fireMouseMoveEvent(document, twoThirdsOfTheWay);
-  goog.testing.events.fireMouseMoveEvent(document, oneThirdOfTheWay);
-  clock.tick(TRACKINGDELAY);
-  assertHidden('Moving mouse away from popup should hide it', popup);
-
-  goog.testing.events.fireMouseMoveEvent(document, twoThirdsOfTheWay);
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.FOCUS, anchor));
-  clock.tick(SHOWDELAY);
-  assertVisible('Set focus shows popup', popup);
-  goog.testing.events.fireMouseMoveEvent(document, oneThirdOfTheWay);
-  clock.tick(TRACKINGDELAY);
-  assertHidden('Mouse move after focus should hide popup', popup);
-}
-
-function testPadding() {
-  if (isWindowTooSmall()) {
-    return;
-  }
-
-  goog.testing.events.fireMouseOverEvent(anchor, elsewhere);
-  clock.tick(SHOWDELAY);
-
-  var attBounds = goog.style.getBounds(popup);
-  var inPadding =
-      new goog.math.Coordinate(attBounds.left - 5, attBounds.top - 5);
-  var outOfPadding =
-      new goog.math.Coordinate(attBounds.left - 15, attBounds.top - 15);
-
-  fireMouseEvents(anchor, popup);
-  goog.testing.events.fireMouseOutEvent(popup, elsewhere);
-  goog.testing.events.fireMouseMoveEvent(document, inPadding);
-  clock.tick(HIDEDELAY);
-  assertVisible(
-      "Mouse out of popup but within padding shouldn't hide it", popup);
-
-  goog.testing.events.fireMouseMoveEvent(document, outOfPadding);
-  clock.tick(HIDEDELAY);
-  assertHidden('Mouse move beyond popup padding should hide it', popup);
-}
-
-
-function testAnchorWithChild() {
-  var child = goog.dom.getElement('childtarget');
-
-  fireMouseEvents(elsewhere, anchor);
-  fireMouseEvents(anchor, child);
-  clock.tick(SHOWDELAY);
-  assertVisible('Mouse into child of anchor should still show popup', popup);
-
-  fireMouseEvents(child, anchor);
-  clock.tick(HIDEDELAY);
-  assertVisible('Mouse from child to anchor should still show popup', popup);
-}
-
-function testNestedTooltip() {
-  if (!isWindowTooSmall()) {
-    checkNestedTooltips(false);
-  }
-}
-
-function testNestedAdvancedTooltip() {
-  if (!isWindowTooSmall()) {
-    checkNestedTooltips(true);
-  }
-}
-
-function testResizingTooltipWhileShown() {
-  fireMouseEvents(elsewhere, anchor);
-  clock.tick(SHOWDELAY);
-  popup.style.height = '100px';
-  var attBounds = goog.style.getBounds(popup);
-  var inPadding = new goog.math.Coordinate(
-      attBounds.left + 5, attBounds.top + attBounds.height + 5);
-  var outOfPadding = new goog.math.Coordinate(
-      attBounds.left + 5, attBounds.top + attBounds.height + 15);
-
-  fireMouseEvents(anchor, popup);
-  goog.testing.events.fireMouseOutEvent(popup, elsewhere);
-  goog.testing.events.fireMouseMoveEvent(document, inPadding);
-  clock.tick(HIDEDELAY);
-  assertVisible(
-      "Mouse out of popup but within padding shouldn't hide it", popup);
-
-  goog.testing.events.fireMouseMoveEvent(document, outOfPadding);
-  clock.tick(HIDEDELAY);
-  assertHidden('Mouse move beyond popup padding should hide it', popup);
+  events.fireMouseOutEvent(from, to);
+  events.fireMouseOverEvent(to, from);
+  const bounds = style.getBounds(to);
+  events.fireMouseMoveEvent(
+      document, new Coordinate(bounds.left + 1, bounds.top + 1));
 }
 
 function checkNestedTooltips(useAdvancedTooltip) {
   popup.appendChild(
-      goog.dom.createDom(
-          goog.dom.TagName.SPAN, {id: 'nestedAnchor'}, 'Nested Anchor'));
-  var nestedAnchor = goog.dom.getElement('nestedAnchor');
-  var nestedTooltip;
+      dom.createDom(TagName.SPAN, {id: 'nestedAnchor'}, 'Nested Anchor'));
+  const nestedAnchor = dom.getElement('nestedAnchor');
+  let nestedTooltip;
   if (useAdvancedTooltip) {
-    nestedTooltip = new goog.ui.AdvancedTooltip(nestedAnchor, 'popup');
+    nestedTooltip = new AdvancedTooltip(nestedAnchor, 'popup');
   } else {
-    nestedTooltip = new goog.ui.Tooltip(nestedAnchor, 'popup');
+    nestedTooltip = new Tooltip(nestedAnchor, 'popup');
   }
-  var nestedPopup = nestedTooltip.getElement();
+  const nestedPopup = nestedTooltip.getElement();
   nestedTooltip.setShowDelayMs(SHOWDELAY);
   nestedTooltip.setHideDelayMs(HIDEDELAY);
 
@@ -242,49 +103,174 @@ function checkNestedTooltips(useAdvancedTooltip) {
   assertHidden(
       'Mouse out of nested popup should eventually hide parent', popup);
 
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.FOCUS, anchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.FOCUS, anchor));
   clock.tick(SHOWDELAY);
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.BLUR, anchor));
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.FOCUS, nestedAnchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.BLUR, anchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.FOCUS, nestedAnchor));
   clock.tick(SHOWDELAY + HIDEDELAY);
   assertVisible("Moving focus to child anchor doesn't hide parent", popup);
   assertVisible('Set focus shows nested popup', nestedPopup);
 
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.BLUR, nestedAnchor));
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.FOCUS, anchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.BLUR, nestedAnchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.FOCUS, anchor));
   clock.tick(HIDEDELAY + HIDEDELAY);
   assertHidden('Lose focus hides nested popup', nestedPopup);
   assertVisible(
       "Moving focus from nested anchor to parent doesn't hide parent", popup);
 
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.BLUR, anchor));
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.FOCUS, nestedAnchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.BLUR, anchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.FOCUS, nestedAnchor));
   clock.tick(SHOWDELAY);
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.BLUR, nestedAnchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.BLUR, nestedAnchor));
   clock.tick(HIDEDELAY);
   assertHidden('Lose focus hides nested popup', nestedPopup);
   clock.tick(HIDEDELAY);
   assertHidden('Nested anchor losing focus hides parent', popup);
 
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.FOCUS, anchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.FOCUS, anchor));
   clock.tick(SHOWDELAY);
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.BLUR, anchor));
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.FOCUS, nestedAnchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.BLUR, anchor));
+  events.fireBrowserEvent(new GoogEvent(EventType.FOCUS, nestedAnchor));
   clock.tick(SHOWDELAY);
-  var coordElsewhere = new goog.math.Coordinate(1, 1);
-  goog.testing.events.fireMouseMoveEvent(document, coordElsewhere);
+  const coordElsewhere = new Coordinate(1, 1);
+  events.fireMouseMoveEvent(document, coordElsewhere);
   clock.tick(HIDEDELAY);
   assertHidden('Mouse move should hide parent with active child', popup);
   assertHidden('Mouse move should hide nested popup', nestedPopup);
 }
+testSuite({
+  setUp() {
+    popup = dom.createDom(
+        TagName.SPAN,
+        {id: 'popup', style: 'position:absolute;top:300;left:300'}, 'Hello');
+    att = new AdvancedTooltip('hovertarget');
+    att.setElement(popup);
+    att.setCursorTracking(true);
+    att.setHotSpotPadding(new Box(10, 10, 10, 10));
+    att.setShowDelayMs(SHOWDELAY);
+    att.setHideDelayMs(HIDEDELAY);
+    att.setCursorTrackingHideDelayMs(TRACKINGDELAY);
+    att.setMargin(new Box(300, 0, 0, 300));
+
+    clock = new MockClock(true);
+
+    anchor = dom.getElement('hovertarget');
+    elsewhere = dom.getElement('notpopup');
+  },
+
+  tearDown() {
+    // tooltip needs to be hidden as well as disposed of so that it doesn't
+    // leave global state hanging around to trip up other tests.
+    if (att.isVisible()) {
+      att.onHide();
+    }
+    att.dispose();
+    clock.uninstall();
+  },
+
+  testCursorTracking() {
+    if (isWindowTooSmall()) {
+      return;
+    }
+
+    let oneThirdOfTheWay;
+    let twoThirdsOfTheWay;
+
+    oneThirdOfTheWay = new Coordinate(100, 100);
+    twoThirdsOfTheWay = new Coordinate(200, 200);
+
+    events.fireMouseOverEvent(anchor, elsewhere);
+    clock.tick(SHOWDELAY);
+    assertVisible('Mouse over anchor should show popup', popup);
+
+    events.fireMouseOutEvent(anchor, elsewhere);
+    events.fireMouseMoveEvent(document, oneThirdOfTheWay);
+    clock.tick(HIDEDELAY);
+    assertVisible('Moving mouse towards popup shouldn\'t hide it', popup);
+
+    events.fireMouseMoveEvent(document, twoThirdsOfTheWay);
+    events.fireMouseMoveEvent(document, oneThirdOfTheWay);
+    clock.tick(TRACKINGDELAY);
+    assertHidden('Moving mouse away from popup should hide it', popup);
+
+    events.fireMouseMoveEvent(document, twoThirdsOfTheWay);
+    events.fireBrowserEvent(new GoogEvent(EventType.FOCUS, anchor));
+    clock.tick(SHOWDELAY);
+    assertVisible('Set focus shows popup', popup);
+    events.fireMouseMoveEvent(document, oneThirdOfTheWay);
+    clock.tick(TRACKINGDELAY);
+    assertHidden('Mouse move after focus should hide popup', popup);
+  },
+
+  testPadding() {
+    if (isWindowTooSmall()) {
+      return;
+    }
+
+    events.fireMouseOverEvent(anchor, elsewhere);
+    clock.tick(SHOWDELAY);
+
+    const attBounds = style.getBounds(popup);
+    const inPadding = new Coordinate(attBounds.left - 5, attBounds.top - 5);
+    const outOfPadding =
+        new Coordinate(attBounds.left - 15, attBounds.top - 15);
+
+    fireMouseEvents(anchor, popup);
+    events.fireMouseOutEvent(popup, elsewhere);
+    events.fireMouseMoveEvent(document, inPadding);
+    clock.tick(HIDEDELAY);
+    assertVisible(
+        'Mouse out of popup but within padding shouldn\'t hide it', popup);
+
+    events.fireMouseMoveEvent(document, outOfPadding);
+    clock.tick(HIDEDELAY);
+    assertHidden('Mouse move beyond popup padding should hide it', popup);
+  },
+
+  testAnchorWithChild() {
+    const child = dom.getElement('childtarget');
+
+    fireMouseEvents(elsewhere, anchor);
+    fireMouseEvents(anchor, child);
+    clock.tick(SHOWDELAY);
+    assertVisible('Mouse into child of anchor should still show popup', popup);
+
+    fireMouseEvents(child, anchor);
+    clock.tick(HIDEDELAY);
+    assertVisible('Mouse from child to anchor should still show popup', popup);
+  },
+
+  testNestedTooltip() {
+    if (!isWindowTooSmall()) {
+      checkNestedTooltips(false);
+    }
+  },
+
+  testNestedAdvancedTooltip() {
+    if (!isWindowTooSmall()) {
+      checkNestedTooltips(true);
+    }
+  },
+
+  testResizingTooltipWhileShown() {
+    fireMouseEvents(elsewhere, anchor);
+    clock.tick(SHOWDELAY);
+    popup.style.height = '100px';
+    const attBounds = style.getBounds(popup);
+    const inPadding = new Coordinate(
+        attBounds.left + 5, attBounds.top + attBounds.height + 5);
+    const outOfPadding = new Coordinate(
+        attBounds.left + 5, attBounds.top + attBounds.height + 15);
+
+    fireMouseEvents(anchor, popup);
+    events.fireMouseOutEvent(popup, elsewhere);
+    events.fireMouseMoveEvent(document, inPadding);
+    clock.tick(HIDEDELAY);
+    assertVisible(
+        'Mouse out of popup but within padding shouldn\'t hide it', popup);
+
+    events.fireMouseMoveEvent(document, outOfPadding);
+    clock.tick(HIDEDELAY);
+    assertHidden('Mouse move beyond popup padding should hide it', popup);
+  },
+});

@@ -12,48 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.math.LineTest');
-goog.setTestOnly('goog.math.LineTest');
+goog.module('goog.math.LineTest');
+goog.setTestOnly();
 
-goog.require('goog.math.Coordinate');
-goog.require('goog.math.Line');
-goog.require('goog.testing.jsunit');
+const Coordinate = goog.require('goog.math.Coordinate');
+const Line = goog.require('goog.math.Line');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testEquals() {
-  var input = new goog.math.Line(1, 2, 3, 4);
+testSuite({
+  testEquals() {
+    const input = new Line(1, 2, 3, 4);
 
-  assert(input.equals(input));
-}
+    assert(input.equals(input));
+  },
 
-function testClone() {
-  var input = new goog.math.Line(1, 2, 3, 4);
+  testClone() {
+    const input = new Line(1, 2, 3, 4);
 
-  assertNotEquals('Clone returns a new object', input, input.clone());
-  assertTrue('Contents of clone match original', input.equals(input.clone()));
-}
+    assertNotEquals('Clone returns a new object', input, input.clone());
+    assertTrue('Contents of clone match original', input.equals(input.clone()));
+  },
 
-function testGetLength() {
-  var input = new goog.math.Line(0, 0, Math.sqrt(2), Math.sqrt(2));
-  assertRoughlyEquals(input.getSegmentLengthSquared(), 4, 1e-10);
-  assertRoughlyEquals(input.getSegmentLength(), 2, 1e-10);
-}
+  testGetLength() {
+    const input = new Line(0, 0, Math.sqrt(2), Math.sqrt(2));
+    assertRoughlyEquals(input.getSegmentLengthSquared(), 4, 1e-10);
+    assertRoughlyEquals(input.getSegmentLength(), 2, 1e-10);
+  },
 
-function testGetClosestPoint() {
-  var input = new goog.math.Line(0, 1, 1, 2);
+  testGetClosestPoint() {
+    const input = new Line(0, 1, 1, 2);
 
-  var point = input.getClosestPoint(0, 3);
-  assertRoughlyEquals(point.x, 1, 1e-10);
-  assertRoughlyEquals(point.y, 2, 1e-10);
-}
+    const point = input.getClosestPoint(0, 3);
+    assertRoughlyEquals(point.x, 1, 1e-10);
+    assertRoughlyEquals(point.y, 2, 1e-10);
+  },
 
-function testGetClosestSegmentPoint() {
-  var input = new goog.math.Line(0, 1, 2, 3);
+  testGetClosestSegmentPoint() {
+    const input = new Line(0, 1, 2, 3);
 
-  var point = input.getClosestSegmentPoint(4, 4);
-  assertRoughlyEquals(point.x, 2, 1e-10);
-  assertRoughlyEquals(point.y, 3, 1e-10);
+    let point = input.getClosestSegmentPoint(4, 4);
+    assertRoughlyEquals(point.x, 2, 1e-10);
+    assertRoughlyEquals(point.y, 3, 1e-10);
 
-  point = input.getClosestSegmentPoint(new goog.math.Coordinate(-1, -10));
-  assertRoughlyEquals(point.x, 0, 1e-10);
-  assertRoughlyEquals(point.y, 1, 1e-10);
-}
+    point = input.getClosestSegmentPoint(new Coordinate(-1, -10));
+    assertRoughlyEquals(point.x, 0, 1e-10);
+    assertRoughlyEquals(point.y, 1, 1e-10);
+  },
+});

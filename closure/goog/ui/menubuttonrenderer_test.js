@@ -12,92 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.MenuButtonRendererTest');
-goog.setTestOnly('goog.ui.MenuButtonRendererTest');
+goog.module('goog.ui.MenuButtonRendererTest');
+goog.setTestOnly();
 
-goog.require('goog.a11y.aria');
-goog.require('goog.a11y.aria.State');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.dom.classlist');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.ui.rendererasserts');
-goog.require('goog.ui.MenuButton');
-goog.require('goog.ui.MenuButtonRenderer');
-goog.require('goog.userAgent');
+const MenuButton = goog.require('goog.ui.MenuButton');
+const MenuButtonRenderer = goog.require('goog.ui.MenuButtonRenderer');
+const State = goog.require('goog.a11y.aria.State');
+const TagName = goog.require('goog.dom.TagName');
+const aria = goog.require('goog.a11y.aria');
+const classlist = goog.require('goog.dom.classlist');
+const dom = goog.require('goog.dom');
+const rendererasserts = goog.require('goog.testing.ui.rendererasserts');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var decoratedButton;
-var renderedButton;
-var savedRootTree;
-
-function setUp() {
-  savedRootTree = goog.dom.getElement('root').cloneNode(true);
-  decoratedButton = null;
-  renderedButton = null;
-}
-
-function tearDown() {
-  if (decoratedButton) {
-    decoratedButton.dispose();
-  }
-
-  if (renderedButton) {
-    renderedButton.dispose();
-  }
-
-  var root = goog.dom.getElement('root');
-  root.parentNode.replaceChild(savedRootTree, root);
-}
-
-function testRendererWithTextContent() {
-  renderedButton = new goog.ui.MenuButton('Foo');
-  renderOnParent(renderedButton);
-  checkButtonCaption(renderedButton);
-  checkAriaState(renderedButton);
-
-  decoratedButton = new goog.ui.MenuButton();
-  decorateDemoButton(decoratedButton);
-  checkButtonCaption(decoratedButton);
-  checkAriaState(decoratedButton);
-
-  assertButtonsEqual();
-}
-
-function testRendererWithNodeContent() {
-  renderedButton = new goog.ui.MenuButton(
-      goog.dom.createDom(goog.dom.TagName.DIV, null, 'Foo'));
-  renderOnParent(renderedButton);
-
-  var contentEl = renderedButton.getContentElement();
-  if (goog.userAgent.IE || goog.userAgent.OPERA) {
-    assertHTMLEquals('<div unselectable="on">Foo</div>', contentEl.innerHTML);
-  } else {
-    assertHTMLEquals('<div>Foo</div>', contentEl.innerHTML);
-  }
-  assertTrue(hasInlineBlock(contentEl));
-}
-
-function testSetContent() {
-  renderedButton = new goog.ui.MenuButton();
-  renderOnParent(renderedButton);
-
-  var contentEl = renderedButton.getContentElement();
-  assertHTMLEquals('', contentEl.innerHTML);
-
-  renderedButton.setContent('Foo');
-  contentEl = renderedButton.getContentElement();
-  assertHTMLEquals('Foo', contentEl.innerHTML);
-  assertTrue(hasInlineBlock(contentEl));
-
-  renderedButton.setContent(
-      goog.dom.createDom(goog.dom.TagName.DIV, null, 'Bar'));
-  contentEl = renderedButton.getContentElement();
-  assertHTMLEquals('<div>Bar</div>', contentEl.innerHTML);
-
-  renderedButton.setContent('Foo');
-  contentEl = renderedButton.getContentElement();
-  assertHTMLEquals('Foo', contentEl.innerHTML);
-}
+let decoratedButton;
+let renderedButton;
+let savedRootTree;
 
 function assertButtonsEqual() {
   assertHTMLEquals(
@@ -106,24 +37,21 @@ function assertButtonsEqual() {
       decoratedButton.getElement().innerHTML);
 }
 
-
 /**
  * Render the given button as a child of 'parent'.
  * @param {goog.ui.Button} button A button with content 'Foo'.
  */
 function renderOnParent(button) {
-  button.render(goog.dom.getElement('parent'));
+  button.render(dom.getElement('parent'));
 }
-
 
 /**
  * Decaorate the button with id 'button'.
  * @param {goog.ui.Button} button A button with no content.
  */
 function decorateDemoButton(button) {
-  button.decorate(goog.dom.getElement('decoratedButton'));
+  button.decorate(dom.getElement('decoratedButton'));
 }
-
 
 /**
  * Verify that the button's caption is never the direct
@@ -131,7 +59,7 @@ function decorateDemoButton(button) {
  * @param {goog.ui.Button} button A button.
  */
 function checkButtonCaption(button) {
-  var contentElement = button.getContentElement();
+  let contentElement = button.getContentElement();
   assertEquals('Foo', contentElement.innerHTML);
   assertTrue(hasInlineBlock(contentElement));
   assert(hasInlineBlock(contentElement.parentNode));
@@ -143,7 +71,6 @@ function checkButtonCaption(button) {
   assert(hasInlineBlock(contentElement.parentNode));
 }
 
-
 /**
  * Verify that the menu button has the correct ARIA attributes
  * @param {goog.ui.Button} button A button.
@@ -151,21 +78,87 @@ function checkButtonCaption(button) {
 function checkAriaState(button) {
   assertEquals(
       'menu buttons should have default aria-expanded == false', 'false',
-      goog.a11y.aria.getState(
-          button.getElement(), goog.a11y.aria.State.EXPANDED));
+      aria.getState(button.getElement(), State.EXPANDED));
   button.setOpen(true);
   assertEquals(
       'menu buttons should not aria-expanded == true after ' +
           'opening',
-      'true', goog.a11y.aria.getState(
-                  button.getElement(), goog.a11y.aria.State.EXPANDED));
+      'true', aria.getState(button.getElement(), State.EXPANDED));
 }
 
 function hasInlineBlock(el) {
-  return goog.dom.classlist.contains(el, 'goog-inline-block');
+  return classlist.contains(el, 'goog-inline-block');
 }
 
-function testDoesntCallGetCssClassInConstructor() {
-  goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
-      goog.ui.MenuButtonRenderer);
-}
+testSuite({
+  setUp() {
+    savedRootTree = dom.getElement('root').cloneNode(true);
+    decoratedButton = null;
+    renderedButton = null;
+  },
+
+  tearDown() {
+    if (decoratedButton) {
+      decoratedButton.dispose();
+    }
+
+    if (renderedButton) {
+      renderedButton.dispose();
+    }
+
+    const root = dom.getElement('root');
+    root.parentNode.replaceChild(savedRootTree, root);
+  },
+
+  testRendererWithTextContent() {
+    renderedButton = new MenuButton('Foo');
+    renderOnParent(renderedButton);
+    checkButtonCaption(renderedButton);
+    checkAriaState(renderedButton);
+
+    decoratedButton = new MenuButton();
+    decorateDemoButton(decoratedButton);
+    checkButtonCaption(decoratedButton);
+    checkAriaState(decoratedButton);
+
+    assertButtonsEqual();
+  },
+
+  testRendererWithNodeContent() {
+    renderedButton = new MenuButton(dom.createDom(TagName.DIV, null, 'Foo'));
+    renderOnParent(renderedButton);
+
+    const contentEl = renderedButton.getContentElement();
+    if (userAgent.IE || userAgent.OPERA) {
+      assertHTMLEquals('<div unselectable="on">Foo</div>', contentEl.innerHTML);
+    } else {
+      assertHTMLEquals('<div>Foo</div>', contentEl.innerHTML);
+    }
+    assertTrue(hasInlineBlock(contentEl));
+  },
+
+  testSetContent() {
+    renderedButton = new MenuButton();
+    renderOnParent(renderedButton);
+
+    let contentEl = renderedButton.getContentElement();
+    assertHTMLEquals('', contentEl.innerHTML);
+
+    renderedButton.setContent('Foo');
+    contentEl = renderedButton.getContentElement();
+    assertHTMLEquals('Foo', contentEl.innerHTML);
+    assertTrue(hasInlineBlock(contentEl));
+
+    renderedButton.setContent(dom.createDom(TagName.DIV, null, 'Bar'));
+    contentEl = renderedButton.getContentElement();
+    assertHTMLEquals('<div>Bar</div>', contentEl.innerHTML);
+
+    renderedButton.setContent('Foo');
+    contentEl = renderedButton.getContentElement();
+    assertHTMLEquals('Foo', contentEl.innerHTML);
+  },
+
+  testDoesntCallGetCssClassInConstructor() {
+    rendererasserts.assertNoGetCssClassCallsInConstructor(MenuButtonRenderer);
+  },
+});

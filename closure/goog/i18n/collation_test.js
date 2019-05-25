@@ -12,68 +12,68 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+goog.module('goog.i18n.collationTest');
+goog.setTestOnly();
 
-goog.provide('goog.i18n.collationTest');
-goog.setTestOnly('goog.i18n.collationTest');
+const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const collation = goog.require('goog.i18n.collation');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-goog.require('goog.i18n.collation');
-goog.require('goog.testing.ExpectedFailures');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+let expectedFailures;
+let propertyReplacer;
 
-var expectedFailures;
-var propertyReplacer;
+testSuite({
+  setUpPage() {
+    expectedFailures = new ExpectedFailures();
+    propertyReplacer = new PropertyReplacer();
+  },
 
-function setUpPage() {
-  expectedFailures = new goog.testing.ExpectedFailures();
-  propertyReplacer = new goog.testing.PropertyReplacer();
-}
+  tearDown() {
+    expectedFailures.handleTearDown();
+  },
 
-function tearDown() {
-  expectedFailures.handleTearDown();
-}
+  testGetEnComparator() {
+    propertyReplacer.replace(goog, 'LOCALE', 'en');
+    const compare = collation.createComparator();
+    // The côte/coté comparison fails in FF/Linux (v19.0) because
+    // calling 'côte'.localeCompare('coté')  gives a negative number (wrong)
+    // when the test is run but a positive number (correct) when calling
+    // it later in the web console. FF/OSX doesn't have this problem.
+    // Mozilla bug: https://bugzilla.mozilla.org/show_bug.cgi?id=856115
+    expectedFailures.expectFailureFor(userAgent.GECKO && userAgent.LINUX);
+    try {
+      assertTrue(compare('côte', 'coté') > 0);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  },
 
-function testGetEnComparator() {
-  propertyReplacer.replace(goog, 'LOCALE', 'en');
-  var compare = goog.i18n.collation.createComparator();
-  // The côte/coté comparison fails in FF/Linux (v19.0) because
-  // calling 'côte'.localeCompare('coté')  gives a negative number (wrong)
-  // when the test is run but a positive number (correct) when calling
-  // it later in the web console. FF/OSX doesn't have this problem.
-  // Mozilla bug: https://bugzilla.mozilla.org/show_bug.cgi?id=856115
-  expectedFailures.expectFailureFor(
-      goog.userAgent.GECKO && goog.userAgent.LINUX);
-  try {
-    assertTrue(compare('côte', 'coté') > 0);
-  } catch (e) {
-    expectedFailures.handleException(e);
-  }
-}
+  testGetFrComparator() {
+    propertyReplacer.replace(goog, 'LOCALE', 'fr-CA');
+    const compare = collation.createComparator();
+    if (!collation.hasNativeComparator()) return;
+    assertTrue(compare('côte', 'coté') < 0);
+  },
 
-function testGetFrComparator() {
-  propertyReplacer.replace(goog, 'LOCALE', 'fr-CA');
-  var compare = goog.i18n.collation.createComparator();
-  if (!goog.i18n.collation.hasNativeComparator()) return;
-  assertTrue(compare('côte', 'coté') < 0);
-}
+  testGetComparatorForSpecificLocale() {
+    propertyReplacer.replace(goog, 'LOCALE', 'en');
+    const compare = collation.createComparator('fr-CA');
+    if (!collation.hasNativeComparator('fr-CA')) return;
+    // 'côte' and 'coté' sort differently for en and fr-CA.
+    assertTrue(compare('côte', 'coté') < 0);
+  },
 
-function testGetComparatorForSpecificLocale() {
-  propertyReplacer.replace(goog, 'LOCALE', 'en');
-  var compare = goog.i18n.collation.createComparator('fr-CA');
-  if (!goog.i18n.collation.hasNativeComparator('fr-CA')) return;
-  // 'côte' and 'coté' sort differently for en and fr-CA.
-  assertTrue(compare('côte', 'coté') < 0);
-}
+  testGetNumericComparator() {
+    const compare = collation.createComparator('en', {numeric: true});
+    if (!collation.hasNativeComparator('en')) return;
+    assertTrue(compare('2', '10') < 0);
+  },
 
-function testGetNumericComparator() {
-  var compare = goog.i18n.collation.createComparator('en', {numeric: true});
-  if (!goog.i18n.collation.hasNativeComparator('en')) return;
-  assertTrue(compare('2', '10') < 0);
-}
-
-function testGetNonNumericComparator() {
-  var compare = goog.i18n.collation.createComparator('en', {numeric: false});
-  if (!goog.i18n.collation.hasNativeComparator('en')) return;
-  assertTrue(compare('2', '10') > 0);
-}
+  testGetNonNumericComparator() {
+    const compare = collation.createComparator('en', {numeric: false});
+    if (!collation.hasNativeComparator('en')) return;
+    assertTrue(compare('2', '10') > 0);
+  },
+});

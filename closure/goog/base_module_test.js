@@ -12,24 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-/**
- * @fileoverview Unit tests for Closure's base.js's goog.module support.
- */
+/** @fileoverview Unit tests for Closure's base.js's goog.module support. */
 
 goog.module('goog.baseModuleTest');
-goog.setTestOnly('goog.baseModuleTest');
-
+goog.setTestOnly();
 
 // Used to test dynamic loading works, see testRequire*
-var Timer = goog.require('goog.Timer');
-var Replacer = goog.require('goog.testing.PropertyReplacer');
-var jsunit = goog.require('goog.testing.jsunit');
-var testSuite = goog.require('goog.testing.testSuite');
+const Timer = goog.require('goog.Timer');
+const Replacer = goog.require('goog.testing.PropertyReplacer');
+const jsunit = goog.require('goog.testing.jsunit');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var testModule = goog.require('goog.test_module');
+const testModule = goog.require('goog.test_module');
 
-var stubs = new Replacer();
+const stubs = new Replacer();
 
 function assertProvideFails(namespace) {
   assertThrows(
@@ -48,7 +44,9 @@ function assertLoadModule(msg, moduleDef) {
 }
 
 testSuite({
-  teardown: function() { stubs.reset(); },
+  teardown: function() {
+    stubs.reset();
+  },
 
   testModuleDecl: function() {
     // assert that goog.module doesn't modify the global namespace
@@ -79,7 +77,7 @@ testSuite({
 
   testExportSymbol: function() {
     // Assert that export symbol works from within a goog.module.
-    var date = new Date();
+    const date = new Date();
 
     assertTrue(typeof nodots == 'undefined');
     goog.exportSymbol('nodots', date);
@@ -126,7 +124,6 @@ testSuite({
     assertNotUndefined('testModule is loaded', testModule);
     assertTrue('module failed: testModule', goog.isFunction(testModule));
 
-
     // Test that any escaping of </script> in test files is correct. Escape the
     // / in </script> here so that any such code does not affect it here.
     assertEquals('<\/script>', testModule.CLOSING_SCRIPT_TAG);
@@ -142,5 +139,5 @@ testSuite({
           assertEquals(this, goog.global);
         }
       },
-      this)
+      this),
 });

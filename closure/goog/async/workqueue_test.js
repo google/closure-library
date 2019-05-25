@@ -12,79 +12,75 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.async.WorkQueueTest');
-goog.setTestOnly('goog.async.WorkQueueTest');
+goog.module('goog.async.WorkQueueTest');
+goog.setTestOnly();
 
-goog.require('goog.async.WorkQueue');
-goog.require('goog.testing.jsunit');
+const WorkQueue = goog.require('goog.async.WorkQueue');
+const testSuite = goog.require('goog.testing.testSuite');
 
+const id = 0;
+let queue = null;
 
-var id = 0;
-var queue = null;
+testSuite({
+  setUp() {
+    queue = new WorkQueue();
+  },
 
+  tearDown() {
+    queue = null;
+  },
 
-function setUp() {
-  queue = new goog.async.WorkQueue();
-}
+  testEntriesReturnedInOrder() {
+    const fn1 = () => {};
+    const scope1 = {};
+    const fn2 = () => {};
+    const scope2 = {};
+    queue.add(fn1, scope1);
+    queue.add(fn2, scope2);
 
+    let item = queue.remove();
+    assertEquals(fn1, item.fn);
+    assertEquals(scope1, item.scope);
+    assertNull(item.next);
 
-function tearDown() {
-  queue = null;
-}
+    item = queue.remove();
+    assertEquals(fn2, item.fn);
+    assertEquals(scope2, item.scope);
+    assertNull(item.next);
 
+    item = queue.remove();
+    assertNull(item);
+  },
 
-function testEntriesReturnedInOrder() {
-  var fn1 = function one() {};
-  var scope1 = {};
-  var fn2 = function two() {};
-  var scope2 = {};
-  queue.add(fn1, scope1);
-  queue.add(fn2, scope2);
+  testReturnedItemReused() {
+    const fn1 = () => {};
+    const scope1 = {};
 
-  var item = queue.remove();
-  assertEquals(fn1, item.fn);
-  assertEquals(scope1, item.scope);
-  assertNull(item.next);
+    const fn2 = () => {};
+    const scope2 = {};
 
-  item = queue.remove();
-  assertEquals(fn2, item.fn);
-  assertEquals(scope2, item.scope);
-  assertNull(item.next);
+    assertEquals(0, WorkQueue.freelist_.occupants());
 
-  item = queue.remove();
-  assertNull(item);
-}
+    queue.add(fn1, scope1);
+    const item1 = queue.remove();
 
+    assertEquals(0, WorkQueue.freelist_.occupants());
 
-function testReturnedItemReused() {
-  var fn1 = function() {};
-  var scope1 = {};
+    queue.returnUnused(item1);
 
-  var fn2 = function() {};
-  var scope2 = {};
+    assertEquals(1, WorkQueue.freelist_.occupants());
 
-  assertEquals(0, goog.async.WorkQueue.freelist_.occupants());
+    queue.add(fn2, scope2);
 
-  queue.add(fn1, scope1);
-  var item1 = queue.remove();
+    assertEquals(0, WorkQueue.freelist_.occupants());
 
-  assertEquals(0, goog.async.WorkQueue.freelist_.occupants());
+    const item2 = queue.remove();
 
-  queue.returnUnused(item1);
+    assertEquals(item1, item2);
+  },
 
-  assertEquals(1, goog.async.WorkQueue.freelist_.occupants());
-
-  queue.add(fn2, scope2);
-
-  assertEquals(0, goog.async.WorkQueue.freelist_.occupants());
-
-  var item2 = queue.remove();
-
-  assertEquals(item1, item2);
-}
-
-
-function testEmptyQueueReturnNull() {
-  var item1 = queue.remove();
-  assertNull(item1);
-}
+  testEmptyQueueReturnNull() {
+    const item1 = queue.remove();
+    assertNull(item1);
+  },
+});

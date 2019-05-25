@@ -12,48 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.style.webkitScrollbarsTest');
-goog.setTestOnly('goog.style.webkitScrollbarsTest');
+goog.module('goog.style.webkitScrollbarsTest');
+goog.setTestOnly();
 
-goog.require('goog.asserts');
-goog.require('goog.style');
+const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
+const asserts = goog.require('goog.asserts');
+const style = goog.require('goog.style');
 /** @suppress {extraRequire} */
-goog.require('goog.styleScrollbarTester');
-goog.require('goog.testing.ExpectedFailures');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const styleScrollbarTester = goog.require('goog.styleScrollbarTester');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var expectedFailures;
+let expectedFailures;
 
-function setUpPage() {
-  expectedFailures = new goog.testing.ExpectedFailures();
-}
+testSuite({
+  setUpPage() {
+    expectedFailures = new ExpectedFailures();
+  },
 
-function tearDown() {
-  expectedFailures.handleTearDown();
+  tearDown() {
+    expectedFailures.handleTearDown();
 
-  // Assert that the test loaded.
-  goog.asserts.assert(testScrollbarWidth);
-}
+    // Assert that the test loaded.
+    asserts.assert(testScrollbarWidth);
+  },
 
-function testScrollBarWidth_webkitScrollbar() {
-  expectedFailures.expectFailureFor(!goog.userAgent.WEBKIT);
+  testScrollBarWidth_webkitScrollbar() {
+    expectedFailures.expectFailureFor(!userAgent.WEBKIT);
 
-  try {
-    var width = goog.style.getScrollbarWidth();
-    assertEquals('Scrollbar width should be 16', 16, width);
-  } catch (e) {
-    expectedFailures.handleException(e);
-  }
-}
+    try {
+      const width = style.getScrollbarWidth();
+      assertEquals('Scrollbar width should be 16', 16, width);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  },
 
-function testScrollBarWidth_webkitScrollbarWithCustomClass() {
-  expectedFailures.expectFailureFor(!goog.userAgent.WEBKIT);
+  testScrollBarWidth_webkitScrollbarWithCustomClass() {
+    expectedFailures.expectFailureFor(!userAgent.WEBKIT);
 
-  try {
-    var customWidth = goog.style.getScrollbarWidth('otherScrollBar');
-    assertEquals('Custom width should be 10', 10, customWidth);
-  } catch (e) {
-    expectedFailures.handleException(e);
-  }
-}
+    try {
+      const customWidth = style.getScrollbarWidth('otherScrollBar');
+      assertEquals('Custom width should be 10', 10, customWidth);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  },
+});

@@ -12,336 +12,309 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.SelectTest');
-goog.setTestOnly('goog.ui.SelectTest');
+goog.module('goog.ui.SelectTest');
+goog.setTestOnly();
 
-goog.require('goog.a11y.aria');
-goog.require('goog.a11y.aria.Role');
-goog.require('goog.a11y.aria.State');
-goog.require('goog.dom');
-goog.require('goog.events');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
-goog.require('goog.ui.Component');
-goog.require('goog.ui.CustomButtonRenderer');
-goog.require('goog.ui.Menu');
-goog.require('goog.ui.MenuItem');
-goog.require('goog.ui.Select');
-goog.require('goog.ui.Separator');
+const Component = goog.require('goog.ui.Component');
+const CustomButtonRenderer = goog.require('goog.ui.CustomButtonRenderer');
+const Menu = goog.require('goog.ui.Menu');
+const MenuItem = goog.require('goog.ui.MenuItem');
+const Role = goog.require('goog.a11y.aria.Role');
+const Select = goog.require('goog.ui.Select');
+const Separator = goog.require('goog.ui.Separator');
+const State = goog.require('goog.a11y.aria.State');
+const aria = goog.require('goog.a11y.aria');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.events');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var defaultCaption = 'initial caption';
-var sandboxEl;
-var select;
-
-function setUp() {
-  sandboxEl = goog.dom.getElement('sandbox');
-  select = new goog.ui.Select(defaultCaption);
-}
-
-function tearDown() {
-  select.dispose();
-  goog.dom.removeChildren(sandboxEl);
-}
-
-
-/**
- * Checks that the default caption passed in the constructor and in the setter
- * is returned by getDefaultCaption, and acts as a default caption, i.e. is
- * shown as a caption when no items are selected.
- */
-function testDefaultCaption() {
-  select.render(sandboxEl);
-  var item1 = new goog.ui.MenuItem('item 1');
-  select.addItem(item1);
-  select.addItem(new goog.ui.MenuItem('item 2'));
-  assertEquals(defaultCaption, select.getDefaultCaption());
-  assertEquals(defaultCaption, select.getCaption());
-
-  var newCaption = 'new caption';
-  select.setDefaultCaption(newCaption);
-  assertEquals(newCaption, select.getDefaultCaption());
-  assertEquals(newCaption, select.getCaption());
-
-  select.setSelectedItem(item1);
-  assertNotEquals(newCaption, select.getCaption());
-
-  select.setSelectedItem(null);
-  assertEquals(newCaption, select.getCaption());
-}
-
-function testNoDefaultCaption() {
-  assertNull(new goog.ui.Select().getDefaultCaption());
-  assertEquals('', new goog.ui.Select('').getDefaultCaption());
-}
+const defaultCaption = 'initial caption';
+let sandboxEl;
+let select;
 
 // Confirms that aria roles for select conform to spec:
 // http://www.w3.org/TR/wai-aria/roles#listbox
 // Basically the select should have a role of LISTBOX and all the items should
 // have a role of OPTION.
-function testAriaRoles() {
-  select.render(sandboxEl);
-  var item1 = new goog.ui.MenuItem('item 1');
-  select.addItem(item1);
-  // Added a separator to make sure that the SETSIZE ignores the separator
-  // items.
-  var separator = new goog.ui.Separator();
-  select.addItem(separator);
-  var item2 = new goog.ui.MenuItem('item 2');
-  select.addItem(item2);
-  assertNotNull(select.getElement());
-  assertNotNull(item1.getElement());
-  assertNotNull(item2.getElement());
-  assertEquals(
-      goog.a11y.aria.Role.LISTBOX, goog.a11y.aria.getRole(select.getElement()));
-  assertEquals(
-      goog.a11y.aria.Role.OPTION, goog.a11y.aria.getRole(item1.getElement()));
-  assertEquals(
-      goog.a11y.aria.Role.OPTION, goog.a11y.aria.getRole(item2.getElement()));
-  assertNotNull(
-      goog.a11y.aria.getState(
-          select.getElement(), goog.a11y.aria.State.ACTIVEDESCENDANT));
-  var contentElement =
-      select.getRenderer().getContentElement(select.getElement());
-  assertEquals(
-      '2',
-      goog.a11y.aria.getState(contentElement, goog.a11y.aria.State.SETSIZE));
-  assertEquals(
-      '0',
-      goog.a11y.aria.getState(contentElement, goog.a11y.aria.State.POSINSET));
-  select.setSelectedItem(item1);
-  assertEquals(
-      '1',
-      goog.a11y.aria.getState(contentElement, goog.a11y.aria.State.POSINSET));
-  select.setSelectedItem(item2);
-  assertEquals(
-      '2',
-      goog.a11y.aria.getState(contentElement, goog.a11y.aria.State.POSINSET));
-}
 
+testSuite({
+  setUp() {
+    sandboxEl = dom.getElement('sandbox');
+    select = new Select(defaultCaption);
+  },
 
-/**
- * Checks that the select control handles ACTION events from its items.
- */
-function testHandlesItemActions() {
-  select.render(sandboxEl);
-  var item1 = new goog.ui.MenuItem('item 1');
-  var item2 = new goog.ui.MenuItem('item 2');
-  select.addItem(item1);
-  select.addItem(item2);
+  tearDown() {
+    select.dispose();
+    dom.removeChildren(sandboxEl);
+  },
 
-  item1.dispatchEvent(goog.ui.Component.EventType.ACTION);
-  assertEquals(item1, select.getSelectedItem());
-  assertEquals(item1.getCaption(), select.getCaption());
+  /**
+   * Checks that the default caption passed in the constructor and in the setter
+   * is returned by getDefaultCaption, and acts as a default caption, i.e. is
+   * shown as a caption when no items are selected.
+   */
+  testDefaultCaption() {
+    select.render(sandboxEl);
+    const item1 = new MenuItem('item 1');
+    select.addItem(item1);
+    select.addItem(new MenuItem('item 2'));
+    assertEquals(defaultCaption, select.getDefaultCaption());
+    assertEquals(defaultCaption, select.getCaption());
 
-  item2.dispatchEvent(goog.ui.Component.EventType.ACTION);
-  assertEquals(item2, select.getSelectedItem());
-  assertEquals(item2.getCaption(), select.getCaption());
-}
+    const newCaption = 'new caption';
+    select.setDefaultCaption(newCaption);
+    assertEquals(newCaption, select.getDefaultCaption());
+    assertEquals(newCaption, select.getCaption());
 
+    select.setSelectedItem(item1);
+    assertNotEquals(newCaption, select.getCaption());
 
-/**
- * Tests goog.ui.Select.prototype.setValue.
- */
-function testSetValue() {
-  select.render(sandboxEl);
-  var item1 = new goog.ui.MenuItem('item 1', 1);
-  var item2 = new goog.ui.MenuItem('item 2', 2);
-  select.addItem(item1);
-  select.addItem(item2);
+    select.setSelectedItem(null);
+    assertEquals(newCaption, select.getCaption());
+  },
 
-  select.setValue(1);
-  assertEquals(item1, select.getSelectedItem());
+  testNoDefaultCaption() {
+    assertNull(new Select().getDefaultCaption());
+    assertEquals('', new Select('').getDefaultCaption());
+  },
 
-  select.setValue(2);
-  assertEquals(item2, select.getSelectedItem());
+  testAriaRoles() {
+    select.render(sandboxEl);
+    const item1 = new MenuItem('item 1');
+    select.addItem(item1);
+    // Added a separator to make sure that the SETSIZE ignores the separator
+    // items.
+    const separator = new Separator();
+    select.addItem(separator);
+    const item2 = new MenuItem('item 2');
+    select.addItem(item2);
+    assertNotNull(select.getElement());
+    assertNotNull(item1.getElement());
+    assertNotNull(item2.getElement());
+    assertEquals(Role.LISTBOX, aria.getRole(select.getElement()));
+    assertEquals(Role.OPTION, aria.getRole(item1.getElement()));
+    assertEquals(Role.OPTION, aria.getRole(item2.getElement()));
+    assertNotNull(aria.getState(select.getElement(), State.ACTIVEDESCENDANT));
+    const contentElement =
+        select.getRenderer().getContentElement(select.getElement());
+    assertEquals('2', aria.getState(contentElement, State.SETSIZE));
+    assertEquals('0', aria.getState(contentElement, State.POSINSET));
+    select.setSelectedItem(item1);
+    assertEquals('1', aria.getState(contentElement, State.POSINSET));
+    select.setSelectedItem(item2);
+    assertEquals('2', aria.getState(contentElement, State.POSINSET));
+  },
 
-  select.setValue(3);
-  assertNull(select.getSelectedItem());
-}
+  /** Checks that the select control handles ACTION events from its items. */
+  testHandlesItemActions() {
+    select.render(sandboxEl);
+    const item1 = new MenuItem('item 1');
+    const item2 = new MenuItem('item 2');
+    select.addItem(item1);
+    select.addItem(item2);
 
+    item1.dispatchEvent(Component.EventType.ACTION);
+    assertEquals(item1, select.getSelectedItem());
+    assertEquals(item1.getCaption(), select.getCaption());
 
-/**
- * Checks that the current selection is cleared when the selected item is
- * removed.
- */
-function testSelectionIsClearedWhenSelectedItemIsRemoved() {
-  select.render(sandboxEl);
-  var item1 = new goog.ui.MenuItem('item 1');
-  select.addItem(item1);
-  select.addItem(new goog.ui.MenuItem('item 2'));
+    item2.dispatchEvent(Component.EventType.ACTION);
+    assertEquals(item2, select.getSelectedItem());
+    assertEquals(item2.getCaption(), select.getCaption());
+  },
 
-  select.setSelectedItem(item1);
-  select.removeItem(item1);
-  assertNull(select.getSelectedItem());
-}
+  /** Tests Select.prototype.setValue. */
+  testSetValue() {
+    select.render(sandboxEl);
+    const item1 = new MenuItem('item 1', 1);
+    const item2 = new MenuItem('item 2', 2);
+    select.addItem(item1);
+    select.addItem(item2);
 
+    select.setValue(1);
+    assertEquals(item1, select.getSelectedItem());
 
-/**
- * Check that the select control is subscribed to its selection model events
- * after being added, removed and added back again into the document.
- */
-function testExitAndEnterDocument() {
-  var component = new goog.ui.Component();
-  component.render(sandboxEl);
+    select.setValue(2);
+    assertEquals(item2, select.getSelectedItem());
 
-  var item1 = new goog.ui.MenuItem('item 1');
-  var item2 = new goog.ui.MenuItem('item 2');
-  var item3 = new goog.ui.MenuItem('item 3');
+    select.setValue(3);
+    assertNull(select.getSelectedItem());
+  },
 
-  select.addItem(item1);
-  select.addItem(item2);
-  select.addItem(item3);
+  /**
+   * Checks that the current selection is cleared when the selected item is
+   * removed.
+   */
+  testSelectionIsClearedWhenSelectedItemIsRemoved() {
+    select.render(sandboxEl);
+    const item1 = new MenuItem('item 1');
+    select.addItem(item1);
+    select.addItem(new MenuItem('item 2'));
 
-  component.addChild(select, true);
-  item2.dispatchEvent(goog.ui.Component.EventType.ACTION);
-  assertEquals(item2.getCaption(), select.getCaption());
+    select.setSelectedItem(item1);
+    select.removeItem(item1);
+    assertNull(select.getSelectedItem());
+  },
 
-  component.removeChild(select, true);
-  item1.dispatchEvent(goog.ui.Component.EventType.ACTION);
-  assertEquals(item2.getCaption(), select.getCaption());
+  /**
+   * Check that the select control is subscribed to its selection model events
+   * after being added, removed and added back again into the document.
+   */
+  testExitAndEnterDocument() {
+    const component = new Component();
+    component.render(sandboxEl);
 
-  component.addChild(select, true);
-  item3.dispatchEvent(goog.ui.Component.EventType.ACTION);
-  assertEquals(item3.getCaption(), select.getCaption());
-}
+    const item1 = new MenuItem('item 1');
+    const item2 = new MenuItem('item 2');
+    const item3 = new MenuItem('item 3');
 
-function testSelectEventFiresForProgrammaticChange() {
-  select.render();
-  var item1 = new goog.ui.MenuItem('item 1');
-  var item2 = new goog.ui.MenuItem('item 2');
-  select.addItem(item1);
-  select.addItem(item2);
+    select.addItem(item1);
+    select.addItem(item2);
+    select.addItem(item3);
 
-  var recordingHandler = new goog.testing.recordFunction();
-  goog.events.listen(
-      select, goog.ui.Component.EventType.CHANGE, recordingHandler);
+    component.addChild(select, true);
+    item2.dispatchEvent(Component.EventType.ACTION);
+    assertEquals(item2.getCaption(), select.getCaption());
 
-  select.setSelectedItem(item2);
-  assertEquals(
-      'Selecting new item should fire CHANGE event.', 1,
-      recordingHandler.getCallCount());
+    component.removeChild(select, true);
+    item1.dispatchEvent(Component.EventType.ACTION);
+    assertEquals(item2.getCaption(), select.getCaption());
 
-  select.setSelectedItem(item2);
-  assertEquals(
-      'Selecting the same item should not fire CHANGE event.', 1,
-      recordingHandler.getCallCount());
+    component.addChild(select, true);
+    item3.dispatchEvent(Component.EventType.ACTION);
+    assertEquals(item3.getCaption(), select.getCaption());
+  },
 
-  select.setSelectedIndex(0);
-  assertEquals(
-      'Selecting new item should fire CHANGE event.', 2,
-      recordingHandler.getCallCount());
+  testSelectEventFiresForProgrammaticChange() {
+    select.render();
+    const item1 = new MenuItem('item 1');
+    const item2 = new MenuItem('item 2');
+    select.addItem(item1);
+    select.addItem(item2);
 
-  select.setSelectedIndex(0);
-  assertEquals(
-      'Selecting the same item should not fire CHANGE event.', 2,
-      recordingHandler.getCallCount());
-}
+    const recordingHandler = new recordFunction();
+    events.listen(select, Component.EventType.CHANGE, recordingHandler);
 
-function testSelectEventFiresForUserInitiatedAction() {
-  select.render();
-  var item1 = new goog.ui.MenuItem('item 1');
-  var item2 = new goog.ui.MenuItem('item 2');
-  select.addItem(item1);
-  select.addItem(item2);
+    select.setSelectedItem(item2);
+    assertEquals(
+        'Selecting new item should fire CHANGE event.', 1,
+        recordingHandler.getCallCount());
 
-  var recordingHandler = new goog.testing.recordFunction();
-  goog.events.listen(
-      select, goog.ui.Component.EventType.CHANGE, recordingHandler);
+    select.setSelectedItem(item2);
+    assertEquals(
+        'Selecting the same item should not fire CHANGE event.', 1,
+        recordingHandler.getCallCount());
 
-  select.setOpen(true);
+    select.setSelectedIndex(0);
+    assertEquals(
+        'Selecting new item should fire CHANGE event.', 2,
+        recordingHandler.getCallCount());
 
-  item2.dispatchEvent(goog.ui.Component.EventType.ACTION);
-  assertEquals(
-      'Selecting new item should fire CHANGE event.', 1,
-      recordingHandler.getCallCount());
-  assertFalse(select.isOpen());
+    select.setSelectedIndex(0);
+    assertEquals(
+        'Selecting the same item should not fire CHANGE event.', 2,
+        recordingHandler.getCallCount());
+  },
 
-  select.setOpen(true);
+  testSelectEventFiresForUserInitiatedAction() {
+    select.render();
+    const item1 = new MenuItem('item 1');
+    const item2 = new MenuItem('item 2');
+    select.addItem(item1);
+    select.addItem(item2);
 
-  item2.dispatchEvent(goog.ui.Component.EventType.ACTION);
-  assertEquals(
-      'Selecting the same item should not fire CHANGE event.', 1,
-      recordingHandler.getCallCount());
-  assertFalse(select.isOpen());
-}
+    const recordingHandler = new recordFunction();
+    events.listen(select, Component.EventType.CHANGE, recordingHandler);
 
+    select.setOpen(true);
 
-/**
- * Checks that if an item is selected before decorate is called, the selection
- * is preserved after decorate.
- */
-function testSetSelectedItemBeforeRender() {
-  select.addItem(new goog.ui.MenuItem('item 1'));
-  select.addItem(new goog.ui.MenuItem('item 2'));
-  var item3 = new goog.ui.MenuItem('item 3');
-  select.addItem(item3);
-  select.setSelectedItem(item3);
-  assertEquals(2, select.getSelectedIndex());
+    item2.dispatchEvent(Component.EventType.ACTION);
+    assertEquals(
+        'Selecting new item should fire CHANGE event.', 1,
+        recordingHandler.getCallCount());
+    assertFalse(select.isOpen());
 
-  select.decorate(sandboxEl);
-  assertEquals(2, select.getSelectedIndex());
-}
+    select.setOpen(true);
 
+    item2.dispatchEvent(Component.EventType.ACTION);
+    assertEquals(
+        'Selecting the same item should not fire CHANGE event.', 1,
+        recordingHandler.getCallCount());
+    assertFalse(select.isOpen());
+  },
 
-/**
- * Checks that if a value is set before decorate is called, the value is
- * preserved after decorate.
- */
-function testSetValueBeforeRender() {
-  select.addItem(new goog.ui.MenuItem('item 1', 1));
-  select.addItem(new goog.ui.MenuItem('item 2', 2));
-  select.setValue(2);
-  assertEquals(2, select.getValue());
+  /**
+   * Checks that if an item is selected before decorate is called, the selection
+   * is preserved after decorate.
+   */
+  testSetSelectedItemBeforeRender() {
+    select.addItem(new MenuItem('item 1'));
+    select.addItem(new MenuItem('item 2'));
+    const item3 = new MenuItem('item 3');
+    select.addItem(item3);
+    select.setSelectedItem(item3);
+    assertEquals(2, select.getSelectedIndex());
 
-  select.decorate(sandboxEl);
-  assertEquals(2, select.getValue());
-}
+    select.decorate(sandboxEl);
+    assertEquals(2, select.getSelectedIndex());
+  },
 
+  /**
+   * Checks that if a value is set before decorate is called, the value is
+   * preserved after decorate.
+   */
+  testSetValueBeforeRender() {
+    select.addItem(new MenuItem('item 1', 1));
+    select.addItem(new MenuItem('item 2', 2));
+    select.setValue(2);
+    assertEquals(2, select.getValue());
 
-function testUpdateCaption_aria() {
-  select.render(sandboxEl);
+    select.decorate(sandboxEl);
+    assertEquals(2, select.getValue());
+  },
 
-  // Verify default state.
-  assertEquals(defaultCaption, select.getCaption());
-  assertFalse(
-      !!goog.a11y.aria.getLabel(
-          select.getRenderer().getContentElement(select.getElement())));
+  testUpdateCaption_aria() {
+    select.render(sandboxEl);
 
-  // Add and select an item with aria-label.
-  var item1 = new goog.ui.MenuItem();
-  select.addItem(item1);
-  item1.getElement().setAttribute('aria-label', 'item1');
-  select.setSelectedIndex(0);
-  assertEquals(
-      'item1',
-      goog.a11y.aria.getLabel(
-          select.getRenderer().getContentElement(select.getElement())));
+    // Verify default state.
+    assertEquals(defaultCaption, select.getCaption());
+    assertFalse(!!aria.getLabel(
+        select.getRenderer().getContentElement(select.getElement())));
 
-  // Add and select an item without a label.
-  var item2 = new goog.ui.MenuItem();
-  select.addItem(item2);
-  select.setSelectedIndex(1);
-  assertFalse(
-      !!goog.a11y.aria.getLabel(
-          select.getRenderer().getContentElement(select.getElement())));
-}
+    // Add and select an item with aria-label.
+    const item1 = new MenuItem();
+    select.addItem(item1);
+    item1.getElement().setAttribute('aria-label', 'item1');
+    select.setSelectedIndex(0);
+    assertEquals(
+        'item1',
+        aria.getLabel(
+            select.getRenderer().getContentElement(select.getElement())));
 
-function testDisposeWhenInnerHTMLHasBeenClearedInIE10() {
-  assertNotThrows(function() {
-    var customSelect = new goog.ui.Select(
-        null /* label */, new goog.ui.Menu(),
-        new goog.ui.CustomButtonRenderer());
-    customSelect.render(sandboxEl);
+    // Add and select an item without a label.
+    const item2 = new MenuItem();
+    select.addItem(item2);
+    select.setSelectedIndex(1);
+    assertFalse(!!aria.getLabel(
+        select.getRenderer().getContentElement(select.getElement())));
+  },
 
-    // In IE10 setting the innerHTML of a node invalidates the parent child
-    // relation of all its child nodes (unlike removeNode).
-    goog.dom.removeChildren(sandboxEl);
+  testDisposeWhenInnerHTMLHasBeenClearedInIE10() {
+    assertNotThrows(() => {
+      const customSelect =
+          new Select(null /* label */, new Menu(), new CustomButtonRenderer());
+      customSelect.render(sandboxEl);
 
-    // goog.ui.Select's disposeInternal trigger's goog.ui.Component's
-    // disposeInternal, which triggers goog.ui.MenuButton's exitDocument,
-    // which closes the associated menu and updates the activeDescendant.
-    // In the case of a CustomMenuButton the contentElement is referenced by
-    // element.firstChild.firstChild, an invalid relation in IE 10.
-    customSelect.dispose();
-  });
-}
+      // In IE10 setting the innerHTML of a node invalidates the parent child
+      // relation of all its child nodes (unlike removeNode).
+      dom.removeChildren(sandboxEl);
+
+      // goog.ui.Select's disposeInternal trigger's goog.ui.Component's
+      // disposeInternal, which triggers goog.ui.MenuButton's exitDocument,
+      // which closes the associated menu and updates the activeDescendant.
+      // In the case of a CustomMenuButton the contentElement is referenced by
+      // element.firstChild.firstChild, an invalid relation in IE 10.
+      customSelect.dispose();
+    });
+  },
+});

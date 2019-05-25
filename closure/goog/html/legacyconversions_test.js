@@ -12,94 +12,85 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Unit tests for goog.html.legacyconversions.
- */
+/** @fileoverview Unit tests for legacyconversions. */
 
-goog.provide('goog.html.legacyconversionsTest');
+goog.module('goog.html.legacyconversionsTest');
+goog.setTestOnly();
 
-goog.require('goog.html.SafeHtml');
-goog.require('goog.html.SafeScript');
-goog.require('goog.html.SafeStyle');
-goog.require('goog.html.SafeStyleSheet');
-goog.require('goog.html.SafeUrl');
-goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.html.legacyconversions');
-goog.require('goog.testing.jsunit');
-
-goog.setTestOnly('goog.html.legacyconversionsTest');
-
-
-function testSafeHtmlFromString() {
-  var html = '<div>irrelevant</div>';
-  var safeHtml = goog.html.legacyconversions.safeHtmlFromString(html);
-  assertEquals(html, goog.html.SafeHtml.unwrap(safeHtml));
-
-  assertFunctionReports(goog.html.legacyconversions.safeHtmlFromString);
-}
-
-
-function testSafeScriptFromString() {
-  var script = 'alert(1);';
-  var safeScript = goog.html.legacyconversions.safeScriptFromString(script);
-  assertEquals(script, goog.html.SafeScript.unwrap(safeScript));
-
-  assertFunctionReports(goog.html.legacyconversions.safeScriptFromString);
-}
-
-
-function testSafeStyleFromString() {
-  var style = 'color: red; width: 1em;';
-  var safeStyle = goog.html.legacyconversions.safeStyleFromString(style);
-  assertEquals(style, goog.html.SafeStyle.unwrap(safeStyle));
-
-  assertFunctionReports(goog.html.legacyconversions.safeStyleFromString);
-}
-
-
-function testSafeStyleSheetFromString() {
-  var styleSheet = 'P.special { color: red; background: url(http://test); }';
-  var safeStyleSheet =
-      goog.html.legacyconversions.safeStyleSheetFromString(styleSheet);
-  assertEquals(styleSheet, goog.html.SafeStyleSheet.unwrap(safeStyleSheet));
-
-  assertFunctionReports(goog.html.legacyconversions.safeStyleSheetFromString);
-}
-
-
-function testSafeUrlFromString() {
-  var url = 'https://www.google.com';
-  var safeUrl = goog.html.legacyconversions.safeUrlFromString(url);
-  assertEquals(url, goog.html.SafeUrl.unwrap(safeUrl));
-
-  assertFunctionReports(goog.html.legacyconversions.safeUrlFromString);
-}
-
-
-function testTrustedResourceUrlFromString() {
-  var url = 'https://www.google.com/script.js';
-  var trustedResourceUrl =
-      goog.html.legacyconversions.trustedResourceUrlFromString(url);
-  assertEquals(url, goog.html.TrustedResourceUrl.unwrap(trustedResourceUrl));
-
-  assertFunctionReports(
-      goog.html.legacyconversions.trustedResourceUrlFromString);
-}
-
+const SafeHtml = goog.require('goog.html.SafeHtml');
+const SafeScript = goog.require('goog.html.SafeScript');
+const SafeStyle = goog.require('goog.html.SafeStyle');
+const SafeStyleSheet = goog.require('goog.html.SafeStyleSheet');
+const SafeUrl = goog.require('goog.html.SafeUrl');
+const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
+const legacyconversions = goog.require('goog.html.legacyconversions');
+const testSuite = goog.require('goog.testing.testSuite');
 
 /**
  * Asserts that conversionFunction calls the report callback.
  * @param {function(string) : *} conversionFunction
  */
 function assertFunctionReports(conversionFunction) {
-  var reported = false;
+  let reported = false;
   try {
-    goog.html.legacyconversions.setReportCallback(function() {
+    legacyconversions.setReportCallback(() => {
       reported = true;
     });
     conversionFunction('irrelevant');
     assertTrue('Expected legacy conversion to be reported.', reported);
   } finally {
-    goog.html.legacyconversions.setReportCallback(goog.nullFunction);
+    legacyconversions.setReportCallback(goog.nullFunction);
   }
 }
+testSuite({
+  testSafeHtmlFromString() {
+    const html = '<div>irrelevant</div>';
+    const safeHtml = legacyconversions.safeHtmlFromString(html);
+    assertEquals(html, SafeHtml.unwrap(safeHtml));
+
+    assertFunctionReports(legacyconversions.safeHtmlFromString);
+  },
+
+  testSafeScriptFromString() {
+    const script = 'alert(1);';
+    const safeScript = legacyconversions.safeScriptFromString(script);
+    assertEquals(script, SafeScript.unwrap(safeScript));
+
+    assertFunctionReports(legacyconversions.safeScriptFromString);
+  },
+
+  testSafeStyleFromString() {
+    const style = 'color: red; width: 1em;';
+    const safeStyle = legacyconversions.safeStyleFromString(style);
+    assertEquals(style, SafeStyle.unwrap(safeStyle));
+
+    assertFunctionReports(legacyconversions.safeStyleFromString);
+  },
+
+  testSafeStyleSheetFromString() {
+    const styleSheet =
+        'P.special { color: red; background: url(http://test); }';
+    const safeStyleSheet =
+        legacyconversions.safeStyleSheetFromString(styleSheet);
+    assertEquals(styleSheet, SafeStyleSheet.unwrap(safeStyleSheet));
+
+    assertFunctionReports(legacyconversions.safeStyleSheetFromString);
+  },
+
+  testSafeUrlFromString() {
+    const url = 'https://www.google.com';
+    const safeUrl = legacyconversions.safeUrlFromString(url);
+    assertEquals(url, SafeUrl.unwrap(safeUrl));
+
+    assertFunctionReports(legacyconversions.safeUrlFromString);
+  },
+
+  testTrustedResourceUrlFromString() {
+    const url = 'https://www.google.com/script.js';
+    const trustedResourceUrl =
+        legacyconversions.trustedResourceUrlFromString(url);
+    assertEquals(url, TrustedResourceUrl.unwrap(trustedResourceUrl));
+
+    assertFunctionReports(legacyconversions.trustedResourceUrlFromString);
+  },
+});

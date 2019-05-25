@@ -12,63 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.editor.ToolbarFactoryTest');
-goog.setTestOnly('goog.ui.editor.ToolbarFactoryTest');
+goog.module('goog.ui.editor.ToolbarFactoryTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.testing.ExpectedFailures');
-goog.require('goog.testing.editor.TestHelper');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.editor.ToolbarFactory');
-goog.require('goog.userAgent');
+const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
+const TestHelper = goog.require('goog.testing.editor.TestHelper');
+const ToolbarFactory = goog.require('goog.ui.editor.ToolbarFactory');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var helper;
-var expectedFailures;
+let helper;
+let expectedFailures;
 
-function setUpPage() {
-  helper = new goog.testing.editor.TestHelper(goog.dom.getElement('myField'));
-  expectedFailures = new goog.testing.ExpectedFailures();
-}
+testSuite({
+  setUpPage() {
+    helper = new TestHelper(dom.getElement('myField'));
+    expectedFailures = new ExpectedFailures();
+  },
 
-function setUp() {
-  helper.setUpEditableElement();
-}
+  setUp() {
+    helper.setUpEditableElement();
+  },
 
-function tearDown() {
-  helper.tearDownEditableElement();
-  expectedFailures.handleTearDown();
-}
+  tearDown() {
+    helper.tearDownEditableElement();
+    expectedFailures.handleTearDown();
+  },
 
-
-/**
- * Makes sure we have the correct conversion table in
- * goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_. Can only be tested in
- * a browser that takes legacy size values as input to execCommand but returns
- * pixel size values from queryCommandValue. That's OK because that's the only
- * situation where this conversion table's precision is critical. (When it's
- * used to size the labels of the font size menu options it's ok if it's a few
- * pixels off.)
- */
-function testGetLegacySizeFromPx() {
-  // We will be warned if other browsers start behaving like webkit pre-534.7.
-  expectedFailures.expectFailureFor(
-      !goog.userAgent.WEBKIT ||
-      (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('534.7')));
-  try {
-    var fieldElem = goog.dom.getElement('myField');
-    // Start from 1 because size 0 is bogus (becomes 16px, legacy size 3).
-    for (var i = 1;
-         i < goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_.length; i++) {
-      helper.select(fieldElem, 0, fieldElem, 1);
-      document.execCommand('fontSize', false, i);
-      helper.select('foo', 1);
-      var value = document.queryCommandValue('fontSize');
-      assertEquals(
-          'Px size ' + value + ' should convert to legacy size ' + i, i,
-          goog.ui.editor.ToolbarFactory.getLegacySizeFromPx(
-              parseInt(value, 10)));
+  /**
+   * Makes sure we have the correct conversion table in
+   * ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_. Can only be tested in
+   * a browser that takes legacy size values as input to execCommand but returns
+   * pixel size values from queryCommandValue. That's OK because that's the only
+   * situation where this conversion table's precision is critical. (When it's
+   * used to size the labels of the font size menu options it's ok if it's a few
+   * pixels off.)
+   */
+  testGetLegacySizeFromPx() {
+    // We will be warned if other browsers start behaving like webkit pre-534.7.
+    expectedFailures.expectFailureFor(
+        !userAgent.WEBKIT ||
+        (userAgent.WEBKIT && userAgent.isVersionOrHigher('534.7')));
+    try {
+      const fieldElem = dom.getElement('myField');
+      // Start from 1 because size 0 is bogus (becomes 16px, legacy size 3).
+      for (let i = 1; i < ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_.length; i++) {
+        helper.select(fieldElem, 0, fieldElem, 1);
+        document.execCommand('fontSize', false, i);
+        helper.select('foo', 1);
+        const value = document.queryCommandValue('fontSize');
+        assertEquals(
+            `Px size ${value} should convert to legacy size ${i}`, i,
+            ToolbarFactory.getLegacySizeFromPx(parseInt(value, 10)));
+      }
+    } catch (e) {
+      expectedFailures.handleException(e);
     }
-  } catch (e) {
-    expectedFailures.handleException(e);
-  }
-}
+  },
+});

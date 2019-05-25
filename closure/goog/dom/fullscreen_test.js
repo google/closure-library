@@ -12,34 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.fullscreen_test');
-goog.setTestOnly('goog.dom.fullscreen_test');
+goog.module('goog.dom.fullscreen_test');
+goog.setTestOnly();
 
-goog.require('goog.dom.DomHelper');
-goog.require('goog.dom.fullscreen');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
+const DomHelper = goog.require('goog.dom.DomHelper');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const asserts = goog.require('goog.testing.asserts');
+const fullscreen = goog.require('goog.dom.fullscreen');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var domHelper;
-var mockDoc;
-var stubs;
+let domHelper;
+let mockDoc;
+let stubs;
 
-function setUp() {
-  mockDoc = {};
-  domHelper = new goog.dom.DomHelper();
-  stubs = new goog.testing.PropertyReplacer();
-  stubs.replace(domHelper, 'getDocument', function() {
-    return mockDoc;
-  });
-}
+testSuite({
+  setUp() {
+    mockDoc = {};
+    domHelper = new DomHelper();
+    stubs = new PropertyReplacer();
+    stubs.replace(domHelper, 'getDocument', () => mockDoc);
+  },
 
-function testGetFullScreenElement() {
-  var element = document.createElement('div');
-  mockDoc.fullscreenElement = element;
-  assertEquals(element, goog.dom.fullscreen.getFullScreenElement(domHelper));
-}
+  testGetFullScreenElement() {
+    const element = document.createElement('div');
+    mockDoc.fullscreenElement = element;
+    assertEquals(element, fullscreen.getFullScreenElement(domHelper));
+  },
 
-function testGetFullScreenElementNotFullScreen() {
-  assertNull(goog.dom.fullscreen.getFullScreenElement(domHelper));
-}
+  testGetFullScreenElementNotFullScreen() {
+    assertNull(fullscreen.getFullScreenElement(domHelper));
+  },
+});

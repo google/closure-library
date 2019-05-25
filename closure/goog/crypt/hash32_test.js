@@ -12,140 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.crypt.hash32Test');
-goog.setTestOnly('goog.crypt.hash32Test');
+goog.module('goog.crypt.hash32Test');
+goog.setTestOnly();
 
-goog.require('goog.crypt.hash32');
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.jsunit');
+const TestCase = goog.require('goog.testing.TestCase');
+const hash32 = goog.require('goog.crypt.hash32');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // NOTE: This test uses a custom test case, see end of script block
 
 // Test data based on known input/output pairs generated using
 // http://go/hash.java
 
-function testEncodeInteger() {
-  assertEquals(898813988, goog.crypt.hash32.encodeInteger(305419896));
-}
-
-function testEncodeByteArray() {
-  assertEquals(
-      -1497024495, goog.crypt.hash32.encodeByteArray([10, 20, 30, 40]));
-  assertEquals(
-      -961586214, goog.crypt.hash32.encodeByteArray([3, 1, 4, 1, 5, 9]));
-  assertEquals(
-      -1482202299, goog.crypt.hash32.encodeByteArray([127, 0, 0, 0, 123, 45]));
-  assertEquals(170907881, goog.crypt.hash32.encodeByteArray([9, 1, 1]));
-}
-
-function testKnownByteArrays() {
-  for (var i = 0; i < byteArrays.length; i++) {
-    assertEquals(
-        byteArrays[i], goog.crypt.hash32.encodeByteArray(createByteArray(i)));
-  }
-}
-
-function testEncodeString() {
-  assertEquals(-937588052, goog.crypt.hash32.encodeString('Hello, world'));
-  assertEquals(62382810, goog.crypt.hash32.encodeString('Sch\xF6n'));
-}
-
-function testEncodeStringUtf8() {
-  assertEquals(-937588052, goog.crypt.hash32.encodeStringUtf8('Hello, world'));
-  assertEquals(-833263351, goog.crypt.hash32.encodeStringUtf8('Sch\xF6n'));
-
-  assertEquals(-1771620293, goog.crypt.hash32.encodeStringUtf8('\u043A\u0440'));
-}
-
-function testEncodeString_ascii() {
-  assertEquals(
-      'For ascii characters UTF8 should be the same',
-      goog.crypt.hash32.encodeStringUtf8('abc123'),
-      goog.crypt.hash32.encodeString('abc123'));
-
-  assertEquals(
-      'For ascii characters UTF8 should be the same',
-      goog.crypt.hash32.encodeStringUtf8('The,quick.brown-fox'),
-      goog.crypt.hash32.encodeString('The,quick.brown-fox'));
-
-  assertNotEquals(
-      'For non-ascii characters UTF-8 encoding is different',
-      goog.crypt.hash32.encodeStringUtf8('Sch\xF6n'),
-      goog.crypt.hash32.encodeString('Sch\xF6n'));
-}
-
-function testEncodeString_poe() {
-  var poe = "Once upon a midnight dreary, while I pondered weak and weary," +
-      "Over many a quaint and curious volume of forgotten lore," +
-      "While I nodded, nearly napping, suddenly there came a tapping," +
-      "As of some one gently rapping, rapping at my chamber door." +
-      "`'Tis some visitor,' I muttered, `tapping at my chamber door -" +
-      "Only this, and nothing more.'" +
-      "Ah, distinctly I remember it was in the bleak December," +
-      "And each separate dying ember wrought its ghost upon the floor." +
-      "Eagerly I wished the morrow; - vainly I had sought to borrow" +
-      "From my books surcease of sorrow - sorrow for the lost Lenore -" +
-      "For the rare and radiant maiden whom the angels named Lenore -" +
-      "Nameless here for evermore." +
-      "And the silken sad uncertain rustling of each purple curtain" +
-      "Thrilled me - filled me with fantastic terrors never felt before;" +
-      "So that now, to still the beating of my heart, I stood repeating" +
-      "`'Tis some visitor entreating entrance at my chamber door -" +
-      "Some late visitor entreating entrance at my chamber door; -" +
-      "This it is, and nothing more,'" +
-      "Presently my soul grew stronger; hesitating then no longer," +
-      "`Sir,' said I, `or Madam, truly your forgiveness I implore;" +
-      "But the fact is I was napping, and so gently you came rapping," +
-      "And so faintly you came tapping, tapping at my chamber door," +
-      "That I scarce was sure I heard you' - here I opened wide the door; -" +
-      "Darkness there, and nothing more." +
-      "Deep into that darkness peering, long I stood there wondering, " +
-      "fearing," +
-      "Doubting, dreaming dreams no mortal ever dared to dream before" +
-      "But the silence was unbroken, and the darkness gave no token," +
-      "And the only word there spoken was the whispered word, `Lenore!'" +
-      "This I whispered, and an echo murmured back the word, `Lenore!'" +
-      "Merely this and nothing more." +
-      "Back into the chamber turning, all my soul within me burning," +
-      "Soon again I heard a tapping somewhat louder than before." +
-      "`Surely,\' said I, `surely that is something at my window lattice;" +
-      "Let me see then, what thereat is, and this mystery explore -" +
-      "Let my heart be still a moment and this mystery explore; -" +
-      "'Tis the wind and nothing more!'";
-
-  assertEquals(147608747, goog.crypt.hash32.encodeString(poe));
-  assertEquals(147608747, goog.crypt.hash32.encodeStringUtf8(poe));
-}
-
-function testBenchmarking() {
-  if (!testCase) return;
-  // Not a real test, just outputs some timing
-  function makeString(n) {
-    var str = [];
-    for (var i = 0; i < n; i++) {
-      str.push(String.fromCharCode(Math.round(Math.random() * 500)));
-    }
-    return str.join('');
-  }
-  for (var i = 0; i < 50000; i += 10000) {
-    var str = makeString(i);
-    var start = goog.now();
-    var hash = goog.crypt.hash32.encodeString(str);
-    var diff = goog.now() - start;
-    testCase.saveMessage(
-        'testBenchmarking : hashing ' + i + ' chars in ' + diff + 'ms');
-  }
-}
-
 function createByteArray(n) {
-  var arr = [];
-  for (var i = 0; i < n; i++) {
+  const arr = [];
+  for (let i = 0; i < n; i++) {
     arr.push(i);
   }
   return arr;
 }
 
-var byteArrays = {
+const byteArrays = {
   0: 1539411136,
   1: 1773524747,
   2: -254958930,
@@ -273,12 +160,121 @@ var byteArrays = {
   124: -860816481,
   125: 1393578269,
   126: -810682545,
-  127: -635515639
+  127: -635515639,
 };
 
-var testCase;
+let testCase;
 if (goog.global.G_testRunner) {
-  testCase = new goog.testing.TestCase(document.title);
+  testCase = new TestCase(document.title);
   testCase.autoDiscoverTests();
   goog.global.G_testRunner.initialize(testCase);
 }
+testSuite({
+  testEncodeInteger() {
+    assertEquals(898813988, hash32.encodeInteger(305419896));
+  },
+
+  testEncodeByteArray() {
+    assertEquals(-1497024495, hash32.encodeByteArray([10, 20, 30, 40]));
+    assertEquals(-961586214, hash32.encodeByteArray([3, 1, 4, 1, 5, 9]));
+    assertEquals(-1482202299, hash32.encodeByteArray([127, 0, 0, 0, 123, 45]));
+    assertEquals(170907881, hash32.encodeByteArray([9, 1, 1]));
+  },
+
+  testKnownByteArrays() {
+    for (let i = 0; i < byteArrays.length; i++) {
+      assertEquals(byteArrays[i], hash32.encodeByteArray(createByteArray(i)));
+    }
+  },
+
+  testEncodeString() {
+    assertEquals(-937588052, hash32.encodeString('Hello, world'));
+    assertEquals(62382810, hash32.encodeString('Sch\xF6n'));
+  },
+
+  testEncodeStringUtf8() {
+    assertEquals(-937588052, hash32.encodeStringUtf8('Hello, world'));
+    assertEquals(-833263351, hash32.encodeStringUtf8('Sch\xF6n'));
+
+    assertEquals(-1771620293, hash32.encodeStringUtf8('\u043A\u0440'));
+  },
+
+  testEncodeString_ascii() {
+    assertEquals(
+        'For ascii characters UTF8 should be the same',
+        hash32.encodeStringUtf8('abc123'), hash32.encodeString('abc123'));
+
+    assertEquals(
+        'For ascii characters UTF8 should be the same',
+        hash32.encodeStringUtf8('The,quick.brown-fox'),
+        hash32.encodeString('The,quick.brown-fox'));
+
+    assertNotEquals(
+        'For non-ascii characters UTF-8 encoding is different',
+        hash32.encodeStringUtf8('Sch\xF6n'), hash32.encodeString('Sch\xF6n'));
+  },
+
+  testEncodeString_poe() {
+    const poe =
+        'Once upon a midnight dreary, while I pondered weak and weary,' +
+        'Over many a quaint and curious volume of forgotten lore,' +
+        'While I nodded, nearly napping, suddenly there came a tapping,' +
+        'As of some one gently rapping, rapping at my chamber door.' +
+        '`\'Tis some visitor,\' I muttered, `tapping at my chamber door -' +
+        'Only this, and nothing more.\'' +
+        'Ah, distinctly I remember it was in the bleak December,' +
+        'And each separate dying ember wrought its ghost upon the floor.' +
+        'Eagerly I wished the morrow; - vainly I had sought to borrow' +
+        'From my books surcease of sorrow - sorrow for the lost Lenore -' +
+        'For the rare and radiant maiden whom the angels named Lenore -' +
+        'Nameless here for evermore.' +
+        'And the silken sad uncertain rustling of each purple curtain' +
+        'Thrilled me - filled me with fantastic terrors never felt before;' +
+        'So that now, to still the beating of my heart, I stood repeating' +
+        '`\'Tis some visitor entreating entrance at my chamber door -' +
+        'Some late visitor entreating entrance at my chamber door; -' +
+        'This it is, and nothing more,\'' +
+        'Presently my soul grew stronger; hesitating then no longer,' +
+        '`Sir,\' said I, `or Madam, truly your forgiveness I implore;' +
+        'But the fact is I was napping, and so gently you came rapping,' +
+        'And so faintly you came tapping, tapping at my chamber door,' +
+        'That I scarce was sure I heard you\' - here I opened wide the door; -' +
+        'Darkness there, and nothing more.' +
+        'Deep into that darkness peering, long I stood there wondering, ' +
+        'fearing,' +
+        'Doubting, dreaming dreams no mortal ever dared to dream before' +
+        'But the silence was unbroken, and the darkness gave no token,' +
+        'And the only word there spoken was the whispered word, `Lenore!\'' +
+        'This I whispered, and an echo murmured back the word, `Lenore!\'' +
+        'Merely this and nothing more.' +
+        'Back into the chamber turning, all my soul within me burning,' +
+        'Soon again I heard a tapping somewhat louder than before.' +
+        '`Surely,\' said I, `surely that is something at my window lattice;' +
+        'Let me see then, what thereat is, and this mystery explore -' +
+        'Let my heart be still a moment and this mystery explore; -' +
+        '\'Tis the wind and nothing more!\'';
+
+    assertEquals(147608747, hash32.encodeString(poe));
+    assertEquals(147608747, hash32.encodeStringUtf8(poe));
+  },
+
+  testBenchmarking() {
+    if (!testCase) return;
+    // Not a real test, just outputs some timing
+    function makeString(n) {
+      const str = [];
+      for (let i = 0; i < n; i++) {
+        str.push(String.fromCharCode(Math.round(Math.random() * 500)));
+      }
+      return str.join('');
+    }
+    for (let i = 0; i < 50000; i += 10000) {
+      const str = makeString(i);
+      const start = goog.now();
+      const hash = hash32.encodeString(str);
+      const diff = goog.now() - start;
+      testCase.saveMessage(
+          `testBenchmarking : hashing ${i} chars in ${diff}ms`);
+    }
+  },
+});

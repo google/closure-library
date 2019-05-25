@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+goog.module('goog.fx.easingTest');
+goog.setTestOnly();
 
-goog.provide('goog.fx.easingTest');
-goog.setTestOnly('goog.fx.easingTest');
+const easing = goog.require('goog.fx.easing');
+const testSuite = goog.require('goog.testing.testSuite');
 
-goog.require('goog.fx.easing');
-goog.require('goog.testing.jsunit');
+testSuite({
+  testEaseIn() {
+    assertEquals(0, easing.easeIn(0));
+    assertEquals(1, easing.easeIn(1));
+    assertRoughlyEquals(Math.pow(0.5, 3), easing.easeIn(0.5), 0.01);
+  },
 
-
-function testEaseIn() {
-  assertEquals(0, goog.fx.easing.easeIn(0));
-  assertEquals(1, goog.fx.easing.easeIn(1));
-  assertRoughlyEquals(Math.pow(0.5, 3), goog.fx.easing.easeIn(0.5), 0.01);
-}
-
-function testEaseOut() {
-  assertEquals(0, goog.fx.easing.easeOut(0));
-  assertEquals(1, goog.fx.easing.easeOut(1));
-  assertRoughlyEquals(1 - Math.pow(0.5, 3), goog.fx.easing.easeOut(0.5), 0.01);
-}
+  testEaseOut() {
+    assertEquals(0, easing.easeOut(0));
+    assertEquals(1, easing.easeOut(1));
+    assertRoughlyEquals(1 - Math.pow(0.5, 3), easing.easeOut(0.5), 0.01);
+  },
+});

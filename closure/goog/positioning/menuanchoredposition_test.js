@@ -12,87 +12,85 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.positioning.MenuAnchoredPositionTest');
-goog.setTestOnly('goog.positioning.MenuAnchoredPositionTest');
+goog.module('goog.positioning.MenuAnchoredPositionTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.positioning.Corner');
-goog.require('goog.positioning.MenuAnchoredPosition');
-goog.require('goog.testing.jsunit');
+const Corner = goog.require('goog.positioning.Corner');
+const MenuAnchoredPosition = goog.require('goog.positioning.MenuAnchoredPosition');
+const TagName = goog.require('goog.dom.TagName');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var offscreenAnchor;
-var onscreenAnchor;
-var customAnchor;
-var menu;
-var corner = goog.positioning.Corner;
-var savedMenuHtml;
+let offscreenAnchor;
+let onscreenAnchor;
+let customAnchor;
+let menu;
+let savedMenuHtml;
 
-function setUp() {
-  offscreenAnchor = goog.dom.getElement('offscreen-anchor');
-  onscreenAnchor = goog.dom.getElement('onscreen-anchor');
-  customAnchor = goog.dom.getElement('custom-anchor');
-  customAnchor.style.left = '0';
-  customAnchor.style.top = '0';
+testSuite({
+  setUp() {
+    offscreenAnchor = dom.getElement('offscreen-anchor');
+    onscreenAnchor = dom.getElement('onscreen-anchor');
+    customAnchor = dom.getElement('custom-anchor');
+    customAnchor.style.left = '0';
+    customAnchor.style.top = '0';
 
-  menu = goog.dom.getElement('menu');
-  savedMenuHtml = menu.innerHTML;
-  menu.style.left = '20px';
-  menu.style.top = '20px';
-}
+    menu = dom.getElement('menu');
+    savedMenuHtml = menu.innerHTML;
+    menu.style.left = '20px';
+    menu.style.top = '20px';
+  },
 
-function tearDown() {
-  menu.innerHTML = savedMenuHtml;
-}
+  tearDown() {
+    menu.innerHTML = savedMenuHtml;
+  },
 
-function testRepositionWithAdjustAndOnscreenAnchor() {
-  // Add so many children that it can't possibly fit onscreen.
-  for (var i = 0; i < 200; i++) {
-    menu.appendChild(
-        goog.dom.createDom(goog.dom.TagName.DIV, null, 'New Item ' + i));
-  }
+  testRepositionWithAdjustAndOnscreenAnchor() {
+    // Add so many children that it can't possibly fit onscreen.
+    for (let i = 0; i < 200; i++) {
+      menu.appendChild(dom.createDom(TagName.DIV, null, `New Item ${i}`));
+    }
 
-  var pos = new goog.positioning.MenuAnchoredPosition(
-      onscreenAnchor, corner.TOP_LEFT, true);
-  pos.reposition(menu, corner.TOP_LEFT);
+    const pos = new MenuAnchoredPosition(onscreenAnchor, Corner.TOP_LEFT, true);
+    pos.reposition(menu, Corner.TOP_LEFT);
 
-  var offset = 0;
-  assertEquals(offset, menu.offsetTop);
-  assertEquals(5, menu.offsetLeft);
-}
+    const offset = 0;
+    assertEquals(offset, menu.offsetTop);
+    assertEquals(5, menu.offsetLeft);
+  },
 
-function testRepositionWithAdjustAndOffscreenAnchor() {
-  // This does not get adjusted because it's too far offscreen.
-  var pos = new goog.positioning.MenuAnchoredPosition(
-      offscreenAnchor, corner.TOP_LEFT, true);
-  pos.reposition(menu, corner.TOP_LEFT);
+  testRepositionWithAdjustAndOffscreenAnchor() {
+    // This does not get adjusted because it's too far offscreen.
+    const pos =
+        new MenuAnchoredPosition(offscreenAnchor, Corner.TOP_LEFT, true);
+    pos.reposition(menu, Corner.TOP_LEFT);
 
-  assertEquals(-1000, menu.offsetTop);
-  assertEquals(-1000, menu.offsetLeft);
-}
+    assertEquals(-1000, menu.offsetTop);
+    assertEquals(-1000, menu.offsetLeft);
+  },
 
-function testRespositionFailoverEvenWhenResizeHeightIsOn() {
-  var pos = new goog.positioning.MenuAnchoredPosition(
-      onscreenAnchor, corner.TOP_LEFT, true, true);
-  pos.reposition(menu, corner.TOP_RIGHT);
+  testRespositionFailoverEvenWhenResizeHeightIsOn() {
+    const pos =
+        new MenuAnchoredPosition(onscreenAnchor, Corner.TOP_LEFT, true, true);
+    pos.reposition(menu, Corner.TOP_RIGHT);
 
-  // The menu should not get positioned offscreen.
-  assertEquals(5, menu.offsetTop);
-  assertEquals(5, menu.offsetLeft);
-}
+    // The menu should not get positioned offscreen.
+    assertEquals(5, menu.offsetTop);
+    assertEquals(5, menu.offsetLeft);
+  },
 
-function testRepositionToBottomLeftWhenBottomFailsAndRightFailsAndResizeOn() {
-  var pageSize = goog.dom.getViewportSize();
-  customAnchor.style.left = (pageSize.width - 10) + 'px';
+  testRepositionToBottomLeftWhenBottomFailsAndRightFailsAndResizeOn() {
+    const pageSize = dom.getViewportSize();
+    customAnchor.style.left = (pageSize.width - 10) + 'px';
 
-  // Add so many children that it can't possibly fit onscreen.
-  for (var i = 0; i < 200; i++) {
-    menu.appendChild(
-        goog.dom.createDom(goog.dom.TagName.DIV, null, 'New Item ' + i));
-  }
+    // Add so many children that it can't possibly fit onscreen.
+    for (let i = 0; i < 200; i++) {
+      menu.appendChild(dom.createDom(TagName.DIV, null, `New Item ${i}`));
+    }
 
-  var pos = new goog.positioning.MenuAnchoredPosition(
-      customAnchor, corner.TOP_LEFT, true, true);
-  pos.reposition(menu, corner.TOP_LEFT);
-  assertEquals(menu.offsetLeft + menu.offsetWidth, customAnchor.offsetLeft);
-}
+    const pos =
+        new MenuAnchoredPosition(customAnchor, Corner.TOP_LEFT, true, true);
+    pos.reposition(menu, Corner.TOP_LEFT);
+    assertEquals(menu.offsetLeft + menu.offsetWidth, customAnchor.offsetLeft);
+  },
+});

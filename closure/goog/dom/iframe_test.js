@@ -12,60 +12,60 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.iframeTest');
-goog.setTestOnly('goog.dom.iframeTest');
+goog.module('goog.dom.iframeTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.iframe');
-goog.require('goog.html.SafeHtml');
-goog.require('goog.html.SafeStyle');
-goog.require('goog.string.Const');
-goog.require('goog.testing.jsunit');
+const Const = goog.require('goog.string.Const');
+const SafeHtml = goog.require('goog.html.SafeHtml');
+const SafeStyle = goog.require('goog.html.SafeStyle');
+const dom = goog.require('goog.dom');
+const domIframe = goog.require('goog.dom.iframe');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var domHelper;
-var sandbox;
+let domHelper;
+let sandbox;
 
-function setUpPage() {
-  domHelper = goog.dom.getDomHelper();
-  sandbox = domHelper.getElement('sandbox');
-}
+testSuite({
+  setUpPage() {
+    domHelper = dom.getDomHelper();
+    sandbox = domHelper.getElement('sandbox');
+  },
 
-function setUp() {
-  goog.dom.removeChildren(sandbox);
-}
+  setUp() {
+    dom.removeChildren(sandbox);
+  },
 
-function testCreateWithContent_safeTypes() {
-  var head = goog.html.SafeHtml.create('title', {}, 'Foo Title');
-  var body = goog.html.SafeHtml.create('div', {'id': 'blah'}, 'Test');
-  var style = goog.html.SafeStyle.fromConstant(
-      goog.string.Const.from('position: absolute;'));
-  var iframe = goog.dom.iframe.createWithContent(
-      sandbox, head, body, style, false /* opt_quirks */);
+  testCreateWithContent_safeTypes() {
+    const head = SafeHtml.create('title', {}, 'Foo Title');
+    const body = SafeHtml.create('div', {'id': 'blah'}, 'Test');
+    const style = SafeStyle.fromConstant(Const.from('position: absolute;'));
+    const iframe = domIframe.createWithContent(
+        sandbox, head, body, style, false /* opt_quirks */);
 
-  var doc = goog.dom.getFrameContentDocument(iframe);
-  assertNotNull(doc.getElementById('blah'));
-  assertEquals('Foo Title', doc.title);
-  assertEquals('absolute', iframe.style.position);
-}
+    const doc = dom.getFrameContentDocument(iframe);
+    assertNotNull(doc.getElementById('blah'));
+    assertEquals('Foo Title', doc.title);
+    assertEquals('absolute', iframe.style.position);
+  },
 
-function testCreateBlankYieldsIframeWithNoBorderOrPadding() {
-  var iframe = goog.dom.iframe.createBlank(domHelper);
-  iframe.style.width = '350px';
-  iframe.style.height = '250px';
-  var blankElement = domHelper.getElement('blank');
-  blankElement.appendChild(iframe);
-  assertEquals(
-      'Width should be as styled: no extra borders, padding, etc.', 350,
-      blankElement.offsetWidth);
-  assertEquals(
-      'Height should be as styled: no extra borders, padding, etc.', 250,
-      blankElement.offsetHeight);
-}
+  testCreateBlankYieldsIframeWithNoBorderOrPadding() {
+    const iframe = domIframe.createBlank(domHelper);
+    iframe.style.width = '350px';
+    iframe.style.height = '250px';
+    const blankElement = domHelper.getElement('blank');
+    blankElement.appendChild(iframe);
+    assertEquals(
+        'Width should be as styled: no extra borders, padding, etc.', 350,
+        blankElement.offsetWidth);
+    assertEquals(
+        'Height should be as styled: no extra borders, padding, etc.', 250,
+        blankElement.offsetHeight);
+  },
 
-function testCreateBlankWithSafeStyles() {
-  var iframe = goog.dom.iframe.createBlank(
-      domHelper, goog.html.SafeStyle.fromConstant(
-                     goog.string.Const.from('position:absolute;')));
-  assertEquals('absolute', iframe.style.position);
-  assertEquals('bottom', iframe.style.verticalAlign);
-}
+  testCreateBlankWithSafeStyles() {
+    const iframe = domIframe.createBlank(
+        domHelper, SafeStyle.fromConstant(Const.from('position:absolute;')));
+    assertEquals('absolute', iframe.style.position);
+    assertEquals('bottom', iframe.style.verticalAlign);
+  },
+});

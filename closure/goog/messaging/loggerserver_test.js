@@ -12,91 +12,91 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.messaging.LoggerServerTest');
-goog.setTestOnly('goog.messaging.LoggerServerTest');
+goog.module('goog.messaging.LoggerServerTest');
+goog.setTestOnly();
 
-goog.require('goog.debug.LogManager');
-goog.require('goog.debug.Logger');
-goog.require('goog.log');
-goog.require('goog.log.Level');
-goog.require('goog.messaging.LoggerServer');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.messaging.MockMessageChannel');
+const Level = goog.require('goog.log.Level');
+const LogManager = goog.require('goog.debug.LogManager');
+const Logger = goog.require('goog.debug.Logger');
+const LoggerServer = goog.require('goog.messaging.LoggerServer');
+const MockControl = goog.require('goog.testing.MockControl');
+const MockMessageChannel = goog.require('goog.testing.messaging.MockMessageChannel');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const log = goog.require('goog.log');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var mockControl;
-var channel;
-var stubs;
+let mockControl;
+let channel;
+let stubs;
 
-function setUpPage() {
-  stubs = new goog.testing.PropertyReplacer();
-}
+testSuite({
+  setUpPage() {
+    stubs = new PropertyReplacer();
+  },
 
-function setUp() {
-  mockControl = new goog.testing.MockControl();
-  channel = new goog.testing.messaging.MockMessageChannel(mockControl);
-  stubs.set(
-      goog.debug.LogManager, 'getLogger',
-      mockControl.createFunctionMock('goog.log.getLogger'));
-}
+  setUp() {
+    mockControl = new MockControl();
+    channel = new MockMessageChannel(mockControl);
+    stubs.set(
+        LogManager, 'getLogger',
+        mockControl.createFunctionMock('goog.log.getLogger'));
+  },
 
-function tearDown() {
-  channel.dispose();
-  stubs.reset();
-}
+  tearDown() {
+    channel.dispose();
+    stubs.reset();
+  },
 
-function testCommandWithoutChannelName() {
-  var mockLogger = mockControl.createStrictMock(goog.debug.Logger);
-  goog.log.getLogger('test.object.Name').$returns(mockLogger);
-  goog.log.log(
-      mockLogger, goog.log.Level.SEVERE, '[remote logger] foo bar', null);
-  mockControl.$replayAll();
+  testCommandWithoutChannelName() {
+    const mockLogger = mockControl.createStrictMock(Logger);
+    log.getLogger('test.object.Name').$returns(mockLogger);
+    log.log(mockLogger, Level.SEVERE, '[remote logger] foo bar', null);
+    mockControl.$replayAll();
 
-  var server = new goog.messaging.LoggerServer(channel, 'log');
-  channel.receive('log', {
-    name: 'test.object.Name',
-    level: goog.log.Level.SEVERE.value,
-    message: 'foo bar',
-    exception: null
-  });
-  mockControl.$verifyAll();
-  server.dispose();
-}
+    const server = new LoggerServer(channel, 'log');
+    channel.receive('log', {
+      name: 'test.object.Name',
+      level: Level.SEVERE.value,
+      message: 'foo bar',
+      exception: null,
+    });
+    mockControl.$verifyAll();
+    server.dispose();
+  },
 
-function testCommandWithChannelName() {
-  var mockLogger = mockControl.createStrictMock(goog.debug.Logger);
-  goog.log.getLogger('test.object.Name').$returns(mockLogger);
-  goog.log.log(
-      mockLogger, goog.log.Level.SEVERE, '[some channel] foo bar', null);
-  mockControl.$replayAll();
+  testCommandWithChannelName() {
+    const mockLogger = mockControl.createStrictMock(Logger);
+    log.getLogger('test.object.Name').$returns(mockLogger);
+    log.log(mockLogger, Level.SEVERE, '[some channel] foo bar', null);
+    mockControl.$replayAll();
 
-  var server = new goog.messaging.LoggerServer(channel, 'log', 'some channel');
-  channel.receive('log', {
-    name: 'test.object.Name',
-    level: goog.log.Level.SEVERE.value,
-    message: 'foo bar',
-    exception: null
-  });
-  mockControl.$verifyAll();
-  server.dispose();
-}
+    const server = new LoggerServer(channel, 'log', 'some channel');
+    channel.receive('log', {
+      name: 'test.object.Name',
+      level: Level.SEVERE.value,
+      message: 'foo bar',
+      exception: null,
+    });
+    mockControl.$verifyAll();
+    server.dispose();
+  },
 
-function testCommandWithException() {
-  var mockLogger = mockControl.createStrictMock(goog.debug.Logger);
-  goog.log.getLogger('test.object.Name').$returns(mockLogger);
-  goog.log.log(
-      mockLogger, goog.log.Level.SEVERE, '[some channel] foo bar',
-      {message: 'Bad things', stack: ['foo', 'bar']});
-  mockControl.$replayAll();
+  testCommandWithException() {
+    const mockLogger = mockControl.createStrictMock(Logger);
+    log.getLogger('test.object.Name').$returns(mockLogger);
+    log.log(
+        mockLogger, Level.SEVERE, '[some channel] foo bar',
+        {message: 'Bad things', stack: ['foo', 'bar']});
+    mockControl.$replayAll();
 
-  var server = new goog.messaging.LoggerServer(channel, 'log', 'some channel');
-  channel.receive('log', {
-    name: 'test.object.Name',
-    level: goog.log.Level.SEVERE.value,
-    message: 'foo bar',
-    exception: {message: 'Bad things', stack: ['foo', 'bar']}
-  });
-  mockControl.$verifyAll();
-  server.dispose();
-}
+    const server = new LoggerServer(channel, 'log', 'some channel');
+    channel.receive('log', {
+      name: 'test.object.Name',
+      level: Level.SEVERE.value,
+      message: 'foo bar',
+      exception: {message: 'Bad things', stack: ['foo', 'bar']},
+    });
+    mockControl.$verifyAll();
+    server.dispose();
+  },
+});

@@ -12,73 +12,79 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.CharPickerTest');
-goog.setTestOnly('goog.ui.CharPickerTest');
+goog.module('goog.ui.CharPickerTest');
+goog.setTestOnly();
 
-goog.require('goog.a11y.aria');
-goog.require('goog.a11y.aria.State');
-goog.require('goog.dispose');
-goog.require('goog.dom');
-goog.require('goog.events.Event');
-goog.require('goog.events.EventType');
-goog.require('goog.i18n.CharPickerData');
-goog.require('goog.i18n.uChar.NameFetcher');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.events');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.mockmatchers');
-goog.require('goog.ui.CharPicker');
-goog.require('goog.ui.FlatButtonRenderer');
+const CharPicker = goog.require('goog.ui.CharPicker');
+const CharPickerData = goog.require('goog.i18n.CharPickerData');
+const EventType = goog.require('goog.events.EventType');
+const FlatButtonRenderer = goog.require('goog.ui.FlatButtonRenderer');
+const GoogEvent = goog.require('goog.events.Event');
+const MockControl = goog.require('goog.testing.MockControl');
+const NameFetcher = goog.require('goog.i18n.uChar.NameFetcher');
+const State = goog.require('goog.a11y.aria.State');
+const aria = goog.require('goog.a11y.aria');
+const dispose = goog.require('goog.dispose');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.testing.events');
+const mockmatchers = goog.require('goog.testing.mockmatchers');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var charPicker, charPickerData, charPickerElement;
-var mockControl, charNameFetcherMock;
+let charPicker;
+let charPickerData;
+let charPickerElement;
 
-function setUp() {
-  mockControl = new goog.testing.MockControl();
-  charNameFetcherMock = mockControl.createLooseMock(
-      goog.i18n.uChar.NameFetcher, true /* opt_ignoreUnexpectedCalls */);
+let charNameFetcherMock;
+let mockControl;
 
-  charPickerData = new goog.i18n.CharPickerData();
-  charPickerElement = goog.dom.getElement('charpicker');
+testSuite({
+  setUp() {
+    mockControl = new MockControl();
+    charNameFetcherMock = mockControl.createLooseMock(
+        NameFetcher, true /* opt_ignoreUnexpectedCalls */);
 
-  charPicker = new goog.ui.CharPicker(charPickerData, charNameFetcherMock);
-}
+    charPickerData = new CharPickerData();
+    charPickerElement = dom.getElement('charpicker');
 
-function tearDown() {
-  goog.dispose(charPicker);
-  goog.dom.removeChildren(charPickerElement);
-  mockControl.$tearDown();
-}
+    charPicker = new CharPicker(charPickerData, charNameFetcherMock);
+  },
 
-function testAriaLabelIsUpdatedOnFocus() {
-  var character = '←';
-  var characterName = 'right arrow';
+  tearDown() {
+    dispose(charPicker);
+    dom.removeChildren(charPickerElement);
+    mockControl.$tearDown();
+  },
 
-  charNameFetcherMock.getName(character, goog.testing.mockmatchers.isFunction)
-      .$does(function(c, callback) { callback(characterName); });
+  testAriaLabelIsUpdatedOnFocus() {
+    const character = '←';
+    const characterName = 'right arrow';
 
-  mockControl.$replayAll();
+    charNameFetcherMock.getName(character, mockmatchers.isFunction)
+        .$does((c, callback) => {
+          callback(characterName);
+        });
 
-  charPicker.decorate(charPickerElement);
+    mockControl.$replayAll();
 
-  // Get the first button elements within the grid div and override its
-  // char attribute so the test doesn't depend on the actual grid content.
-  var gridElement = goog.dom.getElementByClass(
-      goog.getCssName('goog-char-picker-grid'), charPickerElement);
-  var buttonElement = goog.dom.getElementsByClass(
-      goog.ui.FlatButtonRenderer.CSS_CLASS, gridElement)[0];
-  buttonElement.setAttribute('char', character);
+    charPicker.decorate(charPickerElement);
 
-  // Trigger a focus event on the button element.
-  goog.testing.events.fireBrowserEvent(
-      new goog.events.Event(goog.events.EventType.FOCUS, buttonElement));
+    // Get the first button elements within the grid div and override its
+    // char attribute so the test doesn't depend on the actual grid content.
+    const gridElement = dom.getElementByClass(
+        goog.getCssName('goog-char-picker-grid'), charPickerElement);
+    const buttonElement =
+        dom.getElementsByClass(FlatButtonRenderer.CSS_CLASS, gridElement)[0];
+    buttonElement.setAttribute('char', character);
 
-  mockControl.$verifyAll();
+    // Trigger a focus event on the button element.
+    events.fireBrowserEvent(new GoogEvent(EventType.FOCUS, buttonElement));
 
-  var ariaLabel =
-      goog.a11y.aria.getState(buttonElement, goog.a11y.aria.State.LABEL);
-  assertEquals(
-      'The aria label should be updated when the button' +
-          'gains focus.',
-      characterName, ariaLabel);
-}
+    mockControl.$verifyAll();
+
+    const ariaLabel = aria.getState(buttonElement, State.LABEL);
+    assertEquals(
+        'The aria label should be updated when the button' +
+            'gains focus.',
+        characterName, ariaLabel);
+  },
+});

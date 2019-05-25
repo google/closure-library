@@ -12,22 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.testing.JsonFuzzingTest');
-goog.setTestOnly('goog.labs.testing.JsonFuzzingTest');
+goog.module('goog.labs.testing.JsonFuzzingTest');
+goog.setTestOnly();
 
-goog.require('goog.json');
-goog.require('goog.labs.testing.JsonFuzzing');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
+const JsonFuzzing = goog.require('goog.labs.testing.JsonFuzzing');
+const asserts = goog.require('goog.testing.asserts');
+const googJson = goog.require('goog.json');
+const testSuite = goog.require('goog.testing.testSuite');
 
+testSuite({
+  testValidJson() {
+    const fuzzing = new JsonFuzzing();  // seeded with now()
 
-function testValidJson() {
-  var fuzzing = new goog.labs.testing.JsonFuzzing();  // seeded with now()
-
-  for (var i = 0; i < 10; i++) {
-    var data = fuzzing.newArray();
-    assertTrue(goog.isArray(data));
-    // JSON compatible
-    assertNotThrows(function() { goog.json.serialize(data); });
-  }
-}
+    for (let i = 0; i < 10; i++) {
+      const data = fuzzing.newArray();
+      assertTrue(goog.isArray(data));
+      // JSON compatible
+      assertNotThrows(() => {
+        googJson.serialize(data);
+      });
+    }
+  },
+});

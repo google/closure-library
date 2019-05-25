@@ -1,130 +1,134 @@
 // Copyright 2008 The Closure Library Authors. All Rights Reserved.
 // Use of this source code is governed by the Apache License, Version 2.0.
 
-goog.provide('goog.graphics.ext.ElementTest');
-goog.setTestOnly('goog.graphics.ext.ElementTest');
+goog.module('goog.graphics.ext.ElementTest');
+goog.setTestOnly();
 
-goog.require('goog.graphics');
-goog.require('goog.graphics.ext');
-goog.require('goog.testing.StrictMock');
-goog.require('goog.testing.jsunit');
+const StrictMock = goog.require('goog.testing.StrictMock');
+const ext = goog.require('goog.graphics.ext');
+const googGraphics = goog.require('goog.graphics');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var el, graphics, mockWrapper;
+let el;
+let graphics;
+let mockWrapper;
 
-function setUp() {
-  var div = document.getElementById('root');
-  graphics = new goog.graphics.ext.Graphics(100, 100, 200, 200);
-  div.innerHTML = '';
-  graphics.render(div);
-
-  mockWrapper = new goog.testing.StrictMock(goog.graphics.Element);
-}
-
-function tearDown() {
-  mockWrapper.$verify();
-}
-
-function assertPosition(fn, left, top, opt_width, opt_height) {
+function assertPosition(fn, left, top, width = undefined, height = undefined) {
   mockWrapper.setTransformation(0, 0, 0, 5, 5);
   mockWrapper.setTransformation(
-      left, top, 0, (opt_width || 10) / 2, (opt_height || 10) / 2);
+      left, top, 0, (width || 10) / 2, (height || 10) / 2);
   mockWrapper.$replay();
 
-  el = new goog.graphics.ext.Element(graphics, mockWrapper);
+  el = new ext.Element(graphics, mockWrapper);
   el.setSize(10, 10);
   fn();
 }
 
-function testLeft() {
-  assertPosition(function() {
-    el.setLeft(10);
-  }, 10, 0);
-  assertFalse(el.isParentDependent());
-}
+testSuite({
+  setUp() {
+    const div = document.getElementById('root');
+    graphics = new ext.Graphics(100, 100, 200, 200);
+    div.innerHTML = '';
+    graphics.render(div);
 
-function testLeftPercent() {
-  assertPosition(function() {
-    el.setLeft('10%');
-  }, 20, 0);
-}
+    mockWrapper = new StrictMock(googGraphics.Element);
+  },
 
-function testCenter() {
-  assertPosition(function() {
-    el.setCenter(0);
-  }, 95, 0);
-  assertTrue(el.isParentDependent());
-}
+  tearDown() {
+    mockWrapper.$verify();
+  },
 
-function testCenterPercent() {
-  assertPosition(function() {
-    el.setCenter('10%');
-  }, 115, 0);
-}
+  testLeft() {
+    assertPosition(() => {
+      el.setLeft(10);
+    }, 10, 0);
+    assertFalse(el.isParentDependent());
+  },
 
-function testRight() {
-  assertPosition(function() {
-    el.setRight(10);
-  }, 180, 0);
-  assertTrue(el.isParentDependent());
-}
+  testLeftPercent() {
+    assertPosition(() => {
+      el.setLeft('10%');
+    }, 20, 0);
+  },
 
-function testRightPercent() {
-  assertPosition(function() {
-    el.setRight('10%');
-  }, 170, 0);
-  assertTrue(el.isParentDependent());
-}
+  testCenter() {
+    assertPosition(() => {
+      el.setCenter(0);
+    }, 95, 0);
+    assertTrue(el.isParentDependent());
+  },
 
-function testTop() {
-  assertPosition(function() {
-    el.setTop(10);
-  }, 0, 10);
-  assertFalse(el.isParentDependent());
-}
+  testCenterPercent() {
+    assertPosition(() => {
+      el.setCenter('10%');
+    }, 115, 0);
+  },
 
-function testTopPercent() {
-  assertPosition(function() {
-    el.setTop('10%');
-  }, 0, 20);
-}
+  testRight() {
+    assertPosition(() => {
+      el.setRight(10);
+    }, 180, 0);
+    assertTrue(el.isParentDependent());
+  },
 
-function testMiddle() {
-  assertPosition(function() {
-    el.setMiddle(0);
-  }, 0, 95);
-  assertTrue(el.isParentDependent());
-}
+  testRightPercent() {
+    assertPosition(() => {
+      el.setRight('10%');
+    }, 170, 0);
+    assertTrue(el.isParentDependent());
+  },
 
-function testMiddlePercent() {
-  assertPosition(function() {
-    el.setMiddle('10%');
-  }, 0, 115);
-}
+  testTop() {
+    assertPosition(() => {
+      el.setTop(10);
+    }, 0, 10);
+    assertFalse(el.isParentDependent());
+  },
 
-function testBottom() {
-  assertPosition(function() {
-    el.setBottom(10);
-  }, 0, 180);
-  assertTrue(el.isParentDependent());
-}
+  testTopPercent() {
+    assertPosition(() => {
+      el.setTop('10%');
+    }, 0, 20);
+  },
 
-function testBottomPercent() {
-  assertPosition(function() {
-    el.setBottom('10%');
-  }, 0, 170);
-  assertTrue(el.isParentDependent());
-}
+  testMiddle() {
+    assertPosition(() => {
+      el.setMiddle(0);
+    }, 0, 95);
+    assertTrue(el.isParentDependent());
+  },
 
-function testSize() {
-  assertPosition(function() {
-    el.setSize(100, 100);
-  }, 0, 0, 100, 100);
-  assertFalse(el.isParentDependent());
-}
+  testMiddlePercent() {
+    assertPosition(() => {
+      el.setMiddle('10%');
+    }, 0, 115);
+  },
 
-function testSizePercent() {
-  assertPosition(function() {
-    el.setSize('10%', '20%');
-  }, 0, 0, 20, 40);
-  assertTrue(el.isParentDependent());
-}
+  testBottom() {
+    assertPosition(() => {
+      el.setBottom(10);
+    }, 0, 180);
+    assertTrue(el.isParentDependent());
+  },
+
+  testBottomPercent() {
+    assertPosition(() => {
+      el.setBottom('10%');
+    }, 0, 170);
+    assertTrue(el.isParentDependent());
+  },
+
+  testSize() {
+    assertPosition(() => {
+      el.setSize(100, 100);
+    }, 0, 0, 100, 100);
+    assertFalse(el.isParentDependent());
+  },
+
+  testSizePercent() {
+    assertPosition(() => {
+      el.setSize('10%', '20%');
+    }, 0, 0, 20, 40);
+    assertTrue(el.isParentDependent());
+  },
+});

@@ -12,78 +12,77 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.NodeOffsetTest');
-goog.setTestOnly('goog.dom.NodeOffsetTest');
+goog.module('goog.dom.NodeOffsetTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.NodeOffset');
-goog.require('goog.dom.NodeType');
-goog.require('goog.dom.TagName');
-goog.require('goog.testing.jsunit');
+const NodeOffset = goog.require('goog.dom.NodeOffset');
+const NodeType = goog.require('goog.dom.NodeType');
+const TagName = goog.require('goog.dom.TagName');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var test1;
-var test2;
-var i;
-var empty;
+let test1;
+let test2;
+let i;
+let empty;
 
-function setUpPage() {
-  test1 = goog.dom.getElement('test1');
-  i = goog.dom.getElement('i');
-  test2 = goog.dom.getElement('test2');
-  test2.innerHTML = test1.innerHTML;
-  empty = goog.dom.getElement('empty');
-}
+testSuite({
+  setUpPage() {
+    test1 = dom.getElement('test1');
+    i = dom.getElement('i');
+    test2 = dom.getElement('test2');
+    test2.innerHTML = test1.innerHTML;
+    empty = dom.getElement('empty');
+  },
 
-function testElementOffset() {
-  var nodeOffset = new goog.dom.NodeOffset(i, test1);
+  testElementOffset() {
+    const nodeOffset = new NodeOffset(i, test1);
 
-  var recovered = nodeOffset.findTargetNode(test2);
-  assertNotNull('Should recover a node.', recovered);
-  assertEquals(
-      'Should recover an I node.', String(goog.dom.TagName.I),
-      recovered.tagName);
-  assertTrue(
-      'Should recover a child of test2', goog.dom.contains(test2, recovered));
-  assertFalse(
-      'Should not recover a child of test1',
-      goog.dom.contains(test1, recovered));
+    const recovered = nodeOffset.findTargetNode(test2);
+    assertNotNull('Should recover a node.', recovered);
+    assertEquals(
+        'Should recover an I node.', String(TagName.I), recovered.tagName);
+    assertTrue(
+        'Should recover a child of test2', dom.contains(test2, recovered));
+    assertFalse(
+        'Should not recover a child of test1', dom.contains(test1, recovered));
 
-  nodeOffset.dispose();
-}
+    nodeOffset.dispose();
+  },
 
-function testNodeOffset() {
-  var nodeOffset = new goog.dom.NodeOffset(i.firstChild, test1);
+  testNodeOffset() {
+    const nodeOffset = new NodeOffset(i.firstChild, test1);
 
-  var recovered = nodeOffset.findTargetNode(test2);
-  assertNotNull('Should recover a node.', recovered);
-  assertEquals(
-      'Should recover a text node.', goog.dom.NodeType.TEXT,
-      recovered.nodeType);
-  assertEquals('Should  have correct contents.', 'text.', recovered.nodeValue);
-  assertTrue(
-      'Should recover a child of test2', goog.dom.contains(test2, recovered));
-  assertFalse(
-      'Should not recover a child of test1',
-      goog.dom.contains(test1, recovered));
+    const recovered = nodeOffset.findTargetNode(test2);
+    assertNotNull('Should recover a node.', recovered);
+    assertEquals(
+        'Should recover a text node.', NodeType.TEXT, recovered.nodeType);
+    assertEquals(
+        'Should  have correct contents.', 'text.', recovered.nodeValue);
+    assertTrue(
+        'Should recover a child of test2', dom.contains(test2, recovered));
+    assertFalse(
+        'Should not recover a child of test1', dom.contains(test1, recovered));
 
-  nodeOffset.dispose();
-}
+    nodeOffset.dispose();
+  },
 
-function testToString() {
-  var nodeOffset = new goog.dom.NodeOffset(i.firstChild, test1);
+  testToString() {
+    const nodeOffset = new NodeOffset(i.firstChild, test1);
 
-  assertEquals(
-      'Should have correct string representation', '3,B\n1,I\n0,#text',
-      nodeOffset.toString());
+    assertEquals(
+        'Should have correct string representation', '3,B\n1,I\n0,#text',
+        nodeOffset.toString());
 
-  nodeOffset.dispose();
-}
+    nodeOffset.dispose();
+  },
 
-function testBadRecovery() {
-  var nodeOffset = new goog.dom.NodeOffset(i.firstChild, test1);
+  testBadRecovery() {
+    const nodeOffset = new NodeOffset(i.firstChild, test1);
 
-  var recovered = nodeOffset.findTargetNode(empty);
-  assertNull('Should recover nothing.', recovered);
+    const recovered = nodeOffset.findTargetNode(empty);
+    assertNull('Should recover nothing.', recovered);
 
-  nodeOffset.dispose();
-}
+    nodeOffset.dispose();
+  },
+});
