@@ -424,6 +424,7 @@ goog.userAgent.IOS = goog.userAgent.PLATFORM_KNOWN_ ?
 
 /**
  * Whether the user agent is running on KaiOS.
+ * @type {boolean}
  */
 goog.userAgent.KAIOS = goog.userAgent.PLATFORM_KNOWN_ ?
     goog.userAgent.ASSUME_KAIOS :
@@ -431,6 +432,7 @@ goog.userAgent.KAIOS = goog.userAgent.PLATFORM_KNOWN_ ?
 
 /**
  * Whether the user agent is running on Go2Phone.
+ * @type {boolean}
  */
 goog.userAgent.GO2PHONE = goog.userAgent.PLATFORM_KNOWN_ ?
     goog.userAgent.ASSUME_GO2PHONE :
