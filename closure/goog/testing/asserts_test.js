@@ -252,14 +252,24 @@ function testAssertNonEmptyString() {
 function testAssertNaN() {
   assertNaN(NaN);
   assertNaN('Good assertion', NaN);
-  assertThrowsJsUnitException(function() { assertNaN(1); }, 'Expected NaN');
+  assertThrowsJsUnitException(function() {
+    assertNaN(1);
+  }, 'Expected NaN but was <1> (Number)');
   assertThrowsJsUnitException(function() {
     assertNaN('Should be NaN', 1);
-  }, 'Should be NaN\nExpected NaN');
-  assertThrowsJsUnitException(function() { assertNaN(true); }, 'Expected NaN');
-  assertThrowsJsUnitException(function() { assertNaN(false); }, 'Expected NaN');
-  assertThrowsJsUnitException(function() { assertNaN(null); }, 'Expected NaN');
-  assertThrowsJsUnitException(function() { assertNaN(''); }, 'Expected NaN');
+  }, 'Should be NaN\nExpected NaN but was <1> (Number)');
+  assertThrowsJsUnitException(function() {
+    assertNaN(true);
+  }, 'Expected NaN but was <true> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertNaN(false);
+  }, 'Expected NaN but was <false> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertNaN(null);
+  }, 'Expected NaN but was <null>');
+  assertThrowsJsUnitException(function() {
+    assertNaN('');
+  }, 'Expected NaN but was <> (String)');
 
   // TODO(user): These assertions fail. We should decide on the
   // semantics of assertNaN

@@ -636,7 +636,9 @@ var assertNonEmptyString = goog.testing.asserts.assertNonEmptyString = function(
 var assertNaN = goog.testing.asserts.assertNaN = function(a, opt_b) {
   _validateArguments(1, arguments);
   var aVar = nonCommentArg(1, 1, arguments);
-  _assert(commentArg(1, arguments), isNaN(aVar), 'Expected NaN');
+  _assert(
+      commentArg(1, arguments), aVar !== aVar,
+      'Expected NaN but was ' + _displayStringForValue(aVar));
 };
 
 
