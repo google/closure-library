@@ -127,45 +127,6 @@ function testWithClass() {
       ns.TestClass.identity.getLastCall().getArguments());
 }
 
-function testWithEs6Class() {
-  var ns = {};
-  ns.TestClass = class {
-    constructor(num) {
-      this.setX(ns.TestClass.identity(1) + num);
-    }
-    setX(x) {
-      this.x = x;
-    }
-    static identity(x) {
-      return x;
-    }
-  };
-  var originalNsTestClass = ns.TestClass;
-
-  stubs.set(ns, 'TestClass', goog.testing.recordConstructor(ns.TestClass));
-  stubs.set(
-      ns.TestClass, 'identity',
-      goog.testing.recordFunction(ns.TestClass.identity));
-
-  var obj = new ns.TestClass(2);
-  assertTrue('Expected instance method on object', 'setX' in obj);
-  assertEquals('constructor is called once', 1, ns.TestClass.getCallCount());
-  var lastConstructorCall = ns.TestClass.getLastCall();
-  assertArrayEquals(
-      '... with argument 2', [2], lastConstructorCall.getArguments());
-  assertEquals('the created object', obj, lastConstructorCall.getThis());
-  assertEquals(
-      'type of the created object', originalNsTestClass, obj.constructor);
-
-  assertEquals('The x field is properly set', 3, obj.x);
-
-  assertEquals(
-      'identity is called once', 1, ns.TestClass.identity.getCallCount());
-  assertArrayEquals(
-      '... with argument 1', [1],
-      ns.TestClass.identity.getLastCall().getArguments());
-}
-
 function testPopLastCall() {
   var f = goog.testing.recordFunction();
   f(0);
