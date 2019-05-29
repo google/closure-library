@@ -159,8 +159,8 @@ goog.addDependency('debug/error_test.js', ['goog.debug.ErrorTest'], ['goog.debug
 goog.addDependency('debug/errorcontext.js', ['goog.debug.errorcontext'], [], {});
 goog.addDependency('debug/errorcontext_test.js', ['goog.debug.errorcontextTest'], ['goog.debug.errorcontext', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('debug/errorhandler.js', ['goog.debug.ErrorHandler', 'goog.debug.ErrorHandler.ProtectedFunctionError'], ['goog.Disposable', 'goog.asserts', 'goog.debug', 'goog.debug.EntryPointMonitor', 'goog.debug.Error', 'goog.debug.Trace'], {'lang': 'es6'});
-goog.addDependency('debug/errorhandler_async_test.js', ['goog.debug.ErrorHandlerAsyncTest'], ['goog.Promise', 'goog.debug.ErrorHandler', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.userAgent'], {'lang': 'es8'});
-goog.addDependency('debug/errorhandler_test.js', ['goog.debug.ErrorHandlerTest'], ['goog.debug.ErrorHandler', 'goog.testing.MockControl', 'goog.testing.jsunit'], {});
+goog.addDependency('debug/errorhandler_async_test.js', ['goog.debug.ErrorHandlerAsyncTest'], ['goog.Promise', 'goog.debug.ErrorHandler', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es8', 'module': 'goog'});
+goog.addDependency('debug/errorhandler_test.js', ['goog.debug.ErrorHandlerTest'], ['goog.debug.ErrorHandler', 'goog.testing.MockControl', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('debug/errorhandlerweakdep.js', ['goog.debug.errorHandlerWeakDep'], [], {});
 goog.addDependency('debug/errorreporter.js', ['goog.debug.ErrorReporter', 'goog.debug.ErrorReporter.ExceptionEvent'], ['goog.asserts', 'goog.debug', 'goog.debug.Error', 'goog.debug.ErrorHandler', 'goog.debug.entryPointRegistry', 'goog.debug.errorcontext', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.log', 'goog.net.XhrIo', 'goog.object', 'goog.string', 'goog.uri.utils', 'goog.userAgent'], {});
 goog.addDependency('debug/errorreporter_test.js', ['goog.debug.ErrorReporterTest'], ['goog.debug.Error', 'goog.debug.ErrorReporter', 'goog.debug.errorcontext', 'goog.events', 'goog.functions', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.testSuite', 'goog.userAgent', 'goog.userAgent.product'], {'lang': 'es6', 'module': 'goog'});
@@ -185,7 +185,7 @@ goog.addDependency('delegate/delegateregistry_test.js', ['goog.delegate.Delegate
 goog.addDependency('delegate/delegates.js', ['goog.delegate.delegates'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('delegate/delegates_test.js', ['goog.delegate.delegatesTest'], ['goog.delegate.delegates', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('disposable/disposable.js', ['goog.Disposable', 'goog.dispose', 'goog.disposeAll'], ['goog.disposable.IDisposable'], {});
-goog.addDependency('disposable/disposable_test.js', ['goog.DisposableTest'], ['goog.Disposable', 'goog.testing.jsunit', 'goog.testing.recordFunction'], {});
+goog.addDependency('disposable/disposable_test.js', ['goog.DisposableTest'], ['goog.Disposable', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('disposable/idisposable.js', ['goog.disposable.IDisposable'], [], {});
 goog.addDependency('dom/abstractmultirange.js', ['goog.dom.AbstractMultiRange'], ['goog.array', 'goog.dom', 'goog.dom.AbstractRange', 'goog.dom.TextRange'], {});
 goog.addDependency('dom/abstractrange.js', ['goog.dom.AbstractRange', 'goog.dom.RangeIterator', 'goog.dom.RangeType'], ['goog.dom', 'goog.dom.NodeType', 'goog.dom.SavedCaretRange', 'goog.dom.TagIterator', 'goog.userAgent'], {});

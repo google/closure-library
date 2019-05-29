@@ -12,276 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.debug.ErrorHandlerTest');
-goog.setTestOnly('goog.debug.ErrorHandlerTest');
+goog.module('goog.debug.ErrorHandlerTest');
+goog.setTestOnly();
 
-goog.require('goog.debug.ErrorHandler');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.jsunit');
+const ErrorHandler = goog.require('goog.debug.ErrorHandler');
+const MockControl = goog.require('goog.testing.MockControl');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var oldGetObjectByName;
+let oldGetObjectByName;
 
 // provide our own window that implements our instrumented and
 // immediate-call versions of setTimeout and setInterval
-var fakeWin = {};
+let fakeWin = {};
 
-var errorHandler;
-var mockControl;
+let errorHandler;
+let mockControl;
 
 function badTimer() {
   arguments.callee.called = true;
   throw 'die die die';
-}
-
-function setUp() {
-  mockControl = new goog.testing.MockControl();
-  // On IE, globalEval happens async. So make it synchronous.
-  goog.globalEval = function(str) { eval(str); };
-
-  oldGetObjectByName = goog.getObjectByName;
-  goog.getObjectByName = function(name) {
-    if (name == 'window') {
-      return fakeWin;
-    } else {
-      return oldGetObjectByName(name);
-    }
-  };
-
-  fakeWin.setTimeout = function(fn, time) {
-    fakeWin.setTimeout.called = true;
-    fakeWin.setTimeout.that = this;
-    if (goog.isString(fn)) {
-      eval(fn);
-    } else {
-      fn.apply(this, Array.prototype.slice.call(arguments, 2));
-    }
-  };
-
-  fakeWin.setInterval = function(fn, time) {
-    fakeWin.setInterval.called = true;
-    fakeWin.setInterval.that = this;
-    if (goog.isString(fn)) {
-      eval(fn);
-    } else {
-      fn.apply(this, Array.prototype.slice.call(arguments, 2));
-    }
-  };
-
-  fakeWin.requestAnimationFrame = function(fn) {
-    fakeWin.requestAnimationFrame.called = true;
-    fakeWin.requestAnimationFrame.that = this;
-    fn();
-  };
-
-  // just record the exception in the error handler when it happens
-  errorHandler = new goog.debug.ErrorHandler(function(ex) { this.ex = ex; });
-}
-
-function tearDown() {
-  mockControl.$tearDown();
-  goog.dispose(errorHandler);
-  errorHandler = null;
-
-  goog.getObjectByName = oldGetObjectByName;
-
-  delete badTimer['__protected__'];
-}
-
-function testWrapSetTimeout() {
-  errorHandler.protectWindowSetTimeout();
-
-  var caught;
-
-  try {
-    fakeWin.setTimeout(badTimer, 3);
-  } catch (ex) {
-    caught = ex;
-  }
-  assertSetTimeoutError(caught);
-}
-
-function testWrapSetTimeoutWithoutException() {
-  errorHandler.protectWindowSetTimeout();
-
-  fakeWin.setTimeout(function(x, y) {
-    assertEquals('test', x);
-    assertEquals(7, y);
-  }, 3, 'test', 7);
-}
-
-function testWrapSetTimeoutWithString() {
-  errorHandler.protectWindowSetTimeout();
-
-  var caught;
-
-  try {
-    fakeWin.setTimeout('badTimer()', 3);
-  } catch (ex) {
-    caught = ex;
-  }
-  assertSetTimeoutError(caught);
-}
-
-function testWrapSetInterval() {
-  errorHandler.protectWindowSetInterval();
-
-  var caught;
-
-  try {
-    fakeWin.setInterval(badTimer, 3);
-  } catch (ex) {
-    caught = ex;
-  }
-  assertSetIntervalError(caught);
-}
-
-function testWrapSetIntervalWithoutException() {
-  errorHandler.protectWindowSetInterval();
-
-  fakeWin.setInterval(function(x, y) {
-    assertEquals('test', x);
-    assertEquals(7, y);
-  }, 3, 'test', 7);
-}
-
-function testWrapSetIntervalWithString() {
-  errorHandler.protectWindowSetInterval();
-
-  var caught;
-
-  try {
-    fakeWin.setInterval('badTimer()', 3);
-  } catch (ex) {
-    caught = ex;
-  }
-  assertSetIntervalError(caught);
-}
-
-function testWrapRequestAnimationFrame() {
-  errorHandler.protectWindowRequestAnimationFrame();
-
-  var caught;
-  try {
-    fakeWin.requestAnimationFrame(badTimer);
-  } catch (ex) {
-    caught = ex;
-  }
-  assertRequestAnimationFrameError(caught);
-}
-
-function testDisposal() {
-  fakeWin = goog.getObjectByName('window');
-  var originalSetTimeout = fakeWin.setTimeout;
-  var originalSetInterval = fakeWin.setInterval;
-
-  errorHandler.protectWindowSetTimeout();
-  errorHandler.protectWindowSetInterval();
-
-  assertNotEquals(originalSetTimeout, fakeWin.setTimeout);
-  assertNotEquals(originalSetInterval, fakeWin.setInterval);
-
-  errorHandler.dispose();
-
-  assertEquals(originalSetTimeout, fakeWin.setTimeout);
-  assertEquals(originalSetInterval, fakeWin.setInterval);
-}
-
-function testUnwrap() {
-  var fn = function() {};
-  var wrappedFn = errorHandler.wrap(fn);
-  assertNotEquals(wrappedFn, fn);
-
-  assertEquals(fn, errorHandler.unwrap(fn));
-  assertEquals(fn, errorHandler.unwrap(wrappedFn));
-}
-
-function testStackPreserved() {
-  var e;
-  var hasStacks;
-  function specialFunctionName() {
-    var e = Error();
-    hasStacks = !!e.stack;
-    throw e;
-  }
-  var wrappedFn = errorHandler.wrap(specialFunctionName);
-  try {
-    wrappedFn();
-  } catch (exception) {
-    e = exception;
-  }
-  assertTrue(!!e);
-  if (hasStacks) {
-    assertContains('specialFunctionName', e.stack);
-  }
-}
-
-function testGetProtectedFunction() {
-  var fn = function() { throw new Error('Foo'); };
-  var protectedFn = errorHandler.getProtectedFunction(fn);
-  var e = assertThrows(protectedFn);
-  assertTrue(e instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
-  assertEquals('Foo', e.cause.message);
-}
-
-function testGetProtectedFunctionNullError() {
-  var fn = function() { throw null; };
-  var protectedFn = errorHandler.getProtectedFunction(fn);
-  var e = assertThrows(protectedFn);
-  assertTrue(e instanceof goog.debug.ErrorHandler.ProtectedFunctionError);
-  assertNull(e.cause);
-}
-
-function testGetProtectedFunction_withoutWrappedErrors() {
-  var shouldCallErrorLog = !!Error.captureStackTrace;
-  if (shouldCallErrorLog) {
-    mockControl.createMethodMock(goog.global.console, 'error');
-  }
-  errorHandler.setWrapErrors(false);
-  var fn = function() {
-    var e = new Error('Foo');
-    e.stack = 'STACK';
-    throw e;
-  };
-  var protectedFn = errorHandler.getProtectedFunction(fn);
-  if (shouldCallErrorLog) {
-    goog.global.console.error('Foo', 'STACK');
-  }
-  mockControl.$replayAll();
-  var e = assertThrows(protectedFn);
-  mockControl.$verifyAll();
-  assertTrue(e instanceof Error);
-  assertEquals('Foo', e.message);
-  assertEquals(e.stack, 'STACK');
-}
-
-function testGetProtectedFunction_withoutWrappedErrorsWithMessagePrefix() {
-  errorHandler.setWrapErrors(false);
-  errorHandler.setPrefixErrorMessages(true);
-  var fn = function() { throw new Error('Foo'); };
-  var protectedFn = errorHandler.getProtectedFunction(fn);
-  var e = assertThrows(protectedFn);
-  assertTrue(e instanceof Error);
-  assertEquals(
-      goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX + 'Foo',
-      e.message);
-
-  var stringError = function() { throw 'String'; };
-  protectedFn = errorHandler.getProtectedFunction(stringError);
-  e = assertThrows(protectedFn);
-  assertEquals('string', typeof e);
-  assertEquals(
-      goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX + 'String',
-      e);
-}
-
-function testProtectedFunction_infiniteLoop() {
-  var numErrors = 0;
-  var errorHandler = new goog.debug.ErrorHandler(function(ex) { numErrors++; });
-  errorHandler.protectWindowSetTimeout();
-
-  fakeWin.setTimeout(function() { fakeWin.setTimeout(badTimer, 3); }, 3);
-  assertEquals(
-      'Error handler should only have been executed once.', 1, numErrors);
 }
 
 function assertSetTimeoutError(caught) {
@@ -300,8 +49,275 @@ function assertMethodCalledHelper(method, caught) {
   assertTrue('exception not thrown', !!caught);
   assertEquals(
       'exception not caught by error handler', caught.cause, errorHandler.ex);
-  assertTrue('fake ' + method + ' not called', !!fakeWin[method].called);
+  assertTrue(`fake ${method} not called`, !!fakeWin[method].called);
   assertTrue(
-      '"this" not passed to original ' + method,
+      `"this" not passed to original ${method}`,
       fakeWin[method].that === fakeWin);
 }
+
+testSuite({
+  setUp() {
+    mockControl = new MockControl();
+    // On IE, globalEval happens async. So make it synchronous.
+    goog.globalEval = (str) => {
+      eval(str);
+    };
+
+    oldGetObjectByName = goog.getObjectByName;
+    goog.getObjectByName = (name) => {
+      if (name == 'window') {
+        return fakeWin;
+      } else {
+        return oldGetObjectByName(name);
+      }
+    };
+
+    fakeWin.setTimeout = function(fn, time) {
+      fakeWin.setTimeout.called = true;
+      fakeWin.setTimeout.that = this;
+      if (goog.isString(fn)) {
+        eval(fn);
+      } else {
+        fn.apply(this, Array.prototype.slice.call(arguments, 2));
+      }
+    };
+
+    fakeWin.setInterval = function(fn, time) {
+      fakeWin.setInterval.called = true;
+      fakeWin.setInterval.that = this;
+      if (goog.isString(fn)) {
+        eval(fn);
+      } else {
+        fn.apply(this, Array.prototype.slice.call(arguments, 2));
+      }
+    };
+
+    fakeWin.requestAnimationFrame = function(fn) {
+      fakeWin.requestAnimationFrame.called = true;
+      fakeWin.requestAnimationFrame.that = this;
+      fn();
+    };
+
+    // just record the exception in the error handler when it happens
+    errorHandler = new ErrorHandler(function(ex) {
+      this.ex = ex;
+    });
+  },
+
+  tearDown() {
+    mockControl.$tearDown();
+    goog.dispose(errorHandler);
+    errorHandler = null;
+
+    goog.getObjectByName = oldGetObjectByName;
+
+    delete badTimer['__protected__'];
+  },
+
+  testWrapSetTimeout() {
+    errorHandler.protectWindowSetTimeout();
+
+    let caught;
+
+    try {
+      fakeWin.setTimeout(badTimer, 3);
+    } catch (ex) {
+      caught = ex;
+    }
+    assertSetTimeoutError(caught);
+  },
+
+  testWrapSetTimeoutWithoutException() {
+    errorHandler.protectWindowSetTimeout();
+
+    fakeWin.setTimeout((x, y) => {
+      assertEquals('test', x);
+      assertEquals(7, y);
+    }, 3, 'test', 7);
+  },
+
+  testWrapSetTimeoutWithString() {
+    errorHandler.protectWindowSetTimeout();
+
+    let caught;
+
+    try {
+      fakeWin.setTimeout('badTimer()', 3);
+    } catch (ex) {
+      caught = ex;
+    }
+    assertSetTimeoutError(caught);
+  },
+
+  testWrapSetInterval() {
+    errorHandler.protectWindowSetInterval();
+
+    let caught;
+
+    try {
+      fakeWin.setInterval(badTimer, 3);
+    } catch (ex) {
+      caught = ex;
+    }
+    assertSetIntervalError(caught);
+  },
+
+  testWrapSetIntervalWithoutException() {
+    errorHandler.protectWindowSetInterval();
+
+    fakeWin.setInterval((x, y) => {
+      assertEquals('test', x);
+      assertEquals(7, y);
+    }, 3, 'test', 7);
+  },
+
+  testWrapSetIntervalWithString() {
+    errorHandler.protectWindowSetInterval();
+
+    let caught;
+
+    try {
+      fakeWin.setInterval('badTimer()', 3);
+    } catch (ex) {
+      caught = ex;
+    }
+    assertSetIntervalError(caught);
+  },
+
+  testWrapRequestAnimationFrame() {
+    errorHandler.protectWindowRequestAnimationFrame();
+
+    let caught;
+    try {
+      fakeWin.requestAnimationFrame(badTimer);
+    } catch (ex) {
+      caught = ex;
+    }
+    assertRequestAnimationFrameError(caught);
+  },
+
+  testDisposal() {
+    fakeWin = goog.getObjectByName('window');
+    const originalSetTimeout = fakeWin.setTimeout;
+    const originalSetInterval = fakeWin.setInterval;
+
+    errorHandler.protectWindowSetTimeout();
+    errorHandler.protectWindowSetInterval();
+
+    assertNotEquals(originalSetTimeout, fakeWin.setTimeout);
+    assertNotEquals(originalSetInterval, fakeWin.setInterval);
+
+    errorHandler.dispose();
+
+    assertEquals(originalSetTimeout, fakeWin.setTimeout);
+    assertEquals(originalSetInterval, fakeWin.setInterval);
+  },
+
+  testUnwrap() {
+    const fn = () => {};
+    const wrappedFn = errorHandler.wrap(fn);
+    assertNotEquals(wrappedFn, fn);
+
+    assertEquals(fn, errorHandler.unwrap(fn));
+    assertEquals(fn, errorHandler.unwrap(wrappedFn));
+  },
+
+  testStackPreserved() {
+    let e;
+    let hasStacks;
+    function specialFunctionName() {
+      const e = Error();
+      hasStacks = !!e.stack;
+      throw e;
+    }
+    const wrappedFn = errorHandler.wrap(specialFunctionName);
+    try {
+      wrappedFn();
+    } catch (exception) {
+      e = exception;
+    }
+    assertTrue(!!e);
+    if (hasStacks) {
+      assertContains('specialFunctionName', e.stack);
+    }
+  },
+
+  testGetProtectedFunction() {
+    const fn = () => {
+      throw new Error('Foo');
+    };
+    const protectedFn = errorHandler.getProtectedFunction(fn);
+    const e = assertThrows(protectedFn);
+    assertTrue(e instanceof ErrorHandler.ProtectedFunctionError);
+    assertEquals('Foo', e.cause.message);
+  },
+
+  testGetProtectedFunctionNullError() {
+    const fn = () => {
+      throw null;
+    };
+    const protectedFn = errorHandler.getProtectedFunction(fn);
+    const e = assertThrows(protectedFn);
+    assertTrue(e instanceof ErrorHandler.ProtectedFunctionError);
+    assertNull(e.cause);
+  },
+
+  testGetProtectedFunction_withoutWrappedErrors() {
+    const shouldCallErrorLog = !!Error.captureStackTrace;
+    if (shouldCallErrorLog) {
+      mockControl.createMethodMock(goog.global.console, 'error');
+    }
+    errorHandler.setWrapErrors(false);
+    const fn = () => {
+      const e = new Error('Foo');
+      e.stack = 'STACK';
+      throw e;
+    };
+    const protectedFn = errorHandler.getProtectedFunction(fn);
+    if (shouldCallErrorLog) {
+      goog.global.console.error('Foo', 'STACK');
+    }
+    mockControl.$replayAll();
+    const e = assertThrows(protectedFn);
+    mockControl.$verifyAll();
+    assertTrue(e instanceof Error);
+    assertEquals('Foo', e.message);
+    assertEquals(e.stack, 'STACK');
+  },
+
+  testGetProtectedFunction_withoutWrappedErrorsWithMessagePrefix() {
+    errorHandler.setWrapErrors(false);
+    errorHandler.setPrefixErrorMessages(true);
+    const fn = () => {
+      throw new Error('Foo');
+    };
+    let protectedFn = errorHandler.getProtectedFunction(fn);
+    let e = assertThrows(protectedFn);
+    assertTrue(e instanceof Error);
+    assertEquals(
+        ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX + 'Foo', e.message);
+
+    const stringError = () => {
+      throw 'String';
+    };
+    protectedFn = errorHandler.getProtectedFunction(stringError);
+    e = assertThrows(protectedFn);
+    assertEquals('string', typeof e);
+    assertEquals(
+        ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX + 'String', e);
+  },
+
+  testProtectedFunction_infiniteLoop() {
+    let numErrors = 0;
+    const errorHandler = new ErrorHandler((ex) => {
+      numErrors++;
+    });
+    errorHandler.protectWindowSetTimeout();
+
+    fakeWin.setTimeout(() => {
+      fakeWin.setTimeout(badTimer, 3);
+    }, 3);
+    assertEquals(
+        'Error handler should only have been executed once.', 1, numErrors);
+  },
+});
