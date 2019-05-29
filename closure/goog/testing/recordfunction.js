@@ -106,16 +106,16 @@ goog.testing.recordedFunction_.waitForCalls = function(num) {};
 goog.testing.recordedFunction_.reset = function() {};
 
 /**
- * Wraps the function into another one which calls the inner function and
- * records its calls. The recorded function will have 3 static methods:
- * `getCallCount`, `getCalls` and `getLastCall` but won't
- * inherit the original function's prototype and static fields.
+ * Private helper for recordFunction and recordConstructor.
  *
  * @param {!Function=} opt_f The function to wrap and record. Defaults to
  *     {@link goog.nullFunction}.
+ * @param {boolean=} opt_invokeWithNew Whether to invoke the function with `new`
+ *     rather than `apply`. Required for ES6 constructors.
  * @return {!goog.testing.recordFunction.Type} The wrapped function.
+ * @private
  */
-goog.testing.recordFunction = function(opt_f) {
+goog.testing.recordFunction_ = function(opt_f, opt_invokeWithNew) {
   var f = opt_f || goog.nullFunction;
   var calls = [];
   /** @type {?goog.promise.Resolver} */
@@ -135,7 +135,11 @@ goog.testing.recordFunction = function(opt_f) {
   function recordedFunction() {
     var owner = /** @type {?} */ (this);
     try {
-      var ret = f.apply(owner, arguments);
+      var ret =
+          opt_invokeWithNew ? new f(...arguments) : f.apply(owner, arguments);
+      if (opt_invokeWithNew) {
+        owner = ret;
+      }
       calls.push(new goog.testing.FunctionCall(f, owner, arguments, ret, null));
       maybeResolveWaitForCalls();
       return ret;
@@ -215,6 +219,22 @@ goog.testing.recordFunction = function(opt_f) {
   return recordedFunction;
 };
 
+
+/**
+ * Wraps the function into another one which calls the inner function and
+ * records its calls. The recorded function will have 3 static methods:
+ * `getCallCount`, `getCalls` and `getLastCall` but won't
+ * inherit the original function's prototype and static fields.
+ *
+ * @param {!Function=} opt_f The function to wrap and record. Defaults to
+ *     {@link goog.nullFunction}.
+ * @return {!goog.testing.recordFunction.Type} The wrapped function.
+ */
+goog.testing.recordFunction = function(opt_f) {
+  return goog.testing.recordFunction_(opt_f, /* opt_invokeWithNew= */ false);
+};
+
+
 /** @typedef {typeof goog.testing.recordedFunction_} */
 goog.testing.recordFunction.Type;
 
@@ -228,8 +248,13 @@ goog.testing.recordFunction.Type;
  * @return {!Function} The wrapped function.
  */
 goog.testing.recordConstructor = function(ctor) {
-  var recordedConstructor = goog.testing.recordFunction(ctor);
+  var recordedConstructor =
+      goog.testing.recordFunction_(ctor, /* opt_invokeWithNew= */ true);
   recordedConstructor.prototype = ctor.prototype;
+  // Copy ES6 statics.
+  for (const key of Object.getOwnPropertyNames(ctor)) {
+    recordedConstructor[key] = ctor[key];
+  }
   goog.mixin(recordedConstructor, ctor);
   return recordedConstructor;
 };
