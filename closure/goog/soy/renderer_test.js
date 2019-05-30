@@ -178,11 +178,6 @@ testSuite({
 
   testRenderText() {
     const renderer = new Renderer(dataSupplier);
-    // RenderText converts to string.
-    assertEquals(
-        'Output of renderText should be a string', 'I <3 Puppies & Kittens',
-        renderer.renderText(example.unsanitizedTextTemplate));
-    assertUndefined(handleRender.getLastCall().getArguments()[0]);
     // RenderText works on string templates.
     assertEquals('<b>XSS</b>', renderer.renderText(example.stringTemplate));
     // RenderText on non-text template fails.
@@ -192,7 +187,7 @@ testSuite({
         assertThrows(() => {
           renderer.renderText(example.sanitizedHtmlTemplate, {});
         }).message);
-    handleRender.assertCallCount(2);
+    handleRender.assertCallCount(1);
   },
 
   testRenderSafeHtml() {
