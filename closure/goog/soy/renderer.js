@@ -236,7 +236,7 @@ goog.soy.Renderer.prototype.renderStrictOfKind = function(
       opt_templateData || {}, this.getInjectedData_(), this.getInjectedData_());
   goog.asserts.assertInstanceof(
       result, goog.soy.data.SanitizedContent,
-      'renderStrict cannot be called on a non-strict soy template');
+      'renderStrict cannot be called on a text soy template');
   goog.asserts.assert(
       result.contentKind ===
           (opt_kind || goog.soy.data.SanitizedContentKind.HTML),

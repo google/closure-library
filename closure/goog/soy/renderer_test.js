@@ -134,7 +134,7 @@ testSuite({
     // No SanitizedContent at all.
     assertEquals(
         'Assertion failed: ' +
-            'renderStrict cannot be called on a non-strict soy template',
+            'renderStrict cannot be called on a text soy template',
         assertThrows(() => {
           renderer.renderStrict(example.stringTemplate, {});
         }).message);
