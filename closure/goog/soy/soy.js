@@ -48,8 +48,8 @@ goog.soy.StrictHtmlTemplate;
 
 /**
  * Type definition for text templates.
- * @typedef {function(?, ?Object<string, *>=): !goog.soy.TextType|
- *     function(?, null=, ?Object<string, *>=): !goog.soy.TextType}
+ * @typedef {function(?, ?Object<string, *>=): string|
+ *     function(?, null=, ?Object<string, *>=): string}
  */
 goog.soy.TextTemplate;
 
