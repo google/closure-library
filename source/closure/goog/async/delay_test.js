@@ -11,163 +11,155 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-goog.provide('goog.async.DelayTest');
-goog.setTestOnly('goog.async.DelayTest');
+goog.module('goog.async.DelayTest');
+goog.setTestOnly();
 
-goog.require('goog.async.Delay');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
+const Delay = goog.require('goog.async.Delay');
+const MockClock = goog.require('goog.testing.MockClock');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var invoked = false;
-var delay = null;
-var clock = null;
-
+let invoked = false;
+let delay = null;
+let clock = null;
 
 function callback() {
   invoked = true;
 }
 
+testSuite({
+  setUp() {
+    clock = new MockClock(true);
+    invoked = false;
+    delay = new Delay(callback, 200);
+  },
 
-function setUp() {
-  clock = new goog.testing.MockClock(true);
-  invoked = false;
-  delay = new goog.async.Delay(callback, 200);
-}
+  tearDown() {
+    clock.dispose();
+    delay.dispose();
+  },
 
-function tearDown() {
-  clock.dispose();
-  delay.dispose();
-}
+  testDelay() {
+    delay.start();
+    assertFalse(invoked);
 
+    clock.tick(100);
+    assertFalse(invoked);
 
-function testDelay() {
-  delay.start();
-  assertFalse(invoked);
+    clock.tick(100);
+    assertTrue(invoked);
+  },
 
-  clock.tick(100);
-  assertFalse(invoked);
+  testStop() {
+    delay.start();
 
-  clock.tick(100);
-  assertTrue(invoked);
-}
+    clock.tick(100);
+    assertFalse(invoked);
 
+    delay.stop();
+    clock.tick(100);
+    assertFalse(invoked);
+  },
 
-function testStop() {
-  delay.start();
+  testIsActive() {
+    assertFalse(delay.isActive());
+    delay.start();
+    assertTrue(delay.isActive());
+    clock.tick(200);
+    assertFalse(delay.isActive());
+  },
 
-  clock.tick(100);
-  assertFalse(invoked);
+  testRestart() {
+    delay.start();
+    clock.tick(100);
 
-  delay.stop();
-  clock.tick(100);
-  assertFalse(invoked);
-}
+    delay.stop();
+    assertFalse(invoked);
 
+    delay.start();
+    clock.tick(199);
+    assertFalse(invoked);
 
-function testIsActive() {
-  assertFalse(delay.isActive());
-  delay.start();
-  assertTrue(delay.isActive());
-  clock.tick(200);
-  assertFalse(delay.isActive());
-}
+    clock.tick(1);
+    assertTrue(invoked);
 
+    invoked = false;
+    delay.start();
+    clock.tick(200);
+    assertTrue(invoked);
+  },
 
-function testRestart() {
-  delay.start();
-  clock.tick(100);
+  testStartIfNotActive() {
+    delay.startIfNotActive();
+    clock.tick(100);
 
-  delay.stop();
-  assertFalse(invoked);
+    delay.stop();
+    assertFalse(invoked);
 
-  delay.start();
-  clock.tick(199);
-  assertFalse(invoked);
+    delay.startIfNotActive();
+    clock.tick(199);
+    assertFalse(invoked);
 
-  clock.tick(1);
-  assertTrue(invoked);
+    clock.tick(1);
+    assertTrue(invoked);
 
-  invoked = false;
-  delay.start();
-  clock.tick(200);
-  assertTrue(invoked);
-}
+    invoked = false;
+    delay.start();
+    clock.tick(199);
 
+    assertFalse(invoked);
 
-function testStartIfNotActive() {
-  delay.startIfNotActive();
-  clock.tick(100);
+    delay.startIfNotActive();
+    clock.tick(1);
 
-  delay.stop();
-  assertFalse(invoked);
+    assertTrue(invoked);
+  },
 
-  delay.startIfNotActive();
-  clock.tick(199);
-  assertFalse(invoked);
+  testOverride() {
+    delay.start(50);
+    clock.tick(49);
+    assertFalse(invoked);
 
-  clock.tick(1);
-  assertTrue(invoked);
+    clock.tick(1);
+    assertTrue(invoked);
+  },
 
-  invoked = false;
-  delay.start();
-  clock.tick(199);
+  testDispose() {
+    delay.start();
+    delay.dispose();
+    assertTrue(delay.isDisposed());
 
-  assertFalse(invoked);
+    clock.tick(500);
+    assertFalse(invoked);
+  },
 
-  delay.startIfNotActive();
-  clock.tick(1);
+  testFire() {
+    delay.start();
 
-  assertTrue(invoked);
-}
+    clock.tick(50);
+    delay.fire();
+    assertTrue(invoked);
+    assertFalse(delay.isActive());
 
+    invoked = false;
+    clock.tick(200);
+    assertFalse(
+        'Delay fired early with fire call, timeout should have been ' +
+            'cleared',
+        invoked);
+  },
 
-function testOverride() {
-  delay.start(50);
-  clock.tick(49);
-  assertFalse(invoked);
+  testFireIfActive() {
+    delay.fireIfActive();
+    assertFalse(invoked);
 
-  clock.tick(1);
-  assertTrue(invoked);
-}
-
-
-function testDispose() {
-  delay.start();
-  delay.dispose();
-  assertTrue(delay.isDisposed());
-
-  clock.tick(500);
-  assertFalse(invoked);
-}
-
-
-function testFire() {
-  delay.start();
-
-  clock.tick(50);
-  delay.fire();
-  assertTrue(invoked);
-  assertFalse(delay.isActive());
-
-  invoked = false;
-  clock.tick(200);
-  assertFalse(
-      'Delay fired early with fire call, timeout should have been ' +
-          'cleared',
-      invoked);
-}
-
-function testFireIfActive() {
-  delay.fireIfActive();
-  assertFalse(invoked);
-
-  delay.start();
-  delay.fireIfActive();
-  assertTrue(invoked);
-  invoked = false;
-  clock.tick(300);
-  assertFalse(
-      'Delay fired early with fireIfActive, timeout should have been ' +
-          'cleared',
-      invoked);
-}
+    delay.start();
+    delay.fireIfActive();
+    assertTrue(invoked);
+    invoked = false;
+    clock.tick(300);
+    assertFalse(
+        'Delay fired early with fireIfActive, timeout should have been ' +
+            'cleared',
+        invoked);
+  },
+});

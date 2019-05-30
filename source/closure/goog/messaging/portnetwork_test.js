@@ -12,64 +12,70 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.messaging.PortNetworkTest');
-goog.setTestOnly('goog.messaging.PortNetworkTest');
+goog.module('goog.messaging.PortNetworkTest');
+goog.setTestOnly();
 
-goog.require('goog.Promise');
-goog.require('goog.Timer');
-goog.require('goog.labs.userAgent.browser');
-goog.require('goog.messaging.PortChannel');
-goog.require('goog.messaging.PortOperator');
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.jsunit');
+const GoogPromise = goog.require('goog.Promise');
+const PortChannel = goog.require('goog.messaging.PortChannel');
+const PortOperator = goog.require('goog.messaging.PortOperator');
+const TestCase = goog.require('goog.testing.TestCase');
+const Timer = goog.require('goog.Timer');
+const browser = goog.require('goog.labs.userAgent.browser');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var timer;
+let timer;
 
 function shouldRunTests() {
   // TODO(b/31221500): This test fails when run in a suite immediately after
   // portchannel_test. The workers take dozens of seconds to start up for some
   // reason.
-  return !goog.labs.userAgent.browser.isEdge();
+  return !browser.isEdge();
 }
 
-function setUpPage() {
-  // Use a relatively long timeout because workers can take a while to start up.
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 60 * 1000;
-}
+testSuite({
+  setUpPage() {
+    // Use a relatively long timeout because workers can take a while to start
+    // up.
+    TestCase.getActiveTestCase().promiseTimeout = 60 * 1000;
+  },
 
-function setUp() {
-  timer = new goog.Timer(50);
-}
+  setUp() {
+    timer = new Timer(50);
+  },
 
-function tearDown() {
-  goog.dispose(timer);
-}
+  tearDown() {
+    goog.dispose(timer);
+  },
 
-function testRouteMessageThroughWorkers() {
-  if (!('MessageChannel' in goog.global)) {
-    return;
-  }
+  testRouteMessageThroughWorkers() {
+    if (!('MessageChannel' in goog.global)) {
+      return;
+    }
 
-  var master = new goog.messaging.PortOperator('main');
-  master.addPort(
-      'worker1', new goog.messaging.PortChannel(
-                     new Worker('testdata/portnetwork_worker1.js')));
-  master.addPort(
-      'worker2', new goog.messaging.PortChannel(
-                     new Worker('testdata/portnetwork_worker2.js')));
-  var peerOrigin = window.location.protocol + '//' + window.location.host;
-  master.addPort(
-      'frame', goog.messaging.PortChannel.forEmbeddedWindow(
-                   window.frames['inner'], peerOrigin, timer));
+    const master = new PortOperator('main');
+    master.addPort(
+        'worker1',
+        new PortChannel(new Worker('testdata/portnetwork_worker1.js')));
+    master.addPort(
+        'worker2',
+        new PortChannel(new Worker('testdata/portnetwork_worker2.js')));
+    const peerOrigin = window.location.protocol + '//' + window.location.host;
+    master.addPort(
+        'frame',
+        PortChannel.forEmbeddedWindow(
+            window.frames['inner'], peerOrigin, timer));
 
-  var promise = new goog.Promise(function(resolve, reject) {
-    master.dial('worker1').registerService('result', resolve, true);
-  });
-  master.dial('worker2').send('sendToFrame', ['main']);
+    const promise = new GoogPromise((resolve, reject) => {
+      master.dial('worker1').registerService('result', resolve, true);
+    });
+    master.dial('worker2').send('sendToFrame', ['main']);
 
-  return promise
-      .then(function(msg) {
-        assertArrayEquals(['main', 'worker2', 'frame', 'worker1'], msg);
-      })
-      .thenAlways(function() { master.dispose(); });
-}
+    return promise
+        .then((msg) => {
+          assertArrayEquals(['main', 'worker2', 'frame', 'worker1'], msg);
+        })
+        .thenAlways(() => {
+          master.dispose();
+        });
+  },
+});

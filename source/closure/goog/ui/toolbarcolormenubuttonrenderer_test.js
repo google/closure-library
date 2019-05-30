@@ -12,35 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.ToolbarColorMenuButtonRendererTest');
-goog.setTestOnly('goog.ui.ToolbarColorMenuButtonRendererTest');
+goog.module('goog.ui.ToolbarColorMenuButtonRendererTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.ui.RendererHarness');
-goog.require('goog.testing.ui.rendererasserts');
-goog.require('goog.ui.ToolbarColorMenuButton');
-goog.require('goog.ui.ToolbarColorMenuButtonRenderer');
+const RendererHarness = goog.require('goog.testing.ui.RendererHarness');
+const ToolbarColorMenuButton = goog.require('goog.ui.ToolbarColorMenuButton');
+const ToolbarColorMenuButtonRenderer = goog.require('goog.ui.ToolbarColorMenuButtonRenderer');
+const dom = goog.require('goog.dom');
+const rendererasserts = goog.require('goog.testing.ui.rendererasserts');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var harness;
+let harness;
 
-function setUp() {
-  harness = new goog.testing.ui.RendererHarness(
-      goog.ui.ToolbarColorMenuButtonRenderer.getInstance(),
-      goog.dom.getElement('parent'), goog.dom.getElement('decoratedButton'));
-}
+testSuite({
+  setUp() {
+    harness = new RendererHarness(
+        ToolbarColorMenuButtonRenderer.getInstance(), dom.getElement('parent'),
+        dom.getElement('decoratedButton'));
+  },
 
-function tearDown() {
-  harness.dispose();
-}
+  tearDown() {
+    harness.dispose();
+  },
 
-function testEquality() {
-  harness.attachControlAndRender(new goog.ui.ToolbarColorMenuButton('Foo'));
-  harness.attachControlAndDecorate(new goog.ui.ToolbarColorMenuButton());
-  harness.assertDomMatches();
-}
+  testEquality() {
+    harness.attachControlAndRender(new ToolbarColorMenuButton('Foo'));
+    harness.attachControlAndDecorate(new ToolbarColorMenuButton());
+    harness.assertDomMatches();
+  },
 
-function testDoesntCallGetCssClassInConstructor() {
-  goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor(
-      goog.ui.ToolbarColorMenuButtonRenderer);
-}
+  testDoesntCallGetCssClassInConstructor() {
+    rendererasserts.assertNoGetCssClassCallsInConstructor(
+        ToolbarColorMenuButtonRenderer);
+  },
+});

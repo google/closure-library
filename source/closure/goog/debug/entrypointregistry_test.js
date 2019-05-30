@@ -12,67 +12,72 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.debug.entryPointRegistryTest');
-goog.setTestOnly('goog.debug.entryPointRegistryTest');
+goog.module('goog.debug.entryPointRegistryTest');
+goog.setTestOnly();
 
-goog.require('goog.debug.ErrorHandler');
-goog.require('goog.debug.entryPointRegistry');
-goog.require('goog.testing.jsunit');
+const ErrorHandler = goog.require('goog.debug.ErrorHandler');
+const entryPointRegistry = goog.require('goog.debug.entryPointRegistry');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var lastError;
-var errorHandler;
-var errorFn;
+let lastError;
+let errorHandler;
+let errorFn;
 
-function setUp() {
-  lastError = null;
-  errorFn = function(message) { throw {message: message}; };
-  errorHandler = new goog.debug.ErrorHandler(function(ex) { lastError = ex; });
-  goog.debug.entryPointRegistry.refList_ = [];
-}
+testSuite({
+  setUp() {
+    lastError = null;
+    errorFn = (message) => {
+      throw {message: message};
+    };
+    errorHandler = new ErrorHandler((ex) => {
+      lastError = ex;
+    });
+    entryPointRegistry.refList_ = [];
+  },
 
-function testMonitorAndUnmonitor() {
-  goog.debug.entryPointRegistry.register(function(transformer) {
-    errorFn = transformer(errorFn);
-  });
-  goog.debug.entryPointRegistry.monitorAll(errorHandler);
+  testMonitorAndUnmonitor() {
+    entryPointRegistry.register((transformer) => {
+      errorFn = transformer(errorFn);
+    });
+    entryPointRegistry.monitorAll(errorHandler);
 
-  var e = assertThrows('expected error', goog.partial(errorFn, 'Hello!'));
-  assertEquals('Error in protected function: Hello!', e.message);
-  assertEquals('Hello!', lastError.message);
+    let e = assertThrows('expected error', goog.partial(errorFn, 'Hello!'));
+    assertEquals('Error in protected function: Hello!', e.message);
+    assertEquals('Hello!', lastError.message);
 
-  goog.debug.entryPointRegistry.unmonitorAllIfPossible(errorHandler);
+    entryPointRegistry.unmonitorAllIfPossible(errorHandler);
 
-  e = assertThrows('expected error', goog.partial(errorFn, 'Goodbye!'));
-  assertEquals('Goodbye!', e.message);
-  assertEquals('Hello!', lastError.message);
-}
+    e = assertThrows('expected error', goog.partial(errorFn, 'Goodbye!'));
+    assertEquals('Goodbye!', e.message);
+    assertEquals('Hello!', lastError.message);
+  },
 
-function testRegisterAfterMonitor() {
-  goog.debug.entryPointRegistry.monitorAll(errorHandler);
-  goog.debug.entryPointRegistry.register(function(transformer) {
-    errorFn = transformer(errorFn);
-  });
+  testRegisterAfterMonitor() {
+    entryPointRegistry.monitorAll(errorHandler);
+    entryPointRegistry.register((transformer) => {
+      errorFn = transformer(errorFn);
+    });
 
-  var e = assertThrows('expected error', goog.partial(errorFn, 'Hello!'));
-  assertEquals('Error in protected function: Hello!', e.message);
-  assertEquals('Hello!', lastError.message);
+    let e = assertThrows('expected error', goog.partial(errorFn, 'Hello!'));
+    assertEquals('Error in protected function: Hello!', e.message);
+    assertEquals('Hello!', lastError.message);
 
-  goog.debug.entryPointRegistry.unmonitorAllIfPossible(errorHandler);
+    entryPointRegistry.unmonitorAllIfPossible(errorHandler);
 
-  e = assertThrows('expected error', goog.partial(errorFn, 'Goodbye!'));
-  assertEquals('Goodbye!', e.message);
-  assertEquals('Hello!', lastError.message);
-}
+    e = assertThrows('expected error', goog.partial(errorFn, 'Goodbye!'));
+    assertEquals('Goodbye!', e.message);
+    assertEquals('Hello!', lastError.message);
+  },
 
-function testInvalidUnmonitor() {
-  goog.debug.entryPointRegistry.monitorAll(errorHandler);
-  var e = assertThrows(
-      'expected error',
-      goog.partial(
-          goog.debug.entryPointRegistry.unmonitorAllIfPossible,
-          new goog.debug.ErrorHandler()));
-  assertEquals(
-      'Assertion failed: Only the most recent monitor can be unwrapped.',
-      e.message);
-  goog.debug.entryPointRegistry.unmonitorAllIfPossible(errorHandler);
-}
+  testInvalidUnmonitor() {
+    entryPointRegistry.monitorAll(errorHandler);
+    const e = assertThrows(
+        'expected error',
+        goog.partial(
+            entryPointRegistry.unmonitorAllIfPossible, new ErrorHandler()));
+    assertEquals(
+        'Assertion failed: Only the most recent monitor can be unwrapped.',
+        e.message);
+    entryPointRegistry.unmonitorAllIfPossible(errorHandler);
+  },
+});

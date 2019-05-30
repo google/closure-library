@@ -164,6 +164,10 @@ testAgents.EDGE_12_9600 =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
     '(KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.9600';
 
+/** @const {string} */
+testAgents.EDGE_CHROMIUM =
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+    '(KHTML, like Gecko) Chrome/74.0.3729.48 Safari/537.36 Edg/74.1.96.24';
 
 /** @const {string} */
 testAgents.FIREFOX_19 =

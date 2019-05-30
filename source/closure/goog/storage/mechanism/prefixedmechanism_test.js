@@ -12,50 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.storage.mechanism.PrefixedMechanismTest');
-goog.setTestOnly('goog.storage.mechanism.PrefixedMechanismTest');
+goog.module('goog.storage.mechanism.PrefixedMechanismTest');
+goog.setTestOnly();
 
-goog.require('goog.storage.mechanism.HTML5LocalStorage');
-goog.require('goog.storage.mechanism.PrefixedMechanism');
+const HTML5LocalStorage = goog.require('goog.storage.mechanism.HTML5LocalStorage');
+const PrefixedMechanism = goog.require('goog.storage.mechanism.PrefixedMechanism');
 /** @suppress {extraRequire} */
-goog.require('goog.storage.mechanism.mechanismSeparationTester');
+const mechanismSeparationTester = goog.require('goog.storage.mechanism.mechanismSeparationTester');
 /** @suppress {extraRequire} */
-goog.require('goog.storage.mechanism.mechanismSharingTester');
-goog.require('goog.testing.jsunit');
+const mechanismSharingTester = goog.require('goog.storage.mechanism.mechanismSharingTester');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var submechanism = null;
+let submechanism = null;
 
-function setUp() {
-  submechanism = new goog.storage.mechanism.HTML5LocalStorage();
-  if (submechanism.isAvailable()) {
-    mechanism =
-        new goog.storage.mechanism.PrefixedMechanism(submechanism, 'test');
-    mechanism_shared =
-        new goog.storage.mechanism.PrefixedMechanism(submechanism, 'test');
-    mechanism_separate =
-        new goog.storage.mechanism.PrefixedMechanism(submechanism, 'test2');
-  }
-}
+testSuite({
+  setUp() {
+    submechanism = new HTML5LocalStorage();
+    if (submechanism.isAvailable()) {
+      mechanism = new PrefixedMechanism(submechanism, 'test');
+      mechanism_shared = new PrefixedMechanism(submechanism, 'test');
+      mechanism_separate = new PrefixedMechanism(submechanism, 'test2');
+    }
+  },
 
-function tearDown() {
-  if (!!mechanism) {
-    mechanism.clear();
-    mechanism = null;
-  }
-  if (!!mechanism_shared) {
-    mechanism_shared.clear();
-    mechanism_shared = null;
-  }
-  if (!!mechanism_separate) {
-    mechanism_separate.clear();
-    mechanism_separate = null;
-  }
-}
+  tearDown() {
+    if (!!mechanism) {
+      mechanism.clear();
+      mechanism = null;
+    }
+    if (!!mechanism_shared) {
+      mechanism_shared.clear();
+      mechanism_shared = null;
+    }
+    if (!!mechanism_separate) {
+      mechanism_separate.clear();
+      mechanism_separate = null;
+    }
+  },
 
-function testAvailability() {
-  if (submechanism.isAvailable()) {
-    assertNotNull(mechanism);
-    assertNotNull(mechanism_shared);
-    assertNotNull(mechanism_separate);
-  }
-}
+  testAvailability() {
+    if (submechanism.isAvailable()) {
+      assertNotNull(mechanism);
+      assertNotNull(mechanism_shared);
+      assertNotNull(mechanism_separate);
+    }
+  },
+});

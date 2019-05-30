@@ -12,29 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.spell.SpellCheckTest');
-goog.setTestOnly('goog.spell.SpellCheckTest');
+goog.module('goog.spell.SpellCheckTest');
+goog.setTestOnly();
 
-goog.require('goog.spell.SpellCheck');
-goog.require('goog.testing.jsunit');
+const SpellCheck = goog.require('goog.spell.SpellCheck');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var TEST_DATA = {
-  'Test': [goog.spell.SpellCheck.WordStatus.VALID, []],
-  'strnig': [goog.spell.SpellCheck.WordStatus.INVALID, []],
-  'wtih': [goog.spell.SpellCheck.WordStatus.INVALID, []],
-  'a': [goog.spell.SpellCheck.WordStatus.VALID, []],
-  'few': [goog.spell.SpellCheck.WordStatus.VALID, []],
+const TEST_DATA = {
+  'Test': [SpellCheck.WordStatus.VALID, []],
+  'strnig': [SpellCheck.WordStatus.INVALID, []],
+  'wtih': [SpellCheck.WordStatus.INVALID, []],
+  'a': [SpellCheck.WordStatus.VALID, []],
+  'few': [SpellCheck.WordStatus.VALID, []],
   'misspeled': [
-    goog.spell.SpellCheck.WordStatus.INVALID,
-    ['misspelled', 'misapplied', 'misspell']
+    SpellCheck.WordStatus.INVALID,
+    ['misspelled', 'misapplied', 'misspell'],
   ],
-  'words': [goog.spell.SpellCheck.WordStatus.VALID, []],
-  'Testing': [goog.spell.SpellCheck.WordStatus.VALID, []],
-  'set': [goog.spell.SpellCheck.WordStatus.VALID, []],
-  'status': [goog.spell.SpellCheck.WordStatus.VALID, []],
-  'vaild': [goog.spell.SpellCheck.WordStatus.INVALID, []],
-  'invalid': [goog.spell.SpellCheck.WordStatus.VALID, []],
-  'ignoerd': [goog.spell.SpellCheck.WordStatus.INVALID, []]
+  'words': [SpellCheck.WordStatus.VALID, []],
+  'Testing': [SpellCheck.WordStatus.VALID, []],
+  'set': [SpellCheck.WordStatus.VALID, []],
+  'status': [SpellCheck.WordStatus.VALID, []],
+  'vaild': [SpellCheck.WordStatus.INVALID, []],
+  'invalid': [SpellCheck.WordStatus.VALID, []],
+  'ignoerd': [SpellCheck.WordStatus.INVALID, []],
 };
 
 /**
@@ -43,90 +43,88 @@ var TEST_DATA = {
  * @param {!Function} callback
  */
 function mockSpellCheckingFunction(words, spellChecker, callback) {
-  var len = words.length;
-  var data = [];
-  for (var i = 0; i < len; i++) {
-    var word = words[i];
-    var status = TEST_DATA[word][0];
-    var suggestions = TEST_DATA[word][1];
+  const len = words.length;
+  const data = [];
+  for (let i = 0; i < len; i++) {
+    const word = words[i];
+    const status = TEST_DATA[word][0];
+    const suggestions = TEST_DATA[word][1];
     data.push([word, status, suggestions]);
   }
   callback.call(spellChecker, data);
 }
 
+testSuite({
+  testWordMatching() {
+    const spell = new SpellCheck(mockSpellCheckingFunction);
 
-function testWordMatching() {
-  var spell = new goog.spell.SpellCheck(mockSpellCheckingFunction);
+    const valid = SpellCheck.WordStatus.VALID;
+    const invalid = SpellCheck.WordStatus.INVALID;
 
-  var valid = goog.spell.SpellCheck.WordStatus.VALID;
-  var invalid = goog.spell.SpellCheck.WordStatus.INVALID;
+    spell.checkBlock('Test strnig wtih a few misspeled words.');
+    assertEquals(valid, spell.checkWord('Test'));
+    assertEquals(invalid, spell.checkWord('strnig'));
+    assertEquals(invalid, spell.checkWord('wtih'));
+    assertEquals(valid, spell.checkWord('a'));
+    assertEquals(valid, spell.checkWord('few'));
+    assertEquals(invalid, spell.checkWord('misspeled'));
+    assertEquals(valid, spell.checkWord('words'));
+  },
 
-  spell.checkBlock('Test strnig wtih a few misspeled words.');
-  assertEquals(valid, spell.checkWord('Test'));
-  assertEquals(invalid, spell.checkWord('strnig'));
-  assertEquals(invalid, spell.checkWord('wtih'));
-  assertEquals(valid, spell.checkWord('a'));
-  assertEquals(valid, spell.checkWord('few'));
-  assertEquals(invalid, spell.checkWord('misspeled'));
-  assertEquals(valid, spell.checkWord('words'));
-}
+  testSetWordStatusValid() {
+    const spell = new SpellCheck(mockSpellCheckingFunction);
 
+    const valid = SpellCheck.WordStatus.VALID;
 
-function testSetWordStatusValid() {
-  var spell = new goog.spell.SpellCheck(mockSpellCheckingFunction);
+    spell.checkBlock('Testing set status vaild.');
+    spell.setWordStatus('vaild', valid);
 
-  var valid = goog.spell.SpellCheck.WordStatus.VALID;
+    assertEquals(valid, spell.checkWord('vaild'));
+  },
 
-  spell.checkBlock('Testing set status vaild.');
-  spell.setWordStatus('vaild', valid);
+  testSetWordStatusInvalid() {
+    const spell = new SpellCheck(mockSpellCheckingFunction);
 
-  assertEquals(valid, spell.checkWord('vaild'));
-}
+    const invalid = SpellCheck.WordStatus.INVALID;
 
-function testSetWordStatusInvalid() {
-  var spell = new goog.spell.SpellCheck(mockSpellCheckingFunction);
+    spell.checkBlock('Testing set status invalid.');
+    spell.setWordStatus('invalid', invalid);
 
-  var invalid = goog.spell.SpellCheck.WordStatus.INVALID;
+    assertEquals(invalid, spell.checkWord('invalid'));
+  },
 
-  spell.checkBlock('Testing set status invalid.');
-  spell.setWordStatus('invalid', invalid);
+  testSetWordStatusIgnored() {
+    const spell = new SpellCheck(mockSpellCheckingFunction);
 
-  assertEquals(invalid, spell.checkWord('invalid'));
-}
+    const ignored = SpellCheck.WordStatus.IGNORED;
 
+    spell.checkBlock('Testing set status ignoerd.');
+    spell.setWordStatus('ignoerd', ignored);
 
-function testSetWordStatusIgnored() {
-  var spell = new goog.spell.SpellCheck(mockSpellCheckingFunction);
+    assertEquals(ignored, spell.checkWord('ignoerd'));
+  },
 
-  var ignored = goog.spell.SpellCheck.WordStatus.IGNORED;
+  testGetSuggestions() {
+    const spell = new SpellCheck(mockSpellCheckingFunction);
 
-  spell.checkBlock('Testing set status ignoerd.');
-  spell.setWordStatus('ignoerd', ignored);
+    spell.checkBlock('Test strnig wtih a few misspeled words.');
+    const suggestions = spell.getSuggestions('misspeled');
+    assertEquals(3, suggestions.length);
+  },
 
-  assertEquals(ignored, spell.checkWord('ignoerd'));
-}
-
-
-function testGetSuggestions() {
-  var spell = new goog.spell.SpellCheck(mockSpellCheckingFunction);
-
-  spell.checkBlock('Test strnig wtih a few misspeled words.');
-  var suggestions = spell.getSuggestions('misspeled');
-  assertEquals(3, suggestions.length);
-}
-
-function testWordBoundaryRegex() {
-  var regex = goog.spell.SpellCheck.WORD_BOUNDARY_REGEX;
-  assertEquals(3, 'one two three'.split(regex).length);
-  assertEquals(3, 'one/two/three'.split(regex).length);
-  assertEquals(3, 'one-two-three'.split(regex).length);
-  assertEquals(3, 'one.two.three'.split(regex).length);
-  assertEquals(3, 'one,two,three'.split(regex).length);
-  assertEquals(3, 'one[two]three'.split(regex).length);
-  assertEquals(3, 'one\\two\\three'.split(regex).length);
-  assertEquals(3, 'one\rtwo\nthree'.split(regex).length);
-  assertEquals(3, 'one\ttwo\tthree'.split(regex).length);
-  assertEquals(3, 'one!two~three'.split(regex).length);
-  assertEquals(18, 'A"1#B$2%C!3(D)4*E+5:F;6<G>7=H?8@I^9'.split(regex).length);
-  assertEquals(6, 'a_two`z{four|Z}six'.split(regex).length);
-}
+  testWordBoundaryRegex() {
+    const regex = SpellCheck.WORD_BOUNDARY_REGEX;
+    assertEquals(3, 'one two three'.split(regex).length);
+    assertEquals(3, 'one/two/three'.split(regex).length);
+    assertEquals(3, 'one-two-three'.split(regex).length);
+    assertEquals(3, 'one.two.three'.split(regex).length);
+    assertEquals(3, 'one,two,three'.split(regex).length);
+    assertEquals(3, 'one[two]three'.split(regex).length);
+    assertEquals(3, 'one\\two\\three'.split(regex).length);
+    assertEquals(3, 'one\rtwo\nthree'.split(regex).length);
+    assertEquals(3, 'one\ttwo\tthree'.split(regex).length);
+    assertEquals(3, 'one!two~three'.split(regex).length);
+    assertEquals(18, 'A"1#B$2%C!3(D)4*E+5:F;6<G>7=H?8@I^9'.split(regex).length);
+    assertEquals(6, 'a_two`z{four|Z}six'.split(regex).length);
+  },
+});

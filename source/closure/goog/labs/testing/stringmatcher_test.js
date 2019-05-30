@@ -12,87 +12,85 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.testing.stringMatcherTest');
-goog.setTestOnly('goog.labs.testing.stringMatcherTest');
+goog.module('goog.labs.testing.stringMatcherTest');
+goog.setTestOnly();
 
-goog.require('goog.labs.testing.MatcherError');
+const MatcherError = goog.require('goog.labs.testing.MatcherError');
 /** @suppress {extraRequire} */
-goog.require('goog.labs.testing.StringContainsInOrderMatcher');
-goog.require('goog.labs.testing.assertThat');
-goog.require('goog.testing.jsunit');
-
-function testAnyString() {
-  goog.labs.testing.assertThat('foo', anyString(), 'typeof "foo" == "string"');
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat(1, anyString());
-  }, 'typeof 1 == "string"');
-}
-
-function testContainsString() {
-  goog.labs.testing.assertThat(
-      'hello', containsString('ell'), 'hello contains ell');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat('hello', containsString('world!'));
-  }, 'containsString should throw exception when it fails');
-}
-
-function testEndsWith() {
-  goog.labs.testing.assertThat('hello', endsWith('llo'), 'hello ends with llo');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat('minutes', endsWith('midnight'));
-  }, 'endsWith should throw exception when it fails');
-}
-
-function testEqualToIgnoringWhitespace() {
-  goog.labs.testing.assertThat(
-      '    h\n   EL L\tO', equalToIgnoringWhitespace('h el l o'),
-      '"   h   EL L\tO   " is equal to "h el l o"');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat('hybrid', equalToIgnoringWhitespace('theory'));
-  }, 'equalToIgnoringWhitespace should throw exception when it fails');
-}
-
-function testEquals() {
-  goog.labs.testing.assertThat('hello', equals('hello'), 'hello equals hello');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat('thousand', equals('suns'));
-  }, 'equals should throw exception when it fails');
-}
-
-function testStartsWith() {
-  goog.labs.testing.assertThat(
-      'hello', startsWith('hel'), 'hello starts with hel');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat('linkin', startsWith('park'));
-  }, 'startsWith should throw exception when it fails');
-}
-
-function testStringContainsInOrder() {
-  goog.labs.testing.assertThat(
-      'hello', stringContainsInOrder(['h', 'el', 'el', 'l', 'o']),
-      'hello contains in order: [h, el, l, o]');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat(
-        'hybrid', stringContainsInOrder(['hy', 'brid', 'theory']));
-  }, 'stringContainsInOrder should throw exception when it fails');
-}
-
-function testMatchesRegex() {
-  goog.labs.testing.assertThat('foobar', matchesRegex(/foobar/));
-  goog.labs.testing.assertThat('foobar', matchesRegex(/oobar/));
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat('foo', matchesRegex(/^foobar$/));
-  }, 'matchesRegex should throw exception when it fails');
-}
+const StringContainsInOrderMatcher = goog.require('goog.labs.testing.StringContainsInOrderMatcher');
+const assertThat = goog.require('goog.labs.testing.assertThat');
+const testSuite = goog.require('goog.testing.testSuite');
 
 function assertMatcherError(callable, errorString) {
-  var e = assertThrows(errorString || 'callable throws exception', callable);
-  assertTrue(e instanceof goog.labs.testing.MatcherError);
+  const e = assertThrows(errorString || 'callable throws exception', callable);
+  assertTrue(e instanceof MatcherError);
 }
+testSuite({
+  testAnyString() {
+    assertThat('foo', anyString(), 'typeof "foo" == "string"');
+    assertMatcherError(() => {
+      assertThat(1, anyString());
+    }, 'typeof 1 == "string"');
+  },
+
+  testContainsString() {
+    assertThat('hello', containsString('ell'), 'hello contains ell');
+
+    assertMatcherError(() => {
+      assertThat('hello', containsString('world!'));
+    }, 'containsString should throw exception when it fails');
+  },
+
+  testEndsWith() {
+    assertThat('hello', endsWith('llo'), 'hello ends with llo');
+
+    assertMatcherError(() => {
+      assertThat('minutes', endsWith('midnight'));
+    }, 'endsWith should throw exception when it fails');
+  },
+
+  testEqualToIgnoringWhitespace() {
+    assertThat(
+        '    h\n   EL L\tO', equalToIgnoringWhitespace('h el l o'),
+        '"   h   EL L\tO   " is equal to "h el l o"');
+
+    assertMatcherError(() => {
+      assertThat('hybrid', equalToIgnoringWhitespace('theory'));
+    }, 'equalToIgnoringWhitespace should throw exception when it fails');
+  },
+
+  testEquals() {
+    assertThat('hello', equals('hello'), 'hello equals hello');
+
+    assertMatcherError(() => {
+      assertThat('thousand', equals('suns'));
+    }, 'equals should throw exception when it fails');
+  },
+
+  testStartsWith() {
+    assertThat('hello', startsWith('hel'), 'hello starts with hel');
+
+    assertMatcherError(() => {
+      assertThat('linkin', startsWith('park'));
+    }, 'startsWith should throw exception when it fails');
+  },
+
+  testStringContainsInOrder() {
+    assertThat(
+        'hello', stringContainsInOrder(['h', 'el', 'el', 'l', 'o']),
+        'hello contains in order: [h, el, l, o]');
+
+    assertMatcherError(() => {
+      assertThat('hybrid', stringContainsInOrder(['hy', 'brid', 'theory']));
+    }, 'stringContainsInOrder should throw exception when it fails');
+  },
+
+  testMatchesRegex() {
+    assertThat('foobar', matchesRegex(/foobar/));
+    assertThat('foobar', matchesRegex(/oobar/));
+
+    assertMatcherError(() => {
+      assertThat('foo', matchesRegex(/^foobar$/));
+    }, 'matchesRegex should throw exception when it fails');
+  },
+});

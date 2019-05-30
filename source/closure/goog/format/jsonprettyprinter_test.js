@@ -12,104 +12,94 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.format.JsonPrettyPrinterTest');
-goog.setTestOnly('goog.format.JsonPrettyPrinterTest');
+goog.module('goog.format.JsonPrettyPrinterTest');
+goog.setTestOnly();
 
-goog.require('goog.format.JsonPrettyPrinter');
-goog.require('goog.testing.jsunit');
+const JsonPrettyPrinter = goog.require('goog.format.JsonPrettyPrinter');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var formatter;
+let formatter;
 
+testSuite({
+  setUp() {
+    formatter = new JsonPrettyPrinter();
+  },
 
-function setUp() {
-  formatter = new goog.format.JsonPrettyPrinter();
-}
+  testUndefined() {
+    assertEquals('', formatter.format());
+  },
 
+  testNull() {
+    assertEquals('', formatter.format(null));
+  },
 
-function testUndefined() {
-  assertEquals('', formatter.format());
-}
+  testBoolean() {
+    assertEquals('true', formatter.format(true));
+  },
 
+  testNumber() {
+    assertEquals('1', formatter.format(1));
+  },
 
-function testNull() {
-  assertEquals('', formatter.format(null));
-}
+  testEmptyString() {
+    assertEquals('', formatter.format(''));
+  },
 
+  testWhitespaceString() {
+    assertEquals('', formatter.format('   '));
+  },
 
-function testBoolean() {
-  assertEquals('true', formatter.format(true));
-}
+  testString() {
+    assertEquals('{}', formatter.format('{}'));
+  },
 
+  testEmptyArray() {
+    assertEquals('[]', formatter.format([]));
+  },
 
-function testNumber() {
-  assertEquals('1', formatter.format(1));
-}
+  testArrayOneElement() {
+    assertEquals('[\n  1\n]', formatter.format([1]));
+  },
 
+  testArrayMultipleElements() {
+    assertEquals('[\n  1,\n  2,\n  3\n]', formatter.format([1, 2, 3]));
+  },
 
-function testEmptyString() {
-  assertEquals('', formatter.format(''));
-}
+  testFunction() {
+    assertEquals('{\n  "a": "1",\n  "b": ""\n}', formatter.format({
+      'a': '1',
+      'b': function() {
+        return null;
+      }
+    }));
+  },
 
+  testObject() {
+    assertEquals('{}', formatter.format({}));
+  },
 
-function testWhitespaceString() {
-  assertEquals('', formatter.format('   '));
-}
+  testObjectMultipleProperties() {
+    assertEquals(
+        '{\n  "a": null,\n  "b": true,\n  "c": 1,\n  "d": "d",\n  "e":' +
+            ' [\n    1,\n    2,\n    3\n  ],\n  "f": {\n    "g": 1,\n    "h": "h"\n' +
+            '  }\n}',
+        formatter.format({
+          'a': null,
+          'b': true,
+          'c': 1,
+          'd': 'd',
+          'e': [1, 2, 3],
+          'f': {'g': 1, 'h': 'h'},
+        }));
+  },
 
-
-function testString() {
-  assertEquals('{}', formatter.format('{}'));
-}
-
-
-function testEmptyArray() {
-  assertEquals('[]', formatter.format([]));
-}
-
-
-function testArrayOneElement() {
-  assertEquals('[\n  1\n]', formatter.format([1]));
-}
-
-
-function testArrayMultipleElements() {
-  assertEquals('[\n  1,\n  2,\n  3\n]', formatter.format([1, 2, 3]));
-}
-
-
-function testFunction() {
-  assertEquals(
-      '{\n  "a": "1",\n  "b": ""\n}',
-      formatter.format({'a': '1', 'b': function() { return null; }}));
-}
-
-
-function testObject() {
-  assertEquals('{}', formatter.format({}));
-}
-
-
-function testObjectMultipleProperties() {
-  assertEquals(
-      '{\n  "a": null,\n  "b": true,\n  "c": 1,\n  "d": "d",\n  "e":' +
-          ' [\n    1,\n    2,\n    3\n  ],\n  "f": {\n    "g": 1,\n    "h": "h"\n' +
-          '  }\n}',
-      formatter.format({
-        'a': null,
-        'b': true,
-        'c': 1,
-        'd': 'd',
-        'e': [1, 2, 3],
-        'f': {'g': 1, 'h': 'h'}
-      }));
-}
-
-
-function testSafeHtmlDelimiters() {
-  var htmlFormatter = new goog.format.JsonPrettyPrinter(
-      new goog.format.JsonPrettyPrinter.SafeHtmlDelimiters());
-  assertEquals(
-      '{\n  <span class="goog-jsonprettyprinter-propertyname">&quot;' +
-          'a&lt;b&quot;</span>: <span class="goog-jsonprettyprinter-propertyvalue' +
-          '-string">&quot;&gt;&quot;</span>\n}',
-      htmlFormatter.formatSafeHtml({'a<b': '>'}).getTypedStringValue());
-}
+  testSafeHtmlDelimiters() {
+    const htmlFormatter =
+        new JsonPrettyPrinter(new JsonPrettyPrinter.SafeHtmlDelimiters());
+    assertEquals(
+        '{\n  <span class="goog-jsonprettyprinter-propertyname">&quot;' +
+            'a&lt;b&quot;</span>: <span class="goog-jsonprettyprinter-propertyvalue' +
+            '-string">&quot;&gt;&quot;</span>\n}',
+        htmlFormatter.formatSafeHtml({'a<b': '>'}).getTypedStringValue());
+  },
+});

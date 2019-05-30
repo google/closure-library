@@ -1,361 +1,369 @@
 // Copyright 2012 The Closure Library Authors. All Rights Reserved.
 // Use of this source code is governed by the Apache License, Version 2.0.
 
-goog.provide('goog.result.SimpleResultTest');
-goog.setTestOnly('goog.result.SimpleResultTest');
+goog.module('goog.result.SimpleResultTest');
+goog.setTestOnly();
 
-goog.require('goog.Promise');
-goog.require('goog.Thenable');
-goog.require('goog.Timer');
-goog.require('goog.result');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const GoogPromise = goog.require('goog.Promise');
+const MockClock = goog.require('goog.testing.MockClock');
+const Thenable = goog.require('goog.Thenable');
+const Timer = goog.require('goog.Timer');
+const googResult = goog.require('goog.result');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var result, mockClock, resultCallback;
-var resultCallback1;
-var resultCallback2;
+let mockClock;
+let result;
+let resultCallback;
 
-function setUpPage() {
-  mockClock = new goog.testing.MockClock();
-  mockClock.install();
-}
+let resultCallback1;
+let resultCallback2;
 
-function setUp() {
-  mockClock.reset();
-  resultCallback = new goog.testing.recordFunction();
-  resultCallback1 = new goog.testing.recordFunction();
-  resultCallback2 = new goog.testing.recordFunction();
-  result = new goog.result.SimpleResult();
-}
+testSuite({
+  setUpPage() {
+    mockClock = new MockClock();
+    mockClock.install();
+  },
 
-function tearDown() {
-  resultCallback = resultCallback1 = resultCallback2 = result = null;
-}
+  setUp() {
+    mockClock.reset();
+    resultCallback = new recordFunction();
+    resultCallback1 = new recordFunction();
+    resultCallback2 = new recordFunction();
+    result = new googResult.SimpleResult();
+  },
 
-function tearDownPage() {
-  mockClock.uninstall();
-  goog.dispose(mockClock);
-}
+  tearDown() {
+    resultCallback = resultCallback1 = resultCallback2 = result = null;
+  },
 
-function testHandlersCalledOnSuccess() {
-  result.wait(resultCallback1);
-  result.wait(resultCallback2);
+  tearDownPage() {
+    mockClock.uninstall();
+    goog.dispose(mockClock);
+  },
 
-  assertEquals(goog.result.Result.State.PENDING, result.getState());
-  assertEquals(0, resultCallback1.getCallCount());
-  assertEquals(0, resultCallback2.getCallCount());
+  testHandlersCalledOnSuccess() {
+    result.wait(resultCallback1);
+    result.wait(resultCallback2);
 
-  result.setValue(2);
+    assertEquals(googResult.Result.State.PENDING, result.getState());
+    assertEquals(0, resultCallback1.getCallCount());
+    assertEquals(0, resultCallback2.getCallCount());
 
-  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
-  assertEquals(2, result.getValue());
-  assertEquals(1, resultCallback1.getCallCount());
-  assertEquals(1, resultCallback2.getCallCount());
+    result.setValue(2);
 
-  var res1 = resultCallback1.popLastCall().getArgument(0);
-  assertObjectEquals(result, res1);
+    assertEquals(googResult.Result.State.SUCCESS, result.getState());
+    assertEquals(2, result.getValue());
+    assertEquals(1, resultCallback1.getCallCount());
+    assertEquals(1, resultCallback2.getCallCount());
 
-  var res2 = resultCallback2.popLastCall().getArgument(0);
-  assertObjectEquals(result, res2);
-}
+    const res1 = resultCallback1.popLastCall().getArgument(0);
+    assertObjectEquals(result, res1);
 
-function testCustomHandlerScope() {
-  result.wait(resultCallback1);
-  var scope = {};
-  result.wait(resultCallback2, scope);
+    const res2 = resultCallback2.popLastCall().getArgument(0);
+    assertObjectEquals(result, res2);
+  },
 
-  result.setValue(2);
+  testCustomHandlerScope() {
+    result.wait(resultCallback1);
+    const scope = {};
+    result.wait(resultCallback2, scope);
 
-  assertEquals(1, resultCallback1.getCallCount());
-  assertEquals(1, resultCallback2.getCallCount());
+    result.setValue(2);
 
-  var this1 = resultCallback1.popLastCall().getThis();
-  assertObjectEquals(goog.global, this1);
+    assertEquals(1, resultCallback1.getCallCount());
+    assertEquals(1, resultCallback2.getCallCount());
 
-  var this2 = resultCallback2.popLastCall().getThis();
-  assertObjectEquals(scope, this2);
-}
+    const this1 = resultCallback1.popLastCall().getThis();
+    assertObjectEquals(goog.global, this1);
 
-function testHandlersCalledOnError() {
-  result.wait(resultCallback1);
-  result.wait(resultCallback2);
-  assertEquals(goog.result.Result.State.PENDING, result.getState());
+    const this2 = resultCallback2.popLastCall().getThis();
+    assertObjectEquals(scope, this2);
+  },
 
-  var error = "Network Error";
-  result.setError(error);
+  testHandlersCalledOnError() {
+    result.wait(resultCallback1);
+    result.wait(resultCallback2);
+    assertEquals(googResult.Result.State.PENDING, result.getState());
 
-  assertEquals(goog.result.Result.State.ERROR, result.getState());
-  assertEquals(error, result.getError());
-  assertEquals(1, resultCallback1.getCallCount());
-  assertEquals(1, resultCallback2.getCallCount());
-
-  var res1 = resultCallback1.popLastCall().getArgument(0);
-  assertObjectEquals(result, res1);
-  var res2 = resultCallback2.popLastCall().getArgument(0);
-  assertObjectEquals(result, res2);
-}
-
-function testAttachingHandlerOnSuccessfulResult() {
-  result.setValue(2);
-  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
-  assertEquals(2, result.getValue());
-  // resultCallback should be called immediately on a resolved Result
-  assertEquals(0, resultCallback.getCallCount());
-
-  result.wait(resultCallback);
-
-  assertEquals(1, resultCallback.getCallCount());
-  var res = resultCallback.popLastCall().getArgument(0);
-  assertEquals(result, res);
-}
-
-function testAttachingHandlerOnErrorResult() {
-  var error = { code: -1, errorString: "Invalid JSON" };
-  result.setError(error);
-  assertEquals(goog.result.Result.State.ERROR, result.getState());
-  assertEquals(error, result.getError());
-  // resultCallback should be called immediately on a resolved Result
-  assertEquals(0, resultCallback.getCallCount());
-
-  result.wait(resultCallback);
-
-  assertEquals(1, resultCallback.getCallCount());
-  var res = resultCallback.popLastCall().getArgument(0);
-  assertEquals(result, res);
-}
-
-function testExceptionThrownOnMultipleSuccessfulResolutionAttempts() {
-  result.setValue(1);
-  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
-  assertEquals(1, result.getValue());
-
-  // Try to set the value again
-  var e = assertThrows(goog.bind(result.setValue, result, 3));
-  assertTrue(e instanceof goog.result.SimpleResult.StateError);
-}
-
-function testExceptionThrownOnMultipleErrorResolutionAttempts() {
-  assertEquals(goog.result.Result.State.PENDING, result.getState());
-
-  result.setError(5);
-
-  assertEquals(goog.result.Result.State.ERROR, result.getState());
-  assertEquals(5, result.getError());
-  // Try to set error again
-  var e = assertThrows(goog.bind(result.setError, result, 4));
-  assertTrue(e instanceof goog.result.SimpleResult.StateError);
-}
-
-function testExceptionThrownOnSuccessThenErrorResolutionAttempt() {
-  assertEquals(goog.result.Result.State.PENDING, result.getState());
-
-  result.setValue(1);
-
-  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
-  assertEquals(1, result.getValue());
-
-  // Try to set error after setting value
-  var e = assertThrows(goog.bind(result.setError, result, 3));
-  assertTrue(e instanceof goog.result.SimpleResult.StateError);
-}
-
-function testExceptionThrownOnErrorThenSuccessResolutionAttempt() {
-  assertEquals(goog.result.Result.State.PENDING, result.getState());
-
-  var error = "fail";
-  result.setError(error);
-
-  assertEquals(goog.result.Result.State.ERROR, result.getState());
-  assertEquals(error, result.getError());
-  // Try to set value after setting error
-  var e = assertThrows(goog.bind(result.setValue, result, 1));
-  assertTrue(e instanceof goog.result.SimpleResult.StateError);
-}
-
-function testSuccessfulAsyncResolution() {
-  result.wait(resultCallback);
-  assertEquals(goog.result.Result.State.PENDING, result.getState());
-
-  goog.Timer.callOnce(function() {
-    result.setValue(1);
-  });
-  mockClock.tick();
-
-  assertEquals(1, resultCallback.getCallCount());
-
-  var res = resultCallback.popLastCall().getArgument(0);
-  assertEquals(goog.result.Result.State.SUCCESS, res.getState());
-  assertEquals(1, res.getValue());
-}
-
-function testErrorAsyncResolution() {
-  result.wait(resultCallback);
-  assertEquals(goog.result.Result.State.PENDING, result.getState());
-
-  var error = 'Network failure';
-  goog.Timer.callOnce(function() {
+    const error = 'Network Error';
     result.setError(error);
-  });
-  mockClock.tick();
 
-  assertEquals(1, resultCallback.getCallCount());
-  var res = resultCallback.popLastCall().getArgument(0);
-  assertEquals(goog.result.Result.State.ERROR, res.getState());
-  assertEquals(error, res.getError());
-}
+    assertEquals(googResult.Result.State.ERROR, result.getState());
+    assertEquals(error, result.getError());
+    assertEquals(1, resultCallback1.getCallCount());
+    assertEquals(1, resultCallback2.getCallCount());
 
-function testCancelStateAndReturn() {
-  assertFalse(result.isCanceled());
-  var canceled = result.cancel();
-  assertTrue(result.isCanceled());
-  assertEquals(goog.result.Result.State.ERROR, result.getState());
-  assertTrue(result.getError() instanceof goog.result.Result.CancelError);
-  assertTrue(canceled);
-}
+    const res1 = resultCallback1.popLastCall().getArgument(0);
+    assertObjectEquals(result, res1);
+    const res2 = resultCallback2.popLastCall().getArgument(0);
+    assertObjectEquals(result, res2);
+  },
 
-function testErrorHandlersFireOnCancel() {
-  result.wait(resultCallback);
-  result.cancel();
+  testAttachingHandlerOnSuccessfulResult() {
+    result.setValue(2);
+    assertEquals(googResult.Result.State.SUCCESS, result.getState());
+    assertEquals(2, result.getValue());
+    // resultCallback should be called immediately on a resolved Result
+    assertEquals(0, resultCallback.getCallCount());
 
-  assertEquals(1, resultCallback.getCallCount());
-  var lastCall = resultCallback.popLastCall();
-  var res = lastCall.getArgument(0);
-  assertEquals(goog.result.Result.State.ERROR, res.getState());
-  assertTrue(res.getError() instanceof goog.result.Result.CancelError);
-}
+    result.wait(resultCallback);
 
-function testCancelAfterSetValue() {
-  // cancel after setValue/setError => no-op
-  result.wait(resultCallback);
-  result.setValue(1);
+    assertEquals(1, resultCallback.getCallCount());
+    const res = resultCallback.popLastCall().getArgument(0);
+    assertEquals(result, res);
+  },
 
-  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
-  assertEquals(1, result.getValue());
-  assertEquals(1, resultCallback.getCallCount());
+  testAttachingHandlerOnErrorResult() {
+    const error = {code: -1, errorString: 'Invalid JSON'};
+    result.setError(error);
+    assertEquals(googResult.Result.State.ERROR, result.getState());
+    assertEquals(error, result.getError());
+    // resultCallback should be called immediately on a resolved Result
+    assertEquals(0, resultCallback.getCallCount());
 
-  result.cancel();
+    result.wait(resultCallback);
 
-  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
-  assertEquals(1, result.getValue());
-  assertEquals(1, resultCallback.getCallCount());
-}
+    assertEquals(1, resultCallback.getCallCount());
+    const res = resultCallback.popLastCall().getArgument(0);
+    assertEquals(result, res);
+  },
 
-function testSetValueAfterCancel() {
-  // setValue/setError after cancel => no-op
-  result.wait(resultCallback);
+  testExceptionThrownOnMultipleSuccessfulResolutionAttempts() {
+    result.setValue(1);
+    assertEquals(googResult.Result.State.SUCCESS, result.getState());
+    assertEquals(1, result.getValue());
 
-  result.cancel();
-  assertTrue(result.isCanceled());
-  assertTrue(result.getError() instanceof goog.result.Result.CancelError);
+    // Try to set the value again
+    const e = assertThrows(goog.bind(result.setValue, result, 3));
+    assertTrue(e instanceof googResult.SimpleResult.StateError);
+  },
 
-  result.setValue(1);
-  assertTrue(result.isCanceled());
-  assertTrue(result.getError() instanceof goog.result.Result.CancelError);
+  testExceptionThrownOnMultipleErrorResolutionAttempts() {
+    assertEquals(googResult.Result.State.PENDING, result.getState());
 
-  result.setError(3);
-  assertTrue(result.isCanceled());
-  assertTrue(result.getError() instanceof goog.result.Result.CancelError);
-}
+    result.setError(5);
 
-function testFromResolvedPromise() {
-  var promise = goog.Promise.resolve('resolved');
-  result = goog.result.SimpleResult.fromPromise(promise);
-  assertEquals(goog.result.Result.State.PENDING, result.getState());
-  mockClock.tick();
-  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
-  assertEquals('resolved', result.getValue());
-  assertEquals(undefined, result.getError());
-}
+    assertEquals(googResult.Result.State.ERROR, result.getState());
+    assertEquals(5, result.getError());
+    // Try to set error again
+    const e = assertThrows(goog.bind(result.setError, result, 4));
+    assertTrue(e instanceof googResult.SimpleResult.StateError);
+  },
 
-function testFromRejectedPromise() {
-  var promise = goog.Promise.reject('rejected');
-  result = goog.result.SimpleResult.fromPromise(promise);
-  assertEquals(goog.result.Result.State.PENDING, result.getState());
-  mockClock.tick();
-  assertEquals(goog.result.Result.State.ERROR, result.getState());
-  assertEquals(undefined, result.getValue());
-  assertEquals('rejected', result.getError());
-}
+  testExceptionThrownOnSuccessThenErrorResolutionAttempt() {
+    assertEquals(googResult.Result.State.PENDING, result.getState());
 
-function testThen() {
-  var value1, value2;
-  result.then(function(val1) {
-    return value1 = val1;
-  }).then(function(val2) {
-    value2 = val2;
-  });
-  result.setValue('done');
-  assertUndefined(value1);
-  assertUndefined(value2);
-  mockClock.tick();
-  assertEquals('done', value1);
-  assertEquals('done', value2);
-}
+    result.setValue(1);
 
-function testThen_reject() {
-  var value, reason;
-  result.then(
-    function(v) { value = v; },
-    function(r) { reason = r; });
-  result.setError(new Error('oops'));
-  assertUndefined(value);
-  mockClock.tick();
-  assertUndefined(value);
-  assertEquals('oops', reason.message);
-}
+    assertEquals(googResult.Result.State.SUCCESS, result.getState());
+    assertEquals(1, result.getValue());
 
-function testPromiseAll() {
-  var promise = goog.Promise.resolve('promise');
-  goog.Promise.all([result, promise]).then(function(values) {
-    assertEquals(2, values.length);
-    assertEquals('result', values[0]);
-    assertEquals('promise', values[1]);
-  });
-  result.setValue('result');
-  mockClock.tick();
-}
+    // Try to set error after setting value
+    const e = assertThrows(goog.bind(result.setError, result, 3));
+    assertTrue(e instanceof googResult.SimpleResult.StateError);
+  },
 
-function testResolvingPromiseBlocksResult() {
-  var value;
-  goog.Promise.resolve('promise').then(function(value) {
-    result.setValue(value);
-  });
-  result.wait(function(r) {
-    value = r.getValue();
-  });
-  assertUndefined(value);
-  mockClock.tick();
-  assertEquals('promise', value);
-}
+  testExceptionThrownOnErrorThenSuccessResolutionAttempt() {
+    assertEquals(googResult.Result.State.PENDING, result.getState());
 
-function testRejectingPromiseBlocksResult() {
-  var err;
-  goog.Promise.reject(new Error('oops')).then(
-    undefined /* opt_onResolved */,
-    function(reason) {
-      result.setError(reason);
+    const error = 'fail';
+    result.setError(error);
+
+    assertEquals(googResult.Result.State.ERROR, result.getState());
+    assertEquals(error, result.getError());
+    // Try to set value after setting error
+    const e = assertThrows(goog.bind(result.setValue, result, 1));
+    assertTrue(e instanceof googResult.SimpleResult.StateError);
+  },
+
+  testSuccessfulAsyncResolution() {
+    result.wait(resultCallback);
+    assertEquals(googResult.Result.State.PENDING, result.getState());
+
+    Timer.callOnce(() => {
+      result.setValue(1);
     });
-  result.wait(function(r) {
-    err = r.getError();
-  });
-  assertUndefined(err);
-  mockClock.tick();
-  assertEquals('oops', err.message);
-}
+    mockClock.tick();
 
-function testPromiseFromCanceledResult() {
-  var reason;
-  result.cancel();
-  result.then(
-    undefined /* opt_onResolved */,
-    function(r) {
+    assertEquals(1, resultCallback.getCallCount());
+
+    const res = resultCallback.popLastCall().getArgument(0);
+    assertEquals(googResult.Result.State.SUCCESS, res.getState());
+    assertEquals(1, res.getValue());
+  },
+
+  testErrorAsyncResolution() {
+    result.wait(resultCallback);
+    assertEquals(googResult.Result.State.PENDING, result.getState());
+
+    const error = 'Network failure';
+    Timer.callOnce(() => {
+      result.setError(error);
+    });
+    mockClock.tick();
+
+    assertEquals(1, resultCallback.getCallCount());
+    const res = resultCallback.popLastCall().getArgument(0);
+    assertEquals(googResult.Result.State.ERROR, res.getState());
+    assertEquals(error, res.getError());
+  },
+
+  testCancelStateAndReturn() {
+    assertFalse(result.isCanceled());
+    const canceled = result.cancel();
+    assertTrue(result.isCanceled());
+    assertEquals(googResult.Result.State.ERROR, result.getState());
+    assertTrue(result.getError() instanceof googResult.Result.CancelError);
+    assertTrue(canceled);
+  },
+
+  testErrorHandlersFireOnCancel() {
+    result.wait(resultCallback);
+    result.cancel();
+
+    assertEquals(1, resultCallback.getCallCount());
+    const lastCall = resultCallback.popLastCall();
+    const res = lastCall.getArgument(0);
+    assertEquals(googResult.Result.State.ERROR, res.getState());
+    assertTrue(res.getError() instanceof googResult.Result.CancelError);
+  },
+
+  testCancelAfterSetValue() {
+    // cancel after setValue/setError => no-op
+    result.wait(resultCallback);
+    result.setValue(1);
+
+    assertEquals(googResult.Result.State.SUCCESS, result.getState());
+    assertEquals(1, result.getValue());
+    assertEquals(1, resultCallback.getCallCount());
+
+    result.cancel();
+
+    assertEquals(googResult.Result.State.SUCCESS, result.getState());
+    assertEquals(1, result.getValue());
+    assertEquals(1, resultCallback.getCallCount());
+  },
+
+  testSetValueAfterCancel() {
+    // setValue/setError after cancel => no-op
+    result.wait(resultCallback);
+
+    result.cancel();
+    assertTrue(result.isCanceled());
+    assertTrue(result.getError() instanceof googResult.Result.CancelError);
+
+    result.setValue(1);
+    assertTrue(result.isCanceled());
+    assertTrue(result.getError() instanceof googResult.Result.CancelError);
+
+    result.setError(3);
+    assertTrue(result.isCanceled());
+    assertTrue(result.getError() instanceof googResult.Result.CancelError);
+  },
+
+  testFromResolvedPromise() {
+    const promise = GoogPromise.resolve('resolved');
+    result = googResult.SimpleResult.fromPromise(promise);
+    assertEquals(googResult.Result.State.PENDING, result.getState());
+    mockClock.tick();
+    assertEquals(googResult.Result.State.SUCCESS, result.getState());
+    assertEquals('resolved', result.getValue());
+    assertEquals(undefined, result.getError());
+  },
+
+  testFromRejectedPromise() {
+    const promise = GoogPromise.reject('rejected');
+    result = googResult.SimpleResult.fromPromise(promise);
+    assertEquals(googResult.Result.State.PENDING, result.getState());
+    mockClock.tick();
+    assertEquals(googResult.Result.State.ERROR, result.getState());
+    assertEquals(undefined, result.getValue());
+    assertEquals('rejected', result.getError());
+  },
+
+  testThen() {
+    let value1;
+    let value2;
+
+    result.then((val1) => value1 = val1).then((val2) => {
+      value2 = val2;
+    });
+    result.setValue('done');
+    assertUndefined(value1);
+    assertUndefined(value2);
+    mockClock.tick();
+    assertEquals('done', value1);
+    assertEquals('done', value2);
+  },
+
+  testThen_reject() {
+    let reason;
+    let value;
+
+    result.then(
+        (v) => {
+          value = v;
+        },
+        (r) => {
+          reason = r;
+        });
+    result.setError(new Error('oops'));
+    assertUndefined(value);
+    mockClock.tick();
+    assertUndefined(value);
+    assertEquals('oops', reason.message);
+  },
+
+  testPromiseAll() {
+    const promise = GoogPromise.resolve('promise');
+    GoogPromise.all([result, promise]).then((values) => {
+      assertEquals(2, values.length);
+      assertEquals('result', values[0]);
+      assertEquals('promise', values[1]);
+    });
+    result.setValue('result');
+    mockClock.tick();
+  },
+
+  testResolvingPromiseBlocksResult() {
+    let value;
+    GoogPromise.resolve('promise').then((value) => {
+      result.setValue(value);
+    });
+    result.wait((r) => {
+      value = r.getValue();
+    });
+    assertUndefined(value);
+    mockClock.tick();
+    assertEquals('promise', value);
+  },
+
+  testRejectingPromiseBlocksResult() {
+    let err;
+    GoogPromise.reject(new Error('oops'))
+        .then(undefined /* opt_onResolved */, (reason) => {
+          result.setError(reason);
+        });
+    result.wait((r) => {
+      err = r.getError();
+    });
+    assertUndefined(err);
+    mockClock.tick();
+    assertEquals('oops', err.message);
+  },
+
+  testPromiseFromCanceledResult() {
+    let reason;
+    result.cancel();
+    result.then(undefined /* opt_onResolved */, (r) => {
       reason = r;
     });
-  mockClock.tick();
-  assertTrue(reason instanceof goog.Promise.CancellationError);
-}
+    mockClock.tick();
+    assertTrue(reason instanceof GoogPromise.CancellationError);
+  },
 
-function testThenableInterface() {
-  assertTrue(goog.Thenable.isImplementedBy(result));
-}
+  testThenableInterface() {
+    assertTrue(Thenable.isImplementedBy(result));
+  },
+});

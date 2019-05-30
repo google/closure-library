@@ -12,74 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.crypt.AesTest');
-goog.setTestOnly('goog.crypt.AesTest');
+goog.module('goog.crypt.AesTest');
+goog.setTestOnly();
 
-goog.require('goog.crypt');
-goog.require('goog.crypt.Aes');
-goog.require('goog.testing.jsunit');
-goog.crypt.Aes.ENABLE_TEST_MODE = true;
+const Aes = goog.require('goog.crypt.Aes');
+const crypt = goog.require('goog.crypt');
+const testSuite = goog.require('goog.testing.testSuite');
+
+Aes.ENABLE_TEST_MODE = true;
 
 /*
  * Unit test for goog.crypt.Aes using the test vectors from the spec:
  * http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf
  */
 
-var testData = null;
-
-function test128() {
-  doTest(
-      '000102030405060708090a0b0c0d0e0f', '00112233445566778899aabbccddeeff',
-      v128, true /* encrypt */);
-}
-
-function test192() {
-  doTest(
-      '000102030405060708090a0b0c0d0e0f1011121314151617',
-      '00112233445566778899aabbccddeeff', v192, true /* encrypt */);
-}
-
-function test256() {
-  doTest(
-      '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f',
-      '00112233445566778899aabbccddeeff', v256, true /* encrypt */);
-}
-
-function test128d() {
-  doTest(
-      '000102030405060708090a0b0c0d0e0f', '69c4e0d86a7b0430d8cdb78070b4c55a',
-      v128d, false /* decrypt */);
-}
-
-function test192d() {
-  doTest(
-      '000102030405060708090a0b0c0d0e0f1011121314151617',
-      'dda97ca4864cdfe06eaf70a0ec0d7191', v192d, false /* decrypt */);
-}
-
-function test256d() {
-  doTest(
-      '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f',
-      '8ea2b7ca516745bfeafc49904b496089', v256d, false /* decrypt */);
-}
+let testData = null;
 
 function doTest(key, input, values, dir) {
   testData = values;
-  var keyArray = goog.crypt.hexToByteArray(key);
-  var aes = new goog.crypt.Aes(keyArray);
+  const keyArray = crypt.hexToByteArray(key);
+  const aes = new Aes(keyArray);
 
-  aes.testKeySchedule_ = onTestKeySchedule;
-  aes.testStartRound_ = onTestStartRound;
-  aes.testAfterSubBytes_ = onTestAfterSubBytes;
-  aes.testAfterShiftRows_ = onTestAfterShiftRows;
-  aes.testAfterMixColumns_ = onTestAfterMixColumns;
-  aes.testAfterAddRoundKey_ = onTestAfterAddRoundKey;
+  let testKeySchedule = onTestKeySchedule;
+  let testStartRound = onTestStartRound;
+  let testAfterSubBytes = onTestAfterSubBytes;
+  let testAfterShiftRows = onTestAfterShiftRows;
+  let testAfterMixColumns = onTestAfterMixColumns;
+  let testAfterAddRoundKey = onTestAfterAddRoundKey;
 
-  var inputArr = goog.crypt.hexToByteArray(input);
-  var keyArr = goog.crypt.hexToByteArray(key);
-  var outputArr = [];
+  const inputArr = crypt.hexToByteArray(input);
+  const keyArr = crypt.hexToByteArray(key);
+  let outputArr = [];
 
-  var outputArr;
   if (dir) {
     outputArr = aes.encrypt(inputArr);
   } else {
@@ -94,7 +58,7 @@ function doTest(key, input, values, dir) {
 function onTestKeySchedule(roundNum, keySchedule, keyScheduleIndex) {
   assertNotNull(keySchedule);
   assertEquals(
-      'Incorrect key for round ' + roundNum, testData[roundNum].k_sch,
+      `Incorrect key for round ${roundNum}`, testData[roundNum].k_sch,
       encodeKey(keySchedule, keyScheduleIndex));
 }
 
@@ -134,9 +98,9 @@ function onTestAfterAddRoundKey(roundNum, state) {
 }
 
 function encodeHex(arr) {
-  var str = [];
+  const str = [];
 
-  for (var i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     str.push(encodeByte(arr[i]));
   }
 
@@ -144,10 +108,10 @@ function encodeHex(arr) {
 }
 
 function encodeState(state) {
-  var s = [];
+  const s = [];
 
-  for (var c = 0; c < 4; c++) {
-    for (var r = 0; r < 4; r++) {
+  for (let c = 0; c < 4; c++) {
+    for (let r = 0; r < 4; r++) {
       s.push(encodeByte(state[r][c]));
     }
   }
@@ -156,10 +120,10 @@ function encodeState(state) {
 }
 
 function encodeKey(key, round) {
-  var s = [];
+  const s = [];
 
-  for (var r = round * 4; r < (round * 4 + 4); r++) {
-    for (var c = 0; c < 4; c++) {
+  for (let r = round * 4; r < (round * 4 + 4); r++) {
+    for (let c = 0; c < 4; c++) {
       s.push(encodeByte(key[r][c]));
     }
   }
@@ -171,15 +135,15 @@ function encodeByte(val) {
   val = Number(val).toString(16);
 
   if (val.length == 1) {
-    val = '0' + val;
+    val = `0${val}`;
   }
 
   return val;
 }
 
-var v128 = [];
+const v128 = [];
 (function v128_init() {
-  for (var i = 0; i <= 10; i++) v128[i] = {};
+  for (let i = 0; i <= 10; i++) v128[i] = {};
   v128.name = '128';
   v128[0].input = '00112233445566778899aabbccddeeff';
   v128[0].k_sch = '000102030405060708090a0b0c0d0e0f';
@@ -235,9 +199,9 @@ var v128 = [];
   v128[10].output = '69c4e0d86a7b0430d8cdb78070b4c55a';
 })();
 
-var v128d = [];
+const v128d = [];
 (function v128d_init() {
-  for (var i = 0; i <= 10; i++) v128d[i] = {};
+  for (let i = 0; i <= 10; i++) v128d[i] = {};
   v128d.name = '128d';
   v128d[0].input = '69c4e0d86a7b0430d8cdb78070b4c55a';
   v128d[0].k_sch = '13111d7fe3944a17f307a78b4d2b30c5';
@@ -293,9 +257,9 @@ var v128d = [];
   v128d[10].output = '00112233445566778899aabbccddeeff';
 })();
 
-var v192 = [];
+const v192 = [];
 (function v192_init() {
-  for (var i = 0; i <= 12; i++) v192[i] = {};
+  for (let i = 0; i <= 12; i++) v192[i] = {};
   v192.name = '192';
   v192[0].input = '00112233445566778899aabbccddeeff';
   v192[0].k_sch = '000102030405060708090a0b0c0d0e0f';
@@ -361,9 +325,9 @@ var v192 = [];
   v192[12].output = 'dda97ca4864cdfe06eaf70a0ec0d7191';
 })();
 
-var v192d = [];
+const v192d = [];
 (function v192d_init() {
-  for (var i = 0; i <= 12; i++) v192d[i] = {};
+  for (let i = 0; i <= 12; i++) v192d[i] = {};
   v192d.name = '192d';
   v192d[0].input = 'dda97ca4864cdfe06eaf70a0ec0d7191';
   v192d[0].k_sch = 'a4970a331a78dc09c418c271e3a41d5d';
@@ -429,9 +393,9 @@ var v192d = [];
   v192d[12].output = '00112233445566778899aabbccddeeff';
 })();
 
-var v256 = [];
+const v256 = [];
 (function v256_init() {
-  for (var i = 0; i <= 14; i++) v256[i] = {};
+  for (let i = 0; i <= 14; i++) v256[i] = {};
   v256.name = '256';
   v256[0].input = '00112233445566778899aabbccddeeff';
   v256[0].k_sch = '000102030405060708090a0b0c0d0e0f';
@@ -507,9 +471,9 @@ var v256 = [];
   v256[14].output = '8ea2b7ca516745bfeafc49904b496089';
 })();
 
-var v256d = [];
+const v256d = [];
 (function v256d_init() {
-  for (var i = 0; i <= 14; i++) v256d[i] = {};
+  for (let i = 0; i <= 14; i++) v256d[i] = {};
   v256d.name = '256d';
   v256d[0].input = '8ea2b7ca516745bfeafc49904b496089';
   v256d[0].k_sch = '24fc79ccbf0979e9371ac23c6d68de36';
@@ -584,3 +548,40 @@ var v256d = [];
   v256d[14].k_sch = '000102030405060708090a0b0c0d0e0f';
   v256d[14].output = '00112233445566778899aabbccddeeff';
 })();
+testSuite({
+  test128() {
+    doTest(
+        '000102030405060708090a0b0c0d0e0f', '00112233445566778899aabbccddeeff',
+        v128, true /* encrypt */);
+  },
+
+  test192() {
+    doTest(
+        '000102030405060708090a0b0c0d0e0f1011121314151617',
+        '00112233445566778899aabbccddeeff', v192, true /* encrypt */);
+  },
+
+  test256() {
+    doTest(
+        '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f',
+        '00112233445566778899aabbccddeeff', v256, true /* encrypt */);
+  },
+
+  test128d() {
+    doTest(
+        '000102030405060708090a0b0c0d0e0f', '69c4e0d86a7b0430d8cdb78070b4c55a',
+        v128d, false /* decrypt */);
+  },
+
+  test192d() {
+    doTest(
+        '000102030405060708090a0b0c0d0e0f1011121314151617',
+        'dda97ca4864cdfe06eaf70a0ec0d7191', v192d, false /* decrypt */);
+  },
+
+  test256d() {
+    doTest(
+        '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f',
+        '8ea2b7ca516745bfeafc49904b496089', v256d, false /* decrypt */);
+  },
+});

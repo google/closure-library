@@ -12,77 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.PerformanceTimerTest');
-goog.setTestOnly('goog.testing.PerformanceTimerTest');
+goog.module('goog.testing.PerformanceTimerTest');
+goog.setTestOnly();
 
-goog.require('goog.async.Deferred');
-goog.require('goog.dom');
-goog.require('goog.math');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.PerformanceTimer');
-goog.require('goog.testing.jsunit');
+const Deferred = goog.require('goog.async.Deferred');
+const MockClock = goog.require('goog.testing.MockClock');
+const PerformanceTimer = goog.require('goog.testing.PerformanceTimer');
+const dom = goog.require('goog.dom');
+const googMath = goog.require('goog.math');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var mockClock;
-var sandbox;
-var timer;
-function setUpPage() {
-  sandbox = document.getElementById('sandbox');
-}
-
-function setUp() {
-  mockClock = new goog.testing.MockClock(true);
-  timer = new goog.testing.PerformanceTimer();
-}
-
-function tearDown() {
-  mockClock.dispose();
-  timer = null;
-  goog.dom.removeChildren(sandbox);
-}
-
-function testConstructor() {
-  assertTrue(
-      'Timer must be an instance of goog.testing.PerformanceTimer',
-      timer instanceof goog.testing.PerformanceTimer);
-  assertEquals(
-      'Timer must collect the default number of samples', 10,
-      timer.getNumSamples());
-  assertEquals(
-      'Timer must have the default timeout interval', 5000,
-      timer.getTimeoutInterval());
-}
-
-function testRun_noSetUpOrTearDown() {
-  runAndAssert(false, false, false);
-}
-
-function testRun_withSetup() {
-  runAndAssert(true, false, false);
-}
-
-function testRun_withTearDown() {
-  runAndAssert(false, true, false);
-}
-
-function testRun_withSetUpAndTearDown() {
-  runAndAssert(true, true, false);
-}
-
-function testRunAsync_noSetUpOrTearDown() {
-  runAndAssert(false, false, true);
-}
-
-function testRunAsync_withSetup() {
-  runAndAssert(true, false, true);
-}
-
-function testRunAsync_withTearDown() {
-  runAndAssert(false, true, true);
-}
-
-function testRunAsync_withSetUpAndTearDown() {
-  runAndAssert(true, true, true);
-}
+let mockClock;
+let sandbox;
+let timer;
 
 /**
  * @param {boolean} useSetUp
@@ -90,43 +32,43 @@ function testRunAsync_withSetUpAndTearDown() {
  * @param {boolean} runAsync
  */
 function runAndAssert(useSetUp, useTearDown, runAsync) {
-  var fakeExecutionTime = [100, 95, 98, 104, 130, 101, 96, 98, 90, 103];
-  var count = 0;
-  var testFunction = function() {
+  const fakeExecutionTime = [100, 95, 98, 104, 130, 101, 96, 98, 90, 103];
+  let count = 0;
+  const testFunction = () => {
     mockClock.tick(fakeExecutionTime[count++]);
     if (runAsync) {
-      var deferred = new goog.async.Deferred();
+      const deferred = new Deferred();
       deferred.callback();
       return deferred;
     }
   };
 
-  var setUpCount = 0;
-  var setUpFunction = function() {
+  let setUpCount = 0;
+  const setUpFunction = () => {
     // Should have no effect on total time.
     mockClock.tick(7);
     setUpCount++;
     if (runAsync) {
-      var deferred = new goog.async.Deferred();
+      const deferred = new Deferred();
       deferred.callback();
       return deferred;
     }
   };
 
-  var tearDownCount = 0;
-  var tearDownFunction = function() {
+  let tearDownCount = 0;
+  const tearDownFunction = () => {
     // Should have no effect on total time.
     mockClock.tick(11);
     tearDownCount++;
     if (runAsync) {
-      var deferred = new goog.async.Deferred();
+      const deferred = new Deferred();
       deferred.callback();
       return deferred;
     }
   };
 
   // Fast test function should complete successfully in under 5 seconds...
-  var task = new goog.testing.PerformanceTimer.Task(testFunction);
+  const task = new PerformanceTimer.Task(testFunction);
   if (useSetUp) {
     task.withSetUp(setUpFunction);
   }
@@ -134,16 +76,16 @@ function runAndAssert(useSetUp, useTearDown, runAsync) {
     task.withTearDown(tearDownFunction);
   }
   if (runAsync) {
-    var assertsRan = false;
-    var deferred = timer.runAsyncTask(task);
-    deferred.addCallback(function(results) {
+    let assertsRan = false;
+    const deferred = timer.runAsyncTask(task);
+    deferred.addCallback((results) => {
       assertsRan = assertResults(
           results, useSetUp, useTearDown, setUpCount, tearDownCount,
           fakeExecutionTime);
     });
     assertTrue(assertsRan);
   } else {
-    var results = timer.runTask(task);
+    const results = timer.runTask(task);
     assertResults(
         results, useSetUp, useTearDown, setUpCount, tearDownCount,
         fakeExecutionTime);
@@ -165,11 +107,11 @@ function assertResults(
   assertNotNull('Results must be available.', results);
 
   assertEquals(
-      'Average is wrong.', goog.math.average.apply(null, fakeExecutionTime),
+      'Average is wrong.', googMath.average.apply(null, fakeExecutionTime),
       results['average']);
   assertEquals(
       'Standard deviation is wrong.',
-      goog.math.standardDeviation.apply(null, fakeExecutionTime),
+      googMath.standardDeviation.apply(null, fakeExecutionTime),
       results['standardDeviation']);
 
   assertEquals('Count must be as expected.', 10, results['count']);
@@ -177,7 +119,7 @@ function assertResults(
   assertEquals('Mimimum is wrong.', 90, results['minimum']);
   assertEquals(
       'Total must be a nonnegative number.',
-      goog.math.sum.apply(null, fakeExecutionTime), results['total']);
+      googMath.sum.apply(null, fakeExecutionTime), results['total']);
 
   assertEquals(
       'Set up count must be as expected.', useSetUp ? 10 : 0, setUpCount);
@@ -188,35 +130,96 @@ function assertResults(
   return true;
 }
 
-function testTimeout() {
-  var count = 0;
-  var testFunction = function() {
-    mockClock.tick(100);
-    ++count;
-  };
+testSuite({
+  setUpPage() {
+    sandbox = document.getElementById('sandbox');
+  },
 
-  timer.setNumSamples(200);
-  timer.setTimeoutInterval(2500);
-  var results = timer.run(testFunction);
+  setUp() {
+    mockClock = new MockClock(true);
+    timer = new PerformanceTimer();
+  },
 
-  assertNotNull('Results must be available', results);
-  assertEquals('Count is wrong', count, results['count']);
-  assertTrue(
-      'Count must less than expected',
-      results['count'] < timer.getNumSamples());
-}
+  tearDown() {
+    mockClock.dispose();
+    timer = null;
+    dom.removeChildren(sandbox);
+  },
 
-function testCreateResults() {
-  var samples = [53, 0, 103];
-  var expectedResults = {
-    'average': 52,
-    'count': 3,
-    'median': 53,
-    'maximum': 103,
-    'minimum': 0,
-    'standardDeviation': goog.math.standardDeviation.apply(null, samples),
-    'total': 156
-  };
-  assertObjectEquals(
-      expectedResults, goog.testing.PerformanceTimer.createResults(samples));
-}
+  testConstructor() {
+    assertTrue(
+        'Timer must be an instance of goog.testing.PerformanceTimer',
+        timer instanceof PerformanceTimer);
+    assertEquals(
+        'Timer must collect the default number of samples', 10,
+        timer.getNumSamples());
+    assertEquals(
+        'Timer must have the default timeout interval', 5000,
+        timer.getTimeoutInterval());
+  },
+
+  testRun_noSetUpOrTearDown() {
+    runAndAssert(false, false, false);
+  },
+
+  testRun_withSetup() {
+    runAndAssert(true, false, false);
+  },
+
+  testRun_withTearDown() {
+    runAndAssert(false, true, false);
+  },
+
+  testRun_withSetUpAndTearDown() {
+    runAndAssert(true, true, false);
+  },
+
+  testRunAsync_noSetUpOrTearDown() {
+    runAndAssert(false, false, true);
+  },
+
+  testRunAsync_withSetup() {
+    runAndAssert(true, false, true);
+  },
+
+  testRunAsync_withTearDown() {
+    runAndAssert(false, true, true);
+  },
+
+  testRunAsync_withSetUpAndTearDown() {
+    runAndAssert(true, true, true);
+  },
+
+  testTimeout() {
+    let count = 0;
+    const testFunction = () => {
+      mockClock.tick(100);
+      ++count;
+    };
+
+    timer.setNumSamples(200);
+    timer.setTimeoutInterval(2500);
+    const results = timer.run(testFunction);
+
+    assertNotNull('Results must be available', results);
+    assertEquals('Count is wrong', count, results['count']);
+    assertTrue(
+        'Count must less than expected',
+        results['count'] < timer.getNumSamples());
+  },
+
+  testCreateResults() {
+    const samples = [53, 0, 103];
+    const expectedResults = {
+      'average': 52,
+      'count': 3,
+      'median': 53,
+      'maximum': 103,
+      'minimum': 0,
+      'standardDeviation': googMath.standardDeviation.apply(null, samples),
+      'total': 156,
+    };
+    assertObjectEquals(
+        expectedResults, PerformanceTimer.createResults(samples));
+  },
+});

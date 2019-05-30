@@ -12,169 +12,166 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.plugins.LoremIpsumTest');
-goog.setTestOnly('goog.editor.plugins.LoremIpsumTest');
+goog.module('goog.editor.plugins.LoremIpsumTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.editor.Command');
-goog.require('goog.editor.Field');
-goog.require('goog.editor.plugins.LoremIpsum');
-goog.require('goog.html.SafeHtml');
-goog.require('goog.string.Unicode');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const Command = goog.require('goog.editor.Command');
+const Field = goog.require('goog.editor.Field');
+const LoremIpsum = goog.require('goog.editor.plugins.LoremIpsum');
+const SafeHtml = goog.require('goog.html.SafeHtml');
+const Unicode = goog.require('goog.string.Unicode');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var FIELD;
-var PLUGIN;
-var HTML;
-var UPPERCASE_CONTENTS = '<P>THE OWLS ARE NOT WHAT THEY SEEM.</P>';
-
-function setUp() {
-  HTML = goog.dom.getElement('root').innerHTML;
-
-  FIELD = new goog.editor.Field('field');
-
-  PLUGIN =
-      new goog.editor.plugins.LoremIpsum('The owls are not what they seem.');
-  FIELD.registerPlugin(PLUGIN);
-}
-
-function tearDown() {
-  FIELD.dispose();
-  goog.dom.getElement('root').innerHTML = HTML;
-}
-
-function testQueryUsingLorem() {
-  FIELD.makeEditable();
-
-  assertTrue(FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
-  FIELD.setSafeHtml(
-      true, goog.html.SafeHtml.htmlEscape('fresh content'), false, true);
-  assertFalse(FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
-}
-
-function testUpdateLoremIpsum() {
-  goog.dom.setTextContent(goog.dom.getElement('field'), 'stuff');
-
-  var loremPlugin = FIELD.getPluginByClassId('LoremIpsum');
-  FIELD.makeEditable();
-  var content = goog.html.SafeHtml.create('div', {}, 'foo');
-
-  FIELD.setSafeHtml(
-      false, goog.html.SafeHtml.EMPTY, false, /* Don't update lorem */ false);
-  assertFalse(
-      'Field started with content, lorem must not be enabled.',
-      FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
-  FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
-  assertTrue(
-      'Field was set to empty, update must turn on lorem ipsum',
-      FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
-
-  FIELD.unregisterPlugin(loremPlugin);
-  FIELD.setSafeHtml(
-      false, content, false,
-      /* Update (turn off) lorem */ true);
-  FIELD.setSafeHtml(
-      false, goog.html.SafeHtml.EMPTY, false, /* Don't update lorem */ false);
-  FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
-  assertFalse(
-      'Field with no lorem message must not use lorem ipsum',
-      FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
-  FIELD.registerPlugin(loremPlugin);
-
-  FIELD.setSafeHtml(false, content, false, true);
-  FIELD.setSafeHtml(false, goog.html.SafeHtml.EMPTY, false, false);
-  goog.editor.Field.setActiveFieldId(FIELD.id);
-  FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
-  assertFalse(
-      'Active field must not use lorem ipsum',
-      FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
-  goog.editor.Field.setActiveFieldId(null);
-
-  FIELD.setSafeHtml(false, content, false, true);
-  FIELD.setSafeHtml(false, goog.html.SafeHtml.EMPTY, false, false);
-  FIELD.setModalMode(true);
-  FIELD.execCommand(goog.editor.Command.UPDATE_LOREM);
-  assertFalse(
-      'Must not turn on lorem ipsum while a dialog is open.',
-      FIELD.queryCommandValue(goog.editor.Command.USING_LOREM));
-  FIELD.setModalMode(true);
-
-  FIELD.dispose();
-}
-
-function testLoremIpsumAndGetCleanContents() {
-  goog.dom.setTextContent(goog.dom.getElement('field'), 'This is a field');
-  FIELD.makeEditable();
-
-  // test direct getCleanContents
-  assertEquals(
-      'field reported wrong contents', 'This is a field',
-      FIELD.getCleanContents());
-
-  // test indirect getCleanContents
-  var contents = FIELD.getCleanContents();
-  assertEquals('field reported wrong contents', 'This is a field', contents);
-
-  // set field html, but explicitly forbid converting to lorem ipsum text
-  FIELD.setSafeHtml(
-      false, goog.html.SafeHtml.htmlEscape(goog.string.Unicode.NBSP), true,
-      false /* no lorem */);
-  assertEquals(
-      'field contains unexpected contents', getNbsp(),
-      FIELD.getElement().innerHTML);
-  assertEquals(
-      'field reported wrong contents', getNbsp(), FIELD.getCleanContents());
-
-  // now set field html allowing lorem
-  FIELD.setSafeHtml(
-      false, goog.html.SafeHtml.htmlEscape(goog.string.Unicode.NBSP), true,
-      true /* lorem */);
-  assertEquals(
-      'field reported wrong contents', goog.string.Unicode.NBSP,
-      FIELD.getCleanContents());
-  assertEquals(
-      'field contains unexpected contents', UPPERCASE_CONTENTS,
-      FIELD.getElement().innerHTML.toUpperCase());
-}
-
-function testLoremIpsumAndGetCleanContents2() {
-  // make a field blank before we make it editable, and then check
-  // that making it editable activates lorem.
-  assert('field is editable', FIELD.isUneditable());
-  goog.dom.setTextContent(goog.dom.getElement('field'), '   ');
-
-  FIELD.makeEditable();
-  assertEquals(
-      'field contains unexpected contents', UPPERCASE_CONTENTS,
-      FIELD.getElement().innerHTML.toUpperCase());
-
-  FIELD.makeUneditable();
-  assertEquals(
-      'field contains unexpected contents', UPPERCASE_CONTENTS,
-      goog.dom.getElement('field').innerHTML.toUpperCase());
-}
-
-function testLoremIpsumInClickToEditMode() {
-  // in click-to-edit mode, trogedit manages the editable state of the editor,
-  // so we must manage lorem ipsum in uneditable mode too.
-  FIELD.makeEditable();
-
-  assertEquals(
-      'field contains unexpected contents', UPPERCASE_CONTENTS,
-      FIELD.getElement().innerHTML.toUpperCase());
-
-  FIELD.makeUneditable();
-  assertEquals(
-      'field contains unexpected contents', UPPERCASE_CONTENTS,
-      goog.dom.getElement('field').innerHTML.toUpperCase());
-}
+let FIELD;
+let PLUGIN;
+let HTML;
+const UPPERCASE_CONTENTS = '<P>THE OWLS ARE NOT WHAT THEY SEEM.</P>';
 
 function getNbsp() {
   // On WebKit (pre-528) and Opera, &nbsp; shows up as its unicode character in
   // innerHTML under some circumstances.
-  return (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('528')) ||
-          goog.userAgent.OPERA ?
+  return (userAgent.WEBKIT && !userAgent.isVersionOrHigher('528')) ||
+          userAgent.OPERA ?
       '\u00a0' :
       '&nbsp;';
 }
+testSuite({
+  setUp() {
+    HTML = dom.getElement('root').innerHTML;
+
+    FIELD = new Field('field');
+
+    PLUGIN = new LoremIpsum('The owls are not what they seem.');
+    FIELD.registerPlugin(PLUGIN);
+  },
+
+  tearDown() {
+    FIELD.dispose();
+    dom.getElement('root').innerHTML = HTML;
+  },
+
+  testQueryUsingLorem() {
+    FIELD.makeEditable();
+
+    assertTrue(FIELD.queryCommandValue(Command.USING_LOREM));
+    FIELD.setSafeHtml(true, SafeHtml.htmlEscape('fresh content'), false, true);
+    assertFalse(FIELD.queryCommandValue(Command.USING_LOREM));
+  },
+
+  testUpdateLoremIpsum() {
+    dom.setTextContent(dom.getElement('field'), 'stuff');
+
+    const loremPlugin = FIELD.getPluginByClassId('LoremIpsum');
+    FIELD.makeEditable();
+    const content = SafeHtml.create('div', {}, 'foo');
+
+    FIELD.setSafeHtml(
+        false, SafeHtml.EMPTY, false, /* Don't update lorem */ false);
+    assertFalse(
+        'Field started with content, lorem must not be enabled.',
+        FIELD.queryCommandValue(Command.USING_LOREM));
+    FIELD.execCommand(Command.UPDATE_LOREM);
+    assertTrue(
+        'Field was set to empty, update must turn on lorem ipsum',
+        FIELD.queryCommandValue(Command.USING_LOREM));
+
+    FIELD.unregisterPlugin(loremPlugin);
+    FIELD.setSafeHtml(
+        false, content, false,
+        /* Update (turn off) lorem */ true);
+    FIELD.setSafeHtml(
+        false, SafeHtml.EMPTY, false, /* Don't update lorem */ false);
+    FIELD.execCommand(Command.UPDATE_LOREM);
+    assertFalse(
+        'Field with no lorem message must not use lorem ipsum',
+        FIELD.queryCommandValue(Command.USING_LOREM));
+    FIELD.registerPlugin(loremPlugin);
+
+    FIELD.setSafeHtml(false, content, false, true);
+    FIELD.setSafeHtml(false, SafeHtml.EMPTY, false, false);
+    Field.setActiveFieldId(FIELD.id);
+    FIELD.execCommand(Command.UPDATE_LOREM);
+    assertFalse(
+        'Active field must not use lorem ipsum',
+        FIELD.queryCommandValue(Command.USING_LOREM));
+    Field.setActiveFieldId(null);
+
+    FIELD.setSafeHtml(false, content, false, true);
+    FIELD.setSafeHtml(false, SafeHtml.EMPTY, false, false);
+    FIELD.setModalMode(true);
+    FIELD.execCommand(Command.UPDATE_LOREM);
+    assertFalse(
+        'Must not turn on lorem ipsum while a dialog is open.',
+        FIELD.queryCommandValue(Command.USING_LOREM));
+    FIELD.setModalMode(true);
+
+    FIELD.dispose();
+  },
+
+  testLoremIpsumAndGetCleanContents() {
+    dom.setTextContent(dom.getElement('field'), 'This is a field');
+    FIELD.makeEditable();
+
+    // test direct getCleanContents
+    assertEquals(
+        'field reported wrong contents', 'This is a field',
+        FIELD.getCleanContents());
+
+    // test indirect getCleanContents
+    const contents = FIELD.getCleanContents();
+    assertEquals('field reported wrong contents', 'This is a field', contents);
+
+    // set field html, but explicitly forbid converting to lorem ipsum text
+    FIELD.setSafeHtml(
+        false, SafeHtml.htmlEscape(Unicode.NBSP), true, false /* no lorem */);
+    assertEquals(
+        'field contains unexpected contents', getNbsp(),
+        FIELD.getElement().innerHTML);
+    assertEquals(
+        'field reported wrong contents', getNbsp(), FIELD.getCleanContents());
+
+    // now set field html allowing lorem
+    FIELD.setSafeHtml(
+        false, SafeHtml.htmlEscape(Unicode.NBSP), true, true /* lorem */);
+    assertEquals(
+        'field reported wrong contents', Unicode.NBSP,
+        FIELD.getCleanContents());
+    assertEquals(
+        'field contains unexpected contents', UPPERCASE_CONTENTS,
+        FIELD.getElement().innerHTML.toUpperCase());
+  },
+
+  testLoremIpsumAndGetCleanContents2() {
+    // make a field blank before we make it editable, and then check
+    // that making it editable activates lorem.
+    assert('field is editable', FIELD.isUneditable());
+    dom.setTextContent(dom.getElement('field'), '   ');
+
+    FIELD.makeEditable();
+    assertEquals(
+        'field contains unexpected contents', UPPERCASE_CONTENTS,
+        FIELD.getElement().innerHTML.toUpperCase());
+
+    FIELD.makeUneditable();
+    assertEquals(
+        'field contains unexpected contents', UPPERCASE_CONTENTS,
+        dom.getElement('field').innerHTML.toUpperCase());
+  },
+
+  testLoremIpsumInClickToEditMode() {
+    // in click-to-edit mode, trogedit manages the editable state of the editor,
+    // so we must manage lorem ipsum in uneditable mode too.
+    FIELD.makeEditable();
+
+    assertEquals(
+        'field contains unexpected contents', UPPERCASE_CONTENTS,
+        FIELD.getElement().innerHTML.toUpperCase());
+
+    FIELD.makeUneditable();
+    assertEquals(
+        'field contains unexpected contents', UPPERCASE_CONTENTS,
+        dom.getElement('field').innerHTML.toUpperCase());
+  },
+});

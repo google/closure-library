@@ -12,78 +12,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.HoverCardTest');
-goog.setTestOnly('goog.ui.HoverCardTest');
+goog.module('goog.ui.HoverCardTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.events');
-goog.require('goog.math.Coordinate');
-goog.require('goog.style');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.events');
-goog.require('goog.testing.events.Event');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.HoverCard');
+const Coordinate = goog.require('goog.math.Coordinate');
+const GoogTestingEvent = goog.require('goog.testing.events.Event');
+const HoverCard = goog.require('goog.ui.HoverCard');
+const MockClock = goog.require('goog.testing.MockClock');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.events');
+const style = goog.require('goog.style');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingEvents = goog.require('goog.testing.events');
 
-var timer = new goog.testing.MockClock();
-var card;
+const timer = new MockClock();
+let card;
 
 // Variables for mocks
-var triggeredElement;
-var cancelledElement;
-var showDelay;
-var shownCard;
-var hideDelay;
+let triggeredElement;
+let cancelledElement;
+let showDelay;
+let shownCard;
+let hideDelay;
 
 // spans
-var john;
-var jane;
-var james;
-var bill;
-var child;
+let john;
+let jane;
+let james;
+let bill;
+let child;
 
 // Inactive
-var elsewhere;
-var offAnchor;
+let elsewhere;
+let offAnchor;
 
-function setUpPage() {
-  john = goog.dom.getElement('john');
-  jane = goog.dom.getElement('jane');
-  james = goog.dom.getElement('james');
-  bill = goog.dom.getElement('bill');
-  child = goog.dom.getElement('child');
-}
-
-function setUp() {
-  timer.install();
-  triggeredElement = null;
-  cancelledElement = null;
-  showDelay = null;
-  shownCard = null;
-  hideDelay = null;
-  elsewhere = goog.dom.getElement('notpopup');
-  offAnchor = new goog.math.Coordinate(1, 1);
-}
-
-function initCard(opt_isAnchor, opt_checkChildren, opt_maxSearchSteps) {
-  var isAnchor = opt_isAnchor || {SPAN: 'email'};
-  card = new goog.ui.HoverCard(isAnchor, opt_checkChildren);
+function initCard(
+    opt_isAnchor, checkChildren = undefined, maxSearchSteps = undefined) {
+  const isAnchor = opt_isAnchor || {SPAN: 'email'};
+  card = new HoverCard(isAnchor, checkChildren);
   card.setText('Test hovercard');
 
-  if (opt_maxSearchSteps != null) {
-    card.setMaxSearchSteps(opt_maxSearchSteps);
+  if (maxSearchSteps != null) {
+    card.setMaxSearchSteps(maxSearchSteps);
   }
 
-  goog.events.listen(card, goog.ui.HoverCard.EventType.TRIGGER, onTrigger);
-  goog.events.listen(
-      card, goog.ui.HoverCard.EventType.CANCEL_TRIGGER, onCancel);
-  goog.events.listen(
-      card, goog.ui.HoverCard.EventType.BEFORE_SHOW, onBeforeShow);
+  events.listen(card, HoverCard.EventType.TRIGGER, onTrigger);
+  events.listen(card, HoverCard.EventType.CANCEL_TRIGGER, onCancel);
+  events.listen(card, HoverCard.EventType.BEFORE_SHOW, onBeforeShow);
 
   // This gets around the problem where AdvancedToolTip thinks it's
   // receiving a ghost event because cursor position hasn't moved off of
   // (0, 0).
-  card.cursorPosition = new goog.math.Coordinate(1, 1);
+  card.cursorPosition = new Coordinate(1, 1);
 }
 
 // Event handlers
@@ -107,245 +87,250 @@ function onBeforeShow() {
   return true;
 }
 
-function tearDown() {
-  card.dispose();
-  timer.uninstall();
-}
+testSuite({
+  setUpPage() {
+    john = dom.getElement('john');
+    jane = dom.getElement('jane');
+    james = dom.getElement('james');
+    bill = dom.getElement('bill');
+    child = dom.getElement('child');
+  },
 
+  setUp() {
+    timer.install();
+    triggeredElement = null;
+    cancelledElement = null;
+    showDelay = null;
+    shownCard = null;
+    hideDelay = null;
+    elsewhere = dom.getElement('notpopup');
+    offAnchor = new Coordinate(1, 1);
+  },
 
-/**
- * Verify that hovercard displays and goes away under normal circumstances.
- */
-function testTrigger() {
-  initCard();
+  tearDown() {
+    card.dispose();
+    timer.uninstall();
+  },
 
-  // Mouse over correct element fires trigger
-  showDelay = 500;
-  goog.testing.events.fireMouseOverEvent(john, elsewhere);
-  assertEquals('Hovercard should have triggered', john, triggeredElement);
+  /**
+     Verify that hovercard displays and goes away under normal circumstances.
+   */
+  testTrigger() {
+    initCard();
 
-  // Show card after delay
-  timer.tick(showDelay - 1);
-  assertNull('Card should not have shown', shownCard);
-  assertFalse(card.isVisible());
-  hideDelay = 5000;
-  timer.tick(1);
-  assertEquals('Card should have shown', john, shownCard);
-  assertTrue(card.isVisible());
+    // Mouse over correct element fires trigger
+    showDelay = 500;
+    testingEvents.fireMouseOverEvent(john, elsewhere);
+    assertEquals('Hovercard should have triggered', john, triggeredElement);
 
-  // Mouse out leads to hide delay
-  goog.testing.events.fireMouseOutEvent(john, elsewhere);
-  goog.testing.events.fireMouseMoveEvent(document, offAnchor);
-  timer.tick(hideDelay - 1);
-  assertTrue('Card should still be visible', card.isVisible());
-  timer.tick(10);
-  assertFalse('Card should be hidden', card.isVisible());
-}
+    // Show card after delay
+    timer.tick(showDelay - 1);
+    assertNull('Card should not have shown', shownCard);
+    assertFalse(card.isVisible());
+    hideDelay = 5000;
+    timer.tick(1);
+    assertEquals('Card should have shown', john, shownCard);
+    assertTrue(card.isVisible());
 
+    // Mouse out leads to hide delay
+    testingEvents.fireMouseOutEvent(john, elsewhere);
+    testingEvents.fireMouseMoveEvent(document, offAnchor);
+    timer.tick(hideDelay - 1);
+    assertTrue('Card should still be visible', card.isVisible());
+    timer.tick(10);
+    assertFalse('Card should be hidden', card.isVisible());
+  },
 
-/**
- * Verify that CANCEL_TRIGGER event occurs when mouse goes out of
- * triggering element before hovercard is shown.
- */
-function testOnCancel() {
-  initCard();
+  /**
+   * Verify that CANCEL_TRIGGER event occurs when mouse goes out of
+   * triggering element before hovercard is shown.
+   */
+  testOnCancel() {
+    initCard();
 
-  showDelay = 500;
-  goog.testing.events.fireMouseOverEvent(john, elsewhere);
-  timer.tick(showDelay - 1);
-  goog.testing.events.fireMouseOutEvent(john, elsewhere);
-  goog.testing.events.fireMouseMoveEvent(document, offAnchor);
-  timer.tick(10);
-  assertFalse('Card should be hidden', card.isVisible());
-  assertEquals('Should have cancelled trigger', john, cancelledElement);
-}
+    showDelay = 500;
+    testingEvents.fireMouseOverEvent(john, elsewhere);
+    timer.tick(showDelay - 1);
+    testingEvents.fireMouseOutEvent(john, elsewhere);
+    testingEvents.fireMouseMoveEvent(document, offAnchor);
+    timer.tick(10);
+    assertFalse('Card should be hidden', card.isVisible());
+    assertEquals('Should have cancelled trigger', john, cancelledElement);
+  },
 
+  /** Verify that mousing over non-triggering elements don't interfere. */
+  testMouseOverNonTrigger() {
+    initCard();
 
-/**
- * Verify that mousing over non-triggering elements don't interfere.
- */
-function testMouseOverNonTrigger() {
-  initCard();
+    // Mouse over correct element fires trigger
+    showDelay = 500;
+    testingEvents.fireMouseOverEvent(john, elsewhere);
+    timer.tick(showDelay);
 
-  // Mouse over correct element fires trigger
-  showDelay = 500;
-  goog.testing.events.fireMouseOverEvent(john, elsewhere);
-  timer.tick(showDelay);
+    // Mouse over and out other element does nothing
+    triggeredElement = null;
+    testingEvents.fireMouseOverEvent(jane, elsewhere);
+    timer.tick(showDelay + 1);
+    assertNull(triggeredElement);
+  },
 
-  // Mouse over and out other element does nothing
-  triggeredElement = null;
-  goog.testing.events.fireMouseOverEvent(jane, elsewhere);
-  timer.tick(showDelay + 1);
-  assertNull(triggeredElement);
-}
+  /**
+   * Verify that a mouse over event with no target will not break
+   * hover card.
+   */
+  testMouseOverNoTarget() {
+    initCard();
+    card.handleTriggerMouseOver_(new GoogTestingEvent());
+  },
 
+  /**
+   * Verify that mousing over a second trigger before the first one shows
+   * will correctly cancel the first and show the second.
+   */
+  testMultipleTriggers() {
+    initCard();
 
-/**
- * Verify that a mouse over event with no target will not break
- * hover card.
- */
-function testMouseOverNoTarget() {
-  initCard();
-  card.handleTriggerMouseOver_(new goog.testing.events.Event());
-}
+    // Test second trigger when first one still pending
+    showDelay = 500;
+    hideDelay = 1000;
+    testingEvents.fireMouseOverEvent(john, elsewhere);
+    timer.tick(250);
+    testingEvents.fireMouseOutEvent(john, james);
+    testingEvents.fireMouseOverEvent(james, john);
+    // First trigger should cancel because it isn't showing yet
+    assertEquals('Should cancel first trigger', john, cancelledElement);
+    timer.tick(300);
+    assertFalse(card.isVisible());
+    timer.tick(250);
+    assertEquals('Should show second card', james, shownCard);
+    assertTrue(card.isVisible());
 
+    testingEvents.fireMouseOutEvent(james, john);
+    testingEvents.fireMouseOverEvent(john, james);
+    assertEquals(
+        'Should still show second card', james, card.getAnchorElement());
+    assertTrue(card.isVisible());
 
-/**
- * Verify that mousing over a second trigger before the first one shows
- * will correctly cancel the first and show the second.
- */
-function testMultipleTriggers() {
-  initCard();
+    shownCard = null;
+    timer.tick(501);
+    assertEquals('Should show first card again', john, shownCard);
+    assertTrue(card.isVisible());
 
-  // Test second trigger when first one still pending
-  showDelay = 500;
-  hideDelay = 1000;
-  goog.testing.events.fireMouseOverEvent(john, elsewhere);
-  timer.tick(250);
-  goog.testing.events.fireMouseOutEvent(john, james);
-  goog.testing.events.fireMouseOverEvent(james, john);
-  // First trigger should cancel because it isn't showing yet
-  assertEquals('Should cancel first trigger', john, cancelledElement);
-  timer.tick(300);
-  assertFalse(card.isVisible());
-  timer.tick(250);
-  assertEquals('Should show second card', james, shownCard);
-  assertTrue(card.isVisible());
+    // Test that cancelling while another is showing gives correct cancel
+    // information
+    cancelledElement = null;
+    testingEvents.fireMouseOutEvent(john, james);
+    testingEvents.fireMouseOverEvent(james, john);
+    testingEvents.fireMouseOutEvent(james, elsewhere);
+    assertEquals('Should cancel second card', james, cancelledElement);
+  },
 
-  goog.testing.events.fireMouseOutEvent(james, john);
-  goog.testing.events.fireMouseOverEvent(john, james);
-  assertEquals('Should still show second card', james, card.getAnchorElement());
-  assertTrue(card.isVisible());
+  /** Verify manual triggering. */
+  testManualTrigger() {
+    initCard();
 
-  shownCard = null;
-  timer.tick(501);
-  assertEquals('Should show first card again', john, shownCard);
-  assertTrue(card.isVisible());
+    // Doesn't normally trigger for div tag
+    showDelay = 500;
+    testingEvents.fireMouseOverEvent(bill, elsewhere);
+    timer.tick(showDelay);
+    assertFalse(card.isVisible());
 
-  // Test that cancelling while another is showing gives correct cancel
-  // information
-  cancelledElement = null;
-  goog.testing.events.fireMouseOutEvent(john, james);
-  goog.testing.events.fireMouseOverEvent(james, john);
-  goog.testing.events.fireMouseOutEvent(james, elsewhere);
-  assertEquals('Should cancel second card', james, cancelledElement);
-}
+    // Manually trigger element
+    card.triggerForElement(bill);
+    hideDelay = 600;
+    timer.tick(showDelay);
+    assertTrue(card.isVisible());
+    testingEvents.fireMouseOutEvent(bill, elsewhere);
+    testingEvents.fireMouseMoveEvent(document, offAnchor);
+    timer.tick(hideDelay);
+    assertFalse(card.isVisible());
+  },
 
+  /** Verify creating with isAnchor function. */
+  testIsAnchor() {
+    // Initialize card so only bill triggers it.
+    initCard((element) => element == bill);
 
-/**
- * Verify manual triggering.
- */
-function testManualTrigger() {
-  initCard();
+    showDelay = 500;
+    testingEvents.fireMouseOverEvent(bill, elsewhere);
+    timer.tick(showDelay);
+    assertTrue('Should trigger card', card.isVisible());
 
-  // Doesn't normally trigger for div tag
-  showDelay = 500;
-  goog.testing.events.fireMouseOverEvent(bill, elsewhere);
-  timer.tick(showDelay);
-  assertFalse(card.isVisible());
+    hideDelay = 300;
+    testingEvents.fireMouseOutEvent(bill, elsewhere);
+    testingEvents.fireMouseMoveEvent(document, offAnchor);
+    timer.tick(hideDelay);
+    assertFalse(card.isVisible());
 
-  // Manually trigger element
-  card.triggerForElement(bill);
-  hideDelay = 600;
-  timer.tick(showDelay);
-  assertTrue(card.isVisible());
-  goog.testing.events.fireMouseOutEvent(bill, elsewhere);
-  goog.testing.events.fireMouseMoveEvent(document, offAnchor);
-  timer.tick(hideDelay);
-  assertFalse(card.isVisible());
-}
+    testingEvents.fireMouseOverEvent(john, elsewhere);
+    timer.tick(showDelay);
+    assertFalse('Should not trigger card', card.isVisible());
+  },
 
+  /** Verify mouse over child of anchor triggers hovercard. */
+  testAnchorWithChildren() {
+    initCard();
 
-/**
- * Verify creating with isAnchor function.
- */
-function testIsAnchor() {
-  // Initialize card so only bill triggers it.
-  initCard(function(element) { return element == bill; });
+    showDelay = 500;
+    testingEvents.fireMouseOverEvent(james, elsewhere);
+    timer.tick(250);
 
-  showDelay = 500;
-  goog.testing.events.fireMouseOverEvent(bill, elsewhere);
-  timer.tick(showDelay);
-  assertTrue('Should trigger card', card.isVisible());
+    // Moving from an anchor to a child of that anchor shouldn't cancel
+    // or retrigger.
+    const childBounds = style.getBounds(child);
+    const inChild = new Coordinate(childBounds.left + 1, childBounds.top + 1);
+    testingEvents.fireMouseOutEvent(james, child);
+    testingEvents.fireMouseMoveEvent(child, inChild);
+    assertNull('Shouldn\'t cancel trigger', cancelledElement);
+    triggeredElement = null;
+    testingEvents.fireMouseOverEvent(child, james);
+    assertNull('Shouldn\'t retrigger card', triggeredElement);
+    timer.tick(250);
+    assertTrue('Card should show with original delay', card.isVisible());
 
-  hideDelay = 300;
-  goog.testing.events.fireMouseOutEvent(bill, elsewhere);
-  goog.testing.events.fireMouseMoveEvent(document, offAnchor);
-  timer.tick(hideDelay);
-  assertFalse(card.isVisible());
+    hideDelay = 300;
+    testingEvents.fireMouseOutEvent(child, elsewhere);
+    testingEvents.fireMouseMoveEvent(child, offAnchor);
+    timer.tick(hideDelay);
+    assertFalse(card.isVisible());
 
-  goog.testing.events.fireMouseOverEvent(john, elsewhere);
-  timer.tick(showDelay);
-  assertFalse('Should not trigger card', card.isVisible());
-}
+    testingEvents.fireMouseOverEvent(child, elsewhere);
+    timer.tick(showDelay);
+    assertTrue('Mouse over child should trigger card', card.isVisible());
+  },
 
+  testNoTriggerWithMaxSearchSteps() {
+    initCard(undefined, true, 0);
 
-/**
- * Verify mouse over child of anchor triggers hovercard.
- */
-function testAnchorWithChildren() {
-  initCard();
+    showDelay = 500;
+    testingEvents.fireMouseOverEvent(child, elsewhere);
+    timer.tick(showDelay);
+    assertFalse('Should not trigger card', card.isVisible());
+  },
 
-  showDelay = 500;
-  goog.testing.events.fireMouseOverEvent(james, elsewhere);
-  timer.tick(250);
+  testTriggerWithMaxSearchSteps() {
+    initCard(undefined, true, 2);
 
-  // Moving from an anchor to a child of that anchor shouldn't cancel
-  // or retrigger.
-  var childBounds = goog.style.getBounds(child);
-  var inChild =
-      new goog.math.Coordinate(childBounds.left + 1, childBounds.top + 1);
-  goog.testing.events.fireMouseOutEvent(james, child);
-  goog.testing.events.fireMouseMoveEvent(child, inChild);
-  assertNull("Shouldn't cancel trigger", cancelledElement);
-  triggeredElement = null;
-  goog.testing.events.fireMouseOverEvent(child, james);
-  assertNull("Shouldn't retrigger card", triggeredElement);
-  timer.tick(250);
-  assertTrue('Card should show with original delay', card.isVisible());
+    showDelay = 500;
+    testingEvents.fireMouseOverEvent(child, elsewhere);
+    timer.tick(showDelay);
+    assertTrue('Should trigger card', card.isVisible());
+  },
 
-  hideDelay = 300;
-  goog.testing.events.fireMouseOutEvent(child, elsewhere);
-  goog.testing.events.fireMouseMoveEvent(child, offAnchor);
-  timer.tick(hideDelay);
-  assertFalse(card.isVisible());
+  testPositionAfterSecondTriggerWithMaxSearchSteps() {
+    initCard(undefined, true, 2);
 
-  goog.testing.events.fireMouseOverEvent(child, elsewhere);
-  timer.tick(showDelay);
-  assertTrue('Mouse over child should trigger card', card.isVisible());
-}
-
-function testNoTriggerWithMaxSearchSteps() {
-  initCard(undefined, true, 0);
-
-  showDelay = 500;
-  goog.testing.events.fireMouseOverEvent(child, elsewhere);
-  timer.tick(showDelay);
-  assertFalse('Should not trigger card', card.isVisible());
-}
-
-function testTriggerWithMaxSearchSteps() {
-  initCard(undefined, true, 2);
-
-  showDelay = 500;
-  goog.testing.events.fireMouseOverEvent(child, elsewhere);
-  timer.tick(showDelay);
-  assertTrue('Should trigger card', card.isVisible());
-}
-
-function testPositionAfterSecondTriggerWithMaxSearchSteps() {
-  initCard(undefined, true, 2);
-
-  showDelay = 500;
-  goog.testing.events.fireMouseOverEvent(john, elsewhere);
-  timer.tick(showDelay);
-  assertTrue('Should trigger card', card.isVisible());
-  assertEquals(
-      'Card cursor x coordinate should be 1', card.position_.coordinate.x, 1);
-  card.cursorPosition = new goog.math.Coordinate(2, 2);
-  goog.testing.events.fireMouseOverEvent(child, elsewhere);
-  timer.tick(showDelay);
-  assertTrue('Should trigger card', card.isVisible());
-  assertEquals(
-      'Card cursor x coordinate should be 2', card.position_.coordinate.x, 2);
-}
+    showDelay = 500;
+    testingEvents.fireMouseOverEvent(john, elsewhere);
+    timer.tick(showDelay);
+    assertTrue('Should trigger card', card.isVisible());
+    assertEquals(
+        'Card cursor x coordinate should be 1', card.position_.coordinate.x, 1);
+    card.cursorPosition = new Coordinate(2, 2);
+    testingEvents.fireMouseOverEvent(child, elsewhere);
+    timer.tick(showDelay);
+    assertTrue('Should trigger card', card.isVisible());
+    assertEquals(
+        'Card cursor x coordinate should be 2', card.position_.coordinate.x, 2);
+  },
+});

@@ -12,62 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.net.XhrIoPoolTest');
-goog.setTestOnly('goog.net.XhrIoPoolTest');
+goog.module('goog.net.XhrIoPoolTest');
+goog.setTestOnly();
 
-goog.require('goog.net.XhrIoPool');
-goog.require('goog.structs.Map');
-goog.require('goog.testing.jsunit');
+const StructsMap = goog.require('goog.structs.Map');
+const XhrIoPool = goog.require('goog.net.XhrIoPool');
+const testSuite = goog.require('goog.testing.testSuite');
 
-
-var headers = new goog.structs.Map();
+const headers = new StructsMap();
 headers.set('X-Foo', 'Bar');
 
+testSuite({
+  testSetHeadersForNewPoolObjects() {
+    const xhrIoPool = new XhrIoPool(headers, 0);
+    const xhrIo = xhrIoPool.getObject();
 
-function testSetHeadersForNewPoolObjects() {
-  var xhrIoPool = new goog.net.XhrIoPool(headers, 0);
-  var xhrIo = xhrIoPool.getObject();
+    assertEquals(
+        'Request should contain 1 header', 1, xhrIo.headers.getCount());
+    assertTrue(
+        'Request should contain right header key',
+        xhrIo.headers.containsKey('X-Foo'));
+    assertEquals(
+        'Request should contain right header value', xhrIo.headers.get('X-Foo'),
+        'Bar');
 
-  assertEquals('Request should contain 1 header', 1, xhrIo.headers.getCount());
-  assertTrue(
-      'Request should contain right header key',
-      xhrIo.headers.containsKey('X-Foo'));
-  assertEquals(
-      'Request should contain right header value', xhrIo.headers.get('X-Foo'),
-      'Bar');
+    xhrIoPool.releaseObject(xhrIo);
+    goog.dispose(xhrIoPool);
+  },
 
-  xhrIoPool.releaseObject(xhrIo);
-  goog.dispose(xhrIoPool);
-}
+  testSetHeadersForInitializedPoolObjects() {
+    const xhrIoPool = new XhrIoPool(headers, 1, 1);
+    const xhrIo = xhrIoPool.getObject();
 
+    assertEquals(
+        'Request should contain 1 header', 1, xhrIo.headers.getCount());
+    assertTrue(
+        'Request should contain right header key',
+        xhrIo.headers.containsKey('X-Foo'));
+    assertEquals(
+        'Request should contain right header value', 'Bar',
+        xhrIo.headers.get('X-Foo'));
 
-function testSetHeadersForInitializedPoolObjects() {
-  var xhrIoPool = new goog.net.XhrIoPool(headers, 1, 1);
-  var xhrIo = xhrIoPool.getObject();
+    xhrIoPool.releaseObject(xhrIo);
+    goog.dispose(xhrIoPool);
+  },
 
-  assertEquals('Request should contain 1 header', 1, xhrIo.headers.getCount());
-  assertTrue(
-      'Request should contain right header key',
-      xhrIo.headers.containsKey('X-Foo'));
-  assertEquals(
-      'Request should contain right header value', 'Bar',
-      xhrIo.headers.get('X-Foo'));
+  testSetCredentials() {
+    const xhrIoPool = new XhrIoPool(
+        undefined /* opt_headers */, undefined /* opt_minCount */,
+        undefined /* opt_maxCount */, true /* opt_withCredentials */);
+    const xhrIo = xhrIoPool.getObject();
 
-  xhrIoPool.releaseObject(xhrIo);
-  goog.dispose(xhrIoPool);
-}
+    assertTrue(
+        'withCredentials should be set on a request object',
+        xhrIo.getWithCredentials());
 
-
-function testSetCredentials() {
-  var xhrIoPool = new goog.net.XhrIoPool(
-      undefined /* opt_headers */, undefined /* opt_minCount */,
-      undefined /* opt_maxCount */, true /* opt_withCredentials */);
-  var xhrIo = xhrIoPool.getObject();
-
-  assertTrue(
-      'withCredentials should be set on a request object',
-      xhrIo.getWithCredentials());
-
-  xhrIoPool.releaseObject(xhrIo);
-  goog.dispose(xhrIoPool);
-}
+    xhrIoPool.releaseObject(xhrIo);
+    goog.dispose(xhrIoPool);
+  },
+});

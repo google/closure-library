@@ -1,72 +1,75 @@
 // Copyright 2012 The Closure Library Authors. All Rights Reserved.
 // Use of this source code is governed by the Apache License, Version 2.0.
 
-goog.provide('goog.result.DeferredAdaptorTest');
-goog.setTestOnly('goog.result.DeferredAdaptorTest');
+goog.module('goog.result.DeferredAdaptorTest');
+goog.setTestOnly();
 
-goog.require('goog.async.Deferred');
-goog.require('goog.result');
-goog.require('goog.result.DeferredAdaptor');
-goog.require('goog.result.SimpleResult');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const Deferred = goog.require('goog.async.Deferred');
+const DeferredAdaptor = goog.require('goog.result.DeferredAdaptor');
+const SimpleResult = goog.require('goog.result.SimpleResult');
+const googResult = goog.require('goog.result');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var result, deferred, record;
+let deferred;
+let record;
+let result;
 
-function setUp() {
-  result = new goog.result.SimpleResult();
-  deferred = new goog.result.DeferredAdaptor(result);
-  record = new goog.testing.recordFunction();
-}
+testSuite({
+  setUp() {
+    result = new SimpleResult();
+    deferred = new DeferredAdaptor(result);
+    record = new recordFunction();
+  },
 
-function tearDown() {
-  result = deferred = record = null;
-}
+  tearDown() {
+    result = deferred = record = null;
+  },
 
-function testResultSuccessfulResolution() {
-  deferred.addCallback(record);
-  result.setValue(1);
-  assertEquals(1, record.getCallCount());
-  var call = record.popLastCall();
-  assertEquals(1, call.getArgument(0));
-}
+  testResultSuccessfulResolution() {
+    deferred.addCallback(record);
+    result.setValue(1);
+    assertEquals(1, record.getCallCount());
+    const call = record.popLastCall();
+    assertEquals(1, call.getArgument(0));
+  },
 
-function testResultErrorResolution() {
-  deferred.addErrback(record);
-  result.setError(2);
-  assertEquals(1, record.getCallCount());
-  var call = record.popLastCall();
-  assertEquals(2, call.getArgument(0));
-}
+  testResultErrorResolution() {
+    deferred.addErrback(record);
+    result.setError(2);
+    assertEquals(1, record.getCallCount());
+    const call = record.popLastCall();
+    assertEquals(2, call.getArgument(0));
+  },
 
-function testResultCancelResolution() {
-  deferred.addCallback(record);
-  var cancelCallback = new goog.testing.recordFunction();
-  deferred.addErrback(cancelCallback);
-  result.cancel();
-  assertEquals(0, record.getCallCount());
-  assertEquals(1, cancelCallback.getCallCount());
-  var call = cancelCallback.popLastCall();
-  assertTrue(call.getArgument(0) instanceof
-             goog.async.Deferred.CanceledError);
-}
+  testResultCancelResolution() {
+    deferred.addCallback(record);
+    const cancelCallback = new recordFunction();
+    deferred.addErrback(cancelCallback);
+    result.cancel();
+    assertEquals(0, record.getCallCount());
+    assertEquals(1, cancelCallback.getCallCount());
+    const call = cancelCallback.popLastCall();
+    assertTrue(call.getArgument(0) instanceof Deferred.CanceledError);
+  },
 
-function testAddCallbackOnResolvedResult() {
-  result.setValue(1);
-  assertEquals(1, result.getValue());
-  deferred.addCallback(record);
+  testAddCallbackOnResolvedResult() {
+    result.setValue(1);
+    assertEquals(1, result.getValue());
+    deferred.addCallback(record);
 
-  // callback should be called immediately when result is already resolved.
-  assertEquals(1, record.getCallCount());
-  assertEquals(1, record.popLastCall().getArgument(0));
-}
+    // callback should be called immediately when result is already resolved.
+    assertEquals(1, record.getCallCount());
+    assertEquals(1, record.popLastCall().getArgument(0));
+  },
 
-function testAddErrbackOnErroredResult() {
-  result.setError(1);
-  assertEquals(1, result.getError());
+  testAddErrbackOnErroredResult() {
+    result.setError(1);
+    assertEquals(1, result.getError());
 
-  // errback should be called immediately when result already errored.
-  deferred.addErrback(record);
-  assertEquals(1, record.getCallCount());
-  assertEquals(1, record.popLastCall().getArgument(0));
-}
+    // errback should be called immediately when result already errored.
+    deferred.addErrback(record);
+    assertEquals(1, record.getCallCount());
+    assertEquals(1, record.popLastCall().getArgument(0));
+  },
+});

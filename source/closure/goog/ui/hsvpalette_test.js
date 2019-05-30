@@ -12,215 +12,209 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.HsvPaletteTest');
-goog.setTestOnly('goog.ui.HsvPaletteTest');
+goog.module('goog.ui.HsvPaletteTest');
+goog.setTestOnly();
 
-goog.require('goog.color');
-goog.require('goog.dom.TagName');
-goog.require('goog.dom.classlist');
-goog.require('goog.events');
-goog.require('goog.events.Event');
-goog.require('goog.math.Coordinate');
-goog.require('goog.style');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.Component');
-goog.require('goog.ui.HsvPalette');
-goog.require('goog.userAgent');
+const Component = goog.require('goog.ui.Component');
+const Coordinate = goog.require('goog.math.Coordinate');
+const GoogEvent = goog.require('goog.events.Event');
+const HsvPalette = goog.require('goog.ui.HsvPalette');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const TagName = goog.require('goog.dom.TagName');
+const classlist = goog.require('goog.dom.classlist');
+const events = goog.require('goog.events');
+const googColor = goog.require('goog.color');
+const style = goog.require('goog.style');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var samplePalette;
-var eventWasFired;
-var stubs = new goog.testing.PropertyReplacer();
+let samplePalette;
+let eventWasFired;
+const stubs = new PropertyReplacer();
 
-function setUp() {
-  samplePalette = new goog.ui.HsvPalette();
-  eventWasFired = false;
-}
+testSuite({
+  setUp() {
+    samplePalette = new HsvPalette();
+    eventWasFired = false;
+  },
 
-function tearDown() {
-  samplePalette.dispose();
-  stubs.reset();
-}
+  tearDown() {
+    samplePalette.dispose();
+    stubs.reset();
+  },
 
-function testRtl() {
-  samplePalette.render(document.getElementById('sandboxRtl'));
-  var color = '#ffffff';
-  samplePalette.inputElement.value = color;
-  samplePalette.handleInput(null);
-  var expectedRight = samplePalette.hsImageEl_.offsetWidth -
-      Math.ceil(samplePalette.hsHandleEl_.offsetWidth / 2);
-  assertEquals(expectedRight + 'px', samplePalette.hsHandleEl_.style['right']);
-  assertEquals('', samplePalette.hsHandleEl_.style['left']);
-}
-
-function testOptionalInitialColor() {
-  var initialColor = '#0000ff';
-  var customInitialPalette = new goog.ui.HsvPalette(null, initialColor);
-  assertEquals(
-      initialColor, goog.color.parse(customInitialPalette.getColor()).hex);
-}
-
-function testCustomClassName() {
-  var customClassName = 'custom-plouf';
-  var customClassPalette = new goog.ui.HsvPalette(null, null, customClassName);
-  customClassPalette.createDom();
-  assertTrue(
-      goog.dom.classlist.contains(
-          customClassPalette.getElement(), customClassName));
-}
-
-function testCannotDecorate() {
-  assertFalse(samplePalette.canDecorate());
-}
-
-function testSetColor() {
-  var color = '#abcdef';
-  samplePalette.setColor(color);
-  assertEquals(color, goog.color.parse(samplePalette.getColor()).hex);
-  color = 'abcdef';
-  samplePalette.setColor(color);
-  assertEquals('#' + color, goog.color.parse(samplePalette.getColor()).hex);
-}
-
-function testChangeEventWithDisableDispatchEventOmitted() {
-  // TODO(user): Add functionality to goog.testing.events to assert
-  // an event was fired.
-  goog.events.listen(
-      samplePalette, goog.ui.Component.EventType.ACTION,
-      function() { eventWasFired = true; });
-  samplePalette.setColor('#123456');
-  assertTrue(eventWasFired);
-}
-
-function testChangeEventWithDisableDispatchEventTrue() {
-  goog.events.listen(
-      samplePalette, goog.ui.Component.EventType.ACTION, function() {
-        eventWasFired = true;
-      });
-  samplePalette.setColor('#123456', true);
-  assertFalse(eventWasFired);
-}
-
-function testChangeEventWithDisableDispatchEventFalse() {
-  goog.events.listen(
-      samplePalette, goog.ui.Component.EventType.ACTION, function() {
-        eventWasFired = true;
-      });
-  samplePalette.setColor('#123456', false);
-  assertTrue(eventWasFired);
-}
-
-function testSetHsv() {
-  // Start from red.
-  samplePalette.setColor('#ff0000');
-
-  // Setting hue to 0.5 should yield cyan.
-  samplePalette.setHsv(0.5, null, null);
-  assertEquals('#00ffff', goog.color.parse(samplePalette.getColor()).hex);
-
-  // Setting saturation to 0 should yield white.
-  samplePalette.setHsv(null, 0, null);
-  assertEquals('#ffffff', goog.color.parse(samplePalette.getColor()).hex);
-
-  // Setting value/brightness to 0 should yield black.
-  samplePalette.setHsv(null, null, 0);
-  assertEquals('#000000', goog.color.parse(samplePalette.getColor()).hex);
-}
-
-function testRender() {
-  samplePalette.render(document.getElementById('sandbox'));
-
-  assertTrue(samplePalette.isInDocument());
-
-  var elem = samplePalette.getElement();
-  assertNotNull(elem);
-  assertEquals(String(goog.dom.TagName.DIV), elem.tagName);
-
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) {
-    assertSameElements(
-        'On IE6, the noalpha class must be present',
-        ['goog-hsv-palette', 'goog-hsv-palette-noalpha'],
-        goog.dom.classlist.get(elem));
-  } else {
+  testRtl() {
+    samplePalette.render(document.getElementById('sandboxRtl'));
+    const color = '#ffffff';
+    samplePalette.inputElement.value = color;
+    samplePalette.handleInput(null);
+    const expectedRight = samplePalette.hsImageEl_.offsetWidth -
+        Math.ceil(samplePalette.hsHandleEl_.offsetWidth / 2);
     assertEquals(
-        'The noalpha class must not be present', 'goog-hsv-palette',
-        elem.className);
-  }
-}
+        `${expectedRight}px`, samplePalette.hsHandleEl_.style['right']);
+    assertEquals('', samplePalette.hsHandleEl_.style['left']);
+  },
 
-function testRenderWithEnableBrowserSpellcheckOnInputFalse() {
-  samplePalette.render(document.getElementById('sandbox'));
+  testOptionalInitialColor() {
+    const initialColor = '#0000ff';
+    const customInitialPalette = new HsvPalette(null, initialColor);
+    assertEquals(
+        initialColor, googColor.parse(customInitialPalette.getColor()).hex);
+  },
 
-  var inputElement =
-      samplePalette.getRequiredElementByClass('goog-hsv-palette-input');
-  assertFalse(inputElement.spellcheck);
-}
+  testCustomClassName() {
+    const customClassName = 'custom-plouf';
+    const customClassPalette = new HsvPalette(null, null, customClassName);
+    customClassPalette.createDom();
+    assertTrue(
+        classlist.contains(customClassPalette.getElement(), customClassName));
+  },
 
-function testSwatchTextIsReadable() {
-  samplePalette.render(document.getElementById('sandbox'));
+  testCannotDecorate() {
+    assertFalse(samplePalette.canDecorate());
+  },
 
-  var swatchElement = samplePalette.swatchElement;
+  testSetColor() {
+    let color = '#abcdef';
+    samplePalette.setColor(color);
+    assertEquals(color, googColor.parse(samplePalette.getColor()).hex);
+    color = 'abcdef';
+    samplePalette.setColor(color);
+    assertEquals(`#${color}`, googColor.parse(samplePalette.getColor()).hex);
+  },
 
-  // Text should be black when background is light.
-  samplePalette.setColor('#ccffff');
-  assertEquals(
-      '#000000',
-      goog.color.parse(goog.style.getStyle(swatchElement, 'color')).hex);
+  testChangeEventWithDisableDispatchEventOmitted() {
+    // TODO(user): Add functionality to goog.testing.events to assert
+    // an event was fired.
+    events.listen(samplePalette, Component.EventType.ACTION, () => {
+      eventWasFired = true;
+    });
+    samplePalette.setColor('#123456');
+    assertTrue(eventWasFired);
+  },
 
-  // Text should be white when background is dark.
-  samplePalette.setColor('#410800');
-  assertEquals(
-      '#ffffff',
-      goog.color.parse(goog.style.getStyle(swatchElement, 'color')).hex);
-}
+  testChangeEventWithDisableDispatchEventTrue() {
+    events.listen(samplePalette, Component.EventType.ACTION, () => {
+      eventWasFired = true;
+    });
+    samplePalette.setColor('#123456', true);
+    assertFalse(eventWasFired);
+  },
 
-function testInputColor() {
-  samplePalette.render(document.getElementById('sandbox'));
-  var color = '#001122';
-  samplePalette.inputElement.value = color;
-  samplePalette.handleInput(null);
-  assertEquals(color, goog.color.parse(samplePalette.getColor()).hex);
-}
+  testChangeEventWithDisableDispatchEventFalse() {
+    events.listen(samplePalette, Component.EventType.ACTION, () => {
+      eventWasFired = true;
+    });
+    samplePalette.setColor('#123456', false);
+    assertTrue(eventWasFired);
+  },
 
-function testHandleMouseMoveValue() {
-  samplePalette.render(document.getElementById('sandbox'));
-  stubs.set(goog.dom, 'getPageScroll', function() {
-    return new goog.math.Coordinate(0, 0);
-  });
+  testSetHsv() {
+    // Start from red.
+    samplePalette.setColor('#ff0000');
 
-  // Raising the value/brightness of a dark red should yield a lighter red.
-  samplePalette.setColor('#630c00');
-  goog.style.setPageOffset(samplePalette.valueBackgroundImageElement, 0, 0);
-  goog.style.setSize(samplePalette.valueBackgroundImageElement, 10, 100);
-  var boundaries =
-      goog.style.getBounds(samplePalette.valueBackgroundImageElement, 0, 0);
+    // Setting hue to 0.5 should yield cyan.
+    samplePalette.setHsv(0.5, null, null);
+    assertEquals('#00ffff', googColor.parse(samplePalette.getColor()).hex);
 
-  var event = new goog.events.Event();
-  event.clientY = -50;
-  // TODO(user): Use
-  // goog.testing.events.fireMouseDownEvent(
-  //     samplePalette.valueBackgroundImageElement);
-  // when google.testing.events support specifying properties of the event
-  // or find out how tod o it if it already supports it.
-  samplePalette.handleMouseMoveV_(boundaries, event);
-  assertEquals('#ff1e00', goog.color.parse(samplePalette.getColor()).hex);
-}
+    // Setting saturation to 0 should yield white.
+    samplePalette.setHsv(null, 0, null);
+    assertEquals('#ffffff', googColor.parse(samplePalette.getColor()).hex);
 
-function testHandleMouseMoveHueSaturation() {
-  samplePalette.render(document.getElementById('sandbox'));
-  stubs.set(goog.dom, 'getPageScroll', function() {
-    return new goog.math.Coordinate(0, 0);
-  });
+    // Setting value/brightness to 0 should yield black.
+    samplePalette.setHsv(null, null, 0);
+    assertEquals('#000000', googColor.parse(samplePalette.getColor()).hex);
+  },
 
-  // The following hue/saturation selection should yield a light yellow.
-  goog.style.setPageOffset(samplePalette.hsImageEl_, 0, 0);
-  goog.style.setSize(samplePalette.hsImageEl_, 100, 100);
-  var boundaries = goog.style.getBounds(samplePalette.hsImageEl_);
+  testRender() {
+    samplePalette.render(document.getElementById('sandbox'));
 
-  var event = new goog.events.Event();
-  event.clientX = 20;
-  event.clientY = 85;
-  // TODO(user): Use goog.testing.events when appropriate (see above).
-  samplePalette.handleMouseMoveHs_(boundaries, event);
-  assertEquals('#ffeec4', goog.color.parse(samplePalette.getColor()).hex);
-}
+    assertTrue(samplePalette.isInDocument());
+
+    const elem = samplePalette.getElement();
+    assertNotNull(elem);
+    assertEquals(String(TagName.DIV), elem.tagName);
+
+    if (userAgent.IE && !userAgent.isVersionOrHigher('7')) {
+      assertSameElements(
+          'On IE6, the noalpha class must be present',
+          ['goog-hsv-palette', 'goog-hsv-palette-noalpha'],
+          classlist.get(elem));
+    } else {
+      assertEquals(
+          'The noalpha class must not be present', 'goog-hsv-palette',
+          elem.className);
+    }
+  },
+
+  testRenderWithEnableBrowserSpellcheckOnInputFalse() {
+    samplePalette.render(document.getElementById('sandbox'));
+
+    const inputElement =
+        samplePalette.getRequiredElementByClass('goog-hsv-palette-input');
+    assertFalse(inputElement.spellcheck);
+  },
+
+  testSwatchTextIsReadable() {
+    samplePalette.render(document.getElementById('sandbox'));
+
+    const swatchElement = samplePalette.swatchElement;
+
+    // Text should be black when background is light.
+    samplePalette.setColor('#ccffff');
+    assertEquals(
+        '#000000', googColor.parse(style.getStyle(swatchElement, 'color')).hex);
+
+    // Text should be white when background is dark.
+    samplePalette.setColor('#410800');
+    assertEquals(
+        '#ffffff', googColor.parse(style.getStyle(swatchElement, 'color')).hex);
+  },
+
+  testInputColor() {
+    samplePalette.render(document.getElementById('sandbox'));
+    const color = '#001122';
+    samplePalette.inputElement.value = color;
+    samplePalette.handleInput(null);
+    assertEquals(color, googColor.parse(samplePalette.getColor()).hex);
+  },
+
+  testHandleMouseMoveValue() {
+    samplePalette.render(document.getElementById('sandbox'));
+    stubs.set(goog.dom, 'getPageScroll', () => new Coordinate(0, 0));
+
+    // Raising the value/brightness of a dark red should yield a lighter red.
+    samplePalette.setColor('#630c00');
+    style.setPageOffset(samplePalette.valueBackgroundImageElement, 0, 0);
+    style.setSize(samplePalette.valueBackgroundImageElement, 10, 100);
+    const boundaries =
+        style.getBounds(samplePalette.valueBackgroundImageElement, 0, 0);
+
+    const event = new GoogEvent();
+    event.clientY = -50;
+    // TODO(user): Use
+    // goog.testing.events.fireMouseDownEvent(
+    //     samplePalette.valueBackgroundImageElement);
+    // when google.testing.events support specifying properties of the event
+    // or find out how tod o it if it already supports it.
+    samplePalette.handleMouseMoveV_(boundaries, event);
+    assertEquals('#ff1e00', googColor.parse(samplePalette.getColor()).hex);
+  },
+
+  testHandleMouseMoveHueSaturation() {
+    samplePalette.render(document.getElementById('sandbox'));
+    stubs.set(goog.dom, 'getPageScroll', () => new Coordinate(0, 0));
+
+    // The following hue/saturation selection should yield a light yellow.
+    style.setPageOffset(samplePalette.hsImageEl_, 0, 0);
+    style.setSize(samplePalette.hsImageEl_, 100, 100);
+    const boundaries = style.getBounds(samplePalette.hsImageEl_);
+
+    const event = new GoogEvent();
+    event.clientX = 20;
+    event.clientY = 85;
+    // TODO(user): Use goog.testing.events when appropriate (see above).
+    samplePalette.handleMouseMoveHs_(boundaries, event);
+    assertEquals('#ffeec4', googColor.parse(samplePalette.getColor()).hex);
+  },
+});

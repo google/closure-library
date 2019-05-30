@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.PseudoRandomTest');
-goog.setTestOnly('goog.testing.PseudoRandomTest');
+goog.module('goog.testing.PseudoRandomTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.PseudoRandom');
-goog.require('goog.testing.jsunit');
+const PseudoRandom = goog.require('goog.testing.PseudoRandom');
+const testSuite = goog.require('goog.testing.testSuite');
 
 function runFairnessTest(sides, rolls, chiSquareLimit) {
   // Initialize the count table for dice rolls.
-  var counts = [];
-  for (var i = 0; i < sides; ++i) {
+  const counts = [];
+  for (let i = 0; i < sides; ++i) {
     counts[i] = 0;
   }
   // Roll the dice many times and count the results.
-  for (var i = 0; i < rolls; ++i) {
+  for (let i = 0; i < rolls; ++i) {
     ++counts[Math.floor(Math.random() * sides)];
   }
   // If the dice is fair, we expect a uniform distribution.
-  var expected = rolls / sides;
+  const expected = rolls / sides;
   // Pearson's chi-square test for a distribution fit.
-  var chiSquare = 0;
-  for (var i = 0; i < sides; ++i) {
+  let chiSquare = 0;
+  for (let i = 0; i < sides; ++i) {
     chiSquare += (counts[i] - expected) * (counts[i] - expected) / expected;
   }
   assert(
@@ -40,56 +40,58 @@ function runFairnessTest(sides, rolls, chiSquareLimit) {
       chiSquare < chiSquareLimit);
 }
 
-function testInstall() {
-  var random = new goog.testing.PseudoRandom();
-  var originalRandom = Math.random;
+testSuite({
+  testInstall() {
+    const random = new PseudoRandom();
+    const originalRandom = Math.random;
 
-  assertFalse(!!random.installed_);
+    assertFalse(!!random.installed_);
 
-  random.install();
-  assertTrue(random.installed_);
-  assertNotEquals(Math.random, originalRandom);
+    random.install();
+    assertTrue(random.installed_);
+    assertNotEquals(Math.random, originalRandom);
 
-  random.uninstall();
-  assertFalse(random.installed_);
-  assertEquals(originalRandom, Math.random);
-}
+    random.uninstall();
+    assertFalse(random.installed_);
+    assertEquals(originalRandom, Math.random);
+  },
 
-function testBounds() {
-  var random = new goog.testing.PseudoRandom();
-  random.install();
+  testBounds() {
+    const random = new PseudoRandom();
+    random.install();
 
-  for (var i = 0; i < 100000; ++i) {
-    var value = Math.random();
-    assert('Random value out of bounds', value >= 0 && value < 1);
-  }
+    for (let i = 0; i < 100000; ++i) {
+      const value = Math.random();
+      assert('Random value out of bounds', value >= 0 && value < 1);
+    }
 
-  random.uninstall();
-}
+    random.uninstall();
+  },
 
-function testFairness() {
-  var random = new goog.testing.PseudoRandom(0, true);
+  testFairness() {
+    const random = new PseudoRandom(0, true);
 
-  // Chi-square statistics: p-value = 0.05, df = 5, limit = 11.07.
-  runFairnessTest(6, 100000, 11.07);
-  // Chi-square statistics: p-value = 0.05, df = 100, limit = 124.34.
-  runFairnessTest(101, 100000, 124.34);
+    // Chi-square statistics: p-value = 0.05, df = 5, limit = 11.07.
+    runFairnessTest(6, 100000, 11.07);
+    // Chi-square statistics: p-value = 0.05, df = 100, limit = 124.34.
+    runFairnessTest(101, 100000, 124.34);
 
-  random.uninstall();
-}
+    random.uninstall();
+  },
 
-function testReseed() {
-  var random = new goog.testing.PseudoRandom(100, true);
+  testReseed() {
+    const random = new PseudoRandom(100, true);
 
-  var sequence = [];
-  for (var i = 0; i < 64000; ++i) {
-    sequence.push(Math.random());
-  }
+    const sequence = [];
+    for (let i = 0; i < 64000; ++i) {
+      sequence.push(Math.random());
+    }
 
-  random.seed(100);
-  for (var i = 0; i < sequence.length; ++i) {
-    assertEquals(sequence[i], Math.random());
-  }
+    random.seed(100);
+    for (let i = 0; i < sequence.length; ++i) {
+      assertEquals(sequence[i], Math.random());
+    }
 
-  random.uninstall();
-}
+    random.uninstall();
+  },
+});

@@ -12,203 +12,188 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.soy.RendererTest');
-goog.setTestOnly('goog.soy.RendererTest');
+goog.module('goog.soy.RendererTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.NodeType');
-goog.require('goog.dom.TagName');
-goog.require('goog.html.SafeHtml');
-goog.require('goog.i18n.bidi.Dir');
-goog.require('goog.soy.Renderer');
-goog.require('goog.soy.data.SanitizedContentKind');
+const Dir = goog.require('goog.i18n.bidi.Dir');
+const NodeType = goog.require('goog.dom.NodeType');
+const Renderer = goog.require('goog.soy.Renderer');
+const SafeHtml = goog.require('goog.html.SafeHtml');
+const SanitizedContentKind = goog.require('goog.soy.data.SanitizedContentKind');
+const TagName = goog.require('goog.dom.TagName');
+const dom = goog.require('goog.dom');
+const recordFunction = goog.require('goog.testing.recordFunction');
 /** @suppress {extraRequire} */
-goog.require('goog.soy.testHelper');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const testHelper = goog.require('goog.soy.testHelper');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var handleRender;
+let handleRender;
 
+const dataSupplier = {
+  getData: function() {
+    return {name: 'IjValue'};
+  }
+};
 
-function setUp() {
-  // Replace the empty default implementation.
-  handleRender = goog.soy.Renderer.prototype.handleRender =
-      goog.testing.recordFunction(goog.soy.Renderer.prototype.handleRender);
-}
+testSuite({
+  setUp() {
+    // Replace the empty default implementation.
+    handleRender = Renderer.prototype.handleRender =
+        recordFunction(Renderer.prototype.handleRender);
+  },
 
+  testRenderElement() {
+    const testDiv = dom.createElement(TagName.DIV);
 
-var dataSupplier = {getData: function() { return {name: 'IjValue'}; }};
+    const renderer = new Renderer(dataSupplier);
+    renderer.renderElement(
+        testDiv, example.injectedDataTemplate, {name: 'Value'});
+    assertEquals('ValueIjValue', elementToInnerHtml(testDiv));
+    assertEquals(testDiv, handleRender.getLastCall().getArguments()[0]);
+    handleRender.assertCallCount(1);
+  },
 
+  testRenderElementWithNoTemplateData() {
+    const testDiv = dom.createElement(TagName.DIV);
 
-function testRenderElement() {
-  var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
+    const renderer = new Renderer(dataSupplier);
+    renderer.renderElement(testDiv, example.noDataTemplate);
+    assertEquals('<div>Hello</div>', elementToInnerHtml(testDiv));
+    assertEquals(testDiv, handleRender.getLastCall().getArguments()[0]);
+    handleRender.assertCallCount(1);
+  },
 
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  renderer.renderElement(
-      testDiv, example.injectedDataTemplate, {name: 'Value'});
-  assertEquals('ValueIjValue', elementToInnerHtml(testDiv));
-  assertEquals(testDiv, handleRender.getLastCall().getArguments()[0]);
-  handleRender.assertCallCount(1);
-}
+  testRenderAsFragment() {
+    const renderer = new Renderer(dataSupplier);
+    const fragment = renderer.renderAsFragment(
+        example.injectedDataTemplate, {name: 'Value'});
+    assertEquals('ValueIjValue', fragmentToHtml(fragment));
+    assertEquals(fragment, handleRender.getLastCall().getArguments()[0]);
+    handleRender.assertCallCount(1);
+  },
 
+  testRenderAsFragmentWithNoTemplateData() {
+    const renderer = new Renderer(dataSupplier);
+    const fragment = renderer.renderAsFragment(example.noDataTemplate);
+    assertEquals(NodeType.ELEMENT, fragment.nodeType);
+    assertEquals('<div>Hello</div>', fragmentToHtml(fragment));
+    assertEquals(fragment, handleRender.getLastCall().getArguments()[0]);
+    handleRender.assertCallCount(1);
+  },
 
-function testRenderElementWithNoTemplateData() {
-  var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
+  testRenderAsElement() {
+    const renderer = new Renderer(dataSupplier);
+    const element =
+        renderer.renderAsElement(example.injectedDataTemplate, {name: 'Value'});
+    assertEquals('ValueIjValue', elementToInnerHtml(element));
+    assertEquals(element, handleRender.getLastCall().getArguments()[0]);
+    handleRender.assertCallCount(1);
+  },
 
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  renderer.renderElement(testDiv, example.noDataTemplate);
-  assertEquals('<div>Hello</div>', elementToInnerHtml(testDiv));
-  assertEquals(testDiv, handleRender.getLastCall().getArguments()[0]);
-  handleRender.assertCallCount(1);
-}
+  testRenderAsElementWithNoTemplateData() {
+    const renderer = new Renderer(dataSupplier);
+    const elem = renderer.renderAsElement(example.noDataTemplate);
+    assertEquals('Hello', elementToInnerHtml(elem));
+    assertEquals(elem, handleRender.getLastCall().getArguments()[0]);
+  },
 
+  testRenderConvertsToString() {
+    const renderer = new Renderer(dataSupplier);
+    assertEquals(
+        'Output should be a string', 'Hello <b>World</b>',
+        renderer.render(example.sanitizedHtmlTemplate));
+    assertUndefined(handleRender.getLastCall().getArguments()[0]);
+    handleRender.assertCallCount(1);
+  },
 
-function testRenderAsFragment() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  var fragment =
-      renderer.renderAsFragment(example.injectedDataTemplate, {name: 'Value'});
-  assertEquals('ValueIjValue', fragmentToHtml(fragment));
-  assertEquals(fragment, handleRender.getLastCall().getArguments()[0]);
-  handleRender.assertCallCount(1);
-}
+  testRenderRejectsNonHtmlStrictTemplates() {
+    const renderer = new Renderer(dataSupplier);
+    assertEquals(
+        'Assertion failed: ' +
+            'render was called with a strict template of kind other than "html"' +
+            ' (consider using renderText or renderStrict)',
+        assertThrows(() => {
+          renderer.render(example.unsanitizedTextTemplate, {});
+        }).message);
+    handleRender.assertCallCount(0);
+  },
 
+  testRenderStrictDoesNotConvertToString() {
+    const renderer = new Renderer(dataSupplier);
+    const result = renderer.renderStrict(example.sanitizedHtmlTemplate);
+    assertEquals('Hello <b>World</b>', result.content);
+    assertEquals(SanitizedContentKind.HTML, result.contentKind);
+    assertUndefined(handleRender.getLastCall().getArguments()[0]);
+    handleRender.assertCallCount(1);
+  },
 
-function testRenderAsFragmentWithNoTemplateData() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  var fragment = renderer.renderAsFragment(example.noDataTemplate);
-  assertEquals(goog.dom.NodeType.ELEMENT, fragment.nodeType);
-  assertEquals('<div>Hello</div>', fragmentToHtml(fragment));
-  assertEquals(fragment, handleRender.getLastCall().getArguments()[0]);
-  handleRender.assertCallCount(1);
-}
+  testRenderStrictValidatesOutput() {
+    const renderer = new Renderer(dataSupplier);
+    // Passes.
+    renderer.renderStrict(example.sanitizedHtmlTemplate, {});
+    // No SanitizedContent at all.
+    assertEquals(
+        'Assertion failed: ' +
+            'renderStrict cannot be called on a text soy template',
+        assertThrows(() => {
+          renderer.renderStrict(example.stringTemplate, {});
+        }).message);
+    assertUndefined(handleRender.getLastCall().getArguments()[0]);
+    // Passes.
+    renderer.renderStrictOfKind(
+        example.sanitizedHtmlTemplate, {}, SanitizedContentKind.HTML);
+    // Wrong content kind.
+    assertEquals(
+        'Assertion failed: ' +
+            'renderStrict was called with the wrong kind of template',
+        assertThrows(() => {
+          renderer.renderStrictOfKind(
+              example.sanitizedHtmlTemplate, {}, SanitizedContentKind.JS);
+        }).message);
+    assertUndefined(handleRender.getLastCall().getArguments()[0]);
 
+    // Rendering non-HTML template fails:
+    assertEquals(
+        'Assertion failed: ' +
+            'renderStrict was called with the wrong kind of template',
+        assertThrows(() => {
+          renderer.renderStrict(example.unsanitizedTextTemplate, {});
+        }).message);
+    assertUndefined(handleRender.getLastCall().getArguments()[0]);
+    handleRender.assertCallCount(2);
+  },
 
-function testRenderAsElement() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  var element =
-      renderer.renderAsElement(example.injectedDataTemplate, {name: 'Value'});
-  assertEquals('ValueIjValue', elementToInnerHtml(element));
-  assertEquals(element, handleRender.getLastCall().getArguments()[0]);
-  handleRender.assertCallCount(1);
-}
+  testRenderStrictUri() {
+    const renderer = new Renderer(dataSupplier);
+    const result = renderer.renderStrictUri(example.sanitizedUriTemplate, {});
+    assertEquals(SanitizedContentKind.URI, result.contentKind);
+    assertEquals(
+        'Assertion failed: ' +
+            'renderStrict was called with the wrong kind of template',
+        assertThrows(() => {
+          renderer.renderStrictUri(example.sanitizedHtmlTemplate, {});
+        }).message);
+    handleRender.assertCallCount(1);
+  },
 
+  testRenderText() {
+    const renderer = new Renderer(dataSupplier);
+    // RenderText works on string templates.
+    assertEquals('<b>XSS</b>', renderer.renderText(example.stringTemplate));
+    // RenderText on non-text template fails.
+    assertEquals(
+        'Assertion failed: ' +
+            'renderText was called with a template of kind other than "text"',
+        assertThrows(() => {
+          renderer.renderText(example.sanitizedHtmlTemplate, {});
+        }).message);
+    handleRender.assertCallCount(1);
+  },
 
-function testRenderAsElementWithNoTemplateData() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  var elem = renderer.renderAsElement(example.noDataTemplate);
-  assertEquals('Hello', elementToInnerHtml(elem));
-  assertEquals(elem, handleRender.getLastCall().getArguments()[0]);
-}
-
-
-function testRenderConvertsToString() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  assertEquals(
-      'Output should be a string', 'Hello <b>World</b>',
-      renderer.render(example.sanitizedHtmlTemplate));
-  assertUndefined(handleRender.getLastCall().getArguments()[0]);
-  handleRender.assertCallCount(1);
-}
-
-
-function testRenderRejectsNonHtmlStrictTemplates() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  assertEquals(
-      'Assertion failed: ' +
-          'render was called with a strict template of kind other than "html"' +
-          ' (consider using renderText or renderStrict)',
-      assertThrows(function() {
-        renderer.render(example.unsanitizedTextTemplate, {});
-      }).message);
-  handleRender.assertCallCount(0);
-}
-
-
-function testRenderStrictDoesNotConvertToString() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  var result = renderer.renderStrict(example.sanitizedHtmlTemplate);
-  assertEquals('Hello <b>World</b>', result.content);
-  assertEquals(goog.soy.data.SanitizedContentKind.HTML, result.contentKind);
-  assertUndefined(handleRender.getLastCall().getArguments()[0]);
-  handleRender.assertCallCount(1);
-}
-
-
-function testRenderStrictValidatesOutput() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  // Passes.
-  renderer.renderStrict(example.sanitizedHtmlTemplate, {});
-  // No SanitizedContent at all.
-  assertEquals(
-      'Assertion failed: ' +
-          'renderStrict cannot be called on a non-strict soy template',
-      assertThrows(function() {
-        renderer.renderStrict(example.stringTemplate, {});
-      }).message);
-  assertUndefined(handleRender.getLastCall().getArguments()[0]);
-  // Passes.
-  renderer.renderStrictOfKind(
-      example.sanitizedHtmlTemplate, {},
-      goog.soy.data.SanitizedContentKind.HTML);
-  // Wrong content kind.
-  assertEquals(
-      'Assertion failed: ' +
-          'renderStrict was called with the wrong kind of template',
-      assertThrows(function() {
-        renderer.renderStrictOfKind(
-            example.sanitizedHtmlTemplate, {},
-            goog.soy.data.SanitizedContentKind.JS);
-      }).message);
-  assertUndefined(handleRender.getLastCall().getArguments()[0]);
-
-  // Rendering non-HTML template fails:
-  assertEquals(
-      'Assertion failed: ' +
-          'renderStrict was called with the wrong kind of template',
-      assertThrows(function() {
-        renderer.renderStrict(example.unsanitizedTextTemplate, {});
-      }).message);
-  assertUndefined(handleRender.getLastCall().getArguments()[0]);
-  handleRender.assertCallCount(2);
-}
-
-
-function testRenderStrictUri() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  var result = renderer.renderStrictUri(example.sanitizedUriTemplate, {});
-  assertEquals(goog.soy.data.SanitizedContentKind.URI, result.contentKind);
-  assertEquals(
-      'Assertion failed: ' +
-          'renderStrict was called with the wrong kind of template',
-      assertThrows(function() {
-        renderer.renderStrictUri(example.sanitizedHtmlTemplate, {});
-      }).message);
-  handleRender.assertCallCount(1);
-}
-
-
-function testRenderText() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  // RenderText converts to string.
-  assertEquals(
-      'Output of renderText should be a string', 'I <3 Puppies & Kittens',
-      renderer.renderText(example.unsanitizedTextTemplate));
-  assertUndefined(handleRender.getLastCall().getArguments()[0]);
-  // RenderText works on string templates.
-  assertEquals('<b>XSS</b>', renderer.renderText(example.stringTemplate));
-  // RenderText on non-text template fails.
-  assertEquals(
-      'Assertion failed: ' +
-          'renderText was called with a template of kind other than "text"',
-      assertThrows(function() {
-        renderer.renderText(example.sanitizedHtmlTemplate, {});
-      }).message);
-  handleRender.assertCallCount(2);
-}
-
-function testRenderSafeHtml() {
-  var renderer = new goog.soy.Renderer(dataSupplier);
-  var result = renderer.renderSafeHtml(example.sanitizedHtmlTemplate);
-  assertEquals('Hello <b>World</b>', goog.html.SafeHtml.unwrap(result));
-  assertEquals(goog.i18n.bidi.Dir.LTR, result.getDirection());
-}
+  testRenderSafeHtml() {
+    const renderer = new Renderer(dataSupplier);
+    const result = renderer.renderSafeHtml(example.sanitizedHtmlTemplate);
+    assertEquals('Hello <b>World</b>', SafeHtml.unwrap(result));
+    assertEquals(Dir.LTR, result.getDirection());
+  },
+});

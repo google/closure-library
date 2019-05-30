@@ -12,24 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.MockRangeTest');
-goog.setTestOnly('goog.testing.MockRangeTest');
+goog.module('goog.testing.MockRangeTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.MockRange');
-goog.require('goog.testing.jsunit');
+const MockRange = goog.require('goog.testing.MockRange');
+const testSuite = goog.require('goog.testing.testSuite');
 
+testSuite({
+  /**
+   * Tests that a MockRange can be created successfully, a call to a mock
+   * method can be recorded, and the correct behavior replayed and verified.
+   */
+  testMockMethod() {
+    const mockRange = new MockRange();
+    mockRange.getStartOffset().$returns(42);
+    mockRange.$replay();
 
-/**
- * Tests that a MockRange can be created successfully, a call to a mock
- * method can be recorded, and the correct behavior replayed and verified.
- */
-function testMockMethod() {
-  var mockRange = new goog.testing.MockRange();
-  mockRange.getStartOffset().$returns(42);
-  mockRange.$replay();
-
-  assertEquals(
-      'Mock method should return recorded value', 42,
-      mockRange.getStartOffset());
-  mockRange.$verify();
-}
+    assertEquals(
+        'Mock method should return recorded value', 42,
+        mockRange.getStartOffset());
+    mockRange.$verify();
+  },
+});

@@ -11,208 +11,203 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-goog.provide('goog.async.ConditionalDelayTest');
-goog.setTestOnly('goog.async.ConditionalDelayTest');
+goog.module('goog.async.ConditionalDelayTest');
+goog.setTestOnly();
 
-goog.require('goog.async.ConditionalDelay');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
+const ConditionalDelay = goog.require('goog.async.ConditionalDelay');
+const MockClock = goog.require('goog.testing.MockClock');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var invoked = false;
-var delay = null;
-var clock = null;
-var returnValue = true;
-var onSuccessCalled = false;
-var onFailureCalled = false;
-
+let invoked = false;
+let delay = null;
+let clock = null;
+let returnValue = true;
+let onSuccessCalled = false;
+let onFailureCalled = false;
 
 function callback() {
   invoked = true;
   return returnValue;
 }
 
+testSuite({
+  setUp() {
+    clock = new MockClock(true);
+    invoked = false;
+    returnValue = true;
+    onSuccessCalled = false;
+    onFailureCalled = false;
+    delay = new ConditionalDelay(callback);
+    delay.onSuccess = () => {
+      onSuccessCalled = true;
+    };
+    delay.onFailure = () => {
+      onFailureCalled = true;
+    };
+  },
 
-function setUp() {
-  clock = new goog.testing.MockClock(true);
-  invoked = false;
-  returnValue = true;
-  onSuccessCalled = false;
-  onFailureCalled = false;
-  delay = new goog.async.ConditionalDelay(callback);
-  delay.onSuccess = function() { onSuccessCalled = true; };
-  delay.onFailure = function() { onFailureCalled = true; };
-}
+  tearDown() {
+    clock.dispose();
+    delay.dispose();
+  },
 
+  testDelay() {
+    delay.start(200, 200);
+    assertFalse(invoked);
 
-function tearDown() {
-  clock.dispose();
-  delay.dispose();
-}
+    clock.tick(100);
+    assertFalse(invoked);
 
+    clock.tick(100);
+    assertTrue(invoked);
+  },
 
-function testDelay() {
-  delay.start(200, 200);
-  assertFalse(invoked);
+  testStop() {
+    delay.start(200, 500);
+    assertTrue(delay.isActive());
 
-  clock.tick(100);
-  assertFalse(invoked);
+    clock.tick(100);
+    assertFalse(invoked);
 
-  clock.tick(100);
-  assertTrue(invoked);
-}
+    delay.stop();
+    clock.tick(100);
+    assertFalse(invoked);
 
+    assertFalse(delay.isActive());
+  },
 
-function testStop() {
-  delay.start(200, 500);
-  assertTrue(delay.isActive());
+  testIsActive() {
+    assertFalse(delay.isActive());
+    delay.start(200, 200);
+    assertTrue(delay.isActive());
+    clock.tick(200);
+    assertFalse(delay.isActive());
+  },
 
-  clock.tick(100);
-  assertFalse(invoked);
+  testRestart() {
+    delay.start(200, 50000);
+    clock.tick(100);
 
-  delay.stop();
-  clock.tick(100);
-  assertFalse(invoked);
+    delay.stop();
+    assertFalse(invoked);
 
-  assertFalse(delay.isActive());
-}
+    delay.start(200, 50000);
+    clock.tick(199);
+    assertFalse(invoked);
 
+    clock.tick(1);
+    assertTrue(invoked);
 
-function testIsActive() {
-  assertFalse(delay.isActive());
-  delay.start(200, 200);
-  assertTrue(delay.isActive());
-  clock.tick(200);
-  assertFalse(delay.isActive());
-}
+    invoked = false;
+    delay.start(200, 200);
+    clock.tick(200);
+    assertTrue(invoked);
 
+    assertFalse(delay.isActive());
+  },
 
-function testRestart() {
-  delay.start(200, 50000);
-  clock.tick(100);
+  testDispose() {
+    delay.start(200, 200);
+    delay.dispose();
+    assertTrue(delay.isDisposed());
 
-  delay.stop();
-  assertFalse(invoked);
+    clock.tick(500);
+    assertFalse(invoked);
+  },
 
-  delay.start(200, 50000);
-  clock.tick(199);
-  assertFalse(invoked);
+  testConditionalDelay_Success() {
+    returnValue = false;
+    delay.start(100, 300);
 
-  clock.tick(1);
-  assertTrue(invoked);
+    clock.tick(99);
+    assertFalse(invoked);
+    clock.tick(1);
+    assertTrue(invoked);
 
-  invoked = false;
-  delay.start(200, 200);
-  clock.tick(200);
-  assertTrue(invoked);
-
-  assertFalse(delay.isActive());
-}
-
-
-function testDispose() {
-  delay.start(200, 200);
-  delay.dispose();
-  assertTrue(delay.isDisposed());
-
-  clock.tick(500);
-  assertFalse(invoked);
-}
-
-
-function testConditionalDelay_Success() {
-  returnValue = false;
-  delay.start(100, 300);
-
-  clock.tick(99);
-  assertFalse(invoked);
-  clock.tick(1);
-  assertTrue(invoked);
-
-  assertTrue(delay.isActive());
-  assertFalse(delay.isDone());
-  assertFalse(onSuccessCalled);
-  assertFalse(onFailureCalled);
-
-  returnValue = true;
-
-  invoked = false;
-  clock.tick(100);
-  assertTrue(invoked);
-
-  assertFalse(delay.isActive());
-  assertTrue(delay.isDone());
-  assertTrue(onSuccessCalled);
-  assertFalse(onFailureCalled);
-
-  invoked = false;
-  clock.tick(200);
-  assertFalse(invoked);
-}
-
-
-function testConditionalDelay_Failure() {
-  returnValue = false;
-  delay.start(100, 300);
-
-  clock.tick(99);
-  assertFalse(invoked);
-  clock.tick(1);
-  assertTrue(invoked);
-
-  assertTrue(delay.isActive());
-  assertFalse(delay.isDone());
-  assertFalse(onSuccessCalled);
-  assertFalse(onFailureCalled);
-
-  invoked = false;
-  clock.tick(100);
-  assertTrue(invoked);
-  assertFalse(onSuccessCalled);
-  assertFalse(onFailureCalled);
-
-  invoked = false;
-  clock.tick(90);
-  assertFalse(invoked);
-  clock.tick(10);
-  assertTrue(invoked);
-
-  assertFalse(delay.isActive());
-  assertFalse(delay.isDone());
-  assertFalse(onSuccessCalled);
-  assertTrue(onFailureCalled);
-}
-
-
-function testInfiniteDelay() {
-  returnValue = false;
-  delay.start(100, -1);
-
-  // Test in a big enough loop.
-  for (var i = 0; i < 1000; ++i) {
-    clock.tick(80);
     assertTrue(delay.isActive());
     assertFalse(delay.isDone());
     assertFalse(onSuccessCalled);
     assertFalse(onFailureCalled);
-  }
 
-  delay.stop();
-  assertFalse(delay.isActive());
-  assertFalse(delay.isDone());
-  assertFalse(onSuccessCalled);
-  assertFalse(onFailureCalled);
-}
+    returnValue = true;
 
-function testCallbackScope() {
-  var callbackCalled = false;
-  var scopeObject = {};
-  function internalCallback() {
-    assertEquals(this, scopeObject);
-    callbackCalled = true;
-    return true;
-  }
-  delay = new goog.async.ConditionalDelay(internalCallback, scopeObject);
-  delay.start(200, 200);
-  clock.tick(201);
-  assertTrue(callbackCalled);
-}
+    invoked = false;
+    clock.tick(100);
+    assertTrue(invoked);
+
+    assertFalse(delay.isActive());
+    assertTrue(delay.isDone());
+    assertTrue(onSuccessCalled);
+    assertFalse(onFailureCalled);
+
+    invoked = false;
+    clock.tick(200);
+    assertFalse(invoked);
+  },
+
+  testConditionalDelay_Failure() {
+    returnValue = false;
+    delay.start(100, 300);
+
+    clock.tick(99);
+    assertFalse(invoked);
+    clock.tick(1);
+    assertTrue(invoked);
+
+    assertTrue(delay.isActive());
+    assertFalse(delay.isDone());
+    assertFalse(onSuccessCalled);
+    assertFalse(onFailureCalled);
+
+    invoked = false;
+    clock.tick(100);
+    assertTrue(invoked);
+    assertFalse(onSuccessCalled);
+    assertFalse(onFailureCalled);
+
+    invoked = false;
+    clock.tick(90);
+    assertFalse(invoked);
+    clock.tick(10);
+    assertTrue(invoked);
+
+    assertFalse(delay.isActive());
+    assertFalse(delay.isDone());
+    assertFalse(onSuccessCalled);
+    assertTrue(onFailureCalled);
+  },
+
+  testInfiniteDelay() {
+    returnValue = false;
+    delay.start(100, -1);
+
+    // Test in a big enough loop.
+    for (let i = 0; i < 1000; ++i) {
+      clock.tick(80);
+      assertTrue(delay.isActive());
+      assertFalse(delay.isDone());
+      assertFalse(onSuccessCalled);
+      assertFalse(onFailureCalled);
+    }
+
+    delay.stop();
+    assertFalse(delay.isActive());
+    assertFalse(delay.isDone());
+    assertFalse(onSuccessCalled);
+    assertFalse(onFailureCalled);
+  },
+
+  testCallbackScope() {
+    let callbackCalled = false;
+    const scopeObject = {};
+    function internalCallback() {
+      assertEquals(this, scopeObject);
+      callbackCalled = true;
+      return true;
+    }
+    delay = new ConditionalDelay(internalCallback, scopeObject);
+    delay.start(200, 200);
+    clock.tick(201);
+    assertTrue(callbackCalled);
+  },
+});

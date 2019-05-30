@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.math.IntegerTest');
-goog.setTestOnly('goog.math.IntegerTest');
+goog.module('goog.math.IntegerTest');
+goog.setTestOnly();
 
-goog.require('goog.math.Integer');
-goog.require('goog.testing.jsunit');
+const Integer = goog.require('goog.math.Integer');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // Interprets the given numbers as the bits of a 32-bit int.  In particular,
 // this takes care of the 32-bit being interpretted as the sign.
 function toInt32s(arr) {
-  for (var i = 0; i < arr.length; ++i) {
+  for (let i = 0; i < arr.length; ++i) {
     arr[i] = arr[i] & 0xFFFFFFFF;
   }
 }
 
 // Note that these are in numerical order.
-var TEST_BITS = [
+const TEST_BITS = [
   0x80000000, 0x00000000, 0xb776d5f5, 0x5634e2db, 0xffefffff, 0xffffffff,
   0xfff00000, 0x00000000, 0xfffeffff, 0xffffffff, 0xffff0000, 0x00000000,
   0xfffffffe, 0xffffffff, 0xffffffff, 0x00000000, 0xffffffff, 0xfeffffff,
@@ -39,11 +39,11 @@ var TEST_BITS = [
   0x00000000, 0x01000000, 0x00000000, 0x5634e2db, 0x00000000, 0xb776d5f5,
   0x00000000, 0xffffffff, 0x00000001, 0x00000000, 0x0000ffff, 0xffffffff,
   0x00010000, 0x00000000, 0x000fffff, 0xffffffff, 0x00100000, 0x00000000,
-  0x5634e2db, 0xb776d5f5, 0x7fffffff, 0xffffffff
+  0x5634e2db, 0xb776d5f5, 0x7fffffff, 0xffffffff,
 ];
 toInt32s(TEST_BITS);
 
-var TEST_ADD_BITS = [
+const TEST_ADD_BITS = [
   0x3776d5f5, 0x5634e2db, 0x7fefffff, 0xffffffff, 0xb766d5f5, 0x5634e2da,
   0x7ff00000, 0x00000000, 0xb766d5f5, 0x5634e2db, 0xffdfffff, 0xffffffff,
   0x7ffeffff, 0xffffffff, 0xb775d5f5, 0x5634e2da, 0xffeeffff, 0xfffffffe,
@@ -242,11 +242,11 @@ var TEST_ADD_BITS = [
   0x80000000, 0x00ffffff, 0x80000000, 0x5634e2da, 0x80000000, 0xb776d5f4,
   0x80000000, 0xfffffffe, 0x80000000, 0xffffffff, 0x8000ffff, 0xfffffffe,
   0x8000ffff, 0xffffffff, 0x800fffff, 0xfffffffe, 0x800fffff, 0xffffffff,
-  0xd634e2db, 0xb776d5f4
+  0xd634e2db, 0xb776d5f4,
 ];
 toInt32s(TEST_ADD_BITS);
 
-var TEST_SUB_BITS = [
+const TEST_SUB_BITS = [
   0x00000000, 0x00000000, 0xc8892a0a, 0xa9cb1d25, 0x80100000, 0x00000001,
   0x80100000, 0x00000000, 0x80010000, 0x00000001, 0x80010000, 0x00000000,
   0x80000001, 0x00000001, 0x80000001, 0x00000000, 0x80000000, 0x01000001,
@@ -655,11 +655,11 @@ var TEST_SUB_BITS = [
   0x7fffffff, 0xa9cb1d24, 0x7fffffff, 0x48892a0a, 0x7fffffff, 0x00000000,
   0x7ffffffe, 0xffffffff, 0x7fff0000, 0x00000000, 0x7ffeffff, 0xffffffff,
   0x7ff00000, 0x00000000, 0x7fefffff, 0xffffffff, 0x29cb1d24, 0x48892a0a,
-  0x00000000, 0x00000000
+  0x00000000, 0x00000000,
 ];
 toInt32s(TEST_SUB_BITS);
 
-var TEST_MUL_BITS = [
+const TEST_MUL_BITS = [
   0x80000000, 0x00000000, 0x80000000, 0x00000000, 0x1ad92a0a, 0xa9cb1d25,
   0x00000000, 0x00000000, 0xd2500000, 0x00000000, 0x00100000, 0x00000000,
   0x80000000, 0x00000000, 0x65ae2a0a, 0xa9cb1d25, 0x00110000, 0x00000001,
@@ -858,11 +858,11 @@ var TEST_MUL_BITS = [
   0xffffffff, 0xff000000, 0x7fffffff, 0xa9cb1d25, 0x7fffffff, 0x48892a0b,
   0x7fffffff, 0x00000001, 0xffffffff, 0x00000000, 0x7fff0000, 0x00000001,
   0xffff0000, 0x00000000, 0x7ff00000, 0x00000001, 0xfff00000, 0x00000000,
-  0x29cb1d24, 0x48892a0b
+  0x29cb1d24, 0x48892a0b,
 ];
 toInt32s(TEST_MUL_BITS);
 
-var TEST_DIV_BITS = [
+const TEST_DIV_BITS = [
   0x00000000, 0x00000001, 0x00000000, 0x00000001, 0x00000000, 0x000007ff,
   0x00000000, 0x00000800, 0x00000000, 0x00007fff, 0x00000000, 0x00008000,
   0x00000000, 0x7fffffff, 0x00000000, 0x80000000, 0x0000007f, 0xffff8000,
@@ -1259,11 +1259,11 @@ var TEST_DIV_BITS = [
   0x0000007f, 0xffffffff, 0x00000001, 0x7c1c33e6, 0x00000000, 0xb29b67a6,
   0x00000000, 0x80000000, 0x00000000, 0x7fffffff, 0x00000000, 0x00008000,
   0x00000000, 0x00007fff, 0x00000000, 0x00000800, 0x00000000, 0x000007ff,
-  0x00000000, 0x00000001, 0x00000000, 0x00000001
+  0x00000000, 0x00000001, 0x00000000, 0x00000001,
 ];
 toInt32s(TEST_DIV_BITS);
 
-var TEST_STRINGS = [
+const TEST_STRINGS = [
   '-9223372036854775808',
   '-5226755067826871589',
   '-4503599627370497',
@@ -1298,107 +1298,14 @@ var TEST_STRINGS = [
   '4503599627370495',
   '4503599627370496',
   '6211839219354490357',
-  '9223372036854775807'
+  '9223372036854775807',
 ];
 
-function testToFromBits() {
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
-    var val = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    assertEquals(TEST_BITS[i], val.getBits(1));
-    assertEquals(TEST_BITS[i + 1], val.getBits(0));
-  }
-}
-
-function testToFromInt() {
-  for (var i = 0; i < TEST_BITS.length; i += 1) {
-    var val = goog.math.Integer.fromInt(TEST_BITS[i]);
-    assertEquals(TEST_BITS[i], val.toInt());
-  }
-}
-
-function testToFromNumber() {
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
-    var num = TEST_BITS[i] * Math.pow(2, 32) + TEST_BITS[i + 1] >= 0 ?
-        TEST_BITS[i + 1] :
-        Math.pow(2, 32) + TEST_BITS[i + 1];
-    var val = goog.math.Integer.fromNumber(num);
-    assertEquals(num, val.toNumber());
-  }
-}
-
-function testShorten() {
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
-    var val = new goog.math.Integer([TEST_BITS[i + 1], TEST_BITS[i]], 0);
-    val = val.shorten(64);
-    assertEquals(TEST_BITS[i], val.getBits(1));
-    assertEquals(TEST_BITS[i + 1], val.getBits(0));
-  }
-
-  val = new goog.math.Integer.fromBits([0x20000000, 0x01010000], 0);
-
-  var val58 = val.shorten(58);
-  assertEquals(0x01010000 | 0, val58.getBits(1));
-  assertEquals(0x20000000 | 0, val58.getBits(0));
-
-  var val57 = val.shorten(57);
-  assertEquals(0xFF010000 | 0, val57.getBits(1));
-  assertEquals(0x20000000 | 0, val57.getBits(0));
-
-  var val56 = val.shorten(56);
-  assertEquals(0x00010000 | 0, val56.getBits(1));
-  assertEquals(0x20000000 | 0, val56.getBits(0));
-
-  var val50 = val.shorten(50);
-  assertEquals(0x00010000 | 0, val50.getBits(1));
-  assertEquals(0x20000000 | 0, val50.getBits(0));
-
-  var val49 = val.shorten(49);
-  assertEquals(0xFFFF0000 | 0, val49.getBits(1));
-  assertEquals(0x20000000 | 0, val49.getBits(0));
-
-  var val32 = val.shorten(32);
-  assertEquals(0x00000000 | 0, val32.getBits(1));
-  assertEquals(0x20000000 | 0, val32.getBits(0));
-
-  var val31 = val.shorten(31);
-  assertEquals(0x00000000 | 0, val31.getBits(1));
-  assertEquals(0x20000000 | 0, val31.getBits(0));
-
-  var val30 = val.shorten(30);
-  assertEquals(0xFFFFFFFF | 0, val30.getBits(1));
-  assertEquals(0xE0000000 | 0, val30.getBits(0));
-
-  var val29 = val.shorten(29);
-  assertEquals(0x00000000 | 0, val29.getBits(1));
-  assertEquals(0x00000000 | 0, val29.getBits(0));
-}
-
-function testIsZero() {
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
-    var val = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    assertEquals(TEST_BITS[i] == 0 && TEST_BITS[i + 1] == 0, val.isZero());
-  }
-}
-
-function testIsNegative() {
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
-    var val = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    assertEquals((TEST_BITS[i] >> 31) != 0, val.isNegative());
-  }
-}
-
-function testIsOdd() {
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
-    var val = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    assertEquals((TEST_BITS[i + 1] & 1) != 0, val.isOdd());
-  }
-}
-
 function createTestComparisons(i) {
-  return function() {
-    var vi = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    for (var j = 0; j < TEST_BITS.length; j += 2) {
-      var vj = goog.math.Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
+  return () => {
+    const vi = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+    for (let j = 0; j < TEST_BITS.length; j += 2) {
+      const vj = Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
       assertEquals(i == j, vi.equals(vj));
       assertEquals(i != j, vi.notEquals(vj));
       assertEquals(i < j, vi.lessThan(vj));
@@ -1413,18 +1320,18 @@ function createTestComparisons(i) {
 // into a number of test functions that will be run separately by jsunit. This
 // is necessary because, in some testing configurations, the full combined test
 // can take so long that it times out. These smaller tests run much faster.
-for (var i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global['testComparisons' + i] = createTestComparisons(i);
+for (let i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global[`testComparisons${i}`] = createTestComparisons(i);
 }
 
 function createTestBitOperations(i) {
-  return function() {
-    var vi = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+  return () => {
+    const vi = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
     assertEquals(~TEST_BITS[i], vi.not().getBits(1));
     assertEquals(~TEST_BITS[i + 1], vi.not().getBits(0));
 
-    for (var j = 0; j < TEST_BITS.length; j += 2) {
-      var vj = goog.math.Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
+    for (let j = 0; j < TEST_BITS.length; j += 2) {
+      const vj = Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
       assertEquals(TEST_BITS[i] & TEST_BITS[j], vi.and(vj).getBits(1));
       assertEquals(TEST_BITS[i + 1] & TEST_BITS[j + 1], vi.and(vj).getBits(0));
       assertEquals(TEST_BITS[i] | TEST_BITS[j], vi.or(vj).getBits(1));
@@ -1438,7 +1345,7 @@ function createTestBitOperations(i) {
     assertEquals(TEST_BITS[i], vi.shiftRight(0).getBits(1));
     assertEquals(TEST_BITS[i + 1], vi.shiftRight(0).getBits(0));
 
-    for (var len = 1; len < 64; ++len) {
+    for (let len = 1; len < 64; ++len) {
       if (len < 32) {
         assertEquals(
             (TEST_BITS[i] << len) | (TEST_BITS[i + 1] >>> (32 - len)),
@@ -1468,90 +1375,69 @@ function createTestBitOperations(i) {
   };
 }
 
-for (var i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global['testBitOperations' + i] = createTestBitOperations(i);
-}
-
-function testNegation() {
-  for (var i = 0; i < TEST_BITS.length; i += 2) {
-    var vi = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    if (TEST_BITS[i + 1] == 0) {
-      assertEquals((~TEST_BITS[i] + 1) | 0, vi.negate().getBits(1));
-      assertEquals(0, vi.negate().getBits(0));
-    } else {
-      assertEquals(~TEST_BITS[i], vi.negate().getBits(1));
-      assertEquals((~TEST_BITS[i + 1] + 1) | 0, vi.negate().getBits(0));
-    }
-  }
-}
-
-function testAbs() {
-  for (const str of TEST_STRINGS) {
-    const signed = goog.math.Integer.fromString(str, 10);
-    const abs = goog.math.Integer.fromString(str.replace('-', ''), 10);
-    assertTrue(signed.abs().equals(abs));
-  }
+for (let i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global[`testBitOperations${i}`] = createTestBitOperations(i);
 }
 
 function createTestAdd(i, count) {
-  return function() {
-    var vi = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    for (var j = 0; j < i; j += 2) {
-      var vj = goog.math.Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
-      var result = vi.add(vj);
+  return () => {
+    const vi = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+    for (let j = 0; j < i; j += 2) {
+      const vj = Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
+      const result = vi.add(vj);
       assertEquals(TEST_ADD_BITS[count++], result.getBits(1));
       assertEquals(TEST_ADD_BITS[count++], result.getBits(0));
     }
   };
 }
 
-var countAdd = 0;
-for (var i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global['testAdd' + i] = createTestAdd(i, countAdd);
+let countAdd = 0;
+for (let i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global[`testAdd${i}`] = createTestAdd(i, countAdd);
   countAdd += i;
 }
 
 function createTestSubtract(i, count) {
-  return function() {
-    var vi = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    for (var j = 0; j < TEST_BITS.length; j += 2) {
-      var vj = goog.math.Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
-      var result = vi.subtract(vj);
+  return () => {
+    const vi = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+    for (let j = 0; j < TEST_BITS.length; j += 2) {
+      const vj = Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
+      const result = vi.subtract(vj);
       assertEquals(TEST_SUB_BITS[count++], result.getBits(1));
       assertEquals(TEST_SUB_BITS[count++], result.getBits(0));
     }
   };
 }
 
-var countSubtract = 0;
-for (var i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global['testSubtract' + i] = createTestSubtract(i, countSubtract);
+let countSubtract = 0;
+for (let i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global[`testSubtract${i}`] = createTestSubtract(i, countSubtract);
   countSubtract += TEST_BITS.length;
 }
 
 function createTestMultiply(i, count) {
-  return function() {
-    var vi = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    for (var j = 0; j < i; j += 2) {
-      var vj = goog.math.Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
-      var result = vi.multiply(vj);
+  return () => {
+    const vi = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+    for (let j = 0; j < i; j += 2) {
+      const vj = Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
+      const result = vi.multiply(vj);
       assertEquals(TEST_MUL_BITS[count++], result.getBits(1));
       assertEquals(TEST_MUL_BITS[count++], result.getBits(0));
     }
   };
 }
 
-var countMultiply = 0;
-for (var i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global['testMultiply' + i] = createTestMultiply(i, countMultiply);
+let countMultiply = 0;
+for (let i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global[`testMultiply${i}`] = createTestMultiply(i, countMultiply);
   countMultiply += i;
 }
 
 function createTestDivMod(i, count) {
-  return function() {
-    var vi = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    for (var j = 0; j < TEST_BITS.length; j += 2) {
-      var vj = goog.math.Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
+  return () => {
+    const vi = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+    for (let j = 0; j < TEST_BITS.length; j += 2) {
+      const vj = Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
       if (!vj.isZero()) {
         const {quotient, remainder} = vi.divideAndRemainder(vj);
 
@@ -1562,152 +1448,272 @@ function createTestDivMod(i, count) {
         assertTrue(quotient.equals(vi.divide(vj)));
         assertTrue(remainder.equals(vi.modulo(vj)));
 
-        var combinedResult = quotient.multiply(vj).add(remainder);
+        const combinedResult = quotient.multiply(vj).add(remainder);
         assertTrue(vi.equals(combinedResult));
       }
     }
   };
 }
 
-var countPerDivModCall = 0;
-for (var j = 0; j < TEST_BITS.length; j += 2) {
-  var vj = goog.math.Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
+let countPerDivModCall = 0;
+for (let j = 0; j < TEST_BITS.length; j += 2) {
+  const vj = Integer.fromBits([TEST_BITS[j + 1], TEST_BITS[j]]);
   if (!vj.isZero()) {
     countPerDivModCall += 2;
   }
 }
 
-var countDivMod = 0;
-for (var i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global['testDivMod' + i] = createTestDivMod(i, countDivMod);
+let countDivMod = 0;
+for (let i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global[`testDivMod${i}`] = createTestDivMod(i, countDivMod);
   countDivMod += countPerDivModCall;
 }
 
 function createTestToFromString(i) {
-  return function() {
-    var vi = goog.math.Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
-    var str = vi.toString(10);
+  return () => {
+    const vi = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+    const str = vi.toString(10);
     assertEquals(TEST_STRINGS[i / 2], str);
-    assertEquals(
-        TEST_BITS[i], goog.math.Integer.fromString(str, 10).getBits(1));
-    assertEquals(
-        TEST_BITS[i + 1], goog.math.Integer.fromString(str, 10).getBits(0));
+    assertEquals(TEST_BITS[i], Integer.fromString(str, 10).getBits(1));
+    assertEquals(TEST_BITS[i + 1], Integer.fromString(str, 10).getBits(0));
 
-    for (var radix = 2; radix <= 36; ++radix) {
-      var result = vi.toString(radix);
+    for (let radix = 2; radix <= 36; ++radix) {
+      const result = vi.toString(radix);
+      assertEquals(TEST_BITS[i], Integer.fromString(result, radix).getBits(1));
       assertEquals(
-          TEST_BITS[i], goog.math.Integer.fromString(result, radix).getBits(1));
-      assertEquals(
-          TEST_BITS[i + 1],
-          goog.math.Integer.fromString(result, radix).getBits(0));
+          TEST_BITS[i + 1], Integer.fromString(result, radix).getBits(0));
     }
   };
 }
 
-for (var i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global['testToFromString' + i] = createTestToFromString(i);
-}
-
-function testBigMultiply() {
-  var a = goog.math.Integer.fromString('2389428394283434234234');
-  var b = goog.math.Integer.fromString('895489472863784783');
-  assertEquals(
-      '2139707973242632227811083664960586861222', a.multiply(b).toString());
-  assertEquals(
-      '2139707973242632227811083664960586861222', b.multiply(a).toString());
-
-  a = goog.math.Integer.fromString('123940932409302930429304');
-  b = goog.math.Integer.fromString('-23940239409234');
-  assertEquals(
-      '-2967175594482401511466585794961793136', a.multiply(b).toString());
-
-  a = goog.math.Integer.fromString('-4895849540949');
-  b = goog.math.Integer.fromString('5906390354334334989');
-  assertEquals('-28916798504933355408364838964561', a.multiply(b).toString());
-
-  a = goog.math.Integer.fromString('-23489238492334893');
-  b = goog.math.Integer.fromString('-2930482394829348293489234');
-  assertEquals(
-      '68834799869735267747353413198446618041962', a.multiply(b).toString());
-
-  a = goog.math.Integer.fromString('-39403940');
-  b = goog.math.Integer.fromString('-90689586573473848347384834');
-  assertEquals('3573527027965969111849451155845960', a.multiply(b).toString());
-
-  // regression test for https://github.com/google/closure-library/issues/500
-  a = goog.math.Integer.fromString(
-      '13096940572375952535991073728029631156727' +
-      '45889511394745914382575458603399133344113' +
-      '55124789839721800834794626807105252175636' +
-      '59874572877651812163757781047754345758394' +
-      '12393743854289058');
-  b = goog.math.Integer.fromString(
-      '27919529936136212349610129940926086216581' +
-      '64496528137102143826264378516364143418101' +
-      '17954848423382367899187410977857170099434' +
-      '88954503636036324930799550973655515139183' +
-      '49748613352617850');
-  assertEquals(
-      '3656604243822473465231854689622824622925110708289864374262496' +
-          '6011714112304568802330367011373499705061131532809869274041668' +
-          '6403682258958556744594010497630468513209942389833344943567584' +
-          '9711887715782124066353351659885600959610314392971398216556707' +
-          '9177967386189614814272449310787401834779505072200615609456609' +
-          '84075750394399200851742167944560567661447926674910485300',
-      a.multiply(b).toString());
-}
-
-function testSlowDivideThrowsWithNegativeIntegers() {
-  var a = goog.math.Integer.fromString('-10');
-  var b = goog.math.Integer.fromString('2');
-
-  assertThrows(function() { a.slowDivide_(b); });
-
-  a = goog.math.Integer.fromString('10');
-  b = goog.math.Integer.fromString('-2');
-
-  assertThrows(function() { a.slowDivide_(b); });
-
-  a = goog.math.Integer.fromString('-10');
-  b = goog.math.Integer.fromString('-2');
-
-  assertThrows(function() { a.slowDivide_(b); });
-}
-
-function testBigShift() {
-  var a = goog.math.Integer.fromString('3735928559');
-  assertEquals(
-      '591981510028266767381876356163880091648', a.shiftLeft(97).toString());
-  assertEquals(
-      '-591981510028266767381876356163880091648',
-      a.negate().shiftLeft(97).toString());
+for (let i = 0; i < TEST_BITS.length; i += 2) {
+  goog.global[`testToFromString${i}`] = createTestToFromString(i);
 }
 
 // Regression test for
 // https://github.com/google/closure-library/pull/498
-function testBase36ToString() {
-  assertEquals(
-      'zzzzzz', goog.math.Integer.fromString('zzzzzz', 36).toString(36));
-}
 
 // Regression test for
 // https://github.com/google/closure-library/issues/703
-function testMultiplicationWithCascadingCarry() {
-  // original bug reported
-  var s1 = 'f729d763a14ecd55ffffebab43f38' +
-           '8d0f7cbae584d3765d509b5557d6048ea0c';
-  var s2 = 'eea1c478f4683b323f0953c9c8e067e3967d97e7ed0bf05862cecac60f300' +
-           '77f170e480beee2cd0c1d5516764d58bc260cafe5705bc6b6df63cf4c057c' +
-           'b9f090';
-  var b = goog.math.Integer.fromString(s1, 16);
-  assertEquals(s2, b.multiply(b).toString(16));
 
-  // smallest case I could finde
-  var xs = 'ffffffff00000001';
-  var ys = '1ffffffffffffffff';
-  var zs = '1fffffffe0000000100000000ffffffff';
-  var x = goog.math.Integer.fromString(xs, 16);
-  var y = goog.math.Integer.fromString(ys, 16);
-  var z = x.multiply(y);
-  assertEquals(zs, z.toString(16));
-}
+testSuite({
+  testToFromBits() {
+    for (let i = 0; i < TEST_BITS.length; i += 2) {
+      const val = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+      assertEquals(TEST_BITS[i], val.getBits(1));
+      assertEquals(TEST_BITS[i + 1], val.getBits(0));
+    }
+  },
+
+  testToFromInt() {
+    for (let i = 0; i < TEST_BITS.length; i += 1) {
+      const val = Integer.fromInt(TEST_BITS[i]);
+      assertEquals(TEST_BITS[i], val.toInt());
+    }
+  },
+
+  testToFromNumber() {
+    for (let i = 0; i < TEST_BITS.length; i += 2) {
+      const num = TEST_BITS[i] * Math.pow(2, 32) + TEST_BITS[i + 1] >= 0 ?
+          TEST_BITS[i + 1] :
+          Math.pow(2, 32) + TEST_BITS[i + 1];
+      const val = Integer.fromNumber(num);
+      assertEquals(num, val.toNumber());
+    }
+  },
+
+  testShorten() {
+    for (let i = 0; i < TEST_BITS.length; i += 2) {
+      let val = new Integer([TEST_BITS[i + 1], TEST_BITS[i]], 0);
+      val = val.shorten(64);
+      assertEquals(TEST_BITS[i], val.getBits(1));
+      assertEquals(TEST_BITS[i + 1], val.getBits(0));
+    }
+
+    const val = new Integer.fromBits([0x20000000, 0x01010000], 0);
+
+    const val58 = val.shorten(58);
+    assertEquals(0x01010000 | 0, val58.getBits(1));
+    assertEquals(0x20000000 | 0, val58.getBits(0));
+
+    const val57 = val.shorten(57);
+    assertEquals(0xFF010000 | 0, val57.getBits(1));
+    assertEquals(0x20000000 | 0, val57.getBits(0));
+
+    const val56 = val.shorten(56);
+    assertEquals(0x00010000 | 0, val56.getBits(1));
+    assertEquals(0x20000000 | 0, val56.getBits(0));
+
+    const val50 = val.shorten(50);
+    assertEquals(0x00010000 | 0, val50.getBits(1));
+    assertEquals(0x20000000 | 0, val50.getBits(0));
+
+    const val49 = val.shorten(49);
+    assertEquals(0xFFFF0000 | 0, val49.getBits(1));
+    assertEquals(0x20000000 | 0, val49.getBits(0));
+
+    const val32 = val.shorten(32);
+    assertEquals(0x00000000 | 0, val32.getBits(1));
+    assertEquals(0x20000000 | 0, val32.getBits(0));
+
+    const val31 = val.shorten(31);
+    assertEquals(0x00000000 | 0, val31.getBits(1));
+    assertEquals(0x20000000 | 0, val31.getBits(0));
+
+    const val30 = val.shorten(30);
+    assertEquals(0xFFFFFFFF | 0, val30.getBits(1));
+    assertEquals(0xE0000000 | 0, val30.getBits(0));
+
+    const val29 = val.shorten(29);
+    assertEquals(0x00000000 | 0, val29.getBits(1));
+    assertEquals(0x00000000 | 0, val29.getBits(0));
+  },
+
+  testIsZero() {
+    for (let i = 0; i < TEST_BITS.length; i += 2) {
+      const val = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+      assertEquals(TEST_BITS[i] == 0 && TEST_BITS[i + 1] == 0, val.isZero());
+    }
+  },
+
+  testIsNegative() {
+    for (let i = 0; i < TEST_BITS.length; i += 2) {
+      const val = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+      assertEquals((TEST_BITS[i] >> 31) != 0, val.isNegative());
+    }
+  },
+
+  testIsOdd() {
+    for (let i = 0; i < TEST_BITS.length; i += 2) {
+      const val = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+      assertEquals((TEST_BITS[i + 1] & 1) != 0, val.isOdd());
+    }
+  },
+
+  testNegation() {
+    for (let i = 0; i < TEST_BITS.length; i += 2) {
+      const vi = Integer.fromBits([TEST_BITS[i + 1], TEST_BITS[i]]);
+      if (TEST_BITS[i + 1] == 0) {
+        assertEquals((~TEST_BITS[i] + 1) | 0, vi.negate().getBits(1));
+        assertEquals(0, vi.negate().getBits(0));
+      } else {
+        assertEquals(~TEST_BITS[i], vi.negate().getBits(1));
+        assertEquals((~TEST_BITS[i + 1] + 1) | 0, vi.negate().getBits(0));
+      }
+    }
+  },
+
+  testAbs() {
+    for (const str of TEST_STRINGS) {
+      const signed = Integer.fromString(str, 10);
+      const abs = Integer.fromString(str.replace('-', ''), 10);
+      assertTrue(signed.abs().equals(abs));
+    }
+  },
+
+  testBigMultiply() {
+    let a = Integer.fromString('2389428394283434234234');
+    let b = Integer.fromString('895489472863784783');
+    assertEquals(
+        '2139707973242632227811083664960586861222', a.multiply(b).toString());
+    assertEquals(
+        '2139707973242632227811083664960586861222', b.multiply(a).toString());
+
+    a = Integer.fromString('123940932409302930429304');
+    b = Integer.fromString('-23940239409234');
+    assertEquals(
+        '-2967175594482401511466585794961793136', a.multiply(b).toString());
+
+    a = Integer.fromString('-4895849540949');
+    b = Integer.fromString('5906390354334334989');
+    assertEquals('-28916798504933355408364838964561', a.multiply(b).toString());
+
+    a = Integer.fromString('-23489238492334893');
+    b = Integer.fromString('-2930482394829348293489234');
+    assertEquals(
+        '68834799869735267747353413198446618041962', a.multiply(b).toString());
+
+    a = Integer.fromString('-39403940');
+    b = Integer.fromString('-90689586573473848347384834');
+    assertEquals(
+        '3573527027965969111849451155845960', a.multiply(b).toString());
+
+    // regression test for https://github.com/google/closure-library/issues/500
+    a = Integer.fromString(
+        '13096940572375952535991073728029631156727' +
+        '45889511394745914382575458603399133344113' +
+        '55124789839721800834794626807105252175636' +
+        '59874572877651812163757781047754345758394' +
+        '12393743854289058');
+    b = Integer.fromString(
+        '27919529936136212349610129940926086216581' +
+        '64496528137102143826264378516364143418101' +
+        '17954848423382367899187410977857170099434' +
+        '88954503636036324930799550973655515139183' +
+        '49748613352617850');
+    assertEquals(
+        '3656604243822473465231854689622824622925110708289864374262496' +
+            '6011714112304568802330367011373499705061131532809869274041668' +
+            '6403682258958556744594010497630468513209942389833344943567584' +
+            '9711887715782124066353351659885600959610314392971398216556707' +
+            '9177967386189614814272449310787401834779505072200615609456609' +
+            '84075750394399200851742167944560567661447926674910485300',
+        a.multiply(b).toString());
+  },
+
+  testSlowDivideThrowsWithNegativeIntegers() {
+    let a = Integer.fromString('-10');
+    let b = Integer.fromString('2');
+
+    assertThrows(() => {
+      a.slowDivide_(b);
+    });
+
+    a = Integer.fromString('10');
+    b = Integer.fromString('-2');
+
+    assertThrows(() => {
+      a.slowDivide_(b);
+    });
+
+    a = Integer.fromString('-10');
+    b = Integer.fromString('-2');
+
+    assertThrows(() => {
+      a.slowDivide_(b);
+    });
+  },
+
+  testBigShift() {
+    const a = Integer.fromString('3735928559');
+    assertEquals(
+        '591981510028266767381876356163880091648', a.shiftLeft(97).toString());
+    assertEquals(
+        '-591981510028266767381876356163880091648',
+        a.negate().shiftLeft(97).toString());
+  },
+
+  testBase36ToString() {
+    assertEquals('zzzzzz', Integer.fromString('zzzzzz', 36).toString(36));
+  },
+
+  testMultiplicationWithCascadingCarry() {
+    // original bug reported
+    const s1 = 'f729d763a14ecd55ffffebab43f38' +
+        '8d0f7cbae584d3765d509b5557d6048ea0c';
+    const s2 = 'eea1c478f4683b323f0953c9c8e067e3967d97e7ed0bf05862cecac60f300' +
+        '77f170e480beee2cd0c1d5516764d58bc260cafe5705bc6b6df63cf4c057c' +
+        'b9f090';
+    const b = Integer.fromString(s1, 16);
+    assertEquals(s2, b.multiply(b).toString(16));
+
+    // smallest case I could finde
+    const xs = 'ffffffff00000001';
+    const ys = '1ffffffffffffffff';
+    const zs = '1fffffffe0000000100000000ffffffff';
+    const x = Integer.fromString(xs, 16);
+    const y = Integer.fromString(ys, 16);
+    const z = x.multiply(y);
+    assertEquals(zs, z.toString(16));
+  },
+});

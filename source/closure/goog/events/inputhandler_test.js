@@ -12,64 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.events.InputHandlerTest');
-goog.setTestOnly('goog.events.InputHandlerTest');
+goog.module('goog.events.InputHandlerTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.events.EventHandler');
-goog.require('goog.events.EventType');
-goog.require('goog.events.InputHandler');
-goog.require('goog.events.KeyCodes');
-goog.require('goog.testing.events');
-goog.require('goog.testing.events.Event');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
-goog.require('goog.userAgent');
+const EventHandler = goog.require('goog.events.EventHandler');
+const EventType = goog.require('goog.events.EventType');
+const GoogTestingEvent = goog.require('goog.testing.events.Event');
+const InputHandler = goog.require('goog.events.InputHandler');
+const KeyCodes = goog.require('goog.events.KeyCodes');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.testing.events');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var inputHandler;
-var eventHandler;
-
-function setUp() {
-  eventHandler = new goog.events.EventHandler();
-}
-
-function tearDown() {
-  goog.dispose(inputHandler);
-  goog.dispose(eventHandler);
-}
-
-function testInputWithPlaceholder() {
-  var input = goog.dom.getElement('input-w-placeholder');
-  inputHandler = new goog.events.InputHandler(input);
-  var callback = listenToInput(inputHandler);
-  fireFakeInputEvent(input);
-  assertEquals(0, callback.getCallCount());
-}
-
-function testInputWithPlaceholder_withValue() {
-  var input = goog.dom.getElement('input-w-placeholder');
-  inputHandler = new goog.events.InputHandler(input);
-  var callback = listenToInput(inputHandler);
-  input.value = 'foo';
-  fireFakeInputEvent(input);
-  assertEquals(0, callback.getCallCount());
-}
-
-function testInputWithPlaceholder_someKeys() {
-  var input = goog.dom.getElement('input-w-placeholder');
-  inputHandler = new goog.events.InputHandler(input);
-  var callback = listenToInput(inputHandler);
-  input.focus();
-  input.value = 'foo';
-
-  fireInputEvent(input, goog.events.KeyCodes.M);
-  assertEquals(1, callback.getCallCount());
-}
+let inputHandler;
+let eventHandler;
 
 function listenToInput(inputHandler) {
-  var callback = goog.testing.recordFunction();
-  eventHandler.listen(
-      inputHandler, goog.events.InputHandler.EventType.INPUT, callback);
+  const callback = recordFunction();
+  eventHandler.listen(inputHandler, InputHandler.EventType.INPUT, callback);
   return callback;
 }
 
@@ -77,16 +39,53 @@ function fireFakeInputEvent(input) {
   // Simulate the input event that IE fires on focus when a placeholder
   // is present.
   input.focus();
-  if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher(10)) {
+  if (userAgent.IE && userAgent.isVersionOrHigher(10)) {
     // IE fires an input event with keycode 0
     fireInputEvent(input, 0);
   }
 }
 
 function fireInputEvent(input, keyCode) {
-  var inputEvent =
-      new goog.testing.events.Event(goog.events.EventType.INPUT, input);
+  const inputEvent = new GoogTestingEvent(EventType.INPUT, input);
   inputEvent.keyCode = keyCode;
   inputEvent.charCode = keyCode;
-  goog.testing.events.fireBrowserEvent(inputEvent);
+  events.fireBrowserEvent(inputEvent);
 }
+testSuite({
+  setUp() {
+    eventHandler = new EventHandler();
+  },
+
+  tearDown() {
+    goog.dispose(inputHandler);
+    goog.dispose(eventHandler);
+  },
+
+  testInputWithPlaceholder() {
+    const input = dom.getElement('input-w-placeholder');
+    inputHandler = new InputHandler(input);
+    const callback = listenToInput(inputHandler);
+    fireFakeInputEvent(input);
+    assertEquals(0, callback.getCallCount());
+  },
+
+  testInputWithPlaceholder_withValue() {
+    const input = dom.getElement('input-w-placeholder');
+    inputHandler = new InputHandler(input);
+    const callback = listenToInput(inputHandler);
+    input.value = 'foo';
+    fireFakeInputEvent(input);
+    assertEquals(0, callback.getCallCount());
+  },
+
+  testInputWithPlaceholder_someKeys() {
+    const input = dom.getElement('input-w-placeholder');
+    inputHandler = new InputHandler(input);
+    const callback = listenToInput(inputHandler);
+    input.focus();
+    input.value = 'foo';
+
+    fireInputEvent(input, KeyCodes.M);
+    assertEquals(1, callback.getCallCount());
+  },
+});

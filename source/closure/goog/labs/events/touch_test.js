@@ -12,81 +12,82 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Unit tests for goog.labs.events.touch.
- */
+/** @fileoverview Unit tests for touch. */
 
+goog.module('goog.labs.events.touchTest');
+goog.setTestOnly();
 
-goog.provide('goog.labs.events.touchTest');
+const testSuite = goog.require('goog.testing.testSuite');
+const touch = goog.require('goog.labs.events.touch');
 
-goog.require('goog.labs.events.touch');
-goog.require('goog.testing.jsunit');
+testSuite({
+  testMouseEvent() {
+    const fakeTarget = {};
 
-goog.setTestOnly('goog.labs.events.touchTest');
+    const fakeMouseMove = {
+      'clientX': 1,
+      'clientY': 2,
+      'screenX': 3,
+      'screenY': 4,
+      'target': fakeTarget,
+      'type': 'mousemove',
+    };
 
-function testMouseEvent() {
-  var fakeTarget = {};
+    const data = touch.getTouchData(fakeMouseMove);
+    assertEquals(1, data.clientX);
+    assertEquals(2, data.clientY);
+    assertEquals(3, data.screenX);
+    assertEquals(4, data.screenY);
+    assertEquals(fakeTarget, data.target);
+  },
 
-  var fakeMouseMove = {
-    'clientX': 1,
-    'clientY': 2,
-    'screenX': 3,
-    'screenY': 4,
-    'target': fakeTarget,
-    'type': 'mousemove'
-  };
+  testTouchEvent() {
+    const fakeTarget = {};
 
-  var data = goog.labs.events.touch.getTouchData(fakeMouseMove);
-  assertEquals(1, data.clientX);
-  assertEquals(2, data.clientY);
-  assertEquals(3, data.screenX);
-  assertEquals(4, data.screenY);
-  assertEquals(fakeTarget, data.target);
-}
+    const fakeTouch = {
+      'clientX': 1,
+      'clientY': 2,
+      'screenX': 3,
+      'screenY': 4,
+      'target': fakeTarget,
+    };
 
-function testTouchEvent() {
-  var fakeTarget = {};
+    const fakeTouchStart = {
+      'targetTouches': [fakeTouch],
+      'target': fakeTarget,
+      'type': 'touchstart',
+    };
 
-  var fakeTouch = {
-    'clientX': 1,
-    'clientY': 2,
-    'screenX': 3,
-    'screenY': 4,
-    'target': fakeTarget
-  };
+    const data = touch.getTouchData(fakeTouchStart);
+    assertEquals(1, data.clientX);
+    assertEquals(2, data.clientY);
+    assertEquals(3, data.screenX);
+    assertEquals(4, data.screenY);
+    assertEquals(fakeTarget, data.target);
+  },
 
-  var fakeTouchStart = {
-    'targetTouches': [fakeTouch],
-    'target': fakeTarget,
-    'type': 'touchstart'
-  };
+  testTouchChangeEvent() {
+    const fakeTarget = {};
 
-  var data = goog.labs.events.touch.getTouchData(fakeTouchStart);
-  assertEquals(1, data.clientX);
-  assertEquals(2, data.clientY);
-  assertEquals(3, data.screenX);
-  assertEquals(4, data.screenY);
-  assertEquals(fakeTarget, data.target);
-}
+    const fakeTouch = {
+      'clientX': 1,
+      'clientY': 2,
+      'screenX': 3,
+      'screenY': 4,
+      'target': fakeTarget,
+    };
 
-function testTouchChangeEvent() {
-  var fakeTarget = {};
+    const fakeTouchStart = {
+      'changedTouches': [fakeTouch],
+      'target': fakeTarget,
+      'type': 'touchend'
+    };
 
-  var fakeTouch = {
-    'clientX': 1,
-    'clientY': 2,
-    'screenX': 3,
-    'screenY': 4,
-    'target': fakeTarget
-  };
-
-  var fakeTouchStart =
-      {'changedTouches': [fakeTouch], 'target': fakeTarget, 'type': 'touchend'};
-
-  var data = goog.labs.events.touch.getTouchData(fakeTouchStart);
-  assertEquals(1, data.clientX);
-  assertEquals(2, data.clientY);
-  assertEquals(3, data.screenX);
-  assertEquals(4, data.screenY);
-  assertEquals(fakeTarget, data.target);
-}
+    const data = touch.getTouchData(fakeTouchStart);
+    assertEquals(1, data.clientX);
+    assertEquals(2, data.clientY);
+    assertEquals(3, data.screenX);
+    assertEquals(4, data.screenY);
+    assertEquals(fakeTarget, data.target);
+  },
+});

@@ -1,32 +1,32 @@
 // Copyright 2012 The Closure Library Authors. All Rights Reserved.
 // Use of this source code is governed by the Apache License, Version 2.0.
 
-goog.provide('goog.resultTest');
-goog.setTestOnly('goog.resultTest');
+goog.module('goog.resultTest');
+goog.setTestOnly();
 
-goog.require('goog.result');
-goog.require('goog.testing.jsunit');
+const googResult = goog.require('goog.result');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testSuccessfulResult() {
-  var value = 'some-value';
-  var result = goog.result.successfulResult(value);
-  assertEquals(goog.result.Result.State.SUCCESS, result.getState());
-  assertEquals(value, result.getValue());
-}
+testSuite({
+  testSuccessfulResult() {
+    const value = 'some-value';
+    const result = googResult.successfulResult(value);
+    assertEquals(googResult.Result.State.SUCCESS, result.getState());
+    assertEquals(value, result.getValue());
+  },
 
+  testFailedResult() {
+    const error = new Error('something-failed');
+    const result = googResult.failedResult(error);
+    assertEquals(googResult.Result.State.ERROR, result.getState());
+    assertEquals(error, result.getError());
+  },
 
-function testFailedResult() {
-  var error = new Error('something-failed');
-  var result = goog.result.failedResult(error);
-  assertEquals(goog.result.Result.State.ERROR, result.getState());
-  assertEquals(error, result.getError());
-}
+  testCanceledResult() {
+    const result = googResult.canceledResult();
+    assertEquals(googResult.Result.State.ERROR, result.getState());
 
-
-function testCanceledResult() {
-  var result = goog.result.canceledResult();
-  assertEquals(goog.result.Result.State.ERROR, result.getState());
-
-  var error = result.getError();
-  assertTrue(error instanceof goog.result.Result.CancelError);
-}
+    const error = result.getError();
+    assertTrue(error instanceof googResult.Result.CancelError);
+  },
+});

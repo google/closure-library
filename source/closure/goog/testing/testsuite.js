@@ -11,8 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-goog.setTestOnly('goog.testing.testSuite');
 goog.provide('goog.testing.testSuite');
+goog.setTestOnly('goog.testing.testSuite');
 
 goog.require('goog.labs.testing.Environment');
 goog.require('goog.testing.TestCase');

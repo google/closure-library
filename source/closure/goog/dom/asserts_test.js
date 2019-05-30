@@ -12,311 +12,308 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.assertsTest');
-goog.setTestOnly('goog.dom.assertsTest');
+goog.module('goog.dom.assertsTest');
+goog.setTestOnly();
 
-goog.require('goog.dom.asserts');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.StrictMock');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const StrictMock = goog.require('goog.testing.StrictMock');
+const asserts = goog.require('goog.dom.asserts');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var stubs;
+let stubs;
 
-function setUpPage() {
-  stubs = new goog.testing.PropertyReplacer();
-}
+testSuite({
+  setUpPage() {
+    stubs = new PropertyReplacer();
+  },
 
-function tearDown() {
-  stubs.reset();
-}
+  tearDown() {
+    stubs.reset();
+  },
 
-function testAssertIsLocation() {
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsLocation(window.location);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsLocation(o);
-  });
-
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(window.location);
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsLocation(mock);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var linkElement = document.createElement('LINK');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsLocation(linkElement);
+  testAssertIsLocation() {
+    assertNotThrows(() => {
+      asserts.assertIsLocation(window.location);
     });
-    assertContains('Argument is not a Location', ex.message);
-  }
-}
 
-function testAssertIsHtmlAnchorElement() {
-  var anchorElement = document.createElement('A');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLAnchorElement(anchorElement);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLAnchorElement(o);
-  });
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(anchorElement);
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLAnchorElement(mock);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('LINK');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLAnchorElement(otherElement);
+    // Ad-hoc mock objects are allowed.
+    const o = {foo: 'bar'};
+    assertNotThrows(() => {
+      asserts.assertIsLocation(o);
     });
-    assertContains('Argument is not a HTMLAnchorElement', ex.message);
-  }
-}
 
-function testAssertIsHtmlButtonElement() {
-  var buttonElement = document.createElement('BUTTON');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLButtonElement(buttonElement);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLButtonElement(o);
-  });
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(buttonElement);
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLButtonElement(mock);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('LINK');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLButtonElement(otherElement);
+    // So are fancy mocks.
+    const mock = new StrictMock(window.location);
+    assertNotThrows(() => {
+      asserts.assertIsLocation(mock);
     });
-    assertContains('Argument is not a HTMLButtonElement', ex.message);
-  }
-}
 
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const linkElement = document.createElement('LINK');
+      const ex = assertThrows(() => {
+        asserts.assertIsLocation(linkElement);
+      });
+      assertContains('Argument is not a Location', ex.message);
+    }
+  },
 
-function testAssertIsHtmlLinkElement() {
-  var linkElement = document.createElement('LINK');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLLinkElement(linkElement);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLLinkElement(o);
-  });
-
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(linkElement);
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLLinkElement(mock);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('A');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLLinkElement(otherElement);
+  testAssertIsHtmlAnchorElement() {
+    const anchorElement = document.createElement('A');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLAnchorElement(anchorElement);
     });
-    assertContains('Argument is not a HTMLLinkElement', ex.message);
-  }
-}
 
-function testAssertIsHtmlImageElement() {
-  var imgElement = document.createElement('IMG');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLImageElement(imgElement);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLImageElement(o);
-  });
-
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(imgElement);
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLImageElement(mock);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('SCRIPT');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLImageElement(otherElement);
+    // Ad-hoc mock objects are allowed.
+    const o = {foo: 'bar'};
+    assertNotThrows(() => {
+      asserts.assertIsHTMLAnchorElement(o);
     });
-    assertContains('Argument is not a HTMLImageElement', ex.message);
-  }
-}
-
-function testAssertIsHtmlInputElement() {
-  var inputElement = document.createElement('INPUT');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLInputElement(inputElement);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLInputElement(o);
-  });
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(inputElement);
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLInputElement(mock);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('LINK');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLInputElement(otherElement);
+    // So are fancy mocks.
+    const mock = new StrictMock(anchorElement);
+    assertNotThrows(() => {
+      asserts.assertIsHTMLAnchorElement(mock);
     });
-    assertContains('Argument is not a HTMLInputElement', ex.message);
-  }
-}
 
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('LINK');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLAnchorElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLAnchorElement', ex.message);
+    }
+  },
 
-function testAssertIsHtmlFormElement() {
-  var formElement = document.createElement('FORM');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLFormElement(formElement);
-  });
-
-  // Ad-hoc mock objects are allowed.
-  var o = {foo: 'bar'};
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLFormElement(o);
-  });
-  // So are fancy mocks.
-  var mock = new goog.testing.StrictMock(formElement);
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLFormElement(mock);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('LINK');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLFormElement(otherElement);
+  testAssertIsHtmlButtonElement() {
+    const buttonElement = document.createElement('BUTTON');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLButtonElement(buttonElement);
     });
-    assertContains('Argument is not a HTMLFormElement', ex.message);
-  }
-}
 
-
-function testAssertIsHtmlEmbedElement() {
-  var el = document.createElement('EMBED');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLEmbedElement(el);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('SCRIPT');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLEmbedElement(otherElement);
+    // Ad-hoc mock objects are allowed.
+    const o = {foo: 'bar'};
+    assertNotThrows(() => {
+      asserts.assertIsHTMLButtonElement(o);
     });
-    assertContains('Argument is not a HTMLEmbedElement', ex.message);
-  }
-}
-
-function testAssertIsHtmlFrameElement() {
-  var el = document.createElement('FRAME');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLFrameElement(el);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('SCRIPT');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLFrameElement(otherElement);
+    // So are fancy mocks.
+    const mock = new StrictMock(buttonElement);
+    assertNotThrows(() => {
+      asserts.assertIsHTMLButtonElement(mock);
     });
-    assertContains('Argument is not a HTMLFrameElement', ex.message);
-  }
-}
 
-function testAssertIsHtmlIFrameElement() {
-  var el = document.createElement('IFRAME');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLIFrameElement(el);
-  });
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('LINK');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLButtonElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLButtonElement', ex.message);
+    }
+  },
 
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('SCRIPT');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLIFrameElement(otherElement);
+  testAssertIsHtmlLinkElement() {
+    const linkElement = document.createElement('LINK');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLLinkElement(linkElement);
     });
-    assertContains('Argument is not a HTMLIFrameElement', ex.message);
-  }
-}
 
-function testAssertIsHtmlObjectElement() {
-  var el = document.createElement('OBJECT');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLObjectElement(el);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('SCRIPT');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLObjectElement(otherElement);
+    // Ad-hoc mock objects are allowed.
+    const o = {foo: 'bar'};
+    assertNotThrows(() => {
+      asserts.assertIsHTMLLinkElement(o);
     });
-    assertContains('Argument is not a HTMLObjectElement', ex.message);
-  }
-}
 
-function testAssertIsHtmlScriptElement() {
-  var el = document.createElement('SCRIPT');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLScriptElement(el);
-  });
-
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var otherElement = document.createElement('IMG');
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLScriptElement(otherElement);
+    // So are fancy mocks.
+    const mock = new StrictMock(linkElement);
+    assertNotThrows(() => {
+      asserts.assertIsHTMLLinkElement(mock);
     });
-    assertContains('Argument is not a HTMLScriptElement', ex.message);
-  }
-}
 
-function testInOtherWindow() {
-  var iframe = document.createElement('IFRAME');
-  document.body.appendChild(iframe);
-  var el = iframe.contentWindow.document.createElement('SCRIPT');
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsHTMLScriptElement(el);
-  });
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('A');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLLinkElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLLinkElement', ex.message);
+    }
+  },
 
-  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10)) {
-    var ex = assertThrows(function() {
-      goog.dom.asserts.assertIsHTMLImageElement(el);
+  testAssertIsHtmlImageElement() {
+    const imgElement = document.createElement('IMG');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLImageElement(imgElement);
     });
-    assertContains('Argument is not a HTMLImageElement', ex.message);
-  }
 
-  document.body.removeChild(iframe);
-}
+    // Ad-hoc mock objects are allowed.
+    const o = {foo: 'bar'};
+    assertNotThrows(() => {
+      asserts.assertIsHTMLImageElement(o);
+    });
 
-function testAssertIsElementType() {
-  stubs.set(goog.dom.asserts, 'getWindow_', function() {
-    return null;
-  });
-  assertNotThrows(function() {
-    goog.dom.asserts.assertIsLocation(null);
-    goog.dom.asserts.assertIsHTMLAnchorElement(null);
-  });
-}
+    // So are fancy mocks.
+    const mock = new StrictMock(imgElement);
+    assertNotThrows(() => {
+      asserts.assertIsHTMLImageElement(mock);
+    });
+
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('SCRIPT');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLImageElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLImageElement', ex.message);
+    }
+  },
+
+  testAssertIsHtmlInputElement() {
+    const inputElement = document.createElement('INPUT');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLInputElement(inputElement);
+    });
+
+    // Ad-hoc mock objects are allowed.
+    const o = {foo: 'bar'};
+    assertNotThrows(() => {
+      asserts.assertIsHTMLInputElement(o);
+    });
+    // So are fancy mocks.
+    const mock = new StrictMock(inputElement);
+    assertNotThrows(() => {
+      asserts.assertIsHTMLInputElement(mock);
+    });
+
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('LINK');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLInputElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLInputElement', ex.message);
+    }
+  },
+
+  testAssertIsHtmlFormElement() {
+    const formElement = document.createElement('FORM');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLFormElement(formElement);
+    });
+
+    // Ad-hoc mock objects are allowed.
+    const o = {foo: 'bar'};
+    assertNotThrows(() => {
+      asserts.assertIsHTMLFormElement(o);
+    });
+    // So are fancy mocks.
+    const mock = new StrictMock(formElement);
+    assertNotThrows(() => {
+      asserts.assertIsHTMLFormElement(mock);
+    });
+
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('LINK');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLFormElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLFormElement', ex.message);
+    }
+  },
+
+  testAssertIsHtmlEmbedElement() {
+    const el = document.createElement('EMBED');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLEmbedElement(el);
+    });
+
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('SCRIPT');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLEmbedElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLEmbedElement', ex.message);
+    }
+  },
+
+  testAssertIsHtmlFrameElement() {
+    const el = document.createElement('FRAME');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLFrameElement(el);
+    });
+
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('SCRIPT');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLFrameElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLFrameElement', ex.message);
+    }
+  },
+
+  testAssertIsHtmlIFrameElement() {
+    const el = document.createElement('IFRAME');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLIFrameElement(el);
+    });
+
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('SCRIPT');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLIFrameElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLIFrameElement', ex.message);
+    }
+  },
+
+  testAssertIsHtmlObjectElement() {
+    const el = document.createElement('OBJECT');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLObjectElement(el);
+    });
+
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('SCRIPT');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLObjectElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLObjectElement', ex.message);
+    }
+  },
+
+  testAssertIsHtmlScriptElement() {
+    const el = document.createElement('SCRIPT');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLScriptElement(el);
+    });
+
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const otherElement = document.createElement('IMG');
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLScriptElement(otherElement);
+      });
+      assertContains('Argument is not a HTMLScriptElement', ex.message);
+    }
+  },
+
+  testInOtherWindow() {
+    const iframe = document.createElement('IFRAME');
+    document.body.appendChild(iframe);
+    const el = iframe.contentWindow.document.createElement('SCRIPT');
+    assertNotThrows(() => {
+      asserts.assertIsHTMLScriptElement(el);
+    });
+
+    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
+      const ex = assertThrows(() => {
+        asserts.assertIsHTMLImageElement(el);
+      });
+      assertContains('Argument is not a HTMLImageElement', ex.message);
+    }
+
+    document.body.removeChild(iframe);
+  },
+
+  testAssertIsElementType() {
+    stubs.set(asserts, 'getWindow_', () => null);
+    assertNotThrows(() => {
+      asserts.assertIsLocation(null);
+      asserts.assertIsHTMLAnchorElement(null);
+    });
+  },
+});

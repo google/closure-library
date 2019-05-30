@@ -46,7 +46,7 @@ goog.labs.userAgent.engine.isTrident = function() {
 
 
 /**
- * @return {boolean} Whether the rendering engine is Edge.
+ * @return {boolean} Whether the rendering engine is EdgeHTML.
  */
 goog.labs.userAgent.engine.isEdge = function() {
   return goog.labs.userAgent.util.matchUserAgent('Edge');
@@ -54,7 +54,8 @@ goog.labs.userAgent.engine.isEdge = function() {
 
 
 /**
- * @return {boolean} Whether the rendering engine is WebKit.
+ * @return {boolean} Whether the rendering engine is WebKit. This will return
+ * true for Chrome, Blink-based Opera (15+), Edge Chromium and Safari.
  */
 goog.labs.userAgent.engine.isWebKit = function() {
   return goog.labs.userAgent.util.matchUserAgentIgnoreCase('WebKit') &&

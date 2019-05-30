@@ -158,12 +158,11 @@ goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
 
 /**
  * Renders a strict Soy template of kind="text" and returns the output string.
- * It is an error to use renderText on non-strict templates, or strict templates
- * of kinds other than "text".
+ * It is an error to use renderText on templates of kinds other than "text".
  *
  * @param {
- *     ?function(ARG_TYPES, ?Object<string,*>=): ?goog.soy.TextType|
- *     ?function(ARG_TYPES, null=, ?Object<string, *>=): ?goog.soy.TextType}
+ *     ?function(ARG_TYPES, ?Object<string,*>=): ?string|
+ *     ?function(ARG_TYPES, null=, ?Object<string, *>=): ?string}
  *     template The Soy template to render.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @return {string} The return value of rendering the template directly.
@@ -171,14 +170,11 @@ goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
  */
 goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
   var result = template(opt_templateData || {}, this.getInjectedData_());
-  if (!goog.isString(result)) {
-    goog.asserts.assertInstanceof(
-        result, goog.soy.data.SanitizedContent,
-        'renderText cannot be called on a non-strict soy template');
-    goog.asserts.assert(
-        result.contentKind === goog.soy.data.SanitizedContentKind.TEXT,
-        'renderText was called with a template of kind other than "text"');
-  }
+  goog.asserts.assertString(
+      result,
+      result instanceof goog.soy.data.SanitizedContent ?
+          'renderText was called with a template of kind other than "text"' :
+          'renderText was called with a non-template');
   this.handleRender();
   return String(result);
 };
@@ -240,7 +236,7 @@ goog.soy.Renderer.prototype.renderStrictOfKind = function(
       opt_templateData || {}, this.getInjectedData_(), this.getInjectedData_());
   goog.asserts.assertInstanceof(
       result, goog.soy.data.SanitizedContent,
-      'renderStrict cannot be called on a non-strict soy template');
+      'renderStrict cannot be called on a text soy template');
   goog.asserts.assert(
       result.contentKind ===
           (opt_kind || goog.soy.data.SanitizedContentKind.HTML),

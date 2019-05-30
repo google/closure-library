@@ -12,39 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.InputTypeTest');
-goog.setTestOnly('goog.dom.InputTypeTest');
+goog.module('goog.dom.InputTypeTest');
+goog.setTestOnly();
 
-goog.require('goog.dom.InputType');
-goog.require('goog.object');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const InputType = goog.require('goog.dom.InputType');
+const googObject = goog.require('goog.object');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-function testCorrectNumberOfInputTypes() {
-  assertEquals(27, goog.object.getCount(goog.dom.InputType));
-}
+testSuite({
+  testCorrectNumberOfInputTypes() {
+    assertEquals(27, googObject.getCount(InputType));
+  },
 
-function testPropertyNamesEqualValues() {
-  for (var propertyName in goog.dom.InputType) {
+  testPropertyNamesEqualValues() {
+    for (let propertyName in InputType) {
+      assertEquals(
+          propertyName.toLowerCase().replace('_', '-'),
+          InputType[propertyName]);
+    }
+  },
+
+  testTypes() {
+    assertEquals(InputType.TEXT, document.getElementById('textinput').type);
+    // Not all browsers support the time input type.
+    if (userAgent.CHROME || userAgent.EDGE) {
+      assertEquals(InputType.TIME, document.getElementById('timeinput').type);
+    }
+    assertEquals(InputType.TEXTAREA, document.getElementById('textarea').type);
     assertEquals(
-        propertyName.toLowerCase().replace('_', '-'),
-        goog.dom.InputType[propertyName]);
-  }
-}
-
-function testTypes() {
-  assertEquals(
-      goog.dom.InputType.TEXT, document.getElementById('textinput').type);
-  // Not all browsers support the time input type.
-  if (goog.userAgent.CHROME || goog.userAgent.EDGE) {
+        InputType.SELECT_ONE, document.getElementById('selectone').type);
     assertEquals(
-        goog.dom.InputType.TIME, document.getElementById('timeinput').type);
-  }
-  assertEquals(
-      goog.dom.InputType.TEXTAREA, document.getElementById('textarea').type);
-  assertEquals(
-      goog.dom.InputType.SELECT_ONE, document.getElementById('selectone').type);
-  assertEquals(
-      goog.dom.InputType.SELECT_MULTIPLE,
-      document.getElementById('selectmultiple').type);
-}
+        InputType.SELECT_MULTIPLE,
+        document.getElementById('selectmultiple').type);
+  },
+});

@@ -12,237 +12,207 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.debug.LoggerTest');
-goog.setTestOnly('goog.debug.LoggerTest');
+goog.module('goog.debug.LoggerTest');
+goog.setTestOnly();
 
-goog.require('goog.debug.LogManager');
-goog.require('goog.debug.Logger');
-goog.require('goog.testing.jsunit');
+const LogManager = goog.require('goog.debug.LogManager');
+const Logger = goog.require('goog.debug.Logger');
+const testSuite = goog.require('goog.testing.testSuite');
 
 function getDebug(sb, logger, level) {
-  var spacer = '';
+  let spacer = '';
   if (level) {
     spacer = (new Array(level + 1)).join(' ');
   }
   sb[sb.length] = spacer;
-  var name = logger.getName();
+  const name = logger.getName();
   if (name) {
     sb[sb.length] = name;
   } else {
     sb[sb.length] = 'ROOT';
   }
   sb[sb.length] = '\n';
-  var children = logger.getChildren();
-  for (var key in children) {
+  const children = logger.getChildren();
+  for (let key in children) {
     getDebug(sb, children[key], level + 1);
   }
 }
 
+class TestHandler {
+  constructor() {
+    this.logRecord = null;
+  }
 
-function testParents() {
-  var l1 = goog.debug.Logger.getLogger('goog.test');
-  var l2 = goog.debug.Logger.getLogger('goog.bar');
-  var l3 = goog.debug.Logger.getLogger('goog.bar.foo');
-  var l4 = goog.debug.Logger.getLogger('goog.bar.baaz');
-  var rootLogger = goog.debug.LogManager.getRoot();
-  var googLogger = goog.debug.Logger.getLogger('goog');
-  assertEquals(rootLogger, googLogger.getParent());
-  assertEquals(googLogger, l1.getParent());
-  assertEquals(googLogger, l2.getParent());
-  assertEquals(l2, l3.getParent());
-  assertEquals(l2, l4.getParent());
+  onPublish(logRecord) {
+    this.logRecord = logRecord;
+  }
+
+  reset() {
+    this.logRecord = null;
+  }
 }
 
-function testLogging() {
-  var root = goog.debug.LogManager.getRoot();
-  var handler = new TestHandler();
-  var f = goog.bind(handler.onPublish, handler);
-  root.addHandler(f);
-  var l4 = goog.debug.Logger.getLogger('goog.bar.baaz');
-  l4.log(goog.debug.Logger.Level.WARNING, 'foo');
-  assertNotNull(handler.logRecord);
-  assertEquals(goog.debug.Logger.Level.WARNING, handler.logRecord.getLevel());
-  assertEquals('foo', handler.logRecord.getMessage());
-  handler.logRecord = null;
-  root.removeHandler(f);
-  l4.log(goog.debug.Logger.Level.WARNING, 'foo');
-  assertNull(handler.logRecord);
-}
+testSuite({
+  testParents() {
+    const l1 = Logger.getLogger('goog.test');
+    const l2 = Logger.getLogger('goog.bar');
+    const l3 = Logger.getLogger('goog.bar.foo');
+    const l4 = Logger.getLogger('goog.bar.baaz');
+    const rootLogger = LogManager.getRoot();
+    const googLogger = Logger.getLogger('goog');
+    assertEquals(rootLogger, googLogger.getParent());
+    assertEquals(googLogger, l1.getParent());
+    assertEquals(googLogger, l2.getParent());
+    assertEquals(l2, l3.getParent());
+    assertEquals(l2, l4.getParent());
+  },
 
-function testFiltering() {
-  var root = goog.debug.LogManager.getRoot();
-  var handler = new TestHandler();
-  var f = goog.bind(handler.onPublish, handler);
-  root.addHandler(f);
-  var l3 = goog.debug.Logger.getLogger('goog.bar.foo');
-  l3.setLevel(goog.debug.Logger.Level.WARNING);
-  var l4 = goog.debug.Logger.getLogger('goog.bar.baaz');
-  l4.setLevel(goog.debug.Logger.Level.INFO);
-  l4.log(goog.debug.Logger.Level.WARNING, 'foo');
-  assertNotNull(handler.logRecord);
-  assertEquals(goog.debug.Logger.Level.WARNING, handler.logRecord.getLevel());
-  assertEquals('foo', handler.logRecord.getMessage());
-  handler.reset();
-  l3.log(goog.debug.Logger.Level.INFO, 'bar');
-  assertNull(handler.logRecord);
-  l3.log(goog.debug.Logger.Level.WARNING, 'baaz');
-  assertNotNull(handler.logRecord);
-  handler.reset();
-  l3.log(goog.debug.Logger.Level.SEVERE, 'baaz');
-  assertNotNull(handler.logRecord);
-}
+  testLogging() {
+    const root = LogManager.getRoot();
+    const handler = new TestHandler();
+    const f = goog.bind(handler.onPublish, handler);
+    root.addHandler(f);
+    const l4 = Logger.getLogger('goog.bar.baaz');
+    l4.log(Logger.Level.WARNING, 'foo');
+    assertNotNull(handler.logRecord);
+    assertEquals(Logger.Level.WARNING, handler.logRecord.getLevel());
+    assertEquals('foo', handler.logRecord.getMessage());
+    handler.logRecord = null;
+    root.removeHandler(f);
+    l4.log(Logger.Level.WARNING, 'foo');
+    assertNull(handler.logRecord);
+  },
 
-function testException() {
-  var root = goog.debug.LogManager.getRoot();
-  var handler = new TestHandler();
-  var f = goog.bind(handler.onPublish, handler);
-  root.addHandler(f);
-  var logger = goog.debug.Logger.getLogger('goog.debug.logger_test');
-  var ex = Error('boo!');
-  logger.severe('hello', ex);
-  assertNotNull(handler.logRecord);
-  assertEquals(goog.debug.Logger.Level.SEVERE, handler.logRecord.getLevel());
-  assertEquals('hello', handler.logRecord.getMessage());
-  assertEquals(ex, handler.logRecord.getException());
-  assertEquals('boo!', handler.logRecord.getException().message);
-}
+  testFiltering() {
+    const root = LogManager.getRoot();
+    const handler = new TestHandler();
+    const f = goog.bind(handler.onPublish, handler);
+    root.addHandler(f);
+    const l3 = Logger.getLogger('goog.bar.foo');
+    l3.setLevel(Logger.Level.WARNING);
+    const l4 = Logger.getLogger('goog.bar.baaz');
+    l4.setLevel(Logger.Level.INFO);
+    l4.log(Logger.Level.WARNING, 'foo');
+    assertNotNull(handler.logRecord);
+    assertEquals(Logger.Level.WARNING, handler.logRecord.getLevel());
+    assertEquals('foo', handler.logRecord.getMessage());
+    handler.reset();
+    l3.log(Logger.Level.INFO, 'bar');
+    assertNull(handler.logRecord);
+    l3.log(Logger.Level.WARNING, 'baaz');
+    assertNotNull(handler.logRecord);
+    handler.reset();
+    l3.log(Logger.Level.SEVERE, 'baaz');
+    assertNotNull(handler.logRecord);
+  },
 
-function testMessageCallbacks() {
-  var root = goog.debug.LogManager.getRoot();
-  var handler = new TestHandler();
-  var f = goog.bind(handler.onPublish, handler);
-  root.addHandler(f);
-  var l3 = goog.debug.Logger.getLogger('goog.bar.foo');
-  l3.setLevel(goog.debug.Logger.Level.WARNING);
+  testException() {
+    const root = LogManager.getRoot();
+    const handler = new TestHandler();
+    const f = goog.bind(handler.onPublish, handler);
+    root.addHandler(f);
+    const logger = Logger.getLogger('goog.debug.logger_test');
+    const ex = Error('boo!');
+    logger.severe('hello', ex);
+    assertNotNull(handler.logRecord);
+    assertEquals(Logger.Level.SEVERE, handler.logRecord.getLevel());
+    assertEquals('hello', handler.logRecord.getMessage());
+    assertEquals(ex, handler.logRecord.getException());
+    assertEquals('boo!', handler.logRecord.getException().message);
+  },
 
-  l3.log(goog.debug.Logger.Level.INFO, function() {
-    throw "Message callback shouldn't be called when below logger's level!";
-  });
-  assertNull(handler.logRecord);
+  testMessageCallbacks() {
+    const root = LogManager.getRoot();
+    const handler = new TestHandler();
+    const f = goog.bind(handler.onPublish, handler);
+    root.addHandler(f);
+    const l3 = Logger.getLogger('goog.bar.foo');
+    l3.setLevel(Logger.Level.WARNING);
 
-  l3.log(goog.debug.Logger.Level.WARNING, function() {
-    return 'heya';
-  });
-  assertNotNull(handler.logRecord);
-  assertEquals(goog.debug.Logger.Level.WARNING, handler.logRecord.getLevel());
-  assertEquals('heya', handler.logRecord.getMessage());
-}
+    l3.log(Logger.Level.INFO, () => {
+      throw 'Message callback shouldn\'t be called when below logger\'s level!';
+    });
+    assertNull(handler.logRecord);
 
-function testGetPredefinedLevel() {
-  assertEquals(
-      goog.debug.Logger.Level.OFF,
-      goog.debug.Logger.Level.getPredefinedLevel('OFF'));
-  assertEquals(
-      goog.debug.Logger.Level.SHOUT,
-      goog.debug.Logger.Level.getPredefinedLevel('SHOUT'));
-  assertEquals(
-      goog.debug.Logger.Level.SEVERE,
-      goog.debug.Logger.Level.getPredefinedLevel('SEVERE'));
-  assertEquals(
-      goog.debug.Logger.Level.WARNING,
-      goog.debug.Logger.Level.getPredefinedLevel('WARNING'));
-  assertEquals(
-      goog.debug.Logger.Level.INFO,
-      goog.debug.Logger.Level.getPredefinedLevel('INFO'));
-  assertEquals(
-      goog.debug.Logger.Level.CONFIG,
-      goog.debug.Logger.Level.getPredefinedLevel('CONFIG'));
-  assertEquals(
-      goog.debug.Logger.Level.FINE,
-      goog.debug.Logger.Level.getPredefinedLevel('FINE'));
-  assertEquals(
-      goog.debug.Logger.Level.FINER,
-      goog.debug.Logger.Level.getPredefinedLevel('FINER'));
-  assertEquals(
-      goog.debug.Logger.Level.FINEST,
-      goog.debug.Logger.Level.getPredefinedLevel('FINEST'));
-  assertEquals(
-      goog.debug.Logger.Level.ALL,
-      goog.debug.Logger.Level.getPredefinedLevel('ALL'));
-}
+    l3.log(Logger.Level.WARNING, () => 'heya');
+    assertNotNull(handler.logRecord);
+    assertEquals(Logger.Level.WARNING, handler.logRecord.getLevel());
+    assertEquals('heya', handler.logRecord.getMessage());
+  },
 
-function testGetPredefinedLevelByValue() {
-  assertEquals(
-      goog.debug.Logger.Level.OFF,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(Infinity));
-  assertEquals(
-      goog.debug.Logger.Level.SHOUT,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(1300));
-  assertEquals(
-      goog.debug.Logger.Level.SHOUT,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(1200));
-  assertEquals(
-      goog.debug.Logger.Level.SEVERE,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(1150));
-  assertEquals(
-      goog.debug.Logger.Level.SEVERE,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(1000));
-  assertEquals(
-      goog.debug.Logger.Level.WARNING,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(900));
-  assertEquals(
-      goog.debug.Logger.Level.INFO,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(800));
-  assertEquals(
-      goog.debug.Logger.Level.CONFIG,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(701));
-  assertEquals(
-      goog.debug.Logger.Level.CONFIG,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(700));
-  assertEquals(
-      goog.debug.Logger.Level.FINE,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(500));
-  assertEquals(
-      goog.debug.Logger.Level.FINER,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(400));
-  assertEquals(
-      goog.debug.Logger.Level.FINEST,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(300));
-  assertEquals(
-      goog.debug.Logger.Level.ALL,
-      goog.debug.Logger.Level.getPredefinedLevelByValue(0));
-  assertNull(goog.debug.Logger.Level.getPredefinedLevelByValue(-1));
-}
+  testGetPredefinedLevel() {
+    assertEquals(Logger.Level.OFF, Logger.Level.getPredefinedLevel('OFF'));
+    assertEquals(Logger.Level.SHOUT, Logger.Level.getPredefinedLevel('SHOUT'));
+    assertEquals(
+        Logger.Level.SEVERE, Logger.Level.getPredefinedLevel('SEVERE'));
+    assertEquals(
+        Logger.Level.WARNING, Logger.Level.getPredefinedLevel('WARNING'));
+    assertEquals(Logger.Level.INFO, Logger.Level.getPredefinedLevel('INFO'));
+    assertEquals(
+        Logger.Level.CONFIG, Logger.Level.getPredefinedLevel('CONFIG'));
+    assertEquals(Logger.Level.FINE, Logger.Level.getPredefinedLevel('FINE'));
+    assertEquals(Logger.Level.FINER, Logger.Level.getPredefinedLevel('FINER'));
+    assertEquals(
+        Logger.Level.FINEST, Logger.Level.getPredefinedLevel('FINEST'));
+    assertEquals(Logger.Level.ALL, Logger.Level.getPredefinedLevel('ALL'));
+  },
 
-function TestHandler() {
-  this.logRecord = null;
-}
+  testGetPredefinedLevelByValue() {
+    assertEquals(
+        Logger.Level.OFF, Logger.Level.getPredefinedLevelByValue(Infinity));
+    assertEquals(
+        Logger.Level.SHOUT, Logger.Level.getPredefinedLevelByValue(1300));
+    assertEquals(
+        Logger.Level.SHOUT, Logger.Level.getPredefinedLevelByValue(1200));
+    assertEquals(
+        Logger.Level.SEVERE, Logger.Level.getPredefinedLevelByValue(1150));
+    assertEquals(
+        Logger.Level.SEVERE, Logger.Level.getPredefinedLevelByValue(1000));
+    assertEquals(
+        Logger.Level.WARNING, Logger.Level.getPredefinedLevelByValue(900));
+    assertEquals(
+        Logger.Level.INFO, Logger.Level.getPredefinedLevelByValue(800));
+    assertEquals(
+        Logger.Level.CONFIG, Logger.Level.getPredefinedLevelByValue(701));
+    assertEquals(
+        Logger.Level.CONFIG, Logger.Level.getPredefinedLevelByValue(700));
+    assertEquals(
+        Logger.Level.FINE, Logger.Level.getPredefinedLevelByValue(500));
+    assertEquals(
+        Logger.Level.FINER, Logger.Level.getPredefinedLevelByValue(400));
+    assertEquals(
+        Logger.Level.FINEST, Logger.Level.getPredefinedLevelByValue(300));
+    assertEquals(Logger.Level.ALL, Logger.Level.getPredefinedLevelByValue(0));
+    assertNull(Logger.Level.getPredefinedLevelByValue(-1));
+  },
 
-TestHandler.prototype.onPublish = function(logRecord) {
-  this.logRecord = logRecord;
-};
+  testGetLogRecord() {
+    const name = 'test.get.log.record';
+    const level = 1;
+    const msg = 'msg';
 
+    const logger = Logger.getLogger(name);
+    const logRecord = logger.getLogRecord(level, msg);
 
-TestHandler.prototype.reset = function() {
-  this.logRecord = null;
-};
+    assertEquals(name, logRecord.getLoggerName());
+    assertEquals(level, logRecord.getLevel());
+    assertEquals(msg, logRecord.getMessage());
 
-function testGetLogRecord() {
-  var name = 'test.get.log.record';
-  var level = 1;
-  var msg = 'msg';
+    assertNull(logRecord.getException());
+  },
 
-  var logger = goog.debug.Logger.getLogger(name);
-  var logRecord = logger.getLogRecord(level, msg);
+  testGetLogRecordWithException() {
+    const name = 'test.get.log.record';
+    const level = 1;
+    const msg = 'msg';
+    const ex = Error('Hi');
 
-  assertEquals(name, logRecord.getLoggerName());
-  assertEquals(level, logRecord.getLevel());
-  assertEquals(msg, logRecord.getMessage());
+    const logger = Logger.getLogger(name);
+    const logRecord = logger.getLogRecord(level, msg, ex);
 
-  assertNull(logRecord.getException());
-}
-
-function testGetLogRecordWithException() {
-  var name = 'test.get.log.record';
-  var level = 1;
-  var msg = 'msg';
-  var ex = Error('Hi');
-
-  var logger = goog.debug.Logger.getLogger(name);
-  var logRecord = logger.getLogRecord(level, msg, ex);
-
-  assertEquals(name, logRecord.getLoggerName());
-  assertEquals(level, logRecord.getLevel());
-  assertEquals(msg, logRecord.getMessage());
-  assertEquals(ex, logRecord.getException());
-}
+    assertEquals(name, logRecord.getLoggerName());
+    assertEquals(level, logRecord.getLevel());
+    assertEquals(msg, logRecord.getMessage());
+    assertEquals(ex, logRecord.getException());
+  },
+});

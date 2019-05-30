@@ -12,88 +12,87 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.string.pathTest');
-goog.setTestOnly('goog.string.pathTest');
+goog.module('goog.string.pathTest');
+goog.setTestOnly();
 
-goog.require('goog.string.path');
-goog.require('goog.testing.jsunit');
+const path = goog.require('goog.string.path');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // Some test data comes from Python's posixpath tests.
 // See http://svn.python.org/view/python/trunk/Lib/test/test_posixpath.py
 
-function testBasename() {
-  assertEquals('bar', goog.string.path.baseName('/foo/bar'));
-  assertEquals('', goog.string.path.baseName('/'));
-  assertEquals('foo', goog.string.path.baseName('foo'));
-  assertEquals('foo', goog.string.path.baseName('////foo'));
-  assertEquals('bar', goog.string.path.baseName('//foo//bar'));
-}
+testSuite({
+  testBasename() {
+    assertEquals('bar', path.baseName('/foo/bar'));
+    assertEquals('', path.baseName('/'));
+    assertEquals('foo', path.baseName('foo'));
+    assertEquals('foo', path.baseName('////foo'));
+    assertEquals('bar', path.baseName('//foo//bar'));
+  },
 
-function testDirname() {
-  assertEquals('/foo', goog.string.path.dirname('/foo/bar'));
-  assertEquals('/', goog.string.path.dirname('/'));
-  assertEquals('', goog.string.path.dirname('foo'));
-  assertEquals('////', goog.string.path.dirname('////foo'));
-  assertEquals('//foo', goog.string.path.dirname('//foo//bar'));
-}
+  testDirname() {
+    assertEquals('/foo', path.dirname('/foo/bar'));
+    assertEquals('/', path.dirname('/'));
+    assertEquals('', path.dirname('foo'));
+    assertEquals('////', path.dirname('////foo'));
+    assertEquals('//foo', path.dirname('//foo//bar'));
+  },
 
-function testJoin() {
-  assertEquals('/bar/baz', goog.string.path.join('/foo', 'bar', '/bar', 'baz'));
-  assertEquals('/foo/bar/baz', goog.string.path.join('/foo', 'bar', 'baz'));
-  assertEquals('/foo/bar/baz', goog.string.path.join('/foo/', 'bar', 'baz'));
-  assertEquals('/foo/bar/baz/', goog.string.path.join('/foo/', 'bar/', 'baz/'));
-}
+  testJoin() {
+    assertEquals('/bar/baz', path.join('/foo', 'bar', '/bar', 'baz'));
+    assertEquals('/foo/bar/baz', path.join('/foo', 'bar', 'baz'));
+    assertEquals('/foo/bar/baz', path.join('/foo/', 'bar', 'baz'));
+    assertEquals('/foo/bar/baz/', path.join('/foo/', 'bar/', 'baz/'));
+  },
 
-function testNormalizePath() {
-  assertEquals('.', goog.string.path.normalizePath(''));
-  assertEquals('.', goog.string.path.normalizePath('./'));
-  assertEquals('/', goog.string.path.normalizePath('/'));
-  assertEquals('//', goog.string.path.normalizePath('//'));
-  assertEquals('/', goog.string.path.normalizePath('///'));
-  assertEquals('/foo/bar', goog.string.path.normalizePath('///foo/.//bar//'));
-  assertEquals(
-      '/foo/baz',
-      goog.string.path.normalizePath('///foo/.//bar//.//..//.//baz'));
-  assertEquals(
-      '/foo/bar', goog.string.path.normalizePath('///..//./foo/.//bar'));
-  assertEquals(
-      '../../cat/dog', goog.string.path.normalizePath('../../cat/dog/'));
-  assertEquals('../dog', goog.string.path.normalizePath('../cat/../dog/'));
-  assertEquals('/cat/dog', goog.string.path.normalizePath('/../cat/dog/'));
-  assertEquals('/dog', goog.string.path.normalizePath('/../cat/../dog'));
-  assertEquals('/dog', goog.string.path.normalizePath('/../../../dog'));
-}
+  testNormalizePath() {
+    assertEquals('.', path.normalizePath(''));
+    assertEquals('.', path.normalizePath('./'));
+    assertEquals('/', path.normalizePath('/'));
+    assertEquals('//', path.normalizePath('//'));
+    assertEquals('/', path.normalizePath('///'));
+    assertEquals('/foo/bar', path.normalizePath('///foo/.//bar//'));
+    assertEquals(
+        '/foo/baz', path.normalizePath('///foo/.//bar//.//..//.//baz'));
+    assertEquals('/foo/bar', path.normalizePath('///..//./foo/.//bar'));
+    assertEquals('../../cat/dog', path.normalizePath('../../cat/dog/'));
+    assertEquals('../dog', path.normalizePath('../cat/../dog/'));
+    assertEquals('/cat/dog', path.normalizePath('/../cat/dog/'));
+    assertEquals('/dog', path.normalizePath('/../cat/../dog'));
+    assertEquals('/dog', path.normalizePath('/../../../dog'));
+  },
 
-function testSplit() {
-  assertArrayEquals(['/foo', 'bar'], goog.string.path.split('/foo/bar'));
-  assertArrayEquals(['/', ''], goog.string.path.split('/'));
-  assertArrayEquals(['', 'foo'], goog.string.path.split('foo'));
-  assertArrayEquals(['////', 'foo'], goog.string.path.split('////foo'));
-  assertArrayEquals(['//foo', 'bar'], goog.string.path.split('//foo//bar'));
-}
+  testSplit() {
+    assertArrayEquals(['/foo', 'bar'], path.split('/foo/bar'));
+    assertArrayEquals(['/', ''], path.split('/'));
+    assertArrayEquals(['', 'foo'], path.split('foo'));
+    assertArrayEquals(['////', 'foo'], path.split('////foo'));
+    assertArrayEquals(['//foo', 'bar'], path.split('//foo//bar'));
+  },
 
-function testExtension() {
-  assertEquals('jpg', goog.string.path.extension('././foo/bar/baz.jpg'));
-  assertEquals('jpg', goog.string.path.extension('././foo bar/baz.jpg'));
-  assertEquals('jpg', goog.string.path.extension('foo/bar/baz/blah blah.jpg'));
-  assertEquals('', goog.string.path.extension('../../foo/bar/baz baz'));
-  assertEquals('', goog.string.path.extension('../../foo bar/baz baz'));
-  assertEquals('', goog.string.path.extension('foo/bar/.'));
-  assertEquals('', goog.string.path.extension('  '));
-  assertEquals('', goog.string.path.extension(''));
-  assertEquals('', goog.string.path.extension('/home/username/.bashrc'));
+  testExtension() {
+    assertEquals('jpg', path.extension('././foo/bar/baz.jpg'));
+    assertEquals('jpg', path.extension('././foo bar/baz.jpg'));
+    assertEquals('jpg', path.extension('foo/bar/baz/blah blah.jpg'));
+    assertEquals('', path.extension('../../foo/bar/baz baz'));
+    assertEquals('', path.extension('../../foo bar/baz baz'));
+    assertEquals('', path.extension('foo/bar/.'));
+    assertEquals('', path.extension('  '));
+    assertEquals('', path.extension(''));
+    assertEquals('', path.extension('/home/username/.bashrc'));
 
-  // Tests cases taken from python os.path.splitext().
-  assertEquals('bar', goog.string.path.extension('foo.bar'));
-  assertEquals('bar', goog.string.path.extension('foo.boo.bar'));
-  assertEquals('bar', goog.string.path.extension('foo.boo.biff.bar'));
-  assertEquals('rc', goog.string.path.extension('.csh.rc'));
-  assertEquals('', goog.string.path.extension('nodots'));
-  assertEquals('', goog.string.path.extension('.cshrc'));
-  assertEquals('', goog.string.path.extension('...manydots'));
-  assertEquals('ext', goog.string.path.extension('...manydots.ext'));
-  assertEquals('', goog.string.path.extension('.'));
-  assertEquals('', goog.string.path.extension('..'));
-  assertEquals('', goog.string.path.extension('........'));
-  assertEquals('', goog.string.path.extension(''));
-}
+    // Tests cases taken from python os.path.splitext().
+    assertEquals('bar', path.extension('foo.bar'));
+    assertEquals('bar', path.extension('foo.boo.bar'));
+    assertEquals('bar', path.extension('foo.boo.biff.bar'));
+    assertEquals('rc', path.extension('.csh.rc'));
+    assertEquals('', path.extension('nodots'));
+    assertEquals('', path.extension('.cshrc'));
+    assertEquals('', path.extension('...manydots'));
+    assertEquals('ext', path.extension('...manydots.ext'));
+    assertEquals('', path.extension('.'));
+    assertEquals('', path.extension('..'));
+    assertEquals('', path.extension('........'));
+    assertEquals('', path.extension(''));
+  },
+});

@@ -12,63 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.testing.assertThatTest');
-goog.setTestOnly('goog.labs.testing.assertThatTest');
+goog.module('goog.labs.testing.assertThatTest');
+goog.setTestOnly();
 
-goog.require('goog.labs.testing.MatcherError');
-goog.require('goog.labs.testing.assertThat');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const MatcherError = goog.require('goog.labs.testing.MatcherError');
+const assertThat = goog.require('goog.labs.testing.assertThat');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var successMatchesFn, failureMatchesFn, describeFn, successTestMatcher;
-var failureTestMatcher;
+let describeFn;
+let failureMatchesFn;
+let successMatchesFn;
+let successTestMatcher;
 
-function setUp() {
-  successMatchesFn =
-      new goog.testing.recordFunction(function() { return true; });
-  failureMatchesFn =
-      new goog.testing.recordFunction(function() { return false; });
-  describeFn = new goog.testing.recordFunction();
+let failureTestMatcher;
 
-  successTestMatcher = function() {
-    return {matches: successMatchesFn, describe: describeFn};
-  };
-  failureTestMatcher = function() {
-    return {matches: failureMatchesFn, describe: describeFn};
-  };
-}
+testSuite({
+  setUp() {
+    successMatchesFn = new recordFunction(() => true);
+    failureMatchesFn = new recordFunction(() => false);
+    describeFn = new recordFunction();
 
-function testAssertthatAlwaysCallsMatches() {
-  var value = 7;
-  goog.labs.testing.assertThat(
-      value, successTestMatcher(), 'matches is called on success');
+    successTestMatcher = () =>
+        ({matches: successMatchesFn, describe: describeFn});
+    failureTestMatcher = () =>
+        ({matches: failureMatchesFn, describe: describeFn});
+  },
 
-  assertEquals(1, successMatchesFn.getCallCount());
-  var matchesCall = successMatchesFn.popLastCall();
-  assertEquals(value, matchesCall.getArgument(0));
+  testAssertthatAlwaysCallsMatches() {
+    const value = 7;
+    assertThat(value, successTestMatcher(), 'matches is called on success');
 
-  var e = assertThrows(
-      goog.bind(
-          goog.labs.testing.assertThat, null, value, failureTestMatcher(),
-          'matches is called on failure'));
+    assertEquals(1, successMatchesFn.getCallCount());
+    const matchesCall = successMatchesFn.popLastCall();
+    assertEquals(value, matchesCall.getArgument(0));
 
-  assertTrue(e instanceof goog.labs.testing.MatcherError);
+    const e = assertThrows(goog.bind(
+        assertThat, null, value, failureTestMatcher(),
+        'matches is called on failure'));
 
-  assertEquals(1, failureMatchesFn.getCallCount());
-}
+    assertTrue(e instanceof MatcherError);
 
-function testAssertthatCallsDescribeOnFailure() {
-  var value = 7;
-  var e = assertThrows(
-      goog.bind(
-          goog.labs.testing.assertThat, null, value, failureTestMatcher(),
-          'describe is called on failure'));
+    assertEquals(1, failureMatchesFn.getCallCount());
+  },
 
-  assertTrue(e instanceof goog.labs.testing.MatcherError);
+  testAssertthatCallsDescribeOnFailure() {
+    const value = 7;
+    const e = assertThrows(goog.bind(
+        assertThat, null, value, failureTestMatcher(),
+        'describe is called on failure'));
 
-  assertEquals(1, failureMatchesFn.getCallCount());
-  assertEquals(1, describeFn.getCallCount());
+    assertTrue(e instanceof MatcherError);
 
-  var matchesCall = describeFn.popLastCall();
-  assertEquals(value, matchesCall.getArgument(0));
-}
+    assertEquals(1, failureMatchesFn.getCallCount());
+    assertEquals(1, describeFn.getCallCount());
+
+    const matchesCall = describeFn.popLastCall();
+    assertEquals(value, matchesCall.getArgument(0));
+  },
+});

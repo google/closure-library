@@ -12,32 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.MenuSeparatorRendererTest');
-goog.setTestOnly('goog.ui.MenuSeparatorRendererTest');
+goog.module('goog.ui.MenuSeparatorRendererTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.MenuSeparator');
-goog.require('goog.ui.MenuSeparatorRenderer');
+const MenuSeparator = goog.require('goog.ui.MenuSeparator');
+const MenuSeparatorRenderer = goog.require('goog.ui.MenuSeparatorRenderer');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var sandbox;
-var originalSandbox;
+let sandbox;
+let originalSandbox;
 
-function setUp() {
-  sandbox = goog.dom.getElement('sandbox');
-  originalSandbox = sandbox.cloneNode(true);
-}
+testSuite({
+  setUp() {
+    sandbox = dom.getElement('sandbox');
+    originalSandbox = sandbox.cloneNode(true);
+  },
 
-function tearDown() {
-  sandbox.parentNode.replaceChild(originalSandbox, sandbox);
-}
+  tearDown() {
+    sandbox.parentNode.replaceChild(originalSandbox, sandbox);
+  },
 
-function testDecorate() {
-  var separator = new goog.ui.MenuSeparator();
-  var dummyId = 'foo';
-  separator.setId(dummyId);
-  assertEquals(dummyId, separator.getId());
-  var renderer = new goog.ui.MenuSeparatorRenderer();
-  renderer.decorate(separator, goog.dom.getElement('separator'));
-  assertEquals('separator', separator.getId());
-}
+  testDecorate() {
+    const separator = new MenuSeparator();
+    const dummyId = 'foo';
+    separator.setId(dummyId);
+    assertEquals(dummyId, separator.getId());
+    const renderer = new MenuSeparatorRenderer();
+    renderer.decorate(separator, dom.getElement('separator'));
+    assertEquals('separator', separator.getId());
+  },
+});

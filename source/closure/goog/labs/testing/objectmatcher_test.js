@@ -12,89 +12,87 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.testing.objectMatcherTest');
-goog.setTestOnly('goog.labs.testing.objectMatcherTest');
+goog.module('goog.labs.testing.objectMatcherTest');
+goog.setTestOnly();
 
-goog.require('goog.labs.testing.MatcherError');
+const MatcherError = goog.require('goog.labs.testing.MatcherError');
 /** @suppress {extraRequire} */
-goog.require('goog.labs.testing.ObjectEqualsMatcher');
-goog.require('goog.labs.testing.assertThat');
-goog.require('goog.testing.jsunit');
-
-function testAnyObject() {
-  goog.labs.testing.assertThat({}, anyObject(), 'typeof {} == "object"');
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat(null, anyObject());
-  }, 'typeof null == "object"');
-}
-
-function testObjectEquals() {
-  var obj1 = {x: 1};
-  var obj2 = obj1;
-  goog.labs.testing.assertThat(obj1, equalsObject(obj2), 'obj1 equals obj2');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat({x: 1}, equalsObject({}));
-  }, 'equalsObject does not throw exception on failure');
-}
-
-function testInstanceOf() {
-  function expected() { this.x = 1; }
-  var input = new expected();
-  goog.labs.testing.assertThat(
-      input, instanceOfClass(expected), 'input is an instance of expected');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat(5, instanceOfClass(function() {}));
-  }, 'instanceOfClass does not throw exception on failure');
-}
-
-function testHasProperty() {
-  goog.labs.testing.assertThat(
-      {x: 1}, hasProperty('x'), '{x:1} has property x}');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat({x: 1}, hasProperty('y'));
-  }, 'hasProperty does not throw exception on failure');
-}
-
-function testIsNull() {
-  goog.labs.testing.assertThat(null, isNull(), 'null is null');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat(5, isNull());
-  }, 'isNull does not throw exception on failure');
-}
-
-function testIsNullOrUndefined() {
-  var x;
-  goog.labs.testing.assertThat(
-      undefined, isNullOrUndefined(), 'undefined is null or undefined');
-  goog.labs.testing.assertThat(
-      x, isNullOrUndefined(), 'undefined is null or undefined');
-  x = null;
-  goog.labs.testing.assertThat(
-      null, isNullOrUndefined(), 'null is null or undefined');
-  goog.labs.testing.assertThat(
-      x, isNullOrUndefined(), 'null is null or undefined');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat(5, isNullOrUndefined());
-  }, 'isNullOrUndefined does not throw exception on failure');
-}
-
-function testIsUndefined() {
-  var x;
-  goog.labs.testing.assertThat(
-      undefined, isUndefined(), 'undefined is undefined');
-  goog.labs.testing.assertThat(x, isUndefined(), 'undefined is undefined');
-
-  assertMatcherError(function() {
-    goog.labs.testing.assertThat(5, isUndefined());
-  }, 'isUndefined does not throw exception on failure');
-}
+const ObjectEqualsMatcher = goog.require('goog.labs.testing.ObjectEqualsMatcher');
+const assertThat = goog.require('goog.labs.testing.assertThat');
+const testSuite = goog.require('goog.testing.testSuite');
 
 function assertMatcherError(callable, errorString) {
-  var e = assertThrows(errorString || 'callable throws exception', callable);
-  assertTrue(e instanceof goog.labs.testing.MatcherError);
+  const e = assertThrows(errorString || 'callable throws exception', callable);
+  assertTrue(e instanceof MatcherError);
 }
+testSuite({
+  testAnyObject() {
+    assertThat({}, anyObject(), 'typeof {} == "object"');
+    assertMatcherError(() => {
+      assertThat(null, anyObject());
+    }, 'typeof null == "object"');
+  },
+
+  testObjectEquals() {
+    const obj1 = {x: 1};
+    const obj2 = obj1;
+    assertThat(obj1, equalsObject(obj2), 'obj1 equals obj2');
+
+    assertMatcherError(() => {
+      assertThat({x: 1}, equalsObject({}));
+    }, 'equalsObject does not throw exception on failure');
+  },
+
+  testInstanceOf() {
+    function expected() {
+      this.x = 1;
+    }
+    const input = new expected();
+    assertThat(
+        input, instanceOfClass(expected), 'input is an instance of expected');
+
+    assertMatcherError(() => {
+      assertThat(5, instanceOfClass(() => {}));
+    }, 'instanceOfClass does not throw exception on failure');
+  },
+
+  testHasProperty() {
+    assertThat({x: 1}, hasProperty('x'), '{x:1} has property x}');
+
+    assertMatcherError(() => {
+      assertThat({x: 1}, hasProperty('y'));
+    }, 'hasProperty does not throw exception on failure');
+  },
+
+  testIsNull() {
+    assertThat(null, isNull(), 'null is null');
+
+    assertMatcherError(() => {
+      assertThat(5, isNull());
+    }, 'isNull does not throw exception on failure');
+  },
+
+  testIsNullOrUndefined() {
+    let x;
+    assertThat(
+        undefined, isNullOrUndefined(), 'undefined is null or undefined');
+    assertThat(x, isNullOrUndefined(), 'undefined is null or undefined');
+    x = null;
+    assertThat(null, isNullOrUndefined(), 'null is null or undefined');
+    assertThat(x, isNullOrUndefined(), 'null is null or undefined');
+
+    assertMatcherError(() => {
+      assertThat(5, isNullOrUndefined());
+    }, 'isNullOrUndefined does not throw exception on failure');
+  },
+
+  testIsUndefined() {
+    let x;
+    assertThat(undefined, isUndefined(), 'undefined is undefined');
+    assertThat(x, isUndefined(), 'undefined is undefined');
+
+    assertMatcherError(() => {
+      assertThat(5, isUndefined());
+    }, 'isUndefined does not throw exception on failure');
+  },
+});

@@ -12,78 +12,79 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.dom.PageVisibilityMonitorTest');
-goog.setTestOnly('goog.labs.dom.PageVisibilityMonitorTest');
+goog.module('goog.labs.dom.PageVisibilityMonitorTest');
+goog.setTestOnly();
 
-goog.require('goog.events');
-goog.require('goog.functions');
-goog.require('goog.labs.dom.PageVisibilityMonitor');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.events');
-goog.require('goog.testing.events.Event');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const GoogTestingEvent = goog.require('goog.testing.events.Event');
+const PageVisibilityMonitor = goog.require('goog.labs.dom.PageVisibilityMonitor');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const events = goog.require('goog.events');
+const functions = goog.require('goog.functions');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingEvents = goog.require('goog.testing.events');
 
-var stubs = new goog.testing.PropertyReplacer();
-var vh;
+const stubs = new PropertyReplacer();
+let vh;
 
+testSuite({
+  tearDown() {
+    goog.dispose(vh);
+    vh = null;
+    stubs.reset();
+  },
 
-function tearDown() {
-  goog.dispose(vh);
-  vh = null;
-  stubs.reset();
-}
+  testConstructor() {
+    vh = new PageVisibilityMonitor();
+  },
 
-function testConstructor() {
-  vh = new goog.labs.dom.PageVisibilityMonitor();
-}
+  testNoVisibilitySupport() {
+    stubs.set(
+        PageVisibilityMonitor.prototype, 'getBrowserEventType_',
+        functions.NULL);
 
-function testNoVisibilitySupport() {
-  stubs.set(
-      goog.labs.dom.PageVisibilityMonitor.prototype, 'getBrowserEventType_',
-      goog.functions.NULL);
+    const listener = recordFunction();
+    vh = new PageVisibilityMonitor();
 
-  var listener = goog.testing.recordFunction();
-  vh = new goog.labs.dom.PageVisibilityMonitor();
+    events.listen(vh, 'visibilitychange', listener);
 
-  goog.events.listen(vh, 'visibilitychange', listener);
+    const e = new GoogTestingEvent('visibilitychange');
+    e.target = window.document;
+    testingEvents.fireBrowserEvent(e);
+    assertEquals(0, listener.getCallCount());
+  },
 
-  var e = new goog.testing.events.Event('visibilitychange');
-  e.target = window.document;
-  goog.testing.events.fireBrowserEvent(e);
-  assertEquals(0, listener.getCallCount());
-}
+  testListener() {
+    stubs.set(
+        PageVisibilityMonitor.prototype, 'getBrowserEventType_',
+        functions.constant('visibilitychange'));
 
-function testListener() {
-  stubs.set(
-      goog.labs.dom.PageVisibilityMonitor.prototype, 'getBrowserEventType_',
-      goog.functions.constant('visibilitychange'));
+    const listener = recordFunction();
+    vh = new PageVisibilityMonitor();
 
-  var listener = goog.testing.recordFunction();
-  vh = new goog.labs.dom.PageVisibilityMonitor();
+    events.listen(vh, 'visibilitychange', listener);
 
-  goog.events.listen(vh, 'visibilitychange', listener);
+    const e = new GoogTestingEvent('visibilitychange');
+    e.target = window.document;
+    testingEvents.fireBrowserEvent(e);
 
-  var e = new goog.testing.events.Event('visibilitychange');
-  e.target = window.document;
-  goog.testing.events.fireBrowserEvent(e);
+    assertEquals(1, listener.getCallCount());
+  },
 
-  assertEquals(1, listener.getCallCount());
-}
+  testListenerForWebKit() {
+    stubs.set(
+        PageVisibilityMonitor.prototype, 'getBrowserEventType_',
+        functions.constant('webkitvisibilitychange'));
 
-function testListenerForWebKit() {
-  stubs.set(
-      goog.labs.dom.PageVisibilityMonitor.prototype, 'getBrowserEventType_',
-      goog.functions.constant('webkitvisibilitychange'));
+    const listener = recordFunction();
+    vh = new PageVisibilityMonitor();
 
-  var listener = goog.testing.recordFunction();
-  vh = new goog.labs.dom.PageVisibilityMonitor();
+    events.listen(vh, 'visibilitychange', listener);
 
-  goog.events.listen(vh, 'visibilitychange', listener);
+    const e = new GoogTestingEvent('webkitvisibilitychange');
+    e.target = window.document;
+    testingEvents.fireBrowserEvent(e);
 
-  var e = new goog.testing.events.Event('webkitvisibilitychange');
-  e.target = window.document;
-  goog.testing.events.fireBrowserEvent(e);
-
-  assertEquals(1, listener.getCallCount());
-}
+    assertEquals(1, listener.getCallCount());
+  },
+});

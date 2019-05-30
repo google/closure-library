@@ -12,74 +12,76 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.storage.ExpiringStorageTest');
-goog.setTestOnly('goog.storage.ExpiringStorageTest');
+goog.module('goog.storage.ExpiringStorageTest');
+goog.setTestOnly();
 
-goog.require('goog.storage.ExpiringStorage');
-goog.require('goog.storage.storageTester');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.storage.FakeMechanism');
+const ExpiringStorage = goog.require('goog.storage.ExpiringStorage');
+const FakeMechanism = goog.require('goog.testing.storage.FakeMechanism');
+const MockClock = goog.require('goog.testing.MockClock');
+const storageTester = goog.require('goog.storage.storageTester');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testBasicOperations() {
-  var mechanism = new goog.testing.storage.FakeMechanism();
-  var storage = new goog.storage.ExpiringStorage(mechanism);
-  goog.storage.storageTester.runBasicTests(storage);
-}
+testSuite({
+  testBasicOperations() {
+    const mechanism = new FakeMechanism();
+    const storage = new ExpiringStorage(mechanism);
+    storageTester.runBasicTests(storage);
+  },
 
-function testExpiration() {
-  var mechanism = new goog.testing.storage.FakeMechanism();
-  var clock = new goog.testing.MockClock(true);
-  var storage = new goog.storage.ExpiringStorage(mechanism);
+  testExpiration() {
+    const mechanism = new FakeMechanism();
+    const clock = new MockClock(true);
+    const storage = new ExpiringStorage(mechanism);
 
-  // No expiration.
-  storage.set('first', 'one second', 1000);
-  storage.set('second', 'permanent');
-  storage.set('third', 'two seconds', 2000);
-  storage.set('fourth', 'permanent');
-  clock.tick(100);
-  assertEquals('one second', storage.get('first'));
-  assertEquals('permanent', storage.get('second'));
-  assertEquals('two seconds', storage.get('third'));
-  assertEquals('permanent', storage.get('fourth'));
+    // No expiration.
+    storage.set('first', 'one second', 1000);
+    storage.set('second', 'permanent');
+    storage.set('third', 'two seconds', 2000);
+    storage.set('fourth', 'permanent');
+    clock.tick(100);
+    assertEquals('one second', storage.get('first'));
+    assertEquals('permanent', storage.get('second'));
+    assertEquals('two seconds', storage.get('third'));
+    assertEquals('permanent', storage.get('fourth'));
 
-  // A key has expired.
-  clock.tick(1000);
-  assertUndefined(storage.get('first'));
-  assertEquals('permanent', storage.get('second'));
-  assertEquals('two seconds', storage.get('third'));
-  assertEquals('permanent', storage.get('fourth'));
-  assertNull(mechanism.get('first'));
+    // A key has expired.
+    clock.tick(1000);
+    assertUndefined(storage.get('first'));
+    assertEquals('permanent', storage.get('second'));
+    assertEquals('two seconds', storage.get('third'));
+    assertEquals('permanent', storage.get('fourth'));
+    assertNull(mechanism.get('first'));
 
-  // Add an already expired key.
-  storage.set('fourth', 'one second again', 1000);
-  assertNull(mechanism.get('fourth'));
-  assertUndefined(storage.get('fourth'));
+    // Add an already expired key.
+    storage.set('fourth', 'one second again', 1000);
+    assertNull(mechanism.get('fourth'));
+    assertUndefined(storage.get('fourth'));
 
-  // Another key has expired.
-  clock.tick(1000);
-  assertEquals('permanent', storage.get('second'));
-  assertUndefined(storage.get('third'));
-  assertNull(mechanism.get('third'));
+    // Another key has expired.
+    clock.tick(1000);
+    assertEquals('permanent', storage.get('second'));
+    assertUndefined(storage.get('third'));
+    assertNull(mechanism.get('third'));
 
-  // Clean up.
-  storage.remove('second');
-  assertNull(mechanism.get('second'));
-  assertUndefined(storage.get('second'));
-  clock.uninstall();
-}
+    // Clean up.
+    storage.remove('second');
+    assertNull(mechanism.get('second'));
+    assertUndefined(storage.get('second'));
+    clock.uninstall();
+  },
 
-function testClockSkew() {
-  var mechanism = new goog.testing.storage.FakeMechanism();
-  var storage = new goog.storage.ExpiringStorage(mechanism);
-  var clock = new goog.testing.MockClock(true);
+  testClockSkew() {
+    const mechanism = new FakeMechanism();
+    const storage = new ExpiringStorage(mechanism);
+    const clock = new MockClock(true);
 
-  // Simulate clock skew.
-  clock.tick(100);
-  storage.set('first', 'one second', 1000);
-  clock.reset();
-  assertUndefined(storage.get('first'));
-  assertNull(mechanism.get('first'));
+    // Simulate clock skew.
+    clock.tick(100);
+    storage.set('first', 'one second', 1000);
+    clock.reset();
+    assertUndefined(storage.get('first'));
+    assertNull(mechanism.get('first'));
 
-  clock.uninstall();
-}
+    clock.uninstall();
+  },
+});

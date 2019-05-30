@@ -12,215 +12,60 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.net.xpc.IframePollingTransportTest');
-goog.setTestOnly('goog.net.xpc.IframePollingTransportTest');
+goog.module('goog.net.xpc.IframePollingTransportTest');
+goog.setTestOnly();
 
-goog.require('goog.Timer');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.functions');
-goog.require('goog.net.xpc.CfgFields');
-goog.require('goog.net.xpc.CrossPageChannel');
-goog.require('goog.net.xpc.CrossPageChannelRole');
-goog.require('goog.net.xpc.IframePollingTransport');
-goog.require('goog.object');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const CfgFields = goog.require('goog.net.xpc.CfgFields');
+const CrossPageChannel = goog.require('goog.net.xpc.CrossPageChannel');
+const CrossPageChannelRole = goog.require('goog.net.xpc.CrossPageChannelRole');
+const IframePollingTransport = goog.require('goog.net.xpc.IframePollingTransport');
+const MockClock = goog.require('goog.testing.MockClock');
+const TagName = goog.require('goog.dom.TagName');
+const Timer = goog.require('goog.Timer');
+const dom = goog.require('goog.dom');
+const functions = goog.require('goog.functions');
+const googObject = goog.require('goog.object');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
-/** @type {?goog.testing.MockClock} */
-var mockClock = null;
+/** @type {?MockClock} */
+let mockClock = null;
 
-/** @type {?goog.net.xpc.CrossPageChannel} */
-var outerChannel = null;
+/** @type {?CrossPageChannel} */
+let outerChannel = null;
 
-/** @type {?goog.net.xpc.CrossPageChannel} */
-var innerChannel = null;
-
-function setUp() {
-  mockClock = new goog.testing.MockClock(true /* opt_autoInstall */);
-
-  // Create the peer windows.
-  var outerPeerHostName = 'https://www.youtube.com';
-  var outerPeerWindow = createMockPeerWindow(outerPeerHostName);
-
-  var innerPeerHostName = 'https://www.google.com';
-  var innerPeerWindow = createMockPeerWindow(innerPeerHostName);
-
-  // Create the channels.
-  outerChannel = createChannel(
-      goog.net.xpc.CrossPageChannelRole.OUTER, 'test', outerPeerHostName,
-      outerPeerWindow, innerPeerHostName, innerPeerWindow);
-  innerChannel = createChannel(
-      goog.net.xpc.CrossPageChannelRole.INNER, 'test', innerPeerHostName,
-      innerPeerWindow, outerPeerHostName, outerPeerWindow);
-}
-
-
-function tearDown() {
-  outerChannel.dispose();
-  innerChannel.dispose();
-  mockClock.uninstall();
-}
-
-
-/** Tests that connection happens normally and callbacks are invoked. */
-function testConnect() {
-  var outerConnectCallback = goog.testing.recordFunction();
-  var innerConnectCallback = goog.testing.recordFunction();
-
-  // Connect the two channels.
-  outerChannel.connect(outerConnectCallback);
-  innerChannel.connect(innerConnectCallback);
-  mockClock.tick(1000);
-
-  // Check that channels were connected and callbacks invoked.
-  assertEquals(1, outerConnectCallback.getCallCount());
-  assertEquals(1, innerConnectCallback.getCallCount());
-  assertTrue(outerChannel.isConnected());
-  assertTrue(innerChannel.isConnected());
-}
-
-
-/** Tests that messages are successfully delivered to the inner peer. */
-function testSend_outerToInner() {
-  var serviceCallback = goog.testing.recordFunction();
-
-  // Register a service handler in the inner channel.
-  innerChannel.registerService('svc', function(payload) {
-    assertEquals('hello', payload);
-    serviceCallback();
-  });
-
-  // Connect the two channels.
-  outerChannel.connect();
-  innerChannel.connect();
-  mockClock.tick(1000);
-
-  // Send a message.
-  outerChannel.send('svc', 'hello');
-  mockClock.tick(1000);
-
-  // Check that the message was handled.
-  assertEquals(1, serviceCallback.getCallCount());
-}
-
-
-/** Tests that messages are successfully delivered to the outer peer. */
-function testSend_innerToOuter() {
-  var serviceCallback = goog.testing.recordFunction();
-
-  // Register a service handler in the inner channel.
-  outerChannel.registerService('svc', function(payload) {
-    assertEquals('hello', payload);
-    serviceCallback();
-  });
-
-  // Connect the two channels.
-  outerChannel.connect();
-  innerChannel.connect();
-  mockClock.tick(1000);
-
-  // Send a message.
-  innerChannel.send('svc', 'hello');
-  mockClock.tick(1000);
-
-  // Check that the message was handled.
-  assertEquals(1, serviceCallback.getCallCount());
-}
-
-
-/** Tests that closing the outer peer does not cause an error. */
-function testSend_outerPeerClosed() {
-  // Connect the inner channel.
-  innerChannel.connect();
-  mockClock.tick(1000);
-
-  // Close the outer peer before it has a chance to connect.
-  closeWindow(innerChannel.getPeerWindowObject());
-
-  // Allow timers to execute (and fail).
-  mockClock.tick(1000);
-}
-
-
-/** Tests that closing the inner peer does not cause an error. */
-function testSend_innerPeerClosed() {
-  // Connect the outer channel.
-  outerChannel.connect();
-  mockClock.tick(1000);
-
-  // Close the inner peer before it has a chance to connect.
-  closeWindow(outerChannel.getPeerWindowObject());
-
-  // Allow timers to execute (and fail).
-  mockClock.tick(1000);
-}
-
-
-/** Tests that partially closing the outer peer does not cause an error. */
-function testSend_outerPeerClosing() {
-  // Connect the inner channel.
-  innerChannel.connect();
-  mockClock.tick(1000);
-
-  // Close the outer peer before it has a chance to connect, but
-  // leave closed set to false to simulate a partially closed window.
-  closeWindow(innerChannel.getPeerWindowObject());
-  innerChannel.getPeerWindowObject().closed = false;
-
-  // Allow timers to execute (and fail).
-  mockClock.tick(1000);
-}
-
-
-/** Tests that partially closing the inner peer does not cause an error. */
-function testSend_innerPeerClosing() {
-  // Connect the outer channel.
-  outerChannel.connect();
-  mockClock.tick(1000);
-
-  // Close the inner peer before it has a chance to connect, but
-  // leave closed set to false to simulate a partially closed window.
-  closeWindow(outerChannel.getPeerWindowObject());
-  outerChannel.getPeerWindowObject().closed = false;
-
-  // Allow timers to execute (and fail).
-  mockClock.tick(1000);
-}
-
+/** @type {?CrossPageChannel} */
+let innerChannel = null;
 
 /**
  * Creates a channel with the specified configuration, using frame polling.
- * @param {!goog.net.xpc.CrossPageChannelRole} role The channel role.
+ * @param {!CrossPageChannelRole} role The channel role.
  * @param {string} channelName The channel name.
  * @param {string} fromHostName The host name of the window hosting the channel.
  * @param {!Object} fromWindow The window hosting the channel.
  * @param {string} toHostName The host name of the peer window.
  * @param {!Object} toWindow The peer window.
- * @return {!goog.net.xpc.CrossPageChannel}
+ * @return {!CrossPageChannel}
  */
 function createChannel(
     role, channelName, fromHostName, fromWindow, toHostName, toWindow) {
   // Build a channel config using frame polling.
-  var channelConfig = goog.object.create(
-      goog.net.xpc.CfgFields.ROLE, role, goog.net.xpc.CfgFields.PEER_HOSTNAME,
-      toHostName, goog.net.xpc.CfgFields.CHANNEL_NAME, channelName,
-      goog.net.xpc.CfgFields.LOCAL_POLL_URI, fromHostName + '/robots.txt',
-      goog.net.xpc.CfgFields.PEER_POLL_URI, toHostName + '/robots.txt',
-      goog.net.xpc.CfgFields.TRANSPORT, goog.net.xpc.IframePollingTransport);
+  const channelConfig = googObject.create(
+      CfgFields.ROLE, role, CfgFields.PEER_HOSTNAME, toHostName,
+      CfgFields.CHANNEL_NAME, channelName, CfgFields.LOCAL_POLL_URI,
+      `${fromHostName}/robots.txt`, CfgFields.PEER_POLL_URI,
+      `${toHostName}/robots.txt`, CfgFields.TRANSPORT, IframePollingTransport);
 
   // Build the channel.
-  var channel = new goog.net.xpc.CrossPageChannel(channelConfig);
+  const channel = new CrossPageChannel(channelConfig);
 
   channel.setPeerWindowObject(toWindow);
 
   // Update the transport's getWindow, to return the correct host window.
   channel.createTransport_();
-  channel.transport_.getWindow = goog.functions.constant(fromWindow);
+  channel.transport_.getWindow = functions.constant(fromWindow);
   return channel;
 }
-
 
 /**
  * Creates a mock window to use as a peer. The peer window will host the frame
@@ -228,11 +73,11 @@ function createChannel(
  * @param {string} url The peer window's initial URL.
  */
 function createMockPeerWindow(url) {
-  var mockPeer = createMockWindow(url);
+  const mockPeer = createMockWindow(url);
 
   // Update the appendChild method to use a mock frame window.
-  mockPeer.document.body.appendChild = function(el) {
-    assertEquals(String(goog.dom.TagName.IFRAME), el.tagName);
+  mockPeer.document.body.appendChild = (el) => {
+    assertEquals(String(TagName.IFRAME), el.tagName);
     mockPeer.frames[el.name] = createMockWindow(el.src);
     mockPeer.document.body.element.appendChild(el);
   };
@@ -240,37 +85,37 @@ function createMockPeerWindow(url) {
   return mockPeer;
 }
 
-
 /**
  * Creates a mock window.
  * @param {string} url The window's initial URL.
  */
 function createMockWindow(url) {
   // Create the mock window, document and body.
-  var mockWindow = {};
-  var mockDocument = {};
-  var mockBody = {};
-  var mockLocation = {};
+  const mockWindow = {};
+  const mockDocument = {};
+  const mockBody = {};
+  const mockLocation = {};
 
   // Configure the mock window's document body.
-  mockBody.element = goog.dom.createDom(goog.dom.TagName.BODY);
+  mockBody.element = dom.createDom(TagName.BODY);
 
   // Configure the mock window's document.
   mockDocument.body = mockBody;
 
   // Configure the mock window's location.
   mockLocation.href = url;
-  mockLocation.replace = function(value) { mockLocation.href = value; };
+  mockLocation.replace = (value) => {
+    mockLocation.href = value;
+  };
 
   // Configure the mock window.
   mockWindow.document = mockDocument;
   mockWindow.frames = {};
   mockWindow.location = mockLocation;
-  mockWindow.setTimeout = goog.Timer.callOnce;
+  mockWindow.setTimeout = Timer.callOnce;
 
   return mockWindow;
 }
-
 
 /**
  * Emulates closing the specified window by clearing frames, document and
@@ -278,7 +123,7 @@ function createMockWindow(url) {
  */
 function closeWindow(targetWindow) {
   // Close any child frame windows.
-  for (var frameName in targetWindow.frames) {
+  for (let frameName in targetWindow.frames) {
     closeWindow(targetWindow.frames[frameName]);
   }
 
@@ -288,3 +133,148 @@ function closeWindow(targetWindow) {
   targetWindow.document = null;
   targetWindow.location = null;
 }
+testSuite({
+  setUp() {
+    mockClock = new MockClock(true /* opt_autoInstall */);
+
+    // Create the peer windows.
+    const outerPeerHostName = 'https://www.youtube.com';
+    const outerPeerWindow = createMockPeerWindow(outerPeerHostName);
+
+    const innerPeerHostName = 'https://www.google.com';
+    const innerPeerWindow = createMockPeerWindow(innerPeerHostName);
+
+    // Create the channels.
+    outerChannel = createChannel(
+        CrossPageChannelRole.OUTER, 'test', outerPeerHostName, outerPeerWindow,
+        innerPeerHostName, innerPeerWindow);
+    innerChannel = createChannel(
+        CrossPageChannelRole.INNER, 'test', innerPeerHostName, innerPeerWindow,
+        outerPeerHostName, outerPeerWindow);
+  },
+
+  tearDown() {
+    outerChannel.dispose();
+    innerChannel.dispose();
+    mockClock.uninstall();
+  },
+
+  /** Tests that connection happens normally and callbacks are invoked. */
+  testConnect() {
+    const outerConnectCallback = recordFunction();
+    const innerConnectCallback = recordFunction();
+
+    // Connect the two channels.
+    outerChannel.connect(outerConnectCallback);
+    innerChannel.connect(innerConnectCallback);
+    mockClock.tick(1000);
+
+    // Check that channels were connected and callbacks invoked.
+    assertEquals(1, outerConnectCallback.getCallCount());
+    assertEquals(1, innerConnectCallback.getCallCount());
+    assertTrue(outerChannel.isConnected());
+    assertTrue(innerChannel.isConnected());
+  },
+
+  /** Tests that messages are successfully delivered to the inner peer. */
+  testSend_outerToInner() {
+    const serviceCallback = recordFunction();
+
+    // Register a service handler in the inner channel.
+    innerChannel.registerService('svc', (payload) => {
+      assertEquals('hello', payload);
+      serviceCallback();
+    });
+
+    // Connect the two channels.
+    outerChannel.connect();
+    innerChannel.connect();
+    mockClock.tick(1000);
+
+    // Send a message.
+    outerChannel.send('svc', 'hello');
+    mockClock.tick(1000);
+
+    // Check that the message was handled.
+    assertEquals(1, serviceCallback.getCallCount());
+  },
+
+  /** Tests that messages are successfully delivered to the outer peer. */
+  testSend_innerToOuter() {
+    const serviceCallback = recordFunction();
+
+    // Register a service handler in the inner channel.
+    outerChannel.registerService('svc', (payload) => {
+      assertEquals('hello', payload);
+      serviceCallback();
+    });
+
+    // Connect the two channels.
+    outerChannel.connect();
+    innerChannel.connect();
+    mockClock.tick(1000);
+
+    // Send a message.
+    innerChannel.send('svc', 'hello');
+    mockClock.tick(1000);
+
+    // Check that the message was handled.
+    assertEquals(1, serviceCallback.getCallCount());
+  },
+
+  /** Tests that closing the outer peer does not cause an error. */
+  testSend_outerPeerClosed() {
+    // Connect the inner channel.
+    innerChannel.connect();
+    mockClock.tick(1000);
+
+    // Close the outer peer before it has a chance to connect.
+    closeWindow(innerChannel.getPeerWindowObject());
+
+    // Allow timers to execute (and fail).
+    mockClock.tick(1000);
+  },
+
+  /** Tests that closing the inner peer does not cause an error. */
+  testSend_innerPeerClosed() {
+    // Connect the outer channel.
+    outerChannel.connect();
+    mockClock.tick(1000);
+
+    // Close the inner peer before it has a chance to connect.
+    closeWindow(outerChannel.getPeerWindowObject());
+
+    // Allow timers to execute (and fail).
+    mockClock.tick(1000);
+  },
+
+  /** Tests that partially closing the outer peer does not cause an error. */
+  testSend_outerPeerClosing() {
+    // Connect the inner channel.
+    innerChannel.connect();
+    mockClock.tick(1000);
+
+    // Close the outer peer before it has a chance to connect, but
+    // leave closed set to false to simulate a partially closed window.
+    closeWindow(innerChannel.getPeerWindowObject());
+    innerChannel.getPeerWindowObject().closed = false;
+
+    // Allow timers to execute (and fail).
+    mockClock.tick(1000);
+  },
+
+  /** Tests that partially closing the inner peer does not cause an error. */
+  testSend_innerPeerClosing() {
+    // Connect the outer channel.
+    outerChannel.connect();
+    mockClock.tick(1000);
+
+    // Close the inner peer before it has a chance to connect, but
+    // leave closed set to false to simulate a partially closed window.
+    closeWindow(outerChannel.getPeerWindowObject());
+    outerChannel.getPeerWindowObject().closed = false;
+
+    // Allow timers to execute (and fail).
+    mockClock.tick(1000);
+  },
+});

@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.tagsTest');
-goog.setTestOnly('goog.dom.tagsTest');
+goog.module('goog.dom.tagsTest');
+goog.setTestOnly();
 
-goog.require('goog.dom.tags');
-goog.require('goog.testing.jsunit');
+const tags = goog.require('goog.dom.tags');
+const testSuite = goog.require('goog.testing.testSuite');
 
-
-function testIsVoidTag() {
-  assertTrue(goog.dom.tags.isVoidTag('br'));
-  assertFalse(goog.dom.tags.isVoidTag('a'));
-  assertFalse(goog.dom.tags.isVoidTag('constructor'));
-}
+testSuite({
+  testIsVoidTag() {
+    assertTrue(tags.isVoidTag('br'));
+    assertFalse(tags.isVoidTag('a'));
+    assertFalse(tags.isVoidTag('constructor'));
+  },
+});

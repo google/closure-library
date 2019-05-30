@@ -12,30 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.protoTest');
-goog.setTestOnly('goog.protoTest');
+goog.module('goog.protoTest');
+goog.setTestOnly();
 
-goog.require('goog.proto');
-goog.require('goog.testing.jsunit');
+const proto = goog.require('goog.proto');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var serialize = goog.proto.serialize;
-
-function testArraySerialize() {
-  assertEquals('Empty array', serialize([]), '[]');
-
-  assertEquals('Normal array', serialize([0, 1, 2]), '[0,1,2]');
-  assertEquals('Empty start', serialize([, 1, 2]), '[null,1,2]');
-  assertEquals('Empty start', serialize([, , , 3, 4]), '[null,null,null,3,4]');
-  assertEquals('Empty middle', serialize([0, , 2]), '[0,null,2]');
-  assertEquals('Empty middle', serialize([0, , , 3]), '[0,null,null,3]');
-  assertEquals('Empty end', serialize(withLength([0, 1, 2], 4)), '[0,1,2]');
-  assertEquals(
-      'Empty start, middle and end', serialize([, , 2, , 4, null]),
-      '[null,null,2,null,4]');
-  assertEquals('All elements empty', serialize(withLength([], 3)), '[]');
-  assertEquals(
-      'Nested', serialize([, 1, [, 1, [, 1]]]), '[null,1,[null,1,[null,1]]]');
-}
+const serialize = proto.serialize;
 
 /**
  * Returns an array with the given elements and length.
@@ -48,3 +31,22 @@ function withLength(elems, length) {
   elems.length = length;
   return elems;
 }
+testSuite({
+  testArraySerialize() {
+    assertEquals('Empty array', serialize([]), '[]');
+
+    assertEquals('Normal array', serialize([0, 1, 2]), '[0,1,2]');
+    assertEquals('Empty start', serialize([, 1, 2]), '[null,1,2]');
+    assertEquals(
+        'Empty start', serialize([, , , 3, 4]), '[null,null,null,3,4]');
+    assertEquals('Empty middle', serialize([0, , 2]), '[0,null,2]');
+    assertEquals('Empty middle', serialize([0, , , 3]), '[0,null,null,3]');
+    assertEquals('Empty end', serialize(withLength([0, 1, 2], 4)), '[0,1,2]');
+    assertEquals(
+        'Empty start, middle and end', serialize([, , 2, , 4, null]),
+        '[null,null,2,null,4]');
+    assertEquals('All elements empty', serialize(withLength([], 3)), '[]');
+    assertEquals(
+        'Nested', serialize([, 1, [, 1, [, 1]]]), '[null,1,[null,1,[null,1]]]');
+  },
+});

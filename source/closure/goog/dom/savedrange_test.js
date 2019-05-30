@@ -12,42 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.SavedRangeTest');
-goog.setTestOnly('goog.dom.SavedRangeTest');
+goog.module('goog.dom.SavedRangeTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.Range');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const Range = goog.require('goog.dom.Range');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-function testSaved() {
-  var node = goog.dom.getElement('test1');
-  var range = goog.dom.Range.createFromNodeContents(node);
-  var savedRange = range.saveUsingDom();
+testSuite({
+  testSaved() {
+    const node = dom.getElement('test1');
+    let range = Range.createFromNodeContents(node);
+    const savedRange = range.saveUsingDom();
 
-  range = savedRange.restore(true);
-  assertEquals('Restored range should select "Text"', 'Text', range.getText());
-  assertFalse('Restored range should not be reversed.', range.isReversed());
-  assertFalse(
-      'Range should not have disposed itself.', savedRange.isDisposed());
+    range = savedRange.restore(true);
+    assertEquals(
+        'Restored range should select "Text"', 'Text', range.getText());
+    assertFalse('Restored range should not be reversed.', range.isReversed());
+    assertFalse(
+        'Range should not have disposed itself.', savedRange.isDisposed());
 
-  goog.dom.Range.clearSelection();
-  assertFalse(goog.dom.Range.hasSelection(window));
+    Range.clearSelection();
+    assertFalse(Range.hasSelection(window));
 
-  range = savedRange.restore();
-  assertTrue('Range should have auto-disposed.', savedRange.isDisposed());
-  assertEquals('Restored range should select "Text"', 'Text', range.getText());
-  assertFalse('Restored range should not be reversed.', range.isReversed());
-}
+    range = savedRange.restore();
+    assertTrue('Range should have auto-disposed.', savedRange.isDisposed());
+    assertEquals(
+        'Restored range should select "Text"', 'Text', range.getText());
+    assertFalse('Restored range should not be reversed.', range.isReversed());
+  },
 
-function testReversedSave() {
-  var node = goog.dom.getElement('test1').firstChild;
-  var range = goog.dom.Range.createFromNodes(node, 4, node, 0);
-  var savedRange = range.saveUsingDom();
+  testReversedSave() {
+    const node = dom.getElement('test1').firstChild;
+    let range = Range.createFromNodes(node, 4, node, 0);
+    const savedRange = range.saveUsingDom();
 
-  range = savedRange.restore();
-  assertEquals('Restored range should select "Text"', 'Text', range.getText());
-  if (!goog.userAgent.IE) {
-    assertTrue('Restored range should be reversed.', range.isReversed());
-  }
-}
+    range = savedRange.restore();
+    assertEquals(
+        'Restored range should select "Text"', 'Text', range.getText());
+    if (!userAgent.IE) {
+      assertTrue('Restored range should be reversed.', range.isReversed());
+    }
+  },
+});

@@ -12,86 +12,100 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.debug.ErrorTest');
-goog.setTestOnly('goog.debug.ErrorTest');
+goog.module('goog.debug.ErrorTest');
+goog.setTestOnly();
 
-goog.require('goog.debug.Error');
-goog.require('goog.testing.ExpectedFailures');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
+const DebugError = goog.require('goog.debug.Error');
+const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
+const product = goog.require('goog.userAgent.product');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var expectedFailures;
+let expectedFailures;
 
-function setUpPage() {
-  expectedFailures = new goog.testing.ExpectedFailures();
-}
+testSuite({
+  setUpPage() {
+    expectedFailures = new ExpectedFailures();
+  },
 
-function tearDown() {
-  expectedFailures.handleTearDown();
-}
+  tearDown() {
+    expectedFailures.handleTearDown();
+  },
 
-function testError() {
-  function xxxxx() { yyyyy(); }
-  function yyyyy() { zzzzz(); }
-  function zzzzz() { throw new goog.debug.Error('testing'); }
-
-  var stack = null, message = null;
-  try {
-    xxxxx();
-  } catch (e) {
-    message = e.message;
-    if (e.stack) {
-      stack = e.stack.split('\n');
+  testError() {
+    function xxxxx() {
+      yyyyy();
     }
-  }
-
-  assertEquals('Message property should be set', 'testing', message);
-
-  expectedFailures.expectFailureFor(
-      (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) ||
-          goog.userAgent.product.SAFARI ||
-          (goog.userAgent.product.CHROME &&
-           !goog.userAgent.isVersionOrHigher(532)),
-      'error.stack is not widely supported');
-
-  try {
-    assertNotNull(stack);
-
-    if (goog.userAgent.product.FIREFOX &&
-        goog.userAgent.isVersionOrHigher('2.0')) {
-      // Firefox 4 and greater does not have the first line that says
-      // 'Error'. So we insert a dummy line to simplify the test.
-      stack.splice(0, 0, 'Error');
+    function yyyyy() {
+      zzzzz();
+    }
+    function zzzzz() {
+      throw new DebugError('testing');
     }
 
-    // If the stack trace came from a synthetic Error object created
-    // inside the goog.debug.Error constructor, it will have an extra frame
-    // at stack[1]. If it came from captureStackTrace or was attached
-    // by IE when the error was caught, it will not.
-    if (!Error.captureStackTrace && !goog.userAgent.IE) {
-      stack.splice(1, 1);  // Remove stack[1].
+    let message = null;
+    let stack = null;
+
+    try {
+      xxxxx();
+    } catch (e) {
+      message = e.message;
+      if (e.stack) {
+        stack = e.stack.split('\n');
+      }
     }
 
-    assertContains('1st line of stack should have "Error"', 'Error', stack[0]);
-    assertContains('2nd line of stack should have "zzzzz"', 'zzzzz', stack[1]);
-    assertContains('3rd line of stack should have "yyyyy"', 'yyyyy', stack[2]);
-    assertContains('4th line of stack should have "xxxxx"', 'xxxxx', stack[3]);
-  } catch (e) {
-    expectedFailures.handleException(e);
-  }
-}
+    assertEquals('Message property should be set', 'testing', message);
 
-function testInheriting() {
-  function MyError() { goog.debug.Error.call(this); }
-  goog.inherits(MyError, goog.debug.Error);
-  MyError.prototype.message = 'My custom error';
+    expectedFailures.expectFailureFor(
+        (userAgent.IE && !userAgent.isVersionOrHigher('10')) ||
+            product.SAFARI ||
+            (product.CHROME && !userAgent.isVersionOrHigher(532)),
+        'error.stack is not widely supported');
 
-  var message = null;
-  try {
-    throw new MyError();
-  } catch (e) {
-    message = e.message;
-  }
-  assertEquals('My custom error', message);
-}
+    try {
+      assertNotNull(stack);
+
+      if (product.FIREFOX && userAgent.isVersionOrHigher('2.0')) {
+        // Firefox 4 and greater does not have the first line that says
+        // 'Error'. So we insert a dummy line to simplify the test.
+        stack.splice(0, 0, 'Error');
+      }
+
+      // If the stack trace came from a synthetic Error object created
+      // inside the goog.debug.Error constructor, it will have an extra frame
+      // at stack[1]. If it came from captureStackTrace or was attached
+      // by IE when the error was caught, it will not.
+      if (!Error.captureStackTrace && !userAgent.IE) {
+        stack.splice(1, 1);  // Remove stack[1].
+      }
+
+      assertContains(
+          '1st line of stack should have "Error"', 'Error', stack[0]);
+      assertContains(
+          '2nd line of stack should have "zzzzz"', 'zzzzz', stack[1]);
+      assertContains(
+          '3rd line of stack should have "yyyyy"', 'yyyyy', stack[2]);
+      assertContains(
+          '4th line of stack should have "xxxxx"', 'xxxxx', stack[3]);
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  },
+
+  testInheriting() {
+    function MyError() {
+      DebugError.call(this);
+    }
+    goog.inherits(MyError, DebugError);
+    MyError.prototype.message = 'My custom error';
+
+    let message = null;
+    try {
+      throw new MyError();
+    } catch (e) {
+      message = e.message;
+    }
+    assertEquals('My custom error', message);
+  },
+});

@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.debug.FpsDisplayTest');
-goog.setTestOnly('goog.debug.FpsDisplayTest');
+goog.module('goog.debug.FpsDisplayTest');
+goog.setTestOnly();
 
-goog.require('goog.Timer');
-goog.require('goog.debug.FpsDisplay');
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.jsunit');
+const FpsDisplay = goog.require('goog.debug.FpsDisplay');
+const TestCase = goog.require('goog.testing.TestCase');
+const Timer = goog.require('goog.Timer');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var fpsDisplay;
+let fpsDisplay;
 
 function shouldRunTests() {
   // Disable tests when being run as a part of open-source repo as the test
@@ -28,27 +28,29 @@ function shouldRunTests() {
   return !(/closure\/goog\/ui/.test(location.pathname));
 }
 
-function setUpPage() {
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 5000;  // 5s
-}
+testSuite({
+  setUpPage() {
+    TestCase.getActiveTestCase().promiseTimeout = 5000;  // 5s
+  },
 
-function setUp() {
-  fpsDisplay = new goog.debug.FpsDisplay();
-}
+  setUp() {
+    fpsDisplay = new FpsDisplay();
+  },
 
-function tearDown() {
-  goog.dispose(fpsDisplay);
-}
+  tearDown() {
+    goog.dispose(fpsDisplay);
+  },
 
-function testRendering() {
-  fpsDisplay.render();
+  testRendering() {
+    fpsDisplay.render();
 
-  var elem = fpsDisplay.getElement();
-  assertHTMLEquals('', elem.innerHTML);
+    const elem = fpsDisplay.getElement();
+    assertHTMLEquals('', elem.innerHTML);
 
-  return goog.Timer.promise(2000).then(function() {
-    var fps = parseInt(elem.innerHTML, 10);
-    assertTrue('FPS of ' + fps + ' should be non-negative', fps >= 0);
-    assertTrue('FPS of ' + fps + ' too big', fps < 1000);
-  });
-}
+    return Timer.promise(2000).then(() => {
+      const fps = parseInt(elem.innerHTML, 10);
+      assertTrue(`FPS of ${fps} should be non-negative`, fps >= 0);
+      assertTrue(`FPS of ${fps} too big`, fps < 1000);
+    });
+  },
+});

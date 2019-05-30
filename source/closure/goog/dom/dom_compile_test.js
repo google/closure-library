@@ -12,48 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.DomCompileTest');
+goog.module('goog.dom.DomCompileTest');
 goog.setTestOnly();
 
+const TagName = goog.require('goog.dom.TagName');
+const googDom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.testing.jsunit');
+testSuite({
+  /** Checks types with TagName. */
+  testDomTagNameTypes() {
+    /** @type {!HTMLAnchorElement} */
+    const a = googDom.createDom(TagName.A);
 
+    /** @type {!HTMLAnchorElement} */
+    const el = googDom.createElement(TagName.A);
 
-/** Checks types with goog.dom.TagName. */
-function testDomTagNameTypes() {
-  /** @type {!HTMLAnchorElement} */
-  var a = goog.dom.createDom(goog.dom.TagName.A);
+    /** @type {!IArrayLike<!HTMLAnchorElement>} */
+    const anchors = googDom.getElementsByTagNameAndClass(TagName.A);
 
-  /** @type {!HTMLAnchorElement} */
-  var el = goog.dom.createElement(goog.dom.TagName.A);
+    // Check that goog.dom.HtmlElement is assignable to HTMLElement.
+    /** @type {!HTMLElement} */
+    const b = googDom.createElement(TagName.B);
 
-  /** @type {!IArrayLike<!HTMLAnchorElement>} */
-  var anchors = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.A);
+    /** @type {?HTMLAnchorElement} */
+    const anchor = googDom.getElementByTagNameAndClass(TagName.A);
+  },
 
-  // Check that goog.dom.HtmlElement is assignable to HTMLElement.
-  /** @type {!HTMLElement} */
-  var b = goog.dom.createElement(goog.dom.TagName.B);
+  /** Checks types with TagName. */
+  testDomHelperTagNameTypes() {
+    const dom = googDom.getDomHelper();
 
-  /** @type {?HTMLAnchorElement} */
-  var anchor = goog.dom.getElementByTagNameAndClass(goog.dom.TagName.A);
-}
+    /** @type {!HTMLAnchorElement} */
+    const a = dom.createDom(TagName.A);
 
+    /** @type {!HTMLAnchorElement} */
+    const el = dom.createElement(TagName.A);
 
-/** Checks types with goog.dom.TagName. */
-function testDomHelperTagNameTypes() {
-  var dom = goog.dom.getDomHelper();
+    /** @type {!IArrayLike<!HTMLAnchorElement>} */
+    const anchors = dom.getElementsByTagNameAndClass(TagName.A);
 
-  /** @type {!HTMLAnchorElement} */
-  var a = dom.createDom(goog.dom.TagName.A);
-
-  /** @type {!HTMLAnchorElement} */
-  var el = dom.createElement(goog.dom.TagName.A);
-
-  /** @type {!IArrayLike<!HTMLAnchorElement>} */
-  var anchors = dom.getElementsByTagNameAndClass(goog.dom.TagName.A);
-
-  /** @type {?HTMLAnchorElement} */
-  var anchor = dom.getElementByTagNameAndClass(goog.dom.TagName.A);
-}
+    /** @type {?HTMLAnchorElement} */
+    const anchor = dom.getElementByTagNameAndClass(TagName.A);
+  },
+});

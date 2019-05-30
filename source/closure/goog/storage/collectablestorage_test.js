@@ -12,27 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.storage.CollectableStorageTest');
-goog.setTestOnly('goog.storage.CollectableStorageTest');
+goog.module('goog.storage.CollectableStorageTest');
+goog.setTestOnly();
 
-goog.require('goog.storage.CollectableStorage');
-goog.require('goog.storage.collectableStorageTester');
-goog.require('goog.storage.storageTester');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.storage.FakeMechanism');
+const CollectableStorage = goog.require('goog.storage.CollectableStorage');
+const FakeMechanism = goog.require('goog.testing.storage.FakeMechanism');
+const MockClock = goog.require('goog.testing.MockClock');
+const collectableStorageTester = goog.require('goog.storage.collectableStorageTester');
+const storageTester = goog.require('goog.storage.storageTester');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testBasicOperations() {
-  var mechanism = new goog.testing.storage.FakeMechanism();
-  var storage = new goog.storage.CollectableStorage(mechanism);
-  goog.storage.storageTester.runBasicTests(storage);
-}
+testSuite({
+  testBasicOperations() {
+    const mechanism = new FakeMechanism();
+    const storage = new CollectableStorage(mechanism);
+    storageTester.runBasicTests(storage);
+  },
 
-function testExpiredKeyCollection() {
-  var mechanism = new goog.testing.storage.FakeMechanism();
-  var clock = new goog.testing.MockClock(true);
-  var storage = new goog.storage.CollectableStorage(mechanism);
+  testExpiredKeyCollection() {
+    const mechanism = new FakeMechanism();
+    const clock = new MockClock(true);
+    const storage = new CollectableStorage(mechanism);
 
-  goog.storage.collectableStorageTester.runBasicTests(
-      mechanism, clock, storage);
-}
+    collectableStorageTester.runBasicTests(mechanism, clock, storage);
+  },
+});

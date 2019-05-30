@@ -12,55 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.graphics.CanvasGraphicsTest');
-goog.setTestOnly('goog.graphics.CanvasGraphicsTest');
+goog.module('goog.graphics.CanvasGraphicsTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.graphics.CanvasGraphics');
-goog.require('goog.graphics.SolidFill');
-goog.require('goog.graphics.Stroke');
-goog.require('goog.testing.jsunit');
+const CanvasGraphics = goog.require('goog.graphics.CanvasGraphics');
+const SolidFill = goog.require('goog.graphics.SolidFill');
+const Stroke = goog.require('goog.graphics.Stroke');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
-
-var graphics;
+let graphics;
 
 function shouldRunTests() {
-  graphics = new goog.graphics.CanvasGraphics(100, 100);
+  graphics = new CanvasGraphics(100, 100);
   graphics.createDom();
   return graphics.canvas_.getContext;
 }
 
-function setUp() {
-  graphics = new goog.graphics.CanvasGraphics(100, 100);
-  graphics.createDom();
-  goog.dom.getElement('root').appendChild(graphics.getElement());
-  graphics.enterDocument();
-}
+testSuite({
+  setUp() {
+    graphics = new CanvasGraphics(100, 100);
+    graphics.createDom();
+    dom.getElement('root').appendChild(graphics.getElement());
+    graphics.enterDocument();
+  },
 
-function tearDown() {
-  graphics.dispose();
-  goog.dom.removeNode(graphics.getElement());
-}
+  tearDown() {
+    graphics.dispose();
+    dom.removeNode(graphics.getElement());
+  },
 
-function testDrawRemoveRect() {
-  var fill = new goog.graphics.SolidFill('red');
-  var stroke = new goog.graphics.Stroke('blue');
-  var element = graphics.drawRect(10, 10, 80, 80, stroke, fill);
-  assertEquals(1, graphics.canvasElement.children_.length);
-  graphics.removeElement(element);
-  assertEquals(0, graphics.canvasElement.children_.length);
-}
+  testDrawRemoveRect() {
+    const fill = new SolidFill('red');
+    const stroke = new Stroke('blue');
+    const element = graphics.drawRect(10, 10, 80, 80, stroke, fill);
+    assertEquals(1, graphics.canvasElement.children_.length);
+    graphics.removeElement(element);
+    assertEquals(0, graphics.canvasElement.children_.length);
+  },
 
-function testDrawRemoveNestedRect() {
-  var fill = new goog.graphics.SolidFill('red');
-  var stroke = new goog.graphics.Stroke('blue');
-  var group = graphics.createGroup();
-  assertEquals(1, graphics.canvasElement.children_.length);
-  assertEquals(0, graphics.canvasElement.children_[0].children_.length);
-  var element = graphics.drawRect(10, 10, 80, 80, stroke, fill, group);
-  assertEquals(1, graphics.canvasElement.children_.length);
-  assertEquals(1, graphics.canvasElement.children_[0].children_.length);
-  graphics.removeElement(element);
-  assertEquals(1, graphics.canvasElement.children_.length);
-  assertEquals(0, graphics.canvasElement.children_[0].children_.length);
-}
+  testDrawRemoveNestedRect() {
+    const fill = new SolidFill('red');
+    const stroke = new Stroke('blue');
+    const group = graphics.createGroup();
+    assertEquals(1, graphics.canvasElement.children_.length);
+    assertEquals(0, graphics.canvasElement.children_[0].children_.length);
+    const element = graphics.drawRect(10, 10, 80, 80, stroke, fill, group);
+    assertEquals(1, graphics.canvasElement.children_.length);
+    assertEquals(1, graphics.canvasElement.children_[0].children_.length);
+    graphics.removeElement(element);
+    assertEquals(1, graphics.canvasElement.children_.length);
+    assertEquals(0, graphics.canvasElement.children_[0].children_.length);
+  },
+});

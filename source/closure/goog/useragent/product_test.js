@@ -249,8 +249,15 @@ function testChrome() {
           'AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.79 ' +
           'Mobile/14D27 Safari/602.1',
       versions: [
-        {num: '56.1.2924.79', truth: false},
-        {num: '56.0.2924.79', truth: true}
+        {num: '56.1.2924.79', truth: false}, {num: '56.0.2924.79', truth: true}
+      ]
+    },
+    {
+      ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+          '(KHTML, like Gecko) Chrome/74.0.3729.48 Safari/537.36 ' +
+          'Edg/74.1.96.24',
+      versions: [
+        {num: '74.1.3729.48', truth: false}, {num: '74.0.3729.48', truth: true}
       ]
     }
   ];

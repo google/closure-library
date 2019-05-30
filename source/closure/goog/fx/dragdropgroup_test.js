@@ -12,47 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.fx.DragDropGroupTest');
-goog.setTestOnly('goog.fx.DragDropGroupTest');
+goog.module('goog.fx.DragDropGroupTest');
+goog.setTestOnly();
 
-goog.require('goog.events');
-goog.require('goog.fx.DragDropGroup');
-goog.require('goog.testing.jsunit');
+const DragDropGroup = goog.require('goog.fx.DragDropGroup');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var s1;
-var s2;
-var t1;
-var t2;
+let s1;
+let s2;
+let t1;
+let t2;
 
-var source = null;
-var target = null;
-
-function setUpPage() {
-  s1 = document.getElementById('s1');
-  s2 = document.getElementById('s2');
-  t1 = document.getElementById('t1');
-  t2 = document.getElementById('t2');
-}
-
-
-function setUp() {
-  source = new goog.fx.DragDropGroup();
-  source.setSourceClass('ss');
-  source.setTargetClass('st');
-
-  target = new goog.fx.DragDropGroup();
-  target.setSourceClass('ts');
-  target.setTargetClass('tt');
-
-  source.addTarget(target);
-}
-
-
-function tearDown() {
-  source.removeItems();
-  target.removeItems();
-}
-
+let source = null;
+let target = null;
 
 function addElementsToGroups() {
   source.addItem(s1);
@@ -61,169 +34,190 @@ function addElementsToGroups() {
   target.addItem(t2);
 }
 
+testSuite({
+  setUpPage() {
+    s1 = document.getElementById('s1');
+    s2 = document.getElementById('s2');
+    t1 = document.getElementById('t1');
+    t2 = document.getElementById('t2');
+  },
 
-function testAddItemsBeforeInit() {
-  addElementsToGroups();
-  source.init();
-  target.init();
+  setUp() {
+    source = new DragDropGroup();
+    source.setSourceClass('ss');
+    source.setTargetClass('st');
 
-  assertEquals(2, source.items_.length);
-  assertEquals(2, target.items_.length);
+    target = new DragDropGroup();
+    target.setSourceClass('ts');
+    target.setTargetClass('tt');
 
-  assertEquals('s ss', s1.className);
-  assertEquals('s ss', s2.className);
-  assertEquals('t tt', t1.className);
-  assertEquals('t tt', t2.className);
+    source.addTarget(target);
+  },
 
-  assertTrue(goog.events.hasListener(s1));
-  assertTrue(goog.events.hasListener(s2));
-  assertFalse(goog.events.hasListener(t1));
-  assertFalse(goog.events.hasListener(t2));
-}
+  tearDown() {
+    source.removeItems();
+    target.removeItems();
+  },
 
-function testAddItemsAfterInit() {
-  source.init();
-  target.init();
-  addElementsToGroups();
+  testAddItemsBeforeInit() {
+    addElementsToGroups();
+    source.init();
+    target.init();
 
-  assertEquals(2, source.items_.length);
-  assertEquals(2, target.items_.length);
+    assertEquals(2, source.items_.length);
+    assertEquals(2, target.items_.length);
 
-  assertEquals('s ss', s1.className);
-  assertEquals('s ss', s2.className);
-  assertEquals('t tt', t1.className);
-  assertEquals('t tt', t2.className);
+    assertEquals('s ss', s1.className);
+    assertEquals('s ss', s2.className);
+    assertEquals('t tt', t1.className);
+    assertEquals('t tt', t2.className);
 
-  assertTrue(goog.events.hasListener(s1));
-  assertTrue(goog.events.hasListener(s2));
-  assertFalse(goog.events.hasListener(t1));
-  assertFalse(goog.events.hasListener(t2));
-}
+    assertTrue(events.hasListener(s1));
+    assertTrue(events.hasListener(s2));
+    assertFalse(events.hasListener(t1));
+    assertFalse(events.hasListener(t2));
+  },
 
+  testAddItemsAfterInit() {
+    source.init();
+    target.init();
+    addElementsToGroups();
 
-function testRemoveItems() {
-  source.init();
-  target.init();
-  addElementsToGroups();
+    assertEquals(2, source.items_.length);
+    assertEquals(2, target.items_.length);
 
-  assertEquals(2, source.items_.length);
-  assertEquals(s1, source.items_[0].element);
-  assertEquals(s2, source.items_[1].element);
+    assertEquals('s ss', s1.className);
+    assertEquals('s ss', s2.className);
+    assertEquals('t tt', t1.className);
+    assertEquals('t tt', t2.className);
 
-  assertEquals('s ss', s1.className);
-  assertEquals('s ss', s2.className);
-  assertTrue(goog.events.hasListener(s1));
-  assertTrue(goog.events.hasListener(s2));
+    assertTrue(events.hasListener(s1));
+    assertTrue(events.hasListener(s2));
+    assertFalse(events.hasListener(t1));
+    assertFalse(events.hasListener(t2));
+  },
 
-  source.removeItems();
+  testRemoveItems() {
+    source.init();
+    target.init();
+    addElementsToGroups();
 
-  assertEquals(0, source.items_.length);
+    assertEquals(2, source.items_.length);
+    assertEquals(s1, source.items_[0].element);
+    assertEquals(s2, source.items_[1].element);
 
-  assertEquals('s', s1.className);
-  assertEquals('s', s2.className);
-  assertFalse(goog.events.hasListener(s1));
-  assertFalse(goog.events.hasListener(s2));
-}
+    assertEquals('s ss', s1.className);
+    assertEquals('s ss', s2.className);
+    assertTrue(events.hasListener(s1));
+    assertTrue(events.hasListener(s2));
 
-function testRemoveSourceItem1() {
-  source.init();
-  target.init();
-  addElementsToGroups();
+    source.removeItems();
 
-  assertEquals(2, source.items_.length);
-  assertEquals(s1, source.items_[0].element);
-  assertEquals(s2, source.items_[1].element);
+    assertEquals(0, source.items_.length);
 
-  assertEquals('s ss', s1.className);
-  assertEquals('s ss', s2.className);
-  assertTrue(goog.events.hasListener(s1));
-  assertTrue(goog.events.hasListener(s2));
+    assertEquals('s', s1.className);
+    assertEquals('s', s2.className);
+    assertFalse(events.hasListener(s1));
+    assertFalse(events.hasListener(s2));
+  },
 
-  source.removeItem(s1);
+  testRemoveSourceItem1() {
+    source.init();
+    target.init();
+    addElementsToGroups();
 
-  assertEquals(1, source.items_.length);
-  assertEquals(s2, source.items_[0].element);
+    assertEquals(2, source.items_.length);
+    assertEquals(s1, source.items_[0].element);
+    assertEquals(s2, source.items_[1].element);
 
-  assertEquals('s', s1.className);
-  assertEquals('s ss', s2.className);
-  assertFalse(goog.events.hasListener(s1));
-  assertTrue(goog.events.hasListener(s2));
-}
+    assertEquals('s ss', s1.className);
+    assertEquals('s ss', s2.className);
+    assertTrue(events.hasListener(s1));
+    assertTrue(events.hasListener(s2));
 
+    source.removeItem(s1);
 
-function testRemoveSourceItem2() {
-  source.init();
-  target.init();
-  addElementsToGroups();
+    assertEquals(1, source.items_.length);
+    assertEquals(s2, source.items_[0].element);
 
-  assertEquals(2, source.items_.length);
-  assertEquals(s1, source.items_[0].element);
-  assertEquals(s2, source.items_[1].element);
+    assertEquals('s', s1.className);
+    assertEquals('s ss', s2.className);
+    assertFalse(events.hasListener(s1));
+    assertTrue(events.hasListener(s2));
+  },
 
-  assertEquals('s ss', s1.className);
-  assertEquals('s ss', s2.className);
-  assertTrue(goog.events.hasListener(s1));
-  assertTrue(goog.events.hasListener(s2));
+  testRemoveSourceItem2() {
+    source.init();
+    target.init();
+    addElementsToGroups();
 
-  source.removeItem(s2);
+    assertEquals(2, source.items_.length);
+    assertEquals(s1, source.items_[0].element);
+    assertEquals(s2, source.items_[1].element);
 
-  assertEquals(1, source.items_.length);
-  assertEquals(s1, source.items_[0].element);
+    assertEquals('s ss', s1.className);
+    assertEquals('s ss', s2.className);
+    assertTrue(events.hasListener(s1));
+    assertTrue(events.hasListener(s2));
 
-  assertEquals('s ss', s1.className);
-  assertEquals('s', s2.className);
-  assertTrue(goog.events.hasListener(s1));
-  assertFalse(goog.events.hasListener(s2));
-}
+    source.removeItem(s2);
 
+    assertEquals(1, source.items_.length);
+    assertEquals(s1, source.items_[0].element);
 
-function testRemoveTargetItem1() {
-  source.init();
-  target.init();
-  addElementsToGroups();
+    assertEquals('s ss', s1.className);
+    assertEquals('s', s2.className);
+    assertTrue(events.hasListener(s1));
+    assertFalse(events.hasListener(s2));
+  },
 
-  assertEquals(2, target.items_.length);
-  assertEquals(t1, target.items_[0].element);
-  assertEquals(t2, target.items_[1].element);
+  testRemoveTargetItem1() {
+    source.init();
+    target.init();
+    addElementsToGroups();
 
-  assertEquals('t tt', t1.className);
-  assertEquals('t tt', t2.className);
-  assertFalse(goog.events.hasListener(t1));
-  assertFalse(goog.events.hasListener(t2));
+    assertEquals(2, target.items_.length);
+    assertEquals(t1, target.items_[0].element);
+    assertEquals(t2, target.items_[1].element);
 
-  target.removeItem(t1);
+    assertEquals('t tt', t1.className);
+    assertEquals('t tt', t2.className);
+    assertFalse(events.hasListener(t1));
+    assertFalse(events.hasListener(t2));
 
-  assertEquals(1, target.items_.length);
-  assertEquals(t2, target.items_[0].element);
+    target.removeItem(t1);
 
-  assertEquals('t', t1.className);
-  assertEquals('t tt', t2.className);
-  assertFalse(goog.events.hasListener(t1));
-  assertFalse(goog.events.hasListener(t2));
-}
+    assertEquals(1, target.items_.length);
+    assertEquals(t2, target.items_[0].element);
 
+    assertEquals('t', t1.className);
+    assertEquals('t tt', t2.className);
+    assertFalse(events.hasListener(t1));
+    assertFalse(events.hasListener(t2));
+  },
 
-function testRemoveTargetItem2() {
-  source.init();
-  target.init();
-  addElementsToGroups();
+  testRemoveTargetItem2() {
+    source.init();
+    target.init();
+    addElementsToGroups();
 
-  assertEquals(2, target.items_.length);
-  assertEquals(t1, target.items_[0].element);
-  assertEquals(t2, target.items_[1].element);
+    assertEquals(2, target.items_.length);
+    assertEquals(t1, target.items_[0].element);
+    assertEquals(t2, target.items_[1].element);
 
-  assertEquals('t tt', t1.className);
-  assertEquals('t tt', t2.className);
-  assertFalse(goog.events.hasListener(t1));
-  assertFalse(goog.events.hasListener(t2));
+    assertEquals('t tt', t1.className);
+    assertEquals('t tt', t2.className);
+    assertFalse(events.hasListener(t1));
+    assertFalse(events.hasListener(t2));
 
-  target.removeItem(t2);
+    target.removeItem(t2);
 
-  assertEquals(1, target.items_.length);
-  assertEquals(t1, target.items_[0].element);
+    assertEquals(1, target.items_.length);
+    assertEquals(t1, target.items_[0].element);
 
-  assertEquals('t tt', t1.className);
-  assertEquals('t', t2.className);
-  assertFalse(goog.events.hasListener(t1));
-  assertFalse(goog.events.hasListener(t2));
-}
+    assertEquals('t tt', t1.className);
+    assertEquals('t', t2.className);
+    assertFalse(events.hasListener(t1));
+    assertFalse(events.hasListener(t2));
+  },
+});

@@ -12,205 +12,215 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.async.MockControlTest');
-goog.setTestOnly('goog.testing.async.MockControlTest');
+goog.module('goog.testing.async.MockControlTest');
+goog.setTestOnly();
 
-goog.require('goog.async.Deferred');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.async.MockControl');
-goog.require('goog.testing.jsunit');
+const AsyncMockControl = goog.require('goog.testing.async.MockControl');
+const Deferred = goog.require('goog.async.Deferred');
+const MockControl = goog.require('goog.testing.MockControl');
+const TestCase = goog.require('goog.testing.TestCase');
+const asserts = goog.require('goog.testing.asserts');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var mockControl;
-var asyncMockControl;
+let mockControl;
+let asyncMockControl;
 
-var mockControl2;
-var asyncMockControl2;
-
-function setUp() {
-  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-
-  mockControl = new goog.testing.MockControl();
-  asyncMockControl = new goog.testing.async.MockControl(mockControl);
-
-  // We need two of these for the tests where we need to verify our meta-test
-  // assertions without verifying our tested assertions.
-  mockControl2 = new goog.testing.MockControl();
-  asyncMockControl2 = new goog.testing.async.MockControl(mockControl2);
-}
+let mockControl2;
+let asyncMockControl2;
 
 function assertVerifyFails() {
-  assertThrowsJsUnitException(function() { mockControl.$verifyAll(); });
-}
-
-function testCreateCallbackMockFailure() {
-  asyncMockControl.createCallbackMock('failingCallbackMock', function() {});
-  assertVerifyFails();
-}
-
-function testCreateCallbackMockSuccess() {
-  var callback = asyncMockControl.createCallbackMock(
-      'succeedingCallbackMock', function() {});
-  callback();
-  mockControl.$verifyAll();
-}
-
-function testCreateCallbackMockSuccessWithArg() {
-  var callback = asyncMockControl.createCallbackMock(
-      'succeedingCallbackMockWithArg',
-      asyncMockControl.createCallbackMock(
-          'metaCallbackMock', function(val) { assertEquals(10, val); }));
-  callback(10);
-  mockControl.$verifyAll();
-}
-
-function testCreateCallbackMockSuccessWithArgs() {
-  var callback = asyncMockControl.createCallbackMock(
-      'succeedingCallbackMockWithArgs',
-      asyncMockControl.createCallbackMock(
-          'metaCallbackMock', function(val1, val2, val3) {
-            assertEquals(10, val1);
-            assertEquals('foo', val2);
-            assertObjectEquals({foo: 'bar'}, val3);
-          }));
-  callback(10, 'foo', {foo: 'bar'});
-  mockControl.$verifyAll();
-}
-
-function testAsyncAssertEqualsFailureNeverCalled() {
-  asyncMockControl.asyncAssertEquals('never called', 12);
-  assertVerifyFails();
-}
-
-function testAsyncAssertEqualsFailureNumberOfArgs() {
-  assertThrowsJsUnitException(function() {
-    asyncMockControl.asyncAssertEquals('wrong number of args', 12)();
+  assertThrowsJsUnitException(() => {
+    mockControl.$verifyAll();
   });
 }
 
-function testAsyncAssertEqualsFailureOneArg() {
-  assertThrowsJsUnitException(function() {
-    asyncMockControl.asyncAssertEquals('wrong arg value', 12)(13);
-  });
-}
+testSuite({
+  setUp() {
+    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
+    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
 
-function testAsyncAssertEqualsFailureThreeArgs() {
-  assertThrowsJsUnitException(function() {
-    asyncMockControl.asyncAssertEquals('wrong arg values', 1, 2, 15)(2, 2, 15);
-  });
-}
+    mockControl = new MockControl();
+    asyncMockControl = new AsyncMockControl(mockControl);
 
-function testAsyncAssertEqualsSuccessNoArgs() {
-  asyncMockControl.asyncAssertEquals('should be called')();
-  mockControl.$verifyAll();
-}
+    // We need two of these for the tests where we need to verify our meta-test
+    // assertions without verifying our tested assertions.
+    mockControl2 = new MockControl();
+    asyncMockControl2 = new AsyncMockControl(mockControl2);
+  },
 
-function testAsyncAssertEqualsSuccessThreeArgs() {
-  asyncMockControl.asyncAssertEquals('should have args', 1, 2, 3)(1, 2, 3);
-  mockControl.$verifyAll();
-}
+  testCreateCallbackMockFailure() {
+    asyncMockControl.createCallbackMock('failingCallbackMock', () => {});
+    assertVerifyFails();
+  },
 
-function testAssertDeferredErrorFailureNoError() {
-  var deferred = new goog.async.Deferred();
-  asyncMockControl.assertDeferredError(deferred, function() {});
-  assertVerifyFails();
-}
+  testCreateCallbackMockSuccess() {
+    const callback =
+        asyncMockControl.createCallbackMock('succeedingCallbackMock', () => {});
+    callback();
+    mockControl.$verifyAll();
+  },
 
-function testAssertDeferredErrorSuccess() {
-  var deferred = new goog.async.Deferred();
-  asyncMockControl.assertDeferredError(
-      deferred, function() { deferred.errback(new Error('FAIL')); });
-  mockControl.$verifyAll();
-}
+  testCreateCallbackMockSuccessWithArg() {
+    const callback = asyncMockControl.createCallbackMock(
+        'succeedingCallbackMockWithArg',
+        asyncMockControl.createCallbackMock('metaCallbackMock', (val) => {
+          assertEquals(10, val);
+        }));
+    callback(10);
+    mockControl.$verifyAll();
+  },
 
-function testAssertDeferredEqualsFailureActualDeferredNeverResolves() {
-  var actual = new goog.async.Deferred();
-  asyncMockControl.assertDeferredEquals('doesn\'t resolve', 12, actual);
-  assertVerifyFails();
-}
+  testCreateCallbackMockSuccessWithArgs() {
+    const callback = asyncMockControl.createCallbackMock(
+        'succeedingCallbackMockWithArgs',
+        asyncMockControl.createCallbackMock(
+            'metaCallbackMock', (val1, val2, val3) => {
+              assertEquals(10, val1);
+              assertEquals('foo', val2);
+              assertObjectEquals({foo: 'bar'}, val3);
+            }));
+    callback(10, 'foo', {foo: 'bar'});
+    mockControl.$verifyAll();
+  },
 
-function testAssertDeferredEqualsFailureActualDeferredNeverResolvesBoth() {
-  var actualDeferred = new goog.async.Deferred();
-  var expectedDeferred = new goog.async.Deferred();
-  expectedDeferred.callback(12);
-  asyncMockControl.assertDeferredEquals(
-      'doesn\'t resolve', expectedDeferred, actualDeferred);
-  assertVerifyFails();
-}
+  testAsyncAssertEqualsFailureNeverCalled() {
+    asyncMockControl.asyncAssertEquals('never called', 12);
+    assertVerifyFails();
+  },
 
-function testAssertDeferredEqualsFailureExpectedDeferredNeverResolves() {
-  var expected = new goog.async.Deferred();
-  asyncMockControl.assertDeferredEquals('doesn\'t resolve', expected, 12);
-  assertVerifyFails();
-}
+  testAsyncAssertEqualsFailureNumberOfArgs() {
+    assertThrowsJsUnitException(() => {
+      asyncMockControl.asyncAssertEquals('wrong number of args', 12)();
+    });
+  },
 
-function testAssertDeferredEqualsFailureExpectedDeferredNeverResolvesBoth() {
-  var actualDeferred = new goog.async.Deferred();
-  var expectedDeferred = new goog.async.Deferred();
-  actualDeferred.callback(12);
-  asyncMockControl.assertDeferredEquals(
-      'doesn\'t resolve', expectedDeferred, actualDeferred);
-  assertVerifyFails();
-}
+  testAsyncAssertEqualsFailureOneArg() {
+    assertThrowsJsUnitException(() => {
+      asyncMockControl.asyncAssertEquals('wrong arg value', 12)(13);
+    });
+  },
 
-function testAssertDeferredEqualsFailureWrongValueActualDeferred() {
-  var actual = new goog.async.Deferred();
-  asyncMockControl.assertDeferredEquals('doesn\'t resolve', 12, actual);
-  asyncMockControl2.assertDeferredError(
-      actual, function() { actual.callback(13); });
-  mockControl2.$verifyAll();
-}
+  testAsyncAssertEqualsFailureThreeArgs() {
+    assertThrowsJsUnitException(() => {
+      asyncMockControl.asyncAssertEquals('wrong arg values', 1, 2, 15)(
+          2, 2, 15);
+    });
+  },
 
-function testAssertDeferredEqualsFailureWrongValueExpectedDeferred() {
-  var expected = new goog.async.Deferred();
-  asyncMockControl.assertDeferredEquals('doesn\'t resolve', expected, 12);
-  asyncMockControl2.assertDeferredError(
-      expected, function() { expected.callback(13); });
-  mockControl2.$verifyAll();
-}
+  testAsyncAssertEqualsSuccessNoArgs() {
+    asyncMockControl.asyncAssertEquals('should be called')();
+    mockControl.$verifyAll();
+  },
 
-function testAssertDeferredEqualsFailureWongValueBothDeferred() {
-  var actualDeferred = new goog.async.Deferred();
-  var expectedDeferred = new goog.async.Deferred();
-  asyncMockControl.assertDeferredEquals(
-      'different values', expectedDeferred, actualDeferred);
-  expectedDeferred.callback(12);
-  asyncMockControl2.assertDeferredError(
-      actualDeferred, function() { actualDeferred.callback(13); });
-  assertVerifyFails();
-  mockControl2.$verifyAll();
-}
+  testAsyncAssertEqualsSuccessThreeArgs() {
+    asyncMockControl.asyncAssertEquals('should have args', 1, 2, 3)(1, 2, 3);
+    mockControl.$verifyAll();
+  },
 
-function testAssertDeferredEqualsFailureNeitherDeferredEverResolves() {
-  var actualDeferred = new goog.async.Deferred();
-  var expectedDeferred = new goog.async.Deferred();
-  asyncMockControl.assertDeferredEquals(
-      'doesn\'t resolve', expectedDeferred, actualDeferred);
-  assertVerifyFails();
-}
+  testAssertDeferredErrorFailureNoError() {
+    const deferred = new Deferred();
+    asyncMockControl.assertDeferredError(deferred, () => {});
+    assertVerifyFails();
+  },
 
-function testAssertDeferredEqualsSuccessActualDeferred() {
-  var actual = new goog.async.Deferred();
-  asyncMockControl.assertDeferredEquals('should succeed', 12, actual);
-  actual.callback(12);
-  mockControl.$verifyAll();
-}
+  testAssertDeferredErrorSuccess() {
+    const deferred = new Deferred();
+    asyncMockControl.assertDeferredError(deferred, () => {
+      deferred.errback(new Error('FAIL'));
+    });
+    mockControl.$verifyAll();
+  },
 
-function testAssertDeferredEqualsSuccessExpectedDeferred() {
-  var expected = new goog.async.Deferred();
-  asyncMockControl.assertDeferredEquals('should succeed', expected, 12);
-  expected.callback(12);
-  mockControl.$verifyAll();
-}
+  testAssertDeferredEqualsFailureActualDeferredNeverResolves() {
+    const actual = new Deferred();
+    asyncMockControl.assertDeferredEquals('doesn\'t resolve', 12, actual);
+    assertVerifyFails();
+  },
 
-function testAssertDeferredEqualsSuccessBothDeferred() {
-  var actualDeferred = new goog.async.Deferred();
-  var expectedDeferred = new goog.async.Deferred();
-  asyncMockControl.assertDeferredEquals(
-      'should succeed', expectedDeferred, actualDeferred);
-  expectedDeferred.callback(12);
-  actualDeferred.callback(12);
-  mockControl.$verifyAll();
-}
+  testAssertDeferredEqualsFailureActualDeferredNeverResolvesBoth() {
+    const actualDeferred = new Deferred();
+    const expectedDeferred = new Deferred();
+    expectedDeferred.callback(12);
+    asyncMockControl.assertDeferredEquals(
+        'doesn\'t resolve', expectedDeferred, actualDeferred);
+    assertVerifyFails();
+  },
+
+  testAssertDeferredEqualsFailureExpectedDeferredNeverResolves() {
+    const expected = new Deferred();
+    asyncMockControl.assertDeferredEquals('doesn\'t resolve', expected, 12);
+    assertVerifyFails();
+  },
+
+  testAssertDeferredEqualsFailureExpectedDeferredNeverResolvesBoth() {
+    const actualDeferred = new Deferred();
+    const expectedDeferred = new Deferred();
+    actualDeferred.callback(12);
+    asyncMockControl.assertDeferredEquals(
+        'doesn\'t resolve', expectedDeferred, actualDeferred);
+    assertVerifyFails();
+  },
+
+  testAssertDeferredEqualsFailureWrongValueActualDeferred() {
+    const actual = new Deferred();
+    asyncMockControl.assertDeferredEquals('doesn\'t resolve', 12, actual);
+    asyncMockControl2.assertDeferredError(actual, () => {
+      actual.callback(13);
+    });
+    mockControl2.$verifyAll();
+  },
+
+  testAssertDeferredEqualsFailureWrongValueExpectedDeferred() {
+    const expected = new Deferred();
+    asyncMockControl.assertDeferredEquals('doesn\'t resolve', expected, 12);
+    asyncMockControl2.assertDeferredError(expected, () => {
+      expected.callback(13);
+    });
+    mockControl2.$verifyAll();
+  },
+
+  testAssertDeferredEqualsFailureWongValueBothDeferred() {
+    const actualDeferred = new Deferred();
+    const expectedDeferred = new Deferred();
+    asyncMockControl.assertDeferredEquals(
+        'different values', expectedDeferred, actualDeferred);
+    expectedDeferred.callback(12);
+    asyncMockControl2.assertDeferredError(actualDeferred, () => {
+      actualDeferred.callback(13);
+    });
+    assertVerifyFails();
+    mockControl2.$verifyAll();
+  },
+
+  testAssertDeferredEqualsFailureNeitherDeferredEverResolves() {
+    const actualDeferred = new Deferred();
+    const expectedDeferred = new Deferred();
+    asyncMockControl.assertDeferredEquals(
+        'doesn\'t resolve', expectedDeferred, actualDeferred);
+    assertVerifyFails();
+  },
+
+  testAssertDeferredEqualsSuccessActualDeferred() {
+    const actual = new Deferred();
+    asyncMockControl.assertDeferredEquals('should succeed', 12, actual);
+    actual.callback(12);
+    mockControl.$verifyAll();
+  },
+
+  testAssertDeferredEqualsSuccessExpectedDeferred() {
+    const expected = new Deferred();
+    asyncMockControl.assertDeferredEquals('should succeed', expected, 12);
+    expected.callback(12);
+    mockControl.$verifyAll();
+  },
+
+  testAssertDeferredEqualsSuccessBothDeferred() {
+    const actualDeferred = new Deferred();
+    const expectedDeferred = new Deferred();
+    asyncMockControl.assertDeferredEquals(
+        'should succeed', expectedDeferred, actualDeferred);
+    expectedDeferred.callback(12);
+    actualDeferred.callback(12);
+    mockControl.$verifyAll();
+  },
+});

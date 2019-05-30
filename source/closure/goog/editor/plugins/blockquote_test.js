@@ -12,40 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.plugins.BlockquoteTest');
-goog.setTestOnly('goog.editor.plugins.BlockquoteTest');
+goog.module('goog.editor.plugins.BlockquoteTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.Range');
-goog.require('goog.dom.TagName');
-goog.require('goog.editor.BrowserFeature');
-goog.require('goog.editor.plugins.Blockquote');
-goog.require('goog.testing.editor.FieldMock');
-goog.require('goog.testing.editor.TestHelper');
-goog.require('goog.testing.jsunit');
+const Blockquote = goog.require('goog.editor.plugins.Blockquote');
+const BrowserFeature = goog.require('goog.editor.BrowserFeature');
+const FieldMock = goog.require('goog.testing.editor.FieldMock');
+const Range = goog.require('goog.dom.Range');
+const TagName = goog.require('goog.dom.TagName');
+const TestHelper = goog.require('goog.testing.editor.TestHelper');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var SPLIT = '<span id="split-point"></span>';
-var root, helper, field, plugin;
+const SPLIT = '<span id="split-point"></span>';
+let field;
+let helper;
+let plugin;
+let root;
 
-function setUp() {
-  root = goog.dom.getElement('root');
-  helper = new goog.testing.editor.TestHelper(root);
-  field = new goog.testing.editor.FieldMock();
-
-  helper.setUpEditableElement();
-}
-
-function tearDown() {
-  field.$verify();
-  helper.tearDownEditableElement();
-}
-
-function createPlugin(requireClassname, opt_paragraphMode) {
+function createPlugin(requireClassname, paragraphMode = undefined) {
   field.queryCommandValue('+defaultTag')
       .$anyTimes()
-      .$returns(opt_paragraphMode ? goog.dom.TagName.P : undefined);
+      .$returns(paragraphMode ? TagName.P : undefined);
 
-  plugin = new goog.editor.plugins.Blockquote(requireClassname);
+  plugin = new Blockquote(requireClassname);
   plugin.registerFieldObject(field);
   plugin.enable(field);
 }
@@ -55,173 +45,173 @@ function execCommand() {
 
   // With splitPoint we try to mimic the behavior of EnterHandler's
   // deleteCursorSelection_.
-  var splitPoint = goog.dom.getElement('split-point');
-  var position = goog.editor.BrowserFeature.HAS_W3C_RANGES ?
+  const splitPoint = dom.getElement('split-point');
+  const position = BrowserFeature.HAS_W3C_RANGES ?
       {node: splitPoint.nextSibling, offset: 0} :
       splitPoint;
-  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-    goog.dom.removeNode(splitPoint);
-    goog.dom.Range.createCaret(position.node, 0).select();
+  if (BrowserFeature.HAS_W3C_RANGES) {
+    dom.removeNode(splitPoint);
+    Range.createCaret(position.node, 0).select();
   } else {
-    goog.dom.Range.createCaret(position, 0).select();
+    Range.createCaret(position, 0).select();
   }
 
-  var result = plugin.execCommand(
-      goog.editor.plugins.Blockquote.SPLIT_COMMAND, position);
-  if (!goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-    goog.dom.removeNode(splitPoint);
+  const result = plugin.execCommand(Blockquote.SPLIT_COMMAND, position);
+  if (!BrowserFeature.HAS_W3C_RANGES) {
+    dom.removeNode(splitPoint);
   }
 
   return result;
 }
 
-function testSplitBlockquoteDoesNothingWhenNotInBlockquote() {
-  root.innerHTML = '<div>Test' + SPLIT + 'ing</div>';
+testSuite({
+  setUp() {
+    root = dom.getElement('root');
+    helper = new TestHelper(root);
+    field = new FieldMock();
 
-  createPlugin(false);
-  assertFalse(execCommand());
-  helper.assertHtmlMatches('<div>Testing</div>');
-}
+    helper.setUpEditableElement();
+  },
 
-function testSplitBlockquoteDoesNothingWhenNotInBlockquoteWithClass() {
-  root.innerHTML = '<blockquote>Test' + SPLIT + 'ing</blockquote>';
+  tearDown() {
+    field.$verify();
+    helper.tearDownEditableElement();
+  },
 
-  createPlugin(true);
-  assertFalse(execCommand());
-  helper.assertHtmlMatches('<blockquote>Testing</blockquote>');
-}
+  testSplitBlockquoteDoesNothingWhenNotInBlockquote() {
+    root.innerHTML = `<div>Test${SPLIT}ing</div>`;
 
-function testSplitBlockquoteInBlockquoteWithoutClass() {
-  root.innerHTML = '<blockquote>Test' + SPLIT + 'ing</blockquote>';
+    createPlugin(false);
+    assertFalse(execCommand());
+    helper.assertHtmlMatches('<div>Testing</div>');
+  },
 
-  createPlugin(false);
-  assertTrue(execCommand());
-  helper.assertHtmlMatches(
-      '<blockquote>Test</blockquote>' +
-      '<div>' + (goog.editor.BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') +
-      '</div>' +
-      '<blockquote>ing</blockquote>');
-}
+  testSplitBlockquoteDoesNothingWhenNotInBlockquoteWithClass() {
+    root.innerHTML = `<blockquote>Test${SPLIT}ing</blockquote>`;
 
-function testSplitBlockquoteInBlockquoteWithoutClassInParagraphMode() {
-  root.innerHTML = '<blockquote>Test' + SPLIT + 'ing</blockquote>';
+    createPlugin(true);
+    assertFalse(execCommand());
+    helper.assertHtmlMatches('<blockquote>Testing</blockquote>');
+  },
 
-  createPlugin(false, true);
-  assertTrue(execCommand());
-  helper.assertHtmlMatches(
-      '<blockquote>Test</blockquote>' +
-      '<p>' + (goog.editor.BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') +
-      '</p>' +
-      '<blockquote>ing</blockquote>');
-}
+  testSplitBlockquoteInBlockquoteWithoutClass() {
+    root.innerHTML = `<blockquote>Test${SPLIT}ing</blockquote>`;
 
-function testSplitBlockquoteInBlockquoteWithClass() {
-  root.innerHTML =
-      '<blockquote class="tr_bq">Test' + SPLIT + 'ing</blockquote>';
+    createPlugin(false);
+    assertTrue(execCommand());
+    helper.assertHtmlMatches(
+        '<blockquote>Test</blockquote>' +
+        '<div>' + (BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') + '</div>' +
+        '<blockquote>ing</blockquote>');
+  },
 
-  createPlugin(true);
-  assertTrue(execCommand());
+  testSplitBlockquoteInBlockquoteWithoutClassInParagraphMode() {
+    root.innerHTML = `<blockquote>Test${SPLIT}ing</blockquote>`;
 
-  helper.assertHtmlMatches(
-      '<blockquote class="tr_bq">Test</blockquote>' +
-      '<div>' + (goog.editor.BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') +
-      '</div>' +
-      '<blockquote class="tr_bq">ing</blockquote>');
-}
+    createPlugin(false, true);
+    assertTrue(execCommand());
+    helper.assertHtmlMatches(
+        '<blockquote>Test</blockquote>' +
+        '<p>' + (BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') + '</p>' +
+        '<blockquote>ing</blockquote>');
+  },
 
-function testSplitBlockquoteInBlockquoteWithClassInParagraphMode() {
-  root.innerHTML =
-      '<blockquote class="tr_bq">Test' + SPLIT + 'ing</blockquote>';
+  testSplitBlockquoteInBlockquoteWithClass() {
+    root.innerHTML = `<blockquote class="tr_bq">Test${SPLIT}ing</blockquote>`;
 
-  createPlugin(true, true);
-  assertTrue(execCommand());
-  helper.assertHtmlMatches(
-      '<blockquote class="tr_bq">Test</blockquote>' +
-      '<p>' + (goog.editor.BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') +
-      '</p>' +
-      '<blockquote class="tr_bq">ing</blockquote>');
-}
+    createPlugin(true);
+    assertTrue(execCommand());
 
-function testIsSplittableBlockquoteWhenRequiresClassNameToSplit() {
-  createPlugin(true);
+    helper.assertHtmlMatches(
+        '<blockquote class="tr_bq">Test</blockquote>' +
+        '<div>' + (BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') + '</div>' +
+        '<blockquote class="tr_bq">ing</blockquote>');
+  },
 
-  var blockquoteWithClassName =
-      goog.dom.createDom(goog.dom.TagName.BLOCKQUOTE, 'tr_bq');
-  assertTrue(
-      'blockquote should be detected as splittable',
-      plugin.isSplittableBlockquote(blockquoteWithClassName));
+  testSplitBlockquoteInBlockquoteWithClassInParagraphMode() {
+    root.innerHTML = `<blockquote class="tr_bq">Test${SPLIT}ing</blockquote>`;
 
-  var blockquoteWithoutClassName =
-      goog.dom.createDom(goog.dom.TagName.BLOCKQUOTE, 'foo');
-  assertFalse(
-      'blockquote should not be detected as splittable',
-      plugin.isSplittableBlockquote(blockquoteWithoutClassName));
+    createPlugin(true, true);
+    assertTrue(execCommand());
+    helper.assertHtmlMatches(
+        '<blockquote class="tr_bq">Test</blockquote>' +
+        '<p>' + (BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') + '</p>' +
+        '<blockquote class="tr_bq">ing</blockquote>');
+  },
 
-  var nonBlockquote = goog.dom.createDom(goog.dom.TagName.SPAN, 'tr_bq');
-  assertFalse(
-      'element should not be detected as splittable',
-      plugin.isSplittableBlockquote(nonBlockquote));
-}
+  testIsSplittableBlockquoteWhenRequiresClassNameToSplit() {
+    createPlugin(true);
 
-function testIsSplittableBlockquoteWhenNotRequiresClassNameToSplit() {
-  createPlugin(false);
+    const blockquoteWithClassName = dom.createDom(TagName.BLOCKQUOTE, 'tr_bq');
+    assertTrue(
+        'blockquote should be detected as splittable',
+        plugin.isSplittableBlockquote(blockquoteWithClassName));
 
-  var blockquoteWithClassName =
-      goog.dom.createDom(goog.dom.TagName.BLOCKQUOTE, 'tr_bq');
-  assertTrue(
-      'blockquote should be detected as splittable',
-      plugin.isSplittableBlockquote(blockquoteWithClassName));
+    const blockquoteWithoutClassName = dom.createDom(TagName.BLOCKQUOTE, 'foo');
+    assertFalse(
+        'blockquote should not be detected as splittable',
+        plugin.isSplittableBlockquote(blockquoteWithoutClassName));
 
-  var blockquoteWithoutClassName =
-      goog.dom.createDom(goog.dom.TagName.BLOCKQUOTE, 'foo');
-  assertTrue(
-      'blockquote should be detected as splittable',
-      plugin.isSplittableBlockquote(blockquoteWithoutClassName));
+    const nonBlockquote = dom.createDom(TagName.SPAN, 'tr_bq');
+    assertFalse(
+        'element should not be detected as splittable',
+        plugin.isSplittableBlockquote(nonBlockquote));
+  },
 
-  var nonBlockquote = goog.dom.createDom(goog.dom.TagName.SPAN, 'tr_bq');
-  assertFalse(
-      'element should not be detected as splittable',
-      plugin.isSplittableBlockquote(nonBlockquote));
-}
+  testIsSplittableBlockquoteWhenNotRequiresClassNameToSplit() {
+    createPlugin(false);
 
-function testIsSetupBlockquote() {
-  createPlugin(false);
+    const blockquoteWithClassName = dom.createDom(TagName.BLOCKQUOTE, 'tr_bq');
+    assertTrue(
+        'blockquote should be detected as splittable',
+        plugin.isSplittableBlockquote(blockquoteWithClassName));
 
-  var blockquoteWithClassName =
-      goog.dom.createDom(goog.dom.TagName.BLOCKQUOTE, 'tr_bq');
-  assertTrue(
-      'blockquote should be detected as setup',
-      plugin.isSetupBlockquote(blockquoteWithClassName));
+    const blockquoteWithoutClassName = dom.createDom(TagName.BLOCKQUOTE, 'foo');
+    assertTrue(
+        'blockquote should be detected as splittable',
+        plugin.isSplittableBlockquote(blockquoteWithoutClassName));
 
-  var blockquoteWithoutClassName =
-      goog.dom.createDom(goog.dom.TagName.BLOCKQUOTE, 'foo');
-  assertFalse(
-      'blockquote should not be detected as setup',
-      plugin.isSetupBlockquote(blockquoteWithoutClassName));
+    const nonBlockquote = dom.createDom(TagName.SPAN, 'tr_bq');
+    assertFalse(
+        'element should not be detected as splittable',
+        plugin.isSplittableBlockquote(nonBlockquote));
+  },
 
-  var nonBlockquote = goog.dom.createDom(goog.dom.TagName.SPAN, 'tr_bq');
-  assertFalse(
-      'element should not be detected as setup',
-      plugin.isSetupBlockquote(nonBlockquote));
-}
+  testIsSetupBlockquote() {
+    createPlugin(false);
 
-function testIsUnsetupBlockquote() {
-  createPlugin(false);
+    const blockquoteWithClassName = dom.createDom(TagName.BLOCKQUOTE, 'tr_bq');
+    assertTrue(
+        'blockquote should be detected as setup',
+        plugin.isSetupBlockquote(blockquoteWithClassName));
 
-  var blockquoteWithClassName =
-      goog.dom.createDom(goog.dom.TagName.BLOCKQUOTE, 'tr_bq');
-  assertFalse(
-      'blockquote should not be detected as unsetup',
-      plugin.isUnsetupBlockquote(blockquoteWithClassName));
+    const blockquoteWithoutClassName = dom.createDom(TagName.BLOCKQUOTE, 'foo');
+    assertFalse(
+        'blockquote should not be detected as setup',
+        plugin.isSetupBlockquote(blockquoteWithoutClassName));
 
-  var blockquoteWithoutClassName =
-      goog.dom.createDom(goog.dom.TagName.BLOCKQUOTE, 'foo');
-  assertTrue(
-      'blockquote should be detected as unsetup',
-      plugin.isUnsetupBlockquote(blockquoteWithoutClassName));
+    const nonBlockquote = dom.createDom(TagName.SPAN, 'tr_bq');
+    assertFalse(
+        'element should not be detected as setup',
+        plugin.isSetupBlockquote(nonBlockquote));
+  },
 
-  var nonBlockquote = goog.dom.createDom(goog.dom.TagName.SPAN, 'tr_bq');
-  assertFalse(
-      'element should not be detected as unsetup',
-      plugin.isUnsetupBlockquote(nonBlockquote));
-}
+  testIsUnsetupBlockquote() {
+    createPlugin(false);
+
+    const blockquoteWithClassName = dom.createDom(TagName.BLOCKQUOTE, 'tr_bq');
+    assertFalse(
+        'blockquote should not be detected as unsetup',
+        plugin.isUnsetupBlockquote(blockquoteWithClassName));
+
+    const blockquoteWithoutClassName = dom.createDom(TagName.BLOCKQUOTE, 'foo');
+    assertTrue(
+        'blockquote should be detected as unsetup',
+        plugin.isUnsetupBlockquote(blockquoteWithoutClassName));
+
+    const nonBlockquote = dom.createDom(TagName.SPAN, 'tr_bq');
+    assertFalse(
+        'element should not be detected as unsetup',
+        plugin.isUnsetupBlockquote(nonBlockquote));
+  },
+});

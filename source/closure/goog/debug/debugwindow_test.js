@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.debug.DebugWindowTest');
-goog.setTestOnly('goog.debug.DebugWindowTest');
+goog.module('goog.debug.DebugWindowTest');
+goog.setTestOnly();
 
-goog.require('goog.debug.DebugWindow');
-goog.require('goog.testing.jsunit');
+const DebugWindow = goog.require('goog.debug.DebugWindow');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testGetCookieKey() {
-  assertEquals(
-      'keyNasty_Debug__Identifier_',
-      goog.debug.DebugWindow.getCookieKey_('Nasty_Debug =Identifier;', 'key'));
-}
+testSuite({
+  testGetCookieKey() {
+    assertEquals(
+        'keyNasty_Debug__Identifier_',
+        DebugWindow.getCookieKey_('Nasty_Debug =Identifier;', 'key'));
+  },
+});

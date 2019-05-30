@@ -47,8 +47,11 @@ var PredicateFunctionType;
 var PRIMITIVE_EQUALITY_PREDICATES = {
   'String': DOUBLE_EQUALITY_PREDICATE,
   'Number': DOUBLE_EQUALITY_PREDICATE,
+  'Bigint': DOUBLE_EQUALITY_PREDICATE,
   'Boolean': DOUBLE_EQUALITY_PREDICATE,
-  'Date': function(date1, date2) { return date1.getTime() == date2.getTime(); },
+  'Date': function(date1, date2) {
+    return date1.getTime() == date2.getTime();
+  },
   'RegExp': TO_STRING_EQUALITY_PREDICATE,
   'Function': TO_STRING_EQUALITY_PREDICATE
 };
@@ -633,7 +636,9 @@ var assertNonEmptyString = goog.testing.asserts.assertNonEmptyString = function(
 var assertNaN = goog.testing.asserts.assertNaN = function(a, opt_b) {
   _validateArguments(1, arguments);
   var aVar = nonCommentArg(1, 1, arguments);
-  _assert(commentArg(1, arguments), isNaN(aVar), 'Expected NaN');
+  _assert(
+      commentArg(1, arguments), aVar !== aVar,
+      'Expected NaN but was ' + _displayStringForValue(aVar));
 };
 
 
@@ -663,6 +668,24 @@ goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS = null;
  */
 goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL = '';
 
+
+/**
+ * @const {!Object<string, boolean>}
+ */
+goog.testing.asserts.ARRAY_TYPES = {
+  'Array': true,
+  'Float32Array': true,
+  'Float64Array': true,
+  'Int8Array': true,
+  'Int16Array': true,
+  'Int32Array': true,
+  'Uint8Array': true,
+  'Uint8ClampedArray': true,
+  'Uint16Array': true,
+  'Uint32Array': true,
+  'BigInt64Array': true,
+  'BigUint64Array': true
+};
 
 /**
  * Determines if two items of any type match, and formulates an error message
@@ -749,7 +772,7 @@ goog.testing.asserts.findDifferences = function(
     var typeOfVar2 = _trueTypeOf(var2);
 
     if (typeOfVar1 == typeOfVar2) {
-      var isArray = typeOfVar1 == 'Array';
+      var isArray = goog.testing.asserts.ARRAY_TYPES[typeOfVar1];
       var errorMessage = equalityPredicate(typeOfVar1, var1, var2);
       if (errorMessage !=
           goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS) {

@@ -12,72 +12,73 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.MockUserAgentTest');
+goog.module('goog.testing.MockUserAgentTest');
+goog.setTestOnly();
 
-goog.require('goog.dispose');
-goog.require('goog.testing.MockUserAgent');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const MockUserAgent = goog.require('goog.testing.MockUserAgent');
+const dispose = goog.require('goog.dispose');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-goog.setTestOnly('goog.testing.MockUserAgentTest');
+let mockUserAgent;
 
-var mockUserAgent;
+testSuite({
+  setUp() {
+    mockUserAgent = new MockUserAgent();
+  },
 
-function setUp() {
-  mockUserAgent = new goog.testing.MockUserAgent();
-}
+  tearDown() {
+    dispose(mockUserAgent);
+    assertFalse(mockUserAgent.installed_);
+  },
 
-function tearDown() {
-  goog.dispose(mockUserAgent);
-  assertFalse(mockUserAgent.installed_);
-}
+  testMockUserAgentInstall() {
+    const originalUserAgentFunction = userAgent.getUserAgentString;
 
-function testMockUserAgentInstall() {
-  var originalUserAgentFunction = goog.userAgent.getUserAgentString;
+    assertFalse(!!mockUserAgent.installed_);
 
-  assertFalse(!!mockUserAgent.installed_);
+    mockUserAgent.install();
+    assertTrue(mockUserAgent.installed_);
+    assertNotEquals(userAgent.getUserAgentString, originalUserAgentFunction);
 
-  mockUserAgent.install();
-  assertTrue(mockUserAgent.installed_);
-  assertNotEquals(goog.userAgent.getUserAgentString, originalUserAgentFunction);
+    mockUserAgent.uninstall();
+    assertFalse(mockUserAgent.installed_);
+    assertEquals(originalUserAgentFunction, userAgent.getUserAgentString);
+  },
 
-  mockUserAgent.uninstall();
-  assertFalse(mockUserAgent.installed_);
-  assertEquals(originalUserAgentFunction, goog.userAgent.getUserAgentString);
-}
+  testMockUserAgentGetAgent() {
+    const uaString = 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) ' +
+        'AppleWebKit/525.13 (KHTML, like Gecko) ' +
+        'Chrome/0.2.149.27 Safari/525.13';
 
-function testMockUserAgentGetAgent() {
-  var uaString = 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) ' +
-      'AppleWebKit/525.13 (KHTML, like Gecko) ' +
-      'Chrome/0.2.149.27 Safari/525.13';
+    mockUserAgent = new MockUserAgent();
+    mockUserAgent.setUserAgentString(uaString);
+    mockUserAgent.install();
 
-  mockUserAgent = new goog.testing.MockUserAgent();
-  mockUserAgent.setUserAgentString(uaString);
-  mockUserAgent.install();
+    assertTrue(mockUserAgent.installed_);
+    assertEquals(uaString, userAgent.getUserAgentString());
+  },
 
-  assertTrue(mockUserAgent.installed_);
-  assertEquals(uaString, goog.userAgent.getUserAgentString());
-}
+  testMockUserAgentNavigator() {
+    const fakeNavigator = {};
 
-function testMockUserAgentNavigator() {
-  var fakeNavigator = {};
+    mockUserAgent = new MockUserAgent();
+    mockUserAgent.setNavigator(fakeNavigator);
+    mockUserAgent.install();
 
-  mockUserAgent = new goog.testing.MockUserAgent();
-  mockUserAgent.setNavigator(fakeNavigator);
-  mockUserAgent.install();
+    assertTrue(mockUserAgent.installed_);
+    assertEquals(fakeNavigator, userAgent.getNavigator());
+  },
 
-  assertTrue(mockUserAgent.installed_);
-  assertEquals(fakeNavigator, goog.userAgent.getNavigator());
-}
+  testMockUserAgentDocumentMode() {
+    const fakeDocumentMode = -1;
 
-function testMockUserAgentDocumentMode() {
-  var fakeDocumentMode = -1;
+    mockUserAgent = new MockUserAgent();
+    mockUserAgent.setDocumentMode(fakeDocumentMode);
+    mockUserAgent.install();
 
-  mockUserAgent = new goog.testing.MockUserAgent();
-  mockUserAgent.setDocumentMode(fakeDocumentMode);
-  mockUserAgent.install();
-
-  assertTrue(mockUserAgent.installed_);
-  assertEquals(fakeDocumentMode, goog.userAgent.getDocumentMode_());
-  assertEquals(fakeDocumentMode, goog.userAgent.DOCUMENT_MODE);
-}
+    assertTrue(mockUserAgent.installed_);
+    assertEquals(fakeDocumentMode, userAgent.getDocumentMode_());
+    assertEquals(fakeDocumentMode, userAgent.DOCUMENT_MODE);
+  },
+});

@@ -22,18 +22,7 @@ goog.require('goog.functions');
 goog.require('goog.soy');
 /** @suppress {extraRequire} */
 goog.require('goog.soy.testHelper');
-goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
-
-var stubs;
-
-function setUp() {
-  stubs = new goog.testing.PropertyReplacer();
-}
-
-function tearDown() {
-  stubs.reset();
-}
 
 function testRenderHtml() {
   var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
@@ -146,12 +135,9 @@ function testConvertToElement() {
  * @param {Function} func Callback to test.
  */
 function assertUnsafeTemplateOutputErrorThrown(func) {
-  stubs.set(goog.asserts, 'ENABLE_ASSERTS', true);
   assertContains(
-      'Soy template output is unsafe for use as HTML',
+      'Sanitized content was not of kind TEXT or HTML.',
       assertThrows(func).message);
-  stubs.set(goog.asserts, 'ENABLE_ASSERTS', false);
-  assertEquals('zSoyz', func());
 }
 
 function testAllowButEscapeUnsanitizedText() {
@@ -171,18 +157,17 @@ function testRejectSanitizedCss() {
   });
 }
 
-function testRejectSanitizedCss() {
+function testRejectSpoofingSanitizedContent() {
   assertUnsafeTemplateOutputErrorThrown(function() {
-    return goog.soy
-        .renderAsElement(example.templateSpoofingSanitizedContentString)
-        .innerHTML;
+    goog.soy.renderAsElement(example.templateSpoofingSanitizedContentString);
   });
 }
 
-function testRejectStringTemplatesInRenderAsFragment() {
-  assertThrows(function() {
-    goog.soy.renderAsFragment(example.stringTemplate);
-  });
+function testStringTemplatesRenderedAsText() {
+  assertEquals(
+      '<b>XSS</b>',
+      goog.dom.getTextContent(
+          goog.soy.renderAsFragment(example.stringTemplate)));
 }
 
 function testAcceptSanitizedHtml() {

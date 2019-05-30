@@ -12,34 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.module.ModuleLoadCallbackTest');
-goog.setTestOnly('goog.module.ModuleLoadCallbackTest');
+goog.module('goog.module.ModuleLoadCallbackTest');
+goog.setTestOnly();
 
-goog.require('goog.debug.ErrorHandler');
-goog.require('goog.debug.entryPointRegistry');
-goog.require('goog.functions');
-goog.require('goog.module.ModuleLoadCallback');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const ErrorHandler = goog.require('goog.debug.ErrorHandler');
+const ModuleLoadCallback = goog.require('goog.module.ModuleLoadCallback');
+const entryPointRegistry = goog.require('goog.debug.entryPointRegistry');
+const functions = goog.require('goog.functions');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testProtectEntryPoint() {
-  // Test a callback created before the protect method is called.
-  var callback1 =
-      new goog.module.ModuleLoadCallback(goog.functions.error('callback1'));
+testSuite({
+  testProtectEntryPoint() {
+    // Test a callback created before the protect method is called.
+    const callback1 = new ModuleLoadCallback(functions.error('callback1'));
 
-  var errorFn = goog.testing.recordFunction();
-  var errorHandler = new goog.debug.ErrorHandler(errorFn);
-  goog.debug.entryPointRegistry.monitorAll(errorHandler);
+    const errorFn = recordFunction();
+    const errorHandler = new ErrorHandler(errorFn);
+    entryPointRegistry.monitorAll(errorHandler);
 
-  assertEquals(0, errorFn.getCallCount());
-  assertThrows(goog.bind(callback1.execute, callback1));
-  assertEquals(1, errorFn.getCallCount());
-  assertContains('callback1', errorFn.getLastCall().getArguments()[0].message);
+    assertEquals(0, errorFn.getCallCount());
+    assertThrows(goog.bind(callback1.execute, callback1));
+    assertEquals(1, errorFn.getCallCount());
+    assertContains(
+        'callback1', errorFn.getLastCall().getArguments()[0].message);
 
-  // Test a callback created after the protect method is called.
-  var callback2 =
-      new goog.module.ModuleLoadCallback(goog.functions.error('callback2'));
-  assertThrows(goog.bind(callback1.execute, callback2));
-  assertEquals(2, errorFn.getCallCount());
-  assertContains('callback2', errorFn.getLastCall().getArguments()[0].message);
-}
+    // Test a callback created after the protect method is called.
+    const callback2 = new ModuleLoadCallback(functions.error('callback2'));
+    assertThrows(goog.bind(callback1.execute, callback2));
+    assertEquals(2, errorFn.getCallCount());
+    assertContains(
+        'callback2', errorFn.getLastCall().getArguments()[0].message);
+  },
+});

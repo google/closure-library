@@ -12,23 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.style.app.PrimaryActionButtonRendererTest');
-goog.setTestOnly('goog.ui.style.app.PrimaryActionButtonRendererTest');
+goog.module('goog.ui.style.app.PrimaryActionButtonRendererTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.ui.style');
-goog.require('goog.ui.Button');
-goog.require('goog.ui.Component');
-goog.require('goog.ui.style.app.PrimaryActionButtonRenderer');
-var renderer = goog.ui.style.app.PrimaryActionButtonRenderer.getInstance();
-var button;
+const Button = goog.require('goog.ui.Button');
+const Component = goog.require('goog.ui.Component');
+const PrimaryActionButtonRenderer = goog.require('goog.ui.style.app.PrimaryActionButtonRenderer');
+const dom = goog.require('goog.dom');
+const style = goog.require('goog.testing.ui.style');
+const testSuite = goog.require('goog.testing.testSuite');
+
+const renderer = PrimaryActionButtonRenderer.getInstance();
+let button;
 
 // Write iFrame tag to load reference FastUI markup. Then, our tests will
 // compare the generated markup to the reference markup.
-var refPath = '../../../../../' +
+const refPath = '../../../../../' +
     'webutil/css/fastui/app/primaryactionbutton_spec.html';
-goog.testing.ui.style.writeReferenceFrame(refPath);
+style.writeReferenceFrame(refPath);
 
 function shouldRunTests() {
   // Disable tests when being run as a part of open-source repo as the button
@@ -36,40 +37,40 @@ function shouldRunTests() {
   return !(/closure\/goog\/ui/.test(location.pathname));
 }
 
-function setUp() {
-  button = new goog.ui.Button('Hello Generated', renderer);
-}
+testSuite({
+  setUp() {
+    button = new Button('Hello Generated', renderer);
+  },
 
-function tearDown() {
-  if (button) {
-    button.dispose();
-  }
-  goog.dom.removeChildren(goog.dom.getElement('sandbox'));
-}
+  tearDown() {
+    if (button) {
+      button.dispose();
+    }
+    dom.removeChildren(dom.getElement('sandbox'));
+  },
 
-function testGeneratedButton() {
-  button.render(goog.dom.getElement('sandbox'));
-  goog.testing.ui.style.assertStructureMatchesReference(
-      button.getElement(), 'normal-resting');
-}
+  testGeneratedButton() {
+    button.render(dom.getElement('sandbox'));
+    style.assertStructureMatchesReference(
+        button.getElement(), 'normal-resting');
+  },
 
-function testButtonStates() {
-  button.render(goog.dom.getElement('sandbox'));
-  goog.testing.ui.style.assertStructureMatchesReference(
-      button.getElement(), 'normal-resting');
-  button.setState(goog.ui.Component.State.HOVER, true);
-  goog.testing.ui.style.assertStructureMatchesReference(
-      button.getElement(), 'normal-hover');
-  button.setState(goog.ui.Component.State.HOVER, false);
-  button.setState(goog.ui.Component.State.FOCUSED, true);
-  goog.testing.ui.style.assertStructureMatchesReference(
-      button.getElement(), 'normal-focused');
-  button.setState(goog.ui.Component.State.FOCUSED, false);
-  button.setState(goog.ui.Component.State.ACTIVE, true);
-  goog.testing.ui.style.assertStructureMatchesReference(
-      button.getElement(), 'normal-active');
-  button.setState(goog.ui.Component.State.ACTIVE, false);
-  button.setState(goog.ui.Component.State.DISABLED, true);
-  goog.testing.ui.style.assertStructureMatchesReference(
-      button.getElement(), 'normal-disabled');
-}
+  testButtonStates() {
+    button.render(dom.getElement('sandbox'));
+    style.assertStructureMatchesReference(
+        button.getElement(), 'normal-resting');
+    button.setState(Component.State.HOVER, true);
+    style.assertStructureMatchesReference(button.getElement(), 'normal-hover');
+    button.setState(Component.State.HOVER, false);
+    button.setState(Component.State.FOCUSED, true);
+    style.assertStructureMatchesReference(
+        button.getElement(), 'normal-focused');
+    button.setState(Component.State.FOCUSED, false);
+    button.setState(Component.State.ACTIVE, true);
+    style.assertStructureMatchesReference(button.getElement(), 'normal-active');
+    button.setState(Component.State.ACTIVE, false);
+    button.setState(Component.State.DISABLED, true);
+    style.assertStructureMatchesReference(
+        button.getElement(), 'normal-disabled');
+  },
+});

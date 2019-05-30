@@ -12,254 +12,206 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.vendorTest');
-goog.setTestOnly('goog.dom.vendorTest');
+goog.module('goog.dom.vendorTest');
+goog.setTestOnly();
 
-goog.require('goog.array');
-goog.require('goog.dom.vendor');
-goog.require('goog.labs.userAgent.util');
-goog.require('goog.testing.MockUserAgent');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
-goog.require('goog.userAgentTestUtil');
+const MockUserAgent = goog.require('goog.testing.MockUserAgent');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const googArray = goog.require('goog.array');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
+const userAgentTestUtil = goog.require('goog.userAgentTestUtil');
+const util = goog.require('goog.labs.userAgent.util');
+const vendor = goog.require('goog.dom.vendor');
 
-var documentMode;
-var mockUserAgent;
-var propertyReplacer = new goog.testing.PropertyReplacer();
+let documentMode;
+let mockUserAgent;
+const propertyReplacer = new PropertyReplacer();
 
-function setUp() {
-  mockUserAgent = new goog.testing.MockUserAgent();
-  mockUserAgent.install();
-}
+let getDocumentMode = () => documentMode;
 
-function tearDown() {
-  goog.dispose(mockUserAgent);
-  documentMode = undefined;
-  propertyReplacer.reset();
-}
-
-goog.userAgent.getDocumentMode_ = function() {
-  return documentMode;
+const UserAgents = {
+  GECKO: 'GECKO',
+  IE: 'IE',
+  OPERA: 'OPERA',
+  WEBKIT: 'WEBKIT'
 };
-
-
-var UserAgents = {GECKO: 'GECKO', IE: 'IE', OPERA: 'OPERA', WEBKIT: 'WEBKIT'};
-
 
 /**
  * Return whether a given user agent has been detected.
  * @param {number} agent Value in UserAgents.
  * @return {boolean} Whether the user agent has been detected.
  */
-function getUserAgentDetected_(agent) {
+function getUserAgentDetected(agent) {
   switch (agent) {
     case UserAgents.GECKO:
-      return goog.userAgent.GECKO;
+      return userAgent.GECKO;
     case UserAgents.IE:
-      return goog.userAgent.IE;
+      return userAgent.IE;
     case UserAgents.OPERA:
-      return goog.userAgent.OPERA;
+      return userAgent.OPERA;
     case UserAgents.WEBKIT:
-      return goog.userAgent.WEBKIT;
+      return userAgent.WEBKIT;
   }
   return null;
 }
-
 
 /**
  * Test browser detection for a user agent configuration.
  * @param {Array<number>} expectedAgents Array of expected userAgents.
  * @param {string} uaString User agent string.
- * @param {string=} opt_product Navigator product string.
+ * @param {string=} product Navigator product string.
  * @param {string=} opt_vendor Navigator vendor string.
  */
-function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
-  var mockNavigator =
-      {'userAgent': uaString, 'product': opt_product, 'vendor': opt_vendor};
+function assertUserAgent(
+    expectedAgents, uaString, product = undefined, opt_vendor) {
+  const mockNavigator = {
+    'userAgent': uaString,
+    'product': product,
+    'vendor': opt_vendor
+  };
 
   mockUserAgent.setNavigator(mockNavigator);
   mockUserAgent.setUserAgentString(uaString);
 
   // Force reread of navigator.userAgent;
-  goog.labs.userAgent.util.setUserAgent(null);
-  goog.userAgentTestUtil.reinitializeUserAgent();
-  for (var ua in UserAgents) {
-    var isExpected = goog.array.contains(expectedAgents, UserAgents[ua]);
-    assertEquals(isExpected, getUserAgentDetected_(UserAgents[ua]));
+  util.setUserAgent(null);
+  userAgentTestUtil.reinitializeUserAgent();
+  for (let ua in UserAgents) {
+    const isExpected = googArray.contains(expectedAgents, UserAgents[ua]);
+    assertEquals(isExpected, getUserAgentDetected(UserAgents[ua]));
   }
 }
-
-
-/**
- * Tests for the vendor prefix for Webkit.
- */
-function testVendorPrefixWebkit() {
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
-  assertEquals('-webkit', goog.dom.vendor.getVendorPrefix());
-}
-
-
-/**
- * Tests for the vendor prefix for Mozilla/Gecko.
- */
-function testVendorPrefixGecko() {
-  assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
-  assertEquals('-moz', goog.dom.vendor.getVendorPrefix());
-}
-
-
-/**
- * Tests for the vendor prefix for Opera.
- */
-function testVendorPrefixOpera() {
-  assertUserAgent([UserAgents.OPERA], 'Opera');
-  assertEquals('-o', goog.dom.vendor.getVendorPrefix());
-}
-
-
-/**
- * Tests for the vendor prefix for IE.
- */
-function testVendorPrefixIE() {
-  assertUserAgent([UserAgents.IE], 'MSIE');
-  assertEquals('-ms', goog.dom.vendor.getVendorPrefix());
-}
-
-
-/**
- * Tests for the vendor Js prefix for Webkit.
- */
-function testVendorJsPrefixWebkit() {
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
-  assertEquals('Webkit', goog.dom.vendor.getVendorJsPrefix());
-}
-
-
-/**
- * Tests for the vendor Js prefix for Mozilla/Gecko.
- */
-function testVendorJsPrefixGecko() {
-  assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
-  assertEquals('Moz', goog.dom.vendor.getVendorJsPrefix());
-}
-
-
-/**
- * Tests for the vendor Js prefix for Opera.
- */
-function testVendorJsPrefixOpera() {
-  assertUserAgent([UserAgents.OPERA], 'Opera');
-  assertEquals('O', goog.dom.vendor.getVendorJsPrefix());
-}
-
-
-/**
- * Tests for the vendor Js prefix for IE.
- */
-function testVendorJsPrefixIE() {
-  assertUserAgent([UserAgents.IE], 'MSIE');
-  assertEquals('ms', goog.dom.vendor.getVendorJsPrefix());
-}
-
-
-/**
- * Tests for the vendor Js prefix if no UA detected.
- */
-function testVendorJsPrefixNone() {
-  assertUserAgent([], '');
-  assertNull(goog.dom.vendor.getVendorJsPrefix());
-}
-
-
-/**
- * Tests for the prefixed property name on Webkit.
- */
-function testPrefixedPropertyNameWebkit() {
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
-  assertEquals(
-      'webkitFoobar', goog.dom.vendor.getPrefixedPropertyName('foobar'));
-}
-
-
-/**
- * Tests for the prefixed property name on Webkit in an object.
- */
-function testPrefixedPropertyNameWebkitAndObject() {
-  var mockDocument = {
-    // setting a value of 0 on purpose, to ensure we only look for property
-    // names, not their values.
-    'webkitFoobar': 0
-  };
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
-  assertEquals(
-      'webkitFoobar',
-      goog.dom.vendor.getPrefixedPropertyName('foobar', mockDocument));
-}
-
-
-/**
- * Tests for the prefixed property name.
- */
-function testPrefixedPropertyName() {
-  assertUserAgent([], '');
-  assertNull(goog.dom.vendor.getPrefixedPropertyName('foobar'));
-}
-
-
-/**
- * Tests for the prefixed property name in an object.
- */
-function testPrefixedPropertyNameAndObject() {
-  var mockDocument = {'foobar': 0};
-  assertUserAgent([], '');
-  assertEquals(
-      'foobar',
-      goog.dom.vendor.getPrefixedPropertyName('foobar', mockDocument));
-}
-
-
-/**
- * Tests for the prefixed property name when it doesn't exist.
- */
-function testPrefixedPropertyNameAndObjectIsEmpty() {
-  var mockDocument = {};
-  assertUserAgent([], '');
-  assertNull(goog.dom.vendor.getPrefixedPropertyName('foobar', mockDocument));
-}
-
-
-/**
- * Test for prefixed event type.
- */
-function testPrefixedEventType() {
-  assertUserAgent([], '');
-  assertEquals('foobar', goog.dom.vendor.getPrefixedEventType('foobar'));
-}
-
-
-/**
- * Test for browser-specific prefixed event type.
- */
-function testPrefixedEventTypeForBrowser() {
-  assertUserAgent([UserAgents.WEBKIT], 'WebKit');
-  assertEquals('webkitfoobar', goog.dom.vendor.getPrefixedEventType('foobar'));
-}
-
 
 function assertIe(uaString, expectedVersion) {
   assertUserAgent([UserAgents.IE], uaString);
   assertEquals(
-      'User agent ' + uaString + ' should have had version ' + expectedVersion +
-          ' but had ' + goog.userAgent.VERSION,
-      expectedVersion, goog.userAgent.VERSION);
+      `User agent ${uaString} should have had version ${expectedVersion}` +
+          ' but had ' + userAgent.VERSION,
+      expectedVersion, userAgent.VERSION);
 }
-
 
 function assertGecko(uaString, expectedVersion) {
   assertUserAgent([UserAgents.GECKO], uaString, 'Gecko');
   assertEquals(
-      'User agent ' + uaString + ' should have had version ' + expectedVersion +
-          ' but had ' + goog.userAgent.VERSION,
-      expectedVersion, goog.userAgent.VERSION);
+      `User agent ${uaString} should have had version ${expectedVersion}` +
+          ' but had ' + userAgent.VERSION,
+      expectedVersion, userAgent.VERSION);
 }
+testSuite({
+  setUp() {
+    mockUserAgent = new MockUserAgent();
+    mockUserAgent.install();
+  },
+
+  tearDown() {
+    goog.dispose(mockUserAgent);
+    documentMode = undefined;
+    propertyReplacer.reset();
+  },
+
+  /** Tests for the vendor prefix for Webkit. */
+  testVendorPrefixWebkit() {
+    assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+    assertEquals('-webkit', vendor.getVendorPrefix());
+  },
+
+  /** Tests for the vendor prefix for Mozilla/Gecko. */
+  testVendorPrefixGecko() {
+    assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
+    assertEquals('-moz', vendor.getVendorPrefix());
+  },
+
+  /** Tests for the vendor prefix for Opera. */
+  testVendorPrefixOpera() {
+    assertUserAgent([UserAgents.OPERA], 'Opera');
+    assertEquals('-o', vendor.getVendorPrefix());
+  },
+
+  /** Tests for the vendor prefix for IE. */
+  testVendorPrefixIE() {
+    assertUserAgent([UserAgents.IE], 'MSIE');
+    assertEquals('-ms', vendor.getVendorPrefix());
+  },
+
+  /** Tests for the vendor Js prefix for Webkit. */
+  testVendorJsPrefixWebkit() {
+    assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+    assertEquals('Webkit', vendor.getVendorJsPrefix());
+  },
+
+  /** Tests for the vendor Js prefix for Mozilla/Gecko. */
+  testVendorJsPrefixGecko() {
+    assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
+    assertEquals('Moz', vendor.getVendorJsPrefix());
+  },
+
+  /** Tests for the vendor Js prefix for Opera. */
+  testVendorJsPrefixOpera() {
+    assertUserAgent([UserAgents.OPERA], 'Opera');
+    assertEquals('O', vendor.getVendorJsPrefix());
+  },
+
+  /** Tests for the vendor Js prefix for IE. */
+  testVendorJsPrefixIE() {
+    assertUserAgent([UserAgents.IE], 'MSIE');
+    assertEquals('ms', vendor.getVendorJsPrefix());
+  },
+
+  /** Tests for the vendor Js prefix if no UA detected. */
+  testVendorJsPrefixNone() {
+    assertUserAgent([], '');
+    assertNull(vendor.getVendorJsPrefix());
+  },
+
+  /** Tests for the prefixed property name on Webkit. */
+  testPrefixedPropertyNameWebkit() {
+    assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+    assertEquals('webkitFoobar', vendor.getPrefixedPropertyName('foobar'));
+  },
+
+  /** Tests for the prefixed property name on Webkit in an object. */
+  testPrefixedPropertyNameWebkitAndObject() {
+    const mockDocument = {
+      // setting a value of 0 on purpose, to ensure we only look for property
+      // names, not their values.
+      'webkitFoobar': 0,
+    };
+    assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+    assertEquals(
+        'webkitFoobar', vendor.getPrefixedPropertyName('foobar', mockDocument));
+  },
+
+  /** Tests for the prefixed property name. */
+  testPrefixedPropertyName() {
+    assertUserAgent([], '');
+    assertNull(vendor.getPrefixedPropertyName('foobar'));
+  },
+
+  /** Tests for the prefixed property name in an object. */
+  testPrefixedPropertyNameAndObject() {
+    const mockDocument = {'foobar': 0};
+    assertUserAgent([], '');
+    assertEquals(
+        'foobar', vendor.getPrefixedPropertyName('foobar', mockDocument));
+  },
+
+  /** Tests for the prefixed property name when it doesn't exist. */
+  testPrefixedPropertyNameAndObjectIsEmpty() {
+    const mockDocument = {};
+    assertUserAgent([], '');
+    assertNull(vendor.getPrefixedPropertyName('foobar', mockDocument));
+  },
+
+  /** Test for prefixed event type. */
+  testPrefixedEventType() {
+    assertUserAgent([], '');
+    assertEquals('foobar', vendor.getPrefixedEventType('foobar'));
+  },
+
+  /** Test for browser-specific prefixed event type. */
+  testPrefixedEventTypeForBrowser() {
+    assertUserAgent([UserAgents.WEBKIT], 'WebKit');
+    assertEquals('webkitfoobar', vendor.getPrefixedEventType('foobar'));
+  },
+});

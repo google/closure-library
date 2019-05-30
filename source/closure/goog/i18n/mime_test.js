@@ -12,35 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.i18n.mime.encodeTest');
-goog.setTestOnly('goog.i18n.mime.encodeTest');
+goog.module('goog.i18n.mime.encodeTest');
+goog.setTestOnly();
 
-goog.require('goog.i18n.mime.encode');
-goog.require('goog.testing.jsunit');
+const encode = goog.require('goog.i18n.mime.encode');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testEncodeAllAscii() {
-  // A string holding all the characters that should be encoded unchanged.
-  // Double-quote is doubled to avoid annoying syntax highlighting in emacs,
-  // which doesn't recognize the double-quote as being in a string constant.
-  var identity = '!""#$%&\'()*+,-./0123456789:;<>@ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
-      '[\\]^`abcdefghijklmnopqrstuvwxyz{|}~';
-  assertEquals(identity, goog.i18n.mime.encode(identity));
-}
+testSuite({
+  testEncodeAllAscii() {
+    // A string holding all the characters that should be encoded unchanged.
+    // Double-quote is doubled to avoid annoying syntax highlighting in emacs,
+    // which doesn't recognize the double-quote as being in a string constant.
+    const identity =
+        '!""#$%&\'()*+,-./0123456789:;<>@ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+        '[\\]^`abcdefghijklmnopqrstuvwxyz{|}~';
+    assertEquals(identity, encode(identity));
+  },
 
-function testEncodeSpecials() {
-  assertEquals('=?UTF-8?Q?=f0=9f=92=a9?=', goog.i18n.mime.encode('💩'));
-  assertEquals('=?UTF-8?Q?=3f=5f=3d_?=', goog.i18n.mime.encode('?_= '));
-  assertEquals(
-      '=?UTF-8?Q?=3f=5f=3d_=22=22?=', goog.i18n.mime.encode('?_= ""', true));
-}
+  testEncodeSpecials() {
+    assertEquals('=?UTF-8?Q?=f0=9f=92=a9?=', encode('💩'));
+    assertEquals('=?UTF-8?Q?=3f=5f=3d_?=', encode('?_= '));
+    assertEquals('=?UTF-8?Q?=3f=5f=3d_=22=22?=', encode('?_= ""', true));
+  },
 
-function testEncodeUnicode() {
-  // Two-byte UTF-8, plus a special
-  assertEquals(
-      '=?UTF-8?Q?=c2=82=de=a0_dude?=',
-      goog.i18n.mime.encode('\u0082\u07a0 dude'));
-  // Three-byte UTF-8, plus a special
-  assertEquals(
-      '=?UTF-8?Q?=e0=a0=80=ef=bf=bf=3d?=',
-      goog.i18n.mime.encode('\u0800\uffff='));
-}
+  testEncodeUnicode() {
+    // Two-byte UTF-8, plus a special
+    assertEquals('=?UTF-8?Q?=c2=82=de=a0_dude?=', encode('\u0082\u07a0 dude'));
+    // Three-byte UTF-8, plus a special
+    assertEquals('=?UTF-8?Q?=e0=a0=80=ef=bf=bf=3d?=', encode('\u0800\uffff='));
+  },
+});

@@ -12,192 +12,178 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.AnimatedZippyTest');
-goog.setTestOnly('goog.ui.AnimatedZippyTest');
+goog.module('goog.ui.AnimatedZippyTest');
+goog.setTestOnly();
 
-goog.require('goog.a11y.aria');
-goog.require('goog.a11y.aria.Role');
-goog.require('goog.a11y.aria.State');
-goog.require('goog.asserts');
-goog.require('goog.dom');
-goog.require('goog.events');
-goog.require('goog.functions');
-goog.require('goog.fx.Animation');
-goog.require('goog.fx.Transition');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.AnimatedZippy');
-goog.require('goog.ui.Zippy');
+const AnimatedZippy = goog.require('goog.ui.AnimatedZippy');
+const Animation = goog.require('goog.fx.Animation');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const Role = goog.require('goog.a11y.aria.Role');
+const State = goog.require('goog.a11y.aria.State');
+const Transition = goog.require('goog.fx.Transition');
+const Zippy = goog.require('goog.ui.Zippy');
+const aria = goog.require('goog.a11y.aria');
+const asserts = goog.require('goog.asserts');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.events');
+const functions = goog.require('goog.functions');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingAsserts = goog.require('goog.testing.asserts');
 
-var animatedZippy;
-var animatedZippyHeaderEl;
-var propertyReplacer;
+let animatedZippy;
+let animatedZippyHeaderEl;
+let propertyReplacer;
 
-function setUp() {
-  animatedZippyHeaderEl = goog.dom.getElement('t1');
-  goog.asserts.assert(animatedZippyHeaderEl);
-  animatedZippy = new goog.ui.AnimatedZippy(
-      animatedZippyHeaderEl, goog.dom.getElement('c1'));
+testSuite({
+  setUp() {
+    animatedZippyHeaderEl = dom.getElement('t1');
+    asserts.assert(animatedZippyHeaderEl);
+    animatedZippy =
+        new AnimatedZippy(animatedZippyHeaderEl, dom.getElement('c1'));
 
-  propertyReplacer = new goog.testing.PropertyReplacer();
-}
+    propertyReplacer = new PropertyReplacer();
+  },
 
-function tearDown() {
-  propertyReplacer.reset();
-  animatedZippy.dispose();
-}
+  tearDown() {
+    propertyReplacer.reset();
+    animatedZippy.dispose();
+  },
 
-function testConstructor() {
-  assertNotNull('must not be null', animatedZippy);
-  assertEquals(
-      goog.a11y.aria.getRole(animatedZippyHeaderEl), goog.a11y.aria.Role.TAB);
-}
+  testConstructor() {
+    assertNotNull('must not be null', animatedZippy);
+    assertEquals(aria.getRole(animatedZippyHeaderEl), Role.TAB);
+  },
 
-function testConstructorAriaRoleOverride() {
-  animatedZippy = new goog.ui.AnimatedZippy(
-      animatedZippyHeaderEl, goog.dom.getElement('c1'), null, null,
-      goog.a11y.aria.Role.BUTTON);
-  assertEquals(
-      goog.a11y.aria.getRole(animatedZippyHeaderEl),
-      goog.a11y.aria.Role.BUTTON);
-}
+  testConstructorAriaRoleOverride() {
+    animatedZippy = new AnimatedZippy(
+        animatedZippyHeaderEl, dom.getElement('c1'), null, null, Role.BUTTON);
+    assertEquals(aria.getRole(animatedZippyHeaderEl), Role.BUTTON);
+  },
 
-function testExpandCollapse() {
-  var animationsPlayed = 0;
-  var toggleEventsFired = 0;
+  testExpandCollapse() {
+    let animationsPlayed = 0;
+    let toggleEventsFired = 0;
 
-  propertyReplacer.replace(goog.fx.Animation.prototype, 'play', function() {
-    animationsPlayed++;
-    this.dispatchAnimationEvent(goog.fx.Transition.EventType.END);
-  });
-  propertyReplacer.replace(
-      goog.ui.AnimatedZippy.prototype, 'onAnimate_', goog.functions.NULL);
+    propertyReplacer.replace(Animation.prototype, 'play', function() {
+      animationsPlayed++;
+      this.dispatchAnimationEvent(Transition.EventType.END);
+    });
+    propertyReplacer.replace(
+        AnimatedZippy.prototype, 'onAnimate_', functions.NULL);
 
-  goog.events.listenOnce(
-      animatedZippy, goog.ui.Zippy.Events.TOGGLE, function(e) {
-        toggleEventsFired++;
-        assertTrue('TOGGLE event must be for expansion', e.expanded);
-        assertEquals('expanded must be true', true, animatedZippy.isExpanded());
-        assertEquals(
-            'aria-expanded must be true', 'true',
-            goog.a11y.aria.getState(
-                animatedZippyHeaderEl, goog.a11y.aria.State.EXPANDED));
-      });
+    events.listenOnce(animatedZippy, Zippy.Events.TOGGLE, (e) => {
+      toggleEventsFired++;
+      assertTrue('TOGGLE event must be for expansion', e.expanded);
+      assertEquals('expanded must be true', true, animatedZippy.isExpanded());
+      assertEquals(
+          'aria-expanded must be true', 'true',
+          aria.getState(animatedZippyHeaderEl, State.EXPANDED));
+    });
 
-  animatedZippy.expand();
+    animatedZippy.expand();
 
-  goog.events.listenOnce(
-      animatedZippy, goog.ui.Zippy.Events.TOGGLE, function(e) {
-        toggleEventsFired++;
-        assertFalse('TOGGLE event must be for collapse', e.expanded);
-        assertEquals(
-            'expanded must be false', false, animatedZippy.isExpanded());
-        assertEquals(
-            'aria-expanded must be false', 'false',
-            goog.a11y.aria.getState(
-                animatedZippyHeaderEl, goog.a11y.aria.State.EXPANDED));
-      });
+    events.listenOnce(animatedZippy, Zippy.Events.TOGGLE, (e) => {
+      toggleEventsFired++;
+      assertFalse('TOGGLE event must be for collapse', e.expanded);
+      assertEquals('expanded must be false', false, animatedZippy.isExpanded());
+      assertEquals(
+          'aria-expanded must be false', 'false',
+          aria.getState(animatedZippyHeaderEl, State.EXPANDED));
+    });
 
-  animatedZippy.collapse();
+    animatedZippy.collapse();
 
-  assertEquals('animations must play', 2, animationsPlayed);
-  assertEquals('TOGGLE events must fire', 2, toggleEventsFired);
-}
+    assertEquals('animations must play', 2, animationsPlayed);
+    assertEquals('TOGGLE events must fire', 2, toggleEventsFired);
+  },
 
+  /** Tests the TOGGLE_ANIMATION_BEGIN event. */
+  testToggleBegin() {
+    let animationsPlayed = 0;
+    let toggleEventsFired = 0;
 
-/** Tests the TOGGLE_ANIMATION_BEGIN event. */
-function testToggleBegin() {
-  var animationsPlayed = 0;
-  var toggleEventsFired = 0;
+    propertyReplacer.replace(Animation.prototype, 'play', function() {
+      animationsPlayed++;
+      this.dispatchAnimationEvent(Transition.EventType.BEGIN);
+      this.dispatchAnimationEvent(Transition.EventType.END);
+    });
+    propertyReplacer.replace(
+        AnimatedZippy.prototype, 'onAnimate_', functions.NULL);
 
-  propertyReplacer.replace(goog.fx.Animation.prototype, 'play', function() {
-    animationsPlayed++;
-    this.dispatchAnimationEvent(goog.fx.Transition.EventType.BEGIN);
-    this.dispatchAnimationEvent(goog.fx.Transition.EventType.END);
-  });
-  propertyReplacer.replace(
-      goog.ui.AnimatedZippy.prototype, 'onAnimate_', goog.functions.NULL);
+    events.listenOnce(
+        animatedZippy, AnimatedZippy.Events.TOGGLE_ANIMATION_BEGIN, (e) => {
+          toggleEventsFired++;
+          assertTrue(
+              'TOGGLE_ANIMATION_BEGIN event must be for expansion', e.expanded);
+          assertEquals(
+              'expanded must be false', false, animatedZippy.isExpanded());
+          assertEquals(
+              'aria-expanded must be true', 'true',
+              aria.getState(animatedZippyHeaderEl, State.EXPANDED));
+        });
 
-  goog.events.listenOnce(
-      animatedZippy, goog.ui.AnimatedZippy.Events.TOGGLE_ANIMATION_BEGIN,
-      function(e) {
-        toggleEventsFired++;
-        assertTrue(
-            'TOGGLE_ANIMATION_BEGIN event must be for expansion', e.expanded);
-        assertEquals(
-            'expanded must be false', false, animatedZippy.isExpanded());
-        assertEquals(
-            'aria-expanded must be true', 'true',
-            goog.a11y.aria.getState(
-                animatedZippyHeaderEl, goog.a11y.aria.State.EXPANDED));
-      });
+    animatedZippy.expand();
 
-  animatedZippy.expand();
+    events.listenOnce(
+        animatedZippy, AnimatedZippy.Events.TOGGLE_ANIMATION_BEGIN, (e) => {
+          toggleEventsFired++;
+          assertFalse(
+              'TOGGLE_ANIMATION_BEGIN event must be for collapse', e.expanded);
+          assertEquals(
+              'expanded must be true', true, animatedZippy.isExpanded());
+          assertEquals(
+              'aria-expanded must be false', 'false',
+              aria.getState(animatedZippyHeaderEl, State.EXPANDED));
+        });
 
-  goog.events.listenOnce(
-      animatedZippy, goog.ui.AnimatedZippy.Events.TOGGLE_ANIMATION_BEGIN,
-      function(e) {
-        toggleEventsFired++;
-        assertFalse(
-            'TOGGLE_ANIMATION_BEGIN event must be for collapse', e.expanded);
-        assertEquals('expanded must be true', true, animatedZippy.isExpanded());
-        assertEquals(
-            'aria-expanded must be false', 'false',
-            goog.a11y.aria.getState(
-                animatedZippyHeaderEl, goog.a11y.aria.State.EXPANDED));
-      });
+    animatedZippy.collapse();
 
-  animatedZippy.collapse();
+    assertEquals('animations must play', 2, animationsPlayed);
+    assertEquals(
+        'TOGGLE_ANIMATION_BEGIN events must fire', 2, toggleEventsFired);
+  },
 
-  assertEquals('animations must play', 2, animationsPlayed);
-  assertEquals('TOGGLE_ANIMATION_BEGIN events must fire', 2, toggleEventsFired);
-}
+  /** Tests the TOGGLE_ANIMATION_END event. */
+  testToggleEnd() {
+    let animationsPlayed = 0;
+    let toggleEventsFired = 0;
 
+    propertyReplacer.replace(Animation.prototype, 'play', function() {
+      animationsPlayed++;
+      this.dispatchAnimationEvent(Transition.EventType.END);
+    });
+    propertyReplacer.replace(
+        AnimatedZippy.prototype, 'onAnimate_', functions.NULL);
 
-/** Tests the TOGGLE_ANIMATION_END event. */
-function testToggleEnd() {
-  var animationsPlayed = 0;
-  var toggleEventsFired = 0;
+    events.listenOnce(
+        animatedZippy, AnimatedZippy.Events.TOGGLE_ANIMATION_END, (e) => {
+          toggleEventsFired++;
+          assertTrue(
+              'TOGGLE_ANIMATION_END event must be for expansion', e.expanded);
+          assertEquals(
+              'expanded must be true', true, animatedZippy.isExpanded());
+          assertEquals(
+              'aria-expanded must be true', 'true',
+              aria.getState(animatedZippyHeaderEl, State.EXPANDED));
+        });
 
-  propertyReplacer.replace(goog.fx.Animation.prototype, 'play', function() {
-    animationsPlayed++;
-    this.dispatchAnimationEvent(goog.fx.Transition.EventType.END);
-  });
-  propertyReplacer.replace(
-      goog.ui.AnimatedZippy.prototype, 'onAnimate_', goog.functions.NULL);
+    animatedZippy.expand();
 
-  goog.events.listenOnce(
-      animatedZippy, goog.ui.AnimatedZippy.Events.TOGGLE_ANIMATION_END,
-      function(e) {
-        toggleEventsFired++;
-        assertTrue(
-            'TOGGLE_ANIMATION_END event must be for expansion', e.expanded);
-        assertEquals('expanded must be true', true, animatedZippy.isExpanded());
-        assertEquals(
-            'aria-expanded must be true', 'true',
-            goog.a11y.aria.getState(
-                animatedZippyHeaderEl, goog.a11y.aria.State.EXPANDED));
-      });
+    events.listenOnce(
+        animatedZippy, AnimatedZippy.Events.TOGGLE_ANIMATION_END, (e) => {
+          toggleEventsFired++;
+          assertFalse(
+              'TOGGLE_ANIMATION_END event must be for collapse', e.expanded);
+          assertEquals(
+              'expanded must be false', false, animatedZippy.isExpanded());
+          assertEquals(
+              'aria-expanded must be false', 'false',
+              aria.getState(animatedZippyHeaderEl, State.EXPANDED));
+        });
 
-  animatedZippy.expand();
+    animatedZippy.collapse();
 
-  goog.events.listenOnce(
-      animatedZippy, goog.ui.AnimatedZippy.Events.TOGGLE_ANIMATION_END,
-      function(e) {
-        toggleEventsFired++;
-        assertFalse(
-            'TOGGLE_ANIMATION_END event must be for collapse', e.expanded);
-        assertEquals(
-            'expanded must be false', false, animatedZippy.isExpanded());
-        assertEquals(
-            'aria-expanded must be false', 'false',
-            goog.a11y.aria.getState(
-                animatedZippyHeaderEl, goog.a11y.aria.State.EXPANDED));
-      });
-
-  animatedZippy.collapse();
-
-  assertEquals('animations must play', 2, animationsPlayed);
-  assertEquals('TOGGLE_ANIMATION_END events must fire', 2, toggleEventsFired);
-}
+    assertEquals('animations must play', 2, animationsPlayed);
+    assertEquals('TOGGLE_ANIMATION_END events must fire', 2, toggleEventsFired);
+  },
+});

@@ -12,65 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.events.NonDisposableEventTargetGoogEventsTest');
-goog.setTestOnly('goog.labs.events.NonDisposableEventTargetGoogEventsTest');
+goog.module('goog.labs.events.NonDisposableEventTargetGoogEventsTest');
+goog.setTestOnly();
 
-goog.require('goog.events');
-goog.require('goog.events.eventTargetTester');
-goog.require('goog.events.eventTargetTester.KeyType');
-goog.require('goog.events.eventTargetTester.UnlistenReturnType');
-goog.require('goog.labs.events.NonDisposableEventTarget');
-goog.require('goog.testing');
-goog.require('goog.testing.jsunit');
+const KeyType = goog.require('goog.events.eventTargetTester.KeyType');
+const NonDisposableEventTarget = goog.require('goog.labs.events.NonDisposableEventTarget');
+const UnlistenReturnType = goog.require('goog.events.eventTargetTester.UnlistenReturnType');
+const eventTargetTester = goog.require('goog.events.eventTargetTester');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
+const testing = goog.require('goog.testing');
 
-function setUp() {
-  var newListenableFn = function() {
-    return new goog.labs.events.NonDisposableEventTarget();
-  };
-  var unlistenByKeyFn = function(src, key) {
-    return goog.events.unlistenByKey(key);
-  };
-  goog.events.eventTargetTester.setUp(
-      newListenableFn, goog.events.listen, goog.events.unlisten,
-      unlistenByKeyFn, goog.events.listenOnce, goog.events.dispatchEvent,
-      goog.events.removeAll, goog.events.getListeners, goog.events.getListener,
-      goog.events.hasListener, goog.events.eventTargetTester.KeyType.NUMBER,
-      goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN, true);
-}
+testSuite({
+  setUp() {
+    const newListenableFn = () => new NonDisposableEventTarget();
+    const unlistenByKeyFn = (src, key) => events.unlistenByKey(key);
+    eventTargetTester.setUp(
+        newListenableFn, events.listen, events.unlisten, unlistenByKeyFn,
+        events.listenOnce, events.dispatchEvent, events.removeAll,
+        events.getListeners, events.getListener, events.hasListener,
+        KeyType.NUMBER, UnlistenReturnType.BOOLEAN, true);
+  },
 
-function tearDown() {
-  goog.events.eventTargetTester.tearDown();
-}
+  tearDown() {
+    eventTargetTester.tearDown();
+  },
 
-function testUnlistenProperCleanup() {
-  goog.events.listen(eventTargets[0], EventType.A, listeners[0]);
-  goog.events.unlisten(eventTargets[0], EventType.A, listeners[0]);
+  testUnlistenProperCleanup() {
+    events.listen(eventTargets[0], EventType.A, listeners[0]);
+    events.unlisten(eventTargets[0], EventType.A, listeners[0]);
 
-  goog.events.listen(eventTargets[0], EventType.A, listeners[0]);
-  eventTargets[0].unlisten(EventType.A, listeners[0]);
-}
+    events.listen(eventTargets[0], EventType.A, listeners[0]);
+    eventTargets[0].unlisten(EventType.A, listeners[0]);
+  },
 
-function testUnlistenByKeyProperCleanup() {
-  var keyNum = goog.events.listen(eventTargets[0], EventType.A, listeners[0]);
-  goog.events.unlistenByKey(keyNum);
-}
+  testUnlistenByKeyProperCleanup() {
+    const keyNum = events.listen(eventTargets[0], EventType.A, listeners[0]);
+    events.unlistenByKey(keyNum);
+  },
 
-function testListenOnceProperCleanup() {
-  goog.events.listenOnce(eventTargets[0], EventType.A, listeners[0]);
-  eventTargets[0].dispatchEvent(EventType.A);
-}
+  testListenOnceProperCleanup() {
+    events.listenOnce(eventTargets[0], EventType.A, listeners[0]);
+    eventTargets[0].dispatchEvent(EventType.A);
+  },
 
-function testListenWithObject() {
-  var obj = {};
-  obj.handleEvent = goog.testing.recordFunction();
-  goog.events.listen(eventTargets[0], EventType.A, obj);
-  eventTargets[0].dispatchEvent(EventType.A);
-  assertEquals(1, obj.handleEvent.getCallCount());
-}
+  testListenWithObject() {
+    const obj = {};
+    obj.handleEvent = testing.recordFunction();
+    events.listen(eventTargets[0], EventType.A, obj);
+    eventTargets[0].dispatchEvent(EventType.A);
+    assertEquals(1, obj.handleEvent.getCallCount());
+  },
 
-function testListenWithObjectHandleEventReturningFalse() {
-  var obj = {};
-  obj.handleEvent = function() { return false; };
-  goog.events.listen(eventTargets[0], EventType.A, obj);
-  assertFalse(eventTargets[0].dispatchEvent(EventType.A));
-}
+  testListenWithObjectHandleEventReturningFalse() {
+    const obj = {};
+    obj.handleEvent = () => false;
+    events.listen(eventTargets[0], EventType.A, obj);
+    assertFalse(eventTargets[0].dispatchEvent(EventType.A));
+  },
+});

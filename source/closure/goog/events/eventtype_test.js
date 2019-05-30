@@ -12,58 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.events.EventTypeTest');
-goog.setTestOnly('goog.events.EventTypeTest');
+goog.module('goog.events.EventTypeTest');
+goog.setTestOnly();
 
-goog.require('goog.events.BrowserFeature');
-goog.require('goog.events.EventType');
-goog.require('goog.events.PointerFallbackEventType');
-goog.require('goog.events.PointerTouchFallbackEventType');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const BrowserFeature = goog.require('goog.events.BrowserFeature');
+const EventType = goog.require('goog.events.EventType');
+const PointerFallbackEventType = goog.require('goog.events.PointerFallbackEventType');
+const PointerTouchFallbackEventType = goog.require('goog.events.PointerTouchFallbackEventType');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-function testPointerFallbackEventType() {
-  if (goog.events.BrowserFeature.POINTER_EVENTS) {
-    // Pointer events are supported; use W3C PointerEvent
-    assertEquals(
-        goog.events.EventType.POINTERDOWN,
-        goog.events.PointerFallbackEventType.POINTERDOWN);
-  } else if (goog.events.BrowserFeature.MSPOINTER_EVENTS) {
-    // Only IE10 should support MSPointerEvent
-    assertTrue(
-        goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10') &&
-        !goog.userAgent.isVersionOrHigher('11'));
-    // W3C PointerEvent not supported; fall back to MSPointerEvent
-    assertEquals(
-        goog.events.EventType.MSPOINTERDOWN,
-        goog.events.PointerFallbackEventType.POINTERDOWN);
-  } else {
-    // Pointer events not supported; fall back to MouseEvent
-    assertEquals(
-        goog.events.EventType.MOUSEDOWN,
-        goog.events.PointerFallbackEventType.POINTERDOWN);
-  }
-}
+testSuite({
+  testPointerFallbackEventType() {
+    if (BrowserFeature.POINTER_EVENTS) {
+      // Pointer events are supported; use W3C PointerEvent
+      assertEquals(EventType.POINTERDOWN, PointerFallbackEventType.POINTERDOWN);
+    } else if (BrowserFeature.MSPOINTER_EVENTS) {
+      // Only IE10 should support MSPointerEvent
+      assertTrue(
+          userAgent.IE && userAgent.isVersionOrHigher('10') &&
+          !userAgent.isVersionOrHigher('11'));
+      // W3C PointerEvent not supported; fall back to MSPointerEvent
+      assertEquals(
+          EventType.MSPOINTERDOWN, PointerFallbackEventType.POINTERDOWN);
+    } else {
+      // Pointer events not supported; fall back to MouseEvent
+      assertEquals(EventType.MOUSEDOWN, PointerFallbackEventType.POINTERDOWN);
+    }
+  },
 
-function testPointerTouchFallbackEventType() {
-  if (goog.events.BrowserFeature.POINTER_EVENTS) {
-    // Pointer events are supported; use W3C PointerEvent
-    assertEquals(
-        goog.events.EventType.POINTERDOWN,
-        goog.events.PointerTouchFallbackEventType.POINTERDOWN);
-  } else if (goog.events.BrowserFeature.MSPOINTER_EVENTS) {
-    // Only IE10 should support MSPointerEvent
-    assertTrue(
-        goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10') &&
-        !goog.userAgent.isVersionOrHigher('11'));
-    // W3C PointerEvent not supported; fall back to MSPointerEvent
-    assertEquals(
-        goog.events.EventType.MSPOINTERDOWN,
-        goog.events.PointerTouchFallbackEventType.POINTERDOWN);
-  } else {
-    // Pointer events not supported; fall back to TouchEvent
-    assertEquals(
-        goog.events.EventType.TOUCHSTART,
-        goog.events.PointerTouchFallbackEventType.POINTERDOWN);
-  }
-}
+  testPointerTouchFallbackEventType() {
+    if (BrowserFeature.POINTER_EVENTS) {
+      // Pointer events are supported; use W3C PointerEvent
+      assertEquals(
+          EventType.POINTERDOWN, PointerTouchFallbackEventType.POINTERDOWN);
+    } else if (BrowserFeature.MSPOINTER_EVENTS) {
+      // Only IE10 should support MSPointerEvent
+      assertTrue(
+          userAgent.IE && userAgent.isVersionOrHigher('10') &&
+          !userAgent.isVersionOrHigher('11'));
+      // W3C PointerEvent not supported; fall back to MSPointerEvent
+      assertEquals(
+          EventType.MSPOINTERDOWN, PointerTouchFallbackEventType.POINTERDOWN);
+    } else {
+      // Pointer events not supported; fall back to TouchEvent
+      assertEquals(
+          EventType.TOUCHSTART, PointerTouchFallbackEventType.POINTERDOWN);
+    }
+  },
+});

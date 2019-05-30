@@ -12,105 +12,79 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.fx.animTest');
-goog.setTestOnly('goog.fx.animTest');
+goog.module('goog.fx.animTest');
+goog.setTestOnly();
 
-goog.require('goog.async.AnimationDelay');
-goog.require('goog.async.Delay');
-goog.require('goog.events');
-goog.require('goog.functions');
-goog.require('goog.fx.Animation');
-goog.require('goog.fx.anim');
-goog.require('goog.object');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
-goog.require('goog.userAgent');
+const Animation = goog.require('goog.fx.Animation');
+const AnimationDelay = goog.require('goog.async.AnimationDelay');
+const Delay = goog.require('goog.async.Delay');
+const MockClock = goog.require('goog.testing.MockClock');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const events = goog.require('goog.events');
+const functions = goog.require('goog.functions');
+const fxAnim = goog.require('goog.fx.anim');
+const googObject = goog.require('goog.object');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var clock, replacer;
-
-function setUpPage() {
-  clock = new goog.testing.MockClock(true);
-}
-
-function tearDownPage() {
-  clock.dispose();
-}
-
-function setUp() {
-  replacer = new goog.testing.PropertyReplacer();
-}
-
-function tearDown() {
-  replacer.reset();
-  goog.fx.anim.tearDown();
-}
-
-function testDelayWithMocks() {
-  goog.fx.anim.setAnimationWindow(null);
-  registerAndUnregisterAnimationWithMocks(goog.async.Delay);
-}
-
-function testAnimationDelayWithMocks() {
-  goog.fx.anim.setAnimationWindow(window);
-  registerAndUnregisterAnimationWithMocks(goog.async.AnimationDelay);
-}
-
+let clock;
+let replacer;
 
 /**
  * @param {!Function} delayType The constructor for Delay or AnimationDelay.
  *     The methods will be mocked out.
  */
 function registerAndUnregisterAnimationWithMocks(delayType) {
-  var timerCount = 0;
+  let timerCount = 0;
 
-  replacer.set(delayType.prototype, 'start', function() { timerCount++; });
-  replacer.set(delayType.prototype, 'stop', function() { timerCount--; });
-  replacer.set(
-      delayType.prototype, 'isActive', function() { return timerCount > 0; });
+  replacer.set(delayType.prototype, 'start', () => {
+    timerCount++;
+  });
+  replacer.set(delayType.prototype, 'stop', () => {
+    timerCount--;
+  });
+  replacer.set(delayType.prototype, 'isActive', () => timerCount > 0);
 
-  var forbiddenDelayType = delayType == goog.async.AnimationDelay ?
-      goog.async.Delay :
-      goog.async.AnimationDelay;
-  replacer.set(forbiddenDelayType.prototype, 'start', goog.functions.error());
-  replacer.set(forbiddenDelayType.prototype, 'stop', goog.functions.error());
-  replacer.set(
-      forbiddenDelayType.prototype, 'isActive', goog.functions.error());
+  const forbiddenDelayType =
+      delayType == AnimationDelay ? Delay : AnimationDelay;
+  replacer.set(forbiddenDelayType.prototype, 'start', functions.error());
+  replacer.set(forbiddenDelayType.prototype, 'stop', functions.error());
+  replacer.set(forbiddenDelayType.prototype, 'isActive', functions.error());
 
-  var anim = new goog.fx.Animation([0], [1], 1000);
-  var anim2 = new goog.fx.Animation([0], [1], 1000);
+  const anim = new Animation([0], [1], 1000);
+  const anim2 = new Animation([0], [1], 1000);
 
-  goog.fx.anim.registerAnimation(anim);
+  fxAnim.registerAnimation(anim);
 
   assertTrue(
       'Should contain the animation',
-      goog.object.containsValue(goog.fx.anim.activeAnimations_, anim));
+      googObject.containsValue(fxAnim.activeAnimations_, anim));
   assertEquals('Should have called start once', 1, timerCount);
 
-  goog.fx.anim.registerAnimation(anim2);
+  fxAnim.registerAnimation(anim2);
 
   assertEquals('Should not have called start again', 1, timerCount);
 
   // Add anim again.
-  goog.fx.anim.registerAnimation(anim);
+  fxAnim.registerAnimation(anim);
   assertTrue(
       'Should contain the animation',
-      goog.object.containsValue(goog.fx.anim.activeAnimations_, anim));
+      googObject.containsValue(fxAnim.activeAnimations_, anim));
   assertEquals('Should not have called start again', 1, timerCount);
 
-  goog.fx.anim.unregisterAnimation(anim);
+  fxAnim.unregisterAnimation(anim);
   assertFalse(
       'Should not contain the animation',
-      goog.object.containsValue(goog.fx.anim.activeAnimations_, anim));
+      googObject.containsValue(fxAnim.activeAnimations_, anim));
   assertEquals('clearTimeout should not have been called', 1, timerCount);
 
-  goog.fx.anim.unregisterAnimation(anim2);
+  fxAnim.unregisterAnimation(anim2);
   assertEquals('There should be no remaining timers', 0, timerCount);
 
   // Make sure we don't trigger setTimeout or setInterval.
   clock.tick(1000);
-  goog.fx.anim.cycleAnimations_(goog.now());
+  fxAnim.cycleAnimations_(goog.now());
 
   assertEquals('There should be no remaining timers', 0, timerCount);
 
@@ -118,104 +92,133 @@ function registerAndUnregisterAnimationWithMocks(delayType) {
   anim2.dispose();
 }
 
-function testRegisterAndUnregisterAnimationWithRequestAnimationFrameGecko() {
-  // Only FF4 onwards support requestAnimationFrame.
-  if (!goog.userAgent.GECKO || !goog.userAgent.isVersionOrHigher('2.0') ||
-      goog.userAgent.isVersionOrHigher('17')) {
-    return;
-  }
+testSuite({
+  setUpPage() {
+    clock = new MockClock(true);
+  },
 
-  goog.fx.anim.setAnimationWindow(window);
+  tearDownPage() {
+    clock.dispose();
+  },
 
-  var anim = new goog.fx.Animation([0], [1], 1000);
-  var anim2 = new goog.fx.Animation([0], [1], 1000);
+  setUp() {
+    replacer = new PropertyReplacer();
+  },
 
-  goog.fx.anim.registerAnimation(anim);
+  tearDown() {
+    replacer.reset();
+    fxAnim.tearDown();
+  },
 
-  assertTrue(
-      'Should contain the animation',
-      goog.object.containsValue(goog.fx.anim.activeAnimations_, anim));
+  testDelayWithMocks() {
+    fxAnim.setAnimationWindow(null);
+    registerAndUnregisterAnimationWithMocks(Delay);
+  },
 
-  assertEquals(
-      'Should have listen to MozBeforePaint once', 1,
-      goog.events.getListeners(window, 'MozBeforePaint', false).length);
+  testAnimationDelayWithMocks() {
+    fxAnim.setAnimationWindow(window);
+    registerAndUnregisterAnimationWithMocks(AnimationDelay);
+  },
 
-  goog.fx.anim.registerAnimation(anim2);
+  testRegisterAndUnregisterAnimationWithRequestAnimationFrameGecko() {
+    // Only FF4 onwards support requestAnimationFrame.
+    if (!userAgent.GECKO || !userAgent.isVersionOrHigher('2.0') ||
+        userAgent.isVersionOrHigher('17')) {
+      return;
+    }
 
-  assertEquals(
-      'Should not add more listener for MozBeforePaint', 1,
-      goog.events.getListeners(window, 'MozBeforePaint', false).length);
+    fxAnim.setAnimationWindow(window);
 
-  // Add anim again.
-  goog.fx.anim.registerAnimation(anim);
-  assertTrue(
-      'Should contain the animation',
-      goog.object.containsValue(goog.fx.anim.activeAnimations_, anim));
-  assertEquals(
-      'Should not add more listener for MozBeforePaint', 1,
-      goog.events.getListeners(window, 'MozBeforePaint', false).length);
+    const anim = new Animation([0], [1], 1000);
+    const anim2 = new Animation([0], [1], 1000);
 
-  goog.fx.anim.unregisterAnimation(anim);
-  assertFalse(
-      'Should not contain the animation',
-      goog.object.containsValue(goog.fx.anim.activeAnimations_, anim));
-  assertEquals(
-      'Should not clear listener for MozBeforePaint yet', 1,
-      goog.events.getListeners(window, 'MozBeforePaint', false).length);
+    fxAnim.registerAnimation(anim);
 
-  goog.fx.anim.unregisterAnimation(anim2);
-  assertEquals(
-      'There should be no more listener for MozBeforePaint', 0,
-      goog.events.getListeners(window, 'MozBeforePaint', false).length);
+    assertTrue(
+        'Should contain the animation',
+        googObject.containsValue(fxAnim.activeAnimations_, anim));
 
-  anim.dispose();
-  anim2.dispose();
+    assertEquals(
+        'Should have listen to MozBeforePaint once', 1,
+        events.getListeners(window, 'MozBeforePaint', false).length);
 
-  goog.fx.anim.setAnimationWindow(null);
-}
+    fxAnim.registerAnimation(anim2);
 
-function testRegisterUnregisterAnimation() {
-  var anim = new goog.fx.Animation([0], [1], 1000);
+    assertEquals(
+        'Should not add more listener for MozBeforePaint', 1,
+        events.getListeners(window, 'MozBeforePaint', false).length);
 
-  goog.fx.anim.registerAnimation(anim);
+    // Add anim again.
+    fxAnim.registerAnimation(anim);
+    assertTrue(
+        'Should contain the animation',
+        googObject.containsValue(fxAnim.activeAnimations_, anim));
+    assertEquals(
+        'Should not add more listener for MozBeforePaint', 1,
+        events.getListeners(window, 'MozBeforePaint', false).length);
 
-  assertTrue(
-      'There should be an active timer',
-      goog.fx.anim.animationDelay_ && goog.fx.anim.animationDelay_.isActive());
-  assertEquals(
-      'There should be an active animations', 1,
-      goog.object.getCount(goog.fx.anim.activeAnimations_));
+    fxAnim.unregisterAnimation(anim);
+    assertFalse(
+        'Should not contain the animation',
+        googObject.containsValue(fxAnim.activeAnimations_, anim));
+    assertEquals(
+        'Should not clear listener for MozBeforePaint yet', 1,
+        events.getListeners(window, 'MozBeforePaint', false).length);
 
-  goog.fx.anim.unregisterAnimation(anim);
+    fxAnim.unregisterAnimation(anim2);
+    assertEquals(
+        'There should be no more listener for MozBeforePaint', 0,
+        events.getListeners(window, 'MozBeforePaint', false).length);
 
-  assertTrue(
-      'There should be no active animations',
-      goog.object.isEmpty(goog.fx.anim.activeAnimations_));
-  assertFalse(
-      'There should be no active timer',
-      goog.fx.anim.animationDelay_ && goog.fx.anim.animationDelay_.isActive());
+    anim.dispose();
+    anim2.dispose();
 
-  anim.dispose();
-}
+    fxAnim.setAnimationWindow(null);
+  },
 
-function testCycleWithMockClock() {
-  goog.fx.anim.setAnimationWindow(null);
-  var anim = new goog.fx.Animation([0], [1], 1000);
-  anim.onAnimationFrame = goog.testing.recordFunction();
+  testRegisterUnregisterAnimation() {
+    const anim = new Animation([0], [1], 1000);
 
-  goog.fx.anim.registerAnimation(anim);
-  clock.tick(goog.fx.anim.TIMEOUT);
+    fxAnim.registerAnimation(anim);
 
-  assertEquals(1, anim.onAnimationFrame.getCallCount());
-}
+    assertTrue(
+        'There should be an active timer',
+        fxAnim.animationDelay_ && fxAnim.animationDelay_.isActive());
+    assertEquals(
+        'There should be an active animations', 1,
+        googObject.getCount(fxAnim.activeAnimations_));
 
-function testCycleWithMockClockAndAnimationWindow() {
-  goog.fx.anim.setAnimationWindow(window);
-  var anim = new goog.fx.Animation([0], [1], 1000);
-  anim.onAnimationFrame = goog.testing.recordFunction();
+    fxAnim.unregisterAnimation(anim);
 
-  goog.fx.anim.registerAnimation(anim);
-  clock.tick(goog.fx.anim.TIMEOUT);
+    assertTrue(
+        'There should be no active animations',
+        googObject.isEmpty(fxAnim.activeAnimations_));
+    assertFalse(
+        'There should be no active timer',
+        fxAnim.animationDelay_ && fxAnim.animationDelay_.isActive());
 
-  assertEquals(1, anim.onAnimationFrame.getCallCount());
-}
+    anim.dispose();
+  },
+
+  testCycleWithMockClock() {
+    fxAnim.setAnimationWindow(null);
+    const anim = new Animation([0], [1], 1000);
+    anim.onAnimationFrame = recordFunction();
+
+    fxAnim.registerAnimation(anim);
+    clock.tick(fxAnim.TIMEOUT);
+
+    assertEquals(1, anim.onAnimationFrame.getCallCount());
+  },
+
+  testCycleWithMockClockAndAnimationWindow() {
+    fxAnim.setAnimationWindow(window);
+    const anim = new Animation([0], [1], 1000);
+    anim.onAnimationFrame = recordFunction();
+
+    fxAnim.registerAnimation(anim);
+    clock.tick(fxAnim.TIMEOUT);
+
+    assertEquals(1, anim.onAnimationFrame.getCallCount());
+  },
+});

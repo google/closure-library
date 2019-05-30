@@ -12,78 +12,80 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.media.VimeoTest');
-goog.setTestOnly('goog.ui.media.VimeoTest');
+goog.module('goog.ui.media.VimeoTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.media.FlashObject');
-goog.require('goog.ui.media.Media');
-goog.require('goog.ui.media.Vimeo');
-goog.require('goog.ui.media.VimeoModel');
-var vimeo;
-var control;
-var VIMEO_ID = '3001295';
-var VIMEO_URL = 'http://vimeo.com/' + VIMEO_ID;
-var VIMEO_URL_HD = 'http://vimeo.com/hd#' + VIMEO_ID;
-var VIMEO_URL_SECURE = 'https://vimeo.com/' + VIMEO_ID;
-var parent = goog.dom.createElement(goog.dom.TagName.DIV);
+const FlashObject = goog.require('goog.ui.media.FlashObject');
+const Media = goog.require('goog.ui.media.Media');
+const TagName = goog.require('goog.dom.TagName');
+const Vimeo = goog.require('goog.ui.media.Vimeo');
+const VimeoModel = goog.require('goog.ui.media.VimeoModel');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function setUp() {
-  vimeo = new goog.ui.media.Vimeo();
-  var model = new goog.ui.media.VimeoModel(VIMEO_ID, 'vimeo caption');
-  control = new goog.ui.media.Media(model, vimeo);
-  control.setSelected(true);
-}
-
-function tearDown() {
-  control.dispose();
-}
-
-function testBasicRendering() {
-  control.render(parent);
-  var el = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV, goog.ui.media.Vimeo.CSS_CLASS, parent);
-  assertEquals(1, el.length);
-  assertEquals(VIMEO_URL_SECURE, control.getDataModel().getUrl());
-}
-
-function testParsingUrl() {
-  assertExtractsCorrectly(VIMEO_ID, VIMEO_URL);
-  assertExtractsCorrectly(VIMEO_ID, VIMEO_URL_HD);
-  assertExtractsCorrectly(VIMEO_ID, VIMEO_URL_SECURE);
-
-  var invalidUrl = 'http://invalidUrl/filename.doc';
-  var e = assertThrows('parser expects a well formed URL', function() {
-    goog.ui.media.VimeoModel.newInstance(invalidUrl);
-  });
-  assertEquals('failed to parse vimeo url: ' + invalidUrl, e.message);
-}
-
-function testBuildingUrl() {
-  assertEquals(VIMEO_URL_SECURE, goog.ui.media.VimeoModel.buildUrl(VIMEO_ID));
-}
-
-function testCreatingModel() {
-  var model = new goog.ui.media.VimeoModel(VIMEO_ID);
-  assertEquals(VIMEO_ID, model.getVideoId());
-  assertEquals(VIMEO_URL_SECURE, model.getUrl());
-  assertUndefined(model.getCaption());
-}
-
-function testCreatingDomOnInitialState() {
-  control.render(parent);
-  var caption = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV, goog.ui.media.Vimeo.CSS_CLASS + '-caption', parent);
-  assertEquals(1, caption.length);
-
-  var flash = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV, goog.ui.media.FlashObject.CSS_CLASS, parent);
-  assertEquals(1, flash.length);
-}
+let vimeo;
+let control;
+const VIMEO_ID = '3001295';
+const VIMEO_URL = `http://vimeo.com/${VIMEO_ID}`;
+const VIMEO_URL_HD = `http://vimeo.com/hd#${VIMEO_ID}`;
+const VIMEO_URL_SECURE = `https://vimeo.com/${VIMEO_ID}`;
+const parent = dom.createElement(TagName.DIV);
 
 function assertExtractsCorrectly(expectedVideoId, url) {
-  var model = goog.ui.media.VimeoModel.newInstance(url);
-  assertEquals('Video id for ' + url, expectedVideoId, model.getVideoId());
+  const model = VimeoModel.newInstance(url);
+  assertEquals(`Video id for ${url}`, expectedVideoId, model.getVideoId());
 }
+testSuite({
+  setUp() {
+    vimeo = new Vimeo();
+    const model = new VimeoModel(VIMEO_ID, 'vimeo caption');
+    control = new Media(model, vimeo);
+    control.setSelected(true);
+  },
+
+  tearDown() {
+    control.dispose();
+  },
+
+  testBasicRendering() {
+    control.render(parent);
+    const el =
+        dom.getElementsByTagNameAndClass(TagName.DIV, Vimeo.CSS_CLASS, parent);
+    assertEquals(1, el.length);
+    assertEquals(VIMEO_URL_SECURE, control.getDataModel().getUrl());
+  },
+
+  testParsingUrl() {
+    assertExtractsCorrectly(VIMEO_ID, VIMEO_URL);
+    assertExtractsCorrectly(VIMEO_ID, VIMEO_URL_HD);
+    assertExtractsCorrectly(VIMEO_ID, VIMEO_URL_SECURE);
+
+    const invalidUrl = 'http://invalidUrl/filename.doc';
+    const e = assertThrows('parser expects a well formed URL', () => {
+      VimeoModel.newInstance(invalidUrl);
+    });
+    assertEquals(`failed to parse vimeo url: ${invalidUrl}`, e.message);
+  },
+
+  testBuildingUrl() {
+    assertEquals(VIMEO_URL_SECURE, VimeoModel.buildUrl(VIMEO_ID));
+  },
+
+  testCreatingModel() {
+    const model = new VimeoModel(VIMEO_ID);
+    assertEquals(VIMEO_ID, model.getVideoId());
+    assertEquals(VIMEO_URL_SECURE, model.getUrl());
+    assertUndefined(model.getCaption());
+  },
+
+  testCreatingDomOnInitialState() {
+    control.render(parent);
+    const caption = dom.getElementsByTagNameAndClass(
+        TagName.DIV, Vimeo.CSS_CLASS + '-caption', parent);
+    assertEquals(1, caption.length);
+
+    const flash = dom.getElementsByTagNameAndClass(
+        TagName.DIV, FlashObject.CSS_CLASS, parent);
+    assertEquals(1, flash.length);
+  },
+});

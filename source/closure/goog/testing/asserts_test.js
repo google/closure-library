@@ -252,14 +252,24 @@ function testAssertNonEmptyString() {
 function testAssertNaN() {
   assertNaN(NaN);
   assertNaN('Good assertion', NaN);
-  assertThrowsJsUnitException(function() { assertNaN(1); }, 'Expected NaN');
+  assertThrowsJsUnitException(function() {
+    assertNaN(1);
+  }, 'Expected NaN but was <1> (Number)');
   assertThrowsJsUnitException(function() {
     assertNaN('Should be NaN', 1);
-  }, 'Should be NaN\nExpected NaN');
-  assertThrowsJsUnitException(function() { assertNaN(true); }, 'Expected NaN');
-  assertThrowsJsUnitException(function() { assertNaN(false); }, 'Expected NaN');
-  assertThrowsJsUnitException(function() { assertNaN(null); }, 'Expected NaN');
-  assertThrowsJsUnitException(function() { assertNaN(''); }, 'Expected NaN');
+  }, 'Should be NaN\nExpected NaN but was <1> (Number)');
+  assertThrowsJsUnitException(function() {
+    assertNaN(true);
+  }, 'Expected NaN but was <true> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertNaN(false);
+  }, 'Expected NaN but was <false> (Boolean)');
+  assertThrowsJsUnitException(function() {
+    assertNaN(null);
+  }, 'Expected NaN but was <null>');
+  assertThrowsJsUnitException(function() {
+    assertNaN('');
+  }, 'Expected NaN but was <> (String)');
 
   // TODO(user): These assertions fail. We should decide on the
   // semantics of assertNaN
@@ -357,6 +367,11 @@ function testAssertObjectNotEquals() {
 
   assertObjectNotEquals(new Map([['a', '1']]), new Map([['b', '1']]));
   assertObjectNotEquals(new Set(['a', 'b']), new Set(['a']));
+
+  if (SUPPORTS_TYPED_ARRAY) {
+    assertObjectNotEquals(
+        new Uint32Array([1, 2, 3]), new Uint32Array([1, 4, 3]));
+  }
 }
 
 function testAssertObjectEquals2() {
@@ -436,9 +451,153 @@ function testAssertObjectEqualsMap() {
   assertObjectEquals('maps should be equal', map1, map2);
 
   map1.set('hi', 'hey');
-  assertThrows('sets should not be equal', function() {
+  assertThrows('maps should not be equal', function() {
     assertObjectEquals(map1, map2);
   });
+}
+
+const SUPPORTS_TYPED_ARRAY =
+    typeof Uint8Array === 'function' && typeof Uint8Array.of === 'function';
+
+function testAssertObjectEqualsTypedArrays() {
+  if (!SUPPORTS_TYPED_ARRAY) return;  // not supported in IE<11
+
+  assertObjectEquals(
+      'Float32Arrays should be equal', Float32Array.of(1, 2, 3),
+      Float32Array.of(1, 2, 3));
+  assertObjectEquals(
+      'Float64Arrays should be equal', Float64Array.of(1, 2, 3),
+      Float64Array.of(1, 2, 3));
+  assertObjectEquals(
+      'Int8Arrays should be equal', Int8Array.of(1, 2, 3),
+      Int8Array.of(1, 2, 3));
+  assertObjectEquals(
+      'Int16Arrays should be equal', Int16Array.of(1, 2, 3),
+      Int16Array.of(1, 2, 3));
+  assertObjectEquals(
+      'Int32Arrays should be equal', Int32Array.of(1, 2, 3),
+      Int32Array.of(1, 2, 3));
+  assertObjectEquals(
+      'Uint8Arrays should be equal', Uint8Array.of(1, 2, 3),
+      Uint8Array.of(1, 2, 3));
+  assertObjectEquals(
+      'Uint8ClampedArrays should be equal', Uint8ClampedArray.of(1, 2, 3),
+      Uint8ClampedArray.of(1, 2, 3));
+  assertObjectEquals(
+      'Uint16Arrays should be equal', Uint16Array.of(1, 2, 3),
+      Uint16Array.of(1, 2, 3));
+  assertObjectEquals(
+      'Uint32Arrays should be equal', Uint32Array.of(1, 2, 3),
+      Uint32Array.of(1, 2, 3));
+
+  assertThrows('assertObjectNotEquals on same TypedArray', () => {
+    assertObjectNotEquals(Uint8Array.of(1, 2), Uint8Array.of(1, 2));
+  });
+}
+
+function testAssertObjectEqualsTypedArrayDifferentBacking() {
+  if (!SUPPORTS_TYPED_ARRAY) return;  // not supported in IE<11
+
+  const buf1 = new ArrayBuffer(3 * Uint16Array.BYTES_PER_ELEMENT);
+  const buf2 = new ArrayBuffer(4 * Uint16Array.BYTES_PER_ELEMENT);
+  const arr1 = new Uint16Array(buf1, 0, 3);
+  const arr2 = new Uint16Array(buf2, Uint16Array.BYTES_PER_ELEMENT, 3);
+  for (let i = 0; i < arr1.length; ++i) {
+    arr1[i] = arr2[i] = i * 2 + 1;
+  }
+  assertObjectEquals(
+      'TypedArrays with different backing buffer lengths should be equal',
+      Uint16Array.of(1, 3, 5), Uint16Array.of(0, 1, 3, 5, 7).subarray(1, 4));
+}
+
+function testAssertObjectNotEqualsMutatedTypedArray() {
+  if (!SUPPORTS_TYPED_ARRAY) return;  // not supported in IE<11
+
+  const arr1 = Int8Array.of(2, -5, 7);
+  const arr2 = Int8Array.from(arr1);
+  assertObjectEquals('TypedArrays should be equal', arr1, arr2);
+  ++arr1[1];
+  assertObjectNotEquals('Mutated TypedArray should not be equal', arr1, arr2);
+}
+
+function testAssertObjectNotEqualsDifferentTypedArrays() {
+  if (!SUPPORTS_TYPED_ARRAY) return;  // not supported in IE<11
+
+  assertObjectNotEquals(
+      'Float32Array and Float64Array should not be equal',
+      Float32Array.of(1, 2, 3), Float64Array.of(1, 2, 3));
+  assertObjectNotEquals(
+      'Float32Array and Int32Array should not be equal',
+      Float32Array.of(1, 2, 3), Int32Array.of(1, 2, 3));
+  assertObjectNotEquals(
+      'Int8Array and Int16Array should not be equal', Int8Array.of(1, 2, 3),
+      Int16Array.of(1, 2, 3));
+  assertObjectNotEquals(
+      'Int16Array and Uint16Array should not be equal', Int16Array.of(1, 2, 3),
+      Uint16Array.of(1, 2, 3));
+  assertObjectNotEquals(
+      'Int32Array and Uint8Array should not be equal', Int8Array.of(1, 2, 3),
+      Uint8Array.of(1, 2, 3));
+  assertObjectNotEquals(
+      'Uint8Array and Uint8ClampedArray should not be equal',
+      Uint8Array.of(1, 2, 3), Uint8ClampedArray.of(1, 2, 3));
+
+  assertThrows('assertObjectEquals on different types of TypedArray', () => {
+    assertObjectEquals(Uint8Array.of(1, 2), Uint16Array.of(1, 2));
+  });
+}
+
+function testAssertObjectBigIntTypedArrays() {
+  if (typeof BigInt64Array !== 'function') return;  // not supported pre-ES2020
+
+  // Check equality.
+  assertObjectEquals(
+      'BigInt64Arrays should be equal',
+      BigInt64Array.of(BigInt(1), BigInt(2), BigInt(3)),
+      BigInt64Array.of(BigInt(1), BigInt(2), BigInt(3)));
+  assertObjectEquals(
+      'BigUint64Arrays should be equal',
+      BigUint64Array.of(BigInt(1), BigInt(2), BigInt(3)),
+      BigUint64Array.of(BigInt(1), BigInt(2), BigInt(3)));
+
+  // Check mutation.
+  const arr1 = BigInt64Array.of(BigInt(2), BigInt(-5), BigInt(7));
+  const arr2 = BigInt64Array.from(arr1);
+  assertObjectEquals('BigInt64Arrays should be equal', arr1, arr2);
+  ++arr1[1];
+  assertObjectNotEquals(
+      'Mutated BigInt64Array should not be equal', arr1, arr2);
+
+  // Check different types are not equal.
+  assertObjectNotEquals(
+      'BigInt64Array and BigUint64Array should not equal',
+      BigInt64Array.of(BigInt(1), BigInt(2), BigInt(3)),
+      BigUint64Array.of(BigInt(1), BigInt(2), BigInt(3)));
+}
+
+function testAssertObjectNotEqualsTypedArrayContents() {
+  if (!SUPPORTS_TYPED_ARRAY) return;  // not supported in IE<11
+  assertObjectNotEquals(
+      'Different Uint16Array contents should not equal',
+      Uint16Array.of(1, 2, 3), Uint16Array.of(1, 3, 2));
+  assertObjectNotEquals(
+      'Different Float32Array contents should not equal',
+      Float32Array.of(1.2, 2.4, 3.8), Float32Array.of(1.2, 2.3, 3.8));
+
+  assertThrows(
+      'assertObjectEquals on TypedArray with different contents', () => {
+        assertObjectEquals(Uint8Array.of(1, 2), Uint8Array.of(3, 2));
+      });
+}
+
+function testAssertObjectNotEqualsTypedArrayOneExtra() {
+  if (!SUPPORTS_TYPED_ARRAY) return;  // not supported in IE<11
+  assertObjectNotEquals(
+      'Uint8ClampedArray with extra element should not equal',
+      Uint8ClampedArray.of(1, 2, 3), Uint8ClampedArray.of(1, 2, 3, 4));
+  assertObjectNotEquals(
+      'Float32Array with extra element should not equal',
+      Float32Array.of(1, 2, 3), Float32Array.of(1, 2, 3, 4));
 }
 
 function testAssertObjectEqualsIterNoEquals() {

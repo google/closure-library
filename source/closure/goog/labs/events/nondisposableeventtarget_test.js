@@ -12,56 +12,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.events.NonDisposableEventTargetTest');
-goog.setTestOnly('goog.labs.events.NonDisposableEventTargetTest');
+goog.module('goog.labs.events.NonDisposableEventTargetTest');
+goog.setTestOnly();
 
-goog.require('goog.events.Listenable');
-goog.require('goog.events.eventTargetTester');
-goog.require('goog.events.eventTargetTester.KeyType');
-goog.require('goog.events.eventTargetTester.UnlistenReturnType');
-goog.require('goog.labs.events.NonDisposableEventTarget');
-goog.require('goog.testing.jsunit');
+const KeyType = goog.require('goog.events.eventTargetTester.KeyType');
+const Listenable = goog.require('goog.events.Listenable');
+const NonDisposableEventTarget = goog.require('goog.labs.events.NonDisposableEventTarget');
+const UnlistenReturnType = goog.require('goog.events.eventTargetTester.UnlistenReturnType');
+const eventTargetTester = goog.require('goog.events.eventTargetTester');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function setUp() {
-  var newListenableFn = function() {
-    return new goog.labs.events.NonDisposableEventTarget();
-  };
-  var listenFn = function(src, type, listener, opt_capt, opt_handler) {
-    return src.listen(type, listener, opt_capt, opt_handler);
-  };
-  var unlistenFn = function(src, type, listener, opt_capt, opt_handler) {
-    return src.unlisten(type, listener, opt_capt, opt_handler);
-  };
-  var unlistenByKeyFn = function(src, key) { return src.unlistenByKey(key); };
-  var listenOnceFn = function(src, type, listener, opt_capt, opt_handler) {
-    return src.listenOnce(type, listener, opt_capt, opt_handler);
-  };
-  var dispatchEventFn = function(src, e) { return src.dispatchEvent(e); };
-  var removeAllFn = function(src, opt_type, opt_capture) {
-    return src.removeAllListeners(opt_type, opt_capture);
-  };
-  var getListenersFn = function(src, type, capture) {
-    return src.getListeners(type, capture);
-  };
-  var getListenerFn = function(src, type, listener, capture, opt_handler) {
-    return src.getListener(type, listener, capture, opt_handler);
-  };
-  var hasListenerFn = function(src, opt_type, opt_capture) {
-    return src.hasListener(opt_type, opt_capture);
-  };
+testSuite({
+  setUp() {
+    const newListenableFn = () => new NonDisposableEventTarget();
+    const listenFn = (src, type, listener, opt_capt, opt_handler) =>
+        src.listen(type, listener, opt_capt, opt_handler);
+    const unlistenFn = (src, type, listener, opt_capt, opt_handler) =>
+        src.unlisten(type, listener, opt_capt, opt_handler);
+    const unlistenByKeyFn = (src, key) => src.unlistenByKey(key);
+    const listenOnceFn = (src, type, listener, opt_capt, opt_handler) =>
+        src.listenOnce(type, listener, opt_capt, opt_handler);
+    const dispatchEventFn = (src, e) => src.dispatchEvent(e);
+    const removeAllFn = (src, opt_type, opt_capture) =>
+        src.removeAllListeners(opt_type, opt_capture);
+    const getListenersFn = (src, type, capture) =>
+        src.getListeners(type, capture);
+    const getListenerFn = (src, type, listener, capture, opt_handler) =>
+        src.getListener(type, listener, capture, opt_handler);
+    const hasListenerFn = (src, opt_type, opt_capture) =>
+        src.hasListener(opt_type, opt_capture);
 
-  goog.events.eventTargetTester.setUp(
-      newListenableFn, listenFn, unlistenFn, unlistenByKeyFn, listenOnceFn,
-      dispatchEventFn, removeAllFn, getListenersFn, getListenerFn,
-      hasListenerFn, goog.events.eventTargetTester.KeyType.NUMBER,
-      goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN, false);
-}
+    eventTargetTester.setUp(
+        newListenableFn, listenFn, unlistenFn, unlistenByKeyFn, listenOnceFn,
+        dispatchEventFn, removeAllFn, getListenersFn, getListenerFn,
+        hasListenerFn, KeyType.NUMBER, UnlistenReturnType.BOOLEAN, false);
+  },
 
-function tearDown() {
-  goog.events.eventTargetTester.tearDown();
-}
+  tearDown() {
+    eventTargetTester.tearDown();
+  },
 
-function testRuntimeTypeIsCorrect() {
-  var target = new goog.labs.events.NonDisposableEventTarget();
-  assertTrue(goog.events.Listenable.isImplementedBy(target));
-}
+  testRuntimeTypeIsCorrect() {
+    const target = new NonDisposableEventTarget();
+    assertTrue(Listenable.isImplementedBy(target));
+  },
+});

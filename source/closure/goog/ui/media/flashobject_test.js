@@ -12,48 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.media.FlashObjectTest');
-goog.setTestOnly('goog.ui.media.FlashObjectTest');
+goog.module('goog.ui.media.FlashObjectTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.DomHelper');
-goog.require('goog.dom.TagName');
-goog.require('goog.events');
-goog.require('goog.events.Event');
-goog.require('goog.events.EventType');
-goog.require('goog.html.testing');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.events');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.media.FlashObject');
-goog.require('goog.userAgent');
+const DomHelper = goog.require('goog.dom.DomHelper');
+const EventType = goog.require('goog.events.EventType');
+const FlashObject = goog.require('goog.ui.media.FlashObject');
+const GoogEvent = goog.require('goog.events.Event');
+const MockControl = goog.require('goog.testing.MockControl');
+const TagName = goog.require('goog.dom.TagName');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
+const testing = goog.require('goog.html.testing');
+const testingEvents = goog.require('goog.testing.events');
+const userAgent = goog.require('goog.userAgent');
 
 // Delay running the tests after page load. This test has some asynchronous
 // behavior that interacts with page load detection.
 goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS = 500;
 
-var FLASH_URL = goog.html.testing.newTrustedResourceUrlForTest(
+const FLASH_URL = testing.newTrustedResourceUrlForTest(
     'http://www.youtube.com/v/RbI7cCp0v6w&hl=en&fs=1');
-var control = new goog.testing.MockControl();
-var domHelper = control.createLooseMock(goog.dom.DomHelper);
+const control = new MockControl();
+const domHelper = control.createLooseMock(DomHelper);
 // TODO(user): mocking window.document throws exceptions in FF2. find out how
 // to mock it.
-var documentHelper = {body: control.createLooseMock(goog.dom.DomHelper)};
-var element = goog.dom.createElement(goog.dom.TagName.DIV);
-
-function setUp() {
-  control.$resetAll();
-  domHelper.getDocument().$returns(documentHelper).$anyTimes();
-  domHelper.createElement(goog.dom.TagName.DIV).$returns(element).$anyTimes();
-  documentHelper.body.appendChild(element).$anyTimes();
-}
-
-function tearDown() {
-  control.$verifyAll();
-}
+const documentHelper = {
+  body: control.createLooseMock(DomHelper)
+};
+const element = dom.createElement(TagName.DIV);
 
 function getFlashVarsFromElement(flash) {
-  var el = flash.getFlashElement();
+  let el = flash.getFlashElement();
 
   // This should work in everything except IE:
   if (el.hasAttribute && el.hasAttribute('flashvars'))
@@ -70,90 +61,13 @@ function getFlashVarsFromElement(flash) {
   return '';
 }
 
-function testInstantiationAndRendering() {
-  control.$replayAll();
-
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-  flash.render();
-  flash.dispose();
-}
-
-function testRenderedWithCorrectAttributes() {
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(11)) {
-    return;
-  }
-
-  control.$replayAll();
-
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-  flash.setAllowScriptAccess('allowScriptAccess');
-  flash.setBackgroundColor('backgroundColor');
-  flash.setId('id');
-  flash.setFlashVars({'k1': 'v1', 'k2': 'v2'});
-  flash.setWmode('wmode');
-  flash.render();
-
-  var el = flash.getFlashElement();
-  assertEquals('true', el.getAttribute('allowFullScreen'));
-  assertEquals('all', el.getAttribute('allowNetworking'));
-  assertEquals('allowScriptAccess', el.getAttribute('allowScriptAccess'));
-  assertEquals(
-      goog.ui.media.FlashObject.FLASH_CSS_CLASS, el.getAttribute('class'));
-  assertEquals('k1=v1&k2=v2', el.getAttribute('FlashVars'));
-  assertEquals('id', el.getAttribute('id'));
-  assertEquals('id', el.getAttribute('name'));
-  assertEquals(
-      'https://www.macromedia.com/go/getflashplayer',
-      el.getAttribute('pluginspage'));
-  assertEquals('high', el.getAttribute('quality'));
-  assertEquals('false', el.getAttribute('SeamlessTabbing'));
-  assertEquals(FLASH_URL.getTypedStringValue(), el.getAttribute('src'));
-  assertEquals('application/x-shockwave-flash', el.getAttribute('type'));
-  assertEquals('wmode', el.getAttribute('wmode'));
-}
-
-function testRenderedWithCorrectAttributesOldIe() {
-  if (!goog.userAgent.IE || goog.userAgent.isDocumentModeOrHigher(11)) {
-    return;
-  }
-
-  control.$replayAll();
-
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-  flash.setAllowScriptAccess('allowScriptAccess');
-  flash.setBackgroundColor('backgroundColor');
-  flash.setId('id');
-  flash.setFlashVars({'k1': 'v1', 'k2': 'v2'});
-  flash.setWmode('wmode');
-  flash.render();
-
-  var el = flash.getFlashElement();
-  assertEquals(
-      'class', goog.ui.media.FlashObject.FLASH_CSS_CLASS,
-      el.getAttribute('class'));
-  assertEquals(
-      'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000', el.getAttribute('classid'));
-  assertEquals('id', 'id', el.getAttribute('id'));
-  assertEquals('name', 'id', el.getAttribute('name'));
-
-  assertContainsParam(el, 'allowFullScreen', 'true');
-  assertContainsParam(el, 'allowNetworking', 'all');
-  assertContainsParam(el, 'AllowScriptAccess', 'allowScriptAccess');
-  assertContainsParam(el, 'bgcolor', 'backgroundColor');
-  assertContainsParam(el, 'FlashVars', 'FlashVars');
-  assertContainsParam(el, 'movie', FLASH_URL);
-  assertContainsParam(el, 'quality', 'high');
-  assertContainsParam(el, 'SeamlessTabbing', 'false');
-  assertContainsParam(el, 'wmode', 'wmode');
-}
-
 function assertContainsParam(element, expectedName, expectedValue) {
-  var failureMsg = 'Expected param with name \"' + expectedName +
-      '\" and value \"' + expectedValue + '\". Not found in child nodes: ' +
-      element.innerHTML;
-  for (var i = 0; i < element.childNodes.length; i++) {
-    var child = element.childNodes[i];
-    var name = child.getAttribute('name');
+  const failureMsg = `Expected param with name "${expectedName}` +
+      '\" and value \"' + expectedValue +
+      '\". Not found in child nodes: ' + element.innerHTML;
+  for (let i = 0; i < element.childNodes.length; i++) {
+    const child = element.childNodes[i];
+    const name = child.getAttribute('name');
     if (name === expectedName) {
       if (!child.getAttribute('value') === expectedValue) {
         fail(failureMsg);
@@ -164,149 +78,236 @@ function assertContainsParam(element, expectedName, expectedValue) {
   fail(failureMsg);
 }
 
-function testSetFlashVar() {
-  control.$replayAll();
+testSuite({
+  setUp() {
+    control.$resetAll();
+    domHelper.getDocument().$returns(documentHelper).$anyTimes();
+    domHelper.createElement(TagName.DIV).$returns(element).$anyTimes();
+    documentHelper.body.appendChild(element).$anyTimes();
+  },
 
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
+  tearDown() {
+    control.$verifyAll();
+  },
 
-  assertTrue(flash.getFlashVars().isEmpty());
-  flash.setFlashVar('foo', 'bar');
-  flash.setFlashVar('hello', 'world');
-  assertFalse(flash.getFlashVars().isEmpty());
+  testInstantiationAndRendering() {
+    control.$replayAll();
 
-  flash.render();
-
-  assertEquals('foo=bar&hello=world', getFlashVarsFromElement(flash));
-  flash.dispose();
-}
-
-function testAddFlashVars() {
-  control.$replayAll();
-
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-
-  assertTrue(flash.getFlashVars().isEmpty());
-  flash.addFlashVars({'using': 'an', 'object': 'literal'});
-  assertFalse(flash.getFlashVars().isEmpty());
-
-  flash.render();
-
-  assertEquals('using=an&object=literal', getFlashVarsFromElement(flash));
-  flash.dispose();
-}
-
-
-/**
- * @deprecated Remove once setFlashVars is removed.
- */
-function testSetFlashVarsUsingFalseAsTheValue() {
-  control.$replayAll();
-
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-
-  assertTrue(flash.getFlashVars().isEmpty());
-  flash.setFlashVars('beEvil', false);
-  assertFalse(flash.getFlashVars().isEmpty());
-
-  flash.render();
-
-  assertEquals('beEvil=false', getFlashVarsFromElement(flash));
-  flash.dispose();
-}
-
-
-/**
- * @deprecated Remove once setFlashVars is removed.
- */
-function testSetFlashVarsWithWrongArgument() {
-  control.$replayAll();
-
-  assertThrows(function() {
-    var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-    flash.setFlashVars('foo=bar');
+    const flash = new FlashObject(FLASH_URL, domHelper);
+    flash.render();
     flash.dispose();
-  });
-}
+  },
 
-function testSetFlashVarUrlEncoding() {
-  control.$replayAll();
+  testRenderedWithCorrectAttributes() {
+    if (userAgent.IE && !userAgent.isDocumentModeOrHigher(11)) {
+      return;
+    }
 
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-  flash.setFlashVar('foo', 'bar and some extra spaces');
-  flash.render();
-  assertEquals(
-      'foo=bar%20and%20some%20extra%20spaces', getFlashVarsFromElement(flash));
-  flash.dispose();
-}
+    control.$replayAll();
 
-function testThrowsRequiredVersionOfFlashNotAvailable() {
-  control.$replayAll();
+    const flash = new FlashObject(FLASH_URL, domHelper);
+    flash.setAllowScriptAccess('allowScriptAccess');
+    flash.setBackgroundColor('backgroundColor');
+    flash.setId('id');
+    flash.setFlashVars({'k1': 'v1', 'k2': 'v2'});
+    flash.setWmode('wmode');
+    flash.render();
 
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-  flash.setRequiredVersion('999.999.999');
+    const el = flash.getFlashElement();
+    assertEquals('true', el.getAttribute('allowFullScreen'));
+    assertEquals('all', el.getAttribute('allowNetworking'));
+    assertEquals('allowScriptAccess', el.getAttribute('allowScriptAccess'));
+    assertEquals(FlashObject.FLASH_CSS_CLASS, el.getAttribute('class'));
+    assertEquals('k1=v1&k2=v2', el.getAttribute('FlashVars'));
+    assertEquals('id', el.getAttribute('id'));
+    assertEquals('id', el.getAttribute('name'));
+    assertEquals(
+        'https://www.macromedia.com/go/getflashplayer',
+        el.getAttribute('pluginspage'));
+    assertEquals('high', el.getAttribute('quality'));
+    assertEquals('false', el.getAttribute('SeamlessTabbing'));
+    assertEquals(FLASH_URL.getTypedStringValue(), el.getAttribute('src'));
+    assertEquals('application/x-shockwave-flash', el.getAttribute('type'));
+    assertEquals('wmode', el.getAttribute('wmode'));
+  },
 
-  assertTrue(flash.hasRequiredVersion());
+  testRenderedWithCorrectAttributesOldIe() {
+    if (!userAgent.IE || userAgent.isDocumentModeOrHigher(11)) {
+      return;
+    }
 
-  assertThrows(function() { flash.render(); });
+    control.$replayAll();
 
-  flash.dispose();
-}
+    const flash = new FlashObject(FLASH_URL, domHelper);
+    flash.setAllowScriptAccess('allowScriptAccess');
+    flash.setBackgroundColor('backgroundColor');
+    flash.setId('id');
+    flash.setFlashVars({'k1': 'v1', 'k2': 'v2'});
+    flash.setWmode('wmode');
+    flash.render();
 
-function testIsLoadedForIE() {
-  control.$replayAll();
+    const el = flash.getFlashElement();
+    assertEquals(
+        'class', FlashObject.FLASH_CSS_CLASS, el.getAttribute('class'));
+    assertEquals(
+        'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000',
+        el.getAttribute('classid'));
+    assertEquals('id', 'id', el.getAttribute('id'));
+    assertEquals('name', 'id', el.getAttribute('name'));
 
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-  flash.render();
-  assertNotThrows('isLoaded() should not throw exception', function() {
-    flash.isLoaded();
-  });
-  flash.dispose();
-}
+    assertContainsParam(el, 'allowFullScreen', 'true');
+    assertContainsParam(el, 'allowNetworking', 'all');
+    assertContainsParam(el, 'AllowScriptAccess', 'allowScriptAccess');
+    assertContainsParam(el, 'bgcolor', 'backgroundColor');
+    assertContainsParam(el, 'FlashVars', 'FlashVars');
+    assertContainsParam(el, 'movie', FLASH_URL);
+    assertContainsParam(el, 'quality', 'high');
+    assertContainsParam(el, 'SeamlessTabbing', 'false');
+    assertContainsParam(el, 'wmode', 'wmode');
+  },
 
-function testIsLoadedAfterDispose() {
-  control.$replayAll();
+  testSetFlashVar() {
+    control.$replayAll();
 
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-  flash.render();
-  // TODO(user): find out a way to test the loadness of flash movies on
-  // asynchronous tests. if debugger; is left here, the test pass. if removed
-  // the test fails. that happens because flash needs some time to be
-  // considered loaded, after flash.render() is called (like img.src i guess).
-  // debugger;
-  // assertTrue(flash.isLoaded());
-  flash.dispose();
-  assertFalse(flash.isLoaded());
-}
+    const flash = new FlashObject(FLASH_URL, domHelper);
 
-function testPropagatesEventsConsistently() {
-  var event = control.createLooseMock(goog.events.Event);
+    assertTrue(flash.getFlashVars().isEmpty());
+    flash.setFlashVar('foo', 'bar');
+    flash.setFlashVar('hello', 'world');
+    assertFalse(flash.getFlashVars().isEmpty());
 
-  // we expect any event to have its propagation stopped.
-  event.stopPropagation();
+    flash.render();
 
-  control.$replayAll();
+    assertEquals('foo=bar&hello=world', getFlashVarsFromElement(flash));
+    flash.dispose();
+  },
 
-  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
-  flash.render();
-  event.target = flash.getElement();
-  event.type = goog.events.EventType.CLICK;
-  goog.testing.events.fireBrowserEvent(event);
-  flash.dispose();
-}
+  testAddFlashVars() {
+    control.$replayAll();
 
-function testEventsGetsSinked() {
-  var called = false;
-  var flash = new goog.ui.media.FlashObject(FLASH_URL);
-  var parent = goog.dom.createElement(goog.dom.TagName.DIV);
-  flash.render(parent);
+    const flash = new FlashObject(FLASH_URL, domHelper);
 
-  goog.events.listen(
-      parent, goog.events.EventType.CLICK, function(e) { called = true; });
+    assertTrue(flash.getFlashVars().isEmpty());
+    flash.addFlashVars({'using': 'an', 'object': 'literal'});
+    assertFalse(flash.getFlashVars().isEmpty());
 
-  assertFalse(called);
+    flash.render();
 
-  goog.testing.events.fireClickSequence(flash.getElement());
+    assertEquals('using=an&object=literal', getFlashVarsFromElement(flash));
+    flash.dispose();
+  },
 
-  assertFalse(called);
-  flash.dispose();
-}
+  /** @deprecated Remove once setFlashVars is removed. */
+  testSetFlashVarsUsingFalseAsTheValue() {
+    control.$replayAll();
+
+    const flash = new FlashObject(FLASH_URL, domHelper);
+
+    assertTrue(flash.getFlashVars().isEmpty());
+    flash.setFlashVars('beEvil', false);
+    assertFalse(flash.getFlashVars().isEmpty());
+
+    flash.render();
+
+    assertEquals('beEvil=false', getFlashVarsFromElement(flash));
+    flash.dispose();
+  },
+
+  /** @deprecated Remove once setFlashVars is removed. */
+  testSetFlashVarsWithWrongArgument() {
+    control.$replayAll();
+
+    assertThrows(() => {
+      const flash = new FlashObject(FLASH_URL, domHelper);
+      flash.setFlashVars('foo=bar');
+      flash.dispose();
+    });
+  },
+
+  testSetFlashVarUrlEncoding() {
+    control.$replayAll();
+
+    const flash = new FlashObject(FLASH_URL, domHelper);
+    flash.setFlashVar('foo', 'bar and some extra spaces');
+    flash.render();
+    assertEquals(
+        'foo=bar%20and%20some%20extra%20spaces',
+        getFlashVarsFromElement(flash));
+    flash.dispose();
+  },
+
+  testThrowsRequiredVersionOfFlashNotAvailable() {
+    control.$replayAll();
+
+    const flash = new FlashObject(FLASH_URL, domHelper);
+    flash.setRequiredVersion('999.999.999');
+
+    assertTrue(flash.hasRequiredVersion());
+
+    assertThrows(() => {
+      flash.render();
+    });
+
+    flash.dispose();
+  },
+
+  testIsLoadedForIE() {
+    control.$replayAll();
+
+    const flash = new FlashObject(FLASH_URL, domHelper);
+    flash.render();
+    assertNotThrows('isLoaded() should not throw exception', () => {
+      flash.isLoaded();
+    });
+    flash.dispose();
+  },
+
+  testIsLoadedAfterDispose() {
+    control.$replayAll();
+
+    const flash = new FlashObject(FLASH_URL, domHelper);
+    flash.render();
+    // TODO(goto): find out a way to test the loadness of flash movies on
+    // asynchronous tests. if debugger; is left here, the test pass. if removed
+    // the test fails. that happens because flash needs some time to be
+    // considered loaded, after flash.render() is called (like img.src i guess).
+    // debugger;
+    // assertTrue(flash.isLoaded());
+    flash.dispose();
+    assertFalse(flash.isLoaded());
+  },
+
+  testPropagatesEventsConsistently() {
+    const event = control.createLooseMock(GoogEvent);
+
+    // we expect any event to have its propagation stopped.
+    event.stopPropagation();
+
+    control.$replayAll();
+
+    const flash = new FlashObject(FLASH_URL, domHelper);
+    flash.render();
+    event.target = flash.getElement();
+    event.type = EventType.CLICK;
+    testingEvents.fireBrowserEvent(event);
+    flash.dispose();
+  },
+
+  testEventsGetsSinked() {
+    let called = false;
+    const flash = new FlashObject(FLASH_URL);
+    const parent = dom.createElement(TagName.DIV);
+    flash.render(parent);
+
+    events.listen(parent, EventType.CLICK, (e) => {
+      called = true;
+    });
+
+    assertFalse(called);
+
+    testingEvents.fireClickSequence(flash.getElement());
+
+    assertFalse(called);
+    flash.dispose();
+  },
+});

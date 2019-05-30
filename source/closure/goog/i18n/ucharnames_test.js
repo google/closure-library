@@ -12,33 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.i18n.uCharNamesTest');
-goog.setTestOnly('goog.i18n.uCharNamesTest');
+goog.module('goog.i18n.uCharNamesTest');
+goog.setTestOnly();
 
-goog.require('goog.i18n.uCharNames');
-goog.require('goog.testing.jsunit');
+const testSuite = goog.require('goog.testing.testSuite');
+const uCharNames = goog.require('goog.i18n.uCharNames');
 
-function testToName() {
-  var result = goog.i18n.uCharNames.toName(' ');
-  assertEquals('Space', result);
-}
+testSuite({
+  testToName() {
+    const result = uCharNames.toName(' ');
+    assertEquals('Space', result);
+  },
 
-function testToNameForNumberKey() {
-  var result = goog.i18n.uCharNames.toName('\u2028');
-  assertEquals('Line Separator', result);
-}
+  testToNameForNumberKey() {
+    const result = uCharNames.toName('\u2028');
+    assertEquals('Line Separator', result);
+  },
 
-function testToNameForVariationSelector() {
-  var result = goog.i18n.uCharNames.toName('\ufe00');
-  assertEquals('Variation Selector - 1', result);
-}
+  testToNameForVariationSelector() {
+    const result = uCharNames.toName('\ufe00');
+    assertEquals('Variation Selector - 1', result);
+  },
 
-function testToNameForVariationSelectorSupp() {
-  var result = goog.i18n.uCharNames.toName('\uDB40\uDD00');
-  assertEquals('Variation Selector - 17', result);
-}
+  testToNameForVariationSelectorSupp() {
+    const result = uCharNames.toName('\uDB40\uDD00');
+    assertEquals('Variation Selector - 17', result);
+  },
 
-function testToNameForNull() {
-  var result = goog.i18n.uCharNames.toName('a');
-  assertNull(result);
-}
+  testToNameForNull() {
+    const result = uCharNames.toName('a');
+    assertNull(result);
+  },
+});

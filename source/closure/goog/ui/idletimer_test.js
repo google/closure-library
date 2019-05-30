@@ -12,80 +12,78 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.IdleTimerTest');
-goog.setTestOnly('goog.ui.IdleTimerTest');
+goog.module('goog.ui.IdleTimerTest');
+goog.setTestOnly();
 
-goog.require('goog.events');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.IdleTimer');
-goog.require('goog.ui.MockActivityMonitor');
+const IdleTimer = goog.require('goog.ui.IdleTimer');
+const MockActivityMonitor = goog.require('goog.ui.MockActivityMonitor');
+const MockClock = goog.require('goog.testing.MockClock');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var clock;
+let clock;
 
-function setUp() {
-  clock = new goog.testing.MockClock(true);
-  goog.now = goog.bind(clock.getCurrentTime, clock);
-}
+testSuite({
+  setUp() {
+    clock = new MockClock(true);
+    goog.now = goog.bind(clock.getCurrentTime, clock);
+  },
 
-function tearDown() {
-  clock.dispose();
-}
+  tearDown() {
+    clock.dispose();
+  },
 
+  /** Tests whether an event is fired when the user becomes idle */
+  testBecomeIdle() {
+    const idleThreshold = 1000;
+    const mockActivityMonitor = new MockActivityMonitor();
+    const idleTimer = new IdleTimer(idleThreshold, mockActivityMonitor);
 
-/**
- * Tests whether an event is fired when the user becomes idle
- */
-function testBecomeIdle() {
-  var idleThreshold = 1000;
-  var mockActivityMonitor = new goog.ui.MockActivityMonitor();
-  var idleTimer = new goog.ui.IdleTimer(idleThreshold, mockActivityMonitor);
+    mockActivityMonitor.simulateEvent();
+    assertFalse('Precondition: user should be active', idleTimer.isIdle());
 
-  mockActivityMonitor.simulateEvent();
-  assertFalse('Precondition: user should be active', idleTimer.isIdle());
+    let onBecomeIdleCount = 0;
+    const onBecomeIdle = () => {
+      onBecomeIdleCount += 1;
+    };
+    events.listen(idleTimer, IdleTimer.Event.BECOME_IDLE, onBecomeIdle);
 
-  var onBecomeIdleCount = 0;
-  var onBecomeIdle = function() { onBecomeIdleCount += 1; };
-  goog.events.listen(
-      idleTimer, goog.ui.IdleTimer.Event.BECOME_IDLE, onBecomeIdle);
+    clock.tick(idleThreshold);
+    mockActivityMonitor.simulateEvent();
+    clock.tick(idleThreshold);
+    assert('The BECOME_IDLE event fired too early', onBecomeIdleCount == 0);
+    assertFalse('The user should still be active', idleTimer.isIdle());
 
-  clock.tick(idleThreshold);
-  mockActivityMonitor.simulateEvent();
-  clock.tick(idleThreshold);
-  assert('The BECOME_IDLE event fired too early', onBecomeIdleCount == 0);
-  assertFalse('The user should still be active', idleTimer.isIdle());
+    clock.tick(1);
+    assert('The BECOME_IDLE event fired too late', onBecomeIdleCount == 1);
+    assert('The user should be idle', idleTimer.isIdle());
 
-  clock.tick(1);
-  assert('The BECOME_IDLE event fired too late', onBecomeIdleCount == 1);
-  assert('The user should be idle', idleTimer.isIdle());
+    idleTimer.dispose();
+  },
 
-  idleTimer.dispose();
-}
+  /** Tests whether an event is fired when the user becomes active */
+  testBecomeActive() {
+    const idleThreshold = 1000;
+    const mockActivityMonitor = new MockActivityMonitor();
+    const idleTimer = new IdleTimer(idleThreshold, mockActivityMonitor);
 
+    clock.tick(idleThreshold + 1);
+    assert('Precondition: user should be idle', idleTimer.isIdle());
 
-/**
- * Tests whether an event is fired when the user becomes active
- */
-function testBecomeActive() {
-  var idleThreshold = 1000;
-  var mockActivityMonitor = new goog.ui.MockActivityMonitor();
-  var idleTimer = new goog.ui.IdleTimer(idleThreshold, mockActivityMonitor);
+    let onBecomeActiveCount = 0;
+    const onBecomeActive = () => {
+      onBecomeActiveCount += 1;
+    };
+    events.listen(idleTimer, IdleTimer.Event.BECOME_ACTIVE, onBecomeActive);
 
-  clock.tick(idleThreshold + 1);
-  assert('Precondition: user should be idle', idleTimer.isIdle());
+    clock.tick(idleThreshold);
+    assert('The BECOME_ACTIVE event fired too early', onBecomeActiveCount == 0);
+    assert('The user should still be idle', idleTimer.isIdle());
 
-  var onBecomeActiveCount = 0;
-  var onBecomeActive = function() { onBecomeActiveCount += 1; };
-  goog.events.listen(
-      idleTimer, goog.ui.IdleTimer.Event.BECOME_ACTIVE, onBecomeActive);
+    mockActivityMonitor.simulateEvent();
+    assert('The BECOME_ACTIVE event fired too late', onBecomeActiveCount == 1);
+    assertFalse('The user should be active', idleTimer.isIdle());
 
-  clock.tick(idleThreshold);
-  assert('The BECOME_ACTIVE event fired too early', onBecomeActiveCount == 0);
-  assert('The user should still be idle', idleTimer.isIdle());
-
-  mockActivityMonitor.simulateEvent();
-  assert('The BECOME_ACTIVE event fired too late', onBecomeActiveCount == 1);
-  assertFalse('The user should be active', idleTimer.isIdle());
-
-  idleTimer.dispose();
-}
+    idleTimer.dispose();
+  },
+});
