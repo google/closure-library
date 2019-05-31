@@ -168,9 +168,9 @@ testSuite({
     assertFalse(googString.isEmpty(' a b c \t'));
     assertFalse(googString.isEmpty(';'));
 
-    assertFalse(googString.isEmpty(undefined));
-    assertFalse(googString.isEmpty(null));
-    assertFalse(googString.isEmpty({a: 1, b: 2}));
+    assertFalse(googString.isEmpty(/** @type {?} */ (undefined)));
+    assertFalse(googString.isEmpty(/** @type {?} */ (null)));
+    assertFalse(googString.isEmpty(/** @type {?} */ ({a: 1, b: 2})));
   },
 
   testIsEmptyOrWhitespace() {
@@ -183,9 +183,10 @@ testSuite({
     assertFalse(googString.isEmptyOrWhitespace(' a b c \t'));
     assertFalse(googString.isEmptyOrWhitespace(';'));
 
-    assertFalse(googString.isEmptyOrWhitespace(undefined));
-    assertFalse(googString.isEmptyOrWhitespace(null));
-    assertFalse(googString.isEmptyOrWhitespace({a: 1, b: 2}));
+    assertFalse(googString.isEmptyOrWhitespace(/** @type {?} */ (undefined)));
+    assertFalse(googString.isEmptyOrWhitespace(/** @type {?} */ (null)));
+    assertFalse(
+        googString.isEmptyOrWhitespace(/** @type {?} */ ({a: 1, b: 2})));
   },
 
   testIsEmptyString() {
@@ -198,7 +199,7 @@ testSuite({
     assertFalse(googString.isEmptyString(' a b c \t'));
     assertFalse(googString.isEmptyString(';'));
 
-    assertFalse(googString.isEmptyString({a: 1, b: 2}));
+    assertFalse(googString.isEmptyString(/** @type {?} */ ({a: 1, b: 2})));
   },
 
   testIsEmptySafe() {
@@ -239,8 +240,9 @@ testSuite({
     assertTrue('"N" should be alpha', googString.isAlpha('N'));
     assertTrue('"Z" should be alpha', googString.isAlpha('Z'));
     assertTrue('"aa" should be alpha', googString.isAlpha('aa'));
-    assertTrue('null is alpha', googString.isAlpha(null));
-    assertTrue('undefined is alpha', googString.isAlpha(undefined));
+    assertTrue('null is alpha', googString.isAlpha(/** @type {?} */ (null)));
+    assertTrue(
+        'undefined is alpha', googString.isAlpha(/** @type {?} */ (undefined)));
 
     assertFalse('"aa!" is not alpha', googString.isAlpha('aa!s'));
     assertFalse('"!" is not alpha', googString.isAlpha('!'));
@@ -269,9 +271,12 @@ testSuite({
     assertTrue(
         '"ABCabc123" should be alphanumeric',
         googString.isAlphaNumeric('ABCabc123'));
-    assertTrue('null is alphanumeric', googString.isAlphaNumeric(null));
     assertTrue(
-        'undefined is alphanumeric', googString.isAlphaNumeric(undefined));
+        'null is alphanumeric',
+        googString.isAlphaNumeric(/** @type {?} */ (null)));
+    assertTrue(
+        'undefined is alphanumeric',
+        googString.isAlphaNumeric(/** @type {?} */ (undefined)));
 
     assertFalse(
         '"123!" should not be alphanumeric', googString.isAlphaNumeric('123!'));
@@ -304,7 +309,8 @@ testSuite({
     assertFalse('"a" is not a space', googString.isSpace('a'));
     assertFalse('"3" is not a space', googString.isSpace('3'));
     assertFalse('"#" is not a space', googString.isSpace('#'));
-    assertFalse('null is not a space', googString.isSpace(null));
+    assertFalse(
+        'null is not a space', googString.isSpace(/** @type {?} */ (null)));
     assertFalse('nbsp is not a space', googString.isSpace('\xa0'));
   },
 
@@ -594,6 +600,7 @@ testSuite({
   },
 
   testHtmlUnescapeEntitiesWithDocument() {
+    /** @type {?} */
     const documentMock = {
       createElement: mockControl.createFunctionMock('createElement'),
     };
@@ -612,6 +619,7 @@ testSuite({
     mockControl.$verifyAll();
   },
 
+  /** @suppress {visibility} */
   testHtmlEscapeAndUnescapeEntitiesUsingDom() {
     const text = '"x1 < x2 && y2 > y1"';
     const html = '&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;';
@@ -629,6 +637,7 @@ testSuite({
         html);
   },
 
+  /** @suppress {visibility} */
   testHtmlUnescapeEntitiesUsingDom_withAmpersands() {
     const html = '&lt;a&b&gt;';
     const text = '<a&b>';
@@ -638,6 +647,7 @@ testSuite({
         googString.unescapeEntitiesUsingDom_(html));
   },
 
+  /** @suppress {visibility} */
   testHtmlEscapeAndUnescapePureXmlEntities_() {
     const text = '"x1 < x2 && y2 > y1"';
     const html = '&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;';
@@ -699,6 +709,7 @@ testSuite({
     assertEquals('unescapeEntities is vulnarable to XSS', 0, globalXssVar);
   },
 
+  /** @suppress {visibility} */
   testXssUnescapeEntitiesUsingDom() {
     // This tests that we don't have any XSS exploits in
     // unescapeEntitiesUsingDom
@@ -725,6 +736,7 @@ testSuite({
         'unescapeEntitiesUsingDom_ is vulnerable to XSS', 0, globalXssVar);
   },
 
+  /** @suppress {visibility} */
   testXssUnescapePureXmlEntities() {
     // This tests that we don't have any XSS exploits in unescapePureXmlEntities
     let test = '&amp;<script defer>globalXssVar=1;</' +
@@ -786,7 +798,7 @@ testSuite({
 
     // We don't care about trailing spaces.
     assertEquals('a ', googString.preserveSpaces('a '));
-    assertEquals('a \n' + nbsp + 'b', goog.string.preserveSpaces('a \n b'));
+    assertEquals('a \n' + nbsp + 'b', googString.preserveSpaces('a \n b'));
   },
 
   testStripQuotes() {
@@ -854,15 +866,23 @@ testSuite({
         'Should not clip html char', 'true &amp;&amp;...= false',
         googString.truncateMiddle(html, 14, true));
 
-    assertEquals('ab...xyz', googString.truncateMiddle(str, 5, null, 3));
-    assertEquals('abcdefg...xyz', googString.truncateMiddle(str, 10, null, 3));
-    assertEquals('abcdef...wxyz', googString.truncateMiddle(str, 10, null, 4));
-    assertEquals('...yz', googString.truncateMiddle(str, 2, null, 3));
-    assertEquals(str, googString.truncateMiddle(str, 50, null, 3));
+    assertEquals(
+        'ab...xyz',
+        googString.truncateMiddle(str, 5, /** @type {?} */ (null), 3));
+    assertEquals(
+        'abcdefg...xyz',
+        googString.truncateMiddle(str, 10, /** @type {?} */ (null), 3));
+    assertEquals(
+        'abcdef...wxyz',
+        googString.truncateMiddle(str, 10, /** @type {?} */ (null), 4));
+    assertEquals(
+        '...yz', googString.truncateMiddle(str, 2, /** @type {?} */ (null), 3));
+    assertEquals(
+        str, googString.truncateMiddle(str, 50, /** @type {?} */ (null), 3));
 
     assertEquals(
         'Should clip html char', 'true &amp;&...lse',
-        googString.truncateMiddle(html, 14, null, 3));
+        googString.truncateMiddle(html, 14, /** @type {?} */ (null), 3));
     assertEquals(
         'Should not clip html char', 'true &amp;&amp; fal...lse',
         googString.truncateMiddle(html, 14, true, 3));
@@ -923,17 +943,23 @@ testSuite({
   },
 
   testCountOf() {
-    assertEquals(googString.countOf('REDSOXROX', undefined), 0);
-    assertEquals(googString.countOf('REDSOXROX', null), 0);
+    assertEquals(
+        googString.countOf('REDSOXROX', /** @type {?} */ (undefined)), 0);
+    assertEquals(googString.countOf('REDSOXROX', /** @type {?} */ (null)), 0);
     assertEquals(googString.countOf('REDSOXROX', ''), 0);
-    assertEquals(googString.countOf('', undefined), 0);
-    assertEquals(googString.countOf('', null), 0);
+    assertEquals(googString.countOf('', /** @type {?} */ (undefined)), 0);
+    assertEquals(googString.countOf('', /** @type {?} */ (null)), 0);
     assertEquals(googString.countOf('', ''), 0);
     assertEquals(googString.countOf('', 'REDSOXROX'), 0);
-    assertEquals(googString.countOf(undefined, 'R'), 0);
-    assertEquals(googString.countOf(null, 'R'), 0);
-    assertEquals(googString.countOf(undefined, undefined), 0);
-    assertEquals(googString.countOf(null, null), 0);
+    assertEquals(googString.countOf(/** @type {?} */ (undefined), 'R'), 0);
+    assertEquals(googString.countOf(/** @type {?} */ (null), 'R'), 0);
+    assertEquals(
+        googString.countOf(
+            /** @type {?} */ (undefined), /** @type {?} */ (undefined)),
+        0);
+    assertEquals(
+        googString.countOf(/** @type {?} */ (null), /** @type {?} */ (null)),
+        0);
 
     assertEquals(googString.countOf('REDSOXROX', 'R'), 2);
     assertEquals(googString.countOf('REDSOXROX', 'E'), 1);
@@ -1127,7 +1153,7 @@ testSuite({
   /** Verify we get random-ish looking values for hash of Strings. */
   testHashCode() {
     try {
-      googString.hashCode(null);
+      googString.hashCode(/** @type {?} */ (null));
       fail('should throw exception for null');
     } catch (ex) {
       // success
@@ -1274,7 +1300,7 @@ testSuite({
     // Check non-numbers and strings
     assertTrue(isNaN(googString.parseInt(undefined)));
     assertTrue(isNaN(googString.parseInt(null)));
-    assertTrue(isNaN(googString.parseInt({})));
+    assertTrue(isNaN(googString.parseInt(/** @type {?} */ ({}))));
 
     assertTrue(isNaN(googString.parseInt('')));
     assertTrue(isNaN(googString.parseInt(' ')));
@@ -1437,10 +1463,12 @@ testSuite({
         'abcdefgh', googString.lastComponent('abcdefgh', []));
     assertEquals(
         'Last component of a string without separators should be the string',
-        'abcdefgh', googString.lastComponent('abcdefgh', null));
+        'abcdefgh',
+        googString.lastComponent('abcdefgh', /** @type {?} */ (null)));
     assertEquals(
         'Last component of a string without separators should be the string',
-        'abcdefgh', googString.lastComponent('abcdefgh', undefined));
+        'abcdefgh',
+        googString.lastComponent('abcdefgh', /** @type {?} */ (undefined)));
     assertEquals(
         'Last component of a string without separators should be the string',
         'abcdefgh', googString.lastComponent('abcdefgh', ''));
