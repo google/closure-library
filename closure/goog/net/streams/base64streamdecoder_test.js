@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.net.streams.Base64StreamDecoderTest');
-goog.setTestOnly('goog.net.streams.Base64StreamDecoderTest');
+goog.module('goog.net.streams.Base64StreamDecoderTest');
+goog.setTestOnly();
 
-goog.require('goog.net.streams.Base64StreamDecoder');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
+const Base64StreamDecoder = goog.require('goog.net.streams.Base64StreamDecoder');
+const asserts = goog.require('goog.testing.asserts');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // Static test data
 // clang-format off
-var tests = [
+const tests = [
   '', '',
   'f', 'Zg==',
   'fo', 'Zm8=',
@@ -37,7 +37,7 @@ var tests = [
   // non-ascii characters
   '\xe4\xb8\x80\xe4\xba\x8c\xe4\xb8\x89\xe5\x9b\x9b\xe4\xba\x94\xe5' +
       '\x85\xad\xe4\xb8\x83\xe5\x85\xab\xe4\xb9\x9d\xe5\x8d\x81',
-  '5LiA5LqM5LiJ5Zub5LqU5YWt5LiD5YWr5Lmd5Y2B'
+  '5LiA5LqM5LiJ5Zub5LqU5YWt5LiD5YWr5Lmd5Y2B',
 ];
 // clang-format on
 
@@ -46,44 +46,50 @@ var tests = [
  * @return {!Array<number>} The UTF-16 codes of the characters of the string.
  */
 function stringCodes(s) {
-  codes = [];
-  for (var i = 0; i < s.length; i++) {
+  let codes = [];
+  for (let i = 0; i < s.length; i++) {
     codes.push(s.charCodeAt(i));
   }
   return codes;
 }
 
-function testSingleMessage() {
-  var decoder = new goog.net.streams.Base64StreamDecoder();
+testSuite({
+  testSingleMessage() {
+    const decoder = new Base64StreamDecoder();
 
-  for (var i = 0; i < tests.length; i += 2) {
-    var decoded = decoder.decode(tests[i + 1]);
-    if (tests[i]) {
-      assertElementsEquals(stringCodes(tests[i]), decoded);
-    } else {
-      assertNull(decoded);
+    for (let i = 0; i < tests.length; i += 2) {
+      const decoded = decoder.decode(tests[i + 1]);
+      if (tests[i]) {
+        assertElementsEquals(stringCodes(tests[i]), decoded);
+      } else {
+        assertNull(decoded);
+      }
     }
-  }
-}
+  },
 
-function testBadMessage() {
-  var decoder = new goog.net.streams.Base64StreamDecoder();
+  testBadMessage() {
+    const decoder = new Base64StreamDecoder();
 
-  assertThrows(function() { decoder.decode('badchar!'); });
-  assertFalse(decoder.isInputValid());
+    assertThrows(() => {
+      decoder.decode('badchar!');
+    });
+    assertFalse(decoder.isInputValid());
 
-  // decoder already invalidated
-  assertThrows(function() { decoder.decode('abc'); });
-  assertFalse(decoder.isInputValid());
-}
+    // decoder already invalidated
+    assertThrows(() => {
+      decoder.decode('abc');
+    });
+    assertFalse(decoder.isInputValid());
+  },
 
-function testMessagesInChunks() {
-  var decoder = new goog.net.streams.Base64StreamDecoder();
+  testMessagesInChunks() {
+    const decoder = new Base64StreamDecoder();
 
-  assertNull(decoder.decode('Zm'));
-  assertNull(decoder.decode('9'));
-  assertElementsEquals(stringCodes('foobar'), decoder.decode('vYmFyZm'));
-  assertElementsEquals(stringCodes('foo'), decoder.decode('9v'));
-  assertElementsEquals(stringCodes('barfoo'), decoder.decode('YmFyZm9v'));
-  assertTrue(decoder.isInputValid());
-}
+    assertNull(decoder.decode('Zm'));
+    assertNull(decoder.decode('9'));
+    assertElementsEquals(stringCodes('foobar'), decoder.decode('vYmFyZm'));
+    assertElementsEquals(stringCodes('foo'), decoder.decode('9v'));
+    assertElementsEquals(stringCodes('barfoo'), decoder.decode('YmFyZm9v'));
+    assertTrue(decoder.isInputValid());
+  },
+});

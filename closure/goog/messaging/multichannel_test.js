@@ -12,32 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.messaging.MultiChannelTest');
-goog.setTestOnly('goog.messaging.MultiChannelTest');
+goog.module('goog.messaging.MultiChannelTest');
+goog.setTestOnly();
 
-goog.require('goog.messaging.MultiChannel');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.messaging.MockMessageChannel');
-goog.require('goog.testing.mockmatchers.IgnoreArgument');
+const IgnoreArgument = goog.require('goog.testing.mockmatchers.IgnoreArgument');
+const MockControl = goog.require('goog.testing.MockControl');
+const MockMessageChannel = goog.require('goog.testing.messaging.MockMessageChannel');
+const MultiChannel = goog.require('goog.messaging.MultiChannel');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var mockControl;
-var mockChannel;
-var multiChannel;
-var channel1;
-var channel2;
-
-function setUp() {
-  mockControl = new goog.testing.MockControl();
-  mockChannel = new goog.testing.messaging.MockMessageChannel(mockControl);
-  multiChannel = new goog.messaging.MultiChannel(mockChannel);
-  channel0 = multiChannel.createVirtualChannel('foo');
-  channel1 = multiChannel.createVirtualChannel('bar');
-}
+let mockControl;
+let mockChannel;
+let multiChannel;
+let channel0;
+let channel1;
+let channel2;
 
 function expectedFn(name, callback) {
-  var ignored = new goog.testing.mockmatchers.IgnoreArgument();
-  var fn = mockControl.createFunctionMock(name);
+  const ignored = new IgnoreArgument();
+  const fn = mockControl.createFunctionMock(name);
   fn(ignored).$does(function(args) { callback.apply(this, args); });
   return function() { fn(arguments); };
 }
@@ -47,68 +40,78 @@ function notExpectedFn() {
 }
 
 function assertEqualsFn() {
-  var expectedArgs = Array.prototype.slice.call(arguments);
+  const expectedArgs = Array.prototype.slice.call(arguments);
   return expectedFn('assertEqualsFn', function() {
     assertObjectEquals(expectedArgs, Array.prototype.slice.call(arguments));
   });
 }
 
-function tearDown() {
-  multiChannel.dispose();
-  mockControl.$verifyAll();
-  assertTrue(mockChannel.disposed);
-}
+testSuite({
+  setUp() {
+    mockControl = new MockControl();
+    mockChannel = new MockMessageChannel(mockControl);
+    multiChannel = new MultiChannel(mockChannel);
+    channel0 = multiChannel.createVirtualChannel('foo');
+    channel1 = multiChannel.createVirtualChannel('bar');
+  },
 
-function testSend0() {
-  mockChannel.send('foo:fooBar', {foo: 'bar'});
-  mockControl.$replayAll();
-  channel0.send('fooBar', {foo: 'bar'});
-}
+  tearDown() {
+    multiChannel.dispose();
+    mockControl.$verifyAll();
+    assertTrue(mockChannel.disposed);
+  },
 
-function testSend1() {
-  mockChannel.send('bar:fooBar', {foo: 'bar'});
-  mockControl.$replayAll();
-  channel1.send('fooBar', {foo: 'bar'});
-}
+  testSend0() {
+    mockChannel.send('foo:fooBar', {foo: 'bar'});
+    mockControl.$replayAll();
+    channel0.send('fooBar', {foo: 'bar'});
+  },
 
-function testReceive0() {
-  channel0.registerService('fooBar', assertEqualsFn('Baz bang'));
-  channel1.registerService('fooBar', notExpectedFn());
-  mockControl.$replayAll();
-  mockChannel.receive('foo:fooBar', 'Baz bang');
-}
+  testSend1() {
+    mockChannel.send('bar:fooBar', {foo: 'bar'});
+    mockControl.$replayAll();
+    channel1.send('fooBar', {foo: 'bar'});
+  },
 
-function testReceive1() {
-  channel1.registerService('fooBar', assertEqualsFn('Baz bang'));
-  channel0.registerService('fooBar', notExpectedFn());
-  mockControl.$replayAll();
-  mockChannel.receive('bar:fooBar', 'Baz bang');
-}
+  testReceive0() {
+    channel0.registerService('fooBar', assertEqualsFn('Baz bang'));
+    channel1.registerService('fooBar', notExpectedFn());
+    mockControl.$replayAll();
+    mockChannel.receive('foo:fooBar', 'Baz bang');
+  },
 
-function testDefaultReceive0() {
-  channel0.registerDefaultService(assertEqualsFn('fooBar', 'Baz bang'));
-  channel1.registerDefaultService(notExpectedFn());
-  mockControl.$replayAll();
-  mockChannel.receive('foo:fooBar', 'Baz bang');
-}
+  testReceive1() {
+    channel1.registerService('fooBar', assertEqualsFn('Baz bang'));
+    channel0.registerService('fooBar', notExpectedFn());
+    mockControl.$replayAll();
+    mockChannel.receive('bar:fooBar', 'Baz bang');
+  },
 
-function testDefaultReceive1() {
-  channel1.registerDefaultService(assertEqualsFn('fooBar', 'Baz bang'));
-  channel0.registerDefaultService(notExpectedFn());
-  mockControl.$replayAll();
-  mockChannel.receive('bar:fooBar', 'Baz bang');
-}
+  testDefaultReceive0() {
+    channel0.registerDefaultService(assertEqualsFn('fooBar', 'Baz bang'));
+    channel1.registerDefaultService(notExpectedFn());
+    mockControl.$replayAll();
+    mockChannel.receive('foo:fooBar', 'Baz bang');
+  },
 
-function testReceiveAfterDisposed() {
-  channel0.registerService('fooBar', notExpectedFn());
-  mockControl.$replayAll();
-  channel0.dispose();
-  mockChannel.receive('foo:fooBar', 'Baz bang');
-}
+  testDefaultReceive1() {
+    channel1.registerDefaultService(assertEqualsFn('fooBar', 'Baz bang'));
+    channel0.registerDefaultService(notExpectedFn());
+    mockControl.$replayAll();
+    mockChannel.receive('bar:fooBar', 'Baz bang');
+  },
 
-function testReceiveAfterParentDisposed() {
-  channel0.registerService('fooBar', notExpectedFn());
-  mockControl.$replayAll();
-  multiChannel.dispose();
-  mockChannel.receive('foo:fooBar', 'Baz bang');
-}
+  testReceiveAfterDisposed() {
+    channel0.registerService('fooBar', notExpectedFn());
+    mockControl.$replayAll();
+    channel0.dispose();
+    mockChannel.receive('foo:fooBar', 'Baz bang');
+  },
+
+  testReceiveAfterParentDisposed() {
+    channel0.registerService('fooBar', notExpectedFn());
+    mockControl.$replayAll();
+    multiChannel.dispose();
+    mockChannel.receive('foo:fooBar', 'Baz bang');
+  },
+});

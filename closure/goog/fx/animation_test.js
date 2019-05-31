@@ -12,128 +12,132 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.fx.AnimationTest');
-goog.setTestOnly('goog.fx.AnimationTest');
+goog.module('goog.fx.AnimationTest');
+goog.setTestOnly();
 
-goog.require('goog.events');
-goog.require('goog.fx.Animation');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
+const Animation = goog.require('goog.fx.Animation');
+const MockClock = goog.require('goog.testing.MockClock');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var clock;
+let clock;
 
-function setUpPage() {
-  clock = new goog.testing.MockClock(true);
-}
+testSuite({
+  setUpPage() {
+    clock = new MockClock(true);
+  },
 
-function tearDownPage() {
-  clock.dispose();
-}
+  tearDownPage() {
+    clock.dispose();
+  },
 
-function testPauseLogic() {
-  var anim = new goog.fx.Animation([], [], 3000);
-  var nFrames = 0;
-  goog.events.listen(anim, goog.fx.Animation.EventType.ANIMATE, function(e) {
-    assertRoughlyEquals(e.progress, progress, 1e-6);
-    nFrames++;
-  });
-  goog.events.listen(
-      anim, goog.fx.Animation.EventType.END, function(e) { nFrames++; });
-  var nSteps = 10;
-  for (var i = 0; i < nSteps; i++) {
-    progress = i / (nSteps - 1);
-    anim.setProgress(progress);
+  testPauseLogic() {
+    const anim = new Animation([], [], 3000);
+    let nFrames = 0;
+    let progress = 0;
+    events.listen(anim, Animation.EventType.ANIMATE, (e) => {
+      assertRoughlyEquals(e.progress, progress, 1e-6);
+      nFrames++;
+    });
+    events.listen(anim, Animation.EventType.END, (e) => {
+      nFrames++;
+    });
+    const nSteps = 10;
+    for (let i = 0; i < nSteps; i++) {
+      progress = i / (nSteps - 1);
+      anim.setProgress(progress);
+      anim.play();
+      anim.pause();
+    }
+    assertEquals(nSteps, nFrames);
+  },
+
+  testPauseOffset() {
+    const anim = new Animation([0], [1000], 1000);
     anim.play();
+
+    assertEquals(0, anim.coords[0]);
+    assertRoughlyEquals(0, anim.progress, 1e-4);
+
+    clock.tick(300);
+
+    assertEquals(300, anim.coords[0]);
+    assertRoughlyEquals(0.3, anim.progress, 1e-4);
+
     anim.pause();
-  }
-  assertEquals(nSteps, nFrames);
-}
 
-function testPauseOffset() {
-  var anim = new goog.fx.Animation([0], [1000], 1000);
-  anim.play();
+    clock.tick(400);
 
-  assertEquals(0, anim.coords[0]);
-  assertRoughlyEquals(0, anim.progress, 1e-4);
+    assertEquals(300, anim.coords[0]);
+    assertRoughlyEquals(0.3, anim.progress, 1e-4);
 
-  clock.tick(300);
+    anim.play();
 
-  assertEquals(300, anim.coords[0]);
-  assertRoughlyEquals(0.3, anim.progress, 1e-4);
+    assertEquals(300, anim.coords[0]);
+    assertRoughlyEquals(0.3, anim.progress, 1e-4);
 
-  anim.pause();
+    clock.tick(400);
 
-  clock.tick(400);
+    assertEquals(700, anim.coords[0]);
+    assertRoughlyEquals(0.7, anim.progress, 1e-4);
 
-  assertEquals(300, anim.coords[0]);
-  assertRoughlyEquals(0.3, anim.progress, 1e-4);
+    anim.pause();
 
-  anim.play();
+    clock.tick(300);
 
-  assertEquals(300, anim.coords[0]);
-  assertRoughlyEquals(0.3, anim.progress, 1e-4);
+    assertEquals(700, anim.coords[0]);
+    assertRoughlyEquals(0.7, anim.progress, 1e-4);
 
-  clock.tick(400);
+    anim.play();
 
-  assertEquals(700, anim.coords[0]);
-  assertRoughlyEquals(0.7, anim.progress, 1e-4);
+    const lastPlay = goog.now();
 
-  anim.pause();
+    assertEquals(700, anim.coords[0]);
+    assertRoughlyEquals(0.7, anim.progress, 1e-4);
 
-  clock.tick(300);
+    clock.tick(300);
 
-  assertEquals(700, anim.coords[0]);
-  assertRoughlyEquals(0.7, anim.progress, 1e-4);
+    assertEquals(1000, anim.coords[0]);
+    assertRoughlyEquals(1, anim.progress, 1e-4);
+    assertEquals(Animation.State.STOPPED, anim.getStateInternal());
+  },
 
-  anim.play();
+  testClockReset() {
+    const anim = new Animation([0], [1000], 1000);
+    anim.play();
 
-  var lastPlay = goog.now();
+    assertEquals(0, anim.coords[0]);
+    assertRoughlyEquals(0, anim.progress, 1e-4);
 
-  assertEquals(700, anim.coords[0]);
-  assertRoughlyEquals(0.7, anim.progress, 1e-4);
+    // Possible when clock is reset.
+    clock.tick(-200000);
+    anim.pause();
+    anim.play();
 
-  clock.tick(300);
+    assertEquals(0, anim.coords[0]);
+    assertRoughlyEquals(0, anim.progress, 1e-4);
 
-  assertEquals(1000, anim.coords[0]);
-  assertRoughlyEquals(1, anim.progress, 1e-4);
-  assertEquals(goog.fx.Animation.State.STOPPED, anim.getStateInternal());
-}
+    // Animation shoud still only last a second.
+    clock.tick(900);
+    anim.pause();
+    anim.play();
 
-function testClockReset() {
-  var anim = new goog.fx.Animation([0], [1000], 1000);
-  anim.play();
+    assertEquals(900, anim.coords[0]);
+    assertRoughlyEquals(0.9, anim.progress, 1e-4);
+  },
 
-  assertEquals(0, anim.coords[0]);
-  assertRoughlyEquals(0, anim.progress, 1e-4);
-
-  // Possible when clock is reset.
-  clock.tick(-200000);
-  anim.pause();
-  anim.play();
-
-  assertEquals(0, anim.coords[0]);
-  assertRoughlyEquals(0, anim.progress, 1e-4);
-
-  // Animation shoud still only last a second.
-  clock.tick(900);
-  anim.pause();
-  anim.play();
-
-  assertEquals(900, anim.coords[0]);
-  assertRoughlyEquals(0.9, anim.progress, 1e-4);
-}
-
-function testSetProgress() {
-  var anim = new goog.fx.Animation([0], [1000], 3000);
-  var nFrames = 0;
-  anim.play();
-  anim.setProgress(0.5);
-  goog.events.listen(anim, goog.fx.Animation.EventType.ANIMATE, function(e) {
-    assertEquals(500, e.coords[0]);
-    assertRoughlyEquals(0.5, e.progress, 1e-4);
-    nFrames++;
-  });
-  anim.cycle(goog.now());
-  anim.stop();
-  assertEquals(1, nFrames);
-}
+  testSetProgress() {
+    const anim = new Animation([0], [1000], 3000);
+    let nFrames = 0;
+    anim.play();
+    anim.setProgress(0.5);
+    events.listen(anim, Animation.EventType.ANIMATE, (e) => {
+      assertEquals(500, e.coords[0]);
+      assertRoughlyEquals(0.5, e.progress, 1e-4);
+      nFrames++;
+    });
+    anim.cycle(goog.now());
+    anim.stop();
+    assertEquals(1, nFrames);
+  },
+});

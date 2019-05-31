@@ -12,314 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Unit tests for goog.functions.
- */
+/** @fileoverview Unit tests for functions. */
 
-goog.provide('goog.functionsTest');
-goog.setTestOnly('goog.functionsTest');
+goog.module('goog.functionsTest');
+goog.setTestOnly();
 
-goog.require('goog.array');
-goog.require('goog.functions');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const MockClock = goog.require('goog.testing.MockClock');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const functions = goog.require('goog.functions');
+const googArray = goog.require('goog.array');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
+const fTrue = makeCallOrderLogger('fTrue', true);
+const gFalse = makeCallOrderLogger('gFalse', false);
+const hTrue = makeCallOrderLogger('hTrue', true);
 
-var fTrue = makeCallOrderLogger('fTrue', true);
-var gFalse = makeCallOrderLogger('gFalse', false);
-var hTrue = makeCallOrderLogger('hTrue', true);
+const stubs = new PropertyReplacer();
+let callOrder = null;
 
-var stubs = new goog.testing.PropertyReplacer();
-
-function setUp() {
-  callOrder = [];
-}
-
-function tearDown() {
-  stubs.reset();
-}
-
-var foo = 'global';
-var obj = {foo: 'obj'};
+const foo = 'global';
+const obj = {
+  foo: 'obj'
+};
 
 function getFoo(arg1, arg2) {
   return {foo: this.foo, arg1: arg1, arg2: arg2};
 }
 
-function testTrue() {
-  assertTrue(goog.functions.TRUE());
-}
-
-function testFalse() {
-  assertFalse(goog.functions.FALSE());
-}
-
-function testLock() {
-  function add(var_args) {
-    var result = 0;
-    for (var i = 0; i < arguments.length; i++) {
-      result += arguments[i];
-    }
-    return result;
-  }
-
-  assertEquals(6, add(1, 2, 3));
-  assertEquals(0, goog.functions.lock(add)(1, 2, 3));
-  assertEquals(3, goog.functions.lock(add, 2)(1, 2, 3));
-  assertEquals(6, goog.partial(add, 1, 2)(3));
-  assertEquals(3, goog.functions.lock(goog.partial(add, 1, 2))(3));
-}
-
-function testNth() {
-  assertEquals(1, goog.functions.nth(0)(1));
-  assertEquals(2, goog.functions.nth(1)(1, 2));
-  assertEquals('a', goog.functions.nth(0)('a', 'b'));
-  assertEquals(undefined, goog.functions.nth(0)());
-  assertEquals(undefined, goog.functions.nth(1)(true));
-  assertEquals(undefined, goog.functions.nth(-1)());
-}
-
-function testPartialRight() {
-  var f = function(x, y) { return x / y; };
-  var g = goog.functions.partialRight(f, 2);
-  assertEquals(2, g(4));
-
-  var h = goog.functions.partialRight(f, 4, 2);
-  assertEquals(2, h());
-
-  var i = goog.functions.partialRight(f);
-  assertEquals(2, i(4, 2));
-}
-
-function testPartialRightUsesGlobal() {
-  var f = function(x, y) {
-    assertEquals(goog.global, this);
-    return x / y;
-  };
-  var g = goog.functions.partialRight(f, 2);
-  var h = goog.functions.partialRight(g, 4);
-  assertEquals(2, h());
-}
-
-function testPartialRightWithCall() {
-  var obj = {};
-  var f = function(x, y) {
-    assertEquals(obj, this);
-    return x / y;
-  };
-  var g = goog.functions.partialRight(f, 2);
-  var h = goog.functions.partialRight(g, 4);
-  assertEquals(2, h.call(obj));
-}
-
-function testPartialRightAndBind() {
-  // This ensures that this "survives" through a partialRight.
-  var p = goog.functions.partialRight(getFoo, 'dog');
-  var b = goog.bind(p, obj, 'hot');
-
-  var res = b();
-  assertEquals(obj.foo, res.foo);
-  assertEquals('hot', res.arg1);
-  assertEquals('dog', res.arg2);
-}
-
-function testBindAndPartialRight() {
-  // This ensures that this "survives" through a partialRight.
-  var b = goog.bind(getFoo, obj, 'hot');
-  var p = goog.functions.partialRight(b, 'dog');
-
-  var res = p();
-  assertEquals(obj.foo, res.foo);
-  assertEquals('hot', res.arg1);
-  assertEquals('dog', res.arg2);
-}
-
-function testPartialRightMultipleCalls() {
-  var f = goog.testing.recordFunction();
-
-  var a = goog.functions.partialRight(f, 'foo');
-  var b = goog.functions.partialRight(a, 'bar');
-
-  a();
-  a();
-  b();
-  b();
-
-  assertEquals(4, f.getCallCount());
-
-  var calls = f.getCalls();
-  assertArrayEquals(['foo'], calls[0].getArguments());
-  assertArrayEquals(['foo'], calls[1].getArguments());
-  assertArrayEquals(['bar', 'foo'], calls[2].getArguments());
-  assertArrayEquals(['bar', 'foo'], calls[3].getArguments());
-}
-
-function testIdentity() {
-  assertEquals(3, goog.functions.identity(3));
-  assertEquals(3, goog.functions.identity(3, 4, 5, 6));
-  assertEquals('Hi there', goog.functions.identity('Hi there'));
-  assertEquals(null, goog.functions.identity(null));
-  assertEquals(undefined, goog.functions.identity());
-
-  var arr = [1, 'b', null];
-  assertEquals(arr, goog.functions.identity(arr));
-  var obj = {a: 'ay', b: 'bee', c: 'see'};
-  assertEquals(obj, goog.functions.identity(obj));
-}
-
-function testConstant() {
-  assertEquals(3, goog.functions.constant(3)());
-  assertEquals(undefined, goog.functions.constant()());
-}
-
-function testError() {
-  var f = goog.functions.error('x');
-  var e = assertThrows(
-      'A function created by goog.functions.error must throw an error', f);
-  assertEquals('x', e.message);
-}
-
-function testFail() {
-  var obj = {};
-  var f = goog.functions.fail(obj);
-  var e = assertThrows(
-      'A function created by goog.functions.raise must throw its input', f);
-  assertEquals(obj, e);
-}
-
-function testCompose() {
-  var add2 = function(x) { return x + 2; };
-
-  var doubleValue = function(x) { return x * 2; };
-
-  assertEquals(6, goog.functions.compose(doubleValue, add2)(1));
-  assertEquals(4, goog.functions.compose(add2, doubleValue)(1));
-  assertEquals(6, goog.functions.compose(add2, add2, doubleValue)(1));
-  assertEquals(
-      12, goog.functions.compose(doubleValue, add2, add2, doubleValue)(1));
-  assertUndefined(goog.functions.compose()(1));
-  assertEquals(3, goog.functions.compose(add2)(1));
-
-  var add2Numbers = function(x, y) { return x + y; };
-  assertEquals(17, goog.functions.compose(add2Numbers)(10, 7));
-  assertEquals(34, goog.functions.compose(doubleValue, add2Numbers)(10, 7));
-}
-
-function testAdd() {
-  assertUndefined(goog.functions.sequence()());
-  assertCallOrderAndReset([]);
-
-  assert(goog.functions.sequence(fTrue)());
-  assertCallOrderAndReset(['fTrue']);
-
-  assertFalse(goog.functions.sequence(fTrue, gFalse)());
-  assertCallOrderAndReset(['fTrue', 'gFalse']);
-
-  assert(goog.functions.sequence(fTrue, gFalse, hTrue)());
-  assertCallOrderAndReset(['fTrue', 'gFalse', 'hTrue']);
-
-  assert(goog.functions.sequence(goog.functions.identity)(true));
-  assertFalse(goog.functions.sequence(goog.functions.identity)(false));
-}
-
-function testAnd() {
-  // the return value is unspecified for an empty and
-  goog.functions.and()();
-  assertCallOrderAndReset([]);
-
-  assert(goog.functions.and(fTrue)());
-  assertCallOrderAndReset(['fTrue']);
-
-  assertFalse(goog.functions.and(fTrue, gFalse)());
-  assertCallOrderAndReset(['fTrue', 'gFalse']);
-
-  assertFalse(goog.functions.and(fTrue, gFalse, hTrue)());
-  assertCallOrderAndReset(['fTrue', 'gFalse']);
-
-  assert(goog.functions.and(goog.functions.identity)(true));
-  assertFalse(goog.functions.and(goog.functions.identity)(false));
-}
-
-function testOr() {
-  // the return value is unspecified for an empty or
-  goog.functions.or()();
-  assertCallOrderAndReset([]);
-
-  assert(goog.functions.or(fTrue)());
-  assertCallOrderAndReset(['fTrue']);
-
-  assert(goog.functions.or(fTrue, gFalse)());
-  assertCallOrderAndReset(['fTrue']);
-
-  assert(goog.functions.or(fTrue, gFalse, hTrue)());
-  assertCallOrderAndReset(['fTrue']);
-
-  assert(goog.functions.or(goog.functions.identity)(true));
-  assertFalse(goog.functions.or(goog.functions.identity)(false));
-}
-
-function testNot() {
-  assertTrue(goog.functions.not(gFalse)());
-  assertCallOrderAndReset(['gFalse']);
-
-  assertTrue(goog.functions.not(goog.functions.identity)(false));
-  assertFalse(goog.functions.not(goog.functions.identity)(true));
-
-  var f = function(a, b) {
-    assertEquals(1, a);
-    assertEquals(2, b);
-    return false;
-  };
-
-  assertTrue(goog.functions.not(f)(1, 2));
-}
-
-function testCreate(expectedArray) {
-  var tempConstructor = function(a, b) {
-    this.foo = a;
-    this.bar = b;
-  };
-
-  var factory = goog.partial(goog.functions.create, tempConstructor, 'baz');
-  var instance = factory('qux');
-
-  assert(instance instanceof tempConstructor);
-  assertEquals(instance.foo, 'baz');
-  assertEquals(instance.bar, 'qux');
-}
-
-function testWithReturnValue() {
-  var obj = {};
-  var f = function(a, b) {
-    assertEquals(obj, this);
-    assertEquals(1, a);
-    assertEquals(2, b);
-  };
-  assertTrue(goog.functions.withReturnValue(f, true).call(obj, 1, 2));
-  assertFalse(goog.functions.withReturnValue(f, false).call(obj, 1, 2));
-}
-
-function testEqualTo() {
-  assertTrue(goog.functions.equalTo(42)(42));
-  assertFalse(goog.functions.equalTo(42)(13));
-  assertFalse(goog.functions.equalTo(42)('a string'));
-
-  assertFalse(goog.functions.equalTo(42)('42'));
-  assertTrue(goog.functions.equalTo(42, true)('42'));
-
-  assertTrue(goog.functions.equalTo(0)(0));
-  assertFalse(goog.functions.equalTo(0)(''));
-  assertFalse(goog.functions.equalTo(0)(1));
-
-  assertTrue(goog.functions.equalTo(0, true)(0));
-  assertTrue(goog.functions.equalTo(0, true)(''));
-  assertFalse(goog.functions.equalTo(0, true)(1));
-}
-
 function makeCallOrderLogger(name, returnValue) {
-  return function() {
+  return () => {
     callOrder.push(name);
     return returnValue;
   };
@@ -330,379 +52,26 @@ function assertCallOrderAndReset(expectedArray) {
   callOrder = [];
 }
 
-function testCacheReturnValue() {
-  var returnFive = function() { return 5; };
-
-  var recordedReturnFive = goog.testing.recordFunction(returnFive);
-  var cachedRecordedReturnFive =
-      goog.functions.cacheReturnValue(recordedReturnFive);
-
-  assertEquals(0, recordedReturnFive.getCallCount());
-  assertEquals(5, cachedRecordedReturnFive());
-  assertEquals(1, recordedReturnFive.getCallCount());
-  assertEquals(5, cachedRecordedReturnFive());
-  assertEquals(1, recordedReturnFive.getCallCount());
-}
-
-
-function testCacheReturnValueFlagEnabled() {
-  var count = 0;
-  var returnIncrementingInteger = function() {
-    count++;
-    return count;
-  };
-
-  var recordedFunction = goog.testing.recordFunction(returnIncrementingInteger);
-  var cachedRecordedFunction =
-      goog.functions.cacheReturnValue(recordedFunction);
-
-  assertEquals(0, recordedFunction.getCallCount());
-  assertEquals(1, cachedRecordedFunction());
-  assertEquals(1, recordedFunction.getCallCount());
-  assertEquals(1, cachedRecordedFunction());
-  assertEquals(1, recordedFunction.getCallCount());
-  assertEquals(1, cachedRecordedFunction());
-}
-
-
-function testCacheReturnValueFlagDisabled() {
-  stubs.set(goog.functions, 'CACHE_RETURN_VALUE', false);
-
-  var count = 0;
-  var returnIncrementingInteger = function() {
-    count++;
-    return count;
-  };
-
-  var recordedFunction = goog.testing.recordFunction(returnIncrementingInteger);
-  var cachedRecordedFunction =
-      goog.functions.cacheReturnValue(recordedFunction);
-
-  assertEquals(0, recordedFunction.getCallCount());
-  assertEquals(1, cachedRecordedFunction());
-  assertEquals(1, recordedFunction.getCallCount());
-  assertEquals(2, cachedRecordedFunction());
-  assertEquals(2, recordedFunction.getCallCount());
-  assertEquals(3, cachedRecordedFunction());
-}
-
-
-function testOnce() {
-  var recordedFunction = goog.testing.recordFunction();
-  var f = goog.functions.once(recordedFunction);
-
-  assertEquals(0, recordedFunction.getCallCount());
-  f();
-  assertEquals(1, recordedFunction.getCallCount());
-  f();
-  assertEquals(1, recordedFunction.getCallCount());
-}
-
-
-function testDebounce() {
-  // Encoded sequences of commands to perform mapped to expected # of calls.
-  //   f: fire
-  //   w: wait (for the timer to elapse)
-  assertAsyncDecoratorCommandSequenceCalls(goog.functions.debounce, {
-    'f': 0,
-    'ff': 0,
-    'fff': 0,
-    'fw': 1,
-    'ffw': 1,
-    'fffw': 1,
-    'fwffwf': 2,
-    'ffwwwffwwfwf': 3
-  });
-}
-
-
-function testDebounceScopeBinding() {
-  var interval = 500;
-  var mockClock = new goog.testing.MockClock(true);
-
-  var x = {'y': 0};
-  goog.functions.debounce(function() { ++this['y']; }, interval, x)();
-  assertEquals(0, x['y']);
-
-  mockClock.tick(interval);
-  assertEquals(1, x['y']);
-
-  mockClock.uninstall();
-}
-
-
-function testDebounceArgumentBinding() {
-  var interval = 500;
-  var mockClock = new goog.testing.MockClock(true);
-
-  var calls = 0;
-  var debouncedFn = goog.functions.debounce(function(a, b, c) {
-    ++calls;
-    assertEquals(3, a);
-    assertEquals('string', b);
-    assertEquals(false, c);
-  }, interval);
-
-  debouncedFn(3, 'string', false);
-  mockClock.tick(interval);
-  assertEquals(1, calls);
-
-  // goog.functions.debounce should always pass the last arguments passed to the
-  // decorator into the decorated function, even if called multiple times.
-  debouncedFn();
-  mockClock.tick(interval / 2);
-  debouncedFn(8, null, true);
-  debouncedFn(3, 'string', false);
-  mockClock.tick(interval);
-  assertEquals(2, calls);
-
-  mockClock.uninstall();
-}
-
-
-function testDebounceArgumentAndScopeBinding() {
-  var interval = 500;
-  var mockClock = new goog.testing.MockClock(true);
-
-  var x = {'calls': 0};
-  var debouncedFn = goog.functions.debounce(function(a, b, c) {
-    ++this['calls'];
-    assertEquals(3, a);
-    assertEquals('string', b);
-    assertEquals(false, c);
-  }, interval, x);
-
-  debouncedFn(3, 'string', false);
-  mockClock.tick(interval);
-  assertEquals(1, x['calls']);
-
-  // goog.functions.debounce should always pass the last arguments passed to the
-  // decorator into the decorated function, even if called multiple times.
-  debouncedFn();
-  mockClock.tick(interval / 2);
-  debouncedFn(8, null, true);
-  debouncedFn(3, 'string', false);
-  mockClock.tick(interval);
-  assertEquals(2, x['calls']);
-
-  mockClock.uninstall();
-}
-
-
-function testThrottle() {
-  // Encoded sequences of commands to perform mapped to expected # of calls.
-  //   f: fire
-  //   w: wait (for the timer to elapse)
-  assertAsyncDecoratorCommandSequenceCalls(goog.functions.throttle, {
-    'f': 1,
-    'ff': 1,
-    'fff': 1,
-    'fw': 1,
-    'ffw': 2,
-    'fwf': 2,
-    'fffw': 2,
-    'fwfff': 2,
-    'fwfffw': 3,
-    'fwffwf': 3,
-    'ffwf': 2,
-    'ffwff': 2,
-    'ffwfw': 3,
-    'ffwffwf': 3,
-    'ffwffwff': 3,
-    'ffwffwffw': 4,
-    'ffwwwffwwfw': 5,
-    'ffwwwffwwfwf': 6
-  });
-}
-
-
-function testThrottleScopeBinding() {
-  var interval = 500;
-  var mockClock = new goog.testing.MockClock(true);
-
-  var x = {'y': 0};
-  goog.functions.throttle(function() { ++this['y']; }, interval, x)();
-  assertEquals(1, x['y']);
-
-  mockClock.uninstall();
-}
-
-
-function testThrottleArgumentBinding() {
-  var interval = 500;
-  var mockClock = new goog.testing.MockClock(true);
-
-  var calls = 0;
-  var throttledFn = goog.functions.throttle(function(a, b, c) {
-    ++calls;
-    assertEquals(3, a);
-    assertEquals('string', b);
-    assertEquals(false, c);
-  }, interval);
-
-  throttledFn(3, 'string', false);
-  assertEquals(1, calls);
-
-  // goog.functions.throttle should always pass the last arguments passed to the
-  // decorator into the decorated function, even if called multiple times.
-  throttledFn();
-  mockClock.tick(interval / 2);
-  throttledFn(8, null, true);
-  throttledFn(3, 'string', false);
-  mockClock.tick(interval);
-  assertEquals(2, calls);
-
-  mockClock.uninstall();
-}
-
-
-function testThrottleArgumentAndScopeBinding() {
-  var interval = 500;
-  var mockClock = new goog.testing.MockClock(true);
-
-  var x = {'calls': 0};
-  var throttledFn = goog.functions.throttle(function(a, b, c) {
-    ++this['calls'];
-    assertEquals(3, a);
-    assertEquals('string', b);
-    assertEquals(false, c);
-  }, interval, x);
-
-  throttledFn(3, 'string', false);
-  assertEquals(1, x['calls']);
-
-  // goog.functions.throttle should always pass the last arguments passed to the
-  // decorator into the decorated function, even if called multiple times.
-  throttledFn();
-  mockClock.tick(interval / 2);
-  throttledFn(8, null, true);
-  throttledFn(3, 'string', false);
-  mockClock.tick(interval);
-  assertEquals(2, x['calls']);
-
-  mockClock.uninstall();
-}
-
-
-function testRateLimit() {
-  // Encoded sequences of commands to perform mapped to expected # of calls.
-  //   f: fire
-  //   w: wait (for the timer to elapse)
-  assertAsyncDecoratorCommandSequenceCalls(goog.functions.rateLimit, {
-    'f': 1,
-    'ff': 1,
-    'fff': 1,
-    'fw': 1,
-    'ffw': 1,
-    'fwf': 2,
-    'fffw': 1,
-    'fwfff': 2,
-    'fwfffw': 2,
-    'fwffwf': 3,
-    'ffwf': 2,
-    'ffwff': 2,
-    'ffwfw': 2,
-    'ffwffwf': 3,
-    'ffwffwff': 3,
-    'ffwffwffw': 3,
-    'ffwwwffwwfw': 3,
-    'ffwwwffwwfwf': 4
-  });
-}
-
-
-function testRateLimitScopeBinding() {
-  var interval = 500;
-  var mockClock = new goog.testing.MockClock(true);
-
-  var x = {'y': 0};
-  goog.functions.rateLimit(function() {
-    ++this['y'];
-  }, interval, x)();
-  assertEquals(1, x['y']);
-
-  mockClock.uninstall();
-}
-
-
-function testRateLimitArgumentBinding() {
-  var interval = 500;
-  var mockClock = new goog.testing.MockClock(true);
-
-  var calls = 0;
-  var rateLimitedFn = goog.functions.rateLimit(function(a, b, c) {
-    ++calls;
-    assertEquals(3, a);
-    assertEquals('string', b);
-    assertEquals(false, c);
-  }, interval);
-
-  rateLimitedFn(3, 'string', false);
-  assertEquals(1, calls);
-
-  // goog.functions.rateLimit should always pass the first arguments passed to
-  // the
-  // decorator into the decorated function, even if called multiple times.
-  rateLimitedFn();
-  mockClock.tick(interval / 2);
-  rateLimitedFn(8, null, true);
-  mockClock.tick(interval);
-  rateLimitedFn(3, 'string', false);
-  assertEquals(2, calls);
-
-  mockClock.uninstall();
-}
-
-
-function testRateLimitArgumentAndScopeBinding() {
-  var interval = 500;
-  var mockClock = new goog.testing.MockClock(true);
-
-  var x = {'calls': 0};
-  var rateLimitedFn = goog.functions.rateLimit(function(a, b, c) {
-    ++this['calls'];
-    assertEquals(3, a);
-    assertEquals('string', b);
-    assertEquals(false, c);
-  }, interval, x);
-
-  rateLimitedFn(3, 'string', false);
-  assertEquals(1, x['calls']);
-
-  // goog.functions.rateLimit should always pass the last arguments passed to
-  // the
-  // decorator into the decorated function, even if called multiple times.
-  rateLimitedFn();
-  mockClock.tick(interval / 2);
-  rateLimitedFn(8, null, true);
-  mockClock.tick(interval);
-  rateLimitedFn(3, 'string', false);
-  assertEquals(2, x['calls']);
-
-  mockClock.uninstall();
-}
-
-
 /**
- * Wraps a `goog.testing.recordFunction` with the specified decorator and
+ * Wraps a `recordFunction` with the specified decorator and
  * executes a list of command sequences, asserting that in each case the
  * decorated function is called the expected number of times.
  * @param {function():*} decorator The async decorator to test.
- * @param {!Object.<string, number>} expectedCommandSequenceCalls An object
+ * @param {!Object<string,number>} expectedCommandSequenceCalls An object
  *     mapping string command sequences (where 'f' is 'fire' and 'w' is 'wait')
  *     to the number times we expect a decorated function to be called during
  *     the execution of those commands.
  */
 function assertAsyncDecoratorCommandSequenceCalls(
     decorator, expectedCommandSequenceCalls) {
-  var interval = 500;
+  const interval = 500;
 
-  var mockClock = new goog.testing.MockClock(true);
-  for (var commandSequence in expectedCommandSequenceCalls) {
-    var recordedFunction = goog.testing.recordFunction();
-    var f = decorator(recordedFunction, interval);
+  const mockClock = new MockClock(true);
+  for (let commandSequence in expectedCommandSequenceCalls) {
+    const recordedFunction = recordFunction();
+    const f = decorator(recordedFunction, interval);
 
-    for (var i = 0; i < commandSequence.length; ++i) {
+    for (let i = 0; i < commandSequence.length; ++i) {
       switch (commandSequence[i]) {
         case 'f':
           f();
@@ -713,14 +82,14 @@ function assertAsyncDecoratorCommandSequenceCalls(
       }
     }
 
-    var expectedCalls = expectedCommandSequenceCalls[commandSequence];
+    const expectedCalls = expectedCommandSequenceCalls[commandSequence];
     assertEquals(
-        'Expected ' + expectedCalls + ' calls for command sequence "' +
+        `Expected ${expectedCalls} calls for command sequence "` +
             commandSequence + '" (' +
-            goog.array
+            googArray
                 .map(
                     commandSequence,
-                    function(command) {
+                    (command) => {
                       switch (command) {
                         case 'f':
                           return 'fire';
@@ -734,3 +103,622 @@ function assertAsyncDecoratorCommandSequenceCalls(
   }
   mockClock.uninstall();
 }
+
+testSuite({
+  setUp() {
+    callOrder = [];
+  },
+
+  tearDown() {
+    stubs.reset();
+  },
+
+  testTrue() {
+    assertTrue(functions.TRUE());
+  },
+
+  testFalse() {
+    assertFalse(functions.FALSE());
+  },
+
+  testLock() {
+    function add(var_args) {
+      let result = 0;
+      for (let i = 0; i < arguments.length; i++) {
+        result += arguments[i];
+      }
+      return result;
+    }
+
+    assertEquals(6, add(1, 2, 3));
+    assertEquals(0, functions.lock(add)(1, 2, 3));
+    assertEquals(3, functions.lock(add, 2)(1, 2, 3));
+    assertEquals(6, goog.partial(add, 1, 2)(3));
+    assertEquals(3, functions.lock(goog.partial(add, 1, 2))(3));
+  },
+
+  testNth() {
+    assertEquals(1, functions.nth(0)(1));
+    assertEquals(2, functions.nth(1)(1, 2));
+    assertEquals('a', functions.nth(0)('a', 'b'));
+    assertEquals(undefined, functions.nth(0)());
+    assertEquals(undefined, functions.nth(1)(true));
+    assertEquals(undefined, functions.nth(-1)());
+  },
+
+  testPartialRight() {
+    const f = (x, y) => x / y;
+    const g = functions.partialRight(f, 2);
+    assertEquals(2, g(4));
+
+    const h = functions.partialRight(f, 4, 2);
+    assertEquals(2, h());
+
+    const i = functions.partialRight(f);
+    assertEquals(2, i(4, 2));
+  },
+
+  testPartialRightUsesGlobal() {
+    const f = function(x, y) {
+      assertEquals(goog.global, this);
+      return x / y;
+    };
+    const g = functions.partialRight(f, 2);
+    const h = functions.partialRight(g, 4);
+    assertEquals(2, h());
+  },
+
+  testPartialRightWithCall() {
+    const obj = {};
+    const f = function(x, y) {
+      assertEquals(obj, this);
+      return x / y;
+    };
+    const g = functions.partialRight(f, 2);
+    const h = functions.partialRight(g, 4);
+    assertEquals(2, h.call(obj));
+  },
+
+  testPartialRightAndBind() {
+    // This ensures that this "survives" through a partialRight.
+    const p = functions.partialRight(getFoo, 'dog');
+    const b = goog.bind(p, obj, 'hot');
+
+    const res = b();
+    assertEquals(obj.foo, res.foo);
+    assertEquals('hot', res.arg1);
+    assertEquals('dog', res.arg2);
+  },
+
+  testBindAndPartialRight() {
+    // This ensures that this "survives" through a partialRight.
+    const b = goog.bind(getFoo, obj, 'hot');
+    const p = functions.partialRight(b, 'dog');
+
+    const res = p();
+    assertEquals(obj.foo, res.foo);
+    assertEquals('hot', res.arg1);
+    assertEquals('dog', res.arg2);
+  },
+
+  testPartialRightMultipleCalls() {
+    const f = recordFunction();
+
+    const a = functions.partialRight(f, 'foo');
+    const b = functions.partialRight(a, 'bar');
+
+    a();
+    a();
+    b();
+    b();
+
+    assertEquals(4, f.getCallCount());
+
+    const calls = f.getCalls();
+    assertArrayEquals(['foo'], calls[0].getArguments());
+    assertArrayEquals(['foo'], calls[1].getArguments());
+    assertArrayEquals(['bar', 'foo'], calls[2].getArguments());
+    assertArrayEquals(['bar', 'foo'], calls[3].getArguments());
+  },
+
+  testIdentity() {
+    assertEquals(3, functions.identity(3));
+    assertEquals(3, functions.identity(3, 4, 5, 6));
+    assertEquals('Hi there', functions.identity('Hi there'));
+    assertEquals(null, functions.identity(null));
+    assertEquals(undefined, functions.identity());
+
+    const arr = [1, 'b', null];
+    assertEquals(arr, functions.identity(arr));
+    const obj = {a: 'ay', b: 'bee', c: 'see'};
+    assertEquals(obj, functions.identity(obj));
+  },
+
+  testConstant() {
+    assertEquals(3, functions.constant(3)());
+    assertEquals(undefined, functions.constant()());
+  },
+
+  testError() {
+    const f = functions.error('x');
+    const e = assertThrows(
+        'A function created by goog.functions.error must throw an error', f);
+    assertEquals('x', e.message);
+  },
+
+  testFail() {
+    const obj = {};
+    const f = functions.fail(obj);
+    const e = assertThrows(
+        'A function created by goog.functions.raise must throw its input', f);
+    assertEquals(obj, e);
+  },
+
+  testCompose() {
+    const add2 = (x) => x + 2;
+
+    const doubleValue = (x) => x * 2;
+
+    assertEquals(6, functions.compose(doubleValue, add2)(1));
+    assertEquals(4, functions.compose(add2, doubleValue)(1));
+    assertEquals(6, functions.compose(add2, add2, doubleValue)(1));
+    assertEquals(
+        12, functions.compose(doubleValue, add2, add2, doubleValue)(1));
+    assertUndefined(functions.compose()(1));
+    assertEquals(3, functions.compose(add2)(1));
+
+    const add2Numbers = (x, y) => x + y;
+    assertEquals(17, functions.compose(add2Numbers)(10, 7));
+    assertEquals(34, functions.compose(doubleValue, add2Numbers)(10, 7));
+  },
+
+  testAdd() {
+    assertUndefined(functions.sequence()());
+    assertCallOrderAndReset([]);
+
+    assert(functions.sequence(fTrue)());
+    assertCallOrderAndReset(['fTrue']);
+
+    assertFalse(functions.sequence(fTrue, gFalse)());
+    assertCallOrderAndReset(['fTrue', 'gFalse']);
+
+    assert(functions.sequence(fTrue, gFalse, hTrue)());
+    assertCallOrderAndReset(['fTrue', 'gFalse', 'hTrue']);
+
+    assert(functions.sequence(functions.identity)(true));
+    assertFalse(functions.sequence(functions.identity)(false));
+  },
+
+  testAnd() {
+    // the return value is unspecified for an empty and
+    functions.and()();
+    assertCallOrderAndReset([]);
+
+    assert(functions.and(fTrue)());
+    assertCallOrderAndReset(['fTrue']);
+
+    assertFalse(functions.and(fTrue, gFalse)());
+    assertCallOrderAndReset(['fTrue', 'gFalse']);
+
+    assertFalse(functions.and(fTrue, gFalse, hTrue)());
+    assertCallOrderAndReset(['fTrue', 'gFalse']);
+
+    assert(functions.and(functions.identity)(true));
+    assertFalse(functions.and(functions.identity)(false));
+  },
+
+  testOr() {
+    // the return value is unspecified for an empty or
+    functions.or()();
+    assertCallOrderAndReset([]);
+
+    assert(functions.or(fTrue)());
+    assertCallOrderAndReset(['fTrue']);
+
+    assert(functions.or(fTrue, gFalse)());
+    assertCallOrderAndReset(['fTrue']);
+
+    assert(functions.or(fTrue, gFalse, hTrue)());
+    assertCallOrderAndReset(['fTrue']);
+
+    assert(functions.or(functions.identity)(true));
+    assertFalse(functions.or(functions.identity)(false));
+  },
+
+  testNot() {
+    assertTrue(functions.not(gFalse)());
+    assertCallOrderAndReset(['gFalse']);
+
+    assertTrue(functions.not(functions.identity)(false));
+    assertFalse(functions.not(functions.identity)(true));
+
+    const f = (a, b) => {
+      assertEquals(1, a);
+      assertEquals(2, b);
+      return false;
+    };
+
+    assertTrue(functions.not(f)(1, 2));
+  },
+
+  testCreate(expectedArray) {
+    const tempConstructor = function(a, b) {
+      this.foo = a;
+      this.bar = b;
+    };
+
+    const factory = goog.partial(functions.create, tempConstructor, 'baz');
+    const instance = factory('qux');
+
+    assert(instance instanceof tempConstructor);
+    assertEquals(instance.foo, 'baz');
+    assertEquals(instance.bar, 'qux');
+  },
+
+  testWithReturnValue() {
+    const obj = {};
+    const f = function(a, b) {
+      assertEquals(obj, this);
+      assertEquals(1, a);
+      assertEquals(2, b);
+    };
+    assertTrue(functions.withReturnValue(f, true).call(obj, 1, 2));
+    assertFalse(functions.withReturnValue(f, false).call(obj, 1, 2));
+  },
+
+  testEqualTo() {
+    assertTrue(functions.equalTo(42)(42));
+    assertFalse(functions.equalTo(42)(13));
+    assertFalse(functions.equalTo(42)('a string'));
+
+    assertFalse(functions.equalTo(42)('42'));
+    assertTrue(functions.equalTo(42, true)('42'));
+
+    assertTrue(functions.equalTo(0)(0));
+    assertFalse(functions.equalTo(0)(''));
+    assertFalse(functions.equalTo(0)(1));
+
+    assertTrue(functions.equalTo(0, true)(0));
+    assertTrue(functions.equalTo(0, true)(''));
+    assertFalse(functions.equalTo(0, true)(1));
+  },
+
+  testCacheReturnValue() {
+    const returnFive = () => 5;
+
+    const recordedReturnFive = recordFunction(returnFive);
+    const cachedRecordedReturnFive =
+        functions.cacheReturnValue(recordedReturnFive);
+
+    assertEquals(0, recordedReturnFive.getCallCount());
+    assertEquals(5, cachedRecordedReturnFive());
+    assertEquals(1, recordedReturnFive.getCallCount());
+    assertEquals(5, cachedRecordedReturnFive());
+    assertEquals(1, recordedReturnFive.getCallCount());
+  },
+
+  testCacheReturnValueFlagEnabled() {
+    let count = 0;
+    const returnIncrementingInteger = () => {
+      count++;
+      return count;
+    };
+
+    const recordedFunction = recordFunction(returnIncrementingInteger);
+    const cachedRecordedFunction = functions.cacheReturnValue(recordedFunction);
+
+    assertEquals(0, recordedFunction.getCallCount());
+    assertEquals(1, cachedRecordedFunction());
+    assertEquals(1, recordedFunction.getCallCount());
+    assertEquals(1, cachedRecordedFunction());
+    assertEquals(1, recordedFunction.getCallCount());
+    assertEquals(1, cachedRecordedFunction());
+  },
+
+  testCacheReturnValueFlagDisabled() {
+    stubs.set(functions, 'CACHE_RETURN_VALUE', false);
+
+    let count = 0;
+    const returnIncrementingInteger = () => {
+      count++;
+      return count;
+    };
+
+    const recordedFunction = recordFunction(returnIncrementingInteger);
+    const cachedRecordedFunction = functions.cacheReturnValue(recordedFunction);
+
+    assertEquals(0, recordedFunction.getCallCount());
+    assertEquals(1, cachedRecordedFunction());
+    assertEquals(1, recordedFunction.getCallCount());
+    assertEquals(2, cachedRecordedFunction());
+    assertEquals(2, recordedFunction.getCallCount());
+    assertEquals(3, cachedRecordedFunction());
+  },
+
+  testOnce() {
+    const recordedFunction = recordFunction();
+    const f = functions.once(recordedFunction);
+
+    assertEquals(0, recordedFunction.getCallCount());
+    f();
+    assertEquals(1, recordedFunction.getCallCount());
+    f();
+    assertEquals(1, recordedFunction.getCallCount());
+  },
+
+  testDebounce() {
+    // Encoded sequences of commands to perform mapped to expected # of calls.
+    //   f: fire
+    //   w: wait (for the timer to elapse)
+    assertAsyncDecoratorCommandSequenceCalls(functions.debounce, {
+      'f': 0,
+      'ff': 0,
+      'fff': 0,
+      'fw': 1,
+      'ffw': 1,
+      'fffw': 1,
+      'fwffwf': 2,
+      'ffwwwffwwfwf': 3,
+    });
+  },
+
+  testDebounceScopeBinding() {
+    const interval = 500;
+    const mockClock = new MockClock(true);
+
+    const x = {'y': 0};
+    functions.debounce(function() {
+      ++this['y'];
+    }, interval, x)();
+    assertEquals(0, x['y']);
+
+    mockClock.tick(interval);
+    assertEquals(1, x['y']);
+
+    mockClock.uninstall();
+  },
+
+  testDebounceArgumentBinding() {
+    const interval = 500;
+    const mockClock = new MockClock(true);
+
+    let calls = 0;
+    const debouncedFn = functions.debounce((a, b, c) => {
+      ++calls;
+      assertEquals(3, a);
+      assertEquals('string', b);
+      assertEquals(false, c);
+    }, interval);
+
+    debouncedFn(3, 'string', false);
+    mockClock.tick(interval);
+    assertEquals(1, calls);
+
+    // goog.functions.debounce should always pass the last arguments passed to
+    // the decorator into the decorated function, even if called multiple times.
+    debouncedFn();
+    mockClock.tick(interval / 2);
+    debouncedFn(8, null, true);
+    debouncedFn(3, 'string', false);
+    mockClock.tick(interval);
+    assertEquals(2, calls);
+
+    mockClock.uninstall();
+  },
+
+  testDebounceArgumentAndScopeBinding() {
+    const interval = 500;
+    const mockClock = new MockClock(true);
+
+    const x = {'calls': 0};
+    const debouncedFn = functions.debounce(function(a, b, c) {
+      ++this['calls'];
+      assertEquals(3, a);
+      assertEquals('string', b);
+      assertEquals(false, c);
+    }, interval, x);
+
+    debouncedFn(3, 'string', false);
+    mockClock.tick(interval);
+    assertEquals(1, x['calls']);
+
+    // goog.functions.debounce should always pass the last arguments passed to
+    // the decorator into the decorated function, even if called multiple times.
+    debouncedFn();
+    mockClock.tick(interval / 2);
+    debouncedFn(8, null, true);
+    debouncedFn(3, 'string', false);
+    mockClock.tick(interval);
+    assertEquals(2, x['calls']);
+
+    mockClock.uninstall();
+  },
+
+  testThrottle() {
+    // Encoded sequences of commands to perform mapped to expected # of calls.
+    //   f: fire
+    //   w: wait (for the timer to elapse)
+    assertAsyncDecoratorCommandSequenceCalls(functions.throttle, {
+      'f': 1,
+      'ff': 1,
+      'fff': 1,
+      'fw': 1,
+      'ffw': 2,
+      'fwf': 2,
+      'fffw': 2,
+      'fwfff': 2,
+      'fwfffw': 3,
+      'fwffwf': 3,
+      'ffwf': 2,
+      'ffwff': 2,
+      'ffwfw': 3,
+      'ffwffwf': 3,
+      'ffwffwff': 3,
+      'ffwffwffw': 4,
+      'ffwwwffwwfw': 5,
+      'ffwwwffwwfwf': 6,
+    });
+  },
+
+  testThrottleScopeBinding() {
+    const interval = 500;
+    const mockClock = new MockClock(true);
+
+    const x = {'y': 0};
+    functions.throttle(function() {
+      ++this['y'];
+    }, interval, x)();
+    assertEquals(1, x['y']);
+
+    mockClock.uninstall();
+  },
+
+  testThrottleArgumentBinding() {
+    const interval = 500;
+    const mockClock = new MockClock(true);
+
+    let calls = 0;
+    const throttledFn = functions.throttle((a, b, c) => {
+      ++calls;
+      assertEquals(3, a);
+      assertEquals('string', b);
+      assertEquals(false, c);
+    }, interval);
+
+    throttledFn(3, 'string', false);
+    assertEquals(1, calls);
+
+    // goog.functions.throttle should always pass the last arguments passed to
+    // the decorator into the decorated function, even if called multiple times.
+    throttledFn();
+    mockClock.tick(interval / 2);
+    throttledFn(8, null, true);
+    throttledFn(3, 'string', false);
+    mockClock.tick(interval);
+    assertEquals(2, calls);
+
+    mockClock.uninstall();
+  },
+
+  testThrottleArgumentAndScopeBinding() {
+    const interval = 500;
+    const mockClock = new MockClock(true);
+
+    const x = {'calls': 0};
+    const throttledFn = functions.throttle(function(a, b, c) {
+      ++this['calls'];
+      assertEquals(3, a);
+      assertEquals('string', b);
+      assertEquals(false, c);
+    }, interval, x);
+
+    throttledFn(3, 'string', false);
+    assertEquals(1, x['calls']);
+
+    // goog.functions.throttle should always pass the last arguments passed to
+    // the decorator into the decorated function, even if called multiple times.
+    throttledFn();
+    mockClock.tick(interval / 2);
+    throttledFn(8, null, true);
+    throttledFn(3, 'string', false);
+    mockClock.tick(interval);
+    assertEquals(2, x['calls']);
+
+    mockClock.uninstall();
+  },
+
+  testRateLimit() {
+    // Encoded sequences of commands to perform mapped to expected # of calls.
+    //   f: fire
+    //   w: wait (for the timer to elapse)
+    assertAsyncDecoratorCommandSequenceCalls(functions.rateLimit, {
+      'f': 1,
+      'ff': 1,
+      'fff': 1,
+      'fw': 1,
+      'ffw': 1,
+      'fwf': 2,
+      'fffw': 1,
+      'fwfff': 2,
+      'fwfffw': 2,
+      'fwffwf': 3,
+      'ffwf': 2,
+      'ffwff': 2,
+      'ffwfw': 2,
+      'ffwffwf': 3,
+      'ffwffwff': 3,
+      'ffwffwffw': 3,
+      'ffwwwffwwfw': 3,
+      'ffwwwffwwfwf': 4,
+    });
+  },
+
+  testRateLimitScopeBinding() {
+    const interval = 500;
+    const mockClock = new MockClock(true);
+
+    const x = {'y': 0};
+    functions.rateLimit(function() {
+      ++this['y'];
+    }, interval, x)();
+    assertEquals(1, x['y']);
+
+    mockClock.uninstall();
+  },
+
+  testRateLimitArgumentBinding() {
+    const interval = 500;
+    const mockClock = new MockClock(true);
+
+    let calls = 0;
+    const rateLimitedFn = functions.rateLimit((a, b, c) => {
+      ++calls;
+      assertEquals(3, a);
+      assertEquals('string', b);
+      assertEquals(false, c);
+    }, interval);
+
+    rateLimitedFn(3, 'string', false);
+    assertEquals(1, calls);
+
+    // goog.functions.rateLimit should always pass the first arguments passed to
+    // the
+    // decorator into the decorated function, even if called multiple times.
+    rateLimitedFn();
+    mockClock.tick(interval / 2);
+    rateLimitedFn(8, null, true);
+    mockClock.tick(interval);
+    rateLimitedFn(3, 'string', false);
+    assertEquals(2, calls);
+
+    mockClock.uninstall();
+  },
+
+  testRateLimitArgumentAndScopeBinding() {
+    const interval = 500;
+    const mockClock = new MockClock(true);
+
+    const x = {'calls': 0};
+    const rateLimitedFn = functions.rateLimit(function(a, b, c) {
+      ++this['calls'];
+      assertEquals(3, a);
+      assertEquals('string', b);
+      assertEquals(false, c);
+    }, interval, x);
+
+    rateLimitedFn(3, 'string', false);
+    assertEquals(1, x['calls']);
+
+    // goog.functions.rateLimit should always pass the last arguments passed to
+    // the
+    // decorator into the decorated function, even if called multiple times.
+    rateLimitedFn();
+    mockClock.tick(interval / 2);
+    rateLimitedFn(8, null, true);
+    mockClock.tick(interval);
+    rateLimitedFn(3, 'string', false);
+    assertEquals(2, x['calls']);
+
+    mockClock.uninstall();
+  },
+});
