@@ -12,124 +12,107 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview Unit tests for goog.html.SafeScript and its builders.
- */
+/** @fileoverview Unit tests for SafeScript and its builders. */
 
-goog.provide('goog.html.safeScriptTest');
+goog.module('goog.html.safeScriptTest');
+goog.setTestOnly();
 
-goog.require('goog.html.SafeScript');
-goog.require('goog.html.trustedtypes');
-goog.require('goog.object');
-goog.require('goog.string.Const');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
+const Const = goog.require('goog.string.Const');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const SafeScript = goog.require('goog.html.SafeScript');
+const googObject = goog.require('goog.object');
+const testSuite = goog.require('goog.testing.testSuite');
+const trustedtypes = goog.require('goog.html.trustedtypes');
 
-goog.setTestOnly('goog.html.safeScriptTest');
+const stubs = new PropertyReplacer();
+const policy = goog.createTrustedTypesPolicy('closure_test');
 
+testSuite({
+  tearDown() {
+    stubs.reset();
+  },
 
-var stubs = new goog.testing.PropertyReplacer();
-var policy = goog.createTrustedTypesPolicy('closure_test');
+  testSafeScript() {
+    const script = 'var string = \'hello\';';
+    const safeScript = SafeScript.fromConstant(Const.from(script));
+    const extracted = SafeScript.unwrap(safeScript);
+    assertEquals(script, extracted);
+    assertEquals(script, safeScript.getTypedStringValue());
+    assertEquals(`SafeScript{${script}}`, String(safeScript));
 
-function tearDown() {
-  stubs.reset();
-}
+    // Interface marker is present.
+    assertTrue(safeScript.implementsGoogStringTypedString);
+  },
 
+  /** @suppress {checkTypes} */
+  testUnwrap() {
+    const privateFieldName = 'privateDoNotAccessOrElseSafeScriptWrappedValue_';
+    const markerFieldName =
+        'SAFE_SCRIPT_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
+    const propNames =
+        googObject.getKeys(SafeScript.fromConstant(Const.from('')));
+    assertContains(privateFieldName, propNames);
+    assertContains(markerFieldName, propNames);
+    const evil = {};
+    evil[privateFieldName] = 'var string = \'evil\';';
+    evil[markerFieldName] = {};
 
-function testSafeScript() {
-  var script = 'var string = \'hello\';';
-  var safeScript =
-      goog.html.SafeScript.fromConstant(goog.string.Const.from(script));
-  var extracted = goog.html.SafeScript.unwrap(safeScript);
-  assertEquals(script, extracted);
-  assertEquals(script, safeScript.getTypedStringValue());
-  assertEquals('SafeScript{' + script + '}', String(safeScript));
+    const exception = assertThrows(() => {
+      SafeScript.unwrap(evil);
+    });
+    assertContains('expected object of type SafeScript', exception.message);
+  },
 
-  // Interface marker is present.
-  assertTrue(safeScript.implementsGoogStringTypedString);
-}
+  testUnwrapTrustedScript() {
+    let safeValue = SafeScript.fromConstant(Const.from('script'));
+    let trustedValue = SafeScript.unwrapTrustedScript(safeValue);
+    assertEquals(safeValue.getTypedStringValue(), trustedValue);
+    stubs.set(trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
+    safeValue = SafeScript.fromConstant(Const.from('script'));
+    trustedValue = SafeScript.unwrapTrustedScript(safeValue);
+    assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
+    assertTrue(
+        goog.global.TrustedScript ? trustedValue instanceof TrustedScript :
+                                    goog.isString(trustedValue));
+  },
 
+  testFromConstant_allowsEmptyString() {
+    assertEquals(SafeScript.EMPTY, SafeScript.fromConstant(Const.from('')));
+  },
 
-/** @suppress {checkTypes} */
-function testUnwrap() {
-  var privateFieldName = 'privateDoNotAccessOrElseSafeScriptWrappedValue_';
-  var markerFieldName = 'SAFE_SCRIPT_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
-  var propNames = goog.object.getKeys(
-      goog.html.SafeScript.fromConstant(goog.string.Const.from('')));
-  assertContains(privateFieldName, propNames);
-  assertContains(markerFieldName, propNames);
-  var evil = {};
-  evil[privateFieldName] = 'var string = \'evil\';';
-  evil[markerFieldName] = {};
+  testEmpty() {
+    assertEquals('', SafeScript.unwrap(SafeScript.EMPTY));
+  },
 
-  var exception =
-      assertThrows(function() { goog.html.SafeScript.unwrap(evil); });
-  assertContains('expected object of type SafeScript', exception.message);
-}
+  testFromConstantAndArgs() {
+    const script = SafeScript.fromConstantAndArgs(
+        Const.from(
+            'function(str, num, nul, json) { foo(str, num, nul, json); }'),
+        'hello world', 42, null, {'foo': 'bar'});
+    assertEquals(
+        '(function(str, num, nul, json) { foo(str, num, nul, json); })' +
+            '("hello world", 42, null, {"foo":"bar"});',
+        SafeScript.unwrap(script));
+  },
 
+  testFromConstantAndArgs_escaping() {
+    const script = SafeScript.fromConstantAndArgs(
+        Const.from('function(str) { alert(str); }'), '</script</script');
+    assertEquals(
+        '(function(str) { alert(str); })' +
+            '("\\x3c/script\\x3c/script");',
+        SafeScript.unwrap(script));
+  },
 
-function testUnwrapTrustedScript() {
-  var safeValue =
-      goog.html.SafeScript.fromConstant(goog.string.Const.from('script'));
-  var trustedValue = goog.html.SafeScript.unwrapTrustedScript(safeValue);
-  assertEquals(safeValue.getTypedStringValue(), trustedValue);
-  stubs.set(
-      goog.html.trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
-  safeValue =
-      goog.html.SafeScript.fromConstant(goog.string.Const.from('script'));
-  trustedValue = goog.html.SafeScript.unwrapTrustedScript(safeValue);
-  assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
-  assertTrue(
-      goog.global.TrustedScript ? trustedValue instanceof TrustedScript :
-                                  goog.isString(trustedValue));
-}
+  testFromConstantAndArgs_eval() {
+    const script = SafeScript.fromConstantAndArgs(
+        Const.from('function(arg1, arg2) { return arg1 * arg2; }'), 21, 2);
+    const result = eval(SafeScript.unwrap(script));
+    assertEquals(42, result);
+  },
 
-
-function testFromConstant_allowsEmptyString() {
-  assertEquals(
-      goog.html.SafeScript.EMPTY,
-      goog.html.SafeScript.fromConstant(goog.string.Const.from('')));
-}
-
-
-function testEmpty() {
-  assertEquals('', goog.html.SafeScript.unwrap(goog.html.SafeScript.EMPTY));
-}
-
-
-function testFromConstantAndArgs() {
-  var script = goog.html.SafeScript.fromConstantAndArgs(
-      goog.string.Const.from(
-          'function(str, num, nul, json) { foo(str, num, nul, json); }'),
-      'hello world', 42, null, {'foo': 'bar'});
-  assertEquals(
-      '(function(str, num, nul, json) { foo(str, num, nul, json); })' +
-          '("hello world", 42, null, {"foo":"bar"});',
-      goog.html.SafeScript.unwrap(script));
-}
-
-
-function testFromConstantAndArgs_escaping() {
-  var script = goog.html.SafeScript.fromConstantAndArgs(
-      goog.string.Const.from('function(str) { alert(str); }'),
-      '</script</script');
-  assertEquals(
-      '(function(str) { alert(str); })' +
-          '("\\x3c/script\\x3c/script");',
-      goog.html.SafeScript.unwrap(script));
-}
-
-
-function testFromConstantAndArgs_eval() {
-  var script = goog.html.SafeScript.fromConstantAndArgs(
-      goog.string.Const.from('function(arg1, arg2) { return arg1 * arg2; }'),
-      21, 2);
-  var result = eval(goog.html.SafeScript.unwrap(script));
-  assertEquals(42, result);
-}
-
-
-function testFromJson() {
-  var json = goog.html.SafeScript.fromJson({'a': 1, 'b': testFromJson});
-  assertEquals('{"a":1}', goog.html.SafeScript.unwrap(json));
-}
+  testFromJson() {
+    const json = SafeScript.fromJson({'a': 1, 'b': this.testFromJson});
+    assertEquals('{"a":1}', SafeScript.unwrap(json));
+  },
+});
