@@ -288,20 +288,28 @@ function testThenVoidIsRejected() {
 function testThenAsserts() {
   var p = goog.Promise.resolve();
 
-  var m = assertThrows(function() { p.then({}); });
+  var m = assertThrows(function() {
+    p.then(/** @type {?} */ ({}));
+  });
   assertContains('opt_onFulfilled should be a function.', m.message);
 
-  m = assertThrows(function() { p.then(function() {}, {}); });
+  m = assertThrows(function() {
+    p.then(function() {}, /** @type {?} */ ({}));
+  });
   assertContains('opt_onRejected should be a function.', m.message);
 }
 
 function testThenVoidAsserts() {
   var p = goog.Promise.resolve();
 
-  var m = assertThrows(function() { p.thenVoid({}); });
+  var m = assertThrows(function() {
+    p.thenVoid(/** @type {?} */ ({}));
+  });
   assertContains('opt_onFulfilled should be a function.', m.message);
 
-  m = assertThrows(function() { p.thenVoid(function() {}, {}); });
+  m = assertThrows(function() {
+    p.thenVoid(function() {}, /** @type {?} */ ({}));
+  });
   assertContains('opt_onRejected should be a function.', m.message);
 }
 
@@ -442,6 +450,7 @@ function testResolveWithRejectedPromise() {
 function testRejectWithPromise() {
   var resolveBlocker;
   var hasFulfilled = false;
+  var hasRejected = false;
   var blocker =
       new goog.Promise(function(resolve, reject) { resolveBlocker = resolve; });
 
@@ -501,7 +510,8 @@ function testResolveWithSelfRejects() {
   var p = new goog.Promise(function(resolve) { r = resolve; });
   r(p);
   return p.then(shouldNotCall, function(e) {
-    assertEquals(e.message, 'Promise cannot resolve to itself');
+    assertEquals(
+        /** @type {!Error} */ (e).message, 'Promise cannot resolve to itself');
   });
 }
 
@@ -1406,12 +1416,10 @@ function testThenAlwaysWithFulfill() {
 
 
 function testThenAlwaysWithReject() {
-  var thenAlwaysCalled = false;
   return goog.Promise.reject(sentinel)
-      .thenAlways(function(arg) {
+      .thenAlways(function() {
         assertEquals(
             'thenAlways should have no arguments', 0, arguments.length);
-        thenAlwaysCalled = true;
       })
       .then(shouldNotCall, function(err) {
         assertEquals(sentinel, err);
@@ -1508,7 +1516,9 @@ function testCancel() {
   var p = new goog.Promise(goog.nullFunction);
   var child = p.then(shouldNotCall, function(reason) {
     assertTrue(reason instanceof goog.Promise.CancellationError);
-    assertEquals('cancellation message', reason.message);
+    assertEquals(
+        'cancellation message',
+        /** @type {!goog.Promise.CancellationError} */ (reason).message);
 
     // Return a non-Error to resolve the cancellation rejection.
     return null;
@@ -1524,7 +1534,9 @@ function testThenVoidCancel() {
 
   p.thenVoid(shouldNotCall, function(reason) {
     assertTrue(reason instanceof goog.Promise.CancellationError);
-    assertEquals('cancellation message', reason.message);
+    assertEquals(
+        'cancellation message',
+        /** @type {!goog.Promise.CancellationError} */ (reason).message);
     thenVoidCalled = true;
   });
 
@@ -1584,7 +1596,10 @@ function testCancelPropagation() {
   var p2 = p.then(shouldNotCall, function(reason) {
               cancelError = reason;
               assertTrue(reason instanceof goog.Promise.CancellationError);
-              assertEquals('parent cancel message', reason.message);
+              assertEquals(
+                  'parent cancel message',
+                  /** @type {!goog.Promise.CancellationError} */
+                  (reason).message);
               return sentinel;
             }).then(function(value) {
     assertEquals(
@@ -1596,7 +1611,9 @@ function testCancelPropagation() {
     assertEquals(
         'Every onRejected handler should receive the same cancel error.',
         cancelError, reason);
-    assertEquals('parent cancel message', reason.message);
+    assertEquals(
+        'parent cancel message',
+        /** @type {!goog.Promise.CancellationError} */ (reason).message);
 
     // Return a non-Error to resolve the cancellation rejection.
     return null;
@@ -1623,7 +1640,9 @@ function testThenVoidCancelPropagation() {
   var p2 = p.then(shouldNotCall, function(reason) {
     cancelError = reason;
     assertTrue(reason instanceof goog.Promise.CancellationError);
-    assertEquals('parent cancel message', reason.message);
+    assertEquals(
+        'parent cancel message',
+        /** @type {!goog.Promise.CancellationError} */ (reason).message);
     return sentinel;
   });
   p2.thenVoid(function(value) {
@@ -1637,7 +1656,9 @@ function testThenVoidCancelPropagation() {
     assertEquals(
         'Every onRejected handler should receive the same cancel error.',
         cancelError, reason);
-    assertEquals('parent cancel message', reason.message);
+    assertEquals(
+        'parent cancel message',
+        /** @type {!goog.Promise.CancellationError} */ (reason).message);
     partialResolve();
   });
 
@@ -1653,7 +1674,9 @@ function testCancelPropagationUpward() {
 
   var child = parent.then(shouldNotCall, function(reason) {
     assertTrue(reason instanceof goog.Promise.CancellationError);
-    assertEquals('grandChild cancel message', reason.message);
+    assertEquals(
+        'grandChild cancel message',
+        /** @type {!goog.Promise.CancellationError} */ (reason).message);
     cancelError = reason;
     cancelCalls.push('parent');
   });
@@ -1691,7 +1714,9 @@ function testThenVoidCancelPropagationUpward() {
 
   var child = parent.then(shouldNotCall, function(reason) {
     assertTrue(reason instanceof goog.Promise.CancellationError);
-    assertEquals('grandChild cancel message', reason.message);
+    assertEquals(
+        'grandChild cancel message',
+        /** @type {!goog.Promise.CancellationError} */ (reason).message);
     cancelError = reason;
     cancelCalls.push('parent');
   });
@@ -2093,6 +2118,7 @@ function testThenableInterface() {
   assertFalse(goog.Thenable.isImplementedBy(1));
   assertFalse(goog.Thenable.isImplementedBy({then: function() {}}));
 
+  /** @constructor */
   function T() {}
   T.prototype.then = function(opt_a, opt_b, opt_c) {};
   goog.Thenable.addImplementation(T);
@@ -2100,13 +2126,14 @@ function testThenableInterface() {
 
   // Test COMPILED code path.
   try {
-    COMPILED = true;
+    goog.global['COMPILED'] = true;
+    /** @constructor */
     function C() {}
     C.prototype.then = function(opt_a, opt_b, opt_c) {};
     goog.Thenable.addImplementation(C);
     assertTrue(goog.Thenable.isImplementedBy(new C));
   } finally {
-    COMPILED = false;
+    goog.global['COMPILED'] = false;
   }
 }
 
@@ -2168,7 +2195,7 @@ function testCreateWithResolver_Rejected() {
   assertEquals('onFulfilled must be called exactly once.', 1, timesCalled);
 }
 
-
+/** @suppress {visibility} */
 function testLinksBetweenParentsAndChildrenAreCutOnResolve() {
   mockClock.install();
   var parentResolver = goog.Promise.withResolver();
@@ -2182,7 +2209,7 @@ function testLinksBetweenParentsAndChildrenAreCutOnResolve() {
   assertEquals(null, parent.callbackEntries_);
 }
 
-
+/** @suppress {visibility} */
 function testLinksBetweenParentsAndChildrenAreCutWithUnresolvedChild() {
   mockClock.install();
   var parentResolver = goog.Promise.withResolver();
@@ -2199,7 +2226,7 @@ function testLinksBetweenParentsAndChildrenAreCutWithUnresolvedChild() {
   assertEquals(null, parent.callbackEntries_);
 }
 
-
+/** @suppress {visibility} */
 function testLinksBetweenParentsAndChildrenAreCutOnCancel() {
   mockClock.install();
   var parent = new goog.Promise(function() {});

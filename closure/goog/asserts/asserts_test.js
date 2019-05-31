@@ -256,7 +256,7 @@ function testInstanceof() {
 function testObjectPrototypeIsIntact() {
   goog.asserts.assertObjectPrototypeIsIntact();
   var originalToString = Object.prototype.toString;
-  Object.prototype.toString = goog.nullFunction;
+  Object.prototype.toString = function() {};
   try {
     goog.asserts.assertObjectPrototypeIsIntact();
     Object.prototype.foo = 1;
