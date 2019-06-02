@@ -26,5 +26,7 @@ perl -pi -e "s/\"version\": \"v?[\d.]+\"/\"version\": \"$1\"/" \
     package.json
 perl -pi -e "s/\"version\": \"v?[\d.]+\"/\"version\": \"$1\"/" \
     closure-deps/package.json
-perl -pi -e 's/"google-closure-compiler": "\^?[\d.]+"/"google-closure-compiler": "\^'"$1"'"/' \
+perl -pi -e 's/"google-closure-compiler": ".*"/"google-closure-compiler": "\^'"$1"'"/' \
+    closure-deps/package.json
+perl -pi -e 's/"google-closure-library": ".*"/"google-closure-library": "\^'"$1"'"/' \
     closure-deps/package.json
