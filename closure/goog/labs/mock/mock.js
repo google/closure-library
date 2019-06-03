@@ -27,6 +27,7 @@
 
 
 goog.provide('goog.labs.mock');
+goog.provide('goog.labs.mock.TimeoutError');
 goog.provide('goog.labs.mock.VerificationError');
 
 goog.require('goog.array');
@@ -34,7 +35,10 @@ goog.require('goog.asserts');
 goog.require('goog.debug');
 goog.require('goog.debug.Error');
 goog.require('goog.functions');
+goog.require('goog.labs.mock.timeout');
+goog.require('goog.labs.mock.timeout.TimeoutMode');
 goog.require('goog.labs.mock.verification');
+goog.require('goog.labs.mock.verification.BaseVerificationMode');
 goog.require('goog.labs.mock.verification.VerificationMode');
 goog.require('goog.object');
 
@@ -127,6 +131,31 @@ goog.labs.mock.verify = function(obj, opt_verificationMode) {
   return obj.$callVerifier;
 };
 
+/**
+ * Returns an object that can be used to wait for calls to specific methods of a
+ * given mock.
+ * @param {!Object} obj The mocked object.
+ * @param {...(!goog.labs.mock.verification.VerificationMode|
+ *   !goog.labs.mock.timeout.TimeoutMode)} verificationOrTimeoutModes
+ *   The mode under which to verify invocations.
+ * @return {?} The waiter. Return type {?} to avoid compilation errors.
+ * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
+ */
+goog.labs.mock.waitAndVerify = function(obj, ...verificationOrTimeoutModes) {
+  goog.asserts.assert(
+      verificationOrTimeoutModes.length <= 2,
+      'At most 2 arguments may be passed as Timeout and Verification modes.');
+  for (var i = 0; i < 2; i++) {
+    var mode = verificationOrTimeoutModes[i];
+    if (mode instanceof goog.labs.mock.timeout.TimeoutMode) {
+      obj.$timeoutModeSetter(mode);
+    } else if (
+        mode instanceof goog.labs.mock.verification.BaseVerificationMode) {
+      obj.$verificationModeSetter(mode);
+    }
+  }
+  return obj.$callWaiter;
+};
 
 /**
  * Returns a name to identify a function. Named functions return their names,
@@ -291,6 +320,29 @@ goog.inherits(goog.labs.mock.VerificationError, goog.debug.Error);
 /** @override */
 goog.labs.mock.VerificationError.prototype.name = 'VerificationError';
 
+/**
+ * Error thrown when timeout triggers before specified action.
+ *
+ * @param {!Array<!goog.labs.mock.MethodBinding_>} recordedCalls
+ *     The recorded calls that didn't match the expectation.
+ * @param {string} methodName The expected method call.
+ * @param {!goog.labs.mock.verification.VerificationMode} verificationMode The
+ *     expected verification mode which failed verification.
+ * @param {!Array<?>} args The expected arguments.
+ * @constructor
+ * @extends {goog.debug.Error}
+ * @final
+ */
+goog.labs.mock.TimeoutError = function(
+    recordedCalls, methodName, verificationMode, args) {
+  var msg = goog.labs.mock.TimeoutError.getTimeoutErrorMsg_(
+      recordedCalls, methodName, verificationMode, args);
+  goog.labs.mock.TimeoutError.base(this, 'constructor', msg);
+};
+goog.inherits(goog.labs.mock.TimeoutError, goog.debug.Error);
+
+/** @override */
+goog.labs.mock.TimeoutError.prototype.name = 'TimeoutError';
 
 /**
  * This array contains the name of the functions that are part of the base
@@ -339,6 +391,29 @@ goog.labs.mock.VerificationError.getVerificationErrorMsg_ = function(
   return msg;
 };
 
+/**
+ * Constructs a descriptive error message for an expected method call
+ * that was not triggered within a specified duration.
+ * @private
+ * @param {!Array<!goog.labs.mock.MethodBinding_>} recordedCalls
+ *     The recorded calls that didn't match the expectation.
+ * @param {string} methodName The expected method call.
+ * @param {!goog.labs.mock.verification.VerificationMode} verificationMode The
+ *     expected verification mode whose criteria was never met.
+ * @param {!Array<?>} args The expected arguments.
+ * @return {string} The error message.
+ */
+goog.labs.mock.TimeoutError.getTimeoutErrorMsg_ = function(
+    recordedCalls, methodName, verificationMode, args) {
+  var verificationErrorMsg =
+      goog.labs.mock.VerificationError.getVerificationErrorMsg_(
+          recordedCalls, methodName, verificationMode, args);
+  var timeoutErrorMsg =
+      'Function call was either not invoked or never met criteria specified ' +
+      'by provided verification mode. ' + verificationErrorMsg;
+  return timeoutErrorMsg;
+};
+
 
 
 /**
@@ -361,7 +436,7 @@ goog.labs.mock.MockManager_ = function() {
 
   /**
    * A reference to the object or function being mocked.
-   * @type {Object|Function}
+   * @type {?Object|?Function}
    * @protected
    */
   this.mockee = null;
@@ -390,6 +465,21 @@ goog.labs.mock.MockManager_ = function() {
    * @private
    */
   this.verificationMode_ = goog.labs.mock.verification.atLeast(1);
+
+  /**
+   * Which `TimeoutMode` to use during waitAndVerify.
+   * @private
+   */
+  this.timeoutMode_ = goog.labs.mock.timeout.timeout(0);
+
+  /**
+   * Maintains a dictionary keyed by methodName, that holds a list of
+   * callbacks that should be called anytime the provided methodName is called.
+   * @type {!Object<string, !Set<function(!goog.labs.mock.MethodBinding_)>>}
+   * @private
+   * @const
+   */
+  this.callListeners_ = {};
 };
 
 
@@ -405,6 +495,16 @@ goog.labs.mock.MockManager_.prototype.setVerificationMode_ = function(
   this.verificationMode_ = verificationMode;
 };
 
+/**
+ * Allows callers of `#waitAndVerify` to override the default timeout
+ * mode of this MockManager.
+ *
+ * @param {!goog.labs.mock.timeout.TimeoutMode} timeoutMode
+ * @private
+ */
+goog.labs.mock.MockManager_.prototype.setTimeoutMode_ = function(timeoutMode) {
+  this.timeoutMode_ = timeoutMode;
+};
 
 /**
  * Handles the first step in creating a stub, returning a stub-binder that
@@ -457,8 +557,8 @@ goog.labs.mock.MockManager_.prototype.addBinding = function(
  * the most recent binding will be used.
  *
  * If the next binding is a sequence of stubs, then they'll be returned
- * in order until only one is left, at which point it will be returned for every
- * subsequent call.
+ * in order until only one is left, at which point it will be returned for
+ * every subsequent call.
  *
  * @param {string} methodName The name of the stubbed method.
  * @param {!Array<?>} args The arguments passed to the method.
@@ -509,8 +609,13 @@ goog.labs.mock.MockManager_.prototype.executeStub = function(
     methodName, var_args) {
   var args = goog.array.slice(arguments, 1);
 
-  // Record this call
-  this.recordCall_(methodName, args);
+  var callRecord = this.recordCall_(methodName, args);
+
+  if (this.callListeners_[methodName] instanceof Set) {
+    this.callListeners_[methodName].forEach((listener) => {
+      listener(callRecord);
+    });
+  }
 
   var func = this.getExecutor(methodName, args);
   if (func) {
@@ -524,6 +629,7 @@ goog.labs.mock.MockManager_.prototype.executeStub = function(
  *
  * @param {string} methodName The name of the called method.
  * @param {!Array<?>} args The array of arguments.
+ * @return {!goog.labs.mock.MethodBinding_} The call record that was recorded.
  * @private
  */
 goog.labs.mock.MockManager_.prototype.recordCall_ = function(methodName, args) {
@@ -531,6 +637,7 @@ goog.labs.mock.MockManager_.prototype.recordCall_ = function(methodName, args) {
       new goog.labs.mock.MethodBinding_(methodName, args, goog.nullFunction);
 
   this.callRecords_.push(callRecord);
+  return callRecord;
 };
 
 
@@ -554,6 +661,58 @@ goog.labs.mock.MockManager_.prototype.verifyInvocation = function(
   }
 };
 
+/**
+ * Wait until a function is called and then resolve.
+ * @param {string} methodName The name of the method.
+ * @param {...*} args The arguments passed.
+ * @return {!Promise} A promise that resolves when the method is called
+ *     according to its verification mode.
+ * @protected
+ */
+goog.labs.mock.MockManager_.prototype.waitForCall = function(
+    methodName, ...args) {
+  var count = goog.array.count(this.callRecords_, function(binding) {
+    return binding.matches(methodName, args, true /* isVerification */);
+  });
+
+  return new Promise((resolve, reject) => {
+    // If the function has already been called, immediately resolve.
+    if (this.verificationMode_.verify(count)) {
+      resolve();
+      return;
+    }
+
+    var timeout = setTimeout(() => {
+      reject(new goog.labs.mock.TimeoutError(
+          this.callRecords_, methodName, this.verificationMode_, args));
+      this.callListeners_[methodName].delete(listener);
+    }, this.timeoutMode_.duration);
+
+    if (!this.callListeners_[methodName]) {
+      this.callListeners_[methodName] = new Set();
+    }
+
+    /**
+     * Listens for calls to this function name
+     * @param {!goog.labs.mock.MethodBinding_} callRecord The call record
+     *     just added
+     * @this {goog.labs.mock.MockManager_}
+     */
+    const listener = (callRecord) => {
+      if (callRecord.matches(methodName, args, true /* isVerification */)) {
+        count++;
+        if (this.verificationMode_.verify(count)) {
+          resolve();
+          clearTimeout(timeout);
+          this.callListeners_[methodName].delete(listener);
+        }
+      }
+    };
+
+    this.callListeners_[methodName].add(listener);
+  });
+};
+
 
 
 /**
@@ -563,17 +722,18 @@ goog.labs.mock.MockManager_.prototype.verifyInvocation = function(
  * @struct
  * @constructor
  * @extends {goog.labs.mock.MockManager_}
- * @param {!Object|!Function} objOrClass The object or class to set up the mock
- *     for. A class is a constructor function.
+ * @param {!Object|!Function} objOrClass The object or class to set up the
+ *     mock for. A class is a constructor function.
  * @private
- * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
+ * @suppress {strictMissingProperties} Part of the
+ * go/strict_warnings_migration
  */
 goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   goog.labs.mock.MockObjectManager_.base(this, 'constructor');
 
   /**
-   * Proxies the calls to establish the first step of the stub bindings (object
-   * and method name)
+   * Proxies the calls to establish the first step of the stub bindings
+   * (object and method name)
    * @private
    */
   this.objectStubBinder_ = {};
@@ -587,6 +747,15 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
    * @private
    */
   this.objectCallVerifier_ = {};
+
+  /**
+   * The call waiter is used to wait for function calls. It returns a resolved
+   * promise when the function is eventually called.
+   * @type {!Object<string, function(string, ...)>}
+   * @private
+   * @const
+   */
+  this.objectCallWaiter_ = {};
 
   var obj;
   if (goog.isFunction(objOrClass)) {
@@ -637,6 +806,8 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
       // The verifier verifies the calls.
       this.objectCallVerifier_[prop] =
           goog.bind(this.verifyInvocation, this, prop);
+      // The call waiter waits for calls.
+      this.objectCallWaiter_[prop] = goog.bind(this.waitForCall, this, prop);
     }
   }
   // The alias for stub binder exposed to the world.
@@ -645,8 +816,12 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   // The alias for verifier for the world.
   this.mockedItem.$callVerifier = this.objectCallVerifier_;
 
+  this.mockedItem.$callWaiter = this.objectCallWaiter_;
+
   this.mockedItem.$verificationModeSetter =
       goog.bind(this.setVerificationMode_, this);
+
+  this.mockedItem.$timeoutModeSetter = goog.bind(this.setTimeoutMode_, this);
 };
 goog.inherits(goog.labs.mock.MockObjectManager_, goog.labs.mock.MockManager_);
 
@@ -670,8 +845,9 @@ goog.inherits(
 
 
 /**
- * Return a stub, if defined, for the method and arguments passed in. If we lack
- * a stub, instead look for a call record that matches the method and arguments.
+ * Return a stub, if defined, for the method and arguments passed in. If we
+ * lack a stub, instead look for a call record that matches the method and
+ * arguments.
  *
  * @return {!Function} The stub or the invocation logger, if defined.
  * @override
@@ -699,7 +875,8 @@ goog.labs.mock.MockSpyManager_.prototype.getNextBinding = function(
  * @extends {goog.labs.mock.MockManager_}
  * @param {!Function} func The function to set up the mock for.
  * @private
- * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
+ * @suppress {strictMissingProperties} Part of the
+ * go/strict_warnings_migration
  */
 goog.labs.mock.MockFunctionManager_ = function(func) {
   goog.labs.mock.MockFunctionManager_.base(this, 'constructor');
@@ -725,10 +902,11 @@ goog.labs.mock.MockFunctionManager_ = function(func) {
   this.mockedItem.$callVerifier =
       this.useMockedFunctionName_(this.verifyInvocation);
 
-  // This has to be repeated because if it's set in base class it will be
-  // stubbed by MockObjectManager.
+  // These have to be repeated because if they're set in the base class they
+  // will be stubbed by MockObjectManager.
   this.mockedItem.$verificationModeSetter =
       goog.bind(this.setVerificationMode_, this);
+  this.mockedItem.$timeoutModeSetter = goog.bind(this.setTimeoutMode_, this);
 };
 goog.inherits(goog.labs.mock.MockFunctionManager_, goog.labs.mock.MockManager_);
 
@@ -880,8 +1058,10 @@ goog.labs.mock.StubBinderImpl_.prototype.thenReturn = function(value) {
  *         throw new Error('exceptional case');
  *     });
  * @param {!Object} mockObject The mocked object.
- * @return {?} The property binder. Return type {?} to avoid compilation errors.
- * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
+ * @return {?} The property binder. Return type {?} to avoid compilation
+ *     errors.
+ * @suppress {strictMissingProperties} Part of the
+ * go/strict_warnings_migration
  */
 goog.labs.mock.when = function(mockObject) {
   goog.asserts.assert(mockObject.$stubBinder, 'Stub binder cannot be null!');
@@ -895,7 +1075,8 @@ goog.labs.mock.when = function(mockObject) {
  *
  * @param {?string} methodName The name of the method being stubbed.
  * @param {!Array<?>} args The arguments passed to the method.
- * @param {!Function} stub The stub function to be called for the given method.
+ * @param {!Function} stub The stub function to be called for the given
+ *     method.
  * @constructor
  * @struct
  * @private
@@ -956,8 +1137,8 @@ goog.labs.mock.MethodBinding_.prototype.getMethodName = function() {
  *
  * @param {string} methodName The name of the method being stubbed.
  * @param {!Array<?>} args An array of arguments.
- * @param {boolean} isVerification Whether this is a function verification call
- *     or not.
+ * @param {boolean} isVerification Whether this is a function verification
+ *     call or not.
  * @return {boolean} If it matches the stored arguments.
  */
 goog.labs.mock.MethodBinding_.prototype.matches = function(
