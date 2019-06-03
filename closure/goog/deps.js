@@ -1537,7 +1537,7 @@ goog.addDependency('uri/uri.js', ['goog.Uri', 'goog.Uri.QueryData'], ['goog.arra
 goog.addDependency('uri/uri_test.js', ['goog.UriTest'], ['goog.Uri', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('uri/utils.js', ['goog.uri.utils', 'goog.uri.utils.ComponentIndex', 'goog.uri.utils.QueryArray', 'goog.uri.utils.QueryValue', 'goog.uri.utils.StandardQueryParam'], ['goog.array', 'goog.asserts', 'goog.string'], {});
 goog.addDependency('uri/utils_test.js', ['goog.uri.utilsTest'], ['goog.functions', 'goog.string', 'goog.testing.jsunit', 'goog.uri.utils'], {});
-goog.addDependency('useragent/adobereader.js', ['goog.userAgent.adobeReader'], ['goog.string', 'goog.userAgent'], {});
+goog.addDependency('useragent/adobereader.js', ['goog.userAgent.adobeReader'], ['goog.string', 'goog.userAgent'], {'module': 'goog'});
 goog.addDependency('useragent/adobereader_test.js', ['goog.userAgent.adobeReaderTest'], ['goog.testing.testSuite', 'goog.userAgent.adobeReader'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('useragent/flash.js', ['goog.userAgent.flash'], ['goog.string'], {});
 goog.addDependency('useragent/flash_test.js', ['goog.userAgent.flashTest'], ['goog.testing.testSuite', 'goog.userAgent.flash'], {'lang': 'es6', 'module': 'goog'});
