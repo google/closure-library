@@ -75,6 +75,15 @@ goog.labs.userAgent.browser.matchEdgeChromium_ = function() {
 
 
 /**
+ * @return {boolean} Whether the user's browser is Chromium based Opera.
+ * @private
+ */
+goog.labs.userAgent.browser.matchOperaChromium_ = function() {
+  return goog.labs.userAgent.util.matchUserAgent('OPR');
+};
+
+
+/**
  * @return {boolean} Whether the user's browser is Firefox.
  * @private
  */
@@ -95,6 +104,7 @@ goog.labs.userAgent.browser.matchSafari_ = function() {
         goog.labs.userAgent.browser.matchOpera_() ||
         goog.labs.userAgent.browser.matchEdgeHtml_() ||
         goog.labs.userAgent.browser.matchEdgeChromium_() ||
+        goog.labs.userAgent.browser.matchOperaChromium_() ||
         goog.labs.userAgent.browser.matchFirefox_() ||
         goog.labs.userAgent.browser.isSilk() ||
         goog.labs.userAgent.util.matchUserAgent('Android'));
@@ -178,6 +188,12 @@ goog.labs.userAgent.browser.isEdge = goog.labs.userAgent.browser.matchEdgeHtml_;
  */
 goog.labs.userAgent.browser.isEdgeChromium =
     goog.labs.userAgent.browser.matchEdgeChromium_;
+
+/**
+ * @return {boolean} Whether the user's browser is Chromium based Opera.
+ */
+goog.labs.userAgent.browser.isOperaChromium =
+    goog.labs.userAgent.browser.matchOperaChromium_;
 
 /**
  * @return {boolean} Whether the user's browser is Firefox.
