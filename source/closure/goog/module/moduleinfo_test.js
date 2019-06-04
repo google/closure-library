@@ -12,123 +12,137 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.module.ModuleInfoTest');
-goog.setTestOnly('goog.module.ModuleInfoTest');
+goog.module('goog.module.ModuleInfoTest');
+goog.setTestOnly();
 
-goog.require('goog.module.BaseModule');
-goog.require('goog.module.ModuleInfo');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.jsunit');
+const BaseModule = goog.require('goog.module.BaseModule');
+const MockClock = goog.require('goog.testing.MockClock');
+const ModuleInfo = goog.require('goog.module.ModuleInfo');
+const testSuite = goog.require('goog.testing.testSuite');
 
+let mockClock;
 
-
-var mockClock;
-
-
-function setUp() {
-  mockClock = new goog.testing.MockClock(true);
+class TestModule extends BaseModule {
+  constructor() {
+    super();
+  }
 }
 
+testSuite({
+  setUp() {
+    mockClock = new MockClock(true);
+  },
 
-function tearDown() {
-  mockClock.uninstall();
-}
+  tearDown() {
+    mockClock.uninstall();
+  },
 
+  /** Test initial state of module info. */
+  testNotLoadedAtStart() {
+    const m = new ModuleInfo();
+    assertFalse('Shouldn\'t be loaded', m.isLoaded());
+  },
 
-/**
- * Test initial state of module info.
- */
-function testNotLoadedAtStart() {
-  var m = new goog.module.ModuleInfo();
-  assertFalse('Shouldn\'t be loaded', m.isLoaded());
-}
+  /** Test loaded module info. */
+  testOnLoad() {
+    const m = new ModuleInfo();
 
-var TestModule = function() {
-  goog.module.BaseModule.call(this);
-};
-goog.inherits(TestModule, goog.module.BaseModule);
+    m.setModuleConstructor(TestModule);
+    m.onLoad(goog.nullFunction);
+    assertTrue(m.isLoaded());
 
+    const module = m.getModule();
+    assertNotNull(module);
+    assertTrue(module instanceof TestModule);
 
-/**
- * Test loaded module info.
- */
-function testOnLoad() {
-  var m = new goog.module.ModuleInfo();
+    m.dispose();
+    assertTrue(m.isDisposed());
+    assertTrue(
+        'Disposing of ModuleInfo should dispose of its module',
+        module.isDisposed());
+  },
 
-  m.setModuleConstructor(TestModule);
-  m.onLoad(goog.nullFunction);
-  assertTrue(m.isLoaded());
+  /** Test callbacks on module load. */
+  testCallbacks() {
+    const m = new ModuleInfo();
+    m.setModuleConstructor(TestModule);
+    let index = 0;
+    let a = -1;
+    let b = -1;
+    let c = -1;
+    let d = -1;
 
-  var module = m.getModule();
-  assertNotNull(module);
-  assertTrue(module instanceof TestModule);
+    const ca = m.registerCallback(() => {
+      a = index++;
+    });
+    const cb = m.registerCallback(() => {
+      b = index++;
+    });
+    const cc = m.registerCallback(() => {
+      c = index++;
+    });
+    const cd = m.registerEarlyCallback(() => {
+      d = index++;
+    });
+    cb.abort();
+    m.onLoad(goog.nullFunction);
 
-  m.dispose();
-  assertTrue(m.isDisposed());
-  assertTrue(
-      'Disposing of ModuleInfo should dispose of its module',
-      module.isDisposed());
-}
+    assertTrue('callback A should have fired', a >= 0);
+    assertFalse('callback B should have been aborted', b >= 0);
+    assertTrue('callback C should have fired', c >= 0);
+    assertTrue('early callback d should have fired', d >= 0);
 
+    assertEquals('ordering of callbacks was wrong', 0, d);
+    assertEquals('ordering of callbacks was wrong', 1, a);
+    assertEquals('ordering of callbacks was wrong', 2, c);
+  },
 
-/**
- * Test callbacks on module load.
- */
-function testCallbacks() {
-  var m = new goog.module.ModuleInfo();
-  m.setModuleConstructor(TestModule);
-  var index = 0;
-  var a = -1, b = -1, c = -1, d = -1;
-  var ca = m.registerCallback(function() { a = index++; });
-  var cb = m.registerCallback(function() { b = index++; });
-  var cc = m.registerCallback(function() { c = index++; });
-  var cd = m.registerEarlyCallback(function() { d = index++; });
-  cb.abort();
-  m.onLoad(goog.nullFunction);
+  testErrorsInCallbacks() {
+    const m = new ModuleInfo();
+    m.setModuleConstructor(TestModule);
+    m.registerCallback(() => {
+      throw new Error('boom1');
+    });
+    m.registerCallback(() => {
+      throw new Error('boom2');
+    });
+    const hadError = m.onLoad(goog.nullFunction);
+    assertTrue(hadError);
 
-  assertTrue('callback A should have fired', a >= 0);
-  assertFalse('callback B should have been aborted', b >= 0);
-  assertTrue('callback C should have fired', c >= 0);
-  assertTrue('early callback d should have fired', d >= 0);
+    const e = assertThrows(() => {
+      mockClock.tick();
+    });
 
-  assertEquals('ordering of callbacks was wrong', 0, d);
-  assertEquals('ordering of callbacks was wrong', 1, a);
-  assertEquals('ordering of callbacks was wrong', 2, c);
-}
+    assertEquals('boom1', e.message);
+  },
 
+  /** Tests the error callbacks. */
+  testErrbacks() {
+    const m = new ModuleInfo();
+    m.setModuleConstructor(TestModule);
+    let index = 0;
+    let a = -1;
+    let b = -1;
+    let c = -1;
+    const d = -1;
 
-function testErrorsInCallbacks() {
-  var m = new goog.module.ModuleInfo();
-  m.setModuleConstructor(TestModule);
-  m.registerCallback(function() { throw new Error('boom1'); });
-  m.registerCallback(function() { throw new Error('boom2'); });
-  var hadError = m.onLoad(goog.nullFunction);
-  assertTrue(hadError);
+    const ca = m.registerErrback(() => {
+      a = index++;
+    });
+    const cb = m.registerErrback(() => {
+      b = index++;
+    });
+    const cc = m.registerErrback(() => {
+      c = index++;
+    });
+    m.onError('foo');
 
-  var e = assertThrows(function() { mockClock.tick(); });
+    assertTrue('callback A should have fired', a >= 0);
+    assertTrue('callback B should have fired', b >= 0);
+    assertTrue('callback C should have fired', c >= 0);
 
-  assertEquals('boom1', e.message);
-}
-
-
-/**
- * Tests the error callbacks.
- */
-function testErrbacks() {
-  var m = new goog.module.ModuleInfo();
-  m.setModuleConstructor(TestModule);
-  var index = 0;
-  var a = -1, b = -1, c = -1, d = -1;
-  var ca = m.registerErrback(function() { a = index++; });
-  var cb = m.registerErrback(function() { b = index++; });
-  var cc = m.registerErrback(function() { c = index++; });
-  m.onError('foo');
-
-  assertTrue('callback A should have fired', a >= 0);
-  assertTrue('callback B should have fired', b >= 0);
-  assertTrue('callback C should have fired', c >= 0);
-
-  assertEquals('ordering of callbacks was wrong', 0, a);
-  assertEquals('ordering of callbacks was wrong', 1, b);
-  assertEquals('ordering of callbacks was wrong', 2, c);
-}
+    assertEquals('ordering of callbacks was wrong', 0, a);
+    assertEquals('ordering of callbacks was wrong', 1, b);
+    assertEquals('ordering of callbacks was wrong', 2, c);
+  },
+});

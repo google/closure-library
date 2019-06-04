@@ -24,6 +24,7 @@ const safe = goog.require('goog.dom.safe');
 const testSuite = goog.require('goog.testing.testSuite');
 const testingDom = goog.require('goog.testing.dom');
 
+/** @type {!HTMLDivElement} */
 const div = dom.createElement(TagName.DIV);
 
 function assertLinkify(comment, input, expected, preserveNewlines = undefined) {
@@ -228,10 +229,10 @@ testSuite({
             'bolin-fest+for.um@google.com<\/a>');
     assertLinkify(
         'Email with all special characters in the user name',
-        'Send mail to muad\'dib!#$%&\*/=?^_`{|}~@google.com',
+        'Send mail to muad\'dib!#$%&*/=?^_`{|}~@google.com',
         'Send mail to ' +
-            '<a href="mailto:muad&#39;dib!#$%&amp;\*/=?^_`{|}~@google.com">' +
-            'muad&#39;dib!#$%&amp;\*/=?^_`{|}~@google.com<\/a>');
+            '<a href="mailto:muad&#39;dib!#$%&amp;*/=?^_`{|}~@google.com">' +
+            'muad&#39;dib!#$%&amp;*/=?^_`{|}~@google.com<\/a>');
   },
 
   testEmailWithUnderscoreInvalid() {

@@ -12,123 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.soyTest');
-goog.setTestOnly('goog.soyTest');
+goog.module('goog.soyTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.NodeType');
-goog.require('goog.dom.TagName');
-goog.require('goog.functions');
-goog.require('goog.soy');
+const NodeType = goog.require('goog.dom.NodeType');
+const TagName = goog.require('goog.dom.TagName');
+const dom = goog.require('goog.dom');
+const functions = goog.require('goog.functions');
+const soy = goog.require('goog.soy');
 /** @suppress {extraRequire} */
-goog.require('goog.soy.testHelper');
-goog.require('goog.testing.jsunit');
-
-function testRenderHtml() {
-  var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
-  goog.soy.renderHtml(testDiv, example.sanitizedHtmlTemplate());
-  assertEquals('hello <b>world</b>', testDiv.innerHTML.toLowerCase());
-}
-
-
-function testRenderElement() {
-  var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
-  goog.soy.renderElement(testDiv, example.multiRootTemplate, {name: 'Boo'});
-  assertEquals('<div>Hello</div><div>Boo</div>', elementToInnerHtml(testDiv));
-}
-
-
-function testRenderElementWithNoTemplateData() {
-  var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
-  goog.soy.renderElement(testDiv, example.noDataTemplate);
-  assertEquals('<div>Hello</div>', elementToInnerHtml(testDiv));
-}
-
-
-function testRenderAsFragmentTextNode() {
-  var fragment =
-      goog.soy.renderAsFragment(example.textNodeTemplate, {name: 'Boo'});
-  assertEquals(goog.dom.NodeType.TEXT, fragment.nodeType);
-  assertEquals('Boo', fragmentToHtml(fragment));
-}
-
-
-function testRenderAsFragmentInjectedData() {
-  var fragment = goog.soy.renderAsFragment(
-      example.injectedDataTemplate, {name: 'Boo'}, {name: 'ijBoo'});
-  assertEquals(goog.dom.NodeType.TEXT, fragment.nodeType);
-  assertEquals('BooijBoo', fragmentToHtml(fragment));
-}
-
-
-function testRenderAsFragmentSingleRoot() {
-  var fragment =
-      goog.soy.renderAsFragment(example.singleRootTemplate, {name: 'Boo'});
-  assertEquals(goog.dom.NodeType.ELEMENT, fragment.nodeType);
-  assertEquals(String(goog.dom.TagName.SPAN), fragment.tagName);
-  assertEquals('Boo', fragment.innerHTML);
-}
-
-
-function testRenderAsFragmentMultiRoot() {
-  var fragment =
-      goog.soy.renderAsFragment(example.multiRootTemplate, {name: 'Boo'});
-  assertEquals(goog.dom.NodeType.DOCUMENT_FRAGMENT, fragment.nodeType);
-  assertEquals('<div>Hello</div><div>Boo</div>', fragmentToHtml(fragment));
-}
-
-
-function testRenderAsFragmentNoData() {
-  var fragment = goog.soy.renderAsFragment(example.noDataTemplate);
-  assertEquals(goog.dom.NodeType.ELEMENT, fragment.nodeType);
-  assertEquals('<div>Hello</div>', fragmentToHtml(fragment));
-}
-
-
-function testRenderAsElementTextNode() {
-  var elem = goog.soy.renderAsElement(example.textNodeTemplate, {name: 'Boo'});
-  assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
-  assertEquals(String(goog.dom.TagName.DIV), elem.tagName);
-  assertEquals('Boo', elementToInnerHtml(elem));
-}
-
-function testRenderAsElementInjectedData() {
-  var elem = goog.soy.renderAsElement(
-      example.injectedDataTemplate, {name: 'Boo'}, {name: 'ijBoo'});
-  assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
-  assertEquals(String(goog.dom.TagName.DIV), elem.tagName);
-  assertEquals('BooijBoo', elementToInnerHtml(elem));
-}
-
-
-function testRenderAsElementSingleRoot() {
-  var elem =
-      goog.soy.renderAsElement(example.singleRootTemplate, {name: 'Boo'});
-  assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
-  assertEquals(String(goog.dom.TagName.SPAN), elem.tagName);
-  assertEquals('Boo', elementToInnerHtml(elem));
-}
-
-
-function testRenderAsElementMultiRoot() {
-  var elem = goog.soy.renderAsElement(example.multiRootTemplate, {name: 'Boo'});
-  assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
-  assertEquals(String(goog.dom.TagName.DIV), elem.tagName);
-  assertEquals('<div>Hello</div><div>Boo</div>', elementToInnerHtml(elem));
-}
-
-function testRenderAsElementWithNoData() {
-  var elem = goog.soy.renderAsElement(example.noDataTemplate);
-  assertEquals('Hello', elementToInnerHtml(elem));
-}
-
-function testConvertToElement() {
-  var elem = goog.soy.convertToElement(example.sanitizedHtmlTemplate());
-  assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
-  assertEquals(String(goog.dom.TagName.DIV), elem.tagName);
-  assertEquals('hello <b>world</b>', elem.innerHTML.toLowerCase());
-}
-
+const testHelper = goog.require('goog.soy.testHelper');
+const testSuite = goog.require('goog.testing.testSuite');
 
 /**
  * Asserts that the function throws an error for unsafe templates.
@@ -140,129 +34,221 @@ function assertUnsafeTemplateOutputErrorThrown(func) {
       assertThrows(func).message);
 }
 
-function testAllowButEscapeUnsanitizedText() {
-  var div = goog.dom.createElement(goog.dom.TagName.DIV);
-  goog.soy.renderElement(div, example.unsanitizedTextTemplate);
-  assertEquals('I &lt;3 Puppies &amp; Kittens', div.innerHTML);
-  var fragment = goog.soy.renderAsFragment(example.unsanitizedTextTemplate);
-  assertEquals('I <3 Puppies & Kittens', fragment.nodeValue);
-  assertEquals(
-      'I &lt;3 Puppies &amp; Kittens',
-      goog.soy.renderAsElement(example.unsanitizedTextTemplate).innerHTML);
-}
+testSuite({
+  testRenderHtml() {
+    const testDiv = dom.createElement(TagName.DIV);
+    soy.renderHtml(testDiv, example.sanitizedHtmlTemplate());
+    assertEquals('hello <b>world</b>', testDiv.innerHTML.toLowerCase());
+  },
 
-function testRejectSanitizedCss() {
-  assertUnsafeTemplateOutputErrorThrown(function() {
-    goog.soy.renderAsElement(example.sanitizedCssTemplate);
-  });
-}
+  testRenderElement() {
+    const testDiv = dom.createElement(TagName.DIV);
+    soy.renderElement(testDiv, example.multiRootTemplate, {name: 'Boo'});
+    assertEquals('<div>Hello</div><div>Boo</div>', elementToInnerHtml(testDiv));
+  },
 
-function testRejectSpoofingSanitizedContent() {
-  assertUnsafeTemplateOutputErrorThrown(function() {
-    goog.soy.renderAsElement(example.templateSpoofingSanitizedContentString);
-  });
-}
+  testRenderElementWithNoTemplateData() {
+    const testDiv = dom.createElement(TagName.DIV);
+    soy.renderElement(testDiv, example.noDataTemplate);
+    assertEquals('<div>Hello</div>', elementToInnerHtml(testDiv));
+  },
 
-function testStringTemplatesRenderedAsText() {
-  assertEquals(
-      '<b>XSS</b>',
-      goog.dom.getTextContent(
-          goog.soy.renderAsFragment(example.stringTemplate)));
-}
+  testRenderAsFragmentTextNode() {
+    const fragment =
+        soy.renderAsFragment(example.textNodeTemplate, {name: 'Boo'});
+    assertEquals(NodeType.TEXT, fragment.nodeType);
+    assertEquals('Boo', fragmentToHtml(fragment));
+  },
 
-function testAcceptSanitizedHtml() {
-  assertEquals(
-      'Hello World',
-      goog.dom.getTextContent(
-          goog.soy.renderAsElement(example.sanitizedHtmlTemplate)));
-}
+  testRenderAsFragmentInjectedData() {
+    const fragment = soy.renderAsFragment(
+        example.injectedDataTemplate, {name: 'Boo'}, {name: 'ijBoo'});
+    assertEquals(NodeType.TEXT, fragment.nodeType);
+    assertEquals('BooijBoo', fragmentToHtml(fragment));
+  },
 
-function testRejectSanitizedHtmlAttributes() {
-  // Attributes context has nothing to do with html.
-  assertUnsafeTemplateOutputErrorThrown(function() {
-    return goog.dom.getTextContent(
-        goog.soy.renderAsElement(example.sanitizedHtmlAttributesTemplate));
-  });
-}
+  testRenderAsFragmentSingleRoot() {
+    const fragment =
+        soy.renderAsFragment(example.singleRootTemplate, {name: 'Boo'});
+    assertEquals(NodeType.ELEMENT, fragment.nodeType);
+    assertEquals(String(TagName.SPAN), fragment.tagName);
+    assertEquals('Boo', fragment.innerHTML);
+  },
 
-function testAcceptNonObject() {
-  // Some templates, or things that spoof templates in unit tests, might return
-  // non-strings in unusual cases.
-  assertEquals(
-      'null', goog.dom.getTextContent(
-                  goog.soy.renderAsElement(goog.functions.constant(null))));
-}
+  testRenderAsFragmentMultiRoot() {
+    const fragment =
+        soy.renderAsFragment(example.multiRootTemplate, {name: 'Boo'});
+    assertEquals(NodeType.DOCUMENT_FRAGMENT, fragment.nodeType);
+    assertEquals('<div>Hello</div><div>Boo</div>', fragmentToHtml(fragment));
+  },
 
-function testDebugAssertionWithBadFirstTag() {
-  try {
-    goog.soy.renderAsElement(example.tableRowTemplate);
-    // Expect no exception in production code.
-    assert(!goog.DEBUG);
-  } catch (e) {
-    // Expect exception in debug code.
-    assert(goog.DEBUG);
-    // Make sure to let the developer know which tag caused the problem.
-    assertContains('<tr>', e.message);
-  }
+  testRenderAsFragmentNoData() {
+    const fragment = soy.renderAsFragment(example.noDataTemplate);
+    assertEquals(NodeType.ELEMENT, fragment.nodeType);
+    assertEquals('<div>Hello</div>', fragmentToHtml(fragment));
+  },
 
-  try {
-    goog.soy.renderAsFragment(example.tableRowTemplate);
-    // Expect no exception in production code.
-    assert(!goog.DEBUG);
-  } catch (e) {
-    // Expect exception in debug code.
-    assert(goog.DEBUG);
-    // Make sure to let the developer know which tag caused the problem.
-    assertContains('<tr>', e.message);
-  }
+  testRenderAsElementTextNode() {
+    const elem = soy.renderAsElement(example.textNodeTemplate, {name: 'Boo'});
+    assertEquals(NodeType.ELEMENT, elem.nodeType);
+    assertEquals(String(TagName.DIV), elem.tagName);
+    assertEquals('Boo', elementToInnerHtml(elem));
+  },
 
-  try {
-    goog.soy.renderAsElement(example.colGroupTemplateCaps);
-    // Expect no exception in production code.
-    assert(!goog.DEBUG);
-  } catch (e) {
-    // Expect exception in debug code.
-    assert(goog.DEBUG);
-    // Make sure to let the developer know which tag caused the problem.
-    assertContains('<COLGROUP>', e.message);
-  }
-}
+  testRenderAsElementInjectedData() {
+    const elem = soy.renderAsElement(
+        example.injectedDataTemplate, {name: 'Boo'}, {name: 'ijBoo'});
+    assertEquals(NodeType.ELEMENT, elem.nodeType);
+    assertEquals(String(TagName.DIV), elem.tagName);
+    assertEquals('BooijBoo', elementToInnerHtml(elem));
+  },
 
-/**
- * When innerHTML is assigned on an element in IE, IE recursively severs all
- * parent-children links in the removed content. This test ensures that that
- * doesn't happen when re-rendering an element with soy.
- */
-function testRerenderLeavesChildrenInIE() {
-  // Given a div with existing content.
-  var grandchildDiv = goog.dom.createElement(goog.dom.TagName.DIV);
-  var childDiv =
-      goog.dom.createDom(goog.dom.TagName.DIV, null, [grandchildDiv]);
-  var testDiv = goog.dom.createDom(goog.dom.TagName.DIV, null, [childDiv]);
-  // Expect parent/children links.
-  assertArrayEquals(
-      'Expect testDiv to contain childDiv.', [childDiv],
-      Array.from(testDiv.children));
-  assertEquals(
-      'Expect childDiv to be contained in testDiv.', testDiv,
-      childDiv.parentElement);
-  assertArrayEquals(
-      'Expect childDiv to contain grandchildDiv.', [grandchildDiv],
-      Array.from(childDiv.children));
-  assertEquals(
-      'Expect grandchildDiv to be contained in childDiv.', childDiv,
-      grandchildDiv.parentElement);
+  testRenderAsElementSingleRoot() {
+    const elem = soy.renderAsElement(example.singleRootTemplate, {name: 'Boo'});
+    assertEquals(NodeType.ELEMENT, elem.nodeType);
+    assertEquals(String(TagName.SPAN), elem.tagName);
+    assertEquals('Boo', elementToInnerHtml(elem));
+  },
 
-  // When the div's content is re-rendered.
-  goog.soy.renderHtml(testDiv, example.sanitizedHtmlTemplate());
-  assertEquals(
-      `Expect testDiv's contents to complete change`, 'hello <b>world</b>',
-      testDiv.innerHTML.toLowerCase());
-  // Expect the previous childDiv tree to retain its parent-child connections.
-  assertArrayEquals(
-      'Expect childDiv to still contain grandchildDiv.', [grandchildDiv],
-      Array.from(childDiv.children));
-  assertEquals(
-      'Expect grandchildDiv to still be contained in childDiv.', childDiv,
-      grandchildDiv.parentElement);
-}
+  testRenderAsElementMultiRoot() {
+    const elem = soy.renderAsElement(example.multiRootTemplate, {name: 'Boo'});
+    assertEquals(NodeType.ELEMENT, elem.nodeType);
+    assertEquals(String(TagName.DIV), elem.tagName);
+    assertEquals('<div>Hello</div><div>Boo</div>', elementToInnerHtml(elem));
+  },
+
+  testRenderAsElementWithNoData() {
+    const elem = soy.renderAsElement(example.noDataTemplate);
+    assertEquals('Hello', elementToInnerHtml(elem));
+  },
+
+  testConvertToElement() {
+    const elem = soy.convertToElement(example.sanitizedHtmlTemplate());
+    assertEquals(NodeType.ELEMENT, elem.nodeType);
+    assertEquals(String(TagName.DIV), elem.tagName);
+    assertEquals('hello <b>world</b>', elem.innerHTML.toLowerCase());
+  },
+
+  testAllowButEscapeUnsanitizedText() {
+    const div = dom.createElement(TagName.DIV);
+    soy.renderElement(div, example.unsanitizedTextTemplate);
+    assertEquals('I &lt;3 Puppies &amp; Kittens', div.innerHTML);
+    const fragment = soy.renderAsFragment(example.unsanitizedTextTemplate);
+    assertEquals('I <3 Puppies & Kittens', fragment.nodeValue);
+    assertEquals(
+        'I &lt;3 Puppies &amp; Kittens',
+        soy.renderAsElement(example.unsanitizedTextTemplate).innerHTML);
+  },
+
+  testRejectSanitizedCss() {
+    assertUnsafeTemplateOutputErrorThrown(() => {
+      soy.renderAsElement(example.sanitizedCssTemplate);
+    });
+  },
+
+  testRejectSpoofingSanitizedContent() {
+    assertUnsafeTemplateOutputErrorThrown(() => {
+      soy.renderAsElement(example.templateSpoofingSanitizedContentString);
+    });
+  },
+
+  testStringTemplatesRenderedAsText() {
+    assertEquals(
+        '<b>XSS</b>',
+        dom.getTextContent(soy.renderAsFragment(example.stringTemplate)));
+  },
+
+  testAcceptSanitizedHtml() {
+    assertEquals(
+        'Hello World',
+        dom.getTextContent(soy.renderAsElement(example.sanitizedHtmlTemplate)));
+  },
+
+  testRejectSanitizedHtmlAttributes() {
+    // Attributes context has nothing to do with html.
+    assertUnsafeTemplateOutputErrorThrown(
+        () => dom.getTextContent(
+            soy.renderAsElement(example.sanitizedHtmlAttributesTemplate)));
+  },
+
+  testAcceptNonObject() {
+    // Some templates, or things that spoof templates in unit tests, might
+    // return non-strings in unusual cases.
+    assertEquals(
+        'null',
+        dom.getTextContent(soy.renderAsElement(functions.constant(null))));
+  },
+
+  testDebugAssertionWithBadFirstTag() {
+    try {
+      soy.renderAsElement(example.tableRowTemplate);
+      // Expect no exception in production code.
+      assert(!goog.DEBUG);
+    } catch (e) {
+      // Expect exception in debug code.
+      assert(goog.DEBUG);
+      // Make sure to let the developer know which tag caused the problem.
+      assertContains('<tr>', e.message);
+    }
+
+    try {
+      soy.renderAsFragment(example.tableRowTemplate);
+      // Expect no exception in production code.
+      assert(!goog.DEBUG);
+    } catch (e) {
+      // Expect exception in debug code.
+      assert(goog.DEBUG);
+      // Make sure to let the developer know which tag caused the problem.
+      assertContains('<tr>', e.message);
+    }
+
+    try {
+      soy.renderAsElement(example.colGroupTemplateCaps);
+      // Expect no exception in production code.
+      assert(!goog.DEBUG);
+    } catch (e) {
+      // Expect exception in debug code.
+      assert(goog.DEBUG);
+      // Make sure to let the developer know which tag caused the problem.
+      assertContains('<COLGROUP>', e.message);
+    }
+  },
+
+  /**
+   * When innerHTML is assigned on an element in IE, IE recursively severs all
+   * parent-children links in the removed content. This test ensures that that
+   * doesn't happen when re-rendering an element with soy.
+   */
+  testRerenderLeavesChildrenInIE() {
+    // Given a div with existing content.
+    const grandchildDiv = dom.createElement(TagName.DIV);
+    const childDiv = dom.createDom(TagName.DIV, null, [grandchildDiv]);
+    const testDiv = dom.createDom(TagName.DIV, null, [childDiv]);
+    // Expect parent/children links.
+    assertArrayEquals(
+        'Expect testDiv to contain childDiv.', [childDiv],
+        Array.from(testDiv.children));
+    assertEquals(
+        'Expect childDiv to be contained in testDiv.', testDiv,
+        childDiv.parentElement);
+    assertArrayEquals(
+        'Expect childDiv to contain grandchildDiv.', [grandchildDiv],
+        Array.from(childDiv.children));
+    assertEquals(
+        'Expect grandchildDiv to be contained in childDiv.', childDiv,
+        grandchildDiv.parentElement);
+
+    // When the div's content is re-rendered.
+    soy.renderHtml(testDiv, example.sanitizedHtmlTemplate());
+    assertEquals(
+        `Expect testDiv's contents to complete change`, 'hello <b>world</b>',
+        testDiv.innerHTML.toLowerCase());
+    // Expect the previous childDiv tree to retain its parent-child connections.
+    assertArrayEquals(
+        'Expect childDiv to still contain grandchildDiv.', [grandchildDiv],
+        Array.from(childDiv.children));
+    assertEquals(
+        'Expect grandchildDiv to still be contained in childDiv.', childDiv,
+        grandchildDiv.parentElement);
+  },
+});

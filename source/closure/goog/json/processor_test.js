@@ -12,19 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.json.processorTest');
-goog.setTestOnly('goog.json.processorTest');
+goog.module('goog.json.processorTest');
+goog.setTestOnly();
 
-goog.require('goog.json.NativeJsonProcessor');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const NativeJsonProcessor = goog.require('goog.json.NativeJsonProcessor');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-var SUPPORTS_NATIVE_JSON = false;
-
-function setUpPage() {
-  SUPPORTS_NATIVE_JSON = goog.global['JSON'] &&
-      !(goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('5.0'));
-}
+let SUPPORTS_NATIVE_JSON = false;
 
 var REPLACER = function(k, v) {
   return !!k ? v + 'd' : v;
@@ -37,32 +32,37 @@ var REVIVER = function(k, v) {
 // Just sanity check parsing and stringifying.
 // Thorough tests are in json_test.html.
 
-function testNativeParser() {
-  if (!SUPPORTS_NATIVE_JSON) {
-    return;
-  }
-  var json = '{"a":1,"b":{"c":2}}';
-  runParsingTest(new goog.json.NativeJsonProcessor(), json, json);
-}
-
-function testNativeParser_withReplacer() {
-  if (!SUPPORTS_NATIVE_JSON) {
-    return;
-  }
-  runParsingTest(
-      new goog.json.NativeJsonProcessor(REPLACER), '{"a":"foo","b":"goo"}',
-      '{"a":"food","b":"good"}');
-}
-
-function testNativeParser_withReviver() {
-  if (!SUPPORTS_NATIVE_JSON) {
-    return;
-  }
-  var json = '{"a":"fod","b":"god"}';
-  runParsingTest(
-      new goog.json.NativeJsonProcessor(REPLACER, REVIVER), json, json);
-}
-
 function runParsingTest(parser, input, expected) {
   assertEquals(expected, parser.stringify(parser.parse(input)));
 }
+testSuite({
+  setUpPage() {
+    SUPPORTS_NATIVE_JSON = goog.global['JSON'] &&
+        !(userAgent.GECKO && !userAgent.isVersionOrHigher('5.0'));
+  },
+
+  testNativeParser() {
+    if (!SUPPORTS_NATIVE_JSON) {
+      return;
+    }
+    const json = '{"a":1,"b":{"c":2}}';
+    runParsingTest(new NativeJsonProcessor(), json, json);
+  },
+
+  testNativeParser_withReplacer() {
+    if (!SUPPORTS_NATIVE_JSON) {
+      return;
+    }
+    runParsingTest(
+        new NativeJsonProcessor(REPLACER), '{"a":"foo","b":"goo"}',
+        '{"a":"food","b":"good"}');
+  },
+
+  testNativeParser_withReviver() {
+    if (!SUPPORTS_NATIVE_JSON) {
+      return;
+    }
+    const json = '{"a":"fod","b":"god"}';
+    runParsingTest(new NativeJsonProcessor(REPLACER, REVIVER), json, json);
+  },
+});

@@ -17,7 +17,10 @@ goog.setTestOnly('goog.labs.mockTest');
 
 goog.require('goog.array');
 goog.require('goog.labs.mock');
+goog.require('goog.labs.mock.TimeoutError');
 goog.require('goog.labs.mock.VerificationError');
+goog.require('goog.labs.mock.timeout');
+goog.require('goog.labs.mock.verification');
 /** @suppress {extraRequire} */
 goog.require('goog.labs.testing.AnythingMatcher');
 /** @suppress {extraRequire} */
@@ -498,6 +501,155 @@ function testVerificationErrorMessages() {
   assertEquals(expected, e.message);
 }
 
+async function testWait() {
+  const mockParent = goog.labs.mock.mock(ParentClass);
+
+  setTimeout(() => {
+    mockParent.method1();
+  }, 0);
+
+  await goog.labs.mock.waitAndVerify(mockParent).method1();
+}
+
+async function testWaitOnMultipleMethodCalls() {
+  const mockParent = goog.labs.mock.mock(ParentClass);
+  const timeoutMode = goog.labs.mock.timeout.timeout(150);
+  const verificationMode = goog.labs.mock.verification.times(2);
+
+  setTimeout(() => {
+    mockParent.method1();
+  }, 0);
+  setTimeout(() => {
+    mockParent.method1();
+  }, 0);
+
+  await goog.labs.mock.waitAndVerify(mockParent, verificationMode, timeoutMode)
+      .method1();
+}
+
+async function testWaitOnDifferentFunctions() {
+  const mockParent = goog.labs.mock.mock(ParentClass);
+
+  setTimeout(() => {
+    mockParent.incrementVal();
+  }, 0);
+
+  setTimeout(() => {
+    mockParent.method1();
+  }, 0);
+
+  await goog.labs.mock.waitAndVerify(mockParent).method1();
+  await goog.labs.mock.waitAndVerify(mockParent).incrementVal();
+}
+
+async function testWaitOnSameFunctionWithDifferentArgs() {
+  const mockParent = goog.labs.mock.mock(ParentClass);
+
+  setTimeout(() => {
+    mockParent.method1(1);
+  }, 0);
+
+  setTimeout(() => {
+    mockParent.method1(2);
+  }, 0);
+
+  await goog.labs.mock.waitAndVerify(mockParent).method1(2);
+  await goog.labs.mock.waitAndVerify(mockParent).method1(1);
+}
+
+async function testWaitWithTimeoutMode() {
+  const mockParent = goog.labs.mock.mock(ParentClass);
+  const timeoutMode = goog.labs.mock.timeout.timeout(1);
+
+  setTimeout(() => {
+    mockParent.method1();
+  }, 50);
+
+  const e = await assertRejects(
+      goog.labs.mock.waitAndVerify(mockParent, timeoutMode).method1());
+  assertTrue(e instanceof goog.labs.mock.TimeoutError);
+  assertEquals(
+      e.message,
+      'Function call was either not invoked or never met criteria specified ' +
+          'by provided verification mode. \n' +
+          'Expected: method1() at least 1 times\n' +
+          'Recorded: No recorded calls');
+}
+
+async function testWaitWithVerificationMode() {
+  const mockParent = goog.labs.mock.mock(ParentClass);
+  const verificationMode = goog.labs.mock.verification.times(2);
+
+  mockParent.method1();
+
+  const e = await assertRejects(
+      goog.labs.mock.waitAndVerify(mockParent, verificationMode).method1());
+  assertEquals(
+      e.message,
+      'Function call was either not invoked or never met criteria specified ' +
+          'by provided verification mode. \n' +
+          'Expected: method1() 2 times\n' +
+          'Recorded: method1()');
+}
+
+async function testWaitOnSameMethodTwice() {
+  const mockParent = goog.labs.mock.mock(ParentClass);
+
+  mockParent.method1();
+
+  await goog.labs.mock.waitAndVerify(mockParent).method1();
+  await goog.labs.mock.waitAndVerify(mockParent).method1();
+}
+
+async function testWaitWithTimeoutAndVerificationMode() {
+  const mockParent = goog.labs.mock.mock(ParentClass);
+  const timeoutMode = goog.labs.mock.timeout.timeout(150);
+  const verificationMode = goog.labs.mock.verification.times(2);
+
+  setTimeout(() => {
+    mockParent.method1();
+  }, 50);
+
+  setTimeout(() => {
+    mockParent.method1();
+  }, 250);
+
+  const e = await assertRejects(
+      goog.labs.mock.waitAndVerify(mockParent, timeoutMode, verificationMode)
+          .method1());
+  assertTrue(e instanceof goog.labs.mock.TimeoutError);
+  assertEquals(
+      e.message,
+      'Function call was either not invoked or never met criteria specified ' +
+          'by provided verification mode. \n' +
+          'Expected: method1() 2 times\n' +
+          'Recorded: method1()');
+}
+
+async function testPassingVerificationModeBeforeTimeoutMode() {
+  const mockParent = goog.labs.mock.mock(ParentClass);
+  const timeoutMode = goog.labs.mock.timeout.timeout(150);
+  const verificationMode = goog.labs.mock.verification.times(2);
+
+  setTimeout(() => {
+    mockParent.method1();
+  }, 50);
+
+  setTimeout(() => {
+    mockParent.method1();
+  }, 250);
+
+  const e = await assertRejects(
+      goog.labs.mock.waitAndVerify(mockParent, verificationMode, timeoutMode)
+          .method1());
+  assertTrue(e instanceof goog.labs.mock.TimeoutError);
+  assertEquals(
+      e.message,
+      'Function call was either not invoked or never met criteria specified ' +
+          'by provided verification mode. \n' +
+          'Expected: method1() 2 times\n' +
+          'Recorded: method1()');
+}
 
 /**
 * Asserts that the given string contains a list of others strings

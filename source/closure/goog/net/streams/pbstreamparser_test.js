@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.net.streams.PbStreamParserTest');
-goog.setTestOnly('goog.net.streams.PbStreamParserTest');
+goog.module('goog.net.streams.PbStreamParserTest');
+goog.setTestOnly();
 
-goog.require('goog.net.streams.PbStreamParser');
-goog.require('goog.object');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
+const PbStreamParser = goog.require('goog.net.streams.PbStreamParser');
+const asserts = goog.require('goog.testing.asserts');
+const googObject = goog.require('goog.object');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // clang-format off
-var testMessage1 = {
+const testMessage1 = {
   data: [
     0x0a, 0x00,                                            // msg: ''
     0x0a, 0x07, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67,  // msg: 'abcdefg'
@@ -39,8 +39,8 @@ var testMessage1 = {
     {1: [0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67]},
     {1: [0x00, 0x01, 0x02, 0x03, 0x0a, 0xff, 0xfe, 0xfd]},
     {2: [0x08, 0xc8, 0x01, 0x12, 0x12, 0x73, 0x6f, 0x6d, 0x65, 0x74, 0x68, 0x69,
-         0x6e, 0x67, 0x2d, 0x69, 0x73, 0x2d, 0x77, 0x72, 0x6f, 0x6e, 0x67]}
-  ]
+         0x6e, 0x67, 0x2d, 0x69, 0x73, 0x2d, 0x77, 0x72, 0x6f, 0x6e, 0x67]},
+  ],
 };
 // clang-format on
 
@@ -56,91 +56,99 @@ function getInput(bytes) {
   return bytes;
 }
 
-function testSingleMessage() {
-  var parser = new goog.net.streams.PbStreamParser();
-  var input = getInput([0x0a, 0x05, 0xFF, 0xFE, 0x00, 0x01, 0x77]);
-  var result = parser.parse(input);
-  assertEquals(1, result.length);
-  assertElementsEquals(['1'], goog.object.getKeys(result[0]));
-  assertElementsEquals([0xFF, 0xFE, 0x00, 0x01, 0x77], result[0][1]);
+testSuite({
+  testSingleMessage() {
+    const parser = new PbStreamParser();
+    const input = getInput([0x0a, 0x05, 0xFF, 0xFE, 0x00, 0x01, 0x77]);
+    let result = parser.parse(input);
+    assertEquals(1, result.length);
+    assertElementsEquals(['1'], googObject.getKeys(result[0]));
+    assertElementsEquals([0xFF, 0xFE, 0x00, 0x01, 0x77], result[0][1]);
 
-  result = parser.parse(getInput([]));
-  assertNull(result);
-}
+    result = parser.parse(getInput([]));
+    assertNull(result);
+  },
 
-function testMultipleMessagesWithPadding() {
-  var parser = new goog.net.streams.PbStreamParser();
-  var result = parser.parse(getInput(testMessage1.data));
-  var expected = testMessage1.parsed;
+  testMultipleMessagesWithPadding() {
+    const parser = new PbStreamParser();
+    const result = parser.parse(getInput(testMessage1.data));
+    const expected = testMessage1.parsed;
 
-  assertEquals(expected.length, result.length);
-  for (var i = 0; i < expected.length; i++) {
-    keys = goog.object.getKeys(result[i]);
-    assertElementsEquals(goog.object.getKeys(expected[i]), keys);
+    assertEquals(expected.length, result.length);
+    for (let i = 0; i < expected.length; i++) {
+      const keys = googObject.getKeys(result[i]);
+      assertElementsEquals(googObject.getKeys(expected[i]), keys);
 
-    assertEquals(1, keys.length);
-    assertElementsEquals(expected[i][keys[0]], result[i][keys[0]]);
+      assertEquals(1, keys.length);
+      assertElementsEquals(expected[i][keys[0]], result[i][keys[0]]);
 
-    if (typeof Uint8Array !== 'undefined') {
-      assertTrue(result[i][keys[0]] instanceof Uint8Array);
-    } else {
-      assertTrue(result[i][keys[0]] instanceof Array);
+      if (typeof Uint8Array !== 'undefined') {
+        assertTrue(result[i][keys[0]] instanceof Uint8Array);
+      } else {
+        assertTrue(result[i][keys[0]] instanceof Array);
+      }
     }
-  }
-}
+  },
 
-function testMessagesInChunks() {
-  // clang-format off
-  var data = [
-    0x0a, 0x03, 0x61, 0x62, 0x63,
-    0x0a, 0x03, 0x64, 0x65, 0x66,
-    0x12, 0x03, 0x67, 0x68, 0x69
-  ];
-  // clang-format on
+  testMessagesInChunks() {
+    // clang-format off
+    const data = [
+      0x0a, 0x03, 0x61, 0x62, 0x63,
+      0x0a, 0x03, 0x64, 0x65, 0x66,
+      0x12, 0x03, 0x67, 0x68, 0x69,
+    ];
+    // clang-format on
 
-  var parser = new goog.net.streams.PbStreamParser();
+    const parser = new PbStreamParser();
 
-  var result = parser.parse(getInput(data.slice(0, 3)));
-  assertNull(result);
+    let result = parser.parse(getInput(data.slice(0, 3)));
+    assertNull(result);
 
-  result = parser.parse(getInput(data.slice(3, 8)));
-  assertEquals(1, result.length);
-  assertElementsEquals(['1'], goog.object.getKeys(result[0]));
-  assertElementsEquals([0x61, 0x62, 0x63], result[0][1]);
+    result = parser.parse(getInput(data.slice(3, 8)));
+    assertEquals(1, result.length);
+    assertElementsEquals(['1'], googObject.getKeys(result[0]));
+    assertElementsEquals([0x61, 0x62, 0x63], result[0][1]);
 
-  result = parser.parse(getInput(data.slice(8, 10)));
-  assertEquals(1, result.length);
-  assertElementsEquals(['1'], goog.object.getKeys(result[0]));
-  assertElementsEquals([0x64, 0x65, 0x66], result[0][1]);
+    result = parser.parse(getInput(data.slice(8, 10)));
+    assertEquals(1, result.length);
+    assertElementsEquals(['1'], googObject.getKeys(result[0]));
+    assertElementsEquals([0x64, 0x65, 0x66], result[0][1]);
 
-  result = parser.parse(getInput(data.slice(10)));
-  assertEquals(1, result.length);
-  assertElementsEquals(['2'], goog.object.getKeys(result[0]));
-  assertElementsEquals([0x67, 0x68, 0x69], result[0][2]);
-}
+    result = parser.parse(getInput(data.slice(10)));
+    assertEquals(1, result.length);
+    assertElementsEquals(['2'], googObject.getKeys(result[0]));
+    assertElementsEquals([0x67, 0x68, 0x69], result[0][2]);
+  },
 
-function testInvalidInputs() {
-  var parser;
+  testInvalidInputs() {
+    let parser;
 
-  // wrong wire type
-  parser = new goog.net.streams.PbStreamParser();
-  assertThrows(function() { parser.parse(getInput([0x0b])); });
-  // parser already invalidated
-  assertThrows(function() { parser.parse(getInput([0x0a])); });
+    // wrong wire type
+    parser = new PbStreamParser();
+    assertThrows(() => {
+      parser.parse(getInput([0x0b]));
+    });
+    // parser already invalidated
+    assertThrows(() => {
+      parser.parse(getInput([0x0a]));
+    });
 
-  // unknown tag
-  parser = new goog.net.streams.PbStreamParser();
-  assertThrows(function() { parser.parse([0x1a]); });
+    // unknown tag
+    parser = new PbStreamParser();
+    assertThrows(() => {
+      parser.parse([0x1a]);
+    });
 
-  // length too long
-  parser = new goog.net.streams.PbStreamParser();
-  assertThrows(function() {
-    parser.parse(getInput([0x0a, 0xff, 0xff, 0xff, 0xff, 0x10]));
-  });
+    // length too long
+    parser = new PbStreamParser();
+    assertThrows(() => {
+      parser.parse(getInput([0x0a, 0xff, 0xff, 0xff, 0xff, 0x10]));
+    });
 
-  // length is going to be too long since more varint bytes are comming
-  parser = new goog.net.streams.PbStreamParser();
-  assertThrows(function() {
-    parser.parse(getInput([0x0a, 0xff, 0xff, 0xff, 0xff, 0x80]));
-  });
-}
+    // length is going to be too long since more varint bytes are comming
+    parser = new PbStreamParser();
+    assertThrows(() => {
+      parser.parse(getInput([0x0a, 0xff, 0xff, 0xff, 0xff, 0x80]));
+    });
+  },
+});

@@ -402,6 +402,21 @@ goog.html.SafeUrl.fromFacebookMessengerUrl = function(facebookMessengerUrl) {
       facebookMessengerUrl);
 };
 
+/**
+ * Creates a SafeUrl wrapping a whatsapp://send URL.
+ *
+ * @param {string} whatsAppUrl A WhatsApp URL.
+ * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
+ *     wrapped as a SafeUrl if it does not pass.
+ */
+goog.html.SafeUrl.fromWhatsAppUrl = function(whatsAppUrl) {
+  if (!goog.string.internal.caseInsensitiveStartsWith(
+          whatsAppUrl, 'whatsapp://send')) {
+    whatsAppUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+      whatsAppUrl);
+};
 
 /**
  * Creates a SafeUrl wrapping a sms: URL.

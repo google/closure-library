@@ -134,6 +134,30 @@ testSuite({
     assertBlobTypeIsSafe('image/png;foo=%3Cbar', false);
   },
 
+  testSafeUrlFromFacebookMessengerUrl_fbMessengerShareUrl() {
+    const expected = 'fb-messenger://share?link=https%3A%2F%2Fwww.google.com';
+    const observed = SafeUrl.fromFacebookMessengerUrl(
+        'fb-messenger://share?link=https%3A%2F%2Fwww.google.com');
+    assertEquals(expected, SafeUrl.unwrap(observed));
+  },
+
+  testSafeUrlFromFacebookMessengerUrl_fbMessengerEvilUrl() {
+    const observed = SafeUrl.fromFacebookMessengerUrl(
+        'fb-messenger://evil?link=https%3A%2F%2Fwww.google.com');
+    assertEquals(SafeUrl.INNOCUOUS_STRING, SafeUrl.unwrap(observed));
+  },
+
+  testSafeUrlFromWhatsAppUrl_whatsAppSendUrl() {
+    const expected = 'whatsapp://send?text=foo';
+    const observed = SafeUrl.fromWhatsAppUrl('whatsapp://send?text=foo');
+    assertEquals(expected, SafeUrl.unwrap(observed));
+  },
+
+  testSafeUrlFromWhatsAppUrl_whatsAppEvilUrl() {
+    const observed = SafeUrl.fromWhatsAppUrl('whatsapp://evil?text=foo');
+    assertEquals(SafeUrl.INNOCUOUS_STRING, SafeUrl.unwrap(observed));
+  },
+
   testSafeUrlSanitize_sanitizeTelUrl() {
     const vectors = safeUrlTestVectors.TEL_VECTORS;
     for (let i = 0; i < vectors.length; ++i) {

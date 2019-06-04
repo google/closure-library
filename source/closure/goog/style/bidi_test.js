@@ -12,131 +12,138 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.style.bidiTest');
-goog.setTestOnly('goog.style.bidiTest');
+goog.module('goog.style.bidiTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.style');
-goog.require('goog.style.bidi');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
-
+const bidi = goog.require('goog.style.bidi');
+const dom = goog.require('goog.dom');
+const style = goog.require('goog.style');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
 // Updates the calculated metrics.
 function updateInfo() {
-  var element = document.getElementById('scrolledElementRtl');
+  let element = document.getElementById('scrolledElementRtl');
   document.getElementById('elementScrollLeftRtl').innerHTML =
       element.offsetParent.scrollLeft;
   document.getElementById('bidiOffsetStartRtl').innerHTML =
-      goog.style.bidi.getOffsetStart(element);
+      bidi.getOffsetStart(element);
   document.getElementById('bidiScrollLeftRtl').innerHTML =
-      goog.style.bidi.getScrollLeft(element.offsetParent);
+      bidi.getScrollLeft(element.offsetParent);
 
   element = document.getElementById('scrolledElementLtr');
   document.getElementById('elementScrollLeftLtr').innerHTML =
       element.offsetParent.scrollLeft;
   document.getElementById('bidiOffsetStartLtr').innerHTML =
-      goog.style.bidi.getOffsetStart(element);
+      bidi.getOffsetStart(element);
   document.getElementById('bidiScrollLeftLtr').innerHTML =
-      goog.style.bidi.getScrollLeft(element.offsetParent);
+      bidi.getScrollLeft(element.offsetParent);
 }
 
-function setUpPage() {
-  updateInfo();
-}
+testSuite({
+  setUpPage() {
+    for (const e of Array.from(document.querySelectorAll('.scrollDiv'))) {
+      // Defer assigning scroll handlers until after tests begins in case of
+      // aberrant scrolls.
+      e.addEventListener('scroll', updateInfo);
+    }
 
-function tearDown() {
-  document.documentElement.dir = 'ltr';
-  document.body.dir = 'ltr';
-}
+    updateInfo();
+  },
 
-function testGetOffsetStart() {
-  var elm = document.getElementById('scrolledElementRtl');
-  assertEquals(elm.style['right'], goog.style.bidi.getOffsetStart(elm) + 'px');
-  elm = document.getElementById('scrolledElementLtr');
-  assertEquals(elm.style['left'], goog.style.bidi.getOffsetStart(elm) + 'px');
-}
+  tearDown() {
+    document.documentElement.dir = 'ltr';
+    document.body.dir = 'ltr';
+  },
 
-function testSetScrollOffsetRtl() {
-  var scrollElm = document.getElementById('scrollDivRtl');
-  var scrolledElm = document.getElementById('scrolledElementRtl');
-  var originalDistance =
-      goog.style.getRelativePosition(scrolledElm, document.body).x;
-  var scrollAndAssert = function(pixels) {
-    goog.style.bidi.setScrollOffset(scrollElm, pixels);
+  testGetOffsetStart() {
+    let elm = document.getElementById('scrolledElementRtl');
+    assertEquals(elm.style['right'], bidi.getOffsetStart(elm) + 'px');
+    elm = document.getElementById('scrolledElementLtr');
+    assertEquals(elm.style['left'], bidi.getOffsetStart(elm) + 'px');
+  },
+
+  testSetScrollOffsetRtl() {
+    const scrollElm = document.getElementById('scrollDivRtl');
+    const scrolledElm = document.getElementById('scrolledElementRtl');
+    const originalDistance =
+        style.getRelativePosition(scrolledElm, document.body).x;
+    const scrollAndAssert = (pixels) => {
+      bidi.setScrollOffset(scrollElm, pixels);
+      assertEquals(
+          originalDistance + pixels,
+          style.getRelativePosition(scrolledElm, document.body).x);
+    };
+    scrollAndAssert(0);
+    scrollAndAssert(50);
+    scrollAndAssert(100);
+    scrollAndAssert(150);
+    scrollAndAssert(155);
+    scrollAndAssert(0);
+  },
+
+  testSetScrollOffsetLtr() {
+    const scrollElm = document.getElementById('scrollDivLtr');
+    const scrolledElm = document.getElementById('scrolledElementLtr');
+    const originalDistance =
+        style.getRelativePosition(scrolledElm, document.body).x;
+    const scrollAndAssert = (pixels) => {
+      bidi.setScrollOffset(scrollElm, pixels);
+      assertEquals(
+          originalDistance - pixels,
+          style.getRelativePosition(scrolledElm, document.body).x);
+    };
+    scrollAndAssert(0);
+    scrollAndAssert(50);
+    scrollAndAssert(100);
+    scrollAndAssert(150);
+    scrollAndAssert(155);
+    scrollAndAssert(0);
+  },
+
+  testFixedBodyChildLtr() {
+    const bodyChild = document.getElementById('bodyChild');
     assertEquals(
-        originalDistance + pixels,
-        goog.style.getRelativePosition(scrolledElm, document.body).x);
-  };
-  scrollAndAssert(0);
-  scrollAndAssert(50);
-  scrollAndAssert(100);
-  scrollAndAssert(150);
-  scrollAndAssert(155);
-  scrollAndAssert(0);
-}
+        userAgent.GECKO ? document.body : null, bodyChild.offsetParent);
+    assertEquals(60, bidi.getOffsetStart(bodyChild));
+  },
 
-function testSetScrollOffsetLtr() {
-  var scrollElm = document.getElementById('scrollDivLtr');
-  var scrolledElm = document.getElementById('scrolledElementLtr');
-  var originalDistance =
-      goog.style.getRelativePosition(scrolledElm, document.body).x;
-  var scrollAndAssert = function(pixels) {
-    goog.style.bidi.setScrollOffset(scrollElm, pixels);
+  testFixedBodyChildRtl() {
+    document.documentElement.dir = 'rtl';
+    document.body.dir = 'rtl';
+
+    const bodyChild = document.getElementById('bodyChild');
     assertEquals(
-        originalDistance - pixels,
-        goog.style.getRelativePosition(scrolledElm, document.body).x);
-  };
-  scrollAndAssert(0);
-  scrollAndAssert(50);
-  scrollAndAssert(100);
-  scrollAndAssert(150);
-  scrollAndAssert(155);
-  scrollAndAssert(0);
-}
+        userAgent.GECKO ? document.body : null, bodyChild.offsetParent);
 
-function testFixedBodyChildLtr() {
-  var bodyChild = document.getElementById('bodyChild');
-  assertEquals(
-      goog.userAgent.GECKO ? document.body : null, bodyChild.offsetParent);
-  assertEquals(60, goog.style.bidi.getOffsetStart(bodyChild));
-}
+    let expectedOffsetStart =
+        dom.getViewportSize().width - 60 - bodyChild.offsetWidth;
 
-function testFixedBodyChildRtl() {
-  document.documentElement.dir = 'rtl';
-  document.body.dir = 'rtl';
+    // Gecko seems to also add in the marginbox for the body.
+    // It's not really clear to me if this is true in the general case,
+    // or just under certain conditions.
+    if (userAgent.GECKO) {
+      const marginBox = style.getMarginBox(document.body);
+      expectedOffsetStart -= (marginBox.left + marginBox.right);
+    }
 
-  var bodyChild = document.getElementById('bodyChild');
-  assertEquals(
-      goog.userAgent.GECKO ? document.body : null, bodyChild.offsetParent);
+    assertEquals(expectedOffsetStart, bidi.getOffsetStart(bodyChild));
+  },
 
-  var expectedOffsetStart =
-      goog.dom.getViewportSize().width - 60 - bodyChild.offsetWidth;
-
-  // Gecko seems to also add in the marginbox for the body.
-  // It's not really clear to me if this is true in the general case,
-  // or just under certain conditions.
-  if (goog.userAgent.GECKO) {
-    var marginBox = goog.style.getMarginBox(document.body);
-    expectedOffsetStart -= (marginBox.left + marginBox.right);
-  }
-
-  assertEquals(expectedOffsetStart, goog.style.bidi.getOffsetStart(bodyChild));
-}
-
-function testGetScrollLeftRTL() {
-  var scrollLeftDiv = document.getElementById('scrollLeftRtl');
-  scrollLeftDiv.style.overflow = 'visible';
-  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
-  scrollLeftDiv.style.overflow = 'hidden';
-  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
-  // NOTE: 'auto' must go above the 'scroll' assertion. Chrome 47 has a bug
-  // with non-deterministic scroll positioning. Maybe it recalculates the
-  // layout on accessing those properties?
-  // TODO(joeltine): Remove this comment when
-  // https://code.google.com/p/chromium/issues/detail?id=568706 is resolved.
-  scrollLeftDiv.style.overflow = 'auto';
-  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
-  scrollLeftDiv.style.overflow = 'scroll';
-  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
-}
+  testGetScrollLeftRTL() {
+    const scrollLeftDiv = document.getElementById('scrollLeftRtl');
+    scrollLeftDiv.style.overflow = 'visible';
+    assertEquals(0, bidi.getScrollLeft(scrollLeftDiv));
+    scrollLeftDiv.style.overflow = 'hidden';
+    assertEquals(0, bidi.getScrollLeft(scrollLeftDiv));
+    // NOTE: 'auto' must go above the 'scroll' assertion. Chrome 47 has a bug
+    // with non-deterministic scroll positioning. Maybe it recalculates the
+    // layout on accessing those properties?
+    // TODO(joeltine): Remove this comment when
+    // https://code.google.com/p/chromium/issues/detail?id=568706 is resolved.
+    scrollLeftDiv.style.overflow = 'auto';
+    assertEquals(0, bidi.getScrollLeft(scrollLeftDiv));
+    scrollLeftDiv.style.overflow = 'scroll';
+    assertEquals(0, bidi.getScrollLeft(scrollLeftDiv));
+  },
+});
