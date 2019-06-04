@@ -393,6 +393,14 @@ goog.ui.Dialog.prototype.getTitleCloseElement = function() {
   return this.titleCloseEl_;
 };
 
+/**
+ * Get the dialog close message.
+ * @return {string}
+ * @protected
+ */
+goog.ui.Dialog.prototype.getDialogCloseMessage = function() {
+  return goog.ui.Dialog.MSG_GOOG_UI_DIALOG_CLOSE_;
+};
 
 /**
  * Returns the button element so that more complicated things can be done with
