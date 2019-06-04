@@ -42,6 +42,12 @@ function updateInfo() {
 
 testSuite({
   setUpPage() {
+    for (const e of Array.from(document.querySelectorAll('.scrollDiv'))) {
+      // Defer assigning scroll handlers until after tests begins in case of
+      // aberrant scrolls.
+      e.addEventListener('scroll', updateInfo);
+    }
+
     updateInfo();
   },
 

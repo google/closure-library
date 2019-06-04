@@ -5,12 +5,18 @@ Use of this source code is governed by the Apache License, Version 2.0.
 See the COPYING file for details.
 -->
 <style>
- /* Using borders, padding, and margins of various prime values. */
-    .scrollDiv {
-      left:50px; width:250px; height: 100px;
-      position:absolute; overflow:auto; border-left: 3px solid green;
-      border-right: 17px solid green; margin: 7px; padding: 13px;
-    }
+   /* Using borders, padding, and margins of various prime values. */
+  .scrollDiv {
+    border-left: 3px solid green;
+    border-right: 17px solid green;
+    height: 100px;
+    left: 50px;
+    margin: 7px;
+    overflow: auto;
+    padding: 13px;
+    position: absolute;
+    width: 250px;
+  }
 </style>
 <span id="bodyChild" style="position:fixed;left:60px">
  bodyChild
@@ -19,7 +25,7 @@ See the COPYING file for details.
  <span>
   LTR
  </span>
- <div class="scrollDiv" dir="ltr" id="scrollDivLtr" onscroll="updateInfo()">
+ <div class="scrollDiv" dir="ltr" id="scrollDivLtr">
   <div style="width: 1000px; height: 2000px;background-color: blue">
   </div>
   <div id="scrolledElementLtr" style="background:yellow; top: 25px; left:85px;
@@ -67,7 +73,7 @@ See the COPYING file for details.
  <span>
   RTL
  </span>
- <div class="scrollDiv" dir="rtl" id="scrollDivRtl" onscroll="updateInfo();">
+ <div class="scrollDiv" dir="rtl" id="scrollDivRtl">
   <div style="width:1000px; height:70px;background-color:blue">
   </div>
   <div id="scrolledElementRtl" style="background:yellow; top: 25px; right:85px;
