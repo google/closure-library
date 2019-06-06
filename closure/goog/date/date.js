@@ -1700,8 +1700,8 @@ goog.date.DateTime.prototype.toXmlDateTime = function(opt_timezone) {
  *
  * @param {boolean=} opt_verbose Whether the opt_verbose format should be
  *     returned instead of the default compact one.
- * @param {boolean=} opt_tz Whether the the timezone offset should be included
- *     in the string.
+ * @param {boolean=} opt_tz Whether the timezone offset should be included in
+ *     the string.
  * @return {string} ISO 8601 string representation of date/time according to
  *     universal time.
  * @override
