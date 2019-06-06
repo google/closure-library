@@ -257,14 +257,45 @@ goog.crypt.base64.decodeStringToUint8Array = function(input) {
       !goog.userAgent.IE || goog.userAgent.isVersionOrHigher('10'),
       'Browser does not support typed arrays');
   var len = input.length;
-  // Check if there are trailing '=' as padding in the b64 string.
-  var placeholders = 0;
-  if (input[len - 2] === '=') {
-    placeholders = 2;
+  // Approximate the length of the array needed for output.
+  // Our method varies according to the format of the input, which we can
+  // consider in three categories:
+  //   A) well-formed with proper padding
+  //   B) well-formed without any padding
+  //   C) not-well-formed, either with extra whitespace in the middle or with
+  //      extra padding characters.
+  //
+  //  In the case of (A), (length * 3 / 4) will result in an integer number of
+  //  bytes evenly divisible by 3, and we need only subtract bytes according to
+  //  the padding observed.
+  //
+  //  In the case of (B), (length * 3 / 4) will result in a non-integer number
+  //  of bytes, or not evenly divisible by 3. (If the result is evenly divisible
+  //  by 3, it's well-formed with the proper amount of padding [0 padding]).
+  //  This approximation can become exact by rounding down.
+  //
+  //  In the case of (C), the only way to get the length is to walk the full
+  //  length of the string to consider each character. This is handled by
+  //  tracking the number of bytes added to the array and using subarray to
+  //  trim the array back down to size.
+  var approxByteLength = len * 3 / 4;
+  if (approxByteLength % 3) {
+    // The string isn't complete, either because it didn't include padding, or
+    // because it has extra white space.
+    // In either case, we won't generate more bytes than are completely encoded,
+    // so rounding down is appropriate to have a buffer at least as large as
+    // output.
+    approxByteLength = Math.floor(approxByteLength);
   } else if (input[len - 1] === '=') {
-    placeholders = 1;
+    // The string has a round length, and has some padding.
+    // Reduce the byte length according to the quantity of padding.
+    if (input[len - 2] === '=') {
+      approxByteLength -= 2;
+    } else {
+      approxByteLength -= 1;
+    }
   }
-  var output = new Uint8Array(Math.ceil(len * 3 / 4) - placeholders);
+  var output = new Uint8Array(approxByteLength);
   var outLen = 0;
   function pushByte(b) {
     output[outLen++] = b;
@@ -272,6 +303,8 @@ goog.crypt.base64.decodeStringToUint8Array = function(input) {
 
   goog.crypt.base64.decodeStringInternal_(input, pushByte);
 
+  // Return a subarray to handle the case that input included extra whitespace
+  // or extra padding and approxByteLength was incorrect.
   return output.subarray(0, outLen);
 };
 

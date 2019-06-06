@@ -57,6 +57,11 @@ function assertDecodeToUint8ArrayEquals(expected, encoded) {
   if (goog.global.Uint8Array) {
     const dec = base64.decodeStringToUint8Array(encoded);
     assertArrayEquals(expected, Array.prototype.slice.call(dec));
+    if (/^[-+_/A-Za-z0-9=]*$/.test(encoded)) {
+      // Verify that the underlying array buffer was sized correctly when the
+      // input didn't have whitespace.
+      assertEquals(encoded, dec.length, dec.buffer.byteLength);
+    }
   }
 }
 
