@@ -400,11 +400,13 @@ function testEventError() {
 
         var requestErrors = observer.getEvents(EventType.REQUEST_ERROR);
         assertEquals('REQUEST_ERROR', 3, requestErrors.length);
-        assertNotNull(requestErrors[0].error);
+        const requestError = requestErrors[0];
+        assertNotNull(requestError.error);
         var expectedString = 'loaded twice';
         var messageAndStack =
             requestErrors[0].error.message + requestErrors[0].error.stack;
         assertContains(expectedString, messageAndStack);
+        assertNull(requestError.status);
       });
 }
 

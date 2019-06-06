@@ -20,6 +20,7 @@
 
 goog.provide('goog.net.BulkLoader');
 
+goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.log');
@@ -152,7 +153,7 @@ goog.net.BulkLoader.prototype.handleError_ = function(id, xhrIo) {
   // TODO(user): Abort all pending requests.
 
   // Dispatch the ERROR event.
-  this.dispatchEvent(goog.net.EventType.ERROR);
+  this.dispatchEvent(new goog.net.BulkLoader.LoadErrorEvent(xhrIo.getStatus()));
   xhrIo.dispose();
 };
 
@@ -179,3 +180,20 @@ goog.net.BulkLoader.prototype.disposeInternal = function() {
   this.helper_.dispose();
   this.helper_ = null;
 };
+
+
+/**
+ * @param {number} status The response status.
+ * @constructor
+ * @extends {goog.events.Event}
+ * @final
+ * @protected
+ */
+goog.net.BulkLoader.LoadErrorEvent = function(status) {
+  goog.net.BulkLoader.LoadErrorEvent.base(
+      this, 'constructor', goog.net.EventType.ERROR);
+
+  /** @type {number} */
+  this.status = status;
+};
+goog.inherits(goog.net.BulkLoader.LoadErrorEvent, goog.events.Event);

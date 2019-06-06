@@ -33,6 +33,7 @@ let loadError;
 let loadSuccess;
 
 let successResponseTexts;
+let errorStatus;
 
 /**
  * Gets the successful bulkloader for the specified uris with some
@@ -138,6 +139,9 @@ function getNonSuccessfulBulkLoader(uris) {
         return false;
       },
       dispose: function() {},
+      getStatus: function() {
+        return 500;
+      },
     };
     this.handleEvent_(id, new GoogEvent(EventType.ERROR, xhrIo));
   };
@@ -156,6 +160,7 @@ function handleSuccess(e) {
 
 function handleError(e) {
   loadError = true;
+  errorStatus = e.status;
 }
 
 testSuite({
@@ -224,5 +229,6 @@ testSuite({
         loadSuccess);
     assertTrue(
         'The bulk loader is loaded in error (after 15 ticks)', loadError);
+    assertEquals('Ensure that the error status is present', 500, errorStatus);
   },
 });
