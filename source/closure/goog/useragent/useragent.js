@@ -611,16 +611,17 @@ goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher;
  * CSS1Compat property to see if we are in standards mode. If we are in
  * standards mode, treat the browser version as the document mode. Otherwise,
  * IE is emulating version 5.
+ *
+ * NOTE(2019/05/31): Support for IE < 7 is long gone, so this is now simplified.
+ * It returns document.documentMode for IE and undefined for everything else.
+ *
  * @type {number|undefined}
  * @const
  */
 goog.userAgent.DOCUMENT_MODE = (function() {
   var doc = goog.global['document'];
-  var mode = goog.userAgent.getDocumentMode_();
   if (!doc || !goog.userAgent.IE) {
     return undefined;
   }
-  return mode || (doc['compatMode'] == 'CSS1Compat' ?
-                      parseInt(goog.userAgent.VERSION, 10) :
-                      5);
+  return goog.userAgent.getDocumentMode_();
 })();

@@ -27,9 +27,6 @@ testSuite({
   testToSafeHtml() {
     let html;
 
-    html = example.unsanitizedTextTemplate().toSafeHtml();
-    assertEquals('I &lt;3 Puppies &amp; Kittens', SafeHtml.unwrap(html));
-
     html = example.sanitizedHtmlTemplate().toSafeHtml();
     assertEquals('Hello <b>World</b>', SafeHtml.unwrap(html));
   },

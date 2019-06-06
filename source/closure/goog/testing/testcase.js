@@ -1389,8 +1389,22 @@ goog.testing.TestCase.prototype.setLifecycleObj = function(obj) {
 goog.testing.TestCase.prototype.setTestObj = function(obj) {
   // Check any previously added (likely auto-discovered) tests, only one source
   // of discovered test and life-cycle methods is allowed.
-  goog.asserts.assert(
-      this.tests_.length == 0, 'Test methods have already been configured.');
+  if (this.tests_.length > 0) {
+    fail(
+        'Test methods have already been configured.\n' +
+        'Tests previously found:\n' +
+        this.tests_
+            .map(function(test) {
+              return test.name;
+            })
+            .join('\n') +
+        '\nNew tests found:\n' +
+        Object.keys(obj)
+            .filter(function(name) {
+              return name.startsWith('test');
+            })
+            .join('\n'));
+  }
   this.shouldAutoDiscoverTests_ = false;
   if (obj['getTestName']) {
     this.name_ = obj['getTestName']();

@@ -495,18 +495,18 @@ goog.module.ModuleLoader.prototype.loadWithNonAsyncScriptTag_ = function(
  * Handles an error during a request for one or more modules.
  * @param {goog.net.BulkLoader} bulkLoader The bulk loader.
  * @param {Array<string>} moduleIds The ids of the modules requested.
- * @param {number} status The response status.
+ * @param {!goog.net.BulkLoader.LoadErrorEvent} event The load error event.
  * @private
  */
 goog.module.ModuleLoader.prototype.handleError_ = function(
-    bulkLoader, moduleIds, status) {
+    bulkLoader, moduleIds, event) {
   var loadStatus = this.loadingModulesStatus_[moduleIds];
   // The bulk loader doesn't cancel other requests when a request fails. We will
   // delete the loadStatus in the first failure, so it will be undefined in
   // subsequent errors.
   if (loadStatus) {
     delete this.loadingModulesStatus_[moduleIds];
-    this.handleErrorHelper_(moduleIds, loadStatus.errorFn, status);
+    this.handleErrorHelper_(moduleIds, loadStatus.errorFn, event.status);
   }
 
   // NOTE: A bulk loader instance is used for loading a set of module ids. Once
@@ -529,8 +529,8 @@ goog.module.ModuleLoader.prototype.handleError_ = function(
  */
 goog.module.ModuleLoader.prototype.handleErrorHelper_ = function(
     moduleIds, errorFn, status, opt_error) {
-  this.dispatchEvent(
-      new goog.module.ModuleLoader.RequestErrorEvent(moduleIds, opt_error));
+  this.dispatchEvent(new goog.module.ModuleLoader.RequestErrorEvent(
+      moduleIds, status, opt_error));
 
   goog.log.warning(this.logger, 'Request failed for module(s): ' + moduleIds);
 
@@ -623,13 +623,15 @@ goog.inherits(goog.module.ModuleLoader.RequestSuccessEvent, goog.events.Event);
 
 /**
  * @param {Array<string>} moduleIds The ids of the modules being evaluated.
+ * @param {?number} status The response status.
  * @param {!Error=} opt_error The error encountered, if available.
  * @constructor
  * @extends {goog.events.Event}
  * @final
  * @protected
  */
-goog.module.ModuleLoader.RequestErrorEvent = function(moduleIds, opt_error) {
+goog.module.ModuleLoader.RequestErrorEvent = function(
+    moduleIds, status, opt_error) {
   goog.module.ModuleLoader.RequestErrorEvent.base(
       this, 'constructor', goog.module.ModuleLoader.EventType.REQUEST_ERROR);
 
@@ -637,6 +639,9 @@ goog.module.ModuleLoader.RequestErrorEvent = function(moduleIds, opt_error) {
    * @type {Array<string>}
    */
   this.moduleIds = moduleIds;
+
+  /** @type {?number} */
+  this.status = status;
 
   /** @type {?Error} */
   this.error = opt_error || null;

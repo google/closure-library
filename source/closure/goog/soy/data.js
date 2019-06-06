@@ -29,7 +29,6 @@ goog.provide('goog.soy.data.SanitizedHtmlAttribute');
 goog.provide('goog.soy.data.SanitizedJs');
 goog.provide('goog.soy.data.SanitizedTrustedResourceUri');
 goog.provide('goog.soy.data.SanitizedUri');
-goog.provide('goog.soy.data.UnsanitizedText');
 
 goog.require('goog.Uri');
 goog.require('goog.asserts');
@@ -161,17 +160,13 @@ goog.soy.data.SanitizedContent.prototype.toString = function() {
 
 
 /**
- * Converts sanitized content of kind TEXT or HTML into SafeHtml. HTML content
- * is converted without modification, while text content is HTML-escaped.
+ * Converts sanitized content of kind HTML into SafeHtml
  * @return {!goog.html.SafeHtml}
- * @throws {Error} when the content kind is not TEXT or HTML.
+ * @throws {!Error} when the content kind is not HTML.
  */
 goog.soy.data.SanitizedContent.prototype.toSafeHtml = function() {
-  if (this.contentKind === goog.soy.data.SanitizedContentKind.TEXT) {
-    return goog.html.SafeHtml.htmlEscape(this.toString());
-  }
   if (this.contentKind !== goog.soy.data.SanitizedContentKind.HTML) {
-    throw new Error('Sanitized content was not of kind TEXT or HTML.');
+    throw new Error('Sanitized content was not of kind HTML.');
   }
   return goog.html.uncheckedconversions
       .safeHtmlFromStringKnownToSatisfyTypeContract(
@@ -198,34 +193,6 @@ goog.soy.data.SanitizedContent.prototype.toSafeUrl = function() {
               'SafeHtml-contract-compliant value.'),
           this.toString());
 };
-
-
-/**
- * Unsanitized plain text string.
- *
- * While all strings are effectively safe to use as a plain text, there are no
- * guarantees about safety in any other context such as HTML. This is
- * sometimes used to mark that should never be used unescaped.
- *
- * @param {*} content Plain text with no guarantees.
- * @param {?goog.i18n.bidi.Dir=} contentDir ignored
- * @extends {goog.soy.data.SanitizedContent}
- * @constructor
- */
-goog.soy.data.UnsanitizedText = function(content, contentDir) {
-  // Not calling the superclass constructor which just throws an exception.
-
-  /** @override */
-  this.content = String(content);
-  this.contentDir = null;
-};
-goog.inherits(goog.soy.data.UnsanitizedText, goog.soy.data.SanitizedContent);
-
-
-/** @override */
-goog.soy.data.UnsanitizedText.prototype.contentKind =
-    goog.soy.data.SanitizedContentKind.TEXT;
-
 
 
 /**
@@ -259,14 +226,13 @@ goog.soy.data.SanitizedHtml.prototype.contentKind =
  */
 goog.soy.data.SanitizedHtml.isCompatibleWith = function(value) {
   return goog.isString(value) || value instanceof goog.soy.data.SanitizedHtml ||
-      value instanceof goog.soy.data.UnsanitizedText ||
       value instanceof goog.html.SafeHtml;
 };
 
 
 /**
  * Checks if the value could be used as the Soy type {html}.
- * Strict: disallows strings or UnsanitizedText.
+ * Strict: disallows strings.
  * @param {*} value
  * @return {boolean}
  */
@@ -307,13 +273,12 @@ goog.soy.data.SanitizedJs.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
  */
 goog.soy.data.SanitizedJs.isCompatibleWith = function(value) {
   return goog.isString(value) || value instanceof goog.soy.data.SanitizedJs ||
-      value instanceof goog.soy.data.UnsanitizedText ||
       value instanceof goog.html.SafeScript;
 };
 
 /**
  * Checks if the value could be used as the Soy type {js}.
- * Strict: disallows strings or UnsanitizedText.
+ * Strict: disallows strings.
  * @param {*} value
  * @return {boolean}
  */
@@ -353,7 +318,6 @@ goog.soy.data.SanitizedUri.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
  */
 goog.soy.data.SanitizedUri.isCompatibleWith = function(value) {
   return goog.isString(value) || value instanceof goog.soy.data.SanitizedUri ||
-      value instanceof goog.soy.data.UnsanitizedText ||
       value instanceof goog.html.SafeUrl ||
       value instanceof goog.html.TrustedResourceUrl ||
       value instanceof goog.Uri;
@@ -362,7 +326,7 @@ goog.soy.data.SanitizedUri.isCompatibleWith = function(value) {
 
 /**
  * Checks if the value could be used as the Soy type {uri}.
- * Strict: disallows strings or UnsanitizedText.
+ * Strict: disallows strings.
  * @param {*} value
  * @return {boolean}
  */
@@ -425,14 +389,13 @@ goog.soy.data.SanitizedTrustedResourceUri.prototype.toTrustedResourceUrl =
 goog.soy.data.SanitizedTrustedResourceUri.isCompatibleWith = function(value) {
   return goog.isString(value) ||
       value instanceof goog.soy.data.SanitizedTrustedResourceUri ||
-      value instanceof goog.soy.data.UnsanitizedText ||
       value instanceof goog.html.TrustedResourceUrl;
 };
 
 
 /**
  * Checks if the value could be used as the Soy type {trusted_resource_uri}.
- * Strict: disallows strings or UnsanitizedText.
+ * Strict: disallows strings.
  * @param {*} value
  * @return {boolean}
  */
@@ -477,14 +440,13 @@ goog.soy.data.SanitizedHtmlAttribute.prototype.contentDir =
  */
 goog.soy.data.SanitizedHtmlAttribute.isCompatibleWith = function(value) {
   return goog.isString(value) ||
-      value instanceof goog.soy.data.SanitizedHtmlAttribute ||
-      value instanceof goog.soy.data.UnsanitizedText;
+      value instanceof goog.soy.data.SanitizedHtmlAttribute;
 };
 
 
 /**
  * Checks if the value could be used as the Soy type {attribute}.
- * Strict: disallows strings or UnsanitizedText.
+ * Strict: disallows strings.
  * @param {*} value
  * @return {boolean}
  */
@@ -525,7 +487,6 @@ goog.soy.data.SanitizedCss.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
  */
 goog.soy.data.SanitizedCss.isCompatibleWith = function(value) {
   return goog.isString(value) || value instanceof goog.soy.data.SanitizedCss ||
-      value instanceof goog.soy.data.UnsanitizedText ||
       value instanceof goog.html.SafeStyle ||
       value instanceof goog.html.SafeStyleSheet;
 };
@@ -533,7 +494,7 @@ goog.soy.data.SanitizedCss.isCompatibleWith = function(value) {
 
 /**
  * Checks if the value could be used as the Soy type {css}.
- * Strict: disallows strings or UnsanitizedText.
+ * Strict: disallows strings.
  * @param {*} value
  * @return {boolean}
  */

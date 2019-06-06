@@ -1145,6 +1145,20 @@ function testSetObj_es6Class() {
   assertEquals(1, testCase.getCount());
 }
 
+function testSetTestObj_alreadyInitialized() {
+  var testCase = new goog.testing.TestCase();
+  testCase.setTestObj({test1: ok, test2: ok});
+  try {
+    testCase.setTestObj({test3: ok, test4: ok});
+    fail('Overriding the test object should fail');
+  } catch (e) {
+    assertContains(
+        'Test methods have already been configured.\n' +
+            'Tests previously found:\ntest1\ntest2\n' +
+            'New tests found:\ntest3\ntest4',
+        e.toString());
+  }
+}
 
 function testCurrentTestName() {
   var currentTestName = goog.testing.TestCase.currentTestName;
