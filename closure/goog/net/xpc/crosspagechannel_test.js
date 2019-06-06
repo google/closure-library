@@ -484,7 +484,7 @@ function testUnescapeServiceName() {
 }
 
 
-function testDisposeImmediate() {
+async function testDisposeImmediate() {
   // Given
   driver.createPeerIframe(
       'new_iframe',
@@ -503,7 +503,7 @@ function testDisposeImmediate() {
   // Then
   assertTrue(driver.getChannel().isDisposed());
   // Let any errors caused by erroneous retries happen.
-  return goog.Timer.promise(2000);
+  await goog.Timer.promise(2000);
 }
 
 async function testDisposeBeforePeerNotification() {
