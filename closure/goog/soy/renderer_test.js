@@ -113,7 +113,7 @@ testSuite({
             'render was called with a strict template of kind other than "html"' +
             ' (consider using renderText or renderStrict)',
         assertThrows(() => {
-          renderer.render(example.unsanitizedTextTemplate, {});
+          renderer.render(example.sanitizedUriTemplate, {});
         }).message);
     handleRender.assertCallCount(0);
   },
@@ -157,7 +157,7 @@ testSuite({
         'Assertion failed: ' +
             'renderStrict was called with the wrong kind of template',
         assertThrows(() => {
-          renderer.renderStrict(example.unsanitizedTextTemplate, {});
+          renderer.renderStrict(example.sanitizedUriTemplate, {});
         }).message);
     assertUndefined(handleRender.getLastCall().getArguments()[0]);
     handleRender.assertCallCount(2);

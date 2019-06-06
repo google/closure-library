@@ -30,8 +30,7 @@ const testSuite = goog.require('goog.testing.testSuite');
  */
 function assertUnsafeTemplateOutputErrorThrown(func) {
   assertContains(
-      'Sanitized content was not of kind TEXT or HTML.',
-      assertThrows(func).message);
+      'Sanitized content was not of kind HTML.', assertThrows(func).message);
 }
 
 testSuite({
@@ -129,15 +128,15 @@ testSuite({
     assertEquals('hello <b>world</b>', elem.innerHTML.toLowerCase());
   },
 
-  testAllowButEscapeUnsanitizedText() {
+  testAllowButEscapeTextTemplate() {
     const div = dom.createElement(TagName.DIV);
-    soy.renderElement(div, example.unsanitizedTextTemplate);
-    assertEquals('I &lt;3 Puppies &amp; Kittens', div.innerHTML);
-    const fragment = soy.renderAsFragment(example.unsanitizedTextTemplate);
-    assertEquals('I <3 Puppies & Kittens', fragment.nodeValue);
+    soy.renderElement(div, example.stringTemplate);
+    assertEquals('&lt;b&gt;XSS&lt;/b&gt;', div.innerHTML);
+    const fragment = soy.renderAsFragment(example.stringTemplate);
+    assertEquals('<b>XSS</b>', fragment.nodeValue);
     assertEquals(
-        'I &lt;3 Puppies &amp; Kittens',
-        soy.renderAsElement(example.unsanitizedTextTemplate).innerHTML);
+        '&lt;b&gt;XSS&lt;/b&gt;',
+        soy.renderAsElement(example.stringTemplate).innerHTML);
   },
 
   testRejectSanitizedCss() {
