@@ -484,20 +484,52 @@ function testUnescapeServiceName() {
 }
 
 
-/**
- * Tests the case where the channel is disposed before it is fully connected.
- */
-function testDisposeBeforeConnect() {
-  // Test flakes on IE: see b/22873770 and b/18595666.
-  if (goog.labs.userAgent.browser.isIE() &&
-      goog.labs.userAgent.browser.isVersionOrHigher(9)) {
-    return;
-  }
-
+function testDisposeImmediate() {
+  // Given
   driver.createPeerIframe(
-      'new_iframe', false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */, true /* opt_randomChannelNames */);
-  return driver.connectOuterAndDispose();
+      'new_iframe',
+      /* oneSidedHandshake= */ false,
+      /* innerProtocolVersion= */ 2,
+      /* outerProtocolVersion= */ 2,
+      /* opt_randomChannelNames= */ true);
+
+  assertEquals(
+      driver.getChannel().state_, goog.net.xpc.ChannelStates.NOT_CONNECTED);
+  assertNull(driver.getChannel().transport_);
+
+  // When
+  driver.getChannel().dispose();
+
+  // Then
+  assertTrue(driver.getChannel().isDisposed());
+  // Let any errors caused by erroneous retries happen.
+  return goog.Timer.promise(2000);
+}
+
+async function testDisposeBeforePeerNotification() {
+  // Given
+  driver.createPeerIframe(
+      'new_iframe',
+      /* oneSidedHandshake= */ false,
+      /* innerProtocolVersion= */ 2,
+      /* outerProtocolVersion= */ 2,
+      /* opt_randomChannelNames= */ true);
+
+  await driver.connectAndWaitForPeer();
+
+  assertEquals(
+      driver.getChannel().state_, goog.net.xpc.ChannelStates.NOT_CONNECTED);
+  const transport = driver.getChannel().transport_;
+
+  // When
+  driver.getChannel().dispose();
+
+  // Then
+  assertNull(driver.getChannel().transport_);
+  assertTrue(driver.getChannel().isDisposed());
+  assertTrue(transport.isDisposed());
+  // Let any errors caused by erroneous retries happen.
+  await goog.Timer.promise(2000);
 }
 
 
@@ -508,7 +540,7 @@ function testDisposeBeforeConnect() {
  * @constructor
  * @extends {goog.Disposable}
  */
-Driver = function() {
+const Driver = function() {
   goog.Disposable.call(this);
 
   /**
@@ -573,7 +605,6 @@ Driver = function() {
    * @private
    */
   this.outerFrameResponseReceived_ = goog.Promise.withResolver();
-
 };
 goog.inherits(Driver, goog.Disposable);
 
@@ -1004,30 +1035,20 @@ Driver.prototype.isTransportTestable_ = function() {
 };
 
 
-/**
- * Connect the outer channel but not the inner one.  Wait a short time, then
- * dispose the outer channel and make sure it was torn down properly.
- */
-Driver.prototype.connectOuterAndDispose = function() {
-  this.channel_.connect();
-  return goog.Timer.promise(2000).then(this.disposeAndCheck_, null, this);
+/** @return {?goog.net.xpc.CrossPageChannel} */
+Driver.prototype.getChannel = function() {
+  return this.channel_;
 };
 
-
 /**
- * Dispose the cross-page channel. Check that the transport was also
- * disposed, and allow to run briefly to make sure no timers which will cause
- * failures are still running.
- * @private
+ * Begin, but don't finish, connection to a peer.
+ *
+ * @return {!Promise<undefined>} A timing hook for the unstable period between
+ *     the creation of the peer and the connection notification from that peer.
  */
-Driver.prototype.disposeAndCheck_ = function() {
-  assertFalse(this.channel_.isConnected());
-  var transport = this.channel_.transport_;
-  this.channel_.dispose();
-  assertNull(this.channel_.transport_);
-  assertTrue(this.channel_.isDisposed());
-  assertTrue(transport.isDisposed());
-
-  // Let any errors caused by erroneous retries happen.
-  return goog.Timer.promise(2000);
+Driver.prototype.connectAndWaitForPeer = function() {
+  this.channel_.connect();
+  // Set a listener for when the peer exists.
+  return new Promise(
+      (res) => this.channel_.peerWindowDeferred_.addCallback(res));
 };
