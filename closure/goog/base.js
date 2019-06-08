@@ -2318,6 +2318,7 @@ if (!COMPILED) {
  *        be added.
  *     all other properties are added to the prototype.
  * @return {!Function} The class constructor.
+ * @deprecated Use ES6 class syntax instead.
  */
 goog.defineClass = function(superClass, def) {
   // TODO(johnlenz): consider making the superClass an optional parameter.
