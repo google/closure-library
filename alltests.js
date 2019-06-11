@@ -405,6 +405,7 @@ var _allTests = [
   'closure/goog/storage/mechanism/prefixedmechanism_test.html',
   'closure/goog/storage/richstorage_test.html',
   'closure/goog/storage/storage_test.html',
+  'closure/goog/streams/lite_test.html',
   'closure/goog/string/const_test.html',
   'closure/goog/string/linkify_test.html',
   'closure/goog/string/newlines_test.html',
