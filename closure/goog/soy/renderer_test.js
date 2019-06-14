@@ -102,7 +102,7 @@ testSuite({
     assertEquals(
         'Output should be a string', 'Hello <b>World</b>',
         renderer.render(example.sanitizedHtmlTemplate));
-    assertUndefined(handleRender.getLastCall().getArguments()[0]);
+    assertNull(handleRender.getLastCall().getArguments()[0]);
     handleRender.assertCallCount(1);
   },
 
@@ -123,7 +123,7 @@ testSuite({
     const result = renderer.renderStrict(example.sanitizedHtmlTemplate);
     assertEquals('Hello <b>World</b>', result.content);
     assertEquals(SanitizedContentKind.HTML, result.contentKind);
-    assertUndefined(handleRender.getLastCall().getArguments()[0]);
+    assertNull(handleRender.getLastCall().getArguments()[0]);
     handleRender.assertCallCount(1);
   },
 
@@ -138,7 +138,7 @@ testSuite({
         assertThrows(() => {
           renderer.renderStrict(example.stringTemplate, {});
         }).message);
-    assertUndefined(handleRender.getLastCall().getArguments()[0]);
+    assertNull(handleRender.getLastCall().getArguments()[0]);
     // Passes.
     renderer.renderStrictOfKind(
         example.sanitizedHtmlTemplate, {}, SanitizedContentKind.HTML);
@@ -150,7 +150,7 @@ testSuite({
           renderer.renderStrictOfKind(
               example.sanitizedHtmlTemplate, {}, SanitizedContentKind.JS);
         }).message);
-    assertUndefined(handleRender.getLastCall().getArguments()[0]);
+    assertNull(handleRender.getLastCall().getArguments()[0]);
 
     // Rendering non-HTML template fails:
     assertEquals(
@@ -159,7 +159,7 @@ testSuite({
         assertThrows(() => {
           renderer.renderStrict(example.sanitizedUriTemplate, {});
         }).message);
-    assertUndefined(handleRender.getLastCall().getArguments()[0]);
+    assertNull(handleRender.getLastCall().getArguments()[0]);
     handleRender.assertCallCount(2);
   },
 
