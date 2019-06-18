@@ -175,7 +175,6 @@ goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
       result instanceof goog.soy.data.SanitizedContent ?
           'renderText was called with a template of kind other than "text"' :
           'renderText was called with a non-template');
-  this.handleRender(null /* node */, null /* kind; there is no TEXT. */);
   return String(result);
 };
 
@@ -300,12 +299,12 @@ goog.soy.Renderer.prototype.getDom = function() {
 
 
 /**
- * Observes rendering of templates by this renderer.
+ * Observes rendering of non-text templates by this renderer.
  * @param {?Node} node Relevant node, if available. The node may or may
  *     not be in the document, depending on whether Soy is creating an element
  *     or writing into an existing one.
  * @param {?goog.soy.data.SanitizedContentKind} kind of the template, or null if
- *     it was text or not strict.
+ *     it was not strict.
  * @protected
  */
 goog.soy.Renderer.prototype.handleRender = goog.nullFunction;
