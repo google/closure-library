@@ -513,24 +513,6 @@ function testLoadModuleBThenPrefetchModuleA() {
       });
 }
 
-
-
-function testPrefetchThenLoadModuleAUsingPreloadTags() {
-  moduleLoader.setUseScriptTags(true);
-  assertFalse(!!document.querySelector('link[rel=\'preload\']'));
-  moduleManager.prefetchModule('modA');
-  assertTrue(!!document.querySelector('link[rel=\'preload\']'));
-  return new goog
-      .Promise(function(resolve, reject) {
-        moduleManager.execOnLoad('modA', resolve);
-      })
-      .then(function() {
-        assertLoaded('modA');
-        assertNotLoaded('modB');
-        assertTrue(modA1Loaded);
-      });
-}
-
 function testPrefetchModuleWithBatchModeEnabled() {
   moduleManager.setBatchModeEnabled(true);
   assertThrows(
