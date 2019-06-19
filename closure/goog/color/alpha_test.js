@@ -308,7 +308,7 @@ testSuite({
     const opaqueSkyBlueHex = alpha.hsvaArrayToHex(opaqueSkyBlueHsv);
     assertEquals(
         'The HSVA array should have been properly converted to hex',
-        '#00d4ffff', opaqueSkyBlueHex);
+        '#00d5ffff', opaqueSkyBlueHex);
 
     const halfTransparentPinkHsv = [300, 1, 255, 0.5];
     const halfTransparentPinkHex = alpha.hsvaArrayToHex(halfTransparentPinkHsv);

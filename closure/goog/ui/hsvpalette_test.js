@@ -198,7 +198,7 @@ testSuite({
     // when google.testing.events support specifying properties of the event
     // or find out how tod o it if it already supports it.
     samplePalette.handleMouseMoveV_(boundaries, event);
-    assertEquals('#ff1e00', googColor.parse(samplePalette.getColor()).hex);
+    assertEquals('#ff1f00', googColor.parse(samplePalette.getColor()).hex);
   },
 
   testHandleMouseMoveHueSaturation() {
@@ -215,6 +215,6 @@ testSuite({
     event.clientY = 85;
     // TODO(user): Use goog.testing.events when appropriate (see above).
     samplePalette.handleMouseMoveHs_(boundaries, event);
-    assertEquals('#ffeec4', googColor.parse(samplePalette.getColor()).hex);
+    assertEquals('#ffefc4', googColor.parse(samplePalette.getColor()).hex);
   },
 });
