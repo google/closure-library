@@ -27,6 +27,14 @@ goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.soy.data.SanitizedContent');
 
+/**
+ * A structural interface for injected data.
+ *
+ * <p>Soy generated code contributes optional properties.
+ *
+ * @record
+ */
+goog.soy.IjData = function() {};
 
 /**
  * Type definition for strict Soy templates. Very useful when passing a template
