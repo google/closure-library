@@ -187,7 +187,6 @@ testSuite({
         assertThrows(() => {
           renderer.renderText(example.sanitizedHtmlTemplate, {});
         }).message);
-    handleRender.assertCallCount(1);
   },
 
   testRenderSafeHtml() {

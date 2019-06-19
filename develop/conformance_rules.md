@@ -173,7 +173,7 @@ completely new window such as a popup or an iframe.
 
 If you need to use it, use the type-safe [`goog.dom.safe.documentWrite`]
 wrapper, or directly render a Strict Soy template using
-`goog.soy.Renderer.prototype.renderElement` (or similar).
+[`goog.soy.Renderer.prototype.renderElement`] \(or similar\).
 
 
 {: #innerHtml}
@@ -187,7 +187,7 @@ vulnerabilities.
 
 Instead, use the type-safe [`goog.dom.safe.setInnerHtml`] wrapper, or directly
 render a Strict Soy template using [`goog.soy.Renderer.prototype.renderElement`]
-(or similar).
+\(or similar\).
 
 Note: Reads of these properties are permitted.
 
