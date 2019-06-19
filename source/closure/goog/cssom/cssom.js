@@ -186,10 +186,16 @@ goog.cssom.getAllCssStyleSheets = function(
 goog.cssom.getCssTextFromCssRule = function(cssRule) {
   var cssText = '';
 
-  if (cssRule.cssText) {
-    // W3C.
+  // Per github.com/microsoft/ChakraCore/issues/6165, IE/Edge errors when
+  // referencing the cssText property in some cases.
+  try {
     cssText = cssRule.cssText;
-  } else if (cssRule.style && cssRule.style.cssText && cssRule.selectorText) {
+  } catch (e) {
+    return '';
+  }
+
+  if (!cssText && cssRule.style && cssRule.style.cssText &&
+      cssRule.selectorText) {
     // IE: The spacing here is intended to make the result consistent with
     // FF and Webkit.
     // We also remove the special properties that we may have added in

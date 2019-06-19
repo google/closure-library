@@ -91,17 +91,9 @@ goog.soy.data.SanitizedContentKind = {
   STYLE: goog.DEBUG ? {sanitizedContentStyle: true} : {},
 
   /** A CSS3 style sheet (list of rules). */
-  CSS: goog.DEBUG ? {sanitizedContentCss: true} : {},
+  CSS: goog.DEBUG ? {sanitizedContentCss: true} : {}
 
-  /**
-   * Unsanitized plain-text content.
-   *
-   * This is effectively the "null" entry of this enum, and is sometimes used
-   * to explicitly mark content that should never be used unescaped. Since any
-   * string is safe to use as text, being of ContentKind.TEXT makes no
-   * guarantees about its safety in any other context such as HTML.
-   */
-  TEXT: goog.DEBUG ? {sanitizedContentKindText: true} : {}
+  // TEXT doesn't produce SanitizedContent anymore, use renderText.
 };
 
 
