@@ -233,6 +233,7 @@ var _allTests = [
   'closure/goog/i18n/datetimeformat_test.html',
   'closure/goog/i18n/datetimeparse_test.html',
   'closure/goog/i18n/graphemebreak_test.html',
+  'closure/goog/i18n/localefeature_test.html',
   'closure/goog/i18n/messageformat_test.html',
   'closure/goog/i18n/mime_test.html',
   'closure/goog/i18n/numberformat_test.html',
