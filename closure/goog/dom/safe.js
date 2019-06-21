@@ -634,7 +634,7 @@ goog.dom.safe.setLocationHref = function(loc, url) {
  * first sanitized using goog.html.SafeUrl.sanitize.
  *
  * Example usage:
- *   goog.dom.safe.assignHref(document.location, newUrl);
+ *   goog.dom.safe.assignLocation(document.location, newUrl);
  * which is a safe alternative to
  *   document.location.assign(newUrl);
  * The latter can result in XSS vulnerabilities if newUrl is a
