@@ -1803,7 +1803,7 @@ goog.dom.setTextContent = function(node, text) {
 
 
 /**
- * Gets the outerHTML of a node, which islike innerHTML, except that it
+ * Gets the outerHTML of a node, which is like innerHTML, except that it
  * actually contains the HTML of the node itself.
  * @param {Element} element The element to get the HTML of.
  * @return {string} The outerHTML of the given element.

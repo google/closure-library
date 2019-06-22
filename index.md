@@ -12,5 +12,5 @@ The main documentation for the Closure library is [available on developers.googl
 
 * [API Documentation](https://google.github.io/closure-library/api/)
 * [Demos](source/closure/goog/demos/)
-* [JSConformance configuration documentation](develop/conformance_rules.html)
-* [Get started with Closure](develop/get-started.html)
+* [JSConformance configuration documentation](develop/conformance_rules)
+* [Get started with Closure](develop/get-started)

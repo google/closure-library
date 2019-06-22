@@ -646,6 +646,7 @@ goog.testing.AsyncTestCase.prototype.hookAssert_ = function() {
       }
     };
 
+    /** @suppress {const} */
     fail = function() {
       var expectedUnknownThis = /** @type {?} */ (this);
       try {
@@ -704,6 +705,7 @@ goog.testing.AsyncTestCase.prototype.unhookAll_ = function() {
     _assert = goog.asserts.assert(this.origAssert_);
     this.origAssert_ = null;
 
+    /** @suppress {const} */
     fail = goog.asserts.assert(this.origFail_);
     this.origFail_ = null;
   }

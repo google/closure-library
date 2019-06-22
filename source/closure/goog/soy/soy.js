@@ -27,29 +27,46 @@ goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.soy.data.SanitizedContent');
 
+/**
+ * A structural interface for injected data.
+ *
+ * <p>Soy generated code contributes optional properties.
+ *
+ * @record
+ */
+goog.soy.IjData = function() {};
 
+/**
+ * Helper typedef for ij parameters.  This is what soy generates.
+ * @private
+ * @typedef {!goog.soy.IjData|!Object<string, *>}
+ */
+goog.soy.CompatibleIj_;
+
+// TODO(b/36644846): remove the second half of the function type union
 /**
  * Type definition for strict Soy templates. Very useful when passing a template
  * as an argument.
- * @typedef {function(?, ?Object<string, *>=): !goog.soy.data.SanitizedContent|
- *     function(?, null=, ?Object<string, *>=): !goog.soy.data.SanitizedContent}
+ * @typedef {function(?, ?goog.soy.CompatibleIj_=):
+ * !goog.soy.data.SanitizedContent| function(?, null=, ?Object<string, *>=):
+ * !goog.soy.data.SanitizedContent}
  */
 goog.soy.StrictTemplate;
 
-
+// TODO(b/36644846): remove the second half of the function type union
 /**
  * Type definition for strict Soy HTML templates. Very useful when passing
  * a template as an argument.
- * @typedef {function(?, ?Object<string, *>=): !goog.soy.data.SanitizedHtml|
- *     function(?, null=, ?Object<string, *>=): !goog.soy.data.SanitizedHtml}
+ * @typedef {function(?, ?goog.soy.CompatibleIj_=):
+ * !goog.soy.data.SanitizedHtml| function(?, null=, ?Object<string, *>=):
+ * !goog.soy.data.SanitizedHtml}
  */
 goog.soy.StrictHtmlTemplate;
 
 
 /**
  * Type definition for text templates.
- * @typedef {function(?, ?Object<string, *>=): string|
- *     function(?, null=, ?Object<string, *>=): string}
+ * @typedef {function(?=, ?goog.soy.CompatibleIj_=):string}
  */
 goog.soy.TextTemplate;
 
@@ -72,6 +89,7 @@ goog.soy.renderHtml = function(element, templateResult) {
 };
 
 
+// TODO(b/36644846): remove the second half of the function type union
 /**
  * Renders a Soy template and then set the output string as
  * the innerHTML of an element. It is recommended to use this helper function
@@ -79,7 +97,7 @@ goog.soy.renderHtml = function(element, templateResult) {
  * will be easier to audit the code for cross-site scripting vulnerabilities.
  *
  * @param {Element} element The element whose content we are rendering into.
- * @param {?function(ARG_TYPES, Object<string, *>=):*|
+ * @param {?function(ARG_TYPES, ?goog.soy.CompatibleIj_=):*|
  *     ?function(ARG_TYPES, null=, Object<string, *>=):*} template
  *     The Soy template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
@@ -97,7 +115,7 @@ goog.soy.renderElement = function(
       goog.asserts.assert(element), html);
 };
 
-
+// TODO(b/36644846): remove the second half of the function type union
 /**
  * Renders a Soy template into a single node or a document
  * fragment. If the rendered HTML string represents a single node, then that
@@ -106,7 +124,8 @@ goog.soy.renderElement = function(
  * rendered nodes.
  *
  * @param {
- *     ?function(ARG_TYPES, Object<string, *>=):goog.soy.data.SanitizedContent|
+ *     ?function(ARG_TYPES,
+ * ?goog.soy.CompatibleIj_=):!goog.soy.data.SanitizedContent|
  *     ?function(ARG_TYPES, null=, Object<string, *>=):
  *     goog.soy.data.SanitizedContent} template The Soy template defining the
  *     element's content. The kind of the template must be "html" or "text".
@@ -130,13 +149,13 @@ goog.soy.renderAsFragment = function(
   return dom.safeHtmlToNode(html);
 };
 
-
+// TODO(b/36644846): remove the second half of the function type union
 /**
  * Renders a Soy template into a single node. If the rendered
  * HTML string represents a single node, then that node is returned. Otherwise,
  * a DIV element is returned containing the rendered nodes.
  *
- * @param {?function(ARG_TYPES, Object<string, *>=):*|
+ * @param {?function(ARG_TYPES, ?goog.soy.CompatibleIj_=):*|
  *     ?function(ARG_TYPES, null=, Object<string, *>=):*} template
  *     The Soy template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.

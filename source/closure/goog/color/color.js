@@ -476,7 +476,7 @@ goog.color.hsvToRgb = function(h, s, brightness) {
     }
   }
 
-  return [Math.floor(red), Math.floor(green), Math.floor(blue)];
+  return [Math.round(red), Math.round(green), Math.round(blue)];
 };
 
 
