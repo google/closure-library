@@ -362,6 +362,7 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
     if (el == null) {
       el = goog.dom.createElement(goog.dom.TagName.DIV);
       el.id = goog.testing.TestRunner.TEST_LOG_ID;
+      el.dir = 'ltr';
       document.body.appendChild(el);
     }
     this.logEl_ = el;
