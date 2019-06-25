@@ -662,6 +662,24 @@ function testAssertObjectEqualsSparseArrays() {
   assertThrows('Sparse arrays should not be equal', function() {
     assertObjectEquals(arr2, arr1);
   });
+
+  a1 = [];
+  a2 = [];
+  a2[1.8] = undefined;
+  assertThrows(
+      'Empty slots only equal `undefined` for natural-number array keys`',
+      function() {
+        assertObjectEquals(a1, a2);
+      });
+
+  a1 = [];
+  a2 = [];
+  a2[-999] = undefined;
+  assertThrows(
+      'Empty slots only equal `undefined` for natural-number array keys`',
+      function() {
+        assertObjectEquals(a1, a2);
+      });
 }
 
 function testAssertObjectEqualsSparseArrays2() {
@@ -1404,6 +1422,21 @@ function testFindDifferences_unequal() {
   assertNotNull(
       'Values have different types"',
       goog.testing.asserts.findDifferences(new Set(['1']), new Set([1])));
+}
+
+function testFindDifferences_arrays_nonNaturalKeys_notConfsuedForSparseness() {
+  var actual;
+  var expected;
+
+  actual = [];
+  actual[1.8] = undefined;
+  expected = [];
+  assertNotNull(goog.testing.asserts.findDifferences(actual, expected));
+
+  actual = [];
+  actual[-1] = undefined;
+  var expected = [];
+  assertNotNull(goog.testing.asserts.findDifferences(actual, expected));
 }
 
 function testFindDifferences_objectsAndNull() {
