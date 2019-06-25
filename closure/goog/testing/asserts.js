@@ -1560,7 +1560,7 @@ goog.testing.asserts.raiseException = function(comment, opt_message) {
  * @private
  */
 goog.testing.asserts.isArrayIndexProp_ = function(prop) {
-  return (Number(prop) | 0) == prop;
+  return prop === '0' || /^[1-9][0-9]*$/.test(prop);
 };
 
 /** @define {boolean} */
