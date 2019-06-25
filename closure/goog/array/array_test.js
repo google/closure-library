@@ -834,7 +834,8 @@ function testExtend() {
   assertArrayEquals('extend, should be equal', f2, f);
 
   var result = [];
-  var i = 1000000;
+  // Remeber to check for flakey timeouts if increased. Particularly on IE.
+  var i = 100000;
   var bigArray = Array(i);
   while (i--) {
     bigArray[i] = i;
