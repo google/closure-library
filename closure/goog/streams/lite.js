@@ -55,28 +55,20 @@ class ReadableStreamUnderlyingSource {
  */
 class ReadableStream {
   /**
-   * @param {!ReadableStreamUnderlyingSource} underlyingSource
    * @package
    */
-  constructor(underlyingSource) {
+  constructor() {
     /** @package {!ReadableStream.State} */
     this.state = ReadableStream.State.READABLE;
 
     /**  @package {!ReadableStreamDefaultReader|undefined} */
     this.reader = undefined;
 
-    /** @type {*|undefined} */
+    /** @type {*} */
     this.storedError = undefined;
 
-    /**
-     * @type {function(!ReadableStreamDefaultController):
-     *     (!Promise<undefined>|undefined)}
-     */
-    const startAlgorithm = (controller) => underlyingSource.start(controller);
-
-    /** @package @const {!ReadableStreamDefaultController} */
-    this.readableStreamController =
-        new ReadableStreamDefaultController(this, startAlgorithm);
+    /** @package {!ReadableStreamDefaultController} */
+    this.readableStreamController;
   }
 
   /**
@@ -95,15 +87,7 @@ class ReadableStream {
    * @return {!ReadableStreamDefaultReader<T>}
    */
   getReader() {
-    return this.reader = this.acquireDefaultReader();
-  }
-
-  /**
-   * @return {!ReadableStreamDefaultReader<T>}
-   * @package
-   */
-  acquireDefaultReader() {
-    return new ReadableStreamDefaultReader(this);
+    return this.reader = new ReadableStreamDefaultReader(this);
   }
 
   /**
@@ -214,7 +198,12 @@ function newReadableStream(underlyingSource) {
       !(verifyObject.autoAllocateChunkSize),
       `'autoAllocateChunkSize' property not allowed on an underlying ` +
           'source for a lite ReadableStream');
-  return new ReadableStream(underlyingSource);
+  const startAlgorithm = (controller) => underlyingSource.start(controller);
+  const stream = new ReadableStream();
+  const controller = new ReadableStreamDefaultController(stream);
+  stream.readableStreamController = controller;
+  controller.start(startAlgorithm);
+  return stream;
 }
 
 /**
@@ -336,11 +325,9 @@ class ReadableStreamDefaultReader {
 class ReadableStreamDefaultController {
   /**
    * @param {!ReadableStream} stream
-   * @param {function(!ReadableStreamDefaultController):
-   *     (!Promise<undefined>|undefined)} startAlgorithm
    * @package
    */
-  constructor(stream, startAlgorithm) {
+  constructor(stream) {
     /** @package @const {!ReadableStream} */
     this.controlledReadableStream = stream;
 
@@ -349,15 +336,6 @@ class ReadableStreamDefaultController {
 
     /** @package {boolean} */
     this.closeRequested = false;
-
-    Promise.resolve(startAlgorithm(this))
-        .then(
-            () => {
-              this.start();
-            },
-            (e) => {
-              this.errorInternal(e);
-            });
   }
 
   /**
@@ -377,7 +355,6 @@ class ReadableStreamDefaultController {
   /**
    * Enqueues a new chunk into the stream that can be read.
    * @param {T} chunk
-   * @return {*}
    */
   enqueue(chunk) {
     if (!this.canCloseOrEnqueue()) {
@@ -385,7 +362,7 @@ class ReadableStreamDefaultController {
           'Cannot enqueue a readable stream that has already been requested ' +
           'to be closed');
     }
-    return this.enqueueInternal(chunk);
+    this.enqueueInternal(chunk);
   }
 
   /**
@@ -398,10 +375,20 @@ class ReadableStreamDefaultController {
   }
 
   /**
-   * @param {*} reason
+   * @param {function(!ReadableStreamDefaultController):
+   *     (!Promise<undefined>|undefined)} startAlgorithm
    * @package
    */
-  cancelSteps(reason) {}
+  start(startAlgorithm) {
+    Promise.resolve(startAlgorithm(this))
+        .then(
+            () => {
+              this.started();
+            },
+            (e) => {
+              this.errorInternal(e);
+            });
+  }
 
   /**
    * @return {!Promise<!IIterableResult<T>>}
@@ -409,7 +396,7 @@ class ReadableStreamDefaultController {
    */
   pullSteps() {
     if (!this.queue.empty()) {
-      const chunk = this.queue.dequeueValue();
+      const chunk = this.dequeueFromQueue();
       if (this.closeRequested && this.queue.empty()) {
         this.clearAlgorithms();
         this.controlledReadableStream.close();
@@ -424,13 +411,10 @@ class ReadableStreamDefaultController {
   }
 
   /** @package */
-  start() {}
+  started() {}
 
   /** @package */
   callPullIfNeeded() {}
-
-  /** @package */
-  shouldCallPull() {}
 
   /** @package */
   clearAlgorithms() {}
@@ -448,7 +432,6 @@ class ReadableStreamDefaultController {
 
   /**
    * @param {T} chunk
-   * @return {*}
    * @package
    */
   enqueueInternal(chunk) {
@@ -458,16 +441,7 @@ class ReadableStreamDefaultController {
           chunk, /* done= */ false);
       return;
     }
-    return this.enqueueIntoQueue(chunk);
-  }
-
-  /**
-   * @param {T} chunk
-   * @return {*}
-   * @protected
-   */
-  enqueueIntoQueue(chunk) {
-    return this.queue.enqueueValue(chunk);
+    this.enqueueIntoQueue(chunk);
   }
 
   /**
@@ -478,7 +452,7 @@ class ReadableStreamDefaultController {
     if (this.controlledReadableStream.state !== ReadableStream.State.READABLE) {
       return;
     }
-    this.queue.resetQueue();
+    this.resetQueue();
     this.clearAlgorithms();
     this.controlledReadableStream.error(e);
   }
@@ -491,12 +465,36 @@ class ReadableStreamDefaultController {
     return !this.closeRequested &&
         this.controlledReadableStream.state === ReadableStream.State.READABLE;
   }
+
+  /**
+   * @param {T} chunk
+   * @protected
+   */
+  enqueueIntoQueue(chunk) {
+    this.queue.enqueueValue(chunk);
+  }
+
+  /**
+   * @return {T}
+   * @protected
+   */
+  dequeueFromQueue() {
+    return this.queue.dequeueValue();
+  }
+
+  /**
+   * @protected
+   */
+  resetQueue() {
+    this.queue.resetQueue();
+  }
 }
 
 /**
  * An internal Queue representation. This simple Queue just wraps an Array.
  * Other implementations may also have a size associated with each element.
  * @template T
+ * @package
  */
 class Queue {
   constructor() {
@@ -512,18 +510,17 @@ class Queue {
   }
 
   /**
+   * @param {T} value
+   */
+  enqueueValue(value) {
+    this.queue_.push(value);
+  }
+
+  /**
    * @return {T}
    */
   dequeueValue() {
     return this.queue_.shift();
-  }
-
-  /**
-   * @param {T} value
-   * @return {*}
-   */
-  enqueueValue(value) {
-    this.queue_.push(value);
   }
 
   /**
@@ -535,6 +532,7 @@ class Queue {
 }
 
 exports = {
+  Queue,
   ReadableStream,
   ReadableStreamDefaultController,
   ReadableStreamDefaultReader,
