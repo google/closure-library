@@ -837,7 +837,7 @@ goog.string.specialEscapeChars_ = {
   // not appear in the resulting string. The specific strings that must be
   // escaped are documented at:
   // http://www.w3.org/TR/html51/semantics.html#restrictions-for-contents-of-script-elements
-  '<': '\x3c'
+  '<': '\\u003c'  // NOTE: JSON.parse crashes on '\\x3c'.
 };
 
 
