@@ -482,6 +482,104 @@ testSuite({
     const reader = stream.getReader();
     await assertRejects(reader.read());
   },
+
+  async testAsyncIterator() {
+    const {stream, controller} = newReadableStreamWithController();
+    controller.enqueue('foo');
+    controller.enqueue('bar');
+    controller.close();
+    const chunks = [];
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+    }
+    assertArrayEquals(['foo', 'bar'], chunks);
+  },
+
+  async testAsyncIterator_Closed() {
+    const {stream, controller} = newReadableStreamWithController();
+    controller.close();
+    const chunks = [];
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+    }
+    assertArrayEquals([], chunks);
+  },
+
+  async testAsyncIterator_Error() {
+    const {stream, controller} = newReadableStreamWithController();
+    controller.error(new Error('error'));
+    const itr = stream[Symbol.asyncIterator]();
+    assertRejects(itr.next());
+  },
+
+  async testAsyncIterator_Locked() {
+    const stream = newReadableStream();
+    stream.getReader();
+    assertThrows(() => {
+      stream[Symbol.asyncIterator]();
+    });
+  },
+
+  async testAsyncIterator_Partial() {
+    const {stream, controller} = newReadableStreamWithController();
+    controller.enqueue('foo');
+    controller.enqueue('bar');
+    controller.close();
+    const reader = stream.getReader();
+    await reader.read();
+    reader.releaseLock();
+    const chunks = [];
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+    }
+    assertArrayEquals(['bar'], chunks);
+  },
+
+  async testAsyncIterator_Released() {
+    const {stream, controller} = newReadableStreamWithController();
+    controller.close();
+    const itr = stream[Symbol.asyncIterator]();
+    const {done} = await itr.next();
+    assertTrue(done);
+    assertRejects(itr.next());
+  },
+
+  async testAsyncIterator_Return() {
+    const cancel = recordFunction();
+    const {stream, controller} = newReadableStreamWithController({
+      cancel,
+    });
+    const itr = stream[Symbol.asyncIterator]();
+    const error = new Error('error');
+    const returnResult = await itr.return(error);
+    cancel.assertCallCount(1);
+    assertArrayEquals([error], cancel.getLastCall().getArguments());
+    assertEquals(error, returnResult.value);
+    assertTrue(returnResult.done);
+    const reader = stream.getReader();
+    const readResult = await reader.read();
+    assertUndefined(readResult.value);
+    assertTrue(readResult.done);
+  },
+
+  async testAsyncIterator_PreventCancel_Return() {
+    const cancel = recordFunction();
+    const {stream, controller} = newReadableStreamWithController({
+      cancel,
+    });
+    const itr = stream[Symbol.asyncIterator]({preventCancel: true});
+    const error = new Error('error');
+    const returnResult = await itr.return(error);
+    cancel.assertCallCount(0);
+    assertEquals(error, returnResult.value);
+    assertTrue(returnResult.done);
+    await assertRejects(itr.next());
+  },
+
+  testGetIterator() {
+    const stream = newReadableStream();
+    assertEquals(stream.getIterator, stream[Symbol.asyncIterator]);
+  },
 });
 
 /**

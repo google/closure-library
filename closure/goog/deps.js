@@ -1035,7 +1035,7 @@ goog.addDependency('storage/storage.js', ['goog.storage.Storage'], ['goog.json',
 goog.addDependency('storage/storage_test.js', ['goog.storage.storage_test'], ['goog.functions', 'goog.storage.ErrorCode', 'goog.storage.Storage', 'goog.storage.storageTester', 'goog.testing.asserts', 'goog.testing.storage.FakeMechanism', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('storage/storagetester.js', ['goog.storage.storageTester'], ['goog.storage.Storage', 'goog.structs.Map', 'goog.testing.asserts'], {});
 goog.addDependency('streams/full.js', ['goog.streams.full'], ['goog.asserts', 'goog.streams.lite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('streams/full_test.js', ['goog.streams.fullTest'], ['goog.streams.full', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es8', 'module': 'goog'});
+goog.addDependency('streams/full_test.js', ['goog.streams.fullTest'], ['goog.streams.full', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es9', 'module': 'goog'});
 goog.addDependency('streams/lite.js', ['goog.streams.lite'], ['goog.asserts', 'goog.promise.NativeResolver'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('streams/lite_test.js', ['goog.streams.liteImplTest'], ['goog.streams.full', 'goog.streams.lite', 'goog.testing.testSuite'], {'lang': 'es8', 'module': 'goog'});
 goog.addDependency('string/const.js', ['goog.string.Const'], ['goog.asserts', 'goog.string.TypedString'], {});

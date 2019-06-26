@@ -94,6 +94,13 @@ class ReadableStream extends lite.ReadableStream {
   constructor() {
     super();
 
+    /**
+     * Returns an AsyncIterator over the ReadableStream.
+     * https://streams.spec.whatwg.org/#rs-asynciterator
+     * @return {!AsyncIterator<!IIterableResult<T>>}
+     */
+    this[Symbol.asyncIterator] = this.getIterator;
+
     /** @package {boolean} */
     this.disturbed = false;
   }
@@ -120,6 +127,19 @@ class ReadableStream extends lite.ReadableStream {
       return Promise.reject(new TypeError('Cannot cancel a locked stream'));
     }
     return this.cancelInternal(reason);
+  }
+
+  /**
+   * Returns an AyncIterator over the ReadableStream.
+   *
+   * If preventCancel is passed as an option, calling the return() method on the
+   * iterator will terminate the iterator, but will not cancel the
+   * ReadableStream. https://streams.spec.whatwg.org/#rs-get-iterator
+   * @param {{preventCancel: boolean}=} options
+   * @return {!AsyncIterator<T>}
+   */
+  getIterator({preventCancel = false} = {}) {
+    return new ReadableStreamAsyncIterator(this.getReader(), preventCancel);
   }
 
   /**
@@ -215,6 +235,66 @@ class ReadableStreamDefaultReader extends lite.ReadableStreamDefaultReader {
     }
     return /** @type {!ReadableStream} */ (this.ownerReadableStream)
         .cancelInternal(reason);
+  }
+}
+
+/**
+ * @template T
+ * @implements {AsyncIterator<T>}
+ */
+class ReadableStreamAsyncIterator {
+  /**
+   * @param {!ReadableStreamDefaultReader<T>} asyncIteratorReader
+   * @param {boolean} preventCancel
+   * @package
+   */
+  constructor(asyncIteratorReader, preventCancel) {
+    /** @package @const {!ReadableStreamDefaultReader<T>} */
+    this.asyncIteratorReader = asyncIteratorReader;
+
+    /** @package @const {boolean} */
+    this.preventCancel = preventCancel;
+  }
+
+  /**
+   * Gets the next value from the ReadableStream.
+   * https://streams.spec.whatwg.org/#rs-asynciterator-prototype-next
+   * @override
+   */
+  next() {
+    if (!this.asyncIteratorReader.ownerReadableStream) {
+      return Promise.reject(
+          new TypeError('There is no more data left in the ReadableStream'));
+    }
+    return this.asyncIteratorReader.read().then(({value, done}) => {
+      if (done) {
+        this.asyncIteratorReader.release();
+      }
+      return {value, done};
+    });
+  }
+
+  /**
+   * Cancels the underlying stream and resolves with the value.
+   * @param {*} value
+   * @return {!Promise<!IIterableResult<T>>}
+   */
+  return(value) {
+    if (!this.asyncIteratorReader.ownerReadableStream) {
+      return Promise.reject(
+          new TypeError('There is no more data left in the ReadableStream'));
+    }
+    if (this.asyncIteratorReader.readRequests.length) {
+      return Promise.reject(new TypeError(
+          'There are pending read requests in the ReadableStream'));
+    }
+    if (!this.preventCancel) {
+      const result = this.asyncIteratorReader.cancel(value);
+      this.asyncIteratorReader.release();
+      return result.then(() => ({done: true, value}));
+    }
+    this.asyncIteratorReader.release();
+    return Promise.resolve({done: true, value});
   }
 }
 
@@ -449,6 +529,7 @@ class QueueWithSizes {
 
 exports = {
   ReadableStream,
+  ReadableStreamAsyncIterator,
   ReadableStreamDefaultController,
   ReadableStreamDefaultReader,
   ReadableStreamStrategy,
