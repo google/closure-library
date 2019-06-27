@@ -15,6 +15,7 @@
 goog.module('goog.streams.liteImplTest');
 goog.setTestOnly();
 
+const full = goog.require('goog.streams.full');
 const testSuite = goog.require('goog.testing.testSuite');
 const {ReadableStream, ReadableStreamDefaultController, newReadableStream} = goog.require('goog.streams.lite');
 
@@ -23,16 +24,7 @@ let stream;
 /** @type {!ReadableStreamDefaultController<string>} */
 let controller;
 
-testSuite({
-  setUp() {
-    stream = newReadableStream({
-      /** @param  {!ReadableStreamDefaultController<string>} ctlr */
-      start(ctlr) {
-        controller = ctlr;
-      },
-    });
-  },
-
+const tests = {
   async testEnqueue_ThenRead() {
     const chunk = 'foo';
     controller.enqueue(chunk);
@@ -262,6 +254,17 @@ testSuite({
     const rejectedError = await assertRejects(reader.read());
     assertEquals(error, rejectedError);
   },
+};
+
+testSuite(Object.assign({}, tests, {
+  setUp() {
+    stream = newReadableStream({
+      /** @param  {!ReadableStreamDefaultController<string>} ctlr */
+      start(ctlr) {
+        controller = ctlr;
+      },
+    });
+  },
 
   testNewReadableStream_InvalidAttributes() {
     assertThrows(() => {
@@ -292,4 +295,15 @@ testSuite({
       });
     });
   },
-});
+
+  testfull: Object.assign({}, tests, {
+    setUp() {
+      stream = full.newReadableStream({
+        /** @param  {!ReadableStreamDefaultController<string>} ctlr */
+        start(ctlr) {
+          controller = ctlr;
+        },
+      });
+    },
+  }),
+}));

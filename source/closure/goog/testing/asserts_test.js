@@ -1169,7 +1169,7 @@ function testAssertNotThrows() {
   assertFalse('assertNotThrows did not fail on a thrown exception', failed);
 }
 
-async function testAssertRejects() {
+async function testAssertRejects_nonThenables() {
   assertThrows(() => {
     assertRejects('assertRejects should not pass with null param', null);
     fail('Should always throw');
@@ -1197,66 +1197,86 @@ async function testAssertRejects() {
         {});
     fail('Should always throw');
   });
+}
 
-  const thenables = [
-    // Test goog.async.Deferred.
-    (fn) => {
-      const d = new goog.async.Deferred();
-      try {
-        fn((val) => d.callback(), (err) => d.errback(err));
-      } catch (e) {
-        d.errback(e);
-      }
-      return d;
-    },
-    // Test goog.Promise.
-    (fn) => new goog.Promise(fn),
-    /// Test Promise.
-    (fn) => new Promise(fn),
-    // Test async function that awaits on a goog.Promise.
-    async (fn) => {
-      await new goog.Promise(fn);
-    },
-    // Test async function that awaits on a Promise.
-    async (fn) => {
-      await new Promise(fn);
-    },
-    // Test async function that throws.
-    async (fn) => {
-      fn(() => {}, (err) => {
-        throw err;
-      });
-    },
-  ];
-  for (const thenable of thenables) {
-    let e = await assertRejects(
-        'valid IThenable constructor throws Error', thenable(() => {
-          throw new Error('test');
-        }));
-    assertEquals('error message', 'test', e.message);
-    e = await assertRejects(
-        'valid IThenable constructor throws string error', thenable(() => {
-          throw 'string error test';
-        }));
-    assertEquals('string error', 'string error test', e);
-    e = await assertRejects(
-        'valid IThenable rejects Error', thenable((_, reject) => {
-          reject(new Error('test'));
-        }));
-    assertEquals('error message', 'test', e.message);
-    e = await assertRejects(
-        'valid IThenable rejects string error', thenable((_, reject) => {
-          reject('string error test');
-        }));
-    assertEquals('string error', 'string error test', e);
-    e = await assertRejects(
-        'assertRejects should fail with a resolved thenable', (async () => {
-          await assertRejects(thenable((resolve) => resolve()));
-          fail('should always throw.');
-        })());
-    assertEquals(
-        'IThenable passed into assertRejects did not reject', e.message);
-  }
+function testAssertRejects_deferred() {
+  return internalTestAssertRejects((fn) => {
+    const d = new goog.async.Deferred();
+    try {
+      fn((val) => d.callback(), (err) => d.errback(err));
+    } catch (e) {
+      d.errback(e);
+    }
+    return d;
+  });
+}
+
+function testAssertRejects_googPromise() {
+  return internalTestAssertRejects((fn) => new goog.Promise(fn));
+}
+
+function testAssertRejects_promise() {
+  return internalTestAssertRejects((fn) => new Promise(fn));
+}
+
+function testAssertRejects_asyncFunction_awaitingGoogPromise() {
+  return internalTestAssertRejects(async (fn) => {
+    await new goog.Promise(fn, undefined, true);
+  });
+}
+
+function testAssertRejects_asyncFunction_awaitingPromise() {
+  return internalTestAssertRejects(async (fn) => {
+    await new Promise(fn);
+  });
+}
+
+function testAssertRejects_asyncFunction_thatThrows() {
+  return internalTestAssertRejects(async (fn) => {
+    fn(() => {}, (err) => {
+      throw err;
+    });
+  });
+}
+
+/**
+ * Runs test suite (function) for a `Thenable` implementation covering
+ * rejection.
+ *
+ * @param {function(function(function(?), function(?))): !Thenable<?>} factory
+ */
+async function internalTestAssertRejects(factory) {
+  let e;
+  e = await assertRejects(
+      'valid IThenable constructor throws Error', factory(() => {
+        throw new Error('test0');
+      }));
+  assertEquals('test0', e.message);
+
+  e = await assertRejects(
+      'valid IThenable constructor throws string error', factory(() => {
+        throw 'test1';
+      }));
+  assertEquals('test1', e);
+
+  e = await assertRejects(
+      'valid IThenable rejects Error', factory((_, reject) => {
+        reject(new Error('test2'));
+      }));
+  assertEquals('test2', e.message);
+
+  e = await assertRejects(
+      'valid IThenable rejects string error', factory((_, reject) => {
+        reject('test3');
+      }));
+  assertEquals('test3', e);
+
+  e = await assertRejects(
+      'assertRejects should fail with a resolved thenable', (async () => {
+        await assertRejects(factory((resolve) => resolve()));
+        fail('should always throw.');
+      })());
+  assertEquals('IThenable passed into assertRejects did not reject', e.message);
 }
 
 function testAssertArrayEquals() {
@@ -1349,7 +1369,9 @@ function testAssertObjectsEqualsDifferentTypeSameToString() {
 function testAssertObjectsRoughlyEquals() {
   assertObjectRoughlyEquals({'a': 1}, {'a': 1.2}, 0.3);
   assertThrowsJsUnitException(
-      function() { assertObjectRoughlyEquals({'a': 1}, {'a': 1.2}, 0.1); },
+      function() {
+        assertObjectRoughlyEquals({'a': 1}, {'a': 1.2}, 0.1);
+      },
       'Expected <[object Object]> (Object) but was <[object Object]> ' +
           '(Object)\n   a: Expected <1> (Number) but was <1.2> (Number) which ' +
           'was more than 0.1 away');
@@ -1546,9 +1568,8 @@ function testFindDifferences_binaryTree() {
   // algorithm. Can be enabled when (if) the algorithm is improved.
   // assertNull(goog.testing.asserts.findDifferences(
   //    createBinTree(5, null), createBinTree(5, null)));
-  assertNotNull(
-      goog.testing.asserts.findDifferences(
-          createBinTree(4, null), createBinTree(5, null)));
+  assertNotNull(goog.testing.asserts.findDifferences(
+      createBinTree(4, null), createBinTree(5, null)));
 }
 
 function testStringForWindowIE() {
@@ -1564,14 +1585,18 @@ function testStringForWindowIE() {
 
 function testStringSamePrefix() {
   assertThrowsJsUnitException(
-      function() { assertEquals('abcdefghi', 'abcdefghx'); },
+      function() {
+        assertEquals('abcdefghi', 'abcdefghx');
+      },
       'Expected <abcdefghi> (String) but was <abcdefghx> (String)\n' +
           'Difference was at position 8. Expected [...ghi] vs. actual [...ghx]');
 }
 
 function testStringSameSuffix() {
   assertThrowsJsUnitException(
-      function() { assertEquals('xbcdefghi', 'abcdefghi'); },
+      function() {
+        assertEquals('xbcdefghi', 'abcdefghi');
+      },
       'Expected <xbcdefghi> (String) but was <abcdefghi> (String)\n' +
           'Difference was at position 0. Expected [xbc...] vs. actual [abc...]');
 }
