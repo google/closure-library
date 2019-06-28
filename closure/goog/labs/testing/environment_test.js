@@ -316,7 +316,7 @@ function testAutoDiscoverTests() {
 
   // Note that this number changes when more tests are added to this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(10, testCase.tests_.length);
+  assertEquals(12, testCase.tests_.length);
 
   testing = false;
 }
@@ -422,6 +422,57 @@ function testMock() {
     env.mockControl.$replayAll();
     mock.test();
     mock.test();
+    env.mockControl.verifyAll();
+  });
+
+  testCase.runTests();
+
+  testing = false;
+}
+
+function testLooseMock() {
+  testing = true;
+
+  var env = new goog.labs.testing.Environment().withMockControl();
+  var mock = env.looseMock({
+    a: function() {},
+    b: function() {},
+  });
+
+  testCase.addNewTest('testLooseMockCalled', function() {
+    mock.a().$times(2);
+    mock.b().$times(2);
+
+    env.mockControl.$replayAll();
+    mock.a();
+    mock.b();
+    mock.a();
+    mock.b();
+    env.mockControl.verifyAll();
+  });
+
+  testCase.runTests();
+
+  testing = false;
+}
+
+function testLooseMockIgnoresUnexpected() {
+  testing = true;
+
+  var env = new goog.labs.testing.Environment().withMockControl();
+  var mock = env.looseMock(
+      {
+        a: function() {},
+        b: function() {},
+      },
+      true);
+
+  testCase.addNewTest('testLooseMockIgnoresUnexpectedCalls', function() {
+    env.mockControl.$replayAll();
+    mock.a();
+    mock.b();
+    mock.b();
+    mock.a();
     env.mockControl.verifyAll();
   });
 
