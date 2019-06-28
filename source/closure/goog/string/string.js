@@ -836,8 +836,8 @@ goog.string.specialEscapeChars_ = {
   // tags, we have to make sure HTML comments and opening/closing script tags do
   // not appear in the resulting string. The specific strings that must be
   // escaped are documented at:
-  // http://www.w3.org/TR/html51/semantics.html#restrictions-for-contents-of-script-elements
-  '<': '\\u003c'  // NOTE: JSON.parse crashes on '\\x3c'.
+  // https://html.spec.whatwg.org/multipage/scripting.html#restrictions-for-contents-of-script-elements
+  '<': '\\u003C'  // NOTE: JSON.parse crashes on '\\x3c'.
 };
 
 

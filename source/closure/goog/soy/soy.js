@@ -43,23 +43,19 @@ goog.soy.IjData = function() {};
  */
 goog.soy.CompatibleIj_;
 
-// TODO(b/36644846): remove the second half of the function type union
 /**
  * Type definition for strict Soy templates. Very useful when passing a template
  * as an argument.
- * @typedef {function(?, ?goog.soy.CompatibleIj_=):
- * !goog.soy.data.SanitizedContent| function(?, null=, ?Object<string, *>=):
- * !goog.soy.data.SanitizedContent}
+ * @typedef {function(?=,
+ * ?goog.soy.CompatibleIj_=):(string|!goog.soy.data.SanitizedContent)}
  */
 goog.soy.StrictTemplate;
 
-// TODO(b/36644846): remove the second half of the function type union
 /**
  * Type definition for strict Soy HTML templates. Very useful when passing
  * a template as an argument.
- * @typedef {function(?, ?goog.soy.CompatibleIj_=):
- * !goog.soy.data.SanitizedHtml| function(?, null=, ?Object<string, *>=):
- * !goog.soy.data.SanitizedHtml}
+ * @typedef {function(?=,
+ * ?goog.soy.CompatibleIj_=):!goog.soy.data.SanitizedHtml}
  */
 goog.soy.StrictHtmlTemplate;
 

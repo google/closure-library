@@ -18,6 +18,7 @@
 
 goog.module('goog.streams.full');
 
+const NativeResolver = goog.require('goog.promise.NativeResolver');
 const lite = goog.require('goog.streams.lite');
 const {assert, assertNumber} = goog.require('goog.asserts');
 
@@ -140,6 +141,88 @@ class ReadableStream extends lite.ReadableStream {
    */
   getIterator({preventCancel = false} = {}) {
     return new ReadableStreamAsyncIterator(this.getReader(), preventCancel);
+  }
+
+  /**
+   * Returns an Array with two elements, both new ReadableStreams that contain
+   * the same data as this ReadableStream. This stream will become permanently
+   * locked.
+   * https://streams.spec.whatwg.org/#rs-tee
+   * @return {!Array<!ReadableStream>}
+   */
+  tee() {
+    const reader = this.getReader();
+    let reading = false;
+    let canceled1 = false;
+    let canceled2 = false;
+    let reason1;
+    let reason2;
+    let branch1;
+    let branch2;
+    const cancelResolver = new NativeResolver();
+    const pullAlgorithm = () => {
+      if (reading) {
+        return Promise.resolve();
+      }
+      reading = true;
+      reader.read()
+          .then(({value, done}) => {
+            reading = false;
+            if (done) {
+              if (!canceled1) {
+                branch1.readableStreamController.close();
+              }
+              if (!canceled2) {
+                branch2.readableStreamController.close();
+              }
+              return;
+            }
+            if (!canceled1) {
+              branch1.readableStreamController.enqueue(value);
+            }
+            if (!canceled2) {
+              branch2.readableStreamController.enqueue(value);
+            }
+          })
+          .catch(() => {});
+      return Promise.resolve();
+    };
+    const cancel1Algorithm = (reason) => {
+      canceled1 = true;
+      reason1 = reason;
+      if (canceled2) {
+        const cancelResult = this.cancelInternal([reason1, reason2]);
+        cancelResolver.resolve(cancelResult);
+      }
+      return cancelResolver.promise;
+    };
+    const cancel2Algorithm = (reason) => {
+      canceled2 = true;
+      reason2 = reason;
+      if (canceled1) {
+        const cancelResult = this.cancelInternal([reason1, reason2]);
+        cancelResolver.resolve(cancelResult);
+      }
+      return cancelResolver.promise;
+    };
+    const startAlgorithm = () => {};
+    branch1 = new ReadableStream();
+    const controller1 = new ReadableStreamDefaultController(
+        branch1, cancel1Algorithm, pullAlgorithm, /* highWaterMark= */ 1,
+        /* size= */ undefined);
+    branch1.readableStreamController = controller1;
+    controller1.start(startAlgorithm);
+    branch2 = new ReadableStream();
+    const controller2 = new ReadableStreamDefaultController(
+        branch2, cancel2Algorithm, pullAlgorithm, /* highWatermark= */ 1,
+        /* size= */ undefined);
+    branch2.readableStreamController = controller2;
+    controller2.start(startAlgorithm);
+    reader.closed.catch((reason) => {
+      controller1.error(reason);
+      controller2.error(reason);
+    });
+    return [branch1, branch2];
   }
 
   /**

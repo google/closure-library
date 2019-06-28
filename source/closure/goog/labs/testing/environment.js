@@ -194,7 +194,28 @@ goog.labs.testing.Environment = goog.defineClass(null, {
     // checked, this is typed as "?" to turn off JSCompiler checking.
     // TODO(b/69851971): Enable a type-checked mocking library.
     return /** @type {?} */ (mock);
-  }
+  },
+
+  /**
+   * Creates a basic loose mock of a `toMock`. For more advanced mocking, please
+   * use the MockControl directly.
+   * @param {?Function|?Object} toMock
+   * @param {boolean=} ignoreUnexpectedCalls Defaults to false.
+   * @return {?}
+   */
+  looseMock: function(toMock, ignoreUnexpectedCalls = false) {
+    if (!this.shouldMakeMockControl_) {
+      throw new Error(
+          'MockControl not available on this environment. ' +
+          'Call withMockControl if this environment is expected ' +
+          'to contain a MockControl.');
+    }
+    var mock = this.mockControl.createLooseMock(toMock, ignoreUnexpectedCalls);
+    // Mocks are not type-checkable. To reduce burden on tests that are type
+    // checked, this is typed as "?" to turn off JSCompiler checking.
+    // TODO(b/69851971): Enable a type-checked mocking library.
+    return /** @type {?} */ (mock);
+  },
 });
 
 

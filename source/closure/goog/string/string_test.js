@@ -904,7 +904,7 @@ testSuite({
     assertEquals('"\\""', googString.quote('"'));
     assertEquals('"\'"', googString.quote('\''));
     assertEquals('"\\\\"', googString.quote('\\'));
-    assertEquals('"\\u003c"', googString.quote('<'));
+    assertEquals('"\\u003C"', googString.quote('<'));
 
     const zeroQuoted = googString.quote('\0');
     assertTrue(
