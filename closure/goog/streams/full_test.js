@@ -580,6 +580,101 @@ testSuite({
     const stream = newReadableStream();
     assertEquals(stream.getIterator, stream[Symbol.asyncIterator]);
   },
+
+  async testTee() {
+    const {stream, controller} = newReadableStreamWithController();
+    controller.enqueue('1');
+    controller.enqueue('2');
+    controller.enqueue('3');
+    controller.close();
+    const [stream1, stream2] = stream.tee();
+    const chunks1 = [];
+    for await (const chunk of stream1) {
+      chunks1.push(chunk);
+    }
+    assertArrayEquals(['1', '2', '3'], chunks1);
+    const chunks2 = [];
+    for await (const chunk of stream2) {
+      chunks2.push(chunk);
+    }
+    assertArrayEquals(['1', '2', '3'], chunks2);
+  },
+
+  async testTee_Cancel() {
+    const cancel = recordFunction();
+    const {stream, controller} = newReadableStreamWithController({
+      cancel,
+    });
+    const [stream1, stream2] = stream.tee();
+    const cancel1Result = stream1.cancel('reason1');
+    cancel.assertCallCount(0);
+    await 0;  // Just in case the cancel resolves on the next tick.
+    cancel.assertCallCount(0);
+    const cancel2Result = stream2.cancel('reason2');
+    cancel.assertCallCount(1);
+    assertArrayEquals(
+        ['reason1', 'reason2'], cancel.getLastCall().getArguments()[0]);
+    const cancel1Value = await cancel1Result;
+    const cancel2Value = await cancel2Result;
+    assertUndefined(cancel1Value);
+    assertUndefined(cancel2Value);
+  },
+
+  async testTee_Cancel_ReverseOrder() {
+    const cancel = recordFunction();
+    const {stream, controller} = newReadableStreamWithController({
+      cancel,
+    });
+    const [stream1, stream2] = stream.tee();
+    const cancel2Result = stream2.cancel('reason2');
+    cancel.assertCallCount(0);
+    await 0;  // Just in case the cancel resolves on the next tick.
+    cancel.assertCallCount(0);
+    const cancel1Result = stream1.cancel('reason1');
+    cancel.assertCallCount(1);
+    assertArrayEquals(
+        ['reason1', 'reason2'], cancel.getLastCall().getArguments()[0]);
+    const cancel1Value = await cancel1Result;
+    const cancel2Value = await cancel2Result;
+    assertUndefined(cancel1Value);
+    assertUndefined(cancel2Value);
+  },
+
+  async testTee_Cancel_NoCancelOnSource() {
+    const {stream, controller} = newReadableStreamWithController();
+    const [stream1, stream2] = stream.tee();
+    const cancel1Result = stream1.cancel('reason1');
+    const cancel2Result = stream2.cancel('reason2');
+    const cancel1Value = await cancel1Result;
+    const cancel2Value = await cancel2Result;
+    assertUndefined(cancel1Value);
+    assertUndefined(cancel2Value);
+  },
+
+  async testTee_Cancel_Rejects() {
+    const error = new Error('error');
+    const cancel = recordFunction(() => {
+      throw error;
+    });
+    const {stream, controller} = newReadableStreamWithController({
+      cancel,
+    });
+    const [stream1, stream2] = stream.tee();
+    const cancel1Result = stream1.cancel('reason1');
+    const cancel2Result = stream2.cancel('reason2');
+    const error1 = await assertRejects(cancel1Result);
+    const error2 = await assertRejects(cancel2Result);
+    assertEquals(error, error1);
+    assertEquals(error, error2);
+  },
+
+  async testTee_Locked() {
+    const stream = newReadableStream();
+    stream.getReader();
+    assertThrows(() => {
+      stream.tee();
+    });
+  },
 });
 
 /**
