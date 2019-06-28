@@ -42,6 +42,12 @@ const SUPPORTS_STRICT_MODE = (function() {
                                return this;
                              })() === undefined;
 
+/**
+ * @type {boolean}
+ * @suppress {strictMissingProperties}
+ * */
+const MICROTASKS_EXIST = Promise.toString().indexOf('[native code]') >= 0;
+
 /** @type {!MockClock} */
 const mockClock = new MockClock();
 
@@ -2151,6 +2157,17 @@ testSuite({
 
     mockClock.tick();
     assertEquals(0, unhandledRejections.getCallCount());
+  },
+
+  async testUnhandledRejectionNotFiredWhenAwaitingARejectedGoogPromise() {
+    try {
+      await GoogPromise.reject(sentinel);
+    } catch (e) {
+      // Expected
+    }
+
+    // TODO(b/136116638): Expect 0 unhandled rejections in all environemnts.
+    assertEquals(MICROTASKS_EXIST ? 1 : 0, unhandledRejections.getCallCount());
   },
 
   testThenableInterface() {

@@ -1200,7 +1200,7 @@ async function testAssertRejects_nonThenables() {
 }
 
 function testAssertRejects_deferred() {
-  return internalTestAssertRejects((fn) => {
+  return internalTestAssertRejects(true, (fn) => {
     const d = new goog.async.Deferred();
     try {
       fn((val) => d.callback(), (err) => d.errback(err));
@@ -1212,27 +1212,27 @@ function testAssertRejects_deferred() {
 }
 
 function testAssertRejects_googPromise() {
-  return internalTestAssertRejects((fn) => new goog.Promise(fn));
+  return internalTestAssertRejects(true, (fn) => new goog.Promise(fn));
 }
 
 function testAssertRejects_promise() {
-  return internalTestAssertRejects((fn) => new Promise(fn));
+  return internalTestAssertRejects(false, (fn) => new Promise(fn));
 }
 
 function testAssertRejects_asyncFunction_awaitingGoogPromise() {
-  return internalTestAssertRejects(async (fn) => {
-    await new goog.Promise(fn, undefined, true);
+  return internalTestAssertRejects(true, async (fn) => {
+    await new goog.Promise(fn);
   });
 }
 
 function testAssertRejects_asyncFunction_awaitingPromise() {
-  return internalTestAssertRejects(async (fn) => {
+  return internalTestAssertRejects(false, async (fn) => {
     await new Promise(fn);
   });
 }
 
 function testAssertRejects_asyncFunction_thatThrows() {
-  return internalTestAssertRejects(async (fn) => {
+  return internalTestAssertRejects(false, async (fn) => {
     fn(() => {}, (err) => {
       throw err;
     });
@@ -1243,40 +1243,52 @@ function testAssertRejects_asyncFunction_thatThrows() {
  * Runs test suite (function) for a `Thenable` implementation covering
  * rejection.
  *
+ * @param {boolean} swallowUnhandledRejections
  * @param {function(function(function(?), function(?))): !Thenable<?>} factory
  */
-async function internalTestAssertRejects(factory) {
-  let e;
-  e = await assertRejects(
-      'valid IThenable constructor throws Error', factory(() => {
-        throw new Error('test0');
-      }));
-  assertEquals('test0', e.message);
+async function internalTestAssertRejects(swallowUnhandledRejections, factory) {
+  try {
+    // TODO(b/136116638): Stop the unhandled rejection handler from firing
+    // rather than swallowing the errors.
+    if (swallowUnhandledRejections) {
+      goog.Promise.setUnhandledRejectionHandler(goog.nullFunction);
+    }
 
-  e = await assertRejects(
-      'valid IThenable constructor throws string error', factory(() => {
-        throw 'test1';
-      }));
-  assertEquals('test1', e);
+    let e;
+    e = await assertRejects(
+        'valid IThenable constructor throws Error', factory(() => {
+          throw new Error('test0');
+        }));
+    assertEquals('test0', e.message);
 
-  e = await assertRejects(
-      'valid IThenable rejects Error', factory((_, reject) => {
-        reject(new Error('test2'));
-      }));
-  assertEquals('test2', e.message);
+    e = await assertRejects(
+        'valid IThenable constructor throws string error', factory(() => {
+          throw 'test1';
+        }));
+    assertEquals('test1', e);
 
-  e = await assertRejects(
-      'valid IThenable rejects string error', factory((_, reject) => {
-        reject('test3');
-      }));
-  assertEquals('test3', e);
+    e = await assertRejects(
+        'valid IThenable rejects Error', factory((_, reject) => {
+          reject(new Error('test2'));
+        }));
+    assertEquals('test2', e.message);
 
-  e = await assertRejects(
-      'assertRejects should fail with a resolved thenable', (async () => {
-        await assertRejects(factory((resolve) => resolve()));
-        fail('should always throw.');
-      })());
-  assertEquals('IThenable passed into assertRejects did not reject', e.message);
+    e = await assertRejects(
+        'valid IThenable rejects string error', factory((_, reject) => {
+          reject('test3');
+        }));
+    assertEquals('test3', e);
+
+    e = await assertRejects(
+        'assertRejects should fail with a resolved thenable', (async () => {
+          await assertRejects(factory((resolve) => resolve()));
+          fail('should always throw.');
+        })());
+    assertEquals(
+        'IThenable passed into assertRejects did not reject', e.message);
+  } finally {
+    goog.Promise.setUnhandledRejectionHandler(goog.async.throwException);
+  }
 }
 
 function testAssertArrayEquals() {

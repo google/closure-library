@@ -944,7 +944,7 @@ goog.addDependency('positioning/viewportposition.js', ['goog.positioning.Viewpor
 goog.addDependency('promise/nativeresolver.js', ['goog.promise.NativeResolver'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('promise/nativeresolver_test.js', ['goog.promise.nativeResolverTest'], ['goog.promise.NativeResolver', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('promise/promise.js', ['goog.Promise'], ['goog.Thenable', 'goog.asserts', 'goog.async.FreeList', 'goog.async.run', 'goog.async.throwException', 'goog.debug.Error', 'goog.promise.Resolver'], {});
-goog.addDependency('promise/promise_test.js', ['goog.PromiseTest'], ['goog.Promise', 'goog.Thenable', 'goog.Timer', 'goog.functions', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.recordFunction', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('promise/promise_test.js', ['goog.PromiseTest'], ['goog.Promise', 'goog.Thenable', 'goog.Timer', 'goog.functions', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.recordFunction', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es8', 'module': 'goog'});
 goog.addDependency('promise/resolver.js', ['goog.promise.Resolver'], [], {});
 goog.addDependency('promise/testsuiteadapter.js', ['goog.promise.testSuiteAdapter'], ['goog.Promise'], {});
 goog.addDependency('promise/thenable.js', ['goog.Thenable'], [], {});
