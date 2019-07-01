@@ -22,11 +22,11 @@ goog.require('goog.testing.mockmatchers');
 goog.require('goog.testing.mockmatchers.ArgumentMatcher');
 
 // A local reference to the mockmatchers namespace.
-var matchers = goog.testing.mockmatchers;
+const matchers = goog.testing.mockmatchers;
 
 // Simple classes to test the InstanceOf matcher.
-var foo = function() {};
-var bar = function() {};
+const foo = function() {};
+const bar = function() {};
 
 // Simple class to test adding error messages to
 // MockExpectation objects
@@ -34,7 +34,7 @@ function MockMock() {
   this.errorMessages = [];
 }
 
-var mockExpect = null;
+let mockExpect = null;
 
 MockMock.prototype.addErrorMessage = function(msg) {
   this.errorMessages.push(msg);
@@ -53,7 +53,7 @@ function setUp() {
 
 function testNoMatchName() {
   // A matcher that does not fill in the match name
-  var matcher = new goog.testing.mockmatchers.ArgumentMatcher(goog.isString);
+  const matcher = new goog.testing.mockmatchers.ArgumentMatcher(goog.isString);
 
   // Make sure the lack of match name doesn't affect the ability
   // to return True/False
@@ -71,7 +71,7 @@ function testNoMatchName() {
 
 
 function testInstanceOf() {
-  var matcher = new matchers.InstanceOf(foo);
+  const matcher = new matchers.InstanceOf(foo);
   assertTrue(matcher.matches(new foo()));
   assertFalse(matcher.matches(new bar()));
 
@@ -85,7 +85,7 @@ function testInstanceOf() {
 
 
 function testTypeOf() {
-  var matcher = new matchers.TypeOf('number');
+  const matcher = new matchers.TypeOf('number');
   assertTrue(matcher.matches(1));
   assertTrue(matcher.matches(2));
   assertFalse(matcher.matches('test'));
@@ -99,7 +99,7 @@ function testTypeOf() {
 
 
 function testRegexpMatch() {
-  var matcher = new matchers.RegexpMatch(/^cho[dtp]/);
+  const matcher = new matchers.RegexpMatch(/^cho[dtp]/);
   assertTrue(matcher.matches('chodhop'));
   assertTrue(matcher.matches('chopper'));
   assertFalse(matcher.matches('chocolate'));
@@ -115,7 +115,7 @@ function testRegexpMatch() {
 
 function testObjectEquals() {
   // Test a simple match.
-  var simpleMatcher = new matchers.ObjectEquals({name: 'Bob', age: 42});
+  const simpleMatcher = new matchers.ObjectEquals({name: 'Bob', age: 42});
   assertTrue(simpleMatcher.matches({name: 'Bob', age: 42}, mockExpect));
   assertEquals(0, mockExpect.getErrorMessageCount());
   expectObjectEqualsFailure(
@@ -139,7 +139,7 @@ function testObjectEquals() {
 }
 
 function testComplexObjectEquals() {
-  var complexMatcher = new matchers.ObjectEquals(
+  const complexMatcher = new matchers.ObjectEquals(
       {a: 'foo', b: 2, c: ['bar', 3], d: {sub1: 'baz', sub2: -1}});
   assertTrue(
       complexMatcher.matches(
@@ -156,7 +156,7 @@ function testComplexObjectEquals() {
 
 
 function testSaveArgument() {
-  var saveMatcher = new matchers.SaveArgument();
+  let saveMatcher = new matchers.SaveArgument();
   assertTrue(saveMatcher.matches(42));
   assertEquals(42, saveMatcher.arg);
 
@@ -189,8 +189,8 @@ function testIsArray() {
 
 
 function testIsArrayLike() {
-  var nodeList = (function() {
-    var div = goog.dom.createElement(goog.dom.TagName.DIV);
+  const nodeList = (function() {
+    const div = goog.dom.createElement(goog.dom.TagName.DIV);
     div.appendChild(goog.dom.createElement(goog.dom.TagName.P));
     div.appendChild(goog.dom.createElement(goog.dom.TagName.P));
     return goog.dom.getElementsByTagName(goog.dom.TagName.DIV, div);
@@ -316,14 +316,14 @@ function testIgnoreArgumentsMatcher() {
 
 function testFlexibleArrayMatcher() {
   // Test that basic lists are verified properly.
-  var a1 = [1, 'test'];
-  var a2 = [1, 'test'];
-  var a3 = [1, 'test', 'extra'];
+  let a1 = [1, 'test'];
+  let a2 = [1, 'test'];
+  let a3 = [1, 'test', 'extra'];
   assertTrue(matchers.flexibleArrayMatcher(a1, a2));
   assertFalse(matchers.flexibleArrayMatcher(a1, a3));
 
   // Test that basic lists with basic class instances are verified properly.
-  var instance = new foo();
+  const instance = new foo();
   a1 = [1, 'test', instance];
   a2 = [1, 'test', instance];
   a3 = [1, 'test', new foo()];
@@ -331,8 +331,8 @@ function testFlexibleArrayMatcher() {
   assertTrue(matchers.flexibleArrayMatcher(a1, a3));
 
   // Create an argument verifier that returns a consistent value.
-  var verifyValue = true;
-  var argVerifier = function() {};
+  let verifyValue = true;
+  const argVerifier = function() {};
   goog.inherits(argVerifier, matchers.ArgumentMatcher);
   argVerifier.prototype.matches = function(arg) { return verifyValue; };
 

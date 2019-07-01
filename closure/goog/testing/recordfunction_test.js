@@ -22,7 +22,7 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordConstructor');
 goog.require('goog.testing.recordFunction');
 
-var stubs = new goog.testing.PropertyReplacer();
+const stubs = new goog.testing.PropertyReplacer();
 
 function setUp() {
   // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
@@ -34,17 +34,17 @@ function tearDown() {
 }
 
 function testNoCalls() {
-  var f = goog.testing.recordFunction(goog.functions.identity);
+  const f = goog.testing.recordFunction(goog.functions.identity);
   assertEquals('call count', 0, f.getCallCount());
   assertNull('last call', f.getLastCall());
   assertArrayEquals('all calls', [], f.getCalls());
 }
 
 function testWithoutArguments() {
-  var f = goog.testing.recordFunction();
+  const f = goog.testing.recordFunction();
   assertUndefined('f(1)', f(1));
   assertEquals('call count', 1, f.getCallCount());
-  var lastCall = f.getLastCall();
+  const lastCall = f.getLastCall();
   assertEquals('original function', goog.nullFunction, lastCall.getFunction());
   assertEquals('this context', window, lastCall.getThis());
   assertArrayEquals('arguments', [1], lastCall.getArguments());
@@ -54,14 +54,14 @@ function testWithoutArguments() {
 }
 
 function testWithIdentityFunction() {
-  var f = goog.testing.recordFunction(goog.functions.identity);
-  var dummyThis = {};
+  const f = goog.testing.recordFunction(goog.functions.identity);
+  const dummyThis = {};
   assertEquals('f(1)', 1, f(1));
   assertEquals('f.call(dummyThis, 2)', 2, f.call(dummyThis, 2));
 
-  var calls = f.getCalls();
-  var firstCall = calls[0];
-  var lastCall = f.getLastCall();
+  const calls = f.getCalls();
+  const firstCall = calls[0];
+  const lastCall = f.getLastCall();
   assertEquals('call count', 2, f.getCallCount());
   assertEquals('last call', calls[1], lastCall);
   assertEquals(
@@ -78,12 +78,14 @@ function testWithIdentityFunction() {
 }
 
 function testWithErrorFunction() {
-  var f = goog.testing.recordFunction(goog.functions.error('error'));
+  const f = goog.testing.recordFunction(goog.functions.error('error'));
 
-  var error = assertThrows('f(1) should throw an error', function() { f(1); });
+  const error = assertThrows('f(1) should throw an error', function() {
+    f(1);
+  });
   assertEquals('error message', 'error', error.message);
   assertEquals('call count', 1, f.getCallCount());
-  var lastCall = f.getLastCall();
+  const lastCall = f.getLastCall();
   assertEquals('this context', window, lastCall.getThis());
   assertArrayEquals('arguments', [1], lastCall.getArguments());
   assertUndefined('return value', lastCall.getReturnValue());
@@ -91,12 +93,12 @@ function testWithErrorFunction() {
 }
 
 function testWithClass() {
-  var ns = {};
+  const ns = {};
   /** @constructor */
   ns.TestClass = function(num) { this.setX(ns.TestClass.identity(1) + num); };
   ns.TestClass.prototype.setX = function(x) { this.x = x; };
   ns.TestClass.identity = function(x) { return x; };
-  var originalNsTestClass = ns.TestClass;
+  const originalNsTestClass = ns.TestClass;
 
   stubs.set(ns, 'TestClass', goog.testing.recordConstructor(ns.TestClass));
   stubs.set(
@@ -106,9 +108,9 @@ function testWithClass() {
       ns.TestClass, 'identity',
       goog.testing.recordFunction(ns.TestClass.identity));
 
-  var obj = new ns.TestClass(2);
+  const obj = new ns.TestClass(2);
   assertEquals('constructor is called once', 1, ns.TestClass.getCallCount());
-  var lastConstructorCall = ns.TestClass.getLastCall();
+  const lastConstructorCall = ns.TestClass.getLastCall();
   assertArrayEquals(
       '... with argument 2', [2], lastConstructorCall.getArguments());
   assertEquals('the created object', obj, lastConstructorCall.getThis());
@@ -128,12 +130,12 @@ function testWithClass() {
 }
 
 function testPopLastCall() {
-  var f = goog.testing.recordFunction();
+  const f = goog.testing.recordFunction();
   f(0);
   f(1);
 
-  var firstCall = f.getCalls()[0];
-  var lastCall = f.getCalls()[1];
+  const firstCall = f.getCalls()[0];
+  const lastCall = f.getCalls()[1];
   assertEquals('return value of popLastCall', lastCall, f.popLastCall());
   assertArrayEquals('1 call remains', [firstCall], f.getCalls());
   assertEquals('next return value of popLastCall', firstCall, f.popLastCall());
@@ -142,7 +144,7 @@ function testPopLastCall() {
 }
 
 function testReset() {
-  var f = goog.testing.recordFunction();
+  const f = goog.testing.recordFunction();
   f(0);
   f(1);
 
@@ -154,7 +156,7 @@ function testReset() {
 }
 
 function testAssertCallCount() {
-  var f = goog.testing.recordFunction(goog.functions.identity);
+  const f = goog.testing.recordFunction(goog.functions.identity);
 
   f.assertCallCount(0);
   f.assertCallCount('Unexpected failure.', 0);
@@ -172,12 +174,17 @@ function testAssertCallCount() {
   f('Bedazzler');
   f.assertCallCount(1);
 
-  var error = assertThrows(function() { f.assertCallCount(11); });
+  const error = assertThrows(function() {
+    f.assertCallCount(11);
+  });
   assertEquals(error.comment, 'Expected 11 call(s), but was 1.');
 
-  var comment = 'This application has requested the Runtime to terminate it ' +
+  const comment =
+      'This application has requested the Runtime to terminate it ' +
       'in an unusual way.';
-  var error2 = assertThrows(function() { f.assertCallCount(comment, 12); });
+  const error2 = assertThrows(function() {
+    f.assertCallCount(comment, 12);
+  });
   assertEquals(error2.comment, 'Expected 12 call(s), but was 1. ' + comment);
 }
 

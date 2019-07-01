@@ -31,7 +31,7 @@ function setUp() {
 }
 
 function testListFormatterArrayDirect() {
-  var fmt = new goog.labs.i18n.ListFormat();
+  const fmt = new goog.labs.i18n.ListFormat();
   assertEquals('One', fmt.format(['One']));
   assertEquals('One and Two', fmt.format(['One', 'Two']));
   assertEquals('One, Two, and Three', fmt.format(['One', 'Two', 'Three']));
@@ -41,9 +41,9 @@ function testListFormatterArrayDirect() {
 }
 
 function testListFormatterArrayIndirect() {
-  var fmt = new goog.labs.i18n.ListFormat();
+  const fmt = new goog.labs.i18n.ListFormat();
 
-  var items = [];
+  const items = [];
 
   items.push('One');
   assertEquals('One', fmt.format(items));
@@ -62,7 +62,7 @@ function testListFormatterArrayIndirect() {
 function testListFormatterFrench() {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_fr;
 
-  var fmt = new goog.labs.i18n.ListFormat();
+  const fmt = new goog.labs.i18n.ListFormat();
   assertEquals('One', fmt.format(['One']));
   assertEquals('One et Two', fmt.format(['One', 'Two']));
   assertEquals('One, Two et Three', fmt.format(['One', 'Two', 'Three']));
@@ -77,9 +77,9 @@ function testListFormatterFrench() {
 // different than '{0} sometext {1}'
 function testListFormatterSpecialLanguages() {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ml;
-  var fmt_ml = new goog.labs.i18n.ListFormat();
+  const fmt_ml = new goog.labs.i18n.ListFormat();
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_zu;
-  var fmt_zu = new goog.labs.i18n.ListFormat();
+  const fmt_zu = new goog.labs.i18n.ListFormat();
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
 
   // Only the end pattern is special with Malayalam
@@ -93,9 +93,9 @@ function testListFormatterSpecialLanguages() {
 }
 
 function testVariousObjectTypes() {
-  var fmt = new goog.labs.i18n.ListFormat();
-  var booleanObject = new Boolean(1);
-  var arrayObject = ['black', 'white'];
+  const fmt = new goog.labs.i18n.ListFormat();
+  const booleanObject = new Boolean(1);
+  const arrayObject = ['black', 'white'];
   // Not sure how "flaky" this is. Firefox and Chrome give the same results,
   // but I am not sure if the JavaScript standard specifies exactly what
   // Array toString does, for instance.
@@ -105,10 +105,10 @@ function testVariousObjectTypes() {
 }
 
 function testListGendersNeutral() {
-  var Gender = goog.labs.i18n.GenderInfo.Gender;
+  const Gender = goog.labs.i18n.GenderInfo.Gender;
 
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
-  var listGen = new goog.labs.i18n.GenderInfo();
+  const listGen = new goog.labs.i18n.GenderInfo();
 
   assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE]));
   assertEquals(Gender.FEMALE, listGen.getListGender([Gender.FEMALE]));
@@ -154,10 +154,10 @@ function testListGendersNeutral() {
 }
 
 function testListGendersMaleTaints() {
-  var Gender = goog.labs.i18n.GenderInfo.Gender;
+  const Gender = goog.labs.i18n.GenderInfo.Gender;
 
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_fr;
-  var listGen = new goog.labs.i18n.GenderInfo();
+  const listGen = new goog.labs.i18n.GenderInfo();
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
 
   assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE]));
@@ -202,10 +202,10 @@ function testListGendersMaleTaints() {
 }
 
 function testListGendersMixedNeutral() {
-  var Gender = goog.labs.i18n.GenderInfo.Gender;
+  const Gender = goog.labs.i18n.GenderInfo.Gender;
 
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_el;
-  var listGen = new goog.labs.i18n.GenderInfo();
+  const listGen = new goog.labs.i18n.GenderInfo();
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
 
   assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE]));
@@ -252,12 +252,12 @@ function testListGendersMixedNeutral() {
 }
 
 function testListGendersVariousCallTypes() {
-  var Gender = goog.labs.i18n.GenderInfo.Gender;
+  const Gender = goog.labs.i18n.GenderInfo.Gender;
 
   // Using French because with English the results are mostly Gender.OTHER
   // so we can detect fewer problems
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_fr;
-  var listGen = new goog.labs.i18n.GenderInfo();
+  const listGen = new goog.labs.i18n.GenderInfo();
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
 
   // Anynymous Arrays
@@ -278,17 +278,17 @@ function testListGendersVariousCallTypes() {
       Gender.MALE, listGen.getListGender([Gender.FEMALE, Gender.OTHER]));
 
   // Arrays
-  var arrayM = [Gender.MALE];
-  var arrayF = [Gender.FEMALE];
-  var arrayO = [Gender.OTHER];
+  const arrayM = [Gender.MALE];
+  const arrayF = [Gender.FEMALE];
+  const arrayO = [Gender.OTHER];
 
-  var arrayMM = [Gender.MALE, Gender.MALE];
-  var arrayFF = [Gender.FEMALE, Gender.FEMALE];
-  var arrayOO = [Gender.OTHER, Gender.OTHER];
+  const arrayMM = [Gender.MALE, Gender.MALE];
+  const arrayFF = [Gender.FEMALE, Gender.FEMALE];
+  const arrayOO = [Gender.OTHER, Gender.OTHER];
 
-  var arrayMF = [Gender.MALE, Gender.FEMALE];
-  var arrayMO = [Gender.MALE, Gender.OTHER];
-  var arrayFO = [Gender.FEMALE, Gender.OTHER];
+  const arrayMF = [Gender.MALE, Gender.FEMALE];
+  const arrayMO = [Gender.MALE, Gender.OTHER];
+  const arrayFO = [Gender.FEMALE, Gender.OTHER];
 
   assertEquals(Gender.MALE, listGen.getListGender(arrayM));
   assertEquals(Gender.FEMALE, listGen.getListGender(arrayF));

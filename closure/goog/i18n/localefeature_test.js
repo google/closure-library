@@ -13,12 +13,12 @@
 // limitations under the License.
 
 goog.module('goog.i18n.LocaleFeatureTest');
-var LocaleFeature = goog.require('goog.i18n.LocaleFeature');
+const LocaleFeature = goog.require('goog.i18n.LocaleFeature');
 
 
 goog.setTestOnly('goog.i18n.localeFeatureTest');
 
-var testSuite = goog.require('goog.testing.testSuite');
+const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
   testUseEcmaScript: function() {

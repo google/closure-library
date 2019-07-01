@@ -52,11 +52,15 @@ TestTooltip.prototype.getPositioningStrategy = function() {
 };
 
 
-var tt, clock, handler, eventQueue, dom;
+let tt;
+let clock;
+let handler;
+let eventQueue;
+let dom;
 
 // Allow positions to be off by one in gecko as it reports scrolling
 // offsets in steps of 2.
-var ALLOWED_OFFSET = goog.userAgent.GECKO ? 1 : 0;
+const ALLOWED_OFFSET = goog.userAgent.GECKO ? 1 : 0;
 
 function setUp() {
   // We get access denied error when accessing the iframe in IE on the farm
@@ -65,8 +69,8 @@ function setUp() {
   if (goog.userAgent.EDGE_OR_IE) {
     dom = goog.dom.getDomHelper(document);
   } else {
-    var frame = document.getElementById('testframe');
-    var doc = goog.dom.getFrameContentDocument(frame);
+    const frame = document.getElementById('testframe');
+    const doc = goog.dom.getFrameContentDocument(frame);
     dom = goog.dom.getDomHelper(doc);
   }
 
@@ -98,7 +102,7 @@ function tearDown() {
 }
 
 function testConstructor() {
-  var element = tt.getElement();
+  const element = tt.getElement();
   assertNotNull('Tooltip should have non-null element', element);
   assertEquals(
       'Tooltip element should be the DIV we created', dom.getElement('popup'),
@@ -109,10 +113,10 @@ function testConstructor() {
 }
 
 function testTooltipShowsAndHides() {
-  var hoverTarget = dom.getElement('hovertarget');
-  var elsewhere = dom.getElement('notpopup');
-  var element = tt.getElement();
-  var position = new goog.math.Coordinate(5, 5);
+  const hoverTarget = dom.getElement('hovertarget');
+  const elsewhere = dom.getElement('notpopup');
+  const element = tt.getElement();
+  const position = new goog.math.Coordinate(5, 5);
   assertNotNull('Tooltip should have non-null element', element);
   assertEquals(
       'Initial state should be inactive', goog.ui.Tooltip.State.INACTIVE,
@@ -141,10 +145,10 @@ function testTooltipShowsAndHides() {
 }
 
 function testMultipleTargets() {
-  var firstTarget = dom.getElement('hovertarget');
-  var secondTarget = dom.getElement('second');
-  var elsewhere = dom.getElement('notpopup');
-  var element = tt.getElement();
+  const firstTarget = dom.getElement('hovertarget');
+  const secondTarget = dom.getElement('second');
+  const elsewhere = dom.getElement('notpopup');
+  const element = tt.getElement();
 
   tt.attach(firstTarget);
   tt.attach(secondTarget);
@@ -205,8 +209,8 @@ function testMultipleTargets() {
 }
 
 function testRequireInteraction() {
-  var hoverTarget = dom.getElement('hovertarget');
-  var elsewhere = dom.getElement('notpopup');
+  const hoverTarget = dom.getElement('hovertarget');
+  const elsewhere = dom.getElement('notpopup');
 
   tt.attach(hoverTarget);
   tt.setShowDelayMs(100);
@@ -250,7 +254,7 @@ function testRequireInteraction() {
 }
 
 function testDispose() {
-  var element = tt.getElement();
+  const element = tt.getElement();
   tt.dispose();
   assertTrue('Tooltip should have been disposed of', tt.isDisposed());
   assertNull(
@@ -261,7 +265,7 @@ function testDispose() {
 }
 
 function testNested() {
-  var ttNested;
+  let ttNested;
   tt.getElement().appendChild(
       dom.createDom(goog.dom.TagName.SPAN, {id: 'nested'}, 'Goodbye'));
   ttNested = new goog.ui.Tooltip(undefined, undefined, dom);
@@ -271,11 +275,11 @@ function testNested() {
   tt.setHideDelayMs(50);
   ttNested.setShowDelayMs(75);
   ttNested.setHideDelayMs(25);
-  var nestedAnchor = dom.getElement('nested');
-  var hoverTarget = dom.getElement('hovertarget');
-  var outerTooltip = dom.getElement('popup');
-  var innerTooltip = dom.getElement('nestedPopup');
-  var elsewhere = dom.getElement('notpopup');
+  const nestedAnchor = dom.getElement('nested');
+  const hoverTarget = dom.getElement('hovertarget');
+  const outerTooltip = dom.getElement('popup');
+  const innerTooltip = dom.getElement('nestedPopup');
+  const elsewhere = dom.getElement('notpopup');
 
   ttNested.attach(nestedAnchor);
   tt.attach(hoverTarget);
@@ -338,10 +342,10 @@ function testNested() {
 
 function testPosition() {
   dom.getDocument().body.style.paddingBottom = '150%';  // force scrollbar
-  var scrollEl = dom.getDocumentScrollElement();
+  const scrollEl = dom.getDocumentScrollElement();
 
-  var anchor = dom.getElement('hovertarget');
-  var tooltip = new goog.ui.Tooltip(anchor, 'foo');
+  const anchor = dom.getElement('hovertarget');
+  const tooltip = new goog.ui.Tooltip(anchor, 'foo');
   tooltip.getElement().style.position = 'absolute';
 
   tooltip.cursorPosition.x = 100;
@@ -355,7 +359,7 @@ function testPosition() {
 
   scrollEl.scrollTop = 50;
 
-  var offset = goog.style.getPageOffset(tooltip.getElement());
+  const offset = goog.style.getPageOffset(tooltip.getElement());
   assertTrue(
       'Tooltip should be at cursor position when scrolled',
       Math.abs(offset.x - 110) <= ALLOWED_OFFSET);  // 100 + padding 10
@@ -369,8 +373,8 @@ function testPosition() {
 }
 
 function testPositionOverride() {
-  var anchor = dom.getElement('hovertarget');
-  var tooltip = new TestTooltip(anchor, 'foo', dom);
+  const anchor = dom.getElement('hovertarget');
+  const tooltip = new TestTooltip(anchor, 'foo', dom);
 
   tooltip.showForElement(anchor);
 
@@ -384,7 +388,7 @@ function testHtmlContent() {
   tt.setSafeHtml(
       goog.html.testing.newSafeHtmlForTest(
           '<span class="theSpan">Hello</span>'));
-  var spanEl = goog.dom.getElementByClass('theSpan', tt.getElement());
+  const spanEl = goog.dom.getElementByClass('theSpan', tt.getElement());
   assertEquals('Hello', goog.dom.getTextContent(spanEl));
 }
 
@@ -393,7 +397,7 @@ function testSetElementNull() {
 }
 
 function testFocusBlurElementsInTooltip() {
-  var anchorEl = dom.getElement('hovertarget');
+  const anchorEl = dom.getElement('hovertarget');
   goog.dom.setFocusableTabIndex(anchorEl, true);
   tt.attach(anchorEl);
   goog.testing.events.fireFocusEvent(anchorEl);
@@ -422,7 +426,7 @@ function testFocusBlurElementsInTooltip() {
 }
 
 function testFocusElementInTooltipThenBackToAnchor() {
-  var anchorEl = dom.getElement('hovertarget');
+  const anchorEl = dom.getElement('hovertarget');
   goog.dom.setFocusableTabIndex(anchorEl, true);
   tt.attach(anchorEl);
   goog.testing.events.fireFocusEvent(anchorEl);

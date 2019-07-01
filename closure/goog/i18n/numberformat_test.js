@@ -40,9 +40,9 @@ goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
 
-var expectedFailures;
+let expectedFailures;
 
-var stubs = new goog.testing.PropertyReplacer();
+const stubs = new goog.testing.PropertyReplacer();
 
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
@@ -70,17 +70,17 @@ function tearDown() {
  * @param {string} str2
  */
 function assertVeryBigNumberEquals(str1, str2) {
-  var digitsAnonymized = function(s) {
+  const digitsAnonymized = function(s) {
     return s.replace(/[0-9]/g, '#');
   };
-  var valueOf = function(s) {
+  const valueOf = function(s) {
     return parseFloat(s.replace(/[^0-9.e+-]/g, ''));
   };
 
   assertEquals(digitsAnonymized(str1), digitsAnonymized(str2));
 
-  var val1 = valueOf(str1);
-  var val2 = valueOf(str2);
+  const val1 = valueOf(str1);
+  const val2 = valueOf(str2);
   assertTrue(val1 > 1);
   assertTrue(val2 > 1);
 
@@ -89,8 +89,8 @@ function assertVeryBigNumberEquals(str1, str2) {
 }
 
 function testVeryBigNumber() {
-  var str;
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
+  let str;
+  let fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
   str = fmt.format(1785599999999999888888888888888);
   // when comparing big number, various platform have small different in
   // precision. We have to tolerate that using assertVeryBigNumberEquals.
@@ -133,8 +133,8 @@ function testVeryBigNumber() {
 }
 
 function testStandardFormat() {
-  var str;
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
+  let str;
+  let fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
   str = fmt.format(1234.579);
   assertEquals('$1,234.58', str);
   fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
@@ -153,8 +153,8 @@ function testStandardFormat() {
 }
 
 function testNegativePercentage() {
-  var str;
-  var fmt = new goog.i18n.NumberFormat('#,##0.00%');
+  let str;
+  let fmt = new goog.i18n.NumberFormat('#,##0.00%');
   str = fmt.format(-1234.56);
   assertEquals('-123,456.00%', str);
 
@@ -164,8 +164,8 @@ function testNegativePercentage() {
 }
 
 function testNegativePercentagePattern() {
-  var str;
-  var fmt = new goog.i18n.NumberFormat('#,##0.00%;(#,##0.00%)');
+  let str;
+  const fmt = new goog.i18n.NumberFormat('#,##0.00%;(#,##0.00%)');
   str = fmt.format(1234.56);
   assertEquals('123,456.00%', str);
 
@@ -174,10 +174,10 @@ function testNegativePercentagePattern() {
 }
 
 function testCustomPercentage() {
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.PERCENT);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.PERCENT);
   fmt.setMaximumFractionDigits(1);
   fmt.setMinimumFractionDigits(1);
-  var str = fmt.format(0.1291);
+  let str = fmt.format(0.1291);
   assertEquals('12.9%', str);
   fmt.setMaximumFractionDigits(2);
   fmt.setMinimumFractionDigits(1);
@@ -194,9 +194,9 @@ function testCustomPercentage() {
 }
 
 function testBasicParse() {
-  var value;
+  let value;
 
-  var fmt = new goog.i18n.NumberFormat('0.0000');
+  const fmt = new goog.i18n.NumberFormat('0.0000');
   value = fmt.parse('123.4579');
   assertEquals(123.4579, value);
 
@@ -208,9 +208,9 @@ function testBasicParse() {
 }
 
 function testPrefixParse() {
-  var value;
+  let value;
 
-  var fmt = new goog.i18n.NumberFormat('0.0;(0.0)');
+  const fmt = new goog.i18n.NumberFormat('0.0;(0.0)');
   value = fmt.parse('123.4579');
   assertEquals(123.4579, value);
 
@@ -219,9 +219,9 @@ function testPrefixParse() {
 }
 
 function testPrecentParse() {
-  var value;
+  let value;
 
-  var fmt = new goog.i18n.NumberFormat('0.0;(0.0)');
+  const fmt = new goog.i18n.NumberFormat('0.0;(0.0)');
   value = fmt.parse('123.4579%');
   assertEquals((123.4579 / 100), value);
 
@@ -236,9 +236,9 @@ function testPrecentParse() {
 }
 
 function testPercentAndPerMillAdvance() {
-  var value;
-  var pos = [0];
-  var fmt = new goog.i18n.NumberFormat('0');
+  let value;
+  const pos = [0];
+  const fmt = new goog.i18n.NumberFormat('0');
   value = fmt.parse('120%', pos);
   assertEquals(1.2, value);
   assertEquals(4, pos[0]);
@@ -249,24 +249,24 @@ function testPercentAndPerMillAdvance() {
 }
 
 function testPercentAndPerMillParsing() {
-  var implicitFmt = new goog.i18n.NumberFormat('0;(0)');
+  const implicitFmt = new goog.i18n.NumberFormat('0;(0)');
   assertEquals(123 / 100, implicitFmt.parse('123%'));
   assertEquals(-123 / 100, implicitFmt.parse('(123%)'));
   assertEquals(123 / 1000, implicitFmt.parse('123‰'));
   assertEquals(-123 / 1000, implicitFmt.parse('(123‰)'));
 
-  var explicitFmtPercent = new goog.i18n.NumberFormat('0%;(0%)');
+  const explicitFmtPercent = new goog.i18n.NumberFormat('0%;(0%)');
   assertEquals(123 / 100, explicitFmtPercent.parse('123%'));
   assertEquals(-123 / 100, explicitFmtPercent.parse('(123%)'));
 
-  var explicitFmtPermill = new goog.i18n.NumberFormat('0‰;(0‰)');
+  const explicitFmtPermill = new goog.i18n.NumberFormat('0‰;(0‰)');
   assertEquals(123 / 1000, explicitFmtPermill.parse('123‰'));
   assertEquals(-123 / 1000, explicitFmtPermill.parse('(123‰)'));
 }
 
 function testInfinityParse() {
-  var value;
-  var fmt = new goog.i18n.NumberFormat('0.0;(0.0)');
+  let value;
+  const fmt = new goog.i18n.NumberFormat('0.0;(0.0)');
 
   // gwt need to add those symbols first
   value = fmt.parse('\u221e');
@@ -276,8 +276,8 @@ function testInfinityParse() {
   assertEquals(Number.NEGATIVE_INFINITY, value);
 }
 function testExponentParse() {
-  var value;
-  var fmt;
+  let value;
+  let fmt;
 
   fmt = new goog.i18n.NumberFormat('#E0');
   value = fmt.parse('1.234E3');
@@ -299,9 +299,9 @@ function testExponentParse() {
 }
 
 function testGroupingParse() {
-  var value;
+  let value;
 
-  var fmt = new goog.i18n.NumberFormat('#,###');
+  let fmt = new goog.i18n.NumberFormat('#,###');
   value = fmt.parse('1,234,567,890');
   assertEquals(1234567890, value);
   value = fmt.parse('12,3456,7890');
@@ -313,8 +313,8 @@ function testGroupingParse() {
 }
 
 function testParsingStop() {
-  var pos = [0];
-  var fmt = new goog.i18n.NumberFormat('###0.###E0');
+  const pos = [0];
+  const fmt = new goog.i18n.NumberFormat('###0.###E0');
 
   assertEquals(123.457, fmt.parse('123.457', pos));
   assertEquals(7, pos[0]);
@@ -345,15 +345,15 @@ function testParsingStop() {
 }
 
 function testBasicFormat() {
-  var fmt = new goog.i18n.NumberFormat('0.0000');
-  var str = fmt.format(123.45789179565757);
+  const fmt = new goog.i18n.NumberFormat('0.0000');
+  const str = fmt.format(123.45789179565757);
   assertEquals('123.4579', str);
 }
 
 function testGrouping() {
-  var str;
+  let str;
 
-  var fmt = new goog.i18n.NumberFormat('#,###');
+  let fmt = new goog.i18n.NumberFormat('#,###');
   str = fmt.format(1234567890);
   assertEquals('1,234,567,890', str);
 
@@ -368,8 +368,8 @@ function testGrouping() {
 
 function testIndiaNumberGrouping() {
   // Test for a known grouping used and recognized in India
-  var fmt = new goog.i18n.NumberFormat('#,##,###');
-  var str = fmt.format(1);
+  const fmt = new goog.i18n.NumberFormat('#,##,###');
+  let str = fmt.format(1);
   assertEquals('1', str);
   str = fmt.format(12);
   assertEquals('12', str);
@@ -415,8 +415,8 @@ function testIndiaNumberGrouping() {
 
 function testUnknownNumberGroupings() {
   // Test for any future unknown grouping format in addition to India
-  var fmt = new goog.i18n.NumberFormat('#,####,##,###');
-  var str = fmt.format(1);
+  let fmt = new goog.i18n.NumberFormat('#,####,##,###');
+  let str = fmt.format(1);
   assertEquals('1', str);
   str = fmt.format(12);
   assertEquals('12', str);
@@ -521,17 +521,17 @@ function testUnknownNumberGroupings() {
 }
 
 function testPerMill() {
-  var str;
+  let str;
 
-  var fmt = new goog.i18n.NumberFormat('###.###\u2030');
+  const fmt = new goog.i18n.NumberFormat('###.###\u2030');
   str = fmt.format(0.4857);
   assertEquals('485.7\u2030', str);
 }
 
 function testCurrency() {
-  var str;
+  let str;
 
-  var fmt = new goog.i18n.NumberFormat('\u00a4#,##0.00;-\u00a4#,##0.00');
+  let fmt = new goog.i18n.NumberFormat('\u00a4#,##0.00;-\u00a4#,##0.00');
   str = fmt.format(1234.56);
   assertEquals('$1,234.56', str);
   str = fmt.format(-1234.56);
@@ -591,9 +591,9 @@ function testCurrency() {
 }
 
 function testQuotes() {
-  var str;
+  let str;
 
-  var fmt = new goog.i18n.NumberFormat('a\'fo\'\'o\'b#');
+  let fmt = new goog.i18n.NumberFormat('a\'fo\'\'o\'b#');
   str = fmt.format(123);
   assertEquals('afo\'ob123', str);
 
@@ -611,8 +611,8 @@ function testQuotes() {
 }
 
 function testZeros() {
-  var str;
-  var fmt;
+  let str;
+  let fmt;
 
   fmt = new goog.i18n.NumberFormat('#.#');
   str = fmt.format(0);
@@ -645,8 +645,8 @@ function testZeros() {
 }
 
 function testExponential() {
-  var str;
-  var fmt;
+  let str;
+  let fmt;
 
   fmt = new goog.i18n.NumberFormat('0.####E0');
   str = fmt.format(0.01234);
@@ -823,15 +823,15 @@ function testExponential() {
 }
 
 function testPlusSignInExponentPart() {
-  var fmt;
+  let fmt;
   fmt = new goog.i18n.NumberFormat('0E+0');
   str = fmt.format(45678000);
   assertEquals('5E+7', str);
 }
 
 function testGroupingParse2() {
-  var value;
-  var fmt;
+  let value;
+  let fmt;
 
   fmt = new goog.i18n.NumberFormat('#,###');
   value = fmt.parse('1,234,567,890');
@@ -846,8 +846,8 @@ function testGroupingParse2() {
 }
 
 function testApis() {
-  var fmt;
-  var str;
+  let fmt;
+  let str;
 
   fmt = new goog.i18n.NumberFormat('#,###');
   str = fmt.format(1234567890);
@@ -880,8 +880,8 @@ function testLocaleSwitch() {
     return;
   }
 
-  var fmt = new goog.i18n.NumberFormat('#,###');
-  var str = fmt.format(1234567890);
+  let fmt = new goog.i18n.NumberFormat('#,###');
+  let str = fmt.format(1234567890);
   assertEquals('1\u202F234\u202F567\u202F890', str);
 
   fmt = new goog.i18n.NumberFormat('\u00a4#,##0.00;-\u00a4#,##0.00');
@@ -911,8 +911,8 @@ function testFrenchParse() {
     return;
   }
 
-  var fmt = new goog.i18n.NumberFormat('0.0000');
-  var value = fmt.parse('0,30');
+  let fmt = new goog.i18n.NumberFormat('0.0000');
+  let value = fmt.parse('0,30');
   assertEquals(0.30, value);
 
   fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
@@ -933,8 +933,8 @@ function testFrenchParse() {
 
 
 function testFailParseShouldThrow() {
-  var fmt = new goog.i18n.NumberFormat('0.0000');
-  var value = fmt.parse('x');
+  let fmt = new goog.i18n.NumberFormat('0.0000');
+  let value = fmt.parse('x');
   assertNaN(value);
 
   fmt = new goog.i18n.NumberFormat('0.000x');
@@ -962,8 +962,8 @@ function testEnforceAscii() {
   goog.i18n.NumberFormatSymbols_u_nu_latn =
       goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn;
 
-  var fmt = new goog.i18n.NumberFormat('0.0000%');
-  var str = fmt.format(123.45789179565757);
+  let fmt = new goog.i18n.NumberFormat('0.0000%');
+  let str = fmt.format(123.45789179565757);
   assertEquals('١٢٣٤٥٫٧٨٩٢٪؜', str);
 
   goog.i18n.NumberFormat.setEnforceAsciiDigits(true);
@@ -973,7 +973,7 @@ function testEnforceAscii() {
 }
 
 function testFractionDigits() {
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setMinimumFractionDigits(4);
   fmt.setMaximumFractionDigits(6);
   assertEquals('0.1230', fmt.format(0.123));
@@ -985,16 +985,16 @@ function testFractionDigits_possibleLossOfPrecision() {
   // See: https://github.com/google/closure-library/issues/916
 
   // Given
-  var fracDigits = 12;
-  var mantissa = 1.1;
-  var magnitude = 15;
-  var value = parseFloat(mantissa + 'e' + magnitude);
-  var shiftedValue = parseFloat(mantissa + 'e' + (fracDigits + magnitude));
+  const fracDigits = 12;
+  const mantissa = 1.1;
+  const magnitude = 15;
+  const value = parseFloat(mantissa + 'e' + magnitude);
+  const shiftedValue = parseFloat(mantissa + 'e' + (fracDigits + magnitude));
 
   // Confirm that this case risks loss of precision.
   assertNotEquals(shiftedValue / Math.pow(10, fracDigits), value);
 
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setMaximumFractionDigits(fracDigits);
 
   // When & Then
@@ -1002,7 +1002,7 @@ function testFractionDigits_possibleLossOfPrecision() {
 }
 
 function testFractionDigitsSetOutOfOrder() {
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   // First, setup basic min/max
   fmt.setMinimumFractionDigits(2);
   fmt.setMaximumFractionDigits(2);
@@ -1015,7 +1015,7 @@ function testFractionDigitsSetOutOfOrder() {
 }
 
 function testFractionDigitsInvalid() {
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setMinimumFractionDigits(2);
   fmt.setMaximumFractionDigits(1);
   try {
@@ -1026,16 +1026,16 @@ function testFractionDigitsInvalid() {
 }
 
 function testFractionDigitsTooHigh() {
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setMaximumFractionDigits(308);
-  var err = assertThrows(function() {
+  const err = assertThrows(function() {
     fmt.setMaximumFractionDigits(309);
   });
   assertEquals('Unsupported maximum fraction digits: 309', err.message);
 }
 
 function testSignificantDigitsEqualToMax() {
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setMinimumFractionDigits(0);
   fmt.setMaximumFractionDigits(2);
 
@@ -1054,7 +1054,7 @@ function testSignificantDigitsEqualToMax() {
 }
 
 function testSignificantDigitsLessThanMax() {
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setMinimumFractionDigits(0);
   fmt.setMaximumFractionDigits(4);
   fmt.setSignificantDigits(1);
@@ -1068,7 +1068,7 @@ function testSignificantDigitsLessThanMax() {
 
 function testSignificantDigitsMoreThanMax() {
   // Max fractional digits should be absolute
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setMinimumFractionDigits(0);
   fmt.setMaximumFractionDigits(2);
   fmt.setSignificantDigits(3);
@@ -1084,9 +1084,9 @@ function testNegativeDecimalFinnish() {
   // Finnish uses a full-width dash for negative.
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fi;
 
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
 
-  var str = fmt.format(-123);
+  const str = fmt.format(-123);
   assertEquals('−123', str);
 }
 
@@ -1096,10 +1096,10 @@ function testSimpleCompactFrench() {
   goog.i18n.CompactNumberFormatSymbols =
       goog.i18n.CompactNumberFormatSymbols_fr;
 
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
 
-  var str = fmt.format(123400000);
+  const str = fmt.format(123400000);
   assertEquals('123\u00A0M', str);
 }
 
@@ -1109,66 +1109,66 @@ function testSimpleCompactGerman() {
   goog.i18n.CompactNumberFormatSymbols =
       goog.i18n.CompactNumberFormatSymbols_de;
 
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
 
   // The german short compact decimal has a simple '0' for 1000's, which is
   // supposed to be interpreted as 'leave the number as-is'.
   // (The number itself will still be formatted with the '.', but no rounding)
-  var str = fmt.format(1234);
+  const str = fmt.format(1234);
   assertEquals('1.234', str);
 }
 
 function testSimpleCompact1() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
 
-  var str = fmt.format(1234);
+  const str = fmt.format(1234);
   assertEquals('1.2K', str);
 }
 
 function testSimpleCompact2() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
 
-  var str = fmt.format(12345);
+  const str = fmt.format(12345);
   assertEquals('12K', str);
 }
 
 function testRoundingCompact() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
 
-  var str = fmt.format(999999);
+  const str = fmt.format(999999);
   assertEquals('1M', str);  // as opposed to 1000k
 }
 
 function testRoundingCompactNegative() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
 
-  var str = fmt.format(-999999);
+  const str = fmt.format(-999999);
   assertEquals('-1M', str);
 }
 
 function testCompactSmall() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
 
-  var str = fmt.format(0.1234);
+  const str = fmt.format(0.1234);
   assertEquals('0.12', str);
 }
 
 function testCompactLong() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_LONG);
 
-  var str = fmt.format(12345);
+  const str = fmt.format(12345);
   assertEquals('12 thousand', str);
 }
 
 function testCompactWithoutSignificant() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
   fmt.setSignificantDigits(0);
   fmt.setMinimumFractionDigits(2);
@@ -1182,7 +1182,7 @@ function testCompactWithoutSignificant() {
 }
 
 function testCompactWithoutSignificant2() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
   fmt.setSignificantDigits(0);
   fmt.setMinimumFractionDigits(0);
@@ -1196,17 +1196,17 @@ function testCompactWithoutSignificant2() {
 }
 
 function testCompactFallbacks() {
-  var cdfSymbols = {COMPACT_DECIMAL_SHORT_PATTERN: {'1000': {'other': '0K'}}};
+  const cdfSymbols = {COMPACT_DECIMAL_SHORT_PATTERN: {'1000': {'other': '0K'}}};
 
   goog.i18n.CompactNumberFormatSymbols = cdfSymbols;
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_LONG);
-  var str = fmt.format(220000000000000);
+  const str = fmt.format(220000000000000);
   assertEquals('220,000,000,000K', str);
 }
 
 function testShowTrailingZerosWithSignificantDigits() {
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   fmt.setSignificantDigits(2);
   fmt.setShowTrailingZeros(true);
 
@@ -1224,7 +1224,7 @@ function testShowTrailingZerosWithSignificantDigits() {
 
 
 function testShowTrailingZerosWithSignificantDigitsCompactShort() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
   fmt.setSignificantDigits(2);
   fmt.setShowTrailingZeros(true);
@@ -1238,13 +1238,14 @@ function testCurrencyCodeOrder() {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fr;
   goog.i18n.CompactNumberFormatSymbols =
       goog.i18n.CompactNumberFormatSymbols_fr;
-  var fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
+  let fmt = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
   assertFalse(fmt.isCurrencyCodeBeforeValue());
 
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
   goog.i18n.CompactNumberFormatSymbols =
       goog.i18n.CompactNumberFormatSymbols_en;
-  var fmt1 = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
+  const fmt1 =
+      new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
   assertTrue(fmt1.isCurrencyCodeBeforeValue());
 
   // Check that we really have different formatters with different patterns
@@ -1308,7 +1309,7 @@ function testCurrencyCodeOrder() {
 }
 
 function testCompactWithBaseFormattingNumber() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
 
   fmt.setBaseFormatting(1000);
@@ -1331,7 +1332,7 @@ function testCompactWithBaseFormattingFrench() {
       goog.i18n, 'CompactNumberFormatSymbols',
       goog.i18n.CompactNumberFormatSymbols_fr);
 
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
   assertEquals('123\u00A0M', fmt.format(123400000));
   fmt.setBaseFormatting(1000);
@@ -1339,7 +1340,7 @@ function testCompactWithBaseFormattingFrench() {
 }
 
 function testGetBaseFormattingNumber() {
-  var fmt =
+  const fmt =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.COMPACT_SHORT);
   assertEquals(null, fmt.getBaseFormatting());
   fmt.setBaseFormatting(10000);
@@ -1349,28 +1350,31 @@ function testGetBaseFormattingNumber() {
 // Moved Polish, Romanian, other currencies to tier 2, check that it works now
 function testPolish() {
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_pl;
-  var fmPl = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
+  const fmPl =
+      new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
   assertEquals('100,00\u00A0z\u0142', fmPl.format(100));  // 100.00 zł
 
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ro;
-  var fmRo = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
+  const fmRo =
+      new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.CURRENCY);
   assertEquals('100,00\u00A0RON', fmRo.format(100));
 
   goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
 }
 
 function testVerySmallNumberScientific() {  // See b/30990076.
-  var f = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.SCIENTIFIC);
-  var result = f.format(5e-324);
+  const f =
+      new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.SCIENTIFIC);
+  const result = f.format(5e-324);
   assertEquals('5E-324', result);
 }
 
 function testVerySmallNumberDecimal() {
-  var f = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
+  const f = new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.DECIMAL);
   f.setSignificantDigits(3);
   f.setMaximumFractionDigits(100);
 
-  var expected = '0.' + goog.string.repeat('0', 89) + '387';
+  let expected = '0.' + goog.string.repeat('0', 89) + '387';
   assertEquals(expected, f.format(3.87e-90));
   expected = '0.' + goog.string.repeat('0', 8) + '387';
   assertEquals(expected, f.format(3.87e-9));
@@ -1401,7 +1405,7 @@ function testVerySmallNumberDecimal() {
 }
 
 function testSymbols_percent() {
-  var f = new goog.i18n.NumberFormat(
+  const f = new goog.i18n.NumberFormat(
       goog.i18n.NumberFormat.Format.PERCENT, undefined, undefined,
       // Alternate percent symbol.
       Object.create(
@@ -1409,7 +1413,7 @@ function testSymbols_percent() {
   assertEquals('-25Percent', f.format(-0.25));
   assertEquals('25Percent', f.format(0.25));
 
-  var f2 = new goog.i18n.NumberFormat(
+  const f2 = new goog.i18n.NumberFormat(
       goog.i18n.NumberFormat.Format.PERCENT, undefined, undefined,
       goog.i18n.NumberFormatSymbols_en);
   assertEquals('-25%', f2.format(-0.25));
@@ -1422,7 +1426,7 @@ function testSymbols_percent() {
 }
 
 function testSymbols_permill() {
-  var f = new goog.i18n.NumberFormat(
+  const f = new goog.i18n.NumberFormat(
       '#,##0\u2030', undefined, undefined,
       Object.create(
           goog.i18n.NumberFormatSymbols, {PERMILL: {'value': 'Permill'}}));
@@ -1432,12 +1436,12 @@ function testSymbols_permill() {
 }
 
 function testSymbols_expSymbol() {
-  var f = new goog.i18n.NumberFormat(
+  const f = new goog.i18n.NumberFormat(
       goog.i18n.NumberFormat.Format.SCIENTIFIC, undefined, undefined,
       goog.i18n.NumberFormatSymbols_en_AU);
   assertEquals('1e3', f.format(1000));
 
-  var defaultLocale =
+  const defaultLocale =
       new goog.i18n.NumberFormat(goog.i18n.NumberFormat.Format.SCIENTIFIC);
   assertEquals('1e3', f.format(1000));
   assertEquals('1E3', defaultLocale.format(1000));
@@ -1452,7 +1456,7 @@ function testSymbols_expSymbol() {
 }
 
 function testScientific_ar_rtl() {
-  var scientific = new goog.i18n.NumberFormat(
+  const scientific = new goog.i18n.NumberFormat(
       goog.i18n.NumberFormat.Format.SCIENTIFIC, undefined, undefined,
       goog.i18n.NumberFormatSymbols_ar_EG);
   assertEquals('١اس3', scientific.format(1000));

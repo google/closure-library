@@ -51,17 +51,17 @@ function setUpPage() {
   goog.testing.TestCase.getActiveTestCase().promiseTimeout = 40 * 1000;
 
   // Show debug log
-  var debugDiv = goog.dom.getElement('debugDiv');
-  var logger = goog.log.getLogger('goog.net.xpc');
+  const debugDiv = goog.dom.getElement('debugDiv');
+  const logger = goog.log.getLogger('goog.net.xpc');
   logger.setLevel(goog.log.Level.ALL);
   goog.log.addHandler(logger, function(logRecord) {
-    var msgElm = goog.dom.createDom(goog.dom.TagName.DIV);
+    const msgElm = goog.dom.createDom(goog.dom.TagName.DIV);
     msgElm.innerHTML = logRecord.getMessage();
     goog.dom.appendChild(debugDiv, msgElm);
   });
 
   accessCheckPromise = new goog.Promise(function(resolve, reject) {
-    var accessCheckIframes = [];
+    const accessCheckIframes = [];
 
     accessCheckIframes.push(
         create1x1Iframe('nonexistent', 'testdata/i_am_non_existent.html'));
@@ -73,7 +73,7 @@ function setUpPage() {
     // Called from testdata/access_checker.html
     window['sameDomainIframeAccessComplete'] = function(canAccess) {
       canAccessSameDomainIframe = canAccess;
-      for (var i = 0; i < accessCheckIframes.length; i++) {
+      for (let i = 0; i < accessCheckIframes.length; i++) {
         document.body.removeChild(accessCheckIframes[i]);
       }
       resolve();
@@ -96,7 +96,7 @@ function tearDown() {
 
 
 function create1x1Iframe(iframeId, src) {
-  var iframeAccessChecker = goog.dom.createElement(goog.dom.TagName.IFRAME);
+  const iframeAccessChecker = goog.dom.createElement(goog.dom.TagName.IFRAME);
   iframeAccessChecker.id = iframeAccessChecker.name = iframeId;
   iframeAccessChecker.style.width = iframeAccessChecker.style.height = '1px';
   iframeAccessChecker.src = src;
@@ -124,9 +124,9 @@ function testCreateIframeRandomId() {
 
 
 function testGetRole() {
-  var cfg = {};
+  const cfg = {};
   cfg[goog.net.xpc.CfgFields.ROLE] = goog.net.xpc.CrossPageChannelRole.OUTER;
-  var channel = new goog.net.xpc.CrossPageChannel(cfg);
+  const channel = new goog.net.xpc.CrossPageChannel(cfg);
   // If the configured role is ignored, this will cause the dynamicly
   // determined role to become INNER.
   channel.peerWindowObject_ = window.parent;
@@ -412,7 +412,7 @@ function checkConnectMismatchedNames(
 
 
 function testEscapeServiceName() {
-  var escape = goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_;
+  const escape = goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_;
   assertEquals(
       'Shouldn\'t escape alphanumeric name', 'fooBar123', escape('fooBar123'));
   assertEquals(
@@ -430,43 +430,40 @@ function testEscapeServiceName() {
 
 
 function testSameDomainCheck_noMessageOrigin() {
-  var channel = new goog.net.xpc.CrossPageChannel(
-      goog.object.create(
-          goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
+  const channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
+      goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
   assertTrue(channel.isMessageOriginAcceptable(undefined));
 }
 
 
 function testSameDomainCheck_noPeerHostname() {
-  var channel = new goog.net.xpc.CrossPageChannel({});
+  const channel = new goog.net.xpc.CrossPageChannel({});
   assertTrue(channel.isMessageOriginAcceptable('http://foo.com'));
 }
 
 
 function testSameDomainCheck_unconfigured() {
-  var channel = new goog.net.xpc.CrossPageChannel({});
+  const channel = new goog.net.xpc.CrossPageChannel({});
   assertTrue(channel.isMessageOriginAcceptable(undefined));
 }
 
 
 function testSameDomainCheck_originsMatch() {
-  var channel = new goog.net.xpc.CrossPageChannel(
-      goog.object.create(
-          goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
+  const channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
+      goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
   assertTrue(channel.isMessageOriginAcceptable('http://foo.com'));
 }
 
 
 function testSameDomainCheck_originsMismatch() {
-  var channel = new goog.net.xpc.CrossPageChannel(
-      goog.object.create(
-          goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
+  const channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
+      goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
   assertFalse(channel.isMessageOriginAcceptable('http://nasty.com'));
 }
 
 
 function testUnescapeServiceName() {
-  var unescape = goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_;
+  const unescape = goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_;
   assertEquals(
       'Shouldn\'t modify alphanumeric name', 'fooBar123',
       unescape('fooBar123'));
@@ -655,13 +652,13 @@ Driver.prototype.setConfiguration_ = function(
     opt_iframeId, opt_oneSidedHandshake, opt_channelName,
     opt_innerProtocolVersion, opt_outerProtocolVersion,
     opt_randomChannelNames) {
-  var cfg = {};
+  const cfg = {};
   if (opt_iframeId) {
     cfg[goog.net.xpc.CfgFields.IFRAME_ID] = opt_iframeId;
   }
   cfg[goog.net.xpc.CfgFields.PEER_URI] = 'testdata/inner_peer.html';
   if (!opt_randomChannelNames) {
-    var channelName = opt_channelName || 'test_channel' + uniqueId++;
+    const channelName = opt_channelName || 'test_channel' + uniqueId++;
     cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = channelName;
   }
   cfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] = 'does-not-exist.html';
@@ -706,9 +703,9 @@ Driver.prototype.createChannel_ = function() {
  * @private
  */
 Driver.prototype.checkChannelNames_ = function() {
-  var outerName = this.channel_.name;
-  var innerName = this.getInnerPeer_().channel.name;
-  var configName =
+  const outerName = this.channel_.name;
+  const innerName = this.getInnerPeer_().channel.name;
+  const configName =
       this.innerFrameCfg_[goog.net.xpc.CfgFields.CHANNEL_NAME] || null;
 
   // The outer channel never changes its name.
@@ -750,7 +747,7 @@ Driver.prototype.getInnerFrameConfiguration = function() {
 Driver.prototype.createPeerIframe = function(
     opt_iframeId, opt_oneSidedHandshake, opt_innerProtocolVersion,
     opt_outerProtocolVersion, opt_randomChannelNames) {
-  var expectedIframeId;
+  let expectedIframeId;
 
   if (opt_iframeId) {
     expectedIframeId = opt_iframeId = opt_iframeId + uniqueId++;
@@ -769,7 +766,7 @@ Driver.prototype.createPeerIframe = function(
       opt_iframeId, opt_oneSidedHandshake, undefined /* opt_channelName */,
       opt_innerProtocolVersion, opt_outerProtocolVersion,
       opt_randomChannelNames);
-  var channelName = this.createChannel_();
+  const channelName = this.createChannel_();
   this.initialOuterChannelName_ = channelName;
   this.iframe_ = this.channel_.createPeerIframe(document.body);
 
@@ -782,7 +779,7 @@ Driver.prototype.createPeerIframe = function(
  */
 Driver.prototype.checkPeerIframe = function() {
   assertNotNull(this.iframe_);
-  var peer = this.getInnerPeer_();
+  const peer = this.getInnerPeer_();
   assertNotNull(peer);
   assertNotNull(peer.document);
 };
@@ -828,11 +825,11 @@ Driver.prototype.continueConnect_ = function(reverse) {
     return;
   }
 
-  var connectFromOuterFrame = goog.bind(
+  const connectFromOuterFrame = goog.bind(
       this.channel_.connect, this.channel_,
       goog.bind(this.outerFrameConnected_, this));
-  var innerConfig = this.innerFrameCfg_;
-  var connectFromInnerFrame = goog.bind(
+  const innerConfig = this.innerFrameCfg_;
+  const connectFromInnerFrame = goog.bind(
       this.getInnerPeer_().instantiateChannel, this.getInnerPeer_(),
       innerConfig);
 
@@ -849,7 +846,8 @@ Driver.prototype.continueConnect_ = function(reverse) {
  * @private
  */
 Driver.prototype.outerFrameConnected_ = function() {
-  var payload = this.outerFrameEchoPayload_ = goog.net.xpc.getRandomString(10);
+  const payload = this.outerFrameEchoPayload_ =
+      goog.net.xpc.getRandomString(10);
   this.channel_.send('echo', payload);
 };
 
@@ -858,7 +856,8 @@ Driver.prototype.outerFrameConnected_ = function() {
  * Called by the inner frame connection callback in inner_peer.html.
  */
 Driver.prototype.innerFrameConnected = function() {
-  var payload = this.innerFrameEchoPayload_ = goog.net.xpc.getRandomString(10);
+  const payload = this.innerFrameEchoPayload_ =
+      goog.net.xpc.getRandomString(10);
   this.getInnerPeer_().sendEcho(payload);
 };
 
@@ -870,7 +869,7 @@ Driver.prototype.innerFrameConnected = function() {
  */
 Driver.prototype.echoHandler_ = function(payload) {
   assertTrue('outer frame should be connected', this.channel_.isConnected());
-  var peer = this.getInnerPeer_();
+  const peer = this.getInnerPeer_();
   assertTrue('child should be connected', peer.isConnected());
   this.channel_.send('response', payload);
 };
@@ -883,7 +882,7 @@ Driver.prototype.echoHandler_ = function(payload) {
  */
 Driver.prototype.responseHandler_ = function(payload) {
   assertTrue('outer frame should be connected', this.channel_.isConnected());
-  var peer = this.getInnerPeer_();
+  const peer = this.getInnerPeer_();
   assertTrue('child should be connected', peer.isConnected());
   assertEquals(this.outerFrameEchoPayload_, payload);
   this.outerFrameResponseReceived_.resolve(true);
@@ -896,7 +895,7 @@ Driver.prototype.responseHandler_ = function(payload) {
  */
 Driver.prototype.innerFrameGotResponse = function(payload) {
   assertTrue('outer frame should be connected', this.channel_.isConnected());
-  var peer = this.getInnerPeer_();
+  const peer = this.getInnerPeer_();
   assertTrue('child should be connected', peer.isConnected());
   assertEquals(this.innerFrameEchoPayload_, payload);
   this.innerFrameResponseReceived_.resolve(true);
@@ -951,7 +950,7 @@ Driver.prototype.reinitializePromises_ = function() {
  * @private
  */
 Driver.prototype.performInnerFrameReconnect_ = function() {
-  var peer = this.getInnerPeer_();
+  const peer = this.getInnerPeer_();
   peer.instantiateChannel(this.innerFrameCfg_);
 };
 
@@ -995,7 +994,7 @@ Driver.prototype.performOuterFrameReconnect_ = function(
 Driver.prototype.migrateInnerFrame_ = function() {
   G_testRunner.log('Migrating inner frame');
   this.reinitializePromises_();
-  var innerFrameProtoVersion =
+  const innerFrameProtoVersion =
       this.innerFrameCfg_[goog.net.xpc.CfgFields
                               .NATIVE_TRANSPORT_PROTOCOL_VERSION];
   this.innerFrameResponseReceived_.promise.then(
@@ -1015,9 +1014,9 @@ Driver.prototype.migrateInnerFrame_ = function() {
  * @private
  */
 Driver.prototype.isTransportTestable_ = function() {
-  var testable = false;
+  let testable = false;
 
-  var transportType = this.channel_.determineTransportType_();
+  const transportType = this.channel_.determineTransportType_();
   switch (transportType) {
     case goog.net.xpc.TransportTypes.IFRAME_RELAY:
     case goog.net.xpc.TransportTypes.IFRAME_POLLING:

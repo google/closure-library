@@ -20,16 +20,16 @@ goog.require('goog.testing.MockControl');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.net.XhrIo');
 goog.require('goog.ui.ac.RemoteArrayMatcher');
-var url = 'http://www.google.com';
-var token = 'goog';
-var maxMatches = 5;
-var fullToken = 'google';
+const url = 'http://www.google.com';
+const token = 'goog';
+const maxMatches = 5;
+const fullToken = 'google';
 
-var responseJsonText = '["eric", "larry", "sergey", "marissa", "pupius"]';
-var responseJson = JSON.parse(responseJsonText);
+const responseJsonText = '["eric", "larry", "sergey", "marissa", "pupius"]';
+const responseJson = JSON.parse(responseJsonText);
 
-var mockControl;
-var mockMatchHandler;
+let mockControl;
+let mockMatchHandler;
 
 
 function setUp() {
@@ -39,7 +39,7 @@ function setUp() {
 }
 
 function testRequestMatchingRows_noSimilarTrue() {
-  var matcher = new goog.ui.ac.RemoteArrayMatcher(url);
+  const matcher = new goog.ui.ac.RemoteArrayMatcher(url);
   mockMatchHandler(token, responseJson);
   mockControl.$replayAll();
   matcher.requestMatchingRows(token, maxMatches, mockMatchHandler, fullToken);
@@ -49,9 +49,9 @@ function testRequestMatchingRows_noSimilarTrue() {
 }
 
 function testRequestMatchingRows_twoCalls() {
-  var matcher = new goog.ui.ac.RemoteArrayMatcher(url);
+  const matcher = new goog.ui.ac.RemoteArrayMatcher(url);
 
-  var dummyMatchHandler = mockControl.createFunctionMock();
+  const dummyMatchHandler = mockControl.createFunctionMock();
 
   mockMatchHandler(token, responseJson);
   mockControl.$replayAll();

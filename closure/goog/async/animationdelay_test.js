@@ -15,22 +15,24 @@
 goog.module('goog.async.AnimationDelayTest');
 goog.setTestOnly('goog.async.AnimationDelayTest');
 
-var AnimationDelay = goog.require('goog.async.AnimationDelay');
-var Promise = goog.require('goog.Promise');
-var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
-var Timer = goog.require('goog.Timer');
-var testSuite = goog.require('goog.testing.testSuite');
+const AnimationDelay = goog.require('goog.async.AnimationDelay');
+const Promise = goog.require('goog.Promise');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const Timer = goog.require('goog.Timer');
+const testSuite = goog.require('goog.testing.testSuite');
 
-var TEST_DELAY = 50;
-var stubs = new PropertyReplacer();
+const TEST_DELAY = 50;
+const stubs = new PropertyReplacer();
 
 testSuite({
-  tearDown: function() { stubs.reset(); },
+  tearDown: function() {
+    stubs.reset();
+  },
 
   testStart: function() {
-    var resolver = Promise.withResolver();
-    var start = goog.now();
-    var delay = new AnimationDelay(function(end) {
+    let resolver = Promise.withResolver();
+    const start = goog.now();
+    const delay = new AnimationDelay(function(end) {
       assertNotNull(resolver);  // fail if called multiple times
       resolver.resolve();
       resolver = null;
@@ -42,9 +44,11 @@ testSuite({
   },
 
   testStop: function() {
-    var resolver = Promise.withResolver();
-    var start = goog.now();
-    var delay = new AnimationDelay(function(end) { resolver.reject(); });
+    const resolver = Promise.withResolver();
+    const start = goog.now();
+    const delay = new AnimationDelay(function(end) {
+      resolver.reject();
+    });
 
     delay.start();
     delay.stop();
@@ -56,11 +60,11 @@ testSuite({
   },
 
   testAlwaysUseGoogNowForHandlerTimestamp: function() {
-    var resolver = Promise.withResolver();
-    var expectedValue = 12345.1;
+    const resolver = Promise.withResolver();
+    const expectedValue = 12345.1;
     stubs.set(goog, 'now', function() { return expectedValue; });
 
-    var delay = new AnimationDelay(function(timestamp) {
+    const delay = new AnimationDelay(function(timestamp) {
       assertEquals(expectedValue, timestamp);
       resolver.resolve();
     });
@@ -71,10 +75,10 @@ testSuite({
   },
 
   testStartIfActive: function() {
-    var delay = new AnimationDelay(goog.nullFunction);
+    const delay = new AnimationDelay(goog.nullFunction);
     delay.start();
 
-    var startWasCalled = false;
+    let startWasCalled = false;
     stubs.set(AnimationDelay.prototype, 'start', function() {
       startWasCalled = true;
     });

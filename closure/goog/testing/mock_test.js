@@ -23,7 +23,7 @@ goog.require('goog.testing.MockExpectation');
 goog.require('goog.testing.jsunit');
 
 // The object that we will be mocking
-var RealObject = function() {};
+const RealObject = function() {};
 
 RealObject.prototype.a = function() {
   fail('real object should never be called');
@@ -33,16 +33,16 @@ RealObject.prototype.b = function() {
   fail('real object should never be called');
 };
 
-var matchers = goog.testing.mockmatchers;
-var mock;
+const matchers = goog.testing.mockmatchers;
+let mock;
 
 function setUp() {
-  var obj = new RealObject();
+  const obj = new RealObject();
   mock = new goog.testing.Mock(obj);
 }
 
 function testMockErrorMessage() {
-  var expectation = new goog.testing.MockExpectation('a');
+  const expectation = new goog.testing.MockExpectation('a');
   assertEquals(0, expectation.getErrorMessageCount());
   assertEquals('', expectation.getErrorMessage());
 
@@ -56,7 +56,7 @@ function testMockErrorMessage() {
 }
 
 function testVerifyArgumentList() {
-  var expectation = new goog.testing.MockExpectation('a');
+  const expectation = new goog.testing.MockExpectation('a');
   assertEquals('', expectation.getErrorMessage());
 
   // test single string arg
@@ -68,12 +68,12 @@ function testVerifyArgumentList() {
   assertTrue(mock.$verifyCall(expectation, 'a', [2]));
 
   // single object arg (using standard === comparison)
-  var obj = {prop1: 'prop1', prop2: 2};
+  const obj = {prop1: 'prop1', prop2: 2};
   expectation.argumentList = [obj];
   assertTrue(mock.$verifyCall(expectation, 'a', [obj]));
 
   // make sure comparison succeeds if args are similar, but not ===
-  var obj2 = {prop1: 'prop1', prop2: 2};
+  const obj2 = {prop1: 'prop1', prop2: 2};
   expectation.argumentList = [obj];
   assertTrue(mock.$verifyCall(expectation, 'a', [obj2]));
   assertEquals('', expectation.getErrorMessage());
@@ -91,14 +91,14 @@ function testVerifyArgumentList() {
 }
 
 function testVerifyArgumentListForObjectMethods() {
-  var expectation = new goog.testing.MockExpectation('toString');
+  const expectation = new goog.testing.MockExpectation('toString');
   expectation.argumentList = [];
   assertTrue(mock.$verifyCall(expectation, 'toString', []));
 }
 
 function testRegisterArgumentListVerifier() {
-  var expectationA = new goog.testing.MockExpectation('a');
-  var expectationB = new goog.testing.MockExpectation('b');
+  const expectationA = new goog.testing.MockExpectation('a');
+  const expectationB = new goog.testing.MockExpectation('b');
 
   // Simple matcher that return true if all args are === equivalent.
   mock.$registerArgumentListVerifier('a', function(expectedArgs, args) {
@@ -115,7 +115,7 @@ function testRegisterArgumentListVerifier() {
   assertTrue(mock.$verifyCall(expectationA, 'a', [2]));
 
   // single object arg (using standard === comparison)
-  var obj = {prop1: 'prop1', prop2: 2};
+  const obj = {prop1: 'prop1', prop2: 2};
   expectationA.argumentList = [obj];
   expectationB.argumentList = [obj];
   assertTrue(mock.$verifyCall(expectationA, 'a', [obj]));
@@ -123,7 +123,7 @@ function testRegisterArgumentListVerifier() {
 
   // if args are similar, but not ===, then comparison should succeed
   // for method with registered object matcher, and fail for method without
-  var obj2 = {prop1: 'prop1', prop2: 2};
+  const obj2 = {prop1: 'prop1', prop2: 2};
   expectationA.argumentList = [obj];
   expectationB.argumentList = [obj];
   assertFalse(mock.$verifyCall(expectationA, 'a', [obj2]));
@@ -148,7 +148,7 @@ function testCreateProxy() {
 
 
 function testValidConstructorArgument() {
-  var someNamespace = {};
+  const someNamespace = {};
   assertThrows(function() {
     new goog.testing.Mock(someNamespace.RealObjectWithTypo);
   });
@@ -164,7 +164,7 @@ function testArgumentsAsString() {
 
 
 function testThrowCallExceptionBadArgs() {
-  var msg;
+  let msg;
   mock.$throwException = function(m) { msg = m; };
 
   mock.$throwCallException('fn1', ['b'], {
@@ -177,7 +177,7 @@ function testThrowCallExceptionBadArgs() {
 }
 
 function testThrowCallExceptionUnexpected() {
-  var msg;
+  let msg;
   mock.$throwException = function(m) { msg = m; };
 
   mock.$throwCallException('fn1', ['b']);
@@ -188,7 +188,7 @@ function testThrowCallExceptionUnexpected() {
 }
 
 function testThrowCallExceptionUnexpectedWithNext() {
-  var msg;
+  let msg;
   mock.$throwException = function(m) { msg = m; };
 
   mock.$throwCallException('fn1', ['b'], {
@@ -207,7 +207,7 @@ function testThrowCallExceptionUnexpectedWithNext() {
 // be mocked correctly.
 function testBindNonEnumerableFunctions() {
   // Create Foo and override non enumerable functions.
-  var Foo = function() {};
+  const Foo = function() {};
   Foo.prototype.constructor = function() {
     fail('real object should never be called');
   };
@@ -231,8 +231,8 @@ function testBindNonEnumerableFunctions() {
   };
 
   // Create Mock and set $returns for toString.
-  var mockControl = new goog.testing.MockControl();
-  var mock = mockControl.createLooseMock(Foo);
+  const mockControl = new goog.testing.MockControl();
+  const mock = mockControl.createLooseMock(Foo);
   mock.constructor().$returns('constructor');
   mock.hasOwnProperty().$returns('hasOwnProperty');
   mock.isPrototypeOf().$returns('isPrototypeOf');
@@ -254,14 +254,14 @@ function testBindNonEnumerableFunctions() {
 }
 
 function testMockInheritedMethods() {
-  var SubType = function() {};
+  const SubType = function() {};
   goog.inherits(SubType, RealObject);
   SubType.prototype.c = function() {
     fail('real object should never be called');
   };
 
-  var mockControl = new goog.testing.MockControl();
-  var mock = mockControl.createLooseMock(SubType);
+  const mockControl = new goog.testing.MockControl();
+  const mock = mockControl.createLooseMock(SubType);
   mock.a().$returns('a');
   mock.b().$returns('b');
   mock.c().$returns('c');
@@ -275,13 +275,13 @@ function testMockInheritedMethods() {
 }
 
 function testMockStaticMethods() {
-  var SomeType = function() {};
+  const SomeType = function() {};
   SomeType.staticMethod = function() {
     fail('real object should never be called');
   };
 
-  var mockControl = new goog.testing.MockControl();
-  var mock = mockControl.createLooseMock(
+  const mockControl = new goog.testing.MockControl();
+  const mock = mockControl.createLooseMock(
       SomeType, false /* opt_ignoreUnexpectedCalls */,
       true /* opt_mockStaticMethods */);
   mock.staticMethod().$returns('staticMethod');
@@ -308,8 +308,8 @@ function testMockEs6ClassMethods() {
     }
   }
 
-  var mockControl = new goog.testing.MockControl();
-  var mock = mockControl.createLooseMock(Foo);
+  const mockControl = new goog.testing.MockControl();
+  const mock = mockControl.createLooseMock(Foo);
   mock.a().$returns('a');
 
   // Execute and assert that the Mock is working correctly.
@@ -337,8 +337,8 @@ function testMockEs6ClassStaticMethods() {
     }
   }
 
-  var mockControl = new goog.testing.MockControl();
-  var mock = mockControl.createLooseMock(
+  const mockControl = new goog.testing.MockControl();
+  const mock = mockControl.createLooseMock(
       Foo, false /* opt_ignoreUnexpectedCalls */,
       true /* opt_mockStaticMethods */);
   mock.a().$returns('a');

@@ -32,9 +32,12 @@ goog.require('goog.ui.Control');
 goog.require('goog.ui.ControlRenderer');
 goog.require('goog.userAgent');
 
-var control, controlRenderer, testRenderer, propertyReplacer;
-var sandbox;
-var expectedFailures;
+let control;
+let controlRenderer;
+let testRenderer;
+let propertyReplacer;
+let sandbox;
+let expectedFailures;
 
 function setUpPage() {
   sandbox = goog.dom.getElement('sandbox');
@@ -129,8 +132,8 @@ function testConstructor() {
 }
 
 function testGetCustomRenderer() {
-  var cssClass = 'special-css-class';
-  var renderer = goog.ui.ControlRenderer.getCustomRenderer(
+  const cssClass = 'special-css-class';
+  const renderer = goog.ui.ControlRenderer.getCustomRenderer(
       goog.ui.ControlRenderer, cssClass);
   assertEquals(
       'Renderer should have returned the custom CSS class.', cssClass,
@@ -168,7 +171,7 @@ function testEnableExtraClassName() {
   controlRenderer.enableExtraClassName(control, 'foo', true);
 
   control.createDom();
-  var element = control.getElement();
+  const element = control.getElement();
 
   controlRenderer.enableExtraClassName(control, 'foo', true);
   assertSameElements(
@@ -197,8 +200,8 @@ function testCanDecorate() {
 
 function testDecorate() {
   sandbox.innerHTML = '<div id="foo">Hello, world!</div>';
-  var foo = goog.dom.getElement('foo');
-  var element = controlRenderer.decorate(control, foo);
+  const foo = goog.dom.getElement('foo');
+  const element = controlRenderer.decorate(control, foo);
 
   assertEquals('decorate() must return its argument', foo, element);
   assertEquals('Decorated control\'s ID must be set', 'foo', control.getId());
@@ -218,8 +221,8 @@ function testDecorate() {
 
 function testDecorateComplexDom() {
   sandbox.innerHTML = '<div id="foo"><i>Hello</i>,<b>world</b>!</div>';
-  var foo = goog.dom.getElement('foo');
-  var element = controlRenderer.decorate(control, foo);
+  const foo = goog.dom.getElement('foo');
+  const element = controlRenderer.decorate(control, foo);
 
   assertEquals('decorate() must return its argument', foo, element);
   assertEquals('Decorated control\'s ID must be set', 'foo', control.getId());
@@ -240,10 +243,10 @@ function testDecorateComplexDom() {
 function testDecorateWithClasses() {
   sandbox.innerHTML =
       '<div id="foo" class="app goog-base-disabled goog-base-hover"></div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
 
   control.addClassName('extra');
-  var element = testRenderer.decorate(control, foo);
+  const element = testRenderer.decorate(control, foo);
 
   assertEquals('decorate() must return its argument', foo, element);
   assertEquals('Decorated control\'s ID must be set', 'foo', control.getId());
@@ -286,7 +289,7 @@ function testDecorateOptimization() {
 }
 
 function testInitializeDom() {
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
 
   // Replace setRightToLeft().
   renderer.setRightToLeft = function() {
@@ -312,7 +315,7 @@ function testInitializeDom() {
 }
 
 function testInitializeDomDecorated() {
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
 
   // Replace setRightToLeft().
   renderer.setRightToLeft = function() {
@@ -340,7 +343,7 @@ function testInitializeDomDecorated() {
 }
 
 function testInitializeDomDisabledBiDi() {
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
 
   // Replace setFocusable().
   renderer.setFocusable = function() {
@@ -363,7 +366,7 @@ function testInitializeDomDisabledBiDi() {
 }
 
 function testInitializeDomDisabledBiDiDecorated() {
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
 
   // Replace setFocusable().
   renderer.setFocusable = function() {
@@ -390,12 +393,12 @@ function testInitializeDomDisabledBiDiDecorated() {
 function testSetAriaRole() {
   sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
 
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
   assertNotNull(foo);
   controlRenderer.setAriaRole(foo);
   assertEvaluatesToFalse(
       'The role should be empty.', goog.a11y.aria.getRole(foo));
-  var bar = goog.dom.getElement('bar');
+  const bar = goog.dom.getElement('bar');
   assertNotNull(bar);
   testRenderer.setAriaRole(bar);
   assertEquals(
@@ -405,7 +408,7 @@ function testSetAriaRole() {
 
 function testSetAriaStatesHidden() {
   sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
 
   control.setVisible(true);
   controlRenderer.setAriaStates(control, foo);
@@ -424,7 +427,7 @@ function testSetAriaStatesHidden() {
 
 function testSetAriaStatesDisabled() {
   sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
 
   control.setEnabled(true);
   controlRenderer.setAriaStates(control, foo);
@@ -443,7 +446,7 @@ function testSetAriaStatesDisabled() {
 
 function testSetAriaStatesSelected() {
   sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
   control.setSupportedState(goog.ui.Component.State.SELECTED, true);
 
   control.setSelected(true);
@@ -463,7 +466,7 @@ function testSetAriaStatesSelected() {
 
 function testSetAriaStatesChecked() {
   sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
   control.setSupportedState(goog.ui.Component.State.CHECKED, true);
 
   control.setChecked(true);
@@ -483,7 +486,7 @@ function testSetAriaStatesChecked() {
 
 function testSetAriaStatesExpanded() {
   sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
   control.setSupportedState(goog.ui.Component.State.OPENED, true);
 
   control.setOpen(true);
@@ -503,7 +506,7 @@ function testSetAriaStatesExpanded() {
 
 function testSetAllowTextSelection() {
   sandbox.innerHTML = '<div id="foo"><span>Foo</span></div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
 
   controlRenderer.setAllowTextSelection(foo, false);
   assertTrue(
@@ -531,7 +534,7 @@ function testSetAllowTextSelection() {
 function testSetRightToLeft() {
   sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
 
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
   controlRenderer.setRightToLeft(foo, true);
   assertSameElements(
       'Element must have right-to-left class applied', ['goog-control-rtl'],
@@ -541,7 +544,7 @@ function testSetRightToLeft() {
       'Element must not have right-to-left class applied', [],
       goog.dom.classlist.get(foo));
 
-  var bar = goog.dom.getElement('bar');
+  const bar = goog.dom.getElement('bar');
   testRenderer.setRightToLeft(bar, true);
   assertSameElements(
       'Element must have right-to-left class applied', ['goog-base-rtl'],
@@ -618,7 +621,7 @@ function testSetFocusableForNonFocusableControl() {
 
 function testSetVisible() {
   sandbox.innerHTML = '<div id="foo">Foo</div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
   assertTrue('Element must be visible', foo.style.display != 'none');
   controlRenderer.setVisible(foo, true);
   assertEquals(
@@ -635,7 +638,7 @@ function testSetVisible() {
 function testSetState() {
   control.setRenderer(testRenderer);
   control.createDom();
-  var element = control.getElement();
+  const element = control.getElement();
   assertNotNull(element);
   assertSameElements(
       'Control must have expected class names', ['goog-button', 'goog-base'],
@@ -669,7 +672,7 @@ function testSetState() {
 
 function testUpdateAriaStateDisabled() {
   control.createDom();
-  var element = control.getElement();
+  const element = control.getElement();
   assertNotNull(element);
   controlRenderer.updateAriaState(
       element, goog.ui.Component.State.DISABLED, true);
@@ -686,10 +689,10 @@ function testUpdateAriaStateDisabled() {
 
 function testSetAriaStatesRender_ariaStateDisabled() {
   control.setEnabled(false);
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
   control.setRenderer(renderer);
   control.render(sandbox);
-  var element = control.getElement();
+  const element = control.getElement();
   assertNotNull(element);
   assertFalse('Control must be disabled', control.isEnabled());
   assertEquals(
@@ -699,7 +702,7 @@ function testSetAriaStatesRender_ariaStateDisabled() {
 
 function testSetAriaStatesDecorate_ariaStateDisabled() {
   sandbox.innerHTML = '<div id="foo" class="app goog-base-disabled"></div>';
-  var element = goog.dom.getElement('foo');
+  const element = goog.dom.getElement('foo');
 
   control.setRenderer(testRenderer);
   control.decorate(element);
@@ -712,7 +715,7 @@ function testSetAriaStatesDecorate_ariaStateDisabled() {
 
 function testUpdateAriaStateSelected() {
   control.createDom();
-  var element = control.getElement();
+  const element = control.getElement();
   assertNotNull(element);
   controlRenderer.updateAriaState(
       element, goog.ui.Component.State.SELECTED, true);
@@ -731,10 +734,10 @@ function testSetAriaStatesRender_ariaStateSelected() {
   control.setSupportedState(goog.ui.Component.State.SELECTED, true);
   control.setSelected(true);
 
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
   control.setRenderer(renderer);
   control.render(sandbox);
-  var element = control.getElement();
+  const element = control.getElement();
   assertNotNull(element);
   assertTrue('Control must be selected', control.isSelected());
   assertEquals(
@@ -745,10 +748,10 @@ function testSetAriaStatesRender_ariaStateSelected() {
 function testSetAriaStatesRender_ariaStateNotSelected() {
   control.setSupportedState(goog.ui.Component.State.SELECTED, true);
 
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
   control.setRenderer(renderer);
   control.render(sandbox);
-  var element = control.getElement();
+  const element = control.getElement();
   assertNotNull(element);
   assertFalse('Control must not be selected', control.isSelected());
   assertEquals(
@@ -760,7 +763,7 @@ function testSetAriaStatesDecorate_ariaStateSelected() {
   control.setSupportedState(goog.ui.Component.State.SELECTED, true);
 
   sandbox.innerHTML = '<div id="foo" class="app goog-control-selected"></div>';
-  var element = goog.dom.getElement('foo');
+  const element = goog.dom.getElement('foo');
 
   control.setRenderer(controlRenderer);
   control.decorate(element);
@@ -773,7 +776,7 @@ function testSetAriaStatesDecorate_ariaStateSelected() {
 
 function testUpdateAriaStateChecked() {
   control.createDom();
-  var element = control.getElement();
+  const element = control.getElement();
   assertNotNull(element);
   controlRenderer.updateAriaState(
       element, goog.ui.Component.State.CHECKED, true);
@@ -792,10 +795,10 @@ function testSetAriaStatesRender_ariaStateChecked() {
   control.setSupportedState(goog.ui.Component.State.CHECKED, true);
   control.setChecked(true);
 
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
   control.setRenderer(renderer);
   control.render(sandbox);
-  var element = control.getElement();
+  const element = control.getElement();
   assertNotNull(element);
   assertTrue('Control must be checked', control.isChecked());
   assertEquals(
@@ -805,7 +808,7 @@ function testSetAriaStatesRender_ariaStateChecked() {
 
 function testSetAriaStatesDecorate_ariaStateChecked() {
   sandbox.innerHTML = '<div id="foo" class="app goog-control-checked"></div>';
-  var element = goog.dom.getElement('foo');
+  const element = goog.dom.getElement('foo');
 
   control.setSupportedState(goog.ui.Component.State.CHECKED, true);
   control.decorate(element);
@@ -818,7 +821,7 @@ function testSetAriaStatesDecorate_ariaStateChecked() {
 
 function testUpdateAriaStateOpened() {
   control.createDom();
-  var element = control.getElement();
+  const element = control.getElement();
   assertNotNull(element);
   controlRenderer.updateAriaState(
       element, goog.ui.Component.State.OPENED, true);
@@ -837,10 +840,10 @@ function testSetAriaStatesRender_ariaStateOpened() {
   control.setSupportedState(goog.ui.Component.State.OPENED, true);
   control.setOpen(true);
 
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
   control.setRenderer(renderer);
   control.render(sandbox);
-  var element = control.getElement();
+  const element = control.getElement();
   assertNotNull(element);
   assertTrue('Control must be opened', control.isOpen());
   assertEquals(
@@ -850,7 +853,7 @@ function testSetAriaStatesRender_ariaStateOpened() {
 
 function testSetAriaStatesDecorate_ariaStateOpened() {
   sandbox.innerHTML = '<div id="foo" class="app goog-base-open"></div>';
-  var element = goog.dom.getElement('foo');
+  const element = goog.dom.getElement('foo');
 
   control.setSupportedState(goog.ui.Component.State.OPENED, true);
   control.setRenderer(testRenderer);
@@ -866,7 +869,7 @@ function testSetAriaStateRoleNotInMap() {
   sandbox.innerHTML = '<div id="foo" role="option">Hello, world!</div>';
   control.setRenderer(controlRenderer);
   control.setSupportedState(goog.ui.Component.State.CHECKED, true);
-  var element = goog.dom.getElement('foo');
+  const element = goog.dom.getElement('foo');
   control.decorate(element);
   assertEquals(
       'Element should have ARIA role option.', goog.a11y.aria.Role.OPTION,
@@ -887,7 +890,7 @@ function testSetAriaStateRoleInMapMatches() {
   sandbox.innerHTML = '<div id="foo" role="checkbox">Hello, world!</div>';
   control.setRenderer(controlRenderer);
   control.setSupportedState(goog.ui.Component.State.CHECKED, true);
-  var element = goog.dom.getElement('foo');
+  const element = goog.dom.getElement('foo');
   control.decorate(element);
   assertEquals(
       'Element should have ARIA role checkbox.', goog.a11y.aria.Role.CHECKBOX,
@@ -908,7 +911,7 @@ function testSetAriaStateRoleInMapNotMatches() {
   sandbox.innerHTML = '<div id="foo" role="button">Hello, world!</div>';
   control.setRenderer(controlRenderer);
   control.setSupportedState(goog.ui.Component.State.CHECKED, true);
-  var element = goog.dom.getElement('foo');
+  const element = goog.dom.getElement('foo');
   control.decorate(element);
   assertEquals(
       'Element should have ARIA role button.', goog.a11y.aria.Role.BUTTON,
@@ -929,7 +932,7 @@ function testSetAriaStateRoleInMapNotMatches() {
 }
 
 function testToggleAriaStateMap() {
-  var map = goog.object.create(
+  const map = goog.object.create(
       goog.a11y.aria.Role.BUTTON, goog.a11y.aria.State.PRESSED,
       goog.a11y.aria.Role.CHECKBOX, goog.a11y.aria.State.CHECKED,
       goog.a11y.aria.Role.MENU_ITEM, goog.a11y.aria.State.SELECTED,
@@ -938,7 +941,7 @@ function testToggleAriaStateMap() {
       goog.a11y.aria.Role.RADIO, goog.a11y.aria.State.CHECKED,
       goog.a11y.aria.Role.TAB, goog.a11y.aria.State.SELECTED,
       goog.a11y.aria.Role.TREEITEM, goog.a11y.aria.State.SELECTED);
-  for (var key in map) {
+  for (const key in map) {
     assertTrue(
         'Toggle ARIA state map incorrect.',
         key in goog.ui.ControlRenderer.TOGGLE_ARIA_STATE_MAP_);
@@ -1034,7 +1037,7 @@ function testSetContentArray() {
 
 function testSetContentNodeList() {
   goog.dom.setTextContent(sandbox, 'Hello, world!');
-  var div = goog.dom.createDom(
+  const div = goog.dom.createDom(
       goog.dom.TagName.DIV, null, 'Hello, ',
       goog.dom.createDom(goog.dom.TagName.B, null, 'world'), '!');
   controlRenderer.setContent(sandbox, div.childNodes);
@@ -1169,7 +1172,7 @@ function testGetClassNamesForState() {
 }
 
 function testGetClassForState() {
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
   assertUndefined(
       'State-to-class map must not exist until first use',
       renderer.classByState_);
@@ -1183,7 +1186,7 @@ function testGetClassForState() {
 }
 
 function testGetStateFromClass() {
-  var renderer = new goog.ui.ControlRenderer();
+  const renderer = new goog.ui.ControlRenderer();
   assertUndefined(
       'Class-to-state map must not exist until first use',
       renderer.stateByClass_);
@@ -1201,10 +1204,10 @@ function testIe6ClassCombinationsCreateDom() {
   control.enableClassName('combined', true);
 
   control.createDom();
-  var element = control.getElement();
+  const element = control.getElement();
 
   testRenderer.setState(control, goog.ui.Component.State.DISABLED, true);
-  var expectedClasses =
+  let expectedClasses =
       ['combined', 'goog-base', 'goog-base-disabled', 'goog-button'];
   if (isIe6()) {
     assertSameElements(
@@ -1219,8 +1222,7 @@ function testIe6ClassCombinationsCreateDom() {
 
   testRenderer.setState(control, goog.ui.Component.State.DISABLED, false);
   testRenderer.setState(control, goog.ui.Component.State.HOVER, true);
-  var expectedClasses =
-      ['combined', 'goog-base', 'goog-base-hover', 'goog-button'];
+  expectedClasses = ['combined', 'goog-base', 'goog-base-hover', 'goog-button'];
   if (isIe6()) {
     assertSameElements(
         'IE6 and lower should have one combined class',
@@ -1234,7 +1236,7 @@ function testIe6ClassCombinationsCreateDom() {
 
   testRenderer.setRightToLeft(element, true);
   testRenderer.enableExtraClassName(control, 'combined2', true);
-  var expectedClasses = [
+  expectedClasses = [
     'combined', 'combined2', 'goog-base', 'goog-base-hover', 'goog-base-rtl',
     'goog-button'
   ];
@@ -1254,11 +1256,11 @@ function testIe6ClassCombinationsCreateDom() {
 
 function testIe6ClassCombinationsDecorate() {
   sandbox.innerHTML = '<div id="foo" class="combined goog-base-hover"></div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
 
-  var element = testRenderer.decorate(control, foo);
+  const element = testRenderer.decorate(control, foo);
 
-  var expectedClasses =
+  const expectedClasses =
       ['combined', 'goog-base', 'goog-base-hover', 'goog-button'];
   if (isIe6()) {
     assertSameElements(

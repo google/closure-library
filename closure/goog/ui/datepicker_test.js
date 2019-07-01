@@ -33,9 +33,9 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 goog.require('goog.ui.DatePicker');
 
-var picker;
-var $$ = goog.dom.getElementsByTagNameAndClass;
-var sandbox;
+let picker;
+const $$ = goog.dom.getElementsByTagNameAndClass;
+let sandbox;
 
 function setUpPage() {
   sandbox = goog.dom.getElement('sandbox');
@@ -55,8 +55,8 @@ function testIsMonthOnLeft() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en_US;
   picker = new goog.ui.DatePicker();
   picker.create(sandbox);
-  var head = $$('tr', 'goog-date-picker-head')[0];
-  var month = $$('button', 'goog-date-picker-month', head.firstChild)[0];
+  const head = $$('tr', 'goog-date-picker-head')[0];
+  const month = $$('button', 'goog-date-picker-month', head.firstChild)[0];
   assertSameElements(
       'Button element must have expected class names',
       ['goog-date-picker-btn', 'goog-date-picker-month'],
@@ -67,8 +67,8 @@ function testIsYearOnLeft() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh_HK;
   picker = new goog.ui.DatePicker();
   picker.create(sandbox);
-  var head = $$('tr', 'goog-date-picker-head')[0];
-  var year = $$('button', 'goog-date-picker-year', head.firstChild)[0];
+  const head = $$('tr', 'goog-date-picker-head')[0];
+  const year = $$('button', 'goog-date-picker-year', head.firstChild)[0];
   assertSameElements(
       'Button element must have expected class names',
       ['goog-date-picker-btn', 'goog-date-picker-year'],
@@ -80,7 +80,7 @@ function testHidingOfTableFoot0() {
   picker.setAllowNone(false);
   picker.setShowToday(false);
   picker.create(sandbox);
-  var tFoot = $$('tfoot')[0];
+  const tFoot = $$('tfoot')[0];
   assertFalse(goog.style.isElementShown(tFoot));
 }
 
@@ -89,7 +89,7 @@ function testHidingOfTableFoot1() {
   picker.setAllowNone(false);
   picker.setShowToday(true);
   picker.create(sandbox);
-  var tFoot = $$('tfoot')[0];
+  const tFoot = $$('tfoot')[0];
   assertTrue(goog.style.isElementShown(tFoot));
 }
 
@@ -98,7 +98,7 @@ function testHidingOfTableFoot2() {
   picker.setAllowNone(true);
   picker.setShowToday(false);
   picker.create(sandbox);
-  var tFoot = $$('tfoot')[0];
+  const tFoot = $$('tfoot')[0];
   assertTrue(goog.style.isElementShown(tFoot));
 }
 
@@ -107,7 +107,7 @@ function testHidingOfTableFoot3() {
   picker.setAllowNone(true);
   picker.setShowToday(true);
   picker.create(sandbox);
-  var tFoot = $$('tfoot')[0];
+  const tFoot = $$('tfoot')[0];
   assertTrue(goog.style.isElementShown(tFoot));
 }
 
@@ -116,7 +116,7 @@ function testHidingOfTableFootAfterCreate0() {
   picker.create(sandbox);
   picker.setAllowNone(false);
   picker.setShowToday(false);
-  var tFoot = $$('tfoot')[0];
+  const tFoot = $$('tfoot')[0];
   assertFalse(goog.style.isElementShown(tFoot));
 }
 
@@ -125,7 +125,7 @@ function testHidingOfTableFootAfterCreate1() {
   picker.create(sandbox);
   picker.setAllowNone(false);
   picker.setShowToday(true);
-  var tFoot = $$('tfoot')[0];
+  const tFoot = $$('tfoot')[0];
   assertTrue(goog.style.isElementShown(tFoot));
 }
 
@@ -134,7 +134,7 @@ function testHidingOfTableFootAfterCreate2() {
   picker.create(sandbox);
   picker.setAllowNone(true);
   picker.setShowToday(false);
-  var tFoot = $$('tfoot')[0];
+  const tFoot = $$('tfoot')[0];
   assertTrue(goog.style.isElementShown(tFoot));
 }
 
@@ -143,7 +143,7 @@ function testHidingOfTableFootAfterCreate3() {
   picker.create(sandbox);
   picker.setAllowNone(true);
   picker.setShowToday(true);
-  var tFoot = $$('tfoot')[0];
+  const tFoot = $$('tfoot')[0];
   assertTrue(goog.style.isElementShown(tFoot));
 }
 
@@ -151,15 +151,15 @@ function testLongDateFormat() {
   picker = new goog.ui.DatePicker();
   picker.create(sandbox);
   picker.setLongDateFormat(true);
-  var dates = $$('td', 'goog-date-picker-date');
-  for (var i = 0; i < dates.length; i++) {
+  const dates = $$('td', 'goog-date-picker-date');
+  for (let i = 0; i < dates.length; i++) {
     assertEquals(2, goog.dom.getTextContent(dates[i]).length);
   }
 }
 
 function testGetActiveMonth() {
   picker = new goog.ui.DatePicker(new Date(2000, 5, 5));
-  var month = picker.getActiveMonth();
+  const month = picker.getActiveMonth();
   assertObjectEquals(new goog.date.Date(2000, 5, 1), month);
 
   month.setMonth(10);
@@ -169,16 +169,16 @@ function testGetActiveMonth() {
 }
 
 function testGetActiveMonthBeforeYear100() {
-  var date = new Date(23, 5, 5);
+  const date = new Date(23, 5, 5);
   // Above statement will create date with year 1923, need to set full year
   // explicitly.
   date.setFullYear(23);
 
-  var expectedMonth = new goog.date.Date(23, 5, 1);
+  const expectedMonth = new goog.date.Date(23, 5, 1);
   expectedMonth.setFullYear(23);
 
   picker = new goog.ui.DatePicker(date);
-  var month = picker.getActiveMonth();
+  const month = picker.getActiveMonth();
   assertObjectEquals(expectedMonth, month);
 
   month.setMonth(10);
@@ -189,7 +189,7 @@ function testGetActiveMonthBeforeYear100() {
 
 function testGetDate() {
   picker = new goog.ui.DatePicker(new Date(2000, 0, 1));
-  var date = picker.getDate();
+  const date = picker.getDate();
   assertObjectEquals(new goog.date.Date(2000, 0, 1), date);
 
   date.setMonth(1);
@@ -202,27 +202,27 @@ function testGetDate() {
 }
 
 function testGetDateBeforeYear100() {
-  var inputDate = new Date(23, 5, 5);
+  const inputDate = new Date(23, 5, 5);
   // Above statement will create date with year 1923, need to set full year
   // explicitly.
   inputDate.setFullYear(23);
   picker = new goog.ui.DatePicker(inputDate);
-  var date = picker.getDate();
+  const date = picker.getDate();
 
-  var expectedDate = new goog.date.Date(23, 5, 5);
+  const expectedDate = new goog.date.Date(23, 5, 5);
   expectedDate.setFullYear(23);
   assertObjectEquals(expectedDate, date);
 
   picker.setDate(inputDate);
   assertObjectEquals(expectedDate, picker.getDate());
-  var expectedMonth = new goog.date.Date(23, 5, 1);
+  const expectedMonth = new goog.date.Date(23, 5, 1);
   expectedMonth.setFullYear(23);
   assertObjectEquals(expectedMonth, picker.getActiveMonth());
 }
 
 function testGridForDecember23() {
   // Initialize picker to December 23.
-  var inputDate = new Date(23, 11, 5);
+  const inputDate = new Date(23, 11, 5);
   // Above statement will create date with year 1923, need to set full year
   // explicitly.
   inputDate.setFullYear(23);
@@ -231,9 +231,9 @@ function testGridForDecember23() {
 
   // Grid start with last days of November 23, shows December 23 and first days
   // of January 24.
-  for (var i = 0; i < 6; i++) {
-    for (var j = 0; j < 7; j++) {
-      var date = picker.getDateAt(i, j);
+  for (let i = 0; i < 6; i++) {
+    for (let j = 0; j < 7; j++) {
+      const date = picker.getDateAt(i, j);
       if (date.getMonth() == 0) {
         assertEquals(24, date.getFullYear());
       } else {
@@ -245,7 +245,7 @@ function testGridForDecember23() {
 
 function testGridForJanuary22() {
   // Initialize picker to January 22.
-  var inputDate = new Date(22, 0, 5);
+  const inputDate = new Date(22, 0, 5);
   // Above statement will create date with year 1922, need to set full year
   // explicitly.
   inputDate.setFullYear(22);
@@ -254,9 +254,9 @@ function testGridForJanuary22() {
 
   // Grid start with last days of December 21, shows January 22 and first days
   // of February 22.
-  for (var i = 0; i < 6; i++) {
-    for (var j = 0; j < 7; j++) {
-      var date = picker.getDateAt(i, j);
+  for (let i = 0; i < 6; i++) {
+    for (let j = 0; j < 7; j++) {
+      const date = picker.getDateAt(i, j);
       if (date.getMonth() == 11) {
         assertEquals(21, date.getFullYear());
       } else {
@@ -270,7 +270,7 @@ function testGetDateAt() {
   picker = new goog.ui.DatePicker();
   picker.create(sandbox);
   picker.setDate(new Date(2000, 5, 5));
-  var date = picker.getDateAt(0, 0);
+  const date = picker.getDateAt(0, 0);
   assertTrue(date.equals(picker.grid_[0][0]));
 
   date.setMonth(1);
@@ -281,7 +281,7 @@ function testGetDateAt_NotInGrid() {
   picker = new goog.ui.DatePicker();
   picker.create(sandbox);
   picker.setDate(new Date(2000, 5, 5));
-  var date = picker.getDateAt(-1, 0);
+  let date = picker.getDateAt(-1, 0);
   assertNull(date);
 
   date = picker.getDateAt(0, -1);
@@ -292,7 +292,7 @@ function testGetDateElementAt() {
   picker = new goog.ui.DatePicker();
   picker.create(sandbox);
   picker.setDate(new Date(2000, 5, 5));
-  var element = picker.getDateElementAt(0, 0);
+  const element = picker.getDateElementAt(0, 0);
   assertEquals('td', element.tagName.toLowerCase());
   assertObjectEquals(element, picker.elTable_[1][1]);
 }
@@ -301,7 +301,7 @@ function testGetDateElementAt_NotInTable() {
   picker = new goog.ui.DatePicker();
   picker.create(sandbox);
   picker.setDate(new Date(2000, 5, 5));
-  var element = picker.getDateElementAt(-1, 0);
+  let element = picker.getDateElementAt(-1, 0);
   assertNull(element);
 
   element = picker.getDateElementAt(0, -1);
@@ -318,9 +318,9 @@ function testSetDate() {
   picker = new goog.ui.DatePicker();
   picker.createDom();
   picker.enterDocument();
-  var selectEvents = 0;
-  var changeEvents = 0;
-  var changeActiveMonthEvents = 0;
+  let selectEvents = 0;
+  let changeEvents = 0;
+  let changeActiveMonthEvents = 0;
   goog.events.listen(
       picker, goog.ui.DatePicker.Events.SELECT, function() { selectEvents++; });
   goog.events.listen(
@@ -368,7 +368,7 @@ function testSetDate() {
 
 function testChangeActiveMonth() {
   picker = new goog.ui.DatePicker();
-  var changeActiveMonthEvents = 0;
+  let changeActiveMonthEvents = 0;
   goog.events.listen(
       picker, goog.ui.DatePicker.Events.CHANGE_ACTIVE_MONTH,
       function() { changeActiveMonthEvents++; });
@@ -408,7 +408,7 @@ function testChangeActiveMonth_whenGridGrows_dispatchesGridIncreaseEvent() {
   picker = new goog.ui.DatePicker();
   picker.setShowFixedNumWeeks(false);
   picker.render();
-  var gridSizeIncreaseEvents = 0;
+  let gridSizeIncreaseEvents = 0;
   goog.events.listen(
       picker, goog.ui.DatePicker.Events.GRID_SIZE_INCREASE,
       () => void gridSizeIncreaseEvents++);
@@ -448,7 +448,7 @@ testChangeActiveMonth_withFixedNumWeeks_dispatchesNoGridIncreaseEvent() {
   picker = new goog.ui.DatePicker();
   picker.setShowFixedNumWeeks(true);
   picker.render();
-  var gridSizeIncreaseEvents = 0;
+  let gridSizeIncreaseEvents = 0;
   goog.events.listen(
       picker, goog.ui.DatePicker.Events.GRID_SIZE_INCREASE,
       () => void gridSizeIncreaseEvents++);
@@ -457,14 +457,14 @@ testChangeActiveMonth_withFixedNumWeeks_dispatchesNoGridIncreaseEvent() {
   picker.setDate(new Date(2015, 1, 1));
   assertEquals('No grid size changes yet', 0, gridSizeIncreaseEvents);
 
-  for (var i = 0; i < 100; i++) {
+  for (let i = 0; i < 100; i++) {
     picker.nextMonth();
   }
   assertEquals('No grid size changes', 0, gridSizeIncreaseEvents);
 }
 
 function testUserSelectableDates() {
-  var dateRange = new goog.date.DateRange(
+  const dateRange = new goog.date.DateRange(
       new goog.date.Date(2010, 1, 25), new goog.date.Date(2010, 1, 27));
   picker = new goog.ui.DatePicker();
   picker.setUserSelectableDateRange(dateRange);
@@ -487,11 +487,11 @@ function testUserSelectableDates() {
 
 function testGetUserSelectableDateRange() {
   picker = new goog.ui.DatePicker();
-  var dateRange = picker.getUserSelectableDateRange();
+  let dateRange = picker.getUserSelectableDateRange();
   assertTrue(
       'default date range is all time',
       goog.date.DateRange.equals(dateRange, goog.date.DateRange.allTime()));
-  var newDateRange = new goog.date.DateRange(
+  const newDateRange = new goog.date.DateRange(
       new goog.date.Date(2010, 1, 25), new goog.date.Date(2010, 1, 27));
   picker.setUserSelectableDateRange(newDateRange);
   dateRange = picker.getUserSelectableDateRange();
@@ -503,11 +503,11 @@ function testGetUserSelectableDateRange() {
 function testUniqueCellIds() {
   picker = new goog.ui.DatePicker();
   picker.render();
-  var cells = goog.dom.getElementsByTagNameAndClass(
+  const cells = goog.dom.getElementsByTagNameAndClass(
       goog.dom.TagName.TD, undefined, picker.getElement());
-  var existingIds = {};
-  var numCells = cells.length;
-  for (var i = 0; i < numCells; i++) {
+  const existingIds = {};
+  const numCells = cells.length;
+  for (let i = 0; i < numCells; i++) {
     assertNotNull(cells[i]);
     if (goog.a11y.aria.getRole(cells[i]) == goog.a11y.aria.Role.GRIDCELL) {
       assertNonEmptyString('cell id is non empty', cells[i].id);
@@ -519,7 +519,7 @@ function testUniqueCellIds() {
 
 function testDecoratePreservesClasses() {
   picker = new goog.ui.DatePicker();
-  var div = goog.dom.createDom(goog.dom.TagName.DIV, 'existing-class');
+  const div = goog.dom.createDom(goog.dom.TagName.DIV, 'existing-class');
   picker.decorate(div);
   assertTrue(goog.dom.classlist.contains(div, picker.getBaseCssClass()));
   assertTrue(goog.dom.classlist.contains(div, 'existing-class'));
@@ -532,8 +532,8 @@ function testKeyboardNavigation_arrowKey() {
   // Make the first column be Sunday, not week numbers
   picker.setShowWeekNum(false);
   picker.render(goog.dom.getElement('sandbox'));
-  var selectEvents = goog.testing.recordFunction();
-  var changeEvents = goog.testing.recordFunction();
+  const selectEvents = goog.testing.recordFunction();
+  const changeEvents = goog.testing.recordFunction();
   goog.events.listen(picker, goog.ui.DatePicker.Events.SELECT, selectEvents);
   goog.events.listen(picker, goog.ui.DatePicker.Events.CHANGE, changeEvents);
 
@@ -560,8 +560,8 @@ function testKeyboardNavigation_homeKey() {
   // Make the first column be Sunday, not week numbers
   picker.setShowWeekNum(false);
   picker.render(goog.dom.getElement('sandbox'));
-  var selectEvents = goog.testing.recordFunction();
-  var changeEvents = goog.testing.recordFunction();
+  const selectEvents = goog.testing.recordFunction();
+  const changeEvents = goog.testing.recordFunction();
   goog.events.listen(picker, goog.ui.DatePicker.Events.SELECT, selectEvents);
   goog.events.listen(picker, goog.ui.DatePicker.Events.CHANGE, changeEvents);
 
@@ -580,10 +580,10 @@ function testDayGridHasNonEmptyAriaLabels() {
   picker = new goog.ui.DatePicker(new Date(2017, 8, 9));
   picker.render(goog.dom.getElement('sandbox'));
 
-  var cells = goog.dom.getElementsByTagNameAndClass(
+  const cells = goog.dom.getElementsByTagNameAndClass(
       goog.dom.TagName.TD, undefined, picker.getElement());
-  var numCells = cells.length;
-  for (var i = 0; i < numCells; i++) {
+  const numCells = cells.length;
+  for (let i = 0; i < numCells; i++) {
     assertNotNull(cells[i]);
     if (goog.a11y.aria.getRole(cells[i]) == goog.a11y.aria.Role.GRIDCELL) {
       assertNonEmptyString(

@@ -23,8 +23,12 @@ goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.TableSorter');
 
-var oldHtml;
-var alphaHeader, numberHeader, notSortableHeader, table, tableSorter;
+let oldHtml;
+let alphaHeader;
+let numberHeader;
+let notSortableHeader;
+let table;
+let tableSorter;
 
 function setUpPage() {
   oldHtml = goog.dom.getElement('content').innerHTML;
@@ -120,8 +124,10 @@ function testSortWithNonDefaultSortableHeaderRowIndex() {
 }
 
 function testsetSortableHeaderRowIndexAfterDecorateThrows() {
-  var func = function() { tableSorter.setSortableHeaderRowIndex(0); };
-  var msg = assertThrows('failFunc should throw.', func)['message'];
+  const func = function() {
+    tableSorter.setSortableHeaderRowIndex(0);
+  };
+  const msg = assertThrows('failFunc should throw.', func)['message'];
   assertEquals('Component already rendered', msg);
 }
 
@@ -129,7 +135,7 @@ function testSortOnSecondHeaderRow() {
   // Test a table with multiple table headers.
   // Using setSortableHeaderRowIndex one can specify table header columns to use
   // in sorting.
-  var tableSorter2 = new goog.ui.TableSorter();
+  const tableSorter2 = new goog.ui.TableSorter();
   tableSorter2.setSortableHeaderRowIndex(1);
   tableSorter2.decorate(goog.dom.getElement('sortable-2'));
 
@@ -172,8 +178,9 @@ function testSortAfterSwapping() {
   assertEquals(0, tableSorter.getSortColumn());
 
   // Move first column to the end
-  for (var i = 0, r; (r = table.rows[i]); i++) {
-    var cell = r.cells[0];
+  let r;
+  for (let i = 0; (r = table.rows[i]); i++) {
+    const cell = r.cells[0];
     cell.parentNode.appendChild(cell);
   }
   // Make sure the above worked as expected
@@ -189,9 +196,9 @@ function testSortAfterSwapping() {
 }
 
 function testTwoBodies() {
-  var table3 = goog.dom.getElement('sortable-3');
-  var header = goog.dom.getElement('sortable-3-col');
-  var sorter3 = new goog.ui.TableSorter();
+  const table3 = goog.dom.getElement('sortable-3');
+  const header = goog.dom.getElement('sortable-3-col');
+  const sorter3 = new goog.ui.TableSorter();
   sorter3.setSortFunction(0, goog.ui.TableSorter.alphaSort);
   try {
     sorter3.decorate(table3);
@@ -205,9 +212,9 @@ function testTwoBodies() {
 }
 
 function testNaNs() {
-  var table = goog.dom.getElement('sortable-4');
-  var header = goog.dom.getElement('sortable-4-col');
-  var sorter = new goog.ui.TableSorter();
+  const table = goog.dom.getElement('sortable-4');
+  const header = goog.dom.getElement('sortable-4-col');
+  const sorter = new goog.ui.TableSorter();
   try {
     // All non-numbers compare equal, i.e. Bar == Foo, so order of those
     // elements should not change (since we are using stable sort).
@@ -222,12 +229,12 @@ function testNaNs() {
 }
 
 function assertOrder(arr, opt_table) {
-  var tbl = opt_table || table;
-  var actual = [];
+  const tbl = opt_table || table;
+  const actual = [];
   goog.array.forEach(
       goog.dom.getElementsByTagName(goog.dom.TagName.TD, tbl),
       function(td, idx) {
-        var txt = goog.dom.getTextContent(td);
+        const txt = goog.dom.getTextContent(td);
         if (txt) {
           actual.push(txt);
         }

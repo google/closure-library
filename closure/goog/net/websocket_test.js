@@ -26,15 +26,15 @@ goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
-var webSocket;
-var mockClock;
-var pr;
-var testUrl;
+let webSocket;
+let mockClock;
+let pr;
+let testUrl;
 
-var originalOnOpen = goog.net.WebSocket.prototype.onOpen_;
-var originalOnClose = goog.net.WebSocket.prototype.onClose_;
-var originalOnMessage = goog.net.WebSocket.prototype.onMessage_;
-var originalOnError = goog.net.WebSocket.prototype.onError_;
+const originalOnOpen = goog.net.WebSocket.prototype.onOpen_;
+const originalOnClose = goog.net.WebSocket.prototype.onClose_;
+const originalOnMessage = goog.net.WebSocket.prototype.onMessage_;
+const originalOnError = goog.net.WebSocket.prototype.onError_;
 
 function setUp() {
   pr = new goog.testing.PropertyReplacer();
@@ -87,7 +87,7 @@ function testSendWithoutOpeningThrowsException() {
 function testOpenWithProtocol() {
   webSocket = new goog.net.WebSocket();
   webSocket.open(testUrl, testProtocol);
-  var ws = webSocket.webSocket_;
+  const ws = webSocket.webSocket_;
   simulateOpenEvent(ws);
   assertEquals(testUrl, ws.url);
   assertEquals(testProtocol, ws.protocol);
@@ -97,7 +97,7 @@ function testOpenAndClose() {
   webSocket = new goog.net.WebSocket();
   assertFalse(webSocket.isOpen());
   webSocket.open(testUrl);
-  var ws = webSocket.webSocket_;
+  const ws = webSocket.webSocket_;
   simulateOpenEvent(ws);
   assertTrue(webSocket.isOpen());
   assertEquals(testUrl, ws.url);
@@ -114,7 +114,7 @@ function testOpenAndCloseWithOptions() {
   });
   assertFalse(webSocket.isOpen());
   webSocket.open(testUrl);
-  var ws = webSocket.webSocket_;
+  const ws = webSocket.webSocket_;
   simulateOpenEvent(ws);
   assertTrue(webSocket.isOpen());
   assertEquals(testUrl, ws.url);
@@ -137,7 +137,7 @@ function testReconnectionDisabled() {
   assertFalse(webSocket.isOpen());
 
   // Simulate failure.
-  var ws = webSocket.webSocket_;
+  const ws = webSocket.webSocket_;
   simulateCloseEvent(ws);
   assertFalse(webSocket.isOpen());
   assertEquals(0, webSocket.reconnectAttempt_);
@@ -163,7 +163,7 @@ function testReconnectionWithFailureOnFirstOpen() {
   assertFalse(webSocket.isOpen());
 
   // Simulate failure.
-  var ws = webSocket.webSocket_;
+  const ws = webSocket.webSocket_;
   simulateCloseEvent(ws);
   assertFalse(webSocket.isOpen());
   assertEquals(1, webSocket.reconnectAttempt_);
@@ -215,7 +215,7 @@ function testReconnectionWithFailureAfterOpen() {
   assertFalse(webSocket.isOpen());
 
   // Simulate connection success.
-  var ws = webSocket.webSocket_;
+  let ws = webSocket.webSocket_;
   simulateOpenEvent(ws);
   assertEquals(0, webSocket.reconnectAttempt_);
   assertEquals(1, webSocket.open.getCallCount());
@@ -253,8 +253,8 @@ function testExponentialBackOff() {
 }
 
 function testEntryPointRegistry() {
-  var monitor = new goog.debug.EntryPointMonitor();
-  var replacement = function() {};
+  const monitor = new goog.debug.EntryPointMonitor();
+  const replacement = function() {};
   monitor.wrap =
       goog.testing.recordFunction(goog.functions.constant(replacement));
 
@@ -267,9 +267,10 @@ function testEntryPointRegistry() {
 }
 
 function testErrorHandlerCalled() {
-  var errorHandlerCalled = false;
-  var errorHandler =
-      new goog.debug.ErrorHandler(function() { errorHandlerCalled = true; });
+  let errorHandlerCalled = false;
+  const errorHandler = new goog.debug.ErrorHandler(function() {
+    errorHandlerCalled = true;
+  });
   goog.net.WebSocket.protectEntryPoints(errorHandler);
 
   webSocket = new goog.net.WebSocket();
@@ -279,7 +280,7 @@ function testErrorHandlerCalled() {
       });
 
   webSocket.open(testUrl);
-  var ws = webSocket.webSocket_;
+  const ws = webSocket.webSocket_;
   assertThrows(function() { simulateOpenEvent(ws); });
 
   assertTrue(

@@ -15,13 +15,13 @@
 goog.module('goog.labs.mock.VerificationModeTest');
 goog.setTestOnly('goog.labs.mock.VerificationModeTest');
 
-var testSuite = goog.require('goog.testing.testSuite');
-var verification = goog.require('goog.labs.mock.verification');
+const testSuite = goog.require('goog.testing.testSuite');
+const verification = goog.require('goog.labs.mock.verification');
 
-var atLeast = verification.atLeast;
-var atMost = verification.atMost;
-var never = verification.never;
-var times = verification.times;
+const atLeast = verification.atLeast;
+const atMost = verification.atMost;
+const never = verification.never;
+const times = verification.times;
 
 testSuite({
   getTestName: function() { return 'goog.labs.mock.VerificationModeTest'; },

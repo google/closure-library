@@ -34,7 +34,7 @@ function shouldRunTests() {
 }
 
 function setUp() {
-  var localStorage = new goog.storage.mechanism.HTML5LocalStorage();
+  const localStorage = new goog.storage.mechanism.HTML5LocalStorage();
   if (localStorage.isAvailable()) {
     mechanism = localStorage;
     // There should be at least 2 MiB.

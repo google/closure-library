@@ -26,8 +26,8 @@ goog.require('goog.testing.recordFunction');
 
 
 
-var clock;
-var requestCount = 0;
+let clock;
+let requestCount = 0;
 
 
 function tearDown() {
@@ -40,7 +40,7 @@ function setUp() {
 }
 
 function getModuleManager(infoMap) {
-  var mm = new goog.module.ModuleManager();
+  const mm = new goog.module.ModuleManager();
   mm.setAllModuleInfo(infoMap);
 
   mm.isModuleLoaded = function(id) {
@@ -59,7 +59,7 @@ function createSuccessfulBatchLoader(moduleMgr) {
     onLoad: function(ids, idxLoaded) {
       moduleMgr.beforeLoadModuleCode(ids[idxLoaded]);
       moduleMgr.setLoaded();
-      var idx = idxLoaded + 1;
+      const idx = idxLoaded + 1;
       if (idx < ids.length) {
         setTimeout(goog.bind(this.onLoad, this, ids, idx), 2);
       }
@@ -119,7 +119,7 @@ function createTimeoutLoader(moduleMgr, status) {
  * loaded. Test both batch and non-batch loaders.
  */
 function testExecOnLoad() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  let mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
   execOnLoad_(mm);
 
@@ -136,7 +136,7 @@ function testExecOnLoad() {
  */
 function execOnLoad_(mm) {
   // When module is unloaded, execOnLoad is async.
-  var execCalled1 = false;
+  let execCalled1 = false;
   mm.execOnLoad('a', function() { execCalled1 = true; });
   assertFalse('module "a" should not be loaded', mm.isModuleLoaded('a'));
   assertTrue('module "a" should be loading', mm.isModuleLoading('a'));
@@ -152,7 +152,7 @@ function execOnLoad_(mm) {
 
   // When module is already loaded, execOnLoad is still async unless
   // specified otherwise.
-  var execCalled2 = false;
+  let execCalled2 = false;
   mm.execOnLoad('a', function() { execCalled2 = true; });
   assertTrue('module "a" should be loaded', mm.isModuleLoaded('a'));
   assertFalse('module "a" should not be loading', mm.isModuleLoading('a'));
@@ -161,7 +161,7 @@ function execOnLoad_(mm) {
   assertTrue('execCalled2 should be set', execCalled2);
 
   // When module is unloaded, execOnLoad is async (user active).
-  var execCalled5 = false;
+  let execCalled5 = false;
   mm.execOnLoad('c', function() { execCalled5 = true; }, null, null, true);
   assertFalse('module "c" should not be loaded', mm.isModuleLoaded('c'));
   assertTrue('module "c" should be loading', mm.isModuleLoading('c'));
@@ -177,7 +177,7 @@ function execOnLoad_(mm) {
 
   // When module is already loaded, execOnLoad is still synchronous when
   // so specified
-  var execCalled6 = false;
+  let execCalled6 = false;
   mm.execOnLoad('c', function() {
     execCalled6 = true;
   }, undefined, undefined, undefined, true);
@@ -193,13 +193,15 @@ function execOnLoad_(mm) {
  * Test aborting the callback called on module load.
  */
 function testExecOnLoadAbort() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
   // When module is unloaded and abort is called, module still gets
   // loaded, but callback is cancelled.
-  var execCalled1 = false;
-  var callback1 = mm.execOnLoad('b', function() { execCalled1 = true; });
+  let execCalled1 = false;
+  const callback1 = mm.execOnLoad('b', function() {
+    execCalled1 = true;
+  });
   callback1.abort();
   clock.tick(5);
   assertTrue('module "b" should be loaded', mm.isModuleLoaded('b'));
@@ -207,8 +209,10 @@ function testExecOnLoadAbort() {
 
   // When module is already loaded, execOnLoad is still async, so calling
   // abort should still cancel the callback.
-  var execCalled2 = false;
-  var callback2 = mm.execOnLoad('a', function() { execCalled2 = true; });
+  let execCalled2 = false;
+  const callback2 = mm.execOnLoad('a', function() {
+    execCalled2 = true;
+  });
   callback2.abort();
   clock.tick(5);
   assertFalse('execCalled2 should not be set', execCalled2);
@@ -220,7 +224,7 @@ function testExecOnLoadAbort() {
  * and set load called are called only once per module.
  */
 function testExecOnLoadWhilePreloadingAndViceVersa() {
-  var mm = getModuleManager({'c': [], 'd': []});
+  let mm = getModuleManager({'c': [], 'd': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
   execOnLoadWhilePreloadingAndViceVersa_(mm);
 
@@ -236,12 +240,12 @@ function testExecOnLoadWhilePreloadingAndViceVersa() {
  * @param {goog.module.ModuleManager} mm The module manager.
  */
 function execOnLoadWhilePreloadingAndViceVersa_(mm) {
-  var mm = getModuleManager({'c': [], 'd': []});
+  mm = getModuleManager({'c': [], 'd': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var origBeforeLoadModuleCode = mm.beforeLoadModuleCode;
-  var origSetLoaded = mm.setLoaded;
-  var calls = [0, 0];
+  const origBeforeLoadModuleCode = mm.beforeLoadModuleCode;
+  const origSetLoaded = mm.setLoaded;
+  const calls = [0, 0];
   mm.beforeLoadModuleCode = function(id) {
     calls[0]++;
     origBeforeLoadModuleCode.call(mm, id);
@@ -278,11 +282,11 @@ function execOnLoadWhilePreloadingAndViceVersa_(mm) {
  * confusion about the active state after the module is finally loaded.
  */
 function testUserInitiatedExecOnLoadEventuallyLeavesManagerIdle() {
-  var mm = getModuleManager({'c': [], 'd': []});
+  const mm = getModuleManager({'c': [], 'd': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var calledBack1 = false;
-  var calledBack2 = false;
+  let calledBack1 = false;
+  let calledBack2 = false;
 
   mm.execOnLoad(
       'c', function() { calledBack1 = true; }, undefined, undefined, true);
@@ -307,13 +311,13 @@ function testUserInitiatedExecOnLoadEventuallyLeavesManagerIdle() {
  * Tests loading a module by requesting a Deferred object.
  */
 function testLoad() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var calledBack = false;
-  var error = null;
+  let calledBack = false;
+  let error = null;
 
-  var d = mm.load('a');
+  const d = mm.load('a');
   d.then(
       function(ctx) {
         calledBack = true;
@@ -338,12 +342,12 @@ function testLoad() {
  * in one unit of time.
  */
 function testLoad_concurrent() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setConcurrentLoadingEnabled(true);
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var calledBack = false;
-  var error = null;
+  const calledBack = false;
+  const error = null;
 
   mm.load('a');
   mm.load('b');
@@ -356,13 +360,13 @@ function testLoad_concurrent() {
 }
 
 function testLoad_concurrentSecondIsDepOfFist() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setBatchModeEnabled(true);
   mm.setConcurrentLoadingEnabled(true);
   mm.setLoader(createSuccessfulBatchLoader(mm));
 
-  var calledBack = false;
-  var error = null;
+  const calledBack = false;
+  const error = null;
 
   mm.loadMultiple(['a', 'b']);
   mm.load('b');
@@ -376,11 +380,11 @@ function testLoad_concurrentSecondIsDepOfFist() {
 }
 
 function testLoad_nonConcurrent() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var calledBack = false;
-  var error = null;
+  const calledBack = false;
+  const error = null;
 
   mm.load('a');
   mm.load('b');
@@ -393,9 +397,11 @@ function testLoad_nonConcurrent() {
 }
 
 function testLoadUnknown() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
-  var e = assertThrows(function() { mm.load('DoesNotExist'); });
+  const e = assertThrows(function() {
+    mm.load('DoesNotExist');
+  });
   assertEquals('Unknown module: DoesNotExist', e.message);
 }
 
@@ -404,16 +410,16 @@ function testLoadUnknown() {
  * Tests loading multiple modules by requesting a Deferred object.
  */
 function testLoadMultiple() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setBatchModeEnabled(true);
   mm.setLoader(createSuccessfulBatchLoader(mm));
 
-  var calledBack = false;
-  var error = null;
-  var calledBack2 = false;
-  var error2 = null;
+  let calledBack = false;
+  let error = null;
+  let calledBack2 = false;
+  let error2 = null;
 
-  var dMap = mm.loadMultiple(['a', 'b']);
+  const dMap = mm.loadMultiple(['a', 'b']);
   dMap['a'].then(
       function(ctx) {
         calledBack = true;
@@ -455,16 +461,16 @@ function testLoadMultiple() {
  * Tests loading multiple modules with deps by requesting a Deferred object.
  */
 function testLoadMultipleWithDeps() {
-  var mm = getModuleManager({'a': [], 'b': ['c'], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': ['c'], 'c': []});
   mm.setBatchModeEnabled(true);
   mm.setLoader(createSuccessfulBatchLoader(mm));
 
-  var calledBack = false;
-  var error = null;
-  var calledBack2 = false;
-  var error2 = null;
+  let calledBack = false;
+  let error = null;
+  let calledBack2 = false;
+  let error2 = null;
 
-  var dMap = mm.loadMultiple(['a', 'b']);
+  const dMap = mm.loadMultiple(['a', 'b']);
   dMap['a'].then(
       function(ctx) {
         calledBack = true;
@@ -513,18 +519,18 @@ function testLoadMultipleWithDeps() {
  * a server error occurs.
  */
 function testLoadMultipleWithErrors() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setBatchModeEnabled(true);
   mm.setLoader(createUnsuccessfulLoader(mm, 500));
 
-  var calledBack = false;
-  var error = null;
-  var calledBack2 = false;
-  var error2 = null;
-  var calledBack3 = false;
-  var error3 = null;
+  let calledBack = false;
+  let error = null;
+  let calledBack2 = false;
+  let error2 = null;
+  let calledBack3 = false;
+  let error3 = null;
 
-  var dMap = mm.loadMultiple(['a', 'b', 'c']);
+  const dMap = mm.loadMultiple(['a', 'b', 'c']);
   dMap['a'].then(
       function(ctx) {
         calledBack = true;
@@ -598,18 +604,18 @@ function testLoadMultipleWithErrors() {
  * loads.
  */
 function testLoadMultipleWithErrorsFallbackOnSerial() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setBatchModeEnabled(true);
   mm.setLoader(createUnsuccessfulLoader(mm, 500));
 
-  var calledBack = false;
-  var error = null;
-  var calledBack2 = false;
-  var error2 = null;
-  var calledBack3 = false;
-  var error3 = null;
+  let calledBack = false;
+  let error = null;
+  let calledBack2 = false;
+  let error2 = null;
+  let calledBack3 = false;
+  let error3 = null;
 
-  var dMap = mm.loadMultiple(['a', 'b', 'c']);
+  const dMap = mm.loadMultiple(['a', 'b', 'c']);
   dMap['a'].then(
       function(ctx) {
         calledBack = true;
@@ -700,13 +706,13 @@ function testLoadMultipleWithErrorsFallbackOnSerial() {
  * Tests loading a module by user action by requesting a Deferred object.
  */
 function testLoadForUser() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var calledBack = false;
-  var error = null;
+  let calledBack = false;
+  let error = null;
 
-  var d = mm.load('a', true);
+  const d = mm.load('a', true);
   d.then(
       function(ctx) {
         calledBack = true;
@@ -730,12 +736,12 @@ function testLoadForUser() {
  * Tests that preloading a module calls back the deferred object.
  */
 function testPreloadDeferredWhenNotLoaded() {
-  var mm = getModuleManager({'a': []});
+  const mm = getModuleManager({'a': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var calledBack = false;
+  let calledBack = false;
 
-  var d = mm.preloadModule('a');
+  const d = mm.preloadModule('a');
   d.addCallback(function(ctx) { calledBack = true; });
 
   // First load should take five ticks.
@@ -749,15 +755,15 @@ function testPreloadDeferredWhenNotLoaded() {
  * Tests preloading an already loaded module.
  */
 function testPreloadDeferredWhenLoaded() {
-  var mm = getModuleManager({'a': []});
+  const mm = getModuleManager({'a': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var calledBack = false;
+  let calledBack = false;
 
   mm.preloadModule('a');
   clock.tick(5);
 
-  var d = mm.preloadModule('a');
+  const d = mm.preloadModule('a');
   d.addCallback(function(ctx) { calledBack = true; });
 
   // Module is already loaded, should be called back after the setTimeout
@@ -772,15 +778,15 @@ function testPreloadDeferredWhenLoaded() {
  * Tests preloading a module that is currently loading.
  */
 function testPreloadDeferredWhenLoading() {
-  var mm = getModuleManager({'a': []});
+  const mm = getModuleManager({'a': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
   mm.preloadModule('a');
   clock.tick(1);
 
   // 'b' is in the middle of loading, should get called back when it's done.
-  var calledBack = false;
-  var d = mm.preloadModule('a');
+  let calledBack = false;
+  const d = mm.preloadModule('a');
   d.addCallback(function(ctx) { calledBack = true; });
 
   assertFalse('module "a" should not be loaded yet', calledBack);
@@ -794,12 +800,12 @@ function testPreloadDeferredWhenLoading() {
  * preloading.
  */
 function testLoadWhenPreloading() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var origBeforeLoadModuleCode = mm.beforeLoadModuleCode;
-  var origSetLoaded = mm.setLoaded;
-  var calls = [0, 0];
+  const origBeforeLoadModuleCode = mm.beforeLoadModuleCode;
+  const origSetLoaded = mm.setLoaded;
+  const calls = [0, 0];
   mm.beforeLoadModuleCode = function(id) {
     calls[0]++;
     origBeforeLoadModuleCode.call(mm, id);
@@ -809,15 +815,15 @@ function testLoadWhenPreloading() {
     origSetLoaded.call(mm);
   };
 
-  var calledBack = false;
-  var error = null;
+  let calledBack = false;
+  let error = null;
 
   mm.preloadModule('c', 2);
   assertFalse('module "c" should not be loading yet', mm.isModuleLoading('c'));
   clock.tick(2);
   assertTrue('module "c" should now be loading', mm.isModuleLoading('c'));
 
-  var d = mm.load('c');
+  const d = mm.load('c');
   d.then(
       function(ctx) {
         calledBack = true;
@@ -842,29 +848,29 @@ function testLoadWhenPreloading() {
  * preloading.
  */
 function testLoadMultipleWhenPreloading() {
-  var mm = getModuleManager({'a': [], 'b': ['d'], 'c': [], 'd': []});
+  const mm = getModuleManager({'a': [], 'b': ['d'], 'c': [], 'd': []});
   mm.setLoader(createSuccessfulBatchLoader(mm));
   mm.setBatchModeEnabled(true);
 
-  var origBeforeLoadModuleCode = mm.beforeLoadModuleCode;
-  var origSetLoaded = mm.setLoaded;
-  var calls = {'a': 0, 'b': 0, 'c': 0, 'd': 0};
+  const origBeforeLoadModuleCode = mm.beforeLoadModuleCode;
+  const origSetLoaded = mm.setLoaded;
+  const calls = {'a': 0, 'b': 0, 'c': 0, 'd': 0};
   mm.beforeLoadModuleCode = function(id) {
     calls[id]++;
     origBeforeLoadModuleCode.call(mm, id);
   };
-  var setLoadedCalls = 0;
+  let setLoadedCalls = 0;
   mm.setLoaded = function() {
     setLoadedCalls++;
     origSetLoaded.call(mm);
   };
 
-  var calledBack = false;
-  var error = null;
-  var calledBack2 = false;
-  var error2 = null;
-  var calledBack3 = false;
-  var error3 = null;
+  let calledBack = false;
+  let error = null;
+  let calledBack2 = false;
+  let error2 = null;
+  let calledBack3 = false;
+  let error3 = null;
 
   mm.preloadModule('c', 2);
   mm.preloadModule('d', 3);
@@ -875,7 +881,7 @@ function testLoadMultipleWhenPreloading() {
   clock.tick(1);
   assertTrue('module "d" should now be loading', mm.isModuleLoading('d'));
 
-  var dMap = mm.loadMultiple(['a', 'b', 'c']);
+  const dMap = mm.loadMultiple(['a', 'b', 'c']);
   dMap['a'].then(
       function(ctx) {
         calledBack = true;
@@ -937,27 +943,27 @@ function testLoadMultipleWhenPreloading() {
  * that are already preloading.
  */
 function testLoadMultipleWhenPreloadingSameModules() {
-  var mm = getModuleManager({'a': [], 'b': ['d'], 'c': [], 'd': []});
+  const mm = getModuleManager({'a': [], 'b': ['d'], 'c': [], 'd': []});
   mm.setLoader(createSuccessfulBatchLoader(mm));
   mm.setBatchModeEnabled(true);
 
-  var origBeforeLoadModuleCode = mm.beforeLoadModuleCode;
-  var origSetLoaded = mm.setLoaded;
-  var calls = {'c': 0, 'd': 0};
+  const origBeforeLoadModuleCode = mm.beforeLoadModuleCode;
+  const origSetLoaded = mm.setLoaded;
+  const calls = {'c': 0, 'd': 0};
   mm.beforeLoadModuleCode = function(id) {
     calls[id]++;
     origBeforeLoadModuleCode.call(mm, id);
   };
-  var setLoadedCalls = 0;
+  let setLoadedCalls = 0;
   mm.setLoaded = function() {
     setLoadedCalls++;
     origSetLoaded.call(mm);
   };
 
-  var calledBack = false;
-  var error = null;
-  var calledBack2 = false;
-  var error2 = null;
+  let calledBack = false;
+  let error = null;
+  let calledBack2 = false;
+  let error2 = null;
 
   mm.preloadModule('c', 2);
   mm.preloadModule('d', 3);
@@ -968,7 +974,7 @@ function testLoadMultipleWhenPreloadingSameModules() {
   clock.tick(1);
   assertTrue('module "d" should now be loading', mm.isModuleLoading('d'));
 
-  var dMap = mm.loadMultiple(['c', 'd']);
+  const dMap = mm.loadMultiple(['c', 'd']);
   dMap['c'].then(
       function(ctx) {
         calledBack = true;
@@ -1008,18 +1014,18 @@ function testLoadMultipleWhenPreloadingSameModules() {
  * loaded.  The deferred's callback should be called immediately.
  */
 function testLoadWhenLoaded() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var calledBack = false;
-  var error = null;
+  let calledBack = false;
+  let error = null;
 
   mm.preloadModule('b', 2);
   clock.tick(10);
 
   assertFalse('module "b" should be done loading', mm.isModuleLoading('b'));
 
-  var d = mm.load('b');
+  const d = mm.load('b');
   d.then(
       function(ctx) {
         calledBack = true;
@@ -1038,7 +1044,7 @@ function testLoadWhenLoaded() {
  * Tests that the deferred's errbacks are called if the module fails to load.
  */
 function testLoadWithFailingModule() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createUnsuccessfulLoader(mm, 401));
   mm.registerCallback(
       goog.module.ModuleManager.CallbackType.ERROR,
@@ -1048,10 +1054,10 @@ function testLoadWithFailingModule() {
             goog.module.ModuleManager.FailureType.UNAUTHORIZED, cause);
         firedLoadFailed = true;
       });
-  var calledBack = false;
-  var error = null;
+  let calledBack = false;
+  let error = null;
 
-  var d = mm.load('a');
+  const d = mm.load('a');
   d.then(
       function(ctx) {
         calledBack = true;
@@ -1081,7 +1087,7 @@ function testLoadWithFailingModule() {
  * Tests that the deferred's errbacks are called if a module fails to load.
  */
 function testLoadMultipleWithFailingModule() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(createUnsuccessfulLoader(mm, 401));
   mm.setBatchModeEnabled(true);
   mm.registerCallback(
@@ -1091,16 +1097,16 @@ function testLoadMultipleWithFailingModule() {
             'Failure cause was not as expected',
             goog.module.ModuleManager.FailureType.UNAUTHORIZED, cause);
       });
-  var calledBack11 = false;
-  var error11 = null;
-  var calledBack12 = false;
-  var error12 = null;
-  var calledBack21 = false;
-  var error21 = null;
-  var calledBack22 = false;
-  var error22 = null;
+  let calledBack11 = false;
+  let error11 = null;
+  let calledBack12 = false;
+  let error12 = null;
+  let calledBack21 = false;
+  let error21 = null;
+  let calledBack22 = false;
+  let error22 = null;
 
-  var dMap = mm.loadMultiple(['a', 'b']);
+  const dMap = mm.loadMultiple(['a', 'b']);
   dMap['a'].then(
       function(ctx) {
         calledBack11 = true;
@@ -1116,7 +1122,7 @@ function testLoadMultipleWithFailingModule() {
         error12 = err;
       });
 
-  var dMap2 = mm.loadMultiple(['b', 'c']);
+  const dMap2 = mm.loadMultiple(['b', 'c']);
   dMap2['b'].then(
       function(ctx) {
         calledBack21 = true;
@@ -1178,11 +1184,11 @@ function testLoadMultipleWithFailingModule() {
  * Tests that the right dependencies are cancelled on a loadMultiple failure.
  */
 function testLoadMultipleWithFailingModuleDependencies() {
-  var mm =
+  const mm =
       getModuleManager({'a': [], 'b': [], 'c': ['b'], 'd': ['c'], 'e': []});
   mm.setLoader(createUnsuccessfulLoader(mm, 401));
   mm.setBatchModeEnabled(true);
-  var cancelledIds = [];
+  const cancelledIds = [];
 
   mm.registerCallback(
       goog.module.ModuleManager.CallbackType.ERROR,
@@ -1192,18 +1198,18 @@ function testLoadMultipleWithFailingModuleDependencies() {
             goog.module.ModuleManager.FailureType.UNAUTHORIZED, cause);
         cancelledIds.push(id);
       });
-  var calledBack11 = false;
-  var error11 = null;
-  var calledBack12 = false;
-  var error12 = null;
-  var calledBack21 = false;
-  var error21 = null;
-  var calledBack22 = false;
-  var error22 = null;
-  var calledBack23 = false;
-  var error23 = null;
+  let calledBack11 = false;
+  let error11 = null;
+  let calledBack12 = false;
+  let error12 = null;
+  let calledBack21 = false;
+  let error21 = null;
+  let calledBack22 = false;
+  let error22 = null;
+  let calledBack23 = false;
+  let error23 = null;
 
-  var dMap = mm.loadMultiple(['a', 'b']);
+  const dMap = mm.loadMultiple(['a', 'b']);
   dMap['a'].then(
       function(ctx) {
         calledBack11 = true;
@@ -1219,7 +1225,7 @@ function testLoadMultipleWithFailingModuleDependencies() {
         error12 = err;
       });
 
-  var dMap2 = mm.loadMultiple(['c', 'd', 'e']);
+  const dMap2 = mm.loadMultiple(['c', 'd', 'e']);
   dMap2['c'].then(
       function(ctx) {
         calledBack21 = true;
@@ -1284,11 +1290,11 @@ function testLoadMultipleWithFailingModuleDependencies() {
  * when it has duplicates.
  */
 function testLoadMultipleWithDuplicates() {
-  var mm = getModuleManager({'a': [], 'b': []});
+  const mm = getModuleManager({'a': [], 'b': []});
   mm.setBatchModeEnabled(true);
   mm.setLoader(createSuccessfulBatchLoader(mm));
 
-  var listWithDuplicates = ['a', 'a', 'b'];
+  const listWithDuplicates = ['a', 'a', 'b'];
   mm.loadMultiple(listWithDuplicates);
   assertArrayEquals(
       'loadMultiple should not modify its input', ['a', 'a', 'b'],
@@ -1300,7 +1306,7 @@ function testLoadMultipleWithDuplicates() {
  * Test loading dependencies transitively.
  */
 function testLoadingDepsInNonBatchMode1() {
-  var mm =
+  const mm =
       getModuleManager({'i': [], 'j': [], 'k': ['j'], 'l': ['i', 'j', 'k']});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
@@ -1330,7 +1336,7 @@ function testLoadingDepsInNonBatchMode1() {
  * Test loading dependencies transitively and in dependency order.
  */
 function testLoadingDepsInNonBatchMode2() {
-  var mm = getModuleManager({
+  const mm = getModuleManager({
     'h': [],
     'i': ['h'],
     'j': ['i'],
@@ -1379,7 +1385,7 @@ function testLoadingDepsInNonBatchMode2() {
 }
 
 function testLoadingDepsInBatchMode() {
-  var mm =
+  const mm =
       getModuleManager({'e': [], 'f': [], 'g': ['f'], 'h': ['e', 'f', 'g']});
   mm.setLoader(createSuccessfulBatchLoader(mm));
   mm.setBatchModeEnabled(true);
@@ -1410,11 +1416,11 @@ function testLoadingDepsInBatchMode() {
  * Test unauthorized errors while loading modules.
  */
 function testUnauthorizedLoading() {
-  var mm = getModuleManager({'m': [], 'n': [], 'o': ['n']});
+  const mm = getModuleManager({'m': [], 'n': [], 'o': ['n']});
   mm.setLoader(createUnsuccessfulLoader(mm, 401));
 
   // Callback checks for an unauthorized error
-  var firedLoadFailed = false;
+  let firedLoadFailed = false;
   mm.registerCallback(
       goog.module.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
@@ -1440,7 +1446,7 @@ function testUnauthorizedLoading() {
  * Test error loading modules which are retried.
  */
 function testErrorLoadingModule() {
-  var mm = getModuleManager({'p': ['q'], 'q': [], 'r': ['q', 'p']});
+  const mm = getModuleManager({'p': ['q'], 'q': [], 'r': ['q', 'p']});
   mm.setLoader(createUnsuccessfulLoader(mm, 500));
 
   mm.preloadModule('r');
@@ -1473,7 +1479,7 @@ function testErrorLoadingModule() {
  * Tests error loading modules which are retried.
  */
 function testErrorLoadingModule_batchMode() {
-  var mm = getModuleManager({'p': ['q'], 'q': [], 'r': ['q', 'p']});
+  const mm = getModuleManager({'p': ['q'], 'q': [], 'r': ['q', 'p']});
   mm.setLoader(createUnsuccessfulBatchLoader(mm, 500));
   mm.setBatchModeEnabled(true);
 
@@ -1502,11 +1508,11 @@ function testErrorLoadingModule_batchMode() {
  * Test consecutive errors in loading modules.
  */
 function testConsecutiveErrors() {
-  var mm = getModuleManager({'s': []});
+  const mm = getModuleManager({'s': []});
   mm.setLoader(createUnsuccessfulLoader(mm, 500));
 
   // Register an error callback for consecutive failures.
-  var firedLoadFailed = false;
+  let firedLoadFailed = false;
   mm.registerCallback(
       goog.module.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
@@ -1520,7 +1526,7 @@ function testConsecutiveErrors() {
   assertFalse('module "s" should not be loaded (0)', mm.isModuleLoaded('s'));
 
   // Fail twice.
-  for (var i = 0; i < 2; i++) {
+  for (let i = 0; i < 2; i++) {
     clock.tick(5 + mm.getBackOff_());
     assertFalse('module "s" should not be loaded (1)', mm.isModuleLoaded('s'));
     assertFalse('should not fire failed callback (1)', firedLoadFailed);
@@ -1533,7 +1539,7 @@ function testConsecutiveErrors() {
 
   // Check that it doesn't attempt to load the module anymore after it has
   // failed.
-  var triedLoad = false;
+  let triedLoad = false;
   mm.setLoader({
     loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn) {
       triedLoad = true;
@@ -1555,11 +1561,11 @@ function testConsecutiveErrors() {
  * Test loading errors due to old code.
  */
 function testOldCodeGoneError() {
-  var mm = getModuleManager({'s': []});
+  const mm = getModuleManager({'s': []});
   mm.setLoader(createUnsuccessfulLoader(mm, 410));
 
   // Callback checks for an old code failure
-  var firedLoadFailed = false;
+  let firedLoadFailed = false;
   mm.registerCallback(
       goog.module.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
@@ -1581,11 +1587,11 @@ function testOldCodeGoneError() {
  * Test timeout.
  */
 function testTimeout() {
-  var mm = getModuleManager({'s': []});
+  const mm = getModuleManager({'s': []});
   mm.setLoader(createTimeoutLoader(mm));
 
   // Callback checks for timeout
-  var firedTimeout = false;
+  let firedTimeout = false;
   mm.registerCallback(
       goog.module.ModuleManager.CallbackType.ERROR,
       function(callbackType, id, cause) {
@@ -1609,12 +1615,12 @@ function testTimeout() {
 function testExecOnLoadError() {
   // Expect two callbacks, each of which will be called with callback type
   // ERROR, the right module id and failure type INIT_ERROR.
-  var errorCallback1 = goog.testing.createFunctionMock('callback1');
+  const errorCallback1 = goog.testing.createFunctionMock('callback1');
   errorCallback1(
       goog.module.ModuleManager.CallbackType.ERROR, 'b',
       goog.module.ModuleManager.FailureType.INIT_ERROR);
 
-  var errorCallback2 = goog.testing.createFunctionMock('callback2');
+  const errorCallback2 = goog.testing.createFunctionMock('callback2');
   errorCallback2(
       goog.module.ModuleManager.CallbackType.ERROR, 'b',
       goog.module.ModuleManager.FailureType.INIT_ERROR);
@@ -1622,7 +1628,7 @@ function testExecOnLoadError() {
   errorCallback1.$replay();
   errorCallback2.$replay();
 
-  var mm = new goog.module.ModuleManager();
+  const mm = new goog.module.ModuleManager();
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
   // Register the first callback before setting the module info map.
@@ -1635,7 +1641,7 @@ function testExecOnLoadError() {
   mm.registerCallback(
       goog.module.ModuleManager.CallbackType.ERROR, errorCallback2);
 
-  var execOnLoadBCalled = false;
+  let execOnLoadBCalled = false;
   mm.execOnLoad('b', function() {
     execOnLoadBCalled = true;
     throw new Error();
@@ -1657,14 +1663,14 @@ function testExecOnLoadError() {
 function testExecOnLoadErrorModuleInfoString() {
   // Expect a callback to be called with callback type ERROR, the right module
   // id and failure type INIT_ERROR.
-  var errorCallback = goog.testing.createFunctionMock('callback');
+  const errorCallback = goog.testing.createFunctionMock('callback');
   errorCallback(
       goog.module.ModuleManager.CallbackType.ERROR, 'b',
       goog.module.ModuleManager.FailureType.INIT_ERROR);
 
   errorCallback.$replay();
 
-  var mm = new goog.module.ModuleManager();
+  const mm = new goog.module.ModuleManager();
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
   // Register the first callback before setting the module info map.
@@ -1673,7 +1679,7 @@ function testExecOnLoadErrorModuleInfoString() {
 
   mm.setAllModuleInfoString('a/b/c');
 
-  var execOnLoadBCalled = false;
+  let execOnLoadBCalled = false;
   mm.execOnLoad('b', function() {
     execOnLoadBCalled = true;
     throw new Error();
@@ -1691,13 +1697,13 @@ function testExecOnLoadErrorModuleInfoString() {
  * Make sure ModuleInfo objects in moduleInfoMap_ get disposed.
  */
 function testDispose() {
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
 
-  var moduleInfoA = mm.getModuleInfo('a');
+  const moduleInfoA = mm.getModuleInfo('a');
   assertNotNull(moduleInfoA);
-  var moduleInfoB = mm.getModuleInfo('b');
+  const moduleInfoB = mm.getModuleInfo('b');
   assertNotNull(moduleInfoB);
-  var moduleInfoC = mm.getModuleInfo('c');
+  const moduleInfoC = mm.getModuleInfo('c');
   assertNotNull(moduleInfoC);
 
   mm.dispose();
@@ -1707,7 +1713,7 @@ function testDispose() {
 }
 
 function testDependencyOrderingWithSimpleDeps() {
-  var mm = getModuleManager({
+  const mm = getModuleManager({
     'a': ['b', 'c'],
     'b': ['d'],
     'c': ['e', 'f'],
@@ -1715,13 +1721,13 @@ function testDependencyOrderingWithSimpleDeps() {
     'e': [],
     'f': []
   });
-  var ids = mm.getNotYetLoadedTransitiveDepIds_('a');
+  const ids = mm.getNotYetLoadedTransitiveDepIds_('a');
   assertDependencyOrder(ids, mm);
   assertArrayEquals(['d', 'e', 'f', 'b', 'c', 'a'], ids);
 }
 
 function testDependencyOrderingWithRequestedDep() {
-  var mm = getModuleManager({
+  const mm = getModuleManager({
     'a': ['b', 'c'],
     'b': ['d'],
     'c': ['e', 'f'],
@@ -1730,7 +1736,7 @@ function testDependencyOrderingWithRequestedDep() {
     'f': []
   });
   mm.requestedModuleIds_ = ['a', 'b'];
-  var ids = mm.getNotYetLoadedTransitiveDepIds_('a');
+  const ids = mm.getNotYetLoadedTransitiveDepIds_('a');
   assertDependencyOrder(ids, mm);
   assertArrayEquals(['e', 'f', 'c'], ids);
 }
@@ -1738,8 +1744,9 @@ function testDependencyOrderingWithRequestedDep() {
 function testDependencyOrderingWithCommonDepsInDeps() {
   // Tests to make sure that if dependencies of the root are loaded before
   // their common dependencies.
-  var mm = getModuleManager({'a': ['b', 'c'], 'b': ['d'], 'c': ['d'], 'd': []});
-  var ids = mm.getNotYetLoadedTransitiveDepIds_('a');
+  const mm =
+      getModuleManager({'a': ['b', 'c'], 'b': ['d'], 'c': ['d'], 'd': []});
+  const ids = mm.getNotYetLoadedTransitiveDepIds_('a');
   assertDependencyOrder(ids, mm);
   assertArrayEquals(['d', 'b', 'c', 'a'], ids);
 }
@@ -1748,8 +1755,8 @@ function testDependencyOrderingWithCommonDepsInRoot1() {
   // Tests the case where a dependency of the root depends on another
   // dependency of the root.  Regardless of ordering in the root's
   // deps.
-  var mm = getModuleManager({'a': ['b', 'c'], 'b': ['c'], 'c': []});
-  var ids = mm.getNotYetLoadedTransitiveDepIds_('a');
+  const mm = getModuleManager({'a': ['b', 'c'], 'b': ['c'], 'c': []});
+  const ids = mm.getNotYetLoadedTransitiveDepIds_('a');
   assertDependencyOrder(ids, mm);
   assertArrayEquals(['c', 'b', 'a'], ids);
 }
@@ -1758,15 +1765,15 @@ function testDependencyOrderingWithCommonDepsInRoot2() {
   // Tests the case where a dependency of the root depends on another
   // dependency of the root.  Regardless of ordering in the root's
   // deps.
-  var mm = getModuleManager({'a': ['b', 'c'], 'b': [], 'c': ['b']});
-  var ids = mm.getNotYetLoadedTransitiveDepIds_('a');
+  const mm = getModuleManager({'a': ['b', 'c'], 'b': [], 'c': ['b']});
+  const ids = mm.getNotYetLoadedTransitiveDepIds_('a');
   assertDependencyOrder(ids, mm);
   assertArrayEquals(['b', 'c', 'a'], ids);
 }
 
 function testDependencyOrderingWithGmailExample() {
   // Real dependency graph taken from gmail.
-  var mm = getModuleManager({
+  const mm = getModuleManager({
     's': ['dp', 'ml', 'md'],
     'dp': ['a'],
     'ml': ['ld', 'm'],
@@ -1790,19 +1797,19 @@ function testDependencyOrderingWithGmailExample() {
   mm.beforeLoadModuleCode('mh');
   mm.setLoaded();
 
-  var ids = mm.getNotYetLoadedTransitiveDepIds_('s');
+  const ids = mm.getNotYetLoadedTransitiveDepIds_('s');
   assertDependencyOrder(ids, mm);
   assertArrayEquals(['ld', 'dp', 'ml', 'md', 's'], ids);
 }
 
 function assertDependencyOrder(list, mm) {
-  var seen = {};
-  for (var i = 0; i < list.length; i++) {
-    var id = list[i];
+  const seen = {};
+  for (let i = 0; i < list.length; i++) {
+    const id = list[i];
     seen[id] = true;
-    var deps = mm.getModuleInfo(id).getDependencies();
-    for (var j = 0; j < deps.length; j++) {
-      var dep = deps[j];
+    const deps = mm.getModuleInfo(id).getDependencies();
+    for (let j = 0; j < deps.length; j++) {
+      const dep = deps[j];
       assertTrue(
           'Unresolved dependency [' + dep + '] for [' + id + '].',
           seen[dep] || mm.getModuleInfo(dep).isLoaded());
@@ -1811,8 +1818,8 @@ function assertDependencyOrder(list, mm) {
 }
 
 function testRegisterInitializationCallback() {
-  var initCalled = 0;
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  let initCalled = 0;
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
   mm.setLoader(
       createSuccessfulNonBatchLoaderWithRegisterInitCallback(
           mm, function() { ++initCalled; }));
@@ -1838,9 +1845,9 @@ function createSuccessfulNonBatchLoaderWithRegisterInitCallback(moduleMgr, fn) {
 }
 
 function testSetModuleConstructor() {
-  var initCalled = 0;
-  var mm = getModuleManager({'a': [], 'b': [], 'c': []});
-  var info = {
+  const initCalled = 0;
+  const mm = getModuleManager({'a': [], 'b': [], 'c': []});
+  const info = {
     'a': {ctor: AModule, count: 0},
     'b': {ctor: BModule, count: 0},
     'c': {ctor: CModule, count: 0}
@@ -1876,10 +1883,10 @@ function testSetModuleConstructor() {
  * doesn't trigger a second load.
  */
 function testLoadWhenInitializing() {
-  var mm = getModuleManager({'a': []});
+  const mm = getModuleManager({'a': []});
   mm.setLoader(createSuccessfulNonBatchLoader(mm));
 
-  var info = {'a': {ctor: AModule, count: 0}};
+  const info = {'a': {ctor: AModule, count: 0}};
   function AModule() {
     ++info['a'].count;
     goog.module.BaseModule.call(this);
@@ -1893,9 +1900,9 @@ function testLoadWhenInitializing() {
 }
 
 function testErrorInEarlyCallback() {
-  var errback = goog.testing.recordFunction();
-  var callback = goog.testing.recordFunction();
-  var mm = getModuleManager({'a': [], 'b': ['a']});
+  const errback = goog.testing.recordFunction();
+  const callback = goog.testing.recordFunction();
+  const mm = getModuleManager({'a': [], 'b': ['a']});
   mm.getModuleInfo('a').registerEarlyCallback(goog.functions.error('error'));
   mm.getModuleInfo('a').registerCallback(callback);
   mm.getModuleInfo('a').registerErrback(errback);
@@ -1904,7 +1911,9 @@ function testErrorInEarlyCallback() {
       createSuccessfulNonBatchLoaderWithConstructor(
           mm, createModulesFor('a', 'b')));
   mm.preloadModule('b');
-  var e = assertThrows(function() { clock.tick(5); });
+  const e = assertThrows(function() {
+    clock.tick(5);
+  });
 
   assertEquals('error', e.message);
   assertEquals(0, callback.getCallCount());
@@ -1920,9 +1929,9 @@ function testErrorInEarlyCallback() {
 }
 
 function testErrorInNormalCallback() {
-  var earlyCallback = goog.testing.recordFunction();
-  var errback = goog.testing.recordFunction();
-  var mm = getModuleManager({'a': [], 'b': ['a']});
+  const earlyCallback = goog.testing.recordFunction();
+  const errback = goog.testing.recordFunction();
+  const mm = getModuleManager({'a': [], 'b': ['a']});
   mm.getModuleInfo('a').registerEarlyCallback(earlyCallback);
   mm.getModuleInfo('a').registerEarlyCallback(goog.functions.error('error'));
   mm.getModuleInfo('a').registerErrback(errback);
@@ -1931,7 +1940,9 @@ function testErrorInNormalCallback() {
       createSuccessfulNonBatchLoaderWithConstructor(
           mm, createModulesFor('a', 'b')));
   mm.preloadModule('b');
-  var e = assertThrows(function() { clock.tick(10); });
+  const e = assertThrows(function() {
+    clock.tick(10);
+  });
   clock.tick(10);
 
   assertEquals('error', e.message);
@@ -1944,7 +1955,7 @@ function testErrorInNormalCallback() {
 }
 
 function testErrorInErrback() {
-  var mm = getModuleManager({'a': [], 'b': ['a']});
+  const mm = getModuleManager({'a': [], 'b': ['a']});
   mm.getModuleInfo('a').registerCallback(goog.functions.error('error1'));
   mm.getModuleInfo('a').registerErrback(goog.functions.error('error2'));
 
@@ -1952,17 +1963,21 @@ function testErrorInErrback() {
       createSuccessfulNonBatchLoaderWithConstructor(
           mm, createModulesFor('a', 'b')));
   mm.preloadModule('a');
-  var e = assertThrows(function() { clock.tick(10); });
+  let e = assertThrows(function() {
+    clock.tick(10);
+  });
   assertEquals('error1', e.message);
-  var e = assertThrows(function() { clock.tick(10); });
+  e = assertThrows(function() {
+    clock.tick(10);
+  });
   assertEquals('error2', e.message);
   assertTrue(mm.getModuleInfo('a').isLoaded());
 }
 
 function createModulesFor(var_args) {
-  var result = {};
-  for (var i = 0; i < arguments.length; i++) {
-    var key = arguments[i];
+  const result = {};
+  for (let i = 0; i < arguments.length; i++) {
+    const key = arguments[i];
     result[key] = {ctor: goog.module.BaseModule};
   }
   return result;
@@ -1985,9 +2000,9 @@ function createSuccessfulNonBatchLoaderWithConstructor(moduleMgr, info) {
 }
 
 function testInitCallbackInBaseModule() {
-  var mm = new goog.module.ModuleManager();
-  var called = false;
-  var context;
+  let mm = new goog.module.ModuleManager();
+  let called = false;
+  let context;
   mm.registerInitializationCallback(function(mcontext) {
     called = true;
     context = mcontext;
@@ -1996,21 +2011,21 @@ function testInitCallbackInBaseModule() {
   assertTrue('Base initialization not called', called);
   assertNull('Context should still be null', context);
 
-  var mm = new goog.module.ModuleManager();
+  mm = new goog.module.ModuleManager();
   called = false;
   mm.registerInitializationCallback(function(mcontext) {
     called = true;
     context = mcontext;
   });
-  var appContext = {};
+  const appContext = {};
   mm.setModuleContext(appContext);
   assertTrue('Base initialization not called after setModuleContext', called);
   assertEquals('Did not receive module context', appContext, context);
 }
 
 function testSetAllModuleInfoString() {
-  var info = 'base/one:0/two:0/three:0,1,2/four:0,3/five:';
-  var mm = new goog.module.ModuleManager();
+  const info = 'base/one:0/two:0/three:0,1,2/four:0,3/five:';
+  const mm = new goog.module.ModuleManager();
   mm.setAllModuleInfoString(info);
 
   assertNotNull('Base should exist', mm.getModuleInfo('base'));
@@ -2028,9 +2043,9 @@ function testSetAllModuleInfoString() {
 }
 
 function testSetAllModuleInfoStringWithEmptyString() {
-  var mm = new goog.module.ModuleManager();
-  var called = false;
-  var context;
+  const mm = new goog.module.ModuleManager();
+  let called = false;
+  let context;
   mm.registerInitializationCallback(function(mcontext) {
     called = true;
     context = mcontext;
@@ -2040,7 +2055,7 @@ function testSetAllModuleInfoStringWithEmptyString() {
 }
 
 function testBackOffAmounts() {
-  var mm = new goog.module.ModuleManager();
+  const mm = new goog.module.ModuleManager();
   assertEquals(0, mm.getBackOff_());
 
   mm.consecutiveFailures_++;
@@ -2056,9 +2071,9 @@ function testBackOffAmounts() {
  * after setAllModuleInfoString with currently loading modules.
  */
 function testIdleCallbackWithInitialModules() {
-  var callback = goog.testing.recordFunction();
+  const callback = goog.testing.recordFunction();
 
-  var mm = new goog.module.ModuleManager();
+  const mm = new goog.module.ModuleManager();
   mm.setAllModuleInfoString('a', ['a']);
   mm.registerCallback(goog.module.ModuleManager.CallbackType.IDLE, callback);
 

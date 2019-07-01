@@ -23,7 +23,7 @@ goog.require('goog.object');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
-var stubs = new goog.testing.PropertyReplacer();
+const stubs = new goog.testing.PropertyReplacer();
 
 function setUp() {
   stubs.replace(
@@ -98,8 +98,8 @@ function testCurrencyPattern() {
 }
 
 function testCurrencyFormatCHF() {
-  var formatter;
-  var str;
+  let formatter;
+  let str;
 
   formatter = new goog.i18n.NumberFormat(
       goog.i18n.currency.getLocalCurrencyPattern('CHF'));
@@ -118,8 +118,8 @@ function testCurrencyFormatCHF() {
 }
 
 function testCurrencyFormatYER() {
-  var formatter;
-  var str;
+  let formatter;
+  let str;
 
   formatter = new goog.i18n.NumberFormat(
       goog.i18n.currency.getLocalCurrencyPattern('YER'));
@@ -138,8 +138,8 @@ function testCurrencyFormatYER() {
 }
 
 function testCurrencyFormatCNY() {
-  var formatter;
-  var str;
+  let formatter;
+  let str;
 
   formatter = new goog.i18n.NumberFormat(
       goog.i18n.currency.getLocalCurrencyPattern('CNY'));
@@ -158,8 +158,8 @@ function testCurrencyFormatCNY() {
 }
 
 function testCurrencyFormatCZK() {
-  var formatter;
-  var str;
+  let formatter;
+  let str;
 
   formatter = new goog.i18n.NumberFormat(
       goog.i18n.currency.getLocalCurrencyPattern('CZK'));
@@ -178,8 +178,8 @@ function testCurrencyFormatCZK() {
 }
 
 function testCurrencyFormatEUR() {
-  var formatter;
-  var str;
+  let formatter;
+  let str;
 
   formatter = new goog.i18n.NumberFormat(
       goog.i18n.currency.getLocalCurrencyPattern('EUR'));
@@ -198,8 +198,8 @@ function testCurrencyFormatEUR() {
 }
 
 function testCurrencyFormatJPY() {
-  var formatter;
-  var str;
+  let formatter;
+  let str;
 
   formatter = new goog.i18n.NumberFormat(
       goog.i18n.currency.getLocalCurrencyPattern('JPY'));
@@ -218,8 +218,8 @@ function testCurrencyFormatJPY() {
 }
 
 function testCurrencyFormatPLN() {
-  var formatter;
-  var str;
+  let formatter;
+  let str;
 
   formatter = new goog.i18n.NumberFormat(
       goog.i18n.currency.getLocalCurrencyPattern('PLN'));
@@ -238,8 +238,8 @@ function testCurrencyFormatPLN() {
 }
 
 function testCurrencyFormatUSD() {
-  var formatter;
-  var str;
+  let formatter;
+  let str;
 
   formatter = new goog.i18n.NumberFormat(
       goog.i18n.currency.getLocalCurrencyPattern('USD'));

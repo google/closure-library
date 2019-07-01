@@ -21,15 +21,15 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.testing.net.XhrIo');
 goog.require('goog.ui.ac.RichRemoteArrayMatcher');
 
-var url = 'http://www.google.com';
-var token = 'goog';
-var maxMatches = 5;
+const url = 'http://www.google.com';
+const token = 'goog';
+const maxMatches = 5;
 
-var responseJsonText = '[["type1", "eric", "larry", "sergey"]]';
-var responseJsonType1 = ["eric", "larry", "sergey"];
+const responseJsonText = '[["type1", "eric", "larry", "sergey"]]';
+const responseJsonType1 = ['eric', 'larry', 'sergey'];
 
-var mockControl;
-var mockMatchHandler;
+let mockControl;
+let mockMatchHandler;
 
 
 function setUp() {
@@ -48,7 +48,7 @@ function type1(response) {
 }
 
 function testRequestMatchingRows() {
-  var matcher = new goog.ui.ac.RichRemoteArrayMatcher(url);
+  const matcher = new goog.ui.ac.RichRemoteArrayMatcher(url);
   mockMatchHandler(token, responseJsonType1);
   mockControl.$replayAll();
   matcher.requestMatchingRows(token, maxMatches, mockMatchHandler);
@@ -58,7 +58,7 @@ function testRequestMatchingRows() {
 }
 
 function testSetRowBuilder() {
-  var matcher = new goog.ui.ac.RichRemoteArrayMatcher(url);
+  const matcher = new goog.ui.ac.RichRemoteArrayMatcher(url);
   matcher.setRowBuilder(function(type, response) {
     assertEquals("type1", type);
     return response;

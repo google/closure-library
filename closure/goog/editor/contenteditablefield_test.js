@@ -25,7 +25,7 @@ goog.require('goog.testing.jsunit');
 FieldConstructor = goog.editor.ContentEditableField;
 
 function testNoIframeAndSameElement() {
-  var field = new goog.editor.ContentEditableField('testField');
+  const field = new goog.editor.ContentEditableField('testField');
   field.makeEditable();
   assertFalse(field.usesIframe());
   assertEquals(
@@ -41,9 +41,9 @@ function testNoIframeAndSameElement() {
 }
 
 function testMakeEditableAndUnEditable() {
-  var elem = goog.dom.getElement('testField');
+  const elem = goog.dom.getElement('testField');
   goog.dom.setTextContent(elem, 'Hello world');
-  var field = new goog.editor.ContentEditableField('testField');
+  const field = new goog.editor.ContentEditableField('testField');
 
   field.makeEditable();
   assertEquals('true', String(elem.contentEditable));

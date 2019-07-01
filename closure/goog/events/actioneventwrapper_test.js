@@ -23,7 +23,9 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.events.actionEventWrapper');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
-var a, eh, events;
+let a;
+let eh;
+let events;
 
 function setUpPage() {
   a = document.getElementById('a');
@@ -42,14 +44,14 @@ function tearDown() {
   eh.dispose();
 }
 
-var Foo = function() {};
+const Foo = function() {};
 Foo.prototype.test = function(e) {
   events.push(e);
 };
 
 function assertListenersExist(el, listenerCount, capt) {
-  var EVENT_TYPES = goog.events.ActionEventWrapper_.EVENT_TYPES_;
-  for (var i = 0; i < EVENT_TYPES.length; ++i) {
+  const EVENT_TYPES = goog.events.ActionEventWrapper_.EVENT_TYPES_;
+  for (let i = 0; i < EVENT_TYPES.length; ++i) {
     assertEquals(
         listenerCount,
         goog.events.getListeners(el, EVENT_TYPES[i], capt).length);
@@ -57,7 +59,9 @@ function assertListenersExist(el, listenerCount, capt) {
 }
 
 function testAddActionListener() {
-  var listener = function(e) { events.push(e); };
+  const listener = function(e) {
+    events.push(e);
+  };
   goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
 
   assertListenersExist(a, 1, false);
@@ -104,7 +108,11 @@ function testAddActionListener() {
 
 
 function testAddActionListenerForHandleEvent() {
-  var listener = {handleEvent: function(e) { events.push(e); }};
+  const listener = {
+    handleEvent: function(e) {
+      events.push(e);
+    }
+  };
   goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
 
   assertListenersExist(a, 1, false);
@@ -137,14 +145,14 @@ function testAddActionListenerForHandleEvent() {
 
 
 function testAddActionListenerInCaptPhase() {
-  var count = 0;
-  var captListener = function(e) {
+  let count = 0;
+  const captListener = function(e) {
     events.push(e);
     assertEquals(0, count);
     count++;
   };
 
-  var bubbleListener = function(e) {
+  const bubbleListener = function(e) {
     events.push(e);
     assertEquals(1, count);
     count = 0;
@@ -184,8 +192,12 @@ function testAddActionListenerInCaptPhase() {
 
 
 function testRemoveActionListener() {
-  var listener1 = function(e) { events.push(e); };
-  var listener2 = function(e) { events.push({type: 'err'}); };
+  const listener1 = function(e) {
+    events.push(e);
+  };
+  const listener2 = function(e) {
+    events.push({type: 'err'});
+  };
 
   goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener1);
   assertListenersExist(a, 1, false);
@@ -212,7 +224,9 @@ function testRemoveActionListener() {
 
 
 function testEventHandlerActionListener() {
-  var listener = function(e) { events.push(e); };
+  const listener = function(e) {
+    events.push(e);
+  };
   eh.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
 
   assertListenersExist(a, 1, false);
@@ -237,8 +251,8 @@ function testEventHandlerActionListener() {
 
 
 function testEventHandlerActionListenerWithScope() {
-  var foo = new Foo();
-  var eh2 = new goog.events.EventHandler(foo);
+  const foo = new Foo();
+  const eh2 = new goog.events.EventHandler(foo);
 
   eh2.listenWithWrapper(a, goog.events.actionEventWrapper, foo.test);
 

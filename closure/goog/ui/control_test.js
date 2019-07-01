@@ -40,16 +40,16 @@ goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 
 // Disabled due to problems on farm.
-var testFocus = false;
+const testFocus = false;
 
-var control;
+let control;
 
-var ALL_EVENTS = goog.object.getValues(goog.ui.Component.EventType);
-var events = {};
-var expectedFailures;
-var sandbox;
-var aria = goog.a11y.aria;
-var State = goog.a11y.aria.State;
+const ALL_EVENTS = goog.object.getValues(goog.ui.Component.EventType);
+const events = {};
+let expectedFailures;
+let sandbox;
+const aria = goog.a11y.aria;
+const State = goog.a11y.aria.State;
 
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
@@ -103,8 +103,8 @@ function resetEventCount() {
  * @param {goog.events.Event} e Event to count.
  */
 function countEvent(e) {
-  var type = e.type;
-  var target = e.target;
+  const type = e.type;
+  const target = e.target;
 
   if (!events[target]) {
     events[target] = {};
@@ -161,7 +161,7 @@ function getListenerCount(control) {
  * @return {boolean} Whether the event was allowed to proceed.
  */
 function fireMouseDownAndFocus(element, opt_button) {
-  var result = goog.testing.events.fireMouseDownEvent(element, opt_button);
+  const result = goog.testing.events.fireMouseDownEvent(element, opt_button);
   if (result) {
     // Browsers move focus for all buttons, not just the left button.
     element.focus();
@@ -191,12 +191,12 @@ function testConstructor() {
       goog.ui.registry.getDefaultRenderer(goog.ui.Control),
       control.getRenderer());
 
-  var content = goog.dom.createDom(
+  const content = goog.dom.createDom(
       goog.dom.TagName.DIV, null, 'Hello',
       goog.dom.createDom(goog.dom.TagName.B, null, 'World'));
-  var testRenderer = new TestRenderer();
-  var fakeDomHelper = {};
-  var foo = new goog.ui.Control(content, testRenderer, fakeDomHelper);
+  const testRenderer = new TestRenderer();
+  const fakeDomHelper = {};
+  const foo = new goog.ui.Control(content, testRenderer, fakeDomHelper);
   assertNotNull('Constructed object must not be null', foo);
   assertEquals('Content must have expected value', content, foo.getContent());
   assertEquals(
@@ -215,7 +215,7 @@ function testGetHandler() {
       'Event handler must be undefined before getHandler() ' +
           'is called',
       control.googUiComponentHandler_);
-  var handler = control.getHandler();
+  const handler = control.getHandler();
   assertNotNull('Event handler must not be null', handler);
   assertEquals(
       'getHandler() must return the same instance if called again', handler,
@@ -285,7 +285,7 @@ function testGetKeyHandler() {
       'Key handler must be undefined before getKeyHandler() ' +
           'is called',
       control.keyHandler_);
-  var keyHandler = control.getKeyHandler();
+  const keyHandler = control.getKeyHandler();
   assertNotNull('Key handler must not be null', keyHandler);
   assertEquals(
       'getKeyHandler() must return the same instance if called ' +
@@ -317,7 +317,7 @@ function testSetRenderer() {
       goog.ui.registry.getDefaultRenderer(goog.ui.Control),
       control.getRenderer());
 
-  var testRenderer = new TestRenderer();
+  const testRenderer = new TestRenderer();
   control.setRenderer(testRenderer);
   assertNull(
       'Control must not have a DOM after its renderer is reset',
@@ -519,7 +519,7 @@ function testCanDecorate() {
  */
 function testDecorateInternal() {
   sandbox.innerHTML = '<div id="foo">Hello, <b>World</b>!</div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
   control.decorate(foo);
   assertEquals(
       'Decorated control\'s element must have expected value', foo,
@@ -538,7 +538,7 @@ function testDecorateInternal() {
  */
 function testDecorateInternalForSelectableControl() {
   sandbox.innerHTML = '<div id="foo">Hello, <b>World</b>!</div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
   control.setAllowTextSelection(true);
   control.decorate(foo);
   assertEquals(
@@ -556,7 +556,7 @@ function testDecorateInternalForSelectableControl() {
  */
 function testDecorateInternalForHiddenElement() {
   sandbox.innerHTML = '<div id="foo" style="display:none">Hello!</div>';
-  var foo = goog.dom.getElement('foo');
+  const foo = goog.dom.getElement('foo');
   control.decorate(foo);
   assertEquals(
       'Decorated control\'s element must have expected value', foo,
@@ -696,8 +696,8 @@ function testExitDocument() {
  */
 function testDispose() {
   control.render(sandbox);
-  var handler = control.getHandler();
-  var keyHandler = control.getKeyHandler();
+  const handler = control.getHandler();
+  const keyHandler = control.getKeyHandler();
   control.dispose();
   assertFalse(
       'Control must no longer be in the document', control.isInDocument());
@@ -740,14 +740,14 @@ function testGetContentForDecoratedControl() {
       '<div id="element"><span>Foo</span></div>\n' +
       '<div id="nodelist">Hello, <b>world</b>!</div>\n';
 
-  var empty = new goog.ui.Control(null);
+  const empty = new goog.ui.Control(null);
   empty.decorate(goog.dom.getElement('empty'));
   assertNull(
       'Content of control decorating empty DIV must be null',
       empty.getContent());
   empty.dispose();
 
-  var text = new goog.ui.Control(null);
+  const text = new goog.ui.Control(null);
   text.decorate(goog.dom.getElement('text'));
   assertEquals(
       'Content of control decorating DIV with text contents ' +
@@ -755,7 +755,7 @@ function testGetContentForDecoratedControl() {
       'Hello, world!', text.getContent().nodeValue);
   text.dispose();
 
-  var element = new goog.ui.Control(null);
+  const element = new goog.ui.Control(null);
   element.decorate(goog.dom.getElement('element'));
   assertEquals(
       'Content of control decorating DIV with element child ' +
@@ -763,7 +763,7 @@ function testGetContentForDecoratedControl() {
       goog.dom.getElement('element').firstChild, element.getContent());
   element.dispose();
 
-  var nodelist = new goog.ui.Control(null);
+  const nodelist = new goog.ui.Control(null);
   nodelist.decorate(goog.dom.getElement('nodelist'));
   assertSameElements(
       'Content of control decorating DIV with mixed ' +
@@ -786,7 +786,7 @@ function testSetAriaLabel_render() {
 
   control.render(sandbox);
 
-  var elem = control.getElementStrict();
+  const elem = control.getElementStrict();
   assertEquals(
       'Element must have control\'s aria label after rendering', 'label',
       goog.a11y.aria.getLabel(elem));
@@ -813,7 +813,7 @@ function testSetAriaLabel_decorate() {
       'Hello, <b>world</b>!</div>';
   control.decorate(goog.dom.getElement('nodelist'));
 
-  var elem = control.getElementStrict();
+  const elem = control.getElementStrict();
   assertEquals(
       'Element must have control\'s aria label after rendering', 'label',
       goog.a11y.aria.getLabel(elem));
@@ -896,10 +896,11 @@ function testGetCaption() {
       'Caption must have expected value', 'Hello, world!',
       control.getCaption());
 
-  var arrayContent = goog.array.clone(
-      goog.dom.safeHtmlToNode(
-          goog.html.testing.newSafeHtmlForTest(
-              ' <b> foo</b><i>  bar</i> ')).childNodes);
+  const arrayContent =
+      goog.array.clone(goog.dom
+                           .safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(
+                               ' <b> foo</b><i>  bar</i> '))
+                           .childNodes);
   control.setContent(arrayContent);
   assertEquals(
       'whitespaces must be normalized in the caption', 'foo bar',
@@ -1248,7 +1249,7 @@ function testSetEnabled() {
   assertTrue('Control must be enabled', control.isEnabled());
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
-  var elem = control.getElementStrict();
+  let elem = control.getElementStrict();
   assertTrue(
       'Control element must not have aria-disabled',
       goog.string.isEmptyOrWhitespace(aria.getState(elem, State.DISABLED)));
@@ -1287,8 +1288,9 @@ function testSetEnabled() {
 
   control.setEnabled(true);
   control.exitDocument();
-  var cssClass = goog.getCssName(goog.ui.ControlRenderer.CSS_CLASS, 'disabled');
-  var element = goog.dom.createDom(goog.dom.TagName.DIV, {tabIndex: 0});
+  const cssClass =
+      goog.getCssName(goog.ui.ControlRenderer.CSS_CLASS, 'disabled');
+  const element = goog.dom.createDom(goog.dom.TagName.DIV, {tabIndex: 0});
   element.className = cssClass;
   goog.dom.appendChild(sandbox, element);
   control.decorate(element);
@@ -1366,8 +1368,9 @@ function testSetStateWithDisabled() {
 
   control.setState(goog.ui.Component.State.DISABLED, false);
   control.exitDocument();
-  var cssClass = goog.getCssName(goog.ui.ControlRenderer.CSS_CLASS, 'disabled');
-  var element = goog.dom.createDom(goog.dom.TagName.DIV, {tabIndex: 0});
+  const cssClass =
+      goog.getCssName(goog.ui.ControlRenderer.CSS_CLASS, 'disabled');
+  const element = goog.dom.createDom(goog.dom.TagName.DIV, {tabIndex: 0});
   element.className = cssClass;
   goog.dom.appendChild(sandbox, element);
   control.decorate(element);
@@ -1392,7 +1395,7 @@ function testSetStateWithDisabled() {
  * Tests {@link goog.ui.Control#setEnabled} when the control has a parent.
  */
 function testSetEnabledWithParent() {
-  var child = new goog.ui.Control(null);
+  const child = new goog.ui.Control(null);
   child.setDispatchTransitionEvents(goog.ui.Component.State.ALL, true);
   control.addChild(child, true /* opt_render */);
   control.setEnabled(false);
@@ -2187,8 +2190,8 @@ function testHandleMouseOver() {
       goog.dom.createDom(goog.dom.TagName.SPAN, {id: 'caption'}, 'Hello'));
   control.render(sandbox);
 
-  var element = control.getElement();
-  var caption = goog.dom.getElement('caption');
+  const element = control.getElement();
+  const caption = goog.dom.getElement('caption');
 
   // Verify baseline assumptions.
   assertTrue(
@@ -2212,9 +2215,10 @@ function testHandleMouseOver() {
   resetEventCount();
 
   // Scenario 2:  preventDefault() is called on the ENTER event.
-  var key = goog.events.listen(
-      control, goog.ui.Component.EventType.ENTER,
-      function(e) { e.preventDefault(); });
+  const key = goog.events.listen(
+      control, goog.ui.Component.EventType.ENTER, function(e) {
+        e.preventDefault();
+      });
   goog.testing.events.fireMouseOverEvent(element, sandbox);
   assertEquals(
       'Control must have dispatched 1 ENTER event', 1,
@@ -2290,8 +2294,8 @@ function testHandleMouseOut() {
 
   control.render(sandbox);
 
-  var element = control.getElement();
-  var caption = goog.dom.getElement('caption');
+  const element = control.getElement();
+  const caption = goog.dom.getElement('caption');
 
   // Verify baseline assumptions.
   assertTrue(
@@ -2321,9 +2325,10 @@ function testHandleMouseOut() {
   resetEventCount();
 
   // Scenario 2:  preventDefault() is called on the LEAVE event.
-  var key = goog.events.listen(
-      control, goog.ui.Component.EventType.LEAVE,
-      function(e) { e.preventDefault(); });
+  const key = goog.events.listen(
+      control, goog.ui.Component.EventType.LEAVE, function(e) {
+        e.preventDefault();
+      });
   goog.testing.events.fireMouseOutEvent(element, sandbox);
   assertEquals(
       'Control must have dispatched 1 LEAVE event', 1,
@@ -2409,17 +2414,17 @@ function testHandleMouseOut() {
 }
 
 function testIsMouseEventWithinElement() {
-  var child = goog.dom.createElement(goog.dom.TagName.DIV);
-  var parent = goog.dom.createDom(goog.dom.TagName.DIV, null, child);
-  var notChild = goog.dom.createElement(goog.dom.TagName.DIV);
+  const child = goog.dom.createElement(goog.dom.TagName.DIV);
+  const parent = goog.dom.createDom(goog.dom.TagName.DIV, null, child);
+  const notChild = goog.dom.createElement(goog.dom.TagName.DIV);
 
-  var event = new goog.testing.events.Event('mouseout');
+  let event = new goog.testing.events.Event('mouseout');
   event.relatedTarget = child;
   assertTrue(
       'Event is within element',
       goog.ui.Control.isMouseEventWithinElement_(event, parent));
 
-  var event = new goog.testing.events.Event('mouseout');
+  event = new goog.testing.events.Event('mouseout');
   event.relatedTarget = notChild;
   assertFalse(
       'Event is not within element',
@@ -2571,7 +2576,7 @@ function testHandleMouseUp() {
   control.setActive(true);
 
   // Override performActionInternal() for testing purposes.
-  var actionPerformed = false;
+  let actionPerformed = false;
   control.performActionInternal = function() {
     actionPerformed = true;
     return true;
@@ -2580,7 +2585,7 @@ function testHandleMouseUp() {
   resetEventCount();
 
   control.render(sandbox);
-  var element = control.getElement();
+  const element = control.getElement();
 
   // Verify baseline assumptions.
   assertTrue('Control must be enabled', control.isEnabled());
@@ -2687,13 +2692,14 @@ function testHandleMouseUp() {
 }
 
 function testDefaultConstructor() {
-  var control = new goog.ui.Control();
+  const control = new goog.ui.Control();
   assertNull(control.getContent());
 }
 
 
 function assertClickSequenceFires(msg) {
-  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  const actionCount =
+      getEventCount(control, goog.ui.Component.EventType.ACTION);
   goog.testing.events.fireClickSequence(control.getKeyEventTarget());
   assertEquals(
       msg, actionCount + 1,
@@ -2702,7 +2708,8 @@ function assertClickSequenceFires(msg) {
 
 
 function assertIsolatedClickFires(msg) {
-  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  const actionCount =
+      getEventCount(control, goog.ui.Component.EventType.ACTION);
   goog.testing.events.fireClickEvent(control.getKeyEventTarget());
   assertEquals(
       msg, actionCount + 1,
@@ -2711,7 +2718,8 @@ function assertIsolatedClickFires(msg) {
 
 
 function assertIsolatedClickDoesNotFire(msg) {
-  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  const actionCount =
+      getEventCount(control, goog.ui.Component.EventType.ACTION);
   goog.testing.events.fireClickEvent(control.getKeyEventTarget());
   assertEquals(
       msg, actionCount,
@@ -2760,8 +2768,9 @@ function testIeMouseEventSequenceSimulatorStrictMode() {
 
   control.render(sandbox);
 
-  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
-  var e = document.createEvent('MouseEvents');
+  const actionCount =
+      getEventCount(control, goog.ui.Component.EventType.ACTION);
+  const e = document.createEvent('MouseEvents');
   e.initMouseEvent(
       'click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,
       null);
@@ -2785,7 +2794,7 @@ function testSetPointerEventsEnabled() {
       'Control should not be active before pointerdown event.',
       control.isActive());
 
-  var pointerdown = new goog.testing.events.Event(
+  const pointerdown = new goog.testing.events.Event(
       goog.events.PointerFallbackEventType.POINTERDOWN, control.getElement());
   pointerdown.button = goog.events.BrowserEvent.MouseButton.LEFT;
   goog.testing.events.fireBrowserEvent(pointerdown);
@@ -2794,7 +2803,7 @@ function testSetPointerEventsEnabled() {
       'Control should be active after pointerdown event.',
       control.isActive());
 
-  var pointerup = new goog.testing.events.Event(
+  const pointerup = new goog.testing.events.Event(
       goog.events.PointerFallbackEventType.POINTERUP, control.getElement());
   pointerup.button = goog.events.BrowserEvent.MouseButton.LEFT;
   goog.testing.events.fireBrowserEvent(pointerup);

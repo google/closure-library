@@ -28,7 +28,7 @@ goog.require('goog.labs.testing.GreaterThanMatcher');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 
-var ParentClass = function() {};
+const ParentClass = function() {};
 ParentClass.prototype.method1 = function() {};
 ParentClass.prototype.x = 1;
 ParentClass.prototype.val = 0;
@@ -36,7 +36,7 @@ ParentClass.prototype.incrementVal = function() {
   this.val++;
 };
 
-var ChildClass = function() {};
+const ChildClass = function() {};
 goog.inherits(ChildClass, ParentClass);
 ChildClass.prototype.method2 = function() {};
 ChildClass.prototype.y = 2;
@@ -52,7 +52,7 @@ class ChildClassEs6 extends ParentClassEs6 {
 }
 
 function testParentClass() {
-  var parentMock = goog.labs.mock.mock(ParentClass);
+  const parentMock = goog.labs.mock.mock(ParentClass);
 
   assertNotUndefined(parentMock.method1);
   assertUndefined(parentMock.method1());
@@ -75,7 +75,7 @@ function testParentClassEs6() {
 }
 
 function testChildClass() {
-  var childMock = goog.labs.mock.mock(ChildClass);
+  const childMock = goog.labs.mock.mock(ChildClass);
 
   assertNotUndefined(childMock.method1);
   assertUndefined(childMock.method1());
@@ -124,7 +124,7 @@ function testParentClassEs6Instance() {
 }
 
 function testChildClassInstance() {
-  var childMock = goog.labs.mock.mock(new ChildClass());
+  const childMock = goog.labs.mock.mock(new ChildClass());
 
   assertNotUndefined(childMock.method1);
   assertUndefined(childMock.method1());
@@ -150,7 +150,7 @@ function testChildClassEs6Instance() {
 }
 
 function testNonEnumerableProperties() {
-  var mockObject = goog.labs.mock.mock({});
+  const mockObject = goog.labs.mock.mock({});
   assertNotUndefined(mockObject.toString);
   goog.labs.mock.when(mockObject).toString().then(function() {
     return 'toString';
@@ -159,13 +159,19 @@ function testNonEnumerableProperties() {
 }
 
 function testBasicStubbing() {
-  var obj = {
-    method1: function(i) { return 2 * i; },
-    method2: function(i, str) { return str; },
-    method3: function(x) { return x; }
+  const obj = {
+    method1: function(i) {
+      return 2 * i;
+    },
+    method2: function(i, str) {
+      return str;
+    },
+    method3: function(x) {
+      return x;
+    }
   };
 
-  var mockObj = goog.labs.mock.mock(obj);
+  const mockObj = goog.labs.mock.mock(obj);
   goog.labs.mock.when(mockObj).method1(2).then(function(i) { return i; });
 
   assertEquals(4, obj.method1(2));
@@ -189,7 +195,7 @@ function testBasicStubbing() {
 function testMockFunctions() {
   function x(i) { return i; }
 
-  var mockedFunc = goog.labs.mock.mockFunction(x);
+  const mockedFunc = goog.labs.mock.mockFunction(x);
   goog.labs.mock.when(mockedFunc)(100).thenReturn(10);
   goog.labs.mock.when(mockedFunc)(50).thenReturn(25);
 
@@ -199,8 +205,10 @@ function testMockFunctions() {
 }
 
 function testMockFunctionsWithNullableParameters() {
-  var func = function(nullableObject) { return 0; };
-  var mockedFunc = goog.labs.mock.mockFunction(func);
+  const func = function(nullableObject) {
+    return 0;
+  };
+  const mockedFunc = goog.labs.mock.mockFunction(func);
   goog.labs.mock.when(mockedFunc)(null).thenReturn(-1);
 
   assertEquals(0, func(null));
@@ -208,24 +216,30 @@ function testMockFunctionsWithNullableParameters() {
 }
 
 function testMockConstructor() {
-  var Ctor = function() { this.isMock = false; };
-  var mockInstance = {isMock: true};
-  var MockCtor = goog.labs.mock.mockConstructor(Ctor);
+  const Ctor = function() {
+    this.isMock = false;
+  };
+  const mockInstance = {isMock: true};
+  const MockCtor = goog.labs.mock.mockConstructor(Ctor);
   goog.labs.mock.when(MockCtor)().thenReturn(mockInstance);
   assertEquals(mockInstance, new MockCtor());
 }
 
 function testMockConstructorCopiesProperties() {
-  var Ctor = function() {};
+  const Ctor = function() {};
   Ctor.myParam = true;
-  var MockCtor = goog.labs.mock.mockConstructor(Ctor);
+  const MockCtor = goog.labs.mock.mockConstructor(Ctor);
   assertTrue(MockCtor.myParam);
 }
 
 function testStubbingConsecutiveCalls() {
-  var obj = {method: function(i) { return i * 42; }};
+  const obj = {
+    method: function(i) {
+      return i * 42;
+    }
+  };
 
-  var mockObj = goog.labs.mock.mock(obj);
+  const mockObj = goog.labs.mock.mock(obj);
   goog.labs.mock.when(mockObj).method(1).thenReturn(3).thenReturn(4);
 
   assertEquals(42, obj.method(1));
@@ -233,8 +247,10 @@ function testStubbingConsecutiveCalls() {
   assertEquals(4, mockObj.method(1));
   assertEquals(4, mockObj.method(1));
 
-  var x = function(i) { return i; };
-  var mockedFunc = goog.labs.mock.mockFunction(x);
+  const x = function(i) {
+    return i;
+  };
+  const mockedFunc = goog.labs.mock.mockFunction(x);
   goog.labs.mock.when(mockedFunc)(100).thenReturn(10).thenReturn(25);
 
   assertEquals(100, x(100));
@@ -244,8 +260,12 @@ function testStubbingConsecutiveCalls() {
 }
 
 function testStubbingMultipleObjectStubsNonConflictingArgsAllShouldWork() {
-  var obj = {method: function(i) { return i * 2; }};
-  var mockObj = goog.labs.mock.mock(obj);
+  const obj = {
+    method: function(i) {
+      return i * 2;
+    }
+  };
+  const mockObj = goog.labs.mock.mock(obj);
 
   goog.labs.mock.when(mockObj).method(2).thenReturn(100);
   goog.labs.mock.when(mockObj).method(5).thenReturn(45);
@@ -256,8 +276,12 @@ function testStubbingMultipleObjectStubsNonConflictingArgsAllShouldWork() {
 
 function
 testStubbingMultipleObjectStubsConflictingArgsMostRecentShouldPrevail() {
-  var obj = {method: function(i) { return i * 2; }};
-  var mockObj = goog.labs.mock.mock(obj);
+  const obj = {
+    method: function(i) {
+      return i * 2;
+    }
+  };
+  const mockObj = goog.labs.mock.mock(obj);
 
   goog.labs.mock.when(mockObj).method(2).thenReturn(100);
   goog.labs.mock.when(mockObj).method(2).thenReturn(45);
@@ -266,8 +290,10 @@ testStubbingMultipleObjectStubsConflictingArgsMostRecentShouldPrevail() {
 }
 
 function testStubbingMultipleFunctionStubsNonConflictingArgsAllShouldWork() {
-  var x = function(i) { return i; };
-  var mockedFunc = goog.labs.mock.mockFunction(x);
+  const x = function(i) {
+    return i;
+  };
+  const mockedFunc = goog.labs.mock.mockFunction(x);
 
   goog.labs.mock.when(mockedFunc)(100).thenReturn(10);
   goog.labs.mock.when(mockedFunc)(10).thenReturn(132);
@@ -278,8 +304,10 @@ function testStubbingMultipleFunctionStubsNonConflictingArgsAllShouldWork() {
 
 function
 testStubbingMultipleFunctionStubsConflictingArgsMostRecentShouldPrevail() {
-  var x = function(i) { return i; };
-  var mockedFunc = goog.labs.mock.mockFunction(x);
+  const x = function(i) {
+    return i;
+  };
+  const mockedFunc = goog.labs.mock.mockFunction(x);
 
   goog.labs.mock.when(mockedFunc)(100).thenReturn(10);
   goog.labs.mock.when(mockedFunc)(100).thenReturn(132);
@@ -288,12 +316,16 @@ testStubbingMultipleFunctionStubsConflictingArgsMostRecentShouldPrevail() {
 }
 
 function testSpying() {
-  var obj = {
-    method1: function(i) { return 2 * i; },
-    method2: function(i) { return 5 * i; }
+  const obj = {
+    method1: function(i) {
+      return 2 * i;
+    },
+    method2: function(i) {
+      return 5 * i;
+    }
   };
 
-  var spyObj = goog.labs.mock.spy(obj);
+  const spyObj = goog.labs.mock.spy(obj);
   goog.labs.mock.when(spyObj).method1(2).thenReturn(5);
 
   assertEquals(2, obj.method1(1));
@@ -319,8 +351,8 @@ function testSpyingSelfInteraction() {
 }
 
 function testSpyParentClassInstance() {
-  var parent = new ParentClass();
-  var parentMock = goog.labs.mock.spy(parent);
+  const parent = new ParentClass();
+  const parentMock = goog.labs.mock.spy(parent);
 
   assertNotUndefined(parentMock.method1);
   assertUndefined(parentMock.method1());
@@ -330,7 +362,7 @@ function testSpyParentClassInstance() {
   assertTrue(
       'Mock should be an instance of the mocked class.',
       parentMock instanceof ParentClass);
-  var incrementedOrigVal = parent.val + 1;
+  const incrementedOrigVal = parent.val + 1;
   parentMock.incrementVal();
   assertEquals(
       'Changes in the spied object should reflect in the spy.',
@@ -338,8 +370,8 @@ function testSpyParentClassInstance() {
 }
 
 function testSpyChildClassInstance() {
-  var child = new ChildClass();
-  var childMock = goog.labs.mock.spy(child);
+  const child = new ChildClass();
+  const childMock = goog.labs.mock.spy(child);
 
   assertNotUndefined(childMock.method1);
   assertUndefined(childMock.method1());
@@ -350,7 +382,7 @@ function testSpyChildClassInstance() {
   assertTrue(
       'Mock should be an instance of the mocked class.',
       childMock instanceof ParentClass);
-  var incrementedOrigVal = child.val + 1;
+  const incrementedOrigVal = child.val + 1;
   childMock.incrementVal();
   assertEquals(
       'Changes in the spied object should reflect in the spy.',
@@ -358,74 +390,93 @@ function testSpyChildClassInstance() {
 }
 
 function testVerifyForObjects() {
-  var obj = {
-    method1: function(i) { return 2 * i; },
-    method2: function(i) { return 5 * i; }
+  const obj = {
+    method1: function(i) {
+      return 2 * i;
+    },
+    method2: function(i) {
+      return 5 * i;
+    }
   };
 
-  var mockObj = goog.labs.mock.mock(obj);
+  const mockObj = goog.labs.mock.mock(obj);
   goog.labs.mock.when(mockObj).method1(2).thenReturn(5);
 
   assertEquals(5, mockObj.method1(2));
   goog.labs.mock.verify(mockObj).method1(2);
-  var e = assertThrows(goog.partial(goog.labs.mock.verify(mockObj).method2, 2));
+  const e =
+      assertThrows(goog.partial(goog.labs.mock.verify(mockObj).method2, 2));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 
 function testVerifyForFunctions() {
-  var func = function(i) { return i; };
+  const func = function(i) {
+    return i;
+  };
 
-  var mockFunc = goog.labs.mock.mockFunction(func);
+  const mockFunc = goog.labs.mock.mockFunction(func);
   goog.labs.mock.when(mockFunc)(2).thenReturn(55);
   assertEquals(55, mockFunc(2));
   goog.labs.mock.verify(mockFunc)(2);
   goog.labs.mock.verify(mockFunc)(lessThan(3));
 
-  var e = assertThrows(goog.partial(goog.labs.mock.verify(mockFunc), 3));
+  const e = assertThrows(goog.partial(goog.labs.mock.verify(mockFunc), 3));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 
 function testVerifyForFunctionsWithNullableParameters() {
-  var func = function(nullableObject) {};
-  var mockFuncCalled = goog.labs.mock.mockFunction(func);
-  var mockFuncNotCalled = goog.labs.mock.mockFunction(func);
+  const func = function(nullableObject) {};
+  const mockFuncCalled = goog.labs.mock.mockFunction(func);
+  const mockFuncNotCalled = goog.labs.mock.mockFunction(func);
 
   mockFuncCalled(null);
 
   goog.labs.mock.verify(mockFuncCalled)(null);
-  var e = assertThrows(
+  const e = assertThrows(
       goog.partial(goog.labs.mock.verify(mockFuncNotCalled), null));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 
 function testVerifyPassesWhenVerificationModeReturnsTrue() {
-  var trueMode = {
-    verify: function(number) { return true; },
-    describe: function() { return ''; }
+  const trueMode = {
+    verify: function(number) {
+      return true;
+    },
+    describe: function() {
+      return '';
+    }
   };
 
-  var mockObj = goog.labs.mock.mock({doThing: function() {}});
+  const mockObj = goog.labs.mock.mock({doThing: function() {}});
 
   goog.labs.mock.verify(mockObj, trueMode).doThing();
 }
 
 function testVerifyFailsWhenVerificationModeReturnsFalse() {
-  var falseMode = {
-    verify: function(number) { return false; },
-    describe: function() { return ''; }
+  const falseMode = {
+    verify: function(number) {
+      return false;
+    },
+    describe: function() {
+      return '';
+    }
   };
-  var mockObj = goog.labs.mock.mock({doThing: function() {}});
+  const mockObj = goog.labs.mock.mock({doThing: function() {}});
 
   assertThrows(goog.labs.mock.verify(mockObj, falseMode).doThing);
 }
 
 function testVerificationErrorMessagePutsVerificationModeInRightPlace() {
-  var modeDescription = 'test';
-  var mode = {
-    verify: function(number) { return false; },
-    describe: function() { return modeDescription; }
+  const modeDescription = 'test';
+  const mode = {
+    verify: function(number) {
+      return false;
+    },
+    describe: function() {
+      return modeDescription;
+    }
   };
-  var mockObj = goog.labs.mock.mock({methodName: function() {}});
+  const mockObj = goog.labs.mock.mock({methodName: function() {}});
   mockObj.methodName(2);
 
   e = assertThrows(goog.labs.mock.verify(mockObj, mode).methodName);
@@ -441,20 +492,26 @@ function testVerificationErrorMessagePutsVerificationModeInRightPlace() {
 * expectation call, as well as the recorded calls to the same method.
 */
 function testVerificationErrorMessages() {
-  var mock = goog.labs.mock.mock({method: function(i) { return i; }});
+  const mock = goog.labs.mock.mock({
+    method: function(i) {
+      return i;
+    }
+  });
 
   // Failure when there are no recorded calls.
-  var e = assertThrows(function() { goog.labs.mock.verify(mock).method(4); });
+  let e = assertThrows(function() {
+    goog.labs.mock.verify(mock).method(4);
+  });
   assertTrue(e instanceof goog.labs.mock.VerificationError);
-  var expected = '\nExpected: method(4) at least 1 times\n' +
+  let expected = '\nExpected: method(4) at least 1 times\n' +
       'Recorded: No recorded calls';
   assertEquals(expected, e.message);
 
 
   // Failure when there are recorded calls with ints and functions
   // as arguments.
-  var callback = function() {};
-  var callbackId = goog.labs.mock.getUid(callback);
+  const callback = function() {};
+  const callbackId = goog.labs.mock.getUid(callback);
 
   mock.method(1);
   mock.method(2);
@@ -470,7 +527,7 @@ function testVerificationErrorMessages() {
   assertEquals(expected, e.message);
 
   // With mockFunctions
-  var mockCallback = goog.labs.mock.mockFunction(callback);
+  const mockCallback = goog.labs.mock.mockFunction(callback);
   e = assertThrows(function() { goog.labs.mock.verify(mockCallback)(5); });
   expected = '\nExpected: #mockFor<#anonymous' + callbackId + '>(5) at least' +
       ' 1 times\n' +
@@ -481,7 +538,7 @@ function testVerificationErrorMessages() {
   assertEquals(expected, e.message);
 
   // Objects with circular references should not fail.
-  var obj = {x: 1};
+  const obj = {x: 1};
   obj.y = obj;
 
   mockCallback(obj);
@@ -489,10 +546,10 @@ function testVerificationErrorMessages() {
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 
   // Should respect string representation of different custom classes.
-  var myClass = function() {};
+  const myClass = function() {};
   myClass.prototype.toString = function() { return '<superClass>'; };
 
-  var mockFunction = goog.labs.mock.mockFunction(function f() {});
+  const mockFunction = goog.labs.mock.mockFunction(function f() {});
   mockFunction(new myClass());
 
   e = assertThrows(function() { goog.labs.mock.verify(mockFunction)(5); });
@@ -656,12 +713,13 @@ async function testPassingVerificationModeBeforeTimeoutMode() {
 * in the given order.
 */
 function assertContainsInOrder(str, var_args) {
-  var expected = goog.array.splice(arguments, 1);
-  var indices =
-      goog.array.map(expected, function(val) { return str.indexOf(val); });
+  const expected = goog.array.splice(arguments, 1);
+  const indices = goog.array.map(expected, function(val) {
+    return str.indexOf(val);
+  });
 
-  for (var i = 0; i < expected.length; i++) {
-    var msg = 'Missing "' + expected[i] + '" from "' + str + '"';
+  for (let i = 0; i < expected.length; i++) {
+    let msg = 'Missing "' + expected[i] + '" from "' + str + '"';
     assertTrue(msg, indices[i] != -1);
 
     if (i > 0) {
@@ -673,12 +731,16 @@ function assertContainsInOrder(str, var_args) {
 }
 
 function testMatchers() {
-  var obj = {
-    method1: function(i) { return 2 * i; },
-    method2: function(i) { return 5 * i; }
+  const obj = {
+    method1: function(i) {
+      return 2 * i;
+    },
+    method2: function(i) {
+      return 5 * i;
+    }
   };
 
-  var mockObj = goog.labs.mock.mock(obj);
+  const mockObj = goog.labs.mock.mock(obj);
 
   goog.labs.mock.when(mockObj).method1(greaterThan(4)).thenReturn(100);
   goog.labs.mock.when(mockObj).method1(lessThan(4)).thenReturn(40);
@@ -691,60 +753,72 @@ function testMatchers() {
 }
 
 function testMatcherVerify() {
-  var obj = {method: function(i) { return 2 * i; }};
+  const obj = {
+    method: function(i) {
+      return 2 * i;
+    }
+  };
 
   // Using spy objects.
-  var spy = goog.labs.mock.spy(obj);
+  const spy = goog.labs.mock.spy(obj);
 
   spy.method(6);
 
   goog.labs.mock.verify(spy).method(greaterThan(4));
-  var e = assertThrows(
+  let e = assertThrows(
       goog.partial(goog.labs.mock.verify(spy).method, lessThan(4)));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 
   // Using mocks
-  var mockObj = goog.labs.mock.mock(obj);
+  const mockObj = goog.labs.mock.mock(obj);
 
   mockObj.method(8);
 
   goog.labs.mock.verify(mockObj).method(greaterThan(7));
-  var e = assertThrows(
+  e = assertThrows(
       goog.partial(goog.labs.mock.verify(mockObj).method, lessThan(7)));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 
 function testMatcherVerifyCollision() {
-  var obj = {method: function(i) { return 2 * i; }};
-  var mockObj = goog.labs.mock.mock(obj);
+  const obj = {
+    method: function(i) {
+      return 2 * i;
+    }
+  };
+  const mockObj = goog.labs.mock.mock(obj);
 
   goog.labs.mock.when(mockObj).method(5).thenReturn(100);
   assertNotEquals(100, mockObj.method(greaterThan(2)));
 }
 
 function testMatcherVerifyCollisionBetweenMatchers() {
-  var obj = {method: function(i) { return 2 * i; }};
-  var mockObj = goog.labs.mock.mock(obj);
+  const obj = {
+    method: function(i) {
+      return 2 * i;
+    }
+  };
+  const mockObj = goog.labs.mock.mock(obj);
 
   goog.labs.mock.when(mockObj).method(anything()).thenReturn(100);
 
-  var e = assertThrows(
+  const e = assertThrows(
       goog.partial(goog.labs.mock.verify(mockObj).method, anything()));
   assertTrue(e instanceof goog.labs.mock.VerificationError);
 }
 
 function testVerifyForUnmockedMethods() {
-  var Task = function() {};
+  const Task = function() {};
   Task.prototype.run = function() {};
 
-  var mockTask = goog.labs.mock.mock(Task);
+  const mockTask = goog.labs.mock.mock(Task);
   mockTask.run();
 
   goog.labs.mock.verify(mockTask).run();
 }
 
 function testFormatMethodCall() {
-  var formatMethodCall = goog.labs.mock.formatMethodCall_;
+  const formatMethodCall = goog.labs.mock.formatMethodCall_;
   assertEquals('alert()', formatMethodCall('alert'));
   assertEquals('sum(2, 4)', formatMethodCall('sum', [2, 4]));
   assertEquals('sum("2", "4")', formatMethodCall('sum', ['2', '4']));
@@ -752,16 +826,16 @@ function testFormatMethodCall() {
       'call(<function unicorn>)',
       formatMethodCall('call', [function unicorn() {}]));
 
-  var arg = {x: 1, y: {hello: 'world'}};
+  const arg = {x: 1, y: {hello: 'world'}};
   assertEquals(
       'call(' + goog.labs.mock.formatValue_(arg) + ')',
       formatMethodCall('call', [arg]));
 }
 
 function testGetFunctionName() {
-  var f1 = function() {};
-  var f2 = function() {};
-  var named = function myName() {};
+  const f1 = function() {};
+  const f2 = function() {};
+  const named = function myName() {};
 
   assert(
       goog.string.startsWith(
@@ -775,7 +849,9 @@ function testGetFunctionName() {
 }
 
 function testFormatObject() {
-  var obj, obj2, obj3;
+  let obj;
+  let obj2;
+  let obj3;
 
   obj = {x: 1};
   assertEquals(
@@ -812,10 +888,10 @@ function testFormatObject() {
 }
 
 function testGetUid() {
-  var obj1 = {};
-  var obj2 = {};
-  var func1 = function() {};
-  var func2 = function() {};
+  const obj1 = {};
+  const obj2 = {};
+  const func1 = function() {};
+  const func2 = function() {};
 
   assertNotEquals(goog.labs.mock.getUid(obj1), goog.labs.mock.getUid(obj2));
   assertNotEquals(goog.labs.mock.getUid(func1), goog.labs.mock.getUid(func2));
@@ -840,7 +916,7 @@ function testMockEs6ClassMethods() {
     }
   }
 
-  var mockObj = goog.labs.mock.mock(Foo);
+  const mockObj = goog.labs.mock.mock(Foo);
   goog.labs.mock.when(mockObj).a().thenReturn('a');
   assertThrowsJsUnitException(function() { new Foo().a(); });
   assertEquals('a', mockObj.a());

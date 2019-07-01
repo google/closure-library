@@ -50,7 +50,7 @@ goog.require('goog.userAgent');
 goog.setTestOnly('Tests for goog.editor.*Field');
 
 /** Hard-coded HTML for the tests. */
-var HTML = '<div id="testField">I am text.</div>';
+const HTML = '<div id="testField">I am text.</div>';
 
 
 function setUp() {
@@ -103,8 +103,8 @@ goog.inherits(TestPlugin, goog.editor.Plugin);
  * plugin map.
  */
 function testRegisterPlugin() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
 
   editableField.registerPlugin(plugin);
 
@@ -161,8 +161,8 @@ function testRegisterPlugin() {
  * the map.
  */
 function testUnregisterPlugin() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
 
   editableField.registerPlugin(plugin);
   editableField.unregisterPlugin(plugin);
@@ -179,8 +179,8 @@ function testUnregisterPlugin() {
  * Tests that registered plugins can be fetched by their id.
  */
 function testGetPluginByClassId() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
 
   assertNull(
       'Must not be able to get unregistered plugins by class id.',
@@ -200,10 +200,10 @@ function testGetPluginByClassId() {
  * field is disposed.
  */
 function testDisposed_PluginAutoDispose() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
 
-  var noDisposePlugin = new goog.editor.Plugin();
+  const noDisposePlugin = new goog.editor.Plugin();
   noDisposePlugin.getTrogClassId = function() { return 'noDisposeId'; };
   noDisposePlugin.setAutoDispose(false);
 
@@ -215,7 +215,7 @@ function testDisposed_PluginAutoDispose() {
   assertFalse(noDisposePlugin.isDisposed());
 }
 
-var STRING_KEY = String.fromCharCode(goog.events.KeyCodes.A).toLowerCase();
+const STRING_KEY = String.fromCharCode(goog.events.KeyCodes.A).toLowerCase();
 
 
 /**
@@ -223,7 +223,7 @@ var STRING_KEY = String.fromCharCode(goog.events.KeyCodes.A).toLowerCase();
  * for the letter 'a'.
  */
 function getBrowserEvent() {
-  var e = new goog.events.BrowserEvent();
+  const e = new goog.events.BrowserEvent();
   e.ctrlKey = true;
   e.metaKey = true;
   e.charCode = goog.events.KeyCodes.A;
@@ -237,10 +237,10 @@ function getBrowserEvent() {
  * @return {!goog.editor.Field} Returns an editable field after its load phase.
  */
 function createEditableFieldWithListeners(followLinkInNewWindow) {
-  var editableField = new FieldConstructor('testField');
+  const editableField = new FieldConstructor('testField');
   editableField.setFollowLinkInNewWindow(followLinkInNewWindow);
 
-  var originalElement = editableField.getOriginalElement();
+  const originalElement = editableField.getOriginalElement();
   editableField.setupFieldObject(originalElement);
   editableField.handleFieldLoad();
 
@@ -248,8 +248,9 @@ function createEditableFieldWithListeners(followLinkInNewWindow) {
 }
 
 function getListenerTarget(editableField) {
-  var elt = editableField.getElement();
-  var listenerTarget = goog.editor.BrowserFeature.USE_DOCUMENT_FOR_KEY_EVENTS &&
+  const elt = editableField.getElement();
+  const listenerTarget =
+      goog.editor.BrowserFeature.USE_DOCUMENT_FOR_KEY_EVENTS &&
           editableField.usesIframe() ?
       elt.ownerDocument :
       elt;
@@ -257,7 +258,7 @@ function getListenerTarget(editableField) {
 }
 
 function assertClickDefaultActionIsCanceled(editableField) {
-  var cancelClickDefaultActionListener = goog.events.getListener(
+  const cancelClickDefaultActionListener = goog.events.getListener(
       getListenerTarget(editableField), goog.events.EventType.CLICK,
       goog.editor.Field.cancelLinkClick_, undefined, editableField);
 
@@ -265,7 +266,7 @@ function assertClickDefaultActionIsCanceled(editableField) {
 }
 
 function assertClickDefaultActionIsNotCanceled(editableField) {
-  var cancelClickDefaultActionListener = goog.events.getListener(
+  const cancelClickDefaultActionListener = goog.events.getListener(
       getListenerTarget(editableField), goog.events.EventType.CLICK,
       goog.editor.Field.cancelLinkClick_, undefined, editableField);
 
@@ -278,10 +279,10 @@ function assertClickDefaultActionIsNotCanceled(editableField) {
  */
 
 function testMakeUneditableDisablesPlugins() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
 
-  var calls = 0;
+  let calls = 0;
   plugin.disable = function(field) {
     assertEquals(editableField, field);
     assertTrue(field.isUneditable());
@@ -307,7 +308,7 @@ function testMakeUneditableDisablesPlugins() {
 function testClickDefaultActionIsCanceledWhenBrowserFollowsClick() {
   // Simulate a browser that will open a new page when activating a link in a
   // content editable element.
-  var editableField =
+  const editableField =
       createEditableFieldWithListeners(true /* followLinkInNewWindow */);
   assertClickDefaultActionIsCanceled(editableField);
 
@@ -322,7 +323,7 @@ function testClickDefaultActionIsCanceledWhenBrowserFollowsClick() {
 function testClickDefaultActionIsNotCanceledWhenBrowserDontFollowsClick() {
   // Simulate a browser that will NOT open a new page when activating a link in
   // a content editable element.
-  var editableField =
+  const editableField =
       createEditableFieldWithListeners(false /* followLinkInNewWindow */);
   assertClickDefaultActionIsNotCanceled(editableField);
 
@@ -334,11 +335,11 @@ function testClickDefaultActionIsNotCanceledWhenBrowserDontFollowsClick() {
  * Test that if a plugin registers keyup, it gets called.
  */
 function testPluginKeyUp() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
 
-  var mockPlugin = new goog.testing.LooseMock(plugin);
+  const mockPlugin = new goog.testing.LooseMock(plugin);
   mockPlugin.getTrogClassId().$returns('mockPlugin');
   mockPlugin.registerFieldObject(editableField);
   mockPlugin.isEnabled(editableField).$anyTimes().$returns(true);
@@ -357,11 +358,11 @@ function testPluginKeyUp() {
  * Test that if a plugin registers keydown, it gets called.
  */
 function testPluginKeyDown() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
 
-  var mockPlugin = new goog.testing.LooseMock(plugin);
+  const mockPlugin = new goog.testing.LooseMock(plugin);
   mockPlugin.getTrogClassId().$returns('mockPlugin');
   mockPlugin.registerFieldObject(editableField);
   mockPlugin.isEnabled(editableField).$anyTimes().$returns(true);
@@ -380,11 +381,11 @@ function testPluginKeyDown() {
  * Test that if a plugin registers keypress, it gets called.
  */
 function testPluginKeyPress() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
 
-  var mockPlugin = new goog.testing.LooseMock(plugin);
+  const mockPlugin = new goog.testing.LooseMock(plugin);
   mockPlugin.getTrogClassId().$returns('mockPlugin');
   mockPlugin.registerFieldObject(editableField);
   mockPlugin.isEnabled(editableField).$anyTimes().$returns(true);
@@ -404,11 +405,11 @@ function testPluginKeyPress() {
  * key handlers invoked.
  */
 function testHandledKeyEvent() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
 
-  var mockPlugin1 = new goog.testing.LooseMock(plugin);
+  const mockPlugin1 = new goog.testing.LooseMock(plugin);
   mockPlugin1.getTrogClassId().$returns('mockPlugin1');
   mockPlugin1.registerFieldObject(editableField);
   mockPlugin1.isEnabled(editableField).$anyTimes().$returns(true);
@@ -420,7 +421,7 @@ function testHandledKeyEvent() {
   mockPlugin1.handleKeyUp(e).$returns(true);
   mockPlugin1.$replay();
 
-  var mockPlugin2 = new goog.testing.LooseMock(plugin);
+  const mockPlugin2 = new goog.testing.LooseMock(plugin);
   mockPlugin2.getTrogClassId().$returns('mockPlugin2');
   mockPlugin2.registerFieldObject(editableField);
   mockPlugin2.isEnabled(editableField).$anyTimes().$returns(true);
@@ -449,9 +450,9 @@ function testHandleCutAndPasteEvents() {
     // Cut and paste events do not raise events at all in Mozilla.
     return;
   }
-  var editableField = new FieldConstructor('testField');
-  var clock = new goog.testing.MockClock(true);
-  var delayedChanges = goog.testing.recordFunction();
+  const editableField = new FieldConstructor('testField');
+  const clock = new goog.testing.MockClock(true);
+  const delayedChanges = goog.testing.recordFunction();
   goog.events.listen(
       editableField, goog.editor.Field.EventType.DELAYEDCHANGE, delayedChanges);
 
@@ -485,11 +486,11 @@ function testHandleCutAndPasteEvents() {
  * a chance to handle it.
  */
 function testNotHandledKeyEvent() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
 
-  var mockPlugin1 = new goog.testing.LooseMock(plugin);
+  const mockPlugin1 = new goog.testing.LooseMock(plugin);
   mockPlugin1.getTrogClassId().$returns('mockPlugin1');
   mockPlugin1.registerFieldObject(editableField);
   mockPlugin1.isEnabled(editableField).$anyTimes().$returns(true);
@@ -501,7 +502,7 @@ function testNotHandledKeyEvent() {
   mockPlugin1.handleKeyUp(e).$returns(false);
   mockPlugin1.$replay();
 
-  var mockPlugin2 = new goog.testing.LooseMock(plugin);
+  const mockPlugin2 = new goog.testing.LooseMock(plugin);
   mockPlugin2.getTrogClassId().$returns('mockPlugin2');
   mockPlugin2.registerFieldObject(editableField);
   mockPlugin2.isEnabled(editableField).$anyTimes().$returns(true);
@@ -533,11 +534,11 @@ function testNotHandledKeyEvent() {
  * return false.
  */
 function testKeyboardShortcutCalled() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
 
-  var mockPlugin = new goog.testing.LooseMock(plugin);
+  const mockPlugin = new goog.testing.LooseMock(plugin);
   mockPlugin.getTrogClassId().$returns('mockPlugin');
   mockPlugin.registerFieldObject(editableField);
   mockPlugin.isEnabled(editableField).$anyTimes().$returns(true);
@@ -566,11 +567,11 @@ function testKeyboardShortcutCalled() {
  * return true.
  */
 function testKeyboardShortcutNotCalled() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
 
-  var mockPlugin = new goog.testing.LooseMock(plugin);
+  const mockPlugin = new goog.testing.LooseMock(plugin);
   mockPlugin.getTrogClassId().$returns('mockPlugin');
   mockPlugin.registerFieldObject(editableField);
   mockPlugin.isEnabled(editableField).$anyTimes().$returns(true);
@@ -598,12 +599,12 @@ function testKeyboardShortcutNotCalled() {
  * @bug 1363959
  */
 function testKeyHandlingAlt() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
   e.altKey = true;
 
-  var mockPlugin = new goog.testing.LooseMock(plugin);
+  const mockPlugin = new goog.testing.LooseMock(plugin);
   mockPlugin.getTrogClassId().$returns('mockPlugin');
   mockPlugin.registerFieldObject(editableField);
   mockPlugin.isEnabled(editableField).$anyTimes().$returns(true);
@@ -629,13 +630,13 @@ function testKeyHandlingAlt() {
  * Make sure that handleKeyboardShortcut is called if alt+shift is pressed.
  */
 function testKeyHandlingAltShift() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
   e.altKey = true;
   e.shiftKey = true;
 
-  var mockPlugin = new goog.testing.LooseMock(plugin);
+  const mockPlugin = new goog.testing.LooseMock(plugin);
   mockPlugin.getTrogClassId().$returns('mockPlugin');
   mockPlugin.registerFieldObject(editableField);
   mockPlugin.isEnabled(editableField).$anyTimes().$returns(true);
@@ -664,14 +665,15 @@ function testKeyHandlingAltShift() {
  * but only for supported commands.
  */
 function testPluginExecCommand() {
-  var plugin = new TestPlugin();
-  var passedCommand, passedArg;
+  const plugin = new TestPlugin();
+  let passedCommand;
+  let passedArg;
   plugin.execCommand = function(command, arg) {
     passedCommand = command;
     passedArg = arg;
   };
 
-  var editableField = new FieldConstructor('testField');
+  const editableField = new FieldConstructor('testField');
   editableField.registerPlugin(plugin);
   plugin.enable(editableField);
   plugin.isSupportedCommand = goog.functions.constant(true);
@@ -702,10 +704,10 @@ function testPluginExecCommand() {
  * get a chance to handle the execComand.
  */
 function testSupportedExecCommand() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
 
-  var mockPlugin1 = new goog.testing.LooseMock(plugin);
+  const mockPlugin1 = new goog.testing.LooseMock(plugin);
   mockPlugin1.getTrogClassId().$returns('mockPlugin1');
   mockPlugin1.registerFieldObject(editableField);
   mockPlugin1.isEnabled(editableField).$anyTimes().$returns(true);
@@ -716,7 +718,7 @@ function testSupportedExecCommand() {
   });
   mockPlugin1.$replay();
 
-  var mockPlugin2 = new goog.testing.LooseMock(plugin);
+  const mockPlugin2 = new goog.testing.LooseMock(plugin);
   mockPlugin2.getTrogClassId().$returns('mockPlugin2');
   mockPlugin2.registerFieldObject(editableField);
   mockPlugin2.isEnabled(editableField).$anyTimes().$returns(true);
@@ -737,17 +739,17 @@ function testSupportedExecCommand() {
  * plugins get a chance to handle the execCommand.
  */
 function testNotSupportedExecCommand() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
 
-  var mockPlugin1 = new goog.testing.LooseMock(plugin);
+  const mockPlugin1 = new goog.testing.LooseMock(plugin);
   mockPlugin1.getTrogClassId().$returns('mockPlugin1');
   mockPlugin1.registerFieldObject(editableField);
   mockPlugin1.isEnabled(editableField).$anyTimes().$returns(true);
   mockPlugin1.isSupportedCommand('+indent').$returns(false);
   mockPlugin1.$replay();
 
-  var mockPlugin2 = new goog.testing.LooseMock(plugin);
+  const mockPlugin2 = new goog.testing.LooseMock(plugin);
   mockPlugin2.getTrogClassId().$returns('mockPlugin2');
   mockPlugin2.registerFieldObject(editableField);
   mockPlugin2.isEnabled(editableField).$anyTimes().$returns(true);
@@ -773,10 +775,10 @@ function testNotSupportedExecCommand() {
  * gets called and no further plugins can handle the queryCommandValue.
  */
 function testSupportedQueryCommand() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
 
-  var mockPlugin1 = new goog.testing.LooseMock(plugin);
+  const mockPlugin1 = new goog.testing.LooseMock(plugin);
   mockPlugin1.getTrogClassId().$returns('mockPlugin1');
   mockPlugin1.registerFieldObject(editableField);
   mockPlugin1.isEnabled(editableField).$anyTimes().$returns(true);
@@ -785,7 +787,7 @@ function testSupportedQueryCommand() {
   mockPlugin1.activeOnUneditableFields().$returns(true);
   mockPlugin1.$replay();
 
-  var mockPlugin2 = new goog.testing.LooseMock(plugin);
+  const mockPlugin2 = new goog.testing.LooseMock(plugin);
   mockPlugin2.getTrogClassId().$returns('mockPlugin2');
   mockPlugin2.registerFieldObject(editableField);
   mockPlugin2.isEnabled(editableField).$anyTimes().$returns(true);
@@ -807,17 +809,17 @@ function testSupportedQueryCommand() {
  * queryCommandValue.
  */
 function testNotSupportedQueryCommand() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
 
-  var mockPlugin1 = new goog.testing.LooseMock(plugin);
+  const mockPlugin1 = new goog.testing.LooseMock(plugin);
   mockPlugin1.getTrogClassId().$returns('mockPlugin1');
   mockPlugin1.registerFieldObject(editableField);
   mockPlugin1.isEnabled(editableField).$anyTimes().$returns(true);
   mockPlugin1.isSupportedCommand('+indent').$returns(false);
   mockPlugin1.$replay();
 
-  var mockPlugin2 = new goog.testing.LooseMock(plugin);
+  const mockPlugin2 = new goog.testing.LooseMock(plugin);
   mockPlugin2.getTrogClassId().$returns('mockPlugin2');
   mockPlugin2.registerFieldObject(editableField);
   mockPlugin2.isEnabled(editableField).$anyTimes().$returns(true);
@@ -841,18 +843,18 @@ function testNotSupportedQueryCommand() {
  * no further plugins can handle the selectionChange.
  */
 function testHandledSelectionChange() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
 
-  var mockPlugin1 = new goog.testing.LooseMock(plugin);
+  const mockPlugin1 = new goog.testing.LooseMock(plugin);
   mockPlugin1.getTrogClassId().$returns('mockPlugin1');
   mockPlugin1.registerFieldObject(editableField);
   mockPlugin1.isEnabled(editableField).$anyTimes().$returns(true);
   mockPlugin1.handleSelectionChange(e, undefined).$returns(true);
   mockPlugin1.$replay();
 
-  var mockPlugin2 = new goog.testing.LooseMock(plugin);
+  const mockPlugin2 = new goog.testing.LooseMock(plugin);
   mockPlugin2.getTrogClassId().$returns('mockPlugin2');
   mockPlugin2.registerFieldObject(editableField);
   mockPlugin2.isEnabled(editableField).$anyTimes().$returns(true);
@@ -873,18 +875,18 @@ function testHandledSelectionChange() {
  * the next plugin gets a chance to handle it.
  */
 function testNotHandledSelectionChange() {
-  var editableField = new FieldConstructor('testField');
-  var plugin = new TestPlugin();
-  var e = getBrowserEvent();
+  const editableField = new FieldConstructor('testField');
+  const plugin = new TestPlugin();
+  const e = getBrowserEvent();
 
-  var mockPlugin1 = new goog.testing.LooseMock(plugin);
+  const mockPlugin1 = new goog.testing.LooseMock(plugin);
   mockPlugin1.getTrogClassId().$returns('mockPlugin1');
   mockPlugin1.registerFieldObject(editableField);
   mockPlugin1.isEnabled(editableField).$anyTimes().$returns(true);
   mockPlugin1.handleSelectionChange(e, undefined).$returns(false);
   mockPlugin1.$replay();
 
-  var mockPlugin2 = new goog.testing.LooseMock(plugin);
+  const mockPlugin2 = new goog.testing.LooseMock(plugin);
   mockPlugin2.getTrogClassId().$returns('mockPlugin2');
   mockPlugin2.registerFieldObject(editableField);
   mockPlugin2.isEnabled(editableField).$anyTimes().$returns(true);
@@ -904,13 +906,13 @@ function testNotHandledSelectionChange() {
 // Tests for goog.editor.Field internals.
 
 function testSelectionChange() {
-  var editableField = new FieldConstructor('testField', document);
-  var clock = new goog.testing.MockClock(true);
-  var beforeSelectionChanges = goog.testing.recordFunction();
+  const editableField = new FieldConstructor('testField', document);
+  const clock = new goog.testing.MockClock(true);
+  const beforeSelectionChanges = goog.testing.recordFunction();
   goog.events.listen(
       editableField, goog.editor.Field.EventType.BEFORESELECTIONCHANGE,
       beforeSelectionChanges);
-  var selectionChanges = goog.testing.recordFunction();
+  const selectionChanges = goog.testing.recordFunction();
   goog.events.listen(
       editableField, goog.editor.Field.EventType.SELECTIONCHANGE,
       selectionChanges);
@@ -943,20 +945,20 @@ function testSelectionChange() {
 
 
 function testSelectionChangeOnMouseUp() {
-  var fakeEvent =
+  const fakeEvent =
       new goog.events.BrowserEvent({type: 'mouseup', target: 'fakeTarget'});
-  var editableField = new FieldConstructor('testField', document);
-  var clock = new goog.testing.MockClock(true);
-  var beforeSelectionChanges = goog.testing.recordFunction();
+  const editableField = new FieldConstructor('testField', document);
+  const clock = new goog.testing.MockClock(true);
+  const beforeSelectionChanges = goog.testing.recordFunction();
   goog.events.listen(
       editableField, goog.editor.Field.EventType.BEFORESELECTIONCHANGE,
       beforeSelectionChanges);
-  var selectionChanges = goog.testing.recordFunction();
+  const selectionChanges = goog.testing.recordFunction();
   goog.events.listen(
       editableField, goog.editor.Field.EventType.SELECTIONCHANGE,
       selectionChanges);
 
-  var plugin = new TestPlugin();
+  const plugin = new TestPlugin();
   plugin.handleSelectionChange = goog.testing.recordFunction();
   editableField.registerPlugin(plugin);
 
@@ -987,7 +989,7 @@ function testSelectionChangeOnMouseUp() {
   assertEquals(
       'Plugin should have handled second selection change immediately', 2,
       plugin.handleSelectionChange.getCallCount());
-  var args = plugin.handleSelectionChange.getLastCall().getArguments();
+  const args = plugin.handleSelectionChange.getLastCall().getArguments();
   assertTrue(
       'Plugin should not have received data from extra firing',
       args.length == 0 || !args[0] && (args.length == 1 || !args[1]));
@@ -1020,9 +1022,9 @@ function testSelectionChangeOnMouseUp() {
 
 
 function testSelectionChangeBeforeUneditable() {
-  var editableField = new FieldConstructor('testField', document);
-  var clock = new goog.testing.MockClock(true);
-  var selectionChanges = goog.testing.recordFunction();
+  const editableField = new FieldConstructor('testField', document);
+  const clock = new goog.testing.MockClock(true);
+  const selectionChanges = goog.testing.recordFunction();
   goog.events.listen(
       editableField, goog.editor.Field.EventType.SELECTIONCHANGE,
       selectionChanges);
@@ -1047,7 +1049,7 @@ function testSelectionChangeBeforeUneditable() {
 
 
 function testGetEditableDomHelper() {
-  var editableField = new FieldConstructor('testField', document);
+  const editableField = new FieldConstructor('testField', document);
   assertNull(
       'Before being made editable, we do not know the dom helper',
       editableField.getEditableDomHelper());
@@ -1064,7 +1066,7 @@ function testGetEditableDomHelper() {
 
 
 function testQueryCommandValue() {
-  var editableField = new FieldConstructor('testField', document);
+  const editableField = new FieldConstructor('testField', document);
   assertFalse(editableField.queryCommandValue('boo'));
   assertObjectEquals(
       {'boo': false, 'aieee': false},
@@ -1091,11 +1093,11 @@ function focusFieldSync(field) {
 
 
 function testSetSafeHtml() {
-  var editableField = new FieldConstructor('testField', document);
-  var clock = new goog.testing.MockClock(true);
+  const editableField = new FieldConstructor('testField', document);
+  const clock = new goog.testing.MockClock(true);
 
   try {
-    var delayedChangeCalled = false;
+    let delayedChangeCalled = false;
     goog.events.listen(
         editableField, goog.editor.Field.EventType.DELAYEDCHANGE,
         function() { delayedChangeCalled = true; });
@@ -1139,17 +1141,17 @@ function testSetSafeHtml() {
  *     the field element itself).
  */
 function doTestPlaceCursorAtStart(opt_html, opt_parentId) {
-  var editableField = new FieldConstructor('testField', document);
+  const editableField = new FieldConstructor('testField', document);
   editableField.makeEditable();
   // Initially place selection not at the start of the editable field.
-  var textNode = editableField.getElement().firstChild;
+  let textNode = editableField.getElement().firstChild;
   goog.dom.Range.createFromNodes(textNode, 1, textNode, 2).select();
   if (opt_html != null) {
     editableField.getElement().innerHTML = opt_html;
   }
 
   editableField.placeCursorAtStart();
-  var range = editableField.getRange();
+  const range = editableField.getRange();
   assertNotNull(
       'Placing the cursor should result in a range object being available',
       range);
@@ -1167,7 +1169,7 @@ function doTestPlaceCursorAtStart(opt_html, opt_parentId) {
     textNode = null;
   }
 
-  var startNode = opt_parentId ?
+  let startNode = opt_parentId ?
       editableField.getEditableDomHelper().getElement(opt_parentId).firstChild :
       textNode ? textNode : editableField.getElement();
   if (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('528')) {
@@ -1191,22 +1193,22 @@ function doTestPlaceCursorAtStart(opt_html, opt_parentId) {
  * Verify that restoreSavedRange() restores the range and sets the focus.
  */
 function testRestoreSavedRange() {
-  var editableField = new FieldConstructor('testField', document);
+  const editableField = new FieldConstructor('testField', document);
   editableField.makeEditable();
 
 
   // Create another node to take the focus later.
-  var doc = goog.dom.getOwnerDocument(editableField.getElement());
-  var dom = goog.dom.getDomHelper(editableField.getElement());
-  var otherElem = dom.createElement(goog.dom.TagName.DIV);
+  const doc = goog.dom.getOwnerDocument(editableField.getElement());
+  const dom = goog.dom.getDomHelper(editableField.getElement());
+  const otherElem = dom.createElement(goog.dom.TagName.DIV);
   otherElem.tabIndex = 1;  // Make it focusable.
   editableField.getElement().parentNode.appendChild(otherElem);
 
   // Initially place selection not at the start of the editable field.
-  var textNode = editableField.getElement().firstChild;
-  var range = goog.dom.Range.createFromNodes(textNode, 1, textNode, 2);
+  const textNode = editableField.getElement().firstChild;
+  const range = goog.dom.Range.createFromNodes(textNode, 1, textNode, 2);
   range.select();
-  var savedRange = goog.editor.range.saveUsingNormalizedCarets(range);
+  const savedRange = goog.editor.range.saveUsingNormalizedCarets(range);
 
   // Change range to be a simple cursor at start, and move focus away.
   editableField.placeCursorAtStart();
@@ -1218,7 +1220,7 @@ function testRestoreSavedRange() {
   assertEquals(
       'Field should be focused', editableField.getElement(),
       goog.dom.getActiveElement(doc));
-  var newRange = editableField.getRange();
+  const newRange = editableField.getRange();
   assertEquals('Range startNode', textNode, newRange.getStartNode());
   assertEquals('Range startOffset', 1, newRange.getStartOffset());
   assertEquals('Range endNode', textNode, newRange.getEndNode());
@@ -1254,18 +1256,18 @@ function testPlaceCursorAtStartNonImportantTextNode() {
  * @param {number=} opt_offset The offset to expect for the end position.
  */
 function doTestPlaceCursorAtEnd(opt_html, opt_parentId, opt_offset) {
-  var editableField = new FieldConstructor('testField', document);
+  const editableField = new FieldConstructor('testField', document);
   editableField.makeEditable();
 
   // Initially place selection not at the end of the editable field.
-  var textNode = editableField.getElement().firstChild;
+  let textNode = editableField.getElement().firstChild;
   goog.dom.Range.createFromNodes(textNode, 0, textNode, 1).select();
   if (opt_html != null) {
     editableField.getElement().innerHTML = opt_html;
   }
 
   editableField.placeCursorAtEnd();
-  var range = editableField.getRange();
+  const range = editableField.getRange();
   assertNotNull(
       'Placing the cursor should result in a range object being available',
       range);
@@ -1275,7 +1277,7 @@ function doTestPlaceCursorAtEnd(opt_html, opt_parentId, opt_offset) {
   // We check whether getAttribute exist because textNode may be an actual
   // TextNode, which does not have getAttribute.
 
-  var hasBogusNode = textNode && textNode.getAttribute &&
+  const hasBogusNode = textNode && textNode.getAttribute &&
       textNode.getAttribute('_moz_editor_bogus_node');
   if (hasBogusNode) {
     // At least in FF >= 6, assigning '' to innerHTML of a contentEditable
@@ -1285,15 +1287,15 @@ function doTestPlaceCursorAtEnd(opt_html, opt_parentId, opt_offset) {
     textNode = null;
   }
 
-  var endNode = opt_parentId ?
+  const endNode = opt_parentId ?
       editableField.getEditableDomHelper().getElement(opt_parentId).lastChild :
       textNode ? textNode : editableField.getElement();
   assertEquals(
       'The range should end at the specified expected node', endNode,
       range.getEndNode());
-  var offset = goog.isDefAndNotNull(opt_offset) ? opt_offset : textNode ?
-                                                  endNode.nodeValue.length :
-                                                  endNode.childNodes.length - 1;
+  const offset = goog.isDefAndNotNull(opt_offset) ?
+      opt_offset :
+      textNode ? endNode.nodeValue.length : endNode.childNodes.length - 1;
   if (hasBogusNode) {
     assertEquals(
         'The range should end at the ending of the bogus node ' +
@@ -1327,11 +1329,11 @@ function testPlaceCursorAtEndNonImportantTextNode() {
 
 
 function testClearDelayedChange() {
-  var clock = new goog.testing.MockClock(true);
-  var editableField = new FieldConstructor('testField', document);
+  const clock = new goog.testing.MockClock(true);
+  const editableField = new FieldConstructor('testField', document);
   editableField.makeEditable();
 
-  var delayedChangeCalled = false;
+  let delayedChangeCalled = false;
   goog.events.listen(
       editableField, goog.editor.Field.EventType.DELAYEDCHANGE,
       function() { delayedChangeCalled = true; });
@@ -1362,7 +1364,7 @@ function testClearDelayedChange() {
 
 function testHandleChange() {
   if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
-    var editableField = new FieldConstructor('testField', document);
+    const editableField = new FieldConstructor('testField', document);
     editableField.makeEditable();
 
     editableField.changeTimerGecko_.start();
@@ -1373,7 +1375,7 @@ function testHandleChange() {
 
 
 function testDispatchDelayedChange() {
-  var editableField = new FieldConstructor('testField', document);
+  const editableField = new FieldConstructor('testField', document);
   editableField.makeEditable();
 
   editableField.delayedChangeTimer_.start();
@@ -1383,19 +1385,19 @@ function testDispatchDelayedChange() {
 
 
 function testHandleWindowLevelMouseUp() {
-  var editableField = new FieldConstructor('testField', document);
+  const editableField = new FieldConstructor('testField', document);
   if (editableField.usesIframe()) {
     // Only run this test if the editor does not use an iframe.
     return;
   }
   editableField.setUseWindowMouseUp(true);
   editableField.makeEditable();
-  var selectionHasFired = false;
+  let selectionHasFired = false;
   goog.events.listenOnce(
       editableField, goog.editor.Field.EventType.SELECTIONCHANGE,
       function(e) { selectionHasFired = true; });
-  var editableElement = editableField.getElement();
-  var otherElement = goog.dom.createDom(goog.dom.TagName.DIV);
+  const editableElement = editableField.getElement();
+  const otherElement = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.insertSiblingAfter(otherElement, document.body.lastChild);
 
   goog.testing.events.fireMouseDownEvent(editableElement);
@@ -1405,15 +1407,15 @@ function testHandleWindowLevelMouseUp() {
 }
 
 function testNoHandleWindowLevelMouseUp() {
-  var editableField = new FieldConstructor('testField', document);
+  const editableField = new FieldConstructor('testField', document);
   editableField.setUseWindowMouseUp(false);
   editableField.makeEditable();
-  var selectionHasFired = false;
+  let selectionHasFired = false;
   goog.events.listenOnce(
       editableField, goog.editor.Field.EventType.SELECTIONCHANGE,
       function(e) { selectionHasFired = true; });
-  var editableElement = editableField.getElement();
-  var otherElement = goog.dom.createDom(goog.dom.TagName.DIV);
+  const editableElement = editableField.getElement();
+  const otherElement = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.insertSiblingAfter(otherElement, document.body.lastChild);
 
   goog.testing.events.fireMouseDownEvent(editableElement);
@@ -1423,15 +1425,15 @@ function testNoHandleWindowLevelMouseUp() {
 }
 
 function testIsGeneratingKey() {
-  var regularKeyEvent = new goog.events.BrowserEvent();
+  const regularKeyEvent = new goog.events.BrowserEvent();
   regularKeyEvent.charCode = goog.events.KeyCodes.A;
 
-  var ctrlKeyEvent = new goog.events.BrowserEvent();
+  const ctrlKeyEvent = new goog.events.BrowserEvent();
   ctrlKeyEvent.ctrlKey = true;
   ctrlKeyEvent.metaKey = true;
   ctrlKeyEvent.charCode = goog.events.KeyCodes.A;
 
-  var imeKeyEvent = new goog.events.BrowserEvent();
+  const imeKeyEvent = new goog.events.BrowserEvent();
   imeKeyEvent.keyCode =
       229;  // indicates from an IME - see KEYS_CAUSING_CHANGES
 
@@ -1445,8 +1447,8 @@ function testIsGeneratingKey() {
 }
 
 function testSetEditableClassName() {
-  var element = goog.dom.getElement('testField');
-  var editableField = new FieldConstructor('testField');
+  const element = goog.dom.getElement('testField');
+  const editableField = new FieldConstructor('testField');
 
   assertFalse(goog.dom.classlist.contains(element, 'editable'));
   editableField.makeEditable();

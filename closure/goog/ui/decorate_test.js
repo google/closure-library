@@ -73,7 +73,7 @@ function tearDown() {
 }
 
 function testDecorate() {
-  var dx = goog.ui.decorate(document.getElementById('x'));
+  const dx = goog.ui.decorate(document.getElementById('x'));
   assertTrue(
       'Decorator for element with fake-component-x class must be ' +
           'a FakeComponentX',
@@ -82,7 +82,7 @@ function testDecorate() {
       'Element x must have been decorated', document.getElementById('x'),
       dx.element);
 
-  var dy = goog.ui.decorate(document.getElementById('y'));
+  const dy = goog.ui.decorate(document.getElementById('y'));
   assertTrue(
       'Decorator for element with fake-component-y class must be ' +
           'a FakeComponentY',
@@ -91,9 +91,9 @@ function testDecorate() {
       'Element y must have been decorated', document.getElementById('y'),
       dy.element);
 
-  var dz = goog.ui.decorate(document.getElementById('z'));
+  const dz = goog.ui.decorate(document.getElementById('z'));
   assertNull('Decorator for element with unknown class must be null', dz);
 
-  var du = goog.ui.decorate(document.getElementById('u'));
+  const du = goog.ui.decorate(document.getElementById('u'));
   assertNull('Decorator for element without CSS class must be null', du);
 }

@@ -24,18 +24,18 @@ goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.testSuite');
 
-var testCase = null;
-var mockControl = null;
-var replacer = null;
+let testCase = null;
+let mockControl = null;
+let replacer = null;
 
 // Use this flag to control whether the global JsUnit lifecycle events are being
 // called as part of the test lifecycle or as part of the "mocked" environment.
-var testing = false;
+let testing = false;
 
 // Bootstrap it because... why not.
-var env = new goog.labs.testing.Environment();
+const env = new goog.labs.testing.Environment();
 // The outer test case.
-var realTestCase = goog.labs.testing.EnvironmentTestCase_.getInstance();
+const realTestCase = goog.labs.testing.EnvironmentTestCase_.getInstance();
 
 function setUp() {
   // These methods end up being called by the test framework for these tests
@@ -48,7 +48,7 @@ function setUp() {
 
   // Temporarily override the initializeTestRunner method to avoid installing
   // our "test" TestCase.
-  var initFn = goog.testing.TestCase.initializeTestRunner;
+  const initFn = goog.testing.TestCase.initializeTestRunner;
   goog.testing.TestCase.initializeTestRunner = function() {};
   testCase = new goog.labs.testing.EnvironmentTestCase_();
   goog.labs.testing.EnvironmentTestCase_.getInstance = function() {
@@ -75,10 +75,10 @@ function tearDown() {
 function testLifecycle() {
   testing = true;
 
-  var envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
-  var envTwo = mockControl.createStrictMock(goog.labs.testing.Environment);
-  var envThree = mockControl.createStrictMock(goog.labs.testing.Environment);
-  var testMethod = mockControl.createFunctionMock('testMethod');
+  const envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
+  const envTwo = mockControl.createStrictMock(goog.labs.testing.Environment);
+  const envThree = mockControl.createStrictMock(goog.labs.testing.Environment);
+  const testMethod = mockControl.createFunctionMock('testMethod');
 
   testCase.addNewTest('testFake', testMethod);
 
@@ -114,10 +114,10 @@ function testLifecycle() {
 function testLifecycle_withObject() {
   testing = true;
 
-  var envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
-  var envTwo = mockControl.createStrictMock(goog.labs.testing.Environment);
-  var envThree = mockControl.createStrictMock(goog.labs.testing.Environment);
-  var testObject = {
+  const envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
+  const envTwo = mockControl.createStrictMock(goog.labs.testing.Environment);
+  const envThree = mockControl.createStrictMock(goog.labs.testing.Environment);
+  const testObject = {
     configureEnvironment:
         mockControl.createFunctionMock('configureEnvironment1'),
     setUp: mockControl.createFunctionMock('setUp1'),
@@ -169,14 +169,14 @@ function testLifecycle_withObject() {
 }
 
 function testLifecycle_withPromises() {
-  var mockClock = new goog.testing.MockClock(true /* autoinstall */);
+  const mockClock = new goog.testing.MockClock(true /* autoinstall */);
   testing = true;
 
-  var envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
+  const envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
   testCase.registerEnvironment_(envOne);
-  var envTwo = mockControl.createStrictMock(goog.labs.testing.Environment);
+  const envTwo = mockControl.createStrictMock(goog.labs.testing.Environment);
   testCase.registerEnvironment_(envTwo);
-  var testObj = {
+  const testObj = {
     'configureEnvironment':
         mockControl.createFunctionMock('configureEnvironment'),
     'setUpPage': mockControl.createFunctionMock('setUpPage'),
@@ -196,19 +196,19 @@ function testLifecycle_withPromises() {
 
   // Make the testCase.runTestsReturningPromise() a pending operation so we can
   // use assertNextCall also for checking the first call.
-  var resultPromise;
-  var pendingOp = goog.Promise.withResolver();
+  let resultPromise;
+  let pendingOp = goog.Promise.withResolver();
   pendingOp.promise.then(function() {
     resultPromise = testCase.runTestsReturningPromise();
   });
-  var nextOp = null;
-  var finishPendingOp = function() {
+  let nextOp = null;
+  const finishPendingOp = function() {
     pendingOp.resolve();
     pendingOp = nextOp;
     nextOp = null;
     mockClock.tick();
   };
-  var expectCallTo = function(expectedCall) {
+  const expectCallTo = function(expectedCall) {
     assertNull(nextOp);
     nextOp = goog.Promise.withResolver();
     expectedCall().$returns(nextOp.promise);
@@ -254,7 +254,7 @@ function testLifecycle_withPromises() {
   envOne.tearDownPage();
   mockControl.$replayAll();
   finishPendingOp();
-  var result = mockClock.tickPromise(resultPromise);
+  const result = mockClock.tickPromise(resultPromise);
   mockControl.$verifyAll();
   assertTrue(result.complete);
   assertEquals(2, result.totalCount);
@@ -269,11 +269,12 @@ function testLifecycle_withPromises() {
 function testTearDownWithMockControl() {
   testing = true;
 
-  var envWith = new goog.labs.testing.Environment();
-  var envWithout = new goog.labs.testing.Environment();
+  const envWith = new goog.labs.testing.Environment();
+  const envWithout = new goog.labs.testing.Environment();
 
-  var mockControlMock = mockControl.createStrictMock(goog.testing.MockControl);
-  var mockControlCtorMock =
+  const mockControlMock =
+      mockControl.createStrictMock(goog.testing.MockControl);
+  const mockControlCtorMock =
       mockControl.createMethodMock(goog.testing, 'MockControl');
   mockControlCtorMock().$times(1).$returns(mockControlMock);
   // Expecting verify / reset calls twice since two environments use the same
@@ -302,10 +303,10 @@ function testTearDownWithMockControl() {
 function testAutoDiscoverTests() {
   testing = true;
 
-  var setUpPageFn = testCase.setUpPage;
-  var setUpFn = testCase.setUp;
-  var tearDownFn = testCase.tearDownFn;
-  var tearDownPageFn = testCase.tearDownPageFn;
+  const setUpPageFn = testCase.setUpPage;
+  const setUpFn = testCase.setUp;
+  const tearDownFn = testCase.tearDownFn;
+  const tearDownPageFn = testCase.tearDownPageFn;
 
   testCase.autoDiscoverTests();
 
@@ -330,12 +331,12 @@ function testTestSuiteTests() {
   replacer.set(goog.testing.TestCase, 'initializeTestRunner', function() {});
 
   // with an active environment.
-  var envOne = new goog.labs.testing.Environment();
+  const envOne = new goog.labs.testing.Environment();
 
-  var setUpPageFn = testCase.setUpPage;
-  var setUpFn = testCase.setUp;
-  var tearDownFn = testCase.tearDownFn;
-  var tearDownPageFn = testCase.tearDownPageFn;
+  const setUpPageFn = testCase.setUpPage;
+  const setUpFn = testCase.setUp;
+  const tearDownFn = testCase.tearDownFn;
+  const tearDownPageFn = testCase.tearDownPageFn;
 
   goog.testing.testSuite({
     // These lifecycle methods should not override the environment testcase
@@ -367,7 +368,7 @@ function testTestSuiteTests() {
 function testSetupReturnsValue() {
   testing = true;
 
-  var env = new goog.labs.testing.Environment();
+  const env = new goog.labs.testing.Environment();
 
   // Expect the environment to pass on any value returned by the user defined
   // setUp method.
@@ -380,7 +381,7 @@ function testSetupReturnsValue() {
 function testMockClock() {
   testing = true;
 
-  var env = new goog.labs.testing.Environment().withMockClock();
+  const env = new goog.labs.testing.Environment().withMockClock();
 
   testCase.addNewTest('testThatThrowsEventually', function() {
     setTimeout(function() { throw new Error('LateErrorMessage'); }, 200);
@@ -395,8 +396,8 @@ function testMockClock() {
 function testMockControl() {
   testing = true;
 
-  var env = new goog.labs.testing.Environment().withMockControl();
-  var test = env.mockControl.createFunctionMock('test');
+  const env = new goog.labs.testing.Environment().withMockControl();
+  const test = env.mockControl.createFunctionMock('test');
 
   testCase.addNewTest('testWithoutVerify', function() {
     test();
@@ -413,8 +414,8 @@ function testMockControl() {
 function testMock() {
   testing = true;
 
-  var env = new goog.labs.testing.Environment().withMockControl();
-  var mock = env.mock({test: function() {}});
+  const env = new goog.labs.testing.Environment().withMockControl();
+  const mock = env.mock({test: function() {}});
 
   testCase.addNewTest('testMockCalled', function() {
     mock.test().$times(2);

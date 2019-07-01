@@ -73,9 +73,9 @@ MockDate.prototype.getTimezoneOffset = function() {
 };
 
 function testGetFingerprint() {
-  var mockDate = new MockDate();
+  let mockDate = new MockDate();
   mockDate.setTimezoneOffset([-480]);
-  var fingerprint = goog.locale.timeZoneDetection.getFingerprint(mockDate);
+  let fingerprint = goog.locale.timeZoneDetection.getFingerprint(mockDate);
   assertEquals(32, fingerprint);
 
   mockDate = new MockDate();
@@ -86,9 +86,9 @@ function testGetFingerprint() {
 }
 
 function testDetectTimeZone() {
-  var mockDate = new MockDate();
+  let mockDate = new MockDate();
   mockDate.setTimezoneOffset([-480]);
-  var timeZoneId =
+  let timeZoneId =
       goog.locale.timeZoneDetection.detectTimeZone(undefined, mockDate);
   assertEquals('Asia/Hong_Kong', timeZoneId);
 
@@ -106,10 +106,10 @@ function testDetectTimeZone() {
 }
 
 function testGetTimeZoneList() {
-  var mockDate = new MockDate();
+  let mockDate = new MockDate();
   mockDate.setTimezoneOffset(
       [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
-  var timeZoneList =
+  let timeZoneList =
       goog.locale.timeZoneDetection.getTimeZoneList(undefined, mockDate);
   assertEquals('America/Los_Angeles', timeZoneList[0]);
   assertEquals('America/Whitehorse', timeZoneList[4]);

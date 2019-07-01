@@ -38,25 +38,25 @@ goog.require('goog.ui.editor.AbstractDialog');
 goog.require('goog.ui.editor.LinkDialog');
 goog.require('goog.userAgent');
 
-var plugin;
-var anchorElem;
-var extraAnchors;
-var isNew;
-var testDiv;
+let plugin;
+let anchorElem;
+let extraAnchors;
+let isNew;
+let testDiv;
 
-var mockCtrl;
-var mockField;
-var mockLink;
-var mockAlert;
+let mockCtrl;
+let mockField;
+let mockLink;
+let mockAlert;
 
-var OLD_LINK_TEXT = 'old text';
-var OLD_LINK_URL = 'http://old.url/';
-var NEW_LINK_TEXT = 'My Link Text';
-var NEW_LINK_URL = 'http://my.link/url/';
+const OLD_LINK_TEXT = 'old text';
+const OLD_LINK_URL = 'http://old.url/';
+const NEW_LINK_TEXT = 'My Link Text';
+const NEW_LINK_URL = 'http://my.link/url/';
 
-var fieldElem;
-var fieldObj;
-var linkObj;
+let fieldElem;
+let fieldObj;
+let linkObj;
 
 function setUp() {
   testDiv = goog.dom.getDocument().getElementById('test');
@@ -126,7 +126,7 @@ function testCreateDialog() {
   plugin = new goog.editor.plugins.LinkDialogPlugin();
   plugin.registerFieldObject(mockField);
 
-  var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+  const dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
   assertTrue(
       'Dialog should be of type goog.ui.editor.LinkDialog',
       dialog instanceof goog.ui.editor.LinkDialog);
@@ -148,7 +148,7 @@ function testOk() {
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL);
   plugin = new goog.editor.plugins.LinkDialogPlugin();
   plugin.registerFieldObject(mockField);
-  var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+  const dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
 
   // Mock of execCommand + clicking OK without actually opening the dialog.
   plugin.currentLink_ = mockLink;
@@ -171,7 +171,7 @@ function testCancel() {
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL);
   plugin = new goog.editor.plugins.LinkDialogPlugin();
   plugin.registerFieldObject(mockField);
-  var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+  const dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
 
   // Mock of execCommand + cancel without actually opening the dialog.
   plugin.currentLink_ = mockLink;
@@ -196,10 +196,10 @@ function testCancelNew() {
   mockCtrl.$replayAll();
 
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL, true);
-  var prevSib = anchorElem.previousSibling;
+  const prevSib = anchorElem.previousSibling;
   plugin = new goog.editor.plugins.LinkDialogPlugin();
   plugin.registerFieldObject(mockField);
-  var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+  const dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
 
   // Mock of execCommand + cancel without actually opening the dialog.
   plugin.currentLink_ = mockLink;
@@ -208,7 +208,7 @@ function testCancelNew() {
   assertNotEquals(
       'Anchor element should be removed from document body', testDiv,
       anchorElem.parentNode);
-  var newElem = prevSib.nextSibling;
+  const newElem = prevSib.nextSibling;
   assertEquals(
       'Link should be replaced by text node', goog.dom.NodeType.TEXT,
       newElem.nodeType);
@@ -226,26 +226,26 @@ function testCancelNewMultiple() {
   mockField.dispatchChange();  // Should be fired because link was removed.
   mockCtrl.$replayAll();
 
-  var anchorElem1 = anchorElem;
-  var parent1 = goog.dom.createDom(goog.dom.TagName.DIV, null, anchorElem1);
+  const anchorElem1 = anchorElem;
+  const parent1 = goog.dom.createDom(goog.dom.TagName.DIV, null, anchorElem1);
   goog.dom.appendChild(testDiv, parent1);
   setUpGivenAnchor(anchorElem1, OLD_LINK_TEXT + '1', OLD_LINK_URL + '1', true);
 
   anchorElem2 = goog.dom.createDom(goog.dom.TagName.A);
-  var parent2 = goog.dom.createDom(goog.dom.TagName.DIV, null, anchorElem2);
+  const parent2 = goog.dom.createDom(goog.dom.TagName.DIV, null, anchorElem2);
   goog.dom.appendChild(testDiv, parent2);
   setUpGivenAnchor(anchorElem2, OLD_LINK_TEXT + '2', OLD_LINK_URL + '2', true);
   extraAnchors.push(anchorElem2);
 
   anchorElem3 = goog.dom.createDom(goog.dom.TagName.A);
-  var parent3 = goog.dom.createDom(goog.dom.TagName.DIV, null, anchorElem3);
+  const parent3 = goog.dom.createDom(goog.dom.TagName.DIV, null, anchorElem3);
   goog.dom.appendChild(testDiv, parent3);
   setUpGivenAnchor(anchorElem3, OLD_LINK_TEXT + '3', OLD_LINK_URL + '3', true);
   extraAnchors.push(anchorElem3);
 
   plugin = new goog.editor.plugins.LinkDialogPlugin();
   plugin.registerFieldObject(mockField);
-  var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+  const dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
 
   // Mock of execCommand + cancel without actually opening the dialog.
   plugin.currentLink_ = mockLink;
@@ -295,7 +295,7 @@ function testOkNewMultiple() {
   mockField.focus();
   mockCtrl.$replayAll();
 
-  var anchorElem1 = anchorElem;
+  const anchorElem1 = anchorElem;
   setUpGivenAnchor(anchorElem1, OLD_LINK_TEXT + '1', OLD_LINK_URL + '1', true);
 
   anchorElem2 = goog.dom.createElement(goog.dom.TagName.A);
@@ -308,10 +308,10 @@ function testOkNewMultiple() {
   setUpGivenAnchor(anchorElem3, OLD_LINK_TEXT + '3', OLD_LINK_URL + '3', true);
   extraAnchors.push(anchorElem3);
 
-  var prevSib = anchorElem1.previousSibling;
+  const prevSib = anchorElem1.previousSibling;
   plugin = new goog.editor.plugins.LinkDialogPlugin();
   plugin.registerFieldObject(mockField);
-  var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+  const dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
 
   // Mock of execCommand + clicking OK without actually opening the dialog.
   plugin.currentLink_ = mockLink;
@@ -356,7 +356,7 @@ function testOkOpenInNewWindow() {
 
   // Edit a link that doesn't open in a new window and leave it as such.
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL);
-  var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+  let dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
   dialog.dispatchEvent(
       new goog.ui.editor.LinkDialog.OkEvent(
           NEW_LINK_TEXT, NEW_LINK_URL, false, false));
@@ -445,7 +445,7 @@ function verifyRelNoFollow(noFollow, originalRel, expectedRel) {
   plugin.currentLink_ = mockLink;
 
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL, true, null, originalRel);
-  var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+  const dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
   dialog.dispatchEvent(
       new goog.ui.editor.LinkDialog.OkEvent(
           NEW_LINK_TEXT, NEW_LINK_URL, false, noFollow));
@@ -463,8 +463,8 @@ function testRestoreSelectionOnOk() {
   setUpAnchor('12345', '/');
   setUpRealEditableField();
 
-  var elem = fieldObj.getElement();
-  var helper = new goog.testing.editor.TestHelper(elem);
+  const elem = fieldObj.getElement();
+  const helper = new goog.testing.editor.TestHelper(elem);
   helper.select('12345', 1, '12345', 4);  // Selects '234'.
 
   assertEquals(
@@ -507,8 +507,8 @@ function testRestoreSelectionOnCancel(opt_isNew) {
   setUpAnchor('12345', '/', opt_isNew);
   setUpRealEditableField();
 
-  var elem = fieldObj.getElement();
-  var helper = new goog.testing.editor.TestHelper(elem);
+  const elem = fieldObj.getElement();
+  const helper = new goog.testing.editor.TestHelper(elem);
   helper.select('12345', 1, '12345', 4);  // Selects '234'.
 
   assertEquals(
@@ -546,13 +546,13 @@ function testTestLinkDisabledForInvalidScheme() {
   mockAlert(goog.testing.mockmatchers.isString);
   mockCtrl.$replayAll();
 
-  var invalidUrl = 'javascript:document.write(\'hello\');';
+  const invalidUrl = 'javascript:document.write(\'hello\');';
 
   plugin = new goog.editor.plugins.LinkDialogPlugin();
-  var dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
+  const dialog = plugin.createDialog(new goog.dom.DomHelper(), mockLink);
 
   // Mock of execCommand + clicking test without actually opening the dialog.
-  var dispatched = dialog.dispatchEvent(
+  const dispatched = dialog.dispatchEvent(
       new goog.ui.editor.LinkDialog.BeforeTestLinkEvent(invalidUrl));
 
   assertFalse(dispatched);
@@ -562,18 +562,19 @@ function testTestLinkDisabledForInvalidScheme() {
 function testIsSafeSchemeToOpen() {
   plugin = new goog.editor.plugins.LinkDialogPlugin();
   // Urls with no scheme at all are ok too since 'http://' will be prepended.
-  var good = [
+  const good = [
     'http://google.com', 'http://google.com/', 'https://google.com',
     'null@google.com', 'http://www.google.com', 'http://site.com', 'google.com',
     'google', 'http://google', 'HTTP://GOOGLE.COM', 'HtTp://www.google.com'
   ];
 
-  var bad = [
+  const bad = [
     'javascript:google.com', 'httpp://google.com', 'data:foo',
     'javascript:alert(\'hi\');', 'abc:def'
   ];
 
-  for (var i = 0; i < good.length; i++) {
+  let i;
+  for (i = 0; i < good.length; i++) {
     assertTrue(
         good[i] + ' should have a safe scheme',
         plugin.isSafeSchemeToOpen_(good[i]));
@@ -611,8 +612,8 @@ function testBug1607766() {
   setUpAnchor('abc', 'def');
   setUpRealEditableField();
 
-  var elem = fieldObj.getElement();
-  var helper = new goog.testing.editor.TestHelper(elem);
+  const elem = fieldObj.getElement();
+  const helper = new goog.testing.editor.TestHelper(elem);
   helper.select('abc', 1, 'abc', 2);  // Selects 'b'.
   // Dispatching a selection event causes the field to cache a selection
   // util, which is the root of the bug.
@@ -635,7 +636,7 @@ function testBug1607766() {
 function testBug2215546() {
   setUpRealEditableField();
 
-  var elem = fieldObj.getElement();
+  const elem = fieldObj.getElement();
   fieldObj.setSafeHtml(
       false,
       goog.html.SafeHtml.create(
@@ -643,7 +644,7 @@ function testBug2215546() {
   anchorElem = elem.firstChild.firstChild;
   linkObj = new goog.editor.Link(anchorElem, true);
 
-  var helper = new goog.testing.editor.TestHelper(elem);
+  const helper = new goog.testing.editor.TestHelper(elem);
   // Select "</a>" in a way, simulating what IE does if you hit enter twice,
   // arrow up into the blank line and open the link dialog.
   helper.select(anchorElem, 0, elem.firstChild, 1);
@@ -652,7 +653,7 @@ function testBug2215546() {
   goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value =
       'foo';
   goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
-  var okButton = plugin.dialog_.getOkButtonElement();
+  const okButton = plugin.dialog_.getOkButtonElement();
   okButton.disabled = false;
   goog.testing.events.fireClickSequence(okButton);
 
@@ -673,18 +674,18 @@ function testBug7279077ScrollOnFocus() {
   setUpRealEditableField();
 
   // Make the field scrollable and kinda small.
-  var elem = fieldObj.getElement();
+  const elem = fieldObj.getElement();
   elem.style.overflow = 'auto';
   elem.style.height = '40px';
   elem.style.width = '200px';
   elem.style.contenteditable = 'true';
 
   // Add a bunch of text before the anchor tag.
-  var longTextElem = goog.dom.createElement(goog.dom.TagName.SPAN);
+  const longTextElem = goog.dom.createElement(goog.dom.TagName.SPAN);
   longTextElem.innerHTML = goog.string.repeat('All work and no play.<p>', 20);
   elem.insertBefore(longTextElem, elem.firstChild);
 
-  var helper = new goog.testing.editor.TestHelper(elem);
+  const helper = new goog.testing.editor.TestHelper(elem);
   helper.select('12345', 1, '12345', 4);  // Selects '234'.
 
   // Scroll down.
@@ -695,7 +696,7 @@ function testBug7279077ScrollOnFocus() {
   goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value =
       'foo';
   goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
-  var cancelButton = plugin.dialog_.getCancelButtonElement();
+  const cancelButton = plugin.dialog_.getCancelButtonElement();
   goog.testing.events.fireClickSequence(cancelButton);
 
   assertEquals(
@@ -706,7 +707,7 @@ function testBug7279077ScrollOnFocus() {
   goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY).value =
       'foo';
   goog.dom.getElement(goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT).value = 'foo';
-  var okButton = plugin.dialog_.getOkButtonElement();
+  const okButton = plugin.dialog_.getOkButtonElement();
   goog.testing.events.fireClickSequence(okButton);
 
   assertEquals('Field should not have scrolled after OK', 60, elem.scrollTop);

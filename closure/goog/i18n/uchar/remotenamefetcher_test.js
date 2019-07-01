@@ -22,7 +22,7 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.testing.net.XhrIo');
 goog.require('goog.testing.recordFunction');
 
-var nameFetcher = null;
+let nameFetcher = null;
 
 function setUp() {
   goog.net.XhrIo = goog.testing.net.XhrIo;
@@ -34,19 +34,19 @@ function tearDown() {
 }
 
 function testGetName_remote() {
-  var callback = goog.testing.recordFunction(function(name) {
+  const callback = goog.testing.recordFunction(function(name) {
     assertEquals('Latin Capital Letter P', name);
     assertTrue(nameFetcher.charNames_.has('50'));
   });
   nameFetcher.getName('P', callback);
-  var responseJsonText = '{"50":{"name":"Latin Capital Letter P"}}';
+  const responseJsonText = '{"50":{"name":"Latin Capital Letter P"}}';
   nameFetcher.getNameXhrIo_.simulateResponse(200, responseJsonText);
   assertEquals(1, callback.getCallCount());
 }
 
 function testGetName_existing() {
   nameFetcher.charNames_.set('1049d', 'OSYMANYA LETTER OO');
-  var callback = goog.testing.recordFunction(function(name) {
+  const callback = goog.testing.recordFunction(function(name) {
     assertEquals('OSYMANYA LETTER OO', name);
   });
   nameFetcher.getName('\uD801\uDC9D', callback);
@@ -54,8 +54,9 @@ function testGetName_existing() {
 }
 
 function testGetName_fail() {
-  var callback =
-      goog.testing.recordFunction(function(name) { assertNull(name); });
+  const callback = goog.testing.recordFunction(function(name) {
+    assertNull(name);
+  });
   nameFetcher.getName('\uD801\uDC9D', callback);
   assertEquals(
       'http://www.example.com?c=1049d&p=name',
@@ -65,17 +66,18 @@ function testGetName_fail() {
 }
 
 function testGetName_abort() {
-  var callback1 =
-      goog.testing.recordFunction(function(name) { assertNull(name); });
+  const callback1 = goog.testing.recordFunction(function(name) {
+    assertNull(name);
+  });
   nameFetcher.getName('I', callback1);
-  var callback2 = goog.testing.recordFunction(function(name) {
+  const callback2 = goog.testing.recordFunction(function(name) {
     assertEquals(name, 'LATIN SMALL LETTER Y');
   });
   nameFetcher.getName('ÿ', callback2);
   assertEquals(
       'http://www.example.com?c=ff&p=name',
       nameFetcher.getNameXhrIo_.getLastUri().toString());
-  var responseJsonText = '{"ff":{"name":"LATIN SMALL LETTER Y"}}';
+  const responseJsonText = '{"ff":{"name":"LATIN SMALL LETTER Y"}}';
   nameFetcher.getNameXhrIo_.simulateResponse(200, responseJsonText);
   assertEquals(1, callback1.getCallCount());
   assertEquals(1, callback2.getCallCount());
@@ -87,7 +89,7 @@ function testPrefetch() {
       'http://www.example.com?b88=%C3%BFI%F0%90%92%9D&p=name',
       nameFetcher.prefetchXhrIo_.getLastUri().toString());
 
-  var responseJsonText = '{"ff":{"name":"LATIN SMALL LETTER Y"},"49":{' +
+  const responseJsonText = '{"ff":{"name":"LATIN SMALL LETTER Y"},"49":{' +
       '"name":"LATIN CAPITAL LETTER I"}, "1049d":{"name":"OSMYANA OO"}}';
   nameFetcher.prefetchXhrIo_.simulateResponse(200, responseJsonText);
 

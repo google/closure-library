@@ -30,18 +30,19 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.testing.net.XhrIo');
 
 
-var Base64PbStreamParser =
+const Base64PbStreamParser =
     goog.module.get('goog.net.streams.Base64PbStreamParser');
-var PbJsonStreamParser = goog.module.get('goog.net.streams.PbJsonStreamParser');
+const PbJsonStreamParser =
+    goog.module.get('goog.net.streams.PbJsonStreamParser');
 
-var xhrReader;
-var xhrIo;
+let xhrReader;
+let xhrIo;
 
-var Status = goog.net.streams.XhrStreamReader.Status;
-var ReadyState = goog.net.XmlHttp.ReadyState;
+const Status = goog.net.streams.XhrStreamReader.Status;
+const ReadyState = goog.net.XmlHttp.ReadyState;
 
-var CONTENT_TYPE_HEADER = goog.net.XhrIo.CONTENT_TYPE_HEADER;
-var CONTENT_TRANSFER_ENCODING = goog.net.XhrIo.CONTENT_TRANSFER_ENCODING;
+const CONTENT_TYPE_HEADER = goog.net.XhrIo.CONTENT_TYPE_HEADER;
+const CONTENT_TRANSFER_ENCODING = goog.net.XhrIo.CONTENT_TRANSFER_ENCODING;
 
 
 function shouldRunTests() {
@@ -117,14 +118,14 @@ function testNoData() {
     fail('Received unexpected messages: ' + messages);
   });
 
-  var streamStatus = [];
-  var httpStatus = [];
+  const streamStatus = [];
+  const httpStatus = [];
   xhrReader.setStatusHandler(function() {
     streamStatus.push(xhrReader.getStatus());
     httpStatus.push(xhrIo.getStatus());
   });
 
-  var headers = {'Content-Type': 'application/json'};
+  const headers = {'Content-Type': 'application/json'};
   xhrIo.send('/foo/bar');
   xhrIo.simulateResponse(goog.net.HttpStatus.OK, '', headers);
 
@@ -134,20 +135,20 @@ function testNoData() {
 
 
 function testRetrieveHttpStatusInStatusHandler() {
-  var received = [];
+  const received = [];
   xhrReader.setDataHandler(function(messages) {
     received.push(messages);
   });
 
-  var streamStatus = [];
-  var httpStatus = [];
+  const streamStatus = [];
+  const httpStatus = [];
   xhrReader.setStatusHandler(function() {
     console.log('in setStatusHandler');
     streamStatus.push(xhrReader.getStatus());
     httpStatus.push(xhrIo.getStatus());
   });
 
-  var headers = {'Content-Type': 'application/json'};
+  const headers = {'Content-Type': 'application/json'};
   xhrIo.send('/foo/bar');
   xhrIo.simulateResponse(goog.net.HttpStatus.OK, '[{"1" : "b"}]', headers);
 
@@ -163,11 +164,11 @@ function testRetrieveHttpStatusInStatusHandler() {
 
 
 function testParsingSingleMessage() {
-  var received = [];
+  const received = [];
   xhrReader.setDataHandler(function(messages) { received.push(messages); });
 
-  var body = 'CgX__gABdw==';
-  var headers = {
+  const body = 'CgX__gABdw==';
+  const headers = {
     'Content-Type': 'application/x-protobuf',
     'Content-Transfer-Encoding': 'BASE64'
   };
@@ -190,15 +191,15 @@ function testParsingMultipleMessages() {
    *    0x0a, 0x03, 0x6a, 0x6b, 0x6c,
    */
 
-  var chunk1 = 'CgNh';
-  var chunk2 = 'YmMKA';
-  var chunk3 = '2RlZhIDZ2hpCg';
-  var chunk4 = 'Nqa2w=';
+  const chunk1 = 'CgNh';
+  const chunk2 = 'YmMKA';
+  const chunk3 = '2RlZhIDZ2hpCg';
+  const chunk4 = 'Nqa2w=';
 
-  var received = [];
+  let received = [];
   xhrReader.setDataHandler(function(messages) { received.push(messages); });
 
-  var headers = {
+  const headers = {
     'Content-Type': 'application/x-protobuf',
     'Content-Transfer-Encoding': 'BASE64'
   };

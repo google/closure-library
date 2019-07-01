@@ -47,20 +47,20 @@ goog.setTestOnly('goog.style_test');
 goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS = 500;
 
 // IE before version 6 will always be border box in compat mode.
-var isBorderBox = goog.dom.isCss1CompatMode() ?
+const isBorderBox = goog.dom.isCss1CompatMode() ?
     (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('6')) :
     true;
-var EPSILON = 2;
-var expectedFailures;
-var $ = goog.dom.getElement;
-var mockUserAgent;
+const EPSILON = 2;
+let expectedFailures;
+const $ = goog.dom.getElement;
+let mockUserAgent;
 
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
   // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
   goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
 
-  var viewportSize = goog.dom.getViewportSize();
+  const viewportSize = goog.dom.getViewportSize();
   // When the window is too short or not wide enough, some tests, especially
   // those for off-screen elements, fail.  Oddly, the most reliable
   // indicator is a width of zero (which is of course erroneous), since
@@ -82,10 +82,10 @@ function setUp() {
 
 function tearDown() {
   expectedFailures.handleTearDown();
-  var testVisibleDiv2 = goog.dom.getElement('test-visible2');
+  const testVisibleDiv2 = goog.dom.getElement('test-visible2');
   testVisibleDiv2.setAttribute('style', '');
   goog.dom.removeChildren(testVisibleDiv2);
-  var testViewport = goog.dom.getElement('test-viewport');
+  const testViewport = goog.dom.getElement('test-viewport');
   testViewport.setAttribute('style', '');
   goog.dom.removeChildren(testViewport);
   goog.dispose(mockUserAgent);
@@ -95,20 +95,23 @@ function tearDown() {
 }
 
 function testSetStyle() {
-  var el = $('span1');
+  const el = $('span1');
   goog.style.setStyle(el, 'textDecoration', 'underline');
   assertEquals('Should be underline', 'underline', el.style.textDecoration);
 }
 
 function testSetStyleMap() {
-  var el = $('span6');
+  const el = $('span6');
 
-  var styles =
-      {'background-color': 'blue', 'font-size': '100px', textAlign: 'center'};
+  const styles = {
+    'background-color': 'blue',
+    'font-size': '100px',
+    textAlign: 'center'
+  };
 
   goog.style.setStyle(el, styles);
 
-  var answers = {
+  const answers = {
     backgroundColor: 'blue',
     fontSize: '100px',
     textAlign: 'center'
@@ -120,13 +123,13 @@ function testSetStyleMap() {
 }
 
 function testSetStyleWithNonCamelizedString() {
-  var el = $('span5');
+  const el = $('span5');
   goog.style.setStyle(el, 'text-decoration', 'underline');
   assertEquals('Should be underline', 'underline', el.style.textDecoration);
 }
 
 function testGetStyle() {
-  var el = goog.dom.getElement('styleTest3');
+  const el = goog.dom.getElement('styleTest3');
   goog.style.setStyle(el, 'width', '80px');
   goog.style.setStyle(el, 'textDecoration', 'underline');
 
@@ -139,7 +142,7 @@ function testGetStyle() {
 
 function testGetStyleMsFilter() {
   // Element with -ms-filter style set.
-  var e = goog.dom.getElement('msFilter');
+  const e = goog.dom.getElement('msFilter');
 
   if (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(8) &&
       !goog.userAgent.isDocumentModeOrHigher(10)) {
@@ -155,7 +158,7 @@ function testGetStyleMsFilter() {
 
 function testGetStyleFilter() {
   // Element with filter style set.
-  var e = goog.dom.getElement('filter');
+  const e = goog.dom.getElement('filter');
 
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
     // Filter supported.
@@ -167,7 +170,7 @@ function testGetStyleFilter() {
 
 function testGetComputedStyleMsFilter() {
   // Element with -ms-filter style set.
-  var e = goog.dom.getElement('msFilter');
+  const e = goog.dom.getElement('msFilter');
 
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
     if (goog.userAgent.isDocumentModeOrHigher(9)) {
@@ -186,7 +189,7 @@ function testGetComputedStyleMsFilter() {
 
 function testGetComputedStyleFilter() {
   // Element with filter style set.
-  var e = goog.dom.getElement('filter');
+  const e = goog.dom.getElement('filter');
 
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
     if (goog.userAgent.isDocumentModeOrHigher(9)) {
@@ -205,9 +208,9 @@ function testGetComputedStyleFilter() {
 
 function testGetComputedBoxSizing() {
   if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(8)) {
-    var defaultBoxSizing =
+    const defaultBoxSizing =
         goog.dom.isCss1CompatMode() ? 'content-box' : 'border-box';
-    var el = goog.dom.getElement('box-sizing-unset');
+    let el = goog.dom.getElement('box-sizing-unset');
     assertEquals(defaultBoxSizing, goog.style.getComputedBoxSizing(el));
 
     el = goog.dom.getElement('box-sizing-border-box');
@@ -291,11 +294,11 @@ function testGetComputedCursor() {
 }
 
 function testGetBackgroundColor() {
-  var dest = $('bgcolorDest');
+  const dest = $('bgcolorDest');
 
-  for (var i = 0; $('bgcolorTest' + i); i++) {
-    var src = $('bgcolorTest' + i);
-    var bgColor = goog.style.getBackgroundColor(src);
+  for (let i = 0; $('bgcolorTest' + i); i++) {
+    const src = $('bgcolorTest' + i);
+    const bgColor = goog.style.getBackgroundColor(src);
 
     dest.style.backgroundColor = bgColor;
     assertEquals(
@@ -305,7 +308,7 @@ function testGetBackgroundColor() {
     try {
       // goog.color.parse throws a generic exception if handed input it
       // doesn't understand.
-      var c = goog.color.parse(bgColor);
+      const c = goog.color.parse(bgColor);
       assertEquals('rgb(255,0,0)', goog.color.hexToRgbStyle(c.hex));
     } catch (e) {
       // Internet Explorer is unable to parse colors correctly after test 4.
@@ -317,7 +320,7 @@ function testGetBackgroundColor() {
 }
 
 function testSetPosition() {
-  var el = $('testEl');
+  const el = $('testEl');
 
   goog.style.setPosition(el, 100, 100);
   assertEquals('100px', el.style.left);
@@ -350,34 +353,34 @@ function testSetPosition() {
 }
 
 function testGetClientPositionAbsPositionElement() {
-  var div = goog.dom.createDom(goog.dom.TagName.DIV);
+  const div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.style.position = 'absolute';
   div.style.left = '100px';
   div.style.top = '200px';
   document.body.appendChild(div);
-  var pos = goog.style.getClientPosition(div);
+  const pos = goog.style.getClientPosition(div);
   assertEquals(100, pos.x);
   assertEquals(200, pos.y);
 }
 
 function testGetClientPositionNestedElements() {
-  var innerDiv = goog.dom.createDom(goog.dom.TagName.DIV);
+  const innerDiv = goog.dom.createDom(goog.dom.TagName.DIV);
   innerDiv.style.position = 'relative';
   innerDiv.style.left = '-10px';
   innerDiv.style.top = '-10px';
-  var div = goog.dom.createDom(goog.dom.TagName.DIV);
+  const div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.style.position = 'absolute';
   div.style.left = '150px';
   div.style.top = '250px';
   div.appendChild(innerDiv);
   document.body.appendChild(div);
-  var pos = goog.style.getClientPosition(innerDiv);
+  const pos = goog.style.getClientPosition(innerDiv);
   assertEquals(140, pos.x);
   assertEquals(240, pos.y);
 }
 
 function testGetClientPositionOfOffscreenElement() {
-  var div = goog.dom.createDom(goog.dom.TagName.DIV);
+  const div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.style.position = 'absolute';
   div.style.left = '2000px';
   div.style.top = '2000px';
@@ -387,7 +390,7 @@ function testGetClientPositionOfOffscreenElement() {
 
   try {
     window.scroll(0, 0);
-    var pos = goog.style.getClientPosition(div);
+    let pos = goog.style.getClientPosition(div);
     assertEquals(2000, pos.x);
     assertEquals(2000, pos.y);
 
@@ -396,7 +399,7 @@ function testGetClientPositionOfOffscreenElement() {
     if (!goog.userAgent.IE &&
         !(goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9'))) {
       window.scroll(1, 1);
-      var pos = goog.style.getClientPosition(div);
+      let pos = goog.style.getClientPosition(div);
       assertEquals(1999, pos.x);
       assertRoughlyEquals(1999, pos.y, 0.5);
 
@@ -417,34 +420,34 @@ function testGetClientPositionOfOffscreenElement() {
 }
 
 function testGetClientPositionOfOrphanElement() {
-  var orphanElem = goog.dom.createElement(goog.dom.TagName.DIV);
-  var pos = goog.style.getClientPosition(orphanElem);
+  const orphanElem = goog.dom.createElement(goog.dom.TagName.DIV);
+  const pos = goog.style.getClientPosition(orphanElem);
   assertEquals(0, pos.x);
   assertEquals(0, pos.y);
 }
 
 function testGetClientPositionEvent() {
-  var mockEvent = {};
+  const mockEvent = {};
   mockEvent.clientX = 100;
   mockEvent.clientY = 200;
-  var pos = goog.style.getClientPosition(mockEvent);
+  const pos = goog.style.getClientPosition(mockEvent);
   assertEquals(100, pos.x);
   assertEquals(200, pos.y);
 }
 
 function testGetClientPositionTouchEvent() {
-  var mockTouchEvent = {};
+  const mockTouchEvent = {};
   mockTouchEvent.changedTouches = [{}];
   mockTouchEvent.changedTouches[0].clientX = 100;
   mockTouchEvent.changedTouches[0].clientY = 200;
 
-  var pos = goog.style.getClientPosition(mockTouchEvent);
+  const pos = goog.style.getClientPosition(mockTouchEvent);
   assertEquals(100, pos.x);
   assertEquals(200, pos.y);
 }
 
 function testGetClientPositionEmptyTouchList() {
-  var mockTouchEvent = {};
+  const mockTouchEvent = {};
 
   mockTouchEvent.touches = [];
 
@@ -452,47 +455,47 @@ function testGetClientPositionEmptyTouchList() {
   mockTouchEvent.changedTouches[0].clientX = 100;
   mockTouchEvent.changedTouches[0].clientY = 200;
 
-  var pos = goog.style.getClientPosition(mockTouchEvent);
+  const pos = goog.style.getClientPosition(mockTouchEvent);
   assertEquals(100, pos.x);
   assertEquals(200, pos.y);
 }
 
 function testGetClientPositionAbstractedTouchEvent() {
-  var mockTouchEvent = {};
+  const mockTouchEvent = {};
   mockTouchEvent.changedTouches = [{}];
   mockTouchEvent.changedTouches[0].clientX = 100;
   mockTouchEvent.changedTouches[0].clientY = 200;
 
-  var e = new goog.events.BrowserEvent(mockTouchEvent);
+  const e = new goog.events.BrowserEvent(mockTouchEvent);
 
-  var pos = goog.style.getClientPosition(e);
+  const pos = goog.style.getClientPosition(e);
   assertEquals(100, pos.x);
   assertEquals(200, pos.y);
 }
 
 function testGetPageOffsetAbsPositionedElement() {
-  var div = goog.dom.createDom(goog.dom.TagName.DIV);
+  const div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.style.position = 'absolute';
   div.style.left = '100px';
   div.style.top = '200px';
   document.body.appendChild(div);
-  var pos = goog.style.getPageOffset(div);
+  const pos = goog.style.getPageOffset(div);
   assertEquals(100, pos.x);
   assertEquals(200, pos.y);
 }
 
 function testGetPageOffsetNestedElements() {
-  var innerDiv = goog.dom.createDom(goog.dom.TagName.DIV);
+  const innerDiv = goog.dom.createDom(goog.dom.TagName.DIV);
   innerDiv.style.position = 'relative';
   innerDiv.style.left = '-10px';
   innerDiv.style.top = '-10px';
-  var div = goog.dom.createDom(goog.dom.TagName.DIV);
+  const div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.style.position = 'absolute';
   div.style.left = '150px';
   div.style.top = '250px';
   div.appendChild(innerDiv);
   document.body.appendChild(div);
-  var pos = goog.style.getPageOffset(innerDiv);
+  const pos = goog.style.getPageOffset(innerDiv);
   assertRoughlyEquals(140, pos.x, 0.1);
   assertRoughlyEquals(240, pos.y, 0.1);
 }
@@ -501,8 +504,9 @@ function testGetPageOffsetWithBodyPadding() {
   document.body.style.margin = '40px';
   document.body.style.padding = '60px';
   document.body.style.borderWidth = '70px';
+  let div;
   try {
-    var div = goog.dom.createDom(goog.dom.TagName.DIV);
+    div = goog.dom.createDom(goog.dom.TagName.DIV);
     div.style.position = 'absolute';
     div.style.left = '100px';
     div.style.top = '200px';
@@ -511,7 +515,7 @@ function testGetPageOffsetWithBodyPadding() {
     div.style.padding = '2px';
     div.style.borderWidth = '3px';
     document.body.appendChild(div);
-    var pos = goog.style.getPageOffset(div);
+    const pos = goog.style.getPageOffset(div);
     assertRoughlyEquals(101, pos.x, 0.1);
     assertRoughlyEquals(201, pos.y, 0.1);
   } finally {
@@ -526,8 +530,9 @@ function testGetPageOffsetWithDocumentElementPadding() {
   document.documentElement.style.margin = '40px';
   document.documentElement.style.padding = '60px';
   document.documentElement.style.borderWidth = '70px';
+  let div;
   try {
-    var div = goog.dom.createDom(goog.dom.TagName.DIV);
+    div = goog.dom.createDom(goog.dom.TagName.DIV);
     div.style.position = 'absolute';
     div.style.left = '100px';
     div.style.top = '200px';
@@ -536,7 +541,7 @@ function testGetPageOffsetWithDocumentElementPadding() {
     div.style.padding = '2px';
     div.style.borderWidth = '3px';
     document.body.appendChild(div);
-    var pos = goog.style.getPageOffset(div);
+    const pos = goog.style.getPageOffset(div);
     // FF3 (but not beyond) gets confused by document margins.
     if (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9') &&
         !goog.userAgent.isVersionOrHigher('1.9.1')) {
@@ -555,14 +560,14 @@ function testGetPageOffsetWithDocumentElementPadding() {
 }
 
 function testGetPageOffsetElementOffscreen() {
-  var div = goog.dom.createDom(goog.dom.TagName.DIV);
+  const div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.style.position = 'absolute';
   div.style.left = '10000px';
   div.style.top = '20000px';
   document.body.appendChild(div);
   window.scroll(0, 0);
   try {
-    var pos = goog.style.getPageOffset(div);
+    let pos = goog.style.getPageOffset(div);
     assertEquals(10000, pos.x);
     assertEquals(20000, pos.y);
 
@@ -598,17 +603,17 @@ function testGetPageOffsetFixedPositionElements() {
   // position:fixed is not supported in IE before version 7
   if (!goog.userAgent.IE || !goog.userAgent.isVersionOrHigher('6')) {
     // Test with a position fixed element
-    var div = goog.dom.createDom(goog.dom.TagName.DIV);
+    let div = goog.dom.createDom(goog.dom.TagName.DIV);
     div.style.position = 'fixed';
     div.style.top = '10px';
     div.style.left = '10px';
     document.body.appendChild(div);
-    var pos = goog.style.getPageOffset(div);
+    let pos = goog.style.getPageOffset(div);
     assertEquals(10, pos.x);
     assertEquals(10, pos.y);
 
     // Test with a position fixed element as parent
-    var innerDiv = goog.dom.createDom(goog.dom.TagName.DIV);
+    const innerDiv = goog.dom.createDom(goog.dom.TagName.DIV);
     div = goog.dom.createDom(goog.dom.TagName.DIV);
     div.style.position = 'fixed';
     div.style.top = '10px';
@@ -627,7 +632,7 @@ function testGetPositionTolerantToNoDocumentElementBorder() {
   // 2-pixel offset.  Ensure that we're correctly compensating for both cases.
   try {
     document.documentElement.style.borderWidth = '0';
-    var div = goog.dom.createDom(goog.dom.TagName.DIV);
+    const div = goog.dom.createDom(goog.dom.TagName.DIV);
     div.style.position = 'absolute';
     div.style.left = '100px';
     div.style.top = '200px';
@@ -640,10 +645,10 @@ function testGetPositionTolerantToNoDocumentElementBorder() {
         goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(10));
     try {
       // Test all major positioning methods.
-      var pos = goog.style.getClientPosition(div);
+      const pos = goog.style.getClientPosition(div);
       assertEquals(100, pos.x);
       assertRoughlyEquals(200, pos.y, .1);
-      var offset = goog.style.getPageOffset(div);
+      const offset = goog.style.getPageOffset(div);
       assertEquals(100, offset.x);
       assertRoughlyEquals(200, offset.y, .1);
     } catch (e) {
@@ -655,7 +660,7 @@ function testGetPositionTolerantToNoDocumentElementBorder() {
 }
 
 function testSetSize() {
-  var el = $('testEl');
+  const el = $('testEl');
 
   goog.style.setSize(el, 100, 100);
   assertEquals('100px', el.style.width);
@@ -687,7 +692,7 @@ function testSetSize() {
 }
 
 function testSetWidthAndHeight() {
-  var el = $('testEl');
+  const el = $('testEl');
 
   // Replicate all of the setSize tests above.
 
@@ -737,10 +742,10 @@ function testSetWidthAndHeight() {
 }
 
 function testGetSize() {
-  var el = $('testEl');
+  let el = $('testEl');
   goog.style.setSize(el, 100, 100);
 
-  var dims = goog.style.getSize(el);
+  let dims = goog.style.getSize(el);
   assertEquals(100, dims.width);
   assertEquals(100, dims.height);
 
@@ -787,7 +792,7 @@ function testGetSize() {
 }
 
 function testGetSizeSvgElements() {
-  var svgEl = document.createElementNS &&
+  const svgEl = document.createElementNS &&
       document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   if (!svgEl || svgEl.getAttribute('transform') == '' ||
       (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher(534.8))) {
@@ -797,7 +802,7 @@ function testGetSizeSvgElements() {
   }
 
   document.body.appendChild(svgEl);
-  var el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  const el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
   el.setAttribute('x', 10);
   el.setAttribute('y', 10);
   el.setAttribute('width', 32);
@@ -807,10 +812,10 @@ function testGetSizeSvgElements() {
   svgEl.appendChild(el);
 
   // The bounding size in 1 larger than the SVG element in IE.
-  var expectedWidth = (goog.userAgent.EDGE_OR_IE) ? 33 : 32;
-  var expectedHeight = (goog.userAgent.EDGE_OR_IE) ? 22 : 21;
+  const expectedWidth = (goog.userAgent.EDGE_OR_IE) ? 33 : 32;
+  const expectedHeight = (goog.userAgent.EDGE_OR_IE) ? 22 : 21;
 
-  var dims = goog.style.getSize(el);
+  let dims = goog.style.getSize(el);
   assertEquals(expectedWidth, dims.width);
   assertRoughlyEquals(expectedHeight, dims.height, 0.01);
 
@@ -833,7 +838,7 @@ function testGetSizeSvgElements() {
 }
 
 function testGetSizeSvgDocument() {
-  var svgEl = document.createElementNS &&
+  const svgEl = document.createElementNS &&
       document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   if (!svgEl || svgEl.getAttribute('transform') == '' ||
       (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher(534.8))) {
@@ -842,10 +847,10 @@ function testGetSizeSvgDocument() {
     return;
   }
 
-  var frame = goog.dom.getElement('svg-frame');
-  var doc = goog.dom.getFrameContentDocument(frame);
-  var rect = doc.getElementById('rect');
-  var dims = goog.style.getSize(rect);
+  const frame = goog.dom.getElement('svg-frame');
+  const doc = goog.dom.getFrameContentDocument(frame);
+  const rect = doc.getElementById('rect');
+  const dims = goog.style.getSize(rect);
   if (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher(53)) {
     // Firefox >= 53 auto-scales iframe SVG content to fit the frame
     // b/38432885 | https://bugzilla.mozilla.org/show_bug.cgi?id=1366126
@@ -861,33 +866,33 @@ function testGetSizeSvgDocument() {
 }
 
 function testGetSizeInlineBlock() {
-  var el = $('height-test-inner');
-  var dims = goog.style.getSize(el);
+  const el = $('height-test-inner');
+  const dims = goog.style.getSize(el);
   assertNotEquals(0, dims.height);
 }
 
 function testGetSizeTransformedRotated() {
   if (!hasWebkitTransform()) return;
 
-  var el = $('rotated');
+  const el = $('rotated');
   goog.style.setSize(el, 300, 200);
 
-  var noRotateDims = goog.style.getTransformedSize(el);
+  const noRotateDims = goog.style.getTransformedSize(el);
   assertEquals(300, noRotateDims.width);
   assertEquals(200, noRotateDims.height);
 
   el.style.webkitTransform = 'rotate(180deg)';
-  var rotate180Dims = goog.style.getTransformedSize(el);
+  const rotate180Dims = goog.style.getTransformedSize(el);
   assertEquals(300, rotate180Dims.width);
   assertEquals(200, rotate180Dims.height);
 
   el.style.webkitTransform = 'rotate(90deg)';
-  var rotate90ClockwiseDims = goog.style.getTransformedSize(el);
+  const rotate90ClockwiseDims = goog.style.getTransformedSize(el);
   assertEquals(200, rotate90ClockwiseDims.width);
   assertEquals(300, rotate90ClockwiseDims.height);
 
   el.style.webkitTransform = 'rotate(-90deg)';
-  var rotate90CounterClockwiseDims = goog.style.getTransformedSize(el);
+  const rotate90CounterClockwiseDims = goog.style.getTransformedSize(el);
   assertEquals(200, rotate90CounterClockwiseDims.width);
   assertEquals(300, rotate90CounterClockwiseDims.height);
 }
@@ -895,15 +900,15 @@ function testGetSizeTransformedRotated() {
 function testGetSizeTransformedScaled() {
   if (!hasWebkitTransform()) return;
 
-  var el = $('scaled');
+  const el = $('scaled');
   goog.style.setSize(el, 300, 200);
 
-  var noScaleDims = goog.style.getTransformedSize(el);
+  const noScaleDims = goog.style.getTransformedSize(el);
   assertEquals(300, noScaleDims.width);
   assertEquals(200, noScaleDims.height);
 
   el.style.webkitTransform = 'scale(2, 0.5)';
-  var scaledDims = goog.style.getTransformedSize(el);
+  const scaledDims = goog.style.getTransformedSize(el);
   assertEquals(600, scaledDims.width);
   assertEquals(100, scaledDims.height);
 }
@@ -913,19 +918,19 @@ function hasWebkitTransform() {
 }
 
 function testGetSizeOfOrphanElement() {
-  var orphanElem = goog.dom.createElement(goog.dom.TagName.DIV);
-  var size = goog.style.getSize(orphanElem);
+  const orphanElem = goog.dom.createElement(goog.dom.TagName.DIV);
+  const size = goog.style.getSize(orphanElem);
   assertEquals(0, size.width);
   assertEquals(0, size.height);
 }
 
 function testGetBounds() {
-  var el = $('testEl');
+  const el = $('testEl');
 
-  var dims = goog.style.getSize(el);
-  var pos = goog.style.getPageOffset(el);
+  const dims = goog.style.getSize(el);
+  const pos = goog.style.getPageOffset(el);
 
-  var rect = goog.style.getBounds(el);
+  const rect = goog.style.getBounds(el);
 
   // Relies on getSize and getPageOffset being correct.
   assertEquals(dims.width, rect.width);
@@ -935,11 +940,11 @@ function testGetBounds() {
 }
 
 function testInstallSafeStyleSheet() {
-  var el = $('installTest0');
-  var originalBackground = goog.style.getBackgroundColor(el);
+  const el = $('installTest0');
+  const originalBackground = goog.style.getBackgroundColor(el);
 
   // Uses background-color because it's easy to get the computed value
-  var result = goog.style.installSafeStyleSheet(
+  const result = goog.style.installSafeStyleSheet(
       goog.html.testing.newSafeStyleSheetForTest(
           '#installTest0 { background-color: rgb(255, 192, 203); }'));
 
@@ -950,10 +955,10 @@ function testInstallSafeStyleSheet() {
 }
 
 function testSetSafeStyleSheet() {
-  var el = $('installTest1');
+  const el = $('installTest1');
 
   // Change to pink
-  var ss = goog.style.installSafeStyleSheet(
+  const ss = goog.style.installSafeStyleSheet(
       goog.html.testing.newSafeStyleSheetForTest(
           '#installTest1 { background-color: rgb(255, 192, 203); }'));
 
@@ -1000,7 +1005,7 @@ function testIsUnselectable() {
 }
 
 function testSetUnselectable() {
-  var el = $('make-unselectable');
+  const el = $('make-unselectable');
   assertFalse(goog.style.isUnselectable(el));
 
   function assertDescendantsUnselectable(unselectable) {
@@ -1030,12 +1035,12 @@ function testSetUnselectable() {
 }
 
 function testPosWithAbsoluteAndScroll() {
-  var el = $('pos-scroll-abs');
-  var el1 = $('pos-scroll-abs-1');
-  var el2 = $('pos-scroll-abs-2');
+  const el = $('pos-scroll-abs');
+  const el1 = $('pos-scroll-abs-1');
+  const el2 = $('pos-scroll-abs-2');
 
   el1.scrollTop = 200;
-  var pos = goog.style.getPageOffset(el2);
+  const pos = goog.style.getPageOffset(el2);
 
   assertEquals(200, pos.x);
   // Don't bother with IE in quirks mode
@@ -1046,17 +1051,17 @@ function testPosWithAbsoluteAndScroll() {
 
 function testPosWithAbsoluteAndWindowScroll() {
   window.scrollBy(0, 200);
-  var el = $('abs-upper-left');
-  var pos = goog.style.getPageOffset(el);
+  const el = $('abs-upper-left');
+  const pos = goog.style.getPageOffset(el);
   assertRoughlyEquals('Top should be about 0', 0, pos.y, 0.1);
 }
 
 function testGetBorderBoxSize() {
   // Strict mode
-  var getBorderBoxSize = goog.style.getBorderBoxSize;
+  const getBorderBoxSize = goog.style.getBorderBoxSize;
 
-  var el = $('size-a');
-  var rect = getBorderBoxSize(el);
+  let el = $('size-a');
+  let rect = getBorderBoxSize(el);
   assertEquals('width:100px', 100, rect.width);
   assertEquals('height:100px', 100, rect.height);
 
@@ -1089,10 +1094,10 @@ function testGetBorderBoxSize() {
 
 function testGetContentBoxSize() {
   // Strict mode
-  var getContentBoxSize = goog.style.getContentBoxSize;
+  const getContentBoxSize = goog.style.getContentBoxSize;
 
-  var el = $('size-a');
-  var rect = getContentBoxSize(el);
+  let el = $('size-a');
+  let rect = getContentBoxSize(el);
   assertEquals('width:100px', 100, rect.width);
   assertEquals('height:100px', 100, rect.height);
 
@@ -1133,9 +1138,9 @@ function testGetContentBoxSize() {
 
 function testSetBorderBoxSize() {
   // Strict mode
-  var el = $('size-e');
-  var Size = goog.math.Size;
-  var setBorderBoxSize = goog.style.setBorderBoxSize;
+  const el = $('size-e');
+  const Size = goog.math.Size;
+  const setBorderBoxSize = goog.style.setBorderBoxSize;
 
   // Clean up
   // style element has 100x100, no border and no padding
@@ -1182,7 +1187,7 @@ function testSetBorderBoxSize() {
   // Setting the border box smaller than the borders will just give you
   // a content box of size 0.
   // NOTE(nicksantos): I'm not really sure why IE7 is special here.
-  var isIeLt8Quirks = goog.userAgent.IE &&
+  const isIeLt8Quirks = goog.userAgent.IE &&
       !goog.userAgent.isDocumentModeOrHigher(8) && !goog.dom.isCss1CompatMode();
   assertEquals(20, el.offsetWidth);
   assertEquals(isIeLt8Quirks ? 39 : 20, el.offsetHeight);
@@ -1190,9 +1195,9 @@ function testSetBorderBoxSize() {
 
 function testSetContentBoxSize() {
   // Strict mode
-  var el = $('size-e');
-  var Size = goog.math.Size;
-  var setContentBoxSize = goog.style.setContentBoxSize;
+  const el = $('size-e');
+  const Size = goog.math.Size;
+  const setContentBoxSize = goog.style.setContentBoxSize;
 
   // Clean up
   // style element has 100x100, no border and no padding
@@ -1238,7 +1243,7 @@ function testSetContentBoxSize() {
   setContentBoxSize(el, new Size(-10, -10));
 
   // NOTE(nicksantos): I'm not really sure why IE7 is special here.
-  var isIeLt8Quirks = goog.userAgent.IE &&
+  const isIeLt8Quirks = goog.userAgent.IE &&
       !goog.userAgent.isDocumentModeOrHigher('8') &&
       !goog.dom.isCss1CompatMode();
   assertEquals(20, el.offsetWidth);
@@ -1247,9 +1252,9 @@ function testSetContentBoxSize() {
 
 function testGetPaddingBox() {
   // Strict mode
-  var el = $('size-e');
-  var Size = goog.math.Size;
-  var getPaddingBox = goog.style.getPaddingBox;
+  const el = $('size-e');
+  const Size = goog.math.Size;
+  const getPaddingBox = goog.style.getPaddingBox;
 
   // Clean up
   // style element has 100x100, no border and no padding
@@ -1260,7 +1265,7 @@ function testGetPaddingBox() {
   el.style.height = '';
 
   el.style.padding = '10px';
-  var rect = getPaddingBox(el);
+  let rect = getPaddingBox(el);
   assertEquals(10, rect.left);
   assertEquals(10, rect.right);
   assertEquals(10, rect.top);
@@ -1293,8 +1298,8 @@ function testGetPaddingBox() {
 }
 
 function testGetPaddingBoxUnattached() {
-  var el = goog.dom.createElement(goog.dom.TagName.DIV);
-  var box = goog.style.getPaddingBox(el);
+  const el = goog.dom.createElement(goog.dom.TagName.DIV);
+  const box = goog.style.getPaddingBox(el);
   if (goog.userAgent.WEBKIT) {
     assertTrue(isNaN(box.top));
     assertTrue(isNaN(box.right));
@@ -1307,9 +1312,9 @@ function testGetPaddingBoxUnattached() {
 
 function testGetMarginBox() {
   // Strict mode
-  var el = $('size-e');
-  var Size = goog.math.Size;
-  var getMarginBox = goog.style.getMarginBox;
+  const el = $('size-e');
+  const Size = goog.math.Size;
+  const getMarginBox = goog.style.getMarginBox;
 
   // Clean up
   // style element has 100x100, no border and no padding
@@ -1320,7 +1325,7 @@ function testGetMarginBox() {
   el.style.height = '';
 
   el.style.margin = '10px';
-  var rect = getMarginBox(el);
+  let rect = getMarginBox(el);
   assertEquals(10, rect.left);
   // In webkit the right margin is the calculated distance from right edge and
   // not the computed right margin so it is not reliable.
@@ -1374,9 +1379,9 @@ function testGetMarginBox() {
 
 function testGetBorderBox() {
   // Strict mode
-  var el = $('size-e');
-  var Size = goog.math.Size;
-  var getBorderBox = goog.style.getBorderBox;
+  const el = $('size-e');
+  const Size = goog.math.Size;
+  const getBorderBox = goog.style.getBorderBox;
 
   // Clean up
   // style element has 100x100, no border and no padding
@@ -1387,7 +1392,7 @@ function testGetBorderBox() {
   el.style.height = '';
 
   el.style.borderWidth = '10px';
-  var rect = getBorderBox(el);
+  let rect = getBorderBox(el);
   assertEquals(10, rect.left);
   assertEquals(10, rect.right);
   assertEquals(10, rect.top);
@@ -1438,7 +1443,7 @@ function testGetFontFamily() {
   //   Times
   //   Helvetica
 
-  var tmpFont = goog.style.getFontFamily($('font-tag'));
+  let tmpFont = goog.style.getFontFamily($('font-tag'));
   assertTrue(
       'FontFamily should be detectable when set via <font face>',
       'Times' == tmpFont || 'Times New Roman' == tmpFont);
@@ -1485,7 +1490,7 @@ function testGetFontFamily() {
   // IE raises an 'Invalid Argument' error when using the moveToElementText
   // method from the TextRange object with an element that is not attached to
   // a document.
-  var element = goog.dom.createDom(
+  const element = goog.dom.createDom(
       goog.dom.TagName.SPAN, {style: 'font-family:Times,sans-serif;'},
       'some text');
   tmpFont = goog.style.getFontFamily(element);
@@ -1541,21 +1546,21 @@ function testGetLengthUnits() {
 }
 
 function testParseStyleAttribute() {
-  var css = 'left: 0px; text-align: center';
-  var expected = {'left': '0px', 'textAlign': 'center'};
+  const css = 'left: 0px; text-align: center';
+  const expected = {'left': '0px', 'textAlign': 'center'};
 
   assertObjectEquals(expected, goog.style.parseStyleAttribute(css));
 }
 
 function testToStyleAttribute() {
-  var object = {'left': '0px', 'textAlign': 'center'};
-  var expected = 'left:0px;text-align:center;';
+  const object = {'left': '0px', 'textAlign': 'center'};
+  const expected = 'left:0px;text-align:center;';
 
   assertEquals(expected, goog.style.toStyleAttribute(object));
 }
 
 function testStyleAttributePassthrough() {
-  var object = {'left': '0px', 'textAlign': 'center'};
+  const object = {'left': '0px', 'textAlign': 'center'};
 
   assertObjectEquals(
       object,
@@ -1569,7 +1574,7 @@ function testGetFloat() {
 }
 
 function testSetFloat() {
-  var el = $('float-test');
+  const el = $('float-test');
 
   goog.style.setFloat(el, 'left');
   assertEquals('left', goog.style.getFloat(el));
@@ -1585,7 +1590,7 @@ function testSetFloat() {
 }
 
 function testIsElementShown() {
-  var el = $('testEl');
+  const el = $('testEl');
 
   goog.style.setElementShown(el, false);
   assertFalse(goog.style.isElementShown(el));
@@ -1595,11 +1600,11 @@ function testIsElementShown() {
 }
 
 function testGetOpacity() {
-  var el1 = {style: {opacity: '0.3'}};
+  const el1 = {style: {opacity: '0.3'}};
 
-  var el2 = {style: {MozOpacity: '0.1'}};
+  const el2 = {style: {MozOpacity: '0.1'}};
 
-  var el3 = {
+  const el3 = {
     style: {filter: 'some:other,filter;alpha(opacity=25.5);alpha(more=100);'}
   };
 
@@ -1623,20 +1628,20 @@ function testGetOpacity() {
   assertEquals('', goog.style.getOpacity(el2));
   assertEquals('', goog.style.getOpacity(el3));
 
-  var el4 = {style: {}};
+  const el4 = {style: {}};
 
   assertEquals('', goog.style.getOpacity(el4));
   assertEquals('', goog.style.getOpacity($('test-opacity')));
 }
 
 function testSetOpacity() {
-  var el1 = {style: {opacity: '0.3'}};
+  const el1 = {style: {opacity: '0.3'}};
   goog.style.setOpacity(el1, 0.8);
 
-  var el2 = {style: {MozOpacity: '0.1'}};
+  const el2 = {style: {MozOpacity: '0.1'}};
   goog.style.setOpacity(el2, 0.5);
 
-  var el3 = {style: {filter: 'alpha(opacity=25)'}};
+  const el3 = {style: {filter: 'alpha(opacity=25)'}};
   goog.style.setOpacity(el3, 0.1);
 
   assertEquals(0.8, Number(el1.style.opacity));
@@ -1662,27 +1667,27 @@ function testSetOpacity() {
 
 function testFramedPageOffset() {
   // Set up a complicated iframe ancestor chain.
-  var iframe = goog.dom.getElement('test-frame-offset');
-  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
-  var iframeWindow = goog.dom.getWindow(iframeDoc);
+  const iframe = goog.dom.getElement('test-frame-offset');
+  const iframeDoc = goog.dom.getFrameContentDocument(iframe);
+  const iframeWindow = goog.dom.getWindow(iframeDoc);
 
-  var iframePos = 'style="display:block;position:absolute;' +
+  const iframePos = 'style="display:block;position:absolute;' +
       'top:50px;left:50px;width:50px;height:50px;"';
   iframeDoc.write(
       '<iframe id="test-frame-offset-2" ' + iframePos + '></iframe>' +
       '<div id="test-element-2" ' +
       ' style="position:absolute;left:300px;top:300px">hi mom!</div>');
   iframeDoc.close();
-  var iframe2 = iframeDoc.getElementById('test-frame-offset-2');
-  var testElement2 = iframeDoc.getElementById('test-element-2');
-  var iframeDoc2 = goog.dom.getFrameContentDocument(iframe2);
-  var iframeWindow2 = goog.dom.getWindow(iframeDoc2);
+  const iframe2 = iframeDoc.getElementById('test-frame-offset-2');
+  const testElement2 = iframeDoc.getElementById('test-element-2');
+  const iframeDoc2 = goog.dom.getFrameContentDocument(iframe2);
+  const iframeWindow2 = goog.dom.getWindow(iframeDoc2);
 
   iframeDoc2.write(
       '<div id="test-element-3" ' +
       ' style="position:absolute;left:500px;top:500px">hi mom!</div>');
   iframeDoc2.close();
-  var testElement3 = iframeDoc2.getElementById('test-element-3');
+  const testElement3 = iframeDoc2.getElementById('test-element-3');
 
   assertCoordinateApprox(300, 300, 0, goog.style.getPageOffset(testElement2));
   assertCoordinateApprox(500, 500, 0, goog.style.getPageOffset(testElement3));
@@ -1727,7 +1732,7 @@ function testFramedPageOffset() {
   // relativeWin is not that frame's contentWindow, the contentWindow's parent
   // reference points to itself. We want to guarantee that we don't fall into
   // an infinite loop.
-  var iframeParent = iframe.parentElement;
+  const iframeParent = iframe.parentElement;
   iframeParent.removeChild(iframe);
   // We don't check the value returned as it differs by browser. 0,0 for Chrome
   // and FF. IE returns 30000 or 30198 for x in IE8-9 and 300 in IE10-11
@@ -1749,17 +1754,17 @@ function assertCoordinateApprox(x, y, delta, coord) {
 }
 
 function testTranslateRectForAnotherFrame() {
-  var rect = new goog.math.Rect(1, 2, 3, 4);
-  var thisDom = goog.dom.getDomHelper();
+  let rect = new goog.math.Rect(1, 2, 3, 4);
+  const thisDom = goog.dom.getDomHelper();
   goog.style.translateRectForAnotherFrame(rect, thisDom, thisDom);
   assertEquals(1, rect.left);
   assertEquals(2, rect.top);
   assertEquals(3, rect.width);
   assertEquals(4, rect.height);
 
-  var iframe = $('test-translate-frame-standard');
-  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
-  var iframeDom = goog.dom.getDomHelper(iframeDoc);
+  let iframe = $('test-translate-frame-standard');
+  let iframeDoc = goog.dom.getFrameContentDocument(iframe);
+  let iframeDom = goog.dom.getDomHelper(iframeDoc);
   // Cannot rely on iframe starting at origin.
   iframeDom.getWindow().scrollTo(0, 0);
   // iframe is at (100, 150) and its body is not scrolled.
@@ -1801,11 +1806,11 @@ function testTranslateRectForAnotherFrame() {
 }
 
 function testGetVisibleRectForElement() {
-  var container = goog.dom.getElement('test-visible');
-  var el = goog.dom.getElement('test-visible-el');
-  var dom = goog.dom.getDomHelper(el);
-  var winScroll = dom.getDocumentScroll();
-  var winSize = dom.getViewportSize();
+  const container = goog.dom.getElement('test-visible');
+  let el = goog.dom.getElement('test-visible-el');
+  const dom = goog.dom.getDomHelper(el);
+  const winScroll = dom.getDocumentScroll();
+  const winSize = dom.getViewportSize();
 
   // Skip this test if the window size is small.  Firefox3/Linux in Selenium
   // sometimes fails without this check.
@@ -1814,11 +1819,11 @@ function testGetVisibleRectForElement() {
   }
 
   // Move the container element to the window's viewport.
-  var h = winSize.height < 100 ? winSize.height / 2 : 100;
+  const h = winSize.height < 100 ? winSize.height / 2 : 100;
   goog.style.setSize(container, winSize.width / 2, h);
   goog.style.setPosition(container, 8, winScroll.y + winSize.height - h);
-  var visible = goog.style.getVisibleRectForElement(el);
-  var bounds = goog.style.getBounds(container);
+  let visible = goog.style.getVisibleRectForElement(el);
+  let bounds = goog.style.getBounds(container);
   // VisibleRect == Bounds rect of the offsetParent
   assertNotNull(visible);
   assertEquals(bounds.left, visible.left);
@@ -1844,12 +1849,12 @@ function testGetVisibleRectForElement() {
   assertNull(visible);
 
   // Test the case with body element of height 0
-  var iframe = goog.dom.getElement('test-visible-frame');
-  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
+  const iframe = goog.dom.getElement('test-visible-frame');
+  const iframeDoc = goog.dom.getFrameContentDocument(iframe);
   el = iframeDoc.getElementById('test-visible');
   visible = goog.style.getVisibleRectForElement(el);
 
-  var iframeViewportSize = goog.dom.getDomHelper(el).getViewportSize();
+  const iframeViewportSize = goog.dom.getDomHelper(el).getViewportSize();
   // NOTE(chrishenry): For iframe, the clipping viewport is always the iframe
   // viewport, and not the actual browser viewport.
   assertNotNull(visible);
@@ -1860,9 +1865,9 @@ function testGetVisibleRectForElement() {
 }
 
 function testGetVisibleRectForElementWithBodyScrolled() {
-  var container = goog.dom.getElement('test-visible2');
-  var dom = goog.dom.getDomHelper(container);
-  var el = dom.createDom(goog.dom.TagName.DIV, undefined, 'Test');
+  const container = goog.dom.getElement('test-visible2');
+  const dom = goog.dom.getDomHelper(container);
+  const el = dom.createDom(goog.dom.TagName.DIV, undefined, 'Test');
   el.style.position = 'absolute';
   dom.append(container, el);
 
@@ -1872,7 +1877,7 @@ function testGetVisibleRectForElementWithBodyScrolled() {
 
   // Scroll body container such that container is exactly at top.
   window.scrollTo(0, 500);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  let visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(500, visibleRect.top, EPSILON);
   assertRoughlyEquals(20, visibleRect.left, EPSILON);
@@ -1881,20 +1886,20 @@ function testGetVisibleRectForElementWithBodyScrolled() {
 
   // Top 100px is clipped by window viewport.
   window.scrollTo(0, 600);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(600, visibleRect.top, EPSILON);
   assertRoughlyEquals(20, visibleRect.left, EPSILON);
   assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
   assertRoughlyEquals(120, visibleRect.right, EPSILON);
 
-  var winSize = dom.getViewportSize();
+  const winSize = dom.getViewportSize();
 
   // Left 50px is clipped by window viewport.
   // Right part is clipped by window viewport.
   goog.style.setSize(container, 10000, 150);
   window.scrollTo(70, 500);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(500, visibleRect.top, EPSILON);
   assertRoughlyEquals(70, visibleRect.left, EPSILON);
@@ -1904,7 +1909,7 @@ function testGetVisibleRectForElementWithBodyScrolled() {
   // Bottom part is clipped by window viewport.
   goog.style.setSize(container, 100, 2000);
   window.scrollTo(0, 500);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(500, visibleRect.top, EPSILON);
   assertRoughlyEquals(20, visibleRect.left, EPSILON);
@@ -1923,10 +1928,10 @@ function testGetVisibleRectForElementWithNestedAreaAndNonOffsetAncestor() {
     return;
   }
 
-  var container = goog.dom.getElement('test-visible2');
-  var dom = goog.dom.getDomHelper(container);
-  var container2 = dom.createDom(goog.dom.TagName.DIV);
-  var el = dom.createDom(goog.dom.TagName.DIV, undefined, 'Test');
+  const container = goog.dom.getElement('test-visible2');
+  const dom = goog.dom.getDomHelper(container);
+  const container2 = dom.createDom(goog.dom.TagName.DIV);
+  const el = dom.createDom(goog.dom.TagName.DIV, undefined, 'Test');
   el.style.position = 'absolute';
   dom.append(container, container2);
   dom.append(container2, el);
@@ -1944,7 +1949,7 @@ function testGetVisibleRectForElementWithNestedAreaAndNonOffsetAncestor() {
 
   // Scroll body container such that container is exactly at top.
   window.scrollTo(0, 500);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  let visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(500, visibleRect.top, EPSILON);
   assertRoughlyEquals(20, visibleRect.left, EPSILON);
@@ -1953,20 +1958,20 @@ function testGetVisibleRectForElementWithNestedAreaAndNonOffsetAncestor() {
 
   // Top 100px is clipped by window viewport.
   window.scrollTo(0, 600);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(600, visibleRect.top, EPSILON);
   assertRoughlyEquals(20, visibleRect.left, EPSILON);
   assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
   assertRoughlyEquals(120, visibleRect.right, EPSILON);
 
-  var winSize = dom.getViewportSize();
+  const winSize = dom.getViewportSize();
 
   // Left 50px is clipped by window viewport.
   // Right part is clipped by window viewport.
   goog.style.setSize(container, 10000, 150);
   window.scrollTo(70, 500);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(500, visibleRect.top, EPSILON);
   assertRoughlyEquals(70, visibleRect.left, EPSILON);
@@ -1976,7 +1981,7 @@ function testGetVisibleRectForElementWithNestedAreaAndNonOffsetAncestor() {
   // Bottom part is clipped by window viewport.
   goog.style.setSize(container, 100, 2000);
   window.scrollTo(0, 500);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(500, visibleRect.top, EPSILON);
   assertRoughlyEquals(20, visibleRect.left, EPSILON);
@@ -1988,10 +1993,10 @@ function testGetVisibleRectForElementWithNestedAreaAndNonOffsetAncestor() {
 }
 
 function testGetVisibleRectForElementInsideNestedScrollableArea() {
-  var container = goog.dom.getElement('test-visible2');
-  var dom = goog.dom.getDomHelper(container);
-  var container2 = dom.createDom(goog.dom.TagName.DIV);
-  var el = dom.createDom(goog.dom.TagName.DIV, undefined, 'Test');
+  const container = goog.dom.getElement('test-visible2');
+  const dom = goog.dom.getDomHelper(container);
+  const container2 = dom.createDom(goog.dom.TagName.DIV);
+  const el = dom.createDom(goog.dom.TagName.DIV, undefined, 'Test');
   el.style.position = 'absolute';
   dom.append(container, container2);
   dom.append(container2, el);
@@ -2007,7 +2012,7 @@ function testGetVisibleRectForElementInsideNestedScrollableArea() {
 
   // Scroll body container such that container is exactly at top.
   window.scrollTo(0, 500);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  let visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(550, visibleRect.top, EPSILON);
   assertRoughlyEquals(200, visibleRect.left, EPSILON);
@@ -2016,7 +2021,7 @@ function testGetVisibleRectForElementInsideNestedScrollableArea() {
 
   // Left 50px is clipped by container.
   goog.style.setPosition(container2, -50, 50);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(550, visibleRect.top, EPSILON);
   assertRoughlyEquals(100, visibleRect.left, EPSILON);
@@ -2026,7 +2031,7 @@ function testGetVisibleRectForElementInsideNestedScrollableArea() {
   // Right part is clipped by container.
   goog.style.setPosition(container2, 100, 50);
   goog.style.setWidth(container2, 1000, 100);
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(550, visibleRect.top, EPSILON);
   assertRoughlyEquals(200, visibleRect.left, EPSILON);
@@ -2036,7 +2041,7 @@ function testGetVisibleRectForElementInsideNestedScrollableArea() {
   // Top 50px is clipped by container.
   goog.style.setStyle(container2, 'width', '150px');
   goog.style.setStyle(container2, 'top', '-50px');
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(500, visibleRect.top, EPSILON);
   assertRoughlyEquals(200, visibleRect.left, EPSILON);
@@ -2046,7 +2051,7 @@ function testGetVisibleRectForElementInsideNestedScrollableArea() {
   // Bottom part is clipped by container.
   goog.style.setStyle(container2, 'top', '50px');
   goog.style.setStyle(container2, 'height', '1000px');
-  var visibleRect = goog.style.getVisibleRectForElement(el);
+  visibleRect = goog.style.getVisibleRectForElement(el);
   assertNotNull(visibleRect);
   assertRoughlyEquals(550, visibleRect.top, EPSILON);
   assertRoughlyEquals(200, visibleRect.left, EPSILON);
@@ -2062,7 +2067,7 @@ function testGetVisibleRectForElementInsideNestedScrollableArea() {
 function testScrollIntoContainerViewQuirks() {
   if (goog.dom.isCss1CompatMode()) return;
 
-  var container = goog.dom.getElement('scrollable-container');
+  const container = goog.dom.getElement('scrollable-container');
 
   // Scroll the minimum amount to make the elements visible.
   goog.style.scrollIntoContainerView(goog.dom.getElement('item7'), container);
@@ -2102,7 +2107,7 @@ function testScrollIntoContainerViewQuirks() {
 function testScrollIntoContainerViewStandard() {
   if (!goog.dom.isCss1CompatMode()) return;
 
-  var container = goog.dom.getElement('scrollable-container');
+  const container = goog.dom.getElement('scrollable-container');
 
   // Scroll the minimum amount to make the elements visible.
   goog.style.scrollIntoContainerView(goog.dom.getElement('item7'), container);
@@ -2144,7 +2149,7 @@ function testScrollIntoContainerViewSvg() {
     return;
   }
 
-  var svgEl = document.createElementNS &&
+  const svgEl = document.createElementNS &&
       document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   if (!svgEl || svgEl.getAttribute('transform') == '' ||
       (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher(534.8))) {
@@ -2153,7 +2158,7 @@ function testScrollIntoContainerViewSvg() {
     return;
   }
 
-  var assertEqualsForSvgPos = function(expected, actual) {
+  const assertEqualsForSvgPos = function(expected, actual) {
     if (goog.userAgent.EDGE_OR_IE) {
       // The bounding size is 1 larger than the SVG element in IE. The scrollTop
       // value maybe 1 less or 1 more than the expected value depending on the
@@ -2164,12 +2169,12 @@ function testScrollIntoContainerViewSvg() {
     }
   };
 
-  var svgItem1 = goog.dom.getElement('svg-item1');
-  var svgItem2 = goog.dom.getElement('svg-item2');
-  var svgItem3 = goog.dom.getElement('svg-item3');
+  const svgItem1 = goog.dom.getElement('svg-item1');
+  const svgItem2 = goog.dom.getElement('svg-item2');
+  const svgItem3 = goog.dom.getElement('svg-item3');
 
   // Scroll the minimum amount to make the elements visible.
-  var container = goog.dom.getElement('svg-container');
+  const container = goog.dom.getElement('svg-container');
   goog.style.scrollIntoContainerView(svgItem1, container);
   assertEquals(0, container.scrollTop);
   goog.style.scrollIntoContainerView(svgItem2, container);
@@ -2201,14 +2206,14 @@ function testScrollIntoContainerViewSvg() {
 }
 
 function testOffsetParent() {
-  var parent = goog.dom.getElement('offset-parent');
-  var child = goog.dom.getElement('offset-child');
+  const parent = goog.dom.getElement('offset-parent');
+  const child = goog.dom.getElement('offset-child');
   assertEquals(parent, goog.style.getOffsetParent(child));
 }
 
 function testOverflowOffsetParent() {
-  var parent = goog.dom.getElement('offset-parent-overflow');
-  var child = goog.dom.getElement('offset-child-overflow');
+  const parent = goog.dom.getElement('offset-parent-overflow');
+  const child = goog.dom.getElement('offset-child-overflow');
   assertEquals(parent, goog.style.getOffsetParent(child));
 }
 
@@ -2218,12 +2223,12 @@ function testShadowDomOffsetParent() {
     return;
   }
 
-  var parent = goog.dom.createDom(goog.dom.TagName.DIV);
+  const parent = goog.dom.createDom(goog.dom.TagName.DIV);
   parent.style.position = 'relative';
-  var host = goog.dom.createDom(goog.dom.TagName.DIV);
+  const host = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.appendChild(parent, host);
-  var root = host.createShadowRoot();
-  var child = goog.dom.createDom(goog.dom.TagName.DIV);
+  const root = host.createShadowRoot();
+  const child = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.appendChild(root, child);
 
   assertEquals(parent, goog.style.getOffsetParent(child));
@@ -2236,10 +2241,10 @@ function testGetViewportPageOffset() {
           'See b/22873770.');
 
   try {
-    var testViewport = goog.dom.getElement('test-viewport');
+    const testViewport = goog.dom.getElement('test-viewport');
     testViewport.style.height = '5000px';
     testViewport.style.width = '5000px';
-    var offset = goog.style.getViewportPageOffset(document);
+    let offset = goog.style.getViewportPageOffset(document);
     assertEquals(0, offset.x);
     assertEquals(0, offset.y);
 
@@ -2258,7 +2263,7 @@ function testGetViewportPageOffset() {
 }
 
 function testGetsTranslation() {
-  var element = document.getElementById('translation');
+  const element = document.getElementById('translation');
 
   if (goog.userAgent.IE) {
     if (!goog.userAgent.isDocumentModeOrHigher(9) ||
@@ -2272,9 +2277,9 @@ function testGetsTranslation() {
 
   // First check the element is actually translated, and we haven't missed
   // one of the vendor-specific transform properties
-  var position = goog.style.getClientPosition(element);
-  var translation = goog.style.getCssTranslation(element);
-  var expectedTranslation = new goog.math.Coordinate(20, 30);
+  const position = goog.style.getClientPosition(element);
+  const translation = goog.style.getCssTranslation(element);
+  const expectedTranslation = new goog.math.Coordinate(20, 30);
 
   assertEquals(30, position.x);
   assertRoughlyEquals(40, position.y, .1);
@@ -2290,8 +2295,11 @@ function testGetsTranslation() {
  * @param {string=} opt_vendor Navigator vendor string.
  */
 function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
-  var mockNavigator =
-      {'userAgent': uaString, 'product': opt_product, 'vendor': opt_vendor};
+  const mockNavigator = {
+    'userAgent': uaString,
+    'product': opt_product,
+    'vendor': opt_vendor
+  };
 
   mockUserAgent.setNavigator(mockNavigator);
   mockUserAgent.setUserAgentString(uaString);
@@ -2300,8 +2308,8 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
   goog.labs.userAgent.util.setUserAgent(null);
 
   goog.userAgentTestUtil.reinitializeUserAgent();
-  for (var ua in goog.userAgentTestUtil.UserAgents) {
-    var isExpected = goog.array.contains(
+  for (const ua in goog.userAgentTestUtil.UserAgents) {
+    const isExpected = goog.array.contains(
         expectedAgents, goog.userAgentTestUtil.UserAgents[ua]);
     assertEquals(
         isExpected, goog.userAgentTestUtil.getUserAgentDetected(
@@ -2315,7 +2323,7 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
  * with a vendor prefix for Webkit.
  */
 function testGetVendorStyleNameWebkit() {
-  var mockElement = {'style': {'WebkitTransformOrigin': ''}};
+  const mockElement = {'style': {'WebkitTransformOrigin': ''}};
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   assertEquals(
@@ -2329,7 +2337,7 @@ function testGetVendorStyleNameWebkit() {
  * when it exists without a vendor prefix for Webkit.
  */
 function testGetVendorStyleNameWebkitNoPrefix() {
-  var mockElement = {
+  const mockElement = {
     'style': {'WebkitTransformOrigin': '', 'transformOrigin': ''}
   };
 
@@ -2345,7 +2353,7 @@ function testGetVendorStyleNameWebkitNoPrefix() {
  * with a vendor prefix for Gecko.
  */
 function testGetVendorStyleNameGecko() {
-  var mockElement = {'style': {'MozTransformOrigin': ''}};
+  const mockElement = {'style': {'MozTransformOrigin': ''}};
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   assertEquals(
@@ -2359,7 +2367,7 @@ function testGetVendorStyleNameGecko() {
  * when it exists without a vendor prefix for Gecko.
  */
 function testGetVendorStyleNameGeckoNoPrefix() {
-  var mockElement = {
+  const mockElement = {
     'style': {'MozTransformOrigin': '', 'transformOrigin': ''}
   };
 
@@ -2375,7 +2383,7 @@ function testGetVendorStyleNameGeckoNoPrefix() {
  * with a vendor prefix for IE.
  */
 function testGetVendorStyleNameIE() {
-  var mockElement = {'style': {'msTransformOrigin': ''}};
+  const mockElement = {'style': {'msTransformOrigin': ''}};
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   assertEquals(
@@ -2389,7 +2397,9 @@ function testGetVendorStyleNameIE() {
  * when it exists without a vendor prefix for IE.
  */
 function testGetVendorStyleNameIENoPrefix() {
-  var mockElement = {'style': {'msTransformOrigin': '', 'transformOrigin': ''}};
+  const mockElement = {
+    'style': {'msTransformOrigin': '', 'transformOrigin': ''}
+  };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   assertEquals(
@@ -2403,7 +2413,7 @@ function testGetVendorStyleNameIENoPrefix() {
  * with a vendor prefix for Opera.
  */
 function testGetVendorStyleNameOpera() {
-  var mockElement = {'style': {'OTransformOrigin': ''}};
+  const mockElement = {'style': {'OTransformOrigin': ''}};
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   assertEquals(
@@ -2417,7 +2427,9 @@ function testGetVendorStyleNameOpera() {
  * when it exists without a vendor prefix for Opera.
  */
 function testGetVendorStyleNameOperaNoPrefix() {
-  var mockElement = {'style': {'OTransformOrigin': '', 'transformOrigin': ''}};
+  const mockElement = {
+    'style': {'OTransformOrigin': '', 'transformOrigin': ''}
+  };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   assertEquals(
@@ -2431,7 +2443,7 @@ function testGetVendorStyleNameOperaNoPrefix() {
  * with a vendor prefix for Webkit.
  */
 function testGetVendorJsStyleNameWebkit() {
-  var mockElement = {'style': {'WebkitTransformOrigin': ''}};
+  const mockElement = {'style': {'WebkitTransformOrigin': ''}};
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   assertEquals(
@@ -2445,7 +2457,7 @@ function testGetVendorJsStyleNameWebkit() {
  * when it exists without a vendor prefix for Webkit.
  */
 function testGetVendorJsStyleNameWebkitNoPrefix() {
-  var mockElement = {
+  const mockElement = {
     'style': {'WebkitTransformOrigin': '', 'transformOrigin': ''}
   };
 
@@ -2461,7 +2473,7 @@ function testGetVendorJsStyleNameWebkitNoPrefix() {
  * with a vendor prefix for Gecko.
  */
 function testGetVendorJsStyleNameGecko() {
-  var mockElement = {'style': {'MozTransformOrigin': ''}};
+  const mockElement = {'style': {'MozTransformOrigin': ''}};
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   assertEquals(
@@ -2475,7 +2487,7 @@ function testGetVendorJsStyleNameGecko() {
  * when it exists without a vendor prefix for Gecko.
  */
 function testGetVendorJsStyleNameGeckoNoPrefix() {
-  var mockElement = {
+  const mockElement = {
     'style': {'MozTransformOrigin': '', 'transformOrigin': ''}
   };
 
@@ -2491,7 +2503,7 @@ function testGetVendorJsStyleNameGeckoNoPrefix() {
  * with a vendor prefix for IE.
  */
 function testGetVendorJsStyleNameIE() {
-  var mockElement = {'style': {'msTransformOrigin': ''}};
+  const mockElement = {'style': {'msTransformOrigin': ''}};
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   assertEquals(
@@ -2505,7 +2517,9 @@ function testGetVendorJsStyleNameIE() {
  * when it exists without a vendor prefix for IE.
  */
 function testGetVendorJsStyleNameIENoPrefix() {
-  var mockElement = {'style': {'msTransformOrigin': '', 'transformOrigin': ''}};
+  const mockElement = {
+    'style': {'msTransformOrigin': '', 'transformOrigin': ''}
+  };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   assertEquals(
@@ -2519,7 +2533,7 @@ function testGetVendorJsStyleNameIENoPrefix() {
  * with a vendor prefix for Opera.
  */
 function testGetVendorJsStyleNameOpera() {
-  var mockElement = {'style': {'OTransformOrigin': ''}};
+  const mockElement = {'style': {'OTransformOrigin': ''}};
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   assertEquals(
@@ -2533,7 +2547,9 @@ function testGetVendorJsStyleNameOpera() {
  * when it exists without a vendor prefix for Opera.
  */
 function testGetVendorJsStyleNameOperaNoPrefix() {
-  var mockElement = {'style': {'OTransformOrigin': '', 'transformOrigin': ''}};
+  const mockElement = {
+    'style': {'OTransformOrigin': '', 'transformOrigin': ''}
+  };
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   assertEquals(
@@ -2547,8 +2563,8 @@ function testGetVendorJsStyleNameOperaNoPrefix() {
  * with a vendor prefix for Webkit.
  */
 function testSetVendorStyleWebkit() {
-  var mockElement = {'style': {'WebkitTransform': ''}};
-  var styleValue = 'translate3d(0,0,0)';
+  const mockElement = {'style': {'WebkitTransform': ''}};
+  const styleValue = 'translate3d(0,0,0)';
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   goog.style.setStyle(mockElement, 'transform', styleValue);
@@ -2561,8 +2577,8 @@ function testSetVendorStyleWebkit() {
  * with a vendor prefix for Mozilla.
  */
 function testSetVendorStyleGecko() {
-  var mockElement = {'style': {'MozTransform': ''}};
-  var styleValue = 'translate3d(0,0,0)';
+  const mockElement = {'style': {'MozTransform': ''}};
+  const styleValue = 'translate3d(0,0,0)';
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   goog.style.setStyle(mockElement, 'transform', styleValue);
@@ -2575,8 +2591,8 @@ function testSetVendorStyleGecko() {
  * with a vendor prefix for IE.
  */
 function testSetVendorStyleIE() {
-  var mockElement = {'style': {'msTransform': ''}};
-  var styleValue = 'translate3d(0,0,0)';
+  const mockElement = {'style': {'msTransform': ''}};
+  const styleValue = 'translate3d(0,0,0)';
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   goog.style.setStyle(mockElement, 'transform', styleValue);
@@ -2589,8 +2605,8 @@ function testSetVendorStyleIE() {
  * with a vendor prefix for Opera.
  */
 function testSetVendorStyleOpera() {
-  var mockElement = {'style': {'OTransform': ''}};
-  var styleValue = 'translate3d(0,0,0)';
+  const mockElement = {'style': {'OTransform': ''}};
+  const styleValue = 'translate3d(0,0,0)';
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   goog.style.setStyle(mockElement, 'transform', styleValue);
@@ -2603,8 +2619,8 @@ function testSetVendorStyleOpera() {
  * with a vendor prefix for Webkit.
  */
 function testGetVendorStyleWebkit() {
-  var mockElement = {'style': {'WebkitTransform': ''}};
-  var styleValue = 'translate3d(0,0,0)';
+  const mockElement = {'style': {'WebkitTransform': ''}};
+  const styleValue = 'translate3d(0,0,0)';
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], 'WebKit');
   goog.style.setStyle(mockElement, 'transform', styleValue);
@@ -2617,8 +2633,8 @@ function testGetVendorStyleWebkit() {
  * with a vendor prefix for Mozilla.
  */
 function testGetVendorStyleGecko() {
-  var mockElement = {'style': {'MozTransform': ''}};
-  var styleValue = 'translate3d(0,0,0)';
+  const mockElement = {'style': {'MozTransform': ''}};
+  const styleValue = 'translate3d(0,0,0)';
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], 'Gecko', 'Gecko');
   goog.style.setStyle(mockElement, 'transform', styleValue);
@@ -2631,8 +2647,8 @@ function testGetVendorStyleGecko() {
  * with a vendor prefix for IE.
  */
 function testGetVendorStyleIE() {
-  var mockElement = {'style': {'msTransform': ''}};
-  var styleValue = 'translate3d(0,0,0)';
+  const mockElement = {'style': {'msTransform': ''}};
+  const styleValue = 'translate3d(0,0,0)';
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], 'MSIE');
   goog.style.setStyle(mockElement, 'transform', styleValue);
@@ -2645,8 +2661,8 @@ function testGetVendorStyleIE() {
  * with a vendor prefix for Opera.
  */
 function testGetVendorStyleOpera() {
-  var mockElement = {'style': {'OTransform': ''}};
-  var styleValue = 'translate3d(0,0,0)';
+  const mockElement = {'style': {'OTransform': ''}};
+  const styleValue = 'translate3d(0,0,0)';
 
   assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], 'Opera');
   goog.style.setStyle(mockElement, 'transform', styleValue);
@@ -2655,7 +2671,7 @@ function testGetVendorStyleOpera() {
 
 function testParseStyleAttributeWithColon() {
   // Regression test for https://github.com/google/closure-library/issues/127.
-  var cssObj = goog.style.parseStyleAttribute(
+  const cssObj = goog.style.parseStyleAttribute(
       'left: 0px; text-align: center; background-image: ' +
       'url(http://www.google.ca/Test.gif); -ms-filter: ' +
       'progid:DXImageTransform.Microsoft.MotionBlur(strength=50), ' +

@@ -29,13 +29,13 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
 // The key code for the Hebrew א, a strongly RTL letter.
-var ALEPH_KEYCODE = 1488;
-var field;
-var fieldElement;
-var dom;
-var helper;
-var triggeredCommand = null;
-var clock;
+const ALEPH_KEYCODE = 1488;
+let field;
+let fieldElement;
+let dom;
+let helper;
+let triggeredCommand = null;
+let clock;
 
 function setUp() {
   field = new goog.editor.Field('field');
@@ -422,7 +422,7 @@ function testFirstStrongCharacterFromIME_RTL() {
       goog.html.testing.newSafeHtmlForTest(
           '<div id="text">123.7 3121, </div>'));
   field.focusAndPlaceCursorAtStart();
-  var attributes = {};
+  const attributes = {};
   attributes[goog.editor.plugins.FirstStrong.INPUT_ATTRIBUTE] = 'אבג';
   goog.testing.events.fireNonAsciiKeySequence(fieldElement, 0, 0, attributes);
   if (goog.userAgent.IE || goog.userAgent.GECKO) {
@@ -440,7 +440,7 @@ function testFirstCharacterFromIME_LTR() {
       goog.html.testing.newSafeHtmlForTest(
           '<div dir="rtl" id="text"> 1234 </div>'));
   field.focusAndPlaceCursorAtStart();
-  var attributes = {};
+  const attributes = {};
   attributes[goog.editor.plugins.FirstStrong.INPUT_ATTRIBUTE] = 'ABC';
   goog.testing.events.fireNonAsciiKeySequence(fieldElement, 0, 0, attributes);
   if (goog.userAgent.IE || goog.userAgent.GECKO) {

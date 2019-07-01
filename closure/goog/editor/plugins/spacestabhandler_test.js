@@ -26,10 +26,10 @@ goog.require('goog.testing.editor.FieldMock');
 goog.require('goog.testing.editor.TestHelper');
 goog.require('goog.testing.jsunit');
 
-var field;
-var editableField;
-var tabHandler;
-var testHelper;
+let field;
+let editableField;
+let tabHandler;
+let testHelper;
 
 function setUp() {
   field = goog.dom.getElement('field');
@@ -52,10 +52,10 @@ function tearDown() {
 function testSelectedTextIndent() {
   goog.dom.setTextContent(field, 'Test');
 
-  var testText = field.firstChild;
+  const testText = field.firstChild;
   testHelper.select(testText, 0, testText, 4);
 
-  var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  const event = new goog.testing.StrictMock(goog.events.BrowserEvent);
   event.keyCode = goog.events.KeyCodes.TAB;
   event.shiftKey = false;
 
@@ -70,7 +70,7 @@ function testSelectedTextIndent() {
   assertTrue(
       'Event marked as handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
-  var contents = field.textContent || field.innerText;
+  const contents = field.textContent || field.innerText;
   // Chrome doesn't treat \u00a0 as a space.
   assertTrue(
       'Text should be replaced with 4 spaces but was: "' + contents + '"',
@@ -83,10 +83,10 @@ function testSelectedTextIndent() {
 function testCursorIndent() {
   goog.dom.setTextContent(field, 'Test');
 
-  var testText = field.firstChild;
+  const testText = field.firstChild;
   testHelper.select(testText, 2, testText, 2);
 
-  var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  const event = new goog.testing.StrictMock(goog.events.BrowserEvent);
   event.keyCode = goog.events.KeyCodes.TAB;
   event.shiftKey = false;
 
@@ -101,7 +101,7 @@ function testCursorIndent() {
   assertTrue(
       'Event marked as handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
-  var contents = field.textContent || field.innerText;
+  const contents = field.textContent || field.innerText;
   assertTrue(
       'Expected contents "Te    st" but was: "' + contents + '"',
       /Te[\s|\u00a0]{4}st/.test(contents));
@@ -117,7 +117,7 @@ function testShiftTabNoOp() {
   range.collapse();
   range.select();
 
-  var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  const event = new goog.testing.StrictMock(goog.events.BrowserEvent);
   event.keyCode = goog.events.KeyCodes.TAB;
   event.shiftKey = true;
 
@@ -128,7 +128,7 @@ function testShiftTabNoOp() {
   assertTrue(
       'Event marked as handled',
       tabHandler.handleKeyboardShortcut(event, '', false));
-  var contents = field.textContent || field.innerText;
+  const contents = field.textContent || field.innerText;
   assertEquals('Shift+tab should not change contents', 'Test', contents);
 
   editableField.$verify();
@@ -138,10 +138,10 @@ function testShiftTabNoOp() {
 function testInListNoOp() {
   field.innerHTML = '<ul><li>Test</li></ul>';
 
-  var testText = field.firstChild.firstChild.firstChild;  // div ul li Test
+  const testText = field.firstChild.firstChild.firstChild;  // div ul li Test
   testHelper.select(testText, 2, testText, 2);
 
-  var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  const event = new goog.testing.StrictMock(goog.events.BrowserEvent);
   event.keyCode = goog.events.KeyCodes.TAB;
   event.shiftKey = false;
 
@@ -160,10 +160,10 @@ function testInListNoOp() {
 function testContainsListNoOp() {
   field.innerHTML = '<ul><li>Test</li></ul>';
 
-  var testText = field.firstChild.firstChild.firstChild;  // div ul li Test
+  const testText = field.firstChild.firstChild.firstChild;  // div ul li Test
   testHelper.select(field.firstChild, 0, testText, 2);
 
-  var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
+  const event = new goog.testing.StrictMock(goog.events.BrowserEvent);
   event.keyCode = goog.events.KeyCodes.TAB;
   event.shiftKey = false;
 

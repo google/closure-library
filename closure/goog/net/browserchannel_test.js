@@ -35,32 +35,32 @@ goog.require('goog.testing.recordFunction');
 /**
  * Delay between a network failure and the next network request.
  */
-var RETRY_TIME = 1000;
+const RETRY_TIME = 1000;
 
 
 /**
  * A really long time - used to make sure no more timeouts will fire.
  */
-var ALL_DAY_MS = 1000 * 60 * 60 * 24;
+const ALL_DAY_MS = 1000 * 60 * 60 * 24;
 
-var stubs = new goog.testing.PropertyReplacer();
+const stubs = new goog.testing.PropertyReplacer();
 
-var browserChannel;
-var deliveredMaps;
-var handler;
-var mockClock;
-var gotError;
-var numStatEvents;
-var lastStatEvent;
-var numTimingEvents;
-var lastPostSize;
-var lastPostRtt;
-var lastPostRetryCount;
+let browserChannel;
+let deliveredMaps;
+let handler;
+let mockClock;
+let gotError;
+let numStatEvents;
+let lastStatEvent;
+let numTimingEvents;
+let lastPostSize;
+let lastPostRtt;
+let lastPostRetryCount;
 
 // Set to true to see the channel debug output in the browser window.
-var debug = false;
+const debug = false;
 // Debug message to print out when debug is true.
-var debugMessage = '';
+let debugMessage = '';
 
 function debugToWindow(message) {
   if (debug) {
@@ -91,7 +91,7 @@ function stubTmpnetwork() {
  * Mock ChannelRequest.
  * @constructor
  */
-var MockChannelRequest = function(
+const MockChannelRequest = function(
     channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId) {
   this.channel_ = channel;
   this.channelDebug_ = channelDebug;
@@ -236,7 +236,7 @@ function setUp() {
   // Provide a predictable retry time for testing.
   browserChannel.getRetryTime_ = function(retryCount) { return RETRY_TIME; };
 
-  var channelDebug = new goog.net.ChannelDebug();
+  const channelDebug = new goog.net.ChannelDebug();
   channelDebug.debug = function(message) { debugToWindow(message); };
   browserChannel.setChannelDebug(channelDebug);
 
@@ -256,12 +256,12 @@ function tearDown() {
  * Helper function to return a formatted string representing an array of maps.
  */
 function formatArrayOfMaps(arrayOfMaps) {
-  var result = [];
-  for (var i = 0; i < arrayOfMaps.length; i++) {
-    var map = arrayOfMaps[i];
-    var keys = map.map.getKeys();
-    for (var j = 0; j < keys.length; j++) {
-      var tmp = keys[j] + ':' + map.map.get(keys[j]) +
+  const result = [];
+  for (let i = 0; i < arrayOfMaps.length; i++) {
+    const map = arrayOfMaps[i];
+    const keys = map.map.getKeys();
+    for (let j = 0; j < keys.length; j++) {
+      const tmp = keys[j] + ':' + map.map.get(keys[j]) +
           (map.context ? ':' + map.context : '');
       result.push(tmp);
     }
@@ -272,23 +272,23 @@ function formatArrayOfMaps(arrayOfMaps) {
 
 function testFormatArrayOfMaps() {
   // This function is used in a non-trivial test, so let's verify that it works.
-  var map1 = new goog.structs.Map();
+  const map1 = new goog.structs.Map();
   map1.set('k1', 'v1');
   map1.set('k2', 'v2');
-  var map2 = new goog.structs.Map();
+  const map2 = new goog.structs.Map();
   map2.set('k3', 'v3');
-  var map3 = new goog.structs.Map();
+  const map3 = new goog.structs.Map();
   map3.set('k4', 'v4');
   map3.set('k5', 'v5');
   map3.set('k6', 'v6');
 
   // One map.
-  var a = [];
+  const a = [];
   a.push(new goog.net.BrowserChannel.QueuedMap(0, map1));
   assertEquals('k1:v1, k2:v2', formatArrayOfMaps(a));
 
   // Many maps.
-  var b = [];
+  const b = [];
   b.push(new goog.net.BrowserChannel.QueuedMap(0, map1));
   b.push(new goog.net.BrowserChannel.QueuedMap(0, map2));
   b.push(new goog.net.BrowserChannel.QueuedMap(0, map3));
@@ -296,7 +296,7 @@ function testFormatArrayOfMaps() {
       'k1:v1, k2:v2, k3:v3, k4:v4, k5:v5, k6:v6', formatArrayOfMaps(b));
 
   // One map with a context.
-  var c = [];
+  const c = [];
   c.push(new goog.net.BrowserChannel.QueuedMap(0, map1, 'c1'));
   assertEquals('k1:v1:c1, k2:v2:c1', formatArrayOfMaps(c));
 }
@@ -304,7 +304,7 @@ function testFormatArrayOfMaps() {
 
 function connectForwardChannel(
     opt_serverVersion, opt_hostPrefix, opt_uriPrefix) {
-  var uriPrefix = opt_uriPrefix || '';
+  const uriPrefix = opt_uriPrefix || '';
   browserChannel.connect(uriPrefix + '/test', uriPrefix + '/bind', null);
   mockClock.tick(0);
   completeTestConnection();
@@ -349,7 +349,7 @@ function completeBackTestConnection() {
 
 
 function completeForwardChannel(opt_serverVersion, opt_hostPrefix) {
-  var responseData = '[[0,["c","1234567890ABCDEF",' +
+  const responseData = '[[0,["c","1234567890ABCDEF",' +
       (opt_hostPrefix ? '"' + opt_hostPrefix + '"' : 'null') +
       (opt_serverVersion ? ',' + opt_serverVersion : '') + ']]]';
   browserChannel.onRequestData(
@@ -440,7 +440,7 @@ function responseActiveXBlocked() {
 
 
 function sendMap(key, value, opt_context) {
-  var map = new goog.structs.Map();
+  const map = new goog.structs.Map();
   map.set(key, value);
   browserChannel.sendMap(map, opt_context);
   mockClock.tick(0);
@@ -613,7 +613,7 @@ function testTimingEvent() {
   sendMap('', '');
   assertEquals(1, numTimingEvents);
   mockClock.tick(20);
-  var expSize = browserChannel.forwardChannelRequest_.getPostData().length;
+  let expSize = browserChannel.forwardChannelRequest_.getPostData().length;
   responseVersion7();
 
   assertEquals(2, numTimingEvents);
@@ -1254,7 +1254,7 @@ function testPathWithHost() {
 }
 
 function testCreateXhrIo() {
-  var xhr = browserChannel.createXhrIo(null);
+  let xhr = browserChannel.createXhrIo(null);
   assertFalse(xhr.getWithCredentials());
 
   assertThrows(
@@ -1272,17 +1272,17 @@ function testCreateXhrIo() {
 
 
 function testSetParser() {
-  var recordParse = goog.testing.recordFunction(JSON.parse);
-  var parser = {};
+  const recordParse = goog.testing.recordFunction(JSON.parse);
+  const parser = {};
   parser.parse = recordParse;
   browserChannel.setParser(parser);
 
   connect();
   assertEquals(3, recordParse.getCallCount());
 
-  var call3 = recordParse.popLastCall();
-  var call2 = recordParse.popLastCall();
-  var call1 = recordParse.popLastCall();
+  const call3 = recordParse.popLastCall();
+  const call2 = recordParse.popLastCall();
+  const call1 = recordParse.popLastCall();
 
   assertEquals(1, call1.getArguments().length);
   assertEquals('["b"]', call1.getArgument(0));

@@ -23,7 +23,7 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
 function testGetSlotBoundary() {
-  var stat = new goog.stats.BasicStat(1654);
+  const stat = new goog.stats.BasicStat(1654);
   assertEquals('Checking interval', 33, stat.slotInterval_);
 
   assertEquals(132, stat.getSlotBoundary_(125));
@@ -33,7 +33,7 @@ function testGetSlotBoundary() {
 }
 
 function testCheckForTimeTravel() {
-  var stat = new goog.stats.BasicStat(1000);
+  const stat = new goog.stats.BasicStat(1000);
 
   // no slots yet, should always be OK
   stat.checkForTimeTravel_(100);
@@ -58,16 +58,16 @@ function testCheckForTimeTravel() {
 }
 
 function testConstantIncrementPerSlot() {
-  var stat = new goog.stats.BasicStat(1000);
+  const stat = new goog.stats.BasicStat(1000);
 
-  var now = 1000;
-  for (var i = 0; i < 50; ++i) {
-    var newMax = 1000 + i;
-    var newMin = 1000 - i;
+  let now = 1000;
+  for (let i = 0; i < 50; ++i) {
+    const newMax = 1000 + i;
+    const newMin = 1000 - i;
     stat.incBy(newMin, now);
     stat.incBy(newMax, now);
 
-    var msg = goog.string.format(
+    const msg = goog.string.format(
         'now=%d i=%d newMin=%d newMax=%d', now, i, newMin, newMax);
     assertEquals(msg, 2000 * (i + 1), stat.get(now));
     assertEquals(msg, newMax, stat.getMax(now));
@@ -90,8 +90,8 @@ function testConstantIncrementPerSlot() {
 }
 
 function testSparseBuckets() {
-  var stat = new goog.stats.BasicStat(1000);
-  var now = 1000;
+  const stat = new goog.stats.BasicStat(1000);
+  let now = 1000;
 
   stat.incBy(10, now);
   assertEquals(10, stat.get(now));
@@ -102,20 +102,20 @@ function testSparseBuckets() {
 }
 
 function testFuzzy() {
-  var stat = new goog.stats.BasicStat(1000);
-  var test = new PerfectlySlowStat(1000);
-  var rand = new goog.testing.PseudoRandom(58849020);
-  var eventCount = 0;
+  const stat = new goog.stats.BasicStat(1000);
+  const test = new PerfectlySlowStat(1000);
+  const rand = new goog.testing.PseudoRandom(58849020);
+  let eventCount = 0;
 
   // test over 5 simulated seconds (2 for IE, due to timeouts)
-  var simulationDuration = goog.userAgent.IE ? 2000 : 5000;
-  for (var now = 1000; now < simulationDuration;) {
-    var count = Math.floor(rand.random() * 2147483648);
-    var delay = Math.floor(rand.random() * 25);
-    for (var i = 0; i <= delay; ++i) {
-      var time = now + i;
-      var msg = goog.string.format('now=%d eventCount=%d', time, eventCount);
-      var expected = test.getStats(now + i);
+  const simulationDuration = goog.userAgent.IE ? 2000 : 5000;
+  for (let now = 1000; now < simulationDuration;) {
+    const count = Math.floor(rand.random() * 2147483648);
+    const delay = Math.floor(rand.random() * 25);
+    for (let i = 0; i <= delay; ++i) {
+      const time = now + i;
+      const msg = goog.string.format('now=%d eventCount=%d', time, eventCount);
+      const expected = test.getStats(now + i);
       assertEquals(expected.count, stat.get(time));
       assertEquals(expected.min, stat.getMin(time));
       assertEquals(expected.max, stat.getMax(time));
@@ -136,7 +136,7 @@ function testFuzzy() {
  * aggregations.
  * @constructor
  */
-var PerfectlySlowStat = function(interval) {
+const PerfectlySlowStat = function(interval) {
   this.interval_ = interval;
   this.slotSize_ = Math.floor(interval / goog.stats.BasicStat.NUM_SLOTS_);
   this.events_ = [];
@@ -147,9 +147,10 @@ PerfectlySlowStat.prototype.incBy = function(amt, now) {
 };
 
 PerfectlySlowStat.prototype.getStats = function(now) {
-  var end = Math.floor(now / this.slotSize_) * this.slotSize_ + this.slotSize_;
-  var start = end - this.interval_;
-  var events = goog.array.filter(this.events_, function(e) {
+  const end =
+      Math.floor(now / this.slotSize_) * this.slotSize_ + this.slotSize_;
+  const start = end - this.interval_;
+  const events = goog.array.filter(this.events_, function(e) {
     return e.time >= start;
   });
   return {

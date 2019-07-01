@@ -22,8 +22,8 @@ goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
-var KeyCodes;
-var stubs;
+let KeyCodes;
+let stubs;
 
 function setUpPage() {
   KeyCodes = goog.events.KeyCodes;
@@ -35,7 +35,7 @@ function tearDown() {
 }
 
 function testTextModifyingKeys() {
-  var specialTextModifiers = goog.object.createSet(
+  const specialTextModifiers = goog.object.createSet(
       KeyCodes.BACKSPACE, KeyCodes.DELETE, KeyCodes.ENTER, KeyCodes.MAC_ENTER,
       KeyCodes.TAB, KeyCodes.WIN_IME);
 
@@ -43,9 +43,9 @@ function testTextModifyingKeys() {
     specialTextModifiers[KeyCodes.WIN_KEY_FF_LINUX] = 1;
   }
 
-  var keysToTest = {};
-  for (var keyId in KeyCodes) {
-    var key = KeyCodes[keyId];
+  const keysToTest = {};
+  for (const keyId in KeyCodes) {
+    const key = KeyCodes[keyId];
     if (goog.isFunction(key)) {
       // skip static methods
       continue;
@@ -53,14 +53,14 @@ function testTextModifyingKeys() {
 
     keysToTest[keyId] = key;
   }
-  for (var i = KeyCodes.FIRST_MEDIA_KEY; i <= KeyCodes.LAST_MEDIA_KEY; i++) {
+  for (let i = KeyCodes.FIRST_MEDIA_KEY; i <= KeyCodes.LAST_MEDIA_KEY; i++) {
     keysToTest['MEDIA_KEY_' + i] = i;
   }
 
 
-  for (var keyId in keysToTest) {
-    var key = keysToTest[keyId];
-    var fakeEvent = createEventWithKeyCode(key);
+  for (const keyId in keysToTest) {
+    const key = keysToTest[keyId];
+    const fakeEvent = createEventWithKeyCode(key);
 
     if (KeyCodes.isCharacterKey(key) || (key in specialTextModifiers)) {
       assertTrue(
@@ -75,7 +75,7 @@ function testTextModifyingKeys() {
 }
 
 function testKeyCodeZero() {
-  var zeroEvent = createEventWithKeyCode(0);
+  const zeroEvent = createEventWithKeyCode(0);
   assertEquals(
       !goog.userAgent.GECKO, KeyCodes.isTextModifyingKeyEvent(zeroEvent));
   assertEquals(
@@ -85,7 +85,7 @@ function testKeyCodeZero() {
 function testPhantomKey() {
   // KeyCode 255 deserves its own test to make sure this does not regress,
   // because it's so weird. See the comments in the KeyCode enum.
-  var fakeEvent = createEventWithKeyCode(goog.events.KeyCodes.PHANTOM);
+  const fakeEvent = createEventWithKeyCode(goog.events.KeyCodes.PHANTOM);
   assertFalse(
       'Expected phantom key to not modify text',
       KeyCodes.isTextModifyingKeyEvent(fakeEvent));
@@ -93,14 +93,14 @@ function testPhantomKey() {
 }
 
 function testNonUsKeyboards() {
-  var fakeEvent = createEventWithKeyCode(1092 /* Russian a */);
+  const fakeEvent = createEventWithKeyCode(1092 /* Russian a */);
   assertTrue(
       'Expected key to not modify text: 1092',
       KeyCodes.isTextModifyingKeyEvent(fakeEvent));
 }
 
 function createEventWithKeyCode(i) {
-  var fakeEvent = new goog.events.BrowserEvent('keydown');
+  const fakeEvent = new goog.events.BrowserEvent('keydown');
   fakeEvent.keyCode = i;
   return fakeEvent;
 }

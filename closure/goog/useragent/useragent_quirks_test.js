@@ -20,6 +20,6 @@ goog.require('goog.userAgent');
 
 function testGetDocumentModeInQuirksMode() {
   // This test file is forcing quirks mode.
-  var expected = goog.userAgent.IE ? 5 : undefined;
+  const expected = goog.userAgent.IE ? 5 : undefined;
   assertEquals(expected, goog.userAgent.DOCUMENT_MODE);
 }

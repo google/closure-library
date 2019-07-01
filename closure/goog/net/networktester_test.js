@@ -20,7 +20,7 @@ goog.require('goog.net.NetworkTester');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 
-var clock;
+let clock;
 
 function setUp() {
   clock = new goog.testing.MockClock(true);
@@ -32,15 +32,15 @@ function tearDown() {
 
 function testSuccess() {
   // set up the tster
-  var handler = new Handler();
-  var tester = new goog.net.NetworkTester(handler.callback, handler);
+  const handler = new Handler();
+  const tester = new goog.net.NetworkTester(handler.callback, handler);
   assertFalse(tester.isRunning());
   tester.start();
   assertTrue(handler.isEmpty());
   assertTrue(tester.isRunning());
 
   // simulate the image load and verify
-  var image = tester.image_;
+  const image = tester.image_;
   assertEquals(String(tester.getUri()), image.src);
   assertTrue(handler.isEmpty());
   image.onload.call(null);
@@ -50,15 +50,15 @@ function testSuccess() {
 
 function testFailure() {
   // set up the tester
-  var handler = new Handler();
-  var tester = new goog.net.NetworkTester(handler.callback, handler);
+  const handler = new Handler();
+  const tester = new goog.net.NetworkTester(handler.callback, handler);
   assertFalse(tester.isRunning());
   tester.start();
   assertTrue(handler.isEmpty());
   assertTrue(tester.isRunning());
 
   // simulate the image failure and verify
-  var image = tester.image_;
+  const image = tester.image_;
   assertEquals(String(tester.getUri()), image.src);
   assertTrue(handler.isEmpty());
   image.onerror.call(null);
@@ -68,15 +68,15 @@ function testFailure() {
 
 function testAbort() {
   // set up the tester
-  var handler = new Handler();
-  var tester = new goog.net.NetworkTester(handler.callback, handler);
+  const handler = new Handler();
+  const tester = new goog.net.NetworkTester(handler.callback, handler);
   assertFalse(tester.isRunning());
   tester.start();
   assertTrue(handler.isEmpty());
   assertTrue(tester.isRunning());
 
   // simulate the image abort and verify
-  var image = tester.image_;
+  const image = tester.image_;
   assertEquals(String(tester.getUri()), image.src);
   assertTrue(handler.isEmpty());
   image.onabort.call(null);
@@ -86,15 +86,15 @@ function testAbort() {
 
 function testTimeout() {
   // set up the tester
-  var handler = new Handler();
-  var tester = new goog.net.NetworkTester(handler.callback, handler);
+  const handler = new Handler();
+  const tester = new goog.net.NetworkTester(handler.callback, handler);
   assertFalse(tester.isRunning());
   tester.start();
   assertTrue(handler.isEmpty());
   assertTrue(tester.isRunning());
 
   // simulate the image timeout and verify
-  var image = tester.image_;
+  const image = tester.image_;
   assertEquals(String(tester.getUri()), image.src);
   assertTrue(handler.isEmpty());
   clock.tick(10000);
@@ -104,8 +104,8 @@ function testTimeout() {
 
 function testRetries() {
   // set up the tester
-  var handler = new Handler();
-  var tester = new goog.net.NetworkTester(handler.callback, handler);
+  const handler = new Handler();
+  const tester = new goog.net.NetworkTester(handler.callback, handler);
   tester.setNumRetries(1);
   assertEquals(tester.getAttemptCount(), 0);
   assertFalse(tester.isRunning());
@@ -115,7 +115,7 @@ function testRetries() {
   assertEquals(tester.getAttemptCount(), 1);
 
   // try number 1 fails
-  var image = tester.image_;
+  let image = tester.image_;
   assertEquals(String(tester.getUri()), image.src);
   assertTrue(handler.isEmpty());
   image.onerror.call(null);
@@ -135,8 +135,8 @@ function testRetries() {
 
 function testPauseBetweenRetries() {
   // set up the tester
-  var handler = new Handler();
-  var tester = new goog.net.NetworkTester(handler.callback, handler);
+  const handler = new Handler();
+  const tester = new goog.net.NetworkTester(handler.callback, handler);
   tester.setNumRetries(1);
   tester.setPauseBetweenRetries(1000);
   assertFalse(tester.isRunning());
@@ -145,7 +145,7 @@ function testPauseBetweenRetries() {
   assertTrue(tester.isRunning());
 
   // try number 1 fails
-  var image = tester.image_;
+  let image = tester.image_;
   assertEquals(String(tester.getUri()), image.src);
   assertTrue(handler.isEmpty());
   image.onerror.call(null);
@@ -166,18 +166,18 @@ function testPauseBetweenRetries() {
 }
 
 function testNonDefaultUri() {
-  var handler = new Handler();
-  var newUri = new goog.Uri('//www.google.com/images/cleardot2.gif');
-  var tester = new goog.net.NetworkTester(handler.callback, handler, newUri);
-  var testerUri = tester.getUri();
+  const handler = new Handler();
+  const newUri = new goog.Uri('//www.google.com/images/cleardot2.gif');
+  const tester = new goog.net.NetworkTester(handler.callback, handler, newUri);
+  const testerUri = tester.getUri();
   assertTrue(testerUri.toString().indexOf('cleardot2') > -1);
 }
 
 function testOffline() {
   // set up the tester
-  var handler = new Handler();
-  var tester = new goog.net.NetworkTester(handler.callback, handler);
-  var orgGetNavigatorOffline = goog.net.NetworkTester.getNavigatorOffline_;
+  const handler = new Handler();
+  const tester = new goog.net.NetworkTester(handler.callback, handler);
+  const orgGetNavigatorOffline = goog.net.NetworkTester.getNavigatorOffline_;
   goog.net.NetworkTester.getNavigatorOffline_ = function() { return true; };
   try {
     assertFalse(tester.isRunning());
@@ -203,8 +203,8 @@ function Handler() {
 
 function testGetAttemptCount() {
   // set up the tester
-  var handler = new Handler();
-  var tester = new goog.net.NetworkTester(handler.callback, handler);
+  const handler = new Handler();
+  const tester = new goog.net.NetworkTester(handler.callback, handler);
   assertEquals(tester.getAttemptCount(), 0);
   assertTrue(tester.attempt_ === tester.getAttemptCount());
   assertFalse(tester.isRunning());

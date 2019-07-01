@@ -40,8 +40,8 @@ goog.require('goog.testing.jsunit');
 
 goog.setTestOnly('seamlessfield_test');
 
-var fieldElem;
-var fieldElemClone;
+let fieldElem;
+let fieldElemClone;
 
 function setUp() {
   fieldElem = goog.dom.getElement('field');
@@ -105,14 +105,14 @@ function testFieldWithOverflow() {
 
 function testFieldWithOverflowAndPadding() {
   if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
-    var blendedField =
+    const blendedField =
         initSeamlessField(['1', '2', '3', '4', '5', '6', '7'].join('<p/>'), {
           'overflow': 'auto',
           'position': 'relative',
           'height': '20px',
           'padding': '2px 3px'
         });
-    var blendedIframe = createSeamlessIframe();
+    const blendedIframe = createSeamlessIframe();
     assertAttachSeamlessIframeSizesCorrectly(blendedField, blendedIframe);
     assertEquals(24, fieldElem.offsetHeight);
   }
@@ -120,8 +120,8 @@ function testFieldWithOverflowAndPadding() {
 
 function testIframeHeightGrowsOnWrap() {
   if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
-    var clock = new goog.testing.MockClock(true);
-    var blendedField;
+    const clock = new goog.testing.MockClock(true);
+    let blendedField;
     try {
       blendedField = initSeamlessField(
           '', {'border': '1px solid black', 'height': '20px'});
@@ -135,14 +135,15 @@ function testIframeHeightGrowsOnWrap() {
       clock.tick(1);
 
       // Capture starting heights.
-      var unwrappedIframeHeight = blendedField.getEditableIframe().offsetHeight;
+      const unwrappedIframeHeight =
+          blendedField.getEditableIframe().offsetHeight;
 
       // Resize the field such that the text should wrap.
       fieldElem.style.width = '200px';
       blendedField.doFieldSizingGecko();
 
       // Iframe should grow as a result.
-      var wrappedIframeHeight = blendedField.getEditableIframe().offsetHeight;
+      const wrappedIframeHeight = blendedField.getEditableIframe().offsetHeight;
       assertTrue(
           'Wrapped text should cause iframe to grow - initial height: ' +
               unwrappedIframeHeight +
@@ -157,12 +158,12 @@ function testIframeHeightGrowsOnWrap() {
 
 function testDispatchIframeResizedForWrapperHeight() {
   if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
-    var clock = new goog.testing.MockClock(true);
-    var blendedField = initSeamlessField('Hi!', {'border': '2px 5px'});
-    var iframe = createSeamlessIframe();
+    const clock = new goog.testing.MockClock(true);
+    const blendedField = initSeamlessField('Hi!', {'border': '2px 5px'});
+    const iframe = createSeamlessIframe();
     blendedField.attachIframe(iframe);
 
-    var resizeCalled = false;
+    let resizeCalled = false;
     goog.events.listenOnce(
         blendedField, goog.editor.Field.EventType.IFRAME_RESIZED, function() {
           resizeCalled = true;
@@ -193,12 +194,12 @@ function testDispatchIframeResizedForWrapperHeight() {
 
 function testDispatchIframeResizedForBodyHeight() {
   if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
-    var clock = new goog.testing.MockClock(true);
-    var blendedField = initSeamlessField('Hi!', {'border': '2px 5px'});
-    var iframe = createSeamlessIframe();
+    const clock = new goog.testing.MockClock(true);
+    const blendedField = initSeamlessField('Hi!', {'border': '2px 5px'});
+    const iframe = createSeamlessIframe();
     blendedField.attachIframe(iframe);
 
-    var resizeCalled = false;
+    let resizeCalled = false;
     goog.events.listenOnce(
         blendedField, goog.editor.Field.EventType.IFRAME_RESIZED, function() {
           resizeCalled = true;
@@ -217,7 +218,7 @@ function testDispatchIframeResizedForBodyHeight() {
       assertFalse('Iframe resize must not be dispatched yet', resizeCalled);
 
       // Resize the field to a different body height.
-      var bodyHeight = blendedField.getIframeBodyHeightGecko_();
+      const bodyHeight = blendedField.getIframeBodyHeightGecko_();
       blendedField.getIframeBodyHeightGecko_ = function() {
         return bodyHeight + 1;
       };
@@ -233,23 +234,23 @@ function testDispatchIframeResizedForBodyHeight() {
 function testDispatchBlur() {
   if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE &&
       !goog.editor.BrowserFeature.CLEARS_SELECTION_WHEN_FOCUS_LEAVES) {
-    var blendedField = initSeamlessField('Hi!', {'border': '2px 5px'});
-    var iframe = createSeamlessIframe();
+    const blendedField = initSeamlessField('Hi!', {'border': '2px 5px'});
+    const iframe = createSeamlessIframe();
     blendedField.attachIframe(iframe);
 
-    var blurCalled = false;
+    let blurCalled = false;
     goog.events.listenOnce(
         blendedField, goog.editor.Field.EventType.BLUR, function() {
           blurCalled = true;
         });
 
-    var clearSelection = goog.dom.Range.clearSelection;
-    var cleared = false;
-    var clearedWindow;
+    const clearSelection = goog.dom.Range.clearSelection;
+    let cleared = false;
+    let clearedWindow;
     blendedField.editableDomHelper = new goog.dom.DomHelper();
     blendedField.editableDomHelper.getWindow =
         goog.functions.constant(iframe.contentWindow);
-    var mockRange = new goog.testing.MockRange();
+    const mockRange = new goog.testing.MockRange();
     blendedField.getRange = function() {
       return mockRange;
     };
@@ -258,7 +259,7 @@ function testDispatchBlur() {
       cleared = true;
       clearedWindow = opt_window;
     };
-    var clock = new goog.testing.MockClock(true);
+    const clock = new goog.testing.MockClock(true);
 
     mockRange.collapse(true);
     mockRange.select();
@@ -278,22 +279,23 @@ function testDispatchBlur() {
 
 function testSetMinHeight() {
   if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
-    var clock = new goog.testing.MockClock(true);
+    const clock = new goog.testing.MockClock(true);
+    let field;
     try {
-      var field = initSeamlessField(
+      field = initSeamlessField(
           ['1', '2', '3', '4', '5', '6', '7'].join('<p/>'),
           {'position': 'relative', 'height': '60px'});
 
       // Initially create and size iframe.
-      var iframe = createSeamlessIframe();
+      const iframe = createSeamlessIframe();
       field.attachIframe(iframe);
       field.iframeFieldLoadHandler(iframe, '', {});
       // Need to process timeouts set by load handlers.
       clock.tick(1000);
 
-      var normalHeight = goog.style.getSize(iframe).height;
+      const normalHeight = goog.style.getSize(iframe).height;
 
-      var delayedChangeCalled = false;
+      let delayedChangeCalled = false;
       goog.events.listen(
           field, goog.editor.Field.EventType.DELAYEDCHANGE, function() {
             delayedChangeCalled = true;
@@ -329,8 +331,9 @@ function testSetMinHeight() {
  */
 function testSetMinHeightWithNoIframe() {
   if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+    let field;
     try {
-      var field = initSeamlessField('&nbsp;', {});
+      field = initSeamlessField('&nbsp;', {});
       field.makeEditable();
       field.setMinHeight(30);
     } finally {
@@ -341,19 +344,20 @@ function testSetMinHeightWithNoIframe() {
 
 function testStartChangeEvents() {
   if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
-    var clock = new goog.testing.MockClock(true);
+    const clock = new goog.testing.MockClock(true);
 
+    let field;
     try {
-      var field = initSeamlessField('&nbsp;', {});
+      field = initSeamlessField('&nbsp;', {});
       field.makeEditable();
 
-      var changeCalled = false;
+      let changeCalled = false;
       goog.events.listenOnce(
           field, goog.editor.Field.EventType.CHANGE, function() {
             changeCalled = true;
           });
 
-      var delayedChangeCalled = false;
+      let delayedChangeCalled = false;
       goog.events.listenOnce(
           field, goog.editor.Field.EventType.CHANGE, function() {
             delayedChangeCalled = true;
@@ -378,10 +382,10 @@ function testStartChangeEvents() {
 
 function testManipulateDom() {
   // Test in blended field since that is what fires change events.
-  var editableField = initSeamlessField('&nbsp;', {});
-  var clock = new goog.testing.MockClock(true);
+  const editableField = initSeamlessField('&nbsp;', {});
+  const clock = new goog.testing.MockClock(true);
 
-  var delayedChangeCalled = 0;
+  let delayedChangeCalled = 0;
   goog.events.listen(
       editableField, goog.editor.Field.EventType.DELAYEDCHANGE, function() {
         delayedChangeCalled++;
@@ -395,7 +399,7 @@ function testManipulateDom() {
       delayedChangeCalled);
 
   editableField.makeEditable();
-  var usesIframe = editableField.usesIframe();
+  const usesIframe = editableField.usesIframe();
 
   try {
     editableField.manipulateDom(goog.nullFunction);
@@ -431,8 +435,8 @@ function testManipulateDom() {
 }
 
 function testAttachIframe() {
-  var blendedField = initSeamlessField('Hi!', {});
-  var iframe = createSeamlessIframe();
+  const blendedField = initSeamlessField('Hi!', {});
+  const iframe = createSeamlessIframe();
   try {
     blendedField.attachIframe(iframe);
   } catch (err) {
@@ -459,7 +463,7 @@ function createSeamlessIframe() {
  * @return {goog.editor.SeamlessField} The field.
  */
 function initSeamlessField(innerHTML, styles) {
-  var field = new goog.editor.SeamlessField('field');
+  const field = new goog.editor.SeamlessField('field');
   fieldElem.innerHTML = innerHTML;
   goog.style.setStyle(fieldElem, styles);
   return field;
@@ -476,9 +480,9 @@ function initSeamlessField(innerHTML, styles) {
  * @param {HTMLIFrameElement} iframe The iframe.
  */
 function assertAttachSeamlessIframeSizesCorrectly(fieldObj, iframe) {
-  var size = goog.style.getSize(fieldObj.getOriginalElement());
+  const size = goog.style.getSize(fieldObj.getOriginalElement());
   fieldObj.attachIframe(iframe);
-  var newSize = goog.style.getSize(fieldObj.getOriginalElement());
+  const newSize = goog.style.getSize(fieldObj.getOriginalElement());
 
   assertEquals(size.width, newSize.width);
   assertEquals(size.height, newSize.height);

@@ -30,9 +30,11 @@ goog.require('goog.ui.ButtonSide');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ControlRenderer');
 
-var button, buttonRenderer, testRenderer;
-var sandbox;
-var expectedFailures;
+let button;
+let buttonRenderer;
+let testRenderer;
+let sandbox;
+let expectedFailures;
 
 function setUpPage() {
   sandbox = goog.dom.getElement('sandbox');
@@ -83,7 +85,7 @@ function testGetAriaRole() {
 }
 
 function testCreateDom() {
-  var element = buttonRenderer.createDom(button);
+  let element = buttonRenderer.createDom(button);
   assertNotNull('Element must not be null', element);
   assertEquals('Element must be a DIV',
       String(goog.dom.TagName.DIV), element.tagName);
@@ -106,7 +108,7 @@ function testCreateDom() {
       'Element must have expected contents', 'Hello', element.innerHTML);
 
   button.setSupportedState(goog.ui.Component.State.CHECKED, true);
-  var element = buttonRenderer.createDom(button);
+  element = buttonRenderer.createDom(button);
   assertEquals(
       'button\'s aria-pressed attribute must be false', 'false',
       goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
@@ -127,7 +129,7 @@ function testSetTooltip() {
 function testCreateDomAriaState() {
   button.setSupportedState(goog.ui.Component.State.CHECKED, true);
   button.setChecked(true);
-  var element = buttonRenderer.createDom(button);
+  const element = buttonRenderer.createDom(button);
 
   assertEquals(
       'button\'s aria-pressed attribute must be true', 'true',
@@ -139,7 +141,7 @@ function testUseAriaPressedForSelected() {
   button.setSelected(true);
   button.setRenderer(buttonRenderer);
   button.render();
-  var element = button.getElement();
+  const element = button.getElement();
 
   assertEquals(
       'button\'s aria-pressed attribute must be true', 'true',
@@ -153,7 +155,7 @@ function testAriaDisabled() {
   button.setEnabled(false);
   button.setRenderer(buttonRenderer);
   button.render();
-  var element = button.getElement();
+  const element = button.getElement();
 
   assertEquals(
       'button\'s aria-disabled attribute must be true', 'true',
@@ -165,20 +167,20 @@ function testDecorate() {
       '<div id="bar" title="Hello, world!">Bar</div>\n' +
       '<div id="toggle">Toggle</div>';
 
-  var foo = new goog.ui.Button(null, buttonRenderer);
+  const foo = new goog.ui.Button(null, buttonRenderer);
   foo.decorate(goog.dom.getElement('foo'));
   assertEquals('foo\'s tooltip must be the empty string', '', foo.getTooltip());
   foo.dispose();
 
-  var bar = new goog.ui.Button(null, buttonRenderer);
+  const bar = new goog.ui.Button(null, buttonRenderer);
   bar.decorate(goog.dom.getElement('bar'));
   assertEquals(
       'bar\'s tooltip must be initialized', 'Hello, world!', bar.getTooltip());
   bar.dispose();
 
-  var toggle = new goog.ui.Button(null, buttonRenderer);
+  const toggle = new goog.ui.Button(null, buttonRenderer);
   toggle.setSupportedState(goog.ui.Component.State.CHECKED, true);
-  var element = goog.dom.getElement('toggle');
+  const element = goog.dom.getElement('toggle');
   assertNotNull(element);
   toggle.decorate(element);
   assertEquals(
@@ -229,7 +231,7 @@ function testCollapseWithStructuralClass() {
 }
 
 function testUpdateAriaState() {
-  var element = buttonRenderer.createDom(button);
+  const element = buttonRenderer.createDom(button);
   buttonRenderer.updateAriaState(
       element, goog.ui.Component.State.CHECKED, true);
   assertEquals(

@@ -13,10 +13,10 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.testing.mockmatchers.ArgumentMatcher');
 goog.require('goog.ui.editor.AbstractDialog.EventType');
 
-var dialog;
-var mockOkHandler;
+let dialog;
+let mockOkHandler;
 
-var CUSTOM_MESSAGE = 'Hello, cruel world...';
+const CUSTOM_MESSAGE = 'Hello, cruel world...';
 
 function setUp() {
   mockOkHandler = new goog.testing.LooseMock(goog.events.EventHandler);

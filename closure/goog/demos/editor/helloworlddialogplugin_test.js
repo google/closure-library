@@ -24,18 +24,18 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.testing.mockmatchers.ArgumentMatcher');
 goog.require('goog.userAgent');
 
-var plugin;
-var mockCtrl;
-var mockField;
-var mockRange;
-var mockPlaceCursorNextTo;
-var stubs = new goog.testing.PropertyReplacer();
+let plugin;
+let mockCtrl;
+let mockField;
+let mockRange;
+let mockPlaceCursorNextTo;
+const stubs = new goog.testing.PropertyReplacer();
 
-var fieldObj;
+let fieldObj;
 
-var CUSTOM_MESSAGE = 'Hello, cruel world...';
+const CUSTOM_MESSAGE = 'Hello, cruel world...';
 
-var expectedFailures;
+let expectedFailures;
 
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
@@ -71,7 +71,7 @@ function testCreateDialog() {
   plugin = new goog.demos.editor.HelloWorldDialogPlugin();
   plugin.registerFieldObject(mockField);
 
-  var dialog = plugin.createDialog(goog.dom.getDomHelper());
+  const dialog = plugin.createDialog(goog.dom.getDomHelper());
   assertTrue('Dialog should be of type goog.demos.editor.HelloWorldDialog',
              dialog instanceof goog.demos.editor.HelloWorldDialog);
 
@@ -86,8 +86,8 @@ function testOk() {
   mockField.dispatchBeforeChange();
   mockRange.removeContents();
   // Tests that an argument is a span with the custom message.
-  var createdNodeMatcher = new goog.testing.mockmatchers.ArgumentMatcher(
-      function(arg) {
+  const createdNodeMatcher =
+      new goog.testing.mockmatchers.ArgumentMatcher(function(arg) {
         return arg.nodeType == goog.dom.NodeType.ELEMENT &&
                arg.tagName == goog.dom.TagName.SPAN &&
                goog.dom.getRawTextContent(arg) == CUSTOM_MESSAGE;
@@ -104,7 +104,7 @@ function testOk() {
 
   plugin = new goog.demos.editor.HelloWorldDialogPlugin();
   plugin.registerFieldObject(mockField);
-  var dialog = plugin.createDialog(goog.dom.getDomHelper());
+  const dialog = plugin.createDialog(goog.dom.getDomHelper());
 
   // Mock of execCommand + clicking OK without actually opening the dialog.
   dialog.dispatchEvent(
@@ -144,8 +144,8 @@ function testRestoreSelectionOnOk() {
 
   fieldObj.setSafeHtml(false, goog.html.SafeHtml.htmlEscape('12345'));
 
-  var elem = fieldObj.getElement();
-  var helper = new goog.testing.editor.TestHelper(elem);
+  const elem = fieldObj.getElement();
+  const helper = new goog.testing.editor.TestHelper(elem);
   helper.select('12345', 1, '12345', 4); // Selects '234'.
 
   assertEquals('Incorrect text selected before dialog is opened',

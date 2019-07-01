@@ -30,7 +30,7 @@ goog.require('goog.userAgent');
  * @param {string} expectedMsg
  */
 function doTestMessage(failFunc, expectedMsg) {
-  var error = assertThrows('failFunc should throw.', failFunc);
+  const error = assertThrows('failFunc should throw.', failFunc);
   // Test error message.
   assertEquals(expectedMsg, error.message);
 }
@@ -84,10 +84,10 @@ function testAssertExists() {
 }
 
 function testAssertExists_narrowing() {
-  var /** number|null|undefined */ wideValue = 0;
+  const /** number|null|undefined */ wideValue = 0;
 
-  var /** number */ narrowReturn = goog.asserts.assertExists(wideValue);
-  var /** number */ narrowInScope = wideValue;
+  const /** number */ narrowReturn = goog.asserts.assertExists(wideValue);
+  const /** number */ narrowInScope = wideValue;
 
   goog.reflect.sinkValue(narrowReturn);
   goog.reflect.sinkValue(narrowInScope);
@@ -153,7 +153,7 @@ function testFunction() {
 // jslint:ignore end
 
 function testObject() {
-  var o = {};
+  const o = {};
   assertEquals(o, goog.asserts.assertObject(o));
   assertThrows(
       'assertObject(null)', goog.partial(goog.asserts.assertObject, null));
@@ -170,7 +170,7 @@ function testObject() {
 }
 
 function testArray() {
-  var a = [];
+  const a = [];
   assertEquals(a, goog.asserts.assertArray(a));
   assertThrows('assertArray({})', goog.partial(goog.asserts.assertArray, {}));
   // Test error messages.
@@ -208,20 +208,20 @@ function testElement() {
   assertThrows(goog.partial(goog.asserts.assertElement, 'foo'));
   assertThrows(
       goog.partial(goog.asserts.assertElement, goog.dom.createTextNode('foo')));
-  var elem = goog.dom.createElement(goog.dom.TagName.DIV);
+  const elem = goog.dom.createElement(goog.dom.TagName.DIV);
   assertEquals(elem, goog.asserts.assertElement(elem));
 }
 
 function testInstanceof() {
   /** @constructor */
-  var F = function() {};
+  let F = function() {};
   goog.asserts.assertInstanceof(new F(), F);
-  var error = assertThrows(
+  const error = assertThrows(
       'assertInstanceof({}, F)',
       goog.partial(goog.asserts.assertInstanceof, {}, F));
   // IE lacks support for function.name and will fallback to toString().
-  var object = /object/.test(error.message) ? '[object Object]' : 'Object';
-  var name = /F/.test(error.message) ? 'F' : 'unknown type name';
+  const object = /object/.test(error.message) ? '[object Object]' : 'Object';
+  const name = /F/.test(error.message) ? 'F' : 'unknown type name';
 
   // Test error messages.
   doTestMessage(
@@ -255,7 +255,7 @@ function testInstanceof() {
 
 function testObjectPrototypeIsIntact() {
   goog.asserts.assertObjectPrototypeIsIntact();
-  var originalToString = Object.prototype.toString;
+  const originalToString = Object.prototype.toString;
   Object.prototype.toString = function() {};
   try {
     goog.asserts.assertObjectPrototypeIsIntact();
@@ -270,17 +270,17 @@ function testObjectPrototypeIsIntact() {
 }
 
 function testAssertionError() {
-  var error = new goog.asserts.AssertionError('foo %s %s', [1, 'two']);
+  const error = new goog.asserts.AssertionError('foo %s %s', [1, 'two']);
   assertEquals('Wrong message', 'foo 1 two', error.message);
   assertEquals('Wrong messagePattern', 'foo %s %s', error.messagePattern);
 }
 
 function testFailWithCustomErrorHandler() {
   try {
-    var handledException;
+    let handledException;
     goog.asserts.setErrorHandler(function(e) { handledException = e; });
 
-    var expectedMessage = 'Failure: Gevalt!';
+    const expectedMessage = 'Failure: Gevalt!';
 
     goog.asserts.fail('Gevalt!');
     assertTrue('handledException is null.', handledException != null);
@@ -295,10 +295,10 @@ function testFailWithCustomErrorHandler() {
 
 function testAssertWithCustomErrorHandler() {
   try {
-    var handledException;
+    let handledException;
     goog.asserts.setErrorHandler(function(e) { handledException = e; });
 
-    var expectedMessage = 'Assertion failed: Gevalt!';
+    const expectedMessage = 'Assertion failed: Gevalt!';
 
     goog.asserts.assert(false, 'Gevalt!');
     assertTrue('handledException is null.', handledException != null);

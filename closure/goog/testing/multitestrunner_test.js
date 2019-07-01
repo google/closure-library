@@ -19,27 +19,27 @@ goog.setTestOnly('goog.testing.MultiTestRunnerTest');
 // behavior that interacts with page load detection.
 goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS = 500;
 
-var MockControl = goog.require('goog.testing.MockControl');
-var MultiTestRunner = goog.require('goog.testing.MultiTestRunner');
-var Promise = goog.require('goog.Promise');
-var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
-var TestCase = goog.require('goog.testing.TestCase');
-var array = goog.require('goog.array');
-var asserts = goog.require('goog.testing.asserts');
-var events = goog.require('goog.events');
-var testSuite = goog.require('goog.testing.testSuite');
-var testingEvents = goog.require('goog.testing.events');
+const MockControl = goog.require('goog.testing.MockControl');
+const MultiTestRunner = goog.require('goog.testing.MultiTestRunner');
+const Promise = goog.require('goog.Promise');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const TestCase = goog.require('goog.testing.TestCase');
+const array = goog.require('goog.array');
+const asserts = goog.require('goog.testing.asserts');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingEvents = goog.require('goog.testing.events');
 
-var ALL_TESTS = [
+const ALL_TESTS = [
   'testdata/fake_passing_test.html', 'testdata/fake_failing_test.html',
   'testdata/fake_failing_test2.html'
 ];
-var EMPTY_TEST = 'testdata/fake_failing_test3.html';
-var SKIPPED_TEST = 'testdata/fake_failing_test4.html';
+const EMPTY_TEST = 'testdata/fake_failing_test3.html';
+const SKIPPED_TEST = 'testdata/fake_failing_test4.html';
 
-var testRunner;
-var mocks = new MockControl();
-var stubs = new PropertyReplacer();
+let testRunner;
+const mocks = new MockControl();
+const stubs = new PropertyReplacer();
 
 
 /**
@@ -79,7 +79,7 @@ function createEventPromise(target, eventType) {
  *   testNames: !Array<string>
  * }}
  */
-var TestResults;
+let TestResults;
 
 
 /**
@@ -90,11 +90,11 @@ var TestResults;
  * @return {!TestResults} Consolidated test results for all individual tests.
  */
 function processTestResults(testResults) {
-  var failureReports = [];
-  var testNames = [];
+  let failureReports = [];
+  const testNames = [];
 
-  for (var i = 0; i < testResults.length; i++) {
-    for (var testName in testResults[i]) {
+  for (let i = 0; i < testResults.length; i++) {
+    for (const testName in testResults[i]) {
       testNames.push(testName);
       failureReports = failureReports.concat(testResults[i][testName]);
     }
@@ -121,10 +121,11 @@ testSuite({
   testStartButtonStartsTests: function() {
     testRunner.createDom();
     testRunner.render(document.getElementById('runner'));
-    var el = testRunner.getElement();
-    var startButton = el.querySelectorAll('button')[0];
+    const el = testRunner.getElement();
+    const startButton = el.querySelectorAll('button')[0];
     assertEquals('Start', startButton.innerHTML);
-    var mockStart = mocks.createMethodMock(MultiTestRunner.prototype, 'start');
+    const mockStart =
+        mocks.createMethodMock(MultiTestRunner.prototype, 'start');
 
     mockStart();
 
@@ -134,12 +135,12 @@ testSuite({
   },
 
   testStopButtonStopsTests: function() {
-    var promise = createEventPromise(testRunner, 'testsFinished');
+    const promise = createEventPromise(testRunner, 'testsFinished');
     testRunner.createDom();
     testRunner.render(document.getElementById('runner'));
-    var el = testRunner.getElement();
-    var startButton = el.querySelectorAll('button')[0];
-    var stopButton = el.querySelectorAll('button')[1];
+    const el = testRunner.getElement();
+    const startButton = el.querySelectorAll('button')[0];
+    const stopButton = el.querySelectorAll('button')[1];
     assertEquals('Stop', stopButton.innerHTML);
     stubs.replace(
         MultiTestRunner.TestFrame.prototype, 'runTest', function() { return; });
@@ -174,14 +175,14 @@ testSuite({
   },
 
   testRunsTestsAndReportsResults: function() {
-    var promise = createEventPromise(testRunner, 'testsFinished');
+    const promise = createEventPromise(testRunner, 'testsFinished');
 
     testRunner.render(document.getElementById('runner'));
     testRunner.start();
 
     return promise.then(function(results) {
-      var testResults = processTestResults(results['allTestResults']);
-      var testNames = testResults.testNames;
+      const testResults = processTestResults(results['allTestResults']);
+      const testNames = testResults.testNames;
       assertEquals(3, testNames.length);
       assertArrayContainsString(
           'testdata/fake_failing_test2:testFail', testNames);
@@ -189,8 +190,8 @@ testSuite({
           'testdata/fake_failing_test:testFail', testNames);
       assertArrayContainsString(
           'testdata/fake_passing_test:testPass', testNames);
-      var failureReports = testResults.failureReports;
-      var failedTests = testRunner.getTestsThatFailed();
+      const failureReports = testResults.failureReports;
+      const failedTests = testRunner.getTestsThatFailed();
       assertEquals(2, failureReports.length);
       assertEquals(2, failedTests.length);
       assertArrayContainsString('testdata/fake_failing_test.html', failedTests);
@@ -200,19 +201,19 @@ testSuite({
   },
 
   testMissingTestResultsIsAFailure: function() {
-    var promise = createEventPromise(testRunner, 'testsFinished');
+    const promise = createEventPromise(testRunner, 'testsFinished');
 
     testRunner.addTests(EMPTY_TEST);
     testRunner.render(document.getElementById('runner'));
     testRunner.start();
 
     return promise.then(function(results) {
-      var testResults = processTestResults(results['allTestResults']);
-      var testNames = testResults.testNames;
+      const testResults = processTestResults(results['allTestResults']);
+      const testNames = testResults.testNames;
       assertEquals(4, testNames.length);
       assertArrayContainsString('testdata/fake_failing_test3', testNames);
-      var failureReports = testResults.failureReports;
-      var failedTests = testRunner.getTestsThatFailed();
+      const failureReports = testResults.failureReports;
+      const failedTests = testRunner.getTestsThatFailed();
       assertEquals(3, failureReports.length);
       assertEquals(3, failedTests.length);
       assertArrayContainsString(
@@ -221,35 +222,35 @@ testSuite({
   },
 
   testShouldRunTestsFalseIsSuccess: function() {
-    var promise = createEventPromise(testRunner, 'testsFinished');
+    const promise = createEventPromise(testRunner, 'testsFinished');
 
     testRunner.addTests(SKIPPED_TEST);
     testRunner.render(document.getElementById('runner'));
     testRunner.start();
 
     return promise.then(function(results) {
-      var testResults = processTestResults(results['allTestResults']);
-      var testNames = testResults.testNames;
+      const testResults = processTestResults(results['allTestResults']);
+      const testNames = testResults.testNames;
       assertEquals(4, testNames.length);
       assertArrayContainsString('testdata/fake_failing_test4', testNames);
-      var failureReports = testResults.failureReports;
-      var failedTests = testRunner.getTestsThatFailed();
+      const failureReports = testResults.failureReports;
+      const failedTests = testRunner.getTestsThatFailed();
       // Test should pass even though its test method is a failure.
       assertNotContains('testdata/fake_failing_test4', failedTests);
     });
   },
 
   testRunTestsWithEmptyTestList: function() {
-    var testRunner = new MultiTestRunner().setPoolSize(3).addTests([]);
-    var promise = createEventPromise(testRunner, 'testsFinished');
+    const testRunner = new MultiTestRunner().setPoolSize(3).addTests([]);
+    const promise = createEventPromise(testRunner, 'testsFinished');
 
     testRunner.render(document.getElementById('runner'));
     testRunner.start();
 
     return promise.then(function(results) {
-      var allTestResults = results['allTestResults'];
+      const allTestResults = results['allTestResults'];
       assertEquals(0, allTestResults.length);
-      var failureReports = processTestResults(allTestResults).failureReports;
+      const failureReports = processTestResults(allTestResults).failureReports;
       assertEquals(0, failureReports.length);
       assertEquals(0, testRunner.getTestsThatFailed().length);
       testRunner.dispose();
@@ -257,7 +258,7 @@ testSuite({
   },
 
   testFilterFunctionFiltersTest: function() {
-    var promise = createEventPromise(testRunner, 'testsFinished');
+    const promise = createEventPromise(testRunner, 'testsFinished');
 
     testRunner.render(document.getElementById('runner'));
     testRunner.setFilterFunction(function(test) {
@@ -266,10 +267,10 @@ testSuite({
     testRunner.start();
 
     return promise.then(function(results) {
-      var allTestResults = results['allTestResults'];
+      const allTestResults = results['allTestResults'];
       assertEquals(1, allTestResults.length);
-      var failureReports = processTestResults(allTestResults).failureReports;
-      var failedTests = testRunner.getTestsThatFailed();
+      const failureReports = processTestResults(allTestResults).failureReports;
+      const failedTests = testRunner.getTestsThatFailed();
       assertEquals(1, failureReports.length);
       assertEquals(1, failedTests.length);
       assertArrayContainsString(
@@ -282,7 +283,7 @@ testSuite({
       'testdata/fake_long_running_failing_test',
       'testdata/fake_long_running_passing_test'
     ]);
-    var promise = createEventPromise(testRunner, 'testsFinished');
+    const promise = createEventPromise(testRunner, 'testsFinished');
 
     testRunner.render(document.getElementById('runner'));
     testRunner.setTimeout(0);
@@ -290,19 +291,19 @@ testSuite({
     testRunner.start();
 
     return promise.then(function(results) {
-      var testResults = processTestResults(results['allTestResults']);
-      var testNames = testResults.testNames;
+      const testResults = processTestResults(results['allTestResults']);
+      const testNames = testResults.testNames;
       // Only the filename should be the test name for timeouts.
       assertArrayContainsString(
           'testdata/fake_long_running_failing_test', testNames);
       assertArrayContainsString(
           'testdata/fake_long_running_passing_test', testNames);
       assertEquals(2, testNames.length);
-      var failureReports = testResults.failureReports;
+      const failureReports = testResults.failureReports;
       assertContains('timed out', failureReports[0]['message']);
       assertContains('timed out', failureReports[1]['message']);
       assertEquals(2, failureReports.length);
-      var failedTests = testRunner.getTestsThatFailed();
+      const failedTests = testRunner.getTestsThatFailed();
       assertArrayContainsString(
           'testdata/fake_long_running_failing_test', failedTests);
       assertArrayContainsString(
@@ -312,7 +313,7 @@ testSuite({
   },
 
   testRunsAllTestsWhenPoolSizeSmallerThanTotalTests: function() {
-    var promise = createEventPromise(testRunner, 'testsFinished');
+    const promise = createEventPromise(testRunner, 'testsFinished');
 
     testRunner.render(document.getElementById('runner'));
     // There are 3 tests, it should load and run the 3 serially without failing.
@@ -321,8 +322,8 @@ testSuite({
 
     return promise.then(function(results) {
       assertEquals(3, results['allTestResults'].length);
-      var testResults = processTestResults(results['allTestResults']);
-      var testNames = testResults.testNames;
+      const testResults = processTestResults(results['allTestResults']);
+      const testNames = testResults.testNames;
       assertEquals(3, testNames.length);
       assertArrayContainsString(
           'testdata/fake_failing_test2:testFail', testNames);
@@ -330,8 +331,8 @@ testSuite({
           'testdata/fake_failing_test:testFail', testNames);
       assertArrayContainsString(
           'testdata/fake_passing_test:testPass', testNames);
-      var failureReports = testResults.failureReports;
-      var failedTests = testRunner.getTestsThatFailed();
+      const failureReports = testResults.failureReports;
+      const failedTests = testRunner.getTestsThatFailed();
       assertEquals(2, failureReports.length);
       assertEquals(2, failedTests.length);
       assertArrayContainsString('testdata/fake_failing_test.html', failedTests);
@@ -341,7 +342,7 @@ testSuite({
   },
 
   testFrameGetStats: function() {
-    var frame = new MultiTestRunner.TestFrame('/', 2000, false);
+    const frame = new MultiTestRunner.TestFrame('/', 2000, false);
     frame.testFile_ = 'foo';
     frame.isSuccess_ = true;
     frame.runTime_ = 42;
@@ -360,7 +361,7 @@ testSuite({
   },
 
   testFrameDisposeInternal: function() {
-    var frame = new MultiTestRunner.TestFrame('', 2000, false);
+    const frame = new MultiTestRunner.TestFrame('', 2000, false);
     frame.createDom();
     frame.render();
     stubs.replace(frame, 'checkForCompletion_', function() { return; });

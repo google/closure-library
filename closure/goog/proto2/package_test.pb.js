@@ -157,10 +157,10 @@ someprotopackage.TestPackageTypes.prototype.clearOtherAll = function() {
 
 /** @override */
 someprotopackage.TestPackageTypes.prototype.getDescriptor = function() {
-  var descriptor = someprotopackage.TestPackageTypes.descriptor_;
+  let descriptor = someprotopackage.TestPackageTypes.descriptor_;
   if (!descriptor) {
     // The descriptor is created lazily when we instantiate a new instance.
-    var descriptorObj = {
+    const descriptorObj = {
       0: {
         name: 'TestPackageTypes',
         fullName: 'someprotopackage.TestPackageTypes'

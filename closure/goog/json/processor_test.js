@@ -21,11 +21,11 @@ const userAgent = goog.require('goog.userAgent');
 
 let SUPPORTS_NATIVE_JSON = false;
 
-var REPLACER = function(k, v) {
+const REPLACER = function(k, v) {
   return !!k ? v + 'd' : v;
 };
 
-var REVIVER = function(k, v) {
+const REVIVER = function(k, v) {
   return !!k ? v.substring(0, v.length - 1) : v;
 };
 

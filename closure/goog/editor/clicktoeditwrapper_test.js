@@ -24,9 +24,9 @@ goog.require('goog.testing.MockClock');
 goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 
-var FIELD;
-var CLOCK;
-var HTML;
+let FIELD;
+let CLOCK;
+let HTML;
 
 function setUp() {
   HTML = goog.dom.getElement('root').innerHTML;
@@ -65,7 +65,7 @@ function tearDown() {
 function testClickToEdit(opt_isBlended) {
   setUpField(opt_isBlended);
 
-  var text = goog.dom.getElement('testField').firstChild;
+  let text = goog.dom.getElement('testField').firstChild;
   goog.dom.Range.createFromNodes(text, 4, text, 8).select();
 
   goog.testing.events.fireClickSequence(text.parentNode);
@@ -76,10 +76,10 @@ function testClickToEdit(opt_isBlended) {
   CLOCK.tick(1);
   assertTrue('Field should be editable', FIELD.isLoaded());
 
-  var dom = FIELD.getEditableDomHelper();
-  var selection = goog.dom.Range.createFromWindow(dom.getWindow());
+  const dom = FIELD.getEditableDomHelper();
+  const selection = goog.dom.Range.createFromWindow(dom.getWindow());
 
-  var body = FIELD.getElement();
+  const body = FIELD.getElement();
   text = body.firstChild;
 
   assertEquals('Wrong start node', text, selection.getStartNode());
@@ -102,18 +102,19 @@ function testClickToEditWithAnchor(opt_isBlended) {
   CLOCK.tick(1);
   assertTrue('Field should be editable', FIELD.isLoaded());
 
-  var dom = FIELD.getEditableDomHelper();
-  var selection = goog.dom.Range.createFromWindow(dom.getWindow());
+  const dom = FIELD.getEditableDomHelper();
+  const selection = goog.dom.Range.createFromWindow(dom.getWindow());
 
   // TODO(brndn): the location of the cursor is not yet specified by the W3C
   // Editing APIs (https://dvcs.w3.org/hg/editing/raw-file/tip/editing.html).
   // See b/15678403.  IE and some webkit (all Safari, and up to Chrome 57)
   // return the end of the previous text node, while other browsers return
   // the start of the next node.
-  var body = FIELD.getElement();
-  var text = body.firstChild;
-  var link = dom.getElementsByTagNameAndClass(goog.dom.TagName.A, null, body)[0]
-                 .firstChild;
+  const body = FIELD.getElement();
+  const text = body.firstChild;
+  const link =
+      dom.getElementsByTagNameAndClass(goog.dom.TagName.A, null, body)[0]
+          .firstChild;
   if (selection.getStartNode() == text) {
     assertEquals('Wrong start node', text, selection.getStartNode());
     assertEquals('Wrong start offset', 17, selection.getStartOffset());

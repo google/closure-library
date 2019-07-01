@@ -30,7 +30,7 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.ui.FilteredMenu');
 goog.require('goog.ui.MenuItem');
 
-var sandbox;
+let sandbox;
 
 function setUp() {
   sandbox = goog.dom.getElement('sandbox');
@@ -138,7 +138,7 @@ function testFilter() {
       menu.getChildAt(3).getAccelerator());
 
   menu.setFilter('W,');
-  for (var i = 0; i < menu.getChildCount(); i++) {
+  for (let i = 0; i < menu.getChildCount(); i++) {
     assertFalse(
         'W, should not match anything with allowMultiple set to false',
         menu.getChildAt(i).isVisible());
@@ -146,7 +146,7 @@ function testFilter() {
 
   // Clear filter.
   menu.setFilter('');
-  for (var i = 0; i < menu.getChildCount(); i++) {
+  for (let i = 0; i < menu.getChildCount(); i++) {
     assertTrue('All items should be visible', menu.getChildAt(i).isVisible());
   }
 
@@ -166,7 +166,7 @@ function testFilterAllowMultiple() {
 
   // Filter menu.
   menu.setFilter('W,');
-  for (var i = 0; i < menu.getChildCount(); i++) {
+  for (let i = 0; i < menu.getChildCount(); i++) {
     assertTrue(
         'W, should show all items with allowMultiple set to true',
         menu.getChildAt(i).isVisible());
@@ -189,7 +189,7 @@ function testFilterAllowMultiple() {
 
   // Clear filter.
   menu.setFilter('');
-  for (var i = 0; i < menu.getChildCount(); i++) {
+  for (let i = 0; i < menu.getChildCount(); i++) {
     assertTrue('All items should be visible', menu.getChildAt(i).isVisible());
   }
 
@@ -282,8 +282,8 @@ function testEscapeKeyHandling() {
   menu.addItem(new goog.ui.MenuItem('Friends'));
   menu.render(sandbox);
 
-  var gotKeyCode = false;
-  var wrapper = document.getElementById('wrapper');
+  let gotKeyCode = false;
+  const wrapper = document.getElementById('wrapper');
   goog.events.listenOnce(wrapper, goog.events.EventType.KEYPRESS, function(e) {
     gotKeyCode = true;
   });
@@ -298,7 +298,7 @@ function testAriaRoles() {
   menu.addItem(new goog.ui.MenuItem('Item 1'));
   menu.render(sandbox);
 
-  var input = menu.getFilterInputElement();
+  const input = menu.getFilterInputElement();
   assertEquals(
       goog.a11y.aria.AutoCompleteValues.LIST,
       goog.a11y.aria.getState(input, goog.a11y.aria.State.AUTOCOMPLETE));
@@ -312,8 +312,8 @@ function testAriaRoles() {
 
 function testInputActiveDescendant() {
   menu = new goog.ui.FilteredMenu();
-  var menuItem1 = new goog.ui.MenuItem('Item 1');
-  var menuItem2 = new goog.ui.MenuItem('Item 2');
+  const menuItem1 = new goog.ui.MenuItem('Item 1');
+  const menuItem2 = new goog.ui.MenuItem('Item 2');
   menu.addItem(menuItem1);
   menu.addItem(menuItem2);
   menu.render(sandbox);
@@ -331,12 +331,12 @@ function testInputActiveDescendant() {
 
 
 function isHighlightedVisible(menu) {
-  var contRect = goog.style.getBounds(menu.getContentElement());
+  let contRect = goog.style.getBounds(menu.getContentElement());
   // Expands the containing rectangle by 1px on top and bottom. The test
   // sometime fails with 1px out of bound on FF6/Linux. This is not
   // consistently reproducible.
   contRect = new goog.math.Rect(
       contRect.left, contRect.top - 1, contRect.width, contRect.height + 2);
-  var itemRect = goog.style.getBounds(menu.getHighlighted().getElement());
+  const itemRect = goog.style.getBounds(menu.getHighlighted().getElement());
   return contRect.contains(itemRect);
 }

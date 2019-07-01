@@ -31,8 +31,8 @@ function isSafari8() {
 
 // Test PropertyReplacer with JavaScript objects.
 function testSetJsProperties() {
-  var stubs = new goog.testing.PropertyReplacer();
-  var x = {a: 1, b: undefined};
+  const stubs = new goog.testing.PropertyReplacer();
+  const x = {a: 1, b: undefined};
 
   // Setting simple values.
   stubs.set(x, 'num', 1);
@@ -70,7 +70,7 @@ function testSetJsProperties() {
   assertEquals('prototype method', 12, (new x.Class(4)).triple());
 
   // Cleaning up with UnsetAll() twice. The second run should have no effect.
-  for (var i = 0; i < 2; i++) {
+  for (let i = 0; i < 2; i++) {
     stubs.reset();
     assertEquals('x.a preserved', 1, x.a);
     assertTrue('x.b reset', 'b' in x && x.b === undefined);
@@ -85,9 +85,9 @@ function testSetJsProperties() {
 
 // Test removing JavaScript object properties.
 function testRemoveJsProperties() {
-  var stubs = new goog.testing.PropertyReplacer();
-  var orig = {'a': 1, 'b': undefined};
-  var x = {'a': 1, 'b': undefined};
+  const stubs = new goog.testing.PropertyReplacer();
+  const orig = {'a': 1, 'b': undefined};
+  const x = {'a': 1, 'b': undefined};
 
   stubs.remove(x, 'a');
   assertFalse('x.a removed', 'a' in x);
@@ -120,13 +120,13 @@ function testRemoveJsProperties() {
 
 // Test PropertyReplacer with prototype chain.
 function testPrototype() {
-  var stubs = new goog.testing.PropertyReplacer();
+  let stubs = new goog.testing.PropertyReplacer();
 
   // Simple inheritance.
-  var a = {a: 0};
+  const a = {a: 0};
   function B() {}
   B.prototype = a;
-  var b = new B();
+  const b = new B();
 
   stubs.set(a, 0, 1);
   stubs.set(b, 0, 2);
@@ -135,12 +135,12 @@ function testPrototype() {
   assertEquals('b.a == 0', 0, b['a']);
 
   // Inheritance with goog.inherits.
-  var c = {a: 0};
+  const c = {a: 0};
   function C() {}
   C.prototype = c;
   function D() {}
   goog.inherits(D, C);
-  var d = new D();
+  const d = new D();
 
   stubs = new goog.testing.PropertyReplacer();
   stubs.set(c, 'a', 1);
@@ -172,7 +172,7 @@ function testPrototype() {
 
 // Test replacing function properties.
 function testFunctionProperties() {
-  var stubs = new goog.testing.PropertyReplacer();
+  const stubs = new goog.testing.PropertyReplacer();
   stubs.set(Array, 'x', 1);
   assertEquals('Array.x==1', 1, Array.x);
   stubs.reset();
@@ -199,7 +199,7 @@ function testHasKey() {
   C.a = 0;
   assertTrue('C.a set', f(C, 'a'));
 
-  var c = new C();
+  const c = new C();
   assertFalse('C().a, inherited', f(c, 'a'));
   c.a = 0;
   assertTrue('C().a, own', f(c, 'a'));
@@ -210,7 +210,7 @@ function testHasKey() {
 
   assertFalse('document, invalid key', f(document, 'no such key'));
 
-  var div = goog.dom.createElement(goog.dom.TagName.DIV);
+  const div = goog.dom.createElement(goog.dom.TagName.DIV);
   assertFalse('div, invalid key', f(div, 'no such key'));
   div['a'] = 0;
   assertTrue('div, key added by JS', f(div, 'a'));
@@ -242,10 +242,10 @@ function testHasKey() {
 
 // Test PropertyReplacer with DOM objects' built in attributes.
 function testDomBuiltInAttributes() {
-  var div = goog.dom.createElement(goog.dom.TagName.DIV);
+  const div = goog.dom.createElement(goog.dom.TagName.DIV);
   div.id = 'old-id';
 
-  var stubs = new goog.testing.PropertyReplacer();
+  const stubs = new goog.testing.PropertyReplacer();
   stubs.set(div, 'id', 'new-id');
   stubs.set(div, 'className', 'test-class');
   assertEquals('div.id == "new-id"', 'new-id', div.id);
@@ -266,10 +266,10 @@ function testDomBuiltInAttributes() {
 
 // Test PropertyReplacer with DOM objects' custom attributes.
 function testDomCustomAttributes() {
-  var div = goog.dom.createElement(goog.dom.TagName.DIV);
+  const div = goog.dom.createElement(goog.dom.TagName.DIV);
   div.attr1 = 'old';
 
-  var stubs = new goog.testing.PropertyReplacer();
+  const stubs = new goog.testing.PropertyReplacer();
   stubs.set(div, 'attr1', 'new');
   stubs.set(div, 'attr2', 'new');
   assertEquals('div.attr1 == "new"', 'new', div.attr1);
@@ -286,10 +286,10 @@ function testDomCustomAttributes() {
 
 // Test PropertyReplacer trying to override a read-only property.
 function testReadOnlyProperties() {
-  var stubs = new goog.testing.PropertyReplacer();
+  const stubs = new goog.testing.PropertyReplacer();
 
   // Function.prototype.length should be read-only.
-  var foo = function(_) {};
+  const foo = function(_) {};
   assertThrows(
       'Trying to set a read-only property fails silently.',
       goog.bind(stubs.set, stubs, foo, 'length', 10));
@@ -298,7 +298,7 @@ function testReadOnlyProperties() {
       goog.bind(stubs.replace, stubs, foo, 'length', 10));
 
   // Array length should be undeletable.
-  var a = [1, 2, 3];
+  const a = [1, 2, 3];
   assertThrows(
       'Trying to remove a read-only property fails silently.',
       goog.bind(stubs.remove, stubs, a, 'length'));
@@ -313,9 +313,9 @@ function testReadOnlyProperties() {
 // Test PropertyReplacer trying to override a style property doesn't trigger
 // read-only exception.
 function testSettingStyleProperties() {
-  var stubs = new goog.testing.PropertyReplacer();
+  const stubs = new goog.testing.PropertyReplacer();
 
-  var div = document.createElement('div');
+  const div = document.createElement('div');
   // Ensures setting a pixel style value doesn't trigger the read-only property
   // exception, considering div.style.margin will return "0px" instead of just
   // "0".
@@ -330,8 +330,8 @@ function testSealedProperties() {
     return;
   }
 
-  var stubs = new goog.testing.PropertyReplacer();
-  var sealed = Object.seal({a: 1});
+  const stubs = new goog.testing.PropertyReplacer();
+  const sealed = Object.seal({a: 1});
   assertThrows(
       'Trying to set a new sealed property fails silently.',
       goog.bind(stubs.set, stubs, sealed, 'b', 2));
@@ -353,7 +353,7 @@ function testSealedProperties() {
     // error rather than our explicit consistency check.
     'use strict';
 
-    var sealed = Object.seal({a: 1});
+    const sealed = Object.seal({a: 1});
     assertThrows(
         'Trying to set a new sealed property fails silently in strict mode.',
         goog.bind(stubs.set, stubs, sealed, 'b', 2));
@@ -380,8 +380,8 @@ function testFrozenProperty() {
     return;
   }
 
-  var stubs = new goog.testing.PropertyReplacer();
-  var frozen = Object.freeze({a: 1});
+  const stubs = new goog.testing.PropertyReplacer();
+  const frozen = Object.freeze({a: 1});
   assertThrows(
       'Trying to set a new frozen property fails silently.',
       goog.bind(stubs.set, stubs, frozen, 'b', 2));
@@ -409,7 +409,7 @@ function testFrozenProperty() {
     // the error rather than our explicit consistency check.
     'use strict';
 
-    var frozen = Object.freeze({a: 1});
+    const frozen = Object.freeze({a: 1});
     assertThrows(
         'Trying to set a new frozen property fails silently in strict mode.',
         goog.bind(stubs.set, stubs, frozen, 'b', 2));
@@ -442,7 +442,7 @@ function testFrozenProperty() {
 
 // Test PropertyReplacer overriding Math.random.
 function testMathRandom() {
-  var stubs = new goog.testing.PropertyReplacer();
+  const stubs = new goog.testing.PropertyReplacer();
   stubs.set(Math, 'random', function() { return -1; });
   assertEquals('mocked Math.random', -1, Math.random());
 
@@ -452,13 +452,13 @@ function testMathRandom() {
 
 // Tests the replace method of PropertyReplacer.
 function testReplace() {
-  var stubs = new goog.testing.PropertyReplacer();
+  const stubs = new goog.testing.PropertyReplacer();
   function C() {
     this.a = 1;
   }
   C.prototype.b = 1;
   C.prototype.toString = function() { return 'obj'; };
-  var obj = new C();
+  const obj = new C();
 
   stubs.replace(obj, 'a', 2);
   assertEquals('successfully replaced the own property of an object', 2, obj.a);
@@ -466,7 +466,7 @@ function testReplace() {
   stubs.replace(obj, 'b', 2);
   assertEquals('successfully replaced the property in the prototype', 2, obj.b);
 
-  var error = assertThrows(
+  let error = assertThrows(
       'cannot replace missing key',
       goog.bind(stubs.replace, stubs, obj, 'unknown', 1));
   // Using assertContains instead of assertEquals because Opera 10.0 adds
@@ -494,8 +494,8 @@ function testReplace() {
 }
 
 function testReplaceAllowNullOrUndefined() {
-  var stubs = new goog.testing.PropertyReplacer();
-  var obj = {value: 1, zero: 0, emptyString: ''};
+  const stubs = new goog.testing.PropertyReplacer();
+  const obj = {value: 1, zero: 0, emptyString: ''};
 
   stubs.replace(obj, 'value', undefined, true);
   assertUndefined(
@@ -525,7 +525,7 @@ function testReplaceAllowNullOrUndefined() {
 // Tests altering complete namespace paths.
 function testSetPath() {
   goog.global.a = {b: {}};
-  var stubs = new goog.testing.PropertyReplacer();
+  const stubs = new goog.testing.PropertyReplacer();
 
   stubs.setPath('a.b.c.d', 1);
   assertObjectEquals('a.b.c.d=1', {b: {c: {d: 1}}}, goog.global.a);
@@ -551,9 +551,9 @@ function testSetPath() {
 
 // Tests altering paths with functions in them.
 function testSetPathWithFunction() {
-  var f = function() {};
+  const f = function() {};
   goog.global.a = {b: f};
-  var stubs = new goog.testing.PropertyReplacer();
+  const stubs = new goog.testing.PropertyReplacer();
 
   stubs.setPath('a.b.c', 1);
   assertEquals('a.b.c=1, f kept', f, goog.global.a.b);
@@ -566,7 +566,9 @@ function testSetPathWithFunction() {
   assertTrue('a.b.prototype.d=2, proto set', 'd' in goog.global.a.b.prototype);
   assertEquals('a.b.prototype.d=2, d set', 2, new goog.global.a.b().d);
 
-  var invalidSetPath = function() { stubs.setPath('a.prototype.e', 3); };
+  const invalidSetPath = function() {
+    stubs.setPath('a.prototype.e', 3);
+  };
   assertThrows('setting the prototype of a non-function', invalidSetPath);
 
   stubs.reset();
@@ -576,8 +578,8 @@ function testSetPathWithFunction() {
 
 // Tests restoring original attribute values with restore() rather than reset().
 function testRestore() {
-  var stubs = new goog.testing.PropertyReplacer();
-  var x = {a: 1, b: undefined};
+  const stubs = new goog.testing.PropertyReplacer();
+  const x = {a: 1, b: undefined};
 
   // Setting simple value.
   stubs.set(x, 'num', 1);
@@ -639,9 +641,9 @@ function testRestore() {
 
 // Tests restore() with invalid arguments.
 function testRestoreWithInvalidArguments() {
-  var stubs = new goog.testing.PropertyReplacer();
-  var x = {a: 1, b: undefined};
-  var y = {a: 1};
+  const stubs = new goog.testing.PropertyReplacer();
+  const x = {a: 1, b: undefined};
+  const y = {a: 1};
 
   stubs.set(x, 'a', 42);
 

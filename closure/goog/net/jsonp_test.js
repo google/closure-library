@@ -25,14 +25,14 @@ goog.require('goog.userAgent');
 
 // Global vars to facilitate a shared set up function.
 
-var timeoutWasCalled;
-var timeoutHandler;
+let timeoutWasCalled;
+let timeoutHandler;
 
-var fakeUrl = 'https://fake-site.eek/';
-var fakeTrustedUrl =
+const fakeUrl = 'https://fake-site.eek/';
+const fakeTrustedUrl =
     goog.html.TrustedResourceUrl.fromConstant(goog.string.Const.from(fakeUrl));
 
-var originalTimeout;
+let originalTimeout;
 function setUp() {
   timeoutWasCalled = false;
   timeoutHandler = null;
@@ -45,7 +45,7 @@ function setUp() {
 
 // Firefox throws a JS error when a script is not found.  We catch that here and
 // ensure the test case doesn't fail because of it.
-var originalOnError = window.onerror;
+const originalOnError = window.onerror;
 window.onerror = function(msg, url, line) {
   // TODO(user): Safari 3 on the farm returns an object instead of the typical
   // params.  Pass through errors for safari for now.
@@ -64,19 +64,19 @@ function tearDown() {
 // Quick function records the before-state of the DOM, and then return a
 // a function to check that XDC isn't leaving stuff behind.
 function newCleanupGuard() {
-  var bodyChildCount = document.body.childNodes.length;
+  const bodyChildCount = document.body.childNodes.length;
 
   return function() {
     // let any timeout queues finish before we check these:
     window.setTimeout(function() {
-      var propCounter = 0;
+      let propCounter = 0;
 
       // All callbacks should have been deleted or be the null function.
-      for (var key in goog.global) {
+      for (const key in goog.global) {
         // NOTES: callbacks are stored on goog.global with property
         // name prefixed with goog.net.Jsonp.CALLBACKS.
         if (key.indexOf(goog.net.Jsonp.CALLBACKS) == 0) {
-          var callbackId = goog.net.Jsonp.getCallbackId_(key);
+          const callbackId = goog.net.Jsonp.getCallbackId_(key);
           if (goog.global[callbackId] &&
               goog.global[callbackId] != goog.nullFunction) {
             propCounter++;
@@ -98,17 +98,19 @@ function getScriptElement(result) {
 
 // Check that send function is sane when things go well.
 function testSend() {
-  var replyReceived;
-  var jsonp = new goog.net.Jsonp(fakeTrustedUrl);
+  let replyReceived;
+  const jsonp = new goog.net.Jsonp(fakeTrustedUrl);
 
-  var checkCleanup = newCleanupGuard();
+  const checkCleanup = newCleanupGuard();
 
-  var userCallback = function(data) { replyReceived = data; };
+  const userCallback = function(data) {
+    replyReceived = data;
+  };
 
-  var payload = {atisket: 'atasket', basket: 'yellow'};
-  var result = jsonp.send(payload, userCallback);
+  const payload = {atisket: 'atasket', basket: 'yellow'};
+  const result = jsonp.send(payload, userCallback);
 
-  var script = getScriptElement(result);
+  const script = getScriptElement(result);
 
   assertNotNull('script created', script);
   assertEquals('encoding is utf-8', 'UTF-8', script.charset);
@@ -120,8 +122,8 @@ function testSend() {
   // Now, we have to track down the name of the callback function, so we can
   // call that to simulate a returned request + verify that the callback
   // function does not break if it receives a second unexpected parameter.
-  var callbackName = /callback=([^&]+)/.exec(script.src)[1];
-  var callbackFunc = eval(callbackName);
+  const callbackName = /callback=([^&]+)/.exec(script.src)[1];
+  const callbackFunc = eval(callbackName);
   callbackFunc(
       {some: 'data', another: ['data', 'right', 'here']}, 'unexpected');
   assertEquals('input was received', 'right', replyReceived.another[1]);
@@ -138,23 +140,24 @@ function testSend() {
 
 // Check that send function is sane when things go well.
 function testSendWhenCallbackHasTwoParameters() {
-  var replyReceived, replyReceived2;
-  var jsonp = new goog.net.Jsonp(fakeTrustedUrl);
+  let replyReceived;
+  let replyReceived2;
+  const jsonp = new goog.net.Jsonp(fakeTrustedUrl);
 
-  var checkCleanup = newCleanupGuard();
+  const checkCleanup = newCleanupGuard();
 
-  var userCallback = function(data, opt_data2) {
+  const userCallback = function(data, opt_data2) {
     replyReceived = data;
     replyReceived2 = opt_data2;
   };
 
-  var payload = {atisket: 'atasket', basket: 'yellow'};
-  var result = jsonp.send(payload, userCallback);
-  var script = getScriptElement(result);
+  const payload = {atisket: 'atasket', basket: 'yellow'};
+  const result = jsonp.send(payload, userCallback);
+  const script = getScriptElement(result);
 
   // Test a callback function that receives two parameters.
-  var callbackName = /callback=([^&]+)/.exec(script.src)[1];
-  var callbackFunc = eval(callbackName);
+  const callbackName = /callback=([^&]+)/.exec(script.src)[1];
+  const callbackFunc = eval(callbackName);
   callbackFunc('param1', {some: 'data', another: ['data', 'right', 'here']});
   assertEquals('input was received', 'param1', replyReceived);
   assertEquals('second input was received', 'right', replyReceived2.another[1]);
@@ -171,17 +174,19 @@ function testSendWhenCallbackHasTwoParameters() {
 // Check that send function works correctly when callback param value is
 // specified.
 function testSendWithCallbackParamValue() {
-  var replyReceived;
-  var jsonp = new goog.net.Jsonp(fakeTrustedUrl);
+  let replyReceived;
+  const jsonp = new goog.net.Jsonp(fakeTrustedUrl);
 
-  var checkCleanup = newCleanupGuard();
+  const checkCleanup = newCleanupGuard();
 
-  var userCallback = function(data) { replyReceived = data; };
+  const userCallback = function(data) {
+    replyReceived = data;
+  };
 
-  var payload = {atisket: 'atasket', basket: 'yellow'};
-  var result = jsonp.send(payload, userCallback, undefined, 'dummyId');
+  const payload = {atisket: 'atasket', basket: 'yellow'};
+  const result = jsonp.send(payload, userCallback, undefined, 'dummyId');
 
-  var script = getScriptElement(result);
+  const script = getScriptElement(result);
 
   assertNotNull('script created', script);
   assertEquals('encoding is utf-8', 'UTF-8', script.charset);
@@ -196,7 +201,7 @@ function testSendWithCallbackParamValue() {
 
   // Now, we simulate a returned request using the known callback function
   // name.
-  var callbackFunc =
+  const callbackFunc =
       eval('callback=' + goog.net.Jsonp.getCallbackId_('dummyId'));
   callbackFunc({some: 'data', another: ['data', 'right', 'here']});
   assertEquals('input was received', 'right', replyReceived.another[1]);
@@ -213,17 +218,21 @@ function testSendWithCallbackParamValue() {
 
 // Check that the send function is sane when the thing goes south.
 function testSendFailure() {
-  var replyReceived = false;
-  var errorReplyReceived = false;
+  let replyReceived = false;
+  let errorReplyReceived = false;
 
-  var jsonp = new goog.net.Jsonp(fakeTrustedUrl);
+  const jsonp = new goog.net.Jsonp(fakeTrustedUrl);
 
-  var checkCleanup = newCleanupGuard();
+  const checkCleanup = newCleanupGuard();
 
-  var userCallback = function(data) { replyReceived = data; };
-  var userErrorCallback = function(data) { errorReplyReceived = data; };
+  const userCallback = function(data) {
+    replyReceived = data;
+  };
+  const userErrorCallback = function(data) {
+    errorReplyReceived = data;
+  };
 
-  var payload = {justa: 'test'};
+  const payload = {justa: 'test'};
 
   jsonp.send(payload, userCallback, userErrorCallback);
 
@@ -253,21 +262,23 @@ function testSendFailure() {
 
 // Check that a cancel call works and cleans up after itself.
 function testCancel() {
-  var checkCleanup = newCleanupGuard();
+  const checkCleanup = newCleanupGuard();
 
-  var successCalled = false;
-  var successCallback = function() { successCalled = true; };
+  let successCalled = false;
+  const successCallback = function() {
+    successCalled = true;
+  };
 
   // Send and cancel a request, then make sure it was cleaned up.
-  var jsonp = new goog.net.Jsonp(fakeTrustedUrl);
-  var requestObject = jsonp.send({test: 'foo'}, successCallback);
+  const jsonp = new goog.net.Jsonp(fakeTrustedUrl);
+  const requestObject = jsonp.send({test: 'foo'}, successCallback);
   jsonp.cancel(requestObject);
 
-  for (var key in goog.global[goog.net.Jsonp.CALLBACKS]) {
+  for (const key in goog.global[goog.net.Jsonp.CALLBACKS]) {
     // NOTES: callbacks are stored on goog.global with property
     // name prefixed with goog.net.Jsonp.CALLBACKS.
     if (key.indexOf('goog.net.Jsonp.CALLBACKS') == 0) {
-      var callbackId = goog.net.Jsonp.getCallbackId_(key);
+      const callbackId = goog.net.Jsonp.getCallbackId_(key);
       assertNotEquals(
           'The success callback should have been removed',
           goog.global[callbackId], successCallback);
@@ -280,12 +291,12 @@ function testCancel() {
 }
 
 function testPayloadParameters() {
-  var checkCleanup = newCleanupGuard();
+  const checkCleanup = newCleanupGuard();
 
-  var jsonp = new goog.net.Jsonp(fakeTrustedUrl);
-  var result = jsonp.send({'foo': 3, 'bar': 'baz'});
+  const jsonp = new goog.net.Jsonp(fakeTrustedUrl);
+  const result = jsonp.send({'foo': 3, 'bar': 'baz'});
 
-  var script = getScriptElement(result);
+  const script = getScriptElement(result);
   assertEquals(
       'Payload parameters should have been added to url.',
       fakeUrl + '?foo=3&bar=baz', script.src);
@@ -295,13 +306,13 @@ function testPayloadParameters() {
 }
 
 function testNonce() {
-  var checkCleanup = newCleanupGuard();
+  const checkCleanup = newCleanupGuard();
 
-  var jsonp = new goog.net.Jsonp(fakeTrustedUrl);
+  const jsonp = new goog.net.Jsonp(fakeTrustedUrl);
   jsonp.setNonce('foo');
-  var result = jsonp.send();
+  const result = jsonp.send();
 
-  var script = getScriptElement(result);
+  const script = getScriptElement(result);
   assertEquals(
       'Nonce attribute should have been added to script element.', 'foo',
       (script['nonce'] || script.getAttribute('nonce')));
@@ -311,18 +322,18 @@ function testNonce() {
 }
 
 function testOptionalPayload() {
-  var checkCleanup = newCleanupGuard();
+  const checkCleanup = newCleanupGuard();
 
-  var errorCallback = goog.testing.recordFunction();
+  const errorCallback = goog.testing.recordFunction();
 
-  var stubs = new goog.testing.PropertyReplacer();
+  const stubs = new goog.testing.PropertyReplacer();
   stubs.set(
       goog.global, 'setTimeout', function(errorHandler) { errorHandler(); });
 
-  var jsonp = new goog.net.Jsonp(fakeTrustedUrl);
-  var result = jsonp.send(null, null, errorCallback);
+  const jsonp = new goog.net.Jsonp(fakeTrustedUrl);
+  const result = jsonp.send(null, null, errorCallback);
 
-  var script = getScriptElement(result);
+  const script = getScriptElement(result);
   assertEquals(
       'Parameters should not have been added to url.', fakeUrl, script.src);
 
@@ -331,7 +342,7 @@ function testOptionalPayload() {
   script.onerror = goog.nullFunction;
   script.onreadystatechange = goog.nullFunction;
 
-  var errorCallbackArguments = errorCallback.getLastCall().getArguments();
+  const errorCallbackArguments = errorCallback.getLastCall().getArguments();
   assertEquals(1, errorCallbackArguments.length);
   assertObjectEquals({}, errorCallbackArguments[0]);
 

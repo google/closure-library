@@ -35,20 +35,20 @@ goog.require('goog.testing.mockmatchers.ArgumentMatcher');
 goog.require('goog.ui.editor.AbstractDialog');
 goog.require('goog.userAgent');
 
-var plugin;
-var mockCtrl;
-var mockField;
-var mockSavedRange;
-var mockOpenedHandler;
-var mockClosedHandler;
+let plugin;
+let mockCtrl;
+let mockField;
+let mockSavedRange;
+let mockOpenedHandler;
+let mockClosedHandler;
 
-var COMMAND = 'myCommand';
-var stubs = new goog.testing.PropertyReplacer();
+const COMMAND = 'myCommand';
+const stubs = new goog.testing.PropertyReplacer();
 
-var mockClock;
-var fieldObj;
-var fieldElem;
-var mockHandler;
+let mockClock;
+let fieldObj;
+let fieldElem;
+let mockHandler;
 
 function setUp() {
   mockCtrl = new goog.testing.MockControl();
@@ -93,7 +93,7 @@ function tearDown() {
  * @return {goog.ui.editor.AbstractDialog} The created dialog.
  */
 function createDialog(domHelper) {
-  var dialog = new goog.ui.editor.AbstractDialog(domHelper);
+  const dialog = new goog.ui.editor.AbstractDialog(domHelper);
   dialog.createDialogControl = function() {
     return new goog.ui.editor.AbstractDialog.Builder(dialog).build();
   };
@@ -108,7 +108,7 @@ function createDialog(domHelper) {
  * @return {goog.editor.plugins.AbstractDialogPlugin} The created plugin.
  */
 function createDialogPlugin() {
-  var plugin = new goog.editor.plugins.AbstractDialogPlugin(COMMAND);
+  const plugin = new goog.editor.plugins.AbstractDialogPlugin(COMMAND);
   plugin.createDialog = createDialog;
   plugin.returnControlToEditableField = plugin.restoreOriginalSelection;
   plugin.registerFieldObject(mockField);
@@ -179,7 +179,7 @@ function testExecAndDispose(opt_reuse) {
       'Dialog should be open now',
       !!plugin.getDialog() && plugin.getDialog().isOpen());
 
-  var tempDialog = plugin.getDialog();
+  const tempDialog = plugin.getDialog();
   plugin.dispose();
   assertFalse(
       'Dialog should not still be open after disposal', tempDialog.isOpen());
@@ -219,7 +219,7 @@ function testExecAndHide(opt_reuse) {
       'Dialog should be open now',
       !!plugin.getDialog() && plugin.getDialog().isOpen());
 
-  var tempDialog = plugin.getDialog();
+  const tempDialog = plugin.getDialog();
   plugin.getDialog().hide();
   assertFalse(
       'Dialog should not still be open after hiding', tempDialog.isOpen());
@@ -282,7 +282,7 @@ function testExecTwice(opt_reuse) {
       'Dialog should be open now',
       !!plugin.getDialog() && plugin.getDialog().isOpen());
 
-  var tempDialog = plugin.getDialog();
+  const tempDialog = plugin.getDialog();
   plugin.execCommand(COMMAND);
   if (opt_reuse) {
     assertTrue(
@@ -325,8 +325,8 @@ function testRestoreSelection() {
   setUpRealEditableField();
 
   fieldObj.setSafeHtml(false, goog.html.SafeHtml.htmlEscape('12345'));
-  var elem = fieldObj.getElement();
-  var helper = new goog.testing.editor.TestHelper(elem);
+  const elem = fieldObj.getElement();
+  const helper = new goog.testing.editor.TestHelper(elem);
   helper.select('12345', 1, '12345', 4);  // Selects '234'.
 
   assertEquals(
@@ -394,7 +394,7 @@ function testDebounceSelectionChange() {
 
   // Set up a mock event handler to make sure selection change isn't fired
   // more than once on close and a second time on close.
-  var count = 0;
+  let count = 0;
   fieldObj.addEventListener(
       goog.editor.Field.EventType.SELECTIONCHANGE, function(e) { count++; });
 
@@ -405,7 +405,7 @@ function testDebounceSelectionChange() {
   assertEquals(2, count);
 
   // Fake the keyup event firing on the field after the dialog closes.
-  var e = new goog.events.Event('keyup', plugin.fieldObject.getElement());
+  const e = new goog.events.Event('keyup', plugin.fieldObject.getElement());
   e.keyCode = 13;
   goog.testing.events.fireBrowserEvent(e);
 

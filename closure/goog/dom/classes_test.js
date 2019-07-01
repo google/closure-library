@@ -25,10 +25,10 @@ goog.require('goog.dom.classes');
 goog.require('goog.testing.jsunit');
 
 
-var classes = goog.dom.classes;
+const classes = goog.dom.classes;
 
 function testGet() {
-  var el = goog.dom.createElement(goog.dom.TagName.DIV);
+  const el = goog.dom.createElement(goog.dom.TagName.DIV);
   assertArrayEquals([], goog.dom.classes.get(el));
   el.className = 'C';
   assertArrayEquals(['C'], goog.dom.classes.get(el));
@@ -41,7 +41,7 @@ function testGet() {
 }
 
 function testSetAddHasRemove() {
-  var el = goog.dom.getElement('p1');
+  const el = goog.dom.getElement('p1');
   classes.set(el, 'SOMECLASS');
   assertTrue('Should have SOMECLASS', classes.has(el, 'SOMECLASS'));
 
@@ -77,7 +77,7 @@ function testSetAddHasRemove() {
 // While support for this isn't implied in the method documentation,
 // this is a frequently used pattern.
 function testAddWithSpacesInClassName() {
-  var el = goog.dom.getElement('p1');
+  const el = goog.dom.getElement('p1');
   classes.add(el, 'CLASS1 CLASS2', 'CLASS3 CLASS4');
   assertTrue('Should have CLASS1', classes.has(el, 'CLASS1'));
   assertTrue('Should have CLASS2', classes.has(el, 'CLASS2'));
@@ -86,7 +86,7 @@ function testAddWithSpacesInClassName() {
 }
 
 function testSwap() {
-  var el = goog.dom.getElement('p1');
+  const el = goog.dom.getElement('p1');
   classes.set(el, 'SOMECLASS FIRST');
 
   assertTrue('Should have FIRST class', classes.has(el, 'FIRST'));
@@ -107,7 +107,7 @@ function testSwap() {
 }
 
 function testEnable() {
-  var el = goog.dom.getElement('p1');
+  const el = goog.dom.getElement('p1');
   classes.set(el, 'SOMECLASS FIRST');
 
   assertTrue('Should have FIRST class', classes.has(el, 'FIRST'));
@@ -125,7 +125,7 @@ function testEnable() {
 }
 
 function testToggle() {
-  var el = goog.dom.getElement('p1');
+  const el = goog.dom.getElement('p1');
   classes.set(el, 'SOMECLASS FIRST');
 
   assertTrue('Should have FIRST class', classes.has(el, 'FIRST'));
@@ -143,7 +143,7 @@ function testToggle() {
 }
 
 function testAddNotAddingMultiples() {
-  var el = goog.dom.getElement('span6');
+  const el = goog.dom.getElement('span6');
   assertTrue(classes.add(el, 'A'));
   assertEquals('A', el.className);
   assertFalse(classes.add(el, 'A'));
@@ -153,7 +153,7 @@ function testAddNotAddingMultiples() {
 }
 
 function testAddRemoveString() {
-  var el = goog.dom.getElement('span6');
+  const el = goog.dom.getElement('span6');
   el.className = 'A';
 
   goog.dom.classes.addRemove(el, 'A', 'B');
@@ -170,7 +170,7 @@ function testAddRemoveString() {
 }
 
 function testAddRemoveArray() {
-  var el = goog.dom.getElement('span6');
+  const el = goog.dom.getElement('span6');
   el.className = 'A';
 
   goog.dom.classes.addRemove(el, ['A'], ['B']);
@@ -187,7 +187,7 @@ function testAddRemoveArray() {
 }
 
 function testAddRemoveMultiple() {
-  var el = goog.dom.getElement('span6');
+  const el = goog.dom.getElement('span6');
   el.className = 'A';
 
   goog.dom.classes.addRemove(el, ['A'], ['B', 'C', 'D']);
@@ -206,21 +206,21 @@ function testAddRemoveMultiple() {
 // While support for this isn't implied in the method documentation,
 // this is a frequently used pattern.
 function testAddRemoveWithSpacesInClassName() {
-  var el = goog.dom.getElement('p1');
+  const el = goog.dom.getElement('p1');
   classes.addRemove(el, '', 'CLASS1 CLASS2');
   assertTrue('Should have CLASS1', classes.has(el, 'CLASS1'));
   assertTrue('Should have CLASS2', classes.has(el, 'CLASS2'));
 }
 
 function testHasWithNewlines() {
-  var el = goog.dom.getElement('p3');
+  const el = goog.dom.getElement('p3');
   assertTrue('Should have SOMECLASS', classes.has(el, 'SOMECLASS'));
   assertTrue('Should also have OTHERCLASS', classes.has(el, 'OTHERCLASS'));
   assertFalse('Should not have WEIRDCLASS', classes.has(el, 'WEIRDCLASS'));
 }
 
 function testEmptyClassNames() {
-  var el = goog.dom.getElement('span1');
+  const el = goog.dom.getElement('span1');
   // At the very least, make sure these do not error out.
   assertFalse('Should not have an empty class', classes.has(el, ''));
   classes.add(el, '');

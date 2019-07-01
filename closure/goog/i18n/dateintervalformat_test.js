@@ -15,26 +15,26 @@
 goog.module('goog.i18n.DateIntervalFormatTest');
 goog.setTestOnly('goog.i18n.DateIntervalFormatTest');
 
-var DateIntervalFormat = goog.require('goog.i18n.DateIntervalFormat');
-var DateRange = goog.require('goog.date.DateRange');
-var DateTime = goog.require('goog.date.DateTime');
-var DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
-var DateTimeSymbols_ar_EG = goog.require('goog.i18n.DateTimeSymbols_ar_EG');
-var DateTimeSymbols_en = goog.require('goog.i18n.DateTimeSymbols_en');
-var DateTimeSymbols_fr_CA = goog.require('goog.i18n.DateTimeSymbols_fr_CA');
-var DateTimeSymbols_gl = goog.require('goog.i18n.DateTimeSymbols_gl');
-var DateTimeSymbols_hi = goog.require('goog.i18n.DateTimeSymbols_hi');
-var DateTimeSymbols_zh = goog.require('goog.i18n.DateTimeSymbols_zh');
-var GoogDate = goog.require('goog.date.Date');
-var Interval = goog.require('goog.date.Interval');
-var TimeZone = goog.require('goog.i18n.TimeZone');
-var dateIntervalPatterns = goog.require('goog.i18n.dateIntervalPatterns');
-var dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
-var object = goog.require('goog.object');
-var testSuite = goog.require('goog.testing.testSuite');
+const DateIntervalFormat = goog.require('goog.i18n.DateIntervalFormat');
+const DateRange = goog.require('goog.date.DateRange');
+const DateTime = goog.require('goog.date.DateTime');
+const DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
+const DateTimeSymbols_ar_EG = goog.require('goog.i18n.DateTimeSymbols_ar_EG');
+const DateTimeSymbols_en = goog.require('goog.i18n.DateTimeSymbols_en');
+const DateTimeSymbols_fr_CA = goog.require('goog.i18n.DateTimeSymbols_fr_CA');
+const DateTimeSymbols_gl = goog.require('goog.i18n.DateTimeSymbols_gl');
+const DateTimeSymbols_hi = goog.require('goog.i18n.DateTimeSymbols_hi');
+const DateTimeSymbols_zh = goog.require('goog.i18n.DateTimeSymbols_zh');
+const GoogDate = goog.require('goog.date.Date');
+const Interval = goog.require('goog.date.Interval');
+const TimeZone = goog.require('goog.i18n.TimeZone');
+const dateIntervalPatterns = goog.require('goog.i18n.dateIntervalPatterns');
+const dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
+const object = goog.require('goog.object');
+const testSuite = goog.require('goog.testing.testSuite');
 
 /** @const {!Object<string, !Object>} */
-var localeSymbols = {
+const localeSymbols = {
   'ar_EG': {
     DateIntervalSymbols: dateIntervalSymbols.DateIntervalSymbols_ar_EG,
     DateTimeSymbols: DateTimeSymbols_ar_EG
@@ -69,7 +69,7 @@ var localeSymbols = {
  * @param {string} expected
  * @constructor
  */
-var Data = function(locale, firstDate, secondDate, pattern, expected) {
+const Data = function(locale, firstDate, secondDate, pattern, expected) {
   this.locale = locale;
   this.firstDate = firstDate;
   this.secondDate = secondDate;
@@ -86,7 +86,7 @@ Data.prototype.getErrorDescription = function() {
 };
 
 // clang-format off
-var formatTestData = [
+const formatTestData = [
   new Data('en', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_en.YEAR_FULL, '2007'),
   new Data('en', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_en.YEAR_FULL, '2007'),
   new Data('en', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 14, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_en.YEAR_FULL, '2007'),
@@ -175,39 +175,39 @@ var formatTestData = [
 
 testSuite({
   testFormat: function() {
-    for (var i = 0; i < formatTestData.length; i++) {
-      var data = formatTestData[i];
-      var symbols = localeSymbols[data.locale];
-      var dt1 = new Date(Date.UTC.apply(null, data.firstDate));
-      var dt2 = new Date(Date.UTC.apply(null, data.secondDate));
-      var fmt = new DateIntervalFormat(
+    for (let i = 0; i < formatTestData.length; i++) {
+      const data = formatTestData[i];
+      const symbols = localeSymbols[data.locale];
+      const dt1 = new Date(Date.UTC.apply(null, data.firstDate));
+      const dt2 = new Date(Date.UTC.apply(null, data.secondDate));
+      const fmt = new DateIntervalFormat(
           data.pattern, symbols.DateIntervalSymbols, symbols.DateTimeSymbols);
-      var tz = TimeZone.createTimeZone(0);
+      const tz = TimeZone.createTimeZone(0);
       assertEquals(
           data.getErrorDescription(), data.expected, fmt.format(dt1, dt2, tz));
     }
   },
 
   testRangeFormat: function() {
-    var dt1 = new GoogDate(2007, 1, 10);
-    var dt2 = new GoogDate(2007, 6, 3);
-    var dtRng = new DateRange(dt1, dt2);
-    var fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE);
+    const dt1 = new GoogDate(2007, 1, 10);
+    const dt2 = new GoogDate(2007, 6, 3);
+    const dtRng = new DateRange(dt1, dt2);
+    const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE);
     assertEquals('February 10 – July 3, 2007', fmt.formatRange(dtRng));
   },
 
   testDateAndIntervalFormat: function() {
-    var dt = new GoogDate(2007, 1, 10);
-    var itv = new Interval(0, 4, 23);
-    var fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE);
+    const dt = new GoogDate(2007, 1, 10);
+    const itv = new Interval(0, 4, 23);
+    const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE);
     assertEquals('February 10 – July 3, 2007', fmt.format(dt, itv));
   },
 
   testNewYearFormat: function() {
-    var dt1 = new Date(Date.UTC(2007, 0, 1, 3, 0, 23));
-    var dt2 = new Date(Date.UTC(2007, 0, 1, 3, 40, 23));
-    var fmt = new DateIntervalFormat(DateTimeFormat.Format.FULL_DATETIME);
-    var tz = TimeZone.createTimeZone(210);
+    const dt1 = new Date(Date.UTC(2007, 0, 1, 3, 0, 23));
+    const dt2 = new Date(Date.UTC(2007, 0, 1, 3, 40, 23));
+    const fmt = new DateIntervalFormat(DateTimeFormat.Format.FULL_DATETIME);
+    const tz = TimeZone.createTimeZone(210);
     assertEquals(
         'Sunday, December 31, 2006 at 11:30:23 PM UTC-3:30 – ' +
             'Monday, January 1, 2007 at 12:10:23 AM UTC-3:30',
@@ -215,30 +215,31 @@ testSuite({
   },
 
   testTimeZone: function() {
-    var dt1 = new Date(Date.UTC(2007, 0, 10, 6, 0, 23));
-    var dt2 = new Date(Date.UTC(2007, 0, 10, 6, 20, 23));
-    var fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_TIME);
-    var tz = TimeZone.createTimeZone(240);
+    const dt1 = new Date(Date.UTC(2007, 0, 10, 6, 0, 23));
+    const dt2 = new Date(Date.UTC(2007, 0, 10, 6, 20, 23));
+    const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_TIME);
+    const tz = TimeZone.createTimeZone(240);
     assertEquals(
         '2:00:23 AM UTC-4 – 2:20:23 AM UTC-4', fmt.format(dt1, dt2, tz));
   },
 
   testFormatSecondDateWithFirstPattern: function() {
     // Set the new fallback pattern.
-    var symbols = object.clone(dateIntervalSymbols.getDateIntervalSymbols());
+    const symbols = object.clone(dateIntervalSymbols.getDateIntervalSymbols());
     symbols.FALLBACK = '{1} – {0}';
     // Format the dates.
-    var dt1 = new GoogDate(2007, 1, 10);
-    var dt2 = new GoogDate(2007, 6, 3);
-    var fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE, symbols);
+    const dt1 = new GoogDate(2007, 1, 10);
+    const dt2 = new GoogDate(2007, 6, 3);
+    const fmt =
+        new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE, symbols);
     assertEquals('July 3 – February 10, 2007', fmt.format(dt1, dt2));
   },
 
   testGetLargestDifferentCalendarField: function() {
     // Era
-    var dt1 = new DateTime(-1, 1, 10);
-    var dt2 = new DateTime(2007, 6, 3);
-    var calField =
+    let dt1 = new DateTime(-1, 1, 10);
+    let dt2 = new DateTime(2007, 6, 3);
+    let calField =
         DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
     assertEquals('G', calField);
     // Month
@@ -254,7 +255,7 @@ testSuite({
     // AmPm + Timezone
     dt1 = new Date(Date.UTC(2007, 1, 10, 8, 25));
     dt2 = new Date(Date.UTC(2007, 1, 10, 8, 35));
-    var tz = new TimeZone.createTimeZone(-210);
+    const tz = new TimeZone.createTimeZone(-210);
     calField =
         DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2, tz);
     assertEquals('a', calField);
@@ -266,7 +267,7 @@ testSuite({
   },
 
   testDivideIntervalPattern: function() {
-    var pttn = DateIntervalFormat.divideIntervalPattern_('MMM d – d, y');
+    let pttn = DateIntervalFormat.divideIntervalPattern_('MMM d – d, y');
     assertObjectEquals({firstPart: 'MMM d – ', secondPart: 'd, y'}, pttn);
     pttn = DateIntervalFormat.divideIntervalPattern_('MMM d, y');
     assertNull(pttn);

@@ -15,28 +15,32 @@
 goog.module('goog.net.IframeLoadMonitorTest');
 goog.setTestOnly('goog.net.IframeLoadMonitorTest');
 
-var IframeLoadMonitor = goog.require('goog.net.IframeLoadMonitor');
-var Promise = goog.require('goog.Promise');
-var TagName = goog.require('goog.dom.TagName');
-var Timer = goog.require('goog.Timer');
-var dom = goog.require('goog.dom');
-var events = goog.require('goog.events');
-var testSuite = goog.require('goog.testing.testSuite');
+const IframeLoadMonitor = goog.require('goog.net.IframeLoadMonitor');
+const Promise = goog.require('goog.Promise');
+const TagName = goog.require('goog.dom.TagName');
+const Timer = goog.require('goog.Timer');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
 
 
-var TEST_FRAME_SRC = 'iframeloadmonitor_test_frame.html';
-var frameParent;
+const TEST_FRAME_SRC = 'iframeloadmonitor_test_frame.html';
+let frameParent;
 
 
 testSuite({
-  setUpPage: function() { frameParent = dom.getElement('frame_parent'); },
+  setUpPage: function() {
+    frameParent = dom.getElement('frame_parent');
+  },
 
-  tearDown: function() { dom.removeChildren(frameParent); },
+  tearDown: function() {
+    dom.removeChildren(frameParent);
+  },
 
   testIframeLoadMonitor: function() {
-    var frame = dom.createDom(TagName.IFRAME);
-    var monitor = new IframeLoadMonitor(frame);
-    var monitorPromise = new Promise(function(resolve, reject) {
+    const frame = dom.createDom(TagName.IFRAME);
+    const monitor = new IframeLoadMonitor(frame);
+    const monitorPromise = new Promise(function(resolve, reject) {
       events.listen(monitor, IframeLoadMonitor.LOAD_EVENT, resolve);
     });
 
@@ -50,9 +54,9 @@ testSuite({
   },
 
   testIframeLoadMonitor_withContentCheck: function() {
-    var frame = dom.createDom(TagName.IFRAME);
-    var monitor = new IframeLoadMonitor(frame, true);
-    var monitorPromise = new Promise(function(resolve, reject) {
+    const frame = dom.createDom(TagName.IFRAME);
+    const monitor = new IframeLoadMonitor(frame, true);
+    const monitorPromise = new Promise(function(resolve, reject) {
       events.listen(monitor, IframeLoadMonitor.LOAD_EVENT, resolve);
     });
 

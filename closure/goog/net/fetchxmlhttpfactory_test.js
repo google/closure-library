@@ -25,19 +25,19 @@ goog.require('goog.userAgent.product.isVersion');
 
 
 /** @type {!goog.testing.MockControl} */
-var mockControl;
+let mockControl;
 
 
 /** @type {!goog.testing.FunctionMock} */
-var fetchMock;
+let fetchMock;
 
 
 /** @type {!goog.net.FetchXmlHttpFactory} */
-var factory;
+let factory;
 
 
 /** @type {!WorkerGlobalScope} */
-var worker;
+let worker;
 
 
 /**
@@ -68,12 +68,12 @@ function tearDown() {
 function testOpen() {
   mockControl.$replayAll();
 
-  var xhr = factory.createInstance();
+  const xhr = factory.createInstance();
   assertEquals(0, xhr.status);
   assertEquals('', xhr.responseText);
   assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.UNSENT);
 
-  var onReadyStateChangeHandler = new goog.testing.recordFunction();
+  const onReadyStateChangeHandler = new goog.testing.recordFunction();
   xhr.onreadystatechange = onReadyStateChangeHandler;
   xhr.open('GET', 'https://www.google.com', true /* opt_async */);
   assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.OPENED);
@@ -89,7 +89,7 @@ function testOpen() {
 function testOpen_notUnsent() {
   mockControl.$replayAll();
 
-  var xhr = factory.createInstance();
+  const xhr = factory.createInstance();
   xhr.open('GET', 'https://www.google.com', true /* opt_async */);
   assertThrows(function() {
     xhr.open('GET', 'https://www.google.com', true /* opt_async */);
@@ -105,7 +105,7 @@ function testOpen_notUnsent() {
 function testOpen_notAsync() {
   mockControl.$replayAll();
 
-  var xhr = factory.createInstance();
+  const xhr = factory.createInstance();
 
   assertThrows(function() {
     xhr.open('GET', 'https://www.google.com', false /* opt_async */);
@@ -193,20 +193,20 @@ function verifySend(
     sendMethod, expectedStatusCode = 200, isStream = false,
     isArrayBuffer = false) {
   return new Promise((resolve, reject) => {
-    var xhr = factory.createInstance();
-    var expectedBody = 'responseBody';
+    const xhr = factory.createInstance();
+    const expectedBody = 'responseBody';
     if (isArrayBuffer) {
       xhr.responseType = 'arraybuffer';
     }
     xhr.open(sendMethod, 'https://www.google.com', true /* opt_async */);
-    var lastState;
-    var lastBufferSize = 0;
-    var numberOfUpdates = 0;
+    let lastState;
+    let lastBufferSize = 0;
+    let numberOfUpdates = 0;
     xhr.onreadystatechange = function() {
       if (xhr.readyState ===
           goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED) {
         lastState = xhr.readyState;
-        var expectedHeaders =
+        let expectedHeaders =
             'dummyheader: dummyHeaderValue\r\ndummyheader2: dummyHeaderValue2';
         if (!isStream && !isArrayBuffer) {
           expectedHeaders =
@@ -303,7 +303,7 @@ function testSend_arrayBuffer() {
  * @return {!Promise<void>}
  */
 function testSend_failToFetch() {
-  var failedPromise = new Promise(function() {
+  const failedPromise = new Promise(function() {
     throw new Error('failed to fetch');
   });
   fetchMock(new Request('https://www.google.com', {
@@ -313,7 +313,7 @@ function testSend_failToFetch() {
 
   mockControl.$replayAll();
   return new Promise((resolve) => {
-    var xhr = factory.createInstance();
+    const xhr = factory.createInstance();
     xhr.open('GET', 'https://www.google.com', true /* opt_async */);
     xhr.onreadystatechange = function() {
       assertEquals(xhr.readyState, goog.net.FetchXmlHttp.RequestState.DONE);
@@ -334,7 +334,7 @@ function testSend_failToFetch() {
  * @return {!Response}
  */
 function createSuccessResponse() {
-  var headers = new Headers();
+  const headers = new Headers();
   headers.set('dummyHeader', 'dummyHeaderValue');
   headers.set('dummyHeader2', 'dummyHeaderValue2');
   return new Response(
@@ -382,7 +382,7 @@ function createArrayBufferResponse() {
  * @return {!Response}
  */
 function createFailedResponse() {
-  var headers = new Headers();
+  const headers = new Headers();
   headers.set('dummyHeader', 'dummyHeaderValue');
   headers.set('dummyHeader2', 'dummyHeaderValue2');
   return new Response(

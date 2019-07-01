@@ -25,11 +25,11 @@ goog.require('goog.testing.recordFunction');
 
 
 /** @type {goog.net.XhrManager} */
-var xhrManager;
+let xhrManager;
 
 
 /** @type {goog.testing.net.XhrIo} */
-var xhrIo;
+let xhrIo;
 
 
 function setUp() {
@@ -84,7 +84,7 @@ function testForceAbortQueuedRequest() {
 
 
 function testDefaultResponseType() {
-  var callback = goog.testing.recordFunction(function(e) {
+  const callback = goog.testing.recordFunction(function(e) {
     assertEquals('test1', e.id);
     assertEquals(
         goog.net.XhrIo.ResponseType.DEFAULT, e.xhrIo.getResponseType());
@@ -99,7 +99,7 @@ function testDefaultResponseType() {
 
 
 function testNonDefaultResponseType() {
-  var callback = goog.testing.recordFunction(function(e) {
+  const callback = goog.testing.recordFunction(function(e) {
     assertEquals('test2', e.id);
     assertEquals(
         goog.net.XhrIo.ResponseType.ARRAY_BUFFER, e.xhrIo.getResponseType());
