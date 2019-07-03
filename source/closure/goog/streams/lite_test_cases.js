@@ -12,51 +12,78 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.module('goog.streams.liteImplTest');
+goog.module('goog.streams.liteTestCases');
 goog.setTestOnly();
 
-const full = goog.require('goog.streams.full');
-const testSuite = goog.require('goog.testing.testSuite');
-const {ReadableStream, ReadableStreamDefaultController, newReadableStream} = goog.require('goog.streams.lite');
+const {ReadableStream, ReadableStreamDefaultController, ReadableStreamUnderlyingSource} = goog.require('goog.streams.liteTypes');
+/** @suppress {extraRequire} */
+goog.require('goog.testing.jsunit');
 
-/** @type {!ReadableStream<string>} */
-let stream;
-/** @type {!ReadableStreamDefaultController<string>} */
-let controller;
+class TestCases {
+  /**
+   * @param {function(!ReadableStreamUnderlyingSource): !ReadableStream}
+   *     newReadableStream
+   */
+  constructor(newReadableStream) {
+    /** @const */
+    this.newReadableStream = newReadableStream;
+  }
 
-const tests = {
+  /**
+   * @param {!ReadableStreamUnderlyingSource=} underlyingSource
+   * @return {{stream: !ReadableStream<string>, controller:
+   *     !ReadableStreamDefaultController<string>}}
+   */
+  newReadableStreamWithController(underlyingSource = {}) {
+    let controller;
+    const start = underlyingSource.start;
+    underlyingSource = Object.assign({}, underlyingSource, {
+      start(ctlr) {
+        controller = ctlr;
+        return start && start(ctlr);
+      },
+    });
+    const stream = this.newReadableStream(underlyingSource);
+    return {stream, controller};
+  }
+
   async testEnqueue_ThenRead() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const chunk = 'foo';
     controller.enqueue(chunk);
     const reader = stream.getReader();
     const readResult = await reader.read();
     assertFalse(readResult.done);
     assertEquals(chunk, readResult.value);
-  },
+  }
 
   testEnqueue_Closed() {
+    const {controller} = this.newReadableStreamWithController();
     controller.close();
     assertThrows(() => {
       controller.enqueue('foo');
     });
-  },
+  }
 
   testEnqueue_Closing() {
+    const {controller} = this.newReadableStreamWithController();
     controller.enqueue('foo');
     controller.close();
     assertThrows(() => {
       controller.enqueue('bar');
     });
-  },
+  }
 
   testEnqueue_Errored() {
+    const {controller} = this.newReadableStreamWithController();
     controller.error(new Error('error'));
     assertThrows(() => {
       controller.enqueue('foo');
     });
-  },
+  }
 
   async testRead_ThenEnqueue() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const chunk = 'foo';
     const reader = stream.getReader();
     const read = reader.read();
@@ -64,17 +91,19 @@ const tests = {
     const readResult = await read;
     assertFalse(readResult.done);
     assertEquals(chunk, readResult.value);
-  },
+  }
 
   async testRead_Closed() {
+    const {stream, controller} = this.newReadableStreamWithController();
     controller.close();
     const reader = stream.getReader();
     const readResult = await reader.read();
     assertTrue(readResult.done);
     assertUndefined(readResult.value);
-  },
+  }
 
   async testRead_Closing() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const chunk = 'foo';
     controller.enqueue(chunk);
     controller.close();
@@ -85,67 +114,75 @@ const tests = {
     readResult = await reader.read();
     assertTrue(readResult.done);
     assertUndefined(readResult.value);
-  },
+  }
 
   async testRead_Errored() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const error = new Error('error');
     controller.error(error);
     const reader = stream.getReader();
     const rejectedError = await assertRejects(reader.read());
     assertEquals(error, rejectedError);
-  },
+  }
 
   async testRead_ThenClosed() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const reader = stream.getReader();
     const read = reader.read();
     controller.close();
     const readResult = await read;
     assertTrue(readResult.done);
     assertUndefined(readResult.value);
-  },
+  }
 
   async testRead_ThenErrored() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const error = new Error('error');
     const reader = stream.getReader();
     const read = reader.read();
     controller.error(error);
     const rejectedError = await assertRejects(read);
     assertEquals(error, rejectedError);
-  },
+  }
 
   testClose_Closed() {
+    const {controller} = this.newReadableStreamWithController();
     controller.close();
     assertThrows(() => {
       controller.close();
     });
-  },
+  }
 
   testClose_Closing() {
+    const {controller} = this.newReadableStreamWithController();
     controller.enqueue('foo');
     controller.close();
     assertThrows(() => {
       controller.close();
     });
-  },
+  }
 
   async testLocked() {
+    const {stream, controller} = this.newReadableStreamWithController();
     assertFalse(stream.locked);
     const reader = stream.getReader();
     assertTrue(stream.locked);
     reader.releaseLock();
     assertFalse(stream.locked);
-  },
+  }
 
   testLocked_Closed() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const reader = stream.getReader();
     assertTrue(stream.locked);
     controller.close();
     assertTrue(stream.locked);
     reader.releaseLock();
     assertFalse(stream.locked);
-  },
+  }
 
   testLocked_Closing() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const reader = stream.getReader();
     controller.enqueue('foo');
     assertTrue(stream.locked);
@@ -153,34 +190,38 @@ const tests = {
     assertTrue(stream.locked);
     reader.releaseLock();
     assertFalse(stream.locked);
-  },
+  }
 
   testLocked_Errored() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const reader = stream.getReader();
     assertTrue(stream.locked);
-    stream.error(new Error('error'));
+    controller.error(new Error('error'));
     assertTrue(stream.locked);
     reader.releaseLock();
     assertFalse(stream.locked);
-  },
+  }
 
   async testClosed_Close() {
-    stream.close();
+    const {stream, controller} = this.newReadableStreamWithController();
+    controller.close();
     const reader = stream.getReader();
     const closed = reader.closed;
     const closedResult = await closed;
     assertUndefined(closedResult);
-  },
+  }
 
   async testClosed_ThenClosed() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const reader = stream.getReader();
     const closed = reader.closed;
-    stream.close();
+    controller.close();
     const closedResult = await closed;
     assertUndefined(closedResult);
-  },
+  }
 
   async testClosed_Closing() {
+    const {stream, controller} = this.newReadableStreamWithController();
     controller.enqueue('foo');
     controller.close();
     const reader = stream.getReader();
@@ -188,9 +229,10 @@ const tests = {
     await reader.read();
     const closedResult = await closed;
     assertUndefined(closedResult);
-  },
+  }
 
   async testClosed_ThenClosing() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const reader = stream.getReader();
     const closed = reader.closed;
     controller.enqueue('foo');
@@ -198,54 +240,60 @@ const tests = {
     await reader.read();
     const closedResult = await closed;
     assertUndefined(closedResult);
-  },
+  }
 
   async testClosed_Errored() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const error = new Error('error');
     controller.error(error);
     const reader = stream.getReader();
     const rejectedError = await assertRejects(reader.closed);
     assertEquals(error, rejectedError);
-  },
+  }
 
   async testClosed_ThenErrored() {
+    const {stream, controller} = this.newReadableStreamWithController();
     const reader = stream.getReader();
     const closed = reader.closed;
     controller.error(new Error('error'));
     await assertRejects(closed);
-  },
+  }
 
   async testClosed_ThenReleaseLock() {
+    const {stream} = this.newReadableStreamWithController();
     const reader = stream.getReader();
     const closed = reader.closed;
     reader.releaseLock();
     await assertRejects(closed);
-  },
+  }
 
   testGetReader_WhileLocked() {
+    const {stream} = this.newReadableStreamWithController();
     stream.getReader();
     assertThrows(() => {
       stream.getReader();
     });
-  },
+  }
 
   testReleaseLock_WhileOutstandingReads() {
+    const {stream} = this.newReadableStreamWithController();
     const reader = stream.getReader();
     reader.read();
     assertThrows(() => {
       reader.releaseLock();
     });
-  },
+  }
 
   testReleaseLock_Released() {
+    const {stream} = this.newReadableStreamWithController();
     const reader = stream.getReader();
     reader.releaseLock();
     reader.releaseLock();
-  },
+  }
 
   async testStart_RejectedPromise() {
     const error = new Error('error');
-    const stream = newReadableStream({
+    const stream = this.newReadableStream({
       start() {
         return Promise.reject(error);
       }
@@ -253,57 +301,9 @@ const tests = {
     const reader = stream.getReader();
     const rejectedError = await assertRejects(reader.read());
     assertEquals(error, rejectedError);
-  },
+  }
+}
+
+exports = {
+  TestCases,
 };
-
-testSuite(Object.assign({}, tests, {
-  setUp() {
-    stream = newReadableStream({
-      /** @param  {!ReadableStreamDefaultController<string>} ctlr */
-      start(ctlr) {
-        controller = ctlr;
-      },
-    });
-  },
-
-  testNewReadableStream_InvalidAttributes() {
-    assertThrows(() => {
-      newReadableStream({});
-    });
-    assertThrows(() => {
-      newReadableStream({
-        start() {},
-        pull() {},
-      });
-    });
-    assertThrows(() => {
-      newReadableStream({
-        start() {},
-        cancel() {},
-      });
-    });
-    assertThrows(() => {
-      newReadableStream({
-        start() {},
-        type: 'bytes',
-      });
-    });
-    assertThrows(() => {
-      newReadableStream({
-        start() {},
-        autoAllocateChunkSize: 1,
-      });
-    });
-  },
-
-  testfull: Object.assign({}, tests, {
-    setUp() {
-      stream = full.newReadableStream({
-        /** @param  {!ReadableStreamDefaultController<string>} ctlr */
-        start(ctlr) {
-          controller = ctlr;
-        },
-      });
-    },
-  }),
-}));

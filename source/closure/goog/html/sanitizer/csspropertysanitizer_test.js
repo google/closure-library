@@ -17,15 +17,15 @@
 goog.module('goog.html.sanitizer.CssPropertySanitizerTest');
 goog.setTestOnly();
 
-var CssPropertySanitizer = goog.require('goog.html.sanitizer.CssPropertySanitizer');
-var SafeUrl = goog.require('goog.html.SafeUrl');
-var googFunctions = goog.require('goog.functions');
-var noclobber = goog.require('goog.html.sanitizer.noclobber');
-var product = goog.require('goog.userAgent.product');
-var testSuite = goog.require('goog.testing.testSuite');
+const CssPropertySanitizer = goog.require('goog.html.sanitizer.CssPropertySanitizer');
+const SafeUrl = goog.require('goog.html.SafeUrl');
+const googFunctions = goog.require('goog.functions');
+const noclobber = goog.require('goog.html.sanitizer.noclobber');
+const product = goog.require('goog.userAgent.product');
+const testSuite = goog.require('goog.testing.testSuite');
 
 
-var NAME = 'foo';
+const NAME = 'foo';
 
 /**
  * @param {string} name
@@ -33,7 +33,7 @@ var NAME = 'foo';
  * @return {!CSSStyleDeclaration}
  */
 function getProcessedPropertyValue(name, value) {
-  var div = document.createElement('div');
+  const div = document.createElement('div');
   div.innerHTML =
       '<div style="' + name + ': ' + value.replace(/"/g, '&quot;') + '"></div>';
   return noclobber.getCssPropertyValue(div.children[0].style, name);
@@ -97,7 +97,7 @@ testSuite({
 
   testBrowserBehavior_escapedQuotes() {
     // Verify how browsers deal with escaped quotes inside strings.
-    var expectedValue;
+    let expectedValue;
     if (product.CHROME || product.FIREFOX) {
       expectedValue = 'url("http://foo.com/a\\")")';
     } else if (product.SAFARI) {
@@ -129,7 +129,7 @@ testSuite({
   testBrowserBehavior_escapedQuotesMultiple() {
     // Same as above, but check what happens if there are other values after the
     // string-based one.
-    var expectedValue;
+    let expectedValue;
     if (product.CHROME || product.FIREFOX) {
       expectedValue = 'url("http://foo.com/a\\"), rgba(1,1,1,0)")';
     } else if (product.SAFARI) {
@@ -207,7 +207,7 @@ testSuite({
   },
 
   testSanitizeProperty_complexNested() {
-    var expectedValue = 'background-image: repeating-linear-gradient(' +
+    const expectedValue = 'background-image: repeating-linear-gradient(' +
         '-45deg, rgb(66, 133, 244), rgb(66, 133, 244) 4px, ' +
         'rgb(255, 255, 255) 4px, rgb(255, 255, 255) 5px, ' +
         'rgb(66, 133, 244) 5px, rgb(66, 133, 244) 8px);';
@@ -217,7 +217,7 @@ testSuite({
   },
 
   testSanitizeProperty_url() {
-    var url = 'url("http://foo.com")';
+    const url = 'url("http://foo.com")';
     assertEquals(null, CssPropertySanitizer.sanitizeProperty(NAME, url));
     assertEquals(
         null,

@@ -17,22 +17,22 @@
 goog.module('goog.html.sanitizer.ElementWeakMapTest');
 goog.setTestOnly();
 
-var ElementWeakMap = goog.require('goog.html.sanitizer.ElementWeakMap');
-var testSuite = goog.require('goog.testing.testSuite');
-var userAgent = goog.require('goog.userAgent');
+const ElementWeakMap = goog.require('goog.html.sanitizer.ElementWeakMap');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
 /** @const {boolean} */
-var ELEMENTWEAKMAP_SUPPORTED = !userAgent.IE || document.documentMode >= 10;
+const ELEMENTWEAKMAP_SUPPORTED = !userAgent.IE || document.documentMode >= 10;
 
 testSuite({
   testBasic() {
     if (!ELEMENTWEAKMAP_SUPPORTED) {
       return;
     }
-    var el1 = document.createElement('a');
-    var el2 = document.createElement('b');
-    var el3 = document.createElement('a');
-    var weakMap = ElementWeakMap.newWeakMap();
+    const el1 = document.createElement('a');
+    const el2 = document.createElement('b');
+    const el3 = document.createElement('a');
+    const weakMap = ElementWeakMap.newWeakMap();
     weakMap.set(el1, 1);
     weakMap.set(el2, 2);
 
@@ -45,9 +45,9 @@ testSuite({
     if (!ELEMENTWEAKMAP_SUPPORTED) {
       return;
     }
-    var el1 = document.createElement('a');
-    var el2 = document.createElement('a');
-    var weakMap = ElementWeakMap.newWeakMap();
+    const el1 = document.createElement('a');
+    const el2 = document.createElement('a');
+    const weakMap = ElementWeakMap.newWeakMap();
     weakMap.set(el1, 1);
     weakMap.set(el1, 2);
 
@@ -59,8 +59,8 @@ testSuite({
     if (!ELEMENTWEAKMAP_SUPPORTED) {
       return;
     }
-    var el = document.createElement('a');
-    var weakMap = ElementWeakMap.newWeakMap();
+    const el = document.createElement('a');
+    const weakMap = ElementWeakMap.newWeakMap();
     weakMap.set(el, 1);
     weakMap.set(el, 2);
 

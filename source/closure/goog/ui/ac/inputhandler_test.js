@@ -113,7 +113,7 @@ MockInputHandler.prototype.fireKeyEvents = function(
 
 /** Simulates an event. */
 MockInputHandler.prototype.fireEvent = function(type, keyCode, opt_properties) {
-  var e = {};
+  let e = {};
   e.type = type;
   e.keyCode = keyCode;
   e.preventDefault = function() {};
@@ -136,11 +136,17 @@ MockInputHandler.prototype.getCursorPosition = function() {
 };
 
 // Variables used by all test
-var mh = null;
-var oldMac, oldWin, oldLinux, oldIe, oldFf, oldWebkit, oldVersion;
-var oldUsesKeyDown;
-var mockElement;
-var mockClock;
+let mh = null;
+let oldMac;
+let oldWin;
+let oldLinux;
+let oldIe;
+let oldFf;
+let oldWebkit;
+let oldVersion;
+let oldUsesKeyDown;
+let mockElement;
+let mockClock;
 
 function setUp() {
   oldMac = goog.userAgent.MAC;
@@ -504,7 +510,7 @@ function testImeLinuxFirefox() {
  * Check attaching to an EventTarget instead of an element.
  */
 function testAttachEventTarget() {
-  var target = new goog.events.EventTarget();
+  const target = new goog.events.EventTarget();
 
   assertNull(mh.activeElement_);
   mh.attachInput(target);
@@ -541,7 +547,7 @@ function testActiveElement() {
  * We can attach an EventTarget that isn't an element.
  */
 function testAttachEventTarget() {
-  var target = new goog.events.EventTarget();
+  const target = new goog.events.EventTarget();
 
   assertNull(mh.activeElement_);
   mh.attachInput(target);
@@ -558,7 +564,7 @@ function testAttachEventTarget() {
  * Make sure an already-focused element becomes active immediately.
  */
 function testActiveElementAlreadyFocused() {
-  var element = document.getElementById('textInput');
+  const element = document.getElementById('textInput');
   element.style.display = '';
   element.focus();
 
@@ -572,14 +578,14 @@ function testActiveElementAlreadyFocused() {
 }
 
 function testUpdateDoesNotTriggerSetTokenForSelectRow() {
-  var ih = new goog.ui.ac.InputHandler();
+  const ih = new goog.ui.ac.InputHandler();
 
   // Set up our input handler with the necessary mocks
-  var mockAutoCompleter = new MockAutoCompleter();
+  const mockAutoCompleter = new MockAutoCompleter();
   ih.ac_ = mockAutoCompleter;
   ih.activeElement_ = mockElement;
 
-  var row = {};
+  const row = {};
   ih.selectRow(row, false);
 
   ih.update();
@@ -594,10 +600,10 @@ function testUpdateDoesNotTriggerSetTokenForSelectRow() {
 }
 
 function testSetTokenText() {
-  var ih = new MockInputHandler();
+  const ih = new MockInputHandler();
 
   // Set up our input handler with the necessary mocks
-  var mockAutoCompleter = new MockAutoCompleter();
+  const mockAutoCompleter = new MockAutoCompleter();
   ih.ac_ = mockAutoCompleter;
   ih.activeElement_ = mockElement;
   mockElement.value = 'bob, wal, joey';
@@ -609,12 +615,12 @@ function testSetTokenText() {
 }
 
 function testSetTokenTextLeftHandSideOfToken() {
-  var ih = new MockInputHandler();
+  const ih = new MockInputHandler();
   ih.setSeparators(' ');
   ih.setWhitespaceWrapEntries(false);
 
   // Set up our input handler with the necessary mocks
-  var mockAutoCompleter = new MockAutoCompleter();
+  const mockAutoCompleter = new MockAutoCompleter();
   ih.ac_ = mockAutoCompleter;
   ih.activeElement_ = mockElement;
   mockElement.value = 'foo bar';
@@ -627,12 +633,12 @@ function testSetTokenTextLeftHandSideOfToken() {
 }
 
 function testSetTokenTextAppendSeparator() {
-  var ih = new MockInputHandler();
+  const ih = new MockInputHandler();
   ih.setSeparators('\n');
   ih.setWhitespaceWrapEntries(false);
 
   // Set up our input handler with the necessary mocks
-  var mockAutoCompleter = new MockAutoCompleter();
+  const mockAutoCompleter = new MockAutoCompleter();
   ih.ac_ = mockAutoCompleter;
   ih.activeElement_ = mockElement;
   mockElement.value = 'foo bar';
@@ -645,13 +651,13 @@ function testSetTokenTextAppendSeparator() {
 }
 
 function testSetTokenTextDontAppendSeparator() {
-  var ih = new MockInputHandler();
+  const ih = new MockInputHandler();
   ih.setSeparators('\n');
   ih.setWhitespaceWrapEntries(false);
   ih.setEndsWithSeparatorRegExp(null);
 
   // Set up our input handler with the necessary mocks
-  var mockAutoCompleter = new MockAutoCompleter();
+  const mockAutoCompleter = new MockAutoCompleter();
   ih.ac_ = mockAutoCompleter;
   ih.activeElement_ = mockElement;
   mockElement.value = 'foo bar';
@@ -664,8 +670,8 @@ function testSetTokenTextDontAppendSeparator() {
 }
 
 function testEmptyTokenWithSeparator() {
-  var ih = new goog.ui.ac.InputHandler();
-  var mockAutoCompleter = new MockAutoCompleter();
+  const ih = new goog.ui.ac.InputHandler();
+  const mockAutoCompleter = new MockAutoCompleter();
   ih.ac_ = mockAutoCompleter;
   ih.activeElement_ = mockElement;
   mockElement.value = ', ,';
@@ -682,8 +688,8 @@ function testEmptyTokenWithSeparator() {
 }
 
 function testNonEmptyTokenWithSeparator() {
-  var ih = new goog.ui.ac.InputHandler();
-  var mockAutoCompleter = new MockAutoCompleter();
+  const ih = new goog.ui.ac.InputHandler();
+  const mockAutoCompleter = new MockAutoCompleter();
   ih.ac_ = mockAutoCompleter;
   ih.activeElement_ = mockElement;
   mockElement.value = ', joe ,';
@@ -700,13 +706,13 @@ function testNonEmptyTokenWithSeparator() {
 }
 
 function testGetThrottleTime() {
-  var ih = new goog.ui.ac.InputHandler();
+  const ih = new goog.ui.ac.InputHandler();
   ih.setThrottleTime(999);
   assertEquals('throttle time set+get', 999, ih.getThrottleTime());
 }
 
 function testGetUpdateDuringTyping() {
-  var ih = new goog.ui.ac.InputHandler();
+  const ih = new goog.ui.ac.InputHandler();
   ih.setUpdateDuringTyping(false);
   assertFalse('update during typing set+get', ih.getUpdateDuringTyping());
 }
@@ -751,19 +757,19 @@ function testShiftTabDoesNotSelect() {
 }
 
 function testEmptySeparatorUsesDefaults() {
-  var inputHandler = new goog.ui.ac.InputHandler('');
+  const inputHandler = new goog.ui.ac.InputHandler('');
   assertFalse(inputHandler.separatorCheck_.test(''));
   assertFalse(inputHandler.separatorCheck_.test('x'));
   assertTrue(inputHandler.separatorCheck_.test(','));
 }
 
 function testMultipleSeparatorUsesEmptyDefaults() {
-  var inputHandler = new goog.ui.ac.InputHandler(',\n', null, true);
+  const inputHandler = new goog.ui.ac.InputHandler(',\n', null, true);
   inputHandler.setWhitespaceWrapEntries(false);
   inputHandler.setSeparators(',\n', '');
 
   // Set up our input handler with the necessary mocks
-  var mockAutoCompleter = new MockAutoCompleter();
+  const mockAutoCompleter = new MockAutoCompleter();
   inputHandler.ac_ = mockAutoCompleter;
   inputHandler.activeElement_ = mockElement;
   mockElement.value = 'bob,wal';
@@ -776,7 +782,7 @@ function testMultipleSeparatorUsesEmptyDefaults() {
 
 
 function testAriaTags() {
-  var target = goog.dom.createDom(goog.dom.TagName.DIV);
+  const target = goog.dom.createDom(goog.dom.TagName.DIV);
   mh.attachInput(target);
 
   assertEquals(goog.a11y.aria.Role.COMBOBOX, goog.a11y.aria.getRole(target));

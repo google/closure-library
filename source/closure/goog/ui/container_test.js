@@ -32,11 +32,11 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.Container');
 goog.require('goog.ui.Control');
 
-var sandbox;
-var containerElement;
-var container;
-var keyContainer;
-var listContainer;
+let sandbox;
+let containerElement;
+let container;
+let keyContainer;
+let listContainer;
 
 function setUpPage() {
   sandbox = goog.dom.getElement('sandbox');
@@ -193,7 +193,7 @@ function testGetOwnerControl() {
 function testShowEvent() {
   container.decorate(containerElement);
   container.setVisible(false);
-  var eventFired = false;
+  let eventFired = false;
   goog.events.listen(container, goog.ui.Component.EventType.SHOW, function() {
     assertFalse(
         'Container must not be visible when SHOW event is ' +
@@ -208,7 +208,7 @@ function testShowEvent() {
 function testAfterShowEvent() {
   container.decorate(containerElement);
   container.setVisible(false);
-  var eventFired = false;
+  let eventFired = false;
   goog.events.listen(
       container, goog.ui.Container.EventType.AFTER_SHOW, function() {
         assertTrue(
@@ -222,10 +222,10 @@ function testAfterShowEvent() {
 }
 
 function testHideEvents() {
-  var events = [];
+  const events = [];
   container.decorate(containerElement);
   container.setVisible(true);
-  var eventFired = false;
+  const eventFired = false;
   goog.events.listen(container, goog.ui.Component.EventType.HIDE, function(e) {
     assertTrue(
         'Container must be visible when HIDE event is fired',
@@ -265,10 +265,10 @@ goog.inherits(ListContainer, goog.ui.Container);
 /** @override */
 ListContainer.prototype.createDom = function() {
   ListContainer.superClass_.createDom.call(this);
-  var ul = this.getDomHelper().createDom(goog.dom.TagName.UL);
+  const ul = this.getDomHelper().createDom(goog.dom.TagName.UL);
   this.forEachChild(function(child) {
     child.createDom();
-    var childEl = child.getElement();
+    const childEl = child.getElement();
     ul.appendChild(
         this.getDomHelper().createDom(goog.dom.TagName.LI, {}, childEl));
   }, this);
@@ -277,10 +277,10 @@ ListContainer.prototype.createDom = function() {
 
 function testGetOwnerControlWithNoRenderingInAddChild() {
   listContainer = new ListContainer();
-  var control = new goog.ui.Control('item');
+  const control = new goog.ui.Control('item');
   listContainer.addChild(control);
   listContainer.render();
-  var ownerControl = listContainer.getOwnerControl(control.getElement());
+  const ownerControl = listContainer.getOwnerControl(control.getElement());
 
   assertEquals(
       'Control was added with addChild(control, false)', control, ownerControl);
@@ -365,13 +365,14 @@ function testHandleKeyEvent_alwaysHandlesWithKeyEventTarget() {
 
 function testHandleKeyEventInternal_onlyHandlesUnmodified() {
   container.setKeyEventTarget(sandbox);
-  var event =
+  const event =
       new goog.events.KeyEvent(goog.events.KeyCodes.ESC, 0, false, null);
 
-  var propertyNames = ['shiftKey', 'altKey', 'ctrlKey', 'metaKey'];
+  const propertyNames = ['shiftKey', 'altKey', 'ctrlKey', 'metaKey'];
 
   // Verify that the event is not handled whenever a modifier key is true.
-  for (var i = 0, propertyName; propertyName = propertyNames[i]; i++) {
+  let propertyName;
+  for (let i = 0; propertyName = propertyNames[i]; i++) {
     assertTrue(
         'Event should be handled when modifer key is not pressed.',
         container.handleKeyEventInternal(event));
@@ -451,9 +452,9 @@ function testRemoveChild() {
   goog.dom.removeChildren(containerElement);
   container.decorate(containerElement);
 
-  var a = new goog.ui.Control('A');
-  var b = new goog.ui.Control('B');
-  var c = new goog.ui.Control('C');
+  const a = new goog.ui.Control('A');
+  const b = new goog.ui.Control('B');
+  const c = new goog.ui.Control('C');
 
   a.setId('a');
   b.setId('b');
@@ -500,7 +501,7 @@ function testRemoveHighlightedDisposedChild() {
   goog.dom.removeChildren(containerElement);
   container.decorate(containerElement);
 
-  var a = new goog.ui.Control('A');
+  const a = new goog.ui.Control('A');
   container.addChild(a, true);
 
   container.setHighlightedIndex(0);
@@ -518,7 +519,7 @@ function testRemoveHighlightedDisposedChild() {
  */
 function assertHighlightedIndex(explanation, index) {
   assertEquals(explanation, index, container.getHighlightedIndex());
-  for (var i = 0; i < container.getChildCount(); i++) {
+  for (let i = 0; i < container.getChildCount(); i++) {
     if (i == index) {
       assertTrue(
           'Child at highlighted index should be highlighted',
@@ -535,9 +536,9 @@ function testUpdateHighlightedIndex_updatesWhenChildrenAreAdded() {
   goog.dom.removeChildren(containerElement);
   container.decorate(containerElement);
 
-  var a = new goog.ui.Control('A');
-  var b = new goog.ui.Control('B');
-  var c = new goog.ui.Control('C');
+  const a = new goog.ui.Control('A');
+  const b = new goog.ui.Control('B');
+  const c = new goog.ui.Control('C');
 
   container.addChild(a);
   container.setHighlightedIndex(0);
@@ -558,9 +559,9 @@ function testUpdateHighlightedIndex_updatesWhenChildrenAreMoved() {
   goog.dom.removeChildren(containerElement);
   container.decorate(containerElement);
 
-  var a = new goog.ui.Control('A');
-  var b = new goog.ui.Control('B');
-  var c = new goog.ui.Control('C');
+  const a = new goog.ui.Control('A');
+  const b = new goog.ui.Control('B');
+  const c = new goog.ui.Control('C');
 
   container.addChild(a);
   container.addChild(b);
@@ -609,9 +610,9 @@ function testUpdateHighlightedIndex_notChangedWhenNoChildSelected() {
   goog.dom.removeChildren(containerElement);
   container.decorate(containerElement);
 
-  var a = new goog.ui.Control('A');
-  var b = new goog.ui.Control('B');
-  var c = new goog.ui.Control('C');
+  const a = new goog.ui.Control('A');
+  const b = new goog.ui.Control('B');
+  const c = new goog.ui.Control('C');
   container.addChild(a);
   container.addChild(b);
   container.addChild(c);
@@ -630,8 +631,8 @@ function testUpdateHighlightedIndex_indexStaysInBoundsWhenMovedToMaxIndex() {
   goog.dom.removeChildren(containerElement);
   container.decorate(containerElement);
 
-  var a = new goog.ui.Control('A');
-  var b = new goog.ui.Control('B');
+  const a = new goog.ui.Control('A');
+  const b = new goog.ui.Control('B');
   container.addChild(a);
   container.addChild(b);
 
@@ -650,13 +651,13 @@ function testSetPointerEventsEnabled() {
   container.setPointerEventsEnabled(true);
   container.decorate(containerElement);
 
-  var child = container.getChildAt(0);
+  const child = container.getChildAt(0);
 
   assertFalse(
       'Child should not be active before pointerdown event.',
       child.isActive());
 
-  var pointerdown = new goog.testing.events.Event(
+  const pointerdown = new goog.testing.events.Event(
       goog.events.PointerFallbackEventType.POINTERDOWN, child.getElement());
   pointerdown.button = goog.events.BrowserEvent.MouseButton.LEFT;
   goog.testing.events.fireBrowserEvent(pointerdown);
@@ -665,7 +666,7 @@ function testSetPointerEventsEnabled() {
       'Child should be active after pointerdown event.',
       child.isActive());
 
-  var pointerup = new goog.testing.events.Event(
+  const pointerup = new goog.testing.events.Event(
       goog.events.PointerFallbackEventType.POINTERUP, child.getElement());
   pointerup.button = goog.events.BrowserEvent.MouseButton.LEFT;
   goog.testing.events.fireBrowserEvent(pointerup);

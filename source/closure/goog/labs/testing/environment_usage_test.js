@@ -17,8 +17,8 @@ goog.setTestOnly('goog.labs.testing.environmentUsageTest');
 
 goog.require('goog.labs.testing.Environment');
 
-var testing = false;
-var env = new goog.labs.testing.Environment();
+let testing = false;
+const env = new goog.labs.testing.Environment();
 
 function setUpPage() {
   assertFalse(testing);

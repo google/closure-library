@@ -52,10 +52,10 @@ goog.async.Throttle.prototype.permitOne = function() {
 };
 
 // Actual tests.
-var mockControl;
-var mockMatcher;
-var mockHandler;
-var matcher;
+let mockControl;
+let mockMatcher;
+let mockHandler;
+let matcher;
 
 function setUp() {
   mockControl = new goog.testing.MockControl();

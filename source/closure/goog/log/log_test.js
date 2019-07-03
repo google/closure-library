@@ -50,12 +50,12 @@ TestHandler_.prototype.reset = function() {
 
 
 function testParents() {
-  var logger2sibling1 = goog.log.getLogger('goog.test');
-  var logger2sibling2 = goog.log.getLogger('goog.bar');
-  var logger3sibling1 = goog.log.getLogger('goog.bar.foo');
-  var logger3siblint2 = goog.log.getLogger('goog.bar.baaz');
-  var rootLogger = goog.debug.LogManager.getRoot();
-  var googLogger = goog.log.getLogger('goog');
+  const logger2sibling1 = goog.log.getLogger('goog.test');
+  const logger2sibling2 = goog.log.getLogger('goog.bar');
+  const logger3sibling1 = goog.log.getLogger('goog.bar.foo');
+  const logger3siblint2 = goog.log.getLogger('goog.bar.baaz');
+  const rootLogger = goog.debug.LogManager.getRoot();
+  const googLogger = goog.log.getLogger('goog');
   assertEquals(rootLogger, googLogger.getParent());
   assertEquals(googLogger, logger2sibling1.getParent());
   assertEquals(googLogger, logger2sibling2.getParent());
@@ -64,11 +64,11 @@ function testParents() {
 }
 
 function testLogging1() {
-  var root = goog.debug.LogManager.getRoot();
-  var handler = new TestHandler_();
-  var f = goog.bind(handler.onPublish, handler);
+  const root = goog.debug.LogManager.getRoot();
+  const handler = new TestHandler_();
+  const f = goog.bind(handler.onPublish, handler);
   goog.log.addHandler(root, f);
-  var logger = goog.log.getLogger('goog.bar.baaz');
+  const logger = goog.log.getLogger('goog.bar.baaz');
   goog.log.log(logger, goog.log.Level.WARNING, 'foo');
   assertNotNull(handler.logRecord);
   assertEquals(goog.log.Level.WARNING, handler.logRecord.getLevel());
@@ -81,11 +81,11 @@ function testLogging1() {
 }
 
 function testLogging2() {
-  var root = goog.debug.LogManager.getRoot();
-  var handler = new TestHandler_();
-  var f = goog.bind(handler.onPublish, handler);
+  const root = goog.debug.LogManager.getRoot();
+  const handler = new TestHandler_();
+  const f = goog.bind(handler.onPublish, handler);
   goog.log.addHandler(root, f);
-  var logger = goog.log.getLogger('goog.bar.baaz');
+  const logger = goog.log.getLogger('goog.bar.baaz');
   goog.log.warning(logger, 'foo');
   assertNotNull(handler.logRecord);
   assertEquals(goog.log.Level.WARNING, handler.logRecord.getLevel());
@@ -99,12 +99,12 @@ function testLogging2() {
 
 
 function testFiltering() {
-  var root = goog.debug.LogManager.getRoot();
-  var handler = new TestHandler_();
-  var f = goog.bind(handler.onPublish, handler);
+  const root = goog.debug.LogManager.getRoot();
+  const handler = new TestHandler_();
+  const f = goog.bind(handler.onPublish, handler);
   root.addHandler(f);
-  var logger1 = goog.log.getLogger('goog.bar.foo', goog.log.Level.WARNING);
-  var logger2 = goog.log.getLogger('goog.bar.baaz', goog.log.Level.INFO);
+  const logger1 = goog.log.getLogger('goog.bar.foo', goog.log.Level.WARNING);
+  const logger2 = goog.log.getLogger('goog.bar.baaz', goog.log.Level.INFO);
   goog.log.warning(logger2, 'foo');
   assertNotNull(handler.logRecord);
   assertEquals(goog.log.Level.WARNING, handler.logRecord.getLevel());
@@ -121,12 +121,12 @@ function testFiltering() {
 
 
 function testException() {
-  var root = goog.debug.LogManager.getRoot();
-  var handler = new TestHandler_();
-  var f = goog.bind(handler.onPublish, handler);
+  const root = goog.debug.LogManager.getRoot();
+  const handler = new TestHandler_();
+  const f = goog.bind(handler.onPublish, handler);
   root.addHandler(f);
-  var logger = goog.log.getLogger('goog.debug.logger_test');
-  var ex = Error('boo!');
+  const logger = goog.log.getLogger('goog.debug.logger_test');
+  const ex = Error('boo!');
   goog.log.error(logger, 'hello', ex);
   assertNotNull(handler.logRecord);
   assertEquals(goog.log.Level.SEVERE, handler.logRecord.getLevel());
@@ -136,11 +136,11 @@ function testException() {
 
 
 function testMessageCallbacks() {
-  var root = goog.debug.LogManager.getRoot();
-  var handler = new TestHandler_();
-  var f = goog.bind(handler.onPublish, handler);
+  const root = goog.debug.LogManager.getRoot();
+  const handler = new TestHandler_();
+  const f = goog.bind(handler.onPublish, handler);
   root.addHandler(f);
-  var logger = goog.log.getLogger('goog.bar.foo');
+  const logger = goog.log.getLogger('goog.bar.foo');
   logger.setLevel(goog.log.Level.WARNING);
 
   logger.log(goog.log.Level.INFO, function() {
@@ -158,12 +158,12 @@ function testMessageCallbacks() {
 
 
 function testGetLogRecord() {
-  var name = 'test.get.log.record';
-  var level = goog.log.Level.FINE;
-  var msg = 'msg';
+  const name = 'test.get.log.record';
+  const level = goog.log.Level.FINE;
+  const msg = 'msg';
 
-  var logger = goog.log.getLogger(name);
-  var logRecord = logger.getLogRecord(level, msg);
+  const logger = goog.log.getLogger(name);
+  const logRecord = logger.getLogRecord(level, msg);
 
   assertEquals(name, logRecord.getLoggerName());
   assertEquals(level, logRecord.getLevel());
@@ -173,13 +173,13 @@ function testGetLogRecord() {
 }
 
 function testGetLogRecordWithException() {
-  var name = 'test.get.log.record';
-  var level = goog.log.Level.FINE;
-  var msg = 'msg';
-  var ex = Error('Hi');
+  const name = 'test.get.log.record';
+  const level = goog.log.Level.FINE;
+  const msg = 'msg';
+  const ex = Error('Hi');
 
-  var logger = goog.log.getLogger(name);
-  var logRecord = logger.getLogRecord(level, msg, ex);
+  const logger = goog.log.getLogger(name);
+  const logRecord = logger.getLogRecord(level, msg, ex);
 
   assertEquals(name, logRecord.getLoggerName());
   assertEquals(level, logRecord.getLevel());

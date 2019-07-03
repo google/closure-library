@@ -21,7 +21,7 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.uri.utils');
 
 
-var utils = goog.uri.utils;
+const utils = goog.uri.utils;
 
 
 function setUpPage() {
@@ -33,7 +33,8 @@ function tearDown() {}
 
 
 function testSplit() {
-  var uri = 'http://www.google.com:80/path%20path+path?q=query&hl=en#fragment';
+  const uri =
+      'http://www.google.com:80/path%20path+path?q=query&hl=en#fragment';
   assertEquals('http', utils.getScheme(uri));
   assertNull(utils.getUserInfoEncoded(uri));
   assertNull(utils.getUserInfo(uri));
@@ -64,7 +65,7 @@ function testSplit() {
 
 
 function testSplitWithNewline() {
-  var uri = 'http://www.google.com:80/path%20path+path?q=query#frag\nment';
+  const uri = 'http://www.google.com:80/path%20path+path?q=query#frag\nment';
   assertEquals('http', utils.getScheme(uri));
   assertNull(utils.getUserInfoEncoded(uri));
   assertNull(utils.getUserInfo(uri));
@@ -80,7 +81,7 @@ function testSplitWithNewline() {
 
 
 function testMailtoUri() {
-  var uri = 'mailto:joe+random@hominid.com';
+  const uri = 'mailto:joe+random@hominid.com';
   assertNull(utils.getDomain(uri));
   assertEquals('mailto', utils.getScheme(uri));
   assertEquals('joe+random@hominid.com', utils.getPath(uri));
@@ -88,7 +89,7 @@ function testMailtoUri() {
 
 
 function testSplitRelativeUri() {
-  var uri = '/path%20path+path?q=query&hl=en#fragment';
+  const uri = '/path%20path+path?q=query&hl=en#fragment';
   assertNull(utils.getScheme(uri));
   assertNull(utils.getDomain(uri));
   assertNull(utils.getDomainEncoded(uri));
@@ -115,13 +116,14 @@ function testSplitIntoHostAndPath() {
   // Splitting into host and path takes care of one of the major use cases
   // of resolve, without implementing a generic algorithm that undoubtedly
   // requires a huge footprint.
-  var uri = 'http://www.google.com:80/path%20path+path?q=query&hl=en#fragment';
+  const uri =
+      'http://www.google.com:80/path%20path+path?q=query&hl=en#fragment';
   assertEquals('http://www.google.com:80', goog.uri.utils.getHost(uri));
   assertEquals(
       '/path%20path+path?q=query&hl=en#fragment',
       goog.uri.utils.getPathAndAfter(uri));
 
-  var uri2 = 'http://www.google.com/calendar';
+  const uri2 = 'http://www.google.com/calendar';
   assertEquals(
       'should handle missing fields', 'http://www.google.com',
       goog.uri.utils.getHost(uri2));
@@ -132,7 +134,7 @@ function testSplitIntoHostAndPath() {
 
 
 function testGetOrigin() {
-  var uri =
+  const uri =
       'http://foo:pw@www.google.com:80/path%20path+path?q=query&hl=en#fragment';
   assertEquals('http://www.google.com:80', goog.uri.utils.getOrigin(uri));
 }
@@ -144,8 +146,8 @@ function testRelativeUrisHaveNoPath() {
 
 
 function testReservedCharacters() {
-  var o = '%6F';
-  var uri = 'http://www.g' + o + 'ogle.com%40/xxx%2feee/ccc';
+  const o = '%6F';
+  const uri = 'http://www.g' + o + 'ogle.com%40/xxx%2feee/ccc';
   assertEquals(
       'Should not decode reserved characters in path', '/xxx%2feee/ccc',
       goog.uri.utils.getPath(uri));
@@ -155,7 +157,7 @@ function testReservedCharacters() {
 }
 
 function testSetFragmentEncoded() {
-  var expected = 'http://www.google.com/path#bar';
+  const expected = 'http://www.google.com/path#bar';
   assertEquals(
       expected,
       utils.setFragmentEncoded('http://www.google.com/path#foo', 'bar'));
@@ -214,7 +216,7 @@ function testGetParamValueAllowsEqualInValues() {
 
 
 function testGetParamValueNoSuchKey() {
-  var uri = '/path?key=v1&c=d&keywithsuffix=v3&key=v2';
+  const uri = '/path?key=v1&c=d&keywithsuffix=v3&key=v2';
   assertNull(utils.getParamValue(uri, 'nosuchkey'));
   assertArrayEquals([], utils.getParamValues(uri, 'nosuchkey'));
   assertFalse(utils.hasParam(uri, 'nosuchkey'));
@@ -280,25 +282,25 @@ function testGetParamIgnoresExcludesFragmentFromParameterValue() {
 
 
 function testSameDomainPathsDiffer() {
-  var uri1 = 'http://www.google.com/a';
-  var uri2 = 'http://www.google.com/b';
+  const uri1 = 'http://www.google.com/a';
+  const uri2 = 'http://www.google.com/b';
   assertTrue(goog.uri.utils.haveSameDomain(uri1, uri2));
   assertTrue(goog.uri.utils.haveSameDomain(uri2, uri1));
 }
 
 
 function testSameDomainSchemesDiffer() {
-  var uri1 = 'http://www.google.com';
-  var uri2 = 'https://www.google.com';
+  const uri1 = 'http://www.google.com';
+  const uri2 = 'https://www.google.com';
   assertFalse(goog.uri.utils.haveSameDomain(uri1, uri2));
   assertFalse(goog.uri.utils.haveSameDomain(uri2, uri1));
 }
 
 
 function testSameDomainPortsDiffer() {
-  var uri1 = 'http://www.google.com:1234/a';
-  var uri2 = 'http://www.google.com/b';
-  var uri3 = 'http://www.google.com:2345/b';
+  const uri1 = 'http://www.google.com:1234/a';
+  const uri2 = 'http://www.google.com/b';
+  const uri3 = 'http://www.google.com:2345/b';
   assertFalse(goog.uri.utils.haveSameDomain(uri1, uri2));
   assertFalse(goog.uri.utils.haveSameDomain(uri2, uri1));
   assertFalse(goog.uri.utils.haveSameDomain(uri1, uri3));
@@ -306,24 +308,24 @@ function testSameDomainPortsDiffer() {
 
 
 function testSameDomainDomainsDiffer() {
-  var uri1 = '/a';
-  var uri2 = 'http://www.google.com/b';
+  const uri1 = '/a';
+  const uri2 = 'http://www.google.com/b';
   assertFalse(goog.uri.utils.haveSameDomain(uri1, uri2));
   assertFalse(goog.uri.utils.haveSameDomain(uri2, uri1));
 }
 
 
 function testSameDomainSubDomainDiffers() {
-  var uri1 = 'http://www.google.com/a';
-  var uri2 = 'http://mail.google.com/b';
+  const uri1 = 'http://www.google.com/a';
+  const uri2 = 'http://mail.google.com/b';
   assertFalse(goog.uri.utils.haveSameDomain(uri1, uri2));
   assertFalse(goog.uri.utils.haveSameDomain(uri2, uri1));
 }
 
 
 function testSameDomainNoDomain() {
-  var uri1 = '/a';
-  var uri2 = '/b';
+  const uri1 = '/a';
+  const uri2 = '/b';
   assertTrue(goog.uri.utils.haveSameDomain(uri1, uri2));
   assertTrue(goog.uri.utils.haveSameDomain(uri2, uri1));
 }
@@ -478,7 +480,7 @@ function testAppendParamEscapes() {
 
 
 function testAppendParamsFromMap() {
-  var uri = utils.appendParamsFromMap(
+  const uri = utils.appendParamsFromMap(
       'http://www.foo.com',
       {'a': 1, 'b': 'bob', 'c': [1, 2, new HasString('3')]});
   assertArrayEquals(['1'], utils.getParamValues(uri, 'a'));
@@ -488,7 +490,7 @@ function testAppendParamsFromMap() {
 
 function testBuildQueryDataFromMap() {
   assertEquals('a=1', utils.buildQueryDataFromMap({'a': 1}));
-  var uri = 'foo.com?' +
+  const uri = 'foo.com?' +
       utils.buildQueryDataFromMap(
           {'a': 1, 'b': 'bob', 'c': [1, 2, new HasString('3')]});
   assertArrayEquals(['1'], utils.getParamValues(uri, 'a'));
@@ -598,14 +600,14 @@ function testSetParamsFromMap() {
   // These helper assertions are needed because the input is an Object and
   // we cannot gaurauntee an order.
   function assertQueryEquals(message, expected, actual) {
-    var expectedQuery = goog.uri.utils.getQueryData(expected);
-    var actualQuery = goog.uri.utils.getQueryData(actual);
+    const expectedQuery = goog.uri.utils.getQueryData(expected);
+    const actualQuery = goog.uri.utils.getQueryData(actual);
     assertEquals(
         'Unmatched param count. ' + message, expectedQuery.split('&').length,
         actualQuery.split('&').length);
 
     // Build a map of all of the params for actual.
-    var actualParams = {};
+    const actualParams = {};
     goog.uri.utils.parseQueryData(actualQuery, function(key, value) {
       if (actualParams[key]) {
         actualParams[key].push(value);
@@ -615,7 +617,7 @@ function testSetParamsFromMap() {
     });
 
     for (key in actualParams) {
-      var expectedParams = goog.uri.utils.getParamValues(actual, key);
+      const expectedParams = goog.uri.utils.getParamValues(actual, key);
       assertArrayEquals(
           'Unmatched param ' + key + ', ' + message, expectedParams.sort(),
           actualParams[key].sort());
@@ -624,9 +626,9 @@ function testSetParamsFromMap() {
 
   function assertUriEquals(message, expected, actual) {
     message = ' for expected URI: "' + expected + '", actual: "' + actual + '"';
-    var expectedComps = utils.split(expected);
-    var actualComps = utils.split(actual);
-    for (var i = 1; i < expectedComps.length; i++) {
+    const expectedComps = utils.split(expected);
+    const actualComps = utils.split(actual);
+    for (let i = 1; i < expectedComps.length; i++) {
       if (i === goog.uri.utils.ComponentIndex.QUERY_DATA) {
         assertQueryEquals(message, expected, actual);
       } else {
@@ -675,7 +677,7 @@ function testSetParamsFromMap() {
 }
 
 function testModifyQueryParams() {
-  var uri = 'http://foo.com?a=A&a=A2&b=B&b=B2&c=C';
+  let uri = 'http://foo.com?a=A&a=A2&b=B&b=B2&c=C';
 
   uri = utils.appendParam(uri, 'd', 'D');
   assertEquals('http://foo.com?a=A&a=A2&b=B&b=B2&c=C&d=D', uri);
@@ -697,15 +699,15 @@ function testModifyQueryParams() {
 function testBrowserEncoding() {
   // Sanity check borrowed from old code to ensure that encodeURIComponent
   // is good enough.  Entire test should be safe to delete.
-  var allowedInFragment = /[A-Za-z0-9\-\._~!$&'()*+,;=:@/?]/g;
+  const allowedInFragment = /[A-Za-z0-9\-\._~!$&'()*+,;=:@/?]/g;
 
-  var sb = [];
-  for (var i = 33; i < 500; i++) {  // arbitrarily use first 500 chars.
+  const sb = [];
+  for (let i = 33; i < 500; i++) {  // arbitrarily use first 500 chars.
     sb.push(String.fromCharCode(i));
   }
-  var testString = sb.join('');
+  const testString = sb.join('');
 
-  var encodedStr = encodeURIComponent(testString);
+  let encodedStr = encodeURIComponent(testString);
 
   // Strip all percent encoded characters, as they're ok.
   encodedStr = encodedStr.replace(/%[0-9A-F][0-9A-F]/g, '');
@@ -719,8 +721,8 @@ function testBrowserEncoding() {
 
 
 function testAppendPath() {
-  var uri = 'http://www.foo.com';
-  var expected = uri + '/dummy';
+  let uri = 'http://www.foo.com';
+  const expected = uri + '/dummy';
   assertEquals(
       'Path has no trailing "/", adding with leading "/" failed', expected,
       goog.uri.utils.appendPath(uri, '/dummy'));
@@ -749,7 +751,7 @@ function testMakeUnique() {
 
 
 function testParseQuery() {
-  var result = [];
+  const result = [];
   goog.uri.utils.parseQueryData(
       'foo=bar&no&empty=&tricky%3D%26=%3D%26&=nothing&=&',
       function(name, value) { result.push(name, value); });
@@ -762,7 +764,7 @@ function testParseQuery() {
 
   // Go thought buildQueryData and parseQueryData and see if we get the same
   // result.
-  var result2 = [];
+  const result2 = [];
   goog.uri.utils.parseQueryData(
       goog.uri.utils.buildQueryData(result),
       function(name, value) { result2.push(name, value); });

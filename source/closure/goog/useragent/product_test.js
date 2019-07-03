@@ -31,8 +31,8 @@ function shouldRunTests() {
   return !goog.userAgent.IE || !goog.userAgent.isVersionOrHigher(8);
 }
 
-var mockAgent;
-var replacer;
+let mockAgent;
+let replacer;
 
 function setUp() {
   mockAgent = new goog.testing.MockUserAgent();
@@ -53,7 +53,7 @@ function updateUserAgentUtils() {
 
 // The set of products whose corresponding goog.userAgent.product value is set
 // in goog.userAgent.product.init_().
-var DETECTED_BROWSER_KEYS =
+const DETECTED_BROWSER_KEYS =
     ['FIREFOX', 'IPHONE', 'IPAD', 'ANDROID', 'CHROME', 'SAFARI'];
 
 
@@ -127,7 +127,7 @@ function checkEachUserAgentDetected(userAgents, browser) {
 }
 
 function testInternetExplorer() {
-  var userAgents = [
+  const userAgents = [
     {
       ua: 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB6; ' +
           'chromeframe; .NET CLR 1.1.4322; InfoPath.1; ' +
@@ -153,7 +153,7 @@ function testInternetExplorer() {
 }
 
 function testEdge() {
-  var userAgents = [{
+  const userAgents = [{
     ua: goog.labs.userAgent.testAgents.EDGE_12_9600,
     versions: [
       {num: 11, truth: true}, {num: 12, truth: true},
@@ -166,12 +166,11 @@ function testEdge() {
 }
 
 function testOpera() {
-  var opera = {};
-  var userAgents = [{
+  const opera = {};
+  const userAgents = [{
     ua: 'Opera/9.80 (Windows NT 5.1; U; en) Presto/2.2.15 Version/10.01',
     versions: [
-      {num: 9, truth: true}, {num: '10.1', truth: true},
-      {num: 11, truth: false}
+      {num: 9, truth: true}, {num: '10.1', truth: true}, {num: 11, truth: false}
     ]
   }];
   replacer.set(goog.global, 'opera', opera);
@@ -180,7 +179,7 @@ function testOpera() {
 }
 
 function testFirefox() {
-  var userAgents = [
+  const userAgents = [
     {
       ua: 'Mozilla/6.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; ' +
           'rv:2.0.0.0) Gecko/20061028 Firefox/3.0',
@@ -218,7 +217,7 @@ function testFirefox() {
 }
 
 function testChrome() {
-  var userAgents = [
+  const userAgents = [
     {
       ua: 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) ' +
           'AppleWebKit/525.19 (KHTML, like Gecko) Chrome/0.2.153.0 ' +
@@ -265,7 +264,7 @@ function testChrome() {
 }
 
 function testSafari() {
-  var userAgents = [
+  const userAgents = [
     {
       ua: 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; de-de) ' +
           'AppleWebKit/534.16+ (KHTML, like Gecko) Version/5.0.3 ' +
@@ -299,8 +298,7 @@ function testSafari() {
           'AppleWebKit/418.9.1 (KHTML, like Gecko) Safari/419.3',
       versions: [
         {num: 3, truth: false}, {num: 2, truth: false}, {num: 1, truth: false},
-        {num: 0, truth: true}, {num: '0', truth: true},
-        {num: '', truth: true}
+        {num: 0, truth: true}, {num: '0', truth: true}, {num: '', truth: true}
       ]
     }
   ];
@@ -308,7 +306,7 @@ function testSafari() {
 }
 
 function testIphone() {
-  var userAgents = [
+  const userAgents = [
     {
       ua: 'Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ ' +
           '(KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3',
@@ -321,16 +319,15 @@ function testIphone() {
     {
       ua: 'Mozilla/5.0 (iPod; U; CPU like Mac OS X; en) AppleWebKit/420.1 ' +
           '(KHTML, like Gecko) Version/3.0 Mobile/3A100a Safari/419.3',
-      versions: [
-        {num: '3.0.1A543a', truth: true}, {num: '3.0.3A100a', truth: true}
-      ]
+      versions:
+          [{num: '3.0.1A543a', truth: true}, {num: '3.0.3A100a', truth: true}]
     }
   ];
   checkEachUserAgentDetected(userAgents, 'IPHONE');
 }
 
 function testIpad() {
-  var userAgents = [
+  const userAgents = [
     {
       ua: 'Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) ' +
           'AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 ' +
@@ -338,8 +335,7 @@ function testIpad() {
       versions: [
         {num: '4.0.4.7B334b', truth: true}, {num: '4.0', truth: true},
         {num: '4.0.4.7C334b', truth: false}, {num: '4.1.7B334b', truth: false},
-        {num: '4.0.4.7B320c', truth: true},
-        {num: '4.0.4.8B334b', truth: false}
+        {num: '4.0.4.7B320c', truth: true}, {num: '4.0.4.8B334b', truth: false}
       ]
     },
     // Webview in the Facebook iOS app
@@ -355,7 +351,7 @@ function testIpad() {
 }
 
 function testAndroid() {
-  var userAgents = [
+  const userAgents = [
     {
       ua: 'Mozilla/5.0 (Linux; U; Android 0.5; en-us) AppleWebKit/522+ ' +
           '(KHTML, like Gecko) Safari/419.3',

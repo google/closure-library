@@ -35,11 +35,11 @@ goog.require('goog.userAgent');
 
 // Set up a logger to track responses
 goog.debug.LogManager.getRoot().setLevel(goog.log.Level.INFO);
-var logconsole;
-var testLogger = goog.log.getLogger('test');
+let logconsole;
+const testLogger = goog.log.getLogger('test');
 
 function setUpPage() {
-  var logconsole = new goog.debug.DivConsole(document.getElementById('log'));
+  const logconsole = new goog.debug.DivConsole(document.getElementById('log'));
   logconsole.setCapturing(true);
 }
 
@@ -49,7 +49,7 @@ function getTestIframeIo() {
   logconsole.addSeparator();
   logconsole.getFormatter().resetRelativeTimeStart();
 
-  var io = new goog.net.IframeIo();
+  const io = new goog.net.IframeIo();
   io.setErrorChecker(checkForError);
 
   goog.events.listen(io, 'success', onSuccess);
@@ -65,9 +65,9 @@ function getTestIframeIo() {
  * the Gmail server and GFE set on certain errors.
  */
 function checkForError(doc) {
-  var win = goog.dom.getWindow(doc);
-  var text = doc.body.textContent || doc.body.innerText || '';
-  var gseError = text.match(/([^\n]+)\nError ([0-9]{3})/);
+  const win = goog.dom.getWindow(doc);
+  const text = doc.body.textContent || doc.body.innerText || '';
+  const gseError = text.match(/([^\n]+)\nError ([0-9]{3})/);
   if (gseError) {
     return '(Error ' + gseError[2] + ') ' + gseError[1];
   } else if (win.gmail_error) {
@@ -106,14 +106,14 @@ function onReady(e) {
 
 
 function simpleGet() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'complete', onSimpleTestComplete);
   io.send('/iframeio/ping', 'GET');
 }
 
 
 function simplePost() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'complete', onSimpleTestComplete);
   io.send('/iframeio/ping', 'POST');
 }
@@ -123,7 +123,7 @@ function onSimpleTestComplete(e) {
 }
 
 function abort() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'complete', onAbortComplete);
   goog.events.listen(io, 'abort', onAbort);
   io.send('/iframeio/ping', 'GET');
@@ -140,20 +140,20 @@ function onAbort(e) {
 
 
 function errorGse404() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   io.send('/iframeio/404', 'GET');
 }
 
 function jsonEcho(method) {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'complete', onJsonComplete);
-  var data = {'p1': 'x', 'p2': 'y', 'p3': 'z', 'r': 10};
+  const data = {'p1': 'x', 'p2': 'y', 'p3': 'z', 'r': 10};
   io.send('/iframeio/jsonecho?q1=a&q2=b&q3=c&r=5', method, false, data);
 }
 
 function onJsonComplete(e) {
   goog.log.info(testLogger, 'ResponseText: ' + e.target.getResponseText());
-  var json = e.target.getResponseJson();
+  const json = e.target.getResponseJson();
   goog.log.info(
       testLogger, 'ResponseJson:\n' + goog.debug.deepExpose(json, true));
 }
@@ -161,7 +161,7 @@ function onJsonComplete(e) {
 
 
 function sendFromForm() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'success', onUploadSuccess);
   goog.events.listen(io, 'error', onUploadError);
   io.sendFromForm(document.getElementById('uploadform'));
@@ -179,28 +179,28 @@ function onUploadError(e) {
 
 
 function redirect1() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   io.send('/iframeio/redirect', 'GET');
 }
 
 function redirect2() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   io.send('/iframeio/move', 'GET');
 }
 
 function badUrl() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   io.send('http://news.bbc.co.uk', 'GET');
 }
 
 function localUrl1() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'complete', onLocalSuccess);
   io.send('c:\test.txt', 'GET');
 }
 
 function localUrl2() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'success', onLocalSuccess);
   io.send('//test.txt', 'GET');
 }
@@ -211,7 +211,7 @@ function onLocalSuccess(e) {
 }
 
 function getServerTime(noCache) {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'success', onTestCacheSuccess);
   io.send('/iframeio/datetime', 'GET', noCache);
 }
@@ -222,7 +222,7 @@ function onTestCacheSuccess(e) {
 
 
 function errorGmail() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'error', onGmailError);
   io.send('/iframeio/gmailerror', 'GET');
 }
@@ -233,7 +233,7 @@ function onGmailError(e) {
 
 
 function errorGfe() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'error', onGfeError);
   io.send('/iframeio/gfeerror', 'GET');
 }
@@ -245,7 +245,7 @@ function onGfeError(e) {
 
 
 function incremental() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   io.send('/iframeio/incremental', 'GET');
 }
 
@@ -256,7 +256,7 @@ window['P'] = function(iframe, data) {
 
 
 function postForm() {
-  var io = getTestIframeIo();
+  const io = getTestIframeIo();
   goog.events.listen(io, 'complete', onJsonComplete);
   io.sendFromForm(document.getElementById('testfrm'));
 }
@@ -268,33 +268,33 @@ function postForm() {
 
 
 function testGetForm() {
-  var frm1 = goog.net.IframeIo.getForm_;
-  var frm2 = goog.net.IframeIo.getForm_;
+  const frm1 = goog.net.IframeIo.getForm_;
+  const frm2 = goog.net.IframeIo.getForm_;
   assertEquals(frm1, frm2);
 }
 
 
 function testAddFormInputs() {
-  var form = goog.dom.createElement(goog.dom.TagName.FORM);
+  const form = goog.dom.createElement(goog.dom.TagName.FORM);
   goog.net.IframeIo.addFormInputs_(form, {'a': 1, 'b': 2, 'c': 3});
-  var inputs = goog.dom.getElementsByTagName(goog.dom.TagName.INPUT, form);
+  const inputs = goog.dom.getElementsByTagName(goog.dom.TagName.INPUT, form);
   assertEquals(3, inputs.length);
-  for (var i = 0; i < inputs.length; i++) {
+  for (let i = 0; i < inputs.length; i++) {
     assertEquals('hidden', inputs[i].type);
-    var n = inputs[i].name;
+    const n = inputs[i].name;
     assertEquals(n == 'a' ? '1' : n == 'b' ? '2' : '3', inputs[i].value);
   }
 }
 
 function testAddFormArrayInputs() {
-  var form = goog.dom.createElement(goog.dom.TagName.FORM);
-  var data = {'a': ['blue', 'green'], 'b': ['red', 'pink', 'white']};
+  const form = goog.dom.createElement(goog.dom.TagName.FORM);
+  const data = {'a': ['blue', 'green'], 'b': ['red', 'pink', 'white']};
   goog.net.IframeIo.addFormInputs_(form, data);
-  var inputs = goog.dom.getElementsByTagName(goog.dom.TagName.INPUT, form);
+  const inputs = goog.dom.getElementsByTagName(goog.dom.TagName.INPUT, form);
   assertEquals(5, inputs.length);
-  for (var i = 0; i < inputs.length; i++) {
+  for (let i = 0; i < inputs.length; i++) {
     assertEquals('hidden', inputs[i].type);
-    var n = inputs[i].name;
+    const n = inputs[i].name;
     assertContains(inputs[i].value, data[n]);
   }
 }
@@ -305,7 +305,7 @@ function testNotIgnoringResponse() {
   if (goog.userAgent.IE) {
     return;
   }
-  var iframeIo = new goog.net.IframeIo();
+  const iframeIo = new goog.net.IframeIo();
   iframeIo.send('about:blank');
   // Simulate the frame finishing loading.
   goog.testing.events.fireBrowserEvent(
@@ -315,7 +315,7 @@ function testNotIgnoringResponse() {
 }
 
 function testIgnoreResponse() {
-  var iframeIo = new goog.net.IframeIo();
+  const iframeIo = new goog.net.IframeIo();
   iframeIo.setIgnoreResponse(true);
   iframeIo.send('about:blank');
   // Simulate the frame finishing loading.

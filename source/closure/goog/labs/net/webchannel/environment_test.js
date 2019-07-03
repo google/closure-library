@@ -20,9 +20,9 @@
 goog.module('goog.labs.net.webChannel.EnvironmentTest');
 goog.setTestOnly('goog.labs.net.webChannel.EnvironmentTest');
 
-var environment = goog.require('goog.labs.net.webChannel.environment');
-var testSuite = goog.require('goog.testing.testSuite');
-var userAgent = goog.require('goog.userAgent');
+const environment = goog.require('goog.labs.net.webChannel.environment');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
 testSuite({
   testPollingRequiredForEdge: function() {

@@ -27,22 +27,22 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
-var log;
-var stubs = new goog.testing.PropertyReplacer();
+let log;
+const stubs = new goog.testing.PropertyReplacer();
 
-var PREFERRED_TYPE = 'wheel';
-var LEGACY_TYPE = 'mousewheel';
-var GECKO_TYPE = 'DOMMouseScroll';
+const PREFERRED_TYPE = 'wheel';
+const LEGACY_TYPE = 'mousewheel';
+const GECKO_TYPE = 'DOMMouseScroll';
 
-var HORIZONTAL = 'h';
-var VERTICAL = 'v';
+const HORIZONTAL = 'h';
+const VERTICAL = 'v';
 
-var DeltaMode = goog.events.WheelEvent.DeltaMode;
+const DeltaMode = goog.events.WheelEvent.DeltaMode;
 
-var mouseWheelEvent;
-var mouseWheelEventRtl;
-var mouseWheelHandler;
-var mouseWheelHandlerRtl;
+let mouseWheelEvent;
+let mouseWheelEventRtl;
+let mouseWheelHandler;
+let mouseWheelHandlerRtl;
 
 function setUpPage() {
   log = goog.dom.getElement('log');
@@ -189,7 +189,7 @@ function testLegacyIeStyleWheel() {
 
 function testNullBody() {
   goog.userAgent.IE = true;
-  var documentObjectWithNoBody = {};
+  const documentObjectWithNoBody = {};
   goog.testing.events.mixinListenable(documentObjectWithNoBody);
   mouseWheelHandler = new goog.events.WheelHandler(documentObjectWithNoBody);
 }
@@ -268,7 +268,7 @@ function assertPixelDeltas(scale) {
 
 function createFakePreferredEvent(
     opt_deltaMode, opt_deltaX, opt_deltaY, opt_deltaZ) {
-  var event = {
+  const event = {
     type: PREFERRED_TYPE,
     deltaMode: opt_deltaMode,
     deltaX: opt_deltaX,
@@ -281,7 +281,7 @@ function createFakePreferredEvent(
 
 function createFakeLegacyEvent(
     opt_wheelDelta, opt_wheelDeltaX, opt_wheelDeltaY) {
-  var event = {
+  const event = {
     type: LEGACY_TYPE,
     wheelDelta: opt_wheelDelta,
     wheelDeltaX: opt_wheelDeltaX,
@@ -291,7 +291,7 @@ function createFakeLegacyEvent(
 }
 
 function createFakeGeckoEvent(opt_detail, opt_axis) {
-  var event = {
+  const event = {
     type: GECKO_TYPE,
     detail: opt_detail,
     axis: opt_axis,

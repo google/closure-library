@@ -24,15 +24,15 @@ goog.require('goog.i18n.DateTimeSymbols_fa');  // Persian
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
-var MINUTE_MS = 60000;
-var HOUR_MS = 60 * MINUTE_MS;
-var DAY_MS = 24 * HOUR_MS;
+const MINUTE_MS = 60000;
+const HOUR_MS = 60 * MINUTE_MS;
+const DAY_MS = 24 * HOUR_MS;
 
-var duration = goog.date.duration.format;
+const duration = goog.date.duration.format;
 
 
 function setUpPage() {
-  var propertyReplacer = new goog.testing.PropertyReplacer();
+  const propertyReplacer = new goog.testing.PropertyReplacer();
   propertyReplacer.replace(goog, 'LOCALE', 'en_US');
 }
 

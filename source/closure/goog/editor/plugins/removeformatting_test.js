@@ -34,18 +34,18 @@ function shouldRunTests() {
   return !goog.userAgent.IE || !goog.userAgent.isVersionOrHigher(8);
 }
 
-var SAVED_HTML;
-var FIELDMOCK;
-var FORMATTER;
-var testHelper;
-var WEBKIT_BEFORE_CHROME_8;
-var WEBKIT_AFTER_CHROME_16;
-var WEBKIT_AFTER_CHROME_21;
-var insertImageBoldGarbage = '';
-var insertImageFontGarbage = '';
-var controlHtml;
-var controlCleanHtml;
-var expectedFailures;
+let SAVED_HTML;
+let FIELDMOCK;
+let FORMATTER;
+let testHelper;
+let WEBKIT_BEFORE_CHROME_8;
+let WEBKIT_AFTER_CHROME_16;
+let WEBKIT_AFTER_CHROME_21;
+let insertImageBoldGarbage = '';
+let insertImageFontGarbage = '';
+let controlHtml;
+let controlCleanHtml;
+let expectedFailures;
 
 function setUpPage() {
   WEBKIT_BEFORE_CHROME_8 =
@@ -113,7 +113,7 @@ function tearDown() {
 }
 
 function setUpTableTests() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = '<table><tr> <th> head1</th><th id= "outerTh">' +
       '<span id="emptyTh">head2</span></th> </tr><tr> <td> one </td> <td>' +
       'two </td> </tr><tr><td> three</td><td id="outerTd"> ' +
@@ -125,14 +125,14 @@ function setUpTableTests() {
 
 function testTableTagsAreNotRemoved() {
   setUpTableTests();
-  var span;
+  let span;
 
   // TD
   span = document.getElementById('emptyTd');
   goog.dom.Range.createFromNodeContents(span).select();
   FORMATTER.removeFormatting_();
 
-  var elem = document.getElementById('outerTd');
+  let elem = document.getElementById('outerTd');
   assertTrue('TD should not be removed', !!elem);
   if (!goog.userAgent.WEBKIT && !goog.userAgent.EDGE) {
     // webkit seems to have an Apple-style-span
@@ -184,9 +184,9 @@ function testTableDataIsNotRemoved() {
     goog.dom.Range.createFromNodeContents(document.getElementById('outerTr2'))
         .select();
   } else {
-    var selection = window.getSelection();
+    const selection = window.getSelection();
     if (selection.rangeCount > 0) selection.removeAllRanges();
-    var range = document.createRange();
+    let range = document.createRange();
     range.selectNode(document.getElementById('cell1'));
     selection.addRange(range);
     range = document.createRange();
@@ -210,8 +210,8 @@ function testLinksAreNotRemoved() {
       WEBKIT_BEFORE_CHROME_8,
       'WebKit\'s removeFormatting command removes links.');
 
-  var anchor;
-  var div = document.getElementById('html');
+  let anchor;
+  const div = document.getElementById('html');
   div.innerHTML = 'Foo<span id="link">Pre<a href="http://www.google.com">' +
       'Outside Span<span style="font-size:15pt">Inside Span' +
       '</span></a></span>';
@@ -242,11 +242,11 @@ function replacementFormattingFunc(text) {
 }
 
 function testAlternateRemoveFormattingFunction() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = 'Start<span id="remFormat">Foo<pre>Bar</pre>Baz</span>';
 
   FORMATTER.setRemoveFormattingFunc(replacementFormattingFunc);
-  var area = document.getElementById('remFormat');
+  const area = document.getElementById('remFormat');
   goog.dom.Range.createFromNodeContents(area).select();
   FORMATTER.removeFormatting_();
   // Webkit will change all tags to non-formatted ones anyway.
@@ -264,7 +264,7 @@ function testAlternateRemoveFormattingFunction() {
 
 function testGetValueForNode() {
   // Override getValueForNode to keep bold tags.
-  var oldGetValue =
+  const oldGetValue =
       goog.editor.plugins.RemoveFormatting.prototype.getValueForNode;
   goog.editor.plugins.RemoveFormatting.prototype.getValueForNode = function(
       node) {
@@ -274,7 +274,7 @@ function testGetValueForNode() {
     return null;
   };
 
-  var html = FORMATTER.removeFormattingWorker_('<div>foo<b>bar</b></div>');
+  let html = FORMATTER.removeFormattingWorker_('<div>foo<b>bar</b></div>');
   assertHTMLEquals('B tags should remain', 'foo<b>bar</b>', html);
 
   // Override getValueForNode to throw out bold tags, and their contents.
@@ -294,10 +294,10 @@ function testGetValueForNode() {
 }
 
 function testRemoveFormattingAddsNoNbsps() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = '"<span id="toStrip">Twin <b>Cinema</b></span>"';
 
-  var span = document.getElementById('toStrip');
+  const span = document.getElementById('toStrip');
   goog.dom.Range.createFromNodeContents(span).select();
 
   FORMATTER.removeFormatting_();
@@ -314,7 +314,7 @@ function testRemoveFormattingAddsNoNbsps() {
  * @bug 992795
  */
 function testRemoveFormattingNestedDivs() {
-  var html =
+  const html =
       FORMATTER.removeFormattingWorker_('<div>1</div><div><div>2</div></div>');
 
   goog.testing.dom.assertHtmlMatches('1<br>2', html);
@@ -322,9 +322,9 @@ function testRemoveFormattingNestedDivs() {
 
 
 function testTheJavascriptReplaceMetacharacters() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = '123 $< $> $" $& $$ $` $\' 456';
-  var expected = '123 $&lt; $&gt; $" $&amp; $$ $` $\' 456' +
+  const expected = '123 $&lt; $&gt; $" $&amp; $$ $` $\' 456' +
       (goog.userAgent.product.SAFARI ? '<br>' : '');
   // No idea why these <br> appear, but they're fairly insignificant anyways.
 
@@ -344,7 +344,7 @@ function testRemoveFormattingForTableFormatting() {
   // We preserve the table formatting as much as possible.
   // Spaces separate TD's, <br>'s separate TR's.
   // <br>'s separate the start and end of a table.
-  var html = '<table><tr><td>cell00</td><td>cell01</td></tr>' +
+  let html = '<table><tr><td>cell00</td><td>cell01</td></tr>' +
       '<tr><td>cell10</td><td>cell11</td></tr></table>';
   html = FORMATTER.removeFormattingWorker_(html);
   assertHTMLEquals('<br>cell00 cell01<br>cell10 cell11<br>', html);
@@ -355,23 +355,23 @@ function testRemoveFormattingForTableFormatting() {
  * @bug 1319715
  */
 function testRemoveFormattingDoesNotShrinkSelection() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = '<div>l </div><div><br><b>a</b>foo bar</div>';
-  var div2 = div.lastChild;
+  const div2 = div.lastChild;
 
   goog.dom.Range.createFromNodes(div2.firstChild, 0, div2.lastChild, 7)
       .select();
 
   FORMATTER.removeFormatting_();
 
-  var range = goog.dom.Range.createFromWindow();
+  const range = goog.dom.Range.createFromWindow();
   assertEquals('Correct text should be selected', 'afoo bar', range.getText());
 
   // We have to trim out the leading BR in IE due to execCommand issues,
   // so it isn't sent off to the removeFormattingWorker.
   // Workaround for broken removeFormat in old webkit added an extra
   // <br> to the end of the html.
-  var html = '<div>l </div><br class="GECKO WEBKIT">afoo bar' +
+  let html = '<div>l </div><br class="GECKO WEBKIT">afoo bar' +
       (goog.editor.BrowserFeature.ADDS_NBSPS_IN_REMOVE_FORMAT ? '<br>' : '');
   if (goog.userAgent.EDGE) {  // TODO(sdh): I have no idea where this comes from
     html = html.replace(' class="GECKO WEBKIT"', '');
@@ -386,10 +386,10 @@ function testRemoveFormattingDoesNotShrinkSelection() {
  *  @bug 1447374
  */
 function testInsideListRemoveFormat() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = '<ul><li>one</li><li><b>two</b></li><li>three</li></ul>';
 
-  var twoLi = div.firstChild.childNodes[1];
+  const twoLi = div.firstChild.childNodes[1];
   goog.dom.Range.createFromNodeContents(twoLi).select();
 
   expectedFailures.expectFailureFor(
@@ -410,7 +410,7 @@ function testInsideListRemoveFormat() {
 }
 
 function testFullListRemoveFormat() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = '<ul><li>one</li><li><b>two</b></li><li>three</li></ul>after';
 
   goog.dom.Range.createFromNodeContents(div.firstChild).select();
@@ -434,7 +434,7 @@ function testFullListRemoveFormat() {
  *  @bug 1440935
  */
 function testPartialListRemoveFormat() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = '<ul><li>one</li><li>two</li><li>three</li></ul>after';
 
   // Select "two three after".
@@ -469,7 +469,7 @@ function testBasicRemoveFormatting() {
   if (goog.userAgent.IE) {
     return;
   }
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = '<b>bold<i>italic</i></b>';
 
   goog.dom.Range.createFromNodeContents(div).select();
@@ -490,7 +490,7 @@ function testBasicRemoveFormatting() {
  * @bug 1480260
  */
 function testPartialBasicRemoveFormatting() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = '<b>bold<i>italic</i></b>';
 
   goog.dom.Range
@@ -515,9 +515,9 @@ function testPartialBasicRemoveFormatting() {
  * @bug 3075557
  */
 function testRemoveFormattingLinkedImageBorderZero() {
-  var testHtml = '<a href="http://www.google.com/">' +
+  const testHtml = '<a href="http://www.google.com/">' +
       '<img src="http://www.google.com/images/logo.gif" border="0"></a>';
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = testHtml + controlHtml;
   goog.dom.Range.createFromNodeContents(div).select();
   FORMATTER.removeFormatting_();
@@ -539,9 +539,9 @@ function testRemoveFormattingLinkedImageBorderZero() {
  * @bug 3075557
  */
 function testRemoveFormattingLinkedImageBorderNonzero() {
-  var testHtml = '<a href="http://www.google.com/">' +
+  const testHtml = '<a href="http://www.google.com/">' +
       '<img src="http://www.google.com/images/logo.gif" border="1"></a>';
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = testHtml + controlHtml;
   goog.dom.Range.createFromNodeContents(div).select();
   FORMATTER.removeFormatting_();
@@ -564,8 +564,9 @@ function testRemoveFormattingLinkedImageBorderNonzero() {
  * @bug 3075557
  */
 function testRemoveFormattingUnlinkedImage() {
-  var testHtml = '<img src="http://www.google.com/images/logo.gif" border="0">';
-  var div = document.getElementById('html');
+  const testHtml =
+      '<img src="http://www.google.com/images/logo.gif" border="0">';
+  const div = document.getElementById('html');
   div.innerHTML = testHtml + controlHtml;
   goog.dom.Range.createFromNodeContents(div).select();
   FORMATTER.removeFormatting_();
@@ -588,10 +589,10 @@ function testRemoveFormattingUnlinkedImage() {
  * @bug 3075557
  */
 function testRemoveFormattingLinkedImageDeep() {
-  var testHtml = '<a href="http://www.google.com/"><b>hello' +
+  const testHtml = '<a href="http://www.google.com/"><b>hello' +
       '<img src="http://www.google.com/images/logo.gif" border="0">' +
       'world</b></a>';
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = testHtml + controlHtml;
   goog.dom.Range.createFromNodeContents(div).select();
   FORMATTER.removeFormatting_();
@@ -622,7 +623,7 @@ function testFullTableRemoveFormatting() {
     return;
   }
 
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
 
   // WebKit has an extra BR in case 2.
   expectedFailures.expectFailureFor(
@@ -660,7 +661,7 @@ function testFullTableRemoveFormatting() {
 }
 
 function testInsideTableRemoveFormatting() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML =
       '<table><tr><td><b id="b">foo</b></td></tr><tr><td>ba</td></tr></table>';
 
@@ -693,7 +694,7 @@ function testPartialTableRemoveFormatting() {
     return;
   }
 
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = 'bar<table><tr><td><b id="b">foo</b></td></tr>' +
       '<tr><td><i>banana</i></td></tr></table><div id="baz">' +
       'baz</div>';
@@ -739,7 +740,7 @@ function runExpectingFailuresForUnimplementedBrowsers(func) {
 
 function testTwoTablesSelectedFullyRemoveFormatting() {
   runExpectingFailuresForUnimplementedBrowsers(function() {
-    var div = document.getElementById('html');
+    const div = document.getElementById('html');
     // When two tables are fully selected, we remove them completely.
     div.innerHTML = '<table><tr><td>foo</td></tr></table>' +
         '<table><tr><td>bar</td></tr></table>';
@@ -760,7 +761,7 @@ function testTwoTablesSelectedFullyInsideRemoveFormatting() {
   }
 
   runExpectingFailuresForUnimplementedBrowsers(function() {
-    var div = document.getElementById('html');
+    const div = document.getElementById('html');
     // When two tables are selected from inside but fully,
     // also remove them completely.
     div.innerHTML = '<table><tr><td id="td1">foo</td></tr></table>' +
@@ -778,7 +779,7 @@ function testTwoTablesSelectedFullyInsideRemoveFormatting() {
 
 function testTwoTablesSelectedFullyAndPartiallyRemoveFormatting() {
   runExpectingFailuresForUnimplementedBrowsers(function() {
-    var div = document.getElementById('html');
+    const div = document.getElementById('html');
     // Two tables selected, one fully, one partially. Remove
     // only the fully selected one and remove styles only from
     // partially selected one.
@@ -790,7 +791,7 @@ function testTwoTablesSelectedFullyAndPartiallyRemoveFormatting() {
             goog.dom.getElement('td2').firstChild.firstChild, 2)
         .select();
     FORMATTER.removeFormatting_();
-    var expectedHtml = '<br>foo<br>' +
+    let expectedHtml = '<br>foo<br>' +
         '<table><tr><td id="td2">ba<b>r</b></td></tr></table>';
     if (goog.userAgent.EDGE) {
       // TODO(sdh): Edge inserts an extra empty <b> tag but is otherwise correct
@@ -803,7 +804,7 @@ function testTwoTablesSelectedFullyAndPartiallyRemoveFormatting() {
 
 function testTwoTablesSelectedPartiallyRemoveFormatting() {
   runExpectingFailuresForUnimplementedBrowsers(function() {
-    var div = document.getElementById('html');
+    const div = document.getElementById('html');
     // Two tables selected, both partially.  Don't remove tables,
     // but remove styles.
     div.innerHTML = '<table><tr><td id="td1">f<i>o</i>o</td></tr></table>' +
@@ -834,7 +835,7 @@ function testRandomGoogleNewsSnippetRemoveFormatting() {
     return;
   }
 
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML =
       '<font size="-3"><br></font><table align="right" border="0" ' +
       'cellpadding="0" cellspacing="0"><tbody><tr><td style="padding-left:' +
@@ -917,9 +918,9 @@ function testRandomGoogleNewsSnippetRemoveFormatting() {
 }
 
 function testRangeDelimitedByRanges() {
-  var abcde = goog.dom.getElement('abcde').firstChild;
-  var start = goog.dom.Range.createFromNodes(abcde, 1, abcde, 2);
-  var end = goog.dom.Range.createFromNodes(abcde, 3, abcde, 4);
+  const abcde = goog.dom.getElement('abcde').firstChild;
+  const start = goog.dom.Range.createFromNodes(abcde, 1, abcde, 2);
+  const end = goog.dom.Range.createFromNodes(abcde, 3, abcde, 4);
 
   goog.testing.dom.assertRangeEquals(
       abcde, 1, abcde, 4,
@@ -928,7 +929,7 @@ function testRangeDelimitedByRanges() {
 }
 
 function testGetTableAncestor() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
 
   div.innerHTML = 'foo<table><tr><td>foo</td></tr></table>bar';
   assertTrue(
@@ -953,7 +954,7 @@ function testGetTableAncestor() {
  * @bug 1272905
  */
 function testHardReturnsInHeadersPreserved() {
-  var div = document.getElementById('html');
+  const div = document.getElementById('html');
   div.innerHTML = '<h1>abcd</h1><h2>efgh</h2><h3>ijkl</h3>';
 
   // Select efgh.
@@ -1001,9 +1002,9 @@ function testKeyboardShortcut_space() {
 
   FIELDMOCK.$replay();
 
-  var e = {};
-  var key = ' ';
-  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  const e = {};
+  const key = ' ';
+  const result = FORMATTER.handleKeyboardShortcut(e, key, true);
   assertTrue(result);
 
   FIELDMOCK.$verify();
@@ -1013,9 +1014,9 @@ function testKeyboardShortcut_other() {
   FIELDMOCK.$reset();
   FIELDMOCK.$replay();
 
-  var e = {};
-  var key = 'x';
-  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  const e = {};
+  const key = 'x';
+  const result = FORMATTER.handleKeyboardShortcut(e, key, true);
   assertFalse(result);
 
   FIELDMOCK.$verify();
@@ -1029,10 +1030,10 @@ function testCustomKeyboardShortcut_custom() {
 
   FIELDMOCK.$replay();
 
-  var e = {};
-  var key = '\\';
+  const e = {};
+  const key = '\\';
   FORMATTER.setKeyboardShortcutKey(key);
-  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  const result = FORMATTER.handleKeyboardShortcut(e, key, true);
   assertTrue(result);
 
   FIELDMOCK.$verify();
@@ -1042,10 +1043,10 @@ function testCustomKeyboardShortcut_default() {
   FIELDMOCK.$reset();
   FIELDMOCK.$replay();
 
-  var e = {};
-  var key = ' ';
+  const e = {};
+  const key = ' ';
   FORMATTER.setKeyboardShortcutKey('\\');
-  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  const result = FORMATTER.handleKeyboardShortcut(e, key, true);
   assertFalse(result);
 
   FIELDMOCK.$verify();
@@ -1055,11 +1056,11 @@ function testKeyboardShortcut_withBothModifierKeys() {
   FIELDMOCK.$reset();
   FIELDMOCK.$replay();
 
-  var e = {};
+  const e = {};
   e.metaKey = true;
   e.ctrlKey = true;
-  var key = ' ';
-  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  const key = ' ';
+  const result = FORMATTER.handleKeyboardShortcut(e, key, true);
   assertFalse(result);
 
   FIELDMOCK.$verify();
@@ -1070,11 +1071,11 @@ function testKeyboardShortcut_withMetaKeyAndShiftKey() {
   FIELDMOCK.$reset();
   FIELDMOCK.$replay();
 
-  var e = {};
+  const e = {};
   e.metaKey = true;
   e.shiftKey = true;
-  var key = ' ';
-  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  const key = ' ';
+  const result = FORMATTER.handleKeyboardShortcut(e, key, true);
   assertFalse(result);
 
   FIELDMOCK.$verify();
@@ -1085,11 +1086,11 @@ function testKeyboardShortcut_withCtrlKeyAndShiftKey() {
   FIELDMOCK.$reset();
   FIELDMOCK.$replay();
 
-  var e = {};
+  const e = {};
   e.ctrlKey = true;
   e.shiftKey = true;
-  var key = ' ';
-  var result = FORMATTER.handleKeyboardShortcut(e, key, true);
+  const key = ' ';
+  const result = FORMATTER.handleKeyboardShortcut(e, key, true);
   assertFalse(result);
 
   FIELDMOCK.$verify();

@@ -108,7 +108,7 @@ goog.inherits(
 // Fake Soy-generated template functions.
 //
 
-var example = {};
+const example = {};
 
 
 /**
@@ -194,7 +194,7 @@ example.noDataTemplate = function(data, opt_sb, opt_injectedData) {
  */
 example.sanitizedHtmlTemplate = function(data, opt_sb, opt_injectedData) {
   // Test the SanitizedContent constructor.
-  var sanitized = makeSanitizedContent(
+  const sanitized = makeSanitizedContent(
       'Hello <b>World</b>', goog.soy.data.SanitizedContentKind.HTML);
   sanitized.contentDir = goog.i18n.bidi.Dir.LTR;
   return sanitized;
@@ -222,7 +222,7 @@ example.sanitizedHtmlAttributesTemplate = function(
  */
 example.sanitizedSmsUrlTemplate = function(data, opt_sb, opt_injectedData) {
   // Test the SanitizedContent constructor.
-  var sanitized = makeSanitizedContent(
+  const sanitized = makeSanitizedContent(
       'sms:123456789', goog.soy.data.SanitizedContentKind.URI);
   return sanitized;
 };
@@ -236,7 +236,7 @@ example.sanitizedSmsUrlTemplate = function(data, opt_sb, opt_injectedData) {
  */
 example.sanitizedHttpUrlTemplate = function(data, opt_sb, opt_injectedData) {
   // Test the SanitizedContent constructor.
-  var sanitized = makeSanitizedContent(
+  const sanitized = makeSanitizedContent(
       'https://google.com/foo?n=917', goog.soy.data.SanitizedContentKind.URI);
   return sanitized;
 };
@@ -340,7 +340,7 @@ example.colGroupTemplateCaps = function(data, opt_sb, opt_injectedData) {
  * @return {string} Content of the document fragment as HTML.
  */
 function fragmentToHtml(fragment) {
-  var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
+  const testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
   testDiv.appendChild(fragment);
   return elementToInnerHtml(testDiv);
 }
@@ -352,7 +352,7 @@ function fragmentToHtml(fragment) {
  * @return {string} Content of the element as HTML.
  */
 function elementToInnerHtml(elem) {
-  var innerHtml = elem.innerHTML;
+  let innerHtml = elem.innerHTML;
   if (goog.userAgent.IE) {
     innerHtml = innerHtml.replace(/DIV/g, 'div').replace(/\s/g, '');
   }

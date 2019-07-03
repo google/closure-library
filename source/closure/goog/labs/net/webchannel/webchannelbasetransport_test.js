@@ -36,10 +36,10 @@ goog.require('goog.testing.jsunit');
 goog.setTestOnly('goog.labs.net.webChannel.webChannelBaseTransportTest');
 
 
-var webChannel;
-var channelUrl = 'http://127.0.0.1:8080/channel';
+let webChannel;
+const channelUrl = 'http://127.0.0.1:8080/channel';
 
-var stubs = new goog.testing.PropertyReplacer();
+const stubs = new goog.testing.PropertyReplacer();
 
 
 function shouldRunTests() {
@@ -69,19 +69,19 @@ function stubChannelRequest() {
 function testUnsupportedTransports() {
   stubChannelRequest();
 
-  var err = assertThrows(function() {
-    var webChannelTransport =
+  const err = assertThrows(function() {
+    const webChannelTransport =
         new goog.labs.net.webChannel.WebChannelBaseTransport();
   });
   assertContains('error', err.message);
 }
 
 function testOpenWithUrl() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
   webChannel = webChannelTransport.createWebChannel(channelUrl);
 
-  var eventFired = false;
+  let eventFired = false;
   goog.events.listen(
       webChannel, goog.net.WebChannel.EventType.OPEN,
       function(e) { eventFired = true; });
@@ -89,7 +89,7 @@ function testOpenWithUrl() {
   webChannel.open();
   assertFalse(eventFired);
 
-  var channel = webChannel.channel_;
+  const channel = webChannel.channel_;
   assertNotNull(channel);
 
   simulateOpenEvent(channel);
@@ -97,65 +97,65 @@ function testOpenWithUrl() {
 }
 
 function testOpenWithTestUrl() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {'testUrl': channelUrl + '/footest'};
+  const options = {'testUrl': channelUrl + '/footest'};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
-  var testPath = webChannel.channel_.connectionTest_.path_;
+  const testPath = webChannel.channel_.connectionTest_.path_;
   assertNotNullNorUndefined(testPath);
 }
 
 function testOpenWithCustomHeaders() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {'messageHeaders': {'foo-key': 'foo-value'}};
+  const options = {'messageHeaders': {'foo-key': 'foo-value'}};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
-  var extraHeaders_ = webChannel.channel_.extraHeaders_;
+  const extraHeaders_ = webChannel.channel_.extraHeaders_;
   assertNotNullNorUndefined(extraHeaders_);
   assertEquals('foo-value', extraHeaders_['foo-key']);
   assertEquals(undefined, extraHeaders_['X-Client-Protocol']);
 }
 
 function testOpenWithInitHeaders() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {'initMessageHeaders': {'foo-key': 'foo-value'}};
+  const options = {'initMessageHeaders': {'foo-key': 'foo-value'}};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
-  var initHeaders_ = webChannel.channel_.initHeaders_;
+  const initHeaders_ = webChannel.channel_.initHeaders_;
   assertNotNullNorUndefined(initHeaders_);
   assertEquals('foo-value', initHeaders_['foo-key']);
 }
 
 function testOpenWithMessageContentType() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {'messageContentType': 'application/protobuf+json'};
+  const options = {'messageContentType': 'application/protobuf+json'};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
-  var initHeaders_ = webChannel.channel_.initHeaders_;
+  const initHeaders_ = webChannel.channel_.initHeaders_;
   assertNotNullNorUndefined(initHeaders_);
   assertEquals(
       'application/protobuf+json', initHeaders_['X-WebChannel-Content-Type']);
 }
 
 function testOpenWithMessageContentTypeAndInitHeaders() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {
+  const options = {
     'messageContentType': 'application/protobuf+json',
     'initMessageHeaders': {'foo-key': 'foo-value'}
   };
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
-  var initHeaders_ = webChannel.channel_.initHeaders_;
+  const initHeaders_ = webChannel.channel_.initHeaders_;
   assertNotNullNorUndefined(initHeaders_);
   assertEquals(
       'application/protobuf+json', initHeaders_['X-WebChannel-Content-Type']);
@@ -163,86 +163,86 @@ function testOpenWithMessageContentTypeAndInitHeaders() {
 }
 
 function testClientProtocolHeaderRequired() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {'clientProtocolHeaderRequired': true};
+  const options = {'clientProtocolHeaderRequired': true};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
-  var extraHeaders_ = webChannel.channel_.extraHeaders_;
+  const extraHeaders_ = webChannel.channel_.extraHeaders_;
   assertNotNullNorUndefined(extraHeaders_);
   assertEquals('webchannel', extraHeaders_['X-Client-Protocol']);
 }
 
 function testClientProtocolHeaderNotRequiredByDefault() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
   webChannel = webChannelTransport.createWebChannel(channelUrl);
   webChannel.open();
 
-  var extraHeaders_ = webChannel.channel_.extraHeaders_;
+  const extraHeaders_ = webChannel.channel_.extraHeaders_;
   assertNull(extraHeaders_);
 }
 
 function testClientProtocolHeaderRequiredWithCustomHeader() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {
+  const options = {
     'clientProtocolHeaderRequired': true,
     'messageHeaders': {'foo-key': 'foo-value'}
   };
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
-  var extraHeaders_ = webChannel.channel_.extraHeaders_;
+  const extraHeaders_ = webChannel.channel_.extraHeaders_;
   assertNotNullNorUndefined(extraHeaders_);
   assertEquals('foo-value', extraHeaders_['foo-key']);
   assertEquals('webchannel', extraHeaders_['X-Client-Protocol']);
 }
 
 function testOpenWithCustomParams() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {'messageUrlParams': {'foo-key': 'foo-value'}};
+  const options = {'messageUrlParams': {'foo-key': 'foo-value'}};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
-  var extraParams = webChannel.channel_.extraParams_;
+  const extraParams = webChannel.channel_.extraParams_;
   assertNotNullNorUndefined(extraParams);
 }
 
 function testOpenWithHttpSessionIdParam() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {'httpSessionIdParam': 'xsessionid'};
+  const options = {'httpSessionIdParam': 'xsessionid'};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
-  var httpSessionIdParam = webChannel.channel_.getHttpSessionIdParam();
+  const httpSessionIdParam = webChannel.channel_.getHttpSessionIdParam();
   assertEquals('xsessionid', httpSessionIdParam);
 }
 
 function testOpenWithDuplicatedHttpSessionIdParam() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {
+  const options = {
     'messageUrlParams': {'xsessionid': 'abcd1234'},
     'httpSessionIdParam': 'xsessionid'
   };
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
-  var httpSessionIdParam = webChannel.channel_.getHttpSessionIdParam();
+  const httpSessionIdParam = webChannel.channel_.getHttpSessionIdParam();
   assertEquals('xsessionid', httpSessionIdParam);
 
-  var extraParams = webChannel.channel_.extraParams_;
+  const extraParams = webChannel.channel_.extraParams_;
   assertUndefined(extraParams['xsessionid']);
 }
 
 function testOpenWithCorsEnabled() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {'supportsCrossDomainXhr': true};
+  const options = {'supportsCrossDomainXhr': true};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
@@ -250,14 +250,14 @@ function testOpenWithCorsEnabled() {
 }
 
 function testSendRawJsonDefaultValue() {
-  var channelMsg;
+  let channelMsg;
   stubs.set(
       goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
       function(message) {
         channelMsg = message;
       });
 
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
   webChannel = webChannelTransport.createWebChannel(channelUrl);
   webChannel.open();
@@ -267,16 +267,16 @@ function testSendRawJsonDefaultValue() {
 }
 
 function testSendRawJsonUndefinedValue() {
-  var channelMsg;
+  let channelMsg;
   stubs.set(
       goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
       function(message) {
         channelMsg = message;
       });
 
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {};
+  const options = {};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
@@ -285,7 +285,7 @@ function testSendRawJsonUndefinedValue() {
 }
 
 function testSendRawJsonExplicitTrueValue() {
-  var channelMsg;
+  let channelMsg;
   stubs.set(
       goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
       function(message) {
@@ -297,21 +297,21 @@ function testSendRawJsonExplicitTrueValue() {
         return 12;
       });
 
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {'sendRawJson': true};
+  const options = {'sendRawJson': true};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
   webChannel.send({foo: 'bar'});
 
-  var receivedMsg =
+  const receivedMsg =
       goog.json.parse(channelMsg[goog.labs.net.webChannel.Wire.RAW_DATA_KEY]);
   assertEquals('bar', receivedMsg.foo);
 }
 
 function testSendRawJsonExplicitFalseValue() {
-  var channelMsg;
+  let channelMsg;
   stubs.set(
       goog.labs.net.webChannel.WebChannelBase.prototype, 'sendMap',
       function(message) {
@@ -323,9 +323,9 @@ function testSendRawJsonExplicitFalseValue() {
         return 12;
       });
 
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
-  var options = {'sendRawJson': false};
+  const options = {'sendRawJson': false};
   webChannel = webChannelTransport.createWebChannel(channelUrl, options);
   webChannel.open();
 
@@ -334,11 +334,11 @@ function testSendRawJsonExplicitFalseValue() {
 }
 
 function testOpenThenCloseChannel() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
   webChannel = webChannelTransport.createWebChannel(channelUrl);
 
-  var eventFired = false;
+  let eventFired = false;
   goog.events.listen(
       webChannel, goog.net.WebChannel.EventType.CLOSE,
       function(e) { eventFired = true; });
@@ -346,7 +346,7 @@ function testOpenThenCloseChannel() {
   webChannel.open();
   assertFalse(eventFired);
 
-  var channel = webChannel.channel_;
+  const channel = webChannel.channel_;
   assertNotNull(channel);
 
   simulateCloseEvent(channel);
@@ -355,11 +355,11 @@ function testOpenThenCloseChannel() {
 
 
 function testChannelError() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
   webChannel = webChannelTransport.createWebChannel(channelUrl);
 
-  var eventFired = false;
+  let eventFired = false;
   goog.events.listen(
       webChannel, goog.net.WebChannel.EventType.ERROR, function(e) {
         eventFired = true;
@@ -369,7 +369,7 @@ function testChannelError() {
   webChannel.open();
   assertFalse(eventFired);
 
-  var channel = webChannel.channel_;
+  const channel = webChannel.channel_;
   assertNotNull(channel);
 
   simulateErrorEvent(channel);
@@ -378,12 +378,12 @@ function testChannelError() {
 
 
 function testChannelMessage() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
   webChannel = webChannelTransport.createWebChannel(channelUrl);
 
-  var eventFired = false;
-  var data = 'foo';
+  let eventFired = false;
+  const data = 'foo';
   goog.events.listen(
       webChannel, goog.net.WebChannel.EventType.MESSAGE, function(e) {
         eventFired = true;
@@ -393,7 +393,7 @@ function testChannelMessage() {
   webChannel.open();
   assertFalse(eventFired);
 
-  var channel = webChannel.channel_;
+  const channel = webChannel.channel_;
   assertNotNull(channel);
 
   simulateMessageEvent(channel, data);

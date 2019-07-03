@@ -25,16 +25,21 @@ goog.require('goog.userAgent');
 goog.require('goog.userAgentTestUtil');
 
 
-var documentMode;
+let documentMode;
 goog.userAgent.getDocumentMode_ = function() {
   return documentMode;
 };
 
 
-var propertyReplacer = new goog.testing.PropertyReplacer();
+const propertyReplacer = new goog.testing.PropertyReplacer();
 
-var UserAgents =
-    {GECKO: 'GECKO', IE: 'IE', OPERA: 'OPERA', WEBKIT: 'WEBKIT', EDGE: 'EDGE'};
+const UserAgents = {
+  GECKO: 'GECKO',
+  IE: 'IE',
+  OPERA: 'OPERA',
+  WEBKIT: 'WEBKIT',
+  EDGE: 'EDGE'
+};
 
 
 function tearDown() {
@@ -52,7 +57,7 @@ function tearDown() {
  * @param {string=} opt_vendor Navigator vendor string.
  */
 function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
-  var mockGlobal = {
+  const mockGlobal = {
     'navigator':
         {'userAgent': uaString, 'product': opt_product, 'vendor': opt_vendor}
   };
@@ -61,8 +66,8 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
   goog.labs.userAgent.util.setUserAgent(null);
 
   goog.userAgentTestUtil.reinitializeUserAgent();
-  for (var ua in UserAgents) {
-    var isExpected = goog.array.contains(expectedAgents, UserAgents[ua]);
+  for (const ua in UserAgents) {
+    const isExpected = goog.array.contains(expectedAgents, UserAgents[ua]);
     assertEquals(
         isExpected,
         goog.userAgentTestUtil.getUserAgentDetected(UserAgents[ua]));
@@ -71,7 +76,7 @@ function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
 
 function testOperaInit() {
   // Check Opera Mini version strings are detected properly
-  var mockGlobal = {
+  let mockGlobal = {
     'navigator': {'userAgent': goog.labs.userAgent.testAgents.OPERA_MINI}
   };
   propertyReplacer.set(goog, 'global', mockGlobal);
@@ -247,19 +252,19 @@ function testIeDocumentModeOverride() {
 
 function testDocumentModeInStandardsMode() {
   goog.userAgentTestUtil.reinitializeUserAgent();
-  var expectedMode =
+  const expectedMode =
       goog.userAgent.IE ? parseInt(goog.userAgent.VERSION) : undefined;
   assertEquals(expectedMode, goog.userAgent.DOCUMENT_MODE);
 }
 
 function testEdge() {
-  var testAgents = goog.labs.userAgent.testAgents;
+  const testAgents = goog.labs.userAgent.testAgents;
   assertEdge(testAgents.EDGE_12_0, '12.0');
   assertEdge(testAgents.EDGE_12_9600, '12.9600');
 }
 
 function testOpera() {
-  var assertOpera = function(uaString) {
+  const assertOpera = function(uaString) {
     assertUserAgent([UserAgents.OPERA], uaString);
   };
   assertOpera('Opera/7.23 (Windows 98; U) [en]');
@@ -277,7 +282,7 @@ function testOpera() {
 }
 
 function testWebkit() {
-  var testAgents = goog.labs.userAgent.testAgents;
+  const testAgents = goog.labs.userAgent.testAgents;
   assertWebkit(testAgents.ANDROID_BROWSER_403);
   assertWebkit(testAgents.ANDROID_BROWSER_403_ALT);
 }
@@ -289,7 +294,7 @@ function testUnknownBrowser() {
 
 function testNoNavigator() {
   // global object has no "navigator" property.
-  var mockGlobal = {};
+  const mockGlobal = {};
   propertyReplacer.set(goog, 'global', mockGlobal);
   goog.labs.userAgent.util.setUserAgent(null);
   goog.userAgentTestUtil.reinitializeUserAgent();

@@ -40,7 +40,7 @@ function tearDown() {
 }
 
 function testAvailability() {
-  var probe = goog.storage.mechanism.mechanismfactory.create();
+  const probe = goog.storage.mechanism.mechanismfactory.create();
   if (!!probe) {
     assertNotNull(mechanism);
     assertNotNull(mechanism_shared);

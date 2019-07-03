@@ -31,17 +31,17 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.ui.editor.Bubble');
 goog.require('goog.userAgent');
 
-var testHelper;
-var fieldDiv;
-var COMMAND = 'base';
-var fieldMock;
-var bubblePlugin;
-var link;
-var link2;
+let testHelper;
+let fieldDiv;
+const COMMAND = 'base';
+let fieldMock;
+let bubblePlugin;
+let link;
+let link2;
 
 function setUpPage() {
   fieldDiv = goog.dom.getElement('field');
-  var viewportSize = goog.dom.getViewportSize();
+  const viewportSize = goog.dom.getViewportSize();
   // Some tests depends on enough size of viewport.
   if (viewportSize.width < 600 || viewportSize.height < 440) {
     window.moveTo(0, 0);
@@ -109,7 +109,7 @@ function resetFieldMock() {
 
 function helpTestCreateBubble(opt_fn) {
   fieldMock.$replay();
-  var numCalled = 0;
+  let numCalled = 0;
   bubblePlugin.createBubbleContents = function(bubbleContainer) {
     numCalled++;
     assertNotNull('bubbleContainer should not be null', bubbleContainer);
@@ -130,7 +130,7 @@ function testCreateBubble(opt_fn) {
 }
 
 function testOpeningBubbleCallsOnShow() {
-  var numCalled = 0;
+  let numCalled = 0;
   testCreateBubble(function() {
     bubblePlugin.onShow = function() { numCalled++; };
   });
@@ -166,8 +166,8 @@ function testZindexBehavior() {
 
 function testNoTwoBubblesOpenAtSameTime() {
   fieldMock.$replay();
-  var origClose = goog.bind(bubblePlugin.closeBubble, bubblePlugin);
-  var numTimesCloseCalled = 0;
+  const origClose = goog.bind(bubblePlugin.closeBubble, bubblePlugin);
+  let numTimesCloseCalled = 0;
   bubblePlugin.closeBubble = function() {
     numTimesCloseCalled++;
     origClose();
@@ -188,7 +188,8 @@ function testNoTwoBubblesOpenAtSameTime() {
 
 function testHandleSelectionChangeWithEvent() {
   fieldMock.$replay();
-  var fakeEvent = new goog.events.BrowserEvent({type: 'mouseup', target: link});
+  const fakeEvent =
+      new goog.events.BrowserEvent({type: 'mouseup', target: link});
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
   bubblePlugin.createBubbleContents = goog.nullFunction;
   bubblePlugin.handleSelectionChange(fakeEvent);
@@ -229,7 +230,10 @@ function testTabKeyEvents() {
   fieldMock.$replay();
   bubblePlugin.enableKeyboardNavigation(true);
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var nonTabbable1, tabbable1, tabbable2, nonTabbable2;
+  let nonTabbable1;
+  let tabbable1;
+  let tabbable2;
+  let nonTabbable2;
   bubblePlugin.createBubbleContents = function(container) {
     nonTabbable1 = goog.dom.createDom(goog.dom.TagName.DIV);
     tabbable1 = goog.dom.createDom(goog.dom.TagName.DIV);
@@ -243,7 +247,7 @@ function testTabKeyEvents() {
   bubblePlugin.handleSelectionChangeInternal(link);
   assertTrue('Bubble should be visible', bubblePlugin.isVisible());
 
-  var tabHandledByBubble = simulateTabKeyOnBubble();
+  const tabHandledByBubble = simulateTabKeyOnBubble();
   assertTrue('The action should be handled by the plugin', tabHandledByBubble);
   assertFocused(tabbable1);
 
@@ -266,7 +270,9 @@ function testTabKeyEventsWithShiftKey() {
   fieldMock.$replay();
   bubblePlugin.enableKeyboardNavigation(true);
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var nonTabbable, tabbable1, tabbable2;
+  let nonTabbable;
+  let tabbable1;
+  let tabbable2;
   bubblePlugin.createBubbleContents = function(container) {
     nonTabbable = goog.dom.createDom(goog.dom.TagName.DIV);
     tabbable1 = goog.dom.createDom(goog.dom.TagName.DIV);
@@ -281,7 +287,7 @@ function testTabKeyEventsWithShiftKey() {
 
   assertTrue('Bubble should be visible', bubblePlugin.isVisible());
 
-  var tabHandledByBubble = simulateTabKeyOnBubble();
+  const tabHandledByBubble = simulateTabKeyOnBubble();
   assertTrue('The action should be handled by the plugin', tabHandledByBubble);
   assertFocused(tabbable1);
   fieldMock.$verify();
@@ -300,7 +306,10 @@ function testLinksAreTabbable() {
   fieldMock.$replay();
   bubblePlugin.enableKeyboardNavigation(true);
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var nonTabbable1, link1, link2, nonTabbable2;
+  let nonTabbable1;
+  let link1;
+  let link2;
+  let nonTabbable2;
   bubblePlugin.createBubbleContents = function(container) {
     nonTabbable1 = goog.dom.createDom(goog.dom.TagName.DIV);
     goog.dom.appendChild(container, nonTabbable1);
@@ -312,7 +321,7 @@ function testLinksAreTabbable() {
   bubblePlugin.handleSelectionChangeInternal(link);
   assertTrue('Bubble should be visible', bubblePlugin.isVisible());
 
-  var tabHandledByBubble = simulateTabKeyOnBubble();
+  const tabHandledByBubble = simulateTabKeyOnBubble();
   assertTrue('The action should be handled by the plugin', tabHandledByBubble);
   assertFocused(bubbleLink1);
 
@@ -329,7 +338,7 @@ function testLinksAreTabbable() {
 function testTabKeyNoEffectKeyboardNavDisabled() {
   fieldMock.$replay();
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var bubbleLink;
+  let bubbleLink;
   bubblePlugin.createBubbleContents = function(container) {
     bubbleLink = this.createLink('linkInBubble', 'Foo', false, container);
   };
@@ -337,7 +346,7 @@ function testTabKeyNoEffectKeyboardNavDisabled() {
 
   assertTrue('Bubble should be visible', bubblePlugin.isVisible());
 
-  var tabHandledByBubble = simulateTabKeyOnBubble();
+  const tabHandledByBubble = simulateTabKeyOnBubble();
   assertFalse(
       'The action should not be handled by the plugin', tabHandledByBubble);
   assertNotFocused(bubbleLink);
@@ -352,7 +361,7 @@ function testOtherKeyEventNoEffectKeyboardNavEnabled() {
   fieldMock.$replay();
   bubblePlugin.enableKeyboardNavigation(true);
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var bubbleLink;
+  let bubbleLink;
   bubblePlugin.createBubbleContents = function(container) {
     bubbleLink = this.createLink('linkInBubble', 'Foo', false, container);
   };
@@ -361,7 +370,7 @@ function testOtherKeyEventNoEffectKeyboardNavEnabled() {
   assertTrue('Bubble should be visible', bubblePlugin.isVisible());
 
   // Test pressing CTRL + B: this should not have any effect.
-  var keyHandledByBubble =
+  const keyHandledByBubble =
       simulateKeyDownOnBubble(goog.events.KeyCodes.B, true);
 
   assertFalse(
@@ -372,8 +381,8 @@ function testOtherKeyEventNoEffectKeyboardNavEnabled() {
 }
 
 function testSetTabbableSetsTabIndex() {
-  var element1 = goog.dom.createDom(goog.dom.TagName.DIV);
-  var element2 = goog.dom.createDom(goog.dom.TagName.DIV);
+  const element1 = goog.dom.createDom(goog.dom.TagName.DIV);
+  const element2 = goog.dom.createDom(goog.dom.TagName.DIV);
   element1.setAttribute('tabIndex', '1');
 
   bubblePlugin.setTabbable(element1);
@@ -418,7 +427,7 @@ function simulateKeyDownOnBubble(keyCode, isCtrl) {
         .ownerDocument.designMode = 'off';
   }
 
-  var event =
+  const event =
       new goog.testing.events.Event(goog.events.EventType.KEYDOWN, null);
   event.keyCode = keyCode;
   event.ctrlKey = isCtrl;

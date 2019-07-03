@@ -25,7 +25,7 @@ goog.require('goog.testing.jsunit');
 // A browser-independent mock of goog.fs.sliceBlob. The actual implementation
 // calls the underlying slice method differently based on browser version.
 // This mock does not support negative opt_end.
-var fsSliceBlobMock = function(blob, start, opt_end) {
+const fsSliceBlobMock = function(blob, start, opt_end) {
   if (!goog.isNumber(opt_end)) {
     opt_end = blob.size;
   }
@@ -37,7 +37,7 @@ var fsSliceBlobMock = function(blob, start, opt_end) {
  * @param {string} string
  * @constructor
  */
-var BlobMock = function(string) {
+const BlobMock = function(string) {
   this.data = string;
   this.size = this.data.length;
 };
@@ -49,7 +49,7 @@ BlobMock.prototype.slice = function(start, end) {
 
 // Mock out the FileReader to have control over the flow.
 /** @constructor */
-var FileReaderMock = function() {
+const FileReaderMock = function() {
   this.array_ = [];
   this.result = null;
   this.readyState = this.EMPTY;
@@ -88,7 +88,7 @@ FileReaderMock.prototype.mockError = function() {
 FileReaderMock.prototype.readAsArrayBuffer = function(blobMock) {
   this.readyState = this.LOADING;
   this.array_ = [];
-  for (var i = 0; i < blobMock.size; ++i) {
+  for (let i = 0; i < blobMock.size; ++i) {
     this.array_[i] = blobMock.data.charCodeAt(i);
   }
 };
@@ -97,7 +97,7 @@ FileReaderMock.prototype.isLoading = function() {
   return this.readyState == this.LOADING;
 };
 
-var stubs = new goog.testing.PropertyReplacer();
+const stubs = new goog.testing.PropertyReplacer();
 function setUp() {
   stubs.set(goog.global, 'FileReader', FileReaderMock);
   stubs.set(goog.fs, 'sliceBlob', fsSliceBlobMock);
@@ -118,7 +118,7 @@ function tearDown() {
  * @param {number} maxReads Max number of read attempts.
  */
 function readFromBlob(blobHasher, maxReads) {
-  var counter = 0;
+  let counter = 0;
   while (blobHasher.fileReader_ && blobHasher.fileReader_.isLoading() &&
          counter <= maxReads) {
     blobHasher.fileReader_.mockLoad();
@@ -134,9 +134,9 @@ function testBasicOperations() {
   }
 
   // Test hashing with one chunk.
-  var hashFn = new goog.crypt.Md5();
-  var blobHasher = new goog.crypt.BlobHasher(hashFn);
-  var blob = new BlobMock('The quick brown fox jumps over the lazy dog');
+  const hashFn = new goog.crypt.Md5();
+  let blobHasher = new goog.crypt.BlobHasher(hashFn);
+  let blob = new BlobMock('The quick brown fox jumps over the lazy dog');
   blobHasher.hash(blob);
   readFromBlob(blobHasher, 1);
   assertEquals(
@@ -166,12 +166,12 @@ function testNormalFlow() {
   }
 
   // Test the flow with one chunk.
-  var hashFn = new goog.crypt.Md5();
-  var blobHasher = new goog.crypt.BlobHasher(hashFn, 13);
-  var blob = new BlobMock('short');
-  var startedEvents = 0;
-  var progressEvents = 0;
-  var completeEvents = 0;
+  const hashFn = new goog.crypt.Md5();
+  const blobHasher = new goog.crypt.BlobHasher(hashFn, 13);
+  let blob = new BlobMock('short');
+  let startedEvents = 0;
+  let progressEvents = 0;
+  let completeEvents = 0;
   goog.events.listen(
       blobHasher, goog.crypt.BlobHasher.EventType.STARTED,
       function() { ++startedEvents; });
@@ -195,7 +195,7 @@ function testNormalFlow() {
   startedEvents = 0;
   progressEvents = 0;
   completeEvents = 0;
-  var progressLoops = 0;
+  let progressLoops = 0;
   blobHasher.hash(blob);
   assertEquals(1, startedEvents);
   assertEquals(0, progressEvents);
@@ -211,12 +211,12 @@ function testAbortsAndErrors() {
     return;
   }
 
-  var hashFn = new goog.crypt.Md5();
-  var blobHasher = new goog.crypt.BlobHasher(hashFn, 13);
-  var blob = new BlobMock('The quick brown fox jumps over the lazy dog');
-  var abortEvents = 0;
-  var errorEvents = 0;
-  var completeEvents = 0;
+  const hashFn = new goog.crypt.Md5();
+  const blobHasher = new goog.crypt.BlobHasher(hashFn, 13);
+  const blob = new BlobMock('The quick brown fox jumps over the lazy dog');
+  let abortEvents = 0;
+  let errorEvents = 0;
+  let completeEvents = 0;
   goog.events.listen(
       blobHasher, goog.crypt.BlobHasher.EventType.ABORT,
       function() { ++abortEvents; });
@@ -275,11 +275,11 @@ function testBasicThrottling() {
     return;
   }
 
-  var hashFn = new goog.crypt.Md5();
-  var blobHasher = new goog.crypt.BlobHasher(hashFn, 5);
-  var blob = new BlobMock('The quick brown fox jumps over the lazy dog');
-  var throttledEvents = 0;
-  var completeEvents = 0;
+  const hashFn = new goog.crypt.Md5();
+  const blobHasher = new goog.crypt.BlobHasher(hashFn, 5);
+  const blob = new BlobMock('The quick brown fox jumps over the lazy dog');
+  let throttledEvents = 0;
+  let completeEvents = 0;
   goog.events.listen(
       blobHasher, goog.crypt.BlobHasher.EventType.THROTTLED,
       function() { ++throttledEvents; });
@@ -318,7 +318,7 @@ function testBasicThrottling() {
 
   // The entire blob should be processed.
   blobHasher.setHashingLimit(Infinity);
-  var expectedChunks = Math.ceil(blob.size / 5) - 3;
+  const expectedChunks = Math.ceil(blob.size / 5) - 3;
   assertEquals(expectedChunks, readFromBlob(blobHasher, expectedChunks));
   assertEquals(4, throttledEvents);
   assertEquals(1, completeEvents);
@@ -332,10 +332,10 @@ function testLengthZeroThrottling() {
     return;
   }
 
-  var hashFn = new goog.crypt.Md5();
-  var blobHasher = new goog.crypt.BlobHasher(hashFn);
-  var throttledEvents = 0;
-  var completeEvents = 0;
+  const hashFn = new goog.crypt.Md5();
+  const blobHasher = new goog.crypt.BlobHasher(hashFn);
+  let throttledEvents = 0;
+  let completeEvents = 0;
   goog.events.listen(
       blobHasher, goog.crypt.BlobHasher.EventType.THROTTLED,
       function() { ++throttledEvents; });
@@ -344,7 +344,7 @@ function testLengthZeroThrottling() {
       function() { ++completeEvents; });
 
   // Test throttling with length 0 blob.
-  var blob = new BlobMock('');
+  const blob = new BlobMock('');
   blobHasher.setHashingLimit(0);
   blobHasher.hash(blob);
   assertEquals(0, throttledEvents);
@@ -359,13 +359,13 @@ function testAbortsAndErrorsWhileThrottling() {
     return;
   }
 
-  var hashFn = new goog.crypt.Md5();
-  var blobHasher = new goog.crypt.BlobHasher(hashFn, 5);
-  var blob = new BlobMock('The quick brown fox jumps over the lazy dog');
-  var abortEvents = 0;
-  var errorEvents = 0;
-  var throttledEvents = 0;
-  var completeEvents = 0;
+  const hashFn = new goog.crypt.Md5();
+  const blobHasher = new goog.crypt.BlobHasher(hashFn, 5);
+  const blob = new BlobMock('The quick brown fox jumps over the lazy dog');
+  let abortEvents = 0;
+  let errorEvents = 0;
+  let throttledEvents = 0;
+  let completeEvents = 0;
   goog.events.listen(
       blobHasher, goog.crypt.BlobHasher.EventType.ABORT,
       function() { ++abortEvents; });

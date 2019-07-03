@@ -47,32 +47,32 @@ goog.setTestOnly('goog.labs.net.webChannel.webChannelBaseTest');
 /**
  * Delay between a network failure and the next network request.
  */
-var RETRY_TIME = 1000;
+const RETRY_TIME = 1000;
 
 
 /**
  * A really long time - used to make sure no more timeouts will fire.
  */
-var ALL_DAY_MS = 1000 * 60 * 60 * 24;
+const ALL_DAY_MS = 1000 * 60 * 60 * 24;
 
-var stubs = new goog.testing.PropertyReplacer();
+const stubs = new goog.testing.PropertyReplacer();
 
-var channel;
-var deliveredMaps;
-var handler;
-var mockClock;
-var gotError;
-var numStatEvents;
-var lastStatEvent;
-var numTimingEvents;
-var lastPostSize;
-var lastPostRtt;
-var lastPostRetryCount;
+let channel;
+let deliveredMaps;
+let handler;
+let mockClock;
+let gotError;
+let numStatEvents;
+let lastStatEvent;
+let numTimingEvents;
+let lastPostSize;
+let lastPostRtt;
+let lastPostRetryCount;
 
 // Set to true to see the channel debug output in the browser window.
-var debug = false;
+const debug = false;
 // Debug message to print out when debug is true.
-var debugMessage = '';
+let debugMessage = '';
 
 function debugToWindow(message) {
   if (debug) {
@@ -122,7 +122,7 @@ function stubSpdyCheck(spdyEnabled) {
  * @struct
  * @final
  */
-var MockChannelRequest = function(
+const MockChannelRequest = function(
     channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId) {
   this.channel_ = channel;
   this.channelDebug_ = channelDebug;
@@ -362,7 +362,7 @@ function setUp() {
   // Provide a predictable retry time for testing.
   channel.getRetryTime_ = function(retryCount) { return RETRY_TIME; };
 
-  var channelDebug = new goog.labs.net.webChannel.WebChannelDebug();
+  const channelDebug = new goog.labs.net.webChannel.WebChannelDebug();
   channelDebug.debug = function(message) { debugToWindow(message); };
   channel.setChannelDebug(channelDebug);
 
@@ -379,7 +379,7 @@ function tearDown() {
 
 
 function getSingleForwardRequest() {
-  var pool = channel.forwardChannelRequestPool_;
+  const pool = channel.forwardChannelRequestPool_;
   if (!pool.hasPendingRequest()) {
     return null;
   }
@@ -391,12 +391,12 @@ function getSingleForwardRequest() {
  * Helper function to return a formatted string representing an array of maps.
  */
 function formatArrayOfMaps(arrayOfMaps) {
-  var result = [];
-  for (var i = 0; i < arrayOfMaps.length; i++) {
-    var map = arrayOfMaps[i];
-    var keys = map.map.getKeys();
-    for (var j = 0; j < keys.length; j++) {
-      var tmp = keys[j] + ':' + map.map.get(keys[j]) +
+  const result = [];
+  for (let i = 0; i < arrayOfMaps.length; i++) {
+    const map = arrayOfMaps[i];
+    const keys = map.map.getKeys();
+    for (let j = 0; j < keys.length; j++) {
+      const tmp = keys[j] + ':' + map.map.get(keys[j]) +
           (map.context ? ':' + map.context : '');
       result.push(tmp);
     }
@@ -407,23 +407,23 @@ function formatArrayOfMaps(arrayOfMaps) {
 
 function testFormatArrayOfMaps() {
   // This function is used in a non-trivial test, so let's verify that it works.
-  var map1 = new goog.structs.Map();
+  const map1 = new goog.structs.Map();
   map1.set('k1', 'v1');
   map1.set('k2', 'v2');
-  var map2 = new goog.structs.Map();
+  const map2 = new goog.structs.Map();
   map2.set('k3', 'v3');
-  var map3 = new goog.structs.Map();
+  const map3 = new goog.structs.Map();
   map3.set('k4', 'v4');
   map3.set('k5', 'v5');
   map3.set('k6', 'v6');
 
   // One map.
-  var a = [];
+  const a = [];
   a.push(new goog.labs.net.webChannel.Wire.QueuedMap(0, map1));
   assertEquals('k1:v1, k2:v2', formatArrayOfMaps(a));
 
   // Many maps.
-  var b = [];
+  const b = [];
   b.push(new goog.labs.net.webChannel.Wire.QueuedMap(0, map1));
   b.push(new goog.labs.net.webChannel.Wire.QueuedMap(0, map2));
   b.push(new goog.labs.net.webChannel.Wire.QueuedMap(0, map3));
@@ -431,7 +431,7 @@ function testFormatArrayOfMaps() {
       'k1:v1, k2:v2, k3:v3, k4:v4, k5:v5, k6:v6', formatArrayOfMaps(b));
 
   // One map with a context.
-  var c = [];
+  const c = [];
   c.push(
       new goog.labs.net.webChannel.Wire.QueuedMap(0, map1, new String('c1')));
   assertEquals('k1:v1:c1, k2:v2:c1', formatArrayOfMaps(c));
@@ -447,7 +447,7 @@ function testFormatArrayOfMaps() {
 function connectForwardChannel(
     opt_serverVersion, opt_hostPrefix, opt_uriPrefix, opt_spdyEnabled) {
   stubSpdyCheck(!!opt_spdyEnabled);
-  var uriPrefix = opt_uriPrefix || '';
+  const uriPrefix = opt_uriPrefix || '';
   channel.connect(uriPrefix + '/test', uriPrefix + '/bind', null);
   mockClock.tick(0);
   completeTestConnection();
@@ -504,7 +504,7 @@ function completeBackTestConnection() {
  * @param {string=} opt_hostPrefix
  */
 function completeForwardChannel(opt_serverVersion, opt_hostPrefix) {
-  var responseData = '[[0,["c","1234567890ABCDEF",' +
+  const responseData = '[[0,["c","1234567890ABCDEF",' +
       (opt_hostPrefix ? '"' + opt_hostPrefix + '"' : 'null') +
       (opt_serverVersion ? ',' + opt_serverVersion : '') + ']]]';
   channel.onRequestData(getSingleForwardRequest(), responseData);
@@ -534,7 +534,7 @@ function responseDone() {
  */
 function responseNoBackchannel(
     opt_lastArrayIdSentFromServer, opt_outstandingDataSize) {
-  var responseData = goog.json.serialize(
+  const responseData = goog.json.serialize(
       [0, opt_lastArrayIdSentFromServer, opt_outstandingDataSize]);
   channel.onRequestData(getSingleForwardRequest(), responseData);
   channel.onRequestComplete(getSingleForwardRequest());
@@ -542,7 +542,7 @@ function responseNoBackchannel(
 }
 
 function response(lastArrayIdSentFromServer, outstandingDataSize) {
-  var responseData =
+  const responseData =
       goog.json.serialize([1, lastArrayIdSentFromServer, outstandingDataSize]);
   channel.onRequestData(getSingleForwardRequest(), responseData);
   channel.onRequestComplete(getSingleForwardRequest());
@@ -594,7 +594,7 @@ function responseUnknownSessionId() {
  * @param {string=} opt_context
  */
 function sendMap(key, value, opt_context) {
-  var map = new goog.structs.Map();
+  const map = new goog.structs.Map();
   map.set(key, value);
   channel.sendMap(map, opt_context);
   mockClock.tick(0);
@@ -794,7 +794,7 @@ function testTimingEvent() {
   sendMap('', '');
   assertEquals(1, numTimingEvents);
   mockClock.tick(20);
-  var expSize = getSingleForwardRequest().getPostData().length;
+  let expSize = getSingleForwardRequest().getPostData().length;
   responseDone();
 
   assertEquals(2, numTimingEvents);
@@ -1497,7 +1497,7 @@ function testPathWithHost() {
 }
 
 function testCreateXhrIo() {
-  var xhr = channel.createXhrIo(null);
+  let xhr = channel.createXhrIo(null);
   assertFalse(xhr.getWithCredentials());
 
   assertThrows(
@@ -1514,25 +1514,26 @@ function testCreateXhrIo() {
 }
 
 function testSpdyLimitOption() {
-  var webChannelTransport =
+  const webChannelTransport =
       new goog.labs.net.webChannel.WebChannelBaseTransport();
   stubSpdyCheck(true);
-  var webChannelDefault = webChannelTransport.createWebChannel('/foo');
+  const webChannelDefault = webChannelTransport.createWebChannel('/foo');
   assertEquals(
       10, webChannelDefault.getRuntimeProperties().getConcurrentRequestLimit());
   assertTrue(webChannelDefault.getRuntimeProperties().isSpdyEnabled());
 
-  var options = {'concurrentRequestLimit': 100};
+  const options = {'concurrentRequestLimit': 100};
 
   stubSpdyCheck(false);
-  var webChannelDisabled =
+  const webChannelDisabled =
       webChannelTransport.createWebChannel('/foo', options);
   assertEquals(
       1, webChannelDisabled.getRuntimeProperties().getConcurrentRequestLimit());
   assertFalse(webChannelDisabled.getRuntimeProperties().isSpdyEnabled());
 
   stubSpdyCheck(true);
-  var webChannelEnabled = webChannelTransport.createWebChannel('/foo', options);
+  const webChannelEnabled =
+      webChannelTransport.createWebChannel('/foo', options);
   assertEquals(
       100,
       webChannelEnabled.getRuntimeProperties().getConcurrentRequestLimit());

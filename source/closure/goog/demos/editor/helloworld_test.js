@@ -11,10 +11,10 @@ goog.require('goog.testing.editor.TestHelper');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
-var FIELD;
-var plugin;
-var fieldMock;
-var testHelper;
+let FIELD;
+let plugin;
+let fieldMock;
+let testHelper;
 
 function setUpPage() {
   FIELD = goog.dom.getElement('field');
@@ -49,12 +49,12 @@ function testExecCommandInternal() {
   }
 
   fieldMock.$replay();
-  var result = plugin.execCommandInternal(
+  const result = plugin.execCommandInternal(
       goog.demos.editor.HelloWorld.COMMAND.HELLO_WORLD);
   assertUndefined(result);
-  var spans = FIELD.getElementsByTagName('span');
+  const spans = FIELD.getElementsByTagName('span');
   assertEquals(1, spans.length);
-  var helloWorldSpan = spans.item(0);
+  const helloWorldSpan = spans.item(0);
   assertEquals('Hello World!', goog.dom.getTextContent(helloWorldSpan));
   fieldMock.$verify();
 }

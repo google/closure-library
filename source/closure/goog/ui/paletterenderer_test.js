@@ -26,15 +26,15 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.PaletteRenderer');
 
-var sandbox;
-var items = [
+let sandbox;
+const items = [
   '<div aria-label="label-0"></div>', '<div title="title-1"></div>',
   '<div aria-label="label-2" title="title-2"></div>',
   '<div><span title="child-title-3"></span></div>'
 ];
-var itemEls;
-var renderer;
-var palette;
+let itemEls;
+let renderer;
+let palette;
 
 function setUp() {}
 
@@ -55,19 +55,19 @@ function createPalette(items) {
 
 function testGridA11yRoles() {
   createPalette(items);
-  var grid = renderer.createDom(palette);
+  const grid = renderer.createDom(palette);
   assertEquals(goog.a11y.aria.Role.GRID, goog.a11y.aria.getRole(grid));
-  var table = goog.dom.getElementsByTagName(goog.dom.TagName.TABLE, grid)[0];
-  var row = goog.dom.getElementsByTagName(goog.dom.TagName.TR, table)[0];
+  const table = goog.dom.getElementsByTagName(goog.dom.TagName.TABLE, grid)[0];
+  const row = goog.dom.getElementsByTagName(goog.dom.TagName.TR, table)[0];
   assertEquals(goog.a11y.aria.Role.ROW, goog.a11y.aria.getRole(row));
-  var cell = goog.dom.getElementsByTagName(goog.dom.TagName.TD, row)[0];
+  const cell = goog.dom.getElementsByTagName(goog.dom.TagName.TD, row)[0];
   assertEquals(goog.a11y.aria.Role.GRIDCELL, goog.a11y.aria.getRole(cell));
 }
 
 function testCellA11yLabels() {
   createPalette(items);
-  var grid = renderer.createDom(palette);
-  var cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, grid);
+  const grid = renderer.createDom(palette);
+  const cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, grid);
 
   assertEquals(
       'An aria-label is used as a label', 'label-0',
@@ -86,7 +86,7 @@ function testCellA11yLabels() {
 function testA11yActiveDescendant() {
   createPalette(items);
   palette.render();
-  var cells = goog.dom.getElementsByTagName(
+  const cells = goog.dom.getElementsByTagName(
       goog.dom.TagName.TD, palette.getElementStrict());
 
   renderer.highlightCell(palette, cells[1].firstChild, true);
@@ -109,16 +109,16 @@ function testA11yActiveDescendant() {
 }
 
 function testSetContentIncremental() {
-  var items = goog.array.repeat('<div class="item">item</div>', 6);
-  var itemEls = goog.array.map(items, function(item) {
+  const items = goog.array.repeat('<div class="item">item</div>', 6);
+  const itemEls = goog.array.map(items, function(item) {
     return goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(item));
   });
 
   createPalette([]);
   palette.render();
-  var paletteEl = palette.getElementStrict();
+  const paletteEl = palette.getElementStrict();
 
-  var rows = goog.dom.getElementsByTagName(goog.dom.TagName.TR, paletteEl);
+  let rows = goog.dom.getElementsByTagName(goog.dom.TagName.TR, paletteEl);
   assertEquals(1, rows.length);
   assertEquals(0, goog.dom.getElementsByClass('item', rows[0]).length);
 
@@ -140,16 +140,16 @@ function testSetContentIncremental() {
 }
 
 function testA11yLabelsSetContentIncremental() {
-  var itemEls = goog.array.map(items, function(item, index, a) {
+  const itemEls = goog.array.map(items, function(item, index, a) {
     return goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(item));
   });
 
   createPalette([]);
   palette.render();
-  var paletteEl = palette.getElementStrict();
+  const paletteEl = palette.getElementStrict();
 
   palette.setContent(itemEls.slice(0, 1));
-  var cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, paletteEl);
+  let cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, paletteEl);
   assertEquals(4, cells.length);
   assertEquals('label-0', goog.a11y.aria.getLabel(cells[0]));
   assertEquals('', goog.a11y.aria.getLabel(cells[1]));
@@ -167,19 +167,19 @@ function testA11yLabelsSetContentIncremental() {
 function testA11yLabelsSetContentIncremental_ariaLabelUpdated() {
   createPalette(items);
   palette.render();
-  var paletteEl = palette.getElementStrict();
+  const paletteEl = palette.getElementStrict();
   cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, paletteEl);
   assertEquals('label-0', goog.a11y.aria.getLabel(cells[0]));
   assertEquals('title-1', goog.a11y.aria.getLabel(cells[1]));
   assertEquals('label-2', goog.a11y.aria.getLabel(cells[2]));
   assertEquals('child-title-3', goog.a11y.aria.getLabel(cells[3]));
 
-  var newItems = [
+  const newItems = [
     '<div aria-label="newlabel-0"></div>', '<div title="newtitle-1"></div>',
     '<div aria-label="newlabel-2" title="title-2"></div>',
     '<div><span></span></div>'
   ];
-  var newItemEls = goog.array.map(newItems, function(item, index, a) {
+  const newItemEls = goog.array.map(newItems, function(item, index, a) {
     return goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(item));
   });
 

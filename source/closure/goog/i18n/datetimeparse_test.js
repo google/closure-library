@@ -30,7 +30,7 @@ goog.require('goog.userAgent');
 
 goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
 
-var expectedFailures;
+let expectedFailures;
 
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
@@ -72,9 +72,9 @@ function assertParsedTimeEquals(
 }
 
 function testNegativeYear() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('MM/dd, yyyy');
+  const parser = new goog.i18n.DateTimeParse('MM/dd, yyyy');
   assertParsedDateEquals(1999, 11 - 1, 22, parser, '11/22, 1999', date);
   assertParsedDateEquals(-1999, 11 - 1, 22, parser, '11/22, -1999', date);
 }
@@ -86,16 +86,16 @@ function testEra() {
     return;
   }
 
-  var date = new Date();
-  var parser = new goog.i18n.DateTimeParse('MM/dd, yyyyG');
+  const date = new Date();
+  const parser = new goog.i18n.DateTimeParse('MM/dd, yyyyG');
   assertParsedDateEquals(-1998, 11 - 1, 22, parser, '11/22, 1999BC', date);
   assertParsedDateEquals(0, 11 - 1, 22, parser, '11/22, 1BC', date);
   assertParsedDateEquals(1999, 11 - 1, 22, parser, '11/22, 1999AD', date);
 }
 
 function testFractionalSeconds() {
-  var date = new Date();
-  var parser = new goog.i18n.DateTimeParse('hh:mm:ss.SSS');
+  const date = new Date();
+  const parser = new goog.i18n.DateTimeParse('hh:mm:ss.SSS');
 
   assertParsedTimeEquals(11, 12, 13, 956, parser, '11:12:13.956', date);
   assertParsedTimeEquals(11, 12, 13, 950, parser, '11:12:13.95', date);
@@ -115,16 +115,16 @@ function testAmbiguousYear() {
 
   // Since this test can run in any time, some logic needed here.
 
-  var futureDate = new Date();
+  let futureDate = new Date();
   futureDate.setFullYear(
       futureDate.getFullYear() + 100 -
       goog.i18n.DateTimeParse.ambiguousYearCenturyStart);
-  var ambiguousYear = futureDate.getFullYear() % 100;
+  let ambiguousYear = futureDate.getFullYear() % 100;
 
-  var parser = new goog.i18n.DateTimeParse('MM/dd/yy HH:mm:ss:SSS');
-  var date = new Date();
+  const parser = new goog.i18n.DateTimeParse('MM/dd/yy HH:mm:ss:SSS');
+  const date = new Date();
 
-  var str = '01/01/' + ambiguousYear + ' 00:00:00:001';
+  let str = '01/01/' + ambiguousYear + ' 00:00:00:001';
   assertTrue(parser.parse(str, date) > 0);
   assertEquals(futureDate.getFullYear(), date.getFullYear());
 
@@ -141,7 +141,7 @@ function testAmbiguousYear() {
       goog.i18n.DateTimeParse.ambiguousYearCenturyStart);
   ambiguousYear = futureDate.getFullYear() % 100;
 
-  var str = '01/01/' + ambiguousYear + ' 00:00:00:001';
+  str = '01/01/' + ambiguousYear + ' 00:00:00:001';
   assertTrue(parser.parse(str, date) > 0);
   assertEquals(futureDate.getFullYear(), date.getFullYear());
 
@@ -155,26 +155,26 @@ function testAmbiguousYear() {
 }
 
 function testLeapYear() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('MMdd, yyyy');
+  const parser = new goog.i18n.DateTimeParse('MMdd, yyyy');
 
   assertParsedDateEquals(2001, 3 - 1, 1, parser, '0229, 2001', date);
   assertParsedDateEquals(2000, 2 - 1, 29, parser, '0229, 2000', date);
 }
 
 function testAbutField() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('hhmm');
+  const parser = new goog.i18n.DateTimeParse('hhmm');
   assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122', date);
   assertParsedTimeEquals(1, 22, undefined, undefined, parser, '122', date);
 
-  var parser2 = new goog.i18n.DateTimeParse('hhmmss');
+  const parser2 = new goog.i18n.DateTimeParse('hhmmss');
   assertParsedTimeEquals(11, 22, 33, undefined, parser2, '112233', date);
   assertParsedTimeEquals(1, 22, 33, undefined, parser2, '12233', date);
 
-  var parser3 = new goog.i18n.DateTimeParse('yyyyMMdd');
+  const parser3 = new goog.i18n.DateTimeParse('yyyyMMdd');
   assertParsedDateEquals(1999, 12 - 1, 2, parser3, '19991202', date);
   assertParsedDateEquals(999, 12 - 1, 2, parser3, '9991202', date);
   assertParsedDateEquals(99, 12 - 1, 2, parser3, '991202', date);
@@ -182,39 +182,39 @@ function testAbutField() {
 }
 
 function testYearParsing() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('yyMMdd');
+  const parser = new goog.i18n.DateTimeParse('yyMMdd');
   assertParsedDateEquals(1999, 12 - 1, 2, parser, '991202', date);
 
-  var parser2 = new goog.i18n.DateTimeParse('yyyyMMdd');
+  const parser2 = new goog.i18n.DateTimeParse('yyyyMMdd');
   assertParsedDateEquals(2005, 12 - 1, 2, parser2, '20051202', date);
 
-  var parser3 = new goog.i18n.DateTimeParse('MM/y');
+  const parser3 = new goog.i18n.DateTimeParse('MM/y');
   assertParsedDateEquals(1999, 12 - 1, 2, parser3, '12/1999', date);
 
-  var parser4 = new goog.i18n.DateTimeParse('MM-y');
+  const parser4 = new goog.i18n.DateTimeParse('MM-y');
   assertParsedDateEquals(1999, 12 - 1, 2, parser4, '12-1999', date);
 }
 
 function testGoogDateParsing() {
-  var date = new goog.date.Date();
+  const date = new goog.date.Date();
 
-  var parser = new goog.i18n.DateTimeParse('yyMMdd');
+  const parser = new goog.i18n.DateTimeParse('yyMMdd');
   assertParsedDateEquals(1999, 12 - 1, 2, parser, '991202', date);
 }
 
 function testHourParsing_hh() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('hhmm');
+  const parser = new goog.i18n.DateTimeParse('hhmm');
   assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022', date);
   assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122', date);
   assertParsedTimeEquals(0, 22, undefined, undefined, parser, '1222', date);
   assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322', date);
   assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422', date);
 
-  var parser2 = new goog.i18n.DateTimeParse('hhmma');
+  const parser2 = new goog.i18n.DateTimeParse('hhmma');
   assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '0022am', date);
   assertParsedTimeEquals(11, 22, undefined, undefined, parser2, '1122am', date);
   assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '1222am', date);
@@ -228,16 +228,16 @@ function testHourParsing_hh() {
 }
 
 function testHourParsing_KK() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('KKmm');
+  const parser = new goog.i18n.DateTimeParse('KKmm');
   assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022', date);
   assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122', date);
   assertParsedTimeEquals(12, 22, undefined, undefined, parser, '1222', date);
   assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322', date);
   assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422', date);
 
-  var parser2 = new goog.i18n.DateTimeParse('KKmma');
+  const parser2 = new goog.i18n.DateTimeParse('KKmma');
   assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '0022am', date);
   assertParsedTimeEquals(11, 22, undefined, undefined, parser2, '1122am', date);
   assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '1222am', date);
@@ -251,16 +251,16 @@ function testHourParsing_KK() {
 }
 
 function testHourParsing_kk() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('kkmm');
+  const parser = new goog.i18n.DateTimeParse('kkmm');
   assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022', date);
   assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122', date);
   assertParsedTimeEquals(12, 22, undefined, undefined, parser, '1222', date);
   assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322', date);
   assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422', date);
 
-  var parser2 = new goog.i18n.DateTimeParse('kkmma');
+  const parser2 = new goog.i18n.DateTimeParse('kkmma');
   assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '0022am', date);
   assertParsedTimeEquals(11, 22, undefined, undefined, parser2, '1122am', date);
   assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '1222am', date);
@@ -274,16 +274,16 @@ function testHourParsing_kk() {
 }
 
 function testHourParsing_HH() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('HHmm');
+  const parser = new goog.i18n.DateTimeParse('HHmm');
   assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022', date);
   assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122', date);
   assertParsedTimeEquals(12, 22, undefined, undefined, parser, '1222', date);
   assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322', date);
   assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422', date);
 
-  var parser2 = new goog.i18n.DateTimeParse('HHmma');
+  const parser2 = new goog.i18n.DateTimeParse('HHmma');
   assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '0022am', date);
   assertParsedTimeEquals(11, 22, undefined, undefined, parser2, '1122am', date);
   assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '1222am', date);
@@ -297,9 +297,9 @@ function testHourParsing_HH() {
 }
 
 function testEnglishDate() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('yyyy MMM dd hh:mm');
+  const parser = new goog.i18n.DateTimeParse('yyyy MMM dd hh:mm');
 
   // Fails in Safari4/Chrome Winxp because of infrastructure issues, temporarily
   // disabled. See b/4274778.
@@ -316,11 +316,11 @@ function testChineseDate() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_zh;
 
   // JavaScript month start from 0, July is 7 - 1
-  var date = new Date(2006, 7 - 1, 24, 12, 12, 12, 0);
-  var formatter =
+  const date = new Date(2006, 7 - 1, 24, 12, 12, 12, 0);
+  const formatter =
       new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATE);
-  var dateStr = formatter.format(date);
-  var parser =
+  const dateStr = formatter.format(date);
+  let parser =
       new goog.i18n.DateTimeParse(goog.i18n.DateTimeFormat.Format.FULL_DATE);
 
   assertParsedDateEquals(2006, 7 - 1, 24, parser, dateStr, date);
@@ -356,11 +356,11 @@ function testDatesWithNativeDigits() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fa;
 
   // JavaScript month starts from 0, July is 7 - 1
-  var date = new Date(2006, 7 - 1, 24, 12, 12, 12, 0);
-  var formatter =
+  let date = new Date(2006, 7 - 1, 24, 12, 12, 12, 0);
+  let formatter =
       new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATE);
   dateStr = formatter.format(date);
-  var parser =
+  let parser =
       new goog.i18n.DateTimeParse(goog.i18n.DateTimeFormat.Format.FULL_DATE);
 
   assertParsedDateEquals(2006, 7 - 1, 24, parser, dateStr, date);
@@ -381,25 +381,25 @@ function testDatesWithNativeDigits() {
 }
 
 function testTimeZone() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('MM/dd/yyyy, hh:mm:ss zzz');
+  const parser = new goog.i18n.DateTimeParse('MM/dd/yyyy, hh:mm:ss zzz');
   assertTrue(parser.parse('07/21/2003, 11:22:33 GMT-0700', date) > 0);
-  var hourGmtMinus07 = date.getHours();
+  const hourGmtMinus07 = date.getHours();
 
   assertTrue(parser.parse('07/21/2003, 11:22:33 GMT-0600', date) > 0);
-  var hourGmtMinus06 = date.getHours();
+  const hourGmtMinus06 = date.getHours();
   assertEquals(1, (hourGmtMinus07 + 24 - hourGmtMinus06) % 24);
 
   assertTrue(parser.parse('07/21/2003, 11:22:33 GMT-0800', date) > 0);
-  var hourGmtMinus08 = date.getHours();
+  const hourGmtMinus08 = date.getHours();
   assertEquals(1, (hourGmtMinus08 + 24 - hourGmtMinus07) % 24);
 
   assertTrue(parser.parse('07/21/2003, 23:22:33 GMT-0800', date) > 0);
   assertEquals((date.getHours() + 24 - hourGmtMinus07) % 24, 13);
 
   assertTrue(parser.parse('07/21/2003, 11:22:33 GMT+0800', date) > 0);
-  var hourGmt08 = date.getHours();
+  const hourGmt08 = date.getHours();
   assertEquals(16, (hourGmtMinus08 + 24 - hourGmt08) % 24);
 
   assertTrue(parser.parse('07/21/2003, 11:22:33 GMT0800', date) > 0);
@@ -410,8 +410,8 @@ function testTimeZone() {
 }
 
 function testWeekDay() {
-  var date = new Date();
-  var parser = new goog.i18n.DateTimeParse('EEEE, MM/dd/yyyy');
+  const date = new Date();
+  let parser = new goog.i18n.DateTimeParse('EEEE, MM/dd/yyyy');
 
   assertTrue(parser.parse('Wednesday, 08/16/2006', date) > 0);
   assertDateEquals(2006, 8 - 1, 16, date);
@@ -434,9 +434,9 @@ function testWeekDay() {
 }
 
 function testStrictParse() {
-  var date = new Date();
+  const date = new Date();
 
-  var parser = new goog.i18n.DateTimeParse('yyyy/MM/dd');
+  let parser = new goog.i18n.DateTimeParse('yyyy/MM/dd');
   assertTrue(parser.strictParse('2000/13/10', date) == 0);
   assertTrue(parser.strictParse('2000/13/40', date) == 0);
   assertTrue(parser.strictParse('2000/11/10', date) > 0);
@@ -461,8 +461,8 @@ function testStrictParse() {
 }
 
 function testPartialParses() {
-  var date = new Date(0);
-  var parser = new goog.i18n.DateTimeParse('h:mma');
+  let date = new Date(0);
+  let parser = new goog.i18n.DateTimeParse('h:mma');
   assertTrue(parser.parse('5:', date) > 0);
   assertEquals(5, date.getHours());
   assertEquals(0, date.getMinutes());
@@ -485,8 +485,8 @@ function testPartialParses() {
 }
 
 function testEnglishQuarter() {
-  var date = new Date();
-  var parser = new goog.i18n.DateTimeParse('QQQQ yyyy');
+  const date = new Date();
+  const parser = new goog.i18n.DateTimeParse('QQQQ yyyy');
 
   // Fails in Safari4/Chrome Winxp because of infrastructure issues, temporarily
   // disabled. See b/4274778.
@@ -499,8 +499,8 @@ function testEnglishQuarter() {
 }
 
 function testEnglishShortQuarter() {
-  var date = new Date();
-  var parser = new goog.i18n.DateTimeParse('yyyyQQ');
+  const date = new Date();
+  const parser = new goog.i18n.DateTimeParse('yyyyQQ');
 
   // Fails in Safari4/Chrome Winxp because of infrastructure issues, temporarily
   // disabled. See b/4274778.
@@ -515,21 +515,21 @@ function testEnglishShortQuarter() {
 function testFrenchShortQuarter() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fr;
 
-  var date = new Date();
-  var parser = new goog.i18n.DateTimeParse('yyyyQQ');
+  const date = new Date();
+  const parser = new goog.i18n.DateTimeParse('yyyyQQ');
   assertParsedDateEquals(2009, 7 - 1, 1, parser, '2009T3', date);
 }
 
 function testDateTime() {
-  var dateOrg = new Date(2006, 7 - 1, 24, 17, 21, 42, 0);
+  const dateOrg = new Date(2006, 7 - 1, 24, 17, 21, 42, 0);
 
-  var formatter = new goog.i18n.DateTimeFormat(
+  const formatter = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
   dateStr = formatter.format(dateOrg);
 
-  var parser = new goog.i18n.DateTimeParse(
+  const parser = new goog.i18n.DateTimeParse(
       goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
-  var dateParsed = new Date();
+  const dateParsed = new Date();
 
   assertParsedDateEquals(
       dateOrg.getFullYear(), dateOrg.getMonth(), dateOrg.getDate(), parser,
@@ -544,10 +544,10 @@ function testDateTime() {
 function testParseDateWithOverflow() {
   // We force the initial day of month to 30 so that it will always cause an
   // overflow in February, no matter if it is a leap year or not.
-  var dateOrg = new Date(2006, 7 - 1, 30, 17, 21, 42, 0);
-  var dateParsed;  // this will receive the result of the parsing
+  const dateOrg = new Date(2006, 7 - 1, 30, 17, 21, 42, 0);
+  let dateParsed;  // this will receive the result of the parsing
 
-  var parserMonthYear = new goog.i18n.DateTimeParse('MMMM yyyy');
+  const parserMonthYear = new goog.i18n.DateTimeParse('MMMM yyyy');
 
   // The API can be a bit confusing, as this date is both input and output.
   // Benefit: fields that don't come from parsing are preserved.
@@ -580,7 +580,7 @@ function testParseDateWithOverflow() {
       12, 2 - 1, 29, parserMonthYear, 'February 12, 2013', dateParsed);
 
   // We make sure that the fix did not break parsing with day of month present
-  var parserMonthDayYear = new goog.i18n.DateTimeParse('MMMM d, yyyy');
+  const parserMonthDayYear = new goog.i18n.DateTimeParse('MMMM d, yyyy');
 
   dateParsed = new Date(dateOrg.getTime());
   assertParsedDateEquals(
@@ -597,33 +597,33 @@ function testParseDateWithOverflow() {
 /** @bug 9901750 */
 function testStandaloneMonthPattern() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_pl;
-  var date1 = new goog.date.Date(2006, 7 - 1);
-  var date2 = new goog.date.Date();
-  var formatter = new goog.i18n.DateTimeFormat('LLLL yyyy');
-  var parser = new goog.i18n.DateTimeParse('LLLL yyyy');
-  var dateStr = formatter.format(date1);
+  const date1 = new goog.date.Date(2006, 7 - 1);
+  const date2 = new goog.date.Date();
+  const formatter = new goog.i18n.DateTimeFormat('LLLL yyyy');
+  let parser = new goog.i18n.DateTimeParse('LLLL yyyy');
+  let dateStr = formatter.format(date1);
   assertParsedDateEquals(
       date1.getFullYear(), date1.getMonth(), undefined, parser, dateStr, date2);
 
   // Sanity tests to make sure MMM... (and LLL...) formats still work for
   // different locales.
-  var symbols = [goog.i18n.DateTimeSymbols_en, goog.i18n.DateTimeSymbols_pl];
+  const symbols = [goog.i18n.DateTimeSymbols_en, goog.i18n.DateTimeSymbols_pl];
 
-  for (var i = 0; i < symbols.length; i++) {
+  for (let i = 0; i < symbols.length; i++) {
     goog.i18n.DateTimeSymbols = symbols[i];
-    var tests = {
+    const tests = {
       'MMMM yyyy': goog.i18n.DateTimeSymbols.MONTHS,
       'LLLL yyyy': goog.i18n.DateTimeSymbols.STANDALONEMONTHS,
       'MMM yyyy': goog.i18n.DateTimeSymbols.SHORTMONTHS,
       'LLL yyyy': goog.i18n.DateTimeSymbols.STANDALONESHORTMONTHS
     };
 
-    for (var format in tests) {
-      var parser = new goog.i18n.DateTimeParse(format);
-      var months = tests[format];
-      for (var m = 0; m < months.length; m++) {
-        var dateStr = months[m] + ' 2006';
-        var date = new goog.date.Date();
+    for (const format in tests) {
+      const parser = new goog.i18n.DateTimeParse(format);
+      const months = tests[format];
+      for (let m = 0; m < months.length; m++) {
+        const dateStr = months[m] + ' 2006';
+        const date = new goog.date.Date();
         assertParsedDateEquals(2006, m, undefined, parser, dateStr, date);
       }
     }
@@ -631,24 +631,26 @@ function testStandaloneMonthPattern() {
 }
 
 function testConstructorSymbols() {
-  var y = 2015, m = 8, d = 28;
-  var dateFr = new Date(y, m, d);
-  var dateZh = new Date(y, m, d);
+  const y = 2015;
+  const m = 8;
+  const d = 28;
+  const dateFr = new Date(y, m, d);
+  const dateZh = new Date(y, m, d);
 
-  var parserFr = new goog.i18n.DateTimeParse(
+  const parserFr = new goog.i18n.DateTimeParse(
       goog.i18n.DateTimeFormat.Format.FULL_DATE, goog.i18n.DateTimeSymbols_fr);
 
-  var parserZh = new goog.i18n.DateTimeParse(
+  const parserZh = new goog.i18n.DateTimeParse(
       goog.i18n.DateTimeFormat.Format.FULL_DATE, goog.i18n.DateTimeSymbols_zh);
 
-  var fmtFr = new goog.i18n.DateTimeFormat(
+  const fmtFr = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.FULL_DATE, goog.i18n.DateTimeSymbols_fr);
 
-  var fmtZh = new goog.i18n.DateTimeFormat(
+  const fmtZh = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.FULL_DATE, goog.i18n.DateTimeSymbols_zh);
 
-  var dateStrFr = fmtFr.format(dateFr);
-  var dateStrZh = fmtZh.format(dateZh);
+  const dateStrFr = fmtFr.format(dateFr);
+  const dateStrZh = fmtZh.format(dateZh);
 
   assertParsedDateEquals(y, m, d, parserFr, dateStrFr, dateFr);
   assertParsedDateEquals(y, m, d, parserZh, dateStrZh, dateZh);
@@ -657,11 +659,13 @@ function testConstructorSymbols() {
 function testQuotedPattern() {
   // Regression test for b/29990921.
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
-  var y = 2013, m = 10, d = 15;
+  const y = 2013;
+  const m = 10;
+  const d = 15;
 
   // Literal apostrophe
-  var date = new Date(y, m, d);
-  var parser = new goog.i18n.DateTimeParse('MMM \'\'yy');
+  let date = new Date(y, m, d);
+  let parser = new goog.i18n.DateTimeParse('MMM \'\'yy');
   assertParsedDateEquals(y, m, d, parser, 'Nov \'13', date);
   // Quoted text
   date = new Date(y, m, d);
@@ -682,8 +686,8 @@ function testQuotedPattern() {
 }
 
 function testNullDate() {
-  var date = new Date();
-  var parser = new goog.i18n.DateTimeParse('MM/dd, yyyyG');
+  const date = new Date();
+  const parser = new goog.i18n.DateTimeParse('MM/dd, yyyyG');
   assertNotThrows(function() {
     parser.parse('11/22, 1999', date);
   });

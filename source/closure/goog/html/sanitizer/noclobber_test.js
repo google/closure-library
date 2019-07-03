@@ -17,13 +17,13 @@
 goog.module('goog.html.sanitizer.noclobberTest');
 goog.setTestOnly();
 
-var NodeType = goog.require('goog.dom.NodeType');
-var PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
-var noclobber = goog.require('goog.html.sanitizer.noclobber');
-var testSuite = goog.require('goog.testing.testSuite');
-var testingDom = goog.require('goog.testing.dom');
+const NodeType = goog.require('goog.dom.NodeType');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const noclobber = goog.require('goog.html.sanitizer.noclobber');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingDom = goog.require('goog.testing.dom');
 
-var userAgentProduct = goog.require('goog.userAgent.product');
+const userAgentProduct = goog.require('goog.userAgent.product');
 
 /** Whether we support functions that operate on Node and Element. */
 const elementAndNodeSupported =
@@ -34,7 +34,7 @@ const elementAndNodeSupported =
  * @return {!Element}
  */
 function htmlToElement(html) {
-  var div = document.createElement('div');
+  const div = document.createElement('div');
   div.innerHTML = html;
   return div.children[0];
 }
@@ -53,8 +53,8 @@ testSuite({
       return;
     }
 
-    var element = createElement('attributes');
-    var attributes = noclobber.getElementAttributes(element);
+    let element = createElement('attributes');
+    const attributes = noclobber.getElementAttributes(element);
     assertEquals('id', attributes[0].name);
 
     element = createElement('hasAttribute');
@@ -74,11 +74,11 @@ testSuite({
     assertFalse(element.hasAttribute('id'));
 
     element = createElement('innerHTML');
-    var innerHTML = noclobber.getElementInnerHTML(element);
+    const innerHTML = noclobber.getElementInnerHTML(element);
     testingDom.assertHtmlMatches('<input name="innerHTML">', innerHTML);
 
     element = createElement('style');
-    var style = noclobber.getElementStyle(element);
+    const style = noclobber.getElementStyle(element);
     assertTrue(style instanceof CSSStyleDeclaration);
 
     element = createElement('getElementsByTagName');
@@ -105,9 +105,9 @@ testSuite({
 
     // There's currently no browser in our test suite that throws on clobbering,
     // so we delete the saved prototypes to simulate such case.
-    var replacer = new PropertyReplacer();
+    const replacer = new PropertyReplacer();
 
-    var element = createElement('attributes');
+    let element = createElement('attributes');
     replacer.set(noclobber.Methods, 'ATTRIBUTES_GETTER', null);
     assertThrows(function() {
       noclobber.getElementAttributes(element);
@@ -179,7 +179,7 @@ testSuite({
       return;
     }
 
-    var element = createElement('nodeName');
+    let element = createElement('nodeName');
     assertEquals('FORM', noclobber.getNodeName(element));
 
     element = createElement('nodeType');
@@ -203,9 +203,9 @@ testSuite({
       return;
     }
 
-    var replacer = new PropertyReplacer();
+    const replacer = new PropertyReplacer();
 
-    var element = createElement('nodeName');
+    let element = createElement('nodeName');
     replacer.set(noclobber.Methods, 'NODE_NAME_GETTER', null);
     assertThrows(function() {
       noclobber.getNodeName(element);
@@ -240,7 +240,7 @@ testSuite({
 
   testCSSStyleDeclaration() {
     // Properties on the CSSStyleDeclaration object can't be clobbered.
-    var element =
+    const element =
         htmlToElement('<form style="color:red"><input name="test"></form>');
     assertEquals('red', noclobber.getCssPropertyValue(element.style, 'color'));
     noclobber.setCssProperty(element.style, 'color', 'black');
@@ -250,10 +250,10 @@ testSuite({
   testCSSStyleDeclarationOldBrowser() {
     // Properties on the CSSStyleDeclaration object can't be clobbered, we only
     // test that they work on browsers without prototypes.
-    var replacer = new PropertyReplacer();
+    const replacer = new PropertyReplacer();
 
     replacer.set(noclobber.Methods, 'GET_PROPERTY_VALUE', null);
-    var element = htmlToElement(
+    const element = htmlToElement(
         '<form style="color:red"><input name="' +
         (userAgentProduct.IE ? 'getAttribute' : 'getPropertyValue') +
         '" style="color: green"></form>');

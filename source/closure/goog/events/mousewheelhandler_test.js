@@ -27,19 +27,19 @@ goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
-var log;
-var stubs = new goog.testing.PropertyReplacer();
+let log;
+const stubs = new goog.testing.PropertyReplacer();
 
-var DEFAULT_TYPE = 'mousewheel';
-var GECKO_TYPE = 'DOMMouseScroll';
+const DEFAULT_TYPE = 'mousewheel';
+const GECKO_TYPE = 'DOMMouseScroll';
 
-var HORIZONTAL = 'h';
-var VERTICAL = 'v';
+const HORIZONTAL = 'h';
+const VERTICAL = 'v';
 
-var mouseWheelEvent;
-var mouseWheelEventRtl;
-var mouseWheelHandler;
-var mouseWheelHandlerRtl;
+let mouseWheelEvent;
+let mouseWheelEventRtl;
+let mouseWheelHandler;
+let mouseWheelHandlerRtl;
 
 function setUpPage() {
   log = goog.dom.getElement('log');
@@ -90,7 +90,7 @@ function testIeStyleMouseWheel() {
 
 function testNullBody() {
   goog.userAgent = {OPERA: false, IE: true, GECKO: false, WEBKIT: false};
-  var documentObjectWithNoBody = {};
+  const documentObjectWithNoBody = {};
   goog.testing.events.mixinListenable(documentObjectWithNoBody);
   mouseWheelHandler =
       new goog.events.MouseWheelHandler(documentObjectWithNoBody);
@@ -323,7 +323,7 @@ function assertMouseWheelEvent(expectedDetail, expectedDeltaX, expectedDeltaY) {
 function createFakeMouseWheelEvent(
     type, opt_wheelDelta, opt_detail, opt_axis, opt_wheelDeltaX,
     opt_wheelDeltaY) {
-  var event = {
+  const event = {
     type: type,
     wheelDelta: goog.isDef(opt_wheelDelta) ? opt_wheelDelta : undefined,
     detail: goog.isDef(opt_detail) ? opt_detail : undefined,

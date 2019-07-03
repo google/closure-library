@@ -46,16 +46,16 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.SliderBase');
 goog.require('goog.userAgent');
 
-var oneThumbSlider;
-var oneThumbSliderRtl;
-var oneChangeEventCount;
+let oneThumbSlider;
+let oneThumbSliderRtl;
+let oneChangeEventCount;
 
-var twoThumbSlider;
-var twoThumbSliderRtl;
-var twoChangeEventCount;
+let twoThumbSlider;
+let twoThumbSliderRtl;
+let twoChangeEventCount;
 
-var mockClock;
-var mockAnimation;
+let mockClock;
+let mockAnimation;
 
 
 
@@ -78,7 +78,7 @@ goog.inherits(OneThumbSlider, goog.ui.SliderBase);
 
 /** @override */
 OneThumbSlider.prototype.createThumbs = function() {
-  var dirSuffix = this.testOnlyIsRightToLeft_ ? 'Rtl' : '';
+  const dirSuffix = this.testOnlyIsRightToLeft_ ? 'Rtl' : '';
   this.valueThumb = this.extentThumb = goog.dom.getElement('thumb' + dirSuffix);
 };
 
@@ -107,7 +107,7 @@ goog.inherits(TwoThumbSlider, goog.ui.SliderBase);
 
 /** @override */
 TwoThumbSlider.prototype.createThumbs = function() {
-  var dirSuffix = this.testOnlyIsRightToLeft_ ? 'Rtl' : '';
+  const dirSuffix = this.testOnlyIsRightToLeft_ ? 'Rtl' : '';
   this.valueThumb = goog.dom.getElement('valueThumb' + dirSuffix);
   this.extentThumb = goog.dom.getElement('extentThumb' + dirSuffix);
   this.rangeHighlight = goog.dom.getElement('rangeHighlight' + dirSuffix);
@@ -140,10 +140,10 @@ AnimationFactory.prototype.createAnimations = function() {
 
 
 function setUp() {
-  var sandBox = goog.dom.getElement('sandbox');
+  const sandBox = goog.dom.getElement('sandbox');
   mockClock = new goog.testing.MockClock(true);
 
-  var oneThumbElem = goog.dom.createDom(
+  const oneThumbElem = goog.dom.createDom(
       goog.dom.TagName.DIV, {'id': 'oneThumbSlider'},
       goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'thumb'}));
   sandBox.appendChild(oneThumbElem);
@@ -154,7 +154,7 @@ function setUp() {
       oneThumbSlider, goog.ui.Component.EventType.CHANGE,
       function() { oneChangeEventCount++; });
 
-  var twoThumbElem = goog.dom.createDom(
+  const twoThumbElem = goog.dom.createDom(
       goog.dom.TagName.DIV, {'id': 'twoThumbSlider'},
       goog.dom.createDom(goog.dom.TagName.DIV, {'id': 'rangeHighlight'}),
       goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'valueThumb'}),
@@ -167,11 +167,11 @@ function setUp() {
       twoThumbSlider, goog.ui.Component.EventType.CHANGE,
       function() { twoChangeEventCount++; });
 
-  var sandBoxRtl = goog.dom.createDom(
+  const sandBoxRtl = goog.dom.createDom(
       goog.dom.TagName.DIV, {'dir': 'rtl', 'style': 'position:absolute;'});
   sandBox.appendChild(sandBoxRtl);
 
-  var oneThumbElemRtl = goog.dom.createDom(
+  const oneThumbElemRtl = goog.dom.createDom(
       goog.dom.TagName.DIV, {'id': 'oneThumbSliderRtl'},
       goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'thumbRtl'}));
   sandBoxRtl.appendChild(oneThumbElemRtl);
@@ -182,7 +182,7 @@ function setUp() {
       oneThumbSliderRtl, goog.ui.Component.EventType.CHANGE,
       function() { oneChangeEventCount++; });
 
-  var twoThumbElemRtl = goog.dom.createDom(
+  const twoThumbElemRtl = goog.dom.createDom(
       goog.dom.TagName.DIV, {'id': 'twoThumbSliderRtl'},
       goog.dom.createDom(goog.dom.TagName.DIV, {'id': 'rangeHighlightRtl'}),
       goog.dom.createDom(goog.dom.TagName.SPAN, {'id': 'valueThumbRtl'}),
@@ -254,7 +254,7 @@ function testGetAndSetValue() {
 }
 
 function testGetAndSetValueRtl() {
-  var thumbElement = goog.dom.getElement('thumbRtl');
+  const thumbElement = goog.dom.getElement('thumbRtl');
   assertEquals(0, goog.style.bidi.getOffsetStart(thumbElement));
   assertEquals('', thumbElement.style.left);
   assertEquals('0px', thumbElement.style.right);
@@ -285,8 +285,8 @@ function testGetAndSetValueRtl() {
 
   // Value thumb can't go past extent thumb, so we must move that first to
   // allow setting value.
-  var valueThumbElement = goog.dom.getElement('valueThumbRtl');
-  var extentThumbElement = goog.dom.getElement('extentThumbRtl');
+  const valueThumbElement = goog.dom.getElement('valueThumbRtl');
+  const extentThumbElement = goog.dom.getElement('extentThumbRtl');
   assertEquals(0, goog.style.bidi.getOffsetStart(valueThumbElement));
   assertEquals(0, goog.style.bidi.getOffsetStart(extentThumbElement));
   assertEquals('', valueThumbElement.style.left);
@@ -384,11 +384,11 @@ function testGetValueText() {
 }
 
 function testRangeListener() {
-  var slider = new goog.ui.SliderBase;
+  const slider = new goog.ui.SliderBase;
   slider.updateUi_ = slider.updateAriaStates = function() {};
   slider.rangeModel.setValue(0);
 
-  var f = goog.testing.recordFunction();
+  const f = goog.testing.recordFunction();
   goog.events.listen(slider, goog.ui.Component.EventType.CHANGE, f);
 
   slider.rangeModel.setValue(50);
@@ -413,13 +413,13 @@ function testRangeListener() {
  * @param {number} endValue The end value.
  */
 function assertHighlightedRange(rangeHighlight, startValue, endValue) {
-  var rangeStr = '[' + startValue + ', ' + endValue + ']';
-  var rangeStart = 10 + 10 * startValue;
+  const rangeStr = '[' + startValue + ', ' + endValue + ']';
+  const rangeStart = 10 + 10 * startValue;
   assertEquals(
       'Range highlight for ' + rangeStr + ' should start at ' + rangeStart +
           'px.',
       rangeStart, rangeHighlight.offsetLeft);
-  var rangeSize = 10 * (endValue - startValue);
+  const rangeSize = 10 * (endValue - startValue);
   assertEquals(
       'Range highlight for ' + rangeStr + ' should have size ' + rangeSize +
           'px.',
@@ -555,7 +555,7 @@ function testKeyHandlingRtl() {
 }
 
 function testRangeHighlight() {
-  var rangeHighlight = goog.dom.getElement('rangeHighlight');
+  const rangeHighlight = goog.dom.getElement('rangeHighlight');
 
   // Test [0, 100]
   twoThumbSlider.setValue(0);
@@ -574,14 +574,14 @@ function testRangeHighlight() {
 }
 
 function testRangeHighlightAnimation() {
-  var animationDelay = 160;  // Delay in ms, is a bit higher than actual delay.
+  let animationDelay = 160;  // Delay in ms, is a bit higher than actual delay.
   if (goog.userAgent.IE) {
     // For some reason, (probably due to how timing works), IE7 and IE8 will not
     // stop if we don't wait for it.
     animationDelay = 250;
   }
 
-  var rangeHighlight = goog.dom.getElement('rangeHighlight');
+  const rangeHighlight = goog.dom.getElement('rangeHighlight');
   twoThumbSlider.setValue(0);
   twoThumbSlider.setExtent(100);
 
@@ -623,11 +623,11 @@ function testRangeHighlightForZeroSizeSlider() {
 
 function testAnimatedSetValueAnimatesFactoryCreatedAnimations() {
   // Create and set the factory.
-  var ignore = goog.testing.mockmatchers.ignoreArgument;
-  var mockControl = new goog.testing.MockControl();
-  var mockAnimation1 = mockControl.createLooseMock(goog.fx.Animation);
-  var mockAnimation2 = mockControl.createLooseMock(goog.fx.Animation);
-  var testAnimations = [mockAnimation1, mockAnimation2];
+  const ignore = goog.testing.mockmatchers.ignoreArgument;
+  const mockControl = new goog.testing.MockControl();
+  const mockAnimation1 = mockControl.createLooseMock(goog.fx.Animation);
+  const mockAnimation2 = mockControl.createLooseMock(goog.fx.Animation);
+  const testAnimations = [mockAnimation1, mockAnimation2];
   oneThumbSlider.setAdditionalAnimations(new AnimationFactory(testAnimations));
 
   // Expect the animations to be played.
@@ -657,9 +657,9 @@ function testMouseWheelEventHandlerEnable() {
   assertTrue(oneThumbSlider.isHandleMouseWheel());
 
   // Test that mouse wheel handling can be disabled before rendering a slider.
-  var wheelDisabledElem = goog.dom.createDom(
+  const wheelDisabledElem = goog.dom.createDom(
       goog.dom.TagName.DIV, {}, goog.dom.createDom(goog.dom.TagName.SPAN));
-  var wheelDisabledSlider = new OneThumbSlider();
+  const wheelDisabledSlider = new OneThumbSlider();
   wheelDisabledSlider.setHandleMouseWheel(false);
   wheelDisabledSlider.decorate(wheelDisabledElem);
   assertFalse(wheelDisabledSlider.isHandleMouseWheel());
@@ -669,7 +669,7 @@ function testDisabledAndEnabledSlider() {
   // Check that a slider is enabled by default
   assertTrue(oneThumbSlider.isEnabled());
 
-  var listenerCount = oneThumbSlider.getHandler().getListenerCount();
+  const listenerCount = oneThumbSlider.getHandler().getListenerCount();
   // Disable the slider and check its state
   oneThumbSlider.setEnabled(false);
   assertFalse(oneThumbSlider.isEnabled());
@@ -696,7 +696,7 @@ function testDisabledAndEnabledSlider() {
 }
 
 function testBlockIncrementingWithEnableAndDisabled() {
-  var doc = goog.dom.getOwnerDocument(oneThumbSlider.getElement());
+  const doc = goog.dom.getOwnerDocument(oneThumbSlider.getElement());
   // Case when slider is not disabled between the mouse down and up events.
   goog.testing.events.fireMouseDownEvent(oneThumbSlider.getElement());
   assertEquals(
@@ -759,18 +759,18 @@ function testBlockIncrementingWithEnableAndDisabled() {
 }
 
 function testMouseClickWithMoveToPointEnabled() {
-  var stepSize = 20;
+  const stepSize = 20;
   oneThumbSlider.setStep(stepSize);
   oneThumbSlider.setMoveToPointEnabled(true);
-  var initialValue = oneThumbSlider.getValue();
+  const initialValue = oneThumbSlider.getValue();
 
   // Figure out the number of pixels per step.
-  var numSteps = Math.round(
+  const numSteps = Math.round(
       (oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum()) / stepSize);
-  var size = goog.style.getSize(oneThumbSlider.getElement());
-  var pixelsPerStep = Math.round(size.width / numSteps);
+  const size = goog.style.getSize(oneThumbSlider.getElement());
+  const pixelsPerStep = Math.round(size.width / numSteps);
 
-  var coords = goog.style.getClientPosition(oneThumbSlider.getElement());
+  const coords = goog.style.getClientPosition(oneThumbSlider.getElement());
   coords.x += pixelsPerStep / 2;
 
   // Case when value is increased
@@ -791,7 +791,7 @@ function testMouseClickWithMoveToPointEnabled() {
 }
 
 function testNonIntegerStepSize() {
-  var stepSize = 0.02;
+  const stepSize = 0.02;
   oneThumbSlider.setStep(stepSize);
   oneThumbSlider.setMinimum(-1);
   oneThumbSlider.setMaximum(1);
@@ -802,7 +802,7 @@ function testNonIntegerStepSize() {
 }
 
 function testSingleThumbSliderHasZeroExtent() {
-  var stepSize = 0.02;
+  const stepSize = 0.02;
   oneThumbSlider.setStep(stepSize);
   oneThumbSlider.setMinimum(-1);
   oneThumbSlider.setMaximum(1);
@@ -818,16 +818,16 @@ function testSingleThumbSliderHasZeroExtent() {
  */
 function testThumbCoordinateForValueWithHorizontalSlider() {
   // Make sure the y-coordinate stays the same for the horizontal slider.
-  var originalY = goog.style.getPosition(oneThumbSlider.valueThumb).y;
-  var width = oneThumbSlider.getElement().clientWidth -
+  const originalY = goog.style.getPosition(oneThumbSlider.valueThumb).y;
+  const width = oneThumbSlider.getElement().clientWidth -
       oneThumbSlider.valueThumb.offsetWidth;
-  var range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
+  const range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
 
   // Verify coordinate for a particular value.
-  var value = 20;
-  var expectedX = Math.round(value / range * width);
-  var expectedCoord = new goog.math.Coordinate(expectedX, originalY);
-  var coord = oneThumbSlider.getThumbCoordinateForValue(value);
+  const value = 20;
+  const expectedX = Math.round(value / range * width);
+  const expectedCoord = new goog.math.Coordinate(expectedX, originalY);
+  let coord = oneThumbSlider.getThumbCoordinateForValue(value);
   assertObjectEquals(expectedCoord, coord);
 
   // Verify this works regardless of current position.
@@ -839,16 +839,16 @@ function testThumbCoordinateForValueWithHorizontalSlider() {
 function testThumbCoordinateForValueWithVerticalSlider() {
   // Make sure the x-coordinate stays the same for the vertical slider.
   oneThumbSlider.setOrientation(goog.ui.SliderBase.Orientation.VERTICAL);
-  var originalX = goog.style.getPosition(oneThumbSlider.valueThumb).x;
-  var height = oneThumbSlider.getElement().clientHeight -
+  const originalX = goog.style.getPosition(oneThumbSlider.valueThumb).x;
+  const height = oneThumbSlider.getElement().clientHeight -
       oneThumbSlider.valueThumb.offsetHeight;
-  var range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
+  const range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
 
   // Verify coordinate for a particular value.
-  var value = 20;
-  var expectedY = height - Math.round(value / range * height);
-  var expectedCoord = new goog.math.Coordinate(originalX, expectedY);
-  var coord = oneThumbSlider.getThumbCoordinateForValue(value);
+  const value = 20;
+  const expectedY = height - Math.round(value / range * height);
+  const expectedCoord = new goog.math.Coordinate(originalX, expectedY);
+  let coord = oneThumbSlider.getThumbCoordinateForValue(value);
   assertObjectEquals(expectedCoord, coord);
 
   // Verify this works regardless of current position.
@@ -862,13 +862,13 @@ function testThumbCoordinateForValueWithVerticalSlider() {
  * Tests getValueFromMousePosition method.
  */
 function testValueFromMousePosition() {
-  var value = 30;
+  const value = 30;
   oneThumbSlider.setValue(value);
-  var offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
-  var size = goog.style.getSize(oneThumbSlider.valueThumb);
+  const offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  const size = goog.style.getSize(oneThumbSlider.valueThumb);
   offset.x += size.width / 2;
   offset.y += size.height / 2;
-  var e = null;
+  let e = null;
   goog.events.listen(
       oneThumbSlider, goog.events.EventType.MOUSEMOVE,
       function(evt) { e = evt; });
@@ -889,30 +889,30 @@ function testValueFromMousePosition() {
 function testClickAfterMousedown() {
   // Get the center of the thumb at value zero.
   oneThumbSlider.setValue(0);
-  var offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
-  var size = goog.style.getSize(oneThumbSlider.valueThumb);
+  const offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  const size = goog.style.getSize(oneThumbSlider.valueThumb);
   offset.x += size.width / 2;
   offset.y += size.height / 2;
 
-  var sliderElement = oneThumbSlider.getElement();
-  var width = sliderElement.clientWidth - size.width;
-  var range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
-  var offsetXAtZero = offset.x;
+  const sliderElement = oneThumbSlider.getElement();
+  const width = sliderElement.clientWidth - size.width;
+  const range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
+  const offsetXAtZero = offset.x;
 
   // Temporarily control time.
-  var theTime = goog.now();
-  var saveGoogNow = goog.now;
+  let theTime = goog.now();
+  const saveGoogNow = goog.now;
   goog.now = function() { return theTime; };
 
   // set coordinate for a particular value.
-  var valueOne = 10;
+  const valueOne = 10;
   offset.x = offsetXAtZero + Math.round(valueOne / range * width);
   goog.testing.events.fireMouseDownEvent(sliderElement, null, offset);
   assertEquals(valueOne, oneThumbSlider.getValue());
 
   // Verify a click event with another value that follows quickly is ignored.
   theTime += oneThumbSlider.MOUSE_DOWN_DELAY_ / 2;
-  var valueTwo = 20;
+  const valueTwo = 20;
   offset.x = offsetXAtZero + Math.round(valueTwo / range * width);
   goog.testing.events.fireClickEvent(sliderElement, null, offset);
   assertEquals(valueOne, oneThumbSlider.getValue());
@@ -930,12 +930,12 @@ function testClickAfterMousedown() {
  * Tests dragging events.
  */
 function testDragEvents() {
-  var offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
-  var size = goog.style.getSize(oneThumbSlider.valueThumb);
+  const offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  const size = goog.style.getSize(oneThumbSlider.valueThumb);
   offset.x += size.width / 2;
   offset.y += size.height / 2;
-  var event_types = [];
-  var handler = function(evt) {
+  let event_types = [];
+  const handler = function(evt) {
     event_types.push(evt.type);
   };
 
@@ -1030,15 +1030,15 @@ function testDragEventsUpdatesValue() {
 
   // Need to set to (0, 0) in IE8 due to a browser bug where the
   // offsetWidth/height is incorrectly calculated as 0 in test files.
-  var offset = (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) ?
+  const offset = (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) ?
       new goog.math.Coordinate() :
       goog.style.getPageOffset(oneThumbSlider.valueThumb);
-  var offsetXAtZero = offset.x;
+  const offsetXAtZero = offset.x;
 
-  var sliderElement = oneThumbSlider.getElementStrict();
-  var thumbSize = goog.style.getSize(oneThumbSlider.valueThumb);
-  var width = sliderElement.clientWidth - thumbSize.width;
-  var range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
+  const sliderElement = oneThumbSlider.getElementStrict();
+  const thumbSize = goog.style.getSize(oneThumbSlider.valueThumb);
+  const width = sliderElement.clientWidth - thumbSize.width;
+  const range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
 
   // Test that dragging the thumb calls all the correct events.
   goog.testing.events.fireMouseDownEvent(oneThumbSlider.valueThumb);
@@ -1070,18 +1070,18 @@ function testDragEventsInRtlModeUpdatesValue() {
   oneThumbSliderRtl.setMaximum(300);
   oneThumbSliderRtl.setValue(100);
 
-  var offset = goog.style.getPageOffset(oneThumbSliderRtl.valueThumb);
-  var offsetXAtZero = offset.x;
+  const offset = goog.style.getPageOffset(oneThumbSliderRtl.valueThumb);
+  let offsetXAtZero = offset.x;
   // Extra half of the thumb width in IE8 due to a browser bug where the thumb
   // offsetWidth is incorrectly calculated as 0 in test files.
-  var thumbSize = goog.style.getSize(oneThumbSliderRtl.valueThumb);
+  const thumbSize = goog.style.getSize(oneThumbSliderRtl.valueThumb);
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
     offsetXAtZero += thumbSize.width / 2;
   }
 
-  var sliderElement = oneThumbSliderRtl.getElementStrict();
-  var width = sliderElement.clientWidth - thumbSize.width;
-  var range = oneThumbSliderRtl.getMaximum() - oneThumbSliderRtl.getMinimum();
+  const sliderElement = oneThumbSliderRtl.getElementStrict();
+  const width = sliderElement.clientWidth - thumbSize.width;
+  const range = oneThumbSliderRtl.getMaximum() - oneThumbSliderRtl.getMinimum();
 
   // Test that dragging the thumb calls all the correct events.
   goog.testing.events.fireMouseDownEvent(oneThumbSliderRtl.valueThumb);
@@ -1106,15 +1106,15 @@ function testDragEventsInRtlModeUpdatesValue() {
  * Tests animationend event after click.
  */
 function testAnimationEndEventAfterClick() {
-  var offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
-  var size = goog.style.getSize(oneThumbSlider.valueThumb);
+  const offset = goog.style.getPageOffset(oneThumbSlider.valueThumb);
+  const size = goog.style.getSize(oneThumbSlider.valueThumb);
   offset.x += size.width / 2;
   offset.y += size.height / 2;
-  var event_types = [];
-  var handler = function(evt) {
+  const event_types = [];
+  const handler = function(evt) {
     event_types.push(evt.type);
   };
-  var animationDelay = 160;  // Delay in ms, is a bit higher than actual delay.
+  let animationDelay = 160;  // Delay in ms, is a bit higher than actual delay.
   if (goog.userAgent.IE) {
     // For some reason, (probably due to how timing works), IE7 and IE8 will not
     // stop if we don't wait for it.
@@ -1142,12 +1142,12 @@ function testAnimationEndEventAfterClick() {
  * `focusElementOnSliderDrag` is true.
  */
 function testFocusOnSliderAfterClickIfFocusElementOnSliderDragTrue() {
-  var sliderElement = oneThumbSlider.getElement();
-  var coords = goog.style.getClientPosition(sliderElement);
+  const sliderElement = oneThumbSlider.getElement();
+  const coords = goog.style.getClientPosition(sliderElement);
   goog.testing.events.fireClickSequence(
       sliderElement, /* opt_button */ undefined, coords);
 
-  var activeElement = oneThumbSlider.getDomHelper().getActiveElement();
+  const activeElement = oneThumbSlider.getDomHelper().getActiveElement();
   assertEquals(sliderElement, activeElement);
 }
 
@@ -1157,11 +1157,11 @@ function testFocusOnSliderAfterClickIfFocusElementOnSliderDragTrue() {
  */
 function testFocusNotOnSliderAfterClickIfFocusElementOnSliderDragFalse() {
   oneThumbSlider.setFocusElementOnSliderDrag(false);
-  var sliderElement = oneThumbSlider.getElement();
-  var coords = goog.style.getClientPosition(sliderElement);
+  const sliderElement = oneThumbSlider.getElement();
+  const coords = goog.style.getClientPosition(sliderElement);
   goog.testing.events.fireClickSequence(
       sliderElement, /* opt_button */ undefined, coords);
 
-  var activeElement = oneThumbSlider.getDomHelper().getActiveElement();
+  const activeElement = oneThumbSlider.getDomHelper().getActiveElement();
   assertNotEquals(sliderElement, activeElement);
 }

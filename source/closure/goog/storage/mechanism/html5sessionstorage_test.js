@@ -34,7 +34,7 @@ function shouldRunTests() {
 }
 
 function setUp() {
-  var sessionStorage = new goog.storage.mechanism.HTML5SessionStorage();
+  const sessionStorage = new goog.storage.mechanism.HTML5SessionStorage();
   if (sessionStorage.isAvailable()) {
     mechanism = sessionStorage;
     // There should be at least 2 MiB.

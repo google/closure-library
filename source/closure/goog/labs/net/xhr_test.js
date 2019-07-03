@@ -29,11 +29,11 @@ goog.require('goog.userAgent');
 
 
 /** Path to a small download target used for testing binary requests. */
-var TEST_IMAGE = 'testdata/cleardot.gif';
+const TEST_IMAGE = 'testdata/cleardot.gif';
 
 
 /** The expected bytes of the test image. */
-var TEST_IMAGE_BYTES = [
+const TEST_IMAGE_BYTES = [
   0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80,
   0xFF, 0x00, 0xC0, 0xC0, 0xC0, 0x00, 0x00, 0x00, 0x21, 0xF9, 0x04,
   0x01, 0x00, 0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x01,
@@ -57,7 +57,7 @@ function stubXhrToReturn(status, opt_responseText, opt_latency) {
     mockClock = new goog.testing.MockClock(true);
   }
 
-  var stubXhr = {
+  const stubXhr = {
     sent: false,
     aborted: false,
     status: 0,
@@ -67,8 +67,12 @@ function stubXhrToReturn(status, opt_responseText, opt_latency) {
       this.url = url;
       this.async = async;
     },
-    setRequestHeader: function(key, value) { this.headers[key] = value; },
-    overrideMimeType: function(mimeType) { this.mimeType = mimeType; },
+    setRequestHeader: function(key, value) {
+      this.headers[key] = value;
+    },
+    overrideMimeType: function(mimeType) {
+      this.mimeType = mimeType;
+    },
     abort: function() {
       this.aborted = true;
       this.load(0);
@@ -132,14 +136,14 @@ function buildThrowingStubXhr(err) {
  */
 function stubXmlHttpWith(stubXhr) {
   goog.net.XmlHttp = function() { return stubXhr; };
-  for (var x in originalXmlHttp) {
+  for (const x in originalXmlHttp) {
     goog.net.XmlHttp[x] = originalXmlHttp[x];
   }
 }
 
-var xhr = goog.labs.net.xhr;
-var originalXmlHttp = goog.net.XmlHttp;
-var mockClock;
+const xhr = goog.labs.net.xhr;
+const originalXmlHttp = goog.net.XmlHttp;
+let mockClock;
 
 function tearDown() {
   if (mockClock) {
@@ -161,7 +165,7 @@ function tearDown() {
  */
 function isRunningLocally() {
   if (window.location.protocol == 'file:') {
-    var testCase = goog.global['G_testRunner'].testCase;
+    const testCase = goog.global['G_testRunner'].testCase;
     testCase.saveMessage('Test skipped while running on local file system.');
     return true;
   }
@@ -218,18 +222,20 @@ function testGetBlob() {
 
   // IE9 and earlier do not support blobs.
   if (!('Blob' in goog.global)) {
-    var err = assertThrows(function() { xhr.getBlob(TEST_IMAGE); });
+    const err = assertThrows(function() {
+      xhr.getBlob(TEST_IMAGE);
+    });
     assertEquals(
         'Assertion failed: getBlob is not supported in this browser.',
         err.message);
     return;
   }
 
-  var options = {withCredentials: true};
+  const options = {withCredentials: true};
 
   return xhr.getBlob(TEST_IMAGE, options)
       .then(function(blob) {
-        var reader = new FileReader();
+        const reader = new FileReader();
         return new goog.Promise(function(resolve, reject) {
           goog.events.listenOnce(reader, goog.events.EventType.LOAD, resolve);
           reader.readAsArrayBuffer(blob);
@@ -248,14 +254,16 @@ function testGetBytes() {
 
   // IE8 requires a VBScript fallback to read the bytes from the response.
   if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(9)) {
-    var err = assertThrows(function() { xhr.getBytes(TEST_IMAGE); });
+    const err = assertThrows(function() {
+      xhr.getBytes(TEST_IMAGE);
+    });
     assertEquals(
         'Assertion failed: getBytes is not supported in this browser.',
         err.message);
     return;
   }
 
-  var options = {withCredentials: true};
+  const options = {withCredentials: true};
 
   return xhr.getBytes(TEST_IMAGE).then(function(bytes) {
     assertElementsEquals(TEST_IMAGE_BYTES, bytes);
@@ -316,7 +324,7 @@ function testBadOriginTriggersOnErrorHandler() {
 //============================================================================
 
 function testSendNoOptions() {
-  var called = false;
+  let called = false;
   stubXhrToReturn(200);
   assertFalse('Callback should not yet have been called', called);
   return xhr.send('GET', 'test-url', null).then(function(stubXhr) {
@@ -341,7 +349,7 @@ function testSendPostDoesntSetHeaderWithFormData() {
   if (!goog.global['FormData']) {
     return;
   }
-  var formData = new goog.global['FormData']();
+  const formData = new goog.global['FormData']();
   formData.append('name', 'value');
 
   stubXhrToReturn(200);
@@ -370,7 +378,7 @@ function testSendPostHeadersWithFormData() {
   if (!goog.global['FormData']) {
     return;
   }
-  var formData = new goog.global['FormData']();
+  const formData = new goog.global['FormData']();
   formData.append('name', 'value');
 
   stubXhrToReturn(200);
@@ -406,7 +414,7 @@ function testSendNullPostHeadersWithFormData() {
   if (!goog.global['FormData']) {
     return;
   }
-  var formData = new goog.global['FormData']();
+  const formData = new goog.global['FormData']();
   formData.append('name', 'value');
 
   stubXhrToReturn(200);
@@ -473,8 +481,8 @@ function testSendWithTimeoutHit() {
 }
 
 function testCancelRequest() {
-  var request = stubXhrToReturn(200);
-  var promise =
+  const request = stubXhrToReturn(200);
+  const promise =
       xhr.send('GET', 'test-url')
           .then(fail /* opt_onResolved */, function(error) {
             assertTrue(error instanceof goog.Promise.CancellationError);
@@ -513,7 +521,7 @@ function testSendWithClientException() {
 
 function testSendWithFactory() {
   stubXhrToReturn(200);
-  var options = {
+  const options = {
     xmlHttpFactory: new goog.net.WrapperXmlHttpFactory(
         goog.partial(buildThrowingStubXhr, new Error('Bad factory')),
         goog.net.XmlHttp.getOptions)

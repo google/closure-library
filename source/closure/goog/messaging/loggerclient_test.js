@@ -22,10 +22,10 @@ goog.require('goog.testing.MockControl');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.messaging.MockMessageChannel');
 
-var mockControl;
-var channel;
-var client;
-var logger;
+let mockControl;
+let channel;
+let client;
+let logger;
 
 function setUp() {
   goog.debug.FORCE_SLOPPY_STACKS = false;
@@ -53,7 +53,7 @@ function testCommand() {
 }
 
 function testCommandWithException() {
-  var ex = Error('oh no');
+  const ex = Error('oh no');
   ex.stack = ['one', 'two'];
   ex.message0 = 'message 0';
   ex.message1 = 'message 1';

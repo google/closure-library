@@ -60,43 +60,43 @@ fake.ChildClass.staticProperty = 'staticPropertyOnClass';
 function TopLevelBaseClass() {}
 
 fake.ChildClass.prototype.overridden = function() {
-  var superResult = fake.ChildClass.base(this, 'overridden');
+  const superResult = fake.ChildClass.base(this, 'overridden');
   if (superResult != 42) {
     fail('super method not invoked or returned wrong value');
   }
   return superResult + 1;
 };
 
-var mockClassFactory = new goog.testing.MockClassFactory();
-var matchers = goog.testing.mockmatchers;
+const mockClassFactory = new goog.testing.MockClassFactory();
+const matchers = goog.testing.mockmatchers;
 
 function tearDown() {
   mockClassFactory.reset();
 }
 
 function testGetStrictMockClass() {
-  var mock1 = mockClassFactory.getStrictMockClass(fake, fake.BaseClass, 1);
+  const mock1 = mockClassFactory.getStrictMockClass(fake, fake.BaseClass, 1);
   mock1.foo();
   mock1.$replay();
 
-  var mock2 = mockClassFactory.getStrictMockClass(fake, fake.BaseClass, 2);
+  const mock2 = mockClassFactory.getStrictMockClass(fake, fake.BaseClass, 2);
   mock2.foo();
   mock2.$replay();
 
-  var mock3 = mockClassFactory.getStrictMockClass(fake, fake.ChildClass, 3);
+  const mock3 = mockClassFactory.getStrictMockClass(fake, fake.ChildClass, 3);
   mock3.foo();
   mock3.bar();
   mock3.$replay();
 
-  var instance1 = new fake.BaseClass(1);
+  const instance1 = new fake.BaseClass(1);
   instance1.foo();
   mock1.$verify();
 
-  var instance2 = new fake.BaseClass(2);
+  const instance2 = new fake.BaseClass(2);
   instance2.foo();
   mock2.$verify();
 
-  var instance3 = new fake.ChildClass(3);
+  const instance3 = new fake.ChildClass(3);
   instance3.foo();
   instance3.bar();
   mock3.$verify();
@@ -110,34 +110,34 @@ function testGetStrictMockClass() {
 }
 
 function testGetStrictMockClassCreatesAllProxies() {
-  var mock1 = mockClassFactory.getStrictMockClass(fake, fake.BaseClass, 1);
+  const mock1 = mockClassFactory.getStrictMockClass(fake, fake.BaseClass, 1);
   // toString(), toLocaleString() and others are treaded specially in
   // createProxy_().
   mock1.toString();
   mock1.toLocaleString();
   mock1.$replay();
 
-  var instance1 = new fake.BaseClass(1);
+  const instance1 = new fake.BaseClass(1);
   instance1.toString();
   instance1.toLocaleString();
   mock1.$verify();
 }
 
 function testGetLooseMockClass() {
-  var mock1 = mockClassFactory.getLooseMockClass(fake, fake.BaseClass, 1);
+  const mock1 = mockClassFactory.getLooseMockClass(fake, fake.BaseClass, 1);
   mock1.foo().$anyTimes().$returns(3);
   mock1.$replay();
 
-  var mock2 = mockClassFactory.getLooseMockClass(fake, fake.BaseClass, 2);
+  const mock2 = mockClassFactory.getLooseMockClass(fake, fake.BaseClass, 2);
   mock2.foo().$times(3);
   mock2.$replay();
 
-  var mock3 = mockClassFactory.getLooseMockClass(fake, fake.ChildClass, 3);
+  const mock3 = mockClassFactory.getLooseMockClass(fake, fake.ChildClass, 3);
   mock3.foo().$atLeastOnce().$returns(5);
   mock3.bar().$atLeastOnce();
   mock3.$replay();
 
-  var instance1 = new fake.BaseClass(1);
+  const instance1 = new fake.BaseClass(1);
   assertEquals(3, instance1.foo());
   assertEquals(3, instance1.foo());
   assertEquals(3, instance1.foo());
@@ -145,13 +145,13 @@ function testGetLooseMockClass() {
   assertEquals(3, instance1.foo());
   mock1.$verify();
 
-  var instance2 = new fake.BaseClass(2);
+  const instance2 = new fake.BaseClass(2);
   instance2.foo();
   instance2.foo();
   instance2.foo();
   mock2.$verify();
 
-  var instance3 = new fake.ChildClass(3);
+  const instance3 = new fake.ChildClass(3);
   assertEquals(5, instance3.foo());
   assertEquals(5, instance3.foo());
   instance3.bar();
@@ -166,8 +166,9 @@ function testGetLooseMockClass() {
 }
 
 function testGetStrictStaticMock() {
-  var staticMock = mockClassFactory.getStrictStaticMock(fake, fake.ChildClass);
-  var mock = mockClassFactory.getStrictMockClass(fake, fake.ChildClass, 1);
+  const staticMock =
+      mockClassFactory.getStrictStaticMock(fake, fake.ChildClass);
+  const mock = mockClassFactory.getStrictMockClass(fake, fake.ChildClass, 1);
 
   mock.foo();
   mock.bar();
@@ -175,7 +176,7 @@ function testGetStrictStaticMock() {
   mock.$replay();
   staticMock.$replay();
 
-  var instance = new fake.ChildClass(1);
+  const instance = new fake.ChildClass(1);
   instance.foo();
   instance.bar();
   fake.ChildClass.staticFoo();
@@ -190,22 +191,23 @@ function testGetStrictStaticMock() {
 }
 
 function testGetStrictStaticMockKeepsStaticProperties() {
-  var OriginalChildClass = fake.ChildClass;
-  var staticMock = mockClassFactory.getStrictStaticMock(fake, fake.ChildClass);
+  const OriginalChildClass = fake.ChildClass;
+  const staticMock =
+      mockClassFactory.getStrictStaticMock(fake, fake.ChildClass);
   assertEquals(
       OriginalChildClass.staticProperty, fake.ChildClass.staticProperty);
 }
 
 function testGetLooseStaticMockKeepsStaticProperties() {
-  var OriginalChildClass = fake.ChildClass;
-  var staticMock = mockClassFactory.getLooseStaticMock(fake, fake.ChildClass);
+  const OriginalChildClass = fake.ChildClass;
+  const staticMock = mockClassFactory.getLooseStaticMock(fake, fake.ChildClass);
   assertEquals(
       OriginalChildClass.staticProperty, fake.ChildClass.staticProperty);
 }
 
 function testGetLooseStaticMock() {
-  var staticMock = mockClassFactory.getLooseStaticMock(fake, fake.ChildClass);
-  var mock = mockClassFactory.getStrictMockClass(fake, fake.ChildClass, 1);
+  const staticMock = mockClassFactory.getLooseStaticMock(fake, fake.ChildClass);
+  const mock = mockClassFactory.getStrictMockClass(fake, fake.ChildClass, 1);
 
   mock.foo();
   mock.bar();
@@ -213,7 +215,7 @@ function testGetLooseStaticMock() {
   mock.$replay();
   staticMock.$replay();
 
-  var instance = new fake.ChildClass(1);
+  const instance = new fake.ChildClass(1);
   instance.foo();
   instance.bar();
   fake.ChildClass.staticFoo();
@@ -231,14 +233,14 @@ function testGetLooseStaticMock() {
 function testFlexibleClassMockInstantiation() {
   // This mock should be returned for all instances created with a number
   // as the first argument.
-  var mock = mockClassFactory.getStrictMockClass(
+  const mock = mockClassFactory.getStrictMockClass(
       fake, fake.ChildClass, matchers.isNumber);
   mock.foo();  // Will be called by the first mock instance.
   mock.foo();  // Will be called by the second mock instance.
   mock.$replay();
 
-  var instance1 = new fake.ChildClass(1);
-  var instance2 = new fake.ChildClass(2);
+  const instance1 = new fake.ChildClass(1);
+  const instance2 = new fake.ChildClass(2);
   instance1.foo();
   instance2.foo();
   assertThrows(function() { new fake.ChildClass('foo'); });
@@ -246,13 +248,13 @@ function testFlexibleClassMockInstantiation() {
 }
 
 function testMockTopLevelClass() {
-  var mock = mockClassFactory.getStrictMockClass(
+  const mock = mockClassFactory.getStrictMockClass(
       goog.global, goog.global.TopLevelBaseClass);
 }
 
 function testGoogBaseCall() {
-  var overriddenFn = fake.ChildClass.prototype.overridden;
-  var mock = mockClassFactory.getLooseMockClass(fake, fake.ChildClass, 1);
-  var instance1 = new fake.ChildClass(1);
+  const overriddenFn = fake.ChildClass.prototype.overridden;
+  const mock = mockClassFactory.getLooseMockClass(fake, fake.ChildClass, 1);
+  const instance1 = new fake.ChildClass(1);
   assertTrue(43 == overriddenFn.call(instance1));
 }

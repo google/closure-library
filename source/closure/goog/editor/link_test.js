@@ -23,7 +23,7 @@ goog.require('goog.editor.Link');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
-var anchor;
+let anchor;
 
 function setUp() {
   anchor = goog.dom.createDom(goog.dom.TagName.A);
@@ -35,7 +35,7 @@ function tearDown() {
 }
 
 function testCreateNew() {
-  var link = new goog.editor.Link(anchor, true);
+  const link = new goog.editor.Link(anchor, true);
   assertNotNull('Should have created object', link);
   assertTrue('Should be new', link.isNew());
   assertEquals('Should have correct anchor', anchor, link.getAnchor());
@@ -43,7 +43,7 @@ function testCreateNew() {
 }
 
 function testCreateNotNew() {
-  var link = new goog.editor.Link(anchor, false);
+  const link = new goog.editor.Link(anchor, false);
   assertNotNull('Should have created object', link);
   assertFalse('Should not be new', link.isNew());
   assertEquals('Should have correct anchor', anchor, link.getAnchor());
@@ -51,19 +51,19 @@ function testCreateNotNew() {
 }
 
 function testCreateNewLinkFromText() {
-  var url = 'http://www.google.com/';
+  const url = 'http://www.google.com/';
   anchor.innerHTML = url;
-  var link = goog.editor.Link.createNewLinkFromText(anchor);
+  const link = goog.editor.Link.createNewLinkFromText(anchor);
   assertNotNull('Should have created object', link);
   assertEquals('Should have url in anchor', url, anchor.href);
 }
 
 function testCreateNewLinkFromTextLeadingTrailingWhitespace() {
-  var url = 'http://www.google.com/';
-  var urlWithSpaces = ' ' + url + ' ';
+  const url = 'http://www.google.com/';
+  const urlWithSpaces = ' ' + url + ' ';
   anchor.innerHTML = urlWithSpaces;
-  var urlWithSpacesUpdatedByBrowser = anchor.innerHTML;
-  var link = goog.editor.Link.createNewLinkFromText(anchor);
+  const urlWithSpacesUpdatedByBrowser = anchor.innerHTML;
+  const link = goog.editor.Link.createNewLinkFromText(anchor);
   assertNotNull('Should have created object', link);
   assertEquals('Should have url in anchor', url, anchor.href);
   assertEquals(
@@ -72,16 +72,16 @@ function testCreateNewLinkFromTextLeadingTrailingWhitespace() {
 }
 
 function testCreateNewLinkFromTextWithAnchor() {
-  var url = 'https://www.google.com/';
+  const url = 'https://www.google.com/';
   anchor.innerHTML = url;
-  var link = goog.editor.Link.createNewLinkFromText(anchor, '_blank');
+  const link = goog.editor.Link.createNewLinkFromText(anchor, '_blank');
   assertNotNull('Should have created object', link);
   assertEquals('Should have url in anchor', url, anchor.href);
   assertEquals('Should have _blank target', '_blank', anchor.target);
 }
 
 function testInitialize() {
-  var link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com');
+  const link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com');
   assertNotNull('Should have created object', link);
   assertTrue('Should be new', link.isNew());
   assertEquals('Should have correct anchor', anchor, link.getAnchor());
@@ -89,7 +89,7 @@ function testInitialize() {
 }
 
 function testInitializeWithTarget() {
-  var link =
+  const link =
       goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertNotNull('Should have created object', link);
   assertTrue('Should be new', link.isNew());
@@ -99,7 +99,7 @@ function testInitializeWithTarget() {
 }
 
 function testSetText() {
-  var link =
+  const link =
       goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertEquals('Should be empty', '', link.getCurrentText());
   link.setTextAndUrl('Text', 'http://docs.google.com/');
@@ -111,7 +111,7 @@ function testSetText() {
 
 function testSetBoldText() {
   anchor.innerHTML = '<b></b>';
-  var link =
+  const link =
       goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertEquals('Should be empty', '', link.getCurrentText());
   link.setTextAndUrl('Text', 'http://docs.google.com/');
@@ -125,7 +125,7 @@ function testSetBoldText() {
 
 function testLinkImgTag() {
   anchor.innerHTML = '<img src="www.google.com" alt="alt_txt">';
-  var link =
+  const link =
       goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertEquals('Test getCurrentText', 'alt_txt', link.getCurrentText());
   link.setTextAndUrl('newText', 'http://docs.google.com/');
@@ -145,14 +145,14 @@ function testLinkImgTag() {
 
 function testLinkImgTagWithNoAlt() {
   anchor.innerHTML = '<img src="www.google.com">';
-  var link =
+  const link =
       goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertEquals('Test getCurrentText', '', link.getCurrentText());
 }
 
 function testSetMixed() {
   anchor.innerHTML = '<b>A</b>B';
-  var link =
+  const link =
       goog.editor.Link.createNewLink(anchor, 'http://www.google.com', '_blank');
   assertEquals('Should have text: AB', 'AB', link.getCurrentText());
   link.setTextAndUrl('Text', 'http://docs.google.com/');
@@ -166,7 +166,7 @@ function testSetMixed() {
 
 function testPlaceCursorRightOf() {
   // IE can only do selections properly if the region is editable.
-  var ed = goog.dom.createDom(goog.dom.TagName.DIV);
+  const ed = goog.dom.createDom(goog.dom.TagName.DIV);
   goog.dom.replaceNode(ed, anchor);
   ed.contentEditable = true;
   ed.appendChild(anchor);
@@ -175,12 +175,12 @@ function testPlaceCursorRightOf() {
   // link text.  See more details in the test below.
   goog.dom.setTextContent(anchor, 'I am text');
 
-  var link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com');
+  const link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com');
   link.placeCursorRightOf();
 
-  var range = goog.dom.Range.createFromWindow();
+  const range = goog.dom.Range.createFromWindow();
   assertTrue('Range should be collapsed', range.isCollapsed());
-  var startNode = range.getStartNode();
+  const startNode = range.getStartNode();
 
   if (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('528')) {
     assertEquals(
@@ -206,7 +206,7 @@ function testPlaceCursorRightOf() {
 }
 
 function testIsLikelyUrl() {
-  var good = [
+  const good = [
     // Proper URLs
     'http://google.com', 'http://google.com/', 'http://192.168.1.103',
     'http://www.google.com:8083', 'https://antoine', 'https://foo.foo.net',
@@ -224,16 +224,17 @@ function testIsLikelyUrl() {
     // Due to TLD explosion, these could be URLs either now or soon.
     'ww.jester', 'juicer.fake', 'abs.nonsense.something', 'filename.txt'
   ];
-  for (var i = 0; i < good.length; i++) {
+  let i;
+  for (i = 0; i < good.length; i++) {
     assertTrue(
         good[i] + ' should be good', goog.editor.Link.isLikelyUrl(good[i]));
   }
 
-  var bad = [
+  const bad = [
     // Definitely not URLs
     'bananas', 'http google com', '<img>', 'Sad :/', '*garbage!.123', 'ftp',
     'http', '/', 'https', 'this is', '*!&.banana!*&!', 'www.jester is gone.com',
-    'ftp .nospaces.net', 'www_foo_net', "www.'jester'.net", 'www:8080',
+    'ftp .nospaces.net', 'www_foo_net', 'www.\'jester\'.net', 'www:8080',
     'www . notnsense.com', 'email@address.com',
 
     // URL-ish but not quite
@@ -248,18 +249,19 @@ function testIsLikelyUrl() {
 }
 
 function testIsLikelyEmailAddress() {
-  var good = [
+  const good = [
     // Valid email addresses
     'foo@foo.com', 'foo1@foo2.foo3.com', 'f45_1@goog13.org', 'user@gmail.co.uk',
     'jon-smith@crazy.net', 'roland1@capuchino.gov', 'ernir@gshi.nl',
     'JOON@jno.COM', 'media@meDIa.fREnology.FR', 'john.mail4me@del.icio.us',
     'www9@wc3.madeup1.org', 'hi@192.168.1.103', 'hi@192.168.1.1'
   ];
-  for (var i = 0; i < good.length; i++) {
+  let i;
+  for (i = 0; i < good.length; i++) {
     assertTrue(goog.editor.Link.isLikelyEmailAddress(good[i]));
   }
 
-  var bad = [
+  const bad = [
     // Malformed/incomplete email addresses
     'user',
     '@gmail.com',
@@ -276,8 +278,8 @@ function testIsLikelyEmailAddress() {
     '3g?@bil.com',
     'adam be@hi.net',
     'john\nsmith@test.com',
-    "www.'jester'.net",
-    "'james'@covald.net",
+    'www.\'jester\'.net',
+    '\'james\'@covald.net',
     'ftp://user@site.com/',
     'aim:goim?screenname=en2es',
     'user:pass@site.com',
@@ -302,18 +304,18 @@ function testIsMailToLink() {
 }
 
 function testGetValidLinkFromText() {
-  var textLinkPairs = [
+  const textLinkPairs = [
     // input text, expected link output
     'www.foo.com', 'http://www.foo.com', 'user@gmail.com',
     'mailto:user@gmail.com', 'http://www.foo.com', 'http://www.foo.com',
     'https://this.that.edu', 'https://this.that.edu', 'nothing to see here',
     null
   ];
-  var link = new goog.editor.Link(anchor, true);
+  const link = new goog.editor.Link(anchor, true);
 
-  for (var i = 0; i < textLinkPairs.length; i += 2) {
+  for (let i = 0; i < textLinkPairs.length; i += 2) {
     link.currentText_ = textLinkPairs[i];
-    var result = link.getValidLinkFromText();
+    const result = link.getValidLinkFromText();
     assertEquals(textLinkPairs[i + 1], result);
   }
 }

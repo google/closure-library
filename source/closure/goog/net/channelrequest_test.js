@@ -26,29 +26,29 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.testing.net.XhrIo');
 goog.require('goog.testing.recordFunction');
 
-var channelRequest;
-var mockBrowserChannel;
-var mockClock;
-var stubs;
-var xhrIo;
+let channelRequest;
+let mockBrowserChannel;
+let mockClock;
+let stubs;
+let xhrIo;
 
 
 /**
  * Time to wait for a network request to time out, before aborting.
  */
-var WATCHDOG_TIME = 2000;
+const WATCHDOG_TIME = 2000;
 
 
 /**
  * Time to throttle readystatechange events.
  */
-var THROTTLE_TIME = 500;
+const THROTTLE_TIME = 500;
 
 
 /**
  * A really long time - used to make sure no more timeouts will fire.
  */
-var ALL_DAY_MS = 1000 * 60 * 60 * 24;
+const ALL_DAY_MS = 1000 * 60 * 60 * 24;
 
 
 function setUp() {
@@ -152,7 +152,7 @@ function testNetworkEvents_throttleReadyStateChange() {
   createChannelRequest();
   channelRequest.setReadyStateChangeThrottle(THROTTLE_TIME);
 
-  var recordedHandler =
+  const recordedHandler =
       goog.testing.recordFunction(channelRequest.xmlHttpHandler_);
   stubs.set(channelRequest, 'xmlHttpHandler_', recordedHandler);
 
@@ -262,12 +262,12 @@ function testActiveXBlocked() {
  * to verify it works properly.
  */
 function testEscapeForStringInScript() {
-  var actual = goog.net.ChannelRequest.escapeForStringInScript_('"\'<>');
+  const actual = goog.net.ChannelRequest.escapeForStringInScript_('"\'<>');
   assertEquals('\\"\\\'\\x3c\\x3e', actual);
 }
 
 function checkReachabilityEvents(reqMade, reqSucceeded, reqFail, backChannel) {
-  var Reachability = goog.net.BrowserChannel.ServerReachability;
+  const Reachability = goog.net.BrowserChannel.ServerReachability;
   assertEquals(
       reqMade,
       mockBrowserChannel.reachabilityEvents[Reachability.REQUEST_MADE] || 0);

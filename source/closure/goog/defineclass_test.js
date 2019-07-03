@@ -21,7 +21,7 @@ function testSuper() {
   /** @constructor */
   function SomeSuper() {}
 
-  var SomeClass = goog.defineClass(SomeSuper, {
+  const SomeClass = goog.defineClass(SomeSuper, {
     /** @constructor */
     constructor: function() {}
   });
@@ -31,10 +31,12 @@ function testSuper() {
 }
 
 function testPrototypeProp() {
-  var SomeClass = goog.defineClass(null, {
+  const SomeClass = goog.defineClass(null, {
     /** @constructor */
     constructor: function() {},
-    trueMethod: function() { return true; }
+    trueMethod: function() {
+      return true;
+    }
   });
 
   assertEquals(new SomeClass().falseProp, false);
@@ -42,19 +44,23 @@ function testPrototypeProp() {
 }
 
 function testInstanceProp() {
-  var SomeClass = goog.defineClass(null, {
+  const SomeClass = goog.defineClass(null, {
     /** @constructor */
-    constructor: function() { this.falseProp = false; }
+    constructor: function() {
+      this.falseProp = false;
+    }
   });
 
   assertEquals(new SomeClass().falseProp, false);
 }
 
 function testPrototypeProp() {
-  var SomeClass = goog.defineClass(null, {
+  const SomeClass = goog.defineClass(null, {
     /** @constructor */
     constructor: function() {},
-    trueMethod: function() { return true; }
+    trueMethod: function() {
+      return true;
+    }
   });
 
   assertEquals(new SomeClass().trueMethod(), true);
@@ -62,7 +68,7 @@ function testPrototypeProp() {
 }
 
 function testStaticProp() {
-  var SomeClass = goog.defineClass(null, {
+  const SomeClass = goog.defineClass(null, {
     /** @constructor */
     constructor: function() {},
     statics: {someProp: 100}
@@ -74,10 +80,12 @@ function testStaticProp() {
 }
 
 function testStaticPropFn() {
-  var SomeClass = goog.defineClass(null, {
+  const SomeClass = goog.defineClass(null, {
     /** @constructor */
     constructor: function() {},
-    statics: function(cls) { cls.someProp = 100; }
+    statics: function(cls) {
+      cls.someProp = 100;
+    }
   });
 
   assertEquals(new SomeClass().statics, undefined);
@@ -86,10 +94,10 @@ function testStaticPropFn() {
 }
 
 function testUid() {
-  var SomeClass = goog.defineClass(null, {constructor: function() {}});
+  const SomeClass = goog.defineClass(null, {constructor: function() {}});
 
-  var obj1 = new SomeClass();
-  var obj2 = new SomeClass();
+  const obj1 = new SomeClass();
+  const obj2 = new SomeClass();
   assertEquals(goog.getUid(obj1), goog.getUid(obj1));
   assertEquals(goog.getUid(obj2), goog.getUid(obj2));
   assertNotEquals(goog.getUid(obj1), goog.getUid(obj2));

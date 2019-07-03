@@ -21,7 +21,7 @@ goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
 
-var stubs = new goog.testing.PropertyReplacer();
+const stubs = new goog.testing.PropertyReplacer();
 
 function tearDown() {
   stubs.reset();
@@ -34,7 +34,7 @@ function tearDown() {
  *     createElement('form').
  */
 function mockWindowOpen(mockForm) {
-  var windowOpen = function() {
+  const windowOpen = function() {
     return {
       document: {
         createElement: function(name) {
@@ -50,7 +50,7 @@ function mockWindowOpen(mockForm) {
 }
 
 function testSubmitFormInNewWindowWithSubmitButton() {
-  var expectedForm = [
+  const expectedForm = [
     {name: 'in1', value: 'foo', type: 'hidden'},
     {name: 'in2', value: 'bar', type: 'hidden'},
     {name: 'in2', value: 'baaz', type: 'hidden'},
@@ -67,11 +67,11 @@ function testSubmitFormInNewWindowWithSubmitButton() {
     {name: 'submit', value: 'submitb', type: 'hidden'}
   ];
 
-  var formElements = [];
-  var mockForm = {};
+  const formElements = [];
+  const mockForm = {};
 
-  var appendChild = HTMLFormElement.prototype.appendChild;
-  var submit = HTMLFormElement.prototype.submit;
+  const appendChild = HTMLFormElement.prototype.appendChild;
+  const submit = HTMLFormElement.prototype.submit;
 
   HTMLFormElement.prototype.appendChild = function(child) {
     formElements.push(child);
@@ -83,16 +83,16 @@ function testSubmitFormInNewWindowWithSubmitButton() {
   };
   mockWindowOpen(mockForm);
 
-  var formEl = goog.dom.getElement('testform1');
-  var submitEl = goog.dom.getElement('submitb');
-  var result = goog.dom.forms.submitFormInNewWindow(formEl, submitEl);
+  const formEl = goog.dom.getElement('testform1');
+  const submitEl = goog.dom.getElement('submitb');
+  const result = goog.dom.forms.submitFormInNewWindow(formEl, submitEl);
   assertTrue(result);
   HTMLFormElement.prototype.appendChild = appendChild;
   HTMLFormElement.prototype.submit = submit;
 }
 
 function testSubmitFormInNewWindowWithSubmitInput() {
-  var expectedForm = [
+  const expectedForm = [
     {name: 'in1', value: 'foo', type: 'hidden'},
     {name: 'in2', value: 'bar', type: 'hidden'},
     {name: 'in2', value: 'baaz', type: 'hidden'},
@@ -109,11 +109,11 @@ function testSubmitFormInNewWindowWithSubmitInput() {
     {name: 'submit', value: 'submitv', type: 'hidden'}
   ];
 
-  var formElements = [];
-  var mockForm = {};
+  const formElements = [];
+  const mockForm = {};
 
-  var appendChild = HTMLFormElement.prototype.appendChild;
-  var submit = HTMLFormElement.prototype.submit;
+  const appendChild = HTMLFormElement.prototype.appendChild;
+  const submit = HTMLFormElement.prototype.submit;
   HTMLFormElement.prototype.appendChild = function(child) {
     formElements.push(child);
   };
@@ -125,16 +125,16 @@ function testSubmitFormInNewWindowWithSubmitInput() {
   mockWindowOpen(mockForm);
 
 
-  var formEl = goog.dom.getElement('testform1');
-  var submitEl = goog.dom.getElement('submit');
-  var result = goog.dom.forms.submitFormInNewWindow(formEl, submitEl);
+  const formEl = goog.dom.getElement('testform1');
+  const submitEl = goog.dom.getElement('submit');
+  const result = goog.dom.forms.submitFormInNewWindow(formEl, submitEl);
   assertTrue(result);
   HTMLFormElement.prototype.appendChild = appendChild;
   HTMLFormElement.prototype.submit = submit;
 }
 
 function testSubmitFormInNewWindowWithoutSubmitButton() {
-  var expectedForm = [
+  const expectedForm = [
     {name: 'in1', value: 'foo', type: 'hidden'},
     {name: 'in2', value: 'bar', type: 'hidden'},
     {name: 'in2', value: 'baaz', type: 'hidden'},
@@ -150,11 +150,11 @@ function testSubmitFormInNewWindowWithoutSubmitButton() {
     {name: 'radio2', value: 'Y', type: 'hidden'}
   ];
 
-  var formElements = [];
-  var mockForm = {};
+  const formElements = [];
+  const mockForm = {};
 
-  var appendChild = HTMLFormElement.prototype.appendChild;
-  var submit = HTMLFormElement.prototype.submit;
+  const appendChild = HTMLFormElement.prototype.appendChild;
+  const submit = HTMLFormElement.prototype.submit;
 
   HTMLFormElement.prototype.appendChild = function(child) {
     formElements.push(child);
@@ -166,16 +166,16 @@ function testSubmitFormInNewWindowWithoutSubmitButton() {
   };
   mockWindowOpen(mockForm);
 
-  var formEl = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.submitFormInNewWindow(formEl);
+  const formEl = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.submitFormInNewWindow(formEl);
   assertTrue(result);
   HTMLFormElement.prototype.appendChild = appendChild;
   HTMLFormElement.prototype.submit = submit;
 }
 
 function testSubmitFormInNewWindowError() {
-  var formEl = goog.dom.getElement('testform1');
-  var resetEl = goog.dom.getElement('reset');
+  const formEl = goog.dom.getElement('testform1');
+  const resetEl = goog.dom.getElement('reset');
 
   assertThrows(
       'Non-submit type elements cannot be used to submit form.',
@@ -183,7 +183,7 @@ function testSubmitFormInNewWindowError() {
 }
 
 function testSubmitFormDataInNewWindow() {
-  var expectedForm = [
+  const expectedForm = [
     {name: 'in1', value: 'foo', type: 'hidden'},
     {name: 'in2', value: 'bar', type: 'hidden'},
     {name: 'in2', value: 'baaz', type: 'hidden'},
@@ -199,11 +199,11 @@ function testSubmitFormDataInNewWindow() {
     {name: 'radio2', value: 'Y', type: 'hidden'}
   ];
 
-  var formElements = [];
-  var mockForm = {};
+  const formElements = [];
+  const mockForm = {};
 
-  var appendChild = HTMLFormElement.prototype.appendChild;
-  var submit = HTMLFormElement.prototype.submit;
+  const appendChild = HTMLFormElement.prototype.appendChild;
+  const submit = HTMLFormElement.prototype.submit;
   HTMLFormElement.prototype.appendChild = function(child) {
     formElements.push(child);
   };
@@ -214,9 +214,9 @@ function testSubmitFormDataInNewWindow() {
   };
   mockWindowOpen(mockForm);
 
-  var formEl = goog.dom.getElement('testform1');
-  var formData = goog.dom.forms.getFormDataMap(formEl);
-  var result = goog.dom.forms.submitFormDataInNewWindow(
+  const formEl = goog.dom.getElement('testform1');
+  const formData = goog.dom.forms.getFormDataMap(formEl);
+  const result = goog.dom.forms.submitFormDataInNewWindow(
       formEl.action, formEl.method, formData);
   assertTrue(result);
   HTMLFormElement.prototype.appendChild = appendChild;
@@ -224,8 +224,8 @@ function testSubmitFormDataInNewWindow() {
 }
 
 function testGetFormDataString() {
-  var el = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.getFormDataString(el);
+  const el = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.getFormDataString(el);
   assertEquals(
       'in1=foo&in2=bar&in2=baaz&in3=&pass=bar&textarea=foo%20bar%20baz&' +
           'select1=1&select2=a&select2=c&select3=&checkbox1=on&radio=X&radio2=Y',
@@ -233,8 +233,8 @@ function testGetFormDataString() {
 }
 
 function testGetFormDataMap() {
-  var el = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.getFormDataMap(el);
+  const el = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.getFormDataMap(el);
 
   assertArrayEquals(['foo'], result.get('in1'));
   assertArrayEquals(['bar', 'baaz'], result.get('in2'));
@@ -248,7 +248,7 @@ function testGetFormDataMap() {
 }
 
 function testHasFileInput() {
-  var el = goog.dom.getElement('testform1');
+  let el = goog.dom.getElement('testform1');
   assertFalse(goog.dom.forms.hasFileInput(el));
   el = goog.dom.getElement('testform2');
   assertTrue(goog.dom.forms.hasFileInput(el));
@@ -256,117 +256,117 @@ function testHasFileInput() {
 
 
 function testGetValueOnAtypicalValueElements() {
-  var el = goog.dom.getElement('testdiv1');
-  var result = goog.dom.forms.getValue(el);
+  let el = goog.dom.getElement('testdiv1');
+  let result = goog.dom.forms.getValue(el);
   assertNull(result);
-  var el = goog.dom.getElement('testfieldset1');
-  var result = goog.dom.forms.getValue(el);
+  el = goog.dom.getElement('testfieldset1');
+  result = goog.dom.forms.getValue(el);
   assertNull(result);
-  var el = goog.dom.getElement('testlegend1');
-  var result = goog.dom.forms.getValue(el);
+  el = goog.dom.getElement('testlegend1');
+  result = goog.dom.forms.getValue(el);
   assertNull(result);
 }
 
 function testHasValueInput() {
-  var el = goog.dom.getElement('in1');
-  var result = goog.dom.forms.hasValue(el);
+  const el = goog.dom.getElement('in1');
+  const result = goog.dom.forms.hasValue(el);
   assertTrue(result);
 }
 
 function testGetValueByNameForNonExistentElement() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.getValueByName(form, 'non_existent');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.getValueByName(form, 'non_existent');
   assertNull(result);
 }
 
 function testHasValueByNameInput() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.hasValueByName(form, 'in1');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.hasValueByName(form, 'in1');
   assertTrue(result);
 }
 
 function testHasValueInputEmpty() {
-  var el = goog.dom.getElement('in3');
-  var result = goog.dom.forms.hasValue(el);
+  const el = goog.dom.getElement('in3');
+  const result = goog.dom.forms.hasValue(el);
   assertFalse(result);
 }
 
 function testHasValueByNameEmpty() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.hasValueByName(form, 'in3');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.hasValueByName(form, 'in3');
   assertFalse(result);
 }
 
 function testHasValueRadio() {
-  var el = goog.dom.getElement('radio1');
-  var result = goog.dom.forms.hasValue(el);
+  const el = goog.dom.getElement('radio1');
+  const result = goog.dom.forms.hasValue(el);
   assertTrue(result);
 }
 
 function testHasValueByNameRadio() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.hasValueByName(form, 'radio');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.hasValueByName(form, 'radio');
   assertTrue(result);
 }
 
 function testHasValueRadioNotChecked() {
-  var el = goog.dom.getElement('radio2');
-  var result = goog.dom.forms.hasValue(el);
+  const el = goog.dom.getElement('radio2');
+  const result = goog.dom.forms.hasValue(el);
   assertFalse(result);
 }
 
 function testHasValueByNameRadioNotChecked() {
-  var form = goog.dom.getElement('testform3');
-  var result = goog.dom.forms.hasValueByName(form, 'radio3');
+  const form = goog.dom.getElement('testform3');
+  const result = goog.dom.forms.hasValueByName(form, 'radio3');
   assertFalse(result);
 }
 
 function testHasValueSelectSingle() {
-  var el = goog.dom.getElement('select1');
-  var result = goog.dom.forms.hasValue(el);
+  const el = goog.dom.getElement('select1');
+  const result = goog.dom.forms.hasValue(el);
   assertTrue(result);
 }
 
 function testHasValueByNameSelectSingle() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.hasValueByName(form, 'select1');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.hasValueByName(form, 'select1');
   assertTrue(result);
 }
 
 function testHasValueSelectMultiple() {
-  var el = goog.dom.getElement('select2');
-  var result = goog.dom.forms.hasValue(el);
+  const el = goog.dom.getElement('select2');
+  const result = goog.dom.forms.hasValue(el);
   assertTrue(result);
 }
 
 function testHasValueByNameSelectMultiple() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.hasValueByName(form, 'select2');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.hasValueByName(form, 'select2');
   assertTrue(result);
 }
 
 function testHasValueSelectNotSelected() {
   // select without value
-  var el = goog.dom.getElement('select3');
-  var result = goog.dom.forms.hasValue(el);
+  const el = goog.dom.getElement('select3');
+  const result = goog.dom.forms.hasValue(el);
   assertFalse(result);
 }
 
 function testHasValueByNameSelectNotSelected() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.hasValueByName(form, 'select3');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.hasValueByName(form, 'select3');
   assertFalse(result);
 }
 
 function testHasValueSelectMultipleNotSelected() {
-  var el = goog.dom.getElement('select6');
-  var result = goog.dom.forms.hasValue(el);
+  const el = goog.dom.getElement('select6');
+  const result = goog.dom.forms.hasValue(el);
   assertFalse(result);
 }
 
 function testHasValueByNameSelectMultipleNotSelected() {
-  var form = goog.dom.getElement('testform3');
-  var result = goog.dom.forms.hasValueByName(form, 'select6');
+  const form = goog.dom.getElement('testform3');
+  const result = goog.dom.forms.hasValueByName(form, 'select6');
   assertFalse(result);
 }
 
@@ -376,18 +376,18 @@ function testSetDisabledTrue() {}
 
 // TODO(user): make this a meaningful selenium test
 function testFocusAndSelect() {
-  var el = goog.dom.getElement('in1');
+  const el = goog.dom.getElement('in1');
   goog.dom.forms.focusAndSelect(el);
 }
 
 function testGetValueInput() {
-  var el = goog.dom.getElement('in1');
-  var result = goog.dom.forms.getValue(el);
+  const el = goog.dom.getElement('in1');
+  const result = goog.dom.forms.getValue(el);
   assertEquals('foo', result);
 }
 
 function testSetValueInput() {
-  var el = goog.dom.getElement('in3');
+  const el = goog.dom.getElement('in3');
   goog.dom.forms.setValue(el, 'foo');
   assertEquals('foo', goog.dom.forms.getValue(el));
 
@@ -418,12 +418,12 @@ function testSetValueInput() {
 }
 
 function testGetValueMeter() {
-  var el = goog.dom.createDom('meter', {'min': 0, 'max': 3, 'value': 2.3});
+  const el = goog.dom.createDom('meter', {'min': 0, 'max': 3, 'value': 2.3});
   assertEquals(2.3, goog.dom.forms.getValue(el));
 }
 
 function testSetValueMeter() {
-  var el = goog.dom.createDom('meter', {'min': 1, 'max': 5, 'value': 3});
+  const el = goog.dom.createDom('meter', {'min': 1, 'max': 5, 'value': 3});
 
   assertEquals(3, goog.dom.forms.getValue(el));
 
@@ -432,64 +432,64 @@ function testSetValueMeter() {
 }
 
 function testGetValuePassword() {
-  var el = goog.dom.getElement('pass');
-  var result = goog.dom.forms.getValue(el);
+  const el = goog.dom.getElement('pass');
+  const result = goog.dom.forms.getValue(el);
   assertEquals('bar', result);
 }
 
 function testGetValueByNamePassword() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.getValueByName(form, 'pass');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.getValueByName(form, 'pass');
   assertEquals('bar', result);
 }
 
 function testGetValueTextarea() {
-  var el = goog.dom.getElement('textarea1');
-  var result = goog.dom.forms.getValue(el);
+  const el = goog.dom.getElement('textarea1');
+  const result = goog.dom.forms.getValue(el);
   assertEquals('foo bar baz', result);
 }
 
 function testGetValueByNameTextarea() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.getValueByName(form, 'textarea1');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.getValueByName(form, 'textarea1');
   assertEquals('foo bar baz', result);
 }
 
 function testSetValueTextarea() {
-  var el = goog.dom.getElement('textarea2');
+  const el = goog.dom.getElement('textarea2');
   goog.dom.forms.setValue(el, 'foo bar baz');
-  var result = goog.dom.forms.getValue(el);
+  const result = goog.dom.forms.getValue(el);
   assertEquals('foo bar baz', result);
 }
 
 function testGetValueSelectSingle() {
-  var el = goog.dom.getElement('select1');
-  var result = goog.dom.forms.getValue(el);
+  const el = goog.dom.getElement('select1');
+  const result = goog.dom.forms.getValue(el);
   assertEquals('1', result);
 }
 
 function testGetValueByNameSelectSingle() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.getValueByName(form, 'select1');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.getValueByName(form, 'select1');
   assertEquals('1', result);
 }
 
 function testSetValueSelectSingle() {
-  var el = goog.dom.getElement('select4');
+  const el = goog.dom.getElement('select4');
   goog.dom.forms.setValue(el, '2');
-  var result = goog.dom.forms.getValue(el);
+  let result = goog.dom.forms.getValue(el);
   assertEquals('2', result);
   // unset
   goog.dom.forms.setValue(el);
-  var result = goog.dom.forms.getValue(el);
+  result = goog.dom.forms.getValue(el);
   assertNull(result);
 }
 
 function testSetValueSelectSingleEmptyString() {
-  var el = goog.dom.getElement('select7');
+  const el = goog.dom.getElement('select7');
   // unset
   goog.dom.forms.setValue(el);
-  var result = goog.dom.forms.getValue(el);
+  let result = goog.dom.forms.getValue(el);
   assertNull(result);
   goog.dom.forms.setValue(el, '');
   result = goog.dom.forms.getValue(el);
@@ -497,68 +497,68 @@ function testSetValueSelectSingleEmptyString() {
 }
 
 function testGetValueSelectMultiple() {
-  var el = goog.dom.getElement('select2');
-  var result = goog.dom.forms.getValue(el);
+  const el = goog.dom.getElement('select2');
+  const result = goog.dom.forms.getValue(el);
   assertArrayEquals(['a', 'c'], result);
 }
 
 function testGetValueSelectMultipleNotSelected() {
-  var el = goog.dom.getElement('select6');
-  var result = goog.dom.forms.getValue(el);
+  const el = goog.dom.getElement('select6');
+  const result = goog.dom.forms.getValue(el);
   assertNull(result);
 }
 
 function testGetValueByNameSelectMultiple() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.getValueByName(form, 'select2');
+  const form = goog.dom.getElement('testform1');
+  const result = goog.dom.forms.getValueByName(form, 'select2');
   assertArrayEquals(['a', 'c'], result);
 }
 
 function testSetValueSelectMultiple() {
-  var el = goog.dom.getElement('select5');
+  const el = goog.dom.getElement('select5');
   goog.dom.forms.setValue(el, ['a', 'c']);
-  var result = goog.dom.forms.getValue(el);
+  let result = goog.dom.forms.getValue(el);
   assertArrayEquals(['a', 'c'], result);
 
   goog.dom.forms.setValue(el, 'a');
-  var result = goog.dom.forms.getValue(el);
+  result = goog.dom.forms.getValue(el);
   assertArrayEquals(['a'], result);
 
   // unset
   goog.dom.forms.setValue(el);
-  var result = goog.dom.forms.getValue(el);
+  result = goog.dom.forms.getValue(el);
   assertNull(result);
 }
 
 function testGetValueCheckbox() {
-  var el = goog.dom.getElement('checkbox1');
-  var result = goog.dom.forms.getValue(el);
+  let el = goog.dom.getElement('checkbox1');
+  let result = goog.dom.forms.getValue(el);
   assertEquals('on', result);
-  var el = goog.dom.getElement('checkbox2');
-  var result = goog.dom.forms.getValue(el);
+  el = goog.dom.getElement('checkbox2');
+  result = goog.dom.forms.getValue(el);
   assertNull(result);
 }
 
 function testGetValueByNameCheckbox() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.getValueByName(form, 'checkbox1');
+  const form = goog.dom.getElement('testform1');
+  let result = goog.dom.forms.getValueByName(form, 'checkbox1');
   assertEquals('on', result);
   result = goog.dom.forms.getValueByName(form, 'checkbox2');
   assertNull(result);
 }
 
 function testGetValueRadio() {
-  var el = goog.dom.getElement('radio1');
-  var result = goog.dom.forms.getValue(el);
+  let el = goog.dom.getElement('radio1');
+  let result = goog.dom.forms.getValue(el);
   assertEquals('X', result);
-  var el = goog.dom.getElement('radio2');
-  var result = goog.dom.forms.getValue(el);
+  el = goog.dom.getElement('radio2');
+  result = goog.dom.forms.getValue(el);
   assertNull(result);
 }
 
 function testGetValueByNameRadio() {
-  var form = goog.dom.getElement('testform1');
-  var result = goog.dom.forms.getValueByName(form, 'radio');
+  const form = goog.dom.getElement('testform1');
+  let result = goog.dom.forms.getValueByName(form, 'radio');
   assertEquals('X', result);
 
   result = goog.dom.forms.getValueByName(form, 'radio2');
@@ -566,24 +566,24 @@ function testGetValueByNameRadio() {
 }
 
 function testGetValueButton() {
-  var el = goog.dom.getElement('button');
-  var result = goog.dom.forms.getValue(el);
+  const el = goog.dom.getElement('button');
+  const result = goog.dom.forms.getValue(el);
   assertEquals('button', result);
 }
 
 function testGetValueSubmit() {
-  var el = goog.dom.getElement('submit');
-  var result = goog.dom.forms.getValue(el);
+  const el = goog.dom.getElement('submit');
+  const result = goog.dom.forms.getValue(el);
   assertEquals('submitv', result);
 }
 
 function testGetValueReset() {
-  var el = goog.dom.getElement('reset');
-  var result = goog.dom.forms.getValue(el);
+  const el = goog.dom.getElement('reset');
+  const result = goog.dom.forms.getValue(el);
   assertEquals('reset', result);
 }
 
 function testGetFormDataHelperAndNonInputElements() {
-  var el = goog.dom.getElement('testform4');
+  const el = goog.dom.getElement('testform4');
   goog.dom.forms.getFormDataHelper_(el, {}, goog.nullFunction);
 }

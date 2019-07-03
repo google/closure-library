@@ -30,15 +30,15 @@ goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.PopupMenu');
 
-var anchor;
-var menu;
-var menuitem;
+let anchor;
+let menu;
+let menuitem;
 
 // Event handler
-var handler;
-var showPopup;
-var beforeShowPopupCalled;
-var popup;
+let handler;
+let showPopup;
+let beforeShowPopupCalled;
+let popup;
 
 function setUp() {
   anchor = goog.dom.getElement('popup-anchor');
@@ -73,7 +73,7 @@ function tearDown() {
 function assertTarget(
     target, expectedElement, expectedTargetCorner, expectedMenuCorner,
     expectedEventType, expectedMargin) {
-  var expectedTarget = {
+  const expectedTarget = {
     element_: expectedElement,
     targetCorner_: expectedTargetCorner,
     menuCorner_: expectedMenuCorner,
@@ -90,7 +90,7 @@ function assertTarget(
  */
 function testBeforeShowEvent() {
   popup.render();
-  var target = popup.createAttachTarget(anchor);
+  const target = popup.createAttachTarget(anchor);
   popup.attach(anchor);
 
   function beforeShowPopup(e) {
@@ -163,13 +163,13 @@ function testIsAttachTarget() {
  */
 function testCreateAttachTarget() {
   // Randomly picking parameters.
-  var targetCorner = goog.positioning.Corner.TOP_END;
-  var menuCorner = goog.positioning.Corner.BOTTOM_LEFT;
-  var contextMenu = false;  // Show menu on mouse down event.
-  var margin = new goog.math.Box(0, 10, 5, 25);
+  const targetCorner = goog.positioning.Corner.TOP_END;
+  const menuCorner = goog.positioning.Corner.BOTTOM_LEFT;
+  const contextMenu = false;  // Show menu on mouse down event.
+  const margin = new goog.math.Box(0, 10, 5, 25);
 
   // Simply setting the required parameters.
-  var target = popup.createAttachTarget(anchor);
+  let target = popup.createAttachTarget(anchor);
   assertTrue(popup.isAttachTarget(anchor));
   assertTarget(
       target, anchor, undefined, undefined, goog.events.EventType.MOUSEDOWN,
@@ -198,16 +198,16 @@ function testCreateAttachTarget() {
 function testGetAttachTarget() {
   popup.render();
   // Before the menu is attached to the anchor.
-  var target = popup.getAttachTarget(anchor);
+  let target = popup.getAttachTarget(anchor);
   assertTrue(
       'Not expecting a target before the element is attach to the menu',
       target == null);
 
   // Randomly picking parameters.
-  var targetCorner = goog.positioning.Corner.TOP_END;
-  var menuCorner = goog.positioning.Corner.BOTTOM_LEFT;
-  var contextMenu = false;  // Show menu on mouse down event.
-  var margin = new goog.math.Box(0, 10, 5, 25);
+  const targetCorner = goog.positioning.Corner.TOP_END;
+  const menuCorner = goog.positioning.Corner.BOTTOM_LEFT;
+  const contextMenu = false;  // Show menu on mouse down event.
+  const margin = new goog.math.Box(0, 10, 5, 25);
 
   popup.attach(anchor, targetCorner, menuCorner, contextMenu, margin);
   target = popup.getAttachTarget(anchor);
@@ -224,28 +224,28 @@ function testSmallViewportSliding() {
   popup.render();
   popup.getElement().style.position = 'absolute';
   popup.getElement().style.outline = '1px solid blue';
-  var item = new goog.ui.MenuItem('Test Item');
+  const item = new goog.ui.MenuItem('Test Item');
   popup.addChild(item, true);
   item.getElement().style.overflow = 'hidden';
 
-  var viewport = goog.style.getClientViewportElement();
-  var viewportRect = goog.style.getVisibleRectForElement(viewport);
+  const viewport = goog.style.getClientViewportElement();
+  const viewportRect = goog.style.getVisibleRectForElement(viewport);
 
-  var middlePos = Math.floor((viewportRect.right - viewportRect.left) / 2);
-  var leftwardPos = Math.floor((viewportRect.right - viewportRect.left) / 3);
-  var rightwardPos =
+  const middlePos = Math.floor((viewportRect.right - viewportRect.left) / 2);
+  const leftwardPos = Math.floor((viewportRect.right - viewportRect.left) / 3);
+  const rightwardPos =
       Math.floor((viewportRect.right - viewportRect.left) / 3 * 2);
 
   // Can interpret these positions as widths relative to the viewport as well.
-  var smallWidth = leftwardPos;
-  var mediumWidth = middlePos;
-  var largeWidth = rightwardPos;
+  const smallWidth = leftwardPos;
+  const mediumWidth = middlePos;
+  const largeWidth = rightwardPos;
 
   // Test small menu first.  This should be small enough that it will display
   // its upper left corner where we tell it to in all three positions.
   popup.getElement().style.width = smallWidth + 'px';
 
-  var target = popup.createAttachTarget(anchor);
+  let target = popup.createAttachTarget(anchor);
   popup.attach(anchor);
 
   popup.showMenu(target, leftwardPos, 0);
@@ -321,7 +321,7 @@ function testSmallViewportSliding() {
   anchor.style.position = 'absolute';
   anchor.style.left = '24px';
   anchor.style.top = '24px';
-  var targetCorner = goog.positioning.Corner.TOP_END;
+  const targetCorner = goog.positioning.Corner.TOP_END;
   target = popup.createAttachTarget(anchor, targetCorner);
   popup.attach(anchor, targetCorner);
   popup.getElement().style.width = smallWidth + 'px';
@@ -379,7 +379,7 @@ function testMenuItemKeyboardActivation() {
   goog.testing.events.fireKeySequence(menu, goog.events.KeyCodes.ESC);
   assertEquals(anchor, document.activeElement);
 
-  var menuitemListenerFired = false;
+  let menuitemListenerFired = false;
   function onMenuitemAction(event) {
     if (event.keyCode == goog.events.KeyCodes.SPACE ||
         event.keyCode == goog.events.KeyCodes.ENTER) {

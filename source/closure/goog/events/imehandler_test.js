@@ -28,11 +28,11 @@ goog.require('goog.testing.events.Event');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
-var sandbox;
-var imeHandler;
-var eventsFired;
-var stubs = new goog.testing.PropertyReplacer();
-var eventTypes = goog.events.ImeHandler.EventType;
+let sandbox;
+let imeHandler;
+let eventsFired;
+const stubs = new goog.testing.PropertyReplacer();
+const eventTypes = goog.events.ImeHandler.EventType;
 
 function setUp() {
   sandbox = goog.dom.getElement('sandbox');
@@ -68,7 +68,7 @@ function tearDownPage() {
     goog.dom.getElement('logger').innerHTML = last10Events.join('<br>');
   }
 
-  var last10Events = [];
+  const last10Events = [];
   goog.events.listen(
       imeHandler, goog.object.getValues(goog.events.ImeHandler.EventType),
       unshiftEvent);
@@ -234,10 +234,10 @@ function assertScimInputIgnored() {
   assertNotImeMode();
 }
 
-var userAgents = ['IE', 'GECKO', 'WEBKIT'];
+const userAgents = ['IE', 'GECKO', 'WEBKIT'];
 
 function setUserAgent(userAgent) {
-  for (var i = 0; i < userAgents.length; i++) {
+  for (let i = 0; i < userAgents.length; i++) {
     stubs.set(goog.userAgent, userAgents[i], userAgents[i] == userAgent);
   }
 }

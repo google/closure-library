@@ -26,9 +26,9 @@ goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.RichTextSpellChecker');
 
-var VOCABULARY = ['test', 'words', 'a', 'few'];
-var SUGGESTIONS = ['foo', 'bar'];
-var EXCLUDED_DATA = ['DIV.goog-quote', 'goog-comment', 'SPAN.goog-note'];
+const VOCABULARY = ['test', 'words', 'a', 'few'];
+const SUGGESTIONS = ['foo', 'bar'];
+const EXCLUDED_DATA = ['DIV.goog-quote', 'goog-comment', 'SPAN.goog-note'];
 
 
 /**
@@ -36,11 +36,11 @@ var EXCLUDED_DATA = ['DIV.goog-quote', 'goog-comment', 'SPAN.goog-note'];
  * lookup also finishes the spell checking.
  * @see goog.spell.SpellCheck.LOOKUP_DELAY_
  */
-var SPELL_CHECK_LOOKUP_DELAY = 100;
+const SPELL_CHECK_LOOKUP_DELAY = 100;
 
-var TEST_TEXT1 = 'this test is longer than a few words now';
-var TEST_TEXT2 = 'test another simple text with misspelled words';
-var TEST_TEXT3 = 'test another simple text with misspelled words' +
+const TEST_TEXT1 = 'this test is longer than a few words now';
+const TEST_TEXT2 = 'test another simple text with misspelled words';
+const TEST_TEXT3 = 'test another simple text with misspelled words' +
     '<b class="goog-quote">test another simple text with misspelled words<u> ' +
     'test another simple text with misspelled words<del class="goog-quote"> ' +
     'test another simple text with misspelled words<i>this test is longer ' +
@@ -60,9 +60,9 @@ var TEST_TEXT3 = 'test another simple text with misspelled words' +
     'with misspelled words<i>this test is longer than a few words ' +
     'now</i></del></u></b>';
 
-var spellChecker;
-var handler;
-var mockClock;
+let spellChecker;
+let handler;
+let mockClock;
 
 function setUp() {
   mockClock = new goog.testing.MockClock(true /* install */);
@@ -90,12 +90,12 @@ function waitForSpellCheckToFinish() {
  *     function.
  */
 function localSpellCheckingFunction(words, spellChecker, callback) {
-  var len = words.length;
-  var results = [];
-  for (var i = 0; i < len; i++) {
-    var word = words[i];
-    var found = false;
-    for (var j = 0; j < VOCABULARY.length; ++j) {
+  const len = words.length;
+  const results = [];
+  for (let i = 0; i < len; i++) {
+    const word = words[i];
+    let found = false;
+    for (let j = 0; j < VOCABULARY.length; ++j) {
       if (VOCABULARY[j] == word) {
         found = true;
         break;
@@ -112,10 +112,10 @@ function localSpellCheckingFunction(words, spellChecker, callback) {
 }
 
 function testDocumentIntegrity() {
-  var el = document.getElementById('test1');
+  const el = document.getElementById('test1');
   spellChecker.decorate(el);
   el.appendChild(document.createTextNode(TEST_TEXT3));
-  var el2 = el.cloneNode(true);
+  const el2 = el.cloneNode(true);
 
   spellChecker.setExcludeMarker('goog-quote');
   spellChecker.check();
@@ -133,7 +133,7 @@ function testDocumentIntegrity() {
 }
 
 function testExcludeMarkers() {
-  var el = document.getElementById('test1');
+  const el = document.getElementById('test1');
   spellChecker.decorate(el);
   spellChecker.setExcludeMarker(
       ['DIV.goog-quote', 'goog-comment', 'SPAN.goog-note']);
@@ -154,10 +154,10 @@ function testExcludeMarkers() {
 }
 
 function testBiggerDocument() {
-  var el = document.getElementById('test2');
+  const el = document.getElementById('test2');
   spellChecker.decorate(el);
   el.appendChild(document.createTextNode(TEST_TEXT3));
-  var el2 = el.cloneNode(true);
+  const el2 = el.cloneNode(true);
 
   spellChecker.check();
   waitForSpellCheckToFinish();
@@ -170,11 +170,11 @@ function testBiggerDocument() {
 }
 
 function testElementOverflow() {
-  var el = document.getElementById('test3');
+  const el = document.getElementById('test3');
   spellChecker.decorate(el);
   el.appendChild(document.createTextNode(TEST_TEXT3));
 
-  var el2 = el.cloneNode(true);
+  const el2 = el.cloneNode(true);
 
   spellChecker.check();
   waitForSpellCheckToFinish();
@@ -189,11 +189,11 @@ function testElementOverflow() {
 }
 
 function testKeyboardNavigateNext() {
-  var el = document.getElementById('test4');
+  const el = document.getElementById('test4');
   spellChecker.decorate(el);
-  var text = 'a unit test for keyboard test';
+  const text = 'a unit test for keyboard test';
   el.appendChild(document.createTextNode(text));
-  var keyEventProperties =
+  const keyEventProperties =
       goog.object.create('ctrlKey', true, 'shiftKey', false);
 
   spellChecker.check();
@@ -204,7 +204,7 @@ function testKeyboardNavigateNext() {
       el, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
   // Test moving from first to second misspelled word.
-  var defaultExecuted = goog.testing.events.fireKeySequence(
+  const defaultExecuted = goog.testing.events.fireKeySequence(
       el, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
   assertFalse(
@@ -216,11 +216,11 @@ function testKeyboardNavigateNext() {
 }
 
 function testKeyboardNavigateNextOnLastWord() {
-  var el = document.getElementById('test5');
+  const el = document.getElementById('test5');
   spellChecker.decorate(el);
-  var text = 'a unit test for keyboard test';
+  const text = 'a unit test for keyboard test';
   el.appendChild(document.createTextNode(text));
-  var keyEventProperties =
+  const keyEventProperties =
       goog.object.create('ctrlKey', true, 'shiftKey', false);
 
   spellChecker.check();
@@ -235,7 +235,7 @@ function testKeyboardNavigateNextOnLastWord() {
       el, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
   // Test moving to the next invalid word. Should have no effect.
-  var defaultExecuted = goog.testing.events.fireKeySequence(
+  const defaultExecuted = goog.testing.events.fireKeySequence(
       el, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
   assertFalse(
@@ -247,17 +247,17 @@ function testKeyboardNavigateNextOnLastWord() {
 }
 
 function testKeyboardNavigateOpenSuggestions() {
-  var el = document.getElementById('test6');
+  const el = document.getElementById('test6');
   spellChecker.decorate(el);
-  var text = 'unit';
+  const text = 'unit';
   el.appendChild(document.createTextNode(text));
-  var keyEventProperties =
+  const keyEventProperties =
       goog.object.create('ctrlKey', true, 'shiftKey', false);
 
   spellChecker.check();
   waitForSpellCheckToFinish();
 
-  var suggestionMenu = spellChecker.getMenu();
+  const suggestionMenu = spellChecker.getMenu();
 
   goog.testing.events.fireKeySequence(
       el, goog.events.KeyCodes.RIGHT, keyEventProperties);
@@ -267,7 +267,7 @@ function testKeyboardNavigateOpenSuggestions() {
       suggestionMenu.isVisible());
 
   keyEventProperties.ctrlKey = false;
-  var defaultExecuted = goog.testing.events.fireKeySequence(
+  const defaultExecuted = goog.testing.events.fireKeySequence(
       el, goog.events.KeyCodes.DOWN, keyEventProperties);
 
   assertFalse(
@@ -281,11 +281,11 @@ function testKeyboardNavigateOpenSuggestions() {
 }
 
 function testKeyboardNavigatePrevious() {
-  var el = document.getElementById('test7');
+  const el = document.getElementById('test7');
   spellChecker.decorate(el);
-  var text = 'a unit test for keyboard test';
+  const text = 'a unit test for keyboard test';
   el.appendChild(document.createTextNode(text));
-  var keyEventProperties =
+  const keyEventProperties =
       goog.object.create('ctrlKey', true, 'shiftKey', false);
 
   spellChecker.check();
@@ -299,7 +299,7 @@ function testKeyboardNavigatePrevious() {
   goog.testing.events.fireKeySequence(
       el, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
-  var defaultExecuted = goog.testing.events.fireKeySequence(
+  const defaultExecuted = goog.testing.events.fireKeySequence(
       el, goog.events.KeyCodes.LEFT, keyEventProperties);
 
   assertFalse(
@@ -311,11 +311,11 @@ function testKeyboardNavigatePrevious() {
 }
 
 function testKeyboardNavigatePreviousOnLastWord() {
-  var el = document.getElementById('test8');
+  const el = document.getElementById('test8');
   spellChecker.decorate(el);
-  var text = 'a unit test for keyboard test';
+  const text = 'a unit test for keyboard test';
   el.appendChild(document.createTextNode(text));
-  var keyEventProperties =
+  const keyEventProperties =
       goog.object.create('ctrlKey', true, 'shiftKey', false);
 
   spellChecker.check();
@@ -326,7 +326,7 @@ function testKeyboardNavigatePreviousOnLastWord() {
       el, goog.events.KeyCodes.RIGHT, keyEventProperties);
 
   // Test moving to the previous invalid word. Should have no effect.
-  var defaultExecuted = goog.testing.events.fireKeySequence(
+  const defaultExecuted = goog.testing.events.fireKeySequence(
       el, goog.events.KeyCodes.LEFT, keyEventProperties);
 
   assertFalse(
@@ -338,11 +338,12 @@ function testKeyboardNavigatePreviousOnLastWord() {
 }
 
 function assertCursorAtElement(expectedId) {
-  var range = goog.dom.Range.createFromWindow();
+  const range = goog.dom.Range.createFromWindow();
 
+  let focusedElementId;
   if (isCaret(range)) {
     if (isMisspelledWordElement(range.getStartNode())) {
-      var focusedElementId = range.getStartNode().id;
+      focusedElementId = range.getStartNode().id;
     }
 
     // In Chrome a cursor at the start of a misspelled word will appear to be at
@@ -350,7 +351,7 @@ function assertCursorAtElement(expectedId) {
     if (isCursorAtEndOfStartNode(range) &&
         range.getStartNode().nextSibling != null &&
         isMisspelledWordElement(range.getStartNode().nextSibling)) {
-      var focusedElementId = range.getStartNode().nextSibling.id;
+      focusedElementId = range.getStartNode().nextSibling.id;
     }
   }
 

@@ -31,7 +31,8 @@ goog.require('goog.testing.jsunit');
  * alerts and false assertions.
  */
 
-var testCase = new goog.testing.ContinuationTestCase('Continuation Test Case');
+const testCase =
+    new goog.testing.ContinuationTestCase('Continuation Test Case');
 testCase.autoDiscoverTests();
 
 // Standalone Closure Test Runner.
@@ -40,9 +41,9 @@ if (typeof G_testRunner != 'undefined') {
 }
 
 
-var clock = new goog.testing.MockClock();
-var count = 0;
-var stubs = new goog.testing.PropertyReplacer();
+const clock = new goog.testing.MockClock();
+let count = 0;
+const stubs = new goog.testing.PropertyReplacer();
 
 
 function setUpPage() {
@@ -112,9 +113,10 @@ function getSampleStep() {
  *     continuation test with generic setUp, test, and tearDown functions.
  */
 function getSampleTest() {
-  var setupStep = new goog.testing.TestCase.Test('setup', function() {});
-  var testStep = new goog.testing.TestCase.Test('test', function() {});
-  var teardownStep = new goog.testing.TestCase.Test('teardown', function() {});
+  const setupStep = new goog.testing.TestCase.Test('setup', function() {});
+  const testStep = new goog.testing.TestCase.Test('test', function() {});
+  const teardownStep =
+      new goog.testing.TestCase.Test('teardown', function() {});
 
   return new goog.testing.ContinuationTestCase.ContinuationTest(
       setupStep, testStep, teardownStep);
@@ -122,16 +124,16 @@ function getSampleTest() {
 
 
 function testStepWaiting() {
-  var step = getSampleStep();
+  const step = getSampleStep();
   assertTrue(step.waiting);
 }
 
 
 function testStepSetTimeout() {
   installMockClock();
-  var step = getSampleStep();
+  const step = getSampleStep();
 
-  var timeoutReached = false;
+  let timeoutReached = false;
   step.setTimeout(function() {
     timeoutReached = true;
   }, 100);
@@ -144,9 +146,10 @@ function testStepSetTimeout() {
 
 
 function testStepClearTimeout() {
-  var step = new goog.testing.ContinuationTestCase.Step('test', function() {});
+  const step =
+      new goog.testing.ContinuationTestCase.Step('test', function() {});
 
-  var timeoutReached = false;
+  let timeoutReached = false;
   step.setTimeout(function() {
     timeoutReached = true;
   }, 100);
@@ -160,7 +163,7 @@ function testStepClearTimeout() {
 
 
 function testTestPhases() {
-  var test = getSampleTest();
+  const test = getSampleTest();
 
   assertEquals('setup', test.getCurrentPhase()[0].name);
   test.cancelCurrentPhase();
@@ -176,10 +179,10 @@ function testTestPhases() {
 
 
 function testTestSetError() {
-  var test = getSampleTest();
+  const test = getSampleTest();
 
-  var error1 = new Error('Oh noes!');
-  var error2 = new Error('B0rken.');
+  const error1 = new Error('Oh noes!');
+  const error2 = new Error('B0rken.');
 
   assertNull(test.getError());
   test.setError(error1);
@@ -192,11 +195,11 @@ function testTestSetError() {
 
 
 function testAddStep() {
-  var test = getSampleTest();
-  var step = getSampleStep();
+  const test = getSampleTest();
+  const step = getSampleStep();
 
   // Try adding a step to each phase and then cancelling the phase.
-  for (var i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     assertEquals(1, test.getCurrentPhase().length);
     test.addStep(step);
 
@@ -210,7 +213,7 @@ function testAddStep() {
 
 
 function testCancelTestPhase() {
-  var test = getSampleTest();
+  let test = getSampleTest();
 
   test.cancelTestPhase();
   assertEquals('teardown', test.getCurrentPhase()[0].name);
@@ -228,9 +231,9 @@ function testCancelTestPhase() {
 
 
 function testWaitForTimeout() {
-  var reachedA = false;
-  var reachedB = false;
-  var reachedC = false;
+  let reachedA = false;
+  let reachedB = false;
+  let reachedC = false;
 
   waitForTimeout(function a() {
     reachedA = true;
@@ -263,9 +266,9 @@ function testWaitForTimeout() {
 
 
 function testWaitForEvent() {
-  var et = new goog.events.EventTarget();
+  const et = new goog.events.EventTarget();
 
-  var eventFired = false;
+  let eventFired = false;
   goog.events.listen(et, 'testPrefire', function() {
     eventFired = true;
     et.dispatchEvent('test');
@@ -278,7 +281,7 @@ function testWaitForEvent() {
 
 
 function testWaitForCondition() {
-  var counter = 0;
+  let counter = 0;
 
   waitForCondition(
       function() { return ++counter >= 2; },
@@ -287,7 +290,7 @@ function testWaitForCondition() {
 
 
 function testOutOfOrderWaits() {
-  var counter = 0;
+  let counter = 0;
 
   // Note that if the delta between the timeout is too small, two
   // continuation may be invoked at the same timer tick, using the
@@ -304,7 +307,7 @@ function testOutOfOrderWaits() {
  * test steps should be possible, in any configuration.
  */
 
-var testObj;
+let testObj;
 
 
 function testCrazyNestedWaitFunction() {

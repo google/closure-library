@@ -26,8 +26,8 @@ goog.require('goog.testing.stacktrace');
 goog.require('goog.testing.stacktrace.Frame');
 goog.require('goog.userAgent');
 
-var stubs = new goog.testing.PropertyReplacer();
-var expectedFailures;
+const stubs = new goog.testing.PropertyReplacer();
+let expectedFailures;
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
 }
@@ -44,9 +44,9 @@ function tearDown() {
 }
 
 function testParseStackFrameInV8() {
-  var frameString = '    at Error (unknown source)';
-  var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
-  var expected = new goog.testing.stacktrace.Frame('', 'Error', '', '');
+  let frameString = '    at Error (unknown source)';
+  let frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  let expected = new goog.testing.stacktrace.Frame('', 'Error', '', '');
   assertObjectEquals('exception name only', expected, frame);
 
   frameString = '    at Object.assert (file:///.../asserts.js:29:10)';
@@ -113,9 +113,9 @@ function testParseStackFrameInV8() {
 }
 
 function testParseStackFrameInOpera() {
-  var frameString = '@';
-  var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
-  var expected = new goog.testing.stacktrace.Frame('', '', '', '');
+  let frameString = '@';
+  let frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  let expected = new goog.testing.stacktrace.Frame('', '', '', '');
   assertObjectEquals('empty frame', expected, frame);
 
   frameString = '@javascript:console.log(Error().stack):1';
@@ -176,9 +176,9 @@ function testParseStackFrameInOpera() {
 // All test strings are parsed with the conventional and long
 // frame algorithms.
 function testParseStackFrameInFirefox() {
-  var frameString = 'Error("Assertion failed")@:0';
-  var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
-  var expected = new goog.testing.stacktrace.Frame('', 'Error', '', '');
+  let frameString = 'Error("Assertion failed")@:0';
+  let frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  let expected = new goog.testing.stacktrace.Frame('', 'Error', '', '');
   assertObjectEquals('function name + arguments', expected, frame);
 
   frameString = '()@file:///foo:42';
@@ -196,15 +196,15 @@ function testParseStackFrameInFirefox() {
 // All test strings are parsed with the conventional and long
 // frame algorithms.
 function testParseStackFrameInFirefoxWithQualifiedName() {
-  var frameString = 'ns.method@http://some.thing/a.js:1:2';
-  var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
-  var expected = new goog.testing.stacktrace.Frame(
+  const frameString = 'ns.method@http://some.thing/a.js:1:2';
+  const frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  const expected = new goog.testing.stacktrace.Frame(
       '', 'ns.method', '', 'http://some.thing/a.js:1:2');
   assertObjectEquals('anonymous function', expected, frame);
 }
 
 function testCanonicalizeFrame() {
-  var frame = new goog.testing.stacktrace.Frame(
+  const frame = new goog.testing.stacktrace.Frame(
       '<window>', 'foo', 'bar', 'http://x?a=1&b=2:1');
   assertEquals(
       'canonical stack frame, everything is escaped', '&lt;window&gt;.foo ' +
@@ -217,22 +217,22 @@ function testDeobfuscateFunctionName() {
     return name.replace(/\$/g, '.');
   });
 
-  var frame = new goog.testing.stacktrace.Frame('', 'a$b$c', 'd$e', '');
+  const frame = new goog.testing.stacktrace.Frame('', 'a$b$c', 'd$e', '');
   assertEquals(
       'deobfuscated function name', 'a.b.c [as d.e]',
       frame.toCanonicalString());
 }
 
 function testFramesToString() {
-  var normalFrame = new goog.testing.stacktrace.Frame('', 'foo', '', '');
-  var anonFrame = new goog.testing.stacktrace.Frame('', '', '', '');
-  var frames = [normalFrame, anonFrame, null, anonFrame];
-  var stack = goog.testing.stacktrace.framesToString_(frames);
+  const normalFrame = new goog.testing.stacktrace.Frame('', 'foo', '', '');
+  const anonFrame = new goog.testing.stacktrace.Frame('', '', '', '');
+  const frames = [normalFrame, anonFrame, null, anonFrame];
+  const stack = goog.testing.stacktrace.framesToString_(frames);
   assertEquals('framesToString', '> foo\n> anonymous\n> (unknown)\n', stack);
 }
 
 function testFollowCallChain() {
-  var func = function(var_args) {
+  const func = function(var_args) {
     return goog.testing.stacktrace.followCallChain_();
   };
 
@@ -241,11 +241,11 @@ function testFollowCallChain() {
   LocalType.prototype.toString = function() { return 'sg'; };
 
   // Create a mock with no expectations.
-  var mock = new goog.testing.StrictMock(LocalType);
+  const mock = new goog.testing.StrictMock(LocalType);
 
   mock.$replay();
 
-  var frames = func(
+  const frames = func(
       undefined, null, false, 0, '', {}, goog.nullFunction, mock,
       new LocalType);
 
@@ -274,23 +274,23 @@ function testFollowCallChain() {
 // Verify that all frames are parsed. The length of the long arg is set
 // to blow Firefox 3x's stack if put through a RegExp.
 function testParsingLongStackTrace() {
-  var longArg =
+  const longArg =
       goog.string.buildString('(', goog.string.repeat('x', 1000000), ')');
-  var stackTrace = goog.string.buildString(
+  const stackTrace = goog.string.buildString(
       'shortFrame()@:0\n', 'longFrame', longArg,
       '@http://google.com/somescript:0\n');
-  var frames = goog.testing.stacktrace.parse_(stackTrace);
+  const frames = goog.testing.stacktrace.parse_(stackTrace);
   assertEquals('number of returned frames', 2, frames.length);
-  var expected = new goog.testing.stacktrace.Frame('', 'shortFrame', '', '');
+  const expected = new goog.testing.stacktrace.Frame('', 'shortFrame', '', '');
   assertObjectEquals('short frame', expected, frames[0]);
 
   assertNull('exception no frame', frames[1]);
 }
 
 function testParseStackFrameInIE10() {
-  var frameString = '   at foo (http://bar:4000/bar.js:150:3)';
-  var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
-  var expected = new goog.testing.stacktrace.Frame(
+  let frameString = '   at foo (http://bar:4000/bar.js:150:3)';
+  let frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  let expected = new goog.testing.stacktrace.Frame(
       '', 'foo', '', 'http://bar:4000/bar.js:150:3');
   assertObjectEquals('name and path', expected, frame);
 
@@ -320,9 +320,9 @@ function testParseStackFrameInIE10() {
 }
 
 function testParseStackFrameInIE11() {
-  var frameString = '   at a.b.c (Unknown script code:150:3)';
-  var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
-  var expected = new goog.testing.stacktrace.Frame(
+  const frameString = '   at a.b.c (Unknown script code:150:3)';
+  const frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  const expected = new goog.testing.stacktrace.Frame(
       '', 'a.b.c', '', 'Unknown script code:150:3');
   assertObjectEquals('name and path', expected, frame);
 }
@@ -364,10 +364,10 @@ function testGetStackFrameWithV8CallSites() {
 
   // Retrieve the stacktrace. This should translate the array of CallSites into
   // a single multi-line string.
-  var stackTrace = goog.testing.stacktrace.get();
+  const stackTrace = goog.testing.stacktrace.get();
 
   // Make sure the stack trace was translated correctly.
-  var frames = stackTrace.split('\n');
+  const frames = stackTrace.split('\n');
   assertEquals(frames[0], '> fn1 at file1:1:2');
   assertEquals(frames[1], '> fn2 at file2:3:4');
   assertEquals(frames[2], '> fn3 at file3:5:6');

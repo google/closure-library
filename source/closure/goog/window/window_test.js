@@ -46,9 +46,9 @@ function shouldRunTests() {
 
 
 function setUpPage() {
-  var anchors = goog.dom.getElementsByTagNameAndClass(
+  const anchors = goog.dom.getElementsByTagNameAndClass(
       goog.dom.TagName.DIV, 'goog-like-link');
-  for (var i = 0; i < anchors.length; i++) {
+  for (let i = 0; i < anchors.length; i++) {
     goog.events.listen(anchors[i], 'click', function(e) {
       goog.window.open(goog.dom.getTextContent(e.target), {'noreferrer': true});
     });
@@ -86,7 +86,7 @@ function tearDown() {
  */
 function waitForTestWindow(win) {
   return new goog.Promise(function(resolve, reject) {
-    var checkWindow = function(numTries) {
+    const checkWindow = function(numTries) {
       if (!win) {
         fail('Could not open new window. Check if popup blocker is enabled.');
       }
@@ -148,8 +148,8 @@ function verifyWindow(win, noreferrer, urlParam) {
         'Referrer should have been stripped', '', win.document.referrer);
   }
 
-  var winUrl = decodeURI(win.location);
-  var expectedUrlSuffix = decodeURI(urlParam);
+  const winUrl = decodeURI(win.location);
+  const expectedUrlSuffix = decodeURI(urlParam);
   assertTrue(
       'New window href should have ended with <' + expectedUrlSuffix +
           '> but was <' + winUrl + '>',
@@ -220,8 +220,12 @@ function testOpenTag() {
 
 
 function testOpenWindowSanitization() {
-  var navigatedUrl;
-  var mockWin = {open: function(url) { navigatedUrl = url; }};
+  let navigatedUrl;
+  const mockWin = {
+    open: function(url) {
+      navigatedUrl = url;
+    }
+  };
 
   goog.window.open('javascript:evil();', {}, mockWin);
   assertEquals(goog.html.SafeUrl.INNOCUOUS_STRING, navigatedUrl);
@@ -239,8 +243,12 @@ function testOpenWindowSanitization() {
 
 
 function testOpenWindowNoSanitization() {
-  var navigatedUrl;
-  var mockWin = {open: function(url) { navigatedUrl = url; }};
+  let navigatedUrl;
+  const mockWin = {
+    open: function(url) {
+      navigatedUrl = url;
+    }
+  };
 
   goog.window.open('', {}, mockWin);
   assertEquals('', navigatedUrl);
@@ -252,7 +260,7 @@ function testOpenWindowNoSanitization() {
 
 function testOpenBlank() {
   newWin = goog.window.openBlank('Loading...');
-  var urlParam = 'bogus~';
+  const urlParam = 'bogus~';
   newWin.location.href = REDIRECT_URL_PREFIX + urlParam;
   return waitForTestWindow(newWin).then(function() {
     verifyWindow(newWin, false, urlParam);
@@ -261,11 +269,13 @@ function testOpenBlank() {
 
 
 function testOpenBlankReturnsNullPopupBlocker() {
-  var mockWin = {
+  const mockWin = {
     // emulate popup-blocker by returning a null window on open().
-    open: function() { return null; }
+    open: function() {
+      return null;
+    }
   };
-  var win = goog.window.openBlank('', {noreferrer: true}, mockWin);
+  const win = goog.window.openBlank('', {noreferrer: true}, mockWin);
   assertNull(win);
 }
 
@@ -275,8 +285,12 @@ function testOpenBlankEscapesSafely() {
   // is problematic because in some browsers the document.body won't have been
   // updated yet, and in some IE versions the parent window does not have
   // access to document.body in new blank window.
-  var navigatedUrl;
-  var mockWin = {open: function(url) { navigatedUrl = url; }};
+  let navigatedUrl;
+  const mockWin = {
+    open: function(url) {
+      navigatedUrl = url;
+    }
+  };
 
   // Test string determines that all necessary escaping transformations happen,
   // and that they happen in the right order (HTML->JS->URI).
@@ -285,7 +299,7 @@ function testOpenBlankEscapesSafely() {
   // - \ which would be escaped by JS string escaping and percent-encoded
   //     by encodeURI(). It gets JS string escaped first (to two '\') and then
   //     percent-encoded.
-  var win = goog.window.openBlank('"\\', {}, mockWin);
+  const win = goog.window.openBlank('"\\', {}, mockWin);
   assertEquals('javascript:"&quot;%5C%5C"', navigatedUrl);
 }
 
@@ -295,11 +309,15 @@ function testOpenIosBlank() {
     // Don't even try this on IE8!
     return;
   }
-  var attrs = {};
-  var dispatchedEvent = null;
-  var element = {
-    setAttribute: function(name, value) { attrs[name] = value; },
-    dispatchEvent: function(event) { dispatchedEvent = event; }
+  const attrs = {};
+  let dispatchedEvent = null;
+  const element = {
+    setAttribute: function(name, value) {
+      attrs[name] = value;
+    },
+    dispatchEvent: function(event) {
+      dispatchedEvent = event;
+    }
   };
   stubs.replace(window.document, 'createElement', function(name) {
     if (name == goog.dom.TagName.A) {
@@ -310,7 +328,7 @@ function testOpenIosBlank() {
   stubs.set(window.navigator, 'standalone', true);
   stubs.replace(goog.labs.userAgent.platform, 'isIos', goog.functions.TRUE);
 
-  var newWin = goog.window.open('http://google.com', {target: '_blank'});
+  const newWin = goog.window.open('http://google.com', {target: '_blank'});
 
   // This mode cannot return a new window.
   assertNotNull(newWin);
@@ -334,11 +352,15 @@ function testOpenIosBlankNoreferrer() {
     // Don't even try this on IE8!
     return;
   }
-  var attrs = {};
-  var dispatchedEvent = null;
-  var element = {
-    setAttribute: function(name, value) { attrs[name] = value; },
-    dispatchEvent: function(event) { dispatchedEvent = event; }
+  const attrs = {};
+  let dispatchedEvent = null;
+  const element = {
+    setAttribute: function(name, value) {
+      attrs[name] = value;
+    },
+    dispatchEvent: function(event) {
+      dispatchedEvent = event;
+    }
   };
   stubs.replace(window.document, 'createElement', function(name) {
     if (name == goog.dom.TagName.A) {
@@ -349,7 +371,7 @@ function testOpenIosBlankNoreferrer() {
   stubs.set(window.navigator, 'standalone', true);
   stubs.replace(goog.labs.userAgent.platform, 'isIos', goog.functions.TRUE);
 
-  var newWin = goog.window.open(
+  const newWin = goog.window.open(
       'http://google.com', {target: '_blank', noreferrer: true});
 
   // This mode cannot return a new window.
@@ -370,13 +392,17 @@ function testOpenIosBlankNoreferrer() {
 
 
 function testOpenNoReferrerEscapesUrl() {
-  var documentWriteHtml;
-  var mockNewWin = {};
+  let documentWriteHtml;
+  const mockNewWin = {};
   mockNewWin.document = {
     write: function(html) { documentWriteHtml = html; },
     close: function() {}
   };
-  var mockWin = {open: function() { return mockNewWin; }};
+  const mockWin = {
+    open: function() {
+      return mockNewWin;
+    }
+  };
   goog.window.open('https://hello&world', {noreferrer: true}, mockWin);
   assertRegExp(
       'Does not contain expected HTML-escaped string: ' + documentWriteHtml,

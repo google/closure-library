@@ -29,15 +29,15 @@ goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.ac.AutoComplete');
 goog.require('goog.ui.ac.Renderer');
-var renderer;
-var rendRows = [];
-var someElement;
-var target;
-var viewport;
-var viewportTarget;
+let renderer;
+const rendRows = [];
+let someElement;
+let target;
+let viewport;
+let viewportTarget;
 let widthProvider;
 let maxWidthProvider;
-var propertyReplacer;
+let propertyReplacer;
 
 function setUpPage() {
   someElement = goog.dom.getElement('someElement');
@@ -51,7 +51,7 @@ function setUpPage() {
 
 
 // One-time set up of rows formatted for the renderer.
-var rows = [
+const rows = [
   'Amanda Annie Anderson', 'Frankie Manning', 'Louis D Armstrong',
   // NOTE(user): sorry about this test input, but it has caused problems
   // in the past, so I want to make sure to test against it.
@@ -60,7 +60,7 @@ var rows = [
   '<div>random test string<div>test1</div><div><div>test2</div><div>test3</div></div></div>'
 ];
 
-for (var i = 0; i < rows.length; i++) {
+for (let i = 0; i < rows.length; i++) {
   rendRows.push({id: i, data: rows[i]});
 }
 
@@ -77,21 +77,23 @@ function tearDown() {
 
 function testBasicMatchingWithHtmlRow() {
   // '<div><div>test</div></div>'
-  var row = rendRows[4];
-  var token = 'te';
+  const row = rendRows[4];
+  const token = 'te';
   enableHtmlRendering(renderer);
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  const node = renderer.renderRowHtml(row, token);
+  const boldTagElArray =
+      goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
   assertNumBoldTags(boldTagElArray, 1);
 }
 
 function testShouldMatchOnlyOncePerDefaultWithComplexHtmlStrings() {
   // '<div><div>test1</div><div>test2</div></div>'
-  var row = rendRows[5];
-  var token = 'te';
+  const row = rendRows[5];
+  const token = 'te';
   enableHtmlRendering(renderer);
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  const node = renderer.renderRowHtml(row, token);
+  const boldTagElArray =
+      goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
 
   // It should match and render highlighting for the first 'test1' and
   // stop here. This is the default behavior of the renderer.
@@ -102,11 +104,11 @@ function testShouldMatchMultipleTimesWithComplexHtmlStrings() {
   renderer.setHighlightAllTokens(true);
 
   // '<div><div>test1</div><div>test2</div></div>'
-  var row = rendRows[5];
-  var token = 'te';
+  let row = rendRows[5];
+  const token = 'te';
   enableHtmlRendering(renderer);
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  let node = renderer.renderRowHtml(row, token);
+  let boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
 
   // It should match and render highlighting for both 'test1' and 'test2'.
   assertNumBoldTags(boldTagElArray, 2);
@@ -123,13 +125,13 @@ function testShouldMatchMultipleTimesWithComplexHtmlStrings() {
 }
 
 function testBasicStringTokenHighlightingUsingUniversalMatching() {
-  var row = rendRows[0];  // 'Amanda Annie Anderson'
+  const row = rendRows[0];  // 'Amanda Annie Anderson'
   renderer.setMatchWordBoundary(false);
 
   // Should highlight first match only.
-  var token = 'A';
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  let token = 'A';
+  let node = renderer.renderRowHtml(row, token);
+  let boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
   assertNumBoldTags(boldTagElArray, 1);
   assertPreviousNodeText(boldTagElArray[0], '');
   assertHighlightedText(boldTagElArray[0], 'A');
@@ -137,9 +139,9 @@ function testBasicStringTokenHighlightingUsingUniversalMatching() {
 
   // Match should be case insensitive, and should match tokens in the
   // middle of words if useWordMatching is turned off ("an" in Amanda).
-  var token = 'an';
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  token = 'an';
+  node = renderer.renderRowHtml(row, token);
+  boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
   assertNumBoldTags(boldTagElArray, 1);
   assertPreviousNodeText(boldTagElArray[0], 'Am');
   assertHighlightedText(boldTagElArray[0], 'an');
@@ -161,12 +163,12 @@ function testBasicStringTokenHighlightingUsingUniversalMatching() {
 }
 
 function testBasicStringTokenHighlighting() {
-  var row = rendRows[0];  // 'Amanda Annie Anderson'
+  let row = rendRows[0];  // 'Amanda Annie Anderson'
 
   // Should highlight first match only.
-  var token = 'A';
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  let token = 'A';
+  let node = renderer.renderRowHtml(row, token);
+  let boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
   assertNumBoldTags(boldTagElArray, 1);
   assertPreviousNodeText(boldTagElArray[0], '');
   assertHighlightedText(boldTagElArray[0], 'A');
@@ -239,10 +241,11 @@ function testBasicStringTokenHighlighting() {
 // because it triggers the test runner to go back to the event loop...
 function testPathologicalInput() {
   // Should not hang on bizarrely long strings
-  var row = rendRows[3];  // pathological row
-  var token = 'foo';
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  const row = rendRows[3];  // pathological row
+  const token = 'foo';
+  const node = renderer.renderRowHtml(row, token);
+  const boldTagElArray =
+      goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
   assertNumBoldTags(boldTagElArray, 1);
   assertHighlightedText(boldTagElArray[0], 'Foo');
   assert(
@@ -251,12 +254,12 @@ function testPathologicalInput() {
 }
 
 function testBasicArrayTokenHighlighting() {
-  var row = rendRows[1];  // 'Frankie Manning'
+  let row = rendRows[1];  // 'Frankie Manning'
 
   // Only the first match in the array should be highlighted.
-  var token = ['f', 'm'];
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  let token = ['f', 'm'];
+  let node = renderer.renderRowHtml(row, token);
+  let boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
   assertNumBoldTags(boldTagElArray, 1);
   assertPreviousNodeText(boldTagElArray[0], '');
   assertHighlightedText(boldTagElArray[0], 'F');
@@ -330,13 +333,13 @@ function testBasicArrayTokenHighlighting() {
 
 function testHighlightAllTokensSingleTokenHighlighting() {
   renderer.setHighlightAllTokens(true);
-  var row = rendRows[0];  // 'Amanda Annie Anderson'
+  const row = rendRows[0];  // 'Amanda Annie Anderson'
 
   // All matches at the start of the word should be highlighted when
   // highlightAllTokens is set.
-  var token = 'a';
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  let token = 'a';
+  let node = renderer.renderRowHtml(row, token);
+  let boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
   assertNumBoldTags(boldTagElArray, 3);
   assertPreviousNodeText(boldTagElArray[0], '');
   assertHighlightedText(boldTagElArray[0], 'A');
@@ -392,12 +395,13 @@ function testHighlightAllTokensSingleTokenHighlighting() {
 
 function testHighlightAllTokensMultipleStringTokenHighlighting() {
   renderer.setHighlightAllTokens(true);
-  var row = rendRows[1];  // 'Frankie Manning'
+  const row = rendRows[1];  // 'Frankie Manning'
 
   // Each individual space-separated token should match.
-  var token = 'm F';
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  const token = 'm F';
+  const node = renderer.renderRowHtml(row, token);
+  const boldTagElArray =
+      goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
   assertNumBoldTags(boldTagElArray, 2);
   assertPreviousNodeText(boldTagElArray[0], '');
   assertHighlightedText(boldTagElArray[0], 'F');
@@ -408,12 +412,12 @@ function testHighlightAllTokensMultipleStringTokenHighlighting() {
 
 function testHighlightAllTokensArrayTokenHighlighting() {
   renderer.setHighlightAllTokens(true);
-  var row = rendRows[0];  // 'Amanda Annie Anderson'
+  const row = rendRows[0];  // 'Amanda Annie Anderson'
 
   // All tokens in the array should match.
-  var token = ['AM', 'AN'];
-  var node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  let token = ['AM', 'AN'];
+  let node = renderer.renderRowHtml(row, token);
+  let boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
   assertNumBoldTags(boldTagElArray, 3);
   assertPreviousNodeText(boldTagElArray[0], '');
   assertHighlightedText(boldTagElArray[0], 'Am');
@@ -465,7 +469,7 @@ function testHighlightAllTokensArrayTokenHighlighting() {
   // Whitespace in array entry should match as a whole token.
   token = ['annie a', 'Am'];
   node = renderer.renderRowHtml(row, token);
-  var boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
+  boldTagElArray = goog.dom.getElementsByTagName(goog.dom.TagName.B, node);
   assertNumBoldTags(boldTagElArray, 2);
   assertPreviousNodeText(boldTagElArray[0], '');
   assertHighlightedText(boldTagElArray[0], 'Am');
@@ -477,10 +481,10 @@ function testHighlightAllTokensArrayTokenHighlighting() {
 function testMenuFadeDuration() {
   renderer.maybeCreateElement_();
 
-  var hideCalled = false;
-  var hideAnimCalled = false;
-  var showCalled = false;
-  var showAnimCalled = false;
+  let hideCalled = false;
+  let hideAnimCalled = false;
+  let showCalled = false;
+  let showAnimCalled = false;
 
   propertyReplacer.set(goog.style, 'setElementShown', function(el, state) {
     if (state) {
@@ -573,14 +577,15 @@ function testHiliteRowWithCustomRenderer() {
 
   // Use a custom renderer that doesn't put the result divs as direct children
   // of this.element_.
-  var customRenderer = {
+  const customRenderer = {
     render: function(renderer, element, rows, token) {
       // Put all of the results into a results holder div that is a child of
       // this.element_.
-      var resultsHolder = goog.dom.createDom(goog.dom.TagName.DIV);
+      const resultsHolder = goog.dom.createDom(goog.dom.TagName.DIV);
       goog.dom.appendChild(element, resultsHolder);
-      for (var i = 0, row; row = rows[i]; ++i) {
-        var node = renderer.renderRowHtml(row, token);
+      let row;
+      for (let i = 0; row = rows[i]; ++i) {
+        const node = renderer.renderRowHtml(row, token);
         goog.dom.appendChild(resultsHolder, node);
       }
     }
@@ -599,17 +604,17 @@ function testHiliteRowWithCustomRenderer() {
 
 function testReposition() {
   renderer.renderRows(rendRows, '', target);
-  var el = renderer.getElement();
+  const el = renderer.getElement();
   el.style.position = 'absolute';
   el.style.width = '100px';
 
   renderer.setAutoPosition(true);
   renderer.redraw();
 
-  var rendererOffset = goog.style.getPageOffset(renderer.getElement());
-  var rendererSize = goog.style.getSize(renderer.getElement());
-  var targetOffset = goog.style.getPageOffset(target);
-  var targetSize = goog.style.getSize(target);
+  const rendererOffset = goog.style.getPageOffset(renderer.getElement());
+  const rendererSize = goog.style.getSize(renderer.getElement());
+  const targetOffset = goog.style.getPageOffset(target);
+  const targetSize = goog.style.getSize(target);
 
   assertEquals(0 + targetOffset.x, rendererOffset.x);
   assertRoughlyEquals(targetOffset.y + targetSize.height, rendererOffset.y, 1);
@@ -618,29 +623,29 @@ function testReposition() {
 function testSetWidthProvider() {
   renderer.setWidthProvider(widthProvider);
   renderer.renderRows(rendRows, '');
-  var el = renderer.getElement();
+  const el = renderer.getElement();
   // Set a width that's smaller than widthProvider.
   el.style.width = '1px';
 
   renderer.redraw();
 
-  var rendererSize = goog.style.getSize(el);
-  var widthProviderSize = goog.style.getSize(widthProvider);
+  const rendererSize = goog.style.getSize(el);
+  const widthProviderSize = goog.style.getSize(widthProvider);
   assertEquals(rendererSize.width, widthProviderSize.width);
 }
 
 function testSetWidthProviderWithBorderWidth() {
-  var borderWidth = 5;
+  const borderWidth = 5;
   renderer.setWidthProvider(widthProvider, borderWidth);
   renderer.renderRows(rendRows, '');
-  var el = renderer.getElement();
+  const el = renderer.getElement();
   // Set a width that's smaller than widthProvider.
   el.style.width = '1px';
 
   renderer.redraw();
 
-  var rendererSize = goog.style.getSize(el);
-  var widthProviderSize = goog.style.getSize(widthProvider);
+  const rendererSize = goog.style.getSize(el);
+  const widthProviderSize = goog.style.getSize(widthProvider);
   assertEquals(rendererSize.width, widthProviderSize.width - borderWidth);
 }
 
@@ -662,7 +667,7 @@ function testSetWidthProviderWithBorderWidthAndMaxWidthProvider() {
 
 function testRepositionWithRightAlign() {
   renderer.renderRows(rendRows, '', target);
-  var el = renderer.getElement();
+  const el = renderer.getElement();
   el.style.position = 'absolute';
   el.style.width = '150px';
 
@@ -670,10 +675,10 @@ function testRepositionWithRightAlign() {
   renderer.setRightAlign(true);
   renderer.redraw();
 
-  var rendererOffset = goog.style.getPageOffset(renderer.getElement());
-  var rendererSize = goog.style.getSize(renderer.getElement());
-  var targetOffset = goog.style.getPageOffset(target);
-  var targetSize = goog.style.getSize(target);
+  const rendererOffset = goog.style.getPageOffset(renderer.getElement());
+  const rendererSize = goog.style.getSize(renderer.getElement());
+  const targetOffset = goog.style.getPageOffset(target);
+  const targetSize = goog.style.getSize(target);
 
   assertRoughlyEquals(
       targetOffset.x + targetSize.width, rendererOffset.x + rendererSize.width,
@@ -690,16 +695,16 @@ function testRepositionResizeHeight() {
 
   // Stick a huge row in the dropdown element, to make sure it won't
   // fit in the viewport.
-  var hugeRow =
+  const hugeRow =
       goog.dom.createDom(goog.dom.TagName.DIV, {style: 'height:1000px'});
   goog.dom.appendChild(renderer.getElement(), hugeRow);
 
   renderer.reposition();
 
-  var rendererOffset = goog.style.getPageOffset(renderer.getElement());
-  var rendererSize = goog.style.getSize(renderer.getElement());
-  var viewportOffset = goog.style.getPageOffset(viewport);
-  var viewportSize = goog.style.getSize(viewport);
+  let rendererOffset = goog.style.getPageOffset(renderer.getElement());
+  let rendererSize = goog.style.getSize(renderer.getElement());
+  let viewportOffset = goog.style.getPageOffset(viewport);
+  let viewportSize = goog.style.getSize(viewport);
 
   assertRoughlyEquals(
       viewportOffset.y + viewportSize.height,
@@ -722,7 +727,7 @@ function testRepositionResizeHeight() {
 function testHiliteEvent() {
   renderer.renderRows(rendRows, '');
 
-  var hiliteEventFired = false;
+  let hiliteEventFired = false;
   goog.events.listenOnce(
       renderer, goog.ui.ac.AutoComplete.EventType.ROW_HILITE, function(e) {
         hiliteEventFired = true;
@@ -760,7 +765,7 @@ function assertNumBoldTags(boldTagElArray, expectedNum) {
 }
 
 function assertPreviousNodeText(boldTag, expectedText) {
-  var prevNode = boldTag.previousSibling;
+  const prevNode = boldTag.previousSibling;
   assertEquals(
       'Expected text before the token does not match', expectedText,
       prevNode.nodeValue);
@@ -772,7 +777,7 @@ function assertHighlightedText(boldTag, expectedHighlightedText) {
 }
 
 function assertLastNodeText(node, expectedText) {
-  var lastNode = node.lastChild;
+  const lastNode = node.lastChild;
   assertEquals(
       'Incorrect text in the last node', expectedText, lastNode.nodeValue);
 }

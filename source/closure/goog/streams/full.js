@@ -19,14 +19,15 @@
 goog.module('goog.streams.full');
 
 const NativeResolver = goog.require('goog.promise.NativeResolver');
-const lite = goog.require('goog.streams.lite');
+const liteImpl = goog.require('goog.streams.liteImpl');
+const liteTypes = goog.require('goog.streams.liteTypes');
 const {assert, assertNumber} = goog.require('goog.asserts');
 
 /**
  * The underlying source for a ReadableStream.
  * @template T
  * @record
- * @extends {lite.ReadableStreamUnderlyingSource}
+ * @extends {liteTypes.ReadableStreamUnderlyingSource}
  */
 class ReadableStreamUnderlyingSource {
   constructor() {
@@ -90,7 +91,7 @@ let PullAlgorithm;
  * The implemenation of ReadableStream.
  * @template T
  */
-class ReadableStream extends lite.ReadableStream {
+class ReadableStream extends liteImpl.ReadableStream {
   /** @package */
   constructor() {
     super();
@@ -232,10 +233,10 @@ class ReadableStream extends lite.ReadableStream {
    */
   cancelInternal(reason) {
     this.disturbed = true;
-    if (this.state === lite.ReadableStream.State.CLOSED) {
+    if (this.state === liteImpl.ReadableStream.State.CLOSED) {
       return Promise.resolve();
     }
-    if (this.state === lite.ReadableStream.State.ERRORED) {
+    if (this.state === liteImpl.ReadableStream.State.ERRORED) {
       return Promise.reject(this.storedError);
     }
     this.close();
@@ -263,11 +264,11 @@ function newReadableStream(underlyingSource = {}, strategy = {}) {
   assert(
       !(verifyObject.type),
       `'type' property not allowed on an underlying source for a ` +
-          'lite ReadableStream');
+          'liteImpl ReadableStream');
   assert(
       !(verifyObject.autoAllocateChunkSize),
       `'autoAllocateChunkSize' property not allowed on an underlying ` +
-          'source for a lite ReadableStream');
+          'source for a liteImpl ReadableStream');
   const startAlgorithm = underlyingSource.start ?
       (controller) => underlyingSource.start(controller) :
       () => {};
@@ -299,11 +300,11 @@ function newReadableStream(underlyingSource = {}, strategy = {}) {
 }
 
 /**
- * The DefaultReader for a ReadableStream. Adds cancellation onto the lite
+ * The DefaultReader for a ReadableStream. Adds cancellation onto the liteImpl
  * DefaultReader.
  * @template T
  */
-class ReadableStreamDefaultReader extends lite.ReadableStreamDefaultReader {
+class ReadableStreamDefaultReader extends liteImpl.ReadableStreamDefaultReader {
   /**
    * Cancels the ReadableStream with an optional reason.
    * https://streams.spec.whatwg.org/#default-reader-cancel
@@ -383,11 +384,11 @@ class ReadableStreamAsyncIterator {
 
 /**
  * The controller for a ReadableStream. Adds cancellation and backpressure onto
- * the lite DefaultController.
+ * the liteImpl DefaultController.
  * @template T
  */
 class ReadableStreamDefaultController extends
-    lite.ReadableStreamDefaultController {
+    liteImpl.ReadableStreamDefaultController {
   /**
    * @param {!ReadableStream} stream
    * @param {!CancelAlgorithm|undefined} cancelAlgorithm
@@ -549,11 +550,11 @@ class ReadableStreamDefaultController extends
    */
   getDesiredSize_() {
     if (this.controlledReadableStream.state ===
-        lite.ReadableStream.State.ERRORED) {
+        liteImpl.ReadableStream.State.ERRORED) {
       return null;
     }
     if (this.controlledReadableStream.state ===
-        lite.ReadableStream.State.CLOSED) {
+        liteImpl.ReadableStream.State.CLOSED) {
       return 0;
     }
     return this.strategyHWM_ - this.queueTotalSize_;
@@ -568,11 +569,11 @@ class ReadableStreamDefaultController extends
  */
 class QueueWithSizes {
   /**
-   * @param {!lite.Queue} queue
+   * @param {!liteImpl.Queue} queue
    */
   constructor(queue) {
     /**
-     * @private @const {!lite.Queue}
+     * @private @const {!liteImpl.Queue}
      */
     this.queue_ = queue;
 

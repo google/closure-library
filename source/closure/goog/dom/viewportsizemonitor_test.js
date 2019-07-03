@@ -25,7 +25,10 @@ goog.require('goog.testing.MockClock');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
-var propertyReplacer, fakeWindow, viewportSizeMonitor, mockClock;
+let propertyReplacer;
+let fakeWindow;
+let viewportSizeMonitor;
+let mockClock;
 
 
 function FakeWindow() {
@@ -58,7 +61,7 @@ function setViewportSize(w, h, fireEvent) {
 }
 
 
-var eventWasFired = {};
+const eventWasFired = {};
 function getListenerFn(id) {
   return function() { propertyReplacer.set(eventWasFired, id, true); };
 }
@@ -103,15 +106,18 @@ function testResizeEvent() {
 
 
 function testInstanceGetter() {
-  var fakeWindow1 = new FakeWindow();
-  var monitor1 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
-  var monitor2 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
+  const fakeWindow1 = new FakeWindow();
+  const monitor1 =
+      goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
+  const monitor2 =
+      goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
   assertEquals(
       'The same window should give us the same instance monitor', monitor1,
       monitor2);
 
-  var fakeWindow2 = new FakeWindow();
-  var monitor3 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow2);
+  const fakeWindow2 = new FakeWindow();
+  const monitor3 =
+      goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow2);
   assertNotEquals(
       'Different windows should give different instances', monitor1, monitor3);
 
@@ -123,12 +129,14 @@ function testInstanceGetter() {
 
 
 function testRemoveInstanceForWindow() {
-  var fakeWindow1 = new FakeWindow();
-  var monitor1 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
+  const fakeWindow1 = new FakeWindow();
+  const monitor1 =
+      goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
 
   goog.dom.ViewportSizeMonitor.removeInstanceForWindow(fakeWindow1);
   assertTrue(monitor1.isDisposed());
 
-  var monitor2 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
+  const monitor2 =
+      goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
   assertNotEquals(monitor1, monitor2);
 }

@@ -37,16 +37,16 @@ goog.setTestOnly('goog.crypt.CtrTest');
  */
 function runCtrAesTest(
     keyBytes, initialVectorBytes, plainTextBytes, cipherTextBytes) {
-  var aes = new goog.crypt.Aes(keyBytes);
-  var Ctr = new goog.crypt.Ctr(aes);
+  const aes = new goog.crypt.Aes(keyBytes);
+  const Ctr = new goog.crypt.Ctr(aes);
 
-  var encryptedBytes = Ctr.encrypt(plainTextBytes, initialVectorBytes);
+  const encryptedBytes = Ctr.encrypt(plainTextBytes, initialVectorBytes);
   assertEquals(
       'Encrypted bytes should match cipher text.',
       goog.crypt.byteArrayToHex(encryptedBytes),
       goog.crypt.byteArrayToHex(cipherTextBytes));
 
-  var decryptedBytes = Ctr.decrypt(cipherTextBytes, initialVectorBytes);
+  const decryptedBytes = Ctr.decrypt(cipherTextBytes, initialVectorBytes);
   assertEquals(
       'Decrypted bytes should match plain text.',
       goog.crypt.byteArrayToHex(decryptedBytes),
@@ -61,7 +61,7 @@ function runCtrAesTest(
  * @param {string} expectedResult
  */
 function assertIncEquals(toIncrement, expectedResult) {
-  var counter = goog.crypt.hexToByteArray(toIncrement);
+  const counter = goog.crypt.hexToByteArray(toIncrement);
   goog.crypt.Ctr.incrementBigEndianCounter_(counter);
   assertEquals(expectedResult, goog.crypt.byteArrayToHex(counter));
 }

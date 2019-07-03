@@ -30,10 +30,10 @@ goog.require('goog.ui.ButtonSide');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.NativeButtonRenderer');
 
-var sandbox;
-var button;
-var clonedButtonDom;
-var demoButtonElement;
+let sandbox;
+let button;
+let clonedButtonDom;
+let demoButtonElement;
 
 function setUp() {
   sandbox = goog.dom.getElement('sandbox');
@@ -54,8 +54,8 @@ function testConstructor() {
       'Renderer must default to expected value',
       goog.ui.NativeButtonRenderer.getInstance(), button.getRenderer());
 
-  var fakeDomHelper = {};
-  var testButton = new goog.ui.Button(
+  const fakeDomHelper = {};
+  const testButton = new goog.ui.Button(
       'Hello', goog.ui.ButtonRenderer.getInstance(), fakeDomHelper);
   assertEquals(
       'Content must have expected value', 'Hello', testButton.getContent());
@@ -147,8 +147,10 @@ function testDispose() {
 }
 
 function testBasicButtonBehavior() {
-  var dispatchedActionCount = 0;
-  var handleAction = function() { dispatchedActionCount++; };
+  let dispatchedActionCount = 0;
+  const handleAction = function() {
+    dispatchedActionCount++;
+  };
   goog.events.listen(button, goog.ui.Component.EventType.ACTION, handleAction);
 
   button.decorate(demoButtonElement);
@@ -157,7 +159,7 @@ function testBasicButtonBehavior() {
       'Button must have dispatched ACTION on click', 1, dispatchedActionCount);
 
   dispatchedActionCount = 0;
-  var e = new goog.events.Event(goog.events.KeyHandler.EventType.KEY, button);
+  let e = new goog.events.Event(goog.events.KeyHandler.EventType.KEY, button);
   e.keyCode = goog.events.KeyCodes.ENTER;
   button.handleKeyEvent(e);
   assertEquals(
@@ -177,8 +179,10 @@ function testBasicButtonBehavior() {
 }
 
 function testDisabledButtonBehavior() {
-  var dispatchedActionCount = 0;
-  var handleAction = function() { dispatchedActionCount++; };
+  let dispatchedActionCount = 0;
+  const handleAction = function() {
+    dispatchedActionCount++;
+  };
   goog.events.listen(button, goog.ui.Component.EventType.ACTION, handleAction);
 
   button.setEnabled(false);
@@ -201,8 +205,10 @@ function testDisabledButtonBehavior() {
 }
 
 function testSpaceFireActionOnKeyUp() {
-  var dispatchedActionCount = 0;
-  var handleAction = function() { dispatchedActionCount++; };
+  let dispatchedActionCount = 0;
+  const handleAction = function() {
+    dispatchedActionCount++;
+  };
   goog.events.listen(button, goog.ui.Component.EventType.ACTION, handleAction);
 
   dispatchedActionCount = 0;
@@ -231,8 +237,10 @@ function testSpaceFireActionOnKeyUp() {
 }
 
 function testEnterFireActionOnKeyPress() {
-  var dispatchedActionCount = 0;
-  var handleAction = function() { dispatchedActionCount++; };
+  let dispatchedActionCount = 0;
+  const handleAction = function() {
+    dispatchedActionCount++;
+  };
   goog.events.listen(button, goog.ui.Component.EventType.ACTION, handleAction);
 
   dispatchedActionCount = 0;
@@ -274,7 +282,7 @@ function testSetAriaLabel_decorate() {
       'Button must not have aria label by default', button.getAriaLabel());
   button.setAriaLabel('Button 1');
   button.decorate(demoButtonElement);
-  var el = button.getElementStrict();
+  const el = button.getElementStrict();
   assertEquals(
       'Button element must have expected aria-label', 'Button 1',
       el.getAttribute('aria-label'));

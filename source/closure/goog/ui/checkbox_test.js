@@ -31,7 +31,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.ControlRenderer');
 goog.require('goog.ui.decorate');
 
-var checkbox;
+let checkbox;
 
 /**
  * A subclass of `CheckboxRenderer` that overrides `getKeyEventTarget` for
@@ -97,7 +97,7 @@ function testIsEnabled() {
 }
 
 function testSetEnabled_setsTabIndexOnKeyEventTargetOnly() {
-  var keyEventTarget = goog.dom.createElement(goog.dom.TagName.DIV);
+  const keyEventTarget = goog.dom.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(keyEventTarget);
 
   try {
@@ -156,7 +156,7 @@ function testToggle() {
 function testEvents() {
   checkbox.render();
 
-  var events = [];
+  let events = [];
   goog.events.listen(
       checkbox,
       [
@@ -206,8 +206,8 @@ function testEvents() {
 }
 
 function testCheckboxAriaLabelledby() {
-  var label = goog.dom.createElement(goog.dom.TagName.DIV);
-  var label2 = goog.dom.createElement(
+  const label = goog.dom.createElement(goog.dom.TagName.DIV);
+  const label2 = goog.dom.createElement(
       goog.dom.TagName.DIV, {id: checkbox.makeId('foo')});
   document.body.appendChild(label);
   document.body.appendChild(label2);
@@ -231,7 +231,7 @@ function testCheckboxAriaLabelledby() {
 }
 
 function testLabel() {
-  var label = goog.dom.createElement(goog.dom.TagName.DIV);
+  const label = goog.dom.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(label);
   try {
     checkbox.setChecked(false);
@@ -299,7 +299,7 @@ function testLabel() {
 }
 
 function testLabel_setAgain() {
-  var label = goog.dom.createElement(goog.dom.TagName.DIV);
+  const label = goog.dom.createElement(goog.dom.TagName.DIV);
   document.body.appendChild(label);
   try {
     checkbox.setChecked(false);
@@ -321,7 +321,7 @@ function testConstructor() {
       'state is unchecked', goog.ui.Checkbox.State.UNCHECKED,
       checkbox.getChecked());
 
-  var testCheckboxWithState =
+  const testCheckboxWithState =
       new goog.ui.Checkbox(goog.ui.Checkbox.State.UNDETERMINED);
   assertNotNull('checkbox created with custom state', testCheckboxWithState);
   assertEquals(
@@ -331,10 +331,10 @@ function testConstructor() {
 }
 
 function testCustomRenderer() {
-  var cssClass = 'my-custom-checkbox';
-  var renderer = goog.ui.ControlRenderer.getCustomRenderer(
+  const cssClass = 'my-custom-checkbox';
+  const renderer = goog.ui.ControlRenderer.getCustomRenderer(
       goog.ui.CheckboxRenderer, cssClass);
-  var customCheckbox = new goog.ui.Checkbox(undefined, undefined, renderer);
+  const customCheckbox = new goog.ui.Checkbox(undefined, undefined, renderer);
   customCheckbox.createDom();
   assertElementsEquals(
       ['my-custom-checkbox', 'my-custom-checkbox-unchecked'],
@@ -386,7 +386,7 @@ function testCreateDomUpdateAriaState() {
 }
 
 function testDecorateUpdateAriaState() {
-  var decorateSpan = goog.dom.getElement('decorate');
+  const decorateSpan = goog.dom.getElement('decorate');
   checkbox.decorate(decorateSpan);
 
   assertEquals(
@@ -414,7 +414,7 @@ function testDecorateUpdateAriaState() {
 }
 
 function testSpaceKey() {
-  var normalSpan = goog.dom.getElement('normal');
+  const normalSpan = goog.dom.getElement('normal');
 
   checkbox.decorate(normalSpan);
   assertEquals(
@@ -437,10 +437,10 @@ function testSpaceKey() {
 }
 
 function testSpaceKeyFiresEvents() {
-  var normalSpan = goog.dom.getElement('normal');
+  const normalSpan = goog.dom.getElement('normal');
 
   checkbox.decorate(normalSpan);
-  var events = [];
+  let events = [];
   goog.events.listen(
       checkbox,
       [
@@ -493,11 +493,11 @@ function testSpaceKeyFiresEvents() {
 }
 
 function testDecorate() {
-  var normalSpan = goog.dom.getElement('normal');
-  var checkedSpan = goog.dom.getElement('checked');
-  var uncheckedSpan = goog.dom.getElement('unchecked');
-  var undeterminedSpan = goog.dom.getElement('undetermined');
-  var disabledSpan = goog.dom.getElement('disabled');
+  const normalSpan = goog.dom.getElement('normal');
+  const checkedSpan = goog.dom.getElement('checked');
+  const uncheckedSpan = goog.dom.getElement('unchecked');
+  const undeterminedSpan = goog.dom.getElement('undetermined');
+  const disabledSpan = goog.dom.getElement('disabled');
 
   validateCheckBox(normalSpan, goog.ui.Checkbox.State.UNCHECKED);
   validateCheckBox(checkedSpan, goog.ui.Checkbox.State.CHECKED);
@@ -507,7 +507,7 @@ function testDecorate() {
 }
 
 function validateCheckBox(span, state, opt_disabled) {
-  var testCheckbox = goog.ui.decorate(span);
+  const testCheckbox = goog.ui.decorate(span);
   assertNotNull('checkbox created', testCheckbox);
   assertEquals(
       'decorate was successful', goog.ui.Checkbox, testCheckbox.constructor);
@@ -524,7 +524,7 @@ function testSetAriaLabel() {
       'Checkbox must not have aria label by default', checkbox.getAriaLabel());
   checkbox.setAriaLabel('Checkbox 1');
   checkbox.render();
-  var el = checkbox.getElementStrict();
+  const el = checkbox.getElementStrict();
   assertEquals(
       'Checkbox element must have expected aria-label', 'Checkbox 1',
       el.getAttribute('aria-label'));

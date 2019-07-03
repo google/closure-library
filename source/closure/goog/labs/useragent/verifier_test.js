@@ -18,20 +18,20 @@
 goog.module('goog.labs.useragent.verifierTest');
 goog.setTestOnly();
 
-var browser = goog.require('goog.labs.userAgent.browser');
-var testSuite = goog.require('goog.testing.testSuite');
-var verifier = goog.require('goog.labs.useragent.verifier');
+const browser = goog.require('goog.labs.userAgent.browser');
+const testSuite = goog.require('goog.testing.testSuite');
+const verifier = goog.require('goog.labs.useragent.verifier');
 
 
 testSuite({
   testIEVersion: function() {
-    var isUserAgentIE = browser.isIE();
-    var versionByBehavior = verifier.detectIeVersionByBehavior();
-    var versionByNavigator = verifier.detectIeVersionByNavigator();
-    var correctedVersion = verifier.getCorrectedIEVersionByNavigator();
+    const isUserAgentIE = browser.isIE();
+    const versionByBehavior = verifier.detectIeVersionByBehavior();
+    const versionByNavigator = verifier.detectIeVersionByNavigator();
+    const correctedVersion = verifier.getCorrectedIEVersionByNavigator();
 
     if (isUserAgentIE) {
-      var version = Number(browser.getVersion());
+      const version = Number(browser.getVersion());
       assertEquals('behavior detection incorrect', version, versionByBehavior);
       if (version != 11) {
         assertEquals(

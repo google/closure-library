@@ -44,9 +44,9 @@ goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
 
-var menuButton;
-var clonedMenuButtonDom;
-var expectedFailures;
+let menuButton;
+let clonedMenuButtonDom;
+let expectedFailures;
 
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
@@ -57,7 +57,7 @@ function setUpPage() {
 // the selenium farm.
 // TODO(nicksantos): Move this into a common location if we ever have enough
 // code for a general goog.testing.ui library.
-var originalPositionAtCoordinate = goog.positioning.positionAtCoordinate;
+const originalPositionAtCoordinate = goog.positioning.positionAtCoordinate;
 goog.positioning.positionAtCoordinate = function(
     absolutePos, movableElement, movableElementCorner, opt_margin, opt_viewport,
     opt_overflow, opt_preferredSize) {
@@ -77,7 +77,7 @@ function MyFakeEvent(keyCode, opt_eventType) {
 function setUp() {
   window.scrollTo(0, 0);
 
-  var viewportSize = goog.dom.getViewportSize();
+  const viewportSize = goog.dom.getViewportSize();
   // Some tests need enough size viewport.
   if (viewportSize.width < 600 || viewportSize.height < 600) {
     window.moveTo(0, 0);
@@ -93,7 +93,7 @@ function tearDown() {
   expectedFailures.handleTearDown();
   menuButton.dispose();
 
-  var element = goog.dom.getElement('demoMenuButton');
+  const element = goog.dom.getElement('demoMenuButton');
   element.parentNode.replaceChild(clonedMenuButtonDom, element);
 }
 
@@ -107,7 +107,7 @@ function checkHasPopUp() {
       'Menu button must have aria-haspopup attribute set to false',
       goog.a11y.aria.getState(
           menuButton.getElement(), goog.a11y.aria.State.HASPOPUP));
-  var menu = new goog.ui.Menu();
+  const menu = new goog.ui.Menu();
   menu.createDom();
   menuButton.setMenu(menu);
   assertTrue(
@@ -127,7 +127,7 @@ function checkHasPopUp() {
  * Check if the aria-haspopup property is set correctly.
  */
 function testBasicButtonBehavior() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
 
   assertEquals(
@@ -139,15 +139,15 @@ function testBasicButtonBehavior() {
 
   assertTrue('Menu must open after click', menuButton.isOpen());
 
-  var menuItemClicked = 0;
-  var lastMenuItemClicked = null;
+  let menuItemClicked = 0;
+  let lastMenuItemClicked = null;
   goog.events.listen(
       menuButton.getMenu(), goog.ui.Component.EventType.ACTION, function(e) {
         menuItemClicked++;
         lastMenuItemClicked = e.target;
       });
 
-  var menuItem2 = goog.dom.getElement('menuItem2');
+  const menuItem2 = goog.dom.getElement('menuItem2');
   goog.testing.events.fireClickSequence(menuItem2);
   assertFalse('Menu must close on clicking when open', menuButton.isOpen());
   assertEquals('Number of menu items clicked should be 1', 1, menuItemClicked);
@@ -162,7 +162,7 @@ function testBasicButtonBehavior() {
  * Check if the aria-activedescendant property is set correctly.
  */
 function testHighlightItemBehavior() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
   goog.testing.events.fireClickSequence(node);
 
@@ -188,7 +188,7 @@ function testHighlightItemBehavior() {
  * keyboard and setSelectFirstOnEnterOrSpace is not set.
  */
 function testHighlightFirstOnOpen() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
   assertEquals(
@@ -210,9 +210,9 @@ function testHighlightFirstOnOpen() {
  * disabled.
  */
 function testHighlightFirstOnOpen_withFirstDisabled() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-  var menu = menuButton.getMenu();
+  const menu = menuButton.getMenu();
   menu.getItemAt(0).setEnabled(false);
 
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
@@ -234,7 +234,7 @@ function testHighlightFirstOnOpen_withFirstDisabled() {
  * keyboard and setSelectFirstOnEnterOrSpace is set.
  */
 function testHighlightFirstOnOpen_withEnterOrSpaceSet() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
   menuButton.setSelectFirstOnEnterOrSpace(true);
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
@@ -251,10 +251,10 @@ function testHighlightFirstOnOpen_withEnterOrSpaceSet() {
  * disabled.
  */
 function testHighlightFirstOnOpen_withEnterOrSpaceSetAndFirstDisabled() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
   menuButton.setSelectFirstOnEnterOrSpace(true);
-  var menu = menuButton.getMenu();
+  const menu = menuButton.getMenu();
   menu.getItemAt(0).setEnabled(false);
 
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
@@ -270,20 +270,20 @@ function testHighlightFirstOnOpen_withEnterOrSpaceSetAndFirstDisabled() {
  * Check if the aria-activedescendant property is set correctly.
  */
 function testCloseSubMenuBehavior() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-  var menu = menuButton.getMenu();
-  var subMenu = new goog.ui.SubMenu('Submenu');
+  const menu = menuButton.getMenu();
+  const subMenu = new goog.ui.SubMenu('Submenu');
   menu.addItem(subMenu);
   subMenu.getElement().id = 'subMenu';
-  var subMenuMenu = new goog.ui.Menu();
+  const subMenuMenu = new goog.ui.Menu();
   subMenu.setMenu(subMenuMenu);
-  var subMenuItem = new goog.ui.MenuItem('Submenu item 1');
+  const subMenuItem = new goog.ui.MenuItem('Submenu item 1');
   subMenuMenu.addItem(subMenuItem);
   subMenuItem.getElement().id = 'subMenuItem1';
   menuButton.setOpen(true);
 
-  for (var i = 0; i < 4; i++) {
+  for (let i = 0; i < 4; i++) {
     menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
   }
   assertEquals(
@@ -309,7 +309,7 @@ function testCloseSubMenuBehavior() {
  * Make sure the menu opens when enter is pressed.
  */
 function testEnterOpensMenu() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
   assertTrue('Menu must open after enter', menuButton.isOpen());
@@ -320,7 +320,7 @@ function testEnterOpensMenu() {
  * Tests the behavior of the enter and space keys when the menu is open.
  */
 function testSpaceOrEnterClosesMenu() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
 
   menuButton.setOpen(true);
@@ -339,8 +339,8 @@ function testSpaceOrEnterClosesMenu() {
  * menu is closed.
  */
 function testStopEscapePropagationMenuClosed() {
-  var node = goog.dom.getElement('demoMenuButton');
-  var fakeEvent = new MyFakeEvent(
+  const node = goog.dom.getElement('demoMenuButton');
+  const fakeEvent = new MyFakeEvent(
       goog.events.KeyCodes.ESCAPE, goog.events.EventType.KEYDOWN);
   menuButton.decorate(node);
   menuButton.setOpen(false);
@@ -357,8 +357,8 @@ function testStopEscapePropagationMenuClosed() {
  * when the menu is open.
  */
 function testStopEscapePropagationMenuOpen() {
-  var node = goog.dom.getElement('demoMenuButton');
-  var fakeEvent = new MyFakeEvent(
+  const node = goog.dom.getElement('demoMenuButton');
+  const fakeEvent = new MyFakeEvent(
       goog.events.KeyCodes.ESCAPE, goog.events.EventType.KEYDOWN);
   menuButton.decorate(node);
   menuButton.setOpen(true);
@@ -374,7 +374,7 @@ function testStopEscapePropagationMenuOpen() {
  * the document once, to test proper setup/teardown behavior of MenuButton.
  */
 function testButtonAfterEnterDocument() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
 
   menuButton.exitDocument();
@@ -383,7 +383,7 @@ function testButtonAfterEnterDocument() {
   goog.testing.events.fireClickSequence(node);
   assertTrue('Menu must open after click', menuButton.isOpen());
 
-  var menuItem2 = goog.dom.getElement('menuItem2');
+  const menuItem2 = goog.dom.getElement('menuItem2');
   goog.testing.events.fireClickSequence(menuItem2);
   assertFalse('Menu must close on clicking when open', menuButton.isOpen());
 }
@@ -394,9 +394,9 @@ function testButtonAfterEnterDocument() {
  * position is more or less ok.
  */
 function testPositionMenu() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-  var menu = menuButton.getMenu();
+  const menu = menuButton.getMenu();
   menu.setVisible(true, true);
 
   // Move to 500, 500
@@ -404,7 +404,7 @@ function testPositionMenu() {
 
   // Now reposition and make sure position is more or less ok.
   menuButton.positionMenu();
-  var menuNode = goog.dom.getElement('demoMenu');
+  const menuNode = goog.dom.getElement('demoMenu');
   assertRoughlyEquals(
       menuNode.offsetTop, node.offsetTop + node.offsetHeight, 20);
   assertRoughlyEquals(menuNode.offsetLeft, node.offsetLeft, 20);
@@ -416,7 +416,7 @@ function testPositionMenu() {
  * throw an exception.
  */
 function testPositionMenuNotInDocument() {
-  var menu = new goog.ui.Menu();
+  const menu = new goog.ui.Menu();
   menu.createDom();
   menuButton.setMenu(menu);
   menuButton.positionMenu();
@@ -427,23 +427,23 @@ function testPositionMenuNotInDocument() {
  * Shows the menu and moves the menu button, a timer correct the menu position.
  */
 function testOpenedMenuPositionCorrection() {
-  var iframe = goog.dom.getElement('iframe1');
-  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
-  var iframeDom = goog.dom.getDomHelper(iframeDoc);
-  var iframeWindow = goog.dom.getWindow(iframeDoc);
+  const iframe = goog.dom.getElement('iframe1');
+  const iframeDoc = goog.dom.getFrameContentDocument(iframe);
+  const iframeDom = goog.dom.getDomHelper(iframeDoc);
+  const iframeWindow = goog.dom.getWindow(iframeDoc);
 
-  var button = new goog.ui.MenuButton();
+  const button = new goog.ui.MenuButton();
   iframeWindow.scrollTo(0, 0);
-  var node = iframeDom.getElement('demoMenuButton');
+  const node = iframeDom.getElement('demoMenuButton');
   button.decorate(node);
-  var mockTimer = new goog.Timer();
+  const mockTimer = new goog.Timer();
   // Don't start the timer.  We manually dispatch the Tick event.
   mockTimer.start = goog.nullFunction;
   button.timer_ = mockTimer;
 
-  var replacer = new goog.testing.PropertyReplacer();
-  var positionMenuCalled;
-  var origPositionMenu = goog.bind(button.positionMenu, button);
+  const replacer = new goog.testing.PropertyReplacer();
+  let positionMenuCalled;
+  const origPositionMenu = goog.bind(button.positionMenu, button);
   replacer.set(button, 'positionMenu', function() {
     positionMenuCalled = true;
     origPositionMenu();
@@ -453,7 +453,7 @@ function testOpenedMenuPositionCorrection() {
   button.setOpen(true);
 
   // Confirm the menu position
-  var menuNode = iframeDom.getElement('demoMenu');
+  const menuNode = iframeDom.getElement('demoMenu');
   assertRoughlyEquals(
       menuNode.offsetTop, node.offsetTop + node.offsetHeight, 20);
   assertRoughlyEquals(menuNode.offsetLeft, node.offsetLeft, 20);
@@ -464,11 +464,11 @@ function testOpenedMenuPositionCorrection() {
   assertFalse('positionMenu() shouldn\'t be called.', positionMenuCalled);
 
   // Move the menu button by DOM structure change
-  var p1 = iframeDom.createDom(
+  const p1 = iframeDom.createDom(
       goog.dom.TagName.P, null, iframeDom.createTextNode('foo'));
-  var p2 = iframeDom.createDom(
+  const p2 = iframeDom.createDom(
       goog.dom.TagName.P, null, iframeDom.createTextNode('foo'));
-  var p3 = iframeDom.createDom(
+  const p3 = iframeDom.createDom(
       goog.dom.TagName.P, null, iframeDom.createTextNode('foo'));
   iframeDom.insertSiblingBefore(p1, node);
   iframeDom.insertSiblingBefore(p2, node);
@@ -488,8 +488,8 @@ function testOpenedMenuPositionCorrection() {
       menuNode.offsetTop, node.offsetTop + node.offsetHeight, 20);
 
   // Make the frame page scrollable.
-  var viewportHeight = iframeDom.getViewportSize().height;
-  var footer = iframeDom.getElement('footer');
+  const viewportHeight = iframeDom.getViewportSize().height;
+  const footer = iframeDom.getElement('footer');
   goog.style.setSize(footer, 1, viewportHeight * 2);
   // Change the viewport offset.
   iframeWindow.scrollTo(0, viewportHeight);
@@ -513,17 +513,17 @@ function testOpenedMenuPositionCorrection() {
  * correctly.
  */
 function testAlternatePositioningElement() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
 
-  var posElement = goog.dom.getElement('positionElement');
+  const posElement = goog.dom.getElement('positionElement');
   menuButton.setPositionElement(posElement);
 
   // Show the menu.
   menuButton.setOpen(true);
 
   // Confirm the menu position
-  var menuNode = menuButton.getMenu().getElement();
+  const menuNode = menuButton.getMenu().getElement();
   assertRoughlyEquals(
       menuNode.offsetTop, posElement.offsetTop + posElement.offsetHeight, 20);
   assertRoughlyEquals(menuNode.offsetLeft, posElement.offsetLeft, 20);
@@ -534,23 +534,23 @@ function testAlternatePositioningElement() {
  * Test forced positioning above the button.
  */
 function testPositioningAboveAnchor() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
 
   // Show the menu.
   menuButton.setAlignMenuToStart(true);  // Should get overridden below
   menuButton.setScrollOnOverflow(true);  // Should get overridden below
 
-  var position = new goog.positioning.MenuAnchoredPosition(
+  const position = new goog.positioning.MenuAnchoredPosition(
       menuButton.getElement(), goog.positioning.Corner.TOP_START,
       /* opt_adjust */ false, /* opt_resize */ false);
   menuButton.setMenuPosition(position);
   menuButton.setOpen(true);
 
   // Confirm the menu position
-  var buttonBounds = goog.style.getBounds(node);
-  var menuNode = menuButton.getMenu().getElement();
-  var menuBounds = goog.style.getBounds(menuNode);
+  const buttonBounds = goog.style.getBounds(node);
+  const menuNode = menuButton.getMenu().getElement();
+  const menuBounds = goog.style.getBounds(menuNode);
 
   assertRoughlyEquals(menuBounds.top + menuBounds.height, buttonBounds.top, 3);
   assertRoughlyEquals(menuBounds.left, buttonBounds.left, 3);
@@ -563,23 +563,23 @@ function testPositioningAboveAnchor() {
  * Test forced positioning below the button.
  */
 function testPositioningBelowAnchor() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
 
   // Show the menu.
   menuButton.setAlignMenuToStart(true);  // Should get overridden below
   menuButton.setScrollOnOverflow(true);  // Should get overridden below
 
-  var position = new goog.positioning.MenuAnchoredPosition(
+  const position = new goog.positioning.MenuAnchoredPosition(
       menuButton.getElement(), goog.positioning.Corner.BOTTOM_START,
       /* opt_adjust */ false, /* opt_resize */ false);
   menuButton.setMenuPosition(position);
   menuButton.setOpen(true);
 
   // Confirm the menu position
-  var buttonBounds = goog.style.getBounds(node);
-  var menuNode = menuButton.getMenu().getElement();
-  var menuBounds = goog.style.getBounds(menuNode);
+  const buttonBounds = goog.style.getBounds(node);
+  const menuNode = menuButton.getMenu().getElement();
+  const menuBounds = goog.style.getBounds(menuNode);
 
   expectedFailures.expectFailureFor(isWinSafariBefore5());
   try {
@@ -604,7 +604,7 @@ function isWinSafariBefore5() {
  * Tests that space, and only space, fire on key up.
  */
 function testSpaceFireOnKeyUp() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
 
   e = new goog.events.Event(goog.events.KeyHandler.EventType.KEY, menuButton);
@@ -644,7 +644,7 @@ function testSpaceFireOnKeyUp() {
  * being hidden.
  */
 function testPreventHide() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
   menuButton.setDispatchTransitionEvents(goog.ui.Component.State.OPENED, true);
 
@@ -653,9 +653,10 @@ function testPreventHide() {
   assertTrue('Menu button should be open.', menuButton.isOpen());
   assertTrue('Menu should be visible.', menuButton.getMenu().isVisible());
 
-  var key = goog.events.listen(
-      menuButton, goog.ui.Component.EventType.CLOSE,
-      function(event) { event.preventDefault(); });
+  const key = goog.events.listen(
+      menuButton, goog.ui.Component.EventType.CLOSE, function(event) {
+        event.preventDefault();
+      });
 
   // Try to hide the menu.
   menuButton.setOpen(false);
@@ -675,20 +676,20 @@ function testPreventHide() {
  * removing menu items changes the size of the menu.
  */
 function testResizeOnItemAddOrRemove() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-  var menu = menuButton.getMenu();
+  const menu = menuButton.getMenu();
 
   // Show the menu.
   menuButton.setOpen(true);
-  var originalSize = goog.style.getSize(menu.getElement());
+  const originalSize = goog.style.getSize(menu.getElement());
 
   // Check that removing an item while the menu is left open correctly changes
   // the size of the menu.
   // Remove an item using a method on Menu.
-  var item = menu.removeChildAt(0, true);
+  const item = menu.removeChildAt(0, true);
   // Confirm size of menu changed.
-  var afterRemoveSize = goog.style.getSize(menu.getElement());
+  const afterRemoveSize = goog.style.getSize(menu.getElement());
   assertTrue(
       'Height of menu must decrease after removing a menu item.',
       afterRemoveSize.height < originalSize.height);
@@ -697,10 +698,10 @@ function testResizeOnItemAddOrRemove() {
   // (so that reposition is called) correctly changes the size of the menu.
   // Hide menu.
   menuButton.setOpen(false);
-  var item2 = menu.removeChildAt(0, true);
+  const item2 = menu.removeChildAt(0, true);
   menuButton.setOpen(true);
   // Confirm size of menu changed.
-  var afterRemoveAgainSize = goog.style.getSize(menu.getElement());
+  const afterRemoveAgainSize = goog.style.getSize(menu.getElement());
   assertTrue(
       'Height of menu must decrease after removing a second menu item.',
       afterRemoveAgainSize.height < afterRemoveSize.height);
@@ -713,7 +714,7 @@ function testResizeOnItemAddOrRemove() {
   menuButton.setOpen(false);
   menuButton.setOpen(true);
   // Confirm size of menu changed.
-  var afterAddSize = goog.style.getSize(menu.getElement());
+  const afterAddSize = goog.style.getSize(menu.getElement());
   assertTrue(
       'Height of menu must increase after adding a menu item.',
       afterRemoveAgainSize.height < afterAddSize.height);
@@ -731,34 +732,34 @@ function testResizeOnItemAddOrRemove() {
  * correctly resizes the menu.
  */
 function testResizeOnItemAddOrRemoveWithScrollOnOverflow() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-  var menu = menuButton.getMenu();
+  const menu = menuButton.getMenu();
 
   // Show the menu.
   menuButton.setScrollOnOverflow(true);
   menuButton.setOpen(true);
-  var originalSize = goog.style.getSize(menu.getElement());
+  const originalSize = goog.style.getSize(menu.getElement());
 
   // Check that removing an item while the menu is left open correctly changes
   // the size of the menu.
   // Remove an item using a method on Menu.
-  var item = menu.removeChildAt(0, true);
+  const item = menu.removeChildAt(0, true);
   menuButton.invalidateMenuSize();
   menuButton.positionMenu();
 
   // Confirm size of menu changed.
-  var afterRemoveSize = goog.style.getSize(menu.getElement());
+  const afterRemoveSize = goog.style.getSize(menu.getElement());
   assertTrue(
       'Height of menu must decrease after removing a menu item.',
       afterRemoveSize.height < originalSize.height);
 
-  var item2 = menu.removeChildAt(0, true);
+  const item2 = menu.removeChildAt(0, true);
   menuButton.invalidateMenuSize();
   menuButton.positionMenu();
 
   // Confirm size of menu changed.
-  var afterRemoveAgainSize = goog.style.getSize(menu.getElement());
+  const afterRemoveAgainSize = goog.style.getSize(menu.getElement());
   assertTrue(
       'Height of menu must decrease after removing a second menu item.',
       afterRemoveAgainSize.height < afterRemoveSize.height);
@@ -770,7 +771,7 @@ function testResizeOnItemAddOrRemoveWithScrollOnOverflow() {
   menuButton.positionMenu();
 
   // Confirm size of menu changed.
-  var afterAddSize = goog.style.getSize(menu.getElement());
+  const afterAddSize = goog.style.getSize(menu.getElement());
   assertTrue(
       'Height of menu must increase after adding a menu item.',
       afterRemoveAgainSize.height < afterAddSize.height);
@@ -805,15 +806,15 @@ function testRenderMenuAsSibling() {
  * after the menu button.
  */
 function testRenderMenuAsSiblingForDecoratedButton() {
-  var menu = new goog.ui.Menu();
+  const menu = new goog.ui.Menu();
   menu.addChild(new goog.ui.MenuItem('Menu item 1'), true /* render */);
   menu.addChild(new goog.ui.MenuItem('Menu item 2'), true /* render */);
   menu.addChild(new goog.ui.MenuItem('Menu item 3'), true /* render */);
 
-  var menuButton = new goog.ui.MenuButton();
+  const menuButton = new goog.ui.MenuButton();
   menuButton.setMenu(menu);
   menuButton.setRenderMenuAsSibling(true);
-  var node = goog.dom.getElement('button1');
+  const node = goog.dom.getElement('button1');
   menuButton.decorate(node);
 
   menuButton.setOpen(true);
@@ -855,9 +856,9 @@ function testScrollOnOverflowSetter() {
  * when the menu is opened.
  */
 function testSetOpenUnsetsAriaHidden() {
-  var node = goog.dom.getElement('demoMenuButton');
+  const node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-  var menuElem = menuButton.getMenu().getElementStrict();
+  const menuElem = menuButton.getMenu().getElementStrict();
   goog.a11y.aria.setState(menuElem, goog.a11y.aria.State.HIDDEN, true);
   menuButton.setOpen(true);
   assertEquals(

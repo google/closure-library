@@ -55,7 +55,7 @@ function testDispatchingPasteEventSupportedByAFewBrowsersWork() {
   if (!goog.events.PasteHandler.SUPPORTS_NATIVE_PASTE_EVENT) {
     return;
   }
-  var handlerThatSupportsPasteEvents = new goog.events.PasteHandler(textarea);
+  const handlerThatSupportsPasteEvents = new goog.events.PasteHandler(textarea);
   // user clicks on the textarea and give it focus
   goog.events.listen(
       handlerThatSupportsPasteEvents, goog.events.PasteHandler.EventType.PASTE,
@@ -297,7 +297,7 @@ function testMacRightClickPasteRequiresCtrlBecauseItHasOneButton() {
   if (!goog.userAgent.OPERA || !goog.userAgent.MAC) {
     return;
   }
-  var handler = new goog.events.PasteHandler(textarea);
+  const handler = new goog.events.PasteHandler(textarea);
   // user clicks on the textarea and give it focus
   goog.events.listen(
       handler, goog.events.PasteHandler.EventType.PASTE,
@@ -317,7 +317,7 @@ function testOperaMacFiresKeyCode17WhenAppleKeyPressedButDoesNotFireKeyDown() {
   if (!goog.userAgent.OPERA || !goog.userAgent.MAC) {
     return;
   }
-  var handler = new goog.events.PasteHandler(textarea);
+  const handler = new goog.events.PasteHandler(textarea);
   // user clicks on the textarea and give it focus
   goog.events.listen(
       handler, goog.events.PasteHandler.EventType.PASTE,
@@ -336,7 +336,7 @@ function testOperaMacFiresKeyCode17WhenAppleKeyPressedButDoesNotFireKeyDown() {
 }
 
 function testScriptingDoesntTriggerPasteEvents() {
-  var handlerUsedToListenForScriptingChanges =
+  const handlerUsedToListenForScriptingChanges =
       new goog.events.PasteHandler(textarea);
   pasted = false;
   // user clicks on the textarea and give it focus
@@ -357,12 +357,12 @@ function testAfterPaste() {
   if (!goog.events.PasteHandler.SUPPORTS_NATIVE_PASTE_EVENT) {
     return;
   }
-  var handlerThatSupportsPasteEvents = new goog.events.PasteHandler(textarea);
+  const handlerThatSupportsPasteEvents = new goog.events.PasteHandler(textarea);
   pasted = false;
   goog.events.listen(
       handlerThatSupportsPasteEvents, goog.events.PasteHandler.EventType.PASTE,
       function() { pasted = true; });
-  var afterPasteFired = false;
+  let afterPasteFired = false;
   goog.events.listen(
       handlerThatSupportsPasteEvents,
       goog.events.PasteHandler.EventType.AFTER_PASTE,
@@ -386,12 +386,12 @@ function testAfterPasteNotFiredIfDelayTooLong() {
   if (!goog.events.PasteHandler.SUPPORTS_NATIVE_PASTE_EVENT) {
     return;
   }
-  var handlerThatSupportsPasteEvents = new goog.events.PasteHandler(textarea);
+  const handlerThatSupportsPasteEvents = new goog.events.PasteHandler(textarea);
   pasted = false;
   goog.events.listen(
       handlerThatSupportsPasteEvents, goog.events.PasteHandler.EventType.PASTE,
       function() { pasted = true; });
-  var afterPasteFired = false;
+  let afterPasteFired = false;
   goog.events.listen(
       handlerThatSupportsPasteEvents,
       goog.events.PasteHandler.EventType.AFTER_PASTE,

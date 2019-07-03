@@ -35,14 +35,14 @@ goog.require('goog.testing.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
-var fieldDiv;
-var FIELDMOCK;
-var linkBubble;
-var link;
-var linkChild;
-var mockWindowOpen;
-var stubs;
-var testHelper;
+let fieldDiv;
+let FIELDMOCK;
+let linkBubble;
+let link;
+let linkChild;
+let mockWindowOpen;
+let stubs;
+let testHelper;
 
 function setUpPage() {
   fieldDiv = goog.dom.$('field');
@@ -110,7 +110,7 @@ function testImageLink() {
 }
 
 function closeBox() {
-  var closeBox = goog.dom.getElementsByTagNameAndClass(
+  const closeBox = goog.dom.getElementsByTagNameAndClass(
       goog.dom.TagName.DIV, 'tr_bubble_closebox');
   assertEquals('Should find only one close box', 1, closeBox.length);
   assertNotNull('Found close box', closeBox[0]);
@@ -166,7 +166,7 @@ function testChangePressed() {
   linkBubble.handleSelectionChange(createMouseEvent(link));
   assertBubble();
 
-  var defaultPrevented = !goog.testing.events.fireKeySequence(
+  const defaultPrevented = !goog.testing.events.fireKeySequence(
       goog.dom.$(goog.editor.plugins.LinkBubble.CHANGE_LINK_ID_),
       goog.events.KeyCodes.ENTER);
   assertTrue(defaultPrevented);
@@ -190,11 +190,11 @@ function testDeleteClicked() {
 
   goog.testing.events.fireClickSequence(
       goog.dom.$(goog.editor.plugins.LinkBubble.DELETE_LINK_ID_));
-  var element = goog.userAgent.GECKO ? document.body : fieldDiv;
+  const element = goog.userAgent.GECKO ? document.body : fieldDiv;
   assertNotEquals(
       'Link removed', element.firstChild.nodeName, String(goog.dom.TagName.A));
   assertNoBubble();
-  var range = goog.dom.Range.createFromWindow();
+  const range = goog.dom.Range.createFromWindow();
   assertEquals('Link selection on link text', linkChild, range.getEndNode());
   assertEquals(
       'Link selection on link text end',
@@ -216,15 +216,15 @@ function testDeletePressed() {
   linkBubble.handleSelectionChange(createMouseEvent(link));
   assertBubble();
 
-  var defaultPrevented = !goog.testing.events.fireKeySequence(
+  const defaultPrevented = !goog.testing.events.fireKeySequence(
       goog.dom.$(goog.editor.plugins.LinkBubble.DELETE_LINK_ID_),
       goog.events.KeyCodes.ENTER);
   assertTrue(defaultPrevented);
-  var element = goog.userAgent.GECKO ? document.body : fieldDiv;
+  const element = goog.userAgent.GECKO ? document.body : fieldDiv;
   assertNotEquals(
       'Link removed', element.firstChild.nodeName, String(goog.dom.TagName.A));
   assertNoBubble();
-  var range = goog.dom.Range.createFromWindow();
+  const range = goog.dom.Range.createFromWindow();
   assertEquals('Link selection on link text', linkChild, range.getEndNode());
   assertEquals(
       'Link selection on link text end',
@@ -233,18 +233,20 @@ function testDeletePressed() {
 }
 
 function testActionClicked() {
-  var SPAN = 'actionSpanId';
-  var LINK = 'actionLinkId';
-  var toShowCount = 0;
-  var actionCount = 0;
+  const SPAN = 'actionSpanId';
+  const LINK = 'actionLinkId';
+  let toShowCount = 0;
+  let actionCount = 0;
 
-  var linkAction = new goog.editor.plugins.LinkBubble.Action(
+  const linkAction = new goog.editor.plugins.LinkBubble.Action(
       SPAN, LINK, 'message',
       function() {
         toShowCount++;
         return toShowCount == 1;  // Show it the first time.
       },
-      function() { actionCount++; });
+      function() {
+        actionCount++;
+      });
 
   linkBubble = new goog.editor.plugins.LinkBubble(linkAction);
   linkBubble.fieldObject = FIELDMOCK;
@@ -328,7 +330,7 @@ function testDontLinkifyInvalidScheme() {
   FIELDMOCK.$replay();
   linkBubble.enable(FIELDMOCK);
 
-  var badLink = goog.dom.createElement(goog.dom.TagName.A);
+  const badLink = goog.dom.createElement(goog.dom.TagName.A);
   badLink.href = 'javascript:alert(1)';
   goog.dom.setTextContent(badLink, 'bad link');
 
@@ -345,18 +347,19 @@ function testDontLinkifyInvalidScheme() {
 
 function testIsSafeSchemeToOpen() {
   // Urls with no scheme at all are ok too since 'http://' will be prepended.
-  var good = [
+  const good = [
     'http://google.com', 'http://google.com/', 'https://google.com',
     'null@google.com', 'http://www.google.com', 'http://site.com', 'google.com',
     'google', 'http://google', 'HTTP://GOOGLE.COM', 'HtTp://www.google.com'
   ];
 
-  var bad = [
+  const bad = [
     'javascript:google.com', 'httpp://google.com', 'data:foo',
     'javascript:alert(\'hi\');', 'abc:def'
   ];
 
-  for (var i = 0; i < good.length; i++) {
+  let i;
+  for (i = 0; i < good.length; i++) {
     assertTrue(
         good[i] + ' should have a safe scheme',
         linkBubble.isSafeSchemeToOpen_(good[i]));
@@ -392,11 +395,11 @@ function testLongUrlTestLinkAnchorTextCorrect() {
   FIELDMOCK.$replay();
   linkBubble.enable(FIELDMOCK);
 
-  var longUrl = 'http://www.reallylonglinkthatshouldbetruncated' +
+  const longUrl = 'http://www.reallylonglinkthatshouldbetruncated' +
       'becauseitistoolong.com';
-  var truncatedLongUrl = goog.string.truncateMiddle(longUrl, 48);
+  const truncatedLongUrl = goog.string.truncateMiddle(longUrl, 48);
 
-  var longLink = goog.dom.createElement(goog.dom.TagName.A);
+  const longLink = goog.dom.createElement(goog.dom.TagName.A);
   longLink.href = longUrl;
   goog.dom.setTextContent(longLink, 'Google');
   fieldDiv.appendChild(longLink);
@@ -404,7 +407,7 @@ function testLongUrlTestLinkAnchorTextCorrect() {
   linkBubble.handleSelectionChange(createMouseEvent(longLink));
   assertBubble();
 
-  var testLinkEl = goog.dom.$(goog.editor.plugins.LinkBubble.TEST_LINK_ID_);
+  const testLinkEl = goog.dom.$(goog.editor.plugins.LinkBubble.TEST_LINK_ID_);
   assertEquals(
       'The test link\'s anchor text should be the truncated URL.',
       truncatedLongUrl, testLinkEl.innerHTML);
@@ -470,7 +473,7 @@ function assertNoBubble() {
 }
 
 function createMouseEvent(target) {
-  var eventObj = new goog.events.Event(goog.events.EventType.MOUSEUP, target);
+  const eventObj = new goog.events.Event(goog.events.EventType.MOUSEUP, target);
   eventObj.button = goog.events.BrowserEvent.MouseButton.LEFT;
 
   return new goog.events.BrowserEvent(eventObj, target);

@@ -42,22 +42,22 @@ goog.require('goog.userAgent');
 goog.setTestOnly('goog.module.ModuleLoaderTest');
 
 
-var modA1Loaded = false;
-var modA2Loaded = false;
-var modB1Loaded = false;
+window.modA1Loaded = false;
+window.modA2Loaded = false;
+window.modB1Loaded = false;
 
-var moduleLoader = null;
-var moduleManager = null;
-var stubs = new goog.testing.PropertyReplacer();
-var modA1 = goog.html.TrustedResourceUrl.fromConstant(
+let moduleLoader = null;
+let moduleManager = null;
+const stubs = new goog.testing.PropertyReplacer();
+const modA1 = goog.html.TrustedResourceUrl.fromConstant(
     goog.string.Const.from('testdata/modA_1.js'));
-var modA2 = goog.html.TrustedResourceUrl.fromConstant(
+const modA2 = goog.html.TrustedResourceUrl.fromConstant(
     goog.string.Const.from('testdata/modA_2.js'));
-var modB1 = goog.html.TrustedResourceUrl.fromConstant(
+const modB1 = goog.html.TrustedResourceUrl.fromConstant(
     goog.string.Const.from('testdata/modB_1.js'));
 
-var EventType = goog.module.ModuleLoader.EventType;
-var observer;
+const EventType = goog.module.ModuleLoader.EventType;
+let observer;
 
 function setUpPage() {
   goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000;  // 10s
@@ -98,9 +98,9 @@ function tearDown() {
   modA1Loaded = false;
 
   // Remove all the fake scripts.
-  var scripts =
+  const scripts =
       goog.array.clone(goog.dom.getElementsByTagName(goog.dom.TagName.SCRIPT));
-  for (var i = 0; i < scripts.length; i++) {
+  for (let i = 0; i < scripts.length; i++) {
     if (scripts[i].src.indexOf('testdata') != -1) {
       goog.dom.removeNode(scripts[i]);
     }
@@ -196,11 +196,11 @@ function testLoadDebugModuleAThenB() {
         assertLoaded('modA');
         assertLoaded('modB');
 
-        var scripts = goog.array.clone(
+        const scripts = goog.array.clone(
             goog.dom.getElementsByTagName(goog.dom.TagName.SCRIPT));
-        var seenLastScriptOfModuleA = false;
-        for (var i = 0; i < scripts.length; i++) {
-          var uri = scripts[i].src;
+        let seenLastScriptOfModuleA = false;
+        for (let i = 0; i < scripts.length; i++) {
+          const uri = scripts[i].src;
           if (uri.indexOf('modA_1.js') >= 0) {
             seenLastScriptOfModuleA = true;
           } else if (uri.indexOf('modB') >= 0) {
@@ -254,14 +254,16 @@ function assertSourceInjection() {
       .then(function() {
         assertTrue(!!throwErrorInModuleB);
 
-        var ex = assertThrows(function() { throwErrorInModuleB(); });
+        const ex = assertThrows(function() {
+          throwErrorInModuleB();
+        });
 
         if (!ex.stack) {
           return;
         }
 
-        var stackTrace = ex.stack.toString();
-        var expectedString = 'testdata/modB_1.js';
+        const stackTrace = ex.stack.toString();
+        const expectedString = 'testdata/modB_1.js';
 
         if (goog.module.ModuleLoader.supportsSourceUrlStackTraces()) {
           // Source URL should be added in eval or in jsloader.
@@ -282,16 +284,16 @@ function testModuleLoaderRecursesTooDeep(opt_numModules) {
   // asked for modB, it would try to load its dependency modA. When modA
   // failed, it would move onto modB, and then start over, repeating until it
   // ran out of stack.
-  var numModules = opt_numModules || 1;
-  var uris = {};
-  var deps = {};
-  var mods = [];
-  for (var num = 0; num < numModules; num++) {
-    var modName = 'mod' + num;
+  const numModules = opt_numModules || 1;
+  const uris = {};
+  const deps = {};
+  const mods = [];
+  for (let num = 0; num < numModules; num++) {
+    const modName = 'mod' + num;
     mods.unshift(modName);
     uris[modName] = [];
     deps[modName] = num ? ['mod' + (num - 1)] : [];
-    for (var i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) {
       uris[modName].push(goog.html.TrustedResourceUrl.format(
           goog.string.Const.from(
               'https://www.google.com/crossdomain%{num}x%{i}.js'),
@@ -304,15 +306,15 @@ function testModuleLoaderRecursesTooDeep(opt_numModules) {
 
   // Make all XHRs throw an error, so that we test the error-handling
   // functionality.
-  var oldXmlHttp = goog.net.XmlHttp;
+  const oldXmlHttp = goog.net.XmlHttp;
   stubs.set(goog.net, 'XmlHttp', function() {
     return {open: goog.functions.error('mock error'), abort: goog.nullFunction};
   });
   goog.object.extend(goog.net.XmlHttp, oldXmlHttp);
 
-  var errorCount = 0;
-  var errorIds = [];
-  var errorHandler = function(ignored, modId) {
+  let errorCount = 0;
+  const errorIds = [];
+  const errorHandler = function(ignored, modId) {
     errorCount++;
     errorIds.push(modId);
   };
@@ -353,8 +355,12 @@ function testErrback() {
   modA1Loaded = true;
 
   return new goog.Promise(function(resolve, reject) {
-    var errorHandler = function() {
-      assertNotLoaded('modA');
+    const errorHandler = function() {
+      try {
+        assertNotLoaded('modA');
+      } catch (e) {
+        reject(e);
+      }
       resolve();
     };
     moduleManager.registerCallback(
@@ -377,8 +383,12 @@ function testEventError() {
 
   return new goog
       .Promise(function(resolve, reject) {
-        var errorHandler = function() {
-          assertNotLoaded('modA');
+        const errorHandler = function() {
+          try {
+            assertNotLoaded('modA');
+          } catch (e) {
+            reject(e);
+          }
           resolve();
         };
         moduleManager.registerCallback(
@@ -398,12 +408,12 @@ function testEventError() {
             observer.getEvents(EventType.REQUEST_SUCCESS).length);
         assertUndefined(observer.getEvents(EventType.REQUEST_SUCCESS)[0].error);
 
-        var requestErrors = observer.getEvents(EventType.REQUEST_ERROR);
+        const requestErrors = observer.getEvents(EventType.REQUEST_ERROR);
         assertEquals('REQUEST_ERROR', 3, requestErrors.length);
         const requestError = requestErrors[0];
         assertNotNull(requestError.error);
-        var expectedString = 'loaded twice';
-        var messageAndStack =
+        const expectedString = 'loaded twice';
+        const messageAndStack =
             requestErrors[0].error.message + requestErrors[0].error.stack;
         assertContains(expectedString, messageAndStack);
         assertNull(requestError.status);
@@ -523,14 +533,16 @@ function testPrefetchModuleWithBatchModeEnabled() {
 function testLoadErrorCallbackExecutedWhenPrefetchFails() {
   // Make all XHRs throw an error, so that we test the error-handling
   // functionality.
-  var oldXmlHttp = goog.net.XmlHttp;
+  const oldXmlHttp = goog.net.XmlHttp;
   stubs.set(goog.net, 'XmlHttp', function() {
     return {open: goog.functions.error('mock error'), abort: goog.nullFunction};
   });
   goog.object.extend(goog.net.XmlHttp, oldXmlHttp);
 
-  var errorCount = 0;
-  var errorHandler = function() { errorCount++; };
+  let errorCount = 0;
+  const errorHandler = function() {
+    errorCount++;
+  };
   moduleManager.registerCallback(
       goog.module.ModuleManager.CallbackType.ERROR, errorHandler);
 
