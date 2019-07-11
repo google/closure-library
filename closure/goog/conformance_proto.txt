@@ -44,7 +44,6 @@ requirement: {
   java_class: 'com.google.javascript.jscomp.ConformanceRules$BanGlobalVars'
   error_message: 'Global declarations are not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#globalVars'
 
-  whitelist: 'javascript/apps/xid/xid.js' # global 'xid'
   whitelist_regexp: '.+/closure/goog/base.js' # global 'goog'
   whitelist_regexp: '.+/closure/goog/labs/testing/' # global matchers, etc
   whitelist_regexp: '.+/closure/goog/locale/locale.js' # dumb api
@@ -70,7 +69,6 @@ requirement: {
   whitelist_regexp: '.+/closure/goog/testing/'
   whitelist_regexp: '.+/closure/goog/ui/editor/bubble.js'
   whitelist_regexp: '.+/closure/goog/ui/editor/toolbarcontroller.js'
-  whitelist: 'javascript/jfk/activityindicator/activityindicator.js' # Compiler bug? Line 193
 }
 
 ### Browser tech requirements ###
@@ -90,10 +88,6 @@ requirement: {
   whitelist_regexp: '.+/closure/goog/net/xpc/nativemessagingtransport.js'
   # TODO(user): make sure this gets security reviewed (b/29333525).
   whitelist_regexp: '.+/closure/goog/messaging/portchannel.js'
-  # Internal-only code: go/g3doc-widgets#screenshots-widget-html.
-  whitelist: 'java/com/google/frameworks/testing/infrastructure/screenshot/ui/carousel/carouselcontroller.js'
-  # security reviewed (b/118451926)
-  whitelist: 'java/com/google/gaia/frontend/closure/common/service/nativebridge/kaios/basekaiosbridgeservice.js'
 }
 
 ### Security: forbid DOM properties and functions which can cause XSS ###
@@ -120,7 +114,6 @@ requirement: {
   whitelist_regexp: '.+/closure/goog/json/json.js' # used in goog.json.parse
   whitelist_regexp: '.+/closure/goog/module/loader.js'
   whitelist_regexp: '.+/closure/goog/module/moduleloader.js'
-  whitelist: 'javascript/security/safe_eval.js'
 
 }
 
@@ -211,8 +204,6 @@ requirement: {
   # TODO(jakubvrana): These need to be refactored.
   whitelist_regexp: '.+/closure/goog/editor/icontent.js'
   whitelist_regexp: '.+/closure/goog/testing/'
-  # TODO(jakubvrana): Elemental internals.
-  whitelist: 'third_party/java_src/elemental2/java/elemental2/dom/dom-j2cl.js.zip'
 }
 
 requirement: {
@@ -235,7 +226,6 @@ requirement: {
   value: 'iframe'
 
   whitelist_regexp: '.+/closure/goog/async/nexttick.js'
-  whitelist: 'javascript/timing/tail.js'
 }
 
 requirement: {
@@ -278,7 +268,6 @@ requirement: {
 
   whitelist_regexp: '.+/closure/goog/base.js'
   whitelist_regexp: '.+/closure/goog/dom/safe.js'
-  whitelist: 'javascript/security/csp_compatible.js'
 }
 
 requirement: {
@@ -508,7 +497,6 @@ requirement: {
 
   whitelist_regexp: '.+/closure/goog/debug/'
   whitelist_regexp: '.+/closure/goog/log/'
-  whitelist: 'javascript/apps/chat/'
 }
 
 requirement: {
