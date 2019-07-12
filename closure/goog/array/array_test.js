@@ -1571,24 +1571,6 @@ function testArrayBucketUsingThisObject() {
   assertArrayEquals(b[1], [2]);
 }
 
-function testArrayBucketToMap() {
-  const a = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const evenKey = {};
-  const oddKey = {};
-
-  function isEven(value, index, array) {
-    assertEquals(value, array[index]);
-    assertEquals('number', typeof index);
-    assertEquals(a, array);
-    return (value % 2 == 0) ? evenKey : oddKey;
-  }
-
-  const map = goog.array.bucketToMap(a, isEven);
-  assertEquals(2, map.size);
-  assertArrayEquals(map.get(evenKey), [2, 4, 6, 8]);
-  assertArrayEquals(map.get(oddKey), [1, 3, 5, 7, 9]);
-}
-
 function testArrayToObject() {
   const a = [{name: 'a'}, {name: 'b'}, {name: 'c'}, {name: 'd'}];
 
@@ -1605,24 +1587,6 @@ function testArrayToObject() {
     assertEquals(a[i], b[a[i].name]);
   }
 }
-
-function testArrayToMap() {
-  const a = [{id: 0}, {id: 1}, {id: 2}, {id: NaN}];
-
-  function getId(value, index, array) {
-    assertEquals(value, array[index]);
-    assertEquals('number', typeof index);
-    assertEquals(a, array);
-    return value.id;
-  }
-
-  const map = goog.array.toMap(a, getId);
-  assertEquals(map.size, a.length);
-  for (const e of a) {
-    assertEquals(e, map.get(e.id));
-  }
-}
-
 
 function testRange() {
   assertArrayEquals([], goog.array.range(0));
