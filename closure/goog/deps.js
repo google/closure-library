@@ -43,7 +43,7 @@ goog.addDependency('async/debouncer.js', ['goog.async.Debouncer'], ['goog.Dispos
 goog.addDependency('async/debouncer_test.js', ['goog.async.DebouncerTest'], ['goog.array', 'goog.async.Debouncer', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/delay.js', ['goog.Delay', 'goog.async.Delay'], ['goog.Disposable', 'goog.Timer'], {});
 goog.addDependency('async/delay_test.js', ['goog.async.DelayTest'], ['goog.async.Delay', 'goog.testing.MockClock', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('async/freelist.js', ['goog.async.FreeList'], [], {'lang': 'es6'});
+goog.addDependency('async/freelist.js', ['goog.async.FreeList'], [], {});
 goog.addDependency('async/freelist_test.js', ['goog.async.FreeListTest'], ['goog.async.FreeList', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/nexttick.js', ['goog.async.nextTick', 'goog.async.throwException'], ['goog.debug.entryPointRegistry', 'goog.dom.TagName', 'goog.dom.safe', 'goog.functions', 'goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.string.Const'], {});
 goog.addDependency('async/nexttick_test.js', ['goog.async.nextTickTest'], ['goog.Promise', 'goog.Timer', 'goog.async.nextTick', 'goog.debug.ErrorHandler', 'goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.labs.userAgent.browser', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
