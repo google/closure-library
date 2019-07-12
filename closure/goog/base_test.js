@@ -604,6 +604,21 @@ function testGetUid() {
   assertNotEquals('Unique IDs must be unique', uid2, uid3);
 }
 
+function testGetUidEs6Classes() {
+  class A {}
+  class B {}
+  // Test static inheritance.
+  class C extends A {}
+
+  const uid1 = goog.getUid(A);
+  const uid2 = goog.getUid(B);
+  const uid3 = goog.getUid(C);
+
+  assertNotEquals('Unique IDs must be unique', uid1, uid2);
+  assertNotEquals('Unique IDs must be unique', uid1, uid3);
+  assertNotEquals('Unique IDs must be unique', uid2, uid3);
+}
+
 function testHasUid() {
   const a = {};
 
@@ -659,10 +674,8 @@ function testConstructorUid() {
       'Unique IDs of BaseClass and SubClass instances must differ',
       goog.getUid(new BaseClass), goog.getUid(new SubClass));
 
-  assertEquals(
-      'Unique IDs of BaseClass.prototype and SubClass.prototype ' +
-          'should differ, but to keep the implementation simple, we do not ' +
-          'handle this edge case.',
+  assertNotEquals(
+      'Unique IDs of BaseClass.prototype and SubClass.prototype must differ.',
       goog.getUid(BaseClass.prototype), goog.getUid(SubClass.prototype));
 }
 
