@@ -41,14 +41,19 @@ exports.USE_ECMASCRIPT_I18N =
       goog.LOCALE == 'sl' || goog.LOCALE == 'sr' || goog.LOCALE == 'sv' ||
       goog.LOCALE == 'sw' || goog.LOCALE == 'ta' || goog.LOCALE == 'te' ||
       goog.LOCALE == 'th' || goog.LOCALE == 'tr' || goog.LOCALE == 'uk' ||
-      goog.LOCALE == 'vi' || goog.LOCALE == 'en_GB' ||
-      goog.LOCALE == 'es_419' || goog.LOCALE == 'pt_BR' ||
-      goog.LOCALE == 'pt_PT' || goog.LOCALE == 'zh_CN' ||
-      goog.LOCALE == 'zh_TW'));
+      goog.LOCALE == 'vi' || goog.LOCALE == 'en_GB' || goog.LOCALE == 'en-GB' ||
+      goog.LOCALE == 'es_419' || goog.LOCALE == 'es-419' ||
+      goog.LOCALE == 'pt_BR' || goog.LOCALE == 'pt-BR' ||
+      goog.LOCALE == 'pt_PT' || goog.LOCALE == 'pt-PT' ||
+      goog.LOCALE == 'zh_CN' || goog.LOCALE == 'zh-CN' ||
+      goog.LOCALE == 'zh_TW' || goog.LOCALE == 'zh-TW'));
 
 /**
- * @define {boolean} the list of locales used supported by ECMAScript in modern
- * browsers.
- * For now, this is the same as the general value above.
+ * @define {boolean} USE_ECMASCRIPT_I18N_RDTF is evaluted to enable
+ * ECMAScript support for Intl.RelativeTimeFormat support in
+ * browsers based on the locale. Browsers that are considered include:
+ * Chrome, Firefox, Edge, and Safari.
+ * As of June 2019, RelativeTimeFormat is not yet supported in either
+ * Edge or Safari.
  */
-exports.USE_ECMASCRIPT_I18N_RDTF = exports.USE_ECMASCRIPT_I18N;
+exports.USE_ECMASCRIPT_I18N_RDTF = false;
