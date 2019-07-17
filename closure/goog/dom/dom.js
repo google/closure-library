@@ -2473,7 +2473,7 @@ goog.dom.matchesPixelRatio_ = function(pixelRatio) {
 /**
  * Gets '2d' context of a canvas. Shortcut for canvas.getContext('2d') with a
  * type information.
- * @param {!HTMLCanvasElement|!OffscreenCanvas} canvas
+ * @param {!HTMLCanvasElement} canvas
  * @return {!CanvasRenderingContext2D}
  */
 goog.dom.getCanvasContext2D = function(canvas) {
