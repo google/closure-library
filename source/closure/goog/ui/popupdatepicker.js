@@ -167,6 +167,13 @@ goog.ui.PopupDatePicker.prototype.getDatePicker = function() {
   return this.datePicker_;
 };
 
+/**
+ * @return {?goog.ui.Popup} The popup instance.
+ */
+goog.ui.PopupDatePicker.prototype.getPopup = function() {
+  return this.popup_;
+};
+
 
 /**
  * @return {goog.date.Date?} The selected date, if any.  See
