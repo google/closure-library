@@ -105,7 +105,7 @@ goog.i18n.MessageFormat = function(pattern) {
 
   /**
    * Input pattern gets parsed into objects for faster formatting.
-   * @type {?Array<!Object>}
+   * @type {?Array<!goog.i18n.MessageFormat.BlockTypeVal_>}
    * @private
    */
   this.parsedPattern_ = null;
@@ -204,8 +204,11 @@ goog.i18n.MessageFormat.REGEX_LITERAL_ = new RegExp("'([{}#].*?)'", 'g');
  */
 goog.i18n.MessageFormat.REGEX_DOUBLE_APOSTROPHE_ = new RegExp("''", 'g');
 
-/** @typedef {{ type: goog.i18n.MessageFormat.Element_, value: ? }} */
+/** @typedef {{ type: !goog.i18n.MessageFormat.Element_, value: ? }} */
 goog.i18n.MessageFormat.TypeVal_;
+
+/** @typedef {{ type: !goog.i18n.MessageFormat.BlockType_, value: ? }} */
+goog.i18n.MessageFormat.BlockTypeVal_;
 
 
 /**
@@ -307,7 +310,7 @@ goog.i18n.MessageFormat.prototype.format_ = function(
 
 /**
  * Parses generic block and returns a formatted string.
- * @param {!Array<!goog.i18n.MessageFormat.TypeVal_>} parsedPattern
+ * @param {!Array<!goog.i18n.MessageFormat.BlockTypeVal_>} parsedPattern
  *     Holds parsed tree.
  * @param {!Object} namedParameters Parameters that either influence
  *     the formatting or are used as actual data.
@@ -633,7 +636,8 @@ goog.i18n.MessageFormat.prototype.parseBlockType_ = function(pattern) {
 /**
  * Parses generic block.
  * @param {string} pattern Content of the block to parse.
- * @return {!Array<!Object>} Subblocks marked as strings, select...
+ * @return {!Array<!goog.i18n.MessageFormat.BlockTypeVal_>} Subblocks marked as
+ *     strings, select...
  * @private
  */
 goog.i18n.MessageFormat.prototype.parseBlock_ = function(pattern) {
@@ -681,7 +685,8 @@ goog.i18n.MessageFormat.prototype.parseBlock_ = function(pattern) {
 /**
  * Parses a select type of a block and produces JSON object for it.
  * @param {string} pattern Subpattern that needs to be parsed as select pattern.
- * @return {!Object} Object with select block info.
+ * @return {!Object<string, !Array<!goog.i18n.MessageFormat.BlockTypeVal_>>}
+ *     Object with select block info.
  * @private
  */
 goog.i18n.MessageFormat.prototype.parseSelectBlock_ = function(pattern) {
@@ -705,8 +710,9 @@ goog.i18n.MessageFormat.prototype.parseSelectBlock_ = function(pattern) {
     goog.asserts.assert(
         pos < parts.length, 'Missing or invalid select value element.');
 
+    var value;
     if (goog.i18n.MessageFormat.Element_.BLOCK == parts[pos].type) {
-      var value = this.parseBlock_(parts[pos].value);
+      value = this.parseBlock_(parts[pos].value);
     } else {
       goog.asserts.fail('Expected block type.');
     }
@@ -724,7 +730,8 @@ goog.i18n.MessageFormat.prototype.parseSelectBlock_ = function(pattern) {
 /**
  * Parses a plural type of a block and produces JSON object for it.
  * @param {string} pattern Subpattern that needs to be parsed as plural pattern.
- * @return {!Object} Object with select block info.
+ * @return {!Object<string, !Array<!goog.i18n.MessageFormat.BlockTypeVal_>>}
+ *     Object with select block info.
  * @private
  */
 goog.i18n.MessageFormat.prototype.parsePluralBlock_ = function(pattern) {
@@ -754,8 +761,9 @@ goog.i18n.MessageFormat.prototype.parsePluralBlock_ = function(pattern) {
     goog.asserts.assert(
         pos < parts.length, 'Missing or invalid plural value element.');
 
+    var value;
     if (goog.i18n.MessageFormat.Element_.BLOCK == parts[pos].type) {
-      var value = this.parseBlock_(parts[pos].value);
+      value = this.parseBlock_(parts[pos].value);
     } else {
       goog.asserts.fail('Expected block type.');
     }
