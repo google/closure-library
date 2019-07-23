@@ -93,6 +93,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
     {input: "<LINK REL=\"stylesheet\" HREF=\"http://google.com/xss.css\">",
      acceptable: [
          "<link rel=\"stylesheet\"/>",
+         "<link rel=stylesheet>",
          "",
      ],
      name: "remote_stylesheet.html.test"},
