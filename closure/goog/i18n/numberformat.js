@@ -1202,15 +1202,15 @@ goog.i18n.NumberFormat.prototype.parseAffix_ = function(pattern, pos) {
           } else {
             switch (this.currencyStyle_) {
               case goog.i18n.NumberFormat.CurrencyStyle.LOCAL:
-                affix += goog.i18n.currency.getLocalCurrencySign(
+                affix += goog.i18n.currency.getLocalCurrencySignWithFallback(
                     this.getCurrencyCode_());
                 break;
               case goog.i18n.NumberFormat.CurrencyStyle.GLOBAL:
-                affix += goog.i18n.currency.getGlobalCurrencySign(
+                affix += goog.i18n.currency.getGlobalCurrencySignWithFallback(
                     this.getCurrencyCode_());
                 break;
               case goog.i18n.NumberFormat.CurrencyStyle.PORTABLE:
-                affix += goog.i18n.currency.getPortableCurrencySign(
+                affix += goog.i18n.currency.getPortableCurrencySignWithFallback(
                     this.getCurrencyCode_());
                 break;
               default:
