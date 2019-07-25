@@ -93,6 +93,7 @@ class Dependency {
   isParsedFromDepsFile() { return false; }
 }
 
+let hasWarnedForAssignmentToPath = false;
 
 /**
  * A dependency that was parsed from an goog.addDependnecy call.
@@ -108,6 +109,8 @@ class ParsedDependency extends Dependency {
   constructor(
       type, closureRelativePath, closureSymbols, imports, language = 'es3') {
     super(type, /* filepath= */ '', closureSymbols, imports, language);
+    /** @private @const {boolean} */
+    this.hasCalledSuper_ = true;
     /** @private {string|undefined} */
     this.path_ = undefined;
 
@@ -131,6 +134,12 @@ class ParsedDependency extends Dependency {
   /** @param {string} value */
   set path(value) {
     // Ignore, only here to satisfy super constructor.
+    if (!hasWarnedForAssignmentToPath && this.hasCalledSuper_) {
+      console.warn(
+          'Assigning a path of a ParsedDependency instance was ignored. ' +
+          'Use setClosurePath method instead.');
+      hasWarnedForAssignmentToPath = true;
+    }
   }
 
   /** @override */
