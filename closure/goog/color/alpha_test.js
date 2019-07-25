@@ -16,7 +16,6 @@ goog.setTestOnly();
 
 const alpha = goog.require('goog.color.alpha');
 const googArray = goog.require('goog.array');
-const googColor = goog.require('goog.color');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
@@ -46,12 +45,14 @@ testSuite({
 
   testIsValidRgbaColor() {
     const goodRgbaColors = [
-      'rgba(255, 0, 0, 1)',
-      'rgba(255,127,0,1)',
+      'rgba(1, 20, 234, 1)',
+      'rgba(255,127, 0,1)',
       'rgba(0,0,255,0.5)',
       '(255, 26, 75, 0.2)',
       'RGBA(0, 55, 0, 0.6)',
-      'rgba(0, 200, 0, 0.123456789)',
+      'rGbA(0, 200, 0, 0.123456789)',
+      'rgba(255, 0, 0, 1.0)',
+      '  rgba(1,\t2,\n3,\r0.2) ',
     ];
     const badRgbaColors = [
       '(255, 0, 0)',
@@ -61,6 +62,9 @@ testSuite({
       'RGBA(20,20,20,)',
       'RGBA',
       'rgba(255, 0, 0, 1.1)',
+      'rgba(255, 0, 0, 1.00001)',
+      'rgba(255, 0, 0, 1.)',
+      'rgba(01, 0, 0, 1)',
     ];
     for (let i = 0; i < goodRgbaColors.length; i++) {
       assertEquals(
@@ -81,6 +85,8 @@ testSuite({
       'hsla(0,0%,50%,0.5)',
       'HSLA(0, 55%, 0%, 0.6)',
       'hsla(0, 85%, 0%, 0.123456789)',
+      'hsla(120, 0%, 0%, 1.0)',
+      '  hsla(120,\t0%,\n0%,\r0.2) ',
     ];
     const badHslaColors = [
       '(255, 0, 0, 0)',
@@ -89,7 +95,9 @@ testSuite({
       'hsla(1,20,)',
       'HSLA(20,20,20,)',
       'hsla(255, 0, 0, 1.1)',
+      'hsla(255, 0, 0, 1.00001)',
       'HSLA',
+      'hsla(255, 0, 0, 1.)',
     ];
     for (let i = 0; i < goodHslaColors.length; i++) {
       assertEquals(
@@ -123,15 +131,11 @@ testSuite({
     assertEquals('hsla', parsed[4].type);
     assertEquals('#d9f2ea33', parsed[4].hex);
 
-    const badColors = ['rgb(01, 1, 23)', '(256, 256, 256)', '#ffeeddaa'];
-    for (let i = 0; i < badColors.length; i++) {
-      const e = assertThrows(
-          badColors[i] + ' is not a valid color string',
-          goog.partial(googColor.parse, badColors[i]));
-      assertContains(
-          'Error processing ' + badColors[i], 'is not a valid color string',
-          e.message);
-    }
+    const e = assertThrows(
+        'not_color is not a valid color string',
+        goog.partial(alpha.parse, 'not_color'));
+    assertContains(
+        'Error processing not_color', 'is not a valid color string', e.message);
   },
 
   testHexToRgba() {
