@@ -16,6 +16,7 @@ goog.provide('goog.labs.testing.environmentTest');
 goog.setTestOnly('goog.labs.testing.environmentTest');
 
 goog.require('goog.Promise');
+goog.require('goog.asserts');
 goog.require('goog.labs.testing.Environment');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.MockControl');
@@ -50,15 +51,21 @@ function setUp() {
   // our "test" TestCase.
   const initFn = goog.testing.TestCase.initializeTestRunner;
   goog.testing.TestCase.initializeTestRunner = function() {};
-  testCase = new goog.labs.testing.EnvironmentTestCase_();
-  goog.labs.testing.EnvironmentTestCase_.getInstance = function() {
-    return testCase;
-  };
+  setUpTestCase();
   goog.testing.TestCase.initializeTestRunner = initFn;
 
   mockControl = new goog.testing.MockControl();
 
   replacer = new goog.testing.PropertyReplacer();
+}
+
+/** @suppress {visibility} */
+function setUpTestCase() {
+  /** @suppress {missingRequire} */
+  testCase = new goog.labs.testing.EnvironmentTestCase_();
+  goog.labs.testing.EnvironmentTestCase_.getInstance = function() {
+    return goog.asserts.assert(testCase);
+  };
 }
 
 function tearDown() {
@@ -82,9 +89,9 @@ function testLifecycle() {
 
   testCase.addNewTest('testFake', testMethod);
 
-  testCase.registerEnvironment_(envOne);
-  testCase.registerEnvironment_(envTwo);
-  testCase.registerEnvironment_(envThree);
+  registerEnvironment(testCase, envOne);
+  registerEnvironment(testCase, envTwo);
+  registerEnvironment(testCase, envThree);
 
   envOne.setUpPage();
   envTwo.setUpPage();
@@ -133,9 +140,9 @@ function testLifecycle_withObject() {
 
   testCase.setTestObj(testObject);
 
-  testCase.registerEnvironment_(envOne);
-  testCase.registerEnvironment_(envTwo);
-  testCase.registerEnvironment_(envThree);
+  registerEnvironment(testCase, envOne);
+  registerEnvironment(testCase, envTwo);
+  registerEnvironment(testCase, envThree);
 
   envOne.setUpPage();
   envTwo.setUpPage();
@@ -173,9 +180,9 @@ function testLifecycle_withPromises() {
   testing = true;
 
   const envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
-  testCase.registerEnvironment_(envOne);
+  registerEnvironment(testCase, envOne);
   const envTwo = mockControl.createStrictMock(goog.labs.testing.Environment);
-  testCase.registerEnvironment_(envTwo);
+  registerEnvironment(testCase, envTwo);
   const testObj = {
     'configureEnvironment':
         mockControl.createFunctionMock('configureEnvironment'),
@@ -199,7 +206,7 @@ function testLifecycle_withPromises() {
   let resultPromise;
   let pendingOp = goog.Promise.withResolver();
   pendingOp.promise.then(function() {
-    resultPromise = testCase.runTestsReturningPromise();
+    resultPromise = runTestsReturningPromise(testCase);
   });
   let nextOp = null;
   const finishPendingOp = function() {
@@ -305,19 +312,19 @@ function testAutoDiscoverTests() {
 
   const setUpPageFn = testCase.setUpPage;
   const setUpFn = testCase.setUp;
-  const tearDownFn = testCase.tearDownFn;
-  const tearDownPageFn = testCase.tearDownPageFn;
+  const tearDownFn = testCase.tearDown;
+  const tearDownPageFn = testCase.tearDownPage;
 
   testCase.autoDiscoverTests();
 
   assertEquals(setUpPageFn, testCase.setUpPage);
   assertEquals(setUpFn, testCase.setUp);
-  assertEquals(tearDownFn, testCase.tearDownFn);
-  assertEquals(tearDownPageFn, testCase.tearDownPageFn);
+  assertEquals(tearDownFn, testCase.tearDown);
+  assertEquals(tearDownPageFn, testCase.tearDownPage);
 
   // Note that this number changes when more tests are added to this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(12, testCase.tests_.length);
+  assertEquals(12, testCase.getTests().length);
 
   testing = false;
 }
@@ -331,12 +338,12 @@ function testTestSuiteTests() {
   replacer.set(goog.testing.TestCase, 'initializeTestRunner', function() {});
 
   // with an active environment.
-  const envOne = new goog.labs.testing.Environment();
+  new goog.labs.testing.Environment();
 
   const setUpPageFn = testCase.setUpPage;
   const setUpFn = testCase.setUp;
-  const tearDownFn = testCase.tearDownFn;
-  const tearDownPageFn = testCase.tearDownPageFn;
+  const tearDownFn = testCase.tearDown;
+  const tearDownPageFn = testCase.tearDownPage;
 
   goog.testing.testSuite({
     // These lifecycle methods should not override the environment testcase
@@ -357,10 +364,10 @@ function testTestSuiteTests() {
 
   assertEquals(setUpPageFn, testCase.setUpPage);
   assertEquals(setUpFn, testCase.setUp);
-  assertEquals(tearDownFn, testCase.tearDownFn);
-  assertEquals(tearDownPageFn, testCase.tearDownPageFn);
+  assertEquals(tearDownFn, testCase.tearDown);
+  assertEquals(tearDownPageFn, testCase.tearDownPage);
 
-  assertEquals(3, testCase.tests_.length);
+  assertEquals(3, testCase.getTests().length);
 
   testing = false;
 }
@@ -368,7 +375,7 @@ function testTestSuiteTests() {
 function testSetupReturnsValue() {
   testing = true;
 
-  const env = new goog.labs.testing.Environment();
+  new goog.labs.testing.Environment();
 
   // Expect the environment to pass on any value returned by the user defined
   // setUp method.
@@ -381,10 +388,12 @@ function testSetupReturnsValue() {
 function testMockClock() {
   testing = true;
 
-  const env = new goog.labs.testing.Environment().withMockClock();
+  new goog.labs.testing.Environment().withMockClock();
 
   testCase.addNewTest('testThatThrowsEventually', function() {
-    setTimeout(function() { throw new Error('LateErrorMessage'); }, 200);
+    setTimeout(function() {
+      throw new Error('LateErrorMessage');
+    }, 200);
   });
 
   testCase.runTests();
@@ -423,7 +432,7 @@ function testMock() {
     env.mockControl.$replayAll();
     mock.test();
     mock.test();
-    env.mockControl.verifyAll();
+    env.mockControl.$verifyAll();
   });
 
   testCase.runTests();
@@ -449,7 +458,7 @@ function testLooseMock() {
     mock.b();
     mock.a();
     mock.b();
-    env.mockControl.verifyAll();
+    env.mockControl.$verifyAll();
   });
 
   testCase.runTests();
@@ -474,7 +483,7 @@ function testLooseMockIgnoresUnexpected() {
     mock.b();
     mock.b();
     mock.a();
-    env.mockControl.verifyAll();
+    env.mockControl.$verifyAll();
   });
 
   testCase.runTests();
@@ -482,6 +491,33 @@ function testLooseMockIgnoresUnexpected() {
   testing = false;
 }
 
+/**
+ * @param {?goog.testing.TestCase} testCase
+ * @param {string} name
+ * @param {string} message
+ * @suppress {visibility}
+ */
 function assertTestFailure(testCase, name, message) {
-  assertContains(message, testCase.result_.resultsByName[name][0].toString());
+  assertContains(
+      message,
+      goog.asserts.assert(testCase).getResult().resultsByName[name]
+                                                             [0].toString());
+}
+
+/**
+ * @param {?goog.testing.TestCase} testCase
+ * @param {!goog.labs.testing.Environment} environment
+ * @suppress {visibility}
+ */
+function registerEnvironment(testCase, environment) {
+  goog.asserts.assert(testCase).registerEnvironment_(environment);
+}
+
+/**
+ * @param {?goog.testing.TestCase} testCase
+ * @return {!IThenable<!goog.testing.TestCase.Result>}
+ * @suppress {visibility}
+ */
+function runTestsReturningPromise(testCase) {
+  return goog.asserts.assert(testCase).runTestsReturningPromise();
 }
