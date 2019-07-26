@@ -138,6 +138,26 @@ goog.i18n.currency.getGlobalCurrencySign = function(currencyCode) {
 
 
 /**
+ * Return global currency sign string for those applications
+ * that want to handle currency sign themselves.
+ *
+ * This function does not throw an exception if there is no data for the
+ * currency. Instead, it falls back to the ISO code.
+ *
+ * @param {string} currencyCode ISO-4217 3-letter currency code.
+ * @return {string} Global currency sign for given currency.
+ */
+goog.i18n.currency.getGlobalCurrencySignWithFallback = function(currencyCode) {
+  var info = goog.i18n.currency.CurrencyInfo[currencyCode];
+  if (!info) {
+    return currencyCode;
+  }
+  return (currencyCode == info[1]) ? currencyCode :
+                                     currencyCode + ' ' + info[1];
+};
+
+
+/**
  * Deprecated.
  * Local currency pattern is the most frequently used pattern in currency's
  * native region. It does not care about how it is distinguished from other
@@ -164,6 +184,25 @@ goog.i18n.currency.getLocalCurrencyPattern = function(currencyCode) {
  */
 goog.i18n.currency.getLocalCurrencySign = function(currencyCode) {
   return goog.i18n.currency.CurrencyInfo[currencyCode][1];
+};
+
+
+/**
+ * Returns local currency sign string for those applications that need to
+ * handle currency sign separately.
+ *
+ * This function does not throw an exception if there is no data for the
+ * currency. Instead, it falls back to the ISO code.
+ *
+ * @param {string} currencyCode ISO-4217 3-letter currency code.
+ * @return {string} Local currency sign for given currency.
+ */
+goog.i18n.currency.getLocalCurrencySignWithFallback = function(currencyCode) {
+  if (currencyCode in goog.i18n.currency.CurrencyInfo) {
+    return goog.i18n.currency.CurrencyInfo[currencyCode][1];
+  } else {
+    return currencyCode;
+  }
 };
 
 
@@ -197,6 +236,26 @@ goog.i18n.currency.getPortableCurrencyPattern = function(currencyCode) {
  */
 goog.i18n.currency.getPortableCurrencySign = function(currencyCode) {
   return goog.i18n.currency.CurrencyInfo[currencyCode][2];
+};
+
+
+/**
+ * Return portable currency sign string for those applications that need to
+ * handle currency sign themselves.
+ *
+ * This function does not throw an exception if there is no data for the
+ * currency. Instead, it falls back to the ISO code.
+ *
+ * @param {string} currencyCode ISO-4217 3-letter currency code.
+ * @return {string} Portable currency sign for given currency.
+ */
+goog.i18n.currency.getPortableCurrencySignWithFallback = function(
+    currencyCode) {
+  if (currencyCode in goog.i18n.currency.CurrencyInfo) {
+    return goog.i18n.currency.CurrencyInfo[currencyCode][2];
+  } else {
+    return currencyCode;
+  }
 };
 
 
@@ -269,6 +328,10 @@ goog.i18n.currency.getCurrencyPattern_ = function(patternNum, sign) {
 goog.i18n.currency.adjustPrecision = function(pattern, currencyCode) {
   var strParts = ['0'];
   var info = goog.i18n.currency.CurrencyInfo[currencyCode];
+  if (!info) {
+    // If the currency code is unknown, do not modify the pattern.
+    return pattern;
+  }
   var precision = info[0] & goog.i18n.currency.PRECISION_MASK_;
   if (precision > 0) {
     strParts.push('.');
