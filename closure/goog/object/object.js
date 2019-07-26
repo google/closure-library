@@ -751,3 +751,23 @@ goog.object.getAllPropertyNames = function(
 
   return goog.object.getKeys(visitedSet);
 };
+
+
+/**
+ * Given a ES5 or ES6 class reference, return its super class / super
+ * constructor.
+ *
+ * This should be used in rare cases where you need to walk up the inheritance
+ * tree (this is generally a bad idea). But this work with ES5 and ES6 classes,
+ * unlike relying on the superClass_ property.
+ *
+ * Note: To start walking up the hierarchy from an instance call this with its
+ * `constructor` property; e.g. `getSuperClass(instance.constructor)`.
+ *
+ * @param {function(new: ?)} constructor
+ * @return {?Object}
+ */
+goog.object.getSuperClass = function(constructor) {
+  var proto = Object.getPrototypeOf(constructor.prototype);
+  return proto && proto.constructor;
+};
