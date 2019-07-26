@@ -271,4 +271,42 @@ function testGetCurrencySign() {
   assertEquals('YER Rial', goog.i18n.currency.getGlobalCurrencySign('YER'));
   assertEquals('Rial', goog.i18n.currency.getLocalCurrencySign('YER'));
   assertEquals('Rial', goog.i18n.currency.getPortableCurrencySign('YER'));
+
+  assertThrows(() => {
+    goog.i18n.currency.getGlobalCurrencySign('XXY');
+  });
+
+  assertThrows(() => {
+    goog.i18n.currency.getLocalCurrencySign('XXY');
+  });
+
+  assertThrows(() => {
+    goog.i18n.currency.getPortableCurrencySign('XXY');
+  });
+}
+
+function testGetCurrencySignWithFallback() {
+  assertEquals(
+      'USD $', goog.i18n.currency.getGlobalCurrencySignWithFallback('USD'));
+  assertEquals('$', goog.i18n.currency.getLocalCurrencySignWithFallback('USD'));
+  assertEquals(
+      'US$', goog.i18n.currency.getPortableCurrencySignWithFallback('USD'));
+
+  assertEquals(
+      'XXY', goog.i18n.currency.getGlobalCurrencySignWithFallback('XXY'));
+  assertEquals(
+      'XXY', goog.i18n.currency.getLocalCurrencySignWithFallback('XXY'));
+  assertEquals(
+      'XXY', goog.i18n.currency.getPortableCurrencySignWithFallback('XXY'));
+}
+
+function testAdjustPrecision() {
+  // Known currency code, change to pattern
+  assertEquals('0', goog.i18n.currency.adjustPrecision('0.00', 'JPY'));
+
+  // Known currency code, no change to pattern
+  assertEquals('0.00', goog.i18n.currency.adjustPrecision('0.00', 'USD'));
+
+  // Unknown currency code
+  assertEquals('0.00', goog.i18n.currency.adjustPrecision('0.00', 'XXY'));
 }
