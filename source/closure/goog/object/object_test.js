@@ -683,3 +683,22 @@ function testGetAllPropertyNames_includeFunctionPrototype() {
   assertSameElements(
       expectedElements, goog.object.getAllPropertyNames(obj, false, true));
 }
+
+function testGetSuperClass_es5() {
+  function A() {}
+  function B() {}
+  goog.inherits(B, A);
+
+  assertEquals(A, goog.object.getSuperClass(B));
+  assertEquals(Object, goog.object.getSuperClass(A));
+  assertEquals(null, goog.object.getSuperClass(Object));
+}
+
+function testGetSuperClass_es6() {
+  class A {}
+  class B extends A {}
+
+  assertEquals(A, goog.object.getSuperClass(B));
+  assertEquals(Object, goog.object.getSuperClass(A));
+  assertEquals(null, goog.object.getSuperClass(Object));
+}
