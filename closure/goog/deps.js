@@ -1037,9 +1037,13 @@ goog.addDependency('storage/storage.js', ['goog.storage.Storage'], ['goog.json',
 goog.addDependency('storage/storage_test.js', ['goog.storage.storage_test'], ['goog.functions', 'goog.storage.ErrorCode', 'goog.storage.Storage', 'goog.storage.storageTester', 'goog.testing.asserts', 'goog.testing.storage.FakeMechanism', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('storage/storagetester.js', ['goog.storage.storageTester'], ['goog.storage.Storage', 'goog.structs.Map', 'goog.testing.asserts'], {});
 goog.addDependency('streams/defines.js', ['goog.streams.defines'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('streams/full.js', ['goog.streams.full'], ['goog.asserts', 'goog.promise.NativeResolver', 'goog.streams.liteImpl', 'goog.streams.liteTypes'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('streams/full_lite_test.js', ['goog.streams.fullLiteTest'], ['goog.streams.full', 'goog.streams.liteTestCases', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('streams/full_test.js', ['goog.streams.fullTest'], ['goog.streams.full', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es9', 'module': 'goog'});
+goog.addDependency('streams/full.js', ['goog.streams.full'], ['goog.streams.defines', 'goog.streams.fullImpl', 'goog.streams.fullNativeImpl', 'goog.streams.fullTypes'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('streams/full_impl.js', ['goog.streams.fullImpl'], ['goog.asserts', 'goog.promise.NativeResolver', 'goog.streams.fullTypes', 'goog.streams.liteImpl'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('streams/full_impl_test.js', ['goog.streams.fullImplTest'], ['goog.streams.fullImpl', 'goog.streams.fullTestCases', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('streams/full_native_impl.js', ['goog.streams.fullNativeImpl'], ['goog.streams.fullTypes', 'goog.streams.liteNativeImpl'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('streams/full_native_impl_test.js', ['goog.streams.fullNativeImplTest'], ['goog.streams.fullNativeImpl', 'goog.streams.fullTestCases', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('streams/full_test_cases.js', ['goog.streams.fullTestCases'], ['goog.streams.fullTypes', 'goog.streams.liteTestCases', 'goog.testing.recordFunction'], {'lang': 'es9', 'module': 'goog'});
+goog.addDependency('streams/full_types.js', ['goog.streams.fullTypes'], ['goog.streams.liteTypes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('streams/lite.js', ['goog.streams.lite'], ['goog.streams.defines', 'goog.streams.liteImpl', 'goog.streams.liteNativeImpl', 'goog.streams.liteTypes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('streams/lite_impl.js', ['goog.streams.liteImpl'], ['goog.asserts', 'goog.promise.NativeResolver', 'goog.streams.liteTypes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('streams/lite_impl_test.js', ['goog.streams.liteImplTest'], ['goog.streams.liteImpl', 'goog.streams.liteTestCases', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});

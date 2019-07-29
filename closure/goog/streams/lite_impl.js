@@ -33,13 +33,11 @@ const {assert, assertFunction} = goog.require('goog.asserts');
  * Pulling (including backpressure and sizes) and cancellation are not
  * supported.
  * @template T
- * @extends {liteTypes.ReadableStream<T>}
+ * @implements {liteTypes.ReadableStream<T>}
  */
-class ReadableStream extends liteTypes.ReadableStream {
+class ReadableStream {
   /** @package */
   constructor() {
-    super();
-
     /** @package {!ReadableStream.State} */
     this.state = ReadableStream.State.READABLE;
 
@@ -196,17 +194,14 @@ function newReadableStream(underlyingSource) {
  * Supports the read() and releaseLock() methods, along with the closed
  * property.
  * @template T
- * @extends {liteTypes.ReadableStreamDefaultReader<T>}
+ * @implements {liteTypes.ReadableStreamDefaultReader<T>}
  */
-class ReadableStreamDefaultReader extends
-    liteTypes.ReadableStreamDefaultReader {
+class ReadableStreamDefaultReader {
   /**
    * @param {!ReadableStream} stream
    * @package
    */
   constructor(stream) {
-    super();
-
     if (stream.reader) {
       throw new TypeError(
           'ReadableStreamReader constructor can only accept readable streams ' +
@@ -315,17 +310,14 @@ class ReadableStreamDefaultReader extends
  *
  * Provides the enqueue(), error(), and close() methods.
  * @template T
- * @extends {liteTypes.ReadableStreamDefaultController<T>}
+ * @implements {liteTypes.ReadableStreamDefaultController<T>}
  */
-class ReadableStreamDefaultController extends
-    liteTypes.ReadableStreamDefaultController {
+class ReadableStreamDefaultController {
   /**
    * @param {!ReadableStream} stream
    * @package
    */
   constructor(stream) {
-    super();
-
     /** @package @const {!ReadableStream} */
     this.controlledReadableStream = stream;
 

@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.module('goog.streams.fullLiteTest');
+goog.module('goog.streams.fullImplTest');
 goog.setTestOnly();
 
 const testSuite = goog.require('goog.testing.testSuite');
-const {TestCases} = goog.require('goog.streams.liteTestCases');
-const {newReadableStream} = goog.require('goog.streams.full');
+const {TestCasesWithIterator} = goog.require('goog.streams.fullTestCases');
+const {newReadableStream} = goog.require('goog.streams.fullImpl');
 
-testSuite(new TestCases(newReadableStream));
+testSuite(new TestCasesWithIterator(newReadableStream));
