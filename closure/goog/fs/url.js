@@ -58,7 +58,7 @@ goog.fs.url.UrlObject_;
  * @private
  */
 goog.fs.url.getUrlObject_ = function() {
-  var urlObject = goog.fs.url.findUrlObject_();
+  const urlObject = goog.fs.url.findUrlObject_();
   if (urlObject != null) {
     return urlObject;
   } else {

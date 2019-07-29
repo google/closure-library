@@ -34,7 +34,7 @@ goog.module('goog.i18n.dateIntervalSymbols');
  * Map containing the interval pattern for every calendar field.
  * @typedef {!Object<string, string>}
  */
-var DateIntervalPatternMap;
+let DateIntervalPatternMap;
 
 /** @typedef {!DateIntervalPatternMap} */
 exports.DateIntervalPatternMap;
@@ -57,13 +57,13 @@ exports.DateIntervalPatternMap;
  *   FALLBACK: string
  * }}
  */
-var DateIntervalSymbols;
+let DateIntervalSymbols;
 
 /** @typedef {!DateIntervalSymbols} */
 exports.DateIntervalSymbols;
 
 /** @type {!DateIntervalSymbols} */
-var defaultSymbols;
+let defaultSymbols;
 
 /**
  * Returns the default DateIntervalSymbols.

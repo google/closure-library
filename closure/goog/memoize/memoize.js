@@ -37,7 +37,7 @@ goog.provide('goog.memoize');
  * @return {!Function} The wrapped function.
  */
 goog.memoize = function(f, opt_serializer) {
-  var serializer = opt_serializer || goog.memoize.simpleSerializer;
+  const serializer = opt_serializer || goog.memoize.simpleSerializer;
 
   return (/**
            * @this {Object} The object whose function is being wrapped.
@@ -54,12 +54,12 @@ goog.memoize = function(f, opt_serializer) {
               // the object instance, instead of on the global object.
               // This (ha!) is a very surprising API, but retained for backwards
               // compatibility.
-              var thisOrGlobal = this || goog.global;
+              const thisOrGlobal = this || goog.global;
               // Maps the serialized list of args to the corresponding return
               // value.
-              var cache = thisOrGlobal[goog.memoize.CACHE_PROPERTY_] ||
+              const cache = thisOrGlobal[goog.memoize.CACHE_PROPERTY_] ||
                   (thisOrGlobal[goog.memoize.CACHE_PROPERTY_] = {});
-              var key = serializer(goog.getUid(f), arguments);
+              const key = serializer(goog.getUid(f), arguments);
               return cache.hasOwnProperty(key) ?
                   cache[key] :
                   (cache[key] = f.apply(this, arguments));
@@ -107,8 +107,8 @@ goog.memoize.CACHE_PROPERTY_ = 'closure_memoize_cache_';
  *     with the functionUid argument, serialized as \x0B-separated string.
  */
 goog.memoize.simpleSerializer = function(functionUid, args) {
-  var context = [functionUid];
-  for (var i = args.length - 1; i >= 0; --i) {
+  const context = [functionUid];
+  for (let i = args.length - 1; i >= 0; --i) {
     context.push(typeof args[i], args[i]);
   }
   return context.join('\x0B');

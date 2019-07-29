@@ -70,8 +70,8 @@ goog.i18n.ordinalRules.defaultSelect_ = function(n, opt_precision) {
  * @private
  */
 goog.i18n.ordinalRules.decimals_ = function(n) {
-  var str = n + '';
-  var result = str.indexOf('.');
+  const str = n + '';
+  const result = str.indexOf('.');
   return (result == -1) ? 0 : str.length - result - 1;
 };
 
@@ -85,16 +85,17 @@ goog.i18n.ordinalRules.decimals_ = function(n) {
  * @private
  */
 goog.i18n.ordinalRules.get_vf_ = function(n, opt_precision) {
-  var DEFAULT_DIGITS = 3;
+  const DEFAULT_DIGITS = 3;
 
+  let v;
   if (undefined === opt_precision) {
-    var v = Math.min(goog.i18n.ordinalRules.decimals_(n), DEFAULT_DIGITS);
+    v = Math.min(goog.i18n.ordinalRules.decimals_(n), DEFAULT_DIGITS);
   } else {
-    var v = opt_precision;
+    v = opt_precision;
   }
 
-  var base = Math.pow(10, v);
-  var f = ((n * base) | 0) % base;
+  const base = Math.pow(10, v);
+  const f = ((n * base) | 0) % base;
 
   return {v: v, f: f};
 };
@@ -262,7 +263,7 @@ goog.i18n.ordinalRules.beSelect_ = function(n, opt_precision) {
  * @private
  */
 goog.i18n.ordinalRules.azSelect_ = function(n, opt_precision) {
-  var i = n | 0;
+  const i = n | 0;
   if ((i % 10 == 1 || i % 10 == 2 || i % 10 == 5 || i % 10 == 7 || i % 10 == 8) || (i % 100 == 20 || i % 100 == 50 || i % 100 == 70 || i % 100 == 80)) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
@@ -284,7 +285,7 @@ goog.i18n.ordinalRules.azSelect_ = function(n, opt_precision) {
  * @private
  */
 goog.i18n.ordinalRules.kaSelect_ = function(n, opt_precision) {
-  var i = n | 0;
+  const i = n | 0;
   if (i == 1) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
@@ -354,7 +355,7 @@ goog.i18n.ordinalRules.kkSelect_ = function(n, opt_precision) {
  * @private
  */
 goog.i18n.ordinalRules.mkSelect_ = function(n, opt_precision) {
-  var i = n | 0;
+  const i = n | 0;
   if (i % 10 == 1 && i % 100 != 11) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }

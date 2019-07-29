@@ -101,9 +101,9 @@ goog.math.Coordinate3.equals = function(a, b) {
  * @return {number} The distance between `a` and `b`.
  */
 goog.math.Coordinate3.distance = function(a, b) {
-  var dx = a.x - b.x;
-  var dy = a.y - b.y;
-  var dz = a.z - b.z;
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+  const dz = a.z - b.z;
   return Math.sqrt(dx * dx + dy * dy + dz * dz);
 };
 
@@ -121,9 +121,9 @@ goog.math.Coordinate3.distance = function(a, b) {
  * @return {number} The squared distance between `a` and `b`.
  */
 goog.math.Coordinate3.squaredDistance = function(a, b) {
-  var dx = a.x - b.x;
-  var dy = a.y - b.y;
-  var dz = a.z - b.z;
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+  const dz = a.z - b.z;
   return dx * dx + dy * dy + dz * dz;
 };
 

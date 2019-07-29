@@ -115,7 +115,7 @@ goog.functions.fail = function(err) {
 goog.functions.lock = function(f, opt_numArgs) {
   opt_numArgs = opt_numArgs || 0;
   return function() {
-    var self = /** @type {*} */ (this);
+    const self = /** @type {*} */ (this);
     return f.apply(self, Array.prototype.slice.call(arguments, 0, opt_numArgs));
   };
 };
@@ -147,10 +147,10 @@ goog.functions.nth = function(n) {
  *     was invoked as a method of.
  */
 goog.functions.partialRight = function(fn, var_args) {
-  var rightArgs = Array.prototype.slice.call(arguments, 1);
+  const rightArgs = Array.prototype.slice.call(arguments, 1);
   return function() {
-    var self = /** @type {*} */ (this);
-    var newArgs = Array.prototype.slice.call(arguments);
+    const self = /** @type {*} */ (this);
+    const newArgs = Array.prototype.slice.call(arguments);
     newArgs.push.apply(newArgs, rightArgs);
     return fn.apply(self, newArgs);
   };
@@ -197,16 +197,16 @@ goog.functions.equalTo = function(value, opt_useLooseComparison) {
  * @template T
  */
 goog.functions.compose = function(fn, var_args) {
-  var functions = arguments;
-  var length = functions.length;
+  const functions = arguments;
+  const length = functions.length;
   return function() {
-    var self = /** @type {*} */ (this);
-    var result;
+    const self = /** @type {*} */ (this);
+    let result;
     if (length) {
       result = functions[length - 1].apply(self, arguments);
     }
 
-    for (var i = length - 2; i >= 0; i--) {
+    for (let i = length - 2; i >= 0; i--) {
       result = functions[i].call(self, result);
     }
     return result;
@@ -222,12 +222,12 @@ goog.functions.compose = function(fn, var_args) {
  * @return {!Function} A function that calls all inputs in sequence.
  */
 goog.functions.sequence = function(var_args) {
-  var functions = arguments;
-  var length = functions.length;
+  const functions = arguments;
+  const length = functions.length;
   return function() {
-    var self = /** @type {*} */ (this);
-    var result;
-    for (var i = 0; i < length; i++) {
+    const self = /** @type {*} */ (this);
+    let result;
+    for (let i = 0; i < length; i++) {
       result = functions[i].apply(self, arguments);
     }
     return result;
@@ -245,11 +245,11 @@ goog.functions.sequence = function(var_args) {
  *      functions.
  */
 goog.functions.and = function(var_args) {
-  var functions = arguments;
-  var length = functions.length;
+  const functions = arguments;
+  const length = functions.length;
   return function() {
-    var self = /** @type {*} */ (this);
-    for (var i = 0; i < length; i++) {
+    const self = /** @type {*} */ (this);
+    for (let i = 0; i < length; i++) {
       if (!functions[i].apply(self, arguments)) {
         return false;
       }
@@ -269,11 +269,11 @@ goog.functions.and = function(var_args) {
  *    functions.
  */
 goog.functions.or = function(var_args) {
-  var functions = arguments;
-  var length = functions.length;
+  const functions = arguments;
+  const length = functions.length;
   return function() {
-    var self = /** @type {*} */ (this);
-    for (var i = 0; i < length; i++) {
+    const self = /** @type {*} */ (this);
+    for (let i = 0; i < length; i++) {
       if (functions[i].apply(self, arguments)) {
         return true;
       }
@@ -292,7 +292,7 @@ goog.functions.or = function(var_args) {
  */
 goog.functions.not = function(f) {
   return function() {
-    var self = /** @type {*} */ (this);
+    const self = /** @type {*} */ (this);
     return !f.apply(self, arguments);
   };
 };
@@ -316,12 +316,12 @@ goog.functions.create = function(constructor, var_args) {
    * @constructor
    * @final
    */
-  var temp = function() {};
+  const temp = function() {};
   temp.prototype = constructor.prototype;
 
   // obj will have constructor's prototype in its chain and
   // 'obj instanceof constructor' will be true.
-  var obj = new temp();
+  const obj = new temp();
 
   // obj is initialized by constructor.
   // arguments is only array-like so lacks shift(), but can be used with
@@ -355,8 +355,8 @@ goog.functions.CACHE_RETURN_VALUE =
  * @template T
  */
 goog.functions.cacheReturnValue = function(fn) {
-  var called = false;
-  var value;
+  let called = false;
+  let value;
 
   return function() {
     if (!goog.functions.CACHE_RETURN_VALUE) {
@@ -386,10 +386,10 @@ goog.functions.cacheReturnValue = function(fn) {
 goog.functions.once = function(f) {
   // Keep a reference to the function that we null out when we're done with
   // it -- that way, the function can be GC'd when we're done with it.
-  var inner = f;
+  let inner = f;
   return function() {
     if (inner) {
-      var tmp = inner;
+      const tmp = inner;
       inner = null;
       tmp();
     }
@@ -418,10 +418,10 @@ goog.functions.once = function(f) {
  * @template SCOPE
  */
 goog.functions.debounce = function(f, interval, opt_scope) {
-  var timeout = 0;
+  let timeout = 0;
   return /** @type {function(...?)} */ (function(var_args) {
     goog.global.clearTimeout(timeout);
-    var args = arguments;
+    const args = arguments;
     timeout = goog.global.setTimeout(function() {
       f.apply(opt_scope, args);
     }, interval);
@@ -447,11 +447,11 @@ goog.functions.debounce = function(f, interval, opt_scope) {
  * @template SCOPE
  */
 goog.functions.throttle = function(f, interval, opt_scope) {
-  var timeout = 0;
-  var shouldFire = false;
-  var args = [];
+  let timeout = 0;
+  let shouldFire = false;
+  let args = [];
 
-  var handleTimeout = function() {
+  const handleTimeout = function() {
     timeout = 0;
     if (shouldFire) {
       shouldFire = false;
@@ -459,7 +459,7 @@ goog.functions.throttle = function(f, interval, opt_scope) {
     }
   };
 
-  var fire = function() {
+  const fire = function() {
     timeout = goog.global.setTimeout(handleTimeout, interval);
     f.apply(opt_scope, args);
   };
@@ -494,9 +494,9 @@ goog.functions.throttle = function(f, interval, opt_scope) {
  * @template SCOPE
  */
 goog.functions.rateLimit = function(f, interval, opt_scope) {
-  var timeout = 0;
+  let timeout = 0;
 
-  var handleTimeout = function() {
+  const handleTimeout = function() {
     timeout = 0;
   };
 

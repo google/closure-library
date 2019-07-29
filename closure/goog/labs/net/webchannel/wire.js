@@ -33,7 +33,7 @@ goog.labs.net.webChannel.Wire = function() {};
 
 
 goog.scope(function() {
-var Wire = goog.labs.net.webChannel.Wire;
+const Wire = goog.labs.net.webChannel.Wire;
 
 
 /**
@@ -88,7 +88,7 @@ Wire.QueuedMap = function(mapId, map, opt_context) {
  */
 Wire.QueuedMap.prototype.getRawDataSize = function() {
   if (Wire.RAW_DATA_KEY in this.map) {
-    var data = this.map[Wire.RAW_DATA_KEY];
+    const data = this.map[Wire.RAW_DATA_KEY];
     if (goog.isString(data)) {
       return data.length;
     }

@@ -42,7 +42,7 @@ goog.string.internal.startsWith = function(str, prefix) {
  * @see goog.string.endsWith
  */
 goog.string.internal.endsWith = function(str, suffix) {
-  var l = str.length - suffix.length;
+  const l = str.length - suffix.length;
   return l >= 0 && str.indexOf(suffix, l) == l;
 };
 
@@ -136,8 +136,8 @@ goog.string.internal.trim =
  * @see goog.string.caseInsensitiveCompare
  */
 goog.string.internal.caseInsensitiveCompare = function(str1, str2) {
-  var test1 = String(str1).toLowerCase();
-  var test2 = String(str2).toLowerCase();
+  const test1 = String(str1).toLowerCase();
+  const test2 = String(str2).toLowerCase();
 
   if (test1 < test2) {
     return -1;
@@ -318,24 +318,24 @@ goog.string.internal.caseInsensitiveContains = function(str, subString) {
  * @see goog.string.compareVersions
  */
 goog.string.internal.compareVersions = function(version1, version2) {
-  var order = 0;
+  let order = 0;
   // Trim leading and trailing whitespace and split the versions into
   // subversions.
-  var v1Subs = goog.string.internal.trim(String(version1)).split('.');
-  var v2Subs = goog.string.internal.trim(String(version2)).split('.');
-  var subCount = Math.max(v1Subs.length, v2Subs.length);
+  const v1Subs = goog.string.internal.trim(String(version1)).split('.');
+  const v2Subs = goog.string.internal.trim(String(version2)).split('.');
+  const subCount = Math.max(v1Subs.length, v2Subs.length);
 
   // Iterate over the subversions, as long as they appear to be equivalent.
-  for (var subIdx = 0; order == 0 && subIdx < subCount; subIdx++) {
-    var v1Sub = v1Subs[subIdx] || '';
-    var v2Sub = v2Subs[subIdx] || '';
+  for (let subIdx = 0; order == 0 && subIdx < subCount; subIdx++) {
+    let v1Sub = v1Subs[subIdx] || '';
+    let v2Sub = v2Subs[subIdx] || '';
 
     do {
       // Split the subversions into pairs of numbers and qualifiers (like 'b').
       // Two different RegExp objects are use to make it clear the code
       // is side-effect free
-      var v1Comp = /(\d*)(\D*)(.*)/.exec(v1Sub) || ['', '', '', ''];
-      var v2Comp = /(\d*)(\D*)(.*)/.exec(v2Sub) || ['', '', '', ''];
+      const v1Comp = /(\d*)(\D*)(.*)/.exec(v1Sub) || ['', '', '', ''];
+      const v2Comp = /(\d*)(\D*)(.*)/.exec(v2Sub) || ['', '', '', ''];
       // Break if there are no more matches.
       if (v1Comp[0].length == 0 && v2Comp[0].length == 0) {
         break;
@@ -343,8 +343,8 @@ goog.string.internal.compareVersions = function(version1, version2) {
 
       // Parse the numeric part of the subversion. A missing number is
       // equivalent to 0.
-      var v1CompNum = v1Comp[1].length == 0 ? 0 : parseInt(v1Comp[1], 10);
-      var v2CompNum = v2Comp[1].length == 0 ? 0 : parseInt(v2Comp[1], 10);
+      const v1CompNum = v1Comp[1].length == 0 ? 0 : parseInt(v1Comp[1], 10);
+      const v2CompNum = v2Comp[1].length == 0 ? 0 : parseInt(v2Comp[1], 10);
 
       // Compare the subversion components. The number has the highest
       // precedence. Next, if the numbers are equal, a subversion without any

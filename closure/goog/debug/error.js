@@ -37,7 +37,7 @@ goog.debug.Error = function(opt_msg) {
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, goog.debug.Error);
   } else {
-    var stack = new Error().stack;
+    const stack = new Error().stack;
     if (stack) {
       /** @override */
       this.stack = stack;
