@@ -205,7 +205,7 @@ goog.i18n.NumberFormat.isEnforceAsciiDigits = function() {
 
 /**
  * Returns the current NumberFormatSymbols.
- * @return {!Object}
+ * @return {?}
  * @private
  */
 goog.i18n.NumberFormat.prototype.getNumberFormatSymbols_ = function() {
