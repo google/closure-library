@@ -1069,6 +1069,12 @@ function testGetMsgWithPlaceholders() {
 }
 
 
+function testGetMsgWithHtml() {
+  let msg = goog.getMsg('Hello <{$a}&gt;!', {a: '<b>World</b>'}, {html: true});
+  assertEquals('Hello &lt;<b>World</b>&gt;!', msg);
+}
+
+
 //=== miscellaneous tests ===
 
 function testGetObjectByName() {
