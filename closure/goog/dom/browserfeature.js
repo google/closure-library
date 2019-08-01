@@ -45,9 +45,10 @@ goog.dom.BrowserFeature.ASSUME_OFFSCREEN_CANVAS =
  * @private
  */
 goog.dom.BrowserFeature.detectOffscreenCanvas_ = function(contextName) {
+  // This code only gets removed because we forced @nosideeffects on
+  // the functions. See: b/138802376
   try {
-    new self.OffscreenCanvas(0, 0).getContext(contextName);
-    return true;
+    return Boolean(new self.OffscreenCanvas(0, 0).getContext(contextName));
   } catch (ex) {
   }
   return false;

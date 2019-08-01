@@ -84,6 +84,7 @@ var _allTests = [
   'closure/goog/dom/animationframe/animationframe_test.html',
   'closure/goog/dom/annotate_test.html',
   'closure/goog/dom/asserts_test.html',
+  'closure/goog/dom/browserfeature_test.html',
   'closure/goog/dom/browserrange/browserrange_test.html',
   'closure/goog/dom/bufferedviewportsizemonitor_test.html',
   'closure/goog/dom/classes_test.html',
