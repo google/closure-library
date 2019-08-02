@@ -48,11 +48,11 @@ goog.testing.testSuite({
       return;
     }
 
-    assertNotNull(window['OffscreenCanvas']);
+    assertNotNullNorUndefined(window.OffscreenCanvas);
     const canvas = new window.OffscreenCanvas(1, 1);
-    assertNotNull(canvas);
+    assertNotNullNorUndefined(canvas);
 
     const ctx = canvas.getContext('2d');
-    assertNotNull(ctx);
+    assertNotNullNorUndefined(ctx);
   }
 });
