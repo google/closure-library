@@ -29,18 +29,11 @@ goog.testing.testSuite({
       context2d = canvas.getContext('2d');
     } catch (ex) {
     }
-    try {
-      const canvas = new window.OffscreenCanvas(0, 0);
-      contextwebgl = canvas.getContext('webgl');
-    } catch (ex) {
-    }
   },
 
   testOffscreenCanvasSupport() {
     assertEquals(
         Boolean(context2d), goog.dom.BrowserFeature.OFFSCREEN_CANVAS_2D);
-    assertEquals(
-        Boolean(contextwebgl), goog.dom.BrowserFeature.OFFSCREEN_CANVAS_WEBGL);
   },
 
   testOffscreenCanvas2DUsage() {

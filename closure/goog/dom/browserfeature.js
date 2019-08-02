@@ -64,15 +64,6 @@ goog.dom.BrowserFeature.OFFSCREEN_CANVAS_2D =
      goog.dom.BrowserFeature.detectOffscreenCanvas_('2d'));
 
 /**
- * Whether the browser supports OffscreenCanvas WebGL context.
- * @const {boolean}
- */
-goog.dom.BrowserFeature.OFFSCREEN_CANVAS_WEBGL =
-    !goog.dom.BrowserFeature.ASSUME_NO_OFFSCREEN_CANVAS &&
-    (goog.dom.BrowserFeature.ASSUME_OFFSCREEN_CANVAS ||
-     goog.dom.BrowserFeature.detectOffscreenCanvas_('webgl'));
-
-/**
  * Whether attributes 'name' and 'type' can be added to an element after it's
  * created. False in Internet Explorer prior to version 9.
  * @const {boolean}
