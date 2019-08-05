@@ -310,3 +310,11 @@ function testAdjustPrecision() {
   // Unknown currency code
   assertEquals('0.00', goog.i18n.currency.adjustPrecision('0.00', 'XXY'));
 }
+
+function testIsValidCurrencyCode() {
+  assertTrue(goog.i18n.currency.isValid('USD'));
+  assertTrue(goog.i18n.currency.isValid('RUR'));
+  assertTrue(goog.i18n.currency.isValid('XXY'));
+  assertTrue(goog.i18n.currency.isValid('usd'));
+  assertFalse(goog.i18n.currency.isValid('invalid!'));
+}
