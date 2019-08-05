@@ -27,6 +27,10 @@
 
 goog.module('goog.i18n.RelativeDateTimeFormat');
 
+// For referencing goog.i18n.USE_ECMASCRIPT_I18N_RDTF to determine compile-time
+// choice of ECMAScript vs. JavaScript implementation and data.
+var LocaleFeature = goog.require('goog.i18n.LocaleFeature');
+
 var MessageFormat = goog.require('goog.i18n.MessageFormat');
 var asserts = goog.require('goog.asserts');
 var relativeDateTimeSymbols = goog.require('goog.i18n.relativeDateTimeSymbols');
@@ -51,10 +55,30 @@ var relativeDateTimeSymbols = goog.require('goog.i18n.relativeDateTimeSymbols');
  */
 var RelativeDateTimeFormat = function(
     opt_numeric, opt_style, opt_relativeDateTimeSymbols) {
-  asserts.assert(
-      goog.isDef(opt_relativeDateTimeSymbols) ||
-          goog.isDef(relativeDateTimeSymbols.getRelativeDateTimeSymbols()),
-      'goog.i18n.RelativeDateTimeSymbols or explicit symbols must be defined');
+  /**
+   * Records if the implementation is ECMAScript
+   * @private @type {boolean}
+   */
+  this.nativeMode_ = false;
+
+  if (!LocaleFeature.USE_ECMASCRIPT_I18N_RDTF) {
+    asserts.assert(
+        opt_relativeDateTimeSymbols ||
+            relativeDateTimeSymbols.getRelativeDateTimeSymbols(),
+        'goog.i18n.RelativeDateTimeSymbols requires symbols ECMAScript mode');
+    /**
+     * RelativeDateTimeSymbols object for locale data required by the formatter.
+     * @private @const {?relativeDateTimeSymbols.RelativeDateTimeSymbols}
+     */
+    this.rdtfSymbols_ = !LocaleFeature.USE_ECMASCRIPT_I18N_RDTF ?
+        (opt_relativeDateTimeSymbols ||
+         relativeDateTimeSymbols.getRelativeDateTimeSymbols()) :
+        null;
+  }
+  if (!this.rdtfSymbols_) {
+    this.nativeMode_ = true;
+  }
+
   /**
    * Flag to force numeric mode in all cases. Normally true.
    * @private @type {boolean}
@@ -81,13 +105,6 @@ var RelativeDateTimeFormat = function(
         'Style must be LONG, SHORT, or NARROW');
     this.style_ = opt_style;
   }
-
-  /**
-   * RelativeDateTimeSymbols object for locale data required by the formatter.
-   * @private @const {!relativeDateTimeSymbols.RelativeDateTimeSymbols}
-   */
-  this.rdtfSymbols_ = opt_relativeDateTimeSymbols ||
-      relativeDateTimeSymbols.getRelativeDateTimeSymbols();
 };
 
 /**
@@ -133,7 +150,8 @@ RelativeDateTimeFormat.Unit = {
  *     for past, 0 for now, positive for future.
  * @param {!RelativeDateTimeFormat.Unit} relativeUnit  Type such as HOUR, YEAR,
  *     QUARTER.
- * @return {string} The formatted result.
+ * @return {string} The formatted result. May be empty string for an
+ *   unsupported locale.
  */
 RelativeDateTimeFormat.prototype.format = function(quantity, relativeUnit) {
   asserts.assertNumber(quantity, 'Quantity must be a number');
@@ -141,13 +159,6 @@ RelativeDateTimeFormat.prototype.format = function(quantity, relativeUnit) {
       relativeUnit >= RelativeDateTimeFormat.Unit.YEAR &&
           relativeUnit <= RelativeDateTimeFormat.Unit.SECOND,
       'Unit must be one of the supported values');
-
-  /**
-   * Find the right data based on Unit, quantity, and plural.
-   */
-  var rdtfUnitPattern = this.getUnitStylePattern_(relativeUnit);
-
-  var dirString = quantity.toString();
 
   /**
    * Special cases to force numeric units, in order
@@ -166,7 +177,37 @@ RelativeDateTimeFormat.prototype.format = function(quantity, relativeUnit) {
     useNumeric = true;
   }
 
-  // Check for force numeric and having relative value with the given quantity.
+  if (LocaleFeature.USE_ECMASCRIPT_I18N_RDTF) {
+    return this.formatNative_(quantity, relativeUnit, useNumeric);
+  } else {
+    return this.formatPolyfill_(quantity, relativeUnit, useNumeric);
+  }
+};
+
+/**
+ * Format using pure JavaScript
+ * @param {number} quantity Desired offset from current date/time.
+ * @param {!RelativeDateTimeFormat.Unit} relativeUnit  Type such as HOUR, YEAR,
+ *     QUARTER.
+ * @param {boolean} useNumeric True if numeric output is forced.
+ * @return {string} The formatted result. May be empty string for an
+ *   unsupported locale.
+ * @private
+ */
+RelativeDateTimeFormat.prototype.formatPolyfill_ = function(
+    quantity, relativeUnit, useNumeric) {
+  /**
+   * Find the right data based on Unit, quantity, and plural.
+   */
+  var rdtfUnitPattern = this.getUnitStylePattern_(relativeUnit);
+  var dirString = quantity.toString();
+
+  if ((relativeUnit == RelativeDateTimeFormat.Unit.MINUTE) ||
+      (relativeUnit == RelativeDateTimeFormat.Unit.HOUR)) {
+    useNumeric = true;
+  }
+  // Formats using Closure Javascript. Check for forcing numeric and having
+  // relative value with the given quantity.
   if (!useNumeric && rdtfUnitPattern && rdtfUnitPattern.R &&
       rdtfUnitPattern.R[dirString]) {
     return rdtfUnitPattern.R[dirString];
@@ -176,6 +217,75 @@ RelativeDateTimeFormat.prototype.format = function(quantity, relativeUnit) {
   }
 };
 
+/**
+ * Format using ECMAScript Intl class RelativeTimeFormat
+ * @param {number} quantity Desired offset from current date/time.
+ * @param {!RelativeDateTimeFormat.Unit} relativeUnit  Type such as HOUR, YEAR,
+ *     QUARTER.
+ * @param {boolean} useNumeric True if numeric output is forced.
+ * @return {string} The formatted result. May be empty string for an
+ *   unsupported locale.
+ * @private
+ */
+RelativeDateTimeFormat.prototype.formatNative_ = function(
+    quantity, relativeUnit, useNumeric) {
+  // Use built-in ECMAScript Intl object.
+  var options = {
+    'numeric': useNumeric ? 'always' : 'auto',
+  };
+  switch (this.style_) {
+    case RelativeDateTimeFormat.Style.NARROW:
+      options['style'] = 'narrow';
+      break;
+    case RelativeDateTimeFormat.Style.SHORT:
+      options['style'] = 'short';
+      break;
+    case RelativeDateTimeFormat.Style.LONG:
+      options['style'] = 'long';
+    default:
+      break;
+  }
+
+  // Use built-in ECMAScript Intl object.
+  var intl = goog.global.Intl;
+  try {
+    // Fix "_" to "-" to correspond to BCP-47.
+    var intlFormatter =
+        new intl.RelativeTimeFormat(goog.LOCALE.replace(/_/g, '-'), options);
+  } catch (err) {
+    // An empty string is returned for an unsupported LOCALE.
+    return '';
+  }
+
+  var unit = 'year';
+  switch (relativeUnit) {
+    case RelativeDateTimeFormat.Unit.YEAR:
+      unit = 'year';
+      break;
+    case RelativeDateTimeFormat.Unit.QUARTER:
+      unit = 'quarter';
+      break;
+    case RelativeDateTimeFormat.Unit.MONTH:
+      unit = 'month';
+      break;
+    case RelativeDateTimeFormat.Unit.WEEK:
+      unit = 'week';
+      break;
+    case RelativeDateTimeFormat.Unit.DAY:
+      unit = 'day';
+      break;
+    case RelativeDateTimeFormat.Unit.HOUR:
+      unit = 'hour';
+      break;
+    case RelativeDateTimeFormat.Unit.MINUTE:
+      unit = 'minute';
+      break;
+    case RelativeDateTimeFormat.Unit.SECOND:
+      unit = 'second';
+      break;
+  }
+  return intlFormatter.format(quantity, unit);
+};
 
 /**
  * Format with forced numeric value and relative unit.
@@ -228,33 +338,6 @@ RelativeDateTimeFormat.prototype.getUnitStylePattern_ = function(relativeUnit) {
   return this.getStylePattern_(unitInfo);
 };
 
-/**
- * Use public unit symbol to retrieve data for that unit.
- * @param {number|!relativeDateTimeSymbols.RelativeDateTimeFormatStyles} unit
- * @return {!relativeDateTimeSymbols.RelativeDateTimeFormatStyles}
- * @private
- */
-RelativeDateTimeFormat.prototype.getUnitPattern_ = function(unit) {
-  switch (unit) {
-    default:
-    case RelativeDateTimeFormat.Unit.YEAR:
-      return this.rdtfSymbols_.YEAR;
-    case RelativeDateTimeFormat.Unit.QUARTER:
-      return this.rdtfSymbols_.QUARTER;
-    case RelativeDateTimeFormat.Unit.MONTH:
-      return this.rdtfSymbols_.MONTH;
-    case RelativeDateTimeFormat.Unit.WEEK:
-      return this.rdtfSymbols_.WEEK;
-    case RelativeDateTimeFormat.Unit.DAY:
-      return this.rdtfSymbols_.DAY;
-    case RelativeDateTimeFormat.Unit.HOUR:
-      return this.rdtfSymbols_.HOUR;
-    case RelativeDateTimeFormat.Unit.MINUTE:
-      return this.rdtfSymbols_.MINUTE;
-    case RelativeDateTimeFormat.Unit.SECOND:
-      return this.rdtfSymbols_.SECOND;
-  }
-};
 
 /**
  * Use public unit symbol to retrieve data for that unit, given the style.
@@ -300,26 +383,79 @@ RelativeDateTimeFormat.prototype.getNumericMode = function() {
 };
 
 /**
- * Returns relative field for an offset of a  given value unit
+ * Use public unit symbol to retrieve data for that unit.
+ * @param {number|!relativeDateTimeSymbols.RelativeDateTimeFormatStyles} unit
+ * @return {!relativeDateTimeSymbols.RelativeDateTimeFormatStyles}
+ * @private
+ */
+RelativeDateTimeFormat.prototype.getUnitPattern_ = function(unit) {
+  switch (unit) {
+    default:
+    case RelativeDateTimeFormat.Unit.YEAR:
+      return this.rdtfSymbols_.YEAR;
+    case RelativeDateTimeFormat.Unit.QUARTER:
+      return this.rdtfSymbols_.QUARTER;
+    case RelativeDateTimeFormat.Unit.MONTH:
+      return this.rdtfSymbols_.MONTH;
+    case RelativeDateTimeFormat.Unit.WEEK:
+      return this.rdtfSymbols_.WEEK;
+    case RelativeDateTimeFormat.Unit.DAY:
+      return this.rdtfSymbols_.DAY;
+    case RelativeDateTimeFormat.Unit.HOUR:
+      return this.rdtfSymbols_.HOUR;
+    case RelativeDateTimeFormat.Unit.MINUTE:
+      return this.rdtfSymbols_.MINUTE;
+    case RelativeDateTimeFormat.Unit.SECOND:
+      return this.rdtfSymbols_.SECOND;
+  }
+};
+
+/**
+ * Returns relative field for an offset of a given value unit
  * if it is defined for the current style.
  * If the value does not exist, return undefined.
  * For example, is there a -2 offset for DAY in the current locale and style.
+ * Note: This data is not available in an ECMAScript implementation.
  * @param{!RelativeDateTimeFormat.Unit} unit
  * @param{string|number} offset
  * @return{string|undefined}
+ * @deprecated
  */
 RelativeDateTimeFormat.prototype.isOffsetDefinedForUnit = function(
     unit, offset) {
-  var rdtfUnitPattern = this.getUnitStylePattern_(unit);
+  if (this.rdtfSymbols_ == undefined) {
+    return undefined;
+  }
 
+  var rdtfUnitPattern = this.getUnitStylePattern_(unit);
+  // Check for force numeric and requested unit and offset.
   if (typeof (offset) == 'number') {
     offset = offset.toString();
   }
-  // Check for force numeric and having relative value with the given quantity.
   if (rdtfUnitPattern && rdtfUnitPattern.R && rdtfUnitPattern.R[offset]) {
     return rdtfUnitPattern.R[offset];
+  } else {
+    return undefined;
   }
-  return undefined;
+};
+
+/**
+ * Returns the implementation used for this formatter.
+ * @return {boolean}  True iff native mode. False if polyfill.
+ * @package
+ */
+RelativeDateTimeFormat.prototype.isNativeMode = function() {
+  return this.nativeMode_;
+};
+
+/**
+ * Returns true if a ECMAScript formatter is available in the browser.
+ * @return {boolean} Whether the ECMAScript implementation available.
+ * @package
+ */
+RelativeDateTimeFormat.prototype.hasNativeRdtf = function() {
+  var intl = goog.global.Intl;
+  return (Boolean(intl && intl.RelativeTimeFormat));
 };
 
 exports = RelativeDateTimeFormat;

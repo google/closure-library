@@ -18,26 +18,26 @@ goog.setTestOnly('goog.date.relativeCommonTests');
 goog.require('goog.date.DateTime');
 goog.require('goog.date.relative');
 goog.require('goog.i18n.DateTimeFormat');
-
 goog.require('goog.i18n.DateTimePatterns_ar');
 goog.require('goog.i18n.DateTimePatterns_bn');
 goog.require('goog.i18n.DateTimePatterns_es');
 goog.require('goog.i18n.DateTimePatterns_fa');
 goog.require('goog.i18n.DateTimePatterns_fr');
-
+goog.require('goog.i18n.DateTimePatterns_no');
 goog.require('goog.i18n.DateTimeSymbols_ar');
 goog.require('goog.i18n.DateTimeSymbols_bn');
 goog.require('goog.i18n.DateTimeSymbols_es');
 goog.require('goog.i18n.DateTimeSymbols_fa');
 goog.require('goog.i18n.DateTimeSymbols_fr');
-
-goog.require('goog.i18n.NumberFormatSymbols_bn');  // Bengali digits
-goog.require('goog.i18n.NumberFormatSymbols_fa');  // Persian digits
-
+goog.require('goog.i18n.DateTimeSymbols_no');
+goog.require('goog.i18n.NumberFormatSymbols_bn');
+goog.require('goog.i18n.NumberFormatSymbols_en');
+goog.require('goog.i18n.NumberFormatSymbols_fa');
+goog.require('goog.i18n.NumberFormatSymbols_no');
 goog.require('goog.i18n.relativeDateTimeSymbols');
-
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
+
 
 // Testing stubs that autoreset after each test run.
 var stubs = new goog.testing.PropertyReplacer();
@@ -47,16 +47,22 @@ var baseTime = new Date(2009, 2, 23, 14, 31, 6).getTime();
 
 var RelativeDateTimeSymbols;
 
+var propertyReplacer = new goog.testing.PropertyReplacer();
+
 function setUpPage() {
-  var propertyReplacer = new goog.testing.PropertyReplacer();
   // Ensure goog.now returns a constant timestamp.
   propertyReplacer.replace(goog, 'now', function() {
     return baseTime;
   });
-  propertyReplacer.replace(goog, 'LOCALE', 'en_US');
+  propertyReplacer.replace(goog, 'LOCALE', 'en-US');
 
   RelativeDateTimeSymbols =
       goog.module.get('goog.i18n.relativeDateTimeSymbols');
+}
+
+function setUp() {
+  propertyReplacer.replace(goog, 'LOCALE', 'en-US');
+  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
 }
 
 function tearDown() {
@@ -234,6 +240,8 @@ function testGetPastDateString() {
 function testFormatSpanish() {
   var fn = goog.date.relative.formatDay;
 
+  propertyReplacer.replace(goog, 'LOCALE', 'es');
+
   // Spanish locale 'es'
   stubs.set(goog.date.relative, 'monthDateFormatter_', null);
   stubs.set(goog.i18n, 'DateTimeSymbols', goog.i18n.DateTimeSymbols_es);
@@ -292,6 +300,8 @@ function testFormatFrench() {
   var fn = goog.date.relative.formatDay;
 
   // Frence locale 'fr'
+  propertyReplacer.replace(goog, 'LOCALE', 'fr');
+
   stubs.set(goog.date.relative, 'monthDateFormatter_', null);
   stubs.set(goog.i18n, 'DateTimeSymbols', goog.i18n.DateTimeSymbols_fr);
   stubs.set(goog.i18n, 'DateTimePatterns', goog.i18n.DateTimePatterns_fr);
@@ -346,6 +356,8 @@ function testFormatFrench() {
 function testFormatArabic() {
   var fn = goog.date.relative.formatDay;
 
+  propertyReplacer.replace(goog, 'LOCALE', 'ar');
+
   // Arabic locale 'ar'
   stubs.set(goog.date.relative, 'monthDateFormatter_', null);
   stubs.set(goog.i18n, 'DateTimeSymbols', goog.i18n.DateTimeSymbols_ar);
@@ -383,6 +395,8 @@ function testFormatRelativeForPastDatesPersianDigits() {
 
   // For Persian \u06F0 is the base, so \u6F0 = digit 0, \u6F5 = digit 5 ...
   // "Western" digits in square brackets for convenience
+
+  propertyReplacer.replace(goog, 'LOCALE', 'en-u-nu-arabext');
   assertEquals(
       'Should round seconds to the minute below',
       localizeNumber(0) + ' minutes ago',  // ۰ minutes ago
@@ -428,6 +442,13 @@ function testFormatRelativeForPastDatesPersianDigits() {
   assertEquals(
       localizeNumber(3) + ' days ago',  // ۳ days ago
       fn(timestamp('20 March 2009 23:59:59')));
+
+  propertyReplacer.replace(goog, 'LOCALE', 'fa');
+  RelativeDateTimeSymbols.setRelativeDateTimeSymbols(
+      RelativeDateTimeSymbols.RelativeDateTimeSymbols_fa);
+
+  const result1 = fn(timestamp('21 March 2009 10:30:56'));
+  assertEquals('۲ روز پیش', result1);
 }
 
 function testFormatRelativeForFutureDatesBengaliDigits() {
@@ -435,6 +456,9 @@ function testFormatRelativeForFutureDatesBengaliDigits() {
   stubs.set(goog.i18n, 'DateTimeSymbols', goog.i18n.DateTimeSymbols_bn);
   stubs.set(goog.i18n, 'DateTimePatterns', goog.i18n.DateTimePatterns_bn);
   stubs.set(goog.i18n, 'NumberFormatSymbols', goog.i18n.NumberFormatSymbols_bn);
+
+  // Get Bengali digits
+  propertyReplacer.replace(goog, 'LOCALE', 'en-u-nu-beng');
 
   var fn = goog.date.relative.format;
 
@@ -483,6 +507,38 @@ function testFormatRelativeForFutureDatesBengaliDigits() {
   assertEquals(
       'in ' + localizeNumber(3) + ' days',  // in ৩ days
       fn(timestamp('26 March 2009 00:00:00')));
+
+  // Try Bengali text and numerals, too.
+  RelativeDateTimeSymbols.setRelativeDateTimeSymbols(
+      RelativeDateTimeSymbols.RelativeDateTimeSymbols_bn);
+
+  propertyReplacer.replace(goog, 'LOCALE', 'bn');
+
+  // For Bengali \u09E6 is the base, so \u09E6 = digit 0, \u09EB = digit 5
+  // "Western" digits in square brackets for convenience
+
+  const result1 = fn(timestamp('23 March 2009 14:32:05'));
+  assertEquals('Should round seconds to the minute below', '১ মিনিটে', result1);
+
+  const result2 = fn(timestamp('26 March 2009 00:00:00'));
+  assertEquals(
+      'Should be Bengali text with Bengali digit.', '৩ দিনের মধ্যে', result2);
+}
+
+function testFormatRelativeForFutureDatesNorwegian() {
+  stubs.set(goog.date.relative, 'monthDateFormatter_', null);
+  stubs.set(goog.i18n, 'DateTimeSymbols', goog.i18n.DateTimeSymbols_no);
+  stubs.set(goog.i18n, 'DateTimePatterns', goog.i18n.DateTimePatterns_no);
+  stubs.set(goog.i18n, 'NumberFormatSymbols', goog.i18n.NumberFormatSymbols_no);
+
+  RelativeDateTimeSymbols.setRelativeDateTimeSymbols(
+      RelativeDateTimeSymbols.RelativeDateTimeSymbols_no);
+
+  // For a locale not in the ECMASCRIPT locale set.
+  propertyReplacer.replace(goog, 'LOCALE', 'no');
+
+  var fn = goog.date.relative.format;
+  assertEquals('om 1 minutt', fn(timestamp('23 March 2009 14:32:05')));
 }
 
 /**

@@ -191,7 +191,7 @@ goog.date.relative.upcase = function(text) {
  * Finds Day unit in relative date time compatible values, if available.
  * then formats the result using that data.
  * If codepoints are surrogate code points, returns the string unchanged.
- * If no data is available, returns null.
+ * If no relative non-numeric data is available, returns null.
  *
  * @param {number} dayOffset Offset of day unit for lookup in rdtf symbols data.
  * @return {string|null}
@@ -201,10 +201,13 @@ goog.date.relative.relativeCasedString_ = function(dayOffset) {
   var rdtf_formatter =
       new RelativeDateTimeFormat(RelativeDateTimeFormat.NumericOption.AUTO);
 
-  var result = rdtf_formatter.isOffsetDefinedForUnit(
-      RelativeDateTimeFormat.Unit.DAY, dayOffset);
+  var result =
+      rdtf_formatter.format(dayOffset, RelativeDateTimeFormat.Unit.DAY);
 
-  if (result == undefined) {
+  // Check for a digit in expected Auto results, which implies a Numeric
+  // result was actually returned.
+  // Limitation: This checks only for ASCII, Arabic, ArabicExtended digits.
+  if (!result || result.match(/[0-9\u0660-\u0669\u06f0-\u06f9]/g)) {
     return null;
   }
 
@@ -401,10 +404,12 @@ goog.date.relative.formatDay = function(dateMs, opt_formatter) {
   var relativeResult = goog.date.relative.relativeCasedString_(dayOffset);
 
   if (relativeResult) {
+    // Return the non-numeric answer such as "ayer" or "tomorrow".
     return relativeResult;
   }
 
-  // Use other formatting when there is no specific string for the offset.
+  // Use specialized formatting such as day and month when no
+  // special form for the offset is available.
   var formatFunction = opt_formatter || goog.date.relative.formatMonth_;
   return formatFunction(new Date(dateMs));
 };
