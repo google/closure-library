@@ -43,7 +43,7 @@ testCase.setUpPage = function() {
   this.handler.protectWindowSetTimeout();
   this.handler.protectWindowSetInterval();
   this.handler.protectWindowRequestAnimationFrame();
-  this.handler.protectPromiseAndAsyncFunctions();
+  this.handler.catchUnhandledRejections();
   this.exceptions = [];
   this.errors = 0;
 
@@ -58,8 +58,6 @@ testCase.setUpPage = function() {
   if (this.testingReqAnimFrame) {
     window.requestAnimationFrame(goog.bind(this.animFrame, this));
   }
-
-  this.promise();
 
   if (this.testingUnhandledRejection) {
     this.async();
@@ -76,7 +74,7 @@ testCase.tearDownPage = function() {
 
 testCase.onException = function(e) {
   this.exceptions.push(e);
-  if (this.timeoutHit && this.intervalHit && this.promiseHit &&
+  if (this.timeoutHit && this.intervalHit &&
       (!this.testingReqAnimFrame || this.animFrameHit) &&
       (!this.testingUnhandledRejection || this.async)) {
     resolver.resolve();
@@ -104,15 +102,6 @@ testCase.animFrame = function() {
   throw testCase.animFrame;
 };
 
-/** Test uncaught errors in native promises */
-testCase.promise = function() {
-  this.promiseHit = true;
-  const p = Promise.resolve();
-  p.then(() => {
-    throw testCase.promise;
-  });
-};
-
 /** Test uncaught errors in async/await */
 testCase.async = async function() {
   this.asyncHit = true;
@@ -126,7 +115,6 @@ testCase.testResults = function() {
     let animFrameHit;
     let asyncHit;
     let intervalHit;
-    let promiseHit;
     let timeoutHit;
 
     for (let i = 0; i < this.exceptions.length; ++i) {
@@ -139,9 +127,6 @@ testCase.testResults = function() {
           break;
         case this.animFrame:
           animFrameHit = true;
-          break;
-        case this.promise:
-          promiseHit = true;
           break;
         case this.async:
           asyncHit = true;
@@ -157,7 +142,6 @@ testCase.testResults = function() {
       assertTrue('anim frame exception not received', animFrameHit);
       assertTrue('animFrame not called', this.animFrameHit);
     }
-    assertTrue('Promise exception not received', promiseHit);
     if (this.testingUnhandledRejection) {
       assertTrue('Unhandled Rejection exception not received', asyncHit);
     }
