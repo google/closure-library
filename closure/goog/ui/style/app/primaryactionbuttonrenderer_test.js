@@ -28,7 +28,7 @@ let button;
 // Write iFrame tag to load reference FastUI markup. Then, our tests will
 // compare the generated markup to the reference markup.
 const refPath = '../../../../../' +
-    'webutil/css/fastui/app/primaryactionbutton_spec.html';
+    'webutil/css/legacy/fastui/app/primaryactionbutton_spec.html';
 style.writeReferenceFrame(refPath);
 
 function shouldRunTests() {
