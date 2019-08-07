@@ -2761,6 +2761,34 @@ function testIeMouseEventSequenceSimulator() {
       'an isolated click ');
 }
 
+function testIeMouseEventSequenceSimulator_withPointerEvents() {
+  control.setPointerEventsEnabled(true);
+  control.render(sandbox);
+
+  if (goog.userAgent.IE) {
+    // For some reason in IE8 and perhaps earlier, isolated clicks do not result
+    // a detectable dispatch of an ACTION event, so we'll only assert the
+    // desired handling of isolated clicks in IE9 and higher.
+    if (goog.userAgent.isVersionOrHigher(9)) {
+      assertIsolatedClickFires(
+          'ACTION event expected after an isolated click immediately ' +
+          'following a click sequence');
+      assertIsolatedClickFires(
+          'ACTION event expected after second consecutive isolated click');
+    } else {
+      // For IE8-and-lower, fire an isolated click event in preparation for our
+      // final assertion.
+      goog.testing.events.fireClickEvent(control.getKeyEventTarget());
+    }
+  } else {
+    assertIsolatedClickDoesNotFire(
+        'No ACTION event expected after an isolated click immediately ' +
+        'following a click sequence');
+    assertIsolatedClickDoesNotFire(
+        'No ACTION event expected after second consecutive isolated click');
+  }
+}
+
 function testIeMouseEventSequenceSimulatorStrictMode() {
   if (!document.createEvent) {
     return;
