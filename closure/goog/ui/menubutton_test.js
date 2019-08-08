@@ -66,8 +66,16 @@ goog.positioning.positionAtCoordinate = function(
       opt_viewport, goog.positioning.Overflow.IGNORE, opt_preferredSize);
 };
 
-function MyFakeEvent(keyCode, opt_eventType) {
-  this.type = opt_eventType || goog.events.KeyHandler.EventType.KEY;
+/**
+ * Creates an event for use in multiple tests.
+ * @param {!goog.events.KeyCodes} keyCode Key event to handle.
+ * @param {!goog.events.KeyHandler.EventType=} eventType An optional EventType
+ *     that defaults to `goog.events.KeyHandler.EventType.KEY`, but can be set
+ *     to a different EventType.
+ */
+function MyFakeEvent(
+    keyCode, eventType = goog.events.KeyHandler.EventType.KEY) {
+  this.type = eventType;
   this.keyCode = keyCode;
   this.propagationStopped = false;
   this.preventDefault = goog.nullFunction;
@@ -331,6 +339,39 @@ function testSpaceOrEnterClosesMenu() {
   menuButton.handleKeyEvent(
       new MyFakeEvent(goog.events.KeyCodes.SPACE, goog.events.EventType.KEYUP));
   assertFalse('Menu should close after pressing Space', menuButton.isOpen());
+}
+
+// Tests the behavior of the enter key on a submenu.
+function testEnterClosesSubMenu() {
+  const node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  const menu = menuButton.getMenu();
+  const subMenu = new goog.ui.SubMenu('Submenu');
+  menu.addItem(subMenu);
+  menuButton.setOpen(true);
+  // Set the last child of the menu (the SubMenu) as highlighted so that the
+  // SubMenu will handle the key event via the highlighted control in the
+  // Container's handleKeyEventInternal function.
+  menu.setHighlightedIndex(menu.getItemCount() - 1);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertTrue(
+      'Menu should remain open after pressing Enter', menuButton.isOpen());
+}
+
+// Tests the behavior of the esc key on a submenu.
+function testEscClosesSubMenu() {
+  const node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  const menu = menuButton.getMenu();
+  const subMenu = new goog.ui.SubMenu('Submenu');
+  menu.addItem(subMenu);
+  menuButton.setOpen(true);
+  // Set the last child of the menu (the SubMenu) as highlighted so that the
+  // SubMenu will handle the key event via the highlighted control in the
+  // Container's handleKeyEventInternal function.
+  menu.setHighlightedIndex(menu.getItemCount() - 1);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ESC));
+  assertFalse('Menu should close after pressing Esc', menuButton.isOpen());
 }
 
 

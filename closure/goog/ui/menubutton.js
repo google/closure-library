@@ -43,6 +43,7 @@ goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.MenuRenderer');
+goog.require('goog.ui.SubMenu');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
@@ -340,10 +341,19 @@ goog.ui.MenuButton.prototype.handleKeyEventInternal = function(e) {
 
   if (this.menu_ && this.menu_.isVisible()) {
     // Menu is open.
-    var isEnterOrSpace = e.keyCode == goog.events.KeyCodes.ENTER ||
+    const isEnterOrSpace = e.keyCode == goog.events.KeyCodes.ENTER ||
         e.keyCode == goog.events.KeyCodes.SPACE;
-    var handledByMenu = this.menu_.handleKeyEvent(e);
-    if (e.keyCode == goog.events.KeyCodes.ESC || isEnterOrSpace) {
+    const handledByMenu = this.menu_.handleKeyEvent(e);
+    // If the submenu has handled the key event, then defer to it to close the
+    // menu if necessary and do not close it here. This is needed because the
+    // enter key should keep the submenu open, but should close other types of
+    // menu items.
+    // Check for this.menu_ again here because some widgets set this.dispose
+    // after handleKeyEvent. Example: go/widget-dispose-ex
+    const handledBySubMenu = handledByMenu && this.menu_ &&
+        this.menu_.getOpenItem() instanceof goog.ui.SubMenu;
+    if (!handledBySubMenu &&
+        (e.keyCode == goog.events.KeyCodes.ESC || isEnterOrSpace)) {
       // Dismiss the menu.
       this.setOpen(false);
       return true;
