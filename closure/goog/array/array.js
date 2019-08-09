@@ -48,8 +48,8 @@ goog.NATIVE_ARRAY_PROTOTYPES =
  * array functions where appropriate (e.g., `Array#filter`) and remove the
  * unused pure JS implementation.
  */
-goog.array.ASSUME_NATIVE_FUNCTIONS =
-    goog.define('goog.array.ASSUME_NATIVE_FUNCTIONS', false);
+goog.array.ASSUME_NATIVE_FUNCTIONS = goog.define(
+    'goog.array.ASSUME_NATIVE_FUNCTIONS', goog.FEATURESET_YEAR > 2012);
 
 
 /**
