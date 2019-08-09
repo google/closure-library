@@ -380,7 +380,6 @@ var _allTests = [
   'closure/goog/proto2/pbliteserializer_test.html',
   'closure/goog/proto2/proto_test.html',
   'closure/goog/proto2/textformatserializer_test.html',
-  'closure/goog/proto/serializer_test.html',
   'closure/goog/pubsub/pubsub_test.html',
   'closure/goog/pubsub/typedpubsub_test.html',
   'closure/goog/reflect/reflect_test.html',
