@@ -51,7 +51,7 @@ const testMessage1 = {
  * @return {string} The encoded string
  */
 function encodeBytes(input) {
-  return base64.encodeByteArray(input, true /* websafe */);
+  return base64.encodeByteArray(input, base64.Alphabet.WEBSAFE_DOT_PADDING);
 }
 
 
