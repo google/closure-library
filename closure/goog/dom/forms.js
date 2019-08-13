@@ -28,7 +28,6 @@ goog.require('goog.structs.Map');
 goog.require('goog.window');
 
 
-
 /**
  * Submits form data via a new window. This hides references to the parent
  * window and should be used when submitting forms to untrusted 3rd party urls.
@@ -315,25 +314,32 @@ goog.dom.forms.hasValueByName = function(form, name) {
 
 /**
  * Gets the current value of any element with a type.
- * @param {Element} el The element.
+ * @param {null|!Element|!RadioNodeList<?>} input The element.
  * @return {string|Array<string>|null} The current value of the element
  *     (or null).
  */
-goog.dom.forms.getValue = function(el) {
+goog.dom.forms.getValue = function(input) {
   // Elements with a type may need more specialized logic.
-  var type = /** @type {!HTMLInputElement} */ (el).type;
-  switch (goog.isString(type) && type.toLowerCase()) {
-    case goog.dom.InputType.CHECKBOX:
-    case goog.dom.InputType.RADIO:
-      return goog.dom.forms.getInputChecked_(el);
-    case goog.dom.InputType.SELECT_ONE:
-      return goog.dom.forms.getSelectSingle_(el);
-    case goog.dom.InputType.SELECT_MULTIPLE:
-      return goog.dom.forms.getSelectMultiple_(el);
-    default:
-      // Not every element with a value has a type (e.g. meter and progress).
-      return el.value != null ? el.value : null;
+  var type = /** {{type: (string|undefined)}} */ (input).type;
+
+  if (goog.isString(type)) {
+    var el = /** @type {!Element} */ (input);
+
+    switch (type.toLowerCase()) {
+      case goog.dom.InputType.CHECKBOX:
+      case goog.dom.InputType.RADIO:
+        return goog.dom.forms.getInputChecked_(el);
+      case goog.dom.InputType.SELECT_ONE:
+        return goog.dom.forms.getSelectSingle_(el);
+      case goog.dom.InputType.SELECT_MULTIPLE:
+        return goog.dom.forms.getSelectMultiple_(el);
+      default:
+        // Not every element with a value has a type (e.g. meter and progress).
+    }
   }
+
+  // Coerce `undefined` to `null`.
+  return input.value != null ? input.value : null;
 };
 
 
