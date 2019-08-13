@@ -157,7 +157,7 @@ goog.dom.forms.getFormDataString = function(form) {
  */
 goog.dom.forms.getFormDataHelper_ = function(form, result, fnAppend) {
   var els = form.elements;
-  for (var el, i = 0; el = els[i]; i++) {
+  for (var el, i = 0; el = els.item(i); i++) {
     if (  // Make sure we don't include elements that are not part of the form.
         // Some browsers include non-form elements. Check for 'form' property.
         // See http://code.google.com/p/closure-library/issues/detail?id=227
@@ -263,7 +263,7 @@ goog.dom.forms.setDisabled = function(el, disabled) {
   // disable all elements in a form
   if (el.tagName == goog.dom.TagName.FORM) {
     var els = /** @type {!HTMLFormElement} */ (el).elements;
-    for (var i = 0; el = els[i]; i++) {
+    for (var i = 0; el = els.item(i); i++) {
       goog.dom.forms.setDisabled(el, disabled);
     }
   } else {
@@ -356,19 +356,19 @@ goog.dom.forms.getValue = function(input) {
 goog.dom.forms.getValueByName = function(form, name) {
   var els = form.elements[name];
 
-  if (els) {
-    if (els.type) {
-      return goog.dom.forms.getValue(els);
-    } else {
-      for (var i = 0; i < els.length; i++) {
-        var val = goog.dom.forms.getValue(els[i]);
-        if (val) {
-          return val;
-        }
+  if (!els) {
+    return null;
+  } else if (els.type) {
+    return goog.dom.forms.getValue(/** @type {!Element} */ (els));
+  } else {
+    for (var i = 0; i < els.length; i++) {
+      var val = goog.dom.forms.getValue(els[i]);
+      if (val) {
+        return val;
       }
     }
+    return null;
   }
-  return null;
 };
 
 
