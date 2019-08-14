@@ -21,8 +21,6 @@ goog.require('goog.async.Deferred');
 goog.require('goog.dom');
 goog.require('goog.iter.Iterator');
 goog.require('goog.iter.StopIteration');
-goog.require('goog.labs.userAgent.browser');
-goog.require('goog.string');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
 goog.require('goog.testing.TestCase');
@@ -31,10 +29,6 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
-function setUp() {
-  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-}
 
 function testAssertTrue() {
   assertTrue(true);
@@ -305,12 +299,12 @@ function testAssertObjectEquals() {
   const obj2 = [{'a': 'hello', 'c': 'dear', 'b': 'world'}];
 
   // Check with obj1 and obj2 as first and second arguments respectively.
-  assertThrows('Objects should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(obj1, obj2);
   });
 
   // Check with obj1 and obj2 as second and first arguments respectively.
-  assertThrows('Objects should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(obj2, obj1);
   });
 
@@ -324,12 +318,12 @@ function testAssertObjectEquals() {
   const obj5 = [{'a': 'hello'}];
 
   // Check with obj4 and obj5 as first and second arguments respectively.
-  assertThrows('Objects should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(obj4, obj5);
   });
 
   // Check with obj5 and obj4 as first and second arguments respectively.
-  assertThrows('Objects should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(obj5, obj4);
   });
 }
@@ -346,11 +340,11 @@ function testAssertObjectNotEquals() {
 
   // Test if equal objects are considered equal.
   const obj3 = [{'b': 'world', 'a': 'hello'}];
-  let error = assertThrows('Objects should be equal', function() {
+  let error = assertThrowsJsUnitException(function() {
     assertObjectNotEquals(obj1, obj3);
   });
   assertContains('Objects should not be equal', error.message);
-  error = assertThrows('Objects should be equal', function() {
+  error = assertThrowsJsUnitException(function() {
     assertObjectNotEquals(obj3, obj1);
   });
   assertContains('Objects should not be equal', error.message);
@@ -379,10 +373,10 @@ function testAssertObjectEquals2() {
   // (0 in {'0': undefined}) is true on both.
   // grrr.
   assertObjectEquals('arrays should be equal', [undefined], [undefined]);
-  assertThrows('arrays should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals([undefined, undefined], [undefined]);
   });
-  assertThrows('arrays should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals([undefined], [undefined, undefined]);
   });
 }
@@ -404,10 +398,12 @@ function testAssertObjectEquals3() {
 
   const obj3 = {'a': [1, 2]};
   const obj4 = {'a': [1, 2, 3]};
-  assertThrows('inner arrays should not be equal', function() {
+  // inner arrays should not be equal
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(obj3, obj4);
   });
-  assertThrows('inner arrays should not be equal', function() {
+  // inner arrays should not be equal
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(obj4, obj3);
   });
 }
@@ -429,7 +425,7 @@ function testAssertObjectEqualsSet() {
   assertObjectEquals('sets should be equal', set1, set2);
 
   set2.add('hey');
-  assertThrows('sets should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(set1, set2);
   });
 }
@@ -451,7 +447,7 @@ function testAssertObjectEqualsMap() {
   assertObjectEquals('maps should be equal', map1, map2);
 
   map1.set('hi', 'hey');
-  assertThrows('maps should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(map1, map2);
   });
 }
@@ -490,7 +486,7 @@ function testAssertObjectEqualsTypedArrays() {
       'Uint32Arrays should be equal', Uint32Array.of(1, 2, 3),
       Uint32Array.of(1, 2, 3));
 
-  assertThrows('assertObjectNotEquals on same TypedArray', () => {
+  assertThrowsJsUnitException(() => {
     assertObjectNotEquals(Uint8Array.of(1, 2), Uint8Array.of(1, 2));
   });
 }
@@ -542,7 +538,7 @@ function testAssertObjectNotEqualsDifferentTypedArrays() {
       'Uint8Array and Uint8ClampedArray should not be equal',
       Uint8Array.of(1, 2, 3), Uint8ClampedArray.of(1, 2, 3));
 
-  assertThrows('assertObjectEquals on different types of TypedArray', () => {
+  assertThrowsJsUnitException(() => {
     assertObjectEquals(Uint8Array.of(1, 2), Uint16Array.of(1, 2));
   });
 }
@@ -584,10 +580,9 @@ function testAssertObjectNotEqualsTypedArrayContents() {
       'Different Float32Array contents should not equal',
       Float32Array.of(1.2, 2.4, 3.8), Float32Array.of(1.2, 2.3, 3.8));
 
-  assertThrows(
-      'assertObjectEquals on TypedArray with different contents', () => {
-        assertObjectEquals(Uint8Array.of(1, 2), Uint8Array.of(3, 2));
-      });
+  assertThrowsJsUnitException(() => {
+    assertObjectEquals(Uint8Array.of(1, 2), Uint8Array.of(3, 2));
+  });
 }
 
 function testAssertObjectNotEqualsTypedArrayOneExtra() {
@@ -603,6 +598,7 @@ function testAssertObjectNotEqualsTypedArrayOneExtra() {
 function testAssertObjectEqualsIterNoEquals() {
   // an object with an iterator but no equals() and no map_ cannot
   // be compared
+  /** @constructor */
   function Thing() { this.what = []; }
   Thing.prototype.add = function(n, v) { this.what.push(n + '@' + v); };
   Thing.prototype.get = function(n) {
@@ -639,7 +635,7 @@ function testAssertObjectEqualsIterNoEquals() {
   thing2.add('red', 'fish');
   thing2.add('blue', 'fish');
 
-  assertThrows('things should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(thing1, thing2);
   });
 }
@@ -648,38 +644,39 @@ function testAssertObjectEqualsWithDates() {
   const date = new Date(2010, 0, 1);
   const dateWithMilliseconds = new Date(2010, 0, 1, 0, 0, 0, 1);
   assertObjectEquals(new Date(2010, 0, 1), date);
-  assertThrows(goog.partial(assertObjectEquals, date, dateWithMilliseconds));
+  assertThrowsJsUnitException(
+      goog.partial(assertObjectEquals, date, dateWithMilliseconds));
 }
 
 function testAssertObjectEqualsSparseArrays() {
   const arr1 = [, 2, , 4];
   const arr2 = [1, 2, 3, 4, 5];
 
-  assertThrows('Sparse arrays should not be equal', function() {
+  // Sparse arrays should not be equal
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(arr1, arr2);
   });
 
-  assertThrows('Sparse arrays should not be equal', function() {
+  // Sparse arrays should not be equal
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(arr2, arr1);
   });
 
-  a1 = [];
-  a2 = [];
+  let a1 = [];
+  let a2 = [];
   a2[1.8] = undefined;
-  assertThrows(
-      'Empty slots only equal `undefined` for natural-number array keys`',
-      function() {
-        assertObjectEquals(a1, a2);
-      });
+  // Empty slots only equal `undefined` for natural-number array keys`
+  assertThrowsJsUnitException(function() {
+    assertObjectEquals(a1, a2);
+  });
 
   a1 = [];
   a2 = [];
   a2[-999] = undefined;
-  assertThrows(
-      'Empty slots only equal `undefined` for natural-number array keys`',
-      function() {
-        assertObjectEquals(a1, a2);
-      });
+  // Empty slots only equal `undefined` for natural-number array keys`
+  assertThrowsJsUnitException(function() {
+    assertObjectEquals(a1, a2);
+  });
 }
 
 function testAssertObjectEqualsSparseArrays2() {
@@ -733,11 +730,11 @@ function testAssertObjectEqualsArraysWithExtraProps() {
   const arr2 = [1];
   arr2.foo = 3;
 
-  assertThrows('Aarrays should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(arr1, arr2);
   });
 
-  assertThrows('Arrays should not be equal', function() {
+  assertThrowsJsUnitException(function() {
     assertObjectEquals(arr2, arr1);
   });
 }
@@ -771,9 +768,11 @@ function testAssertSameElementsOnArrayLike() {
 }
 
 function testAssertSameElementsWithBadArguments() {
-  const ex = assertThrowsJsUnitException(function() {
-    assertSameElements([], new goog.structs.Set());
-  });
+  const ex = assertThrowsJsUnitException(
+      /** @suppress {checkTypes} */
+      function() {
+        assertSameElements([], new goog.structs.Set());
+      });
   assertContains('actual', ex.toString());
   assertContains('array-like or iterable', ex.toString());
 }
@@ -992,42 +991,34 @@ function testAssertRegExp() {
 }
 
 function testAssertThrows() {
-  let failed = false;
-  try {
-    assertThrows('assertThrows should not pass with null param', null);
-    failed = true;
-  } catch (e) {
-  }
-  assertFalse('Fail should not get set to true', failed);
-
-  try {
+  assertThrowsJsUnitException(() => {
     assertThrows(
-        'assertThrows should not pass with undefined param', undefined);
-    failed = true;
-  } catch (e) {
-  }
-  assertFalse('Fail should not get set to true', failed);
+        'assertThrows should not pass with null param',
+        /** @type {?} */ (null));
+  });
 
-  try {
-    assertThrows('assertThrows should not pass with number param', 1);
-    failed = true;
-  } catch (e) {
-  }
-  assertFalse('Fail should not get set to true', failed);
+  assertThrowsJsUnitException(() => {
+    assertThrows(
+        'assertThrows should not pass with undefined param',
+        /** @type {?} */ (undefined));
+  });
 
-  try {
-    assertThrows('assertThrows should not pass with string param', 'string');
-    failed = true;
-  } catch (e) {
-  }
-  assertFalse('Fail should not get set to true', failed);
+  assertThrowsJsUnitException(() => {
+    assertThrows(
+        'assertThrows should not pass with number param', /** @type {?} */ (1));
+  });
 
-  try {
-    assertThrows('assertThrows should not pass with object param', {});
-    failed = true;
-  } catch (e) {
-  }
-  assertFalse('Fail should not get set to true', failed);
+  assertThrowsJsUnitException(() => {
+    assertThrows(
+        'assertThrows should not pass with string param',
+        /** @type {?} */ ('string'));
+  });
+
+  assertThrowsJsUnitException(() => {
+    assertThrows(
+        'assertThrows should not pass with object param',
+        /** @type {?} */ ({}));
+  });
 
   let error;
   try {
@@ -1052,9 +1043,6 @@ function testAssertThrows() {
 }
 
 function testAssertThrowsThrowsIfJsUnitException() {
-  // TODO(b/25875505): We currently need this true for this part of the test.
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = true;
-
   // Asserts that assertThrows will throw a JsUnitException if the method
   // passed to assertThrows throws a JsUnitException of its own. assertThrows
   // should not be used for catching JsUnitExceptions with
@@ -1078,8 +1066,6 @@ function testAssertThrowsThrowsIfJsUnitException() {
   assertContains(
       'Function passed to assertThrows caught a JsUnitException', e.message);
 
-  // TODO(b/25875505): Set back to false so the rest of the tests pass.
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
 }
 
 function testAssertThrowsJsUnitException() {
@@ -1106,44 +1092,37 @@ function testAssertNotThrows() {
     return;
   }
 
-  let failed = false;
-  try {
-    assertNotThrows('assertNotThrows should not pass with null param', null);
-    failed = true;
-  } catch (e) {
-  }
-  assertFalse('Fail should not get set to true', failed);
-
-  try {
+  assertThrowsJsUnitException(() => {
     assertNotThrows(
-        'assertNotThrows should not pass with undefined param', undefined);
-    failed = true;
-  } catch (e) {
-  }
-  assertFalse('Fail should not get set to true', failed);
+        'assertNotThrows should not pass with null param',
+        /** @type {?} */ (null));
+  });
 
-  try {
-    assertNotThrows('assertNotThrows should not pass with number param', 1);
-    failed = true;
-  } catch (e) {
-  }
-  assertFalse('Fail should not get set to true', failed);
 
-  try {
+  assertThrowsJsUnitException(() => {
     assertNotThrows(
-        'assertNotThrows should not pass with string param', 'string');
-    failed = true;
-  } catch (e) {
-  }
-  assertFalse('Fail should not get set to true', failed);
+        'assertNotThrows should not pass with undefined param',
+        /** @type {?} */ (undefined));
+  });
+
+  assertThrowsJsUnitException(() => {
+    assertNotThrows(
+        'assertNotThrows should not pass with number param',
+        /** @type {?} */ (1));
+  });
+
+  assertThrowsJsUnitException(() => {
+    assertNotThrows(
+        'assertNotThrows should not pass with string param',
+        /** @type {?} */ ('string'));
+  });
 
 
-  try {
-    assertNotThrows('assertNotThrows should not pass with object param', {});
-    failed = true;
-  } catch (e) {
-  }
-  assertFalse('Fail should not get set to true', failed);
+  assertThrowsJsUnitException(() => {
+    assertNotThrows(
+        'assertNotThrows should not pass with object param',
+        /** @type {?} */ ({}));
+  });
 
 
   let result;
@@ -1158,50 +1137,42 @@ function testAssertNotThrows() {
       'assertNotThrows should return the result of the function.', 'some value',
       result);
 
-  const errorDescription = 'a test error exception';
-  try {
+  assertThrowsJsUnitException(() => {
     assertNotThrows('non valid error throwing function', function() {
-      throw new Error(errorDescription);
+      throw new Error('a test error exception');
     });
-    failed = true;
-  } catch (e) {
-    // Some browsers don't have a stack trace so expect to at least have the
-    // error description. For Gecko and IE7 not even that is included.
-    if (!goog.userAgent.GECKO &&
-        (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('8'))) {
-      assertContains(errorDescription, e.message);
-    }
-  }
-  assertFalse('assertNotThrows did not fail on a thrown exception', failed);
+  });
 }
 
 async function testAssertRejects_nonThenables() {
-  assertThrows(() => {
-    assertRejects('assertRejects should not pass with null param', null);
-    fail('Should always throw');
-  });
-
-  assertThrows(() => {
+  assertThrowsJsUnitException(() => {
     assertRejects(
-        'assertRejects should not pass with undefined param', undefined);
-    fail('Should always throw');
+        'assertRejects should not pass with null param',
+        /** @type {?} */ (null));
   });
 
-  assertThrows(() => {
-    assertRejects('assertRejects should not pass with number param', 1);
-    fail('Should always throw');
+  assertThrowsJsUnitException(() => {
+    assertRejects(
+        'assertRejects should not pass with undefined param',
+        /** @type {?} */ (undefined));
   });
 
-  assertThrows(() => {
-    assertRejects('assertRejects should not pass with string param', 'string');
-    fail('Should always throw');
+  assertThrowsJsUnitException(() => {
+    assertRejects(
+        'assertRejects should not pass with number param',
+        /** @type {?} */ (1));
   });
 
-  assertThrows(() => {
+  assertThrowsJsUnitException(() => {
+    assertRejects(
+        'assertRejects should not pass with string param',
+        /** @type {?} */ ('string'));
+  });
+
+  assertThrowsJsUnitException(() => {
     assertRejects(
         'assertRejects should not pass with object param with no then property',
-        {});
-    fail('Should always throw');
+        /** @type {?} */ ({}));
   });
 }
 
@@ -1250,7 +1221,7 @@ function testAssertRejects_asyncFunction_thatThrows() {
  * rejection.
  *
  * @param {boolean} swallowUnhandledRejections
- * @param {function(function(function(?), function(?))): !Thenable<?>} factory
+ * @param {function(function(function(?), function(?))): !IThenable<?>} factory
  */
 async function internalTestAssertRejects(swallowUnhandledRejections, factory) {
   try {
@@ -1287,12 +1258,15 @@ async function internalTestAssertRejects(swallowUnhandledRejections, factory) {
 
     e = await assertRejects(
         'assertRejects should fail with a resolved thenable', (async () => {
-          await assertRejects(factory((resolve) => resolve()));
+          await assertRejects(factory((resolve) => resolve(undefined)));
           fail('should always throw.');
         })());
     assertEquals(
         'IThenable passed into assertRejects did not reject', e.message);
+    // Record this as an expected assertion: go/failonunreportedasserts
+    goog.testing.TestCase.invalidateAssertionException(/** @type {?} */ (e));
   } finally {
+    // restore the default exception handler.
     goog.Promise.setUnhandledRejectionHandler(goog.async.throwException);
   }
 }
@@ -1302,7 +1276,8 @@ function testAssertArrayEquals() {
   let a2 = [0, 1, 2];
   assertArrayEquals('Arrays should be equal', a1, a2);
 
-  assertThrows('Should have thrown because args are not arrays', function() {
+  // Should have thrown because args are not arrays
+  assertThrowsJsUnitException(function() {
     assertArrayEquals(true, true);
   });
 
@@ -1321,11 +1296,13 @@ function testAssertArrayEquals() {
       'Bug: sparse arrays and undefined items are not distinguished',
       [0, undefined, 2], [0, , 2]);
 
-  assertThrows('The array elements should be compared with ===', function() {
+  // The array elements should be compared with ===
+  assertThrowsJsUnitException(function() {
     assertArrayEquals([0], ['0']);
   });
 
-  assertThrows('Arrays with different length should be different', function() {
+  // Arrays with different length should be different
+  assertThrowsJsUnitException(function() {
     assertArrayEquals([0, undefined], [0]);
   });
 
@@ -1336,7 +1313,7 @@ function testAssertArrayEquals() {
 
   a1 = [0];
   a2 = [0];
-  a2['extra'] = 1;
+  a2[/** @type {?} */ ('extra')] = 1;
   assertArrayEquals(
       'Extra properties are ignored. Use assertObjectEquals to compare them.',
       a1, a2);
@@ -1347,7 +1324,8 @@ function testAssertArrayEquals() {
 }
 
 function testAssertObjectsEqualsDifferentArrays() {
-  assertThrows('Should have thrown because args are different', function() {
+  // Should throw because args are different
+  assertThrowsJsUnitException(function() {
     const a1 = ['className1'];
     const a2 = ['className2'];
     assertObjectEquals(a1, a2);
@@ -1365,19 +1343,19 @@ function testAssertObjectsEqualsNegativeArrayIndexes() {
 }
 
 function testAssertObjectsEqualsDifferentTypeSameToString() {
-  assertThrows('Should have thrown because args are different', function() {
+  assertThrowsJsUnitException(function() {
     const a1 = 'className1';
     const a2 = ['className1'];
     assertObjectEquals(a1, a2);
   });
 
-  assertThrows('Should have thrown because args are different', function() {
+  assertThrowsJsUnitException(function() {
     const a1 = ['className1'];
     const a2 = {'0': 'className1'};
     assertObjectEquals(a1, a2);
   });
 
-  assertThrows('Should have thrown because args are different', function() {
+  assertThrowsJsUnitException(function() {
     const a1 = ['className1'];
     const a2 = [['className1']];
     assertObjectEquals(a1, a2);
@@ -1672,36 +1650,6 @@ function testAssertElementsEquals() {
       },
       'length mismatch: Message\n' +
           'Expected <2> (Number) but was <1> (Number)');
-}
-
-function testStackTrace() {
-  try {
-    assertTrue(false);
-  } catch (e) {
-    if (Error.captureStackTrace) {
-      assertNotUndefined(e.stack);
-    }
-    if (e.stack) {
-      const stack = e.stack;
-      const stackTraceContainsTestName =
-          goog.string.contains(stack, 'testStackTrace');
-      if (!stackTraceContainsTestName &&
-          goog.labs.userAgent.browser.isChrome()) {
-        // Occasionally Chrome does not give us a full stack trace, making for
-        // a flaky test. If we don't have the full stack trace, at least
-        // check that we got the error string.
-        // Filed a bug on Chromium here:
-        // https://code.google.com/p/chromium/issues/detail?id=403029
-        const expected = 'Call to assertTrue(boolean) with false';
-        assertContains(expected, stack);
-        return;
-      }
-
-      assertTrue(
-          'Expected the stack trace to contain string "testStackTrace"',
-          stackTraceContainsTestName);
-    }
-  }
 }
 
 function stringForWindowIEHelper() {
