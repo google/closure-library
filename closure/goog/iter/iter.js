@@ -30,7 +30,7 @@ goog.require('goog.math');
 
 
 /**
- * @typedef {goog.iter.Iterator|{length:number}|{__iterator__}}
+ * @typedef {{length:number}|{__iterator__}}
  */
 goog.iter.Iterable;
 
@@ -427,7 +427,8 @@ goog.iter.chain = function(var_args) {
  * Takes a single iterable containing zero or more iterables and returns one
  * iterator that will iterate over each one in the order given.
  * @see https://goo.gl/5NRp5d
- * @param {goog.iter.Iterable} iterable The iterable of iterables to chain.
+ * @param {goog.iter.Iterator<?>|goog.iter.Iterable} iterable The iterable of
+ *     iterables to chain.
  * @return {!goog.iter.Iterator<VALUE>} Returns a new iterator that will
  *     iterate over all the contents of the iterables contained within
  *     `iterable`.
@@ -755,8 +756,8 @@ goog.iter.repeat = function(value) {
  * `iterable`. For example, the array {@code [1, 2, 3, 4, 5]} yields
  * {@code 1 -> 3 -> 6 -> 10 -> 15}.
  * @see http://docs.python.org/3.2/library/itertools.html#itertools.accumulate
- * @param {!goog.iter.Iterable} iterable The iterable of numbers to
- *     accumulate.
+ * @param {!goog.iter.Iterator<number>|!goog.iter.Iterable} iterable The
+ *     iterable of numbers to accumulate.
  * @return {!goog.iter.Iterator<number>} A new iterator that returns the
  *     numbers in the series.
  */
@@ -995,7 +996,7 @@ goog.iter.groupBy = function(iterable, opt_keyFunc) {
  * Similar to {@see goog.iter.map} but allows the function to accept multiple
  * arguments from the iterable.
  *
- * @param {!goog.iter.Iterable} iterable The iterable of
+ * @param {!goog.iter.Iterator<?>|!goog.iter.Iterable} iterable The iterable of
  *     iterables to iterate over.
  * @param {function(this:THIS,...*):RESULT} f The function to call for every
  *     element.  This function takes N+2 arguments, where N represents the
