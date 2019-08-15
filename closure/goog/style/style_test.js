@@ -33,7 +33,6 @@ goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.MockUserAgent');
-goog.require('goog.testing.TestCase');
 goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -57,8 +56,6 @@ let mockUserAgent;
 
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
-  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
 
   const viewportSize = goog.dom.getViewportSize();
   // When the window is too short or not wide enough, some tests, especially
@@ -305,16 +302,21 @@ function testGetBackgroundColor() {
         'Background colors should be equal', goog.style.getBackgroundColor(src),
         goog.style.getBackgroundColor(dest));
 
+    let c = null;
     try {
       // goog.color.parse throws a generic exception if handed input it
       // doesn't understand.
-      const c = goog.color.parse(bgColor);
-      assertEquals('rgb(255,0,0)', goog.color.hexToRgbStyle(c.hex));
+      c = goog.color.parse(bgColor);
     } catch (e) {
       // Internet Explorer is unable to parse colors correctly after test 4.
       // Other browsers may vary, but all should be able to handle straight
       // hex input.
       assertFalse('Should be able to parse color "' + bgColor + '"', i < 5);
+      break;
+    }
+    if (i <= 5) {
+      assertEquals(
+          'parse test', 'rgb(255,0,0)', goog.color.hexToRgbStyle(c.hex));
     }
   }
 }

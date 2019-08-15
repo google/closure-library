@@ -17,7 +17,6 @@ goog.setTestOnly();
 
 const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
 const FieldMock = goog.require('goog.testing.editor.FieldMock');
-const JsUnitException = goog.require('goog.testing.JsUnitException');
 const Range = goog.require('goog.dom.Range');
 const TableEditor = goog.require('goog.editor.plugins.TableEditor');
 const TagName = goog.require('goog.dom.TagName');
@@ -67,9 +66,6 @@ testSuite({
   },
 
   setUp() {
-    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-
     testHelper = new TestHelper(dom.getElement('field'));
     testHelper.setUpEditableElement();
     field.focus();
@@ -92,23 +88,6 @@ testSuite({
     plugin.enable(fieldMock);
     assertTrue('Plugin should be enabled', plugin.isEnabled(fieldMock));
 
-    if (userAgent.GECKO) {
-      // This code path is executed only for GECKO browsers but we can't
-      // verify it because of a GECKO bug while reading the value of the
-      // command "enableObjectResizing".
-      // See https://bugzilla.mozilla.org/show_bug.cgi?id=506368
-      expectedFailures.expectFailureFor(userAgent.GECKO);
-      try {
-        const doc = plugin.getFieldDomHelper().getDocument();
-        assertTrue(
-            'Object resizing should be enabled',
-            doc.queryCommandValue('enableObjectResizing'));
-      } catch (e) {
-        // We need to marshal our exception in order for it to be handled
-        // properly.
-        expectedFailures.handleException(new JsUnitException(e));
-      }
-    }
     fieldMock.$verify();
   },
 

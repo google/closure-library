@@ -20,13 +20,10 @@ const NestedMessage = goog.require('proto2.TestAllTypes.NestedMessage');
 const OptionalGroup = goog.require('proto2.TestAllTypes.OptionalGroup');
 const RepeatedGroup = goog.require('proto2.TestAllTypes.RepeatedGroup');
 const TestAllTypes = goog.require('proto2.TestAllTypes');
-const TestCase = goog.require('goog.testing.TestCase');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
   setUp() {
-    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
   },
 
   testEqualsWithEmptyMessages() {
@@ -280,9 +277,8 @@ testSuite({
     source.setUnknown(999, 'foo');
     target.setUnknown(999, 'bar');
     target.copyFrom(source);
-    assertThrows(
-        'unknown fields are not copied',
-        goog.partial(assertObjectEquals, source, target));
+    // unknown fields are not copied
+    assertObjectNotEquals(source, target);
   },
 
   testMergeFromEmptyMessage() {
