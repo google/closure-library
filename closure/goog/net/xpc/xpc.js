@@ -53,8 +53,7 @@ goog.net.xpc.TransportTypes = {
   FRAME_ELEMENT_METHOD: 2,
   IFRAME_RELAY: 3,
   IFRAME_POLLING: 4,
-  NIX: 5,
-  DIRECT: 6
+  DIRECT: 5
 };
 
 
@@ -68,8 +67,7 @@ goog.net.xpc.TransportNames = {
   '2': 'FrameElementMethodTransport',
   '3': 'IframeRelayTransport',
   '4': 'IframePollingTransport',
-  '5': 'NixTransport',
-  '6': 'DirectTransport'
+  '5': 'DirectTransport'
 };
 
 

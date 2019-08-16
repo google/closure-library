@@ -43,7 +43,6 @@ goog.require('goog.net.xpc.DirectTransport');
 goog.require('goog.net.xpc.FrameElementMethodTransport');
 goog.require('goog.net.xpc.IframeRelayTransport');
 goog.require('goog.net.xpc.NativeMessagingTransport');
-goog.require('goog.net.xpc.NixTransport');
 goog.require('goog.net.xpc.TransportTypes');
 goog.require('goog.net.xpc.UriCfgFields');
 goog.require('goog.string');
@@ -304,8 +303,6 @@ goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
   } else if (
       goog.userAgent.IE && this.cfg_[goog.net.xpc.CfgFields.PEER_RELAY_URI]) {
     transportType = goog.net.xpc.TransportTypes.IFRAME_RELAY;
-  } else if (goog.userAgent.IE && goog.net.xpc.NixTransport.isNixSupported()) {
-    transportType = goog.net.xpc.TransportTypes.NIX;
   } else {
     transportType = goog.net.xpc.TransportTypes.UNDEFINED;
   }
@@ -345,9 +342,6 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
         this.transport_ = new goog.net.xpc.NativeMessagingTransport(
             this, this.cfg_[CfgFields.PEER_HOSTNAME], this.domHelper_,
             !!this.cfg_[CfgFields.ONE_SIDED_HANDSHAKE], protocolVersion);
-        break;
-      case goog.net.xpc.TransportTypes.NIX:
-        this.transport_ = new goog.net.xpc.NixTransport(this, this.domHelper_);
         break;
       case goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD:
         this.transport_ =
