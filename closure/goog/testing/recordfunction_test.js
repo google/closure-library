@@ -17,17 +17,11 @@ goog.setTestOnly('goog.testing.recordFunctionTest');
 
 goog.require('goog.functions');
 goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordConstructor');
 goog.require('goog.testing.recordFunction');
 
 const stubs = new goog.testing.PropertyReplacer();
-
-function setUp() {
-  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-}
 
 function tearDown() {
   stubs.reset();
@@ -174,7 +168,7 @@ function testAssertCallCount() {
   f('Bedazzler');
   f.assertCallCount(1);
 
-  const error = assertThrows(function() {
+  const error = assertThrowsJsUnitException(function() {
     f.assertCallCount(11);
   });
   assertEquals(error.comment, 'Expected 11 call(s), but was 1.');
@@ -182,7 +176,7 @@ function testAssertCallCount() {
   const comment =
       'This application has requested the Runtime to terminate it ' +
       'in an unusual way.';
-  const error2 = assertThrows(function() {
+  const error2 = assertThrowsJsUnitException(function() {
     f.assertCallCount(comment, 12);
   });
   assertEquals(error2.comment, 'Expected 12 call(s), but was 1. ' + comment);

@@ -18,7 +18,6 @@ goog.setTestOnly();
 const DebugError = goog.require('goog.debug.Error');
 const ErrorReporter = goog.require('goog.debug.ErrorReporter');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
-const TestCase = goog.require('goog.testing.TestCase');
 const errorcontext = goog.require('goog.debug.errorcontext');
 const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
@@ -59,9 +58,6 @@ function throwAnErrorWith(script, line, message, stack = undefined) {
 
 testSuite({
   setUp() {
-    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-
     stubs.set(goog.net, 'XhrIo', MockXhrIo);
     ErrorReporter.ALLOW_AUTO_PROTECT = true;
   },
@@ -340,7 +336,7 @@ testSuite({
   testHandleException_ignoresExceptionsDuringEventDispatch() {
     errorReporter = ErrorReporter.install('/errorreporter');
     events.listen(errorReporter, ErrorReporter.ExceptionEvent.TYPE, (event) => {
-      fail('This exception should be swallowed.');
+      throw new Error('This exception should be swallowed.');
     });
     errorReporter.handleException(new Error());
   },

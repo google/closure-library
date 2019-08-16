@@ -15,7 +15,6 @@
 goog.module('goog.testing.ui.styleTest');
 goog.setTestOnly();
 
-const TestCase = goog.require('goog.testing.TestCase');
 const dom = goog.require('goog.dom');
 const style = goog.require('goog.testing.ui.style');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -41,10 +40,6 @@ style.writeReferenceFrame(refPath);
 // node somewhere in the DOM structure.
 
 testSuite({
-  setUp() {
-    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-  },
 
   testCorrect() {
     const el = dom.getFirstElementChild(dom.getElement('correct'));
@@ -53,7 +48,7 @@ testSuite({
 
   testMissingClass() {
     const el = dom.getFirstElementChild(dom.getElement('missing-class'));
-    const e = assertThrows(() => {
+    const e = assertThrowsJsUnitException(() => {
       style.assertStructureMatchesReference(el, 'reference');
     });
     assertContains('all reference classes', e.message);
@@ -66,7 +61,7 @@ testSuite({
 
   testMissingChild() {
     const el = dom.getFirstElementChild(dom.getElement('missing-child'));
-    const e = assertThrows(() => {
+    const e = assertThrowsJsUnitException(() => {
       style.assertStructureMatchesReference(el, 'reference');
     });
     assertContains('same number of children', e.message);
@@ -74,7 +69,7 @@ testSuite({
 
   testExtraChild() {
     const el = dom.getFirstElementChild(dom.getElement('extra-child'));
-    const e = assertThrows(() => {
+    const e = assertThrowsJsUnitException(() => {
       style.assertStructureMatchesReference(el, 'reference');
     });
     assertContains('same number of children', e.message);

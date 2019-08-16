@@ -69,8 +69,6 @@ const neverResolvedGoogPromise = function() {
 let events;
 
 function setUp() {
-  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
   events = [];
 }
 
@@ -1154,6 +1152,7 @@ function testSetTestObj_alreadyInitialized() {
     testCase.setTestObj({test3: ok, test4: ok});
     fail('Overriding the test object should fail');
   } catch (e) {
+    goog.testing.TestCase.invalidateAssertionException(e);
     assertContains(
         'Test methods have already been configured.\n' +
             'Tests previously found:\ntest1\ntest2\n' +
