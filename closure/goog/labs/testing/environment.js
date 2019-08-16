@@ -97,7 +97,11 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    */
   setUp: goog.nullFunction,
 
-  /** Runs immediately after the tearDown phase of JsUnit tests. */
+  /**
+   * Runs immediately after the tearDown phase of JsUnit tests.
+   * @return {!IThenable<*>|undefined} An optional Promise which must be
+   *     resolved before the next test case is executed.
+   */
   tearDown: function() {
     // Make sure promises and other stuff that may still be scheduled, get a
     // chance to run (and throw errors).
@@ -314,12 +318,12 @@ goog.labs.testing.EnvironmentTestCase_.prototype.registerEnvironment_ =
 /** @override */
 goog.labs.testing.EnvironmentTestCase_.prototype.setUpPage = function() {
   var setUpPageFns = goog.array.map(this.environments_, function(env) {
-    return goog.bind(env.setUpPage, env);
-  }, this);
+    return () => env.setUpPage();
+  });
 
   // User defined setUpPage method.
   if (this.testobj_['setUpPage']) {
-    setUpPageFns.push(goog.bind(this.testobj_['setUpPage'], this.testobj_));
+    setUpPageFns.push(() => this.testobj_['setUpPage']());
   }
   return this.callAndChainPromises_(setUpPageFns);
 };
@@ -330,8 +334,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
   var setUpFns = [];
   // User defined configure method.
   if (this.testobj_['configureEnvironment']) {
-    setUpFns.push(
-        goog.bind(this.testobj_['configureEnvironment'], this.testobj_));
+    setUpFns.push(() => this.testobj_['configureEnvironment']());
   }
   var test = this.getCurrentTest();
   if (test instanceof goog.labs.testing.EnvironmentTest_) {
@@ -339,12 +342,12 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
   }
 
   goog.array.forEach(this.environments_, function(env) {
-    setUpFns.push(goog.bind(env.setUp, env));
+    setUpFns.push(() => env.setUp());
   }, this);
 
   // User defined setUp method.
   if (this.testobj_['setUp']) {
-    setUpFns.push(goog.bind(this.testobj_['setUp'], this.testobj_));
+    setUpFns.push(() => this.testobj_['setUp']());
   }
   return this.callAndChainPromises_(setUpFns);
 };
@@ -354,54 +357,85 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
  * Calls a chain of methods and makes sure to properly chain them if any of the
  * methods returns a thenable.
  * @param {!Array<function()>} fns
+ * @param {boolean=} ensureAllFnsCalled If true, this method calls each function
+ *     even if one of them throws an Error or returns a rejected Promise. If
+ *     there were any Errors thrown (or Promises rejected), the first Error will
+ *     be rethrown after all of the functions are called.
  * @return {!IThenable<*>|undefined}
  * @private
  */
 goog.labs.testing.EnvironmentTestCase_.prototype.callAndChainPromises_ =
-    function(fns) {
-  return goog.array.reduce(fns, function(previousResult, fn) {
-    if (goog.Thenable.isImplementedBy(previousResult) ||
-        (typeof goog.global['Promise'] === 'function' &&
-         previousResult instanceof goog.global['Promise'])) {
-      return previousResult.then(function() {
-        return fn();
-      });
+    function(fns, ensureAllFnsCalled) {
+  // Using await here (and making callAndChainPromises_ an async method)
+  // causes many tests across google3 to start failing with errors like this:
+  // "Timed out while waiting for a promise returned from setUp to resolve".
+
+  const isThenable = (v) => goog.Thenable.isImplementedBy(v) ||
+      (typeof goog.global['Promise'] === 'function' &&
+       v instanceof goog.global['Promise']);
+
+  // Record the first error that occurs so that it can be rethrown in the case
+  // where ensureAllFnsCalled is set.
+  let firstError;
+  const recordFirstError = (e) => {
+    if (!firstError) {
+      firstError = e instanceof Error ? e : new Error(e);
     }
-    return fn();
-  }, undefined /* initialValue */, this);
+  };
+
+  // Call the fns, chaining results that are Promises.
+  let lastFnResult;
+  for (const fn of fns) {
+    if (isThenable(lastFnResult)) {
+      // The previous fn was async, so chain the next fn.
+      const rejectedHandler = ensureAllFnsCalled ? (e) => {
+        recordFirstError(e);
+        return fn();
+      } : undefined;
+      lastFnResult = lastFnResult.then(() => fn(), rejectedHandler);
+    } else {
+      // The previous fn was not async, so simply call the next fn.
+      try {
+        lastFnResult = fn();
+      } catch (e) {
+        if (!ensureAllFnsCalled) {
+          throw e;
+        }
+        recordFirstError(e);
+      }
+    }
+  }
+
+  // After all of the fns have been called, either throw the first error if
+  // there was one, or otherwise return the result of the last fn.
+  const resultFn = () => {
+    if (firstError) {
+      throw firstError;
+    }
+    return lastFnResult;
+  };
+  return isThenable(lastFnResult) ? lastFnResult.then(resultFn, resultFn) :
+                                    resultFn();
 };
 
 
 /** @override */
 goog.labs.testing.EnvironmentTestCase_.prototype.tearDown = function() {
-  var firstException;
+  var tearDownFns = [];
   // User defined tearDown method.
   if (this.testobj_['tearDown']) {
-    try {
-      this.testobj_['tearDown']();
-    } catch (e) {
-      if (!firstException) {
-        firstException = e || new Error('Exception thrown: ' + String(e));
-      }
-    }
+    tearDownFns.push(() => this.testobj_['tearDown']());
   }
 
   // Execute the tearDown methods for the environment in the reverse order
   // in which they were registered to "unfold" the setUp.
   goog.array.forEachRight(this.environments_, function(env) {
-    // For tearDowns between tests make sure they run as much as possible to
-    // avoid interference between tests.
-    try {
-      env.tearDown();
-    } catch (e) {
-      if (!firstException) {
-        firstException = e || new Error('Exception thrown: ' + String(e));
-      }
-    }
+    tearDownFns.push(() => env.tearDown());
   });
-  if (firstException) {
-    throw firstException;
-  }
+  // For tearDowns between tests make sure they run as much as possible to avoid
+  // interference between tests.
+  return this.callAndChainPromises_(
+      tearDownFns, /* ensureAllFnsCalled= */ true);
 };
 
 

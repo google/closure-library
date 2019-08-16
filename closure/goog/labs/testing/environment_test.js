@@ -15,10 +15,8 @@
 goog.provide('goog.labs.testing.environmentTest');
 goog.setTestOnly('goog.labs.testing.environmentTest');
 
-goog.require('goog.Promise');
 goog.require('goog.asserts');
 goog.require('goog.labs.testing.Environment');
-goog.require('goog.testing.MockClock');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.TestCase');
@@ -79,7 +77,7 @@ function tearDown() {
   mockControl.$tearDown();
 }
 
-function testLifecycle() {
+async function testLifecycle() {
   testing = true;
 
   const envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
@@ -112,13 +110,13 @@ function testLifecycle() {
   envOne.tearDownPage();
 
   mockControl.$replayAll();
-  testCase.runTests();
+  await runTestsReturningPromise(testCase);
   mockControl.$verifyAll();
 
   testing = false;
 }
 
-function testLifecycle_withObject() {
+async function testLifecycle_withObject() {
   testing = true;
 
   const envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
@@ -169,14 +167,13 @@ function testLifecycle_withObject() {
   envOne.tearDownPage();
 
   mockControl.$replayAll();
-  testCase.runTests();
+  await runTestsReturningPromise(testCase);
   mockControl.$verifyAll();
 
   testing = false;
 }
 
-function testLifecycle_withPromises() {
-  const mockClock = new goog.testing.MockClock(true /* autoinstall */);
+async function testLifecycle_withPromises() {
   testing = true;
 
   const envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
@@ -201,67 +198,39 @@ function testLifecycle_withPromises() {
   };
   testCase.setTestObj(testObj);
 
-  // Make the testCase.runTestsReturningPromise() a pending operation so we can
-  // use assertNextCall also for checking the first call.
-  let resultPromise;
-  let pendingOp = goog.Promise.withResolver();
-  pendingOp.promise.then(function() {
-    resultPromise = runTestsReturningPromise(testCase);
-  });
-  let nextOp = null;
-  const finishPendingOp = function() {
-    pendingOp.resolve();
-    pendingOp = nextOp;
-    nextOp = null;
-    mockClock.tick();
-  };
-  const expectCallTo = function(expectedCall) {
-    assertNull(nextOp);
-    nextOp = goog.Promise.withResolver();
-    expectedCall().$returns(nextOp.promise);
-    mockControl.$replayAll();
-    finishPendingOp();
-    mockControl.$verifyAll();
-    mockControl.$resetAll();
-  };
-  // Make sure there are no hanging expecations dropped by the first $resetAll.
-  mockControl.$replayAll();
-  mockControl.$verifyAll();
-  mockControl.$resetAll();
+  envOne.setUpPage();
+  envTwo.setUpPage();
+  testObj.setUpPage();
 
-  expectCallTo(envOne.setUpPage);
-  expectCallTo(envTwo.setUpPage);
-  expectCallTo(testObj.setUpPage);
-  expectCallTo(testObj.configureEnvironment);
-  expectCallTo(envOne.setUp);
-  expectCallTo(envTwo.setUp);
-  expectCallTo(testObj.setUp);
-  expectCallTo(testObj.testFoo);
-
-  mockControl.$resetAll();
+  testObj.configureEnvironment();
+  envOne.setUp();
+  envTwo.setUp();
+  testObj.setUp();
+  testObj.testFoo();
   testObj.tearDown();
   envTwo.tearDown();
   envOne.tearDown();
 
-  expectCallTo(testObj.configureEnvironment);
-  expectCallTo(testObj.testBar.configureEnvironment);
-  expectCallTo(envOne.setUp);
-  expectCallTo(envTwo.setUp);
-  expectCallTo(testObj.setUp);
-  expectCallTo(testObj.testBar.setUp);
-  expectCallTo(testObj.testBar.test);
-
-  mockControl.$resetAll();
+  testObj.configureEnvironment();
+  testObj.testBar.configureEnvironment();
+  envOne.setUp();
+  envTwo.setUp();
+  testObj.setUp();
+  testObj.testBar.setUp();
+  testObj.testBar.test();
   testObj.testBar.tearDown();
   testObj.tearDown();
   envTwo.tearDown();
   envOne.tearDown();
+
   testObj.tearDownPage();
   envTwo.tearDownPage();
   envOne.tearDownPage();
+
   mockControl.$replayAll();
-  finishPendingOp();
-  const result = mockClock.tickPromise(resultPromise);
+
+  const result = await runTestsReturningPromise(testCase);
+
   mockControl.$verifyAll();
   assertTrue(result.complete);
   assertEquals(2, result.totalCount);
@@ -270,7 +239,6 @@ function testLifecycle_withPromises() {
   assertEquals(0, result.errors.length);
 
   testing = false;
-  mockClock.uninstall();
 }
 
 function testTearDownWithMockControl() {
@@ -372,20 +340,20 @@ function testTestSuiteTests() {
   testing = false;
 }
 
-function testSetupReturnsValue() {
+async function testSetupReturnsValue() {
   testing = true;
 
   new goog.labs.testing.Environment();
 
   // Expect the environment to pass on any value returned by the user defined
   // setUp method.
-  assertEquals('hello', testCase.setUp());
+  assertEquals('hello', await testCase.setUp());
 
   testCase.tearDown();
   testing = false;
 }
 
-function testMockClock() {
+async function testMockClock() {
   testing = true;
 
   new goog.labs.testing.Environment().withMockClock();
@@ -396,13 +364,13 @@ function testMockClock() {
     }, 200);
   });
 
-  testCase.runTests();
+  await runTestsReturningPromise(testCase);
   assertTestFailure(testCase, 'testThatThrowsEventually', 'LateErrorMessage');
 
   testing = false;
 }
 
-function testMockControl() {
+async function testMockControl() {
   testing = true;
 
   const env = new goog.labs.testing.Environment().withMockControl();
@@ -414,13 +382,13 @@ function testMockControl() {
     test();
   });
 
-  testCase.runTests();
+  await runTestsReturningPromise(testCase);
   assertNull(env.mockClock);
 
   testing = false;
 }
 
-function testMock() {
+async function testMock() {
   testing = true;
 
   const env = new goog.labs.testing.Environment().withMockControl();
@@ -435,12 +403,12 @@ function testMock() {
     env.mockControl.$verifyAll();
   });
 
-  testCase.runTests();
+  await runTestsReturningPromise(testCase);
 
   testing = false;
 }
 
-function testLooseMock() {
+async function testLooseMock() {
   testing = true;
 
   var env = new goog.labs.testing.Environment().withMockControl();
@@ -461,12 +429,12 @@ function testLooseMock() {
     env.mockControl.$verifyAll();
   });
 
-  testCase.runTests();
+  await runTestsReturningPromise(testCase);
 
   testing = false;
 }
 
-function testLooseMockIgnoresUnexpected() {
+async function testLooseMockIgnoresUnexpected() {
   testing = true;
 
   var env = new goog.labs.testing.Environment().withMockControl();
@@ -486,7 +454,7 @@ function testLooseMockIgnoresUnexpected() {
     env.mockControl.$verifyAll();
   });
 
-  testCase.runTests();
+  await runTestsReturningPromise(testCase);
 
   testing = false;
 }
