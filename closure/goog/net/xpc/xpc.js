@@ -32,24 +32,15 @@
  * @suppress {underscore}
  */
 
-/*
-TODO(user)
-- resolve fastback issues in Safari (IframeRelayTransport)
- */
-
-
-/**
- * Namespace for CrossPageChannel
- */
 goog.provide('goog.net.xpc');
 goog.provide('goog.net.xpc.CfgFields');
 goog.provide('goog.net.xpc.ChannelStates');
 goog.provide('goog.net.xpc.TransportNames');
 goog.provide('goog.net.xpc.TransportTypes');
 goog.provide('goog.net.xpc.UriCfgFields');
-goog.require('goog.log');
 
 goog.forwardDeclare('goog.net.xpc.CrossPageChannel');  // circular
+goog.require('goog.log');
 
 
 /**
@@ -62,9 +53,8 @@ goog.net.xpc.TransportTypes = {
   FRAME_ELEMENT_METHOD: 2,
   IFRAME_RELAY: 3,
   IFRAME_POLLING: 4,
-  FLASH: 5,
-  NIX: 6,
-  DIRECT: 7
+  NIX: 5,
+  DIRECT: 6
 };
 
 
@@ -78,9 +68,8 @@ goog.net.xpc.TransportNames = {
   '2': 'FrameElementMethodTransport',
   '3': 'IframeRelayTransport',
   '4': 'IframePollingTransport',
-  '5': 'FlashTransport',
-  '6': 'NixTransport',
-  '7': 'DirectTransport'
+  '5': 'NixTransport',
+  '6': 'DirectTransport'
 };
 
 
