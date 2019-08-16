@@ -172,7 +172,6 @@ goog.dom.SavedCaretRange.prototype.restoreInternal = function() {
 /**
  * Dispose the saved range and remove the carets from the DOM.
  * @override
- * @protected
  */
 goog.dom.SavedCaretRange.prototype.disposeInternal = function() {
   this.removeCarets();
