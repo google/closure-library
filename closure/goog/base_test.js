@@ -554,6 +554,8 @@ function testIsNumber() {
   assertFalse('string should not be a number', goog.isNumber(string));
   assertFalse('null should not be a number', goog.isNumber(nullVar));
   assertFalse('undefined should not be a number', goog.isNumber(notDefined));
+  assertTrue('NaN should be a number', goog.isNumber(NaN));
+  assertTrue('Infinity should be a number', goog.isNumber(Infinity));
 }
 
 function testIsFunction() {
