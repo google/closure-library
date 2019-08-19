@@ -50,10 +50,9 @@ goog.require('goog.log');
 goog.net.xpc.TransportTypes = {
   UNDEFINED: 0,
   NATIVE_MESSAGING: 1,
-  FRAME_ELEMENT_METHOD: 2,
-  IFRAME_RELAY: 3,
-  IFRAME_POLLING: 4,
-  DIRECT: 5
+  IFRAME_RELAY: 2,
+  IFRAME_POLLING: 3,
+  DIRECT: 4
 };
 
 
@@ -64,10 +63,9 @@ goog.net.xpc.TransportTypes = {
  */
 goog.net.xpc.TransportNames = {
   '1': 'NativeMessagingTransport',
-  '2': 'FrameElementMethodTransport',
-  '3': 'IframeRelayTransport',
-  '4': 'IframePollingTransport',
-  '5': 'DirectTransport'
+  '2': 'IframeRelayTransport',
+  '3': 'IframePollingTransport',
+  '4': 'DirectTransport'
 };
 
 

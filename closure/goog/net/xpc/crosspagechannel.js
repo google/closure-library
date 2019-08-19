@@ -40,7 +40,6 @@ goog.require('goog.net.xpc.CfgFields');
 goog.require('goog.net.xpc.ChannelStates');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.DirectTransport');
-goog.require('goog.net.xpc.FrameElementMethodTransport');
 goog.require('goog.net.xpc.IframeRelayTransport');
 goog.require('goog.net.xpc.NativeMessagingTransport');
 goog.require('goog.net.xpc.TransportTypes');
@@ -298,8 +297,6 @@ goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
       // typeof window.postMessage returns "object"
       (goog.userAgent.IE && window.postMessage)) {
     transportType = goog.net.xpc.TransportTypes.NATIVE_MESSAGING;
-  } else if (goog.userAgent.GECKO) {
-    transportType = goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD;
   } else if (
       goog.userAgent.IE && this.cfg_[goog.net.xpc.CfgFields.PEER_RELAY_URI]) {
     transportType = goog.net.xpc.TransportTypes.IFRAME_RELAY;
@@ -342,10 +339,6 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
         this.transport_ = new goog.net.xpc.NativeMessagingTransport(
             this, this.cfg_[CfgFields.PEER_HOSTNAME], this.domHelper_,
             !!this.cfg_[CfgFields.ONE_SIDED_HANDSHAKE], protocolVersion);
-        break;
-      case goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD:
-        this.transport_ =
-            new goog.net.xpc.FrameElementMethodTransport(this, this.domHelper_);
         break;
       case goog.net.xpc.TransportTypes.IFRAME_RELAY:
         this.transport_ =
