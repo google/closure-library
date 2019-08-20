@@ -64,6 +64,20 @@ function skipTests(line) {
   return !/goog\.addDependency\('[^']*_test\.js/.test(line);
 }
 
+/**
+ * Sorts the lines of a string, since the specific order of the addDependency
+ * lines is not strictly important. TODO(sdh): ideally we would not need to
+ * do this, but due to some internal work moving these files, we end up with
+ * a different order.  A better fix would be to simply use the same tool and
+ * then the golden tests would be unnecessary.
+ *
+ * @param {string} str
+ * @return {string}
+ */
+function sortLines(str) {
+  return str.split('\n').sort().join('\n');
+}
+
 describe('closure-make-deps', function() {
   const tempFile = path.join(os.tmpdir(), 'closuremakejsdepstmp.js');
   const tempFileRelativePath = path.relative(CLOSURE_PATH, tempFile);
@@ -107,10 +121,10 @@ describe('closure-make-deps', function() {
     expect(result.errors.filter(e => e.fatal).map(e => e.toString()))
         .toEqual([]);
 
-    let resultLines = result.text.split('\n');
+    let resultLines = result.text.split('\n').sort();
     resultLines = resultLines.filter(skipTests);
 
-    let expectedLines = closureDepsContents.split('\n');
+    let expectedLines = closureDepsContents.split('\n').sort();
     expectedLines = expectedLines.filter(skipTests);
 
     expect(resultLines).toEqual(expectedLines);
@@ -125,7 +139,7 @@ describe('closure-make-deps', function() {
 
     const result = await execute(flags);
     expect(result.errors).toEqual([]);
-    expect(result.text).toEqual(closureDepsContents);
+    expect(sortLines(result.text)).toEqual(sortLines(closureDepsContents));
   });
 
   it('input deps file forward declares symbols', async function() {
@@ -182,6 +196,6 @@ describe('closure-make-deps', function() {
 
     const result = await execute(flags);
     expect(result.errors).toEqual([]);
-    expect(result.text).toEqual(expectedContents);
+    expect(sortLines(result.text)).toEqual(sortLines(expectedContents));
   });
 });
