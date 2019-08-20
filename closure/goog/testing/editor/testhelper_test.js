@@ -16,7 +16,6 @@ goog.module('goog.testing.editor.TestHelperTest');
 goog.setTestOnly();
 
 const TagName = goog.require('goog.dom.TagName');
-const TestCase = goog.require('goog.testing.TestCase');
 const TestHelper = goog.require('goog.testing.editor.TestHelper');
 const dom = goog.require('goog.dom');
 const node = goog.require('goog.editor.node');
@@ -77,9 +76,6 @@ function setUpAssertHtmlMatches() {
 
 testSuite({
   setUp() {
-    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-
     root = dom.getElement('root');
     dom.removeChildren(root);
     helper = new TestHelper(root);
@@ -136,7 +132,8 @@ testSuite({
   testAssertHtmlMismatchText() {
     setUpAssertHtmlMatches();
 
-    const e = assertThrows('Should fail due to mismatched text', () => {
+    // Should fail due to mismatched text
+    const e = assertThrowsJsUnitException(() => {
       helper.assertHtmlMatches(
           '<div style="display: none; font-size: 2em">' +
           '[[IE GECKO]]NonWebKitText<div class="IE"><p class="WEBKIT">' +
@@ -149,7 +146,8 @@ testSuite({
   testAssertHtmlMismatchTag() {
     setUpAssertHtmlMatches();
 
-    const e = assertThrows('Should fail due to mismatched tag', () => {
+    // Should fail due to mismatched tag
+    const e = assertThrowsJsUnitException(() => {
       helper.assertHtmlMatches(
           '<span style="display: none; font-size: 2em">[[IE EDGE GECKO]]' +
           'NonWebKitText<div class="IE EDGE"><p class="WEBKIT">' +
@@ -162,7 +160,8 @@ testSuite({
   testAssertHtmlMismatchStyle() {
     setUpAssertHtmlMatches();
 
-    const e = assertThrows('Should fail due to mismatched style', () => {
+    // Should fail due to mismatched style
+    const e = assertThrowsJsUnitException(() => {
       helper.assertHtmlMatches(
           '<div style="display: none; font-size: 3em">[[IE EDGE GECKO]]' +
           'NonWebKitText<div class="IE EDGE"><p class="WEBKIT">' +
@@ -175,7 +174,8 @@ testSuite({
   testAssertHtmlMismatchOptionalText() {
     setUpAssertHtmlMatches();
 
-    const e = assertThrows('Should fail due to mismatched style', () => {
+    // Should fail due to mismatched style
+    const e = assertThrowsJsUnitException(() => {
       helper.assertHtmlMatches(
           '<div style="display: none; font-size: 2em">' +
           '[[IE EDGE GECKO]]Bad<div class="IE EDGE"><p class="WEBKIT">' +
