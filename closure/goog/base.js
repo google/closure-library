@@ -4150,7 +4150,9 @@ goog.identity_ = function(s) {
  */
 goog.createTrustedTypesPolicy = function(name) {
   var policy = null;
-  if (typeof TrustedTypes === 'undefined' || !TrustedTypes.createPolicy) {
+  // TODO(koto): Remove window.TrustedTypes variant when the newer API ships.
+  var policyFactory = goog.global.trustedTypes || goog.global.TrustedTypes;
+  if (!policyFactory || !policyFactory.createPolicy) {
     return policy;
   }
   // TrustedTypes.createPolicy throws if called with a name that is already
@@ -4159,7 +4161,7 @@ goog.createTrustedTypesPolicy = function(name) {
   // will fall back to using regular Safe Types.
   // TODO(koto): Remove catching once createPolicy API stops throwing.
   try {
-    policy = TrustedTypes.createPolicy(name, {
+    policy = policyFactory.createPolicy(name, {
       createHTML: goog.identity_,
       createScript: goog.identity_,
       createScriptURL: goog.identity_,
@@ -4175,10 +4177,10 @@ goog.createTrustedTypesPolicy = function(name) {
   // to TrustedURL. This is a best-effort attempt. If that does not succeed,
   // the application fails close - TrustedURL values will simply be required
   // at all relevant sinks.
-  if (typeof TrustedURL !== 'undefined' && TrustedTypes.getPolicyNames &&
-      TrustedTypes.getPolicyNames().indexOf('default') === -1) {
+  if (goog.global.TrustedURL && policyFactory.getPolicyNames &&
+      policyFactory.getPolicyNames().indexOf('default') === -1) {
     try {
-      TrustedTypes.createPolicy('default', {createURL: goog.identity_}, true);
+      policyFactory.createPolicy('default', {createURL: goog.identity_}, true);
     } catch (e) {
       goog.logToConsole_(e.message);
     }
