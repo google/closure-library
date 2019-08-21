@@ -189,7 +189,7 @@ goog.testing.TestRunner.prototype.isInitialized = function() {
  * @return {boolean} Whether the test runner is not active.
  */
 goog.testing.TestRunner.prototype.isFinished = function() {
-  return this.errors.length > 0 || this.isComplete();
+  return this.hasErrors() || this.isComplete();
 };
 
 
@@ -278,7 +278,7 @@ goog.testing.TestRunner.prototype.getReport = function(opt_verbose) {
   if (this.testCase) {
     report.push(this.testCase.getReport(opt_verbose));
   }
-  if (this.errors.length > 0) {
+  if (this.hasErrors()) {
     report.push('JavaScript errors detected by test runner:');
     report.push.apply(report, this.errors);
     report.push('\n');
@@ -316,7 +316,13 @@ goog.testing.TestRunner.prototype.execute = function() {
         'before execute can be called.');
   }
 
+  // TODO(nickreid): Move this behaviour into `TestCase`.
   if (this.strict_ && this.testCase.getCount() == 0) {
+    // Make sure the internal state of the case says it ran. The case will still
+    // vaccusously fail from the explict error thrown below.
+    this.testCase.started = true;
+    this.testCase.running = false;
+
     throw new Error(
         'No tests found in given test case: ' + this.testCase.getName() + '. ' +
         'By default, the test runner fails if a test case has no tests. ' +
@@ -353,7 +359,7 @@ goog.testing.TestRunner.TEST_LOG_ID = 'closureTestRunnerLog';
  */
 goog.testing.TestRunner.prototype.onComplete_ = function() {
   var log = this.testCase.getReport(true);
-  if (this.errors.length > 0) {
+  if (this.hasErrors()) {
     log += '\n' + this.errors.join('\n');
   }
 

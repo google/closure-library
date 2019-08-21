@@ -373,5 +373,28 @@ testSuite({
     assertEquals(
         0, frame.getDomHelper().getElementsByTagNameAndClass('iframe').length);
     assertNull(frame.iframeEl_);
-  }
+  },
+
+  /**
+   * @see b/139483434
+   * @return {!Promise<?>}
+   */
+  testUnhandledError_inIframe_isNotConsideredCompletion() {
+    const testFile = 'testdata/fake_failing_test_with_unhandled_error.html';
+    testRunner = new MultiTestRunner().setPoolSize(1).addTests([testFile]);
+
+    const promise = createEventPromise(testRunner, 'testsFinished');
+
+    testRunner.render(document.getElementById('runner'));
+    testRunner.start();
+
+    return promise.then(function(results) {
+      const testResults = processTestResults(results['allTestResults']);
+      const failureReports = testResults.failureReports;
+      const failedTests = testRunner.getTestsThatFailed();
+      assertEquals(1, failureReports.length);
+      assertEquals(1, failedTests.length);
+      assertArrayContainsString(testFile, failedTests);
+    });
+  },
 });

@@ -35,6 +35,7 @@ goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.testing.TestCase');
+goog.require('goog.testing.TestRunner');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ServerChart');
 goog.require('goog.ui.TableSorter');
@@ -106,11 +107,14 @@ goog.testing.MultiTestRunner.DEFAULT_TIMEOUT_MS = 45 * 1000;
 
 /**
  * Messages corresponding to the numeric states.
- * @type {Array<string>}
+ * @enum {string}
  */
-goog.testing.MultiTestRunner.STATES = [
-  'waiting for test runner', 'initializing tests', 'waiting for tests to finish'
-];
+goog.testing.MultiTestRunner.State = {
+  WAITING: 'waiting for test runner',
+  INITIALIZING: 'initializing tests',
+  RUNNING: 'waiting for tests to finish',
+  COMPLETE: 'tests finished',
+};
 
 
 /**
@@ -138,7 +142,7 @@ goog.testing.MultiTestRunner.prototype.basePath_ = '';
 
 /**
  * A set of tests that have finished.  All extant keys map to true.
- * @type {Object<boolean>}
+ * @type {?Object<boolean>}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.finished_ = null;
@@ -250,7 +254,7 @@ goog.testing.MultiTestRunner.prototype.stats_ = null;
 
 /**
  * Reference to the start button element.
- * @type {HTMLButtonElement}
+ * @type {?HTMLButtonElement}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.startButtonEl_ = null;
@@ -258,7 +262,7 @@ goog.testing.MultiTestRunner.prototype.startButtonEl_ = null;
 
 /**
  * Reference to the stop button element.
- * @type {HTMLButtonElement}
+ * @type {?HTMLButtonElement}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.stopButtonEl_ = null;
@@ -266,7 +270,7 @@ goog.testing.MultiTestRunner.prototype.stopButtonEl_ = null;
 
 /**
  * Reference to the log element.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.logEl_ = null;
@@ -274,7 +278,7 @@ goog.testing.MultiTestRunner.prototype.logEl_ = null;
 
 /**
  * Reference to the report element.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.reportEl_ = null;
@@ -282,7 +286,7 @@ goog.testing.MultiTestRunner.prototype.reportEl_ = null;
 
 /**
  * Reference to the stats element.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.statsEl_ = null;
@@ -290,7 +294,7 @@ goog.testing.MultiTestRunner.prototype.statsEl_ = null;
 
 /**
  * Reference to the progress bar's element.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.progressEl_ = null;
@@ -298,7 +302,7 @@ goog.testing.MultiTestRunner.prototype.progressEl_ = null;
 
 /**
  * Reference to the progress bar's inner row element.
- * @type {HTMLTableRowElement}
+ * @type {?HTMLTableRowElement}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.progressRow_ = null;
@@ -306,7 +310,7 @@ goog.testing.MultiTestRunner.prototype.progressRow_ = null;
 
 /**
  * Reference to the log tab.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.logTabEl_ = null;
@@ -314,7 +318,7 @@ goog.testing.MultiTestRunner.prototype.logTabEl_ = null;
 
 /**
  * Reference to the report tab.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.reportTabEl_ = null;
@@ -322,7 +326,7 @@ goog.testing.MultiTestRunner.prototype.reportTabEl_ = null;
 
 /**
  * Reference to the stats tab.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.statsTabEl_ = null;
@@ -1273,96 +1277,95 @@ goog.testing.MultiTestRunner.TestFrame = function(
    * @private {!Object<string,!Array<!goog.testing.TestCase.IResult>>}
    */
   this.testResults_ = {};
+
+  /**
+   * Reference to the iframe.
+   * @type {?HTMLIFrameElement}
+   * @private
+   */
+  this.iframeEl_ = null;
+
+
+  /**
+   * Whether the iframe for the current test has loaded.
+   * @type {boolean}
+   * @private
+   */
+  this.iframeLoaded_ = false;
+
+
+  /**
+   * The test file being run.
+   * @type {string}
+   * @private
+   */
+  this.testFile_ = '';
+
+
+  /**
+   * The report returned from the test.
+   * @type {string}
+   * @private
+   */
+  this.report_ = '';
+
+
+  /**
+   * The total time loading and running the test in milliseconds.
+   * @type {number}
+   * @private
+   */
+  this.totalTime_ = 0;
+
+
+  /**
+   * The actual runtime of the test in milliseconds.
+   * @type {number}
+   * @private
+   */
+  this.runTime_ = 0;
+
+
+  /**
+   * The number of files loaded by the test.
+   * @type {number}
+   * @private
+   */
+  this.numFilesLoaded_ = 0;
+
+
+  /**
+   * Whether the test was successful, null if no result has been returned yet.
+   * @type {?boolean}
+   * @private
+   */
+  this.isSuccess_ = null;
+
+
+  /**
+   * Timestamp for the when the test was started.
+   * @type {number}
+   * @private
+   */
+  this.startTime_ = 0;
+
+
+  /**
+   * Timestamp for the last state, used to determine timeouts.
+   * @type {number}
+   * @private
+   */
+  this.lastStateTime_ = 0;
+
+
+  /**
+   * The state of the active test.
+   * @type {!goog.testing.MultiTestRunner.State}
+   * @private
+   */
+  this.currentState_ = goog.testing.MultiTestRunner.State.WAITING;
 };
 goog.inherits(goog.testing.MultiTestRunner.TestFrame, goog.ui.Component);
-
-
-/**
- * Reference to the iframe.
- * @type {HTMLIFrameElement}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.iframeEl_ = null;
-
-
-/**
- * Whether the iframe for the current test has loaded.
- * @type {boolean}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.iframeLoaded_ = false;
-
-
-/**
- * The test file being run.
- * @type {string}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.testFile_ = '';
-
-
-/**
- * The report returned from the test.
- * @type {string}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.report_ = '';
-
-
-/**
- * The total time loading and running the test in milliseconds.
- * @type {number}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.totalTime_ = 0;
-
-
-/**
- * The actual runtime of the test in milliseconds.
- * @type {number}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.runTime_ = 0;
-
-
-/**
- * The number of files loaded by the test.
- * @type {number}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.numFilesLoaded_ = 0;
-
-
-/**
- * Whether the test was successful, null if no result has been returned yet.
- * @type {?boolean}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.isSuccess_ = null;
-
-
-/**
- * Timestamp for the when the test was started.
- * @type {number}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.startTime_ = 0;
-
-
-/**
- * Timestamp for the last state, used to determine timeouts.
- * @type {number}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.lastStateTime_ = 0;
-
-
-/**
- * The state of the active test.
- * @type {number}
- * @private
- */
-goog.testing.MultiTestRunner.TestFrame.prototype.currentState_ = 0;
 
 
 /** @override */
@@ -1386,7 +1389,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.runTest = function(testFile) {
   }
 
   this.iframeLoaded_ = false;
-  this.currentState_ = 0;
+  this.currentState_ = goog.testing.MultiTestRunner.State.WAITING;
   this.isSuccess_ = null;
   this.report_ = '';
   this.testResults_ = {};
@@ -1506,49 +1509,53 @@ goog.testing.MultiTestRunner.TestFrame.prototype.onIframeLoaded_ = function(e) {
  */
 goog.testing.MultiTestRunner.TestFrame.prototype.checkForCompletion_ =
     function() {
-  var js = goog.dom.getFrameContentWindow(this.iframeEl_);
+  var frameWindow = goog.dom.getFrameContentWindow(this.iframeEl_);
+  var /** @type {?goog.testing.TestRunner} */ frameTestRunner =
+      frameWindow['G_testRunner'];
+
   switch (this.currentState_) {
-    case 0:
-      if (this.iframeLoaded_ && js['G_testRunner']) {
+    case goog.testing.MultiTestRunner.State.WAITING:
+      if (this.iframeLoaded_ && frameTestRunner) {
         this.lastStateTime_ = goog.now();
-        this.currentState_++;
+        this.currentState_ = goog.testing.MultiTestRunner.State.INITIALIZING;
       }
       break;
-    case 1:
-      if (js['G_testRunner']['isInitialized']()) {
+
+    case goog.testing.MultiTestRunner.State.INITIALIZING:
+      if (frameTestRunner.isInitialized()) {
         this.lastStateTime_ = goog.now();
-        this.currentState_++;
+        this.currentState_ = goog.testing.MultiTestRunner.State.RUNNING;
       }
       break;
-    case 2:
-      if (js['G_testRunner']['isFinished']()) {
-        var tr = js['G_testRunner'];
-        this.isSuccess_ = tr['isSuccess']();
-        this.report_ = tr['getReport'](this.verbosePasses_);
-        this.testResults_ = tr['getTestResults']();
-        // If there is a syntax error, or no tests, it's not possible to get the
-        // individual test method results from TestCase. So just create one here
-        // based on the test report and filename.
-        if (goog.object.isEmpty(this.testResults_)) {
-          // Existence of a report is a signal of a test failure by the test
-          // runner.
-          this.testResults_[this.testFile_] = this.isSuccess_ ? [] : [{
-            'message': this.report_,
-            'source': this.testFile_,
-            'stacktrace': ''
-          }];
-        }
-        this.runTime_ = tr['getRunTime']();
-        this.numFilesLoaded_ = tr['getNumFilesLoaded']();
-        this.finish_();
-        return;
+
+    case goog.testing.MultiTestRunner.State.RUNNING:
+      if (!frameTestRunner.isComplete()) {
+        break;
       }
+
+      this.currentState_ = goog.testing.MultiTestRunner.State.COMPLETE;
+      this.isSuccess_ = frameTestRunner.isSuccess();
+      this.report_ = frameTestRunner.getReport(this.verbosePasses_);
+      this.testResults_ = frameTestRunner.getTestResults() || {};
+      // If there is a syntax error, or no tests, it's not possible to get the
+      // individual test method results from TestCase. So just create one here
+      // based on the test report and filename.
+      if (goog.object.isEmpty(this.testResults_)) {
+        // Existence of a report is a signal of a test failure by the test
+        // runner.
+        this.testResults_[this.testFile_] = this.isSuccess_ ? [] : [
+          {'message': this.report_, 'source': this.testFile_, 'stacktrace': ''}
+        ];
+      }
+      this.runTime_ = frameTestRunner.getRunTime();
+      this.numFilesLoaded_ = frameTestRunner.getNumFilesLoaded();
+      this.finish_();
+      return;
   }
 
   // Check to see if the test has timed out.
   if (goog.now() - this.lastStateTime_ > this.timeoutMs_) {
-    this.report_ = this.testFile_ + ' timed out  ' +
-        goog.testing.MultiTestRunner.STATES[this.currentState_];
+    this.report_ = this.testFile_ + ' timed out  ' + this.currentState_;
     this.testResults_[this.testFile_] =
         [{'message': this.report_, 'source': this.testFile_, 'stacktrace': ''}];
     this.isSuccess_ = false;
