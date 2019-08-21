@@ -4168,6 +4168,21 @@ goog.createTrustedTypesPolicy = function(name) {
   } catch (e) {
     goog.logToConsole_(e.message);
   }
+
+  // TrustedTypes API will deprecate TrustedURLs in Chrome 78. To prepare for
+  // that, and make the Closure code emulate the post-deprecation behavior
+  // of the API, we attempt to create a default policy that blesses any value
+  // to TrustedURL. This is a best-effort attempt. If that does not succeed,
+  // the application fails close - TrustedURL values will simply be required
+  // at all relevant sinks.
+  if (typeof TrustedURL !== 'undefined' && TrustedTypes.getPolicyNames &&
+      TrustedTypes.getPolicyNames().indexOf('default') === -1) {
+    try {
+      TrustedTypes.createPolicy('default', {createURL: goog.identity_}, true);
+    } catch (e) {
+      goog.logToConsole_(e.message);
+    }
+  }
   return policy;
 };
 
