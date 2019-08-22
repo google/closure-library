@@ -165,6 +165,7 @@ function testSaveArgument() {
   assertEquals('test', saveMatcher.arg);
   assertFalse(saveMatcher.matches(17));
   assertEquals(17, saveMatcher.arg);
+  assertArrayEquals(['test', 17], saveMatcher.allArgs);
 
   saveMatcher =
       new matchers.SaveArgument(new matchers.ObjectEquals({value: 'value'}));
@@ -172,6 +173,7 @@ function testSaveArgument() {
   assertEquals('value', saveMatcher.arg.value);
   assertFalse(saveMatcher.matches('test'));
   assertEquals('test', saveMatcher.arg);
+  assertArrayEquals([{value: 'value'}, 'test'], saveMatcher.allArgs);
 }
 
 

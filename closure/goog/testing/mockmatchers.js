@@ -230,6 +230,12 @@ goog.testing.mockmatchers.SaveArgument = function(opt_matcher, opt_matchName) {
   goog.testing.mockmatchers.ArgumentMatcher.call(
       this, /** @type {Function} */ (opt_matcher), opt_matchName);
 
+  /**
+   * All saved arguments that were verified.
+   * @const {!Array<*>}
+   */
+  this.allArgs = [];
+
   if (opt_matcher instanceof goog.testing.mockmatchers.ArgumentMatcher) {
     /**
      * Delegate match requests to this matcher.
@@ -250,6 +256,7 @@ goog.inherits(
 goog.testing.mockmatchers.SaveArgument.prototype.matches = function(
     toVerify, opt_expectation) {
   this.arg = toVerify;
+  this.allArgs.push(toVerify);
   if (this.delegateMatcher_) {
     return this.delegateMatcher_.matches(toVerify, opt_expectation);
   }
@@ -259,7 +266,7 @@ goog.testing.mockmatchers.SaveArgument.prototype.matches = function(
 
 
 /**
- * Saved argument that was verified.
+ * The last (or only) saved argument that was verified.
  * @type {*}
  */
 goog.testing.mockmatchers.SaveArgument.prototype.arg;
