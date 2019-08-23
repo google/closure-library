@@ -30,6 +30,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.math.Box');
+goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
 goog.require('goog.positioning');
 goog.require('goog.positioning.Corner');
@@ -880,6 +881,20 @@ goog.ui.MenuButton.prototype.onTick_ = function(e) {
   var currentViewport = goog.style.getVisibleRectForElement(this.getElement());
   if (!goog.math.Rect.equals(this.buttonRect_, currentButtonRect) ||
       !goog.math.Box.equals(this.viewportBox_, currentViewport)) {
+    // Reduction in the viewport width (e.g. due to increasing the zoom) can
+    // cause the menu to get squashed against the right edge, distorting its
+    // shape. When we move the menu back where it belongs, we risk using the
+    // distorted size, causing mispositioning. To be safe, start by moving the
+    // menu to the top left to let it reassume its true shape.
+    if (this.menu_.isInDocument() &&
+        currentViewport.getWidth() < this.viewportBox_.getWidth()) {
+      var elem = this.menu_.getElement();
+      if (!this.menu_.isVisible()) {
+        elem.style.visibility = 'hidden';
+        goog.style.setElementShown(elem, true);
+      }
+      goog.style.setPosition(elem, new goog.math.Coordinate(0, 0));
+    }
     this.buttonRect_ = currentButtonRect;
     this.viewportBox_ = currentViewport;
     this.positionMenu();

@@ -550,6 +550,102 @@ function testOpenedMenuPositionCorrection() {
 
 
 /**
+ * Shows the menu and resizes the viewport, a timer corrects the menu position.
+ *
+ * Before a bug was fixed, the menu position could be mispositioned under some
+ * circumstances. Say that a menu button is placed close to the right edge of
+ * the containing viewport, with a menu which is anchored to the top right of
+ * the button. When the menu is open, the user decreases the width of the
+ * viewport, say by zooming the browser window magnification. The right edge
+ * effectively moves to the left. The button moves along with it, and now close
+ * to the new right edge of the viewport, while the menu stays where it is.
+ * But the browser now looks at the menu and finds that it no longer fits in the
+ * allowable horizontal space, so it reflows the menu by breaking a bunch of
+ * lines, making it narrower, and therefore taller. It's now scrunched up
+ * against the right side of the viewport.
+ *
+ * At this point, the MenuButton.onTick method runs, and repositions the menu.
+ * This is how it works in all cases, but in this particular case, repositioning
+ * is complicated by the fact that the menu is no longer the right shape; it is
+ * narrower and taller than its natural size. When the correct position is
+ * calculated, the size is used to determine the position, because the menu is
+ * right- and bottom-aligned. When the code subtracts the width and height, it
+ * winds up with a position which is not far enough to the left, and too high
+ * up. The menu is moved to this new place, and under most circumstances the
+ * browser now has space for the menu to return to its natural shape, resulting
+ * in the menu appearing to detach from the menu button, moving up and to the
+ * right.
+ *
+ * The bug fix was to detect when the viewport width is decreasing, and insert
+ * an additional repositioning of the menu to coordinates (0,0), giving enough
+ * room to lay out the menu properly, so the correct size is available to
+ * determine the proper menu position.
+ */
+function testOpenedMenuPositionCorrection_viewportChange() {
+  const iframe = goog.dom.getElement('iframe1');
+  const iframeDoc = goog.dom.getFrameContentDocument(iframe);
+  const iframeDom = goog.dom.getDomHelper(iframeDoc);
+  const iframeWindow = goog.dom.getWindow(iframeDoc);
+
+  const button = new goog.ui.MenuButton();
+  button.setMenuPosition(new goog.positioning.MenuAnchoredPosition(
+      null, goog.positioning.Corner.TOP_LEFT));
+  iframeWindow.scrollTo(0, 0);
+  const node = iframeDom.getElement('demoMenuButton2');
+  button.decorate(node);
+  const mockTimer = new goog.Timer();
+  // Don't start the timer.  We manually dispatch the Tick event.
+  mockTimer.start = goog.nullFunction;
+  button.timer_ = mockTimer;
+
+  const replacer = new goog.testing.PropertyReplacer();
+  let positionMenuCalled;
+  const origPositionMenu = goog.bind(button.positionMenu, button);
+  replacer.set(button, 'positionMenu', function() {
+    positionMenuCalled = true;
+    origPositionMenu();
+  });
+
+  // Show the menu.
+  button.setOpen(true);
+
+  // Confirm the menu position
+  const menuNode = iframeDom.getElement('demoMenu2');
+  assertRoughlyEquals(
+      menuNode.offsetTop + menuNode.offsetHeight, node.offsetTop, 20);
+  assertRoughlyEquals(menuNode.offsetLeft, node.offsetLeft, 20);
+
+  positionMenuCalled = false;
+  // A Tick event is dispatched.
+  mockTimer.dispatchEvent(goog.Timer.TICK);
+  assertFalse('positionMenu() shouldn\'t be called.', positionMenuCalled);
+
+  // Reduce the size of the enclosing element.
+  iframe.style.width = '300px';
+
+  // Confirm the menu is detached from the button.
+  assertTrue(
+      (Math.abs(node.offsetTop + node.offsetHeight - menuNode.offsetTop) >
+       20) ||
+      (Math.abs(node.offsetLeft - menuNode.offsetLeft) > 20));
+
+  positionMenuCalled = false;
+  // A Tick event is dispatched.
+  mockTimer.dispatchEvent(goog.Timer.TICK);
+  assertTrue('positionMenu() should be called.', positionMenuCalled);
+
+  // The menu is moved to appropriate position again.
+  assertRoughlyEquals(
+      menuNode.offsetTop + menuNode.offsetHeight, node.offsetTop, 20);
+  assertRoughlyEquals(menuNode.offsetLeft, node.offsetLeft, 20);
+
+  // Tear down.
+  replacer.reset();
+  button.dispose();
+}
+
+
+/**
  * Use a different button to position the menu and make sure it does so
  * correctly.
  */
