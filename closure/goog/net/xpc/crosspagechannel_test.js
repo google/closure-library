@@ -1018,10 +1018,6 @@ Driver.prototype.isTransportTestable_ = function() {
 
   const transportType = this.channel_.determineTransportType_();
   switch (transportType) {
-    case goog.net.xpc.TransportTypes.IFRAME_RELAY:
-    case goog.net.xpc.TransportTypes.IFRAME_POLLING:
-      testable = canAccessSameDomainIframe;
-      break;
     case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
     case goog.net.xpc.TransportTypes.DIRECT:
       testable = true;
