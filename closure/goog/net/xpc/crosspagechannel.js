@@ -58,6 +58,7 @@ goog.require('goog.userAgent');
  *     use for looking up elements in the dom.
  * @constructor
  * @extends {goog.messaging.AbstractChannel}
+ * @deprecated Prefer goog.messaging.MessageChannel and friends.
  */
 goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
   goog.net.xpc.CrossPageChannel.base(this, 'constructor');
