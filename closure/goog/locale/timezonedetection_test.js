@@ -12,118 +12,108 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+goog.module('goog.locale.timeZoneDetectionTest');
+goog.setTestOnly();
 
-goog.provide('goog.locale.timeZoneDetectionTest');
-goog.setTestOnly('goog.locale.timeZoneDetectionTest');
+const testSuite = goog.require('goog.testing.testSuite');
+const timeZoneDetection = goog.require('goog.locale.timeZoneDetection');
 
-goog.require('goog.locale.timeZoneDetection');
-goog.require('goog.testing.jsunit');
+/** Mock date class with simplified properties of Date class for testing. */
+class MockDate {
+  constructor() {
+    /**
+     * Time zone offset. For time zones with daylight saving, the different
+     * offsets are represented as array of offsets.
+     * @private {Array<number>}
+     */
+    this.timezoneOffset_ = [];
+    /**
+     * Counter storing the index of next offset value to be returned from the
+     * array of offset values.
+     * @private {number}
+     */
+    this.offsetArrayCounter_ = 0;
+  }
 
-
-
-/**
- * Mock date class with simplified properties of Date class for testing.
- * @constructor
- */
-function MockDate() {
   /**
-   * Time zone offset. For time zones with daylight saving, the different
-   * offsets are represented as array of offsets.
-   * @type {Array<number>}
-   * @private
+   * Does nothing because setting the time to calculate offset is not needed
+   * in the mock class.
+   * @param {number} ms Ignored.
    */
-  this.timezoneOffset_ = [];
+  setTime(ms) {
+    // Do nothing.
+  }
+
   /**
-   * Counter storing the index of next offset value to be returned from the
-   * array of offset values.
-   * @type {number}
-   * @private
+   * Sets the time zone offset.
+   * @param {Array<number>} offset Time zone offset.
    */
-  this.offsetArrayCounter_ = 0;
+  setTimezoneOffset(offset) {
+    this.timezoneOffset_ = offset;
+  }
+
+  /**
+   * Returns consecutive offsets from array of time zone offsets on each call.
+   * @return {number} Time zone offset.
+   */
+  getTimezoneOffset() {
+    return this.timezoneOffset_.length > 1 ?
+        this.timezoneOffset_[this.offsetArrayCounter_++] :
+        this.timezoneOffset_[0];
+  }
 }
 
+testSuite({
+  testGetFingerprint() {
+    let mockDate = new MockDate();
+    mockDate.setTimezoneOffset([-480]);
+    let fingerprint = timeZoneDetection.getFingerprint(mockDate);
+    assertEquals(32, fingerprint);
 
-/**
- * Does nothing because setting the time to calculate offset is not needed
- * in the mock class.
- * @param {number} ms Ignored.
- */
-MockDate.prototype.setTime = function(ms) {
-  // Do nothing.
-};
+    mockDate = new MockDate();
+    mockDate.setTimezoneOffset(
+        [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+    fingerprint = timeZoneDetection.getFingerprint(mockDate);
+    assertEquals(1294772902, fingerprint);
+  },
 
+  testDetectTimeZone() {
+    let mockDate = new MockDate();
+    mockDate.setTimezoneOffset([-480]);
+    let timeZoneId = timeZoneDetection.detectTimeZone(undefined, mockDate);
+    assertEquals('Asia/Hong_Kong', timeZoneId);
 
-/**
- * Sets the time zone offset.
- * @param {Array<number>} offset Time zone offset.
- */
-MockDate.prototype.setTimezoneOffset = function(offset) {
-  this.timezoneOffset_ = offset;
-};
+    mockDate = new MockDate();
+    mockDate.setTimezoneOffset(
+        [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+    timeZoneId = timeZoneDetection.detectTimeZone('US', mockDate);
+    assertEquals('America/Los_Angeles', timeZoneId);
 
+    mockDate = new MockDate();
+    mockDate.setTimezoneOffset(
+        [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+    timeZoneId = timeZoneDetection.detectTimeZone('CA', mockDate);
+    assertEquals('America/Dawson', timeZoneId);
+  },
 
-/**
- * Returns consecutive offsets from array of time zone offsets on each call.
- * @return {number} Time zone offset.
- */
-MockDate.prototype.getTimezoneOffset = function() {
-  return this.timezoneOffset_.length > 1 ?
-      this.timezoneOffset_[this.offsetArrayCounter_++] :
-      this.timezoneOffset_[0];
-};
+  testGetTimeZoneList() {
+    let mockDate = new MockDate();
+    mockDate.setTimezoneOffset(
+        [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+    let timeZoneList = timeZoneDetection.getTimeZoneList(undefined, mockDate);
+    assertEquals('America/Los_Angeles', timeZoneList[0]);
+    assertEquals('America/Whitehorse', timeZoneList[4]);
+    assertEquals(5, timeZoneList.length);
 
-function testGetFingerprint() {
-  let mockDate = new MockDate();
-  mockDate.setTimezoneOffset([-480]);
-  let fingerprint = goog.locale.timeZoneDetection.getFingerprint(mockDate);
-  assertEquals(32, fingerprint);
+    mockDate = new MockDate();
+    mockDate.setTimezoneOffset([-480]);
+    timeZoneList = timeZoneDetection.getTimeZoneList(undefined, mockDate);
+    assertEquals('Asia/Hong_Kong', timeZoneList[0]);
+    assertEquals('Asia/Chongqing', timeZoneList[7]);
+    assertEquals(16, timeZoneList.length);
 
-  mockDate = new MockDate();
-  mockDate.setTimezoneOffset(
-      [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
-  fingerprint = goog.locale.timeZoneDetection.getFingerprint(mockDate);
-  assertEquals(1294772902, fingerprint);
-}
-
-function testDetectTimeZone() {
-  let mockDate = new MockDate();
-  mockDate.setTimezoneOffset([-480]);
-  let timeZoneId =
-      goog.locale.timeZoneDetection.detectTimeZone(undefined, mockDate);
-  assertEquals('Asia/Hong_Kong', timeZoneId);
-
-  mockDate = new MockDate();
-  mockDate.setTimezoneOffset(
-      [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
-  timeZoneId = goog.locale.timeZoneDetection.detectTimeZone('US', mockDate);
-  assertEquals('America/Los_Angeles', timeZoneId);
-
-  mockDate = new MockDate();
-  mockDate.setTimezoneOffset(
-      [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
-  timeZoneId = goog.locale.timeZoneDetection.detectTimeZone('CA', mockDate);
-  assertEquals('America/Dawson', timeZoneId);
-}
-
-function testGetTimeZoneList() {
-  let mockDate = new MockDate();
-  mockDate.setTimezoneOffset(
-      [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
-  let timeZoneList =
-      goog.locale.timeZoneDetection.getTimeZoneList(undefined, mockDate);
-  assertEquals('America/Los_Angeles', timeZoneList[0]);
-  assertEquals('America/Whitehorse', timeZoneList[4]);
-  assertEquals(5, timeZoneList.length);
-
-  mockDate = new MockDate();
-  mockDate.setTimezoneOffset([-480]);
-  timeZoneList =
-      goog.locale.timeZoneDetection.getTimeZoneList(undefined, mockDate);
-  assertEquals('Asia/Hong_Kong', timeZoneList[0]);
-  assertEquals('Asia/Chongqing', timeZoneList[7]);
-  assertEquals(16, timeZoneList.length);
-
-  timeZoneList = goog.locale.timeZoneDetection.getTimeZoneList('AU', mockDate);
-  assertEquals(1, timeZoneList.length);
-  assertEquals('Australia/Perth', timeZoneList[0]);
-}
+    timeZoneList = timeZoneDetection.getTimeZoneList('AU', mockDate);
+    assertEquals(1, timeZoneList.length);
+    assertEquals('Australia/Perth', timeZoneList[0]);
+  },
+});
