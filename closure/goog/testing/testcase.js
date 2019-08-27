@@ -162,14 +162,14 @@ goog.testing.TestCase = function(opt_name) {
    * <li>[1,3,5]
    * <li>[testName1, testName2, 3, 5] - will work
    * <ul>
-   * @type {Object}
+   * @type {?Object}
    * @private
    */
   this.testsToRun_ = null;
 
   /**
    * A call back for each test.
-   * @private {?function(goog.testing.TestCase.Test, !Array<string>)}
+   * @private {?function(?goog.testing.TestCase.Test, !Array<string>)}
    */
   this.testDone_ = null;
 
@@ -1446,6 +1446,7 @@ goog.testing.TestCase.prototype.addTestObj_ = function(obj, name, objChain) {
       } else if (goog.isObject(testProperty)) {
         // To prevent infinite loops.
         if (!goog.array.contains(objChain, testProperty)) {
+          goog.asserts.assertObject(testProperty);
           var newObjChain = objChain.slice();
           newObjChain.push(testProperty);
           this.addTestObj_(testProperty, fullTestName, newObjChain);
