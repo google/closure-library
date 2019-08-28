@@ -123,6 +123,21 @@ goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_ = 'data-sanitizer-';
 goog.html.sanitizer.HTML_SANITIZER_SANITIZED_ATTR_NAME_ =
     goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_ + 'original-tag';
 
+/**
+ * A list of tags that contain '-' but are invalid custom element tags.
+ * @private @const @dict {boolean}
+ */
+goog.html.sanitizer.HTML_SANITIZER_INVALID_CUSTOM_TAGS_ = {
+  'ANNOTATION-XML': true,
+  'COLOR-PROFILE': true,
+  'FONT-FACE': true,
+  'FONT-FACE-SRC': true,
+  'FONT-FACE-URI': true,
+  'FONT-FACE-FORMAT': true,
+  'FONT-FACE-NAME': true,
+  'MISSING-GLYPH': true,
+};
+
 
 /**
  * Special value for the STYLE container ID, which makes the sanitizer choose
@@ -178,6 +193,20 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
     this.attributeHandlers_['* ' + dataAttr.toUpperCase()] =
         /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
             goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
+  }, this);
+
+  // Add whitelist custom element tags, ensures that they contains at least one
+  // '-' and that they are not part of the reserved names.
+  goog.array.forEach(builder.customElementTagWhitelist_, function(customTag) {
+    customTag = customTag.toUpperCase();
+
+    if (!goog.string.contains(customTag, '-') ||
+        goog.html.sanitizer.HTML_SANITIZER_INVALID_CUSTOM_TAGS_[customTag]) {
+      throw new goog.asserts.AssertionError(
+          'Only valid custom element tag names allowed, got: %s.', [customTag]);
+    }
+
+    this.tagWhitelist_[customTag] = true;
   }, this);
 
   /** @private @const {!goog.html.sanitizer.HtmlSanitizerUrlPolicy} */
@@ -271,6 +300,14 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
   this.dataAttributeWhitelist_ = [];
 
   /**
+   * List of custom element tags to whitelist. Custom elements are inert on
+   * their own and require code to actually be dangerous, so the risk is similar
+   * to data-attributes.
+   * @private @const {!Array<string>}
+   */
+  this.customElementTagWhitelist_ = [];
+
+  /**
    * A tag blacklist, to effectively remove an element and its children from the
    * dom.
    * @private @const {!Object<string, boolean>}
@@ -358,6 +395,17 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowDataAttributes =
     function(dataAttributeWhitelist) {
   goog.array.extend(this.dataAttributeWhitelist_, dataAttributeWhitelist);
+  return this;
+};
+
+/**
+ * Extends the list of allowed custom element tags.
+ * @param {!Array<string>} customElementTagWhitelist
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCustomElementTags =
+    function(customElementTagWhitelist) {
+  goog.array.extend(this.customElementTagWhitelist_, customElementTagWhitelist);
   return this;
 };
 
