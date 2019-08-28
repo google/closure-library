@@ -560,7 +560,12 @@ goog.testing.TestCase.prototype.prepareForRun_ = function() {
 goog.testing.TestCase.prototype.finalize = function() {
   this.saveMessage('Done');
 
-  this.tearDownPage();
+  try {
+    this.tearDownPage();
+  } catch (e) {
+    // Report the error and continue with tests.
+    window['onerror'](e.toString(), document.location.href, 0, 0, e);
+  }
 
   this.endTime_ = this.now();
   this.running = false;
