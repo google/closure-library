@@ -57,9 +57,10 @@ goog.require('goog.string.internal');
  *
  * Instances of this type must be created via the factory methods
  * (`goog.html.SafeUrl.fromConstant`, `goog.html.SafeUrl.sanitize`),
- * etc and not by invoking its constructor.  The constructor intentionally
- * takes no parameters and the type is immutable; hence only a default instance
- * corresponding to the empty string can be obtained via constructor invocation.
+ * etc and not by invoking its constructor. The constructor is organized in a
+ * way that only methods from that file can call it and initialize with
+ * non-empty values. Anyone else calling constructor will get default instance
+ * with empty value.
  *
  * @see goog.html.SafeUrl#fromConstant
  * @see goog.html.SafeUrl#from
@@ -69,15 +70,21 @@ goog.require('goog.string.internal');
  * @struct
  * @implements {goog.i18n.bidi.DirectionalString}
  * @implements {goog.string.TypedString}
+ * @param {!Object=} opt_token package-internal implementation detail.
+ * @param {!TrustedURL|string=} opt_content package-internal
+ *     implementation detail.
  */
-goog.html.SafeUrl = function() {
+goog.html.SafeUrl = function(opt_token, opt_content) {
   /**
    * The contained value of this SafeUrl.  The field has a purposely ugly
    * name to make (non-compiled) code that attempts to directly access this
    * field stand out.
    * @private {!TrustedURL|string}
    */
-  this.privateDoNotAccessOrElseSafeUrlWrappedValue_ = '';
+  this.privateDoNotAccessOrElseSafeUrlWrappedValue_ =
+      ((opt_token === goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_) &&
+       opt_content) ||
+      '';
 
   /**
    * A type marker used to implement additional run-time type checking.
@@ -713,13 +720,12 @@ goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
  */
 goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
     url) {
-  var safeUrl = new goog.html.SafeUrl();
-  safeUrl.privateDoNotAccessOrElseSafeUrlWrappedValue_ =
+  return new goog.html.SafeUrl(
+      goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_,
       goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
-      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createURL(
-          url) :
-      url;
-  return safeUrl;
+          goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createURL(
+              url) :
+          url);
 };
 
 
@@ -730,3 +736,11 @@ goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
 goog.html.SafeUrl.ABOUT_BLANK =
     goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
         'about:blank');
+
+/**
+ * Token used to ensure that object is created only from this file. No code
+ * outside of this file can access this token.
+ * @private {!Object}
+ * @const
+ */
+goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_ = {};
