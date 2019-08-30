@@ -23,6 +23,26 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "",
      ],
      name: "body_onload"},
+    {input: "<form><input name=\"children\"></form>",
+     acceptable: [
+         "",
+     ],
+     name: "clobbering_children"},
+    {input: "<form><input name=\"firstChild\"></form>",
+     acceptable: [
+         "",
+     ],
+     name: "clobbering_firstchild"},
+    {input: "<form><input name=\"__proto__\"></form>",
+     acceptable: [
+         "",
+     ],
+     name: "clobbering_proto"},
+    {input: "<form><input name=\"tagName\"></form>",
+     acceptable: [
+         "",
+     ],
+     name: "clobbering_tagname"},
     {input: "<details open ontoggle=\"alert('xss')\">",
      acceptable: [
          "",

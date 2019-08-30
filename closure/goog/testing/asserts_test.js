@@ -1045,8 +1045,7 @@ function testAssertThrows() {
 function testAssertThrowsThrowsIfJsUnitException() {
   // Asserts that assertThrows will throw a JsUnitException if the method
   // passed to assertThrows throws a JsUnitException of its own. assertThrows
-  // should not be used for catching JsUnitExceptions with
-  // "failOnUnreportedAsserts" enabled.
+  // should not be used for catching JsUnitExceptions.
   const e = assertThrowsJsUnitException(function() {
     assertThrows(function() {
       // We need to invalidate this exception so it's not flagged as a
@@ -1065,7 +1064,6 @@ function testAssertThrowsThrowsIfJsUnitException() {
   });
   assertContains(
       'Function passed to assertThrows caught a JsUnitException', e.message);
-
 }
 
 function testAssertThrowsJsUnitException() {

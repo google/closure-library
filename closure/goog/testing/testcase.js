@@ -203,13 +203,6 @@ goog.testing.TestCase = function(opt_name) {
   this.thrownAssertionExceptions_ = [];
 
   /**
-   * Whether the test should fail if exceptions arising from an assert statement
-   * never bubbled up to the testing framework.
-   * @type {boolean}
-   */
-  this.failOnUnreportedAsserts = true;
-
-  /**
    * The maximum time in milliseconds a promise returned from a test function
    * may remain pending before the test fails due to timeout.
    * @type {number}
@@ -1754,9 +1747,7 @@ goog.testing.TestCase.prototype.doError = function(test) {
  * @package
  */
 goog.testing.TestCase.prototype.raiseAssertionException = function(e) {
-  if (this.failOnUnreportedAsserts) {
-    this.thrownAssertionExceptions_.push(e);
-  }
+  this.thrownAssertionExceptions_.push(e);
   throw e;
 };
 
@@ -1770,9 +1761,7 @@ goog.testing.TestCase.prototype.raiseAssertionException = function(e) {
  * @package
  */
 goog.testing.TestCase.prototype.invalidateAssertionException = function(e) {
-  if (this.failOnUnreportedAsserts) {
-    goog.array.remove(this.thrownAssertionExceptions_, e);
-  }
+  goog.array.remove(this.thrownAssertionExceptions_, e);
 };
 
 
