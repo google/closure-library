@@ -1800,6 +1800,7 @@ goog.mixin = function(target, source) {
 /**
  * @return {number} An integer value representing the number of milliseconds
  *     between midnight, January 1, 1970 and the current time.
+ * @deprecated Use Date.now
  */
 goog.now = (goog.TRUSTED_SITE && Date.now) || (function() {
              // Unary plus operator converts its operand to a number which in
