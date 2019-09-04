@@ -135,19 +135,6 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "<input type=\"image\" />",
      ],
      name: "input"},
-    {input: "<a><a<a>a><a style=\"<a><a<a>a><a\"<a><a<a>a><a >",
-     acceptable: [
-         "<a>a&gt;<a>a&gt;<a></a></a></a>",
-         "<a></a><a></a><a></a>",
-         "<a><span>a&gt;</span></a><a><span>a&gt;</span></a><a></a>",
-     ],
-     name: "mess_of_anchors"},
-    {input: "<a><a></a></a>",
-     acceptable: [
-         "<a><a></a></a>",
-         "<a></a><a></a>",
-     ],
-     name: "nested_anchors"},
     {input: "<object data=\"data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\"></object>",
      acceptable: [
          "",
@@ -158,22 +145,6 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "javascript:/*--&gt;",
      ],
      name: "polygot"},
-    {input: "javascript:x//*/javascript:javascript:\"/*'/*`/*--></noscript></title></textarea></style></template></noembed></script><html \" onmouseover=/*&lt;svg/*/onload=xonload=x//><svg onload=x><svg onload=x>*/</style><script>x</script><style>",
-     acceptable: [
-         "javascript:x//*/javascript:javascript:&quot;/*&#39;/*`/*--&gt;",
-         "javascript:x//*/javascript:javascript:&#34;/*&#39;/*`/*--&gt;",
-         "javascript:x//*/javascript:javascript:&quot;/*&#39;/*`/*--&gt;*/",
-         "javascript:x//*/javascript:javascript:\"/*'/*`/*--&gt;",
-         "javascript:x//*/javascript:javascript:\"/*'/*`/*--&gt;*/",
-     ],
-     name: "polygot_inquisition"},
-    {input: "'\"",
-     acceptable: [
-         "'\"",
-         "&#39;&quot;",
-         "&#39;&#34;",
-     ],
-     name: "quotes"},
     {input: "<LINK REL=\"stylesheet\" HREF=\"javascript:alert('xss')\">",
      acceptable: [
          "",
@@ -191,11 +162,6 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "",
      ],
      name: "script_alert"},
-    {input: "<scrIpt>alert('xss')</scrIpt>",
-     acceptable: [
-         "",
-     ],
-     name: "script_case"},
     {input: "<<script>alert('xss');//<</script>",
      acceptable: [
          "&lt;",
