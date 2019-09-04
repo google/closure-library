@@ -1039,10 +1039,12 @@ function testMakeSingleton() {
 //=== tests for now ===
 
 function testNow() {
-  const toleranceMilliseconds = 20;  // 10 ms was not enough for IE7.
-  const now1 = new Date().getTime();
-  const now2 = goog.now();
-  assertTrue(Math.abs(now1 - now2) < toleranceMilliseconds);
+  // We use bounds rather than a tolerance to eliminate non-determinsim.
+  const start = new Date().getTime();
+  const underTest = goog.now();
+  const end = new Date().getTime();
+
+  assertTrue(start <= underTest && underTest <= end);
 }
 
 
