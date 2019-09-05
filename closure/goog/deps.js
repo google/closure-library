@@ -18,8 +18,8 @@
 // See http://goo.gl/SdiwZH
 // clang-format off
 
-goog.addDependency('../../third_party/closure/goog/dojo/dom/query.js', ['goog.dom.query'], ['goog.array', 'goog.dom', 'goog.functions', 'goog.string', 'goog.userAgent'], {});
-goog.addDependency('../../third_party/closure/goog/dojo/dom/query_test.js', ['goog.dom.query_test'], ['goog.dom', 'goog.dom.query', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent'], {});
+goog.addDependency('dojo/dom/query.js', ['goog.dom.query'], ['goog.array', 'goog.dom', 'goog.functions', 'goog.string', 'goog.userAgent'], {});
+goog.addDependency('dojo/dom/query_test.js', ['goog.dom.query_test'], ['goog.dom', 'goog.dom.query', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent'], {});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', ['goog.async.Deferred', 'goog.async.Deferred.AlreadyCalledError', 'goog.async.Deferred.CanceledError'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.debug.Error'], {});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferredlist.js', ['goog.async.DeferredList'], ['goog.async.Deferred'], {});
 goog.addDependency('proto/proto.js', ['goog.proto'], ['goog.proto.Serializer'], {});
