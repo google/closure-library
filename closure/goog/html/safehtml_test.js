@@ -224,6 +224,7 @@ testSuite({
   },
 
   testSafeHtmlCreate_styleAttribute() {
+    stubs.replace(SafeHtml, 'SUPPORT_STYLE_ATTRIBUTE', true);
     const style = 'color:red;';
     const expected = `<hr style="${style}">`;
     assertThrows(() => {
@@ -234,6 +235,11 @@ testSuite({
     }));
     assertSameHtml(
         expected, SafeHtml.create('hr', {'style': {'color': 'red'}}));
+
+    stubs.replace(SafeHtml, 'SUPPORT_STYLE_ATTRIBUTE', false);
+    assertThrows(() => {
+      SafeHtml.create('hr', {'style': {'color': 'red'}});
+    });
   },
 
   testSafeHtmlCreate_urlAttributes() {
