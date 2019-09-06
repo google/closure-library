@@ -16,7 +16,6 @@ goog.module('goog.testing.domTest');
 goog.setTestOnly();
 
 const TagName = goog.require('goog.dom.TagName');
-const TestCase = goog.require('goog.testing.TestCase');
 const dom = goog.require('goog.dom');
 const testSuite = goog.require('goog.testing.testSuite');
 const testingDom = goog.require('goog.testing.dom');
@@ -85,9 +84,6 @@ function setUpAssertHtmlMatches() {
 
 testSuite({
   setUpPage() {
-    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-
     root = dom.getElement('root');
   },
 
@@ -125,7 +121,8 @@ testSuite({
   testAssertHtmlMismatchText() {
     setUpAssertHtmlMatches();
 
-    const e = assertThrows('Should fail due to mismatched text', () => {
+    // Should fail due to mismatched text'
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch(
           '<div style="display: none; font-size: 2em">' +
               '[[IE GECKO]]NonWebKitText<div class="IE"><p class="WEBKIT">' +
@@ -139,7 +136,8 @@ testSuite({
   testAssertHtmlMismatchTag() {
     setUpAssertHtmlMatches();
 
-    const e = assertThrows('Should fail due to mismatched tag', () => {
+    // Should fail due to mismatched tag
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch(
           '<span style="display: none; font-size: 2em">' +
               '[[IE GECKO]]NonWebKitText<div class="IE"><p class="WEBKIT">' +
@@ -153,7 +151,8 @@ testSuite({
   testAssertHtmlMismatchStyle() {
     setUpAssertHtmlMatches();
 
-    const e = assertThrows('Should fail due to mismatched style', () => {
+    // Should fail due to mismatched style
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch(
           '<div style="display: none; font-size: 3em">' +
               '[[IE GECKO]]NonWebKitText<div class="IE"><p class="WEBKIT">' +
@@ -167,7 +166,8 @@ testSuite({
   testAssertHtmlMismatchOptionalText() {
     setUpAssertHtmlMatches();
 
-    const e = assertThrows('Should fail due to mismatched text', () => {
+    // Should fail due to mismatched text
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch(
           '<div style="display: none; font-size: 2em">' +
               '[[IE GECKO]]Bad<div class="IE"><p class="WEBKIT">' +
@@ -181,7 +181,8 @@ testSuite({
   testAssertHtmlMismatchExtraActualAfterText() {
     root.innerHTML = '<div>abc</div>def';
 
-    const e = assertThrows('Should fail due to extra actual nodes', () => {
+    // Should fail due to extra actual nodes
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch('<div>abc</div>', root);
     });
     assertContains('Finished expected HTML before', e.message);
@@ -190,7 +191,8 @@ testSuite({
   testAssertHtmlMismatchExtraActualAfterElement() {
     root.innerHTML = '<br>def';
 
-    const e = assertThrows('Should fail due to extra actual nodes', () => {
+    // Should fail due to extra actual nodes
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch('<br>', root);
     });
     assertContains('Finished expected HTML before', e.message);
@@ -213,7 +215,7 @@ testSuite({
   testAssertHtmlMismatchWithDifferentNumberOfAttributes() {
     root.innerHTML = '<div foo="a" bar="b"></div>';
 
-    const e = assertThrows(() => {
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch('<div foo="a"></div>', root, true);
     });
     assertContains('Unexpected attribute with name bar in element', e.message);
@@ -222,7 +224,7 @@ testSuite({
   testAssertHtmlMismatchWithDifferentAttributeNames() {
     root.innerHTML = '<div foo="a" bar="b"></div>';
 
-    const e = assertThrows(() => {
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch(
           '<div foo="a" baz="b"></div>', root, true);
     });
@@ -232,7 +234,7 @@ testSuite({
   testAssertHtmlMismatchWithDifferentClassNames() {
     root.innerHTML = '<div class="className1"></div>';
 
-    const e = assertThrows(() => {
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch(
           '<div class="className2"></div>', root, true);
     });
@@ -259,7 +261,7 @@ testSuite({
   testAssertHtmlMismatchWithDifferentAttributeValues() {
     root.innerHTML = '<div foo="b" bar="a"></div>';
 
-    const e = assertThrows(() => {
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch(
           '<div foo="a" bar="a"></div>', root, true);
     });
@@ -304,7 +306,7 @@ testSuite({
   testAssertHtmlMismatchWhenIdIsNotSpecified2() {
     root.innerHTML = '<div id="someId"></div>';
 
-    const e = assertThrows(() => {
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch('<div></div>', root, true);
     });
     assertContains('Unexpected attribute with name id in element', e.message);
@@ -313,13 +315,13 @@ testSuite({
   testAssertHtmlMismatchWhenIdIsSpecified() {
     root.innerHTML = '<div></div>';
 
-    let e = assertThrows(() => {
+    let e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch('<div id="someId"></div>', root);
     });
     assertContains(
         'Expected to find attribute with name id, in element', e.message);
 
-    e = assertThrows(() => {
+    e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch('<div id="someId"></div>', root, true);
     });
     assertContains(
@@ -344,7 +346,8 @@ testSuite({
     testingDom.assertHtmlContentsMatch(disabledShort, root, true);
     testingDom.assertHtmlContentsMatch(disabledLong, root, true);
 
-    const e = assertThrows('Should fail due to mismatched text', () => {
+    // Should fail due to mismatched text
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlContentsMatch(enabled, root, true);
     });
     // Attribute value mismatch in IE.
@@ -364,7 +367,7 @@ testSuite({
     testingDom.assertHtmlContentsMatch(checkedLong, root, true);
     if (!userAgent.IE) {
       // CHECKED attribute is ignored because it's among BAD_IE_ATTRIBUTES_.
-      const e = assertThrows('Should fail due to mismatched text', () => {
+      const e = assertThrowsJsUnitException(() => {
         testingDom.assertHtmlContentsMatch(unchecked, root, true);
       });
       assertContains('Unexpected attribute with name checked', e.message);
@@ -493,7 +496,8 @@ testSuite({
         '<div style="font-size: 1px; color: red">abc</div>',
         '<div style="color: red;  font-size: 1px;;">abc</div>');
 
-    const e = assertThrows('Should fail due to mismatched text', () => {
+    // Should fail due to mismatched text
+    const e = assertThrowsJsUnitException(() => {
       testingDom.assertHtmlMatches('<div>abc</div>', '<div>abd</div>');
     });
     assertContains('Text should match', e.message);

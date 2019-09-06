@@ -24,7 +24,7 @@ goog.require('goog.testing.i18n.asserts');
 
 
 // Add this mapping for testing only
-goog.testing.i18n.asserts.EXPECTED_VALUE_MAP_['mappedValue'] = 'newValue';
+goog.testing.i18n.asserts.addI18nMapping('mappedValue', 'newValue');
 
 let expectedFailures;
 
@@ -50,6 +50,21 @@ function testEdgeCases() {
     goog.testing.i18n.asserts.assertI18nEquals('', 'test');
     goog.testing.i18n.asserts.assertI18nEquals('test', null);
     goog.testing.i18n.asserts.assertI18nEquals('test', '');
+  } catch (e) {
+    expectedFailures.handleException(e);
+  }
+}
+
+function testContains() {
+  // Real contains
+  goog.testing.i18n.asserts.assertI18nContains('mappedValue', '** mappedValue');
+  // i18n mapped contains
+  goog.testing.i18n.asserts.assertI18nContains('mappedValue', '** newValue');
+
+  // Negative testing
+  expectedFailures.expectFailureFor(true);
+  try {
+    goog.testing.i18n.asserts.assertI18nContains('mappedValue', '** dummy');
   } catch (e) {
     expectedFailures.handleException(e);
   }

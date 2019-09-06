@@ -988,6 +988,9 @@ goog.nullFunction = function() {};
  *
  * @type {!Function}
  * @throws {Error} when invoked to indicate the method should be overridden.
+ * @deprecated Use "@abstract" annotation instead of goog.abstractMethod in new
+ *     code. See
+ *     https://github.com/google/closure-compiler/wiki/@abstract-classes-and-methods
  */
 goog.abstractMethod = function() {
   throw new Error('unimplemented abstract method');
@@ -1797,6 +1800,7 @@ goog.mixin = function(target, source) {
 /**
  * @return {number} An integer value representing the number of milliseconds
  *     between midnight, January 1, 1970 and the current time.
+ * @deprecated Use Date.now
  */
 goog.now = (goog.TRUSTED_SITE && Date.now) || (function() {
              // Unary plus operator converts its operand to a number which in
@@ -2042,9 +2046,19 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
  *
  * @param {string} str Translatable string, places holders in the form {$foo}.
  * @param {Object<string, string>=} opt_values Maps place holder name to value.
+ * @param {{html: boolean}=} opt_options Options:
+ *     html: Escape '<' in str to '&lt;'. Used by Closure Templates where the
+ *     generated code size and performance is critical which is why {@link
+ *     goog.html.SafeHtmlFormatter} is not used. The value must be literal true
+ *     or false.
  * @return {string} message with placeholders filled.
  */
-goog.getMsg = function(str, opt_values) {
+goog.getMsg = function(str, opt_values, opt_options) {
+  if (opt_options && opt_options.html) {
+    // Note that '&' is not replaced because the translation can contain HTML
+    // entities.
+    str = str.replace(/</g, '&lt;');
+  }
   if (opt_values) {
     str = str.replace(/\{\$([^}]+)}/g, function(match, key) {
       return (opt_values != null && key in opt_values) ? opt_values[key] :
@@ -4137,7 +4151,9 @@ goog.identity_ = function(s) {
  */
 goog.createTrustedTypesPolicy = function(name) {
   var policy = null;
-  if (typeof TrustedTypes === 'undefined' || !TrustedTypes.createPolicy) {
+  // TODO(koto): Remove window.TrustedTypes variant when the newer API ships.
+  var policyFactory = goog.global.trustedTypes || goog.global.TrustedTypes;
+  if (!policyFactory || !policyFactory.createPolicy) {
     return policy;
   }
   // TrustedTypes.createPolicy throws if called with a name that is already
@@ -4146,7 +4162,7 @@ goog.createTrustedTypesPolicy = function(name) {
   // will fall back to using regular Safe Types.
   // TODO(koto): Remove catching once createPolicy API stops throwing.
   try {
-    policy = TrustedTypes.createPolicy(name, {
+    policy = policyFactory.createPolicy(name, {
       createHTML: goog.identity_,
       createScript: goog.identity_,
       createScriptURL: goog.identity_,

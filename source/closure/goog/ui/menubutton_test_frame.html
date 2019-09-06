@@ -20,9 +20,29 @@ See the COPYING file for details.
    */
   width: 64px;
 }
+#demoMenuButton2Container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 200px;
+  right: 0;
+}
+#demoMenuButton2 {
+  /*
+   * Set a fixed width because the button size can be changed by a scroll bar
+   * without it.
+   */
+  position: absolute;
+  right: 100px;
+  bottom: 0;
+  width: 100px;
+}
 .goog-menu {
   position: absolute;
   color: #aaa;
+}
+.goog-inline-block {
+  display: inline-block;
 }
 </style>
 </head>
@@ -33,6 +53,16 @@ See the COPYING file for details.
     <div id='menuItem1' class="goog-menuitem">Annual Report.pdf</div>
     <div id='menuItem2' class="goog-menuitem">Quarterly Update.pdf</div>
     <div id='menuItem3' class="goog-menuitem">Enemies List.txt</div>
+  </div>
+</div>
+<div id="demoMenuButton2Container">
+  <div id="demoMenuButton2" class="goog-menu-button">
+    Button 2
+    <div id="demoMenu2" class="goog-menu">
+      <div id='menuItem4' class="goog-menuitem">Annual Report.pdf</div>
+      <div id='menuItem5' class="goog-menuitem">Quarterly Update.pdf</div>
+      <div id='menuItem6' class="goog-menuitem">Enemies List.txt</div>
+    </div>
   </div>
 </div>
 

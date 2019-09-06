@@ -22,28 +22,26 @@ const liteTypes = goog.require('goog.streams.liteTypes');
 
 /**
  * @template T
- * @extends {liteTypes.ReadableStream<T>}
+ * @implements {liteTypes.ReadableStream<T>}
  */
-class NativeReadableStream extends liteTypes.ReadableStream {
+class NativeReadableStream {
   /**
    * @param {!ReadableStream} stream
    */
   constructor(stream) {
-    super();
-
-    /** @private @const {!ReadableStream} */
-    this.stream_ = stream;
+    /** @protected @const {!ReadableStream} */
+    this.stream = stream;
   }
 
   /** @override */
   get locked() {
-    return this.stream_.locked;
+    return this.stream.locked;
   }
 
   /** @override */
   getReader() {
     return new NativeReadableStreamDefaultReader(
-        /** @type {!ReadableStreamDefaultReader} */ (this.stream_.getReader()));
+        /** @type {!ReadableStreamDefaultReader} */ (this.stream.getReader()));
   }
 }
 
@@ -67,65 +65,59 @@ function newReadableStream(underlyingSource) {
 
 /**
  * @template T
- * @extends {liteTypes.ReadableStreamDefaultReader<T>}
+ * @implements {liteTypes.ReadableStreamDefaultReader<T>}
  */
-class NativeReadableStreamDefaultReader extends
-    liteTypes.ReadableStreamDefaultReader {
+class NativeReadableStreamDefaultReader {
   /**
    * @param {!ReadableStreamDefaultReader} reader
    */
   constructor(reader) {
-    super();
-
-    /** @private @const {!ReadableStreamDefaultReader} */
-    this.reader_ = reader;
+    /** @protected @const {!ReadableStreamDefaultReader} */
+    this.reader = reader;
   }
 
   /** @override */
   get closed() {
-    return this.reader_.closed;
+    return this.reader.closed;
   }
 
   /** @override */
   read() {
-    return this.reader_.read();
+    return this.reader.read();
   }
 
   /** @override */
   releaseLock() {
-    this.reader_.releaseLock();
+    this.reader.releaseLock();
   }
 }
 
 /**
  * @template T
- * @extends {liteTypes.ReadableStreamDefaultController<T>}
+ * @implements {liteTypes.ReadableStreamDefaultController<T>}
  */
-class NativeReadableStreamDefaultController extends
-    liteTypes.ReadableStreamDefaultController {
+class NativeReadableStreamDefaultController {
   /**
    * @param {!ReadableStreamDefaultController} controller
    */
   constructor(controller) {
-    super();
-
-    /** @private @const {!ReadableStreamDefaultController} */
-    this.controller_ = controller;
+    /** @protected @const {!ReadableStreamDefaultController} */
+    this.controller = controller;
   }
 
   /** @override */
   close() {
-    this.controller_.close();
+    this.controller.close();
   }
 
   /** @override */
   enqueue(chunk) {
-    this.controller_.enqueue(chunk);
+    this.controller.enqueue(chunk);
   }
 
   /** @override */
   error(e) {
-    this.controller_.error(e);
+    this.controller.error(e);
   }
 }
 

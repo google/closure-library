@@ -162,14 +162,14 @@ goog.testing.TestCase = function(opt_name) {
    * <li>[1,3,5]
    * <li>[testName1, testName2, 3, 5] - will work
    * <ul>
-   * @type {Object}
+   * @type {?Object}
    * @private
    */
   this.testsToRun_ = null;
 
   /**
    * A call back for each test.
-   * @private {?function(goog.testing.TestCase.Test, !Array<string>)}
+   * @private {?function(?goog.testing.TestCase.Test, !Array<string>)}
    */
   this.testDone_ = null;
 
@@ -201,13 +201,6 @@ goog.testing.TestCase = function(opt_name) {
    * @private {!Array<!goog.testing.JsUnitException>}
    */
   this.thrownAssertionExceptions_ = [];
-
-  /**
-   * Whether the test should fail if exceptions arising from an assert statement
-   * never bubbled up to the testing framework.
-   * @type {boolean}
-   */
-  this.failOnUnreportedAsserts = true;
 
   /**
    * The maximum time in milliseconds a promise returned from a test function
@@ -560,7 +553,12 @@ goog.testing.TestCase.prototype.prepareForRun_ = function() {
 goog.testing.TestCase.prototype.finalize = function() {
   this.saveMessage('Done');
 
-  this.tearDownPage();
+  try {
+    this.tearDownPage();
+  } catch (e) {
+    // Report the error and continue with tests.
+    window['onerror'](e.toString(), document.location.href, 0, 0, e);
+  }
 
   this.endTime_ = this.now();
   this.running = false;
@@ -1446,6 +1444,7 @@ goog.testing.TestCase.prototype.addTestObj_ = function(obj, name, objChain) {
       } else if (goog.isObject(testProperty)) {
         // To prevent infinite loops.
         if (!goog.array.contains(objChain, testProperty)) {
+          goog.asserts.assertObject(testProperty);
           var newObjChain = objChain.slice();
           newObjChain.push(testProperty);
           this.addTestObj_(testProperty, fullTestName, newObjChain);
@@ -1748,9 +1747,7 @@ goog.testing.TestCase.prototype.doError = function(test) {
  * @package
  */
 goog.testing.TestCase.prototype.raiseAssertionException = function(e) {
-  if (this.failOnUnreportedAsserts) {
-    this.thrownAssertionExceptions_.push(e);
-  }
+  this.thrownAssertionExceptions_.push(e);
   throw e;
 };
 
@@ -1764,9 +1761,7 @@ goog.testing.TestCase.prototype.raiseAssertionException = function(e) {
  * @package
  */
 goog.testing.TestCase.prototype.invalidateAssertionException = function(e) {
-  if (this.failOnUnreportedAsserts) {
-    goog.array.remove(this.thrownAssertionExceptions_, e);
-  }
+  goog.array.remove(this.thrownAssertionExceptions_, e);
 };
 
 

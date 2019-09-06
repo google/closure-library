@@ -61,7 +61,7 @@ goog.structs.CircularBuffer = function(opt_maxSize) {
  *     Return undefined, otherwise.
  */
 goog.structs.CircularBuffer.prototype.add = function(item) {
-  var previousItem = this.buff_[this.nextPtr_];
+  const previousItem = this.buff_[this.nextPtr_];
   this.buff_[this.nextPtr_] = item;
   this.nextPtr_ = (this.nextPtr_ + 1) % this.maxSize_;
   return previousItem;
@@ -136,10 +136,10 @@ goog.structs.CircularBuffer.prototype.getValues = function() {
  *     values are ordered from oldest to newest.
  */
 goog.structs.CircularBuffer.prototype.getNewestValues = function(maxCount) {
-  var l = this.getCount();
-  var start = this.getCount() - maxCount;
-  var rv = [];
-  for (var i = start; i < l; i++) {
+  const l = this.getCount();
+  const start = this.getCount() - maxCount;
+  const rv = [];
+  for (let i = start; i < l; i++) {
     rv.push(this.get(i));
   }
   return rv;
@@ -148,9 +148,9 @@ goog.structs.CircularBuffer.prototype.getNewestValues = function(maxCount) {
 
 /** @return {!Array<number>} The indexes in the buffer. */
 goog.structs.CircularBuffer.prototype.getKeys = function() {
-  var rv = [];
-  var l = this.getCount();
-  for (var i = 0; i < l; i++) {
+  const rv = [];
+  const l = this.getCount();
+  for (let i = 0; i < l; i++) {
     rv[i] = i;
   }
   return rv;
@@ -173,8 +173,8 @@ goog.structs.CircularBuffer.prototype.containsKey = function(key) {
  * @return {boolean} Whether the buffer contains the given value.
  */
 goog.structs.CircularBuffer.prototype.containsValue = function(value) {
-  var l = this.getCount();
-  for (var i = 0; i < l; i++) {
+  const l = this.getCount();
+  for (let i = 0; i < l; i++) {
     if (this.get(i) == value) {
       return true;
     }

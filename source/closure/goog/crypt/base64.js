@@ -159,9 +159,8 @@ goog.crypt.base64.HAS_NATIVE_DECODE_ =
  *
  * @param {Array<number>|Uint8Array} input An array of bytes (numbers with
  *     value in [0, 255]) to encode.
- * @param {(!goog.crypt.base64.Alphabet|boolean)=} alphabet Base 64 alphabet to
+ * @param {!goog.crypt.base64.Alphabet=} alphabet Base 64 alphabet to
  *     use in encoding. Alphabet.DEFAULT is used by default.
- *     WARNING: Passing a `boolean` is deprecated. See b/135291727.
  * @return {string} The base64 encoded string.
  */
 goog.crypt.base64.encodeByteArray = function(input, alphabet) {
@@ -170,20 +169,13 @@ goog.crypt.base64.encodeByteArray = function(input, alphabet) {
   goog.asserts.assert(
       goog.isArrayLike(input), 'encodeByteArray takes an array as a parameter');
 
-  if (alphabet === false || alphabet === undefined) {
+  if (alphabet === undefined) {
     alphabet = goog.crypt.base64.Alphabet.DEFAULT;
-  } else if (alphabet === true) {
-    // Legacy opt_webSafe=true handling for backward compatibility.
-    // TODO(b/135291727): The legacy usages should be replaced with a proper
-    // alphabet parameter, to remove the boolean support of the parameter.
-    alphabet = goog.crypt.base64.Alphabet.WEBSAFE_DOT_PADDING;
   }
 
   goog.crypt.base64.init_();
 
-  // TODO(b/135291727): Don't need the cast after removing boolean support.
-  var byteToCharMap = goog.crypt.base64.byteToCharMaps_[
-      /** @type {!goog.crypt.base64.Alphabet} */ (alphabet)];
+  var byteToCharMap = goog.crypt.base64.byteToCharMaps_[alphabet];
 
   var output = [];
 
@@ -220,9 +212,8 @@ goog.crypt.base64.encodeByteArray = function(input, alphabet) {
  * Base64-encode a string.
  *
  * @param {string} input A string to encode.
- * @param {(!goog.crypt.base64.Alphabet|boolean)=} alphabet Base 64 alphabet to
+ * @param {!goog.crypt.base64.Alphabet=} alphabet Base 64 alphabet to
  *     use in encoding. Alphabet.DEFAULT is used by default.
- *     WARNING: Passing a `boolean` is deprecated. See b/135291727.
  * @return {string} The base64 encoded string.
  */
 goog.crypt.base64.encodeString = function(input, alphabet) {

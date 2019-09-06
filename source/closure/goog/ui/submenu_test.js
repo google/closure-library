@@ -66,10 +66,23 @@ function assertKeyHandlingIsCorrect(keyToOpenSubMenu, keyToCloseSubMenu) {
 
   const fireKeySequence = testingEvents.fireKeySequence;
 
-  assertTrue(
-      'Expected OpenSubMenu key to not be handled',
-      fireKeySequence(plainItem.getElement(), keyToOpenSubMenu));
+  const keySequenceReturn =
+      fireKeySequence(plainItem.getElement(), keyToOpenSubMenu);
+
+  // Expect keyToOpenSubMenu to only be handled when ENTER because menuItem
+  // handles ENTER, while subMenu handles LEFT, RIGHT and ENTER.
+  if (keyToOpenSubMenu == KeyCodes.ENTER) {
+    assertFalse(
+        'Expected OpenSubMenu key to be handled when KeyCode is ENTER',
+        keySequenceReturn);
+  } else {
+    assertTrue('Expected OpenSubMenu key to not be handled', keySequenceReturn);
+  }
   assertFalse(subMenuItem1Menu.isVisible());
+
+  // Expect ENTER to be handled when subMenu is visible.
+  subMenuItem1Menu.setVisible(true);
+  assertFalse(fireKeySequence(subMenuItem1.getElement(), KeyCodes.ENTER));
 
   assertFalse(
       'Expected F key to be handled',
@@ -80,6 +93,8 @@ function assertKeyHandlingIsCorrect(keyToOpenSubMenu, keyToCloseSubMenu) {
       fireKeySequence(plainItem.getElement(), KeyCodes.DOWN));
   assertEquals(subMenuItem1, menu.getChildAt(1));
 
+  // Expect keyToOpenSubMenu to be handled when subMenu is not visible.
+  subMenuItem1Menu.setVisible(false);
   assertFalse(
       'Expected OpenSubMenu key to be handled',
       fireKeySequence(subMenuItem1.getElement(), keyToOpenSubMenu));
@@ -173,6 +188,10 @@ testSuite({
       mockClock.uninstall();
       mockClock = null;
     }
+  },
+
+  testEnterOpensSubmenu() {
+    assertKeyHandlingIsCorrect(KeyCodes.ENTER, KeyCodes.LEFT);
   },
 
   testKeyHandling_ltr() {

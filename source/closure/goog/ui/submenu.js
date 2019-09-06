@@ -273,25 +273,26 @@ goog.ui.SubMenu.prototype.dismissSiblings_ = function() {
 
 /**
  * Handles a key event that is passed to the menu item from its parent because
- * it is highlighted.  If the right key is pressed the sub menu takes control
- * and delegates further key events to its menu until it is dismissed OR the
- * left key is pressed.
+ * it is highlighted.  If the arrow keys or enter key is pressed the sub menu
+ * takes control and delegates further key events to its menu until it is
+ * dismissed.
  * @param {goog.events.KeyEvent} e A key event.
  * @return {boolean} Whether the event was handled.
  * @override
  */
 goog.ui.SubMenu.prototype.handleKeyEvent = function(e) {
   var keyCode = e.keyCode;
-  var openKeyCode = this.isRightToLeft() ? goog.events.KeyCodes.LEFT :
-                                           goog.events.KeyCodes.RIGHT;
+  var arrowOpenKeyCode = this.isRightToLeft() ? goog.events.KeyCodes.LEFT :
+                                                goog.events.KeyCodes.RIGHT;
   var closeKeyCode = this.isRightToLeft() ? goog.events.KeyCodes.RIGHT :
                                             goog.events.KeyCodes.LEFT;
 
   if (!this.menuIsVisible_) {
-    // Menu item doesn't have keyboard control and the right key was pressed.
+    // Menu item doesn't have keyboard control and the correct key was pressed.
     // So open take keyboard control and open the sub menu.
     if (this.isEnabled() &&
-        (keyCode == openKeyCode || keyCode == this.getMnemonic())) {
+        (keyCode == arrowOpenKeyCode || keyCode == goog.events.KeyCodes.ENTER ||
+         keyCode == this.getMnemonic())) {
       this.showSubMenu();
       this.getMenu().highlightFirst();
       this.clearTimers();

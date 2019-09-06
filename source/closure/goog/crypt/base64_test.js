@@ -71,9 +71,6 @@ function assertEncodings(input, expectedOutputs) {
   assertEquals(
       base64.encodeString(input),  // default case
       expectedOutputs[base64.Alphabet.DEFAULT]);
-  assertEquals(
-      base64.encodeString(input, true),  // Legacy opt_webSafe
-      expectedOutputs[base64.Alphabet.WEBSAFE_DOT_PADDING]);
 
   // encodeByteArray with Array<number>
   for (const name in base64.Alphabet) {
@@ -84,9 +81,6 @@ function assertEncodings(input, expectedOutputs) {
   assertEquals(
       base64.encodeByteArray(arr),  // default case
       expectedOutputs[base64.Alphabet.DEFAULT]);
-  assertEquals(
-      base64.encodeByteArray(arr, true),  // Legacy opt_webSafe
-      expectedOutputs[base64.Alphabet.WEBSAFE_DOT_PADDING]);
 
   // encodeByteArray with Uint8Array
   if (SUPPORT_TYPED_ARRAY) {
@@ -100,9 +94,6 @@ function assertEncodings(input, expectedOutputs) {
     assertEquals(
         base64.encodeByteArray(uint8Arr),  // default case
         expectedOutputs[base64.Alphabet.DEFAULT]);
-    assertEquals(
-        base64.encodeByteArray(uint8Arr, true),  // Legacy opt_webSafe
-        expectedOutputs[base64.Alphabet.WEBSAFE_DOT_PADDING]);
   }
 }
 

@@ -16,22 +16,16 @@ goog.module('goog.testing.proto2Test');
 goog.setTestOnly();
 
 const TestAllTypes = goog.require('proto2.TestAllTypes');
-const TestCase = goog.require('goog.testing.TestCase');
 const proto2 = goog.require('goog.testing.proto2');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
-  setUp() {
-    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-  },
-
   testAssertEquals() {
     const assertProto2Equals = proto2.assertEquals;
     assertProto2Equals(new TestAllTypes, new TestAllTypes);
     assertProto2Equals(new TestAllTypes, new TestAllTypes, 'oops');
 
-    let ex = assertThrows(goog.partial(
+    let ex = assertThrowsJsUnitException(goog.partial(
         assertProto2Equals, new TestAllTypes, new TestAllTypes.NestedMessage));
     assertEquals(
         'Message type mismatch: TestAllTypes != TestAllTypes.NestedMessage',
@@ -39,11 +33,11 @@ testSuite({
 
     const message = new TestAllTypes;
     message.setOptionalInt32(1);
-    ex = assertThrows(
+    ex = assertThrowsJsUnitException(
         goog.partial(assertProto2Equals, new TestAllTypes, message));
     assertEquals('optional_int32 should not be present', ex.message);
 
-    ex = assertThrows(
+    ex = assertThrowsJsUnitException(
         goog.partial(assertProto2Equals, new TestAllTypes, message, 'oops'));
     assertEquals('oops\noptional_int32 should not be present', ex.message);
   },

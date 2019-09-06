@@ -837,6 +837,33 @@ testSuite({
     });
   },
 
+  testCustomTagsAttributes() {
+    let html = '<my-custom-div>Testing</my-custom-div>';
+    const safeHtml = '<span>Testing</span>';
+    assertSanitizedHtml(html, safeHtml);
+
+    html = '<my-cool-div>Testing</my-cool-div><lame-div></lame-div>';
+    const expectedHtml = '<my-cool-div>Testing</my-cool-div><span></span>';
+    assertSanitizedHtml(
+        html, expectedHtml,
+        new Builder()
+            .allowCssStyles()
+            .allowCustomElementTags(['my-cool-div'])
+            .build());
+  },
+
+
+  testDisallowedCustomElementsWhitelistingTags() {
+    assertThrows(() => {
+      new Builder().allowCustomElementTags(['script']).build();
+    });
+
+    // Reserved tag names.
+    assertThrows(() => {
+      new Builder().allowCustomElementTags(['font-face']).build();
+    });
+  },
+
   testBlacklistedWithChildren() {
     let input = '<form>foo<a>bar</a></form>';
     let expected = '';

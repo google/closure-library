@@ -28,18 +28,18 @@ goog.provide('goog.net.xpc.relay');
   // <url>#<channel_name>[,<iframe_id>]|<data>
 
   // Get the fragment identifier.
-  var raw = window.location.hash;
+  let raw = window.location.hash;
   if (!raw) {
     return;
   }
   if (raw.charAt(0) == '#') {
     raw = raw.substring(1);
   }
-  var pos = raw.indexOf('|');
-  var head = raw.substring(0, pos).split(',');
-  var channelName = head[0];
-  var iframeId = head.length == 2 ? head[1] : null;
-  var frame = raw.substring(pos + 1);
+  const pos = raw.indexOf('|');
+  const head = raw.substring(0, pos).split(',');
+  const channelName = head[0];
+  const iframeId = head.length == 2 ? head[1] : null;
+  const frame = raw.substring(pos + 1);
 
   // Find the window object of the peer.
   //
@@ -51,7 +51,7 @@ goog.provide('goog.net.xpc.relay');
   //
   // We are either relay1 or relay2.
 
-  var win;
+  let win;
   if (iframeId) {
     // We are relay2 and need to deliver the data to peer2.
     win = window.parent.frames[iframeId];

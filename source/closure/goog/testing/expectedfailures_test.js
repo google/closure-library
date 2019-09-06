@@ -18,7 +18,6 @@ goog.setTestOnly();
 const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
 const JsUnitException = goog.require('goog.testing.JsUnitException');
 const Logger = goog.require('goog.debug.Logger');
-const TestCase = goog.require('goog.testing.TestCase');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let count;
@@ -37,9 +36,6 @@ ExpectedFailures.prototype.logger_.log = (level, message) => {
 
 testSuite({
   setUp() {
-    // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-    TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
-
     expectedFailures = new ExpectedFailures();
     count = 0;
     lastLevel = lastMessage = '';
@@ -106,7 +102,7 @@ testSuite({
   testRunStrict() {
     expectedFailures.expectFailureFor(true);
 
-    const ex = assertThrows(() => {
+    const ex = assertThrowsJsUnitException(() => {
       expectedFailures.run(
           () => {
               // Doesn't fail!

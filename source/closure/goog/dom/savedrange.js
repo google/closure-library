@@ -72,5 +72,6 @@ goog.dom.SavedRange.prototype.restore = function(opt_stayAlive) {
 /**
  * Internal method to restore the saved range.
  * @return {goog.dom.AbstractRange} The restored range.
+ * @protected
  */
 goog.dom.SavedRange.prototype.restoreInternal = goog.abstractMethod;

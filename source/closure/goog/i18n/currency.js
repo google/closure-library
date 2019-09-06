@@ -89,7 +89,7 @@ goog.i18n.currency.isAvailable = function(currencyCode) {
 goog.i18n.currency.addTier2Support = function() {
   // Protection from executing this these again and again.
   if (!goog.i18n.currency.tier2Enabled_) {
-    for (var key in goog.i18n.currency.CurrencyInfoTier2) {
+    for (const key in goog.i18n.currency.CurrencyInfoTier2) {
       goog.i18n.currency.CurrencyInfo[key] =
           goog.i18n.currency.CurrencyInfoTier2[key];
     }
@@ -113,8 +113,8 @@ goog.i18n.currency.addTier2Support = function() {
  *   {@link goog.i18n.NumberFormat.CurrencyStyle.GLOBAL}
  */
 goog.i18n.currency.getGlobalCurrencyPattern = function(currencyCode) {
-  var info = goog.i18n.currency.CurrencyInfo[currencyCode];
-  var patternNum = info[0];
+  const info = goog.i18n.currency.CurrencyInfo[currencyCode];
+  const patternNum = info[0];
   if (currencyCode == info[1]) {
     return goog.i18n.currency.getCurrencyPattern_(patternNum, info[1]);
   }
@@ -131,7 +131,7 @@ goog.i18n.currency.getGlobalCurrencyPattern = function(currencyCode) {
  * @return {string} Global currency sign for given currency.
  */
 goog.i18n.currency.getGlobalCurrencySign = function(currencyCode) {
-  var info = goog.i18n.currency.CurrencyInfo[currencyCode];
+  const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   return (currencyCode == info[1]) ? currencyCode :
                                      currencyCode + ' ' + info[1];
 };
@@ -170,7 +170,7 @@ goog.i18n.currency.getGlobalCurrencySignWithFallback = function(currencyCode) {
  *   {@link goog.i18n.NumberFormat.CurrencyStyle.LOCAL}
  */
 goog.i18n.currency.getLocalCurrencyPattern = function(currencyCode) {
-  var info = goog.i18n.currency.CurrencyInfo[currencyCode];
+  const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   return goog.i18n.currency.getCurrencyPattern_(info[0], info[1]);
 };
 
@@ -222,7 +222,7 @@ goog.i18n.currency.getLocalCurrencySignWithFallback = function(currencyCode) {
  *   {@link goog.i18n.NumberFormat.CurrencyStyle.PORTABLE}
  */
 goog.i18n.currency.getPortableCurrencyPattern = function(currencyCode) {
-  var info = goog.i18n.currency.CurrencyInfo[currencyCode];
+  const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   return goog.i18n.currency.getCurrencyPattern_(info[0], info[2]);
 };
 
@@ -236,6 +236,26 @@ goog.i18n.currency.getPortableCurrencyPattern = function(currencyCode) {
  */
 goog.i18n.currency.getPortableCurrencySign = function(currencyCode) {
   return goog.i18n.currency.CurrencyInfo[currencyCode][2];
+};
+
+
+/**
+ * Returns whether the string represents a valid ISO-4217 currency code.
+ *
+ * @param {string} currencyCode String to check.
+ * @return {boolean} Whether currencyCode is a 3-letter currency code.
+ */
+goog.i18n.currency.isValid = function(currencyCode) {
+  if (!currencyCode || currencyCode.length !== 3) {
+    return false;
+  }
+  for (let i = 0; i < 3; i++) {
+    const c = currencyCode[i];
+    if (c < 'A' || (c > 'Z' && c < 'a') || c > 'z') {
+      return false;
+    }
+  }
+  return true;
 };
 
 
@@ -292,11 +312,11 @@ goog.i18n.currency.isPrefixSignPosition = function(currencyCode) {
  * @private
  */
 goog.i18n.currency.getCurrencyPattern_ = function(patternNum, sign) {
-  var strParts = ['#,##0'];
-  var precision = patternNum & goog.i18n.currency.PRECISION_MASK_;
+  const strParts = ['#,##0'];
+  const precision = patternNum & goog.i18n.currency.PRECISION_MASK_;
   if (precision > 0) {
     strParts.push('.');
-    for (var i = 0; i < precision; i++) {
+    for (let i = 0; i < precision; i++) {
       strParts.push('0');
     }
   }
@@ -326,16 +346,16 @@ goog.i18n.currency.getCurrencyPattern_ = function(patternNum, sign) {
  * @return {string} modified currency pattern string.
  */
 goog.i18n.currency.adjustPrecision = function(pattern, currencyCode) {
-  var strParts = ['0'];
-  var info = goog.i18n.currency.CurrencyInfo[currencyCode];
+  const strParts = ['0'];
+  const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   if (!info) {
     // If the currency code is unknown, do not modify the pattern.
     return pattern;
   }
-  var precision = info[0] & goog.i18n.currency.PRECISION_MASK_;
+  const precision = info[0] & goog.i18n.currency.PRECISION_MASK_;
   if (precision > 0) {
     strParts.push('.');
-    for (var i = 0; i < precision; i++) {
+    for (let i = 0; i < precision; i++) {
       strParts.push('0');
     }
   }

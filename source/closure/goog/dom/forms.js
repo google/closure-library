@@ -28,7 +28,6 @@ goog.require('goog.structs.Map');
 goog.require('goog.window');
 
 
-
 /**
  * Submits form data via a new window. This hides references to the parent
  * window and should be used when submitting forms to untrusted 3rd party urls.
@@ -158,7 +157,7 @@ goog.dom.forms.getFormDataString = function(form) {
  */
 goog.dom.forms.getFormDataHelper_ = function(form, result, fnAppend) {
   var els = form.elements;
-  for (var el, i = 0; el = els[i]; i++) {
+  for (var el, i = 0; el = els.item(i); i++) {
     if (  // Make sure we don't include elements that are not part of the form.
         // Some browsers include non-form elements. Check for 'form' property.
         // See http://code.google.com/p/closure-library/issues/detail?id=227
@@ -264,7 +263,7 @@ goog.dom.forms.setDisabled = function(el, disabled) {
   // disable all elements in a form
   if (el.tagName == goog.dom.TagName.FORM) {
     var els = /** @type {!HTMLFormElement} */ (el).elements;
-    for (var i = 0; el = els[i]; i++) {
+    for (var i = 0; el = els.item(i); i++) {
       goog.dom.forms.setDisabled(el, disabled);
     }
   } else {
@@ -315,25 +314,32 @@ goog.dom.forms.hasValueByName = function(form, name) {
 
 /**
  * Gets the current value of any element with a type.
- * @param {Element} el The element.
+ * @param {null|!Element|!RadioNodeList<?>} input The element.
  * @return {string|Array<string>|null} The current value of the element
  *     (or null).
  */
-goog.dom.forms.getValue = function(el) {
+goog.dom.forms.getValue = function(input) {
   // Elements with a type may need more specialized logic.
-  var type = /** @type {!HTMLInputElement} */ (el).type;
-  switch (goog.isString(type) && type.toLowerCase()) {
-    case goog.dom.InputType.CHECKBOX:
-    case goog.dom.InputType.RADIO:
-      return goog.dom.forms.getInputChecked_(el);
-    case goog.dom.InputType.SELECT_ONE:
-      return goog.dom.forms.getSelectSingle_(el);
-    case goog.dom.InputType.SELECT_MULTIPLE:
-      return goog.dom.forms.getSelectMultiple_(el);
-    default:
-      // Not every element with a value has a type (e.g. meter and progress).
-      return el.value != null ? el.value : null;
+  var type = /** {{type: (string|undefined)}} */ (input).type;
+
+  if (goog.isString(type)) {
+    var el = /** @type {!Element} */ (input);
+
+    switch (type.toLowerCase()) {
+      case goog.dom.InputType.CHECKBOX:
+      case goog.dom.InputType.RADIO:
+        return goog.dom.forms.getInputChecked_(el);
+      case goog.dom.InputType.SELECT_ONE:
+        return goog.dom.forms.getSelectSingle_(el);
+      case goog.dom.InputType.SELECT_MULTIPLE:
+        return goog.dom.forms.getSelectMultiple_(el);
+      default:
+        // Not every element with a value has a type (e.g. meter and progress).
+    }
   }
+
+  // Coerce `undefined` to `null`.
+  return input.value != null ? input.value : null;
 };
 
 
@@ -350,19 +356,19 @@ goog.dom.forms.getValue = function(el) {
 goog.dom.forms.getValueByName = function(form, name) {
   var els = form.elements[name];
 
-  if (els) {
-    if (els.type) {
-      return goog.dom.forms.getValue(els);
-    } else {
-      for (var i = 0; i < els.length; i++) {
-        var val = goog.dom.forms.getValue(els[i]);
-        if (val) {
-          return val;
-        }
+  if (!els) {
+    return null;
+  } else if (els.type) {
+    return goog.dom.forms.getValue(/** @type {!Element} */ (els));
+  } else {
+    for (var i = 0; i < els.length; i++) {
+      var val = goog.dom.forms.getValue(els[i]);
+      if (val) {
+        return val;
       }
     }
+    return null;
   }
-  return null;
 };
 
 

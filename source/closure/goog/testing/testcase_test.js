@@ -69,8 +69,6 @@ const neverResolvedGoogPromise = function() {
 let events;
 
 function setUp() {
-  // TODO(b/25875505): Fix unreported assertions (go/failonunreportedasserts).
-  goog.testing.TestCase.getActiveTestCase().failOnUnreportedAsserts = false;
   events = [];
 }
 
@@ -732,10 +730,6 @@ function testTearDown_complexJsUnitExceptionIssue() {  // http://b/110796519
   });
 }
 
-function testFailOnUnreportedAsserts_EnabledByDefault() {
-  assertTrue(new goog.testing.TestCase().failOnUnreportedAsserts);
-}
-
 
 /**
  * Verifies that:
@@ -755,41 +749,9 @@ function testFailOnUnreportedAsserts_EnabledByDefault() {
  */
 function verifyTestOutcomeForFailOnUnreportedAssertsFlag(
     shouldPassWithFlagEnabled, testFunction) {
-  return verifyWithFlagEnabledAndNoInvalidation(testFunction)
-      .then(function() {
-        return verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled);
-      })
-      .then(function() { return verifyWithFlagDisabled(testFunction); });
-}
-
-function verifyWithFlagDisabled(testFunction) {
-  // With the flag disabled, the test is expected to pass, as any caught
-  // exception would not be reported.
-  const testCase = new goog.testing.TestCase();
-  const getTestCase = goog.functions.constant(testCase);
-  testCase.addNewTest('test', testFunction);
-  testCase.failOnUnreportedAsserts = false;
-
-  const stubs = new goog.testing.PropertyReplacer();
-  stubs.replace(window, '_getCurrentTestCase', getTestCase);
-  stubs.replace(goog.testing.TestCase, 'getActiveTestCase', getTestCase);
-
-  const promise = new goog
-                      .Promise(function(resolve, reject) {
-                        testCase.addCompletedCallback(resolve);
-                      })
-                      .then(function() {
-                        assertTrue(testCase.isSuccess());
-                        const result = testCase.getResult();
-                        assertTrue(result.complete);
-                        assertEquals(0, result.errors.length);
-                      })
-                      .thenAlways(function() {
-                        stubs.reset();
-                      });
-
-  testCase.runTests();
-  return promise;
+  return verifyWithFlagEnabledAndNoInvalidation(testFunction).then(function() {
+    return verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled);
+  });
 }
 
 function verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled) {
@@ -798,7 +760,6 @@ function verifyWithFlagEnabled(testFunction, shouldPassWithFlagEnabled) {
   const testCase = new goog.testing.TestCase();
   const getTestCase = goog.functions.constant(testCase);
   testCase.addNewTest('test', testFunction);
-  testCase.failOnUnreportedAsserts = true;
 
   const stubs = new goog.testing.PropertyReplacer();
   stubs.replace(window, '_getCurrentTestCase', getTestCase);
@@ -832,7 +793,6 @@ function verifyWithFlagEnabledAndNoInvalidation(testFunction) {
   const testCase = new goog.testing.TestCase();
   const getTestCase = goog.functions.constant(testCase);
   testCase.addNewTest('test', testFunction);
-  testCase.failOnUnreportedAsserts = true;
 
   const stubs = new goog.testing.PropertyReplacer();
   stubs.replace(window, '_getCurrentTestCase', getTestCase);
@@ -1154,6 +1114,7 @@ function testSetTestObj_alreadyInitialized() {
     testCase.setTestObj({test3: ok, test4: ok});
     fail('Overriding the test object should fail');
   } catch (e) {
+    goog.testing.TestCase.invalidateAssertionException(e);
     assertContains(
         'Test methods have already been configured.\n' +
             'Tests previously found:\ntest1\ntest2\n' +

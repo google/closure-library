@@ -48,8 +48,8 @@ goog.NATIVE_ARRAY_PROTOTYPES =
  * array functions where appropriate (e.g., `Array#filter`) and remove the
  * unused pure JS implementation.
  */
-goog.array.ASSUME_NATIVE_FUNCTIONS =
-    goog.define('goog.array.ASSUME_NATIVE_FUNCTIONS', false);
+goog.array.ASSUME_NATIVE_FUNCTIONS = goog.define(
+    'goog.array.ASSUME_NATIVE_FUNCTIONS', goog.FEATURESET_YEAR > 2012);
 
 
 /**
@@ -984,8 +984,8 @@ goog.array.removeDuplicates = function(arr, opt_rv, opt_hashFn) {
  * behavior for homogeneous arrays of String(s) and Number(s). The array
  * specified <b>must</b> be sorted in ascending order (as defined by the
  * comparison function).  If the array is not sorted, results are undefined.
- * If the array contains multiple instances of the specified target value, any
- * of these instances may be found.
+ * If the array contains multiple instances of the specified target value, the
+ * left-most instance will be found.
  *
  * Runtime: O(log n)
  *

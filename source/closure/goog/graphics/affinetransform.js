@@ -247,8 +247,8 @@ goog.graphics.AffineTransform.prototype.preRotate = function(theta, x, y) {
  * @return {!goog.graphics.AffineTransform} This affine transform.
  */
 goog.graphics.AffineTransform.prototype.shear = function(shx, shy) {
-  var m00 = this.m00_;
-  var m10 = this.m10_;
+  const m00 = this.m00_;
+  const m10 = this.m10_;
   this.m00_ += shy * this.m01_;
   this.m10_ += shy * this.m11_;
   this.m01_ += shx * m00;
@@ -272,9 +272,9 @@ goog.graphics.AffineTransform.prototype.shear = function(shx, shy) {
  * @return {!goog.graphics.AffineTransform} This affine transform.
  */
 goog.graphics.AffineTransform.prototype.preShear = function(shx, shy) {
-  var m00 = this.m00_;
-  var m01 = this.m01_;
-  var m02 = this.m02_;
+  const m00 = this.m00_;
+  const m01 = this.m01_;
+  const m02 = this.m02_;
   this.m00_ += shx * this.m10_;
   this.m01_ += shx * this.m11_;
   this.m02_ += shx * this.m12_;
@@ -354,8 +354,8 @@ goog.graphics.AffineTransform.prototype.getShearY = function() {
  * @return {!goog.graphics.AffineTransform} This affine transform.
  */
 goog.graphics.AffineTransform.prototype.concatenate = function(tx) {
-  var m0 = this.m00_;
-  var m1 = this.m01_;
+  let m0 = this.m00_;
+  let m1 = this.m01_;
   this.m00_ = tx.m00_ * m0 + tx.m10_ * m1;
   this.m01_ = tx.m01_ * m0 + tx.m11_ * m1;
   this.m02_ += tx.m02_ * m0 + tx.m12_ * m1;
@@ -376,8 +376,8 @@ goog.graphics.AffineTransform.prototype.concatenate = function(tx) {
  * @return {!goog.graphics.AffineTransform} This affine transform.
  */
 goog.graphics.AffineTransform.prototype.preConcatenate = function(tx) {
-  var m0 = this.m00_;
-  var m1 = this.m10_;
+  let m0 = this.m00_;
+  let m1 = this.m10_;
   this.m00_ = tx.m00_ * m0 + tx.m01_ * m1;
   this.m10_ = tx.m10_ * m0 + tx.m11_ * m1;
 
@@ -409,12 +409,12 @@ goog.graphics.AffineTransform.prototype.preConcatenate = function(tx) {
  */
 goog.graphics.AffineTransform.prototype.transform = function(
     src, srcOff, dst, dstOff, numPts) {
-  var i = srcOff;
-  var j = dstOff;
-  var srcEnd = srcOff + 2 * numPts;
+  let i = srcOff;
+  let j = dstOff;
+  const srcEnd = srcOff + 2 * numPts;
   while (i < srcEnd) {
-    var x = src[i++];
-    var y = src[i++];
+    const x = src[i++];
+    const y = src[i++];
     dst[j++] = x * this.m00_ + y * this.m01_ + this.m02_;
     dst[j++] = x * this.m10_ + y * this.m11_ + this.m12_;
   }
@@ -436,7 +436,7 @@ goog.graphics.AffineTransform.prototype.getDeterminant = function() {
  * @return {boolean} Whether the transform is invertible.
  */
 goog.graphics.AffineTransform.prototype.isInvertible = function() {
-  var det = this.getDeterminant();
+  const det = this.getDeterminant();
   return isFinite(det) && isFinite(this.m02_) && isFinite(this.m12_) &&
       det != 0;
 };
@@ -447,7 +447,7 @@ goog.graphics.AffineTransform.prototype.isInvertible = function() {
  *     representing the inverse transformation.
  */
 goog.graphics.AffineTransform.prototype.createInverse = function() {
-  var det = this.getDeterminant();
+  const det = this.getDeterminant();
   return new goog.graphics.AffineTransform(
       this.m11_ / det, -this.m10_ / det, -this.m01_ / det, this.m00_ / det,
       (this.m01_ * this.m12_ - this.m11_ * this.m02_) / det,
@@ -553,8 +553,8 @@ goog.graphics.AffineTransform.prototype.setToShear = function(shx, shy) {
  * @return {!goog.graphics.AffineTransform} This affine transform.
  */
 goog.graphics.AffineTransform.prototype.setToRotation = function(theta, x, y) {
-  var cos = Math.cos(theta);
-  var sin = Math.sin(theta);
+  const cos = Math.cos(theta);
+  const sin = Math.sin(theta);
   return this.setTransform(
       cos, sin, -sin, cos, x - x * cos + y * sin, y - x * sin - y * cos);
 };

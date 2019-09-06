@@ -554,6 +554,8 @@ function testIsNumber() {
   assertFalse('string should not be a number', goog.isNumber(string));
   assertFalse('null should not be a number', goog.isNumber(nullVar));
   assertFalse('undefined should not be a number', goog.isNumber(notDefined));
+  assertTrue('NaN should be a number', goog.isNumber(NaN));
+  assertTrue('Infinity should be a number', goog.isNumber(Infinity));
 }
 
 function testIsFunction() {
@@ -1037,10 +1039,12 @@ function testMakeSingleton() {
 //=== tests for now ===
 
 function testNow() {
-  const toleranceMilliseconds = 20;  // 10 ms was not enough for IE7.
-  const now1 = new Date().getTime();
-  const now2 = goog.now();
-  assertTrue(Math.abs(now1 - now2) < toleranceMilliseconds);
+  // We use bounds rather than a tolerance to eliminate non-determinsim.
+  const start = new Date().getTime();
+  const underTest = goog.now();
+  const end = new Date().getTime();
+
+  assertTrue(start <= underTest && underTest <= end);
 }
 
 
@@ -1066,6 +1070,12 @@ function testGetMsgWithPlaceholders() {
 
   msg = goog.getMsg('{$a}{$b}', {b: ''});
   assertEquals('{$a}', msg);
+}
+
+
+function testGetMsgWithHtml() {
+  let msg = goog.getMsg('Hello <{$a}&gt;!', {a: '<b>World</b>'}, {html: true});
+  assertEquals('Hello &lt;<b>World</b>&gt;!', msg);
 }
 
 

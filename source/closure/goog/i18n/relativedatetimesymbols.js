@@ -43,7 +43,7 @@ goog.module('goog.i18n.relativeDateTimeSymbols');
  *   SECOND:  RelativeDateTimeFormatStyles!,
  * }}
  */
-var RelativeDateTimeSymbols; /* The data for the locale */
+let RelativeDateTimeSymbols; /* The data for the locale */
 
 /** @typedef {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols;
@@ -56,7 +56,7 @@ exports.RelativeDateTimeSymbols;
  *   NARROW: (!StyleElement|undefined),
  * }}
  */
-var RelativeDateTimeFormatStyles;
+let RelativeDateTimeFormatStyles;
 
 /** @typedef {!RelativeDateTimeFormatStyles} */
 exports.RelativeDateTimeFormatStyles;
@@ -73,7 +73,7 @@ exports.RelativeDateTimeFormatStyles;
  *   P: string,
  * }}
  */
-var StyleElement;
+let StyleElement;
 
 /** @typedef {?StyleElement} */
 exports.StyleElement;
@@ -82,13 +82,13 @@ exports.StyleElement;
  * Map of direction options for RELATIVE data with integer keys.
  * @typedef {!Object<string, string>}
  */
-var RelativeDateTimeDirectionMap;
+let RelativeDateTimeDirectionMap;
 
 /** @typedef {!RelativeDateTimeDirectionMap} */
 exports.RelativeDateTimeDirectionMap;
 
 /** @type {!RelativeDateTimeSymbols} */
-var defaultSymbols;
+let defaultSymbols;
 
 /**
  * Returns the default RelativeDateTimeSymbols.

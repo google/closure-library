@@ -184,7 +184,7 @@ goog.math.Size.prototype.round = function() {
  * @return {!goog.math.Size} This Size object after scaling.
  */
 goog.math.Size.prototype.scale = function(sx, opt_sy) {
-  var sy = goog.isNumber(opt_sy) ? opt_sy : sx;
+  const sy = goog.isNumber(opt_sy) ? opt_sy : sx;
   this.width *= sx;
   this.height *= sy;
   return this;
@@ -202,7 +202,7 @@ goog.math.Size.prototype.scale = function(sx, opt_sy) {
  * @return {!goog.math.Size} This Size object, after optional scaling.
  */
 goog.math.Size.prototype.scaleToCover = function(target) {
-  var s = this.aspectRatio() <= target.aspectRatio() ?
+  const s = this.aspectRatio() <= target.aspectRatio() ?
       target.width / this.width :
       target.height / this.height;
 
@@ -219,7 +219,7 @@ goog.math.Size.prototype.scaleToCover = function(target) {
  * @return {!goog.math.Size} This Size object, after optional scaling.
  */
 goog.math.Size.prototype.scaleToFit = function(target) {
-  var s = this.aspectRatio() > target.aspectRatio() ?
+  const s = this.aspectRatio() > target.aspectRatio() ?
       target.width / this.width :
       target.height / this.height;
 

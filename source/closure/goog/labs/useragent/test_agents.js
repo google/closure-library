@@ -24,7 +24,7 @@ goog.provide('goog.labs.userAgent.testAgents');
 goog.setTestOnly('goog.labs.userAgent.testAgents');
 
 goog.scope(function() {
-var testAgents = goog.labs.userAgent.testAgents;
+const testAgents = goog.labs.userAgent.testAgents;
 
 
 /** @const {string} */
@@ -417,5 +417,4 @@ testAgents.GO2PHONE =
     'Mozilla/5.0 (Linux; Android 8.1.0; GAFP sp9820e_1h10_go_native)' +
     ' AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3605.0 Mobile' +
     ' Safari/537.36';
-
 });  // goog.scope

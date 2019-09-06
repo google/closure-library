@@ -257,32 +257,11 @@ goog.debug.ErrorHandler.prototype.protectWindowSetInterval = function() {
 
 
 /**
- * Install exception protection for native promises and async/await functions.
- */
-goog.debug.ErrorHandler.prototype.protectPromiseAndAsyncFunctions = function() {
-  if (this.catchUnhandledRejections_()) {
-    return;
-  }
-  const oldPromiseThen = Promise.prototype.then;
-  const that = this;
-  /** @override */
-  Promise.prototype.then = function(callback, errorHandler) {
-    callback = callback ? that.protectEntryPoint(callback) : callback;
-    errorHandler =
-        errorHandler ? that.protectEntryPoint(errorHandler) : errorHandler;
-    return oldPromiseThen.call(this, callback, errorHandler);
-  };
-};
-
-
-/**
  * Install an unhandledrejection event listener that reports rejected promises.
  * Note: this will only work with Chrome 49+ and friends, but so far is the only
  * way to report uncaught errors in aysnc/await functions.
- * @private
- * @return {boolean} Whether an exception handler could be installed.
  */
-goog.debug.ErrorHandler.prototype.catchUnhandledRejections_ = function() {
+goog.debug.ErrorHandler.prototype.catchUnhandledRejections = function() {
   if ('onunhandledrejection' in goog.global) {
     goog.global.onunhandledrejection = (event) => {
       // event.reason contains the rejection reason. When an Error is
@@ -292,9 +271,7 @@ goog.debug.ErrorHandler.prototype.catchUnhandledRejections_ = function() {
           event && event.reason ? event.reason : new Error('uncaught error');
       this.handleError_(e);
     };
-    return true;
   }
-  return false;
 };
 
 

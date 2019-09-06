@@ -15,6 +15,8 @@
 goog.module('goog.i18n.RelativeDateTimeFormatTest');
 goog.setTestOnly('goog.i18n.RelativeDateTimeFormatTest');
 
+var LocaleFeature = goog.require('goog.i18n.LocaleFeature');
+
 const NumberFormatSymbols_ar_EG = goog.require('goog.i18n.NumberFormatSymbols_ar_EG');
 const NumberFormatSymbols_en = goog.require('goog.i18n.NumberFormatSymbols_en');
 const NumberFormatSymbols_es = goog.require('goog.i18n.NumberFormatSymbols_es');
@@ -25,8 +27,12 @@ const RelativeDateTimeFormat = goog.require('goog.i18n.RelativeDateTimeFormat');
 const relativeDateTimeSymbols = goog.require('goog.i18n.relativeDateTimeSymbols');
 const relativeDateTimeSymbolsExt = goog.require('goog.i18n.relativeDateTimeSymbolsExt');
 
+var testSuite = goog.require('goog.testing.testSuite');
 
-const testSuite = goog.require('goog.testing.testSuite');
+var Plurals_en = goog.i18n.pluralRules.enSelect_;
+var Plurals_he = goog.i18n.pluralRules.heSelect_;
+var Plurals_ar = goog.i18n.pluralRules.arSelect_;
+
 
 /**
  * @param {string} locale
@@ -34,14 +40,17 @@ const testSuite = goog.require('goog.testing.testSuite');
  * @param {number} direction
  * @param {number} unit
  * @param {string} expected
+ * @param {string|undefined} pluralrules
  * @constructor
  */
-const DirectionData = function(locale, style, direction, unit, expected) {
+const DirectionData = function(
+    locale, style, direction, unit, expected, pluralrules) {
   this.locale = locale;
   this.style = style;
   this.direction = direction;
   this.unit = unit;
   this.expected = expected;
+  this.pluralrules = pluralrules;
 };
 
 
@@ -93,7 +102,6 @@ const localeSymbols = {
   },
 };
 
-
 // clang-format off
 const formatDirectionTestData = [
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.DAY, 'yesterday'),
@@ -138,7 +146,7 @@ const formatDirectionTestData = [
   new DirectionData('en', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.WEEK, 'next wk.'),
   new DirectionData('en', RelativeDateTimeFormat.Style.NARROW, 1, RelativeDateTimeFormat.Unit.WEEK, 'next wk.'),
 
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.WEEK, 'الأسبوع القادم'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.WEEK, 'الأسبوع القادم', Plurals_ar),
 
   /* Trying with locale "es" */
   new DirectionData('es', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.DAY, 'ayer'),
@@ -227,15 +235,15 @@ const formatFarsiData = [
 ];
 
 const formatArEgData = [
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.DAY, 'خلال ٠ يوم'),
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 0, RelativeDateTimeFormat.Unit.DAY, 'خلال ٠ يوم'),
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.MONTH, 'خلال شهر واحد'),
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, -1, RelativeDateTimeFormat.Unit.DAY, 'قبل يوم واحد'),
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 2, RelativeDateTimeFormat.Unit.DAY, 'خلال ٢ يوم'),
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.HOUR, 'خلال ٣ ساعة'),
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 28, RelativeDateTimeFormat.Unit.SECOND, 'خلال ٢٨ ثانية'),
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 101, RelativeDateTimeFormat.Unit.WEEK, 'خلال ١٠١ أسبوع'),
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 1.5, RelativeDateTimeFormat.Unit.YEAR, 'خلال ١٫٥ سنة'),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.DAY, 'خلال ٠ يوم', Plurals_ar),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 0, RelativeDateTimeFormat.Unit.DAY, 'خلال ٠ يوم', Plurals_ar),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.MONTH, 'خلال شهر واحد', Plurals_ar),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, -1, RelativeDateTimeFormat.Unit.DAY, 'قبل يوم واحد', Plurals_ar),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 2, RelativeDateTimeFormat.Unit.DAY, 'خلال يومين', Plurals_ar),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.HOUR, 'خلال ٣ ساعات', Plurals_ar),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 28, RelativeDateTimeFormat.Unit.SECOND, 'خلال ٢٨ ثانية', Plurals_ar),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 101, RelativeDateTimeFormat.Unit.WEEK, 'خلال ١٠١ أسبوع', Plurals_ar),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.SHORT, 1.5, RelativeDateTimeFormat.Unit.YEAR, 'خلال ١٫٥ سنة', Plurals_ar),
 ];
 
 const formatNumericSpanishData = [
@@ -247,17 +255,38 @@ const formatNumericSpanishData = [
 
 
 const formatNumericExtendedData = [
-  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, 'قبل ٢ يوم'),
-  new DirectionData('agq', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.DAY, '-١ d'),
-  new DirectionData('agq', RelativeDateTimeFormat.Style.SHORT, 2, RelativeDateTimeFormat.Unit.DAY, '+٢ d'),
-  new DirectionData('ar_AE', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, 'قبل ٢ يوم'),
-  new DirectionData('as', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.DAY, '١ দিনত'),
-  new DirectionData('as', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.DAY, '٣ দিনত'),
+  new DirectionData('ar_AE', RelativeDateTimeFormat.Style.LONG, -2,
+                    RelativeDateTimeFormat.Unit.DAY, 'قبل يومين', Plurals_ar),
+  new DirectionData('ar_EG', RelativeDateTimeFormat.Style.LONG, -2,
+                    RelativeDateTimeFormat.Unit.DAY, 'قبل يومين', Plurals_ar),
+  new DirectionData('agq', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.DAY, '-1 d'),
+  new DirectionData('agq', RelativeDateTimeFormat.Style.SHORT, 2, RelativeDateTimeFormat.Unit.DAY, '+2 d'),
+  new DirectionData('as', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.DAY, '1 দিনত'),
+  new DirectionData('as', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.DAY, '3 দিনত'),
 ];
 
 const formatNumericRtlData = [
-  new DirectionData('he', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, 'לפני 2 ימים'),
-  new DirectionData('ar_LY', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, 'قبل 2 يوم'),
+  new DirectionData('he', RelativeDateTimeFormat.Style.LONG, -2,
+                    RelativeDateTimeFormat.Unit.DAY, 'לפני יומיים', Plurals_he),
+  // Should this be 'לפני יומיים'?
+  new DirectionData('he', RelativeDateTimeFormat.Style.LONG, 2,
+                    RelativeDateTimeFormat.Unit.DAY, 'בעוד יומיים', Plurals_he),
+  // Should this be 'בעוד יומיים'?
+  new DirectionData('he', RelativeDateTimeFormat.Style.LONG, -3,
+                    RelativeDateTimeFormat.Unit.DAY, 'לפני 3 ימים', Plurals_he),
+  new DirectionData('ar', RelativeDateTimeFormat.Style.LONG, -2,
+                    RelativeDateTimeFormat.Unit.DAY, 'قبل يومين', Plurals_ar),
+  new DirectionData('ar', RelativeDateTimeFormat.Style.LONG, 2,
+                    RelativeDateTimeFormat.Unit.DAY, 'خلال يومين', Plurals_ar),
+];
+
+var formatAutoRtlData = [
+  new DirectionData('he', RelativeDateTimeFormat.Style.LONG, -2,
+                    RelativeDateTimeFormat.Unit.DAY, 'שלשום', Plurals_he),
+  new DirectionData('he', RelativeDateTimeFormat.Style.LONG, -3,
+                    RelativeDateTimeFormat.Unit.DAY, 'לפני 3 ימים', Plurals_he),
+  new DirectionData('ar', RelativeDateTimeFormat.Style.LONG, -2,
+                    RelativeDateTimeFormat.Unit.DAY, 'أول أمس', Plurals_ar),
 ];
 
 // clang-format on
@@ -265,208 +294,352 @@ const formatNumericRtlData = [
 /** @return {string} Error description. */
 DirectionData.prototype.getErrorDescription = function() {
   return 'Error for locale:' + this.locale + ' style: ' + this.style +
-      ' quantity =' + this.direction + ' unit =' + this.unit + '\'';
+      ' quantity =' + this.direction + ' unit =' + this.unit +
+      ' pluralrules = ' + this.pluralrules + '\'';
 };
 
+// Tests both JavaScript and ECMAScript on supporting browsers.
+// Sets up goog.USE_ECMASCRIPT_I18N_RDTF flag in each function.
+var testECMAScriptOptions = [false];
+var rdtf = new RelativeDateTimeFormat();
+if (rdtf.hasNativeRdtf()) {
+  // Add test if the browser environment supports ECMAScript implementation.
+  testECMAScriptOptions.push(true);
+}
+
 testSuite({
+  getTestName: function() {
+    return 'RelativeDateTimeFormat Tests';
+  },
+
+  setUp: function() {
+    goog.LOCALE = 'en';
+    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
+    goog.i18n.pluralRules.select = Plurals_en;
+    LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = false;
+  },
+
+  tearDown: function() {
+    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
+    goog.LOCALE = 'en';
+  },
+
   // Test with style, but no number formatting.
   testFormatStyle: function() {
-    for (let i = 0; i < formatDirectionTestData.length; i++) {
-      const data = formatDirectionTestData[i];
-      const symbols = localeSymbols[data.locale];
-      // TODO: also test with "always"
-      const fmt = new RelativeDateTimeFormat(
-          RelativeDateTimeFormat.NumericOption.AUTO, data.style,
-          symbols.RelativeDateTimeFormatSymbols);
+    // Try with both JavaScript and ECMAScript implementations, if present.
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
 
-      const result = fmt.format(data.direction, data.unit);
-      assertEquals(data.getErrorDescription(), data.expected, result);
+      for (let i = 0; i < formatDirectionTestData.length; i++) {
+        const data = formatDirectionTestData[i];
+        const symbols = localeSymbols[data.locale];
+        goog.LOCALE = data.locale;
+
+        const fmt = new RelativeDateTimeFormat(
+            RelativeDateTimeFormat.NumericOption.AUTO, data.style,
+            symbols.RelativeDateTimeFormatSymbols);
+
+        const result = fmt.format(data.direction, data.unit);
+        assertEquals(data.getErrorDescription(), data.expected, result);
+      }
     }
   },
 
   testFormatNumericStyle: function() {
-    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
-    for (let i = 0; i < formatNumericTestData.length; i++) {
-      const data = formatNumericTestData[i];
-      const symbols = localeSymbols[data.locale];
-      const fmtAlways = new RelativeDateTimeFormat(
-          RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
-          symbols.RelativeDateTimeFormatSymbols);
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
 
-      const result = fmtAlways.format(data.direction, data.unit);
-      assertEquals(data.getErrorDescription(), data.expected, result);
+      goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
+      for (let i = 0; i < formatNumericTestData.length; i++) {
+        const data = formatNumericTestData[i];
+        const symbols = localeSymbols[data.locale];
+        goog.LOCALE = data.locale;
+        const fmtAlways = new RelativeDateTimeFormat(
+            RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+            symbols.RelativeDateTimeFormatSymbols);
 
-      const fmtUndefined = new RelativeDateTimeFormat(
-          undefined, data.style, symbols.RelativeDateTimeFormatSymbols);
-      assertEquals(
-          data.getErrorDescription(), data.expected,
-          fmtUndefined.format(data.direction, data.unit));
+        const result = fmtAlways.format(data.direction, data.unit);
+        assertEquals(data.getErrorDescription(), data.expected, result);
+
+        const fmtUndefined = new RelativeDateTimeFormat(
+            undefined, data.style, symbols.RelativeDateTimeFormatSymbols);
+        assertEquals(
+            data.getErrorDescription(), data.expected,
+            fmtUndefined.format(data.direction, data.unit));
+      }
     }
   },
 
   testNumericMode: function() {
-    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_es;
-    const data = new DirectionData(
-        'es', RelativeDateTimeFormat.Style.LONG, -1,
-        RelativeDateTimeFormat.Unit.DAY, 'ayer');
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
 
-    const symbols = localeSymbols[data.locale];
-    const fmt = new RelativeDateTimeFormat(
-        RelativeDateTimeFormat.NumericOption.AUTO, data.style,
-        symbols.RelativeDateTimeFormatSymbols);
+      goog.i18n.NumberFormatSymbols = NumberFormatSymbols_es;
+      goog.LOCALE = 'es';
+      const data = new DirectionData(
+          'es', RelativeDateTimeFormat.Style.LONG, -1,
+          RelativeDateTimeFormat.Unit.DAY, 'ayer');
 
-    let numMode = fmt.getNumericMode();
-    assertEquals(
-        data.getErrorDescription(), numMode,
-        RelativeDateTimeFormat.NumericOption.AUTO);
-    const result = fmt.format(data.direction, data.unit);
-    assertEquals(data.getErrorDescription(), data.expected, result);
-
-    // Try with forced numeric mode.
-    const fmtNumericOnly = new RelativeDateTimeFormat(
-        RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
-        symbols.RelativeDateTimeFormatSymbols);
-    numMode = fmtNumericOnly.getNumericMode();
-    assertEquals(
-        data.getErrorDescription(), numMode,
-        RelativeDateTimeFormat.NumericOption.ALWAYS);
-    const numResult = fmtNumericOnly.format(data.direction, data.unit);
-    assertEquals(data.getErrorDescription(), 'hace 1 día', numResult);
-  },
-
-  testFormatNumericSpanishStyle: function() {
-    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_es;
-    for (let i = 0; i < formatNumericSpanishData.length; i++) {
-      const data = formatNumericSpanishData[i];
-      const symbols = localeSymbols[data.locale];
-      const fmt = new RelativeDateTimeFormat(
-          RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
-          symbols.RelativeDateTimeFormatSymbols);
-
-      const result = fmt.format(data.direction, data.unit);
-      assertEquals(data.getErrorDescription(), data.expected, result);
-    }
-  },
-
-  testFormatNumericFarsiStyle: function() {
-    for (let i = 0; i < formatFarsiData.length; i++) {
-      const data = formatFarsiData[i];
-      const symbols = localeSymbols[data.locale];
-      goog.i18n.NumberFormatSymbols = NumberFormatSymbols_fa;
-
-      const fmt = new RelativeDateTimeFormat(
-          RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
-          symbols.RelativeDateTimeFormatSymbols);
-
-      const result = fmt.format(data.direction, data.unit);
-      assertEquals(data.getErrorDescription(), data.expected, result);
-    }
-  },
-
-  testFormatNumericArEgStyle: function() {
-    for (let i = 0; i < formatArEgData.length; i++) {
-      const data = formatArEgData[i];
-      const symbols = localeSymbols[data.locale];
-      goog.i18n.NumberFormatSymbols = NumberFormatSymbols_ar_EG;
-
-      const fmt = new RelativeDateTimeFormat(
-          RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
-          symbols.RelativeDateTimeFormatSymbols);
-
-      const result = fmt.format(data.direction, data.unit);
-      assertEquals(data.getErrorDescription(), data.expected, result);
-    }
-  },
-
-  testFormatNumericExtendedStyle: function() {
-    for (let i = 0; i < formatNumericExtendedData.length; i++) {
-      const data = formatNumericExtendedData[i];
-      const symbols = localeSymbols[data.locale];
-      const fmt = new RelativeDateTimeFormat(
-          RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
-          symbols.RelativeDateTimeFormatSymbols);
-
-      const result = fmt.format(data.direction, data.unit);
-      assertEquals(data.getErrorDescription(), data.expected, result);
-    }
-  },
-
-  testForcedNumeric: function() {
-    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
-    for (let i = 0; i < forcedNumericTestData.length; i++) {
-      const data = forcedNumericTestData[i];
       const symbols = localeSymbols[data.locale];
       const fmt = new RelativeDateTimeFormat(
           RelativeDateTimeFormat.NumericOption.AUTO, data.style,
           symbols.RelativeDateTimeFormatSymbols);
 
+      let numMode = fmt.getNumericMode();
+      assertEquals(
+          data.getErrorDescription(), numMode,
+          RelativeDateTimeFormat.NumericOption.AUTO);
       const result = fmt.format(data.direction, data.unit);
       assertEquals(data.getErrorDescription(), data.expected, result);
+
+      // Try with forced numeric mode.
+      const fmtNumericOnly = new RelativeDateTimeFormat(
+          RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+          symbols.RelativeDateTimeFormatSymbols);
+      numMode = fmtNumericOnly.getNumericMode();
+      assertEquals(
+          data.getErrorDescription(), numMode,
+          RelativeDateTimeFormat.NumericOption.ALWAYS);
+      const numResult = fmtNumericOnly.format(data.direction, data.unit);
+      assertEquals(data.getErrorDescription(), 'hace 1 día', numResult);
+    }
+  },
+
+  testFormatNumericSpanishStyle: function() {
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
+
+      goog.i18n.NumberFormatSymbols = NumberFormatSymbols_es;
+      goog.LOCALE = 'es';
+      for (let i = 0; i < formatNumericSpanishData.length; i++) {
+        const data = formatNumericSpanishData[i];
+        const symbols = localeSymbols[data.locale];
+        const fmt = new RelativeDateTimeFormat(
+            RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+            symbols.RelativeDateTimeFormatSymbols);
+
+        const result = fmt.format(data.direction, data.unit);
+        assertEquals(data.getErrorDescription(), data.expected, result);
+      }
+    }
+  },
+
+  testFormatNumericFarsiStyle: function() {
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
+
+      for (let i = 0; i < formatFarsiData.length; i++) {
+        const data = formatFarsiData[i];
+        const symbols = localeSymbols[data.locale];
+        goog.i18n.NumberFormatSymbols = NumberFormatSymbols_fa;
+
+        goog.LOCALE = data.locale;
+        const fmt = new RelativeDateTimeFormat(
+            RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+            symbols.RelativeDateTimeFormatSymbols);
+
+        const result = fmt.format(data.direction, data.unit);
+        assertEquals(data.getErrorDescription(), data.expected, result);
+      }
+    }
+  },
+
+  testFormatNumericArEgStyle: function() {
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
+
+      for (let i = 0; i < formatArEgData.length; i++) {
+        const data = formatArEgData[i];
+        const symbols = localeSymbols[data.locale];
+        goog.i18n.NumberFormatSymbols = NumberFormatSymbols_ar_EG;
+
+        goog.LOCALE = data.locale;
+        goog.i18n.pluralRules.select = data.pluralrules;
+        const fmt = new RelativeDateTimeFormat(
+            RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+            symbols.RelativeDateTimeFormatSymbols);
+
+        const result = fmt.format(data.direction, data.unit);
+        assertEquals(data.getErrorDescription(), data.expected, result);
+      }
+    }
+  },
+
+  testFormatNumericExtendedStyle: function() {
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
+
+      for (let i = 0; i < formatNumericExtendedData.length; i++) {
+        const data = formatNumericExtendedData[i];
+        const symbols = localeSymbols[data.locale];
+        goog.LOCALE = data.locale;
+        const fmt = new RelativeDateTimeFormat(
+            RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+            symbols.RelativeDateTimeFormatSymbols);
+
+        if (data.pluralrules) {
+          goog.i18n.pluralRules.select = data.pluralrules;
+        } else {
+          goog.i18n.pluralRules.select = Plurals_en;
+        }
+
+        /* Only test ECMAScript mode if locale data is expected */
+        if (!fmt.isNativeMode()) {
+          const result = fmt.format(data.direction, data.unit);
+          assertEquals(data.getErrorDescription(), data.expected, result);
+        }
+      }
+    }
+  },
+
+  testForcedNumeric: function() {
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
+
+      goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
+      for (let i = 0; i < forcedNumericTestData.length; i++) {
+        const data = forcedNumericTestData[i];
+        const symbols = localeSymbols[data.locale];
+        goog.LOCALE = data.locale;
+        const fmt = new RelativeDateTimeFormat(
+            RelativeDateTimeFormat.NumericOption.AUTO, data.style,
+            symbols.RelativeDateTimeFormatSymbols);
+
+        const result = fmt.format(data.direction, data.unit);
+        assertEquals(data.getErrorDescription(), data.expected, result);
+      }
     }
   },
 
   testFormatNumericRtl: function() {
-    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
-    for (let i = 0; i < formatNumericRtlData.length; i++) {
-      const data = formatNumericRtlData[i];
-      const symbols = localeSymbols[data.locale];
-      const fmt = new RelativeDateTimeFormat(
-          RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
-          symbols.RelativeDateTimeFormatSymbols);
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
 
-      const result = fmt.format(data.direction, data.unit);
-      assertEquals(data.getErrorDescription(), data.expected, result);
+      goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
+      for (var i = 0; i < formatNumericRtlData.length; i++) {
+        var data = formatNumericRtlData[i];
+        var symbols = localeSymbols[data.locale];
+        goog.LOCALE = data.locale;
+
+        // Explicitly set plural rules to get correct option.
+        goog.i18n.pluralRules.select = data.pluralrules;
+
+        let fmt = new RelativeDateTimeFormat(
+            RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
+            symbols.RelativeDateTimeFormatSymbols);
+
+        var result = fmt.format(data.direction, data.unit);
+        assertEquals(data.getErrorDescription(), data.expected, result);
+      }
+    }
+  },
+
+  testFormatAutoRtl: function() {
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
+
+      for (let i = 0; i < formatAutoRtlData.length; i++) {
+        const data = formatAutoRtlData[i];
+        const symbols = localeSymbols[data.locale];
+        goog.LOCALE = data.locale;
+        goog.i18n.pluralRules.select = data.pluralrules;
+        const fmt = new RelativeDateTimeFormat(
+            RelativeDateTimeFormat.NumericOption.AUTO, data.style,
+            symbols.RelativeDateTimeFormatSymbols);
+
+        const result = fmt.format(data.direction, data.unit);
+        assertEquals(data.getErrorDescription(), data.expected, result);
+      }
     }
   },
 
   // Test that retrieving style works.
   testGetStyle: function() {
-    let fmt = new RelativeDateTimeFormat();
-    let style = fmt.getFormatStyle();
-    assertEquals(
-        'bad style returned', RelativeDateTimeFormat.Style.LONG, style);
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
 
-    fmt = new RelativeDateTimeFormat(
-        undefined, RelativeDateTimeFormat.Style.LONG);
-    style = fmt.getFormatStyle();
-    assertEquals(
-        'bad style returned', RelativeDateTimeFormat.Style.LONG, style);
+      let fmt = new RelativeDateTimeFormat();
+      let style = fmt.getFormatStyle();
+      assertEquals(
+          'bad style returned', RelativeDateTimeFormat.Style.LONG, style);
 
-    fmt = new RelativeDateTimeFormat(
-        undefined, RelativeDateTimeFormat.Style.SHORT);
-    style = fmt.getFormatStyle();
-    assertEquals(
-        'bad style returned', RelativeDateTimeFormat.Style.SHORT, style);
+      fmt = new RelativeDateTimeFormat(
+          undefined, RelativeDateTimeFormat.Style.LONG);
+      style = fmt.getFormatStyle();
+      assertEquals(
+          'bad style returned', RelativeDateTimeFormat.Style.LONG, style);
 
-    fmt = new RelativeDateTimeFormat(
-        undefined, RelativeDateTimeFormat.Style.NARROW);
-    style = fmt.getFormatStyle();
-    assertEquals(
-        'bad style returned', RelativeDateTimeFormat.Style.NARROW, style);
+      fmt = new RelativeDateTimeFormat(
+          undefined, RelativeDateTimeFormat.Style.SHORT);
+      style = fmt.getFormatStyle();
+      assertEquals(
+          'bad style returned', RelativeDateTimeFormat.Style.SHORT, style);
+
+      fmt = new RelativeDateTimeFormat(
+          undefined, RelativeDateTimeFormat.Style.NARROW);
+      style = fmt.getFormatStyle();
+      assertEquals(
+          'bad style returned', RelativeDateTimeFormat.Style.NARROW, style);
+    }
   },
 
   // Test that retrieving relative unit is returned when defined only.
   testGetRelativeStringDefined: function() {
-    const fmt = new RelativeDateTimeFormat();
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
 
-    let result =
-        fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, -7);
-    assertUndefined(result);  // Expect undefined for Day -7
+      let fmt = new RelativeDateTimeFormat();
 
-    result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, -2);
-    assertUndefined(result);  // Expect undefined for Day -2 English
+      if (!fmt.isNativeMode()) {
+        // These are only applicable for JavaScript implementation.
+        var result =
+            fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, -7);
+        assertUndefined(result);  // Expect undefined for Day -7
 
-    result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.YEAR, -1);
-    assertEquals('last year', result);
+        result =
+            fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, -2);
+        assertUndefined(result);  // Expect undefined for Day -2 English
 
-    result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, 0);
-    assertEquals('today', result);
+        result =
+            fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.YEAR, -1);
+        assertEquals('last year', result);
 
-    result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.QUARTER, 1);
-    assertEquals('next quarter', result);
+        result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, 0);
+        assertEquals('today', result);
 
-    result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, 2);
-    assertUndefined(result);  // No special term for in 2 days in English
+        result =
+            fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.QUARTER, 1);
+        assertEquals('next quarter', result);
+
+        result = fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, 2);
+        assertUndefined(result);  // No special term for in 2 days in English
+      }
+    }
   },
 
+  testEnShort: function() {
+    goog.LOCALE = 'en';
+
+    for (const val of testECMAScriptOptions) {
+      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
+
+      let fmt = new RelativeDateTimeFormat(
+          RelativeDateTimeFormat.NumericOption.ALWAYS,
+          RelativeDateTimeFormat.Style.SHORT);
+      var result = fmt.format(2, RelativeDateTimeFormat.Unit.HOUR);
+      assertEquals('in 2 hr.', result);
+
+      result = fmt.format(1, RelativeDateTimeFormat.Unit.QUARTER);
+      assertEquals('in 1 qtr.', result);
+
+      var fmtAuto = new RelativeDateTimeFormat(
+          RelativeDateTimeFormat.NumericOption.AUTO,
+          RelativeDateTimeFormat.Style.SHORT);
+      var result = fmtAuto.format(2, RelativeDateTimeFormat.Unit.HOUR);
+      assertEquals('in 2 hr.', result);
+
+      result = fmtAuto.format(1, RelativeDateTimeFormat.Unit.QUARTER);
+      assertEquals('next qtr.', result);
+    }
+  },
 });

@@ -93,20 +93,22 @@ goog.string.Const.prototype.getTypedStringValue = function() {
 };
 
 
-/**
- * Returns a debug-string representation of this value.
- *
- * To obtain the actual string value wrapped inside an object of this type,
- * use `goog.string.Const.unwrap`.
- *
- * @see goog.string.Const#unwrap
- * @override
- */
-goog.string.Const.prototype.toString = function() {
-  return 'Const{' +
-      this.stringConstValueWithSecurityContract__googStringSecurityPrivate_ +
-      '}';
-};
+if (goog.DEBUG) {
+  /**
+   * Returns a debug-string representation of this value.
+   *
+   * To obtain the actual string value wrapped inside an object of this type,
+   * use `goog.string.Const.unwrap`.
+   *
+   * @see goog.string.Const#unwrap
+   * @override
+   */
+  goog.string.Const.prototype.toString = function() {
+    return 'Const{' +
+        this.stringConstValueWithSecurityContract__googStringSecurityPrivate_ +
+        '}';
+  };
+}
 
 
 /**

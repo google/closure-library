@@ -38,7 +38,7 @@ goog.labs.net.webChannel.Channel = function() {};
 
 
 goog.scope(function() {
-var Channel = goog.labs.net.webChannel.Channel;
+const Channel = goog.labs.net.webChannel.Channel;
 
 
 /**

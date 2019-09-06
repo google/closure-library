@@ -98,7 +98,8 @@ goog.storage.EncryptedStorage.prototype.hashKeyWithSecret_ = function(key) {
   var sha1 = new goog.crypt.Sha1();
   sha1.update(goog.crypt.stringToByteArray(key));
   sha1.update(this.secret_);
-  return goog.crypt.base64.encodeByteArray(sha1.digest(), true);
+  return goog.crypt.base64.encodeByteArray(
+      sha1.digest(), goog.crypt.base64.Alphabet.WEBSAFE_DOT_PADDING);
 };
 
 

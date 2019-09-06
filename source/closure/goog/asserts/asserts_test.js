@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.assertsTest');
-goog.setTestOnly('goog.assertsTest');
+goog.module('goog.assertsTest');
+goog.setTestOnly();
 
-goog.require('goog.asserts');
-goog.require('goog.asserts.AssertionError');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.reflect');
-goog.require('goog.string');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
+const AssertionError = goog.require('goog.asserts.AssertionError');
+const TagName = goog.require('goog.dom.TagName');
+const asserts = goog.require('goog.asserts');
+const dom = goog.require('goog.dom');
+const googString = goog.require('goog.string');
+const reflect = goog.require('goog.reflect');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
 /**
  * Test that the function throws an error with the given message.
@@ -35,296 +35,301 @@ function doTestMessage(failFunc, expectedMsg) {
   assertEquals(expectedMsg, error.message);
 }
 
-function testAssert() {
-  // None of them may throw exception
-  goog.asserts.assert(true);
-  goog.asserts.assert(1);
-  goog.asserts.assert([]);
-  goog.asserts.assert({});
+testSuite({
+  testAssert() {
+    // None of them may throw exception
+    asserts.assert(true);
+    asserts.assert(1);
+    asserts.assert([]);
+    asserts.assert({});
 
-  assertThrows('assert(false)', goog.partial(goog.asserts.assert, false));
-  assertThrows('assert(0)', goog.partial(goog.asserts.assert, 0));
-  assertThrows('assert(null)', goog.partial(goog.asserts.assert, null));
-  assertThrows(
-      'assert(undefined)', goog.partial(goog.asserts.assert, undefined));
+    assertThrows('assert(false)', goog.partial(asserts.assert, false));
+    assertThrows('assert(0)', goog.partial(asserts.assert, 0));
+    assertThrows('assert(null)', goog.partial(asserts.assert, null));
+    assertThrows('assert(undefined)', goog.partial(asserts.assert, undefined));
 
-  // Test error messages.
-  doTestMessage(goog.partial(goog.asserts.assert, false), 'Assertion failed');
-  doTestMessage(
-      goog.partial(goog.asserts.assert, false, 'ouch %s', 1),
-      'Assertion failed: ouch 1');
-}
-
-function testAssertExists() {
-  // None of them may throw exception
-  goog.asserts.assertExists(true);
-  goog.asserts.assertExists(false);
-  goog.asserts.assertExists(1);
-  goog.asserts.assertExists(0);
-  goog.asserts.assertExists(NaN);
-  goog.asserts.assertExists('Hello');
-  goog.asserts.assertExists('');
-  goog.asserts.assertExists(/Hello/);
-  goog.asserts.assertExists([]);
-  goog.asserts.assertExists({});
-
-  assertThrows(
-      'assertExists(null)', goog.partial(goog.asserts.assertExists, null));
-  assertThrows(
-      'assertExists(undefined)',
-      goog.partial(goog.asserts.assertExists, undefined));
-
-  // Test error messages.
-  doTestMessage(
-      goog.partial(goog.asserts.assertExists, null),
-      'Assertion failed: Expected to exist: null.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertExists, null, 'ouch %s', 1),
-      'Assertion failed: ouch 1');
-}
-
-function testAssertExists_narrowing() {
-  const /** number|null|undefined */ wideValue = 0;
-
-  const /** number */ narrowReturn = goog.asserts.assertExists(wideValue);
-  const /** number */ narrowInScope = wideValue;
-
-  goog.reflect.sinkValue(narrowReturn);
-  goog.reflect.sinkValue(narrowInScope);
-}
-
-function testFail() {
-  assertThrows('fail()', goog.asserts.fail);
-  // Test error messages.
-  doTestMessage(goog.partial(goog.asserts.fail, false), 'Failure');
-  doTestMessage(
-      goog.partial(goog.asserts.fail, 'ouch %s', 1), 'Failure: ouch 1');
-}
-
-function testNumber() {
-  goog.asserts.assertNumber(1);
-  assertThrows(
-      'assertNumber(null)', goog.partial(goog.asserts.assertNumber, null));
-  // Test error messages.
-  doTestMessage(
-      goog.partial(goog.asserts.assertNumber, null),
-      'Assertion failed: Expected number but got null: null.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertNumber, '1234'),
-      'Assertion failed: Expected number but got string: 1234.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertNumber, null, 'ouch %s', 1),
-      'Assertion failed: ouch 1');
-}
-
-function testString() {
-  assertEquals('1', goog.asserts.assertString('1'));
-  assertThrows(
-      'assertString(null)', goog.partial(goog.asserts.assertString, null));
-  // Test error messages.
-  doTestMessage(
-      goog.partial(goog.asserts.assertString, null),
-      'Assertion failed: Expected string but got null: null.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertString, 1234),
-      'Assertion failed: Expected string but got number: 1234.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertString, null, 'ouch %s', 1),
-      'Assertion failed: ouch 1');
-}
-
-// jslint:ignore start
-function testFunction() {
-  function f() {}
-  assertEquals(f, goog.asserts.assertFunction(f));
-  assertThrows(
-      'assertFunction(null)', goog.partial(goog.asserts.assertFunction, null));
-  // Test error messages.
-  doTestMessage(
-      goog.partial(goog.asserts.assertFunction, null),
-      'Assertion failed: Expected function but got null: null.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertFunction, 1234),
-      'Assertion failed: Expected function but got number: 1234.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertFunction, null, 'ouch %s', 1),
-      'Assertion failed: ouch 1');
-}
-// jslint:ignore end
-
-function testObject() {
-  const o = {};
-  assertEquals(o, goog.asserts.assertObject(o));
-  assertThrows(
-      'assertObject(null)', goog.partial(goog.asserts.assertObject, null));
-  // Test error messages.
-  doTestMessage(
-      goog.partial(goog.asserts.assertObject, null),
-      'Assertion failed: Expected object but got null: null.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertObject, 1234),
-      'Assertion failed: Expected object but got number: 1234.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertObject, null, 'ouch %s', 1),
-      'Assertion failed: ouch 1');
-}
-
-function testArray() {
-  const a = [];
-  assertEquals(a, goog.asserts.assertArray(a));
-  assertThrows('assertArray({})', goog.partial(goog.asserts.assertArray, {}));
-  // Test error messages.
-  doTestMessage(
-      goog.partial(goog.asserts.assertArray, null),
-      'Assertion failed: Expected array but got null: null.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertArray, 1234),
-      'Assertion failed: Expected array but got number: 1234.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertArray, null, 'ouch %s', 1),
-      'Assertion failed: ouch 1');
-}
-
-function testBoolean() {
-  assertEquals(true, goog.asserts.assertBoolean(true));
-  assertEquals(false, goog.asserts.assertBoolean(false));
-  assertThrows(goog.partial(goog.asserts.assertBoolean, null));
-  assertThrows(goog.partial(goog.asserts.assertBoolean, 'foo'));
-
-  // Test error messages.
-  doTestMessage(
-      goog.partial(goog.asserts.assertBoolean, null),
-      'Assertion failed: Expected boolean but got null: null.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertBoolean, 1234),
-      'Assertion failed: Expected boolean but got number: 1234.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertBoolean, null, 'ouch %s', 1),
-      'Assertion failed: ouch 1');
-}
-
-function testElement() {
-  assertThrows(goog.partial(goog.asserts.assertElement, null));
-  assertThrows(goog.partial(goog.asserts.assertElement, 'foo'));
-  assertThrows(
-      goog.partial(goog.asserts.assertElement, goog.dom.createTextNode('foo')));
-  const elem = goog.dom.createElement(goog.dom.TagName.DIV);
-  assertEquals(elem, goog.asserts.assertElement(elem));
-}
-
-function testInstanceof() {
-  /** @constructor */
-  let F = function() {};
-  goog.asserts.assertInstanceof(new F(), F);
-  const error = assertThrows(
-      'assertInstanceof({}, F)',
-      goog.partial(goog.asserts.assertInstanceof, {}, F));
-  // IE lacks support for function.name and will fallback to toString().
-  const object = /object/.test(error.message) ? '[object Object]' : 'Object';
-  const name = /F/.test(error.message) ? 'F' : 'unknown type name';
-
-  // Test error messages.
-  doTestMessage(
-      goog.partial(goog.asserts.assertInstanceof, {}, F),
-      'Assertion failed: Expected instanceof ' + name + ' but got ' + object +
-          '.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertInstanceof, {}, F, 'a %s', 1),
-      'Assertion failed: a 1');
-  doTestMessage(
-      goog.partial(goog.asserts.assertInstanceof, null, F),
-      'Assertion failed: Expected instanceof ' + name + ' but got null.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertInstanceof, 5, F), 'Assertion failed: ' +
-          'Expected instanceof ' + name + ' but got number.');
-
-  // Test a constructor a with a name (IE does not support function.name).
-  if (!goog.userAgent.IE) {
-    F = function foo() {};
+    // Test error messages.
+    doTestMessage(goog.partial(asserts.assert, false), 'Assertion failed');
     doTestMessage(
-        goog.partial(goog.asserts.assertInstanceof, {}, F),
-        'Assertion failed: Expected instanceof foo but got ' + object + '.');
-  }
+        goog.partial(asserts.assert, false, 'ouch %s', 1),
+        'Assertion failed: ouch 1');
+  },
 
-  // Test a constructor with a displayName.
-  F.displayName = 'bar';
-  doTestMessage(
-      goog.partial(goog.asserts.assertInstanceof, {}, F),
-      'Assertion failed: Expected instanceof bar but got ' + object + '.');
-}
+  testAssertExists() {
+    // None of them may throw exception
+    asserts.assertExists(true);
+    asserts.assertExists(false);
+    asserts.assertExists(1);
+    asserts.assertExists(0);
+    asserts.assertExists(NaN);
+    asserts.assertExists('Hello');
+    asserts.assertExists('');
+    asserts.assertExists(/Hello/);
+    asserts.assertExists([]);
+    asserts.assertExists({});
 
-function testObjectPrototypeIsIntact() {
-  goog.asserts.assertObjectPrototypeIsIntact();
-  const originalToString = Object.prototype.toString;
-  Object.prototype.toString = function() {};
-  try {
-    goog.asserts.assertObjectPrototypeIsIntact();
-    Object.prototype.foo = 1;
+    assertThrows(
+        'assertExists(null)', goog.partial(asserts.assertExists, null));
+    assertThrows(
+        'assertExists(undefined)',
+        goog.partial(asserts.assertExists, undefined));
+
+    // Test error messages.
     doTestMessage(
-        goog.asserts.assertObjectPrototypeIsIntact,
-        'Failure: foo should not be enumerable in Object.prototype.');
-  } finally {
-    Object.prototype.toString = originalToString;
-    delete Object.prototype.foo;
-  }
-}
+        goog.partial(asserts.assertExists, null),
+        'Assertion failed: Expected to exist: null.');
+    doTestMessage(
+        goog.partial(asserts.assertExists, null, 'ouch %s', 1),
+        'Assertion failed: ouch 1');
+  },
 
-function testAssertionError() {
-  const error = new goog.asserts.AssertionError('foo %s %s', [1, 'two']);
-  assertEquals('Wrong message', 'foo 1 two', error.message);
-  assertEquals('Wrong messagePattern', 'foo %s %s', error.messagePattern);
-}
+  testAssertExists_narrowing() {
+    const /** number|null|undefined */ wideValue = 0;
 
-function testFailWithCustomErrorHandler() {
-  try {
-    let handledException;
-    goog.asserts.setErrorHandler(function(e) { handledException = e; });
+    const /** number */ narrowReturn = asserts.assertExists(wideValue);
+    const /** number */ narrowInScope = wideValue;
 
-    const expectedMessage = 'Failure: Gevalt!';
+    reflect.sinkValue(narrowReturn);
+    reflect.sinkValue(narrowInScope);
+  },
 
-    goog.asserts.fail('Gevalt!');
-    assertTrue('handledException is null.', handledException != null);
-    assertTrue(
-        'Message check failed.  Expected: ' + expectedMessage + ' Actual: ' +
-            handledException.message,
-        goog.string.startsWith(expectedMessage, handledException.message));
-  } finally {
-    goog.asserts.setErrorHandler(goog.asserts.DEFAULT_ERROR_HANDLER);
-  }
-}
+  testFail() {
+    assertThrows('fail()', asserts.fail);
+    // Test error messages.
+    doTestMessage(goog.partial(asserts.fail, false), 'Failure');
+    doTestMessage(goog.partial(asserts.fail, 'ouch %s', 1), 'Failure: ouch 1');
+  },
 
-function testAssertWithCustomErrorHandler() {
-  try {
-    let handledException;
-    goog.asserts.setErrorHandler(function(e) { handledException = e; });
+  testNumber() {
+    asserts.assertNumber(1);
+    assertThrows(
+        'assertNumber(null)', goog.partial(asserts.assertNumber, null));
+    // Test error messages.
+    doTestMessage(
+        goog.partial(asserts.assertNumber, null),
+        'Assertion failed: Expected number but got null: null.');
+    doTestMessage(
+        goog.partial(asserts.assertNumber, '1234'),
+        'Assertion failed: Expected number but got string: 1234.');
+    doTestMessage(
+        goog.partial(asserts.assertNumber, null, 'ouch %s', 1),
+        'Assertion failed: ouch 1');
+  },
 
-    const expectedMessage = 'Assertion failed: Gevalt!';
+  testString() {
+    assertEquals('1', asserts.assertString('1'));
+    assertThrows(
+        'assertString(null)', goog.partial(asserts.assertString, null));
+    // Test error messages.
+    doTestMessage(
+        goog.partial(asserts.assertString, null),
+        'Assertion failed: Expected string but got null: null.');
+    doTestMessage(
+        goog.partial(asserts.assertString, 1234),
+        'Assertion failed: Expected string but got number: 1234.');
+    doTestMessage(
+        goog.partial(asserts.assertString, null, 'ouch %s', 1),
+        'Assertion failed: ouch 1');
+  },
 
-    goog.asserts.assert(false, 'Gevalt!');
-    assertTrue('handledException is null.', handledException != null);
-    assertTrue(
-        'Message check failed.  Expected: ' + expectedMessage + ' Actual: ' +
-            handledException.message,
-        goog.string.startsWith(expectedMessage, handledException.message));
-  } finally {
-    goog.asserts.setErrorHandler(goog.asserts.DEFAULT_ERROR_HANDLER);
-  }
-}
+  // jslint:ignore start
+  testFunction() {
+    function f() {}
+    assertEquals(f, asserts.assertFunction(f));
+    assertThrows(
+        'assertFunction(null)', goog.partial(asserts.assertFunction, null));
+    // Test error messages.
+    doTestMessage(
+        goog.partial(asserts.assertFunction, null),
+        'Assertion failed: Expected function but got null: null.');
+    doTestMessage(
+        goog.partial(asserts.assertFunction, 1234),
+        'Assertion failed: Expected function but got number: 1234.');
+    doTestMessage(
+        goog.partial(asserts.assertFunction, null, 'ouch %s', 1),
+        'Assertion failed: ouch 1');
+  },
 
-function testAssertFinite() {
-  assertEquals(9, goog.asserts.assertFinite(9));
-  assertEquals(0, goog.asserts.assertFinite(0));
-  assertThrows(goog.partial(goog.asserts.assertFinite, NaN));
-  assertThrows(goog.partial(goog.asserts.assertFinite, Infinity));
-  assertThrows(goog.partial(goog.asserts.assertFinite, -Infinity));
-  assertThrows(goog.partial(goog.asserts.assertFinite, 'foo'));
-  assertThrows(goog.partial(goog.asserts.assertFinite, true));
+  // jslint:ignore end
+  testObject() {
+    const o = {};
+    assertEquals(o, asserts.assertObject(o));
+    assertThrows(
+        'assertObject(null)', goog.partial(asserts.assertObject, null));
+    // Test error messages.
+    doTestMessage(
+        goog.partial(asserts.assertObject, null),
+        'Assertion failed: Expected object but got null: null.');
+    doTestMessage(
+        goog.partial(asserts.assertObject, 1234),
+        'Assertion failed: Expected object but got number: 1234.');
+    doTestMessage(
+        goog.partial(asserts.assertObject, null, 'ouch %s', 1),
+        'Assertion failed: ouch 1');
+  },
 
-  // Test error messages.
-  doTestMessage(
-      goog.partial(goog.asserts.assertFinite, NaN),
-      'Assertion failed: Expected NaN to be a finite number but it is not.');
-  doTestMessage(
-      goog.partial(goog.asserts.assertFinite, NaN, 'ouch %s', 1),
-      'Assertion failed: ouch 1');
-}
+  testArray() {
+    const a = [];
+    assertEquals(a, asserts.assertArray(a));
+    assertThrows('assertArray({})', goog.partial(asserts.assertArray, {}));
+    // Test error messages.
+    doTestMessage(
+        goog.partial(asserts.assertArray, null),
+        'Assertion failed: Expected array but got null: null.');
+    doTestMessage(
+        goog.partial(asserts.assertArray, 1234),
+        'Assertion failed: Expected array but got number: 1234.');
+    doTestMessage(
+        goog.partial(asserts.assertArray, null, 'ouch %s', 1),
+        'Assertion failed: ouch 1');
+  },
+
+  testBoolean() {
+    assertEquals(true, asserts.assertBoolean(true));
+    assertEquals(false, asserts.assertBoolean(false));
+    assertThrows(goog.partial(asserts.assertBoolean, null));
+    assertThrows(goog.partial(asserts.assertBoolean, 'foo'));
+
+    // Test error messages.
+    doTestMessage(
+        goog.partial(asserts.assertBoolean, null),
+        'Assertion failed: Expected boolean but got null: null.');
+    doTestMessage(
+        goog.partial(asserts.assertBoolean, 1234),
+        'Assertion failed: Expected boolean but got number: 1234.');
+    doTestMessage(
+        goog.partial(asserts.assertBoolean, null, 'ouch %s', 1),
+        'Assertion failed: ouch 1');
+  },
+
+  testElement() {
+    assertThrows(goog.partial(asserts.assertElement, null));
+    assertThrows(goog.partial(asserts.assertElement, 'foo'));
+    assertThrows(
+        goog.partial(asserts.assertElement, dom.createTextNode('foo')));
+    const elem = dom.createElement(TagName.DIV);
+    assertEquals(elem, asserts.assertElement(elem));
+  },
+
+  testInstanceof() {
+    /** @constructor */
+    let F = function() {};
+    asserts.assertInstanceof(new F(), F);
+    const error = assertThrows(
+        'assertInstanceof({}, F)',
+        goog.partial(asserts.assertInstanceof, {}, F));
+    // IE lacks support for function.name and will fallback to toString().
+    const object = /object/.test(error.message) ? '[object Object]' : 'Object';
+    const name = /F/.test(error.message) ? 'F' : 'unknown type name';
+
+    // Test error messages.
+    doTestMessage(
+        goog.partial(asserts.assertInstanceof, {}, F),
+        `Assertion failed: Expected instanceof ${name} but got ${object}` +
+            '.');
+    doTestMessage(
+        goog.partial(asserts.assertInstanceof, {}, F, 'a %s', 1),
+        'Assertion failed: a 1');
+    doTestMessage(
+        goog.partial(asserts.assertInstanceof, null, F),
+        `Assertion failed: Expected instanceof ${name} but got null.`);
+    doTestMessage(
+        goog.partial(asserts.assertInstanceof, 5, F),
+        'Assertion failed: ' +
+            'Expected instanceof ' + name + ' but got number.');
+
+    // Test a constructor a with a name (IE does not support function.name).
+    if (!userAgent.IE) {
+      F = function foo() {};
+      doTestMessage(
+          goog.partial(asserts.assertInstanceof, {}, F),
+          `Assertion failed: Expected instanceof foo but got ${object}.`);
+    }
+
+    // Test a constructor with a displayName.
+    F.displayName = 'bar';
+    doTestMessage(
+        goog.partial(asserts.assertInstanceof, {}, F),
+        `Assertion failed: Expected instanceof bar but got ${object}.`);
+  },
+
+  testObjectPrototypeIsIntact() {
+    asserts.assertObjectPrototypeIsIntact();
+    const originalToString = Object.prototype.toString;
+    Object.prototype.toString = () => {};
+    try {
+      asserts.assertObjectPrototypeIsIntact();
+      Object.prototype.foo = 1;
+      doTestMessage(
+          asserts.assertObjectPrototypeIsIntact,
+          'Failure: foo should not be enumerable in Object.prototype.');
+    } finally {
+      Object.prototype.toString = originalToString;
+      delete Object.prototype.foo;
+    }
+  },
+
+  testAssertionError() {
+    const error = new AssertionError('foo %s %s', [1, 'two']);
+    assertEquals('Wrong message', 'foo 1 two', error.message);
+    assertEquals('Wrong messagePattern', 'foo %s %s', error.messagePattern);
+  },
+
+  testFailWithCustomErrorHandler() {
+    try {
+      let handledException;
+      asserts.setErrorHandler((e) => {
+        handledException = e;
+      });
+
+      const expectedMessage = 'Failure: Gevalt!';
+
+      asserts.fail('Gevalt!');
+      assertTrue('handledException is null.', handledException != null);
+      assertTrue(
+          `Message check failed.  Expected: ${expectedMessage} Actual: ` +
+              handledException.message,
+          googString.startsWith(expectedMessage, handledException.message));
+    } finally {
+      asserts.setErrorHandler(asserts.DEFAULT_ERROR_HANDLER);
+    }
+  },
+
+  testAssertWithCustomErrorHandler() {
+    try {
+      let handledException;
+      asserts.setErrorHandler((e) => {
+        handledException = e;
+      });
+
+      const expectedMessage = 'Assertion failed: Gevalt!';
+
+      asserts.assert(false, 'Gevalt!');
+      assertTrue('handledException is null.', handledException != null);
+      assertTrue(
+          `Message check failed.  Expected: ${expectedMessage} Actual: ` +
+              handledException.message,
+          googString.startsWith(expectedMessage, handledException.message));
+    } finally {
+      asserts.setErrorHandler(asserts.DEFAULT_ERROR_HANDLER);
+    }
+  },
+
+  testAssertFinite() {
+    assertEquals(9, asserts.assertFinite(9));
+    assertEquals(0, asserts.assertFinite(0));
+    assertThrows(goog.partial(asserts.assertFinite, NaN));
+    assertThrows(goog.partial(asserts.assertFinite, Infinity));
+    assertThrows(goog.partial(asserts.assertFinite, -Infinity));
+    assertThrows(goog.partial(asserts.assertFinite, 'foo'));
+    assertThrows(goog.partial(asserts.assertFinite, true));
+
+    // Test error messages.
+    doTestMessage(
+        goog.partial(asserts.assertFinite, NaN),
+        'Assertion failed: Expected NaN to be a finite number but it is not.');
+    doTestMessage(
+        goog.partial(asserts.assertFinite, NaN, 'ouch %s', 1),
+        'Assertion failed: ouch 1');
+  },
+});

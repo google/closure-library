@@ -321,8 +321,7 @@ goog.testing.asserts.assertThrows = function(a, opt_b) {
     goog.testing.asserts.removeOperaStacktrace_(e);
 
     var testCase = _getCurrentTestCase();
-    if (e && e['isJsUnitException'] && testCase &&
-        testCase.failOnUnreportedAsserts) {
+    if (e && e['isJsUnitException'] && testCase) {
       goog.testing.asserts.raiseException(
           comment,
           'Function passed to assertThrows caught a JsUnitException (usually ' +

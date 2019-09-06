@@ -13,7 +13,9 @@
 // limitations under the License.
 
 /**
- * @fileoverview Types provided by the lite implementation.
+ * @fileoverview Types provided by the lite implementation. DO NOT WRITE
+ * IMPLEMANTATIONS OF THE INTERFACES PROVIDED HERE. These exist to provide
+ * a super type for the native-wrapped impl and the ponyfill impl.
  */
 goog.module('goog.streams.liteTypes');
 
@@ -28,12 +30,9 @@ goog.module('goog.streams.liteTypes');
  * Pulling (including backpressure and sizes) and cancellation are not
  * supported.
  * @template T
- * @abstract
+ * @interface
  */
 class ReadableStream {
-  /** @package */
-  constructor() {}
-
   /**
    * Returns true if the ReadableStream has been locked to a reader.
    * https://streams.spec.whatwg.org/#rs-locked
@@ -56,12 +55,9 @@ class ReadableStream {
  * Supports the read() and releaseLock() methods, along with the closed
  * property.
  * @template T
- * @abstract
+ * @interface
  */
 class ReadableStreamDefaultReader {
-  /** @package */
-  constructor() {}
-
   /**
    * Returns a Promise that resolves when the Stream closes or is errored, or if
    * the reader releases its lock.
@@ -93,12 +89,9 @@ class ReadableStreamDefaultReader {
  *
  * Provides the enqueue(), error(), and close() methods.
  * @template T
- * @abstract
+ * @interface
  */
 class ReadableStreamDefaultController {
-  /** @package */
-  constructor() {}
-
   /**
    * Signals that the ReadableStream should close. The ReadableStream will
    * actually close once all of its chunks have been read.

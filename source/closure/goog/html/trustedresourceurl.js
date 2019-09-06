@@ -43,9 +43,9 @@ goog.require('goog.string.TypedString');
  * Instances of this type must be created via the factory method,
  * (`fromConstant`, `fromConstants`, `format` or
  * `formatWithParams`), and not by invoking its constructor. The constructor
- * intentionally takes no parameters and the type is immutable; hence only a
- * default instance corresponding to the empty string can be obtained via
- * constructor invocation.
+ * is organized in a way that only methods from that file can call it and
+ * initialize with non-empty values. Anyone else calling constructor will
+ * get default instance with empty value.
  *
  * @see goog.html.TrustedResourceUrl#fromConstant
  * @constructor
@@ -53,22 +53,36 @@ goog.require('goog.string.TypedString');
  * @struct
  * @implements {goog.i18n.bidi.DirectionalString}
  * @implements {goog.string.TypedString}
+ * @param {!Object=} opt_token package-internal implementation detail.
+ * @param {!TrustedScriptURL|string=} opt_content package-internal
+ *     implementation detail.
+ * @param {?TrustedURL=} opt_trustedUrl package-internal implementation detail.
  */
-goog.html.TrustedResourceUrl = function() {
+goog.html.TrustedResourceUrl = function(
+    opt_token, opt_content, opt_trustedUrl) {
   /**
    * The contained value of this TrustedResourceUrl.  The field has a purposely
    * ugly name to make (non-compiled) code that attempts to directly access this
    * field stand out.
+   * @const
    * @private {!TrustedScriptURL|string}
    */
-  this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ = '';
+  this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ =
+      ((opt_token ===
+        goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_) &&
+       opt_content) ||
+      '';
 
   /**
    * Value stored as TrustedURL. TrustedResourceURL corresponds to TrustedURL in
    * some context thus we need to store it separately.
+   * @const
    * @private {?TrustedURL}
    */
-  this.trustedURL_ = null;
+  this.trustedURL_ =
+      (opt_token === goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_ &&
+       opt_trustedUrl) ||
+      null;
 
   /**
    * A type marker used to implement additional run-time type checking.
@@ -452,18 +466,17 @@ goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
  */
 goog.html.TrustedResourceUrl
     .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse = function(url) {
-  var trustedResourceUrl = new goog.html.TrustedResourceUrl();
-  trustedResourceUrl.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ =
-      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
+  var value = goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
       goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY
           .createScriptURL(url) :
       url;
-  if (goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY) {
-    trustedResourceUrl.trustedURL_ =
-        goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createURL(
-            url);
-  }
-  return trustedResourceUrl;
+  var trustedUrl = goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
+      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createURL(
+          url) :
+      null;
+  return new goog.html.TrustedResourceUrl(
+      goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_, value,
+      trustedUrl);
 };
 
 
@@ -519,3 +532,11 @@ goog.html.TrustedResourceUrl.stringifyParams_ = function(
   }
   return currentString;
 };
+
+/**
+ * Token used to ensure that object is created only from this file. No code
+ * outside of this file can access this token.
+ * @private {!Object}
+ * @const
+ */
+goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_ = {};
