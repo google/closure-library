@@ -236,8 +236,14 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
                   '<meta name="referrer" content="no-referrer">' +
                       '<meta http-equiv="refresh" content="0; url=' +
                       goog.string.htmlEscape(sanitizedLinkRef) + '">');
-      goog.dom.safe.documentWrite(newWin.document, safeHtml);
-      newWin.document.close();
+
+      // During window loading `newWin.document` may be unset in some browsers.
+      // Storing and checking a reference to the document prevents NPEs.
+      var newDoc = newWin.document;
+      if (newDoc) {
+        goog.dom.safe.documentWrite(newDoc, safeHtml);
+        newDoc.close();
+      }
     }
   } else {
     newWin = parentWin.open(
