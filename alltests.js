@@ -633,6 +633,8 @@ var _allTests = [
   'closure/goog/vec/vec4d_test.html',
   'closure/goog/vec/vec4f_test.html',
   'closure/goog/vec/vec4_test.html',
+  'closure/goog/collections/sets_test.html',
+  'closure/goog/proto/serializer_test.html',
   'closure/goog/dom/classes_quirks_test.html',
   'closure/goog/editor/seamlessfield_quirks_test.html',
   'closure/goog/style/style_quirks_test.html',
