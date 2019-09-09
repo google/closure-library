@@ -19,7 +19,6 @@ const GoogPromise = goog.require('goog.Promise');
 const MockClock = goog.require('goog.testing.MockClock');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const TagName = goog.require('goog.dom.TagName');
-const Timer = goog.require('goog.Timer');
 const browser = goog.require('goog.labs.userAgent.browser');
 const dom = goog.require('goog.dom');
 const entryPointRegistry = goog.require('goog.debug.entryPointRegistry');
@@ -210,6 +209,9 @@ testSuite({
    * message that does not have match what is expected. In this case, the
    * polyfill should not try to invoke a callback (which would result in an
    * error because there would be no callbacks in the linked list).
+   *
+   * TODO(nickreid): Delete this test? It's testing for a an adversarial input
+   * case and depend on deep implementation details.
    */
   testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
     // EDGE/IE does not use the postMessage polyfill.
@@ -221,28 +223,20 @@ testSuite({
     propertyReplacer.set(window, 'setImmediate', undefined);
     propertyReplacer.set(window, 'MessageChannel', undefined);
 
-    let callbackCalled = false;
-    nextTick(() => {
-      callbackCalled = true;
-    });
+    let atNextTick = new GoogPromise(nextTick);
 
     const frame = dom.getElementsByTagName(TagName.IFRAME)[0];
     frame.contentWindow.postMessage(
         'bogus message',
         window.location.protocol + '//' + window.location.host);
 
-    let error = null;
-    frame.contentWindow.onerror = (e) => {
-      error = e;
-    };
-    return Timer.promise(3)
-        .then(() => {
-          assert('Callback should have been called.', callbackCalled);
-          assertNull('An unexpected error was thrown.', error);
-        })
-        .thenAlways(() => {
-          dom.removeNode(frame);
-        });
+    // The test passes if no error is ever reported by the <iframe>, as would
+    // happen if the queue was pumped without an callbacks to run.
+    frame.contentWindow.onerror = window.onerror;
+
+    return atNextTick.thenAlways(() => {
+      dom.removeNode(frame);
+    });
   },
 
   testBehaviorOnPagesWithOverriddenWindowConstructor() {

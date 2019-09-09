@@ -18,8 +18,8 @@
 // See http://goo.gl/SdiwZH
 // clang-format off
 
-goog.addDependency('../../third_party/closure/goog/dojo/dom/query.js', ['goog.dom.query'], ['goog.array', 'goog.dom', 'goog.functions', 'goog.string', 'goog.userAgent'], {});
-goog.addDependency('../../third_party/closure/goog/dojo/dom/query_test.js', ['goog.dom.query_test'], ['goog.dom', 'goog.dom.query', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent'], {});
+goog.addDependency('collections/sets.js', ['goog.collections.sets'], ['goog.labs.collections.iterables'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('collections/sets_test.js', ['goog.collections.setsTest'], ['goog.collections.sets', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', ['goog.async.Deferred', 'goog.async.Deferred.AlreadyCalledError', 'goog.async.Deferred.CanceledError'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.debug.Error'], {});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferredlist.js', ['goog.async.DeferredList'], ['goog.async.Deferred'], {});
 goog.addDependency('proto/proto.js', ['goog.proto'], ['goog.proto.Serializer'], {});
@@ -48,7 +48,7 @@ goog.addDependency('async/delay_test.js', ['goog.async.DelayTest'], ['goog.async
 goog.addDependency('async/freelist.js', ['goog.async.FreeList'], [], {'lang': 'es6'});
 goog.addDependency('async/freelist_test.js', ['goog.async.FreeListTest'], ['goog.async.FreeList', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/nexttick.js', ['goog.async.nextTick', 'goog.async.throwException'], ['goog.debug.entryPointRegistry', 'goog.dom.TagName', 'goog.dom.safe', 'goog.functions', 'goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.string.Const'], {});
-goog.addDependency('async/nexttick_test.js', ['goog.async.nextTickTest'], ['goog.Promise', 'goog.Timer', 'goog.async.nextTick', 'goog.debug.ErrorHandler', 'goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.labs.userAgent.browser', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('async/nexttick_test.js', ['goog.async.nextTickTest'], ['goog.Promise', 'goog.async.nextTick', 'goog.debug.ErrorHandler', 'goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.labs.userAgent.browser', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/run.js', ['goog.async.run'], ['goog.async.WorkQueue', 'goog.async.nextTick', 'goog.async.throwException'], {});
 goog.addDependency('async/run_next_tick_test.js', ['goog.async.runNextTickTest'], ['goog.async.run', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/run_test.js', ['goog.async.runTest'], ['goog.async.run', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
@@ -59,8 +59,6 @@ goog.addDependency('async/workqueue_test.js', ['goog.async.WorkQueueTest'], ['go
 goog.addDependency('base.js', ['goog'], [], {});
 goog.addDependency('base_module_test.js', ['goog.baseModuleTest'], ['goog.Timer', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base_test.js', ['goog.baseTest'], ['goog.Promise', 'goog.Timer', 'goog.Uri', 'goog.dom', 'goog.dom.TagName', 'goog.object', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {'lang': 'es6'});
-goog.addDependency('collections/sets.js', ['goog.collections.sets'], ['goog.labs.collections.iterables'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('collections/sets_test.js', ['goog.collections.setsTest'], ['goog.collections.sets', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color'], {});
 goog.addDependency('color/alpha_test.js', ['goog.color.alphaTest'], ['goog.array', 'goog.color.alpha', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('color/color.js', ['goog.color', 'goog.color.Hsl', 'goog.color.Hsv', 'goog.color.Rgb'], ['goog.color.names', 'goog.math'], {});
@@ -767,7 +765,7 @@ goog.addDependency('math/interpolator/spline1_test.js', ['goog.math.interpolator
 goog.addDependency('math/irect.js', ['goog.math.IRect'], [], {});
 goog.addDependency('math/line.js', ['goog.math.Line'], ['goog.math', 'goog.math.Coordinate'], {});
 goog.addDependency('math/line_test.js', ['goog.math.LineTest'], ['goog.math.Coordinate', 'goog.math.Line', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('math/long.js', ['goog.math.Long'], ['goog.asserts', 'goog.reflect'], {});
+goog.addDependency('math/long.js', ['goog.math.Long'], ['goog.asserts', 'goog.reflect'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('math/long_test.js', ['goog.math.LongTest'], ['goog.asserts', 'goog.math.Long', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('math/math.js', ['goog.math'], ['goog.array', 'goog.asserts'], {});
 goog.addDependency('math/math_test.js', ['goog.mathTest'], ['goog.math', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});

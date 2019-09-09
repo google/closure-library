@@ -519,7 +519,6 @@ goog.module = function(name) {
  * @suppress {missingProvide}
  */
 goog.module.get = function(name) {
-
   return goog.module.getInternal_(name);
 };
 
