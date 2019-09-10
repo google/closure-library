@@ -1780,8 +1780,16 @@ goog.partial = function(fn, var_args) {
  * Copies all the members of a source object to a target object. This method
  * does not work on all browsers for all objects that contain keys such as
  * toString or hasOwnProperty. Use goog.object.extend for this purpose.
+ *
+ * NOTE: Some have advocated for the use of goog.mixin to setup classes
+ * with multiple inheritence (traits, mixins, etc).  However, as it simply
+ * uses "for in", this is not compatible with ES6 classes whose methods are
+ * non-enumerable.  Changing this, would break cases where non-enumerable
+ * properties are not expected.
+ *
  * @param {Object} target Target.
  * @param {Object} source Source.
+ * @deprecated Prefer Object.assign
  */
 goog.mixin = function(target, source) {
   for (var x in source) {

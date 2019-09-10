@@ -181,7 +181,7 @@ goog.dom.safe.setOuterHtml = function(elem, html) {
  * Safely assigns a URL a form element's action property.
  *
  * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
- * anchor's href property.  If url is of type string however, it is first
+ * form's action property.  If url is of type string however, it is first
  * sanitized using goog.html.SafeUrl.sanitize.
  *
  * Example usage:
@@ -212,7 +212,7 @@ goog.dom.safe.setFormElementAction = function(form, url) {
  * Safely assigns a URL to a button element's formaction property.
  *
  * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
- * anchor's href property.  If url is of type string however, it is first
+ * button's formaction property.  If url is of type string however, it is first
  * sanitized using goog.html.SafeUrl.sanitize.
  *
  * Example usage:
@@ -242,7 +242,7 @@ goog.dom.safe.setButtonFormAction = function(button, url) {
  * Safely assigns a URL to an input element's formaction property.
  *
  * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
- * anchor's href property.  If url is of type string however, it is first
+ * input's formaction property.  If url is of type string however, it is first
  * sanitized using goog.html.SafeUrl.sanitize.
  *
  * Example usage:

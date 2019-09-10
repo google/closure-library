@@ -603,6 +603,7 @@ goog.object.PROTOTYPE_FIELDS_ = [
  *     `var_args`.
  * @param {...(Object|null|undefined)} var_args The objects from which values
  *     will be copied.
+ * @deprecated Prefer Object.assign
  */
 goog.object.extend = function(target, var_args) {
   let key;
