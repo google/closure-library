@@ -169,7 +169,7 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
   }
 
   for (var part; parts.length && (part = parts.shift());) {
-    if (!parts.length && goog.isDef(opt_object)) {
+    if (!parts.length && opt_object !== undefined) {
       // last part and we have an object; use it
       cur[part] = opt_object;
     } else if (cur[part] && cur[part] !== Object.prototype[part]) {
@@ -478,7 +478,7 @@ goog.VALID_MODULE_RE_ = /^[a-zA-Z_$][a-zA-Z0-9._$]*$/;
  * @return {void}
  */
 goog.module = function(name) {
-  if (!goog.isString(name) || !name ||
+  if (typeof name !== 'string' || !name ||
       name.search(goog.VALID_MODULE_RE_) == -1) {
     throw new Error('Invalid module identifier');
   }
@@ -745,8 +745,7 @@ if (!COMPILED) {
    */
   goog.isProvided_ = function(name) {
     return (name in goog.loadedModules_) ||
-        (!goog.implicitNamespaces_[name] &&
-         goog.isDefAndNotNull(goog.getObjectByName(name)));
+        (!goog.implicitNamespaces_[name] && goog.getObjectByName(name) != null);
   };
 
   /**
@@ -782,7 +781,7 @@ goog.getObjectByName = function(name, opt_obj) {
   var cur = opt_obj || goog.global;
   for (var i = 0; i < parts.length; i++) {
     cur = cur[parts[i]];
-    if (!goog.isDefAndNotNull(cur)) {
+    if (cur == null) {
       return null;
     }
   }
@@ -1176,7 +1175,7 @@ goog.loadModule = function(moduleDef) {
     var exports;
     if (goog.isFunction(moduleDef)) {
       exports = moduleDef.call(undefined, {});
-    } else if (goog.isString(moduleDef)) {
+    } else if (typeof moduleDef === 'string') {
       if (goog.useSafari10Workaround()) {
         moduleDef = goog.workaroundSafari10EvalBug(moduleDef);
       }
@@ -1187,7 +1186,7 @@ goog.loadModule = function(moduleDef) {
     }
 
     var moduleName = goog.moduleLoaderState_.moduleName;
-    if (goog.isString(moduleName) && moduleName) {
+    if (typeof moduleName === 'string' && moduleName) {
       // Don't seal legacy namespaces as they may be used as a parent of
       // another namespace
       if (goog.moduleLoaderState_.declareLegacyNamespace) {
@@ -2553,9 +2552,9 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.findBasePath_ = function() {
-    if (goog.isDef(goog.global.CLOSURE_BASE_PATH) &&
+    if (goog.global.CLOSURE_BASE_PATH != undefined &&
         // Anti DOM-clobbering runtime check (b/37736576).
-        goog.isString(goog.global.CLOSURE_BASE_PATH)) {
+        typeof goog.global.CLOSURE_BASE_PATH === 'string') {
       goog.basePath = goog.global.CLOSURE_BASE_PATH;
       return;
     } else if (!goog.inHtmlDocument_()) {
@@ -3965,7 +3964,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       contents = this.transpiler_.transpile(contents, this.getPathName());
     }
 
-    if (!goog.LOAD_MODULE_USING_EVAL || !goog.isDef(goog.global.JSON)) {
+    if (!goog.LOAD_MODULE_USING_EVAL || goog.global.JSON === undefined) {
       return '' +
           'goog.loadModule(function(exports) {' +
           '"use strict";' + contents +
