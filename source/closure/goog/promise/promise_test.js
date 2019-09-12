@@ -24,18 +24,10 @@ const Timer = goog.require('goog.Timer');
 const functions = goog.require('goog.functions');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
 // TODO(brenneman):
 // - Add tests for interoperability with native Promises where available.
 // - Add tests for long stack traces.
-
-/** @type {boolean} */
-const SUPPORTS_ACCESSORS = !!window.Object.defineProperty &&
-    // IE8 and Safari<5.1 have an Object.defineProperty which does not work on
-    // some objects.
-    (!userAgent.IE || userAgent.isVersionOrHigher('9')) &&
-    (!userAgent.SAFARI || userAgent.isVersionOrHigher('534.48.3'));
 
 /** @type {boolean} */
 const SUPPORTS_STRICT_MODE = (function() {
@@ -72,125 +64,109 @@ function shouldNotCall(result) {
   fail('This should not have been called (result: ' + String(result) + ')');
 }
 
-function fulfillSoon(value, delay) {
-  return new GoogPromise((resolve, reject) => {
-    window.setTimeout(() => {
-      resolve(value);
-    }, delay);
-  });
-}
+/** @typedef {function(new:IThenable<?>, function(function(?), function(?)))} */
+const IThenableCtor = undefined;
 
-function fulfillThenableSoon(value, delay) {
-  return createThenable(value, delay, true /* fulfilled */);
-}
+const /** !IThenableCtor */ NativeOrGoogPromise = window.Promise || GoogPromise;
 
-function fulfillBuiltInSoon(value, delay) {
-  // If the environment does not provide a built-in Promise, then just use
-  // goog.Promise instead to allow tests which use this to continue.
-  if (!window.Promise) {
-    return fulfillSoon(value, delay);
+/** @implements {IThenable<?>} */
+class CountingThenable {
+  /** @param {function(function(?), function(?))} immediate */
+  constructor(immediate) {
+    /** @type {number} */
+    this.thenCallCount = 0;
+    /** @const @private {!GoogPromise<?>} */
+    this.internalPromise_ = new GoogPromise(immediate);
   }
-  return new window.Promise((resolve, reject) => {
-    window.setTimeout(() => {
-      resolve(value);
-    }, delay);
-  });
-}
 
-function rejectSoon(reason, delay) {
-  return new GoogPromise((resolve, reject) => {
-    window.setTimeout(() => {
-      reject(reason);
-    }, delay);
-  });
-}
-
-function rejectThenableSoon(value, delay) {
-  return createThenable(value, delay, false /* fulfilled */);
-}
-
-function rejectBuiltInSoon(value, delay) {
-  // If the environment does not provide a built-in Promise, then just use
-  // goog.Promise instead to allow tests which use this to continue.
-  if (!window.Promise) {
-    return rejectSoon(value, delay);
+  /**
+   * @param {?} value
+   * @return {!CountingThenable}
+   */
+  static resolve(value) {
+    return new CountingThenable((resolve) => resolve(value));
   }
-  return new window.Promise((resolve, reject) => {
-    window.setTimeout(() => {
-      reject(value);
-    }, delay);
-  });
-}
 
-/**
- * Creates a thenable which isn't formally a promise for testing non-Promise
- * thenables.
- */
-function createThenableResolver() {
-  const resolver = GoogPromise.withResolver();
-  const thenable = {};
-  const then = (onFulfilled, onRejected) => {
-    const next = createThenableResolver();
-    next.resolve(resolver.promise.then(onFulfilled, onRejected));
-    return next.thenable;
-  };
-  // Count accesses of the `then` property when possible. Otherwise, just
-  // define the `then` method as a regular data property.
-  if (SUPPORTS_ACCESSORS) {
-    thenable.thenAccesses = 0;
-    window.Object.defineProperty(thenable, 'then', {
-      get: function() {
-        thenable.thenAccesses++;
-        return then;
-      },
-    });
-  } else {
-    thenable.then = then;
-  }
-  return {
-    resolve: resolver.resolve,
-    reject: resolver.reject,
-    thenable: thenable,
-  };
-}
-
-/**
- * @param {*} value The value the thenable should be fulfilled/rejected with.
- * @param {number} delay The length of the delay until the thenable is resolved.
- * @param {boolean} fulfill Whether to fulfill or reject the thenable.
- * @return {!Thenable}
- */
-function createThenable(value, delay, fulfill) {
-  const resolver = createThenableResolver();
-  window.setTimeout(() => {
-    if (fulfill) {
-      resolver.resolve(value);
-    } else {
-      resolver.reject(value);
+  /**
+   * @param {?(function(?): ?)=} onResolve
+   * @param {?(function(?): ?)=} onReject
+   * @param {*=} shouldCount
+   * @return {?}
+   */
+  then(onResolve, onReject, shouldCount) {
+    if (shouldCount !== CountingThenable) {
+      this.thenCallCount++;
     }
-  }, delay);
-  return resolver.thenable;
+    return CountingThenable.resolve(
+        this.internalPromise_.then(onResolve, onReject));
+  }
+}
+
+/** @implements {IThenable<?>} */
+class ThrowingThenable {
+  /** @param {?} value */
+  constructor(value) {
+    /** @const {?} */
+    this.value = value;
+  }
+
+  /**
+   * @param {?(function(?): ?)=} onResolve
+   * @param {?(function(?): ?)=} onReject
+   * @param {*=} ctx
+   * @return {?}
+   */
+  then(onResolve, onReject, ctx) {
+    throw this.value;
+  }
 }
 
 /**
- * Creates a malicious thenable that throws when the `then` method is
- * accessed to ensure that it is caught and converted to a rejected promise
- * instead of allowed to cause a synchronous exception.
- * @param {*} value The value to throw.
- * @return {!Thenable}
+ * Return an `IThenable` for `(typeof ctor)` that resolves on the next tick.
+ *
+ * @template T
+ * @param {function(new:T, ...?)} ctor
+ * @param {?} value
+ * @return {T}
  */
-function createThrowingThenable(value) {
-  // If the environment does not provide Object.defineProperty, then just
-  // use an immediately rejected promise to allow tests which use this to
-  // continue.
-  if (!SUPPORTS_ACCESSORS) {
-    return rejectThenableSoon(value, 0);
-  }
+function fulfillSoon(ctor, value) {
+  return new ctor((resolve, reject) => {
+    window.setTimeout(() => resolve(value), 0);
+  });
+}
 
-  const thenable = {};
-  window.Object.defineProperty(
-      thenable, 'then', {get: function() { throw value; }});
-  return /** @type {?} */ (thenable);
+/**
+ * Return an `IThenable` for `(typeof ctor)` that rejects on the next tick.
+ *
+ * @template T
+ * @param {function(new:T, ...?)} ctor
+ * @param {?} value
+ * @return {T}
+ */
+function rejectSoon(ctor, value) {
+  return new ctor((resolve, reject) => {
+    window.setTimeout(() => reject(value), 0);
+  });
+}
+
+/**
+ * Return a new `IThenable` chained after `thenable` with a delay of one tick.
+ *
+ * @template T
+ * @param {T} thenable
+ * @param {function(...?): ?} callback
+ * @return {T}
+ */
+function after(thenable, callback) {
+  const always = () => {
+    try {
+      return fulfillSoon(thenable.constructor, callback());
+    } catch (e) {
+      return rejectSoon(thenable.constructor, e);
+    }
+  };
+
+  return thenable.then(always, always, CountingThenable);
 }
 
 /**
@@ -968,10 +944,10 @@ testSuite({
   },
 
   testRaceWithFulfill() {
-    const a = fulfillSoon('a', 40);
-    const b = fulfillSoon('b', 30);
-    const c = fulfillSoon('c', 10);
-    const d = fulfillSoon('d', 20);
+    const c = fulfillSoon(NativeOrGoogPromise, 'c');
+    const d = after(c, () => 'd');
+    const b = after(d, () => 'b');
+    const a = after(b, () => 'a');
 
     return GoogPromise.race([a, b, c, d])
         .then((value) => {
@@ -986,19 +962,17 @@ testSuite({
   },
 
   testRaceWithThenables() {
-    const a = fulfillThenableSoon('a', 40);
-    const b = fulfillThenableSoon('b', 30);
-    const c = fulfillThenableSoon('c', 10);
-    const d = fulfillThenableSoon('d', 20);
+    const c = fulfillSoon(CountingThenable, 'c');
+    const d = after(c, () => 'd');
+    const b = after(d, () => 'b');
+    const a = after(b, () => 'a');
 
     return GoogPromise.race([a, b, c, d])
         .then((value) => {
           assertEquals('c', value);
           // Ensure that the `then` property was only accessed once by
           // `goog.Promise.race`.
-          if (SUPPORTS_ACCESSORS) {
-            assertEquals(1, c.thenAccesses);
-          }
+          assertEquals(1, c.thenCallCount);
           // Return the slowest input thenable to wait for it to complete.
           return a;
         })
@@ -1009,10 +983,10 @@ testSuite({
   },
 
   testRaceWithBuiltIns() {
-    const a = fulfillBuiltInSoon('a', 40);
-    const b = fulfillBuiltInSoon('b', 30);
-    const c = fulfillBuiltInSoon('c', 10);
-    const d = fulfillBuiltInSoon('d', 20);
+    const c = fulfillSoon(NativeOrGoogPromise, 'c');
+    const d = after(c, () => 'd');
+    const b = after(d, () => 'b');
+    const a = after(d, () => 'a');
 
     return GoogPromise.race([a, b, c, d])
         .then((value) => {
@@ -1027,10 +1001,10 @@ testSuite({
   },
 
   testRaceWithNonThenable() {
-    const a = fulfillSoon('a', 40);
+    const c = fulfillSoon(GoogPromise, 'c');
+    const d = after(c, () => 'd');
     const b = 'b';
-    const c = fulfillSoon('c', 10);
-    const d = fulfillSoon('d', 20);
+    const a = after(d, () => 'a');
 
     return GoogPromise.race([a, b, c, d])
         .then((value) => {
@@ -1045,10 +1019,10 @@ testSuite({
   },
 
   testRaceWithFalseyNonThenable() {
-    const a = fulfillSoon('a', 40);
+    const c = fulfillSoon(GoogPromise, 'c');
+    const d = after(c, () => 'd');
     const b = 0;
-    const c = fulfillSoon('c', 10);
-    const d = fulfillSoon('d', 20);
+    const a = after(d, () => 'a');
 
     return GoogPromise.race([a, b, c, d])
         .then((value) => {
@@ -1063,10 +1037,10 @@ testSuite({
   },
 
   testRaceWithFulfilledBeforeNonThenable() {
-    const a = fulfillSoon('a', 40);
-    const b = GoogPromise.resolve('b');
     const c = 'c';
-    const d = fulfillSoon('d', 20);
+    const d = fulfillSoon(GoogPromise, 'd');
+    const b = GoogPromise.resolve('b');
+    const a = after(d, () => 'a');
 
     return GoogPromise.race([a, b, c, d])
         .then((value) => {
@@ -1081,10 +1055,16 @@ testSuite({
   },
 
   testRaceWithReject() {
-    const a = rejectSoon('rejected-a', 40);
-    const b = rejectSoon('rejected-b', 30);
-    const c = rejectSoon('rejected-c', 10);
-    const d = rejectSoon('rejected-d', 20);
+    const c = rejectSoon(GoogPromise, 'rejected-c');
+    const d = after(c, () => {
+      throw 'rejected-d';
+    });
+    const b = after(d, () => {
+      throw 'rejected-b';
+    });
+    const a = after(b, () => {
+      throw 'rejected-a';
+    });
 
     return GoogPromise.race([a, b, c, d])
         .then(
@@ -1101,10 +1081,16 @@ testSuite({
   },
 
   testRaceWithRejectThenable() {
-    const a = rejectThenableSoon('rejected-a', 40);
-    const b = rejectThenableSoon('rejected-b', 30);
-    const c = rejectThenableSoon('rejected-c', 10);
-    const d = rejectThenableSoon('rejected-d', 20);
+    const c = rejectSoon(CountingThenable, 'rejected-c');
+    const d = after(c, () => {
+      throw 'rejected-d';
+    });
+    const b = after(d, () => {
+      throw 'rejected-b';
+    });
+    const a = after(b, () => {
+      throw 'rejected-a';
+    });
 
     return GoogPromise.race([a, b, c, d])
         .then(
@@ -1121,10 +1107,16 @@ testSuite({
   },
 
   testRaceWithRejectBuiltIn() {
-    const a = rejectBuiltInSoon('rejected-a', 40);
-    const b = rejectBuiltInSoon('rejected-b', 30);
-    const c = rejectBuiltInSoon('rejected-c', 10);
-    const d = rejectBuiltInSoon('rejected-d', 20);
+    const c = rejectSoon(NativeOrGoogPromise, 'rejected-c');
+    const d = after(c, () => {
+      throw 'rejected-d';
+    });
+    const b = after(d, () => {
+      throw 'rejected-b';
+    });
+    const a = after(b, () => {
+      throw 'rejected-a';
+    });
 
     return GoogPromise.race([a, b, c, d])
         .then(
@@ -1141,10 +1133,14 @@ testSuite({
   },
 
   testRaceWithRejectAndThrowingThenable() {
-    const a = rejectSoon('rejected-a', 40);
-    const b = rejectThenableSoon('rejected-b', 30);
-    const c = rejectBuiltInSoon('rejected-c', 10);
-    const d = createThrowingThenable('rejected-d');
+    const c = rejectSoon(NativeOrGoogPromise, 'rejected-c');
+    const d = new ThrowingThenable('rejected-d');
+    const b = CountingThenable.resolve(after(c, () => {
+      throw 'rejected-b';
+    }));
+    const a = GoogPromise.resolve(after(b, () => {
+      throw 'rejected-a';
+    }));
 
     return GoogPromise.race([a, b, c, d])
         .then(
@@ -1167,12 +1163,12 @@ testSuite({
   },
 
   testAllWithFulfill() {
-    const a = fulfillSoon('a', 40);
-    const b = fulfillSoon('b', 30);
-    const c = fulfillSoon('c', 10);
-    const d = fulfillSoon('d', 20);
+    const a = fulfillSoon(GoogPromise, 'a');
+    const b = fulfillSoon(GoogPromise, 'b');
+    const c = fulfillSoon(GoogPromise, 'c');
+    const d = fulfillSoon(GoogPromise, 'd');
     // Test a falsey value.
-    const z = fulfillSoon(0, 30);
+    const z = fulfillSoon(NativeOrGoogPromise, 0);
 
     return GoogPromise.all([a, b, c, d, z]).then((value) => {
       assertArrayEquals(['a', 'b', 'c', 'd', 0], value);
@@ -1180,26 +1176,24 @@ testSuite({
   },
 
   testAllWithThenable() {
-    const a = fulfillSoon('a', 40);
-    const b = fulfillThenableSoon('b', 30);
-    const c = fulfillSoon('c', 10);
-    const d = fulfillSoon('d', 20);
+    const a = fulfillSoon(GoogPromise, 'a');
+    const b = fulfillSoon(CountingThenable, 'b');
+    const c = fulfillSoon(GoogPromise, 'c');
+    const d = fulfillSoon(GoogPromise, 'd');
 
     return GoogPromise.all([a, b, c, d]).then((value) => {
       assertArrayEquals(['a', 'b', 'c', 'd'], value);
       // Ensure that the `then` property was only accessed once by
       // `goog.Promise.all`.
-      if (SUPPORTS_ACCESSORS) {
-        assertEquals(1, b.thenAccesses);
-      }
+      assertEquals(1, b.thenCallCount);
     });
   },
 
   testAllWithBuiltIn() {
-    const a = fulfillSoon('a', 40);
-    const b = fulfillBuiltInSoon('b', 30);
-    const c = fulfillSoon('c', 10);
-    const d = fulfillSoon('d', 20);
+    const a = fulfillSoon(GoogPromise, 'a');
+    const b = fulfillSoon(NativeOrGoogPromise, 'b');
+    const c = fulfillSoon(GoogPromise, 'c');
+    const d = fulfillSoon(GoogPromise, 'd');
 
     return GoogPromise.all([a, b, c, d]).then((value) => {
       assertArrayEquals(['a', 'b', 'c', 'd'], value);
@@ -1207,10 +1201,11 @@ testSuite({
   },
 
   testAllWithNonThenable() {
-    const a = fulfillSoon('a', 40);
+    const a = fulfillSoon(GoogPromise, 'a');
     const b = 'b';
-    const c = fulfillSoon('c', 10);
-    const d = fulfillSoon('d', 20);
+    const c = fulfillSoon(GoogPromise, 'c');
+    const d = fulfillSoon(GoogPromise, 'd');
+
     // Test a falsey value.
     const z = 0;
 
@@ -1220,10 +1215,11 @@ testSuite({
   },
 
   testAllWithReject() {
-    const a = fulfillSoon('a', 40);
-    const b = rejectSoon('rejected-b', 30);
-    const c = fulfillSoon('c', 10);
-    const d = fulfillSoon('d', 20);
+    const a = fulfillSoon(GoogPromise, 'a');
+    const b = rejectSoon(GoogPromise, 'rejected-b');
+    const c = fulfillSoon(GoogPromise, 'c');
+    const d = fulfillSoon(GoogPromise, 'd');
+
 
     return GoogPromise.all([a, b, c, d])
         .then(
@@ -1247,14 +1243,14 @@ testSuite({
   },
 
   testAllSettledWithFulfillAndReject() {
-    const a = fulfillSoon('a', 40);
-    const b = rejectSoon('rejected-b', 30);
+    const a = fulfillSoon(GoogPromise, 'a');
+    const b = rejectSoon(GoogPromise, 'rejected-b');
     const c = 'c';
-    const d = rejectBuiltInSoon('rejected-d', 20);
-    const e = fulfillThenableSoon('e', 40);
-    const f = fulfillBuiltInSoon('f', 30);
-    const g = rejectThenableSoon('rejected-g', 10);
-    const h = createThrowingThenable('rejected-h');
+    const d = rejectSoon(NativeOrGoogPromise, 'rejected-d');
+    const e = fulfillSoon(CountingThenable, 'e');
+    const f = fulfillSoon(NativeOrGoogPromise, 'f');
+    const g = rejectSoon(CountingThenable, 'rejected-g');
+    const h = new ThrowingThenable('rejected-h');
     // Test a falsey value.
     const z = 0;
 
@@ -1275,10 +1271,8 @@ testSuite({
               results);
           // Ensure that the `then` property was only accessed once by
           // `goog.Promise.allSettled`.
-          if (SUPPORTS_ACCESSORS) {
-            assertEquals(1, e.thenAccesses);
-            assertEquals(1, g.thenAccesses);
-          }
+          assertEquals(1, e.thenCallCount);
+          assertEquals(1, g.thenCallCount);
         });
   },
 
@@ -1289,10 +1283,12 @@ testSuite({
   },
 
   testFirstFulfilledWithFulfill() {
-    const a = fulfillSoon('a', 40);
-    const b = rejectSoon('rejected-b', 30);
-    const c = rejectSoon('rejected-c', 10);
-    const d = fulfillSoon('d', 20);
+    const c = rejectSoon(GoogPromise, 'rejected-c');
+    const d = after(c, () => 'd');
+    const b = after(d, () => {
+      throw 'rejected-b';
+    });
+    const a = after(b, () => 'a');
 
     return GoogPromise.firstFulfilled([a, b, c, d])
         .then((value) => {
@@ -1315,19 +1311,20 @@ testSuite({
   },
 
   testFirstFulfilledWithThenables() {
-    const a = fulfillThenableSoon('a', 40);
-    const b = rejectThenableSoon('rejected-b', 30);
-    const c = rejectThenableSoon('rejected-c', 10);
-    const d = fulfillThenableSoon('d', 20);
+    const c = rejectSoon(CountingThenable, 'rejected-c');
+    const d = after(c, () => 'd');
+    const b = after(d, () => {
+      throw 'rejected-b';
+    });
+    const a = after(b, () => 'a');
 
     return GoogPromise.firstFulfilled([a, b, c, d])
         .then((value) => {
           assertEquals('d', value);
           // Ensure that the `then` property was only accessed once by
           // `goog.Promise.firstFulfilled`.
-          if (SUPPORTS_ACCESSORS) {
-            assertEquals(1, d.thenAccesses);
-          }
+          assertEquals(1, d.thenCallCount);
+
           return c;
         })
         .then(
@@ -1346,10 +1343,12 @@ testSuite({
   },
 
   testFirstFulfilledWithBuiltIns() {
-    const a = fulfillBuiltInSoon('a', 40);
-    const b = rejectBuiltInSoon('rejected-b', 30);
-    const c = rejectBuiltInSoon('rejected-c', 10);
-    const d = fulfillBuiltInSoon('d', 20);
+    const c = rejectSoon(NativeOrGoogPromise, 'rejected-c');
+    const d = after(c, () => 'd');
+    const b = after(d, () => {
+      throw 'rejected-b';
+    });
+    const a = after(b, () => 'a');
 
     return GoogPromise.firstFulfilled([a, b, c, d])
         .then((value) => {
@@ -1372,10 +1371,12 @@ testSuite({
   },
 
   testFirstFulfilledWithNonThenable() {
-    const a = fulfillSoon('a', 40);
-    const b = rejectSoon('rejected-b', 30);
-    const c = rejectSoon('rejected-c', 10);
+    const c = rejectSoon(GoogPromise, 'rejected-c');
     const d = 'd';
+    const b = after(c, () => {
+      throw 'rejected-b';
+    });
+    const a = after(b, () => 'a');
 
     return GoogPromise.firstFulfilled([a, b, c, d])
         .then((value) => {
@@ -1390,10 +1391,12 @@ testSuite({
   },
 
   testFirstFulfilledWithFalseyNonThenable() {
-    const a = fulfillSoon('a', 40);
-    const b = rejectSoon('rejected-b', 30);
-    const c = rejectSoon('rejected-c', 10);
+    const c = rejectSoon(GoogPromise, 'rejected-c');
     const d = 0;
+    const b = after(c, () => {
+      throw 'rejected-b';
+    });
+    const a = after(b, () => 'a');
 
     return GoogPromise.firstFulfilled([a, b, c, d])
         .then((value) => {
@@ -1408,10 +1411,10 @@ testSuite({
   },
 
   testFirstFulfilledWithFulfilledBeforeNonThenable() {
-    const a = fulfillSoon('a', 40);
-    const b = GoogPromise.resolve('b');
-    const c = rejectSoon('rejected-c', 10);
+    const c = rejectSoon(GoogPromise, 'rejected-c');
     const d = 'd';
+    const b = GoogPromise.resolve('b');
+    const a = after(c, () => 'a');
 
     return GoogPromise.firstFulfilled([a, b, c, d])
         .then((value) => {
@@ -1426,10 +1429,14 @@ testSuite({
   },
 
   testFirstFulfilledWithReject() {
-    const a = rejectSoon('rejected-a', 40);
-    const b = rejectThenableSoon('rejected-b', 30);
-    const c = rejectBuiltInSoon('rejected-c', 10);
-    const d = createThrowingThenable('rejected-d');
+    const c = rejectSoon(NativeOrGoogPromise, 'rejected-c');
+    const d = new ThrowingThenable('rejected-d');
+    const b = CountingThenable.resolve(after(c, () => {
+      throw 'rejected-b';
+    }));
+    const a = GoogPromise.resolve(after(b, () => {
+      throw 'rejected-a';
+    }));
 
     return GoogPromise.firstFulfilled([a, b, c, d])
         .then(shouldNotCall, (reason) => {
@@ -1437,9 +1444,7 @@ testSuite({
               ['rejected-a', 'rejected-b', 'rejected-c', 'rejected-d'], reason);
           // Ensure that the `then` property was only accessed once by
           // `goog.Promise.firstFulfilled`.
-          if (SUPPORTS_ACCESSORS) {
-            assertEquals(1, b.thenAccesses);
-          }
+          assertEquals(1, b.thenCallCount);
         });
   },
 
@@ -1812,7 +1817,7 @@ testSuite({
   testCancelPropagationUpwardWithMultipleChildren() {
     let cancelError;
     const cancelCalls = [];
-    const parent = fulfillSoon(sentinel, 0);
+    const parent = fulfillSoon(GoogPromise, sentinel);
 
     parent.then((value) => {
       assertEquals(
@@ -1850,7 +1855,7 @@ testSuite({
   testThenVoidCancelPropagationUpwardWithMultipleChildren() {
     let cancelError;
     const cancelCalls = [];
-    const parent = fulfillSoon(sentinel, 0);
+    const parent = fulfillSoon(GoogPromise, sentinel);
 
     parent.thenVoid((value) => {
       assertEquals(
@@ -1860,7 +1865,9 @@ testSuite({
 
     const child = parent.then(shouldNotCall, (reason) => {
       assertTrue(reason instanceof GoogPromise.CancellationError);
-      assertEquals('grandChild cancel message', reason.message);
+      assertEquals(
+          'grandChild cancel message',
+          /** @type {!GoogPromise.CancellationError} */ (reason).message);
       cancelError = reason;
       cancelCalls.push('child');
     });
@@ -1891,7 +1898,7 @@ testSuite({
   testCancelRecovery() {
     const cancelCalls = [];
 
-    const parent = fulfillSoon(sentinel, 100);
+    const parent = fulfillSoon(GoogPromise, sentinel);
 
     const sibling1 = parent.then((value) => {
       assertEquals(
