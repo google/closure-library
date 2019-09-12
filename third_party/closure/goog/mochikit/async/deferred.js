@@ -448,7 +448,7 @@ goog.async.Deferred.prototype.addBoth = function(f, opt_scope) {
 goog.async.Deferred.prototype.addFinally = function(f, opt_scope) {
   return this.addCallbacks(f, function(err) {
     var result = f.call(/** @type {?} */ (this), err);
-    if (!goog.isDef(result)) {
+    if (result === undefined) {
       throw err;
     }
     return result;
@@ -650,7 +650,7 @@ goog.async.Deferred.prototype.fire_ = function() {
         var ret = f.call(scope || this.defaultScope_, res);
 
         // If no result, then use previous result.
-        if (goog.isDef(ret)) {
+        if (ret !== undefined) {
           // Bubble up the error as long as the return value hasn't changed.
           this.hadError_ = this.hadError_ && (ret == res || this.isError(ret));
           this.result_ = res = ret;
