@@ -34,7 +34,7 @@ class Registration {
     /**
      * The registered delegate constructor.  Exactly one of `instance` or
      * `ctor` must be provided.
-     * @type {function(new: T)|undefined}
+     * @type {function(new: T, ...?)|undefined}
      */
     this.ctor;
     /**
@@ -95,7 +95,7 @@ class DelegateRegistryBase {
   /**
    * Returns the first (highest priority) registered delegate, or undefined
    * if none was registered.
-   * @param {(function(function(new: T)): T)=} instantiate A function to
+   * @param {(function(function(new: T, ...?)): T)=} instantiate A function to
    *     instantiate constructors registered with `registerClass`.  By default,
    *     this just calls the constructor with no arguments.
    * @return {T|undefined}
@@ -114,7 +114,7 @@ class DelegateRegistryBase {
    * of any registered classes.  The `instantiate` argument can be passed to
    * override how constructors are called.  The array will be frozen in debug
    * mode.
-   * @param {(function(function(new: T)): T)=} instantiate A function to
+   * @param {(function(function(new: T, ...?)): T)=} instantiate A function to
    *     instantiate constructors registered with `registerClass`.  By default,
    *     this just calls the constructor with no arguments.
    * @return {!Array<T>}
@@ -128,7 +128,7 @@ class DelegateRegistryBase {
 
   /**
    * @param {!Registration<T>} registration
-   * @param {(function(function(new: T)): T)=} instantiate
+   * @param {(function(function(new: T, ...?)): T)=} instantiate
    * @return {T}
    * @private
    */
@@ -298,7 +298,7 @@ class DelegateRegistry extends DelegateRegistryBase {
   }
 
   /**
-   * @param {function(new: T)} ctor
+   * @param {function(new: T, ...?)} ctor
    */
   registerClass(ctor) {
     this.checkRegistration_();
