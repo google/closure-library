@@ -26,16 +26,19 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
     {input: "<form><input name=\"children\"></form>",
      acceptable: [
          "",
+         "<form><input></form>",
      ],
      name: "clobbering_children"},
     {input: "<form><input name=\"firstChild\"></form>",
      acceptable: [
          "",
+         "<form><input></form>",
      ],
      name: "clobbering_firstchild"},
     {input: "<form><input name=\"__proto__\"></form>",
      acceptable: [
          "",
+         "<form><input></form>",
      ],
      name: "clobbering_proto"},
     {input: "<form><input name=\"tagName\"></form>",
