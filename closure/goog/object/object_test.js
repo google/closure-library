@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.objectTest');
-goog.setTestOnly('goog.objectTest');
+goog.module('goog.objectTest');
+goog.setTestOnly();
 
-goog.require('goog.array');
-goog.require('goog.functions');
-goog.require('goog.object');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
+const functions = goog.require('goog.functions');
+const googArray = goog.require('goog.array');
+const googObject = goog.require('goog.object');
+const recordFunction = goog.require('goog.testing.recordFunction');
+const testSuite = goog.require('goog.testing.testSuite');
 
 function stringifyObject(m) {
-  const keys = goog.object.getKeys(m);
+  const keys = googObject.getKeys(m);
   let s = '';
   for (let i = 0; i < keys.length; i++) {
-    s += keys[i] + goog.object.get(m, keys[i]);
+    s += keys[i] + googObject.get(m, keys[i]);
   }
   return s;
 }
@@ -34,401 +34,8 @@ function getObject() {
   return {a: 0, b: 1, c: 2, d: 3};
 }
 
-function testKeys() {
-  const m = getObject();
-  assertEquals(
-      'getKeys, The keys should be a,b,c', 'a,b,c,d',
-      goog.object.getKeys(m).join(','));
-}
-
-function testValues() {
-  const m = getObject();
-  assertEquals(
-      'getValues, The values should be 0,1,2', '0,1,2,3',
-      goog.object.getValues(m).join(','));
-}
-
-function testGetAnyKey() {
-  const m = getObject();
-  assertTrue(
-      'getAnyKey, The key should be a,b,c or d', goog.object.getAnyKey(m) in m);
-  assertUndefined(
-      'getAnyKey, The key should be undefined', goog.object.getAnyKey({}));
-}
-
-function testGetAnyValue() {
-  const m = getObject();
-  assertTrue(
-      'getAnyValue, The value should be 0,1,2 or 3',
-      goog.object.containsValue(m, goog.object.getAnyValue(m)));
-  assertUndefined(
-      'getAnyValue, The value should be undefined',
-      goog.object.getAnyValue({}));
-}
-
-function testContainsKey() {
-  const m = getObject();
-  assertTrue(
-      "containsKey, Should contain the 'a' key",
-      goog.object.containsKey(m, 'a'));
-  assertFalse(
-      "containsKey, Should not contain the 'e' key",
-      goog.object.containsKey(m, 'e'));
-}
-
-function testContainsValue() {
-  const m = getObject();
-  assertTrue(
-      'containsValue, Should contain the value 0',
-      goog.object.containsValue(m, 0));
-  assertFalse(
-      'containsValue, Should not contain the value 4',
-      goog.object.containsValue(m, 4));
-  assertTrue('isEmpty, The map should not be empty', !goog.object.isEmpty(m));
-}
-
-function testFindKey() {
-  const dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4};
-  const key = goog.object.findKey(dict, function(v, k, d) {
-    assertEquals('valid 3rd argument', dict, d);
-    assertTrue('valid 1st argument', goog.object.containsValue(d, v));
-    assertTrue('valid 2nd argument', k in d);
-    return v % 3 == 0;
-  });
-  assertEquals('key "c" found', 'c', key);
-
-  const pred = function(value) {
-    return value > 5;
-  };
-  assertUndefined('no match', goog.object.findKey(dict, pred));
-}
-
-function testFindValue() {
-  const dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4};
-  const value = goog.object.findValue(dict, function(v, k, d) {
-    assertEquals('valid 3rd argument', dict, d);
-    assertTrue('valid 1st argument', goog.object.containsValue(d, v));
-    assertTrue('valid 2nd argument', k in d);
-    return k.toUpperCase() == 'C';
-  });
-  assertEquals('value 3 found', 3, value);
-
-  const pred = function(value, key) {
-    return key > 'd';
-  };
-  assertUndefined('no match', goog.object.findValue(dict, pred));
-}
-
-function testClear() {
-  const m = getObject();
-  goog.object.clear(m);
-  assertTrue('cleared so it should be empty', goog.object.isEmpty(m));
-  assertFalse(
-      "cleared so it should not contain 'a' key",
-      goog.object.containsKey(m, 'a'));
-}
-
-function testClone() {
-  const m = getObject();
-  const m2 = goog.object.clone(m);
-  assertFalse('clone so it should not be empty', goog.object.isEmpty(m2));
-  assertTrue(
-      "clone so it should contain 'c' key", goog.object.containsKey(m2, 'c'));
-}
-
-function testUnsafeClonePrimitive() {
-  assertEquals(
-      'cloning a primitive should return an equal primitive', 5,
-      goog.object.unsafeClone(5));
-}
-
-function testUnsafeCloneObjectThatHasACloneMethod() {
-  const original = {
-    name: 'original',
-    clone: goog.functions.constant({name: 'clone'})
-  };
-
-  const clone = goog.object.unsafeClone(original);
-  assertEquals('original', original.name);
-  assertEquals('clone', clone.name);
-}
-
-function testUnsafeCloneObjectThatHasACloneNonMethod() {
-  const originalIndex = {red: [0, 4], clone: [1, 3, 5, 7], yellow: [2, 6]};
-
-  const clone = goog.object.unsafeClone(originalIndex);
-  assertArrayEquals([1, 3, 5, 7], originalIndex.clone);
-  assertArrayEquals([1, 3, 5, 7], clone.clone);
-}
-
-function testUnsafeCloneFlatObject() {
-  const original = {a: 1, b: 2, c: 3};
-  const clone = goog.object.unsafeClone(original);
-  assertNotEquals(original, clone);
-  assertObjectEquals(original, clone);
-}
-
-function testUnsafeCloneDeepObject() {
-  const original = {a: 1, b: {c: 2, d: 3}, e: {f: {g: 4, h: 5}}};
-  const clone = goog.object.unsafeClone(original);
-
-  assertNotEquals(original, clone);
-  assertNotEquals(original.b, clone.b);
-  assertNotEquals(original.e, clone.e);
-
-  assertEquals(1, clone.a);
-  assertEquals(2, clone.b.c);
-  assertEquals(3, clone.b.d);
-  assertEquals(4, clone.e.f.g);
-  assertEquals(5, clone.e.f.h);
-}
-
-function testUnsafeCloneFunctions() {
-  const original = {f: goog.functions.constant('hi')};
-  const clone = goog.object.unsafeClone(original);
-
-  assertNotEquals(original, clone);
-  assertEquals('hi', clone.f());
-  assertEquals(original.f, clone.f);
-}
-
-function testForEach() {
-  const m = getObject();
-  let s = '';
-  goog.object.forEach(m, function(val, key, m2) {
-    assertNotUndefined(key);
-    assertEquals(m, m2);
-    s += key + val;
-  });
-  assertEquals(s, 'a0b1c2d3');
-}
-
-function testFilter() {
-  const m = getObject();
-
-  const m2 = goog.object.filter(m, function(val, key, m3) {
-    assertNotUndefined(key);
-    assertEquals(m, m3);
-    return val > 1;
-  });
-  assertEquals(stringifyObject(m2), 'c2d3');
-}
-
-
-function testMap() {
-  const m = getObject();
-  const m2 = goog.object.map(m, function(val, key, m3) {
-    assertNotUndefined(key);
-    assertEquals(m, m3);
-    return val * val;
-  });
-  assertEquals(stringifyObject(m2), 'a0b1c4d9');
-}
-
-function testSome() {
-  const m = getObject();
-  let b = goog.object.some(m, function(val, key, m2) {
-    assertNotUndefined(key);
-    assertEquals(m, m2);
-    return val > 1;
-  });
-  assertTrue(b);
-  b = goog.object.some(m, function(val, key, m2) {
-    assertNotUndefined(key);
-    assertEquals(m, m2);
-    return val > 100;
-  });
-  assertFalse(b);
-}
-
-function testEvery() {
-  const m = getObject();
-  let b = goog.object.every(m, function(val, key, m2) {
-    assertNotUndefined(key);
-    assertEquals(m, m2);
-    return val >= 0;
-  });
-  assertTrue(b);
-  b = goog.object.every(m, function(val, key, m2) {
-    assertNotUndefined(key);
-    assertEquals(m, m2);
-    return val > 1;
-  });
-  assertFalse(b);
-}
-
-function testContains() {
-  const m = getObject();
-  assertTrue(goog.object.contains(m, 3));
-  assertFalse(goog.object.contains(m, 4));
-}
-
-function testObjectProperties() {
-  const m = {};
-
-  goog.object.set(m, 'toString', 'once');
-  goog.object.set(m, 'valueOf', 'upon');
-  goog.object.set(m, 'eval', 'a');
-  goog.object.set(m, 'toSource', 'midnight');
-  goog.object.set(m, 'prototype', 'dreary');
-  goog.object.set(m, 'hasOwnProperty', 'dark');
-
-  assertEquals(goog.object.get(m, 'toString'), 'once');
-  assertEquals(goog.object.get(m, 'valueOf'), 'upon');
-  assertEquals(goog.object.get(m, 'eval'), 'a');
-  assertEquals(goog.object.get(m, 'toSource'), 'midnight');
-  assertEquals(goog.object.get(m, 'prototype'), 'dreary');
-  assertEquals(goog.object.get(m, 'hasOwnProperty'), 'dark');
-}
-
-function testSetDefault() {
-  const dict = {};
-  assertEquals(1, goog.object.setIfUndefined(dict, 'a', 1));
-  assertEquals(1, dict['a']);
-  assertEquals(1, goog.object.setIfUndefined(dict, 'a', 2));
-  assertEquals(1, dict['a']);
-}
-
 function createRecordedGetFoo() {
-  return goog.testing.recordFunction(goog.functions.constant('foo'));
-}
-
-function testSetWithReturnValueNotSet_KeyIsSet() {
-  const f = createRecordedGetFoo();
-  const obj = {};
-  obj['key'] = 'bar';
-  assertEquals('bar', goog.object.setWithReturnValueIfNotSet(obj, 'key', f));
-  f.assertCallCount(0);
-}
-
-function testSetWithReturnValueNotSet_KeyIsNotSet() {
-  const f = createRecordedGetFoo();
-  const obj = {};
-  assertEquals('foo', goog.object.setWithReturnValueIfNotSet(obj, 'key', f));
-  f.assertCallCount(1);
-}
-
-function testSetWithReturnValueNotSet_KeySetValueIsUndefined() {
-  const f = createRecordedGetFoo();
-  const obj = {};
-  obj['key'] = undefined;
-  assertEquals(
-      undefined, goog.object.setWithReturnValueIfNotSet(obj, 'key', f));
-  f.assertCallCount(0);
-}
-
-function testTranspose() {
-  const m = getObject();
-  const b = goog.object.transpose(m);
-  assertEquals('a', b[0]);
-  assertEquals('b', b[1]);
-  assertEquals('c', b[2]);
-  assertEquals('d', b[3]);
-}
-
-function testExtend() {
-  let o = {};
-  let o2 = {a: 0, b: 1};
-  goog.object.extend(o, o2);
-  assertEquals(0, o.a);
-  assertEquals(1, o.b);
-  assertTrue('a' in o);
-  assertTrue('b' in o);
-
-  o2 = {c: 2};
-  goog.object.extend(o, o2);
-  assertEquals(2, o.c);
-  assertTrue('c' in o);
-
-  o2 = {c: 3};
-  goog.object.extend(o, o2);
-  assertEquals(3, o.c);
-  assertTrue('c' in o);
-
-  o = {};
-  o2 = {c: 2};
-  let o3 = {c: 3};
-  goog.object.extend(o, o2, o3);
-  assertEquals(3, o.c);
-  assertTrue('c' in o);
-
-  o = {};
-  o2 = {a: 0, b: 1};
-  o3 = {c: 2, d: 3};
-  goog.object.extend(o, o2, o3);
-  assertEquals(0, o.a);
-  assertEquals(1, o.b);
-  assertEquals(2, o.c);
-  assertEquals(3, o.d);
-  assertTrue('a' in o);
-  assertTrue('b' in o);
-  assertTrue('c' in o);
-  assertTrue('d' in o);
-
-  o = {};
-  o2 = {
-    'constructor': 0,
-    'hasOwnProperty': 1,
-    'isPrototypeOf': 2,
-    'propertyIsEnumerable': 3,
-    'toLocaleString': 4,
-    'toString': 5,
-    'valueOf': 6
-  };
-  goog.object.extend(o, o2);
-  assertEquals(0, o['constructor']);
-  assertEquals(1, o['hasOwnProperty']);
-  assertEquals(2, o['isPrototypeOf']);
-  assertEquals(3, o['propertyIsEnumerable']);
-  assertEquals(4, o['toLocaleString']);
-  assertEquals(5, o['toString']);
-  assertEquals(6, o['valueOf']);
-  assertTrue('constructor' in o);
-  assertTrue('hasOwnProperty' in o);
-  assertTrue('isPrototypeOf' in o);
-  assertTrue('propertyIsEnumerable' in o);
-  assertTrue('toLocaleString' in o);
-  assertTrue('toString' in o);
-  assertTrue('valueOf' in o);
-}
-
-function testCreate() {
-  assertObjectEquals(
-      'With multiple arguments', {a: 0, b: 1},
-      goog.object.create('a', 0, 'b', 1));
-  assertObjectEquals(
-      'With an array argument', {a: 0, b: 1},
-      goog.object.create(['a', 0, 'b', 1]));
-
-  assertObjectEquals('With no arguments', {}, goog.object.create());
-  assertObjectEquals(
-      'With an ampty array argument', {}, goog.object.create([]));
-
-  assertThrows('Should throw due to uneven arguments', function() {
-    goog.object.create('a');
-  });
-  assertThrows('Should throw due to uneven arguments', function() {
-    goog.object.create('a', 0, 'b');
-  });
-  assertThrows('Should throw due to uneven length array', function() {
-    goog.object.create(['a']);
-  });
-  assertThrows('Should throw due to uneven length array', function() {
-    goog.object.create(['a', 0, 'b']);
-  });
-}
-
-function testCreateSet() {
-  assertObjectEquals(
-      'With multiple arguments', {a: true, b: true},
-      goog.object.createSet('a', 'b'));
-  assertObjectEquals(
-      'With an array argument', {a: true, b: true},
-      goog.object.createSet(['a', 'b']));
-
-  assertObjectEquals('With no arguments', {}, goog.object.createSet());
-  assertObjectEquals(
-      'With an ampty array argument', {}, goog.object.createSet([]));
+  return recordFunction(functions.constant('foo'));
 }
 
 function createTestDeepObject() {
@@ -444,261 +51,665 @@ function createTestDeepObject() {
   return obj;
 }
 
-function testGetValueByKeys() {
-  const obj = createTestDeepObject();
-  assertEquals(obj, goog.object.getValueByKeys(obj));
-  assertEquals(obj.a, goog.object.getValueByKeys(obj, 'a'));
-  assertEquals(obj.a.b, goog.object.getValueByKeys(obj, 'a', 'b'));
-  assertEquals(obj.a.b.c, goog.object.getValueByKeys(obj, 'a', 'b', 'c'));
-  assertEquals(
-      obj.a.b.c.d, goog.object.getValueByKeys(obj, 'a', 'b', 'c', 'd'));
-  assertEquals(8, goog.object.getValueByKeys(obj, 'a', 'b', 'c', 'fooArr', 3));
-  assertNull(goog.object.getValueByKeys(obj, 'a', 'b', 'c', 'knownNull'));
-  assertUndefined(
-      goog.object.getValueByKeys(obj, 'a', 'b', 'c', 'knownNull', 'd'));
-  assertUndefined(goog.object.getValueByKeys(obj, 'e', 'f', 'g'));
-  assertEquals(
-      0, goog.object.getValueByKeys(obj, 'knownEmptyString', 'length'));
-  assertEquals(
-      1,
-      goog.object.getValueByKeys(obj, 'knownSingleCharacterString', 'length'));
-}
+testSuite({
+  testKeys() {
+    const m = getObject();
+    assertEquals(
+        'getKeys, The keys should be a,b,c', 'a,b,c,d',
+        googObject.getKeys(m).join(','));
+  },
 
-function testGetValueByKeysArraySyntax() {
-  const obj = createTestDeepObject();
-  assertEquals(obj, goog.object.getValueByKeys(obj, []));
-  assertEquals(obj.a, goog.object.getValueByKeys(obj, ['a']));
+  testValues() {
+    const m = getObject();
+    assertEquals(
+        'getValues, The values should be 0,1,2', '0,1,2,3',
+        googObject.getValues(m).join(','));
+  },
 
-  assertEquals(obj.a.b, goog.object.getValueByKeys(obj, ['a', 'b']));
-  assertEquals(obj.a.b.c, goog.object.getValueByKeys(obj, ['a', 'b', 'c']));
-  assertEquals(
-      obj.a.b.c.d, goog.object.getValueByKeys(obj, ['a', 'b', 'c', 'd']));
-  assertEquals(
-      8, goog.object.getValueByKeys(obj, ['a', 'b', 'c', 'fooArr', 3]));
-  assertNull(goog.object.getValueByKeys(obj, ['a', 'b', 'c', 'knownNull']));
-  assertUndefined(
-      goog.object.getValueByKeys(obj, ['a', 'b', 'c', 'knownNull', 'd']));
-  assertUndefined(goog.object.getValueByKeys(obj, 'e', 'f', 'g'));
-}
+  testGetAnyKey() {
+    const m = getObject();
+    assertTrue(
+        'getAnyKey, The key should be a,b,c or d',
+        googObject.getAnyKey(m) in m);
+    assertUndefined(
+        'getAnyKey, The key should be undefined', googObject.getAnyKey({}));
+  },
 
-function testImmutableView() {
-  if (!Object.isFrozen) {
-    return;
-  }
-  const x = {propA: 3};
-  const y = goog.object.createImmutableView(x);
-  x.propA = 4;
-  x.propB = 6;
-  y.propA = 5;
-  y.propB = 7;
-  assertEquals(4, x.propA);
-  assertEquals(6, x.propB);
-  assertFalse(goog.object.isImmutableView(x));
+  testGetAnyValue() {
+    const m = getObject();
+    assertTrue(
+        'getAnyValue, The value should be 0,1,2 or 3',
+        googObject.containsValue(m, googObject.getAnyValue(m)));
+    assertUndefined(
+        'getAnyValue, The value should be undefined',
+        googObject.getAnyValue({}));
+  },
 
-  assertEquals(4, y.propA);
-  assertEquals(6, y.propB);
-  assertTrue(goog.object.isImmutableView(y));
+  testContainsKey() {
+    const m = getObject();
+    assertTrue(
+        'containsKey, Should contain the \'a\' key',
+        googObject.containsKey(m, 'a'));
+    assertFalse(
+        'containsKey, Should not contain the \'e\' key',
+        googObject.containsKey(m, 'e'));
+  },
 
-  assertFalse('x and y should be different references', x == y);
-  assertTrue(
-      'createImmutableView should not create a new view of an immutable object',
-      y == goog.object.createImmutableView(y));
-}
+  testContainsValue() {
+    const m = getObject();
+    assertTrue(
+        'containsValue, Should contain the value 0',
+        googObject.containsValue(m, 0));
+    assertFalse(
+        'containsValue, Should not contain the value 4',
+        googObject.containsValue(m, 4));
+    assertTrue('isEmpty, The map should not be empty', !googObject.isEmpty(m));
+  },
 
-function testImmutableViewStrict() {
-  'use strict';
+  testFindKey() {
+    const dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4};
+    const key = googObject.findKey(dict, (v, k, d) => {
+      assertEquals('valid 3rd argument', dict, d);
+      assertTrue('valid 1st argument', googObject.containsValue(d, v));
+      assertTrue('valid 2nd argument', k in d);
+      return v % 3 == 0;
+    });
+    assertEquals('key "c" found', 'c', key);
 
-  // IE9 supports isFrozen, but does not support strict mode. Exit early if we
-  // are not actually running in strict mode.
-  const isStrict = (function() {
-    return !this;
-  })();
+    const pred = (value) => value > 5;
+    assertUndefined('no match', googObject.findKey(dict, pred));
+  },
 
-  if (!Object.isFrozen || !isStrict) {
-    return;
-  }
-  const x = {propA: 3};
-  const y = goog.object.createImmutableView(x);
-  assertThrows(function() { y.propA = 4; });
-  assertThrows(function() { y.propB = 4; });
-}
+  testFindValue() {
+    const dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4};
+    const value = googObject.findValue(dict, (v, k, d) => {
+      assertEquals('valid 3rd argument', dict, d);
+      assertTrue('valid 1st argument', googObject.containsValue(d, v));
+      assertTrue('valid 2nd argument', k in d);
+      return k.toUpperCase() == 'C';
+    });
+    assertEquals('value 3 found', 3, value);
 
-function testEmptyObjectsAreEqual() {
-  assertTrue(goog.object.equals({}, {}));
-}
+    const pred = (value, key) => key > 'd';
+    assertUndefined('no match', googObject.findValue(dict, pred));
+  },
 
-function testObjectsWithDifferentKeysAreUnequal() {
-  assertFalse(goog.object.equals({'a': 1}, {'b': 1}));
-}
+  testClear() {
+    const m = getObject();
+    googObject.clear(m);
+    assertTrue('cleared so it should be empty', googObject.isEmpty(m));
+    assertFalse(
+        'cleared so it should not contain \'a\' key',
+        googObject.containsKey(m, 'a'));
+  },
 
-function testObjectsWithDifferentValuesAreUnequal() {
-  assertFalse(goog.object.equals({'a': 1}, {'a': 2}));
-}
+  testClone() {
+    const m = getObject();
+    const m2 = googObject.clone(m);
+    assertFalse('clone so it should not be empty', googObject.isEmpty(m2));
+    assertTrue(
+        'clone so it should contain \'c\' key',
+        googObject.containsKey(m2, 'c'));
+  },
 
-function testObjectsWithSameKeysAndValuesAreEqual() {
-  assertTrue(goog.object.equals({'a': 1}, {'a': 1}));
-}
+  testUnsafeClonePrimitive() {
+    assertEquals(
+        'cloning a primitive should return an equal primitive', 5,
+        googObject.unsafeClone(5));
+  },
 
-function testObjectsWithSameKeysInDifferentOrderAreEqual() {
-  assertTrue(goog.object.equals({'a': 1, 'b': 2}, {'b': 2, 'a': 1}));
-}
+  testUnsafeCloneObjectThatHasACloneMethod() {
+    const original = {
+      name: 'original',
+      clone: functions.constant({name: 'clone'}),
+    };
 
-function testIs() {
-  const object = {};
-  assertTrue(goog.object.is(object, object));
-  assertFalse(goog.object.is(object, {}));
+    const clone = googObject.unsafeClone(original);
+    assertEquals('original', original.name);
+    assertEquals('clone', clone.name);
+  },
 
-  assertTrue(goog.object.is(NaN, NaN));
-  assertTrue(goog.object.is(0, 0));
-  assertTrue(goog.object.is(1, 1));
-  assertTrue(goog.object.is(-1, -1));
-  assertTrue(goog.object.is(123, 123));
-  assertFalse(goog.object.is(0, -0));
-  assertFalse(goog.object.is(-0, 0));
-  assertFalse(goog.object.is(0, 1));
+  testUnsafeCloneObjectThatHasACloneNonMethod() {
+    const originalIndex = {red: [0, 4], clone: [1, 3, 5, 7], yellow: [2, 6]};
 
-  assertTrue(goog.object.is(true, true));
-  assertTrue(goog.object.is(false, false));
-  assertFalse(goog.object.is(true, false));
-  assertFalse(goog.object.is(false, true));
+    const clone = googObject.unsafeClone(originalIndex);
+    assertArrayEquals([1, 3, 5, 7], originalIndex.clone);
+    assertArrayEquals([1, 3, 5, 7], clone.clone);
+  },
 
-  assertTrue(goog.object.is('', ''));
-  assertTrue(goog.object.is('a', 'a'));
-  assertFalse(goog.object.is('', 'a'));
-  assertFalse(goog.object.is('a', ''));
-  assertFalse(goog.object.is('a', 'b'));
+  testUnsafeCloneFlatObject() {
+    const original = {a: 1, b: 2, c: 3};
+    const clone = googObject.unsafeClone(original);
+    assertNotEquals(original, clone);
+    assertObjectEquals(original, clone);
+  },
 
-  assertFalse(goog.object.is(true, 'true'));
-  assertFalse(goog.object.is('true', true));
-  assertFalse(goog.object.is(false, 'false'));
-  assertFalse(goog.object.is('false', false));
-  assertFalse(goog.object.is(0, '0'));
-  assertFalse(goog.object.is('0', 0));
-}
+  testUnsafeCloneDeepObject() {
+    const original = {a: 1, b: {c: 2, d: 3}, e: {f: {g: 4, h: 5}}};
+    const clone = googObject.unsafeClone(original);
 
-function testGetAllPropertyNames_enumerableProperties() {
-  const obj = {a: function() {}, b: 'b', c: function(x) {}};
-  assertSameElements(['a', 'b', 'c'], goog.object.getAllPropertyNames(obj));
-}
+    assertNotEquals(original, clone);
+    assertNotEquals(original.b, clone.b);
+    assertNotEquals(original.e, clone.e);
 
-function testGetAllPropertyNames_nonEnumerableProperties() {
-  const obj = {};
-  try {
-    Object.defineProperty(obj, 'foo', {value: 'bar', enumerable: false});
-  } catch (ex) {
-    // IE8 doesn't allow Object.defineProperty on non-DOM elements.
-    if (ex.message == 'Object doesn\'t support this action') {
+    assertEquals(1, clone.a);
+    assertEquals(2, clone.b.c);
+    assertEquals(3, clone.b.d);
+    assertEquals(4, clone.e.f.g);
+    assertEquals(5, clone.e.f.h);
+  },
+
+  testUnsafeCloneFunctions() {
+    const original = {f: functions.constant('hi')};
+    const clone = googObject.unsafeClone(original);
+
+    assertNotEquals(original, clone);
+    assertEquals('hi', clone.f());
+    assertEquals(original.f, clone.f);
+  },
+
+  testForEach() {
+    const m = getObject();
+    let s = '';
+    googObject.forEach(m, (val, key, m2) => {
+      assertNotUndefined(key);
+      assertEquals(m, m2);
+      s += key + val;
+    });
+    assertEquals(s, 'a0b1c2d3');
+  },
+
+  testFilter() {
+    const m = getObject();
+
+    const m2 = googObject.filter(m, (val, key, m3) => {
+      assertNotUndefined(key);
+      assertEquals(m, m3);
+      return val > 1;
+    });
+    assertEquals(stringifyObject(m2), 'c2d3');
+  },
+
+  testMap() {
+    const m = getObject();
+    const m2 = googObject.map(m, (val, key, m3) => {
+      assertNotUndefined(key);
+      assertEquals(m, m3);
+      return val * val;
+    });
+    assertEquals(stringifyObject(m2), 'a0b1c4d9');
+  },
+
+  testSome() {
+    const m = getObject();
+    let b = googObject.some(m, (val, key, m2) => {
+      assertNotUndefined(key);
+      assertEquals(m, m2);
+      return val > 1;
+    });
+    assertTrue(b);
+    b = googObject.some(m, (val, key, m2) => {
+      assertNotUndefined(key);
+      assertEquals(m, m2);
+      return val > 100;
+    });
+    assertFalse(b);
+  },
+
+  testEvery() {
+    const m = getObject();
+    let b = googObject.every(m, (val, key, m2) => {
+      assertNotUndefined(key);
+      assertEquals(m, m2);
+      return val >= 0;
+    });
+    assertTrue(b);
+    b = googObject.every(m, (val, key, m2) => {
+      assertNotUndefined(key);
+      assertEquals(m, m2);
+      return val > 1;
+    });
+    assertFalse(b);
+  },
+
+  testContains() {
+    const m = getObject();
+    assertTrue(googObject.contains(m, 3));
+    assertFalse(googObject.contains(m, 4));
+  },
+
+  testObjectProperties() {
+    const m = {};
+
+    googObject.set(m, 'toString', 'once');
+    googObject.set(m, 'valueOf', 'upon');
+    googObject.set(m, 'eval', 'a');
+    googObject.set(m, 'toSource', 'midnight');
+    googObject.set(m, 'prototype', 'dreary');
+    googObject.set(m, 'hasOwnProperty', 'dark');
+
+    assertEquals(googObject.get(m, 'toString'), 'once');
+    assertEquals(googObject.get(m, 'valueOf'), 'upon');
+    assertEquals(googObject.get(m, 'eval'), 'a');
+    assertEquals(googObject.get(m, 'toSource'), 'midnight');
+    assertEquals(googObject.get(m, 'prototype'), 'dreary');
+    assertEquals(googObject.get(m, 'hasOwnProperty'), 'dark');
+  },
+
+  testSetDefault() {
+    const dict = {};
+    assertEquals(1, googObject.setIfUndefined(dict, 'a', 1));
+    assertEquals(1, dict['a']);
+    assertEquals(1, googObject.setIfUndefined(dict, 'a', 2));
+    assertEquals(1, dict['a']);
+  },
+
+  testSetWithReturnValueNotSet_KeyIsSet() {
+    const f = createRecordedGetFoo();
+    const obj = {};
+    obj['key'] = 'bar';
+    assertEquals('bar', googObject.setWithReturnValueIfNotSet(obj, 'key', f));
+    f.assertCallCount(0);
+  },
+
+  testSetWithReturnValueNotSet_KeyIsNotSet() {
+    const f = createRecordedGetFoo();
+    const obj = {};
+    assertEquals('foo', googObject.setWithReturnValueIfNotSet(obj, 'key', f));
+    f.assertCallCount(1);
+  },
+
+  testSetWithReturnValueNotSet_KeySetValueIsUndefined() {
+    const f = createRecordedGetFoo();
+    const obj = {};
+    obj['key'] = undefined;
+    assertEquals(
+        undefined, googObject.setWithReturnValueIfNotSet(obj, 'key', f));
+    f.assertCallCount(0);
+  },
+
+  testTranspose() {
+    const m = getObject();
+    const b = googObject.transpose(m);
+    assertEquals('a', b[0]);
+    assertEquals('b', b[1]);
+    assertEquals('c', b[2]);
+    assertEquals('d', b[3]);
+  },
+
+  testExtend() {
+    let o = {};
+    let o2 = {a: 0, b: 1};
+    googObject.extend(o, o2);
+    assertEquals(0, o.a);
+    assertEquals(1, o.b);
+    assertTrue('a' in o);
+    assertTrue('b' in o);
+
+    o2 = {c: 2};
+    googObject.extend(o, o2);
+    assertEquals(2, o.c);
+    assertTrue('c' in o);
+
+    o2 = {c: 3};
+    googObject.extend(o, o2);
+    assertEquals(3, o.c);
+    assertTrue('c' in o);
+
+    o = {};
+    o2 = {c: 2};
+    let o3 = {c: 3};
+    googObject.extend(o, o2, o3);
+    assertEquals(3, o.c);
+    assertTrue('c' in o);
+
+    o = {};
+    o2 = {a: 0, b: 1};
+    o3 = {c: 2, d: 3};
+    googObject.extend(o, o2, o3);
+    assertEquals(0, o.a);
+    assertEquals(1, o.b);
+    assertEquals(2, o.c);
+    assertEquals(3, o.d);
+    assertTrue('a' in o);
+    assertTrue('b' in o);
+    assertTrue('c' in o);
+    assertTrue('d' in o);
+
+    o = {};
+    o2 = {
+      'constructor': 0,
+      'hasOwnProperty': 1,
+      'isPrototypeOf': 2,
+      'propertyIsEnumerable': 3,
+      'toLocaleString': 4,
+      'toString': 5,
+      'valueOf': 6,
+    };
+    googObject.extend(o, o2);
+    assertEquals(0, o['constructor']);
+    assertEquals(1, o['hasOwnProperty']);
+    assertEquals(2, o['isPrototypeOf']);
+    assertEquals(3, o['propertyIsEnumerable']);
+    assertEquals(4, o['toLocaleString']);
+    assertEquals(5, o['toString']);
+    assertEquals(6, o['valueOf']);
+    assertTrue('constructor' in o);
+    assertTrue('hasOwnProperty' in o);
+    assertTrue('isPrototypeOf' in o);
+    assertTrue('propertyIsEnumerable' in o);
+    assertTrue('toLocaleString' in o);
+    assertTrue('toString' in o);
+    assertTrue('valueOf' in o);
+  },
+
+  testCreate() {
+    assertObjectEquals(
+        'With multiple arguments', {a: 0, b: 1},
+        googObject.create('a', 0, 'b', 1));
+    assertObjectEquals(
+        'With an array argument', {a: 0, b: 1},
+        googObject.create(['a', 0, 'b', 1]));
+
+    assertObjectEquals('With no arguments', {}, googObject.create());
+    assertObjectEquals(
+        'With an ampty array argument', {}, googObject.create([]));
+
+    assertThrows('Should throw due to uneven arguments', () => {
+      googObject.create('a');
+    });
+    assertThrows('Should throw due to uneven arguments', () => {
+      googObject.create('a', 0, 'b');
+    });
+    assertThrows('Should throw due to uneven length array', () => {
+      googObject.create(['a']);
+    });
+    assertThrows('Should throw due to uneven length array', () => {
+      googObject.create(['a', 0, 'b']);
+    });
+  },
+
+  testCreateSet() {
+    assertObjectEquals(
+        'With multiple arguments', {a: true, b: true},
+        googObject.createSet('a', 'b'));
+    assertObjectEquals(
+        'With an array argument', {a: true, b: true},
+        googObject.createSet(['a', 'b']));
+
+    assertObjectEquals('With no arguments', {}, googObject.createSet());
+    assertObjectEquals(
+        'With an ampty array argument', {}, googObject.createSet([]));
+  },
+
+  testGetValueByKeys() {
+    const obj = createTestDeepObject();
+    assertEquals(obj, googObject.getValueByKeys(obj));
+    assertEquals(obj.a, googObject.getValueByKeys(obj, 'a'));
+    assertEquals(obj.a.b, googObject.getValueByKeys(obj, 'a', 'b'));
+    assertEquals(obj.a.b.c, googObject.getValueByKeys(obj, 'a', 'b', 'c'));
+    assertEquals(
+        obj.a.b.c.d, googObject.getValueByKeys(obj, 'a', 'b', 'c', 'd'));
+    assertEquals(8, googObject.getValueByKeys(obj, 'a', 'b', 'c', 'fooArr', 3));
+    assertNull(googObject.getValueByKeys(obj, 'a', 'b', 'c', 'knownNull'));
+    assertUndefined(
+        googObject.getValueByKeys(obj, 'a', 'b', 'c', 'knownNull', 'd'));
+    assertUndefined(googObject.getValueByKeys(obj, 'e', 'f', 'g'));
+    assertEquals(
+        0, googObject.getValueByKeys(obj, 'knownEmptyString', 'length'));
+    assertEquals(
+        1,
+        googObject.getValueByKeys(obj, 'knownSingleCharacterString', 'length'));
+  },
+
+  testGetValueByKeysArraySyntax() {
+    const obj = createTestDeepObject();
+    assertEquals(obj, googObject.getValueByKeys(obj, []));
+    assertEquals(obj.a, googObject.getValueByKeys(obj, ['a']));
+
+    assertEquals(obj.a.b, googObject.getValueByKeys(obj, ['a', 'b']));
+    assertEquals(obj.a.b.c, googObject.getValueByKeys(obj, ['a', 'b', 'c']));
+    assertEquals(
+        obj.a.b.c.d, googObject.getValueByKeys(obj, ['a', 'b', 'c', 'd']));
+    assertEquals(
+        8, googObject.getValueByKeys(obj, ['a', 'b', 'c', 'fooArr', 3]));
+    assertNull(googObject.getValueByKeys(obj, ['a', 'b', 'c', 'knownNull']));
+    assertUndefined(
+        googObject.getValueByKeys(obj, ['a', 'b', 'c', 'knownNull', 'd']));
+    assertUndefined(googObject.getValueByKeys(obj, 'e', 'f', 'g'));
+  },
+
+  testImmutableView() {
+    if (!Object.isFrozen) {
       return;
     }
-  }
+    const x = {propA: 3};
+    const y = googObject.createImmutableView(x);
+    x.propA = 4;
+    x.propB = 6;
+    try {
+      y.propA = 5;
+      y.propB = 7;
+    } catch (e) {
+    }
+    assertEquals(4, x.propA);
+    assertEquals(6, x.propB);
+    assertFalse(googObject.isImmutableView(x));
 
-  const expected = goog.isDef(Object.getOwnPropertyNames) ? ['foo'] : [];
-  assertSameElements(expected, goog.object.getAllPropertyNames(obj));
-}
+    assertEquals(4, y.propA);
+    assertEquals(6, y.propB);
+    assertTrue(googObject.isImmutableView(y));
 
-function testGetAllPropertyNames_inheritedProperties() {
-  const parent = function() {};
-  parent.prototype.a = null;
+    assertFalse('x and y should be different references', x == y);
+    assertTrue(
+        'createImmutableView should not create a new view of an immutable object',
+        y == googObject.createImmutableView(y));
+  },
 
-  const child = function() {};
-  goog.inherits(child, parent);
-  child.prototype.b = null;
+  testImmutableViewStrict() {
+    'use strict';
 
-  const expected = ['a', 'b'];
-  if (goog.isDef(Object.getOwnPropertyNames)) {
-    expected.push('constructor');
-  }
+    // IE9 supports isFrozen, but does not support strict mode. Exit early if we
+    // are not actually running in strict mode.
+    const isStrict = (function() {
+      return !this;
+    })();
 
-  assertSameElements(
-      expected, goog.object.getAllPropertyNames(child.prototype));
-}
-
-function testGetAllPropertyNames_es6ClassProperties() {
-  // Create an ES6 class via eval so we can bail out if it's a syntax error in
-  // browsers that don't support ES6 classes.
-  try {
-    eval(
-        'var Foo = class {' +
-        '  a() {}' +
-        '};' +
-        'Foo.prototype.b = null;' +
-        'var Bar = class extends Foo {' +
-        '  c() {}' +
-        '  static d() {}' +
-        '};');
-  } catch (e) {
-    if (e instanceof SyntaxError) {
+    if (!Object.isFrozen || !isStrict) {
       return;
     }
-  }
+    const x = {propA: 3};
+    const y = googObject.createImmutableView(x);
+    assertThrows(() => {
+      y.propA = 4;
+    });
+    assertThrows(() => {
+      y.propB = 4;
+    });
+  },
 
-  assertSameElements(
-      ['a', 'b', 'constructor'],
-      goog.object.getAllPropertyNames(Foo.prototype));
-  assertSameElements(
-      ['a', 'b', 'c', 'constructor'],
-      goog.object.getAllPropertyNames(Bar.prototype));
+  testEmptyObjectsAreEqual() {
+    assertTrue(googObject.equals({}, {}));
+  },
 
-  const expectedBarProperties = ['d', 'prototype', 'length', 'name'];
+  testObjectsWithDifferentKeysAreUnequal() {
+    assertFalse(googObject.equals({'a': 1}, {'b': 1}));
+  },
 
-  // Some versions of Firefox don't find the name property via
-  // getOwnPropertyNames.
-  if (!goog.array.contains(Object.getOwnPropertyNames(Bar), 'name')) {
-    goog.array.remove(expectedBarProperties, 'name');
-  }
+  testObjectsWithDifferentValuesAreUnequal() {
+    assertFalse(googObject.equals({'a': 1}, {'a': 2}));
+  },
 
-  assertSameElements(
-      expectedBarProperties, goog.object.getAllPropertyNames(Bar));
-}
+  testObjectsWithSameKeysAndValuesAreEqual() {
+    assertTrue(googObject.equals({'a': 1}, {'a': 1}));
+  },
 
-function testGetAllPropertyNames_includeObjectPrototype() {
-  const obj = {a: function() {}, b: 'b', c: function(x) {}};
+  testObjectsWithSameKeysInDifferentOrderAreEqual() {
+    assertTrue(googObject.equals({'a': 1, 'b': 2}, {'b': 2, 'a': 1}));
+  },
 
-  // There's slightly different behavior depending on what APIs the browser
-  // under test supports.
-  const additionalProps = !!Object.getOwnPropertyNames ?
-      Object.getOwnPropertyNames(Object.prototype) :
-      [];
-  // __proto__ is a bit special and should be excluded from the result set.
-  goog.array.remove(additionalProps, '__proto__');
+  testIs() {
+    const object = {};
+    assertTrue(googObject.is(object, object));
+    assertFalse(googObject.is(object, {}));
 
-  assertSameElements(
-      ['a', 'b', 'c'].concat(additionalProps),
-      goog.object.getAllPropertyNames(obj, true));
-}
+    assertTrue(googObject.is(NaN, NaN));
+    assertTrue(googObject.is(0, 0));
+    assertTrue(googObject.is(1, 1));
+    assertTrue(googObject.is(-1, -1));
+    assertTrue(googObject.is(123, 123));
+    assertFalse(googObject.is(0, -0));
+    assertFalse(googObject.is(-0, 0));
+    assertFalse(googObject.is(0, 1));
 
-function testGetAllPropertyNames_includeFunctionPrototype() {
-  const obj = function() {};
-  obj.a = function() {};
+    assertTrue(googObject.is(true, true));
+    assertTrue(googObject.is(false, false));
+    assertFalse(googObject.is(true, false));
+    assertFalse(googObject.is(false, true));
 
-  // There's slightly different behavior depending on what APIs the browser
-  // under test supports.
-  const additionalProps = !!Object.getOwnPropertyNames ?
-      Object.getOwnPropertyNames(Function.prototype).concat(['prototype']) :
-      [];
+    assertTrue(googObject.is('', ''));
+    assertTrue(googObject.is('a', 'a'));
+    assertFalse(googObject.is('', 'a'));
+    assertFalse(googObject.is('a', ''));
+    assertFalse(googObject.is('a', 'b'));
 
-  const expectedElements = ['a'].concat(additionalProps);
-  goog.array.removeDuplicates(expectedElements);
+    assertFalse(googObject.is(true, 'true'));
+    assertFalse(googObject.is('true', true));
+    assertFalse(googObject.is(false, 'false'));
+    assertFalse(googObject.is('false', false));
+    assertFalse(googObject.is(0, '0'));
+    assertFalse(googObject.is('0', 0));
+  },
 
-  assertSameElements(
-      expectedElements, goog.object.getAllPropertyNames(obj, false, true));
-}
+  testGetAllPropertyNames_enumerableProperties() {
+    const obj = {a: function() {}, b: 'b', c: function(x) {}};
+    assertSameElements(['a', 'b', 'c'], googObject.getAllPropertyNames(obj));
+  },
 
-function testGetSuperClass_es5() {
-  function A() {}
-  function B() {}
-  goog.inherits(B, A);
+  testGetAllPropertyNames_nonEnumerableProperties() {
+    const obj = {};
+    try {
+      Object.defineProperty(obj, 'foo', {value: 'bar', enumerable: false});
+    } catch (ex) {
+      // IE8 doesn't allow Object.defineProperty on non-DOM elements.
+      if (ex.message == 'Object doesn\'t support this action') {
+        return;
+      }
+    }
 
-  assertEquals(A, goog.object.getSuperClass(B));
-  assertEquals(Object, goog.object.getSuperClass(A));
-  assertEquals(null, goog.object.getSuperClass(Object));
-}
+    const expected = goog.isDef(Object.getOwnPropertyNames) ? ['foo'] : [];
+    assertSameElements(expected, googObject.getAllPropertyNames(obj));
+  },
 
-function testGetSuperClass_es6() {
-  class A {}
-  class B extends A {}
+  testGetAllPropertyNames_inheritedProperties() {
+    const parent = function() {};
+    parent.prototype.a = null;
 
-  assertEquals(A, goog.object.getSuperClass(B));
-  assertEquals(Object, goog.object.getSuperClass(A));
-  assertEquals(null, goog.object.getSuperClass(Object));
-}
+    const child = function() {};
+    goog.inherits(child, parent);
+    child.prototype.b = null;
+
+    const expected = ['a', 'b'];
+    if (goog.isDef(Object.getOwnPropertyNames)) {
+      expected.push('constructor');
+    }
+
+    assertSameElements(
+        expected, googObject.getAllPropertyNames(child.prototype));
+  },
+
+  testGetAllPropertyNames_es6ClassProperties() {
+    // Create an ES6 class via eval so we can bail out if it's a syntax error in
+    // browsers that don't support ES6 classes.
+    let Foo, Bar;
+    try {
+      eval(
+          'Foo = class {' +
+          '  a() {}' +
+          '};' +
+          'Foo.prototype.b = null;' +
+          'Bar = class extends Foo {' +
+          '  c() {}' +
+          '  static d() {}' +
+          '};');
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        return;
+      }
+    }
+
+    assertSameElements(
+        ['a', 'b', 'constructor'],
+        googObject.getAllPropertyNames(Foo.prototype));
+    assertSameElements(
+        ['a', 'b', 'c', 'constructor'],
+        googObject.getAllPropertyNames(Bar.prototype));
+
+    const expectedBarProperties = ['d', 'prototype', 'length', 'name'];
+
+    // Some versions of Firefox don't find the name property via
+    // getOwnPropertyNames.
+    if (!googArray.contains(Object.getOwnPropertyNames(Bar), 'name')) {
+      googArray.remove(expectedBarProperties, 'name');
+    }
+
+    assertSameElements(
+        expectedBarProperties, googObject.getAllPropertyNames(Bar));
+  },
+
+  testGetAllPropertyNames_includeObjectPrototype() {
+    const obj = {a: function() {}, b: 'b', c: function(x) {}};
+
+    // There's slightly different behavior depending on what APIs the browser
+    // under test supports.
+    const additionalProps = !!Object.getOwnPropertyNames ?
+        Object.getOwnPropertyNames(Object.prototype) :
+        [];
+    // __proto__ is a bit special and should be excluded from the result set.
+    googArray.remove(additionalProps, '__proto__');
+
+    assertSameElements(
+        ['a', 'b', 'c'].concat(additionalProps),
+        googObject.getAllPropertyNames(obj, true));
+  },
+
+  testGetAllPropertyNames_includeFunctionPrototype() {
+    const obj = function() {};
+    obj.a = () => {};
+
+    // There's slightly different behavior depending on what APIs the browser
+    // under test supports.
+    const additionalProps = !!Object.getOwnPropertyNames ?
+        Object.getOwnPropertyNames(Function.prototype) :
+        [];
+
+    const expectedElements = ['a'].concat(additionalProps);
+    googArray.removeDuplicates(expectedElements);
+
+    // There's slightly different behavior depending on what APIs the browser
+    // under test supports.
+    let results = googObject.getAllPropertyNames(obj, false, true);
+    results = results.filter(word => word != 'prototype');
+
+    assertSameElements(expectedElements.sort(), results.sort());
+  },
+
+  testGetSuperClass_es5() {
+    function A() {}
+    function B() {}
+    goog.inherits(B, A);
+
+    assertEquals(A, googObject.getSuperClass(B));
+    assertEquals(Object, googObject.getSuperClass(A));
+    assertEquals(null, googObject.getSuperClass(Object));
+  },
+
+  testGetSuperClass_es6() {
+    class A {}
+    class B extends A {}
+
+    assertEquals(A, googObject.getSuperClass(B));
+    assertEquals(Object, googObject.getSuperClass(A));
+    assertEquals(null, googObject.getSuperClass(Object));
+  },
+});

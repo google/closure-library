@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.BrowserFeatureTest');
+goog.module('goog.dom.BrowserFeatureTest');
 goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.BrowserFeature');
-goog.require('goog.testing.testSuite');
+const BrowserFeature = goog.require('goog.dom.BrowserFeature');
+const dom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
 let context2d = null;
 let contextwebgl = null;
 
-goog.testing.testSuite({
+testSuite({
   setUp() {
     try {
       const canvas = new window.OffscreenCanvas(0, 0);
@@ -32,12 +32,11 @@ goog.testing.testSuite({
   },
 
   testOffscreenCanvasSupport() {
-    assertEquals(
-        Boolean(context2d), goog.dom.BrowserFeature.OFFSCREEN_CANVAS_2D);
+    assertEquals(Boolean(context2d), BrowserFeature.OFFSCREEN_CANVAS_2D);
   },
 
   testOffscreenCanvas2DUsage() {
-    if (!goog.dom.BrowserFeature.OFFSCREEN_CANVAS_2D) {
+    if (!BrowserFeature.OFFSCREEN_CANVAS_2D) {
       return;
     }
 
@@ -47,5 +46,5 @@ goog.testing.testSuite({
 
     const ctx = canvas.getContext('2d');
     assertNotNullNorUndefined(ctx);
-  }
+  },
 });

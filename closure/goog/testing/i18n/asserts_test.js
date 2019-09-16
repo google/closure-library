@@ -16,71 +16,73 @@
  * @fileoverview Unit tests for goog.testing.i18n.asserts.
  */
 
-goog.provide('goog.testing.i18n.assertsTest');
-goog.setTestOnly('goog.testing.i18n.assertsTest');
+goog.module('goog.testing.i18n.assertsTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.ExpectedFailures');
-goog.require('goog.testing.i18n.asserts');
-
+const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
+const asserts = goog.require('goog.testing.i18n.asserts');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // Add this mapping for testing only
-goog.testing.i18n.asserts.addI18nMapping('mappedValue', 'newValue');
+asserts.addI18nMapping('mappedValue', 'newValue');
 
 let expectedFailures;
 
-function setUpPage() {
-  expectedFailures = new goog.testing.ExpectedFailures();
-}
+testSuite({
+  setUpPage() {
+    expectedFailures = new ExpectedFailures();
+  },
 
-function tearDown() {
-  expectedFailures.handleTearDown();
-}
+  tearDown() {
+    expectedFailures.handleTearDown();
+  },
 
-function testEdgeCases() {
-  // Pass
-  goog.testing.i18n.asserts.assertI18nEquals(null, null);
-  goog.testing.i18n.asserts.assertI18nEquals('', '');
+  testEdgeCases() {
+    // Pass
+    asserts.assertI18nEquals(null, null);
+    asserts.assertI18nEquals('', '');
 
-  // Fail
-  expectedFailures.expectFailureFor(true);
-  try {
-    goog.testing.i18n.asserts.assertI18nEquals(null, '');
-    goog.testing.i18n.asserts.assertI18nEquals(null, 'test');
-    goog.testing.i18n.asserts.assertI18nEquals('', null);
-    goog.testing.i18n.asserts.assertI18nEquals('', 'test');
-    goog.testing.i18n.asserts.assertI18nEquals('test', null);
-    goog.testing.i18n.asserts.assertI18nEquals('test', '');
-  } catch (e) {
-    expectedFailures.handleException(e);
+    // Fail
+    expectedFailures.expectFailureFor(true);
+    try {
+      asserts.assertI18nEquals(null, '');
+      asserts.assertI18nEquals(null, 'test');
+      asserts.assertI18nEquals('', null);
+      asserts.assertI18nEquals('', 'test');
+      asserts.assertI18nEquals('test', null);
+      asserts.assertI18nEquals('test', '');
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  },
+
+  testContains() {
+    // Real contains
+    asserts.assertI18nContains('mappedValue', '** mappedValue');
+    // i18n mapped contains
+    asserts.assertI18nContains('mappedValue', '** newValue');
+
+    // Negative testing
+    expectedFailures.expectFailureFor(true);
+    try {
+      asserts.assertI18nContains('mappedValue', '** dummy');
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  },
+
+  testMappingWorks() {
+    // Real equality
+    asserts.assertI18nEquals('test', 'test');
+    // i18n mapped equality
+    asserts.assertI18nEquals('mappedValue', 'newValue');
+
+    // Negative testing
+    expectedFailures.expectFailureFor(true);
+    try {
+      asserts.assertI18nEquals('unmappedValue', 'newValue');
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
   }
-}
-
-function testContains() {
-  // Real contains
-  goog.testing.i18n.asserts.assertI18nContains('mappedValue', '** mappedValue');
-  // i18n mapped contains
-  goog.testing.i18n.asserts.assertI18nContains('mappedValue', '** newValue');
-
-  // Negative testing
-  expectedFailures.expectFailureFor(true);
-  try {
-    goog.testing.i18n.asserts.assertI18nContains('mappedValue', '** dummy');
-  } catch (e) {
-    expectedFailures.handleException(e);
-  }
-}
-
-function testMappingWorks() {
-  // Real equality
-  goog.testing.i18n.asserts.assertI18nEquals('test', 'test');
-  // i18n mapped equality
-  goog.testing.i18n.asserts.assertI18nEquals('mappedValue', 'newValue');
-
-  // Negative testing
-  expectedFailures.expectFailureFor(true);
-  try {
-    goog.testing.i18n.asserts.assertI18nEquals('unmappedValue', 'newValue');
-  } catch (e) {
-    expectedFailures.handleException(e);
-  }
-}
+});
