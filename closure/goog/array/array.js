@@ -1074,7 +1074,7 @@ goog.array.binarySearch_ = function(
   var right = arr.length;  // exclusive
   var found;
   while (left < right) {
-    var middle = (left + right) >> 1;
+    var middle = left + ((right - left) >>> 1);
     var compareResult;
     if (isEvaluator) {
       compareResult = compareFn.call(opt_selfObj, arr[middle], middle, arr);
@@ -1093,8 +1093,10 @@ goog.array.binarySearch_ = function(
     }
   }
   // left is the index if found, or the insertion point otherwise.
-  // ~left is a shorthand for -left - 1.
-  return found ? left : ~left;
+  // Avoiding bitwise not operator, as that causes a loss in precision for array
+  // indexes outside the bounds of a 32-bit signed integer.  Array indexes have
+  // a maximum value of 2^32-2 https://tc39.es/ecma262/#array-index
+  return found ? left : -left - 1;
 };
 
 

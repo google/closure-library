@@ -1220,6 +1220,31 @@ testSuite({
         googArray.binarySearch([0, 1, 1], 1));
   },
 
+  testBinarySearchMaximumSizeArray() {
+    const maxLength = 2 ** 32 - 1;
+    // [1, empty × 4294967293, 2]
+    const /** !IArrayLike<number|undefined> */ giantSparseArray = {
+      length: maxLength,
+      0: 1,
+      [maxLength - 1]: 2,
+    };
+    const undefCmp = (a, b) => (a || 1.5) - (b || 1.5);
+
+    // test with array-like object of maximum array length (2^32-1).
+    assertEquals(
+        '1 should be found at the start.', 0,
+        googArray.binarySearch(giantSparseArray, 1, undefCmp));
+    assertEquals(
+        '0.5 should require insertion at the start.', -1,
+        googArray.binarySearch(giantSparseArray, 0.5, undefCmp));
+    assertEquals(
+        '2 should be found at the end.', maxLength - 1,
+        googArray.binarySearch(giantSparseArray, 2, undefCmp));
+    assertEquals(
+        '2.5 should require insertion at the end.', -maxLength - 1,
+        googArray.binarySearch(giantSparseArray, 2.5, undefCmp));
+  },
+
   testBinarySearchPerformance() {
     // Ensure that Array#slice, Function#apply and Function#call are not called
     // from within binarySearch, since they have performance implications in IE.
