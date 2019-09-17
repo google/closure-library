@@ -88,7 +88,7 @@ goog.labs.events.NonDisposableEventTarget.MAX_ANCESTORS_ = 1000;
 
 /**
  * Parent event target, used during event bubbling.
- * @private {goog.events.Listenable}
+ * @private {?goog.events.Listenable}
  */
 goog.labs.events.NonDisposableEventTarget.prototype.parentEventTarget_ = null;
 

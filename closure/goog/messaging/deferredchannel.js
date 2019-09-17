@@ -20,10 +20,10 @@
 
 goog.provide('goog.messaging.DeferredChannel');
 
-goog.require('goog.Disposable');
-goog.require('goog.messaging.MessageChannel');  // interface
-
+// interface
 goog.forwardDeclare('goog.async.Deferred');
+goog.require('goog.Disposable');
+goog.require('goog.messaging.MessageChannel');
 
 
 

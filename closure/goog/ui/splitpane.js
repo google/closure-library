@@ -89,7 +89,7 @@ goog.ui.SplitPane = function(
   this.secondComponent_ = secondComponent;
   this.addChild(secondComponent);
 
-  /** @private {Element} */
+  /** @private {?Element} */
   this.splitpaneHandle_ = null;
 };
 goog.inherits(goog.ui.SplitPane, goog.ui.Component);
@@ -181,7 +181,7 @@ goog.ui.SplitPane.prototype.splitDragger_ = null;
 
 /**
  * The left/top component dom container.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.SplitPane.prototype.firstComponentContainer_ = null;
@@ -189,7 +189,7 @@ goog.ui.SplitPane.prototype.firstComponentContainer_ = null;
 
 /**
  * The right/bottom component dom container.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.SplitPane.prototype.secondComponentContainer_ = null;
@@ -239,7 +239,7 @@ goog.ui.SplitPane.prototype.continuousResize_ = true;
 
 /**
  * Iframe overlay to prevent iframes from grabbing events.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.SplitPane.prototype.iframeOverlay_ = null;

@@ -20,13 +20,12 @@
 
 goog.provide('goog.labs.net.webChannel.BaseTestChannel');
 
+goog.forwardDeclare('goog.labs.net.webChannel.WebChannelBase');
 goog.require('goog.labs.net.webChannel.Channel');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.net.WebChannel');
-
-goog.forwardDeclare('goog.labs.net.webChannel.WebChannelBase');
 
 
 
@@ -58,13 +57,13 @@ goog.labs.net.webChannel.BaseTestChannel = function(channel, channelDebug) {
 
   /**
    * Extra HTTP headers to add to all the requests sent to the server.
-   * @private {Object}
+   * @private {?Object}
    */
   this.extraHeaders_ = null;
 
   /**
    * The test request.
-   * @private {goog.labs.net.webChannel.ChannelRequest}
+   * @private {?goog.labs.net.webChannel.ChannelRequest}
    */
   this.request_ = null;
 

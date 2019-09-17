@@ -133,7 +133,7 @@ goog.testing.ContinuationTestCase.prototype.locked_;
 
 /**
  * The current test being run.
- * @type {goog.testing.ContinuationTestCase.ContinuationTest}
+ * @type {?goog.testing.ContinuationTestCase.ContinuationTest}
  * @private
  */
 goog.testing.ContinuationTestCase.prototype.currentTest_ = null;
@@ -497,7 +497,7 @@ goog.inherits(
 
 /**
  * The first error encountered during the test run, if any.
- * @type {Error}
+ * @type {?Error}
  * @private
  */
 goog.testing.ContinuationTestCase.ContinuationTest.prototype.error_ = null;

@@ -83,7 +83,7 @@ goog.ui.ac.CachingMatcher = function(baseMatcher) {
   /** @private {string} */
   this.mostRecentToken_ = '';
 
-  /** @private {Function} */
+  /** @private {?Function} */
   this.mostRecentMatchHandler_ = null;
 
   /** @private {number} */

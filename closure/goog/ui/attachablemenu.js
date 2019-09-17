@@ -62,7 +62,7 @@ goog.tagUnsealableClass(goog.ui.AttachableMenu);
 
 /**
  * The currently selected element (mouse was moved over it or keyboard arrows)
- * @type {HTMLElement}
+ * @type {?HTMLElement}
  * @private
  */
 goog.ui.AttachableMenu.prototype.selectedElement_ = null;

@@ -138,7 +138,7 @@ goog.testing.MockClock.prototype.callbacksTriggered_ = 0;
 /**
  * PropertyReplacer instance which overwrites and resets setTimeout,
  * setInterval, etc. or null if the MockClock is not installed.
- * @type {goog.testing.PropertyReplacer}
+ * @type {?goog.testing.PropertyReplacer}
  * @private
  */
 goog.testing.MockClock.prototype.replacer_ = null;

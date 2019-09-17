@@ -89,7 +89,7 @@ goog.ui.ac.RemoteArrayMatcher.prototype.content_ = undefined;
 
 /**
  * Headers to send with every HTTP request.
- * @type {Object|goog.structs.Map}
+ * @type {?Object|?goog.structs.Map}
  * @private
  */
 goog.ui.ac.RemoteArrayMatcher.prototype.headers_ = null;
@@ -97,7 +97,7 @@ goog.ui.ac.RemoteArrayMatcher.prototype.headers_ = null;
 
 /**
  * Key to the listener on XHR. Used to clear previous listeners.
- * @type {goog.events.Key}
+ * @type {?goog.events.Key}
  * @private
  */
 goog.ui.ac.RemoteArrayMatcher.prototype.lastListenerKey_ = null;

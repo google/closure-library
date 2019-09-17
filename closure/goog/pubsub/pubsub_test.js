@@ -638,8 +638,7 @@ testSuite({
 
     let selfDestructCalled = false;
 
-    let selfDestruct =
-        function() {
+    let selfDestruct = function() {
       assertTrue(
           'unsubscribe() must return true when unsubscribing',
           pubsub.unsubscribe('someTopic', selfDestruct));
@@ -647,9 +646,9 @@ testSuite({
           'Topic must still have 1 subscriber', 1,
           pubsub.getCount('someTopic'));
       selfDestructCalled = true;
-    }
+    };
 
-        pubsub.subscribe('someTopic', selfDestruct);
+    pubsub.subscribe('someTopic', selfDestruct);
     assertEquals(
         'Topic must have 1 subscriber', 1, pubsub.getCount('someTopic'));
     assertFalse(

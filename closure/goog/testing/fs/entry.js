@@ -32,6 +32,7 @@ goog.provide('goog.testing.fs.DirectoryEntry');
 goog.provide('goog.testing.fs.Entry');
 goog.provide('goog.testing.fs.FileEntry');
 
+goog.forwardDeclare('goog.testing.fs.FileSystem');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -46,8 +47,6 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.testing.fs.File');
 goog.require('goog.testing.fs.FileWriter');
-
-goog.forwardDeclare('goog.testing.fs.FileSystem');
 
 
 

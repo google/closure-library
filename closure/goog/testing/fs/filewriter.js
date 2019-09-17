@@ -20,6 +20,7 @@
 goog.setTestOnly('goog.testing.fs.FileWriter');
 goog.provide('goog.testing.fs.FileWriter');
 
+goog.forwardDeclare('goog.testing.fs.FileEntry');
 goog.require('goog.Timer');
 goog.require('goog.events.EventTarget');
 goog.require('goog.fs.Error');
@@ -28,7 +29,6 @@ goog.require('goog.string');
 goog.require('goog.testing.fs.Blob');
 goog.require('goog.testing.fs.File');
 goog.require('goog.testing.fs.ProgressEvent');
-goog.forwardDeclare('goog.testing.fs.FileEntry');
 
 
 

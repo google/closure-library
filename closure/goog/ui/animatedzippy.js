@@ -68,7 +68,7 @@ goog.ui.AnimatedZippy = function(
 
   /**
    * Reference to animation or null if animation is not active.
-   * @type {goog.fx.Animation}
+   * @type {?goog.fx.Animation}
    * @private
    */
   this.anim_ = null;

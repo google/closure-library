@@ -17,11 +17,11 @@
  */
 
 goog.provide('goog.net.MockIFrameIo');
+goog.forwardDeclare('goog.testing.TestQueue');
 goog.require('goog.events.EventTarget');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.IframeIo');
-goog.forwardDeclare('goog.testing.TestQueue');
 
 
 
@@ -83,7 +83,7 @@ goog.net.MockIFrameIo.prototype.lastError_ = '';
 
 /**
  * Last custom error.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.net.MockIFrameIo.prototype.lastCustomError_ = null;
@@ -91,7 +91,7 @@ goog.net.MockIFrameIo.prototype.lastCustomError_ = null;
 
 /**
  * Last URI.
- * @type {goog.Uri}
+ * @type {?goog.Uri}
  * @private
  */
 goog.net.MockIFrameIo.prototype.lastUri_ = null;

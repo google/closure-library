@@ -20,6 +20,9 @@
 
 goog.provide('goog.ui.ContainerRenderer');
 
+goog.forwardDeclare('goog.ui.Container');
+goog.forwardDeclare('goog.ui.Container.Orientation');
+goog.forwardDeclare('goog.ui.Control');
 goog.require('goog.a11y.aria');
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -30,10 +33,6 @@ goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
-
-goog.forwardDeclare('goog.ui.Container');
-goog.forwardDeclare('goog.ui.Container.Orientation');
-goog.forwardDeclare('goog.ui.Control');
 
 
 

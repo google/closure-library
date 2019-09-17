@@ -50,7 +50,7 @@ goog.ui.TableSorter = function(opt_domHelper) {
 
   /**
    * The current sort header of the table, or null if none.
-   * @type {HTMLTableCellElement}
+   * @type {?HTMLTableCellElement}
    * @private
    */
   this.header_ = null;

@@ -22,10 +22,9 @@ goog.provide('goog.labs.style.PixelDensityMonitor');
 goog.provide('goog.labs.style.PixelDensityMonitor.Density');
 goog.provide('goog.labs.style.PixelDensityMonitor.EventType');
 
+goog.forwardDeclare('goog.dom.DomHelper');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
-
-goog.forwardDeclare('goog.dom.DomHelper');
 
 
 

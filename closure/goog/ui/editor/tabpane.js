@@ -74,14 +74,14 @@ goog.ui.editor.TabPane = function(dom, opt_caption) {
 
   /**
    * The currently selected radio button.
-   * @type {Element}
+   * @type {?Element}
    * @private
    */
   this.selectedRadio_ = null;
 
   /**
    * The currently visible tab content.
-   * @type {Element}
+   * @type {?Element}
    * @private
    */
   this.visibleContent_ = null;

@@ -83,7 +83,7 @@ goog.testing.net.MockIFrameIo.prototype.lastError_ = '';
 
 /**
  * Last custom error.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.testing.net.MockIFrameIo.prototype.lastCustomError_ = null;
@@ -91,7 +91,7 @@ goog.testing.net.MockIFrameIo.prototype.lastCustomError_ = null;
 
 /**
  * Last URI.
- * @type {goog.Uri}
+ * @type {?goog.Uri}
  * @private
  */
 goog.testing.net.MockIFrameIo.prototype.lastUri_ = null;

@@ -20,6 +20,7 @@
 
 goog.provide('goog.ui.PaletteRenderer');
 
+goog.forwardDeclare('goog.ui.Palette');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
@@ -35,8 +36,6 @@ goog.require('goog.iter');
 goog.require('goog.style');
 goog.require('goog.ui.ControlRenderer');
 goog.require('goog.userAgent');
-
-goog.forwardDeclare('goog.ui.Palette');
 
 
 

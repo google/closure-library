@@ -21,14 +21,13 @@
 
 goog.provide('goog.graphics.ext.Element');
 
-goog.require('goog.events.EventTarget');
-goog.require('goog.functions');
-goog.require('goog.graphics.ext.coordinates');
-
 goog.forwardDeclare('goog.graphics.AbstractGraphics');
 goog.forwardDeclare('goog.graphics.Element');
 goog.forwardDeclare('goog.graphics.ext.Graphics');
 goog.forwardDeclare('goog.graphics.ext.Group');
+goog.require('goog.events.EventTarget');
+goog.require('goog.functions');
+goog.require('goog.graphics.ext.coordinates');
 
 
 
@@ -915,7 +914,7 @@ goog.graphics.ext.Element.Position_.prototype.cachedValue_ = null;
 
 /**
  * A cache of computed x coordinates.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.graphics.ext.Element.Position_.prototype.coordinateCache_ = null;

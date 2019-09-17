@@ -549,14 +549,14 @@ const Driver = function() {
 
   /**
    * The channel to use.
-   * @type {goog.net.xpc.CrossPageChannel}
+   * @type {?goog.net.xpc.CrossPageChannel}
    * @private
    */
   this.channel_ = null;
 
   /**
    * Outer frame configuration object.
-   * @type {Object}
+   * @type {?Object}
    * @private
    */
   this.outerFrameCfg_ = null;
@@ -570,7 +570,7 @@ const Driver = function() {
 
   /**
    * Inner frame configuration object.
-   * @type {Object}
+   * @type {?Object}
    * @private
    */
   this.innerFrameCfg_ = null;

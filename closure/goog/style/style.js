@@ -25,6 +25,7 @@
 goog.provide('goog.style');
 
 
+goog.forwardDeclare('goog.events.Event');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
@@ -40,8 +41,6 @@ goog.require('goog.object');
 goog.require('goog.reflect');
 goog.require('goog.string');
 goog.require('goog.userAgent');
-
-goog.forwardDeclare('goog.events.Event');
 
 
 /**

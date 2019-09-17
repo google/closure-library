@@ -80,10 +80,10 @@ goog.labs.pubsub.BroadcastPubSub = function() {
   /** @private @const */
   this.mechanism_ = new goog.storage.mechanism.HTML5LocalStorage();
 
-  /** @private {goog.storage.Storage} */
+  /** @private {?goog.storage.Storage} */
   this.storage_ = null;
 
-  /** @private {Object<string, number>} */
+  /** @private {?Object<string, number>} */
   this.ie8LastEventTimes_ = null;
 
   /** @private {number} */

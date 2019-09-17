@@ -46,7 +46,7 @@ goog.inherits(goog.db.Cursor, goog.events.EventTarget);
 /**
  * Underlying IndexedDB cursor object.
  *
- * @type {IDBCursor}
+ * @type {?IDBCursor}
  * @private
  */
 goog.db.Cursor.prototype.cursor_ = null;

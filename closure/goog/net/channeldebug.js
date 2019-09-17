@@ -24,11 +24,10 @@
  */
 goog.provide('goog.net.ChannelDebug');
 
-goog.require('goog.json');
-goog.require('goog.log');
-
 goog.forwardDeclare('goog.Uri');
 goog.forwardDeclare('goog.net.XmlHttp.ReadyState');
+goog.require('goog.json');
+goog.require('goog.log');
 
 
 

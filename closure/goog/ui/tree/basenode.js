@@ -26,6 +26,7 @@
 goog.provide('goog.ui.tree.BaseNode');
 goog.provide('goog.ui.tree.BaseNode.EventType');
 
+goog.forwardDeclare('goog.ui.tree.TreeControl');
 goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
@@ -38,9 +39,7 @@ goog.require('goog.html.SafeStyle');
 goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.style');
-goog.require('goog.ui.Component');
-
-goog.forwardDeclare('goog.ui.tree.TreeControl');  // circular
+goog.require('goog.ui.Component');  // circular
 
 
 

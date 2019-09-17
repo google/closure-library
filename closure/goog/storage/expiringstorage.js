@@ -19,9 +19,8 @@
 
 goog.provide('goog.storage.ExpiringStorage');
 
-goog.require('goog.storage.RichStorage');
-
 goog.forwardDeclare('goog.storage.mechanism.Mechanism');
+goog.require('goog.storage.RichStorage');
 
 
 

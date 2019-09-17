@@ -21,10 +21,9 @@
 
 goog.provide('goog.dom.SavedRange');
 
+goog.forwardDeclare('goog.dom.AbstractRange');
 goog.require('goog.Disposable');
 goog.require('goog.log');
-
-goog.forwardDeclare('goog.dom.AbstractRange');
 
 
 

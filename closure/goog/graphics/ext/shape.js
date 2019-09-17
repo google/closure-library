@@ -30,12 +30,11 @@
 
 goog.provide('goog.graphics.ext.Shape');
 
-goog.require('goog.graphics.ext.StrokeAndFillElement');
-
 goog.forwardDeclare('goog.graphics.Path');
 goog.forwardDeclare('goog.graphics.ext.Group');
 goog.forwardDeclare('goog.graphics.ext.Path');
 goog.forwardDeclare('goog.math.Rect');
+goog.require('goog.graphics.ext.StrokeAndFillElement');
 
 
 
