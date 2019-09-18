@@ -20,8 +20,11 @@ const DatePicker = goog.require('goog.ui.DatePicker');
 const MockControl = goog.require('goog.testing.MockControl');
 const PopupBase = goog.require('goog.ui.PopupBase');
 const PopupDatePicker = goog.require('goog.ui.PopupDatePicker');
+const TagName = goog.require('goog.dom.TagName');
+const dom = goog.require('goog.dom');
 const events = goog.require('goog.events');
 const recordFunction = goog.require('goog.testing.recordFunction');
+const style = goog.require('goog.style');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let mockControl;
@@ -146,4 +149,33 @@ testSuite({
     datePicker.dispatchEvent(DatePicker.Events.GRID_SIZE_INCREASE);
     mockControl.$verifyAll();
   },
+
+  testPositioning_whenReferenceElementAtBottom_pickerRendersFullyAbove() {
+    // Given a PopupDatePicker rendered with relation to a reference element
+    // positioned at the bottom of the screen.
+    const referenceElement = dom.createElement(TagName.DIV);
+    referenceElement.style.position = 'absolute';
+    referenceElement.style.bottom = '0';
+    referenceElement.style.height = '1em';
+
+    document.body.style.height = '100%';
+    document.body.appendChild(referenceElement);
+
+    popupDatePicker.createDom();
+    popupDatePicker.render();
+    popupDatePicker.showPopup(referenceElement, undefined /* opt_keepDate */);
+
+    const datePickerElement = popupDatePicker.getElement();
+
+    // Expect the picker to be rendered above the reference.
+    const datePickerRect = style.getBounds(datePickerElement);
+    const referenceRect = style.getBounds(referenceElement);
+    assertTrue(
+        'Date picker should render above reference element',
+        datePickerRect.top + datePickerRect.height <= referenceRect.top);
+
+    // Clean up.
+    dom.removeNode(referenceElement);
+    document.body.style.height = '';
+  }
 });
