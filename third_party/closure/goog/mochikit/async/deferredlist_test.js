@@ -3,14 +3,12 @@
  * Author: brenneman@google.com (Shawn Brenneman)
  */
 
+goog.module('goog.async.deferredListTest');
 goog.setTestOnly();
-goog.require('goog.array');
-goog.require('goog.async.Deferred');
-goog.require('goog.async.DeferredList');
-goog.require('goog.testing.jsunit');
-
-var Deferred = goog.async.Deferred;
-var DeferredList = goog.async.DeferredList;
+const Deferred = goog.require('goog.async.Deferred');
+const DeferredList = goog.require('goog.async.DeferredList');
+const googArray = goog.require('goog.array');
+const testSuite = goog.require('goog.testing.testSuite');
 
 
 // Re-throw (after a timeout) any errors not handled in an errback.
@@ -44,16 +42,11 @@ function addCatchAll(var_args) {
  */
 function checkCatchAll() {
   var err = storedErrors.shift();
-  goog.array.clear(storedErrors);
+  googArray.clear(storedErrors);
 
   if (err) {
     throw err;
   }
-}
-
-
-function tearDown() {
-  checkCatchAll();
 }
 
 /**
@@ -63,431 +56,427 @@ function neverHappen(res) {
   fail('This should not happen');
 }
 
+testSuite({
+  tearDown() {
+    checkCatchAll();
+  },
 
-function testNoInputs() {
-  var count = 0;
-  var d = new DeferredList([]);
+  testNoInputs() {
+    var count = 0;
+    var d = new DeferredList([]);
 
-  d.addCallback(function(res) {
-    assertArrayEquals([], res);
-    count++;
-  });
-  addCatchAll(d);
+    d.addCallback(function(res) {
+      assertArrayEquals([], res);
+      count++;
+    });
+    addCatchAll(d);
 
-  assertEquals('An empty DeferredList should fire immediately with an empty ' +
-               'list of results.',
-               1, count);
-}
+    assertEquals(
+        'An empty DeferredList should fire immediately with an empty ' +
+            'list of results.',
+        1, count);
+  },
 
+  testNoInputsAndFireOnOneCallback() {
+    var count = 0;
+    var d = new DeferredList([], true);
 
-function testNoInputsAndFireOnOneCallback() {
-  var count = 0;
-  var d = new DeferredList([], true);
+    d.addCallback(function(res) {
+      assertArrayEquals([], res);
+      count++;
+    });
+    addCatchAll(d);
 
-  d.addCallback(function(res) {
-    assertArrayEquals([], res);
-    count++;
-  });
-  addCatchAll(d);
+    assertEquals(
+        'An empty DeferredList with opt_fireOnOneCallback set should ' +
+            'not fire unless callback is invoked explicitly.',
+        0, count);
 
-  assertEquals('An empty DeferredList with opt_fireOnOneCallback set should ' +
-               'not fire unless callback is invoked explicitly.',
-               0, count);
+    d.callback([]);
+    assertEquals('Calling callback explicitly should still fire.', 1, count);
+  },
 
-  d.callback([]);
-  assertEquals('Calling callback explicitly should still fire.', 1, count);
-}
+  testDeferredList() {
+    var count = 0;
 
+    var a = new Deferred();
+    var b = new Deferred();
+    var c = new Deferred();
 
-function testDeferredList() {
-  var count = 0;
+    var dl = new DeferredList([a, b, c]);
 
-  var a = new Deferred();
-  var b = new Deferred();
-  var c = new Deferred();
+    dl.addCallback(function(res) {
+      assertEquals('Expected 3 Deferred results.', 3, res.length);
 
-  var dl = new DeferredList([a, b, c]);
+      assertTrue('Deferred a should return success.', res[0][0]);
+      assertFalse('Deferred b should return failure.', res[1][0]);
+      assertTrue('Deferred c should return success.', res[2][0]);
 
-  dl.addCallback(function(res) {
-    assertEquals('Expected 3 Deferred results.', 3, res.length);
+      assertEquals('Unexpected return value for a.', 'A', res[0][1]);
+      assertEquals('Unexpected return value for c.', 'C', res[2][1]);
 
-    assertTrue('Deferred a should return success.', res[0][0]);
-    assertFalse('Deferred b should return failure.', res[1][0]);
-    assertTrue('Deferred c should return success.', res[2][0]);
+      assertEquals('B', res[1][1]);
 
-    assertEquals('Unexpected return value for a.', 'A', res[0][1]);
-    assertEquals('Unexpected return value for c.', 'C', res[2][1]);
+      count++;
+    });
 
-    assertEquals('B', res[1][1]);
+    addCatchAll(dl);
 
-    count++;
-  });
+    c.callback('C');
+    assertEquals(0, count);
 
-  addCatchAll(dl);
+    b.errback('B');
+    assertEquals(0, count);
 
-  c.callback('C');
-  assertEquals(0, count);
+    a.callback('A');
 
-  b.errback('B');
-  assertEquals(0, count);
+    checkCatchAll();
+    assertEquals('DeferredList should fire on last call or errback.', 1, count);
+  },
 
-  a.callback('A');
+  testFireOnFirstCallback() {
+    var a = new Deferred();
+    var b = new Deferred();
+    var c = new Deferred();
 
-  checkCatchAll();
-  assertEquals('DeferredList should fire on last call or errback.', 1, count);
-}
+    var dl = new DeferredList([a, b, c], true);
 
+    dl.addCallback(function(res) {
+      assertEquals('Should be the deferred index in this mode.', 1, res[0]);
+      assertEquals('B', res[1]);
+    });
+    dl.addErrback(neverHappen);
 
-function testFireOnFirstCallback() {
-  var a = new Deferred();
-  var b = new Deferred();
-  var c = new Deferred();
+    addCatchAll(dl);
 
-  var dl = new DeferredList([a, b, c], true);
+    a.errback('A');
+    b.callback('B');
 
-  dl.addCallback(function(res) {
-    assertEquals('Should be the deferred index in this mode.', 1, res[0]);
-    assertEquals('B', res[1]);
-  });
-  dl.addErrback(neverHappen);
+    // Shouldn't cause any more callbacks on the DeferredList.
+    c.callback('C');
+  },
 
-  addCatchAll(dl);
+  testFireOnFirstErrback() {
+    var a = new Deferred();
+    var b = new Deferred();
+    var c = new Deferred();
 
-  a.errback('A');
-  b.callback('B');
+    var dl = new DeferredList([a, b, c], false, true);
 
-  // Shouldn't cause any more callbacks on the DeferredList.
-  c.callback('C');
-}
+    dl.addCallback(neverHappen);
+    dl.addErrback(function(res) {
+      assertEquals('A', res);
 
+      // Return a non-error value to break out of the errback path.
+      return null;
+    });
+    addCatchAll(dl);
 
-function testFireOnFirstErrback() {
-  var a = new Deferred();
-  var b = new Deferred();
-  var c = new Deferred();
+    b.callback('B');
+    a.errback('A');
 
-  var dl = new DeferredList([a, b, c], false, true);
+    assertTrue(c.hasFired());
+    c.addErrback(function(res) {
+      assertTrue(
+          'The DeferredList errback should have canceled all pending inputs.',
+          res instanceof Deferred.CanceledError);
+      return null;
+    });
+    addCatchAll(c);
 
-  dl.addCallback(neverHappen);
-  dl.addErrback(function(res) {
-    assertEquals('A', res);
+    // Shouldn't cause any more callbacks on the DeferredList.
+    c.callback('C');
+  },
 
-    // Return a non-error value to break out of the errback path.
-    return null;
-  });
-  addCatchAll(dl);
+  testNoConsumeErrors() {
+    var count = 0;
 
-  b.callback('B');
-  a.errback('A');
+    var a = new Deferred();
+    var dl = new DeferredList([a]);
 
-  assertTrue(c.hasFired());
-  c.addErrback(function(res) {
-    assertTrue(
-        'The DeferredList errback should have canceled all pending inputs.',
-        res instanceof Deferred.CanceledError);
-    return null;
-  });
-  addCatchAll(c);
+    a.addErrback(function(res) {
+      count++;
+      return null;
+    });
 
-  // Shouldn't cause any more callbacks on the DeferredList.
-  c.callback('C');
-}
+    addCatchAll(a, dl);
 
+    a.errback('oh noes');
+    assertEquals(1, count);
+  },
 
-function testNoConsumeErrors() {
-  var count = 0;
+  testConsumeErrors() {
+    var count = 0;
 
-  var a = new Deferred();
-  var dl = new DeferredList([a]);
+    var a = new Deferred();
+    var dl = new DeferredList([a], false, false, true);
 
-  a.addErrback(function(res) {
-    count++;
-    return null;
-  });
+    a.addErrback(neverHappen);
 
-  addCatchAll(a, dl);
+    addCatchAll(a, dl);
 
-  a.errback('oh noes');
-  assertEquals(1, count);
-}
+    a.errback('oh noes');
+    assertEquals(0, count);
+  },
 
+  testNesting() {
+    function upperCase(res) {
+      return res.toUpperCase();
+    }
 
-function testConsumeErrors() {
-  var count = 0;
+    // Concatenates a list of callback or errback results into a single string.
+    function combine(res) {
+      return googArray
+          .map(
+              res,
+              function(result) {
+                return result[1];
+              })
+          .join('');
+    }
 
-  var a = new Deferred();
-  var dl = new DeferredList([a], false, false, true);
+    var a = new Deferred();
+    var b = new Deferred();
+    var c = new Deferred();
+    var d = new Deferred();
 
-  a.addErrback(neverHappen);
+    a.addCallback(upperCase);
+    b.addCallback(upperCase);
+    c.addCallback(upperCase);
+    d.addCallback(upperCase);
 
-  addCatchAll(a, dl);
+    var dl1 = new DeferredList([a, b]);
+    var dl2 = new DeferredList([c, d]);
 
-  a.errback('oh noes');
-  assertEquals(0, count);
-}
+    dl1.addCallback(combine);
+    dl2.addCallback(combine);
 
+    var dl3 = new DeferredList([dl1, dl2]);
+    dl3.addCallback(combine);
+    dl3.addCallback(function(res) {
+      assertEquals('AbCd', res);
+    });
 
-function testNesting() {
+    addCatchAll(dl1, dl2, dl3);
 
-  function upperCase(res) {
-    return res.toUpperCase();
+    a.callback('a');
+    c.callback('c');
+    b.errback('b');
+    d.errback('d');
+  },
+
+  testGatherResults() {
+    var a = new Deferred();
+    var b = new Deferred();
+    var c = new Deferred();
+
+    var dl = DeferredList.gatherResults([a, b, c]);
+
+    dl.addCallback(function(res) {
+      assertArrayEquals(['A', 'B', 'C'], res);
+    });
+
+    addCatchAll(dl);
+
+    b.callback('B');
+    a.callback('A');
+    c.callback('C');
+  },
+
+  testGatherResultsFailure() {
+    var a = new Deferred();
+    var b = new Deferred();
+    var c = new Deferred();
+
+    var dl = DeferredList.gatherResults([a, b, c]);
+
+    var firedErrback = false;
+    var firedCallback = false;
+    dl.addCallback(function() {
+      firedCallback = true;
+    });
+    dl.addErrback(function() {
+      firedErrback = true;
+      return null;
+    });
+
+    addCatchAll(dl);
+
+    b.callback('B');
+    a.callback('A');
+    c.errback();
+
+    assertTrue('Errback should be called', firedErrback);
+    assertFalse('Callback should not be called', firedCallback);
+  },
+
+  testGatherResults_cancelCancelsChildren() {
+    var canceled = [];
+    var a = new Deferred(function() {
+      canceled.push('a');
+    });
+    var b = new Deferred(function() {
+      canceled.push('b');
+    });
+    var c = new Deferred(function() {
+      canceled.push('c');
+    });
+
+    var dl = new DeferredList([a, b, c]);
+
+    var firedErrback = false;
+    var firedCallback = false;
+    dl.addCallback(function() {
+      firedCallback = true;
+    });
+    dl.addErrback(function() {
+      firedErrback = true;
+      return null;
+    });
+
+    addCatchAll(dl);
+
+    b.callback('b');
+    dl.cancel();
+
+    assertTrue('Errback should be called', firedErrback);
+    assertFalse('Callback should not be called', firedCallback);
+    assertArrayEquals(['a', 'c'], canceled);
+  },
+
+  testErrorCancelsPendingChildrenWhenFireOnFirstError() {
+    var canceled = [];
+    var a = new Deferred(function() {
+      canceled.push('a');
+    });
+    var b = new Deferred(function() {
+      canceled.push('b');
+    });
+    var c = new Deferred(function() {
+      canceled.push('c');
+    });
+
+    var dl = new DeferredList([a, b, c], false, true);
+
+    var firedErrback = false;
+    var firedCallback = false;
+    dl.addCallback(function() {
+      firedCallback = true;
+    });
+    dl.addErrback(function() {
+      firedErrback = true;
+      return null;
+    });
+
+    addCatchAll(dl);
+
+    a.callback('a');
+    b.errback();
+
+    assertTrue('Errback should be called', firedErrback);
+    assertFalse('Callback should not be called', firedCallback);
+    assertArrayEquals(
+        'Only C should be canceled since A and B fired.', ['c'], canceled);
+  },
+
+  testErrorDoesNotCancelPendingChildrenForVanillaLists() {
+    var canceled = [];
+    var a = new Deferred(function() {
+      canceled.push('a');
+    });
+    var b = new Deferred(function() {
+      canceled.push('b');
+    });
+    var c = new Deferred(function() {
+      canceled.push('c');
+    });
+
+    var dl = new DeferredList([a, b, c]);
+
+    var firedErrback = false;
+    var firedCallback = false;
+    dl.addCallback(function() {
+      firedCallback = true;
+    });
+    dl.addErrback(function() {
+      firedErrback = true;
+      return null;
+    });
+
+    addCatchAll(dl);
+
+    a.callback('a');
+    b.errback();
+    c.callback('c');
+
+    assertFalse('Errback should not be called', firedErrback);
+    assertTrue('Callback should be called', firedCallback);
+    assertArrayEquals('No cancellations', [], canceled);
+  },
+
+  testInputDeferredsStillUsable() {
+    var increment = function(res) {
+      return res + 1;
+    };
+    var incrementErrback = function(res) {
+      throw res + 1;
+    };
+
+    var aComplete = false;
+    var bComplete = false;
+    var hadListCallback = false;
+
+    var a = new Deferred().addCallback(increment);
+    var b = new Deferred().addErrback(incrementErrback);
+    var c = new Deferred();
+
+    var dl = new DeferredList([a, b, c]);
+
+    a.callback(0);
+    a.addCallback(increment);
+    a.addCallback(function(res) {
+      aComplete = true;
+      assertEquals(
+          'The "a" Deferred should have had two increment callbacks.', 2, res);
+    });
+    assertTrue('The "a" deferred should complete before the list.', aComplete);
+
+    b.errback(0);
+    b.addErrback(incrementErrback);
+    b.addErrback(function(res) {
+      bComplete = true;
+      assertEquals(
+          'The "b" Deferred should have had two increment errbacks.', 2, res);
+    });
+    assertTrue('The "b" deferred should complete before the list.', bComplete);
+
+    assertFalse(
+        'The list should not fire until every input has.', dl.hasFired());
+    c.callback();
+    assertTrue(dl.hasFired());
+
+    assertFalse(hadListCallback);
+    dl.addCallback(function(results) {
+      hadListCallback = true;
+
+      var aResult = results[0];
+      var bResult = results[1];
+      var cResult = results[2];
+
+      assertTrue(aResult[0]);
+      assertEquals(
+          'Should see the result from before the second callback was added.', 1,
+          aResult[1]);
+
+      assertFalse(bResult[0]);
+      assertEquals(
+          'Should see the result from before the second errback was added.', 1,
+          aResult[1]);
+
+      assertTrue(cResult[0]);
+    });
+    assertTrue(hadListCallback);
+
+    addCatchAll(dl);
   }
-
-  // Concatenates a list of callback or errback results into a single string.
-  function combine(res) {
-    return goog.array.map(res, function(result) {
-      return result[1];
-    }).join('');
-  }
-
-  var a = new Deferred();
-  var b = new Deferred();
-  var c = new Deferred();
-  var d = new Deferred();
-
-  a.addCallback(upperCase);
-  b.addCallback(upperCase);
-  c.addCallback(upperCase);
-  d.addCallback(upperCase);
-
-  var dl1 = new DeferredList([a, b]);
-  var dl2 = new DeferredList([c, d]);
-
-  dl1.addCallback(combine);
-  dl2.addCallback(combine);
-
-  var dl3 = new DeferredList([dl1, dl2]);
-  dl3.addCallback(combine);
-  dl3.addCallback(function(res) {
-    assertEquals('AbCd', res);
-  });
-
-  addCatchAll(dl1, dl2, dl3);
-
-  a.callback('a');
-  c.callback('c');
-  b.errback('b');
-  d.errback('d');
-}
-
-
-function testGatherResults() {
-  var a = new Deferred();
-  var b = new Deferred();
-  var c = new Deferred();
-
-  var dl = DeferredList.gatherResults([a, b, c]);
-
-  dl.addCallback(function(res) {
-    assertArrayEquals(['A', 'B', 'C'], res);
-  });
-
-  addCatchAll(dl);
-
-  b.callback('B');
-  a.callback('A');
-  c.callback('C');
-}
-
-
-function testGatherResultsFailure() {
-  var a = new Deferred();
-  var b = new Deferred();
-  var c = new Deferred();
-
-  var dl = DeferredList.gatherResults([a, b, c]);
-
-  var firedErrback = false;
-  var firedCallback = false;
-  dl.addCallback(function() {
-    firedCallback = true;
-  });
-  dl.addErrback(function() {
-    firedErrback = true;
-    return null;
-  });
-
-  addCatchAll(dl);
-
-  b.callback('B');
-  a.callback('A');
-  c.errback();
-
-  assertTrue('Errback should be called', firedErrback);
-  assertFalse('Callback should not be called', firedCallback);
-}
-
-
-function testGatherResults_cancelCancelsChildren() {
-  var canceled = [];
-  var a = new Deferred(function() {
-    canceled.push('a');
-  });
-  var b = new Deferred(function() {
-    canceled.push('b');
-  });
-  var c = new Deferred(function() {
-    canceled.push('c');
-  });
-
-  var dl = new DeferredList([a, b, c]);
-
-  var firedErrback = false;
-  var firedCallback = false;
-  dl.addCallback(function() {
-    firedCallback = true;
-  });
-  dl.addErrback(function() {
-    firedErrback = true;
-    return null;
-  });
-
-  addCatchAll(dl);
-
-  b.callback('b');
-  dl.cancel();
-
-  assertTrue('Errback should be called', firedErrback);
-  assertFalse('Callback should not be called', firedCallback);
-  assertArrayEquals(['a', 'c'], canceled);
-}
-
-
-function testErrorCancelsPendingChildrenWhenFireOnFirstError() {
-  var canceled = [];
-  var a = new Deferred(function() {
-    canceled.push('a');
-  });
-  var b = new Deferred(function() {
-    canceled.push('b');
-  });
-  var c = new Deferred(function() {
-    canceled.push('c');
-  });
-
-  var dl = new DeferredList([a, b, c], false, true);
-
-  var firedErrback = false;
-  var firedCallback = false;
-  dl.addCallback(function() {
-    firedCallback = true;
-  });
-  dl.addErrback(function() {
-    firedErrback = true;
-    return null;
-  });
-
-  addCatchAll(dl);
-
-  a.callback('a');
-  b.errback();
-
-  assertTrue('Errback should be called', firedErrback);
-  assertFalse('Callback should not be called', firedCallback);
-  assertArrayEquals('Only C should be canceled since A and B fired.',
-      ['c'], canceled);
-}
-
-
-function testErrorDoesNotCancelPendingChildrenForVanillaLists() {
-  var canceled = [];
-  var a = new Deferred(function() {
-    canceled.push('a');
-  });
-  var b = new Deferred(function() {
-    canceled.push('b');
-  });
-  var c = new Deferred(function() {
-    canceled.push('c');
-  });
-
-  var dl = new DeferredList([a, b, c]);
-
-  var firedErrback = false;
-  var firedCallback = false;
-  dl.addCallback(function() {
-    firedCallback = true;
-  });
-  dl.addErrback(function() {
-    firedErrback = true;
-    return null;
-  });
-
-  addCatchAll(dl);
-
-  a.callback('a');
-  b.errback();
-  c.callback('c');
-
-  assertFalse('Errback should not be called', firedErrback);
-  assertTrue('Callback should be called', firedCallback);
-  assertArrayEquals('No cancellations', [], canceled);
-}
-
-
-function testInputDeferredsStillUsable() {
-  var increment = function(res) {
-    return res + 1;
-  };
-  var incrementErrback = function(res) {
-    throw res + 1;
-  };
-
-  var aComplete = false;
-  var bComplete = false;
-  var hadListCallback = false;
-
-  var a = new Deferred().addCallback(increment);
-  var b = new Deferred().addErrback(incrementErrback);
-  var c = new Deferred();
-
-  var dl = new DeferredList([a, b, c]);
-
-  a.callback(0);
-  a.addCallback(increment);
-  a.addCallback(function(res) {
-    aComplete = true;
-    assertEquals(
-        'The "a" Deferred should have had two increment callbacks.',
-        2, res);
-  });
-  assertTrue('The "a" deferred should complete before the list.', aComplete);
-
-  b.errback(0);
-  b.addErrback(incrementErrback);
-  b.addErrback(function(res) {
-    bComplete = true;
-    assertEquals(
-        'The "b" Deferred should have had two increment errbacks.',
-        2, res);
-  });
-  assertTrue('The "b" deferred should complete before the list.', bComplete);
-
-  assertFalse('The list should not fire until every input has.', dl.hasFired());
-  c.callback();
-  assertTrue(dl.hasFired());
-
-  assertFalse(hadListCallback);
-  dl.addCallback(function(results) {
-    hadListCallback = true;
-
-    var aResult = results[0];
-    var bResult = results[1];
-    var cResult = results[2];
-
-    assertTrue(aResult[0]);
-    assertEquals(
-        'Should see the result from before the second callback was added.',
-        1, aResult[1]);
-
-    assertFalse(bResult[0]);
-    assertEquals(
-        'Should see the result from before the second errback was added.',
-        1, aResult[1]);
-
-    assertTrue(cResult[0]);
-  });
-  assertTrue(hadListCallback);
-
-  addCatchAll(dl);
-}
+});

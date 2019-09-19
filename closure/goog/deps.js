@@ -21,7 +21,10 @@
 goog.addDependency('collections/sets.js', ['goog.collections.sets'], ['goog.labs.collections.iterables'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('collections/sets_test.js', ['goog.collections.setsTest'], ['goog.collections.sets', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', ['goog.async.Deferred', 'goog.async.Deferred.AlreadyCalledError', 'goog.async.Deferred.CanceledError'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.debug.Error'], {});
+goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred_async_test.js', ['goog.async.deferredAsyncTest'], ['goog.async.Deferred', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred_test.js', ['goog.async.deferredTest'], ['goog.Promise', 'goog.Thenable', 'goog.async.Deferred', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferredlist.js', ['goog.async.DeferredList'], ['goog.async.Deferred'], {});
+goog.addDependency('../../third_party/closure/goog/mochikit/async/deferredlist_test.js', ['goog.async.deferredListTest'], ['goog.array', 'goog.async.Deferred', 'goog.async.DeferredList', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('proto/proto.js', ['goog.proto'], ['goog.proto.Serializer'], {});
 goog.addDependency('proto/serializer.js', ['goog.proto.Serializer'], ['goog.json.Serializer', 'goog.string'], {});
 goog.addDependency('proto/serializer_test.js', ['goog.protoTest'], ['goog.proto', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
