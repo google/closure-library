@@ -20,11 +20,10 @@
 goog.provide('goog.events.Listenable');
 goog.provide('goog.events.ListenableKey');
 
-/** @suppress {extraRequire} */
-goog.require('goog.events.EventId');
-
 goog.forwardDeclare('goog.events.EventLike');
 goog.forwardDeclare('goog.events.EventTarget');
+/** @suppress {extraRequire} */
+goog.require('goog.events.EventId');
 
 
 

@@ -566,17 +566,16 @@ testSuite({
 
     const SOME_TOPIC = new TopicId('someTopic');
 
-    let selfDestruct =
-        function() {
+    let selfDestruct = function() {
       assertTrue(
           'unsubscribe() must return true when removing a topic',
           pubsub.unsubscribe(SOME_TOPIC, selfDestruct));
       assertEquals(
           'Topic must still have 1 subscriber', 1, pubsub.getCount(SOME_TOPIC));
       selfDestructCalled = true;
-    }
+    };
 
-        pubsub.subscribe(SOME_TOPIC, selfDestruct);
+    pubsub.subscribe(SOME_TOPIC, selfDestruct);
     assertEquals(
         'Topic must have 1 subscriber', 1, pubsub.getCount(SOME_TOPIC));
     assertFalse(

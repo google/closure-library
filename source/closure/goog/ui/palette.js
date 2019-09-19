@@ -92,7 +92,7 @@ goog.ui.Palette.EventType = {
 /**
  * Palette dimensions (columns x rows).  If the number of rows is undefined,
  * it is calculated on first use.
- * @type {goog.math.Size}
+ * @type {?goog.math.Size}
  * @private
  */
 goog.ui.Palette.prototype.size_ = null;
@@ -108,7 +108,7 @@ goog.ui.Palette.prototype.highlightedIndex_ = -1;
 
 /**
  * Selection model controlling the palette's selection state.
- * @type {goog.ui.SelectionModel}
+ * @type {?goog.ui.SelectionModel}
  * @private
  */
 goog.ui.Palette.prototype.selectionModel_ = null;

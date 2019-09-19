@@ -24,7 +24,7 @@ goog.require('goog.i18n.uChar');
 
 /**
  * Map used for looking up the char data.  Will be created lazily.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.i18n.uCharNames.charData_ = null;

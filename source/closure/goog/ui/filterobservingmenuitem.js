@@ -54,7 +54,7 @@ goog.tagUnsealableClass(goog.ui.FilterObservingMenuItem);
 
 /**
  * Function called when the filter text changes.
- * @type {Function} function(goog.ui.FilterObservingMenuItem, string)
+ * @type {?Function} function(goog.ui.FilterObservingMenuItem, string)
  * @private
  */
 goog.ui.FilterObservingMenuItem.prototype.observer_ = null;

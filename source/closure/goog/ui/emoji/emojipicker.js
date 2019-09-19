@@ -94,7 +94,7 @@ goog.ui.emoji.EmojiPicker = function(defaultImgUrl, opt_domHelper) {
   /**
    * Tabpane to hold the pages of this emojipicker.
    *
-   * @type {goog.ui.TabPane}
+   * @type {?goog.ui.TabPane}
    * @private
    */
   this.tabPane_ = null;

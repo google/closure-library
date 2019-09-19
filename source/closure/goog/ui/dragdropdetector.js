@@ -211,7 +211,7 @@ goog.ui.DragDropDetector.prototype.element_;
 
 /**
  * The iframe's window, null if the iframe hasn't loaded yet.
- * @type {Window}
+ * @type {?Window}
  * @private
  */
 goog.ui.DragDropDetector.prototype.window_ = null;
@@ -219,7 +219,7 @@ goog.ui.DragDropDetector.prototype.window_ = null;
 
 /**
  * The iframe's document, null if the iframe hasn't loaded yet.
- * @type {Document}
+ * @type {?Document}
  * @private
  */
 goog.ui.DragDropDetector.prototype.document_ = null;
@@ -227,7 +227,7 @@ goog.ui.DragDropDetector.prototype.document_ = null;
 
 /**
  * The iframe's body, null if the iframe hasn't loaded yet.
- * @type {HTMLBodyElement}
+ * @type {?HTMLBodyElement}
  * @private
  */
 goog.ui.DragDropDetector.prototype.body_ = null;
@@ -244,7 +244,7 @@ goog.ui.DragDropDetector.prototype.isCoveringScreen_ = false;
 
 /**
  * The last position of the mouse while dragging.
- * @type {goog.math.Coordinate}
+ * @type {?goog.math.Coordinate}
  * @private
  */
 goog.ui.DragDropDetector.prototype.mousePosition_ = null;

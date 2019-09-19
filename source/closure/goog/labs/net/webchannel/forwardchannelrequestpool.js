@@ -60,7 +60,7 @@ var ForwardChannelRequestPool = function(opt_maxPoolSize) {
   /**
    * The container for all the pending request objects.
    *
-   * @private {Set<ChannelRequest>}
+   * @private {?Set<?ChannelRequest>}
    */
   this.requestPool_ = null;
 
@@ -71,7 +71,7 @@ var ForwardChannelRequestPool = function(opt_maxPoolSize) {
   /**
    * The single request object when the pool size is limited to one.
    *
-   * @private {ChannelRequest}
+   * @private {?ChannelRequest}
    */
   this.request_ = null;
 

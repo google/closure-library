@@ -29,6 +29,7 @@
 
 goog.provide('goog.storage.EncryptedStorage');
 
+goog.forwardDeclare('goog.storage.mechanism.IterableMechanism');
 goog.require('goog.crypt');
 goog.require('goog.crypt.Arc4');
 goog.require('goog.crypt.Sha1');
@@ -38,8 +39,6 @@ goog.require('goog.json.Serializer');
 goog.require('goog.storage.CollectableStorage');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.RichStorage');
-
-goog.forwardDeclare('goog.storage.mechanism.IterableMechanism');
 
 
 

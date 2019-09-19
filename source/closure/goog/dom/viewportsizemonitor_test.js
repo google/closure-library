@@ -12,131 +12,119 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.dom.ViewportSizeMonitorTest');
-goog.setTestOnly('goog.dom.ViewportSizeMonitorTest');
+goog.module('goog.dom.ViewportSizeMonitorTest');
+goog.setTestOnly();
 
-goog.require('goog.dom.ViewportSizeMonitor');
-goog.require('goog.events');
-goog.require('goog.events.Event');
-goog.require('goog.events.EventTarget');
-goog.require('goog.events.EventType');
-goog.require('goog.math.Size');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.jsunit');
+const EventType = goog.require('goog.events.EventType');
+const GoogEvent = goog.require('goog.events.Event');
+const GoogEventTarget = goog.require('goog.events.EventTarget');
+const MockClock = goog.require('goog.testing.MockClock');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const Size = goog.require('goog.math.Size');
+const ViewportSizeMonitor = goog.require('goog.dom.ViewportSizeMonitor');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
 
 let propertyReplacer;
 let fakeWindow;
 let viewportSizeMonitor;
 let mockClock;
+let viewportSize;
 
-
-function FakeWindow() {
-  FakeWindow.base(this, 'constructor');
+class FakeWindow extends GoogEventTarget {
+  fireResize() {
+    return this.dispatchEvent(new FakeResizeEvent());
+  }
 }
-goog.inherits(FakeWindow, goog.events.EventTarget);
 
-
-FakeWindow.prototype.fireResize = function() {
-  return this.dispatchEvent(new FakeResizeEvent());
-};
-
-
-function FakeResizeEvent(obj) {
-  this.type = goog.events.EventType.RESIZE;
+class FakeResizeEvent extends GoogEvent {
+  constructor(obj) {
+    super();
+    this.type = EventType.RESIZE;
+  }
 }
-goog.inherits(FakeResizeEvent, goog.events.Event);
-
 
 function getViewportSize() {
   return viewportSize;
 }
 
-
 function setViewportSize(w, h, fireEvent) {
-  this.viewportSize = new goog.math.Size(w, h);
+  viewportSize = new Size(w, h);
   if (fireEvent) {
     fakeWindow.fireResize();
   }
 }
 
-
 const eventWasFired = {};
 function getListenerFn(id) {
-  return function() { propertyReplacer.set(eventWasFired, id, true); };
+  return () => {
+    propertyReplacer.set(eventWasFired, id, true);
+  };
 }
-
 
 function listenerWasCalled(id) {
   return !!eventWasFired[id];
 }
 
+testSuite({
+  setUp() {
+    propertyReplacer = new PropertyReplacer();
+    propertyReplacer.set(goog.dom, 'getViewportSize', getViewportSize);
+    mockClock = new MockClock();
+    mockClock.install();
+    fakeWindow = new FakeWindow();
+    setViewportSize(300, 300);
+    viewportSizeMonitor = new ViewportSizeMonitor(fakeWindow);
+  },
 
-function setUp() {
-  propertyReplacer = new goog.testing.PropertyReplacer();
-  propertyReplacer.set(goog.dom, 'getViewportSize', getViewportSize);
-  mockClock = new goog.testing.MockClock();
-  mockClock.install();
-  fakeWindow = new FakeWindow();
-  setViewportSize(300, 300);
-  viewportSizeMonitor = new goog.dom.ViewportSizeMonitor(fakeWindow);
-}
+  tearDown() {
+    propertyReplacer.reset();
+    mockClock.uninstall();
+  },
 
+  testResizeEvent() {
+    events.listen(viewportSizeMonitor, EventType.RESIZE, getListenerFn(1));
+    assertFalse(
+        'Listener should not be called if window was not resized',
+        listenerWasCalled(1));
+    setViewportSize(300, 300, true);
+    assertFalse(
+        'Listener should not be called for bogus resize event',
+        listenerWasCalled(1));
+    setViewportSize(301, 301, true);
+    assertTrue(
+        'Listener should be called for valid resize event',
+        listenerWasCalled(1));
+  },
 
-function tearDown() {
-  propertyReplacer.reset();
-  mockClock.uninstall();
-}
+  testInstanceGetter() {
+    const fakeWindow1 = new FakeWindow();
+    const monitor1 = ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
+    const monitor2 = ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
+    assertEquals(
+        'The same window should give us the same instance monitor', monitor1,
+        monitor2);
 
+    const fakeWindow2 = new FakeWindow();
+    const monitor3 = ViewportSizeMonitor.getInstanceForWindow(fakeWindow2);
+    assertNotEquals(
+        'Different windows should give different instances', monitor1,
+        monitor3);
 
-function testResizeEvent() {
-  goog.events.listen(
-      viewportSizeMonitor, goog.events.EventType.RESIZE, getListenerFn(1));
-  assertFalse(
-      'Listener should not be called if window was not resized',
-      listenerWasCalled(1));
-  setViewportSize(300, 300, true);
-  assertFalse(
-      'Listener should not be called for bogus resize event',
-      listenerWasCalled(1));
-  setViewportSize(301, 301, true);
-  assertTrue(
-      'Listener should be called for valid resize event', listenerWasCalled(1));
-}
+    assertEquals(
+        'Monitors should match if opt_window is not provided',
+        ViewportSizeMonitor.getInstanceForWindow(),
+        ViewportSizeMonitor.getInstanceForWindow());
+  },
 
+  testRemoveInstanceForWindow() {
+    const fakeWindow1 = new FakeWindow();
+    const monitor1 = ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
 
-function testInstanceGetter() {
-  const fakeWindow1 = new FakeWindow();
-  const monitor1 =
-      goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
-  const monitor2 =
-      goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
-  assertEquals(
-      'The same window should give us the same instance monitor', monitor1,
-      monitor2);
+    ViewportSizeMonitor.removeInstanceForWindow(fakeWindow1);
+    assertTrue(monitor1.isDisposed());
 
-  const fakeWindow2 = new FakeWindow();
-  const monitor3 =
-      goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow2);
-  assertNotEquals(
-      'Different windows should give different instances', monitor1, monitor3);
-
-  assertEquals(
-      'Monitors should match if opt_window is not provided',
-      goog.dom.ViewportSizeMonitor.getInstanceForWindow(),
-      goog.dom.ViewportSizeMonitor.getInstanceForWindow());
-}
-
-
-function testRemoveInstanceForWindow() {
-  const fakeWindow1 = new FakeWindow();
-  const monitor1 =
-      goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
-
-  goog.dom.ViewportSizeMonitor.removeInstanceForWindow(fakeWindow1);
-  assertTrue(monitor1.isDisposed());
-
-  const monitor2 =
-      goog.dom.ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
-  assertNotEquals(monitor1, monitor2);
-}
+    const monitor2 = ViewportSizeMonitor.getInstanceForWindow(fakeWindow1);
+    assertNotEquals(monitor1, monitor2);
+  },
+});

@@ -96,7 +96,7 @@ goog.ui.Ratings = function(opt_ratings, opt_domHelper) {
 
   /**
    * An attached form field to set the value to
-   * @type {HTMLInputElement|HTMLSelectElement|null}
+   * @type {?HTMLInputElement|?HTMLSelectElement|null}
    * @private
    */
   this.attachedFormField_ = null;

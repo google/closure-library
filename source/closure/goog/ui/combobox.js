@@ -146,7 +146,7 @@ goog.ui.ComboBox.prototype.visibleCount_ = -1;
 
 /**
  * The input element.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.ComboBox.prototype.input_ = null;
@@ -163,7 +163,7 @@ goog.ui.ComboBox.prototype.matchFunction_ = goog.string.startsWith;
 
 /**
  * Element used as the combo boxes button.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.ComboBox.prototype.button_ = null;

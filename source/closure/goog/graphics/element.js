@@ -67,7 +67,7 @@ goog.graphics.Element.prototype.graphics_ = null;
 
 /**
  * The native browser element this class wraps.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.graphics.Element.prototype.element_ = null;

@@ -55,7 +55,7 @@ goog.i18n.CharListDecompressor = function() {
 /**
  * 1-1 mapping from ascii characters used in encoding to an integer in the
  * range 0 to 87.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.i18n.CharListDecompressor.prototype.charMap_ = null;

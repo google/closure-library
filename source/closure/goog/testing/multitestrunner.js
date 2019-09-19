@@ -138,7 +138,7 @@ goog.testing.MultiTestRunner.prototype.basePath_ = '';
 
 /**
  * A set of tests that have finished.  All extant keys map to true.
- * @type {Object<boolean>}
+ * @type {?Object<boolean>}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.finished_ = null;
@@ -250,7 +250,7 @@ goog.testing.MultiTestRunner.prototype.stats_ = null;
 
 /**
  * Reference to the start button element.
- * @type {HTMLButtonElement}
+ * @type {?HTMLButtonElement}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.startButtonEl_ = null;
@@ -258,7 +258,7 @@ goog.testing.MultiTestRunner.prototype.startButtonEl_ = null;
 
 /**
  * Reference to the stop button element.
- * @type {HTMLButtonElement}
+ * @type {?HTMLButtonElement}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.stopButtonEl_ = null;
@@ -266,7 +266,7 @@ goog.testing.MultiTestRunner.prototype.stopButtonEl_ = null;
 
 /**
  * Reference to the log element.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.logEl_ = null;
@@ -274,7 +274,7 @@ goog.testing.MultiTestRunner.prototype.logEl_ = null;
 
 /**
  * Reference to the report element.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.reportEl_ = null;
@@ -282,7 +282,7 @@ goog.testing.MultiTestRunner.prototype.reportEl_ = null;
 
 /**
  * Reference to the stats element.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.statsEl_ = null;
@@ -290,7 +290,7 @@ goog.testing.MultiTestRunner.prototype.statsEl_ = null;
 
 /**
  * Reference to the progress bar's element.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.progressEl_ = null;
@@ -298,7 +298,7 @@ goog.testing.MultiTestRunner.prototype.progressEl_ = null;
 
 /**
  * Reference to the progress bar's inner row element.
- * @type {HTMLTableRowElement}
+ * @type {?HTMLTableRowElement}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.progressRow_ = null;
@@ -306,7 +306,7 @@ goog.testing.MultiTestRunner.prototype.progressRow_ = null;
 
 /**
  * Reference to the log tab.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.logTabEl_ = null;
@@ -314,7 +314,7 @@ goog.testing.MultiTestRunner.prototype.logTabEl_ = null;
 
 /**
  * Reference to the report tab.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.reportTabEl_ = null;
@@ -322,7 +322,7 @@ goog.testing.MultiTestRunner.prototype.reportTabEl_ = null;
 
 /**
  * Reference to the stats tab.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.statsTabEl_ = null;
@@ -1279,7 +1279,7 @@ goog.inherits(goog.testing.MultiTestRunner.TestFrame, goog.ui.Component);
 
 /**
  * Reference to the iframe.
- * @type {HTMLIFrameElement}
+ * @type {?HTMLIFrameElement}
  * @private
  */
 goog.testing.MultiTestRunner.TestFrame.prototype.iframeEl_ = null;

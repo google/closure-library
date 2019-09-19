@@ -115,7 +115,7 @@ goog.editor.plugins.UndoRedoManager.EventType = {
 /**
  * The key for the listener for the completion of the asynchronous state whose
  * undo or redo action is in progress. Null if no action is in progress.
- * @type {goog.events.Key}
+ * @type {?goog.events.Key}
  * @private
  */
 goog.editor.plugins.UndoRedoManager.prototype.inProgressActionKey_ = null;

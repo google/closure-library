@@ -392,7 +392,7 @@ goog.net.IframeIo.prototype.logger_ = goog.log.getLogger('goog.net.IframeIo');
 
 /**
  * Reference to form element that gets reused for requests to the iframe.
- * @type {HTMLFormElement}
+ * @type {?HTMLFormElement}
  * @private
  */
 goog.net.IframeIo.prototype.form_ = null;
@@ -401,7 +401,7 @@ goog.net.IframeIo.prototype.form_ = null;
 /**
  * Reference to the iframe being used for the current request, or null if no
  * request is currently active.
- * @type {HTMLIFrameElement}
+ * @type {?HTMLIFrameElement}
  * @private
  */
 goog.net.IframeIo.prototype.iframe_ = null;
@@ -450,7 +450,7 @@ goog.net.IframeIo.prototype.success_ = false;
 
 /**
  * The URI for the last request.
- * @type {goog.Uri}
+ * @type {?goog.Uri}
  * @private
  */
 goog.net.IframeIo.prototype.lastUri_ = null;

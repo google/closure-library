@@ -20,12 +20,11 @@
 
 goog.provide('goog.messaging.LoggerClient');
 
+goog.forwardDeclare('goog.messaging.MessageChannel');
 goog.require('goog.Disposable');
 goog.require('goog.debug');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.Logger');
-
-goog.forwardDeclare('goog.messaging.MessageChannel');
 
 
 
@@ -78,7 +77,7 @@ goog.inherits(goog.messaging.LoggerClient, goog.Disposable);
 
 /**
  * The singleton instance, if any.
- * @type {goog.messaging.LoggerClient}
+ * @type {?goog.messaging.LoggerClient}
  * @private
  */
 goog.messaging.LoggerClient.instance_ = null;

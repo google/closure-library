@@ -81,7 +81,7 @@ goog.ui.editor.LinkDialog = function(domHelper, link) {
 
   /**
    * Optional warning to show about email addresses.
-   * @type {goog.html.SafeHtml}
+   * @type {?goog.html.SafeHtml}
    * @private
    */
   this.emailWarning_ = null;
@@ -121,14 +121,14 @@ goog.ui.editor.LinkDialog = function(domHelper, link) {
 
   /**
    * InputHandler object to listen for changes in the url input field.
-   * @type {goog.events.InputHandler}
+   * @type {?goog.events.InputHandler}
    * @private
    */
   this.urlInputHandler_ = null;
 
   /**
    * InputHandler object to listen for changes in the email input field.
-   * @type {goog.events.InputHandler}
+   * @type {?goog.events.InputHandler}
    * @private
    */
   this.emailInputHandler_ = null;
@@ -136,28 +136,28 @@ goog.ui.editor.LinkDialog = function(domHelper, link) {
   /**
    * InputHandler object to listen for changes in the text to display input
    * field.
-   * @type {goog.events.InputHandler}
+   * @type {?goog.events.InputHandler}
    * @private
    */
   this.textInputHandler_ = null;
 
   /**
    * The tab bar where the url and email tabs are.
-   * @type {goog.ui.editor.TabPane}
+   * @type {?goog.ui.editor.TabPane}
    * @private
    */
   this.tabPane_ = null;
 
   /**
    * The div element holding the link's display text input.
-   * @type {HTMLDivElement}
+   * @type {?HTMLDivElement}
    * @private
    */
   this.textToDisplayDiv_ = null;
 
   /**
    * The input element holding the link's display text.
-   * @type {HTMLInputElement}
+   * @type {?HTMLInputElement}
    * @private
    */
   this.textToDisplayInput_ = null;
@@ -187,7 +187,7 @@ goog.ui.editor.LinkDialog = function(domHelper, link) {
   /**
    * The input element (checkbox) to indicate that the link should open in a new
    * window.
-   * @type {HTMLInputElement}
+   * @type {?HTMLInputElement}
    * @private
    */
   this.openInNewWindowCheckbox_ = null;
@@ -195,7 +195,7 @@ goog.ui.editor.LinkDialog = function(domHelper, link) {
   /**
    * The input element (checkbox) to indicate that the link should have
    * 'rel=nofollow' attribute.
-   * @type {HTMLInputElement}
+   * @type {?HTMLInputElement}
    * @private
    */
   this.relNoFollowCheckbox_ = null;

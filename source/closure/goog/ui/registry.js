@@ -19,11 +19,10 @@
 
 goog.provide('goog.ui.registry');
 
-goog.require('goog.asserts');
-goog.require('goog.dom.classlist');
-
 goog.forwardDeclare('goog.ui.Component');
 goog.forwardDeclare('goog.ui.ControlRenderer');
+goog.require('goog.asserts');
+goog.require('goog.dom.classlist');
 
 
 /**

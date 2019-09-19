@@ -40,7 +40,7 @@ goog.dom.pattern.callback.Test = function() {
   /**
    * The callback function.  Suitable as a callback for
    * {@link goog.dom.pattern.Matcher}.
-   * @private {Function}
+   * @private {?Function}
    */
   this.callback_ = null;
 };

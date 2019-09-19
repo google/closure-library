@@ -12,506 +12,454 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.ModalPopupTest');
-goog.setTestOnly('goog.ui.ModalPopupTest');
+goog.module('goog.ui.ModalPopupTest');
+goog.setTestOnly();
 
-goog.require('goog.a11y.aria');
-goog.require('goog.a11y.aria.State');
-goog.require('goog.dispose');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.events');
-goog.require('goog.events.EventTarget');
-goog.require('goog.events.EventType');
-goog.require('goog.fx.Transition');
-goog.require('goog.fx.css3');
-goog.require('goog.string');
-goog.require('goog.style');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.events');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.ModalPopup');
-goog.require('goog.ui.PopupBase');
+const EventType = goog.require('goog.events.EventType');
+const GoogEventTarget = goog.require('goog.events.EventTarget');
+const MockClock = goog.require('goog.testing.MockClock');
+const ModalPopup = goog.require('goog.ui.ModalPopup');
+const PopupBase = goog.require('goog.ui.PopupBase');
+const State = goog.require('goog.a11y.aria.State');
+const TagName = goog.require('goog.dom.TagName');
+const Transition = goog.require('goog.fx.Transition');
+const aria = goog.require('goog.a11y.aria');
+const css3 = goog.require('goog.fx.css3');
+const dispose = goog.require('goog.dispose');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.events');
+const googString = goog.require('goog.string');
+const style = goog.require('goog.style');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingEvents = goog.require('goog.testing.events');
 
 let popup;
 let main;
 let mockClock;
 
+/** @implements {Transition} */
+class MockTransition extends GoogEventTarget {
+  constructor() {
+    super();
+    this.wasPlayed = false;
+  }
 
-function setUp() {
-  main = /** @type {!Element}*/ (goog.dom.getElement('main'));
-  mockClock = new goog.testing.MockClock(true);
+  play() {
+    this.wasPlayed = true;
+  }
+
+  stop() {}
 }
 
+testSuite({
+  setUp() {
+    main = /** @type {!Element} */ (dom.getElement('main'));
+    mockClock = new MockClock(true);
+  },
 
-function tearDown() {
-  goog.dispose(popup);
-  mockClock.dispose();
-  goog.a11y.aria.removeState(main, goog.a11y.aria.State.HIDDEN);
-}
+  tearDown() {
+    dispose(popup);
+    mockClock.dispose();
+    aria.removeState(main, State.HIDDEN);
+  },
 
+  testOrientationChange() {
+    let i = 0;
+    popup = new ModalPopup();
+    popup.resizeBackgroundTask_ = () => {
+      i++;
+    };
+    popup.render();
+    popup.setVisible(true);
+    const event = new events.Event(
+        EventType.ORIENTATIONCHANGE, popup.getDomHelper().getWindow());
 
-function testOrientationChange() {
-  let i = 0;
-  popup = new goog.ui.ModalPopup();
-  popup.resizeBackgroundTask_ = function() { i++; };
-  popup.render();
-  popup.setVisible(true);
-  const event = new goog.events.Event(
-      goog.events.EventType.ORIENTATIONCHANGE,
-      popup.getDomHelper().getWindow());
+    testingEvents.fireBrowserEvent(event);
+    assertEquals(1, i);
 
-  goog.testing.events.fireBrowserEvent(event);
-  assertEquals(1, i);
+    testingEvents.fireBrowserEvent(event);
+    assertEquals(2, i);
 
-  goog.testing.events.fireBrowserEvent(event);
-  assertEquals(2, i);
+    popup.setVisible(false);
+    testingEvents.fireBrowserEvent(event);
+    assertEquals(2, i);
+  },
 
-  popup.setVisible(false);
-  goog.testing.events.fireBrowserEvent(event);
-  assertEquals(2, i);
-}
+  testDispose() {
+    popup = new ModalPopup();
+    popup.render();
 
+    dispose(popup);
+    assertNull(dom.getElementByClass('goog-modalpopup-bg'));
+    assertNull(dom.getElementByClass('goog-modalpopup'));
+    assertEquals(0, dom.getElementsByTagNameAndClass(TagName.SPAN).length);
+  },
 
-function testDispose() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
+  testRenderWithoutIframeMask() {
+    popup = new ModalPopup();
+    popup.render();
 
-  goog.dispose(popup);
-  assertNull(goog.dom.getElementByClass('goog-modalpopup-bg'));
-  assertNull(goog.dom.getElementByClass('goog-modalpopup'));
-  assertEquals(
-      0, goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.SPAN).length);
-}
-
-
-function testRenderWithoutIframeMask() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
-
-  assertEquals(
-      0, goog.dom
-             .getElementsByTagNameAndClass(
-                 goog.dom.TagName.IFRAME, 'goog-modalpopup-bg')
-             .length);
-
-  const bg = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV, 'goog-modalpopup-bg');
-  assertEquals(1, bg.length);
-  const content = goog.dom.getElementByClass('goog-modalpopup');
-  assertNotNull(content);
-  const tabCatcher =
-      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.SPAN);
-  assertEquals(1, tabCatcher.length);
-
-  assertTrue(goog.dom.compareNodeOrder(bg[0], content) < 0);
-  assertTrue(goog.dom.compareNodeOrder(content, tabCatcher[0]) < 0);
-  assertTrue(
-      goog.string.isEmptyOrWhitespace(
-          goog.string.makeSafe(
-              goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
-  popup.setVisible(true);
-  assertTrue(
-      goog.string.isEmptyOrWhitespace(
-          goog.string.makeSafe(
-              goog.a11y.aria.getState(
-                  popup.getElementStrict(), goog.a11y.aria.State.HIDDEN))));
-  assertEquals(
-      'true', goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
-  popup.setVisible(false);
-  assertTrue(
-      goog.string.isEmptyOrWhitespace(
-          goog.string.makeSafe(
-              goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
-}
-
-
-function testRenderWithIframeMask() {
-  popup = new goog.ui.ModalPopup(true);
-  popup.render();
-
-  const iframe = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.IFRAME, 'goog-modalpopup-bg');
-  assertEquals(1, iframe.length);
-  const bg = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV, 'goog-modalpopup-bg');
-  assertEquals(1, bg.length);
-  const content = goog.dom.getElementByClass('goog-modalpopup');
-  assertNotNull(content);
-  const tabCatcher =
-      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.SPAN);
-  assertEquals(1, tabCatcher.length);
-
-  assertTrue(goog.dom.compareNodeOrder(iframe[0], bg[0]) < 0);
-  assertTrue(goog.dom.compareNodeOrder(bg[0], content) < 0);
-  assertTrue(goog.dom.compareNodeOrder(content, tabCatcher[0]) < 0);
-  assertTrue(
-      goog.string.isEmptyOrWhitespace(
-          goog.string.makeSafe(
-              goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
-  popup.setVisible(true);
-  assertTrue(
-      goog.string.isEmptyOrWhitespace(
-          goog.string.makeSafe(
-              goog.a11y.aria.getState(
-                  popup.getElementStrict(), goog.a11y.aria.State.HIDDEN))));
-  assertEquals(
-      'true', goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
-  popup.setVisible(false);
-  assertTrue(
-      goog.string.isEmptyOrWhitespace(
-          goog.string.makeSafe(
-              goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
-}
-
-
-function testRenderWithAriaState() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
-
-  goog.a11y.aria.setState(main, goog.a11y.aria.State.HIDDEN, true);
-  popup.setVisible(true);
-  assertEquals(
-      'true', goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
-  popup.setVisible(false);
-  assertEquals(
-      'true', goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
-
-  goog.a11y.aria.setState(main, goog.a11y.aria.State.HIDDEN, false);
-  popup.setVisible(true);
-  assertEquals(
-      'false', goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
-  popup.setVisible(false);
-  assertEquals(
-      'false', goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
-}
-
-
-function testRenderDoesNotShowAnyElement() {
-  popup = new goog.ui.ModalPopup(true);
-  popup.render();
-
-  const iframe = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.IFRAME, 'goog-modalpopup-bg');
-  assertFalse(goog.style.isElementShown(iframe[0]));
-  const bg = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.DIV, 'goog-modalpopup-bg');
-  assertFalse(goog.style.isElementShown(bg[0]));
-  assertFalse(
-      goog.style.isElementShown(goog.dom.getElementByClass('goog-modalpopup')));
-  const tabCatcher =
-      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.SPAN);
-  assertFalse(goog.style.isElementShown(tabCatcher[0]));
-}
-
-
-function testIframeOpacityIsSetToZero() {
-  popup = new goog.ui.ModalPopup(true);
-  popup.render();
-
-  const iframe = goog.dom.getElementsByTagNameAndClass(
-      goog.dom.TagName.IFRAME, 'goog-modalpopup-bg')[0];
-  assertEquals(0, goog.style.getOpacity(iframe));
-}
-
-
-function testEventFiredOnShow() {
-  popup = new goog.ui.ModalPopup(true);
-  popup.render();
-
-  let beforeShowCallCount = 0;
-  const beforeShowHandler = function() {
-    beforeShowCallCount++;
-  };
-  let showCallCount = false;
-  const showHandler = function() {
     assertEquals(
-        'BEFORE_SHOW is not dispatched before SHOW', 1, beforeShowCallCount);
-    showCallCount++;
-  };
+        0,
+        dom.getElementsByTagNameAndClass(TagName.IFRAME, 'goog-modalpopup-bg')
+            .length);
 
-  goog.events.listen(
-      popup, goog.ui.PopupBase.EventType.BEFORE_SHOW, beforeShowHandler);
-  goog.events.listen(popup, goog.ui.PopupBase.EventType.SHOW, showHandler);
+    const bg =
+        dom.getElementsByTagNameAndClass(TagName.DIV, 'goog-modalpopup-bg');
+    assertEquals(1, bg.length);
+    const content = dom.getElementByClass('goog-modalpopup');
+    assertNotNull(content);
+    const tabCatcher = dom.getElementsByTagNameAndClass(TagName.SPAN);
+    assertEquals(1, tabCatcher.length);
 
-  popup.setVisible(true);
+    assertTrue(dom.compareNodeOrder(bg[0], content) < 0);
+    assertTrue(dom.compareNodeOrder(content, tabCatcher[0]) < 0);
+    assertTrue(googString.isEmptyOrWhitespace(
+        googString.makeSafe(aria.getState(main, State.HIDDEN))));
+    popup.setVisible(true);
+    assertTrue(googString.isEmptyOrWhitespace(googString.makeSafe(
+        aria.getState(popup.getElementStrict(), State.HIDDEN))));
+    assertEquals('true', aria.getState(main, State.HIDDEN));
+    popup.setVisible(false);
+    assertTrue(googString.isEmptyOrWhitespace(
+        googString.makeSafe(aria.getState(main, State.HIDDEN))));
+  },
 
-  assertEquals(1, beforeShowCallCount);
-  assertEquals(1, showCallCount);
-}
+  testRenderWithIframeMask() {
+    popup = new ModalPopup(true);
+    popup.render();
 
+    const iframe =
+        dom.getElementsByTagNameAndClass(TagName.IFRAME, 'goog-modalpopup-bg');
+    assertEquals(1, iframe.length);
+    const bg =
+        dom.getElementsByTagNameAndClass(TagName.DIV, 'goog-modalpopup-bg');
+    assertEquals(1, bg.length);
+    const content = dom.getElementByClass('goog-modalpopup');
+    assertNotNull(content);
+    const tabCatcher = dom.getElementsByTagNameAndClass(TagName.SPAN);
+    assertEquals(1, tabCatcher.length);
 
-function testEventFiredOnHide() {
-  popup = new goog.ui.ModalPopup(true);
-  popup.render();
-  popup.setVisible(true);
+    assertTrue(dom.compareNodeOrder(iframe[0], bg[0]) < 0);
+    assertTrue(dom.compareNodeOrder(bg[0], content) < 0);
+    assertTrue(dom.compareNodeOrder(content, tabCatcher[0]) < 0);
+    assertTrue(googString.isEmptyOrWhitespace(
+        googString.makeSafe(aria.getState(main, State.HIDDEN))));
+    popup.setVisible(true);
+    assertTrue(googString.isEmptyOrWhitespace(googString.makeSafe(
+        aria.getState(popup.getElementStrict(), State.HIDDEN))));
+    assertEquals('true', aria.getState(main, State.HIDDEN));
+    popup.setVisible(false);
+    assertTrue(googString.isEmptyOrWhitespace(
+        googString.makeSafe(aria.getState(main, State.HIDDEN))));
+  },
 
-  let beforeHideCallCount = 0;
-  const beforeHideHandler = function() {
-    beforeHideCallCount++;
-  };
-  let hideCallCount = false;
-  const hideHandler = function() {
-    assertEquals(
-        'BEFORE_HIDE is not dispatched before HIDE', 1, beforeHideCallCount);
-    hideCallCount++;
-  };
+  testRenderWithAriaState() {
+    popup = new ModalPopup();
+    popup.render();
 
-  goog.events.listen(
-      popup, goog.ui.PopupBase.EventType.BEFORE_HIDE, beforeHideHandler);
-  goog.events.listen(popup, goog.ui.PopupBase.EventType.HIDE, hideHandler);
+    aria.setState(main, State.HIDDEN, true);
+    popup.setVisible(true);
+    assertEquals('true', aria.getState(main, State.HIDDEN));
+    popup.setVisible(false);
+    assertEquals('true', aria.getState(main, State.HIDDEN));
 
-  popup.setVisible(false);
+    aria.setState(main, State.HIDDEN, false);
+    popup.setVisible(true);
+    assertEquals('false', aria.getState(main, State.HIDDEN));
+    popup.setVisible(false);
+    assertEquals('false', aria.getState(main, State.HIDDEN));
+  },
 
-  assertEquals(1, beforeHideCallCount);
-  assertEquals(1, hideCallCount);
-}
+  testRenderDoesNotShowAnyElement() {
+    popup = new ModalPopup(true);
+    popup.render();
 
+    const iframe =
+        dom.getElementsByTagNameAndClass(TagName.IFRAME, 'goog-modalpopup-bg');
+    assertFalse(style.isElementShown(iframe[0]));
+    const bg =
+        dom.getElementsByTagNameAndClass(TagName.DIV, 'goog-modalpopup-bg');
+    assertFalse(style.isElementShown(bg[0]));
+    assertFalse(style.isElementShown(dom.getElementByClass('goog-modalpopup')));
+    const tabCatcher = dom.getElementsByTagNameAndClass(TagName.SPAN);
+    assertFalse(style.isElementShown(tabCatcher[0]));
+  },
 
-function testShowEventFiredWithNoTransition() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
+  testIframeOpacityIsSetToZero() {
+    popup = new ModalPopup(true);
+    popup.render();
 
-  let showHandlerCalled = false;
-  goog.events.listen(popup, goog.ui.PopupBase.EventType.SHOW, function() {
-    showHandlerCalled = true;
-  });
+    const iframe = dom.getElementsByTagNameAndClass(
+        TagName.IFRAME, 'goog-modalpopup-bg')[0];
+    assertEquals(0, style.getOpacity(iframe));
+  },
 
-  popup.setVisible(true);
-  assertTrue(showHandlerCalled);
-}
+  testEventFiredOnShow() {
+    popup = new ModalPopup(true);
+    popup.render();
 
-function testHideEventFiredWithNoTransition() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
+    let beforeShowCallCount = 0;
+    const beforeShowHandler = () => {
+      beforeShowCallCount++;
+    };
+    let showCallCount = false;
+    const showHandler = () => {
+      assertEquals(
+          'BEFORE_SHOW is not dispatched before SHOW', 1, beforeShowCallCount);
+      showCallCount++;
+    };
 
-  let hideHandlerCalled = false;
-  goog.events.listen(popup, goog.ui.PopupBase.EventType.HIDE, function() {
-    hideHandlerCalled = true;
-  });
+    events.listen(popup, PopupBase.EventType.BEFORE_SHOW, beforeShowHandler);
+    events.listen(popup, PopupBase.EventType.SHOW, showHandler);
 
-  popup.setVisible(true);
-  popup.setVisible(false);
-  assertTrue(hideHandlerCalled);
-}
+    popup.setVisible(true);
 
-function testTransitionsPlayedOnShow() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
+    assertEquals(1, beforeShowCallCount);
+    assertEquals(1, showCallCount);
+  },
 
-  const mockPopupShowTransition = new MockTransition();
-  const mockPopupHideTransition = new MockTransition();
-  const mockBgShowTransition = new MockTransition();
-  const mockBgHideTransition = new MockTransition();
-
-  let showHandlerCalled = false;
-  goog.events.listen(popup, goog.ui.PopupBase.EventType.SHOW, function() {
-    showHandlerCalled = true;
-  });
-
-  popup.setTransition(
-      mockPopupShowTransition, mockPopupHideTransition, mockBgShowTransition,
-      mockBgHideTransition);
-  assertFalse(mockPopupShowTransition.wasPlayed);
-  assertFalse(mockBgShowTransition.wasPlayed);
-
-  popup.setVisible(true);
-  assertTrue(mockPopupShowTransition.wasPlayed);
-  assertTrue(mockBgShowTransition.wasPlayed);
-
-  assertFalse(showHandlerCalled);
-  mockPopupShowTransition.dispatchEvent(goog.fx.Transition.EventType.END);
-  assertTrue(showHandlerCalled);
-}
-
-
-function testTransitionsPlayedOnHide() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
-
-  const mockPopupShowTransition = new MockTransition();
-  const mockPopupHideTransition = new MockTransition();
-  const mockBgShowTransition = new MockTransition();
-  const mockBgHideTransition = new MockTransition();
-
-  let hideHandlerCalled = false;
-  goog.events.listen(popup, goog.ui.PopupBase.EventType.HIDE, function() {
-    hideHandlerCalled = true;
-  });
-
-  popup.setTransition(
-      mockPopupShowTransition, mockPopupHideTransition, mockBgShowTransition,
-      mockBgHideTransition);
-  popup.setVisible(true);
-  assertFalse(mockPopupHideTransition.wasPlayed);
-  assertFalse(mockBgHideTransition.wasPlayed);
-
-  popup.setVisible(false);
-  assertTrue(mockPopupHideTransition.wasPlayed);
-  assertTrue(mockBgHideTransition.wasPlayed);
-
-  assertFalse(hideHandlerCalled);
-  mockPopupHideTransition.dispatchEvent(goog.fx.Transition.EventType.END);
-  assertTrue(hideHandlerCalled);
-}
-
-
-function testTransitionsAndDisposingOnHideWorks() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
-
-  goog.events.listen(
-      popup, goog.ui.PopupBase.EventType.HIDE, function() { popup.dispose(); });
-
-  const popupShowTransition =
-      goog.fx.css3.fadeIn(popup.getElement(), 0.1 /* duration */);
-  const popupHideTransition =
-      goog.fx.css3.fadeOut(popup.getElement(), 0.1 /* duration */);
-  const bgShowTransition =
-      goog.fx.css3.fadeIn(popup.getElement(), 0.1 /* duration */);
-  const bgHideTransition =
-      goog.fx.css3.fadeOut(popup.getElement(), 0.1 /* duration */);
-
-  popup.setTransition(
-      popupShowTransition, popupHideTransition, bgShowTransition,
-      bgHideTransition);
-  popup.setVisible(true);
-  popup.setVisible(false);
-  // Nothing to assert. We only want to ensure that there is no error.
-}
-
-
-function testSetVisibleWorksCorrectlyWithTransitions() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
-  popup.setTransition(
-      goog.fx.css3.fadeIn(popup.getElement(), 1),
-      goog.fx.css3.fadeIn(popup.getBackgroundElement(), 1),
-      goog.fx.css3.fadeOut(popup.getElement(), 1),
-      goog.fx.css3.fadeOut(popup.getBackgroundElement(), 1));
-
-  // Consecutive calls to setVisible works without needing to wait for
-  // transition to finish.
-  popup.setVisible(true);
-  assertTrue(popup.isVisible());
-  popup.setVisible(false);
-  assertFalse(popup.isVisible());
-  mockClock.tick(1100);
-
-  // Calling setVisible(true) immediately changed the state to visible.
-  popup.setVisible(true);
-  assertTrue(popup.isVisible());
-  mockClock.tick(1100);
-
-  // Consecutive calls to setVisible, in opposite order.
-  popup.setVisible(false);
-  popup.setVisible(true);
-  assertTrue(popup.isVisible());
-  mockClock.tick(1100);
-
-  // Calling setVisible(false) immediately changed the state to not visible.
-  popup.setVisible(false);
-  assertFalse(popup.isVisible());
-  mockClock.tick(1100);
-}
-
-
-function testTransitionsDisposed() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
-
-  const transition =
-      goog.fx.css3.fadeIn(popup.getElement(), 0.1 /* duration */);
-
-  let hideHandlerCalled = false;
-  goog.events.listen(popup, goog.ui.PopupBase.EventType.HIDE, function() {
-    hideHandlerCalled = true;
-  });
-
-  popup.setTransition(transition, transition, transition, transition);
-  popup.dispose();
-
-  transition.dispatchEvent(goog.fx.Transition.EventType.END);
-  assertFalse(hideHandlerCalled);
-}
-
-
-function testBackgroundHeight() {
-  // Insert an absolutely-positioned element larger than the viewport.
-  const viewportSize = goog.dom.getViewportSize();
-  const w = viewportSize.width * 2;
-  const h = viewportSize.height * 2;
-  const dummy = goog.dom.createElement(goog.dom.TagName.DIV);
-  dummy.style.position = 'absolute';
-  goog.style.setSize(dummy, w, h);
-  document.body.appendChild(dummy);
-
-  try {
-    popup = new goog.ui.ModalPopup();
+  testEventFiredOnHide() {
+    popup = new ModalPopup(true);
     popup.render();
     popup.setVisible(true);
 
-    const size = goog.style.getSize(popup.getBackgroundElement());
+    let beforeHideCallCount = 0;
+    const beforeHideHandler = () => {
+      beforeHideCallCount++;
+    };
+    let hideCallCount = false;
+    const hideHandler = () => {
+      assertEquals(
+          'BEFORE_HIDE is not dispatched before HIDE', 1, beforeHideCallCount);
+      hideCallCount++;
+    };
+
+    events.listen(popup, PopupBase.EventType.BEFORE_HIDE, beforeHideHandler);
+    events.listen(popup, PopupBase.EventType.HIDE, hideHandler);
+
+    popup.setVisible(false);
+
+    assertEquals(1, beforeHideCallCount);
+    assertEquals(1, hideCallCount);
+  },
+
+  testShowEventFiredWithNoTransition() {
+    popup = new ModalPopup();
+    popup.render();
+
+    let showHandlerCalled = false;
+    events.listen(popup, PopupBase.EventType.SHOW, () => {
+      showHandlerCalled = true;
+    });
+
+    popup.setVisible(true);
+    assertTrue(showHandlerCalled);
+  },
+
+  testHideEventFiredWithNoTransition() {
+    popup = new ModalPopup();
+    popup.render();
+
+    let hideHandlerCalled = false;
+    events.listen(popup, PopupBase.EventType.HIDE, () => {
+      hideHandlerCalled = true;
+    });
+
+    popup.setVisible(true);
+    popup.setVisible(false);
+    assertTrue(hideHandlerCalled);
+  },
+
+  testTransitionsPlayedOnShow() {
+    popup = new ModalPopup();
+    popup.render();
+
+    const mockPopupShowTransition = new MockTransition();
+    const mockPopupHideTransition = new MockTransition();
+    const mockBgShowTransition = new MockTransition();
+    const mockBgHideTransition = new MockTransition();
+
+    let showHandlerCalled = false;
+    events.listen(popup, PopupBase.EventType.SHOW, () => {
+      showHandlerCalled = true;
+    });
+
+    popup.setTransition(
+        mockPopupShowTransition, mockPopupHideTransition, mockBgShowTransition,
+        mockBgHideTransition);
+    assertFalse(mockPopupShowTransition.wasPlayed);
+    assertFalse(mockBgShowTransition.wasPlayed);
+
+    popup.setVisible(true);
+    assertTrue(mockPopupShowTransition.wasPlayed);
+    assertTrue(mockBgShowTransition.wasPlayed);
+
+    assertFalse(showHandlerCalled);
+    mockPopupShowTransition.dispatchEvent(Transition.EventType.END);
+    assertTrue(showHandlerCalled);
+  },
+
+  testTransitionsPlayedOnHide() {
+    popup = new ModalPopup();
+    popup.render();
+
+    const mockPopupShowTransition = new MockTransition();
+    const mockPopupHideTransition = new MockTransition();
+    const mockBgShowTransition = new MockTransition();
+    const mockBgHideTransition = new MockTransition();
+
+    let hideHandlerCalled = false;
+    events.listen(popup, PopupBase.EventType.HIDE, () => {
+      hideHandlerCalled = true;
+    });
+
+    popup.setTransition(
+        mockPopupShowTransition, mockPopupHideTransition, mockBgShowTransition,
+        mockBgHideTransition);
+    popup.setVisible(true);
+    assertFalse(mockPopupHideTransition.wasPlayed);
+    assertFalse(mockBgHideTransition.wasPlayed);
+
+    popup.setVisible(false);
+    assertTrue(mockPopupHideTransition.wasPlayed);
+    assertTrue(mockBgHideTransition.wasPlayed);
+
+    assertFalse(hideHandlerCalled);
+    mockPopupHideTransition.dispatchEvent(Transition.EventType.END);
+    assertTrue(hideHandlerCalled);
+  },
+
+  testTransitionsAndDisposingOnHideWorks() {
+    popup = new ModalPopup();
+    popup.render();
+
+    events.listen(popup, PopupBase.EventType.HIDE, () => {
+      popup.dispose();
+    });
+
+    const popupShowTransition =
+        css3.fadeIn(popup.getElement(), 0.1 /* duration */);
+    const popupHideTransition =
+        css3.fadeOut(popup.getElement(), 0.1 /* duration */);
+    const bgShowTransition =
+        css3.fadeIn(popup.getElement(), 0.1 /* duration */);
+    const bgHideTransition =
+        css3.fadeOut(popup.getElement(), 0.1 /* duration */);
+
+    popup.setTransition(
+        popupShowTransition, popupHideTransition, bgShowTransition,
+        bgHideTransition);
+    popup.setVisible(true);
+    popup.setVisible(false);
+    // Nothing to assert. We only want to ensure that there is no error.
+  },
+
+  testSetVisibleWorksCorrectlyWithTransitions() {
+    popup = new ModalPopup();
+    popup.render();
+    popup.setTransition(
+        css3.fadeIn(popup.getElement(), 1),
+        css3.fadeIn(popup.getBackgroundElement(), 1),
+        css3.fadeOut(popup.getElement(), 1),
+        css3.fadeOut(popup.getBackgroundElement(), 1));
+
+    // Consecutive calls to setVisible works without needing to wait for
+    // transition to finish.
+    popup.setVisible(true);
+    assertTrue(popup.isVisible());
+    popup.setVisible(false);
+    assertFalse(popup.isVisible());
+    mockClock.tick(1100);
+
+    // Calling setVisible(true) immediately changed the state to visible.
+    popup.setVisible(true);
+    assertTrue(popup.isVisible());
+    mockClock.tick(1100);
+
+    // Consecutive calls to setVisible, in opposite order.
+    popup.setVisible(false);
+    popup.setVisible(true);
+    assertTrue(popup.isVisible());
+    mockClock.tick(1100);
+
+    // Calling setVisible(false) immediately changed the state to not visible.
+    popup.setVisible(false);
+    assertFalse(popup.isVisible());
+    mockClock.tick(1100);
+  },
+
+  testTransitionsDisposed() {
+    popup = new ModalPopup();
+    popup.render();
+
+    const transition = css3.fadeIn(popup.getElement(), 0.1 /* duration */);
+
+    let hideHandlerCalled = false;
+    events.listen(popup, PopupBase.EventType.HIDE, () => {
+      hideHandlerCalled = true;
+    });
+
+    popup.setTransition(transition, transition, transition, transition);
+    popup.dispose();
+
+    transition.dispatchEvent(Transition.EventType.END);
+    assertFalse(hideHandlerCalled);
+  },
+
+  testBackgroundHeight() {
+    // Insert an absolutely-positioned element larger than the viewport.
+    const viewportSize = dom.getViewportSize();
+    const w = viewportSize.width * 2;
+    const h = viewportSize.height * 2;
+    const dummy = dom.createElement(TagName.DIV);
+    dummy.style.position = 'absolute';
+    style.setSize(dummy, w, h);
+    document.body.appendChild(dummy);
+
+    try {
+      popup = new ModalPopup();
+      popup.render();
+      popup.setVisible(true);
+
+      const size = style.getSize(popup.getBackgroundElement());
+      assertTrue(
+          'Background element must cover the size of the content',
+          size.width >= w && size.height >= h);
+    } finally {
+      dom.removeNode(dummy);
+    }
+  },
+
+  testSetupBackwardTabWrapResetsFlagAfterTimeout() {
+    popup.setupBackwardTabWrap();
     assertTrue(
-        'Background element must cover the size of the content',
-        size.width >= w && size.height >= h);
-  } finally {
-    goog.dom.removeNode(dummy);
-  }
-}
+        'Backward tab wrap should be in progress',
+        popup.backwardTabWrapInProgress_);
+    mockClock.tick(1);
+    assertFalse(
+        'Backward tab wrap flag should be reset after delay',
+        popup.backwardTabWrapInProgress_);
+  },
 
+  testPopupGetsFocus() {
+    popup = new ModalPopup();
+    popup.render();
+    popup.setVisible(true);
+    assertTrue(
+        'Dialog must receive initial focus',
+        dom.getActiveElement(document) == popup.getElement());
+  },
 
-function testSetupBackwardTabWrapResetsFlagAfterTimeout() {
-  popup.setupBackwardTabWrap();
-  assertTrue(
-      'Backward tab wrap should be in progress',
-      popup.backwardTabWrapInProgress_);
-  mockClock.tick(1);
-  assertFalse(
-      'Backward tab wrap flag should be reset after delay',
-      popup.backwardTabWrapInProgress_);
-}
-
-
-function testPopupGetsFocus() {
-  popup = new goog.ui.ModalPopup();
-  popup.render();
-  popup.setVisible(true);
-  assertTrue(
-      'Dialog must receive initial focus',
-      goog.dom.getActiveElement(document) == popup.getElement());
-}
-
-
-function testDecoratedPopupGetsFocus() {
-  const dialogElem = goog.dom.createElement(goog.dom.TagName.DIV);
-  document.body.appendChild(dialogElem);
-  popup = new goog.ui.ModalPopup();
-  popup.decorate(dialogElem);
-  popup.setVisible(true);
-  assertTrue(
-      'Dialog must receive initial focus',
-      goog.dom.getActiveElement(document) == popup.getElement());
-  goog.dom.removeNode(dialogElem);
-}
-
-
-
-/**
- * @implements {goog.fx.Transition}
- * @extends {goog.events.EventTarget}
- * @constructor
- */
-const MockTransition = function() {
-  MockTransition.base(this, 'constructor');
-  this.wasPlayed = false;
-};
-goog.inherits(MockTransition, goog.events.EventTarget);
-
-
-MockTransition.prototype.play = function() {
-  this.wasPlayed = true;
-};
-
-
-MockTransition.prototype.stop = goog.nullFunction;
+  testDecoratedPopupGetsFocus() {
+    const dialogElem = dom.createElement(TagName.DIV);
+    document.body.appendChild(dialogElem);
+    popup = new ModalPopup();
+    popup.decorate(dialogElem);
+    popup.setVisible(true);
+    assertTrue(
+        'Dialog must receive initial focus',
+        dom.getActiveElement(document) == popup.getElement());
+    dom.removeNode(dialogElem);
+  },
+});

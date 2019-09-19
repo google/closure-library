@@ -20,10 +20,9 @@
 
 goog.provide('goog.storage.Storage');
 
+goog.forwardDeclare('goog.storage.mechanism.Mechanism');
 goog.require('goog.json');
 goog.require('goog.storage.ErrorCode');
-
-goog.forwardDeclare('goog.storage.mechanism.Mechanism');
 
 
 

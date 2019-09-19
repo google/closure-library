@@ -56,7 +56,7 @@ goog.tagUnsealableClass(goog.ui.SelectionModel);
 
 /**
  * The currently selected item (null if none).
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 goog.ui.SelectionModel.prototype.selectedItem_ = null;
@@ -66,7 +66,7 @@ goog.ui.SelectionModel.prototype.selectedItem_ = null;
  * Selection handler function.  Called with two arguments (the item to be
  * selected or deselected, and a Boolean indicating whether the item is to
  * be selected or deselected).
- * @type {Function}
+ * @type {?Function}
  * @private
  */
 goog.ui.SelectionModel.prototype.selectionHandler_ = null;

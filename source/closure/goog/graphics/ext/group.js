@@ -21,10 +21,9 @@
 
 goog.provide('goog.graphics.ext.Group');
 
+goog.forwardDeclare('goog.graphics.GroupElement');
 goog.require('goog.array');
 goog.require('goog.graphics.ext.Element');
-
-goog.forwardDeclare('goog.graphics.GroupElement');
 
 
 

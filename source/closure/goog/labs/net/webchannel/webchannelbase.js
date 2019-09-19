@@ -109,13 +109,13 @@ goog.labs.net.webChannel.WebChannelBase = function(
 
   /**
    * Extra HTTP headers to add to all the requests sent to the server.
-   * @private {Object}
+   * @private {?Object}
    */
   this.extraHeaders_ = null;
 
   /**
    * Extra HTTP headers to add to the init request(s) sent to the server.
-   * @private {Object}
+   * @private {?Object}
    */
   this.initHeaders_ = null;
 
@@ -127,7 +127,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
 
   /**
    * Extra parameters to add to all the requests sent to the server.
-   * @private {Object}
+   * @private {?Object}
    */
   this.extraParams_ = null;
 
@@ -146,7 +146,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
 
   /**
    * The ChannelRequest object for the backchannel.
-   * @private {ChannelRequest}
+   * @private {?ChannelRequest}
    */
   this.backChannelRequest_ = null;
 
@@ -159,13 +159,13 @@ goog.labs.net.webChannel.WebChannelBase = function(
 
   /**
    * The absolute URI for the forwardchannel request.
-   * @private {goog.Uri}
+   * @private {?goog.Uri}
    */
   this.forwardChannelUri_ = null;
 
   /**
    * The absolute URI for the backchannel request.
-   * @private {goog.Uri}
+   * @private {?goog.Uri}
    */
   this.backChannelUri_ = null;
 
@@ -205,7 +205,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
 
   /**
    * The handler that receive callbacks for state changes and data.
-   * @private {goog.labs.net.webChannel.WebChannelBase.Handler}
+   * @private {?goog.labs.net.webChannel.WebChannelBase.Handler}
    */
   this.handler_ = null;
 
@@ -233,7 +233,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
   /**
    * The TestChannel object which encapsulates the logic for determining
    * interesting network conditions about the client.
-   * @private {BaseTestChannel}
+   * @private {?BaseTestChannel}
    */
   this.connectionTest_ = null;
 

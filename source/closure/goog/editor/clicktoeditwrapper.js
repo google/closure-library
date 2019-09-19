@@ -65,7 +65,7 @@ goog.editor.ClickToEditWrapper = function(fieldObj) {
       goog.dom.getDomHelper(fieldObj.getOriginalElement());
 
   /**
-   * @type {goog.dom.SavedCaretRange}
+   * @type {?goog.dom.SavedCaretRange}
    * @private
    */
   this.savedCaretRange_ = null;

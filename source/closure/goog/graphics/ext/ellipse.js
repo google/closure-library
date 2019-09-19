@@ -21,9 +21,8 @@
 
 goog.provide('goog.graphics.ext.Ellipse');
 
-goog.require('goog.graphics.ext.StrokeAndFillElement');
-
 goog.forwardDeclare('goog.graphics.ext.Group');
+goog.require('goog.graphics.ext.StrokeAndFillElement');
 
 
 

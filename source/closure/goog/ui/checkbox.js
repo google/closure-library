@@ -78,7 +78,7 @@ goog.ui.Checkbox.State = {
 
 /**
  * Label element bound to the checkbox.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.ui.Checkbox.prototype.label_ = null;

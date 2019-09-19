@@ -21,14 +21,13 @@
 
 goog.provide('goog.dom.SavedCaretRange');
 
+goog.forwardDeclare('goog.dom.AbstractRange');
+goog.forwardDeclare('goog.dom.Range');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.SavedRange');
 goog.require('goog.dom.TagName');
 goog.require('goog.string');
-
-goog.forwardDeclare('goog.dom.AbstractRange');
-goog.forwardDeclare('goog.dom.Range');
 
 
 /**

@@ -19,6 +19,7 @@
 
 goog.provide('goog.ui.CheckboxRenderer');
 
+goog.forwardDeclare('goog.ui.Checkbox.State');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
@@ -28,8 +29,6 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.object');
 goog.require('goog.ui.ControlRenderer');
-
-goog.forwardDeclare('goog.ui.Checkbox.State');
 
 
 

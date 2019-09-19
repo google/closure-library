@@ -134,7 +134,7 @@ goog.net.xpc.IframePollingTransport.prototype.initialized_ = false;
 
 /**
  * Reconnection iframe created by inner peer.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 goog.net.xpc.IframePollingTransport.prototype.reconnectFrame_ = null;

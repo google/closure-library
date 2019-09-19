@@ -12,181 +12,181 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.PaletteRendererTest');
-goog.setTestOnly('goog.ui.PaletteRendererTest');
+goog.module('goog.ui.PaletteRendererTest');
+goog.setTestOnly();
 
-goog.require('goog.a11y.aria');
-goog.require('goog.a11y.aria.Role');
-goog.require('goog.a11y.aria.State');
-goog.require('goog.array');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.html.testing');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.Palette');
-goog.require('goog.ui.PaletteRenderer');
+const Palette = goog.require('goog.ui.Palette');
+const PaletteRenderer = goog.require('goog.ui.PaletteRenderer');
+const Role = goog.require('goog.a11y.aria.Role');
+const State = goog.require('goog.a11y.aria.State');
+const TagName = goog.require('goog.dom.TagName');
+const aria = goog.require('goog.a11y.aria');
+const dom = goog.require('goog.dom');
+const googArray = goog.require('goog.array');
+const testSuite = goog.require('goog.testing.testSuite');
+const testing = goog.require('goog.html.testing');
 
 let sandbox;
 const items = [
-  '<div aria-label="label-0"></div>', '<div title="title-1"></div>',
+  '<div aria-label="label-0"></div>',
+  '<div title="title-1"></div>',
   '<div aria-label="label-2" title="title-2"></div>',
-  '<div><span title="child-title-3"></span></div>'
+  '<div><span title="child-title-3"></span></div>',
 ];
 let itemEls;
 let renderer;
 let palette;
 
-function setUp() {}
-
-function tearDown() {
-  palette.dispose();
-}
-
 /** @param {!Array<string>} items */
 function createPalette(items) {
-  sandbox = goog.dom.getElement('sandbox');
-  itemEls = goog.array.map(items, function(item, index, a) {
-    return goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(item));
-  });
-  renderer = new goog.ui.PaletteRenderer();
-  palette = new goog.ui.Palette(itemEls, renderer);
+  sandbox = dom.getElement('sandbox');
+  itemEls = googArray.map(
+      items,
+      (item, index, a) => dom.safeHtmlToNode(testing.newSafeHtmlForTest(item)));
+  renderer = new PaletteRenderer();
+  palette = new Palette(itemEls, renderer);
   palette.setSize(4, 1);
 }
 
-function testGridA11yRoles() {
-  createPalette(items);
-  const grid = renderer.createDom(palette);
-  assertEquals(goog.a11y.aria.Role.GRID, goog.a11y.aria.getRole(grid));
-  const table = goog.dom.getElementsByTagName(goog.dom.TagName.TABLE, grid)[0];
-  const row = goog.dom.getElementsByTagName(goog.dom.TagName.TR, table)[0];
-  assertEquals(goog.a11y.aria.Role.ROW, goog.a11y.aria.getRole(row));
-  const cell = goog.dom.getElementsByTagName(goog.dom.TagName.TD, row)[0];
-  assertEquals(goog.a11y.aria.Role.GRIDCELL, goog.a11y.aria.getRole(cell));
-}
+testSuite({
+  setUp() {},
 
-function testCellA11yLabels() {
-  createPalette(items);
-  const grid = renderer.createDom(palette);
-  const cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, grid);
+  tearDown() {
+    palette.dispose();
+  },
 
-  assertEquals(
-      'An aria-label is used as a label', 'label-0',
-      goog.a11y.aria.getLabel(cells[0]));
-  assertEquals(
-      'A title is used as a label', 'title-1',
-      goog.a11y.aria.getLabel(cells[1]));
-  assertEquals(
-      'An aria-label takes precedence over a title', 'label-2',
-      goog.a11y.aria.getLabel(cells[2]));
-  assertEquals(
-      'Children are traversed to find labels', 'child-title-3',
-      goog.a11y.aria.getLabel(cells[3]));
-}
+  testGridA11yRoles() {
+    createPalette(items);
+    const grid = renderer.createDom(palette);
+    assertEquals(Role.GRID, aria.getRole(grid));
+    const table = dom.getElementsByTagName(TagName.TABLE, grid)[0];
+    const row = dom.getElementsByTagName(TagName.TR, table)[0];
+    assertEquals(Role.ROW, aria.getRole(row));
+    const cell = dom.getElementsByTagName(TagName.TD, row)[0];
+    assertEquals(Role.GRIDCELL, aria.getRole(cell));
+  },
 
-function testA11yActiveDescendant() {
-  createPalette(items);
-  palette.render();
-  const cells = goog.dom.getElementsByTagName(
-      goog.dom.TagName.TD, palette.getElementStrict());
+  testCellA11yLabels() {
+    createPalette(items);
+    const grid = renderer.createDom(palette);
+    const cells = dom.getElementsByTagName(TagName.TD, grid);
 
-  renderer.highlightCell(palette, cells[1].firstChild, true);
-  assertEquals(
-      cells[1].id,
-      goog.a11y.aria.getState(
-          palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
+    assertEquals(
+        'An aria-label is used as a label', 'label-0', aria.getLabel(cells[0]));
+    assertEquals(
+        'A title is used as a label', 'title-1', aria.getLabel(cells[1]));
+    assertEquals(
+        'An aria-label takes precedence over a title', 'label-2',
+        aria.getLabel(cells[2]));
+    assertEquals(
+        'Children are traversed to find labels', 'child-title-3',
+        aria.getLabel(cells[3]));
+  },
 
-  renderer.highlightCell(palette, cells[0].firstChild, false);
-  assertEquals(
-      cells[1].id,
-      goog.a11y.aria.getState(
-          palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
+  testA11yActiveDescendant() {
+    createPalette(items);
+    palette.render();
+    const cells =
+        dom.getElementsByTagName(TagName.TD, palette.getElementStrict());
 
-  renderer.highlightCell(palette, cells[1].firstChild, false);
-  assertNotEquals(
-      cells[1].id,
-      goog.a11y.aria.getState(
-          palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
-}
+    renderer.highlightCell(palette, cells[1].firstChild, true);
+    assertEquals(
+        cells[1].id,
+        aria.getState(palette.getElementStrict(), State.ACTIVEDESCENDANT));
 
-function testSetContentIncremental() {
-  const items = goog.array.repeat('<div class="item">item</div>', 6);
-  const itemEls = goog.array.map(items, function(item) {
-    return goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(item));
-  });
+    renderer.highlightCell(palette, cells[0].firstChild, false);
+    assertEquals(
+        cells[1].id,
+        aria.getState(palette.getElementStrict(), State.ACTIVEDESCENDANT));
 
-  createPalette([]);
-  palette.render();
-  const paletteEl = palette.getElementStrict();
+    renderer.highlightCell(palette, cells[1].firstChild, false);
+    assertNotEquals(
+        cells[1].id,
+        aria.getState(palette.getElementStrict(), State.ACTIVEDESCENDANT));
+  },
 
-  let rows = goog.dom.getElementsByTagName(goog.dom.TagName.TR, paletteEl);
-  assertEquals(1, rows.length);
-  assertEquals(0, goog.dom.getElementsByClass('item', rows[0]).length);
+  testSetContentIncremental() {
+    const items = googArray.repeat('<div class="item">item</div>', 6);
+    const itemEls = googArray.map(
+        items, (item) => dom.safeHtmlToNode(testing.newSafeHtmlForTest(item)));
 
-  palette.setContent(itemEls.slice(0, 1));
-  rows = goog.dom.getElementsByTagName(goog.dom.TagName.TR, paletteEl);
-  assertEquals(1, rows.length);
-  assertEquals(1, goog.dom.getElementsByClass('item', rows[0]).length);
+    createPalette([]);
+    palette.render();
+    const paletteEl = palette.getElementStrict();
 
-  palette.setContent(itemEls.slice(0, 3));
-  rows = goog.dom.getElementsByTagName(goog.dom.TagName.TR, paletteEl);
-  assertEquals(1, rows.length);
-  assertEquals(3, goog.dom.getElementsByClass('item', rows[0]).length);
+    let rows = dom.getElementsByTagName(TagName.TR, paletteEl);
+    assertEquals(1, rows.length);
+    assertEquals(0, dom.getElementsByClass('item', rows[0]).length);
 
-  palette.setContent(itemEls);
-  rows = goog.dom.getElementsByTagName(goog.dom.TagName.TR, paletteEl);
-  assertEquals(2, rows.length);
-  assertEquals(4, goog.dom.getElementsByClass('item', rows[0]).length);
-  assertEquals(2, goog.dom.getElementsByClass('item', rows[1]).length);
-}
+    palette.setContent(itemEls.slice(0, 1));
+    rows = dom.getElementsByTagName(TagName.TR, paletteEl);
+    assertEquals(1, rows.length);
+    assertEquals(1, dom.getElementsByClass('item', rows[0]).length);
 
-function testA11yLabelsSetContentIncremental() {
-  const itemEls = goog.array.map(items, function(item, index, a) {
-    return goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(item));
-  });
+    palette.setContent(itemEls.slice(0, 3));
+    rows = dom.getElementsByTagName(TagName.TR, paletteEl);
+    assertEquals(1, rows.length);
+    assertEquals(3, dom.getElementsByClass('item', rows[0]).length);
 
-  createPalette([]);
-  palette.render();
-  const paletteEl = palette.getElementStrict();
+    palette.setContent(itemEls);
+    rows = dom.getElementsByTagName(TagName.TR, paletteEl);
+    assertEquals(2, rows.length);
+    assertEquals(4, dom.getElementsByClass('item', rows[0]).length);
+    assertEquals(2, dom.getElementsByClass('item', rows[1]).length);
+  },
 
-  palette.setContent(itemEls.slice(0, 1));
-  let cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, paletteEl);
-  assertEquals(4, cells.length);
-  assertEquals('label-0', goog.a11y.aria.getLabel(cells[0]));
-  assertEquals('', goog.a11y.aria.getLabel(cells[1]));
-  assertEquals('', goog.a11y.aria.getLabel(cells[2]));
-  assertEquals('', goog.a11y.aria.getLabel(cells[3]));
+  testA11yLabelsSetContentIncremental() {
+    const itemEls = googArray.map(
+        items,
+        (item, index, a) =>
+            dom.safeHtmlToNode(testing.newSafeHtmlForTest(item)));
 
-  palette.setContent(itemEls);
-  cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, paletteEl);
-  assertEquals('label-0', goog.a11y.aria.getLabel(cells[0]));
-  assertEquals('title-1', goog.a11y.aria.getLabel(cells[1]));
-  assertEquals('label-2', goog.a11y.aria.getLabel(cells[2]));
-  assertEquals('child-title-3', goog.a11y.aria.getLabel(cells[3]));
-}
+    createPalette([]);
+    palette.render();
+    const paletteEl = palette.getElementStrict();
 
-function testA11yLabelsSetContentIncremental_ariaLabelUpdated() {
-  createPalette(items);
-  palette.render();
-  const paletteEl = palette.getElementStrict();
-  cells = goog.dom.getElementsByTagName(goog.dom.TagName.TD, paletteEl);
-  assertEquals('label-0', goog.a11y.aria.getLabel(cells[0]));
-  assertEquals('title-1', goog.a11y.aria.getLabel(cells[1]));
-  assertEquals('label-2', goog.a11y.aria.getLabel(cells[2]));
-  assertEquals('child-title-3', goog.a11y.aria.getLabel(cells[3]));
+    palette.setContent(itemEls.slice(0, 1));
+    let cells = dom.getElementsByTagName(TagName.TD, paletteEl);
+    assertEquals(4, cells.length);
+    assertEquals('label-0', aria.getLabel(cells[0]));
+    assertEquals('', aria.getLabel(cells[1]));
+    assertEquals('', aria.getLabel(cells[2]));
+    assertEquals('', aria.getLabel(cells[3]));
 
-  const newItems = [
-    '<div aria-label="newlabel-0"></div>', '<div title="newtitle-1"></div>',
-    '<div aria-label="newlabel-2" title="title-2"></div>',
-    '<div><span></span></div>'
-  ];
-  const newItemEls = goog.array.map(newItems, function(item, index, a) {
-    return goog.dom.safeHtmlToNode(goog.html.testing.newSafeHtmlForTest(item));
-  });
+    palette.setContent(itemEls);
+    cells = dom.getElementsByTagName(TagName.TD, paletteEl);
+    assertEquals('label-0', aria.getLabel(cells[0]));
+    assertEquals('title-1', aria.getLabel(cells[1]));
+    assertEquals('label-2', aria.getLabel(cells[2]));
+    assertEquals('child-title-3', aria.getLabel(cells[3]));
+  },
 
-  palette.setContent(newItemEls);
+  testA11yLabelsSetContentIncremental_ariaLabelUpdated() {
+    createPalette(items);
+    palette.render();
+    const paletteEl = palette.getElementStrict();
+    let cells = dom.getElementsByTagName(TagName.TD, paletteEl);
+    assertEquals('label-0', aria.getLabel(cells[0]));
+    assertEquals('title-1', aria.getLabel(cells[1]));
+    assertEquals('label-2', aria.getLabel(cells[2]));
+    assertEquals('child-title-3', aria.getLabel(cells[3]));
 
-  assertEquals('newlabel-0', goog.a11y.aria.getLabel(cells[0]));
-  assertEquals('newtitle-1', goog.a11y.aria.getLabel(cells[1]));
-  assertEquals('newlabel-2', goog.a11y.aria.getLabel(cells[2]));
-  assertEquals('', goog.a11y.aria.getLabel(cells[3]));
-}
+    const newItems = [
+      '<div aria-label="newlabel-0"></div>',
+      '<div title="newtitle-1"></div>',
+      '<div aria-label="newlabel-2" title="title-2"></div>',
+      '<div><span></span></div>',
+    ];
+    const newItemEls = googArray.map(
+        newItems,
+        (item, index, a) =>
+            dom.safeHtmlToNode(testing.newSafeHtmlForTest(item)));
+
+    palette.setContent(newItemEls);
+
+    assertEquals('newlabel-0', aria.getLabel(cells[0]));
+    assertEquals('newtitle-1', aria.getLabel(cells[1]));
+    assertEquals('newlabel-2', aria.getLabel(cells[2]));
+    assertEquals('', aria.getLabel(cells[3]));
+  },
+});

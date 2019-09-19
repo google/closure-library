@@ -86,7 +86,7 @@ goog.tagUnsealableClass(goog.ui.Select);
 
 /**
  * The selection model controlling the items in the menu.
- * @type {goog.ui.SelectionModel}
+ * @type {?goog.ui.SelectionModel}
  * @private
  */
 goog.ui.Select.prototype.selectionModel_ = null;

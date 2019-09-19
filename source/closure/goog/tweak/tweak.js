@@ -47,7 +47,7 @@ goog.tweak.getCompilerOverrides_ = function() {
 
 /**
  * The global reference to the registry, if it exists.
- * @type {goog.tweak.Registry}
+ * @type {?goog.tweak.Registry}
  * @private
  */
 goog.tweak.registry_ = null;
@@ -55,7 +55,7 @@ goog.tweak.registry_ = null;
 
 /**
  * The boolean group set by beginBooleanGroup and cleared by endBooleanGroup.
- * @type {goog.tweak.BooleanGroup}
+ * @type {?goog.tweak.BooleanGroup}
  * @private
  */
 goog.tweak.activeBooleanGroup_ = null;

@@ -15,12 +15,11 @@
 goog.module('goog.debug.TraceTest');
 goog.setTestOnly();
 
+const StopTraceDetail = goog.forwardDeclare('goog.debug.StopTraceDetail');
 const Trace = goog.require('goog.debug.Trace');
 const googArray = goog.require('goog.array');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
-
-const StopTraceDetail = goog.forwardDeclare('goog.debug.StopTraceDetail');
 
 /** @type {!Function} */
 const recorder = recordFunction();

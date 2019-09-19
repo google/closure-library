@@ -22,10 +22,9 @@
 
 goog.provide('goog.fx.CssSpriteAnimation');
 
-goog.require('goog.fx.Animation');
-
 goog.forwardDeclare('goog.math.Box');
 goog.forwardDeclare('goog.math.Size');
+goog.require('goog.fx.Animation');
 
 
 

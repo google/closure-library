@@ -24,6 +24,8 @@
 
 goog.provide('goog.labs.net.webChannel.ChannelRequest');
 
+goog.forwardDeclare('goog.Uri');
+goog.forwardDeclare('goog.net.XhrIo');
 goog.require('goog.Timer');
 goog.require('goog.async.Throttle');
 goog.require('goog.events.EventHandler');
@@ -38,9 +40,6 @@ goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
-
-goog.forwardDeclare('goog.Uri');
-goog.forwardDeclare('goog.net.XhrIo');
 
 
 
@@ -113,7 +112,7 @@ goog.labs.net.webChannel.ChannelRequest = function(
 
   /**
    * Extra HTTP headers to add to all the requests sent to the server.
-   * @private {Object}
+   * @private {?Object}
    */
   this.extraHeaders_ = null;
 
@@ -154,13 +153,13 @@ goog.labs.net.webChannel.ChannelRequest = function(
   /**
    * The base Uri for the request. The includes all the parameters except the
    * one that indicates the retry number.
-   * @private {goog.Uri}
+   * @private {?goog.Uri}
    */
   this.baseUri_ = null;
 
   /**
    * The request Uri that was actually used for the most recent request attempt.
-   * @private {goog.Uri}
+   * @private {?goog.Uri}
    */
   this.requestUri_ = null;
 
@@ -180,7 +179,7 @@ goog.labs.net.webChannel.ChannelRequest = function(
 
   /**
    * The XhrLte request if the request is using XMLHTTP
-   * @private {goog.net.XhrIo}
+   * @private {?goog.net.XhrIo}
    */
   this.xmlHttp_ = null;
 
@@ -229,7 +228,7 @@ goog.labs.net.webChannel.ChannelRequest = function(
   /**
    * The throttle for readystatechange events for the current request, or null
    * if there is none.
-   * @private {goog.async.Throttle}
+   * @private {?goog.async.Throttle}
    */
   this.readyStateChangeThrottle_ = null;
 

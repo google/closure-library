@@ -1571,7 +1571,7 @@ goog.fx.ScrollableContainer_ = function(element) {
 
   /**
    * The space occupied by the container.
-   * @type {goog.math.Box}
+   * @type {?goog.math.Box}
    * @private
    */
   this.box_ = null;

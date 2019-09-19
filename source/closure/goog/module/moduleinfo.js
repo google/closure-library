@@ -19,6 +19,7 @@
 
 goog.provide('goog.module.ModuleInfo');
 
+goog.forwardDeclare('goog.loader.AbstractModuleManager.FailureType');
 goog.require('goog.Disposable');
 goog.require('goog.async.throwException');
 goog.require('goog.functions');
@@ -27,8 +28,6 @@ goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.module');
 goog.require('goog.module.BaseModule');
 goog.require('goog.module.ModuleLoadCallback');
-
-goog.forwardDeclare('goog.loader.AbstractModuleManager.FailureType');
 
 
 
