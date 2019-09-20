@@ -12,169 +12,171 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.plugins.SpacesTabHandlerTest');
-goog.setTestOnly('goog.editor.plugins.SpacesTabHandlerTest');
+goog.module('goog.editor.plugins.SpacesTabHandlerTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.dom.Range');
-goog.require('goog.editor.plugins.SpacesTabHandler');
-goog.require('goog.events.BrowserEvent');
-goog.require('goog.events.KeyCodes');
-goog.require('goog.functions');
-goog.require('goog.testing.StrictMock');
-goog.require('goog.testing.editor.FieldMock');
-goog.require('goog.testing.editor.TestHelper');
-goog.require('goog.testing.jsunit');
+const BrowserEvent = goog.require('goog.events.BrowserEvent');
+const FieldMock = goog.require('goog.testing.editor.FieldMock');
+const KeyCodes = goog.require('goog.events.KeyCodes');
+const Range = goog.require('goog.dom.Range');
+const SpacesTabHandler = goog.require('goog.editor.plugins.SpacesTabHandler');
+const StrictMock = goog.require('goog.testing.StrictMock');
+const TestHelper = goog.require('goog.testing.editor.TestHelper');
+const dom = goog.require('goog.dom');
+const functions = goog.require('goog.functions');
+const testSuite = goog.require('goog.testing.testSuite');
 
 let field;
 let editableField;
 let tabHandler;
 let testHelper;
 
-function setUp() {
-  field = goog.dom.getElement('field');
-  editableField = new goog.testing.editor.FieldMock();
-  // Modal mode behavior tested in AbstractTabHandler.
-  editableField.inModalMode = goog.functions.FALSE;
-  testHelper = new goog.testing.editor.TestHelper(field);
-  testHelper.setUpEditableElement();
+testSuite({
+  setUp() {
+    field = dom.getElement('field');
+    editableField = new FieldMock();
+    // Modal mode behavior tested in AbstractTabHandler.
+    editableField.inModalMode = functions.FALSE;
+    testHelper = new TestHelper(field);
+    testHelper.setUpEditableElement();
 
-  tabHandler = new goog.editor.plugins.SpacesTabHandler();
-  tabHandler.registerFieldObject(editableField);
-}
+    tabHandler = new SpacesTabHandler();
+    tabHandler.registerFieldObject(editableField);
+  },
 
-function tearDown() {
-  editableField = null;
-  testHelper.tearDownEditableElement();
-  tabHandler.dispose();
-}
+  tearDown() {
+    editableField = null;
+    testHelper.tearDownEditableElement();
+    tabHandler.dispose();
+  },
 
-function testSelectedTextIndent() {
-  goog.dom.setTextContent(field, 'Test');
+  testSelectedTextIndent() {
+    dom.setTextContent(field, 'Test');
 
-  const testText = field.firstChild;
-  testHelper.select(testText, 0, testText, 4);
+    const testText = field.firstChild;
+    testHelper.select(testText, 0, testText, 4);
 
-  const event = new goog.testing.StrictMock(goog.events.BrowserEvent);
-  event.keyCode = goog.events.KeyCodes.TAB;
-  event.shiftKey = false;
+    const event = new StrictMock(BrowserEvent);
+    event.keyCode = KeyCodes.TAB;
+    event.shiftKey = false;
 
-  editableField.stopChangeEvents(true, true);
-  editableField.dispatchChange();
-  editableField.dispatchSelectionChangeEvent();
-  event.preventDefault();
+    editableField.stopChangeEvents(true, true);
+    editableField.dispatchChange();
+    editableField.dispatchSelectionChangeEvent();
+    event.preventDefault();
 
-  editableField.$replay();
-  event.$replay();
+    editableField.$replay();
+    event.$replay();
 
-  assertTrue(
-      'Event marked as handled',
-      tabHandler.handleKeyboardShortcut(event, '', false));
-  const contents = field.textContent || field.innerText;
-  // Chrome doesn't treat \u00a0 as a space.
-  assertTrue(
-      'Text should be replaced with 4 spaces but was: "' + contents + '"',
-      /^(\s|\u00a0){4}$/.test(contents));
+    assertTrue(
+        'Event marked as handled',
+        tabHandler.handleKeyboardShortcut(event, '', false));
+    const contents = field.textContent || field.innerText;
+    // Chrome doesn't treat \u00a0 as a space.
+    assertTrue(
+        `Text should be replaced with 4 spaces but was: "${contents}"`,
+        /^(\s|\u00a0){4}$/.test(contents));
 
-  editableField.$verify();
-  event.$verify();
-}
+    editableField.$verify();
+    event.$verify();
+  },
 
-function testCursorIndent() {
-  goog.dom.setTextContent(field, 'Test');
+  testCursorIndent() {
+    dom.setTextContent(field, 'Test');
 
-  const testText = field.firstChild;
-  testHelper.select(testText, 2, testText, 2);
+    const testText = field.firstChild;
+    testHelper.select(testText, 2, testText, 2);
 
-  const event = new goog.testing.StrictMock(goog.events.BrowserEvent);
-  event.keyCode = goog.events.KeyCodes.TAB;
-  event.shiftKey = false;
+    const event = new StrictMock(BrowserEvent);
+    event.keyCode = KeyCodes.TAB;
+    event.shiftKey = false;
 
-  editableField.stopChangeEvents(true, true);
-  editableField.dispatchChange();
-  editableField.dispatchSelectionChangeEvent();
-  event.preventDefault();
+    editableField.stopChangeEvents(true, true);
+    editableField.dispatchChange();
+    editableField.dispatchSelectionChangeEvent();
+    event.preventDefault();
 
-  editableField.$replay();
-  event.$replay();
+    editableField.$replay();
+    event.$replay();
 
-  assertTrue(
-      'Event marked as handled',
-      tabHandler.handleKeyboardShortcut(event, '', false));
-  const contents = field.textContent || field.innerText;
-  assertTrue(
-      'Expected contents "Te    st" but was: "' + contents + '"',
-      /Te[\s|\u00a0]{4}st/.test(contents));
+    assertTrue(
+        'Event marked as handled',
+        tabHandler.handleKeyboardShortcut(event, '', false));
+    const contents = field.textContent || field.innerText;
+    assertTrue(
+        `Expected contents "Te    st" but was: "${contents}"`,
+        /Te[\s|\u00a0]{4}st/.test(contents));
 
-  editableField.$verify();
-  event.$verify();
-}
+    editableField.$verify();
+    event.$verify();
+  },
 
-function testShiftTabNoOp() {
-  goog.dom.setTextContent(field, 'Test');
+  testShiftTabNoOp() {
+    dom.setTextContent(field, 'Test');
 
-  range = goog.dom.Range.createFromNodeContents(field);
-  range.collapse();
-  range.select();
+    let range = Range.createFromNodeContents(field);
+    range.collapse();
+    range.select();
 
-  const event = new goog.testing.StrictMock(goog.events.BrowserEvent);
-  event.keyCode = goog.events.KeyCodes.TAB;
-  event.shiftKey = true;
+    const event = new StrictMock(BrowserEvent);
+    event.keyCode = KeyCodes.TAB;
+    event.shiftKey = true;
 
-  event.preventDefault();
-  editableField.$replay();
-  event.$replay();
+    event.preventDefault();
+    editableField.$replay();
+    event.$replay();
 
-  assertTrue(
-      'Event marked as handled',
-      tabHandler.handleKeyboardShortcut(event, '', false));
-  const contents = field.textContent || field.innerText;
-  assertEquals('Shift+tab should not change contents', 'Test', contents);
+    assertTrue(
+        'Event marked as handled',
+        tabHandler.handleKeyboardShortcut(event, '', false));
+    const contents = field.textContent || field.innerText;
+    assertEquals('Shift+tab should not change contents', 'Test', contents);
 
-  editableField.$verify();
-  event.$verify();
-}
+    editableField.$verify();
+    event.$verify();
+  },
 
-function testInListNoOp() {
-  field.innerHTML = '<ul><li>Test</li></ul>';
+  testInListNoOp() {
+    field.innerHTML = '<ul><li>Test</li></ul>';
 
-  const testText = field.firstChild.firstChild.firstChild;  // div ul li Test
-  testHelper.select(testText, 2, testText, 2);
+    const testText = field.firstChild.firstChild.firstChild;  // div ul li Test
+    testHelper.select(testText, 2, testText, 2);
 
-  const event = new goog.testing.StrictMock(goog.events.BrowserEvent);
-  event.keyCode = goog.events.KeyCodes.TAB;
-  event.shiftKey = false;
+    const event = new StrictMock(BrowserEvent);
+    event.keyCode = KeyCodes.TAB;
+    event.shiftKey = false;
 
-  editableField.$replay();
-  event.$replay();
+    editableField.$replay();
+    event.$replay();
 
-  assertFalse(
-      'Event must not be handled when selection inside list.',
-      tabHandler.handleKeyboardShortcut(event, '', false));
-  testHelper.assertHtmlMatches('<ul><li>Test</li></ul>');
+    assertFalse(
+        'Event must not be handled when selection inside list.',
+        tabHandler.handleKeyboardShortcut(event, '', false));
+    testHelper.assertHtmlMatches('<ul><li>Test</li></ul>');
 
-  editableField.$verify();
-  event.$verify();
-}
+    editableField.$verify();
+    event.$verify();
+  },
 
-function testContainsListNoOp() {
-  field.innerHTML = '<ul><li>Test</li></ul>';
+  testContainsListNoOp() {
+    field.innerHTML = '<ul><li>Test</li></ul>';
 
-  const testText = field.firstChild.firstChild.firstChild;  // div ul li Test
-  testHelper.select(field.firstChild, 0, testText, 2);
+    const testText = field.firstChild.firstChild.firstChild;  // div ul li Test
+    testHelper.select(field.firstChild, 0, testText, 2);
 
-  const event = new goog.testing.StrictMock(goog.events.BrowserEvent);
-  event.keyCode = goog.events.KeyCodes.TAB;
-  event.shiftKey = false;
+    const event = new StrictMock(BrowserEvent);
+    event.keyCode = KeyCodes.TAB;
+    event.shiftKey = false;
 
-  editableField.$replay();
-  event.$replay();
+    editableField.$replay();
+    event.$replay();
 
-  assertFalse(
-      'Event must not be handled when selection inside list.',
-      tabHandler.handleKeyboardShortcut(event, '', false));
-  testHelper.assertHtmlMatches('<ul><li>Test</li></ul>');
+    assertFalse(
+        'Event must not be handled when selection inside list.',
+        tabHandler.handleKeyboardShortcut(event, '', false));
+    testHelper.assertHtmlMatches('<ul><li>Test</li></ul>');
 
-  editableField.$verify();
-  event.$verify();
-}
+    editableField.$verify();
+    event.$verify();
+  },
+});
