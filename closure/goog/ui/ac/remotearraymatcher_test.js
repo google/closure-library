@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.ac.RemoteArrayMatcherTest');
-goog.setTestOnly('goog.ui.ac.RemoteArrayMatcherTest');
+goog.module('goog.ui.ac.RemoteArrayMatcherTest');
+goog.setTestOnly();
 
-goog.require('goog.net.XhrIo');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.net.XhrIo');
-goog.require('goog.ui.ac.RemoteArrayMatcher');
+const MockControl = goog.require('goog.testing.MockControl');
+const NetXhrIo = goog.require('goog.testing.net.XhrIo');
+const RemoteArrayMatcher = goog.require('goog.ui.ac.RemoteArrayMatcher');
+/** @suppress {extraRequire} */
+const XhrIo = goog.require('goog.net.XhrIo');
+const testSuite = goog.require('goog.testing.testSuite');
+
 const url = 'http://www.google.com';
 const token = 'goog';
 const maxMatches = 5;
@@ -31,35 +33,37 @@ const responseJson = JSON.parse(responseJsonText);
 let mockControl;
 let mockMatchHandler;
 
+testSuite({
+  setUp() {
+    goog.net.XhrIo = /** @type {?} */ (NetXhrIo);
+    mockControl = new MockControl();
+    mockMatchHandler = mockControl.createFunctionMock();
+  },
 
-function setUp() {
-  goog.net.XhrIo = goog.testing.net.XhrIo;
-  mockControl = new goog.testing.MockControl();
-  mockMatchHandler = mockControl.createFunctionMock();
-}
+  testRequestMatchingRows_noSimilarTrue() {
+    const matcher = new RemoteArrayMatcher(url);
+    mockMatchHandler(token, responseJson);
+    mockControl.$replayAll();
+    matcher.requestMatchingRows(token, maxMatches, mockMatchHandler, fullToken);
+    matcher.xhr_.simulateResponse(200, responseJsonText);
+    mockControl.$verifyAll();
+    mockControl.$resetAll();
+  },
 
-function testRequestMatchingRows_noSimilarTrue() {
-  const matcher = new goog.ui.ac.RemoteArrayMatcher(url);
-  mockMatchHandler(token, responseJson);
-  mockControl.$replayAll();
-  matcher.requestMatchingRows(token, maxMatches, mockMatchHandler, fullToken);
-  matcher.xhr_.simulateResponse(200, responseJsonText);
-  mockControl.$verifyAll();
-  mockControl.$resetAll();
-}
+  testRequestMatchingRows_twoCalls() {
+    const matcher = new RemoteArrayMatcher(url);
 
-function testRequestMatchingRows_twoCalls() {
-  const matcher = new goog.ui.ac.RemoteArrayMatcher(url);
+    const dummyMatchHandler = mockControl.createFunctionMock();
 
-  const dummyMatchHandler = mockControl.createFunctionMock();
+    mockMatchHandler(token, responseJson);
+    mockControl.$replayAll();
 
-  mockMatchHandler(token, responseJson);
-  mockControl.$replayAll();
+    matcher.requestMatchingRows(
+        token, maxMatches, dummyMatchHandler, fullToken);
 
-  matcher.requestMatchingRows(token, maxMatches, dummyMatchHandler, fullToken);
-
-  matcher.requestMatchingRows(token, maxMatches, mockMatchHandler, fullToken);
-  matcher.xhr_.simulateResponse(200, responseJsonText);
-  mockControl.$verifyAll();
-  mockControl.$resetAll();
-}
+    matcher.requestMatchingRows(token, maxMatches, mockMatchHandler, fullToken);
+    matcher.xhr_.simulateResponse(200, responseJsonText);
+    mockControl.$verifyAll();
+    mockControl.$resetAll();
+  },
+});

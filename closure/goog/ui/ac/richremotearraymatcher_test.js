@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.ac.RichRemoteArrayMatcherTest');
-goog.setTestOnly('goog.ui.ac.RichRemoteArrayMatcherTest');
+goog.module('goog.ui.ac.RichRemoteArrayMatcherTest');
+goog.setTestOnly();
 
-goog.require('goog.net.XhrIo');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.jsunit');
-goog.require('goog.testing.net.XhrIo');
-goog.require('goog.ui.ac.RichRemoteArrayMatcher');
+const MockControl = goog.require('goog.testing.MockControl');
+const NetXhrIo = goog.require('goog.testing.net.XhrIo');
+const RichRemoteArrayMatcher = goog.require('goog.ui.ac.RichRemoteArrayMatcher');
+/** @suppress {extraRequire} */
+const XhrIo = goog.require('goog.net.XhrIo');
+const testSuite = goog.require('goog.testing.testSuite');
 
 const url = 'http://www.google.com';
 const token = 'goog';
@@ -31,13 +32,6 @@ const responseJsonType1 = ['eric', 'larry', 'sergey'];
 let mockControl;
 let mockMatchHandler;
 
-
-function setUp() {
-  goog.net.XhrIo = goog.testing.net.XhrIo;
-  mockControl = new goog.testing.MockControl();
-  mockMatchHandler = mockControl.createFunctionMock();
-}
-
 /**
  * Callback for type1 responses.
  * @param {string} response
@@ -47,26 +41,34 @@ function type1(response) {
   return response;
 }
 
-function testRequestMatchingRows() {
-  const matcher = new goog.ui.ac.RichRemoteArrayMatcher(url);
-  mockMatchHandler(token, responseJsonType1);
-  mockControl.$replayAll();
-  matcher.requestMatchingRows(token, maxMatches, mockMatchHandler);
-  matcher.xhr_.simulateResponse(200, responseJsonText);
-  mockControl.$verifyAll();
-  mockControl.$resetAll();
-}
+testSuite({
+  setUp() {
+    goog.net.XhrIo = /** @type {?} */ (NetXhrIo);
+    mockControl = new MockControl();
+    mockMatchHandler = mockControl.createFunctionMock();
+  },
 
-function testSetRowBuilder() {
-  const matcher = new goog.ui.ac.RichRemoteArrayMatcher(url);
-  matcher.setRowBuilder(function(type, response) {
-    assertEquals("type1", type);
-    return response;
-  });
-  mockMatchHandler(token, responseJsonType1);
-  mockControl.$replayAll();
-  matcher.requestMatchingRows(token, maxMatches, mockMatchHandler);
-  matcher.xhr_.simulateResponse(200, responseJsonText);
-  mockControl.$verifyAll();
-  mockControl.$resetAll();
-}
+  testRequestMatchingRows() {
+    const matcher = new RichRemoteArrayMatcher(url);
+    mockMatchHandler(token, responseJsonType1);
+    mockControl.$replayAll();
+    matcher.requestMatchingRows(token, maxMatches, mockMatchHandler);
+    matcher.xhr_.simulateResponse(200, responseJsonText);
+    mockControl.$verifyAll();
+    mockControl.$resetAll();
+  },
+
+  testSetRowBuilder() {
+    const matcher = new RichRemoteArrayMatcher(url);
+    matcher.setRowBuilder((type, response) => {
+      assertEquals('type1', type);
+      return response;
+    });
+    mockMatchHandler(token, responseJsonType1);
+    mockControl.$replayAll();
+    matcher.requestMatchingRows(token, maxMatches, mockMatchHandler);
+    matcher.xhr_.simulateResponse(200, responseJsonText);
+    mockControl.$verifyAll();
+    mockControl.$resetAll();
+  },
+});
