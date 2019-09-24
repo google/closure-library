@@ -851,7 +851,7 @@ goog.dom.createDom_ = function(doc, args) {
     tagName = tagNameArr.join('');
   }
 
-  var element = doc.createElement(tagName);
+  var element = goog.dom.createElement_(doc, tagName);
 
   if (attributes) {
     if (goog.isString(attributes)) {
@@ -950,7 +950,9 @@ goog.dom.createElement = function(name) {
  * @private
  */
 goog.dom.createElement_ = function(doc, name) {
-  return doc.createElement(String(name));
+  name = String(name);
+  if (doc.contentType === 'application/xhtml+xml') name = name.toLowerCase();
+  return doc.createElement(name);
 };
 
 
