@@ -23,6 +23,7 @@ goog.provide('goog.async.nextTick');
 goog.provide('goog.async.throwException');
 
 goog.require('goog.debug.entryPointRegistry');
+goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.functions');
@@ -162,8 +163,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
     /** @constructor */
     Channel = function() {
       // Make an empty, invisible iframe.
-      var iframe = /** @type {!HTMLIFrameElement} */ (
-          document.createElement(String(goog.dom.TagName.IFRAME)));
+      var iframe = goog.dom.createElement(goog.dom.TagName.IFRAME);
       iframe.style.display = 'none';
       goog.dom.safe.setIframeSrc(
           iframe,
@@ -227,11 +227,9 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
   // Implementation for IE6 to IE10: Script elements fire an asynchronous
   // onreadystatechange event when inserted into the DOM.
   if (typeof document !== 'undefined' &&
-      'onreadystatechange' in
-          document.createElement(String(goog.dom.TagName.SCRIPT))) {
+      'onreadystatechange' in goog.dom.createElement(goog.dom.TagName.SCRIPT)) {
     return function(cb) {
-      var script = /** @type {!HTMLScriptElement} */ (
-          document.createElement(String(goog.dom.TagName.SCRIPT)));
+      var script = goog.dom.createElement(goog.dom.TagName.SCRIPT);
       script.onreadystatechange = function() {
         // Clean up and call the callback.
         script.onreadystatechange = null;

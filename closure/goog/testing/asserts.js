@@ -1509,7 +1509,7 @@ goog.testing.asserts.contains_ = function(container, contained) {
 };
 
 var standardizeHTML = function(html) {
-  var translator = document.createElement('DIV');
+  var translator = document.createElement('div');
   translator.innerHTML = html;
 
   // Trim whitespace from result (without relying on goog.string)
@@ -1525,7 +1525,7 @@ var standardizeHTML = function(html) {
  * @return {string} Normalized CSS value.
  */
 var standardizeCSSValue = function(propertyName, value) {
-  var styleDeclaration = document.createElement('DIV').style;
+  var styleDeclaration = document.createElement('div').style;
   styleDeclaration[propertyName] = value;
   return styleDeclaration[propertyName];
 };

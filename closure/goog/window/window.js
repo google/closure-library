@@ -19,6 +19,7 @@
 
 goog.provide('goog.window');
 
+goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeUrl');
@@ -154,8 +155,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // element and send a click event to it.
     // Notice that the "A" tag does NOT have to be added to the DOM.
 
-    var a = /** @type {!HTMLAnchorElement} */
-        (parentWin.document.createElement(String(goog.dom.TagName.A)));
+    var a = goog.dom.createElement(goog.dom.TagName.A);
     goog.dom.safe.setAnchorHref(a, safeLinkRef);
 
     a.setAttribute('target', target);

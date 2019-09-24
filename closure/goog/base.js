@@ -1851,7 +1851,7 @@ goog.globalEval = function(script) {
       /** @type {!Document} */
       var doc = goog.global.document;
       var scriptElt =
-          /** @type {!HTMLScriptElement} */ (doc.createElement('SCRIPT'));
+          /** @type {!HTMLScriptElement} */ (doc.createElement('script'));
       scriptElt.type = 'text/javascript';
       scriptElt.defer = false;
       // Note(user): can't use .innerHTML since "t('<test>')" will fail and
