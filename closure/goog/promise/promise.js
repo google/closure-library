@@ -700,8 +700,10 @@ goog.Promise.prototype.thenCatch = function(onRejected, opt_context) {
  */
 goog.Promise.prototype.cancel = function(opt_message) {
   if (this.state_ == goog.Promise.State_.PENDING) {
+    // Instantiate Error object synchronously. This ensures Error::stack points
+    // to the cancel() callsite.
+    var err = new goog.Promise.CancellationError(opt_message);
     goog.async.run(function() {
-      var err = new goog.Promise.CancellationError(opt_message);
       this.cancelInternal_(err);
     }, this);
   }
