@@ -12,34 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.testing.environmentUsageTest');
-goog.setTestOnly('goog.labs.testing.environmentUsageTest');
+goog.module('goog.labs.testing.environmentUsageTest');
+goog.setTestOnly();
 
-goog.require('goog.labs.testing.Environment');
+const Environment = goog.require('goog.labs.testing.Environment');
+const testSuite = goog.require('goog.testing.testSuite');
 
 let testing = false;
-const env = new goog.labs.testing.Environment();
+const env = new Environment();
 
-function setUpPage() {
-  assertFalse(testing);
-}
+testSuite({
+  setUpPage() {
+    assertFalse(testing);
+  },
 
-function setUp() {
-  testing = true;
-}
+  setUp() {
+    testing = true;
+  },
 
-function testOne() {
-  assertTrue(testing);
-}
+  testOne() {
+    assertTrue(testing);
+  },
 
-function testTwo() {
-  assertTrue(testing);
-}
+  testTwo() {
+    assertTrue(testing);
+  },
 
-function tearDown() {
-  testing = false;
-}
+  tearDown() {
+    testing = false;
+  },
 
-function tearDownPage() {
-  assertFalse(testing);
-}
+  tearDownPage() {
+    assertFalse(testing);
+  },
+});

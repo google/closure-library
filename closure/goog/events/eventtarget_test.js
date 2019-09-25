@@ -12,60 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.events.EventTargetTest');
-goog.setTestOnly('goog.events.EventTargetTest');
+goog.module('goog.events.EventTargetTest');
+goog.setTestOnly();
 
-goog.require('goog.events.EventTarget');
-goog.require('goog.events.Listenable');
-goog.require('goog.events.eventTargetTester');
-goog.require('goog.events.eventTargetTester.KeyType');
-goog.require('goog.events.eventTargetTester.UnlistenReturnType');
-goog.require('goog.testing.jsunit');
+const GoogEventTarget = goog.require('goog.events.EventTarget');
+const Listenable = goog.require('goog.events.Listenable');
+const eventTargetTester = goog.require('goog.events.eventTargetTester');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function setUp() {
-  const newListenableFn = function() {
-    return new goog.events.EventTarget();
-  };
-  const listenFn = function(src, type, listener, opt_capt, opt_handler) {
-    return src.listen(type, listener, opt_capt, opt_handler);
-  };
-  const unlistenFn = function(src, type, listener, opt_capt, opt_handler) {
-    return src.unlisten(type, listener, opt_capt, opt_handler);
-  };
-  const unlistenByKeyFn = function(src, key) {
-    return src.unlistenByKey(key);
-  };
-  const listenOnceFn = function(src, type, listener, opt_capt, opt_handler) {
-    return src.listenOnce(type, listener, opt_capt, opt_handler);
-  };
-  const dispatchEventFn = function(src, e) {
-    return src.dispatchEvent(e);
-  };
-  const removeAllFn = function(src, opt_type, opt_capture) {
-    return src.removeAllListeners(opt_type, opt_capture);
-  };
-  const getListenersFn = function(src, type, capture) {
-    return src.getListeners(type, capture);
-  };
-  const getListenerFn = function(src, type, listener, capture, opt_handler) {
-    return src.getListener(type, listener, capture, opt_handler);
-  };
-  const hasListenerFn = function(src, opt_type, opt_capture) {
-    return src.hasListener(opt_type, opt_capture);
-  };
+const KeyType = eventTargetTester.KeyType;
+const UnlistenReturnType = eventTargetTester.UnlistenReturnType;
 
-  goog.events.eventTargetTester.setUp(
-      newListenableFn, listenFn, unlistenFn, unlistenByKeyFn, listenOnceFn,
-      dispatchEventFn, removeAllFn, getListenersFn, getListenerFn,
-      hasListenerFn, goog.events.eventTargetTester.KeyType.NUMBER,
-      goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN, false);
-}
+testSuite(Object.assign(
+    {
+      setUp() {
+        const newListenableFn = () => new GoogEventTarget();
+        const listenFn = (src, type, listener, opt_capt, opt_handler) =>
+            src.listen(type, listener, opt_capt, opt_handler);
+        const unlistenFn = (src, type, listener, opt_capt, opt_handler) =>
+            src.unlisten(type, listener, opt_capt, opt_handler);
+        const unlistenByKeyFn = (src, key) => src.unlistenByKey(key);
+        const listenOnceFn = (src, type, listener, opt_capt, opt_handler) =>
+            src.listenOnce(type, listener, opt_capt, opt_handler);
+        const dispatchEventFn = (src, e) => src.dispatchEvent(e);
+        const removeAllFn = (src, opt_type, opt_capture) =>
+            src.removeAllListeners(opt_type, opt_capture);
+        const getListenersFn = (src, type, capture) =>
+            src.getListeners(type, capture);
+        const getListenerFn = (src, type, listener, capture, opt_handler) =>
+            src.getListener(type, listener, capture, opt_handler);
+        const hasListenerFn = (src, opt_type, opt_capture) =>
+            src.hasListener(opt_type, opt_capture);
 
-function tearDown() {
-  goog.events.eventTargetTester.tearDown();
-}
+        eventTargetTester.setUp(
+            newListenableFn, listenFn, unlistenFn, unlistenByKeyFn,
+            listenOnceFn, dispatchEventFn, removeAllFn, getListenersFn,
+            getListenerFn, hasListenerFn, KeyType.NUMBER,
+            UnlistenReturnType.BOOLEAN, false);
+      },
 
-function testRuntimeTypeIsCorrect() {
-  const target = new goog.events.EventTarget();
-  assertTrue(goog.events.Listenable.isImplementedBy(target));
-}
+      tearDown() {
+        eventTargetTester.tearDown();
+      },
+
+      testRuntimeTypeIsCorrect() {
+        const target = new GoogEventTarget();
+        assertTrue(Listenable.isImplementedBy(target));
+      },
+    },
+    eventTargetTester.commonTests));

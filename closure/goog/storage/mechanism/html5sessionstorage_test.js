@@ -12,56 +12,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.storage.mechanism.HTML5SessionStorageTest');
-goog.setTestOnly('goog.storage.mechanism.HTML5SessionStorageTest');
+goog.module('goog.storage.mechanism.HTML5SessionStorageTest');
+goog.setTestOnly();
 
-goog.require('goog.storage.mechanism.HTML5SessionStorage');
+const HTML5SessionStorage = goog.require('goog.storage.mechanism.HTML5SessionStorage');
 /** @suppress {extraRequire} */
-goog.require('goog.storage.mechanism.mechanismSeparationTester');
+const mechanismSeparationTester = goog.require('goog.storage.mechanism.mechanismSeparationTester');
 /** @suppress {extraRequire} */
-goog.require('goog.storage.mechanism.mechanismSharingTester');
+const mechanismSharingTester = goog.require('goog.storage.mechanism.mechanismSharingTester');
 /** @suppress {extraRequire} */
-goog.require('goog.storage.mechanism.mechanismTestDefinition');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
+const mechanismTestDefinition = goog.require('goog.storage.mechanism.mechanismTestDefinition');
+const product = goog.require('goog.userAgent.product');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
 
-function shouldRunTests() {
-  // Disabled in Safari because Apple SafariDriver runs tests in Private
-  // Browsing mode, and Safari does not permit writing to sessionStorage in
-  // Private Browsing windows.
-  return !goog.userAgent.product.SAFARI;
-}
+testSuite({
+  shouldRunTests() {
+    // Disabled in Safari because Apple SafariDriver runs tests in Private
+    // Browsing mode, and Safari does not permit writing to sessionStorage in
+    // Private Browsing windows.
+    return !product.SAFARI;
+  },
 
-function setUp() {
-  const sessionStorage = new goog.storage.mechanism.HTML5SessionStorage();
-  if (sessionStorage.isAvailable()) {
-    mechanism = sessionStorage;
-    // There should be at least 2 MiB.
-    minimumQuota = 2 * 1024 * 1024;
-    mechanism_shared = new goog.storage.mechanism.HTML5SessionStorage();
-  }
-}
+  setUp() {
+    const sessionStorage = new HTML5SessionStorage();
+    if (sessionStorage.isAvailable()) {
+      mechanism = sessionStorage;
+      // There should be at least 2 MiB.
+      minimumQuota = 2 * 1024 * 1024;
+      mechanism_shared = new HTML5SessionStorage();
+    }
+  },
 
-function tearDown() {
-  if (!!mechanism) {
-    mechanism.clear();
-    mechanism = null;
-  }
-  if (!!mechanism_shared) {
-    mechanism_shared.clear();
-    mechanism_shared = null;
-  }
-}
+  tearDown() {
+    if (!!mechanism) {
+      mechanism.clear();
+      mechanism = null;
+    }
+    if (!!mechanism_shared) {
+      mechanism_shared.clear();
+      mechanism_shared = null;
+    }
+  },
 
-function testAvailability() {
-  if (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('532.5') ||
-      goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.1') &&
-          window.location.protocol != 'file:' ||
-      goog.userAgent.IE && goog.userAgent.isVersionOrHigher('8')) {
-    assertNotNull(mechanism);
-    assertTrue(mechanism.isAvailable());
-    assertNotNull(mechanism_shared);
-    assertTrue(mechanism_shared.isAvailable());
-  }
-}
+  testAvailability() {
+    if (userAgent.WEBKIT && userAgent.isVersionOrHigher('532.5') ||
+        userAgent.GECKO && userAgent.isVersionOrHigher('1.9.1') &&
+            window.location.protocol != 'file:' ||
+        userAgent.IE && userAgent.isVersionOrHigher('8')) {
+      assertNotNull(mechanism);
+      assertTrue(mechanism.isAvailable());
+      assertNotNull(mechanism_shared);
+      assertTrue(mechanism_shared.isAvailable());
+    }
+  },
+});

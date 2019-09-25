@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.registryTest');
-goog.setTestOnly('goog.ui.registryTest');
+goog.module('goog.ui.registryTest');
+goog.setTestOnly();
 
-goog.require('goog.object');
-goog.require('goog.testing.jsunit');
-goog.require('goog.ui.registry');
+const googObject = goog.require('goog.object');
+const registry = goog.require('goog.ui.registry');
+const testSuite = goog.require('goog.testing.testSuite');
+
+
+// TODO(nickreid): THis all breaks when implemented using ES6 classes because of
+// issue with `goog.getUid` and `ctor.superClass_`.
 
 // Fake component and renderer implementations, for testing only.
 
@@ -59,200 +63,201 @@ FakeSingletonRenderer.getInstance = function() {
   return FakeSingletonRenderer.instance_;
 };
 
-function setUp() {
-  goog.ui.registry.setDefaultRenderer(FakeComponentX, FakeRenderer);
-  goog.ui.registry.setDefaultRenderer(FakeComponentZ, FakeSingletonRenderer);
 
-  goog.ui.registry.setDecoratorByClassName(
-      'fake-component-x', function() { return new FakeComponentX(); });
-  goog.ui.registry.setDecoratorByClassName(
-      'fake-component-y', function() { return new FakeComponentY(); });
-}
+testSuite({
+  setUp() {
+    registry.setDefaultRenderer(FakeComponentX, FakeRenderer);
+    registry.setDefaultRenderer(FakeComponentZ, FakeSingletonRenderer);
 
-function tearDown() {
-  goog.ui.registry.reset();
-}
+    registry.setDecoratorByClassName(
+        'fake-component-x', () => new FakeComponentX());
+    registry.setDecoratorByClassName(
+        'fake-component-y', () => new FakeComponentY());
+  },
 
-function testGetDefaultRenderer() {
-  const rx1 = goog.ui.registry.getDefaultRenderer(FakeComponentX);
-  const rx2 = goog.ui.registry.getDefaultRenderer(FakeComponentX);
-  assertTrue(
-      'FakeComponentX\'s default renderer must be a FakeRenderer',
-      rx1 instanceof FakeRenderer);
-  assertNotEquals(
-      'Each call to getDefaultRenderer must create a new ' +
-          'FakeRenderer',
-      rx1, rx2);
+  tearDown() {
+    registry.reset();
+  },
 
-  const ry = goog.ui.registry.getDefaultRenderer(FakeComponentY);
-  assertTrue(
-      'FakeComponentY must inherit its default renderer from ' +
-          'its superclass',
-      ry instanceof FakeRenderer);
+  testGetDefaultRenderer() {
+    const rx1 = registry.getDefaultRenderer(FakeComponentX);
+    const rx2 = registry.getDefaultRenderer(FakeComponentX);
+    assertTrue(
+        'FakeComponentX\'s default renderer must be a FakeRenderer',
+        rx1 instanceof FakeRenderer);
+    assertNotEquals(
+        'Each call to getDefaultRenderer must create a new ' +
+            'FakeRenderer',
+        rx1, rx2);
 
-  const rz1 = goog.ui.registry.getDefaultRenderer(FakeComponentZ);
-  const rz2 = goog.ui.registry.getDefaultRenderer(FakeComponentZ);
-  assertTrue(
-      'FakeComponentZ\' default renderer must be a ' +
-          'FakeSingletonRenderer',
-      rz1 instanceof FakeSingletonRenderer);
-  assertEquals(
-      'Each call to getDefaultRenderer must return the ' +
-          'singleton instance of FakeSingletonRenderer',
-      rz1, rz2);
+    const ry = registry.getDefaultRenderer(FakeComponentY);
+    assertTrue(
+        'FakeComponentY must inherit its default renderer from ' +
+            'its superclass',
+        ry instanceof FakeRenderer);
 
-  assertNull(
-      'getDefaultRenderer must return null for unknown component',
-      goog.ui.registry.getDefaultRenderer(UnknownComponent));
-}
+    const rz1 = registry.getDefaultRenderer(FakeComponentZ);
+    const rz2 = registry.getDefaultRenderer(FakeComponentZ);
+    assertTrue(
+        'FakeComponentZ\' default renderer must be a ' +
+            'FakeSingletonRenderer',
+        rz1 instanceof FakeSingletonRenderer);
+    assertEquals(
+        'Each call to getDefaultRenderer must return the ' +
+            'singleton instance of FakeSingletonRenderer',
+        rz1, rz2);
 
-function testSetDefaultRenderer() {
-  const rx1 = goog.ui.registry.getDefaultRenderer(FakeComponentX);
-  assertTrue(
-      'FakeComponentX\'s renderer must be FakeRenderer',
-      rx1 instanceof FakeRenderer);
+    assertNull(
+        'getDefaultRenderer must return null for unknown component',
+        registry.getDefaultRenderer(UnknownComponent));
+  },
 
-  const ry1 = goog.ui.registry.getDefaultRenderer(FakeComponentY);
-  assertTrue(
-      'FakeComponentY must inherit its default renderer from ' +
-          'its superclass',
-      ry1 instanceof FakeRenderer);
+  testSetDefaultRenderer() {
+    const rx1 = registry.getDefaultRenderer(FakeComponentX);
+    assertTrue(
+        'FakeComponentX\'s renderer must be FakeRenderer',
+        rx1 instanceof FakeRenderer);
 
-  goog.ui.registry.setDefaultRenderer(FakeComponentX, FakeSingletonRenderer);
+    const ry1 = registry.getDefaultRenderer(FakeComponentY);
+    assertTrue(
+        'FakeComponentY must inherit its default renderer from ' +
+            'its superclass',
+        ry1 instanceof FakeRenderer);
 
-  const rx2 = goog.ui.registry.getDefaultRenderer(FakeComponentX);
-  assertEquals(
-      'FakeComponentX\'s renderer must be FakeSingletonRenderer',
-      FakeSingletonRenderer.getInstance(), rx2);
+    registry.setDefaultRenderer(FakeComponentX, FakeSingletonRenderer);
 
-  const ry2 = goog.ui.registry.getDefaultRenderer(FakeComponentY);
-  assertEquals(
-      'FakeComponentY must inherit the new default renderer ' +
-          'from its superclass',
-      FakeSingletonRenderer.getInstance(), ry2);
+    const rx2 = registry.getDefaultRenderer(FakeComponentX);
+    assertEquals(
+        'FakeComponentX\'s renderer must be FakeSingletonRenderer',
+        FakeSingletonRenderer.getInstance(), rx2);
 
-  goog.ui.registry.setDefaultRenderer(FakeComponentY, FakeRenderer);
+    const ry2 = registry.getDefaultRenderer(FakeComponentY);
+    assertEquals(
+        'FakeComponentY must inherit the new default renderer ' +
+            'from its superclass',
+        FakeSingletonRenderer.getInstance(), ry2);
 
-  const rx3 = goog.ui.registry.getDefaultRenderer(FakeComponentX);
-  assertEquals(
-      'FakeComponentX\'s renderer must be unchanged',
-      FakeSingletonRenderer.getInstance(), rx3);
+    registry.setDefaultRenderer(FakeComponentY, FakeRenderer);
 
-  const ry3 = goog.ui.registry.getDefaultRenderer(FakeComponentY);
-  assertTrue(
-      'FakeComponentY must now have its own default renderer',
-      ry3 instanceof FakeRenderer);
+    const rx3 = registry.getDefaultRenderer(FakeComponentX);
+    assertEquals(
+        'FakeComponentX\'s renderer must be unchanged',
+        FakeSingletonRenderer.getInstance(), rx3);
 
-  assertThrows(
-      'Calling setDefaultRenderer with non-function component ' +
-          'must throw error',
-      function() {
-        goog.ui.registry.setDefaultRenderer('Not function', FakeRenderer);
-      });
+    const ry3 = registry.getDefaultRenderer(FakeComponentY);
+    assertTrue(
+        'FakeComponentY must now have its own default renderer',
+        ry3 instanceof FakeRenderer);
 
-  assertThrows(
-      'Calling setDefaultRenderer with non-function renderer ' +
-          'must throw error',
-      function() {
-        goog.ui.registry.setDefaultRenderer(FakeComponentX, 'Not function');
-      });
-}
+    assertThrows(
+        'Calling setDefaultRenderer with non-function component ' +
+            'must throw error',
+        () => {
+          registry.setDefaultRenderer('Not function', FakeRenderer);
+        });
 
-function testGetDecoratorByClassName() {
-  const dx1 = goog.ui.registry.getDecoratorByClassName('fake-component-x');
-  const dx2 = goog.ui.registry.getDecoratorByClassName('fake-component-x');
-  assertTrue(
-      'fake-component-x must be decorated by a FakeComponentX',
-      dx1 instanceof FakeComponentX);
-  assertNotEquals(
-      'Each call to getDecoratorByClassName must return a ' +
-          'new FakeComponentX instance',
-      dx1, dx2);
+    assertThrows(
+        'Calling setDefaultRenderer with non-function renderer ' +
+            'must throw error',
+        () => {
+          registry.setDefaultRenderer(FakeComponentX, 'Not function');
+        });
+  },
 
-  const dy1 = goog.ui.registry.getDecoratorByClassName('fake-component-y');
-  const dy2 = goog.ui.registry.getDecoratorByClassName('fake-component-y');
-  assertTrue(
-      'fake-component-y must be decorated by a FakeComponentY',
-      dy1 instanceof FakeComponentY);
-  assertNotEquals(
-      'Each call to getDecoratorByClassName must return a ' +
-          'new FakeComponentY instance',
-      dy1, dy2);
+  testGetDecoratorByClassName() {
+    const dx1 = registry.getDecoratorByClassName('fake-component-x');
+    const dx2 = registry.getDecoratorByClassName('fake-component-x');
+    assertTrue(
+        'fake-component-x must be decorated by a FakeComponentX',
+        dx1 instanceof FakeComponentX);
+    assertNotEquals(
+        'Each call to getDecoratorByClassName must return a ' +
+            'new FakeComponentX instance',
+        dx1, dx2);
 
-  assertNull(
-      'getDecoratorByClassName must return null for unknown class',
-      goog.ui.registry.getDecoratorByClassName('fake-component-z'));
-  assertNull(
-      'getDecoratorByClassName must return null for empty string',
-      goog.ui.registry.getDecoratorByClassName(''));
-}
+    const dy1 = registry.getDecoratorByClassName('fake-component-y');
+    const dy2 = registry.getDecoratorByClassName('fake-component-y');
+    assertTrue(
+        'fake-component-y must be decorated by a FakeComponentY',
+        dy1 instanceof FakeComponentY);
+    assertNotEquals(
+        'Each call to getDecoratorByClassName must return a ' +
+            'new FakeComponentY instance',
+        dy1, dy2);
 
-function testSetDecoratorByClassName() {
-  let dx1;
-  let dx2;
+    assertNull(
+        'getDecoratorByClassName must return null for unknown class',
+        registry.getDecoratorByClassName('fake-component-z'));
+    assertNull(
+        'getDecoratorByClassName must return null for empty string',
+        registry.getDecoratorByClassName(''));
+  },
 
-  dx1 = goog.ui.registry.getDecoratorByClassName('fake-component-x');
-  assertTrue(
-      'fake-component-x must be decorated by a FakeComponentX',
-      dx1 instanceof FakeComponentX);
-  goog.ui.registry.setDecoratorByClassName(
-      'fake-component-x', function() { return new UnknownComponent(); });
-  dx2 = goog.ui.registry.getDecoratorByClassName('fake-component-x');
-  assertTrue(
-      'fake-component-x must now be decorated by UnknownComponent',
-      dx2 instanceof UnknownComponent);
+  testSetDecoratorByClassName() {
+    let dx1;
+    let dx2;
 
-  assertThrows(
-      'Calling setDecoratorByClassName with invalid class name ' +
-          'must throw error',
-      function() {
-        goog.ui.registry.setDecoratorByClassName(
-            '', function() { return new UnknownComponent(); });
-      });
+    dx1 = registry.getDecoratorByClassName('fake-component-x');
+    assertTrue(
+        'fake-component-x must be decorated by a FakeComponentX',
+        dx1 instanceof FakeComponentX);
+    registry.setDecoratorByClassName(
+        'fake-component-x', () => new UnknownComponent());
+    dx2 = registry.getDecoratorByClassName('fake-component-x');
+    assertTrue(
+        'fake-component-x must now be decorated by UnknownComponent',
+        dx2 instanceof UnknownComponent);
 
-  assertThrows(
-      'Calling setDecoratorByClassName with non-function ' +
-          'decorator must throw error',
-      function() {
-        goog.ui.registry.setDecoratorByClassName(
-            'fake-component-x', 'Not function');
-      });
-}
+    assertThrows(
+        'Calling setDecoratorByClassName with invalid class name ' +
+            'must throw error',
+        () => {
+          registry.setDecoratorByClassName('', () => new UnknownComponent());
+        });
 
-function testGetDecorator() {
-  const dx = goog.ui.registry.getDecorator(document.getElementById('x'));
-  assertTrue(
-      'Decorator for element with fake-component-x class must be ' +
-          'a FakeComponentX',
-      dx instanceof FakeComponentX);
+    assertThrows(
+        'Calling setDecoratorByClassName with non-function ' +
+            'decorator must throw error',
+        () => {
+          registry.setDecoratorByClassName('fake-component-x', 'Not function');
+        });
+  },
 
-  const dy = goog.ui.registry.getDecorator(document.getElementById('y'));
-  assertTrue(
-      'Decorator for element with fake-component-y class must be ' +
-          'a FakeComponentY',
-      dy instanceof FakeComponentY);
+  testGetDecorator() {
+    const dx = registry.getDecorator(document.getElementById('x'));
+    assertTrue(
+        'Decorator for element with fake-component-x class must be ' +
+            'a FakeComponentX',
+        dx instanceof FakeComponentX);
 
-  const dz = goog.ui.registry.getDecorator(document.getElementById('z'));
-  assertNull('Decorator for element with unknown class must be null', dz);
+    const dy = registry.getDecorator(document.getElementById('y'));
+    assertTrue(
+        'Decorator for element with fake-component-y class must be ' +
+            'a FakeComponentY',
+        dy instanceof FakeComponentY);
 
-  const du = goog.ui.registry.getDecorator(document.getElementById('u'));
-  assertNull('Decorator for element without CSS class must be null', du);
-}
+    const dz = registry.getDecorator(document.getElementById('z'));
+    assertNull('Decorator for element with unknown class must be null', dz);
 
-function testReset() {
-  assertNotEquals(
-      'Some renderers must be registered', 0,
-      goog.object.getCount(goog.ui.registry.defaultRenderers_));
-  assertNotEquals(
-      'Some decorators must be registered', 0,
-      goog.object.getCount(goog.ui.registry.decoratorFunctions_));
+    const du = registry.getDecorator(document.getElementById('u'));
+    assertNull('Decorator for element without CSS class must be null', du);
+  },
 
-  goog.ui.registry.reset();
+  testReset() {
+    assertNotEquals(
+        'Some renderers must be registered', 0,
+        googObject.getCount(registry.defaultRenderers_));
+    assertNotEquals(
+        'Some decorators must be registered', 0,
+        googObject.getCount(registry.decoratorFunctions_));
 
-  assertTrue(
-      'No renderers must be registered',
-      goog.object.isEmpty(goog.ui.registry.defaultRenderers_));
-  assertTrue(
-      'No decorators must be registered',
-      goog.object.isEmpty(goog.ui.registry.decoratorFunctions_));
-}
+    registry.reset();
+
+    assertTrue(
+        'No renderers must be registered',
+        googObject.isEmpty(registry.defaultRenderers_));
+    assertTrue(
+        'No decorators must be registered',
+        googObject.isEmpty(registry.decoratorFunctions_));
+  },
+});

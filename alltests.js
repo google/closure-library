@@ -636,7 +636,6 @@ var _allTests = [
   'closure/goog/collections/sets_test.html',
   'closure/goog/proto/serializer_test.html',
   'closure/goog/dom/classes_quirks_test.html',
-  'closure/goog/editor/seamlessfield_quirks_test.html',
   'closure/goog/style/style_quirks_test.html',
   'closure/goog/useragent/useragent_quirks_test.html'
 ];

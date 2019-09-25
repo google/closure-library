@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.MockControlTest');
-goog.setTestOnly('goog.testing.MockControlTest');
+goog.module('goog.testing.MockControlTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.Mock');
-goog.require('goog.testing.MockControl');
-goog.require('goog.testing.jsunit');
+const Mock = goog.require('goog.testing.Mock');
+const MockControl = goog.require('goog.testing.MockControl');
+const testSuite = goog.require('goog.testing.testSuite');
 
 // Emulate the behavior of a mock.
-function MockMock() {
-  this.replayCalled = false;
-  this.resetCalled = false;
-  this.verifyCalled = false;
-  this.tearDownCalled = false;
+class MockMock {
+  constructor() {
+    this.replayCalled = false;
+    this.resetCalled = false;
+    this.verifyCalled = false;
+    this.tearDownCalled = false;
+  }
 }
 
 MockMock.prototype.$replay = function() {
@@ -39,79 +41,85 @@ MockMock.prototype.$verify = function() {
   this.verifyCalled = true;
 };
 
-function setUp() {
-  const mock = new goog.testing.Mock(MockMock);
-}
+testSuite({
+  setUp() {
+    const mock = new Mock(MockMock);
+  },
 
-function testAdd() {
-  const mockMock = new MockMock();
+  testAdd() {
+    const mockMock = new MockMock();
 
-  const control = new goog.testing.MockControl();
-  assertEquals(mockMock, control.addMock(mockMock));
-}
+    const control = new MockControl();
+    assertEquals(mockMock, control.addMock(mockMock));
+  },
 
-function testReplayAll() {
-  const mockMock1 = new MockMock();
-  const mockMock2 = new MockMock();
-  const mockMockExcluded = new MockMock();
+  testReplayAll() {
+    const mockMock1 = new MockMock();
+    const mockMock2 = new MockMock();
+    const mockMockExcluded = new MockMock();
 
-  const control = new goog.testing.MockControl();
-  control.addMock(mockMock1);
-  control.addMock(mockMock2);
+    const control = new MockControl();
+    control.addMock(mockMock1);
+    control.addMock(mockMock2);
 
-  control.$replayAll();
-  assertTrue(mockMock1.replayCalled);
-  assertTrue(mockMock2.replayCalled);
-  assertFalse(mockMockExcluded.replayCalled);
-}
+    control.$replayAll();
+    assertTrue(mockMock1.replayCalled);
+    assertTrue(mockMock2.replayCalled);
+    assertFalse(mockMockExcluded.replayCalled);
+  },
 
-function testResetAll() {
-  const mockMock1 = new MockMock();
-  const mockMock2 = new MockMock();
-  const mockMockExcluded = new MockMock();
+  testResetAll() {
+    const mockMock1 = new MockMock();
+    const mockMock2 = new MockMock();
+    const mockMockExcluded = new MockMock();
 
-  const control = new goog.testing.MockControl();
-  control.addMock(mockMock1);
-  control.addMock(mockMock2);
+    const control = new MockControl();
+    control.addMock(mockMock1);
+    control.addMock(mockMock2);
 
-  control.$resetAll();
-  assertTrue(mockMock1.resetCalled);
-  assertTrue(mockMock2.resetCalled);
-  assertFalse(mockMockExcluded.resetCalled);
-}
+    control.$resetAll();
+    assertTrue(mockMock1.resetCalled);
+    assertTrue(mockMock2.resetCalled);
+    assertFalse(mockMockExcluded.resetCalled);
+  },
 
-function testVerifyAll() {
-  const mockMock1 = new MockMock();
-  const mockMock2 = new MockMock();
-  const mockMockExcluded = new MockMock();
+  testVerifyAll() {
+    const mockMock1 = new MockMock();
+    const mockMock2 = new MockMock();
+    const mockMockExcluded = new MockMock();
 
-  const control = new goog.testing.MockControl();
-  control.addMock(mockMock1);
-  control.addMock(mockMock2);
+    const control = new MockControl();
+    control.addMock(mockMock1);
+    control.addMock(mockMock2);
 
-  control.$verifyAll();
-  assertTrue(mockMock1.verifyCalled);
-  assertTrue(mockMock2.verifyCalled);
-  assertFalse(mockMockExcluded.verifyCalled);
-}
+    control.$verifyAll();
+    assertTrue(mockMock1.verifyCalled);
+    assertTrue(mockMock2.verifyCalled);
+    assertFalse(mockMockExcluded.verifyCalled);
+  },
 
-function testTearDownAll() {
-  const mockMock1 = new MockMock();
-  const mockMock2 = new MockMock();
-  const mockMockExcluded = new MockMock();
+  testTearDownAll() {
+    const mockMock1 = new MockMock();
+    const mockMock2 = new MockMock();
+    const mockMockExcluded = new MockMock();
 
-  // $tearDown is optional.
-  mockMock2.$tearDown = function() { this.tearDownCalled = true; };
-  mockMockExcluded.$tearDown = function() { this.tearDownCalled = true; };
+    // $tearDown is optional.
+    mockMock2.$tearDown = function() {
+      this.tearDownCalled = true;
+    };
+    mockMockExcluded.$tearDown = function() {
+      this.tearDownCalled = true;
+    };
 
-  const control = new goog.testing.MockControl();
-  control.addMock(mockMock1);
-  control.addMock(mockMock2);
+    const control = new MockControl();
+    control.addMock(mockMock1);
+    control.addMock(mockMock2);
 
-  control.$tearDown();
+    control.$tearDown();
 
-  // mockMock2 has a tearDown method and is in the control.
-  assertTrue(mockMock2.tearDownCalled);
-  assertFalse(mockMock1.tearDownCalled);
-  assertFalse(mockMockExcluded.tearDownCalled);
-}
+    // mockMock2 has a tearDown method and is in the control.
+    assertTrue(mockMock2.tearDownCalled);
+    assertFalse(mockMock1.tearDownCalled);
+    assertFalse(mockMockExcluded.tearDownCalled);
+  },
+});

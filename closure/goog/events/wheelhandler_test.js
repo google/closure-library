@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.events.WheelHandlerTest');
-goog.setTestOnly('goog.events.WheelHandlerTest');
+goog.module('goog.events.WheelHandlerTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.events');
-goog.require('goog.events.BrowserEvent');
-goog.require('goog.events.WheelEvent');
-goog.require('goog.events.WheelHandler');
-goog.require('goog.string');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.events');
-goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
+const BrowserEvent = goog.require('goog.events.BrowserEvent');
+const EventsWheelEvent = goog.require('goog.events.WheelEvent');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const WheelHandler = goog.require('goog.events.WheelHandler');
+const dom = goog.require('goog.dom');
+const events = goog.require('goog.events');
+const googString = goog.require('goog.string');
+const testSuite = goog.require('goog.testing.testSuite');
+const testingEvents = goog.require('goog.testing.events');
+/** @suppress {extraRequire} */
+const userAgent = goog.require('goog.userAgent');
 
 let log;
-const stubs = new goog.testing.PropertyReplacer();
+const stubs = new PropertyReplacer();
 
 const PREFERRED_TYPE = 'wheel';
 const LEGACY_TYPE = 'mousewheel';
@@ -37,177 +37,26 @@ const GECKO_TYPE = 'DOMMouseScroll';
 const HORIZONTAL = 'h';
 const VERTICAL = 'v';
 
-const DeltaMode = goog.events.WheelEvent.DeltaMode;
+const DeltaMode = EventsWheelEvent.DeltaMode;
 
 let mouseWheelEvent;
 let mouseWheelEventRtl;
 let mouseWheelHandler;
 let mouseWheelHandlerRtl;
 
-function setUpPage() {
-  log = goog.dom.getElement('log');
-}
-
-function setUp() {
-  stubs.remove(goog, 'userAgent');
-  goog.userAgent = {
-    product: {
-      CHROME: false,
-      version: 0,
-      isVersion: function(version) {
-        return goog.string.compareVersions(this.version, version) >= 0;
-      }
-    },
-    GECKO: false,
-    IE: false,
-    version: 0,
-    isVersionOrHigher: function(version) {
-      return goog.string.compareVersions(this.version, version) >= 0;
-    }
-  };
-}
-
-function tearDown() {
-  stubs.reset();
-  goog.dispose(mouseWheelHandler);
-  goog.dispose(mouseWheelHandlerRtl);
-  mouseWheelHandlerRtl = null;
-  mouseWheelHandler = null;
-  mouseWheelEvent = null;
-  mouseWheelEventRtl = null;
-}
-
-function tearDownPage() {
-  // Create interactive demo.
-  mouseWheelHandler = new goog.events.WheelHandler(document.body);
-
-  goog.events.listen(
-      mouseWheelHandler, goog.events.WheelEvent.EventType.WHEEL, function(e) {
-        log.innerHTML += goog.string.subs(
-            '<br />(deltaX, deltaY): (%s, %s)', e.deltaX, e.deltaY);
-      });
-}
-
-function testGetDomEventType() {
-  // Defaults to legacy non-gecko event.
-  assertEquals(LEGACY_TYPE, goog.events.WheelHandler.getDomEventType());
-
-  // Gecko start to support wheel with version 17.
-  goog.userAgent.GECKO = true;
-  goog.userAgent.version = 16;
-  assertEquals(GECKO_TYPE, goog.events.WheelHandler.getDomEventType());
-  goog.userAgent.version = 17;
-  assertEquals(PREFERRED_TYPE, goog.events.WheelHandler.getDomEventType());
-  goog.userAgent.GECKO = false;
-
-  // IE started with version 9.
-  goog.userAgent.IE = true;
-  goog.userAgent.version = 8;
-  assertEquals(LEGACY_TYPE, goog.events.WheelHandler.getDomEventType());
-  goog.userAgent.version = 9;
-  assertEquals(PREFERRED_TYPE, goog.events.WheelHandler.getDomEventType());
-  goog.userAgent.IE = false;
-
-  // Chrome started with version 31.
-  goog.userAgent.product.CHROME = true;
-  goog.userAgent.product.version = 30;
-  assertEquals(LEGACY_TYPE, goog.events.WheelHandler.getDomEventType());
-  goog.userAgent.product.version = 31;
-  assertEquals(PREFERRED_TYPE, goog.events.WheelHandler.getDomEventType());
-  goog.userAgent.product.CHROME = false;
-}
-
-function testPreferredStyleWheel() {
-  // Enable 'wheel'
-  goog.userAgent.IE = true;
-  goog.userAgent.version = 9;
-  createHandlerAndListen();
-
-  handleEvent(createFakePreferredEvent(DeltaMode.PIXEL, 10, 20, 30));
-  assertWheelEvent(DeltaMode.PIXEL, 10, 20, 30);
-  assertPixelDeltas(1);
-
-  handleEvent(createFakePreferredEvent(DeltaMode.LINE, 10, 20, 30));
-  assertWheelEvent(DeltaMode.LINE, 10, 20, 30);
-  assertPixelDeltas(15);
-
-  handleEvent(createFakePreferredEvent(DeltaMode.PAGE, 10, 20, 30));
-  assertWheelEvent(DeltaMode.PAGE, 10, 20, 30);
-  assertPixelDeltas(30 * 15);
-}
-
-function testLegacyStyleWheel() {
-  // 'mousewheel' enabled by default
-  createHandlerAndListen();
-
-  // Test one dimensional.
-  handleEvent(createFakeLegacyEvent(10));
-  assertWheelEvent(DeltaMode.PIXEL, 0, -10, 0);
-  assertPixelDeltas(1);
-
-  // Test two dimensional.
-  handleEvent(createFakeLegacyEvent(/* ignored */ 10, 20, 30));
-  assertWheelEvent(DeltaMode.PIXEL, -20, -30, 0);
-  assertPixelDeltas(1);
-}
-
-function testLegacyGeckoStyleWheel() {
-  goog.userAgent.GECKO = true;
-  createHandlerAndListen();
-
-  // Test no axis.
-  handleEvent(createFakeGeckoEvent(10));
-  assertWheelEvent(DeltaMode.LINE, 0, 10, 0);
-  assertPixelDeltas(15);
-
-  // Vertical axis.
-  handleEvent(createFakeGeckoEvent(10, VERTICAL));
-  assertWheelEvent(DeltaMode.LINE, 0, 10, 0);
-  assertPixelDeltas(15);
-
-  // Horizontal axis.
-  handleEvent(createFakeGeckoEvent(10, HORIZONTAL));
-  assertWheelEvent(DeltaMode.LINE, 10, 0, 0);
-  assertPixelDeltas(15);
-}
-
-function testLegacyIeStyleWheel() {
-  goog.userAgent.IE = true;
-
-  createHandlerAndListen();
-
-  // Non-gecko, non-webkit events get wheelDelta divided by -40 to get detail.
-  handleEvent(createFakeLegacyEvent(120));
-  assertWheelEvent(DeltaMode.PIXEL, 0, -120, 0);
-
-  handleEvent(createFakeLegacyEvent(-120));
-  assertWheelEvent(DeltaMode.PIXEL, 0, 120, 0);
-
-  handleEvent(createFakeLegacyEvent(1200));
-  assertWheelEvent(DeltaMode.PIXEL, 0, -1200, 0);
-}
-
-function testNullBody() {
-  goog.userAgent.IE = true;
-  const documentObjectWithNoBody = {};
-  goog.testing.events.mixinListenable(documentObjectWithNoBody);
-  mouseWheelHandler = new goog.events.WheelHandler(documentObjectWithNoBody);
-}
-
 // Be sure to call this after setting up goog.userAgent mock and not before.
 function createHandlerAndListen() {
-  mouseWheelHandler = new goog.events.WheelHandler(goog.dom.getElement('foo'));
+  mouseWheelHandler = new WheelHandler(dom.getElement('foo'));
 
-  goog.events.listen(
-      mouseWheelHandler, goog.events.WheelEvent.EventType.WHEEL,
-      function(e) { mouseWheelEvent = e; });
+  events.listen(mouseWheelHandler, EventsWheelEvent.EventType.WHEEL, (e) => {
+    mouseWheelEvent = e;
+  });
 
-  mouseWheelHandlerRtl =
-      new goog.events.WheelHandler(goog.dom.getElement('fooRtl'));
+  mouseWheelHandlerRtl = new WheelHandler(dom.getElement('fooRtl'));
 
-  goog.events.listen(
-      mouseWheelHandlerRtl, goog.events.WheelEvent.EventType.WHEEL,
-      function(e) { mouseWheelEventRtl = e; });
+  events.listen(mouseWheelHandlerRtl, EventsWheelEvent.EventType.WHEEL, (e) => {
+    mouseWheelEventRtl = e;
+  });
 }
 
 function handleEvent(event) {
@@ -219,7 +68,7 @@ function assertWheelEvent(deltaMode, deltaX, deltaY, deltaZ) {
   assertTrue('event should be non-null', !!mouseWheelEvent);
   assertTrue(
       'event should have correct JS type',
-      mouseWheelEvent instanceof goog.events.WheelEvent);
+      mouseWheelEvent instanceof EventsWheelEvent);
   assertEquals(
       'event should have correct deltaMode property', deltaMode,
       mouseWheelEvent.deltaMode);
@@ -237,7 +86,7 @@ function assertWheelEvent(deltaMode, deltaX, deltaY, deltaZ) {
   assertTrue('event should be non-null', !!mouseWheelEventRtl);
   assertTrue(
       'event should have correct JS type',
-      mouseWheelEventRtl instanceof goog.events.WheelEvent);
+      mouseWheelEventRtl instanceof EventsWheelEvent);
   assertEquals(
       'event should have correct deltaMode property', deltaMode,
       mouseWheelEventRtl.deltaMode);
@@ -273,11 +122,10 @@ function createFakePreferredEvent(
     deltaMode: opt_deltaMode,
     deltaX: opt_deltaX,
     deltaY: opt_deltaY,
-    deltaZ: opt_deltaZ
+    deltaZ: opt_deltaZ,
   };
-  return new goog.events.BrowserEvent(event);
+  return new BrowserEvent(event);
 }
-
 
 function createFakeLegacyEvent(
     opt_wheelDelta, opt_wheelDeltaX, opt_wheelDeltaY) {
@@ -285,9 +133,9 @@ function createFakeLegacyEvent(
     type: LEGACY_TYPE,
     wheelDelta: opt_wheelDelta,
     wheelDeltaX: opt_wheelDeltaX,
-    wheelDeltaY: opt_wheelDeltaY
+    wheelDeltaY: opt_wheelDeltaY,
   };
-  return new goog.events.BrowserEvent(event);
+  return new BrowserEvent(event);
 }
 
 function createFakeGeckoEvent(opt_detail, opt_axis) {
@@ -296,7 +144,157 @@ function createFakeGeckoEvent(opt_detail, opt_axis) {
     detail: opt_detail,
     axis: opt_axis,
     HORIZONTAL_AXIS: HORIZONTAL,
-    VERTICAL_AXIS: VERTICAL
+    VERTICAL_AXIS: VERTICAL,
   };
-  return new goog.events.BrowserEvent(event);
+  return new BrowserEvent(event);
 }
+testSuite({
+  setUpPage() {
+    log = dom.getElement('log');
+  },
+
+  setUp() {
+    stubs.remove(goog, 'userAgent');
+    goog.userAgent = {
+      product: {
+        CHROME: false,
+        version: 0,
+        isVersion: function(version) {
+          return googString.compareVersions(this.version, version) >= 0;
+        },
+      },
+      GECKO: false,
+      IE: false,
+      version: 0,
+      isVersionOrHigher: function(version) {
+        return googString.compareVersions(this.version, version) >= 0;
+      },
+    };
+  },
+
+  tearDown() {
+    stubs.reset();
+    goog.dispose(mouseWheelHandler);
+    goog.dispose(mouseWheelHandlerRtl);
+    mouseWheelHandlerRtl = null;
+    mouseWheelHandler = null;
+    mouseWheelEvent = null;
+    mouseWheelEventRtl = null;
+  },
+
+  tearDownPage() {
+    // Create interactive demo.
+    mouseWheelHandler = new WheelHandler(document.body);
+
+    events.listen(mouseWheelHandler, EventsWheelEvent.EventType.WHEEL, (e) => {
+      log.innerHTML += googString.subs(
+          '<br />(deltaX, deltaY): (%s, %s)', e.deltaX, e.deltaY);
+    });
+  },
+
+  testGetDomEventType() {
+    // Defaults to legacy non-gecko event.
+    assertEquals(LEGACY_TYPE, WheelHandler.getDomEventType());
+
+    // Gecko start to support wheel with version 17.
+    goog.userAgent.GECKO = true;
+    goog.userAgent.version = 16;
+    assertEquals(GECKO_TYPE, WheelHandler.getDomEventType());
+    goog.userAgent.version = 17;
+    assertEquals(PREFERRED_TYPE, WheelHandler.getDomEventType());
+    goog.userAgent.GECKO = false;
+
+    // IE started with version 9.
+    goog.userAgent.IE = true;
+    goog.userAgent.version = 8;
+    assertEquals(LEGACY_TYPE, WheelHandler.getDomEventType());
+    goog.userAgent.version = 9;
+    assertEquals(PREFERRED_TYPE, WheelHandler.getDomEventType());
+    goog.userAgent.IE = false;
+
+    // Chrome started with version 31.
+    goog.userAgent.product.CHROME = true;
+    goog.userAgent.product.version = 30;
+    assertEquals(LEGACY_TYPE, WheelHandler.getDomEventType());
+    goog.userAgent.product.version = 31;
+    assertEquals(PREFERRED_TYPE, WheelHandler.getDomEventType());
+    goog.userAgent.product.CHROME = false;
+  },
+
+  testPreferredStyleWheel() {
+    // Enable 'wheel'
+    goog.userAgent.IE = true;
+    goog.userAgent.version = 9;
+    createHandlerAndListen();
+
+    handleEvent(createFakePreferredEvent(DeltaMode.PIXEL, 10, 20, 30));
+    assertWheelEvent(DeltaMode.PIXEL, 10, 20, 30);
+    assertPixelDeltas(1);
+
+    handleEvent(createFakePreferredEvent(DeltaMode.LINE, 10, 20, 30));
+    assertWheelEvent(DeltaMode.LINE, 10, 20, 30);
+    assertPixelDeltas(15);
+
+    handleEvent(createFakePreferredEvent(DeltaMode.PAGE, 10, 20, 30));
+    assertWheelEvent(DeltaMode.PAGE, 10, 20, 30);
+    assertPixelDeltas(30 * 15);
+  },
+
+  testLegacyStyleWheel() {
+    // 'mousewheel' enabled by default
+    createHandlerAndListen();
+
+    // Test one dimensional.
+    handleEvent(createFakeLegacyEvent(10));
+    assertWheelEvent(DeltaMode.PIXEL, 0, -10, 0);
+    assertPixelDeltas(1);
+
+    // Test two dimensional.
+    handleEvent(createFakeLegacyEvent(/* ignored */ 10, 20, 30));
+    assertWheelEvent(DeltaMode.PIXEL, -20, -30, 0);
+    assertPixelDeltas(1);
+  },
+
+  testLegacyGeckoStyleWheel() {
+    goog.userAgent.GECKO = true;
+    createHandlerAndListen();
+
+    // Test no axis.
+    handleEvent(createFakeGeckoEvent(10));
+    assertWheelEvent(DeltaMode.LINE, 0, 10, 0);
+    assertPixelDeltas(15);
+
+    // Vertical axis.
+    handleEvent(createFakeGeckoEvent(10, VERTICAL));
+    assertWheelEvent(DeltaMode.LINE, 0, 10, 0);
+    assertPixelDeltas(15);
+
+    // Horizontal axis.
+    handleEvent(createFakeGeckoEvent(10, HORIZONTAL));
+    assertWheelEvent(DeltaMode.LINE, 10, 0, 0);
+    assertPixelDeltas(15);
+  },
+
+  testLegacyIeStyleWheel() {
+    goog.userAgent.IE = true;
+
+    createHandlerAndListen();
+
+    // Non-gecko, non-webkit events get wheelDelta divided by -40 to get detail.
+    handleEvent(createFakeLegacyEvent(120));
+    assertWheelEvent(DeltaMode.PIXEL, 0, -120, 0);
+
+    handleEvent(createFakeLegacyEvent(-120));
+    assertWheelEvent(DeltaMode.PIXEL, 0, 120, 0);
+
+    handleEvent(createFakeLegacyEvent(1200));
+    assertWheelEvent(DeltaMode.PIXEL, 0, -1200, 0);
+  },
+
+  testNullBody() {
+    goog.userAgent.IE = true;
+    const documentObjectWithNoBody = {};
+    testingEvents.mixinListenable(documentObjectWithNoBody);
+    mouseWheelHandler = new WheelHandler(documentObjectWithNoBody);
+  },
+});

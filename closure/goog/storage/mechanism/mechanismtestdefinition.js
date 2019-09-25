@@ -26,3 +26,4 @@ goog.setTestOnly('goog.storage.mechanism.mechanismTestDefinition');
 var mechanism;
 var mechanism_shared;
 var mechanism_separate;
+var minimumQuota;
