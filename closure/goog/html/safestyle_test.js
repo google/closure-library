@@ -142,6 +142,12 @@ testSuite({
         {'grid-template-columns': 'repeat(3, [start] 100px [end])'});
   },
 
+  testCreate_allowsCubicBezier() {
+    assertCreateEquals(
+        'transition-timing-function:cubic-bezier(0.26, 0.86, 0.44, 0.95);',
+        {'transition-timing-function': 'cubic-bezier(0.26, 0.86, 0.44, 0.95)'});
+  },
+
   testCreate_allowsMinmax() {
     assertCreateEquals(
         'grid-template-columns:minmax(max-content, 50px) 20px;',
