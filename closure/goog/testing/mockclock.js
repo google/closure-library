@@ -215,6 +215,16 @@ goog.testing.MockClock.prototype.install = function() {
 
 
 /**
+ * Unmocks the Date.now() function for tests that aren't expecting it to be
+ * mocked. See b/141619890.
+ * @deprecated
+ */
+goog.testing.MockClock.prototype.unmockDateNow = function() {
+  // TODO(b/141619890): Implement.
+};
+
+
+/**
  * Installs the mocks for requestAnimationFrame and cancelRequestAnimationFrame.
  * @private
  */
