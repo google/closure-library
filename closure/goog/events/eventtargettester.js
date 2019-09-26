@@ -167,6 +167,12 @@ class TestEvent extends GoogEventsEvent {
 }
 
 exports = {
+  assertListenerIsCalled,
+  assertNoOtherListenerIsCalled,
+  createListener,
+  times,
+  resetListeners,
+
   /** @return {!Array<?>} */
   getListeners() {
     return listeners;
