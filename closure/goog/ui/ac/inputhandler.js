@@ -549,7 +549,7 @@ goog.ui.ac.InputHandler.prototype.selectRow = function(row, opt_multi) {
  */
 goog.ui.ac.InputHandler.prototype.setTokenText = function(
     tokenText, opt_multi) {
-  if (goog.isDef(opt_multi) ? opt_multi : this.multi_) {
+  if (opt_multi !== undefined ? opt_multi : this.multi_) {
     var index = this.getTokenIndex_(this.getValue(), this.getCursorPosition());
 
     // Break up the current input string.
@@ -643,7 +643,7 @@ goog.ui.ac.InputHandler.prototype.disposeInternal = function() {
 goog.ui.ac.InputHandler.prototype.setSeparators = function(
     separators, opt_defaultSeparators) {
   this.separators_ = separators;
-  this.defaultSeparator_ = goog.isDefAndNotNull(opt_defaultSeparators) ?
+  this.defaultSeparator_ = (opt_defaultSeparators != null) ?
       opt_defaultSeparators :
       this.separators_.substring(0, 1);
 

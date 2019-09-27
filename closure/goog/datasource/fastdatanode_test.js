@@ -59,7 +59,7 @@ testSuite({
   testGetChildNodeValue() {
     const node = new FastDataNode(simpleObject, 'Simple');
     const value = node.getChildNodeValue('Name');
-    assert(goog.isString(value));
+    assert(typeof value === 'string');
     assertEquals('Jon Doe', value);
   },
 

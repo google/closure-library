@@ -54,7 +54,7 @@ goog.dom.classes.get = function(element) {
   // Some types of elements don't have a className in IE (e.g. iframes).
   // Furthermore, in Firefox, className is not a string when the element is
   // an SVG element.
-  return goog.isString(className) && className.match(/\S+/g) || [];
+  return typeof className === 'string' && className.match(/\S+/g) || [];
 };
 
 
@@ -174,13 +174,13 @@ goog.dom.classes.swap = function(element, fromClass, toClass) {
  */
 goog.dom.classes.addRemove = function(element, classesToRemove, classesToAdd) {
   var classes = goog.dom.classes.get(element);
-  if (goog.isString(classesToRemove)) {
+  if (typeof classesToRemove === 'string') {
     goog.array.remove(classes, classesToRemove);
   } else if (goog.isArray(classesToRemove)) {
     classes = goog.dom.classes.getDifference_(classes, classesToRemove);
   }
 
-  if (goog.isString(classesToAdd) &&
+  if (typeof classesToAdd === 'string' &&
       !goog.array.contains(classes, classesToAdd)) {
     classes.push(classesToAdd);
   } else if (goog.isArray(classesToAdd)) {

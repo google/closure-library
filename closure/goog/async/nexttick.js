@@ -211,7 +211,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
     var head = {};
     var tail = head;
     channel['port1'].onmessage = function() {
-      if (goog.isDef(head.next)) {
+      if (head.next !== undefined) {
         head = head.next;
         var cb = head.cb;
         head.cb = null;

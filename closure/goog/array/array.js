@@ -106,9 +106,9 @@ goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
           (opt_fromIndex < 0 ? Math.max(0, arr.length + opt_fromIndex) :
                                opt_fromIndex);
 
-      if (goog.isString(arr)) {
+      if (typeof arr === 'string') {
         // Array.prototype.indexOf uses === so only strings should be found.
-        if (!goog.isString(obj) || obj.length != 1) {
+        if (typeof obj !== 'string' || obj.length != 1) {
           return -1;
         }
         return arr.indexOf(obj, fromIndex);
@@ -151,9 +151,9 @@ goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
         fromIndex = Math.max(0, arr.length + fromIndex);
       }
 
-      if (goog.isString(arr)) {
+      if (typeof arr === 'string') {
         // Array.prototype.lastIndexOf uses === so only strings should be found.
-        if (!goog.isString(obj) || obj.length != 1) {
+        if (typeof obj !== 'string' || obj.length != 1) {
           return -1;
         }
         return arr.lastIndexOf(obj, fromIndex);
@@ -187,7 +187,7 @@ goog.array.forEach = goog.NATIVE_ARRAY_PROTOTYPES &&
     } :
     function(arr, f, opt_obj) {
       var l = arr.length;  // must be fixed during loop... see docs
-      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
       for (var i = 0; i < l; i++) {
         if (i in arr2) {
           f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
@@ -212,7 +212,7 @@ goog.array.forEach = goog.NATIVE_ARRAY_PROTOTYPES &&
  */
 goog.array.forEachRight = function(arr, f, opt_obj) {
   var l = arr.length;  // must be fixed during loop... see docs
-  var arr2 = goog.isString(arr) ? arr.split('') : arr;
+  var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
   for (var i = l - 1; i >= 0; --i) {
     if (i in arr2) {
       f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
@@ -251,7 +251,7 @@ goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
       var l = arr.length;  // must be fixed during loop... see docs
       var res = [];
       var resLength = 0;
-      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
       for (var i = 0; i < l; i++) {
         if (i in arr2) {
           var val = arr2[i];  // in case f mutates arr2
@@ -290,7 +290,7 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
     function(arr, f, opt_obj) {
       var l = arr.length;  // must be fixed during loop... see docs
       var res = new Array(l);
-      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
       for (var i = 0; i < l; i++) {
         if (i in arr2) {
           res[i] = f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
@@ -413,7 +413,7 @@ goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES &&
     } :
     function(arr, f, opt_obj) {
       var l = arr.length;  // must be fixed during loop... see docs
-      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
       for (var i = 0; i < l; i++) {
         if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
           return true;
@@ -449,7 +449,7 @@ goog.array.every = goog.NATIVE_ARRAY_PROTOTYPES &&
     } :
     function(arr, f, opt_obj) {
       var l = arr.length;  // must be fixed during loop... see docs
-      var arr2 = goog.isString(arr) ? arr.split('') : arr;
+      var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
       for (var i = 0; i < l; i++) {
         if (i in arr2 && !f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
           return false;
@@ -497,7 +497,7 @@ goog.array.count = function(arr, f, opt_obj) {
  */
 goog.array.find = function(arr, f, opt_obj) {
   var i = goog.array.findIndex(arr, f, opt_obj);
-  return i < 0 ? null : goog.isString(arr) ? arr.charAt(i) : arr[i];
+  return i < 0 ? null : typeof arr === 'string' ? arr.charAt(i) : arr[i];
 };
 
 
@@ -517,7 +517,7 @@ goog.array.find = function(arr, f, opt_obj) {
  */
 goog.array.findIndex = function(arr, f, opt_obj) {
   var l = arr.length;  // must be fixed during loop... see docs
-  var arr2 = goog.isString(arr) ? arr.split('') : arr;
+  var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
   for (var i = 0; i < l; i++) {
     if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
       return i;
@@ -543,7 +543,7 @@ goog.array.findIndex = function(arr, f, opt_obj) {
  */
 goog.array.findRight = function(arr, f, opt_obj) {
   var i = goog.array.findIndexRight(arr, f, opt_obj);
-  return i < 0 ? null : goog.isString(arr) ? arr.charAt(i) : arr[i];
+  return i < 0 ? null : typeof arr === 'string' ? arr.charAt(i) : arr[i];
 };
 
 
@@ -563,7 +563,7 @@ goog.array.findRight = function(arr, f, opt_obj) {
  */
 goog.array.findIndexRight = function(arr, f, opt_obj) {
   var l = arr.length;  // must be fixed during loop... see docs
-  var arr2 = goog.isString(arr) ? arr.split('') : arr;
+  var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
   for (var i = l - 1; i >= 0; i--) {
     if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
       return i;
@@ -1387,7 +1387,7 @@ goog.array.bucket = function(array, sorter, opt_obj) {
   for (var i = 0; i < array.length; i++) {
     var value = array[i];
     var key = sorter.call(/** @type {?} */ (opt_obj), value, i, array);
-    if (goog.isDef(key)) {
+    if (key !== undefined) {
       // Push the value to the right bucket, creating it if necessary.
       var bucket = buckets[key] || (buckets[key] = []);
       bucket.push(value);

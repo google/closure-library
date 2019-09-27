@@ -245,8 +245,7 @@ goog.ui.media.MediaRenderer.prototype.createDom = function(control) {
     // seems to exist in some cases.
     var size = thumbnail.getSize();
 
-    if (size && goog.isDefAndNotNull(size.height) &&
-        goog.isDefAndNotNull(size.width)) {
+    if (size && size.height != null && size.width != null) {
       goog.style.setSize(thumbnailElement, size);
     }
     domHelper.appendChild(div, thumbnailElement);

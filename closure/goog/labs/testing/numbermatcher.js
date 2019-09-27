@@ -39,7 +39,7 @@ goog.labs.testing.AnyNumberMatcher = function() {};
 
 /** @override */
 goog.labs.testing.AnyNumberMatcher.prototype.matches = function(actualValue) {
-  return goog.isNumber(actualValue);
+  return typeof actualValue === 'number';
 };
 
 

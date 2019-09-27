@@ -754,7 +754,7 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
       value = goog.html.TrustedResourceUrl.unwrap(value);
     } else if (value instanceof goog.html.SafeUrl) {
       value = goog.html.SafeUrl.unwrap(value);
-    } else if (goog.isString(value)) {
+    } else if (typeof value === 'string') {
       value = goog.html.SafeUrl.sanitize(value).getTypedStringValue();
     } else {
       throw new Error(
@@ -776,7 +776,7 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
   }
 
   goog.asserts.assert(
-      goog.isString(value) || goog.isNumber(value),
+      typeof value === 'string' || typeof value === 'number',
       'String or number value expected, got ' + (typeof value) +
           ' with value: ' + value);
   return name + '="' + goog.string.internal.htmlEscape(String(value)) + '"';
@@ -957,7 +957,7 @@ goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse = function(
   result += goog.html.SafeHtml.stringifyAttributes(tagName, opt_attributes);
 
   var content = opt_content;
-  if (!goog.isDefAndNotNull(content)) {
+  if (content == null) {
     content = [];
   } else if (!goog.isArray(content)) {
     content = [content];
@@ -1009,7 +1009,7 @@ goog.html.SafeHtml.stringifyAttributes = function(tagName, opt_attributes) {
                 '');
       }
       var value = opt_attributes[name];
-      if (!goog.isDefAndNotNull(value)) {
+      if (value == null) {
         continue;
       }
       result +=

@@ -357,7 +357,7 @@ goog.ui.Menu.prototype.setVisible = function(show, opt_force, opt_e) {
       this.allowAutoFocus_) {
     this.getKeyEventTarget().focus();
   }
-  if (show && opt_e && goog.isNumber(opt_e.clientX)) {
+  if (show && opt_e && typeof opt_e.clientX === 'number') {
     this.openingCoords = new goog.math.Coordinate(opt_e.clientX, opt_e.clientY);
   } else {
     this.openingCoords = null;

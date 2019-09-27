@@ -321,8 +321,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.clear = function(opt_topic) {
 /** @override */
 goog.labs.pubsub.BroadcastPubSub.prototype.disposeInternal = function() {
   goog.array.remove(goog.labs.pubsub.BroadcastPubSub.instances_, this);
-  if (goog.labs.pubsub.BroadcastPubSub.IS_IE8_ &&
-      goog.isDefAndNotNull(this.storage_) &&
+  if (goog.labs.pubsub.BroadcastPubSub.IS_IE8_ && this.storage_ != null &&
       goog.labs.pubsub.BroadcastPubSub.instances_.length == 0) {
     this.storage_.remove(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_);
   }
@@ -407,7 +406,7 @@ goog.labs.pubsub.BroadcastPubSub.IS_IE8_ =
  * @private
  */
 goog.labs.pubsub.BroadcastPubSub.validateIe8Event_ = function(obj) {
-  if (goog.isObject(obj) && goog.isNumber(obj['timestamp']) &&
+  if (goog.isObject(obj) && typeof obj['timestamp'] === 'number' &&
       goog.array.every(obj['args'], goog.isString)) {
     return {'timestamp': obj['timestamp'], 'args': obj['args']};
   }
@@ -499,7 +498,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.handleIe8StorageEvent_ = function() {
     // storage object is affected by a change in localStorage. Chrome, Firefox,
     // and modern IE don't dispatch the event to the window which made the
     // change. This code simulates that behavior in IE8.
-    if (!(goog.isString(key) &&
+    if (!(typeof key === 'string' &&
           goog.string.startsWith(
               key, goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_PREFIX_))) {
       continue;

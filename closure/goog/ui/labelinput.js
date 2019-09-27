@@ -110,7 +110,7 @@ goog.ui.LabelInput.supportsPlaceholder_;
  * @private
  */
 goog.ui.LabelInput.isPlaceholderSupported_ = function() {
-  if (!goog.isDefAndNotNull(goog.ui.LabelInput.supportsPlaceholder_)) {
+  if (goog.ui.LabelInput.supportsPlaceholder_ == null) {
     goog.ui.LabelInput.supportsPlaceholder_ =
         ('placeholder' in goog.dom.createElement(goog.dom.TagName.INPUT));
   }

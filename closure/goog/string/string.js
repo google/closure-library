@@ -1056,7 +1056,8 @@ goog.string.repeat = (String.prototype.repeat) ? function(string, length) {
  * @return {string} `num` as a string with the given options.
  */
 goog.string.padNumber = function(num, length, opt_precision) {
-  var s = goog.isDef(opt_precision) ? num.toFixed(opt_precision) : String(num);
+  var s =
+      (opt_precision !== undefined) ? num.toFixed(opt_precision) : String(num);
   var index = s.indexOf('.');
   if (index == -1) {
     index = s.length;
@@ -1270,7 +1271,7 @@ goog.string.toSelectorCase = function(str) {
  * @return {string} String value in TitleCase form.
  */
 goog.string.toTitleCase = function(str, opt_delimiters) {
-  var delimiters = goog.isString(opt_delimiters) ?
+  var delimiters = (typeof opt_delimiters === 'string') ?
       goog.string.regExpEscape(opt_delimiters) :
       '\\s';
 
@@ -1327,7 +1328,7 @@ goog.string.parseInt = function(value) {
     value = String(value);
   }
 
-  if (goog.isString(value)) {
+  if (typeof value === 'string') {
     // If the string starts with '0x' or '-0x', parse as hex.
     return /^\s*-?0x/i.test(value) ? parseInt(value, 16) : parseInt(value, 10);
   }

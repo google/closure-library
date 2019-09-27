@@ -366,7 +366,7 @@ goog.i18n.MessageFormat.prototype.formatBlock_ = function(
 goog.i18n.MessageFormat.prototype.formatSimplePlaceholder_ = function(
     parsedPattern, namedParameters, result) {
   var value = namedParameters[parsedPattern];
-  if (!goog.isDef(value)) {
+  if (value === undefined) {
     result.push('Undefined parameter - ' + parsedPattern);
     return;
   }
@@ -394,13 +394,13 @@ goog.i18n.MessageFormat.prototype.formatSimplePlaceholder_ = function(
 goog.i18n.MessageFormat.prototype.formatSelectBlock_ = function(
     parsedPattern, namedParameters, ignorePound, result) {
   var argumentIndex = parsedPattern.argumentIndex;
-  if (!goog.isDef(namedParameters[argumentIndex])) {
+  if (namedParameters[argumentIndex] === undefined) {
     result.push('Undefined parameter - ' + argumentIndex);
     return;
   }
 
   var option = parsedPattern[namedParameters[argumentIndex]];
-  if (!goog.isDef(option)) {
+  if (option === undefined) {
     option = parsedPattern[goog.i18n.MessageFormat.OTHER_];
     goog.asserts.assertArray(
         option, 'Invalid option or missing other option for select block.');
@@ -441,7 +441,7 @@ goog.i18n.MessageFormat.prototype.formatPluralOrdinalBlock_ = function(
 
   // Check if there is an exact match.
   var option = parsedPattern[namedParameters[argumentIndex]];
-  if (!goog.isDef(option)) {
+  if (option === undefined) {
     goog.asserts.assert(diff >= 0, 'Argument index smaller than offset.');
     var item = pluralSelector(diff);
     goog.asserts.assertString(item, 'Invalid plural key.');
@@ -449,7 +449,7 @@ goog.i18n.MessageFormat.prototype.formatPluralOrdinalBlock_ = function(
     option = parsedPattern[item];
 
     // If option is not provided fall back to "other".
-    if (!goog.isDef(option)) {
+    if (option === undefined) {
       option = parsedPattern[goog.i18n.MessageFormat.OTHER_];
     }
 
@@ -539,7 +539,7 @@ goog.i18n.MessageFormat.prototype.extractParts_ = function(pattern) {
     if (match[0] == '}') {
       var brace = braceStack.pop();
       goog.asserts.assert(
-          goog.isDef(brace) && brace == '{', 'No matching { for }.');
+          brace !== undefined && brace == '{', 'No matching { for }.');
 
       if (braceStack.length == 0) {
         // End of the block.

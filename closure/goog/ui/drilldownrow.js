@@ -89,7 +89,7 @@ goog.ui.DrilldownRow = function(opt_properties, opt_domHelper) {
   // Initialize instance variables.
 
   var html;
-  if (!goog.isDefAndNotNull(properties.html)) {
+  if (properties.html == null) {
     html = goog.html.SafeHtml.EMPTY;
   } else {
     goog.asserts.assert(properties.html instanceof goog.html.SafeHtml);

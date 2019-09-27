@@ -270,7 +270,7 @@ goog.module.ModuleManager.prototype.setAllModuleInfoString = function(
     this.setAllModuleInfoString(opt_info, opt_loadingModuleIds);
     return;
   }
-  if (!goog.isString(opt_info)) {
+  if (typeof (opt_info) !== 'string') {
     // The call to this method is generated in two steps, the argument is added
     // after some of the compilation passes.  This means that the initial code
     // doesn't have any arguments and causes compiler errors.  We make it

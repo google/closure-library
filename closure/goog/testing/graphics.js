@@ -55,8 +55,8 @@ goog.testing.graphics.assertPathEquals = function(expected, path) {
   });
   assertEquals(expected.length, actual.length);
   for (var i = 0; i < expected.length; i++) {
-    if (goog.isNumber(expected[i])) {
-      assertTrue(goog.isNumber(actual[i]));
+    if (typeof expected[i] === 'number') {
+      assertTrue(typeof actual[i] === 'number');
       assertRoughlyEquals(expected[i], actual[i], 0.01);
     } else {
       assertEquals(expected[i], actual[i]);

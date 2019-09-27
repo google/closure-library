@@ -53,7 +53,7 @@ function setUpPage() {
  *     The XHR stub that will be returned from the factory.
  */
 function stubXhrToReturn(status, opt_responseText, opt_latency) {
-  if (goog.isDefAndNotNull(opt_latency)) {
+  if (opt_latency != null) {
     mockClock = new goog.testing.MockClock(true);
   }
 
@@ -89,7 +89,7 @@ function stubXhrToReturn(status, opt_responseText, opt_latency) {
     },
     load: function(status) {
       this.status = status;
-      if (goog.isDefAndNotNull(opt_responseText)) {
+      if (opt_responseText != null) {
         this.responseText = opt_responseText;
       }
       this.readyState = 4;

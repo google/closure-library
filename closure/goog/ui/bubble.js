@@ -62,7 +62,7 @@ var SafeHtml = goog.html.SafeHtml;
 goog.ui.Bubble = function(message, opt_config, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
-  if (goog.isString(message)) {
+  if (typeof message === 'string') {
     message = goog.html.SafeHtml.htmlEscape(message);
   }
 

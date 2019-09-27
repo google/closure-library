@@ -74,7 +74,7 @@ function createIframe() {
 function getConfiguration(role, peerFrameId = undefined) {
   const cfg = {};
   cfg[CfgFields.TRANSPORT] = TransportTypes.DIRECT;
-  if (goog.isDefAndNotNull(peerFrameId)) {
+  if (peerFrameId != null) {
     cfg[CfgFields.IFRAME_ID] = peerFrameId;
   }
   cfg[CfgFields.CHANNEL_NAME] = channelName;

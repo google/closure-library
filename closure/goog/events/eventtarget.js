@@ -307,7 +307,7 @@ goog.events.EventTarget.prototype.getListener = function(
 /** @override */
 goog.events.EventTarget.prototype.hasListener = function(
     opt_type, opt_capture) {
-  var id = goog.isDef(opt_type) ? String(opt_type) : undefined;
+  var id = (opt_type !== undefined) ? String(opt_type) : undefined;
   return this.eventTargetListeners_.hasListener(id, opt_capture);
 };
 
@@ -354,7 +354,7 @@ goog.events.EventTarget.dispatchEventInternal_ = function(
 
   // If accepting a string or object, create a custom event object so that
   // preventDefault and stopPropagation work with the event.
-  if (goog.isString(e)) {
+  if (typeof e === 'string') {
     e = new goog.events.Event(e, target);
   } else if (!(e instanceof goog.events.Event)) {
     var oldEvent = e;

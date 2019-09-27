@@ -332,7 +332,7 @@ goog.ui.Select.prototype.setSelectedIndex = function(index) {
  * @override
  */
 goog.ui.Select.prototype.setValue = function(value) {
-  if (goog.isDefAndNotNull(value) && this.selectionModel_) {
+  if (value != null && this.selectionModel_) {
     for (var i = 0, item; item = this.selectionModel_.getItemAt(i); i++) {
       if (item && typeof item.getValue == 'function' &&
           item.getValue() == value) {

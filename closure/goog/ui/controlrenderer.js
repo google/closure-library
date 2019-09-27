@@ -425,7 +425,7 @@ goog.ui.ControlRenderer.prototype.setAriaStates = function(control, element) {
   goog.asserts.assert(element);
 
   var ariaLabel = control.getAriaLabel();
-  if (goog.isDefAndNotNull(ariaLabel)) {
+  if (ariaLabel != null) {
     this.setAriaLabel(element, ariaLabel);
   }
 
@@ -659,14 +659,14 @@ goog.ui.ControlRenderer.prototype.setContent = function(element, content) {
   if (contentElem) {
     goog.dom.removeChildren(contentElem);
     if (content) {
-      if (goog.isString(content)) {
+      if (typeof content === 'string') {
         goog.dom.setTextContent(contentElem, content);
       } else {
         var childHandler = function(child) {
           if (child) {
             var doc = goog.dom.getOwnerDocument(contentElem);
             contentElem.appendChild(
-                goog.isString(child) ? doc.createTextNode(child) : child);
+                typeof child === 'string' ? doc.createTextNode(child) : child);
           }
         };
         if (goog.isArray(content)) {

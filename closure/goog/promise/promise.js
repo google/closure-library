@@ -842,7 +842,7 @@ goog.Promise.prototype.addChildPromise_ = function(
     callbackEntry.onRejected = onRejected ? function(reason) {
       try {
         var result = onRejected.call(opt_context, reason);
-        if (!goog.isDef(result) &&
+        if (result === undefined &&
             reason instanceof goog.Promise.CancellationError) {
           // Propagate cancellation to children if no other result is returned.
           reject(reason);
@@ -1186,7 +1186,7 @@ goog.Promise.invokeCallback_ = function(callbackEntry, state, result) {
  * @private
  */
 goog.Promise.prototype.addStackTrace_ = function(err) {
-  if (goog.Promise.LONG_STACK_TRACES && goog.isString(err.stack)) {
+  if (goog.Promise.LONG_STACK_TRACES && typeof err.stack === 'string') {
     // Extract the third line of the stack trace, which is the entry for the
     // user function that called into Promise code.
     var trace = err.stack.split('\n', 4)[3];
@@ -1209,7 +1209,7 @@ goog.Promise.prototype.addStackTrace_ = function(err) {
  * @private
  */
 goog.Promise.prototype.appendLongStack_ = function(err) {
-  if (goog.Promise.LONG_STACK_TRACES && err && goog.isString(err.stack) &&
+  if (goog.Promise.LONG_STACK_TRACES && err && typeof err.stack === 'string' &&
       this.stack_.length) {
     var longTrace = ['Promise trace:'];
 

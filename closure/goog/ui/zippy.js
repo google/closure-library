@@ -116,7 +116,7 @@ goog.ui.Zippy = function(
    * @private
    */
   this.expanded_ = opt_expanded == true;
-  if (!goog.isDef(opt_expanded) && !this.lazyCreateFunc_) {
+  if (opt_expanded === undefined && !this.lazyCreateFunc_) {
     // For the dual caption case, we can get expanded_ from the visibility of
     // the expandedHeader. For the single-caption case, we use the
     // presence/absence of the relevant class. Using one of the standard Soy

@@ -67,7 +67,7 @@ goog.fs.Error = function(error, action) {
    */
   this.code;
 
-  if (goog.isDef(error.name)) {
+  if (error.name !== undefined) {
     this.name = error.name;
     // TODO(user): Remove warning suppression after JSCompiler stops
     // firing a spurious warning here.
@@ -141,7 +141,7 @@ goog.fs.Error.ErrorCode = {
 goog.fs.Error.getNameFromCode_ = function(code) {
   var name = goog.object.findKey(
       goog.fs.Error.NameToCodeMap_, function(c) { return code == c; });
-  if (!goog.isDef(name)) {
+  if (name === undefined) {
     throw new Error('Invalid code: ' + code);
   }
   return name;

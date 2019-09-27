@@ -317,7 +317,7 @@ function hasBackChannel() {
 }
 
 function hasDeadBackChannelTimer() {
-  return goog.isDefAndNotNull(browserChannel.deadBackChannelTimerId_);
+  return browserChannel.deadBackChannelTimerId_ != null;
 }
 
 function assertHasForwardChannel() {

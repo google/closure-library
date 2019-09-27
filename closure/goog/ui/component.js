@@ -1246,7 +1246,7 @@ goog.ui.Component.prototype.removeChild = function(child, opt_unrender) {
   if (child) {
     // Normalize child to be the object and id to be the ID string.  This also
     // ensures that the child is really ours.
-    var id = goog.isString(child) ? child : child.getId();
+    var id = (typeof child === 'string') ? child : child.getId();
     child = this.getChild(id);
 
     if (id && child) {

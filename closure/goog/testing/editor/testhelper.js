@@ -159,12 +159,12 @@ goog.testing.editor.TestHelper.prototype.findTextNode = function(textOrRegexp) {
 goog.testing.editor.TestHelper.prototype.select = function(
     from, fromOffset, opt_to, opt_toOffset) {
   var end;
-  var start = end = goog.isString(from) ? this.findTextNode(from) : from;
+  var start = end = (typeof from === 'string') ? this.findTextNode(from) : from;
   var endOffset;
   var startOffset = endOffset = fromOffset;
 
-  if (opt_to && goog.isNumber(opt_toOffset)) {
-    end = goog.isString(opt_to) ? this.findTextNode(opt_to) : opt_to;
+  if (opt_to && typeof opt_toOffset === 'number') {
+    end = (typeof opt_to === 'string') ? this.findTextNode(opt_to) : opt_to;
     endOffset = opt_toOffset;
   }
 

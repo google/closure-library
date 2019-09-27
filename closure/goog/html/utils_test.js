@@ -39,10 +39,10 @@ let result;
 function makeHtml(
     tag, content, copies = undefined, tabIndex = undefined, id = undefined) {
   let html = [`<${tag}`, `>${content}</${tag}>`];
-  if (goog.isNumber(tabIndex)) {
+  if (typeof tabIndex === 'number') {
     googArray.insertAt(html, ` tabIndex="${tabIndex}"`, 1);
   }
-  if (goog.isString(id)) {
+  if (typeof id === 'string') {
     googArray.insertAt(html, ` id="${id}"`, 1);
   }
   html = html.join('');

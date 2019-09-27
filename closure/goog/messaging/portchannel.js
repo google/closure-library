@@ -301,7 +301,7 @@ goog.messaging.PortChannel.prototype.deliver_ = function(e) {
     payload = this.decodePayload(
         serviceName, this.injectPorts_(browserEvent.ports || [], payload),
         service.objectPayload);
-    if (goog.isDefAndNotNull(payload)) {
+    if (payload != null) {
       service.callback(payload);
     }
   }

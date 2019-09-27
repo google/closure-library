@@ -93,7 +93,7 @@ goog.crypt.Sha2 = function(numHashBlocks, initHashBlocks) {
    */
   this.w_ = goog.global['Int32Array'] ? new Int32Array(64) : new Array(64);
 
-  if (!goog.isDef(goog.crypt.Sha2.Kx_)) {
+  if (goog.crypt.Sha2.Kx_ === undefined) {
     // This is the first time this constructor has been called.
     if (goog.global['Int32Array']) {
       // Typed arrays exist
@@ -218,7 +218,7 @@ goog.crypt.Sha2.prototype.computeChunk_ = function() {
 
 /** @override */
 goog.crypt.Sha2.prototype.update = function(message, opt_length) {
-  if (!goog.isDef(opt_length)) {
+  if (opt_length === undefined) {
     opt_length = message.length;
   }
   // Process the message from left to right up to |opt_length| bytes.
@@ -231,7 +231,7 @@ goog.crypt.Sha2.prototype.update = function(message, opt_length) {
   var inChunk = this.inChunk_;
 
   // The input message could be either byte array of string.
-  if (goog.isString(message)) {
+  if (typeof message === 'string') {
     while (n < opt_length) {
       this.chunk_[inChunk++] = message.charCodeAt(n++);
       if (inChunk == this.blockSize) {

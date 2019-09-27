@@ -264,7 +264,7 @@ goog.net.BrowserTestChannel.prototype.connect = function(path) {
 
   // If the channel already has the result of the first test, then skip it.
   var firstTestResults = this.channel_.getFirstTestResults();
-  if (goog.isDefAndNotNull(firstTestResults)) {
+  if (firstTestResults != null) {
     this.hostPrefix_ = this.channel_.correctHostPrefix(firstTestResults[0]);
     this.blockedPrefix_ = firstTestResults[1];
     if (this.blockedPrefix_) {
@@ -353,7 +353,7 @@ goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
 
   // If the second test results are available, skip its execution.
   var secondTestResults = this.channel_.getSecondTestResults();
-  if (goog.isDefAndNotNull(secondTestResults)) {
+  if (secondTestResults != null) {
     this.channelDebug_.debug(
         'TestConnection: skipping stage 2, precomputed result is ' +
                 secondTestResults ?

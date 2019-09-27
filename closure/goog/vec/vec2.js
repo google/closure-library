@@ -392,7 +392,7 @@ goog.vec.Vec2.lerp = function(vec0, vec1, f, resultVec) {
  *     chained together.
  */
 goog.vec.Vec2.max = function(vec0, limit, resultVec) {
-  if (goog.isNumber(limit)) {
+  if (typeof limit === 'number') {
     resultVec[0] = Math.max(vec0[0], limit);
     resultVec[1] = Math.max(vec0[1], limit);
   } else {
@@ -415,7 +415,7 @@ goog.vec.Vec2.max = function(vec0, limit, resultVec) {
  *     chained together.
  */
 goog.vec.Vec2.min = function(vec0, limit, resultVec) {
-  if (goog.isNumber(limit)) {
+  if (typeof limit === 'number') {
     resultVec[0] = Math.min(vec0[0], limit);
     resultVec[1] = Math.min(vec0[1], limit);
   } else {

@@ -73,7 +73,7 @@ testSuite({
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
     assertTrue(
         goog.global.TrustedScript ? trustedValue instanceof TrustedScript :
-                                    goog.isString(trustedValue));
+                                    typeof trustedValue === 'string');
   },
 
   testFromConstant_allowsEmptyString() {

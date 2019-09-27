@@ -73,7 +73,7 @@ function remoteStorageEvent(data) {
   } else {
     const uniqueKey = BroadcastPubSub.IE8_EVENTS_KEY_PREFIX_ + '1234567890';
     let ie8Events = mockHtml5LocalStorage.get(uniqueKey);
-    if (goog.isDefAndNotNull(ie8Events)) {
+    if (ie8Events != null) {
       ie8Events = JSON.parse(ie8Events);
       // Events should never overlap in IE8 mode.
       if (ie8Events.length > 0 &&
@@ -108,7 +108,7 @@ testSuite({
         goog.bind(mockHtml5LocalStorage.get, mockHtml5LocalStorage);
     mockHtml5LocalStorage.get = (key) => {
       const value = originalGetFn(key);
-      if (!goog.isDef(value)) {
+      if (value === undefined) {
         return null;
       }
       return value;

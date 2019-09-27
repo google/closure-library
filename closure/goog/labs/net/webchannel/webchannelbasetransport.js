@@ -272,10 +272,10 @@ WebChannelBaseTransport.Channel.prototype.halfClose = function() {
  */
 WebChannelBaseTransport.Channel.prototype.send = function(message) {
   goog.asserts.assert(
-      goog.isObject(message) || goog.isString(message),
+      goog.isObject(message) || typeof message === 'string',
       'only object type or raw string is supported');
 
-  if (goog.isString(message)) {
+  if (typeof message === 'string') {
     var rawJson = {};
     rawJson[Wire.RAW_DATA_KEY] = message;
     this.channel_.sendMap(rawJson);

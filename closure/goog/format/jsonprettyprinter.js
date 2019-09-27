@@ -111,10 +111,10 @@ goog.format.JsonPrettyPrinter.prototype.formatSafeHtml = function(json) {
  */
 goog.format.JsonPrettyPrinter.prototype.format_ = function(json) {
   // If input is undefined, null, or empty, return an empty string.
-  if (!goog.isDefAndNotNull(json)) {
+  if (json == null) {
     return [];
   }
-  if (goog.isString(json)) {
+  if (typeof json === 'string') {
     if (goog.string.isEmptyOrWhitespace(json)) {
       return [];
     }

@@ -94,7 +94,7 @@ testSuite({
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
     assertTrue(
         goog.global.TrustedHTML ? trustedValue instanceof TrustedHTML :
-                                  goog.isString(trustedValue));
+                                  typeof trustedValue === 'string');
   },
 
   testHtmlEscape() {

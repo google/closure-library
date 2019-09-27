@@ -548,7 +548,7 @@ goog.ui.KeyboardShortcutHandler.prototype.interpretStrokes_ = function(
   var strokes;
 
   // Build strokes array from string.
-  if (goog.isString(args[initialIndex])) {
+  if (typeof (args[initialIndex]) === 'string') {
     strokes = goog.array.map(
         goog.ui.KeyboardShortcutHandler.parseStringShortcut(args[initialIndex]),
         function(stroke) {
@@ -661,7 +661,7 @@ goog.ui.KeyboardShortcutHandler.parseStringShortcut = function(s) {
           modifiers |= goog.ui.KeyboardShortcutHandler.Modifiers.META;
           continue;
       }
-      if (!goog.isNull(keyCode)) {
+      if (keyCode !== null) {
         goog.asserts.fail('At most one non-modifier key can be in a stroke.');
       }
       keyCode = goog.ui.KeyboardShortcutHandler.getKeyCode(key);

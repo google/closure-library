@@ -768,7 +768,7 @@ goog.ui.SliderBase.prototype.handleTimerTick_ = function() {
     }
   }
 
-  if (goog.isDef(value)) {  // not all code paths sets the value variable
+  if (value !== undefined) {  // not all code paths sets the value variable
     this.setThumbPosition_(this.thumbToMove_, value);
   }
 };

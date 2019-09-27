@@ -150,7 +150,7 @@ goog.events.MouseWheelHandler.prototype.handleEvent = function(e) {
 
     detail = goog.events.MouseWheelHandler.smartScale_(
         -be.wheelDelta, wheelDeltaScaleFactor);
-    if (goog.isDef(be.wheelDeltaX)) {
+    if (be.wheelDeltaX !== undefined) {
       // Webkit has two properties to indicate directional scroll, and
       // can scroll both directions at once.
       deltaX = goog.events.MouseWheelHandler.smartScale_(
@@ -176,17 +176,17 @@ goog.events.MouseWheelHandler.prototype.handleEvent = function(e) {
 
     // Firefox 3.1 adds an axis field to the event to indicate direction of
     // scroll.  See https://developer.mozilla.org/en/Gecko-Specific_DOM_Events
-    if (goog.isDef(be.axis) && be.axis === be.HORIZONTAL_AXIS) {
+    if (be.axis !== undefined && be.axis === be.HORIZONTAL_AXIS) {
       deltaX = detail;
     } else {
       deltaY = detail;
     }
   }
 
-  if (goog.isNumber(this.maxDeltaX_)) {
+  if (typeof this.maxDeltaX_ === 'number') {
     deltaX = goog.math.clamp(deltaX, -this.maxDeltaX_, this.maxDeltaX_);
   }
-  if (goog.isNumber(this.maxDeltaY_)) {
+  if (typeof this.maxDeltaY_ === 'number') {
     deltaY = goog.math.clamp(deltaY, -this.maxDeltaY_, this.maxDeltaY_);
   }
   // Don't clamp 'detail', since it could be ambiguous which axis it refers to

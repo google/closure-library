@@ -1164,7 +1164,7 @@ goog.net.IframeIo.prototype.handleError_ = function(
     this.complete_ = true;
     this.lastErrorCode_ = errorCode;
     if (errorCode == goog.net.ErrorCode.CUSTOM_ERROR) {
-      goog.asserts.assert(goog.isDef(opt_customError));
+      goog.asserts.assert(opt_customError !== undefined);
       this.lastCustomError_ = opt_customError;
     }
     this.dispatchEvent(goog.net.EventType.COMPLETE);

@@ -28,7 +28,7 @@ const testSuite = goog.require('goog.testing.testSuite');
  * This mock does not support negative opt_end.
  */
 const fsSliceBlobMock = (blob, start, end = undefined) => {
-  if (!goog.isNumber(end)) {
+  if (typeof end !== 'number') {
     end = blob.size;
   }
   return blob.slice(start, end);

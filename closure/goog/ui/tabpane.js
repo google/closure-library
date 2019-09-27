@@ -291,7 +291,7 @@ goog.ui.TabPane.prototype.addPage = function(page, opt_index) {
 
   // Insert page at specified position
   var index = this.pages_.length;
-  if (goog.isDef(opt_index) && opt_index != index) {
+  if (opt_index !== undefined && opt_index != index) {
     index = opt_index;
     this.pages_.splice(index, 0, page);
     this.elButtonBar_.insertBefore(
@@ -332,7 +332,7 @@ goog.ui.TabPane.prototype.addPage = function(page, opt_index) {
  *     based index.
  */
 goog.ui.TabPane.prototype.removePage = function(page) {
-  if (goog.isNumber(page)) {
+  if (typeof page === 'number') {
     page = this.pages_[page];
   }
   this.pages_.splice(page.index_, 1);
@@ -660,7 +660,7 @@ goog.ui.TabPane.TabPage.prototype.setVisible_ = function(visible) {
  */
 goog.ui.TabPane.TabPage.prototype.setParent_ = function(tabPane, opt_index) {
   this.parent_ = tabPane;
-  this.index_ = goog.isDef(opt_index) ? opt_index : null;
+  this.index_ = (opt_index !== undefined) ? opt_index : null;
 };
 
 

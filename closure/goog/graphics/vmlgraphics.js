@@ -127,7 +127,7 @@ goog.graphics.VmlGraphics.COORD_MULTIPLIER = 100;
  * @return {string} The position adjusted for COORD_MULTIPLIER.
  */
 goog.graphics.VmlGraphics.toCssSize = function(size) {
-  return goog.isString(size) && goog.string.endsWith(size, '%') ?
+  return typeof size === 'string' && goog.string.endsWith(size, '%') ?
       size :
       parseFloat(size.toString()) + 'px';
 };
@@ -315,10 +315,10 @@ goog.graphics.VmlGraphics.prototype.setElementFill = function(element, fill) {
     var gradient = this.createVmlElement('fill');
     gradient.color = fill.getColor1();
     gradient.color2 = fill.getColor2();
-    if (goog.isNumber(fill.getOpacity1())) {
+    if (typeof fill.getOpacity1() === 'number') {
       gradient.opacity = fill.getOpacity1();
     }
-    if (goog.isNumber(fill.getOpacity2())) {
+    if (typeof fill.getOpacity2() === 'number') {
       gradient.opacity2 = fill.getOpacity2();
     }
     var angle =
@@ -350,7 +350,7 @@ goog.graphics.VmlGraphics.prototype.setElementStroke = function(
     vmlElement.stroked = true;
 
     var width = stroke.getWidth();
-    if (goog.isString(width) && width.indexOf('px') == -1) {
+    if (typeof width === 'string' && width.indexOf('px') == -1) {
       width = parseFloat(width);
     } else {
       width = width * this.getPixelScaleX();
@@ -577,7 +577,7 @@ goog.graphics.VmlGraphics.prototype.createDom = function() {
         goog.graphics.VmlGraphics.toSizeCoord(pixelHeight);
   }
 
-  if (goog.isDef(this.coordLeft)) {
+  if (this.coordLeft !== undefined) {
     group.coordorigin = goog.graphics.VmlGraphics.toSizeCoord(this.coordLeft) +
         ' ' + goog.graphics.VmlGraphics.toSizeCoord(this.coordTop);
   } else {

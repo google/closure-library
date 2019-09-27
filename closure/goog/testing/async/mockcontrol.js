@@ -88,7 +88,7 @@ goog.testing.async.MockControl = function(mockControl) {
 goog.testing.async.MockControl.prototype.createCallbackMock = function(
     name, callback, opt_selfObj) {
   goog.asserts.assert(
-      goog.isString(name),
+      typeof name === 'string',
       'name parameter ' + goog.debug.deepExpose(name) + ' should be a string');
 
   var ignored = new goog.testing.mockmatchers.IgnoreArgument();

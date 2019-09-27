@@ -98,7 +98,7 @@ exports.setHttpHeadersWithOverwriteParam = function(
     return url;
   }
   var httpHeaders = exports.generateHttpHeadersOverwriteParam(extraHeaders);
-  if (goog.isString(url)) {
+  if (typeof url === 'string') {
     return googUriUtils.appendParam(
         url, googString.urlEncode(urlParam), httpHeaders);
   } else {

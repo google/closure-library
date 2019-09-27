@@ -722,7 +722,7 @@ goog.iter.cycle = function(iterable) {
  */
 goog.iter.count = function(opt_start, opt_step) {
   var counter = opt_start || 0;
-  var step = goog.isDef(opt_step) ? opt_step : 1;
+  var step = (opt_step !== undefined) ? opt_step : 1;
   var iter = new goog.iter.Iterator();
 
   iter.next = function() {
@@ -1035,7 +1035,7 @@ goog.iter.starMap = function(iterable, f, opt_obj) {
  */
 goog.iter.tee = function(iterable, opt_num) {
   var iterator = goog.iter.toIterator(iterable);
-  var num = goog.isNumber(opt_num) ? opt_num : 2;
+  var num = (typeof opt_num === 'number') ? opt_num : 2;
   var buffers =
       goog.array.map(goog.array.range(num), function() { return []; });
 
@@ -1156,7 +1156,7 @@ goog.iter.slice = function(iterable, start, opt_end) {
 
   var iterator = goog.iter.consume(iterable, start);
 
-  if (goog.isNumber(opt_end)) {
+  if (typeof opt_end === 'number') {
     goog.asserts.assert(goog.math.isInt(opt_end) && opt_end >= start);
     iterator = goog.iter.limit(iterator, opt_end - start /* limitSize */);
   }
@@ -1200,7 +1200,7 @@ goog.iter.hasDuplicates_ = function(arr) {
  */
 goog.iter.permutations = function(iterable, opt_length) {
   var elements = goog.iter.toArray(iterable);
-  var length = goog.isNumber(opt_length) ? opt_length : elements.length;
+  var length = (typeof opt_length === 'number') ? opt_length : elements.length;
 
   var sets = goog.array.repeat(elements, length);
   var product = goog.iter.product.apply(undefined, sets);

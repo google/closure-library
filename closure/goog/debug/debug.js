@@ -164,11 +164,11 @@ goog.debug.deepExpose = function(obj, opt_showFn) {
 
 
     try {
-      if (!goog.isDef(obj)) {
+      if (obj === undefined) {
         str.push('undefined');
-      } else if (goog.isNull(obj)) {
+      } else if (obj === null) {
         str.push('NULL');
-      } else if (goog.isString(obj)) {
+      } else if (typeof obj === 'string') {
         str.push('"' + indentMultiline(obj) + '"');
       } else if (goog.isFunction(obj)) {
         str.push(indentMultiline(String(obj)));
@@ -249,7 +249,7 @@ goog.debug.normalizeErrorObject = function(err) {
   if (err == null) {
     err = 'Unknown Error of type "null/undefined"';
   }
-  if (goog.isString(err)) {
+  if (typeof err === 'string') {
     return {
       'message': err,
       'name': 'Unknown error',

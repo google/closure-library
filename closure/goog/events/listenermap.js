@@ -260,9 +260,9 @@ goog.events.ListenerMap.prototype.getListener = function(
  */
 goog.events.ListenerMap.prototype.hasListener = function(
     opt_type, opt_capture) {
-  var hasType = goog.isDef(opt_type);
+  var hasType = (opt_type !== undefined);
   var typeStr = hasType ? opt_type.toString() : '';
-  var hasCapture = goog.isDef(opt_capture);
+  var hasCapture = (opt_capture !== undefined);
 
   return goog.object.some(this.listeners, function(listenerArray, type) {
     for (var i = 0; i < listenerArray.length; ++i) {

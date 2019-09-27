@@ -485,7 +485,7 @@ goog.ui.PopupMenu.prototype.showWithPosition = function(
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
-  var position = goog.isDef(target.targetCorner_) ?
+  var position = (target.targetCorner_ !== undefined) ?
       new goog.positioning.AnchoredViewportPosition(
           target.element_, target.targetCorner_, true) :
       new goog.positioning.ViewportClientPosition(x, y);

@@ -400,7 +400,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {boolean}
    */
   this.backgroundChannelTest_ =
-      opt_options && goog.isDef(opt_options.backgroundChannelTest) ?
+      opt_options && opt_options.backgroundChannelTest !== undefined ?
       opt_options.backgroundChannelTest :
       true;
 
@@ -642,7 +642,7 @@ WebChannelBase.prototype.connect = function(
   this.extraParams_ = opt_extraParams || {};
 
   // Attach parameters about the previous session if reconnecting.
-  if (opt_oldSessionId && goog.isDef(opt_oldArrayId)) {
+  if (opt_oldSessionId && opt_oldArrayId !== undefined) {
     this.extraParams_['OSID'] = opt_oldSessionId;
     this.extraParams_['OAID'] = opt_oldArrayId;
   }
@@ -773,7 +773,7 @@ WebChannelBase.prototype.cancelRequests_ = function() {
  * @private
  */
 WebChannelBase.prototype.clearForwardChannelTimer_ = function() {
-  if (goog.isNumber(this.forwardChannelTimerId_)) {
+  if (typeof this.forwardChannelTimerId_ === 'number') {
     goog.global.clearTimeout(this.forwardChannelTimerId_);
   }
 
@@ -1802,7 +1802,7 @@ WebChannelBase.prototype.correctHostPrefix = function(serverHostPrefix) {
  * @private
  */
 WebChannelBase.prototype.onBackChannelDead_ = function() {
-  if (goog.isDefAndNotNull(this.deadBackChannelTimerId_)) {
+  if (this.deadBackChannelTimerId_ != null) {
     this.deadBackChannelTimerId_ = null;
     this.backChannelRequest_.cancel();
     this.backChannelRequest_ = null;
@@ -1818,7 +1818,7 @@ WebChannelBase.prototype.onBackChannelDead_ = function() {
  * @private
  */
 WebChannelBase.prototype.clearDeadBackchannelTimer_ = function() {
-  if (goog.isDefAndNotNull(this.deadBackChannelTimerId_)) {
+  if (this.deadBackChannelTimerId_ != null) {
     goog.global.clearTimeout(this.deadBackChannelTimerId_);
     this.deadBackChannelTimerId_ = null;
   }
@@ -2021,21 +2021,21 @@ WebChannelBase.prototype.onInput_ = function(respArray, request) {
         this.hostPrefix_ = this.correctHostPrefix(nextArray[2]);
 
         var negotiatedVersion = nextArray[3];
-        if (goog.isDefAndNotNull(negotiatedVersion)) {
+        if (negotiatedVersion != null) {
           this.channelVersion_ = negotiatedVersion;
           this.channelDebug_.info('VER=' + this.channelVersion_);
         }
 
         var negotiatedServerVersion = nextArray[4];
-        if (goog.isDefAndNotNull(negotiatedServerVersion)) {
+        if (negotiatedServerVersion != null) {
           this.serverVersion_ = negotiatedServerVersion;
           this.channelDebug_.info('SVER=' + this.serverVersion_);
         }
 
         // CVER=22
         var serverKeepaliveMs = nextArray[5];
-        if (goog.isDefAndNotNull(serverKeepaliveMs) &&
-            goog.isNumber(serverKeepaliveMs) && serverKeepaliveMs > 0) {
+        if (serverKeepaliveMs != null &&
+            typeof serverKeepaliveMs === 'number' && serverKeepaliveMs > 0) {
           var timeout = 1.5 * serverKeepaliveMs;
           this.backChannelRequestTimeoutMs_ = timeout;
           this.channelDebug_.info('backChannelRequestTimeoutMs_=' + timeout);

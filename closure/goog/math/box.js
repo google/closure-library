@@ -374,7 +374,7 @@ goog.math.Box.prototype.translate = function(tx, opt_ty) {
     goog.asserts.assertNumber(tx);
     this.left += tx;
     this.right += tx;
-    if (goog.isNumber(opt_ty)) {
+    if (typeof opt_ty === 'number') {
       this.top += opt_ty;
       this.bottom += opt_ty;
     }
@@ -393,7 +393,7 @@ goog.math.Box.prototype.translate = function(tx, opt_ty) {
  * @return {!goog.math.Box} This box after scaling.
  */
 goog.math.Box.prototype.scale = function(sx, opt_sy) {
-  var sy = goog.isNumber(opt_sy) ? opt_sy : sx;
+  var sy = (typeof opt_sy === 'number') ? opt_sy : sx;
   this.left *= sx;
   this.right *= sx;
   this.top *= sy;

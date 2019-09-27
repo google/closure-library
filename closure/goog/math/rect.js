@@ -450,7 +450,7 @@ goog.math.Rect.prototype.translate = function(tx, opt_ty) {
     this.top += tx.y;
   } else {
     this.left += goog.asserts.assertNumber(tx);
-    if (goog.isNumber(opt_ty)) {
+    if (typeof opt_ty === 'number') {
       this.top += opt_ty;
     }
   }
@@ -468,7 +468,7 @@ goog.math.Rect.prototype.translate = function(tx, opt_ty) {
  * @return {!goog.math.Rect} This rectangle after scaling.
  */
 goog.math.Rect.prototype.scale = function(sx, opt_sy) {
-  var sy = goog.isNumber(opt_sy) ? opt_sy : sx;
+  var sy = (typeof opt_sy === 'number') ? opt_sy : sx;
   this.left *= sx;
   this.width *= sx;
   this.top *= sy;

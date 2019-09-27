@@ -39,7 +39,7 @@ let reader;
 let observer;
 
 /** @const */
-const hasArrayBuffer = goog.isDef(goog.global.ArrayBuffer);
+const hasArrayBuffer = (goog.global.ArrayBuffer !== undefined);
 
 testSuite({
   setUp() {

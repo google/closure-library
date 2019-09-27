@@ -153,7 +153,7 @@ goog.net.Cookies.prototype.set = function(
     throw new Error('Invalid cookie value "' + value + '"');
   }
 
-  if (!goog.isDef(opt_maxAge)) {
+  if (opt_maxAge === undefined) {
     opt_maxAge = -1;
   }
 
@@ -278,7 +278,7 @@ goog.net.Cookies.prototype.getCount = function() {
 goog.net.Cookies.prototype.containsKey = function(key) {
   // substring will return empty string if the key is not found, so the get
   // function will only return undefined
-  return goog.isDef(this.get(key));
+  return this.get(key) !== undefined;
 };
 
 

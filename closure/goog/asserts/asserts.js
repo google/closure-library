@@ -260,7 +260,7 @@ goog.asserts.fail = function(opt_message, var_args) {
  * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertNumber = function(value, opt_message, var_args) {
-  if (goog.asserts.ENABLE_ASSERTS && !goog.isNumber(value)) {
+  if (goog.asserts.ENABLE_ASSERTS && typeof value !== 'number') {
     goog.asserts.doAssertFailure_(
         'Expected number but got %s: %s.', [goog.typeOf(value), value],
         opt_message, Array.prototype.slice.call(arguments, 2));
@@ -279,7 +279,7 @@ goog.asserts.assertNumber = function(value, opt_message, var_args) {
  * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertString = function(value, opt_message, var_args) {
-  if (goog.asserts.ENABLE_ASSERTS && !goog.isString(value)) {
+  if (goog.asserts.ENABLE_ASSERTS && typeof value !== 'string') {
     goog.asserts.doAssertFailure_(
         'Expected string but got %s: %s.', [goog.typeOf(value), value],
         opt_message, Array.prototype.slice.call(arguments, 2));
@@ -357,7 +357,7 @@ goog.asserts.assertArray = function(value, opt_message, var_args) {
  * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertBoolean = function(value, opt_message, var_args) {
-  if (goog.asserts.ENABLE_ASSERTS && !goog.isBoolean(value)) {
+  if (goog.asserts.ENABLE_ASSERTS && typeof value !== 'boolean') {
     goog.asserts.doAssertFailure_(
         'Expected boolean but got %s: %s.', [goog.typeOf(value), value],
         opt_message, Array.prototype.slice.call(arguments, 2));

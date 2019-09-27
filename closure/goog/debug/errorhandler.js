@@ -309,7 +309,7 @@ goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ = function(
   win[fnName] = function(fn, time) {
     // Don't try to protect strings. In theory, we could try to globalEval
     // the string, but this seems to lead to permission errors on IE6.
-    if (goog.isString(fn)) {
+    if (typeof fn === 'string') {
       fn = goog.partial(goog.globalEval, fn);
     }
     arguments[0] = fn = that.protectEntryPoint(fn);
@@ -391,7 +391,7 @@ goog.debug.ErrorHandler.ProtectedFunctionError = function(cause) {
 
   /** @suppress {missingProperties} stack may not be defined. */
   var stack = cause && cause.stack;
-  if (stack && goog.isString(stack)) {
+  if (stack && typeof stack === 'string') {
     this.stack = /** @type {string} */ (stack);
   }
 };

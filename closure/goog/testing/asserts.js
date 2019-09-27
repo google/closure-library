@@ -180,14 +180,13 @@ var nonCommentArg = function(
 var _validateArguments = function(expectedNumberOfNonCommentArgs, args) {
   var valid = args.length == expectedNumberOfNonCommentArgs ||
       args.length == expectedNumberOfNonCommentArgs + 1 &&
-          goog.isString(args[0]);
+          typeof args[0] === 'string';
   if (!valid) {
     goog.testing.asserts.raiseException(
         'Incorrect arguments passed to assert function.\n' +
         'Expected ' + expectedNumberOfNonCommentArgs + ' argument(s) plus ' +
         'optional comment; got ' + args.length + '.');
   }
-
 };
 
 /**
@@ -290,7 +289,8 @@ goog.testing.asserts.assert = function(a, opt_b) {
   var booleanValue = nonCommentArg(1, 1, arguments);
 
   _assert(
-      comment, goog.isBoolean(booleanValue), 'Bad argument to assert(boolean)');
+      comment, typeof booleanValue === 'boolean',
+      'Bad argument to assert(boolean)');
   _assert(comment, booleanValue, 'Call to assert(boolean) with false');
 };
 /** @const */
@@ -345,8 +345,8 @@ var assertThrows = goog.testing.asserts.assertThrows;
  * @private
  */
 goog.testing.asserts.removeOperaStacktrace_ = function(e) {
-  if (goog.isObject(e) && goog.isString(e['stacktrace']) &&
-      goog.isString(e['message'])) {
+  if (goog.isObject(e) && typeof e['stacktrace'] === 'string' &&
+      typeof e['message'] === 'string') {
     var startIndex = e['message'].length - e['stacktrace'].length;
     if (e['message'].indexOf(e['stacktrace'], startIndex) == startIndex) {
       e['message'] = e['message'].substr(0, startIndex - 14);
@@ -491,7 +491,7 @@ goog.testing.asserts.assertTrue = function(a, opt_b) {
   var booleanValue = nonCommentArg(1, 1, arguments);
 
   _assert(
-      comment, goog.isBoolean(booleanValue),
+      comment, typeof booleanValue === 'boolean',
       'Bad argument to assertTrue(boolean)');
   _assert(comment, booleanValue, 'Call to assertTrue(boolean) with false');
 };
@@ -509,7 +509,7 @@ goog.testing.asserts.assertFalse = function(a, opt_b) {
   var booleanValue = nonCommentArg(1, 1, arguments);
 
   _assert(
-      comment, goog.isBoolean(booleanValue),
+      comment, typeof booleanValue === 'boolean',
       'Bad argument to assertFalse(boolean)');
   _assert(comment, !booleanValue, 'Call to assertFalse(boolean) with true');
 };

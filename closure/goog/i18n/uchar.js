@@ -132,7 +132,7 @@ goog.i18n.uChar.toCharCode = function(ch) {
  * @return {?string} The character corresponding to the given Unicode value.
  */
 goog.i18n.uChar.fromCharCode = function(code) {
-  if (!goog.isDefAndNotNull(code) ||
+  if (code == null ||
       !(code >= 0 && code <= goog.i18n.uChar.CODE_POINT_MAX_VALUE_)) {
     return null;
   }

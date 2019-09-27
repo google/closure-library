@@ -178,7 +178,7 @@ testSuite({
 
   testGetRequiredElement() {
     const el = googDom.getRequiredElement('testEl');
-    assertTrue(goog.isDefAndNotNull(el));
+    assertTrue(el != null);
     assertEquals('testEl', el.id);
     assertThrows(() => {
       googDom.getRequiredElement('does_not_exist');
@@ -188,7 +188,7 @@ testSuite({
   testGetRequiredElementDomHelper() {
     const domHelper = new DomHelper();
     const el = domHelper.getRequiredElement('testEl');
-    assertTrue(goog.isDefAndNotNull(el));
+    assertTrue(el != null);
     assertEquals('testEl', el.id);
     assertThrows(() => {
       googDom.getRequiredElementByClass('does_not_exist', container);

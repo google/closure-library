@@ -35,13 +35,13 @@ goog.math.Coordinate = function(opt_x, opt_y) {
    * X-value
    * @type {number}
    */
-  this.x = goog.isDef(opt_x) ? opt_x : 0;
+  this.x = (opt_x !== undefined) ? opt_x : 0;
 
   /**
    * Y-value
    * @type {number}
    */
-  this.y = goog.isDef(opt_y) ? opt_y : 0;
+  this.y = (opt_y !== undefined) ? opt_y : 0;
 };
 
 
@@ -221,7 +221,7 @@ goog.math.Coordinate.prototype.translate = function(tx, opt_ty) {
     this.y += tx.y;
   } else {
     this.x += Number(tx);
-    if (goog.isNumber(opt_ty)) {
+    if (typeof opt_ty === 'number') {
       this.y += opt_ty;
     }
   }
@@ -238,7 +238,7 @@ goog.math.Coordinate.prototype.translate = function(tx, opt_ty) {
  * @return {!goog.math.Coordinate} This coordinate after scaling.
  */
 goog.math.Coordinate.prototype.scale = function(sx, opt_sy) {
-  var sy = goog.isNumber(opt_sy) ? opt_sy : sx;
+  var sy = (typeof opt_sy === 'number') ? opt_sy : sx;
   this.x *= sx;
   this.y *= sy;
   return this;

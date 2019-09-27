@@ -327,7 +327,7 @@ goog.ds.FastDataNode.prototype.add = function(value) {
  * @override
  */
 goog.ds.FastDataNode.prototype.get = function(opt_key) {
-  if (!goog.isDef(opt_key)) {
+  if (opt_key === undefined) {
     // if there is no key, DataNode#get was called
     return this;
   } else {
@@ -730,7 +730,7 @@ goog.ds.FastListNode.prototype.add = function(value) {
  */
 goog.ds.FastListNode.prototype.get = function(opt_key) {
   // if there are no arguments, DataNode.get was called
-  if (!goog.isDef(opt_key)) {
+  if (opt_key === undefined) {
     return this.values_;
   } else {
     return this.getChildNode(opt_key);

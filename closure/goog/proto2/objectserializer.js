@@ -158,7 +158,7 @@ goog.proto2.ObjectSerializer.prototype.getSerializedValue = function(
   // Some deserialization libraries, such as GWT, can use this notation.
   if (this.serializeBooleanAsNumber_ &&
       field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.BOOL &&
-      goog.isBoolean(value)) {
+      typeof value === 'boolean') {
     return value ? 1 : 0;
   }
 
@@ -174,7 +174,7 @@ goog.proto2.ObjectSerializer.prototype.getDeserializedValue = function(
   // Gracefully handle the case where a boolean is represented by 0/1.
   // Some serialization libraries, such as GWT, can use this notation.
   if (field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.BOOL &&
-      goog.isNumber(value)) {
+      typeof value === 'number') {
     return Boolean(value);
   }
 

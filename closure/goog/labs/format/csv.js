@@ -115,7 +115,7 @@ goog.labs.format.csv.ParseError.findLineInfo_ = function(str, index) {
     return line.startLineIndex <= index && line.endLineIndex > index;
   });
 
-  if (goog.isNumber(lineIndex)) {
+  if (typeof (lineIndex) === 'number') {
     var line = lines[lineIndex];
     return {line: line, lineIndex: lineIndex};
   }
@@ -182,7 +182,7 @@ goog.labs.format.csv.parse = function(text, opt_ignoreErrors, opt_delimiter) {
    */
   function pushBack(t) {
     goog.labs.format.csv.assertToken_(t);
-    goog.asserts.assert(goog.isNull(pushBackToken));
+    goog.asserts.assert(pushBackToken === null);
     pushBackToken = t;
   }
 
@@ -280,7 +280,7 @@ goog.labs.format.csv.parse = function(text, opt_ignoreErrors, opt_delimiter) {
       }
     }
 
-    if (goog.isNull(end)) {
+    if (end === null) {
       if (!opt_ignoreErrors) {
         throw new goog.labs.format.csv.ParseError(
             text, text.length - 1, 'Unexpected end of text after open quote');
@@ -399,7 +399,7 @@ goog.labs.format.csv.Sentinels_ = {
  * @private
  */
 goog.labs.format.csv.isCharacterString_ = function(str) {
-  return goog.isString(str) && str.length == 1;
+  return typeof str === 'string' && str.length == 1;
 };
 
 
@@ -410,7 +410,7 @@ goog.labs.format.csv.isCharacterString_ = function(str) {
  * @private
  */
 goog.labs.format.csv.assertToken_ = function(o) {
-  if (goog.isString(o)) {
+  if (typeof o === 'string') {
     goog.asserts.assertString(o);
     goog.asserts.assert(
         goog.labs.format.csv.isCharacterString_(o),

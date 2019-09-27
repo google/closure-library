@@ -382,14 +382,13 @@ goog.testing.fs.DirectoryEntry.prototype.getFileSync = function(
     path, opt_behavior, opt_data, opt_type) {
   opt_behavior = opt_behavior || goog.fs.DirectoryEntry.Behavior.DEFAULT;
   return (
-      /** @type {!goog.testing.fs.FileEntry} */ (
-          this.getEntry_(
-              path, opt_behavior, true /* isFile */,
-              goog.bind(function(parent, name) {
-                return new goog.testing.fs.FileEntry(
-                    this.getFileSystem(), parent, name,
-                    goog.isDef(opt_data) ? opt_data : '', opt_type);
-              }, this))));
+      /** @type {!goog.testing.fs.FileEntry} */ (this.getEntry_(
+          path, opt_behavior, true /* isFile */,
+          goog.bind(function(parent, name) {
+            return new goog.testing.fs.FileEntry(
+                this.getFileSystem(), parent, name,
+                opt_data !== undefined ? opt_data : '', opt_type);
+          }, this))));
 };
 
 

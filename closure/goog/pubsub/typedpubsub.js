@@ -112,7 +112,8 @@ goog.pubsub.TypedPubSub.prototype.publish = function(topic, payload) {
  * @template PAYLOAD
  */
 goog.pubsub.TypedPubSub.prototype.clear = function(opt_topic) {
-  this.pubSub_.clear(goog.isDef(opt_topic) ? opt_topic.toString() : undefined);
+  this.pubSub_.clear(
+      opt_topic !== undefined ? opt_topic.toString() : undefined);
 };
 
 
@@ -125,5 +126,5 @@ goog.pubsub.TypedPubSub.prototype.clear = function(opt_topic) {
  */
 goog.pubsub.TypedPubSub.prototype.getCount = function(opt_topic) {
   return this.pubSub_.getCount(
-      goog.isDef(opt_topic) ? opt_topic.toString() : undefined);
+      opt_topic !== undefined ? opt_topic.toString() : undefined);
 };

@@ -276,7 +276,7 @@ goog.debug.HtmlFormatter.exposeExceptionAsHtml = function(err, fn) {
  * @private
  */
 goog.debug.HtmlFormatter.createViewSourceUrl_ = function(fileName) {
-  if (!goog.isDefAndNotNull(fileName)) {
+  if (fileName == null) {
     fileName = '';
   }
   if (!/^https?:\/\//i.test(fileName)) {

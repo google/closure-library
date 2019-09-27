@@ -163,7 +163,7 @@ BaseTestChannel.prototype.connect = function(path) {
 
   // If the channel already has the result of the handshake, then skip it.
   var handshakeResult = this.channel_.getConnectionState().handshakeResult;
-  if (goog.isDefAndNotNull(handshakeResult)) {
+  if (handshakeResult != null) {
     this.hostPrefix_ = this.channel_.correctHostPrefix(handshakeResult[0]);
     this.state_ = BaseTestChannel.State_.CONNECTION_TESTING;
     this.checkBufferingProxy_();
@@ -204,7 +204,7 @@ BaseTestChannel.prototype.checkBufferingProxy_ = function() {
   // If the test result is already available, skip its execution.
   var bufferingProxyResult =
       this.channel_.getConnectionState().bufferingProxyResult;
-  if (goog.isDefAndNotNull(bufferingProxyResult)) {
+  if (bufferingProxyResult != null) {
     this.channelDebug_.debug(function() {
       return 'TestConnection: skipping stage 2, precomputed result is ' +
               bufferingProxyResult ?

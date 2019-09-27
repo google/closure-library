@@ -247,7 +247,7 @@ goog.ui.AttachableMenu.prototype.getNextPrevItem = function(prev) {
   }
 
   // if no selected element, start from beginning or end
-  if (!goog.isDef(index)) {
+  if (index === undefined) {
     index = prev ? elementCount - 1 : 0;
   }
 

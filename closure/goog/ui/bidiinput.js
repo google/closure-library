@@ -145,7 +145,7 @@ goog.ui.BidiInput.prototype.getDirection = function() {
  */
 goog.ui.BidiInput.prototype.setValue = function(value) {
   var element = this.getElement();
-  if (goog.isDefAndNotNull(element.value)) {
+  if (element.value != null) {
     element.value = value;
   } else {
     goog.dom.setTextContent(element, value);
@@ -161,9 +161,8 @@ goog.ui.BidiInput.prototype.setValue = function(value) {
  */
 goog.ui.BidiInput.prototype.getValue = function() {
   var element = this.getElement();
-  return goog.isDefAndNotNull(element.value) ?
-      element.value :
-      goog.dom.getRawTextContent(element);
+  return element.value != null ? element.value :
+                                 goog.dom.getRawTextContent(element);
 };
 
 

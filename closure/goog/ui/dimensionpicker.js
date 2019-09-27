@@ -323,7 +323,7 @@ goog.ui.DimensionPicker.prototype.getValue = function() {
  *     omitted when columns is a good.math.Size object.
  */
 goog.ui.DimensionPicker.prototype.setValue = function(columns, opt_rows) {
-  if (!goog.isDef(opt_rows)) {
+  if (opt_rows === undefined) {
     columns = /** @type {!goog.math.Size} */ (columns);
     opt_rows = columns.height;
     columns = columns.width;

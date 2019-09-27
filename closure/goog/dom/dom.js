@@ -127,7 +127,7 @@ goog.dom.getElement = function(element) {
  * @private
  */
 goog.dom.getElementHelper_ = function(doc, element) {
-  return goog.isString(element) ? doc.getElementById(element) : element;
+  return typeof element === 'string' ? doc.getElementById(element) : element;
 };
 
 
@@ -854,7 +854,7 @@ goog.dom.createDom_ = function(doc, args) {
   var element = goog.dom.createElement_(doc, tagName);
 
   if (attributes) {
-    if (goog.isString(attributes)) {
+    if (typeof attributes === 'string') {
       element.className = attributes;
     } else if (goog.isArray(attributes)) {
       element.className = attributes.join(' ');
@@ -884,7 +884,7 @@ goog.dom.append_ = function(doc, parent, args, startIndex) {
     // TODO(user): More coercion, ala MochiKit?
     if (child) {
       parent.appendChild(
-          goog.isString(child) ? doc.createTextNode(child) : child);
+          typeof child === 'string' ? doc.createTextNode(child) : child);
     }
   }
 
@@ -1344,7 +1344,7 @@ goog.dom.getChildren = function(element) {
  * @return {Element} The first child node of `node` that is an element.
  */
 goog.dom.getFirstElementChild = function(node) {
-  if (goog.isDef(node.firstElementChild)) {
+  if (node.firstElementChild !== undefined) {
     return /** @type {!Element} */ (node).firstElementChild;
   }
   return goog.dom.getNextElementNode_(node.firstChild, true);
@@ -1357,7 +1357,7 @@ goog.dom.getFirstElementChild = function(node) {
  * @return {Element} The last child node of `node` that is an element.
  */
 goog.dom.getLastElementChild = function(node) {
-  if (goog.isDef(node.lastElementChild)) {
+  if (node.lastElementChild !== undefined) {
     return /** @type {!Element} */ (node).lastElementChild;
   }
   return goog.dom.getNextElementNode_(node.lastChild, false);
@@ -1370,7 +1370,7 @@ goog.dom.getLastElementChild = function(node) {
  * @return {Element} The next sibling of `node` that is an element.
  */
 goog.dom.getNextElementSibling = function(node) {
-  if (goog.isDef(node.nextElementSibling)) {
+  if (node.nextElementSibling !== undefined) {
     return /** @type {!Element} */ (node).nextElementSibling;
   }
   return goog.dom.getNextElementNode_(node.nextSibling, true);
@@ -1384,7 +1384,7 @@ goog.dom.getNextElementSibling = function(node) {
  *     an element.
  */
 goog.dom.getPreviousElementSibling = function(node) {
-  if (goog.isDef(node.previousElementSibling)) {
+  if (node.previousElementSibling !== undefined) {
     return /** @type {!Element} */ (node).previousElementSibling;
   }
   return goog.dom.getNextElementNode_(node.previousSibling, false);
@@ -2061,7 +2061,7 @@ goog.dom.hasSpecifiedTabIndex_ = function(element) {
   // 'tabindex' attributeNode is specified. Otherwise check hasAttribute().
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
     var attrNode = element.getAttributeNode('tabindex');  // Must be lowercase!
-    return goog.isDefAndNotNull(attrNode) && attrNode.specified;
+    return attrNode != null && attrNode.specified;
   } else {
     return element.hasAttribute('tabindex');
   }
@@ -2077,7 +2077,7 @@ goog.dom.hasSpecifiedTabIndex_ = function(element) {
 goog.dom.isTabIndexFocusable_ = function(element) {
   var index = /** @type {!HTMLElement} */ (element).tabIndex;
   // NOTE: IE9 puts tabIndex in 16-bit int, e.g. -2 is 65534.
-  return goog.isNumber(index) && index >= 0 && index < 32768;
+  return typeof (index) === 'number' && index >= 0 && index < 32768;
 };
 
 
@@ -2113,7 +2113,7 @@ goog.dom.hasNonZeroBoundingRect_ = function(element) {
   } else {
     rect = element.getBoundingClientRect();
   }
-  return goog.isDefAndNotNull(rect) && rect.height > 0 && rect.width > 0;
+  return rect != null && rect.height > 0 && rect.width > 0;
 };
 
 
@@ -2340,7 +2340,7 @@ goog.dom.getAncestorByTagNameAndClass = function(
   return /** @type {Element} */ (goog.dom.getAncestor(element, function(node) {
     return (!tagName || node.nodeName == tagName) &&
         (!opt_class ||
-         goog.isString(node.className) &&
+         typeof node.className === 'string' &&
              goog.array.contains(node.className.split(/\s+/), opt_class));
   }, true, opt_maxSearchSteps));
 };
@@ -2432,7 +2432,7 @@ goog.dom.getActiveElement = function(doc) {
  */
 goog.dom.getPixelRatio = function() {
   var win = goog.dom.getWindow();
-  if (goog.isDef(win.devicePixelRatio)) {
+  if (win.devicePixelRatio !== undefined) {
     return win.devicePixelRatio;
   } else if (win.matchMedia) {
     // Should be for IE10 and FF6-17 (this basically clamps to lower)
