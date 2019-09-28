@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.AsyncTestCaseAsyncTest');
-goog.setTestOnly('goog.testing.AsyncTestCaseAsyncTest');
+goog.module('goog.testing.AsyncTestCaseAsyncTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.AsyncTestCase');
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.jsunit');
+const AsyncTestCase = goog.require('goog.testing.AsyncTestCase');
+const TestCase = goog.require('goog.testing.TestCase');
+/** @suppress {extraRequire} */
+const jsunit = goog.require('goog.testing.jsunit');
 
 // Has the setUp() function been called.
 const setUpCalled = false;
@@ -25,9 +26,6 @@ const setUpCalled = false;
 // the next test is not started before the previous completed.
 let curTestIsDone = true;
 // Use an asynchronous test runner for our tests.
-const asyncTestCase =
-    goog.testing.AsyncTestCase.createAndInstall(document.title);
-
 
 /**
  * Uses window.setTimeout() to perform asynchronous behaviour and uses
@@ -40,129 +38,138 @@ function doAsyncStuff(numAsyncCalls, name) {
   if (numAsyncCalls > 0) {
     curTestIsDone = false;
     asyncTestCase.waitForAsync(
-        'doAsyncStuff-' + name + '(' + numAsyncCalls + ')');
-    window.setTimeout(function() { doAsyncStuff(numAsyncCalls - 1, name); }, 0);
+        `doAsyncStuff-${name}` +
+        '(' + numAsyncCalls + ')');
+    window.setTimeout(() => {
+      doAsyncStuff(numAsyncCalls - 1, name);
+    }, 0);
   } else {
     curTestIsDone = true;
     asyncTestCase.continueTesting();
   }
 }
 
-function setUpPage() {
-  debug('setUpPage was called.');
-  doAsyncStuff(3, 'setUpPage');
-}
-function setUp() {
-  assertTrue(curTestIsDone);
-  doAsyncStuff(3, 'setUp');
-}
-function tearDown() {
-  assertTrue(curTestIsDone);
-}
-function test1() {
-  assertTrue(curTestIsDone);
-  doAsyncStuff(1, 'test1');
-}
-function test2_asyncContinueThenWait() {
-  const activeTest = asyncTestCase.activeTest_;
-  function async1() {
-    asyncTestCase.continueTesting();
-    asyncTestCase.waitForAsync('2');
-    window.setTimeout(async2, 0);
-  }
-  function async2() {
-    asyncTestCase.continueTesting();
-    assertEquals(
-        'Did not wait for inner waitForAsync', activeTest,
-        asyncTestCase.activeTest_);
-  }
-  asyncTestCase.waitForAsync('1');
-  window.setTimeout(async1, 0);
-}
-function test3() {
-  assertTrue(curTestIsDone);
-  doAsyncStuff(2, 'test3');
-}
-
-function tearDownPage() {
-  debug('tearDownPage was called.');
-  assertTrue(curTestIsDone);
-}
-
-
-const callback = function() {
-  curTestIsDone = true;
-  asyncTestCase.signal();
-};
-const doAsyncSignals = function() {
+const doAsyncSignals = () => {
   curTestIsDone = false;
-  window.setTimeout(callback, 0);
+  window.setTimeout(() => {
+    curTestIsDone = true;
+    asyncTestCase.signal();
+  }, 0);
 };
 
-function testSignalsReturn() {
-  doAsyncSignals();
-  doAsyncSignals();
-  doAsyncSignals();
-  asyncTestCase.waitForSignals(3);
-}
+const asyncTestCase = new AsyncTestCase(document.title);
+asyncTestCase.setTestObj({
+  setUpPage() {
+    debug('setUpPage was called.');
+    doAsyncStuff(3, 'setUpPage');
+  },
 
-function testSignalsMixedSyncAndAsync() {
-  asyncTestCase.signal();
-  doAsyncSignals();
-  doAsyncSignals();
-  asyncTestCase.waitForSignals(3);
-}
+  setUp() {
+    assertTrue(curTestIsDone);
+    doAsyncStuff(3, 'setUp');
+  },
 
-function testSignalsMixedSyncAndAsyncMultipleWaits() {
-  asyncTestCase.signal();
-  doAsyncSignals();
-  asyncTestCase.waitForSignals(1);
-  doAsyncSignals();
-  asyncTestCase.waitForSignals(2);
-}
+  tearDown() {
+    assertTrue(curTestIsDone);
+  },
 
-function testSignalsCallContinueTestingBeforeFinishing() {
-  doAsyncSignals();
-  asyncTestCase.waitForSignals(2);
+  test1() {
+    assertTrue(curTestIsDone);
+    doAsyncStuff(1, 'test1');
+  },
 
-  window.setTimeout(function() {
-    const thrown = assertThrows(function() {
+  test2_asyncContinueThenWait() {
+    const activeTest = asyncTestCase.activeTest_;
+    function async1() {
       asyncTestCase.continueTesting();
-    });
-    assertEquals('Still waiting for 1 signals.', thrown.message);
-  }, 0);
-  doAsyncSignals();  // To not timeout.
-}
+      asyncTestCase.waitForAsync('2');
+      window.setTimeout(async2, 0);
+    }
+    function async2() {
+      asyncTestCase.continueTesting();
+      assertEquals(
+          'Did not wait for inner waitForAsync', activeTest,
+          asyncTestCase.activeTest_);
+    }
+    asyncTestCase.waitForAsync('1');
+    window.setTimeout(async1, 0);
+  },
 
-function testCurrentTestName() {
-  const currentTestName = goog.testing.TestCase.currentTestName;
-  assertEquals('testCurrentTestName', currentTestName);
-}
+  test3() {
+    assertTrue(curTestIsDone);
+    doAsyncStuff(2, 'test3');
+  },
 
-function testCurrentTestNameAsync() {
-  const getAssertSameTest = function() {
-    const expectedTestCase = goog.testing.TestCase.getActiveTestCase();
-    const expectedTestName = (expectedTestCase ? expectedTestCase.getName() :
-                                                 '<no active TestCase>') +
-        '.' +
-        (goog.testing.TestCase.currentTestName || '<no active test name>');
-    const assertSameTest = function() {
-      const currentTestCase = goog.testing.TestCase.getActiveTestCase();
-      const currentTestName = (currentTestCase ? currentTestCase.getName() :
-                                                 '<no active TestCase>') +
-              '.' + goog.testing.TestCase.currentTestName ||
-          '<no active test name>';
-      assertEquals(expectedTestName, currentTestName);
-      assertEquals(expectedTestCase, currentTestCase);
-    };
-    return assertSameTest;
-  };
-  const assertSameTest = getAssertSameTest();
-  // do something asynchronously...
-  asyncTestCase.waitForSignals(1, 'Awaiting asynchronous callback');
-  setTimeout(function() {
-    // ... and ensure the later half runs during the same test:
-    assertSameTest();
+  tearDownPage() {
+    debug('tearDownPage was called.');
+    assertTrue(curTestIsDone);
+  },
+
+  testSignalsReturn() {
+    doAsyncSignals();
+    doAsyncSignals();
+    doAsyncSignals();
+    asyncTestCase.waitForSignals(3);
+  },
+
+  testSignalsMixedSyncAndAsync() {
     asyncTestCase.signal();
-  });
-}
+    doAsyncSignals();
+    doAsyncSignals();
+    asyncTestCase.waitForSignals(3);
+  },
+
+  testSignalsMixedSyncAndAsyncMultipleWaits() {
+    asyncTestCase.signal();
+    doAsyncSignals();
+    asyncTestCase.waitForSignals(1);
+    doAsyncSignals();
+    asyncTestCase.waitForSignals(2);
+  },
+
+  testSignalsCallContinueTestingBeforeFinishing() {
+    doAsyncSignals();
+    asyncTestCase.waitForSignals(2);
+
+    window.setTimeout(() => {
+      const thrown = assertThrows(() => {
+        asyncTestCase.continueTesting();
+      });
+      assertEquals('Still waiting for 1 signals.', thrown.message);
+    }, 0);
+    doAsyncSignals();  // To not timeout.
+  },
+
+  testCurrentTestName() {
+    const currentTestName = TestCase.currentTestName;
+    assertEquals('testCurrentTestName', currentTestName);
+  },
+
+  testCurrentTestNameAsync() {
+    const getAssertSameTest = () => {
+      const expectedTestCase = TestCase.getActiveTestCase();
+      const expectedTestName = (expectedTestCase ? expectedTestCase.getName() :
+                                                   '<no active TestCase>') +
+          '.' + (TestCase.currentTestName || '<no active test name>');
+      const assertSameTest = () => {
+        const currentTestCase = TestCase.getActiveTestCase();
+        const currentTestName = (currentTestCase ? currentTestCase.getName() :
+                                                   '<no active TestCase>') +
+                '.' + TestCase.currentTestName ||
+            '<no active test name>';
+        assertEquals(expectedTestName, currentTestName);
+        assertEquals(expectedTestCase, currentTestCase);
+      };
+      return assertSameTest;
+    };
+    const assertSameTest = getAssertSameTest();
+    // do something asynchronously...
+    asyncTestCase.waitForSignals(1, 'Awaiting asynchronous callback');
+    setTimeout(() => {
+      // ... and ensure the later half runs during the same test:
+      assertSameTest();
+      asyncTestCase.signal();
+    });
+  },
+});
+TestCase.initializeTestRunner(asyncTestCase);

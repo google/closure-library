@@ -122,11 +122,11 @@ function createFakeMouseWheelEvent(
     opt_wheelDeltaY) {
   const event = {
     type: type,
-    wheelDelta: goog.isDef(opt_wheelDelta) ? opt_wheelDelta : undefined,
-    detail: goog.isDef(opt_detail) ? opt_detail : undefined,
+    wheelDelta: opt_wheelDelta !== undefined ? opt_wheelDelta : undefined,
+    detail: opt_detail !== undefined ? opt_detail : undefined,
     axis: opt_axis || undefined,
-    wheelDeltaX: goog.isDef(opt_wheelDeltaX) ? opt_wheelDeltaX : undefined,
-    wheelDeltaY: goog.isDef(opt_wheelDeltaY) ? opt_wheelDeltaY : undefined,
+    wheelDeltaX: opt_wheelDeltaX !== undefined ? opt_wheelDeltaX : undefined,
+    wheelDeltaY: opt_wheelDeltaY !== undefined ? opt_wheelDeltaY : undefined,
 
     // These two are constants defined on the event in FF3.1 and later.
     // It doesn't matter exactly what they are, and it doesn't affect

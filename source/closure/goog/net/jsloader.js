@@ -168,7 +168,7 @@ goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
 
   // Set a timeout.
   var timeout = null;
-  var timeoutDuration = goog.isDefAndNotNull(options.timeout) ?
+  var timeoutDuration = (options.timeout != null) ?
       options.timeout :
       goog.net.jsloader.DEFAULT_TIMEOUT;
   if (timeoutDuration > 0) {
@@ -249,7 +249,7 @@ goog.net.jsloader.safeLoadAndVerify = function(
   var uri = goog.html.TrustedResourceUrl.unwrap(trustedUri);
 
   // Verify that the expected object does not exist yet.
-  if (goog.isDef(verifyObjs[verificationObjName])) {
+  if (verifyObjs[verificationObjName] !== undefined) {
     // TODO(user): Error or reset variable?
     return goog.async.Deferred.fail(
         new goog.net.jsloader.Error(
@@ -268,7 +268,7 @@ goog.net.jsloader.safeLoadAndVerify = function(
   // Call user back with object that was set by the script.
   sendDeferred.addCallback(function() {
     var result = verifyObjs[verificationObjName];
-    if (goog.isDef(result)) {
+    if (result !== undefined) {
       deferred.callback(result);
       delete verifyObjs[verificationObjName];
     } else {
@@ -283,7 +283,7 @@ goog.net.jsloader.safeLoadAndVerify = function(
 
   // Pass error to new deferred object.
   sendDeferred.addErrback(function(error) {
-    if (goog.isDef(verifyObjs[verificationObjName])) {
+    if (verifyObjs[verificationObjName] !== undefined) {
       delete verifyObjs[verificationObjName];
     }
     deferred.errback(error);
@@ -338,7 +338,7 @@ goog.net.jsloader.cancel_ = function() {
  */
 goog.net.jsloader.cleanup_ = function(
     scriptNode, removeScriptNode, opt_timeout) {
-  if (goog.isDefAndNotNull(opt_timeout)) {
+  if (opt_timeout != null) {
     goog.global.clearTimeout(opt_timeout);
   }
 

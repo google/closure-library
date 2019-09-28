@@ -76,7 +76,7 @@ function receiveMessage(
 }
 
 function receiveNonChannelMessage(data) {
-  if (PortChannel.REQUIRES_SERIALIZATION_ && !goog.isString(data)) {
+  if (PortChannel.REQUIRES_SERIALIZATION_ && typeof data !== 'string') {
     data = googJson.serialize(data);
   }
   mockPort.dispatchEvent(MockMessageEvent.wrap(data, 'http://google.com'));

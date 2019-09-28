@@ -45,7 +45,7 @@ goog.labs.net.image.load = function(uri, opt_image) {
   return new goog.Promise(/** @suppress {strictPrimitiveOperators} Part of the go/strict_warnings_migration */
                           function(resolve, reject) {
     var image;
-    if (!goog.isDef(opt_image)) {
+    if (opt_image === undefined) {
       image = new Image();
     } else if (goog.isFunction(opt_image)) {
       image = opt_image();

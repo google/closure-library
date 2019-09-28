@@ -222,7 +222,7 @@ goog.Disposable.prototype.registerDisposable = function(disposable) {
  */
 goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
   if (this.disposed_) {
-    goog.isDef(opt_scope) ? callback.call(opt_scope) : callback();
+    opt_scope !== undefined ? callback.call(opt_scope) : callback();
     return;
   }
   if (!this.onDisposeCallbacks_) {
@@ -230,7 +230,7 @@ goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
   }
 
   this.onDisposeCallbacks_.push(
-      goog.isDef(opt_scope) ? goog.bind(callback, opt_scope) : callback);
+      opt_scope !== undefined ? goog.bind(callback, opt_scope) : callback);
 };
 
 

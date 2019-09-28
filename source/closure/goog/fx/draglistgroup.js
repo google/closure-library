@@ -444,7 +444,7 @@ goog.fx.DragListGroup.prototype.init = function() {
  */
 goog.fx.DragListGroup.prototype.addItemToDragList = function(
     list, item, opt_index) {
-  if (goog.isDef(opt_index)) {
+  if (opt_index !== undefined) {
     goog.dom.insertChildAt(list, item, opt_index);
   } else {
     goog.dom.appendChild(list, item);
@@ -1132,7 +1132,7 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
           item, draggerElCenter);
       // Initialize the distance to the closest row to the current value if
       // undefined.
-      if (!goog.isDef(distanceToClosestRow)) {
+      if (distanceToClosestRow === undefined) {
         distanceToClosestRow = distanceToRow;
       }
       if (isBeforeFn(relevantCoord, relevantBound) &&
@@ -1159,7 +1159,7 @@ goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
   // If we ended up picking an element that is not in the closest row it can
   // only happen if we should have picked the last one in which case there is
   // no consecutive element.
-  if (!goog.isNull(earliestAfterItem) &&
+  if (earliestAfterItem !== null &&
       goog.fx.DragListGroup.verticalDistanceFromItem_(
           earliestAfterItem, draggerElCenter) > distanceToClosestRow) {
     return null;

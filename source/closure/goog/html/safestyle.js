@@ -528,14 +528,31 @@ goog.html.SafeStyle.URL_RE_ = new RegExp(
         ')([ \t\n]*\\))',
     'g');
 
+/**
+ * Names of functions allowed in FUNCTIONS_RE_.
+ * @private @const {!Array<string>}
+ */
+goog.html.SafeStyle.ALLOWED_FUNCTIONS_ = [
+  'calc',
+  'cubic-bezier',
+  'fit-content',
+  'hsl',
+  'hsla',
+  'matrix',
+  'minmax',
+  'repeat',
+  'rgb',
+  'rgba',
+  '(rotate|scale|translate)(X|Y|Z|3d)?',
+];
+
 
 /**
  * Regular expression for simple functions.
  * @private @const {!RegExp}
  */
 goog.html.SafeStyle.FUNCTIONS_RE_ = new RegExp(
-    '\\b(hsl|hsla|rgb|rgba|matrix|calc|minmax|fit-content|repeat|' +
-        '(rotate|scale|translate)(X|Y|Z|3d)?)' +
+    '\\b(' + goog.html.SafeStyle.ALLOWED_FUNCTIONS_.join('|') + ')' +
         '\\([-+*/0-9a-z.%\\[\\], ]+\\)',
     'g');
 

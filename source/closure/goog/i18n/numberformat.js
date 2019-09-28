@@ -339,7 +339,7 @@ goog.i18n.NumberFormat.prototype.setShowTrailingZeros = function(
 goog.i18n.NumberFormat.prototype.setBaseFormatting = function(
     baseFormattingNumber) {
   goog.asserts.assert(
-      goog.isNull(baseFormattingNumber) || isFinite(baseFormattingNumber));
+      baseFormattingNumber === null || isFinite(baseFormattingNumber));
   this.baseFormattingNumber_ = baseFormattingNumber;
   return this;
 };
@@ -624,7 +624,7 @@ goog.i18n.NumberFormat.prototype.format = function(number) {
   }
 
   var parts = [];
-  var baseFormattingNumber = goog.isNull(this.baseFormattingNumber_) ?
+  var baseFormattingNumber = (this.baseFormattingNumber_ === null) ?
       number :
       this.baseFormattingNumber_;
   var unit = this.getUnitAfterRounding_(baseFormattingNumber, number);
@@ -1426,7 +1426,7 @@ goog.i18n.NumberFormat.prototype.getUnitFor_ = function(base, plurality) {
       goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN :
       goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_LONG_PATTERN;
 
-  if (!goog.isDefAndNotNull(table)) {
+  if (table == null) {
     table = goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN;
   }
 

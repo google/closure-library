@@ -18,8 +18,8 @@
  */
 
 goog.module('goog.test_module');
-goog.setTestOnly('goog.test_module');
 goog.module.declareLegacyNamespace();
+goog.setTestOnly('goog.test_module');
 
 
 /** @suppress {extraRequire} */

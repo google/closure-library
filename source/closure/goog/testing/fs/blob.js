@@ -76,14 +76,14 @@ goog.testing.fs.Blob = function(opt_data, opt_type) {
 goog.testing.fs.Blob.prototype.slice = function(
     opt_start, opt_end, opt_contentType) {
   var relativeStart;
-  if (goog.isNumber(opt_start)) {
+  if (typeof opt_start === 'number') {
     relativeStart = (opt_start < 0) ? Math.max(this.size + opt_start, 0) :
                                       Math.min(opt_start, this.size);
   } else {
     relativeStart = 0;
   }
   var relativeEnd;
-  if (goog.isNumber(opt_end)) {
+  if (typeof opt_end === 'number') {
     relativeEnd = (opt_end < 0) ? Math.max(this.size + opt_end, 0) :
                                   Math.min(opt_end, this.size);
   } else {

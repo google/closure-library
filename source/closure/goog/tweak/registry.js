@@ -136,7 +136,7 @@ goog.tweak.Registry.prototype.register = function(entry) {
   var defaultValueOverride = (id in this.compilerDefaultValueOverrides_) ?
       this.compilerDefaultValueOverrides_[id] :
       this.defaultValueOverrides_[id];
-  if (goog.isDef(defaultValueOverride)) {
+  if (defaultValueOverride !== undefined) {
     goog.asserts.assertInstanceof(
         entry, goog.tweak.BasePrimitiveSetting,
         'Cannot set the default value of non-primitive setting %s',

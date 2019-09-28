@@ -429,7 +429,7 @@ goog.math.log10Floor = function(num) {
  * @return {number} The largest integer less than or equal to `num`.
  */
 goog.math.safeFloor = function(num, opt_epsilon) {
-  goog.asserts.assert(!goog.isDef(opt_epsilon) || opt_epsilon > 0);
+  goog.asserts.assert(opt_epsilon === undefined || opt_epsilon > 0);
   return Math.floor(num + (opt_epsilon || 2e-15));
 };
 
@@ -443,6 +443,6 @@ goog.math.safeFloor = function(num, opt_epsilon) {
  * @return {number} The smallest integer greater than or equal to `num`.
  */
 goog.math.safeCeil = function(num, opt_epsilon) {
-  goog.asserts.assert(!goog.isDef(opt_epsilon) || opt_epsilon > 0);
+  goog.asserts.assert(opt_epsilon === undefined || opt_epsilon > 0);
   return Math.ceil(num - (opt_epsilon || 2e-15));
 };

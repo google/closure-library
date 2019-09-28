@@ -284,7 +284,7 @@ goog.module.ModuleLoader.prototype.loadModules = function(
     // rely on the browser to reconcile the (existing) prefetch request and the
     // script tag we're about to insert.
     this.downloadModules_(ids);
-  } else if (goog.isDefAndNotNull(loadStatus.responseTexts)) {
+  } else if (loadStatus.responseTexts != null) {
     // Modules prefetch is complete.
     this.evaluateCode_(ids);
   }

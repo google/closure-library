@@ -78,7 +78,7 @@ goog.graphics.ext.coordinates.isSpecial = function(coord) {
   var cache = goog.graphics.ext.coordinates.specialCoordinateCache_;
 
   if (!(coord in cache)) {
-    cache[coord] = goog.isString(coord) &&
+    cache[coord] = (typeof coord === 'string') &&
         (goog.graphics.ext.coordinates.isPercent_(coord) ||
          goog.graphics.ext.coordinates.isPixels_(coord));
   }
@@ -100,7 +100,7 @@ goog.graphics.ext.coordinates.isSpecial = function(coord) {
  */
 goog.graphics.ext.coordinates.computeValue = function(coord, size, scale) {
   var number = parseFloat(String(coord));
-  if (goog.isString(coord)) {
+  if (typeof coord === 'string') {
     if (goog.graphics.ext.coordinates.isPercent_(coord)) {
       return number * size / 100;
     } else if (goog.graphics.ext.coordinates.isPixels_(coord)) {
@@ -132,7 +132,7 @@ goog.graphics.ext.coordinates.computeValue = function(coord, size, scale) {
  */
 goog.graphics.ext.coordinates.getValue = function(
     coord, forMaximum, containerSize, scale, opt_cache) {
-  if (!goog.isNumber(coord)) {
+  if (typeof coord !== 'number') {
     var cacheString = opt_cache && ((forMaximum ? 'X' : '') + coord);
 
     if (opt_cache && cacheString in opt_cache) {

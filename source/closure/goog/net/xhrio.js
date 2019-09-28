@@ -655,8 +655,8 @@ goog.net.XhrIo.prototype.send = function(
  */
 goog.net.XhrIo.shouldUseXhr2Timeout_ = function(xhr) {
   return goog.userAgent.IE && goog.userAgent.isVersionOrHigher(9) &&
-      goog.isNumber(xhr[goog.net.XhrIo.XHR2_TIMEOUT_]) &&
-      goog.isDef(xhr[goog.net.XhrIo.XHR2_ON_TIMEOUT_]);
+      typeof xhr[goog.net.XhrIo.XHR2_TIMEOUT_] === 'number' &&
+      xhr[goog.net.XhrIo.XHR2_ON_TIMEOUT_] !== undefined;
 };
 
 
@@ -1248,7 +1248,7 @@ goog.net.XhrIo.prototype.getResponseHeader = function(key) {
   }
 
   var value = this.xhr_.getResponseHeader(key);
-  return goog.isNull(value) ? undefined : value;
+  return value === null ? undefined : value;
 };
 
 
@@ -1294,7 +1294,7 @@ goog.net.XhrIo.prototype.getResponseHeaders = function() {
     var key = keyValue[0];
     var value = keyValue[1];
 
-    if (!goog.isString(value)) {
+    if (typeof value !== 'string') {
       // There must be a value but it can be the empty string.
       continue;
     }
@@ -1352,8 +1352,8 @@ goog.net.XhrIo.prototype.getLastErrorCode = function() {
  * @return {string} Last error message.
  */
 goog.net.XhrIo.prototype.getLastError = function() {
-  return goog.isString(this.lastError_) ? this.lastError_ :
-                                          String(this.lastError_);
+  return typeof this.lastError_ === 'string' ? this.lastError_ :
+                                               String(this.lastError_);
 };
 
 

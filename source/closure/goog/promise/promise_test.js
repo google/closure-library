@@ -1600,6 +1600,34 @@ testSuite({
     return child;
   },
 
+  async testCancelThenCatchIncludesDetailedStack() {
+    if (!new Error()['stack']) {
+      // e.stack is missing for IE9, IE10, and IE11.
+      return;
+    }
+    // Given.
+    const p = new GoogPromise(goog.nullFunction);
+    function recurse(depth) {
+      if (depth == 0) {
+        p.cancel('cancellation message');
+      } else {
+        // Increase the number of stack frames.
+        recurse(depth - 1);
+      }
+    }
+    recurse(20);
+
+    // When.
+    const error = await assertRejects(p);
+
+    // Then.
+    const stackLines = error['stack'].split('\n');
+    // Note: If Error() is created in an asynchronous frame the length is ~5
+    // frames (depending on browser). When Error() is created synchronously
+    // The frame is much longer and includes the frames from this test.
+    assertTrue(stackLines.length > 20);
+  },
+
   testThenVoidCancel() {
     let thenVoidCalled = false;
     const p = new GoogPromise(goog.nullFunction);

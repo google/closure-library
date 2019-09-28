@@ -83,7 +83,7 @@ goog.testing.dom.assertNodesMatch = function(it, array) {
 
     if (goog.dom.isNodeLike(expected)) {
       assertEquals('Nodes should match at position ' + i, expected, node);
-    } else if (goog.isNumber(expected)) {
+    } else if (typeof expected === 'number') {
       assertEquals(
           'Node types should match at position ' + i, expected, node.nodeType);
     } else if (expected.charAt(0) == '#') {
@@ -228,7 +228,7 @@ goog.testing.dom.nodeFilter_ = function(node) {
   // This cast exists to preserve existing behaviour. It's risky, but fine as
   // long as we only access direct properties of `node`.
   var maybeElement = /** @type {!Element} */ (node);
-  if (maybeElement.className && goog.isString(maybeElement.className)) {
+  if (maybeElement.className && typeof maybeElement.className === 'string') {
     return goog.testing.dom.checkUserAgents_(maybeElement.className);
   }
 
@@ -461,7 +461,7 @@ goog.testing.dom.findTextNode = function(textOrRegexp, root) {
   var it = new goog.dom.NodeIterator(root);
   var ret = goog.iter.nextOrValue(goog.iter.filter(it, function(node) {
     if (node.nodeType == goog.dom.NodeType.TEXT) {
-      if (goog.isString(textOrRegexp)) {
+      if (typeof textOrRegexp === 'string') {
         return node.nodeValue == textOrRegexp;
       } else {
         return !!node.nodeValue.match(textOrRegexp);

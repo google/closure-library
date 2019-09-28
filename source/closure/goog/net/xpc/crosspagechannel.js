@@ -516,7 +516,7 @@ goog.net.xpc.CrossPageChannel.prototype.cleanUpIncompleteConnection_ =
  */
 goog.net.xpc.CrossPageChannel.prototype.getPeerUri = function(opt_addCfgParam) {
   var peerUri = this.cfg_[goog.net.xpc.CfgFields.PEER_URI];
-  if (goog.isString(peerUri)) {
+  if (typeof peerUri === 'string') {
     peerUri = this.cfg_[goog.net.xpc.CfgFields.PEER_URI] =
         new goog.Uri(peerUri);
   }
@@ -634,7 +634,7 @@ goog.net.xpc.CrossPageChannel.prototype.notifyConnected = function(opt_delay) {
   this.state_ = goog.net.xpc.ChannelStates.CONNECTED;
   goog.log.info(goog.net.xpc.logger, 'Channel "' + this.name + '" connected');
   goog.dispose(this.connectionDelay_);
-  if (goog.isDef(opt_delay)) {
+  if (opt_delay !== undefined) {
     this.connectionDelay_ = new goog.async.Delay(this.connectCb_, opt_delay);
     this.connectionDelay_.start();
   } else {
@@ -780,7 +780,7 @@ goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_ = function(name) {
  */
 goog.net.xpc.CrossPageChannel.prototype.getRole = function() {
   var role = this.cfg_[goog.net.xpc.CfgFields.ROLE];
-  if (goog.isNumber(role)) {
+  if (typeof role === 'number') {
     return role;
   } else {
     return window.parent == this.peerWindowObject_ ?

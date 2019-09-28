@@ -322,7 +322,7 @@ goog.dom.forms.getValue = function(input) {
   // Elements with a type may need more specialized logic.
   var type = /** {{type: (string|undefined)}} */ (input).type;
 
-  if (goog.isString(type)) {
+  if (typeof type === 'string') {
     var el = /** @type {!Element} */ (input);
 
     switch (type.toLowerCase()) {
@@ -425,7 +425,7 @@ goog.dom.forms.getSelectMultiple_ = function(el) {
 goog.dom.forms.setValue = function(el, opt_value) {
   // Elements with a type may need more specialized logic.
   var type = /** @type {!HTMLInputElement} */ (el).type;
-  switch (goog.isString(type) && type.toLowerCase()) {
+  switch (typeof type === 'string' && type.toLowerCase()) {
     case goog.dom.InputType.CHECKBOX:
     case goog.dom.InputType.RADIO:
       goog.dom.forms.setInputChecked_(
@@ -473,7 +473,7 @@ goog.dom.forms.setInputChecked_ = function(el, opt_value) {
 goog.dom.forms.setSelectSingle_ = function(el, opt_value) {
   // unset any prior selections
   el.selectedIndex = -1;
-  if (goog.isString(opt_value)) {
+  if (typeof opt_value === 'string') {
     for (var option, i = 0;
          option = /** @type {!HTMLSelectElement} */ (el).options[i]; i++) {
       if (option.value == opt_value) {
@@ -494,7 +494,7 @@ goog.dom.forms.setSelectSingle_ = function(el, opt_value) {
  */
 goog.dom.forms.setSelectMultiple_ = function(el, opt_value) {
   // reset string opt_values as an array
-  if (goog.isString(opt_value)) {
+  if (typeof opt_value === 'string') {
     opt_value = [opt_value];
   }
   for (var option, i = 0;

@@ -70,15 +70,16 @@ goog.net.XhrManager = function(
    * @type {number}
    * @private
    */
-  this.maxRetries_ = goog.isDef(opt_maxRetries) ? opt_maxRetries : 1;
+  this.maxRetries_ = (opt_maxRetries !== undefined) ? opt_maxRetries : 1;
 
   /**
    * Timeout interval for an attempt of a given request.
    * @type {number}
    * @private
    */
-  this.timeoutInterval_ =
-      goog.isDef(opt_timeoutInterval) ? Math.max(0, opt_timeoutInterval) : 0;
+  this.timeoutInterval_ = (opt_timeoutInterval !== undefined) ?
+      Math.max(0, opt_timeoutInterval) :
+      0;
 
   /**
    * Add credentials to every request.
@@ -204,10 +205,10 @@ goog.net.XhrManager.prototype.send = function(
   var request = new goog.net.XhrManager.Request(
       url, goog.bind(this.handleEvent_, this, id), opt_method, opt_content,
       opt_headers, opt_callback,
-      goog.isDef(opt_maxRetries) ? opt_maxRetries : this.maxRetries_,
+      opt_maxRetries !== undefined ? opt_maxRetries : this.maxRetries_,
       opt_responseType,
-      goog.isDef(opt_withCredentials) ? opt_withCredentials :
-                                        this.withCredentials_);
+      opt_withCredentials !== undefined ? opt_withCredentials :
+                                          this.withCredentials_);
   this.requests_.set(id, request);
 
   // Setup the callback for the pool.
@@ -582,7 +583,7 @@ goog.net.XhrManager.Request = function(
    * @type {number}
    * @private
    */
-  this.maxRetries_ = goog.isDef(opt_maxRetries) ? opt_maxRetries : 1;
+  this.maxRetries_ = (opt_maxRetries !== undefined) ? opt_maxRetries : 1;
 
   /**
    * The number of attempts  so far.

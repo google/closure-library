@@ -154,7 +154,7 @@ goog.crypt.Md5.prototype.compress_ = function(buf, opt_offset) {
   var X = new Array(16);
 
   // Get 16 little endian words. It is not worth unrolling this for Chrome 11.
-  if (goog.isString(buf)) {
+  if (typeof buf === 'string') {
     for (var i = 0; i < 16; ++i) {
       X[i] = (buf.charCodeAt(opt_offset++)) |
           (buf.charCodeAt(opt_offset++) << 8) |
@@ -349,7 +349,7 @@ goog.crypt.Md5.prototype.compress_ = function(buf, opt_offset) {
 
 /** @override */
 goog.crypt.Md5.prototype.update = function(bytes, opt_length) {
-  if (!goog.isDef(opt_length)) {
+  if (opt_length === undefined) {
     opt_length = bytes.length;
   }
   var lengthMinusBlock = opt_length - this.blockSize;
@@ -373,7 +373,7 @@ goog.crypt.Md5.prototype.update = function(bytes, opt_length) {
       }
     }
 
-    if (goog.isString(bytes)) {
+    if (typeof bytes === 'string') {
       while (i < opt_length) {
         block[blockLength++] = bytes.charCodeAt(i++);
         if (blockLength == this.blockSize) {

@@ -188,7 +188,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
   switch (command) {
     case goog.editor.plugins.BasicTextFormatter.COMMAND.BACKGROUND_COLOR:
       // Don't bother for no color selected, color picker is resetting itself.
-      if (!goog.isNull(opt_arg)) {
+      if (opt_arg !== null) {
         if (goog.editor.BrowserFeature.EATS_EMPTY_BACKGROUND_COLOR) {
           this.applyBgColorManually_(opt_arg);
         } else if (goog.userAgent.OPERA) {
@@ -231,7 +231,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
 
       if (command ==
               goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_COLOR &&
-          goog.isNull(opt_arg)) {
+          opt_arg === null) {
         // If we don't have a color, then FONT_COLOR is a no-op.
         break;
       }

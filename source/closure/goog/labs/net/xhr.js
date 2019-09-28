@@ -305,7 +305,7 @@ xhr.send = function(method, url, data, opt_options) {
     if (options.headers) {
       for (var key in options.headers) {
         var value = options.headers[key];
-        if (goog.isDefAndNotNull(value)) {
+        if (value != null) {
           request.setRequestHeader(key, value);
         }
       }

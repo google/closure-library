@@ -251,7 +251,7 @@ goog.crypt.BlobHasher.prototype.onLoad_ = function() {
 
   var array = null;
   if (this.fileReader_.result instanceof Array ||
-      goog.isString(this.fileReader_.result)) {
+      typeof this.fileReader_.result === 'string') {
     array = this.fileReader_.result;
   } else if (
       goog.global['ArrayBuffer'] && goog.global['Uint8Array'] &&

@@ -235,7 +235,7 @@ testSuite({
     // include anything that inherits from the CSSRule interface.
     // See http://dev.w3.org/csswg/cssom/#cssrule.
     const parentStyleSheet = cssom.getParentStyleSheet(cssRule);
-    const ruleIndex = goog.isDefAndNotNull(parentStyleSheet.cssRules) ? 2 : 1;
+    const ruleIndex = (parentStyleSheet.cssRules != null) ? 2 : 1;
     assertEquals(ruleIndex, cssom.getCssRuleIndexInParentStyleSheet(cssRule));
   },
 
@@ -292,7 +292,7 @@ testSuite({
     const styleSheets = cssom.getAllCssStyleSheets();
     const styleSheet = styleSheets[3];
     const rules = cssom.getCssRulesFromStyleSheet(styleSheet);
-    const index = goog.isDefAndNotNull(styleSheet.cssRules) ? 2 : 1;
+    const index = (styleSheet.cssRules != null) ? 2 : 1;
     const cssRule = rules[index];
     const cssText = fixCssTextForIe(cssom.getCssTextFromCssRule(cssRule));
     assertEquals(replacementCssText, cssText);

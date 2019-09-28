@@ -15,6 +15,7 @@
 goog.module('goog.net.cookiesTest');
 goog.setTestOnly();
 
+const Cookies = goog.require('goog.net.Cookies');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const cookies = goog.require('goog.net.cookies');
 const googArray = goog.require('goog.array');
@@ -204,6 +205,8 @@ testSuite({
   },
 
   testSetCookiePath() {
+    assertEquals(
+        'foo=bar;path=/xyz', mockSetCookie('foo', 'bar', {path: '/xyz'}));
     assertEquals('foo=bar;path=/xyz', mockSetCookie('foo', 'bar', -1, '/xyz'));
   },
 
@@ -214,17 +217,36 @@ testSuite({
   },
 
   testSetCookieSecure() {
+    assertEquals('foo=bar;secure', mockSetCookie('foo', 'bar', {secure: true}));
     assertEquals(
         'foo=bar;secure', mockSetCookie('foo', 'bar', -1, null, null, true));
   },
 
   testSetCookieMaxAgeZero() {
+    const result = mockSetCookie('foo', 'bar', {maxAge: 0});
+    const pattern =
+        new RegExp('foo=bar;expires=' + new Date(1970, 1, 1).toUTCString());
+    if (!result.match(pattern)) {
+      fail(`expected match against ${pattern} got ${result}`);
+    }
+  },
+
+  testSetCookieMaxAgeZeroPositional() {
     const result = mockSetCookie('foo', 'bar', 0);
     const pattern =
         new RegExp('foo=bar;expires=' + new Date(1970, 1, 1).toUTCString());
     if (!result.match(pattern)) {
       fail(`expected match against ${pattern} got ${result}`);
     }
+  },
+
+  testSetCookieSameSite() {
+    assertEquals(
+        'foo=bar;samesite=lax',
+        mockSetCookie('foo', 'bar', {sameSite: Cookies.SameSite.LAX}));
+    assertEquals(
+        'foo=bar;samesite=strict',
+        mockSetCookie('foo', 'bar', {sameSite: Cookies.SameSite.STRICT}));
   },
 
   testGetEmptyCookie() {

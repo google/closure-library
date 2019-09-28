@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.testing.ShardingTestCaseTest');
-goog.setTestOnly('goog.testing.ShardingTestCaseTest');
+goog.module('goog.testing.ShardingTestCaseTest');
+goog.setTestOnly();
 
-goog.require('goog.testing.ShardingTestCase');
-goog.require('goog.testing.TestCase');
-goog.require('goog.testing.asserts');
-goog.require('goog.testing.jsunit');
+const ShardingTestCase = goog.require('goog.testing.ShardingTestCase');
+const TestCase = goog.require('goog.testing.TestCase');
+const asserts = goog.require('goog.testing.asserts');
+/** @suppress {extraRequire} */
+const jsunit = goog.require('goog.testing.jsunit');
 
-goog.testing.TestCase.initializeTestRunner(
-    new goog.testing.ShardingTestCase(1, 2));
+const testCase = new ShardingTestCase(1, 2);
+testCase.setTestObj({
+  testA() {},
 
-function testA() {}
-
-function testB() {
-  fail('testB should not be in this shard');
-}
+  testB() {
+    fail('testB should not be in this shard');
+  },
+});
+TestCase.initializeTestRunner(testCase);

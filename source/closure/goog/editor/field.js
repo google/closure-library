@@ -595,7 +595,7 @@ goog.editor.Field.prototype.resetOriginalElemProperties = function() {
     goog.dom.setProperties(field, {'style': cssText});
   }
 
-  if (goog.isString(this.originalFieldLineHeight_)) {
+  if (typeof (this.originalFieldLineHeight_) === 'string') {
     goog.style.setStyle(field, 'lineHeight', this.originalFieldLineHeight_);
     this.originalFieldLineHeight_ = null;
   }
@@ -1480,7 +1480,7 @@ goog.editor.Field.prototype.execCommand = function(command, var_args) {
  */
 goog.editor.Field.prototype.queryCommandValue = function(commands) {
   var isEditable = this.isLoaded() && this.isSelectionEditable();
-  if (goog.isString(commands)) {
+  if (typeof commands === 'string') {
     return this.queryCommandValueInternal_(commands, isEditable);
   } else {
     var state = {};
@@ -2546,7 +2546,7 @@ goog.editor.Field.prototype.makeUneditable = function(opt_skipRestore) {
   // If html is provided, copy it back and reset the properties on the field
   // so that the original node will have the same properties as it did before
   // it was made editable.
-  if (goog.isString(html)) {
+  if (typeof html === 'string') {
     goog.editor.node.replaceInnerHtml(field, html);
     this.resetOriginalElemProperties();
   }
@@ -2591,7 +2591,7 @@ goog.editor.Field.prototype.restoreDom = function() {
  * @protected
  */
 goog.editor.Field.prototype.shouldLoadAsynchronously = function() {
-  if (!goog.isDef(this.isHttps_)) {
+  if (this.isHttps_ === undefined) {
     this.isHttps_ = false;
 
     if (goog.userAgent.IE && this.usesIframe()) {

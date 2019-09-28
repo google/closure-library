@@ -126,7 +126,7 @@ goog.cssom.getAllCssStyleSheets = function(
   var styleSheetsOutput = [];
   var styleSheet = opt_styleSheet || document.styleSheets;
   var includeDisabled =
-      goog.isDef(opt_includeDisabled) ? opt_includeDisabled : false;
+      (opt_includeDisabled !== undefined) ? opt_includeDisabled : false;
 
   // Imports need to go first.
   if (styleSheet.imports && styleSheet.imports.length) {

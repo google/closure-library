@@ -31,8 +31,8 @@ const testSuite = goog.require('goog.testing.testSuite');
 
 const TEST_DIR = 'goog-fs-test-dir';
 
-const fsExists = goog.isDef(goog.global.requestFileSystem) ||
-    goog.isDef(goog.global.webkitRequestFileSystem);
+const fsExists = (goog.global.requestFileSystem !== undefined) ||
+    goog.global.webkitRequestFileSystem !== undefined;
 const deferredFs = fsExists ? googFs.getTemporary() : null;
 const stubs = new PropertyReplacer();
 

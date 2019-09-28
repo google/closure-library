@@ -800,7 +800,7 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
       }
 
       // Clear any sizes that might have been stored.
-      if (goog.isDefAndNotNull(this.originalSize_)) {
+      if (this.originalSize_ != null) {
         this.originalSize_ = undefined;
         var elem = this.menu_.getElement();
         if (elem) {

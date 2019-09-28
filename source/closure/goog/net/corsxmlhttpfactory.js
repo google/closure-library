@@ -144,7 +144,7 @@ goog.net.IeCorsXhrAdapter = function() {
  * @override
  */
 goog.net.IeCorsXhrAdapter.prototype.open = function(method, url, opt_async) {
-  if (goog.isDefAndNotNull(opt_async) && (!opt_async)) {
+  if (opt_async != null && (!opt_async)) {
     throw new Error('Only async requests are supported.');
   }
   this.xdr_.open(method, url);

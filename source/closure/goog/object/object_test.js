@@ -597,7 +597,7 @@ testSuite({
       }
     }
 
-    const expected = goog.isDef(Object.getOwnPropertyNames) ? ['foo'] : [];
+    const expected = (Object.getOwnPropertyNames !== undefined) ? ['foo'] : [];
     assertSameElements(expected, googObject.getAllPropertyNames(obj));
   },
 
@@ -610,7 +610,7 @@ testSuite({
     child.prototype.b = null;
 
     const expected = ['a', 'b'];
-    if (goog.isDef(Object.getOwnPropertyNames)) {
+    if (Object.getOwnPropertyNames !== undefined) {
       expected.push('constructor');
     }
 

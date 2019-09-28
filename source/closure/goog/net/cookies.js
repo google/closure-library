@@ -22,6 +22,7 @@
 goog.provide('goog.net.Cookies');
 goog.provide('goog.net.cookies');
 
+goog.require('goog.asserts');
 goog.require('goog.string');
 
 
@@ -117,9 +118,10 @@ goog.net.Cookies.prototype.isValidValue = function(value) {
  *
  * @param {string} name  The cookie name.
  * @param {string} value  The cookie value.
- * @param {number=} opt_maxAge  The max age in seconds (from now). Use -1 to
- *     set a session cookie. If not provided, the default is -1
- *     (i.e. set a session cookie).
+ * @param {number|!goog.net.Cookies.SetOptions=} opt_maxAge  The options object,
+ *     or else (deprecated) the max age in seconds (from now). Use -1 to set a
+ *     session cookie. If not provided, the default is -1 (i.e. set a session
+ *     cookie).
  * @param {?string=} opt_path  The path of the cookie. If not present then this
  *     uses the full request path.
  * @param {?string=} opt_domain  The domain of the cookie, or null to not
@@ -131,6 +133,19 @@ goog.net.Cookies.prototype.isValidValue = function(value) {
  */
 goog.net.Cookies.prototype.set = function(
     name, value, opt_maxAge, opt_path, opt_domain, opt_secure) {
+  /** @type {string|undefined} */
+  var sameSite;
+  if (typeof opt_maxAge === 'object') {
+    goog.asserts.assert(opt_path == null);
+    goog.asserts.assert(opt_domain == null);
+    goog.asserts.assert(opt_secure == null);
+    var options = opt_maxAge;
+    sameSite = options.sameSite;
+    opt_secure = options.secure;
+    opt_domain = options.domain;
+    opt_path = options.path;
+    opt_maxAge = options.maxAge;
+  }
   if (!this.isValidName(name)) {
     throw new Error('Invalid cookie name "' + name + '"');
   }
@@ -138,7 +153,7 @@ goog.net.Cookies.prototype.set = function(
     throw new Error('Invalid cookie value "' + value + '"');
   }
 
-  if (!goog.isDef(opt_maxAge)) {
+  if (opt_maxAge === undefined) {
     opt_maxAge = -1;
   }
 
@@ -168,8 +183,11 @@ goog.net.Cookies.prototype.set = function(
     expiresStr = ';expires=' + futureDate.toUTCString();
   }
 
+  var sameSiteStr = sameSite != null ? ';samesite=' + sameSite : '';
+
   this.setCookie_(
-      name + '=' + value + domainStr + pathStr + expiresStr + secureStr);
+      name + '=' + value + domainStr + pathStr + expiresStr + secureStr +
+      sameSiteStr);
 };
 
 
@@ -260,7 +278,7 @@ goog.net.Cookies.prototype.getCount = function() {
 goog.net.Cookies.prototype.containsKey = function(key) {
   // substring will return empty string if the key is not found, so the get
   // function will only return undefined
-  return goog.isDef(this.get(key));
+  return this.get(key) !== undefined;
 };
 
 
@@ -348,6 +366,71 @@ goog.net.Cookies.prototype.getKeyValues_ = function() {
     }
   }
   return {keys: keys, values: values};
+};
+
+
+/**
+ * Options object for calls to Cookies.prototype.set.
+ * @record
+ */
+goog.net.Cookies.SetOptions = function() {
+  /**
+   * The max age in seconds (from now). Use -1 to set a session cookie. If not
+   * provided, the default is -1 (i.e. set a session cookie).
+   * @type {number|undefined}
+   */
+  this.maxAge;
+  /**
+   * The path of the cookie. If not present then this uses the full request
+   * path.
+   * @type {?string|undefined}
+   */
+  this.path;
+  /**
+   * The domain of the cookie, or null to not specify a domain attribute
+   * (browser will use the full request host name). If not provided, the default
+   * is null (i.e. let browser use full request host name).
+   * @type {?string|undefined}
+   */
+  this.domain;
+  /**
+   * Whether the cookie should only be sent over a secure channel.
+   * @type {boolean|undefined}
+   */
+  this.secure;
+  /**
+   * The SameSite attribute for the cookie (default is NONE).
+   * @type {!goog.net.Cookies.SameSite|undefined}
+   */
+  this.sameSite;
+};
+
+
+/**
+ * Valid values for the SameSite cookie attribute.  In 2019, browsers began the
+ * process of changing the default from NONE to LAX.
+ *
+ * @see https://web.dev/samesite-cookies-explained
+ * @see https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-03#section-5.3.7
+ * @enum {string}
+ */
+goog.net.Cookies.SameSite = {
+  /**
+   * The cookie will be sent in first-party contexts, including initial
+   * navigation from external referrers.
+   */
+  LAX: 'lax',
+  /**
+   * The cookie will be sent in all first-party or third-party contexts. This
+   * was the original default behavior of the web, but will need to be set
+   * explicitly starting in 2020.
+   */
+  NONE: 'none',
+  /**
+   * The cookie will only be sent in first-party contexts. It will not be sent
+   * on initial navigation from external referrers.
+   */
+  STRICT: 'strict',
 };
 
 

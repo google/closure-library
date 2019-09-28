@@ -247,7 +247,8 @@ goog.date.getCutOffSameWeek_ = function(
   var d = new Date(year, month, date);
 
   // Default to Thursday for cut off as per ISO 8601.
-  var cutoff = goog.isDef(opt_weekDay) ? opt_weekDay : goog.date.weekDay.THU;
+  var cutoff =
+      (opt_weekDay !== undefined) ? opt_weekDay : goog.date.weekDay.THU;
 
   // Default to Monday for first day of the week as per ISO 8601.
   var firstday = opt_firstDayOfWeek || goog.date.weekDay.MON;
@@ -539,7 +540,7 @@ goog.date.setIso8601TimeOnly_ = function(d, formatted) {
  */
 goog.date.Interval = function(
     opt_years, opt_months, opt_days, opt_hours, opt_minutes, opt_seconds) {
-  if (goog.isString(opt_years)) {
+  if (typeof opt_years === 'string') {
     var type = opt_years;
     var interval = /** @type {number} */ (opt_months);
     /** @type {number} */
@@ -807,7 +808,7 @@ goog.date.Date = function(opt_year, opt_month, opt_date) {
   /** @protected {!Date} The wrapped date or datetime. */
   this.date;
   // goog.date.DateTime assumes that only this.date is added in this ctor.
-  if (goog.isNumber(opt_year)) {
+  if (typeof opt_year === 'number') {
     this.date = this.buildDate_(opt_year, opt_month || 0, opt_date || 1);
     this.maybeFixDst_(opt_date || 1);
   } else if (goog.isObject(opt_year)) {
@@ -1411,7 +1412,7 @@ goog.date.Date.fromIsoString = function(formatted) {
 goog.date.DateTime = function(
     opt_year, opt_month, opt_date, opt_hours, opt_minutes, opt_seconds,
     opt_milliseconds) {
-  if (goog.isNumber(opt_year)) {
+  if (typeof opt_year === 'number') {
     /** @override */
     this.date = new Date(
         opt_year, opt_month || 0, opt_date || 1, opt_hours || 0,
@@ -1777,7 +1778,7 @@ goog.date.DateTime.prototype.toUsTimeString = function(
   var hours = this.getHours();
 
   // show am/pm marker by default
-  if (!goog.isDef(opt_showAmPm)) {
+  if (opt_showAmPm === undefined) {
     opt_showAmPm = true;
   }
 
@@ -1819,7 +1820,7 @@ goog.date.DateTime.prototype.toIsoTimeString = function(opt_showSeconds) {
   var hours = this.getHours();
   var label = goog.string.padNumber(hours, 2) + ':' +
       goog.string.padNumber(this.getMinutes(), 2);
-  if (!goog.isDef(opt_showSeconds) || opt_showSeconds) {
+  if (opt_showSeconds === undefined || opt_showSeconds) {
     label += ':' + goog.string.padNumber(this.getSeconds(), 2);
   }
   return label;

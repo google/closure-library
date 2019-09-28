@@ -40,7 +40,7 @@ goog.require('goog.Disposable');
 goog.testing.PseudoRandom = function(opt_seed, opt_install) {
   goog.Disposable.call(this);
 
-  if (!goog.isDef(opt_seed)) {
+  if (opt_seed === undefined) {
     opt_seed = goog.testing.PseudoRandom.seedUniquifier_++ + goog.now();
   }
   this.seed(opt_seed);

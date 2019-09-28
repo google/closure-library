@@ -133,7 +133,8 @@ goog.require('goog.i18n.DateTimeSymbols');
  */
 goog.i18n.DateTimeParse = function(pattern, opt_dateTimeSymbols) {
   goog.asserts.assert(
-      goog.isDef(opt_dateTimeSymbols) || goog.isDef(goog.i18n.DateTimeSymbols),
+      opt_dateTimeSymbols !== undefined ||
+          goog.i18n.DateTimeSymbols !== undefined,
       'goog.i18n.DateTimeSymbols or explicit symbols must be defined');
 
   this.patternParts_ = [];

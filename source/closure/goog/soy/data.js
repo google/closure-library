@@ -217,7 +217,8 @@ goog.soy.data.SanitizedHtml.prototype.contentKind =
  * @return {boolean}
  */
 goog.soy.data.SanitizedHtml.isCompatibleWith = function(value) {
-  return goog.isString(value) || value instanceof goog.soy.data.SanitizedHtml ||
+  return typeof value === 'string' ||
+      value instanceof goog.soy.data.SanitizedHtml ||
       value instanceof goog.html.SafeHtml;
 };
 
@@ -264,7 +265,8 @@ goog.soy.data.SanitizedJs.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
  * @return {boolean}
  */
 goog.soy.data.SanitizedJs.isCompatibleWith = function(value) {
-  return goog.isString(value) || value instanceof goog.soy.data.SanitizedJs ||
+  return typeof value === 'string' ||
+      value instanceof goog.soy.data.SanitizedJs ||
       value instanceof goog.html.SafeScript;
 };
 
@@ -309,7 +311,8 @@ goog.soy.data.SanitizedUri.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
  * @return {boolean}
  */
 goog.soy.data.SanitizedUri.isCompatibleWith = function(value) {
-  return goog.isString(value) || value instanceof goog.soy.data.SanitizedUri ||
+  return typeof value === 'string' ||
+      value instanceof goog.soy.data.SanitizedUri ||
       value instanceof goog.html.SafeUrl ||
       value instanceof goog.html.TrustedResourceUrl ||
       value instanceof goog.Uri;
@@ -379,7 +382,7 @@ goog.soy.data.SanitizedTrustedResourceUri.prototype.toTrustedResourceUrl =
  * @return {boolean}
  */
 goog.soy.data.SanitizedTrustedResourceUri.isCompatibleWith = function(value) {
-  return goog.isString(value) ||
+  return typeof value === 'string' ||
       value instanceof goog.soy.data.SanitizedTrustedResourceUri ||
       value instanceof goog.html.TrustedResourceUrl;
 };
@@ -431,7 +434,7 @@ goog.soy.data.SanitizedHtmlAttribute.prototype.contentDir =
  * @return {boolean}
  */
 goog.soy.data.SanitizedHtmlAttribute.isCompatibleWith = function(value) {
-  return goog.isString(value) ||
+  return typeof value === 'string' ||
       value instanceof goog.soy.data.SanitizedHtmlAttribute;
 };
 
@@ -478,7 +481,8 @@ goog.soy.data.SanitizedCss.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
  * @return {boolean}
  */
 goog.soy.data.SanitizedCss.isCompatibleWith = function(value) {
-  return goog.isString(value) || value instanceof goog.soy.data.SanitizedCss ||
+  return typeof value === 'string' ||
+      value instanceof goog.soy.data.SanitizedCss ||
       value instanceof goog.html.SafeStyle ||
       value instanceof goog.html.SafeStyleSheet;
 };

@@ -531,7 +531,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype
     .alsoAllowAttributesPrivateDoNotAccessOrElse = function(attrs) {
   goog.array.forEach(attrs, function(attr) {
-    if (goog.isString(attr)) {
+    if (typeof attr === 'string') {
       attr = {tagName: '*', attributeName: attr, policy: null};
     }
     var handlerName = goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(

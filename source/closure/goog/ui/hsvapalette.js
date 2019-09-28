@@ -59,7 +59,7 @@ goog.ui.HsvaPalette = function(opt_domHelper, opt_color, opt_alpha, opt_class) {
    * @type {number}
    * @private
    */
-  this.alpha_ = goog.isDef(opt_alpha) ? opt_alpha : 1;
+  this.alpha_ = (opt_alpha !== undefined) ? opt_alpha : 1;
 
   /**
    * @override

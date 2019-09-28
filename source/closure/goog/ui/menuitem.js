@@ -241,7 +241,7 @@ goog.ui.MenuItem.prototype.handleMouseUp = function(e) {
     // Clear out the saved opening coords immediately so they're not used twice.
     parentMenu.openingCoords = null;
 
-    if (oldCoords && goog.isNumber(e.clientX)) {
+    if (oldCoords && typeof e.clientX === 'number') {
       var newCoords = new goog.math.Coordinate(e.clientX, e.clientY);
       if (goog.math.Coordinate.equals(oldCoords, newCoords)) {
         // This menu was opened by a mousedown and we're handling the consequent

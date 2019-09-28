@@ -91,7 +91,7 @@ goog.fx.dom.PredefinedEffect.prototype.updateStyle = goog.nullFunction;
  *     otherwise.
  */
 goog.fx.dom.PredefinedEffect.prototype.isRightToLeft = function() {
-  if (!goog.isDef(this.rightToLeft_)) {
+  if (this.rightToLeft_ === undefined) {
     this.rightToLeft_ = goog.style.isRightToLeft(this.element);
   }
   return this.rightToLeft_;
@@ -423,8 +423,8 @@ goog.fx.dom.ResizeHeight.prototype.updateStyle = function() {
  * @struct
  */
 goog.fx.dom.Fade = function(element, start, end, time, opt_acc) {
-  if (goog.isNumber(start)) start = [start];
-  if (goog.isNumber(end)) end = [end];
+  if (typeof start === 'number') start = [start];
+  if (typeof end === 'number') end = [end];
 
   goog.fx.dom.Fade.base(
       this, 'constructor', element, start, end, time, opt_acc);

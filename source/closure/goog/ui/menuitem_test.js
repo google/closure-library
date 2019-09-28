@@ -116,11 +116,13 @@ testSuite({
   testGetSetCaption() {
     assertEquals('Caption must have expected value', 'Item', item.getCaption());
     item.setCaption('Hello, world!');
-    assertTrue('Caption must be a string', goog.isString(item.getCaption()));
+    assertTrue(
+        'Caption must be a string', typeof item.getCaption() === 'string');
     assertEquals(
         'Caption must have expected value', 'Hello, world!', item.getCaption());
     item.setContent(dom.createDom(TagName.DIV, 'foo', 'Foo'));
-    assertTrue('Caption must be a string', goog.isString(item.getCaption()));
+    assertTrue(
+        'Caption must be a string', typeof item.getCaption() === 'string');
     assertEquals('Caption must have expected value', 'Foo', item.getCaption());
   },
 
@@ -140,11 +142,13 @@ testSuite({
     item.createDom();
     assertEquals('Caption must have expected value', 'Item', item.getCaption());
     item.setCaption('Hello, world!');
-    assertTrue('Caption must be a string', goog.isString(item.getCaption()));
+    assertTrue(
+        'Caption must be a string', typeof item.getCaption() === 'string');
     assertEquals(
         'Caption must have expected value', 'Hello, world!', item.getCaption());
     item.setContent(dom.createDom(TagName.DIV, 'foo', 'Foo'));
-    assertTrue('Caption must be a string', goog.isString(item.getCaption()));
+    assertTrue(
+        'Caption must be a string', typeof item.getCaption() === 'string');
     assertEquals('Caption must have expected value', 'Foo', item.getCaption());
 
     const arrayContent =

@@ -187,7 +187,7 @@ goog.labs.testing.IsNullOrUndefinedMatcher = function() {};
  */
 goog.labs.testing.IsNullOrUndefinedMatcher.prototype.matches = function(
     actualValue) {
-  return !goog.isDefAndNotNull(actualValue);
+  return actualValue == null;
 };
 
 
@@ -218,7 +218,7 @@ goog.labs.testing.IsNullMatcher = function() {};
  * @override
  */
 goog.labs.testing.IsNullMatcher.prototype.matches = function(actualValue) {
-  return goog.isNull(actualValue);
+  return actualValue === null;
 };
 
 
@@ -248,7 +248,7 @@ goog.labs.testing.IsUndefinedMatcher = function() {};
  * @override
  */
 goog.labs.testing.IsUndefinedMatcher.prototype.matches = function(actualValue) {
-  return !goog.isDef(actualValue);
+  return actualValue === undefined;
 };
 
 

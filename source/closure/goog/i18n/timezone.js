@@ -404,11 +404,11 @@ goog.i18n.TimeZone.prototype.isDaylightTime = function(date) {
  */
 goog.i18n.TimeZone.prototype.getLongNameGMT = function(date) {
   if (this.isDaylightTime(date)) {
-    return (goog.isDef(this.tzNamesExt_.DST_LONG_NAME_GMT)) ?
+    return (this.tzNamesExt_.DST_LONG_NAME_GMT !== undefined) ?
         this.tzNamesExt_.DST_LONG_NAME_GMT :
         this.tzNamesExt_['DST_LONG_NAME_GMT'];
   } else {
-    return (goog.isDef(this.tzNamesExt_.STD_LONG_NAME_GMT)) ?
+    return (this.tzNamesExt_.STD_LONG_NAME_GMT !== undefined) ?
         this.tzNamesExt_.STD_LONG_NAME_GMT :
         this.tzNamesExt_['STD_LONG_NAME_GMT'];
   }
@@ -423,11 +423,11 @@ goog.i18n.TimeZone.prototype.getLongNameGMT = function(date) {
  */
 goog.i18n.TimeZone.prototype.getGenericLocation = function(date) {
   if (this.isDaylightTime(date)) {
-    return (goog.isDef(this.tzNamesExt_.DST_GENERIC_LOCATION)) ?
+    return (this.tzNamesExt_.DST_GENERIC_LOCATION !== undefined) ?
         this.tzNamesExt_.DST_GENERIC_LOCATION :
         this.tzNamesExt_['DST_GENERIC_LOCATION'];
   } else {
-    return (goog.isDef(this.tzNamesExt_.STD_GENERIC_LOCATION)) ?
+    return (this.tzNamesExt_.STD_GENERIC_LOCATION !== undefined) ?
         this.tzNamesExt_.STD_GENERIC_LOCATION :
         this.tzNamesExt_['STD_GENERIC_LOCATION'];
   }

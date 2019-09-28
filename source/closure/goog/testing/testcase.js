@@ -1777,7 +1777,7 @@ goog.testing.TestCase.prototype.logError = function(name, error) {
   var stack = null;
   if (error) {
     this.log(error);
-    if (goog.isString(error)) {
+    if (typeof error === 'string') {
       errMsg = error;
     } else {
       errMsg = error.message || error.description || error.toString();

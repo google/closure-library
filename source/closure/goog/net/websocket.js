@@ -480,7 +480,7 @@ goog.net.WebSocket.prototype.onError_ = function(event) {
  * @private
  */
 goog.net.WebSocket.prototype.clearReconnectTimer_ = function() {
-  if (goog.isDefAndNotNull(this.reconnectTimer_)) {
+  if (this.reconnectTimer_ != null) {
     goog.Timer.clear(this.reconnectTimer_);
   }
   this.reconnectTimer_ = null;

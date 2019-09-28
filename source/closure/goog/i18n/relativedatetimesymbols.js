@@ -15,7 +15,7 @@
 /**
  * @fileoverview Relative date time formatting symbols.
  *
- * File generated from CLDR ver. 35
+ * File generated from CLDR ver. 35.1
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -107,7 +107,7 @@ exports.setRelativeDateTimeSymbols = function(symbols) {
 };
 
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_af =  {
   DAY: {
     LONG:{
@@ -202,7 +202,7 @@ exports.RelativeDateTimeSymbols_af =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_am =  {
   DAY: {
     LONG:{
@@ -282,7 +282,7 @@ exports.RelativeDateTimeSymbols_am =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ar =  {
   DAY: {
     LONG:{
@@ -367,13 +367,13 @@ exports.RelativeDateTimeSymbols_ar =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ar_DZ = exports.RelativeDateTimeSymbols_ar;
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ar_EG = exports.RelativeDateTimeSymbols_ar;
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_az =  {
   DAY: {
     LONG:{
@@ -433,7 +433,7 @@ exports.RelativeDateTimeSymbols_az =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_be =  {
   DAY: {
     LONG:{
@@ -528,7 +528,7 @@ exports.RelativeDateTimeSymbols_be =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_bg =  {
   DAY: {
     LONG:{
@@ -663,7 +663,7 @@ exports.RelativeDateTimeSymbols_bg =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_bn =  {
   DAY: {
     LONG:{
@@ -728,7 +728,7 @@ exports.RelativeDateTimeSymbols_bn =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_br =  {
   DAY: {
     LONG:{
@@ -853,7 +853,7 @@ exports.RelativeDateTimeSymbols_br =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_bs =  {
   DAY: {
     LONG:{
@@ -953,7 +953,7 @@ exports.RelativeDateTimeSymbols_bs =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ca =  {
   DAY: {
     LONG:{
@@ -1058,7 +1058,7 @@ exports.RelativeDateTimeSymbols_ca =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_chr =  {
   DAY: {
     LONG:{
@@ -1153,7 +1153,7 @@ exports.RelativeDateTimeSymbols_chr =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_cs =  {
   DAY: {
     LONG:{
@@ -1248,7 +1248,7 @@ exports.RelativeDateTimeSymbols_cs =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_cy =  {
   DAY: {
     LONG:{
@@ -1353,7 +1353,7 @@ exports.RelativeDateTimeSymbols_cy =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_da =  {
   DAY: {
     LONG:{
@@ -1433,7 +1433,7 @@ exports.RelativeDateTimeSymbols_da =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_de =  {
   DAY: {
     LONG:{
@@ -1543,10 +1543,10 @@ exports.RelativeDateTimeSymbols_de =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_de_AT = exports.RelativeDateTimeSymbols_de;
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_de_CH =  {
   DAY: {
     LONG:{
@@ -1656,7 +1656,7 @@ exports.RelativeDateTimeSymbols_de_CH =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_el =  {
   DAY: {
     LONG:{
@@ -1786,7 +1786,7 @@ exports.RelativeDateTimeSymbols_el =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_en =  {
   DAY: {
     LONG:{
@@ -1881,7 +1881,7 @@ exports.RelativeDateTimeSymbols_en =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_en_AU =  {
   DAY: {
     LONG:{
@@ -1986,7 +1986,7 @@ exports.RelativeDateTimeSymbols_en_AU =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_en_CA =  {
   DAY: {
     LONG:{
@@ -2081,7 +2081,7 @@ exports.RelativeDateTimeSymbols_en_CA =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_en_GB =  {
   DAY: {
     LONG:{
@@ -2186,7 +2186,7 @@ exports.RelativeDateTimeSymbols_en_GB =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_en_IE =  {
   DAY: {
     LONG:{
@@ -2281,7 +2281,7 @@ exports.RelativeDateTimeSymbols_en_IE =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_en_IN =  {
   DAY: {
     LONG:{
@@ -2376,7 +2376,7 @@ exports.RelativeDateTimeSymbols_en_IN =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_en_SG =  {
   DAY: {
     LONG:{
@@ -2481,10 +2481,10 @@ exports.RelativeDateTimeSymbols_en_SG =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_en_US = exports.RelativeDateTimeSymbols_en;
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_en_ZA =  {
   DAY: {
     LONG:{
@@ -2579,7 +2579,7 @@ exports.RelativeDateTimeSymbols_en_ZA =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_es =  {
   DAY: {
     LONG:{
@@ -2674,7 +2674,7 @@ exports.RelativeDateTimeSymbols_es =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_es_419 =  {
   DAY: {
     LONG:{
@@ -2779,10 +2779,10 @@ exports.RelativeDateTimeSymbols_es_419 =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_es_ES = exports.RelativeDateTimeSymbols_es;
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_es_MX =  {
   DAY: {
     LONG:{
@@ -2922,7 +2922,7 @@ exports.RelativeDateTimeSymbols_es_MX =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_es_US =  {
   DAY: {
     LONG:{
@@ -3027,7 +3027,7 @@ exports.RelativeDateTimeSymbols_es_US =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_et =  {
   DAY: {
     LONG:{
@@ -3132,7 +3132,7 @@ exports.RelativeDateTimeSymbols_et =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_eu =  {
   DAY: {
     LONG:{
@@ -3197,7 +3197,7 @@ exports.RelativeDateTimeSymbols_eu =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_fa =  {
   DAY: {
     LONG:{
@@ -3262,7 +3262,7 @@ exports.RelativeDateTimeSymbols_fa =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_fi =  {
   DAY: {
     LONG:{
@@ -3367,7 +3367,7 @@ exports.RelativeDateTimeSymbols_fi =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_fil =  {
   DAY: {
     LONG:{
@@ -3472,7 +3472,7 @@ exports.RelativeDateTimeSymbols_fil =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_fr =  {
   DAY: {
     LONG:{
@@ -3612,7 +3612,7 @@ exports.RelativeDateTimeSymbols_fr =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_fr_CA =  {
   DAY: {
     LONG:{
@@ -3752,7 +3752,7 @@ exports.RelativeDateTimeSymbols_fr_CA =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ga =  {
   DAY: {
     LONG:{
@@ -3877,7 +3877,7 @@ exports.RelativeDateTimeSymbols_ga =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_gl =  {
   DAY: {
     LONG:{
@@ -3972,7 +3972,7 @@ exports.RelativeDateTimeSymbols_gl =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_gsw =  {
   DAY: {
     LONG:{
@@ -4032,7 +4032,7 @@ exports.RelativeDateTimeSymbols_gsw =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_gu =  {
   DAY: {
     LONG:{
@@ -4097,7 +4097,7 @@ exports.RelativeDateTimeSymbols_gu =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_haw =  {
   DAY: {
     LONG:{
@@ -4157,7 +4157,7 @@ exports.RelativeDateTimeSymbols_haw =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_he =  {
   DAY: {
     LONG:{
@@ -4267,7 +4267,7 @@ exports.RelativeDateTimeSymbols_he =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_hi =  {
   DAY: {
     LONG:{
@@ -4352,7 +4352,7 @@ exports.RelativeDateTimeSymbols_hi =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_hr =  {
   DAY: {
     LONG:{
@@ -4457,7 +4457,7 @@ exports.RelativeDateTimeSymbols_hr =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_hu =  {
   DAY: {
     LONG:{
@@ -4527,7 +4527,7 @@ exports.RelativeDateTimeSymbols_hu =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_hy =  {
   DAY: {
     LONG:{
@@ -4632,7 +4632,7 @@ exports.RelativeDateTimeSymbols_hy =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_id =  {
   DAY: {
     LONG:{
@@ -4732,7 +4732,7 @@ exports.RelativeDateTimeSymbols_id =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_in =  {
   DAY: {
     LONG:{
@@ -4832,7 +4832,7 @@ exports.RelativeDateTimeSymbols_in =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_is =  {
   DAY: {
     LONG:{
@@ -4947,7 +4947,7 @@ exports.RelativeDateTimeSymbols_is =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_it =  {
   DAY: {
     LONG:{
@@ -5042,7 +5042,7 @@ exports.RelativeDateTimeSymbols_it =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_iw =  {
   DAY: {
     LONG:{
@@ -5152,7 +5152,7 @@ exports.RelativeDateTimeSymbols_iw =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ja =  {
   DAY: {
     LONG:{
@@ -5252,7 +5252,7 @@ exports.RelativeDateTimeSymbols_ja =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ka =  {
   DAY: {
     LONG:{
@@ -5347,7 +5347,7 @@ exports.RelativeDateTimeSymbols_ka =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_kk =  {
   DAY: {
     LONG:{
@@ -5442,7 +5442,7 @@ exports.RelativeDateTimeSymbols_kk =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_km =  {
   DAY: {
     LONG:{
@@ -5517,7 +5517,7 @@ exports.RelativeDateTimeSymbols_km =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_kn =  {
   DAY: {
     LONG:{
@@ -5602,7 +5602,7 @@ exports.RelativeDateTimeSymbols_kn =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ko =  {
   DAY: {
     LONG:{
@@ -5662,7 +5662,7 @@ exports.RelativeDateTimeSymbols_ko =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ky =  {
   DAY: {
     LONG:{
@@ -5787,7 +5787,7 @@ exports.RelativeDateTimeSymbols_ky =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ln =  {
   DAY: {
     LONG:{
@@ -5847,7 +5847,7 @@ exports.RelativeDateTimeSymbols_ln =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_lo =  {
   DAY: {
     LONG:{
@@ -5937,7 +5937,7 @@ exports.RelativeDateTimeSymbols_lo =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_lt =  {
   DAY: {
     LONG:{
@@ -6042,7 +6042,7 @@ exports.RelativeDateTimeSymbols_lt =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_lv =  {
   DAY: {
     LONG:{
@@ -6157,7 +6157,7 @@ exports.RelativeDateTimeSymbols_lv =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_mk =  {
   DAY: {
     LONG:{
@@ -6237,7 +6237,7 @@ exports.RelativeDateTimeSymbols_mk =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ml =  {
   DAY: {
     LONG:{
@@ -6297,7 +6297,7 @@ exports.RelativeDateTimeSymbols_ml =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_mn =  {
   DAY: {
     LONG:{
@@ -6377,7 +6377,7 @@ exports.RelativeDateTimeSymbols_mn =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_mo =  {
   DAY: {
     LONG:{
@@ -6507,7 +6507,7 @@ exports.RelativeDateTimeSymbols_mo =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_mr =  {
   DAY: {
     LONG:{
@@ -6632,7 +6632,7 @@ exports.RelativeDateTimeSymbols_mr =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ms =  {
   DAY: {
     LONG:{
@@ -6737,7 +6737,7 @@ exports.RelativeDateTimeSymbols_ms =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_mt =  {
   DAY: {
     LONG:{
@@ -6867,7 +6867,7 @@ exports.RelativeDateTimeSymbols_mt =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_my =  {
   DAY: {
     LONG:{
@@ -6932,7 +6932,7 @@ exports.RelativeDateTimeSymbols_my =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_nb =  {
   DAY: {
     LONG:{
@@ -7067,7 +7067,7 @@ exports.RelativeDateTimeSymbols_nb =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ne =  {
   DAY: {
     LONG:{
@@ -7132,7 +7132,7 @@ exports.RelativeDateTimeSymbols_ne =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_nl =  {
   DAY: {
     LONG:{
@@ -7212,7 +7212,7 @@ exports.RelativeDateTimeSymbols_nl =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_no =  {
   DAY: {
     LONG:{
@@ -7347,10 +7347,10 @@ exports.RelativeDateTimeSymbols_no =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_no_NO = exports.RelativeDateTimeSymbols_no;
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_or =  {
   DAY: {
     LONG:{
@@ -7445,7 +7445,7 @@ exports.RelativeDateTimeSymbols_or =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_pa =  {
   DAY: {
     LONG:{
@@ -7510,7 +7510,7 @@ exports.RelativeDateTimeSymbols_pa =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_pl =  {
   DAY: {
     LONG:{
@@ -7615,7 +7615,7 @@ exports.RelativeDateTimeSymbols_pl =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_pt =  {
   DAY: {
     LONG:{
@@ -7715,10 +7715,10 @@ exports.RelativeDateTimeSymbols_pt =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_pt_BR = exports.RelativeDateTimeSymbols_pt;
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_pt_PT =  {
   DAY: {
     LONG:{
@@ -7848,7 +7848,7 @@ exports.RelativeDateTimeSymbols_pt_PT =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ro =  {
   DAY: {
     LONG:{
@@ -7978,7 +7978,7 @@ exports.RelativeDateTimeSymbols_ro =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ru =  {
   DAY: {
     LONG:{
@@ -8118,7 +8118,7 @@ exports.RelativeDateTimeSymbols_ru =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_sh =  {
   DAY: {
     LONG:{
@@ -8238,7 +8238,7 @@ exports.RelativeDateTimeSymbols_sh =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_si =  {
   DAY: {
     LONG:{
@@ -8313,7 +8313,7 @@ exports.RelativeDateTimeSymbols_si =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_sk =  {
   DAY: {
     LONG:{
@@ -8413,7 +8413,7 @@ exports.RelativeDateTimeSymbols_sk =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_sl =  {
   DAY: {
     LONG:{
@@ -8513,7 +8513,7 @@ exports.RelativeDateTimeSymbols_sl =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_sq =  {
   DAY: {
     LONG:{
@@ -8588,7 +8588,7 @@ exports.RelativeDateTimeSymbols_sq =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_sr =  {
   DAY: {
     LONG:{
@@ -8708,7 +8708,7 @@ exports.RelativeDateTimeSymbols_sr =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_sr_Latn =  {
   DAY: {
     LONG:{
@@ -8828,7 +8828,7 @@ exports.RelativeDateTimeSymbols_sr_Latn =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_sv =  {
   DAY: {
     LONG:{
@@ -8968,7 +8968,7 @@ exports.RelativeDateTimeSymbols_sv =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_sw =  {
   DAY: {
     LONG:{
@@ -9038,7 +9038,7 @@ exports.RelativeDateTimeSymbols_sw =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ta =  {
   DAY: {
     LONG:{
@@ -9168,7 +9168,7 @@ exports.RelativeDateTimeSymbols_ta =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_te =  {
   DAY: {
     LONG:{
@@ -9263,7 +9263,7 @@ exports.RelativeDateTimeSymbols_te =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_th =  {
   DAY: {
     LONG:{
@@ -9363,7 +9363,7 @@ exports.RelativeDateTimeSymbols_th =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_tl =  {
   DAY: {
     LONG:{
@@ -9468,7 +9468,7 @@ exports.RelativeDateTimeSymbols_tl =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_tr =  {
   DAY: {
     LONG:{
@@ -9553,7 +9553,7 @@ exports.RelativeDateTimeSymbols_tr =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_uk =  {
   DAY: {
     LONG:{
@@ -9693,7 +9693,7 @@ exports.RelativeDateTimeSymbols_uk =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_ur =  {
   DAY: {
     LONG:{
@@ -9798,7 +9798,7 @@ exports.RelativeDateTimeSymbols_ur =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_uz =  {
   DAY: {
     LONG:{
@@ -9863,7 +9863,7 @@ exports.RelativeDateTimeSymbols_uz =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_vi =  {
   DAY: {
     LONG:{
@@ -9928,7 +9928,7 @@ exports.RelativeDateTimeSymbols_vi =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_zh =  {
   DAY: {
     LONG:{
@@ -9993,10 +9993,10 @@ exports.RelativeDateTimeSymbols_zh =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_zh_CN = exports.RelativeDateTimeSymbols_zh;
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_zh_HK =  {
   DAY: {
     LONG:{
@@ -10101,7 +10101,7 @@ exports.RelativeDateTimeSymbols_zh_HK =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_zh_TW =  {
   DAY: {
     LONG:{
@@ -10161,7 +10161,7 @@ exports.RelativeDateTimeSymbols_zh_TW =  {
   },
 };
 
-/** const {RelativeDateTimeSymbols} */
+/** @const {!RelativeDateTimeSymbols} */
 exports.RelativeDateTimeSymbols_zu =  {
   DAY: {
     LONG:{

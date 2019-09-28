@@ -36,19 +36,19 @@ goog.math.Coordinate3 = function(opt_x, opt_y, opt_z) {
    * X-value
    * @type {number}
    */
-  this.x = goog.isDef(opt_x) ? opt_x : 0;
+  this.x = (opt_x !== undefined) ? opt_x : 0;
 
   /**
    * Y-value
    * @type {number}
    */
-  this.y = goog.isDef(opt_y) ? opt_y : 0;
+  this.y = (opt_y !== undefined) ? opt_y : 0;
 
   /**
    * Z-value
    * @type {number}
    */
-  this.z = goog.isDef(opt_z) ? opt_z : 0;
+  this.z = (opt_z !== undefined) ? opt_z : 0;
 };
 
 

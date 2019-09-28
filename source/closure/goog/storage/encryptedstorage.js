@@ -149,7 +149,7 @@ goog.storage.EncryptedStorage.prototype.decryptValue_ = function(
 /** @override */
 goog.storage.EncryptedStorage.prototype.set = function(
     key, value, opt_expiration) {
-  if (!goog.isDef(value)) {
+  if (value === undefined) {
     goog.storage.EncryptedStorage.prototype.remove.call(this, key);
     return;
   }
@@ -177,7 +177,7 @@ goog.storage.EncryptedStorage.prototype.getWrapper = function(
   }
   var value = goog.storage.RichStorage.Wrapper.unwrap(wrapper);
   var salt = wrapper[goog.storage.EncryptedStorage.SALT_KEY];
-  if (!goog.isString(value) || !goog.isArray(salt) || !salt.length) {
+  if (typeof value !== 'string' || !goog.isArray(salt) || !salt.length) {
     throw goog.storage.ErrorCode.INVALID_VALUE;
   }
   var json = this.decryptValue_(salt, key, value);

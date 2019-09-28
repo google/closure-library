@@ -123,7 +123,8 @@ goog.async.Delay.prototype.disposeInternal = function() {
 goog.async.Delay.prototype.start = function(opt_interval) {
   this.stop();
   this.id_ = goog.Timer.callOnce(
-      this.callback_, goog.isDef(opt_interval) ? opt_interval : this.interval_);
+      this.callback_,
+      opt_interval !== undefined ? opt_interval : this.interval_);
 };
 
 

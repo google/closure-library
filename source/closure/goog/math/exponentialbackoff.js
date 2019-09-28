@@ -51,18 +51,18 @@ goog.math.ExponentialBackoff = function(
       maxValue >= initialValue,
       'Max value should be at least as large as initial value.');
 
-  if (goog.isDef(opt_randomFactor)) {
+  if (opt_randomFactor !== undefined) {
     goog.asserts.assert(
         opt_randomFactor >= 0 && opt_randomFactor <= 1,
         'Randomness factor should be between 0 and 1.');
   }
 
-  if (goog.isDef(opt_backoffFactor)) {
+  if (opt_backoffFactor !== undefined) {
     goog.asserts.assert(
         opt_backoffFactor > 1, 'Backoff factor should be greater than 1');
   }
 
-  if (goog.isDef(opt_decayFactor)) {
+  if (opt_decayFactor !== undefined) {
     goog.asserts.assert(
         opt_decayFactor >= 1, 'Decay factor should be greater than 1');
   }

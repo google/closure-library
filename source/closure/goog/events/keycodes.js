@@ -285,7 +285,7 @@ goog.events.KeyCodes.firesKeyPressEvent = function(
   // Gecko doesn't need to use the held key for modifiers, it just checks the
   // ctrl/meta/alt/shiftKey fields.
   if (!goog.userAgent.GECKO) {
-    if (goog.isNumber(opt_heldKeyCode)) {
+    if (typeof opt_heldKeyCode === 'number') {
       opt_heldKeyCode = goog.events.KeyCodes.normalizeKeyCode(opt_heldKeyCode);
     }
     var heldKeyIsModifier = opt_heldKeyCode == goog.events.KeyCodes.CTRL ||

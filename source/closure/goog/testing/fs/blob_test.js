@@ -19,7 +19,7 @@ const FsBlob = goog.require('goog.testing.fs.Blob');
 const dom = goog.require('goog.dom');
 const testSuite = goog.require('goog.testing.testSuite');
 
-const hasArrayBuffer = goog.isDef(goog.global.ArrayBuffer);
+const hasArrayBuffer = (goog.global.ArrayBuffer !== undefined);
 
 testSuite({
   testInput() {

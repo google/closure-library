@@ -314,7 +314,7 @@ SafeDomTreeProcessor.prototype.processElementAttributes_ = function(
   for (var i = 0, attribute; attribute = attributes[i]; i++) {
     if (attribute.specified) {
       var newValue = this.processElementAttribute(originalElement, attribute);
-      if (!goog.isNull(newValue)) {
+      if (newValue !== null) {
         noclobber.setElementAttribute(newElement, attribute.name, newValue);
       }
     }

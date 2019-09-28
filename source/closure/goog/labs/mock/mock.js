@@ -235,7 +235,7 @@ goog.labs.mock.getUid = function(obj) {
  * @return {string} The string representation of the object.
  */
 goog.labs.mock.formatValue_ = function(obj, opt_id) {
-  var id = goog.isDef(opt_id) ? opt_id : true;
+  var id = (opt_id !== undefined) ? opt_id : true;
   var previous = [];
   var output = [];
 
@@ -246,11 +246,11 @@ goog.labs.mock.formatValue_ = function(obj, opt_id) {
 
 
     try {
-      if (!goog.isDef(obj)) {
+      if (obj === undefined) {
         output.push('undefined');
-      } else if (goog.isNull(obj)) {
+      } else if (obj === null) {
         output.push('NULL');
-      } else if (goog.isString(obj)) {
+      } else if (typeof obj === 'string') {
         output.push('"' + indentMultiline(obj) + '"');
       } else if (goog.isFunction(obj)) {
         var funcName = goog.labs.mock.getFunctionName_(obj);
@@ -290,7 +290,6 @@ goog.labs.mock.formatValue_ = function(obj, opt_id) {
   return output.join('')
       .replace(/"closure_uid_\d+"/g, '_id')
       .replace(/{ /g, '{');
-
 };
 
 

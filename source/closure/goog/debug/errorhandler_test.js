@@ -75,7 +75,7 @@ testSuite({
     fakeWin.setTimeout = function(fn, time) {
       fakeWin.setTimeout.called = true;
       fakeWin.setTimeout.that = this;
-      if (goog.isString(fn)) {
+      if (typeof fn === 'string') {
         eval(fn);
       } else {
         fn.apply(this, Array.prototype.slice.call(arguments, 2));
@@ -85,7 +85,7 @@ testSuite({
     fakeWin.setInterval = function(fn, time) {
       fakeWin.setInterval.called = true;
       fakeWin.setInterval.that = this;
-      if (goog.isString(fn)) {
+      if (typeof fn === 'string') {
         eval(fn);
       } else {
         fn.apply(this, Array.prototype.slice.call(arguments, 2));

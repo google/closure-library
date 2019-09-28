@@ -12,18 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.events.ListenableTest');
-goog.setTestOnly('goog.events.ListenableTest');
+goog.module('goog.events.ListenableTest');
+goog.setTestOnly();
 
-goog.require('goog.events.Listenable');
-goog.require('goog.testing.jsunit');
+const Listenable = goog.require('goog.events.Listenable');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function testIsImplementedBy() {
-  const ListenableClass = function() {};
-  goog.events.Listenable.addImplementation(ListenableClass);
+testSuite({
+  testIsImplementedBy() {
+    const ListenableClass = class {};
+    Listenable.addImplementation(ListenableClass);
 
-  const NonListenableClass = function() {};
+    const NonListenableClass = class {};
 
-  assertTrue(goog.events.Listenable.isImplementedBy(new ListenableClass()));
-  assertFalse(goog.events.Listenable.isImplementedBy(new NonListenableClass()));
-}
+    assertTrue(Listenable.isImplementedBy(new ListenableClass()));
+    assertFalse(Listenable.isImplementedBy(new NonListenableClass()));
+  },
+});

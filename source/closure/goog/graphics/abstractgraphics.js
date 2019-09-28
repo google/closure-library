@@ -191,7 +191,7 @@ goog.graphics.AbstractGraphics.prototype.getPixelSize = function() {
   if (this.isInDocument()) {
     return goog.style.getSize(this.getElement());
   }
-  if (goog.isNumber(this.width) && goog.isNumber(this.height)) {
+  if (typeof this.width === 'number' && typeof this.height === 'number') {
     return new goog.math.Size(this.width, this.height);
   }
   return null;

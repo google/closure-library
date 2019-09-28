@@ -301,7 +301,7 @@ goog.ui.editor.DefaultToolbar.makeToolbar = function(
   var controls = [];
 
   for (var i = 0, button; button = items[i]; i++) {
-    if (goog.isString(button)) {
+    if (typeof button === 'string') {
       button = goog.ui.editor.DefaultToolbar.makeBuiltInToolbarButton(
           button, domHelper);
     }
@@ -536,7 +536,7 @@ goog.ui.editor.DefaultToolbar.fontSizeFactory_ = function(
     // integer, so normalize that first.
     // NOTE(user): Gecko returns "6" so can't just normalize all
     // strings, only ones ending in "px".
-    if (goog.isString(value) && goog.style.getLengthUnits(value) == 'px') {
+    if (typeof value === 'string' && goog.style.getLengthUnits(value) == 'px') {
       value = goog.ui.editor.ToolbarFactory.getLegacySizeFromPx(
           parseInt(value, 10));
     }

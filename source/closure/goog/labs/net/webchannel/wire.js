@@ -89,7 +89,7 @@ Wire.QueuedMap = function(mapId, map, opt_context) {
 Wire.QueuedMap.prototype.getRawDataSize = function() {
   if (Wire.RAW_DATA_KEY in this.map) {
     const data = this.map[Wire.RAW_DATA_KEY];
-    if (goog.isString(data)) {
+    if (typeof data === 'string') {
       return data.length;
     }
   }

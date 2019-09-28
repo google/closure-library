@@ -513,7 +513,7 @@ goog.proto2.Message.prototype.has$Value = function(tag) {
 goog.proto2.Message.prototype.getValueForTag_ = function(tag) {
   // Retrieve the current value, which may still be serialized.
   var value = this.values_[tag];
-  if (!goog.isDefAndNotNull(value)) {
+  if (value == null) {
     return null;
   }
 

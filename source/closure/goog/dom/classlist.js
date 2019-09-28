@@ -51,7 +51,7 @@ goog.dom.classlist.get = function(element) {
   // Some types of elements don't have a className in IE (e.g. iframes).
   // Furthermore, in Firefox, className is not a string when the element is
   // an SVG element.
-  return goog.isString(className) && className.match(/\S+/g) || [];
+  return typeof className === 'string' && className.match(/\S+/g) || [];
 };
 
 

@@ -102,8 +102,9 @@ goog.graphics.AffineTransform.prototype.clone = function() {
  */
 goog.graphics.AffineTransform.prototype.setTransform = function(
     m00, m10, m01, m11, m02, m12) {
-  if (!goog.isNumber(m00) || !goog.isNumber(m10) || !goog.isNumber(m01) ||
-      !goog.isNumber(m11) || !goog.isNumber(m02) || !goog.isNumber(m12)) {
+  if (typeof m00 !== 'number' || typeof m10 !== 'number' ||
+      typeof m01 !== 'number' || typeof m11 !== 'number' ||
+      typeof m02 !== 'number' || typeof m12 !== 'number') {
     throw new Error('Invalid transform parameters');
   }
   this.m00_ = m00;

@@ -246,7 +246,7 @@ function doTestPlaceCursorAtEnd(
   assertEquals(
       'The range should end at the specified expected node', endNode,
       range.getEndNode());
-  const offset = goog.isDefAndNotNull(opt_offset) ?
+  const offset = (opt_offset != null) ?
       opt_offset :
       textNode ? endNode.nodeValue.length : endNode.childNodes.length - 1;
   if (hasBogusNode) {

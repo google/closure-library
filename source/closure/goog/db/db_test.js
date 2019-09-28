@@ -21,6 +21,7 @@ const GoogPromise = goog.require('goog.Promise');
 const IndexedDb = goog.require('goog.db.IndexedDb');
 const KeyRange = goog.require('goog.db.KeyRange');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const TestCase = goog.require('goog.testing.TestCase');
 const Transaction = goog.require('goog.db.Transaction');
 const asserts = goog.require('goog.testing.asserts');
 const events = goog.require('goog.events');
@@ -381,6 +382,8 @@ testSuite({
   },
 
   testAddRecord() {
+    TestCase.getActiveTestCase().promiseTimeout = 60 * 1000;  // msecs
+
     if (!idbSupported) {
       return;
     }
@@ -1072,6 +1075,8 @@ testSuite({
   },
 
   testAddRecordWithIndex() {
+    TestCase.getActiveTestCase().promiseTimeout = 60 * 1000;  // msecs
+
     if (!idbSupported) {
       return;
     }

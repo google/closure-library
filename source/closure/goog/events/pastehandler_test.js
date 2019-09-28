@@ -27,7 +27,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 
 function newBrowserEvent(type) {
-  if (goog.isString(type)) {
+  if (typeof type === 'string') {
     return new BrowserEvent({type: type});
   } else {
     return new BrowserEvent(type);

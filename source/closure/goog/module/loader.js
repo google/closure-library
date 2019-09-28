@@ -261,7 +261,7 @@ goog.module.Loader.prototype.require = function(module, symbol, callback) {
     pending[module] = [[symbol, callback]];  // Yes, really [[ ]].
     // Defer loading to initialization if Loader is not yet
     // initialized, otherwise load the module.
-    if (goog.isString(this.urlBase_)) {
+    if (typeof this.urlBase_ === 'string') {
       this.load_(module);
     } else {
       this.pendingBeforeInit_.push(module);

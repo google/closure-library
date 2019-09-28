@@ -365,7 +365,7 @@ testSuite({
     assertTrue(
         goog.global.TrustedScriptURL ?
             trustedValue instanceof TrustedScriptURL :
-            goog.isString(trustedValue));
+            typeof trustedValue === 'string');
   },
 
   testUnwrapTrustedURL() {
@@ -380,6 +380,6 @@ testSuite({
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
     assertTrue(
         goog.global.TrustedURL ? trustedValue instanceof TrustedURL :
-                                 goog.isString(trustedValue));
+                                 typeof trustedValue === 'string');
   },
 });

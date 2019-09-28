@@ -166,7 +166,7 @@ goog.dom.TagIterator.prototype.setPosition = function(
   this.node = node;
 
   if (node) {
-    if (goog.isNumber(opt_tagType)) {
+    if (typeof opt_tagType === 'number') {
       this.tagType = opt_tagType;
     } else {
       // Auto-determine the proper type
@@ -177,7 +177,7 @@ goog.dom.TagIterator.prototype.setPosition = function(
     }
   }
 
-  if (goog.isNumber(opt_depth)) {
+  if (typeof opt_depth === 'number') {
     this.depth = opt_depth;
   }
 };

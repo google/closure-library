@@ -85,16 +85,16 @@ goog.i18n.GraphemeBreak.inversions_ = null;
 goog.i18n.GraphemeBreak.applyBreakRules_ = function(a, b, extended) {
   var prop = goog.i18n.GraphemeBreak.property;
 
-  var aCode = goog.isString(a) ?
+  var aCode = (typeof a === 'string') ?
       goog.i18n.GraphemeBreak.getCodePoint_(a, a.length - 1) :
       a;
   var bCode =
-      goog.isString(b) ? goog.i18n.GraphemeBreak.getCodePoint_(b, 0) : b;
+      (typeof b === 'string') ? goog.i18n.GraphemeBreak.getCodePoint_(b, 0) : b;
 
   var aProp = goog.i18n.GraphemeBreak.getBreakProp_(aCode);
   var bProp = goog.i18n.GraphemeBreak.getBreakProp_(bCode);
 
-  var isString = goog.isString(a);
+  var isString = (typeof a === 'string');
 
   // GB3.
   if (aProp === prop.CR && bProp === prop.LF) {
@@ -437,8 +437,8 @@ goog.i18n.GraphemeBreak.hasGraphemeBreak = function(a, b, opt_extended) {
  *     a and b; False otherwise.
  */
 goog.i18n.GraphemeBreak.hasGraphemeBreakStrings = function(a, b, opt_extended) {
-  goog.asserts.assert(goog.isDef(a), 'First string should be defined.');
-  goog.asserts.assert(goog.isDef(b), 'Second string should be defined.');
+  goog.asserts.assert(a !== undefined, 'First string should be defined.');
+  goog.asserts.assert(b !== undefined, 'Second string should be defined.');
 
   // Break if any of the strings is empty.
   if (a.length === 0 || b.length === 0) {

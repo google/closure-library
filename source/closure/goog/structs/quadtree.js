@@ -566,5 +566,5 @@ goog.structs.QuadTree.Point = function(x, y, opt_value) {
    * Optional value associated with the point.
    * @type {*}
    */
-  this.value = goog.isDef(opt_value) ? opt_value : null;
+  this.value = (opt_value !== undefined) ? opt_value : null;
 };

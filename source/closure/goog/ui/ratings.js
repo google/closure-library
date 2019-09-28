@@ -368,7 +368,7 @@ goog.ui.Ratings.prototype.onMouseOver_ = function(e) {
   if (!this.isEnabled()) {
     return;
   }
-  if (goog.isDef(e.target.index)) {
+  if (e.target.index !== undefined) {
     var n = e.target.index;
     if (this.highlightedIndex_ != n) {
       this.highlightIndex_(n);
@@ -388,7 +388,7 @@ goog.ui.Ratings.prototype.onMouseOver_ = function(e) {
  */
 goog.ui.Ratings.prototype.onMouseOut_ = function(e) {
   // Only remove the highlight if the mouse is not moving to another star
-  if (e.relatedTarget && !goog.isDef(e.relatedTarget.index)) {
+  if (e.relatedTarget && e.relatedTarget.index === undefined) {
     this.resetHighlights_();
   }
 };
@@ -405,7 +405,7 @@ goog.ui.Ratings.prototype.onClick_ = function(e) {
     return;
   }
 
-  if (goog.isDef(e.target.index)) {
+  if (e.target.index !== undefined) {
     this.setSelectedIndex(e.target.index);
   }
 };

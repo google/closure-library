@@ -777,7 +777,7 @@ goog.testing.net.XhrIo.prototype.checkXhr_ = function() {
 goog.testing.net.XhrIo.prototype.getResponseText = function() {
   if (!this.checkXhr_()) {
     return '';
-  } else if (goog.isString(this.response_)) {
+  } else if (typeof this.response_ === 'string') {
     return this.response_;
   } else if (
       goog.global['ArrayBuffer'] && this.response_ instanceof ArrayBuffer) {
@@ -835,7 +835,7 @@ goog.testing.net.XhrIo.prototype.getResponseXml = function() {
   }
   // NOTE(user): I haven't found out how to check in Internet Explorer
   // whether the response is XML document, so I do it the other way around.
-  return goog.isString(this.response_) ||
+  return typeof this.response_ === 'string' ||
           (goog.global['ArrayBuffer'] &&
            this.response_ instanceof ArrayBuffer) ?
       null :

@@ -510,7 +510,7 @@ goog.html.TrustedResourceUrl.stringifyParams_ = function(
     // Do not modify the field.
     return currentString;
   }
-  if (goog.isString(params)) {
+  if (typeof params === 'string') {
     // Set field to the passed string.
     return params ? prefix + encodeURIComponent(params) : '';
   }

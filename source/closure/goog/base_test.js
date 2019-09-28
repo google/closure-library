@@ -355,37 +355,6 @@ function testTypeOfFramed2() {
   // IE behaves very strange when it comes to DOM nodes on disconnected frames.
 }
 
-function testIsDef() {
-  const defined = 'foo';
-  const nullVar = null;
-  let notDefined;
-
-  assertTrue('defined should be defined', goog.isDef(defined));
-  assertTrue('null should be defined', goog.isDef(nullVar));
-  assertFalse('undefined should not be defined', goog.isDef(notDefined));
-}
-
-function testIsDefAndNotNull() {
-  assertTrue('string is defined and non-null', goog.isDefAndNotNull(''));
-  assertTrue('object is defined and non-null', goog.isDefAndNotNull({}));
-  assertTrue(
-      'function is defined and non-null',
-      goog.isDefAndNotNull(goog.nullFunction));
-  assertTrue('zero is defined and non-null', goog.isDefAndNotNull(0));
-  assertFalse('null', goog.isDefAndNotNull(null));
-  assertFalse('undefined', goog.isDefAndNotNull(undefined));
-}
-
-function testIsNull() {
-  const notNull = 'foo';
-  const nullVar = null;
-  let notDefined;
-
-  assertFalse('defined should not be null', goog.isNull(notNull));
-  assertTrue('null should be null', goog.isNull(nullVar));
-  assertFalse('undefined should not be null', goog.isNull(notDefined));
-}
-
 function testIsArray() {
   const array = [1, 2, 3];
   const arrayWithLengthSet = [1, 2, 3];
@@ -518,46 +487,6 @@ function testIsDateLike() {
   assertFalse('undefined should not be date-like', goog.isDateLike(notDefined));
 }
 
-function testIsString() {
-  const string = 'foo';
-  const number = 2;
-  const nullVar = null;
-  let notDefined;
-
-  assertTrue('string should be a string', goog.isString(string));
-  assertFalse('number should not be a string', goog.isString(number));
-  assertFalse('null should not be a string', goog.isString(nullVar));
-  assertFalse('undefined should not be a string', goog.isString(notDefined));
-}
-
-function testIsBoolean() {
-  const b = true;
-  const s = 'true';
-  const num = 1;
-  const nullVar = null;
-  let notDefined;
-
-  assertTrue('boolean should be a boolean', goog.isBoolean(b));
-  assertFalse('string should not be a boolean', goog.isBoolean(s));
-  assertFalse('number should not be a boolean', goog.isBoolean(num));
-  assertFalse('null should not be a boolean', goog.isBoolean(nullVar));
-  assertFalse('undefined should not be a boolean', goog.isBoolean(notDefined));
-}
-
-function testIsNumber() {
-  const number = 1;
-  const string = '1';
-  const nullVar = null;
-  let notDefined;
-
-  assertTrue('number should be a number', goog.isNumber(number));
-  assertFalse('string should not be a number', goog.isNumber(string));
-  assertFalse('null should not be a number', goog.isNumber(nullVar));
-  assertFalse('undefined should not be a number', goog.isNumber(notDefined));
-  assertTrue('NaN should be a number', goog.isNumber(NaN));
-  assertTrue('Infinity should be a number', goog.isNumber(Infinity));
-}
-
 function testIsFunction() {
   const func = function() {
     return 1;
@@ -687,7 +616,7 @@ function testUidNotUndefinedOnReusedElement() {
 
 function testWindowUid() {
   const uid = goog.getUid(window);
-  assertTrue('window unique id is a number', goog.isNumber(uid));
+  assertTrue('window unique id is a number', typeof uid === 'number');
   assertEquals('returns the same id second time', uid, goog.getUid(window));
   goog.removeUid(window);
   assertNotEquals(

@@ -42,7 +42,7 @@ goog.labs.testing.AnyStringMatcher = function() {};
 
 /** @override */
 goog.labs.testing.AnyStringMatcher.prototype.matches = function(actualValue) {
-  return goog.isString(actualValue);
+  return typeof actualValue === 'string';
 };
 
 

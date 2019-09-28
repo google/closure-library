@@ -12,37 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.events.EventTargetW3CTest');
-goog.setTestOnly('goog.events.EventTargetW3CTest');
+goog.module('goog.events.EventTargetW3CTest');
+goog.setTestOnly();
 
-goog.require('goog.events.EventTarget');
-goog.require('goog.events.eventTargetTester');
-goog.require('goog.events.eventTargetTester.KeyType');
-goog.require('goog.events.eventTargetTester.UnlistenReturnType');
-goog.require('goog.testing.jsunit');
+const GoogEventTarget = goog.require('goog.events.EventTarget');
+const eventTargetTester = goog.require('goog.events.eventTargetTester');
+const testSuite = goog.require('goog.testing.testSuite');
 
-function setUp() {
-  const newListenableFn = function() {
-    return new goog.events.EventTarget();
-  };
-  const listenFn = function(src, type, listener, opt_capt, opt_handler) {
-    src.addEventListener(type, listener, opt_capt, opt_handler);
-  };
-  const unlistenFn = function(src, type, listener, opt_capt, opt_handler) {
-    src.removeEventListener(type, listener, opt_capt, opt_handler);
-  };
-  const dispatchEventFn = function(src, e) {
-    return src.dispatchEvent(e);
-  };
+const KeyType = eventTargetTester.KeyType;
+const UnlistenReturnType = eventTargetTester.UnlistenReturnType;
 
-  goog.events.eventTargetTester.setUp(
-      newListenableFn, listenFn, unlistenFn, null /* unlistenByKeyFn */,
-      null /* listenOnceFn */, dispatchEventFn, null /* removeAllFn */,
-      null /* getListenersFn */, null /* getListenerFn */,
-      null /* hasListenerFn */, goog.events.eventTargetTester.KeyType.UNDEFINED,
-      goog.events.eventTargetTester.UnlistenReturnType.UNDEFINED, true);
-}
+testSuite(Object.assign(
+    {
+      setUp() {
+        const newListenableFn = () => new GoogEventTarget();
+        const listenFn = (src, type, listener, opt_capt, opt_handler) => {
+          src.addEventListener(type, listener, opt_capt, opt_handler);
+        };
+        const unlistenFn = (src, type, listener, opt_capt, opt_handler) => {
+          src.removeEventListener(type, listener, opt_capt, opt_handler);
+        };
+        const dispatchEventFn = (src, e) => src.dispatchEvent(e);
 
-function tearDown() {
-  goog.events.eventTargetTester.tearDown();
-}
+        eventTargetTester.setUp(
+            newListenableFn, listenFn, unlistenFn, null /* unlistenByKeyFn */,
+            null /* listenOnceFn */, dispatchEventFn, null /* removeAllFn */,
+            null /* getListenersFn */, null /* getListenerFn */,
+            null /* hasListenerFn */, KeyType.UNDEFINED,
+            UnlistenReturnType.UNDEFINED, true);
+      },
+
+      tearDown() {
+        eventTargetTester.tearDown();
+      },
+    },
+    eventTargetTester.commonTests));

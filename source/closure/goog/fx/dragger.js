@@ -420,7 +420,7 @@ goog.fx.Dragger.prototype.disposeInternal = function() {
  * @private
  */
 goog.fx.Dragger.prototype.isRightToLeft_ = function() {
-  if (!goog.isDef(this.rightToLeft_)) {
+  if (this.rightToLeft_ === undefined) {
     this.rightToLeft_ = goog.style.isRightToLeft(this.target);
   }
   return this.rightToLeft_;
@@ -800,13 +800,13 @@ goog.fx.DragEvent = function(
    * The real x-position of the drag if it has been limited
    * @type {number}
    */
-  this.left = goog.isDef(opt_actX) ? opt_actX : dragobj.deltaX;
+  this.left = (opt_actX !== undefined) ? opt_actX : dragobj.deltaX;
 
   /**
    * The real y-position of the drag if it has been limited
    * @type {number}
    */
-  this.top = goog.isDef(opt_actY) ? opt_actY : dragobj.deltaY;
+  this.top = (opt_actY !== undefined) ? opt_actY : dragobj.deltaY;
 
   /**
    * Reference to the drag object for this event

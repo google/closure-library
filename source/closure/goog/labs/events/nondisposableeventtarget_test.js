@@ -15,12 +15,13 @@
 goog.module('goog.labs.events.NonDisposableEventTargetTest');
 goog.setTestOnly();
 
-const KeyType = goog.require('goog.events.eventTargetTester.KeyType');
 const Listenable = goog.require('goog.events.Listenable');
 const NonDisposableEventTarget = goog.require('goog.labs.events.NonDisposableEventTarget');
-const UnlistenReturnType = goog.require('goog.events.eventTargetTester.UnlistenReturnType');
 const eventTargetTester = goog.require('goog.events.eventTargetTester');
 const testSuite = goog.require('goog.testing.testSuite');
+
+const KeyType = eventTargetTester.KeyType;
+const UnlistenReturnType = eventTargetTester.UnlistenReturnType;
 
 testSuite({
   setUp() {

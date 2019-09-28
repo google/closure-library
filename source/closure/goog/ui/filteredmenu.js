@@ -320,7 +320,7 @@ goog.ui.FilteredMenu.prototype.setFilter = function(str) {
  * @return {string} Current filter or an an empty string.
  */
 goog.ui.FilteredMenu.prototype.getFilter = function() {
-  return this.filterInput_ && goog.isString(this.filterInput_.value) ?
+  return this.filterInput_ && typeof this.filterInput_.value === 'string' ?
       this.filterInput_.value :
       '';
 };

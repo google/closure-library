@@ -184,7 +184,7 @@ goog.math.Size.prototype.round = function() {
  * @return {!goog.math.Size} This Size object after scaling.
  */
 goog.math.Size.prototype.scale = function(sx, opt_sy) {
-  const sy = goog.isNumber(opt_sy) ? opt_sy : sx;
+  const sy = (typeof opt_sy === 'number') ? opt_sy : sx;
   this.width *= sx;
   this.height *= sy;
   return this;

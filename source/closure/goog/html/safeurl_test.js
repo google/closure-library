@@ -317,7 +317,7 @@ testSuite({
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
     assertTrue(
         goog.global.TrustedURL ? trustedValue instanceof TrustedURL :
-                                 goog.isString(trustedValue));
+                                 typeof trustedValue === 'string');
   },
 
   testSafeUrlSanitize_sanitizeUrl() {

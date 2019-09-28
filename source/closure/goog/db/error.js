@@ -59,7 +59,7 @@ goog.db.DOMErrorLike.prototype.name;
 goog.db.Error = function(error, context, opt_message) {
   var errorCode = null;
   var internalError = null;
-  if (goog.isNumber(error)) {
+  if (typeof error === 'number') {
     errorCode = error;
     internalError = {name: goog.db.Error.getName(errorCode)};
   } else {

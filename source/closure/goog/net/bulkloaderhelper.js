@@ -101,7 +101,7 @@ goog.net.BulkLoaderHelper.prototype.isLoadComplete = function() {
   var responseTexts = this.responseTexts_;
   if (responseTexts.length == this.uris_.length) {
     for (var i = 0; i < responseTexts.length; i++) {
-      if (!goog.isDefAndNotNull(responseTexts[i])) {
+      if (responseTexts[i] == null) {
         return false;
       }
     }

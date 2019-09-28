@@ -33,7 +33,7 @@ goog.provide('goog.dom.pattern.MatchType');
  *     the regular expression.
  */
 goog.dom.pattern.matchStringOrRegex = function(obj, str) {
-  if (goog.isString(obj)) {
+  if (typeof obj === 'string') {
     // Match a string
     return str == obj;
   } else {

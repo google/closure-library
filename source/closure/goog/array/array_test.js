@@ -662,7 +662,7 @@ testSuite({
     const a = [0, 1, 2, 3, 4];
     const context = {};
     assertEquals(3, googArray.count(a, function(element, index, array) {
-      assertTrue(goog.isNumber(index));
+      assertTrue(typeof (index) === 'number');
       assertEquals(a, array);
       assertEquals(context, this);
       return element % 2 == 0;

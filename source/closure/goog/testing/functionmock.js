@@ -167,6 +167,8 @@ goog.testing.createConstructorMock = function(
   // Copy class members from the real constructor to the mock. Do not copy
   // the closure superClass_ property (see goog.inherits), the built-in
   // prototype property, or properties added to Function.prototype
+  // TODO(nickreid): Should this work for non-enumerable properties, like are
+  // created by ES6 classes.
   for (var property in realConstructor) {
     if (property != 'superClass_' && property != 'prototype' &&
         realConstructor.hasOwnProperty(property)) {

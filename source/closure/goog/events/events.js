@@ -444,7 +444,7 @@ goog.events.unlisten = function(src, type, listener, opt_options, opt_handler) {
 goog.events.unlistenByKey = function(key) {
   // TODO(chrishenry): Remove this check when tests that rely on this
   // are fixed.
-  if (goog.isNumber(key)) {
+  if (typeof key === 'number') {
     return false;
   }
 

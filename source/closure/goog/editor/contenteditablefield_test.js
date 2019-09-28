@@ -12,48 +12,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.editor.ContentEditableFieldTest');
-goog.setTestOnly('goog.editor.ContentEditableFieldTest');
+goog.module('goog.editor.ContentEditableFieldTest');
+goog.setTestOnly();
 
-goog.require('goog.dom');
-goog.require('goog.editor.ContentEditableField');
-/** @suppress {extraRequire} needed for test setup */
-goog.require('goog.editor.field_test');
-goog.require('goog.html.SafeHtml');
-goog.require('goog.testing.jsunit');
+const ContentEditableField = goog.require('goog.editor.ContentEditableField');
+const SafeHtml = goog.require('goog.html.SafeHtml');
+const googDom = goog.require('goog.dom');
+const testSuite = goog.require('goog.testing.testSuite');
 
-FieldConstructor = goog.editor.ContentEditableField;
 
-function testNoIframeAndSameElement() {
-  const field = new goog.editor.ContentEditableField('testField');
-  field.makeEditable();
-  assertFalse(field.usesIframe());
-  assertEquals(
-      'Original element should equal field element', field.getOriginalElement(),
-      field.getElement());
-  assertEquals(
-      'Sanity check on original element', 'testField',
-      field.getOriginalElement().id);
-  assertEquals(
-      'Editable document should be same as main document', document,
-      field.getEditableDomHelper().getDocument());
-  field.dispose();
-}
+const HTML = '<div id="testField">I am text.</div>';
 
-function testMakeEditableAndUnEditable() {
-  const elem = goog.dom.getElement('testField');
-  goog.dom.setTextContent(elem, 'Hello world');
-  const field = new goog.editor.ContentEditableField('testField');
+goog.global.FieldConstructor = ContentEditableField;
 
-  field.makeEditable();
-  assertEquals('true', String(elem.contentEditable));
-  assertEquals('Hello world', goog.dom.getTextContent(elem));
-  field.setSafeHtml(
-      false /* addParas */, goog.html.SafeHtml.htmlEscape('Goodbye world'));
-  assertEquals('Goodbye world', goog.dom.getTextContent(elem));
+testSuite({
+  setUp() {
+    googDom.getElement('parent').innerHTML = HTML;
+    assertTrue(
+        'FieldConstructor should be set by the test HTML file',
+        goog.isFunction(FieldConstructor));
+  },
 
-  field.makeUneditable();
-  assertNotEquals('true', String(elem.contentEditable));
-  assertEquals('Goodbye world', goog.dom.getTextContent(elem));
-  field.dispose();
-}
+  testNoIframeAndSameElement() {
+    const field = new ContentEditableField('testField');
+    field.makeEditable();
+    assertFalse(field.usesIframe());
+    assertEquals(
+        'Original element should equal field element',
+        field.getOriginalElement(), field.getElement());
+    assertEquals(
+        'Sanity check on original element', 'testField',
+        field.getOriginalElement().id);
+    assertEquals(
+        'Editable document should be same as main document', document,
+        field.getEditableDomHelper().getDocument());
+    field.dispose();
+  },
+
+  testMakeEditableAndUnEditable() {
+    const elem = googDom.getElement('testField');
+    googDom.setTextContent(elem, 'Hello world');
+    const field = new ContentEditableField('testField');
+
+    field.makeEditable();
+    assertEquals('true', String(elem.contentEditable));
+    assertEquals('Hello world', googDom.getTextContent(elem));
+    field.setSafeHtml(
+        false /* addParas */, SafeHtml.htmlEscape('Goodbye world'));
+    assertEquals('Goodbye world', googDom.getTextContent(elem));
+
+    field.makeUneditable();
+    assertNotEquals('true', String(elem.contentEditable));
+    assertEquals('Goodbye world', googDom.getTextContent(elem));
+    field.dispose();
+  },
+});

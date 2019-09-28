@@ -388,7 +388,7 @@ goog.ui.ac.AutoComplete.prototype.handleEvent = function(e) {
         var rowDisabled = false;
 
         // e.row can be either a valid row id or empty.
-        if (goog.isNumber(e.row)) {
+        if (typeof e.row === 'number') {
           var rowId = e.row;
           var index = this.getIndexOfId(rowId);
           var row = this.rows_[index];
