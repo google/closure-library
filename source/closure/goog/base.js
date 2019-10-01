@@ -109,6 +109,7 @@ goog.global.CLOSURE_DEFINES;
  *
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is defined.
+ * @deprecated Use `val !== undefined` instead.
  */
 goog.isDef = function(val) {
   // void 0 always evaluates to undefined and hence we do not need to depend on
@@ -120,6 +121,7 @@ goog.isDef = function(val) {
  * Returns true if the specified value is a string.
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is a string.
+ * @deprecated Use `typeof val === 'string'` instead.
  */
 goog.isString = function(val) {
   return typeof val == 'string';
@@ -130,6 +132,7 @@ goog.isString = function(val) {
  * Returns true if the specified value is a boolean.
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is boolean.
+ * @deprecated Use `typeof val === 'boolean'` instead.
  */
 goog.isBoolean = function(val) {
   return typeof val == 'boolean';
@@ -140,6 +143,7 @@ goog.isBoolean = function(val) {
  * Returns true if the specified value is a number.
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is a number.
+ * @deprecated Use `typeof val === 'number'` instead.
  */
 goog.isNumber = function(val) {
   return typeof val == 'number';
@@ -1455,6 +1459,7 @@ goog.typeOf = function(value) {
  * Returns true if the specified value is null.
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is null.
+ * @deprecated Use `val === null` instead.
  */
 goog.isNull = function(val) {
   return val === null;
@@ -1465,6 +1470,7 @@ goog.isNull = function(val) {
  * Returns true if the specified value is defined and not null.
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is defined and not null.
+ * @deprecated Use `val != null` instead.
  */
 goog.isDefAndNotNull = function(val) {
   // Note that undefined == null.
