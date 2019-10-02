@@ -447,14 +447,14 @@ testSuite({
         'few {Take the elevator to the #rd floor.}' +
         'other {Take the elevator to the #th floor.}}');
 
-    try {
-      fmt.format({'NUM_FLOOR': -2});
-    } catch (e) {
-      assertEquals(
-          'Assertion failed: Argument index smaller than offset.', e.message);
-      return;
-    }
-    fail('Expected an error to be thrown');
+    assertEquals(
+        'Take the elevator to the -1st floor.', fmt.format({'NUM_FLOOR': -1}));
+    assertEquals(
+        'Take the elevator to the -2nd floor.', fmt.format({'NUM_FLOOR': -2}));
+    assertEquals(
+        'Take the elevator to the -3rd floor.', fmt.format({'NUM_FLOOR': -3}));
+    assertEquals(
+        'Take the elevator to the -4th floor.', fmt.format({'NUM_FLOOR': -4}));
   },
 
   testSimpleOrdinalWithIgnorePound() {
