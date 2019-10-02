@@ -762,6 +762,32 @@ testSuite({
     assertTrue(message.getOptionalBool());
   },
 
+  testDeserializationIgnoreUnknownFieldsFalse() {
+    const simplified = {'unknownTag': 0, 13: 1};
+
+    const serializer = new ObjectSerializer();
+
+    assertThrows('Should have an assertion failure in deserialization', () => {
+      serializer.deserialize(TestAllTypes.getDescriptor(), simplified);
+    });
+  },
+
+  testDeserializationIgnoreUnknownFieldsTrue() {
+    const simplified = {'unknownTag': 0, 13: 1};
+
+    const serializer = new ObjectSerializer(
+        ObjectSerializer.KeyOption.CAMEL_CASE_NAME,
+        false /* opt_serializeBooleanAsNumber */,
+        true /* opt_ignoreUnknownFields */);
+
+    const message =
+        serializer.deserialize(TestAllTypes.getDescriptor(), simplified);
+
+    assertNotNull(message);
+
+    assertTrue(message.getOptionalBool());
+  },
+
   testRoundTripping() {
     const message = new TestAllTypes();
 
