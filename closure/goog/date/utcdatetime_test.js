@@ -108,7 +108,7 @@ testSuite({
   testToIsoString() {
     const date = new UtcDateTime(2000, month.JAN, 2, 3, 4, 5);
     assertEquals(
-        'serialize date/time', '2000-01-02 03:04:05', date.toIsoString(true));
+        'serialize date/time', '2000-01-02T03:04:05', date.toIsoString(true));
     assertEquals('serialize time only', '03:04:05', date.toIsoTimeString(true));
     assertEquals(
         'serialize date/time to XML', '2000-01-02T03:04:05',
