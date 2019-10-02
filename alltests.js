@@ -284,6 +284,7 @@ var _allTests = [
   'closure/goog/labs/useragent/browser_test.html',
   'closure/goog/labs/useragent/device_test.html',
   'closure/goog/labs/useragent/engine_test.html',
+  'closure/goog/labs/useragent/extra_test.html',
   'closure/goog/labs/useragent/platform_test.html',
   'closure/goog/labs/useragent/util_test.html',
   'closure/goog/labs/useragent/verifier_test.html',
