@@ -40,11 +40,6 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.Popup');
 
 
-goog.scope(function() {
-var SafeHtml = goog.html.SafeHtml;
-
-
-
 /**
  * The Bubble provides a general purpose bubble implementation that can be
  * anchored to a particular element and displayed for a period of time.
@@ -259,7 +254,7 @@ goog.ui.Bubble.prototype.configureElement_ = function() {
   goog.dom.safe.setInnerHtml(
       /** @type {!Element} */ (element), this.computeHtmlForCorner_(corner));
 
-  if (!(this.message_ instanceof SafeHtml)) {
+  if (!(this.message_ instanceof goog.html.SafeHtml)) {
     var messageDiv = this.getDomHelper().getElement(this.messageId_);
     this.getDomHelper().appendChild(messageDiv, this.message_);
   }
@@ -421,37 +416,41 @@ goog.ui.Bubble.prototype.computeHtmlForCorner_ = function(corner) {
       throw new Error('This corner type is not supported by bubble!');
   }
   var message = null;
-  if (this.message_ instanceof SafeHtml) {
+  if (this.message_ instanceof goog.html.SafeHtml) {
     message = this.message_;
   } else {
-    message = SafeHtml.create('div', {'id': this.messageId_});
+    message = goog.html.SafeHtml.create('div', {'id': this.messageId_});
   }
 
   var tableRows = goog.html.SafeHtml.concat(
-      SafeHtml.create(
+      goog.html.SafeHtml.create(
           'tr', {},
-          SafeHtml.create('td', {'colspan': 4, 'class': bubbleTopClass})),
-      SafeHtml.create(
+          goog.html.SafeHtml.create(
+              'td', {'colspan': 4, 'class': bubbleTopClass})),
+      goog.html.SafeHtml.create(
           'tr', {},
-          SafeHtml.concat(
-              SafeHtml.create('td', {'class': this.config_.cssBubbleLeft}),
-              SafeHtml.create(
+          goog.html.SafeHtml.concat(
+              goog.html.SafeHtml.create(
+                  'td', {'class': this.config_.cssBubbleLeft}),
+              goog.html.SafeHtml.create(
                   'td', {
                     'class': this.config_.cssBubbleFont,
                     'style':
                         goog.string.Const.from('padding:0 4px;background:white')
                   },
                   message),
-              SafeHtml.create('td', {
+              goog.html.SafeHtml.create('td', {
                 'id': this.closeButtonId_,
                 'class': this.config_.cssCloseButton
               }),
-              SafeHtml.create('td', {'class': this.config_.cssBubbleRight}))),
-      SafeHtml.create(
+              goog.html.SafeHtml.create(
+                  'td', {'class': this.config_.cssBubbleRight}))),
+      goog.html.SafeHtml.create(
           'tr', {},
-          SafeHtml.create('td', {'colspan': 4, 'class': bubbleBottomClass})));
+          goog.html.SafeHtml.create(
+              'td', {'colspan': 4, 'class': bubbleBottomClass})));
 
-  return SafeHtml.create(
+  return goog.html.SafeHtml.create(
       'table', {
         'border': 0,
         'cellspacing': 0,
@@ -495,4 +494,3 @@ goog.ui.Bubble.corners_ = [
   goog.positioning.Corner.BOTTOM_RIGHT, goog.positioning.Corner.BOTTOM_LEFT,
   goog.positioning.Corner.TOP_RIGHT, goog.positioning.Corner.TOP_LEFT
 ];
-});  // goog.scope

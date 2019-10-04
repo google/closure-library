@@ -722,7 +722,7 @@ goog.addDependency('labs/useragent/extra.js', ['goog.labs.userAgent.extra'], ['g
 goog.addDependency('labs/useragent/extra_test.js', ['goog.labs.userAgent.extraTest'], ['goog.labs.userAgent.browser', 'goog.labs.userAgent.extra', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/useragent/platform.js', ['goog.labs.userAgent.platform'], ['goog.labs.userAgent.util', 'goog.string'], {});
 goog.addDependency('labs/useragent/platform_test.js', ['goog.labs.userAgent.platformTest'], ['goog.labs.userAgent.platform', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('labs/useragent/test_agents.js', ['goog.labs.userAgent.testAgents'], [], {'lang': 'es6'});
+goog.addDependency('labs/useragent/test_agents.js', ['goog.labs.userAgent.testAgents'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/useragent/util.js', ['goog.labs.userAgent.util'], ['goog.string.internal'], {});
 goog.addDependency('labs/useragent/util_test.js', ['goog.labs.userAgent.utilTest'], ['goog.functions', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/useragent/verifier.js', ['goog.labs.useragent.verifier'], [], {'lang': 'es6'});
