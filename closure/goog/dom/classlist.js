@@ -18,15 +18,15 @@
  * (DOMTokenList: http://dom.spec.whatwg.org/#domtokenlist) which is faster
  * and requires less code.
  *
- * Note: these utilities are meant to operate on HTMLElements
- * and may have unexpected behavior on elements with differing interfaces
- * (such as SVGElements).
+ * Note: these utilities are meant to operate on HTMLElements and SVGElements
+ * and may have unexpected behavior on elements with differing interfaces.
  */
 
 
 goog.provide('goog.dom.classlist');
 
 goog.require('goog.array');
+goog.require('goog.dom');
 
 
 /**
@@ -35,6 +35,20 @@ goog.require('goog.array');
  */
 goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST =
     goog.define('goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST', false);
+
+
+/**
+ * A wrapper which ensures correct functionality when interacting with
+ * SVGElements
+ * @param {?Element} element DOM node to get the class name of.
+ * @return {string}
+ * @private
+ */
+goog.dom.classlist.getClassName_ = function(element) {
+  return goog.dom.isElement(element) && element.hasAttribute('class') ?
+      element.getAttribute('class') :
+      '';
+};
 
 
 /**
@@ -47,11 +61,7 @@ goog.dom.classlist.get = function(element) {
     return element.classList;
   }
 
-  var className = element.className;
-  // Some types of elements don't have a className in IE (e.g. iframes).
-  // Furthermore, in Firefox, className is not a string when the element is
-  // an SVG element.
-  return typeof className === 'string' && className.match(/\S+/g) || [];
+  return goog.dom.classlist.getClassName_(element).match(/\S+/g) || [];
 };
 
 
@@ -61,7 +71,19 @@ goog.dom.classlist.get = function(element) {
  * @param {string} className Class name(s) to apply to element.
  */
 goog.dom.classlist.set = function(element, className) {
-  element.className = className;
+  element.setAttribute('class', className);
+};
+
+
+/**
+ * Sets the entire class name of an element.
+ * @param {?Element} element DOM node to set class of.
+ * @param {!Iterable<string>|!IArrayLike<string>} classNames
+ *     Class name to apply to element.
+ * @private
+ */
+goog.dom.classlist.setAll_ = function(element, classNames) {
+  goog.dom.classlist.set(element, Array.from(classNames).join(' '));
 };
 
 
@@ -95,8 +117,11 @@ goog.dom.classlist.add = function(element, className) {
 
   if (!goog.dom.classlist.contains(element, className)) {
     // Ensure we add a space if this is not the first class name added.
-    element.className +=
-        element.className.length > 0 ? (' ' + className) : className;
+    var oldClassName = goog.dom.classlist.getClassName_(element);
+    goog.dom.classlist.set(
+        element,
+        oldClassName +
+            (oldClassName.length > 0 ? (' ' + className) : className));
   }
 };
 
@@ -117,23 +142,9 @@ goog.dom.classlist.addAll = function(element, classesToAdd) {
     return;
   }
 
-  var classMap = {};
-
-  // Get all current class names into a map.
-  goog.array.forEach(goog.dom.classlist.get(element), function(className) {
-    classMap[className] = true;
-  });
-
-  // Add new class names to the map.
-  goog.array.forEach(
-      classesToAdd, function(className) { classMap[className] = true; });
-
-  // Flatten the keys of the map into the className.
-  element.className = '';
-  for (var className in classMap) {
-    element.className +=
-        element.className.length > 0 ? (' ' + className) : className;
-  }
+  const /** !Set<string> */ classSet =
+      new Set([].concat(goog.dom.classlist.get(element), classesToAdd));
+  goog.dom.classlist.setAll_(element, classSet);
 };
 
 
@@ -151,11 +162,9 @@ goog.dom.classlist.remove = function(element, className) {
 
   if (goog.dom.classlist.contains(element, className)) {
     // Filter out the class name.
-    element.className = goog.array
-                            .filter(
-                                goog.dom.classlist.get(element),
-                                function(c) { return c != className; })
-                            .join(' ');
+    const classes = goog.dom.classlist.get(element);
+    goog.dom.classlist.setAll_(
+        element, goog.array.filter(classes, (c) => c != className));
   }
 };
 
@@ -177,17 +186,17 @@ goog.dom.classlist.removeAll = function(element, classesToRemove) {
     });
     return;
   }
+
   // Filter out those classes in classesToRemove.
-  element.className =
-      goog.array
-          .filter(
-              goog.dom.classlist.get(element),
-              function(className) {
-                // If this class is not one we are trying to remove,
-                // add it to the array of new class names.
-                return !goog.array.contains(classesToRemove, className);
-              })
-          .join(' ');
+  const removalSet = new Set([].concat(classesToRemove));
+  const classes = goog.dom.classlist.get(element);
+  goog.dom.classlist.setAll_(
+      element,
+      goog.array.filter(
+          classes,
+          // If this class is not one we are trying to remove,
+          // add it to the array of new class names.
+          (className) => !removalSet.has(className)));
 };
 
 
