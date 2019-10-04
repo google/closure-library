@@ -442,8 +442,7 @@ goog.i18n.MessageFormat.prototype.formatPluralOrdinalBlock_ = function(
   // Check if there is an exact match.
   var option = parsedPattern[namedParameters[argumentIndex]];
   if (option === undefined) {
-    goog.asserts.assert(diff >= 0, 'Argument index smaller than offset.');
-    var item = pluralSelector(diff);
+    var item = pluralSelector(Math.abs(diff));
     goog.asserts.assertString(item, 'Invalid plural key.');
 
     option = parsedPattern[item];

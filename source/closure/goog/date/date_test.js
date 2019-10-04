@@ -1344,23 +1344,17 @@ testSuite({
   testToUTCRfc3339String() {
     let date = DateTime.fromIsoString('19850412T232050Z');
     date.setUTCMilliseconds(52);
-    assertEquals(date.toUTCRfc3339String(), '1985-04-12T23:20:50.052Z');
+    assertEquals('1985-04-12T23:20:50.052Z', date.toUTCRfc3339String());
     assertNotEquals(
         'Diverges from ISO 8601', date.toUTCRfc3339String(),
         date.toUTCIsoString(true, true));
 
     date = DateTime.fromIsoString('19901231T235959Z');
-    assertEquals(date.toUTCRfc3339String(), '1990-12-31T23:59:59Z');
-    assertNotEquals(
-        'Diverges from ISO 8601', date.toUTCRfc3339String(),
-        date.toUTCIsoString(true, true));
+    assertEquals('1990-12-31T23:59:59Z', date.toUTCRfc3339String());
 
     date = DateTime.fromIsoString('19370101T120027Z');
     date.setUTCMilliseconds(87);
-    assertEquals(date.toUTCRfc3339String(), '1937-01-01T12:00:27.087Z');
-    assertNotEquals(
-        'Diverges from ISO 8601', date.toUTCRfc3339String(),
-        date.toUTCIsoString(true, true));
+    assertEquals('1937-01-01T12:00:27.087Z', date.toUTCRfc3339String());
   },
 
   testDateTimezone() {

@@ -39,44 +39,36 @@ class InsertJsDocTestCase(unittest.TestCase):
     self.assertEqual('', match.group('arguments'))
 
     match = generate_jsdoc._MatchFirstFunction(_ODD_NEWLINES_SOURCE)
-    self.assertEquals('goog.\nfoo.\nbar\n.baz.\nqux',
-                      match.group('identifier'))
+    self.assertEqual('goog.\nfoo.\nbar\n.baz.\nqux', match.group('identifier'))
 
   def testParseArgString(self):
-    self.assertEquals(
-        ['foo', 'bar', 'baz'],
-        list(generate_jsdoc._ParseArgString('foo, bar, baz')))
+    self.assertEqual(['foo', 'bar', 'baz'],
+                     list(generate_jsdoc._ParseArgString('foo, bar, baz')))
 
   def testExtractFunctionBody(self):
-    self.assertEquals(
-        '\n  // Function comments.\n  return;\n',
-        generate_jsdoc._ExtractFunctionBody(_TEST_SOURCE))
+    self.assertEqual('\n  // Function comments.\n  return;\n',
+                     generate_jsdoc._ExtractFunctionBody(_TEST_SOURCE))
 
-    self.assertEquals(
-        '\n    var bar = 3;\n    return true;\n',
-        generate_jsdoc._ExtractFunctionBody(_INDENTED_SOURCE, 2))
+    self.assertEqual('\n    var bar = 3;\n    return true;\n',
+                     generate_jsdoc._ExtractFunctionBody(_INDENTED_SOURCE, 2))
 
   def testContainsValueReturn(self):
     self.assertTrue(generate_jsdoc._ContainsReturnValue(_INDENTED_SOURCE))
     self.assertFalse(generate_jsdoc._ContainsReturnValue(_TEST_SOURCE))
 
   def testInsertString(self):
-    self.assertEquals(
-        'abc123def',
-        generate_jsdoc._InsertString('abcdef', '123', 3))
+    self.assertEqual('abc123def',
+                     generate_jsdoc._InsertString('abcdef', '123', 3))
 
   def testInsertJsDoc(self):
-    self.assertEquals(
-        _EXPECTED_INDENTED_SOURCE,
-        generate_jsdoc.InsertJsDoc(_INDENTED_SOURCE))
+    self.assertEqual(_EXPECTED_INDENTED_SOURCE,
+                     generate_jsdoc.InsertJsDoc(_INDENTED_SOURCE))
 
-    self.assertEquals(
-        _EXPECTED_TEST_SOURCE,
-        generate_jsdoc.InsertJsDoc(_TEST_SOURCE))
+    self.assertEqual(_EXPECTED_TEST_SOURCE,
+                     generate_jsdoc.InsertJsDoc(_TEST_SOURCE))
 
-    self.assertEquals(
-        _EXPECTED_ODD_NEWLINES_SOURCE,
-        generate_jsdoc.InsertJsDoc(_ODD_NEWLINES_SOURCE))
+    self.assertEqual(_EXPECTED_ODD_NEWLINES_SOURCE,
+                     generate_jsdoc.InsertJsDoc(_ODD_NEWLINES_SOURCE))
 
 
 _INDENTED_SOURCE = """\

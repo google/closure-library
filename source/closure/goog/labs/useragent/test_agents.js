@@ -249,6 +249,14 @@ testAgents.SAFARI_WINDOWS =
     'Mozilla/5.0 (Windows; U; Windows NT 6.1; tr-TR) AppleWebKit/533.20.25' +
     ' (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27';
 
+/**
+ * The user-agent for desktop Safari and iPadOS Safari are identical and require
+ * runtime examination.
+ * @const {string}
+ */
+testAgents.SAFARI_13 =
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15' +
+    ' (KHTML, like Gecko) Version/13.0 Safari/605.1.15';
 
 /** @const {string} */
 testAgents.COAST =

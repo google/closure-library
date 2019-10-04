@@ -35,13 +35,17 @@ goog.require('goog.string');
  *     which key option to use when serializing/deserializing.
  * @param {boolean=} opt_serializeBooleanAsNumber If specified and true, the
  *     serializer will convert boolean values to 0/1 representation.
+ * @param {boolean=} opt_ignoreUnknownFields If specified and true, the
+ *     serializer will ignore unknown fields in the JSON payload instead of
+ *     returning an error.
  * @constructor
  * @extends {goog.proto2.Serializer}
  */
 goog.proto2.ObjectSerializer = function(
-    opt_keyOption, opt_serializeBooleanAsNumber) {
+    opt_keyOption, opt_serializeBooleanAsNumber, opt_ignoreUnknownFields) {
   this.keyOption_ = opt_keyOption;
   this.serializeBooleanAsNumber_ = opt_serializeBooleanAsNumber;
+  this.ignoreUnknownFields_ = opt_ignoreUnknownFields;
 };
 goog.inherits(goog.proto2.ObjectSerializer, goog.proto2.Serializer);
 
@@ -243,11 +247,14 @@ goog.proto2.ObjectSerializer.prototype.deserializeTo = function(message, data) {
       }
     } else {
       if (isNumeric) {
-        // We have an unknown field.
+        // We have an unknown field (with a numeric tag).
         message.setUnknown(Number(key), value);
       } else {
-        // Named fields must be present.
-        goog.asserts.fail('Failed to find field: ' + key);
+        // Handle unknown non-numeric tag.
+        if (!this.ignoreUnknownFields_) {
+          // Named fields must be present.
+          goog.asserts.fail('Failed to find field: ' + key);
+        }
       }
     }
   }

@@ -1665,7 +1665,7 @@ goog.date.DateTime.prototype.toIsoString = function(opt_verbose, opt_tz) {
   var dateString = goog.date.Date.prototype.toIsoString.call(this, opt_verbose);
 
   if (opt_verbose) {
-    return dateString + ' ' + goog.string.padNumber(this.getHours(), 2) + ':' +
+    return dateString + 'T' + goog.string.padNumber(this.getHours(), 2) + ':' +
         goog.string.padNumber(this.getMinutes(), 2) + ':' +
         goog.string.padNumber(this.getSeconds(), 2) +
         (opt_tz ? this.getTimezoneOffsetString() : '');
@@ -1711,7 +1711,7 @@ goog.date.DateTime.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
   var dateStr = goog.date.Date.prototype.toUTCIsoString.call(this, opt_verbose);
 
   if (opt_verbose) {
-    return dateStr + ' ' + goog.string.padNumber(this.getUTCHours(), 2) + ':' +
+    return dateStr + 'T' + goog.string.padNumber(this.getUTCHours(), 2) + ':' +
         goog.string.padNumber(this.getUTCMinutes(), 2) + ':' +
         goog.string.padNumber(this.getUTCSeconds(), 2) + (opt_tz ? 'Z' : '');
   }
@@ -1728,7 +1728,7 @@ goog.date.DateTime.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
  * @return {string} A UTC datetime expressed in RFC 3339 format.
  */
 goog.date.DateTime.prototype.toUTCRfc3339String = function() {
-  var date = this.toUTCIsoString(true).replace(' ', 'T');
+  var date = this.toUTCIsoString(true);
   var millis = this.getUTCMilliseconds();
   return (millis ? date + '.' + goog.string.padNumber(millis, 3) : date) + 'Z';
 };
