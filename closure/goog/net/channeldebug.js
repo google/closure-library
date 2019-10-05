@@ -168,11 +168,11 @@ goog.net.ChannelDebug.prototype.debug = function(text) {
 
 /**
  * Logs an exception
- * @param {Error} e The error or error event.
- * @param {string=} opt_msg The optional message, defaults to 'Exception'.
+ * @param {!Error} e The error or error event.
+ * @param {string=} msg The optional message, defaults to 'Exception'.
  */
-goog.net.ChannelDebug.prototype.dumpException = function(e, opt_msg) {
-  this.severe((opt_msg || 'Exception') + e);
+goog.net.ChannelDebug.prototype.dumpException = function(e, msg = 'Exception') {
+  this.severe(msg, e);
 };
 
 
@@ -197,9 +197,10 @@ goog.net.ChannelDebug.prototype.warning = function(text) {
 /**
  * Logs a severe message.
  * @param {string} text The message.
+ * @param {!Error=} error An exception associated with the message.
  */
-goog.net.ChannelDebug.prototype.severe = function(text) {
-  goog.log.error(this.logger_, text);
+goog.net.ChannelDebug.prototype.severe = function(text, error = undefined) {
+  goog.log.error(this.logger_, text, error);
 };
 
 
