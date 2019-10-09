@@ -367,19 +367,4 @@ testSuite({
             trustedValue instanceof TrustedScriptURL :
             typeof trustedValue === 'string');
   },
-
-  testUnwrapTrustedURL() {
-    let safeValue =
-        TrustedResourceUrl.fromConstant(Const.from('https://example.com/'));
-    let trustedValue = TrustedResourceUrl.unwrapTrustedURL(safeValue);
-    assertEquals(safeValue.getTypedStringValue(), trustedValue);
-    stubs.set(trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
-    safeValue =
-        TrustedResourceUrl.fromConstant(Const.from('https://example.com/'));
-    trustedValue = TrustedResourceUrl.unwrapTrustedURL(safeValue);
-    assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
-    assertTrue(
-        goog.global.TrustedURL ? trustedValue instanceof TrustedURL :
-                                 typeof trustedValue === 'string');
-  },
 });

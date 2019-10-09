@@ -56,10 +56,8 @@ goog.require('goog.string.TypedString');
  * @param {!Object=} opt_token package-internal implementation detail.
  * @param {!TrustedScriptURL|string=} opt_content package-internal
  *     implementation detail.
- * @param {?TrustedURL=} opt_trustedUrl package-internal implementation detail.
  */
-goog.html.TrustedResourceUrl = function(
-    opt_token, opt_content, opt_trustedUrl) {
+goog.html.TrustedResourceUrl = function(opt_token, opt_content) {
   /**
    * The contained value of this TrustedResourceUrl.  The field has a purposely
    * ugly name to make (non-compiled) code that attempts to directly access this
@@ -72,17 +70,6 @@ goog.html.TrustedResourceUrl = function(
         goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_) &&
        opt_content) ||
       '';
-
-  /**
-   * Value stored as TrustedURL. TrustedResourceURL corresponds to TrustedURL in
-   * some context thus we need to store it separately.
-   * @const
-   * @private {?TrustedURL}
-   */
-  this.trustedURL_ =
-      (opt_token === goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_ &&
-       opt_trustedUrl) ||
-      null;
 
   /**
    * A type marker used to implement additional run-time type checking.
@@ -242,19 +229,6 @@ goog.html.TrustedResourceUrl.unwrapTrustedScriptURL = function(
         trustedResourceUrl + '\' of type ' + goog.typeOf(trustedResourceUrl));
     return 'type_error:TrustedResourceUrl';
   }
-};
-
-
-/**
- * Unwraps value as TrustedURL if supported or as a string if not.
- * @param {!goog.html.TrustedResourceUrl} trustedResourceUrl
- * @return {!TrustedURL|string}
- * @see goog.html.TrustedResourceUrl.unwrap
- */
-goog.html.TrustedResourceUrl.unwrapTrustedURL = function(trustedResourceUrl) {
-  return trustedResourceUrl.trustedURL_ ?
-      trustedResourceUrl.trustedURL_ :
-      goog.html.TrustedResourceUrl.unwrap(trustedResourceUrl);
 };
 
 
@@ -470,13 +444,8 @@ goog.html.TrustedResourceUrl
       goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY
           .createScriptURL(url) :
       url;
-  var trustedUrl = goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
-      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createURL(
-          url) :
-      null;
   return new goog.html.TrustedResourceUrl(
-      goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_, value,
-      trustedUrl);
+      goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_, value);
 };
 
 

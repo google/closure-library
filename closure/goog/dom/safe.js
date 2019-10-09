@@ -205,7 +205,7 @@ goog.dom.safe.setFormElementAction = function(form, url) {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
   goog.dom.asserts.assertIsHTMLFormElement(form).action =
-      goog.html.SafeUrl.unwrapTrustedURL(safeUrl);
+      goog.html.SafeUrl.unwrap(safeUrl);
 };
 
 /**
@@ -236,7 +236,7 @@ goog.dom.safe.setButtonFormAction = function(button, url) {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
   goog.dom.asserts.assertIsHTMLButtonElement(button).formAction =
-      goog.html.SafeUrl.unwrapTrustedURL(safeUrl);
+      goog.html.SafeUrl.unwrap(safeUrl);
 };
 /**
  * Safely assigns a URL to an input element's formaction property.
@@ -266,7 +266,7 @@ goog.dom.safe.setInputFormAction = function(input, url) {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
   goog.dom.asserts.assertIsHTMLInputElement(input).formAction =
-      goog.html.SafeUrl.unwrapTrustedURL(safeUrl);
+      goog.html.SafeUrl.unwrap(safeUrl);
 };
 
 /**
@@ -318,7 +318,7 @@ goog.dom.safe.setAnchorHref = function(anchor, url) {
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  anchor.href = goog.html.SafeUrl.unwrapTrustedURL(safeUrl);
+  anchor.href = goog.html.SafeUrl.unwrap(safeUrl);
 };
 
 
@@ -344,7 +344,7 @@ goog.dom.safe.setImageSrc = function(imageElement, url) {
     var allowDataUrl = /^data:image\//i.test(url);
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url, allowDataUrl);
   }
-  imageElement.src = goog.html.SafeUrl.unwrapTrustedURL(safeUrl);
+  imageElement.src = goog.html.SafeUrl.unwrap(safeUrl);
 };
 
 /**
@@ -369,7 +369,7 @@ goog.dom.safe.setAudioSrc = function(audioElement, url) {
     var allowDataUrl = /^data:audio\//i.test(url);
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url, allowDataUrl);
   }
-  audioElement.src = goog.html.SafeUrl.unwrapTrustedURL(safeUrl);
+  audioElement.src = goog.html.SafeUrl.unwrap(safeUrl);
 };
 
 /**
@@ -394,7 +394,7 @@ goog.dom.safe.setVideoSrc = function(videoElement, url) {
     var allowDataUrl = /^data:video\//i.test(url);
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url, allowDataUrl);
   }
-  videoElement.src = goog.html.SafeUrl.unwrapTrustedURL(safeUrl);
+  videoElement.src = goog.html.SafeUrl.unwrap(safeUrl);
 };
 
 /**
@@ -433,7 +433,7 @@ goog.dom.safe.setEmbedSrc = function(embed, url) {
  */
 goog.dom.safe.setFrameSrc = function(frame, url) {
   goog.dom.asserts.assertIsHTMLFrameElement(frame);
-  frame.src = goog.html.TrustedResourceUrl.unwrapTrustedURL(url);
+  frame.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
 
@@ -453,7 +453,7 @@ goog.dom.safe.setFrameSrc = function(frame, url) {
  */
 goog.dom.safe.setIframeSrc = function(iframe, url) {
   goog.dom.asserts.assertIsHTMLIFrameElement(iframe);
-  iframe.src = goog.html.TrustedResourceUrl.unwrapTrustedURL(url);
+  iframe.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
 
@@ -508,14 +508,14 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
     goog.asserts.assert(
         url instanceof goog.html.TrustedResourceUrl,
         'URL must be TrustedResourceUrl because "rel" contains "stylesheet"');
-    link.href = goog.html.TrustedResourceUrl.unwrapTrustedURL(url);
+    link.href = goog.html.TrustedResourceUrl.unwrap(url);
   } else if (url instanceof goog.html.TrustedResourceUrl) {
-    link.href = goog.html.TrustedResourceUrl.unwrapTrustedURL(url);
+    link.href = goog.html.TrustedResourceUrl.unwrap(url);
   } else if (url instanceof goog.html.SafeUrl) {
-    link.href = goog.html.SafeUrl.unwrapTrustedURL(url);
+    link.href = goog.html.SafeUrl.unwrap(url);
   } else {  // string
     // SafeUrl.sanitize must return legitimate SafeUrl when passed a string.
-    link.href = goog.html.SafeUrl.unwrapTrustedURL(
+    link.href = goog.html.SafeUrl.unwrap(
         goog.html.SafeUrl.sanitizeAssertUnchanged(url));
   }
 };
@@ -623,7 +623,7 @@ goog.dom.safe.setLocationHref = function(loc, url) {
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  loc.href = goog.html.SafeUrl.unwrapTrustedURL(safeUrl);
+  loc.href = goog.html.SafeUrl.unwrap(safeUrl);
 };
 
 /**
@@ -656,7 +656,7 @@ goog.dom.safe.assignLocation = function(loc, url) {
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  loc.assign(goog.html.SafeUrl.unwrapTrustedURL(safeUrl));
+  loc.assign(goog.html.SafeUrl.unwrap(safeUrl));
 };
 
 
@@ -687,7 +687,7 @@ goog.dom.safe.replaceLocation = function(loc, url) {
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  loc.replace(goog.html.SafeUrl.unwrapTrustedURL(safeUrl));
+  loc.replace(goog.html.SafeUrl.unwrap(safeUrl));
 };
 
 
@@ -730,7 +730,7 @@ goog.dom.safe.openInWindow = function(
   }
   var win = opt_openerWin || goog.global;
   return win.open(
-      goog.html.SafeUrl.unwrapTrustedURL(safeUrl),
+      goog.html.SafeUrl.unwrap(safeUrl),
       // If opt_name is undefined, simply passing that in to open() causes IE to
       // reuse the current window instead of opening a new one. Thus we pass ''
       // in instead, which according to spec opens a new window. See

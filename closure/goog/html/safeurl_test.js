@@ -19,17 +19,12 @@ goog.setTestOnly();
 
 const Const = goog.require('goog.string.Const');
 const Dir = goog.require('goog.i18n.bidi.Dir');
-const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const SafeUrl = goog.require('goog.html.SafeUrl');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
 const googObject = goog.require('goog.object');
 const safeUrlTestVectors = goog.require('goog.html.safeUrlTestVectors');
 const testSuite = goog.require('goog.testing.testSuite');
-const trustedtypes = goog.require('goog.html.trustedtypes');
 const userAgent = goog.require('goog.userAgent');
-
-const stubs = new PropertyReplacer();
-const policy = goog.createTrustedTypesPolicy('closure_test');
 
 /** @return {boolean} True if running on IE9 or lower. */
 function isIE9OrLower() {
@@ -55,10 +50,6 @@ function assertBlobTypeIsSafe(type, isSafe) {
 }
 
 testSuite({
-  tearDown() {
-    stubs.reset();
-  },
-
   testSafeUrl() {
     const safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
     const extracted = SafeUrl.unwrap(safeUrl);
@@ -305,19 +296,6 @@ testSuite({
       SafeUrl.unwrap(evil);
     });
     assertContains('expected object of type SafeUrl', exception.message);
-  },
-
-  testUnwrapTrustedURL() {
-    let safeValue = SafeUrl.sanitize('https://example.com/');
-    let trustedValue = SafeUrl.unwrapTrustedURL(safeValue);
-    assertEquals(safeValue.getTypedStringValue(), trustedValue);
-    stubs.set(trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
-    safeValue = SafeUrl.sanitize('https://example.com/');
-    trustedValue = SafeUrl.unwrapTrustedURL(safeValue);
-    assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
-    assertTrue(
-        goog.global.TrustedURL ? trustedValue instanceof TrustedURL :
-                                 typeof trustedValue === 'string');
   },
 
   testSafeUrlSanitize_sanitizeUrl() {
