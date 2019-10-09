@@ -266,6 +266,8 @@ testSuite({
       'www:8080',
       'www . notnsense.com',
       'email@address.com',
+      '.',
+      'x.',
 
       // URL-ish but not quite
       '  http://www.google.com',
