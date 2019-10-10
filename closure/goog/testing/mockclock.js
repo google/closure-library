@@ -86,12 +86,6 @@ goog.testing.MockClock = function(opt_autoInstall) {
    */
   this.deletedKeys_ = {};
 
-  /**
-   * Whether we should skip mocking Date.now().
-   * @private {boolean}
-   */
-  this.unmockDateNow_ = false;
-
   if (opt_autoInstall) {
     this.install();
   }
@@ -201,9 +195,6 @@ goog.testing.MockClock.prototype.install = function() {
     r.set(goog.global, 'setImmediate', goog.bind(this.setImmediate_, this));
     r.set(goog.global, 'clearTimeout', goog.bind(this.clearTimeout_, this));
     r.set(goog.global, 'clearInterval', goog.bind(this.clearInterval_, this));
-    if (!this.unmockDateNow_) {
-      r.set(Date, 'now', goog.bind(this.getCurrentTime, this));
-    }
     // goog.Promise uses goog.async.run. In order to be able to test
     // Promise-based code, we need to make sure that goog.async.run uses
     // nextTick instead of native browser Promises. This means that it will
@@ -229,14 +220,7 @@ goog.testing.MockClock.prototype.install = function() {
  * @deprecated
  */
 goog.testing.MockClock.prototype.unmockDateNow = function() {
-  this.unmockDateNow_ = true;
-  if (this.replacer_) {
-    try {
-      this.replacer_.restore(Date, 'now');
-    } catch (e) {
-      // Ignore error thrown if Date.now was not already mocked.
-    }
-  }
+  // TODO(b/141619890): Implement.
 };
 
 
