@@ -270,6 +270,35 @@ testSuite({
     assertNotEquals(50, goog.now());
   },
 
+  testMockDateNow() {
+    assertNotEquals(0, Date.now());
+    const clock = new MockClock(true);
+    assertEquals(0, Date.now());
+    clock.tick(50);
+    assertEquals(50, Date.now());
+    clock.uninstall();
+    assertNotEquals(50, Date.now());
+  },
+
+  testMockDateNow_unmockDateNow_autoInstall() {
+    assertNotEquals(0, Date.now());
+    const clock = new MockClock(true);
+    clock.unmockDateNow();
+    assertNotEquals(0, Date.now());
+    clock.uninstall();
+    assertNotEquals(0, Date.now());
+  },
+
+  testMockDateNow_unmockDateNow_manualInstall() {
+    assertNotEquals(0, Date.now());
+    const clock = new MockClock();
+    clock.unmockDateNow();
+    clock.install();
+    assertNotEquals(0, Date.now());
+    clock.uninstall();
+    assertNotEquals(0, Date.now());
+  },
+
   testTimeoutDelay() {
     const clock = new MockClock(true);
     let m10 = false;

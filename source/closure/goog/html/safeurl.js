@@ -23,7 +23,6 @@ goog.provide('goog.html.SafeUrl');
 goog.require('goog.asserts');
 goog.require('goog.fs.url');
 goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.html.trustedtypes');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
 goog.require('goog.string.Const');
@@ -71,15 +70,14 @@ goog.require('goog.string.internal');
  * @implements {goog.i18n.bidi.DirectionalString}
  * @implements {goog.string.TypedString}
  * @param {!Object=} opt_token package-internal implementation detail.
- * @param {!TrustedURL|string=} opt_content package-internal
- *     implementation detail.
+ * @param {string=} opt_content package-internal implementation detail.
  */
 goog.html.SafeUrl = function(opt_token, opt_content) {
   /**
    * The contained value of this SafeUrl.  The field has a purposely ugly
    * name to make (non-compiled) code that attempts to directly access this
    * field stand out.
-   * @private {!TrustedURL|string}
+   * @private {string}
    */
   this.privateDoNotAccessOrElseSafeUrlWrappedValue_ =
       ((opt_token === goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_) &&
@@ -201,17 +199,6 @@ if (goog.DEBUG) {
  *     `goog.asserts.AssertionError`.
  */
 goog.html.SafeUrl.unwrap = function(safeUrl) {
-  return goog.html.SafeUrl.unwrapTrustedURL(safeUrl).toString();
-};
-
-
-/**
- * Unwraps value as TrustedURL if supported or as a string if not.
- * @param {!goog.html.SafeUrl} safeUrl
- * @return {!TrustedURL|string}
- * @see goog.html.SafeUrl.unwrap
- */
-goog.html.SafeUrl.unwrapTrustedURL = function(safeUrl) {
   // Perform additional Run-time type-checking to ensure that safeUrl is indeed
   // an instance of the expected type.  This provides some additional protection
   // against security bugs due to application code that disables type checks.
@@ -721,11 +708,7 @@ goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
     url) {
   return new goog.html.SafeUrl(
-      goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_,
-      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
-          goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createURL(
-              url) :
-          url);
+      goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_, url);
 };
 
 

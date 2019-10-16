@@ -27,6 +27,7 @@ goog.provide('goog.fs.FileEntry');
 
 goog.forwardDeclare('goog.async.Deferred');
 goog.forwardDeclare('goog.fs.FileSystem');
+goog.forwardDeclare('goog.fs.FileWriter');
 
 
 

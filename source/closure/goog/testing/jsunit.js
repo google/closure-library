@@ -97,14 +97,8 @@ goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS =
   }
 
   var maybeGetStack = function(error) {
-    if (typeof error == 'object') {
-      var stack = error.stack;
-      if (stack && typeof stack == 'string') {
-        // non-empty string
-        return stack;
-      }
-    }
-    return '';
+    var stack = error && error.stack;
+    return typeof stack === 'string' ? stack : '';
   };
 
   // Add an error handler to report errors that may occur during
@@ -124,7 +118,7 @@ goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS =
     if (stack) {
       tr.logError(String(messageOrEvent) + '\n' + stack);
     } else if (typeof messageOrEvent == 'object') {
-      var error = messageOrEvent;
+      var error = /** @type {{target: ?}} */ (messageOrEvent);
       // Some older webkit browsers pass an event object as the only argument
       // to window.onerror.  It doesn't contain an error message, url or line
       // number.  We therefore log as much info as we can.

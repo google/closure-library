@@ -143,6 +143,7 @@ goog.events.EventType = {
   PAUSE: 'pause',
   PLAY: 'play',
   PLAYING: 'playing',
+  PROGRESS: 'progress',
   RATECHANGE: 'ratechange',
   SEEKED: 'seeked',
   SEEKING: 'seeking',
