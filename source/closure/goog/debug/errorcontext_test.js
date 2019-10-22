@@ -17,7 +17,6 @@ goog.setTestOnly('goog.debug.errorcontextTest');
 
 const errorcontext = goog.require('goog.debug.errorcontext');
 const testSuite = goog.require('goog.testing.testSuite');
-goog.require('goog.testing.jsunit');
 
 testSuite({
   testAddContext() {

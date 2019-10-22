@@ -18,7 +18,6 @@ goog.setTestOnly();
 const DelegateRegistry = goog.require('goog.delegate.DelegateRegistry');
 const testSuite = goog.require('goog.testing.testSuite');
 const {zip} = goog.require('goog.array');
-goog.require('goog.testing.jsunit');
 
 /** Always throws. */
 const THROW = () => {

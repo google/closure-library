@@ -18,7 +18,6 @@ goog.setTestOnly('goog.iter.es6Test');
 const testSuite = goog.require('goog.testing.testSuite');
 const {ShimIterable} = goog.require('goog.iter.es6');
 const {range, toArray} = goog.require('goog.iter');
-goog.require('goog.testing.jsunit');
 
 /** @return {!Iterator<number>} */
 function* gen() {
