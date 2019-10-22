@@ -159,7 +159,7 @@ goog.addDependency('debug/entrypointregistry_test.js', ['goog.debug.entryPointRe
 goog.addDependency('debug/error.js', ['goog.debug.Error'], [], {'lang': 'es6'});
 goog.addDependency('debug/error_test.js', ['goog.debug.ErrorTest'], ['goog.debug.Error', 'goog.testing.ExpectedFailures', 'goog.testing.testSuite', 'goog.userAgent', 'goog.userAgent.product'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('debug/errorcontext.js', ['goog.debug.errorcontext'], [], {});
-goog.addDependency('debug/errorcontext_test.js', ['goog.debug.errorcontextTest'], ['goog.debug.errorcontext', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('debug/errorcontext_test.js', ['goog.debug.errorcontextTest'], ['goog.debug.errorcontext', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('debug/errorhandler.js', ['goog.debug.ErrorHandler', 'goog.debug.ErrorHandler.ProtectedFunctionError'], ['goog.Disposable', 'goog.asserts', 'goog.debug', 'goog.debug.EntryPointMonitor', 'goog.debug.Error', 'goog.debug.Trace'], {'lang': 'es6'});
 goog.addDependency('debug/errorhandler_async_test.js', ['goog.debug.ErrorHandlerAsyncTest'], ['goog.Promise', 'goog.debug.ErrorHandler', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es8', 'module': 'goog'});
 goog.addDependency('debug/errorhandler_test.js', ['goog.debug.ErrorHandlerTest'], ['goog.debug.ErrorHandler', 'goog.testing.MockControl', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
@@ -183,9 +183,9 @@ goog.addDependency('debug/tracer.js', ['goog.debug.StopTraceDetail', 'goog.debug
 goog.addDependency('debug/tracer_test.js', ['goog.debug.TraceTest'], ['goog.array', 'goog.debug.Trace', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('defineclass_test.js', ['goog.defineClassTest'], ['goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('delegate/delegateregistry.js', ['goog.delegate.DelegateRegistry'], ['goog.array', 'goog.asserts', 'goog.debug'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('delegate/delegateregistry_test.js', ['goog.delegate.DelegateRegistryTest'], ['goog.array', 'goog.delegate.DelegateRegistry', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('delegate/delegateregistry_test.js', ['goog.delegate.DelegateRegistryTest'], ['goog.array', 'goog.delegate.DelegateRegistry', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('delegate/delegates.js', ['goog.delegate.delegates'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('delegate/delegates_test.js', ['goog.delegate.delegatesTest'], ['goog.delegate.delegates', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('delegate/delegates_test.js', ['goog.delegate.delegatesTest'], ['goog.delegate.delegates', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('disposable/disposable.js', ['goog.Disposable', 'goog.dispose', 'goog.disposeAll'], ['goog.disposable.IDisposable'], {});
 goog.addDependency('disposable/disposable_test.js', ['goog.DisposableTest'], ['goog.Disposable', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('disposable/idisposable.js', ['goog.disposable.IDisposable'], [], {});
@@ -626,7 +626,7 @@ goog.addDependency('i18n/uchar_test.js', ['goog.i18n.uCharTest'], ['goog.i18n.uC
 goog.addDependency('i18n/ucharnames.js', ['goog.i18n.uCharNames'], ['goog.i18n.uChar'], {});
 goog.addDependency('i18n/ucharnames_test.js', ['goog.i18n.uCharNamesTest'], ['goog.i18n.uCharNames', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('iter/es6.js', ['goog.iter.es6'], ['goog.iter.Iterable', 'goog.iter.Iterator', 'goog.iter.StopIteration'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('iter/es6_test.js', ['goog.iter.es6Test'], ['goog.iter', 'goog.iter.es6', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('iter/es6_test.js', ['goog.iter.es6Test'], ['goog.iter', 'goog.iter.es6', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('iter/iter.js', ['goog.iter', 'goog.iter.Iterable', 'goog.iter.Iterator', 'goog.iter.StopIteration'], ['goog.array', 'goog.asserts', 'goog.functions', 'goog.math'], {});
 goog.addDependency('iter/iter_test.js', ['goog.iterTest'], ['goog.iter', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('json/hybrid.js', ['goog.json.hybrid'], ['goog.asserts', 'goog.json'], {});

@@ -18,7 +18,6 @@ goog.setTestOnly();
 const delegates = goog.require('goog.delegate.delegates');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
-goog.require('goog.testing.jsunit');
 
 testSuite({
 
