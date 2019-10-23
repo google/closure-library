@@ -23,7 +23,6 @@
  * MockControl also exposes some convenience functions that create
  * controlled mocks for common mocks: StrictMock, LooseMock,
  * FunctionMock, MethodMock, and GlobalFunctionMock.
- *
  */
 
 

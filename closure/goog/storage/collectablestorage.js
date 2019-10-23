@@ -15,7 +15,6 @@
 /**
  * @fileoverview Provides a convenient API for data persistence with data
  * expiration and user-initiated expired key collection.
- *
  */
 
 goog.provide('goog.storage.CollectableStorage');

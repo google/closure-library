@@ -21,7 +21,6 @@
  * incomplete implementation of web workers, it doesn't support sending ports
  * over Window connections. IE has no web worker support at all, and so is
  * unsupported by this class.
- *
  */
 
 goog.provide('goog.messaging.PortChannel');

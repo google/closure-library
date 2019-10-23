@@ -43,7 +43,6 @@
  * 2. New programming models for cloud (on the server-side) may require
  *    new APIs to be defined.
  * 3. WebRTC DataChannel alignment
- *
  */
 
 goog.provide('goog.net.WebChannel');

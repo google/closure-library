@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Action event wrapper implementation.
- * @author eae@google.com (Emil A Eklund)
  */
 
 goog.provide('goog.events.actionEventWrapper');

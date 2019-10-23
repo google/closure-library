@@ -15,7 +15,6 @@
 /**
  * @fileoverview Utilities for working with ranges in HTML documents.
  *
- * @author robbyw@google.com (Robby Walker)
  * @suppress {strictMissingProperties}
  */
 

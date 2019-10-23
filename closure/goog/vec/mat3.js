@@ -21,7 +21,6 @@
  * vectors as follows: resultVec = matrix * vec.
  *
  * The matrices are stored in column-major order.
- *
  */
 goog.provide('goog.vec.Mat3');
 

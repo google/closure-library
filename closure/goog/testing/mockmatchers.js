@@ -18,7 +18,6 @@
  * matcher function into an ArgumentMatcher instance.
  *
  * For examples, please see the unit test.
- *
  */
 
 

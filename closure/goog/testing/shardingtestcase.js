@@ -29,8 +29,6 @@
  * as a symlink
  *   </li>
  * </ol>
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.setTestOnly('goog.testing.ShardingTestCase');

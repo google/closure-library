@@ -15,7 +15,6 @@
 /**
  * @fileoverview Utility class that monitors viewport size changes.
  *
- * @author attila@google.com (Attila Bodis)
  * @see ../demos/viewportsizemonitor.html
  */
 

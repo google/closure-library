@@ -16,7 +16,6 @@
  * @fileoverview A dimension picker control.  A dimension picker allows the
  * user to visually select a row and column count.
  *
- * @author robbyw@google.com (Robby Walker)
  * @see ../demos/dimensionpicker.html
  * @see ../demos/dimensionpicker_rtl.html
  */

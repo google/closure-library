@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Support class for spell checker components.
- *
- * @author eae@google.com (Emil A Eklund)
  */
 
 goog.provide('goog.spell.SpellCheck');

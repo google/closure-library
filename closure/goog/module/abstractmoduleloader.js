@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview An interface for module loading.
- *
  */
 
 goog.provide('goog.module.AbstractModuleLoader');

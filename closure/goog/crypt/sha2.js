@@ -19,7 +19,6 @@
  * http://csrc.nist.gov/publications/fips/fips180-3/fips180-3_final.pdf.
  *
  * Some code similar to SHA1 are borrowed from sha1.js written by mschilder@.
- *
  */
 
 goog.provide('goog.crypt.Sha2');

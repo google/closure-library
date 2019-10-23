@@ -34,7 +34,6 @@
  * touchpad with acceleration). There is no signal in the events to reliably
  * distinguish between these.
  *
- * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/wheelhandler.html
  */
 

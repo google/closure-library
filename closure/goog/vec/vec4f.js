@@ -31,7 +31,6 @@
  *
  * See the README for notes about the design and structure of the API
  * (especially related to performance).
- *
  */
 goog.provide('goog.vec.vec4f');
 goog.provide('goog.vec.vec4f.Type');

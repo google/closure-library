@@ -19,7 +19,6 @@
  * goog.editor.TableCell. Together these provide support for
  * high level table modifications: Adding and deleting rows and columns,
  * and merging and splitting cells.
- *
  */
 
 goog.provide('goog.editor.Table');

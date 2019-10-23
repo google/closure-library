@@ -18,7 +18,6 @@
  * does not save any metadata by itself. It only provides the necessary
  * infrastructure for subclasses that need to save metadata along with
  * values stored.
- *
  */
 
 goog.provide('goog.storage.RichStorage');

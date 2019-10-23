@@ -19,7 +19,6 @@
  * of the WebChannel are limited to what's supported by the implementation.
  * Particularly, multiplexing is not possible, and only strings are
  * supported as message types.
- *
  */
 
 goog.provide('goog.labs.net.webChannel.WebChannelBaseTransport');

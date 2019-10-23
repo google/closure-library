@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Unit tests for goog.position.
- *
- * @author eae@google.com (Emil A Eklund)
  */
 
 /** @suppress {extraProvide} */

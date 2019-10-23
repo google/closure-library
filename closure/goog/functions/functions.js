@@ -23,8 +23,6 @@
  *
  * More about these can be found at
  * https://github.com/google/guava/wiki/FunctionalExplained
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 

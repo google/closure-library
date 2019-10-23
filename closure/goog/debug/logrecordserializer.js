@@ -16,7 +16,6 @@
  * @fileoverview Static methods for serializing and deserializing log
  * messages.  These methods are deliberately kept separate from logrecord.js
  * and logger.js because they add dependencies on goog.json and goog.object.
- *
  */
 
 goog.provide('goog.debug.logRecordSerializer');

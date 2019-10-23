@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview A generic interface for saving and restoring ranges.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 

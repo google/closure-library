@@ -15,9 +15,6 @@
 /**
  * @fileoverview Default renderer for {@link goog.ui.TabBar}s.  Based on the
  * original `TabPane` code.
- *
- * @author attila@google.com (Attila Bodis)
- * @author eae@google.com (Emil A. Eklund)
  */
 
 goog.provide('goog.ui.TabBarRenderer');

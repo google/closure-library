@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Mock FileWriter object.
- *
  */
 
 goog.setTestOnly('goog.testing.fs.FileWriter');

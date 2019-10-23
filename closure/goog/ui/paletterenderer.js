@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Renderer for {@link goog.ui.Palette}s.
- *
- * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.ui.PaletteRenderer');

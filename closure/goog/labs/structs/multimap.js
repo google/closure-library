@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview A Map that associates multiple values with a single key.
- *
- * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.labs.structs.Multimap');

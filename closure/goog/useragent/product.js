@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Detects the specific browser and not just the rendering engine.
- *
  */
 
 goog.provide('goog.userAgent.product');

@@ -17,7 +17,6 @@
  * Unicode 10 UAX#29. Tailoring for Virama × Indic Letters is used.
  *
  * Reference: http://unicode.org/reports/tr29
- *
  */
 
 goog.provide('goog.i18n.GraphemeBreak');

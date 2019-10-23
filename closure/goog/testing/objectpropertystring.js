@@ -15,7 +15,6 @@
 /**
  * @fileoverview Helper for passing property names as string literals in
  * compiled test code.
- *
  */
 
 goog.setTestOnly('goog.testing.ObjectPropertyString');

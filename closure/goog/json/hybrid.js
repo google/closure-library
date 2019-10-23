@@ -19,8 +19,6 @@
  *
  *     This is intended as a drop-in for current users of goog.json who want
  *     to take advantage of native JSON if present.
- *
- * @author nnaze@google.com (Nathan Naze)
  */
 
 goog.provide('goog.json.hybrid');

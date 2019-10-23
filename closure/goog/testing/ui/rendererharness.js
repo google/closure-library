@@ -15,8 +15,6 @@
 
 /**
  * @fileoverview A driver for testing renderers.
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.setTestOnly('goog.testing.ui.RendererHarness');

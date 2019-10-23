@@ -36,7 +36,6 @@
  *   slider.decorate(document.getElementById('slider'));
  * </code>
  *
- * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/slider.html
  */
 

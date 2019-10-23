@@ -15,8 +15,6 @@
 /**
  * @fileoverview Interface definitions for working with ranges
  * in HTML documents.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 

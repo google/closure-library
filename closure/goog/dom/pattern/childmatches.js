@@ -15,8 +15,6 @@
 /**
  * @fileoverview DOM pattern to match any children of a tag, and
  * specifically collect those that match a child pattern.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 

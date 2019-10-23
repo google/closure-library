@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview CSS3 transition base library.
- *
- * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.fx.css3.Transition');

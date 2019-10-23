@@ -26,9 +26,6 @@ required for compilation.
 """
 
 
-
-
-
 try:
   import distutils.version
 except ImportError:

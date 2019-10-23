@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Detection of JScript version.
- *
- * @author arv@google.com (Erik Arvidsson)
  */
 
 

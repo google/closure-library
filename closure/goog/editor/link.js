@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview A utility class for managing editable links.
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.editor.Link');

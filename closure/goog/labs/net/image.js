@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Simple image loader, used for preloading.
- * @author nnaze@google.com (Nathan Naze)
  */
 
 goog.provide('goog.labs.net.image');

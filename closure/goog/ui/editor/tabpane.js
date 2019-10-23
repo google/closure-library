@@ -15,8 +15,6 @@
 /**
  * @fileoverview Tabbed pane with style and functionality specific to
  * Editor dialogs.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.ui.editor.TabPane');

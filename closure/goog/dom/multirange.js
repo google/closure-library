@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Utilities for working with W3C multi-part ranges.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 

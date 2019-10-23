@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview An API for saving and restoring ranges as HTML carets.
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 

@@ -35,8 +35,6 @@
  * - createDom
  * - decorateInternal
  * - getCssClass
- *
- * @author arv@google.com (Erik Arvidsson)
  */
 
 goog.provide('goog.ui.SliderBase');

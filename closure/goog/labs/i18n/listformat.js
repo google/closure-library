@@ -32,7 +32,6 @@
  * "αυτές" for feminine, and "αυτά" for neutral/undetermined.
  * (it is in fact more complicated than that, as weak/strong forms and case
  * also matter, see http://en.wiktionary.org/wiki/Appendix:Greek_pronouns)
- *
  */
 
 goog.provide('goog.labs.i18n.GenderInfo');

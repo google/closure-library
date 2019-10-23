@@ -15,7 +15,6 @@
 
 /**
  * @fileoverview Graphics surface type.
- * @author robbyw@google.com (Robby Walker)
  */
 
 

@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Test helpers to compare goog.proto2.Messages.
- *
  */
 
 goog.setTestOnly('goog.testing.proto2');

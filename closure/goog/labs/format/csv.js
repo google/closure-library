@@ -19,8 +19,6 @@
  * Empty fields (adjacent commas) are returned as empty strings.
  *
  * This parser uses http://tools.ietf.org/html/rfc4180 as the definition of CSV.
- *
- * @author nnaze@google.com (Nathan Naze) Ported to Closure
  */
 
 // TODO(b/130421259): We're trying to migrate all ES5 subclasses of Closure

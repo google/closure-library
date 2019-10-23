@@ -28,8 +28,6 @@
  *
  * Additional pieces of advanced coordinate functionality can (soon) be found in
  * element.js and groupelement.js.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.graphics.ext.coordinates');

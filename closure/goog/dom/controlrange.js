@@ -15,7 +15,6 @@
 /**
  * @fileoverview Utilities for working with IE control ranges.
  *
- * @author robbyw@google.com (Robby Walker)
  * @suppress {strictMissingProperties}
  */
 

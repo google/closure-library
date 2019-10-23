@@ -33,7 +33,6 @@
  * populated messages with tag numbers that are not continuous (and/or are very
  * large) will have many (empty) spots and thus, are inefficient.
  *
- *
  */
 
 goog.provide('goog.proto2.PbLiteSerializer');

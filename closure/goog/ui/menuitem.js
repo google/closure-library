@@ -16,7 +16,6 @@
  * @fileoverview A class for representing items in menus.
  * @see goog.ui.Menu
  *
- * @author attila@google.com (Attila Bodis)
  * @see ../demos/menuitem.html
  */
 

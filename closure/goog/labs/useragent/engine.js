@@ -17,7 +17,6 @@
  * @see http://en.wikipedia.org/wiki/User_agent
  * For more information on browser brand, platform, or device see the other
  * sub-namespaces in goog.labs.userAgent (browser, platform, and device).
- *
  */
 
 goog.provide('goog.labs.userAgent.engine');

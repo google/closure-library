@@ -18,8 +18,6 @@
  * Usage:
  *   var hmac = new goog.crypt.Hmac(new goog.crypt.sha1(), key, 64);
  *   var digest = hmac.getHmac(bytes);
- *
- * @author benyu@google.com (Jige Yu) - port to closure
  */
 
 

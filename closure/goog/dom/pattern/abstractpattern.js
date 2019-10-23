@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview DOM pattern base class.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.dom.pattern.AbstractPattern');

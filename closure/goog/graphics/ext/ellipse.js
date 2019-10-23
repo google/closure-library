@@ -15,7 +15,6 @@
 
 /**
  * @fileoverview A thick wrapper around ellipses.
- * @author robbyw@google.com (Robby Walker)
  */
 
 

@@ -15,7 +15,6 @@
 /**
  * @fileoverview Utility methods to deal with CSS3 transitions
  * programmatically.
- * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.style.transition');

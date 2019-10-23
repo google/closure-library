@@ -17,7 +17,6 @@
  * used by goog.net.xpc.IframeRelayTransport. This script will decode the
  * fragment identifier, determine the target window object and deliver
  * the data to it.
- *
  */
 
 goog.provide('goog.net.xpc.relay');

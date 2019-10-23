@@ -15,7 +15,6 @@
 /**
  * @fileoverview Provides inversion and inversion map functionality for storing
  * integer ranges and corresponding values.
- *
  */
 
 goog.provide('goog.structs.InversionMap');

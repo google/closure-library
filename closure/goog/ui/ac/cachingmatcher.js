@@ -15,7 +15,6 @@
 /**
  * @fileoverview Matcher which maintains a client-side cache on top of some
  * other matcher.
- * @author reinerp@google.com (Reiner Pope)
  */
 
 

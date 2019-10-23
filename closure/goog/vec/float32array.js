@@ -23,7 +23,6 @@
  *
  *     Adding support for the other TypedArray classes here does not make sense
  *     since this vector math library only needs Float32Array.
- *
  */
 goog.provide('goog.vec.Float32Array');
 

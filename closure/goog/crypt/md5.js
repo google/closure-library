@@ -29,7 +29,6 @@
  *   IE9 (in a VM)           ~27 Mbit/s
  *   Firefox 3.6             ~15 Mbit/s
  *   IE8 (in a VM)           ~13 Mbit/s
- *
  */
 
 goog.provide('goog.crypt.Md5');

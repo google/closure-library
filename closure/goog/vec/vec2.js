@@ -15,7 +15,6 @@
 /**
  * @fileoverview Definition of 2 element vectors.  This follows the same design
  * patterns as Vec3 and Vec4.
- *
  */
 
 goog.provide('goog.vec.Vec2');

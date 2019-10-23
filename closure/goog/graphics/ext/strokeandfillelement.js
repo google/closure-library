@@ -15,7 +15,6 @@
 
 /**
  * @fileoverview A thick wrapper around elements with stroke and fill.
- * @author robbyw@google.com (Robby Walker)
  */
 
 

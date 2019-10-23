@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Provides a convenient API for data persistence with expiration.
- *
  */
 
 goog.provide('goog.storage.ExpiringStorage');

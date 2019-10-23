@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Collection of utility functions for Unicode character.
- *
  */
 
 goog.provide('goog.i18n.uChar');

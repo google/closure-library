@@ -16,8 +16,6 @@
  * @fileoverview A plugin that fills the field with lorem ipsum text when it's
  * empty and does not have the focus. Applies to both editable and uneditable
  * fields.
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.editor.plugins.LoremIpsum');

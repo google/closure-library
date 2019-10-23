@@ -18,7 +18,6 @@
  * states as defined by W3C ARIA standard: http://www.w3.org/TR/wai-aria/
  * All modern browsers have some form of ARIA support, so no browser checks are
  * performed when adding ARIA to components.
- *
  */
 
 goog.provide('goog.a11y.aria');

@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Utilties for working with ranges.
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.editor.range');

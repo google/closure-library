@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Unit tests for the collectable storage interface.
- *
  */
 
 goog.provide('goog.storage.collectableStorageTester');

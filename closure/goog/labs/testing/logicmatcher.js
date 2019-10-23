@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Provides the built-in logic matchers: anyOf, allOf, and isNot.
- *
  */
 
 

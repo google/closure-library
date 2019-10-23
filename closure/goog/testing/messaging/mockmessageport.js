@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview A simple dummy class for representing message ports in tests.
- *
  */
 
 goog.setTestOnly('goog.testing.messaging.MockMessagePort');

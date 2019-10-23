@@ -28,8 +28,6 @@
  * assertEquals(3, observer.getEvents('select').length);
  * assertEquals(2, observer.getEvents('submit').length);
  * </pre>
- *
- * @author nnaze@google.com (Nathan Naze)
  */
 
 goog.setTestOnly('goog.testing.events.EventObserver');

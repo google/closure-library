@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Renderer for {@link goog.ui.Menu}s.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.ui.MenuRenderer');

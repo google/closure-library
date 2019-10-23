@@ -25,8 +25,6 @@
  * more permissive than the goog.style API should be. For example,
  * goog.style.getComputedStyle will throw an exception if you give it a
  * text node.
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.editor.style');

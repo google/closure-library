@@ -21,8 +21,6 @@
  * Entry points may be registered before or after a call to
  * goog.debug.entryPointRegistry.monitorAll. If an entry point is registered
  * later, the existing monitor will instrument the new entry point.
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.debug.EntryPointMonitor');

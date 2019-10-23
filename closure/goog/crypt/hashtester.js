@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Unit tests for the abstract cryptographic hash interface.
- *
  */
 
 goog.provide('goog.crypt.hashTester');

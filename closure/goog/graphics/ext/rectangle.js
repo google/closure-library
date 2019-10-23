@@ -15,7 +15,6 @@
 
 /**
  * @fileoverview A thick wrapper around rectangles.
- * @author robbyw@google.com (Robby Walker)
  */
 
 

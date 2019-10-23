@@ -18,7 +18,6 @@
  * handling and child management, based on a generalized version of
  * {@link goog.ui.Menu}.
  *
- * @author attila@google.com (Attila Bodis)
  * @see ../demos/container.html
  */
 // TODO(attila):  Fix code/logic duplication between this and goog.ui.Control.

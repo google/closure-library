@@ -15,7 +15,6 @@
 /**
  * @fileoverview Implementation of a progress bar.
  *
- * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/progressbar.html
  */
 

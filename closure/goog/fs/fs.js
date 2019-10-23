@@ -20,7 +20,6 @@
  *
  * When adding public functions to anything under this namespace, be sure to add
  * its mock counterpart to goog.testing.fs.
- *
  */
 
 goog.provide('goog.fs');

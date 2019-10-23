@@ -19,8 +19,6 @@
  * Vec2 objects inherit from goog.math.Coordinate and may be used wherever a
  * Coordinate is required. Where appropriate, Vec2 functions accept both Vec2
  * and Coordinate objects as input.
- *
- * @author brenneman@google.com (Shawn Brenneman)
  */
 
 goog.provide('goog.math.Vec2');

@@ -17,7 +17,6 @@
  * plugin is intended to be an example of a very simple plugin for plugin
  * developers.
  *
- * @author gak@google.com (Gregory Kick)
  * @see helloworld.html
  */
 

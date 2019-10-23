@@ -14,9 +14,6 @@
 
 /**
  * @fileoverview Client positioning class.
- *
- * @author eae@google.com (Emil A Eklund)
- * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.positioning.ClientPosition');

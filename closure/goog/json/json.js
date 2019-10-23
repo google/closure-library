@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview JSON utility functions.
- * @author arv@google.com (Erik Arvidsson)
  */
 
 

@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Base TestChannel implementation.
- *
  */
 
 

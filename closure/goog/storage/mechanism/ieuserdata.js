@@ -17,7 +17,6 @@
  * UserData uses proprietary Element.addBehavior(), Element.load(),
  * Element.save(), and Element.XMLDocument() methods, see:
  * http://msdn.microsoft.com/en-us/library/ms531424(v=vs.85).aspx.
- *
  */
 
 

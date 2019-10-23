@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Tests for goog.ui.MockActivityMonitorTest.
- * @author nnaze@google.com (Nathan Naze)
  */
 
 /** @suppress {extraProvide} */

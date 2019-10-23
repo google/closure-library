@@ -20,7 +20,6 @@
  *
  * This file does not compile correctly with --collapse_properties. Use
  * --property_renaming=ALL_UNQUOTED instead.
- *
  */
 
 goog.setTestOnly('goog.testing.TestCase');

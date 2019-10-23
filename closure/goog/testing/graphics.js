@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Testing utilities for DOM related tests.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.setTestOnly('goog.testing.graphics');

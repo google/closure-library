@@ -17,7 +17,6 @@
  * repetitive details of registering and dispatching to services. This is more
  * useful for full-fledged channels than for decorators, since decorators
  * generally delegate service registering anyway.
- *
  */
 
 

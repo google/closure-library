@@ -18,7 +18,6 @@
  * For more information on browser brand, rendering engine, or device see the
  * other sub-namespaces in goog.labs.userAgent (browser, engine, and device
  * respectively).
- *
  */
 
 goog.provide('goog.labs.userAgent.platform');

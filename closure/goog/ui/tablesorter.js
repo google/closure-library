@@ -15,7 +15,6 @@
 /**
  * @fileoverview A table sorting decorator.
  *
- * @author robbyw@google.com (Robby Walker)
  * @see ../demos/tablesorter.html
  */
 

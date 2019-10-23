@@ -15,7 +15,6 @@
 /**
  * @fileoverview
  * Implementations of DataNode for wrapping XML data.
- *
  */
 
 goog.provide('goog.ds.XmlDataSource');

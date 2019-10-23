@@ -17,8 +17,6 @@
  *
  * TODO(attila): Add keyboard & mouse event hooks?
  * TODO(attila): Add multiple selection?
- *
- * @author attila@google.com (Attila Bodis)
  */
 
 

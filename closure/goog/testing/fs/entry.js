@@ -15,7 +15,6 @@
 /**
  * @fileoverview Mock filesystem objects. These are all in the same file to
  * avoid circular dependency issues.
- *
  */
 
 goog.setTestOnly('goog.testing.fs.DirectoryEntry');

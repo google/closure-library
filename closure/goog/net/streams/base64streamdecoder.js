@@ -22,7 +22,6 @@
  * - Further input after padding characters are decoded normally. Padding
  *   characters are simply treated as 6 input bits (like other characters),
  *   and has no more semantics meaning to the decoder.
- *
  */
 
 goog.provide('goog.net.streams.Base64StreamDecoder');

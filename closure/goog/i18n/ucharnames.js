@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Utility functions for Unicode character names.
- *
  */
 
 goog.provide('goog.i18n.uCharNames');

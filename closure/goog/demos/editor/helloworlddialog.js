@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview An example of how to write a dialog to be opened by a plugin.
- *
  */
 
 

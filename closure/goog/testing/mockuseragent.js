@@ -15,7 +15,6 @@
 /**
  * @fileoverview MockUserAgent overrides goog.userAgent.getUserAgentString()
  *     depending on a specified configuration.
- *
  */
 
 goog.setTestOnly('goog.testing.MockUserAgent');

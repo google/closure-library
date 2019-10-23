@@ -15,7 +15,6 @@
 /**
  * @fileoverview Definition of the ChannelDebug class. ChannelDebug provides
  * a utility for tracing and debugging the BrowserChannel requests.
- *
  */
 
 

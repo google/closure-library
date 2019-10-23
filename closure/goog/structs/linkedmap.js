@@ -19,8 +19,6 @@
  * default) or ordered from most recent to least recent use. By setting a fixed
  * size, the LRU version of the LinkedMap makes an effective object cache. This
  * data structure is similar to Java's LinkedHashMap.
- *
- * @author brenneman@google.com (Shawn Brenneman)
  */
 
 

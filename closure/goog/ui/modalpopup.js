@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Class for showing simple modal popup.
- * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.ui.ModalPopup');

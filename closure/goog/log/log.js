@@ -15,8 +15,6 @@
 /**
  * @fileoverview Basic strippable logging definitions.
  * @see http://go/closurelogging
- *
- * @author johnlenz@google.com (John Lenz)
  */
 
 goog.provide('goog.log');

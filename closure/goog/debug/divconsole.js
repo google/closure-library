@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Simple logger that logs a Div Element.
- *
  */
 
 goog.provide('goog.debug.DivConsole');

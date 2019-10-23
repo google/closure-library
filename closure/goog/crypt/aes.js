@@ -15,8 +15,6 @@
 /**
  * @fileoverview Implementation of AES in JavaScript.
  * @see http://en.wikipedia.org/wiki/Advanced_Encryption_Standard
- *
- * @author nnaze@google.com (Nathan Naze) - port to Closure
  */
 
 goog.provide('goog.crypt.Aes');

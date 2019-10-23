@@ -15,7 +15,6 @@
 /**
  * @fileoverview Datastructure: Hash Map.
  *
- * @author arv@google.com (Erik Arvidsson)
  *
  * This file contains an implementation of a Map structure. It implements a lot
  * of the methods used in goog.structs so those functions work on hashes. This

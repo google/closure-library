@@ -17,7 +17,6 @@
  * with semantics similar to the native HTML <code>&lt;select&gt;</code>
  * element.
  *
- * @author attila@google.com (Attila Bodis)
  * @see ../demos/select.html
  */
 

@@ -18,7 +18,6 @@
  * As part of net.rpc package, CORS features provided by this class
  * depend on the server support. Please check related specs to decide how
  * to enable any of the features provided by this class.
- *
  */
 
 goog.module('goog.net.rpc.HttpCors');

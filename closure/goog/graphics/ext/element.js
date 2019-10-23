@@ -16,7 +16,6 @@
  * @fileoverview A thicker wrapper around the DOM element returned from
  * the different draw methods of the graphics implementation, and
  * all interfaces that the various element types support.
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.graphics.ext.Element');

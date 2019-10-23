@@ -28,7 +28,6 @@
  * popular currencies (like USD, EUR) and currencies somewhat relevant in the
  * area (like CNY in HK, though native currency is HKD). There is no guarantee
  * of uniqueness.
- *
  */
 
 

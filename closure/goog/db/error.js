@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Error classes for the IndexedDB wrapper.
- *
  */
 
 

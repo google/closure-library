@@ -15,8 +15,6 @@
 /**
  * @fileoverview Image loader utility class.  Useful when an application needs
  * to preload multiple images, for example so they can be sized.
- *
- * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.net.ImageLoader');

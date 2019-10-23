@@ -28,7 +28,6 @@
  *    new goog.events.ActionHandler(el),
  *    ACTION,
  *    this.onAction_);<code>
- *
  */
 
 goog.provide('goog.events.ActionEvent');

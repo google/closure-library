@@ -19,7 +19,6 @@
  * Closure's I18N formatter for relative dates and times is by default to
  * format strings function. It provides plural forms and many locales
  * using standard data from the Common Data Locale Repository (CLDR).
- *
  */
 
 goog.provide('goog.date.relative');

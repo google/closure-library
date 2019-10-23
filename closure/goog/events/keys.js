@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Constant declarations for common key values.
- *
  */
 
 goog.provide('goog.events.Keys');

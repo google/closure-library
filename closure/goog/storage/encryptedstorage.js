@@ -24,7 +24,6 @@
  * decrypting them. If sensitive metadata is added in subclasses, it is up
  * to the subclass to protect this information, perhaps by embedding it in
  * the object.
- *
  */
 
 goog.provide('goog.storage.EncryptedStorage');

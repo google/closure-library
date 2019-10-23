@@ -15,9 +15,6 @@
 /**
  * @fileoverview
  * JavaScript support for client-side CSS sanitization.
- *
- * @author danesh@google.com (Danesh Irani)
- * @author mikesamuel@gmail.com (Mike Samuel)
  */
 
 goog.provide('goog.html.sanitizer.CssSanitizer');

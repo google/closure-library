@@ -27,9 +27,6 @@
  * The injected data can then be referred to in any soy templates as
  * part of a magic "ij" parameter. For example, `$ij.dataKey`
  * will evaluate to 'value' with the above injected data.
- *
- * @author henrywong@google.com (Henry Wong)
- * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.soy.InjectedDataSupplier');

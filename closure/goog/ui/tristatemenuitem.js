@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview A menu item class that supports three state checkbox semantics.
- *
- * @author eae@google.com (Emil A Eklund)
  */
 
 goog.provide('goog.ui.TriStateMenuItem');

@@ -40,7 +40,6 @@
  * asyncMockControl.run();
  * mockControl.$verifyAll();
  * </pre>
- *
  */
 
 

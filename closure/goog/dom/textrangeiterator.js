@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Iterator between two DOM text range positions.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 

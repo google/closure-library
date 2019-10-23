@@ -39,7 +39,6 @@
  * goog.net.EventType.PROGRESS event will be the re-dispatched browser
  * progress event. Additionally, a DOWNLOAD_PROGRESS or UPLOAD_PROGRESS event
  * will be fired for download and upload progress respectively.
- *
  */
 
 

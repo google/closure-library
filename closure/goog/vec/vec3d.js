@@ -31,7 +31,6 @@
  *
  * See the README for notes about the design and structure of the API
  * (especially related to performance).
- *
  */
 goog.provide('goog.vec.vec3d');
 goog.provide('goog.vec.vec3d.Type');

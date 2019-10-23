@@ -15,8 +15,6 @@
 /**
  * @fileoverview Utilities used by goog.labs.userAgent tools. These functions
  * should not be used outside of goog.labs.userAgent.*.
- *
- * @author nnaze@google.com (Nathan Naze)
  */
 
 goog.provide('goog.labs.userAgent.util');
