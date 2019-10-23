@@ -12,15 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+goog.module('goog.storage.mechanism.HTML5WebStorageTest');
 goog.setTestOnly('goog.storage.mechanism.HTML5WebStorageTest');
-goog.provide('goog.storage.mechanism.HTML5MockStorage');
-goog.provide('goog.storage.mechanism.HTML5WebStorageTest');
-goog.provide('goog.storage.mechanism.MockThrowableStorage');
 
-goog.require('goog.storage.mechanism.ErrorCode');
-goog.require('goog.storage.mechanism.HTML5WebStorage');
-goog.require('goog.testing.jsunit');
-
+const ErrorCode = goog.require('goog.storage.mechanism.ErrorCode');
+const HTML5WebStorage = goog.require('goog.storage.mechanism.HTML5WebStorage');
+const testSuite = goog.require('goog.testing.testSuite');
 
 
 /**
@@ -33,26 +30,24 @@ goog.require('goog.testing.jsunit');
  *     exceeded.
  * @constructor
  */
-goog.storage.mechanism.MockThrowableStorage = function(opt_isStorageDisabled) {
+function MockThrowableStorage(opt_isStorageDisabled) {
   this.isStorageDisabled_ = !!opt_isStorageDisabled;
   this.length = opt_isStorageDisabled ? 0 : 1;
-};
+}
 
 
 /** @override */
-goog.storage.mechanism.MockThrowableStorage.prototype.setItem = function(
-    key, value) {
+MockThrowableStorage.prototype.setItem = function(key, value) {
   if (this.isStorageDisabled_) {
-    throw goog.storage.mechanism.ErrorCode.STORAGE_DISABLED;
+    throw ErrorCode.STORAGE_DISABLED;
   } else {
-    throw goog.storage.mechanism.ErrorCode.QUOTA_EXCEEDED;
+    throw ErrorCode.QUOTA_EXCEEDED;
   }
 };
 
 
 /** @override */
-goog.storage.mechanism.MockThrowableStorage.prototype.removeItem = function(
-    key) {};
+MockThrowableStorage.prototype.removeItem = function(key) {};
 
 
 /**
@@ -61,7 +56,7 @@ goog.storage.mechanism.MockThrowableStorage.prototype.removeItem = function(
  * @param {number} index A key index.
  * @return {string} The key associated with that index.
  */
-goog.storage.mechanism.MockThrowableStorage.prototype.key = function(index) {
+MockThrowableStorage.prototype.key = function(index) {
   return 'dummyKey';
 };
 
@@ -71,51 +66,50 @@ goog.storage.mechanism.MockThrowableStorage.prototype.key = function(index) {
  * Provides an HTML5WebStorage wrapper for MockThrowableStorage.
  *
  * @constructor
- * @extends {goog.storage.mechanism.HTML5WebStorage}
+ * @extends {HTML5WebStorage}
  */
-goog.storage.mechanism.HTML5MockStorage = function(opt_isStorageDisabled) {
-  goog.storage.mechanism.HTML5MockStorage.base(
-      this, 'constructor',
-      new goog.storage.mechanism.MockThrowableStorage(opt_isStorageDisabled));
-};
-goog.inherits(
-    goog.storage.mechanism.HTML5MockStorage,
-    goog.storage.mechanism.HTML5WebStorage);
-
-
-function testIsNotAvailableWhenQuotaExceeded() {
-  const storage = new goog.storage.mechanism.HTML5MockStorage(false);
-  assertFalse(storage.isAvailable());
+function HTML5MockStorage(opt_isStorageDisabled) {
+  HTML5MockStorage.base(
+      this, 'constructor', new MockThrowableStorage(opt_isStorageDisabled));
 }
+goog.inherits(HTML5MockStorage, HTML5WebStorage);
 
-function testIsNotAvailableWhenStorageDisabled() {
-  const storage = new goog.storage.mechanism.HTML5MockStorage(true);
-  assertFalse(storage.isAvailable());
-}
 
-function testSetThrowsExceptionWhenQuotaExceeded() {
-  const storage = new goog.storage.mechanism.HTML5MockStorage(false);
-  let isQuotaExceeded = false;
-  try {
-    storage.set('foobar', '1');
-  } catch (e) {
-    isQuotaExceeded = e == goog.storage.mechanism.ErrorCode.QUOTA_EXCEEDED;
-  }
-  assertTrue(isQuotaExceeded);
-}
+testSuite({
+  testIsNotAvailableWhenQuotaExceeded() {
+    const storage = new HTML5MockStorage(false);
+    assertFalse(storage.isAvailable());
+  },
 
-function testSetThrowsExceptionWhenStorageDisabled() {
-  const storage = new goog.storage.mechanism.HTML5MockStorage(true);
-  let isStorageDisabled = false;
-  try {
-    storage.set('foobar', '1');
-  } catch (e) {
-    isStorageDisabled = e == goog.storage.mechanism.ErrorCode.STORAGE_DISABLED;
-  }
-  assertTrue(isStorageDisabled);
-}
+  testIsNotAvailableWhenStorageDisabled() {
+    const storage = new HTML5MockStorage(true);
+    assertFalse(storage.isAvailable());
+  },
 
-function testKeyIterationWithKeyMethod() {
-  const storage = new goog.storage.mechanism.HTML5MockStorage(true);
-  assertEquals('dummyKey', storage.key(1));
-}
+  testSetThrowsExceptionWhenQuotaExceeded() {
+    const storage = new HTML5MockStorage(false);
+    let isQuotaExceeded = false;
+    try {
+      storage.set('foobar', '1');
+    } catch (e) {
+      isQuotaExceeded = e == ErrorCode.QUOTA_EXCEEDED;
+    }
+    assertTrue(isQuotaExceeded);
+  },
+
+  testSetThrowsExceptionWhenStorageDisabled() {
+    const storage = new HTML5MockStorage(true);
+    let isStorageDisabled = false;
+    try {
+      storage.set('foobar', '1');
+    } catch (e) {
+      isStorageDisabled = e == ErrorCode.STORAGE_DISABLED;
+    }
+    assertTrue(isStorageDisabled);
+  },
+
+  testKeyIterationWithKeyMethod() {
+    const storage = new HTML5MockStorage(true);
+    assertEquals('dummyKey', storage.key(1));
+  },
+});
