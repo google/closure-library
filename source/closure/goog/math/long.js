@@ -16,7 +16,6 @@
  * @fileoverview Defines a Long class for representing a 64-bit two's-complement
  * integer value, which faithfully simulates the behavior of a Java "long". This
  * implementation is derived from LongLib in GWT.
- *
  */
 
 goog.module('goog.math.Long');

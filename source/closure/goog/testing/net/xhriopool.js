@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview An XhrIo pool that uses a single mock XHR object for testing.
- *
  */
 
 goog.setTestOnly('goog.testing.net.XhrIoPool');

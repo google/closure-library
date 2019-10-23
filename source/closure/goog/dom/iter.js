@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Iterators over DOM nodes.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.dom.iter.AncestorIterator');

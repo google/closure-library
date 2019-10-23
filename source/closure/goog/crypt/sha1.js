@@ -25,7 +25,6 @@
  * Performance:
  *   Chrome 23:   ~400 Mbit/s
  *   Firefox 16:  ~250 Mbit/s
- *
  */
 
 goog.provide('goog.crypt.Sha1');

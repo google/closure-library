@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Utility function for linkifying text.
- * @author bolinfest@google.com (Michael Bolin)
  */
 
 goog.provide('goog.string.linkify');

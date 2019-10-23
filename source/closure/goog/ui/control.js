@@ -18,7 +18,6 @@
  * of {@link goog.ui.MenuItem}.
  * TODO(attila):  If the renderer framework works well, pull it into Component.
  *
- * @author attila@google.com (Attila Bodis)
  * @see ../demos/control.html
  * @see http://code.google.com/p/closure-library/wiki/IntroToControls
  */

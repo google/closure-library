@@ -15,7 +15,6 @@
 /**
  * @fileoverview A MessageChannel decorator that wraps a deferred MessageChannel
  * and enqueues messages and service registrations until that channel exists.
- *
  */
 
 goog.provide('goog.messaging.DeferredChannel');

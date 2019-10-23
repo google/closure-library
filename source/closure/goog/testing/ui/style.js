@@ -15,7 +15,6 @@
 /**
  * @fileoverview Tools for testing Closure renderers against static markup
  * spec pages.
- *
  */
 
 goog.setTestOnly('goog.testing.ui.style');

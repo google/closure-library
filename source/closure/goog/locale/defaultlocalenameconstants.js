@@ -16,7 +16,6 @@
  * @fileoverview Default list of locale specific country and language names.
  *
  * File generated from CLDR ver. 35
- *
  */
 
 // clang-format off

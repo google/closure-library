@@ -15,7 +15,6 @@
 /**
  * @fileoverview This class sends logging messages over a message channel to a
  * server on the main page that prints them using standard logging mechanisms.
- *
  */
 
 goog.provide('goog.messaging.LoggerClient');

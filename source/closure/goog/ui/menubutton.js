@@ -15,7 +15,6 @@
 /**
  * @fileoverview A menu button control.
  *
- * @author attila@google.com (Attila Bodis)
  * @see ../demos/menubutton.html
  */
 

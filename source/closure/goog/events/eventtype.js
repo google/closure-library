@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Event Types.
- *
- * @author arv@google.com (Erik Arvidsson)
  */
 
 

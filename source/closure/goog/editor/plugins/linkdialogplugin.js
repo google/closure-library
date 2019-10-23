@@ -14,9 +14,6 @@
 
 /**
  * @fileoverview A plugin for the LinkDialog.
- *
- * @author nicksantos@google.com (Nick Santos)
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.editor.plugins.LinkDialogPlugin');

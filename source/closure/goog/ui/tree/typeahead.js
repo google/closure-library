@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Provides the typeahead functionality for the tree class.
- *
  */
 
 goog.provide('goog.ui.tree.TypeAhead');

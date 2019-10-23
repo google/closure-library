@@ -15,7 +15,6 @@
 
 /**
  * @fileoverview A thick wrapper around images.
- * @author robbyw@google.com (Robby Walker)
  */
 
 

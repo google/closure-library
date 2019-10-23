@@ -18,8 +18,6 @@
  * to eliminate the need for each app to implement their own log buffer. The
  * disadvantage to doing this is that log handlers cannot maintain references to
  * log records and expect that they are not overwriten at a later point.
- *
- * @author agrieve@google.com (Andrew Grieve)
  */
 
 goog.provide('goog.debug.LogBuffer');

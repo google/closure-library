@@ -17,7 +17,6 @@
  * interface as goog.testing.TestRunner.  Each test is run in series and their
  * results aggregated.  The main usecase for the MultiTestRunner is to allow
  * the testing of all tests in a project locally.
- *
  */
 
 goog.setTestOnly('goog.testing.MultiTestRunner');

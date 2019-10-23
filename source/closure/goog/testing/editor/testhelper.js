@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Class that allows for simple text editing tests.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.setTestOnly('goog.testing.editor.TestHelper');

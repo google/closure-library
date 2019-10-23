@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview An interface that all mocks should share.
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.setTestOnly('goog.testing.MockInterface');

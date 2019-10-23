@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Utilities for manipulating arrays.
- *
- * @author arv@google.com (Erik Arvidsson)
  */
 
 

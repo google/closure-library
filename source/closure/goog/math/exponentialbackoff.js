@@ -18,7 +18,6 @@
  * exponential backoff model.  Given an initial backoff value and a maximum
  * backoff value, every call to backoff() will double the value until maximum
  * backoff value is reached.
- *
  */
 
 

@@ -15,8 +15,6 @@
 
 /**
  * @fileoverview Typedef for JavaScript types that can be JSON serialized.
- *
- * @author ruilopes@google.com (Rui Lopes)
  */
 
 goog.module('goog.json.Jsonable');

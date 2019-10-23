@@ -32,7 +32,6 @@
  *  } catch (e) {
  *    ...
  *  }
- *
  */
 
 goog.provide('goog.net.WebSocket');

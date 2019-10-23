@@ -15,7 +15,6 @@
 /**
  * @fileoverview Plain text spell checker implementation.
  *
- * @author eae@google.com (Emil A Eklund)
  * @see ../demos/plaintextspellchecker.html
  */
 

@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Definition of the PopupBase class.
- *
  */
 
 goog.provide('goog.ui.PopupBase');

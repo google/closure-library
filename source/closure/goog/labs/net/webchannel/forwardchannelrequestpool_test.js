@@ -15,7 +15,6 @@
 /**
  * @fileoverview Unit tests for ForwardChannelRequestPool.
  * @suppress {accessControls} Private methods are accessed for test purposes.
- *
  */
 
 goog.module('goog.labs.net.webChannel.ForwardChannelRequestPoolTest');

@@ -15,7 +15,6 @@
 /**
  * @fileoverview MockRandom provides a mechanism for specifying a stream of
  * numbers to expect from calls to Math.random().
- *
  */
 
 goog.setTestOnly('goog.testing.MockRandom');

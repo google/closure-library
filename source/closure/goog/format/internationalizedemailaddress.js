@@ -16,7 +16,6 @@
  * @fileoverview Provides functions to parse and manipulate internationalized
  * email addresses. This is useful in the context of Email Address
  * Internationalization (EAI) as defined by RFC6530.
- *
  */
 
 goog.provide('goog.format.InternationalizedEmailAddress');

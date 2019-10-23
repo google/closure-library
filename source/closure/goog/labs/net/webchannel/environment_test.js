@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Unit tests for goog.labs.net.webChannel.environment.
- *
  */
 
 goog.module('goog.labs.net.webChannel.EnvironmentTest');

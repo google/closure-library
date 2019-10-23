@@ -15,7 +15,6 @@
 
 /**
  * @fileoverview A thicker wrapper around graphics groups.
- * @author robbyw@google.com (Robby Walker)
  */
 
 

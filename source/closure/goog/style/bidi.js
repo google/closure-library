@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Bidi utility functions.
- *
  */
 
 goog.provide('goog.style.bidi');

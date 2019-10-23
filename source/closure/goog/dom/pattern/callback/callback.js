@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Useful callback functions for the DOM matcher.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.dom.pattern.callback');

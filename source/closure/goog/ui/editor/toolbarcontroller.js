@@ -15,7 +15,6 @@
 /**
  * @fileoverview A class for managing the editor toolbar.
  *
- * @author attila@google.com (Attila Bodis)
  * @see ../../demos/editor/editor.html
  */
 

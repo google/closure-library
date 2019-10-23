@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Locale independent date/time class.
- *
  */
 
 goog.provide('goog.date.UtcDateTime');

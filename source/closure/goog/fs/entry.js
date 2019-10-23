@@ -18,7 +18,6 @@
  *
  * When adding or modifying functionality in this namespace, be sure to update
  * the mock counterparts in goog.testing.fs.
- *
  */
 goog.provide('goog.fs.DirectoryEntry');
 goog.provide('goog.fs.DirectoryEntry.Behavior');

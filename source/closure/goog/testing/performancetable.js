@@ -16,9 +16,6 @@
  * @fileoverview A table for showing the results of performance testing.
  *
  * {@see goog.testing.benchmark} for an easy way to use this functionality.
- *
- * @author attila@google.com (Attila Bodis)
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.setTestOnly('goog.testing.PerformanceTable');

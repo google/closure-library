@@ -28,7 +28,6 @@
  * event only once (when created or when it is changed) so if you move the DOM
  * node to another form it will not be cleared correctly before submitting.
  *
- * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/labelinput.html
  */
 

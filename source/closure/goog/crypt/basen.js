@@ -21,7 +21,6 @@
  * mostly for demonstration purpose.
  *
  * TODO: Make base64 and baseN classes that have common interface.  (Perhaps...)
- *
  */
 
 goog.provide('goog.crypt.baseN');

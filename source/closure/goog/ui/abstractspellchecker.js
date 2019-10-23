@@ -30,8 +30,6 @@
  * chunks that have been processed after the very beginning, and returns every
  * so often so that the calling function could reschedule its execution on a
  * different stack (for example by calling setInterval(0)).
- *
- * @author eae@google.com (Emil A Eklund)
  */
 
 goog.provide('goog.ui.AbstractSpellChecker');

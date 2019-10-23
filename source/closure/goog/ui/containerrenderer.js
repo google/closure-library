@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Base class for container renderers.
- *
- * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.ui.ContainerRenderer');

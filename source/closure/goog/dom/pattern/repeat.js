@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview DOM pattern to match a tag and all of its children.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.dom.pattern.Repeat');

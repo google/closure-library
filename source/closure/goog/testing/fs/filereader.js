@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Mock FileReader object.
- *
  */
 
 goog.setTestOnly('goog.testing.fs.FileReader');

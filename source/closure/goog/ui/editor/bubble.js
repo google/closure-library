@@ -18,8 +18,6 @@
  *
  * This is used exclusively by code within the editor package, and should not
  * be used directly.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.ui.editor.Bubble');

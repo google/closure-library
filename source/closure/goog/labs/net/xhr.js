@@ -18,7 +18,6 @@
  * via XMLHttpRequest.  Instead of mirroring the XHR interface and exposing
  * events, results are used as a way to pass a "promise" of the response to
  * interested parties.
- *
  */
 
 goog.provide('goog.labs.net.xhr');

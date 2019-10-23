@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Callback object that counts matches.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.dom.pattern.callback.Counter');

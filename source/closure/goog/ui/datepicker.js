@@ -15,7 +15,6 @@
 /**
  * @fileoverview Date picker implementation.
  *
- * @author eae@google.com (Emil A Eklund)
  * @see ../demos/datepicker.html
  */
 

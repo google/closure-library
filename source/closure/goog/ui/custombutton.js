@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview A button rendered via {@link goog.ui.CustomButtonRenderer}.
- *
- * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.ui.CustomButton');

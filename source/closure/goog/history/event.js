@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview The event object dispatched when the history changes.
- *
  */
 
 

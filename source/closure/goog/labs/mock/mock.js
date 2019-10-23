@@ -22,7 +22,6 @@
  * methods (stubbing).
  *
  * Design doc : http://go/closuremock
- *
  */
 
 

@@ -38,7 +38,6 @@
  *   assertEquals('confirm', lastDialogInstance.getTitle());
  * }
  * </pre>
- *
  */
 
 goog.setTestOnly('goog.testing.FunctionCall');

@@ -20,8 +20,6 @@
  *
  * Clients can still determine when the field has loaded by listening to
  * field's load event.
- *
- * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.editor.ClickToEditWrapper');

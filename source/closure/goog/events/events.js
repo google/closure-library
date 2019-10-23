@@ -38,7 +38,6 @@
  * </pre>
  *
  *                                            in IE and event object patching]
- * @author arv@google.com (Erik Arvidsson)
  *
  * @see ../demos/events.html
  * @see ../demos/event-propagation.html

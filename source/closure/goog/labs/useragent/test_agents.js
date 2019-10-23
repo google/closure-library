@@ -16,8 +16,6 @@
  * @fileoverview Various User-Agent strings.
  * See http://go/useragentexamples and http://www.useragentstring.com/ for
  * examples.
- *
- * @author martone@google.com (Andy Martone)
  */
 
 goog.module('goog.labs.userAgent.testAgents');

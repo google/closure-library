@@ -20,7 +20,6 @@
  * XMLHTTP, Trident ActiveX (ie only), and Image request. It provides timeout
  * detection. This class is part of the BrowserChannel implementation and is not
  * for use by normal application code.
- *
  */
 
 

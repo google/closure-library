@@ -15,8 +15,6 @@
 /**
  * @fileoverview A collection of CSS3 targeted animation, based on
  * `goog.fx.css3.Transition`.
- *
- * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.fx.css3');

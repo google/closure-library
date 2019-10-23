@@ -18,7 +18,6 @@
  *
  * Testing code should not have dependencies outside of goog.testing so as to
  * reduce the chance of masking missing dependencies.
- *
  */
 
 goog.setTestOnly('goog.testing.jsunit');

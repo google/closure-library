@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Mock of goog.editor.field.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.setTestOnly('goog.testing.editor.FieldMock');

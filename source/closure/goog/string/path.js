@@ -15,7 +15,6 @@
 /**
  * @fileoverview Utilities for dealing with POSIX path strings. Based on
  * Python's os.path and posixpath.
- * @author nnaze@google.com (Nathan Naze)
  */
 
 goog.provide('goog.string.path');

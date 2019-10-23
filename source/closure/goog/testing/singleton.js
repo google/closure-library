@@ -21,7 +21,6 @@
  *
  * The `goog.testing.singleton` functions expect that the goog.DEBUG flag
  * is enabled, and the tests are either uncompiled or compiled without renaming.
- *
  */
 
 goog.setTestOnly('goog.testing.singleton');

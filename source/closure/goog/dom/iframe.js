@@ -15,7 +15,6 @@
 /**
  * @fileoverview Utilities for creating and working with iframes
  * cross-browser.
- * @author gboyer@google.com (Garry Boyer)
  */
 
 

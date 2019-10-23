@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview TabPane widget implementation.
- *
- * @author eae@google.com (Emil A Eklund)
  */
 
 goog.provide('goog.ui.TabPane');

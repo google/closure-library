@@ -17,7 +17,6 @@
  *
  * These tests should be included in tests of any class extending
  * goog.storage.mechanism.Mechanism.
- *
  */
 
 goog.provide('goog.storage.mechanism.mechanismTester');

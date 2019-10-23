@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview A UI for editing tweak settings / clicking tweak actions.
- *
- * @author agrieve@google.com (Andrew Grieve)
  */
 
 goog.provide('goog.tweak.EntriesPanel');

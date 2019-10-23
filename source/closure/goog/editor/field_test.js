@@ -16,9 +16,6 @@
  * @fileoverview Shared tests for Field and ContentEditableField.
  * Since ContentEditableField switches many of the internal code paths in Field
  * (such as via usesIframe()) it's important to re-run a lot of the same tests.
- *
- * @author nicksantos@google.com (Nick Santos)
- * @author gboyer@google.com (Garrett Boyer)
  */
 
 /** @suppress {extraProvide} */

@@ -27,7 +27,6 @@
  * {@link goog.messaging.PortOperator}, which is in charge of connecting each
  * context to each other context. All other contexts have
  * {@link goog.messaging.PortCaller}s which connect to the operator.
- *
  */
 
 goog.provide('goog.messaging.PortNetwork');

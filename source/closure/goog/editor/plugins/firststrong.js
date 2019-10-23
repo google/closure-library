@@ -36,7 +36,6 @@
  * itself. Rather, it fires editor commands upon the key up event when a
  * direction change needs to be performed; `goog.editor.Command.DIR_RTL`
  * or `goog.editor.Command.DIR_RTL`.
- *
  */
 
 goog.provide('goog.editor.plugins.FirstStrong');

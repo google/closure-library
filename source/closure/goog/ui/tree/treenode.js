@@ -15,8 +15,6 @@
 /**
  * @fileoverview Definition of the goog.ui.tree.TreeNode class.
  *
- * @author arv@google.com (Erik Arvidsson)
- * @author eae@google.com (Emil A Eklund)
  *
  * This is a based on the webfx tree control. See file comment in
  * treecontrol.js.

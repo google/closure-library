@@ -15,7 +15,6 @@
 /**
  * @fileoverview Definition of the ErrorReporter class, which creates an error
  * handler that reports any errors raised to a URL.
- *
  */
 
 goog.provide('goog.debug.ErrorReporter');

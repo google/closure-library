@@ -15,7 +15,6 @@
 /**
  * @fileoverview A utility to load JavaScript files via DOM script tags.
  * Refactored from goog.net.Jsonp. Works cross-domain.
- *
  */
 
 goog.provide('goog.net.jsloader');

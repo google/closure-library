@@ -17,7 +17,6 @@
  * version of a sparse linear system Ax = b where A is tridiagonal.
  *
  * See http://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
- *
  */
 
 goog.provide('goog.math.tdma');

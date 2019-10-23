@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Messages common to Editor UI components.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.ui.editor.messages');

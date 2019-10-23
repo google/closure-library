@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Unit tests for CBC mode for block ciphers.
- *
- * @author nnaze@google.com (Nathan Naze)
  */
 
 /** @suppress {extraProvide} */

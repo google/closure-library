@@ -15,7 +15,6 @@
 /**
  * @fileoverview A fake PortNetwork implementation that simply produces
  * MockMessageChannels for all ports.
- *
  */
 
 goog.setTestOnly('goog.testing.messaging.MockPortNetwork');

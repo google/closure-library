@@ -49,7 +49,6 @@
  * </pre>
  *
  * Requires flash to actually work.
- *
  */
 
 goog.provide('goog.ui.media.Mp3');

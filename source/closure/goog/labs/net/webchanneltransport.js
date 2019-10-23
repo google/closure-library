@@ -19,7 +19,6 @@
  * for <code>WebChannel</code>, which offers an abstraction for
  * point-to-point socket-like communication similar to what BrowserChannel
  * or HTML5 WebSocket offers.
- *
  */
 
 goog.provide('goog.net.WebChannelTransport');

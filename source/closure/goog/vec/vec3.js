@@ -20,7 +20,6 @@
  * allocations.  The last parameter will typically be the output vector and
  * an object can be both an input and output parameter to all methods except
  * where noted.
- *
  */
 goog.provide('goog.vec.Vec3');
 

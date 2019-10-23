@@ -15,7 +15,6 @@
 /**
  * @fileoverview Generic keyboard shortcut handler.
  *
- * @author eae@google.com (Emil A Eklund)
  * @see ../demos/keyboardshortcuts.html
  */
 

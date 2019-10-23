@@ -16,7 +16,6 @@
  * @fileoverview A button control. This implementation extends {@link
  * goog.ui.Control}.
  *
- * @author attila@google.com (Attila Bodis)
  * @see ../demos/button.html
  */
 

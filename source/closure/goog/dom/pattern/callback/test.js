@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Callback object that tests if a pattern matches at least once.
- *
- * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.dom.pattern.callback.Test');

@@ -16,7 +16,6 @@
  * @fileoverview Provides a function to schedule running a function as soon
  * as possible after the current JS execution stops and yields to the event
  * loop.
- *
  */
 
 goog.provide('goog.async.nextTick');

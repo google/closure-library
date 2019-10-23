@@ -39,7 +39,6 @@
  *
  *  // Stop the deferred function call (does nothing if it's not active).
  *  deferredCall.stop();
- *
  */
 
 

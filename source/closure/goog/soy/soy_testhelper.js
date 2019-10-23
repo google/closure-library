@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Provides test helpers for Soy tests.
- * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.soy.testHelper');

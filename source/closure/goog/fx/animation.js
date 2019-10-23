@@ -17,7 +17,6 @@
  *
  * (Based loosly on my animation code for 13thparallel.org, with extra
  * inspiration from the DojoToolkit's modifications to my code)
- * @author arv@google.com (Erik Arvidsson)
  */
 
 goog.provide('goog.fx.Animation');

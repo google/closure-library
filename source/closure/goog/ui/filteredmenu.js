@@ -16,7 +16,6 @@
  * @fileoverview Menu where items can be filtered based on user keyboard input.
  * If a filter is specified only the items matching it will be displayed.
  *
- * @author eae@google.com (Emil A Eklund)
  * @see ../demos/filteredmenu.html
  */
 

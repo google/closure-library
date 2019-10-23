@@ -15,8 +15,6 @@
 /**
  * @fileoverview Functions and objects for date representation and manipulation.
  * @suppress {checkPrototypalTypes}
- *
- * @author eae@google.com (Emil A Eklund)
  */
 
 goog.provide('goog.date');

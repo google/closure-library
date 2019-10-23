@@ -30,7 +30,6 @@
  * The BASENAME portion is the basename of the URL. It's used for the filename
  * proper so that the local filesystem: URL will be downloaded to a file with a
  * recognizable name.
- *
  */
 
 goog.provide('goog.net.FileDownloader');

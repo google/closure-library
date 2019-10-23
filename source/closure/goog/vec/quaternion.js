@@ -18,7 +18,6 @@
  * implementation, quaternions are represented as 4 element vectors with the
  * first 3 elements holding the imaginary components and the 4th element holding
  * the real component.
- *
  */
 goog.provide('goog.vec.Quaternion');
 goog.provide('goog.vec.Quaternion.AnyType');

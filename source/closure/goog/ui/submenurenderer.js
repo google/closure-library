@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Renderer for {@link goog.ui.SubMenu}s.
- *
  */
 
 goog.provide('goog.ui.SubMenuRenderer');

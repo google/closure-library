@@ -16,7 +16,6 @@
  * @fileoverview Implementation of 32-bit hashing functions.
  *
  * This is a direct port from the Google Java Hash class
- *
  */
 
 goog.provide('goog.crypt.hash32');

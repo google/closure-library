@@ -15,7 +15,6 @@
 /**
  * @fileoverview Tab bar UI component.
  *
- * @author attila@google.com (Attila Bodis)
  * @see ../demos/tabbar.html
  */
 

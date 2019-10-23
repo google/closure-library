@@ -15,7 +15,6 @@
 /**
  * @fileoverview Detects the Adobe Reader PDF browser plugin.
  *
- * @author chrisn@google.com (Chris Nokleberg)
  * @see ../demos/useragent.html
  */
 

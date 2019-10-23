@@ -24,7 +24,6 @@
  *  channel.connect('channel/test', 'channel/bind');
  *
  * See goog.net.BrowserChannel.Handler for the handler interface.
- *
  */
 
 

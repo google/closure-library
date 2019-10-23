@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Mock ProgressEvent object.
- *
  */
 
 goog.setTestOnly('goog.testing.fs.ProgressEvent');

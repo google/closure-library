@@ -15,9 +15,6 @@
 /**
  * @fileoverview A color menu button.  Extends {@link goog.ui.MenuButton} by
  * showing the currently selected color in the button caption.
- *
- * @author robbyw@google.com (Robby Walker)
- * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.ui.ColorMenuButton');

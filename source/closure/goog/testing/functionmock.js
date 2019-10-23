@@ -17,7 +17,6 @@
  * whether they be global / top-level or anonymous methods / closures.
  *
  * See the unit tests for usage.
- *
  */
 
 goog.setTestOnly('goog.testing');

@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Class to support scrollable containers for drag and drop.
- *
- * @author dgajda@google.com (Damian Gajda)
  */
 
 goog.provide('goog.fx.DragScrollSupport');

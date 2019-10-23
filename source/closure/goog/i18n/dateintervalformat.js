@@ -45,7 +45,6 @@
  * var dt5 = new DateTime(2016, 8, 23, 14, 53, 0);
  * var itv = new Interval(0, 1); // One month.
  * dtIntFmt.format(dt5, itv); // --> 'Sep 23 – Oct 23, 2016'
- *
  */
 
 goog.module('goog.i18n.DateIntervalFormat');

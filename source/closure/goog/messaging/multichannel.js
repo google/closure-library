@@ -16,7 +16,6 @@
  * @fileoverview Definition of goog.messaging.MultiChannel, which uses a
  * single underlying MessageChannel to carry several independent virtual message
  * channels.
- *
  */
 
 

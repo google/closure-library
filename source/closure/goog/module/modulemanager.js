@@ -15,7 +15,6 @@
 /**
  * @fileoverview A default implementation for managing JavaScript code modules.
  * @enhanceable
- *
  */
 
 goog.provide('goog.module.ModuleManager');

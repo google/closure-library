@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Native browser button renderer for {@link goog.ui.Button}s.
- *
- * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.ui.NativeButtonRenderer');

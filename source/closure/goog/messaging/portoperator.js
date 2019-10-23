@@ -18,7 +18,6 @@
  * {@link MessageChannel}s) between each pair of nodes in the network that need
  * to communicate with one another. Each network should have one and only one
  * operator.
- *
  */
 
 goog.provide('goog.messaging.PortOperator');

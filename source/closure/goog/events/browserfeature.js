@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Browser capability checks for the events package.
- *
  */
 
 

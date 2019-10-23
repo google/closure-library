@@ -32,7 +32,6 @@
  *   implement better (and pluggable) argument matching
  *   Have the exceptions for LooseMock show the number of expected/actual calls
  *   loose and strict mocks share a lot of code - move it to the base class
- *
  */
 
 goog.setTestOnly('goog.testing.Mock');

@@ -20,8 +20,6 @@
  *
  * This code borrows heavily from the 32-bit SHA2 implementation written by
  * Yue Zhang (zysxqn@).
- *
- * @author fy@google.com (Frank Yellin)
  */
 
 goog.provide('goog.crypt.Sha2_64bit');

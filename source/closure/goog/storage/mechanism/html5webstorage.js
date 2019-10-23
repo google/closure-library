@@ -15,7 +15,6 @@
 /**
  * @fileoverview Base class that implements functionality common
  * across both session and local web storage mechanisms.
- *
  */
 
 goog.provide('goog.storage.mechanism.HTML5WebStorage');

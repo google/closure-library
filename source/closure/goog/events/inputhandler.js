@@ -30,7 +30,6 @@
  *     trigger in emulation mode if text was modified by context menu commands
  *     such as 'Undo' and 'Delete'.
  * </ul>
- * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/inputhandler.html
  */
 

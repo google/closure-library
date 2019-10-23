@@ -16,7 +16,6 @@
  * @fileoverview Helper class to load a list of URIs in bulk. All URIs
  * must be a successfully loaded in order for the entire load to be considered
  * a success.
- *
  */
 
 goog.provide('goog.net.BulkLoaderHelper');

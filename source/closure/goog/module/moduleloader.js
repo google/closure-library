@@ -24,7 +24,6 @@
  * In debugging mode, we use normal script tags. In order to make this work,
  * we load the scripts in serial: we do not execute script B to the document
  * until we are certain that script A is finished loading.
- *
  */
 
 goog.provide('goog.module.ModuleLoader');

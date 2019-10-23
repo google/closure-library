@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Unit tests for TextFormatSerializer.
- *
  */
 
 /** @suppress {extraProvide} */

@@ -15,7 +15,6 @@
 /**
  * @fileoverview Provides a convenient API for data persistence using a selected
  * data storage mechanism.
- *
  */
 
 goog.provide('goog.storage.Storage');

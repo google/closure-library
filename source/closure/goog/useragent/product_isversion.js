@@ -19,7 +19,6 @@
  * to strip out unneeded pieces.
  *
  * TODO(nnaze): Move to more appropriate filename/namespace.
- *
  */
 
 
