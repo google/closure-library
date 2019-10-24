@@ -19,7 +19,7 @@
 // clang-format off
 
 goog.addDependency('collections/sets.js', ['goog.collections.sets'], ['goog.labs.collections.iterables'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('collections/sets_test.js', ['goog.collections.setsTest'], ['goog.collections.sets', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('collections/sets_test.js', ['goog.collections.setsTest'], ['goog.collections.sets', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', ['goog.async.Deferred', 'goog.async.Deferred.AlreadyCalledError', 'goog.async.Deferred.CanceledError'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.debug.Error'], {});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred_async_test.js', ['goog.async.deferredAsyncTest'], ['goog.async.Deferred', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred_test.js', ['goog.async.deferredTest'], ['goog.Promise', 'goog.Thenable', 'goog.async.Deferred', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
