@@ -25,8 +25,6 @@ goog.setTestOnly('goog.collections.setsTest');
 const sets = goog.require('goog.collections.sets');
 const testSuite = goog.require('goog.testing.testSuite');
 
-goog.require('goog.testing.jsunit');
-
 /** Yield of the given arguments in order. */
 function* yieldArguments(...args) {
   for (const arg of args) {

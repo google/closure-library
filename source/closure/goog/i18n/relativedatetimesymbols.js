@@ -80,7 +80,7 @@ exports.StyleElement;
 
 /**
  * Map of direction options for RELATIVE data with integer keys.
- * @typedef {!Object<string, string>}
+ * @typedef {!Object<number, string>}
  */
 let RelativeDateTimeDirectionMap;
 
