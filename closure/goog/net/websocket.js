@@ -62,7 +62,7 @@ goog.require('goog.log');
  */
 goog.net.WebSocket = function(opt_params, opt_getNextReconnect) {
   goog.net.WebSocket.base(this, 'constructor');
-  if (typeof opt_params != 'object') {
+  if (typeof opt_params != 'object' || opt_params === null) {
     opt_params = /**@type {!goog.net.WebSocket.Options} */ ({
       autoReconnect: opt_params,
       getNextReconnect: opt_getNextReconnect,
