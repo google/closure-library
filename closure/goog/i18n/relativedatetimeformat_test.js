@@ -166,12 +166,12 @@ const forcedNumericTestData = [
   // Special cases for MINUTE and HOUR, and SECOND != 0, forced numeric mode.
     new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 0.0, RelativeDateTimeFormat.Unit.SECOND, 'now'),
   new DirectionData(
-      'en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.MINUTE, 'in 0 minutes'),  // Not "this minute"
+      'en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.MINUTE, 'this minute'),
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.SECOND, 'now'),
   new DirectionData(
       'en', RelativeDateTimeFormat.Style.LONG, 1, RelativeDateTimeFormat.Unit.MINUTE, 'in 1 minute'),
   new DirectionData(
-      'en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.HOUR, 'in 0 hours'),  // Not "this hour"
+      'en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.HOUR, 'this hour'),
 ];
 
 const formatNumericTestData = [
