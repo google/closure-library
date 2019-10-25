@@ -391,7 +391,7 @@ testSuite({
     goog.i18n.DateTimePatterns = DateTimePatterns_bg;
     const fmtBg = new DateTimeFormat(
         goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-    assertEquals('28.06, 13:10 ч. UTC-7', fmtBg.format(date));
+    assertEquals('28.06, 13:10 UTC-7', fmtBg.format(date));
 
     goog.i18n.DateTimePatterns = DateTimePatterns_zh_HK;
     const fmtZhHk = new DateTimeFormat(

@@ -15,7 +15,7 @@
 /**
  * @fileoverview List of native country and language names.
  *
- * File generated from CLDR ver. 35
+ * File generated from CLDR ver. 36
  */
 
 // clang-format off
@@ -423,9 +423,9 @@ goog.locale.nativeNameConstants = {
     'en_JM': 'Jamaica',
     'en_KE': 'Kenya',
     'en_KI': 'Kiribati',
-    'en_KN': 'St. Kitts & Nevis',
+    'en_KN': 'St Kitts & Nevis',
     'en_KY': 'Cayman Islands',
-    'en_LC': 'St. Lucia',
+    'en_LC': 'St Lucia',
     'en_LR': 'Liberia',
     'en_LS': 'Lesotho',
     'en_MG': 'Madagascar',
@@ -456,7 +456,7 @@ goog.locale.nativeNameConstants = {
     'en_SD': 'Sudan',
     'en_SE': 'Sweden',
     'en_SG': 'Singapore',
-    'en_SH': 'St. Helena',
+    'en_SH': 'St Helena',
     'en_SI': 'Slovenia',
     'en_SL': 'Sierra Leone',
     'en_SS': 'South Sudan',
@@ -472,7 +472,7 @@ goog.locale.nativeNameConstants = {
     'en_UM': 'U.S. Outlying Islands',
     'en_US': 'United States',
     'en_US_POSIX': 'United States',
-    'en_VC': 'St. Vincent & Grenadines',
+    'en_VC': 'St Vincent & Grenadines',
     'en_VG': 'British Virgin Islands',
     'en_VI': 'U.S. Virgin Islands',
     'en_VU': 'Vanuatu',
@@ -579,6 +579,7 @@ goog.locale.nativeNameConstants = {
     'fr_YT': 'Mayotte',
     'fur_IT': 'Italie',
     'fy_NL': 'Nederlân',
+    'ga_GB': 'an Ríocht Aontaithe',
     'ga_IE': 'Éire',
     'gd_GB': 'An Rìoghachd Aonaichte',
     'gl_ES': 'España',
@@ -896,7 +897,7 @@ goog.locale.nativeNameConstants = {
     'cch': 'Atsam',
     'ccp': '𑄌𑄋𑄴𑄟𑄳𑄦',
     'ce': 'нохчийн',
-    'ceb': 'Cebuano',
+    'ceb': 'Binisaya',
     'cgg': 'Rukiga',
     'ch': 'Chamorro',
     'chb': 'Chibcha',
@@ -1141,7 +1142,7 @@ goog.locale.nativeNameConstants = {
     'mt': 'Malti',
     'mua': 'MUNDAŊ',
     'mul': 'Multiple languages',
-    'mus': 'Creek',
+    'mus': 'Muscogee',
     'mwl': 'Mirandese',
     'mwr': 'Marwari',
     'my': 'မြန်မာ',
