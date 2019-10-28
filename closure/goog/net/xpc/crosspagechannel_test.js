@@ -12,27 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.net.xpc.CrossPageChannelTest');
+goog.module('goog.net.xpc.CrossPageChannelTest');
 goog.setTestOnly('goog.net.xpc.CrossPageChannelTest');
 
-goog.require('goog.Disposable');
-goog.require('goog.Promise');
-goog.require('goog.Timer');
-goog.require('goog.Uri');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
-goog.require('goog.labs.userAgent.browser');
-goog.require('goog.log');
-goog.require('goog.log.Level');
-goog.require('goog.net.xpc');
-goog.require('goog.net.xpc.CfgFields');
-goog.require('goog.net.xpc.CrossPageChannel');
-goog.require('goog.net.xpc.CrossPageChannelRole');
-goog.require('goog.net.xpc.TransportTypes');
-goog.require('goog.object');
-goog.require('goog.testing.PropertyReplacer');
-goog.require('goog.testing.TestCase');
+const CfgFields = goog.require('goog.net.xpc.CfgFields');
+const ChannelStates = goog.require('goog.net.xpc.ChannelStates');
+const CrossPageChannel = goog.require('goog.net.xpc.CrossPageChannel');
+const CrossPageChannelRole = goog.require('goog.net.xpc.CrossPageChannelRole');
+const Disposable = goog.require('goog.Disposable');
+const GoogPromise = goog.require('goog.Promise');
+const Level = goog.require('goog.log.Level');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const Resolver = goog.require('goog.promise.Resolver');
+const TagName = goog.require('goog.dom.TagName');
+const TestCase = goog.require('goog.testing.TestCase');
+const Timer = goog.require('goog.Timer');
+const TransportTypes = goog.require('goog.net.xpc.TransportTypes');
+const Uri = goog.require('goog.Uri');
+const browser = goog.require('goog.labs.userAgent.browser');
+const dom = goog.require('goog.dom');
+const log = goog.require('goog.log');
+const object = goog.require('goog.object');
+const testSuite = goog.require('goog.testing.testSuite');
+const xpc = goog.require('goog.net.xpc');
+/** @suppress {extraRequire} Needed for G_testRunner.log() */
 goog.require('goog.testing.jsunit');
+
 
 // Set this to false when working on this test.  It needs to be true for
 // automated testing, as some browsers (eg IE8) choke on the large numbers of
@@ -40,63 +45,475 @@ goog.require('goog.testing.jsunit');
 var CLEAN_UP_IFRAMES = true;
 
 var IFRAME_LOAD_WAIT_MS = 1000;
-var stubs = new goog.testing.PropertyReplacer();
+var stubs = new PropertyReplacer();
 var uniqueId = 0;
 var driver;
-var canAccessSameDomainIframe = true;
 var accessCheckPromise = null;
 
-function setUpPage() {
-  // This test is insanely slow on IE8 and Safari for some reason.
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 40 * 1000;
+testSuite({
 
-  // Show debug log
-  const debugDiv = goog.dom.getElement('debugDiv');
-  const logger = goog.log.getLogger('goog.net.xpc');
-  logger.setLevel(goog.log.Level.ALL);
-  goog.log.addHandler(logger, function(logRecord) {
-    const msgElm = goog.dom.createDom(goog.dom.TagName.DIV);
-    msgElm.innerHTML = logRecord.getMessage();
-    goog.dom.appendChild(debugDiv, msgElm);
-  });
+  setUpPage() {
+    // This test is insanely slow on IE8 and Safari for some reason.
+    TestCase.getActiveTestCase().promiseTimeout = 40 * 1000;
 
-  accessCheckPromise = new goog.Promise(function(resolve, reject) {
-    const accessCheckIframes = [];
+    // Show debug log
+    const debugDiv = dom.getElement('debugDiv');
+    const logger = log.getLogger('goog.net.xpc');
+    logger.setLevel(Level.ALL);
+    log.addHandler(logger, function(logRecord) {
+      const msgElm = dom.createDom(TagName.DIV);
+      msgElm.innerHTML = logRecord.getMessage();
+      dom.appendChild(debugDiv, msgElm);
+    });
 
-    accessCheckIframes.push(
-        create1x1Iframe('nonexistent', 'testdata/i_am_non_existent.html'));
-    window.setTimeout(function() {
+    accessCheckPromise = new GoogPromise(function(resolve, reject) {
+      const accessCheckIframes = [];
+
       accessCheckIframes.push(
-          create1x1Iframe('existent', 'testdata/access_checker.html'));
-    }, 10);
+          create1x1Iframe('nonexistent', 'testdata/i_am_non_existent.html'));
+      window.setTimeout(function() {
+        accessCheckIframes.push(
+            create1x1Iframe('existent', 'testdata/access_checker.html'));
+      }, 10);
 
-    // Called from testdata/access_checker.html
-    window['sameDomainIframeAccessComplete'] = function(canAccess) {
-      canAccessSameDomainIframe = canAccess;
-      for (let i = 0; i < accessCheckIframes.length; i++) {
-        document.body.removeChild(accessCheckIframes[i]);
-      }
-      resolve();
-    };
-  });
-}
-
-
-function setUp() {
-  driver = new Driver();
-  // Ensure that the access check is complete before starting each test.
-  return accessCheckPromise;
-}
+      // Called from testdata/access_checker.html
+      window['sameDomainIframeAccessComplete'] = function() {
+        for (let i = 0; i < accessCheckIframes.length; i++) {
+          document.body.removeChild(accessCheckIframes[i]);
+        }
+        resolve();
+      };
+    });
+  },
 
 
-function tearDown() {
-  stubs.reset();
-  driver.dispose();
-}
+  setUp() {
+    driver = new Driver();
+    // Expose driver on the window object, since inner_peer.html uses it to
+    // communicate.
+    window['driver'] = driver;
+
+    // Ensure that the access check is complete before starting each test.
+    return accessCheckPromise;
+  },
 
 
+  tearDown() {
+    stubs.reset();
+    driver.dispose();
+  },
+
+
+  testCreateIframeSpecifyId() {
+    driver.createPeerIframe('new_iframe');
+
+    return Timer.promise(IFRAME_LOAD_WAIT_MS).then(function() {
+      driver.checkPeerIframe();
+    });
+  },
+
+
+  testCreateIframeRandomId() {
+    driver.createPeerIframe();
+
+    return Timer.promise(IFRAME_LOAD_WAIT_MS).then(function() {
+      driver.checkPeerIframe();
+    });
+  },
+
+
+  testGetRole() {
+    const cfg = {};
+    cfg[CfgFields.ROLE] = CrossPageChannelRole.OUTER;
+    const channel = new CrossPageChannel(cfg);
+    // If the configured role is ignored, this will cause the dynamicly
+    // determined role to become INNER.
+    channel.peerWindowObject_ = window.parent;
+    assertEquals(
+        'Channel should use role from the config.', CrossPageChannelRole.OUTER,
+        channel.getRole());
+    channel.dispose();
+  },
+
+
+  // The following batch of tests:
+  // * Establishes a peer iframe
+  // * Connects an XPC channel between the frames
+  // * From the connection callback in each frame, sends an 'echo' request, and
+  //   expects a 'response' response.
+  // * Reconnects the inner frame, sends an 'echo', expects a 'response'.
+  // * Optionally, reconnects the outer frame, sends an 'echo', expects a
+  //   'response'.
+  // * Optionally, reconnects the inner frame, but first reconfigures it to the
+  //   alternate protocol version, simulating an inner frame navigation that
+  //   picks up a new/old version.
+  //
+  // Every valid combination of protocol versions is tested, with both single
+  // and double ended handshakes.  Two timing scenarios are tested per
+  // combination, which is what the 'reverse' parameter distinguishes.
+  //
+  // Where single sided handshake is in use, reconnection by the outer frame is
+  // not supported, and therefore is not tested.
+  //
+  // The only known issue migrating to V2 is that once two V2 peers have
+  // connected, replacing either peer with a V1 peer will not work.  Upgrading
+  // V1 peers to v2 is supported, as is replacing the only v2 peer in a
+  // connection with a v1.
+
+
+  testLifeCycle_v1_v1() {
+    return checkLifeCycle(
+        false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+        1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, false /* reverse */);
+  },
+
+
+  testLifeCycle_v1_v1_rev() {
+    return checkLifeCycle(
+        false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+        1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, true /* reverse */);
+  },
+
+
+  testLifeCycle_v1_v1_onesided() {
+    return checkLifeCycle(
+        true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+        1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, false /* reverse */);
+  },
+
+
+  testLifeCycle_v1_v1_onesided_rev() {
+    return checkLifeCycle(
+        true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+        1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, true /* reverse */);
+  },
+
+
+  testLifeCycle_v1_v2() {
+    return checkLifeCycle(
+        false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+        2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, false /* reverse */);
+  },
+
+
+  testLifeCycle_v1_v2_rev() {
+    return checkLifeCycle(
+        false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+        2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, true /* reverse */);
+  },
+
+
+  testLifeCycle_v1_v2_onesided() {
+    return checkLifeCycle(
+        true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+        2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, false /* reverse */);
+  },
+
+
+  testLifeCycle_v1_v2_onesided_rev() {
+    return checkLifeCycle(
+        true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
+        2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, true /* reverse */);
+  },
+
+
+  testLifeCycle_v2_v1() {
+    return checkLifeCycle(
+        false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+        1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, false /* reverse */);
+  },
+
+
+  testLifeCycle_v2_v1_rev() {
+    return checkLifeCycle(
+        false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+        1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, true /* reverse */);
+  },
+
+
+  testLifeCycle_v2_v1_onesided() {
+    return checkLifeCycle(
+        true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+        1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, false /* reverse */);
+  },
+
+  testLifeCycle_v2_v1_onesided_rev() {
+    return checkLifeCycle(
+        true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+        1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+        true /* innerFrameMigrationSupported */, true /* reverse */);
+  },
+
+
+  testLifeCycle_v2_v2() {
+    // Test flakes on IE 10+ and Chrome: see b/22873770 and b/18595666.
+    if ((browser.isIE() && browser.isVersionOrHigher(10)) ||
+        browser.isChrome()) {
+      return;
+    }
+
+    return checkLifeCycle(
+        false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+        2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+        false /* innerFrameMigrationSupported */, false /* reverse */);
+  },
+
+
+  testLifeCycle_v2_v2_rev() {
+    return checkLifeCycle(
+        false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+        2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
+        false /* innerFrameMigrationSupported */, true /* reverse */);
+  },
+
+
+  testLifeCycle_v2_v2_onesided() {
+    return checkLifeCycle(
+        true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+        2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+        false /* innerFrameMigrationSupported */, false /* reverse */);
+  },
+
+
+  testLifeCycle_v2_v2_onesided_rev() {
+    return checkLifeCycle(
+        true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
+        2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
+        false /* innerFrameMigrationSupported */, true /* reverse */);
+  },
+
+
+  // testConnectMismatchedNames have been flaky on IEs.
+  // Flakiness is tracked in http://b/18595666
+  // For now, not running these tests on IE.
+
+  testConnectMismatchedNames_v1_v1() {
+    if (browser.isIE()) {
+      return;
+    }
+
+    return checkConnectMismatchedNames(
+        1 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
+        false /* reverse */);
+  },
+
+
+  testConnectMismatchedNames_v1_v1_rev() {
+    if (browser.isIE()) {
+      return;
+    }
+
+    return checkConnectMismatchedNames(
+        1 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
+        true /* reverse */);
+  },
+
+
+  testConnectMismatchedNames_v1_v2() {
+    if (browser.isIE()) {
+      return;
+    }
+
+    return checkConnectMismatchedNames(
+        1 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
+        false /* reverse */);
+  },
+
+
+  testConnectMismatchedNames_v1_v2_rev() {
+    if (browser.isIE()) {
+      return;
+    }
+
+    return checkConnectMismatchedNames(
+        1 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
+        true /* reverse */);
+  },
+
+
+  testConnectMismatchedNames_v2_v1() {
+    if (browser.isIE()) {
+      return;
+    }
+
+    return checkConnectMismatchedNames(
+        2 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
+        false /* reverse */);
+  },
+
+
+  testConnectMismatchedNames_v2_v1_rev() {
+    if (browser.isIE()) {
+      return;
+    }
+
+    return checkConnectMismatchedNames(
+        2 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
+        true /* reverse */);
+  },
+
+
+  testConnectMismatchedNames_v2_v2() {
+    if (browser.isIE()) {
+      return;
+    }
+
+    return checkConnectMismatchedNames(
+        2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
+        false /* reverse */);
+  },
+
+
+  testConnectMismatchedNames_v2_v2_rev() {
+    if (browser.isIE()) {
+      return;
+    }
+
+    return checkConnectMismatchedNames(
+        2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
+        true /* reverse */);
+  },
+
+  testEscapeServiceName() {
+    const escape = CrossPageChannel.prototype.escapeServiceName_;
+    assertEquals(
+        'Shouldn\'t escape alphanumeric name', 'fooBar123',
+        escape('fooBar123'));
+    assertEquals(
+        'Shouldn\'t escape most non-alphanumeric characters',
+        '`~!@#$^&*()_-=+ []{}\'";,<.>/?\\',
+        escape('`~!@#$^&*()_-=+ []{}\'";,<.>/?\\'));
+    assertEquals(
+        'Should escape %, |, and :', 'foo%3ABar%7C123%25',
+        escape('foo:Bar|123%'));
+    assertEquals('Should escape tp', '%25tp', escape('tp'));
+    assertEquals('Should escape %tp', '%25%25tp', escape('%tp'));
+    assertEquals('Should not escape stp', 'stp', escape('stp'));
+    assertEquals('Should not escape s%tp', 's%25tp', escape('s%tp'));
+  },
+
+
+  testSameDomainCheck_noMessageOrigin() {
+    const channel = new CrossPageChannel(
+        object.create(CfgFields.PEER_HOSTNAME, 'http://foo.com'));
+    assertTrue(channel.isMessageOriginAcceptable(undefined));
+  },
+
+
+  testSameDomainCheck_noPeerHostname() {
+    const channel = new CrossPageChannel({});
+    assertTrue(channel.isMessageOriginAcceptable('http://foo.com'));
+  },
+
+
+  testSameDomainCheck_unconfigured() {
+    const channel = new CrossPageChannel({});
+    assertTrue(channel.isMessageOriginAcceptable(undefined));
+  },
+
+
+  testSameDomainCheck_originsMatch() {
+    const channel = new CrossPageChannel(
+        object.create(CfgFields.PEER_HOSTNAME, 'http://foo.com'));
+    assertTrue(channel.isMessageOriginAcceptable('http://foo.com'));
+  },
+
+
+  testSameDomainCheck_originsMismatch() {
+    const channel = new CrossPageChannel(
+        object.create(CfgFields.PEER_HOSTNAME, 'http://foo.com'));
+    assertFalse(channel.isMessageOriginAcceptable('http://nasty.com'));
+  },
+
+
+  testUnescapeServiceName() {
+    const unescape = CrossPageChannel.prototype.unescapeServiceName_;
+    assertEquals(
+        'Shouldn\'t modify alphanumeric name', 'fooBar123',
+        unescape('fooBar123'));
+    assertEquals(
+        'Shouldn\'t modify most non-alphanumeric characters',
+        '`~!@#$^&*()_-=+ []{}\'";,<.>/?\\',
+        unescape('`~!@#$^&*()_-=+ []{}\'";,<.>/?\\'));
+    assertEquals(
+        'Should unescape URL-escapes', 'foo:Bar|123%',
+        unescape('foo%3ABar%7C123%25'));
+    assertEquals('Should unescape tp', 'tp', unescape('%25tp'));
+    assertEquals('Should unescape %tp', '%tp', unescape('%25%25tp'));
+    assertEquals('Should not escape stp', 'stp', unescape('stp'));
+    assertEquals('Should not escape s%tp', 's%tp', unescape('s%25tp'));
+  },
+
+
+  async testDisposeImmediate() {
+    // Given
+    driver.createPeerIframe(
+        'new_iframe',
+        /* oneSidedHandshake= */ false,
+        /* innerProtocolVersion= */ 2,
+        /* outerProtocolVersion= */ 2,
+        /* opt_randomChannelNames= */ true);
+
+    assertEquals(driver.getChannel().state_, ChannelStates.NOT_CONNECTED);
+    assertNull(driver.getChannel().transport_);
+
+    // When
+    driver.getChannel().dispose();
+
+    // Then
+    assertTrue(driver.getChannel().isDisposed());
+    // Let any errors caused by erroneous retries happen.
+    await Timer.promise(2000);
+  },
+
+  async testDisposeBeforePeerNotification() {
+    // Given
+    driver.createPeerIframe(
+        'new_iframe',
+        /* oneSidedHandshake= */ false,
+        /* innerProtocolVersion= */ 2,
+        /* outerProtocolVersion= */ 2,
+        /* opt_randomChannelNames= */ true);
+
+    await driver.connectAndWaitForPeer();
+
+    assertEquals(driver.getChannel().state_, ChannelStates.NOT_CONNECTED);
+    const transport = driver.getChannel().transport_;
+
+    // When
+    driver.getChannel().dispose();
+
+    // Then
+    assertNull(driver.getChannel().transport_);
+    assertTrue(driver.getChannel().isDisposed());
+    assertTrue(transport.isDisposed());
+    // Let any errors caused by erroneous retries happen.
+    await Timer.promise(2000);
+  },
+
+
+
+});
+
+
+/**
+ * @param {string} iframeId
+ * @param {string} src
+ * @return {!HTMLIFrameElement}
+ */
 function create1x1Iframe(iframeId, src) {
-  const iframeAccessChecker = goog.dom.createElement(goog.dom.TagName.IFRAME);
+  const iframeAccessChecker = dom.createElement(TagName.IFRAME);
   iframeAccessChecker.id = iframeAccessChecker.name = iframeId;
   iframeAccessChecker.style.width = iframeAccessChecker.style.height = '1px';
   iframeAccessChecker.src = src;
@@ -104,199 +521,15 @@ function create1x1Iframe(iframeId, src) {
   return iframeAccessChecker;
 }
 
-
-function testCreateIframeSpecifyId() {
-  driver.createPeerIframe('new_iframe');
-
-  return goog.Timer.promise(IFRAME_LOAD_WAIT_MS).then(function() {
-    driver.checkPeerIframe();
-  });
-}
-
-
-function testCreateIframeRandomId() {
-  driver.createPeerIframe();
-
-  return goog.Timer.promise(IFRAME_LOAD_WAIT_MS).then(function() {
-    driver.checkPeerIframe();
-  });
-}
-
-
-function testGetRole() {
-  const cfg = {};
-  cfg[goog.net.xpc.CfgFields.ROLE] = goog.net.xpc.CrossPageChannelRole.OUTER;
-  const channel = new goog.net.xpc.CrossPageChannel(cfg);
-  // If the configured role is ignored, this will cause the dynamicly
-  // determined role to become INNER.
-  channel.peerWindowObject_ = window.parent;
-  assertEquals(
-      'Channel should use role from the config.',
-      goog.net.xpc.CrossPageChannelRole.OUTER, channel.getRole());
-  channel.dispose();
-}
-
-
-// The following batch of tests:
-// * Establishes a peer iframe
-// * Connects an XPC channel between the frames
-// * From the connection callback in each frame, sends an 'echo' request, and
-//   expects a 'response' response.
-// * Reconnects the inner frame, sends an 'echo', expects a 'response'.
-// * Optionally, reconnects the outer frame, sends an 'echo', expects a
-//   'response'.
-// * Optionally, reconnects the inner frame, but first reconfigures it to the
-//   alternate protocol version, simulating an inner frame navigation that
-//   picks up a new/old version.
-//
-// Every valid combination of protocol versions is tested, with both single and
-// double ended handshakes.  Two timing scenarios are tested per combination,
-// which is what the 'reverse' parameter distinguishes.
-//
-// Where single sided handshake is in use, reconnection by the outer frame is
-// not supported, and therefore is not tested.
-//
-// The only known issue migrating to V2 is that once two V2 peers have
-// connected, replacing either peer with a V1 peer will not work.  Upgrading V1
-// peers to v2 is supported, as is replacing the only v2 peer in a connection
-// with a v1.
-
-
-function testLifeCycle_v1_v1() {
-  return checkLifeCycle(
-      false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, false /* reverse */);
-}
-
-
-function testLifeCycle_v1_v1_rev() {
-  return checkLifeCycle(
-      false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, true /* reverse */);
-}
-
-
-function testLifeCycle_v1_v1_onesided() {
-  return checkLifeCycle(
-      true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, false /* reverse */);
-}
-
-
-function testLifeCycle_v1_v1_onesided_rev() {
-  return checkLifeCycle(
-      true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, true /* reverse */);
-}
-
-
-function testLifeCycle_v1_v2() {
-  return checkLifeCycle(
-      false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, false /* reverse */);
-}
-
-
-function testLifeCycle_v1_v2_rev() {
-  return checkLifeCycle(
-      false /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, true /* reverse */);
-}
-
-
-function testLifeCycle_v1_v2_onesided() {
-  return checkLifeCycle(
-      true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, false /* reverse */);
-}
-
-
-function testLifeCycle_v1_v2_onesided_rev() {
-  return checkLifeCycle(
-      true /* oneSidedHandshake */, 1 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, true /* reverse */);
-}
-
-
-function testLifeCycle_v2_v1() {
-  return checkLifeCycle(
-      false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, false /* reverse */);
-}
-
-
-function testLifeCycle_v2_v1_rev() {
-  return checkLifeCycle(
-      false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, true /* reverse */);
-}
-
-
-function testLifeCycle_v2_v1_onesided() {
-  return checkLifeCycle(
-      true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, false /* reverse */);
-}
-
-
-function testLifeCycle_v2_v1_onesided_rev() {
-  return checkLifeCycle(
-      true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
-      1 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
-      true /* innerFrameMigrationSupported */, true /* reverse */);
-}
-
-
-function testLifeCycle_v2_v2() {
-  // Test flakes on IE 10+ and Chrome: see b/22873770 and b/18595666.
-  if ((goog.labs.userAgent.browser.isIE() &&
-       goog.labs.userAgent.browser.isVersionOrHigher(10)) ||
-      goog.labs.userAgent.browser.isChrome()) {
-    return;
-  }
-
-  return checkLifeCycle(
-      false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
-      false /* innerFrameMigrationSupported */, false /* reverse */);
-}
-
-
-function testLifeCycle_v2_v2_rev() {
-  return checkLifeCycle(
-      false /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */, true /* outerFrameReconnectSupported */,
-      false /* innerFrameMigrationSupported */, true /* reverse */);
-}
-
-
-function testLifeCycle_v2_v2_onesided() {
-  return checkLifeCycle(
-      true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
-      false /* innerFrameMigrationSupported */, false /* reverse */);
-}
-
-
-function testLifeCycle_v2_v2_onesided_rev() {
-  return checkLifeCycle(
-      true /* oneSidedHandshake */, 2 /* innerProtocolVersion */,
-      2 /* outerProtocolVersion */, false /* outerFrameReconnectSupported */,
-      false /* innerFrameMigrationSupported */, true /* reverse */);
-}
-
-
+/**
+ * @param {boolean} oneSidedHandshake,
+ * @param {number} innerProtocolVersion
+ * @param {number} outerProtocolVersion
+ * @param {boolean} outerFrameReconnectSupported
+ * @param {boolean} innerFrameMigrationSupported
+ * @param {boolean} reverse
+ * @return {!GoogPromise<undefined>}
+ */
 function checkLifeCycle(
     oneSidedHandshake, innerProtocolVersion, outerProtocolVersion,
     outerFrameReconnectSupported, innerFrameMigrationSupported, reverse) {
@@ -308,98 +541,12 @@ function checkLifeCycle(
       innerFrameMigrationSupported, reverse);
 }
 
-// testConnectMismatchedNames have been flaky on IEs.
-// Flakiness is tracked in http://b/18595666
-// For now, not running these tests on IE.
-
-function testConnectMismatchedNames_v1_v1() {
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
-  return checkConnectMismatchedNames(
-      1 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
-      false /* reverse */);
-}
-
-
-function testConnectMismatchedNames_v1_v1_rev() {
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
-  return checkConnectMismatchedNames(
-      1 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
-      true /* reverse */);
-}
-
-
-function testConnectMismatchedNames_v1_v2() {
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
-  return checkConnectMismatchedNames(
-      1 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
-      false /* reverse */);
-}
-
-
-function testConnectMismatchedNames_v1_v2_rev() {
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
-  return checkConnectMismatchedNames(
-      1 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
-      true /* reverse */);
-}
-
-
-function testConnectMismatchedNames_v2_v1() {
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
-  return checkConnectMismatchedNames(
-      2 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
-      false /* reverse */);
-}
-
-
-function testConnectMismatchedNames_v2_v1_rev() {
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
-  return checkConnectMismatchedNames(
-      2 /* innerProtocolVersion */, 1 /* outerProtocolVersion */,
-      true /* reverse */);
-}
-
-
-function testConnectMismatchedNames_v2_v2() {
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
-  return checkConnectMismatchedNames(
-      2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
-      false /* reverse */);
-}
-
-
-function testConnectMismatchedNames_v2_v2_rev() {
-  if (goog.labs.userAgent.browser.isIE()) {
-    return;
-  }
-
-  return checkConnectMismatchedNames(
-      2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
-      true /* reverse */);
-}
-
-
+/**
+ * @param {number} innerProtocolVersion
+ * @param {number} outerProtocolVersion
+ * @param {boolean} reverse
+ * @return {!GoogPromise<undefined>}
+ */
 function checkConnectMismatchedNames(
     innerProtocolVersion, outerProtocolVersion, reverse) {
   driver.createPeerIframe(
@@ -411,134 +558,15 @@ function checkConnectMismatchedNames(
 }
 
 
-function testEscapeServiceName() {
-  const escape = goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_;
-  assertEquals(
-      'Shouldn\'t escape alphanumeric name', 'fooBar123', escape('fooBar123'));
-  assertEquals(
-      'Shouldn\'t escape most non-alphanumeric characters',
-      '`~!@#$^&*()_-=+ []{}\'";,<.>/?\\',
-      escape('`~!@#$^&*()_-=+ []{}\'";,<.>/?\\'));
-  assertEquals(
-      'Should escape %, |, and :', 'foo%3ABar%7C123%25',
-      escape('foo:Bar|123%'));
-  assertEquals('Should escape tp', '%25tp', escape('tp'));
-  assertEquals('Should escape %tp', '%25%25tp', escape('%tp'));
-  assertEquals('Should not escape stp', 'stp', escape('stp'));
-  assertEquals('Should not escape s%tp', 's%25tp', escape('s%tp'));
-}
-
-
-function testSameDomainCheck_noMessageOrigin() {
-  const channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
-      goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
-  assertTrue(channel.isMessageOriginAcceptable(undefined));
-}
-
-
-function testSameDomainCheck_noPeerHostname() {
-  const channel = new goog.net.xpc.CrossPageChannel({});
-  assertTrue(channel.isMessageOriginAcceptable('http://foo.com'));
-}
-
-
-function testSameDomainCheck_unconfigured() {
-  const channel = new goog.net.xpc.CrossPageChannel({});
-  assertTrue(channel.isMessageOriginAcceptable(undefined));
-}
-
-
-function testSameDomainCheck_originsMatch() {
-  const channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
-      goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
-  assertTrue(channel.isMessageOriginAcceptable('http://foo.com'));
-}
-
-
-function testSameDomainCheck_originsMismatch() {
-  const channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
-      goog.net.xpc.CfgFields.PEER_HOSTNAME, 'http://foo.com'));
-  assertFalse(channel.isMessageOriginAcceptable('http://nasty.com'));
-}
-
-
-function testUnescapeServiceName() {
-  const unescape = goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_;
-  assertEquals(
-      'Shouldn\'t modify alphanumeric name', 'fooBar123',
-      unescape('fooBar123'));
-  assertEquals(
-      'Shouldn\'t modify most non-alphanumeric characters',
-      '`~!@#$^&*()_-=+ []{}\'";,<.>/?\\',
-      unescape('`~!@#$^&*()_-=+ []{}\'";,<.>/?\\'));
-  assertEquals(
-      'Should unescape URL-escapes', 'foo:Bar|123%',
-      unescape('foo%3ABar%7C123%25'));
-  assertEquals('Should unescape tp', 'tp', unescape('%25tp'));
-  assertEquals('Should unescape %tp', '%tp', unescape('%25%25tp'));
-  assertEquals('Should not escape stp', 'stp', unescape('stp'));
-  assertEquals('Should not escape s%tp', 's%tp', unescape('s%25tp'));
-}
-
-
-async function testDisposeImmediate() {
-  // Given
-  driver.createPeerIframe(
-      'new_iframe',
-      /* oneSidedHandshake= */ false,
-      /* innerProtocolVersion= */ 2,
-      /* outerProtocolVersion= */ 2,
-      /* opt_randomChannelNames= */ true);
-
-  assertEquals(
-      driver.getChannel().state_, goog.net.xpc.ChannelStates.NOT_CONNECTED);
-  assertNull(driver.getChannel().transport_);
-
-  // When
-  driver.getChannel().dispose();
-
-  // Then
-  assertTrue(driver.getChannel().isDisposed());
-  // Let any errors caused by erroneous retries happen.
-  await goog.Timer.promise(2000);
-}
-
-async function testDisposeBeforePeerNotification() {
-  // Given
-  driver.createPeerIframe(
-      'new_iframe',
-      /* oneSidedHandshake= */ false,
-      /* innerProtocolVersion= */ 2,
-      /* outerProtocolVersion= */ 2,
-      /* opt_randomChannelNames= */ true);
-
-  await driver.connectAndWaitForPeer();
-
-  assertEquals(
-      driver.getChannel().state_, goog.net.xpc.ChannelStates.NOT_CONNECTED);
-  const transport = driver.getChannel().transport_;
-
-  // When
-  driver.getChannel().dispose();
-
-  // Then
-  assertNull(driver.getChannel().transport_);
-  assertTrue(driver.getChannel().isDisposed());
-  assertTrue(transport.isDisposed());
-  // Let any errors caused by erroneous retries happen.
-  await goog.Timer.promise(2000);
-}
-
-
 
 /**
  * Driver for the tests for CrossPageChannel.
  *
  * @constructor
- * @extends {goog.Disposable}
+ * @extends {Disposable}
  */
 const Driver = function() {
-  goog.Disposable.call(this);
+  Disposable.call(this);
 
   /**
    * The peer iframe.
@@ -549,7 +577,7 @@ const Driver = function() {
 
   /**
    * The channel to use.
-   * @type {?goog.net.xpc.CrossPageChannel}
+   * @type {?CrossPageChannel}
    * @private
    */
   this.channel_ = null;
@@ -591,19 +619,19 @@ const Driver = function() {
 
   /**
    * A resolver which fires its promise when the inner frame receives an echo.
-   * @type {!goog.promise.Resolver}
+   * @type {!Resolver}
    * @private
    */
-  this.innerFrameResponseReceived_ = goog.Promise.withResolver();
+  this.innerFrameResponseReceived_ = GoogPromise.withResolver();
 
   /**
    * A resolver which fires its promise when the outer frame receives an echo.
-   * @type {!goog.promise.Resolver}
+   * @type {!Resolver}
    * @private
    */
-  this.outerFrameResponseReceived_ = goog.Promise.withResolver();
+  this.outerFrameResponseReceived_ = GoogPromise.withResolver();
 };
-goog.inherits(Driver, goog.Disposable);
+goog.inherits(Driver, Disposable);
 
 
 /** @override */
@@ -611,7 +639,7 @@ Driver.prototype.disposeInternal = function() {
   // Required to make this test perform acceptably (and pass) on slow browsers,
   // esp IE8.
   if (CLEAN_UP_IFRAMES) {
-    goog.dom.removeNode(this.iframe_);
+    dom.removeNode(this.iframe_);
     delete this.iframe_;
   }
   goog.dispose(this.channel_);
@@ -623,7 +651,7 @@ Driver.prototype.disposeInternal = function() {
 
 /**
  * Returns the child peer's window object.
- * @return {Window} Child peer's window.
+ * @return {!Window} Child peer's window.
  * @private
  */
 Driver.prototype.getInnerPeer_ = function() {
@@ -654,42 +682,41 @@ Driver.prototype.setConfiguration_ = function(
     opt_randomChannelNames) {
   const cfg = {};
   if (opt_iframeId) {
-    cfg[goog.net.xpc.CfgFields.IFRAME_ID] = opt_iframeId;
+    cfg[CfgFields.IFRAME_ID] = opt_iframeId;
   }
-  cfg[goog.net.xpc.CfgFields.PEER_URI] = 'testdata/inner_peer.html';
+  cfg[CfgFields.PEER_URI] = 'testdata/inner_peer.html';
   if (!opt_randomChannelNames) {
     const channelName = opt_channelName || 'test_channel' + uniqueId++;
-    cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = channelName;
+    cfg[CfgFields.CHANNEL_NAME] = channelName;
   }
-  cfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] = 'does-not-exist.html';
-  cfg[goog.net.xpc.CfgFields.PEER_POLL_URI] = 'does-not-exist.html';
-  cfg[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE] = !!opt_oneSidedHandshake;
-  cfg[goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
-      opt_outerProtocolVersion;
+  cfg[CfgFields.LOCAL_POLL_URI] = 'does-not-exist.html';
+  cfg[CfgFields.PEER_POLL_URI] = 'does-not-exist.html';
+  cfg[CfgFields.ONE_SIDED_HANDSHAKE] = !!opt_oneSidedHandshake;
+  cfg[CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] = opt_outerProtocolVersion;
   function resolveUri(fieldName) {
     cfg[fieldName] =
-        goog.Uri.resolve(window.location.href, cfg[fieldName]).toString();
+        Uri.resolve(window.location.href, cfg[fieldName]).toString();
   }
-  resolveUri(goog.net.xpc.CfgFields.PEER_URI);
-  resolveUri(goog.net.xpc.CfgFields.LOCAL_POLL_URI);
-  resolveUri(goog.net.xpc.CfgFields.PEER_POLL_URI);
+  resolveUri(CfgFields.PEER_URI);
+  resolveUri(CfgFields.LOCAL_POLL_URI);
+  resolveUri(CfgFields.PEER_POLL_URI);
   this.outerFrameCfg_ = cfg;
-  this.innerFrameCfg_ = goog.object.clone(cfg);
-  this.innerFrameCfg_[goog.net.xpc.CfgFields
-                          .NATIVE_TRANSPORT_PROTOCOL_VERSION] =
+  this.innerFrameCfg_ = object.clone(cfg);
+  this.innerFrameCfg_[CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
       opt_innerProtocolVersion;
 };
 
 
 /**
  * Creates an outer frame channel object.
+ * @return {string}
  * @private
  */
 Driver.prototype.createChannel_ = function() {
   if (this.channel_) {
     this.channel_.dispose();
   }
-  this.channel_ = new goog.net.xpc.CrossPageChannel(this.outerFrameCfg_);
+  this.channel_ = new CrossPageChannel(this.outerFrameCfg_);
   this.channel_.registerService('echo', goog.bind(this.echoHandler_, this));
   this.channel_.registerService(
       'response', goog.bind(this.responseHandler_, this));
@@ -705,8 +732,7 @@ Driver.prototype.createChannel_ = function() {
 Driver.prototype.checkChannelNames_ = function() {
   const outerName = this.channel_.name;
   const innerName = this.getInnerPeer_().channel.name;
-  const configName =
-      this.innerFrameCfg_[goog.net.xpc.CfgFields.CHANNEL_NAME] || null;
+  const configName = this.innerFrameCfg_[CfgFields.CHANNEL_NAME] || null;
 
   // The outer channel never changes its name.
   assertEquals(this.initialOuterChannelName_, outerName);
@@ -753,14 +779,14 @@ Driver.prototype.createPeerIframe = function(
     expectedIframeId = opt_iframeId = opt_iframeId + uniqueId++;
   } else {
     // Have createPeerIframe() generate an ID
-    stubs.set(goog.net.xpc, 'getRandomString', function(length) {
+    stubs.set(xpc, 'getRandomString', function(length) {
       return '' + length;
     });
     expectedIframeId = 'xpcpeer4';
   }
   assertNull(
       'element[id=' + expectedIframeId + '] exists',
-      goog.dom.getElement(expectedIframeId));
+      dom.getElement(expectedIframeId));
 
   this.setConfiguration_(
       opt_iframeId, opt_oneSidedHandshake, undefined /* opt_channelName */,
@@ -787,6 +813,11 @@ Driver.prototype.checkPeerIframe = function() {
 
 /**
  * Starts the connection. The connection happens asynchronously.
+ * @param {boolean} fullLifeCycleTest
+ * @param {boolean} outerFrameReconnectSupported
+ * @param {boolean} innerFrameMigrationSupported
+ * @param {boolean} reverse
+ * @return {!GoogPromise<undefined>}
  */
 Driver.prototype.connect = function(
     fullLifeCycleTest, outerFrameReconnectSupported,
@@ -813,6 +844,10 @@ Driver.prototype.connect = function(
 };
 
 
+/**
+ * @param {boolean} reverse
+ * @private
+ */
 Driver.prototype.continueConnect_ = function(reverse) {
   // Wait until the peer is fully established.  Establishment is sometimes very
   // slow indeed, especially on virtual machines, so a fixed timeout is not
@@ -846,8 +881,7 @@ Driver.prototype.continueConnect_ = function(reverse) {
  * @private
  */
 Driver.prototype.outerFrameConnected_ = function() {
-  const payload = this.outerFrameEchoPayload_ =
-      goog.net.xpc.getRandomString(10);
+  const payload = this.outerFrameEchoPayload_ = xpc.getRandomString(10);
   this.channel_.send('echo', payload);
 };
 
@@ -856,8 +890,7 @@ Driver.prototype.outerFrameConnected_ = function() {
  * Called by the inner frame connection callback in inner_peer.html.
  */
 Driver.prototype.innerFrameConnected = function() {
-  const payload = this.innerFrameEchoPayload_ =
-      goog.net.xpc.getRandomString(10);
+  const payload = this.innerFrameEchoPayload_ = xpc.getRandomString(10);
   this.getInnerPeer_().sendEcho(payload);
 };
 
@@ -907,6 +940,7 @@ Driver.prototype.innerFrameGotResponse = function(payload) {
  * and outer frames are performed.
  * @param {boolean} outerFrameReconnectSupported Whether outer frame reconnects
  *     are supported, and should be tested.
+ * @param {boolean} innerFrameMigrationSupported
  * @private
  */
 Driver.prototype.testReconnects_ = function(
@@ -939,9 +973,9 @@ Driver.prototype.reinitializePromises_ = function() {
   this.innerFrameEchoPayload_ = null;
   this.outerFrameEchoPayload_ = null;
   this.innerFrameResponseReceived_.promise.cancel();
-  this.innerFrameResponseReceived_ = goog.Promise.withResolver();
+  this.innerFrameResponseReceived_ = GoogPromise.withResolver();
   this.outerFrameResponseReceived_.promise.cancel();
-  this.outerFrameResponseReceived_ = goog.Promise.withResolver();
+  this.outerFrameResponseReceived_ = GoogPromise.withResolver();
 };
 
 
@@ -970,7 +1004,7 @@ Driver.prototype.performOuterFrameReconnect_ = function(
   // such as transport service traffic from its previous correspondent in the
   // other frame.  Ensure these messages don't cause exceptions.
   try {
-    this.channel_.xpcDeliver(goog.net.xpc.TRANSPORT_SERVICE_, 'payload');
+    this.channel_.xpcDeliver(xpc.TRANSPORT_SERVICE_, 'payload');
   } catch (e) {
     fail('Should not throw exception');
   }
@@ -995,12 +1029,10 @@ Driver.prototype.migrateInnerFrame_ = function() {
   G_testRunner.log('Migrating inner frame');
   this.reinitializePromises_();
   const innerFrameProtoVersion =
-      this.innerFrameCfg_[goog.net.xpc.CfgFields
-                              .NATIVE_TRANSPORT_PROTOCOL_VERSION];
+      this.innerFrameCfg_[CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION];
   this.innerFrameResponseReceived_.promise.then(
       this.checkChannelNames_, null, this);
-  this.innerFrameCfg_[goog.net.xpc.CfgFields
-                          .NATIVE_TRANSPORT_PROTOCOL_VERSION] =
+  this.innerFrameCfg_[CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
       innerFrameProtoVersion == 1 ? 2 : 1;
   this.performInnerFrameReconnect_();
 };
@@ -1018,8 +1050,8 @@ Driver.prototype.isTransportTestable_ = function() {
 
   const transportType = this.channel_.determineTransportType_();
   switch (transportType) {
-    case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
-    case goog.net.xpc.TransportTypes.DIRECT:
+    case TransportTypes.NATIVE_MESSAGING:
+    case TransportTypes.DIRECT:
       testable = true;
       break;
   }
@@ -1028,7 +1060,7 @@ Driver.prototype.isTransportTestable_ = function() {
 };
 
 
-/** @return {?goog.net.xpc.CrossPageChannel} */
+/** @return {?CrossPageChannel} */
 Driver.prototype.getChannel = function() {
   return this.channel_;
 };
