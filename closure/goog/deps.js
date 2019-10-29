@@ -83,7 +83,7 @@ goog.addDependency('crypt/cbc_test.js', ['goog.crypt.CbcTest'], ['goog.crypt', '
 goog.addDependency('crypt/crypt.js', ['goog.crypt'], ['goog.array', 'goog.asserts'], {});
 goog.addDependency('crypt/crypt_test.js', ['goog.cryptTest'], ['goog.crypt', 'goog.string', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('crypt/ctr.js', ['goog.crypt.Ctr'], ['goog.array', 'goog.asserts', 'goog.crypt'], {});
-goog.addDependency('crypt/ctr_test.js', ['goog.crypt.CtrTest'], ['goog.crypt', 'goog.crypt.Aes', 'goog.crypt.Ctr', 'goog.testing.jsunit'], {'lang': 'es6'});
+goog.addDependency('crypt/ctr_test.js', ['goog.crypt.CtrTest'], ['goog.crypt', 'goog.crypt.Aes', 'goog.crypt.Ctr', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('crypt/hash.js', ['goog.crypt.Hash'], [], {});
 goog.addDependency('crypt/hash32.js', ['goog.crypt.hash32'], ['goog.crypt'], {});
 goog.addDependency('crypt/hash32_test.js', ['goog.crypt.hash32Test'], ['goog.crypt.hash32', 'goog.testing.TestCase', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
