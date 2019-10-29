@@ -548,6 +548,7 @@ var _allTests = [
   'closure/goog/ui/iframemask_test.html',
   'closure/goog/ui/inputdatepicker_test.html',
   'closure/goog/ui/keyboardshortcuthandler_test.html',
+  'closure/goog/ui/map_test.html',
   'closure/goog/ui/media/flashobject_test.html',
   'closure/goog/ui/media/flickr_test.html',
   'closure/goog/ui/media/googlevideo_test.html',

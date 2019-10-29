@@ -48,8 +48,8 @@ goog.require('goog.fx.Dragger');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.math.Rect');
 goog.require('goog.string');
-goog.require('goog.structs.Map');
 goog.require('goog.style');
+goog.require('goog.ui.Map');
 goog.require('goog.ui.ModalPopup');
 
 
@@ -1174,55 +1174,49 @@ goog.ui.Dialog.EventType = {
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
  *    goog.ui.Component} for semantics.
  * @constructor
- * @extends {goog.structs.Map}
- * @suppress {deprecated} Underlying extended goog.structs.Map is deprecated but
- *    this class is not. Suppress warnings until refactored.
+ * @extends {goog.ui.Map}
  */
 goog.ui.Dialog.ButtonSet = function(opt_domHelper) {
+  goog.ui.Map.call(this);
   // TODO(attila):  Refactor ButtonSet to extend goog.ui.Component?
   this.dom_ = opt_domHelper || goog.dom.getDomHelper();
-  goog.structs.Map.call(this);
+
+
+  /**
+   * A CSS className for this component.
+   * @private @const {string}
+   */
+  this.class_ = goog.getCssName('goog-buttonset');
+
+
+  /**
+   * The button that has default focus (references key in buttons_ map).
+   * @private {?string}
+   */
+  this.defaultButton_ = null;
+
+
+  /**
+   * Optional container the button set should be rendered into.
+   * @private {?Element}
+   */
+  this.element_ = null;
+
+
+  /**
+   * The button whose action is associated with the escape key and the X button
+   * on the dialog.
+   * @private {?string}
+   */
+  this.cancelButton_ = null;
 };
-goog.inherits(goog.ui.Dialog.ButtonSet, goog.structs.Map);
+goog.inherits(goog.ui.Dialog.ButtonSet, goog.ui.Map);
 goog.tagUnsealableClass(goog.ui.Dialog.ButtonSet);
-
-
-/**
- * A CSS className for this component.
- * @type {string}
- * @private
- */
-goog.ui.Dialog.ButtonSet.prototype.class_ = goog.getCssName('goog-buttonset');
-
-
-/**
- * The button that has default focus (references key in buttons_ map).
- * @type {?string}
- * @private
- */
-goog.ui.Dialog.ButtonSet.prototype.defaultButton_ = null;
-
-
-/**
- * Optional container the button set should be rendered into.
- * @type {?Element}
- * @private
- */
-goog.ui.Dialog.ButtonSet.prototype.element_ = null;
-
-
-/**
- * The button whose action is associated with the escape key and the X button
- * on the dialog.
- * @type {?string}
- * @private
- */
-goog.ui.Dialog.ButtonSet.prototype.cancelButton_ = null;
 
 
 /** @override */
 goog.ui.Dialog.ButtonSet.prototype.clear = function() {
-  goog.structs.Map.prototype.clear.call(this);
+  goog.ui.Map.prototype.clear.call(this);
   this.defaultButton_ = this.cancelButton_ = null;
 };
 
@@ -1244,7 +1238,7 @@ goog.ui.Dialog.ButtonSet.prototype.clear = function() {
  */
 goog.ui.Dialog.ButtonSet.prototype.set = function(
     key, caption, opt_isDefault, opt_isCancel) {
-  goog.structs.Map.prototype.set.call(this, key, caption);
+  goog.ui.Map.prototype.set.call(this, key, caption);
 
   if (opt_isDefault) {
     this.defaultButton_ = /** @type {?string} */ (key);
