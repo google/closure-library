@@ -15,7 +15,7 @@
 /**
  * @fileoverview Number formatting symbols.
  *
- * File generated from CLDR ver. 35
+ * File generated from CLDR ver. 36
  *
  * This file covers those locales that are not covered in
  * "numberformatsymbols.js".
@@ -373,6 +373,7 @@ goog.provide('goog.i18n.NumberFormatSymbols_fur');
 goog.provide('goog.i18n.NumberFormatSymbols_fur_IT');
 goog.provide('goog.i18n.NumberFormatSymbols_fy');
 goog.provide('goog.i18n.NumberFormatSymbols_fy_NL');
+goog.provide('goog.i18n.NumberFormatSymbols_ga_GB');
 goog.provide('goog.i18n.NumberFormatSymbols_ga_IE');
 goog.provide('goog.i18n.NumberFormatSymbols_gd');
 goog.provide('goog.i18n.NumberFormatSymbols_gd_GB');
@@ -7267,6 +7268,29 @@ goog.i18n.NumberFormatSymbols_fy_NL = goog.i18n.NumberFormatSymbols_fy;
 
 
 /**
+ * Number formatting symbols for locale ga_GB.
+ * @enum {string}
+ */
+goog.i18n.NumberFormatSymbols_ga_GB = {
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
+  PERCENT: '%',
+  ZERO_DIGIT: '0',
+  PLUS_SIGN: '+',
+  MINUS_SIGN: '-',
+  EXP_SYMBOL: 'E',
+  PERMILL: '‰',
+  INFINITY: '∞',
+  NAN: 'NaN',
+  DECIMAL_PATTERN: '#,##0.###',
+  SCIENTIFIC_PATTERN: '#E0',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '¤#,##0.00',
+  DEF_CURRENCY_CODE: 'GBP'
+};
+
+
+/**
  * Number formatting symbols for locale ga_IE.
  * @enum {string}
  */
@@ -8269,10 +8293,10 @@ goog.i18n.NumberFormatSymbols_kok = {
   PERMILL: '‰',
   INFINITY: '∞',
   NAN: 'NaN',
-  DECIMAL_PATTERN: '#,##,##0.###',
+  DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
-  PERCENT_PATTERN: '#,##,##0%',
-  CURRENCY_PATTERN: '¤ #,##,##0.00',
+  PERCENT_PATTERN: '#,##0%',
+  CURRENCY_PATTERN: '¤ #,##0.00',
   DEF_CURRENCY_CODE: 'INR'
 };
 
@@ -14907,6 +14931,11 @@ switch (goog.LOCALE) {
   case 'fy-NL':
     goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fy_NL;
     goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_fy_NL;
+    break;
+  case 'ga_GB':
+  case 'ga-GB':
+    goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_ga_GB;
+    goog.i18n.NumberFormatSymbols_u_nu_latn = goog.i18n.NumberFormatSymbols_ga_GB;
     break;
   case 'ga_IE':
   case 'ga-IE':

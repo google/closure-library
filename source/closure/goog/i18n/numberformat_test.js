@@ -15,14 +15,15 @@
 goog.module('goog.i18n.NumberFormatTest');
 goog.setTestOnly();
 
-const CompactNumberFormatSymbols = goog.require('goog.i18n.CompactNumberFormatSymbols');
 const CompactNumberFormatSymbols_de = goog.require('goog.i18n.CompactNumberFormatSymbols_de');
 const CompactNumberFormatSymbols_en = goog.require('goog.i18n.CompactNumberFormatSymbols_en');
 const CompactNumberFormatSymbols_fr = goog.require('goog.i18n.CompactNumberFormatSymbols_fr');
+const CompactNumberFormatSymbols_sw = goog.require('goog.i18n.CompactNumberFormatSymbols_sw');
+const CompactNumberFormatSymbols_sw_KE = goog.require('goog.i18n.CompactNumberFormatSymbols_sw_KE');
 const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
 const NumberFormat = goog.require('goog.i18n.NumberFormat');
 /** @suppress {extraRequire} */
-const NumberFormatSymbols = goog.require('goog.i18n.NumberFormatSymbols');
+var NumberFormatSymbols = goog.require('goog.i18n.NumberFormatSymbols');
 const NumberFormatSymbols_ar_EG = goog.require('goog.i18n.NumberFormatSymbols_ar_EG');
 const NumberFormatSymbols_ar_EG_u_nu_latn = goog.require('goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn');
 const NumberFormatSymbols_de = goog.require('goog.i18n.NumberFormatSymbols_de');
@@ -33,6 +34,8 @@ const NumberFormatSymbols_fi = goog.require('goog.i18n.NumberFormatSymbols_fi');
 const NumberFormatSymbols_fr = goog.require('goog.i18n.NumberFormatSymbols_fr');
 const NumberFormatSymbols_pl = goog.require('goog.i18n.NumberFormatSymbols_pl');
 const NumberFormatSymbols_ro = goog.require('goog.i18n.NumberFormatSymbols_ro');
+const NumberFormatSymbols_sw = goog.require('goog.i18n.NumberFormatSymbols_sw');
+const NumberFormatSymbols_sw_KE = goog.require('goog.i18n.NumberFormatSymbols_sw_KE');
 /** @suppress {extraRequire} */
 const NumberFormatSymbols_u_nu_latn = goog.require('goog.i18n.NumberFormatSymbols_u_nu_latn');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
@@ -74,6 +77,10 @@ function isFirefox363Linux() {
 }
 
 testSuite({
+  getTestName: function() {
+    return 'NumberFormat Tests';
+  },
+
   setUpPage() {
     expectedFailures = new ExpectedFailures();
   },
@@ -1453,5 +1460,53 @@ testSuite({
     assertThrows(() => {
       new google.i18n.NumberFormat('¤#,##0.00', 'invalid!');
     });
+  },
+
+  testCheckSwKeThousands() {
+    stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_sw_KE);
+    stubs.set(
+        goog.i18n, 'CompactNumberFormatSymbols',
+        CompactNumberFormatSymbols_sw_KE);
+
+    const fmt = new NumberFormat(NumberFormat.Format.COMPACT_LONG);
+
+    // The Kenyan Swahili short compact decimal has two forms.
+    // Check if it works.
+    // (The number itself will still be formatted with the '.', but no rounding)
+    const str = fmt.format(1234);
+    assertEquals('elfu 1.2', str);
+    const negstr = fmt.format(-1234);
+    assertEquals('elfu -1.2', negstr);
+  },
+
+  testCheckSwCompactDecimal() {
+    stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_sw);
+    stubs.set(
+        goog.i18n, 'CompactNumberFormatSymbols', CompactNumberFormatSymbols_sw);
+
+    const fmt = new NumberFormat(NumberFormat.Format.COMPACT_SHORT);
+    const fmt_long = new NumberFormat(NumberFormat.Format.COMPACT_LONG);
+
+    // The Swahili long compact decimal has two forms.
+    // Check if it works. A: no, it doesn't
+    var str = fmt.format(1234);
+    assertEquals('elfu 1.2', str);
+    var negstr = fmt.format(-1234);
+    assertEquals('elfu -1.2', negstr);
+
+    str = fmt.format(123400);
+    assertEquals('elfu 123', str);
+    negstr = fmt.format(-123400);
+    assertEquals('elfu -123', negstr);
+    negstr = fmt.format(-1234000);
+    assertEquals('-1.2M', negstr);
+
+    str = fmt_long.format(12340000);
+    assertEquals('milioni 12', str);
+    negstr = fmt_long.format(-123400000);
+    assertEquals('milioni -123', negstr);
+
+    negstr = fmt_long.format(-123400000000000);
+    assertEquals('trilioni -123', negstr);
   },
 });

@@ -179,7 +179,7 @@ goog.editor.plugins.RemoveFormatting.prototype.setKeyboardShortcutKey =
  */
 goog.editor.plugins.RemoveFormatting.prototype.removeFormatting_ = function() {
   var range = this.getFieldObject().getRange();
-  if (range.isCollapsed()) {
+  if (!range || range.isCollapsed()) {
     return;
   }
 

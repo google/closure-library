@@ -15,7 +15,7 @@
 /**
  * @fileoverview Compact number formatting symbols.
  *
- * File generated from CLDR ver. 35
+ * File generated from CLDR ver. 36
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -420,31 +420,31 @@ goog.i18n.CompactNumberFormatSymbols_az = {
       'other': '000K'
     },
     '1000000': {
-      'other': '0M'
+      'other': '0 mln'
     },
     '10000000': {
-      'other': '00M'
+      'other': '00 mln'
     },
     '100000000': {
-      'other': '000M'
+      'other': '000 mln'
     },
     '1000000000': {
-      'other': '0G'
+      'other': '0 mlrd'
     },
     '10000000000': {
-      'other': '00G'
+      'other': '00 mlrd'
     },
     '100000000000': {
-      'other': '000G'
+      'other': '000 mlrd'
     },
     '1000000000000': {
-      'other': '0T'
+      'other': '0 trln'
     },
     '10000000000000': {
-      'other': '00T'
+      'other': '00 trln'
     },
     '100000000000000': {
-      'other': '000T'
+      'other': '000 trln'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -681,7 +681,7 @@ goog.i18n.CompactNumberFormatSymbols_bn = {
       'other': '000 কো'
     },
     '10000000000': {
-      'other': '0000 কো'
+      'other': '00শত কো'
     },
     '100000000000': {
       'other': '00000 কো'
@@ -1723,15 +1723,6 @@ goog.i18n.CompactNumberFormatSymbols_es_419 = {
     },
     '100000': {
       'other': '000 k'
-    },
-    '1000000000': {
-      'other': '0k M'
-    },
-    '10000000000': {
-      'other': '00k M'
-    },
-    '100000000000': {
-      'other': '000k M'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -1767,20 +1758,17 @@ goog.i18n.CompactNumberFormatSymbols_es_MX = {
     },
     '100000': {
       'other': '000 k'
-    },
-    '1000000000': {
-      'other': '0000 M'
-    },
-    '10000000000': {
-      'other': '00 mil M'
-    },
-    '100000000000': {
-      'other': '000 mil M'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
     '1000000000000': {
       'other': '0 billones'
+    },
+    '10000000000000': {
+      'other': '00 billones'
+    },
+    '100000000000000': {
+      'other': '000 billones'
     }
   }
 };
@@ -1791,6 +1779,9 @@ goog.i18n.CompactNumberFormatSymbols_es_MX = {
  */
 goog.i18n.CompactNumberFormatSymbols_es_US = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
+    '1000': {
+      'other': '0 K'
+    },
     '10000': {
       'other': '00 K'
     },
@@ -2342,24 +2333,6 @@ goog.i18n.CompactNumberFormatSymbols_fr = {
  */
 goog.i18n.CompactNumberFormatSymbols_fr_CA = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
-    '1000': {
-      'other': '0 k'
-    },
-    '10000': {
-      'other': '00 k'
-    },
-    '100000': {
-      'other': '000 k'
-    },
-    '1000000': {
-      'other': '0 M'
-    },
-    '10000000': {
-      'other': '00 M'
-    },
-    '100000000': {
-      'other': '000 M'
-    },
     '1000000000': {
       'other': '0 G'
     },
@@ -2388,15 +2361,6 @@ goog.i18n.CompactNumberFormatSymbols_fr_CA = {
     },
     '100000': {
       'other': '000 mille'
-    },
-    '1000000': {
-      'other': '0 millions'
-    },
-    '10000000': {
-      'other': '00 millions'
-    },
-    '100000000': {
-      'other': '000 millions'
     }
   }
 };
@@ -6687,13 +6651,15 @@ goog.i18n.CompactNumberFormatSymbols_sv = {
 goog.i18n.CompactNumberFormatSymbols_sw = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': 'elfu 0;elfu -0'
+      // Patching items with negative options until compact formatting is fixed.
+      // b/143315130
+      'other': 'elfu 0' //;elfu -0'
     },
     '10000': {
-      'other': 'elfu 00;elfu -00'
+      'other': 'elfu 00'  //;elfu -00'
     },
     '100000': {
-      'other': 'elfu 000;elfu -000'
+      'other': 'elfu 000'  //;elfu -000'
     },
     '1000000': {
       'other': '0M'
@@ -6705,13 +6671,13 @@ goog.i18n.CompactNumberFormatSymbols_sw = {
       'other': '000M'
     },
     '1000000000': {
-      'other': '0B;-0B'
+      'other': '0B'  //;-0B'
     },
     '10000000000': {
-      'other': '00B;-00B'
+      'other': '00B'  //;-00B'
     },
     '100000000000': {
-      'other': '000B;-000B'
+      'other': '000B'  //;-000B'
     },
     '1000000000000': {
       'other': '0T'
@@ -6725,40 +6691,40 @@ goog.i18n.CompactNumberFormatSymbols_sw = {
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
     '1000': {
-      'other': 'elfu 0;elfu -0'
+      'other': 'elfu 0'  //;elfu -0'
     },
     '10000': {
-      'other': 'elfu 00;elfu -00'
+      'other': 'elfu 00'  //;elfu -00'
     },
     '100000': {
-      'other': 'elfu 000;elfu -000'
+      'other': 'elfu 000' //;elfu -000'
     },
     '1000000': {
-      'other': 'milioni 0;milioni -0'
+      'other': 'milioni 0' //;milioni -0'
     },
     '10000000': {
-      'other': 'milioni 00;milioni -00'
+      'other': 'milioni 00'  //;milioni -00'
     },
     '100000000': {
-      'other': 'milioni 000;milioni -000'
+      'other': 'milioni 000'  //;milioni -000'
     },
     '1000000000': {
-      'other': 'bilioni 0;bilioni -0'
+      'other': 'bilioni 0'//;bilioni -0'
     },
     '10000000000': {
-      'other': 'bilioni 00;bilioni -00'
+      'other': 'bilioni 00'  //;bilioni -00'
     },
     '100000000000': {
-      'other': 'bilioni 000;bilioni -000'
+      'other': 'bilioni 000'  //;bilioni -000'
     },
     '1000000000000': {
-      'other': 'trilioni 0;trilioni -0'
+      'other': 'trilioni 0'  //;trilioni -0'
     },
     '10000000000000': {
-      'other': 'trilioni 00;trilioni -00'
+      'other': 'trilioni 00'  //;trilioni -00'
     },
     '100000000000000': {
-      'other': 'trilioni 000;trilioni -000'
+      'other': 'trilioni 000'  //;trilioni -000'
     }
   }
 };
@@ -7544,13 +7510,13 @@ goog.i18n.CompactNumberFormatSymbols_zh = {
       'other': '0000亿'
     },
     '1000000000000': {
-      'other': '0兆'
+      'other': '0万亿'
     },
     '10000000000000': {
-      'other': '00兆'
+      'other': '00万亿'
     },
     '100000000000000': {
-      'other': '000兆'
+      'other': '000万亿'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -7582,13 +7548,13 @@ goog.i18n.CompactNumberFormatSymbols_zh = {
       'other': '0000亿'
     },
     '1000000000000': {
-      'other': '0兆'
+      'other': '0万亿'
     },
     '10000000000000': {
-      'other': '00兆'
+      'other': '00万亿'
     },
     '100000000000000': {
-      'other': '000兆'
+      'other': '000万亿'
     }
   }
 };
