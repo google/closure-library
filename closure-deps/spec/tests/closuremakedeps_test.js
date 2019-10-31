@@ -21,8 +21,7 @@ const fs = require('fs');
 const jasmineDiff = require('jasmine-diff');
 const os = require('os');
 
-// This test isn't that slow unless you're debugging.
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
 
 // By default assume this is running based on the structure of the git repo.
 // closure_deps/ lives in the save repo as Closure, and the library's code is in
