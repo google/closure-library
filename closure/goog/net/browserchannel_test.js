@@ -278,7 +278,7 @@ function responseRequestFailed(statusCode = undefined) {
   Object.assign(browserChannel.forwardChannelRequest_, {
     lastError_: ChannelRequest.Error.STATUS,
     lastStatusCode_: statusCode || 503,
-    successful_: false
+    successful_: false,
   });
   browserChannel.onRequestComplete(browserChannel.forwardChannelRequest_);
   mockClock.tick(0);
@@ -287,7 +287,7 @@ function responseRequestFailed(statusCode = undefined) {
 function responseUnknownSessionId() {
   Object.assign(browserChannel.forwardChannelRequest_, {
     lastError_: ChannelRequest.Error.UNKNOWN_SESSION_ID,
-    successful_: false
+    successful_: false,
   });
   browserChannel.onRequestComplete(browserChannel.forwardChannelRequest_);
   mockClock.tick(0);

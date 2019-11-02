@@ -86,7 +86,7 @@ goog.net.XmlHttp.OptionType = {
    * is still changed to COMPLETE.  We need to ignore it and allow the
    * try/catch around send() to pick up the error.
    */
-  LOCAL_REQUEST_ERROR: 1
+  LOCAL_REQUEST_ERROR: 1,
 };
 
 
@@ -119,7 +119,7 @@ goog.net.XmlHttp.ReadyState = {
   /**
    * Constant for when xmlhttprequest.readyState is completed
    */
-  COMPLETE: 4
+  COMPLETE: 4,
 };
 
 
@@ -217,8 +217,10 @@ goog.net.DefaultXmlHttpFactory.prototype.getProgId_ = function() {
       typeof ActiveXObject != 'undefined') {
     // Candidate Active X types.
     var ACTIVE_X_IDENTS = [
-      'MSXML2.XMLHTTP.6.0', 'MSXML2.XMLHTTP.3.0', 'MSXML2.XMLHTTP',
-      'Microsoft.XMLHTTP'
+      'MSXML2.XMLHTTP.6.0',
+      'MSXML2.XMLHTTP.3.0',
+      'MSXML2.XMLHTTP',
+      'Microsoft.XMLHTTP',
     ];
     for (var i = 0; i < ACTIVE_X_IDENTS.length; i++) {
       var candidate = ACTIVE_X_IDENTS[i];

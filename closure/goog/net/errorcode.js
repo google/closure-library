@@ -82,7 +82,7 @@ goog.net.ErrorCode = {
   /**
    * The resource is not available offline.
    */
-  OFFLINE: 9
+  OFFLINE: 9,
 };
 
 

@@ -166,7 +166,7 @@ Parser.StreamState_ = {
   INIT: 0,
   ARRAY_OPEN: 1,
   ARRAY_END: 2,
-  INVALID: 3
+  INVALID: 3,
 };
 
 
@@ -195,7 +195,7 @@ Parser.State_ = {
   NULL2: 17,
   NULL3: 18,
   NUM_DECIMAL_POINT: 19,
-  NUM_DIGIT: 20
+  NUM_DIGIT: 20,
 };
 
 

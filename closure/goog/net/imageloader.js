@@ -111,7 +111,7 @@ goog.inherits(goog.net.ImageLoader, goog.events.EventTarget);
  */
 goog.net.ImageLoader.CorsRequestType = {
   ANONYMOUS: 'anonymous',
-  USE_CREDENTIALS: 'use-credentials'
+  USE_CREDENTIALS: 'use-credentials',
 };
 
 
@@ -148,7 +148,8 @@ goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
   goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('11') ?
       goog.net.EventType.READY_STATE_CHANGE :
       goog.events.EventType.LOAD,
-  goog.net.EventType.ABORT, goog.net.EventType.ERROR
+  goog.net.EventType.ABORT,
+  goog.net.EventType.ERROR,
 ];
 
 
@@ -172,7 +173,7 @@ goog.net.ImageLoader.prototype.addImage = function(
     this.imageIdToRequestMap_[id] = {
       src: src,
       corsRequestType: opt_corsRequestType !== undefined ? opt_corsRequestType :
-                                                           null
+                                                           null,
     };
   }
 };

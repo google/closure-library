@@ -38,5 +38,5 @@ goog.net.EventType = {
   // goog.net.XhrIo to allow binding listeners specific to each type of
   // progress.
   DOWNLOAD_PROGRESS: 'downloadprogress',
-  UPLOAD_PROGRESS: 'uploadprogress'
+  UPLOAD_PROGRESS: 'uploadprogress',
 };

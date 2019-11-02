@@ -174,7 +174,7 @@ goog.net.streams.XhrStreamReader.Status = {
   /**
    * The request is cancelled by the application.
    */
-  CANCELLED: 8
+  CANCELLED: 8,
 };
 
 

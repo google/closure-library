@@ -361,7 +361,7 @@ goog.net.jsloader.ErrorCode = {
   LOAD_ERROR: 0,
   TIMEOUT: 1,
   VERIFY_ERROR: 2,
-  VERIFY_OBJECT_ALREADY_EXISTS: 3
+  VERIFY_OBJECT_ALREADY_EXISTS: 3,
 };
 
 

@@ -489,7 +489,7 @@ goog.net.BrowserChannel.State = {
   OPENING: 2,
 
   /** The channel is open. */
-  OPENED: 3
+  OPENED: 3,
 };
 
 
@@ -561,7 +561,7 @@ goog.net.BrowserChannel.Error = {
   BAD_RESPONSE: 11,
 
   /** ActiveX is blocked by the machine's admin settings. */
-  ACTIVE_X_BLOCKED: 12
+  ACTIVE_X_BLOCKED: 12,
 };
 
 
@@ -573,7 +573,7 @@ goog.net.BrowserChannel.Error = {
 goog.net.BrowserChannel.ChannelType_ = {
   FORWARD_CHANNEL: 1,
 
-  BACK_CHANNEL: 2
+  BACK_CHANNEL: 2,
 };
 
 
@@ -694,7 +694,7 @@ goog.net.BrowserChannel.ServerReachability = {
   REQUEST_MADE: 1,
   REQUEST_SUCCEEDED: 2,
   REQUEST_FAILED: 3,
-  BACK_CHANNEL_ACTIVITY: 4
+  BACK_CHANNEL_ACTIVITY: 4,
 };
 
 
@@ -819,7 +819,7 @@ goog.net.BrowserChannel.Stat = {
   BROWSER_OFFLINE: 21,
 
   /** ActiveX is blocked by the machine's admin settings. */
-  ACTIVE_X_BLOCKED: 22
+  ACTIVE_X_BLOCKED: 22,
 };
 
 

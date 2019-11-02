@@ -97,5 +97,5 @@ testSuite({
     const newUrl =
         HttpCors.setHttpHeadersWithOverwriteParam(url, '$httpHeaders', headers);
     assertEquals('/example.com/', newUrl.toString());
-  }
+  },
 });

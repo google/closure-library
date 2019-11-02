@@ -98,7 +98,7 @@ var State = {
   MESSAGES_DONE: 3,  // expecting the msg-status separator or the ending "]"
   STATUS: 4,         // expecting the status
   ARRAY_END: 5,      // expecting NO more non-whitespace input
-  INVALID: 6         // the stream has become invalid
+  INVALID: 6,        // the stream has become invalid
 };
 
 

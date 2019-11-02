@@ -76,5 +76,5 @@ testSuite({
           assertEquals(IframeLoadMonitor.LOAD_EVENT, e.type);
           assertTrue(monitor.isLoaded());
         });
-  }
+  },
 });

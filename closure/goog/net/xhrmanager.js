@@ -126,9 +126,12 @@ goog.net.XhrManager.ERROR_ID_IN_USE_ = '[goog.net.XhrManager] ID in use';
  * @private
  */
 goog.net.XhrManager.XHR_EVENT_TYPES_ = [
-  goog.net.EventType.READY, goog.net.EventType.COMPLETE,
-  goog.net.EventType.SUCCESS, goog.net.EventType.ERROR,
-  goog.net.EventType.ABORT, goog.net.EventType.TIMEOUT
+  goog.net.EventType.READY,
+  goog.net.EventType.COMPLETE,
+  goog.net.EventType.SUCCESS,
+  goog.net.EventType.ERROR,
+  goog.net.EventType.ABORT,
+  goog.net.EventType.TIMEOUT,
 ];
 
 

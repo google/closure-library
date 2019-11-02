@@ -144,7 +144,7 @@ testSuite({
       attributes: {'data-attr1': 'enabled', 'data-attr2': 'disabled'},
       timeout: undefined,          // Use default
       cleanupWhenDone: undefined,  // Use default
-      document: undefined          // Use default
+      document: undefined,         // Use default
     };
     const result = jsloader.safeLoad(testUrl, options);
 

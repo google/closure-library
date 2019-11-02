@@ -37,7 +37,7 @@ goog.net.NetworkStatusMonitor = function() {};
  */
 goog.net.NetworkStatusMonitor.EventType = {
   ONLINE: 'online',
-  OFFLINE: 'offline'
+  OFFLINE: 'offline',
 };
 
 

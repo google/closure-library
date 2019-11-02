@@ -237,7 +237,7 @@ goog.net.XhrIo.ResponseType = {
   DOCUMENT: 'document',
   // Not supported as of Chrome 10.0.612.1 dev
   BLOB: 'blob',
-  ARRAY_BUFFER: 'arraybuffer'
+  ARRAY_BUFFER: 'arraybuffer',
 };
 
 var ResponseType = goog.net.XhrIo.ResponseType;
@@ -920,7 +920,7 @@ goog.net.XhrIo.buildProgressEvent_ = function(e, eventType) {
     type: eventType,
     lengthComputable: e.lengthComputable,
     loaded: e.loaded,
-    total: e.total
+    total: e.total,
   });
 };
 
