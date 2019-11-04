@@ -373,6 +373,7 @@ goog.asserts.assertBoolean = function(value, opt_message, var_args) {
  *     enabled.
  * @throws {goog.asserts.AssertionError} When the value is not an Element.
  * @closurePrimitive {asserts.matchesReturn}
+ * @deprecated Use goog.asserts.dom.assertIsElement instead.
  */
 goog.asserts.assertElement = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS &&
@@ -390,6 +391,11 @@ goog.asserts.assertElement = function(value, opt_message, var_args) {
  * goog.asserts.ENABLE_ASSERTS is true.
  *
  * The compiler may tighten the type returned by this function.
+ *
+ * Do not use this to ensure a value is an HTMLElement or a subclass! Cross-
+ * document DOM inherits from separate - though identical - browser classes, and
+ * such a check will unexpectedly fail. Please use the methods in
+ * goog.asserts.dom for these purposes.
  *
  * @param {?} value The value to check.
  * @param {function(new: T, ...)} type A user-defined constructor.
