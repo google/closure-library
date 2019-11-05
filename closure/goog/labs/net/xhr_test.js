@@ -12,21 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.net.xhrTest');
+goog.module('goog.labs.net.xhrTest');
 goog.setTestOnly('goog.labs.net.xhrTest');
 
-goog.require('goog.Promise');
-goog.require('goog.events');
-goog.require('goog.events.EventType');
-goog.require('goog.labs.net.xhr');
-goog.require('goog.net.WrapperXmlHttpFactory');
-goog.require('goog.net.XhrLike');
-goog.require('goog.net.XmlHttp');
-goog.require('goog.testing.MockClock');
-goog.require('goog.testing.TestCase');
+const DefaultXmlHttpFactory = goog.require('goog.net.DefaultXmlHttpFactory');
+const EventType = goog.require('goog.events.EventType');
+const GoogPromise = goog.require('goog.Promise');
+const MockClock = goog.require('goog.testing.MockClock');
+const TestCase = goog.require('goog.testing.TestCase');
+const WrapperXmlHttpFactory = goog.require('goog.net.WrapperXmlHttpFactory');
+const XhrLike = goog.require('goog.net.XhrLike');
+const XmlHttp = goog.require('goog.net.XmlHttp');
+const events = goog.require('goog.events');
+const testSuite = goog.require('goog.testing.testSuite');
+const userAgent = goog.require('goog.userAgent');
+const xhr = goog.require('goog.labs.net.xhr');
+/** @suppress {extraRequire} Needed for G_testrunner */
 goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
-
 
 /** Path to a small download target used for testing binary requests. */
 const TEST_IMAGE = 'testdata/cleardot.gif';
@@ -40,21 +42,17 @@ const TEST_IMAGE_BYTES = [
   0x00, 0x01, 0x00, 0x00, 0x02, 0x02, 0x44, 0x01, 0x00, 0x3B
 ];
 
-function setUpPage() {
-  goog.testing.TestCase.getActiveTestCase().promiseTimeout = 10000;  // 10s
-}
-
 /**
  * @param {number} status HTTP status code.
  * @param {string=} opt_responseText
  * @param {number=} opt_latency
  *     Milliseconds between sending a request and receiving the response.
- * @return {!goog.net.XhrLike}
+ * @return {!XhrLike}
  *     The XHR stub that will be returned from the factory.
  */
 function stubXhrToReturn(status, opt_responseText, opt_latency) {
   if (opt_latency != null) {
-    mockClock = new goog.testing.MockClock(true);
+    mockClock = new MockClock(true);
   }
 
   const stubXhr = {
@@ -110,7 +108,7 @@ function stubXhrToThrow(err) {
 
 /**
  * @param {!Error} err Error to be thrown when sending this stub XHR.
- * @return {!goog.net.XhrLike}
+ * @return {!XhrLike}
  *     The XHR stub that will be returned from the factory.
  */
 function buildThrowingStubXhr(err) {
@@ -131,27 +129,21 @@ function buildThrowingStubXhr(err) {
 }
 
 /**
- * Replace goog.net.XmlHttp with a function that returns a stub XHR.
- * @param {!goog.net.XhrLike.OrNative} stubXhr
+ * Replace XmlHttp with a function that returns a stub XHR.
+ * @param {!XhrLike.OrNative} stubXhr
  */
 function stubXmlHttpWith(stubXhr) {
-  goog.net.XmlHttp = function() { return stubXhr; };
-  for (const x in originalXmlHttp) {
-    goog.net.XmlHttp[x] = originalXmlHttp[x];
-  }
+  XmlHttp.setGlobalFactory({
+    createInstance() {
+      return stubXhr;
+    },
+    getOptions() {
+      return {};
+    }
+  });
 }
 
-const xhr = goog.labs.net.xhr;
-const originalXmlHttp = goog.net.XmlHttp;
 let mockClock;
-
-function tearDown() {
-  if (mockClock) {
-    mockClock.dispose();
-    mockClock = null;
-  }
-  goog.net.XmlHttp = originalXmlHttp;
-}
 
 
 /**
@@ -172,362 +164,382 @@ function isRunningLocally() {
   return false;
 }
 
-function testSimpleRequest() {
-  if (isRunningLocally()) return;
+testSuite({
+  setUpPage() {
+    TestCase.getActiveTestCase().promiseTimeout = 10000;  // 10s
+  },
 
-  return xhr.send('GET', 'testdata/xhr_test_text.data').then(function(xhr) {
-    assertEquals('Just some data.', xhr.responseText);
-    assertEquals(200, xhr.status);
-  });
-}
+  tearDown() {
+    if (mockClock) {
+      mockClock.dispose();
+      mockClock = null;
+    }
 
-function testGetText() {
-  if (isRunningLocally()) return;
+    XmlHttp.setGlobalFactory(new DefaultXmlHttpFactory());
+  },
 
-  return xhr.get('testdata/xhr_test_text.data').then(function(responseText) {
-    assertEquals('Just some data.', responseText);
-  });
-}
+  testSimpleRequest() {
+    if (isRunningLocally()) return;
 
-function testGetTextWithJson() {
-  if (isRunningLocally()) return;
-
-  return xhr.get('testdata/xhr_test_json.data').then(function(responseText) {
-    assertEquals('while(1);\n{"stat":"ok","count":12345}\n', responseText);
-  });
-}
-
-function testPostText() {
-  if (isRunningLocally()) return;
-
-  return xhr.post('testdata/xhr_test_text.data', 'post-data')
-      .then(function(responseText) {
-        // No good way to test post-data gets transported.
-        assertEquals('Just some data.', responseText);
-      });
-}
-
-function testGetJson() {
-  if (isRunningLocally()) return;
-
-  return xhr.getJson('testdata/xhr_test_json.data', {xssiPrefix: 'while(1);\n'})
-      .then(function(responseObj) {
-        assertEquals('ok', responseObj['stat']);
-        assertEquals(12345, responseObj['count']);
-      });
-}
-
-function testGetBlob() {
-  if (isRunningLocally()) return;
-
-  // IE9 and earlier do not support blobs.
-  if (!('Blob' in goog.global)) {
-    const err = assertThrows(function() {
-      xhr.getBlob(TEST_IMAGE);
+    return xhr.send('GET', 'testdata/xhr_test_text.data').then(function(xhr) {
+      assertEquals('Just some data.', xhr.responseText);
+      assertEquals(200, xhr.status);
     });
-    assertEquals(
-        'Assertion failed: getBlob is not supported in this browser.',
-        err.message);
-    return;
-  }
+  },
 
-  const options = {withCredentials: true};
+  testGetText() {
+    if (isRunningLocally()) return;
 
-  return xhr.getBlob(TEST_IMAGE, options)
-      .then(function(blob) {
-        const reader = new FileReader();
-        return new goog.Promise(function(resolve, reject) {
-          goog.events.listenOnce(reader, goog.events.EventType.LOAD, resolve);
-          reader.readAsArrayBuffer(blob);
+    return xhr.get('testdata/xhr_test_text.data').then(function(responseText) {
+      assertEquals('Just some data.', responseText);
+    });
+  },
+
+  testGetTextWithJson() {
+    if (isRunningLocally()) return;
+
+    return xhr.get('testdata/xhr_test_json.data').then(function(responseText) {
+      assertEquals('while(1);\n{"stat":"ok","count":12345}\n', responseText);
+    });
+  },
+
+  testPostText() {
+    if (isRunningLocally()) return;
+
+    return xhr.post('testdata/xhr_test_text.data', 'post-data')
+        .then(function(responseText) {
+          // No good way to test post-data gets transported.
+          assertEquals('Just some data.', responseText);
         });
-      })
-      .then(function(e) {
-        assertElementsEquals(TEST_IMAGE_BYTES, new Uint8Array(e.target.result));
-        assertObjectEquals(
-            'input options should not have mutated.', {withCredentials: true},
-            options);
+  },
+
+  testGetJson() {
+    if (isRunningLocally()) return;
+
+    return xhr
+        .getJson('testdata/xhr_test_json.data', {xssiPrefix: 'while(1);\n'})
+        .then(function(responseObj) {
+          assertEquals('ok', responseObj['stat']);
+          assertEquals(12345, responseObj['count']);
+        });
+  },
+
+  testGetBlob() {
+    if (isRunningLocally()) return;
+
+    // IE9 and earlier do not support blobs.
+    if (!('Blob' in goog.global)) {
+      const err = assertThrows(function() {
+        xhr.getBlob(TEST_IMAGE);
       });
-}
+      assertEquals(
+          'Assertion failed: getBlob is not supported in this browser.',
+          err.message);
+      return;
+    }
 
-function testGetBytes() {
-  if (isRunningLocally()) return;
+    const options = {withCredentials: true};
 
-  // IE8 requires a VBScript fallback to read the bytes from the response.
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(9)) {
-    const err = assertThrows(function() {
-      xhr.getBytes(TEST_IMAGE);
+    return xhr.getBlob(TEST_IMAGE, options)
+        .then(function(blob) {
+          const reader = new FileReader();
+          return new GoogPromise(function(resolve, reject) {
+            events.listenOnce(reader, EventType.LOAD, resolve);
+            reader.readAsArrayBuffer(blob);
+          });
+        })
+        .then(function(e) {
+          assertElementsEquals(
+              TEST_IMAGE_BYTES, new Uint8Array(e.target.result));
+          assertObjectEquals(
+              'input options should not have mutated.', {withCredentials: true},
+              options);
+        });
+  },
+
+  testGetBytes() {
+    if (isRunningLocally()) return;
+
+    // IE8 requires a VBScript fallback to read the bytes from the response.
+    if (userAgent.IE && !userAgent.isDocumentMode(9)) {
+      const err = assertThrows(function() {
+        xhr.getBytes(TEST_IMAGE);
+      });
+      assertEquals(
+          'Assertion failed: getBytes is not supported in this browser.',
+          err.message);
+      return;
+    }
+
+    const options = {withCredentials: true};
+
+    return xhr.getBytes(TEST_IMAGE).then(function(bytes) {
+      assertElementsEquals(TEST_IMAGE_BYTES, bytes);
+      assertObjectEquals(
+          'input options should not have mutated.', {withCredentials: true},
+          options);
     });
-    assertEquals(
-        'Assertion failed: getBytes is not supported in this browser.',
-        err.message);
-    return;
-  }
+  },
 
-  const options = {withCredentials: true};
+  testSerialRequests() {
+    if (isRunningLocally()) return;
 
-  return xhr.getBytes(TEST_IMAGE).then(function(bytes) {
-    assertElementsEquals(TEST_IMAGE_BYTES, bytes);
-    assertObjectEquals(
-        'input options should not have mutated.', {withCredentials: true},
-        options);
-  });
-}
+    return xhr.get('testdata/xhr_test_text.data')
+        .then(function(response) {
+          return xhr.getJson(
+              'testdata/xhr_test_json.data', {xssiPrefix: 'while(1);\n'});
+        })
+        .then(function(responseObj) {
+          // Data that comes through to callbacks should be from the 2nd
+          // request.
+          assertEquals('ok', responseObj['stat']);
+          assertEquals(12345, responseObj['count']);
+        });
+  },
 
-function testSerialRequests() {
-  if (isRunningLocally()) return;
+  testBadUrlDetectedAsError() {
+    if (isRunningLocally()) return;
 
-  return xhr.get('testdata/xhr_test_text.data')
-      .then(function(response) {
-        return xhr.getJson(
-            'testdata/xhr_test_json.data', {xssiPrefix: 'while(1);\n'});
-      })
-      .then(function(responseObj) {
-        // Data that comes through to callbacks should be from the 2nd request.
-        assertEquals('ok', responseObj['stat']);
-        assertEquals(12345, responseObj['count']);
-      });
-}
+    return xhr.getJson('unknown-file.dat')
+        .then(fail /* opt_onFulfilled */, function(err) {
+          assertTrue(
+              'Error should be an HTTP error', err instanceof xhr.HttpError);
+          assertEquals(404, err.status);
+          assertNotNull(err.xhr);
+        });
+  },
 
-function testBadUrlDetectedAsError() {
-  if (isRunningLocally()) return;
+  testBadOriginTriggersOnErrorHandler() {
+    if (userAgent.EDGE) return;  // failing b/62677027
 
-  return xhr.getJson('unknown-file.dat')
-      .then(fail /* opt_onFulfilled */, function(err) {
-        assertTrue(
-            'Error should be an HTTP error', err instanceof xhr.HttpError);
-        assertEquals(404, err.status);
-        assertNotNull(err.xhr);
-      });
-}
+    return xhr.get('http://www.google.com')
+        .then(
+            function() {
+              fail(
+                  'XHR to http://www.google.com should\'ve failed due to ' +
+                  'same-origin policy.');
+            } /* opt_onFulfilled */,
+            function(err) {
+              // In IE this will be a goog.labs.net.xhr.Error since it is thrown
+              //  when calling xhr.open(), other browsers will raise an
+              //  HttpError.
+              assertTrue(
+                  'Error should be an xhr error', err instanceof xhr.Error);
+              assertNotNull(err.xhr);
+            });
+  },
 
-function testBadOriginTriggersOnErrorHandler() {
-  if (goog.userAgent.EDGE) return;  // failing b/62677027
+  //============================================================================
+  // The following tests use a stubbed out XMLHttpRequest.
+  //============================================================================
 
-  return xhr.get('http://www.google.com')
-      .then(
-          function() {
-            fail(
-                'XHR to http://www.google.com should\'ve failed due to ' +
-                'same-origin policy.');
-          } /* opt_onFulfilled */,
-          function(err) {
-            // In IE this will be a goog.labs.net.xhr.Error since it is thrown
-            //  when calling xhr.open(), other browsers will raise an HttpError.
-            assertTrue(
-                'Error should be an xhr error', err instanceof xhr.Error);
-            assertNotNull(err.xhr);
-          });
-}
+  testSendNoOptions() {
+    let called = false;
+    stubXhrToReturn(200);
+    assertFalse('Callback should not yet have been called', called);
+    return xhr.send('GET', 'test-url', null).then(function(stubXhr) {
+      called = true;
+      assertEquals('GET', stubXhr.method);
+      assertEquals('test-url', stubXhr.url);
+    });
+  },
 
-//============================================================================
-// The following tests use a stubbed out XMLHttpRequest.
-//============================================================================
+  testSendPostSetsDefaultHeader() {
+    stubXhrToReturn(200);
+    return xhr.send('POST', 'test-url', null).then(function(stubXhr) {
+      assertEquals('POST', stubXhr.method);
+      assertEquals('test-url', stubXhr.url);
+      assertEquals(
+          'application/x-www-form-urlencoded;charset=utf-8',
+          stubXhr.headers['Content-Type']);
+    });
+  },
 
-function testSendNoOptions() {
-  let called = false;
-  stubXhrToReturn(200);
-  assertFalse('Callback should not yet have been called', called);
-  return xhr.send('GET', 'test-url', null).then(function(stubXhr) {
-    called = true;
-    assertEquals('GET', stubXhr.method);
-    assertEquals('test-url', stubXhr.url);
-  });
-}
+  testSendPostDoesntSetHeaderWithFormData() {
+    if (!goog.global['FormData']) {
+      return;
+    }
+    const formData = new goog.global['FormData']();
+    formData.append('name', 'value');
 
-function testSendPostSetsDefaultHeader() {
-  stubXhrToReturn(200);
-  return xhr.send('POST', 'test-url', null).then(function(stubXhr) {
-    assertEquals('POST', stubXhr.method);
-    assertEquals('test-url', stubXhr.url);
-    assertEquals(
-        'application/x-www-form-urlencoded;charset=utf-8',
-        stubXhr.headers['Content-Type']);
-  });
-}
+    stubXhrToReturn(200);
+    return xhr.send('POST', 'test-url', formData).then(function(stubXhr) {
+      assertEquals('POST', stubXhr.method);
+      assertEquals('test-url', stubXhr.url);
+      assertEquals(undefined, stubXhr.headers['Content-Type']);
+    });
+  },
 
-function testSendPostDoesntSetHeaderWithFormData() {
-  if (!goog.global['FormData']) {
-    return;
-  }
-  const formData = new goog.global['FormData']();
-  formData.append('name', 'value');
+  testSendPostHeaders() {
+    stubXhrToReturn(200);
+    return xhr
+        .send(
+            'POST', 'test-url', null,
+            {headers: {'Content-Type': 'text/plain', 'X-Made-Up': 'FooBar'}})
+        .then(function(stubXhr) {
+          assertEquals('POST', stubXhr.method);
+          assertEquals('test-url', stubXhr.url);
+          assertEquals('text/plain', stubXhr.headers['Content-Type']);
+          assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
+        });
+  },
 
-  stubXhrToReturn(200);
-  return xhr.send('POST', 'test-url', formData).then(function(stubXhr) {
-    assertEquals('POST', stubXhr.method);
-    assertEquals('test-url', stubXhr.url);
-    assertEquals(undefined, stubXhr.headers['Content-Type']);
-  });
-}
+  testSendPostHeadersWithFormData() {
+    if (!goog.global['FormData']) {
+      return;
+    }
+    const formData = new goog.global['FormData']();
+    formData.append('name', 'value');
 
-function testSendPostHeaders() {
-  stubXhrToReturn(200);
-  return xhr
-      .send(
-          'POST', 'test-url', null,
-          {headers: {'Content-Type': 'text/plain', 'X-Made-Up': 'FooBar'}})
-      .then(function(stubXhr) {
-        assertEquals('POST', stubXhr.method);
-        assertEquals('test-url', stubXhr.url);
-        assertEquals('text/plain', stubXhr.headers['Content-Type']);
-        assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
-      });
-}
+    stubXhrToReturn(200);
+    return xhr
+        .send(
+            'POST', 'test-url', formData,
+            {headers: {'Content-Type': 'text/plain', 'X-Made-Up': 'FooBar'}})
+        .then(function(stubXhr) {
+          assertEquals('POST', stubXhr.method);
+          assertEquals('test-url', stubXhr.url);
+          assertEquals('text/plain', stubXhr.headers['Content-Type']);
+          assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
+        });
+  },
 
-function testSendPostHeadersWithFormData() {
-  if (!goog.global['FormData']) {
-    return;
-  }
-  const formData = new goog.global['FormData']();
-  formData.append('name', 'value');
+  testSendNullPostHeaders() {
+    stubXhrToReturn(200);
+    return xhr
+        .send('POST', 'test-url', null, {
+          headers:
+              {'Content-Type': null, 'X-Made-Up': 'FooBar', 'Y-Made-Up': null}
+        })
+        .then(function(stubXhr) {
+          assertEquals('POST', stubXhr.method);
+          assertEquals('test-url', stubXhr.url);
+          assertEquals(undefined, stubXhr.headers['Content-Type']);
+          assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
+          assertEquals(undefined, stubXhr.headers['Y-Made-Up']);
+        });
+  },
 
-  stubXhrToReturn(200);
-  return xhr
-      .send(
-          'POST', 'test-url', formData,
-          {headers: {'Content-Type': 'text/plain', 'X-Made-Up': 'FooBar'}})
-      .then(function(stubXhr) {
-        assertEquals('POST', stubXhr.method);
-        assertEquals('test-url', stubXhr.url);
-        assertEquals('text/plain', stubXhr.headers['Content-Type']);
-        assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
-      });
-}
+  testSendNullPostHeadersWithFormData() {
+    if (!goog.global['FormData']) {
+      return;
+    }
+    const formData = new goog.global['FormData']();
+    formData.append('name', 'value');
 
-function testSendNullPostHeaders() {
-  stubXhrToReturn(200);
-  return xhr
-      .send('POST', 'test-url', null, {
-        headers:
-            {'Content-Type': null, 'X-Made-Up': 'FooBar', 'Y-Made-Up': null}
-      })
-      .then(function(stubXhr) {
-        assertEquals('POST', stubXhr.method);
-        assertEquals('test-url', stubXhr.url);
-        assertEquals(undefined, stubXhr.headers['Content-Type']);
-        assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
-        assertEquals(undefined, stubXhr.headers['Y-Made-Up']);
-      });
-}
+    stubXhrToReturn(200);
+    return xhr
+        .send('POST', 'test-url', formData, {
+          headers:
+              {'Content-Type': null, 'X-Made-Up': 'FooBar', 'Y-Made-Up': null}
+        })
+        .then(function(stubXhr) {
+          assertEquals('POST', stubXhr.method);
+          assertEquals('test-url', stubXhr.url);
+          assertEquals(undefined, stubXhr.headers['Content-Type']);
+          assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
+          assertEquals(undefined, stubXhr.headers['Y-Made-Up']);
+        });
+  },
 
-function testSendNullPostHeadersWithFormData() {
-  if (!goog.global['FormData']) {
-    return;
-  }
-  const formData = new goog.global['FormData']();
-  formData.append('name', 'value');
+  testSendWithCredentials() {
+    stubXhrToReturn(200);
+    return xhr.send('POST', 'test-url', null, {withCredentials: true})
+        .then(function(stubXhr) {
+          assertTrue('XHR should have been sent', stubXhr.sent);
+          assertTrue(stubXhr.withCredentials);
+        });
+  },
 
-  stubXhrToReturn(200);
-  return xhr
-      .send('POST', 'test-url', formData, {
-        headers:
-            {'Content-Type': null, 'X-Made-Up': 'FooBar', 'Y-Made-Up': null}
-      })
-      .then(function(stubXhr) {
-        assertEquals('POST', stubXhr.method);
-        assertEquals('test-url', stubXhr.url);
-        assertEquals(undefined, stubXhr.headers['Content-Type']);
-        assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
-        assertEquals(undefined, stubXhr.headers['Y-Made-Up']);
-      });
-}
+  testSendWithMimeType() {
+    stubXhrToReturn(200);
+    return xhr.send('POST', 'test-url', null, {mimeType: 'text/plain'})
+        .then(function(stubXhr) {
+          assertTrue('XHR should have been sent', stubXhr.sent);
+          assertEquals('text/plain', stubXhr.mimeType);
+        });
+  },
 
-function testSendWithCredentials() {
-  stubXhrToReturn(200);
-  return xhr.send('POST', 'test-url', null, {withCredentials: true})
-      .then(function(stubXhr) {
-        assertTrue('XHR should have been sent', stubXhr.sent);
-        assertTrue(stubXhr.withCredentials);
-      });
-}
+  testSendWithHttpError() {
+    stubXhrToReturn(500);
+    return xhr.send('POST', 'test-url', null)
+        .then(fail /* opt_onResolved */, function(err) {
+          assertTrue(err instanceof xhr.HttpError);
+          assertTrue(err.xhr.sent);
+          assertEquals(500, err.status);
+        });
+  },
 
-function testSendWithMimeType() {
-  stubXhrToReturn(200);
-  return xhr.send('POST', 'test-url', null, {mimeType: 'text/plain'})
-      .then(function(stubXhr) {
-        assertTrue('XHR should have been sent', stubXhr.sent);
-        assertEquals('text/plain', stubXhr.mimeType);
-      });
-}
+  testSendWithTimeoutNotHit() {
+    stubXhrToReturn(200, null /* opt_responseText */, 1400 /* opt_latency */);
+    return xhr.send('POST', 'test-url', null, {timeoutMs: 1500})
+        .then(function(stubXhr) {
+          assertTrue(mockClock.getTimeoutsMade() > 0);
+          assertTrue('XHR should have been sent', stubXhr.sent);
+          assertFalse('XHR should not have been aborted', stubXhr.aborted);
+        });
+  },
 
-function testSendWithHttpError() {
-  stubXhrToReturn(500);
-  return xhr.send('POST', 'test-url', null)
-      .then(fail /* opt_onResolved */, function(err) {
-        assertTrue(err instanceof xhr.HttpError);
-        assertTrue(err.xhr.sent);
-        assertEquals(500, err.status);
-      });
-}
+  testSendWithTimeoutHit() {
+    stubXhrToReturn(200, null /* opt_responseText */, 50 /* opt_latency */);
+    return xhr.send('POST', 'test-url', null, {timeoutMs: 50})
+        .then(fail /* opt_onResolved */, function(err) {
+          assertTrue('XHR should have been sent', err.xhr.sent);
+          assertTrue('XHR should have been aborted', err.xhr.aborted);
+          assertTrue(err instanceof xhr.TimeoutError);
+        });
+  },
 
-function testSendWithTimeoutNotHit() {
-  stubXhrToReturn(200, null /* opt_responseText */, 1400 /* opt_latency */);
-  return xhr.send('POST', 'test-url', null, {timeoutMs: 1500})
-      .then(function(stubXhr) {
-        assertTrue(mockClock.getTimeoutsMade() > 0);
-        assertTrue('XHR should have been sent', stubXhr.sent);
-        assertFalse('XHR should not have been aborted', stubXhr.aborted);
-      });
-}
+  testCancelRequest() {
+    const request = stubXhrToReturn(200);
+    const promise =
+        xhr.send('GET', 'test-url')
+            .then(fail /* opt_onResolved */, function(error) {
+              assertTrue(error instanceof GoogPromise.CancellationError);
+              assertTrue('XHR should have been aborted', request.aborted);
+              return null;  // Return a non-error value for the test runner.
+            });
+    promise.cancel();
+    return promise;
+  },
 
-function testSendWithTimeoutHit() {
-  stubXhrToReturn(200, null /* opt_responseText */, 50 /* opt_latency */);
-  return xhr.send('POST', 'test-url', null, {timeoutMs: 50})
-      .then(fail /* opt_onResolved */, function(err) {
-        assertTrue('XHR should have been sent', err.xhr.sent);
-        assertTrue('XHR should have been aborted', err.xhr.aborted);
-        assertTrue(err instanceof xhr.TimeoutError);
-      });
-}
+  testGetJson_stubbed() {
+    stubXhrToReturn(200, '{"a": 1, "b": 2}');
+    xhr.getJson('test-url').then(function(responseObj) {
+      assertObjectEquals({a: 1, b: 2}, responseObj);
+    });
+  },
 
-function testCancelRequest() {
-  const request = stubXhrToReturn(200);
-  const promise =
-      xhr.send('GET', 'test-url')
-          .then(fail /* opt_onResolved */, function(error) {
-            assertTrue(error instanceof goog.Promise.CancellationError);
-            assertTrue('XHR should have been aborted', request.aborted);
-            return null;  // Return a non-error value for the test runner.
-          });
-  promise.cancel();
-  return promise;
-}
+  testGetJsonWithXssiPrefix() {
+    stubXhrToReturn(200, 'while(1);\n{"a": 1, "b": 2}');
+    return xhr.getJson('test-url', {xssiPrefix: 'while(1);\n'})
+        .then(function(responseObj) {
+          assertObjectEquals({a: 1, b: 2}, responseObj);
+        });
+  },
 
-function testGetJson() {
-  stubXhrToReturn(200, '{"a": 1, "b": 2}');
-  xhr.getJson('test-url').then(function(responseObj) {
-    assertObjectEquals({a: 1, b: 2}, responseObj);
-  });
-}
+  testSendWithClientException() {
+    stubXhrToThrow(new Error('CORS XHR with file:// schemas not allowed.'));
+    return xhr.send('POST', 'file://test-url', null)
+        .then(fail /* opt_onResolved */, function(err) {
+          assertFalse('XHR should not have been sent', err.xhr.sent);
+          assertTrue(err instanceof Error);
+          assertTrue(
+              /CORS XHR with file:\/\/ schemas not allowed./.test(err.message));
+        });
+  },
 
-function testGetJsonWithXssiPrefix() {
-  stubXhrToReturn(200, 'while(1);\n{"a": 1, "b": 2}');
-  return xhr.getJson('test-url', {xssiPrefix: 'while(1);\n'})
-      .then(function(responseObj) {
-        assertObjectEquals({a: 1, b: 2}, responseObj);
-      });
-}
+  testSendWithFactory() {
+    stubXhrToReturn(200);
+    const options = {
+      xmlHttpFactory: new WrapperXmlHttpFactory(
+          goog.partial(buildThrowingStubXhr, new Error('Bad factory')),
+          XmlHttp.getOptions)
+    };
+    return xhr.send('POST', 'file://test-url', null, options)
+        .then(fail /* opt_onResolved */, function(err) {
+          assertTrue(err instanceof Error);
+        });
+  },
 
-function testSendWithClientException() {
-  stubXhrToThrow(new Error('CORS XHR with file:// schemas not allowed.'));
-  return xhr.send('POST', 'file://test-url', null)
-      .then(fail /* opt_onResolved */, function(err) {
-        assertFalse('XHR should not have been sent', err.xhr.sent);
-        assertTrue(err instanceof Error);
-        assertTrue(
-            /CORS XHR with file:\/\/ schemas not allowed./.test(err.message));
-      });
-}
-
-function testSendWithFactory() {
-  stubXhrToReturn(200);
-  const options = {
-    xmlHttpFactory: new goog.net.WrapperXmlHttpFactory(
-        goog.partial(buildThrowingStubXhr, new Error('Bad factory')),
-        goog.net.XmlHttp.getOptions)
-  };
-  return xhr.send('POST', 'file://test-url', null, options)
-      .then(fail /* opt_onResolved */, function(err) {
-        assertTrue(err instanceof Error);
-      });
-}
+});
