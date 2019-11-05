@@ -86,7 +86,9 @@ function checkForError(doc) {
  */
 function logStatus(i) {
   log.fine(testLogger, 'Is complete/success/active: ' + [
-    i.isComplete(), i.isSuccess(), i.isActive()
+    i.isComplete(),
+    i.isSuccess(),
+    i.isActive(),
   ].join('/'));
 }
 
