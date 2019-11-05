@@ -133,6 +133,7 @@
 
 goog.provide('goog.net.IframeIo');
 goog.provide('goog.net.IframeIo.IncrementalDataEvent');
+goog.provide('goog.net.IframeIo.TEST_ONLY');
 
 goog.require('goog.Timer');
 goog.require('goog.Uri');
@@ -1430,3 +1431,13 @@ goog.net.IframeIo.IncrementalDataEvent = function(data) {
   this.data = data;
 };
 goog.inherits(goog.net.IframeIo.IncrementalDataEvent, goog.events.Event);
+
+
+
+/**
+ * Test-only exports.
+ * @const
+ */
+goog.net.IframeIo.TEST_ONLY = {
+  getForm: goog.net.IframeIo.getForm_,
+};
