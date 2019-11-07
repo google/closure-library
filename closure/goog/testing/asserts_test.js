@@ -106,10 +106,10 @@ testSuite({
     }, 'Should be true\nCall to assertTrue(boolean) with false');
     assertThrowsJsUnitException(() => {
       assertTrue(null);
-    }, 'Bad argument to assertTrue(boolean)');
+    }, 'Bad argument to assertTrue(boolean): <null>');
     assertThrowsJsUnitException(() => {
       assertTrue(undefined);
-    }, 'Bad argument to assertTrue(boolean)');
+    }, 'Bad argument to assertTrue(boolean): <undefined>');
   },
 
   testAssertFalse() {
@@ -123,10 +123,10 @@ testSuite({
     }, 'Should be false\nCall to assertFalse(boolean) with true');
     assertThrowsJsUnitException(() => {
       assertFalse(null);
-    }, 'Bad argument to assertFalse(boolean)');
+    }, 'Bad argument to assertFalse(boolean): <null>');
     assertThrowsJsUnitException(() => {
       assertFalse(undefined);
-    }, 'Bad argument to assertFalse(boolean)');
+    }, 'Bad argument to assertFalse(boolean): <undefined>');
   },
 
   testAssertEqualsWithString() {
