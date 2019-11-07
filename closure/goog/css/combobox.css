@@ -5,16 +5,10 @@
  * See the COPYING file for details.
  */
 
+/* Author: pupius@google.com (Daniel Pupius) */
+/* Author: pallosp@google.com (Peter Pallos) */
 
-
-/*
- * Styles for goog.ui.ComboBox and its derivatives.
- *
- * @author pupius@google.com (Daniel Pupius)
- * @author pallosp@google.com (Peter Pallos)
- *
- * @provide {goog.css.combobox}
- */
+/* Styles for goog.ui.ComboBox and its derivatives. */
 
 
 .goog-combobox {
