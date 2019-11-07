@@ -1574,3 +1574,12 @@ goog.fx.ScrollableContainer_ = function(element) {
    */
   this.box_ = null;
 };
+
+
+/**
+ * Test-only exports.
+ * @const
+ */
+goog.fx.AbstractDragDrop.TEST_ONLY = {
+  ActiveDropTarget: goog.fx.ActiveDropTarget_,
+};

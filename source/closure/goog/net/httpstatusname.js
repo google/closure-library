@@ -84,5 +84,5 @@ goog.net.HttpStatusName = {
   504: 'Gateway Timeout',
   505: 'HTTP Version Not Supported',
   507: 'Insufficient Storage',
-  511: 'Network Authentication Required'
+  511: 'Network Authentication Required',
 };

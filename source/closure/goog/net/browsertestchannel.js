@@ -187,7 +187,7 @@ goog.net.BrowserTestChannel.State_ = {
    * The  state for the BrowserTestChannel state machine where we're checking to
    * se if we're behind a buffering proxy.
    */
-  CONNECTION_TESTING: 2
+  CONNECTION_TESTING: 2,
 };
 
 

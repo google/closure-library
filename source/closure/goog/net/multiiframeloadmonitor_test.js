@@ -102,8 +102,12 @@ testSuite({
       iframeLoadMonitorsCreated++;
       return {
         attachEvent: function() {},
-        dispose: function() { disposeCalls++; },
-        isLoaded: function() { return false; }
+        dispose: function() {
+          disposeCalls++;
+        },
+        isLoaded: function() {
+          return false;
+        },
       };
     }
     FakeIframeLoadMonitor.LOAD_EVENT = 'ifload';
@@ -120,5 +124,5 @@ testSuite({
 
     monitor.stopMonitoring();
     assertEquals(frames.length, disposeCalls);
-  }
+  },
 });

@@ -133,7 +133,7 @@ goog.net.streams.PbStreamParser.State_ = {
   INIT: 0,     // expecting the tag:wire-type byte
   LENGTH: 1,   // expecting more varint bytes of length
   MESSAGE: 2,  // expecting more message bytes
-  INVALID: 3
+  INVALID: 3,
 };
 
 

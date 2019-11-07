@@ -599,7 +599,7 @@ DirectTransport.Message_.prototype.toLiteral = function() {
   return {
     'channelName': this.channelName,
     'service': this.service,
-    'payload': this.payload
+    'payload': this.payload,
   };
 };
 

@@ -93,7 +93,7 @@ goog.net.HttpStatus = {
    * code for 'Operation Aborted'. The status text is 'Unknown', the response
    * headers are ''. Known to occur on IE 6 on XP through IE9 on Win7.
    */
-  QUIRK_IE_NO_CONTENT: 1223
+  QUIRK_IE_NO_CONTENT: 1223,
 };
 
 

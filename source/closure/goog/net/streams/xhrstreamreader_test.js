@@ -167,7 +167,7 @@ testSuite({
     const body = 'CgX__gABdw==';
     const headers = {
       'Content-Type': 'application/x-protobuf',
-      'Content-Transfer-Encoding': 'BASE64'
+      'Content-Transfer-Encoding': 'BASE64',
     };
     xhrIo.send('/foo/bar');
     xhrIo.simulateResponse(HttpStatus.OK, body, headers);
@@ -200,7 +200,7 @@ testSuite({
 
     const headers = {
       'Content-Type': 'application/x-protobuf',
-      'Content-Transfer-Encoding': 'BASE64'
+      'Content-Transfer-Encoding': 'BASE64',
     };
 
     xhrIo.send('/foo/bar');

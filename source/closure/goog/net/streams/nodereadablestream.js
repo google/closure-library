@@ -55,7 +55,7 @@ goog.net.streams.NodeReadableStream.EventType = {
   DATA: 'data',
   END: 'end',
   CLOSE: 'close',
-  ERROR: 'error'
+  ERROR: 'error',
 };
 
 

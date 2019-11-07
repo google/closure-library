@@ -203,7 +203,7 @@ goog.net.FetchXmlHttp.RequestState = {
   OPENED: 1,
   HEADER_RECEIVED: 2,
   LOADING: 3,
-  DONE: 4
+  DONE: 4,
 };
 
 
@@ -235,7 +235,7 @@ goog.net.FetchXmlHttp.prototype.send = function(opt_data) {
     headers: this.requestHeaders_,
     method: this.method_,
     credentials: this.credentialsMode_,
-    cache: this.cacheMode_
+    cache: this.cacheMode_,
   };
   if (opt_data) {
     requestInit['body'] = opt_data;

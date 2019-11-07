@@ -96,9 +96,11 @@ class TestCases extends LiteTestCases {
     const cancel = recordFunction();
     const stream = this.newReadableStream({cancel});
     const reason = new Error('error');
+
     await stream.cancel(reason);
+
     cancel.assertCallCount(1);
-    assertArrayEquals([reason], cancel.getLastCall().getArguments());
+    assertEquals(reason, cancel.getLastCall().getArguments()[0]);
   }
 
   async testCancel_ThrowingSource() {
@@ -153,9 +155,11 @@ class TestCases extends LiteTestCases {
     const cancel = recordFunction();
     const stream = this.newReadableStream({cancel});
     const reason = new Error('error');
+
     await stream.getReader().cancel(reason);
+
     cancel.assertCallCount(1);
-    assertArrayEquals([reason], cancel.getLastCall().getArguments());
+    assertEquals(reason, cancel.getLastCall().getArguments()[0]);
   }
 
   async testReaderCancel_ThrowingSource() {

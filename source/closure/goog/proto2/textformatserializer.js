@@ -180,7 +180,7 @@ goog.proto2.TextFormatSerializer.prototype.serializeUnknown_ = function(
   }
   printer.append(tag);
   printer.append(': ');
-  printer.append(value.toString());
+  printer.append(value);
   printer.appendLine();
 };
 
@@ -365,7 +365,7 @@ goog.proto2.TextFormatSerializer.Printer_.prototype.append = function(value) {
     this.requiresIndentation_ = false;
   }
 
-  this.buffer_.push(value.toString());
+  this.buffer_.push(String(value));
 };
 
 

@@ -164,5 +164,5 @@ testSuite({
     assertThrows(function() {
       parse4.parse(', ["error"]');
     });
-  }
+  },
 });
