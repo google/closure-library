@@ -97,6 +97,54 @@ testSuite({
     assertEquals('TOGGLE events must fire', 2, toggleEventsFired);
   },
 
+  testExpandCollapseWhileAnimationPlaying() {
+    let animationsRunning = 0;
+    let lastAnimation = null;
+
+    propertyReplacer.replace(Animation.prototype, 'play', function() {
+      animationsRunning++;
+      lastAnimation = this;
+    });
+    propertyReplacer.replace(Animation.prototype, 'stop', function() {
+      animationsRunning--;
+      this.dispatchAnimationEvent(Transition.EventType.END);
+    });
+    propertyReplacer.replace(
+        AnimatedZippy.prototype, 'onAnimate_', functions.NULL);
+
+    // Expand when expanding animation is playing.
+    animatedZippy.expand();
+    animatedZippy.expand();
+    assertEquals('exactly 1 animation must be running', 1, animationsRunning);
+    lastAnimation.stop();
+    assertEquals('animation must have finished', 0, animationsRunning);
+    assertEquals('expanded must be true', animatedZippy.isExpanded(), true);
+
+    // Expand when collapsing animation is playing.
+    animatedZippy.collapse();
+    animatedZippy.expand();
+    assertEquals('exactly 1 animation must be running', 1, animationsRunning);
+    lastAnimation.stop();
+    assertEquals('animation must have finished', 0, animationsRunning);
+    assertEquals('expanded must be true', animatedZippy.isExpanded(), true);
+
+    // Collapse when collapsing animation is playing.
+    animatedZippy.collapse();
+    animatedZippy.collapse();
+    assertEquals('exactly 1 animation must be running', 1, animationsRunning);
+    lastAnimation.stop();
+    assertEquals('animation must have finished', 0, animationsRunning);
+    assertEquals('expanded must be false', animatedZippy.isExpanded(), false);
+
+    // Collapse when expanding animation is playing.
+    animatedZippy.expand();
+    animatedZippy.collapse();
+    assertEquals('exactly 1 animation must be running', 1, animationsRunning);
+    lastAnimation.stop();
+    assertEquals('animation must have finished', 0, animationsRunning);
+    assertEquals('expanded must be false', animatedZippy.isExpanded(), false);
+  },
+
   /** Tests the TOGGLE_ANIMATION_BEGIN event. */
   testToggleBegin() {
     let animationsPlayed = 0;
