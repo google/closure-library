@@ -10,6 +10,8 @@
  * Editor toolbar styles.
  *
  * @author attila@google.com (Attila Bodis)
+ *
+ * @provide {goog.css.editortoolbar}
  */
 
 /* Common base style for all icons. */

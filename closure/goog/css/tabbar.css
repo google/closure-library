@@ -5,13 +5,15 @@
  * See the COPYING file for details.
  */
 
-/* Author: attila@google.com (Attila Bodis) */
-/* Author: eae@google.com (Emil A. Eklund) */
-
-
 /*
  * Styles used by goog.ui.TabBarRenderer.
+ *
+ * @author attila@google.com (Attila Bodis)
+ * @author eae@google.com (Emil A. Eklund)
+ *
+ * @provide {goog.css.tabbar}
  */
+
 .goog-tab-bar {
   margin: 0;
   border: 0;

@@ -9,6 +9,8 @@
  * Standard styling for a goog.ui.PopupDatePicker.
  *
  * @author arv@google.com (Erik Arvidsson)
+ *
+ * @provide {goog.css.popupdatepicker}
  */
 
 .goog-date-picker {
