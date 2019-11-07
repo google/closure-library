@@ -13,6 +13,7 @@
 // limitations under the License.
 
 goog.module('goog.asserts.dom');
+goog.module.declareLegacyNamespace();
 
 const TagName = goog.require('goog.dom.TagName');
 const asserts = goog.require('goog.asserts');
