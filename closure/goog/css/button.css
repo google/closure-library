@@ -7,6 +7,8 @@
 
 /*
  * Styling for buttons rendered by goog.ui.ButtonRenderer.
+ *
+ * @provide {goog.css.button}
  */
 
 .goog-button {

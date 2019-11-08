@@ -7,8 +7,9 @@
 
 /*
  * Standard styling for buttons created by goog.ui.FlatMenuButtonRenderer.
+ *
+ * @provide {goog.css.flatmenubutton}
  */
-
 
 .goog-flat-menu-button {
   background-color: #fff;

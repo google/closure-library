@@ -8,6 +8,7 @@
 /*
  * Styling for link buttons created by goog.ui.LinkButtonRenderer.
  *
+ * @provide {goog.css.linkbutton}
  */
 
 .goog-link-button {

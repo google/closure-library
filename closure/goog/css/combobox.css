@@ -5,11 +5,11 @@
  * See the COPYING file for details.
  */
 
-/* Author: pupius@google.com (Daniel Pupius) */
-/* Author: pallosp@google.com (Peter Pallos) */
-
-/* Styles for goog.ui.ComboBox and its derivatives. */
-
+/*
+ * Styles for goog.ui.ComboBox and its derivatives.
+ *
+ * @provide {goog.css.combobox}
+ */
 
 .goog-combobox {
   background: #ddd url(//ssl.gstatic.com/closure/button-bg.gif) repeat-x scroll left top;
