@@ -1069,7 +1069,7 @@ function testGetCssName() {
   assertEquals('a-b', goog.getCssName(g, 'active'));
   assertEquals('goog-disabled', goog.getCssName('goog-disabled'));
 
-  e = assertThrows(function() {
+  const e = assertThrows(function() {
     goog.getCssName('.name');
   });
   assertEquals(
