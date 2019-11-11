@@ -8,9 +8,8 @@
 /*
  * styling for goog.ui.menuBar and child buttons.
  *
- * @author tvykruta@google.com (Tomas Vykruta)
+ * @provide {goog.css.menubar}
  */
-
 
 .goog-menubar {
   cursor: default;

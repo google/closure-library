@@ -290,7 +290,8 @@ goog.testing.asserts.assert = function(a, opt_b) {
 
   _assert(
       comment, typeof booleanValue === 'boolean',
-      'Bad argument to assert(boolean)');
+      'Bad argument to assert(boolean): ' +
+          _displayStringForValue(booleanValue));
   _assert(comment, booleanValue, 'Call to assert(boolean) with false');
 };
 /** @const */
@@ -492,7 +493,8 @@ goog.testing.asserts.assertTrue = function(a, opt_b) {
 
   _assert(
       comment, typeof booleanValue === 'boolean',
-      'Bad argument to assertTrue(boolean)');
+      'Bad argument to assertTrue(boolean): ' +
+          _displayStringForValue(booleanValue));
   _assert(comment, booleanValue, 'Call to assertTrue(boolean) with false');
 };
 /** @const */
@@ -510,7 +512,8 @@ goog.testing.asserts.assertFalse = function(a, opt_b) {
 
   _assert(
       comment, typeof booleanValue === 'boolean',
-      'Bad argument to assertFalse(boolean)');
+      'Bad argument to assertFalse(boolean): ' +
+          _displayStringForValue(booleanValue));
   _assert(comment, !booleanValue, 'Call to assertFalse(boolean) with true');
 };
 /** @const */
