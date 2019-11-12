@@ -456,7 +456,7 @@ goog.ui.PopupBase.prototype.isVisible = function() {
  * Returns whether the popup is currently visible or was visible within about
  * 150 ms ago. This is used by clients to handle a very specific, but common,
  * popup scenario. The button that launches the popup should close the popup
- * on mouse down if the popup is alrady open. The problem is that the popup
+ * on mouse down if the popup is already open. The problem is that the popup
  * closes itself during the capture phase of the mouse down and thus the button
  * thinks it's hidden and this should show it again. This method provides a
  * good heuristic for clients. Typically in their event handler they will have
