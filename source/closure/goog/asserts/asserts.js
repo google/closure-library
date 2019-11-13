@@ -240,10 +240,9 @@ goog.asserts.assertExists = function(value, opt_message, var_args) {
  */
 goog.asserts.fail = function(opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS) {
-    goog.asserts.errorHandler_(
-        new goog.asserts.AssertionError(
-            'Failure' + (opt_message ? ': ' + opt_message : ''),
-            Array.prototype.slice.call(arguments, 1)));
+    goog.asserts.errorHandler_(new goog.asserts.AssertionError(
+        'Failure' + (opt_message ? ': ' + opt_message : ''),
+        Array.prototype.slice.call(arguments, 1)));
   }
 };
 
@@ -377,7 +376,8 @@ goog.asserts.assertBoolean = function(value, opt_message, var_args) {
  */
 goog.asserts.assertElement = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS &&
-      (!goog.isObject(value) || value.nodeType != goog.dom.NodeType.ELEMENT)) {
+      (!goog.isObject(value) ||
+       /** @type {!Node} */ (value).nodeType != goog.dom.NodeType.ELEMENT)) {
     goog.asserts.doAssertFailure_(
         'Expected Element but got %s: %s.', [goog.typeOf(value), value],
         opt_message, Array.prototype.slice.call(arguments, 2));
