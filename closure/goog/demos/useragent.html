@@ -174,7 +174,7 @@ See the COPYING file for details.
     var valueCell = goog.dom.createElement('td');
     goog.dom.appendChild(row, valueCell);
 
-    if (goog.isBoolean(value)) {
+    if (typeof value === 'boolean') {
       value = value ? 'yes' : 'no';
       goog.dom.setTextContent(valueCell, value);
       goog.dom.classlist.set(valueCell, value);
