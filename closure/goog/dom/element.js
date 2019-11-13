@@ -27,7 +27,8 @@ const HTML_NAMESPACE = 'http://www.w3.org/1999/xhtml';
  * @return {boolean}
  */
 const isElement = (value) => {
-  return goog.isObject(value) && value.nodeType === NodeType.ELEMENT;
+  return goog.isObject(value) &&
+      /** @type {!Node} */ (value).nodeType === NodeType.ELEMENT;
 };
 
 /**
@@ -38,7 +39,8 @@ const isElement = (value) => {
 const isHtmlElement = (value) => {
   return goog.isObject(value) && isElement(value) &&
       // namespaceURI of old browsers (FF < 3.6, IE < 9) will be null.
-      (!value.namespaceURI || value.namespaceURI === HTML_NAMESPACE);
+      (!/** @type {!Element} */ (value).namespaceURI ||
+       /** @type {!Element} */ (value).namespaceURI === HTML_NAMESPACE);
 };
 
 /**
@@ -53,7 +55,8 @@ const isHtmlElementOfType = (value, tagName) => {
   return goog.isObject(value) && isHtmlElement(value) &&
       // Some uncommon JS environments (e.g. Cobalt 9) have issues with tag
       // capitalization.
-      value.tagName.toUpperCase() === tagName.toString();
+      (/** @type {!HTMLElement} */ (value).tagName.toUpperCase() ===
+       tagName.toString());
 };
 
 /**

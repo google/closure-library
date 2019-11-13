@@ -462,7 +462,7 @@ var assertThrowsJsUnitException =
  */
 goog.testing.asserts.assertRejects = function(a, opt_b) {
   _validateArguments(1, arguments);
-  var thenable = nonCommentArg(1, 1, arguments);
+  var thenable = /** @type {!IThenable<*>} */ (nonCommentArg(1, 1, arguments));
   var comment = commentArg(1, arguments);
   _assert(
       comment, goog.isObject(thenable) && goog.isFunction(thenable.then),

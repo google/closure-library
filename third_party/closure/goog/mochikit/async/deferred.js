@@ -348,6 +348,7 @@ goog.async.Deferred.prototype.errback = function(opt_result) {
  * current stack trace to give additional context.
  * @param {*} error
  * @private
+ * @suppress {missingProperties} error.stack
  */
 goog.async.Deferred.prototype.makeStackTraceLong_ = function(error) {
   if (!goog.async.Deferred.LONG_STACK_TRACES) {

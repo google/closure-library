@@ -955,10 +955,11 @@ goog.Promise.maybeThen_ = function(value, onFulfilled, onRejected, context) {
     value.then(onFulfilled, onRejected, context);
     return true;
   } else if (goog.isObject(value)) {
+    const thenable = /** @type {!Thenable} */ (value);
     try {
-      var then = value['then'];
+      var then = thenable.then;
       if (goog.isFunction(then)) {
-        goog.Promise.tryThen_(value, then, onFulfilled, onRejected, context);
+        goog.Promise.tryThen_(thenable, then, onFulfilled, onRejected, context);
         return true;
       }
     } catch (e) {

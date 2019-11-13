@@ -350,8 +350,8 @@ goog.dom.asserts.assertIsHTMLScriptElement = function(o) {
 goog.dom.asserts.debugStringForType_ = function(value) {
   if (goog.isObject(value)) {
     try {
-      return value.constructor.displayName || value.constructor.name ||
-          Object.prototype.toString.call(value);
+      return /** @type {string|undefined} */ (value.constructor.displayName) ||
+          value.constructor.name || Object.prototype.toString.call(value);
     } catch (e) {
       return '<object could not be stringified>';
     }
