@@ -51,15 +51,22 @@ goog.require('goog.log');
 /**
  * Class encapsulating the logic for using a WebSocket.
  *
- * @param {!goog.net.WebSocket.Options=} opt_params Parameters describing
- *     behavior of the WebSocket.
+ * @param {boolean|!goog.net.WebSocket.Options=} opt_params
+ *     Parameters describing behavior of the WebSocket. The boolean 'true' is
+ *     equivalent to setting Options.autoReconnect to be true.
+ * @param {function(number): number=} opt_getNextReconnect
+ *     @see goog.net.WebSocket.Options.getNextReconnect. This parameter is
+ *     ignored if Options is passed for the first argument.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-goog.net.WebSocket = function(opt_params) {
+goog.net.WebSocket = function(opt_params, opt_getNextReconnect) {
   goog.net.WebSocket.base(this, 'constructor');
-  if (!opt_params) {
-    opt_params = /** @type {!goog.net.WebSocket.Options} */ ({});
+  if (typeof opt_params != 'object') {
+    opt_params = /**@type {!goog.net.WebSocket.Options} */ ({
+      autoReconnect: opt_params,
+      getNextReconnect: opt_getNextReconnect,
+    });
   }
   /** @private {boolean} @see goog.net.WebSocket.Options.autoReconnect */
   this.autoReconnect_ = opt_params.autoReconnect != false;
