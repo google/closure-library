@@ -310,7 +310,8 @@ goog.testing.mockmatchers.isDateLike =
  * @type {!goog.testing.mockmatchers.ArgumentMatcher}
  */
 goog.testing.mockmatchers.isString =
-    new goog.testing.mockmatchers.ArgumentMatcher(goog.isString, 'isString');
+    new goog.testing.mockmatchers.ArgumentMatcher(
+        x => typeof x === 'string', 'isString');
 
 
 /**
@@ -318,7 +319,8 @@ goog.testing.mockmatchers.isString =
  * @type {!goog.testing.mockmatchers.ArgumentMatcher}
  */
 goog.testing.mockmatchers.isBoolean =
-    new goog.testing.mockmatchers.ArgumentMatcher(goog.isBoolean, 'isBoolean');
+    new goog.testing.mockmatchers.ArgumentMatcher(
+        x => typeof x === 'boolean', 'isBoolean');
 
 
 /**
@@ -326,7 +328,8 @@ goog.testing.mockmatchers.isBoolean =
  * @type {!goog.testing.mockmatchers.ArgumentMatcher}
  */
 goog.testing.mockmatchers.isNumber =
-    new goog.testing.mockmatchers.ArgumentMatcher(goog.isNumber, 'isNumber');
+    new goog.testing.mockmatchers.ArgumentMatcher(
+        x => typeof x === 'number', 'isNumber');
 
 
 /**

@@ -38,9 +38,6 @@
 
 export const global = goog.global;
 export const require = goog.require;
-export const isString = goog.isString;
-export const isBoolean = goog.isBoolean;
-export const isNumber = goog.isNumber;
 export const define = goog.define;
 export const DEBUG = goog.DEBUG;
 export const LOCALE = goog.LOCALE;
@@ -71,9 +68,6 @@ export const getMsg = goog.getMsg;
 export const getMsgWithFallback = goog.getMsgWithFallback;
 export const exportSymbol = goog.exportSymbol;
 export const exportProperty = goog.exportProperty;
-export const isDef = goog.isDef;
-export const isNull = goog.isNull;
-export const isDefAndNotNull = goog.isDefAndNotNull;
 export const globalize = goog.globalize;
 export const nullFunction = goog.nullFunction;
 export const abstractMethod = goog.abstractMethod;
