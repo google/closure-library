@@ -50,7 +50,7 @@ testSuite({
 
   testNoMatchName() {
     // A matcher that does not fill in the match name
-    const matcher = new ArgumentMatcher(goog.isString);
+    const matcher = new ArgumentMatcher(x => typeof x === 'string');
 
     // Make sure the lack of match name doesn't affect the ability
     // to return True/False
@@ -156,7 +156,7 @@ testSuite({
     assertTrue(saveMatcher.matches(42));
     assertEquals(42, saveMatcher.arg);
 
-    saveMatcher = new matchers.SaveArgument(goog.isString);
+    saveMatcher = new matchers.SaveArgument(x => typeof x === 'string');
     assertTrue(saveMatcher.matches('test'));
     assertEquals('test', saveMatcher.arg);
     assertFalse(saveMatcher.matches(17));
