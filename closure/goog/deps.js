@@ -62,7 +62,7 @@ goog.addDependency('async/workqueue.js', ['goog.async.WorkItem', 'goog.async.Wor
 goog.addDependency('async/workqueue_test.js', ['goog.async.WorkQueueTest'], ['goog.async.WorkQueue', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base.js', ['goog'], [], {});
 goog.addDependency('base_module_test.js', ['goog.baseModuleTest'], ['goog.Timer', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('base_test.js', ['goog.baseTest'], ['goog.dom', 'goog.dom.TagName', 'goog.object', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.userAgent'], {'lang': 'es6'});
+goog.addDependency('base_test.js', ['goog.baseTest'], ['goog.dom', 'goog.dom.TagName', 'goog.object', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color'], {});
 goog.addDependency('color/alpha_test.js', ['goog.color.alphaTest'], ['goog.array', 'goog.color.alpha', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('color/color.js', ['goog.color', 'goog.color.Hsl', 'goog.color.Hsv', 'goog.color.Rgb'], ['goog.color.names', 'goog.math'], {});
