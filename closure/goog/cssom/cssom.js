@@ -195,7 +195,7 @@ goog.cssom.getCssTextFromCssRule = function(cssRule) {
   }
 
   if (!cssText && cssRule.style && cssRule.style.cssText &&
-      cssRule.selectorText) {
+      /** @type {!CSSStyleRule} */ (cssRule).selectorText) {
     // IE: The spacing here is intended to make the result consistent with
     // FF and Webkit.
     // We also remove the special properties that we may have added in
@@ -204,7 +204,8 @@ goog.cssom.getCssTextFromCssRule = function(cssRule) {
         cssRule.style.cssText
             .replace(/\s*-closure-parent-stylesheet:\s*\[object\];?\s*/gi, '')
             .replace(/\s*-closure-rule-index:\s*[\d]+;?\s*/gi, '');
-    var thisCssText = cssRule.selectorText + ' { ' + styleCssText + ' }';
+    var thisCssText = /** @type {!CSSStyleRule} */ (cssRule).selectorText +
+        ' { ' + styleCssText + ' }';
     cssText = thisCssText;
   }
 
@@ -316,6 +317,7 @@ goog.cssom.addCssRule = function(cssStyleSheet, cssText, opt_index) {
     var rules = goog.cssom.getCssRulesFromStyleSheet(cssStyleSheet);
     index = rules.length;
   }
+  cssStyleSheet = /** @type {!CSSStyleSheet} */ (cssStyleSheet);
   if (cssStyleSheet.insertRule) {
     // W3C (including IE9+).
     cssStyleSheet.insertRule(cssText, index);
@@ -343,6 +345,7 @@ goog.cssom.addCssRule = function(cssStyleSheet, cssText, opt_index) {
  * @param {number} index The CSSRule's index in the parentStyleSheet.
  */
 goog.cssom.removeCssRule = function(cssStyleSheet, index) {
+  cssStyleSheet = /** @type {!CSSStyleSheet} */ (cssStyleSheet);
   if (cssStyleSheet.deleteRule) {
     // W3C.
     cssStyleSheet.deleteRule(index);
