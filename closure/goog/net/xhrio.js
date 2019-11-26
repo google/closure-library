@@ -1279,7 +1279,7 @@ goog.net.XhrIo.prototype.getAllResponseHeaders = function() {
  *     and header values as values.
  */
 goog.net.XhrIo.prototype.getResponseHeaders = function() {
-  // TODO(b/120371595): Make this function parse headers as per the spec
+  // TODO(user): Make this function parse headers as per the spec
   // (https://tools.ietf.org/html/rfc2616#section-4.2).
 
   var headersObject = {};

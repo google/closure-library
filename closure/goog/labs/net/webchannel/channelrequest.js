@@ -19,6 +19,7 @@
  * the logic for the two types of transports we use:
  * XMLHTTP and Image request. It provides timeout detection. More transports
  * to be added in future, such as Fetch, WebSocket.
+ *
  */
 
 

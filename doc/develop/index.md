@@ -6,8 +6,6 @@ title: Develop with Closure
 section: develop
 layout: article
 ---
-
-
 # Develop with Closure
 
 This section contains information pertaining to the development of applications
@@ -15,4 +13,5 @@ with the Closure Library.
 
 *   [Getting started](./get-started)
 *   [JSConformance configuration documentation](./conformance_rules)
+
 

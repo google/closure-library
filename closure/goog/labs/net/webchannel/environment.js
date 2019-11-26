@@ -15,6 +15,7 @@
 /**
  * @fileoverview A single module to define user-agent specific environment
  * details.
+ *
  */
 
 goog.module('goog.labs.net.webChannel.environment');

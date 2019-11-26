@@ -86,7 +86,7 @@ goog.dom.AbstractRange.getBrowserSelectionForWindow = function(win) {
         // in a different domain, IE will throw an exception.
         return null;
       }
-      // TODO(user|robbyw) Sometimes IE 6 returns a selection instance
+      // TODO(user) Sometimes IE 6 returns a selection instance
       // when there is no selection.  This object has a 'type' property equals
       // to 'None' and a typeDetail property bound to undefined. Ideally this
       // function should not return this instance.

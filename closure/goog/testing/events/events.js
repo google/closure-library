@@ -29,7 +29,7 @@
  * please, please email closure-tech first to explain your use case before you
  * sink time into this.
  *
- * TODO(b/8933952): Migrate to explicitly non-nullable types. At present, many
+ * TODO(user): Migrate to explicitly non-nullable types. At present, many
  *     functions in this file expect non-null inputs but do not explicitly
  *     indicate this.
  */

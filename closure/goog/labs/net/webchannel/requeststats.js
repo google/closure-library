@@ -15,6 +15,7 @@
 /**
  * @fileoverview Static utilities for collecting stats associated with
  * ChannelRequest.
+ *
  */
 
 

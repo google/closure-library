@@ -100,7 +100,7 @@ goog.i18n.bidi.IS_RTL =
           goog.LOCALE.substring(4, 8).toLowerCase() == 'thaa')));
 //    closure/RtlLocalesTest.java)
 
-// TODO(b/77919903): Add additional scripts and languages that are RTL,
+// TODO(user): Add additional scripts and languages that are RTL,
 // e.g., mende, samaritan, etc.
 
 

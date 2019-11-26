@@ -205,7 +205,7 @@ testSuite({
 
   testGetStartPositionRightToLeft() {
     if (product.SAFARI) {
-      // TODO(b/20733468): Disabled so we can get the rest of the Closure test
+      // TODO(user): Disabled so we can get the rest of the Closure test
       // suite running in a continuous build. Will investigate later.
       return;
     }

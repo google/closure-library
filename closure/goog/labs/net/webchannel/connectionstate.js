@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview This class manages the network connectivity state.
+ *
  */
 
 

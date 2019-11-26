@@ -80,13 +80,13 @@
  * Which will allow you to set your own .my-custom-namespace-hover,
  * .my-custom-namespace-selected CSS selectors.
  *
- * NOTE(user): it seems like an overkill to subclass goog.ui.Control instead of
+ * NOTE(goto): it seems like an overkill to subclass goog.ui.Control instead of
  * using a factory, but we wanted to make sure we had more control over the
  * events for future media implementations. Since we intent to use it in many
  * different places, it makes sense to have a more flexible design that lets us
  * control the inner workings of goog.ui.Control.
  *
- * TODO(user): implement, as needed, the Media specific state changes UI, such
+ * TODO(goto): implement, as needed, the Media specific state changes UI, such
  * as minimize/maximize buttons, expand/close buttons, etc.
  */
 
@@ -123,7 +123,7 @@ goog.ui.media.Media = function(dataModel, opt_renderer, opt_domHelper) {
   this.setDataModel(dataModel);
   this.setSupportedState(goog.ui.Component.State.OPENED, true);
   this.setSupportedState(goog.ui.Component.State.SELECTED, true);
-  // TODO(user): had to do this to for mouseDownHandler not to
+  // TODO(goto): had to do this to for mouseDownHandler not to
   // e.preventDefault(), because it was not allowing the event to reach the
   // flash player. figure out a better way to not e.preventDefault().
   this.setAllowTextSelection(true);
@@ -171,9 +171,9 @@ goog.ui.media.Media.prototype.getDataModel = function() {
  * The current common functionality shared by Medias is to have an outer frame
  * that gets highlighted on mouse hover.
  *
- * TODO(user): implement more common UI behavior, as needed.
+ * TODO(goto): implement more common UI behavior, as needed.
  *
- * NOTE(user): I am not enjoying how the subclasses are changing their state
+ * NOTE(goto): I am not enjoying how the subclasses are changing their state
  * through setState() ... maybe provide abstract methods like
  * goog.ui.media.MediaRenderer.prototype.preview = goog.abstractMethod;
  * goog.ui.media.MediaRenderer.prototype.play = goog.abstractMethod;
