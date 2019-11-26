@@ -54,7 +54,7 @@
  * Requires flash to actually work.
  *
  *
- * TODO(user): Support non flash users. Maybe show a link to the Flick set,
+ * TODO(goto): Support non flash users. Maybe show a link to the Flick set,
  * or fetch the data and rendering it using javascript (instead of a broken
  * 'You need to install flash' message).
  */
@@ -133,7 +133,7 @@ goog.ui.media.FlickrSet.flashUrl_ = goog.html.TrustedResourceUrl.fromConstant(
  *     document interaction.
  * @return {!goog.ui.media.Media} A Control binded to the FlickrSet renderer.
  * @throws exception in case `flickrSetUrl` is an invalid flickr set URL.
- * TODO(user): use {@link goog.ui.media.MediaModel} once it is checked in.
+ * TODO(goto): use {@link goog.ui.media.MediaModel} once it is checked in.
  */
 goog.ui.media.FlickrSet.newControl = function(dataModel, opt_domHelper) {
   var control = new goog.ui.media.Media(
@@ -170,7 +170,7 @@ goog.ui.media.FlickrSet.prototype.createDom = function(c) {
   var model =
       /** @type {goog.ui.media.FlickrSetModel} */ (control.getDataModel());
 
-  // TODO(user): find out what is the policy about hosting this SWF. figure out
+  // TODO(goto): find out what is the policy about hosting this SWF. figure out
   // if it works over https.
   var flash = new goog.ui.media.FlashObject(
       model.getPlayer().getTrustedResourceUrl(), control.getDomHelper());

@@ -291,7 +291,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
         case goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK:
           // Both FF & IE may lose directionality info. Save/restore it.
           // TODO(user): Does Safari also need this?
-          // TODO (gmark, jparent): This isn't ideal because it uses a string
+          // TODO (user): This isn't ideal because it uses a string
           // literal, so if the plugin name changes, it would break. We need a
           // better solution. See also other places in code that use
           // this.getPluginByClassId('Bidi').

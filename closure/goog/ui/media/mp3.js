@@ -125,7 +125,7 @@ goog.ui.media.Mp3.flashUrl_ =
  * Copied from http://go/markdownlite.js.
 
  *
- * NOTE(user): although it would be easier to use goog.string.endsWith('.mp3'),
+ * NOTE(goto): although it would be easier to use goog.string.endsWith('.mp3'),
  * in the future, we want to provide media inlining, which is basically getting
  * a text and replacing all mp3 references with an mp3 player, so it makes sense
  * to share the same regular expression to match everything.

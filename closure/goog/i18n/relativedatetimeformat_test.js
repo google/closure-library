@@ -161,7 +161,7 @@ const formatDirectionTestData = [
   new DirectionData('fr', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.SECOND, 'maintenant')
 ];
 
-// TODO(icu/12171): re-examine when ICU4J and CLDR data are updated.
+// TODO(user): re-examine when ICU4J and CLDR data are updated.
 const forcedNumericTestData = [
   // Special cases for MINUTE and HOUR, and SECOND != 0, forced numeric mode.
     new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 0.0, RelativeDateTimeFormat.Unit.SECOND, 'now'),

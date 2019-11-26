@@ -123,7 +123,7 @@ function verifyWindow(win, noreferrer, urlParam) {
 
 testSuite({
   shouldRunTests() {
-    // TODO(b/25455129): Edge has a flaky test failures around window.open.
+    // TODO(user): Edge has a flaky test failures around window.open.
     return !browser.isEdge();
   },
 

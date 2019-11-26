@@ -392,7 +392,7 @@ goog.editor.PluginImpl.prototype.execCommand = function(command, var_args) {
  * If custom event dispatching is needed, execCommand shoul be overriden
  * instead.
  *
- * TODO(b/111035839): This pattern makes accurate typing impossible.
+ * TODO(user): This pattern makes accurate typing impossible.
  *
  * @param {?} command `extends string` The command to execute.
  * @param {...?} var_args Any additional parameters needed to

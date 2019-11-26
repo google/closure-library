@@ -119,8 +119,6 @@ goog.i18n.uChar.RemoteNameFetcher.logger_ =
     goog.log.getLogger('goog.i18n.uChar.RemoteNameFetcher');
 
 
-
-
 /** @override */
 goog.i18n.uChar.RemoteNameFetcher.prototype.disposeInternal = function() {
   goog.i18n.uChar.RemoteNameFetcher.base(this, 'disposeInternal');
