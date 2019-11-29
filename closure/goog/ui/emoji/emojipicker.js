@@ -677,7 +677,7 @@ goog.ui.emoji.EmojiPicker.prototype.getCssClass = function() {
 goog.ui.emoji.EmojiPicker.prototype.getSelectedEmoji = function() {
   return this.urlPrefix_ ?
       new goog.ui.emoji.Emoji(
-          this.urlPrefix_ + this.selectedEmoji_.getId(),
+          this.urlPrefix_ + this.selectedEmoji_.getUrl(),
           this.selectedEmoji_.getId()) :
       this.selectedEmoji_;
 };
