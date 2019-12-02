@@ -1146,6 +1146,7 @@ goog.editor.plugins.BasicTextFormatter.prototype
  * selection, so the font tags produced by execCommand work properly.
  * See {@bug 1286408}.
  * @private
+ * @suppress {missingProperties}
  */
 goog.editor.plugins.BasicTextFormatter.prototype.removeFontSizeFromStyleAttrs_ =
     function() {
@@ -1588,6 +1589,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.beforeInsertListGecko_ =
  * @param {goog.dom.AbstractRange} range The range to get toolbar state for.
  * @return {string?} The selection block state.
  * @private
+ * @suppress {missingProperties}
  */
 goog.editor.plugins.BasicTextFormatter.getSelectionBlockState_ = function(
     range) {
