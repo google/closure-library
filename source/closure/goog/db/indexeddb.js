@@ -101,13 +101,13 @@ goog.db.IndexedDb.prototype.dispatchError_ = function(ev) {
 /**
  * Dispatches a wrapped version change event based on the given event.
  *
- * @param {Event} ev The version change event given to the underlying
- *     IDBDatabase.
+ * @param {!IDBVersionChangeEvent} ev The version change event given to the
+ *     underlying IDBDatabase.
  * @private
  */
 goog.db.IndexedDb.prototype.dispatchVersionChange_ = function(ev) {
-  this.dispatchEvent(
-      new goog.db.IndexedDb.VersionChangeEvent(ev.oldVersion, ev.newVersion));
+  this.dispatchEvent(new goog.db.IndexedDb.VersionChangeEvent(
+      ev.oldVersion, /** @type {number} */ (ev.newVersion)));
 };
 
 

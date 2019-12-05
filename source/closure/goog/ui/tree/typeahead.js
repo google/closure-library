@@ -232,7 +232,7 @@ goog.ui.tree.TypeAhead.prototype.jumpToLabel_ = function(typeAhead) {
     }
   }
 
-  // TODO(user): beep when no node is found
+  // TODO(annams): beep when no node is found
   return handled;
 };
 
@@ -287,7 +287,7 @@ goog.ui.tree.TypeAhead.prototype.jumpTo_ = function(offset) {
     }
   }
 
-  // TODO(user): beep when no node is found
+  // TODO(annams): beep when no node is found
   return handled;
 };
 

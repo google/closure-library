@@ -18,6 +18,7 @@
  * `goog.events.EventTarget`.
  *
  * WARNING: Do not use this class from outside goog.events package.
+ *
  */
 
 goog.provide('goog.events.ListenerMap');

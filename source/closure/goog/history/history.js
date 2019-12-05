@@ -502,7 +502,7 @@ goog.History.prototype.setEnabled = function(enable) {
       this.eventHandler_.listen(this.window_, 'pageshow', this.onShow_);
     }
 
-    // TODO(user): make HTML5 and invisible history work by listening to the
+    // TODO(goto): make HTML5 and invisible history work by listening to the
     // iframe # changes instead of the window.
     if (goog.History.isOnHashChangeSupported() && this.userVisible_) {
       this.eventHandler_.listen(

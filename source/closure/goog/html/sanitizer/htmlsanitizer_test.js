@@ -837,7 +837,7 @@ testSuite({
     });
   },
 
-  testCustomTagsAttributes() {
+  testAllowWhitelistedCustomElementsTags() {
     let html = '<my-custom-div>Testing</my-custom-div>';
     const safeHtml = '<span>Testing</span>';
     assertSanitizedHtml(html, safeHtml);
@@ -848,19 +848,31 @@ testSuite({
         html, expectedHtml,
         new Builder()
             .allowCssStyles()
-            .allowCustomElementTags(['my-cool-div'])
+            .allowCustomElementTag('my-cool-div')
+            .build());
+  },
+
+  testAllowWithelistedCustomElementsAttributes() {
+    let html =
+        '<my-div my-attr="yes" my-bool-attr not-whitelisted="no">Testing</my-div>';
+    const expectedHtml = '<my-div my-attr="yes" my-bool-attr>Testing</my-div>';
+    assertSanitizedHtml(
+        html, expectedHtml,
+        new Builder()
+            .allowCssStyles()
+            .allowCustomElementTag('my-div', ['my-attr', 'my-bool-attr'])
             .build());
   },
 
 
   testDisallowedCustomElementsWhitelistingTags() {
     assertThrows(() => {
-      new Builder().allowCustomElementTags(['script']).build();
+      new Builder().allowCustomElementTag('script').build();
     });
 
     // Reserved tag names.
     assertThrows(() => {
-      new Builder().allowCustomElementTags(['font-face']).build();
+      new Builder().allowCustomElementTag('font-face').build();
     });
   },
 

@@ -17,7 +17,7 @@
  * @fileoverview provides a reusable picasa album UI component given a public
  * picasa album URL.
  *
- * TODO(user): implement the javascript viewer, for users without flash. Get it
+ * TODO(goto): implement the javascript viewer, for users without flash. Get it
  * from the Gmail Picasa gadget.
  *
  * goog.ui.media.PicasaAlbum is actually a {@link goog.ui.ControlRenderer}, a

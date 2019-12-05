@@ -201,7 +201,7 @@ goog.inherits(goog.ui.media.VimeoModel, goog.ui.media.MediaModel);
  *
  * Copied from http://go/markdownlite.js
  *
- * TODO(user): add support to https.
+ * TODO(goto): add support to https.
  *
  * @type {RegExp}
  * @private

@@ -759,7 +759,7 @@ goog.net.CrossDomainRpc.sendResponse = function(
    *   automatically decode when you access it via location.hash or
    *   location.href.  So we encode it here and decode it in detectResponse_().
    *
-   * Note(*): IE actually does encode only space to %20 and decodes that
+   * Note(user): IE actually does encode only space to %20 and decodes that
    *   automatically when you do location.href or location.hash.
    */
   if (!goog.userAgent.EDGE_OR_IE) {

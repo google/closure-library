@@ -203,7 +203,7 @@ testSuite({
 
   testReconnectionDisabled() {
     // Construct the web socket and disable reconnection.
-    webSocket = new NetWebSocket(false);
+    webSocket = new NetWebSocket({autoReconnect: false});
 
     // Record how many times open is called.
     pr.set(webSocket, 'open', recordFunction(webSocket.open));
@@ -229,7 +229,8 @@ testSuite({
 
   testReconnectionWithFailureOnFirstOpen() {
     // Construct the web socket with a linear back-off.
-    webSocket = new NetWebSocket(true, linearBackOff);
+    webSocket = new NetWebSocket(
+        {autoReconnect: true, getNextReconnext: linearBackOff});
 
     // Record how many times open is called.
     pr.set(webSocket, 'open', recordFunction(webSocket.open));
@@ -281,7 +282,8 @@ testSuite({
 
   testReconnectionWithFailureAfterOpen() {
     // Construct the web socket with a linear back-off.
-    webSocket = new NetWebSocket(true, fibonacciBackOff);
+    webSocket = new NetWebSocket(
+        {autoReconnect: true, getNextReconnect: fibonacciBackOff});
 
     // Record how many times open is called.
     pr.set(webSocket, 'open', recordFunction(webSocket.open));

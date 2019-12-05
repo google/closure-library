@@ -21,7 +21,6 @@
  * running instance of a CSS Compiler to pass your CSS through.
  */
 
-
 goog.provide('goog.debug.DevCss');
 goog.provide('goog.debug.DevCss.UserAgent');
 

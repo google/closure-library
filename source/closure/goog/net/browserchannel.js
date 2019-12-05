@@ -726,7 +726,7 @@ goog.inherits(
 
 /**
  * Enum that identifies events for statistics that are interesting to track.
- * TODO(user) - Change name not to use Event or use EventTarget
+ * TODO(jonp) - Change name not to use Event or use EventTarget
  * @enum {number}
  */
 goog.net.BrowserChannel.Stat = {

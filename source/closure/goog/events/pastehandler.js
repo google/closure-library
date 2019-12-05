@@ -23,7 +23,7 @@
  * Known issue: will not detect paste events in FF2 if you pasted exactly the
  * same existing text.
  * Known issue: Opera + Mac doesn't work properly because of the meta key. We
- * can probably fix that. TODO(user): {@link KeyboardShortcutHandler} does not
+ * can probably fix that. TODO(goto): {@link KeyboardShortcutHandler} does not
  * work either very well with opera + mac. fix that.
  *
  * @see ../demos/pastehandler.html
@@ -308,7 +308,7 @@ goog.events.PasteHandler.prototype.dispatch_ = function(e) {
  * it fires e.keyCode = 17, which is the CTRL key code.
  * {@link http://www.quirksmode.org/js/keys.html}
  *
- * NOTE(user, pbarry): There is an interesting thing about (5): on Linux, (5)
+ * NOTE(goto, user): There is an interesting thing about (5): on Linux, (5)
  * pastes the last thing that you highlighted, not the last thing that you
  * ctrl+c'ed. This code will still generate a `PASTE` event though.
  *

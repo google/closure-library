@@ -634,7 +634,7 @@ goog.math.Integer.prototype.slowDivide_ = function(other) {
   }
 
 
-  // TODO(b/130639293): Calculate this more efficiently during the division.
+  // TODO(user): Calculate this more efficiently during the division.
   // This is kind of a waste since it isn't always needed, but it keeps the
   // API smooth. Since this is already a slow path it probably isn't a big deal.
   var remainder = this.subtract(res.multiply(other));

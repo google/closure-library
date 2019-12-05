@@ -14,6 +14,7 @@
 
 /**
  * Utilities intended for testing assertion functions.
+ *
  */
 
 goog.module('goog.testing.safe.assertionFailure');

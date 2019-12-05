@@ -112,7 +112,7 @@ goog.editor.BrowserFeature = {
 
   // Has a standards mode quirk where width=100% doesn't do the right thing,
   // but width=99% does.
-  // TODO(user|user): This should be fixable by less hacky means
+  // TODO(user): This should be fixable by less hacky means
   NEEDS_99_WIDTH_IN_STANDARDS_MODE: goog.userAgent.IE,
 
   // Whether keyboard events only reliably fire on the document.

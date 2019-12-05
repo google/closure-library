@@ -222,7 +222,7 @@ testSuite({
 
     // setting select as false doesn't actually remove the flash movie from
     // the DOM tree, which means that setting selected to true won't actually
-    // restart the movie. TODO(user): fix this.
+    // restart the movie. TODO(goto): fix this.
     flash = dom.getElementsByTagNameAndClass(
         TagName.DIV, FlashObject.CSS_CLASS, parent);
     assertEquals(1, flash.length);

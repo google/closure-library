@@ -15,6 +15,7 @@
 /**
  * @fileoverview A pool of forward channel requests to enable real-time
  * messaging from the client to server.
+ *
  */
 
 goog.module('goog.labs.net.webChannel.ForwardChannelRequestPool');

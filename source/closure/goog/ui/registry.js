@@ -35,7 +35,7 @@ goog.require('goog.dom.classlist');
  *     no default renderer was found.
  */
 goog.ui.registry.getDefaultRenderer = function(componentCtor) {
-  // TODO(b/141512323): This should probably be implemented with a `WeakMap`.
+  // TODO(user): This should probably be implemented with a `WeakMap`.
   // Locate the default renderer based on the constructor's unique ID.  If no
   // renderer is registered for this class, walk up the superClass_ chain.
   var key;

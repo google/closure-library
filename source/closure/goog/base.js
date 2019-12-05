@@ -828,8 +828,6 @@ goog.addDependency = function(relPath, provides, requires, opt_loadFlags) {
 };
 
 
-
-
 // NOTE(nnaze): The debug DOM loader was included in base.js as an original way
 // to do "debug-mode" development.  The dependency system can sometimes be
 // confusing, as can the debug DOM loader's asynchronous nature.
@@ -1556,7 +1554,7 @@ goog.getUid = function(obj) {
   // In Opera window.hasOwnProperty exists but always returns false so we avoid
   // using it. As a consequence the unique ID generated for BaseClass.prototype
   // and SubClass.prototype will be the same.
-  // TODO(b/141512323): UUIDs are broken for ctors with class-side inheritance.
+  // TODO(user): UUIDs are broken for ctors with class-side inheritance.
   return obj[goog.UID_PROPERTY_] ||
       (obj[goog.UID_PROPERTY_] = ++goog.uidCounter_);
 };
@@ -2599,8 +2597,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     /** @private {string} */
     this.transpilationTarget_ = goog.TRANSPILE_TO_LANGUAGE;
   };
-
-
   /**
    * Returns a newly created map from language mode string to a boolean
    * indicating whether transpilation should be done for that mode as well as

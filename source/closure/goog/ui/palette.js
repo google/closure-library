@@ -22,11 +22,13 @@
 goog.provide('goog.ui.Palette');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.math.Size');
+goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.PaletteRenderer');
@@ -304,10 +306,10 @@ goog.ui.Palette.prototype.handleKeyEvent = function(e) {
 
   // User hit HOME or END; move highlight.
   if (e.keyCode == goog.events.KeyCodes.HOME) {
-    this.setHighlightedIndex(0);
+    this.setHighlightedIndexInternal_(0, true /* scrollIntoView */);
     return true;
   } else if (e.keyCode == goog.events.KeyCodes.END) {
-    this.setHighlightedIndex(numItems - 1);
+    this.setHighlightedIndexInternal_(numItems - 1, true /* scrollIntoView */);
     return true;
   }
 
@@ -323,7 +325,8 @@ goog.ui.Palette.prototype.handleKeyEvent = function(e) {
       if (highlightedIndex == -1 || highlightedIndex == 0) {
         highlightedIndex = numItems;
       }
-      this.setHighlightedIndex(highlightedIndex - 1);
+      this.setHighlightedIndexInternal_(
+          highlightedIndex - 1, true /* scrollIntoView */);
       e.preventDefault();
       return true;
       break;
@@ -333,7 +336,8 @@ goog.ui.Palette.prototype.handleKeyEvent = function(e) {
       if (highlightedIndex == numItems - 1) {
         highlightedIndex = -1;
       }
-      this.setHighlightedIndex(highlightedIndex + 1);
+      this.setHighlightedIndexInternal_(
+          highlightedIndex + 1, true /* scrollIntoView */);
       e.preventDefault();
       return true;
       break;
@@ -343,7 +347,8 @@ goog.ui.Palette.prototype.handleKeyEvent = function(e) {
         highlightedIndex = numItems + numColumns - 1;
       }
       if (highlightedIndex >= numColumns) {
-        this.setHighlightedIndex(highlightedIndex - numColumns);
+        this.setHighlightedIndexInternal_(
+            highlightedIndex - numColumns, true /* scrollIntoView */);
         e.preventDefault();
         return true;
       }
@@ -354,7 +359,8 @@ goog.ui.Palette.prototype.handleKeyEvent = function(e) {
         highlightedIndex = -numColumns;
       }
       if (highlightedIndex < numItems - numColumns) {
-        this.setHighlightedIndex(highlightedIndex + numColumns);
+        this.setHighlightedIndexInternal_(
+            highlightedIndex + numColumns, true /* scrollIntoView */);
         e.preventDefault();
         return true;
       }
@@ -448,11 +454,32 @@ goog.ui.Palette.prototype.getHighlightedCellElement_ = function() {
  * @param {number} index 0-based index of the item to highlight.
  */
 goog.ui.Palette.prototype.setHighlightedIndex = function(index) {
+  this.setHighlightedIndexInternal_(index, false /* scrollIntoView */);
+};
+
+
+/**
+ * @param {number} index 0-based index of the item to highlight.
+ * @param {boolean} scrollIntoView Whether to bring the highlighted item into
+ *     view by potentially scrolling the palette's container. This has no effect
+ *     if the palette is not in a scrollbale container.
+ * @private
+ */
+goog.ui.Palette.prototype.setHighlightedIndexInternal_ = function(
+    index, scrollIntoView) {
   if (index != this.highlightedIndex_) {
     this.highlightIndex_(this.highlightedIndex_, false);
     this.lastHighlightedIndex_ = this.highlightedIndex_;
     this.highlightedIndex_ = index;
     this.highlightIndex_(index, true);
+    if (scrollIntoView) {
+      var highlightedElement = goog.asserts.assert(
+          this.getHighlightedCellElement_(),
+          'Highlighted item must exist to scroll to make it visible in ' +
+              'container. Please check that index is non-negative and valid.');
+      goog.style.scrollIntoContainerView(
+          highlightedElement, this.getParent().getElementStrict());
+    }
     this.dispatchEvent(goog.ui.Palette.EventType.AFTER_HIGHLIGHT);
   }
 };

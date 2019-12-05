@@ -29,8 +29,12 @@ goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.functions');
 goog.require('goog.object');
+goog.require('goog.test_module');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
+
+
+const earlyTestModuleGet = goog.module.get('goog.test_module');
 
 var stubs = new goog.testing.PropertyReplacer();
 var originalGoogBind = goog.bind;
@@ -770,4 +774,43 @@ function testBindWithNullObj() {
   if (Function.prototype.bind) {
     assertEquals(foo, getFoo.bind(null)().foo);
   }
+}
+
+
+// Validate the behavior of goog.module when used from traditional files.
+function testGoogModuleGet() {
+  // assert that goog.module doesn't modify the global namespace
+  assertUndefined(
+      'module failed to protect global namespace: ' +
+          'goog.test_module_dep',
+      goog.test_module_dep);
+
+  // assert that goog.module with goog.module.declareLegacyNamespace is
+  // present.
+  assertNotUndefined(
+      'module failed to declare global namespace: ' +
+          'goog.test_module',
+      goog.test_module);
+
+  // assert that a require'd goog.module is available immediately after the
+  // goog.require call.
+  assertNotUndefined(
+      'module failed to protect global namespace: ' +
+          'goog.test_module_dep',
+      earlyTestModuleGet);
+
+  // assert that an non-existent module request doesn't throw and returns
+  // null.
+  assertEquals(null, goog.module.get('unrequired.module.id'));
+
+  // Validate the module exports
+  const testModuleExports = goog.module.get('goog.test_module');
+  assertTrue(goog.isFunction(testModuleExports));
+
+  // Test that any escaping of </script> in test files is correct. Escape the
+  // / in </script> here so that any such code does not affect it here.
+  assertEquals('<\/script>', testModuleExports.CLOSING_SCRIPT_TAG);
+
+  // Validate that the module exports object has not changed
+  assertEquals(earlyTestModuleGet, testModuleExports);
 }

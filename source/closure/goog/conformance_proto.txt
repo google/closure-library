@@ -5,7 +5,6 @@
 # your project and extend the rules to disable them or to add their whitelists.
 
 
-
 ### Platform restrictions ###
 
 requirement: {
@@ -43,7 +42,6 @@ requirement: {
   type: CUSTOM
   java_class: 'com.google.javascript.jscomp.ConformanceRules$BanGlobalVars'
   error_message: 'Global declarations are not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#globalVars'
-
   whitelist_regexp: '.+/closure/goog/base.js' # global 'goog'
   whitelist_regexp: '.+/closure/goog/labs/testing/' # global matchers, etc
   whitelist_regexp: '.+/closure/goog/locale/locale.js' # dumb api
@@ -114,7 +112,6 @@ requirement: {
   whitelist_regexp: '.+/closure/goog/json/json.js' # used in goog.json.parse
   whitelist_regexp: '.+/closure/goog/module/loader.js'
   whitelist_regexp: '.+/closure/goog/module/moduleloader.js'
-
 }
 
 requirement: {
@@ -483,8 +480,6 @@ requirement: {
 #
 # These rules allow projects to have compile-time errors for legacyconversions
 # functions and to progressively move away from them by using the whitelist.
-
-
 
 ### Closure library restrictions ###
 
