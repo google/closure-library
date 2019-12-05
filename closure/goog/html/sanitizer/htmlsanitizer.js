@@ -405,7 +405,31 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowDataAttributes =
  */
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCustomElementTags =
     function(customElementTagWhitelist) {
-  goog.array.extend(this.customElementTagWhitelist_, customElementTagWhitelist);
+  goog.array.forEach(customElementTagWhitelist, function(tag) {
+    this.allowCustomElementTag(tag);
+  }, this);
+  return this;
+};
+
+/**
+ * Extends the list of allowed custom element tags.
+ * @param {string} customElementTagName
+ * @param {!Array<string>=} customElementAttributes
+ * @return {!goog.html.sanitizer.HtmlSanitizer.Builder}
+ */
+goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCustomElementTag =
+    function(customElementTagName, customElementAttributes) {
+  this.customElementTagWhitelist_.push(customElementTagName);
+  if (customElementAttributes) {
+    goog.array.forEach(customElementAttributes, function(attr) {
+      var handlerName = goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(
+          customElementTagName, attr);
+      this.attributeWhitelist_[handlerName] =
+          /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
+          (goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
+      this.attributeOverrideList_[handlerName] = true;
+    }, this);
+  }
   return this;
 };
 
