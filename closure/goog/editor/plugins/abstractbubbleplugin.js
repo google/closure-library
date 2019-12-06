@@ -64,6 +64,7 @@ goog.editor.plugins.AbstractBubblePlugin = function() {
    * @protected
    */
   this.eventRegister = new goog.events.EventHandler(this);
+  this.registerDisposable(this.eventRegister);
 
   /**
    * Instance factory function that creates a bubble UI component.  If set to a
