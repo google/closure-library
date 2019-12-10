@@ -23,7 +23,6 @@ goog.module('goog.labs.net.webChannel.ForwardChannelRequestPool');
 goog.module.declareLegacyNamespace();
 
 var ChannelRequest = goog.require('goog.labs.net.webChannel.ChannelRequest');
-var Set = goog.require('goog.structs.Set');
 var Wire = goog.require('goog.labs.net.webChannel.Wire');
 var array = goog.require('goog.array');
 var googString = goog.require('goog.string');
@@ -149,7 +148,7 @@ ForwardChannelRequestPool.prototype.isFull = function() {
   }
 
   if (this.requestPool_) {
-    return this.requestPool_.getCount() >= this.maxSize_;
+    return this.requestPool_.size >= this.maxSize_;
   }
 
   return false;
@@ -173,7 +172,7 @@ ForwardChannelRequestPool.prototype.getRequestCount = function() {
   }
 
   if (this.requestPool_) {
-    return this.requestPool_.getCount();
+    return this.requestPool_.size;
   }
 
   return 0;
@@ -190,7 +189,7 @@ ForwardChannelRequestPool.prototype.hasRequest = function(req) {
   }
 
   if (this.requestPool_) {
-    return this.requestPool_.contains(req);
+    return this.requestPool_.has(req);
   }
 
   return false;
@@ -223,8 +222,8 @@ ForwardChannelRequestPool.prototype.removeRequest = function(req) {
     return true;
   }
 
-  if (this.requestPool_ && this.requestPool_.contains(req)) {
-    this.requestPool_.remove(req);
+  if (this.requestPool_ && this.requestPool_.has(req)) {
+    this.requestPool_.delete(req);
     return true;
   }
 
@@ -245,10 +244,10 @@ ForwardChannelRequestPool.prototype.cancel = function() {
     return;
   }
 
-  if (this.requestPool_ && !this.requestPool_.isEmpty()) {
-    array.forEach(this.requestPool_.getValues(), function(val) {
+  if (this.requestPool_ && this.requestPool_.size !== 0) {
+    for (const val of this.requestPool_.values()) {
       val.cancel();
-    });
+    }
     this.requestPool_.clear();
   }
 };
@@ -259,7 +258,7 @@ ForwardChannelRequestPool.prototype.cancel = function() {
  */
 ForwardChannelRequestPool.prototype.hasPendingRequest = function() {
   return (this.request_ != null) ||
-      (this.requestPool_ != null && !this.requestPool_.isEmpty());
+      (this.requestPool_ != null && this.requestPool_.size !== 0);
 };
 
 
@@ -272,11 +271,11 @@ ForwardChannelRequestPool.prototype.getPendingMessages = function() {
     return this.pendingMessages_.concat(this.request_.getPendingMessages());
   }
 
-  if (this.requestPool_ != null && !this.requestPool_.isEmpty()) {
-    var result = this.pendingMessages_;
-    array.forEach(this.requestPool_.getValues(), function(val) {
+  if (this.requestPool_ != null && this.requestPool_.size !== 0) {
+    let result = this.pendingMessages_;
+    for (const val of this.requestPool_.values()) {
       result = result.concat(val.getPendingMessages());
-    });
+    }
     return result;
   }
 
@@ -318,11 +317,11 @@ ForwardChannelRequestPool.prototype.forceComplete = function(onComplete) {
     return true;
   }
 
-  if (this.requestPool_ && !this.requestPool_.isEmpty()) {
-    array.forEach(this.requestPool_.getValues(), function(val) {
+  if (this.requestPool_ && this.requestPool_.size !== 0) {
+    for (const val of this.requestPool_.values()) {
       val.cancel();
       onComplete(val);
-    });
+    }
     return true;
   }
 
