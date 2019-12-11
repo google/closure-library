@@ -1250,7 +1250,7 @@ goog.net.IframeIo.prototype.createIframe_ = function() {
 goog.net.IframeIo.prototype.appendIframe_ = function() {
   goog.dom.getDomHelper(this.form_)
       .getDocument()
-      .body.appendChild(this.iframe_);
+      .body.appendChild(/** @type {!Node} */ (this.iframe_));
 };
 
 

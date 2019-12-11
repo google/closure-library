@@ -174,7 +174,7 @@ goog.graphics.SvgGraphics.prototype.setElementAttributes = function(
  */
 goog.graphics.SvgGraphics.prototype.append_ = function(element, opt_group) {
   var parent = opt_group || this.canvasElement;
-  parent.getElement().appendChild(element.getElement());
+  parent.getElement().appendChild(/** @type {!Node} */ (element.getElement()));
 };
 
 
@@ -783,7 +783,7 @@ goog.graphics.SvgGraphics.prototype.removeDef = function(defKey) {
   var id = this.getDef(defKey);
   if (id) {
     var element = this.dom_.getElement(id);
-    this.defsElement_.removeChild(element);
+    this.defsElement_.removeChild(/** @type {!Node} */ (element));
     delete this.defs_[defKey];
   }
 };

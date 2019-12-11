@@ -181,7 +181,7 @@ goog.ui.ProgressBar.prototype.decorateInternal = function(element) {
       null, goog.getCssName('progress-bar-thumb'), this.getElement())[0];
   if (!thumb) {
     thumb = this.createThumb_();
-    this.getElement().appendChild(thumb);
+    this.getElement().appendChild(/** @type {!Node} */ (thumb));
   }
   this.thumbElement_ = /** @type {!HTMLDivElement} */ (thumb);
 };

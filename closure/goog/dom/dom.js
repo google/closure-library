@@ -1259,7 +1259,8 @@ goog.dom.insertChildAt = function(parent, child, index) {
   // will append the child at the end of the list of children.
   goog.asserts.assert(
       parent != null, 'goog.dom.insertChildAt expects a non-null parent');
-  parent.insertBefore(child, parent.childNodes[index] || null);
+  parent.insertBefore(
+      /** @type {!Node} */ (child), parent.childNodes[index] || null);
 };
 
 

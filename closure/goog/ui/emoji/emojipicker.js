@@ -611,7 +611,7 @@ goog.ui.emoji.EmojiPicker.prototype.enterDocument = function() {
       this.tabPane_.addPage(
           new goog.ui.TabPane.TabPage(pageElement, title, this.getDomHelper()));
     } else {
-      this.getElement().appendChild(pageElement);
+      this.getElement().appendChild(/** @type {!Node} */ (pageElement));
     }
   }
 
@@ -788,7 +788,7 @@ goog.ui.emoji.EmojiPicker.prototype.loadPage_ = function(index) {
       this.tabPane_.setSelectedIndex(index);
     } else {
       var el = this.getElement();
-      el.appendChild(pageElement);
+      el.appendChild(/** @type {!Node} */ (pageElement));
     }
     if (oldPage) {
       oldPage.dispose();

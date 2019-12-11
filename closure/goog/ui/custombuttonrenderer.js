@@ -194,7 +194,8 @@ goog.ui.CustomButtonRenderer.prototype.decorate = function(control, element) {
   // Create the buttom dom if it has not been created.
   if (!this.hasBoxStructure(button, element)) {
     element.appendChild(
-        this.createButton(element.childNodes, button.getDomHelper()));
+        /** @type {!Node} */ (
+            this.createButton(element.childNodes, button.getDomHelper())));
   }
 
   goog.dom.classlist.addAll(
