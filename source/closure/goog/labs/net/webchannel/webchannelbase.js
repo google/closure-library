@@ -57,6 +57,23 @@ var requestStats = goog.labs.net.webChannel.requestStats;
 
 var httpCors = goog.module.get('goog.net.rpc.HttpCors');
 
+/**
+ * Gets an internal channel parameter in a type-safe way.
+ *
+ * @param {string} paramName the key of the parameter to fetch.
+ * @param {!T} defaultValue the default value to return
+ * @param {!goog.net.WebChannel.Options=} options Configuration for the
+ *        WebChannel instance.
+ * @return {T}
+ * @template T
+ */
+function getInternalChannelParam(paramName, defaultValue, options) {
+  if (!options || !options.internalChannelParams) {
+    return defaultValue;
+  }
+  return /** @type {T} */ (options.internalChannelParams[paramName]) ||
+      defaultValue;
+}
 
 /**
  * This WebChannel implementation is branched off goog.net.BrowserChannel
@@ -199,8 +216,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * Whether to fail forward-channel requests after one try or a few tries.
    * @private {boolean}
    */
-  this.failFast_ =
-      !!goog.getObjectByName('internalChannelParams.failFast', opt_options);
+  this.failFast_ = getInternalChannelParam('failFast', false, opt_options);
 
   /**
    * The handler that receive callbacks for state changes and data.
@@ -297,9 +313,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {number}
    */
   this.baseRetryDelayMs_ =
-      goog.getObjectByName(
-          'internalChannelParams.baseRetryDelayMs', opt_options) ||
-      5 * 1000;
+      getInternalChannelParam('baseRetryDelayMs', 5 * 1000, opt_options);
 
   /**
    * A random time between 0 and this number of MS is added to the
@@ -307,9 +321,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {number}
    */
   this.retryDelaySeedMs_ =
-      goog.getObjectByName(
-          'internalChannelParams.retryDelaySeedMs', opt_options) ||
-      10 * 1000;
+      getInternalChannelParam('retryDelaySeedMs', 10 * 1000, opt_options);
 
   /**
    * Maximum number of attempts to connect to the server for forward channel
@@ -317,20 +329,15 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {number}
    */
   this.forwardChannelMaxRetries_ =
-      goog.getObjectByName(
-          'internalChannelParams.forwardChannelMaxRetries', opt_options) ||
-      2;
+      getInternalChannelParam('forwardChannelMaxRetries', 2, opt_options);
 
   /**
    * The timeout in milliseconds for a forward channel request. Defaults to 20
    * seconds. Note that part of this timeout can be randomized.
    * @private {number}
    */
-  this.forwardChannelRequestTimeoutMs_ =
-      goog.getObjectByName(
-          'internalChannelParams.forwardChannelRequestTimeoutMs',
-          opt_options) ||
-      20 * 1000;
+  this.forwardChannelRequestTimeoutMs_ = getInternalChannelParam(
+      'forwardChannelRequestTimeoutMs', 20 * 1000, opt_options);
 
   /**
    * The custom factory used to create XMLHttpRequest objects.
