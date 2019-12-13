@@ -680,7 +680,7 @@ goog.ui.emoji.EmojiPicker.prototype.getSelectedEmoji = function() {
                  this.urlPrefix_ + this.selectedEmoji_.getUrl(),
                  this.selectedEmoji_.getId()) :
              this.selectedEmoji_;
-
+};
 
 /**
  * Returns the number of emoji groups in this picker.
