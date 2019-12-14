@@ -698,7 +698,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.setTabbable = function(
 goog.editor.plugins.AbstractBubblePlugin.prototype.setupLink = function(
     link, linkId, opt_container) {
   if (opt_container) {
-    opt_container.appendChild(link);
+    opt_container.appendChild(/** @type {!Node} */ (link));
   } else {
     var oldLink = this.dom_.getElement(linkId);
     if (oldLink) {

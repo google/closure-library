@@ -159,7 +159,7 @@ goog.ui.Ratings.prototype.decorateInternal = function(el) {
   select.style.display = 'none';
   this.attachedFormField_ = /** @type {HTMLSelectElement} */ (select);
   this.createDom();
-  el.insertBefore(this.getElement(), select);
+  el.insertBefore(/** @type {!Node} */ (this.getElement()), select);
 };
 
 

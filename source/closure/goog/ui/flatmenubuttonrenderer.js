@@ -133,7 +133,8 @@ goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
       '*', goog.getCssName(this.getCssClass(), 'caption'), element)[0];
   if (!captionElem) {
     element.appendChild(
-        this.createCaption(element.childNodes, button.getDomHelper()));
+        /** @type {!Node} */ (
+            this.createCaption(element.childNodes, button.getDomHelper())));
   }
 
   // Add the dropdown icon if it's not already there.

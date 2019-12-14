@@ -293,13 +293,14 @@ goog.ui.TabPane.prototype.addPage = function(page, opt_index) {
     index = opt_index;
     this.pages_.splice(index, 0, page);
     this.elButtonBar_.insertBefore(
-        page.elTitle_, this.elButtonBar_.childNodes[index]);
+        /** @type {!Node} */ (page.elTitle_),
+        this.elButtonBar_.childNodes[index]);
   }
 
   // Append page to end
   else {
     this.pages_.push(page);
-    this.elButtonBar_.appendChild(page.elTitle_);
+    this.elButtonBar_.appendChild(/** @type {!Node} */ (page.elTitle_));
   }
 
   page.setParent_(this, index);
@@ -307,13 +308,12 @@ goog.ui.TabPane.prototype.addPage = function(page, opt_index) {
   // Select first page and fire change event
   if (!this.selected_) {
     this.selected_ = page;
-    this.dispatchEvent(
-        new goog.ui.TabPaneEvent(
-            goog.ui.TabPane.Events.CHANGE, this, this.selected_));
+    this.dispatchEvent(new goog.ui.TabPaneEvent(
+        goog.ui.TabPane.Events.CHANGE, this, this.selected_));
   }
 
   // Move page content to the tab pane and update visibility.
-  this.elContent_.appendChild(page.elContent_);
+  this.elContent_.appendChild(/** @type {!Node} */ (page.elContent_));
   page.setVisible_(page == this.selected_);
 
   // Update index for following pages

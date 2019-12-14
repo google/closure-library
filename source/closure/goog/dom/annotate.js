@@ -137,7 +137,7 @@ goog.dom.annotate.annotateTermsInNode_ = function(
       while ((nodeToInsert = tempNode.firstChild) != null) {
         // Each parentNode.insertBefore call removes the inserted node from
         // tempNode's list of children.
-        parentNode.insertBefore(nodeToInsert, node);
+        parentNode.insertBefore(/** @type {!Node} */ (nodeToInsert), node);
       }
 
       parentNode.removeChild(node);

@@ -237,7 +237,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
         cb();
         cb = null;
       };
-      document.documentElement.appendChild(script);
+      document.documentElement.appendChild(/** @type {!Node} */ (script));
     };
   }
   // Fall back to setTimeout with 0. In browsers this creates a delay of 5ms

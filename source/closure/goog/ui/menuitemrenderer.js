@@ -147,7 +147,8 @@ goog.ui.MenuItemRenderer.prototype.decorate = function(item, element) {
   goog.asserts.assert(element);
   if (!this.hasContentStructure(element)) {
     element.appendChild(
-        this.createContent(element.childNodes, item.getDomHelper()));
+        /** @type {!Node} */ (
+            this.createContent(element.childNodes, item.getDomHelper())));
   }
   if (goog.dom.classlist.contains(element, goog.getCssName('goog-option'))) {
     (/** @type {goog.ui.MenuItem} */ (item)).setCheckable(true);
@@ -288,7 +289,8 @@ goog.ui.MenuItemRenderer.prototype.setEnableCheckBoxStructure = function(
           contentElement.firstChild || null);
     } else {
       // Remove checkbox structure.
-      contentElement.removeChild(contentElement.firstChild);
+      contentElement.removeChild(
+          /** @type {!Node} */ (contentElement.firstChild));
     }
   }
 };
