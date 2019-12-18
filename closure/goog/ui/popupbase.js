@@ -809,6 +809,10 @@ goog.ui.PopupBase.prototype.onDocumentBlur_ = function(e) {
     return;
   }
 
+  if (this.isOrWithinAutoHidePartner_(activeElement)) {
+    return;
+  }
+
   var doc = goog.dom.getOwnerDocument(this.element_);
 
   // Ignore blur events if the active element is still inside the popup or if
