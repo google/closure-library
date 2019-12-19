@@ -23,7 +23,6 @@ goog.require('goog.color');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.MenuButtonRenderer');
-goog.require('goog.userAgent');
 
 
 
@@ -121,10 +120,7 @@ goog.ui.ColorMenuButtonRenderer.setCaptionValue = function(caption, value) {
         goog.color.parse(strValue).hex :
         null;
 
-    // Stupid IE6/7 doesn't do transparent borders.
-    // TODO(attila): Add user-agent version check when IE8 comes out...
-    caption.firstChild.style.borderBottomColor =
-        hexColor || (goog.userAgent.IE ? '' : 'transparent');
+    caption.firstChild.style.borderBottomColor = hexColor || 'transparent';
   }
 };
 

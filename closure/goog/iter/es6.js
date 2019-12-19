@@ -156,13 +156,6 @@ class ShimGoogIterator extends GoogIterator {
   }
 
   /** @override */
-  __iterator__() {
-    // TODO(sdh): this seems ridiculous, but the compiler complains
-    // that it's not implemented if we don't have it.
-    return super.__iterator__();
-  }
-
-  /** @override */
   next() {
     const result = this.iter_.next();
     if (result.done) throw StopIteration;

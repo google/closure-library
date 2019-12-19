@@ -42,10 +42,9 @@ const util = goog.require('goog.labs.userAgent.util');
 // behavior that interacts with page load detection.
 goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS = 500;
 
-// IE before version 6 will always be border box in compat mode.
-const isBorderBox = googDom.isCss1CompatMode() ?
-    (userAgent.IE && !userAgent.isVersionOrHigher('6')) :
-    true;
+const isBorderBox = !googDom.isCss1CompatMode();
+// IE9 and below throw an error if provided a unit other than 'px'.
+const crashesOnBadUnits = userAgent.IE && !userAgent.isVersionOrHigher('10');
 const EPSILON = 2;
 let expectedFailures;
 const $ = googDom.getElement;
@@ -388,11 +387,11 @@ testSuite({
     assertEquals('10%', el.style.left);
     assertEquals('25%', el.style.top);
 
-    // ignores stupid units
+    // ignores bad units
     googStyle.setPosition(el, 0, 0);
-    // TODO(user): IE errors if you set these values.  Should we make setStyle
-    // catch these?  Or leave it up to the app.  Fixing the tests for now.
-    // goog.style.setPosition(el, '10rainbows', '25rainbows');
+    if (!crashesOnBadUnits) {
+      googStyle.setPosition(el, '10rainbows', '25rainbows');
+    }
     assertEquals('0px', el.style.left);
     assertEquals('0px', el.style.top);
 
@@ -727,11 +726,11 @@ testSuite({
     assertEquals('10%', el.style.width);
     assertEquals('25%', el.style.height);
 
-    // ignores stupid units
+    // ignores bad units
     googStyle.setSize(el, 0, 0);
-    // TODO(user): IE errors if you set these values.  Should we make setStyle
-    // catch these?  Or leave it up to the app.  Fixing the tests for now.
-    // goog.style.setSize(el, '10rainbows', '25rainbows');
+    if (!crashesOnBadUnits) {
+      googStyle.setSize(el, '10rainbows', '25rainbows');
+    }
     assertEquals('0px', el.style.width);
     assertEquals('0px', el.style.height);
 
