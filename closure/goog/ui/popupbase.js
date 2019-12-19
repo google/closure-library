@@ -809,10 +809,6 @@ goog.ui.PopupBase.prototype.onDocumentBlur_ = function(e) {
     return;
   }
 
-  if (this.isOrWithinAutoHidePartner_(activeElement)) {
-    return;
-  }
-
   var doc = goog.dom.getOwnerDocument(this.element_);
 
   // Ignore blur events if the active element is still inside the popup or if
@@ -822,6 +818,10 @@ goog.ui.PopupBase.prototype.onDocumentBlur_ = function(e) {
     var activeElement = doc.activeElement;
     if (!activeElement || goog.dom.contains(this.element_, activeElement) ||
         activeElement.tagName == goog.dom.TagName.BODY) {
+      return;
+    }
+
+    if (this.isOrWithinAutoHidePartner_(activeElement)) {
       return;
     }
 
