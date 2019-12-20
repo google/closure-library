@@ -25,7 +25,7 @@ const functions = goog.require('goog.functions');
 const googString = goog.require('goog.string');
 const testSuite = goog.require('goog.testing.testSuite');
 const testingEvents = goog.require('goog.testing.events');
-/** @supress {extraRequire} */
+/** @suppress {extraRequire} */
 const userAgent = goog.require('goog.userAgent');
 
 let log;
