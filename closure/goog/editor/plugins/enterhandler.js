@@ -631,6 +631,22 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionW3C_ =
   return goog.editor.range.getDeepEndPoint(range, true);
 };
 
+/**
+ * Checks Whether the selection range start from beginning.
+ * @param {Node} node the element or text node the range starts in.
+ * @param {Node} baseNode the container element.
+ * @return {boolean} Whether the selection range start from beginning.
+ * @private
+ */
+goog.editor.plugins.EnterHandler.isStartFromBeginning_ = function(node, baseNode) {
+  while (node && node.nodeName != goog.dom.TagName.BODY && node != baseNode) {
+    if (node.previousSibling) {
+      return false;
+    }
+    node = node.parentNode;
+  }
+  return true;
+};
 
 /**
  * Deletes the contents of the selection from the DOM.
@@ -655,16 +671,22 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
     var isPartialEnd = !isInOneContainer &&
         goog.editor.plugins.EnterHandler.isPartialEndW3c_(range);
 
+    var isStartFromBeginning =
+        goog.editor.plugins.EnterHandler.isStartFromBeginning_(
+            range.getStartNode(), baseNode);
+
     // Remove The range contents, and ensure the correct content stays selected.
     range.removeContents();
     var node = nodeOffset.findTargetNode(baseNode);
     if (node) {
       range = goog.dom.Range.createCaret(node, rangeOffset);
     } else {
-      // This occurs when the node that would have been referenced has now been
-      // deleted and there are no other nodes in the baseNode. Thus need to
-      // set the caret to the end of the base node.
-      range = goog.dom.Range.createCaret(baseNode, baseNode.childNodes.length);
+      // when the node that would have been referenced has now been deleted and
+      // there are no other nodes in the baseNode,  Thus need to set the caret
+      // to the end of the base node. If selection range start from beginning,
+      // set the caret to the start of the base node.
+      var pos = isStartFromBeginning ? 0 : baseNode.childNodes.length;
+      range = goog.dom.Range.createCaret(baseNode, pos);
       reselect = false;
     }
     range.select();
