@@ -649,6 +649,8 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
     var isInOneContainer =
         goog.editor.plugins.EnterHandler.isInOneContainerW3c_(range);
 
+    // Whether the selection starts in a container.
+    var isPartialStart = !isInOneContainer && range.getStartOffset() != 0;
     // Whether the selection ends in a container it doesn't fully select.
     var isPartialEnd = !isInOneContainer &&
         goog.editor.plugins.EnterHandler.isPartialEndW3c_(range);
@@ -683,7 +685,7 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
       }
     }
 
-    if (isPartialEnd) {
+    if (isPartialStart && isPartialEnd) {
       /*
        This code handles the following, where | is the cursor:
          <div>a|b</div><div>c|d</div>
