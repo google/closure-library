@@ -757,6 +757,21 @@ goog.editor.plugins.EnterHandler.isInOneContainerW3c_ = function(range) {
 goog.editor.plugins.EnterHandler.isPartialEndW3c_ = function(range) {
   var endContainer = range.getEndNode();
   var endOffset = range.getEndOffset();
+  // Since the range object is different for each browser,
+  // Normalize range using previousSibling or parentNode of
+  // endContainer, when endOffset is 0.
+  while (endOffset == 0 && endContainer) {
+    if (endContainer.previousSibling) {
+      endContainer = endContainer.previousSibling;
+      endOffset = goog.editor.node.getLength(endContainer);
+    } else if (endContainer.parentNode) {
+      endContainer = endContainer.parentNode;
+      endOffset = 0;
+    } else {
+      break;
+    }
+  }
+
   var node = endContainer;
   if (goog.editor.style.isContainer(node)) {
     var child = node.childNodes[endOffset];
