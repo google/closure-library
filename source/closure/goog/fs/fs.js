@@ -160,7 +160,7 @@ goog.fs.getBlob = goog.fs.blob.getBlob;
  * TODO(user): Update references to use goog.fs.blob.getBlobWithProperties
  * instead.
  *
- * @param {Array<string|!Blob>} parts The values that will make up the
+ * @param {!Array<string|!Blob|!ArrayBuffer>} parts The values that will make up
  *     resulting blob.
  * @param {string=} opt_type The MIME type of the Blob.
  * @param {string=} opt_endings Specifies how strings containing newlines are to

@@ -599,7 +599,7 @@ See the COPYING file for details.
     t1rtl.getChildAt(3).setEnabled(false);
     t1rtl.addChild(new goog.ui.ToolbarButton('YetAnotherButton'), true);
     // For reasons unknown, on FF2, we have to inject an &nbsp; character into
-    // the icon div for RTL positioning to work.  FF2 BiDi sucks!
+    // the icon div for RTL positioning to work.
     var rtlToggleButton = new goog.ui.ToolbarToggleButton(goog.dom.createDom(
         goog.dom.TagName.DIV, 'icon goog-edit-bold', '\u00A0'));
     rtlToggleButton.setChecked(true);

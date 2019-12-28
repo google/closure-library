@@ -1,16 +1,8 @@
-// Copyright 2006 The Closure Library Authors. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS-IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/**
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /**
  * @fileoverview Bootstrap for the Google JS Library (Closure).
@@ -102,52 +94,6 @@ goog.global.CLOSURE_UNCOMPILED_DEFINES;
  * @type {Object<string, (string|number|boolean)>|undefined}
  */
 goog.global.CLOSURE_DEFINES;
-
-
-/**
- * Returns true if the specified value is not undefined.
- *
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is defined.
- * @deprecated Use `val !== undefined` instead.
- */
-goog.isDef = function(val) {
-  // void 0 always evaluates to undefined and hence we do not need to depend on
-  // the definition of the global variable named 'undefined'.
-  return val !== void 0;
-};
-
-/**
- * Returns true if the specified value is a string.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is a string.
- * @deprecated Use `typeof val === 'string'` instead.
- */
-goog.isString = function(val) {
-  return typeof val == 'string';
-};
-
-
-/**
- * Returns true if the specified value is a boolean.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is boolean.
- * @deprecated Use `typeof val === 'boolean'` instead.
- */
-goog.isBoolean = function(val) {
-  return typeof val == 'boolean';
-};
-
-
-/**
- * Returns true if the specified value is a number.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is a number.
- * @deprecated Use `typeof val === 'number'` instead.
- */
-goog.isNumber = function(val) {
-  return typeof val == 'number';
-};
 
 
 /**
@@ -1454,29 +1400,6 @@ goog.typeOf = function(value) {
 
 
 /**
- * Returns true if the specified value is null.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is null.
- * @deprecated Use `val === null` instead.
- */
-goog.isNull = function(val) {
-  return val === null;
-};
-
-
-/**
- * Returns true if the specified value is defined and not null.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is defined and not null.
- * @deprecated Use `val != null` instead.
- */
-goog.isDefAndNotNull = function(val) {
-  // Note that undefined == null.
-  return val != null;
-};
-
-
-/**
  * Returns true if the specified value is an array.
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is an array.
@@ -2196,91 +2119,6 @@ goog.inherits = function(childCtor, parentCtor) {
     }
     return parentCtor.prototype[methodName].apply(me, args);
   };
-};
-
-
-/**
- * Call up to the superclass.
- *
- * If this is called from a constructor, then this calls the superclass
- * constructor with arguments 1-N.
- *
- * If this is called from a prototype method, then you must pass the name of the
- * method as the second argument to this function. If you do not, you will get a
- * runtime error. This calls the superclass' method with arguments 2-N.
- *
- * This function only works if you use goog.inherits to express inheritance
- * relationships between your classes.
- *
- * This function is a compiler primitive. At compile-time, the compiler will do
- * macro expansion to remove a lot of the extra overhead that this function
- * introduces. The compiler will also enforce a lot of the assumptions that this
- * function makes, and treat it as a compiler error if you break them.
- *
- * @param {!Object} me Should always be "this".
- * @param {*=} opt_methodName The method name if calling a super method.
- * @param {...*} var_args The rest of the arguments.
- * @return {*} The return value of the superclass method.
- * @suppress {es5Strict} This method can not be used in strict mode, but
- *     all Closure Library consumers must depend on this file.
- * @deprecated goog.base is not strict mode compatible.  Prefer the static
- *     "base" method added to the constructor by goog.inherits
- *     or ES6 classes and the "super" keyword.
- */
-goog.base = function(me, opt_methodName, var_args) {
-  var caller = arguments.callee.caller;
-
-  if (goog.STRICT_MODE_COMPATIBLE || (goog.DEBUG && !caller)) {
-    throw new Error(
-        'arguments.caller not defined.  goog.base() cannot be used ' +
-        'with strict mode code. See ' +
-        'http://www.ecma-international.org/ecma-262/5.1/#sec-C');
-  }
-
-  if (typeof caller.superClass_ !== 'undefined') {
-    // Copying using loop to avoid deop due to passing arguments object to
-    // function. This is faster in many JS engines as of late 2014.
-    var ctorArgs = new Array(arguments.length - 1);
-    for (var i = 1; i < arguments.length; i++) {
-      ctorArgs[i - 1] = arguments[i];
-    }
-    // This is a constructor. Call the superclass constructor.
-    return /** @type {!Function} */ (caller.superClass_)
-        .constructor.apply(me, ctorArgs);
-  }
-
-  if (typeof opt_methodName != 'string' && typeof opt_methodName != 'symbol') {
-    throw new Error(
-        'method names provided to goog.base must be a string or a symbol');
-  }
-
-  // Copying using loop to avoid deop due to passing arguments object to
-  // function. This is faster in many JS engines as of late 2014.
-  var args = new Array(arguments.length - 2);
-  for (var i = 2; i < arguments.length; i++) {
-    args[i - 2] = arguments[i];
-  }
-  var foundCaller = false;
-  for (var proto = me.constructor.prototype; proto;
-       proto = Object.getPrototypeOf(proto)) {
-    if (proto[opt_methodName] === caller) {
-      foundCaller = true;
-    } else if (foundCaller) {
-      return proto[opt_methodName].apply(me, args);
-    }
-  }
-
-  // If we did not find the caller in the prototype chain, then one of two
-  // things happened:
-  // 1) The caller is an instance method.
-  // 2) This method was not called by the right caller.
-  if (me[opt_methodName] === caller) {
-    return me.constructor.prototype[opt_methodName].apply(me, args);
-  } else {
-    throw new Error(
-        'goog.base called from a method of one name ' +
-        'to a method of a different name');
-  }
 };
 
 

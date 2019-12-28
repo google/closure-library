@@ -1287,7 +1287,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandIEFixes_ =
 
 
 /**
- * Fix a ridiculous Safari bug: the first letters of new headings
+ * Fix an unfortunate Safari bug: the first letters of new headings
  * somehow retain their original font size and weight if multiple lines are
  * selected during the execCommand that turns them into headings.
  * The solution is to strip these styles which are normally stripped when
