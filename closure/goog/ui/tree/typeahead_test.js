@@ -150,5 +150,12 @@ testSuite({
     typeAhead.buffer_ = '';
     typeAhead.handleTypeAheadChar(e);
     assertEquals('a', typeAhead.buffer_);
+
+    // keyCodes should not be used for keys that produce non-printable chars.
+    e.keyCode = KeyCodes.F5;
+    e.charCode = 0;
+    typeAhead.buffer_ = '';
+    typeAhead.handleTypeAheadChar(e);
+    assertEquals('', typeAhead.buffer_);
   },
 });
