@@ -21,9 +21,8 @@
   "homepage": "https://developers.google.com/closure/library/",
   "devDependencies": {
     "promise": "^7.0.4",
+    "promises-aplus-tests": "^2.1.2",
     "protractor": "^2.1.0"
   },
-  "dependencies": {
-    "promises-aplus-tests": "^2.1.2"
-  }
+  "dependencies": {}
 }
