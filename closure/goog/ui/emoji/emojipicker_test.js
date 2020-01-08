@@ -810,6 +810,30 @@ testSuite({
     picker.dispose();
   },
 
+  testGetSelectedEmoji_urlPrefix() {
+    const defaultImg = 'http://example.com/../../demos/emoji/none.gif';
+    const picker = new EmojiPicker(defaultImg);
+    picker.setDelayedLoad(false);
+    picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
+    picker.setUrlPrefix('http://example.com/')
+    picker.render();
+
+    const palette = picker.getPage(0);
+
+    // No emoji should be selected yet
+    assertUndefined(palette.getSelectedEmoji());
+
+    // Artificially select the first emoji
+    palette.setSelectedIndex(0);
+
+    // Now we should get the first emoji back. See emojiGroup1 above.
+    const emoji = palette.getSelectedEmoji();
+    assertEquals(emoji.getId(), 'std.200');
+    assertEquals(emoji.getUrl(), 'http://example.com/../../demos/emoji/200.gif');
+
+    picker.dispose();
+  },
+
   testPreLoadCellConstructionForFastLoadingNonProgressive() {
     const defaultImg = '../../demos/emoji/none.gif';
     const picker = new EmojiPicker(defaultImg);
