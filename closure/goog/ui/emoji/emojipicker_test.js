@@ -829,7 +829,8 @@ testSuite({
     // Now we should get the first emoji back. See emojiGroup1 above.
     const emoji = palette.getSelectedEmoji();
     assertEquals(emoji.getId(), 'std.200');
-    assertEquals(emoji.getUrl(), 'http://example.com/../../demos/emoji/200.gif');
+    assertEquals(
+        emoji.getUrl(), 'http://example.com/../../demos/emoji/200.gif');
 
     picker.dispose();
   },
