@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Closure Performance Tests - goog.proto2 - message.js</title>
+<link rel="stylesheet" type="text/css" href="../testing/performancetable.css"/>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.proto2.Message');
+  goog.require('goog.testing.PerformanceTable');
+  goog.require('goog.testing.jsunit');
+  goog.require('proto2.TestAllTypes');
+</script>
+</head>
+<body>
+<h1>goog.proto2.Message Performance Tests</h1>
+<p>
+<strong>User-agent:</strong>
+<script>document.write(navigator.userAgent);</script>
+</p>
+<div id="perfTable"></div>
+<hr>
+
+<script>
+
+var table = new goog.testing.PerformanceTable(goog.dom.getElement('perfTable'));
+
+function testGetValue() {
+  var proto = new proto2.TestAllTypes();
+
+  table.run(function() {
+    for (var i = 0; i < 100000; i++) {
+      var int32 = proto.getOptionalInt32();
+      var str = proto.getOptionalString();
+    }
+  }, 'Get empty values');
+
+  proto.setOptionalInt32(0);
+  proto.setOptionalString('');
+
+  table.run(function() {
+    for (var i = 0; i < 100000; i++) {
+      var int34 = proto.getOptionalInt32();
+      var str = proto.getOptionalString();
+    }
+  }, 'Get values');
+}
+
+</script>
+</body>
+</html>

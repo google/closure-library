@@ -649,3 +649,109 @@ goog.debug.freeze = function(arg) {
     }
   }.valueOf();
 };
+
+/**
+ * @type {!ObjectPropertyDescriptor}
+ * @private
+ */
+goog.debug.throwingPropertyDescriptor_ = {
+  configurable: false,
+  get: function() {
+    throw new Error(
+        'Retrieving object values after deepFreeze is disallowed. Please use the frozen object instead.');
+  },
+  set: function() {
+    throw new Error(
+        'Setting object values after deepFreeze is disallowed. Please use the frozen object instead.');
+  },
+};
+
+/**
+ * Deep freezes the given object, but only in debug mode and in browsers that
+ * support freezing.
+ *
+ * @param {T} arg The object to clone.
+ * @param {!Set<?>} seenSet The set of objects seen so far while recursing into
+ *     child objects. Used to detect cyclic objects.
+ * @return {T}
+ * @template T
+ * @private
+ */
+goog.debug.deepFreezeInternal_ = function(arg, seenSet) {
+  // Check for primitives and non-recursive object types to avoid adding to seen
+  // set.
+  switch (typeof arg) {
+    case 'function':
+      throw new Error('deepFreeze does not support functions');
+    case 'object':
+      if (arg === null) {
+        return null;
+      }
+      break;
+    default:
+      // Primitives. Return them as they are effectively immutable.
+      return arg;
+  }
+
+  if (seenSet.has(arg)) {
+    throw new Error('deepFreeze does not support cyclic structures');
+  }
+
+  // Check and see if the arg is either an Array literal or an Object literal
+  // (e.g isn't a class).
+  const prototype = Object.getPrototypeOf(arg);
+  if (prototype !== Object.prototype && prototype !== Array.prototype) {
+    throw new Error('deepFreeze only supports literals (array or object).');
+  }
+
+  seenSet.add(arg);
+  const dupe = prototype === Array.prototype ? new Array(arg.length) : {};
+  const keys = [
+    ...Object.getOwnPropertyNames(arg),
+    ...Object.getOwnPropertySymbols(arg),
+  ];
+
+  const descriptorBundle = {};
+  for (const key of keys) {
+    const descriptor = Object.getOwnPropertyDescriptor(arg, key);
+    if (!descriptor.enumerable) {
+      continue;
+    }
+    if (descriptor.get != null || descriptor.set != null) {
+      throw new Error('deepFreeze does not support getters/setters');
+    }
+    const frozen = goog.debug.deepFreezeInternal_(arg[key], seenSet);
+    dupe[key] = frozen;
+    // Batch-overwrite the original arg's value with a throwing getter
+    descriptorBundle[key] = goog.debug.throwingPropertyDescriptor_;
+  }
+
+  Object.defineProperties(arg, descriptorBundle);
+
+  seenSet.delete(arg);
+  goog.debug.freezeInternal_(dupe);
+  return dupe;
+};
+
+/**
+ * Deep-freezes the given object, but only in debug mode (and in browsers
+ * that support it). This freeze is deep, and will automatically recurse
+ * into object properties and freeze them. This implementation may return a copy
+ * of the original object, and the return value should be used instead of the
+ * original argument. This implementation only supports literal object
+ * structures, and does not attempt to freeze classes, functions, etc.
+ * @param {T} arg
+ * @return {T}
+ * @template T
+ */
+goog.debug.deepFreeze = function(arg) {
+  // NOTE: this compiles to nothing, but hides the possible side effect of
+  // deepFreezeInternal_ from the compiler so that the entire call can be
+  // removed if the result is not used.
+  return {
+    valueOf: function() {
+      if (!goog.DEBUG) return arg;
+      return goog.debug.deepFreezeInternal_(arg, new Set());
+    },
+  }.valueOf();
+};
