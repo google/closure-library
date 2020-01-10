@@ -1,0 +1,203 @@
+/*
+ * Copyright The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/* Basic HTML style
+----------------------------------------------- */
+
+a:link {
+  color: #ffeaf9;
+  background: #b27094;
+  border-bottom-color: #ffeaf9;
+}
+
+a:visited {
+  color: #ffeaf9;
+  background: #8c5071;
+  border-bottom-color: #ffeaf9;
+}
+
+a:hover, a:active {
+  background: #df6dad;
+  border-bottom-color: #ffeaf9;
+}
+
+body {
+  color: #f5e2ee;
+  background-color: #4f2c3d;
+}
+
+blockquote {
+  color: #c0b8a2;
+}
+
+caption {
+  color: #366878;
+  background: #a9eaff;
+  border-bottom-color: #4f2c3d;
+}
+
+dd {
+  background: #593446;
+  color: #f0d9e0;
+  border-left-color: #744663;
+}
+
+hr {
+  color: #ccdce8;
+  background: #676c76;
+  border-color: #8a9cb0;
+}
+
+td {
+  border-bottom-color: #4f2c3d;
+  background-color: #593446;
+}
+
+th {
+  color: #766b5d;
+  background: #dde0a3;
+  border-bottom-color: #4f2c3d;
+}
+
+/* Custom font definitions for Lagoona style
+----------------------------------------------- */
+
+p.description {
+  color: #ffffff;
+}
+
+h2 {
+  color: #dbaac1;
+}
+
+h3 {
+  color: #e2dac2;
+  border-bottom-color: #b2b098;
+}
+
+h4 {
+  color: #a9eaff;
+}
+
+h5 {
+  color: #d1c49b;
+  border-top-color: #d1c49b;
+  border-bottom-color: #d1c49b;
+}
+
+h6 {
+  color: #e290b2;
+  border-top-color: #bd92a6;
+  border-bottom-color: #bd92a6;
+}
+
+/* Header style
+----------------------------------------------- */
+
+#header {
+  color: #ce739e;
+}
+
+#header h2 {
+  color: #bb8aa1;
+}
+
+/* Sidebar style
+----------------------------------------------- */
+
+#sidebar .links ul {
+  color: #f6f3eb;
+}
+
+#sidebar .links ul li {
+  background: none;
+}
+
+#sidebar li a:link, #sidebar li a:visited {
+  color: #f3bcd7;
+  border-bottom-color: #dbaac1;
+}
+
+#sidebar li a:hover {
+  color: #ffb7d9;
+  background: #6f3f56;
+  border-bottom-color: #dbaac1;
+}
+
+#sidebar h3 {
+  color: #ffffff;
+  border-left-color: #ff4795;
+}
+
+#sidebar h4 {
+  border-bottom-color: #bd92a6;
+  border-top-color: #bd92a6;
+  color: #bd92a6;
+}
+
+#sidebar p {
+  color: #c0b8a2;
+}
+
+/* Footer style
+----------------------------------------------- */
+
+#footer .wrapper {
+  color: #ae8e9d;
+}
+
+/* Tweaks for Three-column layout
+----------------------------------------------- */
+
+#sidebar-alternate {
+  background-color: #663e51;
+}
+
+#sidebar-alternate .wrapper {
+  color: #d5d1a0;
+  background-color: #663e51;
+}
+
+#sidebar-alternate .wrapper .wrapper {
+  background: #663e51;
+}
+
+#sidebar-alternate h3 {
+  color: #e9d4dd;
+}
+
+#sidebar-alternate h4 {
+  border-bottom-color: #bd92a6;
+  border-top-color: #bd92a6;
+  color: #bd92a6;
+}
+
+#sidebar-alternate h5, #sidebar h5 {
+  border-top-color: #bd92a6;
+  border-bottom-color: #bd92a6;
+}
+
+#sidebar-alternate h5 {
+  border-left-color: #bd92a6;
+  border-right-color: #bd92a6;
+}
+
+#alternate-content blockquote {
+  color: #e3b7c5;
+}
+
+#sidebar-alternate ul, #sidebar-alternate ol, #sidebar ul, #sidebar ol {
+  margin-left: 10px;
+}
+
+#sidebar-alternate ul li, #sidebar ul li {
+  color: #e3b7c5;
+}
+
+#sidebar-alternate ol li, #sidebar ol li {
+  color: #e3b7c5;
+}
