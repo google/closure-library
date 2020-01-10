@@ -28,9 +28,10 @@ goog.require('goog.disposable.IDisposable');
 
 /**
  * Class that provides the basic implementation for disposable objects. If your
- * class holds one or more references to COM objects, DOM nodes, or other
- * disposable objects, it should extend this class or implement the disposable
- * interface (defined in goog.disposable.IDisposable).
+ * class holds references or resources that can't be collected by standard GC,
+ * it should extend this class or implement the disposable interface (defined
+ * in goog.disposable.IDisposable). See description of
+ * goog.disposable.IDisposable for examples of cleanup.
  * @constructor
  * @implements {goog.disposable.IDisposable}
  */
@@ -164,8 +165,8 @@ goog.Disposable.prototype.getDisposed = goog.Disposable.prototype.isDisposed;
 /**
  * Disposes of the object. If the object hasn't already been disposed of, calls
  * {@link #disposeInternal}. Classes that extend `goog.Disposable` should
- * override {@link #disposeInternal} in order to delete references to COM
- * objects, DOM nodes, and other disposable objects. Reentrant.
+ * override {@link #disposeInternal} in order to cleanup references, resources
+ * and other disposable objects. Reentrant.
  *
  * @return {void} Nothing.
  * @override
@@ -234,16 +235,15 @@ goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
 
 
 /**
- * Deletes or nulls out any references to COM objects, DOM nodes, or other
- * disposable objects. Classes that extend `goog.Disposable` should
- * override this method.
- * Not reentrant. To avoid calling it twice, it must only be called from the
- * subclass' `disposeInternal` method. Everywhere else the public
- * `dispose` method must be used.
- * For example:
+ * Performs appropriate cleanup. See description of goog.disposable.IDisposable
+ * for examples. Classes that extend `goog.Disposable` should override this
+ * method. Not reentrant. To avoid calling it twice, it must only be called from
+ * the subclass' `disposeInternal` method. Everywhere else the public `dispose`
+ * method must be used. For example:
+ *
  * <pre>
- *   mypackage.MyClass = function() {
- *     mypackage.MyClass.base(this, 'constructor');
+ * mypackage.MyClass = function() {
+ * mypackage.MyClass.base(this, 'constructor');
  *     // Constructor logic specific to MyClass.
  *     ...
  *   };
@@ -257,6 +257,7 @@ goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
  *     mypackage.MyClass.base(this, 'disposeInternal');
  *   };
  * </pre>
+ *
  * @protected
  */
 goog.Disposable.prototype.disposeInternal = function() {
