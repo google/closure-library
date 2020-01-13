@@ -202,7 +202,7 @@ goog.labs.events.NonDisposableEventTarget.prototype.fireListeners = function(
     }
   }
 
-  return rv && eventObject.returnValue_ != false;
+  return rv && !eventObject.defaultPrevented;
 };
 
 

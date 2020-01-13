@@ -93,13 +93,6 @@ goog.events.Event = function(type, opt_target) {
    * @type {boolean}
    */
   this.defaultPrevented = false;
-
-  /**
-   * Return value for in internal capture/bubble processing for IE.
-   * @type {boolean}
-   * @public
-   */
-  this.returnValue_ = true;
 };
 
 
@@ -116,7 +109,6 @@ goog.events.Event.prototype.stopPropagation = function() {
  */
 goog.events.Event.prototype.preventDefault = function() {
   this.defaultPrevented = true;
-  this.returnValue_ = false;
 };
 
 
