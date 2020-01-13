@@ -17,6 +17,7 @@ goog.setTestOnly();
 
 const Component = goog.require('goog.ui.Component');
 const Emoji = goog.require('goog.ui.emoji.Emoji');
+const EmojiPalette = goog.requireType('goog.ui.emoji.EmojiPalette');
 const EmojiPicker = goog.require('goog.ui.emoji.EmojiPicker');
 const EventHandler = goog.require('goog.events.EventHandler');
 const SpriteInfo = goog.require('goog.ui.emoji.SpriteInfo');
@@ -262,7 +263,7 @@ function getImageUrl(element) {
 /**
  * Checks that the content of an emojipicker page is all images pointing to
  * the default img.
- * @param {goog.ui.emoji.EmojiPalette} page The page of the picker to check
+ * @param {!EmojiPalette} page The page of the picker to check
  * @param {string} defaultImgUrl The url of the default img
  */
 function checkContentIsDefaultImg(page, defaultImgUrl) {
@@ -279,7 +280,7 @@ function checkContentIsDefaultImg(page, defaultImgUrl) {
 /**
  * Checks that the content of an emojipicker page is the specified emoji and
  * the default img after the emoji are all used.
- * @param {goog.ui.emoji.EmojiPalette} page The page of the picker to check
+ * @param {!EmojiPalette} page The page of the picker to check
  * @param {Array<Array<string>>} emojiList List of emoji that should be in the
  *     palette
  * @param {string} defaultImgUrl The url of the default img
@@ -304,7 +305,7 @@ function checkContentIsEmojiImages(page, emojiList, defaultImg) {
 /**
  * Checks and verifies the structure of a non-progressively-rendered
  * emojipicker.
- * @param {goog.ui.emoji.EmojiPalette} palette Emoji palette to check.
+ * @param {!EmojiPalette} palette Emoji palette to check.
  * @param {Array<Array<string>>} emoji Emoji that should be in the palette.
  */
 function checkStructureForNonProgressivePicker(palette, emoji) {
@@ -364,7 +365,7 @@ function checkStructureForNonProgressivePicker(palette, emoji) {
 
 /**
  * Checks and verifies the structure of a progressively-rendered emojipicker.
- * @param {goog.ui.emoji.EmojiPalette} palette Emoji palette to check.
+ * @param {!EmojiPalette} palette Emoji palette to check.
  * @param {Array<Array<string>>} emoji Emoji that should be in the palette.
  */
 function checkStructureForProgressivePicker(palette, emoji) {
@@ -427,7 +428,7 @@ function checkStructureForProgressivePicker(palette, emoji) {
 /**
  * Checks and verifies the structure of a non-progressive fast-loading picker
  * after the animated emoji have loaded.
- * @param {goog.ui.emoji.EmojiPalette} palette Emoji palette to check.
+ * @param {!EmojiPalette} palette Emoji palette to check.
  * @param {Array<Array<string>>} emoji Emoji that should be in the palette.
  */
 function checkPostLoadStructureForFastLoadNonProgressivePicker(palette, emoji) {
@@ -509,7 +510,7 @@ function checkPostLoadStructureForFastLoadNonProgressivePicker(palette, emoji) {
 /**
  * Checks and verifies the structure of a progressive fast-loading picker
  * after the animated emoji have loaded.
- * @param {goog.ui.emoji.EmojiPalette} palette Emoji palette to check.
+ * @param {!EmojiPalette} palette Emoji palette to check.
  * @param {Array<Array<string>>} emoji Emoji that should be in the palette.
  */
 function checkPostLoadStructureForFastLoadProgressivePicker(palette, emoji) {
