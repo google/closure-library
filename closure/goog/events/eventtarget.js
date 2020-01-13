@@ -285,7 +285,7 @@ goog.events.EventTarget.prototype.fireListeners = function(
     }
   }
 
-  return rv && eventObject.returnValue_ != false;
+  return rv && !eventObject.defaultPrevented;
 };
 
 
