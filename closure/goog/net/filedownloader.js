@@ -46,6 +46,7 @@ goog.require('goog.fs');
 goog.require('goog.fs.DirectoryEntry');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.FileSaver');
+goog.require('goog.fs.blob');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.XhrIoPool');
@@ -340,7 +341,7 @@ goog.net.FileDownloader.prototype.xhrSuccess_ = function(download) {
     return;
   }
 
-  download.blob = goog.fs.getBlob(resp);
+  download.blob = goog.fs.blob.getBlob(resp);
   delete download.xhr;
 
   this.getDir_(download.url, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE)
