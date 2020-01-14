@@ -501,9 +501,11 @@ goog.ui.ScrollFloater.prototype.float_ = function(floatMode) {
   // If parents are the same, avoid detaching and reattaching elem.
   // This prevents Flash embeds from being reloaded, for example.
   if (elem.parentNode == this.parentElement_) {
-    elem.parentNode.insertBefore(this.placeholder_, elem);
+    elem.parentNode.insertBefore(
+        /** @type {!Node} */ (this.placeholder_), elem);
   } else {
-    elem.parentNode.replaceChild(this.placeholder_, elem);
+    elem.parentNode.replaceChild(
+        /** @type {!Node} */ (this.placeholder_), elem);
     this.parentElement_.appendChild(elem);
   }
 
@@ -559,7 +561,8 @@ goog.ui.ScrollFloater.prototype.dock_ = function() {
     if (this.placeholder_.parentNode == this.parentElement_) {
       this.placeholder_.parentNode.removeChild(this.placeholder_);
     } else {
-      this.placeholder_.parentNode.replaceChild(elem, this.placeholder_);
+      this.placeholder_.parentNode.replaceChild(
+          /** @type {!Node} */ (elem), this.placeholder_);
     }
   }
 

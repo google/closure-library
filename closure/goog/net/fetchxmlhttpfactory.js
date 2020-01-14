@@ -439,7 +439,7 @@ goog.net.FetchXmlHttp.prototype.setRequestHeader = function(header, value) {
 
 /** @override */
 goog.net.FetchXmlHttp.prototype.getResponseHeader = function(header) {
-  // TODO(b/70808323): This method should return null when the headers are not
+  // TODO(user): This method should return null when the headers are not
   // present or the specified header is missing. The externs need to be fixed.
   if (!this.responseHeaders_) {
     goog.log.warning(

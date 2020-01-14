@@ -710,9 +710,11 @@ goog.ui.Component.prototype.render_ = function(
   }
 
   if (opt_parentElement) {
-    opt_parentElement.insertBefore(this.element_, opt_beforeNode || null);
+    opt_parentElement.insertBefore(
+        /** @type {!Node} */ (this.element_), opt_beforeNode || null);
   } else {
-    this.dom_.getDocument().body.appendChild(this.element_);
+    this.dom_.getDocument().body.appendChild(
+        /** @type {!Node} */ (this.element_));
   }
 
   // If this component has a parent component that isn't in the document yet,
@@ -1055,7 +1057,8 @@ goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
     var contentElement = this.getContentElement();
     var insertBeforeElement = contentElement.childNodes[index] || null;
     if (insertBeforeElement != child.getElement()) {
-      contentElement.insertBefore(child.getElement(), insertBeforeElement);
+      contentElement.insertBefore(
+          /** @type {!Node} */ (child.getElement()), insertBeforeElement);
     }
   } else if (opt_render) {
     // If this (parent) component doesn't have a DOM yet, call createDom now

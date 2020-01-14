@@ -3,8 +3,6 @@ title: Get Started with the Closure Library
 section: develop
 layout: article
 ---
-
-
 <!-- Documentation licensed under CC BY 4.0 -->
 <!-- License available at https://creativecommons.org/licenses/by/4.0/ -->
 
@@ -13,6 +11,7 @@ layout: article
 This get started guide is designed to teach you some fundamental Closure
 development concepts in the context of creating your first Closure application.
 This guide also provides the steps common to a Closure development workflow.
+
 
 
 ## Download the Closure library
@@ -26,8 +25,6 @@ git clone https://github.com/google/closure-library
 
 A directory named `closure-library` is created. This directory contains the
 Closure Library code.
-
-
 ## Create Closure JavaScript
 
 Create a `hello.js` JavaScript file in `path/to/myapp/` with the
@@ -55,6 +52,7 @@ The `hello.js` JavaScript calls two Closure Library functions:
 in the Closure Library's `closure/goog/dom/dom.js` file. The next steps
 explains how the correct files are loaded to provide access these functions.
 
+
 ## Create an HTML file
 
 Create a `hello.html` file in `path/to/myapp/` with the
@@ -70,6 +68,7 @@ following contents::
   </body>
 </html>
 ```
+
 
 The first thing this HTML file does is to load `base.js` which defines the
 function `goog.require` and other core functionality. Then the HTML file loads
@@ -94,6 +93,7 @@ python -m SimpleHTTPServer 8000
 ```
 
 And visit localhost:8000/path/to/myapp/hello.html.
+
 
 ## Compile your app
 Use the Closure compiler to compile your application when your app is ready for
@@ -139,4 +139,5 @@ To compile your application:
 
 Refer to [Getting Started with the Closure Compiler Application](https://developers.google.com/closure/compiler/docs/gettingstarted_app#the-hello-world-of the-closure-compiler-application)
 for more information on the Closure Compiler.
+
 

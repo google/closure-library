@@ -2201,7 +2201,7 @@ testSuite({
       // Expected
     }
 
-    // TODO(b/136116638): Expect 0 unhandled rejections in all environemnts.
+    // TODO(user): Expect 0 unhandled rejections in all environemnts.
     assertEquals(MICROTASKS_EXIST ? 1 : 0, unhandledRejections.getCallCount());
   },
 

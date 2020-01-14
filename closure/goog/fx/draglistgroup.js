@@ -1046,7 +1046,8 @@ goog.fx.DragListGroup.prototype.updateCurrHoverItem = function(
  * @protected
  */
 goog.fx.DragListGroup.prototype.insertCurrHoverItem = function() {
-  this.origList_.insertBefore(this.currDragItem_, this.currHoverItem_);
+  this.origList_.insertBefore(
+      /** @type {!Node} */ (this.currDragItem_), this.currHoverItem_);
 };
 
 

@@ -20,7 +20,7 @@
  */
 
 
-// TODO(b/130421259): We're trying to migrate all ES5 subclasses of Closure
+// TODO(user): We're trying to migrate all ES5 subclasses of Closure
 // Library to ES6. In ES6 this cannot be referenced before super is called. This
 // file has at least one this before a super call (in ES5) and cannot be
 // automatically upgraded to ES6 as a result. Please fix this if you have a

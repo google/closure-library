@@ -61,7 +61,7 @@ goog.debug.ErrorHandler = function(handler) {
    * @type {boolean}
    * @private
    */
-  this.wrapErrors_ = true;  // TODO(user) Change default.
+  this.wrapErrors_ = true;  // TODO(malteubl) Change default.
 
   /**
    * Whether to add a prefix to all error messages. The prefix is

@@ -1,16 +1,8 @@
-// Copyright 2011 The Closure Library Authors. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS-IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/**
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 goog.module('goog.fsTest');
 goog.setTestOnly();
@@ -26,6 +18,7 @@ const dom = goog.require('goog.dom');
 const events = goog.require('goog.events');
 const googArray = goog.require('goog.array');
 const googFs = goog.require('goog.fs');
+const googFsBlob = goog.require('goog.fs.blob');
 const googString = goog.require('goog.string');
 const testSuite = goog.require('goog.testing.testSuite');
 
@@ -54,7 +47,7 @@ function startWrite(content, file) {
   return file.createWriter()
       .then(goog.partial(checkReadyState, FsFileSaver.ReadyState.INIT))
       .then((writer) => {
-        writer.write(googFs.getBlob(content));
+        writer.write(googFsBlob.getBlob(content));
         return writer;
       })
       .then(goog.partial(checkReadyState, FsFileSaver.ReadyState.WRITING));
@@ -340,7 +333,7 @@ testSuite({
         .then(goog.partial(checkReadyState, FsFileSaver.ReadyState.INIT))
         .then((writer) => {
           writer.seek(5);
-          writer.write(googFs.getBlob('stuff and things'));
+          writer.write(googFsBlob.getBlob('stuff and things'));
           return writer;
         })
         .then(goog.partial(checkReadyState, FsFileSaver.ReadyState.WRITING))
@@ -657,7 +650,7 @@ testSuite({
     stubs.remove(goog.global, 'Blob');
 
     try {
-      googFs.getBlob();
+      googFsBlob.getBlob();
       fail();
     } catch (e) {
       assertEquals(
@@ -673,7 +666,8 @@ testSuite({
       return;
     }
 
-    const blob = googFs.getBlobWithProperties(['test'], 'text/test', 'native');
+    const blob =
+        googFsBlob.getBlobWithProperties(['test'], 'text/test', 'native');
     assertEquals('text/test', blob.type);
   },
 
@@ -683,7 +677,7 @@ testSuite({
     stubs.remove(goog.global, 'Blob');
 
     try {
-      googFs.getBlobWithProperties();
+      googFsBlob.getBlobWithProperties();
       fail();
     } catch (e) {
       assertEquals(
@@ -705,7 +699,8 @@ testSuite({
     }
     stubs.set(goog.global, 'BlobBuilder', BlobBuilder);
 
-    const blob = googFs.getBlobWithProperties(['test'], 'text/test', 'native');
+    const blob =
+        googFsBlob.getBlobWithProperties(['test'], 'text/test', 'native');
     assertEquals('text/test', blob.type);
     assertEquals('test', blob.builder.parts[0].value);
     assertEquals('native', blob.builder.parts[0].endings);

@@ -123,7 +123,7 @@ goog.debug.Console.prototype.addLogRecord = function(logRecord) {
   var record = this.formatter_.formatRecord(logRecord);
   var console = goog.debug.Console.console_;
   if (console) {
-    // TODO(b/117415985): Make getLevel() non-null and update
+    // TODO(user): Make getLevel() non-null and update
     // getConsoleMethodName_ parameters.
     var logMethod = getConsoleMethodName_(logRecord.getLevel());
     goog.debug.Console.logToConsole_(

@@ -287,7 +287,7 @@ goog.ui.tree.BaseNode.prototype.addChildAt = function(
       }
       var childElement = child.getElement();
       var nextElement = nextNode && nextNode.getElement();
-      childrenEl.insertBefore(childElement, nextElement);
+      childrenEl.insertBefore(/** @type {!Node} */ (childElement), nextElement);
 
       if (this.isInDocument()) {
         child.enterDocument();
@@ -381,7 +381,7 @@ goog.ui.tree.BaseNode.prototype.removeChild = function(
 
       if (child.isInDocument()) {
         var childEl = child.getElement();
-        childrenEl.removeChild(childEl);
+        childrenEl.removeChild(/** @type {!Node} */ (childEl));
 
         child.exitDocument();
       }

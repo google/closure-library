@@ -329,7 +329,7 @@ goog.graphics.CanvasGraphics.prototype.clear = function() {
 
   // Remove all children (text nodes) except the canvas (which is at index 0)
   while (el.childNodes.length > 1) {
-    el.removeChild(el.lastChild);
+    el.removeChild(/** @type {!Node} */ (el.lastChild));
   }
 };
 

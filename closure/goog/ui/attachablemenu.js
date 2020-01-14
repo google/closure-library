@@ -121,7 +121,7 @@ goog.ui.AttachableMenu.prototype.setItemClassName = function(name) {
 
 /**
  * Sets the class name to use for selected menu items
- * todo(user) - reevaluate if we can simulate pseudo classes in IE
+ * todo(jonp) - reevaluate if we can simulate pseudo classes in IE
  *
  * @return {string} The class name to use for selected items.
  */
@@ -132,7 +132,7 @@ goog.ui.AttachableMenu.prototype.getSelectedItemClassName = function() {
 
 /**
  * Sets the class name to use for selected menu items
- * todo(user) - reevaluate if we can simulate pseudo classes in IE
+ * todo(jonp) - reevaluate if we can simulate pseudo classes in IE
  *
  * @param {string} name The class name to use for selected items.
  */

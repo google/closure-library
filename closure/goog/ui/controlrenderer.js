@@ -525,7 +525,7 @@ goog.ui.ControlRenderer.prototype.setFocusable = function(control, focusable) {
       try {
         keyTarget.blur();
       } catch (e) {
-        // TODO(user|user):  Find out why this fails on IE.
+        // TODO(user):  Find out why this fails on IE.
       }
       // The blur event dispatched by the key event target element when blur()
       // was called on it should have been handled by the control's handleBlur()

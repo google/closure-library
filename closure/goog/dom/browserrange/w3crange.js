@@ -212,7 +212,7 @@ goog.dom.browserrange.W3cRange.prototype.getText = function() {
 goog.dom.browserrange.W3cRange.prototype.getValidHtml = function() {
   var div = goog.dom.getDomHelper(this.range_.startContainer)
                 .createDom(goog.dom.TagName.DIV);
-  div.appendChild(this.range_.cloneContents());
+  div.appendChild(/** @type {!Node} */ (this.range_.cloneContents()));
   var result = div.innerHTML;
 
   if (goog.string.startsWith(result, '<') ||

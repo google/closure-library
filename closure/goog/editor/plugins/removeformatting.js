@@ -379,7 +379,7 @@ goog.editor.plugins.RemoveFormatting.prototype.getHtmlText_ = function(range) {
 
   if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
     // Get the text to convert.
-    div.appendChild(textRange.cloneContents());
+    div.appendChild(/** @type {!Node} */ (textRange.cloneContents()));
   } else if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
     // Trim the whitespace on the ends of the range, so that it the container
     // will be the container of only the text content that we are changing.

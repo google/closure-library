@@ -26,7 +26,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 let timer;
 
 function shouldRunTests() {
-  // TODO(b/31221500): This test fails when run in a suite immediately after
+  // TODO(user): This test fails when run in a suite immediately after
   // portchannel_test. The workers take dozens of seconds to start up for some
   // reason.
   return !browser.isEdge();

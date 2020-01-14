@@ -409,7 +409,7 @@ goog.fx.AbstractDragDrop.prototype.startDrag = function(event, item) {
   var el = item.getCurrentDragElement();
   this.dragEl_ = this.createDragElement(el);
   var doc = goog.dom.getOwnerDocument(el);
-  doc.body.appendChild(this.dragEl_);
+  doc.body.appendChild(/** @type {!Node} */ (this.dragEl_));
 
   this.dragger_ = this.createDraggerFor(el, this.dragEl_, event);
   this.dragger_.setScrollTarget(this.scrollTarget_);

@@ -611,7 +611,7 @@ goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher;
  * standards mode, treat the browser version as the document mode. Otherwise,
  * IE is emulating version 5.
  *
- * NOTE(2019/05/31): Support for IE < 7 is long gone, so this is now simplified.
+ * NOTE(user): Support for IE < 7 is long gone, so this is now simplified.
  * It returns document.documentMode for IE and undefined for everything else.
  *
  * @type {number|undefined}

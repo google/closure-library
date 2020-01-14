@@ -270,7 +270,7 @@ goog.ui.InputDatePicker.prototype.enterDocument = function() {
   //
   // See cl/100837907 for more context and the discussion around this decision.
   (this.popupParentElement_ || this.getDomHelper().getDocument().body)
-      .appendChild(this.popupDatePicker_.getElement());
+      .appendChild(/** @type {!Node} */ (this.popupDatePicker_.getElement()));
 
   goog.ui.InputDatePicker.superClass_.enterDocument.call(this);
   var el = this.getElement();

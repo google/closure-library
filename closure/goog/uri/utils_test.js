@@ -106,6 +106,19 @@ testSuite({
     assertEquals('fragment', utils.getFragment(uri));
   },
 
+  testSplitMaliciousUri() {
+    const uri = 'https://malicious.com\\test.google.com';
+    assertEquals('https', utils.getScheme(uri));
+    assertEquals('malicious.com', utils.getDomain(uri));
+    assertEquals('malicious.com', utils.getDomainEncoded(uri));
+    assertNull(utils.getPort(uri));
+    assertEquals('\\test.google.com', utils.getPathEncoded(uri));
+    assertEquals('\\test.google.com', utils.getPath(uri));
+    assertNull(utils.getQueryData(uri));
+    assertNull(utils.getFragmentEncoded(uri));
+    assertNull(utils.getFragment(uri));
+  },
+
   testSplitBadAuthority() {
     // This URL has a syntax error per the RFC (port number must be digits, and
     // host cannot contain a colon except in [...]). This test is solely to

@@ -36,7 +36,7 @@ const FLASH_URL = testing.newTrustedResourceUrlForTest(
     'http://www.youtube.com/v/RbI7cCp0v6w&hl=en&fs=1');
 const control = new MockControl();
 const domHelper = control.createLooseMock(DomHelper);
-// TODO(user): mocking window.document throws exceptions in FF2. find out how
+// TODO(goto): mocking window.document throws exceptions in FF2. find out how
 // to mock it.
 const documentHelper = {
   body: control.createLooseMock(DomHelper)

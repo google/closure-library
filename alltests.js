@@ -1,17 +1,5 @@
-// Copyright 2009 The Closure Library Authors. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS-IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
+// Copyright The Closure Library Authors.
+// SPDX-License-Identifier: Apache-2.0
 var _allTests = [
   'closure/goog/a11y/aria/announcer_test.html',
   'closure/goog/a11y/aria/aria_test.html',
@@ -30,6 +18,7 @@ var _allTests = [
   'closure/goog/async/workqueue_test.html',
   'closure/goog/base_module_test.html',
   'closure/goog/base_test.html',
+  'closure/goog/collections/sets_test.html',
   'closure/goog/color/alpha_test.html',
   'closure/goog/color/color_test.html',
   'closure/goog/crypt/aes_test.html',
@@ -87,6 +76,7 @@ var _allTests = [
   'closure/goog/dom/browserfeature_test.html',
   'closure/goog/dom/browserrange/browserrange_test.html',
   'closure/goog/dom/bufferedviewportsizemonitor_test.html',
+  'closure/goog/dom/classes_quirks_test.html',
   'closure/goog/dom/classes_test.html',
   'closure/goog/dom/classlist_test.html',
   'closure/goog/dom/controlrange_test.html',
@@ -331,6 +321,9 @@ var _allTests = [
   'closure/goog/messaging/portnetwork_test.html',
   'closure/goog/messaging/portoperator_test.html',
   'closure/goog/messaging/respondingchannel_test.html',
+  'closure/goog/mochikit/async/deferred_async_test.html',
+  'closure/goog/mochikit/async/deferredlist_test.html',
+  'closure/goog/mochikit/async/deferred_test.html',
   'closure/goog/module/moduleinfo_test.html',
   'closure/goog/module/moduleloadcallback_test.html',
   'closure/goog/module/moduleloader_test.html',
@@ -382,6 +375,7 @@ var _allTests = [
   'closure/goog/proto2/pbliteserializer_test.html',
   'closure/goog/proto2/proto_test.html',
   'closure/goog/proto2/textformatserializer_test.html',
+  'closure/goog/proto/serializer_test.html',
   'closure/goog/pubsub/pubsub_test.html',
   'closure/goog/pubsub/typedpubsub_test.html',
   'closure/goog/reflect/reflect_test.html',
@@ -440,6 +434,7 @@ var _allTests = [
   'closure/goog/style/bidi_test.html',
   'closure/goog/style/cursor_test.html',
   'closure/goog/style/style_document_scroll_test.html',
+  'closure/goog/style/style_quirks_test.html',
   'closure/goog/style/style_test.html',
   'closure/goog/style/style_webkit_scrollbars_test.html',
   'closure/goog/style/transform_test.html',
@@ -617,6 +612,7 @@ var _allTests = [
   'closure/goog/useragent/keyboard_test.html',
   'closure/goog/useragent/platform_test.html',
   'closure/goog/useragent/product_test.html',
+  'closure/goog/useragent/useragent_quirks_test.html',
   'closure/goog/useragent/useragent_test.html',
   'closure/goog/vec/float32array_test.html',
   'closure/goog/vec/float64array_test.html',
@@ -636,15 +632,7 @@ var _allTests = [
   'closure/goog/vec/vec3_test.html',
   'closure/goog/vec/vec4d_test.html',
   'closure/goog/vec/vec4f_test.html',
-  'closure/goog/vec/vec4_test.html',
-  'closure/goog/collections/sets_test.html',
-  'closure/goog/mochikit/async/deferred_async_test.html',
-  'closure/goog/mochikit/async/deferredlist_test.html',
-  'closure/goog/mochikit/async/deferred_test.html',
-  'closure/goog/proto/serializer_test.html',
-  'closure/goog/dom/classes_quirks_test.html',
-  'closure/goog/style/style_quirks_test.html',
-  'closure/goog/useragent/useragent_quirks_test.html'
+  'closure/goog/vec/vec4_test.html'
 ];
 
 // If we're running in a nodejs context, export tests. Used when running tests

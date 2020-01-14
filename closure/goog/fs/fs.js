@@ -1,16 +1,8 @@
-// Copyright 2011 The Closure Library Authors. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS-IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/**
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /**
  * @fileoverview Wrappers for the HTML5 File API. These wrappers closely mirror
@@ -24,11 +16,11 @@
 
 goog.provide('goog.fs');
 
-goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.FileReader');
 goog.require('goog.fs.FileSystemImpl');
+goog.require('goog.fs.blob');
 goog.require('goog.fs.url');
 goog.require('goog.userAgent');
 
@@ -151,58 +143,32 @@ goog.fs.browserSupportsObjectUrls = function() {
 /**
  * Concatenates one or more values together and converts them to a Blob.
  *
+ * TODO(user): Update references to use goog.fs.blob.getBlob instead.
+ *
  * @param {...(string|!Blob|!ArrayBuffer)} var_args The values that will make up
  *     the resulting blob.
  * @return {!Blob} The blob.
+ * @deprecated Use goog.fs.blob.getBlob().
  */
-goog.fs.getBlob = function(var_args) {
-  var BlobBuilder = goog.global.BlobBuilder || goog.global.WebKitBlobBuilder;
-
-  if (BlobBuilder !== undefined) {
-    var bb = new BlobBuilder();
-    for (var i = 0; i < arguments.length; i++) {
-      bb.append(arguments[i]);
-    }
-    return bb.getBlob();
-  } else {
-    return goog.fs.getBlobWithProperties(goog.array.toArray(arguments));
-  }
-};
+goog.fs.getBlob = goog.fs.blob.getBlob;
 
 
 /**
  * Creates a blob with the given properties.
  * See https://developer.mozilla.org/en-US/docs/Web/API/Blob for more details.
  *
- * @param {Array<string|!Blob>} parts The values that will make up the
+ * TODO(user): Update references to use goog.fs.blob.getBlobWithProperties
+ * instead.
+ *
+ * @param {!Array<string|!Blob|!ArrayBuffer>} parts The values that will make up
  *     resulting blob.
  * @param {string=} opt_type The MIME type of the Blob.
  * @param {string=} opt_endings Specifies how strings containing newlines are to
  *     be written out.
  * @return {!Blob} The blob.
+ * @deprecated Use goog.fs.blob.getBlobWithProperties().
  */
-goog.fs.getBlobWithProperties = function(parts, opt_type, opt_endings) {
-  var BlobBuilder = goog.global.BlobBuilder || goog.global.WebKitBlobBuilder;
-
-  if (BlobBuilder !== undefined) {
-    var bb = new BlobBuilder();
-    for (var i = 0; i < parts.length; i++) {
-      bb.append(parts[i], opt_endings);
-    }
-    return bb.getBlob(opt_type);
-  } else if (goog.global.Blob !== undefined) {
-    var properties = {};
-    if (opt_type) {
-      properties['type'] = opt_type;
-    }
-    if (opt_endings) {
-      properties['endings'] = opt_endings;
-    }
-    return new Blob(parts, properties);
-  } else {
-    throw new Error('This browser doesn\'t seem to support creating Blobs');
-  }
-};
+goog.fs.getBlobWithProperties = goog.fs.blob.getBlobWithProperties;
 
 
 /**

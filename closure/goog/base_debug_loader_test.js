@@ -621,19 +621,19 @@ function testBaseClass() {
   }
 
   function B(x, y) {
-    goog.base(this, x, y);
+    B.base(this, 'constructor', x, y);
     this.foo += 2;
   }
   goog.inherits(B, A);
 
   function C(x, y) {
-    goog.base(this, x, y);
+    C.base(this, 'constructor', x, y);
     this.foo += 4;
   }
   goog.inherits(C, B);
 
   function D(x, y) {
-    goog.base(this, x, y);
+    D.base(this, 'constructor', x, y);
     this.foo += 8;
   }
   goog.inherits(D, C);
@@ -643,45 +643,6 @@ function testBaseClass() {
   assertEquals(16, (new D(2, 0)).foo);
   assertEquals(7, (new C(1, 0)).foo);
   assertEquals(3, (new B(1, 0)).foo);
-}
-
-function testBaseMethod() {
-  function A() {}
-  A.prototype.foo = function(x, y) {
-    return x + y;
-  };
-
-  function B() {}
-  goog.inherits(B, A);
-  B.prototype.foo = function(x, y) {
-    return 2 + goog.base(this, 'foo', x, y);
-  };
-
-  function C() {}
-  goog.inherits(C, B);
-  C.prototype.foo = function(x, y) {
-    return 4 + goog.base(this, 'foo', x, y);
-  };
-
-  const d = new C();
-  d.foo = function(x, y) {
-    return 8 + goog.base(this, 'foo', x, y);
-  };
-
-  assertEquals(15, d.foo(1, 0));
-  assertEquals(16, d.foo(1, 1));
-  assertEquals(16, d.foo(2, 0));
-  assertEquals(7, (new C()).foo(1, 0));
-  assertEquals(3, (new B()).foo(1, 0));
-  assertThrows(function() {
-    goog.base(d, 'foo', 1, 0);
-  });
-
-  delete B.prototype.foo;
-  assertEquals(13, d.foo(1, 0));
-
-  delete C.prototype.foo;
-  assertEquals(9, d.foo(1, 0));
 }
 
 
@@ -696,52 +657,15 @@ function testBaseMethodAndBaseCtor() {
   };
 
   function B(x, y) {
-    goog.base(this, x, y);
+    B.base(this, 'constructor', x, y);
   }
   goog.inherits(B, A);
   B.prototype.foo = function(x, y) {
-    goog.base(this, 'foo', x, y);
+    B.base(this, 'foo', x, y);
     this.bar = this.bar * 2;
   };
 
   assertEquals(14, new B(3, 4).bar);
-}
-
-
-function testBaseMethodWithEs6Subclass() {
-  function A() {}
-  A.prototype.foo = function(x, y) {
-    return x + y;
-  };
-
-  function B() {}
-  goog.inherits(B, A);
-  B.prototype.foo = function(x, y) {
-    return 2 + goog.base(this, 'foo', x, y);
-  };
-
-  class C extends B {
-    foo(x, y) {
-      return 4 + super.foo(x, y);
-    }
-
-    useBase(x, y) {
-      return 4 + goog.base(this, 'foo', x, y);
-    }
-  }
-
-  const c = new C();
-
-  assertEquals(7, c.foo(1, 0));
-  assertEquals(8, c.foo(1, 1));
-  assertEquals(8, c.foo(2, 0));
-  assertEquals(7, (new C()).foo(1, 0));
-  assertThrows(function() {
-    goog.base(c, 'foo', 1, 0);
-  });
-  assertThrows(function() {
-    c.useBase(0, 0);
-  });
 }
 
 

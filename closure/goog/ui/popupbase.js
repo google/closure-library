@@ -811,13 +811,24 @@ goog.ui.PopupBase.prototype.onDocumentBlur_ = function(e) {
 
   var doc = goog.dom.getOwnerDocument(this.element_);
 
-  // Ignore blur events if the active element is still inside the popup or if
-  // there is no longer an active element.  For example, a widget like a
-  // goog.ui.Button might programatically blur itself before losing tabIndex.
+  // Ignore blur events if either the active element is still inside the popup
+  // or one of its partner elements, or if there is no longer an active element.
+  // For example, a widget like a goog.ui.Button might programmatically blur
+  // itself before losing tabIndex.
   if (typeof document.activeElement != 'undefined') {
     var activeElement = doc.activeElement;
     if (!activeElement || goog.dom.contains(this.element_, activeElement) ||
         activeElement.tagName == goog.dom.TagName.BODY) {
+      return;
+    }
+
+    // IE10 differs from other browsers in that it sets the active element to
+    // the element being focused while the blur event is being handled.
+    // In this case, check if the focused element is one of this popup element's
+    // auto-hide partners. If so, do not hide the popup.
+    // Reference:
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event
+    if (this.isOrWithinAutoHidePartner_(activeElement)) {
       return;
     }
 

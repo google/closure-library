@@ -1286,8 +1286,6 @@ testSuite({
   },
 
 
-
-
   testGoogModuleNames() {
     // avoid usage checks
     const module = goog.module;

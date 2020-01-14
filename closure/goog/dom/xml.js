@@ -101,9 +101,9 @@ goog.dom.xml.createDocument = function(
     if (doc) {
       if (opt_rootTagName) {
         doc.appendChild(
-            doc.createNode(
+            /** @type {!Node} */ (doc.createNode(
                 goog.dom.NodeType.ELEMENT, opt_rootTagName,
-                opt_namespaceUri || ''));
+                opt_namespaceUri || '')));
       }
       return doc;
     }

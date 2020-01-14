@@ -250,7 +250,8 @@ goog.ui.emoji.PopupEmojiPicker.prototype.createDom = function() {
   this.emojiPicker_.createDom();
 
   this.getElement().className = goog.getCssName('goog-ui-popupemojipicker');
-  this.getElement().appendChild(this.emojiPicker_.getElement());
+  this.getElement().appendChild(
+      /** @type {!Node} */ (this.emojiPicker_.getElement()));
 
   this.popup_ = new goog.ui.Popup(this.getElement());
   this.getElement().unselectable = 'on';

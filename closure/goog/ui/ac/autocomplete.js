@@ -374,6 +374,7 @@ goog.ui.ac.AutoComplete.prototype.getHighlightedId = function() {
 /**
  * Generic event handler that handles any events this object is listening to.
  * @param {goog.events.Event} e Event Object.
+ * @suppress {missingProperties} e.row
  */
 goog.ui.ac.AutoComplete.prototype.handleEvent = function(e) {
   var matcher = /** @type {?goog.ui.ac.AutoComplete.Matcher} */ (this.matcher_);

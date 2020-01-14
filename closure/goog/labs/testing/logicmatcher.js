@@ -66,7 +66,7 @@ goog.labs.testing.AllOfMatcher.prototype.matches = function(actualValue) {
  * @override
  */
 goog.labs.testing.AllOfMatcher.prototype.describe = function(actualValue) {
-  // TODO(user) : Optimize this to remove duplication with matches ?
+  // TODO(vbhasin) : Optimize this to remove duplication with matches ?
   var errorString = '';
   goog.array.forEach(this.matchers_, function(matcher) {
     if (!matcher.matches(actualValue)) {
@@ -115,7 +115,7 @@ goog.labs.testing.AnyOfMatcher.prototype.matches = function(actualValue) {
  * @override
  */
 goog.labs.testing.AnyOfMatcher.prototype.describe = function(actualValue) {
-  // TODO(user) : Optimize this to remove duplication with matches ?
+  // TODO(vbhasin) : Optimize this to remove duplication with matches ?
   var errorString = '';
   goog.array.forEach(this.matchers_, function(matcher) {
     if (!matcher.matches(actualValue)) {

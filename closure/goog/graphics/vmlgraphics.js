@@ -277,7 +277,7 @@ goog.graphics.VmlGraphics.prototype.updateGraphics_ = function() {
  */
 goog.graphics.VmlGraphics.prototype.append_ = function(element, opt_group) {
   var parent = opt_group || this.canvasElement;
-  parent.getElement().appendChild(element.getElement());
+  parent.getElement().appendChild(/** @type {!Node} */ (element.getElement()));
   this.updateGraphics_();
 };
 

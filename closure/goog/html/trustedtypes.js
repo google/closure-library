@@ -15,6 +15,7 @@
 /**
  * @fileoverview Policy to convert strings to Trusted Types. See
  * https://github.com/WICG/trusted-types for details.
+ *
  */
 
 goog.provide('goog.html.trustedtypes');

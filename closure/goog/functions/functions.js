@@ -308,6 +308,8 @@ goog.functions.not = function(f) {
  * @param {...*} var_args The arguments to be passed to the constructor.
  * @return {T} A new instance of the class given in `constructor`.
  * @template T
+ * @deprecated This function does not work with ES6 class constructors. Use
+ *     arrow functions + spread args instead.
  */
 goog.functions.create = function(constructor, var_args) {
   /**

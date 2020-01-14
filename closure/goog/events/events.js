@@ -263,6 +263,7 @@ goog.events.listen_ = function(
     src.addEventListener(type.toString(), proxy, opt_options);
   } else if (src.attachEvent) {
     // The else if above used to be an unconditional else. It would call
+    // attachEvent come gws or high water. This would sometimes throw an
     // exception on IE11, spoiling the day of some callers. The previous
     // incarnation of this code, from 2007, indicates that it replaced an
     // earlier still version that caused excess allocations on IE6.

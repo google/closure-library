@@ -19,7 +19,6 @@
 
 goog.provide('goog.net.createWebChannelTransport');
 
-goog.require('goog.functions');
 goog.require('goog.labs.net.webChannel.WebChannelBaseTransport');
 
 
@@ -30,8 +29,6 @@ goog.require('goog.labs.net.webChannel.WebChannelBaseTransport');
  *
  * @return {!goog.net.WebChannelTransport} the newly created transport instance.
  */
-goog.net.createWebChannelTransport =
-    /** @type {function(): !goog.net.WebChannelTransport} */ (
-        goog.partial(
-            goog.functions.create,
-            goog.labs.net.webChannel.WebChannelBaseTransport));
+goog.net.createWebChannelTransport = function() {
+  return new goog.labs.net.webChannel.WebChannelBaseTransport();
+};

@@ -469,6 +469,10 @@ goog.ui.Select.prototype.updateAriaActiveDescendant_ = function() {
         contentElement.id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
       }
       goog.a11y.aria.setRole(contentElement, goog.a11y.aria.Role.OPTION);
+      // Set 'aria-selected' to true since the content element represents the
+      // currently selected option.
+      goog.a11y.aria.setState(
+          contentElement, goog.a11y.aria.State.SELECTED, true);
       goog.a11y.aria.setState(
           buttonElement, goog.a11y.aria.State.ACTIVEDESCENDANT,
           contentElement.id);

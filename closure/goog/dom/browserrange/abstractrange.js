@@ -233,6 +233,7 @@ goog.dom.browserrange.AbstractRange.prototype.getText = goog.abstractMethod;
  * Returns the HTML fragment this range selects.  This is slow on all browsers.
  * @return {string} HTML fragment of the range, does not include context
  *     containing elements.
+ * @suppress {missingProperties}
  */
 goog.dom.browserrange.AbstractRange.prototype.getHtmlFragment = function() {
   var output = new goog.string.StringBuffer();

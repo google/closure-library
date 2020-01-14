@@ -469,4 +469,35 @@ testSuite({
     assertFalse('Popup should be invisible', popup.isVisible());
     dom.removeNode(focusDiv);
   },
+
+  testOnDocumentBlurShouldNotHideOnFocusAutoHidePartnerWithoutDelay() {
+    popup.setVisible(true);
+    const commonAncestor = dom.getElement('commonAncestor');
+    const focusDiv = dom.createDom(TagName.DIV, 'tabIndex');
+    popup.addAutoHidePartner(focusDiv);
+    focusDiv.setAttribute('tabIndex', 0);
+    dom.appendChild(commonAncestor, focusDiv);
+    focusDiv.focus();
+    const e = new GoogTestingEvent(EventType.BLUR, document);
+    testingEvents.fireBrowserEvent(e);
+    assertTrue('Popup should be visible', popup.isVisible());
+    popup.removeAutoHidePartner(focusDiv);
+    dom.removeNode(focusDiv);
+  },
+
+  testOnDocumentBlurShouldNotHideOnFocusAutoHidePartnerWithDelay() {
+    popup.setVisible(true);
+    clock.tick(PopupBase.DEBOUNCE_DELAY_MS);
+    const commonAncestor = dom.getElement('commonAncestor');
+    const focusDiv = dom.createDom(TagName.DIV, 'tabIndex');
+    popup.addAutoHidePartner(focusDiv);
+    focusDiv.setAttribute('tabIndex', 0);
+    dom.appendChild(commonAncestor, focusDiv);
+    focusDiv.focus();
+    const e = new GoogTestingEvent(EventType.BLUR, document);
+    testingEvents.fireBrowserEvent(e);
+    assertTrue('Popup should be visible', popup.isVisible());
+    popup.removeAutoHidePartner(focusDiv);
+    dom.removeNode(focusDiv);
+  },
 });

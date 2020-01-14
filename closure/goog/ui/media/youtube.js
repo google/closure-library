@@ -317,9 +317,9 @@ goog.ui.media.YoutubeModel.buildUrl = function(videoId) {
  * A static auxiliary method that builds a static image URL with a preview of
  * the youtube video.
  *
- * NOTE(user): patterned after Gmail's gadgets/youtube,
+ * NOTE(goto): patterned after Gmail's gadgets/youtube,
  *
- * TODO(user): how do I specify the width/height of the resulting image on the
+ * TODO(goto): how do I specify the width/height of the resulting image on the
  * url ? is there an official API for https://ytimg.com ?
  *
  * @param {string} youtubeId The youtube video ID.
