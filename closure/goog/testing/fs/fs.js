@@ -183,4 +183,8 @@ goog.testing.fs.install = function(stubs) {
       fs, 'getBlobWithProperties', goog.testing.fs.getBlobWithProperties);
   stubs.replace(fs, 'blobToString', goog.testing.fs.blobToString);
   stubs.replace(fs, 'browserSupportsObjectUrls', function() { return true; });
+  var fsBlob = goog.getObjectByName('goog.fs.blob');
+  stubs.replace(fsBlob, 'getBlob', goog.testing.fs.getBlob);
+  stubs.replace(
+      fsBlob, 'getBlobWithProperties', goog.testing.fs.getBlobWithProperties);
 };
