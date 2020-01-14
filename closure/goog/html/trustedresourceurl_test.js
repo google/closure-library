@@ -20,6 +20,7 @@ goog.setTestOnly();
 const Const = goog.require('goog.string.Const');
 const Dir = goog.require('goog.i18n.bidi.Dir');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const SafeScript = goog.require('goog.html.SafeScript');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
 const googObject = goog.require('goog.object');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -175,6 +176,28 @@ testSuite({
           Const.from('foo'),
           Const.from('bar'),
         ])));
+  },
+
+  async testFromConstantJavaScript() {
+    const url = TrustedResourceUrl.unwrap(TrustedResourceUrl.fromSafeScript(
+        SafeScript.fromConstant(Const.from('(()=>{})()'))));
+    assertEquals('blob:', url.slice(0, 5));
+    // Verify the content of the URL is the blob we created.
+    // Skip this check on user agents that don't have the fetch API.
+    if (!goog.global.fetch) {
+      return;
+    }
+    const fetchedContent = await (await goog.global.fetch(url)).text();
+    assertEquals('(()=>{})()', fetchedContent);
+  },
+
+  testFromConstantJavaScriptForUserAgentsWithoutBlob() {
+    stubs.set(goog.global, 'BlobBuilder', undefined);
+    stubs.set(goog.global, 'Blob', undefined);
+    assertThrows(() => {
+      TrustedResourceUrl.fromSafeScript(
+          SafeScript.fromConstant(Const.from('(()=>{})()')));
+    });
   },
 
   testCloneWithParams() {

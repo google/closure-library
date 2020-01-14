@@ -21,6 +21,9 @@
 goog.provide('goog.html.TrustedResourceUrl');
 
 goog.require('goog.asserts');
+goog.require('goog.fs.blob');
+goog.require('goog.fs.url');
+goog.require('goog.html.SafeScript');
 goog.require('goog.html.trustedtypes');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.DirectionalString');
@@ -417,6 +420,30 @@ goog.html.TrustedResourceUrl.fromConstants = function(parts) {
   }
   return goog.html.TrustedResourceUrl
       .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(unwrapped);
+};
+
+/**
+ * Creates a TrustedResourceUrl object by generating a Blob from a SafeScript
+ * object and then calling createObjectURL with that blob.
+ *
+ * SafeScript objects are trusted to contain executable JavaScript code.
+ *
+ * Caller must call goog.fs.url.revokeObjectUrl() on the unwrapped url to
+ * release the underlying blob.
+ *
+ * Throws if browser doesn't support blob construction.
+ *
+ * @param {!goog.html.SafeScript} safeScript A script from which to create a
+ *     TrustedResourceUrl.
+ * @return {!goog.html.TrustedResourceUrl} A TrustedResourceUrl object
+ *     initialized to a new blob URL.
+ */
+goog.html.TrustedResourceUrl.fromSafeScript = function(safeScript) {
+  var blob = goog.fs.blob.getBlobWithProperties(
+      [goog.html.SafeScript.unwrap(safeScript)], 'text/javascript');
+  var url = goog.fs.url.createObjectUrl(blob);
+  return goog.html.TrustedResourceUrl
+      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(url);
 };
 
 
