@@ -178,9 +178,6 @@ goog.testing.fs.install = function(stubs) {
   stubs.replace(fs, 'getPersistent', goog.testing.fs.getPersistent);
   stubs.replace(fs, 'createObjectUrl', goog.testing.fs.createObjectUrl);
   stubs.replace(fs, 'revokeObjectUrl', goog.testing.fs.revokeObjectUrl);
-  stubs.replace(fs, 'getBlob', goog.testing.fs.getBlob);
-  stubs.replace(
-      fs, 'getBlobWithProperties', goog.testing.fs.getBlobWithProperties);
   stubs.replace(fs, 'blobToString', goog.testing.fs.blobToString);
   stubs.replace(fs, 'browserSupportsObjectUrls', function() { return true; });
   var fsBlob = goog.getObjectByName('goog.fs.blob');
