@@ -110,7 +110,7 @@ testSuite({
     assertRoughlyEquals(0, anim.progress, 1e-4);
 
     // Possible when clock is reset.
-    clock.tick(-200000);
+    clock.nowMillis_ -= 200000;
     anim.pause();
     anim.play();
 
