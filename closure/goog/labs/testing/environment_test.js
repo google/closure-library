@@ -343,7 +343,7 @@ testingTestSuite(testSuite = {
     const tearDownFn = testCase.tearDown;
     const tearDownPageFn = testCase.tearDownPage;
 
-    testingTestSuite.initialized_ = false;
+    testingTestSuite.resetForTesting();
     testingTestSuite({
       // These lifecycle methods should not override the environment testcase
       // methods but they should be called, when the test runs.

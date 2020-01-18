@@ -11,16 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-goog.provide('goog.testing.testSuite');
+goog.module('goog.testing.testSuite');
+goog.module.declareLegacyNamespace();
 goog.setTestOnly('goog.testing.testSuite');
 
-goog.require('goog.labs.testing.Environment');
-goog.require('goog.testing.TestCase');
+const Environment = goog.require('goog.labs.testing.Environment');
+const TestCase = goog.require('goog.testing.TestCase');
 
-/**
- * @typedef {{order: (!goog.testing.TestCase.Order|undefined)}}
- */
-var TestSuiteOptions;
+/** @record */
+class TestSuiteOptions {
+  constructor() {
+    /** @type {!TestCase.Order|undefined} */
+    this.order;
+  }
+}
 
 /**
  * Runs the lifecycle methods (setUp, tearDown, etc.) and test* methods from
@@ -34,34 +38,48 @@ var TestSuiteOptions;
  *     setUps, any additional tearDown will run before parent tearDowns. The
  *     this object refers to the object that the functions were defined on, not
  *     the full testSuite object.
- * @param {!TestSuiteOptions=} opt_options Optional options object which can
+ * @param {!TestSuiteOptions=} options Optional options object which can
  *     be used to set the sort order for running tests.
  */
-goog.testing.testSuite = function(obj, opt_options) {
-  if (goog.isFunction(obj)) {
+function testSuite(obj, options) {
+  if (typeof obj === 'function') {
     throw new Error(
         'testSuite should be called with an object. ' +
         'Did you forget to initialize a class?');
   }
 
-  if (goog.testing.testSuite.initialized_) {
+  if (initialized) {
     throw new Error('Only one TestSuite can be active');
   }
-  goog.testing.testSuite.initialized_ = true;
+  initialized = true;
 
-  var testCase = goog.labs.testing.Environment.getTestCaseIfActive() ||
-      new goog.testing.TestCase(document.title);
+  const testCase =
+      Environment.getTestCaseIfActive() || new TestCase(document.title);
   testCase.setTestObj(obj);
 
-  var options = opt_options || {};
-  if (options.order) {
+  if (options && options.order) {
     testCase.setOrder(options.order);
   }
-  goog.testing.TestCase.initializeTestRunner(testCase);
-};
+  TestCase.initializeTestRunner(testCase);
+}
 
 /**
  * True iff the testSuite has been created.
- * @private {boolean}
+ * @type {boolean}
  */
-goog.testing.testSuite.initialized_ = false;
+let initialized = false;
+
+/**
+ * Reset the initialized flag so that we can test testSuite.
+ * Should not be called outside Closure.  This should be package-private,
+ * but it's called from environment_test in labs.testing package.
+ */
+testSuite.resetForTesting = function() {
+  const name = TestCase.getActiveTestCase().getName();
+  if (name !== 'environment_test' && name !== 'testsuite_test') {
+    throw new Error(name);
+  }
+  initialized = false;
+};
+
+exports = testSuite;

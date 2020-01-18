@@ -1232,7 +1232,7 @@ goog.addDependency('testing/testcase_test.js', ['goog.testing.TestCaseTest'], ['
 goog.addDependency('testing/testqueue.js', ['goog.testing.TestQueue'], [], {});
 goog.addDependency('testing/testrunner.js', ['goog.testing.TestRunner'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.json', 'goog.testing.TestCase', 'goog.userAgent'], {});
 goog.addDependency('testing/testrunner_test.js', ['goog.testing.TestRunnerTest'], ['goog.testing.TestCase', 'goog.testing.TestRunner', 'goog.testing.asserts', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('testing/testsuite.js', ['goog.testing.testSuite'], ['goog.labs.testing.Environment', 'goog.testing.TestCase'], {});
+goog.addDependency('testing/testsuite.js', ['goog.testing.testSuite'], ['goog.labs.testing.Environment', 'goog.testing.TestCase'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('testing/testsuite_test.js', ['goog.testing.testSuiteTest'], ['goog.testing.TestCase', 'goog.testing.asserts', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('testing/ui/rendererasserts.js', ['goog.testing.ui.rendererasserts'], ['goog.testing.asserts', 'goog.ui.ControlRenderer'], {});
 goog.addDependency('testing/ui/rendererasserts_test.js', ['goog.testing.ui.rendererassertsTest'], ['goog.testing.asserts', 'goog.testing.testSuite', 'goog.testing.ui.rendererasserts', 'goog.ui.ControlRenderer'], {'lang': 'es6', 'module': 'goog'});
