@@ -1473,12 +1473,8 @@ goog.isObject = function(val) {
  */
 goog.getUid = function(obj) {
   // TODO(arv): Make the type stricter, do not accept null.
-
-  // In Opera window.hasOwnProperty exists but always returns false so we avoid
-  // using it. As a consequence the unique ID generated for BaseClass.prototype
-  // and SubClass.prototype will be the same.
-  // TODO(user): UUIDs are broken for ctors with class-side inheritance.
-  return obj[goog.UID_PROPERTY_] ||
+  return Object.prototype.hasOwnProperty.call(obj, goog.UID_PROPERTY_) &&
+      obj[goog.UID_PROPERTY_] ||
       (obj[goog.UID_PROPERTY_] = ++goog.uidCounter_);
 };
 

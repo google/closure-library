@@ -22,15 +22,16 @@ goog.forwardDeclare('goog.ui.Component');
 goog.forwardDeclare('goog.ui.ControlRenderer');
 goog.require('goog.asserts');
 goog.require('goog.dom.classlist');
+goog.require('goog.object');
 
 
 /**
  * Given a {@link goog.ui.Component} constructor, returns an instance of its
  * default renderer.  If the default renderer is a singleton, returns the
  * singleton instance; otherwise returns a new instance of the renderer class.
- * @param {Function} componentCtor Component constructor function (for example
+ * @param {!Function} componentCtor Component constructor function (for example
  *     `goog.ui.Button`).
- * @return {goog.ui.ControlRenderer?} Renderer instance (for example the
+ * @return {?goog.ui.ControlRenderer} Renderer instance (for example the
  *     singleton instance of `goog.ui.ButtonRenderer`), or null if
  *     no default renderer was found.
  */
@@ -39,15 +40,12 @@ goog.ui.registry.getDefaultRenderer = function(componentCtor) {
   // Locate the default renderer based on the constructor's unique ID.  If no
   // renderer is registered for this class, walk up the superClass_ chain.
   var key;
-  /** @type {Function|undefined} */ var rendererCtor;
-  while (componentCtor) {
-    key = goog.getUid(componentCtor);
-    if ((rendererCtor = goog.ui.registry.defaultRenderers_[key])) {
-      break;
-    }
-    componentCtor = componentCtor.superClass_ ?
-        componentCtor.superClass_.constructor :
-        null;
+  var /** ?Function|undefined */ ctor = componentCtor;
+  var /** ?Function|undefined */ rendererCtor;
+  while (ctor) {
+    key = goog.getUid(ctor);
+    if ((rendererCtor = goog.ui.registry.defaultRenderers_[key])) break;
+    ctor = /** @type {?Function|undefined} */ (goog.object.getSuperClass(ctor));
   }
 
   // If the renderer has a static getInstance method, return the singleton
