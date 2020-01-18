@@ -15,7 +15,6 @@
 goog.module('goog.testing.testSuiteTest');
 goog.setTestOnly();
 
-/** @suppress {extraRequire} */
 const TestCase = goog.require('goog.testing.TestCase');
 const asserts = goog.require('goog.testing.asserts');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -28,7 +27,7 @@ testSuite({
     TestCase.initializeTestRunner = () => {
       calls++;
     };
-    testSuite.initialized_ = false;
+    testSuite.resetForTesting();
   },
 
   testTestSuiteInitializesRunner() {
