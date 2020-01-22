@@ -29,6 +29,8 @@ const events = goog.require('goog.events');
 const style = goog.require('goog.style');
 const testSuite = goog.require('goog.testing.testSuite');
 const testingEvents = goog.require('goog.testing.events');
+const transform = goog.require('goog.style.transform');
+
 
 let sandbox;
 
@@ -266,6 +268,40 @@ testSuite({
     menu.addItem(new MenuItem('Photos'));
     menu.addItem(new MenuItem('Work'));
     menu.render(sandbox);
+
+    menu.setHighlightedIndex(0);
+    assertTrue(
+        'Highlighted item should be visible', isHighlightedVisible(menu));
+    menu.setHighlightedIndex(1);
+    assertTrue(
+        'Highlighted item should be visible', isHighlightedVisible(menu));
+    menu.setHighlightedIndex(2);
+    assertTrue(
+        'Highlighted item should be visible', isHighlightedVisible(menu));
+    menu.setHighlightedIndex(3);
+    assertTrue(
+        'Highlighted item should be visible', isHighlightedVisible(menu));
+    menu.setHighlightedIndex(0);
+    assertTrue(
+        'Highlighted item should be visible', isHighlightedVisible(menu));
+
+    menu.dispose();
+  },
+
+  testScrollIntoView_cssTransformApplied() {
+    // Applying a transform property on an element affects whether it is set
+    // as an offsetParent, which influences calculation of offsetTop and
+    // offsetLeft for child elements. This test is to help ensure that reliance
+    // on offsetParent is avoided when performing scroll-on-highlight as the
+    // behavior of offsetParent is not well-defined.
+    let menu = new FilteredMenu();
+    menu.addItem(new MenuItem('Family'));
+    menu.addItem(new MenuItem('Friends'));
+    menu.addItem(new MenuItem('Photos'));
+    menu.addItem(new MenuItem('Work'));
+    menu.render(sandbox);
+
+    transform.setTranslation(menu.getContentElement(), 0, 0);
 
     menu.setHighlightedIndex(0);
     assertTrue(
