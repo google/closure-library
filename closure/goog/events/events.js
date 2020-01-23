@@ -845,8 +845,8 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
 
         // Fire capture listeners.
         var type = listener.type;
-        for (var i = ancestors.length - 1;
-             !evt.hasPropagationStopped() && i >= 0; i--) {
+        for (var i = ancestors.length - 1; !evt.propagationStopped_ && i >= 0;
+             i--) {
           evt.currentTarget = ancestors[i];
           var result =
               goog.events.fireListeners_(ancestors[i], type, true, evt);
@@ -862,8 +862,7 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
         // Level 2 Events TR leaves the event ordering unspecified,
         // modern browsers and W3C DOM Level 3 Events Working Draft
         // actually specify the order as the registration order.)
-        for (var i = 0; !evt.hasPropagationStopped() && i < ancestors.length;
-             i++) {
+        for (var i = 0; !evt.propagationStopped_ && i < ancestors.length; i++) {
           evt.currentTarget = ancestors[i];
           var result =
               goog.events.fireListeners_(ancestors[i], type, false, evt);

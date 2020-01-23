@@ -41,10 +41,12 @@ testSuite({
   },
 
   testStopPropagation() {
+    // This test breaks encapsulation because there is no public getter for
+    // propagationStopped_.
     assertFalse(
-        'Propagation must not have been stopped', e.hasPropagationStopped());
+        'Propagation must not have been stopped', e.propagationStopped_);
     e.stopPropagation();
-    assertTrue('Propagation must have been stopped', e.hasPropagationStopped());
+    assertTrue('Propagation must have been stopped', e.propagationStopped_);
   },
 
   testDefaultPrevented() {

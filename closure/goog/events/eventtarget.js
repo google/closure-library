@@ -367,26 +367,25 @@ goog.events.EventTarget.dispatchEventInternal_ = function(
 
   // Executes all capture listeners on the ancestors, if any.
   if (opt_ancestorsTree) {
-    for (var i = opt_ancestorsTree.length - 1;
-         !e.hasPropagationStopped() && i >= 0; i--) {
+    for (var i = opt_ancestorsTree.length - 1; !e.propagationStopped_ && i >= 0;
+         i--) {
       currentTarget = e.currentTarget = opt_ancestorsTree[i];
       rv = currentTarget.fireListeners(type, true, e) && rv;
     }
   }
 
   // Executes capture and bubble listeners on the target.
-  if (!e.hasPropagationStopped()) {
+  if (!e.propagationStopped_) {
     currentTarget = /** @type {?} */ (e.currentTarget = target);
     rv = currentTarget.fireListeners(type, true, e) && rv;
-    if (!e.hasPropagationStopped()) {
+    if (!e.propagationStopped_) {
       rv = currentTarget.fireListeners(type, false, e) && rv;
     }
   }
 
   // Executes all bubble listeners on the ancestors, if any.
   if (opt_ancestorsTree) {
-    for (i = 0; !e.hasPropagationStopped() && i < opt_ancestorsTree.length;
-         i++) {
+    for (i = 0; !e.propagationStopped_ && i < opt_ancestorsTree.length; i++) {
       currentTarget = e.currentTarget = opt_ancestorsTree[i];
       rv = currentTarget.fireListeners(type, false, e) && rv;
     }
