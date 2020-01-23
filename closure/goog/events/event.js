@@ -95,6 +95,12 @@ goog.events.Event = function(type, opt_target) {
   this.defaultPrevented = false;
 };
 
+/**
+ * @return {boolean} true iff internal propagation has been stopped.
+ */
+goog.events.Event.prototype.hasPropagationStopped = function() {
+  return this.propagationStopped_;
+};
 
 /**
  * Stops event propagation.
