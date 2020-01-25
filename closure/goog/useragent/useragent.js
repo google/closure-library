@@ -293,12 +293,6 @@ goog.userAgent.ASSUME_IPOD = goog.define('goog.userAgent.ASSUME_IPOD', false);
  */
 goog.userAgent.ASSUME_KAIOS = goog.define('goog.userAgent.ASSUME_KAIOS', false);
 
-/**
- * @define {boolean} Whether the user agent is running on Go2Phone.
- */
-goog.userAgent.ASSUME_GO2PHONE =
-    goog.define('goog.userAgent.ASSUME_GO2PHONE', false);
-
 
 /**
  * @type {boolean}
@@ -428,14 +422,6 @@ goog.userAgent.IOS = goog.userAgent.PLATFORM_KNOWN_ ?
 goog.userAgent.KAIOS = goog.userAgent.PLATFORM_KNOWN_ ?
     goog.userAgent.ASSUME_KAIOS :
     goog.labs.userAgent.platform.isKaiOS();
-
-/**
- * Whether the user agent is running on Go2Phone.
- * @type {boolean}
- */
-goog.userAgent.GO2PHONE = goog.userAgent.PLATFORM_KNOWN_ ?
-    goog.userAgent.ASSUME_GO2PHONE :
-    goog.labs.userAgent.platform.isGo2Phone();
 
 
 /**
