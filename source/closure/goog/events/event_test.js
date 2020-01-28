@@ -41,20 +41,10 @@ testSuite({
   },
 
   testStopPropagation() {
-    // This test breaks encapsulation because there is no public getter for
-    // propagationStopped_.
     assertFalse(
-        'Propagation must not have been stopped', e.propagationStopped_);
+        'Propagation must not have been stopped', e.hasPropagationStopped());
     e.stopPropagation();
-    assertTrue('Propagation must have been stopped', e.propagationStopped_);
-  },
-
-  testPreventDefault() {
-    // This test breaks encapsulation because there is no public getter for
-    // returnValue_.
-    assertTrue('Return value must be true', e.returnValue_);
-    e.preventDefault();
-    assertFalse('Return value must be false', e.returnValue_);
+    assertTrue('Propagation must have been stopped', e.hasPropagationStopped());
   },
 
   testDefaultPrevented() {

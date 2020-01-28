@@ -275,6 +275,15 @@ testSuite({
     assertVersionBetween('17.0', '18.1');
   },
 
+  testChromeHeadless() {
+    util.setUserAgent(testAgents.CHROME_HEADLESS);
+    assertBrowser(Browser.CHROME);
+    assertTrue(userAgentBrowser.isChrome());
+    assertVersion('79.0.3945.84');
+    assertVersionBetween('78.0', '80.0');
+    assertVersionBetween('79.0', '79.1');
+  },
+
   testChromeIphone() {
     util.setUserAgent(testAgents.CHROME_IPHONE);
     assertBrowser(Browser.CHROME);

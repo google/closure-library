@@ -671,6 +671,7 @@ goog.setTestOnly = function(opt_message) {
  *
  * @param {string} name The namespace to forward declare in the form of
  *     "goog.package.part".
+ * @deprecated See go/noforwarddeclaration, Use `goog.requireType` instead.
  */
 goog.forwardDeclare = function(name) {};
 
@@ -1473,12 +1474,8 @@ goog.isObject = function(val) {
  */
 goog.getUid = function(obj) {
   // TODO(arv): Make the type stricter, do not accept null.
-
-  // In Opera window.hasOwnProperty exists but always returns false so we avoid
-  // using it. As a consequence the unique ID generated for BaseClass.prototype
-  // and SubClass.prototype will be the same.
-  // TODO(user): UUIDs are broken for ctors with class-side inheritance.
-  return obj[goog.UID_PROPERTY_] ||
+  return Object.prototype.hasOwnProperty.call(obj, goog.UID_PROPERTY_) &&
+      obj[goog.UID_PROPERTY_] ||
       (obj[goog.UID_PROPERTY_] = ++goog.uidCounter_);
 };
 
@@ -2132,6 +2129,7 @@ goog.inherits = function(childCtor, parentCtor) {
  * @param {function()} fn Function to call.  This function can contain aliases
  *     to namespaces (e.g. "var dom = goog.dom") or classes
  *     (e.g. "var Timer = goog.Timer").
+ * @deprecated Use goog.module instead.
  */
 goog.scope = function(fn) {
   if (goog.isInModuleLoader_()) {

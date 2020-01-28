@@ -22,6 +22,7 @@ const GoogPromise = goog.require('goog.Promise');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const events = goog.require('goog.events');
 const googFs = goog.require('goog.fs');
+const googFsBlob = goog.require('goog.fs.blob');
 const testSuite = goog.require('goog.testing.testSuite');
 const testingFs = goog.require('goog.testing.fs');
 
@@ -50,7 +51,7 @@ function startWrite(content, fileEntry) {
   return fileEntry.createWriter()
       .then(goog.partial(checkReadyState, ReadyState.INIT))
       .then((writer) => {
-        writer.write(googFs.getBlob(content));
+        writer.write(googFsBlob.getBlob(content));
         return writer;
       })
       .then(goog.partial(checkReadyState, ReadyState.WRITING));
@@ -161,7 +162,7 @@ testSuite({
         .then(goog.partial(checkReadyState, ReadyState.INIT))
         .then((writer) => {
           writer.seek(5);
-          writer.write(googFs.getBlob('stuff and things'));
+          writer.write(googFsBlob.getBlob('stuff and things'));
           return writer;
         })
         .then(goog.partial(checkReadyState, ReadyState.WRITING))

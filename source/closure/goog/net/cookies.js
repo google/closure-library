@@ -225,7 +225,7 @@ goog.net.Cookies.prototype.get = function(name, opt_default) {
  */
 goog.net.Cookies.prototype.remove = function(name, opt_path, opt_domain) {
   var rv = this.containsKey(name);
-  this.set(name, '', 0, opt_path, opt_domain);
+  this.set(name, '', {maxAge: 0, path: opt_path, domain: opt_domain});
   return rv;
 };
 

@@ -352,6 +352,12 @@ testAgents.CHROME_ANDROID_TABLET_4_4 =
 
 
 /** @const {string} */
+testAgents.CHROME_HEADLESS =
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) ' +
+    'HeadlessChrome/79.0.3945.84 Safari/537.36';
+
+
+/** @const {string} */
 testAgents.CHROME_IPHONE =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X; en-us) ' +
     'AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/22.0.1194.0 Mobile/11E53 ' +

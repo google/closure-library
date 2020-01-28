@@ -223,10 +223,10 @@ testSuite({
     assertEquals(
         'Button must not have dispatched ACTION on Space keypress', 0,
         dispatchedActionCount);
-    assertEquals(
+    assertTrue(
         'The default action (scrolling) must have been prevented ' +
             'for Space keypress',
-        false, e.returnValue_);
+        e.defaultPrevented);
 
     dispatchedActionCount = 0;
     e = new GoogEvent(EventType.KEYUP, button);

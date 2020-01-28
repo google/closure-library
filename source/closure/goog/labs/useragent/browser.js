@@ -302,7 +302,7 @@ goog.labs.userAgent.browser.getVersion = function() {
   }
 
   if (goog.labs.userAgent.browser.isChrome()) {
-    return lookUpValueWithKeys(['Chrome', 'CriOS']);
+    return lookUpValueWithKeys(['Chrome', 'CriOS', 'HeadlessChrome']);
   }
 
   // Usually products browser versions are in the third tuple after "Mozilla"
