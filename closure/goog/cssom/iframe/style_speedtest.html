@@ -1,0 +1,105 @@
+<html>
+<!--
+Copyright The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="style_speedtest_link_1.css" />
+  <link rel="stylesheet" href="style_speedtest_link_2.css" />
+  <script src="../../base.js"></script>
+  <script>
+    goog.require('goog.cssom');
+    goog.require('goog.cssom.iframe.style');
+    goog.require('goog.dom');
+  </script>
+  <script>
+    var IFRAMECOUNT=5;
+    var iframeDocs = [];
+    window.onload = function() {
+      var sampleHtml = document.getElementById('sampleText').innerHTML;
+      for (var i = 0; i < IFRAMECOUNT; i++) {
+        var iframe = document.createElement('iframe');
+        iframe.id = 'testframe' + i;
+        document.body.appendChild(document.createElement('br'));
+        document.body.appendChild(iframe);
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        iframeDocs.push(doc);
+        doc.open();
+        doc.write('<html><head></head><body>' + sampleHtml + '</body></html>');
+        doc.close();
+        doc.designMode = 'on';
+      }
+    };
+
+    function copyCss() {
+      var startTime = new Date();
+      var sourceDiv = document.getElementById('dummyContainer');
+      for (var i = 0; i < iframeDocs.length; i++) {
+        goog.cssom.addCssText(
+            goog.cssom.iframe.style.getElementContext(sourceDiv),
+            new goog.dom.DomHelper(iframeDocs[i]));
+        if (i === 0) {
+          var firstCopyTime = new Date();
+        }
+      }
+      var endTime = new Date();
+      document.getElementById('results').innerHTML =
+        'copied css to ' + IFRAMECOUNT + ' iframes  in ' +
+        (endTime-startTime) + 'ms. <br /> First copy took ' +
+        (firstCopyTime-startTime) + 'ms, average subsequent copies took ' +
+        (endTime-firstCopyTime)/(IFRAMECOUNT-1) + 'ms.'
+    };
+
+    function loadRuleSets() {
+      goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument(document);
+    }
+
+  </script>
+</head>
+<body>
+<h1>copyElementContextToDocument speed test</h1>
+<button onclick="loadRuleSets();">
+  preload css rules for copyElementContextToDocument
+</button>
+<br />
+<button onclick="copyCss();">
+  copy css rules using copyElementContextToDocument
+</button>
+<br />
+<div id="results">&nbsp;</div>
+<br />
+<div>
+  <div id="twocolumn-liquid-left">
+    <div id="sidebar">
+      <div id="dummyContainer"></div>
+    </div>
+  </div>
+<div>
+<br style="clear:both" />
+<div id="sampleText" style="display: none">
+<h1>Lorem ipsum</h1>
+<p>dolor sit amet, <a href="http://www.google.com/">consectetuer</a> adipiscing elit. Donec eros ipsum, blandit id, ultrices in, faucibus sit amet, arcu. Nulla pretium, lacus in sollicitudin luctus, metus diam sollicitudin velit, id congue tellus tortor quis urna. Sed nonummy. Pellentesque interdum faucibus mauris. Proin elementum lectus et lacus. Aenean nunc velit, vestibulum non, suscipit sit amet, iaculis ut, erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Pellentesque quis orci. Donec id neque. Fusce mollis. Fusce ut mauris. Integer eu purus et odio adipiscing suscipit. Phasellus dignissim convallis tortor. Integer id diam at purus fringilla porttitor. Mauris vel enim. Aenean iaculis bibendum massa. Praesent tortor. Quisque quam massa, commodo nec, congue eget, volutpat id, turpis. Donec felis ligula, ullamcorper convallis, scelerisque at, ultrices et, neque. Vestibulum lacus lectus, lacinia sit amet, congue ac, sodales vitae, tortor.
+</p>
+<div>
+<ul>
+  <li>Suspendisse vitae odio.</li>
+  <li>Sed eu nisl.</li>
+  <li>Phasellus egestas tellus at tellus.</li>
+</ul>
+<h2>Suspendisse potenti</h2>
+<p>Pellentesque ac mauris at dolor feugiat placerat. Maecenas hendrerit, nisi et posuere congue, ante quam porttitor quam, in dignissim sem orci ultricies nisi. Praesent tempus augue at enim mollis adipiscing. Sed tristique, purus et fringilla aliquet, est diam placerat eros, at sollicitudin metus turpis sit amet mauris. Sed mauris. Maecenas et nisl ac enim consequat nonummy.</p>
+<p>
+Nunc ornare fermentum lorem. Nullam lobortis imperdiet turpis. Pellentesque lacinia dignissim mauris. Donec a libero. Etiam in mauris. Morbi quis magna. Phasellus porta vestibulum lorem. Nam ligula libero, condimentum at, tempus a, elementum eget, lacus. Nulla metus arcu, accumsan a, vulputate sed, venenatis in, tellus. Sed vel leo sed mi venenatis porta. Pellentesque id diam. Praesent vitae ligula aliquet urna suscipit pellentesque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam sed neque. Fusce tellus nulla, rutrum sit amet, elementum eu, rhoncus at, lectus. Etiam lobortis. Nulla facilisi.
+</p>
+<p>
+Sed posuere laoreet mauris. Donec vestibulum ipsum id dolor. Suspendisse porttitor scelerisque libero. Quisque enim orci, posuere eu, feugiat suscipit, mattis in, sem. Aliquam luctus, eros sit amet ornare pellentesque, nulla nibh semper lectus, at eleifend lorem erat eu nibh. Maecenas sed lectus non nisl varius tincidunt. Morbi vel sapien. Morbi volutpat semper libero. Donec at orci at ante auctor tincidunt. Integer rutrum volutpat mauris. Fusce eget enim.
+</p>
+<p>
+Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed urna eros, ultrices at, congue vitae, sagittis ac, mauris. Nullam luctus pede quis erat. Ut pulvinar facilisis dui. Donec eget mi quis lacus varius facilisis. Cras porta. Morbi dui ipsum, pharetra nec, pretium sed, tempus eu, nisi. Phasellus nisl tellus, egestas a, mattis commodo, fermentum id, tellus. Maecenas a sapien at mi mattis blandit. Quisque non diam eget nibh dictum tempus. Praesent semper ultrices purus. Etiam sit amet ante.
+</p>
+</div>
+</body>
+</html>
