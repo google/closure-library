@@ -62,14 +62,6 @@ testSuite({
     assertVersionBetween('4.0.0', '4.1.0');
     assertVersionBetween('4.0', '4.1');
     assertVersionBetween('4', '5');
-
-    uaString = testAgents.GO2PHONE;
-
-    util.setUserAgent(uaString);
-    assertTrue(userAgentPlatform.isAndroid());
-    assertVersion('8.1.0');
-    assertVersionBetween('8.0', '8.2');
-    assertVersionBetween('8', '9');
   },
 
   testKindleFire() {
@@ -273,13 +265,5 @@ testSuite({
     util.setUserAgent(uaString);
     assertTrue(userAgentPlatform.isKaiOS());
     assertVersion('2.5');
-  },
-
-  testGo2Phone() {
-    const uaString = testAgents.GO2PHONE;
-
-    util.setUserAgent(uaString);
-    assertTrue(userAgentPlatform.isGo2Phone());
-    assertVersion('8.1.0');
   },
 });
