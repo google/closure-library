@@ -207,32 +207,20 @@ testSuite({
   testSetCookiePath() {
     assertEquals(
         'foo=bar;path=/xyz', mockSetCookie('foo', 'bar', {path: '/xyz'}));
-    assertEquals('foo=bar;path=/xyz', mockSetCookie('foo', 'bar', -1, '/xyz'));
   },
 
   testSetCookieDomain() {
     assertEquals(
         'foo=bar;domain=google.com',
-        mockSetCookie('foo', 'bar', -1, null, 'google.com'));
+        mockSetCookie('foo', 'bar', {domain: 'google.com'}));
   },
 
   testSetCookieSecure() {
     assertEquals('foo=bar;secure', mockSetCookie('foo', 'bar', {secure: true}));
-    assertEquals(
-        'foo=bar;secure', mockSetCookie('foo', 'bar', -1, null, null, true));
   },
 
   testSetCookieMaxAgeZero() {
     const result = mockSetCookie('foo', 'bar', {maxAge: 0});
-    const pattern =
-        new RegExp('foo=bar;expires=' + new Date(1970, 1, 1).toUTCString());
-    if (!result.match(pattern)) {
-      fail(`expected match against ${pattern} got ${result}`);
-    }
-  },
-
-  testSetCookieMaxAgeZeroPositional() {
-    const result = mockSetCookie('foo', 'bar', 0);
     const pattern =
         new RegExp('foo=bar;expires=' + new Date(1970, 1, 1).toUTCString());
     if (!result.match(pattern)) {
