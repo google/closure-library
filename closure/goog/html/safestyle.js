@@ -530,6 +530,7 @@ goog.html.SafeStyle.ALLOWED_FUNCTIONS_ = [
   'fit-content',
   'hsl',
   'hsla',
+  'linear-gradient',
   'matrix',
   'minmax',
   'repeat',
