@@ -561,7 +561,7 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelection_ = function() {
 goog.editor.plugins.EnterHandler.prototype.releasePositionObject_ = function(
     position) {
   if (!goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-    (/** @type {Node} */ (position)).removeNode(true);
+    goog.dom.removeNode(/** @type {!Node} */ (position));
   }
 };
 
