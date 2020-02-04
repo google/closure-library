@@ -423,10 +423,4 @@ testAgents.KAIOS =
     'Mozilla/5.0 (Mobile; LYF/F90M/LYF_F90M_000-03-19-240319; Android; ' +
     'rv:48.0) Gecko/48.0 Firefox/48.0 KAIOS/2.5';
 
-/** @const {string} */
-testAgents.GO2PHONE =
-    'Mozilla/5.0 (Linux; Android 8.1.0; GAFP sp9820e_1h10_go_native)' +
-    ' AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3605.0 Mobile' +
-    ' Safari/537.36';
-
 exports = testAgents;
