@@ -14,7 +14,7 @@
 
 goog.provide('goog.promise.Resolver');
 
-goog.forwardDeclare('goog.Promise');
+goog.requireType('goog.Promise');
 
 
 

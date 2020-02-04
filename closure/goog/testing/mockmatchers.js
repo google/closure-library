@@ -31,10 +31,10 @@ goog.provide('goog.testing.mockmatchers.RegexpMatch');
 goog.provide('goog.testing.mockmatchers.SaveArgument');
 goog.provide('goog.testing.mockmatchers.TypeOf');
 
-goog.forwardDeclare('goog.testing.MockExpectation');
 goog.require('goog.array');
 goog.require('goog.dom');
-goog.require('goog.testing.asserts');  // circular
+goog.require('goog.testing.asserts');
+goog.requireType('goog.testing.MockExpectation');
 
 
 

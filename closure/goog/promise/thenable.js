@@ -13,9 +13,8 @@
 // limitations under the License.
 
 goog.provide('goog.Thenable');
-
-/** @suppress {extraRequire} */
-goog.forwardDeclare('goog.Promise'); // for the type reference.
+/** @suppress {extraRequire} used in complex type */
+goog.requireType('goog.Promise');  // for the type reference.
 
 
 
