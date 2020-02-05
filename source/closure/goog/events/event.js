@@ -45,10 +45,6 @@ goog.events.EventLike;
  * A base class for event objects, so that they can support preventDefault and
  * stopPropagation.
  *
- * @suppress {underscore} Several properties on this class are technically
- *     public, but referencing these properties outside this package is strongly
- *     discouraged.
- *
  * @param {string|!goog.events.EventId} type Event Type.
  * @param {Object=} opt_target Reference to the object that is the target of
  *     this event. It has to implement the `EventTarget` interface
@@ -80,7 +76,7 @@ goog.events.Event = function(type, opt_target) {
   /**
    * Whether to cancel the event in internal capture/bubble processing for IE.
    * @type {boolean}
-   * @public
+   * @private
    */
   this.propagationStopped_ = false;
 
