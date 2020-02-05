@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<!--
+  Copyright The Closure Library Authors. All Rights Reserved.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Closure Speed Tests - goog.debug.Logger</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.debug.Logger');
+</script>
+</head>
+<body>
+  Number of trials: <input id="numtrials" value="4"><br>
+  <label><input id="hierarchy" type="checkbox">
+      Turn off ENABLE_HIERARCHY Logging Define</label><br>
+  <label><input id="buffer" type="checkbox"> Enable LogBuffer</label><br>
+  <button onclick="doInMemoryTest()">Test In-Memory Logging</button>
+  <div>Logs: (<a href="javascript:void(clearLogs())">clear</a>)</div>
+    <pre id="logs"></pre>
+<script>
+
+// Each element in this is the number of nth level names to create.
+// The total number of names will be the product of these.
+var DEFAULT_LOGGER_DEPTHS = [4, 8, 8, 40];
+// The number of logger.info() statements to execute.
+var DEFAULT_NUM_LOGS = 50000;
+
+var logsDiv = document.getElementById('logs');
+var numTrialsElem = document.getElementById('numtrials');
+var disableHierarchyElem = document.getElementById('hierarchy');
+var enableLogBufferElem = document.getElementById('buffer');
+var pageLoadStartTime = goog.now();
+
+var createLoggersTime;
+var logTime;
+
+function clearLogs() {
+  logsDiv.textContent = '';
+}
+
+function log(msg) {
+  msg = timeStamp() + ' ' + msg;
+  logsDiv.textContent += msg + '\n';
+}
+
+function timeStamp() {
+  return Math.round((goog.now() - pageLoadStartTime) / 10) / 100;
+}
+
+function resetLogging(disableHierarchy, buffer) {
+  goog.debug.LogManager.loggers_ = {};
+  goog.debug.LogManager.rootLogger_ = null;
+  goog.debug.Logger.ENABLE_HIERARCHY = !disableHierarchy;
+  goog.debug.Logger.rootHandlers_ = [];
+  goog.debug.LogRecord.ENABLE_SEQUENCE_NUMBERS = !disableHierarchy;
+  goog.debug.LogBuffer.instance_ = null;
+  goog.debug.LogBuffer.CAPACITY = buffer ? 500 : 0;
+}
+
+// Creates a unique name based on the given number.
+function makeName(prefix, num) {
+  var name = 'logger' + num;
+  if (prefix) {
+    return prefix + '.' + name;
+  }
+  return name;
+}
+
+// Creates a logger for each permutation of depths.
+// Eg: depths = [1, 2] --> logger0.logger0 and logger0.logger1
+// Eg: depths = [2, 2] --> logger0.logger0 and logger0.logger1 and
+//     logger1.logger0 and logger1.logger1
+function createLoggers(depths) {
+  var startTime = goog.now();
+  var allLoggers = [];
+  function helper(prefix, subDepths) {
+    var curDepth = subDepths[0];
+    if (curDepth) {
+      subDepths = subDepths.slice(1);
+      for (var i = 0; i < curDepth; i++) {
+        var name = makeName(prefix, i);
+        allLoggers.push(goog.debug.Logger.getLogger(name));
+        helper(name, subDepths);
+      }
+    }
+  }
+  helper('', depths);
+  var timeDelta = goog.now() - startTime;
+  createLoggersTime.push(timeDelta);
+  log('created ' + allLoggers.length + ' loggers in ' + timeDelta + 'ms');
+  return allLoggers;
+}
+
+function InMemoryHandler() {
+  this.records = [];
+}
+
+InMemoryHandler.prototype.addLog = function(record) {
+  this.records.push(record);
+};
+
+// Registers the given handler on the root logger.
+function installRootHandler(handler) {
+  function addLog(r) {
+    handler.addLog(r);
+  }
+  var rootLogger = goog.debug.LogManager.getRoot();
+  rootLogger.addHandler(addLog);
+}
+
+// Iterates through loggers, calling logger.info howMany number of times.
+function logSomeStuff(loggers, howMany) {
+  var startTime = goog.now();
+  var numLoggers = loggers.length;
+  for (var i = 0; i < howMany; ++i) {
+    var logger = loggers[i % numLoggers];
+    logger.info('this is a test logs message');
+  }
+  var timeDelta = goog.now() - startTime;
+  logTime.push(timeDelta);
+  log('Logged ' + howMany + ' messages in ' + timeDelta + 'ms.');
+}
+
+function doInMemoryTest() {
+  createLoggersTime = [];
+  logTime = [];
+  var numTrials = +numTrialsElem.value;
+  var disableHierarchy = !!disableHierarchyElem.value;
+  var buffer = !!enableLogBufferElem.value;
+  log('Logging with disableHierarchy=' + disableHierarchy +
+      ' buffering=' + buffer);
+  for (var i = 0; i < numTrials; ++i) {
+    resetLogging(disableHierarchy, buffer);
+    var loggers = createLoggers(DEFAULT_LOGGER_DEPTHS);
+    // Don't need a log handler when there's an internal buffer.
+    if (!buffer) {
+      var handler = new InMemoryHandler();
+      installRootHandler(handler);
+    }
+    logSomeStuff(loggers, DEFAULT_NUM_LOGS);
+  }
+  log('Creating Loggers: ' + createLoggersTime.join(', '));
+  log('Logging: ' + logTime.join(', '));
+  log('===== Done =====');
+}
+
+</script>
+</body>
+</html>
