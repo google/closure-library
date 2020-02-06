@@ -57,7 +57,7 @@ goog.net.streams.StreamParser.prototype.getErrorMessage = goog.abstractMethod;
  *
  * Note that there is no Parser state to indicate the end of a stream.
  *
- * @param {string|!ArrayBuffer|!Array<number>} input The input data
+ * @param {string|!ArrayBuffer|!Uint8Array|!Array<number>} input The input data
  * @throws {!Error} if the input is invalid, and the parser will remain invalid
  *    once an error has been thrown.
  * @return {?Array<string|!Object>} any parsed objects (atomic messages)
