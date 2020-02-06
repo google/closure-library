@@ -239,7 +239,7 @@ Parser.prototype.getExtraInput = function() {
 
 
 /**
- * @param {string|!ArrayBuffer|!Array<number>} input
+ * @param {string|!ArrayBuffer|!Uint8Array|!Array<number>} input
  *     The current input string (always)
  * @param {number} pos The position in the current input that triggers the error
  * @throws {!Error} Throws an error indicating where the stream is broken
