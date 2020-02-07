@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Closure Performance Tests - goog.string.linkify</title>
+  <link rel="stylesheet" type="text/css" href="../testing/performancetable.css"/>
+  <script src="../base.js"></script>
+  <script>
+    goog.require('goog.string.linkify');
+    goog.require('goog.testing.PerformanceTable');
+    goog.require('goog.testing.jsunit');
+  </script>
+</head>
+<body>
+  <div id="perfTable"></div>
+  <hr>
+
+  <script>
+    var table = new goog.testing.PerformanceTable(
+        document.getElementById('perfTable'));
+
+    // Number of operations to measure in each table line.
+    var OPS_COUNT = 20000;
+
+    function testEmptyString() {
+      table.run(function() {
+        for (var i = 0; i < OPS_COUNT; i++) {
+          goog.string.linkify.linkifyPlainTextAsHtml('');
+        }
+      }, 'Empty string');
+    }
+
+    function testNothingToLinkify() {
+      table.run(function() {
+        for (var i = 0; i < OPS_COUNT; i++) {
+          goog.string.linkify.linkifyPlainTextAsHtml(
+              'Lorem ipsum dolor sit amet, consectetur adipisicing elit...');
+        }
+      }, 'Nothing to linkify');
+    }
+
+    function testEmailAddress() {
+      table.run(function() {
+        for (var i = 0; i < OPS_COUNT; i++) {
+          goog.string.linkify.linkifyPlainTextAsHtml(
+              'My email address is johndoe@example.com.');
+        }
+      }, 'Plain text with an email address');
+    }
+
+    function testHttpUrl() {
+      table.run(function() {
+        for (var i = 0; i < OPS_COUNT; i++) {
+          goog.string.linkify.linkifyPlainTextAsHtml(
+              'See http://www.example.com/.');
+        }
+      }, 'Plain text with an http url');
+    }
+  </script>
+</body>
+</html>
