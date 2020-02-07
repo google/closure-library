@@ -1,0 +1,27 @@
+/*
+ * Copyright The Closure Library Authors. All Rights Reserved.
+ *
+ * Use of this source code is governed by the Apache License, Version 2.0.
+ * See the COPYING file for details.
+ */
+
+/**
+ * TODO(user): Re-enable if we ever come up with a way to make imports work.
+ * This enables us to test that our style disabler correctly respects the
+ * order of dependency from the top down in devcss_test.html.
+ * @import "devcss_test_import_1.css";
+ */
+
+.css-style-3 {
+  background-color: rgb(255,255,0); /* aka yellow */
+}
+
+/**
+ * These rules should override earlier rules for IE-6 Equals tests.
+ */
+.USERAGENT-IE-6 #devcss-test-ie6 {
+  background-color: rgb(255, 192, 203);
+}
+.USERAGENT-IE-7 #devcss-test-ie6 {
+  background-color: #000;
+}
