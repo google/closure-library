@@ -171,12 +171,15 @@ goog.fs.EntryImpl.prototype.remove = function() {
 /** @override */
 goog.fs.EntryImpl.prototype.getParent = function() {
   var d = new goog.async.Deferred();
-  this.entry_.getParent(goog.bind(function(parent) {
-    d.callback(new goog.fs.DirectoryEntryImpl(this.fs_, parent));
-  }, this), goog.bind(function(err) {
-    var msg = 'getting parent of ' + this.getFullPath();
-    d.errback(new goog.fs.Error(err, msg));
-  }, this));
+  this.entry_.getParent(
+      (parent) => {
+        d.callback(new goog.fs.DirectoryEntryImpl(
+            this.fs_, /** @type {!DirectoryEntry} */ (parent)));
+      },
+      (err) => {
+        var msg = 'getting parent of ' + this.getFullPath();
+        d.errback(new goog.fs.Error(err, msg));
+      });
   return d;
 };
 

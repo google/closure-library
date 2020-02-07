@@ -547,7 +547,8 @@ goog.async.Deferred.prototype.awaitDeferred = function(otherDeferred) {
       return otherDeferred;
     });
   }
-  return this.addCallback(goog.bind(otherDeferred.branch, otherDeferred));
+  const def = otherDeferred;
+  return this.addCallback((propagateCancel) => def.branch(propagateCancel));
 };
 
 
@@ -679,8 +680,8 @@ goog.async.Deferred.prototype.fire_ = function() {
   this.result_ = res;
 
   if (isNewlyBlocked) {
-    var onCallback = goog.bind(this.continue_, this, true /* isSuccess */);
-    var onErrback = goog.bind(this.continue_, this, false /* isSuccess */);
+    var onCallback = (res) => this.continue_(true /* isSuccess */, res);
+    var onErrback = (res) => this.continue_(false /* isSuccess */, res);
 
     if (res instanceof goog.async.Deferred) {
       res.addCallbacks(onCallback, onErrback);
@@ -879,7 +880,7 @@ goog.async.Deferred.CanceledError.prototype.name = 'CanceledError';
  */
 goog.async.Deferred.Error_ = function(error) {
   /** @const @private {number} */
-  this.id_ = goog.global.setTimeout(goog.bind(this.throwError, this), 0);
+  this.id_ = goog.global.setTimeout(() => this.throwError(), 0);
 
   /** @const @private {*} */
   this.error_ = error;

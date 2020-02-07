@@ -567,9 +567,9 @@ AvlTree.prototype.reverseOrderTraverse = function(func, opt_startValue) {
   }
 
   // Depth traverse the tree to find node to begin reverse-order traversal from
-  var startNode;
+  var /** ?Node<T> */ startNode;
   if (opt_startValue !== undefined) {
-    this.traverse_(goog.bind(function(node) {
+    this.traverse_((node) => {
       var retNode = null;
       var comparison = this.comparator_(node.value, opt_startValue);
       if (comparison > 0) {
@@ -581,7 +581,7 @@ AvlTree.prototype.reverseOrderTraverse = function(func, opt_startValue) {
         startNode = node;
       }
       return retNode;  // If null, we'll stop traversing the tree
-    }, this));
+    });
     if (!startNode) {
       return;
     }
@@ -590,7 +590,7 @@ AvlTree.prototype.reverseOrderTraverse = function(func, opt_startValue) {
   }
 
   // Traverse the tree and call func on each traversed node's value
-  var node = startNode, prev = startNode.right ? startNode.right : startNode;
+  var node = startNode, prev = node.right ? node.right : node;
   while (node != null) {
     if (node.right != null && node.right != prev && node.left != prev) {
       node = node.right;

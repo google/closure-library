@@ -1,0 +1,8 @@
+JavaScript implementation of the safe-HTML types. These types are simple
+wrappers around string, and represent values that are known -- by construction
+or via escaping or sanitization -- to be safe to use in various HTML contexts
+and with various DOM APIs.
+
+See http://go/safehtmltypes for an introduction to the safe-HTML types.
+
+See http://go/safehtml-closure for design doc for the Closure implementation.

@@ -200,7 +200,10 @@ goog.messaging.RespondingChannel.prototype.callbackServiceHandler_ = function(
 goog.messaging.RespondingChannel.prototype.registerService = function(
     serviceName, callback) {
   this.publicChannel_.registerService(
-      serviceName, goog.bind(this.callbackProxy_, this, callback), true);
+      serviceName,
+      (message) =>
+          this.callbackProxy_(/** @type {!Function} */ (callback), message),
+      true);
 };
 
 

@@ -96,7 +96,6 @@ goog.net.WebSocket.BinaryType = {
 
 /** @record */
 goog.net.WebSocket.Options = function() {
-
   /**
    * True if the web socket should automatically reconnect or not.  This is
    * true by default.
@@ -300,8 +299,9 @@ goog.net.WebSocket.prototype.open = function(url, opt_protocol) {
   // for passing undefined, null, '', or [].
   if (this.protocol_) {
     goog.log.info(
-        this.logger_, 'Opening the WebSocket on ' + this.url_ +
-            ' with protocol ' + this.protocol_);
+        this.logger_,
+        'Opening the WebSocket on ' + this.url_ + ' with protocol ' +
+            this.protocol_);
     this.webSocket_ = new WebSocket(this.url_, this.protocol_);
   } else {
     goog.log.info(this.logger_, 'Opening the WebSocket on ' + this.url_);
@@ -324,7 +324,6 @@ goog.net.WebSocket.prototype.open = function(url, opt_protocol) {
  * Closes the web socket connection.
  */
 goog.net.WebSocket.prototype.close = function() {
-
   // Clear any pending attempts to reconnect.
   this.clearReconnectTimer_();
 
@@ -428,7 +427,8 @@ goog.net.WebSocket.prototype.onClose_ = function(event) {
 
       // Actually schedule the timer.
       this.reconnectTimer_ = goog.Timer.callOnce(
-          goog.bind(this.open, this, this.url_, this.protocol_),
+          ((url, protocol) => () => this.open(url, protocol))(
+              /** @type {string} */ (this.url_), this.protocol_),
           this.nextReconnect_, this);
 
       // Set the next reconnect interval.
