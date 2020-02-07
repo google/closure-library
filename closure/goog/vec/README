@@ -1,0 +1,76 @@
+The goog.vec library provides high performance functions for operating
+on vectors and matrices.  For vectors, 2-element vectors, 3-element
+vectors, and 4-element vectors are supported.  For matrices, 3x3
+matrices and 4x4 matrices are supported.  Both float (32bit) and double
+(64bit) elements are supported.
+
+Functions are split into files according to the primary type they act
+on.  For example, vec2f.js contains functions for operating on
+2-element float vectors, and mat4d.js contains functions for operating
+on 4x4 double matrices.  The files and namespaces are named like
+<vec|mat><dim><f|d>.js where "mat" stands for "matrix", "vec" stands
+for "vector", "dim" represents the dimensionality of the vector or matrix
+(2, 3, or 4 for vectors, 3 or 4 for matrices), "f" stands for float
+(32bit) elements, and "d" stands for double (64bit) elements.  Note that
+there are also legacy versions of these files that don't have the 'f' or
+'d' suffix that are slower because they are polymorphic (see the
+discussion about polymorphic code below for more on this).
+
+The API of the library is designed and structured to achieve maximal
+performance in JavaScript.  Several aspects of the design are discussed
+below.
+
+1. Using Float32Array and Float64Array instead of Object as the container.
+This is because reads and writes of elements in Float32Array and
+Float64Array are much faster than reads and writes of properties on Objects.
+For example, in the V8 JavaScript engine, writing a double to a property on
+an Object requires boxing the double, which means allocating an Object on the
+heap to store the double, and storing a reference to the boxed double in
+the property on the Object.
+
+2. Exposing C-like API, where each namespace contains functions that
+operate directly on Float32Arrays or Float64Arrays, instead of an
+object-oriented API.  This removes overhead in interacting with the
+Float32Arrays or Float64Arrays, and avoids the need for allocating an extra
+Object for each vector/matrix.
+
+3. Requiring that an output vector/matrix be passed into each function.
+This avoids unnecessary allocations of new vector/matrix matrix objects on
+every call.
+
+4. Having separate functions (in separate namespaces) for acting on the
+float and double versions of each vector/matrix type (for example vec3f
+for 3-element float vectors and vec3d for 3-element double vectors).
+This is because code that is used in a polymorphic manner (where the
+same variable or parameter can have different types) is slower than code
+that is used in a monomorphic manner (where the same variable or parameter
+always has the same type).  See the following performance tests that
+demonstrate this performance difference for various functions defined in
+this library:
+
+http://jsperf.com/matrix-multiply-multple-types/3
+http://jsperf.com/matrix-set-values-multiple-types/2
+http://jsperf.com/vector-add-multiple-types
+http://jsperf.com/matrix-invert-multiple-types
+http://jsperf.com/matrix-vector-multiply-multiple-types/2
+
+In Chrome 26, the polymorphic code is 20-40% slower than the monomorphic code.
+In Firefox 19, the polymorphic code is 90-95% slower than the monomorphic code.
+In IE 10, the polymorphic code is 80-95% slower than the monomorphic code.
+
+A legacy polymorphic version of this library still exists in vec2.js,
+vec3.js, vec4.js, mat3.js, and mat4.js.  Clients are encouraged to
+use the new monomorphic versions since they are so much faster.  A side
+benefit of using the monomorphic versions is more strict compile-time
+type checking.
+
+Unfortunately, having float and double versions of each function
+duplicates all the code.  To aid in keeping the two versions in sync,
+a swap_type.sh script is provided that can take convert a file specific
+to one type (float or double) into a file specific to the other type.
+
+5. Inlining as much as possible.  This improves performance, as can
+be seen in these performance tests:
+
+http://jsperf.com/vector-normalize
+http://jsperf.com/rotate-matrix

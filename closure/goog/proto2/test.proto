@@ -1,0 +1,110 @@
+// Copyright Google Inc.  All rights reserved.
+// Author: jschorr@google.com (Joseph Schorr)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// A proto file used for unit testing the ECMAScript
+// compiler and framework.
+
+// LINT: ALLOW_GROUPS
+
+syntax = "proto2";
+
+option javascript_package = "proto2";
+
+// Based on //net/proto2/internal/unittest.proto (Thanks Kenton!)
+message TestAllTypes {
+  message NestedMessage {
+    optional int32 b = 1;
+    optional int32 c = 2;
+  }
+
+  enum NestedEnum {
+    option allow_alias = true;
+
+    FOO = 0;
+    OOF = 0;
+    BAR = 2;
+    BAZ = 3;
+  }
+
+  // Singular
+  optional int32 optional_int32 = 1;
+  optional int64 optional_int64 = 2 [default = 1];
+  optional uint32 optional_uint32 = 3;
+  optional uint64 optional_uint64 = 4;
+  optional sint32 optional_sint32 = 5;
+  optional sint64 optional_sint64 = 6;
+  optional fixed32 optional_fixed32 = 7;
+  optional fixed64 optional_fixed64 = 8;
+  optional sfixed32 optional_sfixed32 = 9;
+  optional sfixed64 optional_sfixed64 = 10;
+  optional float optional_float = 11 [default = 1.5];
+  optional double optional_double = 12;
+  optional bool optional_bool = 13;
+  optional string optional_string = 14;
+  optional bytes optional_bytes = 15 [default = "moo"];
+
+  optional group OptionalGroup = 16 {
+    optional int32 a = 17;
+  }
+
+  optional NestedMessage optional_nested_message = 18;
+  optional NestedEnum optional_nested_enum = 21;
+
+  // The monster default value cannot be represented exactly as a JavaScript
+  // number.
+  optional int64 optional_int64_number = 50
+      [jstype = JS_NUMBER, default = 1000000000000000001];
+  optional int64 optional_int64_string = 51 [default = 1000000000000000001];
+
+  // Repeated
+  repeated int32 repeated_int32 = 31;
+  repeated int64 repeated_int64 = 32;
+  repeated uint32 repeated_uint32 = 33;
+  repeated uint64 repeated_uint64 = 34;
+  repeated sint32 repeated_sint32 = 35;
+  repeated sint64 repeated_sint64 = 36;
+  repeated fixed32 repeated_fixed32 = 37;
+  repeated fixed64 repeated_fixed64 = 38;
+  repeated sfixed32 repeated_sfixed32 = 39;
+  repeated sfixed64 repeated_sfixed64 = 40;
+  repeated float repeated_float = 41;
+  repeated double repeated_double = 42;
+  repeated bool repeated_bool = 43;
+  repeated string repeated_string = 44;
+  repeated bytes repeated_bytes = 45;
+
+  repeated group RepeatedGroup = 46 {
+    repeated int32 a = 47;
+  }
+
+  repeated NestedMessage repeated_nested_message = 48;
+  repeated NestedEnum repeated_nested_enum = 49;
+
+  repeated int64 repeated_int64_number = 52 [jstype = JS_NUMBER];
+  repeated int64 repeated_int64_string = 53;
+
+  // Packed
+  repeated int32 packed_int32 = 54 [packed = true];
+  repeated int64 packed_int64 = 55 [packed = true, jstype = JS_NUMBER];
+  repeated uint32 packed_uint32 = 56 [packed = true];
+  repeated uint64 packed_uint64 = 57 [packed = true, jstype = JS_NUMBER];
+  repeated sint32 packed_sint32 = 58 [packed = true];
+  repeated sint64 packed_sint64 = 59 [packed = true, jstype = JS_NUMBER];
+  repeated fixed32 packed_fixed32 = 60 [packed = true];
+  repeated fixed64 packed_fixed64 = 61 [packed = true, jstype = JS_NUMBER];
+  repeated sfixed32 packed_sfixed32 = 62 [packed = true];
+  repeated sfixed64 packed_sfixed64 = 63 [packed = true, jstype = JS_NUMBER];
+  repeated float packed_float = 64 [packed = true];
+  repeated double packed_double = 65 [packed = true];
+  repeated bool packed_bool = 66 [packed = true];
+}
+
+message TestDefaultParent {
+  optional TestDefaultChild child = 1;
+}
+
+message TestDefaultChild {
+  optional bool foo = 1 [default = true];
+}
