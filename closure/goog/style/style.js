@@ -1319,9 +1319,9 @@ goog.style.installSafeStyleSheet = function(safeStyleSheet, opt_node) {
 
 
 /**
- * Removes the styles added by {@link #installStyles}.
+ * Removes the styles added by {@link #installSafeStyleSheet}.
  * @param {Element|StyleSheet} styleSheet The value returned by
- *     {@link #installStyles}.
+ *     {@link #installSafeStyleSheet}.
  */
 goog.style.uninstallStyles = function(styleSheet) {
   var node = styleSheet.ownerNode || styleSheet.owningElement ||
@@ -1335,7 +1335,7 @@ goog.style.uninstallStyles = function(styleSheet) {
  * style element.  This element will have its content completely replaced by
  * the safeStyleSheet.
  * @param {!Element|!StyleSheet} element A stylesheet element as returned by
- *     installStyles.
+ *     installSafeStyleSheet.
  * @param {!goog.html.SafeStyleSheet} safeStyleSheet The new content of the
  *     stylesheet.
  */
