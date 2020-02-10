@@ -140,7 +140,7 @@ goog.string.linkify.findFirstEmail = function(text) {
  * @const
  * @private
  */
-goog.string.linkify.ENDING_PUNCTUATION_CHARS_ = '\':;,\\.?}\\]\\)!';
+goog.string.linkify.ENDING_PUNCTUATION_CHARS_ = '\':;,\\.?\\]\\)!';
 
 
 /**

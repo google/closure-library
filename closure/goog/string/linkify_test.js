@@ -481,13 +481,6 @@ testSuite({
             'http://www.google.com/<\/a>&gt;');
   },
 
-  testEndsWithPunctuation_curlies() {
-    assertLinkify(
-        'Link inside curly brackets', '{http://www.google.com/}',
-        '{<a href="http://www.google.com/">' +
-            'http://www.google.com/<\/a>}');
-  },
-
   testEndsWithPunctuation_closingPairThenSingle() {
     assertLinkify(
         'Link followed by closing punctuation pair then singular punctuation',
@@ -521,9 +514,9 @@ testSuite({
     assertLinkify(
         'Link with characters that are neither reserved nor unreserved as per' +
             'RFC 3986 but that are recognized by other Google properties.',
-        'https://www.google.com/?q=\`{|}recognized',
-        '<a href="https://www.google.com/?q=\`{|}recognized">' +
-            'https://www.google.com/?q=\`{|}recognized<\/a>');
+        'https://www.google.com/?q=\`recognized{|}',
+        '<a href="https://www.google.com/?q=\`recognized{|}">' +
+            'https://www.google.com/?q=\`recognized{|}<\/a>');
   },
 
   testUsuallyUnrecognizedCharactersAreNotInUrl() {

@@ -1,0 +1,18 @@
+// Copyright Google Inc.  All rights reserved.
+// Author: jschorr@google.com (Joseph Schorr)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// A proto file used for unit testing the ECMAScript
+// compiler and framework that has a package.
+
+syntax = "proto2";
+
+package someprotopackage;
+
+import "javascript/closure/proto2/test.proto";
+
+message TestPackageTypes {
+  optional int32 optional_int32 = 1;
+  optional TestAllTypes other_all = 2;
+}
