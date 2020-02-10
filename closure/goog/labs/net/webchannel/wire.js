@@ -18,7 +18,7 @@
  */
 goog.provide('goog.labs.net.webChannel.Wire');
 
-goog.forwardDeclare('goog.structs.Map');
+goog.requireType('goog.structs.Map');
 
 
 

@@ -21,10 +21,10 @@
 
 goog.provide('goog.labs.net.webChannel.WebChannelDebug');
 
-goog.forwardDeclare('goog.Uri');
-goog.forwardDeclare('goog.net.XmlHttp.ReadyState');
 goog.require('goog.json');
 goog.require('goog.log');
+goog.requireType('goog.Uri');
+goog.requireType('goog.net.XmlHttp.ReadyState');
 
 
 

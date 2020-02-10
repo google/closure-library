@@ -26,7 +26,6 @@
 goog.provide('goog.net.ChannelRequest');
 goog.provide('goog.net.ChannelRequest.Error');
 
-goog.forwardDeclare('goog.Uri');
 goog.forwardDeclare('goog.net.BrowserChannel');
 goog.forwardDeclare('goog.net.BrowserTestChannel');
 goog.forwardDeclare('goog.net.ChannelDebug');
@@ -45,6 +44,7 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.userAgent');
+goog.requireType('goog.Uri');
 
 // TODO(nnaze): This file depends on goog.net.BrowserChannel and vice versa (a
 // circular dependency).  Usages of BrowserChannel are marked as
