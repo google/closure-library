@@ -10,9 +10,9 @@
 
 goog.provide('goog.positioning.AbstractPosition');
 
-goog.forwardDeclare('goog.math.Box');
-goog.forwardDeclare('goog.math.Size');
-goog.forwardDeclare('goog.positioning.Corner');
+goog.requireType('goog.math.Box');
+goog.requireType('goog.math.Size');
+goog.requireType('goog.positioning.Corner');
 
 
 
