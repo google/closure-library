@@ -12,7 +12,6 @@ goog.provide('goog.fs.DirectoryEntryImpl');
 goog.provide('goog.fs.EntryImpl');
 goog.provide('goog.fs.FileEntryImpl');
 
-goog.forwardDeclare('goog.fs.FileSystem');
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.fs.DirectoryEntry');
@@ -22,6 +21,7 @@ goog.require('goog.fs.FileEntry');
 goog.require('goog.fs.FileWriter');
 goog.require('goog.functions');
 goog.require('goog.string');
+goog.requireType('goog.fs.FileSystem');
 
 
 
