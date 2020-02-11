@@ -12,11 +12,11 @@
 
 goog.provide('goog.graphics.ext.StrokeAndFillElement');
 
-goog.forwardDeclare('goog.graphics.Fill');
-goog.forwardDeclare('goog.graphics.Stroke');
-goog.forwardDeclare('goog.graphics.StrokeAndFillElement');
-goog.forwardDeclare('goog.graphics.ext.Group');
 goog.require('goog.graphics.ext.Element');
+goog.requireType('goog.graphics.Fill');
+goog.requireType('goog.graphics.Stroke');
+goog.requireType('goog.graphics.StrokeAndFillElement');
+goog.requireType('goog.graphics.ext.Group');
 
 
 

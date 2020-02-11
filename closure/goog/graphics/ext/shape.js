@@ -21,11 +21,11 @@
 
 goog.provide('goog.graphics.ext.Shape');
 
-goog.forwardDeclare('goog.graphics.Path');
-goog.forwardDeclare('goog.graphics.ext.Group');
-goog.forwardDeclare('goog.graphics.ext.Path');
-goog.forwardDeclare('goog.math.Rect');
 goog.require('goog.graphics.ext.StrokeAndFillElement');
+goog.requireType('goog.graphics.Path');
+goog.requireType('goog.graphics.ext.Group');
+goog.requireType('goog.graphics.ext.Path');
+goog.requireType('goog.math.Rect');
 
 
 
