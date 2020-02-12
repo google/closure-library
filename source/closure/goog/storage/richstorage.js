@@ -15,9 +15,9 @@
 goog.provide('goog.storage.RichStorage');
 goog.provide('goog.storage.RichStorage.Wrapper');
 
-goog.forwardDeclare('goog.storage.mechanism.Mechanism');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.Storage');
+goog.requireType('goog.storage.mechanism.Mechanism');
 
 
 

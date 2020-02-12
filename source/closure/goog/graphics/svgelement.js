@@ -18,7 +18,6 @@ goog.provide('goog.graphics.SvgRectElement');
 goog.provide('goog.graphics.SvgTextElement');
 
 
-goog.forwardDeclare('goog.graphics.SvgGraphics');
 goog.require('goog.dom');
 goog.require('goog.graphics.EllipseElement');
 goog.require('goog.graphics.GroupElement');
@@ -26,6 +25,7 @@ goog.require('goog.graphics.ImageElement');
 goog.require('goog.graphics.PathElement');
 goog.require('goog.graphics.RectElement');
 goog.require('goog.graphics.TextElement');
+goog.requireType('goog.graphics.SvgGraphics');
 
 
 

@@ -12,8 +12,8 @@
 
 goog.provide('goog.graphics.ext.Image');
 
-goog.forwardDeclare('goog.graphics.ext.Group');
 goog.require('goog.graphics.ext.Element');
+goog.requireType('goog.graphics.ext.Group');
 
 
 
