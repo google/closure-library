@@ -25,8 +25,6 @@
 
 goog.provide('goog.labs.net.webChannel.ChannelRequest');
 
-goog.forwardDeclare('goog.Uri');
-goog.forwardDeclare('goog.net.XhrIo');
 goog.require('goog.Timer');
 goog.require('goog.async.Throttle');
 goog.require('goog.events.EventHandler');
@@ -41,6 +39,8 @@ goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
+goog.requireType('goog.Uri');
+goog.requireType('goog.net.XhrIo');
 
 
 
