@@ -241,5 +241,16 @@ testSuite({
         null,
         CssPropertySanitizer.sanitizeProperty(
             NAME, 'rgba(1,1,1,0), url(http://foo.com)', SafeUrl.sanitize));
+  },
+
+  testSanitizeProperty_mixedCaseFunction() {
+    const lowerCaseValue = 'translatex(10px)';
+    assertEquals(
+        lowerCaseValue,
+        CssPropertySanitizer.sanitizeProperty(NAME, lowerCaseValue));
+    const mixedCaseValue = 'translateX(10px)';
+    assertEquals(
+        mixedCaseValue,
+        CssPropertySanitizer.sanitizeProperty(NAME, mixedCaseValue));
   }
 });
