@@ -17,11 +17,11 @@
  */
 
 goog.provide('goog.net.MockIFrameIo');
-goog.forwardDeclare('goog.testing.TestQueue');
 goog.require('goog.events.EventTarget');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.net.IframeIo');
+goog.requireType('goog.testing.TestQueue');
 
 
 

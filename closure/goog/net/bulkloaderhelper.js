@@ -20,8 +20,8 @@
 
 goog.provide('goog.net.BulkLoaderHelper');
 
-goog.forwardDeclare('goog.Uri');
 goog.require('goog.Disposable');
+goog.requireType('goog.Uri');
 
 
 
