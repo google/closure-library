@@ -486,6 +486,10 @@ testSuite({
         'Link inside curly brackets', '{http://www.google.com/}',
         '{<a href="http://www.google.com/">' +
             'http://www.google.com/<\/a>}');
+    assertLinkify(
+        'Curly brackets inside link', 'http://www.google.com/abc{arg=1}',
+        '<a href="http://www.google.com/abc{arg=1}">' +
+            'http://www.google.com/abc{arg=1}<\/a>');
   },
 
   testEndsWithPunctuation_closingPairThenSingle() {
