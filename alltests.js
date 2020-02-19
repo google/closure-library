@@ -51,6 +51,7 @@ var _allTests = [
   'closure/goog/debug/console_test.html',
   'closure/goog/debug/debug_test.html',
   'closure/goog/debug/debugwindow_test.html',
+  'closure/goog/debug/deepfreeze_test.html',
   'closure/goog/debug/devcss/devcss_test.html',
   'closure/goog/debug/enhanceerror_test.html',
   'closure/goog/debug/entrypointregistry_test.html',
