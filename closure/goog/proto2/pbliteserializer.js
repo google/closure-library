@@ -132,7 +132,7 @@ goog.proto2.PbLiteSerializer.prototype.deserializeField = function(
   if (field.isRepeated()) {
     var data = [];
 
-    goog.asserts.assert(goog.isArray(value), 'Value must be array: %s', value);
+    goog.asserts.assert(Array.isArray(value), 'Value must be array: %s', value);
 
     for (var i = 0; i < value.length; i++) {
       data[i] = this.getDeserializedValue(field, value[i]);

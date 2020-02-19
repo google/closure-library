@@ -517,7 +517,7 @@ goog.testing.stacktrace.get = function() {
   let frames;
   if (!stack) {
     frames = goog.testing.stacktrace.followCallChain_();
-  } else if (goog.isArray(stack)) {
+  } else if (Array.isArray(stack)) {
     frames = goog.testing.stacktrace.callSitesToFrames_(stack);
   } else {
     frames = goog.testing.stacktrace.parse_(stack);

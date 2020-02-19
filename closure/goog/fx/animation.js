@@ -41,7 +41,7 @@ goog.require('goog.fx.anim.Animated');
 goog.fx.Animation = function(start, end, duration, opt_acc) {
   goog.fx.Animation.base(this, 'constructor');
 
-  if (!goog.isArray(start) || !goog.isArray(end)) {
+  if (!Array.isArray(start) || !Array.isArray(end)) {
     throw new Error('Start and end parameters must be arrays');
   }
 

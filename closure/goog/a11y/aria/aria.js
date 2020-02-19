@@ -139,7 +139,7 @@ goog.a11y.aria.removeRole = function(element) {
  * for the state attribute.
  */
 goog.a11y.aria.setState = function(element, stateName, value) {
-  if (goog.isArray(value)) {
+  if (Array.isArray(value)) {
     value = value.join(' ');
   }
   var attrStateName = goog.a11y.aria.getAriaAttributeName_(stateName);

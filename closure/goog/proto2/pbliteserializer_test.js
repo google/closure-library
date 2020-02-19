@@ -168,7 +168,7 @@ testSuite({
     const serializer = new PbLiteSerializer();
     const pblite = serializer.serialize(message);
 
-    assertTrue(goog.isArray(pblite));
+    assertTrue(Array.isArray(pblite));
 
     // Assert that everything serialized properly.
     assertEquals(101, pblite[1]);
@@ -219,7 +219,7 @@ testSuite({
 
     const pblite = serializer.serialize(message);
 
-    assertTrue(goog.isArray(pblite));
+    assertTrue(Array.isArray(pblite));
 
     // Assert that everything serialized properly.
     assertEquals(101, pblite[0]);

@@ -83,7 +83,7 @@ goog.ui.ActivityMonitor = function(opt_domHelper, opt_useBubble) {
 
   if (!opt_domHelper) {
     this.addDocument(goog.dom.getDomHelper().getDocument());
-  } else if (goog.isArray(opt_domHelper)) {
+  } else if (Array.isArray(opt_domHelper)) {
     for (var i = 0; i < opt_domHelper.length; i++) {
       this.addDocument(opt_domHelper[i].getDocument());
     }

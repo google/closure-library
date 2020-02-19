@@ -26,7 +26,7 @@ testSuite({
 
     for (let i = 0; i < 10; i++) {
       const data = fuzzing.newArray();
-      assertTrue(goog.isArray(data));
+      assertTrue(Array.isArray(data));
       // JSON compatible
       assertNotThrows(() => {
         googJson.serialize(data);

@@ -188,7 +188,7 @@ goog.labs.mock.formatMethodCall_ = function(methodName, opt_args) {
       return '<function ' + funcName + '>';
     } else {
       var isObjectWithClass = goog.isObject(arg) && !goog.isFunction(arg) &&
-          !goog.isArray(arg) && arg.constructor != Object;
+          !Array.isArray(arg) && arg.constructor != Object;
 
       if (isObjectWithClass) {
         return arg.toString();

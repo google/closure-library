@@ -148,7 +148,7 @@ goog.ds.JsDataSource.prototype.createChildNodes_ = function(opt_force) {
 
   var childNodeList = new goog.ds.BasicNodeList();
   var newNode;
-  if (goog.isArray(this.root_)) {
+  if (Array.isArray(this.root_)) {
     var len = this.root_.length;
     for (var i = 0; i < len; i++) {
       // "id" is reserved node name that will map to a named child node
@@ -190,7 +190,7 @@ goog.ds.JsDataSource.prototype.getChildNode = function(name, opt_canCreate) {
   var node = /** @type {goog.ds.DataNode} */ (this.getChildNodes().get(name));
   if (!node && opt_canCreate) {
     var newObj = {};
-    if (goog.isArray(this.root_)) {
+    if (Array.isArray(this.root_)) {
       newObj['id'] = name;
       this.root_.push(newObj);
     } else {
@@ -246,7 +246,7 @@ goog.ds.JsDataSource.prototype.setChildNode = function(name, value) {
       node = value;
       node.parent_ = this;
     } else {
-      if (goog.isArray(value) || goog.isObject(value)) {
+      if (Array.isArray(value) || goog.isObject(value)) {
         node = new goog.ds.JsDataSource(value, name, this);
       } else {
         node = new goog.ds.JsPropertyDataSource(
@@ -260,7 +260,7 @@ goog.ds.JsDataSource.prototype.setChildNode = function(name, value) {
   // is cleaned up.
   // TODO(user) Remove backing array / object and just use childNodeList_
 
-  if (goog.isArray(this.root_)) {
+  if (Array.isArray(this.root_)) {
     // To remove by name, need to create a map of the child nodes by ID
     this.createChildNodes_();
     var index = this.childNodeList_.indexOf(name);
@@ -386,7 +386,7 @@ goog.ds.JsDataSource.prototype.getLoadState = function() {
  * @override
  */
 goog.ds.JsDataSource.prototype.isList = function() {
-  return this.isList_ != null ? this.isList_ : goog.isArray(this.root_);
+  return this.isList_ != null ? this.isList_ : Array.isArray(this.root_);
 };
 
 

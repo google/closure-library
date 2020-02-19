@@ -505,7 +505,7 @@ goog.html.TrustedResourceUrl.stringifyParams_ = function(
   // Add on parameters to field from key-value object.
   for (var key in params) {
     var value = params[key];
-    var outputValues = goog.isArray(value) ? value : [value];
+    var outputValues = Array.isArray(value) ? value : [value];
     for (var i = 0; i < outputValues.length; i++) {
       var outputValue = outputValues[i];
       if (outputValue != null) {

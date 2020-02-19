@@ -439,7 +439,7 @@ testSuite({
     assertSerialize('[null,null,0]', [, , 0]);
 
     assertSerialize('[0,0,{"x":0}]', [, , {x: 0}], function(k, v) {
-      if (v === undefined && goog.isArray(this)) {
+      if (v === undefined && Array.isArray(this)) {
         return 0;
       }
       return v;

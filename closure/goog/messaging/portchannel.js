@@ -356,7 +356,7 @@ goog.messaging.PortChannel.prototype.extractPorts_ = function(ports, message) {
           '[object MessagePort]') {
     ports.push(/** @type {MessagePort} */ (message));
     return {'_port': {'type': 'real', 'index': ports.length - 1}};
-  } else if (goog.isArray(message)) {
+  } else if (Array.isArray(message)) {
     return goog.array.map(message, goog.bind(this.extractPorts_, this, ports));
     // We want to compare the exact constructor here because we only want to
     // recurse into object literals, not native objects like Date.
@@ -383,7 +383,7 @@ goog.messaging.PortChannel.prototype.extractPorts_ = function(ports, message) {
  * @private
  */
 goog.messaging.PortChannel.prototype.injectPorts_ = function(ports, message) {
-  if (goog.isArray(message)) {
+  if (Array.isArray(message)) {
     return goog.array.map(message, goog.bind(this.injectPorts_, this, ports));
   } else if (message && message.constructor == Object) {
     message = /** @type {!Object} */ (message);

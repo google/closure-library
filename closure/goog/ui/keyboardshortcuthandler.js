@@ -560,7 +560,7 @@ goog.ui.KeyboardShortcutHandler.prototype.interpretStrokes_ = function(
     // Build strokes array from arguments list or from array.
   } else {
     var strokesArgs = args, i = initialIndex;
-    if (goog.isArray(args[initialIndex])) {
+    if (Array.isArray(args[initialIndex])) {
       strokesArgs = args[initialIndex];
       i = 0;
     }

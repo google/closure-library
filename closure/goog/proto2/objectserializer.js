@@ -224,7 +224,7 @@ goog.proto2.ObjectSerializer.prototype.deserializeTo = function(message, data) {
     if (field) {
       if (field.isRepeated()) {
         goog.asserts.assert(
-            goog.isArray(value),
+            Array.isArray(value),
             'Value for repeated field ' + field + ' must be an array.');
 
         for (var j = 0; j < value.length; j++) {
@@ -232,7 +232,7 @@ goog.proto2.ObjectSerializer.prototype.deserializeTo = function(message, data) {
         }
       } else {
         goog.asserts.assert(
-            !goog.isArray(value),
+            !Array.isArray(value),
             'Value for non-repeated field ' + field + ' must not be an array.');
         message.set(field, this.getDeserializedValue(field, value));
       }

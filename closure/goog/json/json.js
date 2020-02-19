@@ -233,7 +233,7 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
   }
 
   if (typeof object == 'object') {
-    if (goog.isArray(object)) {
+    if (Array.isArray(object)) {
       this.serializeArray(object, sb);
       return;
     } else if (

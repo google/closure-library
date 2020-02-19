@@ -204,7 +204,7 @@ WebChannelDebug.prototype.redactResponse_ = function(responseText) {
     var responseArray = JSON.parse(responseText);
     if (responseArray) {
       for (var i = 0; i < responseArray.length; i++) {
-        if (goog.isArray(responseArray[i])) {
+        if (Array.isArray(responseArray[i])) {
           this.maybeRedactArray_(responseArray[i]);
         }
       }
@@ -228,7 +228,7 @@ WebChannelDebug.prototype.maybeRedactArray_ = function(array) {
     return;
   }
   var dataPart = array[1];
-  if (!goog.isArray(dataPart)) {
+  if (!Array.isArray(dataPart)) {
     return;
   }
   if (dataPart.length < 1) {

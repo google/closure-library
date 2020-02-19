@@ -1658,7 +1658,7 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
     } catch (ex) {
       response = null;
     }
-    if (goog.isArray(response) && response.length == 3) {
+    if (Array.isArray(response) && response.length == 3) {
       this.handlePostResponse_(/** @type {!Array<?>} */ (response), request);
       this.onForwardChannelFlushed_();
     } else {

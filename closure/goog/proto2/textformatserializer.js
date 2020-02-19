@@ -134,7 +134,7 @@ goog.proto2.TextFormatSerializer.prototype.serializeUnknown_ = function(
     return;
   }
 
-  if (goog.isArray(value)) {
+  if (Array.isArray(value)) {
     goog.array.forEach(value, function(val) {
       this.serializeUnknown_(tag, val, printer);
     }, this);

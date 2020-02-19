@@ -359,7 +359,7 @@ goog.net.IframeIo.getForm_ = function() {
 goog.net.IframeIo.addFormInputs_ = function(form, data) {
   var helper = goog.dom.getDomHelper(form);
   goog.structs.forEach(data, function(value, key) {
-    if (!goog.isArray(value)) {
+    if (!Array.isArray(value)) {
       value = [value];
     }
     goog.array.forEach(value, function(value) {

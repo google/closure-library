@@ -214,7 +214,7 @@ goog.debug.deepExpose = function(obj, opt_showFn) {
 goog.debug.exposeArray = function(arr) {
   var str = [];
   for (var i = 0; i < arr.length; i++) {
-    if (goog.isArray(arr[i])) {
+    if (Array.isArray(arr[i])) {
       str.push(goog.debug.exposeArray(arr[i]));
     } else {
       str.push(arr[i]);

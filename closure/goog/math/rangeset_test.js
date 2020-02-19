@@ -28,7 +28,7 @@ function assertRangesEqual(a, b, c = undefined) {
   let expected = c ? b : a;
   const actual = c ? c : b;
 
-  if (goog.isArray(expected)) {
+  if (Array.isArray(expected)) {
     assertEquals(
         `${message}
 ` +

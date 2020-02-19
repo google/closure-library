@@ -592,7 +592,7 @@ goog.array.isEmpty = function(arr) {
 goog.array.clear = function(arr) {
   // For non real arrays we don't have the magic length so we delete the
   // indices.
-  if (!goog.isArray(arr)) {
+  if (!Array.isArray(arr)) {
     for (var i = arr.length - 1; i >= 0; i--) {
       delete arr[i];
     }
@@ -1492,7 +1492,7 @@ goog.array.flatten = function(var_args) {
   var result = [];
   for (var i = 0; i < arguments.length; i++) {
     var element = arguments[i];
-    if (goog.isArray(element)) {
+    if (Array.isArray(element)) {
       for (var c = 0; c < element.length; c += CHUNK_SIZE) {
         var chunk = goog.array.slice(element, c, c + CHUNK_SIZE);
         var recurseResult = goog.array.flatten.apply(null, chunk);
