@@ -671,7 +671,6 @@ goog.dom.safe.assignLocation = function(loc, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.replaceLocation = function(loc, url) {
-  goog.dom.asserts.assertIsLocation(loc);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
