@@ -405,10 +405,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
    *
    * @private {boolean}
    */
-  this.backgroundChannelTest_ =
-      opt_options && opt_options.backgroundChannelTest !== undefined ?
-      opt_options.backgroundChannelTest :
-      true;
+  this.backgroundChannelTest_ = true;
 
   /**
    * Whether to turn on the fast handshake behavior.

@@ -119,8 +119,7 @@ testSuite({
 
   testOpenWithTestUrl() {
     const webChannelTransport = new WebChannelBaseTransport();
-    const options = {'testUrl': `${channelUrl}/footest`};
-    webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+    webChannel = webChannelTransport.createWebChannel(channelUrl);
     webChannel.open();
 
     const testPath = webChannel.channel_.connectionTest_.path_;
