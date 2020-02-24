@@ -91,29 +91,6 @@ Summing it up:
 
 ## Explanation of conformance rules
 
-### goog.base
-
-goog.base is not compatible with EcmaScript 5+ strict mode.  As part of the
-migration to strict mode Closure Library has moved away from goog.base and
-instead uses the "base" method defined on the class constructor by
-goog.inherits.
-
-Calling a super class constructor:
-
-```js
-var MyClass = function(arg) {
-  MyClass.base(this, 'constructor', arg);
-};
-```
-
-Calling a super class method:
-
-```js
-MyClass.prototype.method = function(arg) {
-  MyClass.base(this, 'method', arg);
-}
-```
-
 {: #logger}
 ### goog.debug.Logger 
 
