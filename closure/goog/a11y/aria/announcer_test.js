@@ -23,6 +23,7 @@ const TagName = goog.require('goog.dom.TagName');
 const aria = goog.require('goog.a11y.aria');
 const googArray = goog.require('goog.array');
 const googDom = goog.require('goog.dom');
+const googString = goog.require('goog.string');
 const iframe = goog.require('goog.dom.iframe');
 const testSuite = goog.require('goog.testing.testSuite');
 
@@ -88,13 +89,14 @@ testSuite({
 
   testAnnouncerTwiceSameMessage() {
     const text = 'test content';
+    const repeatedText = text + googString.Unicode.NBSP;
     const announcer = new Announcer(googDom.getDomHelper());
     announcer.say(text);
     const firstLiveRegion = getLiveRegion('polite');
     announcer.say(text, undefined);
     const secondLiveRegion = getLiveRegion('polite');
     assertEquals(firstLiveRegion, secondLiveRegion);
-    checkLiveRegionContains(text, 'polite');
+    checkLiveRegionContains(repeatedText, 'polite');
     goog.dispose(announcer);
   },
 

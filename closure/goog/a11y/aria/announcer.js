@@ -21,13 +21,13 @@
 goog.provide('goog.a11y.aria.Announcer');
 
 goog.require('goog.Disposable');
-goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.LivePriority');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.object');
+goog.require('goog.string');
 
 
 
@@ -56,6 +56,8 @@ goog.a11y.aria.Announcer = function(opt_domHelper) {
    * @private
    */
   this.liveRegions_ = {};
+  /** @private {string} */
+  this.lastMessageAnnounced_ = '';
 };
 goog.inherits(goog.a11y.aria.Announcer, goog.Disposable);
 
@@ -78,17 +80,18 @@ goog.a11y.aria.Announcer.prototype.disposeInternal = function() {
  *     message. Defaults to POLITE.
  */
 goog.a11y.aria.Announcer.prototype.say = function(message, opt_priority) {
-  var priority = opt_priority || goog.a11y.aria.LivePriority.POLITE;
-  var liveRegion = this.getLiveRegion_(priority);
-  // Resets text content to force a DOM mutation (so that the setTextContent
-  // post-timeout function will be noticed by the screen reader). This is to
-  // avoid the problem of when the same message is "said" twice, which doesn't
-  // trigger a DOM mutation.
-  goog.dom.setTextContent(liveRegion, '');
-  // Uses non-zero timer to make VoiceOver and NVDA work
-  goog.Timer.callOnce(function() {
-    goog.dom.setTextContent(liveRegion, message);
-  }, 1);
+  const priority = opt_priority || goog.a11y.aria.LivePriority.POLITE;
+  const liveRegion = this.getLiveRegion_(priority);
+  // TODO(user): Remove the code once Chrome fix the bug on their
+  // end. Add nonbreaking space such that there's a change to aria live region
+  // to verbalize repeated character or text.
+  const announceMessage = this.lastMessageAnnounced_ === message ?
+      message + goog.string.Unicode.NBSP :
+      message;
+  if (!goog.string.isEmptyString(message)) {
+    this.lastMessageAnnounced_ = announceMessage;
+  }
+  goog.dom.setTextContent(liveRegion, announceMessage);
 };
 
 
