@@ -88,7 +88,7 @@ goog.a11y.aria.Announcer.prototype.say = function(message, opt_priority) {
   const announceMessage = this.lastMessageAnnounced_ === message ?
       message + goog.string.Unicode.NBSP :
       message;
-  if (!goog.string.isEmptyString(message)) {
+  if (message) {
     this.lastMessageAnnounced_ = announceMessage;
   }
   goog.dom.setTextContent(liveRegion, announceMessage);
