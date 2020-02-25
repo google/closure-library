@@ -35,7 +35,7 @@ const getDepFileText = exports.getDepFileText = (
     if (dep.type == depGraph.DependencyType.SCRIPT) continue;
     const args = [];
 
-    args.push(`'${path.relative(pathToClosure, dep.path)}'`);
+    args.push(`'${path.posix.relative(pathToClosure, dep.path)}'`);
     args.push(`[${dep.closureSymbols.map(s => `'${s}'`).join(', ')}]`);
     const requires = [];
     for (const imported of dep.imports) {
