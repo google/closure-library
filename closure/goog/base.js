@@ -1404,6 +1404,7 @@ goog.typeOf = function(value) {
  * Returns true if the specified value is an array.
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is an array.
+ * @deprecated Use Array.isArray instead.
  */
 goog.isArray = function(val) {
   return goog.typeOf(val) == 'array';
