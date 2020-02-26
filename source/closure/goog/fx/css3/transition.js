@@ -99,7 +99,7 @@ goog.fx.css3.Transition = function(
    * @type {Array<goog.style.transition.Css3Property>}
    * @private
    */
-  this.transitions_ = goog.isArray(transitions) ? transitions : [transitions];
+  this.transitions_ = Array.isArray(transitions) ? transitions : [transitions];
 };
 goog.inherits(goog.fx.css3.Transition, goog.fx.TransitionBase);
 

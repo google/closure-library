@@ -603,7 +603,7 @@ goog.Uri.prototype.setParameterValue = function(key, value) {
 goog.Uri.prototype.setParameterValues = function(key, values) {
   this.enforceReadOnly();
 
-  if (!goog.isArray(values)) {
+  if (!Array.isArray(values)) {
     values = [String(values)];
   }
 
@@ -1115,7 +1115,7 @@ goog.Uri.QueryData.createFromMap = function(map, opt_uri, opt_ignoreCase) {
   for (var i = 0; i < keys.length; i++) {
     var key = keys[i];
     var value = values[i];
-    if (!goog.isArray(value)) {
+    if (!Array.isArray(value)) {
       queryData.add(key, value);
     } else {
       queryData.setValues(key, value);

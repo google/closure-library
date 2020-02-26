@@ -127,9 +127,6 @@ goog.net.WebChannel.FailureRecovery = function() {};
  * (as configured by the server) to send XHRs with the CORS withCredentials
  * bit set to true.
  *
- * testUrl: the test URL for detecting connectivity during the initial
- * handshake. This parameter defaults to "/<channel_url>/test".
- *
  * sendRawJson: whether to bypass v8 encoding of client-sent messages.
  * This defaults to false now due to legacy servers. New applications should
  * always configure this option to true.
@@ -145,11 +142,6 @@ goog.net.WebChannel.FailureRecovery = function() {};
  * httpHeadersOverwriteParam: the URL parameter name to allow custom HTTP
  * headers to be overwritten as a URL param to bypass CORS preflight.
  * goog.net.rpc.HttpCors is used to encode the HTTP headers.
- *
- * backgroundChannelTest: whether to run the channel test (detecting networking
- * conditions) as a background process so the OPEN event will be fired sooner
- * to reduce the initial handshake delay. This option defaults to true.
- * The actual background channel test is not fully implemented.
  *
  * forceLongPolling: whether to force long-polling from client to server.
  * This defaults to false. Long-polling may be necessary when a (MITM) proxy

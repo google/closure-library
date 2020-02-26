@@ -326,7 +326,7 @@ goog.asserts.assertObject = function(value, opt_message, var_args) {
  * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertArray = function(value, opt_message, var_args) {
-  if (goog.asserts.ENABLE_ASSERTS && !goog.isArray(value)) {
+  if (goog.asserts.ENABLE_ASSERTS && !Array.isArray(value)) {
     goog.asserts.doAssertFailure_(
         'Expected array but got %s: %s.', [goog.typeOf(value), value],
         opt_message, Array.prototype.slice.call(arguments, 2));

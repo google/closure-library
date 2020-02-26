@@ -836,7 +836,7 @@ goog.html.SafeHtml.join = function(separator, parts) {
    *     !Array<!goog.html.SafeHtml.TextOrHtml_>} argument
    */
   var addArgument = function(argument) {
-    if (goog.isArray(argument)) {
+    if (Array.isArray(argument)) {
       goog.array.forEach(argument, addArgument);
     } else {
       var html = goog.html.SafeHtml.htmlEscape(argument);
@@ -951,7 +951,7 @@ goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse = function(
   var content = opt_content;
   if (content == null) {
     content = [];
-  } else if (!goog.isArray(content)) {
+  } else if (!Array.isArray(content)) {
     content = [content];
   }
 

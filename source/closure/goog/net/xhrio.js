@@ -45,7 +45,6 @@
 goog.provide('goog.net.XhrIo');
 goog.provide('goog.net.XhrIo.ResponseType');
 
-goog.forwardDeclare('goog.Uri');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -63,6 +62,7 @@ goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.uri.utils');
 goog.require('goog.userAgent');
+goog.requireType('goog.Uri');
 
 goog.scope(function() {
 

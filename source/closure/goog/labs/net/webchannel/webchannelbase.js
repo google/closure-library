@@ -405,10 +405,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
    *
    * @private {boolean}
    */
-  this.backgroundChannelTest_ =
-      opt_options && opt_options.backgroundChannelTest !== undefined ?
-      opt_options.backgroundChannelTest :
-      true;
+  this.backgroundChannelTest_ = true;
 
   /**
    * Whether to turn on the fast handshake behavior.
@@ -1658,7 +1655,7 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
     } catch (ex) {
       response = null;
     }
-    if (goog.isArray(response) && response.length == 3) {
+    if (Array.isArray(response) && response.length == 3) {
       this.handlePostResponse_(/** @type {!Array<?>} */ (response), request);
       this.onForwardChannelFlushed_();
     } else {

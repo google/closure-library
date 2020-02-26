@@ -14,7 +14,6 @@ requirement: {
 
   value: 'Arguments.prototype.callee'
 
-  whitelist_regexp: '.+/closure/goog/base.js'  # goog.base uses arguments.callee
   whitelist_regexp: '.+/closure/goog/debug/'  # legacy stack trace support, etc
   # TODO(mlourenco): Fix this? Not sure if possible or not.
   whitelist_regexp: '.+/closure/goog/testing/stacktrace.js'

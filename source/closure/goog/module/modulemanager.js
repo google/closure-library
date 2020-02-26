@@ -1108,7 +1108,7 @@ goog.module.ModuleManager.prototype.loadNextModules_ = function() {
 
 /** @override */
 goog.module.ModuleManager.prototype.registerCallback = function(types, fn) {
-  if (!goog.isArray(types)) {
+  if (!Array.isArray(types)) {
     types = [types];
   }
 

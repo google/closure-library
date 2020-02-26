@@ -346,7 +346,7 @@ goog.html.SafeStyle.create = function(map) {
     if (value == null) {
       continue;
     }
-    if (goog.isArray(value)) {
+    if (Array.isArray(value)) {
       value = goog.array.map(value, goog.html.SafeStyle.sanitizePropertyValue_)
                   .join(' ');
     } else {
@@ -598,7 +598,7 @@ goog.html.SafeStyle.concat = function(var_args) {
    * @param {!goog.html.SafeStyle|!Array<!goog.html.SafeStyle>} argument
    */
   var addArgument = function(argument) {
-    if (goog.isArray(argument)) {
+    if (Array.isArray(argument)) {
       goog.array.forEach(argument, addArgument);
     } else {
       style += goog.html.SafeStyle.unwrap(argument);

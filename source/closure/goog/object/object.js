@@ -632,7 +632,7 @@ goog.object.extend = function(target, var_args) {
  */
 goog.object.create = function(var_args) {
   const argLength = arguments.length;
-  if (argLength == 1 && goog.isArray(arguments[0])) {
+  if (argLength == 1 && Array.isArray(arguments[0])) {
     return goog.object.create.apply(null, arguments[0]);
   }
 
@@ -658,7 +658,7 @@ goog.object.create = function(var_args) {
  */
 goog.object.createSet = function(var_args) {
   const argLength = arguments.length;
-  if (argLength == 1 && goog.isArray(arguments[0])) {
+  if (argLength == 1 && Array.isArray(arguments[0])) {
     return goog.object.createSet.apply(null, arguments[0]);
   }
 

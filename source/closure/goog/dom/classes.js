@@ -166,14 +166,14 @@ goog.dom.classes.addRemove = function(element, classesToRemove, classesToAdd) {
   var classes = goog.dom.classes.get(element);
   if (typeof classesToRemove === 'string') {
     goog.array.remove(classes, classesToRemove);
-  } else if (goog.isArray(classesToRemove)) {
+  } else if (Array.isArray(classesToRemove)) {
     classes = goog.dom.classes.getDifference_(classes, classesToRemove);
   }
 
   if (typeof classesToAdd === 'string' &&
       !goog.array.contains(classes, classesToAdd)) {
     classes.push(classesToAdd);
-  } else if (goog.isArray(classesToAdd)) {
+  } else if (Array.isArray(classesToAdd)) {
     goog.dom.classes.add_(classes, classesToAdd);
   }
 

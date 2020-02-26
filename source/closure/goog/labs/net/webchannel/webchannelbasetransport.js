@@ -102,10 +102,9 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
    * this.url_ + '/test'.
    *
    * @private {string}
+   * @const
    */
-  this.testUrl_ = (opt_options && opt_options.testUrl) ?
-      opt_options.testUrl :
-      goog.string.path.join(this.url_, 'test');
+  this.testUrl_ = goog.string.path.join(this.url_, 'test');
 
   /**
    * @private {goog.log.Logger} The logger for this class.

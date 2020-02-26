@@ -61,7 +61,7 @@ testSuite({
 
   testDecodeMessage() {
     const message = wireCodec.decodeMessage('[{"a":"a", "x":1}, {"b":"b"}]');
-    assertTrue(goog.isArray(message));
+    assertTrue(Array.isArray(message));
     assertEquals(2, message.length);
     assertEquals('a', message[0].a);
     assertEquals(1, message[0].x);

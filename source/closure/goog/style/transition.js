@@ -51,7 +51,7 @@ goog.style.transition.Css3Property;
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.style.transition.set = function(element, properties) {
-  if (!goog.isArray(properties)) {
+  if (!Array.isArray(properties)) {
     properties = [properties];
   }
   goog.asserts.assert(

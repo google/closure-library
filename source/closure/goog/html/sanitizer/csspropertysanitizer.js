@@ -140,7 +140,7 @@ exports.sanitizeProperty = function(propName, propValue, opt_uriRewriter) {
     var regex = /([\-\w]+)\(/g;
     var match;
     while (match = regex.exec(propValue)) {
-      if (!(match[1] in ALLOWED_FUNCTIONS)) {
+      if (!(match[1].toLowerCase() in ALLOWED_FUNCTIONS)) {
         return null;
       }
     }

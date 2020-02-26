@@ -847,7 +847,7 @@ goog.dom.createDom_ = function(doc, args) {
   if (attributes) {
     if (typeof attributes === 'string') {
       element.className = attributes;
-    } else if (goog.isArray(attributes)) {
+    } else if (Array.isArray(attributes)) {
       element.className = attributes.join(' ');
     } else {
       goog.dom.setProperties(element, attributes);

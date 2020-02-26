@@ -14,7 +14,6 @@ goog.provide('goog.dom.AbstractRange');
 goog.provide('goog.dom.RangeIterator');
 goog.provide('goog.dom.RangeType');
 
-goog.forwardDeclare('goog.dom.TextRange');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.SavedCaretRange');
@@ -141,7 +140,7 @@ goog.dom.AbstractRange.prototype.getTextRangeCount = goog.abstractMethod;
  * Get the i-th text range in this range.  The behavior is undefined if
  * i >= getTextRangeCount or i < 0.
  * @param {number} i The range number to retrieve.
- * @return {goog.dom.TextRange} The i-th text range.
+ * @return {?goog.dom.AbstractRange} The i-th text range.
  */
 goog.dom.AbstractRange.prototype.getTextRange = goog.abstractMethod;
 
@@ -149,7 +148,7 @@ goog.dom.AbstractRange.prototype.getTextRange = goog.abstractMethod;
 /**
  * Gets an array of all text ranges this range is comprised of.  For non-multi
  * ranges, returns a single element array containing this.
- * @return {!Array<goog.dom.TextRange>} Array of text ranges.
+ * @return {!Array<?goog.dom.AbstractRange>} Array of text ranges.
  */
 goog.dom.AbstractRange.prototype.getTextRanges = function() {
   var output = [];

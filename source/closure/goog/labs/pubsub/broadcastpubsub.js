@@ -136,7 +136,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.handleStorageEvent_ = function(e) {
 
   var data = JSON.parse(browserEvent.newValue);
   var args = goog.isObject(data) && data['args'];
-  if (goog.isArray(args) &&
+  if (Array.isArray(args) &&
       goog.array.every(args, x => typeof x === 'string')) {
     this.dispatch_(args);
   } else {
@@ -188,7 +188,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.publish = function(topic, var_args) {
             this.logger_, 'publish encountered invalid event queue at ' +
                 goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_);
       }
-      if (!goog.isArray(events)) {
+      if (!Array.isArray(events)) {
         events = [];
       }
       // Avoid a race condition where we're publishing in the same
@@ -513,7 +513,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.handleIe8StorageEvent_ = function() {
       goog.log.warning(this.logger_, 'invalid remote event queue ' + key);
     }
 
-    if (!(goog.isArray(events) && this.maybeProcessIe8Events_(key, events))) {
+    if (!(Array.isArray(events) && this.maybeProcessIe8Events_(key, events))) {
       // Events is not an array, empty, contains invalid events, or expired.
       this.storage_.remove(key);
     }
@@ -539,7 +539,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.cleanupIe8StorageEvents_ = function(
         this.logger_, 'cleanup encountered invalid event queue key ' +
             goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_);
   }
-  if (!goog.isArray(events)) {
+  if (!Array.isArray(events)) {
     this.storage_.remove(goog.labs.pubsub.BroadcastPubSub.IE8_EVENTS_KEY_);
     return;
   }

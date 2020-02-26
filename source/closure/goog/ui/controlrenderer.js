@@ -667,7 +667,7 @@ goog.ui.ControlRenderer.prototype.setContent = function(element, content) {
                 typeof child === 'string' ? doc.createTextNode(child) : child);
           }
         };
-        if (goog.isArray(content)) {
+        if (Array.isArray(content)) {
           // Array of nodes.
           goog.array.forEach(content, childHandler);
         } else if (goog.isArrayLike(content) && !('nodeType' in content)) {

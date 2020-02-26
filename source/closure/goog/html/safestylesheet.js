@@ -181,7 +181,7 @@ goog.html.SafeStyleSheet.concat = function(var_args) {
    *     argument
    */
   var addArgument = function(argument) {
-    if (goog.isArray(argument)) {
+    if (Array.isArray(argument)) {
       goog.array.forEach(argument, addArgument);
     } else {
       result += goog.html.SafeStyleSheet.unwrap(argument);

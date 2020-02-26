@@ -51,7 +51,7 @@ function expectUrlAndParameters(url, target, parameters) {
   const inputs = dom.getElementsByTagNameAndClass(TagName.INPUT, null, form);
   const formValues = {};
   for (let i = 0, input = inputs[i]; input = inputs[i]; i++) {
-    if (goog.isArray(formValues[input.name])) {
+    if (Array.isArray(formValues[input.name])) {
       formValues[input.name].push(input.value);
     } else if (input.name in formValues) {
       formValues[input.name] = [formValues[input.name], input.value];
@@ -64,7 +64,7 @@ function expectUrlAndParameters(url, target, parameters) {
 }
 
 function valueToString(value) {
-  if (goog.isArray(value)) {
+  if (Array.isArray(value)) {
     return googArray.map(value, valueToString);
   }
   return String(value);

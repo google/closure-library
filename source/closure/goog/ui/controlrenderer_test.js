@@ -218,7 +218,7 @@ testSuite({
     assertEquals('Decorated control\'s ID must be set', 'foo', control.getId());
     assertTrue(
         'Decorated control\'s content must be an array',
-        goog.isArray(control.getContent()));
+        Array.isArray(control.getContent()));
     assertEquals(
         'Decorated control\'s content must have expected length', 4,
         control.getContent().length);

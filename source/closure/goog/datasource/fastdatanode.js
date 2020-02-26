@@ -143,7 +143,7 @@ goog.ds.FastDataNode.prototype.extendWith = function(object) {
  * @return {!goog.ds.AbstractFastDataNode} Data node representing object.
  */
 goog.ds.FastDataNode.fromJs = function(object, dataName, opt_parent) {
-  if (goog.isArray(object)) {
+  if (Array.isArray(object)) {
     return new goog.ds.FastListNode(object, dataName, opt_parent);
   } else if (goog.isObject(object)) {
     return new goog.ds.FastDataNode(object, dataName, opt_parent);
@@ -423,7 +423,7 @@ goog.ds.PrimitiveFastDataNode.prototype.get = function() {
  * @override
  */
 goog.ds.PrimitiveFastDataNode.prototype.set = function(value) {
-  if (goog.isArray(value) || goog.isObject(value)) {
+  if (Array.isArray(value) || goog.isObject(value)) {
     throw new Error('can only set PrimitiveFastDataNode to primitive values');
   }
   this.value_ = value;

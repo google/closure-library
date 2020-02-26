@@ -161,7 +161,7 @@ goog.events.listen = function(src, type, listener, opt_options, opt_handler) {
     return goog.events.listenOnce(
         src, type, listener, opt_options, opt_handler);
   }
-  if (goog.isArray(type)) {
+  if (Array.isArray(type)) {
     for (var i = 0; i < type.length; i++) {
       goog.events.listen(src, type[i], listener, opt_options, opt_handler);
     }
@@ -327,7 +327,7 @@ goog.events.getProxy = function() {
  */
 goog.events.listenOnce = function(
     src, type, listener, opt_options, opt_handler) {
-  if (goog.isArray(type)) {
+  if (Array.isArray(type)) {
     for (var i = 0; i < type.length; i++) {
       goog.events.listenOnce(src, type[i], listener, opt_options, opt_handler);
     }
@@ -388,7 +388,7 @@ goog.events.listenWithWrapper = function(
  * @template EVENTOBJ
  */
 goog.events.unlisten = function(src, type, listener, opt_options, opt_handler) {
-  if (goog.isArray(type)) {
+  if (Array.isArray(type)) {
     for (var i = 0; i < type.length; i++) {
       goog.events.unlisten(src, type[i], listener, opt_options, opt_handler);
     }

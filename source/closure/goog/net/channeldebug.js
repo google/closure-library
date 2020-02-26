@@ -23,10 +23,10 @@
  */
 goog.provide('goog.net.ChannelDebug');
 
-goog.forwardDeclare('goog.Uri');
-goog.forwardDeclare('goog.net.XmlHttp.ReadyState');
 goog.require('goog.json');
 goog.require('goog.log');
+goog.requireType('goog.Uri');
+goog.requireType('goog.net.XmlHttp.ReadyState');
 
 
 
@@ -221,7 +221,7 @@ goog.net.ChannelDebug.prototype.redactResponse_ = function(responseText) {
     var responseArray = JSON.parse(responseText);
     if (responseArray) {
       for (var i = 0; i < responseArray.length; i++) {
-        if (goog.isArray(responseArray[i])) {
+        if (Array.isArray(responseArray[i])) {
           this.maybeRedactArray_(responseArray[i]);
         }
       }
@@ -245,7 +245,7 @@ goog.net.ChannelDebug.prototype.maybeRedactArray_ = function(array) {
     return;
   }
   var dataPart = array[1];
-  if (!goog.isArray(dataPart)) {
+  if (!Array.isArray(dataPart)) {
     return;
   }
   if (dataPart.length < 1) {

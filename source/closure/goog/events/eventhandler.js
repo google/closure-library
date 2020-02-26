@@ -157,7 +157,7 @@ goog.events.EventHandler.prototype.listenWithScope = function(
 goog.events.EventHandler.prototype.listen_ = function(
     src, type, opt_fn, opt_options, opt_scope) {
   var self = /** @type {!goog.events.EventHandler} */ (this);
-  if (!goog.isArray(type)) {
+  if (!Array.isArray(type)) {
     if (type) {
       goog.events.EventHandler.typeArray_[0] = type.toString();
     }
@@ -256,7 +256,7 @@ goog.events.EventHandler.prototype.listenOnceWithScope = function(
 goog.events.EventHandler.prototype.listenOnce_ = function(
     src, type, opt_fn, opt_options, opt_scope) {
   var self = /** @type {!goog.events.EventHandler} */ (this);
-  if (goog.isArray(type)) {
+  if (Array.isArray(type)) {
     for (var i = 0; i < type.length; i++) {
       self.listenOnce_(src, type[i], opt_fn, opt_options, opt_scope);
     }
@@ -388,7 +388,7 @@ goog.events.EventHandler.prototype.getListenerCount = function() {
 goog.events.EventHandler.prototype.unlisten = function(
     src, type, opt_fn, opt_options, opt_scope) {
   var self = /** @type {!goog.events.EventHandler} */ (this);
-  if (goog.isArray(type)) {
+  if (Array.isArray(type)) {
     for (var i = 0; i < type.length; i++) {
       self.unlisten(src, type[i], opt_fn, opt_options, opt_scope);
     }

@@ -128,7 +128,7 @@ goog.labs.storage.BoundedCollectableStorage.prototype.getKeys_ = function(
       goog.labs.storage.BoundedCollectableStorage.superClass_.get.call(
           this, goog.labs.storage.BoundedCollectableStorage.KEY_LIST_KEY_) ||
       null;
-  if (!keys || !goog.isArray(keys)) {
+  if (!keys || !Array.isArray(keys)) {
     if (rebuild) {
       keys = this.rebuildIndex_();
     } else {

@@ -866,7 +866,7 @@ goog.ui.ac.Renderer.prototype.hiliteMatchingText_ = function(
 
   if (node.nodeType == goog.dom.NodeType.TEXT) {
     var rest = null;
-    if (goog.isArray(tokenOrArray) && tokenOrArray.length > 1 &&
+    if (Array.isArray(tokenOrArray) && tokenOrArray.length > 1 &&
         !this.highlightAllTokens_) {
       rest = goog.array.slice(tokenOrArray, 1);
     }
@@ -964,7 +964,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
     return token;
   }
 
-  if (goog.isArray(tokenOrArray)) {
+  if (Array.isArray(tokenOrArray)) {
     // Remove invalid tokens from the array, which may leave us with nothing.
     tokenOrArray = goog.array.filter(tokenOrArray, function(str) {
       return !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(str));
@@ -974,7 +974,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
   // If highlighting all tokens, join them with '|' so the regular expression
   // will match on any of them.
   if (this.highlightAllTokens_) {
-    if (goog.isArray(tokenOrArray)) {
+    if (Array.isArray(tokenOrArray)) {
       var tokenArray = goog.array.map(tokenOrArray, goog.string.regExpEscape);
       token = tokenArray.join('|');
     } else {
@@ -991,7 +991,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
     // array.
     // TODO(user): why is this this way?. We should match against all
     // tokens in the array, but only accept the first match.
-    if (goog.isArray(tokenOrArray)) {
+    if (Array.isArray(tokenOrArray)) {
       token = tokenOrArray.length > 0 ?
           goog.string.regExpEscape(tokenOrArray[0]) :
           '';

@@ -88,10 +88,30 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
           var splitEndingPunctuation =
               original.match(goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_);
           // An open paren in the link will often be matched with a close paren
-          // at the end, so skip cutting off ending punctuation if there's an
-          // open paren. For example:
-          // http://en.wikipedia.org/wiki/Titanic_(1997_film)
-          if (splitEndingPunctuation && !goog.string.contains(original, '(')) {
+          // at the end, so skip cutting off ending punctuation if
+          // opening/closing parens are matched in the link. Same for curly
+          // brackets. For example:
+          // End symbol is linkified:
+          // * http://en.wikipedia.org/wiki/Titanic_(1997_film)
+          // * http://google.com/abc{arg=1}
+          // e.g. needEndingPunctuationForBalance for split
+          // 'http://google.com/abc{arg=', and '} is true.
+          // End symbol is not linkified because there is no open parens to
+          // close in the link itself, as the open parens occurs before the URL:
+          // * (http://google.com/)
+          // e.g. needEndingPunctuationForBalance for split 'http://google.com/
+          // and ')' is false.
+          function needEndingPunctuationForBalance(
+              split, openSymbol, closeSymbol) {
+            return goog.string.contains(split[2], closeSymbol) &&
+                goog.string.countOf(split[1], openSymbol) >
+                goog.string.countOf(split[1], closeSymbol);
+          }
+          if (splitEndingPunctuation &&
+              !needEndingPunctuationForBalance(
+                  splitEndingPunctuation, '(', ')') &&
+              !needEndingPunctuationForBalance(
+                  splitEndingPunctuation, '{', '}')) {
             linkText = splitEndingPunctuation[1];
             afterLink = splitEndingPunctuation[2];
           } else {

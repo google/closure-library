@@ -168,7 +168,7 @@ goog.storage.EncryptedStorage.prototype.getWrapper = function(
   }
   var value = goog.storage.RichStorage.Wrapper.unwrap(wrapper);
   var salt = wrapper[goog.storage.EncryptedStorage.SALT_KEY];
-  if (typeof value !== 'string' || !goog.isArray(salt) || !salt.length) {
+  if (typeof value !== 'string' || !Array.isArray(salt) || !salt.length) {
     throw goog.storage.ErrorCode.INVALID_VALUE;
   }
   var json = this.decryptValue_(salt, key, value);

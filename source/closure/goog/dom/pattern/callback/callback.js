@@ -10,10 +10,10 @@
 
 goog.provide('goog.dom.pattern.callback');
 
-goog.forwardDeclare('goog.dom.TagIterator');
 goog.require('goog.dom');
 goog.require('goog.dom.TagWalkType');
 goog.require('goog.iter');
+goog.requireType('goog.dom.TagIterator');
 
 
 /**

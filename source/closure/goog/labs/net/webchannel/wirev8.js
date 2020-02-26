@@ -23,12 +23,12 @@
 
 goog.provide('goog.labs.net.webChannel.WireV8');
 
-goog.forwardDeclare('goog.structs.Map');
 goog.require('goog.asserts');
 goog.require('goog.json');
 goog.require('goog.json.NativeJsonProcessor');
 goog.require('goog.labs.net.webChannel.Wire');
 goog.require('goog.structs');
+goog.requireType('goog.structs.Map');
 
 
 
@@ -149,7 +149,7 @@ WireV8.prototype.encodeMessageQueue = function(
  */
 WireV8.prototype.decodeMessage = function(messageText) {
   var response = this.parser_.parse(messageText);
-  goog.asserts.assert(goog.isArray(response));  // throw exception
+  goog.asserts.assert(Array.isArray(response));  // throw exception
   return response;
 };
 });  // goog.scope
