@@ -1314,8 +1314,8 @@ goog.typeOf = function(value) {
       // Check these first, so we can avoid calling Object.prototype.toString if
       // possible.
       //
-      // IE improperly marshals typeof across execution contexts, but a
-      // cross-context object will still return false for "instanceof Object".
+      // IE9 and below improperly marshals typeof across execution contexts, but
+      // a cross-context object will still return false for "instanceof Object".
       if (value instanceof Array) {
         return 'array';
       } else if (value instanceof Object) {
