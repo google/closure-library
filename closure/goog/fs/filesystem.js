@@ -10,7 +10,7 @@
 
 goog.provide('goog.fs.FileSystem');
 
-goog.forwardDeclare('goog.fs.DirectoryEntry');
+goog.requireType('goog.fs.DirectoryEntry');
 
 
 

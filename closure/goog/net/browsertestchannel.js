@@ -27,12 +27,12 @@ goog.provide('goog.net.BrowserTestChannel');
 
 goog.forwardDeclare('goog.net.BrowserChannel');
 goog.forwardDeclare('goog.net.BrowserChannel.ServerReachability');
-goog.forwardDeclare('goog.net.XhrIo');
 goog.require('goog.json.NativeJsonProcessor');
 goog.require('goog.net.ChannelRequest');
 goog.require('goog.net.ChannelRequest.Error');
 goog.require('goog.net.tmpnetwork');
 goog.require('goog.string.Parser');
+goog.requireType('goog.net.XhrIo');
 
 
 
