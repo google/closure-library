@@ -400,25 +400,11 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.wireCodec_ = new WireV8();
 
   /**
-   * Whether to run the channel test as a background process to not block
-   * the OPEN event.
-   *
-   * @private {boolean}
-   */
-  this.backgroundChannelTest_ = true;
-
-  /**
    * Whether to turn on the fast handshake behavior.
    *
    * @private {boolean}
    */
   this.fastHandshake_ = (opt_options && opt_options.fastHandshake) || false;
-
-  if (this.fastHandshake_ && !this.backgroundChannelTest_) {
-    this.channelDebug_.warning(
-        'Force backgroundChannelTest when fastHandshake is enabled.');
-    this.backgroundChannelTest_ = true;
-  }
 
   if (opt_options && opt_options.disableRedact) {
     this.channelDebug_.disableRedact();
@@ -628,7 +614,6 @@ WebChannelBase.prototype.setChannelDebug = function(channelDebug) {
 /**
  * Starts the channel. This initiates connections to the server.
  *
- * @param {string} testPath  The path for the test connection.
  * @param {string} channelPath  The path for the channel connection.
  * @param {!Object=} opt_extraParams Extra parameter keys and values to add to
  *     the requests.
@@ -636,7 +621,7 @@ WebChannelBase.prototype.setChannelDebug = function(channelDebug) {
  * @param {number=} opt_oldArrayId  The last array ID from a previous session.
  */
 WebChannelBase.prototype.connect = function(
-    testPath, channelPath, opt_extraParams, opt_oldSessionId, opt_oldArrayId) {
+    channelPath, opt_extraParams, opt_oldSessionId, opt_oldArrayId) {
   this.channelDebug_.debug('connect()');
 
   requestStats.notifyStatEvent(requestStats.Stat.CONNECT_ATTEMPT);
@@ -650,17 +635,15 @@ WebChannelBase.prototype.connect = function(
     this.extraParams_['OAID'] = opt_oldArrayId;
   }
 
-  if (this.backgroundChannelTest_) {
-    this.channelDebug_.debug('connect() bypassed channel-test.');
-    this.connState_.handshakeResult = [];
-    this.connState_.bufferingProxyResult = false;
+  this.channelDebug_.debug('connect() bypassed channel-test.');
+  this.connState_.handshakeResult = [];
+  this.connState_.bufferingProxyResult = false;
 
-    // TODO(user): merge states with background channel test
-    // requestStats.setTimeout(goog.bind(this.connectTest_, this, testPath), 0);
-    //     this.connectChannel_();
-  }
+  // TODO(user): merge states with background channel test
+  // requestStats.setTimeout(goog.bind(this.connectTest_, this, testPath), 0);
+  // this.connectChannel_();
 
-  this.connectTest_(testPath);
+  this.connectTest_(channelPath);
 };
 
 
@@ -704,10 +687,10 @@ WebChannelBase.prototype.getSessionId = function() {
 /**
  * Starts the test channel to determine network conditions.
  *
- * @param {string} testPath  The relative PATH for the test connection.
+ * @param {string} channelPath The path for the channel connection.
  * @private
  */
-WebChannelBase.prototype.connectTest_ = function(testPath) {
+WebChannelBase.prototype.connectTest_ = function(channelPath) {
   this.channelDebug_.debug('connectTest_()');
   if (!this.okToMakeRequest_()) {
     return;  // channel is cancelled
@@ -718,10 +701,10 @@ WebChannelBase.prototype.connectTest_ = function(testPath) {
     this.connectionTest_.setExtraHeaders(this.extraHeaders_);
   }
 
-  var urlPath = testPath;
+  var urlPath = channelPath;
   if (this.httpHeadersOverwriteParam_ && this.extraHeaders_) {
     urlPath = httpCors.setHttpHeadersWithOverwriteParam(
-        testPath, this.httpHeadersOverwriteParam_, this.extraHeaders_);
+        channelPath, this.httpHeadersOverwriteParam_, this.extraHeaders_);
   }
 
   this.connectionTest_.connect(/** @type {string} */ (urlPath));
@@ -865,14 +848,6 @@ WebChannelBase.prototype.setHttpSessionId = function(httpSessionId) {
  */
 WebChannelBase.prototype.getHttpSessionId = function() {
   return this.httpSessionId_;
-};
-
-
-/**
- * @override
- */
-WebChannelBase.prototype.getBackgroundChannelTest = function() {
-  return this.backgroundChannelTest_;
 };
 
 
@@ -1306,7 +1281,7 @@ WebChannelBase.prototype.open_ = function() {
   }
 
   // http-session-id to be generated as the response
-  if (this.getBackgroundChannelTest() && this.getHttpSessionIdParam()) {
+  if (this.getHttpSessionIdParam()) {
     uri.setParameterValue(
         WebChannel.X_HTTP_SESSION_ID, this.getHttpSessionIdParam());
   }
@@ -1972,10 +1947,6 @@ WebChannelBase.prototype.setRetryDelay = function(baseDelayMs, delaySeedMs) {
  * @private
  */
 WebChannelBase.prototype.applyControlHeaders_ = function(request) {
-  if (!this.backgroundChannelTest_) {
-    return;
-  }
-
   var xhr = request.getXhr();
   if (xhr) {
     var clientProtocol =

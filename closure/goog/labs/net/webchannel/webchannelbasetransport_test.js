@@ -117,15 +117,6 @@ testSuite({
     assertTrue(eventFired);
   },
 
-  testOpenWithTestUrl() {
-    const webChannelTransport = new WebChannelBaseTransport();
-    webChannel = webChannelTransport.createWebChannel(channelUrl);
-    webChannel.open();
-
-    const testPath = webChannel.channel_.connectionTest_.path_;
-    assertNotNullNorUndefined(testPath);
-  },
-
   testOpenWithCustomHeaders() {
     const webChannelTransport = new WebChannelBaseTransport();
     const options = {'messageHeaders': {'foo-key': 'foo-value'}};
