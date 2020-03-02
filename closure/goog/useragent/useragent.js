@@ -597,8 +597,12 @@ goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher;
  */
 goog.userAgent.DOCUMENT_MODE = (function() {
   var doc = goog.global['document'];
-  if (!doc || !goog.userAgent.IE) {
-    return undefined;
-  }
-  return goog.userAgent.getDocumentMode_();
+  if (!doc || !goog.userAgent.IE) return undefined;
+  // This must be an IE user agent.
+  var documentMode = goog.userAgent.getDocumentMode_();
+  if (documentMode) return documentMode;
+  // The user agent version string begins with the major version.
+  // Parse the major version and truncate anything following.
+  var ieVersion = parseInt(goog.userAgent.VERSION, 10);
+  return ieVersion || undefined;
 })();
