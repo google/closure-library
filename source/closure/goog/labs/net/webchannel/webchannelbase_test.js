@@ -270,9 +270,8 @@ function connectForwardChannel(
     spdyEnabled = undefined) {
   stubSpdyCheck(!!spdyEnabled);
   const uriPrefix = opt_uriPrefix || '';
-  channel.connect(`${uriPrefix}/test`, `${uriPrefix}/bind`, null);
+  channel.connect(`${uriPrefix}/bind`, null);
   mockClock.tick(0);
-  completeTestConnection();
   completeForwardChannel(serverVersion, hostPrefix);
 }
 
@@ -291,25 +290,6 @@ function connect(
 
 function disconnect() {
   channel.disconnect();
-  mockClock.tick(0);
-}
-
-function completeTestConnection() {
-  completeForwardTestConnection();
-  completeBackTestConnection();
-  assertEquals(WebChannelBase.State.OPENING, channel.getState());
-}
-
-function completeForwardTestConnection() {
-  channel.connectionTest_.onRequestData(
-      channel.connectionTest_.request_, '["b"]');
-  channel.connectionTest_.onRequestComplete(channel.connectionTest_.request_);
-  mockClock.tick(0);
-}
-
-function completeBackTestConnection() {
-  channel.connectionTest_.onRequestData(
-      channel.connectionTest_.request_, '11111');
   mockClock.tick(0);
 }
 
@@ -613,8 +593,6 @@ testSuite({
 
     mockClock = new MockClock(true);
     channel = new WebChannelBase('1');
-    // restore channel-test for tests that rely on the channel-test state
-    channel.backgroundChannelTest_ = false;
 
     gotError = false;
 
@@ -734,15 +712,14 @@ testSuite({
 
   testConnect_notOkToMakeRequestForTest() {
     handler.okToMakeRequest = functions.constant(WebChannelBase.Error.NETWORK);
-    channel.connect('/test', '/bind', null);
+    channel.connect('/bind', null);
     mockClock.tick(0);
     assertEquals(WebChannelBase.State.CLOSED, channel.getState());
   },
 
   testConnect_notOkToMakeRequestForBind() {
-    channel.connect('/test', '/bind', null);
+    channel.connect('/bind', null);
     mockClock.tick(0);
-    completeTestConnection();
     handler.okToMakeRequest = functions.constant(WebChannelBase.Error.NETWORK);
     completeForwardChannel();
     assertEquals(WebChannelBase.State.CLOSED, channel.getState());

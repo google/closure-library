@@ -34,7 +34,6 @@ goog.require('goog.net.WebChannel');
 goog.require('goog.net.WebChannelTransport');
 goog.require('goog.object');
 goog.require('goog.string');
-goog.require('goog.string.path');
 
 
 
@@ -96,15 +95,6 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
    * @private {string} The URL of the target server end-point.
    */
   this.url_ = url;
-
-  /**
-   * The test URL of the target server end-point. This value defaults to
-   * this.url_ + '/test'.
-   *
-   * @private {string}
-   * @const
-   */
-  this.testUrl_ = goog.string.path.join(this.url_, 'test');
 
   /**
    * @private {goog.log.Logger} The logger for this class.
@@ -230,8 +220,6 @@ WebChannelBaseTransport.Channel.prototype.removeEventListener = function(
 
 
 /**
- * Test path is always set to "/url/test".
- *
  * @override
  */
 WebChannelBaseTransport.Channel.prototype.open = function() {
@@ -239,8 +227,7 @@ WebChannelBaseTransport.Channel.prototype.open = function() {
   if (this.supportsCrossDomainXhr_) {
     this.channel_.setSupportsCrossDomainXhrs(true);
   }
-  this.channel_.connect(
-      this.testUrl_, this.url_, (this.messageUrlParams_ || undefined));
+  this.channel_.connect(this.url_, (this.messageUrlParams_ || undefined));
 };
 
 

@@ -7,7 +7,7 @@
 goog.module('goog.debug.TraceTest');
 goog.setTestOnly();
 
-const StopTraceDetail = goog.forwardDeclare('goog.debug.StopTraceDetail');
+const StopTraceDetail = goog.requireType('goog.debug.StopTraceDetail');
 const Trace = goog.require('goog.debug.Trace');
 const googArray = goog.require('goog.array');
 const recordFunction = goog.require('goog.testing.recordFunction');

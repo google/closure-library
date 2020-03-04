@@ -25,13 +25,13 @@
 
 goog.provide('goog.labs.storage.BoundedCollectableStorage');
 
-goog.forwardDeclare('goog.storage.mechanism.IterableMechanism');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.iter');
 goog.require('goog.storage.CollectableStorage');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.ExpiringStorage');
+goog.requireType('goog.storage.mechanism.IterableMechanism');
 
 
 

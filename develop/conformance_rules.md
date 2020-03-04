@@ -275,14 +275,7 @@ and therefore disallowed.
 {: #postMessage}
 ### Window.prototype.postMessage 
 
-Raw "postMessage" can create security vulnerabilities. Use gapi.rpc instead.
-gapi.rpc conceptually augments window.postmessage with more security and other
-features. 
-
-Valid reasons for using raw "postMessage" include when it is used for
-communication to/from an iframe hosted on the same domain as the page containing
-the iframe. However, be sure to get a security review to allow usage of this.
-
+Raw "postMessage" can create security vulnerabilities. 
 
 {: #expose}
 ### @expose 

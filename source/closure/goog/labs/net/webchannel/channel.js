@@ -215,12 +215,4 @@ Channel.prototype.setHttpSessionId = goog.abstractMethod;
  * @return {?string} The http session id if there is one in effect.
  */
 Channel.prototype.getHttpSessionId = goog.abstractMethod;
-
-
-/**
- * Returns true if the channel-test is done in background.
- *
- * @return {boolean} if the channel-test is done in background.
- */
-Channel.prototype.getBackgroundChannelTest = goog.abstractMethod;
 });  // goog.scope
