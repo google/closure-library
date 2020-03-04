@@ -282,7 +282,7 @@ goog.html.SafeUrl.isSafeMimeType = function(mimeType) {
  *   as a SafeUrl.
  */
 goog.html.SafeUrl.fromBlob = function(blob) {
-  var url = goog.html.SAFE_MIME_TYPE_PATTERN_.test(blob.type) ?
+  var url = goog.html.SafeUrl.isSafeMimeType(blob.type) ?
       goog.fs.url.createObjectUrl(blob) :
       goog.html.SafeUrl.INNOCUOUS_STRING;
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
@@ -317,7 +317,7 @@ goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
   // of the page with the link. It seems unlikely that both of these will
   // happen, particularly in not really old IEs.
   var match = filteredDataUrl.match(goog.html.DATA_URL_PATTERN_);
-  var valid = match && goog.html.SAFE_MIME_TYPE_PATTERN_.test(match[1]);
+  var valid = match && goog.html.SafeUrl.isSafeMimeType(match[1]);
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
       valid ? filteredDataUrl : goog.html.SafeUrl.INNOCUOUS_STRING);
 };
