@@ -118,7 +118,7 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
 
 
 /**
- * Returns this SafeUrl's value a string.
+ * Returns this SafeUrl's value as a string.
  *
  * IMPORTANT: In code where it is security relevant that an object's type is
  * indeed `SafeUrl`, use `goog.html.SafeUrl.unwrap` instead of this
