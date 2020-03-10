@@ -290,6 +290,21 @@ goog.html.SafeUrl.fromBlob = function(blob) {
 
 
 /**
+ * Creates a SafeUrl wrapping a blob URL created for a MediaSource.
+ * @param {!MediaSource} mediaSource
+ * @return {!goog.html.SafeUrl} The blob URL.
+ */
+goog.html.SafeUrl.fromMediaSource = function(mediaSource) {
+  goog.asserts.assert(
+      'MediaSource' in goog.global, 'No support for MediaSource');
+  const url = mediaSource instanceof MediaSource ?
+      goog.fs.url.createObjectUrl(mediaSource) :
+      goog.html.SafeUrl.INNOCUOUS_STRING;
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
+};
+
+
+/**
  * Matches a base-64 data URL, with the first match group being the MIME type.
  * @const
  * @private
