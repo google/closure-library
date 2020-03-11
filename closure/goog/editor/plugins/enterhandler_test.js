@@ -70,7 +70,7 @@ function selectNodeAndHitEnter(field, id) {
 /**
  * Creates a field with only the enter handler plugged in, for testing.
  * @param {string} id A DOM id.
- * @return {Field} A field.
+ * @return {!Field} A field.
  */
 function makeField(id, classnameRequiredToSplitBlockquote) {
   const field = new Field(id);

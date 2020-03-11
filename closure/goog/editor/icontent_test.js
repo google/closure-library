@@ -58,7 +58,7 @@ function assertBodyCorrect(body, id, bodyHTML, rtl = undefined) {
   assertEquals(id, body.id);
 }
 
-/** @return {Object} A mock document */
+/** @return {!Object} A mock document */
 function createMockDocument() {
   return {
     body: {

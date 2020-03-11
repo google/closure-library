@@ -145,7 +145,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.updateAnimatedPaletteItem =
  * @param {goog.ui.emoji.SpriteInfo} spriteInfo The metadata to create the css
  *     for the sprite.
  * @param {string} displayUrl The URL of the image for this cell.
- * @return {HTMLDivElement} The inner element for a palette item.
+ * @return {!HTMLDivElement} The inner element for a palette item.
  */
 goog.ui.emoji.EmojiPaletteRenderer.prototype.buildElementFromSpriteMetadata =
     function(dom, spriteInfo, displayUrl) {

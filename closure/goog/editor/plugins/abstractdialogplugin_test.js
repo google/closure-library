@@ -64,7 +64,7 @@ function setUpMockRange() {
  * a plain implementation of createDialogControl().
  * @param {dom.DomHelper} domHelper The dom helper to be used to create the
  *     dialog.
- * @return {AbstractDialog} The created dialog.
+ * @return {!AbstractDialog} The created dialog.
  */
 function createDialog(domHelper) {
   const dialog = new AbstractDialog(domHelper);
@@ -76,7 +76,7 @@ function createDialog(domHelper) {
  * Creates a concrete instance of the abstract class
  * AbstractDialogPlugin
  * and registers it with the mock editable field being used.
- * @return {AbstractDialogPlugin} The created plugin.
+ * @return {!AbstractDialogPlugin} The created plugin.
  */
 function createDialogPlugin() {
   const plugin = new AbstractDialogPlugin(COMMAND);

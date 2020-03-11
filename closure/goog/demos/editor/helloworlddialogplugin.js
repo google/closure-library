@@ -68,7 +68,7 @@ goog.demos.editor.HelloWorldDialogPlugin.prototype.getTrogClassId =
  * Creates a new instance of the dialog and registers for the relevant events.
  * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
  *     create the dialog.
- * @return {goog.demos.editor.HelloWorldDialog} The dialog.
+ * @return {!goog.demos.editor.HelloWorldDialog} The dialog.
  * @override
  * @protected
  */

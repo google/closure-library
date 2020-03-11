@@ -39,7 +39,7 @@ function SampleItem() {
 /**
  * Creates an array of BiDi text objects for testing,
  * setting the direction and HTML flags appropriately.
- * @return {Array<Object<string,boolean,boolean>>}
+ * @return {!Array<Object<string,boolean,boolean>>}
  * @private
  */
 function getBidiTextSamples() {

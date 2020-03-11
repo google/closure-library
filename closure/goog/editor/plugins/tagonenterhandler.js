@@ -471,7 +471,7 @@ goog.editor.plugins.TagOnEnterHandler.trimTabsAndLineBreaks_ = function(
 /**
  * Called in response to a normal enter keystroke. It has the action of
  * splitting elements.
- * @return {Element} The node that the cursor should be before.
+ * @return {!Element} The node that the cursor should be before.
  * @private
  */
 goog.editor.plugins.TagOnEnterHandler.prototype.handleRegularEnterGecko_ =

@@ -53,14 +53,14 @@ function installMockClock() {
 }
 
 /**
- * @return {ContinuationTestCase.Step} A generic step in a continuation test.
+ * @return {!ContinuationTestCase.Step} A generic step in a continuation test.
  */
 function getSampleStep() {
   return new ContinuationTestCase.Step('test', () => {});
 }
 
 /**
- * @return {ContinuationTestCase.ContinuationTest} A simple continuation test
+ * @return {!ContinuationTestCase.ContinuationTest} A simple continuation test
  *     with generic setUp, test, and tearDown functions.
  */
 function getSampleTest() {

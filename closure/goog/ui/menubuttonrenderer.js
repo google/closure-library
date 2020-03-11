@@ -118,7 +118,7 @@ goog.ui.MenuButtonRenderer.prototype.decorate = function(control, element) {
  * @param {goog.ui.ControlContent} content Text caption or DOM structure
  *     to wrap in a box.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Pseudo-rounded-corner box containing the content.
+ * @return {!Element} Pseudo-rounded-corner box containing the content.
  * @override
  */
 goog.ui.MenuButtonRenderer.prototype.createButton = function(content, dom) {
