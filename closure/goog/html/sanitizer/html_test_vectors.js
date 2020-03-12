@@ -153,6 +153,18 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "<a><span>a&gt;</span></a><a><span>a&gt;</span></a><a />",
      ],
      name: "mess_of_anchors"},
+    {input: "\"><noscript><p title=\"</noscript><img src=x onerror=alert(1)>\">",
+     acceptable: [
+         "",
+         "&quot;&gt;",
+         "\"&gt;<noscript><p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\"></p></noscript>",
+         "\"&gt;<noscript>&lt;p title=\"</noscript><img />\"&gt;",
+         "\"&gt;<noscript><p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\" /></noscript>",
+         "&#34;&gt;<img src=\"x\"/>&#34;&gt;",
+         "\"&gt;<p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\">",
+         "&quot;&gt;<p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\"></p>",
+     ],
+     name: "mxss_noscript"},
     {input: "<a><a></a></a>",
      acceptable: [
          "<a><a></a></a>",
