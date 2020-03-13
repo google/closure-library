@@ -169,7 +169,7 @@ goog.debug.FancyWindow.prototype.openOptions_ = function() {
  * Make a drop down for the log levels.
  * @param {string} id Logger id.
  * @param {string} selected What log level is currently selected.
- * @return {Element} The newly created 'select' DOM element.
+ * @return {!Element} The newly created 'select' DOM element.
  * @private
  */
 goog.debug.FancyWindow.prototype.getDropDown_ = function(id, selected) {

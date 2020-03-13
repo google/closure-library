@@ -434,7 +434,7 @@ goog.style.getViewportPageOffset = function(doc) {
  * be thrown depending on user agent.
  *
  * @param {!Element} el The element whose bounding rectangle is being queried.
- * @return {Object} A native bounding rectangle with numerical left, top,
+ * @return {!Object} A native bounding rectangle with numerical left, top,
  *     right, and bottom.  Reported by Firefox to be of object type ClientRect.
  * @private
  */
