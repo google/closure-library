@@ -16,7 +16,6 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.async.run');
 goog.require('goog.json');
-goog.require('goog.labs.net.webChannel.BaseTestChannel');
 goog.require('goog.labs.net.webChannel.Channel');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.labs.net.webChannel.ConnectionState');
@@ -36,7 +35,6 @@ goog.require('goog.structs');
 
 goog.scope(function() {
 var WebChannel = goog.net.WebChannel;
-var BaseTestChannel = goog.labs.net.webChannel.BaseTestChannel;
 var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
 var ConnectionState = goog.labs.net.webChannel.ConnectionState;
 var ForwardChannelRequestPool =
@@ -110,7 +108,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.channelDebug_ = new WebChannelDebug();
 
   /**
-   * Previous connectivity test results.
+   * Connectivity state.
    * @private {!ConnectionState}
    */
   this.connState_ = opt_conn || new ConnectionState();
@@ -236,13 +234,6 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {?number}
    */
   this.deadBackChannelTimerId_ = null;
-
-  /**
-   * The TestChannel object which encapsulates the logic for determining
-   * interesting network conditions about the client.
-   * @private {?BaseTestChannel}
-   */
-  this.connectionTest_ = null;
 
   /**
    * Whether the client's network conditions can support chunked responses.
@@ -576,7 +567,7 @@ WebChannelBase.prototype.getForwardChannelRequestPool = function() {
 
 
 /**
- * @return {!Object} The codec object, to be used for the test channel.
+ * @return {!Object} The codec object.
  */
 WebChannelBase.prototype.getWireCodec = function() {
   return this.wireCodec_;
@@ -627,15 +618,8 @@ WebChannelBase.prototype.connect = function(
     this.extraParams_['OAID'] = opt_oldArrayId;
   }
 
-  this.channelDebug_.debug('connect() bypassed channel-test.');
-  this.connState_.handshakeResult = [];
-  this.connState_.bufferingProxyResult = false;
-
-  // TODO(user): merge states with background channel test
-  // requestStats.setTimeout(goog.bind(this.connectTest_, this, testPath), 0);
-  // this.connectChannel_();
-
-  this.connectTest_(channelPath);
+  this.useChunked_ = this.allowChunkedMode_;
+  this.connectChannel_();
 };
 
 
@@ -677,34 +661,7 @@ WebChannelBase.prototype.getSessionId = function() {
 
 
 /**
- * Starts the test channel to determine network conditions.
- *
- * @param {string} channelPath The path for the channel connection.
- * @private
- */
-WebChannelBase.prototype.connectTest_ = function(channelPath) {
-  this.channelDebug_.debug('connectTest_()');
-  if (!this.okToMakeRequest_()) {
-    return;  // channel is cancelled
-  }
-  this.connectionTest_ = new BaseTestChannel(this, this.channelDebug_);
-
-  if (this.httpHeadersOverwriteParam_ === null) {
-    this.connectionTest_.setExtraHeaders(this.extraHeaders_);
-  }
-
-  var urlPath = channelPath;
-  if (this.httpHeadersOverwriteParam_ && this.extraHeaders_) {
-    urlPath = httpCors.setHttpHeadersWithOverwriteParam(
-        channelPath, this.httpHeadersOverwriteParam_, this.extraHeaders_);
-  }
-
-  this.connectionTest_.connect(/** @type {string} */ (urlPath));
-};
-
-
-/**
- * Starts the regular channel which is run after the test channel is complete.
+ * Starts the connection.
  * @private
  */
 WebChannelBase.prototype.connectChannel_ = function() {
@@ -721,11 +678,6 @@ WebChannelBase.prototype.connectChannel_ = function() {
  * @private
  */
 WebChannelBase.prototype.cancelRequests_ = function() {
-  if (this.connectionTest_) {
-    this.connectionTest_.abort();
-    this.connectionTest_ = null;
-  }
-
   if (this.backChannelRequest_) {
     this.backChannelRequest_.cancel();
     this.backChannelRequest_ = null;
@@ -914,11 +866,9 @@ WebChannelBase.prototype.setAllowHostPrefix = function(allowHostPrefix) {
 
 
 /**
- * Returns whether the channel is buffered or not. This state is valid for
- * querying only after the test connection has completed. This may be
+ * Returns whether the channel is buffered or not.  This may be
  * queried in the WebChannelBase.okToMakeRequest() callback.
- * A channel may be buffered if the test connection determines that
- * a chunked response could not be sent down within a suitable time.
+ *
  * @return {boolean} Whether the channel is buffered.
  */
 WebChannelBase.prototype.isBuffered = function() {
@@ -1566,37 +1516,6 @@ WebChannelBase.prototype.okToMakeRequest_ = function() {
     }
   }
   return true;
-};
-
-
-/**
- * @override
- */
-WebChannelBase.prototype.testConnectionFinished = function(
-    testChannel, useChunked) {
-  this.channelDebug_.debug('Test Connection Finished');
-
-  // Forward channel will not be used prior to this method is called
-  var clientProtocol = testChannel.getClientProtocol();
-  if (clientProtocol) {
-    this.forwardChannelRequestPool_.applyClientProtocol(clientProtocol);
-  }
-
-  this.useChunked_ = this.allowChunkedMode_ && useChunked;
-  this.lastStatusCode_ = testChannel.getLastStatusCode();
-
-  this.connectChannel_();
-};
-
-
-/**
- * @override
- */
-WebChannelBase.prototype.testConnectionFailure = function(
-    testChannel, errorCode) {
-  this.channelDebug_.debug('Test Connection Failed');
-  this.lastStatusCode_ = testChannel.getLastStatusCode();
-  this.signalError_(WebChannelBase.Error.REQUEST_FAILED);
 };
 
 

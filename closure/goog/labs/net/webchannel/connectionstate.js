@@ -17,6 +17,8 @@ goog.provide('goog.labs.net.webChannel.ConnectionState');
 /**
  * The connectivity state of the channel.
  *
+ * To be used for the new buffering-proxy detection algorithm.
+ *
  * @constructor
  * @struct
  */

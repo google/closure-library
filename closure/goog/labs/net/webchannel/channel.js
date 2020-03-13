@@ -5,14 +5,13 @@
  */
 
 /**
- * @fileoverview A shared interface for WebChannelBase and BaseTestChannel.
+ * @fileoverview A core interface for WebChannelBase.
  *
  */
 
 
 goog.provide('goog.labs.net.webChannel.Channel');
 
-goog.forwardDeclare('goog.labs.net.webChannel.BaseTestChannel');
 goog.forwardDeclare('goog.labs.net.webChannel.ChannelRequest');
 goog.forwardDeclare('goog.labs.net.webChannel.ChannelRequest.Error');
 goog.forwardDeclare('goog.labs.net.webChannel.ConnectionState');
@@ -21,9 +20,7 @@ goog.requireType('goog.net.XhrIo');
 
 
 /**
- * Shared interface between Channel and TestChannel to support callbacks
- * between WebChannelBase and BaseTestChannel and between Channel and
- * ChannelRequest.
+ * Core interface for WebChannelBase.
  *
  * @interface
  */
@@ -143,29 +140,6 @@ Channel.prototype.correctHostPrefix = goog.abstractMethod;
  * @return {goog.Uri} The data URI.
  */
 Channel.prototype.createDataUri = goog.abstractMethod;
-
-
-/**
- * Not needed for testchannel.
- *
- * Callback from TestChannel for when the channel is finished.
- * @param {goog.labs.net.webChannel.BaseTestChannel} testChannel
- *     The TestChannel.
- * @param {boolean} useChunked  Whether we can chunk responses.
- */
-Channel.prototype.testConnectionFinished = goog.abstractMethod;
-
-
-/**
- * Not needed for testchannel.
- *
- * Callback from TestChannel for when the channel has an error.
- * @param {goog.labs.net.webChannel.BaseTestChannel} testChannel
- *     The TestChannel.
- * @param {goog.labs.net.webChannel.ChannelRequest.Error} errorCode
- *     The error code of the failure.
- */
-Channel.prototype.testConnectionFailure = goog.abstractMethod;
 
 
 /**
