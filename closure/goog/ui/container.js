@@ -989,7 +989,7 @@ goog.ui.Container.prototype.updateHighlightedIndex_ = function(
  * @param {boolean=} opt_unrender Whether to call `exitDocument` on the
  *     removed control, and detach its DOM from the document (defaults to
  *     false).
- * @return {goog.ui.Control} The removed control, if any.
+ * @return {?goog.ui.Control} The removed control, if any.
  * @override
  */
 goog.ui.Container.prototype.removeChild = function(control, opt_unrender) {

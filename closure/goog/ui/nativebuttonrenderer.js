@@ -54,7 +54,8 @@ goog.ui.NativeButtonRenderer.prototype.getAriaRole = function() {
  * Returns the button's contents wrapped in a native HTML button element.  Sets
  * the button's disabled attribute as needed.
  * @param {goog.ui.Control} button Button to render.
- * @return {Element} Root element for the button (a native HTML button element).
+ * @return {!Element} Root element for the button (a native HTML button
+ *     element).
  * @override
  */
 goog.ui.NativeButtonRenderer.prototype.createDom = function(button) {

@@ -219,7 +219,7 @@ goog.ui.Zippy.prototype.getAriaRole = function() {
 
 
 /**
- * @return {HTMLElement} The content element.
+ * @return {!HTMLElement} The content element.
  */
 goog.ui.Zippy.prototype.getContentElement = function() {
   return /** @type {!HTMLElement} */ (this.elContent_);
