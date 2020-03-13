@@ -1996,7 +1996,7 @@ goog.dom.isFocusableTabIndex = function(element) {
  * Enables or disables keyboard focus support on the element via its tab index.
  * Only elements for which {@link goog.dom.isFocusableTabIndex} returns true
  * (or elements that natively support keyboard focus, like form elements) can
- * receive keyboard focus.  See http://go/tabindex for more info.
+ * receive keyboard focus.
  * @param {Element} element Element whose tab index is to be changed.
  * @param {boolean} enable Whether to set or remove a tab index on the element
  *     that supports keyboard focus.
@@ -3169,7 +3169,7 @@ goog.dom.DomHelper.prototype.isFocusableTabIndex = goog.dom.isFocusableTabIndex;
  * Enables or disables keyboard focus support on the element via its tab index.
  * Only elements for which {@link goog.dom.isFocusableTabIndex} returns true
  * (or elements that natively support keyboard focus, like form elements) can
- * receive keyboard focus.  See http://go/tabindex for more info.
+ * receive keyboard focus.
  * @param {Element} element Element whose tab index is to be changed.
  * @param {boolean} enable Whether to set or remove a tab index on the element
  *     that supports keyboard focus.

@@ -32,8 +32,6 @@ goog.require('goog.testing.jsunit');
  * Environments will run their setUp steps in the order in which they
  * are instantiated and registered. During tearDown, the environments will
  * unwind the setUp and execute in reverse order.
- *
- * See http://go/jsunit-env for more information.
  */
 goog.labs.testing.Environment = goog.defineClass(null, {
   /** @constructor */

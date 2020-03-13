@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Various User-Agent strings.
- * See http://go/useragentexamples and http://www.useragentstring.com/ for
+ * See http://www.useragentstring.com/ for
  * examples.
  */
 

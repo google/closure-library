@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview Cross domain RPC library using the <a
- * href="http://go/xd2_design" target="_top">XD2 approach</a>.
+ * href="xd2_design" target="_top">XD2 approach</a>.
  *
  * <h5>Protocol</h5>
  * Client sends a request across domain via a form submission.  Server
@@ -54,9 +54,9 @@
  * <h5>Server Side</h5>
  * For an example of the server side, refer to the following files:
  * <ul>
- * <li>http://go/xdservletfilter.java</li>
- * <li>http://go/xdservletrequest.java</li>
- * <li>http://go/xdservletresponse.java</li>
+ * <li>xdservletfilter.java</li>
+ * <li>xdservletrequest.java</li>
+ * <li>xdservletresponse.java</li>
  * </ul>
  *
  * <h5>System Requirements</h5>

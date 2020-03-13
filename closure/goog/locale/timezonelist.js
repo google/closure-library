@@ -22,7 +22,7 @@ goog.require('goog.locale');
  * the current locale, selected based on the region or language provided.
  *
  * This method depends on `goog.locale.TimeZone*__<locale>` available
- * from http://go/js_locale_data. Users of this method must add a dependency on
+ * from js_locale_data on go. Users of this method must add a dependency on
  * this.
  *
  * @param {string=} opt_regionOrLang If region tag is provided, timezone ids
@@ -45,7 +45,7 @@ goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
  * the current locale, selected based on the region or language provided.
  *
  * This method depends on `goog.locale.TimeZone*__<locale>` available
- * from http://go/js_locale_data. Users of this method must add a dependency on
+ * from js_locale_data. Users of this method must add a dependency on
  * this.
  *
  * @param {string=} opt_regionOrLang If region tag is provided, timezone ids
@@ -68,7 +68,7 @@ goog.locale.getTimeZoneSelectedLongNames = function(opt_regionOrLang) {
  * the current locale.
  *
  * This method depends on `goog.locale.TimeZoneAllLongNames__<locale>` available
- * from http://go/js_locale_data. Users of this method must add a dependency on
+ * from js_locale_data. Users of this method must add a dependency on
  * this.
  *
  * @return {Array<Object>} localized and relevant list of timezone names
@@ -86,7 +86,7 @@ goog.locale.getTimeZoneAllLongNames = function() {
  * the current locale, selected based on the region or language provided.
  *
  * This method depends on `goog.locale.TimeZone*__<locale>` available
- * from http://go/js_locale_data. Users of this method must add a dependency on
+ * from js_locale_data. Users of this method must add a dependency on
  * this.
  *
  * @param {string} nameType Resource name to be loaded to get the names.

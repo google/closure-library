@@ -291,7 +291,7 @@ goog.date.DateRange.allTime = function(opt_today) {
 
 /**
  * Standard date range keys. Equivalent to the enum IDs in
- * DateRange.java http://go/datarange.java
+ * DateRange.java.
  *
  * @enum {string}
  */

@@ -19,7 +19,7 @@ const TimeZone = goog.require('goog.i18n.TimeZone');
 const testSuite = goog.require('goog.testing.testSuite');
 
 // Where could such data be found
-// In js_i18n_data in http://go/i18n_dir, we have a bunch of files with names
+// In js_i18n_data, we have a bunch of files with names
 // like TimeZoneConstant__<locale>.js
 // We strongly discourage you to use them directly as those data can make
 // your client code bloated. You should try to provide this data from server

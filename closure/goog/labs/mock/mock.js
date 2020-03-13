@@ -20,8 +20,6 @@
  * Apart from mocking, methods are also provided to just monitor calls to an
  * object (spying) and returning specific values for some or all the inputs to
  * methods (stubbing).
- *
- * Design doc : http://go/closuremock
  */
 
 

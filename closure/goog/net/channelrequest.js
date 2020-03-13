@@ -885,7 +885,7 @@ goog.net.ChannelRequest.prototype.getNextChunk_ = function(responseText) {
 /**
  * Uses the Trident htmlfile ActiveX control to send a GET request in IE. This
  * is the innovation discovered that lets us get intermediate results in
- * Internet Explorer.  Thanks to http://go/kev
+ * Internet Explorer.  Thanks to kev (on go)
  * @param {goog.Uri} uri The uri to request from.
  * @param {boolean} usingSecondaryDomain Whether to use a secondary domain.
  */

@@ -27,9 +27,6 @@
  *
  * Value uses 0 based counting. That is value for the range [a, b] is 0 and
  * that of [a, c] is 1. Simillarly, the delta of "ab" is 0.
- *
- * Following python script can be used to compress character lists taken
- * standard input: http://go/charlistcompressor.py
  */
 
 goog.provide('goog.i18n.CharListDecompressor');

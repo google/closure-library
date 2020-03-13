@@ -14,7 +14,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 // NOTE: This test uses a custom test case, see end of script block
 
 // Test data based on known input/output pairs generated using
-// http://go/hash.java
+// hash.java
 
 function createByteArray(n) {
   const arr = [];

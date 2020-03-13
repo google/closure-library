@@ -611,7 +611,7 @@ goog.editor.plugins.RemoveFormatting.prototype.convertSelectedHtmlText_ =
  * browser's execCommand couldn't clobber without being totally inefficient.
  * Attempts to convert visual line breaks to BRs. Leaves anchors that contain an
  * href and images.
- * Adapted from Gmail's MessageUtil's htmlToPlainText. http://go/messageutil.js
+ * Adapted from Gmail's MessageUtil's htmlToPlainText.
  * @param {string} html The original html of the message.
  * @return {string} The unformatted html, which is just text, br's, anchors and
  *     images.

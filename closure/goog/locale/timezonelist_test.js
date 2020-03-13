@@ -57,7 +57,7 @@ document.write('<hr>');
 
 testSuite({
   setUpPage() {
-    // Test data files are in in http://go/js_locale_data
+    // Test data files are in js_locale_data (see go)
 
     // Test data from TimeZoneSelectedIds__FR.js
     const TimeZoneSelectedIds__FR =

@@ -28,8 +28,6 @@ goog.provide('goog.disposable.IDisposable');
  * to null as garbage collector will collect them assuming that references to
  * current object will be lost after it is disposed.
  *
- * See also http://go/mdn/JavaScript/Memory_Management.
- *
  * @record
  */
 goog.disposable.IDisposable = function() {};

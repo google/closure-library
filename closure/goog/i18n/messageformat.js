@@ -31,7 +31,6 @@
  *
  * This is a subset of the ICU MessageFormatSyntax:
  *   http://userguide.icu-project.org/formatparse/messages
- * See also http://go/plurals and http://go/ordinals for internal details.
  *
  *
  * Message example:

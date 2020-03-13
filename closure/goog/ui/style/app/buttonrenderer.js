@@ -21,7 +21,7 @@
  * without the use of images.
  *
  * Based on the Custom Buttons 3.1 visual specification, see
- * http://go/custombuttons
+ * custombuttons on go
  */
 
 goog.provide('goog.ui.style.app.ButtonRenderer');
