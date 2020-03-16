@@ -231,7 +231,7 @@ goog.inherits(requestStats.StatEvent, goog.events.Event);
 
 /**
  * Returns the singleton event target for stat events.
- * @return {goog.events.EventTarget} The event target for stat events.
+ * @return {!goog.events.EventTarget} The event target for stat events.
  */
 requestStats.getStatEventTarget = function() {
   return requestStats.getStatEventTarget_();

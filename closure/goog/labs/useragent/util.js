@@ -37,7 +37,7 @@ goog.labs.userAgent.util.getNativeUserAgentString_ = function() {
 /**
  * Getter for the native navigator.
  * This is a separate function so it can be stubbed out in testing.
- * @return {Navigator}
+ * @return {!Navigator}
  * @private
  */
 goog.labs.userAgent.util.getNavigator_ = function() {
