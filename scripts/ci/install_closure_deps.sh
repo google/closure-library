@@ -61,4 +61,8 @@ npm install
 
 # Install dependencies in closure-deps
 cd closure-deps
+# Install latest Closure library/compiler to test against.
+# This modifies package.json locally.
+npm install --save-dev google-closure-library@latest
+npm install --save-prod google-closure-compiler@latest
 npm install
