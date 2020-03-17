@@ -6,9 +6,9 @@
 
 goog.provide('goog.pubsub.TypedPubSub');
 
-goog.forwardDeclare('goog.pubsub.TopicId');
 goog.require('goog.Disposable');
 goog.require('goog.pubsub.PubSub');
+goog.requireType('goog.pubsub.TopicId');
 
 
 
