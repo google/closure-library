@@ -13,8 +13,8 @@
 
 goog.provide('goog.fx.CssSpriteAnimation');
 
-goog.forwardDeclare('goog.math.Box');
 goog.require('goog.fx.Animation');
+goog.requireType('goog.math.Box');
 goog.requireType('goog.math.Size');
 
 
