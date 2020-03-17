@@ -1340,6 +1340,8 @@ goog.style.setSafeStyleSheet = function(element, safeStyleSheet) {
     // However IE >= 11 doesn't support cssText any more, so we make sure that
     // cssText is a defined property and otherwise fall back to innerHTML.
     element.cssText = stylesString;
+  } else if (goog.global.trustedTypes) {
+    goog.dom.setTextContent(/** @type {!Element} */ (element), stylesString);
   } else {
     // Setting textContent doesn't work in Safari, see b/29340337.
     element.innerHTML = stylesString;
