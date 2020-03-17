@@ -15,8 +15,8 @@
 
 goog.provide('goog.net.WebChannelTransport');
 
-goog.forwardDeclare('goog.net.WebChannel');
 goog.forwardDeclare('goog.net.WebChannel.Options');
+goog.requireType('goog.net.WebChannel');
 
 
 
