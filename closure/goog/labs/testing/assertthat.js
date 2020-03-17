@@ -13,8 +13,8 @@
 goog.provide('goog.labs.testing.MatcherError');
 goog.provide('goog.labs.testing.assertThat');
 
-goog.forwardDeclare('goog.labs.testing.Matcher');
 goog.require('goog.debug.Error');
+goog.requireType('goog.labs.testing.Matcher');
 
 
 /**
