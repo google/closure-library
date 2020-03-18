@@ -19,10 +19,10 @@
 
 goog.provide('goog.ui.TabBarRenderer');
 
-goog.forwardDeclare('goog.ui.Container');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.object');
 goog.require('goog.ui.ContainerRenderer');
+goog.requireType('goog.ui.Container');
 
 
 
