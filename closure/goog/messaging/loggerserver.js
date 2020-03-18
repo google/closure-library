@@ -20,10 +20,10 @@
 
 goog.provide('goog.messaging.LoggerServer');
 
-goog.forwardDeclare('goog.messaging.MessageChannel');
 goog.require('goog.Disposable');
 goog.require('goog.log');
 goog.require('goog.log.Level');
+goog.requireType('goog.messaging.MessageChannel');
 
 
 
