@@ -93,13 +93,13 @@
 goog.provide('goog.ui.media.Media');
 goog.provide('goog.ui.media.MediaRenderer');
 
-goog.forwardDeclare('goog.ui.media.MediaModel');
 goog.require('goog.asserts');
 goog.require('goog.dom.TagName');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.ControlRenderer');
+goog.requireType('goog.ui.media.MediaModel');
 
 
 
