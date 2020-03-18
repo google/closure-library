@@ -19,9 +19,9 @@
 goog.setTestOnly('goog.testing.fs.ProgressEvent');
 goog.provide('goog.testing.fs.ProgressEvent');
 
-goog.forwardDeclare('goog.fs.FileReader.EventType');
-goog.forwardDeclare('goog.fs.FileSaver.EventType');
 goog.require('goog.events.Event');
+goog.requireType('goog.fs.FileReader.EventType');
+goog.requireType('goog.fs.FileSaver.EventType');
 
 
 
