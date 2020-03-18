@@ -28,7 +28,6 @@ goog.provide('goog.net.ChannelRequest.Error');
 
 goog.forwardDeclare('goog.net.BrowserChannel');
 goog.forwardDeclare('goog.net.BrowserTestChannel');
-goog.forwardDeclare('goog.net.ChannelDebug');
 goog.require('goog.Timer');
 goog.require('goog.async.Throttle');
 goog.require('goog.dom.TagName');
@@ -44,6 +43,7 @@ goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.userAgent');
 goog.requireType('goog.Uri');
+goog.requireType('goog.net.ChannelDebug');
 goog.requireType('goog.net.XhrIo');
 
 // TODO(nnaze): This file depends on goog.net.BrowserChannel and vice versa (a
