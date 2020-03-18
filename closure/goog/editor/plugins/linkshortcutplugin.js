@@ -18,9 +18,9 @@
 
 goog.provide('goog.editor.plugins.LinkShortcutPlugin');
 
-goog.forwardDeclare('goog.editor.Link');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
+goog.requireType('goog.editor.Link');
 
 
 
