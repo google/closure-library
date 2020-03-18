@@ -19,11 +19,11 @@
 goog.provide('goog.ui.tree.TypeAhead');
 goog.provide('goog.ui.tree.TypeAhead.Offset');
 
-goog.forwardDeclare('goog.ui.tree.BaseNode');
 goog.require('goog.array');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.string');
 goog.require('goog.structs.Trie');
+goog.requireType('goog.ui.tree.BaseNode');
 
 
 
