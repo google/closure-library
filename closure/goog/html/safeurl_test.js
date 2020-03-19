@@ -59,6 +59,7 @@ testSuite({
 
   testSafeUrlIsSafeMimeType_withSafeType() {
     assertTrue(SafeUrl.isSafeMimeType('audio/ogg'));
+    assertTrue(SafeUrl.isSafeMimeType('audio/x-matroska'));
     assertTrue(SafeUrl.isSafeMimeType('image/png'));
     assertTrue(SafeUrl.isSafeMimeType('iMage/pNg'));
     assertTrue(SafeUrl.isSafeMimeType('video/mpeg'));
@@ -67,6 +68,10 @@ testSuite({
     assertTrue(SafeUrl.isSafeMimeType('video/ogg'));
     assertTrue(SafeUrl.isSafeMimeType('video/webm'));
     assertTrue(SafeUrl.isSafeMimeType('video/quicktime'));
+    assertTrue(SafeUrl.isSafeMimeType('video/x-matroska'));
+    // Allow comma-separated, quoted MIME parameters with and without spaces.
+    assertTrue(SafeUrl.isSafeMimeType('video/webm;codecs="vp8,opus"'));
+    assertTrue(SafeUrl.isSafeMimeType('video/webm;codecs="vp8, opus"'));
   },
 
   testSafeUrlIsSafeMimeType_withUnsafeType() {
@@ -75,6 +80,8 @@ testSuite({
     assertFalse(SafeUrl.isSafeMimeType('image/pngx'));
     assertFalse(SafeUrl.isSafeMimeType('video/whatever'));
     assertFalse(SafeUrl.isSafeMimeType('video/'));
+    // Complex MIME parameters must be quoted.
+    assertFalse(SafeUrl.isSafeMimeType('video/webm;codecs=vp8,opus'));
   },
 
   testSafeUrlFromBlob_withSafeType() {
