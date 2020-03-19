@@ -135,7 +135,7 @@ goog.ui.TabBar.prototype.disposeInternal = function() {
  * @param {string|goog.ui.Component} tab Tab to remove.
  * @param {boolean=} opt_unrender Whether to call `exitDocument` on the
  *     removed tab, and detach its DOM from the document (defaults to false).
- * @return {goog.ui.Control} The removed tab, if any.
+ * @return {?goog.ui.Control} The removed tab, if any.
  * @override
  */
 goog.ui.TabBar.prototype.removeChild = function(tab, opt_unrender) {

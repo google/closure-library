@@ -32,9 +32,10 @@ goog.Thenable = function() {};
  * an exception, the child Promise will be rejected with the thrown value
  * instead.
  *
- * If the Thenable is rejected, the `onRejected` callback will be invoked
- * with the rejection reason as argument, and the child Promise will be rejected
- * with the return value of the callback or thrown value.
+ * If the Thenable is rejected, the `onRejected` callback will be invoked with
+ * the rejection reason as argument. Similar to the fulfilled case, the child
+ * Promise will then be resolved with the return value of the callback, or
+ * rejected with the thrown value if the callback throws an exception.
  *
  * @param {?(function(this:THIS, TYPE): VALUE)=} opt_onFulfilled A
  *     function that will be invoked with the fulfillment value if the Promise

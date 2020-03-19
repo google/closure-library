@@ -75,7 +75,7 @@ class TestPlugin extends Plugin {
 const STRING_KEY = String.fromCharCode(KeyCodes.A).toLowerCase();
 
 /**
- * @return {events.Event} Returns an event for a keyboard shortcut for the
+ * @return {!events.Event} Returns an event for a keyboard shortcut for the
  *     letter 'a'.
  */
 function getBrowserEvent() {

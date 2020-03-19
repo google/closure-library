@@ -53,11 +53,11 @@
 
 goog.provide('goog.ui.media.Mp3');
 
-goog.forwardDeclare('goog.ui.media.MediaModel');
 goog.require('goog.string');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Media');
 goog.require('goog.ui.media.MediaRenderer');
+goog.requireType('goog.ui.media.MediaModel');
 
 
 

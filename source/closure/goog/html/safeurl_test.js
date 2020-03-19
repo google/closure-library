@@ -117,6 +117,25 @@ testSuite({
     assertBlobTypeIsSafe('image/png;foo=%3Cbar', false);
   },
 
+  testSafeUrlFromMediaSource_createsBlob() {
+    if (!('MediaSource' in goog.global)) {
+      return;
+    }
+    const safeUrl = SafeUrl.fromMediaSource(new MediaSource());
+    const extracted = SafeUrl.unwrap(safeUrl);
+    assertEquals('blob:', extracted.substring(0, 5));
+  },
+
+  testSafeUrlFromMediaSource_rejectsBlobs() {
+    if (!('MediaSource' in goog.global)) {
+      return;
+    }
+    const safeUrl =
+        SafeUrl.fromMediaSource(new Blob([''], {type: 'text/plain'}));
+    const extracted = SafeUrl.unwrap(safeUrl);
+    assertEquals(SafeUrl.INNOCUOUS_STRING, extracted);
+  },
+
   testSafeUrlFromFacebookMessengerUrl_fbMessengerShareUrl() {
     const expected = 'fb-messenger://share?link=https%3A%2F%2Fwww.google.com';
     const observed = SafeUrl.fromFacebookMessengerUrl(

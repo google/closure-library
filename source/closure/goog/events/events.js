@@ -554,7 +554,7 @@ goog.events.removeAll = function(obj, opt_type) {
  * @param {Object} obj Object to get listeners for.
  * @param {string|!goog.events.EventId} type Event type.
  * @param {boolean} capture Capture phase?.
- * @return {Array<!goog.events.Listener>} Array of listener objects.
+ * @return {!Array<!goog.events.Listener>} Array of listener objects.
  */
 goog.events.getListeners = function(obj, type, capture) {
   if (goog.events.Listenable.isImplementedBy(obj)) {

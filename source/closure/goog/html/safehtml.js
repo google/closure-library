@@ -325,6 +325,22 @@ goog.html.SafeHtml.from = goog.html.SafeHtml.htmlEscape;
 
 
 /**
+ * Converts an arbitrary string into an HTML comment by HTML-escaping the
+ * contents and embedding the result between HTML comment markers.
+ *
+ * Escaping is needed because Internet Explorer supports conditional comments
+ * and so may render HTML markup within comments.
+ *
+ * @param {string} text
+ * @return {!goog.html.SafeHtml}
+ */
+goog.html.SafeHtml.comment = function(text) {
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+      '<!--' + goog.string.internal.htmlEscape(text) + '-->', null);
+};
+
+
+/**
  * @const
  * @private
  */

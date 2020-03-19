@@ -313,9 +313,27 @@ goog.module.ModuleManager.prototype.setAllModuleInfoString = function(
   this.maybeFinishBaseLoad_();
 };
 
+/**
+ * @define {boolean} Whether subtractive module loading is enabled. The main
+ * difference is the module graph is no longer in the client, i.e.,
+ * setAllModuleInfoString is never been called. Instead, the module manager
+ * will keep track of the already loaded modules, and add them to the subsequent
+ * loader requests. The serving system is able to figure out the list of desired
+ * modules.
+ *
+ * The default is false, but new code is encouraged to use this.
+ * Search, Gmail, and many Google applications has been using subtractive
+ * module loading for years and see significantly performance benefits.
+ */
+goog.module.ModuleManager.SUBTRACTIVE_MODULE_LOADING =
+    goog.define('goog.module.ModuleManager.SUBTRACTIVE_MODULE_LOADING', false);
 
 /** @override */
 goog.module.ModuleManager.prototype.getModuleInfo = function(id) {
+  if (goog.module.ModuleManager.SUBTRACTIVE_MODULE_LOADING &&
+      !(id in this.moduleInfoMap)) {
+    this.moduleInfoMap[id] = new goog.module.ModuleInfo([], id);
+  }
   return this.moduleInfoMap[id];
 };
 

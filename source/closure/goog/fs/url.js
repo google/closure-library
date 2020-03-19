@@ -16,11 +16,12 @@ goog.provide('goog.fs.url');
  * Creates a blob URL for a blob object.
  * Throws an error if the browser does not support Object Urls.
  *
- * @param {!Blob} blob The object for which to create the URL.
+ * @param {!File|!Blob|!MediaSource|!MediaStream} obj The object for which
+ *   to create the URL.
  * @return {string} The URL for the object.
  */
-goog.fs.url.createObjectUrl = function(blob) {
-  return goog.fs.url.getUrlObject_().createObjectURL(blob);
+goog.fs.url.createObjectUrl = function(obj) {
+  return goog.fs.url.getUrlObject_().createObjectURL(obj);
 };
 
 
@@ -36,17 +37,28 @@ goog.fs.url.revokeObjectUrl = function(url) {
 
 
 /**
- * @typedef {{createObjectURL: (function(!Blob): string),
- *            revokeObjectURL: function(string): void}}
+ * @record
+ * @private
  */
-goog.fs.url.UrlObject_;
+goog.fs.url.UrlObject_ = function() {};
+
+/**
+ * @param {!File|!Blob|!MediaSource|!MediaStream} arg
+ * @return {string}
+ */
+goog.fs.url.UrlObject_.prototype.createObjectURL = function(arg) {};
+
+/**
+ * @param {string} s
+ */
+goog.fs.url.UrlObject_.prototype.revokeObjectURL = function(s) {};
 
 
 /**
  * Get the object that has the createObjectURL and revokeObjectURL functions for
  * this browser.
  *
- * @return {goog.fs.url.UrlObject_} The object for this browser.
+ * @return {!goog.fs.url.UrlObject_} The object for this browser.
  * @private
  */
 goog.fs.url.getUrlObject_ = function() {
@@ -72,15 +84,15 @@ goog.fs.url.findUrlObject_ = function() {
   // http://dev.w3.org/2006/webapi/FileAPI/#dfn-createObjectURL
   if (goog.global.URL !== undefined &&
       goog.global.URL.createObjectURL !== undefined) {
-    return /** @type {goog.fs.url.UrlObject_} */ (goog.global.URL);
+    return /** @type {!goog.fs.url.UrlObject_} */ (goog.global.URL);
     // This is what Chrome does (as of 10.0.648.6 dev)
   } else if (
       goog.global.webkitURL !== undefined &&
       goog.global.webkitURL.createObjectURL !== undefined) {
-    return /** @type {goog.fs.url.UrlObject_} */ (goog.global.webkitURL);
+    return /** @type {!goog.fs.url.UrlObject_} */ (goog.global.webkitURL);
     // This is what the spec used to say to do
   } else if (goog.global.createObjectURL !== undefined) {
-    return /** @type {goog.fs.url.UrlObject_} */ (goog.global);
+    return /** @type {!goog.fs.url.UrlObject_} */ (goog.global);
   } else {
     return null;
   }

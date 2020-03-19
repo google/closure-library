@@ -46,7 +46,7 @@ function createSeamlessIframe() {
  * innerHTML and styles.
  * @param {string} innerHTML html for the field contents.
  * @param {?Object} styles Key-value pairs for styles on the field.
- * @return {SeamlessField} The field.
+ * @return {!SeamlessField} The field.
  */
 function initSeamlessField(innerHTML, styles) {
   const field = new SeamlessField('field');

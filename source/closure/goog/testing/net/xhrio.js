@@ -805,7 +805,7 @@ goog.testing.net.XhrIo.prototype.getResponseBody = function() {
  * @param {string=} opt_xssiPrefix Optional XSSI prefix string to use for
  *     stripping of the response before parsing. This needs to be set only if
  *     your backend server prepends the same prefix string to the JSON response.
- * @return {Object|undefined} JavaScript object.
+ * @return {!Object|undefined} JavaScript object.
  * @throws Error if s is invalid JSON.
  * @override
  */

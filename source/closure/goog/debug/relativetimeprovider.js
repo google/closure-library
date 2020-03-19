@@ -67,7 +67,7 @@ goog.debug.RelativeTimeProvider.prototype.get = function() {
 
 
 /**
- * @return {goog.debug.RelativeTimeProvider} The default instance.
+ * @return {!goog.debug.RelativeTimeProvider} The default instance.
  */
 goog.debug.RelativeTimeProvider.getDefaultInstance = function() {
   if (!goog.debug.RelativeTimeProvider.defaultInstance_) {

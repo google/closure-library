@@ -21,13 +21,13 @@
 goog.provide('goog.ui.ac.AutoComplete');
 goog.provide('goog.ui.ac.AutoComplete.EventType');
 
-goog.forwardDeclare('goog.ui.ac.InputHandler');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.object');
 goog.require('goog.ui.ac.RenderOptions');
+goog.requireType('goog.ui.ac.InputHandler');
 
 
 /**

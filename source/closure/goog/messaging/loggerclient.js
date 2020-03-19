@@ -19,11 +19,11 @@
 
 goog.provide('goog.messaging.LoggerClient');
 
-goog.forwardDeclare('goog.messaging.MessageChannel');
 goog.require('goog.Disposable');
 goog.require('goog.debug');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.Logger');
+goog.requireType('goog.messaging.MessageChannel');
 
 
 

@@ -611,6 +611,10 @@ testSuite({
         'a &#160;b', SafeHtml.htmlEscapePreservingNewlinesAndSpaces('a  b'));
   },
 
+  testComment() {
+    assertSameHtml('<!--&lt;script&gt;-->', SafeHtml.comment('<script>'));
+  },
+
   testSafeHtmlConcatWithDir() {
     const ltr = Dir.LTR;
     const rtl = Dir.RTL;

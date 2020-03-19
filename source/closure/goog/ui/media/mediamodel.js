@@ -28,9 +28,9 @@ goog.provide('goog.ui.media.MediaModel.Player');
 goog.provide('goog.ui.media.MediaModel.SubTitle');
 goog.provide('goog.ui.media.MediaModel.Thumbnail');
 
-goog.forwardDeclare('goog.math.Size');
 goog.require('goog.array');
 goog.require('goog.html.TrustedResourceUrl');
+goog.requireType('goog.math.Size');
 
 
 

@@ -114,7 +114,7 @@ goog.ui.MenuItemRenderer.prototype.getAriaRole = function() {
  * Overrides {@link goog.ui.ControlRenderer#createDom} by adding extra markup
  * and stying to the menu item's element if it is selectable or checkable.
  * @param {goog.ui.Control} item Menu item to render.
- * @return {Element} Root element for the item.
+ * @return {!Element} Root element for the item.
  * @override
  */
 goog.ui.MenuItemRenderer.prototype.createDom = function(item) {
@@ -203,7 +203,7 @@ goog.ui.MenuItemRenderer.prototype.hasContentStructure = function(element) {
  * containing the menu item's contents.
  * @param {goog.ui.ControlContent} content Menu item contents.
  * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
- * @return {Element} Menu item content element.
+ * @return {!Element} Menu item content element.
  * @protected
  */
 goog.ui.MenuItemRenderer.prototype.createContent = function(content, dom) {

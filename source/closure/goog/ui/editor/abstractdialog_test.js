@@ -95,7 +95,7 @@ function expectCustomButton() {
  * abstract, needs to add a concrete version of any abstract methods. Also
  * creates up the global builder variable which should be set up after the call
  * to this method.
- * @return {AbstractDialog} The dialog.
+ * @return {!AbstractDialog} The dialog.
  */
 function createTestDialog() {
   const dialog = new AbstractDialog(new DomHelper());

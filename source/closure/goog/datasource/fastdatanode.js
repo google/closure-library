@@ -287,7 +287,7 @@ goog.ds.FastDataNode.prototype.getJsObject = function() {
 
 /**
  * Creates a deep copy of this data node.
- * @return {goog.ds.FastDataNode} Clone of this data node.
+ * @return {!goog.ds.FastDataNode} Clone of this data node.
  */
 goog.ds.FastDataNode.prototype.clone = function() {
   return /** @type {!goog.ds.FastDataNode} */ (

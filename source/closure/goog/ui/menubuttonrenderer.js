@@ -118,7 +118,7 @@ goog.ui.MenuButtonRenderer.prototype.decorate = function(control, element) {
  * @param {goog.ui.ControlContent} content Text caption or DOM structure
  *     to wrap in a box.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Pseudo-rounded-corner box containing the content.
+ * @return {!Element} Pseudo-rounded-corner box containing the content.
  * @override
  */
 goog.ui.MenuButtonRenderer.prototype.createButton = function(content, dom) {
@@ -138,7 +138,7 @@ goog.ui.MenuButtonRenderer.prototype.createButton = function(content, dom) {
  * @param {goog.ui.ControlContent} content Text caption or DOM structure
  *     to wrap in a box.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Caption element.
+ * @return {!Element} Caption element.
  */
 goog.ui.MenuButtonRenderer.prototype.createCaption = function(content, dom) {
   return goog.ui.MenuButtonRenderer.wrapCaption(
@@ -177,7 +177,7 @@ goog.ui.MenuButtonRenderer.wrapCaption = function(content, cssClass, dom) {
  *    </div>
  *
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Dropdown element.
+ * @return {!Element} Dropdown element.
  */
 goog.ui.MenuButtonRenderer.prototype.createDropdown = function(dom) {
   // 00A0 is &nbsp;

@@ -138,7 +138,7 @@ goog.demos.editor.HelloWorldDialog.prototype.input_;
 
 /**
  * Creates the DOM structure that makes up the dialog's content area.
- * @return {Element} The DOM structure that makes up the dialog's content area.
+ * @return {!Element} The DOM structure that makes up the dialog's content area.
  * @private
  */
 goog.demos.editor.HelloWorldDialog.prototype.createContent_ = function() {

@@ -27,13 +27,13 @@ goog.provide('goog.fx.dom.Slide');
 goog.provide('goog.fx.dom.SlideFrom');
 goog.provide('goog.fx.dom.Swipe');
 
-goog.forwardDeclare('goog.events.EventHandler');
 goog.require('goog.color');
 goog.require('goog.events');
 goog.require('goog.fx.Animation');
 goog.require('goog.fx.Transition');
 goog.require('goog.style');
 goog.require('goog.style.bidi');
+goog.requireType('goog.events.EventHandler');
 
 
 

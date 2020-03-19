@@ -156,7 +156,7 @@ goog.testing.fs.blobToString = function(blob, opt_encoding) {
  * @param {!goog.testing.fs.Blob} testBlob The blob to slice.
  * @param {number} start Index of the starting byte.
  * @param {number=} opt_end Index of the ending byte.
- * @return {goog.testing.fs.Blob} The new blob or null if not supported.
+ * @return {!goog.testing.fs.Blob} The new blob or null if not supported.
  */
 goog.testing.fs.sliceBlob = function(testBlob, start, opt_end) {
   return testBlob.slice(start, opt_end);

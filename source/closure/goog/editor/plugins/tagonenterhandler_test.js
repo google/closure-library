@@ -61,7 +61,7 @@ function selectNodeAndHitEnter(field, id) {
  * Creates a field with only the enter handler plugged in, for testing.
  * @param {string} id A DOM id.
  * @param {!TagName=} tag The block tag to use. Defaults to P.
- * @return {Field} A field.
+ * @return {!Field} A field.
  */
 function makeField(id, tag = undefined) {
   const field = new Field(id);

@@ -62,7 +62,7 @@ goog.ui.ColorMenuButtonRenderer.CSS_CLASS =
  * background.
  * @param {goog.ui.ControlContent} content Text caption or DOM structure.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Caption element.
+ * @return {!Element} Caption element.
  * @override
  */
 goog.ui.ColorMenuButtonRenderer.prototype.createCaption = function(

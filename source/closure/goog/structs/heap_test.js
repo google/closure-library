@@ -14,7 +14,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 /**
  * Constructs a heap from key-value pairs passed as arguments
  * @param {...!Array} var_args List of length-2 arrays [key, value]
- * @return {Heap} Heap constructed from passed in key-value pairs
+ * @return {!Heap} Heap constructed from passed in key-value pairs
  */
 function makeHeap(var_args) {
   const h = new Heap();

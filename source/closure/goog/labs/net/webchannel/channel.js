@@ -1,37 +1,26 @@
-// Copyright 2013 The Closure Library Authors. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS-IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/**
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /**
- * @fileoverview A shared interface for WebChannelBase and BaseTestChannel.
+ * @fileoverview A core interface for WebChannelBase.
  *
  */
 
 
 goog.provide('goog.labs.net.webChannel.Channel');
 
-goog.forwardDeclare('goog.labs.net.webChannel.BaseTestChannel');
 goog.forwardDeclare('goog.labs.net.webChannel.ChannelRequest');
 goog.forwardDeclare('goog.labs.net.webChannel.ChannelRequest.Error');
-goog.forwardDeclare('goog.labs.net.webChannel.ConnectionState');
 goog.requireType('goog.Uri');
+goog.requireType('goog.labs.net.webChannel.ConnectionState');
 goog.requireType('goog.net.XhrIo');
 
 
 /**
- * Shared interface between Channel and TestChannel to support callbacks
- * between WebChannelBase and BaseTestChannel and between Channel and
- * ChannelRequest.
+ * Core interface for WebChannelBase.
  *
  * @interface
  */
@@ -151,29 +140,6 @@ Channel.prototype.correctHostPrefix = goog.abstractMethod;
  * @return {goog.Uri} The data URI.
  */
 Channel.prototype.createDataUri = goog.abstractMethod;
-
-
-/**
- * Not needed for testchannel.
- *
- * Callback from TestChannel for when the channel is finished.
- * @param {goog.labs.net.webChannel.BaseTestChannel} testChannel
- *     The TestChannel.
- * @param {boolean} useChunked  Whether we can chunk responses.
- */
-Channel.prototype.testConnectionFinished = goog.abstractMethod;
-
-
-/**
- * Not needed for testchannel.
- *
- * Callback from TestChannel for when the channel has an error.
- * @param {goog.labs.net.webChannel.BaseTestChannel} testChannel
- *     The TestChannel.
- * @param {goog.labs.net.webChannel.ChannelRequest.Error} errorCode
- *     The error code of the failure.
- */
-Channel.prototype.testConnectionFailure = goog.abstractMethod;
 
 
 /**

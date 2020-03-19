@@ -118,7 +118,7 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
 
 
 /**
- * Returns this SafeUrl's value a string.
+ * Returns this SafeUrl's value as a string.
  *
  * IMPORTANT: In code where it is security relevant that an object's type is
  * indeed `SafeUrl`, use `goog.html.SafeUrl.unwrap` instead of this
@@ -284,6 +284,21 @@ goog.html.SafeUrl.isSafeMimeType = function(mimeType) {
 goog.html.SafeUrl.fromBlob = function(blob) {
   var url = goog.html.SafeUrl.isSafeMimeType(blob.type) ?
       goog.fs.url.createObjectUrl(blob) :
+      goog.html.SafeUrl.INNOCUOUS_STRING;
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
+};
+
+
+/**
+ * Creates a SafeUrl wrapping a blob URL created for a MediaSource.
+ * @param {!MediaSource} mediaSource
+ * @return {!goog.html.SafeUrl} The blob URL.
+ */
+goog.html.SafeUrl.fromMediaSource = function(mediaSource) {
+  goog.asserts.assert(
+      'MediaSource' in goog.global, 'No support for MediaSource');
+  const url = mediaSource instanceof MediaSource ?
+      goog.fs.url.createObjectUrl(mediaSource) :
       goog.html.SafeUrl.INNOCUOUS_STRING;
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };

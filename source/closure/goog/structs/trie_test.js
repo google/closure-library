@@ -435,21 +435,21 @@ testSuite({
   testGetKeyAndPrefixes() {
     const trie = makeTrie();
     // Note: trie has one of its keys as ''
-    assertEquals(
-        'getKeyAndPrefixes, should be 2', 2,
-        googObject.getCount(trie.getKeyAndPrefixes('world')));
-    assertEquals(
-        'getKeyAndPrefixes, should be 2', 2,
-        googObject.getCount(trie.getKeyAndPrefixes('hello')));
-    assertEquals(
-        'getKeyAndPrefixes, should be 2', 2,
-        googObject.getCount(trie.getKeyAndPrefixes('hello,')));
-    assertEquals(
-        'getKeyAndPrefixes, should be 3', 3,
-        googObject.getCount(trie.getKeyAndPrefixes('hello, world')));
-    assertEquals(
-        'getKeyAndPrefixes, should be 1', 1,
-        googObject.getCount(trie.getKeyAndPrefixes('hell')));
+    assertObjectEquals(
+        {0: 'an empty string key', 4: {}},  //
+        trie.getKeyAndPrefixes('world'));
+    assertObjectEquals(
+        {0: 'an empty string key', 4: 1},  //
+        trie.getKeyAndPrefixes('hello'));
+    assertObjectEquals(
+        {0: 'an empty string key', 4: 1},  //
+        trie.getKeyAndPrefixes('hello,'));
+    assertObjectEquals(
+        {0: 'an empty string key', 4: 1, 11: 2},  //
+        trie.getKeyAndPrefixes('hello, world'));
+    assertObjectEquals(
+        {0: 'an empty string key'},  //
+        trie.getKeyAndPrefixes('hell'));
   },
 
   testGetKeyAndPrefixesStartIndex() {

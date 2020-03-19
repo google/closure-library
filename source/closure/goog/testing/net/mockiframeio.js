@@ -245,7 +245,7 @@ goog.testing.net.MockIFrameIo.prototype.getResponseText = function() {
 /**
  * Parses the content as JSON. This is a safe parse and may throw an error
  * if the response is malformed.
- * @return {Object} The parsed content.
+ * @return {!Object} The parsed content.
  */
 goog.testing.net.MockIFrameIo.prototype.getResponseJson = function() {
   return /** @type {!Object} */ (JSON.parse(this.lastContent_));

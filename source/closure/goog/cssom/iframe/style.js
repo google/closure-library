@@ -823,7 +823,7 @@ goog.cssom.iframe.style.isTransparentValue_ = function(colorValue) {
  * are not the same for certain properties.
  *
  * @param {Element} element The element whose computed style to return.
- * @return {Object} Object containing style properties and values.
+ * @return {!Object} Object containing style properties and values.
  * @private
  */
 goog.cssom.iframe.style.getComputedStyleObject_ = function(element) {

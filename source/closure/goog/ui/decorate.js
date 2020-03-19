@@ -19,8 +19,8 @@
 
 goog.provide('goog.ui.decorate');
 
-goog.forwardDeclare('goog.ui.Component');
 goog.require('goog.ui.registry');
+goog.requireType('goog.ui.Component');
 
 
 /**
