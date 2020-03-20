@@ -62,10 +62,10 @@ class DepsTreeTestCase(unittest.TestCase):
       source = deps_list[i]
       previous_provides = _GetProvides(deps_list[:i])
       for require in source.requires:
-        self.assertTrue(
-            require in previous_provides,
-            'Namespace "%s" not provided before required by %s' % (
-                require, source))
+        self.assertIn(
+            require, previous_provides,
+            'Namespace "%s" not provided before required by %s' %
+            (require, source))
 
   def testSimpleDepsTree(self):
     a = MockSource(['A'], ['B', 'C'])
