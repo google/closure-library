@@ -13,7 +13,6 @@
 goog.provide('goog.labs.net.webChannel.Channel');
 
 goog.forwardDeclare('goog.labs.net.webChannel.ChannelRequest');
-goog.forwardDeclare('goog.labs.net.webChannel.ChannelRequest.Error');
 goog.requireType('goog.Uri');
 goog.requireType('goog.labs.net.webChannel.ConnectionState');
 goog.requireType('goog.net.XhrIo');
