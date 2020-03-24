@@ -11,10 +11,10 @@
 
 goog.provide('goog.proto2.Message');
 
-goog.forwardDeclare('goog.proto2.LazyDeserializer');
 goog.require('goog.asserts');
 goog.require('goog.proto2.Descriptor');
-goog.require('goog.proto2.FieldDescriptor');  // circular reference
+goog.require('goog.proto2.FieldDescriptor');
+goog.requireType('goog.proto2.LazyDeserializer');
 
 
 

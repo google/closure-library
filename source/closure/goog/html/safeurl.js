@@ -248,13 +248,13 @@ goog.html.SafeUrl.fromConstant = function(url) {
 goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
     // Note: Due to content-sniffing concerns, only add MIME types for
     // media formats.
-    '^(?:audio/(?:3gpp2|3gpp|aac|L16|midi|mp3|mp4|mpeg|oga|ogg|opus|x-m4a|x-wav|wav|webm)|' +
+    '^(?:audio/(?:3gpp2|3gpp|aac|L16|midi|mp3|mp4|mpeg|oga|ogg|opus|x-m4a|x-matroska|x-wav|wav|webm)|' +
         'image/(?:bmp|gif|jpeg|jpg|png|tiff|webp|x-icon)|' +
         // TODO(user): Due to content-sniffing concerns, text/csv should
         // be removed from the whitelist.
         'text/csv|' +
-        'video/(?:mpeg|mp4|ogg|webm|quicktime))' +
-        '(?:;\\w+=(?:\\w+|"[\\w;=]+"))*$',  // MIME type parameters
+        'video/(?:mpeg|mp4|ogg|webm|quicktime|x-matroska))' +
+        '(?:;\\w+=(?:\\w+|"[\\w;,= ]+"))*$',  // MIME type parameters
     'i');
 
 
@@ -309,7 +309,7 @@ goog.html.SafeUrl.fromMediaSource = function(mediaSource) {
  * @const
  * @private
  */
-goog.html.DATA_URL_PATTERN_ = /^data:([^,]*);base64,[a-z0-9+\/]+=*$/i;
+goog.html.DATA_URL_PATTERN_ = /^data:(.*);base64,[a-z0-9+\/]+=*$/i;
 
 
 /**

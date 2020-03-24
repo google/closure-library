@@ -10,10 +10,10 @@
 
 goog.provide('goog.proto2.FieldDescriptor');
 
-goog.forwardDeclare('goog.proto2.Descriptor');
-goog.forwardDeclare('goog.proto2.Message');
 goog.require('goog.asserts');
 goog.require('goog.string');
+goog.requireType('goog.proto2.Descriptor');
+goog.requireType('goog.proto2.Message');
 
 
 

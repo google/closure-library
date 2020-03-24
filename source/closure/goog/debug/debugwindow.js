@@ -418,9 +418,9 @@ goog.debug.DebugWindow.prototype.openWindow_ = function() {
   var h = Number(winpos[3]);
 
   this.winOpening_ = true;
-  this.win = window.open(
-      '', this.getWindowName_(), 'width=' + w + ',height=' + h +
-          ',toolbar=no,resizable=yes,' +
+  this.win = goog.dom.safe.openInWindow(
+      '', window, this.getWindowName_(),
+      'width=' + w + ',height=' + h + ',toolbar=no,resizable=yes,' +
           'scrollbars=yes,left=' + x + ',top=' + y + ',status=no,screenx=' + x +
           ',screeny=' + y);
 
