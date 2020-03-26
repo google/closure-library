@@ -23,6 +23,7 @@ const TestHelper = goog.require('goog.testing.editor.TestHelper');
 const dom = goog.require('goog.dom');
 const events = goog.require('goog.testing.events');
 const googString = goog.require('goog.string');
+const googWindow = goog.require('goog.window');
 const style = goog.require('goog.style');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
@@ -79,7 +80,7 @@ testSuite({
     linkChild = link.lastChild;
 
     mockWindowOpen = new FunctionMock('open');
-    stubs.set(window, 'open', mockWindowOpen);
+    stubs.set(googWindow, 'open', mockWindowOpen);
   },
 
   tearDown() {
@@ -284,7 +285,9 @@ testSuite({
   },
 
   testLinkTextClicked() {
-    mockWindowOpen('http://www.google.com/', '_blank', '');
+    mockWindowOpen(
+        'http://www.google.com/', {'target': '_blank', 'noreferrer': false},
+        window);
     mockWindowOpen.$replay();
     FIELDMOCK.$replay();
     linkBubble.enable(FIELDMOCK);
@@ -300,7 +303,9 @@ testSuite({
   },
 
   testLinkTextClickedCustomUrlFn() {
-    mockWindowOpen('http://images.google.com/', '_blank', '');
+    mockWindowOpen(
+        'http://images.google.com/', {'target': '_blank', 'noreferrer': false},
+        window);
     mockWindowOpen.$replay();
     FIELDMOCK.$replay();
     linkBubble.enable(FIELDMOCK);
