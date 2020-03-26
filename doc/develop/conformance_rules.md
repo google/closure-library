@@ -275,7 +275,9 @@ and therefore disallowed.
 {: #postMessage}
 ### Window.prototype.postMessage 
 
-Raw "postMessage" can create security vulnerabilities. 
+Raw `postMessage()` does not restrict target and sender origins by default. This
+can cause security vulnerabilities.
+
 
 {: #expose}
 ### @expose 
