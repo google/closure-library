@@ -249,6 +249,7 @@ goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
     // Note: Due to content-sniffing concerns, only add MIME types for
     // media formats.
     '^(?:audio/(?:3gpp2|3gpp|aac|L16|midi|mp3|mp4|mpeg|oga|ogg|opus|x-m4a|x-matroska|x-wav|wav|webm)|' +
+        'font/\\w+|' +
         'image/(?:bmp|gif|jpeg|jpg|png|tiff|webp|x-icon)|' +
         // TODO(user): Due to content-sniffing concerns, text/csv should
         // be removed from the whitelist.
@@ -314,10 +315,10 @@ goog.html.DATA_URL_PATTERN_ = /^data:(.*);base64,[a-z0-9+\/]+=*$/i;
 
 /**
  * Creates a SafeUrl wrapping a data: URL, after validating it matches a
- * known-safe audio, image or video MIME type.
+ * known-safe media MIME type.
  *
  * @param {string} dataUrl A valid base64 data URL with one of the whitelisted
- *     audio, image or video MIME types.
+ *     media MIME types.
  * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
  *     wrapped as a SafeUrl if it does not pass.
  */

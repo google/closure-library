@@ -60,6 +60,7 @@ testSuite({
   testSafeUrlIsSafeMimeType_withSafeType() {
     assertTrue(SafeUrl.isSafeMimeType('audio/ogg'));
     assertTrue(SafeUrl.isSafeMimeType('audio/x-matroska'));
+    assertTrue(SafeUrl.isSafeMimeType('font/woff'));
     assertTrue(SafeUrl.isSafeMimeType('image/png'));
     assertTrue(SafeUrl.isSafeMimeType('iMage/pNg'));
     assertTrue(SafeUrl.isSafeMimeType('video/mpeg'));
