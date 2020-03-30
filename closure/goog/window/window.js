@@ -185,11 +185,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // Detecting user agent and then using a different strategy per browser
     // would allow the referrer to leak in case of an incorrect/missing user
     // agent.
-    //
-    // Also note that we can't use goog.dom.safe.openInWindow here, as it
-    // requires a goog.string.Const 'name' parameter, while we're using plain
-    // strings here for target.
-    newWin = parentWin.open('', target, optionString);
+    newWin = goog.dom.safe.openInWindow('', parentWin, target, optionString);
 
     var sanitizedLinkRef = goog.html.SafeUrl.unwrap(safeLinkRef);
     if (newWin) {
@@ -238,8 +234,8 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
       }
     }
   } else {
-    newWin = parentWin.open(
-        goog.html.SafeUrl.unwrap(safeLinkRef), target, optionString);
+    newWin = goog.dom.safe.openInWindow(
+        safeLinkRef, parentWin, target, optionString);
     // Passing in 'noopener' into the 'windowFeatures' param of window.open(...)
     // will yield a feature-deprived browser. This is an known issue, tracked
     // here: https://github.com/whatwg/html/issues/1902
