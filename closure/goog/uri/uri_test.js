@@ -97,8 +97,7 @@ testSuite({
 
     const createdUri = Uri.create(
         'http', null, 'www.google.com', null, '/search path',
-        new Uri.QueryData(null, null, true).set('Q', 'what to eat+drink?'),
-        null);
+        new Uri.QueryData(null, true).set('Q', 'what to eat+drink?'), null);
 
     assertEquals(
         'http://www.google.com/search%20path?q=what%20to%20eat%2Bdrink%3F',
@@ -760,7 +759,7 @@ testSuite({
     assertFalse(qd.containsKey('c'));
 
     // Test case-insensitive
-    qd = new Uri.QueryData('aaa=A&bbb=B&aaa=A2&bbbb=B2&ccc=C', null, true);
+    qd = new Uri.QueryData('aaa=A&bbb=B&aaa=A2&bbbb=B2&ccc=C', true);
     assertTrue(qd.containsKey('aaa'));
     assertTrue(qd.containsKey('bBb'));
     assertTrue(qd.containsKey('CCC'));
@@ -822,7 +821,7 @@ testSuite({
     assertEquals('bbcdd', qd.getKeys().join(''));
 
     // Test case-insensitive
-    qd = new Uri.QueryData('A=A&B=B&a=A2&b=B2&C=C=extra', null, true);
+    qd = new Uri.QueryData('A=A&B=B&a=A2&b=B2&C=C=extra', true);
 
     assertEquals('aabbc', qd.getKeys().join(''));
     qd.remove('a');
@@ -890,7 +889,7 @@ testSuite({
     assertEquals('C=extra', qd.get('c'));
     assertEquals('Default', qd.get('d', 'Default'));
 
-    qd = new Uri.QueryData('a=A&b=B&a=A2&b=B2&c=C=extra', null, true);
+    qd = new Uri.QueryData('a=A&b=B&a=A2&b=B2&c=C=extra', true);
 
     assertEquals('A', qd.get('A'));
     assertEquals('B', qd.get('b'));
