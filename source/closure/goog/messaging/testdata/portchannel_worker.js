@@ -1,4 +1,8 @@
-// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+/**
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 // Use of this source code is governed by the Apache License, Version 2.0.
 // See the COPYING file for details.
@@ -9,6 +13,7 @@
  * @nocompile
  */
 
+self.CLOSURE_BASE_PATH =
 self.CLOSURE_BASE_PATH = '../../';
 importScripts('../../bootstrap/webworkers.js');
 importScripts('../../base.js');

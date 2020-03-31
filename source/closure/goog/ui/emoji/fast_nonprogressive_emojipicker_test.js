@@ -30,8 +30,9 @@ const testSuite = goog.require('goog.testing.testSuite');
 let images;
 let palette;
 let picker;
-const sprite = '../../demos/emoji/sprite.png';
-const sprite2 = '../../demos/emoji/sprite2.png';
+const base = '../../demos/emoji';
+const sprite = base + '/sprite.png';
+const sprite2 = base + '/sprite2.png';
 
 /**
  * Creates a SpriteInfo object with the specified properties. If the image is
@@ -59,47 +60,31 @@ function si(
 const spritedEmoji2 = [
   'Emoji 1',
   [
-    ['../../demos/emoji/200.gif', 'std.200', si('SPRITE_200')],
-    ['../../demos/emoji/201.gif', 'std.201', si('SPRITE_201')],
-    ['../../demos/emoji/202.gif', 'std.202', si('SPRITE_202')],
-    ['../../demos/emoji/203.gif', 'std.203', si('SPRITE_203')],
-    ['../../demos/emoji/204.gif', 'std.204', si('SPRITE_204')],
-    ['../../demos/emoji/205.gif', 'std.205', si('SPRITE_205')],
-    ['../../demos/emoji/206.gif', 'std.206', si('SPRITE_206')],
-    ['../../demos/emoji/2BC.gif', 'std.2BC', si('SPRITE_2BC')],
-    ['../../demos/emoji/2BD.gif', 'std.2BD', si('SPRITE_2BD')],
-    ['../../demos/emoji/2BE.gif', 'std.2BE', si(null, sprite, 18, 18, 36, 54)],
-    ['../../demos/emoji/2BF.gif', 'std.2BF', si(null, sprite, 18, 18, 0, 126)],
-    ['../../demos/emoji/2C0.gif', 'std.2C0', si(null, sprite, 18, 18, 18, 305)],
-    ['../../demos/emoji/2C1.gif', 'std.2C1', si(null, sprite, 18, 18, 0, 287)],
-    ['../../demos/emoji/2C2.gif', 'std.2C2', si(null, sprite, 18, 18, 18, 126)],
-    ['../../demos/emoji/2C3.gif', 'std.2C3', si(null, sprite, 18, 18, 36, 234)],
-    ['../../demos/emoji/2C4.gif', 'std.2C4', si(null, sprite, 18, 18, 36, 72)],
-    ['../../demos/emoji/2C5.gif', 'std.2C5', si(null, sprite, 18, 18, 54, 54)],
-    ['../../demos/emoji/2C6.gif', 'std.2C6'],
-    ['../../demos/emoji/2C7.gif', 'std.2C7'],
-    ['../../demos/emoji/2C8.gif', 'std.2C8'],
-    ['../../demos/emoji/2C9.gif', 'std.2C9'],
-    [
-      '../../demos/emoji/2CA.gif',
-      'std.2CA',
-      si(null, sprite2, 18, 20, 36, 72, 1),
-    ],
-    [
-      '../../demos/emoji/2E3.gif',
-      'std.2E3',
-      si(null, sprite2, 18, 18, 0, 0, 1),
-    ],
-    [
-      '../../demos/emoji/2EF.gif',
-      'std.2EF',
-      si(null, sprite2, 18, 20, 0, 300, 1),
-    ],
-    [
-      '../../demos/emoji/2F1.gif',
-      'std.2F1',
-      si(null, sprite2, 18, 18, 0, 320, 1),
-    ],
+    [base + '/200.gif', 'std.200', si('SPRITE_200')],
+    [base + '/201.gif', 'std.201', si('SPRITE_201')],
+    [base + '/202.gif', 'std.202', si('SPRITE_202')],
+    [base + '/203.gif', 'std.203', si('SPRITE_203')],
+    [base + '/204.gif', 'std.204', si('SPRITE_204')],
+    [base + '/205.gif', 'std.205', si('SPRITE_205')],
+    [base + '/206.gif', 'std.206', si('SPRITE_206')],
+    [base + '/2BC.gif', 'std.2BC', si('SPRITE_2BC')],
+    [base + '/2BD.gif', 'std.2BD', si('SPRITE_2BD')],
+    [base + '/2BE.gif', 'std.2BE', si(null, sprite, 18, 18, 36, 54)],
+    [base + '/2BF.gif', 'std.2BF', si(null, sprite, 18, 18, 0, 126)],
+    [base + '/2C0.gif', 'std.2C0', si(null, sprite, 18, 18, 18, 305)],
+    [base + '/2C1.gif', 'std.2C1', si(null, sprite, 18, 18, 0, 287)],
+    [base + '/2C2.gif', 'std.2C2', si(null, sprite, 18, 18, 18, 126)],
+    [base + '/2C3.gif', 'std.2C3', si(null, sprite, 18, 18, 36, 234)],
+    [base + '/2C4.gif', 'std.2C4', si(null, sprite, 18, 18, 36, 72)],
+    [base + '/2C5.gif', 'std.2C5', si(null, sprite, 18, 18, 54, 54)],
+    [base + '/2C6.gif', 'std.2C6'],
+    [base + '/2C7.gif', 'std.2C7'],
+    [base + '/2C8.gif', 'std.2C8'],
+    [base + '/2C9.gif', 'std.2C9'],
+    [base + '/2CA.gif', 'std.2CA', si(null, sprite2, 18, 20, 36, 72, 1)],
+    [base + '/2E3.gif', 'std.2E3', si(null, sprite2, 18, 18, 0, 0, 1)],
+    [base + '/2EF.gif', 'std.2EF', si(null, sprite2, 18, 20, 0, 300, 1)],
+    [base + '/2F1.gif', 'std.2F1', si(null, sprite2, 18, 18, 0, 320, 1)],
   ],
 ];
 
@@ -209,7 +194,7 @@ testSuite({
   },
 
   setUp() {
-    const defaultImg = '../../demos/emoji/none.gif';
+    const defaultImg = base + '/none.gif';
     picker = new EmojiPicker(defaultImg);
     picker.setDelayedLoad(false);
     picker.setManualLoadOfAnimatedEmoji(true);

@@ -28,8 +28,10 @@ const LinkDialog = goog.require('goog.ui.editor.LinkDialog');
 const MockControl = goog.require('goog.testing.MockControl');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const TagName = goog.require('goog.dom.TagName');
+const asserts = goog.require('goog.testing.asserts');
 const dom = goog.require('goog.dom');
 const events = goog.require('goog.events');
+const googWindow = goog.require('goog.window');
 const messages = goog.require('goog.ui.editor.messages');
 const mockmatchers = goog.require('goog.testing.mockmatchers');
 const style = goog.require('goog.style');
@@ -209,7 +211,7 @@ testSuite({
     mockLink.$returns(anchorElem);
 
     mockWindowOpen = mockCtrl.createFunctionMock('open');
-    stubs.set(window, 'open', mockWindowOpen);
+    stubs.set(googWindow, 'open', mockWindowOpen);
   },
 
   tearDown() {
@@ -672,13 +674,23 @@ testSuite({
     let width;
 
     mockWindowOpen(
-        ANCHOR_URL, '_blank',
+        ANCHOR_URL,
         new ArgumentMatcher(
-            (str) => str ==
-                `width=${width},height=${height}` +
-                    ',toolbar=1,scrollbars=1,location=1,statusbar=0,' +
-                    'menubar=1,resizable=1',
-            '3rd arg: (string) window.open() options'));
+            (options) => !asserts.findDifferences(options, {
+              target: '_blank',
+              width: width,
+              height: height,
+              toolbar: true,
+              scrollbars: true,
+              location: true,
+              statusbar: false,
+              menubar: true,
+              resizable: true,
+              noreferrer: false,
+              noopener: false,
+            }),
+            '2nd arg: window.open() options'),
+        window);
 
     mockCtrl.$replayAll();
     setUpAnchor(ANCHOR_URL, ANCHOR_TEXT);
