@@ -16,44 +16,42 @@
  * @fileoverview An interface for module loading.
  */
 
-goog.provide('goog.module.AbstractModuleLoader');
+goog.module('goog.module.AbstractModuleLoader');
+goog.module.declareLegacyNamespace();
 
-/** @suppress {extraRequire} */
-goog.require('goog.module');
-goog.require('goog.module.ModuleInfo');
+const {ModuleInfo} = goog.require('goog.module');
 
 
 /**
  * An interface that loads JavaScript modules.
  * @interface
  */
-goog.module.AbstractModuleLoader = function() {};
+class AbstractModuleLoader {
+  /**
+   * Loads a list of JavaScript modules.
+   *
+   * @param {!Array<string>} ids The module ids in dependency order.
+   * @param {!Object<string, !ModuleInfo>} moduleInfoMap A mapping
+   *     from module id to ModuleInfo object.
+   * @param {?function()=} successFn The callback if module loading is a
+   *     success.
+   * @param {?function(?number)=} errorFn The callback if module loading is an
+   *     error.
+   * @param {?function()=} timeoutFn The callback if module loading times out.
+   * @param {boolean=} forceReload Whether to bypass cache while loading the
+   *     module.
+   */
+  loadModules(ids, moduleInfoMap, successFn, errorFn, timeoutFn, forceReload) {
+  };
 
 
-/**
- * Loads a list of JavaScript modules.
- *
- * @param {Array<string>} ids The module ids in dependency order.
- * @param {!Object<string, !goog.module.ModuleInfo>} moduleInfoMap A mapping
- *     from module id to ModuleInfo object.
- * @param {function()?=} opt_successFn The callback if module loading is a
- *     success.
- * @param {function(?number)?=} opt_errorFn The callback if module loading is an
- *     error.
- * @param {function()?=} opt_timeoutFn The callback if module loading times out.
- * @param {boolean=} opt_forceReload Whether to bypass cache while loading the
- *     module.
- */
-goog.module.AbstractModuleLoader.prototype.loadModules = function(
-    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
-    opt_forceReload) {};
+  /**
+   * Pre-fetches a JavaScript module.
+   *
+   * @param {string} id The module id.
+   * @param {!ModuleInfo} moduleInfo The module info.
+   */
+  prefetchModule(id, moduleInfo) {};
+}
 
-
-/**
- * Pre-fetches a JavaScript module.
- *
- * @param {string} id The module id.
- * @param {!goog.module.ModuleInfo} moduleInfo The module info.
- */
-goog.module.AbstractModuleLoader.prototype.prefetchModule = function(
-    id, moduleInfo) {};
+exports = AbstractModuleLoader;
