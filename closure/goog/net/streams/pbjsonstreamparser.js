@@ -113,7 +113,7 @@ PbJsonStreamParser.prototype.parse = function(input) {
   var parser = this;
   var pos = 0;
   while (pos < input.length) {
-    if (!readMore()) {
+    if ((parser.state_ !== State.MESSAGES) && !readMore()) {
       return null;
     }
 

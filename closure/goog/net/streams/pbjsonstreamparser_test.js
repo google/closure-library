@@ -79,6 +79,22 @@ testSuite({
     assertEquals('[{"a": "xyz"}]', result[1][1]);
   },
 
+  testSingleMessageInChunks: function() {
+    const parser = new PbJsonStreamParser();
+    const input1 = '[[[1,"really long string broken  \n    ';
+    const input2 = '     into chunks with some whitespace in the middle"]]]';
+
+    let result = parser.parse(input1);
+    assertNull(result);
+
+    result = parser.parse(input2);
+    assertMessages(result, 1);
+    assertEquals(
+        '[1,"really long string broken  \n    ' +
+            '     into chunks with some whitespace in the middle"]',
+        result[0][1]);
+  },
+
   testOnlyStatus: function() {
     const parser = new PbJsonStreamParser();
     const status = '[1,null,"abced",[true,false]]';
