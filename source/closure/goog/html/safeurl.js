@@ -327,12 +327,14 @@ goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
   // See https://tools.ietf.org/html/rfc4648.
   // Remove the CR (%0D) and LF (%0A) from the dataUrl.
   var filteredDataUrl = dataUrl.replace(/(%0A|%0D)/g, '');
-  // There's a slight risk here that a browser sniffs the content type if it
-  // doesn't know the MIME type and executes HTML within the data: URL. For this
-  // to cause XSS it would also have to execute the HTML in the same origin
-  // of the page with the link. It seems unlikely that both of these will
-  // happen, particularly in not really old IEs.
   var match = filteredDataUrl.match(goog.html.DATA_URL_PATTERN_);
+  // Note: The only risk of XSS here is if the `data:` URL results in a
+  // same-origin document. In which case content-sniffing might cause the
+  // browser to interpret the contents as html.
+  // All modern browsers consider `data:` URL documents to have unique empty
+  // origins. Only Firefox for versions prior to v57 behaves differently:
+  // https://blog.mozilla.org/security/2017/10/04/treating-data-urls-unique-origins-firefox-57/
+  // Older versions of IE don't understand `data:` urls, so it is not an issue.
   var valid = match && goog.html.SafeUrl.isSafeMimeType(match[1]);
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
       valid ? filteredDataUrl : goog.html.SafeUrl.INNOCUOUS_STRING);
