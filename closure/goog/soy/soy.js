@@ -96,8 +96,7 @@ goog.soy.renderElement = function(
   // Soy template parameter is only nullable for historical reasons.
   goog.asserts.assert(template, 'Soy template may not be null.');
   var html = goog.soy.ensureTemplateOutputHtml_(template(
-      opt_templateData || goog.soy.defaultTemplateData_, undefined,
-      opt_injectedData));
+      opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData));
   goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
       goog.asserts.assert(element), html);
 };
@@ -129,8 +128,7 @@ goog.soy.renderAsFragment = function(
   goog.asserts.assert(template, 'Soy template may not be null.');
   var dom = opt_domHelper || goog.dom.getDomHelper();
   var output = template(
-      opt_templateData || goog.soy.defaultTemplateData_, undefined,
-      opt_injectedData);
+      opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData);
   var html = goog.soy.ensureTemplateOutputHtml_(output);
   goog.soy.assertFirstTagValid_(html.getTypedStringValue());
   return dom.safeHtmlToNode(html);
@@ -159,8 +157,7 @@ goog.soy.renderAsElement = function(
   goog.asserts.assert(template, 'Soy template may not be null.');
   return goog.soy.convertToElement_(
       template(
-          opt_templateData || goog.soy.defaultTemplateData_, undefined,
-          opt_injectedData),
+          opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData),
       opt_domHelper);
 };
 
