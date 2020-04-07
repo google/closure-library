@@ -245,7 +245,7 @@ goog.editor.plugins.EnterHandler.prototype.deleteBrGecko = function(e) {
         //    end of that.
         // 2. If the BR doesn't have a previous sibling or the previous sibling
         //    is a block level element or a BR, we place the cursor at the
-        //    beginning of the leftmost leaf of its next sibling.
+        //    leftmost of the leftmost leaf of its next sibling.
         if (nextSibling && goog.editor.node.isBlockTag(nextSibling)) {
           if (previousSibling &&
               !(previousSibling.tagName == goog.dom.TagName.BR ||
@@ -632,13 +632,13 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionW3C_ =
 };
 
 /**
- * Checks Whether the selection range start from beginning.
+ * Checks Whether the selection range start from leftmost.
  * @param {Node} node the element or text node the range starts in.
  * @param {Node} baseNode the container element.
- * @return {boolean} Whether the selection range start from beginning.
+ * @return {boolean} Whether the selection range start from leftmost.
  * @private
  */
-goog.editor.plugins.EnterHandler.isStartFromBeginning_ = function(node, baseNode) {
+goog.editor.plugins.EnterHandler.isNodeLeftMostChild_ = function(node, baseNode) {
   while (node && node.nodeName != goog.dom.TagName.BODY && node != baseNode) {
     if (node.previousSibling) {
       return false;
@@ -671,8 +671,8 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
     var isPartialEnd = !isInOneContainer &&
         goog.editor.plugins.EnterHandler.isPartialEndW3c_(range);
 
-    var isStartFromBeginning =
-        goog.editor.plugins.EnterHandler.isStartFromBeginning_(
+    var isNodeLeftMostChild =
+        goog.editor.plugins.EnterHandler.isNodeLeftMostChild_(
             range.getStartNode(), baseNode);
 
     // Remove The range contents, and ensure the correct content stays selected.
@@ -683,9 +683,9 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
     } else {
       // when the node that would have been referenced has now been deleted and
       // there are no other nodes in the baseNode,  Thus need to set the caret
-      // to the end of the base node. If selection range start from beginning,
+      // to the end of the base node. If selection range start from leftmost,
       // set the caret to the start of the base node.
-      var pos = isStartFromBeginning ? 0 : baseNode.childNodes.length;
+      var pos = isNodeLeftMostChild ? 0 : baseNode.childNodes.length;
       range = goog.dom.Range.createCaret(baseNode, pos);
       reselect = false;
     }
