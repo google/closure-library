@@ -11,14 +11,13 @@
 
 goog.provide('goog.date');
 goog.provide('goog.date.Date');
+goog.provide('goog.date.DateLike');
 goog.provide('goog.date.DateTime');
 goog.provide('goog.date.Interval');
 goog.provide('goog.date.month');
 goog.provide('goog.date.weekDay');
 
 goog.require('goog.asserts');
-/** @suppress {extraRequire} */
-goog.require('goog.date.DateLike');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.string');
 
@@ -774,6 +773,11 @@ goog.date.Interval.prototype.add = function(interval) {
   this.seconds += interval.seconds;
 };
 
+
+/**
+ * @typedef {(?Date|?goog.date.Date)}
+ */
+goog.date.DateLike;
 
 
 /**
