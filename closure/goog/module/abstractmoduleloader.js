@@ -21,6 +21,37 @@ goog.module.declareLegacyNamespace();
 
 const {ModuleInfo} = goog.require('goog.module');
 
+/**
+ * Optional parameters for the loadModules method.
+ * @record
+ */
+class LoadOptions {
+  constructor() {
+    /**
+     * Whether to bypass cache while loading the module.
+     * @const {boolean|undefined}
+     */
+    this.forceReload;
+
+    /**
+     * The callback if module loading is an error.
+     * @const {(function(?number): void)|undefined}
+     */
+    this.onError;
+
+    /**
+     * The callback if module loading is a success.
+     * @const {(function(): void)|undefined}
+     */
+    this.onSuccess;
+
+    /**
+     * The callback if module loading times out.
+     * @const {(function(): void)|undefined}
+     */
+    this.onTimeout;
+  }
+}
 
 /**
  * An interface that loads JavaScript modules.
@@ -33,16 +64,9 @@ class AbstractModuleLoader {
    * @param {!Array<string>} ids The module ids in dependency order.
    * @param {!Object<string, !ModuleInfo>} moduleInfoMap A mapping
    *     from module id to ModuleInfo object.
-   * @param {?function()=} successFn The callback if module loading is a
-   *     success.
-   * @param {?function(?number)=} errorFn The callback if module loading is an
-   *     error.
-   * @param {?function()=} timeoutFn The callback if module loading times out.
-   * @param {boolean=} forceReload Whether to bypass cache while loading the
-   *     module.
+   * @param {!LoadOptions=} loadOptions
    */
-  loadModules(ids, moduleInfoMap, successFn, errorFn, timeoutFn, forceReload) {
-  };
+  loadModules(ids, moduleInfoMap, loadOptions) {};
 
 
   /**

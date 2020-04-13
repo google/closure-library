@@ -39,8 +39,7 @@ function getModuleManager(infoMap) {
 
 function createSuccessfulBatchLoader(moduleMgr) {
   return {
-    loadModules: function(
-        ids, moduleInfoMap, opt_successFn, opt_errFn, opt_timeoutFn) {
+    loadModules: function(ids, moduleInfoMap, {onError, onSuccess, onTimeout}) {
       requestCount++;
       setTimeout(goog.bind(this.onLoad, this, ids.concat(), 0), 5);
     },
@@ -57,14 +56,13 @@ function createSuccessfulBatchLoader(moduleMgr) {
 
 function createSuccessfulNonBatchLoader(moduleMgr) {
   return {
-    loadModules: function(
-        ids, moduleInfoMap, opt_successFn, opt_errFn, opt_timeoutFn) {
+    loadModules: function(ids, moduleInfoMap, {onError, onSuccess, onTimeout}) {
       requestCount++;
       setTimeout(() => {
         moduleMgr.beforeLoadModuleCode(ids[0]);
         moduleMgr.setLoaded();
-        if (opt_successFn) {
-          opt_successFn();
+        if (onSuccess) {
+          onSuccess();
         }
       }, 5);
     },
@@ -73,11 +71,10 @@ function createSuccessfulNonBatchLoader(moduleMgr) {
 
 function createUnsuccessfulLoader(moduleMgr, status) {
   return {
-    loadModules: function(
-        ids, moduleInfoMap, opt_successFn, opt_errFn, opt_timeoutFn) {
+    loadModules: function(ids, moduleInfoMap, {onError, onSuccess, onTimeout}) {
       moduleMgr.beforeLoadModuleCode(ids[0]);
       setTimeout(() => {
-        opt_errFn(status);
+        onError(status);
       }, 5);
     },
   };
@@ -85,10 +82,9 @@ function createUnsuccessfulLoader(moduleMgr, status) {
 
 function createUnsuccessfulBatchLoader(moduleMgr, status) {
   return {
-    loadModules: function(
-        ids, moduleInfoMap, opt_successFn, opt_errFn, opt_timeoutFn) {
+    loadModules: function(ids, moduleInfoMap, {onError, onSuccess, onTimeout}) {
       setTimeout(() => {
-        opt_errFn(status);
+        onError(status);
       }, 5);
     },
   };
@@ -96,10 +92,9 @@ function createUnsuccessfulBatchLoader(moduleMgr, status) {
 
 function createTimeoutLoader(moduleMgr, status) {
   return {
-    loadModules: function(
-        ids, moduleInfoMap, opt_successFn, opt_errFn, opt_timeoutFn) {
+    loadModules: function(ids, moduleInfoMap, {onError, onSuccess, onTimeout}) {
       setTimeout(() => {
-        opt_timeoutFn(status);
+        onTimeout(status);
       }, 5);
     },
   };
@@ -227,14 +222,13 @@ function assertDependencyOrder(list, mm) {
 
 function createSuccessfulNonBatchLoaderWithRegisterInitCallback(moduleMgr, fn) {
   return {
-    loadModules: function(
-        ids, moduleInfoMap, opt_successFn, opt_errFn, opt_timeoutFn) {
+    loadModules: function(ids, moduleInfoMap, {onError, onSuccess, onTimeout}) {
       moduleMgr.beforeLoadModuleCode(ids[0]);
       moduleMgr.registerInitializationCallback(fn);
       setTimeout(() => {
         moduleMgr.setLoaded();
-        if (opt_successFn) {
-          opt_successFn();
+        if (onSuccess) {
+          onSuccess();
         }
       }, 5);
     },
@@ -252,14 +246,13 @@ function createModulesFor(var_args) {
 
 function createSuccessfulNonBatchLoaderWithConstructor(moduleMgr, info) {
   return {
-    loadModules: function(
-        ids, moduleInfoMap, opt_successFn, opt_errFn, opt_timeoutFn) {
+    loadModules: function(ids, moduleInfoMap, {onError, onSuccess, onTimeout}) {
       setTimeout(() => {
         moduleMgr.beforeLoadModuleCode(ids[0]);
         moduleMgr.setModuleConstructor(info[ids[0]].ctor);
         moduleMgr.setLoaded();
-        if (opt_successFn) {
-          opt_successFn();
+        if (onSuccess) {
+          onSuccess();
         }
       }, 5);
     },
@@ -1560,7 +1553,7 @@ testSuite({
     // failed.
     let triedLoad = false;
     mm.setLoader({
-      loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn) {
+      loadModules: function(ids, moduleInfoMap, {onError, onSuccess}) {
         triedLoad = true;
       },
     });

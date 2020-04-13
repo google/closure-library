@@ -258,20 +258,19 @@ goog.module.ModuleLoader.prototype.usingSourceUrlInjection_ = function() {
 
 /** @override */
 goog.module.ModuleLoader.prototype.loadModules = function(
-    ids, moduleInfoMap, opt_successFn, opt_errorFn, opt_timeoutFn,
-    opt_forceReload) {
+    ids, moduleInfoMap, {forceReload, onError, onSuccess, onTimeout} = {}) {
   var loadStatus = this.loadingModulesStatus_[ids] ||
       goog.module.ModuleLoader.LoadStatus.createForIds_(ids, moduleInfoMap);
   loadStatus.loadRequested = true;
-  if (loadStatus.successFn && opt_successFn) {
+  if (loadStatus.successFn && onSuccess) {
     // If there already exists a success function, chain it before the passed
     // success functon.
     loadStatus.successFn =
-        goog.functions.sequence(loadStatus.successFn, opt_successFn);
+        goog.functions.sequence(loadStatus.successFn, onSuccess);
   } else {
-    loadStatus.successFn = opt_successFn || loadStatus.successFn;
+    loadStatus.successFn = onSuccess || loadStatus.successFn;
   }
-  loadStatus.errorFn = opt_errorFn || null;
+  loadStatus.errorFn = onError || null;
 
   if (!this.loadingModulesStatus_[ids]) {
     // Modules were not prefetched.

@@ -544,9 +544,12 @@ testSuite({
         ModuleManager.CallbackType.ERROR, errorHandler);
 
     moduleLoader.prefetchModule('modA', moduleManager.moduleInfoMap['modA']);
-    moduleLoader.loadModules(['modA'], moduleManager.moduleInfoMap, () => {
-      fail('modA should not load successfully');
-    }, errorHandler);
+    moduleLoader.loadModules(['modA'], moduleManager.moduleInfoMap, {
+      onSuccess: () => {
+        fail('modA should not load successfully');
+      },
+      onError: errorHandler,
+    });
 
     assertEquals(1, errorCount);
   },
