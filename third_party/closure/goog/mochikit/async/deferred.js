@@ -611,6 +611,18 @@ goog.async.Deferred.prototype.hasErrback_ = function() {
 
 
 /**
+ * Return the most recent value fired.
+ *
+ * @return {VALUE|undefined}
+ * @deprecated This method is only for facilitating migrations from other async
+ *     primitives.
+ */
+goog.async.Deferred.prototype.getLastValueForMigration = function() {
+  return (this.hasFired() && !this.hadError_) ? this.result_ : undefined;
+};
+
+
+/**
  * Exhausts the execution sequence while a result is available. The result may
  * be modified by callbacks or errbacks, and execution will block if the
  * returned result is an incomplete Deferred.
