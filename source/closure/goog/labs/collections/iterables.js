@@ -84,3 +84,55 @@ exports.filter = function*(iterable, f) {
     }
   }
 };
+
+
+/**
+ * @template T
+ * @implements {IteratorIterable<T>}
+ */
+class ConcatIterator {
+  /** @param {!Array<!Iterator<T>>} iterators */
+  constructor(iterators) {
+    /** @private @const {!Array<!Iterator<T>>} */
+    this.iterators_ = iterators;
+
+    /** @private {number} */
+    this.iterIndex_ = 0;
+  }
+
+  [Symbol.iterator]() {
+    return this;
+  }
+
+  /** @override */
+  next() {
+    while (this.iterIndex_ < this.iterators_.length) {
+      const result = this.iterators_[this.iterIndex_].next();
+      if (!result.done) {
+        return result;
+      }
+      this.iterIndex_++;
+    }
+    return /** @type {!IteratorResult<T>} */ ({done: true});
+  }
+}
+
+
+/**
+ * Concatenates multiple iterators to create a new iterable.
+ *
+ * When next() is called on the return iterator, it will call next() on the
+ * current passed iterator. When the current passed iterator is exhausted, it
+ * will move on to the next iterator until there are no more left.
+ *
+ * All generator return values will be ignored (i.e. when childIter.next()
+ * returns {done: true, value: notUndefined} it will be treated as just
+ * {done: true}).
+ *
+ * @param {...!Iterable<VALUE>} iterables
+ * @return {!IteratorIterable<VALUE>}
+ * @template VALUE
+ */
+exports.concat = function(...iterables) {
+  return new ConcatIterator(iterables.map(exports.getIterator));
+};

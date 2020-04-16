@@ -627,11 +627,13 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
   var loadFn = goog.bind(
       this.getLoader().loadModules, goog.asserts.assert(this.getLoader()),
       goog.array.clone(idsToLoadImmediately),
-      goog.asserts.assert(this.moduleInfoMap), null,
-      goog.bind(
-          this.handleLoadError_, this, this.requestedLoadingModuleIds_,
-          idsToLoadImmediately),
-      goog.bind(this.handleLoadTimeout_, this), !!opt_forceReload);
+      goog.asserts.assert(this.moduleInfoMap), {
+        forceReload: !!opt_forceReload,
+        onError: goog.bind(
+            this.handleLoadError_, this, this.requestedLoadingModuleIds_,
+            idsToLoadImmediately),
+        onTimeout: goog.bind(this.handleLoadTimeout_, this),
+      });
 
   var delay = this.getBackOff_();
   if (delay) {
