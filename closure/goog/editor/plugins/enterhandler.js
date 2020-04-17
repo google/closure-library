@@ -245,7 +245,7 @@ goog.editor.plugins.EnterHandler.prototype.deleteBrGecko = function(e) {
         //    end of that.
         // 2. If the BR doesn't have a previous sibling or the previous sibling
         //    is a block level element or a BR, we place the cursor at the
-        //    leftmost of the leftmost leaf of its next sibling.
+        //    beginning of the leftmost leaf of its next sibling.
         if (nextSibling && goog.editor.node.isBlockTag(nextSibling)) {
           if (previousSibling &&
               !(previousSibling.tagName == goog.dom.TagName.BR ||
