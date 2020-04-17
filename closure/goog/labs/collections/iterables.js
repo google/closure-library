@@ -113,7 +113,7 @@ class ConcatIterator {
       }
       this.iterIndex_++;
     }
-    return /** @type {!IteratorResult<T>} */ ({done: true});
+    return /** @type {!IIterableResult<T>} */ ({done: true});
   }
 }
 

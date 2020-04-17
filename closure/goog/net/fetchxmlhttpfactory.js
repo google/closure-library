@@ -325,7 +325,7 @@ goog.net.FetchXmlHttp.prototype.readInputFromFetch_ = function() {
 
 /**
  * Handles a chunk of data from the fetch response stream reader.
- * @param {!IteratorResult} result
+ * @param {!IIterableResult} result
  * @private
  */
 goog.net.FetchXmlHttp.prototype.handleDataFromStream_ = function(result) {
