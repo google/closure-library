@@ -179,6 +179,14 @@ goog.module.ModuleLoader.createPreloadScriptElement_ = function(url) {
   const link = goog.dom.createElement(goog.dom.TagName.LINK);
   goog.dom.safe.setLinkHrefAndRel(link, url, 'preload');
   link.as = 'script';
+
+  // If CSP nonces are used, propagate them to dynamically created scripts.
+  // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
+  var nonce = goog.getScriptNonce();
+  if (nonce) {
+    link.setAttribute('nonce', nonce);
+  }
+
   return link;
 };
 
