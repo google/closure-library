@@ -253,7 +253,7 @@ goog.net.FetchXmlHttp.prototype.abort = function() {
        this.inProgress_) &&
       (this.readyState != goog.net.FetchXmlHttp.RequestState.DONE)) {
     this.inProgress_ = false;
-    this.requestDone_(false);
+    this.requestDone_();
   }
 
   this.readyState = goog.net.FetchXmlHttp.RequestState.UNSENT;
@@ -274,6 +274,8 @@ goog.net.FetchXmlHttp.prototype.handleResponse_ = function(response) {
   this.fetchResponse_ = response;
 
   if (!this.responseHeaders_) {
+    this.status = this.fetchResponse_.status;
+    this.statusText = this.fetchResponse_.statusText;
     this.responseHeaders_ = response.headers;
     this.readyState = goog.net.FetchXmlHttp.RequestState.HEADER_RECEIVED;
     this.dispatchCallback_();
@@ -343,7 +345,7 @@ goog.net.FetchXmlHttp.prototype.handleDataFromStream_ = function(result) {
   }
 
   if (result.done) {
-    this.requestDone_(true);
+    this.requestDone_();
   } else {
     this.dispatchCallback_();
   }
@@ -365,7 +367,7 @@ goog.net.FetchXmlHttp.prototype.handleResponseText_ = function(responseText) {
     return;
   }
   this.response = this.responseText = responseText;
-  this.requestDone_(true);
+  this.requestDone_();
 };
 
 
@@ -381,7 +383,7 @@ goog.net.FetchXmlHttp.prototype.handleResponseArrayBuffer_ = function(
     return;
   }
   this.response = responseArrayBuffer;
-  this.requestDone_(true);
+  this.requestDone_();
 };
 
 
@@ -397,22 +399,15 @@ goog.net.FetchXmlHttp.prototype.handleSendFailure_ = function(error) {
     // The request was aborted, ignore.
     return;
   }
-  this.requestDone_(true);
+  this.requestDone_();
 };
 
 
 /**
  * Sets the request state to DONE and performs cleanup.
- * @param {boolean} setStatus whether to set the status and statusText fields,
- * this is not necessary when the request is aborted.
  * @private
  */
-goog.net.FetchXmlHttp.prototype.requestDone_ = function(setStatus) {
-  if (setStatus && this.fetchResponse_) {
-    this.status = this.fetchResponse_.status;
-    this.statusText = this.fetchResponse_.statusText;
-  }
-
+goog.net.FetchXmlHttp.prototype.requestDone_ = function() {
   this.readyState = goog.net.FetchXmlHttp.RequestState.DONE;
 
   this.fetchResponse_ = null;

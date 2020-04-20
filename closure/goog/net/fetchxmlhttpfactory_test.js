@@ -57,13 +57,13 @@ function verifySend(
           expectedHeaders =
               `content-type: text/plain;charset=UTF-8\r\n${expectedHeaders}`;
         }
-        assertEquals(0, xhr.status);
+        assertEquals(expectedStatusCode, xhr.status);
         assertEquals('', xhr.responseText);
         assertEquals('dummyHeaderValue', xhr.getResponseHeader('dummyHeader'));
         assertEquals(expectedHeaders, xhr.getAllResponseHeaders());
       } else if (xhr.readyState === FetchXmlHttp.RequestState.LOADING) {
         lastState = xhr.readyState;
-        assertEquals(0, xhr.status);
+        assertEquals(expectedStatusCode, xhr.status);
         assertEquals(0, expectedBody.indexOf(xhr.responseText));
         if (isStream && xhr.responseText) {
           assertTrue(xhr.responseText.length > lastBufferSize);
