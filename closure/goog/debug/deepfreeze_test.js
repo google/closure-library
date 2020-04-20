@@ -8,8 +8,8 @@ goog.module('goog.deepFreezeTest');
 goog.setTestOnly();
 
 const asserts = goog.require('goog.asserts');
-const deepFreeze = goog.require('goog.debug.deepFreeze');
 const testSuite = goog.require('goog.testing.testSuite');
+const {deepFreeze} = goog.require('goog.debug.deepFreeze');
 
 testSuite({
   testDeepFreeze: {

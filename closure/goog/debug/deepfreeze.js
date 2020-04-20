@@ -170,4 +170,4 @@ const deepFreeze = function(arg) {
   }.valueOf();
 };
 
-exports = deepFreeze;
+exports = {deepFreeze};
