@@ -14,6 +14,9 @@
  *
  */
 
+@provide 'goog.css.imagelessbutton';
+
+@require 'goog.css.common';
 
 /* Imageless button styles. */
 
