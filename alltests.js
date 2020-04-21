@@ -244,7 +244,7 @@ var _allTests = [
   'closure/goog/json/hybrid_test.html',
   'closure/goog/json/json_test.html',
   'closure/goog/json/processor_test.html',
-  'closure/goog/labs/collections/iterables_test.html',
+  'closure/goog/labs/collections/iters_test.html',
   'closure/goog/labs/dom/pagevisibilitymonitor_test.html',
   'closure/goog/labs/events/nondisposableeventtarget_test.html',
   'closure/goog/labs/events/nondisposableeventtarget_via_googevents_test.html',

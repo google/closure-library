@@ -49,7 +49,7 @@ goog.addDependency('async/workqueue_test.js', ['goog.async.WorkQueueTest'], ['go
 goog.addDependency('base.js', ['goog'], [], {});
 goog.addDependency('base_module_test.js', ['goog.baseModuleTest'], ['goog.Timer', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base_test.js', ['goog.baseTest'], ['goog.dom', 'goog.dom.TagName', 'goog.object', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('collections/sets.js', ['goog.collections.sets'], ['goog.labs.collections.iterables'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('collections/sets.js', ['goog.collections.sets'], ['goog.labs.collections.iters'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('collections/sets_test.js', ['goog.collections.setsTest'], ['goog.collections.sets', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color'], {});
 goog.addDependency('color/alpha_test.js', ['goog.color.alphaTest'], ['goog.array', 'goog.color.alpha', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
@@ -632,8 +632,8 @@ goog.addDependency('json/jsonable.js', ['goog.json.Jsonable'], [], {'lang': 'es6
 goog.addDependency('json/nativejsonprocessor.js', ['goog.json.NativeJsonProcessor'], ['goog.asserts', 'goog.json.Processor'], {});
 goog.addDependency('json/processor.js', ['goog.json.Processor'], ['goog.string.Parser', 'goog.string.Stringifier'], {});
 goog.addDependency('json/processor_test.js', ['goog.json.processorTest'], ['goog.json.NativeJsonProcessor', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('labs/collections/iterables.js', ['goog.labs.collections.iterables'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('labs/collections/iterables_test.js', ['goog.labs.iterableTest'], ['goog.labs.collections.iterables', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('labs/collections/iters.js', ['goog.labs.collections.iters'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('labs/collections/iters_test.js', ['goog.labs.iterableTest'], ['goog.labs.collections.iters', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/dom/pagevisibilitymonitor.js', ['goog.labs.dom.PageVisibilityEvent', 'goog.labs.dom.PageVisibilityMonitor', 'goog.labs.dom.PageVisibilityState'], ['goog.dom', 'goog.dom.vendor', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.memoize'], {});
 goog.addDependency('labs/dom/pagevisibilitymonitor_test.js', ['goog.labs.dom.PageVisibilityMonitorTest'], ['goog.events', 'goog.functions', 'goog.labs.dom.PageVisibilityMonitor', 'goog.testing.PropertyReplacer', 'goog.testing.events', 'goog.testing.events.Event', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/events/nondisposableeventtarget.js', ['goog.labs.events.NonDisposableEventTarget'], ['goog.array', 'goog.asserts', 'goog.events.Event', 'goog.events.Listenable', 'goog.events.ListenerMap', 'goog.object'], {});
