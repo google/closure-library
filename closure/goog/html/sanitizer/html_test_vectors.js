@@ -40,6 +40,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
     {input: "<form><input name=\"tagName\"></form>",
      acceptable: [
          "",
+         "<form><input /></form>",
      ],
      name: "clobbering_tagname"},
     {input: "<details open ontoggle=\"alert('xss')\">",
@@ -143,6 +144,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "<input type=\"image\" />",
          "<input type=\"image\" src=\"about:invalid#zCSafez\">",
          "<input type=\"image\" src=\"about:invalid#zCSafez\" />",
+         "<input src=\"about:invalid#zCSafez\" />",
      ],
      name: "input"},
     {input: "<a><a<a>a><a style=\"<a><a<a>a><a\"<a><a<a>a><a >",
@@ -163,6 +165,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "&#34;&gt;<img src=\"x\"/>&#34;&gt;",
          "\"&gt;<p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\">",
          "&quot;&gt;<p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\"></p>",
+         "\"&gt;<noscript><p></p></noscript>",
      ],
      name: "mxss_noscript"},
     {input: "<a><a></a></a>",
