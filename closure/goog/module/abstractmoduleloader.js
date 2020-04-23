@@ -29,7 +29,7 @@ class LoadOptions {
   constructor() {
     /**
      * A map of extra runtime module dependencies.
-     * @type {!Map<string, !Array<string>>|undefined}
+     * @type {!Map<string, !Set<string>>|undefined}
      */
     this.extraEdges;
 
