@@ -28,6 +28,12 @@ const {ModuleInfo} = goog.require('goog.module');
 class LoadOptions {
   constructor() {
     /**
+     * A map of extra runtime module dependencies.
+     * @type {!Map<string, !Array<string>>|undefined}
+     */
+    this.extraEdges;
+
+    /**
      * Whether to bypass cache while loading the module.
      * @const {boolean|undefined}
      */
@@ -58,6 +64,14 @@ class LoadOptions {
  * @interface
  */
 class AbstractModuleLoader {
+  constructor() {
+    /**
+     * Whether or not the implementation supports extra edges.
+     * @type {boolean|undefined}
+     */
+    this.supportsExtraEdges;
+  }
+
   /**
    * Loads a list of JavaScript modules.
    *
