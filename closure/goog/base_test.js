@@ -1336,4 +1336,8 @@ testSuite({
           'const {type} = goog.requireType(\'module.with.types\');');
     });
   },
+
+  testBaseDoesNotDefineTrustedTypePolicy() {
+    assertFalse('TRUSTED_TYPES_POLICY_' in goog);
+  },
 });

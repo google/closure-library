@@ -3944,6 +3944,14 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   };
 
 
+  /**
+   * Trusted Types policy for the debug loader.
+   * @private @const {?TrustedTypePolicy}
+   */
+  goog.TRUSTED_TYPES_POLICY_ = goog.TRUSTED_TYPES_POLICY_NAME ?
+      goog.createTrustedTypesPolicy(goog.TRUSTED_TYPES_POLICY_NAME + '#base') :
+      null;
+
   if (!goog.global.CLOSURE_NO_DEPS) {
     goog.debugLoader_.loadClosureDeps();
   }
@@ -4020,8 +4028,3 @@ goog.createTrustedTypesPolicy = function(name) {
   return policy;
 };
 
-
-/** @private @const {?TrustedTypePolicy} */
-goog.TRUSTED_TYPES_POLICY_ = goog.TRUSTED_TYPES_POLICY_NAME ?
-    goog.createTrustedTypesPolicy(goog.TRUSTED_TYPES_POLICY_NAME + '#base') :
-    null;
