@@ -697,6 +697,39 @@ testSuite({
     }
   },
 
+  testSetScriptSrc_withIframe() {
+    const url =
+        TrustedResourceUrl.fromConstant(Const.from('javascript:trusted();'));
+    // clear nonce cache for test.
+    /** @type {?} */ (goog).cspNonce_ = null;
+    // create the iframe and set up a script inside the iframe.
+    const nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
+    const iframe = dom.createElement(TagName.IFRAME);
+    document.body.appendChild(iframe);
+    const iframeWindow = iframe.contentWindow;
+    const iframeDocument = iframeWindow.document;
+    iframeDocument.write('<HTML><BODY></BODY></HTML>');
+    iframeDocument.close();
+    const iframeScript = iframeDocument.createElement('SCRIPT');
+    iframeScript.setAttribute('nonce', nonce);
+    iframeDocument.body.appendChild(iframeScript);
+    const mockElement = /** @type {!HTMLScriptElement} */ ({
+      'src': 'blarg',
+      /** @suppress {globalThis} */
+      'setAttribute': function(attr, value) {
+        this[attr] = value;
+      },
+      ownerDocument: {defaultView: iframeWindow}
+    });
+    safe.setScriptSrc(mockElement, url);
+    try {
+      assertEquals('javascript:trusted();', mockElement.src);
+      assertEquals(nonce, mockElement.nonce);
+    } finally {
+      dom.removeNode(iframe);
+    }
+  },
+
   testSetScriptContent() {
     const mockScriptElement = /** @type {!HTMLScriptElement} */ ({
       /** @suppress {globalThis} */
