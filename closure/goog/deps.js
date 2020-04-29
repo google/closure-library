@@ -35,7 +35,7 @@ goog.addDependency('async/delay.js', ['goog.Delay', 'goog.async.Delay'], ['goog.
 goog.addDependency('async/delay_test.js', ['goog.async.DelayTest'], ['goog.async.Delay', 'goog.testing.MockClock', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/freelist.js', ['goog.async.FreeList'], [], {'lang': 'es6'});
 goog.addDependency('async/freelist_test.js', ['goog.async.FreeListTest'], ['goog.async.FreeList', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('async/nexttick.js', ['goog.async.nextTick', 'goog.async.throwException'], ['goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.functions', 'goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.string.Const'], {});
+goog.addDependency('async/nexttick.js', ['goog.async.nextTick', 'goog.async.throwException'], ['goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.functions', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine'], {});
 goog.addDependency('async/nexttick_test.js', ['goog.async.nextTickTest'], ['goog.Promise', 'goog.async.nextTick', 'goog.debug.ErrorHandler', 'goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.labs.userAgent.browser', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/promises.js', ['goog.async.promises'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/promises_test.js', ['goog.async.promisesTest'], ['goog.async.promises', 'goog.testing.testSuite'], {'lang': 'es8', 'module': 'goog'});
