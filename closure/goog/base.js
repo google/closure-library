@@ -2245,9 +2245,7 @@ goog.defineClass.createSealingConstructor_ = function(ctr, superClass) {
     return ctr;
   }
 
-  // Compute whether the constructor is sealable at definition time, rather
-  // than when the instance is being constructed.
-  var superclassSealable = !goog.defineClass.isUnsealable_(superClass);
+  // NOTE: The sealing behavior has been removed
 
   /**
    * @this {Object}
@@ -2259,27 +2257,12 @@ goog.defineClass.createSealingConstructor_ = function(ctr, superClass) {
     var instance = ctr.apply(this, arguments) || this;
     instance[goog.UID_PROPERTY_] = instance[goog.UID_PROPERTY_];
 
-    if (this.constructor === wrappedCtr && superclassSealable &&
-        Object.seal instanceof Function) {
-      Object.seal(instance);
-    }
     return instance;
   };
 
   return wrappedCtr;
 };
 
-
-/**
- * @param {Function} ctr The constructor to test.
- * @return {boolean} Whether the constructor has been tagged as unsealable
- *     using goog.tagUnsealableClass.
- * @private
- */
-goog.defineClass.isUnsealable_ = function(ctr) {
-  return ctr && ctr.prototype &&
-      ctr.prototype[goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_];
-};
 
 
 // TODO(johnlenz): share these values with the goog.object
@@ -2334,17 +2317,9 @@ goog.defineClass.applyProperties_ = function(target, source) {
  * @param {!Function} ctr The legacy constructor to tag as unsealable.
  */
 goog.tagUnsealableClass = function(ctr) {
-  if (!COMPILED && goog.defineClass.SEAL_CLASS_INSTANCES) {
-    ctr.prototype[goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_] = true;
-  }
+
 };
 
-
-/**
- * Name for unsealable tag property.
- * @const @private {string}
- */
-goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = 'goog_defineClass_legacy_unsealable';
 
 
 // There's a bug in the compiler where without collapse properties the

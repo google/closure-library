@@ -1104,15 +1104,11 @@ testSuite({
     });
   },
 
-  testDefineClass_seals() {
-    if (!(Object.seal instanceof Function)) return;  // IE<9 doesn't have seal
+  testDefineClass_doesnt_seals() {
     const A = goog.defineClass(null, {constructor: function() {}});
     const a = new A();
-    try {
-      a.foo = 'bar';
-    } catch (expectedInStrictModeOnly) { /* ignored */
-    }
-    assertEquals(undefined, a.foo);
+    a.foo = 'bar';
+    assertEquals('bar', a.foo);
   },
 
   testDefineClass_unsealable() {
