@@ -7,8 +7,13 @@
 
 /**
  * Styles for the Editor's Edit Link dialog.
- * @provide {goog.css.editor.linkdialog}
+ *
  */
+
+@provide 'goog.css.editor.linkdialog';
+
+@require 'goog.css.editor.dialog';
+@require 'goog.css.linkbutton';
 
 
 .tr-link-dialog-explanation-text {

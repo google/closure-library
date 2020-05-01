@@ -389,6 +389,15 @@ goog.labs.net.webChannel.WebChannelBase = function(
    */
   this.fastHandshake_ = (opt_options && opt_options.fastHandshake) || false;
 
+  /**
+   * Whether to signal to the server to enable blocking handshake.
+   *
+   * @private {boolean}
+   */
+  this.blockingHandshake_ =
+      (opt_options && opt_options.blockingHandshake) || false;
+
+
   if (opt_options && opt_options.disableRedact) {
     this.channelDebug_.disableRedact();
   }
@@ -1237,6 +1246,10 @@ WebChannelBase.prototype.open_ = function() {
   }
 
   this.forwardChannelRequestPool_.addRequest(request);
+
+  if (this.blockingHandshake_) {
+    uri.setParameterValue('TYPE', 'init');  // default to blocking in future
+  }
 
   // Check the option and use GET to enable QUIC 0-RTT
   if (this.fastHandshake_) {

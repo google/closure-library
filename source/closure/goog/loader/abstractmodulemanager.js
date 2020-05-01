@@ -160,6 +160,32 @@ goog.loader.AbstractModuleManager.prototype.setAllModuleInfoString = function(
  */
 goog.loader.AbstractModuleManager.prototype.getModuleInfo = function(id) {};
 
+/**
+ * Register an extra runtime module dependency. After an extra edge is added,
+ * any subsequent calls to load or loadMultiple will fetch toModule if the
+ * fromModule was loaded.
+ *
+ * The mechanism for this is implementation dependent. If the implementation
+ * does not support extra edges, it will throw an error.
+ * @param {string} fromModule The dependent module of the extra edge.
+ * @param {string} toModule The module dependency of the extra edge.
+ */
+goog.loader.AbstractModuleManager.prototype.addExtraEdge = function(
+    fromModule, toModule) {
+  throw new Error('addExtraEdge is not implemented.');
+};
+
+/**
+ * Remove an existing extra edge previously added by `addExtraEdge`.
+ *
+ * If the implementation does not support extra edges, it will throw an error.
+ * @param {string} fromModule The dependent module of the extra edge.
+ * @param {string} toModule The module dependency of the extra edge.
+ */
+goog.loader.AbstractModuleManager.prototype.removeExtraEdge = function(
+    fromModule, toModule) {
+  throw new Error('removeExtraEdge is not implemented.');
+};
 
 /**
  * Sets the module uris.
@@ -172,9 +198,7 @@ goog.loader.AbstractModuleManager.prototype.setModuleTrustedUris = function(
 
 /**
  * Gets the application-specific module loader.
- * @return {?goog.module.AbstractModuleLoader} An object that has a
- *     loadModules(ids, moduleInfoMap, opt_successFn, opt_errFn,
- *         opt_timeoutFn, opt_forceReload) method.
+ * @return {?goog.module.AbstractModuleLoader} the loader.
  */
 goog.loader.AbstractModuleManager.prototype.getLoader = function() {
   return this.loader_;
@@ -183,9 +207,7 @@ goog.loader.AbstractModuleManager.prototype.getLoader = function() {
 
 /**
  * Sets the application-specific module loader.
- * @param {!goog.module.AbstractModuleLoader} loader An object that has a
- *     loadModules(ids, moduleInfoMap, opt_successFn, opt_errFn,
- *         opt_timeoutFn, opt_forceReload) method.
+ * @param {!goog.module.AbstractModuleLoader} loader
  */
 goog.loader.AbstractModuleManager.prototype.setLoader = function(loader) {
   this.loader_ = loader;

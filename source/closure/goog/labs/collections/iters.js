@@ -13,7 +13,7 @@
  * @see https://goo.gl/Rok5YQ
  */
 
-goog.module('goog.labs.collections.iterables');
+goog.module('goog.labs.collections.iters');
 
 
 /**
@@ -113,7 +113,7 @@ class ConcatIterator {
       }
       this.iterIndex_++;
     }
-    return /** @type {!IteratorResult<T>} */ ({done: true});
+    return /** @type {!IIterableResult<T>} */ ({done: true});
   }
 }
 

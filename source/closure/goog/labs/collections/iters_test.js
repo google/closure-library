@@ -11,7 +11,7 @@
 goog.module('goog.labs.iterableTest');
 goog.setTestOnly('goog.labs.iterableTest');
 
-const iterables = goog.require('goog.labs.collections.iterables');
+const iters = goog.require('goog.labs.collections.iters');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
 
@@ -98,7 +98,7 @@ testSuite({
     const range = createRangeIterable(0, 3);
 
     const callback = recordFunction();
-    iterables.forEach(range, callback);
+    iters.forEach(range, callback);
 
     callback.assertCallCount(3);
 
@@ -121,8 +121,8 @@ testSuite({
       return i + 2;
     }
 
-    const newIterable = iterables.map(range, addTwo);
-    const newIterator = iterables.getIterator(newIterable);
+    const newIterable = iters.map(range, addTwo);
+    const newIterator = iters.getIterator(newIterable);
 
     let nextObj = newIterator.next();
     assertEquals(2, nextObj.value);
@@ -150,8 +150,8 @@ testSuite({
     }
 
     const range = createRangeIterable(0, 6);
-    const newIterable = iterables.filter(range, isEven);
-    const newIterator = iterables.getIterator(newIterable);
+    const newIterable = iters.filter(range, isEven);
+    const newIterator = iters.getIterator(newIterable);
 
     let nextObj = newIterator.next();
     assertEquals(0, nextObj.value);
@@ -176,7 +176,7 @@ testSuite({
   testConcat_2Iterators() {
     const iter1 = createRangeIterable(0, 3);
     const iter2 = createRangeIterable(3, 6);
-    const concatIter = iterables.concat(iter1, iter2);
+    const concatIter = iters.concat(iter1, iter2);
 
     assertObjectEquals({value: 0, done: false}, concatIter.next());
     assertObjectEquals({value: 1, done: false}, concatIter.next());
@@ -193,7 +193,7 @@ testSuite({
     const iter1 = createRangeIterable(0, 3);
     const iter2 = createRangeIterable(3, 6);
     const iter3 = createRangeIterable(6, 9);
-    const concatIter = iterables.concat(iter1, iter2, iter3);
+    const concatIter = iters.concat(iter1, iter2, iter3);
 
     assertObjectEquals({value: 0, done: false}, concatIter.next());
     assertObjectEquals({value: 1, done: false}, concatIter.next());
@@ -215,7 +215,7 @@ testSuite({
     // testing that 3 is only present once, and that 6 is not present at all.
     const iter1 = rangeGeneratorWithReturn(0, 3);
     const iter2 = rangeGeneratorWithReturn(3, 6);
-    const concatIter = iterables.concat(iter1, iter2);
+    const concatIter = iters.concat(iter1, iter2);
 
     assertObjectEquals({value: 0, done: false}, concatIter.next());
     assertObjectEquals({value: 1, done: false}, concatIter.next());
@@ -234,7 +234,7 @@ testSuite({
   testConcat_arraySpread() {
     const concat1 = rangeGeneratorWithReturn(0, 3);
     const concat2 = rangeGeneratorWithReturn(3, 6);
-    const concatIter = iterables.concat(concat1, concat2);
+    const concatIter = iters.concat(concat1, concat2);
 
     const array1 = rangeGeneratorWithReturn(0, 3);
     const array2 = rangeGeneratorWithReturn(3, 6);

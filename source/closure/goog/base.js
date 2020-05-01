@@ -1744,8 +1744,8 @@ goog.now = (goog.TRUSTED_SITE && Date.now) || (function() {
 
 /**
  * Evals JavaScript in the global scope.  In IE this uses execScript, other
- * browsers use goog.global.eval. If goog.global.eval does not evaluate in the
- * global scope (for example, in Safari), appends a script tag instead.
+ * browsers use goog.global.eval. If goog.global.eval does not evaluate,
+ * appends a script tag instead.
  * Throws an exception if neither execScript or eval is defined.
  * @param {string} script JavaScript string.
  */
@@ -1754,24 +1754,16 @@ goog.globalEval = function(script) {
     goog.global.execScript(script, 'JavaScript');
   } else if (goog.global.eval) {
     // Test to see if eval works
-    if (goog.evalWorksForGlobals_ == null) {
+    if (goog.evalWorks_ == null) {
       try {
-        goog.global.eval('var _evalTest_ = 1;');
+        goog.global.eval('');
+        goog.evalWorks_ = true;
       } catch (ignore) {
-      }
-      if (typeof goog.global['_evalTest_'] != 'undefined') {
-        try {
-          delete goog.global['_evalTest_'];
-        } catch (ignore) {
-          // Microsoft edge fails the deletion above in strict mode.
-        }
-        goog.evalWorksForGlobals_ = true;
-      } else {
-        goog.evalWorksForGlobals_ = false;
+        goog.evalWorks_ = false;
       }
     }
 
-    if (goog.evalWorksForGlobals_) {
+    if (goog.evalWorks_) {
       goog.global.eval(script);
     } else {
       /** @type {!Document} */
@@ -1799,7 +1791,7 @@ goog.globalEval = function(script) {
  * @type {?boolean}
  * @private
  */
-goog.evalWorksForGlobals_ = null;
+goog.evalWorks_ = null;
 
 
 /**
@@ -3944,6 +3936,14 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   };
 
 
+  /**
+   * Trusted Types policy for the debug loader.
+   * @private @const {?TrustedTypePolicy}
+   */
+  goog.TRUSTED_TYPES_POLICY_ = goog.TRUSTED_TYPES_POLICY_NAME ?
+      goog.createTrustedTypesPolicy(goog.TRUSTED_TYPES_POLICY_NAME + '#base') :
+      null;
+
   if (!goog.global.CLOSURE_NO_DEPS) {
     goog.debugLoader_.loadClosureDeps();
   }
@@ -4020,8 +4020,3 @@ goog.createTrustedTypesPolicy = function(name) {
   return policy;
 };
 
-
-/** @private @const {?TrustedTypePolicy} */
-goog.TRUSTED_TYPES_POLICY_ = goog.TRUSTED_TYPES_POLICY_NAME ?
-    goog.createTrustedTypesPolicy(goog.TRUSTED_TYPES_POLICY_NAME + '#base') :
-    null;

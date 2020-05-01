@@ -12,6 +12,7 @@ goog.setTestOnly();
 const DomHelper = goog.require('goog.dom.DomHelper');
 const MockControl = goog.require('goog.testing.MockControl');
 const PixelDensityMonitor = goog.require('goog.labs.style.PixelDensityMonitor');
+const dispose = goog.require('goog.dispose');
 const events = goog.require('goog.events');
 const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -76,8 +77,8 @@ testSuite({
 
   tearDown() {
     mockControl.$verifyAll();
-    goog.dispose(monitor);
-    goog.dispose(recordFunction);
+    dispose(monitor);
+    dispose(recordFunction);
   },
 
   testNormalDensity() {
@@ -122,7 +123,7 @@ testSuite({
     assertEquals(1, mediaQueryLists.length);
     assertEquals(1, mediaQueryLists[0].getListenerCount());
 
-    goog.dispose(monitor);
+    dispose(monitor);
 
     assertEquals(1, mediaQueryLists.length);
     assertEquals(0, mediaQueryLists[0].getListenerCount());

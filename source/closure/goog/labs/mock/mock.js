@@ -892,6 +892,13 @@ goog.labs.mock.MockFunctionManager_ = function(func) {
   this.mockedItem.$callVerifier =
       this.useMockedFunctionName_(this.verifyInvocation);
 
+  /**
+   * The call waiter is used to wait for function calls.
+   * Sets the first argument of waitForCall to the function name.
+   * @type {!Function}
+   */
+  this.mockedItem.$callWaiter = this.useMockedFunctionName_(this.waitForCall);
+
   // These have to be repeated because if they're set in the base class they
   // will be stubbed by MockObjectManager.
   this.mockedItem.$verificationModeSetter =

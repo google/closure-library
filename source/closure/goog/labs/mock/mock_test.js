@@ -596,6 +596,17 @@ testSuite({
     await mock.waitAndVerify(mockParent).method1();
   },
 
+  async testMockFunctionWait() {
+    const func = function() {};
+    const mockFunc = mock.mockFunction(func);
+
+    setTimeout(() => {
+      mockFunc();
+    }, 0);
+
+    await mock.waitAndVerify(mockFunc)();
+  },
+
   async testWaitOnMultipleMethodCalls() {
     const mockParent = mock.mock(ParentClass);
     const timeoutMode = mockTimeout.timeout(150);
@@ -610,6 +621,22 @@ testSuite({
 
     await mock.waitAndVerify(mockParent, verificationMode, timeoutMode)
         .method1();
+  },
+
+  async testMockFunctionWaitOnMultipleMethodCalls() {
+    const func = function() {};
+    const mockFunc = mock.mockFunction(func);
+    const timeoutMode = mockTimeout.timeout(150);
+    const verificationMode = mock.verification.times(2);
+
+    setTimeout(() => {
+      mockFunc();
+    }, 0);
+    setTimeout(() => {
+      mockFunc();
+    }, 0);
+
+    await mock.waitAndVerify(mockFunc, verificationMode, timeoutMode)();
   },
 
   async testWaitOnDifferentFunctions() {
@@ -642,6 +669,22 @@ testSuite({
     await mock.waitAndVerify(mockParent).method1(1);
   },
 
+  async testMockFunctionWaitWithDifferentArgs() {
+    const func = function() {};
+    const mockFunc = mock.mockFunction(func);
+
+    setTimeout(() => {
+      mockFunc(1);
+    }, 0);
+
+    setTimeout(() => {
+      mockFunc(2);
+    }, 0);
+
+    await mock.waitAndVerify(mockFunc)(2);
+    await mock.waitAndVerify(mockFunc)(1);
+  },
+
   async testWaitWithTimeoutMode() {
     const mockParent = mock.mock(ParentClass);
     const timeoutMode = mockTimeout.timeout(1);
@@ -661,6 +704,27 @@ testSuite({
             'Recorded: No recorded calls');
   },
 
+  async testMockFunctionWaitWithTimeoutMode() {
+    const func = function() {};
+    const funcId = mock.getUid(func);
+    const mockFunc = mock.mockFunction(func);
+    const timeoutMode = mockTimeout.timeout(1);
+
+    setTimeout(() => {
+      mockFunc();
+    }, 50);
+
+    const e = await assertRejects(mock.waitAndVerify(mockFunc, timeoutMode)());
+    assertTrue(e instanceof TimeoutError);
+    assertEquals(
+        e.message,
+        'Function call was either not invoked or never met criteria specified ' +
+            'by provided verification mode. \n' +
+            'Expected: #mockFor<#anonymous' + funcId +
+            '>() at least 1 times\n' +
+            'Recorded: No recorded calls');
+  },
+
   async testWaitWithVerificationMode() {
     const mockParent = mock.mock(ParentClass);
     const verificationMode = mock.verification.times(2);
@@ -677,6 +741,24 @@ testSuite({
             'Recorded: method1()');
   },
 
+  async testMockFunctionWaitWithVerificationMode() {
+    const func = function() {};
+    const funcId = mock.getUid(func);
+    const mockFunc = mock.mockFunction(func);
+    const verificationMode = mock.verification.times(2);
+
+    mockFunc();
+
+    const e =
+        await assertRejects(mock.waitAndVerify(mockFunc, verificationMode)());
+    assertEquals(
+        e.message,
+        'Function call was either not invoked or never met criteria specified ' +
+            'by provided verification mode. \n' +
+            'Expected: #mockFor<#anonymous' + funcId + '>() 2 times\n' +
+            'Recorded: #mockFor<#anonymous' + funcId + '>()');
+  },
+
   async testWaitOnSameMethodTwice() {
     const mockParent = mock.mock(ParentClass);
 
@@ -684,6 +766,16 @@ testSuite({
 
     await mock.waitAndVerify(mockParent).method1();
     await mock.waitAndVerify(mockParent).method1();
+  },
+
+  async testMockFunctionWaitOnSameMethodTwice() {
+    const func = function() {};
+    const mockFunc = mock.mockFunction(func);
+
+    mockFunc();
+
+    await mock.waitAndVerify(mockFunc)();
+    await mock.waitAndVerify(mockFunc)();
   },
 
   async testWaitWithTimeoutAndVerificationMode() {
@@ -711,6 +803,32 @@ testSuite({
             'Recorded: method1()');
   },
 
+  async testMockFunctionWaitWithTimeoutAndVerificationMode() {
+    const func = function() {};
+    const funcId = mock.getUid(func);
+    const mockFunc = mock.mockFunction(func);
+    const timeoutMode = mockTimeout.timeout(150);
+    const verificationMode = mock.verification.times(2);
+
+    setTimeout(() => {
+      mockFunc();
+    }, 50);
+
+    setTimeout(() => {
+      mockFunc();
+    }, 250);
+
+    const e = await assertRejects(
+        mock.waitAndVerify(mockFunc, timeoutMode, verificationMode)());
+    assertTrue(e instanceof TimeoutError);
+    assertEquals(
+        e.message,
+        'Function call was either not invoked or never met criteria specified ' +
+            'by provided verification mode. \n' +
+            'Expected: #mockFor<#anonymous' + funcId + '>() 2 times\n' +
+            'Recorded: #mockFor<#anonymous' + funcId + '>()');
+  },
+
   async testPassingVerificationModeBeforeTimeoutMode() {
     const mockParent = mock.mock(ParentClass);
     const timeoutMode = mockTimeout.timeout(150);
@@ -734,6 +852,32 @@ testSuite({
             'by provided verification mode. \n' +
             'Expected: method1() 2 times\n' +
             'Recorded: method1()');
+  },
+
+  async testMockFunctionPassingVerificationModeBeforeTimeoutMode() {
+    const func = function() {};
+    const funcId = mock.getUid(func);
+    const mockFunc = mock.mockFunction(func);
+    const timeoutMode = mockTimeout.timeout(150);
+    const verificationMode = mock.verification.times(2);
+
+    setTimeout(() => {
+      mockFunc();
+    }, 50);
+
+    setTimeout(() => {
+      mockFunc();
+    }, 250);
+
+    const e = await assertRejects(
+        mock.waitAndVerify(mockFunc, verificationMode, timeoutMode)());
+    assertTrue(e instanceof TimeoutError);
+    assertEquals(
+        e.message,
+        'Function call was either not invoked or never met criteria specified ' +
+            'by provided verification mode. \n' +
+            'Expected: #mockFor<#anonymous' + funcId + '>() 2 times\n' +
+            'Recorded: #mockFor<#anonymous' + funcId + '>()');
   },
 
 

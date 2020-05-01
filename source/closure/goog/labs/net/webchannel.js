@@ -150,6 +150,13 @@ goog.net.WebChannel.FailureRecovery = function() {};
  * (1-RTT) finishes. With sendRawJson=false, it's up to the application
  * to limit the amount of data that is sent as part of the handshake.
  *
+ * blockingHandshake: enable the blocking RPC semantics for the handshake:
+ * 1) the completion of handshake is blocked by the server-side application
+ * logic for handling the handshake (HTTP) request; 2) the client application
+ * will inspect the handshake (HTTP) response headers as generated
+ * by the server application (v.s. by only the webchannel runtime). This option
+ * defaults to false.
+ *
  * disableRedact: whether to disable logging redact. By default, redact is
  * enabled to remove any message payload or user-provided info
  * from closure logs.
@@ -190,6 +197,7 @@ goog.net.WebChannel.FailureRecovery = function() {};
  *   backgroundChannelTest: (boolean|undefined),
  *   forceLongPolling: (boolean|undefined),
  *   fastHandshake: (boolean|undefined),
+ *   blockingHandshake: (boolean|undefined),
  *   disableRedact: (boolean|undefined),
  *   clientProfile: (string|undefined),
  *   internalChannelParams: (!Object<string, boolean|number>|undefined),

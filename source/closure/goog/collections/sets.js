@@ -12,7 +12,7 @@
 
 goog.module('goog.collections.sets');
 
-const iterables = goog.require('goog.labs.collections.iterables');
+const iters = goog.require('goog.labs.collections.iters');
 
 // Note: Set operations are being proposed for EcmaScript. See proposal here:
 // https://github.com/tc39/proposal-set-methods
@@ -20,7 +20,7 @@ const iterables = goog.require('goog.labs.collections.iterables');
 // When these methods become available in JS engines, they should be used in
 // place of these utility methods and these methods will be deprecated.
 // Call sites can be automatically migrated. For example,
-// "iterables.filter(a, b)" becomes "a.filter(b)".
+// "iters.filter(a, b)" becomes "a.filter(b)".
 
 /**
  * Creates a new set containing the elements that appear in both given
@@ -32,7 +32,7 @@ const iterables = goog.require('goog.labs.collections.iterables');
  * @template T
  */
 exports.intersection = function(a, b) {
-  return new Set(iterables.filter(b, elem => a.has(elem)));
+  return new Set(iters.filter(b, elem => a.has(elem)));
 };
 
 /**
@@ -46,7 +46,7 @@ exports.intersection = function(a, b) {
  */
 exports.union = function(a, b) {
   const set = new Set(a);
-  iterables.forEach(b, elem => set.add(elem));
+  iters.forEach(b, elem => set.add(elem));
   return set;
 };
 
@@ -62,7 +62,7 @@ exports.union = function(a, b) {
  */
 exports.difference = function(a, b) {
   const set = new Set(a);
-  iterables.forEach(b, elem => set.delete(elem));
+  iters.forEach(b, elem => set.delete(elem));
   return set;
 };
 
