@@ -190,7 +190,6 @@ goog.net.WebChannel.FailureRecovery = function() {};
  *   clientProtocolHeaderRequired: (boolean|undefined),
  *   concurrentRequestLimit: (number|undefined),
  *   supportsCrossDomainXhr: (boolean|undefined),
- *   testUrl: (string|undefined),
  *   sendRawJson: (boolean|undefined),
  *   httpSessionIdParam: (string|undefined),
  *   httpHeadersOverwriteParam: (string|undefined),
