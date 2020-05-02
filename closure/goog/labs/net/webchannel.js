@@ -7,34 +7,25 @@
 /**
  * @fileoverview The API spec for the WebChannel messaging library.
  *
- * Similar to HTML5 WebSocket and Closure BrowserChannel, WebChannel
- * offers an abstraction for point-to-point socket-like communication between
- * a browser client and a remote origin.
+ * Similar to HTML5 WebSocket, WebChannel offers an abstraction for
+ * point-to-point socket-like communication between a browser client and
+ * a remote origin.
  *
  * WebChannels are created via <code>WebChannel</code>. Multiple WebChannels
  * may be multiplexed over the same WebChannelTransport, which represents
  * the underlying physical connectivity over standard wire protocols
- * such as HTTP and SPDY.
+ * such as HTTP.
  *
- * A WebChannels in turn represents a logical communication channel between
- * the client and server end point. A WebChannel remains open for
- * as long as the client or server end-point allows.
+ * A WebChannel in turn represents a logical communication channel between
+ * the client and server end point. A WebChannel remains open for as long
+ * as the client or server end-point allows.
  *
- * Messages may be delivered in-order or out-of-order, reliably or unreliably
- * over the same WebChannel. Message delivery guarantees of a WebChannel is
- * to be specified by the application code; and the choice of the
- * underlying wire protocols is completely transparent to the API users.
- *
- * Client-to-client messaging via WebRTC based transport may also be support
- * via the same WebChannel API in future.
+ * Messages are delivered in-order and reliably over the same WebChannel,
+ * and the choice of the underlying wire protocols is completely transparent
+ * to the API users.
  *
  * Note that we have no immediate plan to move this API out of labs. While
- * the implementation is production ready, the API is subject to change
- * (addition only):
- * 1. Adopt new Web APIs (mainly whatwg streams) and goog.net.streams.
- * 2. New programming models for cloud (on the server-side) may require
- *    new APIs to be defined.
- * 3. WebRTC DataChannel alignment
+ * the implementation is production ready, the API is subject to change.
  */
 
 goog.provide('goog.net.WebChannel');
