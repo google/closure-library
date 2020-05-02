@@ -500,7 +500,7 @@ goog.ui.Textarea.prototype.setHeightToEstimate_ = function() {
 
 
 /**
- * Gets the the height of (possibly present) horizontal scrollbar.
+ * Gets the height of (possibly present) horizontal scrollbar.
  * @return {number} The height of the horizontal scrollbar.
  * @private
  */

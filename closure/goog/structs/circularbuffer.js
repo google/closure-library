@@ -31,7 +31,7 @@ goog.structs.CircularBuffer = function(opt_maxSize) {
   this.nextPtr_ = 0;
 
   /**
-   * Maximum size of the the circular array structure.
+   * Maximum size of the circular array structure.
    * @private {number}
    */
   this.maxSize_ = opt_maxSize || 100;

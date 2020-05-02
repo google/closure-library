@@ -49,7 +49,7 @@ goog.require('goog.ui.PopupBase');
 
 /**
  * Tooltip widget. Can be attached to one or more elements and is shown, with a
- * slight delay, when the the cursor is over the element or the element gains
+ * slight delay, when the cursor is over the element or the element gains
  * focus.
  *
  * @param {Element|string=} opt_el Element to display tooltip for, either
@@ -479,7 +479,7 @@ goog.ui.Tooltip.prototype.setRequireInteraction = function(requireInteraction) {
  * @return {boolean} Whether the coord is in the tooltip.
  */
 goog.ui.Tooltip.prototype.isCoordinateInTooltip = function(coord) {
-  // Check if coord is inside the the tooltip
+  // Check if coord is inside the tooltip
   if (!this.isVisible()) {
     return false;
   }

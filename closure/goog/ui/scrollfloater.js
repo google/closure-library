@@ -275,7 +275,7 @@ goog.ui.ScrollFloater.prototype.enterDocument = function() {
 
 /**
  * Forces the component to update the cached element positions and sizes and
- * to re-evaluate whether the the component should be docked, floated or
+ * to re-evaluate whether the component should be docked, floated or
  * pinned.
  */
 goog.ui.ScrollFloater.prototype.update = function() {
@@ -535,7 +535,7 @@ goog.ui.ScrollFloater.prototype.float_ = function(floatMode) {
 
 /**
  * Stops floating behavior, returning element to its original state.
- * @return {boolean} True if the the element has been docked.  False if the
+ * @return {boolean} True if the element has been docked.  False if the
  *     element is already docked or the event was cancelled.
  * @private
  */

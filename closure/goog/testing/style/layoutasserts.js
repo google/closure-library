@@ -308,7 +308,7 @@ var assertContained = function(a, b, opt_c) {
  * @param {number} val1 The first value.
  * @param {number} val2 The second value.
  * @param {number} threshold The threshold value.
- * @return {boolean} Whether or not the the values are within the threshold.
+ * @return {boolean} Whether or not the values are within the threshold.
  * @private
  */
 goog.testing.style.layoutasserts.isWithinThreshold_ = function(

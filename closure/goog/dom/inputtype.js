@@ -7,7 +7,7 @@
 /**
  * @fileoverview Defines the goog.dom.InputType enum.  This enumerates
  * all input element types (for INPUT, BUTTON, SELECT and TEXTAREA
- * elements) in either the the W3C HTML 4.01 index of elements or the
+ * elements) in either the W3C HTML 4.01 index of elements or the
  * HTML5 draft specification.
  *
  * References:
