@@ -623,6 +623,25 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionW3C_ =
   return goog.editor.range.getDeepEndPoint(range, true);
 };
 
+/**
+ * Checks Whether the selection range start from leftmost.
+ * @param {?Node} node the element or text node the range starts in.
+ * @param {?Node} baseNode the container element.
+ * @return {boolean} Whether the selection range start from leftmost.
+ * @private
+ */
+goog.editor.plugins.EnterHandler.isNodeLeftMostChild_ = function(
+    node, baseNode) {
+  let childNode = node;
+  while (childNode && childNode.nodeName != goog.dom.TagName.BODY &&
+         childNode != baseNode) {
+    if (childNode.previousSibling) {
+      return false;
+    }
+    childNode = childNode.parentNode;
+  }
+  return true;
+};
 
 /**
  * Deletes the contents of the selection from the DOM.
@@ -641,9 +660,15 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
     var isInOneContainer =
         goog.editor.plugins.EnterHandler.isInOneContainerW3c_(range);
 
+    // Whether the selection starts in a container.
+    var isPartialStart = !isInOneContainer && range.getStartOffset() != 0;
     // Whether the selection ends in a container it doesn't fully select.
     var isPartialEnd = !isInOneContainer &&
         goog.editor.plugins.EnterHandler.isPartialEndW3c_(range);
+
+    var isNodeLeftMostChild =
+        goog.editor.plugins.EnterHandler.isNodeLeftMostChild_(
+            range.getStartNode(), baseNode);
 
     // Remove The range contents, and ensure the correct content stays selected.
     range.removeContents();
@@ -651,10 +676,12 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
     if (node) {
       range = goog.dom.Range.createCaret(node, rangeOffset);
     } else {
-      // This occurs when the node that would have been referenced has now been
-      // deleted and there are no other nodes in the baseNode. Thus need to
-      // set the caret to the end of the base node.
-      range = goog.dom.Range.createCaret(baseNode, baseNode.childNodes.length);
+      // when the node that would have been referenced has now been deleted and
+      // there are no other nodes in the baseNode,  Thus need to set the caret
+      // to the end of the base node. If selection range start from leftmost,
+      // set the caret to the start of the base node.
+      var pos = isNodeLeftMostChild ? 0 : baseNode.childNodes.length;
+      range = goog.dom.Range.createCaret(baseNode, pos);
       reselect = false;
     }
     range.select();
@@ -675,7 +702,7 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
       }
     }
 
-    if (isPartialEnd) {
+    if (isPartialStart && isPartialEnd) {
       /*
        This code handles the following, where | is the cursor:
          <div>a|b</div><div>c|d</div>
@@ -749,6 +776,21 @@ goog.editor.plugins.EnterHandler.isInOneContainerW3c_ = function(range) {
 goog.editor.plugins.EnterHandler.isPartialEndW3c_ = function(range) {
   var endContainer = range.getEndNode();
   var endOffset = range.getEndOffset();
+  // Since the range object is different for each browser,
+  // Normalize range using previousSibling or parentNode of
+  // endContainer, when endOffset is 0.
+  while (endOffset === 0 && endContainer) {
+    if (endContainer.previousSibling) {
+      endContainer = endContainer.previousSibling;
+      endOffset = goog.editor.node.getLength(endContainer);
+    } else if (endContainer.parentNode) {
+      endContainer = endContainer.parentNode;
+      endOffset = 0;
+    } else {
+      break;
+    }
+  }
+
   var node = endContainer;
   if (goog.editor.style.isContainer(node)) {
     var child = node.childNodes[endOffset];
