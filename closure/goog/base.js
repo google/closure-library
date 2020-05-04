@@ -3972,12 +3972,11 @@ goog.identity_ = function(s) {
  */
 goog.createTrustedTypesPolicy = function(name) {
   var policy = null;
-  // TODO(koto): Remove window.TrustedTypes variant when the newer API ships.
-  var policyFactory = goog.global.trustedTypes || goog.global.TrustedTypes;
+  var policyFactory = goog.global.trustedTypes;
   if (!policyFactory || !policyFactory.createPolicy) {
     return policy;
   }
-  // TrustedTypes.createPolicy throws if called with a name that is already
+  // trustedTypes.createPolicy throws if called with a name that is already
   // registered, even in report-only mode. Until the API changes, catch the
   // error not to break the applications functionally. In such case, the code
   // will fall back to using regular Safe Types.
@@ -3986,8 +3985,7 @@ goog.createTrustedTypesPolicy = function(name) {
     policy = policyFactory.createPolicy(name, {
       createHTML: goog.identity_,
       createScript: goog.identity_,
-      createScriptURL: goog.identity_,
-      createURL: goog.identity_
+      createScriptURL: goog.identity_
     });
   } catch (e) {
     goog.logToConsole_(e.message);
