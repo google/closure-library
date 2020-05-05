@@ -7,7 +7,7 @@
 
 @provide 'goog.css.css3button';
 
-@require 'goog.css.common';
+@require './common';
 
 /* Imageless button styles. */
 .goog-css3-button {

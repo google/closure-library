@@ -11,8 +11,8 @@
 
 @provide 'goog.css.button';
 
-@require 'goog.css.custombutton';
-@require 'goog.css.flatbutton';
+@require './custombutton';
+@require './flatbutton';
 
 .goog-button {
   color: #036;

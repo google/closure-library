@@ -10,11 +10,9 @@
  */
 
 
-@provide 'goog.css.combobox';
-
-@require 'goog.css.menu';
-@require 'goog.css.menuitem';
-@require 'goog.css.menuseparator';
+@require './menu';
+@require './menuitem';
+@require './menuseparator';
 
 .goog-combobox {
   background: #ddd url(//ssl.gstatic.com/closure/button-bg.gif) repeat-x scroll left top;

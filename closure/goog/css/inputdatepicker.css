@@ -9,6 +9,6 @@
 
 @provide 'goog.css.inputdatepicker';
 
-@require 'goog.css.popupdatepicker';
+@require './popupdatepicker';
 
 @import url(popupdatepicker.css);

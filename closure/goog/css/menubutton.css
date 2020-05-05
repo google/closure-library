@@ -11,7 +11,7 @@
 
 @provide 'goog.css.menubutton';
 
-@require 'goog.css.common';
+@require './common';
 
 /* State: resting. */
 .goog-menu-button {

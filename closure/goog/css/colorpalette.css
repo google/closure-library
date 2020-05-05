@@ -11,7 +11,7 @@
 
 @provide 'goog.css.colorpalette';
 
-@require 'goog.css.palette';
+@require './palette';
 
 .goog-palette-cell .goog-palette-colorswatch {
   border: none;
