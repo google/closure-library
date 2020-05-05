@@ -750,4 +750,62 @@ testSuite({
       assertEquals(2, newRange.getStartOffset());
     }
   },
+
+  testDeleteW3CRemoveEntireLineWithShiftDown() {
+    if (!BrowserFeature.HAS_W3C_RANGES) {
+      return;
+    }
+    container.innerHTML = '<div>a</div><div>b</div><div>cc</div><div>d</div>';
+    // anchor: |, focus: ||
+    // <div>a</div><div>|b</div><div>||cc</div><div>d</div>
+    const range = Range.createFromNodes(
+        container.children[1].firstChild, 0, container.children[2], 0);
+    range.select();
+    EnterHandler.deleteW3cRange_(range);
+
+    // Browsers will add a newline between the a and cc lines, but this doesn't
+    // happen in unit tests as we can't trigger the browser's behavior when
+    // editing content-editable divs.
+    testingDom.assertHtmlContentsMatch(
+        '<div>a</div><div>cc</div><div>d</div>', container);
+  },
+
+  testDeleteW3CRemoveEntireFirstLineWithShiftDown() {
+    if (!BrowserFeature.HAS_W3C_RANGES) {
+      return;
+    }
+    container.innerHTML = '<div>a</div><div>b</div><div>cc</div><div>d</div>';
+    // anchor: |, focus: ||
+    // <div>|a</div><div>||b</div><div>cc</div><div>d</div>
+    const range = Range.createFromNodes(
+        container.children[0].firstChild, 0, container.children[1], 0);
+    range.select();
+    EnterHandler.deleteW3cRange_(range);
+
+    // Browsers will add a newline between the a and cc lines, but this doesn't
+    // happen in unit tests as we can't trigger the browser's behavior when
+    // editing content-editable divs.
+    testingDom.assertHtmlContentsMatch(
+        '<div>b</div><div>cc</div><div>d</div>', container);
+  },
+
+  testDeleteW3CRemoveEntireLineWithPartialSecondLine() {
+    if (BrowserFeature.HAS_W3C_RANGES) {
+      return;
+    }
+    container.innerHTML = '<div>a</div><div>b</div><div>cc</div><div>d</div>';
+    // anchor: |, focus: ||
+    // <div>a</div><div>|b</div><div>c||c</div><div>d</div>
+    const range = Range.createFromNodes(
+        container.children[1].firstChild, 0, container.children[2].firstChild,
+        1);
+    range.select();
+    EnterHandler.deleteW3cRange_(range);
+
+    // Browsers will add a newline between the a and cc lines, but this doesn't
+    // happen in unit tests as we can't trigger the browser's behavior when
+    // editing content-editable divs.
+    testingDom.assertHtmlContentsMatch(
+        '<div>a</div><div>c</div><div>d</div>', container);
+  },
 });

@@ -2245,9 +2245,7 @@ goog.defineClass.createSealingConstructor_ = function(ctr, superClass) {
     return ctr;
   }
 
-  // Compute whether the constructor is sealable at definition time, rather
-  // than when the instance is being constructed.
-  var superclassSealable = !goog.defineClass.isUnsealable_(superClass);
+  // NOTE: The sealing behavior has been removed
 
   /**
    * @this {Object}
@@ -2259,27 +2257,12 @@ goog.defineClass.createSealingConstructor_ = function(ctr, superClass) {
     var instance = ctr.apply(this, arguments) || this;
     instance[goog.UID_PROPERTY_] = instance[goog.UID_PROPERTY_];
 
-    if (this.constructor === wrappedCtr && superclassSealable &&
-        Object.seal instanceof Function) {
-      Object.seal(instance);
-    }
     return instance;
   };
 
   return wrappedCtr;
 };
 
-
-/**
- * @param {Function} ctr The constructor to test.
- * @return {boolean} Whether the constructor has been tagged as unsealable
- *     using goog.tagUnsealableClass.
- * @private
- */
-goog.defineClass.isUnsealable_ = function(ctr) {
-  return ctr && ctr.prototype &&
-      ctr.prototype[goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_];
-};
 
 
 // TODO(johnlenz): share these values with the goog.object
@@ -2334,17 +2317,9 @@ goog.defineClass.applyProperties_ = function(target, source) {
  * @param {!Function} ctr The legacy constructor to tag as unsealable.
  */
 goog.tagUnsealableClass = function(ctr) {
-  if (!COMPILED && goog.defineClass.SEAL_CLASS_INSTANCES) {
-    ctr.prototype[goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_] = true;
-  }
+
 };
 
-
-/**
- * Name for unsealable tag property.
- * @const @private {string}
- */
-goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = 'goog_defineClass_legacy_unsealable';
 
 
 // There's a bug in the compiler where without collapse properties the
@@ -3997,12 +3972,11 @@ goog.identity_ = function(s) {
  */
 goog.createTrustedTypesPolicy = function(name) {
   var policy = null;
-  // TODO(koto): Remove window.TrustedTypes variant when the newer API ships.
-  var policyFactory = goog.global.trustedTypes || goog.global.TrustedTypes;
+  var policyFactory = goog.global.trustedTypes;
   if (!policyFactory || !policyFactory.createPolicy) {
     return policy;
   }
-  // TrustedTypes.createPolicy throws if called with a name that is already
+  // trustedTypes.createPolicy throws if called with a name that is already
   // registered, even in report-only mode. Until the API changes, catch the
   // error not to break the applications functionally. In such case, the code
   // will fall back to using regular Safe Types.
@@ -4011,8 +3985,7 @@ goog.createTrustedTypesPolicy = function(name) {
     policy = policyFactory.createPolicy(name, {
       createHTML: goog.identity_,
       createScript: goog.identity_,
-      createScriptURL: goog.identity_,
-      createURL: goog.identity_
+      createScriptURL: goog.identity_
     });
   } catch (e) {
     goog.logToConsole_(e.message);
