@@ -936,11 +936,9 @@ goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse = function(
  */
 goog.html.SafeHtml.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(
     html, dir) {
+  const policy = goog.html.trustedtypes.getPolicyPrivateDoNotAccessOrElse();
   this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ =
-      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
-      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createHTML(
-          html) :
-      html;
+      policy ? policy.createHTML(html) : html;
   this.dir_ = dir;
   return this;
 };

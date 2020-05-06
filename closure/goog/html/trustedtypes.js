@@ -11,9 +11,19 @@
  */
 
 goog.provide('goog.html.trustedtypes');
+goog.require('goog.memoize');
 
-/** @package @const {?TrustedTypePolicy} */
-goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY =
-    goog.TRUSTED_TYPES_POLICY_NAME ?
-    goog.createTrustedTypesPolicy(goog.TRUSTED_TYPES_POLICY_NAME + '#html') :
-    null;
+
+/**
+ * Creates a (singleton) Trusted Type Policy for Safe HTML Types.
+ * @return {?TrustedTypePolicy}
+ * @package
+ */
+goog.html.trustedtypes.getPolicyPrivateDoNotAccessOrElse = function() {
+  if (!goog.TRUSTED_TYPES_POLICY_NAME) {
+    // Binary not configured for Trusted Types.
+    return null;
+  }
+  return goog.memoize(goog.createTrustedTypesPolicy)(
+      goog.TRUSTED_TYPES_POLICY_NAME + '#html');
+};

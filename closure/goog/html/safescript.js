@@ -282,11 +282,9 @@ goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse =
  */
 goog.html.SafeScript.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(
     script) {
+  const policy = goog.html.trustedtypes.getPolicyPrivateDoNotAccessOrElse();
   this.privateDoNotAccessOrElseSafeScriptWrappedValue_ =
-      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
-      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY.createScript(
-          script) :
-      script;
+      policy ? policy.createScript(script) : script;
   return this;
 };
 
