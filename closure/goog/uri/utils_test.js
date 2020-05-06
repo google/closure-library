@@ -818,4 +818,17 @@ testSuite({
         'https://www.google.com:8113/?q=t&q1=y',
         utils.setPath('https://www.google.com:8113/foobar?q=t&q1=y', ''));
   },
+
+  testSplitCallsLoggingFunction() {
+    const uri1 = 'http://www.google.com';
+    let logged = false;
+    utils.setUrlPackageSupportLoggingHandler((loggedUri) => {
+      logged = true;
+      assertEquals(uri1, loggedUri);
+    });
+    // Enabling this logging doesn't change any of the return values.
+    assertEquals('http', utils.getScheme(uri1));
+    assertTrue(logged);
+    utils.setUrlPackageSupportLoggingHandler(null);
+  },
 });
