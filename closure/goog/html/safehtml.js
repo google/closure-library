@@ -924,6 +924,22 @@ goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse = function(
       html, dir);
 };
 
+/**
+ * Package-internal utility method to create SafeHtml instances, skipping
+ * Trusted Type policy. This method exists only so that the compiler can
+ * dead code eliminate static fields (like EMPTY) when they're not accessed.
+ * @param {!TrustedHTML|string} trustedHtml
+ * @return {!goog.html.SafeHtml} The initialized SafeHtml object.
+ * @package
+ */
+goog.html.SafeHtml
+    .createSafeHtmlFromTrustedHtmlSecurityPrivateDoNotAccessOrElse = function(
+    trustedHtml) {
+  return new goog.html.SafeHtml()
+      .initSecurityFromTrustedHtmlPrivateDoNotAccessOrElse_(
+          trustedHtml, goog.i18n.bidi.Dir.NEUTRAL);
+};
+
 
 /**
  * Called from createSafeHtmlSecurityPrivateDoNotAccessOrElse(). This
@@ -939,6 +955,24 @@ goog.html.SafeHtml.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(
   const policy = goog.html.trustedtypes.getPolicyPrivateDoNotAccessOrElse();
   this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ =
       policy ? policy.createHTML(html) : html;
+  this.dir_ = dir;
+  return this;
+};
+
+
+/**
+ * Called from createSafeHtmlFromTrustedHtmlSecurityPrivateDoNotAccessOrElse().
+ * This method exists only so that the compiler can dead code eliminate static
+ * fields (like EMPTY) when they're not accessed.
+ * @param {!TrustedHTML|string} trustedHtml
+ * @param {?goog.i18n.bidi.Dir} dir
+ * @return {!goog.html.SafeHtml}
+ * @private
+ */
+goog.html.SafeHtml.prototype
+    .initSecurityFromTrustedHtmlPrivateDoNotAccessOrElse_ = function(
+    trustedHtml, dir) {
+  this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = trustedHtml;
   this.dir_ = dir;
   return this;
 };
@@ -1075,24 +1109,42 @@ goog.html.SafeHtml.combineAttributes = function(
  * A SafeHtml instance corresponding to the HTML doctype: "<!DOCTYPE html>".
  * @const {!goog.html.SafeHtml}
  */
-goog.html.SafeHtml.DOCTYPE_HTML =
-    goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+goog.html.SafeHtml.DOCTYPE_HTML = /** @type {!goog.html.SafeHtml} */ ({
+  // NOTE: this compiles to nothing, but hides the possible side effect of
+  // SafeHtml creation (due to calling trustedTypes.createPolicy) from the
+  // compiler so that the entire call can be removed if the result is not used.
+  valueOf: function() {
+    return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
         '<!DOCTYPE html>', goog.i18n.bidi.Dir.NEUTRAL);
-
+  },
+}.valueOf());
 
 /**
  * A SafeHtml instance corresponding to the empty string.
  * @const {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.EMPTY =
-    goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
-        '', goog.i18n.bidi.Dir.NEUTRAL);
+    goog.html.SafeHtml
+        .createSafeHtmlFromTrustedHtmlSecurityPrivateDoNotAccessOrElse(
+            // NOTE: This constant uses a different builder function, that
+            // accepts TrustedHTML to avoid creating a Trusted Types policy.
+            // Using trustedTypes.emptyHTML if available, and an empty string if
+            // not. This typecast is safe - if trustedTypes are not available,
+            // policy creation would not happen anyway, and DOM sinks accept
+            // string values.
+            goog.global.trustedTypes ? goog.global.trustedTypes.emptyHTML : '');
 
 
 /**
  * A SafeHtml instance corresponding to the <br> tag.
  * @const {!goog.html.SafeHtml}
  */
-goog.html.SafeHtml.BR =
-    goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+goog.html.SafeHtml.BR = /** @type {!goog.html.SafeHtml} */ ({
+  // NOTE: this compiles to nothing, but hides the possible side effect of
+  // SafeHtml creation (due to calling trustedTypes.createPolicy) from the
+  // compiler so that the entire call can be removed if the result is not used.
+  valueOf: function() {
+    return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
         '<br>', goog.i18n.bidi.Dir.NEUTRAL);
+  },
+}.valueOf());

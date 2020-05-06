@@ -293,5 +293,12 @@ goog.html.SafeScript.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(
  * A SafeScript instance corresponding to the empty string.
  * @const {!goog.html.SafeScript}
  */
-goog.html.SafeScript.EMPTY =
-    goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse('');
+goog.html.SafeScript.EMPTY = /** @type {!goog.html.SafeScript} */ ({
+  // NOTE: this compiles to nothing, but hides the possible side effect of
+  // SafeScript creation (due to calling trustedTypes.createPolicy) from the
+  // compiler so that the entire call can be removed if the result is not used.
+  valueOf: function() {
+    return goog.html.SafeScript
+        .createSafeScriptSecurityPrivateDoNotAccessOrElse('');
+  },
+}.valueOf());
