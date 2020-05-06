@@ -12,6 +12,7 @@ goog.setTestOnly('goog.testing.MockRange');
 goog.provide('goog.testing.MockRange');
 
 goog.require('goog.dom.AbstractRange');
+goog.require('goog.dom.SavedCaretRange');
 goog.require('goog.testing.LooseMock');
 
 
@@ -57,3 +58,10 @@ goog.inherits(goog.testing.MockRange.ConcreteRange_, goog.dom.AbstractRange);
 goog.testing.MockRange.ConcreteRange_.prototype.__iterator__ =
     // This isn't really type-safe.
     /** @type {?} */ (undefined);
+
+/** @override */
+goog.testing.MockRange.ConcreteRange_.prototype.saveUsingCarets = function() {
+  return (this.getStartNode() && this.getEndNode()) ?
+      new goog.dom.SavedCaretRange(this) :
+      null;
+};

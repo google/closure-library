@@ -24,6 +24,7 @@ goog.require('goog.dom.TextRange');
  * constructor: use one of the goog.dom.Range.createFrom* methods instead.
  * @constructor
  * @extends {goog.dom.AbstractRange}
+ * @abstract
  */
 goog.dom.AbstractMultiRange = function() {};
 goog.inherits(goog.dom.AbstractMultiRange, goog.dom.AbstractRange);
