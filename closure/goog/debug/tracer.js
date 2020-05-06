@@ -262,6 +262,26 @@ goog.debug.Trace_.Event_.prototype.id;
  */
 goog.debug.Trace_.Event_.prototype.comment;
 
+/**
+ * @type {number|undefined}
+ */
+goog.debug.Trace_.Event_.prototype.eventTime;
+
+/**
+ * @type {number|undefined}
+ */
+goog.debug.Trace_.Event_.prototype.startTime;
+
+/**
+ * @type {number|undefined}
+ */
+goog.debug.Trace_.Event_.prototype.stopTime;
+
+/**
+ * @type {number|undefined}
+ */
+goog.debug.Trace_.Event_.prototype.totalVarAlloc;
+
 
 /**
  * Returns a formatted string for the event.
@@ -760,7 +780,7 @@ goog.debug.Trace_.prototype.toString = function() {
       indent.pop();
     }
     sb.push(' ', e.toTraceString(this.startTime_, etime, indent.join('')));
-    etime = e.eventTime;
+    etime = /** @type {number} */ (e.eventTime);
     sb.push('\n');
     if (e.eventType == goog.debug.Trace_.EventType.START) {
       indent.push('|  ');
