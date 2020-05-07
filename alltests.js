@@ -614,7 +614,6 @@ var _allTests = [
   'closure/goog/useragent/keyboard_test.html',
   'closure/goog/useragent/platform_test.html',
   'closure/goog/useragent/product_test.html',
-  'closure/goog/useragent/useragent_quirks_test.html',
   'closure/goog/useragent/useragent_test.html',
   'closure/goog/vec/float32array_test.html',
   'closure/goog/vec/float64array_test.html',
