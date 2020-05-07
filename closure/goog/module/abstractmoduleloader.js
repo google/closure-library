@@ -20,6 +20,12 @@ const {ModuleInfo} = goog.require('goog.module');
 class LoadOptions {
   constructor() {
     /**
+     * A map of extra runtime module dependencies.
+     * @type {!AbstractModuleLoader.ExtraEdgesMap|undefined}
+     */
+    this.extraEdges;
+
+    /**
      * Whether to bypass cache while loading the module.
      * @const {boolean|undefined}
      */
@@ -50,6 +56,14 @@ class LoadOptions {
  * @interface
  */
 class AbstractModuleLoader {
+  constructor() {
+    /**
+     * Whether or not the implementation supports extra edges.
+     * @type {boolean|undefined}
+     */
+    this.supportsExtraEdges;
+  }
+
   /**
    * Loads a list of JavaScript modules.
    *
@@ -69,5 +83,16 @@ class AbstractModuleLoader {
    */
   prefetchModule(id, moduleInfo) {};
 }
+
+/**
+ * A map of extra runtime module dependencies.
+ * Since the polyfills for the ES6 Map/Set classes would cause a performance
+ * regression, we are using plain Javascript objects to mimic their
+ * functionality. The outer object will map a moduleId to another object, the
+ * keys of which are the moduleIds of the modules it depends on: that is, if
+ * `map['a']['b']` is true then module 'a' depends on module 'b'.
+ * @typedef {!Object<!Object<boolean>>}
+ */
+AbstractModuleLoader.ExtraEdgesMap;
 
 exports = AbstractModuleLoader;
