@@ -1092,6 +1092,9 @@ testSuite({
 
     const str = fmt.format(123400000);
     assertEquals('123\u00A0M', str);
+
+    const negative_str = fmt.format(-123400000);
+    assertEquals('-123\u00A0M', negative_str);
   },
 
   testSimpleCompactGerman() {
