@@ -439,36 +439,13 @@ goog.style.getViewportPageOffset = function(doc) {
  * @private
  */
 goog.style.getBoundingClientRect_ = function(el) {
-  var rect;
   try {
-    rect = el.getBoundingClientRect();
+    return el.getBoundingClientRect();
   } catch (e) {
-    // In IE < 9, calling getBoundingClientRect on an orphan element raises an
+    // In IE, calling getBoundingClientRect on an orphan element raises an
     // "Unspecified Error". All other browsers return zeros.
     return {'left': 0, 'top': 0, 'right': 0, 'bottom': 0};
   }
-
-  // Patch the result in IE only, so that this function can be inlined if
-  // compiled for non-IE.
-  if (goog.userAgent.IE && el.ownerDocument.body) {
-    // In IE, most of the time, 2 extra pixels are added to the top and left
-    // due to the implicit 2-pixel inset border.  In IE6/7 quirks mode and
-    // IE6 standards mode, this border can be overridden by setting the
-    // document element's border to zero -- thus, we cannot rely on the
-    // offset always being 2 pixels.
-
-    // In quirks mode, the offset can be determined by querying the body's
-    // clientLeft/clientTop, but in standards mode, it is found by querying
-    // the document element's clientLeft/clientTop.  Since we already called
-    // getBoundingClientRect we have already forced a reflow, so it is not
-    // too expensive just to query them all.
-
-    // See: http://msdn.microsoft.com/en-us/library/ms536433(VS.85).aspx
-    var doc = el.ownerDocument;
-    rect.left -= doc.documentElement.clientLeft + doc.body.clientLeft;
-    rect.top -= doc.documentElement.clientTop + doc.body.clientTop;
-  }
-  return rect;
 };
 
 
