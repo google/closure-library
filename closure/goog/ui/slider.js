@@ -59,7 +59,6 @@ goog.ui.Slider = function(opt_domHelper, opt_labelFn) {
   this.rangeModel.setExtent(0);
 };
 goog.inherits(goog.ui.Slider, goog.ui.SliderBase);
-goog.tagUnsealableClass(goog.ui.Slider);
 
 
 /**

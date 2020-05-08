@@ -36,7 +36,6 @@ goog.ui.TabBarRenderer = function() {
 };
 goog.inherits(goog.ui.TabBarRenderer, goog.ui.ContainerRenderer);
 goog.addSingletonGetter(goog.ui.TabBarRenderer);
-goog.tagUnsealableClass(goog.ui.TabBarRenderer);
 
 
 /**

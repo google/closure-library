@@ -76,7 +76,6 @@ goog.ui.AnimatedZippy = function(
   this.updateHeaderClassName(expanded);
 };
 goog.inherits(goog.ui.AnimatedZippy, goog.ui.Zippy);
-goog.tagUnsealableClass(goog.ui.AnimatedZippy);
 
 
 /**

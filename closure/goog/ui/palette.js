@@ -70,7 +70,6 @@ goog.ui.Palette = function(items, opt_renderer, opt_domHelper) {
   this.lastHighlightedIndex_ = -1;
 };
 goog.inherits(goog.ui.Palette, goog.ui.Control);
-goog.tagUnsealableClass(goog.ui.Palette);
 
 
 /**

@@ -59,7 +59,6 @@ goog.ui.TabBar = function(opt_location, opt_renderer, opt_domHelper) {
   this.listenToTabEvents_();
 };
 goog.inherits(goog.ui.TabBar, goog.ui.Container);
-goog.tagUnsealableClass(goog.ui.TabBar);
 
 
 /**

@@ -92,7 +92,6 @@ goog.ui.TabPane = function(
   this.create_();
 };
 goog.inherits(goog.ui.TabPane, goog.events.EventTarget);
-goog.tagUnsealableClass(goog.ui.TabPane);
 
 
 /**

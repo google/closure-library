@@ -55,7 +55,6 @@ goog.ui.Checkbox = function(opt_checked, opt_domHelper, opt_renderer) {
       goog.ui.Checkbox.State.UNCHECKED;
 };
 goog.inherits(goog.ui.Checkbox, goog.ui.Control);
-goog.tagUnsealableClass(goog.ui.Checkbox);
 
 
 /**

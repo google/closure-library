@@ -85,7 +85,6 @@ goog.ui.SplitPane = function(
   this.splitpaneHandle_ = null;
 };
 goog.inherits(goog.ui.SplitPane, goog.ui.Component);
-goog.tagUnsealableClass(goog.ui.SplitPane);
 
 
 /**

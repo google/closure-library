@@ -50,7 +50,6 @@ goog.require('goog.userAgent');  // circular
  */
 goog.ui.ControlRenderer = function() {};
 goog.addSingletonGetter(goog.ui.ControlRenderer);
-goog.tagUnsealableClass(goog.ui.ControlRenderer);
 
 
 /**

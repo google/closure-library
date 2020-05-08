@@ -72,7 +72,6 @@ goog.ui.Select = function(
   this.setPreferredAriaRole(goog.a11y.aria.Role.LISTBOX);
 };
 goog.inherits(goog.ui.Select, goog.ui.MenuButton);
-goog.tagUnsealableClass(goog.ui.Select);
 
 
 /**

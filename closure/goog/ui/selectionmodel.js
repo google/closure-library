@@ -41,7 +41,6 @@ goog.ui.SelectionModel = function(opt_items) {
   this.addItems(opt_items);
 };
 goog.inherits(goog.ui.SelectionModel, goog.events.EventTarget);
-goog.tagUnsealableClass(goog.ui.SelectionModel);
 
 
 /**

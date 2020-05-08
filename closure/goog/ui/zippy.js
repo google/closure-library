@@ -159,7 +159,6 @@ goog.ui.Zippy = function(
   this.setExpanded(this.expanded_);
 };
 goog.inherits(goog.ui.Zippy, goog.events.EventTarget);
-goog.tagUnsealableClass(goog.ui.Zippy);
 
 
 /**

@@ -53,7 +53,6 @@ goog.ui.PopupBase = function(opt_element, opt_type) {
   }
 };
 goog.inherits(goog.ui.PopupBase, goog.events.EventTarget);
-goog.tagUnsealableClass(goog.ui.PopupBase);
 
 
 /**

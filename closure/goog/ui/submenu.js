@@ -50,7 +50,6 @@ goog.ui.SubMenu = function(content, opt_model, opt_domHelper, opt_renderer) {
       opt_renderer || goog.ui.SubMenuRenderer.getInstance());
 };
 goog.inherits(goog.ui.SubMenu, goog.ui.MenuItem);
-goog.tagUnsealableClass(goog.ui.SubMenu);
 
 
 /**

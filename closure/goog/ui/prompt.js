@@ -85,7 +85,6 @@ goog.ui.Prompt = function(
   this.setButtonSet(buttonSet);
 };
 goog.inherits(goog.ui.Prompt, goog.ui.Dialog);
-goog.tagUnsealableClass(goog.ui.Prompt);
 
 
 /**

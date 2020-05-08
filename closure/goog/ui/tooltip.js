@@ -96,7 +96,6 @@ goog.ui.Tooltip = function(opt_el, opt_str, opt_domHelper) {
   }
 };
 goog.inherits(goog.ui.Tooltip, goog.ui.Popup);
-goog.tagUnsealableClass(goog.ui.Tooltip);
 
 
 /**

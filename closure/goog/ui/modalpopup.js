@@ -81,7 +81,6 @@ goog.ui.ModalPopup = function(opt_useIframeMask, opt_domHelper) {
       {mutate: this.resizeBackground_}, this);
 };
 goog.inherits(goog.ui.ModalPopup, goog.ui.Component);
-goog.tagUnsealableClass(goog.ui.ModalPopup);
 
 
 /**

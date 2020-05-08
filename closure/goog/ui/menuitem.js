@@ -47,7 +47,6 @@ goog.ui.MenuItem = function(content, opt_model, opt_domHelper, opt_renderer) {
   this.setValue(opt_model);
 };
 goog.inherits(goog.ui.MenuItem, goog.ui.Control);
-goog.tagUnsealableClass(goog.ui.MenuItem);
 
 
 /**

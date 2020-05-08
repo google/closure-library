@@ -73,7 +73,6 @@ goog.ui.RichTextSpellChecker = function(handler, opt_domHelper) {
   this.registerDisposable(this.keyHandler_);
 };
 goog.inherits(goog.ui.RichTextSpellChecker, goog.ui.AbstractSpellChecker);
-goog.tagUnsealableClass(goog.ui.RichTextSpellChecker);
 
 
 /**

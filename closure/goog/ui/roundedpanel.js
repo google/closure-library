@@ -165,7 +165,6 @@ goog.ui.BaseRoundedPanel = function(
   this.corners_ = opt_corners || goog.ui.RoundedPanel.Corner.NONE;
 };
 goog.inherits(goog.ui.BaseRoundedPanel, goog.ui.Component);
-goog.tagUnsealableClass(goog.ui.BaseRoundedPanel);
 
 
 /**

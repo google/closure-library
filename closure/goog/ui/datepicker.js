@@ -180,7 +180,6 @@ goog.ui.DatePicker = function(
   this.lastNumberOfRowsInGrid_ = 0;
 };
 goog.inherits(goog.ui.DatePicker, goog.ui.Component);
-goog.tagUnsealableClass(goog.ui.DatePicker);
 
 
 /**

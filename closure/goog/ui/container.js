@@ -60,7 +60,6 @@ goog.ui.Container = function(opt_orientation, opt_renderer, opt_domHelper) {
   this.orientation_ = opt_orientation || this.renderer_.getDefaultOrientation();
 };
 goog.inherits(goog.ui.Container, goog.ui.Component);
-goog.tagUnsealableClass(goog.ui.Container);
 
 
 /**

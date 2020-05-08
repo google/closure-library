@@ -47,7 +47,6 @@ goog.ui.Tab = function(content, opt_renderer, opt_domHelper) {
       true);
 };
 goog.inherits(goog.ui.Tab, goog.ui.Control);
-goog.tagUnsealableClass(goog.ui.Tab);
 
 
 /**

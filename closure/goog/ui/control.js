@@ -79,7 +79,6 @@ goog.ui.Control = function(opt_content, opt_renderer, opt_domHelper) {
   this.ieMouseEventSequenceSimulator_;
 };
 goog.inherits(goog.ui.Control, goog.ui.Component);
-goog.tagUnsealableClass(goog.ui.Control);
 
 
 // Renderer registry.

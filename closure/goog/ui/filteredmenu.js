@@ -46,7 +46,6 @@ goog.ui.FilteredMenu = function(opt_renderer, opt_domHelper) {
   goog.ui.Menu.call(this, opt_domHelper, opt_renderer);
 };
 goog.inherits(goog.ui.FilteredMenu, goog.ui.Menu);
-goog.tagUnsealableClass(goog.ui.FilteredMenu);
 
 
 /**

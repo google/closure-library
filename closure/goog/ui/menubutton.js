@@ -95,7 +95,6 @@ goog.ui.MenuButton = function(
   this.menuRenderer_ = opt_menuRenderer || goog.ui.MenuRenderer.getInstance();
 };
 goog.inherits(goog.ui.MenuButton, goog.ui.Button);
-goog.tagUnsealableClass(goog.ui.MenuButton);
 
 
 /**

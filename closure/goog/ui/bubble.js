@@ -95,7 +95,6 @@ goog.ui.Bubble = function(message, opt_config, opt_domHelper) {
 
 };
 goog.inherits(goog.ui.Bubble, goog.ui.Component);
-goog.tagUnsealableClass(goog.ui.Bubble);
 
 
 /**

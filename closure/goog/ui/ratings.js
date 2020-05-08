@@ -94,7 +94,6 @@ goog.ui.Ratings = function(opt_ratings, opt_domHelper) {
   this.attachedFormField_ = null;
 };
 goog.inherits(goog.ui.Ratings, goog.ui.Component);
-goog.tagUnsealableClass(goog.ui.Ratings);
 
 
 /**

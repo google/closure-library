@@ -61,7 +61,6 @@ goog.ui.ComboBox = function(opt_domHelper, opt_menu, opt_labelInput) {
   this.setupMenu_();
 };
 goog.inherits(goog.ui.ComboBox, goog.ui.Component);
-goog.tagUnsealableClass(goog.ui.ComboBox);
 
 
 /**
@@ -924,7 +923,6 @@ goog.ui.ComboBoxItem = function(
       this, 'constructor', content, opt_data, opt_domHelper, opt_renderer);
 };
 goog.inherits(goog.ui.ComboBoxItem, goog.ui.MenuItem);
-goog.tagUnsealableClass(goog.ui.ComboBoxItem);
 
 
 // Register a decorator factory function for goog.ui.ComboBoxItems.
