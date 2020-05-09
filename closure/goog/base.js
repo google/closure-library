@@ -2308,20 +2308,6 @@ goog.defineClass.applyProperties_ = function(target, source) {
 };
 
 
-/**
- * Sealing classes breaks the older idiom of assigning properties on the
- * prototype rather than in the constructor. As such, goog.defineClass
- * must not seal subclasses of these old-style classes until they are fixed.
- * Until then, this marks a class as "broken", instructing defineClass
- * not to seal subclasses.
- * @param {!Function} ctr The legacy constructor to tag as unsealable.
- */
-goog.tagUnsealableClass = function(ctr) {
-
-};
-
-
-
 // There's a bug in the compiler where without collapse properties the
 // Closure namespace defines do not guard code correctly. To help reduce code
 // size also check for !COMPILED even though it redundant until this is fixed.
