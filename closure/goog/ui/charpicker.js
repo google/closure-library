@@ -797,7 +797,7 @@ goog.ui.CharPicker.prototype.updateGrid_ = function(grid, items) {
           this.stickwrap_.offsetHeight * items.length / this.gridsize_ + 'px';
     } else {
       // This is the last ditch effort if height is not avaialble.
-      // Maximum of 3em is assumed to the the cell height. Extra space after
+      // Maximum of 3em is assumed to the cell height. Extra space after
       // last character in the grid is OK.
       this.stick_.style.height =
           3 * this.columnCount_ * items.length / this.gridsize_ + 'em';

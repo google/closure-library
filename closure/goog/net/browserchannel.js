@@ -205,7 +205,7 @@ goog.net.BrowserChannel.prototype.backChannelRequest_ = null;
 
 
 /**
- * The relative path (in the context of the the page hosting the browser
+ * The relative path (in the context of the page hosting the browser
  * channel) for making requests to the server.
  * @type {?string}
  * @private
@@ -1459,7 +1459,7 @@ goog.net.BrowserChannel.prototype.startForwardChannel_ = function(
 
 
 /**
- * Establishes a new channel session with the the server.
+ * Establishes a new channel session with the server.
  * @private
  */
 goog.net.BrowserChannel.prototype.open_ = function() {

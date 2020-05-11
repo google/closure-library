@@ -76,7 +76,7 @@ goog.fx.TransitionBase.prototype.play = goog.abstractMethod;
 /**
  * Stops the animation.
  *
- * @param {boolean=} opt_gotoEnd Optional boolean parameter to go the the end of
+ * @param {boolean=} opt_gotoEnd Optional boolean parameter to go the end of
  *     the animation.
  * @override
  */

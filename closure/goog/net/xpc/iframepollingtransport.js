@@ -295,7 +295,7 @@ goog.net.xpc.IframePollingTransport.prototype.constructSenderFrames_ =
 
 
 /**
- * Constructs a sending frame the the given id.
+ * Constructs a sending frame the given id.
  * @param {string} id The id.
  * @return {!Element} The constructed frame.
  * @private

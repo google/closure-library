@@ -157,7 +157,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.backChannelRequest_ = null;
 
   /**
-   * The relative path (in the context of the the page hosting the browser
+   * The relative path (in the context of the page hosting the browser
    * channel) for making requests to the server.
    * @private {?string}
    */
@@ -1193,7 +1193,7 @@ WebChannelBase.prototype.startForwardChannel_ = function(opt_retryRequest) {
 
 
 /**
- * Establishes a new channel session with the the server.
+ * Establishes a new channel session with the server.
  * @private
  */
 WebChannelBase.prototype.open_ = function() {
