@@ -179,11 +179,7 @@ class SearchParamsImpl {
   }
 
   /**
-   * @param {string} key The key to retrieve a value for. Must not be
-   *     url-encoded.
-   * @return {?string} The value. If a key is specified more than once, the
-   *     first value is returned (as per the spec). All values will be
-   *     url-decoded already.
+   * @override
    */
   get(key) {
     const values = this.paramMap_.get(key);
@@ -191,11 +187,7 @@ class SearchParamsImpl {
   }
 
   /**
-   * @param {string} key The key to retrieve all values for. Must not be
-   *     url-encoded.
-   * @return {!Array<string>} The list of values for this key. Will return the
-   *     empty array if there are no values for the key. All values will have
-   *     been url-decoded already.
+   * @override
    */
   getAll(key) {
     // As per the spec, this returns the "empty sequence" if the key is not
@@ -204,8 +196,7 @@ class SearchParamsImpl {
   }
 
   /**
-   * @param {string} key The key to search for. Must not be url-encoded.
-   * @return {boolean} True iff this key exists within the search params.
+   * @override
    */
   has(key) {
     return this.paramMap_.has(key);
@@ -225,7 +216,7 @@ class SearchParamsImpl {
   }
 
   /**
-   * @return {string}
+   * @override
    */
   toString() {
     return iterableSearchParamsToString(this);
