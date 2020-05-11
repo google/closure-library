@@ -821,7 +821,7 @@ goog.History.prototype.getIframeToken_ = function() {
         hash = goog.string.urlDecode(this.getLocationFragment_(contentWindow));
       } catch (e) {
         // An exception will be thrown if the location of the iframe can not be
-        // accessed (permission denied). This can occur in FF if the the server
+        // accessed (permission denied). This can occur in FF if the server
         // that is hosting the blank html page goes down and then a new history
         // token is set. The iframe will navigate to an error page, and the
         // location of the iframe can no longer be accessed. Due to the polling,

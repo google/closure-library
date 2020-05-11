@@ -11,13 +11,12 @@
 
 goog.provide('goog.dom.SavedCaretRange');
 
-goog.forwardDeclare('goog.dom.AbstractRange');
-goog.forwardDeclare('goog.dom.Range');
 goog.require('goog.array');
 goog.require('goog.dom');
-goog.require('goog.dom.SavedRange');
+goog.require('goog.dom.AbstractSavedCaretRange');
 goog.require('goog.dom.TagName');
 goog.require('goog.string');
+goog.requireType('goog.dom.AbstractRange');
 
 
 /**
@@ -30,10 +29,10 @@ goog.require('goog.string');
  * prefer using {@see goog.editor.range.saveUsingNormalizedCarets}.
  * @param {goog.dom.AbstractRange} range The range being saved.
  * @constructor
- * @extends {goog.dom.SavedRange}
+ * @extends {goog.dom.AbstractSavedCaretRange}
  */
 goog.dom.SavedCaretRange = function(range) {
-  goog.dom.SavedRange.call(this);
+  goog.dom.AbstractSavedCaretRange.call(this);
 
   /**
    * The DOM id of the caret at the start of the range.
@@ -64,21 +63,22 @@ goog.dom.SavedCaretRange = function(range) {
 
   range.surroundWithNodes(this.createCaret_(true), this.createCaret_(false));
 };
-goog.inherits(goog.dom.SavedCaretRange, goog.dom.SavedRange);
+goog.inherits(goog.dom.SavedCaretRange, goog.dom.AbstractSavedCaretRange);
 
 
 /**
  * Gets the range that this SavedCaretRage represents, without selecting it
  * or removing the carets from the DOM.
  * @return {goog.dom.AbstractRange?} An abstract range.
- * @suppress {missingRequire,undefinedNames} circular dependency
+ * @override
  */
 goog.dom.SavedCaretRange.prototype.toAbstractRange = function() {
   var range = null;
   var startCaret = this.getCaret(true);
   var endCaret = this.getCaret(false);
   if (startCaret && endCaret) {
-    range = goog.dom.Range.createFromNodes(startCaret, 0, endCaret, 0);
+    const TextRange = goog.module.get('goog.dom.TextRange');
+    range = TextRange.createFromNodes(startCaret, 0, endCaret, 0);
   }
   return range;
 };
@@ -89,6 +89,7 @@ goog.dom.SavedCaretRange.prototype.toAbstractRange = function() {
  * @param {boolean} start If true, returns the start caret. Otherwise, get the
  *     end caret.
  * @return {Element} The start or end caret in the given document.
+ * @override
  */
 goog.dom.SavedCaretRange.prototype.getCaret = function(start) {
   return this.dom_.getElement(start ? this.startCaretId_ : this.endCaretId_);
@@ -102,10 +103,13 @@ goog.dom.SavedCaretRange.prototype.getCaret = function(start) {
  *     affected by post-removal operations, such as text node normalization.
  * @return {goog.dom.AbstractRange|undefined} The adjusted range, if opt_range
  *     was provided.
+ * @override
  */
 goog.dom.SavedCaretRange.prototype.removeCarets = function(opt_range) {
   goog.dom.removeNode(this.getCaret(true));
   goog.dom.removeNode(this.getCaret(false));
+  // This appears unused, but the range is sometimes adjusted in other
+  // implementations of AbstractSavedCaretRange.
   return opt_range;
 };
 
@@ -113,6 +117,7 @@ goog.dom.SavedCaretRange.prototype.removeCarets = function(opt_range) {
 /**
  * Sets the document where the range will be restored.
  * @param {!Document} doc An HTML document.
+ * @override
  */
 goog.dom.SavedCaretRange.prototype.setRestorationDocument = function(doc) {
   this.dom_.setDocument(doc);
@@ -145,8 +150,9 @@ goog.dom.SavedCaretRange.prototype.restoreInternal = function() {
         focusOffset--;
       }
     }
-    /** @suppress {missingRequire,undefinedNames} circular dependency */
-    range = goog.dom.Range.createFromNodes(
+
+    const TextRange = goog.module.get('goog.dom.TextRange');
+    range = TextRange.createFromNodes(
         anchorNode, anchorOffset, focusNode, focusOffset);
     range = this.removeCarets(range);
     range.select();

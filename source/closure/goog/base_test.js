@@ -1111,21 +1111,6 @@ testSuite({
     assertEquals('bar', a.foo);
   },
 
-  testDefineClass_unsealable() {
-    const LegacyBase = function() {};
-    LegacyBase.prototype.foo = null;
-    LegacyBase.prototype.setFoo = function(foo) {
-      this.foo = foo;
-    };
-    goog.tagUnsealableClass(LegacyBase);
-
-    const Derived = goog.defineClass(LegacyBase, {constructor: function() {}});
-
-    const der = new Derived();
-    der.setFoo('bar');
-    assertEquals('bar', der.foo);
-  },
-
   testDefineClass_constructorIsNotWrappedWhenSealingIsDisabled() {
     const org = goog.defineClass;
     let ctr = null;
@@ -1142,13 +1127,12 @@ testSuite({
     assertEquals('The constructor should not be wrapped.', ctr, MyClass);
   },
 
-  testDefineClass_unsealableConstructorIsWrapped() {
+  testDefineClass_constructorIsWrappedWhenSealingIsEnabled() {
     const LegacyBase = function() {};
     LegacyBase.prototype.foo = null;
     LegacyBase.prototype.setFoo = function(foo) {
       this.foo = foo;
     };
-    goog.tagUnsealableClass(LegacyBase);
 
     const org = goog.defineClass;
     let ctr = null;

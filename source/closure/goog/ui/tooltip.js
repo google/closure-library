@@ -1,16 +1,8 @@
-// Copyright 2007 The Closure Library Authors. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS-IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/**
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /**
  * @fileoverview Tooltip widget implementation.
@@ -49,7 +41,7 @@ goog.require('goog.ui.PopupBase');
 
 /**
  * Tooltip widget. Can be attached to one or more elements and is shown, with a
- * slight delay, when the the cursor is over the element or the element gains
+ * slight delay, when the cursor is over the element or the element gains
  * focus.
  *
  * @param {Element|string=} opt_el Element to display tooltip for, either
@@ -104,7 +96,6 @@ goog.ui.Tooltip = function(opt_el, opt_str, opt_domHelper) {
   }
 };
 goog.inherits(goog.ui.Tooltip, goog.ui.Popup);
-goog.tagUnsealableClass(goog.ui.Tooltip);
 
 
 /**
@@ -479,7 +470,7 @@ goog.ui.Tooltip.prototype.setRequireInteraction = function(requireInteraction) {
  * @return {boolean} Whether the coord is in the tooltip.
  */
 goog.ui.Tooltip.prototype.isCoordinateInTooltip = function(coord) {
-  // Check if coord is inside the the tooltip
+  // Check if coord is inside the tooltip
   if (!this.isVisible()) {
     return false;
   }

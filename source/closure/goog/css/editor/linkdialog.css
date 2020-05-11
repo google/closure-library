@@ -12,8 +12,8 @@
 
 @provide 'goog.css.editor.linkdialog';
 
-@require 'goog.css.editor.dialog';
-@require 'goog.css.linkbutton';
+@require './dialog';
+@require '../linkbutton';
 
 
 .tr-link-dialog-explanation-text {

@@ -100,7 +100,7 @@ goog.structs.SimplePool.prototype.setDisposeObjectFn = function(
 
 
 /**
- * Gets an unused object from the the pool, if there is one available,
+ * Gets an unused object from the pool, if there is one available,
  * otherwise creates a new one.
  * @return {T} An object from the pool or a new one if necessary.
  */

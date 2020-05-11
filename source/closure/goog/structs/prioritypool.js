@@ -77,7 +77,7 @@ goog.structs.PriorityPool.prototype.setDelay = function(delay) {
 
 
 /**
- * Get a new object from the the pool, if there is one available, otherwise
+ * Get a new object from the pool, if there is one available, otherwise
  * return undefined.
  * @param {Function=} opt_callback The function to callback when an object is
  *     available. This could be immediately. If this is not present, then an

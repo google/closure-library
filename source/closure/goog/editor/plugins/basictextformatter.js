@@ -822,7 +822,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandHelper_ = function(
 
   if (/insert(un)?orderedlist/i.test(command)) {
     // NOTE(user): This doesn't check queryCommandState because it seems to
-    // lie. Also, this runs for insertunorderedlist so that the the list
+    // lie. Also, this runs for insertunorderedlist so that the list
     // isn't made up of an <ul> for each <li> - even though it looks the same,
     // the markup is disgusting.
     if (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher(534)) {

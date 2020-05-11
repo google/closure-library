@@ -215,6 +215,20 @@ goog.uri.utils.ComponentIndex = {
   FRAGMENT: 7
 };
 
+/**
+ * @type {?function(string)}
+ * @private
+ */
+goog.uri.utils.urlPackageSupportLoggingHandler_ = null;
+
+/**
+ * @param {?function(string)} handler The handler function to call when a URI
+ *     with a protocol that is better supported by the Closure URL package is
+ *     detected.
+ */
+goog.uri.utils.setUrlPackageSupportLoggingHandler = function(handler) {
+  goog.uri.utils.urlPackageSupportLoggingHandler_ = handler;
+};
 
 /**
  * Splits a URI into its component parts.
@@ -233,8 +247,14 @@ goog.uri.utils.ComponentIndex = {
  */
 goog.uri.utils.split = function(uri) {
   // See @return comment -- never null.
-  return /** @type {!Array<string|undefined>} */ (
+  var result = /** @type {!Array<string|undefined>} */ (
       uri.match(goog.uri.utils.splitRe_));
+  if (goog.uri.utils.urlPackageSupportLoggingHandler_ &&
+      ['http', 'https', 'ws', 'wss',
+       'ftp'].indexOf(result[goog.uri.utils.ComponentIndex.SCHEME]) >= 0) {
+    goog.uri.utils.urlPackageSupportLoggingHandler_(uri);
+  }
+  return result;
 };
 
 

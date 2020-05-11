@@ -352,7 +352,7 @@ goog.math.Box.prototype.round = function() {
  * and y dimension values.
  *
  * @param {number|goog.math.Coordinate} tx The value to translate the x
- *     dimension values by or the the coordinate to translate this box by.
+ *     dimension values by or the coordinate to translate this box by.
  * @param {number=} opt_ty The value to translate y dimension values by.
  * @return {!goog.math.Box} This box after translating.
  */

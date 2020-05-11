@@ -14,12 +14,12 @@ goog.provide('goog.dom.AbstractRange');
 goog.provide('goog.dom.RangeIterator');
 goog.provide('goog.dom.RangeType');
 
+goog.forwardDeclare('goog.dom.SavedCaretRange');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.SavedCaretRange');
 goog.require('goog.dom.TagIterator');
 goog.require('goog.userAgent');
-
+goog.requireType('goog.dom.SavedRange');
 
 /**
  * Types of ranges.
@@ -37,6 +37,7 @@ goog.dom.RangeType = {
  * Creates a new selection with no properties.  Do not use this constructor -
  * use one of the goog.dom.Range.from* methods instead.
  * @constructor
+ * @abstract
  */
 goog.dom.AbstractRange = function() {};
 
@@ -446,15 +447,13 @@ goog.dom.AbstractRange.prototype.saveUsingDom = goog.abstractMethod;
  * Saves the range using HTML carets. As long as the carets remained in the
  * HTML, the range can be restored...even when the HTML is copied across
  * documents.
- * @return {goog.dom.SavedCaretRange?} A range representation that can be
- *     restored as long as carets are not removed. Returns null if carets
+ * // TODO(user) return type should become AbstractSavedCaretRange
+ * @return {?goog.dom.SavedCaretRange} A range representation that can
+ *     be restored as long as carets are not removed. Returns null if carets
  *     could not be created.
+ * @abstract
  */
-goog.dom.AbstractRange.prototype.saveUsingCarets = function() {
-  return (this.getStartNode() && this.getEndNode()) ?
-      new goog.dom.SavedCaretRange(this) :
-      null;
-};
+goog.dom.AbstractRange.prototype.saveUsingCarets = function() {};
 
 
 // RANGE MODIFICATION

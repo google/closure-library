@@ -1,16 +1,8 @@
-// Copyright 2006 The Closure Library Authors. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS-IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/**
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /**
  * @fileoverview Number format/parse library with locale support.
@@ -630,13 +622,24 @@ goog.i18n.NumberFormat.prototype.format = function(number) {
   var unit = this.getUnitAfterRounding_(baseFormattingNumber, number);
   number = goog.i18n.NumberFormat.decimalShift_(number, -unit.divisorBase);
 
-  parts.push(unit.prefix);
-
   // in icu code, it is commented that certain computation need to keep the
   // negative sign for 0.
   var isNegative = number < 0.0 || number == 0.0 && 1 / number < 0.0;
 
-  parts.push(isNegative ? this.negativePrefix_ : this.positivePrefix_);
+  if (isNegative) {
+    // Also handle compact number formats
+    if (unit.negative_prefix) {
+      // Compact form includes the negative sign
+      parts.push(unit.negative_prefix);
+    } else {
+      parts.push(unit.prefix);
+      parts.push(this.negativePrefix_);
+    }
+  } else {
+    parts.push(unit.prefix);
+    parts.push(this.positivePrefix_);
+  }
+
 
   if (!isFinite(number)) {
     parts.push(this.getNumberFormatSymbols_().INFINITY);
@@ -650,9 +653,19 @@ goog.i18n.NumberFormat.prototype.format = function(number) {
         this.subformatFixed_(number, this.minimumIntegerDigits_, parts);
   }
 
-  parts.push(isNegative ? this.negativeSuffix_ : this.positiveSuffix_);
-  parts.push(unit.suffix);
-
+  if (isNegative) {
+    // Also handle compact number formats
+    if (unit.negative_suffix) {
+      // Compact form includes the negative sign
+      parts.push(unit.negative_suffix);
+    } else {
+      parts.push(unit.suffix);
+      parts.push(this.negativeSuffix_);
+    }
+  } else {
+    parts.push(unit.suffix);
+    parts.push(this.positiveSuffix_);
+  }
   return parts.join('');
 };
 
@@ -1394,9 +1407,11 @@ goog.i18n.NumberFormat.prototype.parseTrunk_ = function(pattern, pos) {
 /**
  * Alias for the compact format 'unit' object.
  * @typedef {{
+ *     divisorBase: number,
+ *     negative_prefix: string,
+ *     negative_suffix: string,
  *     prefix: string,
- *     suffix: string,
- *     divisorBase: number
+ *     suffix: string
  * }}
  */
 goog.i18n.NumberFormat.CompactNumberUnit;
@@ -1407,9 +1422,11 @@ goog.i18n.NumberFormat.CompactNumberUnit;
  * @private {!goog.i18n.NumberFormat.CompactNumberUnit}
  */
 goog.i18n.NumberFormat.NULL_UNIT_ = {
+  divisorBase: 0,
+  negative_prefix: '',
+  negative_suffix: '',
   prefix: '',
-  suffix: '',
-  divisorBase: 0
+  suffix: ''
 };
 
 
@@ -1447,6 +1464,23 @@ goog.i18n.NumberFormat.prototype.getUnitFor_ = function(base, plurality) {
     }
 
     var pattern = patterns[plurality];
+
+    // Return pattern for negative formatting, if present
+    var neg_prefix = '';
+    var neg_suffix = '';
+    var index_of_neg_part = pattern.indexOf(';');
+    var neg_pattern = null;
+    if (index_of_neg_part >= 0) {
+      // Trim positive pattern
+      pattern = pattern.substring(0, index_of_neg_part);
+      neg_pattern = pattern.substring(index_of_neg_part + 1);
+      if (neg_pattern) {
+        var neg_parts = /([^0]*)(0+)(.*)/.exec(neg_pattern);
+        neg_prefix = neg_parts[1];
+        neg_suffix = neg_parts[3];
+      }
+    }
+
     if (!pattern || pattern == '0') {
       return goog.i18n.NumberFormat.NULL_UNIT_;
     }
@@ -1457,9 +1491,11 @@ goog.i18n.NumberFormat.prototype.getUnitFor_ = function(base, plurality) {
     }
 
     return {
+      divisorBase: (previousNonNullBase + 1) - (parts[2].length - 1),
+      negative_prefix: neg_prefix,
+      negative_suffix: neg_suffix,
       prefix: parts[1],
-      suffix: parts[3],
-      divisorBase: (previousNonNullBase + 1) - (parts[2].length - 1)
+      suffix: parts[3]
     };
   }
 };

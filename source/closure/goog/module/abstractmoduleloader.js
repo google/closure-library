@@ -1,16 +1,8 @@
-// Copyright 2009 The Closure Library Authors. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS-IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/**
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 /**
  * @fileoverview An interface for module loading.
@@ -27,6 +19,12 @@ const {ModuleInfo} = goog.require('goog.module');
  */
 class LoadOptions {
   constructor() {
+    /**
+     * A map of extra runtime module dependencies.
+     * @type {!AbstractModuleLoader.ExtraEdgesMap|undefined}
+     */
+    this.extraEdges;
+
     /**
      * Whether to bypass cache while loading the module.
      * @const {boolean|undefined}
@@ -58,6 +56,14 @@ class LoadOptions {
  * @interface
  */
 class AbstractModuleLoader {
+  constructor() {
+    /**
+     * Whether or not the implementation supports extra edges.
+     * @type {boolean|undefined}
+     */
+    this.supportsExtraEdges;
+  }
+
   /**
    * Loads a list of JavaScript modules.
    *
@@ -77,5 +83,16 @@ class AbstractModuleLoader {
    */
   prefetchModule(id, moduleInfo) {};
 }
+
+/**
+ * A map of extra runtime module dependencies.
+ * Since the polyfills for the ES6 Map/Set classes would cause a performance
+ * regression, we are using plain Javascript objects to mimic their
+ * functionality. The outer object will map a moduleId to another object, the
+ * keys of which are the moduleIds of the modules it depends on: that is, if
+ * `map['a']['b']` is true then module 'a' depends on module 'b'.
+ * @typedef {!Object<!Object<boolean>>}
+ */
+AbstractModuleLoader.ExtraEdgesMap;
 
 exports = AbstractModuleLoader;

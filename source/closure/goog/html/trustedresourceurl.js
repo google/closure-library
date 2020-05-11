@@ -459,10 +459,8 @@ goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
  */
 goog.html.TrustedResourceUrl
     .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse = function(url) {
-  var value = goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY ?
-      goog.html.trustedtypes.PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY
-          .createScriptURL(url) :
-      url;
+  const policy = goog.html.trustedtypes.getPolicyPrivateDoNotAccessOrElse();
+  var value = policy ? policy.createScriptURL(url) : url;
   return new goog.html.TrustedResourceUrl(
       goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_, value);
 };

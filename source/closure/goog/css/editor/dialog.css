@@ -11,9 +11,9 @@
 
 @provide 'goog.css.editor.dialog';
 
-@require 'goog.css.dialog';
-@require 'goog.css.tab';
-@require 'goog.css.tabbar';
+@require '../dialog';
+@require '../tab';
+@require '../tabbar';
 
 .tr-dialog {
   width: 475px;

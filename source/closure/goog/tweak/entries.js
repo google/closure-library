@@ -285,7 +285,7 @@ goog.tweak.BaseSetting.prototype.getParamName = function() {
 
 /**
  * Sets the name of the query parameter used for this setting. If null is
- * passed the the setting will not appear in the top-level query string.
+ * passed the setting will not appear in the top-level query string.
  * @param {?string} value The new value.
  */
 goog.tweak.BaseSetting.prototype.setParamName = function(value) {

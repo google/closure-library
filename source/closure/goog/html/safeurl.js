@@ -277,6 +277,9 @@ goog.html.SafeUrl.isSafeMimeType = function(mimeType) {
  * for `blob` is not of a known safe audio, image or video MIME type,
  * then the SafeUrl will wrap {@link #INNOCUOUS_STRING}.
  *
+ * Note: Call {@link revokeObjectUrl} on the URL after it's used
+ * to prevent memory leaks.
+ *
  * @see http://www.w3.org/TR/FileAPI/#url
  * @param {!Blob} blob
  * @return {!goog.html.SafeUrl} The blob URL, or an innocuous string wrapped
@@ -287,6 +290,18 @@ goog.html.SafeUrl.fromBlob = function(blob) {
       goog.fs.url.createObjectUrl(blob) :
       goog.html.SafeUrl.INNOCUOUS_STRING;
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
+};
+
+
+/**
+ * Revokes an object URL created for a safe URL created {@link fromBlob()}.
+ * @param {!goog.html.SafeUrl} safeUrl SafeUrl wrapping a blob object.
+ */
+goog.html.SafeUrl.revokeObjectUrl = function(safeUrl) {
+  var url = safeUrl.getTypedStringValue();
+  if (url !== goog.html.SafeUrl.INNOCUOUS_STRING) {
+    goog.fs.url.revokeObjectUrl(url);
+  }
 };
 
 

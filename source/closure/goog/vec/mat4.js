@@ -1030,7 +1030,7 @@ goog.vec.Mat4.invert = function(mat, resultMat) {
  *
  * @param {goog.vec.Mat4.AnyType} mat0 The first matrix.
  * @param {goog.vec.Mat4.AnyType} mat1 The second matrix.
- * @return {boolean} True if the the two matrices are equivalent.
+ * @return {boolean} True if the two matrices are equivalent.
  */
 goog.vec.Mat4.equals = function(mat0, mat1) {
   return mat0.length == mat1.length && mat0[0] == mat1[0] &&
