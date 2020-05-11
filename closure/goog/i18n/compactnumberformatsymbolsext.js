@@ -3,7 +3,6 @@
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
  */
-
 /**
  * @fileoverview Compact number formatting symbols.
  *
@@ -10800,9 +10799,7 @@ goog.i18n.CompactNumberFormatSymbols_sw_KE = {
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
     '1000': {
-      // Patching items with negative options until compact formatting is fixed.
-      // b/143315130
-      'other': 'elfu 0', //;elfu -0'
+      'other': 'elfu 0;elfu -0'
     },
     '10000': {
       'other': 'elfu 00'

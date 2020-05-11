@@ -3,7 +3,6 @@
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
  */
-
 /**
  * @fileoverview Compact number formatting symbols.
  *
@@ -6643,15 +6642,13 @@ goog.i18n.CompactNumberFormatSymbols_sv = {
 goog.i18n.CompactNumberFormatSymbols_sw = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      // Patching items with negative options until compact formatting is fixed.
-      // b/143315130
-      'other': 'elfu 0' //;elfu -0'
+      'other': 'elfu 0;elfu -0'
     },
     '10000': {
-      'other': 'elfu 00'  //;elfu -00'
+      'other': 'elfu 00;elfu -00'
     },
     '100000': {
-      'other': 'elfu 000'  //;elfu -000'
+      'other': 'elfu 000;elfu -000'
     },
     '1000000': {
       'other': '0M'
@@ -6663,13 +6660,13 @@ goog.i18n.CompactNumberFormatSymbols_sw = {
       'other': '000M'
     },
     '1000000000': {
-      'other': '0B'  //;-0B'
+      'other': '0B;-0B'
     },
     '10000000000': {
-      'other': '00B'  //;-00B'
+      'other': '00B;-00B'
     },
     '100000000000': {
-      'other': '000B'  //;-000B'
+      'other': '000B;-000B'
     },
     '1000000000000': {
       'other': '0T'
@@ -6683,40 +6680,40 @@ goog.i18n.CompactNumberFormatSymbols_sw = {
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
     '1000': {
-      'other': 'elfu 0'  //;elfu -0'
+      'other': 'elfu 0;elfu -0'
     },
     '10000': {
-      'other': 'elfu 00'  //;elfu -00'
+      'other': 'elfu 00;elfu -00'
     },
     '100000': {
-      'other': 'elfu 000' //;elfu -000'
+      'other': 'elfu 000;elfu -000'
     },
     '1000000': {
-      'other': 'milioni 0' //;milioni -0'
+      'other': 'milioni 0;milioni -0'
     },
     '10000000': {
-      'other': 'milioni 00'  //;milioni -00'
+      'other': 'milioni 00;milioni -00'
     },
     '100000000': {
-      'other': 'milioni 000'  //;milioni -000'
+      'other': 'milioni 000;milioni -000'
     },
     '1000000000': {
-      'other': 'bilioni 0'//;bilioni -0'
+      'other': 'bilioni 0;bilioni -0'
     },
     '10000000000': {
-      'other': 'bilioni 00'  //;bilioni -00'
+      'other': 'bilioni 00;bilioni -00'
     },
     '100000000000': {
-      'other': 'bilioni 000'  //;bilioni -000'
+      'other': 'bilioni 000;bilioni -000'
     },
     '1000000000000': {
-      'other': 'trilioni 0'  //;trilioni -0'
+      'other': 'trilioni 0;trilioni -0'
     },
     '10000000000000': {
-      'other': 'trilioni 00'  //;trilioni -00'
+      'other': 'trilioni 00;trilioni -00'
     },
     '100000000000000': {
-      'other': 'trilioni 000'  //;trilioni -000'
+      'other': 'trilioni 000;trilioni -000'
     }
   }
 };

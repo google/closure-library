@@ -3,11 +3,10 @@
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
  */
-
 /**
  * @fileoverview Date/time formatting symbols for all locales.
  *
- * File generated from CLDR ver. 35.1
+ * File generated from CLDR ver. 36
  *
  * This file covers those locales that are not covered in
  * "datetimesymbols.js".
@@ -8680,6 +8679,7 @@ goog.i18n.DateTimeSymbols_fy_NL = goog.i18n.DateTimeSymbols_fy;
 /**
  * Date/time formatting symbols for locale ga_GB.
  * @const
+ * @type {!goog.i18n.DateTimeSymbolsType}
  */
 goog.i18n.DateTimeSymbols_ga_GB = goog.i18n.DateTimeSymbols_ga;
 
