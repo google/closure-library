@@ -1,5 +1,11 @@
 /**
- * @fileoverview Description of this file.
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Tests for the URL package.
  */
 goog.module('goog.urltest');
 goog.setTestOnly();

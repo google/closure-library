@@ -608,6 +608,7 @@ var _allTests = [
   'closure/goog/ui/zippy_test.html',
   'closure/goog/uri/uri_test.html',
   'closure/goog/uri/utils_test.html',
+  'closure/goog/url/url_test.html',
   'closure/goog/useragent/adobereader_test.html',
   'closure/goog/useragent/flash_test.html',
   'closure/goog/useragent/jscript_test.html',
