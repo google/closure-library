@@ -7,6 +7,7 @@
 /**
  * @fileoverview A lite polyfill of the ReadableStream native API with a subset
  * of methods supported.
+ * @visibility {//visibility:public}
  */
 goog.module('goog.streams.lite');
 

@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview A full ponyfill of the ReadableStream native API.
+ * @visibility {//visibility:public}
  */
 goog.module('goog.streams.full');
 

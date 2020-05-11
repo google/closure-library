@@ -948,8 +948,8 @@ goog.editor.plugins.UndoRedo.CursorPosition_.prototype.select = function() {
 
 
 /**
- * Get the range that encompases the cursor position relative to a given
- * base node.
+ * Get the range that encompases the cursor position relative to a given base
+ * node.
  * @param {Element} baseNode The node to get the cursor position relative to.
  * @return {Range|TextRange|null} The browser range for this position.
  * @private
