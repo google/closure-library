@@ -11,12 +11,15 @@ goog.setTestOnly();
 
 const Const = goog.require('goog.string.Const');
 const Dir = goog.require('goog.i18n.bidi.Dir');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const SafeUrl = goog.require('goog.html.SafeUrl');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
+const fsUrl = goog.require('goog.fs.url');
 const googObject = goog.require('goog.object');
 const safeUrlTestVectors = goog.require('goog.html.safeUrlTestVectors');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
+
 
 /** @return {boolean} True if running on IE9 or lower. */
 function isIE9OrLower() {
@@ -41,7 +44,21 @@ function assertBlobTypeIsSafe(type, isSafe) {
   }
 }
 
+/**
+ * @type {!PropertyReplacer}
+ */
+let stubs;
+
 testSuite({
+
+  setUp() {
+    stubs = new PropertyReplacer();
+  },
+
+  tearDown() {
+    stubs.reset();
+  },
+
   testSafeUrl() {
     const safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
     const extracted = SafeUrl.unwrap(safeUrl);
@@ -123,6 +140,23 @@ testSuite({
     // Maybe not wrong, but we reject nonetheless for simplicity.
     assertBlobTypeIsSafe('image/png;foo=bar&', false);
     assertBlobTypeIsSafe('image/png;foo=%3Cbar', false);
+  },
+
+  testSafeUrlFromBlob_revocation() {
+    if (isIE9OrLower()) {
+      return;
+    }
+    let timesCalled = 0;
+    stubs.replace(fsUrl, 'revokeObjectUrl', function(arg) {
+      timesCalled++;
+    });
+    SafeUrl.revokeObjectUrl(
+        SafeUrl.fromBlob(new Blob(['test'], {type: 'image/png'})));
+    assertEquals(1, timesCalled);
+    SafeUrl.revokeObjectUrl(
+        SafeUrl.fromBlob(new Blob(['test'], {type: 'text/html'})));
+    // No revocation, as object URL was never created.
+    assertEquals(1, timesCalled);
   },
 
   testSafeUrlFromMediaSource_createsBlob() {
