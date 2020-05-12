@@ -14,7 +14,6 @@ goog.provide('goog.dom.AbstractRange');
 goog.provide('goog.dom.RangeIterator');
 goog.provide('goog.dom.RangeType');
 
-goog.forwardDeclare('goog.dom.SavedCaretRange');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagIterator');
@@ -447,8 +446,7 @@ goog.dom.AbstractRange.prototype.saveUsingDom = goog.abstractMethod;
  * Saves the range using HTML carets. As long as the carets remained in the
  * HTML, the range can be restored...even when the HTML is copied across
  * documents.
- * // TODO(user) return type should become AbstractSavedCaretRange
- * @return {?goog.dom.SavedCaretRange} A range representation that can
+ * @return {?goog.dom.AbstractSavedCaretRange} A range representation that can
  *     be restored as long as carets are not removed. Returns null if carets
  *     could not be created.
  * @abstract
