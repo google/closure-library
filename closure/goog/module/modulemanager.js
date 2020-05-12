@@ -244,7 +244,7 @@ goog.module.ModuleManager.prototype.setConcurrentLoadingEnabled = function(
 /** @override */
 goog.module.ModuleManager.prototype.setAllModuleInfo = function(infoMap) {
   for (var id in infoMap) {
-    this.moduleInfoMap[id] = new goog.module.ModuleInfo(infoMap[id], id);
+    this.addOrUpdateModuleInfo_(id, infoMap[id]);
   }
   if (!this.initialModulesLoaded_.hasFired()) {
     this.initialModulesLoaded_.callback();
@@ -289,7 +289,7 @@ goog.module.ModuleManager.prototype.setAllModuleInfoString = function(
       deps = [];
     }
     moduleIds.push(id);
-    this.moduleInfoMap[id] = new goog.module.ModuleInfo(deps, id);
+    this.addOrUpdateModuleInfo_(id, deps);
   }
   if (opt_loadingModuleIds && opt_loadingModuleIds.length) {
     goog.array.extend(this.loadingModuleIds_, opt_loadingModuleIds);
@@ -439,10 +439,32 @@ goog.module.ModuleManager.prototype.addLoadModule_ = function(id, d) {
 
 
 /**
- * Loads a list of modules or, if some other module is currently being loaded,
- * appends the ids to the queue of requested module ids. Registers callbacks a
- * module that is currently loading and returns a fired deferred for a module
- * that is already loaded.
+ * Updates the module info map with either a new ModuleInfo instance or by doing
+ * an in-place update of the dependencies to persist the existing loaded state
+ * and registered callbacks.
+ *
+ * @param {string} id
+ * @param {!Array<string>} deps
+ * @private
+ */
+goog.module.ModuleManager.prototype.addOrUpdateModuleInfo_ = function(
+    id, deps) {
+  if (this.moduleInfoMap[id]) {
+    const moduleDeps = this.moduleInfoMap[id].getDependencies();
+    if (moduleDeps != deps) {
+      moduleDeps.splice(0, moduleDeps.length, ...deps);
+    }
+  } else {
+    this.moduleInfoMap[id] = new goog.module.ModuleInfo(deps, id);
+  }
+};
+
+
+/**
+ * Loads a list of modules or, if some other module is currently being
+ * loaded, appends the ids to the queue of requested module ids. Registers
+ * callbacks a module that is currently loading and returns a fired deferred
+ * for a module that is already loaded.
  *
  * @param {!Array<string>} ids The id of the module to load.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.

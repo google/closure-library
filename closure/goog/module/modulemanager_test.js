@@ -1893,7 +1893,7 @@ testSuite({
     const errback = recordFunction();
     const mm = getModuleManager({'a': [], 'b': ['a']});
     mm.getModuleInfo('a').registerEarlyCallback(earlyCallback);
-    mm.getModuleInfo('a').registerEarlyCallback(functions.error('error'));
+    mm.getModuleInfo('a').registerCallback(functions.error('error'));
     mm.getModuleInfo('a').registerErrback(errback);
 
     mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
@@ -1956,10 +1956,56 @@ testSuite({
     assertEquals('Did not receive module context', appContext, context);
   },
 
+  testSetAllModuleInfo() {
+    const callback = recordFunction();
+    const errback = recordFunction();
+    const moduleInfo = {'base': [], 'one': ['base'], 'two': ['one']};
+    const mm = getModuleManager(moduleInfo);
+    mm.getModuleInfo('one').registerEarlyCallback(callback);
+    mm.getModuleInfo('one').registerCallback(functions.error('error'));
+    mm.getModuleInfo('one').registerErrback(errback);
+    mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
+        mm, createModulesFor('base', 'one', 'two')));
+    mm.preloadModule('base');
+    clock.tick(10);
+    // Module 'base' is now loaded.
+    assertTrue(mm.getModuleInfo('base').isLoaded());
+    // Re-init all modules using same instance.
+    mm.setAllModuleInfo(moduleInfo);
+    // Re-init all modules using new instance.
+    mm.setAllModuleInfo({'base': [], 'one': ['base'], 'two': ['one']});
+    // Module 'base' is still loaded.
+    assertTrue(mm.getModuleInfo('base').isLoaded());
+
+    // Callbacks are still registered.
+    mm.preloadModule('two');
+    assertThrows(() => {
+      clock.tick(10);
+    });
+    clock.tick(10);
+
+    assertEquals(1, callback.getCallCount());
+    assertEquals(1, errback.getCallCount());
+  },
+
   testSetAllModuleInfoString() {
-    const info = 'base/one:0/two:0/three:0,1,2/four:0,3/five:';
-    const mm = new ModuleManager();
-    mm.setAllModuleInfoString(info);
+    const callback = recordFunction();
+    const errback = recordFunction();
+    const moduleInfo = {'base': [], 'one': ['base'], 'two': ['one']};
+    const mm = getModuleManager(moduleInfo);
+    mm.getModuleInfo('one').registerEarlyCallback(callback);
+    mm.getModuleInfo('one').registerCallback(functions.error('error'));
+    mm.getModuleInfo('one').registerErrback(errback);
+    mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
+        mm, createModulesFor('base', 'one', 'two')));
+    mm.preloadModule('base');
+    clock.tick(10);
+    // Module 'base' is now loaded.
+    assertTrue(mm.getModuleInfo('base').isLoaded());
+    // Re-init all modules using same instance.
+    mm.setAllModuleInfoString('base/one:0/two:1/three:0,1,2/four:0,3/five:');
+    // Module 'base' is still loaded.
+    assertTrue(mm.getModuleInfo('base').isLoaded());
 
     assertNotNull('Base should exist', mm.getModuleInfo('base'));
     assertNotNull('One should exist', mm.getModuleInfo('one'));
@@ -1973,6 +2019,16 @@ testSuite({
     assertArrayEquals(
         ['base', 'three'], mm.getModuleInfo('four').getDependencies());
     assertArrayEquals([], mm.getModuleInfo('five').getDependencies());
+
+    // Callbacks are still registered.
+    mm.preloadModule('two');
+    assertThrows(() => {
+      clock.tick(10);
+    });
+    clock.tick(10);
+
+    assertEquals(1, callback.getCallCount());
+    assertEquals(1, errback.getCallCount());
   },
 
   testSetAllModuleInfoStringWithEmptyString() {
