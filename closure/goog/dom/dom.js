@@ -15,6 +15,7 @@
  * @suppress {strictMissingProperties}
  */
 
+// DO NOT LAND THIS CHANGE -- for testing only.
 
 // TODO(arv): Rename/refactor getTextContent and getRawTextContent. The problem
 // is that getTextContent should mimic the DOM3 textContent. We should add a
