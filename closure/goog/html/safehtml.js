@@ -1132,7 +1132,9 @@ goog.html.SafeHtml.EMPTY =
             // not. This typecast is safe - if trustedTypes are not available,
             // policy creation would not happen anyway, and DOM sinks accept
             // string values.
-            goog.global.trustedTypes ? goog.global.trustedTypes.emptyHTML : '');
+            goog.global.trustedTypes && goog.global.trustedTypes.emptyHTML ?
+                goog.global.trustedTypes.emptyHTML :
+                '');
 
 
 /**
