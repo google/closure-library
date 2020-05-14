@@ -6,8 +6,6 @@
 
 /**
  * Utilities intended for testing assertion functions.
- *
- * @visibility {//closure/goog:__pkg__}
  */
 
 goog.module('goog.testing.safe.assertionFailure');
