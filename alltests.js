@@ -383,7 +383,6 @@ var _allTests = [
   'closure/goog/reflect/reflect_test.html',
   'closure/goog/result/chain_test.html',
   'closure/goog/result/combine_test.html',
-  'closure/goog/result/deferredadaptor_test.html',
   'closure/goog/result/resultutil_test.html',
   'closure/goog/result/simpleresult_test.html',
   'closure/goog/result/transform_test.html',

@@ -975,8 +975,6 @@ goog.addDependency('reflect/reflect.js', ['goog.reflect'], [], {'lang': 'es6'});
 goog.addDependency('reflect/reflect_test.js', ['goog.reflectTest'], ['goog.object', 'goog.reflect', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('result/chain_test.js', ['goog.result.chainTest'], ['goog.Timer', 'goog.result', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('result/combine_test.js', ['goog.result.combineTest'], ['goog.Timer', 'goog.array', 'goog.result', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('result/deferredadaptor.js', ['goog.result.DeferredAdaptor'], ['goog.async.Deferred', 'goog.result', 'goog.result.Result'], {});
-goog.addDependency('result/deferredadaptor_test.js', ['goog.result.DeferredAdaptorTest'], ['goog.async.Deferred', 'goog.result', 'goog.result.DeferredAdaptor', 'goog.result.SimpleResult', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('result/dependentresult.js', ['goog.result.DependentResult'], ['goog.result.Result'], {});
 goog.addDependency('result/result_interface.js', ['goog.result.Result'], ['goog.Thenable'], {});
 goog.addDependency('result/resultutil.js', ['goog.result'], ['goog.array', 'goog.result.DependentResult', 'goog.result.Result', 'goog.result.SimpleResult'], {});
