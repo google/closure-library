@@ -128,7 +128,7 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
   /**
    * Used to ensure that we don't dispatch an multiple ERROR events. This can
    * happen in IE when it does a synchronous load and one error is handled in
-   * the ready statte change and one is handled due to send() throwing an
+   * the ready state change and one is handled due to send() throwing an
    * exception.
    * @private {boolean}
    */
