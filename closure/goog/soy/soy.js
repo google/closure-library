@@ -76,7 +76,6 @@ goog.soy.renderHtml = function(element, templateResult) {
 };
 
 
-// TODO(user): remove the second half of the function type union
 /**
  * Renders a Soy template and then set the output string as
  * the innerHTML of an element. It is recommended to use this helper function
@@ -84,24 +83,20 @@ goog.soy.renderHtml = function(element, templateResult) {
  * will be easier to audit the code for cross-site scripting vulnerabilities.
  *
  * @param {Element} element The element whose content we are rendering into.
- * @param {?function(ARG_TYPES, ?goog.soy.CompatibleIj_=):*|
- *     ?function(ARG_TYPES, null=, Object<string, *>=):*} template
- *     The Soy template defining the element's content.
+ * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj_=): *} template The Soy
+ *     template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
  * @template ARG_TYPES
  */
 goog.soy.renderElement = function(
     element, template, opt_templateData, opt_injectedData) {
-  // Soy template parameter is only nullable for historical reasons.
-  goog.asserts.assert(template, 'Soy template may not be null.');
   var html = goog.soy.ensureTemplateOutputHtml_(template(
       opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData));
   goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
       goog.asserts.assert(element), html);
 };
 
-// TODO(user): remove the second half of the function type union
 /**
  * Renders a Soy template into a single node or a document
  * fragment. If the rendered HTML string represents a single node, then that
@@ -109,12 +104,9 @@ goog.soy.renderElement = function(
  * the method). Otherwise a document fragment is returned containing the
  * rendered nodes.
  *
- * @param {
- *     ?function(ARG_TYPES,
- * ?goog.soy.CompatibleIj_=):!goog.soy.data.SanitizedContent|
- *     ?function(ARG_TYPES, null=, Object<string, *>=):
- *     goog.soy.data.SanitizedContent} template The Soy template defining the
- *     element's content. The kind of the template must be "html" or "text".
+ * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj_=): *} template The Soy
+ *     template defining the element's content. The kind of the template must be
+ *     "html" or "text".
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
  * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper used to
@@ -124,8 +116,6 @@ goog.soy.renderElement = function(
  */
 goog.soy.renderAsFragment = function(
     template, opt_templateData, opt_injectedData, opt_domHelper) {
-  // Soy template parameter is only nullable for historical reasons.
-  goog.asserts.assert(template, 'Soy template may not be null.');
   var dom = opt_domHelper || goog.dom.getDomHelper();
   var output = template(
       opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData);
@@ -134,14 +124,12 @@ goog.soy.renderAsFragment = function(
   return dom.safeHtmlToNode(html);
 };
 
-// TODO(user): remove the second half of the function type union
 /**
  * Renders a Soy template into a single node. If the rendered
  * HTML string represents a single node, then that node is returned. Otherwise,
  * a DIV element is returned containing the rendered nodes.
  *
- * @param {?function(ARG_TYPES, ?goog.soy.CompatibleIj_=):*|
- *     ?function(ARG_TYPES, null=, Object<string, *>=):*} template
+ * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj_=): *} template
  *     The Soy template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
@@ -153,8 +141,6 @@ goog.soy.renderAsFragment = function(
  */
 goog.soy.renderAsElement = function(
     template, opt_templateData, opt_injectedData, opt_domHelper) {
-  // Soy template parameter is only nullable for historical reasons.
-  goog.asserts.assert(template, 'Soy template may not be null.');
   return goog.soy.convertToElement_(
       template(
           opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData),
