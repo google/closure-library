@@ -77,25 +77,6 @@ function otag(tag) {
   return `data-sanitizer-original-tag="${tag}"`;
 }
 
-/**
- * Sanitize content, let the browser apply its own HTML tree correction by
- * attaching the content to the document, and then assert it matches the
- * expected value.
- * @param {string} expected
- * @param {string} input
- */
-function assertAfterInsertionEquals(expected, input) {
-  const sanitizer =
-      new Builder().allowFormTag().allowStyleTag().withStyleContainer().build();
-  input = SafeHtml.unwrap(sanitizer.sanitize(input));
-  const div = document.createElement('div');
-  document.body.appendChild(div);
-  div.innerHTML = input;
-  googTestingDom.assertHtmlMatches(
-      expected, div.innerHTML, true /* opt_strictAttributes */);
-  div.parentNode.removeChild(div);
-}
-
 // TODO(pelizzi): name of test does not make sense
 
 // the tests below investigate how <span> behaves when it is unknowingly put
