@@ -34,7 +34,7 @@ function assertTokens(value, tokens, ignoreWhitespace = undefined) {
     tokensFound.push(tokenizer.getCurrent());
   }
 
-  if (goog.typeOf(tokens) != 'array') {
+  if (!Array.isArray(tokens)) {
     tokens = [tokens];
   }
 
