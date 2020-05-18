@@ -12,21 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @fileoverview The forward declarations in this file are here to faciliate
- * the removal of "deps.js" from the "base" rule.  These types are
- * included in various extern files.  These rules should be cleaned up
- * so that these declarations aren't necessary.
- * @suppress {extraRequire}
- */
 
-goog.forwardDeclare('goog.Promise');
-goog.forwardDeclare('goog.date.DateLike');
-goog.forwardDeclare('goog.date.DateTime');
-goog.forwardDeclare('goog.events.EventId');
-goog.forwardDeclare('goog.events.Key');
-goog.forwardDeclare('goog.events.KeyCodes');
-goog.forwardDeclare('goog.i18n.TimeZone');
-goog.forwardDeclare('goog.math.Range');
-goog.forwardDeclare('goog.math.Size');
-goog.forwardDeclare('goog.structs.Map');
+// NOTE: This file exists simply to not break the rules_closure.  This
+// dependency should be removed and this file deleted.
+
+
+
