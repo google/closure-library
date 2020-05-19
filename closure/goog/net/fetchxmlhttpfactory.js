@@ -468,6 +468,13 @@ goog.net.FetchXmlHttp.prototype.setCredentialsMode = function(credentialsMode) {
   this.credentialsMode_ = credentialsMode;
 };
 
+/**
+ * @return {!RequestCredentials|undefined} The credentials mode of the
+ *     Service Worker fetch.
+ */
+goog.net.FetchXmlHttp.prototype.getCredentialsMode = function() {
+  return this.credentialsMode_;
+};
 
 /**
  * @param {!RequestCache} cacheMode The cache mode of the Service Worker fetch.
@@ -486,3 +493,27 @@ goog.net.FetchXmlHttp.prototype.dispatchCallback_ = function() {
     this.onreadystatechange.call(this);
   }
 };
+
+// Polyfill XmlHttpRequest's withCredentials property for specifying whether to
+// include credentials on cross domain requests.
+Object.defineProperty(goog.net.FetchXmlHttp.prototype, 'withCredentials', {
+  get:
+      /**
+       * @this {goog.net.FetchXmlHttp}
+       * @return {boolean} Whether to include credentials in cross domain
+       *     requests.
+       */
+      function() {
+        return this.getCredentialsMode() === 'include';
+      },
+
+  set:
+      /**
+       * @param {boolean} value Whether to include credentials in cross domain
+       *     requests.
+       * @this {goog.net.FetchXmlHttp}
+       **/
+      function(value) {
+        this.setCredentialsMode(value ? 'include' : 'same-origin');
+      }
+});
