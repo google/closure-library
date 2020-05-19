@@ -624,7 +624,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowAttributes =
   var oldWhitelist = this.attributeWhitelist_;
   this.attributeWhitelist_ = {};
   goog.array.forEach(attrWhitelist, function(attr) {
-    if (goog.typeOf(attr) === 'string') {
+    if (typeof attr === 'string') {
       attr = {tagName: '*', attributeName: attr.toUpperCase(), policy: null};
     }
     var handlerName = goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(

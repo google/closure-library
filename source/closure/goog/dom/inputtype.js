@@ -5,10 +5,9 @@
  */
 
 /**
- * @fileoverview Defines the goog.dom.InputType enum.  This enumerates
- * all input element types (for INPUT, BUTTON, SELECT and TEXTAREA
- * elements) in either the W3C HTML 4.01 index of elements or the
- * HTML5 draft specification.
+ * @fileoverview Defines the goog.dom.InputType enum.  This enumerates all
+ * input element types (for INPUT, BUTTON, SELECT and TEXTAREA elements) in
+ * either the W3C HTML 4.01 index of elements or the HTML5 draft specification.
  *
  * References:
  * http://www.w3.org/TR/html401/sgml/dtd.html#InputType

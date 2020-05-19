@@ -205,8 +205,8 @@ goog.net.BrowserChannel.prototype.backChannelRequest_ = null;
 
 
 /**
- * The relative path (in the context of the page hosting the browser
- * channel) for making requests to the server.
+ * The relative path (in the context of the page hosting the browser channel)
+ * for making requests to the server.
  * @type {?string}
  * @private
  */
