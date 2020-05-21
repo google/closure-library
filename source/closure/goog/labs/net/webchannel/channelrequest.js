@@ -18,6 +18,7 @@
 goog.provide('goog.labs.net.webChannel.ChannelRequest');
 
 goog.require('goog.Timer');
+goog.require('goog.asserts');
 goog.require('goog.async.Throttle');
 goog.require('goog.events.EventHandler');
 goog.require('goog.labs.net.webChannel.Channel');
@@ -32,6 +33,7 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 goog.requireType('goog.Uri');
+goog.requireType('goog.labs.net.webChannel.Wire.QueuedMap');
 goog.requireType('goog.net.XhrIo');
 
 
@@ -1005,6 +1007,8 @@ ChannelRequest.prototype.cancelWatchDogTimer_ = function() {
 ChannelRequest.prototype.onWatchDogTimeout_ = function() {
   this.watchDogTimerId_ = null;
   var now = goog.now();
+  goog.asserts.assert(
+      this.watchDogTimeoutTime_, 'WatchDog timeout time missing?');
   if (now - this.watchDogTimeoutTime_ >= 0) {
     this.handleTimeout_();
   } else {

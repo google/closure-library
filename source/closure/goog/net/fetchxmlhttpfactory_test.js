@@ -351,4 +351,31 @@ testSuite({
       mockControl.$verifyAll();
     });
   },
+
+  testWithCredentials_set() {
+    const xhr = factory.createInstance();
+
+    assertEquals(xhr.getCredentialsMode(), undefined);
+
+    xhr.withCredentials = true;
+    assertEquals(xhr.getCredentialsMode(), 'include');
+
+    xhr.withCredentials = false;
+    assertEquals(xhr.getCredentialsMode(), 'same-origin');
+  },
+
+  testWithCredentials_get() {
+    const xhr = factory.createInstance();
+
+    assertEquals(xhr.withCredentials, false);
+
+    xhr.setCredentialsMode('include');
+    assertEquals(xhr.withCredentials, true);
+
+    xhr.setCredentialsMode('same-origin');
+    assertEquals(xhr.withCredentials, false);
+
+    xhr.setCredentialsMode('omit');
+    assertEquals(xhr.withCredentials, false);
+  }
 });

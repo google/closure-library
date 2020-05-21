@@ -296,6 +296,10 @@ goog.debug.Trace_.Event_.prototype.toTraceString = function(
     startTime, prevTime, indent) {
   var sb = [];
 
+  goog.asserts.assertNumber(
+      this.eventTime, 'eventTime missing - call startTracer?');
+  goog.asserts.assertNumber(
+      this.totalVarAlloc, 'totalVarAlloc missing - call startTracer?');
   if (prevTime == -1) {
     sb.push('    ');
   } else {
@@ -307,6 +311,10 @@ goog.debug.Trace_.Event_.prototype.toTraceString = function(
     sb.push(' Start        ');
   } else if (this.eventType == goog.debug.Trace_.EventType.STOP) {
     sb.push(' Done ');
+    goog.asserts.assertNumber(
+        this.startTime, 'startTime missing - startTracer not called?');
+    goog.asserts.assertNumber(
+        this.stopTime, 'stopTime missing - stopTracer not called?');
     var delta = this.stopTime - this.startTime;
     sb.push(goog.debug.Trace_.longToPaddedString_(delta), ' ms ');
   } else {
@@ -712,6 +720,8 @@ goog.debug.Trace_.prototype.addComment = function(
       var event = this.events_[i];
       var eventTime = event.eventTime;
 
+      goog.asserts.assertNumber(
+          eventTime, 'eventTime undefined - call startTracer?');
       if (eventTime > timeStamp) {
         goog.array.insertAt(this.events_, eventComment, i);
         break;

@@ -245,17 +245,6 @@ goog.TRUSTED_SITE = goog.define('goog.TRUSTED_SITE', true);
 
 
 /**
- * @define {boolean} Whether a project is expected to be running in strict mode.
- *
- * This define can be used to trigger alternate implementations compatible with
- * running in EcmaScript Strict mode or warn about unavailable functionality.
- * @see https://goo.gl/PudQ4y
- *
- */
-goog.STRICT_MODE_COMPATIBLE = goog.define('goog.STRICT_MODE_COMPATIBLE', false);
-
-
-/**
  * @define {boolean} Whether code that calls {@link goog.setTestOnly} should
  *     be disallowed in the compilation unit.
  */

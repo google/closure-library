@@ -29,6 +29,7 @@
  */
 
 goog.provide('goog.net.WebChannel');
+goog.provide('goog.net.WebChannel.Options');
 
 goog.require('goog.events');
 goog.require('goog.events.Event');

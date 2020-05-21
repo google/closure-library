@@ -12,8 +12,8 @@
 
 goog.provide('goog.events.KeyCodes');
 
-goog.forwardDeclare('goog.events.BrowserEvent');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
 
 
 /**

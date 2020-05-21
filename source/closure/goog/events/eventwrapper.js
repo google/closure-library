@@ -10,8 +10,8 @@
 
 goog.provide('goog.events.EventWrapper');
 
-goog.forwardDeclare('goog.events.EventHandler');
-goog.forwardDeclare('goog.events.ListenableType');
+goog.requireType('goog.events.EventHandler');
+goog.requireType('goog.events.ListenableType');
 
 
 

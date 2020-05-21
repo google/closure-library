@@ -251,6 +251,25 @@ function createSuccessfulNonBatchLoaderWithConstructor(moduleMgr, info) {
   };
 }
 
+/**
+ * Creates an AbstractModuleLoader implementation with extra edges support
+ * @param {!Array} loaderCalls array to which the arguments of loadModules will
+ *     be appended
+ * @return {!Object<function(), boolean>}
+ */
+function createModuleLoaderWithExtraEdgesSupport(loaderCalls) {
+  return {
+    loadModules(ids, moduleInfoMap, loadOptions) {
+      loaderCalls.push({
+        ids: ids,
+        moduleInfoMap: moduleInfoMap,
+        ...loadOptions,
+      });
+    },
+    supportsExtraEdges: true,
+  };
+}
+
 testSuite({
   tearDown() {
     clock.dispose();
@@ -495,7 +514,8 @@ testSuite({
   },
 
   /**
-     Tests loading multiple modules with deps by requesting a Deferred object.
+     Tests loading multiple modules with deps by requesting a Deferred
+     object.
    */
   testLoadMultipleWithDeps() {
     const mm = getModuleManager({'a': [], 'b': ['c'], 'c': []});
@@ -736,7 +756,9 @@ testSuite({
     assertNull(error3);
   },
 
-  /** Tests loading a module by user action by requesting a Deferred object. */
+  /**
+     Tests loading a module by user action by requesting a Deferred object.
+   */
   testLoadForUser() {
     const mm = getModuleManager({'a': [], 'b': [], 'c': []});
     mm.setLoader(createSuccessfulNonBatchLoader(mm));
@@ -761,6 +783,73 @@ testSuite({
 
     assertTrue(calledBack);
     assertNull(error);
+  },
+
+  testExtraEdges() {
+    const mm =
+        getModuleManager({'modA': [], 'modB': [], 'modC': [], 'modD': []});
+    const loaderCalls = [];
+    mm.setLoader(createModuleLoaderWithExtraEdgesSupport(loaderCalls));
+    mm.addExtraEdge('modA', 'modB');
+    mm.addExtraEdge('modA', 'modC');
+    mm.addExtraEdge('modC', 'modD');
+
+    const expectedExtraEdges = {
+      'modA': {'modB': true, 'modC': true},
+      'modC': {'modD': true},
+    };
+
+    mm.load('modA');
+    assertEquals(1, loaderCalls.length);
+    assertObjectEquals(expectedExtraEdges, loaderCalls[0].extraEdges);
+  },
+
+  testAddExtraEdge_managerDoesNotSupportExtraEdges() {
+    const mm =
+        getModuleManager({'modA': [], 'modB': [], 'modC': [], 'modD': []});
+    mm.setLoader({
+      loadModules(ids, moduleInfoMap, loadOptions) {},
+    });
+    assertThrows(() => mm.addExtraEdge('modA', 'modB'));
+  },
+
+  testRemoveExtraEdge() {
+    const mm =
+        getModuleManager({'modA': [], 'modB': [], 'modC': [], 'modD': []});
+    const loaderCalls = [];
+    mm.setLoader(createModuleLoaderWithExtraEdgesSupport(loaderCalls));
+    mm.addExtraEdge('modA', 'modB');
+    mm.addExtraEdge('modA', 'modC');
+    mm.addExtraEdge('modC', 'modD');
+    mm.removeExtraEdge('modA', 'modB');
+
+    const expectedExtraEdges = {
+      'modA': {'modC': true},
+      'modC': {'modD': true},
+    };
+
+    mm.load('modA');
+    assertEquals(1, loaderCalls.length);
+    assertObjectEquals(expectedExtraEdges, loaderCalls[0].extraEdges);
+  },
+
+  testRemoveEdge_nonexistentEdge() {
+    const mm =
+        getModuleManager({'modA': [], 'modB': [], 'modC': [], 'modD': []});
+    const loaderCalls = [];
+    mm.setLoader(createModuleLoaderWithExtraEdgesSupport(loaderCalls));
+    mm.addExtraEdge('modA', 'modC');
+    mm.addExtraEdge('modC', 'modD');
+    mm.removeExtraEdge('modA', 'modB');
+
+    const expectedExtraEdges = {
+      'modA': {'modC': true},
+      'modC': {'modD': true},
+    };
+
+    mm.load('modA');
+    assertEquals(1, loaderCalls.length);
+    assertObjectEquals(expectedExtraEdges, loaderCalls[0].extraEdges);
   },
 
   /** Tests that preloading a module calls back the deferred object. */
@@ -811,7 +900,8 @@ testSuite({
     mm.preloadModule('a');
     clock.tick(1);
 
-    // 'b' is in the middle of loading, should get called back when it's done.
+    // 'b' is in the middle of loading, should get called back when it's
+    // done.
     let calledBack = false;
     const d = mm.preloadModule('a');
     d.addCallback((ctx) => {
@@ -1077,7 +1167,8 @@ testSuite({
   },
 
   /**
-     Tests that the deferred's errbacks are called if the module fails to load.
+     Tests that the deferred's errbacks are called if the module fails to
+     load.
    */
   testLoadWithFailingModule() {
     const mm = getModuleManager({'a': [], 'b': [], 'c': []});
@@ -1107,16 +1198,17 @@ testSuite({
 
     assertFalse(calledBack);
 
-    // NOTE: Deferred always calls errbacks with an Error object.  For now the
-    // module manager just passes the FailureType which gets set as the Error
-    // object's message.
+    // NOTE: Deferred always calls errbacks with an Error object.  For now
+    // the module manager just passes the FailureType which gets set as the
+    // Error object's message.
     assertEquals(
         'Failure cause was not as expected',
         ModuleManager.FailureType.UNAUTHORIZED, Number(error.message));
   },
 
   /**
-     Tests that the deferred's errbacks are called if a module fails to load.
+     Tests that the deferred's errbacks are called if a module fails to
+     load.
    */
   testLoadMultipleWithFailingModule() {
     const mm = getModuleManager({'a': [], 'b': [], 'c': []});
@@ -1185,9 +1277,9 @@ testSuite({
     assertFalse(calledBack21);
     assertFalse(calledBack22);
 
-    // NOTE: Deferred always calls errbacks with an Error object.  For now the
-    // module manager just passes the FailureType which gets set as the Error
-    // object's message.
+    // NOTE: Deferred always calls errbacks with an Error object.  For now
+    // the module manager just passes the FailureType which gets set as the
+    // Error object's message.
     assertEquals(
         'Failure cause was not as expected',
         ModuleManager.FailureType.UNAUTHORIZED, Number(error11.message));
@@ -1195,20 +1287,21 @@ testSuite({
         'Failure cause was not as expected',
         ModuleManager.FailureType.UNAUTHORIZED, Number(error12.message));
 
-    // The first deferred of the second load should be called since it asks for
-    // one of the failed modules.
+    // The first deferred of the second load should be called since it asks
+    // for one of the failed modules.
     assertEquals(
         'Failure cause was not as expected',
         ModuleManager.FailureType.UNAUTHORIZED, Number(error21.message));
 
-    // The last deferred should be dropped so it is neither called back nor an
-    // error.
+    // The last deferred should be dropped so it is neither called back nor
+    // an error.
     assertFalse(calledBack22);
     assertNull(error22);
   },
 
   /**
-     Tests that the right dependencies are cancelled on a loadMultiple failure.
+     Tests that the right dependencies are cancelled on a loadMultiple
+     failure.
    */
   testLoadMultipleWithFailingModuleDependencies() {
     const mm =
@@ -1293,9 +1386,9 @@ testSuite({
     assertFalse(calledBack22);
     assertFalse(calledBack23);
 
-    // NOTE: Deferred always calls errbacks with an Error object.  For now the
-    // module manager just passes the FailureType which gets set as the Error
-    // object's message.
+    // NOTE: Deferred always calls errbacks with an Error object.  For now
+    // the module manager just passes the FailureType which gets set as the
+    // Error object's message.
     assertEquals(
         'Failure cause was not as expected',
         ModuleManager.FailureType.UNAUTHORIZED, Number(error11.message));
@@ -1309,8 +1402,8 @@ testSuite({
   },
 
   /**
-   * Tests that when loading multiple modules, the input array is not modified
-   * when it has duplicates.
+   * Tests that when loading multiple modules, the input array is not
+   * modified when it has duplicates.
    */
   testLoadMultipleWithDuplicates() {
     const mm = getModuleManager({'a': [], 'b': []});
@@ -1604,7 +1697,9 @@ testSuite({
     assertTrue('should have called timeout callback', firedTimeout);
   },
 
-  /** Tests that an error during execOnLoad will trigger the error callback. */
+  /**
+     Tests that an error during execOnLoad will trigger the error callback.
+   */
   testExecOnLoadError() {
     // Expect two callbacks, each of which will be called with callback type
     // ERROR, the right module id and failure type INIT_ERROR.
@@ -1653,8 +1748,8 @@ testSuite({
    * Uses setAllModuleInfoString rather than setAllModuleInfo.
    */
   testExecOnLoadErrorModuleInfoString() {
-    // Expect a callback to be called with callback type ERROR, the right module
-    // id and failure type INIT_ERROR.
+    // Expect a callback to be called with callback type ERROR, the right
+    // module id and failure type INIT_ERROR.
     const errorCallback = testing.createFunctionMock('callback');
     errorCallback(
         ModuleManager.CallbackType.ERROR, 'b',
@@ -1838,8 +1933,8 @@ testSuite({
   },
 
   /**
-   * Tests that a call to load the loading module during module initialization
-   * doesn't trigger a second load.
+   * Tests that a call to load the loading module during module
+   * initialization doesn't trigger a second load.
    */
   testLoadWhenInitializing() {
     const mm = getModuleManager({'a': []});

@@ -9,6 +9,7 @@
  * different wire protocol versions.
  */
 goog.provide('goog.labs.net.webChannel.Wire');
+goog.provide('goog.labs.net.webChannel.Wire.QueuedMap');
 
 goog.requireType('goog.structs.Map');
 

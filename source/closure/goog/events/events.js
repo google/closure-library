@@ -47,14 +47,14 @@ goog.provide('goog.events.CaptureSimulationMode');
 goog.provide('goog.events.Key');
 goog.provide('goog.events.ListenableType');
 
-goog.forwardDeclare('goog.debug.ErrorHandler');
-goog.forwardDeclare('goog.events.EventWrapper');
 goog.require('goog.asserts');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Listenable');
 goog.require('goog.events.ListenerMap');
+goog.requireType('goog.debug.ErrorHandler');
+goog.requireType('goog.events.EventWrapper');
 
 
 /**
