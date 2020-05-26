@@ -11,7 +11,7 @@
 goog.module('goog.module.AbstractModuleLoader');
 goog.module.declareLegacyNamespace();
 
-const {ModuleInfo} = goog.require('goog.module');
+const ModuleInfo = goog.requireType('goog.module.ModuleInfo');
 
 /**
  * Optional parameters for the loadModules method.
