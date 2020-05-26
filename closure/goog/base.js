@@ -1431,6 +1431,7 @@ goog.isDateLike = function(val) {
  * Returns true if the specified value is a function.
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is a function.
+ * @deprecated use "typeof val === 'function'" instead.
  */
 goog.isFunction = function(val) {
   return goog.typeOf(val) == 'function';
