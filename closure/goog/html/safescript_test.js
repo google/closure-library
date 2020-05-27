@@ -59,7 +59,9 @@ testSuite({
     let safeValue = SafeScript.fromConstant(Const.from('script'));
     let trustedValue = SafeScript.unwrapTrustedScript(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue);
-    stubs.set(trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
+    stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
+      return policy;
+    });
     safeValue = SafeScript.fromConstant(Const.from('script'));
     trustedValue = SafeScript.unwrapTrustedScript(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
