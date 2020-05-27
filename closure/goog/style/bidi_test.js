@@ -18,17 +18,17 @@ function updateInfo() {
   let element = document.getElementById('scrolledElementRtl');
   document.getElementById('elementScrollLeftRtl').innerHTML =
       element.offsetParent.scrollLeft;
-  document.getElementById('bidiOffsetStartRtl').innerHTML =
+  document.getElementById('bidiOffsetStartRtl').textContent =
       bidi.getOffsetStart(element);
-  document.getElementById('bidiScrollLeftRtl').innerHTML =
+  document.getElementById('bidiScrollLeftRtl').textContent =
       bidi.getScrollLeft(element.offsetParent);
 
   element = document.getElementById('scrolledElementLtr');
   document.getElementById('elementScrollLeftLtr').innerHTML =
       element.offsetParent.scrollLeft;
-  document.getElementById('bidiOffsetStartLtr').innerHTML =
+  document.getElementById('bidiOffsetStartLtr').textContent =
       bidi.getOffsetStart(element);
-  document.getElementById('bidiScrollLeftLtr').innerHTML =
+  document.getElementById('bidiScrollLeftLtr').textContent =
       bidi.getScrollLeft(element.offsetParent);
 }
 
