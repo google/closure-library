@@ -217,6 +217,7 @@ var _allTests = [
   'closure/goog/html/silverlight_test.html',
   'closure/goog/html/textextractor_test.html',
   'closure/goog/html/trustedresourceurl_test.html',
+  'closure/goog/html/trustedtypes_test.html',
   'closure/goog/html/uncheckedconversions_test.html',
   'closure/goog/html/utils_test.html',
   'closure/goog/i18n/bidiformatter_test.html',
