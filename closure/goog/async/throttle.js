@@ -60,10 +60,10 @@ goog.async.Throttle = function(listener, interval, opt_handler) {
   this.callback_ = goog.bind(this.onTimer_, this);
 
   /**
-   * The last arguments passed into `fire`.
-   * @private {!IArrayLike}
+   * The last arguments passed into `fire`, or null if there is no pending call.
+   * @private {?IArrayLike}
    */
-  this.args_ = [];
+  this.args_ = null;
 };
 goog.inherits(goog.async.Throttle, goog.Disposable);
 
@@ -130,7 +130,7 @@ goog.async.Throttle.prototype.stop = function() {
     goog.Timer.clear(this.timer_);
     this.timer_ = null;
     this.shouldFire_ = false;
-    this.args_ = [];
+    this.args_ = null;
   }
 };
 
@@ -186,5 +186,8 @@ goog.async.Throttle.prototype.onTimer_ = function() {
  */
 goog.async.Throttle.prototype.doAction_ = function() {
   this.timer_ = goog.Timer.callOnce(this.callback_, this.interval_);
-  this.listener_.apply(null, this.args_);
+  var args = this.args_;
+  // release memory first so it always happens even if listener throws
+  this.args_ = null;
+  this.listener_.apply(null, args);
 };
