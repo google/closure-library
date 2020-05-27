@@ -203,7 +203,8 @@ var _getCurrentTestCase = function() {
 
 var _assert = function(comment, booleanValue, failureMessage) {
   // If another framework has installed an adapter, tell it about the assertion.
-  var adapter = window['Closure assert adapter'];
+  var adapter =
+      typeof window !== 'undefined' && window['Closure assert adapter'];
   if (adapter) {
     adapter['assertWithMessage'](
         booleanValue,
