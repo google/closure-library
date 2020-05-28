@@ -1449,24 +1449,6 @@ goog.uidCounter_ = 0;
 
 
 /**
- * Adds a hash code field to an object. The hash code is unique for the
- * given object.
- * @param {Object} obj The object to get the hash code for.
- * @return {number} The hash code for the object.
- * @deprecated Use goog.getUid instead.
- */
-goog.getHashCode = goog.getUid;
-
-
-/**
- * Removes the hash code field from an object.
- * @param {Object} obj The object to remove the field from.
- * @deprecated Use goog.removeUid instead.
- */
-goog.removeHashCode = goog.removeUid;
-
-
-/**
  * Clones a value. The input may be an Object, Array, or basic type. Objects and
  * arrays will be cloned recursively.
  *
