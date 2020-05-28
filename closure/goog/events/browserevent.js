@@ -388,10 +388,11 @@ goog.events.BrowserEvent.prototype.isButton = function(button) {
  * @return {boolean} The result.
  */
 goog.events.BrowserEvent.prototype.isMouseActionButton = function() {
-  // Webkit does not ctrl+click to be a right-click, so we
-  // normalize it to behave like Gecko and Opera.
+  // Ctrl+click should never behave like a left-click on mac, regardless of
+  // whether or not the browser will actually ever emit such an event.  If
+  // we see it, treat it like right-click always.
   return this.isButton(goog.events.BrowserEvent.MouseButton.LEFT) &&
-      !(goog.userAgent.WEBKIT && goog.userAgent.MAC && this.ctrlKey);
+      !(goog.userAgent.MAC && this.ctrlKey);
 };
 
 
