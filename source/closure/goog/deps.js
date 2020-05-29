@@ -556,7 +556,8 @@ goog.addDependency('html/textextractor.js', ['goog.html.textExtractor'], ['goog.
 goog.addDependency('html/textextractor_test.js', ['goog.html.textExtractorTest'], ['goog.html.textExtractor', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('html/trustedresourceurl.js', ['goog.html.TrustedResourceUrl'], ['goog.asserts', 'goog.fs.blob', 'goog.fs.url', 'goog.html.SafeScript', 'goog.html.trustedtypes', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.string.Const', 'goog.string.TypedString'], {'lang': 'es6'});
 goog.addDependency('html/trustedresourceurl_test.js', ['goog.html.trustedResourceUrlTest'], ['goog.html.SafeScript', 'goog.html.TrustedResourceUrl', 'goog.html.trustedtypes', 'goog.i18n.bidi.Dir', 'goog.object', 'goog.string.Const', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es8', 'module': 'goog'});
-goog.addDependency('html/trustedtypes.js', ['goog.html.trustedtypes'], ['goog.memoize'], {});
+goog.addDependency('html/trustedtypes.js', ['goog.html.trustedtypes'], [], {});
+goog.addDependency('html/trustedtypes_test.js', ['goog.html.trustedtypesTest'], ['goog.html.trustedtypes', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('html/uncheckedconversions.js', ['goog.html.uncheckedconversions'], ['goog.asserts', 'goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.string.Const', 'goog.string.internal'], {});
 goog.addDependency('html/uncheckedconversions_test.js', ['goog.html.uncheckedconversionsTest'], ['goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.uncheckedconversions', 'goog.i18n.bidi.Dir', 'goog.string.Const', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('html/utils.js', ['goog.html.utils'], ['goog.string'], {});
@@ -816,7 +817,7 @@ goog.addDependency('messaging/respondingchannel_test.js', ['goog.messaging.Respo
 goog.addDependency('messaging/testdata/portchannel_worker.js', ['goog.messaging.testdata.portchannel_worker'], ['goog.messaging.PortChannel'], {});
 goog.addDependency('messaging/testdata/portnetwork_worker1.js', ['goog.messaging.testdata.portnetwork_worker1'], ['goog.messaging.PortCaller', 'goog.messaging.PortChannel'], {});
 goog.addDependency('messaging/testdata/portnetwork_worker2.js', ['goog.messaging.testdata.portnetwork_worker2'], ['goog.messaging.PortCaller', 'goog.messaging.PortChannel'], {});
-goog.addDependency('module/abstractmoduleloader.js', ['goog.module.AbstractModuleLoader'], ['goog.module'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('module/abstractmoduleloader.js', ['goog.module.AbstractModuleLoader'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('module/basemodule.js', ['goog.module.BaseModule'], ['goog.Disposable', 'goog.module'], {});
 goog.addDependency('module/loader.js', ['goog.module.Loader'], ['goog.Timer', 'goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.legacyconversions', 'goog.module', 'goog.object'], {});
 goog.addDependency('module/module.js', ['goog.module'], [], {});
@@ -979,7 +980,7 @@ goog.addDependency('result/dependentresult.js', ['goog.result.DependentResult'],
 goog.addDependency('result/result_interface.js', ['goog.result.Result'], ['goog.Thenable'], {});
 goog.addDependency('result/resultutil.js', ['goog.result'], ['goog.array', 'goog.result.DependentResult', 'goog.result.Result', 'goog.result.SimpleResult'], {});
 goog.addDependency('result/resultutil_test.js', ['goog.resultTest'], ['goog.result', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('result/simpleresult.js', ['goog.result.SimpleResult', 'goog.result.SimpleResult.StateError'], ['goog.Promise', 'goog.Thenable', 'goog.debug.Error', 'goog.result.Result'], {});
+goog.addDependency('result/simpleresult.js', ['goog.result.SimpleResult', 'goog.result.SimpleResult.StateError'], ['goog.Promise', 'goog.Thenable', 'goog.debug.Error', 'goog.result.Result'], {'lang': 'es6'});
 goog.addDependency('result/simpleresult_test.js', ['goog.result.SimpleResultTest'], ['goog.Promise', 'goog.Thenable', 'goog.Timer', 'goog.result', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('result/transform_test.js', ['goog.result.transformTest'], ['goog.Timer', 'goog.result', 'goog.result.SimpleResult', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('result/wait_test.js', ['goog.result.waitTest'], ['goog.Timer', 'goog.result', 'goog.result.SimpleResult', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});

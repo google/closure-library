@@ -151,8 +151,8 @@ goog.html.SafeHtmlFormatter.prototype.startTag = function(
  * @param {string} tagName
  * @return {string} Marker.
  * @throws {Error} If invalid tag name, attribute name, or attribute value is
- *     provided. This function accepts the same tags and attributes as
- *     {@link goog.html.SafeHtml.create}.
+ *     provided. This function accepts the same tags as {@link
+ *     goog.html.SafeHtml.create}.
  */
 goog.html.SafeHtmlFormatter.prototype.endTag = function(tagName) {
   goog.html.SafeHtml.verifyTagName(tagName);

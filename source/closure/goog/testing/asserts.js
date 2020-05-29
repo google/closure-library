@@ -9,9 +9,6 @@ goog.setTestOnly();
 
 goog.require('goog.testing.JsUnitException');
 
-// TODO(user): Copied from JsUnit with some small modifications, we should
-// reimplement the asserters.
-
 var DOUBLE_EQUALITY_PREDICATE = function(var1, var2) {
   return var1 == var2;
 };
@@ -205,6 +202,15 @@ var _getCurrentTestCase = function() {
 };
 
 var _assert = function(comment, booleanValue, failureMessage) {
+  // If another framework has installed an adapter, tell it about the assertion.
+  var adapter =
+      typeof window !== 'undefined' && window['Closure assert adapter'];
+  if (adapter) {
+    adapter['assertWithMessage'](
+        booleanValue,
+        goog.testing.JsUnitException.generateMessage(comment, failureMessage));
+    // Either way, throw an error, for callers that assume that asserts throw.
+  }
   if (!booleanValue) {
     goog.testing.asserts.raiseException(comment, failureMessage);
   }

@@ -67,6 +67,34 @@ goog.Thenable.addImplementation(goog.result.SimpleResult);
 
 
 /**
+ * See `goog.async.Deferred`
+ *
+ * @param {*} value The value of the result.
+ * @return {!goog.result.Result} A Result object that has already been resolved
+ *     to the supplied value.
+ */
+goog.result.SimpleResult.succeed = function(value) {
+  var result = new goog.result.SimpleResult();
+  result.callback(value);
+  return result;
+};
+
+
+/**
+ * See `goog.async.Deferred`
+ *
+ * @param {*=} opt_error The error to which the result should resolve.
+ * @return {!goog.result.Result} A Result object that has already been resolved
+ *     to the supplied Error.
+ */
+goog.result.SimpleResult.fail = function(opt_error) {
+  var result = new goog.result.SimpleResult();
+  result.errback(opt_error);
+  return result;
+};
+
+
+/**
  * A waiting handler entry.
  * @typedef {{
  *   callback: function(!goog.result.SimpleResult),
@@ -101,9 +129,20 @@ goog.result.SimpleResult.prototype.getState = function() {
 
 
 /** @override */
+goog.result.SimpleResult.prototype.hasFired = function() {
+  return this.getState() !== goog.result.Result.State.PENDING;
+};
+
+
+/** @override */
 goog.result.SimpleResult.prototype.getValue = function() {
   return this.value_;
 };
+
+
+/** @override */
+goog.result.SimpleResult.prototype.getLastValueForMigration =
+    goog.result.SimpleResult.prototype.getValue;
 
 
 /** @override */
@@ -130,13 +169,48 @@ goog.result.SimpleResult.prototype.wait = function(handler, opt_scope) {
   }
 };
 
+/**
+ * See `goog.async.Deferred`.
+ *
+ * @param {function(this:T,?):?} cb The function to be called with a
+ *     successful result.
+ * @param {T=} opt_scope An optional scope to call the callback in.
+ * @template T
+ * @override
+ */
+goog.result.SimpleResult.prototype.addCallback = function(cb, opt_scope) {
+  this.wait(() => {
+    if (this.getState() == goog.result.Result.State.SUCCESS) {
+      cb.call(opt_scope, this.getValue());
+    }
+  });
+};
+
+
+/**
+ * See `goog.async.Deferred`.
+ *
+ * @param {function(this:T,?):?} eb The function to be called on an
+ *     unsuccessful result.
+ * @param {T=} opt_scope An optional scope to call the errback in.
+ * @template T
+ * @override
+ */
+goog.result.SimpleResult.prototype.addErrback = function(eb, opt_scope) {
+  this.wait(() => {
+    if (this.getState() == goog.result.Result.State.ERROR) {
+      eb.call(opt_scope, this.error_);
+    }
+  });
+};
+
 
 /**
  * Sets the value of this Result, changing the state.
  *
  * @param {*} value The value to set for this Result.
  */
-goog.result.SimpleResult.prototype.setValue = function(value) {
+goog.result.SimpleResult.prototype.callback = function(value) {
   if (this.isPending_()) {
     this.value_ = value;
     this.state_ = goog.result.Result.State.SUCCESS;
@@ -148,12 +222,17 @@ goog.result.SimpleResult.prototype.setValue = function(value) {
 };
 
 
+/** @const */
+goog.result.SimpleResult.prototype.setValue =
+    goog.result.SimpleResult.prototype.callback;
+
+
 /**
  * Sets the Result to be an error Result.
  *
  * @param {*=} opt_error Optional error slug to set for this Result.
  */
-goog.result.SimpleResult.prototype.setError = function(opt_error) {
+goog.result.SimpleResult.prototype.errback = function(opt_error) {
   if (this.isPending_()) {
     this.error_ = opt_error;
     this.state_ = goog.result.Result.State.ERROR;
@@ -163,6 +242,11 @@ goog.result.SimpleResult.prototype.setError = function(opt_error) {
     throw new goog.result.SimpleResult.StateError();
   }
 };
+
+
+/** @const */
+goog.result.SimpleResult.prototype.setError =
+    goog.result.SimpleResult.prototype.errback;
 
 
 /**
@@ -199,7 +283,7 @@ goog.result.SimpleResult.prototype.isPending_ = function() {
 goog.result.SimpleResult.prototype.cancel = function() {
   // cancel is a no-op if the result has been resolved.
   if (this.isPending_()) {
-    this.setError(new goog.result.Result.CancelError());
+    this.errback(new goog.result.Result.CancelError());
     return true;
   }
   return false;
@@ -227,9 +311,9 @@ goog.result.SimpleResult.prototype.then = function(
     if (result.isCanceled()) {
       promise.cancel();
     } else if (result.getState() == goog.result.Result.State.SUCCESS) {
-      resolve(result.getValue());
+      resolve(result.getLastValueForMigration());
     } else if (result.getState() == goog.result.Result.State.ERROR) {
-      reject(result.getError());
+      reject(result.error_);
     }
   });
   return promise.then(opt_onFulfilled, opt_onRejected, opt_context);
@@ -244,6 +328,6 @@ goog.result.SimpleResult.prototype.then = function(
  */
 goog.result.SimpleResult.fromPromise = function(promise) {
   var result = new goog.result.SimpleResult();
-  promise.then(result.setValue, result.setError, result);
+  promise.then(result.callback, result.errback, result);
   return result;
 };

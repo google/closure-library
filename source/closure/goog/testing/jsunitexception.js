@@ -19,8 +19,8 @@ goog.require('goog.testing.stacktrace');
  */
 goog.testing.JsUnitException = function(comment, opt_message) {
   this.isJsUnitException = true;
-  this.message = (comment ? comment : '') +
-      (comment && opt_message ? '\n' : '') + (opt_message ? opt_message : '');
+  this.message =
+      goog.testing.JsUnitException.generateMessage(comment, opt_message);
   this.stackTrace = goog.testing.stacktrace.get();
   // These fields are for compatibility with jsUnitTestManager.
   this.comment = comment || null;
@@ -34,6 +34,17 @@ goog.testing.JsUnitException = function(comment, opt_message) {
   }
 };
 goog.inherits(goog.testing.JsUnitException, Error);
+
+/**
+ * @param {string} comment A summary for the exception.
+ * @param {?string=} opt_message A description of the exception.
+ * @return {string} Concatenated message
+ * @package
+ */
+goog.testing.JsUnitException.generateMessage = function(comment, opt_message) {
+  return (comment || '') + (comment && opt_message ? '\n' : '') +
+      (opt_message || '');
+};
 
 
 /** @override */

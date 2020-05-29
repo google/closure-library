@@ -372,7 +372,9 @@ testSuite({
         TrustedResourceUrl.fromConstant(Const.from('https://example.com/'));
     let trustedValue = TrustedResourceUrl.unwrapTrustedScriptURL(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue);
-    stubs.set(trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
+    stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
+      return policy;
+    });
     safeValue =
         TrustedResourceUrl.fromConstant(Const.from('https://example.com/'));
     trustedValue = TrustedResourceUrl.unwrapTrustedScriptURL(safeValue);

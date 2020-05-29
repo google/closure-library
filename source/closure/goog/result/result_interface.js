@@ -43,6 +43,28 @@ goog.result.Result.prototype.wait = function(handler, opt_scope) {};
 
 
 /**
+ * See `goog.async.Deferred`.
+ *
+ * @param {function(this:T,?):?} cb The function to be called with a
+ *     successful result.
+ * @param {T=} opt_scope An optional scope to call the callback in.
+ * @template T
+ */
+goog.result.Result.prototype.addCallback = function(cb, opt_scope) {};
+
+
+/**
+ * See `goog.async.Deferred`.
+ *
+ * @param {function(this:T,?):?} eb The function to be called on an
+ *     unsuccessful result.
+ * @param {T=} opt_scope An optional scope to call the errback in.
+ * @template T
+ */
+goog.result.Result.prototype.addErrback = function(eb, opt_scope) {};
+
+
+/**
  * The States this object can be in.
  *
  * @enum {string}
@@ -67,10 +89,27 @@ goog.result.Result.prototype.getState = function() {};
 
 
 /**
+ * See `goog.async.Deferred`.
+ *
+ * @return {boolean} Has is this result no longer pending.
+ */
+goog.result.Result.prototype.hasFired = function() {};
+
+
+/**
  * @return {*} The value of this Result. Will return undefined if the Result is
  *     pending or was an error.
  */
 goog.result.Result.prototype.getValue = function() {};
+
+
+/**
+ * See `goog.async.Deferred`.
+ *
+ * @return {*} The value of this Result. Will return undefined if the Result is
+ *     pending or was an error.
+ */
+goog.result.Result.prototype.getLastValueForMigration = function() {};
 
 
 /**
@@ -95,7 +134,6 @@ goog.result.Result.prototype.cancel = function() {};
 goog.result.Result.prototype.isCanceled = function() {};
 
 
-
 /**
  * The value to be passed to the error handlers invoked upon cancellation.
  * @constructor
@@ -109,3 +147,7 @@ goog.result.Result.CancelError = function() {
   // cancel() operation.
 };
 goog.inherits(goog.result.Result.CancelError, Error);
+
+
+/** @const */
+goog.result.Result.CanceledError = goog.result.Result.CancelError;

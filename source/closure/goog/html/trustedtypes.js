@@ -10,7 +10,14 @@
  */
 
 goog.provide('goog.html.trustedtypes');
-goog.require('goog.memoize');
+
+
+/**
+ * Cached result of goog.createTrustedTypesPolicy.
+ * @type {?TrustedTypePolicy|undefined}
+ * @private
+ */
+goog.html.trustedtypes.cachedPolicy_;
 
 
 /**
@@ -23,6 +30,11 @@ goog.html.trustedtypes.getPolicyPrivateDoNotAccessOrElse = function() {
     // Binary not configured for Trusted Types.
     return null;
   }
-  return goog.memoize(goog.createTrustedTypesPolicy)(
-      goog.TRUSTED_TYPES_POLICY_NAME + '#html');
+
+  if (goog.html.trustedtypes.cachedPolicy_ === undefined) {
+    goog.html.trustedtypes.cachedPolicy_ =
+        goog.createTrustedTypesPolicy(goog.TRUSTED_TYPES_POLICY_NAME + '#html');
+  }
+
+  return goog.html.trustedtypes.cachedPolicy_;
 };

@@ -80,7 +80,9 @@ testSuite({
     let safeValue = SafeHtml.htmlEscape('HTML');
     let trustedValue = SafeHtml.unwrapTrustedHTML(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue);
-    stubs.set(trustedtypes, 'PRIVATE_DO_NOT_ACCESS_OR_ELSE_POLICY', policy);
+    stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
+      return policy;
+    });
     safeValue = SafeHtml.htmlEscape('HTML');
     trustedValue = SafeHtml.unwrapTrustedHTML(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());

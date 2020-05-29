@@ -871,10 +871,14 @@ goog.i18n.bidi.setElementDirByTextDirectionality = function(element, text) {
   const htmlElement = /** @type {!HTMLElement} */ (element);
   switch (goog.i18n.bidi.estimateDirection(text)) {
     case (goog.i18n.bidi.Dir.LTR):
-      htmlElement.dir = 'ltr';
+      if (htmlElement.dir !== 'ltr') {
+        htmlElement.dir = 'ltr';
+      }
       break;
     case (goog.i18n.bidi.Dir.RTL):
-      htmlElement.dir = 'rtl';
+      if (htmlElement.dir !== 'rtl') {
+        htmlElement.dir = 'rtl';
+      }
       break;
     default:
       // Default for no direction, inherit from document.
