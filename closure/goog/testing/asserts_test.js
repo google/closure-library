@@ -1140,7 +1140,10 @@ testSuite({
         throw new Error('fail');
       });
     });
-    assertEquals('Call to fail()\nExpected a JsUnitException', error.message);
+    assertEquals(
+        'Call to fail()\nExpected a JsUnitException, ' +
+            'got \'Error: fail\' instead',
+        error.message);
 
     error = assertThrowsJsUnitException(() => {
       assertThrowsJsUnitException(goog.nullFunction);

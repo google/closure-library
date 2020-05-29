@@ -413,7 +413,8 @@ goog.testing.asserts.assertThrowsJsUnitException = function(
     }
 
     if (!e.isJsUnitException) {
-      goog.testing.asserts.fail('Expected a JsUnitException');
+      goog.testing.asserts.fail(
+          'Expected a JsUnitException, got \'' + e + '\' instead');
     }
 
     if (typeof opt_expectedMessage != 'undefined' &&
