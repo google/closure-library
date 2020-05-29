@@ -185,6 +185,18 @@ goog.net.WebChannel.Options.prototype.backgroundChannelTest;
 goog.net.WebChannel.Options.prototype.forceLongPolling;
 
 /**
+ * Whether to enable automatic detection of buffering proxies. In the presence
+ * of any buffering proxy, webchannel will use long-polling to send messages
+ * from the server to the client. This option defaults to false.
+ * Currently when fastHandshake is enabled, this option will be ignored.
+ * Compared to "forceLongPolling", this option may introduce up to 2-RTT
+ * extra latency for delivering messages generated immediately after the
+ * handshake.
+ * @type {boolean|undefined}
+ */
+goog.net.WebChannel.Options.prototype.detectBufferingProxy;
+
+/**
  * Enable true 0-RTT message delivery, including
  * leveraging QUIC 0-RTT (which requires GET to be used). This option
  * defaults to false. Note it is allowed to send messages before Open event is

@@ -407,11 +407,32 @@ goog.labs.net.webChannel.WebChannelBase = function(
   }
 
   /**
+   * Whether to detect buffering proxies.
+   *
+   * fastHandshake + detectBufferingProxy are yet to be implemented.
+   *
+   * @private {boolean}
+   */
+  this.detectBufferingProxy_ =
+      (!this.fastHandshake_ && this.allowChunkedMode_ && opt_options &&
+       opt_options.detectBufferingProxy) ||
+      false;
+
+  /**
    * Callback when all the pending client-sent messages have been flushed.
    *
    * @private {function()|undefined}
    */
   this.forwardChannelFlushedCallback_ = undefined;
+
+  /**
+   * The estimated handshake RTT (ms) as measured from when the handshake
+   * request is sent and when the handshake response headers are received.
+   * If the value is 0, the RTT is unknown.
+   *
+   * @private {number}
+   */
+  this.handshakeRttMs_ = 0;
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
@@ -1944,6 +1965,12 @@ WebChannelBase.prototype.onInput_ = function(respArray, request) {
         this.state_ = WebChannelBase.State.OPENED;
         if (this.handler_) {
           this.handler_.channelOpened(this);
+        }
+
+        if (this.detectBufferingProxy_) {
+          this.handshakeRttMs_ = goog.now() - request.getRequestStartTime();
+          this.channelDebug_.info(
+              'Handshake RTT: ' + this.handshakeRttMs_ + 'ms');
         }
 
         this.startBackchannelAfterHandshake_(request);
