@@ -749,7 +749,7 @@ testSuite({
     safe.setScriptContent(mockScriptElement, content);
 
     try {
-      assertEquals(SafeScript.unwrap(content), mockScriptElement.text);
+      assertEquals(SafeScript.unwrap(content), mockScriptElement.textContent);
       assertEquals(nonce, mockScriptElement.nonce);
     } finally {
       dom.removeNode(noncedScript);
