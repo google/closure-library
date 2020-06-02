@@ -62,7 +62,6 @@ requirement: {
   whitelist_regexp: '.+/closure/goog/functions/functions.js'
   whitelist_regexp: '.+/closure/goog/memoize/memoize.js'
   whitelist_regexp: '.+/closure/goog/pubsub/pubsub.js'
-  whitelist_regexp: '.+/closure/goog/result/resultutil.js'
   whitelist_regexp: '.+/closure/goog/testing/'
   whitelist_regexp: '.+/closure/goog/ui/editor/bubble.js'
   whitelist_regexp: '.+/closure/goog/ui/editor/toolbarcontroller.js'
