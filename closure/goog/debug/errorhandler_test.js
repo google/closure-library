@@ -189,7 +189,7 @@ testSuite({
   },
 
   testDisposal() {
-    fakeWin = goog.getObjectByName('window');
+    fakeWin = goog.global['window'];
     const originalSetTimeout = fakeWin.setTimeout;
     const originalSetInterval = fakeWin.setInterval;
 
