@@ -142,7 +142,7 @@ var _displayStringForValue = function(aVar) {
 
 /** @param {?} failureMessage */
 goog.testing.asserts.fail = function(failureMessage) {
-  goog.testing.asserts.raiseException('Call to fail()', failureMessage);
+  _assert('Call to fail()', false, failureMessage);
 };
 /** @const */
 var fail = goog.testing.asserts.fail;
@@ -209,7 +209,9 @@ var _assert = function(comment, booleanValue, failureMessage) {
     adapter['assertWithMessage'](
         booleanValue,
         goog.testing.JsUnitException.generateMessage(comment, failureMessage));
-    // Either way, throw an error, for callers that assume that asserts throw.
+    // Also throw an error, for callers that assume that asserts throw. We don't
+    // include error details to avoid duplicate failure messages.
+    if (!booleanValue) throw new Error('goog.testing assertion failed');
   }
   if (!booleanValue) {
     goog.testing.asserts.raiseException(comment, failureMessage);
