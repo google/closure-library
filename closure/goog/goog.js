@@ -67,7 +67,6 @@ export const getMsg = goog.getMsg;
 export const getMsgWithFallback = goog.getMsgWithFallback;
 export const exportSymbol = goog.exportSymbol;
 export const exportProperty = goog.exportProperty;
-export const globalize = goog.globalize;
 export const nullFunction = goog.nullFunction;
 export const abstractMethod = goog.abstractMethod;
 export const cloneObject = goog.cloneObject;
