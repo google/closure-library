@@ -3831,7 +3831,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
  * use Trusted Types.
  */
 goog.TRUSTED_TYPES_POLICY_NAME =
-    goog.define('goog.TRUSTED_TYPES_POLICY_NAME', '');
+    goog.define('goog.TRUSTED_TYPES_POLICY_NAME', 'goog');
 
 
 /**

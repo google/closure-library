@@ -42,6 +42,9 @@ goog.require('goog.string.TypedString');
  * initialize with non-empty values. Anyone else calling constructor will
  * get default instance with empty value.
  *
+ * Creating TrustedResourceUrl objects HAS SIDE-EFFECTS due to calling
+ * Trusted Types Web API.
+ *
  * @see goog.html.TrustedResourceUrl#fromConstant
  * @constructor
  * @final
