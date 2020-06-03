@@ -145,6 +145,23 @@ goog.db.Transaction.prototype.objectStore = function(name) {
   }
 };
 
+/**
+ * @param {boolean} allowNoopWhenUnsupported Whether it's fine for the method to
+ *     act like no-op if native method is not supported by the browser.
+ * @throws {!goog.db.Error} In case of error executing the commit.
+ */
+goog.db.Transaction.prototype.commit = function(allowNoopWhenUnsupported) {
+  if (!this.tx_.commit && allowNoopWhenUnsupported) {
+    // Method doesn't exist, and caller is ok with a no-op.
+    return;
+  }
+  try {
+    this.tx_.commit();
+  } catch (ex) {
+    throw goog.db.Error.fromException(ex, 'cannot commit the transaction');
+  }
+};
+
 
 /**
  * @return {!goog.async.Deferred} A deferred that will fire once the
