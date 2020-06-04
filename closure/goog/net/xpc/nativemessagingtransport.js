@@ -22,6 +22,7 @@ goog.require('goog.net.xpc');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.Transport');
 goog.require('goog.net.xpc.TransportTypes');
+goog.requireType('goog.net.xpc.CrossPageChannel');
 
 
 
@@ -307,7 +308,8 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
   //  - channel was created in a different namespace
   //  - message was sent to the wrong window
   //  - channel has become stale (e.g. caching iframes and back clicks)
-  var channel = goog.net.xpc.channels[channelName];
+  var allChannels = goog.module.get('goog.net.xpc.CrossPageChannel').channels;
+  var channel = allChannels[channelName];
   if (channel) {
     channel.xpcDeliver(
         service, payload,
@@ -319,8 +321,8 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
       goog.net.xpc.NativeMessagingTransport.parseTransportPayload_(payload)[0];
 
   // Check if there are any stale channel names that can be updated.
-  for (var staleChannelName in goog.net.xpc.channels) {
-    var staleChannel = goog.net.xpc.channels[staleChannelName];
+  for (var staleChannelName in allChannels) {
+    var staleChannel = allChannels[staleChannelName];
     if (staleChannel.getRole() == goog.net.xpc.CrossPageChannelRole.INNER &&
         !staleChannel.isConnected() &&
         service == goog.net.xpc.TRANSPORT_SERVICE_ &&

@@ -31,7 +31,6 @@ goog.provide('goog.net.xpc.TransportNames');
 goog.provide('goog.net.xpc.TransportTypes');
 goog.provide('goog.net.xpc.UriCfgFields');
 
-goog.forwardDeclare('goog.net.xpc.CrossPageChannel');  // circular
 goog.require('goog.log');
 
 
@@ -237,14 +236,6 @@ goog.net.xpc.SETUP_ACK_ = 'SETUP_ACK';
  * @type {string}
  */
 goog.net.xpc.SETUP_ACK_NTPV2 = 'SETUP_ACK_NTPV2';
-
-
-/**
- * Object holding active channels.
- *
- * @package {Object<string, goog.net.xpc.CrossPageChannel>}
- */
-goog.net.xpc.channels = {};
 
 
 /**
