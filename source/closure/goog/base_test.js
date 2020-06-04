@@ -188,15 +188,6 @@ testSuite({
   },
 
 
-  testGlobalize() {
-    const a = {a: 1, b: 2, c: 3};
-    const b = {};
-    goog.globalize(a, b);
-    assertNotUndefined('Globalize to arbitrary object', b.a);
-    assertNotUndefined('Globalize to arbitrary object', b.b);
-    assertNotUndefined('Globalize to arbitrary object', b.c);
-  },
-
   testExportSymbol() {
     const date = new Date();
 

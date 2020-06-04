@@ -144,6 +144,36 @@ testSuite({
     }
   },
 
+  testMap_3Items() {
+    assertArrayEquals(
+        [0, 2, 4], [...iters.map(createRangeIterable(0, 3), (x) => x * 2)]);
+  },
+
+  // Make sure that generator return values are ignored
+  testMap_3ItemsWithReturn() {
+    // {value: 0, done: false}
+    // {value: 1, done: false}
+    // {value: 2, done: false}
+    // {value: 3, done: true}
+    const childIter = rangeGeneratorWithReturn(0, 3);
+    const iter = iters.map(childIter, (x) => x * 2);
+
+    assertObjectEquals({value: 0, done: false}, iter.next());
+    assertObjectEquals({value: 2, done: false}, iter.next());
+    assertObjectEquals({value: 4, done: false}, iter.next());
+    assertObjectEquals({value: undefined, done: true}, iter.next());
+    assertObjectEquals({value: undefined, done: true}, iter.next());
+    assertObjectEquals({value: undefined, done: true}, iter.next());
+  },
+
+  testMap_index() {
+    // Use something besides consecutive integers to make sure we're actually
+    // being passed the index here.
+    const someNumbers = [5, 5, 5, 5, 5];
+    assertArrayEquals(
+        [0, 2, 4, 6, 8], [...iters.map(someNumbers, (n, index) => index * 2)]);
+  },
+
   testFilter() {
     function isEven(val) {
       return val % 2 == 0;
@@ -171,6 +201,50 @@ testSuite({
       assertUndefined(nextObj.value);
       assertTrue(nextObj.done);
     }
+  },
+
+  testFilterEveryOther() {
+    const tenNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    assertArrayEquals(
+        [1, 3, 5, 7, 9],
+        [...iters.filter(tenNumbers, (n, index) => index % 2 == 0)]);
+  },
+
+  testFilterLongGap() {
+    const tenNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].values();
+    assertArrayEquals(
+        [1, 10],
+        [...iters.filter(tenNumbers, (n) => String(n).startsWith('1'))]);
+  },
+
+  // Make sure the implementation tests `childResult.done` and not
+  // `childResult.value != undefined`
+  testFilterUndefineds() {
+    const miscValues = [1, 'two', undefined, 4.4].values();
+    let count = 0;
+    assertArrayEquals(
+        [1, 'two', undefined, 4.4], [...iters.filter(miscValues, () => {
+          count++;
+          return true;
+        })]);
+    assertEquals(4, count);
+  },
+
+  // Make sure generator return values are ignored
+  testFilterReturnValues() {
+    // {value: 0, done: false}
+    // {value: 1, done: false}
+    // {value: 2, done: false}
+    // {value: 3, done: true}
+    const childIter = rangeGeneratorWithReturn(0, 3);
+    const filterIter = iters.filter(childIter, () => true);
+
+    assertObjectEquals({value: 0, done: false}, filterIter.next());
+    assertObjectEquals({value: 1, done: false}, filterIter.next());
+    assertObjectEquals({value: 2, done: false}, filterIter.next());
+    assertObjectEquals({value: undefined, done: true}, filterIter.next());
+    assertObjectEquals({value: undefined, done: true}, filterIter.next());
+    assertObjectEquals({value: undefined, done: true}, filterIter.next());
   },
 
   testConcat_2Iterators() {

@@ -51,6 +51,9 @@ goog.require('goog.string.internal');
  * takes no parameters and the type is immutable; hence only a default instance
  * corresponding to the empty string can be obtained via constructor invocation.
  *
+ * Creating SafeHtml objects HAS SIDE-EFFECTS due to calling Trusted Types Web
+ * API.
+ *
  * Note that there is no `goog.html.SafeHtml.fromConstant`. The reason is that
  * the following code would create an unsafe HTML:
  *

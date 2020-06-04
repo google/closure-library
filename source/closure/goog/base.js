@@ -730,22 +730,6 @@ goog.getObjectByName = function(name, opt_obj) {
 
 
 /**
- * Globalizes a whole namespace, such as goog or goog.lang.
- *
- * @param {!Object} obj The namespace to globalize.
- * @param {Object=} opt_global The object to add the properties to.
- * @deprecated Properties may be explicitly exported to the global scope, but
- *     this should no longer be done in bulk.
- */
-goog.globalize = function(obj, opt_global) {
-  var global = opt_global || goog.global;
-  for (var x in obj) {
-    global[x] = obj[x];
-  }
-};
-
-
-/**
  * Adds a dependency from a file to the files it requires.
  * @param {string} relPath The path to the js file.
  * @param {!Array<string>} provides An array of strings with
@@ -3831,7 +3815,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
  * use Trusted Types.
  */
 goog.TRUSTED_TYPES_POLICY_NAME =
-    goog.define('goog.TRUSTED_TYPES_POLICY_NAME', '');
+    goog.define('goog.TRUSTED_TYPES_POLICY_NAME', 'goog');
 
 
 /**

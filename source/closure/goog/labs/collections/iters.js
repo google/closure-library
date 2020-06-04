@@ -22,9 +22,10 @@ goog.module('goog.labs.collections.iters');
  * @return {!Iterator<VALUE>}
  * @template VALUE
  */
-exports.getIterator = function(iterable) {
+function getIterator(iterable) {
   return iterable[goog.global.Symbol.iterator]();
-};
+}
+exports.getIterator = getIterator;
 
 
 /**
@@ -45,6 +46,49 @@ exports.forEach = function(iterable, f) {
 
 
 /**
+ * An Iterable that wraps a child iterable, and maps every element of the child
+ * iterator to a new value, using a mapping function. Similar to Array.map, but
+ * for Iterable.
+ * @template TO,FROM
+ * @implements {IteratorIterable<TO>}
+ */
+class MapIterator {
+  /**
+   * @param {!Iterable<FROM>} childIter
+   * @param {function(FROM, number): TO} mapFn
+   */
+  constructor(childIter, mapFn) {
+    /** @private @const {!Iterator<FROM>} */
+    this.childIterator_ = getIterator(childIter);
+
+    /** @private @const {function(FROM, number): TO} */
+    this.mapFn_ = mapFn;
+
+    /** @private {number} */
+    this.nextIndex_ = 0;
+  }
+
+  [Symbol.iterator]() {
+    return this;
+  }
+
+  /** @override */
+  next() {
+    const childResult = this.childIterator_.next();
+    // Always return a new object, even when childResult.done == true. This is
+    // so that we don't accidentally preserve generator return values, which
+    // are unlikely to be meaningful in the context of this MapIterator.
+    return {
+      value: childResult.done ?
+          undefined :
+          this.mapFn_.call(undefined, childResult.value, this.nextIndex_++),
+      done: childResult.done,
+    };
+  }
+}
+
+
+/**
  * Maps the values of one iterable to create another iterable.
  *
  * When next() is called on the returned iterable, it will call the given
@@ -52,16 +96,60 @@ exports.forEach = function(iterable, f) {
  * `iterable` until the given iterable is exhausted.
  *
  * @param {!Iterable<VALUE>} iterable
- * @param {function(this: THIS, VALUE): RESULT} f
- * @return {!Iterable<RESULT>} The created iterable that gives the mapped
- *     values.
- * @template THIS, VALUE, RESULT
+ * @param {function(VALUE, number): RESULT} f
+ * @return {!IteratorIterable<RESULT>} The created iterable that gives the
+ *     mapped values.
+ * @template VALUE, RESULT
  */
-exports.map = function*(iterable, f) {
-  for (const elem of iterable) {
-    yield f(elem);
-  }
+exports.map = function(iterable, f) {
+  return new MapIterator(iterable, f);
 };
+
+
+/**
+ * An Iterable that wraps a child Iterable and returns a subset of the child's
+ * items, based on a filter function. Similar to Array.filter, but for
+ * Iterable.
+ * @template T
+ * @implements {IteratorIterable<T>}
+ */
+class FilterIterator {
+  /**
+   * @param {!Iterable<T>} childIter
+   * @param {function(T, number): boolean} filterFn
+   */
+  constructor(childIter, filterFn) {
+    /** @private @const {!Iterator<T>} */
+    this.childIter_ = getIterator(childIter);
+
+    /** @private @const {function(T, number): boolean} */
+    this.filterFn_ = filterFn;
+
+    /** @private {number} */
+    this.nextIndex_ = 0;
+  }
+
+  [Symbol.iterator]() {
+    return this;
+  }
+
+  /** @override */
+  next() {
+    while (true) {
+      const childResult = this.childIter_.next();
+      if (childResult.done) {
+        // Don't return childResult directly, because that would preserve
+        // generator return values, and we want to ignore them.
+        return {done: true, value: undefined};
+      }
+      const passesFilter =
+          this.filterFn_.call(undefined, childResult.value, this.nextIndex_++);
+      if (passesFilter) {
+        return childResult;
+      }
+    }
+  }
+}
 
 
 /**
@@ -72,17 +160,13 @@ exports.map = function*(iterable, f) {
  * is returned or the given iterator is exhausted.
  *
  * @param {!Iterable<VALUE>} iterable
- * @param {function(VALUE): boolean} f
- * @return {!Iterable<VALUE>} The created iterable that gives the mapped
+ * @param {function(VALUE, number): boolean} f
+ * @return {!IteratorIterable<VALUE>} The created iterable that gives the mapped
  *     values.
  * @template VALUE
  */
-exports.filter = function*(iterable, f) {
-  for (const elem of iterable) {
-    if (f(elem)) {
-      yield elem;
-    }
-  }
+exports.filter = function(iterable, f) {
+  return new FilterIterator(iterable, f);
 };
 
 
@@ -134,5 +218,5 @@ class ConcatIterator {
  * @template VALUE
  */
 exports.concat = function(...iterables) {
-  return new ConcatIterator(iterables.map(exports.getIterator));
+  return new ConcatIterator(iterables.map(getIterator));
 };

@@ -749,10 +749,32 @@ testSuite({
     safe.setScriptContent(mockScriptElement, content);
 
     try {
-      assertEquals(SafeScript.unwrap(content), mockScriptElement.text);
+      assertEquals(SafeScript.unwrap(content), mockScriptElement.textContent);
       assertEquals(nonce, mockScriptElement.nonce);
     } finally {
       dom.removeNode(noncedScript);
+    }
+  },
+
+  testSetScriptContentWithSpecialCharacters() {
+    const scriptElement = dom.createElement(TagName.SCRIPT);
+    document.body.appendChild(scriptElement);
+    const TEST_PROPERTY = 'scriptContentTestProperty';
+    const content = SafeScript.fromConstant(Const.from(`
+      // Comment to ensure newlines are preserved.
+      window.${TEST_PROPERTY} = 'tricky<{}>value';
+    `));
+    safe.setScriptContent(scriptElement, content);
+
+    try {
+      assertEquals(SafeScript.unwrap(content), scriptElement.text);
+      assertEquals('tricky<{}>value', window[TEST_PROPERTY]);
+
+      // Ensure no <br> tags were inserted into the script tag.
+      assertEquals(1, scriptElement.childNodes.length);
+    } finally {
+      dom.removeNode(scriptElement);
+      delete window[TEST_PROPERTY];
     }
   },
 

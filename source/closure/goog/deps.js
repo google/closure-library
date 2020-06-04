@@ -35,6 +35,7 @@ goog.addDependency('async/delay.js', ['goog.Delay', 'goog.async.Delay'], ['goog.
 goog.addDependency('async/delay_test.js', ['goog.async.DelayTest'], ['goog.async.Delay', 'goog.testing.MockClock', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/freelist.js', ['goog.async.FreeList'], [], {'lang': 'es6'});
 goog.addDependency('async/freelist_test.js', ['goog.async.FreeListTest'], ['goog.async.FreeList', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('async/legacy_throttle.js', ['goog.Throttle'], ['goog.async.Throttle'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/nexttick.js', ['goog.async.nextTick', 'goog.async.throwException'], ['goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.functions', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine'], {});
 goog.addDependency('async/nexttick_test.js', ['goog.async.nextTickTest'], ['goog.Promise', 'goog.async.nextTick', 'goog.debug.ErrorHandler', 'goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.labs.userAgent.browser', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/promises.js', ['goog.async.promises'], [], {'lang': 'es6', 'module': 'goog'});
@@ -42,7 +43,7 @@ goog.addDependency('async/promises_test.js', ['goog.async.promisesTest'], ['goog
 goog.addDependency('async/run.js', ['goog.async.run'], ['goog.async.WorkQueue', 'goog.async.nextTick', 'goog.async.throwException'], {});
 goog.addDependency('async/run_next_tick_test.js', ['goog.async.runNextTickTest'], ['goog.async.run', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/run_test.js', ['goog.async.runTest'], ['goog.async.run', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('async/throttle.js', ['goog.Throttle', 'goog.async.Throttle'], ['goog.Disposable', 'goog.Timer'], {});
+goog.addDependency('async/throttle.js', ['goog.async.Throttle'], ['goog.Disposable', 'goog.Timer'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/throttle_test.js', ['goog.async.ThrottleTest'], ['goog.async.Throttle', 'goog.testing.MockClock', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/workqueue.js', ['goog.async.WorkItem', 'goog.async.WorkQueue'], ['goog.asserts', 'goog.async.FreeList'], {});
 goog.addDependency('async/workqueue_test.js', ['goog.async.WorkQueueTest'], ['goog.async.WorkQueue', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
@@ -974,16 +975,6 @@ goog.addDependency('pubsub/typedpubsub.js', ['goog.pubsub.TypedPubSub'], ['goog.
 goog.addDependency('pubsub/typedpubsub_test.js', ['goog.pubsub.TypedPubSubTest'], ['goog.array', 'goog.pubsub.TopicId', 'goog.pubsub.TypedPubSub', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('reflect/reflect.js', ['goog.reflect'], [], {'lang': 'es6'});
 goog.addDependency('reflect/reflect_test.js', ['goog.reflectTest'], ['goog.object', 'goog.reflect', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('result/chain_test.js', ['goog.result.chainTest'], ['goog.Timer', 'goog.result', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('result/combine_test.js', ['goog.result.combineTest'], ['goog.Timer', 'goog.array', 'goog.result', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('result/dependentresult.js', ['goog.result.DependentResult'], ['goog.result.Result'], {});
-goog.addDependency('result/result_interface.js', ['goog.result.Result'], ['goog.Thenable'], {});
-goog.addDependency('result/resultutil.js', ['goog.result'], ['goog.array', 'goog.result.DependentResult', 'goog.result.Result', 'goog.result.SimpleResult'], {});
-goog.addDependency('result/resultutil_test.js', ['goog.resultTest'], ['goog.result', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('result/simpleresult.js', ['goog.result.SimpleResult', 'goog.result.SimpleResult.StateError'], ['goog.Promise', 'goog.Thenable', 'goog.debug.Error', 'goog.result.Result'], {'lang': 'es6'});
-goog.addDependency('result/simpleresult_test.js', ['goog.result.SimpleResultTest'], ['goog.Promise', 'goog.Thenable', 'goog.Timer', 'goog.result', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('result/transform_test.js', ['goog.result.transformTest'], ['goog.Timer', 'goog.result', 'goog.result.SimpleResult', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('result/wait_test.js', ['goog.result.waitTest'], ['goog.Timer', 'goog.result', 'goog.result.SimpleResult', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('soy/data.js', ['goog.soy.data.SanitizedContent', 'goog.soy.data.SanitizedContentKind', 'goog.soy.data.SanitizedCss', 'goog.soy.data.SanitizedHtml', 'goog.soy.data.SanitizedHtmlAttribute', 'goog.soy.data.SanitizedJs', 'goog.soy.data.SanitizedTrustedResourceUri', 'goog.soy.data.SanitizedUri'], ['goog.Uri', 'goog.asserts', 'goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.uncheckedconversions', 'goog.i18n.bidi.Dir', 'goog.string.Const'], {});
 goog.addDependency('soy/data_test.js', ['goog.soy.dataTest'], ['goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.soy.testHelper', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('soy/renderer.js', ['goog.soy.InjectedDataSupplier', 'goog.soy.Renderer'], ['goog.asserts', 'goog.dom', 'goog.soy', 'goog.soy.data.SanitizedContent', 'goog.soy.data.SanitizedContentKind'], {});

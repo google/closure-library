@@ -273,7 +273,7 @@ goog.debug.ErrorHandler.prototype.catchUnhandledRejections = function() {
  */
 goog.debug.ErrorHandler.prototype.protectWindowRequestAnimationFrame =
     function() {
-  var win = goog.getObjectByName('window');
+  var win = goog.global['window'];
   var fnNames = [
     'requestAnimationFrame', 'mozRequestAnimationFrame', 'webkitAnimationFrame',
     'msRequestAnimationFrame'
@@ -295,7 +295,7 @@ goog.debug.ErrorHandler.prototype.protectWindowRequestAnimationFrame =
  */
 goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ = function(
     fnName) {
-  var win = goog.getObjectByName('window');
+  var win = goog.global['window'];
   var originalFn = win[fnName];
   var that = this;
   win[fnName] = function(fn, time) {
@@ -351,7 +351,7 @@ goog.debug.ErrorHandler.prototype.setPrefixErrorMessages = function(
 /** @override */
 goog.debug.ErrorHandler.prototype.disposeInternal = function() {
   // Try to unwrap window.setTimeout and window.setInterval.
-  var win = goog.getObjectByName('window');
+  var win = goog.global['window'];
   win.setTimeout = this.unwrap(win.setTimeout);
   win.setInterval = this.unwrap(win.setInterval);
 

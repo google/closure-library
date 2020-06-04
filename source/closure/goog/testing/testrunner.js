@@ -372,7 +372,7 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
     this.execute();
     return false;
   }, this);
-  runAgainLink.innerHTML = 'Run again without reloading';
+  runAgainLink.textContent = 'Run again without reloading';
   this.logEl_.appendChild(runAgainLink);
 };
 
@@ -440,7 +440,7 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
 
       // Add the link.
       var a = goog.dom.createElement(goog.dom.TagName.A);
-      a.innerHTML = '(run individually)';
+      a.textContent = '(run individually)';
       a.style.fontSize = '0.8em';
       a.style.color = '#888';
       goog.dom.safe.setAnchorHref(a, href);

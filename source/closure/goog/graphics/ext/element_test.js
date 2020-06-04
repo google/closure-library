@@ -31,7 +31,7 @@ testSuite({
   setUp() {
     const div = document.getElementById('root');
     graphics = new ext.Graphics(100, 100, 200, 200);
-    div.innerHTML = '';
+    div.textContent = '';
     graphics.render(div);
 
     mockWrapper = new StrictMock(googGraphics.Element);

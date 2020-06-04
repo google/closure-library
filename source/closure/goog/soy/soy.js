@@ -100,9 +100,9 @@ goog.soy.renderElement = function(
 /**
  * Renders a Soy template into a single node or a document
  * fragment. If the rendered HTML string represents a single node, then that
- * node is returned (note that this is *not* a fragment, despite them name of
- * the method). Otherwise a document fragment is returned containing the
- * rendered nodes.
+ * node is returned (note that this is *not* a fragment, despite the name of the
+ * method). Otherwise a document fragment is returned containing the rendered
+ * nodes.
  *
  * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj_=): *} template The Soy
  *     template defining the element's content. The kind of the template must be
