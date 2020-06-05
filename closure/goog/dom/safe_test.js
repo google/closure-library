@@ -143,6 +143,13 @@ testSuite({
         grandchildDiv.parentElement);
   },
 
+  testSetInnerHtmlFromConstant() {
+    const element = document.createElement('div');
+    const html = '<b>c</b>';
+    safe.setInnerHtmlFromConstant(element, Const.from(html));
+    assertEquals(html, element.innerHTML);
+  },
+
   testSetStyle() {
     const style = SafeStyle.fromConstant(Const.from('color: red;'));
     const elem = document.createElement('div');
