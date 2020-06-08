@@ -179,8 +179,9 @@ testSuite({
     mouseWheelHandler = new WheelHandler(document.body);
 
     events.listen(mouseWheelHandler, EventsWheelEvent.EventType.WHEEL, (e) => {
-      log.innerHTML += googString.subs(
-          '<br />(deltaX, deltaY): (%s, %s)', e.deltaX, e.deltaY);
+      log.append(
+          document.createElement('br'),
+          googString.subs('(deltaX, deltaY): (%s, %s)', e.deltaX, e.deltaY));
     });
   },
 
