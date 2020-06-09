@@ -1625,55 +1625,14 @@ goog.now = (goog.TRUSTED_SITE && Date.now) || (function() {
 
 
 /**
- * Evals JavaScript in the global scope.  In IE this uses execScript, other
- * browsers use goog.global.eval. If goog.global.eval does not evaluate,
- * appends a script tag instead.
+ * Evals JavaScript in the global scope.
+ *
  * Throws an exception if neither execScript or eval is defined.
  * @param {string} script JavaScript string.
  */
 goog.globalEval = function(script) {
-  if (goog.global.execScript) {
-    goog.global.execScript(script, 'JavaScript');
-  } else if (goog.global.eval) {
-    // Test to see if eval works
-    if (goog.evalWorks_ == null) {
-      try {
-        goog.global.eval('');
-        goog.evalWorks_ = true;
-      } catch (ignore) {
-        goog.evalWorks_ = false;
-      }
-    }
-
-    if (goog.evalWorks_) {
-      goog.global.eval(script);
-    } else {
-      /** @type {!Document} */
-      var doc = goog.global.document;
-      var scriptElt =
-          /** @type {!HTMLScriptElement} */ (doc.createElement('script'));
-      scriptElt.type = 'text/javascript';
-      scriptElt.defer = false;
-      // Note(user): can't use .innerHTML since "t('<test>')" will fail and
-      // .text doesn't work in Safari 2.  Therefore we append a text node.
-      scriptElt.appendChild(doc.createTextNode(script));
-      doc.head.appendChild(scriptElt);
-      doc.head.removeChild(scriptElt);
-    }
-  } else {
-    throw new Error('goog.globalEval not available');
-  }
+  (0, eval)(script);
 };
-
-
-/**
- * Indicates whether or not we can call 'eval' directly to eval code in the
- * global scope. Set to a Boolean by the first call to goog.globalEval (which
- * empirically tests whether eval works for globals). @see goog.globalEval
- * @type {?boolean}
- * @private
- */
-goog.evalWorks_ = null;
 
 
 /**
