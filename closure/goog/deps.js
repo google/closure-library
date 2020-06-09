@@ -44,7 +44,7 @@ goog.addDependency('async/run.js', ['goog.async.run'], ['goog.async.WorkQueue', 
 goog.addDependency('async/run_next_tick_test.js', ['goog.async.runNextTickTest'], ['goog.async.run', 'goog.testing.MockClock', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/run_test.js', ['goog.async.runTest'], ['goog.async.run', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/throttle.js', ['goog.async.Throttle'], ['goog.Disposable', 'goog.Timer'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('async/throttle_test.js', ['goog.async.ThrottleTest'], ['goog.async.Throttle', 'goog.testing.MockClock', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('async/throttle_test.js', ['goog.async.ThrottleTest'], ['goog.async.Throttle', 'goog.testing.MockClock', 'goog.testing.objects', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/workqueue.js', ['goog.async.WorkItem', 'goog.async.WorkQueue'], ['goog.asserts', 'goog.async.FreeList'], {});
 goog.addDependency('async/workqueue_test.js', ['goog.async.WorkQueueTest'], ['goog.async.WorkQueue', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base.js', ['goog'], [], {});
@@ -1193,6 +1193,8 @@ goog.addDependency('testing/net/xhrio.js', ['goog.testing.net.XhrIo'], ['goog.Ur
 goog.addDependency('testing/net/xhrio_test.js', ['goog.testing.net.XhrIoTest'], ['goog.dom.xml', 'goog.events', 'goog.events.Event', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.XmlHttp', 'goog.object', 'goog.testing.MockControl', 'goog.testing.asserts', 'goog.testing.mockmatchers.InstanceOf', 'goog.testing.net.XhrIo', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('testing/net/xhriopool.js', ['goog.testing.net.XhrIoPool'], ['goog.net.XhrIoPool', 'goog.testing.net.XhrIo'], {});
 goog.addDependency('testing/objectpropertystring.js', ['goog.testing.ObjectPropertyString'], [], {});
+goog.addDependency('testing/objects.js', ['goog.testing.objects'], ['goog.testing.asserts'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('testing/objects_test.js', ['goog.testing.objects_test'], ['goog.testing.asserts', 'goog.testing.objects', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('testing/parallel_closure_test_suite.js', ['goog.testing.parallelClosureTestSuite'], ['goog.Promise', 'goog.asserts', 'goog.events', 'goog.json', 'goog.testing.MultiTestRunner', 'goog.testing.TestCase', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('testing/parallel_closure_test_suite_test.js', ['goog.testing.parallelClosureTestSuiteTest'], ['goog.dom', 'goog.testing.MockControl', 'goog.testing.MultiTestRunner', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.mockmatchers', 'goog.testing.mockmatchers.ArgumentMatcher', 'goog.testing.parallelClosureTestSuite', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('testing/performancetable.js', ['goog.testing.PerformanceTable'], ['goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.testing.PerformanceTimer'], {});
