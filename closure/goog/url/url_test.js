@@ -277,6 +277,103 @@ testSuite({
       assertEquals('', url.hash);
     },
 
+    testResolvesTwoDots() {
+      const url = resolveWithTestChecks(
+          '..', 'https://google.com/maps/search/new?hl=de#one');
+      assertEquals(url.hostname, 'google.com');
+      assertEquals(url.protocol, 'https:');
+      // Providing a path of '..' in urlStr removes everything after the second
+      // to last '/'
+      assertEquals(url.pathname, '/maps/');
+      // providing a pathname as the relative value then causes everything
+      // "after" that to be removed - search and hash
+      assertEquals(url.search, '');
+      assertEquals(url.hash, '');
+    },
+
+    testResolvesTwoDotsNoBasePath() {
+      const url = resolveWithTestChecks('..', 'https://google.com?hl=de#one');
+      assertEquals(url.hostname, 'google.com');
+      assertEquals(url.protocol, 'https:');
+      // Providing a path of '..' in urlStr removes everything after the second
+      // to last '/'
+      assertEquals(url.pathname, '/');
+      // providing a pathname as the relative value then causes everything
+      // "after" that to be removed - search and hash
+      assertEquals(url.search, '');
+      assertEquals(url.hash, '');
+    },
+
+    testResolvesTwoDotsShortBasePath() {
+      const url =
+          resolveWithTestChecks('..', 'https://google.com/maps?hl=de#one');
+      assertEquals(url.hostname, 'google.com');
+      assertEquals(url.protocol, 'https:');
+      // Providing a path of '..' in urlStr removes everything after the second
+      // to last '/'
+      assertEquals(url.pathname, '/');
+      // providing a pathname as the relative value then causes everything
+      // "after" that to be removed - search and hash
+      assertEquals(url.search, '');
+      assertEquals(url.hash, '');
+    },
+
+    testResolvesDot() {
+      const url = resolveWithTestChecks(
+          '.', 'https://google.com/maps/search/new?hl=de#one');
+      assertEquals(url.hostname, 'google.com');
+      assertEquals(url.protocol, 'https:');
+      // Providing a path of '.' in urlStr removes everything after the last '/'
+      assertEquals(url.pathname, '/maps/search/');
+      // providing a pathname as the relative value then causes everything
+      // "after" that to be removed - search and hash
+      assertEquals(url.search, '');
+      assertEquals(url.hash, '');
+    },
+
+    testResolvesDotNoBasePath() {
+      const url = resolveWithTestChecks('.', 'https://google.com?hl=de#one');
+      assertEquals(url.hostname, 'google.com');
+      assertEquals(url.protocol, 'https:');
+      // Providing a path of '.' in urlStr removes everything after the last '/'
+      assertEquals(url.pathname, '/');
+      // providing a pathname as the relative value then causes everything
+      // "after" that to be removed - search and hash
+      assertEquals(url.search, '');
+      assertEquals(url.hash, '');
+    },
+
+    testResolvesDotShortBasePath() {
+      const url =
+          resolveWithTestChecks('.', 'https://google.com/maps?hl=de#one');
+      assertEquals(url.hostname, 'google.com');
+      assertEquals(url.protocol, 'https:');
+      // Providing a path of '.' in urlStr removes everything after the last '/'
+      assertEquals(url.pathname, '/');
+      // providing a pathname as the relative value then causes everything
+      // "after" that to be removed - search and hash
+      assertEquals(url.search, '');
+      assertEquals(url.hash, '');
+    },
+
+    testResolvesEmptyString() {
+      const url = resolveWithTestChecks(
+          '', 'https://google.com/maps/search/new?hl=de#one');
+      assertEquals(url.hostname, 'google.com');
+      assertEquals(url.protocol, 'https:');
+
+      if (!userAgent.isEdge()) {
+        assertEquals(url.pathname, '/maps/search/new');
+        assertEquals(url.search, '?hl=de');
+      } else {
+        // Edge is weird here and instead follows the same conventions for '.'
+        // it removes one chunk of path and every part after it.
+        assertEquals(url.pathname, '/maps/search/');
+        assertEquals(url.search, '');
+      }
+      assertEquals(url.hash, '');
+    },
+
     testErrorsOnInvalidBaseURL() {
       assertThrows(() => {
         resolveWithTestChecks(
@@ -384,11 +481,13 @@ testSuite({
 
   testResolveRelativeURL: {
     testResolves() {
-      setUrlBaseForTesting('https://google.com');
+      setUrlBaseForTesting('https://google.com/#one');
       const url = resolveRelativeUrl('/search');
       assertEquals(url.hostname, 'google.com');
       assertEquals(url.protocol, 'https:');
       assertEquals(url.pathname, '/search');
+      assertEquals(url.search, '');
+      assertEquals(url.hash, '');
     },
   },
 
