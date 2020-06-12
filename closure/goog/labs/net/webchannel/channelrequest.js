@@ -245,6 +245,13 @@ goog.labs.net.webChannel.ChannelRequest = function(
    * @private {boolean}
    */
   this.initialResponseDecoded_ = false;
+
+  /**
+   * Whether the first byte of response body has arrived, for a successful
+   * response.
+   * @private {boolean}
+   */
+  this.firstByteReceived_ = false;
 };
 
 
@@ -551,7 +558,6 @@ ChannelRequest.prototype.readyStateChangeHandler_ = function(evt) {
 ChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
   requestStats.onStartExecution();
 
-
   try {
     if (xmlhttp == this.xmlHttp_) {
       this.onXmlHttpReadyStateChanged_();
@@ -765,6 +771,7 @@ ChannelRequest.prototype.setDecodeInitialResponse = function() {
 ChannelRequest.prototype.decodeNextChunks_ = function(
     readyState, responseText) {
   var decodeNextChunksSuccessful = true;
+
   while (!this.cancelled_ && this.xmlHttpChunkStart_ < responseText.length) {
     var chunkText = this.getNextChunk_(responseText);
     if (chunkText == ChannelRequest.INCOMPLETE_CHUNK_) {
@@ -790,6 +797,7 @@ ChannelRequest.prototype.decodeNextChunks_ = function(
       this.safeOnRequestData_(/** @type {string} */ (chunkText));
     }
   }
+
   if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE &&
       responseText.length == 0) {
     // also an error if we didn't get any response
@@ -797,13 +805,20 @@ ChannelRequest.prototype.decodeNextChunks_ = function(
     requestStats.notifyStatEvent(requestStats.Stat.REQUEST_NO_DATA);
     decodeNextChunksSuccessful = false;
   }
+
   this.successful_ = this.successful_ && decodeNextChunksSuccessful;
+
   if (!decodeNextChunksSuccessful) {
     // malformed response - we make this trigger retry logic
     this.channelDebug_.xmlHttpChannelResponseText(
         this.rid_, responseText, '[Invalid Chunked Response]');
     this.cleanup_();
     this.dispatchFailure_();
+  } else {
+    if (responseText.length > 0 && !this.firstByteReceived_) {
+      this.firstByteReceived_ = true;
+      this.channel_.onFirstByteReceived(this, responseText);
+    }
   }
 };
 

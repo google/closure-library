@@ -1556,8 +1556,6 @@ WebChannelBase.prototype.onBpDetectionTimer_ = function() {
   // cancel the timer.
   if (this.backChannelRequest_.getXhr() != null) {
     var responseData = this.backChannelRequest_.getXhr().getResponseText();
-    // NB: currently we need to read more than 1 byte to cancel the timer.
-    // If this fires a lot, check length > 15
     if (responseData) {
       this.channelDebug_.warning(
           'Timer should have been cancelled : ' + responseData);
@@ -1661,6 +1659,24 @@ WebChannelBase.prototype.okToMakeRequest_ = function() {
 /**
  * @override
  */
+WebChannelBase.prototype.onFirstByteReceived = function(request, responseText) {
+  if (this.backChannelRequest_ == request && this.detectBufferingProxy_) {
+    if (!this.bpDetectionDone_) {
+      this.channelDebug_.info(
+          'Great, no buffering proxy detected. Bytes received: ' +
+          responseText.length);
+      goog.asserts.assert(
+          this.bpDetectionTimerId_, 'Timer should not have been cancelled.');
+      this.clearBpDetectionTimer_();
+      this.bpDetectionDone_ = true;
+    }
+  }
+};
+
+
+/**
+ * @override
+ */
 WebChannelBase.prototype.onRequestData = function(request, responseText) {
   if (this.state_ == WebChannelBase.State.CLOSED ||
       (this.backChannelRequest_ != request &&
@@ -1691,17 +1707,6 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
     if (request.isInitialResponseDecoded() ||
         this.backChannelRequest_ == request) {
       this.clearDeadBackchannelTimer_();
-    }
-
-    // This is not as optimal as checking the first byte arrived.
-    if (this.backChannelRequest_ == request && this.detectBufferingProxy_) {
-      if (!this.bpDetectionDone_) {
-        this.channelDebug_.info('Great, no buffering proxy detected.');
-        goog.asserts.assert(
-            this.bpDetectionTimerId_, 'Timer should not have been cancelled.');
-        this.clearBpDetectionTimer_();
-        this.bpDetectionDone_ = true;
-      }
     }
 
     if (!goog.string.isEmptyOrWhitespace(responseText)) {

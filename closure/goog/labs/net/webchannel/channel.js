@@ -88,6 +88,16 @@ Channel.prototype.onRequestData = goog.abstractMethod;
 
 
 /**
+ * Callback from ChannelRequest for when the first byte of response body has
+ * been received. This is needed for detecting buffering proxies.
+ * @param {!goog.labs.net.webChannel.ChannelRequest} request
+ *     The request object.
+ * @param {string} responseText The text of the response.
+ */
+Channel.prototype.onFirstByteReceived = goog.abstractMethod;
+
+
+/**
  * Gets whether this channel is currently active. This is used to determine the
  * length of time to wait before retrying. This call delegates to the handler.
  * @return {boolean} Whether the channel is currently active.
