@@ -11,7 +11,6 @@
 goog.provide('goog.labs.structs.Multimap');
 
 goog.require('goog.array');
-goog.require('goog.object');
 
 
 
@@ -138,8 +137,9 @@ goog.labs.structs.Multimap.prototype.remove = function(key, value) {
     return false;
   }
 
-  var removed = goog.array.removeIf(
-      values, function(v) { return goog.object.is(value, v); });
+  var removed = goog.array.removeIf(values, function(v) {
+    return Object.is(value, v);
+  });
 
   if (removed) {
     this.count_--;
@@ -197,8 +197,9 @@ goog.labs.structs.Multimap.prototype.containsEntry = function(key, value) {
     return false;
   }
 
-  var index = goog.array.findIndex(
-      values, function(v) { return goog.object.is(v, value); });
+  var index = goog.array.findIndex(values, function(v) {
+    return Object.is(v, value);
+  });
   return index >= 0;
 };
 
