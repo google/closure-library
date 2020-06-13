@@ -729,7 +729,7 @@ function testGoogModuleGet() {
 
   // Validate the module exports
   const testModuleExports = goog.module.get('goog.test_module');
-  assertTrue(goog.isFunction(testModuleExports));
+  assertTrue(typeof testModuleExports === 'function');
 
   // Test that any escaping of </script> in test files is correct. Escape the
   // / in </script> here so that any such code does not affect it here.

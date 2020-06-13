@@ -61,7 +61,7 @@ testSuite({
     assertNotUndefined('module failed: testModule', testModule);
     assertFalse(
         'module failed: testModule',
-        goog.isFunction(goog.global.testModuleScoping));
+        typeof goog.global.testModuleScoping === 'function');
   },
 
   testProvideStrictness1: function() {
@@ -122,7 +122,7 @@ testSuite({
 
     // The test module is available under its alias
     assertNotUndefined('testModule is loaded', testModule);
-    assertTrue('module failed: testModule', goog.isFunction(testModule));
+    assertTrue('module failed: testModule', typeof testModule === 'function');
 
     // Test that any escaping of </script> in test files is correct. Escape the
     // / in </script> here so that any such code does not affect it here.

@@ -417,11 +417,12 @@ testSuite({
     const nullVar = null;
     let notDefined;
 
-    assertTrue('function should be a function', goog.isFunction(func));
-    assertFalse('object should not be a function', goog.isFunction(object));
-    assertFalse('null should not be a function', goog.isFunction(nullVar));
+    assertTrue('function should be a function', typeof func === 'function');
     assertFalse(
-        'undefined should not be a function', goog.isFunction(notDefined));
+        'object should not be a function', typeof object === 'function');
+    assertFalse('null should not be a function', typeof nullVar === 'function');
+    assertFalse(
+        'undefined should not be a function', typeof notDefined === 'function');
   },
 
   testIsObject() {
