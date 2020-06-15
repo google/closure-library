@@ -281,6 +281,7 @@ goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING =
  * @see goog.module
  * @param {string} name Namespace provided by this file in the form
  *     "goog.package.part".
+ * @deprecated Use goog.module
  */
 goog.provide = function(name) {
   if (goog.isInModuleLoader_()) {
@@ -1539,6 +1540,7 @@ goog.bindJs_ = function(fn, selfObj, var_args) {
  *     invoked as a method of.
  * @template T
  * @suppress {deprecated} See above.
+ * @deprecated use `=> {}` or Function.prototype.bind instead.
  */
 goog.bind = function(fn, selfObj, var_args) {
   // TODO(nicksantos): narrow the type signature.
@@ -1914,6 +1916,7 @@ goog.exportProperty = function(object, publicName, symbol) {
  * @param {!Function} parentCtor Parent class.
  * @suppress {strictMissingProperties} superClass_ and base is not defined on
  *    Function.
+ * @deprecated Use ECMAScript class syntax instead.
  */
 goog.inherits = function(childCtor, parentCtor) {
   /** @constructor */
@@ -2013,7 +2016,7 @@ if (!COMPILED) {
  *        be added.
  *     all other properties are added to the prototype.
  * @return {!Function} The class constructor.
- * @deprecated Use ES6 class syntax instead.
+ * @deprecated Use ECMAScript class syntax instead.
  */
 goog.defineClass = function(superClass, def) {
   // TODO(johnlenz): consider making the superClass an optional parameter.
