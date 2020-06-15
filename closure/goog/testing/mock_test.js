@@ -377,4 +377,50 @@ testSuite({
 
     fail('Expected exception');
   },
+
+  testMockRecordWithToString() {
+    const string = 'stringified';
+    class WithCustomToString {
+      doSomething() {
+        fail('real object should never be called');
+      }
+
+      toString() {
+        return string;
+      }
+    }
+
+    const mockControl = new MockControl();
+    const strictMock = mockControl.createStrictMock(WithCustomToString);
+    Mock.record(strictMock).doSomething();
+
+    mockControl.$replayAll();
+    strictMock.doSomething();
+
+    mockControl.$verifyAll();
+  },
+
+  testMockRecordFailsWhenNotAMock() {
+    const string = 'stringified object';
+    class WithCustomToString {
+      doSomething() {
+        fail('real object should never be called');
+      }
+
+      toString() {
+        return string;
+      }
+    }
+
+    const notAMock = new WithCustomToString();
+
+    try {
+      Mock.record(notAMock);
+    } catch (ex) {
+      assertEquals(
+          `Assertion failed: ${string} is not a mock.  ` +
+              'Did you pass a real object to record()?',
+          ex.message);
+    }
+  },
 });

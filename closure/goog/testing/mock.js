@@ -232,7 +232,7 @@ goog.testing.Mock.STRICT = 0;
 goog.testing.Mock.record = function(obj) {
   goog.asserts.assert(
       obj.$recording_ !== undefined,
-      obj + ' is not a mock.  Did you pass a real object to record()?');
+      '%s is not a mock.  Did you pass a real object to record()?', obj);
   goog.asserts.assert(
       obj.$recording_,
       'Your mock is in replay mode.  You can only call record(mock) before mock.$replay()');
