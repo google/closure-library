@@ -1618,12 +1618,7 @@ goog.mixin = function(target, source) {
  *     between midnight, January 1, 1970 and the current time.
  * @deprecated Use Date.now
  */
-goog.now = (goog.TRUSTED_SITE && Date.now) || (function() {
-             // Unary plus operator converts its operand to a number which in
-             // the case of
-             // a date is done by calling getTime().
-             return +new Date();
-           });
+goog.now = Date.now;
 
 
 /**
