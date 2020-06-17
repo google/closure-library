@@ -236,17 +236,17 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.deadBackChannelTimerId_ = null;
 
   /**
-   * Whether the client's network conditions can support chunked responses.
+   * Whether the client's network conditions can support streamed responses.
    * @private {?boolean}
    */
-  this.useChunked_ = null;
+  this.enableStreaming_ = null;
 
   /**
-   * Whether chunked mode is allowed. In certain debugging situations, it's
+   * Whether streaming mode is allowed. In certain debugging situations, it's
    * useful to disable this.
    * @private {boolean}
    */
-  this.allowChunkedMode_ = true;
+  this.allowStreamingMode_ = true;
 
   /**
    * The array identifier of the last array received from the server for the
@@ -403,7 +403,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
   }
 
   if (opt_options && opt_options.forceLongPolling) {
-    this.allowChunkedMode_ = false;
+    this.allowStreamingMode_ = false;
   }
 
   /**
@@ -414,7 +414,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {boolean}
    */
   this.detectBufferingProxy_ =
-      (!this.fastHandshake_ && this.allowChunkedMode_ && opt_options &&
+      (!this.fastHandshake_ && this.allowStreamingMode_ && opt_options &&
        opt_options.detectBufferingProxy) ||
       false;
 
@@ -426,6 +426,9 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.forwardChannelFlushedCallback_ = undefined;
 
   /**
+   * TODO(user): move all backchannel states to its own class similar to
+   * forwardchannelrequestpool.js and log more stats.
+   *
    * The estimated handshake RTT (ms) as measured from when the handshake
    * request is sent and when the handshake response headers are received.
    * If the value is 0, the RTT is unknown.
@@ -433,6 +436,20 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {number}
    */
   this.handshakeRttMs_ = 0;
+
+  /**
+   * If BP detection is done or still in progress.
+   * Should only be checked when detectBufferingProxy is turned on.
+   * @private {boolean}
+   */
+  this.bpDetectionDone_ = false;
+
+  /**
+   * The timer for detecting buffering proxy. This needs be reset with each
+   * backchannel request. If this is not null, bpDetectionDone_ == false.
+   * @private {?number}
+   */
+  this.bpDetectionTimerId_ = null;
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
@@ -648,7 +665,7 @@ WebChannelBase.prototype.connect = function(
     this.extraParams_['OAID'] = opt_oldArrayId;
   }
 
-  this.useChunked_ = this.allowChunkedMode_;
+  this.enableStreaming_ = this.allowStreamingMode_;
   this.connectChannel_();
 };
 
@@ -704,14 +721,24 @@ WebChannelBase.prototype.connectChannel_ = function() {
 
 
 /**
+ * Cancels backchannel request.
+ * @private
+ */
+WebChannelBase.prototype.cancelBackChannelRequest_ = function() {
+  if (this.backChannelRequest_) {
+    this.clearBpDetectionTimer_();
+    this.backChannelRequest_.cancel();
+    this.backChannelRequest_ = null;
+  }
+};
+
+
+/**
  * Cancels all outstanding requests.
  * @private
  */
 WebChannelBase.prototype.cancelRequests_ = function() {
-  if (this.backChannelRequest_) {
-    this.backChannelRequest_.cancel();
-    this.backChannelRequest_ = null;
-  }
+  this.cancelBackChannelRequest_();
 
   if (this.backChannelTimerId_) {
     goog.global.clearTimeout(this.backChannelTimerId_);
@@ -902,29 +929,30 @@ WebChannelBase.prototype.setAllowHostPrefix = function(allowHostPrefix) {
  * @return {boolean} Whether the channel is buffered.
  */
 WebChannelBase.prototype.isBuffered = function() {
-  return !this.useChunked_;
+  return !this.enableStreaming_;
 };
 
 
 /**
- * Returns whether chunked mode is allowed. In certain debugging situations,
- * it's useful for the application to have a way to disable chunked mode for a
+ * Returns whether streaming mode is allowed. In certain debugging situations,
+ * it's useful for the application to have a way to disable streaming mode for a
  * user.
 
- * @return {boolean} Whether chunked mode is allowed.
+ * @return {boolean} Whether streaming mode is allowed.
  */
-WebChannelBase.prototype.getAllowChunkedMode = function() {
-  return this.allowChunkedMode_;
+WebChannelBase.prototype.getAllowStreamingMode = function() {
+  return this.allowStreamingMode_;
 };
 
 
 /**
- * Sets whether chunked mode is allowed. In certain debugging situations, it's
- * useful for the application to have a way to disable chunked mode for a user.
- * @param {boolean} allowChunkedMode  Whether chunked mode is allowed.
+ * Sets whether streaming mode is allowed. In certain debugging situations, it's
+ * useful for the application to have a way to disable streaming mode for a
+ * user.
+ * @param {boolean} allowStreamingMode  Whether streaming mode is allowed.
  */
-WebChannelBase.prototype.setAllowChunkedMode = function(allowChunkedMode) {
-  this.allowChunkedMode_ = allowChunkedMode;
+WebChannelBase.prototype.setAllowStreamingMode = function(allowStreamingMode) {
+  this.allowStreamingMode_ = allowStreamingMode;
 };
 
 
@@ -1482,6 +1510,81 @@ WebChannelBase.prototype.maybeRetryBackChannel_ = function() {
 WebChannelBase.prototype.onStartBackChannelTimer_ = function() {
   this.backChannelTimerId_ = null;
   this.startBackChannel_();
+
+  if (!this.detectBufferingProxy_) {
+    return;
+  }
+
+  if (this.bpDetectionDone_) {
+    return;
+  }
+
+  if (this.backChannelRequest_ == null || this.handshakeRttMs_ <= 0) {
+    this.channelDebug_.warning(
+        'Skip bpDetectionTimerId_ ' + this.backChannelRequest_ + ' ' +
+        this.handshakeRttMs_);
+    return;
+  }
+
+  // This goes with each new request until bpDetectionDone_
+  var bpDetectionTimeout = 2 * this.handshakeRttMs_;
+  this.channelDebug_.info('BP detection timer enabled: ' + bpDetectionTimeout);
+
+  this.bpDetectionTimerId_ = requestStats.setTimeout(
+      goog.bind(this.onBpDetectionTimer_, this), bpDetectionTimeout);
+};
+
+
+/**
+ * Timer callback for bpDetection.
+ * @private
+ */
+WebChannelBase.prototype.onBpDetectionTimer_ = function() {
+  if (!this.bpDetectionTimerId_) {
+    this.channelDebug_.warning('Invalid operation.');
+    return;
+  }
+
+  this.bpDetectionTimerId_ = null;
+  this.channelDebug_.info('BP detection timeout reached.');
+
+  goog.asserts.assert(
+      this.backChannelRequest_ != null,
+      'Invalid state: no backchannel request');
+
+  // We wait for extra response payload in addition to just headers to
+  // cancel the timer.
+  if (this.backChannelRequest_.getXhr() != null) {
+    var responseData = this.backChannelRequest_.getXhr().getResponseText();
+    if (responseData) {
+      this.channelDebug_.warning(
+          'Timer should have been cancelled : ' + responseData);
+    }
+  }
+
+  // Enable long-polling
+  this.channelDebug_.info(
+      'Buffering proxy detected and switch to long-polling!');
+  this.enableStreaming_ = false;
+
+  this.bpDetectionDone_ = true;
+
+  // Cancel the request and start a new one immediately
+  this.cancelBackChannelRequest_();
+  this.startBackChannel_();
+};
+
+
+/**
+ * Clears the timer for BP detection.
+ * @private
+ */
+WebChannelBase.prototype.clearBpDetectionTimer_ = function() {
+  if (this.bpDetectionTimerId_ != null) {
+    this.channelDebug_.debug('Cancel the BP detection timer.');
+    goog.global.clearTimeout(this.bpDetectionTimerId_);
+    this.bpDetectionTimerId_ = null;
+  }
 };
 
 
@@ -1508,7 +1611,7 @@ WebChannelBase.prototype.startBackChannel_ = function() {
   var uri = this.backChannelUri_.clone();
   uri.setParameterValue('RID', 'rpc');
   uri.setParameterValue('SID', this.sid_);
-  uri.setParameterValue('CI', this.useChunked_ ? '0' : '1');
+  uri.setParameterValue('CI', this.enableStreaming_ ? '0' : '1');
   uri.setParameterValue('AID', this.lastArrayId_);
 
   // Add the reconnect parameters.
@@ -1556,6 +1659,24 @@ WebChannelBase.prototype.okToMakeRequest_ = function() {
 /**
  * @override
  */
+WebChannelBase.prototype.onFirstByteReceived = function(request, responseText) {
+  if (this.backChannelRequest_ == request && this.detectBufferingProxy_) {
+    if (!this.bpDetectionDone_) {
+      this.channelDebug_.info(
+          'Great, no buffering proxy detected. Bytes received: ' +
+          responseText.length);
+      goog.asserts.assert(
+          this.bpDetectionTimerId_, 'Timer should not have been cancelled.');
+      this.clearBpDetectionTimer_();
+      this.bpDetectionDone_ = true;
+    }
+  }
+};
+
+
+/**
+ * @override
+ */
 WebChannelBase.prototype.onRequestData = function(request, responseText) {
   if (this.state_ == WebChannelBase.State.CLOSED ||
       (this.backChannelRequest_ != request &&
@@ -1587,6 +1708,7 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
         this.backChannelRequest_ == request) {
       this.clearDeadBackchannelTimer_();
     }
+
     if (!goog.string.isEmptyOrWhitespace(responseText)) {
       var response = this.wireCodec_.decodeMessage(responseText);
       this.onInput_(/** @type {!Array<?>} */ (response), request);
@@ -1673,8 +1795,7 @@ WebChannelBase.prototype.handleBackchannelMissing_ = function(forwardReq) {
           WebChannelBase.RTT_ESTIMATE <
       forwardReq.getRequestStartTime()) {
     this.clearDeadBackchannelTimer_();
-    this.backChannelRequest_.cancel();
-    this.backChannelRequest_ = null;
+    this.cancelBackChannelRequest_();
   } else {
     return;
   }
@@ -1727,8 +1848,7 @@ WebChannelBase.prototype.correctHostPrefix = function(serverHostPrefix) {
 WebChannelBase.prototype.onBackChannelDead_ = function() {
   if (this.deadBackChannelTimerId_ != null) {
     this.deadBackChannelTimerId_ = null;
-    this.backChannelRequest_.cancel();
-    this.backChannelRequest_ = null;
+    this.cancelBackChannelRequest_();
     this.maybeRetryBackChannel_();
     requestStats.notifyStatEvent(requestStats.Stat.BACKCHANNEL_DEAD);
   }
@@ -1773,6 +1893,7 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
   var pendingMessages = null;
   if (this.backChannelRequest_ == request) {
     this.clearDeadBackchannelTimer_();
+    this.clearBpDetectionTimer_();
     this.backChannelRequest_ = null;
     type = WebChannelBase.ChannelType_.BACK_CHANNEL;
   } else if (this.forwardChannelRequestPool_.hasRequest(request)) {
@@ -1791,7 +1912,6 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
   }
 
   if (request.getSuccess()) {
-    // Yay!
     if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
       var size = request.getPostData() ? request.getPostData().length : 0;
       requestStats.notifyTimingEvent(
@@ -2033,7 +2153,6 @@ WebChannelBase.prototype.startBackchannelAfterHandshake_ = function(request) {
     request.resetTimeout(this.backChannelRequestTimeoutMs_);
     this.backChannelRequest_ = request;
   } else {
-    // Open connection to receive data
     this.ensureBackChannel_();
   }
 };

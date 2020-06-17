@@ -641,7 +641,6 @@ goog.ui.PopupMenu.prototype.onDocClick = function(e) {
 /**
  * Handles the key event target losing focus.
  * @param {?goog.events.BrowserEvent} e The browser event.
- * @protected
  * @override
  */
 goog.ui.PopupMenu.prototype.handleBlur = function(e) {

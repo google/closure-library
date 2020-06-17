@@ -23,7 +23,8 @@ let debug;
  */
 function print(info) {
   if (debug) {
-    debug.innerHTML += `<p><p>${info}`;
+    debug.append(
+        document.createElement('p'), document.createElement('p'), info);
   }
 }
 

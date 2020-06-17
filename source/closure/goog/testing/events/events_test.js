@@ -163,8 +163,9 @@ testSuite({
           e.preventDefault();
         }
 
-        log.innerHTML +=
-            googString.subs('<br />%s (%s, %s)', e.type, e.clientX, e.clientY);
+        log.append(
+            document.createElement('br'),
+            googString.subs('%s (%s, %s)', e.type, e.clientX, e.clientY));
       });
     }
   },

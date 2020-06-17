@@ -221,7 +221,11 @@ goog.testing.recordFunction.Type;
 goog.testing.recordConstructor = function(ctor) {
   var recordedConstructor = goog.testing.recordFunction(ctor);
   recordedConstructor.prototype = ctor.prototype;
-  goog.mixin(recordedConstructor, ctor);
+
+  // NOTE: This does not handle non-enumerable properties, should it?
+  for (var x in ctor) {
+    recordedConstructor[x] = ctor[x];
+  }
   return recordedConstructor;
 };
 

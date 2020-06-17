@@ -9,6 +9,7 @@ goog.setTestOnly();
 const MockClock = goog.require('goog.testing.MockClock');
 const Throttle = goog.require('goog.async.Throttle');
 const testSuite = goog.require('goog.testing.testSuite');
+const {assertDoesNotRetainReference, assertRetainsReference} = goog.require('goog.testing.objects');
 
 testSuite({
   testThrottle() {
@@ -167,48 +168,13 @@ testSuite({
     throttle.fire(arg);
     assertEquals(0, x.calls);
     // sanity check that our search algorithm can find the value
-    assertNotNull(searchForReference(throttle, arg));
+    assertRetainsReference(throttle, arg);
 
     // invoke the call
     throttle.resume();
     assertEquals(1, x.calls);
     // now make sure that throttle doesn't retain a reference to 'arg'
-    assertNull(searchForReference(throttle, arg));
+    assertDoesNotRetainReference(throttle, arg);
   },
 
 });
-
-/**
- * Searches an object for a value and returns the path to it.
- *
- * @param {!Object} object The object to search, recursively
- * @param {?} needle The value to search for
- * @return {?Array<string>} the path to the value, or null if there is no such
- *     path
- */
-function searchForReference(object, needle) {
-  const /** !Set<!Object> */ visited = new Set();
-  const /** !Array<string> */ stack = [];
-  /** @return {boolean} */
-  const doSearch = (/** !Object */ object, /** ? */ needle) => {
-    if (object === needle) {
-      return true;
-    }
-    if (!object || visited.has(object)) {
-      return false;  // cycle or null
-    }
-    visited.add(object);
-    for (const key in object) {
-      stack.push(key);
-      if (doSearch(object[key], needle)) {
-        return true;
-      }
-      stack.pop();
-    }
-    return false;
-  };
-  if (doSearch(object, needle)) {
-    return stack;
-  }
-  return null;
-}

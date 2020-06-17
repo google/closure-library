@@ -275,7 +275,7 @@ goog.testing.mockmatchers.ignoreArgument =
  * @type {!goog.testing.mockmatchers.ArgumentMatcher}
  */
 goog.testing.mockmatchers.isArray =
-    new goog.testing.mockmatchers.ArgumentMatcher(goog.isArray, 'isArray');
+    new goog.testing.mockmatchers.ArgumentMatcher(Array.isArray, 'isArray');
 
 
 /**

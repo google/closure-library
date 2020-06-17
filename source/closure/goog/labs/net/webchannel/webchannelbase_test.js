@@ -1240,7 +1240,7 @@ testSuite({
 
   testResponseInBufferedMode() {
     connect(8);
-    channel.useChunked_ = false;
+    channel.enableStreaming_ = false;
     sendMap('foo1', 'bar1');
     assertEquals(-1, channel.lastPostResponseArrayId_);
     response(7, 111);

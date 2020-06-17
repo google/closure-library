@@ -83,16 +83,18 @@ goog.dom.fullscreen.isSupported = function(opt_domHelper) {
  * @param {!Element} element The element to put full screen.
  * @param {!goog.dom.fullscreen.FullscreenOptions=} opt_options Options for full
  *     screen. This field will be ignored on older browsers.
+   @return {!Promise<undefined>|undefined} A promise in later versions of Chrome
+       and undefined otherwise.
  */
 goog.dom.fullscreen.requestFullScreen = function(element, opt_options) {
   if (element.requestFullscreen) {
-    element.requestFullscreen(opt_options);
+    return element.requestFullscreen(opt_options);
   } else if (element.webkitRequestFullscreen) {
-    element.webkitRequestFullscreen();
+    return element.webkitRequestFullscreen();
   } else if (element.mozRequestFullScreen) {
-    element.mozRequestFullScreen();
+    return element.mozRequestFullScreen();
   } else if (element.msRequestFullscreen) {
-    element.msRequestFullscreen();
+    return element.msRequestFullscreen();
   }
 };
 
@@ -100,12 +102,14 @@ goog.dom.fullscreen.requestFullScreen = function(element, opt_options) {
 /**
  * Requests putting the element in full screen with full keyboard access.
  * @param {!Element} element The element to put full screen.
+   @return {!Promise<undefined>|undefined} A promise in later versions of Chrome
+       and undefined otherwise.
  */
 goog.dom.fullscreen.requestFullScreenWithKeys = function(element) {
   if (element.mozRequestFullScreenWithKeys) {
-    element.mozRequestFullScreenWithKeys();
+    return element.mozRequestFullScreenWithKeys();
   } else {
-    goog.dom.fullscreen.requestFullScreen(element);
+    return goog.dom.fullscreen.requestFullScreen(element);
   }
 };
 

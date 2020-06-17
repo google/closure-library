@@ -161,8 +161,10 @@ testSuite({
 
     events.listen(
         mouseWheelHandler, MouseWheelHandler.EventType.MOUSEWHEEL, (e) => {
-          log.innerHTML += googString.subs(
-              '<br />(deltaX, deltaY): (%s, %s)', e.deltaX, e.deltaY);
+          log.append(
+              document.createElement('br'),
+              googString.subs(
+                  '(deltaX, deltaY): (%s, %s)', e.deltaX, e.deltaY));
         });
   },
 

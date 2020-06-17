@@ -1222,13 +1222,15 @@ goog.array.isSorted = function(arr, opt_compareFn, opt_strict) {
  * have the same length and their corresponding elements are equal according to
  * the comparison function.
  *
- * @param {IArrayLike<?>} arr1 The first array to compare.
- * @param {IArrayLike<?>} arr2 The second array to compare.
- * @param {Function=} opt_equalsFn Optional comparison function.
+ * @param {IArrayLike<A>} arr1 The first array to compare.
+ * @param {IArrayLike<B>} arr2 The second array to compare.
+ * @param {?function(A,B):boolean=} opt_equalsFn Optional comparison function.
  *     Should take 2 arguments to compare, and return true if the arguments
  *     are equal. Defaults to {@link goog.array.defaultCompareEquality} which
  *     compares the elements using the built-in '===' operator.
  * @return {boolean} Whether the two arrays are equal.
+ * @template A
+ * @template B
  */
 goog.array.equals = function(arr1, arr2, opt_equalsFn) {
   if (!goog.isArrayLike(arr1) || !goog.isArrayLike(arr2) ||

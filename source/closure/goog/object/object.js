@@ -22,6 +22,7 @@ goog.provide('goog.object');
  * @param {*} v2 The second value to compare.
  * @return {boolean} Whether two values are not observably distinguishable.
  * @see http://wiki.ecmascript.org/doku.php?id=harmony:egal
+ * @deprecated Use Object.is
  */
 goog.object.is = function(v, v2) {
   if (v === v2) {
@@ -506,15 +507,11 @@ goog.object.equals = function(a, b) {
  * @template K,V
  */
 goog.object.clone = function(obj) {
-  // We cannot use the prototype trick because a lot of methods depend on where
-  // the actual key is set.
-
   const res = {};
   for (const key in obj) {
     res[key] = obj[key];
   }
   return res;
-  // We could also use goog.mixin but I wanted this to be independent from that.
 };
 
 

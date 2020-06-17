@@ -160,6 +160,23 @@ goog.dom.safe.setInnerHtml = function(elem, html) {
 
 
 /**
+ * Assigns constant HTML to an element's innerHTML property.
+ * @param {!Element} element The element whose innerHTML is to be assigned to.
+ * @param {!goog.string.Const} constHtml The known-safe HTML to assign.
+ * @throws {!Error} If called with one of these tags: math, script, style, svg,
+ *     template.
+ */
+goog.dom.safe.setInnerHtmlFromConstant = function(element, constHtml) {
+  goog.dom.safe.setInnerHtml(
+      element,
+      goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from('Constant HTML to be immediatelly used.'),
+              goog.string.Const.unwrap(constHtml)));
+};
+
+
+/**
  * Assigns known-safe HTML to an element's outerHTML property.
  * @param {!Element} elem The element whose outerHTML is to be assigned to.
  * @param {!goog.html.SafeHtml} html The known-safe HTML to assign.

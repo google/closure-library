@@ -482,10 +482,16 @@ const urlParseWithCommonChecks = function(urlStr) {
  * and will throw an error - please use `resolveRelativeUrl` instead for this
  * use-case.
  *
+ * Note that calling resolveUrl with both urlStr and baseStr may have surprising
+ * behavior. For example, any invocation with both parameters will never use the
+ * hash value from baseStr. Similarly, passing a path segment in urlStr will
+ * append (or replace) the path in baseStr, but will ALSO exclude the search and
+ * hash portions of baseStr from the resulting URL. See the unit tests
+ * (specifically testWithBase* test cases) for examples.
+ *
  * Compatibility notes:
- * - both IE (all versions) and Edge (EdgeHTML
- * only) disallow URLs to have user information in them, and parsing those
- * strings will throw an error.
+ * - both IE (all versions) and Edge (EdgeHTML only) disallow URLs to have user
+ *   information in them, and parsing those strings will throw an error.
  * - FireFox disallows URLs with just a password in the userinfo.
  * @param {string} urlStr A potential absolute URL as a string, or a relative
  *     URL if baseStr is provided.
@@ -560,13 +566,17 @@ const resolveUrl = function(urlStr, baseStr) {
       href = newBaseStr + urlStr;
     } else if (firstChar === '?') {
       href = newBaseStr + baseUrl.pathname + urlStr;
-    } else if (firstChar === '#') {
+    } else if (!firstChar || firstChar === '#') {
       href = newBaseStr + baseUrl.pathname + baseUrl.search + urlStr;
     } else {
       // This doesn't start with any of the authority terminating characters,
-      // but other browsers treat it implicitly as a path, so we add in the path
-      // termination character.
-      href = newBaseStr + '/' + urlStr;
+      // but other browsers treat it implicitly as an extension to the existing
+      // path, removing anything after the last '/' and appending urlStr to it.
+      const lastPathSeparator = baseUrl.pathname.lastIndexOf('/');
+      const path = lastPathSeparator > 0 ?
+          baseUrl.pathname.substring(0, lastPathSeparator) :
+          '';
+      href = newBaseStr + path + '/' + urlStr;
     }
     return createAnchorElementInIE(href);
   }
