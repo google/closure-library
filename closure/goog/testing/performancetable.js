@@ -16,6 +16,8 @@ goog.provide('goog.testing.PerformanceTable');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
+goog.require('goog.string.Const');
 goog.require('goog.testing.PerformanceTimer');
 
 
@@ -76,24 +78,27 @@ goog.testing.PerformanceTable.prototype.getTimer = function() {
  * @private
  */
 goog.testing.PerformanceTable.prototype.initRoot_ = function() {
-  this.root_.innerHTML = '<table class="test-results" cellspacing="1">' +
-      '  <thead>' +
-      '    <tr>' +
-      '      <th rowspan="2">Test Description</th>' +
-      '      <th rowspan="2">Runs</th>' +
-      '      <th colspan="4">Results (ms)</th>' +
-      '    </tr>' +
-      '    <tr>' +
-      '      <th>Average</th>' +
-      '      <th>Median</th>' +
-      '      <th>Std Dev</th>' +
-      '      <th>Minimum</th>' +
-      '      <th>Maximum</th>' +
-      '    </tr>' +
-      '  </thead>' +
-      '  <tbody>' +
-      '  </tbody>' +
-      '</table>';
+  goog.dom.safe.setInnerHtmlFromConstant(
+      goog.asserts.assert(this.root_),
+      goog.string.Const.from(
+          '<table class="test-results" cellspacing="1">' +
+          '  <thead>' +
+          '    <tr>' +
+          '      <th rowspan="2">Test Description</th>' +
+          '      <th rowspan="2">Runs</th>' +
+          '      <th colspan="4">Results (ms)</th>' +
+          '    </tr>' +
+          '    <tr>' +
+          '      <th>Average</th>' +
+          '      <th>Median</th>' +
+          '      <th>Std Dev</th>' +
+          '      <th>Minimum</th>' +
+          '      <th>Maximum</th>' +
+          '    </tr>' +
+          '  </thead>' +
+          '  <tbody>' +
+          '  </tbody>' +
+          '</table>'));
 };
 
 
