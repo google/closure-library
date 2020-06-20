@@ -436,7 +436,7 @@ goog.i18n.currency.CurrencyInfo = {
   'SGD': [2, '$', 'S$'],
   'THB': [2, '\u0e3f', 'THB'],
   'TRY': [2, '₺', 'TRY'],
-  'TWD': [2, 'NT$', 'NT$'],
+  'TWD': [2, '$', 'NT$'],
   'TZS': [0, 'TSh', 'TSh'],
   'UAH': [2, 'грн.', 'UAH'],
   'USD': [2, '$', 'US$'],
