@@ -101,15 +101,19 @@ goog.global.CLOSURE_DEFINES;
  * names that already exist are not overwritten. For example:
  * "a.b.c" -> a = {};a.b={};a.b.c={};
  * Used by goog.provide and goog.exportSymbol.
- * @param {string} name name of the object that this file defines.
- * @param {*=} opt_object the object to expose at the end of the path.
- * @param {Object=} opt_objectToExportTo The object to add the path to; default
- *     is `goog.global`.
+ * @param {string} name The name of the object that this file defines.
+ * @param {*=} object The object to expose at the end of the path.
+ * @param {boolean=} overwriteImplicit If object is set and a previous call
+ *     implicitly constructed the namespace given by name, this parameter
+ *     controls whether object should overwrite the implicitly constructed
+ *     namespace or be merged into it. Defaults to false.
+ * @param {?Object=} objectToExportTo The object to add the path to; if this
+ *     field is not specified, its value defaults to `goog.global`.
  * @private
  */
-goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
+goog.exportPath_ = function(name, object, overwriteImplicit, objectToExportTo) {
   var parts = name.split('.');
-  var cur = opt_objectToExportTo || goog.global;
+  var cur = objectToExportTo || goog.global;
 
   // Internet Explorer exhibits strange behavior when throwing errors from
   // methods externed in this manner.  See the testExportSymbolExceptions in
@@ -119,9 +123,23 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
   }
 
   for (var part; parts.length && (part = parts.shift());) {
-    if (!parts.length && opt_object !== undefined) {
-      // last part and we have an object; use it
-      cur[part] = opt_object;
+    if (!parts.length && object !== undefined) {
+      if (!overwriteImplicit && goog.isObject(object) &&
+          goog.isObject(cur[part])) {
+        // Merge properties on object (the input parameter) with the existing
+        // implicitly defined namespace, so as to not clobber previously
+        // defined child namespaces.
+        for (var prop in object) {
+          if (object.hasOwnProperty(prop)) {
+            cur[part][prop] = object[prop];
+          }
+        }
+      } else {
+        // Either there is no existing implicit namespace, or overwriteImplicit
+        // is set to true, so directly assign object (the input parameter) to
+        // the namespace.
+        cur[part] = object;
+      }
     } else if (cur[part] && cur[part] !== Object.prototype[part]) {
       cur = cur[part];
     } else {
@@ -302,10 +320,14 @@ goog.provide = function(name) {
 /**
  * @param {string} name Namespace provided by this file in the form
  *     "goog.package.part".
- * @param {Object=} opt_obj The object to embed in the namespace.
+ * @param {?Object=} object The object to embed in the namespace.
+ * @param {boolean=} overwriteImplicit If object is set and a previous call
+ *     implicitly constructed the namespace given by name, this parameter
+ *     controls whether opt_obj should overwrite the implicitly constructed
+ *     namespace or be merged into it. Defaults to false.
  * @private
  */
-goog.constructNamespace_ = function(name, opt_obj) {
+goog.constructNamespace_ = function(name, object, overwriteImplicit) {
   if (!COMPILED) {
     delete goog.implicitNamespaces_[name];
 
@@ -318,7 +340,7 @@ goog.constructNamespace_ = function(name, opt_obj) {
     }
   }
 
-  goog.exportPath_(name, opt_obj);
+  goog.exportPath_(name, object, overwriteImplicit);
 };
 
 
@@ -1096,15 +1118,16 @@ goog.loadModule = function(moduleDef) {
       declareLegacyNamespace: false,
       type: goog.ModuleType.GOOG
     };
-    var exports;
+    var origExports = {};
+    var exports = origExports;
     if (goog.isFunction(moduleDef)) {
-      exports = moduleDef.call(undefined, {});
+      exports = moduleDef.call(undefined, exports);
     } else if (typeof moduleDef === 'string') {
       if (goog.useSafari10Workaround()) {
         moduleDef = goog.workaroundSafari10EvalBug(moduleDef);
       }
 
-      exports = goog.loadModuleFromSource_.call(undefined, moduleDef);
+      exports = goog.loadModuleFromSource_.call(undefined, exports, moduleDef);
     } else {
       throw new Error('Invalid module definition');
     }
@@ -1114,7 +1137,12 @@ goog.loadModule = function(moduleDef) {
       // Don't seal legacy namespaces as they may be used as a parent of
       // another namespace
       if (goog.moduleLoaderState_.declareLegacyNamespace) {
-        goog.constructNamespace_(moduleName, exports);
+        // Whether exports was overwritten via default export assignment.
+        // This is important for legacy namespaces as it dictates whether
+        // previously a previously loaded implicit namespace should be clobbered
+        // or not.
+        var isDefaultExport = origExports !== exports;
+        goog.constructNamespace_(moduleName, exports, isDefaultExport);
       } else if (
           goog.SEAL_MODULE_EXPORTS && Object.seal &&
           typeof exports == 'object' && exports != null) {
@@ -1139,14 +1167,14 @@ goog.loadModule = function(moduleDef) {
 /**
  * @private @const
  */
-goog.loadModuleFromSource_ = /** @type {function(string):?} */ (function() {
-  // NOTE: we avoid declaring parameters or local variables here to avoid
-  // masking globals or leaking values into the module definition.
-  'use strict';
-  var exports = {};
-  eval(arguments[0]);
-  return exports;
-});
+goog.loadModuleFromSource_ =
+    /** @type {function(!Object, string):?} */ (function(exports) {
+      // NOTE: we avoid declaring parameters or local variables here to avoid
+      // masking globals or leaking values into the module definition.
+      'use strict';
+      eval(arguments[1]);
+      return exports;
+    });
 
 
 /**
@@ -1869,11 +1897,12 @@ goog.getMsgWithFallback = function(a, b) {
  *
  * @param {string} publicPath Unobfuscated name to export.
  * @param {*} object Object the name should point to.
- * @param {Object=} opt_objectToExportTo The object to add the path to; default
+ * @param {?Object=} objectToExportTo The object to add the path to; default
  *     is goog.global.
  */
-goog.exportSymbol = function(publicPath, object, opt_objectToExportTo) {
-  goog.exportPath_(publicPath, object, opt_objectToExportTo);
+goog.exportSymbol = function(publicPath, object, objectToExportTo) {
+  goog.exportPath_(
+      publicPath, object, /* overwriteImplicit= */ true, objectToExportTo);
 };
 
 
@@ -3817,4 +3846,3 @@ goog.createTrustedTypesPolicy = function(name) {
   }
   return policy;
 };
-
