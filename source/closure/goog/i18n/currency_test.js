@@ -73,6 +73,27 @@ testSuite({
     assertEquals('\'CHF\'#,##0.00', currency.getLocalCurrencyPattern('CHF'));
     assertEquals('\'CHF\'#,##0.00', currency.getPortableCurrencyPattern('CHF'));
     assertEquals('\'CHF\'#,##0.00', currency.getGlobalCurrencyPattern('CHF'));
+
+    assertEquals('\'$\'#,##0.00', currency.getLocalCurrencyPattern('TWD'));
+    assertEquals('\'NT$\'#,##0.00', currency.getPortableCurrencyPattern('TWD'));
+    assertEquals('TWD \'$\'#,##0.00', currency.getGlobalCurrencyPattern('TWD'));
+  },
+
+  testCurrencyFormatTWD() {
+    let formatter;
+    let str;
+
+    formatter = new NumberFormat(currency.getLocalCurrencyPattern('TWD'));
+    str = formatter.format(123456.7899);
+    assertEquals('$123,456.79', str);
+
+    formatter = new NumberFormat(currency.getPortableCurrencyPattern('TWD'));
+    str = formatter.format(123456.7899);
+    assertEquals('NT$123,456.79', str);
+
+    formatter = new NumberFormat(currency.getGlobalCurrencyPattern('TWD'));
+    str = formatter.format(123456.7899);
+    assertEquals('TWD $123,456.79', str);
   },
 
   testCurrencyFormatCHF() {

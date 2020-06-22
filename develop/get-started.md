@@ -92,7 +92,7 @@ For example, start a simple server in your project directory with:
 python -m SimpleHTTPServer 8000
 ```
 
-And visit localhost:8000/path/to/myapp/hello.html.
+And visit http://localhost:8000/path/to/myapp/hello.html.
 
 
 ## Compile your app
@@ -137,7 +137,7 @@ To compile your application:
 </html>
 ```
 
-Refer to [Getting Started with the Closure Compiler Application](https://developers.google.com/closure/compiler/docs/gettingstarted_app#the-hello-world-of the-closure-compiler-application)
+Refer to [Getting Started with the Closure Compiler Application](https://developers.google.com/closure/compiler/docs/gettingstarted_app#the-hello-world-of%20the-closure-compiler-application)
 for more information on the Closure Compiler.
 
 
