@@ -329,15 +329,17 @@ goog.html.DATA_URL_PATTERN_ = /^data:(.*);base64,[a-z0-9+\/]+=*$/i;
 
 
 /**
- * Creates a SafeUrl wrapping a data: URL, after validating it matches a
- * known-safe media MIME type.
+ * Attempts to create a SafeUrl wrapping a `data:` URL, after validating it
+ * matches a known-safe media MIME type. If it doesn't match, return `null`.
  *
  * @param {string} dataUrl A valid base64 data URL with one of the whitelisted
  *     media MIME types.
- * @return {!goog.html.SafeUrl} A matching safe URL, or {@link INNOCUOUS_STRING}
- *     wrapped as a SafeUrl if it does not pass.
+ * @return {?goog.html.SafeUrl} A matching safe URL, or `null` if it does not
+ *     pass.
  */
-goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
+goog.html.SafeUrl.tryFromDataUrl = function(dataUrl) {
+  // For defensive purposes, in case users cast around the parameter type.
+  dataUrl = String(dataUrl);
   // RFC4648 suggest to ignore CRLF in base64 encoding.
   // See https://tools.ietf.org/html/rfc4648.
   // Remove the CR (%0D) and LF (%0A) from the dataUrl.
@@ -351,8 +353,27 @@ goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
   // https://blog.mozilla.org/security/2017/10/04/treating-data-urls-unique-origins-firefox-57/
   // Older versions of IE don't understand `data:` urls, so it is not an issue.
   var valid = match && goog.html.SafeUrl.isSafeMimeType(match[1]);
-  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
-      valid ? filteredDataUrl : goog.html.SafeUrl.INNOCUOUS_STRING);
+  if (valid) {
+    return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+        filteredDataUrl);
+  }
+  return null;
+};
+
+
+/**
+ * Creates a SafeUrl wrapping a `data:` URL, after validating it matches a
+ * known-safe media MIME type. If it doesn't match, return
+ * `goog.html.SafeUrl.INNOCUOUS_URL`.
+ *
+ * @param {string} dataUrl A valid base64 data URL with one of the whitelisted
+ *     media MIME types.
+ * @return {!goog.html.SafeUrl} A matching safe URL, or
+ *     `goog.html.SafeUrl.INNOCUOUS_URL` if it does not pass.
+ */
+goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
+  return goog.html.SafeUrl.tryFromDataUrl(dataUrl) ||
+      goog.html.SafeUrl.INNOCUOUS_URL;
 };
 
 
@@ -644,13 +665,43 @@ goog.html.SAFE_URL_PATTERN_ =
  */
 goog.html.SafeUrl.SAFE_URL_PATTERN = goog.html.SAFE_URL_PATTERN_;
 
+/**
+ * Attempts to create a SafeUrl object from `url`. The input string is validated
+ * to match a pattern of commonly used safe URLs. If validation fails, `null` is
+ * returned.
+ *
+ * `url` may be a URL with the `http:`, `https:`, `mailto:`, or `ftp:` scheme,
+ * or a relative URL (i.e., a URL without a scheme; specifically, a
+ * scheme-relative, absolute-path-relative, or path-relative URL).
+ *
+ * @see http://url.spec.whatwg.org/#concept-relative-url
+ * @param {string|!goog.string.TypedString} url The URL to validate.
+ * @return {?goog.html.SafeUrl} The validated URL, wrapped as a SafeUrl, or null
+ *     if validation fails.
+ */
+goog.html.SafeUrl.trySanitize = function(url) {
+  if (url instanceof goog.html.SafeUrl) {
+    return url;
+  }
+  if (typeof url == 'object' && url.implementsGoogStringTypedString) {
+    url = /** @type {!goog.string.TypedString} */ (url).getTypedStringValue();
+  } else {
+    // For defensive purposes, in case users cast around the parameter type.
+    url = String(url);
+  }
+  if (!goog.html.SAFE_URL_PATTERN_.test(url)) {
+    return null;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
+};
 
 /**
  * Creates a SafeUrl object from `url`. If `url` is a
- * goog.html.SafeUrl then it is simply returned. Otherwise the input string is
- * validated to match a pattern of commonly used safe URLs.
+ * `goog.html.SafeUrl` then it is simply returned. Otherwise the input string is
+ * validated to match a pattern of commonly used safe URLs. If validation fails,
+ * `goog.html.SafeUrl.INNOCUOUS_URL` is returned.
  *
- * `url` may be a URL with the http, https, mailto or ftp scheme,
+ * `url` may be a URL with the `http:`, `https:`, `mailto:` or `ftp:` scheme,
  * or a relative URL (i.e., a URL without a scheme; specifically, a
  * scheme-relative, absolute-path-relative, or path-relative URL).
  *
@@ -659,22 +710,12 @@ goog.html.SafeUrl.SAFE_URL_PATTERN = goog.html.SAFE_URL_PATTERN_;
  * @return {!goog.html.SafeUrl} The validated URL, wrapped as a SafeUrl.
  */
 goog.html.SafeUrl.sanitize = function(url) {
-  if (url instanceof goog.html.SafeUrl) {
-    return url;
-  } else if (typeof url == 'object' && url.implementsGoogStringTypedString) {
-    url = /** @type {!goog.string.TypedString} */ (url).getTypedStringValue();
-  } else {
-    url = String(url);
-  }
-  if (!goog.html.SAFE_URL_PATTERN_.test(url)) {
-    url = goog.html.SafeUrl.INNOCUOUS_STRING;
-  }
-  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
+  return goog.html.SafeUrl.trySanitize(url) || goog.html.SafeUrl.INNOCUOUS_URL;
 };
 
 /**
  * Creates a SafeUrl object from `url`. If `url` is a
- * goog.html.SafeUrl then it is simply returned. Otherwise the input string is
+ * `goog.html.SafeUrl` then it is simply returned. Otherwise the input string is
  * validated to match a pattern of commonly used safe URLs.
  *
  * `url` may be a URL with the http, https, mailto or ftp scheme,
@@ -682,7 +723,7 @@ goog.html.SafeUrl.sanitize = function(url) {
  * scheme-relative, absolute-path-relative, or path-relative URL).
  *
  * This function asserts (using goog.asserts) that the URL matches this pattern.
- * If it does not, in addition to failing the assert, an innocous URL will be
+ * If it does not, in addition to failing the assert, an innocuous URL will be
  * returned.
  *
  * @see http://url.spec.whatwg.org/#concept-relative-url
@@ -735,6 +776,15 @@ goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
   return new goog.html.SafeUrl(
       goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_, url);
 };
+
+
+/**
+ * `INNOCUOUS_STRING` wrapped in a `SafeUrl`.
+ * @const {!goog.html.SafeUrl}
+ */
+goog.html.SafeUrl.INNOCUOUS_URL =
+    goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
+        goog.html.SafeUrl.INNOCUOUS_STRING);
 
 
 /**

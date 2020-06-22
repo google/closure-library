@@ -281,7 +281,7 @@ goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING =
  * @see goog.module
  * @param {string} name Namespace provided by this file in the form
  *     "goog.package.part".
- * @deprecated Use goog.module
+ * deprecated Use goog.module (see b/159289405)
  */
 goog.provide = function(name) {
   if (goog.isInModuleLoader_()) {
