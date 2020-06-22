@@ -540,39 +540,6 @@ testSuite({
     assertTrue(googObject.equals({'a': 1, 'b': 2}, {'b': 2, 'a': 1}));
   },
 
-  testIs() {
-    const object = {};
-    assertTrue(googObject.is(object, object));
-    assertFalse(googObject.is(object, {}));
-
-    assertTrue(googObject.is(NaN, NaN));
-    assertTrue(googObject.is(0, 0));
-    assertTrue(googObject.is(1, 1));
-    assertTrue(googObject.is(-1, -1));
-    assertTrue(googObject.is(123, 123));
-    assertFalse(googObject.is(0, -0));
-    assertFalse(googObject.is(-0, 0));
-    assertFalse(googObject.is(0, 1));
-
-    assertTrue(googObject.is(true, true));
-    assertTrue(googObject.is(false, false));
-    assertFalse(googObject.is(true, false));
-    assertFalse(googObject.is(false, true));
-
-    assertTrue(googObject.is('', ''));
-    assertTrue(googObject.is('a', 'a'));
-    assertFalse(googObject.is('', 'a'));
-    assertFalse(googObject.is('a', ''));
-    assertFalse(googObject.is('a', 'b'));
-
-    assertFalse(googObject.is(true, 'true'));
-    assertFalse(googObject.is('true', true));
-    assertFalse(googObject.is(false, 'false'));
-    assertFalse(googObject.is('false', false));
-    assertFalse(googObject.is(0, '0'));
-    assertFalse(googObject.is('0', 0));
-  },
-
   testGetAllPropertyNames_enumerableProperties() {
     const obj = {a: function() {}, b: 'b', c: function(x) {}};
     assertSameElements(['a', 'b', 'c'], googObject.getAllPropertyNames(obj));
