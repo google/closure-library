@@ -52,7 +52,6 @@ var utils = goog.module.get('goog.net.streams.utils');
  * @struct
  * @implements {goog.net.streams.StreamParser}
  * @final
- * @package
  */
 goog.net.streams.JsonStreamParser = function(opt_options) {
   /**
