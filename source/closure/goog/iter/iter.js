@@ -10,31 +10,14 @@
 
 
 goog.provide('goog.iter');
-goog.provide('goog.iter.Iterable');
 goog.provide('goog.iter.Iterator');
-goog.provide('goog.iter.StopIteration');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.functions');
+goog.require('goog.iter.Iterable');
+goog.require('goog.iter.StopIteration');
 goog.require('goog.math');
-
-
-/**
- * @typedef {{length:number}|{__iterator__}}
- */
-goog.iter.Iterable;
-
-
-/**
- * Singleton Error object that is used to terminate iterations.
- * @const {!Error}
- */
-goog.iter.StopIteration = ('StopIteration' in goog.global) ?
-    // For script engines that support legacy iterators.
-    goog.global['StopIteration'] :
-    {message: 'StopIteration', stack: ''};
-
 
 
 /**
@@ -45,6 +28,9 @@ goog.iter.StopIteration = ('StopIteration' in goog.global) ?
  * iterator or in case you are only targeting JavaScript 1.7 for in loops.
  * @constructor
  * @template VALUE
+ * @deprecated Use objects implementing JavaScript iterable protocol introduced
+ *     in ES6.
+ *     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
 goog.iter.Iterator = function() {};
 

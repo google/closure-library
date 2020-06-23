@@ -623,8 +623,10 @@ goog.addDependency('i18n/ucharnames.js', ['goog.i18n.uCharNames'], ['goog.i18n.u
 goog.addDependency('i18n/ucharnames_test.js', ['goog.i18n.uCharNamesTest'], ['goog.i18n.uCharNames', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('iter/es6.js', ['goog.iter.es6'], ['goog.iter.Iterable', 'goog.iter.Iterator', 'goog.iter.StopIteration'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('iter/es6_test.js', ['goog.iter.es6Test'], ['goog.iter', 'goog.iter.es6', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('iter/iter.js', ['goog.iter', 'goog.iter.Iterable', 'goog.iter.Iterator', 'goog.iter.StopIteration'], ['goog.array', 'goog.asserts', 'goog.functions', 'goog.math'], {});
+goog.addDependency('iter/iter.js', ['goog.iter', 'goog.iter.Iterator'], ['goog.array', 'goog.asserts', 'goog.functions', 'goog.iter.Iterable', 'goog.iter.StopIteration', 'goog.math'], {});
 goog.addDependency('iter/iter_test.js', ['goog.iterTest'], ['goog.iter', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('iter/iterable.js', ['goog.iter.Iterable'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('iter/stopiteration.js', ['goog.iter.StopIteration'], [], {'module': 'goog'});
 goog.addDependency('json/hybrid.js', ['goog.json.hybrid'], ['goog.asserts', 'goog.json'], {});
 goog.addDependency('json/hybrid_test.js', ['goog.json.hybridTest'], ['goog.json', 'goog.json.hybrid', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('json/json.js', ['goog.json', 'goog.json.Replacer', 'goog.json.Reviver', 'goog.json.Serializer'], [], {'lang': 'es6'});
@@ -1544,7 +1546,7 @@ goog.addDependency('ui/zippy.js', ['goog.ui.Zippy', 'goog.ui.Zippy.Events', 'goo
 goog.addDependency('ui/zippy_test.js', ['goog.ui.ZippyTest'], ['goog.a11y.aria', 'goog.dom', 'goog.dom.TagName', 'goog.dom.classlist', 'goog.events', 'goog.events.KeyCodes', 'goog.object', 'goog.testing.events', 'goog.testing.testSuite', 'goog.ui.Zippy'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('uri/uri.js', ['goog.Uri', 'goog.Uri.QueryData'], ['goog.array', 'goog.asserts', 'goog.string', 'goog.structs', 'goog.structs.Map', 'goog.uri.utils', 'goog.uri.utils.ComponentIndex', 'goog.uri.utils.StandardQueryParam'], {});
 goog.addDependency('uri/uri_test.js', ['goog.UriTest'], ['goog.Uri', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('uri/utils.js', ['goog.uri.utils', 'goog.uri.utils.ComponentIndex', 'goog.uri.utils.QueryArray', 'goog.uri.utils.QueryValue', 'goog.uri.utils.StandardQueryParam'], ['goog.array', 'goog.asserts', 'goog.string'], {});
+goog.addDependency('uri/utils.js', ['goog.uri.utils', 'goog.uri.utils.ComponentIndex', 'goog.uri.utils.QueryArray', 'goog.uri.utils.QueryValue', 'goog.uri.utils.StandardQueryParam'], ['goog.asserts', 'goog.string'], {});
 goog.addDependency('uri/utils_test.js', ['goog.uri.utilsTest'], ['goog.functions', 'goog.string', 'goog.testing.testSuite', 'goog.uri.utils'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('url/url.js', ['goog.url'], ['goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.uncheckedconversions', 'goog.labs.collections.iters', 'goog.string.Const'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('url/url_test.js', ['goog.urltest'], ['goog.labs.userAgent.browser', 'goog.testing.asserts', 'goog.testing.testSuite', 'goog.url'], {'lang': 'es6', 'module': 'goog'});

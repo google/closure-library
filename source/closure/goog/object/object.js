@@ -12,33 +12,6 @@ goog.provide('goog.object');
 
 
 /**
- * Whether two values are not observably distinguishable. This
- * correctly detects that 0 is not the same as -0 and two NaNs are
- * practically equivalent.
- *
- * The implementation is as suggested by harmony:egal proposal.
- *
- * @param {*} v The first value to compare.
- * @param {*} v2 The second value to compare.
- * @return {boolean} Whether two values are not observably distinguishable.
- * @see http://wiki.ecmascript.org/doku.php?id=harmony:egal
- * @deprecated Use Object.is
- */
-goog.object.is = function(v, v2) {
-  if (v === v2) {
-    // 0 === -0, but they are not identical.
-    // We need the cast because the compiler requires that v2 is a
-    // number (although 1/v2 works with non-number). We cast to ? to
-    // stop the compiler from type-checking this statement.
-    return v !== 0 || 1 / v === 1 / /** @type {?} */ (v2);
-  }
-
-  // NaN is non-reflexive: NaN !== NaN, although they are identical.
-  return v !== v && v2 !== v2;
-};
-
-
-/**
  * Calls a function for each element in an object/map/hash.
  *
  * @param {Object<K,V>} obj The object over which to iterate.
