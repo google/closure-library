@@ -45,6 +45,9 @@ goog.iter.StopIteration = ('StopIteration' in goog.global) ?
  * iterator or in case you are only targeting JavaScript 1.7 for in loops.
  * @constructor
  * @template VALUE
+ * @deprecated Use objects implementing JavaScript iterable protocol introduced
+ *     in ES6.
+ *     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
 goog.iter.Iterator = function() {};
 
