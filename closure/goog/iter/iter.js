@@ -10,22 +10,14 @@
 
 
 goog.provide('goog.iter');
-goog.provide('goog.iter.Iterable');
 goog.provide('goog.iter.Iterator');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.functions');
+goog.require('goog.iter.Iterable');
 goog.require('goog.iter.StopIteration');
 goog.require('goog.math');
-
-
-/**
- * @typedef {{length:number}|{__iterator__}}
- */
-goog.iter.Iterable;
-
-
 
 
 /**
