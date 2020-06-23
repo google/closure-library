@@ -40,7 +40,6 @@ goog.provide('goog.uri.utils.QueryArray');
 goog.provide('goog.uri.utils.QueryValue');
 goog.provide('goog.uri.utils.StandardQueryParam');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.string');
 
@@ -1031,7 +1030,7 @@ goog.uri.utils.setParamsFromMap = function(uri, params) {
   var queryData = parts[1];
   var buffer = [];
   if (queryData) {
-    goog.array.forEach(queryData.split('&'), function(pair) {
+    queryData.split('&').forEach(function(pair) {
       var indexOfEquals = pair.indexOf('=');
       var name = indexOfEquals >= 0 ? pair.substr(0, indexOfEquals) : pair;
       if (!params.hasOwnProperty(name)) {
