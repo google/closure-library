@@ -359,7 +359,6 @@ var _allTests = [
   'closure/goog/net/xhrio_test.html',
   'closure/goog/net/xhrmanager_test.html',
   'closure/goog/net/xpc/directtransport_test.html',
-  'closure/goog/net/xpc/iframepollingtransport_test.html',
   'closure/goog/net/xpc/nativemessagingtransport_test.html',
   'closure/goog/object/object_test.html',
   'closure/goog/positioning/anchoredposition_test.html',
