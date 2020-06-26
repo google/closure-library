@@ -28,6 +28,14 @@ goog.debug.FORCE_SLOPPY_STACKS =
 
 
 /**
+ * @define {boolean} TODO(user): Remove this hack once bug is resolved.
+ */
+goog.debug.CHECK_FOR_THROWN_EVENT =
+    goog.define('goog.debug.CHECK_FOR_THROWN_EVENT', false);
+
+
+
+/**
  * Catches onerror events fired by windows and similar objects.
  * @param {function(Object)} logFunc The function to call with the error
  *    information.
@@ -285,6 +293,14 @@ goog.debug.normalizeErrorObject = function(err) {
             err.constructor.name :
             goog.debug.getFunctionName(err.constructor);
         message = 'Unknown Error of type "' + ctorName + '"';
+        // TODO(user): Remove this hack once bug is resolved.
+        if (goog.debug.CHECK_FOR_THROWN_EVENT && ctorName == 'Event') {
+          try {
+            message = message + ' with Event.type "' + (err.type || '') + '"';
+          } catch (e) {
+            // Just give up on getting more information out of the error object.
+          }
+        }
       } else {
         message = 'Unknown Error of unknown type';
       }
