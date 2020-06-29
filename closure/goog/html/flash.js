@@ -183,22 +183,29 @@ goog.html.flash.combineParams = function(defaultParams, opt_params) {
   var name;
 
   for (name in defaultParams) {
-    goog.asserts.assert(name.toLowerCase() == name, 'Must be lower case');
-    combinedParams[name] = defaultParams[name];
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty#Using_hasOwnProperty_as_a_property_name
+    if (Object.prototype.hasOwnProperty.call(defaultParams, name)) {
+      goog.asserts.assert(name.toLowerCase() == name, 'Must be lower case');
+      combinedParams[name] = defaultParams[name];
+    }
   }
   for (name in opt_params) {
-    var nameLower = name.toLowerCase();
-    if (nameLower in defaultParams) {
-      delete combinedParams[nameLower];
+    if (Object.prototype.hasOwnProperty.call(opt_params, name)) {
+      var nameLower = name.toLowerCase();
+      if (nameLower in defaultParams) {
+        delete combinedParams[nameLower];
+      }
+      combinedParams[name] = opt_params[name];
     }
-    combinedParams[name] = opt_params[name];
   }
 
   var paramTags = [];
   for (name in combinedParams) {
-    paramTags.push(
-        goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
-            'param', {'name': name, 'value': combinedParams[name]}));
+    if (Object.prototype.hasOwnProperty.call(combinedParams, name)) {
+      paramTags.push(
+          goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
+              'param', {'name': name, 'value': combinedParams[name]}));
+    }
   }
   return paramTags;
 };
@@ -219,14 +226,17 @@ goog.html.flash.verifyKeysNotInMaps = function(
     keys, opt_attributes, opt_params) {
   var verifyNotInMap = function(keys, map, type) {
     for (var keyMap in map) {
-      var keyMapLower = keyMap.toLowerCase();
-      for (var i = 0; i < keys.length; i++) {
-        var keyToCheck = keys[i];
-        goog.asserts.assert(keyToCheck.toLowerCase() == keyToCheck);
-        if (keyMapLower == keyToCheck) {
-          throw new Error(
-              'Cannot override "' + keyToCheck + '" ' + type + ', got "' +
-              keyMap + '" with value "' + map[keyMap] + '"');
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty#Using_hasOwnProperty_as_a_property_name
+      if (Object.prototype.hasOwnProperty.call(map, keyMap)) {
+        var keyMapLower = keyMap.toLowerCase();
+        for (var i = 0; i < keys.length; i++) {
+          var keyToCheck = keys[i];
+          goog.asserts.assert(keyToCheck.toLowerCase() == keyToCheck);
+          if (keyMapLower == keyToCheck) {
+            throw new Error(
+                'Cannot override "' + keyToCheck + '" ' + type + ', got "' +
+                keyMap + '" with value "' + map[keyMap] + '"');
+          }
         }
       }
     }

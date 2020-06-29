@@ -505,17 +505,20 @@ goog.html.TrustedResourceUrl.stringifyParams_ = function(
   }
   // Add on parameters to field from key-value object.
   for (var key in params) {
-    var value = params[key];
-    var outputValues = Array.isArray(value) ? value : [value];
-    for (var i = 0; i < outputValues.length; i++) {
-      var outputValue = outputValues[i];
-      if (outputValue != null) {
-        if (!currentString) {
-          currentString = prefix;
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty#Using_hasOwnProperty_as_a_property_name
+    if (Object.prototype.hasOwnProperty.call(params, key)) {
+      var value = params[key];
+      var outputValues = Array.isArray(value) ? value : [value];
+      for (var i = 0; i < outputValues.length; i++) {
+        var outputValue = outputValues[i];
+        if (outputValue != null) {
+          if (!currentString) {
+            currentString = prefix;
+          }
+          currentString += (currentString.length > prefix.length ? '&' : '') +
+              encodeURIComponent(key) + '=' +
+              encodeURIComponent(String(outputValue));
         }
-        currentString += (currentString.length > prefix.length ? '&' : '') +
-            encodeURIComponent(key) + '=' +
-            encodeURIComponent(String(outputValue));
       }
     }
   }

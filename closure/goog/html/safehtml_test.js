@@ -318,6 +318,15 @@ testSuite({
         SafeHtml.createIframe(null, null, {'sandbox': null}, '<'));
   },
 
+  testSafeHtmlCreateIframe_withMonkeypatchedObjectPrototype() {
+    stubs.set(Object.prototype, 'foo', 'bar');
+    const url = TrustedResourceUrl.fromConstant(
+        Const.from('https://google.com/trusted<'));
+    assertSameHtml(
+        '<iframe src="https://google.com/trusted&lt;"></iframe>',
+        SafeHtml.createIframe(url, null, {'sandbox': null}));
+  },
+
   /** @suppress {checkTypes} */
   testSafeHtmlcreateSandboxIframe() {
     function assertSameHtmlIfSupportsSandbox(
@@ -422,6 +431,13 @@ testSuite({
 
     // Directionality.
     assertEquals(Dir.NEUTRAL, scriptHtml.getDirection());
+  },
+
+  testSafeHtmlCreateScript_withMonkeypatchedObjectPrototype() {
+    stubs.set(Object.prototype, 'foo', 'bar');
+    stubs.set(Object.prototype, 'type', 'baz');
+    const scriptHtml = SafeHtml.createScript(SafeScript.EMPTY, {'id': null});
+    assertSameHtml('<script></script>', scriptHtml);
   },
 
   /** @suppress {checkTypes} */

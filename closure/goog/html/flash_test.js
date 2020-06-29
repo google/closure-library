@@ -10,6 +10,7 @@ goog.module('goog.html.flashTest');
 goog.setTestOnly();
 
 const Const = goog.require('goog.string.Const');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const SafeHtml = goog.require('goog.html.SafeHtml');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
 const flash = goog.require('goog.html.flash');
@@ -18,7 +19,14 @@ const testSuite = goog.require('goog.testing.testSuite');
 function assertSameHtml(expected, html) {
   assertEquals(expected, SafeHtml.unwrap(html));
 }
+
+const stubs = new PropertyReplacer();
+
 testSuite({
+  tearDown() {
+    stubs.reset();
+  },
+
   testCreateEmbed() {
     const trustedResourceUrl = TrustedResourceUrl.fromConstant(
         Const.from('https://google.com/trusted&'));
@@ -90,4 +98,22 @@ testSuite({
           trustedResourceUrl, {}, {'datA': 'cantdothis'});
     });
   },
+
+  testCreateEmbed_withMonkeypatchedObjectPrototype() {
+    stubs.set(Object.prototype, 'foo', 'bar');
+    stubs.set(Object.prototype, 'type', 'baz');
+    const trustedResourceUrl = TrustedResourceUrl.fromConstant(
+        Const.from('https://google.com/trusted&'));
+    assertSameHtml(
+        '<embed ' +
+            'src="https://google.com/trusted&amp;" ' +
+            'type="application/x-shockwave-flash" ' +
+            'pluginspage="https://www.macromedia.com/go/getflashplayer" ' +
+            'allownetworking="none" ' +
+            'allowScriptAccess="always&lt;" ' +
+            'class="test&lt;">',
+        flash.createEmbed(
+            trustedResourceUrl,
+            {'allowScriptAccess': 'always<', 'class': 'test<'}));
+  }
 });
