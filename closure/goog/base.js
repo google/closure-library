@@ -1329,17 +1329,6 @@ goog.typeOf = function(value) {
 
 
 /**
- * Returns true if the specified value is an array.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is an array.
- * @deprecated Use Array.isArray instead.
- */
-goog.isArray = function(val) {
-  return Array.isArray(val);
-};
-
-
-/**
  * Returns true if the object looks like an array. To qualify as array like
  * the value needs to be either a NodeList or an object with a Number length
  * property. Note that for this function neither strings nor functions are
