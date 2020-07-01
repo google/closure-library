@@ -26,6 +26,7 @@ goog.provide('goog.ui.SplitPane');
 goog.provide('goog.ui.SplitPane.Orientation');
 
 goog.require('goog.asserts');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
@@ -36,6 +37,8 @@ goog.require('goog.math.Size');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.fx.DragEvent');
 
 
 

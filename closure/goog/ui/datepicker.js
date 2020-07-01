@@ -15,6 +15,7 @@ goog.provide('goog.ui.DatePicker.Events');
 goog.provide('goog.ui.DatePickerEvent');
 
 goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.asserts');
 goog.require('goog.date.Date');
 goog.require('goog.date.DateRange');
@@ -33,6 +34,9 @@ goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.DefaultDatePickerRenderer');
 goog.require('goog.ui.IdGenerator');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.i18n.DateTimeSymbolsType');
+goog.requireType('goog.ui.DatePickerRenderer');
 
 
 

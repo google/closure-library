@@ -14,6 +14,7 @@ goog.provide('goog.ui.PopupBase.Type');
 
 goog.require('goog.Timer');
 goog.require('goog.array');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
@@ -24,6 +25,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.fx.Transition');
 goog.require('goog.style');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
 
 
 
