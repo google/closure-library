@@ -314,7 +314,7 @@ goog.editor.plugins.Blockquote.prototype.splitQuotedBlockW3C_ = function(
                         goog.editor.Command.DEFAULT_TAG) ||
       goog.dom.TagName.DIV;
   var container = dh.createElement(/** @type {string} */ (tagToInsert));
-  container.innerHTML = '&nbsp;';  // Prevent the div from collapsing.
+  container.textContent = '\xA0';  // Prevent the div from collapsing.
   quoteNode.parentNode.insertBefore(container, secondHalf);
   dh.getWindow().getSelection().collapse(container, 0);
 
@@ -388,7 +388,7 @@ goog.editor.plugins.Blockquote.prototype.splitQuotedBlockIE_ = function(
 
   // The div needs non-whitespace contents in order for the insertion point
   // to get correctly inserted.
-  div.innerHTML = '&nbsp;';
+  div.textContent = '\xA0';
 
   // Moving the range 1 char isn't enough when you have markup.
   // This moves the range to the end of the nbsp.
