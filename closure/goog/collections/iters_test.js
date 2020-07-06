@@ -8,10 +8,10 @@
  * @fileoverview Tests for goog.labs.iterable
  */
 
-goog.module('goog.labs.iterableTest');
-goog.setTestOnly('goog.labs.iterableTest');
+goog.module('goog.collections.iters.iterableTest');
+goog.setTestOnly('goog.collections.iters.iterableTest');
 
-const iters = goog.require('goog.labs.collections.iters');
+const iters = goog.require('goog.collections.iters');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
 

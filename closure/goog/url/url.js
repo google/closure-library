@@ -45,7 +45,7 @@ const Tagname = goog.require('goog.dom.TagName');
 const safe = goog.require('goog.dom.safe');
 const uncheckedConversions = goog.require('goog.html.uncheckedconversions');
 const {assert} = goog.require('goog.asserts');
-const {concat: iterableConcat, map: iterableMap} = goog.require('goog.labs.collections.iters');
+const {concat: iterableConcat, map: iterableMap} = goog.require('goog.collections.iters');
 const {createElement} = goog.require('goog.dom');
 
 /** @define {boolean} */
