@@ -28,6 +28,8 @@ java -Xmx1G -jar ../closure-compiler-1.0-SNAPSHOT.jar \
   --jscomp_error='*' \
   --jscomp_off=strictCheckTypes \
   --jscomp_off=strictMissingRequire \
+  --jscomp_off=stricterMissingRequireInProvidesFile \
+  --jscomp_off=stricterMissingRequireTypeInProvidesFile \
   --jscomp_off=extraRequire \
   --jscomp_off=deprecated \
   --jscomp_off=lintChecks \
