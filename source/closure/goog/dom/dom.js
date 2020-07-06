@@ -1284,6 +1284,26 @@ goog.dom.replaceNode = function(newNode, oldNode) {
 
 
 /**
+ * Replaces child nodes of `target` with child nodes of `source`. This is
+ * roughly equivalent to `target.innerHTML = source.innerHTML` which is not
+ * compatible with Trusted Types.
+ * @param {?Node} target Node to clean and replace its children.
+ * @param {?Node} source Node to get the children from. The nodes will be cloned
+ *     so they will stay in source.
+ */
+goog.dom.copyContents = function(target, source) {
+  goog.asserts.assert(
+      target != null && source != null,
+      'goog.dom.copyContents expects non-null arguments');
+  goog.dom.removeChildren(target);
+  var childNodes = source.cloneNode(/* deep= */ true).childNodes;
+  while (childNodes.length) {
+    target.appendChild(childNodes[0]);
+  }
+};
+
+
+/**
  * Flattens an element. That is, removes it and replace it with its children.
  * Does nothing if the element is not in the document.
  * @param {Element} element The element to flatten.
@@ -2949,6 +2969,17 @@ goog.dom.DomHelper.prototype.removeNode = goog.dom.removeNode;
  * @param {Node} oldNode Node to replace.
  */
 goog.dom.DomHelper.prototype.replaceNode = goog.dom.replaceNode;
+
+
+/**
+ * Replaces child nodes of `target` with child nodes of `source`. This is
+ * roughly equivalent to `target.innerHTML = source.innerHTML` which is not
+ * compatible with Trusted Types.
+ * @param {?Node} target Node to clean and replace its children.
+ * @param {?Node} source Node to get the children from. The nodes will be cloned
+ *     so they will stay in source.
+ */
+goog.dom.DomHelper.prototype.copyContents = goog.dom.copyContents;
 
 
 /**

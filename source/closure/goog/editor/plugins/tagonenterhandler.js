@@ -327,7 +327,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.breakOutOfEmptyListItemGecko_ =
     goog.dom.removeNode(listNode);
   }
   goog.dom.removeNode(li);
-  newNode.innerHTML = '&nbsp;';
+  newNode.textContent = '\xA0';
 
   return newNode;
 };
@@ -484,7 +484,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.handleRegularEnterGecko_ =
     goog.dom.insertSiblingAfter(newNode, container);
   } else {
     if (!container.firstChild) {
-      container.innerHTML = '&nbsp;';
+      container.innerHTML = '\xA0';
     }
 
     var position = goog.editor.range.getDeepEndPoint(range, true);

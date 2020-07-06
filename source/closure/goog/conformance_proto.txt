@@ -306,9 +306,7 @@ requirement: {
   value: 'Location.prototype.href'
 
   whitelist_regexp: '.+/closure/goog/dom/safe.js'
-  # URL is sanitized in goog.net.xpc.IframePollingTransport.Sender, before
-  # being assigned to .href.
-  whitelist_regexp: '.+/closure/goog/net/xpc/iframepollingtransport.js'
+
   # The following whitelist entries are due to usages of .href that still
   # need to be refactored or reviewed. See http://b/12014412.
   whitelist_regexp: '.+/closure/goog/history/history.js'

@@ -339,20 +339,24 @@ goog.html.SafeStyle.PropertyMap;
 goog.html.SafeStyle.create = function(map) {
   var style = '';
   for (var name in map) {
-    if (!/^[-_a-zA-Z0-9]+$/.test(name)) {
-      throw new Error('Name allows only [-_a-zA-Z0-9], got: ' + name);
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty#Using_hasOwnProperty_as_a_property_name
+    if (Object.prototype.hasOwnProperty.call(map, name)) {
+      if (!/^[-_a-zA-Z0-9]+$/.test(name)) {
+        throw new Error('Name allows only [-_a-zA-Z0-9], got: ' + name);
+      }
+      var value = map[name];
+      if (value == null) {
+        continue;
+      }
+      if (Array.isArray(value)) {
+        value =
+            goog.array.map(value, goog.html.SafeStyle.sanitizePropertyValue_)
+                .join(' ');
+      } else {
+        value = goog.html.SafeStyle.sanitizePropertyValue_(value);
+      }
+      style += name + ':' + value + ';';
     }
-    var value = map[name];
-    if (value == null) {
-      continue;
-    }
-    if (Array.isArray(value)) {
-      value = goog.array.map(value, goog.html.SafeStyle.sanitizePropertyValue_)
-                  .join(' ');
-    } else {
-      value = goog.html.SafeStyle.sanitizePropertyValue_(value);
-    }
-    style += name + ':' + value + ';';
   }
   if (!style) {
     return goog.html.SafeStyle.EMPTY;

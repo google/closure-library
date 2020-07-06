@@ -24,6 +24,7 @@ goog.require('goog.storage.mechanism.Mechanism');
  * @constructor
  * @struct
  * @extends {goog.storage.mechanism.Mechanism}
+ * @abstract
  */
 goog.storage.mechanism.IterableMechanism = function() {
   goog.storage.mechanism.IterableMechanism.base(this, 'constructor');

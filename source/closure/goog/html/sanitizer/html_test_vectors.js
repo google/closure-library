@@ -166,6 +166,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "\"&gt;<p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\">",
          "&quot;&gt;<p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\"></p>",
          "\"&gt;<noscript><p></p></noscript>",
+         "\"&gt;",
      ],
      name: "mxss_noscript"},
     {input: "<a><a></a></a>",

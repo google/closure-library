@@ -41,8 +41,7 @@ goog.require('goog.log');
 goog.net.xpc.TransportTypes = {
   UNDEFINED: 0,
   NATIVE_MESSAGING: 1,
-  IFRAME_POLLING: 2,
-  DIRECT: 3,
+  DIRECT: 2,
 };
 
 
@@ -53,8 +52,7 @@ goog.net.xpc.TransportTypes = {
  */
 goog.net.xpc.TransportNames = {
   '1': 'NativeMessagingTransport',
-  '2': 'IframePollingTransport',
-  '3': 'DirectTransport',
+  '2': 'DirectTransport',
 };
 
 

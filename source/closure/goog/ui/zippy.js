@@ -17,6 +17,7 @@ goog.provide('goog.ui.ZippyEvent');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.Event');
@@ -26,6 +27,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.style');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

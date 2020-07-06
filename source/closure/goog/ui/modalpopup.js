@@ -12,6 +12,7 @@ goog.provide('goog.ui.ModalPopup');
 
 goog.require('goog.Timer');
 goog.require('goog.asserts');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.animationFrame');
@@ -27,6 +28,8 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.ModalAriaVisibilityHelper');
 goog.require('goog.ui.PopupBase');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.EventTarget');
 
 
 

@@ -39,6 +39,7 @@ goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.disposeAll');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
@@ -60,6 +61,12 @@ goog.require('goog.style');
 goog.require('goog.style.bidi');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.RangeModel');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.events.KeyEvent');
+goog.requireType('goog.events.MouseWheelEvent');
+goog.requireType('goog.fx.AnimationEvent');
+goog.requireType('goog.fx.DragEvent');
+goog.requireType('goog.fx.TransitionBase');
 
 
 

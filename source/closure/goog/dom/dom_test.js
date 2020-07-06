@@ -755,6 +755,17 @@ testSuite({
     assertNull('badNode should not be in the DOM tree', $('badReplaceNode'));
   },
 
+  testCopyContents() {
+    const target =
+        googDom.createDom('div', {}, 'a', googDom.createDom('span', {}, 'b'));
+    const source =
+        googDom.createDom('div', {}, googDom.createDom('span', {}, 'c'), 'd');
+    googDom.copyContents(target, source);
+    assertEquals('cd', target.textContent);
+    assertEquals('cd', source.textContent);
+    assertEquals('c', target.firstChild.textContent);
+  },
+
   testInsertChildAt() {
     const parent = $('p2');
     const origNumChildren = parent.childNodes.length;

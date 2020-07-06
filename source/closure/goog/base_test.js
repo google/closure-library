@@ -288,42 +288,6 @@ testSuite({
     // frames.
   },
 
-  testIsArray() {
-    const array = [1, 2, 3];
-    const arrayWithLengthSet = [1, 2, 3];
-    arrayWithLengthSet.length = 2;
-    const objWithArrayFunctions = {slice: function() {}, length: 0};
-    const object = {a: 1, b: 2, c: 3};
-    const nullVar = null;
-    let notDefined;
-    const elem = document.getElementById('elem');
-    const text = document.getElementById('text').firstChild;
-    const impostor = document.body.getElementsByTagName('BOGUS');
-    impostor.push = Array.prototype.push;
-    impostor.pop = Array.prototype.pop;
-    impostor.slice = Array.prototype.slice;
-    impostor.splice = Array.prototype.splice;
-
-    assertTrue('array should be an array', goog.isArray(array));
-    assertTrue(
-        'arrayWithLengthSet should be an array',
-        goog.isArray(arrayWithLengthSet));
-    assertFalse(
-        'object with array functions should not be an array unless ' +
-            'length is not enumerable',
-        goog.isArray(objWithArrayFunctions));
-    assertFalse('object should not be an array', goog.isArray(object));
-    assertFalse('null should not be an array', goog.isArray(nullVar));
-    assertFalse('undefined should not be an array', goog.isArray(notDefined));
-    assertFalse(
-        'NodeList should not be an array', goog.isArray(elem.childNodes));
-    assertFalse('TextNode should not be an array', goog.isArray(text));
-    assertTrue(
-        'Array of nodes should be an array',
-        goog.isArray([elem.firstChild, elem.lastChild]));
-    assertFalse('An impostor should not be an array', goog.isArray(impostor));
-  },
-
   testTypeOfAcrossWindow() {
     if (userAgent.IE && userAgent.isVersionOrHigher('10') &&
         !userAgent.isVersionOrHigher('11')) {

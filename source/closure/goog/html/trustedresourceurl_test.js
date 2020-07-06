@@ -314,6 +314,17 @@ testSuite({
             .getTypedStringValue());
   },
 
+  testCloneWithParams_withMonkeypatchedObjectPrototype() {
+    stubs.set(Object.prototype, 'foo', 'bar');
+    const url =
+        TrustedResourceUrl.fromConstant(Const.from('https://example.com/'));
+    assertEquals(
+        'https://example.com/?a=%3F%23%26&b=1&e=x&e=y',
+        url.cloneWithParams(
+               {'a': '?#&', 'b': 1, 'c': null, 'd': undefined, 'e': ['x', 'y']})
+            .getTypedStringValue());
+  },
+
   testFormatWithParams() {
     let url = TrustedResourceUrl.formatWithParams(
         Const.from('https://example.com/'), {}, {'a': '&'});

@@ -53,6 +53,14 @@ goog.log.LogRecord = goog.debug.LogRecord;
 
 
 /**
+ * For access of goog.log.LogBuffer.CAPACITY only.
+ * @constructor
+ * @final
+ */
+goog.log.LogBuffer = goog.debug.LogBuffer;
+
+
+/**
  * Finds or creates a logger for a named subsystem. If a logger has already been
  * created with the given name it is returned. Otherwise a new logger is
  * created. If a new logger is created its log level will be configured based
