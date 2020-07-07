@@ -69,10 +69,10 @@ testSuite({
   testDequeue() {
     const q = createQueue();
     assertEquals('testDequeue(), should return b', q.dequeue(), 'b');
-    assertEquals('testDequeue(), should return b', q.dequeue(), 'c');
-    assertEquals('testDequeue(), should return b', q.dequeue(), 'a');
+    assertEquals('testDequeue(), should return c', q.dequeue(), 'c');
+    assertEquals('testDequeue(), should return a', q.dequeue(), 'a');
     assertEquals('testDequeue(), should return b', q.dequeue(), 'b');
-    assertEquals('testDequeue(), should return b', q.dequeue(), 'c');
+    assertEquals('testDequeue(), should return c', q.dequeue(), 'c');
     assertTrue('testDequeue(), queue should be empty', q.isEmpty());
     assertEquals(
         'testDequeue(), should return undefined for empty queue', q.dequeue(),
@@ -84,7 +84,7 @@ testSuite({
     assertEquals('testPeek(), should return b', q.peek(), 'b');
     assertEquals(
         'testPeek(), dequeue should return peek() result', q.dequeue(), 'b');
-    assertEquals('testPeek(), should return b', q.peek(), 'c');
+    assertEquals('testPeek(), should return c', q.peek(), 'c');
     q.clear();
     assertEquals(
         'testPeek(), should return undefined for empty queue', q.peek(),

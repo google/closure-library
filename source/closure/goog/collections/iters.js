@@ -13,7 +13,7 @@
  * @see https://goo.gl/Rok5YQ
  */
 
-goog.module('goog.labs.collections.iters');
+goog.module('goog.collections.iters');
 
 
 /**

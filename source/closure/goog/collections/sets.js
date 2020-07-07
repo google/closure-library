@@ -12,7 +12,7 @@
 
 goog.module('goog.collections.sets');
 
-const iters = goog.require('goog.labs.collections.iters');
+const iters = goog.require('goog.collections.iters');
 
 // Note: Set operations are being proposed for EcmaScript. See proposal here:
 // https://github.com/tc39/proposal-set-methods
