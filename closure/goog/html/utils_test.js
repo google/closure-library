@@ -51,10 +51,6 @@ testSuite({
 
   testStripAllHtmlTagsSingle() {
     googObject.forEach(TagName, (tag) => {
-      if (typeof tag !== 'string') {
-        return;
-      }
-
       result = utils.stripHtmlTags(makeHtml(tag, STRIP));
       assertEquals(FAILURE_MESSAGE, STRIP, result);
     });
@@ -62,10 +58,6 @@ testSuite({
 
   testStripAllHtmlTagsAttribute() {
     googObject.forEach(TagName, (tag) => {
-      if (typeof tag !== 'string') {
-        return;
-      }
-
       result = utils.stripHtmlTags(makeHtml(tag, STRIP, 1, 0, 'a'));
       assertEquals(FAILURE_MESSAGE, STRIP, result);
     });

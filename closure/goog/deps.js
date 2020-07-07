@@ -270,8 +270,8 @@ goog.addDependency('dom/selection.js', ['goog.dom.selection'], ['goog.dom.InputT
 goog.addDependency('dom/selection_test.js', ['goog.dom.selectionTest'], ['goog.dom', 'goog.dom.InputType', 'goog.dom.TagName', 'goog.dom.selection', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('dom/tagiterator.js', ['goog.dom.TagIterator', 'goog.dom.TagWalkType'], ['goog.dom', 'goog.dom.NodeType', 'goog.iter.Iterator', 'goog.iter.StopIteration'], {});
 goog.addDependency('dom/tagiterator_test.js', ['goog.dom.TagIteratorTest'], ['goog.dom', 'goog.dom.TagIterator', 'goog.dom.TagName', 'goog.dom.TagWalkType', 'goog.iter', 'goog.iter.StopIteration', 'goog.testing.dom', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('dom/tagname.js', ['goog.dom.TagName'], ['goog.dom.HtmlElement'], {'lang': 'es6'});
-goog.addDependency('dom/tagname_test.js', ['goog.dom.TagNameTest'], ['goog.dom.TagName', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('dom/tagname.js', ['goog.dom.TagName'], ['goog.dom.HtmlElement'], {});
+goog.addDependency('dom/tagname_test.js', ['goog.dom.TagNameTest'], ['goog.dom.TagName', 'goog.object', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('dom/tags.js', ['goog.dom.tags'], ['goog.object'], {});
 goog.addDependency('dom/tags_test.js', ['goog.dom.tagsTest'], ['goog.dom.tags', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('dom/textassert.js', ['goog.dom.textAssert'], ['goog.asserts', 'goog.dom', 'goog.dom.TagName'], {});
