@@ -8,61 +8,71 @@
  * @fileoverview Browser capability checks for the events package.
  */
 
+goog.module('goog.events.BrowserFeature');
+goog.module.declareLegacyNamespace();
 
-goog.provide('goog.events.BrowserFeature');
+const googUserAgent = goog.require('goog.userAgent');
 
-goog.require('goog.userAgent');
-goog.scope(function() {
 
+/**
+ * Tricks Closure Compiler into believing that a function is pure.  The compiler
+ * assumes that any `valueOf` function is pure, without analyzing its contents.
+ *
+ * @param {function(): T} fn
+ * @return {T}
+ * @template T
+ */
+const purify = (fn) => {
+  return ({valueOf: fn}).valueOf();
+};
 
 
 /**
  * Enum of browser capabilities.
  * @enum {boolean}
  */
-goog.events.BrowserFeature = {
+const BrowserFeature = {
   /**
    * Whether the button attribute of the event is W3C compliant.  False in
    * Internet Explorer prior to version 9; document-version dependent.
    */
-  HAS_W3C_BUTTON:
-      !goog.userAgent.IE || goog.userAgent.isDocumentModeOrHigher(9),
+  HAS_W3C_BUTTON: !googUserAgent.IE || googUserAgent.isDocumentModeOrHigher(9),
 
   /**
    * Whether the browser supports full W3C event model.
    */
   HAS_W3C_EVENT_SUPPORT:
-      !goog.userAgent.IE || goog.userAgent.isDocumentModeOrHigher(9),
+      !googUserAgent.IE || googUserAgent.isDocumentModeOrHigher(9),
 
   /**
    * To prevent default in IE7-8 for certain keydown events we need set the
    * keyCode to -1.
    */
   SET_KEY_CODE_TO_PREVENT_DEFAULT:
-      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9'),
+      googUserAgent.IE && !googUserAgent.isVersionOrHigher('9'),
 
   /**
    * Whether the `navigator.onLine` property is supported.
    */
   HAS_NAVIGATOR_ONLINE_PROPERTY:
-      !goog.userAgent.WEBKIT || goog.userAgent.isVersionOrHigher('528'),
+      !googUserAgent.WEBKIT || googUserAgent.isVersionOrHigher('528'),
 
   /**
    * Whether HTML5 network online/offline events are supported.
    */
   HAS_HTML5_NETWORK_EVENT_SUPPORT:
-      goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9b') ||
-      goog.userAgent.IE && goog.userAgent.isVersionOrHigher('8') ||
-      goog.userAgent.OPERA && goog.userAgent.isVersionOrHigher('9.5') ||
-      goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('528'),
+      googUserAgent.GECKO && googUserAgent.isVersionOrHigher('1.9b') ||
+          googUserAgent.IE && googUserAgent.isVersionOrHigher('8') ||
+          googUserAgent.OPERA && googUserAgent.isVersionOrHigher('9.5') ||
+          googUserAgent.WEBKIT && googUserAgent.isVersionOrHigher('528'),
 
   /**
    * Whether HTML5 network events fire on document.body, or otherwise the
    * window.
    */
   HTML5_NETWORK_EVENTS_FIRE_ON_BODY:
-      goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('8') ||
-      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9'),
+      googUserAgent.GECKO && !googUserAgent.isVersionOrHigher('8') ||
+          googUserAgent.IE && !googUserAgent.isVersionOrHigher('9'),
 
   /**
    * Whether touch is enabled in the browser.
@@ -87,10 +97,9 @@ goog.events.BrowserFeature = {
    * http://msdn.microsoft.com/en-us/library/ie/hh772103(v=vs.85).aspx
    * http://msdn.microsoft.com/library/hh673557(v=vs.85).aspx
    */
-  MSPOINTER_EVENTS:
-      ('MSPointerEvent' in goog.global &&
-       !!(goog.global['navigator'] &&
-          goog.global['navigator']['msPointerEnabled'])),
+  MSPOINTER_EVENTS: ('MSPointerEvent' in goog.global &&
+                     !!(goog.global['navigator'] &&
+                        goog.global['navigator']['msPointerEnabled'])),
 
   /**
    * Whether addEventListener supports {passive: true}.
@@ -103,11 +112,8 @@ goog.events.BrowserFeature = {
     }
 
     var passive = false;
-    var options = Object.defineProperty({}, 'passive', {
-      get: function() {
-        passive = true;
-      }
-    });
+    var options = Object.defineProperty({}, 'passive',
+                                        {get: function() { passive = true; }});
     try {
       goog.global.addEventListener('test', goog.nullFunction, options);
       goog.global.removeEventListener('test', goog.nullFunction, options);
@@ -118,16 +124,4 @@ goog.events.BrowserFeature = {
   })
 };
 
-
-/**
- * Tricks Closure Compiler into believing that a function is pure.  The compiler
- * assumes that any `valueOf` function is pure, without analyzing its contents.
- *
- * @param {function(): T} fn
- * @return {T}
- * @template T
- */
-function purify(fn) {
-  return ({valueOf: fn}).valueOf();
-}
-});  // goog.scope
+exports = BrowserFeature;
