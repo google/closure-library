@@ -8,17 +8,22 @@ goog.module('goog.dom.TagNameTest');
 goog.setTestOnly();
 
 const TagName = goog.require('goog.dom.TagName');
-const googObject = goog.require('goog.object');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
   testCorrectNumberOfTagNames() {
-    assertEquals(130, googObject.getCount(TagName));
+    assertEquals(
+        130,
+        Object.entries(TagName)
+            .filter(([k, v]) => typeof v === 'string')
+            .length);
   },
 
   testPropertyNamesEqualValues() {
-    for (let propertyName in TagName) {
-      assertEquals(propertyName, String(TagName[propertyName]));
-    }
+    Object.entries(TagName)
+        .filter(([k, v]) => typeof v === 'string')
+        .forEach(([k, v]) => {
+          assertEquals(k, v);
+        });
   },
 });

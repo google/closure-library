@@ -17,554 +17,455 @@ goog.provide('goog.dom.TagName');
 
 goog.require('goog.dom.HtmlElement');
 
-
 /**
- * A tag name with the type of the element stored in the generic.
- * @param {string} tagName
- * @constructor
+ * A tag name for an HTML element.
+ *
+ * This type is a lie. All instances are actually strings. Do not implement it.
+ *
+ * It exists because we need an object type to host the template type parameter,
+ * and that's not possible with literal or enum types. It is a record type so
+ * that runtime type checks don't try to validate the lie.
+ *
  * @template T
+ * @record
  */
-goog.dom.TagName = function(tagName) {
-  /** @private {string} */
-  this.tagName_ = tagName;
+goog.dom.TagName = class {
+  /**
+   * Cast a string into the tagname for the associated constructor.
+   *
+   * @template T
+   * @param {string} name
+   * @param {function(new:T, ...?)} type
+   * @return {!goog.dom.TagName<T>}
+   */
+  static cast(name, type) {
+    return /** @type {?} */ (name);
+  }
+
+  constructor() {
+    /** @private {null} */
+    this.googDomTagName_doNotImplementThisTypeOrElse_;
+
+    /** @private {T} */
+    this.ensureTypeScriptRemembersTypeT_;
+  }
+
+  /**
+   * Appease the compiler that instances are stringafiable for the
+   * purpose of being a dictionary key.
+   *
+   * Never implemented; always backed by `String::toString`.
+   *
+   * @override
+   * @return {string}
+   */
+  toString() {}
+
+  /**
+   * Create a `TagName` with no inference.
+   *
+   * A lot of element constructors in the spec don't exist in various VMs and
+   * cause runtime errors when accessed. Therefore, within this file, we define
+   * the `TagName`s for those types without referencing the constructors.
+   *
+   * @param {string} name
+   * @return {!goog.dom.TagName<?>}
+   * @private
+   */
+  static privateCast_(name) {
+    return /** @type {?} */ (name);
+  }
 };
 
 
-/**
- * Returns the tag name.
- * @return {string}
- * @override
- */
-goog.dom.TagName.prototype.toString = function() {
-  return this.tagName_;
-};
 
+/** @const {!goog.dom.TagName<!HTMLAnchorElement>} */
+goog.dom.TagName.A = goog.dom.TagName.privateCast_('A');
 
-// Closure Compiler unconditionally converts the following constants to their
-// string value (goog.dom.TagName.A -> 'A'). These are the consequences:
-// 1. Don't add any members or static members to goog.dom.TagName as they
-//    couldn't be accessed after this optimization.
-// 2. Keep the constant name and its string value the same:
-//    goog.dom.TagName.X = new goog.dom.TagName('Y');
-//    is converted to 'X', not 'Y'.
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.ABBR = goog.dom.TagName.privateCast_('ABBR');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.ACRONYM = goog.dom.TagName.privateCast_('ACRONYM');
 
-/** @type {!goog.dom.TagName<!HTMLAnchorElement>} */
-goog.dom.TagName.A = new goog.dom.TagName('A');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.ADDRESS = goog.dom.TagName.privateCast_('ADDRESS');
 
+/** @const {!goog.dom.TagName<!HTMLAppletElement>} */
+goog.dom.TagName.APPLET = goog.dom.TagName.privateCast_('APPLET');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.ABBR = new goog.dom.TagName('ABBR');
+/** @const {!goog.dom.TagName<!HTMLAreaElement>} */
+goog.dom.TagName.AREA = goog.dom.TagName.privateCast_('AREA');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.ARTICLE = goog.dom.TagName.privateCast_('ARTICLE');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.ACRONYM = new goog.dom.TagName('ACRONYM');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.ASIDE = goog.dom.TagName.privateCast_('ASIDE');
 
+/** @const {!goog.dom.TagName<!HTMLAudioElement>} */
+goog.dom.TagName.AUDIO = goog.dom.TagName.privateCast_('AUDIO');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.ADDRESS = new goog.dom.TagName('ADDRESS');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.B = goog.dom.TagName.privateCast_('B');
 
+/** @const {!goog.dom.TagName<!HTMLBaseElement>} */
+goog.dom.TagName.BASE = goog.dom.TagName.privateCast_('BASE');
 
-/** @type {!goog.dom.TagName<!HTMLAppletElement>} */
-goog.dom.TagName.APPLET = new goog.dom.TagName('APPLET');
+/** @const {!goog.dom.TagName<!HTMLBaseFontElement>} */
+goog.dom.TagName.BASEFONT = goog.dom.TagName.privateCast_('BASEFONT');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.BDI = goog.dom.TagName.privateCast_('BDI');
 
-/** @type {!goog.dom.TagName<!HTMLAreaElement>} */
-goog.dom.TagName.AREA = new goog.dom.TagName('AREA');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.BDO = goog.dom.TagName.privateCast_('BDO');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.BIG = goog.dom.TagName.privateCast_('BIG');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.ARTICLE = new goog.dom.TagName('ARTICLE');
+/** @const {!goog.dom.TagName<!HTMLQuoteElement>} */
+goog.dom.TagName.BLOCKQUOTE = goog.dom.TagName.privateCast_('BLOCKQUOTE');
 
+/** @const {!goog.dom.TagName<!HTMLBodyElement>} */
+goog.dom.TagName.BODY = goog.dom.TagName.privateCast_('BODY');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.ASIDE = new goog.dom.TagName('ASIDE');
+/** @const {!goog.dom.TagName<!HTMLBRElement>} */
+goog.dom.TagName.BR = goog.dom.TagName.privateCast_('BR');
 
+/** @const {!goog.dom.TagName<!HTMLButtonElement>} */
+goog.dom.TagName.BUTTON = goog.dom.TagName.privateCast_('BUTTON');
 
-/** @type {!goog.dom.TagName<!HTMLAudioElement>} */
-goog.dom.TagName.AUDIO = new goog.dom.TagName('AUDIO');
+/** @const {!goog.dom.TagName<!HTMLCanvasElement>} */
+goog.dom.TagName.CANVAS = goog.dom.TagName.privateCast_('CANVAS');
 
+/** @const {!goog.dom.TagName<!HTMLTableCaptionElement>} */
+goog.dom.TagName.CAPTION = goog.dom.TagName.privateCast_('CAPTION');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.B = new goog.dom.TagName('B');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.CENTER = goog.dom.TagName.privateCast_('CENTER');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.CITE = goog.dom.TagName.privateCast_('CITE');
 
-/** @type {!goog.dom.TagName<!HTMLBaseElement>} */
-goog.dom.TagName.BASE = new goog.dom.TagName('BASE');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.CODE = goog.dom.TagName.privateCast_('CODE');
 
+/** @const {!goog.dom.TagName<!HTMLTableColElement>} */
+goog.dom.TagName.COL = goog.dom.TagName.privateCast_('COL');
 
-/** @type {!goog.dom.TagName<!HTMLBaseFontElement>} */
-goog.dom.TagName.BASEFONT = new goog.dom.TagName('BASEFONT');
+/** @const {!goog.dom.TagName<!HTMLTableColElement>} */
+goog.dom.TagName.COLGROUP = goog.dom.TagName.privateCast_('COLGROUP');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.COMMAND = goog.dom.TagName.privateCast_('COMMAND');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.BDI = new goog.dom.TagName('BDI');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.DATA = goog.dom.TagName.privateCast_('DATA');
 
+/** @const {!goog.dom.TagName<!HTMLDataListElement>} */
+goog.dom.TagName.DATALIST = goog.dom.TagName.privateCast_('DATALIST');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.BDO = new goog.dom.TagName('BDO');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.DD = goog.dom.TagName.privateCast_('DD');
 
+/** @const {!goog.dom.TagName<!HTMLModElement>} */
+goog.dom.TagName.DEL = goog.dom.TagName.privateCast_('DEL');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.BIG = new goog.dom.TagName('BIG');
+/** @const {!goog.dom.TagName<!HTMLDetailsElement>} */
+goog.dom.TagName.DETAILS = goog.dom.TagName.privateCast_('DETAILS');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.DFN = goog.dom.TagName.privateCast_('DFN');
 
-/** @type {!goog.dom.TagName<!HTMLQuoteElement>} */
-goog.dom.TagName.BLOCKQUOTE = new goog.dom.TagName('BLOCKQUOTE');
+/** @const {!goog.dom.TagName<!HTMLDialogElement>} */
+goog.dom.TagName.DIALOG = goog.dom.TagName.privateCast_('DIALOG');
 
+/** @const {!goog.dom.TagName<!HTMLDirectoryElement>} */
+goog.dom.TagName.DIR = goog.dom.TagName.privateCast_('DIR');
 
-/** @type {!goog.dom.TagName<!HTMLBodyElement>} */
-goog.dom.TagName.BODY = new goog.dom.TagName('BODY');
+/** @const {!goog.dom.TagName<!HTMLDivElement>} */
+goog.dom.TagName.DIV = goog.dom.TagName.privateCast_('DIV');
 
+/** @const {!goog.dom.TagName<!HTMLDListElement>} */
+goog.dom.TagName.DL = goog.dom.TagName.privateCast_('DL');
 
-/** @type {!goog.dom.TagName<!HTMLBRElement>} */
-goog.dom.TagName.BR = new goog.dom.TagName('BR');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.DT = goog.dom.TagName.privateCast_('DT');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.EM = goog.dom.TagName.privateCast_('EM');
 
-/** @type {!goog.dom.TagName<!HTMLButtonElement>} */
-goog.dom.TagName.BUTTON = new goog.dom.TagName('BUTTON');
+/** @const {!goog.dom.TagName<!HTMLEmbedElement>} */
+goog.dom.TagName.EMBED = goog.dom.TagName.privateCast_('EMBED');
 
+/** @const {!goog.dom.TagName<!HTMLFieldSetElement>} */
+goog.dom.TagName.FIELDSET = goog.dom.TagName.privateCast_('FIELDSET');
 
-/** @type {!goog.dom.TagName<!HTMLCanvasElement>} */
-goog.dom.TagName.CANVAS = new goog.dom.TagName('CANVAS');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.FIGCAPTION = goog.dom.TagName.privateCast_('FIGCAPTION');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.FIGURE = goog.dom.TagName.privateCast_('FIGURE');
 
-/** @type {!goog.dom.TagName<!HTMLTableCaptionElement>} */
-goog.dom.TagName.CAPTION = new goog.dom.TagName('CAPTION');
+/** @const {!goog.dom.TagName<!HTMLFontElement>} */
+goog.dom.TagName.FONT = goog.dom.TagName.privateCast_('FONT');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.FOOTER = goog.dom.TagName.privateCast_('FOOTER');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.CENTER = new goog.dom.TagName('CENTER');
+/** @const {!goog.dom.TagName<!HTMLFormElement>} */
+goog.dom.TagName.FORM = goog.dom.TagName.privateCast_('FORM');
 
+/** @const {!goog.dom.TagName<!HTMLFrameElement>} */
+goog.dom.TagName.FRAME = goog.dom.TagName.privateCast_('FRAME');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.CITE = new goog.dom.TagName('CITE');
+/** @const {!goog.dom.TagName<!HTMLFrameSetElement>} */
+goog.dom.TagName.FRAMESET = goog.dom.TagName.privateCast_('FRAMESET');
 
+/** @const {!goog.dom.TagName<!HTMLHeadingElement>} */
+goog.dom.TagName.H1 = goog.dom.TagName.privateCast_('H1');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.CODE = new goog.dom.TagName('CODE');
+/** @const {!goog.dom.TagName<!HTMLHeadingElement>} */
+goog.dom.TagName.H2 = goog.dom.TagName.privateCast_('H2');
 
+/** @const {!goog.dom.TagName<!HTMLHeadingElement>} */
+goog.dom.TagName.H3 = goog.dom.TagName.privateCast_('H3');
 
-/** @type {!goog.dom.TagName<!HTMLTableColElement>} */
-goog.dom.TagName.COL = new goog.dom.TagName('COL');
+/** @const {!goog.dom.TagName<!HTMLHeadingElement>} */
+goog.dom.TagName.H4 = goog.dom.TagName.privateCast_('H4');
 
+/** @const {!goog.dom.TagName<!HTMLHeadingElement>} */
+goog.dom.TagName.H5 = goog.dom.TagName.privateCast_('H5');
 
-/** @type {!goog.dom.TagName<!HTMLTableColElement>} */
-goog.dom.TagName.COLGROUP = new goog.dom.TagName('COLGROUP');
+/** @const {!goog.dom.TagName<!HTMLHeadingElement>} */
+goog.dom.TagName.H6 = goog.dom.TagName.privateCast_('H6');
 
+/** @const {!goog.dom.TagName<!HTMLHeadElement>} */
+goog.dom.TagName.HEAD = goog.dom.TagName.privateCast_('HEAD');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.COMMAND = new goog.dom.TagName('COMMAND');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.HEADER = goog.dom.TagName.privateCast_('HEADER');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.HGROUP = goog.dom.TagName.privateCast_('HGROUP');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.DATA = new goog.dom.TagName('DATA');
+/** @const {!goog.dom.TagName<!HTMLHRElement>} */
+goog.dom.TagName.HR = goog.dom.TagName.privateCast_('HR');
 
+/** @const {!goog.dom.TagName<!HTMLHtmlElement>} */
+goog.dom.TagName.HTML = goog.dom.TagName.privateCast_('HTML');
 
-/** @type {!goog.dom.TagName<!HTMLDataListElement>} */
-goog.dom.TagName.DATALIST = new goog.dom.TagName('DATALIST');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.I = goog.dom.TagName.privateCast_('I');
 
+/** @const {!goog.dom.TagName<!HTMLIFrameElement>} */
+goog.dom.TagName.IFRAME = goog.dom.TagName.privateCast_('IFRAME');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.DD = new goog.dom.TagName('DD');
+/** @const {!goog.dom.TagName<!HTMLImageElement>} */
+goog.dom.TagName.IMG = goog.dom.TagName.privateCast_('IMG');
 
+/** @const {!goog.dom.TagName<!HTMLInputElement>} */
+goog.dom.TagName.INPUT = goog.dom.TagName.privateCast_('INPUT');
 
-/** @type {!goog.dom.TagName<!HTMLModElement>} */
-goog.dom.TagName.DEL = new goog.dom.TagName('DEL');
+/** @const {!goog.dom.TagName<!HTMLModElement>} */
+goog.dom.TagName.INS = goog.dom.TagName.privateCast_('INS');
 
+/** @const {!goog.dom.TagName<!HTMLIsIndexElement>} */
+goog.dom.TagName.ISINDEX = goog.dom.TagName.privateCast_('ISINDEX');
 
-/** @type {!goog.dom.TagName<!HTMLDetailsElement>} */
-goog.dom.TagName.DETAILS = new goog.dom.TagName('DETAILS');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.DFN = new goog.dom.TagName('DFN');
-
-
-/** @type {!goog.dom.TagName<!HTMLDialogElement>} */
-goog.dom.TagName.DIALOG = new goog.dom.TagName('DIALOG');
-
-
-/** @type {!goog.dom.TagName<!HTMLDirectoryElement>} */
-goog.dom.TagName.DIR = new goog.dom.TagName('DIR');
-
-
-/** @type {!goog.dom.TagName<!HTMLDivElement>} */
-goog.dom.TagName.DIV = new goog.dom.TagName('DIV');
-
-
-/** @type {!goog.dom.TagName<!HTMLDListElement>} */
-goog.dom.TagName.DL = new goog.dom.TagName('DL');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.DT = new goog.dom.TagName('DT');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.EM = new goog.dom.TagName('EM');
-
-
-/** @type {!goog.dom.TagName<!HTMLEmbedElement>} */
-goog.dom.TagName.EMBED = new goog.dom.TagName('EMBED');
-
-
-/** @type {!goog.dom.TagName<!HTMLFieldSetElement>} */
-goog.dom.TagName.FIELDSET = new goog.dom.TagName('FIELDSET');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.FIGCAPTION = new goog.dom.TagName('FIGCAPTION');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.FIGURE = new goog.dom.TagName('FIGURE');
-
-
-/** @type {!goog.dom.TagName<!HTMLFontElement>} */
-goog.dom.TagName.FONT = new goog.dom.TagName('FONT');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.FOOTER = new goog.dom.TagName('FOOTER');
-
-
-/** @type {!goog.dom.TagName<!HTMLFormElement>} */
-goog.dom.TagName.FORM = new goog.dom.TagName('FORM');
-
-
-/** @type {!goog.dom.TagName<!HTMLFrameElement>} */
-goog.dom.TagName.FRAME = new goog.dom.TagName('FRAME');
-
-
-/** @type {!goog.dom.TagName<!HTMLFrameSetElement>} */
-goog.dom.TagName.FRAMESET = new goog.dom.TagName('FRAMESET');
-
-
-/** @type {!goog.dom.TagName<!HTMLHeadingElement>} */
-goog.dom.TagName.H1 = new goog.dom.TagName('H1');
-
-
-/** @type {!goog.dom.TagName<!HTMLHeadingElement>} */
-goog.dom.TagName.H2 = new goog.dom.TagName('H2');
-
-
-/** @type {!goog.dom.TagName<!HTMLHeadingElement>} */
-goog.dom.TagName.H3 = new goog.dom.TagName('H3');
-
-
-/** @type {!goog.dom.TagName<!HTMLHeadingElement>} */
-goog.dom.TagName.H4 = new goog.dom.TagName('H4');
-
-
-/** @type {!goog.dom.TagName<!HTMLHeadingElement>} */
-goog.dom.TagName.H5 = new goog.dom.TagName('H5');
-
-
-/** @type {!goog.dom.TagName<!HTMLHeadingElement>} */
-goog.dom.TagName.H6 = new goog.dom.TagName('H6');
-
-
-/** @type {!goog.dom.TagName<!HTMLHeadElement>} */
-goog.dom.TagName.HEAD = new goog.dom.TagName('HEAD');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.HEADER = new goog.dom.TagName('HEADER');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.HGROUP = new goog.dom.TagName('HGROUP');
-
-
-/** @type {!goog.dom.TagName<!HTMLHRElement>} */
-goog.dom.TagName.HR = new goog.dom.TagName('HR');
-
-
-/** @type {!goog.dom.TagName<!HTMLHtmlElement>} */
-goog.dom.TagName.HTML = new goog.dom.TagName('HTML');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.I = new goog.dom.TagName('I');
-
-
-/** @type {!goog.dom.TagName<!HTMLIFrameElement>} */
-goog.dom.TagName.IFRAME = new goog.dom.TagName('IFRAME');
-
-
-/** @type {!goog.dom.TagName<!HTMLImageElement>} */
-goog.dom.TagName.IMG = new goog.dom.TagName('IMG');
-
-
-/** @type {!goog.dom.TagName<!HTMLInputElement>} */
-goog.dom.TagName.INPUT = new goog.dom.TagName('INPUT');
-
-
-/** @type {!goog.dom.TagName<!HTMLModElement>} */
-goog.dom.TagName.INS = new goog.dom.TagName('INS');
-
-
-/** @type {!goog.dom.TagName<!HTMLIsIndexElement>} */
-goog.dom.TagName.ISINDEX = new goog.dom.TagName('ISINDEX');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.KBD = new goog.dom.TagName('KBD');
-
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.KBD = goog.dom.TagName.privateCast_('KBD');
 
 // HTMLKeygenElement is deprecated.
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.KEYGEN = new goog.dom.TagName('KEYGEN');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.KEYGEN = goog.dom.TagName.privateCast_('KEYGEN');
 
+/** @const {!goog.dom.TagName<!HTMLLabelElement>} */
+goog.dom.TagName.LABEL = goog.dom.TagName.privateCast_('LABEL');
 
-/** @type {!goog.dom.TagName<!HTMLLabelElement>} */
-goog.dom.TagName.LABEL = new goog.dom.TagName('LABEL');
+/** @const {!goog.dom.TagName<!HTMLLegendElement>} */
+goog.dom.TagName.LEGEND = goog.dom.TagName.privateCast_('LEGEND');
 
+/** @const {!goog.dom.TagName<!HTMLLIElement>} */
+goog.dom.TagName.LI = goog.dom.TagName.privateCast_('LI');
 
-/** @type {!goog.dom.TagName<!HTMLLegendElement>} */
-goog.dom.TagName.LEGEND = new goog.dom.TagName('LEGEND');
+/** @const {!goog.dom.TagName<!HTMLLinkElement>} */
+goog.dom.TagName.LINK = goog.dom.TagName.privateCast_('LINK');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.MAIN = goog.dom.TagName.privateCast_('MAIN');
 
-/** @type {!goog.dom.TagName<!HTMLLIElement>} */
-goog.dom.TagName.LI = new goog.dom.TagName('LI');
+/** @const {!goog.dom.TagName<!HTMLMapElement>} */
+goog.dom.TagName.MAP = goog.dom.TagName.privateCast_('MAP');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.MARK = goog.dom.TagName.privateCast_('MARK');
 
-/** @type {!goog.dom.TagName<!HTMLLinkElement>} */
-goog.dom.TagName.LINK = new goog.dom.TagName('LINK');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.MATH = goog.dom.TagName.privateCast_('MATH');
 
+/** @const {!goog.dom.TagName<!HTMLMenuElement>} */
+goog.dom.TagName.MENU = goog.dom.TagName.privateCast_('MENU');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.MAIN = new goog.dom.TagName('MAIN');
+/** @const {!goog.dom.TagName<!HTMLMenuItemElement>} */
+goog.dom.TagName.MENUITEM = goog.dom.TagName.privateCast_('MENUITEM');
 
+/** @const {!goog.dom.TagName<!HTMLMetaElement>} */
+goog.dom.TagName.META = goog.dom.TagName.privateCast_('META');
 
-/** @type {!goog.dom.TagName<!HTMLMapElement>} */
-goog.dom.TagName.MAP = new goog.dom.TagName('MAP');
+/** @const {!goog.dom.TagName<!HTMLMeterElement>} */
+goog.dom.TagName.METER = goog.dom.TagName.privateCast_('METER');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.NAV = goog.dom.TagName.privateCast_('NAV');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.MARK = new goog.dom.TagName('MARK');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.NOFRAMES = goog.dom.TagName.privateCast_('NOFRAMES');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.NOSCRIPT = goog.dom.TagName.privateCast_('NOSCRIPT');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.MATH = new goog.dom.TagName('MATH');
+/** @const {!goog.dom.TagName<!HTMLObjectElement>} */
+goog.dom.TagName.OBJECT = goog.dom.TagName.privateCast_('OBJECT');
 
+/** @const {!goog.dom.TagName<!HTMLOListElement>} */
+goog.dom.TagName.OL = goog.dom.TagName.privateCast_('OL');
 
-/** @type {!goog.dom.TagName<!HTMLMenuElement>} */
-goog.dom.TagName.MENU = new goog.dom.TagName('MENU');
+/** @const {!goog.dom.TagName<!HTMLOptGroupElement>} */
+goog.dom.TagName.OPTGROUP = goog.dom.TagName.privateCast_('OPTGROUP');
 
+/** @const {!goog.dom.TagName<!HTMLOptionElement>} */
+goog.dom.TagName.OPTION = goog.dom.TagName.privateCast_('OPTION');
 
-/** @type {!goog.dom.TagName<!HTMLMenuItemElement>} */
-goog.dom.TagName.MENUITEM = new goog.dom.TagName('MENUITEM');
+/** @const {!goog.dom.TagName<!HTMLOutputElement>} */
+goog.dom.TagName.OUTPUT = goog.dom.TagName.privateCast_('OUTPUT');
 
+/** @const {!goog.dom.TagName<!HTMLParagraphElement>} */
+goog.dom.TagName.P = goog.dom.TagName.privateCast_('P');
 
-/** @type {!goog.dom.TagName<!HTMLMetaElement>} */
-goog.dom.TagName.META = new goog.dom.TagName('META');
+/** @const {!goog.dom.TagName<!HTMLParamElement>} */
+goog.dom.TagName.PARAM = goog.dom.TagName.privateCast_('PARAM');
 
+/** @const {!goog.dom.TagName<!HTMLPictureElement>} */
+goog.dom.TagName.PICTURE = goog.dom.TagName.privateCast_('PICTURE');
 
-/** @type {!goog.dom.TagName<!HTMLMeterElement>} */
-goog.dom.TagName.METER = new goog.dom.TagName('METER');
+/** @const {!goog.dom.TagName<!HTMLPreElement>} */
+goog.dom.TagName.PRE = goog.dom.TagName.privateCast_('PRE');
 
+/** @const {!goog.dom.TagName<!HTMLProgressElement>} */
+goog.dom.TagName.PROGRESS = goog.dom.TagName.privateCast_('PROGRESS');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.NAV = new goog.dom.TagName('NAV');
+/** @const {!goog.dom.TagName<!HTMLQuoteElement>} */
+goog.dom.TagName.Q = goog.dom.TagName.privateCast_('Q');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.RP = goog.dom.TagName.privateCast_('RP');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.NOFRAMES = new goog.dom.TagName('NOFRAMES');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.RT = goog.dom.TagName.privateCast_('RT');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.RTC = goog.dom.TagName.privateCast_('RTC');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.NOSCRIPT = new goog.dom.TagName('NOSCRIPT');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.RUBY = goog.dom.TagName.privateCast_('RUBY');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.S = goog.dom.TagName.privateCast_('S');
 
-/** @type {!goog.dom.TagName<!HTMLObjectElement>} */
-goog.dom.TagName.OBJECT = new goog.dom.TagName('OBJECT');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.SAMP = goog.dom.TagName.privateCast_('SAMP');
 
+/** @const {!goog.dom.TagName<!HTMLScriptElement>} */
+goog.dom.TagName.SCRIPT = goog.dom.TagName.privateCast_('SCRIPT');
 
-/** @type {!goog.dom.TagName<!HTMLOListElement>} */
-goog.dom.TagName.OL = new goog.dom.TagName('OL');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.SECTION = goog.dom.TagName.privateCast_('SECTION');
 
+/** @const {!goog.dom.TagName<!HTMLSelectElement>} */
+goog.dom.TagName.SELECT = goog.dom.TagName.privateCast_('SELECT');
 
-/** @type {!goog.dom.TagName<!HTMLOptGroupElement>} */
-goog.dom.TagName.OPTGROUP = new goog.dom.TagName('OPTGROUP');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.SMALL = goog.dom.TagName.privateCast_('SMALL');
 
+/** @const {!goog.dom.TagName<!HTMLSourceElement>} */
+goog.dom.TagName.SOURCE = goog.dom.TagName.privateCast_('SOURCE');
 
-/** @type {!goog.dom.TagName<!HTMLOptionElement>} */
-goog.dom.TagName.OPTION = new goog.dom.TagName('OPTION');
+/** @const {!goog.dom.TagName<!HTMLSpanElement>} */
+goog.dom.TagName.SPAN = goog.dom.TagName.privateCast_('SPAN');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.STRIKE = goog.dom.TagName.privateCast_('STRIKE');
 
-/** @type {!goog.dom.TagName<!HTMLOutputElement>} */
-goog.dom.TagName.OUTPUT = new goog.dom.TagName('OUTPUT');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.STRONG = goog.dom.TagName.privateCast_('STRONG');
 
+/** @const {!goog.dom.TagName<!HTMLStyleElement>} */
+goog.dom.TagName.STYLE = goog.dom.TagName.privateCast_('STYLE');
 
-/** @type {!goog.dom.TagName<!HTMLParagraphElement>} */
-goog.dom.TagName.P = new goog.dom.TagName('P');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.SUB = goog.dom.TagName.privateCast_('SUB');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.SUMMARY = goog.dom.TagName.privateCast_('SUMMARY');
 
-/** @type {!goog.dom.TagName<!HTMLParamElement>} */
-goog.dom.TagName.PARAM = new goog.dom.TagName('PARAM');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.SUP = goog.dom.TagName.privateCast_('SUP');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.SVG = goog.dom.TagName.privateCast_('SVG');
 
-/** @type {!goog.dom.TagName<!HTMLPictureElement>} */
-goog.dom.TagName.PICTURE = new goog.dom.TagName('PICTURE');
+/** @const {!goog.dom.TagName<!HTMLTableElement>} */
+goog.dom.TagName.TABLE = goog.dom.TagName.privateCast_('TABLE');
 
+/** @const {!goog.dom.TagName<!HTMLTableSectionElement>} */
+goog.dom.TagName.TBODY = goog.dom.TagName.privateCast_('TBODY');
 
-/** @type {!goog.dom.TagName<!HTMLPreElement>} */
-goog.dom.TagName.PRE = new goog.dom.TagName('PRE');
+/** @const {!goog.dom.TagName<!HTMLTableCellElement>} */
+goog.dom.TagName.TD = goog.dom.TagName.privateCast_('TD');
 
+/** @const {!goog.dom.TagName<!HTMLTemplateElement>} */
+goog.dom.TagName.TEMPLATE = goog.dom.TagName.privateCast_('TEMPLATE');
 
-/** @type {!goog.dom.TagName<!HTMLProgressElement>} */
-goog.dom.TagName.PROGRESS = new goog.dom.TagName('PROGRESS');
+/** @const {!goog.dom.TagName<!HTMLTextAreaElement>} */
+goog.dom.TagName.TEXTAREA = goog.dom.TagName.privateCast_('TEXTAREA');
 
+/** @const {!goog.dom.TagName<!HTMLTableSectionElement>} */
+goog.dom.TagName.TFOOT = goog.dom.TagName.privateCast_('TFOOT');
 
-/** @type {!goog.dom.TagName<!HTMLQuoteElement>} */
-goog.dom.TagName.Q = new goog.dom.TagName('Q');
+/** @const {!goog.dom.TagName<!HTMLTableCellElement>} */
+goog.dom.TagName.TH = goog.dom.TagName.privateCast_('TH');
 
+/** @const {!goog.dom.TagName<!HTMLTableSectionElement>} */
+goog.dom.TagName.THEAD = goog.dom.TagName.privateCast_('THEAD');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.RP = new goog.dom.TagName('RP');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.TIME = goog.dom.TagName.privateCast_('TIME');
 
+/** @const {!goog.dom.TagName<!HTMLTitleElement>} */
+goog.dom.TagName.TITLE = goog.dom.TagName.privateCast_('TITLE');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.RT = new goog.dom.TagName('RT');
+/** @const {!goog.dom.TagName<!HTMLTableRowElement>} */
+goog.dom.TagName.TR = goog.dom.TagName.privateCast_('TR');
 
+/** @const {!goog.dom.TagName<!HTMLTrackElement>} */
+goog.dom.TagName.TRACK = goog.dom.TagName.privateCast_('TRACK');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.RTC = new goog.dom.TagName('RTC');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.TT = goog.dom.TagName.privateCast_('TT');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.U = goog.dom.TagName.privateCast_('U');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.RUBY = new goog.dom.TagName('RUBY');
+/** @const {!goog.dom.TagName<!HTMLUListElement>} */
+goog.dom.TagName.UL = goog.dom.TagName.privateCast_('UL');
 
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.VAR = goog.dom.TagName.privateCast_('VAR');
 
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.S = new goog.dom.TagName('S');
+/** @const {!goog.dom.TagName<!HTMLVideoElement>} */
+goog.dom.TagName.VIDEO = goog.dom.TagName.privateCast_('VIDEO');
 
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.SAMP = new goog.dom.TagName('SAMP');
-
-
-/** @type {!goog.dom.TagName<!HTMLScriptElement>} */
-goog.dom.TagName.SCRIPT = new goog.dom.TagName('SCRIPT');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.SECTION = new goog.dom.TagName('SECTION');
-
-
-/** @type {!goog.dom.TagName<!HTMLSelectElement>} */
-goog.dom.TagName.SELECT = new goog.dom.TagName('SELECT');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.SMALL = new goog.dom.TagName('SMALL');
-
-
-/** @type {!goog.dom.TagName<!HTMLSourceElement>} */
-goog.dom.TagName.SOURCE = new goog.dom.TagName('SOURCE');
-
-
-/** @type {!goog.dom.TagName<!HTMLSpanElement>} */
-goog.dom.TagName.SPAN = new goog.dom.TagName('SPAN');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.STRIKE = new goog.dom.TagName('STRIKE');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.STRONG = new goog.dom.TagName('STRONG');
-
-
-/** @type {!goog.dom.TagName<!HTMLStyleElement>} */
-goog.dom.TagName.STYLE = new goog.dom.TagName('STYLE');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.SUB = new goog.dom.TagName('SUB');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.SUMMARY = new goog.dom.TagName('SUMMARY');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.SUP = new goog.dom.TagName('SUP');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.SVG = new goog.dom.TagName('SVG');
-
-
-/** @type {!goog.dom.TagName<!HTMLTableElement>} */
-goog.dom.TagName.TABLE = new goog.dom.TagName('TABLE');
-
-
-/** @type {!goog.dom.TagName<!HTMLTableSectionElement>} */
-goog.dom.TagName.TBODY = new goog.dom.TagName('TBODY');
-
-
-/** @type {!goog.dom.TagName<!HTMLTableCellElement>} */
-goog.dom.TagName.TD = new goog.dom.TagName('TD');
-
-
-/** @type {!goog.dom.TagName<!HTMLTemplateElement>} */
-goog.dom.TagName.TEMPLATE = new goog.dom.TagName('TEMPLATE');
-
-
-/** @type {!goog.dom.TagName<!HTMLTextAreaElement>} */
-goog.dom.TagName.TEXTAREA = new goog.dom.TagName('TEXTAREA');
-
-
-/** @type {!goog.dom.TagName<!HTMLTableSectionElement>} */
-goog.dom.TagName.TFOOT = new goog.dom.TagName('TFOOT');
-
-
-/** @type {!goog.dom.TagName<!HTMLTableCellElement>} */
-goog.dom.TagName.TH = new goog.dom.TagName('TH');
-
-
-/** @type {!goog.dom.TagName<!HTMLTableSectionElement>} */
-goog.dom.TagName.THEAD = new goog.dom.TagName('THEAD');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.TIME = new goog.dom.TagName('TIME');
-
-
-/** @type {!goog.dom.TagName<!HTMLTitleElement>} */
-goog.dom.TagName.TITLE = new goog.dom.TagName('TITLE');
-
-
-/** @type {!goog.dom.TagName<!HTMLTableRowElement>} */
-goog.dom.TagName.TR = new goog.dom.TagName('TR');
-
-
-/** @type {!goog.dom.TagName<!HTMLTrackElement>} */
-goog.dom.TagName.TRACK = new goog.dom.TagName('TRACK');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.TT = new goog.dom.TagName('TT');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.U = new goog.dom.TagName('U');
-
-
-/** @type {!goog.dom.TagName<!HTMLUListElement>} */
-goog.dom.TagName.UL = new goog.dom.TagName('UL');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.VAR = new goog.dom.TagName('VAR');
-
-
-/** @type {!goog.dom.TagName<!HTMLVideoElement>} */
-goog.dom.TagName.VIDEO = new goog.dom.TagName('VIDEO');
-
-
-/** @type {!goog.dom.TagName<!goog.dom.HtmlElement>} */
-goog.dom.TagName.WBR = new goog.dom.TagName('WBR');
+/** @const {!goog.dom.TagName<!goog.dom.HtmlElement>} */
+goog.dom.TagName.WBR = goog.dom.TagName.privateCast_('WBR');
