@@ -23,6 +23,9 @@
 #     violations.
 
 java -Xmx1G -jar ../closure-compiler-1.0-SNAPSHOT.jar \
+# MOE:begin_strip
+# LINT.IfChange
+# MOE:end_strip
   -O ADVANCED \
   --warning_level VERBOSE \
   --jscomp_error='*' \
@@ -35,6 +38,9 @@ java -Xmx1G -jar ../closure-compiler-1.0-SNAPSHOT.jar \
   --jscomp_off=lintChecks \
   --jscomp_off=analyzerChecks \
   --jscomp_warning=unusedLocalVariables \
+# MOE:begin_strip
+# LINT.ThenChange(//depot/google3/javascript/closure/oss_compiler_test.sh)
+# MOE:end_strip
   --js='**.js' \
   --js='!./closure-deps/**.js' \
   --js='!**_test.js' \
