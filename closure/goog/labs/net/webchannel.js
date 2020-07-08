@@ -267,6 +267,25 @@ goog.net.WebChannel.Options.prototype.xmlHttpFactory;
  */
 goog.net.WebChannel.Options.prototype.requestRefreshThresholds;
 
+/**
+ * Opt-in to enable Chrome origin trials from the WebChannel client. See
+ * https://github.com/GoogleChrome/OriginTrials
+ *
+ * Origin trial history:
+ * - fetch upload (07/2020 - 01/2021)
+ * https://developers.chrome.com/origintrials/#/view_trial/3524066708417413121
+ *
+ * Participating in the origin trials will help Chrome to release new Web
+ * platform features sooner, which will in turn help improve WebChannel
+ * performance.
+ *
+ * Origin trials are not expected to interfere with WebChannel wire messages
+ * and should not introduce any noticeable overhead.
+ *
+ * @type {boolean|undefined}
+ */
+goog.net.WebChannel.Options.prototype.enableOriginTrials;
+
 
 /**
  * Types that are allowed as message data.
