@@ -764,6 +764,9 @@ testSuite({
     assertEquals('cd', target.textContent);
     assertEquals('cd', source.textContent);
     assertEquals('c', target.firstChild.textContent);
+    googDom.copyContents(source, source);
+    assertEquals('cd', source.textContent);
+    assertEquals('c', source.firstChild.textContent);
   },
 
   testInsertChildAt() {

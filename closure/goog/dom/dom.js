@@ -1295,8 +1295,8 @@ goog.dom.copyContents = function(target, source) {
   goog.asserts.assert(
       target != null && source != null,
       'goog.dom.copyContents expects non-null arguments');
-  goog.dom.removeChildren(target);
   var childNodes = source.cloneNode(/* deep= */ true).childNodes;
+  goog.dom.removeChildren(target);
   while (childNodes.length) {
     target.appendChild(childNodes[0]);
   }
