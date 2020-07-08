@@ -37,6 +37,7 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.string.Unicode');
 goog.require('goog.userAgent');
 

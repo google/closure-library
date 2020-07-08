@@ -11,6 +11,7 @@
 goog.provide('goog.labs.net.image');
 
 goog.require('goog.Promise');
+goog.require('goog.dispose');
 goog.require('goog.dom.safe');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');

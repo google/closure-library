@@ -14,8 +14,10 @@ goog.provide('goog.messaging.RespondingChannel');
 
 goog.require('goog.Disposable');
 goog.require('goog.Promise');
+goog.require('goog.dispose');
 goog.require('goog.log');
 goog.require('goog.messaging.MultiChannel');
+goog.requireType('goog.messaging.MessageChannel');
 
 
 

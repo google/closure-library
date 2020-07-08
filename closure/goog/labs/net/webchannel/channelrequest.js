@@ -20,6 +20,7 @@ goog.provide('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.async.Throttle');
+goog.require('goog.dispose');
 goog.require('goog.events.EventHandler');
 goog.require('goog.labs.net.webChannel.Channel');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
@@ -33,6 +34,7 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 goog.requireType('goog.Uri');
+goog.requireType('goog.events.Event');
 goog.requireType('goog.labs.net.webChannel.Wire.QueuedMap');
 goog.requireType('goog.net.XhrIo');
 

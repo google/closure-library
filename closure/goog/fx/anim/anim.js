@@ -12,6 +12,7 @@ goog.provide('goog.fx.anim.Animated');
 
 goog.require('goog.async.AnimationDelay');
 goog.require('goog.async.Delay');
+goog.require('goog.dispose');
 goog.require('goog.object');
 
 

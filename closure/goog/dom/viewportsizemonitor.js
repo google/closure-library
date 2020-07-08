@@ -12,11 +12,13 @@
 
 goog.provide('goog.dom.ViewportSizeMonitor');
 
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Size');
+goog.requireType('goog.events.Event');
 
 
 

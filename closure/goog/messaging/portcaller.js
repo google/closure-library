@@ -13,10 +13,12 @@ goog.provide('goog.messaging.PortCaller');
 
 goog.require('goog.Disposable');
 goog.require('goog.async.Deferred');
+goog.require('goog.dispose');
 goog.require('goog.messaging.DeferredChannel');
 goog.require('goog.messaging.PortChannel');
 goog.require('goog.messaging.PortNetwork');  // interface
 goog.require('goog.object');
+goog.requireType('goog.messaging.MessageChannel');
 
 
 

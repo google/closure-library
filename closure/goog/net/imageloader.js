@@ -12,6 +12,7 @@
 goog.provide('goog.net.ImageLoader');
 
 goog.require('goog.array');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events.EventHandler');
@@ -20,6 +21,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.net.EventType');
 goog.require('goog.object');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.Event');
 
 
 
