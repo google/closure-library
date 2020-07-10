@@ -55,6 +55,20 @@ function setDefault(fn) {
   getDefault = fn;
 }
 
+/**
+ * Initialize the module manager if it exists.
+ */
+function maybeInitialize() {
+  if (!moduleManager) {
+    if (getDefault) {
+      moduleManager = getDefault();
+    } else {
+      return;
+    }
+  }
+  moduleManager.setAllModuleInfoString();
+}
+
 /** Test-only method for removing the active module manager. */
 const reset = function() {
   moduleManager = null;
@@ -64,5 +78,6 @@ exports = {
   get,
   set,
   setDefault,
+  maybeInitialize,
   reset,
 };
