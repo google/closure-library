@@ -18,6 +18,7 @@ goog.provide('goog.ui.Tooltip.State');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
@@ -36,6 +37,9 @@ goog.require('goog.structs.Set');
 goog.require('goog.style');
 goog.require('goog.ui.Popup');
 goog.require('goog.ui.PopupBase');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.html.SafeHtml');
+goog.requireType('goog.positioning.AbstractPosition');
 
 
 

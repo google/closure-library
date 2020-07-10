@@ -16,6 +16,7 @@ goog.provide('goog.debug.Trace');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.debug');
 goog.require('goog.debug.Logger');
 goog.require('goog.iter');
 goog.require('goog.log');

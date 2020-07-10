@@ -23,6 +23,7 @@ goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.Transport');
 goog.require('goog.net.xpc.TransportTypes');
 goog.require('goog.object');
+goog.requireType('goog.dom.DomHelper');
 goog.requireType('goog.net.xpc.CrossPageChannel');
 
 

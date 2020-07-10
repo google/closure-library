@@ -13,6 +13,7 @@ goog.provide('goog.module.ModuleInfo');
 goog.forwardDeclare('goog.loader.AbstractModuleManager.FailureType');
 goog.require('goog.Disposable');
 goog.require('goog.async.throwException');
+goog.require('goog.dispose');
 goog.require('goog.functions');
 goog.require('goog.html.TrustedResourceUrl');
 /** @suppress {extraRequire} */

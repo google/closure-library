@@ -15,9 +15,11 @@ goog.provide('goog.log.LogRecord');
 goog.provide('goog.log.Logger');
 
 goog.require('goog.debug');
+goog.require('goog.debug.LogBuffer');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.LogRecord');
 goog.require('goog.debug.Logger');
+goog.requireType('goog.debug.Loggable');
 
 
 /** @define {boolean} Whether logging is enabled. */

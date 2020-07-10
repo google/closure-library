@@ -18,6 +18,7 @@ goog.provide('goog.ui.Control');
 
 goog.require('goog.Disposable');
 goog.require('goog.array');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
@@ -33,6 +34,8 @@ goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.ControlRenderer');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
+goog.requireType('goog.a11y.aria.Role');
+goog.requireType('goog.events.KeyEvent');
 
 
 

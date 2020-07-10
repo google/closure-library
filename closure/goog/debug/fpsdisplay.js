@@ -16,6 +16,7 @@ goog.provide('goog.debug.FpsDisplay');
 
 goog.require('goog.asserts');
 goog.require('goog.async.AnimationDelay');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.ui.Component');
