@@ -57,8 +57,13 @@ function setDefault(fn) {
 
 /**
  * Initialize the module manager if it exists.
+ * @param {string=} info A string representation of the module dependency
+ *      graph, in the form: module1:dep1,dep2/module2:dep1,dep2 etc.
+ *     Where depX is the base-36 encoded position of the dep in the module list.
+ * @param {!Array<string>=} loadingModuleIds A list of moduleIds that
+ *     are currently being loaded.
  */
-function maybeInitialize() {
+function maybeInitialize(info, loadingModuleIds) {
   if (!moduleManager) {
     if (getDefault) {
       moduleManager = getDefault();
@@ -66,7 +71,7 @@ function maybeInitialize() {
       return;
     }
   }
-  moduleManager.setAllModuleInfoString();
+  moduleManager.setAllModuleInfoString(info, loadingModuleIds);
 }
 
 /** Test-only method for removing the active module manager. */
