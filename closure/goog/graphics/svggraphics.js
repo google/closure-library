@@ -31,6 +31,16 @@ goog.require('goog.math');
 goog.require('goog.math.Size');
 goog.require('goog.style');
 goog.require('goog.userAgent');
+goog.requireType('goog.graphics.AffineTransform');
+goog.requireType('goog.graphics.Element');
+goog.requireType('goog.graphics.EllipseElement');
+goog.requireType('goog.graphics.Fill');
+goog.requireType('goog.graphics.GroupElement');
+goog.requireType('goog.graphics.ImageElement');
+goog.requireType('goog.graphics.PathElement');
+goog.requireType('goog.graphics.RectElement');
+goog.requireType('goog.graphics.StrokeAndFillElement');
+goog.requireType('goog.graphics.TextElement');
 
 
 
