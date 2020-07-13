@@ -18,23 +18,18 @@
 goog.setTestOnly('goog.testing.singleton');
 goog.provide('goog.testing.singleton');
 
+
 /**
  * Deletes all singleton instances, so `getInstance` will return a new
  * instance on next call.
  */
-goog.testing.singleton.resetAll = function() {
+goog.testing.singleton.reset = function() {
   const singletons = goog.getObjectByName('goog.instantiatedSingletons_');
   let ctor;
   while (ctor = singletons.pop()) {
     delete ctor.instance_;
   }
 };
-
-/**
- * Deletes all singleton instances, so `getInstance` will return a new
- * instance on next call.
- */
-goog.testing.singleton.reset = goog.testing.singleton.resetAll;
 
 
 /**
