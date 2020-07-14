@@ -205,7 +205,9 @@ goog.structs.StringSet.prototype.forEach = function(f, opt_obj) {
 
 /**
  * Counts the number of elements in the set in linear time.
+ * MOE:begin_strip
  * NOTE: getCount is always called at most once per set instance in google3.
+ * MOE:end_strip
  * If this usage pattern won't change, the linear getCount implementation is
  * better, because
  * <li>populating a set and getting the number of elements in it takes the same
