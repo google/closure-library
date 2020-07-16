@@ -37,6 +37,7 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.string.Unicode');
 goog.require('goog.userAgent');
 
@@ -1295,8 +1296,8 @@ goog.dom.copyContents = function(target, source) {
   goog.asserts.assert(
       target != null && source != null,
       'goog.dom.copyContents expects non-null arguments');
-  goog.dom.removeChildren(target);
   var childNodes = source.cloneNode(/* deep= */ true).childNodes;
+  goog.dom.removeChildren(target);
   while (childNodes.length) {
     target.appendChild(childNodes[0]);
   }

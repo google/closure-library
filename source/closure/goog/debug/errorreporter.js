@@ -18,6 +18,7 @@ goog.require('goog.debug.Error');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.debug.errorcontext');
+goog.require('goog.dispose');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
@@ -27,6 +28,7 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.uri.utils');
 goog.require('goog.userAgent');
+goog.requireType('goog.structs.Map');
 
 
 

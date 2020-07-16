@@ -38,6 +38,19 @@ goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.style');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.graphics.AffineTransform');
+goog.requireType('goog.graphics.Element');
+goog.requireType('goog.graphics.EllipseElement');
+goog.requireType('goog.graphics.Fill');
+goog.requireType('goog.graphics.GroupElement');
+goog.requireType('goog.graphics.ImageElement');
+goog.requireType('goog.graphics.PathElement');
+goog.requireType('goog.graphics.RectElement');
+goog.requireType('goog.graphics.Stroke');
+goog.requireType('goog.graphics.StrokeAndFillElement');
+goog.requireType('goog.graphics.TextElement');
 
 
 

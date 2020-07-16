@@ -15,6 +15,7 @@ goog.provide('goog.messaging.MultiChannel');
 goog.provide('goog.messaging.MultiChannel.VirtualChannel');
 
 goog.require('goog.Disposable');
+goog.require('goog.dispose');
 goog.require('goog.log');
 goog.require('goog.messaging.MessageChannel');  // interface
 goog.require('goog.object');

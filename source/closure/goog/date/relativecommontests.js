@@ -22,6 +22,7 @@ goog.require('goog.i18n.DateTimeSymbols_es');
 goog.require('goog.i18n.DateTimeSymbols_fa');
 goog.require('goog.i18n.DateTimeSymbols_fr');
 goog.require('goog.i18n.DateTimeSymbols_no');
+goog.require('goog.i18n.NumberFormatSymbols');
 goog.require('goog.i18n.NumberFormatSymbols_bn');
 goog.require('goog.i18n.NumberFormatSymbols_en');
 goog.require('goog.i18n.NumberFormatSymbols_fa');

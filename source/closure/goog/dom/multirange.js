@@ -219,10 +219,9 @@ goog.dom.MultiRange.prototype.getSortedRanges = function() {
        * @suppress {missingRequire} Cannot depend on goog.dom.Range because
        *     it creates a circular dependency.
        */
-      return goog.dom.Range.isReversed(
-                 aStartNode, aStartOffset, bStartNode, bStartOffset) ?
-          1 :
-          -1;
+      const isReversed = goog.dom.Range.isReversed(
+          aStartNode, aStartOffset, bStartNode, bStartOffset);
+      return isReversed ? 1 : -1;
     });
   }
   return this.sortedRanges_;

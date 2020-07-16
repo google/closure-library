@@ -16,6 +16,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
@@ -42,6 +43,7 @@ goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.Tooltip');
+goog.requireType('goog.events.KeyEvent');
 
 
 

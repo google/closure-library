@@ -15,9 +15,11 @@ goog.provide('goog.log.LogRecord');
 goog.provide('goog.log.Logger');
 
 goog.require('goog.debug');
+goog.require('goog.debug.LogBuffer');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.LogRecord');
 goog.require('goog.debug.Logger');
+goog.requireType('goog.debug.Loggable');
 
 
 /** @define {boolean} Whether logging is enabled. */
@@ -114,6 +116,97 @@ goog.log.removeHandler = function(logger, handler) {
     return logger.removeHandler(handler);
   } else {
     return false;
+  }
+};
+
+
+/**
+ * Set the log level specifying which message levels will be logged by the
+ * given logger.
+ * @param {?goog.log.Logger} logger
+ * @param {?goog.debug.Logger.Level} level The level to set.
+ */
+goog.log.setLevel = function(logger, level) {
+  if (goog.log.ENABLED && logger) {
+    logger.setLevel(level);
+  }
+};
+
+
+/**
+ * Gets the log level specifying which message levels will be logged by this
+ * logger. Message levels lower than this value will be discarded.
+ * The level value Level.OFF can be used to turn off logging. If the level
+ * is null, it means that this node should inherit its level from its
+ * nearest ancestor with a specific (non-null) level value.
+ * @param {?goog.log.Logger} logger
+ * @return {?goog.debug.Logger.Level} The level.
+ */
+goog.log.getLevel = function(logger) {
+  if (goog.log.ENABLED && logger) {
+    return logger.getLevel();
+  }
+  return null;
+};
+
+
+/**
+ * Returns the effective level of the logger based on its ancestors'
+ * levels.
+ * @param {?goog.log.Logger} logger
+ * @return {?goog.debug.Logger.Level} The level.
+ */
+goog.log.getEffectiveLevel = function(logger) {
+  if (goog.log.ENABLED && logger) {
+    return logger.getEffectiveLevel();
+  }
+  return null;
+};
+
+
+/**
+ * Checks if a message of the given level would actually be logged
+ * by this logger. This check is based on the Loggers effective
+ * level, which may be inherited from its parent.
+ * @param {?goog.log.Logger} logger
+ * @param {?goog.debug.Logger.Level} level The level to check.
+ * @return {boolean} Whether the message would be logged.
+ */
+goog.log.isLoggable = function(logger, level) {
+  if (goog.log.ENABLED && logger) {
+    return logger.isLoggable(level);
+  }
+  return false;
+};
+
+
+/**
+ * Creates a new log record and adds the exception (if present) to it.
+ * @param {?goog.log.Logger} logger
+ * @param {?goog.debug.Logger.Level} level One of the level identifiers.
+ * @param {string} msg The string message.
+ * @param {?Error|?Object=} opt_exception An exception associated with the
+ *     message.
+ * @return {?goog.debug.LogRecord} A log record.
+ */
+goog.log.getLogRecord = function(logger, level, msg, opt_exception) {
+  if (goog.log.ENABLED && logger) {
+    return logger.getLogRecord(level, msg, opt_exception);
+  }
+  return null;
+};
+
+
+/**
+ * Logs a LogRecord. If the logger is currently enabled for the
+ * given message level then the given message is forwarded to all the
+ * registered output Handler objects.
+ * @param {?goog.log.Logger} logger
+ * @param {?goog.debug.LogRecord} logRecord A log record to log.
+ */
+goog.log.publishLogRecord = function(logger, logRecord) {
+  if (goog.log.ENABLED && logger) {
+    logger.logRecord(logRecord);
   }
 };
 

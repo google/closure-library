@@ -20,6 +20,7 @@ goog.provide('goog.fx.DragListPermission');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
 goog.require('goog.events');
@@ -32,6 +33,9 @@ goog.require('goog.fx.Dragger');
 goog.require('goog.math.Coordinate');
 goog.require('goog.string');
 goog.require('goog.style');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.fx.DragEvent');
+goog.requireType('goog.math.Rect');
 
 
 

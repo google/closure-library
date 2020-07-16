@@ -24,6 +24,7 @@ goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.Event');
@@ -40,6 +41,7 @@ goog.require('goog.net.EventType');
 goog.require('goog.net.jsloader');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
+goog.requireType('goog.module.ModuleInfo');
 
 
 

@@ -15,6 +15,7 @@ goog.provide('goog.net.xpc.NativeMessagingTransport');
 goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.async.Deferred');
+goog.require('goog.dispose');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.log');
@@ -22,6 +23,8 @@ goog.require('goog.net.xpc');
 goog.require('goog.net.xpc.CrossPageChannelRole');
 goog.require('goog.net.xpc.Transport');
 goog.require('goog.net.xpc.TransportTypes');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.BrowserEvent');
 goog.requireType('goog.net.xpc.CrossPageChannel');
 
 

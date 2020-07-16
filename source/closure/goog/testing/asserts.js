@@ -144,7 +144,11 @@ var _displayStringForValue = function(aVar) {
 goog.testing.asserts.fail = function(failureMessage) {
   _assert('Call to fail()', false, failureMessage);
 };
-/** @const */
+/**
+ * @const
+ * @suppress {duplicate,checkTypes} Test frameworks like Jasmine may also
+ * define global fail functions.
+ */
 var fail = goog.testing.asserts.fail;
 
 var argumentsIncludeComments = function(expectedNumberOfNonCommentArgs, args) {

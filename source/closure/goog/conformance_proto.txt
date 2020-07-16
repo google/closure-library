@@ -399,7 +399,9 @@ requirement: {
   value: '*.innerHTML'
   value: '*.outerHTML'
 
+  whitelist_regexp: '.+/closure/tweak/tweakui.js' # False positive - missing type on containerNodeName. MOE:strip_line
   whitelist_regexp: '.+/closure/goog/tweak/tweakui.js' # False positive - missing type on containerNodeName.
+
   # TODO(jakubvrana): Ban this.
   whitelist_regexp: '.+/closure/goog/ui/abstractspellchecker.js'
 }

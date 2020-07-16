@@ -38,6 +38,7 @@ goog.require('goog.net.xpc.UriCfgFields');
 goog.require('goog.string');
 goog.require('goog.uri.utils');
 goog.require('goog.userAgent');
+goog.requireType('goog.net.xpc.Transport');
 
 
 

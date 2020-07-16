@@ -21,6 +21,7 @@ goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.debug');
+goog.require('goog.dispose');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.json');
@@ -30,6 +31,8 @@ goog.require('goog.messaging.DeferredChannel');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.messaging.MessageChannel');
 
 
 

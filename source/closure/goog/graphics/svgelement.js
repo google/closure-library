@@ -25,6 +25,9 @@ goog.require('goog.graphics.ImageElement');
 goog.require('goog.graphics.PathElement');
 goog.require('goog.graphics.RectElement');
 goog.require('goog.graphics.TextElement');
+goog.requireType('goog.graphics.Fill');
+goog.requireType('goog.graphics.Path');
+goog.requireType('goog.graphics.Stroke');
 goog.requireType('goog.graphics.SvgGraphics');
 
 
@@ -184,9 +187,9 @@ goog.inherits(goog.graphics.SvgPathElement, goog.graphics.PathElement);
  * Update the underlying path.
  * @param {!goog.graphics.Path} path The path object to draw.
  * @override
+ * @suppress {missingRequire} goog.graphics.SvgGraphics
  */
 goog.graphics.SvgPathElement.prototype.setPath = function(path) {
-  /** @suppress {missingRequire} goog.graphics.SvgGraphics */
   this.getGraphics().setElementAttributes(
       this.getElement(), {'d': goog.graphics.SvgGraphics.getSvgPath(path)});
 };

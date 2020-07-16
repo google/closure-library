@@ -55,6 +55,25 @@ function setDefault(fn) {
   getDefault = fn;
 }
 
+/**
+ * Initialize the module manager if it exists.
+ * @param {string=} info A string representation of the module dependency
+ *      graph, in the form: module1:dep1,dep2/module2:dep1,dep2 etc.
+ *     Where depX is the base-36 encoded position of the dep in the module list.
+ * @param {!Array<string>=} loadingModuleIds A list of moduleIds that
+ *     are currently being loaded.
+ */
+function maybeInitialize(info, loadingModuleIds) {
+  if (!moduleManager) {
+    if (getDefault) {
+      moduleManager = getDefault();
+    } else {
+      return;
+    }
+  }
+  moduleManager.setAllModuleInfoString(info, loadingModuleIds);
+}
+
 /** Test-only method for removing the active module manager. */
 const reset = function() {
   moduleManager = null;
@@ -64,5 +83,6 @@ exports = {
   get,
   set,
   setDefault,
+  maybeInitialize,
   reset,
 };

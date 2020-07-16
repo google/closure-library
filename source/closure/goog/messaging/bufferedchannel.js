@@ -13,6 +13,7 @@ goog.provide('goog.messaging.BufferedChannel');
 
 goog.require('goog.Disposable');
 goog.require('goog.Timer');
+goog.require('goog.dispose');
 goog.require('goog.events');
 goog.require('goog.log');
 goog.require('goog.messaging.MessageChannel');

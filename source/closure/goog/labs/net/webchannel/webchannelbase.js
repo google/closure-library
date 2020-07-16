@@ -450,6 +450,20 @@ goog.labs.net.webChannel.WebChannelBase = function(
    * @private {?number}
    */
   this.bpDetectionTimerId_ = null;
+
+  /**
+   * TODO(user): create a dedicated class for managing future origin trials.
+   *
+   * Whether to enable OTs that are implemented here.
+   * @private {boolean}
+   */
+  this.enableOriginTrials_ =
+      (opt_options && opt_options.enableOriginTrials) || false;
+
+  if (this.enableOriginTrials_) {
+    this.channelDebug_.info('Opt-in to enable Chrome Origin Trials.');
+    // To be implemented
+  }
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;

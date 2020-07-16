@@ -22,6 +22,7 @@ goog.require('goog.dom.TextRangeIterator');
 goog.require('goog.dom.browserrange');
 goog.require('goog.string');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.browserrange.AbstractRange');
 
 
 

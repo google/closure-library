@@ -11,7 +11,8 @@
  * @see http://en.wikipedia.org/wiki/Memoization
  */
 
-goog.provide('goog.memoize');
+goog.module('goog.memoize');
+goog.module.declareLegacyNamespace();
 
 
 /**
@@ -27,15 +28,15 @@ goog.provide('goog.memoize');
  *     goog.memoize.simpleSerializer. It defaults to that function.
  * @return {!Function} The wrapped function.
  */
-goog.memoize = function(f, opt_serializer) {
-  const serializer = opt_serializer || goog.memoize.simpleSerializer;
+function memoize(f, opt_serializer) {
+  const serializer = opt_serializer || simpleSerializer;
 
   return (/**
            * @this {Object} The object whose function is being wrapped.
            * @return {?} the return value of the original function.
            */
           function() {
-            if (goog.memoize.ENABLE_MEMOIZE) {
+            if (memoize.ENABLE_MEMOIZE) {
               // In the strict mode, when this function is called as a global
               // function, the value of 'this' is undefined instead of a global
               // object. See:
@@ -48,8 +49,8 @@ goog.memoize = function(f, opt_serializer) {
               const thisOrGlobal = this || goog.global;
               // Maps the serialized list of args to the corresponding return
               // value.
-              const cache = thisOrGlobal[goog.memoize.CACHE_PROPERTY_] ||
-                  (thisOrGlobal[goog.memoize.CACHE_PROPERTY_] = {});
+              const cache = thisOrGlobal[CACHE_PROPERTY] ||
+                  (thisOrGlobal[CACHE_PROPERTY] = {});
               const key = serializer(goog.getUid(f), arguments);
               return cache.hasOwnProperty(key) ?
                   cache[key] :
@@ -58,13 +59,13 @@ goog.memoize = function(f, opt_serializer) {
               return f.apply(this, arguments);
             }
           });
-};
-
+}
+exports = memoize;
 
 /**
  * @define {boolean} Flag to disable memoization in unit tests.
  */
-goog.memoize.ENABLE_MEMOIZE = goog.define('goog.memoize.ENABLE_MEMOIZE', true);
+memoize.ENABLE_MEMOIZE = goog.define('goog.memoize.ENABLE_MEMOIZE', true);
 
 
 /**
@@ -72,17 +73,18 @@ goog.memoize.ENABLE_MEMOIZE = goog.define('goog.memoize.ENABLE_MEMOIZE', true);
  * @param {Object} cacheOwner The owner of the cache. This is the `this`
  *     context of the memoized function.
  */
-goog.memoize.clearCache = function(cacheOwner) {
-  cacheOwner[goog.memoize.CACHE_PROPERTY_] = {};
+const clearCache = function(cacheOwner) {
+  cacheOwner[CACHE_PROPERTY] = {};
 };
+exports.clearCache = clearCache;
+
 
 
 /**
  * Name of the property used by goog.memoize as cache.
  * @type {string}
- * @private
  */
-goog.memoize.CACHE_PROPERTY_ = 'closure_memoize_cache_';
+const CACHE_PROPERTY = 'closure_memoize_cache_';
 
 
 /**
@@ -97,10 +99,11 @@ goog.memoize.CACHE_PROPERTY_ = 'closure_memoize_cache_';
  * @return {string} The list of arguments with type information concatenated
  *     with the functionUid argument, serialized as \x0B-separated string.
  */
-goog.memoize.simpleSerializer = function(functionUid, args) {
+const simpleSerializer = function(functionUid, args) {
   const context = [functionUid];
   for (let i = args.length - 1; i >= 0; --i) {
     context.push(typeof args[i], args[i]);
   }
   return context.join('\x0B');
 };
+exports.simpleSerializer = simpleSerializer;
