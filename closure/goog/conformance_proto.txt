@@ -46,7 +46,7 @@ requirement: {
   whitelist_regexp: '.+/closure/goog/locale/locale.js' # dumb api
   whitelist_regexp: '.+/closure/goog/testing/' # global assert methods, etc
   whitelist_regexp: '.+/closure/goog/tweak/testhelpers.js' # global values
-  whitelist_regexp: '^Post.*_module$' # injected '_ModuleManager_initialize'
+  whitelist_regexp: '^Post-' # injected '_ModuleManager_initialize'
 }
 
 requirement: {
