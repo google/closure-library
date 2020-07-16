@@ -91,6 +91,14 @@ goog.net.ImageLoader = function(opt_parent) {
    * @private
    */
   this.parent_ = opt_parent;
+
+  /**
+   * Tracks completion state for the active batch of images being loaded to
+   * ensure only a single COMPLETE is dispatched per batch of in-flight images.
+   * @type {boolean}
+   * @private
+   */
+  this.completionFired_ = false;
 };
 goog.inherits(goog.net.ImageLoader, goog.events.EventTarget);
 
@@ -163,6 +171,7 @@ goog.net.ImageLoader.prototype.addImage = function(
     id, image, opt_corsRequestType) {
   var src = (typeof image === 'string') ? image : image.src;
   if (src) {
+    this.completionFired_ = false;
     // For now, we just store the source URL for the image.
     this.imageIdToRequestMap_[id] = {
       src: src,
@@ -175,8 +184,7 @@ goog.net.ImageLoader.prototype.addImage = function(
 
 /**
  * Removes the image associated with the given ID string from the image loader.
- * If the image was previously loading, removes any listeners for its events
- * and dispatches a COMPLETE event if all remaining images have now completed.
+ * If the image was previously loading, removes any listeners for its events.
  * @param {string} id The ID of the image to remove.
  */
 goog.net.ImageLoader.prototype.removeImage = function(id) {
@@ -189,12 +197,6 @@ goog.net.ImageLoader.prototype.removeImage = function(id) {
     // Stop listening for events on the image.
     this.handler_.unlisten(
         image, goog.net.ImageLoader.IMAGE_LOAD_EVENTS_, this.onNetworkEvent_);
-
-    // If this was the last image, raise a COMPLETE event.
-    if (goog.object.isEmpty(this.imageIdToImageMap_) &&
-        goog.object.isEmpty(this.imageIdToRequestMap_)) {
-      this.dispatchEvent(goog.net.EventType.COMPLETE);
-    }
   }
 };
 
@@ -308,6 +310,8 @@ goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
     }
   }
 
+  this.removeImage(image.id);
+
   // Redispatch the event on behalf of the image. Note that the external
   // listener may dispose this instance.
   this.dispatchEvent({type: evt.type, target: image});
@@ -317,9 +321,18 @@ goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
     return;
   }
 
-  this.removeImage(image.id);
+  this.maybeFireCompletionEvent_();
 };
 
+/** If there are no more images pending, raise a COMPLETE event. */
+goog.net.ImageLoader.prototype.maybeFireCompletionEvent_ = function() {
+  if (goog.object.isEmpty(this.imageIdToImageMap_) &&
+      goog.object.isEmpty(this.imageIdToRequestMap_) &&
+      !this.completionFired_) {
+    this.completionFired_ = true;
+    this.dispatchEvent(goog.net.EventType.COMPLETE);
+  }
+};
 
 /** @override */
 goog.net.ImageLoader.prototype.disposeInternal = function() {
