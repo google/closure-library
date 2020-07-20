@@ -835,13 +835,6 @@ testSuite({
     assertEquals('adcb', component.getChildIds().join(''));
     assertEquals(a, component.getChildAt(0));
     assertEquals(a.getElement(), component.getElement().childNodes[0]);
-
-    // Move child d to the bottom, and check that DOM nodes are in correct
-    // order.
-    component.addChildAt(d, 3);
-    assertEquals('acbd', component.getChildIds().join(''));
-    assertEquals(d, component.getChildAt(3));
-    assertEquals(d.getElement(), component.getElement().childNodes[3]);
   },
 
   testAddChildAfterDomCreatedDoesNotEnterDocument() {

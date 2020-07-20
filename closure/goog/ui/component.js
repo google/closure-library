@@ -1044,14 +1044,14 @@ goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
   goog.array.insertAt(this.children_, child, index);
 
   if (child.inDocument_ && this.inDocument_ && child.getParent() == this) {
-    // Changing the position of an existing child, move the DOM node
+    // Changing the position of an existing child, move the DOM node (if
+    // necessary).
     var contentElement = this.getContentElement();
-    if (contentElement.contains(child.getElement())) {
-      contentElement.removeChild(child.getElement());
-    }
     var insertBeforeElement = contentElement.childNodes[index] || null;
-    contentElement.insertBefore(
-        /** @type {!Node} */ (child.getElement()), insertBeforeElement);
+    if (insertBeforeElement != child.getElement()) {
+      contentElement.insertBefore(
+          /** @type {!Node} */ (child.getElement()), insertBeforeElement);
+    }
   } else if (opt_render) {
     // If this (parent) component doesn't have a DOM yet, call createDom now
     // to make sure we render the child component's element into the correct
