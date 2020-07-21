@@ -570,78 +570,11 @@ testSuite({
       },
     };
 
-    // Simulate Firefox 13 that implements the new slice.
-    let tmpStubs = new PropertyReplacer();
-    tmpStubs.set(goog.userAgent, 'GECKO', true);
-    tmpStubs.set(goog.userAgent, 'WEBKIT', false);
-    tmpStubs.set(goog.userAgent, 'IE', false);
-    tmpStubs.set(goog.userAgent, 'VERSION', '13.0');
-    tmpStubs.set(goog.userAgent, 'isVersionOrHigherCache_', {});
-
     // Expect slice to be called with no change to parameters
     assertArrayEquals([2, 10], googFs.sliceBlob(blob, 2));
     assertArrayEquals([-2, 10], googFs.sliceBlob(blob, -2));
     assertArrayEquals([3, 6], googFs.sliceBlob(blob, 3, 6));
     assertArrayEquals([3, -6], googFs.sliceBlob(blob, 3, -6));
-
-    // Simulate IE 10 that implements the new slice.
-    tmpStubs = new PropertyReplacer();
-    tmpStubs.set(goog.userAgent, 'GECKO', false);
-    tmpStubs.set(goog.userAgent, 'WEBKIT', false);
-    tmpStubs.set(goog.userAgent, 'IE', true);
-    tmpStubs.set(goog.userAgent, 'VERSION', '10.0');
-    tmpStubs.set(goog.userAgent, 'isVersionOrHigherCache_', {});
-
-    // Expect slice to be called with no change to parameters
-    assertArrayEquals([2, 10], googFs.sliceBlob(blob, 2));
-    assertArrayEquals([-2, 10], googFs.sliceBlob(blob, -2));
-    assertArrayEquals([3, 6], googFs.sliceBlob(blob, 3, 6));
-    assertArrayEquals([3, -6], googFs.sliceBlob(blob, 3, -6));
-
-    // Simulate Firefox 4 that implements the old slice.
-    tmpStubs.set(goog.userAgent, 'GECKO', true);
-    tmpStubs.set(goog.userAgent, 'WEBKIT', false);
-    tmpStubs.set(goog.userAgent, 'IE', false);
-    tmpStubs.set(goog.userAgent, 'VERSION', '2.0');
-    tmpStubs.set(goog.userAgent, 'isVersionOrHigherCache_', {});
-
-    // Expect slice to be called with transformed parameters.
-    assertArrayEquals([2, 8], googFs.sliceBlob(blob, 2));
-    assertArrayEquals([8, 2], googFs.sliceBlob(blob, -2));
-    assertArrayEquals([3, 3], googFs.sliceBlob(blob, 3, 6));
-    assertArrayEquals([3, 1], googFs.sliceBlob(blob, 3, -6));
-
-    // Simulate Firefox 5 that implements mozSlice (new spec).
-    delete blob.slice;
-    blob.mozSlice = (start, end) => ['moz', start, end];
-    tmpStubs.set(goog.userAgent, 'GECKO', true);
-    tmpStubs.set(goog.userAgent, 'WEBKIT', false);
-    tmpStubs.set(goog.userAgent, 'IE', false);
-    tmpStubs.set(goog.userAgent, 'VERSION', '5.0');
-    tmpStubs.set(goog.userAgent, 'isVersionOrHigherCache_', {});
-
-    // Expect mozSlice to be called with no change to parameters.
-    assertArrayEquals(['moz', 2, 10], googFs.sliceBlob(blob, 2));
-    assertArrayEquals(['moz', -2, 10], googFs.sliceBlob(blob, -2));
-    assertArrayEquals(['moz', 3, 6], googFs.sliceBlob(blob, 3, 6));
-    assertArrayEquals(['moz', 3, -6], googFs.sliceBlob(blob, 3, -6));
-
-    // Simulate Chrome 20 that implements webkitSlice (new spec).
-    delete blob.mozSlice;
-    blob.webkitSlice = (start, end) => ['webkit', start, end];
-    tmpStubs.set(goog.userAgent, 'GECKO', false);
-    tmpStubs.set(goog.userAgent, 'WEBKIT', true);
-    tmpStubs.set(goog.userAgent, 'IE', false);
-    tmpStubs.set(goog.userAgent, 'VERSION', '536.10');
-    tmpStubs.set(goog.userAgent, 'isVersionOrHigherCache_', {});
-
-    // Expect webkitSlice to be called with no change to parameters.
-    assertArrayEquals(['webkit', 2, 10], googFs.sliceBlob(blob, 2));
-    assertArrayEquals(['webkit', -2, 10], googFs.sliceBlob(blob, -2));
-    assertArrayEquals(['webkit', 3, 6], googFs.sliceBlob(blob, 3, 6));
-    assertArrayEquals(['webkit', 3, -6], googFs.sliceBlob(blob, 3, -6));
-
-    tmpStubs.reset();
   },
 
   testGetBlobThrowsError() {

@@ -50,7 +50,8 @@ goog.i18n.uChar.LocalNameFetcher.prototype.getName = function(
     character, callback) {
   var localName = goog.i18n.uCharNames.toName(character);
   if (!localName) {
-    goog.i18n.uChar.LocalNameFetcher.logger_.warning(
+    goog.log.warning(
+        goog.i18n.uChar.LocalNameFetcher.logger_,
         'No local name defined for character ' + character);
   }
   callback(localName);

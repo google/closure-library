@@ -1582,6 +1582,7 @@ WebChannelBase.prototype.onBpDetectionTimer_ = function() {
   this.enableStreaming_ = false;
 
   this.bpDetectionDone_ = true;
+  requestStats.notifyStatEvent(requestStats.Stat.PROXY);
 
   // Cancel the request and start a new one immediately
   this.cancelBackChannelRequest_();
@@ -1683,6 +1684,7 @@ WebChannelBase.prototype.onFirstByteReceived = function(request, responseText) {
           this.bpDetectionTimerId_, 'Timer should not have been cancelled.');
       this.clearBpDetectionTimer_();
       this.bpDetectionDone_ = true;
+      requestStats.notifyStatEvent(requestStats.Stat.NOPROXY);
     }
   }
 };
