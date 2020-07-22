@@ -325,11 +325,6 @@ goog.debug.normalizeErrorObject = function(err) {
 /**
  * Serialize stack by including the cause chain of the exception if it exists.
  *
- * MOE:begin_strip
- * When an OO language is transpiled to JavaScript, it might have the concept of
- * exception chaining, which we emulate here. See go/exception-cause-reporting
- * for more information.
- * MOE:end_strip
  *
  * @param {*} e an exception that may have a cause
  * @param {!Object=} seen set of cause that have already been serialized
