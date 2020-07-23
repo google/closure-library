@@ -19,6 +19,7 @@ goog.require('goog.Disposable');
 /** @suppress {extraRequire} */
 goog.require('goog.Promise');
 goog.require('goog.Thenable');
+goog.require('goog.asserts');
 goog.require('goog.async.run');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.events');
@@ -73,7 +74,7 @@ goog.testing.MockClock = function(opt_autoInstall) {
    * turn comes up.  The keys are the timeout keys that are cancelled, each
    * mapping to true.
    *
-   * @private {Object<number, boolean>}
+   * @private {?Object<number, boolean>}
    */
   this.deletedKeys_ = {};
 
@@ -93,7 +94,7 @@ goog.inherits(goog.testing.MockClock, goog.Disposable);
 /**
  * @typedef {{
  *    timeoutKey: number, millis: number,
- *    runAtMillis: number, funcToCall: Function, recurring: boolean}}
+ *    runAtMillis: number, funcToCall: !Function, recurring: boolean}}
  */
 goog.testing.MockClock.QueueObjType_;
 
@@ -481,7 +482,7 @@ goog.testing.MockClock.prototype.runFunctionsWithinRange_ = function(endTime) {
 /**
  * Schedules a function to be run at a certain time.
  * @param {number} timeoutKey The timeout key.
- * @param {Function} funcToCall The function to call.
+ * @param {!Function} funcToCall The function to call.
  * @param {number} millis The number of milliseconds to call it in.
  * @param {boolean} recurring Whether to function call should recur.
  * @private
@@ -502,7 +503,7 @@ goog.testing.MockClock.prototype.scheduleFunction_ = function(
     millis: millis
   };
 
-  goog.testing.MockClock.insert_(timeout, this.queue_);
+  goog.testing.MockClock.insert_(timeout, goog.asserts.assert(this.queue_));
 };
 
 
@@ -512,9 +513,9 @@ goog.testing.MockClock.prototype.scheduleFunction_ = function(
  * Later-inserted duplicates appear at lower indices.  For example, the
  * asterisk in (5,4,*,3,2,1) would be the insertion point for 3.
  *
- * @param {goog.testing.MockClock.QueueObjType_} timeout The timeout to insert,
+ * @param {!goog.testing.MockClock.QueueObjType_} timeout The timeout to insert,
  *     with numerical runAtMillis property.
- * @param {Array<!goog.testing.MockClock.QueueObjType_>} queue The queue to
+ * @param {!Array<!goog.testing.MockClock.QueueObjType_>} queue The queue to
  *     insert into, with each element having a numerical runAtMillis property.
  * @private
  */
@@ -555,7 +556,7 @@ goog.testing.MockClock.MAX_INT_ = 2147483647;
 /**
  * Schedules a function to be called after `millis` milliseconds.
  * Mock implementation for setTimeout.
- * @param {Function} funcToCall The function to call.
+ * @param {!Function} funcToCall The function to call.
  * @param {number=} opt_millis The number of milliseconds to call it after.
  * @return {number} The number of timeouts created.
  * @private
@@ -579,7 +580,7 @@ goog.testing.MockClock.prototype.setTimeout_ = function(
 /**
  * Schedules a function to be called every `millis` milliseconds.
  * Mock implementation for setInterval.
- * @param {Function} funcToCall The function to call.
+ * @param {!Function} funcToCall The function to call.
  * @param {number=} opt_millis The number of milliseconds between calls.
  * @return {number} The number of timeouts created.
  * @private
@@ -597,7 +598,7 @@ goog.testing.MockClock.prototype.setInterval_ = function(
 /**
  * Schedules a function to be called when an animation frame is triggered.
  * Mock implementation for requestAnimationFrame.
- * @param {Function} funcToCall The function to call.
+ * @param {!Function} funcToCall The function to call.
  * @return {number} The number of timeouts created.
  * @private
  */
@@ -618,7 +619,7 @@ goog.testing.MockClock.prototype.requestAnimationFrame_ = function(funcToCall) {
  * Schedules a function to be called immediately after the current JS
  * execution.
  * Mock implementation for setImmediate.
- * @param {Function} funcToCall The function to call.
+ * @param {!Function} funcToCall The function to call.
  * @return {number} The number of timeouts created.
  * @private
  */
