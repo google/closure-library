@@ -16,7 +16,9 @@ goog.provide('goog.editor.icontent.FieldFormatInfo');
 goog.provide('goog.editor.icontent.FieldStyleInfo');
 
 goog.require('goog.dom');
+goog.require('goog.dom.safe');
 goog.require('goog.editor.BrowserFeature');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.style');
 goog.require('goog.userAgent');
 
@@ -281,5 +283,6 @@ goog.editor.icontent.writeHttpsInitialIframe = function(info, doc, bodyHtml) {
   body.id = info.fieldId_;
 
   goog.style.setStyle(body, info.extraStyles_);
-  body.innerHTML = bodyHtml;
+  goog.dom.safe.setInnerHtml(
+      body, goog.html.legacyconversions.safeHtmlFromString(bodyHtml));
 };

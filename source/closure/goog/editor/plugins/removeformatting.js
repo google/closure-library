@@ -14,10 +14,12 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
@@ -394,7 +396,8 @@ goog.editor.plugins.RemoveFormatting.prototype.getHtmlText_ = function(range) {
     if (textRange.queryCommandValue('formatBlock') == 'Formatted') {
       htmlText = goog.string.newLineToBr(textRange.htmlText);
     }
-    div.innerHTML = htmlText;
+    goog.dom.safe.setInnerHtml(
+        div, goog.html.legacyconversions.safeHtmlFromString(htmlText));
   }
 
   // Get the innerHTML of the node instead of just returning the text above
@@ -611,7 +614,8 @@ goog.editor.plugins.RemoveFormatting.prototype.convertSelectedHtmlText_ =
 goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
     function(html) {
   var el = goog.dom.createElement(goog.dom.TagName.DIV);
-  el.innerHTML = html;
+  goog.dom.safe.setInnerHtml(
+      el, goog.html.legacyconversions.safeHtmlFromString(html));
 
   // Put everything into a string buffer to avoid lots of expensive string
   // concatenation along the way.

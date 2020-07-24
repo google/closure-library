@@ -325,6 +325,7 @@ goog.debug.normalizeErrorObject = function(err) {
 /**
  * Serialize stack by including the cause chain of the exception if it exists.
  *
+ *
  * @param {*} e an exception that may have a cause
  * @param {!Object=} seen set of cause that have already been serialized
  * @return {string}
