@@ -11,11 +11,14 @@
 
 goog.provide('goog.editor.node');
 
+goog.require('goog.asserts.dom');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.iter.ChildIterator');
 goog.require('goog.dom.iter.SiblingIterator');
+goog.require('goog.dom.safe');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.iter');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -448,5 +451,7 @@ goog.editor.node.replaceInnerHtml = function(node, html) {
   if (goog.userAgent.IE) {
     goog.dom.removeChildren(node);
   }
-  node.innerHTML = html;
+  goog.dom.safe.setInnerHtml(
+      goog.asserts.dom.assertIsElement(node),
+      goog.html.legacyconversions.safeHtmlFromString(html));
 };

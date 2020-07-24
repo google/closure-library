@@ -30,7 +30,7 @@ let propertyReplacer;
  * @param {boolean=} rtl If true, expect RTL directionality
  */
 function assertBodyCorrect(body, id, bodyHTML, rtl = undefined) {
-  assertEquals(bodyHTML, body.innerHTML);
+  assertEquals(bodyHTML, body.innerHTML.toString());
   // We can't just check
   // assert(HAS_CONTENTE_EDITABLE, !!body.contentEditable) since in
   // FF 3 we don't currently use contentEditable, but body.contentEditable
@@ -54,6 +54,7 @@ function assertBodyCorrect(body, id, bodyHTML, rtl = undefined) {
 function createMockDocument() {
   return {
     body: {
+      tagName: 'BODY',
       setAttribute: function(key, val) {
         this[key] = val;
       },
