@@ -26,6 +26,7 @@ goog.require('goog.Promise');
 goog.require('goog.Thenable');
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.debug');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.object');
@@ -989,8 +990,10 @@ goog.testing.TestCase.prototype.safeTearDownHelper_ = function(tearDowns) {
  * the TestCase instance as the method receiver.
  *
  * @param {function()} fn The function to call.
- * @param {function(this:goog.testing.TestCase): (?goog.testing.Continuation_|undefined)} onSuccess
- * @param {function(this:goog.testing.TestCase, *): (?goog.testing.Continuation_|undefined)} onFailure
+ * @param {function(this:goog.testing.TestCase):
+ *     (?goog.testing.Continuation_|undefined)} onSuccess
+ * @param {function(this:goog.testing.TestCase, *):
+ *     (?goog.testing.Continuation_|undefined)} onFailure
  * @param {string} fnName Name of the function being invoked e.g. 'setUp'.
  * @return {?goog.testing.Continuation_}
  * @private
@@ -1764,34 +1767,53 @@ goog.testing.TestCase.prototype.invalidateAssertionException = function(e) {
  * @suppress {missingProperties} message and stack properties
  */
 goog.testing.TestCase.prototype.logError = function(name, error) {
-  var errMsg = null;
-  var stack = null;
   if (error) {
     this.log(error);
-    if (typeof error === 'string') {
-      errMsg = error;
-    } else {
-      errMsg = error.message || error.description || error.toString();
-      stack = error.stack ? error.stack : error['stackTrace'];
-    }
-  } else {
-    errMsg = 'An unknown error occurred';
   }
 
-  if (stack) {
-    // The Error class includes the message in the stack. Don't duplicate it.
-    stack = stack.replace('Error: ' + errMsg + '\n', 'Error\n');
-
-    // Remove extra goog.testing.TestCase frames from the end.
-    stack = stack.replace(
-        /\n\s*(\bat\b)?\s*(goog\.labs\.testing\.EnvironmentTestCase_\.)?goog\.testing\.(Continuation_\.(prototype\.)?run|TestCase\.(prototype\.)?(execute|cycleTests|startNextBatch_|safeRunTest_|invokeFunction_?))[^\0]*/m,
-        '');
-  }
-  var err = new goog.testing.TestCase.Error(name, errMsg, stack);
+  var normalizedError = goog.debug.normalizeErrorObject(error);
+  var stack =
+      this.cleanStackTrace_(normalizedError.stack, normalizedError.message);
+  var err =
+      new goog.testing.TestCase.Error(name, normalizedError.message, stack);
 
   this.saveMessage(err.toString());
 
   return err;
+};
+
+/**
+ * @param {?string} stack
+ * @param {string} errMsg
+ * @return {string|undefined}
+ * @private
+ */
+goog.testing.TestCase.prototype.cleanStackTrace_ = function(stack, errMsg) {
+  if (!stack) {
+    return;
+  }
+
+  // The Error class includes the message in the stack. Don't duplicate it.
+  stack = stack.replace('Error: ' + errMsg + '\n', 'Error\n');
+
+  // Remove extra goog.testing.TestCase frames from all stacks (main error +
+  // causes if they exists)
+  var index = 0;
+  while (index < stack.length) {
+    var extraFrameIndex = stack.search(
+        /\s*(\bat\b)?\s*(goog\.labs\.testing\.EnvironmentTestCase_\.)?goog\.testing\.(Continuation_\.(prototype\.)?run|TestCase\.(prototype\.)?(execute|cycleTests|startNextBatch_|safeRunTest_|invokeFunction_?))/);
+    if (extraFrameIndex < 0) {
+      break;
+    }
+
+    var causedByIndex = stack.indexOf('Caused by:', extraFrameIndex);
+    index = causedByIndex < 0 ? stack.length : causedByIndex;
+
+
+    stack = stack.substring(0, extraFrameIndex + 1) + stack.substring(index);
+  }
+
+  return stack;
 };
 
 /**

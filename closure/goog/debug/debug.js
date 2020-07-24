@@ -351,10 +351,10 @@ goog.debug.serializeErrorStack_ = function(e, seen) {
   var cause = e.cause;
   if (cause && !seen[goog.debug.serializeErrorAsKey_(cause)]) {
     stack += '\nCaused by: ';
-    // Some browsers like Chrome add the error message as first frame of the
+    // Some browsers like Chrome add the error message as the first frame of the
     // stack, In this case we don't need to add it. Note: we don't use
-    // String.startsWith method because it can require to be polyfilled.
-    if (!cause.stack || cause.stack.indexOf(cause.message) != 0) {
+    // String.startsWith method because it might have to be polyfilled.
+    if (!cause.stack || cause.stack.indexOf(cause.toString()) != 0) {
       stack += (typeof cause === 'string') ? cause : cause.message + '\n';
     }
     stack += goog.debug.serializeErrorStack_(cause, seen);
