@@ -306,6 +306,13 @@ goog.debug.normalizeErrorObject = function(err) {
       } else {
         message = 'Unknown Error of unknown type';
       }
+
+      // Avoid TypeError since toString could be missing from the instance
+      // (e.g. if created Object.create(null)).
+      if (typeof err.toString === 'function' &&
+          Object.prototype.toString !== err.toString) {
+        message += ': ' + err.toString();
+      }
     }
     return {
       'message': message,
