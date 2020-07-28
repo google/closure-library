@@ -15,8 +15,8 @@ goog.module.declareLegacyNamespace();
 
 const Const = goog.require('goog.string.Const');
 const TypedString = goog.require('goog.string.TypedString');
+const trustedtypes = goog.require('goog.html.trustedtypes');
 const {fail} = goog.require('goog.asserts');
-const {getPolicyPrivateDoNotAccessOrElse} = goog.require('goog.html.trustedtypes');
 
 /**
  * A string-like object which represents JavaScript code and that carries the
@@ -245,7 +245,7 @@ class SafeScript {
    * @private
    */
   initSecurityPrivateDoNotAccessOrElse_(script) {
-    const policy = getPolicyPrivateDoNotAccessOrElse();
+    const policy = trustedtypes.getPolicyPrivateDoNotAccessOrElse();
     this.privateDoNotAccessOrElseSafeScriptWrappedValue_ =
         policy ? policy.createScript(script) : script;
     return this;

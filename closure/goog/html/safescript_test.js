@@ -55,15 +55,22 @@ testSuite({
     assertContains('expected object of type SafeScript', exception.message);
   },
 
-  testUnwrapTrustedScript() {
-    let safeValue = SafeScript.fromConstant(Const.from('script'));
-    let trustedValue = SafeScript.unwrapTrustedScript(safeValue);
+  testUnwrapTrustedScript_policyIsNull() {
+    stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
+      return null;
+    });
+    const safeValue = SafeScript.fromConstant(Const.from('script'));
+    const trustedValue = SafeScript.unwrapTrustedScript(safeValue);
+    assertEquals('string', typeof trustedValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue);
+  },
+
+  testUnwrapTrustedScript_policyIsSet() {
     stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
       return policy;
     });
-    safeValue = SafeScript.fromConstant(Const.from('script'));
-    trustedValue = SafeScript.unwrapTrustedScript(safeValue);
+    const safeValue = SafeScript.fromConstant(Const.from('script'));
+    const trustedValue = SafeScript.unwrapTrustedScript(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
     assertTrue(
         goog.global.TrustedScript ? trustedValue instanceof TrustedScript :

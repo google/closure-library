@@ -378,17 +378,24 @@ testSuite({
         'expected object of type TrustedResourceUrl', exception.message);
   },
 
-  testUnwrapTrustedScriptURL() {
-    let safeValue =
+  testUnwrapTrustedScriptURL_policyIsNull() {
+    stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
+      return null;
+    });
+    const safeValue =
         TrustedResourceUrl.fromConstant(Const.from('https://example.com/'));
-    let trustedValue = TrustedResourceUrl.unwrapTrustedScriptURL(safeValue);
+    const trustedValue = TrustedResourceUrl.unwrapTrustedScriptURL(safeValue);
+    assertEquals('string', typeof trustedValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue);
+  },
+
+  testUnwrapTrustedScriptURL_policyIsSet() {
     stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
       return policy;
     });
-    safeValue =
+    const safeValue =
         TrustedResourceUrl.fromConstant(Const.from('https://example.com/'));
-    trustedValue = TrustedResourceUrl.unwrapTrustedScriptURL(safeValue);
+    const trustedValue = TrustedResourceUrl.unwrapTrustedScriptURL(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
     assertTrue(
         goog.global.TrustedScriptURL ?
