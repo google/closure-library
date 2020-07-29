@@ -18,6 +18,9 @@ const TypedString = goog.require('goog.string.TypedString');
 const trustedtypes = goog.require('goog.html.trustedtypes');
 const {fail} = goog.require('goog.asserts');
 
+/** @const {!Object} */
+const CONSTRUCTOR_TOKEN_PRIVATE = {};
+
 /**
  * A string-like object which represents JavaScript code and that carries the
  * security type contract that its value, as a string, will not cause execution
@@ -59,23 +62,19 @@ const {fail} = goog.require('goog.asserts');
  * @implements {TypedString}
  */
 class SafeScript {
-  constructor() {
+  /**
+   * @param {!TrustedScript|string} value
+   * @param {!Object} token package-internal implementation detail.
+   */
+  constructor(value, token) {
     /**
      * The contained value of this SafeScript.  The field has a purposely ugly
      * name to make (non-compiled) code that attempts to directly access this
      * field stand out.
      * @private {!TrustedScript|string}
      */
-    this.privateDoNotAccessOrElseSafeScriptWrappedValue_ = '';
-
-    /**
-     * A type marker used to implement additional run-time type checking.
-     * @see SafeScript#unwrap
-     * @const {!Object}
-     * @private
-     */
-    this.SAFE_SCRIPT_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
-        TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE;
+    this.privateDoNotAccessOrElseSafeScriptWrappedValue_ =
+        (token === CONSTRUCTOR_TOKEN_PRIVATE) ? value : '';
 
     /**
      * @override
@@ -195,13 +194,8 @@ class SafeScript {
     // Specifically, the following checks are performed:
     // 1. The object is an instance of the expected type.
     // 2. The object is not an instance of a subclass.
-    // 3. The object carries a type marker for the expected type. "Faking" an
-    // object requires a reference to the type marker, which has names intended
-    // to stand out in code reviews.
     if (safeScript instanceof SafeScript &&
-        safeScript.constructor === SafeScript &&
-        safeScript.SAFE_SCRIPT_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ ===
-            TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE) {
+        safeScript.constructor === SafeScript) {
       return safeScript.privateDoNotAccessOrElseSafeScriptWrappedValue_;
     } else {
       fail(
@@ -233,22 +227,9 @@ class SafeScript {
    * @package
    */
   static createSafeScriptSecurityPrivateDoNotAccessOrElse(script) {
-    return new SafeScript().initSecurityPrivateDoNotAccessOrElse_(script);
-  }
-
-  /**
-   * Called from createSafeScriptSecurityPrivateDoNotAccessOrElse(). This
-   * method exists only so that the compiler can dead code eliminate static
-   * fields (like EMPTY) when they're not accessed.
-   * @param {string} script
-   * @return {!SafeScript}
-   * @private
-   */
-  initSecurityPrivateDoNotAccessOrElse_(script) {
     const policy = trustedtypes.getPolicyPrivateDoNotAccessOrElse();
-    this.privateDoNotAccessOrElseSafeScriptWrappedValue_ =
-        policy ? policy.createScript(script) : script;
-    return this;
+    const trustedScript = policy ? policy.createScript(script) : script;
+    return new SafeScript(trustedScript, CONSTRUCTOR_TOKEN_PRIVATE);
   }
 }
 
@@ -267,14 +248,6 @@ if (goog.DEBUG) {
         this.privateDoNotAccessOrElseSafeScriptWrappedValue_ + '}';
   };
 }
-
-
-/**
- * Type marker for the SafeScript type, used to implement additional
- * run-time type checking.
- * @const {!Object}
- */
-const TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE = {};
 
 
 /**

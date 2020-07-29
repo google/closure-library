@@ -39,15 +39,11 @@ testSuite({
   /** @suppress {checkTypes} */
   testUnwrap() {
     const privateFieldName = 'privateDoNotAccessOrElseSafeScriptWrappedValue_';
-    const markerFieldName =
-        'SAFE_SCRIPT_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
     const propNames =
         googObject.getKeys(SafeScript.fromConstant(Const.from('')));
     assertContains(privateFieldName, propNames);
-    assertContains(markerFieldName, propNames);
     const evil = {};
     evil[privateFieldName] = 'var string = \'evil\';';
-    evil[markerFieldName] = {};
 
     const exception = assertThrows(() => {
       SafeScript.unwrap(evil);
