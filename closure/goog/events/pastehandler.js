@@ -43,7 +43,7 @@ goog.require('goog.userAgent');
  * pasted in the `element`. Uses heuristics to detect paste events in FF2.
  * See more details of the heuristic on {@link #handleEvent_}.
  *
- * @param {Element} element The textarea element we are listening on.
+ * @param {!Element} element The textarea element we are listening on.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
@@ -52,7 +52,7 @@ goog.events.PasteHandler = function(element) {
 
   /**
    * The element that you want to listen for paste events on.
-   * @type {Element}
+   * @type {!Element}
    * @private
    */
   this.element_ = element;
@@ -67,7 +67,7 @@ goog.events.PasteHandler = function(element) {
 
   /**
    * Handler for events.
-   * @type {goog.events.EventHandler<!goog.events.PasteHandler>}
+   * @type {?goog.events.EventHandler<!goog.events.PasteHandler>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
@@ -100,7 +100,7 @@ goog.events.PasteHandler = function(element) {
    * ConditionalDelay used to poll for changes in the text element once users
    * paste text. Browsers fire paste events BEFORE the text is actually present
    * in the element.value property.
-   * @type {goog.async.ConditionalDelay}
+   * @type {?goog.async.ConditionalDelay}
    * @private
    */
   this.delay_ =
@@ -176,7 +176,7 @@ goog.events.PasteHandler.State = {
 
 /**
  * The initial state of the paste detection algorithm.
- * @type {goog.events.PasteHandler.State}
+ * @type {!goog.events.PasteHandler.State}
  * @private
  */
 goog.events.PasteHandler.prototype.state_ = goog.events.PasteHandler.State.INIT;
@@ -192,7 +192,7 @@ goog.events.PasteHandler.prototype.previousEvent_;
 
 /**
  * A logger, used to help us debug the algorithm.
- * @type {goog.log.Logger}
+ * @type {?goog.log.Logger}
  * @private
  */
 goog.events.PasteHandler.prototype.logger_ =
@@ -212,7 +212,7 @@ goog.events.PasteHandler.prototype.disposeInternal = function() {
 /**
  * Returns the current state of the paste detection algorithm. Used mostly for
  * testing.
- * @return {goog.events.PasteHandler.State} The current state of the class.
+ * @return {!goog.events.PasteHandler.State} The current state of the class.
  */
 goog.events.PasteHandler.prototype.getState = function() {
   return this.state_;
@@ -221,10 +221,9 @@ goog.events.PasteHandler.prototype.getState = function() {
 
 /**
  * Returns the event handler.
- * @return {goog.events.EventHandler<T>} The event handler.
+ * @return {?goog.events.EventHandler<!goog.events.PasteHandler>} The event
+ *     handler.
  * @protected
- * @this {T}
- * @template T
  */
 goog.events.PasteHandler.prototype.getEventHandler = function() {
   return this.eventHandler_;
@@ -250,7 +249,7 @@ goog.events.PasteHandler.prototype.checkUpdatedText_ = function() {
 
 /**
  * Dispatches the paste event.
- * @param {goog.events.BrowserEvent} e The underlying browser event.
+ * @param {!goog.events.BrowserEvent} e The underlying browser event.
  * @private
  */
 goog.events.PasteHandler.prototype.dispatch_ = function(e) {
@@ -319,7 +318,7 @@ goog.events.PasteHandler.prototype.dispatch_ = function(e) {
  * user is typing normally
  * INIT -> FOCUS -> TYPING -> INPUT -> INIT
  *
- * @param {goog.events.BrowserEvent} e The underlying browser event.
+ * @param {!goog.events.BrowserEvent} e The underlying browser event.
  * @private
  */
 goog.events.PasteHandler.prototype.handleEvent_ = function(e) {
@@ -359,7 +358,7 @@ goog.events.PasteHandler.prototype.handleEvent_ = function(e) {
  * For browsers that support the 'paste' event, we match it and stay on the same
  * state.
  *
- * @param {goog.events.BrowserEvent} e The underlying browser event.
+ * @param {!goog.events.BrowserEvent} e The underlying browser event.
  * @private
  */
 goog.events.PasteHandler.prototype.handleUnderInit_ = function(e) {
@@ -406,7 +405,7 @@ goog.events.PasteHandler.prototype.handleUnderInit_ = function(e) {
  * do this by checking a minimum time between the two events. This heuristic
  * seems to work well, but it is obviously a heuristic :).
  *
- * @param {goog.events.BrowserEvent} e The underlying browser event.
+ * @param {!goog.events.BrowserEvent} e The underlying browser event.
  * @private
  */
 goog.events.PasteHandler.prototype.handleUnderFocused_ = function(e) {
@@ -471,7 +470,7 @@ goog.events.PasteHandler.prototype.handleUnderFocused_ = function(e) {
  *
  * This is the state that we match the ctrl+v pattern.
  *
- * @param {goog.events.BrowserEvent} e The underlying browser event.
+ * @param {!goog.events.BrowserEvent} e The underlying browser event.
  * @private
  */
 goog.events.PasteHandler.prototype.handleUnderTyping_ = function(e) {
