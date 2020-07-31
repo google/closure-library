@@ -367,9 +367,7 @@ testSuite({
 
   testSafeUrlSanitize_sanitize() {
     for (const v of safeUrlTestVectors.BASE_VECTORS) {
-      const isDataUrl = v.input.match(/^data:/i);
-      const observed =
-          isDataUrl ? SafeUrl.fromDataUrl(v.input) : SafeUrl.sanitize(v.input);
+      const observed = SafeUrl.sanitize(v.input);
       assertEquals(v.expected, SafeUrl.unwrap(observed));
     }
   },
