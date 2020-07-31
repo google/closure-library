@@ -46,37 +46,40 @@ goog.require('goog.string.TypedString');
  * Trusted Types Web API.
  *
  * @see goog.html.TrustedResourceUrl#fromConstant
- * @constructor
  * @final
  * @struct
  * @implements {goog.i18n.bidi.DirectionalString}
  * @implements {goog.string.TypedString}
- * @param {!Object=} opt_token package-internal implementation detail.
- * @param {!TrustedScriptURL|string=} opt_content package-internal
- *     implementation detail.
  */
-goog.html.TrustedResourceUrl = function(opt_token, opt_content) {
+goog.html.TrustedResourceUrl = class {
   /**
-   * The contained value of this TrustedResourceUrl.  The field has a purposely
-   * ugly name to make (non-compiled) code that attempts to directly access this
-   * field stand out.
-   * @const
-   * @private {!TrustedScriptURL|string}
+   * @param {!Object=} opt_token package-internal implementation detail.
+   * @param {!TrustedScriptURL|string=} opt_content package-internal
+   *     implementation detail.
    */
-  this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ =
-      ((opt_token ===
-        goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_) &&
-       opt_content) ||
-      '';
+  constructor(opt_token, opt_content) {
+    /**
+     * The contained value of this TrustedResourceUrl.  The field has a
+     * purposely ugly name to make (non-compiled) code that attempts to directly
+     * access this field stand out.
+     * @const
+     * @private {!TrustedScriptURL|string}
+     */
+    this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ =
+        ((opt_token ===
+          goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_) &&
+         opt_content) ||
+        '';
 
-  /**
-   * A type marker used to implement additional run-time type checking.
-   * @see goog.html.TrustedResourceUrl#unwrap
-   * @const {!Object}
-   * @private
-   */
-  this.TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
-      goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
+    /**
+     * A type marker used to implement additional run-time type checking.
+     * @see goog.html.TrustedResourceUrl#unwrap
+     * @const {!Object}
+     * @private
+     */
+    this.TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
+        goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
+  }
 };
 
 

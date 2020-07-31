@@ -56,34 +56,37 @@ goog.require('goog.string.internal');
  * @see goog.html.SafeUrl#fromConstant
  * @see goog.html.SafeUrl#from
  * @see goog.html.SafeUrl#sanitize
- * @constructor
  * @final
  * @struct
  * @implements {goog.i18n.bidi.DirectionalString}
  * @implements {goog.string.TypedString}
- * @param {!Object=} opt_token package-internal implementation detail.
- * @param {string=} opt_content package-internal implementation detail.
  */
-goog.html.SafeUrl = function(opt_token, opt_content) {
+goog.html.SafeUrl = class {
   /**
-   * The contained value of this SafeUrl.  The field has a purposely ugly
-   * name to make (non-compiled) code that attempts to directly access this
-   * field stand out.
-   * @private {string}
+   * @param {!Object=} opt_token package-internal implementation detail.
+   * @param {string=} opt_content package-internal implementation detail.
    */
-  this.privateDoNotAccessOrElseSafeUrlWrappedValue_ =
-      ((opt_token === goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_) &&
-       opt_content) ||
-      '';
+  constructor(opt_token, opt_content) {
+    /**
+     * The contained value of this SafeUrl.  The field has a purposely ugly
+     * name to make (non-compiled) code that attempts to directly access this
+     * field stand out.
+     * @private {string}
+     */
+    this.privateDoNotAccessOrElseSafeUrlWrappedValue_ =
+        ((opt_token === goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_) &&
+         opt_content) ||
+        '';
 
-  /**
-   * A type marker used to implement additional run-time type checking.
-   * @see goog.html.SafeUrl#unwrap
-   * @const {!Object}
-   * @private
-   */
-  this.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
-      goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
+    /**
+     * A type marker used to implement additional run-time type checking.
+     * @see goog.html.SafeUrl#unwrap
+     * @const {!Object}
+     * @private
+     */
+    this.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
+        goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
+  };
 };
 
 
