@@ -39,15 +39,11 @@ testSuite({
   /** @suppress {checkTypes} */
   testUnwrap() {
     const privateFieldName = 'privateDoNotAccessOrElseSafeScriptWrappedValue_';
-    const markerFieldName =
-        'SAFE_SCRIPT_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
     const propNames =
         googObject.getKeys(SafeScript.fromConstant(Const.from('')));
     assertContains(privateFieldName, propNames);
-    assertContains(markerFieldName, propNames);
     const evil = {};
     evil[privateFieldName] = 'var string = \'evil\';';
-    evil[markerFieldName] = {};
 
     const exception = assertThrows(() => {
       SafeScript.unwrap(evil);
@@ -55,15 +51,22 @@ testSuite({
     assertContains('expected object of type SafeScript', exception.message);
   },
 
-  testUnwrapTrustedScript() {
-    let safeValue = SafeScript.fromConstant(Const.from('script'));
-    let trustedValue = SafeScript.unwrapTrustedScript(safeValue);
+  testUnwrapTrustedScript_policyIsNull() {
+    stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
+      return null;
+    });
+    const safeValue = SafeScript.fromConstant(Const.from('script'));
+    const trustedValue = SafeScript.unwrapTrustedScript(safeValue);
+    assertEquals('string', typeof trustedValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue);
+  },
+
+  testUnwrapTrustedScript_policyIsSet() {
     stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
       return policy;
     });
-    safeValue = SafeScript.fromConstant(Const.from('script'));
-    trustedValue = SafeScript.unwrapTrustedScript(safeValue);
+    const safeValue = SafeScript.fromConstant(Const.from('script'));
+    const trustedValue = SafeScript.unwrapTrustedScript(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
     assertTrue(
         goog.global.TrustedScript ? trustedValue instanceof TrustedScript :

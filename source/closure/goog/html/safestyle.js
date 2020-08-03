@@ -23,7 +23,7 @@ goog.require('goog.string.internal');
 
 /**
  * A string-like object which represents a sequence of CSS declarations
- * ({@code propertyName1: propertyvalue1; propertyName2: propertyValue2; ...})
+ * (`propertyName1: propertyvalue1; propertyName2: propertyValue2; ...`)
  * and that carries the security type contract that its value, as a string,
  * will not cause untrusted script execution (XSS) when evaluated as CSS in a
  * browser.
@@ -54,7 +54,7 @@ goog.require('goog.string.internal');
  * A SafeStyle may never contain literal angle brackets. Otherwise, it could
  * be unsafe to place a SafeStyle into a &lt;style&gt; tag (where it can't
  * be HTML escaped). For example, if the SafeStyle containing
- * "{@code font: 'foo &lt;style/&gt;&lt;script&gt;evil&lt;/script&gt;'}" were
+ * `font: 'foo &lt;style/&gt;&lt;script&gt;evil&lt;/script&gt;'` were
  * interpolated within a &lt;style&gt; tag, this would then break out of the
  * style context into HTML.
  *
@@ -65,16 +65,16 @@ goog.require('goog.string.internal');
  *
  * Values of this type must be composable, i.e. for any two values
  * `style1` and `style2` of this type,
- * {@code goog.html.SafeStyle.unwrap(style1) +
- * goog.html.SafeStyle.unwrap(style2)} must itself be a value that satisfies
+ * `goog.html.SafeStyle.unwrap(style1) +
+ * goog.html.SafeStyle.unwrap(style2)` must itself be a value that satisfies
  * the SafeStyle type constraint. This requirement implies that for any value
  * `style` of this type, `goog.html.SafeStyle.unwrap(style)` must
  * not end in a "property value" or "property name" context. For example,
- * a value of {@code background:url("} or {@code font-} would not satisfy the
+ * a value of `background:url("` or `font-` would not satisfy the
  * SafeStyle contract. This is because concatenating such strings with a
  * second value that itself does not contain unsafe CSS can result in an
- * overall string that does. For example, if {@code javascript:evil())"} is
- * appended to {@code background:url("}, the resulting string may result in
+ * overall string that does. For example, if `javascript:evil())"` is
+ * appended to `background:url("}, the resulting string may result in
  * the execution of a malicious script.
  *
  * TODO(mlourenco): Consider whether we should implement UTF-8 interchange
@@ -102,28 +102,29 @@ goog.require('goog.string.internal');
  * @see goog.html.SafeStyle#create
  * @see goog.html.SafeStyle#fromConstant
  * @see http://www.w3.org/TR/css3-syntax/
- * @constructor
  * @final
  * @struct
  * @implements {goog.string.TypedString}
  */
-goog.html.SafeStyle = function() {
-  /**
-   * The contained value of this SafeStyle.  The field has a purposely
-   * ugly name to make (non-compiled) code that attempts to directly access this
-   * field stand out.
-   * @private {string}
-   */
-  this.privateDoNotAccessOrElseSafeStyleWrappedValue_ = '';
+goog.html.SafeStyle = class {
+  constructor() {
+    /**
+     * The contained value of this SafeStyle.  The field has a purposely
+     * ugly name to make (non-compiled) code that attempts to directly access
+     * this field stand out.
+     * @private {string}
+     */
+    this.privateDoNotAccessOrElseSafeStyleWrappedValue_ = '';
 
-  /**
-   * A type marker used to implement additional run-time type checking.
-   * @see goog.html.SafeStyle#unwrap
-   * @const {!Object}
-   * @private
-   */
-  this.SAFE_STYLE_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
-      goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
+    /**
+     * A type marker used to implement additional run-time type checking.
+     * @see goog.html.SafeStyle#unwrap
+     * @const {!Object}
+     * @private
+     */
+    this.SAFE_STYLE_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
+        goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
+  }
 };
 
 
@@ -147,7 +148,7 @@ goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
  * Creates a SafeStyle object from a compile-time constant string.
  *
  * `style` should be in the format
- * {@code name: value; [name: value; ...]} and must not have any < or >
+ * `name: value; [name: value; ...]` and must not have any < or >
  * characters in it. This is so that SafeStyle's contract is preserved,
  * allowing the SafeStyle to correctly be interpreted as a sequence of CSS
  * declarations and without affecting the syntactic structure of any
@@ -321,7 +322,7 @@ goog.html.SafeStyle.PropertyMap;
 
 /**
  * Creates a new SafeStyle object from the properties specified in the map.
- * @param {goog.html.SafeStyle.PropertyMap} map Mapping of property names to
+ * @param {!goog.html.SafeStyle.PropertyMap} map Mapping of property names to
  *     their values, for example {'margin': '1px'}. Names must consist of
  *     [-_a-zA-Z0-9]. Values might be strings consisting of
  *     [-,.'"%_!# a-zA-Z0-9[\]], where ", ', and [] must be properly balanced.
@@ -331,8 +332,8 @@ goog.html.SafeStyle.PropertyMap;
  *     also support array whose elements are joined with ' '. Null value causes
  *     skipping the property.
  * @return {!goog.html.SafeStyle}
- * @throws {Error} If invalid name is provided.
- * @throws {goog.asserts.AssertionError} If invalid value is provided. With
+ * @throws {!Error} If invalid name is provided.
+ * @throws {!goog.asserts.AssertionError} If invalid value is provided. With
  *     disabled assertions, invalid value is replaced by
  *     goog.html.SafeStyle.INNOCUOUS_STRING.
  */

@@ -76,15 +76,22 @@ testSuite({
     assertContains('expected object of type SafeHtml', exception.message);
   },
 
-  testUnwrapTrustedHTML() {
-    let safeValue = SafeHtml.htmlEscape('HTML');
-    let trustedValue = SafeHtml.unwrapTrustedHTML(safeValue);
+  testUnwrapTrustedHTML_policyIsNull() {
+    stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
+      return null;
+    });
+    const safeValue = SafeHtml.htmlEscape('HTML');
+    const trustedValue = SafeHtml.unwrapTrustedHTML(safeValue);
+    assertEquals('string', typeof trustedValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue);
+  },
+
+  testUnwrapTrustedHTML_policyIsSet() {
     stubs.set(trustedtypes, 'getPolicyPrivateDoNotAccessOrElse', function() {
       return policy;
     });
-    safeValue = SafeHtml.htmlEscape('HTML');
-    trustedValue = SafeHtml.unwrapTrustedHTML(safeValue);
+    const safeValue = SafeHtml.htmlEscape('HTML');
+    const trustedValue = SafeHtml.unwrapTrustedHTML(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
     assertTrue(
         goog.global.TrustedHTML ? trustedValue instanceof TrustedHTML :

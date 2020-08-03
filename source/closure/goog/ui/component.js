@@ -1047,8 +1047,15 @@ goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
     // Changing the position of an existing child, move the DOM node (if
     // necessary).
     var contentElement = this.getContentElement();
-    var insertBeforeElement = contentElement.childNodes[index] || null;
-    if (insertBeforeElement != child.getElement()) {
+    var elementAtDestinationIndex = contentElement.childNodes[index] || null;
+    // Don't move the node if it's already in the destination index.
+    if (elementAtDestinationIndex != child.getElement()) {
+      // We remove the node before calculating the new index, otherwise we get
+      // an off-by-one error when we move it to the right of its current index.
+      if (child.getElement().parentElement == contentElement) {
+        contentElement.removeChild(child.getElement());
+      }
+      var insertBeforeElement = contentElement.childNodes[index] || null;
       contentElement.insertBefore(
           /** @type {!Node} */ (child.getElement()), insertBeforeElement);
     }

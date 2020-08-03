@@ -49,7 +49,14 @@ const encodedUrl = 'http%3A%2F%2Fwww.your.tst%2Fmore%2Fbogus.js';
  */
 function createError(
     filename, line, message, stack = undefined, cause = undefined) {
-  const error = {message: message, fileName: filename, lineNumber: line};
+  const error = {
+    message: message,
+    fileName: filename,
+    lineNumber: line,
+    toString: function() {
+      return 'Error: ' + message;
+    }
+  };
   if (stack) {
     error['stack'] = stack;
   }
@@ -225,7 +232,7 @@ testSuite({
 
     // For this cause, the error message is part of the stacktrace.
     const causetrace1 =
-        'Cause1 Error\n([object Object])@http://a.b.c:813/b/d.js:35';
+        'Error: Cause1 Error\n([object Object])@http://a.b.c:813/b/d.js:35';
     const causetrace2 =
         '$AB$B$Wx$([object Object])@http://a.b.c:83/c/e.js:101\n' +
         '([object Object])@http://a.b.c:813/c/d.js:3';
@@ -237,7 +244,7 @@ testSuite({
     const expectedTrace = 'Error("Something Wrong")@:0\n' +
         '$MF$E$Nx$([object Object])@http://a.b.c:83/a/f.js:901\n' +
         '([object Object])@http://a.b.c:813/a/f.js:37\n' +
-        'Caused by: Cause1 Error\n' +
+        'Caused by: Error: Cause1 Error\n' +
         '([object Object])@http://a.b.c:813/b/d.js:35\n' +
         'Caused by: Cause2 Error\n' +
         '$AB$B$Wx$([object Object])@http://a.b.c:83/c/e.js:101\n' +
@@ -277,7 +284,7 @@ testSuite({
 
     // For this cause, the error message is part of the stacktrace.
     const causetrace1 =
-        'Cause1 Error\n([object Object])@http://a.b.c:813/b/d.js:35';
+        'Error: Cause1 Error\n([object Object])@http://a.b.c:813/b/d.js:35';
     const causetrace2 =
         '$AB$B$Wx$([object Object])@http://a.b.c:83/c/e.js:101\n' +
         '([object Object])@http://a.b.c:813/c/d.js:3';
@@ -290,7 +297,7 @@ testSuite({
     const expectedTrace = 'Error("Something Wrong")@:0\n' +
         '$MF$E$Nx$([object Object])@http://a.b.c:83/a/f.js:901\n' +
         '([object Object])@http://a.b.c:813/a/f.js:37\n' +
-        'Caused by: Cause1 Error\n' +
+        'Caused by: Error: Cause1 Error\n' +
         '([object Object])@http://a.b.c:813/b/d.js:35\n' +
         'Caused by: Cause2 Error\n' +
         '$AB$B$Wx$([object Object])@http://a.b.c:83/c/e.js:101\n' +

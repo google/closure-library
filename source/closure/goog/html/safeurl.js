@@ -56,34 +56,37 @@ goog.require('goog.string.internal');
  * @see goog.html.SafeUrl#fromConstant
  * @see goog.html.SafeUrl#from
  * @see goog.html.SafeUrl#sanitize
- * @constructor
  * @final
  * @struct
  * @implements {goog.i18n.bidi.DirectionalString}
  * @implements {goog.string.TypedString}
- * @param {!Object=} opt_token package-internal implementation detail.
- * @param {string=} opt_content package-internal implementation detail.
  */
-goog.html.SafeUrl = function(opt_token, opt_content) {
+goog.html.SafeUrl = class {
   /**
-   * The contained value of this SafeUrl.  The field has a purposely ugly
-   * name to make (non-compiled) code that attempts to directly access this
-   * field stand out.
-   * @private {string}
+   * @param {!Object=} opt_token package-internal implementation detail.
+   * @param {string=} opt_content package-internal implementation detail.
    */
-  this.privateDoNotAccessOrElseSafeUrlWrappedValue_ =
-      ((opt_token === goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_) &&
-       opt_content) ||
-      '';
+  constructor(opt_token, opt_content) {
+    /**
+     * The contained value of this SafeUrl.  The field has a purposely ugly
+     * name to make (non-compiled) code that attempts to directly access this
+     * field stand out.
+     * @private {string}
+     */
+    this.privateDoNotAccessOrElseSafeUrlWrappedValue_ =
+        ((opt_token === goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_) &&
+         opt_content) ||
+        '';
 
-  /**
-   * A type marker used to implement additional run-time type checking.
-   * @see goog.html.SafeUrl#unwrap
-   * @const {!Object}
-   * @private
-   */
-  this.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
-      goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
+    /**
+     * A type marker used to implement additional run-time type checking.
+     * @see goog.html.SafeUrl#unwrap
+     * @const {!Object}
+     * @private
+     */
+    this.SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
+        goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
+  };
 };
 
 
@@ -670,8 +673,8 @@ goog.html.SafeUrl.SAFE_URL_PATTERN = goog.html.SAFE_URL_PATTERN_;
  * to match a pattern of commonly used safe URLs. If validation fails, `null` is
  * returned.
  *
- * `url` may be a URL with the `http:`, `https:`, `mailto:`, or `ftp:` scheme,
- * or a relative URL (i.e., a URL without a scheme; specifically, a
+ * `url` may be a URL with the `http:`, `https:`, `mailto:`, `ftp:` or `data`
+ * scheme, or a relative URL (i.e., a URL without a scheme; specifically, a
  * scheme-relative, absolute-path-relative, or path-relative URL).
  *
  * @see http://url.spec.whatwg.org/#concept-relative-url
@@ -690,7 +693,7 @@ goog.html.SafeUrl.trySanitize = function(url) {
     url = String(url);
   }
   if (!goog.html.SAFE_URL_PATTERN_.test(url)) {
-    return null;
+    return goog.html.SafeUrl.tryFromDataUrl(url);
   }
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
@@ -701,8 +704,8 @@ goog.html.SafeUrl.trySanitize = function(url) {
  * validated to match a pattern of commonly used safe URLs. If validation fails,
  * `goog.html.SafeUrl.INNOCUOUS_URL` is returned.
  *
- * `url` may be a URL with the `http:`, `https:`, `mailto:` or `ftp:` scheme,
- * or a relative URL (i.e., a URL without a scheme; specifically, a
+ * `url` may be a URL with the `http:`, `https:`, `mailto:`, `ftp:` or `data`
+ * scheme, or a relative URL (i.e., a URL without a scheme; specifically, a
  * scheme-relative, absolute-path-relative, or path-relative URL).
  *
  * @see http://url.spec.whatwg.org/#concept-relative-url
