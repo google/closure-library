@@ -31,13 +31,6 @@ goog.testing.singleton.resetAll = function() {
   }
 };
 
-/**
- * Deletes all singleton instances, so `getInstance` will return a new
- * instance on next call.
- * @const
- */
-goog.testing.singleton.reset = goog.testing.singleton.resetAll;
-
 
 /**
  * @deprecated Please use `goog.addSingletonGetter`.
