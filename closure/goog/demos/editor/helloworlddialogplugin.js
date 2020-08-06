@@ -25,18 +25,62 @@ goog.require('goog.ui.editor.AbstractDialog');
 
 /**
  * A plugin that opens the hello world dialog.
- * @constructor
- * @extends {goog.editor.plugins.AbstractDialogPlugin}
  * @final
+ * @unrestricted
  */
-goog.demos.editor.HelloWorldDialogPlugin = function() {
-  goog.editor.plugins.AbstractDialogPlugin.call(
-      this,
-      goog.demos.editor.HelloWorldDialogPlugin.Command.HELLO_WORLD_DIALOG);
+goog.demos.editor.HelloWorldDialogPlugin =
+    class extends goog.editor.plugins.AbstractDialogPlugin {
+  constructor() {
+    super(goog.demos.editor.HelloWorldDialogPlugin.Command.HELLO_WORLD_DIALOG);
+  }
+
+  /**
+   * Creates a new instance of the dialog and registers for the relevant events.
+   * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
+   *     create the dialog.
+   * @return {!goog.demos.editor.HelloWorldDialog} The dialog.
+   * @override
+   * @protected
+   */
+  createDialog(dialogDomHelper) {
+    var dialog = new goog.demos.editor.HelloWorldDialog(dialogDomHelper);
+    dialog.addEventListener(
+        goog.ui.editor.AbstractDialog.EventType.OK, this.handleOk_, false,
+        this);
+    return dialog;
+  }
+
+  /**
+   * Handles the OK event from the dialog by inserting the hello world message
+   * into the field.
+   * @param {goog.demos.editor.HelloWorldDialog.OkEvent} e OK event object.
+   * @private
+   */
+  handleOk_(e) {
+    // First restore the selection so we can manipulate the field's content
+    // according to what was selected.
+    this.restoreOriginalSelection();
+
+    // Notify listeners that the field's contents are about to change.
+    this.getFieldObject().dispatchBeforeChange();
+
+    // Now we can clear out what was previously selected (if anything).
+    var range = this.getFieldObject().getRange();
+    range.removeContents();
+    // And replace it with a span containing our hello world message.
+    var createdNode = this.getFieldDomHelper().createDom(
+        goog.dom.TagName.SPAN, null, e.message);
+    createdNode = range.insertNode(createdNode, false);
+    // Place the cursor at the end of the new text node (false == to the right).
+    goog.editor.range.placeCursorNextTo(createdNode, false);
+
+    // Notify listeners that the field's selection has changed.
+    this.getFieldObject().dispatchSelectionChangeEvent();
+    // Notify listeners that the field's contents have changed.
+    this.getFieldObject().dispatchChange();
+  }
 };
-goog.inherits(
-    goog.demos.editor.HelloWorldDialogPlugin,
-    goog.editor.plugins.AbstractDialogPlugin);
+
 
 
 /**
@@ -56,52 +100,5 @@ goog.demos.editor.HelloWorldDialogPlugin.prototype.getTrogClassId =
 // *** Protected interface ************************************************** //
 
 
-/**
- * Creates a new instance of the dialog and registers for the relevant events.
- * @param {goog.dom.DomHelper} dialogDomHelper The dom helper to be used to
- *     create the dialog.
- * @return {!goog.demos.editor.HelloWorldDialog} The dialog.
- * @override
- * @protected
- */
-goog.demos.editor.HelloWorldDialogPlugin.prototype.createDialog = function(
-    dialogDomHelper) {
-  var dialog = new goog.demos.editor.HelloWorldDialog(dialogDomHelper);
-  dialog.addEventListener(
-      goog.ui.editor.AbstractDialog.EventType.OK, this.handleOk_, false, this);
-  return dialog;
-};
-
 
 // *** Private implementation *********************************************** //
-
-
-/**
- * Handles the OK event from the dialog by inserting the hello world message
- * into the field.
- * @param {goog.demos.editor.HelloWorldDialog.OkEvent} e OK event object.
- * @private
- */
-goog.demos.editor.HelloWorldDialogPlugin.prototype.handleOk_ = function(e) {
-  // First restore the selection so we can manipulate the field's content
-  // according to what was selected.
-  this.restoreOriginalSelection();
-
-  // Notify listeners that the field's contents are about to change.
-  this.getFieldObject().dispatchBeforeChange();
-
-  // Now we can clear out what was previously selected (if anything).
-  var range = this.getFieldObject().getRange();
-  range.removeContents();
-  // And replace it with a span containing our hello world message.
-  var createdNode = this.getFieldDomHelper().createDom(
-      goog.dom.TagName.SPAN, null, e.message);
-  createdNode = range.insertNode(createdNode, false);
-  // Place the cursor at the end of the new text node (false == to the right).
-  goog.editor.range.placeCursorNextTo(createdNode, false);
-
-  // Notify listeners that the field's selection has changed.
-  this.getFieldObject().dispatchSelectionChangeEvent();
-  // Notify listeners that the field's contents have changed.
-  this.getFieldObject().dispatchChange();
-};
