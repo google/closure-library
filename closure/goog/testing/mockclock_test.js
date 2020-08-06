@@ -11,6 +11,7 @@ const GoogPromise = goog.require('goog.Promise');
 const MockClock = goog.require('goog.testing.MockClock');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const Timer = goog.require('goog.Timer');
+const array = goog.require('goog.array');
 const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
 const recordFunction = goog.require('goog.testing.recordFunction');
@@ -18,9 +19,150 @@ const testSuite = goog.require('goog.testing.testSuite');
 
 const stubs = new PropertyReplacer();
 
+/**
+ * @param {number} ms
+ * @return {!Promise<void>} Resolves after ms
+ */
+function waitFor(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 testSuite({
   tearDown() {
     stubs.reset();
+  },
+
+  testAsyncSupport: {
+    setUp() {
+      this.clock = new MockClock(true);
+    },
+
+    tearDown() {
+      this.clock.uninstall();
+    },
+
+    async testInterleavedGoogPromiseCallbacks() {
+      const result = [];
+
+      await GoogPromise.resolve(null);
+      result.push(1);
+
+      setTimeout(() => result.push(3), 5);
+      result.push(2);
+      await this.clock.tickAsync(6);
+      result.push(4);
+
+      const promise = GoogPromise.resolve(null)
+                          .then(() => Timer.promise(5))
+                          .then(() => result.push(5))
+                          .then(() => Timer.promise(5));
+
+      await this.clock.tickAsync(11);
+      await promise;
+      result.push(6);
+
+      assertArrayEquals([1, 2, 3, 4, 5, 6], result);
+    },
+
+    async testTimerInNativePromise() {
+      const result = [];
+      const promise = Promise.resolve()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then(() => Timer.promise(5))
+                          .then(() => result.push(1))
+                          .then(() => waitFor(5));
+
+      await this.clock.tickAsync(11);
+      await promise;
+      result.push(2);
+
+      assertArrayEquals([1, 2], result);
+    },
+
+    async testInterleavedNativePromiseCallbacks() {
+      function waitFor(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+      const result = [];
+
+      await Promise.resolve();
+      result.push(1);
+
+      setTimeout(() => result.push(3), 5);
+      result.push(2);
+      await this.clock.tickAsync(6);
+      result.push(4);
+
+      const promise = Timer.promise(5)
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then(() => result.push(5))
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then(() => waitFor(5))
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then()
+                          .then(() => result.push(6));
+
+      await this.clock.tickAsync(11);
+      await promise;
+      result.push(7);
+
+      assertArrayEquals([1, 2, 3, 4, 5, 6, 7], result);
+    },
+
+    async testSequenceOfTimeouts() {
+      const result = [];
+
+      async function runAsyncCode() {
+        for (var i = 0; i < 30; i += 3) {
+          result.push(i);
+          await waitFor(10);
+          result.push(i + 1);
+          await Timer.promise(10);
+          result.push(i + 2);
+        }
+      }
+
+      runAsyncCode();
+      await this.clock.tickAsync(600);
+
+      assertArrayEquals(array.range(30), result);
+    },
   },
 
   testMockClockWasInstalled() {

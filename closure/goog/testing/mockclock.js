@@ -455,27 +455,105 @@ goog.testing.MockClock.prototype.isTimeoutSet = function(timeoutKey) {
  * @private
  */
 goog.testing.MockClock.prototype.runFunctionsWithinRange_ = function(endTime) {
-  var adjustedEndTime = endTime - this.timeoutDelay_;
+  // Repeatedly pop off the last item since the queue is always sorted.
+  while (this.hasQueuedEntriesBefore_(endTime)) {
+    this.runNextQueuedTimeout_();
+  }
+};
+
+
+/**
+ * Increments the MockClock's time by a given number of milliseconds, running
+ * any functions that are now overdue.
+ * @param {number=} millis Number of milliseconds to increment the counter.
+ *     If not specified, clock ticks 1 millisecond.
+ * @return {!Promise<number>} Current mock time in milliseconds.
+ */
+goog.testing.MockClock.prototype.tickAsync = async function(millis = 1) {
+  if (millis < 0) {
+    throw new Error(`Time cannot go backwards (cannot tick by ${millis})`);
+  }
+  const endTime = this.nowMillis_ + millis;
+  await this.runFunctionsWithinRangeAsync_(endTime);
+  this.nowMillis_ = Math.max(this.nowMillis_, endTime);
+  return endTime;
+};
+
+
+/**
+ * Like runFunctionsWithinRange, but pauses to allow native promise callbacks to
+ * run correctly.
+ * @param {number} endTime The latest time in the range, in milliseconds.
+ * @private
+ */
+goog.testing.MockClock.prototype.runFunctionsWithinRangeAsync_ =
+    async function(endTime) {
+  // Let native promises set timers before we start ticking.
+  await goog.testing.MockClock.flushMicroTasks_();
 
   // Repeatedly pop off the last item since the queue is always sorted.
-  while (this.queue_ && this.queue_.length &&
-         this.queue_[this.queue_.length - 1].runAtMillis <= adjustedEndTime) {
-    var timeout = this.queue_.pop();
-
-    if (!(timeout.timeoutKey in this.deletedKeys_)) {
-      // Only move time forwards.
-      this.nowMillis_ =
-          Math.max(this.nowMillis_, timeout.runAtMillis + this.timeoutDelay_);
-      // Call timeout in global scope and pass the timeout key as the argument.
-      this.callbacksTriggered_++;
-      timeout.funcToCall.call(goog.global, timeout.timeoutKey);
-      // In case the interval was cleared in the funcToCall
-      if (timeout.recurring) {
-        this.scheduleFunction_(
-            timeout.timeoutKey, timeout.funcToCall, timeout.millis, true);
-      }
+  while (this.hasQueuedEntriesBefore_(endTime)) {
+    if (this.runNextQueuedTimeout_()) {
+      await goog.testing.MockClock.flushMicroTasks_();
     }
   }
+};
+
+
+/**
+ * Pauses asynchronously to run all promise callbacks in the microtask queue.
+ *
+ * This is optimized to be correct, but to also not be too slow in IE.  It waits
+ * for up to 50 chained `then()` callbacks at once. Microtasks callbacks are run
+ * in batches, so a series of `then()` callbacks scheduled at the same time will
+ * run at once.  The loop is only necessary for to run very deep promise chains.
+ *
+ * Using `setTimeout()`, `setImmediate()`, or a polyfill would make this better,
+ * but also makes it 15x slower in IE.  Without IE, setImmediate and polyfill is
+ * best option.
+ * @private
+ */
+goog.testing.MockClock.flushMicroTasks_ = async function() {
+  for (var i = 0; i < 50; i++) {
+    await Promise.resolve();
+  }
+};
+
+
+/**
+ * @param {number} endTime The latest time in the range, in milliseconds.
+ * @return {boolean}
+ * @private
+ */
+goog.testing.MockClock.prototype.hasQueuedEntriesBefore_ = function(endTime) {
+  var adjustedEndTime = endTime - this.timeoutDelay_;
+  return !!this.queue_ && !!this.queue_.length &&
+      this.queue_[this.queue_.length - 1].runAtMillis <= adjustedEndTime;
+};
+
+
+/**
+ * Runs the next timeout in the queue, advancing the clock.
+ * @return {boolean} False if the timeout was cancelled (and nothing happened).
+ * @private
+ */
+goog.testing.MockClock.prototype.runNextQueuedTimeout_ = function() {
+  var timeout = this.queue_.pop();
+
+  if (timeout.timeoutKey in this.deletedKeys_) return false;
+
+  // Only move time forwards.
+  this.nowMillis_ =
+      Math.max(this.nowMillis_, timeout.runAtMillis + this.timeoutDelay_);
+  // Call timeout in global scope and pass the timeout key as the argument.
+  this.callbacksTriggered_++;
+  timeout.funcToCall.call(goog.global, timeout.timeoutKey);
+  // In case the interval was cleared in the funcToCall
+  if (timeout.recurring) {
+    this.scheduleFunction_(
+        timeout.timeoutKey, timeout.funcToCall, timeout.millis, true);
+  }
+  return true;
 };
 
 
