@@ -53,29 +53,33 @@ const localeSymbols = {
   }
 };
 
-/**
- * @param {string} locale
- * @param {!Array<number>} firstDate
- * @param {!Array<number>} secondDate
- * @param {number|!dateIntervalSymbols.DateIntervalPatternMap} pattern
- * @param {string} expected
- * @constructor
- */
-const Data = function(locale, firstDate, secondDate, pattern, expected) {
-  this.locale = locale;
-  this.firstDate = firstDate;
-  this.secondDate = secondDate;
-  this.pattern = pattern;
-  this.expected = expected;
+/** @unrestricted */
+const Data = class {
+  /**
+   * @param {string} locale
+   * @param {!Array<number>} firstDate
+   * @param {!Array<number>} secondDate
+   * @param {number|!dateIntervalSymbols.DateIntervalPatternMap} pattern
+   * @param {string} expected
+   */
+  constructor(locale, firstDate, secondDate, pattern, expected) {
+    this.locale = locale;
+    this.firstDate = firstDate;
+    this.secondDate = secondDate;
+    this.pattern = pattern;
+    this.expected = expected;
+  }
+
+  /**
+   * @return {string} Error description.
+   */
+  getErrorDescription() {
+    return 'Error for locale:' + this.locale + ' firstDate:\'' +
+        this.firstDate + '\' secondDate:\'' + this.secondDate + '\'';
+  }
 };
 
-/**
- * @return {string} Error description.
- */
-Data.prototype.getErrorDescription = function() {
-  return 'Error for locale:' + this.locale + ' firstDate:\'' + this.firstDate +
-      '\' secondDate:\'' + this.secondDate + '\'';
-};
+
 
 // clang-format off
 const formatTestData = [
