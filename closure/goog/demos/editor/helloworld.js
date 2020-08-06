@@ -22,20 +22,42 @@ goog.require('goog.editor.Plugin');
 
 /**
  * Plugin to insert 'Hello World!' into an editable field.
- * @constructor
- * @extends {goog.editor.Plugin}
  * @final
+ * @unrestricted
  */
-goog.demos.editor.HelloWorld = function() {
-  goog.editor.Plugin.call(this);
-};
-goog.inherits(goog.demos.editor.HelloWorld, goog.editor.Plugin);
+goog.demos.editor.HelloWorld = class extends goog.editor.Plugin {
+  constructor() {
+    super();
+  }
 
+  /** @override */
+  getTrogClassId() {
+    return 'HelloWorld';
+  }
 
-/** @override */
-goog.demos.editor.HelloWorld.prototype.getTrogClassId = function() {
-  return 'HelloWorld';
+  /** @override */
+  isSupportedCommand(command) {
+    return command == goog.demos.editor.HelloWorld.COMMAND.HELLO_WORLD;
+  }
+
+  /**
+   * Executes a command. Does not fire any BEFORECHANGE, CHANGE, or
+   * SELECTIONCHANGE events (these are handled by the super class implementation
+   * of `execCommand`.
+   * @param {string} command Command to execute.
+   * @override
+   * @protected
+   */
+  execCommandInternal(command) {
+    var domHelper = this.getFieldObject().getEditableDomHelper();
+    var range = this.getFieldObject().getRange();
+    range.removeContents();
+    var newNode =
+        domHelper.createDom(goog.dom.TagName.SPAN, null, 'Hello World!');
+    range.insertNode(newNode, false);
+  }
 };
+
 
 
 /**
@@ -44,28 +66,4 @@ goog.demos.editor.HelloWorld.prototype.getTrogClassId = function() {
  */
 goog.demos.editor.HelloWorld.COMMAND = {
   HELLO_WORLD: '+helloWorld'
-};
-
-
-/** @override */
-goog.demos.editor.HelloWorld.prototype.isSupportedCommand = function(command) {
-  return command == goog.demos.editor.HelloWorld.COMMAND.HELLO_WORLD;
-};
-
-
-/**
- * Executes a command. Does not fire any BEFORECHANGE, CHANGE, or
- * SELECTIONCHANGE events (these are handled by the super class implementation
- * of `execCommand`.
- * @param {string} command Command to execute.
- * @override
- * @protected
- */
-goog.demos.editor.HelloWorld.prototype.execCommandInternal = function(command) {
-  var domHelper = this.getFieldObject().getEditableDomHelper();
-  var range = this.getFieldObject().getRange();
-  range.removeContents();
-  var newNode =
-      domHelper.createDom(goog.dom.TagName.SPAN, null, 'Hello World!');
-  range.insertNode(newNode, false);
 };
