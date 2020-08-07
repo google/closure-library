@@ -420,6 +420,20 @@ testSuite({
     mockClock.tick();
   },
 
+  testUnhandledErrorsWithHandler() {
+    stubs.replace(Deferred, 'STRICT_ERRORS', true);
+    const unhandledErrorHandler = recordFunction();
+    Deferred.setUnhandledErrorHandler(unhandledErrorHandler);
+    const d = new Deferred();
+    const error = new Error('Error!');
+
+    d.errback(error);
+    mockClock.tick();
+
+    assertEquals(1, unhandledErrorHandler.getCallCount());
+    assertEquals(error, unhandledErrorHandler.getCalls()[0].getArgument(0));
+  },
+
   testStrictUnhandledErrors() {
     stubs.replace(Deferred, 'STRICT_ERRORS', true);
     var err = Error('never handled');

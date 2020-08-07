@@ -341,6 +341,27 @@ goog.async.Deferred.prototype.errback = function(opt_result) {
 
 
 /**
+ * A method that is invoked with the reason of Deferred's failure for unhandled
+ * errors.
+ * @type {function(*)}
+ * @private
+ */
+goog.async.Deferred.unhandledErrorHandler_ = (e) => {
+  throw e;
+};
+
+
+/**
+ * @param {function(*)} handler A function that will be called with the reason
+ *     of Deferred's failure on unhandled errors. If none is specified, errors
+ *     will fail with `throw`.
+ */
+goog.async.Deferred.setUnhandledErrorHandler = function(handler) {
+  goog.async.Deferred.unhandledErrorHandler_ = handler;
+};
+
+
+/**
  * Attempt to make the error's stack trace be long in that it contains the
  * stack trace from the point where the deferred was created on top of the
  * current stack trace to give additional context.
@@ -906,7 +927,7 @@ goog.async.Deferred.Error_.prototype.throwError = function() {
   goog.asserts.assert(goog.async.Deferred.errorMap_[this.id_],
       'Cannot throw an error that is not scheduled.');
   delete goog.async.Deferred.errorMap_[this.id_];
-  throw this.error_;
+  goog.async.Deferred.unhandledErrorHandler_(this.error_);
 };
 
 

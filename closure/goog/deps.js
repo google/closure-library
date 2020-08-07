@@ -7,7 +7,7 @@
 // See http://goo.gl/SdiwZH
 // clang-format off
 
-goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', ['goog.async.Deferred', 'goog.async.Deferred.AlreadyCalledError', 'goog.async.Deferred.CanceledError'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.debug.Error'], {});
+goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred.js', ['goog.async.Deferred', 'goog.async.Deferred.AlreadyCalledError', 'goog.async.Deferred.CanceledError'], ['goog.Promise', 'goog.Thenable', 'goog.array', 'goog.asserts', 'goog.debug.Error'], {'lang': 'es6'});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred_async_test.js', ['goog.async.deferredAsyncTest'], ['goog.async.Deferred', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferred_test.js', ['goog.async.deferredTest'], ['goog.Promise', 'goog.Thenable', 'goog.async.Deferred', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../third_party/closure/goog/mochikit/async/deferredlist.js', ['goog.async.DeferredList'], ['goog.async.Deferred'], {});
