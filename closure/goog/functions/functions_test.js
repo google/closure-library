@@ -713,4 +713,17 @@ testSuite({
 
     mockClock.uninstall();
   },
+
+  testIsFunction() {
+    assertTrue(functions.isFunction(() => {}));
+    assertTrue(functions.isFunction(function() {}));
+    assertTrue(functions.isFunction(class {}));
+    assertTrue(functions.isFunction(function*() {}));
+    assertTrue(functions.isFunction(async function() {}));
+    assertFalse(functions.isFunction(0));
+    assertFalse(functions.isFunction(false));
+    assertFalse(functions.isFunction(''));
+    assertFalse(functions.isFunction({}));
+    assertFalse(functions.isFunction([]));
+  }
 });
