@@ -24,19 +24,4 @@ testSuite({
     const s3 = SingletonClass.getInstance();
     assertNotEquals('getInstance returns a new instance after reset', s1, s3);
   },
-
-  testReset() {
-    class Singleton {}
-    goog.addSingletonGetter(Singleton);
-
-    class OtherSingleton {}
-    goog.addSingletonGetter(OtherSingleton);
-
-    const instance1 = Singleton.getInstance();
-    const instance2 = OtherSingleton.getInstance();
-
-    singleton.reset(Singleton);
-    assertNotEquals(instance1, Singleton.getInstance());
-    assertEquals(instance2, OtherSingleton.getInstance());
-  },
 });
