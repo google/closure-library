@@ -13,6 +13,9 @@
 goog.provide('goog.graphics.TextElement');
 
 goog.require('goog.graphics.StrokeAndFillElement');
+goog.requireType('goog.graphics.AbstractGraphics');
+goog.requireType('goog.graphics.Fill');
+goog.requireType('goog.graphics.Stroke');
 
 
 

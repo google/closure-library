@@ -13,6 +13,10 @@
 goog.provide('goog.graphics.PathElement');
 
 goog.require('goog.graphics.StrokeAndFillElement');
+goog.requireType('goog.graphics.AbstractGraphics');
+goog.requireType('goog.graphics.Fill');
+goog.requireType('goog.graphics.Path');
+goog.requireType('goog.graphics.Stroke');
 
 
 

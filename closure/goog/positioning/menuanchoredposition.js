@@ -13,6 +13,7 @@ goog.provide('goog.positioning.MenuAnchoredPosition');
 
 goog.require('goog.positioning.AnchoredViewportPosition');
 goog.require('goog.positioning.Overflow');
+goog.requireType('goog.positioning.Corner');
 
 
 

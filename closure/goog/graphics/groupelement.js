@@ -13,6 +13,7 @@
 goog.provide('goog.graphics.GroupElement');
 
 goog.require('goog.graphics.Element');
+goog.requireType('goog.graphics.AbstractGraphics');
 
 
 

@@ -15,6 +15,8 @@ goog.require('goog.positioning');
 goog.require('goog.positioning.AbstractPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.style');
+goog.requireType('goog.math.Box');
+goog.requireType('goog.math.Size');
 
 
 

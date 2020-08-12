@@ -13,6 +13,8 @@ goog.provide('goog.positioning.AbsolutePosition');
 goog.require('goog.math.Coordinate');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AbstractPosition');
+goog.requireType('goog.math.Box');
+goog.requireType('goog.math.Size');
 
 
 
