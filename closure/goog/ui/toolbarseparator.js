@@ -13,6 +13,7 @@ goog.provide('goog.ui.ToolbarSeparator');
 goog.require('goog.ui.Separator');
 goog.require('goog.ui.ToolbarSeparatorRenderer');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
 
 
 

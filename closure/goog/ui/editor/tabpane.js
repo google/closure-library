@@ -23,6 +23,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.Tab');
 goog.require('goog.ui.TabBar');
+goog.requireType('goog.events.Event');
 
 
 

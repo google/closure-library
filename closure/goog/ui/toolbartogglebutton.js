@@ -13,6 +13,8 @@ goog.provide('goog.ui.ToolbarToggleButton');
 goog.require('goog.ui.ToggleButton');
 goog.require('goog.ui.ToolbarButtonRenderer');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.ControlContent');
 
 
 

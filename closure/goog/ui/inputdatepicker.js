@@ -26,6 +26,10 @@ goog.require('goog.ui.DatePicker');
 goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.PopupBase');
 goog.require('goog.ui.PopupDatePicker');
+goog.requireType('goog.date.Date');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.i18n.DateTimeFormat');
+goog.requireType('goog.ui.DatePickerEvent');
 
 
 

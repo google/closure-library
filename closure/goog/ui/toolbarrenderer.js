@@ -16,6 +16,7 @@ goog.require('goog.ui.Container');
 goog.require('goog.ui.ContainerRenderer');
 goog.require('goog.ui.Separator');
 goog.require('goog.ui.ToolbarSeparatorRenderer');
+goog.requireType('goog.ui.Control');
 
 
 

@@ -26,6 +26,13 @@ goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.SelectionModel');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.ui.ButtonRenderer');
+goog.requireType('goog.ui.Control');
+goog.requireType('goog.ui.ControlContent');
+goog.requireType('goog.ui.Menu');
+goog.requireType('goog.ui.MenuSeparator');
 
 
 

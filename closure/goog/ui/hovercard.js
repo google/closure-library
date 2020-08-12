@@ -23,6 +23,8 @@ goog.require('goog.events.EventType');
 goog.require('goog.ui.AdvancedTooltip');
 goog.require('goog.ui.PopupBase');
 goog.require('goog.ui.Tooltip');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.positioning.AbstractPosition');
 
 
 

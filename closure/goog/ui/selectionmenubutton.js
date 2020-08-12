@@ -26,6 +26,11 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.ui.ButtonRenderer');
+goog.requireType('goog.ui.MenuItemRenderer');
 
 
 

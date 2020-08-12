@@ -14,6 +14,8 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.ui.Popup');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.events.KeyEvent');
 
 
 

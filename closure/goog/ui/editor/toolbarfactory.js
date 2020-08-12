@@ -27,6 +27,15 @@ goog.require('goog.ui.ToolbarMenuButton');
 goog.require('goog.ui.ToolbarRenderer');
 goog.require('goog.ui.ToolbarSelect');
 goog.require('goog.userAgent');
+goog.requireType('goog.ui.Button');
+goog.requireType('goog.ui.ButtonRenderer');
+goog.requireType('goog.ui.ColorMenuButton');
+goog.requireType('goog.ui.ColorMenuButtonRenderer');
+goog.requireType('goog.ui.Control');
+goog.requireType('goog.ui.ControlContent');
+goog.requireType('goog.ui.MenuButton');
+goog.requireType('goog.ui.MenuButtonRenderer');
+goog.requireType('goog.ui.Select');
 
 
 /**

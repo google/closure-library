@@ -17,6 +17,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.style');
 goog.require('goog.ui.Palette');
 goog.require('goog.ui.PaletteRenderer');
+goog.requireType('goog.dom.DomHelper');
 
 
 

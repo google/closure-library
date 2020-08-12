@@ -29,6 +29,8 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
+goog.requireType('goog.graphics.AbstractGraphics');
+goog.requireType('goog.math.Size');
 
 
 /**

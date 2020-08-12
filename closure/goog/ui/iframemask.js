@@ -19,6 +19,7 @@ goog.require('goog.dom.iframe');
 goog.require('goog.events.EventHandler');
 goog.require('goog.structs.Pool');
 goog.require('goog.style');
+goog.requireType('goog.events.EventTarget');
 
 
 

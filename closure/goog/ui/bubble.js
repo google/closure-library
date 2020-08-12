@@ -30,6 +30,8 @@ goog.require('goog.string.Const');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Popup');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.positioning.AbstractPosition');
 
 
 /**

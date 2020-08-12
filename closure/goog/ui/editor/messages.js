@@ -11,6 +11,7 @@
 goog.provide('goog.ui.editor.messages');
 
 goog.require('goog.html.SafeHtmlFormatter');
+goog.requireType('goog.html.SafeHtml');
 
 
 /** @desc Link button / bubble caption. */

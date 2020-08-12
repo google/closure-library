@@ -13,6 +13,7 @@ goog.provide('goog.ui.ModalAriaVisibilityHelper');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
+goog.requireType('goog.dom.DomHelper');
 
 
 

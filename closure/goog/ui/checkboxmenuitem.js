@@ -12,6 +12,8 @@ goog.provide('goog.ui.CheckBoxMenuItem');
 
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.ControlContent');
 
 
 

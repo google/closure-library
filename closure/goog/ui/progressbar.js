@@ -24,6 +24,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.RangeModel');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.Event');
 
 
 

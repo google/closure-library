@@ -17,6 +17,8 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.ColorPalette');
 goog.require('goog.ui.Component');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.ui.PaletteRenderer');
 
 
 

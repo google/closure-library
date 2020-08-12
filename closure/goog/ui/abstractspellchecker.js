@@ -47,6 +47,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.MenuSeparator');
 goog.require('goog.ui.PopupMenu');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

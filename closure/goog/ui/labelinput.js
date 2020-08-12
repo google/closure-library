@@ -37,6 +37,8 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.Event');
 
 
 

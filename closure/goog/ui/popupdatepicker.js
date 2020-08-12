@@ -21,6 +21,9 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.DatePicker');
 goog.require('goog.ui.Popup');
 goog.require('goog.ui.PopupBase');
+goog.requireType('goog.date.Date');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.Event');
 
 
 

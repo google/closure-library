@@ -20,6 +20,7 @@ goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.functions');
 goog.require('goog.ui.Component');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

@@ -13,6 +13,10 @@ goog.provide('goog.ui.ToolbarMenuButton');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.ToolbarMenuButtonRenderer');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.ButtonRenderer');
+goog.requireType('goog.ui.ControlContent');
+goog.requireType('goog.ui.Menu');
 
 
 
