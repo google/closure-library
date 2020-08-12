@@ -12,8 +12,8 @@ const FsError = goog.require('goog.fs.Error');
 const FsFileSaver = goog.require('goog.fs.FileSaver');
 const GoogPromise = goog.require('goog.Promise');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const Timer = goog.require('goog.Timer');
 const events = goog.require('goog.events');
-const googFs = goog.require('goog.fs');
 const googFsBlob = goog.require('goog.fs.blob');
 const testSuite = goog.require('goog.testing.testSuite');
 const testingFs = goog.require('goog.testing.fs');
@@ -63,7 +63,11 @@ function writeToFile(content, fileEntry) {
 
 function checkFileContent(content, fileEntry) {
   return fileEntry.file()
-      .then((blob) => googFs.blobToString(blob))
+      .then((blob) => {
+        const resolver = GoogPromise.withResolver();
+        Timer.callOnce(() => resolver.resolve(blob.toString()));
+        return resolver.promise;
+      })
       .then(goog.partial(assertEquals, content));
 }
 

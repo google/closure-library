@@ -29,12 +29,6 @@ testSuite({
         fs.getBlob('foo', new FsBlob('bar'), 'baz').toString());
   },
 
-  testBlobToString() {
-    return fs.blobToString(new FsBlob('foobarbaz')).then((result) => {
-      assertEquals('foobarbaz', result);
-    });
-  },
-
   testGetBlobWithProperties() {
     assertEquals(
         'data:spam/eggs;base64,Zm9vYmFy',
