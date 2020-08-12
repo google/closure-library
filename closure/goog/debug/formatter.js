@@ -21,6 +21,7 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.string.Const');
+goog.requireType('goog.debug.LogRecord');
 
 
 

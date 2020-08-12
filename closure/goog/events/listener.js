@@ -12,6 +12,7 @@
 goog.provide('goog.events.Listener');
 
 goog.require('goog.events.ListenableKey');
+goog.requireType('goog.events.Listenable');
 
 
 

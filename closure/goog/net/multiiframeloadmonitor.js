@@ -12,6 +12,7 @@ goog.provide('goog.net.MultiIframeLoadMonitor');
 
 goog.require('goog.events');
 goog.require('goog.net.IframeLoadMonitor');
+goog.requireType('goog.events.Event');
 
 
 

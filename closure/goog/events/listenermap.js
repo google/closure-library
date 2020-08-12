@@ -18,6 +18,9 @@ goog.provide('goog.events.ListenerMap');
 goog.require('goog.array');
 goog.require('goog.events.Listener');
 goog.require('goog.object');
+goog.requireType('goog.events.EventId');
+goog.requireType('goog.events.Listenable');
+goog.requireType('goog.events.ListenableKey');
 
 
 

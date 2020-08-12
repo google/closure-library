@@ -17,6 +17,7 @@ goog.provide('goog.net.XmlHttpDefines');
 goog.require('goog.asserts');
 goog.require('goog.net.WrapperXmlHttpFactory');
 goog.require('goog.net.XmlHttpFactory');
+goog.requireType('goog.net.XhrLike');
 
 
 /**

@@ -24,6 +24,7 @@ goog.require('goog.asserts');
 goog.require('goog.html.sanitizer.HtmlSanitizer.Builder');
 goog.require('goog.string');
 goog.require('goog.string.Const');
+goog.requireType('goog.html.sanitizer.HtmlSanitizerAttributePolicy');
 
 
 /**

@@ -14,6 +14,7 @@ goog.provide('goog.net.XhrIoPool');
 
 goog.require('goog.net.XhrIo');
 goog.require('goog.structs.PriorityPool');
+goog.requireType('goog.structs.Map');
 
 
 

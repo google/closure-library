@@ -34,6 +34,8 @@ goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.IdGenerator');
 goog.require('goog.ui.ac.AutoComplete');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.fx.Animation');
 
 
 

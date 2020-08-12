@@ -21,6 +21,8 @@ goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.string.Const');
 goog.require('goog.structs.CircularBuffer');
 goog.require('goog.userAgent');
+goog.requireType('goog.debug.Formatter');
+goog.requireType('goog.debug.LogRecord');
 
 
 

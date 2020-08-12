@@ -26,6 +26,7 @@ goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.testing.TestQueue');
 goog.require('goog.uri.utils');
+goog.requireType('goog.net.XhrLike');
 
 /**
  * Mock implementation of goog.net.XhrIo. This doesn't provide a mock

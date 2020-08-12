@@ -19,6 +19,8 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.string.Const');
 goog.require('goog.style');
+goog.requireType('goog.debug.Formatter');
+goog.requireType('goog.debug.LogRecord');
 
 
 /**

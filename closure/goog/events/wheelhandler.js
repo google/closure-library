@@ -39,6 +39,7 @@ goog.require('goog.style');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
+goog.requireType('goog.events.BrowserEvent');
 
 
 
