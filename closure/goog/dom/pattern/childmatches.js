@@ -22,6 +22,8 @@ goog.provide('goog.dom.pattern.ChildMatches');
 
 goog.require('goog.dom.pattern.AllChildren');
 goog.require('goog.dom.pattern.MatchType');
+goog.requireType('goog.dom.TagWalkType');
+goog.requireType('goog.dom.pattern.AbstractPattern');
 
 
 

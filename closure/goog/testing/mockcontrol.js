@@ -26,6 +26,7 @@ goog.require('goog.array');
 goog.require('goog.testing');
 goog.require('goog.testing.LooseMock');
 goog.require('goog.testing.StrictMock');
+goog.requireType('goog.testing.MockInterface');
 
 
 

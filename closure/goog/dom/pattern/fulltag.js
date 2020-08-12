@@ -22,6 +22,7 @@ goog.provide('goog.dom.pattern.FullTag');
 goog.require('goog.dom.pattern.MatchType');
 goog.require('goog.dom.pattern.StartTag');
 goog.require('goog.dom.pattern.Tag');
+goog.requireType('goog.dom.TagWalkType');
 
 
 
