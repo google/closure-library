@@ -33,6 +33,7 @@ goog.require('goog.asserts');
 goog.require('goog.proto2.FieldDescriptor');
 goog.require('goog.proto2.LazyDeserializer');
 goog.require('goog.proto2.Serializer');
+goog.requireType('goog.proto2.Message');
 
 
 

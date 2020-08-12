@@ -16,6 +16,7 @@ goog.provide('goog.loader.AbstractModuleManager.FailureType');
 goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.module.ModuleInfo');
 goog.require('goog.module.ModuleLoadCallback');
+goog.requireType('goog.html.TrustedResourceUrl');
 
 
 

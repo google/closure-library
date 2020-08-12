@@ -20,6 +20,7 @@ goog.provide('goog.structs.Set');
 goog.require('goog.structs');
 goog.require('goog.structs.Collection');
 goog.require('goog.structs.Map');
+goog.requireType('goog.iter.Iterator');
 
 /**
  * A set that can contain both primitives and objects.  Adding and removing

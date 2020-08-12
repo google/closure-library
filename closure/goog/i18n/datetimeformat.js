@@ -20,6 +20,7 @@ goog.require('goog.date');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.i18n.TimeZone');
 goog.require('goog.string');
+goog.requireType('goog.i18n.DateTimeSymbolsType');
 
 
 /**

@@ -23,6 +23,7 @@ goog.require('goog.tweak.BooleanSetting');
 goog.require('goog.tweak.NumericSetting');
 goog.require('goog.tweak.StringSetting');
 goog.require('goog.uri.utils');
+goog.requireType('goog.tweak.BaseEntry');
 
 
 

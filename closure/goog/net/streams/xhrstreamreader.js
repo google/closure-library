@@ -35,6 +35,8 @@ goog.require('goog.net.streams.PbJsonStreamParser');
 goog.require('goog.net.streams.PbStreamParser');
 goog.require('goog.string');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.net.streams.StreamParser');
 
 goog.scope(function() {
 
