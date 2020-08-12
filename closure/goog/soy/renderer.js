@@ -29,6 +29,11 @@ goog.require('goog.dom');
 goog.require('goog.soy');
 goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
+goog.requireType('goog.html.SafeHtml');
+goog.requireType('goog.html.SafeStyleSheet');
+goog.requireType('goog.soy.data.SanitizedCss');
+goog.requireType('goog.soy.data.SanitizedHtml');
+goog.requireType('goog.soy.data.SanitizedUri');
 
 
 

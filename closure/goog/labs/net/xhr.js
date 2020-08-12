@@ -29,6 +29,8 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.uri.utils');
 goog.require('goog.userAgent');
+goog.requireType('goog.net.XhrLike');
+goog.requireType('goog.net.XmlHttpFactory');
 
 
 

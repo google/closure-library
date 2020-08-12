@@ -173,6 +173,7 @@ goog.require('goog.memoize');
 goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

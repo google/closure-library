@@ -29,6 +29,8 @@ goog.require('goog.fx.Dragger');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.style');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.fx.DragEvent');
 
 
 

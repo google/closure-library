@@ -22,6 +22,7 @@ goog.require('goog.events');
 goog.require('goog.fx.Animation');
 goog.require('goog.fx.Transition');
 goog.require('goog.fx.TransitionBase');
+goog.requireType('goog.events.Event');
 
 
 

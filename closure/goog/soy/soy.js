@@ -17,6 +17,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.soy.data.SanitizedContent');
+goog.requireType('goog.soy.data.SanitizedHtml');
 
 /**
  * A structural interface for injected data.
