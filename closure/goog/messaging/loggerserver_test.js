@@ -8,8 +8,7 @@ goog.module('goog.messaging.LoggerServerTest');
 goog.setTestOnly();
 
 const Level = goog.require('goog.log.Level');
-const LogManager = goog.require('goog.debug.LogManager');
-const Logger = goog.require('goog.debug.Logger');
+const Logger = goog.require('goog.log.Logger');
 const LoggerServer = goog.require('goog.messaging.LoggerServer');
 const MockControl = goog.require('goog.testing.MockControl');
 const MockMessageChannel = goog.require('goog.testing.messaging.MockMessageChannel');
@@ -30,8 +29,8 @@ testSuite({
     mockControl = new MockControl();
     channel = new MockMessageChannel(mockControl);
     stubs.set(
-        LogManager, 'getLogger',
-        mockControl.createFunctionMock('goog.log.getLogger'));
+        log, 'getLogger', mockControl.createFunctionMock('goog.log.getLogger'));
+    stubs.set(log, 'log', mockControl.createFunctionMock('goog.log.log'));
   },
 
   tearDown() {
@@ -42,7 +41,7 @@ testSuite({
   testCommandWithoutChannelName() {
     const mockLogger = mockControl.createStrictMock(Logger);
     log.getLogger('test.object.Name').$returns(mockLogger);
-    log.log(mockLogger, Level.SEVERE, '[remote logger] foo bar', null);
+    log.log(mockLogger, Level.SEVERE, '[remote logger] foo bar', null).$once();
     mockControl.$replayAll();
 
     const server = new LoggerServer(channel, 'log');
@@ -59,7 +58,7 @@ testSuite({
   testCommandWithChannelName() {
     const mockLogger = mockControl.createStrictMock(Logger);
     log.getLogger('test.object.Name').$returns(mockLogger);
-    log.log(mockLogger, Level.SEVERE, '[some channel] foo bar', null);
+    log.log(mockLogger, Level.SEVERE, '[some channel] foo bar', null).$once();
     mockControl.$replayAll();
 
     const server = new LoggerServer(channel, 'log', 'some channel');
@@ -77,8 +76,9 @@ testSuite({
     const mockLogger = mockControl.createStrictMock(Logger);
     log.getLogger('test.object.Name').$returns(mockLogger);
     log.log(
-        mockLogger, Level.SEVERE, '[some channel] foo bar',
-        {message: 'Bad things', stack: ['foo', 'bar']});
+           mockLogger, Level.SEVERE, '[some channel] foo bar',
+           {message: 'Bad things', stack: ['foo', 'bar']})
+        .$once();
     mockControl.$replayAll();
 
     const server = new LoggerServer(channel, 'log', 'some channel');
