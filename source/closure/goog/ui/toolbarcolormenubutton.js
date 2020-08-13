@@ -13,6 +13,10 @@ goog.provide('goog.ui.ToolbarColorMenuButton');
 goog.require('goog.ui.ColorMenuButton');
 goog.require('goog.ui.ToolbarColorMenuButtonRenderer');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.ColorMenuButtonRenderer');
+goog.requireType('goog.ui.ControlContent');
+goog.requireType('goog.ui.Menu');
 
 
 

@@ -12,6 +12,7 @@
 goog.provide('goog.net.createWebChannelTransport');
 
 goog.require('goog.labs.net.webChannel.WebChannelBaseTransport');
+goog.requireType('goog.net.WebChannelTransport');
 
 
 /**

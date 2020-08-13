@@ -16,6 +16,7 @@
 goog.provide('goog.vec.Ray');
 
 goog.require('goog.vec.Vec3');
+goog.requireType('goog.vec.AnyType');
 
 
 

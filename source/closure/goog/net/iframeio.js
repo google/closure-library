@@ -153,6 +153,9 @@ goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.structs');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.html.SafeHtml');
+goog.requireType('goog.structs.Map');
 
 
 

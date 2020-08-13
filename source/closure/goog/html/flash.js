@@ -14,6 +14,8 @@ goog.provide('goog.html.flash');
 
 goog.require('goog.asserts');
 goog.require('goog.html.SafeHtml');
+goog.requireType('goog.html.TrustedResourceUrl');
+goog.requireType('goog.string.TypedString');
 
 
 /**

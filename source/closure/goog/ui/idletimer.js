@@ -21,6 +21,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.structs.Set');
 goog.require('goog.ui.ActivityMonitor');
+goog.requireType('goog.events.Event');
 
 
 

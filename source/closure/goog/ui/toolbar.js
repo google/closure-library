@@ -15,6 +15,7 @@ goog.provide('goog.ui.Toolbar');
 
 goog.require('goog.ui.Container');
 goog.require('goog.ui.ToolbarRenderer');
+goog.requireType('goog.dom.DomHelper');
 
 
 

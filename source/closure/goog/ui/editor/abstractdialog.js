@@ -20,6 +20,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.string');
 goog.require('goog.ui.Dialog');
 goog.require('goog.ui.PopupBase');
+goog.requireType('goog.events.Event');
 
 
 // *** Public interface ***************************************************** //

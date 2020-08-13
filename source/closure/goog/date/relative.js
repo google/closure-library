@@ -20,6 +20,7 @@ goog.provide('goog.date.relative.Unit');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimePatterns');
 goog.require('goog.i18n.RelativeDateTimeFormat');
+goog.requireType('goog.date.DateTime');
 
 goog.scope(function() {
 // For referencing this module.

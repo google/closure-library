@@ -14,6 +14,7 @@ goog.provide('goog.ui.MenuSeparator');
 goog.require('goog.ui.MenuSeparatorRenderer');
 goog.require('goog.ui.Separator');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
 
 
 

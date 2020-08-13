@@ -25,6 +25,9 @@ goog.require('goog.style');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.TextareaRenderer');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.math.Box');
 
 
 

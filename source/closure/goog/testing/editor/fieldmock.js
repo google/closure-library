@@ -16,6 +16,7 @@ goog.require('goog.dom.Range');
 goog.require('goog.editor.Field');
 goog.require('goog.testing.LooseMock');
 goog.require('goog.testing.mockmatchers');
+goog.requireType('goog.dom.AbstractRange');
 
 
 

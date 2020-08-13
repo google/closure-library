@@ -12,6 +12,8 @@ goog.provide('goog.dom.pattern.NodeType');
 
 goog.require('goog.dom.pattern.AbstractPattern');
 goog.require('goog.dom.pattern.MatchType');
+goog.requireType('goog.dom.NodeType');
+goog.requireType('goog.dom.TagWalkType');
 
 
 

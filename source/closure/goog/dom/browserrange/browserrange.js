@@ -24,6 +24,7 @@ goog.require('goog.dom.browserrange.OperaRange');
 goog.require('goog.dom.browserrange.W3cRange');
 goog.require('goog.dom.browserrange.WebKitRange');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.browserrange.AbstractRange');
 
 
 /**

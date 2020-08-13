@@ -20,6 +20,7 @@ goog.require('goog.labs.userAgent.platform');
 goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.require('goog.userAgent');
+goog.requireType('goog.string.TypedString');
 
 
 /**

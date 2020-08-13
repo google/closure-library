@@ -15,6 +15,9 @@ goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.CustomButtonRenderer');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.ButtonRenderer');
+goog.requireType('goog.ui.ControlContent');
 
 
 

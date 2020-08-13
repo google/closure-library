@@ -27,6 +27,10 @@ goog.require('goog.style');
 goog.require('goog.style.bidi');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.math.Rect');
 
 
 

@@ -15,6 +15,8 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.MenuHeaderRenderer');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.ControlContent');
 
 
 

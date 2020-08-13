@@ -125,20 +125,6 @@ goog.testing.fs.getBlobWithProperties = function(parts, opt_type, opt_endings) {
 
 
 /**
- * Returns the string value of a fake blob.
- *
- * @param {!goog.testing.fs.Blob} blob The blob to convert to a string.
- * @param {string=} opt_encoding Ignored.
- * @return {!goog.async.Deferred} The deferred string value of the blob.
- */
-goog.testing.fs.blobToString = function(blob, opt_encoding) {
-  var d = new goog.async.Deferred();
-  goog.Timer.callOnce(goog.bind(d.callback, d, blob.toString()));
-  return d;
-};
-
-
-/**
  * Slices the blob. The returned blob contains data from the start byte
  * (inclusive) till the end byte (exclusive). Negative indices can be used
  * to count bytes from the end of the blob (-1 == blob.size - 1). Indices
@@ -170,7 +156,6 @@ goog.testing.fs.install = function(stubs) {
   stubs.replace(fs, 'getPersistent', goog.testing.fs.getPersistent);
   stubs.replace(fs, 'createObjectUrl', goog.testing.fs.createObjectUrl);
   stubs.replace(fs, 'revokeObjectUrl', goog.testing.fs.revokeObjectUrl);
-  stubs.replace(fs, 'blobToString', goog.testing.fs.blobToString);
   stubs.replace(fs, 'browserSupportsObjectUrls', function() { return true; });
   var fsBlob = goog.getObjectByName('goog.fs.blob');
   stubs.replace(fsBlob, 'getBlob', goog.testing.fs.getBlob);

@@ -13,6 +13,9 @@ goog.provide('goog.ui.Option');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.ui.ControlContent');
 
 
 

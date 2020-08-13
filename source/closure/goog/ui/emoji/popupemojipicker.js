@@ -27,6 +27,12 @@ goog.require('goog.positioning.Corner');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Popup');
 goog.require('goog.ui.emoji.EmojiPicker');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.ui.PopupBase');
+goog.requireType('goog.ui.TabPane.TabLocation');
+goog.requireType('goog.ui.emoji.Emoji');
 
 
 

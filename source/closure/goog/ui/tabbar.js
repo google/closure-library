@@ -21,6 +21,10 @@ goog.require('goog.ui.Container.Orientation');
 goog.require('goog.ui.Tab');
 goog.require('goog.ui.TabBarRenderer');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.ui.Component');
+goog.requireType('goog.ui.Control');
 
 
 

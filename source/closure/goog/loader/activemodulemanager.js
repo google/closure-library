@@ -12,6 +12,7 @@ goog.module('goog.loader.activeModuleManager');
 goog.module.declareLegacyNamespace();
 
 const AbstractModuleManager = goog.require('goog.loader.AbstractModuleManager');
+const NoopModuleManager = goog.require('goog.loader.NoopModuleManager');
 const asserts = goog.require('goog.asserts');
 
 
@@ -56,20 +57,19 @@ function setDefault(fn) {
 }
 
 /**
- * Initialize the module manager if it exists.
+ * Initialize the module manager.
  * @param {string=} info A string representation of the module dependency
  *      graph, in the form: module1:dep1,dep2/module2:dep1,dep2 etc.
  *     Where depX is the base-36 encoded position of the dep in the module list.
  * @param {!Array<string>=} loadingModuleIds A list of moduleIds that
  *     are currently being loaded.
  */
-function maybeInitialize(info, loadingModuleIds) {
+function initialize(info, loadingModuleIds) {
   if (!moduleManager) {
-    if (getDefault) {
-      moduleManager = getDefault();
-    } else {
-      return;
+    if (!getDefault) {
+      setDefault(() => new NoopModuleManager());
     }
+    moduleManager = getDefault();
   }
   moduleManager.setAllModuleInfoString(info, loadingModuleIds);
 }
@@ -83,6 +83,6 @@ exports = {
   get,
   set,
   setDefault,
-  maybeInitialize,
+  initialize,
   reset,
 };

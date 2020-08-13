@@ -19,6 +19,8 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.style');
 goog.require('goog.ui.Tooltip');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

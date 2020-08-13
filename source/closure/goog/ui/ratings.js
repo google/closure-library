@@ -33,6 +33,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

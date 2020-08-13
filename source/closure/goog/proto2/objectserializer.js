@@ -15,6 +15,7 @@ goog.require('goog.asserts');
 goog.require('goog.proto2.FieldDescriptor');
 goog.require('goog.proto2.Serializer');
 goog.require('goog.string');
+goog.requireType('goog.proto2.Message');
 
 
 

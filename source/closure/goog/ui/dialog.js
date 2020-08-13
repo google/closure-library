@@ -43,6 +43,7 @@ goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Map');
 goog.require('goog.ui.ModalPopup');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

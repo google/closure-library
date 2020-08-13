@@ -29,6 +29,7 @@ goog.require('goog.object');
 goog.require('goog.ui.KeyboardEventData');
 goog.require('goog.ui.SyntheticKeyboardEvent');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

@@ -32,6 +32,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.Event');
 
 
 /**

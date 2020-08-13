@@ -16,6 +16,7 @@ goog.provide('goog.ui.GaugeTheme');
 goog.require('goog.graphics.LinearGradient');
 goog.require('goog.graphics.SolidFill');
 goog.require('goog.graphics.Stroke');
+goog.requireType('goog.graphics.Fill');
 
 
 

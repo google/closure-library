@@ -14,6 +14,8 @@ goog.require('goog.positioning');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.Overflow');
 goog.require('goog.positioning.OverflowStatus');
+goog.requireType('goog.math.Box');
+goog.requireType('goog.math.Size');
 
 
 

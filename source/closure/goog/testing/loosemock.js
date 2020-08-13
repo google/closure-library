@@ -17,6 +17,7 @@ goog.require('goog.asserts');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
 goog.require('goog.testing.Mock');
+goog.requireType('goog.testing.MockExpectation');
 
 
 

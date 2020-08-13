@@ -16,6 +16,8 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AbstractPosition');
 goog.require('goog.style');
+goog.requireType('goog.math.Box');
+goog.requireType('goog.math.Size');
 
 
 

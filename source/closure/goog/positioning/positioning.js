@@ -22,6 +22,7 @@ goog.require('goog.math.Rect');
 goog.require('goog.math.Size');
 goog.require('goog.style');
 goog.require('goog.style.bidi');
+goog.requireType('goog.math.Box');
 
 
 /**

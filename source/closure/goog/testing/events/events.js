@@ -42,6 +42,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.userAgent');
+goog.requireType('goog.math.Coordinate');
 
 
 

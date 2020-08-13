@@ -16,6 +16,9 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.TriStateMenuItemRenderer');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.ControlContent');
+goog.requireType('goog.ui.MenuItemRenderer');
 
 
 

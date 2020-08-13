@@ -27,6 +27,7 @@ goog.provide('goog.testing.events.EventObserver');
 
 goog.require('goog.array');
 goog.require('goog.events.Event');
+goog.requireType('goog.events.EventId');
 
 
 

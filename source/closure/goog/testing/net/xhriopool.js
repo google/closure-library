@@ -22,6 +22,7 @@ goog.provide('goog.testing.net.XhrIoPool');
 
 goog.require('goog.net.XhrIoPool');
 goog.require('goog.testing.net.XhrIo');
+goog.requireType('goog.net.XhrIo');
 
 
 

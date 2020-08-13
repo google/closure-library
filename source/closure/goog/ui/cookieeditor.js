@@ -18,6 +18,7 @@ goog.require('goog.net.cookies');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
+goog.requireType('goog.events.Event');
 
 
 

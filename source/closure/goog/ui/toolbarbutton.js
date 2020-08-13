@@ -13,6 +13,9 @@ goog.provide('goog.ui.ToolbarButton');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.ToolbarButtonRenderer');
 goog.require('goog.ui.registry');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.ButtonRenderer');
+goog.requireType('goog.ui.ControlContent');
 
 
 

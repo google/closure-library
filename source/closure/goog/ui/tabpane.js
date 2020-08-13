@@ -25,6 +25,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.style');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

@@ -499,3 +499,12 @@ goog.functions.rateLimit = function(f, interval, opt_scope) {
     }
   });
 };
+
+/**
+ * Returns true if the specified value is a function.
+ * @param {*} val Variable to test.
+ * @return {boolean} Whether variable is a function.
+ */
+goog.functions.isFunction = (val) => {
+  return typeof val === 'function';
+};

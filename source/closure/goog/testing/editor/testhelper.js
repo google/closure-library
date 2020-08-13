@@ -18,6 +18,7 @@ goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.node');
 goog.require('goog.editor.plugins.AbstractBubblePlugin');
 goog.require('goog.testing.dom');
+goog.requireType('goog.dom.AbstractRange');
 
 
 

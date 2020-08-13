@@ -16,6 +16,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Container');
+goog.requireType('goog.events.Event');
 
 
 

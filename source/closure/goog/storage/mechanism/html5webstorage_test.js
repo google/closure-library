@@ -16,55 +16,54 @@ const testSuite = goog.require('goog.testing.testSuite');
  * A minimal WebStorage implementation that throws exceptions for disabled
  * storage. Since we cannot have unit tests running in Safari private mode to
  * test this, we need to mock an exception throwing when trying to set a value.
- *
- * @param {boolean=} opt_isStorageDisabled If true, throws exceptions emulating
- *     Private browsing mode.  If false, storage quota will be marked as
- *     exceeded.
- * @constructor
+ * @unrestricted
  */
-function MockThrowableStorage(opt_isStorageDisabled) {
-  this.isStorageDisabled_ = !!opt_isStorageDisabled;
-  this.length = opt_isStorageDisabled ? 0 : 1;
-}
-
-
-/** @override */
-MockThrowableStorage.prototype.setItem = function(key, value) {
-  if (this.isStorageDisabled_) {
-    throw ErrorCode.STORAGE_DISABLED;
-  } else {
-    throw ErrorCode.QUOTA_EXCEEDED;
+class MockThrowableStorage {
+  /**
+   * @param {boolean=} opt_isStorageDisabled If true, throws exceptions
+   *     emulating Private browsing mode.  If false, storage quota will be
+   *     marked as exceeded.
+   */
+  constructor(opt_isStorageDisabled) {
+    this.isStorageDisabled_ = !!opt_isStorageDisabled;
+    this.length = opt_isStorageDisabled ? 0 : 1;
   }
-};
 
+  /** @override */
+  setItem(key, value) {
+    if (this.isStorageDisabled_) {
+      throw ErrorCode.STORAGE_DISABLED;
+    } else {
+      throw ErrorCode.QUOTA_EXCEEDED;
+    }
+  }
 
-/** @override */
-MockThrowableStorage.prototype.removeItem = function(key) {};
+  /** @override */
+  removeItem(key) {}
 
-
-/**
- * A very simple, dummy implementation of key(), merely to verify that calls to
- * HTML5WebStorage#key are proxied through.
- * @param {number} index A key index.
- * @return {string} The key associated with that index.
- */
-MockThrowableStorage.prototype.key = function(index) {
-  return 'dummyKey';
-};
+  /**
+   * A very simple, dummy implementation of key(), merely to verify that calls
+   * to HTML5WebStorage#key are proxied through.
+   * @param {number} index A key index.
+   * @return {string} The key associated with that index.
+   */
+  key(index) {
+    return 'dummyKey';
+  }
+}
 
 
 
 /**
  * Provides an HTML5WebStorage wrapper for MockThrowableStorage.
- *
- * @constructor
- * @extends {HTML5WebStorage}
+ * @unrestricted
  */
-function HTML5MockStorage(opt_isStorageDisabled) {
-  HTML5MockStorage.base(
-      this, 'constructor', new MockThrowableStorage(opt_isStorageDisabled));
+class HTML5MockStorage extends HTML5WebStorage {
+  constructor(opt_isStorageDisabled) {
+    super(new MockThrowableStorage(opt_isStorageDisabled));
+  }
 }
-goog.inherits(HTML5MockStorage, HTML5WebStorage);
+
 
 
 testSuite({

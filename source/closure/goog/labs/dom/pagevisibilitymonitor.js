@@ -20,6 +20,7 @@ goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.memoize');
+goog.requireType('goog.events.BrowserEvent');
 
 
 /**

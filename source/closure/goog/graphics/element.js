@@ -20,6 +20,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.Listenable');
 goog.require('goog.graphics.AffineTransform');
 goog.require('goog.math');
+goog.requireType('goog.graphics.AbstractGraphics');
 
 
 

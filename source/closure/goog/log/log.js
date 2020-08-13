@@ -90,6 +90,16 @@ goog.log.getLogger = function(name, opt_level) {
 };
 
 
+/**
+ * Returns the root logger.
+ *
+ * @return {?goog.log.Logger} The root logger, or null if logging is disabled.
+ */
+goog.log.getRootLogger = function() {
+  return goog.log.getLogger(goog.log.ROOT_LOGGER_NAME);
+};
+
+
 // TODO(johnlenz): try to tighten the types to these functions.
 /**
  * Adds a handler to the logger. This doesn't use the event system because

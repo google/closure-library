@@ -14,6 +14,9 @@
 goog.provide('goog.graphics.StrokeAndFillElement');
 
 goog.require('goog.graphics.Element');
+goog.requireType('goog.graphics.AbstractGraphics');
+goog.requireType('goog.graphics.Fill');
+goog.requireType('goog.graphics.Stroke');
 
 
 

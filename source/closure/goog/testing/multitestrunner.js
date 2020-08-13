@@ -29,6 +29,7 @@ goog.require('goog.testing.TestCase');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ServerChart');
 goog.require('goog.ui.TableSorter');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

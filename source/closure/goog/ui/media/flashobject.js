@@ -53,6 +53,8 @@ goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.flash');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.html.SafeHtml');
 
 
 

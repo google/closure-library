@@ -11,14 +11,16 @@
 goog.provide('goog.debug.DivConsole');
 
 goog.require('goog.debug.HtmlFormatter');
-goog.require('goog.debug.LogManager');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyleSheet');
+goog.require('goog.log');
 goog.require('goog.string.Const');
 goog.require('goog.style');
+goog.requireType('goog.debug.Formatter');
+goog.requireType('goog.log.LogRecord');
 
 
 /**
@@ -72,11 +74,11 @@ goog.debug.DivConsole.prototype.setCapturing = function(capturing) {
   }
 
   // attach or detach handler from the root logger
-  var rootLogger = goog.debug.LogManager.getRoot();
+  var rootLogger = goog.log.getRootLogger();
   if (capturing) {
-    rootLogger.addHandler(this.publishHandler_);
+    goog.log.addHandler(rootLogger, this.publishHandler_);
   } else {
-    rootLogger.removeHandler(this.publishHandler_);
+    goog.log.removeHandler(rootLogger, this.publishHandler_);
   }
   this.isCapturing_ = capturing;
 };
@@ -84,7 +86,7 @@ goog.debug.DivConsole.prototype.setCapturing = function(capturing) {
 
 /**
  * Adds a log record.
- * @param {goog.debug.LogRecord} logRecord The log entry.
+ * @param {?goog.log.LogRecord} logRecord The log entry.
  */
 goog.debug.DivConsole.prototype.addLogRecord = function(logRecord) {
   if (!logRecord) {

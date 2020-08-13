@@ -17,6 +17,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
 
 
 // TODO(arv): Move this to goog.events instead.

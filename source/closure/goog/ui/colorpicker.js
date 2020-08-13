@@ -21,6 +21,9 @@ goog.provide('goog.ui.ColorPicker.EventType');
 
 goog.require('goog.ui.ColorPalette');
 goog.require('goog.ui.Component');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.math.Size');
 
 
 

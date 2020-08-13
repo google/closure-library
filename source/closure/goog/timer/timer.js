@@ -15,6 +15,7 @@ goog.provide('goog.Timer');
 
 goog.require('goog.Promise');
 goog.require('goog.events.EventTarget');
+goog.requireType('goog.Thenable');
 
 
 

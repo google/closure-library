@@ -15,6 +15,9 @@ goog.require('goog.Uri');
 goog.require('goog.events');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.net.XmlHttpFactory');
+goog.requireType('goog.structs.Map');
 
 
 

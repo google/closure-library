@@ -18,7 +18,6 @@ goog.provide('goog.fs');
 
 goog.require('goog.async.Deferred');
 goog.require('goog.fs.Error');
-goog.require('goog.fs.FileReader');
 goog.require('goog.fs.FileSystemImpl');
 goog.require('goog.fs.url');
 
@@ -135,21 +134,6 @@ goog.fs.revokeObjectUrl = function(url) {
  */
 goog.fs.browserSupportsObjectUrls = function() {
   return goog.fs.url.browserSupportsObjectUrls();
-};
-
-
-/**
- * Converts a Blob or a File into a string. This should only be used when the
- * blob is known to be small.
- *
- * @param {!Blob} blob The blob to convert.
- * @param {string=} opt_encoding The name of the encoding to use.
- * @return {!goog.async.Deferred} The deferred string. If an error occurrs, the
- *     errback is called with a {@link goog.fs.Error}.
- * @deprecated Use {@link goog.fs.FileReader.readAsText} instead.
- */
-goog.fs.blobToString = function(blob, opt_encoding) {
-  return goog.fs.FileReader.readAsText(blob, opt_encoding);
 };
 
 
