@@ -13,16 +13,16 @@
 goog.provide('goog.debug.DebugWindow');
 
 goog.require('goog.debug.HtmlFormatter');
+goog.require('goog.debug.LogManager');
+goog.require('goog.debug.Logger');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyleSheet');
-goog.require('goog.log');
-goog.require('goog.log.Level');
 goog.require('goog.string.Const');
 goog.require('goog.structs.CircularBuffer');
 goog.require('goog.userAgent');
 goog.requireType('goog.debug.Formatter');
-goog.requireType('goog.log.LogRecord');
+goog.requireType('goog.debug.LogRecord');
 
 
 
@@ -259,11 +259,11 @@ goog.debug.DebugWindow.prototype.setCapturing = function(capturing) {
   this.isCapturing_ = capturing;
 
   // attach or detach handler from the root logger
-  var rootLogger = goog.log.getRootLogger();
+  var rootLogger = goog.debug.LogManager.getRoot();
   if (capturing) {
-    goog.log.addHandler(rootLogger, this.publishHandler_);
+    rootLogger.addHandler(this.publishHandler_);
   } else {
-    goog.log.removeHandler(rootLogger, this.publishHandler_);
+    rootLogger.removeHandler(this.publishHandler_);
   }
 };
 
@@ -317,7 +317,7 @@ goog.debug.DebugWindow.prototype.clear = function() {
 
 /**
  * Adds a log record.
- * @param {?goog.log.LogRecord} logRecord the LogRecord.
+ * @param {goog.debug.LogRecord} logRecord the LogRecord.
  */
 goog.debug.DebugWindow.prototype.addLogRecord = function(logRecord) {
   if (this.filteredLoggers_[logRecord.getLoggerName()]) {
@@ -326,7 +326,7 @@ goog.debug.DebugWindow.prototype.addLogRecord = function(logRecord) {
   var html = this.formatter_.formatRecordAsHtml(logRecord);
   this.write_(html);
   if (this.enableOnSevere_ &&
-      logRecord.getLevel().value >= goog.log.Level.SEVERE.value) {
+      logRecord.getLevel().value >= goog.debug.Logger.Level.SEVERE.value) {
     this.setEnabled(true);
   }
 };

@@ -51,7 +51,7 @@ testSuite({
     // Show debug log
     const debugDiv = dom.getElement('debugDiv');
     const logger = log.getLogger('goog.net.xpc');
-    log.setLevel(logger, Level.ALL);
+    logger.setLevel(Level.ALL);
     log.addHandler(logger, function(logRecord) {
       const msgElm = dom.createDom(TagName.DIV);
       msgElm.innerHTML = logRecord.getMessage();

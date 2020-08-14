@@ -79,7 +79,7 @@ testSuite({
     // Show debug log
     debugDiv = dom.createElement(TagName.DIV);
     const logger = log.getLogger('goog.net.xpc');
-    log.setLevel(logger, Level.ALL);
+    logger.setLevel(Level.ALL);
     log.addHandler(logger, (logRecord) => {
       const msgElm = dom.createDom(TagName.DIV);
       msgElm.innerHTML = logRecord.getMessage();

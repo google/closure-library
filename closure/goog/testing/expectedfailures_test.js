@@ -9,8 +9,7 @@ goog.setTestOnly();
 
 const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
 const JsUnitException = goog.require('goog.testing.JsUnitException');
-const Level = goog.require('goog.log.Level');
-const log = goog.require('goog.log');
+const Logger = goog.require('goog.debug.Logger');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let count;
@@ -18,17 +17,16 @@ let expectedFailures;
 let lastLevel;
 let lastMessage;
 
+// Stub out the logger.
+ExpectedFailures.prototype.logger_.log = (level, message) => {
+  lastLevel = level;
+  lastMessage = message;
+  count++;
+};
+
 // Individual test methods.
 
 testSuite({
-  setUpPage() {
-    log.addHandler(log.getLogger('goog.testing.ExpectedFailures'), (record) => {
-      lastLevel = record.getLevel();
-      lastMessage = record.getMessage();
-      count++;
-    });
-  },
-
   setUp() {
     expectedFailures = new ExpectedFailures();
     count = 0;
@@ -44,7 +42,8 @@ testSuite({
 
     expectedFailures.handleException(new JsUnitException('', ''));
     assertEquals('Should have logged a message', 1, count);
-    assertEquals('Should have logged an info message', Level.INFO, lastLevel);
+    assertEquals(
+        'Should have logged an info message', Logger.Level.INFO, lastLevel);
     assertContains(
         'Should log a suppression message', 'Suppressing test failure',
         lastMessage);
@@ -67,7 +66,8 @@ testSuite({
 
     expectedFailures.handleTearDown();
     assertEquals('Should have logged a message', 1, count);
-    assertEquals('Should have logged a warning', Level.WARNING, lastLevel);
+    assertEquals(
+        'Should have logged a warning', Logger.Level.WARNING, lastLevel);
     assertContains(
         'Should log a suppression message', 'Expected a test failure',
         lastMessage);
@@ -81,7 +81,8 @@ testSuite({
     });
 
     assertEquals('Should have logged a message', 1, count);
-    assertEquals('Should have logged an info message', Level.INFO, lastLevel);
+    assertEquals(
+        'Should have logged an info message', Logger.Level.INFO, lastLevel);
     assertContains(
         'Should log a suppression message', 'Suppressing test failure',
         lastMessage);
@@ -114,7 +115,8 @@ testSuite({
         true);
     expectedFailures.handleTearDown();
     assertEquals('Should have logged a message', 1, count);
-    assertEquals('Should have logged a warning', Level.WARNING, lastLevel);
+    assertEquals(
+        'Should have logged a warning', Logger.Level.WARNING, lastLevel);
     assertContains(
         'Should log a suppression message', 'Expected a test failure',
         lastMessage);

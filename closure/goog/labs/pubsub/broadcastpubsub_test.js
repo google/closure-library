@@ -10,7 +10,7 @@ goog.setTestOnly();
 const ArgumentMatcher = goog.require('goog.testing.mockmatchers.ArgumentMatcher');
 const BroadcastPubSub = goog.require('goog.labs.pubsub.BroadcastPubSub');
 const GoogTestingEvent = goog.require('goog.testing.events.Event');
-const Level = goog.require('goog.log.Level');
+const Logger = goog.require('goog.debug.Logger');
 const MockClock = goog.require('goog.testing.MockClock');
 const MockControl = goog.require('goog.testing.MockControl');
 const StorageStorage = goog.require('goog.storage.Storage');
@@ -18,7 +18,6 @@ const StructsMap = goog.require('goog.structs.Map');
 const events = goog.require('goog.testing.events');
 const googArray = goog.require('goog.array');
 const googJson = goog.require('goog.json');
-const log = goog.require('goog.log');
 const mockmatchers = goog.require('goog.testing.mockmatchers');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -138,7 +137,7 @@ testSuite({
     mockHTML5LocalStorageCtor().$returns(mockHtml5LocalStorage);
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     assertNotNullNorUndefined(
         'BroadcastChannel instance must not be null', broadcastPubSub);
     assertTrue(
@@ -161,7 +160,7 @@ testSuite({
     });
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     assertNotNullNorUndefined(
         'BroadcastChannel instance must not be null', broadcastPubSub);
     assertTrue(
@@ -193,7 +192,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     const broadcastPubSubExtra = new BroadcastPubSub();
     assertArrayEquals(
@@ -236,7 +235,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     const eventData = {
       'args': ['someTopic', 'x', 'y'],
       'timestamp': goog.now()
@@ -279,7 +278,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.subscribeOnce('someTopic', foo);
     assertEquals(
@@ -308,7 +307,7 @@ testSuite({
     mockControl.$replayAll();
 
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     broadcastPubSub.subscribe('fooTopic', foo);
     broadcastPubSub.subscribe('barTopic', bar);
 
@@ -335,7 +334,7 @@ testSuite({
     mockControl.$replayAll();
 
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     broadcastPubSub.subscribe('fooTopic', foo);
     broadcastPubSub.subscribe('barTopic', bar);
 
@@ -359,7 +358,7 @@ testSuite({
     mockControl.$replayAll();
 
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     broadcastPubSub.subscribeOnce('someTopic', foo);
 
     let eventData = {'args': ['someTopic', 'x', 'y'], 'timestamp': goog.now()};
@@ -395,7 +394,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.subscribe('foo', foo1);
     broadcastPubSub.subscribe('foo', foo2);
@@ -424,7 +423,7 @@ testSuite({
     mockControl.$replayAll();
 
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     broadcastPubSub.subscribe('someTopic', foo);
     broadcastPubSub.subscribe('someTopic', bar, context);
 
@@ -452,7 +451,7 @@ testSuite({
     mockControl.$replayAll();
 
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     broadcastPubSub.subscribe('fooTopic', foo);
 
     const broadcastPubSub2 = new BroadcastPubSub();
@@ -522,7 +521,7 @@ testSuite({
     mockControl.$replayAll();
 
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     broadcastPubSub.subscribe(topic, fn);
 
     broadcastPubSub.publish(topic, '10');
@@ -540,7 +539,7 @@ testSuite({
     mockControl.$replayAll();
 
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.subscribe('someTopic', fn);
 
@@ -558,7 +557,7 @@ testSuite({
     mockControl.$replayAll();
 
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     broadcastPubSub.subscribe('someTopic', fn);
 
     if (!isIe8) {
@@ -594,7 +593,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.subscribe('someTopic', foo);
     broadcastPubSub.subscribe('someTopic', bar, context);
@@ -630,7 +629,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.publish('someTopic');
     mockClock.tick();
@@ -664,7 +663,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.subscribe('someTopic', fn1);
     assertEquals(
@@ -718,7 +717,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.subscribe('X', fn1);
     broadcastPubSub.subscribe('X', fn2);
@@ -757,7 +756,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.subscribe('someTopic', fn);
     assertEquals(
@@ -799,7 +798,7 @@ testSuite({
     mockControl.$replayAll();
 
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     broadcastPubSub.subscribe('X', xFn1);
     broadcastPubSub.subscribe('X', xFn2);
     broadcastPubSub.subscribe('Y', yFn1);
@@ -818,7 +817,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
     broadcastPubSub.subscribeOnce('someTopic', fn);
 
     assertEquals(
@@ -877,7 +876,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.subscribeOnce('someTopic', goog.bind(fn, context));
     assertEquals(
@@ -908,7 +907,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.subscribeOnce('someTopic', goog.partial(fullFn, true));
     assertEquals(
@@ -937,7 +936,7 @@ testSuite({
 
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     broadcastPubSub.subscribeOnce('someTopic', resubscribeFn);
     assertEquals(
@@ -979,7 +978,7 @@ testSuite({
     const fn = mockControl.createFunctionMock();
     mockControl.$replayAll();
     broadcastPubSub = new BroadcastPubSub();
-    log.setLevel(broadcastPubSub.logger_, Level.OFF);
+    broadcastPubSub.logger_.setLevel(Logger.Level.OFF);
 
     googArray.forEach(['V', 'W', 'X', 'Y', 'Z'], (topic) => {
       broadcastPubSub.subscribe(topic, fn);
