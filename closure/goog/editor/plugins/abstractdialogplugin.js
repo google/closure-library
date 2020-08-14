@@ -19,6 +19,8 @@ goog.require('goog.editor.Plugin');
 goog.require('goog.editor.range');
 goog.require('goog.events');
 goog.require('goog.ui.editor.AbstractDialog');
+goog.requireType('goog.dom.SavedRange');
+goog.requireType('goog.events.Event');
 
 
 // *** Public interface ***************************************************** //

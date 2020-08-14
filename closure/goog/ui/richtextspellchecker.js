@@ -28,6 +28,8 @@ goog.require('goog.style');
 goog.require('goog.ui.AbstractSpellChecker');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.PopupMenu');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.Event');
 
 
 

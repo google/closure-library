@@ -39,6 +39,7 @@ goog.require('goog.ui.editor.TabPane');
 goog.require('goog.ui.editor.messages');
 goog.require('goog.userAgent');
 goog.require('goog.window');
+goog.requireType('goog.ui.Tab');
 
 
 
