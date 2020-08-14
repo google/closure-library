@@ -27,10 +27,21 @@ goog.testing.singleton.resetAll = function() {
   const singletons = goog.getObjectByName('goog.instantiatedSingletons_');
   let ctor;
   while (ctor = singletons.pop()) {
-    delete ctor.instance_;
+    goog.testing.singleton.reset(ctor);
   }
 };
 
+/**
+ * Deletes a singleton's instance, so `getInstance` will return a new instance
+ * on next call.
+ * @param {function(new: Object)} singleton
+ * @const
+ * @suppress {missingProperties} 'instance_' isn't a property on any declared
+ * type.
+ */
+goog.testing.singleton.reset = function(singleton) {
+  delete /** @type {?} */ (singleton).instance_;
+};
 
 /**
  * @deprecated Please use `goog.addSingletonGetter`.
