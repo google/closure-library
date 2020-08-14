@@ -16,6 +16,7 @@ goog.provide('goog.module.ModuleManager.FailureType');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.async.Deferred');
+goog.require('goog.debug.Error');
 goog.require('goog.debug.Trace');
 goog.require('goog.disposable.IDisposable');
 goog.require('goog.disposeAll');
@@ -198,6 +199,23 @@ goog.module.ModuleManager = function() {
   this.isDisposed_ = false;
 };
 goog.inherits(goog.module.ModuleManager, goog.loader.AbstractModuleManager);
+
+
+/**
+ * Error used to indicate a module has failed.
+ *
+ * @param {?goog.loader.AbstractModuleManager.FailureType} failureType
+ * @constructor
+ * @extends {goog.debug.Error}
+ * @final
+ */
+goog.module.ModuleManager.ModuleFailureError = function(failureType) {
+  goog.module.ModuleManager.ModuleFailureError.base(this, 'constructor');
+
+  /** @type {?goog.loader.AbstractModuleManager.FailureType} */
+  this.failureType = failureType;
+};
+goog.inherits(goog.module.ModuleManager.ModuleFailureError, goog.debug.Error);
 
 
 /**
@@ -550,7 +568,7 @@ goog.module.ModuleManager.prototype.registerModuleLoadCallbacks_ = function(
     id, moduleInfo, userInitiated, d) {
   moduleInfo.registerCallback(d.callback, d);
   moduleInfo.registerErrback(function(err) {
-    d.errback(Error(err));
+    d.errback(new goog.module.ModuleManager.ModuleFailureError(err));
   });
   // If it's already loading, we don't have to do anything besides handle
   // if it was user initiated
