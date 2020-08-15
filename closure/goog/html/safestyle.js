@@ -29,9 +29,9 @@ goog.require('goog.string.internal');
  * browser.
  *
  * Instances of this type must be created via the factory methods
- * (`goog.html.SafeStyle.create` or
- * `goog.html.SafeStyle.fromConstant`) and not by invoking its
- * constructor. The constructor intentionally takes no parameters and the type
+ * (`goog.html.SafeStyle.create` or `goog.html.SafeStyle.fromConstant`)
+ * and not by invoking its constructor. The constructor intentionally takes an
+ * extra parameter that cannot be constructed outside of this file and the type
  * is immutable; hence only a default instance corresponding to the empty string
  * can be obtained via constructor invocation.
  *
@@ -107,23 +107,19 @@ goog.require('goog.string.internal');
  * @implements {goog.string.TypedString}
  */
 goog.html.SafeStyle = class {
-  constructor() {
+  /**
+   * @param {string} value
+   * @param {!Object} token package-internal implementation detail.
+   */
+  constructor(value, token) {
     /**
      * The contained value of this SafeStyle.  The field has a purposely
      * ugly name to make (non-compiled) code that attempts to directly access
      * this field stand out.
      * @private {string}
      */
-    this.privateDoNotAccessOrElseSafeStyleWrappedValue_ = '';
-
-    /**
-     * A type marker used to implement additional run-time type checking.
-     * @see goog.html.SafeStyle#unwrap
-     * @const {!Object}
-     * @private
-     */
-    this.SAFE_STYLE_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
-        goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
+    this.privateDoNotAccessOrElseSafeStyleWrappedValue_ =
+        (token === goog.html.SafeStyle.CONSTRUCTOR_TOKEN_PRIVATE_) ? value : '';
   }
 };
 
@@ -133,15 +129,6 @@ goog.html.SafeStyle = class {
  * @const
  */
 goog.html.SafeStyle.prototype.implementsGoogStringTypedString = true;
-
-
-/**
- * Type marker for the SafeStyle type, used to implement additional
- * run-time type checking.
- * @const {!Object}
- * @private
- */
-goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
 
 /**
@@ -241,20 +228,25 @@ goog.html.SafeStyle.unwrap = function(safeStyle) {
   // Specifically, the following checks are performed:
   // 1. The object is an instance of the expected type.
   // 2. The object is not an instance of a subclass.
-  // 3. The object carries a type marker for the expected type. "Faking" an
-  // object requires a reference to the type marker, which has names intended
-  // to stand out in code reviews.
   if (safeStyle instanceof goog.html.SafeStyle &&
-      safeStyle.constructor === goog.html.SafeStyle &&
-      safeStyle.SAFE_STYLE_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ ===
-          goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
+      safeStyle.constructor === goog.html.SafeStyle) {
     return safeStyle.privateDoNotAccessOrElseSafeStyleWrappedValue_;
   } else {
-    goog.asserts.fail('expected object of type SafeStyle, got \'' +
-        safeStyle + '\' of type ' + goog.typeOf(safeStyle));
+    goog.asserts.fail(
+        'expected object of type SafeStyle, got \'' + safeStyle +
+        '\' of type ' + goog.typeOf(safeStyle));
     return 'type_error:SafeStyle';
   }
 };
+
+
+/**
+ * Token used to ensure that object is created only from this file. No code
+ * outside of this file can access this token.
+ * @private {!Object}
+ * @const
+ */
+goog.html.SafeStyle.CONSTRUCTOR_TOKEN_PRIVATE_ = {};
 
 
 /**
@@ -266,22 +258,8 @@ goog.html.SafeStyle.unwrap = function(safeStyle) {
  */
 goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse = function(
     style) {
-  return new goog.html.SafeStyle().initSecurityPrivateDoNotAccessOrElse_(style);
-};
-
-
-/**
- * Called from createSafeStyleSecurityPrivateDoNotAccessOrElse(). This
- * method exists only so that the compiler can dead code eliminate static
- * fields (like EMPTY) when they're not accessed.
- * @param {string} style
- * @return {!goog.html.SafeStyle}
- * @private
- */
-goog.html.SafeStyle.prototype.initSecurityPrivateDoNotAccessOrElse_ = function(
-    style) {
-  this.privateDoNotAccessOrElseSafeStyleWrappedValue_ = style;
-  return this;
+  return new goog.html.SafeStyle(
+      style, goog.html.SafeStyle.CONSTRUCTOR_TOKEN_PRIVATE_);
 };
 
 
@@ -440,7 +418,7 @@ goog.html.SafeStyle.hasBalancedQuotes_ = function(value) {
   var outsideDouble = true;
   for (var i = 0; i < value.length; i++) {
     var c = value.charAt(i);
-    if (c == "'" && outsideDouble) {
+    if (c == '\'' && outsideDouble) {
       outsideSingle = !outsideSingle;
     } else if (c == '"' && outsideSingle) {
       outsideDouble = !outsideDouble;
