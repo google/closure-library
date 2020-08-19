@@ -20,7 +20,7 @@ goog.addDependency('asserts/dom.js', ['goog.asserts.dom'], ['goog.asserts', 'goo
 goog.addDependency('async/animationdelay.js', ['goog.async.AnimationDelay'], ['goog.Disposable', 'goog.events', 'goog.functions'], {});
 goog.addDependency('async/conditionaldelay.js', ['goog.async.ConditionalDelay'], ['goog.Disposable', 'goog.async.Delay'], {});
 goog.addDependency('async/debouncer.js', ['goog.async.Debouncer'], ['goog.Disposable', 'goog.Timer'], {});
-goog.addDependency('async/delay.js', ['goog.Delay', 'goog.async.Delay'], ['goog.Disposable', 'goog.Timer'], {});
+goog.addDependency('async/delay.js', ['goog.async.Delay'], ['goog.Disposable', 'goog.Timer'], {});
 goog.addDependency('async/freelist.js', ['goog.async.FreeList'], [], {'lang': 'es6'});
 goog.addDependency('async/legacy_throttle.js', ['goog.Throttle'], ['goog.async.Throttle'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/nexttick.js', ['goog.async.nextTick', 'goog.async.throwException'], ['goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.functions', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine'], {});
