@@ -41,6 +41,12 @@ testSuite({
     assertFalse(browser.isChrome());
     assertTrue(extra.isSafariDesktopOnMobile());
 
+    util.setUserAgent(testAgents.CHROME_IPAD_DESKTOP);
+    setGlobalNavigator({'maxTouchPoints': 5});
+    assertTrue(browser.isChrome());
+    assertFalse(browser.isSafari());
+    assertTrue(extra.isSafariDesktopOnMobile());
+
     setGlobalNavigator({'maxTouchPoints': 0});
     assertFalse(extra.isSafariDesktopOnMobile());
 
