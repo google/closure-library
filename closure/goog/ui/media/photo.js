@@ -48,6 +48,7 @@ goog.provide('goog.ui.media.Photo');
 goog.require('goog.dom.TagName');
 goog.require('goog.ui.media.Media');
 goog.require('goog.ui.media.MediaRenderer');
+goog.requireType('goog.ui.Control');
 goog.requireType('goog.ui.media.MediaModel');
 
 

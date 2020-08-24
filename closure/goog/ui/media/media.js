@@ -91,6 +91,7 @@ goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.ControlRenderer');
+goog.requireType('goog.dom.DomHelper');
 goog.requireType('goog.ui.media.MediaModel');
 
 
