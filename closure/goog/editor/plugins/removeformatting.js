@@ -22,6 +22,8 @@ goog.require('goog.editor.range');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.string');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.AbstractRange');
+goog.requireType('goog.dom.SavedCaretRange');
 
 
 

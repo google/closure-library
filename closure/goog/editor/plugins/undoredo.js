@@ -26,6 +26,8 @@ goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.log');
 goog.require('goog.object');
+goog.requireType('goog.dom.AbstractRange');
+goog.requireType('goog.events.Event');
 
 
 

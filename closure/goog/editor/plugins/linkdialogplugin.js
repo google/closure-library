@@ -19,6 +19,9 @@ goog.require('goog.functions');
 goog.require('goog.ui.editor.AbstractDialog');
 goog.require('goog.ui.editor.LinkDialog');
 goog.require('goog.uri.utils');
+goog.requireType('goog.editor.Link');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.html.SafeHtml');
 
 
 

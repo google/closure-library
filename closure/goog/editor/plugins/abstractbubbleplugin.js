@@ -28,6 +28,7 @@ goog.require('goog.string.Unicode');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.editor.Bubble');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

@@ -26,6 +26,9 @@ goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.AbstractRange');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.Event');
 
 
 

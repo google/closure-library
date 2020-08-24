@@ -25,6 +25,7 @@ goog.require('goog.functions');
 goog.require('goog.string.Unicode');
 goog.require('goog.style');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.AbstractRange');
 
 
 
