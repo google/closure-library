@@ -361,6 +361,9 @@ testAgents.CHROME_IPAD = 'Mozilla/5.0 (iPad; CPU OS 7_0_4 like Mac OS X) ' +
     'AppleWebKit/537.51.1 (KHTML, like Gecko) CriOS/32.0.1700.20 ' +
     'Mobile/11B554a Safari/9537.53';
 
+/** @const {string} */
+testAgents.CHROME_IPAD_DESKTOP = 'Mozilla/5.0 (Macintosh; Intel Mac OS X ' +
+    '10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/79 Safari/605.1.15';
 
 /** @const {string} */
 testAgents.CHROME_LINUX =

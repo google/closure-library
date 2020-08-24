@@ -13,7 +13,6 @@
  */
 
 
-goog.provide('goog.Delay');
 goog.provide('goog.async.Delay');
 
 goog.require('goog.Disposable');
@@ -70,16 +69,6 @@ goog.async.Delay = function(listener, opt_interval, opt_handler) {
   this.callback_ = goog.bind(this.doAction_, this);
 };
 goog.inherits(goog.async.Delay, goog.Disposable);
-
-
-
-/**
- * A deprecated alias.
- * @deprecated Use goog.async.Delay instead.
- * @constructor
- * @final
- */
-goog.Delay = goog.async.Delay;
 
 
 /**

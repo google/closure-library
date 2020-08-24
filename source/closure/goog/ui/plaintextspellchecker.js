@@ -26,6 +26,10 @@ goog.require('goog.style');
 goog.require('goog.ui.AbstractSpellChecker');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.math.Size');
+goog.requireType('goog.ui.PopupMenu');
 
 
 

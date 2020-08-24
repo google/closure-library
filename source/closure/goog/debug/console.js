@@ -13,10 +13,11 @@
 
 goog.provide('goog.debug.Console');
 
+goog.require('goog.debug.LogManager');
+goog.require('goog.debug.Logger');
 goog.require('goog.debug.TextFormatter');
-goog.require('goog.log');
-goog.require('goog.log.Level');
-goog.requireType('goog.log.LogRecord');
+goog.requireType('goog.debug.LogRecord');
+
 
 
 /**
@@ -68,11 +69,11 @@ goog.debug.Console.prototype.setCapturing = function(capturing) {
   }
 
   // attach or detach handler from the root logger
-  var rootLogger = goog.log.getRootLogger();
+  var rootLogger = goog.debug.LogManager.getRoot();
   if (capturing) {
-    goog.log.addHandler(rootLogger, this.publishHandler_);
+    rootLogger.addHandler(this.publishHandler_);
   } else {
-    goog.log.removeHandler(rootLogger, this.publishHandler_);
+    rootLogger.removeHandler(this.publishHandler_);
   }
   this.isCapturing_ = capturing;
 };
@@ -80,7 +81,7 @@ goog.debug.Console.prototype.setCapturing = function(capturing) {
 
 /**
  * Adds a log record.
- * @param {?goog.log.LogRecord} logRecord The log entry.
+ * @param {?goog.debug.LogRecord} logRecord The log entry.
  */
 goog.debug.Console.prototype.addLogRecord = function(logRecord) {
   // Check to see if the log record is filtered or not.
@@ -89,23 +90,23 @@ goog.debug.Console.prototype.addLogRecord = function(logRecord) {
   }
 
   /**
-   * @param {?goog.log.Level} level
+   * @param {?goog.debug.Logger.Level} level
    * @return {string}
    */
   function getConsoleMethodName_(level) {
     if (level) {
-      if (level.value >= goog.log.Level.SEVERE.value) {
+      if (level.value >= goog.debug.Logger.Level.SEVERE.value) {
         // SEVERE == 1000, SHOUT == 1200
         return 'error';
       }
-      if (level.value >= goog.log.Level.WARNING.value) {
+      if (level.value >= goog.debug.Logger.Level.WARNING.value) {
         return 'warn';
       }
-      // NOTE(martone): there's a goog.log.Level.INFO - that we should
+      // NOTE(martone): there's a goog.debug.Logger.Level.INFO - that we should
       // presumably map to console.info. However, the current mapping is INFO ->
       // console.log. Let's keep the status quo for now, but we should
       // reevaluate if we tweak the goog.log API.
-      if (level.value >= goog.log.Level.CONFIG.value) {
+      if (level.value >= goog.debug.Logger.Level.CONFIG.value) {
         return 'log';
       }
     }

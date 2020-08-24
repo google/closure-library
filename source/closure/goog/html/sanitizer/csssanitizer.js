@@ -270,7 +270,7 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyleString = function(
     cssText, opt_uriRewriter) {
   // same check as in goog.html.sanitizer.HTML_SANITIZER_SUPPORTED_
   if (goog.userAgent.IE && document.documentMode < 10) {
-    return new goog.html.SafeStyle();
+    return goog.html.SafeStyle.EMPTY;
   }
 
   var div = goog.html.sanitizer.CssSanitizer

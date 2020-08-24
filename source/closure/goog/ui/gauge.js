@@ -29,6 +29,10 @@ goog.require('goog.graphics.SolidFill');
 goog.require('goog.math');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.GaugeTheme');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.fx.AnimationEvent');
+goog.requireType('goog.graphics.AbstractGraphics');
+goog.requireType('goog.graphics.GroupElement');
 
 
 

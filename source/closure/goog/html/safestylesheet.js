@@ -22,15 +22,22 @@ const {assert, fail} = goog.require('goog.asserts');
 const {contains} = goog.require('goog.string.internal');
 
 /**
+ * Token used to ensure that object is created only from this file. No code
+ * outside of this file can access this token.
+ * @const {!Object}
+ */
+const CONSTRUCTOR_TOKEN_PRIVATE = {};
+
+/**
  * A string-like object which represents a CSS style sheet and that carries the
  * security type contract that its value, as a string, will not cause untrusted
  * script execution (XSS) when evaluated as CSS in a browser.
  *
  * Instances of this type must be created via the factory method
- * `SafeStyleSheet.fromConstant` and not by invoking its
- * constructor. The constructor intentionally takes no parameters and the type
- * is immutable; hence only a default instance corresponding to the empty string
- * can be obtained via constructor invocation.
+ * `SafeStyleSheet.fromConstant` and not by invoking its constructor. The
+ * constructor intentionally takes an extra parameter that cannot be constructed
+ * outside of this file and the type is immutable; hence only a default instance
+ * corresponding to the empty string can be obtained via constructor invocation.
  *
  * A SafeStyleSheet's string representation can safely be interpolated as the
  * content of a style element within HTML. The SafeStyleSheet string should
@@ -62,23 +69,19 @@ const {contains} = goog.require('goog.string.internal');
  * @implements {TypedString}
  */
 class SafeStyleSheet {
-  constructor() {
+  /**
+   * @param {string} value
+   * @param {!Object} token package-internal implementation detail.
+   */
+  constructor(value, token) {
     /**
      * The contained value of this SafeStyleSheet.  The field has a purposely
      * ugly name to make (non-compiled) code that attempts to directly access
      * this field stand out.
      * @private {string}
      */
-    this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_ = '';
-
-    /**
-     * A type marker used to implement additional run-time type checking.
-     * @see SafeStyleSheet#unwrap
-     * @const {!Object}
-     * @private
-     */
-    this.SAFE_STYLE_SHEET_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
-        TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE;
+    this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_ =
+        (token === CONSTRUCTOR_TOKEN_PRIVATE) ? value : '';
 
     /**
      * @override
@@ -245,14 +248,8 @@ class SafeStyleSheet {
     // Specifically, the following checks are performed:
     // 1. The object is an instance of the expected type.
     // 2. The object is not an instance of a subclass.
-    // 3. The object carries a type marker for the expected type. "Faking" an
-    // object requires a reference to the type marker, which has names intended
-    // to stand out in code reviews.
     if (safeStyleSheet instanceof SafeStyleSheet &&
-        safeStyleSheet.constructor === SafeStyleSheet &&
-        safeStyleSheet
-                .SAFE_STYLE_SHEET_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ ===
-            TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE) {
+        safeStyleSheet.constructor === SafeStyleSheet) {
       return safeStyleSheet.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_;
     } else {
       fail(
@@ -271,21 +268,7 @@ class SafeStyleSheet {
    * @package
    */
   static createSafeStyleSheetSecurityPrivateDoNotAccessOrElse(styleSheet) {
-    return new SafeStyleSheet().initSecurityPrivateDoNotAccessOrElse_(
-        styleSheet);
-  }
-
-  /**
-   * Called from createSafeStyleSheetSecurityPrivateDoNotAccessOrElse(). This
-   * method exists only so that the compiler can dead code eliminate static
-   * fields (like EMPTY) when they're not accessed.
-   * @param {string} styleSheet
-   * @return {!SafeStyleSheet}
-   * @private
-   */
-  initSecurityPrivateDoNotAccessOrElse_(styleSheet) {
-    this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_ = styleSheet;
-    return this;
+    return new SafeStyleSheet(styleSheet, CONSTRUCTOR_TOKEN_PRIVATE);
   }
 }
 
@@ -304,14 +287,6 @@ if (goog.DEBUG) {
         this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_ + '}';
   };
 }
-
-
-/**
- * Type marker for the SafeStyleSheet type, used to implement additional
- * run-time type checking.
- * @const {!Object}
- */
-const TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE = {};
 
 
 /**

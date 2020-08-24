@@ -22,6 +22,16 @@ goog.require('goog.style');
 goog.require('goog.ui.editor.ToolbarFactory');
 goog.require('goog.ui.editor.messages');
 goog.require('goog.userAgent');
+goog.requireType('goog.ui.Button');
+goog.requireType('goog.ui.ButtonRenderer');
+goog.requireType('goog.ui.ColorMenuButtonRenderer');
+goog.requireType('goog.ui.Control');
+goog.requireType('goog.ui.ControlContent');
+goog.requireType('goog.ui.MenuButtonRenderer');
+goog.requireType('goog.ui.MenuItem');
+goog.requireType('goog.ui.Select');
+goog.requireType('goog.ui.Toolbar');
+goog.requireType('goog.ui.ToolbarColorMenuButton');
 
 // Font menu creation.
 

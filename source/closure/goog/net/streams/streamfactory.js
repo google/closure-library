@@ -13,6 +13,8 @@ goog.provide('goog.net.streams.createXhrNodeReadableStream');
 goog.require('goog.asserts');
 goog.require('goog.net.streams.XhrNodeReadableStream');
 goog.require('goog.net.streams.XhrStreamReader');
+goog.requireType('goog.net.XhrIo');
+goog.requireType('goog.net.streams.NodeReadableStream');
 
 
 /**

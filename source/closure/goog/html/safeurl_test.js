@@ -338,13 +338,10 @@ testSuite({
   /** @suppress {checkTypes} */
   testUnwrap() {
     const privateFieldName = 'privateDoNotAccessOrElseSafeUrlWrappedValue_';
-    const markerFieldName = 'SAFE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
     const propNames = googObject.getKeys(SafeUrl.sanitize(''));
     assertContains(privateFieldName, propNames);
-    assertContains(markerFieldName, propNames);
     const evil = {};
     evil[privateFieldName] = 'javascript:evil()';
-    evil[markerFieldName] = {};
 
     const exception = assertThrows(() => {
       SafeUrl.unwrap(evil);

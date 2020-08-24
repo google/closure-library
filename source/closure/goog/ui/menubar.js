@@ -18,6 +18,8 @@ goog.provide('goog.ui.menuBar');
 
 goog.require('goog.ui.Container');
 goog.require('goog.ui.MenuBarRenderer');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.ContainerRenderer');
 
 
 /**

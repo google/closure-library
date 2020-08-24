@@ -18,7 +18,11 @@ const TypedString = goog.require('goog.string.TypedString');
 const trustedtypes = goog.require('goog.html.trustedtypes');
 const {fail} = goog.require('goog.asserts');
 
-/** @const {!Object} */
+/**
+ * Token used to ensure that object is created only from this file. No code
+ * outside of this file can access this token.
+ * @const {!Object}
+ */
 const CONSTRUCTOR_TOKEN_PRIVATE = {};
 
 /**
@@ -28,10 +32,10 @@ const CONSTRUCTOR_TOKEN_PRIVATE = {};
  * in a browser.
  *
  * Instances of this type must be created via the factory method
- * `SafeScript.fromConstant` and not by invoking its
- * constructor. The constructor intentionally takes no parameters and the type
- * is immutable; hence only a default instance corresponding to the empty string
- * can be obtained via constructor invocation.
+ * `SafeScript.fromConstant` and not by invoking its constructor. The
+ * constructor intentionally takes an extra parameter that cannot be constructed
+ * outside of this file and the type is immutable; hence only a default instance
+ * corresponding to the empty string can be obtained via constructor invocation.
  *
  * A SafeScript's string representation can safely be interpolated as the
  * content of a script element within HTML. The SafeScript string should not be

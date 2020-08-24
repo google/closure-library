@@ -48,15 +48,11 @@ testSuite({
   /** @suppress {checkTypes} */
   testUnwrap() {
     const privateFieldName = 'privateDoNotAccessOrElseSafeStyleWrappedValue_';
-    const markerFieldName =
-        'SAFE_STYLE_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
     const propNames =
         googObject.getKeys(SafeStyle.fromConstant(Const.from('')));
     assertContains(privateFieldName, propNames);
-    assertContains(markerFieldName, propNames);
     const evil = {};
     evil[privateFieldName] = 'width: expression(evil);';
-    evil[markerFieldName] = {};
 
     const exception = assertThrows(() => {
       SafeStyle.unwrap(evil);

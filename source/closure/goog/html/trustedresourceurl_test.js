@@ -361,15 +361,11 @@ testSuite({
   testUnwrap() {
     const privateFieldName =
         'privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_';
-    const markerFieldName =
-        'TRUSTED_RESOURCE_URL_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_';
     const propNames =
         googObject.getKeys(TrustedResourceUrl.fromConstant(Const.from('')));
     assertContains(privateFieldName, propNames);
-    assertContains(markerFieldName, propNames);
     const evil = {};
     evil[privateFieldName] = 'http://example.com/evil.js';
-    evil[markerFieldName] = {};
 
     const exception = assertThrows(() => {
       TrustedResourceUrl.unwrap(evil);
