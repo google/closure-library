@@ -16,6 +16,7 @@ goog.provide('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.json');
 goog.require('goog.log');
 goog.requireType('goog.Uri');
+goog.requireType('goog.debug.Loggable');
 goog.requireType('goog.net.XmlHttp.ReadyState');
 
 

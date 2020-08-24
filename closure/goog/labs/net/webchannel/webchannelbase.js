@@ -32,6 +32,7 @@ goog.require('goog.net.rpc.HttpCors');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs');
+goog.requireType('goog.structs.Map');
 
 goog.scope(function() {
 var WebChannel = goog.net.WebChannel;
