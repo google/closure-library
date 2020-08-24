@@ -54,7 +54,11 @@ goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Listenable');
 goog.require('goog.events.ListenerMap');
 goog.requireType('goog.debug.ErrorHandler');
+goog.requireType('goog.events.EventId');
+goog.requireType('goog.events.EventLike');
 goog.requireType('goog.events.EventWrapper');
+goog.requireType('goog.events.ListenableKey');
+goog.requireType('goog.events.Listener');
 
 
 /**
