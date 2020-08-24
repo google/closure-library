@@ -31029,6 +31029,16 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "",
      ],
      name: "contract_aria-activedescendant"},
+    {input: "<p aria-owns=\"javascript:xss\"></p>",
+     acceptable: [
+         "<p aria-owns=\"about:invalid#zCSafez\"></p>",
+         "<p aria-owns=\"about:invalid#zGoSafez\"></p>",
+         "<p aria-owns=\"javascript:void(0);\"></p>",
+         "<p></p>",
+         "<p />",
+         "",
+     ],
+     name: "contract_aria-owns"},
     {input: "<p async=\"x\"></p>",
      acceptable: [
          "<p></p>",
