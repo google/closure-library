@@ -34,7 +34,6 @@ class DepsTree(object):
 
     Raises:
       MultipleProvideError: A namespace is provided by muplitple sources.
-      NamespaceNotFoundError: A namespace is required but never provided.
     """
 
     self._sources = sources
@@ -48,12 +47,6 @@ class DepsTree(object):
               provide, [self._provides_map[provide], source])
 
         self._provides_map[provide] = source
-
-    # Check that all required namespaces are provided.
-    for source in sources:
-      for require in source.requires:
-        if require not in self._provides_map:
-          raise NamespaceNotFoundError(require, source)
 
   def GetDependencies(self, required_namespaces):
     """Get source dependencies, in order, for the given namespaces.

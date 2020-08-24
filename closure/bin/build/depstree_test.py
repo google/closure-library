@@ -98,10 +98,10 @@ class DepsTreeTestCase(unittest.TestCase):
     b = MockSource(['B'], ['C'])
     c = MockSource(['C'], ['D'])  # But there is no D.
 
-    def MakeDepsTree():
-      return depstree.DepsTree([a, b, c])
+    tree = depstree.DepsTree([a, b, c])
 
-    self.assertRaises(depstree.NamespaceNotFoundError, MakeDepsTree)
+    self.assertRaises(depstree.NamespaceNotFoundError,
+                      tree.GetDependencies, 'A')
 
   def testDepsForMissingNamespace(self):
     a = MockSource(['A'], ['B'])

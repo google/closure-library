@@ -71,6 +71,12 @@ def _GetOptionsParser():
                     default=[],
                     help='The paths that should be traversed to build the '
                     'dependencies.')
+  parser.add_option(
+      '-e',
+      '--exclude',
+      dest='excludes',
+      action='append',
+      help='Files to exclude from the --root flag.')
   parser.add_option('-o',
                     '--output_mode',
                     dest='output_mode',
@@ -215,7 +221,8 @@ def main():
   logging.info('Scanning paths...')
   for path in options.roots:
     for js_path in treescan.ScanTreeForJsFiles(path):
-      sources.add(_PathSource(js_path))
+      if js_path not in options.excludes:
+        sources.add(_PathSource(js_path))
 
   # Add scripts specified on the command line.
   for js_path in args:
