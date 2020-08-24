@@ -16,6 +16,7 @@ goog.require('goog.Disposable');
 goog.require('goog.debug');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.Logger');
+goog.requireType('goog.debug.LogRecord');
 
 
 
