@@ -33,6 +33,7 @@ goog.requireType('goog.debug.LogRecord');
  * @final
  */
 goog.messaging.LoggerClient = function(channel, serviceName) {
+  'use strict';
   if (goog.messaging.LoggerClient.instance_) {
     return goog.messaging.LoggerClient.instance_;
   }
@@ -81,6 +82,7 @@ goog.messaging.LoggerClient.instance_ = null;
  * @private
  */
 goog.messaging.LoggerClient.prototype.sendLog_ = function(logRecord) {
+  'use strict';
   var name = logRecord.getLoggerName();
   var level = logRecord.getLevel();
   var msg = logRecord.getMessage();
@@ -121,6 +123,7 @@ goog.messaging.LoggerClient.prototype.sendLog_ = function(logRecord) {
 
 /** @override */
 goog.messaging.LoggerClient.prototype.disposeInternal = function() {
+  'use strict';
   goog.messaging.LoggerClient.base(this, 'disposeInternal');
   goog.debug.LogManager.getRoot().removeHandler(this.publishHandler_);
   delete this.channel_;

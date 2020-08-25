@@ -37,6 +37,7 @@ goog.require('goog.object');
  * @final
  */
 goog.messaging.MultiChannel = function(underlyingChannel) {
+  'use strict';
   goog.messaging.MultiChannel.base(this, 'constructor');
 
   /**
@@ -78,6 +79,7 @@ goog.messaging.MultiChannel.prototype.logger_ =
  *     channel.
  */
 goog.messaging.MultiChannel.prototype.createVirtualChannel = function(name) {
+  'use strict';
   if (name.indexOf(':') != -1) {
     throw new Error(
         'Virtual channel name "' + name + '" should not contain colons');
@@ -105,6 +107,7 @@ goog.messaging.MultiChannel.prototype.createVirtualChannel = function(name) {
  */
 goog.messaging.MultiChannel.prototype.handleDefault_ = function(
     serviceName, payload) {
+  'use strict';
   var match = serviceName.match(/^([^:]*):(.*)/);
   if (!match) {
     goog.log.warning(
@@ -144,8 +147,11 @@ goog.messaging.MultiChannel.prototype.handleDefault_ = function(
 
 /** @override */
 goog.messaging.MultiChannel.prototype.disposeInternal = function() {
-  goog.object.forEach(
-      this.virtualChannels_, function(channel) { goog.dispose(channel); });
+  'use strict';
+  goog.object.forEach(this.virtualChannels_, function(channel) {
+    'use strict';
+    goog.dispose(channel);
+  });
   goog.dispose(this.underlyingChannel_);
   delete this.virtualChannels_;
   delete this.underlyingChannel_;
@@ -167,6 +173,7 @@ goog.messaging.MultiChannel.prototype.disposeInternal = function() {
  * @final
  */
 goog.messaging.MultiChannel.VirtualChannel = function(parent, name) {
+  'use strict';
   goog.messaging.MultiChannel.VirtualChannel.base(this, 'constructor');
 
   /**
@@ -211,6 +218,7 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.logger_ =
  */
 goog.messaging.MultiChannel.VirtualChannel.prototype.connect = function(
     opt_connectCb) {
+  'use strict';
   if (opt_connectCb) {
     opt_connectCb();
   }
@@ -224,6 +232,7 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.connect = function(
  * @override
  */
 goog.messaging.MultiChannel.VirtualChannel.prototype.isConnected = function() {
+  'use strict';
   return true;
 };
 
@@ -233,6 +242,7 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.isConnected = function() {
  */
 goog.messaging.MultiChannel.VirtualChannel.prototype.registerService = function(
     serviceName, callback, opt_objectPayload) {
+  'use strict';
   this.parent_.underlyingChannel_.registerService(
       this.name_ + ':' + serviceName,
       goog.bind(this.doCallback_, this, callback), opt_objectPayload);
@@ -244,6 +254,7 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.registerService = function(
  */
 goog.messaging.MultiChannel.VirtualChannel.prototype.registerDefaultService =
     function(callback) {
+  'use strict';
   this.defaultService_ = goog.bind(this.doCallback_, this, callback);
 };
 
@@ -253,6 +264,7 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.registerDefaultService =
  */
 goog.messaging.MultiChannel.VirtualChannel.prototype.send = function(
     serviceName, payload) {
+  'use strict';
   if (this.isDisposed()) {
     throw new Error('#send called for disposed VirtualChannel.');
   }
@@ -271,6 +283,7 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.send = function(
  */
 goog.messaging.MultiChannel.VirtualChannel.prototype.doCallback_ = function(
     callback, var_args) {
+  'use strict';
   if (this.isDisposed()) {
     goog.log.warning(
         this.logger_, 'Virtual channel "' + this.name_ + '" received ' +
@@ -285,6 +298,7 @@ goog.messaging.MultiChannel.VirtualChannel.prototype.doCallback_ = function(
 /** @override */
 goog.messaging.MultiChannel.VirtualChannel.prototype.disposeInternal =
     function() {
+  'use strict';
   this.parent_.virtualChannels_[this.name_] = null;
   this.parent_ = null;
 };

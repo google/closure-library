@@ -85,6 +85,7 @@ goog.requireType('goog.ui.Control');
  * @final
  */
 goog.ui.media.GoogleVideo = function() {
+  'use strict';
   goog.ui.media.MediaRenderer.call(this);
 };
 goog.inherits(goog.ui.media.GoogleVideo, goog.ui.media.MediaRenderer);
@@ -105,6 +106,7 @@ goog.addSingletonGetter(goog.ui.media.GoogleVideo);
  * @return {!goog.ui.media.Media} A Control binded to the GoogleVideo renderer.
  */
 goog.ui.media.GoogleVideo.newControl = function(dataModel, opt_domHelper) {
+  'use strict';
   var control = new goog.ui.media.Media(
       dataModel, goog.ui.media.GoogleVideo.getInstance(), opt_domHelper);
   // GoogleVideo videos don't have any thumbnail for now, so we show the
@@ -133,6 +135,7 @@ goog.ui.media.GoogleVideo.CSS_CLASS =
  * @override
  */
 goog.ui.media.GoogleVideo.prototype.createDom = function(c) {
+  'use strict';
   var control = /** @type {goog.ui.media.Media} */ (c);
   var div = goog.ui.media.GoogleVideo.base(this, 'createDom', control);
 
@@ -155,6 +158,7 @@ goog.ui.media.GoogleVideo.prototype.createDom = function(c) {
  * @override
  */
 goog.ui.media.GoogleVideo.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.media.GoogleVideo.CSS_CLASS;
 };
 
@@ -176,6 +180,7 @@ goog.ui.media.GoogleVideo.prototype.getCssClass = function() {
  */
 goog.ui.media.GoogleVideoModel = function(
     videoId, opt_caption, opt_description, opt_autoplay) {
+  'use strict';
   goog.ui.media.MediaModel.call(
       this, goog.ui.media.GoogleVideoModel.buildUrl(videoId), opt_caption,
       opt_description, goog.ui.media.MediaModel.MimeType.FLASH);
@@ -222,6 +227,7 @@ goog.ui.media.GoogleVideoModel.MATCHER_ =
  */
 goog.ui.media.GoogleVideoModel.newInstance = function(
     googleVideoUrl, opt_caption, opt_description, opt_autoplay) {
+  'use strict';
   if (goog.ui.media.GoogleVideoModel.MATCHER_.test(googleVideoUrl)) {
     var data = goog.ui.media.GoogleVideoModel.MATCHER_.exec(googleVideoUrl);
     return new goog.ui.media.GoogleVideoModel(
@@ -241,6 +247,7 @@ goog.ui.media.GoogleVideoModel.newInstance = function(
  * @return {string} The GoogleVideo URL.
  */
 goog.ui.media.GoogleVideoModel.buildUrl = function(videoId) {
+  'use strict';
   return 'https://video.google.com/videoplay?docid=' +
       goog.string.urlEncode(videoId);
 };
@@ -257,6 +264,7 @@ goog.ui.media.GoogleVideoModel.buildUrl = function(videoId) {
  *     page.
  */
 goog.ui.media.GoogleVideoModel.buildFlashUrl = function(videoId, opt_autoplay) {
+  'use strict';
   return goog.html.TrustedResourceUrl.format(
       goog.string.Const.from(
           'https://video.google.com/googleplayer.swf?docid=%{docid}' +
@@ -273,5 +281,6 @@ goog.ui.media.GoogleVideoModel.buildFlashUrl = function(videoId, opt_autoplay) {
  * @return {string} The GoogleVideo video id.
  */
 goog.ui.media.GoogleVideoModel.prototype.getVideoId = function() {
+  'use strict';
   return this.videoId_;
 };

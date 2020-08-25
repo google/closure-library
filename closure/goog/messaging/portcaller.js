@@ -36,6 +36,7 @@ goog.requireType('goog.messaging.MessageChannel');
  * @final
  */
 goog.messaging.PortCaller = function(operatorPort) {
+  'use strict';
   goog.messaging.PortCaller.base(this, 'constructor');
 
   /**
@@ -81,6 +82,7 @@ goog.inherits(goog.messaging.PortCaller, goog.Disposable);
 
 /** @override */
 goog.messaging.PortCaller.prototype.dial = function(name) {
+  'use strict';
   if (name in this.connections_) {
     return this.connections_[name].channel;
   }
@@ -111,6 +113,7 @@ goog.messaging.PortCaller.prototype.dial = function(name) {
  * @private
  */
 goog.messaging.PortCaller.prototype.connectionGranted_ = function(message) {
+  'use strict';
   var args = /** @type {{name: string, port: MessagePort}} */ (message);
   var port = args['port'];
   var entry = this.connections_[args['name']];
@@ -136,6 +139,7 @@ goog.messaging.PortCaller.prototype.connectionGranted_ = function(message) {
 
 /** @override */
 goog.messaging.PortCaller.prototype.disposeInternal = function() {
+  'use strict';
   goog.dispose(this.operatorPort_);
   goog.object.forEach(this.connections_, goog.dispose);
   delete this.operatorPort_;

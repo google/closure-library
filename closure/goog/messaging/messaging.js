@@ -20,6 +20,7 @@ goog.forwardDeclare('goog.messaging.MessageChannel');
  * @param {goog.messaging.MessageChannel} channel2 The second channel.
  */
 goog.messaging.pipe = function(channel1, channel2) {
+  'use strict';
   channel1.registerDefaultService(goog.bind(channel2.send, channel2));
   channel2.registerDefaultService(goog.bind(channel1.send, channel1));
 };

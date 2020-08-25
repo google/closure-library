@@ -83,6 +83,7 @@ goog.requireType('goog.ui.Control');
  * @final
  */
 goog.ui.media.Vimeo = function() {
+  'use strict';
   goog.ui.media.MediaRenderer.call(this);
 };
 goog.inherits(goog.ui.media.Vimeo, goog.ui.media.MediaRenderer);
@@ -112,6 +113,7 @@ goog.ui.media.Vimeo.CSS_CLASS = goog.getCssName('goog-ui-media-vimeo');
  * @return {!goog.ui.media.Media} A Control binded to the Vimeo renderer.
  */
 goog.ui.media.Vimeo.newControl = function(dataModel, opt_domHelper) {
+  'use strict';
   var control = new goog.ui.media.Media(
       dataModel, goog.ui.media.Vimeo.getInstance(), opt_domHelper);
   // vimeo videos don't have any thumbnail for now, so we show the
@@ -131,6 +133,7 @@ goog.ui.media.Vimeo.newControl = function(dataModel, opt_domHelper) {
  * @override
  */
 goog.ui.media.Vimeo.prototype.createDom = function(c) {
+  'use strict';
   var control = /** @type {goog.ui.media.Media} */ (c);
   var div = goog.ui.media.Vimeo.superClass_.createDom.call(this, control);
 
@@ -152,6 +155,7 @@ goog.ui.media.Vimeo.prototype.createDom = function(c) {
  * @override
  */
 goog.ui.media.Vimeo.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.media.Vimeo.CSS_CLASS;
 };
 
@@ -172,6 +176,7 @@ goog.ui.media.Vimeo.prototype.getCssClass = function() {
  */
 goog.ui.media.VimeoModel = function(
     videoId, opt_caption, opt_description, opt_autoplay) {
+  'use strict';
   goog.ui.media.MediaModel.call(
       this, goog.ui.media.VimeoModel.buildUrl(videoId), opt_caption,
       opt_description, goog.ui.media.MediaModel.MimeType.FLASH);
@@ -218,6 +223,7 @@ goog.ui.media.VimeoModel.MATCHER_ =
  */
 goog.ui.media.VimeoModel.newInstance = function(
     vimeoUrl, opt_caption, opt_description, opt_autoplay) {
+  'use strict';
   if (goog.ui.media.VimeoModel.MATCHER_.test(vimeoUrl)) {
     var data = goog.ui.media.VimeoModel.MATCHER_.exec(vimeoUrl);
     return new goog.ui.media.VimeoModel(
@@ -235,6 +241,7 @@ goog.ui.media.VimeoModel.newInstance = function(
  * @return {string} The vimeo URL.
  */
 goog.ui.media.VimeoModel.buildUrl = function(videoId) {
+  'use strict';
   return 'https://vimeo.com/' + goog.string.urlEncode(videoId);
 };
 
@@ -248,6 +255,7 @@ goog.ui.media.VimeoModel.buildUrl = function(videoId) {
  * @return {!goog.html.TrustedResourceUrl} The vimeo flash URL.
  */
 goog.ui.media.VimeoModel.buildFlashUrl = function(videoId, opt_autoplay) {
+  'use strict';
   return goog.html.TrustedResourceUrl.format(
       goog.string.Const.from(
           'https://vimeo.com/moogaloop.swf?clip_id=%{clip_id}' +
@@ -265,5 +273,6 @@ goog.ui.media.VimeoModel.buildFlashUrl = function(videoId, opt_autoplay) {
  * @return {string} The Vimeo video id.
  */
 goog.ui.media.VimeoModel.prototype.getVideoId = function() {
+  'use strict';
   return this.videoId_;
 };
