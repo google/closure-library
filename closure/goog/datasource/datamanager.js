@@ -25,6 +25,7 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
+goog.requireType('goog.ds.LoadState');
 
 
 

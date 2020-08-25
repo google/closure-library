@@ -23,6 +23,7 @@ goog.require('goog.ds.logger');
 goog.require('goog.log');
 goog.require('goog.net.XhrIo');
 goog.require('goog.string');
+goog.requireType('goog.events.Event');
 
 
 
