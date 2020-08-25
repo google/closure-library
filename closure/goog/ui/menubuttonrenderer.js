@@ -17,6 +17,8 @@ goog.require('goog.ui.CustomButtonRenderer');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuRenderer');
+goog.requireType('goog.ui.Control');
+goog.requireType('goog.ui.ControlContent');
 
 
 

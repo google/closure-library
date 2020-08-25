@@ -15,6 +15,9 @@ goog.require('goog.dom.classlist');
 goog.require('goog.ui.ColorMenuButtonRenderer');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.ToolbarMenuButtonRenderer');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.Control');
+goog.requireType('goog.ui.ControlContent');
 
 
 

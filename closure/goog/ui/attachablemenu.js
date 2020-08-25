@@ -24,6 +24,7 @@ goog.require('goog.ui.ItemEvent');
 goog.require('goog.ui.MenuBase');
 goog.require('goog.ui.PopupBase');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.KeyEvent');
 
 
 

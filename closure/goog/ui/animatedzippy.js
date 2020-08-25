@@ -21,6 +21,7 @@ goog.require('goog.fx.Transition');
 goog.require('goog.fx.easing');
 goog.require('goog.ui.Zippy');
 goog.require('goog.ui.ZippyEvent');
+goog.requireType('goog.events.Event');
 
 
 

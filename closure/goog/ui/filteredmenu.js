@@ -31,6 +31,10 @@ goog.require('goog.ui.FilterObservingMenuItem');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.KeyEvent');
+goog.requireType('goog.ui.Control');
+goog.requireType('goog.ui.MenuRenderer');
 
 
 

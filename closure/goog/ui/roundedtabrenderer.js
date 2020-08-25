@@ -16,6 +16,8 @@ goog.require('goog.ui.Tab');
 goog.require('goog.ui.TabBar');
 goog.require('goog.ui.TabRenderer');
 goog.require('goog.ui.registry');
+goog.requireType('goog.ui.Control');
+goog.requireType('goog.ui.ControlContent');
 
 
 

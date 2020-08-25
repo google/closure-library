@@ -23,7 +23,9 @@ goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.MenuItemRenderer');
-goog.require('goog.ui.registry');  // circular
+goog.require('goog.ui.registry');
+goog.requireType('goog.events.KeyCodes');
+goog.requireType('goog.ui.ControlContent');  // circular
 
 
 

@@ -48,6 +48,8 @@ goog.require('goog.ui.MenuHeader');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.MenuSeparator');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.Event');
 
 // The dependencies MenuHeader, MenuItem, and MenuSeparator are implicit.
 // There are no references in the code, but we need to load these

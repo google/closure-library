@@ -37,6 +37,11 @@ goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.MenuSeparator');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.events.KeyEvent');
+goog.requireType('goog.ui.ControlContent');
+goog.requireType('goog.ui.MenuItemRenderer');
 
 
 

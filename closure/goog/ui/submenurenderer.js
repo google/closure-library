@@ -20,6 +20,8 @@ goog.require('goog.dom.classlist');
 goog.require('goog.style');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItemRenderer');
+goog.requireType('goog.ui.Control');
+goog.requireType('goog.ui.ControlContent');
 
 
 
