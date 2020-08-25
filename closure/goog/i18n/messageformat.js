@@ -72,6 +72,7 @@ goog.require('goog.i18n.pluralRules');
  * @final
  */
 goog.i18n.MessageFormat = function(pattern) {
+  'use strict';
   /**
    * The pattern we parse and apply positional parameters to.
    * @type {?string}
@@ -211,6 +212,7 @@ goog.i18n.MessageFormat.BlockTypeVal_;
  * @private
  */
 goog.i18n.MessageFormat.getNumberFormatter_ = function() {
+  'use strict';
   var currentSymbols = goog.i18n.NumberFormatSymbols;
   var currentCompactSymbols = goog.i18n.CompactNumberFormatSymbols;
 
@@ -241,6 +243,7 @@ goog.i18n.MessageFormat.getNumberFormatter_ = function() {
  * @return {string} Formatted message.
  */
 goog.i18n.MessageFormat.prototype.format = function(namedParameters) {
+  'use strict';
   return this.format_(namedParameters, false);
 };
 
@@ -257,6 +260,7 @@ goog.i18n.MessageFormat.prototype.format = function(namedParameters) {
  */
 goog.i18n.MessageFormat.prototype.formatIgnoringPound = function(
     namedParameters) {
+  'use strict';
   return this.format_(namedParameters, true);
 };
 
@@ -277,6 +281,7 @@ goog.i18n.MessageFormat.prototype.formatIgnoringPound = function(
  */
 goog.i18n.MessageFormat.prototype.format_ = function(
     namedParameters, ignorePound) {
+  'use strict';
   this.init_();
   if (!this.parsedPattern_ || this.parsedPattern_.length == 0) {
     return '';
@@ -315,6 +320,7 @@ goog.i18n.MessageFormat.prototype.format_ = function(
  */
 goog.i18n.MessageFormat.prototype.formatBlock_ = function(
     parsedPattern, namedParameters, ignorePound, result) {
+  'use strict';
   for (var i = 0; i < parsedPattern.length; i++) {
     switch (parsedPattern[i].type) {
       case goog.i18n.MessageFormat.BlockType_.STRING:
@@ -357,6 +363,7 @@ goog.i18n.MessageFormat.prototype.formatBlock_ = function(
  */
 goog.i18n.MessageFormat.prototype.formatSimplePlaceholder_ = function(
     parsedPattern, namedParameters, result) {
+  'use strict';
   var value = namedParameters[parsedPattern];
   if (value === undefined) {
     result.push('Undefined parameter - ' + parsedPattern);
@@ -385,6 +392,7 @@ goog.i18n.MessageFormat.prototype.formatSimplePlaceholder_ = function(
  */
 goog.i18n.MessageFormat.prototype.formatSelectBlock_ = function(
     parsedPattern, namedParameters, ignorePound, result) {
+  'use strict';
   var argumentIndex = parsedPattern.argumentIndex;
   if (namedParameters[argumentIndex] === undefined) {
     result.push('Undefined parameter - ' + argumentIndex);
@@ -421,6 +429,7 @@ goog.i18n.MessageFormat.prototype.formatSelectBlock_ = function(
  */
 goog.i18n.MessageFormat.prototype.formatPluralOrdinalBlock_ = function(
     parsedPattern, namedParameters, pluralSelector, ignorePound, result) {
+  'use strict';
   var argumentIndex = parsedPattern.argumentIndex;
   var argumentOffset = parsedPattern.argumentOffset;
   var pluralValue = +namedParameters[argumentIndex];
@@ -469,6 +478,7 @@ goog.i18n.MessageFormat.prototype.formatPluralOrdinalBlock_ = function(
  * @private
  */
 goog.i18n.MessageFormat.prototype.init_ = function() {
+  'use strict';
   if (this.pattern_) {
     this.initialLiterals_ = [];
     var pattern = this.insertPlaceholders_(this.pattern_);
@@ -489,6 +499,7 @@ goog.i18n.MessageFormat.prototype.init_ = function() {
  * @private
  */
 goog.i18n.MessageFormat.prototype.insertPlaceholders_ = function(pattern) {
+  'use strict';
   var literals = this.initialLiterals_;
   var buildPlaceholder = goog.bind(this.buildPlaceholder_, this);
 
@@ -496,12 +507,14 @@ goog.i18n.MessageFormat.prototype.insertPlaceholders_ = function(pattern) {
   // inside other literals.
   pattern = pattern.replace(
       goog.i18n.MessageFormat.REGEX_DOUBLE_APOSTROPHE_, function() {
-        literals.push("'");
+        'use strict';
+        literals.push('\'');
         return buildPlaceholder(literals);
       });
 
   pattern = pattern.replace(
       goog.i18n.MessageFormat.REGEX_LITERAL_, function(match, text) {
+        'use strict';
         literals.push(text);
         return buildPlaceholder(literals);
       });
@@ -517,6 +530,7 @@ goog.i18n.MessageFormat.prototype.insertPlaceholders_ = function(pattern) {
  * @private
  */
 goog.i18n.MessageFormat.prototype.extractParts_ = function(pattern) {
+  'use strict';
   var prevPos = 0;
   var braceStack = [];
   var results = [];
@@ -604,6 +618,7 @@ goog.i18n.MessageFormat.SELECT_BLOCK_RE_ = /^\s*(\w+)\s*,\s*select\s*,/;
  * @private
  */
 goog.i18n.MessageFormat.prototype.parseBlockType_ = function(pattern) {
+  'use strict';
   if (goog.i18n.MessageFormat.PLURAL_BLOCK_RE_.test(pattern)) {
     return goog.i18n.MessageFormat.BlockType_.PLURAL;
   }
@@ -632,6 +647,7 @@ goog.i18n.MessageFormat.prototype.parseBlockType_ = function(pattern) {
  * @private
  */
 goog.i18n.MessageFormat.prototype.parseBlock_ = function(pattern) {
+  'use strict';
   var result = [];
   var parts = this.extractParts_(pattern);
   for (var i = 0; i < parts.length; i++) {
@@ -681,9 +697,11 @@ goog.i18n.MessageFormat.prototype.parseBlock_ = function(pattern) {
  * @private
  */
 goog.i18n.MessageFormat.prototype.parseSelectBlock_ = function(pattern) {
+  'use strict';
   var argumentIndex = '';
   var replaceRegex = goog.i18n.MessageFormat.SELECT_BLOCK_RE_;
   pattern = pattern.replace(replaceRegex, function(string, name) {
+    'use strict';
     argumentIndex = name;
     return '';
   });
@@ -726,10 +744,12 @@ goog.i18n.MessageFormat.prototype.parseSelectBlock_ = function(pattern) {
  * @private
  */
 goog.i18n.MessageFormat.prototype.parsePluralBlock_ = function(pattern) {
+  'use strict';
   var argumentIndex = '';
   var argumentOffset = 0;
   var replaceRegex = goog.i18n.MessageFormat.PLURAL_BLOCK_RE_;
   pattern = pattern.replace(replaceRegex, function(string, name, offset) {
+    'use strict';
     argumentIndex = name;
     if (offset) {
       argumentOffset = parseInt(offset, 10);
@@ -786,9 +806,11 @@ goog.i18n.MessageFormat.prototype.parsePluralBlock_ = function(pattern) {
  * @private
  */
 goog.i18n.MessageFormat.prototype.parseOrdinalBlock_ = function(pattern) {
+  'use strict';
   var argumentIndex = '';
   var replaceRegex = goog.i18n.MessageFormat.ORDINAL_BLOCK_RE_;
   pattern = pattern.replace(replaceRegex, function(string, name) {
+    'use strict';
     argumentIndex = name;
     return '';
   });
@@ -832,6 +854,7 @@ goog.i18n.MessageFormat.prototype.parseOrdinalBlock_ = function(pattern) {
  * @private
  */
 goog.i18n.MessageFormat.prototype.buildPlaceholder_ = function(literals) {
+  'use strict';
   goog.asserts.assert(literals.length > 0, 'Literal array is empty.');
 
   var index = (literals.length - 1).toString(10);

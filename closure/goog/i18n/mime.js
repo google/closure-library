@@ -42,6 +42,7 @@ goog.i18n.mime.NONASCII_NOQUOTE_ =
  * @return {string} The encoded string.
  */
 goog.i18n.mime.encode = function(str, opt_noquote) {
+  'use strict';
   var nonascii =
       opt_noquote ? goog.i18n.mime.NONASCII_NOQUOTE_ : goog.i18n.mime.NONASCII_;
 
@@ -54,6 +55,7 @@ goog.i18n.mime.encode = function(str, opt_noquote) {
              * @return {string} The quoted-printable form of utf-8 encoding.
              */
             function(c) {
+              'use strict';
               var i = c.charCodeAt(0);
               if (i == 32) {
                 // Special case for space, which can be encoded as _ not =20
@@ -74,6 +76,7 @@ goog.i18n.mime.encode = function(str, opt_noquote) {
  * @return {!Array<string>} A hex array representing the character.
  */
 goog.i18n.mime.getHexCharArray = function(c) {
+  'use strict';
   var i = goog.i18n.uChar.toCharCode(c);
   var a = [];
   // First convert the UCS-2 character into its UTF-8 bytes

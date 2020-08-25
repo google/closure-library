@@ -37,6 +37,7 @@ goog.require('goog.i18n.uChar');
  * @final
  */
 goog.i18n.CharListDecompressor = function() {
+  'use strict';
   this.buildCharMap_(
       '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr' +
       'stuvwxyz!#$%()*+,-.:;<=>?@[]^_`{|}~');
@@ -59,6 +60,7 @@ goog.i18n.CharListDecompressor.prototype.charMap_ = null;
  * @private
  */
 goog.i18n.CharListDecompressor.prototype.buildCharMap_ = function(str) {
+  'use strict';
   if (!this.charMap_) {
     this.charMap_ = {};
     for (var i = 0; i < str.length; i++) {
@@ -80,6 +82,7 @@ goog.i18n.CharListDecompressor.prototype.buildCharMap_ = function(str) {
  */
 goog.i18n.CharListDecompressor.prototype.getCodeAt_ = function(
     str, start, leng) {
+  'use strict';
   var result = 0;
   for (var i = 0; i < leng; i++) {
     var c = this.charMap_[str.charAt(start + i)];
@@ -104,6 +107,7 @@ goog.i18n.CharListDecompressor.prototype.getCodeAt_ = function(
  */
 goog.i18n.CharListDecompressor.prototype.addChars_ = function(
     list, lastcode, value, type) {
+  'use strict';
   if (type == 0) {
     lastcode += value + 1;
     goog.array.extend(list, goog.i18n.uChar.fromCharCode(lastcode));
@@ -127,6 +131,7 @@ goog.i18n.CharListDecompressor.prototype.addChars_ = function(
  *     string in base 88 scheme.
  */
 goog.i18n.CharListDecompressor.prototype.toCharList = function(str) {
+  'use strict';
   var metasize = 8;
   var result = [];
   var lastcode = 0;
