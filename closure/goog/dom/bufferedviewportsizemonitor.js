@@ -24,6 +24,8 @@ goog.require('goog.async.Delay');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+goog.requireType('goog.dom');
+goog.requireType('goog.math.Size');
 
 
 
