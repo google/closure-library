@@ -31,6 +31,7 @@ goog.requireType('goog.graphics.ext.Group');
  * @extends {goog.graphics.ext.Element}
  */
 goog.graphics.ext.StrokeAndFillElement = function(group, wrapper) {
+  'use strict';
   goog.graphics.ext.Element.call(this, group, wrapper);
 };
 goog.inherits(
@@ -42,6 +43,7 @@ goog.inherits(
  * @param {goog.graphics.Fill?} fill The fill object.
  */
 goog.graphics.ext.StrokeAndFillElement.prototype.setFill = function(fill) {
+  'use strict';
   this.getWrapper().setFill(fill);
 };
 
@@ -51,6 +53,7 @@ goog.graphics.ext.StrokeAndFillElement.prototype.setFill = function(fill) {
  * @param {goog.graphics.Stroke?} stroke The stroke object.
  */
 goog.graphics.ext.StrokeAndFillElement.prototype.setStroke = function(stroke) {
+  'use strict';
   this.getWrapper().setStroke(stroke);
 };
 
@@ -61,5 +64,6 @@ goog.graphics.ext.StrokeAndFillElement.prototype.setStroke = function(stroke) {
  * @override
  */
 goog.graphics.ext.StrokeAndFillElement.prototype.redraw = function() {
+  'use strict';
   this.getWrapper().reapplyStroke();
 };

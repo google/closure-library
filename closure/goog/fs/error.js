@@ -49,6 +49,7 @@ goog.fs.DOMErrorLike.prototype.code;
  * @final
  */
 goog.fs.Error = function(error, action) {
+  'use strict';
   /** @type {string} */
   this.name;
 
@@ -130,8 +131,11 @@ goog.fs.Error.ErrorCode = {
  * @private
  */
 goog.fs.Error.getNameFromCode_ = function(code) {
-  var name = goog.object.findKey(
-      goog.fs.Error.NameToCodeMap_, function(c) { return code == c; });
+  'use strict';
+  var name = goog.object.findKey(goog.fs.Error.NameToCodeMap_, function(c) {
+    'use strict';
+    return code == c;
+  });
   if (name === undefined) {
     throw new Error('Invalid code: ' + code);
   }
@@ -146,6 +150,7 @@ goog.fs.Error.getNameFromCode_ = function(code) {
  * @private
  */
 goog.fs.Error.getCodeFromName_ = function(name) {
+  'use strict';
   return goog.fs.Error.NameToCodeMap_[name];
 };
 
