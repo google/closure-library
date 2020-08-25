@@ -19,6 +19,8 @@ goog.require('goog.style');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.style.app.ButtonRenderer');
+goog.requireType('goog.ui.Control');
+goog.requireType('goog.ui.ControlContent');
 goog.requireType('goog.ui.MenuButton');
 
 
