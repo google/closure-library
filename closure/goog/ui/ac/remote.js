@@ -17,6 +17,7 @@ goog.require('goog.ui.ac.AutoComplete');
 goog.require('goog.ui.ac.InputHandler');
 goog.require('goog.ui.ac.RemoteArrayMatcher');
 goog.require('goog.ui.ac.Renderer');
+goog.requireType('goog.structs.Map');
 
 
 
