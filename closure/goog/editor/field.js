@@ -50,6 +50,11 @@ goog.require('goog.string.Unicode');
 goog.require('goog.style');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
+goog.requireType('goog.Disposable');
+goog.requireType('goog.dom.AbstractRange');
+goog.requireType('goog.dom.SavedRange');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.html.TrustedResourceUrl');
 
 
 
