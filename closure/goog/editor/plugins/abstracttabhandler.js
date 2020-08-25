@@ -25,6 +25,7 @@ goog.requireType('goog.events.Event');
  * @extends {goog.editor.Plugin}
  */
 goog.editor.plugins.AbstractTabHandler = function() {
+  'use strict';
   goog.editor.Plugin.call(this);
 };
 goog.inherits(goog.editor.plugins.AbstractTabHandler, goog.editor.Plugin);
@@ -38,6 +39,7 @@ goog.editor.plugins.AbstractTabHandler.prototype.getTrogClassId =
 /** @override */
 goog.editor.plugins.AbstractTabHandler.prototype.handleKeyboardShortcut =
     function(e, key, isModifierPressed) {
+  'use strict';
   // If a dialog doesn't have selectable field, Moz grabs the event and
   // performs actions in editor window. This solves that problem and allows
   // the event to be passed on to proper handlers.

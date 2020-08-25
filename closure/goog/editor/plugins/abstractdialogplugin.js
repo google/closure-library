@@ -38,6 +38,7 @@ goog.requireType('goog.events.Event');
  * @extends {goog.editor.Plugin}
  */
 goog.editor.plugins.AbstractDialogPlugin = function(command) {
+  'use strict';
   goog.editor.plugins.AbstractDialogPlugin.base(this, 'constructor');
 
   /**
@@ -80,6 +81,7 @@ goog.inherits(goog.editor.plugins.AbstractDialogPlugin, goog.editor.Plugin);
 /** @override */
 goog.editor.plugins.AbstractDialogPlugin.prototype.isSupportedCommand =
     function(command) {
+  'use strict';
   return command == this.command_;
 };
 
@@ -97,6 +99,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.isSupportedCommand =
  */
 goog.editor.plugins.AbstractDialogPlugin.prototype.execCommand = function(
     command, var_args) {
+  'use strict';
   return this.execCommandInternal.apply(this, arguments);
 };
 
@@ -143,6 +146,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.createDialog =
  * @protected
  */
 goog.editor.plugins.AbstractDialogPlugin.prototype.getDialog = function() {
+  'use strict';
   return this.dialog_;
 };
 
@@ -156,6 +160,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.getDialog = function() {
  */
 goog.editor.plugins.AbstractDialogPlugin.prototype.setReuseDialog = function(
     reuse) {
+  'use strict';
   this.reuseDialog_ = reuse;
 };
 
@@ -173,6 +178,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.setReuseDialog = function(
  */
 goog.editor.plugins.AbstractDialogPlugin.prototype.execCommandInternal =
     function(command, opt_arg) {
+  'use strict';
   // If this plugin should not reuse dialog instances, first dispose of the
   // previous dialog.
   if (!this.reuseDialog_) {
@@ -233,6 +239,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.execCommandInternal =
  */
 goog.editor.plugins.AbstractDialogPlugin.prototype.handleAfterHide = function(
     e) {
+  'use strict';
   this.getFieldObject().setModalMode(false);
   this.restoreOriginalSelection();
   this.restoreScrollPosition_();
@@ -267,6 +274,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.handleAfterHide = function(
  */
 goog.editor.plugins.AbstractDialogPlugin.prototype.restoreOriginalSelection =
     function() {
+  'use strict';
   this.getFieldObject().restoreSavedRange(this.savedRange_);
   this.savedRange_ = null;
 };
@@ -280,6 +288,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.restoreOriginalSelection =
  */
 goog.editor.plugins.AbstractDialogPlugin.prototype.disposeOriginalSelection =
     function() {
+  'use strict';
   if (this.savedRange_) {
     this.savedRange_.dispose();
     this.savedRange_ = null;
@@ -290,6 +299,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.disposeOriginalSelection =
 /** @override */
 goog.editor.plugins.AbstractDialogPlugin.prototype.disposeInternal =
     function() {
+  'use strict';
   this.disposeDialog_();
   goog.editor.plugins.AbstractDialogPlugin.base(this, 'disposeInternal');
 };
@@ -306,6 +316,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.disposeInternal =
  * @private
  */
 goog.editor.plugins.AbstractDialogPlugin.prototype.disposeDialog_ = function() {
+  'use strict';
   // Wrap disposing the dialog in a mutex. Otherwise disposing it would cause it
   // to get hidden (if it is still open) and fire AFTER_HIDE, which in
   // turn would cause the dialog to be disposed again (closure only flags an

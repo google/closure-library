@@ -26,6 +26,7 @@ goog.require('goog.iter');
  * @final
  */
 goog.editor.plugins.ListTabHandler = function() {
+  'use strict';
   goog.editor.plugins.AbstractTabHandler.call(this);
 };
 goog.inherits(
@@ -34,16 +35,19 @@ goog.inherits(
 
 /** @override */
 goog.editor.plugins.ListTabHandler.prototype.getTrogClassId = function() {
+  'use strict';
   return 'ListTabHandler';
 };
 
 
 /** @override */
 goog.editor.plugins.ListTabHandler.prototype.handleTabKey = function(e) {
+  'use strict';
   var range = this.getFieldObject().getRange();
   if (goog.dom.getAncestorByTagNameAndClass(
           range.getContainerElement(), goog.dom.TagName.LI) ||
       goog.iter.some(range, function(node) {
+        'use strict';
         return node.tagName == goog.dom.TagName.LI;
       })) {
     this.getFieldObject().execCommand(

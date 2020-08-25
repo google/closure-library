@@ -23,6 +23,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.editor.plugins.HeaderFormatter = function() {
+  'use strict';
   goog.editor.Plugin.call(this);
 };
 goog.inherits(goog.editor.plugins.HeaderFormatter, goog.editor.Plugin);
@@ -30,6 +31,7 @@ goog.inherits(goog.editor.plugins.HeaderFormatter, goog.editor.Plugin);
 
 /** @override */
 goog.editor.plugins.HeaderFormatter.prototype.getTrogClassId = function() {
+  'use strict';
   return 'HeaderFormatter';
 };
 
@@ -56,6 +58,7 @@ goog.editor.plugins.HeaderFormatter.HEADER_COMMAND = {
  */
 goog.editor.plugins.HeaderFormatter.prototype.handleKeyboardShortcut = function(
     e, key, isModifierPressed) {
+  'use strict';
   if (!isModifierPressed) {
     return false;
   }

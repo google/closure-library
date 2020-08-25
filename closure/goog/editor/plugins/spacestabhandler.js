@@ -23,6 +23,7 @@ goog.require('goog.editor.range');
  * @final
  */
 goog.editor.plugins.SpacesTabHandler = function() {
+  'use strict';
   goog.editor.plugins.AbstractTabHandler.call(this);
 };
 goog.inherits(
@@ -32,12 +33,14 @@ goog.inherits(
 
 /** @override */
 goog.editor.plugins.SpacesTabHandler.prototype.getTrogClassId = function() {
+  'use strict';
   return 'SpacesTabHandler';
 };
 
 
 /** @override */
 goog.editor.plugins.SpacesTabHandler.prototype.handleTabKey = function(e) {
+  'use strict';
   var dh = this.getFieldDomHelper();
   var range = this.getFieldObject().getRange();
   if (!goog.editor.range.intersectsTag(range, goog.dom.TagName.LI)) {
