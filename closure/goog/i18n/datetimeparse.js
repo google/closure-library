@@ -18,6 +18,7 @@ goog.require('goog.asserts');
 goog.require('goog.date');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
+goog.requireType('goog.i18n.DateTimeSymbolsType');
 
 
 /**
