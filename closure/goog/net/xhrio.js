@@ -55,6 +55,9 @@ goog.require('goog.structs.Map');
 goog.require('goog.uri.utils');
 goog.require('goog.userAgent');
 goog.requireType('goog.Uri');
+goog.requireType('goog.debug.ErrorHandler');
+goog.requireType('goog.net.XhrLike');
+goog.requireType('goog.net.XmlHttpFactory');
 
 goog.scope(function() {
 
