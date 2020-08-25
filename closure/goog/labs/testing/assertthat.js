@@ -25,6 +25,7 @@ goog.requireType('goog.labs.testing.Matcher');
  * @param {string=} opt_reason Description of what is asserted.
  */
 goog.labs.testing.assertThat = function(actual, matcher, opt_reason) {
+  'use strict';
   if (!matcher.matches(actual)) {
     // Prefix the error description with a reason from the assert ?
     var prefix = opt_reason ? opt_reason + ': ' : '';
@@ -45,6 +46,7 @@ goog.labs.testing.assertThat = function(actual, matcher, opt_reason) {
  * @final
  */
 goog.labs.testing.MatcherError = function(opt_message) {
+  'use strict';
   goog.labs.testing.MatcherError.base(this, 'constructor', opt_message);
 };
 goog.inherits(goog.labs.testing.MatcherError, goog.debug.Error);

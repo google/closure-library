@@ -30,6 +30,7 @@ goog.require('goog.testing.jsunit');
 goog.labs.testing.Environment = goog.defineClass(null, {
   /** @constructor */
   constructor: function() {
+    'use strict';
     var testcase = goog.labs.testing.EnvironmentTestCase_.getInstance();
     testcase.registerEnvironment_(this);
 
@@ -68,6 +69,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    *     resolved before the test is executed.
    */
   setUpPage: function() {
+    'use strict';
     if (this.mockClockOn && !this.hasMockClock()) {
       this.mockClock = new goog.testing.MockClock(true);
     }
@@ -76,6 +78,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
   /** Runs immediately after the tearDownPage phase of JsUnit tests. */
   tearDownPage: function() {
+    'use strict';
     // If we created the mockClock, we'll also dispose it.
     if (this.hasMockClock()) {
       this.mockClock.dispose();
@@ -95,6 +98,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    *     resolved before the next test case is executed.
    */
   tearDown: function() {
+    'use strict';
     // Make sure promises and other stuff that may still be scheduled, get a
     // chance to run (and throw errors).
     if (this.mockClock) {
@@ -141,6 +145,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    * @return {!goog.labs.testing.Environment} For chaining.
    */
   withMockControl: function() {
+    'use strict';
     if (!this.shouldMakeMockControl_) {
       this.shouldMakeMockControl_ = true;
       this.mockControl = new goog.testing.MockControl();
@@ -157,6 +162,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    * @return {!goog.labs.testing.Environment} For chaining.
    */
   withMockClock: function() {
+    'use strict';
     if (!this.hasMockClock()) {
       this.mockClockOn = true;
       this.mockClock = new goog.testing.MockClock(true);
@@ -169,6 +175,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    * @protected
    */
   hasMockClock: function() {
+    'use strict';
     return this.mockClockOn && !!this.mockClock && !this.mockClock.isDisposed();
   },
 
@@ -179,6 +186,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    * @return {?}
    */
   mock: function(toMock) {
+    'use strict';
     if (!this.shouldMakeMockControl_) {
       throw new Error(
           'MockControl not available on this environment. ' +
@@ -226,6 +234,7 @@ goog.labs.testing.Environment.activeTestCase_ = null;
  * @return {?goog.testing.TestCase}
  */
 goog.labs.testing.Environment.getTestCaseIfActive = function() {
+  'use strict';
   return goog.labs.testing.Environment.activeTestCase_;
 };
 
@@ -246,6 +255,7 @@ goog.labs.testing.Environment.console_.setCapturing(true);
  * @extends {goog.testing.TestCase}
  */
 goog.labs.testing.EnvironmentTestCase_ = function() {
+  'use strict';
   goog.labs.testing.EnvironmentTestCase_.base(
       this, 'constructor', document.title);
 
@@ -270,6 +280,7 @@ goog.addSingletonGetter(goog.labs.testing.EnvironmentTestCase_);
  */
 goog.labs.testing.EnvironmentTestCase_.prototype.setLifecycleObj = function(
     obj) {
+  'use strict';
   goog.asserts.assert(
       this.testobj_ == goog.global,
       'A test method object has already been provided ' +
@@ -292,6 +303,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setLifecycleObj = function(
  */
 goog.labs.testing.EnvironmentTestCase_.prototype.createTest = function(
     name, ref, scope, objChain) {
+  'use strict';
   return new goog.labs.testing.EnvironmentTest_(name, ref, scope, objChain);
 };
 
@@ -303,13 +315,16 @@ goog.labs.testing.EnvironmentTestCase_.prototype.createTest = function(
  */
 goog.labs.testing.EnvironmentTestCase_.prototype.registerEnvironment_ =
     function(env) {
+  'use strict';
   this.environments_.push(env);
 };
 
 
 /** @override */
 goog.labs.testing.EnvironmentTestCase_.prototype.setUpPage = function() {
+  'use strict';
   var setUpPageFns = goog.array.map(this.environments_, function(env) {
+    'use strict';
     return () => env.setUpPage();
   });
 
@@ -323,6 +338,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUpPage = function() {
 
 /** @override */
 goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
+  'use strict';
   var setUpFns = [];
   // User defined configure method.
   if (this.testobj_['configureEnvironment']) {
@@ -334,6 +350,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
   }
 
   goog.array.forEach(this.environments_, function(env) {
+    'use strict';
     setUpFns.push(() => env.setUp());
   }, this);
 
@@ -358,6 +375,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
  */
 goog.labs.testing.EnvironmentTestCase_.prototype.callAndChainPromises_ =
     function(fns, ensureAllFnsCalled) {
+  'use strict';
   // Using await here (and making callAndChainPromises_ an async method)
   // causes many tests across google3 to start failing with errors like this:
   // "Timed out while waiting for a promise returned from setUp to resolve".
@@ -413,6 +431,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.callAndChainPromises_ =
 
 /** @override */
 goog.labs.testing.EnvironmentTestCase_.prototype.tearDown = function() {
+  'use strict';
   var tearDownFns = [];
   // User defined tearDown method.
   if (this.testobj_['tearDown']) {
@@ -422,6 +441,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.tearDown = function() {
   // Execute the tearDown methods for the environment in the reverse order
   // in which they were registered to "unfold" the setUp.
   goog.array.forEachRight(this.environments_, function(env) {
+    'use strict';
     tearDownFns.push(() => env.tearDown());
   });
   // For tearDowns between tests make sure they run as much as possible to avoid
@@ -433,13 +453,16 @@ goog.labs.testing.EnvironmentTestCase_.prototype.tearDown = function() {
 
 /** @override */
 goog.labs.testing.EnvironmentTestCase_.prototype.tearDownPage = function() {
+  'use strict';
   // User defined tearDownPage method.
   if (this.testobj_['tearDownPage']) {
     this.testobj_['tearDownPage']();
   }
 
-  goog.array.forEachRight(
-      this.environments_, function(env) { env.tearDownPage(); });
+  goog.array.forEachRight(this.environments_, function(env) {
+    'use strict';
+    env.tearDownPage();
+  });
 };
 
 /**
@@ -456,6 +479,7 @@ goog.labs.testing.EnvironmentTestCase_.prototype.tearDownPage = function() {
  * @extends {goog.testing.TestCase.Test}
  */
 goog.labs.testing.EnvironmentTest_ = function(name, ref, scope, objChain) {
+  'use strict';
   goog.labs.testing.EnvironmentTest_.base(
       this, 'constructor', name, ref, scope, objChain);
 
@@ -466,12 +490,14 @@ goog.labs.testing.EnvironmentTest_ = function(name, ref, scope, objChain) {
       goog.array.filter(
           objChain || [],
           function(obj) {
+            'use strict';
             return goog.isFunction(obj.configureEnvironment);
           }), /**
                * @param  {{configureEnvironment: function()}} obj
                * @return {function()}
                */
       function(obj) {
+        'use strict';
         return goog.bind(obj.configureEnvironment, obj);
       });
 };

@@ -52,7 +52,7 @@ goog.labs.testing.Matcher.prototype.describe = function(
  */
 goog.labs.testing.Matcher.makeMatcher = function(
     matchesFunction, opt_describeFunction) {
-
+  'use strict';
   /**
    * @constructor
    * @implements {goog.labs.testing.Matcher}

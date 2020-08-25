@@ -27,6 +27,7 @@ goog.labs.net.webChannel.Channel = function() {};
 
 
 goog.scope(function() {
+'use strict';
 const Channel = goog.labs.net.webChannel.Channel;
 
 

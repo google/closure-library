@@ -31,6 +31,7 @@ goog.require('goog.labs.testing.Matcher');
  * @final
  */
 goog.labs.testing.AllOfMatcher = function(matchers) {
+  'use strict';
   /**
    * @type {!Array<!goog.labs.testing.Matcher>}
    * @private
@@ -45,7 +46,9 @@ goog.labs.testing.AllOfMatcher = function(matchers) {
  * @override
  */
 goog.labs.testing.AllOfMatcher.prototype.matches = function(actualValue) {
+  'use strict';
   return goog.array.every(this.matchers_, function(matcher) {
+    'use strict';
     return matcher.matches(actualValue);
   });
 };
@@ -58,9 +61,11 @@ goog.labs.testing.AllOfMatcher.prototype.matches = function(actualValue) {
  * @override
  */
 goog.labs.testing.AllOfMatcher.prototype.describe = function(actualValue) {
+  'use strict';
   // TODO(vbhasin) : Optimize this to remove duplication with matches ?
   var errorString = '';
   goog.array.forEach(this.matchers_, function(matcher) {
+    'use strict';
     if (!matcher.matches(actualValue)) {
       errorString += matcher.describe(actualValue) + '\n';
     }
@@ -81,6 +86,7 @@ goog.labs.testing.AllOfMatcher.prototype.describe = function(actualValue) {
  * @final
  */
 goog.labs.testing.AnyOfMatcher = function(matchers) {
+  'use strict';
   /**
    * @type {!Array<!goog.labs.testing.Matcher>}
    * @private
@@ -95,7 +101,9 @@ goog.labs.testing.AnyOfMatcher = function(matchers) {
  * @override
  */
 goog.labs.testing.AnyOfMatcher.prototype.matches = function(actualValue) {
+  'use strict';
   return goog.array.some(this.matchers_, function(matcher) {
+    'use strict';
     return matcher.matches(actualValue);
   });
 };
@@ -107,9 +115,11 @@ goog.labs.testing.AnyOfMatcher.prototype.matches = function(actualValue) {
  * @override
  */
 goog.labs.testing.AnyOfMatcher.prototype.describe = function(actualValue) {
+  'use strict';
   // TODO(vbhasin) : Optimize this to remove duplication with matches ?
   var errorString = '';
   goog.array.forEach(this.matchers_, function(matcher) {
+    'use strict';
     if (!matcher.matches(actualValue)) {
       errorString += matcher.describe(actualValue) + '\n';
     }
@@ -130,6 +140,7 @@ goog.labs.testing.AnyOfMatcher.prototype.describe = function(actualValue) {
  * @final
  */
 goog.labs.testing.IsNotMatcher = function(matcher) {
+  'use strict';
   /**
    * @type {!goog.labs.testing.Matcher}
    * @private
@@ -144,6 +155,7 @@ goog.labs.testing.IsNotMatcher = function(matcher) {
  * @override
  */
 goog.labs.testing.IsNotMatcher.prototype.matches = function(actualValue) {
+  'use strict';
   return !this.matcher_.matches(actualValue);
 };
 
@@ -154,6 +166,7 @@ goog.labs.testing.IsNotMatcher.prototype.matches = function(actualValue) {
  * @override
  */
 goog.labs.testing.IsNotMatcher.prototype.describe = function(actualValue) {
+  'use strict';
   return 'The following is false: ' + this.matcher_.describe(actualValue);
 };
 
@@ -168,6 +181,7 @@ goog.labs.testing.IsNotMatcher.prototype.describe = function(actualValue) {
  * @return {!goog.labs.testing.AllOfMatcher} The AllOf matcher.
  */
 var allOf = goog.labs.testing.AllOfMatcher.allOf = function(var_args) {
+  'use strict';
   var matchers = goog.array.toArray(arguments);
   return new goog.labs.testing.AllOfMatcher(matchers);
 };
@@ -183,6 +197,7 @@ var allOf = goog.labs.testing.AllOfMatcher.allOf = function(var_args) {
  * @return {!goog.labs.testing.AnyOfMatcher} The AnyOf matcher.
  */
 var anyOf = goog.labs.testing.AnyOfMatcher.anyOf = function(var_args) {
+  'use strict';
   var matchers = goog.array.toArray(arguments);
   return new goog.labs.testing.AnyOfMatcher(matchers);
 };
@@ -197,6 +212,7 @@ var anyOf = goog.labs.testing.AnyOfMatcher.anyOf = function(var_args) {
  * @return {!goog.labs.testing.IsNotMatcher} The IsNot matcher.
  */
 var isNot = goog.labs.testing.IsNotMatcher.isNot = function(matcher) {
+  'use strict';
   return new goog.labs.testing.IsNotMatcher(matcher);
 };
 
