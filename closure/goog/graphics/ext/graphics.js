@@ -25,6 +25,10 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.graphics');
 goog.require('goog.graphics.ext.Group');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.graphics.AbstractGraphics');
+goog.requireType('goog.math.Coordinate');
+goog.requireType('goog.math.Size');
 
 
 
