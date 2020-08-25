@@ -28,6 +28,7 @@ goog.require('goog.storage.mechanism.Mechanism');
  */
 goog.storage.mechanism.ErrorHandlingMechanism = function(
     mechanism, errorHandler) {
+  'use strict';
   goog.storage.mechanism.ErrorHandlingMechanism.base(this, 'constructor');
 
   /**
@@ -84,6 +85,7 @@ goog.storage.mechanism.ErrorHandlingMechanism.ErrorHandler;
 /** @override */
 goog.storage.mechanism.ErrorHandlingMechanism.prototype.set = function(
     key, value) {
+  'use strict';
   try {
     this.mechanism_.set(key, value);
   } catch (e) {
@@ -96,6 +98,7 @@ goog.storage.mechanism.ErrorHandlingMechanism.prototype.set = function(
 
 /** @override */
 goog.storage.mechanism.ErrorHandlingMechanism.prototype.get = function(key) {
+  'use strict';
   try {
     return this.mechanism_.get(key);
   } catch (e) {
@@ -108,6 +111,7 @@ goog.storage.mechanism.ErrorHandlingMechanism.prototype.get = function(key) {
 
 /** @override */
 goog.storage.mechanism.ErrorHandlingMechanism.prototype.remove = function(key) {
+  'use strict';
   try {
     this.mechanism_.remove(key);
   } catch (e) {

@@ -31,7 +31,7 @@ goog.require('goog.string');
  * @return {string} Formatted string.
  */
 goog.string.format = function(formatString, var_args) {
-
+  'use strict';
   // Convert the arguments to an array (MDC recommended way).
   var args = Array.prototype.slice.call(arguments);
 
@@ -103,6 +103,7 @@ goog.string.format.demuxes_ = {};
  */
 goog.string.format.demuxes_['s'] = function(
     value, flags, width, dotp, precision, type, offset, wholeString) {
+  'use strict';
   var replacement = value;
   // If no padding is necessary we're done.
   // The check for '' is necessary because Firefox incorrectly provides the
@@ -138,7 +139,7 @@ goog.string.format.demuxes_['s'] = function(
  */
 goog.string.format.demuxes_['f'] = function(
     value, flags, width, dotp, precision, type, offset, wholeString) {
-
+  'use strict';
   var replacement = value.toString();
 
   // The check for '' is necessary because Firefox incorrectly provides the
@@ -204,6 +205,7 @@ goog.string.format.demuxes_['f'] = function(
  */
 goog.string.format.demuxes_['d'] = function(
     value, flags, width, dotp, precision, type, offset, wholeString) {
+  'use strict';
   return goog.string.format.demuxes_['f'](
       parseInt(value, 10) /* value */, flags, width, dotp, 0 /* precision */,
       type, offset, wholeString);

@@ -21,6 +21,7 @@ goog.provide('goog.string.StringBuffer');
  * @constructor
  */
 goog.string.StringBuffer = function(opt_a1, var_args) {
+  'use strict';
   if (opt_a1 != null) {
     this.append.apply(this, arguments);
   }
@@ -42,6 +43,7 @@ goog.string.StringBuffer.prototype.buffer_ = '';
  * @param {*} s String to set.
  */
 goog.string.StringBuffer.prototype.set = function(s) {
+  'use strict';
   this.buffer_ = '' + s;
 };
 
@@ -59,6 +61,7 @@ goog.string.StringBuffer.prototype.set = function(s) {
  * @suppress {duplicate}
  */
 goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
+  'use strict';
   // Use a1 directly to avoid arguments instantiation for single-arg case.
   this.buffer_ += String(a1);
   if (opt_a2 != null) {  // second argument is undefined (null == undefined)
@@ -74,6 +77,7 @@ goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
  * Clears the internal buffer.
  */
 goog.string.StringBuffer.prototype.clear = function() {
+  'use strict';
   this.buffer_ = '';
 };
 
@@ -82,6 +86,7 @@ goog.string.StringBuffer.prototype.clear = function() {
  * @return {number} the length of the current contents of the buffer.
  */
 goog.string.StringBuffer.prototype.getLength = function() {
+  'use strict';
   return this.buffer_.length;
 };
 
@@ -91,5 +96,6 @@ goog.string.StringBuffer.prototype.getLength = function() {
  * @override
  */
 goog.string.StringBuffer.prototype.toString = function() {
+  'use strict';
   return this.buffer_;
 };

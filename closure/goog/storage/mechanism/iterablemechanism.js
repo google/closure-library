@@ -27,6 +27,7 @@ goog.require('goog.storage.mechanism.Mechanism');
  * @abstract
  */
 goog.storage.mechanism.IterableMechanism = function() {
+  'use strict';
   goog.storage.mechanism.IterableMechanism.base(this, 'constructor');
 };
 goog.inherits(
@@ -42,8 +43,10 @@ goog.inherits(
  * @return {number} Number of stored elements.
  */
 goog.storage.mechanism.IterableMechanism.prototype.getCount = function() {
+  'use strict';
   var count = 0;
   goog.iter.forEach(this.__iterator__(true), function(key) {
+    'use strict';
     goog.asserts.assertString(key);
     count++;
   });
@@ -70,10 +73,14 @@ goog.storage.mechanism.IterableMechanism.prototype.__iterator__ =
  * efficient - it iterates over all keys.
  */
 goog.storage.mechanism.IterableMechanism.prototype.clear = function() {
+  'use strict';
   // This converts the keys to an array first because otherwise
   // removing while iterating results in unstable ordering of keys and
   // can skip keys or terminate early.
   var keys = goog.iter.toArray(this.__iterator__(true));
   var selfObj = this;
-  goog.array.forEach(keys, function(key) { selfObj.remove(key); });
+  goog.array.forEach(keys, function(key) {
+    'use strict';
+    selfObj.remove(key);
+  });
 };

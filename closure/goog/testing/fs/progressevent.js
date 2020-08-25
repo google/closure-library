@@ -29,6 +29,7 @@ goog.requireType('goog.fs.FileSaver.EventType');
  * @final
  */
 goog.testing.fs.ProgressEvent = function(type, loaded, total) {
+  'use strict';
   goog.testing.fs.ProgressEvent.base(this, 'constructor', type);
 
   /**
@@ -54,6 +55,7 @@ goog.inherits(goog.testing.fs.ProgressEvent, goog.events.Event);
  * @return {boolean} True if the length is known.
  */
 goog.testing.fs.ProgressEvent.prototype.isLengthComputable = function() {
+  'use strict';
   return true;
 };
 
@@ -63,6 +65,7 @@ goog.testing.fs.ProgressEvent.prototype.isLengthComputable = function() {
  * @return {number} The number of bytes loaded or written.
  */
 goog.testing.fs.ProgressEvent.prototype.getLoaded = function() {
+  'use strict';
   return this.loaded_;
 };
 
@@ -72,5 +75,6 @@ goog.testing.fs.ProgressEvent.prototype.getLoaded = function() {
  * @return {number} The total bytes to load or write.
  */
 goog.testing.fs.ProgressEvent.prototype.getTotal = function() {
+  'use strict';
   return this.total_;
 };

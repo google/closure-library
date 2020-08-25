@@ -28,6 +28,7 @@ goog.require('goog.testing.fs.Blob');
  * @final
  */
 goog.testing.fs.File = function(name, opt_lastModified, opt_data, opt_type) {
+  'use strict';
   goog.testing.fs.File.base(this, 'constructor', opt_data, opt_type);
 
   /**

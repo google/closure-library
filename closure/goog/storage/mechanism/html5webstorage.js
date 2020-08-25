@@ -28,6 +28,7 @@ goog.require('goog.storage.mechanism.IterableMechanism');
  * @extends {goog.storage.mechanism.IterableMechanism}
  */
 goog.storage.mechanism.HTML5WebStorage = function(storage) {
+  'use strict';
   goog.storage.mechanism.HTML5WebStorage.base(this, 'constructor');
 
   /**
@@ -56,6 +57,7 @@ goog.storage.mechanism.HTML5WebStorage.STORAGE_AVAILABLE_KEY_ = '__sak';
  * @return {boolean} True if the mechanism is available.
  */
 goog.storage.mechanism.HTML5WebStorage.prototype.isAvailable = function() {
+  'use strict';
   if (!this.storage_) {
     return false;
   }
@@ -76,7 +78,7 @@ goog.storage.mechanism.HTML5WebStorage.prototype.isAvailable = function() {
 
 /** @override */
 goog.storage.mechanism.HTML5WebStorage.prototype.set = function(key, value) {
-
+  'use strict';
   try {
     // May throw an exception if storage quota is exceeded.
     this.storage_.setItem(key, value);
@@ -96,6 +98,7 @@ goog.storage.mechanism.HTML5WebStorage.prototype.set = function(key, value) {
 
 /** @override */
 goog.storage.mechanism.HTML5WebStorage.prototype.get = function(key) {
+  'use strict';
   // According to W3C specs, values can be of any type. Since we only save
   // strings, any other type is a storage error. If we returned nulls for
   // such keys, i.e., treated them as non-existent, this would lead to a
@@ -111,12 +114,14 @@ goog.storage.mechanism.HTML5WebStorage.prototype.get = function(key) {
 
 /** @override */
 goog.storage.mechanism.HTML5WebStorage.prototype.remove = function(key) {
+  'use strict';
   this.storage_.removeItem(key);
 };
 
 
 /** @override */
 goog.storage.mechanism.HTML5WebStorage.prototype.getCount = function() {
+  'use strict';
   return this.storage_.length;
 };
 
@@ -124,10 +129,12 @@ goog.storage.mechanism.HTML5WebStorage.prototype.getCount = function() {
 /** @override */
 goog.storage.mechanism.HTML5WebStorage.prototype.__iterator__ = function(
     opt_keys) {
+  'use strict';
   var i = 0;
   var storage = this.storage_;
   var newIter = new goog.iter.Iterator();
   newIter.next = function() {
+    'use strict';
     if (i >= storage.length) {
       throw goog.iter.StopIteration;
     }
@@ -148,6 +155,7 @@ goog.storage.mechanism.HTML5WebStorage.prototype.__iterator__ = function(
 
 /** @override */
 goog.storage.mechanism.HTML5WebStorage.prototype.clear = function() {
+  'use strict';
   this.storage_.clear();
 };
 
@@ -160,5 +168,6 @@ goog.storage.mechanism.HTML5WebStorage.prototype.clear = function() {
  *     range.
  */
 goog.storage.mechanism.HTML5WebStorage.prototype.key = function(index) {
+  'use strict';
   return this.storage_.key(index);
 };

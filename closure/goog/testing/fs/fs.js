@@ -32,6 +32,7 @@ goog.require('goog.testing.fs.FileSystem');
  *     {@link goog.testing.fs.FileSystem}.
  */
 goog.testing.fs.getTemporary = function(size) {
+  'use strict';
   var d = new goog.async.Deferred();
   goog.Timer.callOnce(
       goog.bind(d.callback, d, new goog.testing.fs.FileSystem()));
@@ -48,6 +49,7 @@ goog.testing.fs.getTemporary = function(size) {
  *     {@link goog.testing.fs.FileSystem}.
  */
 goog.testing.fs.getPersistent = function(size) {
+  'use strict';
   return goog.testing.fs.getTemporary(size);
 };
 
@@ -68,6 +70,7 @@ goog.testing.fs.objectUrls_ = {};
  * @return {string} The URL.
  */
 goog.testing.fs.createObjectUrl = function(blob) {
+  'use strict';
   var url = blob.toDataUrl();
   goog.testing.fs.objectUrls_[url] = true;
   return url;
@@ -80,6 +83,7 @@ goog.testing.fs.createObjectUrl = function(blob) {
  * @param {string} url The URL to revoke.
  */
 goog.testing.fs.revokeObjectUrl = function(url) {
+  'use strict';
   delete goog.testing.fs.objectUrls_[url];
 };
 
@@ -91,6 +95,7 @@ goog.testing.fs.revokeObjectUrl = function(url) {
  * @return {boolean} Whether a URL has been granted.
  */
 goog.testing.fs.isObjectUrlGranted = function(blob) {
+  'use strict';
   return (blob.toDataUrl()) in goog.testing.fs.objectUrls_;
 };
 
@@ -103,6 +108,7 @@ goog.testing.fs.isObjectUrlGranted = function(blob) {
  * @return {!goog.testing.fs.Blob} The blob.
  */
 goog.testing.fs.getBlob = function(var_args) {
+  'use strict';
   return new goog.testing.fs.Blob(goog.array.map(arguments, String).join(''));
 };
 
@@ -119,6 +125,7 @@ goog.testing.fs.getBlob = function(var_args) {
  * @return {!goog.testing.fs.Blob} The blob.
  */
 goog.testing.fs.getBlobWithProperties = function(parts, opt_type, opt_endings) {
+  'use strict';
   return new goog.testing.fs.Blob(
       goog.array.map(parts, String).join(''), opt_type);
 };
@@ -137,6 +144,7 @@ goog.testing.fs.getBlobWithProperties = function(parts, opt_type, opt_endings) {
  * @return {!goog.testing.fs.Blob} The new blob or null if not supported.
  */
 goog.testing.fs.sliceBlob = function(testBlob, start, opt_end) {
+  'use strict';
   return testBlob.slice(start, opt_end);
 };
 
@@ -149,6 +157,7 @@ goog.testing.fs.sliceBlob = function(testBlob, start, opt_end) {
  *     stubbing out the original goog.fs functions.
  */
 goog.testing.fs.install = function(stubs) {
+  'use strict';
   // Prevent warnings that goog.fs may get optimized away. It's true this is
   // unsafe in compiled code, but it's only meant for tests.
   var fs = goog.getObjectByName('goog.fs');
@@ -156,7 +165,10 @@ goog.testing.fs.install = function(stubs) {
   stubs.replace(fs, 'getPersistent', goog.testing.fs.getPersistent);
   stubs.replace(fs, 'createObjectUrl', goog.testing.fs.createObjectUrl);
   stubs.replace(fs, 'revokeObjectUrl', goog.testing.fs.revokeObjectUrl);
-  stubs.replace(fs, 'browserSupportsObjectUrls', function() { return true; });
+  stubs.replace(fs, 'browserSupportsObjectUrls', function() {
+    'use strict';
+    return true;
+  });
   var fsBlob = goog.getObjectByName('goog.fs.blob');
   stubs.replace(fsBlob, 'getBlob', goog.testing.fs.getBlob);
   stubs.replace(

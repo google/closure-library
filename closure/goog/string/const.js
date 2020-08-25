@@ -40,6 +40,7 @@ goog.require('goog.string.TypedString');
  * @param {string=} opt_content package-internal implementation detail.
  */
 goog.string.Const = function(opt_token, opt_content) {
+  'use strict';
   /**
    * The wrapped value of this Const object.  The field has a purposely ugly
    * name to make (non-compiled) code that attempts to directly access this
@@ -81,6 +82,7 @@ goog.string.Const.prototype.implementsGoogStringTypedString = true;
  * @override
  */
 goog.string.Const.prototype.getTypedStringValue = function() {
+  'use strict';
   return this.stringConstValueWithSecurityContract__googStringSecurityPrivate_;
 };
 
@@ -96,6 +98,7 @@ if (goog.DEBUG) {
    * @override
    */
   goog.string.Const.prototype.toString = function() {
+    'use strict';
     return 'Const{' +
         this.stringConstValueWithSecurityContract__googStringSecurityPrivate_ +
         '}';
@@ -113,6 +116,7 @@ if (goog.DEBUG) {
  *     `goog.asserts.AssertionError`.
  */
 goog.string.Const.unwrap = function(stringConst) {
+  'use strict';
   // Perform additional run-time type-checking to ensure that stringConst is
   // indeed an instance of the expected type.  This provides some additional
   // protection against security bugs due to application code that disables type
@@ -153,6 +157,7 @@ goog.string.Const.unwrap = function(stringConst) {
  * @return {!goog.string.Const} A Const object initialized to stringConst.
  */
 goog.string.Const.from = function(s) {
+  'use strict';
   return new goog.string.Const(
       goog.string.Const.GOOG_STRING_CONSTRUCTOR_TOKEN_PRIVATE_, s);
 };

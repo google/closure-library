@@ -23,6 +23,7 @@ goog.require('goog.string');
  *     after the final slash.
  */
 goog.string.path.baseName = function(path) {
+  'use strict';
   var i = path.lastIndexOf('/') + 1;
   return path.slice(i);
 };
@@ -45,6 +46,7 @@ goog.string.path.basename = goog.string.path.baseName;
  *     leading up to the final slash.
  */
 goog.string.path.dirname = function(path) {
+  'use strict';
   var i = path.lastIndexOf('/') + 1;
   var head = path.slice(0, i);
   // If the path isn't all forward slashes, trim the trailing slashes.
@@ -61,6 +63,7 @@ goog.string.path.dirname = function(path) {
  * @return {string} The extension if any, otherwise the empty string.
  */
 goog.string.path.extension = function(path) {
+  'use strict';
   var separator = '.';
   // Combining all adjacent periods in the basename to a single period.
   var baseName = goog.string.path.baseName(path).replace(/\.+/g, separator);
@@ -78,6 +81,7 @@ goog.string.path.extension = function(path) {
  * @return {string} The path components joined.
  */
 goog.string.path.join = function(var_args) {
+  'use strict';
   var path = arguments[0];
 
   for (var i = 1; i < arguments.length; i++) {
@@ -103,6 +107,7 @@ goog.string.path.join = function(var_args) {
  * @return {string} The path after normalization.
  */
 goog.string.path.normalizePath = function(path) {
+  'use strict';
   if (path == '') {
     return '.';
   }
@@ -152,6 +157,7 @@ goog.string.path.normalizePath = function(path) {
  * @return {!Array<string>} An array of [dirname, basename].
  */
 goog.string.path.split = function(path) {
+  'use strict';
   var head = goog.string.path.dirname(path);
   var tail = goog.string.path.baseName(path);
   return [head, tail];

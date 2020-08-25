@@ -24,6 +24,7 @@ goog.require('goog.storage.mechanism.HTML5WebStorage');
  * @extends {goog.storage.mechanism.HTML5WebStorage}
  */
 goog.storage.mechanism.HTML5SessionStorage = function() {
+  'use strict';
   var storage = null;
 
   try {
