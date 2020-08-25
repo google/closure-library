@@ -35,6 +35,9 @@ goog.require('goog.math');
 goog.require('goog.string');
 goog.require('goog.string.Const');
 goog.requireType('goog.graphics.CanvasGraphics');
+goog.requireType('goog.graphics.Element');
+goog.requireType('goog.graphics.Fill');
+goog.requireType('goog.graphics.Stroke');
 
 
 

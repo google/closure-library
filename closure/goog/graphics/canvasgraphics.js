@@ -26,6 +26,19 @@ goog.require('goog.graphics.Font');
 goog.require('goog.graphics.SolidFill');
 goog.require('goog.math.Size');
 goog.require('goog.style');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.graphics.AffineTransform');
+goog.requireType('goog.graphics.Element');
+goog.requireType('goog.graphics.EllipseElement');
+goog.requireType('goog.graphics.Fill');
+goog.requireType('goog.graphics.GroupElement');
+goog.requireType('goog.graphics.ImageElement');
+goog.requireType('goog.graphics.Path');
+goog.requireType('goog.graphics.PathElement');
+goog.requireType('goog.graphics.RectElement');
+goog.requireType('goog.graphics.Stroke');
+goog.requireType('goog.graphics.StrokeAndFillElement');
+goog.requireType('goog.graphics.TextElement');
 
 
 
