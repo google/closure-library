@@ -69,6 +69,7 @@ goog.date.month = {
  *     goog.i18n.DateTimeFormat.Format.YEAR_MONTH_FULL.
  */
 goog.date.formatMonthAndYear = function(monthName, yearNum) {
+  'use strict';
   /** @desc Month/year format given the month name and the numeric year. */
   var MSG_MONTH_AND_YEAR = goog.getMsg(
       '{$monthName} {$yearNum}',
@@ -139,6 +140,7 @@ goog.date.MS_PER_DAY = 24 * 60 * 60 * 1000;
  * @return {boolean} Whether the given year is a leap year.
  */
 goog.date.isLeapYear = function(year) {
+  'use strict';
   // Leap year logic; the 4-100-400 rule
   return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
 };
@@ -152,6 +154,7 @@ goog.date.isLeapYear = function(year) {
  * @return {boolean} Whether the given year is a long ISO year.
  */
 goog.date.isLongIsoYear = function(year) {
+  'use strict';
   var n = 5 * year + 12 - 4 * (Math.floor(year / 100) - Math.floor(year / 400));
   n += Math.floor((year - 100) / 400) - Math.floor((year - 102) / 400);
   n += Math.floor((year - 200) / 400) - Math.floor((year - 199) / 400);
@@ -168,6 +171,7 @@ goog.date.isLongIsoYear = function(year) {
  * @return {number} The number of days for the given month.
  */
 goog.date.getNumberOfDaysInMonth = function(year, month) {
+  'use strict';
   switch (month) {
     case goog.date.month.FEB:
       return goog.date.isLeapYear(year) ? 29 : 28;
@@ -188,6 +192,7 @@ goog.date.getNumberOfDaysInMonth = function(year, month) {
  * @return {boolean} Whether the dates are on the same day.
  */
 goog.date.isSameDay = function(date, opt_now) {
+  'use strict';
   var now = opt_now || new Date(goog.now());
   return date.getDate() == now.getDate() && goog.date.isSameMonth(date, now);
 };
@@ -200,6 +205,7 @@ goog.date.isSameDay = function(date, opt_now) {
  * @return {boolean} Whether the dates are in the same calendar month.
  */
 goog.date.isSameMonth = function(date, opt_now) {
+  'use strict';
   var now = opt_now || new Date(goog.now());
   return date.getMonth() == now.getMonth() && goog.date.isSameYear(date, now);
 };
@@ -212,6 +218,7 @@ goog.date.isSameMonth = function(date, opt_now) {
  * @return {boolean} Whether the dates are in the same calendar year.
  */
 goog.date.isSameYear = function(date, opt_now) {
+  'use strict';
   var now = opt_now || new Date(goog.now());
   return date.getFullYear() == now.getFullYear();
 };
@@ -233,6 +240,7 @@ goog.date.isSameYear = function(date, opt_now) {
  */
 goog.date.getCutOffSameWeek_ = function(
     year, month, date, opt_weekDay, opt_firstDayOfWeek) {
+  'use strict';
   var d = new Date(year, month, date);
 
   // Default to Thursday for cut off as per ISO 8601.
@@ -272,6 +280,7 @@ goog.date.getCutOffSameWeek_ = function(
  */
 goog.date.getWeekNumber = function(
     year, month, date, opt_weekDay, opt_firstDayOfWeek) {
+  'use strict';
   var cutoffSameWeek = goog.date.getCutOffSameWeek_(
       year, month, date, opt_weekDay, opt_firstDayOfWeek);
 
@@ -299,6 +308,7 @@ goog.date.getWeekNumber = function(
  */
 goog.date.getYearOfWeek = function(
     year, month, date, opt_weekDay, opt_firstDayOfWeek) {
+  'use strict';
   var cutoffSameWeek = goog.date.getCutOffSameWeek_(
       year, month, date, opt_weekDay, opt_firstDayOfWeek);
 
@@ -313,6 +323,7 @@ goog.date.getYearOfWeek = function(
  * @template T,S
  */
 goog.date.min = function(date1, date2) {
+  'use strict';
   return date1 < date2 ? date1 : date2;
 };
 
@@ -324,6 +335,7 @@ goog.date.min = function(date1, date2) {
  * @template T,S
  */
 goog.date.max = function(date1, date2) {
+  'use strict';
   return date1 > date2 ? date1 : date2;
 };
 
@@ -337,6 +349,7 @@ goog.date.max = function(date1, date2) {
  * @return {boolean} Whether the parsing succeeded.
  */
 goog.date.setIso8601DateTime = function(dateTime, formatted) {
+  'use strict';
   formatted = goog.string.trim(formatted);
   var delim = formatted.indexOf('T') == -1 ? ' ' : 'T';
   var parts = formatted.split(delim);
@@ -354,6 +367,7 @@ goog.date.setIso8601DateTime = function(dateTime, formatted) {
  * @private
  */
 goog.date.setIso8601DateOnly_ = function(d, formatted) {
+  'use strict';
   // split the formatted ISO date string into its date fields
   var parts = formatted.match(goog.date.splitDateStringRegex_);
   if (!parts) {
@@ -409,6 +423,7 @@ goog.date.setIso8601DateOnly_ = function(d, formatted) {
  * @private
  */
 goog.date.setDateFromIso8601Week_ = function(d, week, dayOfWeek) {
+  'use strict';
   // calculate offset for first week
   d.setMonth(0);
   d.setDate(1);
@@ -449,6 +464,7 @@ goog.date.setDateFromIso8601Week_ = function(d, week, dayOfWeek) {
  * @private
  */
 goog.date.setIso8601TimeOnly_ = function(d, formatted) {
+  'use strict';
   // first strip timezone info from the end
   var timezoneParts = formatted.match(goog.date.splitTimezoneStringRegex_);
 
@@ -529,6 +545,7 @@ goog.date.setIso8601TimeOnly_ = function(d, formatted) {
  */
 goog.date.Interval = function(
     opt_years, opt_months, opt_days, opt_hours, opt_minutes, opt_seconds) {
+  'use strict';
   if (typeof opt_years === 'string') {
     var type = opt_years;
     var interval = /** @type {number} */ (opt_months);
@@ -565,6 +582,7 @@ goog.date.Interval = function(
  *     if the parse fails.
  */
 goog.date.Interval.fromIsoString = function(duration) {
+  'use strict';
   var parts = duration.match(goog.date.splitDurationRegex_);
   if (!parts) {
     return null;
@@ -599,6 +617,7 @@ goog.date.Interval.fromIsoString = function(duration) {
  *     or null if the interval contains both positive and negative fields.
  */
 goog.date.Interval.prototype.toIsoString = function(opt_verbose) {
+  'use strict';
   var minField = Math.min(
       this.years, this.months, this.days, this.hours, this.minutes,
       this.seconds);
@@ -660,6 +679,7 @@ goog.date.Interval.prototype.toIsoString = function(opt_verbose) {
  * @return {boolean} Whether the intervals are equal.
  */
 goog.date.Interval.prototype.equals = function(other) {
+  'use strict';
   return other.years == this.years && other.months == this.months &&
       other.days == this.days && other.hours == this.hours &&
       other.minutes == this.minutes && other.seconds == this.seconds;
@@ -670,6 +690,7 @@ goog.date.Interval.prototype.equals = function(other) {
  * @return {!goog.date.Interval} A clone of the interval object.
  */
 goog.date.Interval.prototype.clone = function() {
+  'use strict';
   return new goog.date.Interval(
       this.years, this.months, this.days, this.hours, this.minutes,
       this.seconds);
@@ -722,6 +743,7 @@ goog.date.Interval.SECONDS = 's';
  * @return {boolean} Whether all fields of the interval are zero.
  */
 goog.date.Interval.prototype.isZero = function() {
+  'use strict';
   return this.years == 0 && this.months == 0 && this.days == 0 &&
       this.hours == 0 && this.minutes == 0 && this.seconds == 0;
 };
@@ -731,6 +753,7 @@ goog.date.Interval.prototype.isZero = function() {
  * @return {!goog.date.Interval} Negative of this interval.
  */
 goog.date.Interval.prototype.getInverse = function() {
+  'use strict';
   return this.times(-1);
 };
 
@@ -741,6 +764,7 @@ goog.date.Interval.prototype.getInverse = function() {
  * @return {!goog.date.Interval} n * this.
  */
 goog.date.Interval.prototype.times = function(n) {
+  'use strict';
   return new goog.date.Interval(
       this.years * n, this.months * n, this.days * n, this.hours * n,
       this.minutes * n, this.seconds * n);
@@ -753,6 +777,7 @@ goog.date.Interval.prototype.times = function(n) {
  * @return {number} Total number of seconds in the interval.
  */
 goog.date.Interval.prototype.getTotalSeconds = function() {
+  'use strict';
   goog.asserts.assert(this.years == 0 && this.months == 0);
   return ((this.days * 24 + this.hours) * 60 + this.minutes) * 60 +
       this.seconds;
@@ -765,6 +790,7 @@ goog.date.Interval.prototype.getTotalSeconds = function() {
  * @param {goog.date.Interval} interval The Interval to add.
  */
 goog.date.Interval.prototype.add = function(interval) {
+  'use strict';
   this.years += interval.years;
   this.months += interval.months;
   this.days += interval.days;
@@ -799,6 +825,7 @@ goog.date.DateLike;
  * @see goog.date.DateTime
  */
 goog.date.Date = function(opt_year, opt_month, opt_date) {
+  'use strict';
   /** @protected {!Date} The wrapped date or datetime. */
   this.date;
   // goog.date.DateTime assumes that only this.date is added in this ctor.
@@ -836,6 +863,7 @@ goog.date.Date = function(opt_year, opt_month, opt_date) {
  * @return {!Date} The constructed Date object.
  */
 goog.date.Date.prototype.buildDate_ = function(fullYear, month, date) {
+  'use strict';
   var d = new Date(fullYear, month, date);
   if (fullYear >= 0 && fullYear < 100) {
     // Can't just setFullYear as new Date() can flip over for e.g. month = 13.
@@ -867,6 +895,7 @@ goog.date.Date.prototype.firstWeekCutOffDay_ =
  * @return {!goog.date.Date} A clone of the date object.
  */
 goog.date.Date.prototype.clone = function() {
+  'use strict';
   var date = new goog.date.Date(this.date);
   date.firstDayOfWeek_ = this.firstDayOfWeek_;
   date.firstWeekCutOffDay_ = this.firstWeekCutOffDay_;
@@ -879,6 +908,7 @@ goog.date.Date.prototype.clone = function() {
  * @return {number} The four digit year of date.
  */
 goog.date.Date.prototype.getFullYear = function() {
+  'use strict';
   return this.date.getFullYear();
 };
 
@@ -890,6 +920,7 @@ goog.date.Date.prototype.getFullYear = function() {
  * @see #getFullYear
  */
 goog.date.Date.prototype.getYear = function() {
+  'use strict';
   return this.getFullYear();
 };
 
@@ -898,6 +929,7 @@ goog.date.Date.prototype.getYear = function() {
  * @return {goog.date.month} The month of date, 0 = Jan, 11 = Dec.
  */
 goog.date.Date.prototype.getMonth = function() {
+  'use strict';
   return /** @type {goog.date.month} */ (this.date.getMonth());
 };
 
@@ -906,6 +938,7 @@ goog.date.Date.prototype.getMonth = function() {
  * @return {number} The date of month.
  */
 goog.date.Date.prototype.getDate = function() {
+  'use strict';
   return this.date.getDate();
 };
 
@@ -916,6 +949,7 @@ goog.date.Date.prototype.getDate = function() {
  * @return {number} The number of milliseconds since 1 January 1970 00:00:00.
  */
 goog.date.Date.prototype.getTime = function() {
+  'use strict';
   return this.date.getTime();
 };
 
@@ -924,6 +958,7 @@ goog.date.Date.prototype.getTime = function() {
  * @return {number} The day of week, US style. 0 = Sun, 6 = Sat.
  */
 goog.date.Date.prototype.getDay = function() {
+  'use strict';
   return this.date.getDay();
 };
 
@@ -932,6 +967,7 @@ goog.date.Date.prototype.getDay = function() {
  * @return {goog.date.weekDay} The day of week, ISO style. 0 = Mon, 6 = Sun.
  */
 goog.date.Date.prototype.getIsoWeekday = function() {
+  'use strict';
   return /** @type {goog.date.weekDay} */ ((this.getDay() + 6) % 7);
 };
 
@@ -940,6 +976,7 @@ goog.date.Date.prototype.getIsoWeekday = function() {
  * @return {number} The day of week according to firstDayOfWeek setting.
  */
 goog.date.Date.prototype.getWeekday = function() {
+  'use strict';
   return (this.getIsoWeekday() - this.firstDayOfWeek_ + 7) % 7;
 };
 
@@ -948,6 +985,7 @@ goog.date.Date.prototype.getWeekday = function() {
  * @return {number} The four digit year of date according to universal time.
  */
 goog.date.Date.prototype.getUTCFullYear = function() {
+  'use strict';
   return this.date.getUTCFullYear();
 };
 
@@ -957,6 +995,7 @@ goog.date.Date.prototype.getUTCFullYear = function() {
  *     0 = Jan, 11 = Dec.
  */
 goog.date.Date.prototype.getUTCMonth = function() {
+  'use strict';
   return /** @type {goog.date.month} */ (this.date.getUTCMonth());
 };
 
@@ -965,6 +1004,7 @@ goog.date.Date.prototype.getUTCMonth = function() {
  * @return {number} The date of month according to universal time.
  */
 goog.date.Date.prototype.getUTCDate = function() {
+  'use strict';
   return this.date.getUTCDate();
 };
 
@@ -974,6 +1014,7 @@ goog.date.Date.prototype.getUTCDate = function() {
  *     0 = Sun, 1 = Mon, 6 = Sat.
  */
 goog.date.Date.prototype.getUTCDay = function() {
+  'use strict';
   return this.date.getDay();
 };
 
@@ -982,6 +1023,7 @@ goog.date.Date.prototype.getUTCDay = function() {
  * @return {number} The hours value according to universal time.
  */
 goog.date.Date.prototype.getUTCHours = function() {
+  'use strict';
   return this.date.getUTCHours();
 };
 
@@ -990,6 +1032,7 @@ goog.date.Date.prototype.getUTCHours = function() {
  * @return {number} The minutes value according to universal time.
  */
 goog.date.Date.prototype.getUTCMinutes = function() {
+  'use strict';
   return this.date.getUTCMinutes();
 };
 
@@ -999,6 +1042,7 @@ goog.date.Date.prototype.getUTCMinutes = function() {
  *     style. 0 = Mon, 6 = Sun.
  */
 goog.date.Date.prototype.getUTCIsoWeekday = function() {
+  'use strict';
   return /** @type {goog.date.weekDay} */ ((this.date.getUTCDay() + 6) % 7);
 };
 
@@ -1008,6 +1052,7 @@ goog.date.Date.prototype.getUTCIsoWeekday = function() {
  *     firstDayOfWeek setting.
  */
 goog.date.Date.prototype.getUTCWeekday = function() {
+  'use strict';
   return (this.getUTCIsoWeekday() - this.firstDayOfWeek_ + 7) % 7;
 };
 
@@ -1016,6 +1061,7 @@ goog.date.Date.prototype.getUTCWeekday = function() {
  * @return {number} The first day of the week. 0 = Mon, 6 = Sun.
  */
 goog.date.Date.prototype.getFirstDayOfWeek = function() {
+  'use strict';
   return this.firstDayOfWeek_;
 };
 
@@ -1025,6 +1071,7 @@ goog.date.Date.prototype.getFirstDayOfWeek = function() {
  *     0 = Mon, 6 = Sun.
  */
 goog.date.Date.prototype.getFirstWeekCutOffDay = function() {
+  'use strict';
   return this.firstWeekCutOffDay_;
 };
 
@@ -1033,6 +1080,7 @@ goog.date.Date.prototype.getFirstWeekCutOffDay = function() {
  * @return {number} The number of days for the selected month.
  */
 goog.date.Date.prototype.getNumberOfDaysInMonth = function() {
+  'use strict';
   return goog.date.getNumberOfDaysInMonth(this.getFullYear(), this.getMonth());
 };
 
@@ -1041,6 +1089,7 @@ goog.date.Date.prototype.getNumberOfDaysInMonth = function() {
  * @return {number} The week number.
  */
 goog.date.Date.prototype.getWeekNumber = function() {
+  'use strict';
   return goog.date.getWeekNumber(
       this.getFullYear(), this.getMonth(), this.getDate(),
       this.firstWeekCutOffDay_, this.firstDayOfWeek_);
@@ -1053,6 +1102,7 @@ goog.date.Date.prototype.getWeekNumber = function() {
  * @return {number} The four digit year in "Week of Year"
  */
 goog.date.Date.prototype.getYearOfWeek = function() {
+  'use strict';
   return goog.date.getYearOfWeek(
       this.getFullYear(), this.getMonth(), this.getDate(),
       this.firstWeekCutOffDay_, this.firstDayOfWeek_);
@@ -1063,6 +1113,7 @@ goog.date.Date.prototype.getYearOfWeek = function() {
  * @return {number} The day of year.
  */
 goog.date.Date.prototype.getDayOfYear = function() {
+  'use strict';
   var dayOfYear = this.getDate();
   var year = this.getFullYear();
   for (var m = this.getMonth() - 1; m >= 0; m--) {
@@ -1081,6 +1132,7 @@ goog.date.Date.prototype.getDayOfYear = function() {
  * @return {number} The timezone offset.
  */
 goog.date.Date.prototype.getTimezoneOffset = function() {
+  'use strict';
   return this.date.getTimezoneOffset();
 };
 
@@ -1092,6 +1144,7 @@ goog.date.Date.prototype.getTimezoneOffset = function() {
  * @return {string} The timezone offset as a string.
  */
 goog.date.Date.prototype.getTimezoneOffsetString = function() {
+  'use strict';
   var tz;
   var offset = this.getTimezoneOffset();
 
@@ -1115,6 +1168,7 @@ goog.date.Date.prototype.getTimezoneOffsetString = function() {
  * @param {goog.date.Date} date Date object to set date from.
  */
 goog.date.Date.prototype.set = function(date) {
+  'use strict';
   this.date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 };
 
@@ -1125,6 +1179,7 @@ goog.date.Date.prototype.set = function(date) {
  * @param {number} year Four digit year.
  */
 goog.date.Date.prototype.setFullYear = function(year) {
+  'use strict';
   this.date.setFullYear(year);
 };
 
@@ -1136,6 +1191,7 @@ goog.date.Date.prototype.setFullYear = function(year) {
  * @see #setFullYear
  */
 goog.date.Date.prototype.setYear = function(year) {
+  'use strict';
   this.setFullYear(year);
 };
 
@@ -1148,6 +1204,7 @@ goog.date.Date.prototype.setYear = function(year) {
  * @param {number} month The month, where 0 = Jan, 11 = Dec.
  */
 goog.date.Date.prototype.setMonth = function(month) {
+  'use strict';
   this.date.setMonth(month);
 };
 
@@ -1158,6 +1215,7 @@ goog.date.Date.prototype.setMonth = function(month) {
  * @param {number} date The day part.
  */
 goog.date.Date.prototype.setDate = function(date) {
+  'use strict';
   this.date.setDate(date);
 };
 
@@ -1169,6 +1227,7 @@ goog.date.Date.prototype.setDate = function(date) {
  * @param {number} ms Number of milliseconds since 1 Jan 1970.
  */
 goog.date.Date.prototype.setTime = function(ms) {
+  'use strict';
   this.date.setTime(ms);
 };
 
@@ -1179,6 +1238,7 @@ goog.date.Date.prototype.setTime = function(ms) {
  * @param {number} year Four digit year.
  */
 goog.date.Date.prototype.setUTCFullYear = function(year) {
+  'use strict';
   this.date.setUTCFullYear(year);
 };
 
@@ -1189,6 +1249,7 @@ goog.date.Date.prototype.setUTCFullYear = function(year) {
  * @param {number} month The month, where 0 = Jan, 11 = Dec.
  */
 goog.date.Date.prototype.setUTCMonth = function(month) {
+  'use strict';
   this.date.setUTCMonth(month);
 };
 
@@ -1199,6 +1260,7 @@ goog.date.Date.prototype.setUTCMonth = function(month) {
  * @param {number} date The UTC date.
  */
 goog.date.Date.prototype.setUTCDate = function(date) {
+  'use strict';
   this.date.setUTCDate(date);
 };
 
@@ -1209,6 +1271,7 @@ goog.date.Date.prototype.setUTCDate = function(date) {
  * @param {number} day 0 = Mon, 6 = Sun.
  */
 goog.date.Date.prototype.setFirstDayOfWeek = function(day) {
+  'use strict';
   this.firstDayOfWeek_ = day;
 };
 
@@ -1219,6 +1282,7 @@ goog.date.Date.prototype.setFirstDayOfWeek = function(day) {
  * @param {number} day The cut off weekday.
  */
 goog.date.Date.prototype.setFirstWeekCutOffDay = function(day) {
+  'use strict';
   this.firstWeekCutOffDay_ = day;
 };
 
@@ -1229,6 +1293,7 @@ goog.date.Date.prototype.setFirstWeekCutOffDay = function(day) {
  * @param {goog.date.Interval} interval Date interval to add.
  */
 goog.date.Date.prototype.add = function(interval) {
+  'use strict';
   if (interval.years || interval.months) {
     // As months have different number of days adding a month to Jan 31 by just
     // setting the month would result in a date in early March rather than Feb
@@ -1280,6 +1345,7 @@ goog.date.Date.prototype.add = function(interval) {
  * @return {string} ISO 8601 string representation of date.
  */
 goog.date.Date.prototype.toIsoString = function(opt_verbose, opt_tz) {
+  'use strict';
   var str = [
     this.getFullYear(), goog.string.padNumber(this.getMonth() + 1, 2),
     goog.string.padNumber(this.getDate(), 2)
@@ -1301,6 +1367,7 @@ goog.date.Date.prototype.toIsoString = function(opt_verbose, opt_tz) {
  *     universal time.
  */
 goog.date.Date.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
+  'use strict';
   var str = [
     this.getUTCFullYear(), goog.string.padNumber(this.getUTCMonth() + 1, 2),
     goog.string.padNumber(this.getUTCDate(), 2)
@@ -1319,6 +1386,7 @@ goog.date.Date.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
  * @return {boolean} Whether the given date is equal to this one.
  */
 goog.date.Date.prototype.equals = function(other) {
+  'use strict';
   return !!(
       other && this.getYear() == other.getYear() &&
       this.getMonth() == other.getMonth() && this.getDate() == other.getDate());
@@ -1331,6 +1399,7 @@ goog.date.Date.prototype.equals = function(other) {
  * @override
  */
 goog.date.Date.prototype.toString = function() {
+  'use strict';
   return this.toIsoString();
 };
 
@@ -1342,6 +1411,7 @@ goog.date.Date.prototype.toString = function() {
  * @private
  */
 goog.date.Date.prototype.maybeFixDst_ = function(expected) {
+  'use strict';
   if (this.getDate() != expected) {
     var dir = this.getDate() < expected ? 1 : -1;
     this.date.setUTCHours(this.date.getUTCHours() + dir);
@@ -1354,6 +1424,7 @@ goog.date.Date.prototype.maybeFixDst_ = function(expected) {
  * @override
  */
 goog.date.Date.prototype.valueOf = function() {
+  'use strict';
   return this.date.valueOf();
 };
 
@@ -1367,6 +1438,7 @@ goog.date.Date.prototype.valueOf = function() {
  *     date1 is earlier than date2, greater than 0 if date1 is later than date2.
  */
 goog.date.Date.compare = function(date1, date2) {
+  'use strict';
   return date1.getTime() - date2.getTime();
 };
 
@@ -1377,6 +1449,7 @@ goog.date.Date.compare = function(date1, date2) {
  * @return {?goog.date.Date} Parsed date or null if parse fails.
  */
 goog.date.Date.fromIsoString = function(formatted) {
+  'use strict';
   var ret = new goog.date.Date(2000);
   return goog.date.setIso8601DateOnly_(ret, formatted) ? ret : null;
 };
@@ -1406,6 +1479,7 @@ goog.date.Date.fromIsoString = function(formatted) {
 goog.date.DateTime = function(
     opt_year, opt_month, opt_date, opt_hours, opt_minutes, opt_seconds,
     opt_milliseconds) {
+  'use strict';
   if (typeof opt_year === 'number') {
     /** @override */
     this.date = new Date(
@@ -1424,6 +1498,7 @@ goog.inherits(goog.date.DateTime, goog.date.Date);
  * @return {!goog.date.DateTime}
  */
 goog.date.DateTime.fromTimestamp = function(timestamp) {
+  'use strict';
   var date = new goog.date.DateTime();
   date.setTime(timestamp);
   return date;
@@ -1437,6 +1512,7 @@ goog.date.DateTime.fromTimestamp = function(timestamp) {
  * @return {goog.date.DateTime} Parsed date or null if parse fails.
  */
 goog.date.DateTime.fromRfc822String = function(formatted) {
+  'use strict';
   var date = new Date(formatted);
   return !isNaN(date.getTime()) ? new goog.date.DateTime(date) : null;
 };
@@ -1448,6 +1524,7 @@ goog.date.DateTime.fromRfc822String = function(formatted) {
  * @return {number} An integer between 0 and 23, representing the hour.
  */
 goog.date.DateTime.prototype.getHours = function() {
+  'use strict';
   return this.date.getHours();
 };
 
@@ -1458,6 +1535,7 @@ goog.date.DateTime.prototype.getHours = function() {
  * @return {number} An integer between 0 and 59, representing the minutes.
  */
 goog.date.DateTime.prototype.getMinutes = function() {
+  'use strict';
   return this.date.getMinutes();
 };
 
@@ -1468,6 +1546,7 @@ goog.date.DateTime.prototype.getMinutes = function() {
  * @return {number} An integer between 0 and 59, representing the seconds.
  */
 goog.date.DateTime.prototype.getSeconds = function() {
+  'use strict';
   return this.date.getSeconds();
 };
 
@@ -1478,6 +1557,7 @@ goog.date.DateTime.prototype.getSeconds = function() {
  * @return {number} An integer between 0 and 999, representing the milliseconds.
  */
 goog.date.DateTime.prototype.getMilliseconds = function() {
+  'use strict';
   return this.date.getMilliseconds();
 };
 
@@ -1489,6 +1569,7 @@ goog.date.DateTime.prototype.getMilliseconds = function() {
  * @override
  */
 goog.date.DateTime.prototype.getUTCDay = function() {
+  'use strict';
   return /** @type {goog.date.weekDay} */ (this.date.getUTCDay());
 };
 
@@ -1500,6 +1581,7 @@ goog.date.DateTime.prototype.getUTCDay = function() {
  * @override
  */
 goog.date.DateTime.prototype.getUTCHours = function() {
+  'use strict';
   return this.date.getUTCHours();
 };
 
@@ -1511,6 +1593,7 @@ goog.date.DateTime.prototype.getUTCHours = function() {
  * @override
  */
 goog.date.DateTime.prototype.getUTCMinutes = function() {
+  'use strict';
   return this.date.getUTCMinutes();
 };
 
@@ -1521,6 +1604,7 @@ goog.date.DateTime.prototype.getUTCMinutes = function() {
  * @return {number} An integer between 0 and 59, representing the seconds.
  */
 goog.date.DateTime.prototype.getUTCSeconds = function() {
+  'use strict';
   return this.date.getUTCSeconds();
 };
 
@@ -1531,6 +1615,7 @@ goog.date.DateTime.prototype.getUTCSeconds = function() {
  * @return {number} An integer between 0 and 999, representing the milliseconds.
  */
 goog.date.DateTime.prototype.getUTCMilliseconds = function() {
+  'use strict';
   return this.date.getUTCMilliseconds();
 };
 
@@ -1541,6 +1626,7 @@ goog.date.DateTime.prototype.getUTCMilliseconds = function() {
  * @param {number} hours An integer between 0 and 23, representing the hour.
  */
 goog.date.DateTime.prototype.setHours = function(hours) {
+  'use strict';
   this.date.setHours(hours);
 };
 
@@ -1551,6 +1637,7 @@ goog.date.DateTime.prototype.setHours = function(hours) {
  * @param {number} minutes Integer between 0 and 59, representing the minutes.
  */
 goog.date.DateTime.prototype.setMinutes = function(minutes) {
+  'use strict';
   this.date.setMinutes(minutes);
 };
 
@@ -1561,6 +1648,7 @@ goog.date.DateTime.prototype.setMinutes = function(minutes) {
  * @param {number} seconds Integer between 0 and 59, representing the seconds.
  */
 goog.date.DateTime.prototype.setSeconds = function(seconds) {
+  'use strict';
   this.date.setSeconds(seconds);
 };
 
@@ -1571,6 +1659,7 @@ goog.date.DateTime.prototype.setSeconds = function(seconds) {
  * @param {number} ms Integer between 0 and 999, representing the milliseconds.
  */
 goog.date.DateTime.prototype.setMilliseconds = function(ms) {
+  'use strict';
   this.date.setMilliseconds(ms);
 };
 
@@ -1581,6 +1670,7 @@ goog.date.DateTime.prototype.setMilliseconds = function(ms) {
  * @param {number} hours An integer between 0 and 23, representing the hour.
  */
 goog.date.DateTime.prototype.setUTCHours = function(hours) {
+  'use strict';
   this.date.setUTCHours(hours);
 };
 
@@ -1591,6 +1681,7 @@ goog.date.DateTime.prototype.setUTCHours = function(hours) {
  * @param {number} minutes Integer between 0 and 59, representing the minutes.
  */
 goog.date.DateTime.prototype.setUTCMinutes = function(minutes) {
+  'use strict';
   this.date.setUTCMinutes(minutes);
 };
 
@@ -1601,6 +1692,7 @@ goog.date.DateTime.prototype.setUTCMinutes = function(minutes) {
  * @param {number} seconds Integer between 0 and 59, representing the seconds.
  */
 goog.date.DateTime.prototype.setUTCSeconds = function(seconds) {
+  'use strict';
   this.date.setUTCSeconds(seconds);
 };
 
@@ -1611,6 +1703,7 @@ goog.date.DateTime.prototype.setUTCSeconds = function(seconds) {
  * @param {number} ms Integer between 0 and 999, representing the milliseconds.
  */
 goog.date.DateTime.prototype.setUTCMilliseconds = function(ms) {
+  'use strict';
   this.date.setUTCMilliseconds(ms);
 };
 
@@ -1619,6 +1712,7 @@ goog.date.DateTime.prototype.setUTCMilliseconds = function(ms) {
  * @return {boolean} Whether the datetime is aligned to midnight.
  */
 goog.date.DateTime.prototype.isMidnight = function() {
+  'use strict';
   return this.getHours() == 0 && this.getMinutes() == 0 &&
       this.getSeconds() == 0 && this.getMilliseconds() == 0;
 };
@@ -1631,6 +1725,7 @@ goog.date.DateTime.prototype.isMidnight = function() {
  * @override
  */
 goog.date.DateTime.prototype.add = function(interval) {
+  'use strict';
   goog.date.Date.prototype.add.call(this, interval);
 
   if (interval.hours) {
@@ -1656,6 +1751,7 @@ goog.date.DateTime.prototype.add = function(interval) {
  * @override
  */
 goog.date.DateTime.prototype.toIsoString = function(opt_verbose, opt_tz) {
+  'use strict';
   var dateString = goog.date.Date.prototype.toIsoString.call(this, opt_verbose);
 
   if (opt_verbose) {
@@ -1681,6 +1777,7 @@ goog.date.DateTime.prototype.toIsoString = function(opt_verbose, opt_tz) {
  * @return {string} XML Schema 2 string representation of date/time.
  */
 goog.date.DateTime.prototype.toXmlDateTime = function(opt_timezone) {
+  'use strict';
   return goog.date.Date.prototype.toIsoString.call(this, true) + 'T' +
       goog.string.padNumber(this.getHours(), 2) + ':' +
       goog.string.padNumber(this.getMinutes(), 2) + ':' +
@@ -1702,6 +1799,7 @@ goog.date.DateTime.prototype.toXmlDateTime = function(opt_timezone) {
  * @override
  */
 goog.date.DateTime.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
+  'use strict';
   var dateStr = goog.date.Date.prototype.toUTCIsoString.call(this, opt_verbose);
 
   if (opt_verbose) {
@@ -1722,6 +1820,7 @@ goog.date.DateTime.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
  * @return {string} A UTC datetime expressed in RFC 3339 format.
  */
 goog.date.DateTime.prototype.toUTCRfc3339String = function() {
+  'use strict';
   var date = this.toUTCIsoString(true);
   var millis = this.getUTCMilliseconds();
   return (millis ? date + '.' + goog.string.padNumber(millis, 3) : date) + 'Z';
@@ -1736,6 +1835,7 @@ goog.date.DateTime.prototype.toUTCRfc3339String = function() {
  * @override
  */
 goog.date.DateTime.prototype.equals = function(other) {
+  'use strict';
   return this.getTime() == other.getTime();
 };
 
@@ -1746,6 +1846,7 @@ goog.date.DateTime.prototype.equals = function(other) {
  * @override
  */
 goog.date.DateTime.prototype.toString = function() {
+  'use strict';
   return this.toIsoString();
 };
 
@@ -1769,6 +1870,7 @@ goog.date.DateTime.prototype.toString = function() {
  */
 goog.date.DateTime.prototype.toUsTimeString = function(
     opt_padHours, opt_showAmPm, opt_omitZeroMinutes) {
+  'use strict';
   var hours = this.getHours();
 
   // show am/pm marker by default
@@ -1811,6 +1913,7 @@ goog.date.DateTime.prototype.toUsTimeString = function(
  * @return {string} The time label.
  */
 goog.date.DateTime.prototype.toIsoTimeString = function(opt_showSeconds) {
+  'use strict';
   var hours = this.getHours();
   var label = goog.string.padNumber(hours, 2) + ':' +
       goog.string.padNumber(this.getMinutes(), 2);
@@ -1826,6 +1929,7 @@ goog.date.DateTime.prototype.toIsoTimeString = function(opt_showSeconds) {
  * @override
  */
 goog.date.DateTime.prototype.clone = function() {
+  'use strict';
   var date = new goog.date.DateTime(this.date);
   date.setFirstDayOfWeek(this.getFirstDayOfWeek());
   date.setFirstWeekCutOffDay(this.getFirstWeekCutOffDay());
@@ -1840,6 +1944,7 @@ goog.date.DateTime.prototype.clone = function() {
  * @override
  */
 goog.date.DateTime.fromIsoString = function(formatted) {
+  'use strict';
   var ret = new goog.date.DateTime(2000);
   return goog.date.setIso8601DateTime(ret, formatted) ? ret : null;
 };

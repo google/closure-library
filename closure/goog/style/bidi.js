@@ -26,6 +26,7 @@ goog.require('goog.userAgent.product.isVersion');
  *     left-most position in ltr and the right-most position in rtl).
  */
 goog.style.bidi.getScrollLeft = function(element) {
+  'use strict';
   var isRtl = goog.style.isRightToLeft(element);
   if (isRtl && goog.style.bidi.usesNegativeScrollLeftInRtl_()) {
     return -element.scrollLeft;
@@ -79,6 +80,7 @@ goog.style.bidi.getScrollLeft = function(element) {
  * @return {number} The offsetStart for that element.
  */
 goog.style.bidi.getOffsetStart = function(element) {
+  'use strict';
   element = /** @type {!HTMLElement} */ (element);
   var offsetLeftForReal = element.offsetLeft;
 
@@ -137,6 +139,7 @@ goog.style.bidi.getOffsetStart = function(element) {
  *     If this value is < 0, 0 is used.
  */
 goog.style.bidi.setScrollOffset = function(element, offsetStart) {
+  'use strict';
   offsetStart = Math.max(offsetStart, 0);
   // In LTR and in "mirrored" browser RTL (such as IE), we set scrollLeft to
   // the number of pixels to scroll.
@@ -165,6 +168,7 @@ goog.style.bidi.setScrollOffset = function(element, offsetStart) {
  * @private
  */
 goog.style.bidi.usesNegativeScrollLeftInRtl_ = function() {
+  'use strict';
   var isSafari10Plus =
       goog.userAgent.product.SAFARI && goog.userAgent.product.isVersion(10);
   var isIOS10Plus = goog.userAgent.IOS && goog.userAgent.platform.isVersion(10);
@@ -181,6 +185,7 @@ goog.style.bidi.usesNegativeScrollLeftInRtl_ = function() {
  * @param {boolean} isRtl Whether we are in RTL mode.
  */
 goog.style.bidi.setPosition = function(elem, left, top, isRtl) {
+  'use strict';
   if (top !== null) {
     elem.style.top = top + 'px';
   }

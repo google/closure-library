@@ -21,6 +21,7 @@ goog.labs.useragent.verifier.NOT_IE = 0;
  * @return {number}
  */
 goog.labs.useragent.verifier.detectIeVersionByBehavior = function() {
+  'use strict';
   if (document.all) {
     if (!document.compatMode) {
       return 5;
@@ -55,6 +56,7 @@ goog.labs.useragent.verifier.detectIeVersionByBehavior = function() {
  * @return {number}
  */
 goog.labs.useragent.verifier.detectIeVersionByNavigator = function() {
+  'use strict';
   const ua = navigator.userAgent.toLowerCase();
   if (ua.indexOf('msie') != -1) {
     const value = parseInt(ua.split('msie')[1], 10);
@@ -73,6 +75,7 @@ goog.labs.useragent.verifier.detectIeVersionByNavigator = function() {
  * @return {number}
  */
 goog.labs.useragent.verifier.getCorrectedIEVersionByNavigator = function() {
+  'use strict';
   const ua = navigator.userAgent;
   if (/Trident/.test(ua) || /MSIE/.test(ua)) {
     return goog.labs.useragent.verifier.getIEVersion_(ua);
@@ -90,6 +93,7 @@ goog.labs.useragent.verifier.getCorrectedIEVersionByNavigator = function() {
  * @private
  */
 goog.labs.useragent.verifier.getIEVersion_ = function(userAgent) {
+  'use strict';
   // IE11 may identify itself as MSIE 9.0 or MSIE 10.0 due to an IE 11 upgrade
   // bug. Example UA:
   // Mozilla/5.0 (MSIE 9.0; Windows NT 6.1; WOW64; Trident/7.0; rv:11.0)

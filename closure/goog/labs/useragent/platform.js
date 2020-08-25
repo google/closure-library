@@ -22,6 +22,7 @@ goog.require('goog.string');
  * @return {boolean} Whether the platform is Android.
  */
 goog.labs.userAgent.platform.isAndroid = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Android');
 };
 
@@ -30,6 +31,7 @@ goog.labs.userAgent.platform.isAndroid = function() {
  * @return {boolean} Whether the platform is iPod.
  */
 goog.labs.userAgent.platform.isIpod = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('iPod');
 };
 
@@ -38,6 +40,7 @@ goog.labs.userAgent.platform.isIpod = function() {
  * @return {boolean} Whether the platform is iPhone.
  */
 goog.labs.userAgent.platform.isIphone = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('iPhone') &&
       !goog.labs.userAgent.util.matchUserAgent('iPod') &&
       !goog.labs.userAgent.util.matchUserAgent('iPad');
@@ -48,6 +51,7 @@ goog.labs.userAgent.platform.isIphone = function() {
  * @return {boolean} Whether the platform is iPad.
  */
 goog.labs.userAgent.platform.isIpad = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('iPad');
 };
 
@@ -56,6 +60,7 @@ goog.labs.userAgent.platform.isIpad = function() {
  * @return {boolean} Whether the platform is iOS.
  */
 goog.labs.userAgent.platform.isIos = function() {
+  'use strict';
   return goog.labs.userAgent.platform.isIphone() ||
       goog.labs.userAgent.platform.isIpad() ||
       goog.labs.userAgent.platform.isIpod();
@@ -66,6 +71,7 @@ goog.labs.userAgent.platform.isIos = function() {
  * @return {boolean} Whether the platform is Mac.
  */
 goog.labs.userAgent.platform.isMacintosh = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Macintosh');
 };
 
@@ -76,6 +82,7 @@ goog.labs.userAgent.platform.isMacintosh = function() {
  * @return {boolean} Whether the platform is Linux.
  */
 goog.labs.userAgent.platform.isLinux = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Linux');
 };
 
@@ -84,6 +91,7 @@ goog.labs.userAgent.platform.isLinux = function() {
  * @return {boolean} Whether the platform is Windows.
  */
 goog.labs.userAgent.platform.isWindows = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Windows');
 };
 
@@ -92,6 +100,7 @@ goog.labs.userAgent.platform.isWindows = function() {
  * @return {boolean} Whether the platform is ChromeOS.
  */
 goog.labs.userAgent.platform.isChromeOS = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('CrOS');
 };
 
@@ -99,6 +108,7 @@ goog.labs.userAgent.platform.isChromeOS = function() {
  * @return {boolean} Whether the platform is Chromecast.
  */
 goog.labs.userAgent.platform.isChromecast = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('CrKey');
 };
 
@@ -106,6 +116,7 @@ goog.labs.userAgent.platform.isChromecast = function() {
  * @return {boolean} Whether the platform is KaiOS.
  */
 goog.labs.userAgent.platform.isKaiOS = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgentIgnoreCase('KaiOS');
 };
 
@@ -119,6 +130,7 @@ goog.labs.userAgent.platform.isKaiOS = function() {
  *     determined.
  */
 goog.labs.userAgent.platform.getVersion = function() {
+  'use strict';
   var userAgentString = goog.labs.userAgent.util.getUserAgent();
   var version = '', re;
   if (goog.labs.userAgent.platform.isWindows()) {
@@ -163,6 +175,7 @@ goog.labs.userAgent.platform.getVersion = function() {
  *     given version.
  */
 goog.labs.userAgent.platform.isVersionOrHigher = function(version) {
+  'use strict';
   return goog.string.compareVersions(
              goog.labs.userAgent.platform.getVersion(), version) >= 0;
 };

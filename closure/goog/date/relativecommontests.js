@@ -45,6 +45,7 @@ var propertyReplacer = new goog.testing.PropertyReplacer();
 function setUpPage() {
   // Ensure goog.now returns a constant timestamp.
   propertyReplacer.replace(goog, 'now', function() {
+    'use strict';
     return baseTime;
   });
   propertyReplacer.replace(goog, 'LOCALE', 'en-US');
