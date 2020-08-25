@@ -13,6 +13,7 @@ goog.provide('goog.dom.pattern.Repeat');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.pattern.AbstractPattern');
 goog.require('goog.dom.pattern.MatchType');
+goog.requireType('goog.dom.TagWalkType');
 
 
 
