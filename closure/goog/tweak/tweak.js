@@ -21,6 +21,7 @@ goog.require('goog.tweak.ButtonAction');
 goog.require('goog.tweak.NumericSetting');
 goog.require('goog.tweak.Registry');
 goog.require('goog.tweak.StringSetting');
+goog.requireType('goog.tweak.BaseEntry');
 
 
 /**
