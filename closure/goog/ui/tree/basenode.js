@@ -29,7 +29,9 @@ goog.require('goog.html.SafeStyle');
 goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.style');
-goog.require('goog.ui.Component');  // circular
+goog.require('goog.ui.Component');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.BrowserEvent');  // circular
 
 
 

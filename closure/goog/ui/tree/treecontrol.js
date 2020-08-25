@@ -29,6 +29,8 @@ goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeNode');
 goog.require('goog.ui.tree.TypeAhead');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.BrowserEvent');
 
 
 
