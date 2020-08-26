@@ -19,6 +19,7 @@ goog.require('goog.ds.JsDataSource');
 goog.require('goog.ds.LoadState');
 goog.require('goog.ds.logger');
 goog.require('goog.log');
+goog.requireType('goog.html.TrustedResourceUrl');
 
 
 

@@ -25,6 +25,10 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.graphics');
 goog.require('goog.graphics.ext.Group');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.graphics.AbstractGraphics');
+goog.requireType('goog.math.Coordinate');
+goog.requireType('goog.math.Size');
 
 
 
@@ -51,6 +55,7 @@ goog.require('goog.graphics.ext.Group');
 goog.graphics.ext.Graphics = function(
     width, height, opt_coordWidth, opt_coordHeight, opt_domHelper,
     opt_isSimple) {
+  'use strict';
   var surface = opt_isSimple ?
       goog.graphics.createSimpleGraphics(
           width, height, opt_coordWidth, opt_coordHeight, opt_domHelper) :
@@ -78,6 +83,7 @@ goog.graphics.ext.Graphics.prototype.implementation_;
  * @return {goog.graphics.AbstractGraphics} The graphics implementation layer.
  */
 goog.graphics.ext.Graphics.prototype.getImplementation = function() {
+  'use strict';
   return this.implementation_;
 };
 
@@ -89,6 +95,7 @@ goog.graphics.ext.Graphics.prototype.getImplementation = function() {
  */
 goog.graphics.ext.Graphics.prototype.setCoordSize = function(
     coordWidth, coordHeight) {
+  'use strict';
   this.implementation_.setCoordSize(coordWidth, coordHeight);
   goog.graphics.ext.Graphics.superClass_.setSize.call(
       this, coordWidth, coordHeight);
@@ -99,6 +106,7 @@ goog.graphics.ext.Graphics.prototype.setCoordSize = function(
  * @return {goog.math.Size} The coordinate size.
  */
 goog.graphics.ext.Graphics.prototype.getCoordSize = function() {
+  'use strict';
   return this.implementation_.getCoordSize();
 };
 
@@ -109,6 +117,7 @@ goog.graphics.ext.Graphics.prototype.getCoordSize = function() {
  * @param {number} top The coordinate system top bound.
  */
 goog.graphics.ext.Graphics.prototype.setCoordOrigin = function(left, top) {
+  'use strict';
   this.implementation_.setCoordOrigin(left, top);
 };
 
@@ -117,6 +126,7 @@ goog.graphics.ext.Graphics.prototype.setCoordOrigin = function(left, top) {
  * @return {!goog.math.Coordinate} The coordinate system position.
  */
 goog.graphics.ext.Graphics.prototype.getCoordOrigin = function() {
+  'use strict';
   return this.implementation_.getCoordOrigin();
 };
 
@@ -128,6 +138,7 @@ goog.graphics.ext.Graphics.prototype.getCoordOrigin = function() {
  */
 goog.graphics.ext.Graphics.prototype.setPixelSize = function(
     pixelWidth, pixelHeight) {
+  'use strict';
   this.implementation_.setSize(pixelWidth, pixelHeight);
 
   var coordSize = this.getCoordSize();
@@ -143,6 +154,7 @@ goog.graphics.ext.Graphics.prototype.setPixelSize = function(
  *     document.
  */
 goog.graphics.ext.Graphics.prototype.getPixelSize = function() {
+  'use strict';
   return this.implementation_.getPixelSize();
 };
 
@@ -152,6 +164,7 @@ goog.graphics.ext.Graphics.prototype.getPixelSize = function() {
  * @override
  */
 goog.graphics.ext.Graphics.prototype.getWidth = function() {
+  'use strict';
   return this.implementation_.getCoordSize().width;
 };
 
@@ -161,6 +174,7 @@ goog.graphics.ext.Graphics.prototype.getWidth = function() {
  * @override
  */
 goog.graphics.ext.Graphics.prototype.getHeight = function() {
+  'use strict';
   return this.implementation_.getCoordSize().height;
 };
 
@@ -170,6 +184,7 @@ goog.graphics.ext.Graphics.prototype.getHeight = function() {
  * @override
  */
 goog.graphics.ext.Graphics.prototype.getPixelScaleX = function() {
+  'use strict';
   return this.implementation_.getPixelScaleX();
 };
 
@@ -179,6 +194,7 @@ goog.graphics.ext.Graphics.prototype.getPixelScaleX = function() {
  * @override
  */
 goog.graphics.ext.Graphics.prototype.getPixelScaleY = function() {
+  'use strict';
   return this.implementation_.getPixelScaleY();
 };
 
@@ -187,6 +203,7 @@ goog.graphics.ext.Graphics.prototype.getPixelScaleY = function() {
  * @return {Element} The root element of the graphics surface.
  */
 goog.graphics.ext.Graphics.prototype.getElement = function() {
+  'use strict';
   return this.implementation_.getElement();
 };
 
@@ -197,6 +214,7 @@ goog.graphics.ext.Graphics.prototype.getElement = function() {
  * @param {Element} parentElement Parent element to render the component into.
  */
 goog.graphics.ext.Graphics.prototype.render = function(parentElement) {
+  'use strict';
   this.implementation_.render(parentElement);
 };
 
@@ -215,5 +233,6 @@ goog.graphics.ext.Graphics.prototype.transform = goog.nullFunction;
  * @override
  */
 goog.graphics.ext.Graphics.prototype.redraw = function() {
+  'use strict';
   this.transformChildren();
 };

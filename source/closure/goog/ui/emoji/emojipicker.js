@@ -26,6 +26,8 @@ goog.require('goog.ui.emoji.Emoji');
 goog.require('goog.ui.emoji.EmojiPalette');
 goog.require('goog.ui.emoji.EmojiPaletteRenderer');
 goog.require('goog.ui.emoji.ProgressiveEmojiPaletteRenderer');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.TabPaneEvent');
 
 
 

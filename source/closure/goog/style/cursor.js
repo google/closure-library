@@ -39,6 +39,7 @@ goog.style.cursor.CLOSEDHAND_FILE = 'closedhand.cur';
  */
 goog.style.cursor.getDraggableCursorStyle = function(
     absoluteDotCurFilePath, opt_obsolete) {
+  'use strict';
   return goog.style.cursor.getCursorStyle_(
       '-moz-grab', absoluteDotCurFilePath + goog.style.cursor.OPENHAND_FILE,
       'default');
@@ -56,6 +57,7 @@ goog.style.cursor.getDraggableCursorStyle = function(
  */
 goog.style.cursor.getDraggingCursorStyle = function(
     absoluteDotCurFilePath, opt_obsolete) {
+  'use strict';
   return goog.style.cursor.getCursorStyle_(
       '-moz-grabbing',
       absoluteDotCurFilePath + goog.style.cursor.CLOSEDHAND_FILE, 'move');
@@ -75,6 +77,7 @@ goog.style.cursor.getDraggingCursorStyle = function(
  */
 goog.style.cursor.getCursorStyle_ = function(
     geckoNonWinBuiltInStyleValue, absoluteDotCurFilePath, defaultStyle) {
+  'use strict';
   // Use built in cursors for Gecko on non Windows OS.
   // We prefer our custom cursor, but Firefox Mac and Firefox Linux
   // cannot do custom cursors. They do have a built-in hand, so use it:

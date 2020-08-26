@@ -23,6 +23,7 @@ goog.require('goog.events.Event');
  * @final
  */
 goog.fs.ProgressEvent = function(event, target) {
+  'use strict';
   goog.fs.ProgressEvent.base(this, 'constructor', event.type, target);
 
   /**
@@ -40,6 +41,7 @@ goog.inherits(goog.fs.ProgressEvent, goog.events.Event);
  *     saved is known.
  */
 goog.fs.ProgressEvent.prototype.isLengthComputable = function() {
+  'use strict';
   return this.event_.lengthComputable;
 };
 
@@ -48,6 +50,7 @@ goog.fs.ProgressEvent.prototype.isLengthComputable = function() {
  * @return {number} The number of bytes saved so far.
  */
 goog.fs.ProgressEvent.prototype.getLoaded = function() {
+  'use strict';
   return this.event_.loaded;
 };
 
@@ -56,5 +59,6 @@ goog.fs.ProgressEvent.prototype.getLoaded = function() {
  * @return {number} The total number of bytes in the file being saved.
  */
 goog.fs.ProgressEvent.prototype.getTotal = function() {
+  'use strict';
   return this.event_.total;
 };

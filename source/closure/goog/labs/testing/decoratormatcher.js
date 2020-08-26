@@ -29,6 +29,7 @@ goog.labs.testing.AnythingMatcher = function() {};
  * @override
  */
 goog.labs.testing.AnythingMatcher.prototype.matches = function(actualObject) {
+  'use strict';
   return true;
 };
 
@@ -40,6 +41,7 @@ goog.labs.testing.AnythingMatcher.prototype.matches = function(actualObject) {
  * @override
  */
 goog.labs.testing.AnythingMatcher.prototype.describe = function(actualObject) {
+  'use strict';
   throw new Error('AnythingMatcher should never fail!');
 };
 
@@ -50,6 +52,7 @@ goog.labs.testing.AnythingMatcher.prototype.describe = function(actualObject) {
  * @return {!goog.labs.testing.AnythingMatcher} A AnythingMatcher.
  */
 var anything = goog.labs.testing.AnythingMatcher.anything = function() {
+  'use strict';
   return new goog.labs.testing.AnythingMatcher();
 };
 
@@ -61,6 +64,7 @@ var anything = goog.labs.testing.AnythingMatcher.anything = function() {
  * @return {!goog.labs.testing.Matcher} The wrapped matcher.
  */
 var is = goog.labs.testing.AnythingMatcher.is = function(matcher) {
+  'use strict';
   return matcher;
 };
 
@@ -74,11 +78,14 @@ var is = goog.labs.testing.AnythingMatcher.is = function(matcher) {
  */
 var describedAs = goog.labs.testing.AnythingMatcher.describedAs = function(
     description, matcher) {
+  'use strict';
   return /** @type {!goog.labs.testing.Matcher} */ ({
     matches: function(value) {
+      'use strict';
       return matcher.matches(value);
     },
     describe: function() {
+      'use strict';
       return description;
     }
   });

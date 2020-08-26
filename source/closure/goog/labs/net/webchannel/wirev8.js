@@ -20,6 +20,7 @@ goog.require('goog.json');
 goog.require('goog.json.NativeJsonProcessor');
 goog.require('goog.labs.net.webChannel.Wire');
 goog.require('goog.structs');
+goog.requireType('goog.string.Parser');
 goog.requireType('goog.structs.Map');
 
 
@@ -31,6 +32,7 @@ goog.requireType('goog.structs.Map');
  * @struct
  */
 goog.labs.net.webChannel.WireV8 = function() {
+  'use strict';
   /**
    * Parser for a response payload. The parser should return an array.
    * @private {!goog.string.Parser}
@@ -40,6 +42,7 @@ goog.labs.net.webChannel.WireV8 = function() {
 
 
 goog.scope(function() {
+'use strict';
 var WireV8 = goog.labs.net.webChannel.WireV8;
 var Wire = goog.labs.net.webChannel.Wire;
 
@@ -55,9 +58,11 @@ var Wire = goog.labs.net.webChannel.Wire;
  * @param {string=} opt_prefix The prefix for each field of the object.
  */
 WireV8.prototype.encodeMessage = function(message, buffer, opt_prefix) {
+  'use strict';
   var prefix = opt_prefix || '';
   try {
     goog.structs.forEach(message, function(value, key) {
+      'use strict';
       var encodedValue = value;
       if (goog.isObject(value)) {
         encodedValue = goog.json.serialize(value);
@@ -86,6 +91,7 @@ WireV8.prototype.encodeMessage = function(message, buffer, opt_prefix) {
  */
 WireV8.prototype.encodeMessageQueue = function(
     messageQueue, count, badMapHandler) {
+  'use strict';
   var offset = -1;
   while (true) {
     var sb = ['count=' + count];
@@ -140,6 +146,7 @@ WireV8.prototype.encodeMessageQueue = function(
  * @return {*} The decoded message object.
  */
 WireV8.prototype.decodeMessage = function(messageText) {
+  'use strict';
   var response = this.parser_.parse(messageText);
   goog.asserts.assert(Array.isArray(response));  // throw exception
   return response;

@@ -19,6 +19,9 @@ goog.require('goog.functions');
 goog.require('goog.ui.editor.AbstractDialog');
 goog.require('goog.ui.editor.LinkDialog');
 goog.require('goog.uri.utils');
+goog.requireType('goog.editor.Link');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.html.SafeHtml');
 
 
 
@@ -28,6 +31,7 @@ goog.require('goog.uri.utils');
  * @extends {goog.editor.plugins.AbstractDialogPlugin}
  */
 goog.editor.plugins.LinkDialogPlugin = function() {
+  'use strict';
   goog.editor.plugins.LinkDialogPlugin.base(
       this, 'constructor', goog.editor.Command.MODAL_LINK_EDITOR);
 
@@ -146,6 +150,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.getTrogClassId =
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.setBlockOpeningUnsafeSchemes =
     function(blockOpeningUnsafeSchemes) {
+  'use strict';
   this.blockOpeningUnsafeSchemes_ = blockOpeningUnsafeSchemes;
 };
 
@@ -160,6 +165,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.setBlockOpeningUnsafeSchemes =
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.setSafeToOpenSchemes = function(
     schemes) {
+  'use strict';
   this.safeToOpenSchemes_ = schemes;
 };
 
@@ -173,6 +179,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.setSafeToOpenSchemes = function(
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.showOpenLinkInNewWindow =
     function(startChecked) {
+  'use strict';
   this.showOpenLinkInNewWindow_ = true;
   this.isOpenLinkInNewWindowChecked_ = startChecked;
 };
@@ -184,6 +191,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.showOpenLinkInNewWindow =
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.focusTextToDisplayOnOpenIfEmpty =
     function() {
+  'use strict';
   this.focusTextToDisplayOnOpenIfEmpty_ = true;
 };
 
@@ -193,6 +201,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.focusTextToDisplayOnOpenIfEmpty =
  * 'rel=nofollow' attribute added to the link.
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.showRelNoFollow = function() {
+  'use strict';
   this.showRelNoFollow_ = true;
 };
 
@@ -205,6 +214,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.showRelNoFollow = function() {
  */
 goog.editor.plugins.LinkDialogPlugin.prototype
     .getOpenLinkInNewWindowCheckedState = function() {
+  'use strict';
   return this.isOpenLinkInNewWindowChecked_;
 };
 
@@ -220,6 +230,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype
  * if the user had opened a blank window and typed the url in themselves.
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.stopReferrerLeaks = function() {
+  'use strict';
   this.stopReferrerLeaks_ = true;
 };
 
@@ -230,6 +241,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.stopReferrerLeaks = function() {
  * to launch a reverse tabnabbing attack.
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.stopTabNabbing = function() {
+  'use strict';
   this.stopTabNabbing_ = true;
 };
 
@@ -242,6 +254,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.stopTabNabbing = function() {
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.setEmailWarning = function(
     emailWarning) {
+  'use strict';
   this.emailWarning_ = emailWarning;
 };
 
@@ -257,6 +270,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.setEmailWarning = function(
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.execCommandInternal = function(
     command, opt_arg) {
+  'use strict';
   this.currentLink_ = /** @type {goog.editor.Link} */ (opt_arg);
   return goog.editor.plugins.LinkDialogPlugin.base(
       this, 'execCommandInternal', command, opt_arg);
@@ -270,6 +284,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.execCommandInternal = function(
  * @protected
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.handleAfterHide = function(e) {
+  'use strict';
   goog.editor.plugins.LinkDialogPlugin.base(this, 'handleAfterHide', e);
   this.currentLink_ = null;
 };
@@ -282,6 +297,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleAfterHide = function(e) {
  * @template T
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.getEventHandler = function() {
+  'use strict';
   return this.eventHandler_;
 };
 
@@ -291,6 +307,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.getEventHandler = function() {
  * @protected
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.getCurrentLink = function() {
+  'use strict';
   return this.currentLink_;
 };
 
@@ -306,6 +323,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.getCurrentLink = function() {
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
     dialogDomHelper, opt_link) {
+  'use strict';
   var dialog = new goog.ui.editor.LinkDialog(
       dialogDomHelper,
       /** @type {goog.editor.Link} */ (opt_link));
@@ -337,6 +355,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.createDialog = function(
 
 /** @override */
 goog.editor.plugins.LinkDialogPlugin.prototype.disposeInternal = function() {
+  'use strict';
   goog.editor.plugins.LinkDialogPlugin.base(this, 'disposeInternal');
   this.eventHandler_.dispose();
 };
@@ -348,6 +367,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.disposeInternal = function() {
  * @protected
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.handleOk = function(e) {
+  'use strict';
   // We're not restoring the original selection, so clear it out.
   this.disposeOriginalSelection();
 
@@ -385,6 +405,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk = function(e) {
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.touchUpAnchorOnOk_ = function(
     anchor, e) {
+  'use strict';
   if (this.showOpenLinkInNewWindow_) {
     if (e.openInNewWindow) {
       anchor.target = '_blank';
@@ -414,6 +435,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.touchUpAnchorOnOk_ = function(
  * @private
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.handleCancel_ = function(e) {
+  'use strict';
   if (this.currentLink_.isNew()) {
     goog.dom.flattenElement(this.currentLink_.getAnchor());
     var extraAnchors = this.currentLink_.getExtraAnchors();
@@ -436,6 +458,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleCancel_ = function(e) {
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.handleBeforeTestLink = function(
     e) {
+  'use strict';
   if (!this.shouldOpenUrl(e.url)) {
     /** @desc Message when the user tries to test (preview) a link, but the
      * link cannot be tested. */
@@ -453,6 +476,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleBeforeTestLink = function(
  * @protected
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.shouldOpenUrl = function(url) {
+  'use strict';
   return !this.blockOpeningUnsafeSchemes_ || this.isSafeSchemeToOpen_(url);
 };
 
@@ -466,6 +490,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.shouldOpenUrl = function(url) {
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.isSafeSchemeToOpen_ = function(
     url) {
+  'use strict';
   var scheme = goog.uri.utils.getScheme(url) || 'http';
   return goog.array.contains(this.safeToOpenSchemes_, scheme.toLowerCase());
 };

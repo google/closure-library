@@ -24,6 +24,7 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

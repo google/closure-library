@@ -43,6 +43,7 @@ goog.graphics.ext.coordinates.specialCoordinateCache_ = {};
  * @private
  */
 goog.graphics.ext.coordinates.isPercent_ = function(coord) {
+  'use strict';
   return goog.string.contains(coord, '%');
 };
 
@@ -55,6 +56,7 @@ goog.graphics.ext.coordinates.isPercent_ = function(coord) {
  * @private
  */
 goog.graphics.ext.coordinates.isPixels_ = function(coord) {
+  'use strict';
   return goog.string.contains(coord, 'px');
 };
 
@@ -65,6 +67,7 @@ goog.graphics.ext.coordinates.isPixels_ = function(coord) {
  * @return {boolean} Whether the coordinate is special.
  */
 goog.graphics.ext.coordinates.isSpecial = function(coord) {
+  'use strict';
   var cache = goog.graphics.ext.coordinates.specialCoordinateCache_;
 
   if (!(coord in cache)) {
@@ -89,6 +92,7 @@ goog.graphics.ext.coordinates.isSpecial = function(coord) {
  *     this coordinate.
  */
 goog.graphics.ext.coordinates.computeValue = function(coord, size, scale) {
+  'use strict';
   var number = parseFloat(String(coord));
   if (typeof coord === 'string') {
     if (goog.graphics.ext.coordinates.isPercent_(coord)) {
@@ -122,6 +126,7 @@ goog.graphics.ext.coordinates.computeValue = function(coord, size, scale) {
  */
 goog.graphics.ext.coordinates.getValue = function(
     coord, forMaximum, containerSize, scale, opt_cache) {
+  'use strict';
   if (typeof coord !== 'number') {
     var cacheString = opt_cache && ((forMaximum ? 'X' : '') + coord);
 

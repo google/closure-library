@@ -27,6 +27,7 @@ goog.require('goog.string.StringBuffer');
  * @final
  */
 goog.format.HtmlPrettyPrinter = function(opt_timeOutMillis) {
+  'use strict';
   /**
    * Max # milliseconds to spend on #format.
    * @type {number}
@@ -50,6 +51,7 @@ goog.format.HtmlPrettyPrinter.instance_ = null;
  * @private
  */
 goog.format.HtmlPrettyPrinter.getInstance_ = function() {
+  'use strict';
   if (!goog.format.HtmlPrettyPrinter.instance_) {
     goog.format.HtmlPrettyPrinter.instance_ =
         new goog.format.HtmlPrettyPrinter();
@@ -64,6 +66,7 @@ goog.format.HtmlPrettyPrinter.getInstance_ = function() {
  * @return {string} Formatted result.
  */
 goog.format.HtmlPrettyPrinter.format = function(html) {
+  'use strict';
   return goog.format.HtmlPrettyPrinter.getInstance_().format(html);
 };
 
@@ -144,6 +147,7 @@ goog.format.HtmlPrettyPrinter.EMPTY_TAGS_ = goog.object.createSet(
  * @throws {Error} Regex error, data loss, or endless loop detected.
  */
 goog.format.HtmlPrettyPrinter.prototype.format = function(html) {
+  'use strict';
   // Trim leading whitespace, but preserve first indent; in other words, keep
   // any spaces immediately before the first non-whitespace character (that's
   // what $1 is), but remove all other leading whitespace. This adjustment
@@ -271,6 +275,7 @@ goog.format.HtmlPrettyPrinter.prototype.format = function(html) {
  * @final
  */
 goog.format.HtmlPrettyPrinter.Buffer = function() {
+  'use strict';
   /**
    * Tokens to be output in #toString.
    * @type {goog.string.StringBuffer}
@@ -313,6 +318,7 @@ goog.format.HtmlPrettyPrinter.Buffer.prototype.needsNewLine_ = false;
  */
 goog.format.HtmlPrettyPrinter.Buffer.prototype.pushToken = function(
     breakBefore, token, breakAfter) {
+  'use strict';
   // If this token needs a preceding line break, and
   // we haven't already added a line break, and
   // this token does not start with a line break,
@@ -342,6 +348,7 @@ goog.format.HtmlPrettyPrinter.Buffer.prototype.pushToken = function(
  * Append line break if we need one.
  */
 goog.format.HtmlPrettyPrinter.Buffer.prototype.lineBreak = function() {
+  'use strict';
   if (!this.isBeginningOfNewLine_) {
     this.out_.append('\n');
     ++this.breakCount;
@@ -354,5 +361,6 @@ goog.format.HtmlPrettyPrinter.Buffer.prototype.lineBreak = function() {
  * @override
  */
 goog.format.HtmlPrettyPrinter.Buffer.prototype.toString = function() {
+  'use strict';
   return this.out_.toString();
 };

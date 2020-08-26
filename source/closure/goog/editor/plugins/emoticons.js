@@ -27,6 +27,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.editor.plugins.Emoticons = function() {
+  'use strict';
   goog.editor.plugins.Emoticons.base(this, 'constructor');
 };
 goog.inherits(goog.editor.plugins.Emoticons, goog.editor.Plugin);
@@ -43,6 +44,7 @@ goog.editor.plugins.Emoticons.prototype.getTrogClassId =
 
 /** @override */
 goog.editor.plugins.Emoticons.prototype.isSupportedCommand = function(command) {
+  'use strict';
   return command == goog.editor.plugins.Emoticons.COMMAND;
 };
 
@@ -57,6 +59,7 @@ goog.editor.plugins.Emoticons.prototype.isSupportedCommand = function(command) {
  */
 goog.editor.plugins.Emoticons.prototype.execCommandInternal = function(
     command, opt_arg) {
+  'use strict';
   var emoji = /** @type {goog.ui.emoji.Emoji} */ (opt_arg);
 
   var styleProperties = 'margin:0 0.2ex;vertical-align:middle;';

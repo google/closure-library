@@ -18,6 +18,7 @@ goog.provide('goog.net.ChannelDebug');
 goog.require('goog.json');
 goog.require('goog.log');
 goog.requireType('goog.Uri');
+goog.requireType('goog.debug.Logger');
 goog.requireType('goog.net.XmlHttp.ReadyState');
 
 

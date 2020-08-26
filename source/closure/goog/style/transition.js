@@ -51,6 +51,7 @@ goog.style.transition.Css3Property;
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.style.transition.set = function(element, properties) {
+  'use strict';
   if (!Array.isArray(properties)) {
     properties = [properties];
   }
@@ -58,6 +59,7 @@ goog.style.transition.set = function(element, properties) {
       properties.length > 0, 'At least one Css3Property should be specified.');
 
   var values = goog.array.map(properties, function(p) {
+    'use strict';
     if (typeof p === 'string') {
       return p;
     } else {
@@ -80,6 +82,7 @@ goog.style.transition.set = function(element, properties) {
  * @param {Element} element The element to remove transition from.
  */
 goog.style.transition.removeAll = function(element) {
+  'use strict';
   goog.style.transition.setPropertyValue_(element, '');
 };
 
@@ -88,6 +91,7 @@ goog.style.transition.removeAll = function(element) {
  * @return {boolean} Whether CSS3 transition is supported.
  */
 goog.style.transition.isSupported = goog.functions.cacheReturnValue(function() {
+  'use strict';
   // Since IE would allow any attribute, we need to explicitly check the
   // browser version here instead.
   if (goog.userAgent.IE) {
@@ -121,5 +125,6 @@ goog.style.transition.isSupported = goog.functions.cacheReturnValue(function() {
  * @private
  */
 goog.style.transition.setPropertyValue_ = function(element, transitionValue) {
+  'use strict';
   goog.style.setStyle(element, 'transition', transitionValue);
 };

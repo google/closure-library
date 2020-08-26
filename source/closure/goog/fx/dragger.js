@@ -30,6 +30,7 @@ goog.require('goog.math.Rect');
 goog.require('goog.style');
 goog.require('goog.style.bidi');
 goog.require('goog.userAgent');
+goog.requireType('goog.events.BrowserEvent');
 
 
 

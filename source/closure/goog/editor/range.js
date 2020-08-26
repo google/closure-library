@@ -21,6 +21,8 @@ goog.require('goog.editor.node');
 goog.require('goog.editor.style');
 goog.require('goog.iter');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.AbstractRange');
+goog.requireType('goog.dom.TagName');
 
 
 /**

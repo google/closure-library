@@ -27,6 +27,8 @@ goog.require('goog.editor.range');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
+goog.requireType('goog.dom.AbstractRange');
+goog.requireType('goog.dom.SavedCaretRange');
 
 
 

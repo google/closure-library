@@ -39,6 +39,7 @@ goog.require('goog.dom.safe');
 goog.require('goog.events.Event');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
+goog.requireType('goog.dom.DomHelper');
 
 
 

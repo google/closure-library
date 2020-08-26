@@ -32,6 +32,7 @@ goog.requireType('goog.messaging.MessageChannel');
  * @extends {goog.Disposable}
  */
 goog.messaging.RespondingChannel = function(messageChannel) {
+  'use strict';
   goog.messaging.RespondingChannel.base(this, 'constructor');
 
   /**
@@ -124,12 +125,14 @@ goog.messaging.RespondingChannel.prototype.logger_ =
  * @private
  */
 goog.messaging.RespondingChannel.prototype.getNextSignature_ = function() {
+  'use strict';
   return this.nextSignatureIndex_++;
 };
 
 
 /** @override */
 goog.messaging.RespondingChannel.prototype.disposeInternal = function() {
+  'use strict';
   goog.dispose(this.messageChannel_);
   delete this.messageChannel_;
   // Note: this.publicChannel_ and this.privateChannel_ get disposed by
@@ -150,7 +153,7 @@ goog.messaging.RespondingChannel.prototype.disposeInternal = function() {
  */
 goog.messaging.RespondingChannel.prototype.send = function(
     serviceName, payload, callback) {
-
+  'use strict';
   var signature = this.getNextSignature_();
   this.sigCallbackMap_[signature] = callback;
 
@@ -170,7 +173,7 @@ goog.messaging.RespondingChannel.prototype.send = function(
  */
 goog.messaging.RespondingChannel.prototype.callbackServiceHandler_ = function(
     message) {
-
+  'use strict';
   var signature = message['signature'];
   var result = message['data'];
 
@@ -193,6 +196,7 @@ goog.messaging.RespondingChannel.prototype.callbackServiceHandler_ = function(
  */
 goog.messaging.RespondingChannel.prototype.registerService = function(
     serviceName, callback) {
+  'use strict';
   this.publicChannel_.registerService(
       serviceName, goog.bind(this.callbackProxy_, this, callback), true);
 };
@@ -209,9 +213,11 @@ goog.messaging.RespondingChannel.prototype.registerService = function(
  */
 goog.messaging.RespondingChannel.prototype.callbackProxy_ = function(
     callback, message) {
+  'use strict';
   var response = callback(message['data']);
   var signature = message['signature'];
   goog.Promise.resolve(response).then(goog.bind(function(result) {
+    'use strict';
     this.sendResponse_(result, signature);
   }, this));
 };
@@ -226,6 +232,7 @@ goog.messaging.RespondingChannel.prototype.callbackProxy_ = function(
  */
 goog.messaging.RespondingChannel.prototype.sendResponse_ = function(
     result, signature) {
+  'use strict';
   var resultMessage = {};
   resultMessage['data'] = result;
   resultMessage['signature'] = signature;

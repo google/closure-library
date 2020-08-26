@@ -39,6 +39,15 @@ goog.require('goog.ui.SubMenu');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
+goog.requireType('goog.events.BrowserEvent');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.events.EventTarget');
+goog.requireType('goog.math.Size');
+goog.requireType('goog.positioning.AnchoredPosition');
+goog.requireType('goog.ui.ButtonRenderer');
+goog.requireType('goog.ui.Control');
+goog.requireType('goog.ui.ControlContent');
+goog.requireType('goog.ui.MenuSeparator');
 
 
 

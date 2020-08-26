@@ -68,6 +68,7 @@ goog.i18n.currency.tier2Enabled_ = false;
  * @return {boolean} If the currency is available.
  */
 goog.i18n.currency.isAvailable = function(currencyCode) {
+  'use strict';
   return currencyCode in goog.i18n.currency.CurrencyInfo;
 };
 
@@ -78,6 +79,7 @@ goog.i18n.currency.isAvailable = function(currencyCode) {
  * before any other functions in this namespace.
  */
 goog.i18n.currency.addTier2Support = function() {
+  'use strict';
   // Protection from executing this these again and again.
   if (!goog.i18n.currency.tier2Enabled_) {
     for (const key in goog.i18n.currency.CurrencyInfoTier2) {
@@ -104,6 +106,7 @@ goog.i18n.currency.addTier2Support = function() {
  *   {@link goog.i18n.NumberFormat.CurrencyStyle.GLOBAL}
  */
 goog.i18n.currency.getGlobalCurrencyPattern = function(currencyCode) {
+  'use strict';
   const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   const patternNum = info[0];
   if (currencyCode == info[1]) {
@@ -122,6 +125,7 @@ goog.i18n.currency.getGlobalCurrencyPattern = function(currencyCode) {
  * @return {string} Global currency sign for given currency.
  */
 goog.i18n.currency.getGlobalCurrencySign = function(currencyCode) {
+  'use strict';
   const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   return (currencyCode == info[1]) ? currencyCode :
                                      currencyCode + ' ' + info[1];
@@ -139,6 +143,7 @@ goog.i18n.currency.getGlobalCurrencySign = function(currencyCode) {
  * @return {string} Global currency sign for given currency.
  */
 goog.i18n.currency.getGlobalCurrencySignWithFallback = function(currencyCode) {
+  'use strict';
   var info = goog.i18n.currency.CurrencyInfo[currencyCode];
   if (!info) {
     return currencyCode;
@@ -161,6 +166,7 @@ goog.i18n.currency.getGlobalCurrencySignWithFallback = function(currencyCode) {
  *   {@link goog.i18n.NumberFormat.CurrencyStyle.LOCAL}
  */
 goog.i18n.currency.getLocalCurrencyPattern = function(currencyCode) {
+  'use strict';
   const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   return goog.i18n.currency.getCurrencyPattern_(info[0], info[1]);
 };
@@ -174,6 +180,7 @@ goog.i18n.currency.getLocalCurrencyPattern = function(currencyCode) {
  * @return {string} Local currency sign for given currency.
  */
 goog.i18n.currency.getLocalCurrencySign = function(currencyCode) {
+  'use strict';
   return goog.i18n.currency.CurrencyInfo[currencyCode][1];
 };
 
@@ -189,6 +196,7 @@ goog.i18n.currency.getLocalCurrencySign = function(currencyCode) {
  * @return {string} Local currency sign for given currency.
  */
 goog.i18n.currency.getLocalCurrencySignWithFallback = function(currencyCode) {
+  'use strict';
   if (currencyCode in goog.i18n.currency.CurrencyInfo) {
     return goog.i18n.currency.CurrencyInfo[currencyCode][1];
   } else {
@@ -213,6 +221,7 @@ goog.i18n.currency.getLocalCurrencySignWithFallback = function(currencyCode) {
  *   {@link goog.i18n.NumberFormat.CurrencyStyle.PORTABLE}
  */
 goog.i18n.currency.getPortableCurrencyPattern = function(currencyCode) {
+  'use strict';
   const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   return goog.i18n.currency.getCurrencyPattern_(info[0], info[2]);
 };
@@ -226,6 +235,7 @@ goog.i18n.currency.getPortableCurrencyPattern = function(currencyCode) {
  * @return {string} Portable currency sign for given currency.
  */
 goog.i18n.currency.getPortableCurrencySign = function(currencyCode) {
+  'use strict';
   return goog.i18n.currency.CurrencyInfo[currencyCode][2];
 };
 
@@ -237,6 +247,7 @@ goog.i18n.currency.getPortableCurrencySign = function(currencyCode) {
  * @return {boolean} Whether currencyCode is a 3-letter currency code.
  */
 goog.i18n.currency.isValid = function(currencyCode) {
+  'use strict';
   if (!currencyCode || currencyCode.length !== 3) {
     return false;
   }
@@ -262,6 +273,7 @@ goog.i18n.currency.isValid = function(currencyCode) {
  */
 goog.i18n.currency.getPortableCurrencySignWithFallback = function(
     currencyCode) {
+  'use strict';
   if (currencyCode in goog.i18n.currency.CurrencyInfo) {
     return goog.i18n.currency.CurrencyInfo[currencyCode][2];
   } else {
@@ -287,6 +299,7 @@ goog.i18n.currency.getPortableCurrencySignWithFallback = function(
  * @return {boolean} true if currency should be positioned before amount field.
  */
 goog.i18n.currency.isPrefixSignPosition = function(currencyCode) {
+  'use strict';
   return (goog.i18n.currency.CurrencyInfo[currencyCode][0] &
           goog.i18n.currency.POSITION_FLAG_) == 0;
 };
@@ -303,6 +316,7 @@ goog.i18n.currency.isPrefixSignPosition = function(currencyCode) {
  * @private
  */
 goog.i18n.currency.getCurrencyPattern_ = function(patternNum, sign) {
+  'use strict';
   const strParts = ['#,##0'];
   const precision = patternNum & goog.i18n.currency.PRECISION_MASK_;
   if (precision > 0) {
@@ -337,6 +351,7 @@ goog.i18n.currency.getCurrencyPattern_ = function(patternNum, sign) {
  * @return {string} modified currency pattern string.
  */
 goog.i18n.currency.adjustPrecision = function(pattern, currencyCode) {
+  'use strict';
   const strParts = ['0'];
   const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   if (!info) {

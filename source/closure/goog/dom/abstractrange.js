@@ -18,7 +18,9 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagIterator');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.AbstractSavedCaretRange');
 goog.requireType('goog.dom.SavedRange');
+goog.requireType('goog.math.Coordinate');
 
 /**
  * Types of ranges.

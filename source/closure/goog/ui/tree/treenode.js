@@ -15,7 +15,9 @@
 goog.provide('goog.ui.tree.TreeNode');
 
 goog.forwardDeclare('goog.ui.tree.TreeControl');
-goog.require('goog.ui.tree.BaseNode');  // circular
+goog.require('goog.ui.tree.BaseNode');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.html.SafeHtml');  // circular
 
 
 

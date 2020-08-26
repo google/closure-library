@@ -50,6 +50,9 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.CircularBuffer');
+goog.requireType('goog.debug.Formatter');
+goog.requireType('goog.string.Parser');
+goog.requireType('goog.structs.Map');
 
 
 

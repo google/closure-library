@@ -26,6 +26,7 @@ goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.testing.mockmatchers.ArgumentMatcher');
+goog.requireType('goog.i18n.bidi.Dir');
 
 
 /**

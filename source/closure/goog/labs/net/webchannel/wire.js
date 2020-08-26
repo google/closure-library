@@ -49,6 +49,7 @@ goog.labs.net.webChannel.Wire.RAW_DATA_KEY = '__data__';
  * @struct
  */
 goog.labs.net.webChannel.Wire.QueuedMap = function(mapId, map, opt_context) {
+  'use strict';
   /**
    * The id for this map.
    * @type {number}
@@ -74,6 +75,7 @@ goog.labs.net.webChannel.Wire.QueuedMap = function(mapId, map, opt_context) {
  * undefined if the message is not encoded as a raw JSON message
  */
 goog.labs.net.webChannel.Wire.QueuedMap.prototype.getRawDataSize = function() {
+  'use strict';
   if (goog.labs.net.webChannel.Wire.RAW_DATA_KEY in this.map) {
     const data = this.map[goog.labs.net.webChannel.Wire.RAW_DATA_KEY];
     if (typeof data === 'string') {

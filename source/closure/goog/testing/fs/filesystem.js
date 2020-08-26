@@ -25,6 +25,7 @@ goog.require('goog.testing.fs.DirectoryEntry');
  * @final
  */
 goog.testing.fs.FileSystem = function(opt_name) {
+  'use strict';
   /**
    * The name of the filesystem.
    * @type {string}
@@ -43,6 +44,7 @@ goog.testing.fs.FileSystem = function(opt_name) {
 
 /** @override */
 goog.testing.fs.FileSystem.prototype.getName = function() {
+  'use strict';
   return this.name_;
 };
 
@@ -52,5 +54,6 @@ goog.testing.fs.FileSystem.prototype.getName = function() {
  * @return {!goog.testing.fs.DirectoryEntry}
  */
 goog.testing.fs.FileSystem.prototype.getRoot = function() {
+  'use strict';
   return this.root_;
 };

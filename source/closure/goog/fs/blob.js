@@ -26,6 +26,7 @@ goog.require('goog.array');
  * @return {!Blob} The blob.
  */
 goog.fs.blob.getBlob = function(var_args) {
+  'use strict';
   var BlobBuilder = goog.global.BlobBuilder || goog.global.WebKitBlobBuilder;
 
   if (BlobBuilder !== undefined) {
@@ -53,6 +54,7 @@ goog.fs.blob.getBlob = function(var_args) {
  * @return {!Blob} The blob.
  */
 goog.fs.blob.getBlobWithProperties = function(parts, opt_type, opt_endings) {
+  'use strict';
   var BlobBuilder = goog.global.BlobBuilder || goog.global.WebKitBlobBuilder;
 
   if (BlobBuilder !== undefined) {

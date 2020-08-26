@@ -15,6 +15,7 @@ goog.require('goog.array');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.string');
 goog.require('goog.structs.Trie');
+goog.requireType('goog.events.BrowserEvent');
 goog.requireType('goog.ui.tree.BaseNode');
 
 

@@ -49,6 +49,8 @@ goog.require('goog.string');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.Media');
 goog.require('goog.ui.media.MediaRenderer');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.ui.Control');
 goog.requireType('goog.ui.media.MediaModel');
 
 
@@ -75,6 +77,7 @@ goog.requireType('goog.ui.media.MediaModel');
  * @final
  */
 goog.ui.media.Mp3 = function() {
+  'use strict';
   goog.ui.media.MediaRenderer.call(this);
 };
 goog.inherits(goog.ui.media.Mp3, goog.ui.media.MediaRenderer);
@@ -144,6 +147,7 @@ goog.ui.media.Mp3.MATCHER =
  *     renderer.
  */
 goog.ui.media.Mp3.newControl = function(dataModel, opt_domHelper) {
+  'use strict';
   var control = new goog.ui.media.Media(
       dataModel, goog.ui.media.Mp3.getInstance(), opt_domHelper);
   // mp3 ui doesn't have a non selected view: it shows the mp3 player by
@@ -160,6 +164,7 @@ goog.ui.media.Mp3.newControl = function(dataModel, opt_domHelper) {
  * @param {string} flashUrl The URL of the flash mp3 player.
  */
 goog.ui.media.Mp3.setFlashUrl = function(flashUrl) {
+  'use strict';
   goog.ui.media.Mp3.flashUrl_ = flashUrl;
 };
 
@@ -173,6 +178,7 @@ goog.ui.media.Mp3.setFlashUrl = function(flashUrl) {
  *     given `mp3Url`.
  */
 goog.ui.media.Mp3.buildFlashUrl = function(mp3Url) {
+  'use strict';
   var flashUrl = goog.ui.media.Mp3.flashUrl_ + '?' +
       goog.string.subs(
           goog.ui.media.Mp3.PLAYER_ARGUMENTS_, goog.string.urlEncode(mp3Url));
@@ -189,6 +195,7 @@ goog.ui.media.Mp3.buildFlashUrl = function(mp3Url) {
  * @override
  */
 goog.ui.media.Mp3.prototype.createDom = function(c) {
+  'use strict';
   var control = /** @type {goog.ui.media.Media} */ (c);
   var div = goog.ui.media.Mp3.superClass_.createDom.call(this, control);
 
@@ -210,5 +217,6 @@ goog.ui.media.Mp3.prototype.createDom = function(c) {
  * @override
  */
 goog.ui.media.Mp3.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.media.Mp3.CSS_CLASS;
 };

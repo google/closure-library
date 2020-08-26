@@ -31,6 +31,7 @@ goog.require('goog.string.internal');
  * @private
  */
 goog.labs.userAgent.browser.matchOpera_ = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Opera');
 };
 
@@ -40,6 +41,7 @@ goog.labs.userAgent.browser.matchOpera_ = function() {
  * @private
  */
 goog.labs.userAgent.browser.matchIE_ = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Trident') ||
       goog.labs.userAgent.util.matchUserAgent('MSIE');
 };
@@ -51,6 +53,7 @@ goog.labs.userAgent.browser.matchIE_ = function() {
  * @private
  */
 goog.labs.userAgent.browser.matchEdgeHtml_ = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Edge');
 };
 
@@ -60,6 +63,7 @@ goog.labs.userAgent.browser.matchEdgeHtml_ = function() {
  * @private
  */
 goog.labs.userAgent.browser.matchEdgeChromium_ = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Edg/');
 };
 
@@ -69,6 +73,7 @@ goog.labs.userAgent.browser.matchEdgeChromium_ = function() {
  * @private
  */
 goog.labs.userAgent.browser.matchOperaChromium_ = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('OPR');
 };
 
@@ -78,6 +83,7 @@ goog.labs.userAgent.browser.matchOperaChromium_ = function() {
  * @private
  */
 goog.labs.userAgent.browser.matchFirefox_ = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Firefox') ||
       goog.labs.userAgent.util.matchUserAgent('FxiOS');
 };
@@ -88,6 +94,7 @@ goog.labs.userAgent.browser.matchFirefox_ = function() {
  * @private
  */
 goog.labs.userAgent.browser.matchSafari_ = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Safari') &&
       !(goog.labs.userAgent.browser.matchChrome_() ||
         goog.labs.userAgent.browser.matchCoast_() ||
@@ -107,6 +114,7 @@ goog.labs.userAgent.browser.matchSafari_ = function() {
  * @private
  */
 goog.labs.userAgent.browser.matchCoast_ = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Coast');
 };
 
@@ -116,6 +124,7 @@ goog.labs.userAgent.browser.matchCoast_ = function() {
  * @private
  */
 goog.labs.userAgent.browser.matchIosWebview_ = function() {
+  'use strict';
   // iOS Webview does not show up as Chrome or Safari. Also check for Opera's
   // WebKit-based iOS browser, Coast.
   return (goog.labs.userAgent.util.matchUserAgent('iPad') ||
@@ -134,6 +143,7 @@ goog.labs.userAgent.browser.matchIosWebview_ = function() {
  * @private
  */
 goog.labs.userAgent.browser.matchChrome_ = function() {
+  'use strict';
   return (goog.labs.userAgent.util.matchUserAgent('Chrome') ||
           goog.labs.userAgent.util.matchUserAgent('CriOS')) &&
       !goog.labs.userAgent.browser.matchEdgeHtml_();
@@ -145,6 +155,7 @@ goog.labs.userAgent.browser.matchChrome_ = function() {
  * @private
  */
 goog.labs.userAgent.browser.matchAndroidBrowser_ = function() {
+  'use strict';
   // Android can appear in the user agent string for Chrome on Android.
   // This is not the Android standalone browser if it does.
   return goog.labs.userAgent.util.matchUserAgent('Android') &&
@@ -232,6 +243,7 @@ goog.labs.userAgent.browser.isAndroidBrowser =
  * @return {boolean} Whether the user's browser is Silk.
  */
 goog.labs.userAgent.browser.isSilk = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('Silk');
 };
 
@@ -246,6 +258,7 @@ goog.labs.userAgent.browser.isSilk = function() {
  *     details.)
  */
 goog.labs.userAgent.browser.getVersion = function() {
+  'use strict';
   var userAgentString = goog.labs.userAgent.util.getUserAgent();
   // Special case IE since IE's version is inside the parenthesis and
   // without the '/'.
@@ -259,6 +272,7 @@ goog.labs.userAgent.browser.getVersion = function() {
   // Construct a map for easy lookup.
   var versionMap = {};
   goog.array.forEach(versionTuples, function(tuple) {
+    'use strict';
     // Note that the tuple is of length three, but we only care about the
     // first two.
     var key = tuple[0];
@@ -310,6 +324,7 @@ goog.labs.userAgent.browser.getVersion = function() {
  *     given version.
  */
 goog.labs.userAgent.browser.isVersionOrHigher = function(version) {
+  'use strict';
   return goog.string.internal.compareVersions(
              goog.labs.userAgent.browser.getVersion(), version) >= 0;
 };
@@ -327,6 +342,7 @@ goog.labs.userAgent.browser.isVersionOrHigher = function(version) {
  * @private
  */
 goog.labs.userAgent.browser.getIEVersion_ = function(userAgent) {
+  'use strict';
   // IE11 may identify itself as MSIE 9.0 or MSIE 10.0 due to an IE 11 upgrade
   // bug. Example UA:
   // Mozilla/5.0 (MSIE 9.0; Windows NT 6.1; WOW64; Trident/7.0; rv:11.0)

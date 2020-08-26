@@ -27,6 +27,7 @@ goog.i18n.uCharNames.charData_ = null;
  * @return {?string} The name of the character.
  */
 goog.i18n.uCharNames.toName = function(ch) {
+  'use strict';
   if (!goog.i18n.uCharNames.charData_) {
     goog.i18n.uCharNames.createCharData();
   }
@@ -72,8 +73,7 @@ goog.i18n.uCharNames.toName = function(ch) {
  * @protected
  */
 goog.i18n.uCharNames.createCharData = function() {
-
-
+  'use strict';
   /**
    * @desc Name for a symbol, character or a letter. Used in a pop-up balloon,
    *   shown to a document editing user trying to insert a special character.

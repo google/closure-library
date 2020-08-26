@@ -14,6 +14,7 @@ goog.provide('goog.dom.pattern.Matcher');
 goog.require('goog.dom.TagIterator');
 goog.require('goog.dom.pattern.MatchType');
 goog.require('goog.iter');
+goog.requireType('goog.dom.pattern');
 
 
 // TODO(robbyw): Allow for backtracks of size > 1.

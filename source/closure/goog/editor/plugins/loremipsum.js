@@ -32,6 +32,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.editor.plugins.LoremIpsum = function(message) {
+  'use strict';
   goog.editor.Plugin.call(this);
 
   /**
@@ -69,6 +70,7 @@ goog.editor.plugins.LoremIpsum.prototype.usingLorem_ = false;
  * @override
  */
 goog.editor.plugins.LoremIpsum.prototype.queryCommandValue = function(command) {
+  'use strict';
   return command == goog.editor.Command.USING_LOREM && this.usingLorem_;
 };
 
@@ -83,6 +85,7 @@ goog.editor.plugins.LoremIpsum.prototype.queryCommandValue = function(command) {
  */
 goog.editor.plugins.LoremIpsum.prototype.execCommand = function(
     command, opt_placeCursor) {
+  'use strict';
   if (command == goog.editor.Command.CLEAR_LOREM) {
     this.clearLorem_(!!opt_placeCursor);
   } else if (command == goog.editor.Command.UPDATE_LOREM) {
@@ -94,6 +97,7 @@ goog.editor.plugins.LoremIpsum.prototype.execCommand = function(
 /** @override */
 goog.editor.plugins.LoremIpsum.prototype.isSupportedCommand = function(
     command) {
+  'use strict';
   return command == goog.editor.Command.CLEAR_LOREM ||
       command == goog.editor.Command.UPDATE_LOREM ||
       command == goog.editor.Command.USING_LOREM;
@@ -106,6 +110,7 @@ goog.editor.plugins.LoremIpsum.prototype.isSupportedCommand = function(
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.plugins.LoremIpsum.prototype.updateLorem_ = function() {
+  'use strict';
   // Try to apply lorem ipsum if:
   // 1) We have lorem ipsum text
   // 2) There's not a dialog open, as that screws
@@ -153,6 +158,7 @@ goog.editor.plugins.LoremIpsum.prototype.updateLorem_ = function() {
  */
 goog.editor.plugins.LoremIpsum.prototype.clearLorem_ = function(
     opt_placeCursor) {
+  'use strict';
   // Don't mess with lorem state when a dialog is open as that screws
   // with the dialog's ability to properly restore the selection
   // on dialog close (since the DOM nodes would get clobbered)

@@ -21,6 +21,7 @@ goog.provide('goog.fs.url');
  * @return {string} The URL for the object.
  */
 goog.fs.url.createObjectUrl = function(obj) {
+  'use strict';
   return goog.fs.url.getUrlObject_().createObjectURL(obj);
 };
 
@@ -32,6 +33,7 @@ goog.fs.url.createObjectUrl = function(obj) {
  * @param {string} url The URL to revoke.
  */
 goog.fs.url.revokeObjectUrl = function(url) {
+  'use strict';
   goog.fs.url.getUrlObject_().revokeObjectURL(url);
 };
 
@@ -62,6 +64,7 @@ goog.fs.url.UrlObject_.prototype.revokeObjectURL = function(s) {};
  * @private
  */
 goog.fs.url.getUrlObject_ = function() {
+  'use strict';
   const urlObject = goog.fs.url.findUrlObject_();
   if (urlObject != null) {
     return urlObject;
@@ -80,6 +83,7 @@ goog.fs.url.getUrlObject_ = function() {
  * @private
  */
 goog.fs.url.findUrlObject_ = function() {
+  'use strict';
   // This is what the spec says to do
   // http://dev.w3.org/2006/webapi/FileAPI/#dfn-createObjectURL
   if (goog.global.URL !== undefined &&
@@ -106,5 +110,6 @@ goog.fs.url.findUrlObject_ = function() {
  * @return {boolean} True if this browser supports Object Urls.
  */
 goog.fs.url.browserSupportsObjectUrls = function() {
+  'use strict';
   return goog.fs.url.findUrlObject_() != null;
 };

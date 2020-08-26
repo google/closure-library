@@ -26,6 +26,7 @@ goog.requireType('goog.graphics.ext.Group');
  * @final
  */
 goog.graphics.ext.Image = function(group, src) {
+  'use strict';
   // Initialize with some stock values.
   var wrapper = group.getGraphicsImplementation().drawImage(
       0, 0, 1, 1, src, group.getWrapper());
@@ -40,6 +41,7 @@ goog.inherits(goog.graphics.ext.Image, goog.graphics.ext.Element);
  * @override
  */
 goog.graphics.ext.Image.prototype.redraw = function() {
+  'use strict';
   goog.graphics.ext.Image.superClass_.redraw.call(this);
 
   // Our position is already handled bu transform_.
@@ -52,5 +54,6 @@ goog.graphics.ext.Image.prototype.redraw = function() {
  * @param {string} src  Source of the image.
  */
 goog.graphics.ext.Image.prototype.setSource = function(src) {
+  'use strict';
   this.getWrapper().setSource(src);
 };

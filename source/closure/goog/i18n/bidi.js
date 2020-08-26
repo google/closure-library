@@ -184,6 +184,7 @@ goog.i18n.bidi.I18N_LEFT =
  *     given directionality. If given null, returns null (i.e. unknown).
  */
 goog.i18n.bidi.toDir = function(givenDir, opt_noNeutral) {
+  'use strict';
   if (typeof givenDir == 'number') {
     // This includes the non-null goog.i18n.bidi.Dir case.
     return givenDir > 0 ?
@@ -256,6 +257,7 @@ goog.i18n.bidi.htmlSkipReg_ = /<[^>]*>|&[^;]+;/g;
  * @private
  */
 goog.i18n.bidi.stripHtmlIfNeeded_ = function(str, opt_isStripNeeded) {
+  'use strict';
   return opt_isStripNeeded ? str.replace(goog.i18n.bidi.htmlSkipReg_, '') : str;
 };
 
@@ -284,6 +286,7 @@ goog.i18n.bidi.ltrCharReg_ = new RegExp('[' + goog.i18n.bidi.ltrChars_ + ']');
  * @return {boolean} Whether the string contains RTL characters.
  */
 goog.i18n.bidi.hasAnyRtl = function(str, opt_isHtml) {
+  'use strict';
   return goog.i18n.bidi.rtlCharReg_.test(
       goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml));
 };
@@ -306,6 +309,7 @@ goog.i18n.bidi.hasRtlChar = goog.i18n.bidi.hasAnyRtl;
  * @return {boolean} Whether the string contains LTR characters.
  */
 goog.i18n.bidi.hasAnyLtr = function(str, opt_isHtml) {
+  'use strict';
   return goog.i18n.bidi.ltrCharReg_.test(
       goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml));
 };
@@ -335,6 +339,7 @@ goog.i18n.bidi.rtlRe_ = new RegExp('^[' + goog.i18n.bidi.rtlChars_ + ']');
  * @return {boolean} Whether the first character in str is an RTL char.
  */
 goog.i18n.bidi.isRtlChar = function(str) {
+  'use strict';
   return goog.i18n.bidi.rtlRe_.test(str);
 };
 
@@ -345,6 +350,7 @@ goog.i18n.bidi.isRtlChar = function(str) {
  * @return {boolean} Whether the first character in str is an LTR char.
  */
 goog.i18n.bidi.isLtrChar = function(str) {
+  'use strict';
   return goog.i18n.bidi.ltrRe_.test(str);
 };
 
@@ -355,6 +361,7 @@ goog.i18n.bidi.isLtrChar = function(str) {
  * @return {boolean} Whether the first character in str is a neutral char.
  */
 goog.i18n.bidi.isNeutralChar = function(str) {
+  'use strict';
   return !goog.i18n.bidi.isLtrChar(str) && !goog.i18n.bidi.isRtlChar(str);
 };
 
@@ -388,6 +395,7 @@ goog.i18n.bidi.rtlDirCheckRe_ = new RegExp(
  *     strongly-directional character method.
  */
 goog.i18n.bidi.startsWithRtl = function(str, opt_isHtml) {
+  'use strict';
   return goog.i18n.bidi.rtlDirCheckRe_.test(
       goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml));
 };
@@ -414,6 +422,7 @@ goog.i18n.bidi.isRtlText = goog.i18n.bidi.startsWithRtl;
  *     strongly-directional character method.
  */
 goog.i18n.bidi.startsWithLtr = function(str, opt_isHtml) {
+  'use strict';
   return goog.i18n.bidi.ltrDirCheckRe_.test(
       goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml));
 };
@@ -451,6 +460,7 @@ goog.i18n.bidi.isRequiredLtrRe_ = /^http:\/\/.*/;
  * @return {boolean} Whether neutral directionality is detected.
  */
 goog.i18n.bidi.isNeutralText = function(str, opt_isHtml) {
+  'use strict';
   str = goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml);
   return goog.i18n.bidi.isRequiredLtrRe_.test(str) ||
       !goog.i18n.bidi.hasAnyLtr(str) && !goog.i18n.bidi.hasAnyRtl(str);
@@ -488,6 +498,7 @@ goog.i18n.bidi.rtlExitDirCheckRe_ = new RegExp(
  * @return {boolean} Whether LTR exit directionality was detected.
  */
 goog.i18n.bidi.endsWithLtr = function(str, opt_isHtml) {
+  'use strict';
   return goog.i18n.bidi.ltrExitDirCheckRe_.test(
       goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml));
 };
@@ -514,6 +525,7 @@ goog.i18n.bidi.isLtrExitText = goog.i18n.bidi.endsWithLtr;
  * @return {boolean} Whether RTL exit directionality was detected.
  */
 goog.i18n.bidi.endsWithRtl = function(str, opt_isHtml) {
+  'use strict';
   return goog.i18n.bidi.rtlExitDirCheckRe_.test(
       goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml));
 };
@@ -569,6 +581,7 @@ goog.i18n.bidi.rtlLocalesRe_ = new RegExp(
  * @return {boolean} Whether the language code is an RTL language.
  */
 goog.i18n.bidi.isRtlLanguage = function(lang) {
+  'use strict';
   return goog.i18n.bidi.rtlLocalesRe_.test(lang);
 };
 
@@ -594,6 +607,7 @@ goog.i18n.bidi.bracketGuardTextRe_ =
  * @return {string} The processed string, with all bracket guarded.
  */
 goog.i18n.bidi.guardBracketInText = function(s, opt_isRtlContext) {
+  'use strict';
   const useRtl = opt_isRtlContext === undefined ? goog.i18n.bidi.hasAnyRtl(s) :
                                                   opt_isRtlContext;
   const mark = useRtl ? goog.i18n.bidi.Format.RLM : goog.i18n.bidi.Format.LRM;
@@ -612,6 +626,7 @@ goog.i18n.bidi.guardBracketInText = function(s, opt_isRtlContext) {
  * @return {string} The processed string, with directionality enforced to RTL.
  */
 goog.i18n.bidi.enforceRtlInHtml = function(html) {
+  'use strict';
   if (html.charAt(0) == '<') {
     return html.replace(/<\w+/, '$& dir=rtl');
   }
@@ -627,6 +642,7 @@ goog.i18n.bidi.enforceRtlInHtml = function(html) {
  * @return {string} The wrapped string after process.
  */
 goog.i18n.bidi.enforceRtlInText = function(text) {
+  'use strict';
   return goog.i18n.bidi.Format.RLE + text + goog.i18n.bidi.Format.PDF;
 };
 
@@ -642,6 +658,7 @@ goog.i18n.bidi.enforceRtlInText = function(text) {
  * @return {string} The processed string, with directionality enforced to RTL.
  */
 goog.i18n.bidi.enforceLtrInHtml = function(html) {
+  'use strict';
   if (html.charAt(0) == '<') {
     return html.replace(/<\w+/, '$& dir=ltr');
   }
@@ -657,6 +674,7 @@ goog.i18n.bidi.enforceLtrInHtml = function(html) {
  * @return {string} The wrapped string after process.
  */
 goog.i18n.bidi.enforceLtrInText = function(text) {
+  'use strict';
   return goog.i18n.bidi.Format.LRE + text + goog.i18n.bidi.Format.PDF;
 };
 
@@ -703,6 +721,7 @@ goog.i18n.bidi.tempRe_ = /%%%%/g;
  * @return {string} Processed CSS specification string.
  */
 goog.i18n.bidi.mirrorCSS = function(cssStr) {
+  'use strict';
   return cssStr
       .
       // reverse dimensions
@@ -739,6 +758,7 @@ goog.i18n.bidi.singleQuoteSubstituteRe_ = /([\u0591-\u05f2])'/g;
  * @return {string} Processed string with double/single quote replaced.
  */
 goog.i18n.bidi.normalizeHebrewQuote = function(str) {
+  'use strict';
   return str.replace(goog.i18n.bidi.doubleQuoteSubstituteRe_, '$1\u05f4')
       .replace(goog.i18n.bidi.singleQuoteSubstituteRe_, '$1\u05f3');
 };
@@ -795,6 +815,7 @@ goog.i18n.bidi.rtlDetectionThreshold_ = 0.40;
  * @return {goog.i18n.bidi.Dir} Estimated overall directionality of `str`.
  */
 goog.i18n.bidi.estimateDirection = function(str, opt_isHtml) {
+  'use strict';
   let rtlCount = 0;
   let totalCount = 0;
   let hasWeaklyLtr = false;
@@ -831,6 +852,7 @@ goog.i18n.bidi.estimateDirection = function(str, opt_isHtml) {
  * @return {boolean} Whether this piece of text should be laid out in RTL.
  */
 goog.i18n.bidi.detectRtlDirectionality = function(str, opt_isHtml) {
+  'use strict';
   return goog.i18n.bidi.estimateDirection(str, opt_isHtml) ==
       goog.i18n.bidi.Dir.RTL;
 };
@@ -849,6 +871,7 @@ goog.i18n.bidi.detectRtlDirectionality = function(str, opt_isHtml) {
  *     4. A null for unknown directionality.
  */
 goog.i18n.bidi.setElementDirAndAlign = function(element, dir) {
+  'use strict';
   if (element) {
     const htmlElement = /** @type {!HTMLElement} */ (element);
     dir = goog.i18n.bidi.toDir(dir);
@@ -868,6 +891,7 @@ goog.i18n.bidi.setElementDirAndAlign = function(element, dir) {
  * @param {string} text
  */
 goog.i18n.bidi.setElementDirByTextDirectionality = function(element, text) {
+  'use strict';
   const htmlElement = /** @type {!HTMLElement} */ (element);
   switch (goog.i18n.bidi.estimateDirection(text)) {
     case (goog.i18n.bidi.Dir.LTR):

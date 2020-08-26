@@ -31,6 +31,7 @@ goog.require('goog.fs.FileSaver');
  * @final
  */
 goog.fs.FileWriter = function(writer) {
+  'use strict';
   goog.fs.FileWriter.base(this, 'constructor', writer);
 
   /**
@@ -48,6 +49,7 @@ goog.inherits(goog.fs.FileWriter, goog.fs.FileSaver);
  * @return {number} The byte offset at which the next write will occur.
  */
 goog.fs.FileWriter.prototype.getPosition = function() {
+  'use strict';
   return this.writer_.position;
 };
 
@@ -56,6 +58,7 @@ goog.fs.FileWriter.prototype.getPosition = function() {
  * @return {number} The length of the file.
  */
 goog.fs.FileWriter.prototype.getLength = function() {
+  'use strict';
   return this.writer_.length;
 };
 
@@ -66,6 +69,7 @@ goog.fs.FileWriter.prototype.getLength = function() {
  * @param {!Blob} blob The data to write.
  */
 goog.fs.FileWriter.prototype.write = function(blob) {
+  'use strict';
   try {
     this.writer_.write(blob);
   } catch (e) {
@@ -80,6 +84,7 @@ goog.fs.FileWriter.prototype.write = function(blob) {
  * @param {number} offset An absolute byte offset into the file.
  */
 goog.fs.FileWriter.prototype.seek = function(offset) {
+  'use strict';
   try {
     this.writer_.seek(offset);
   } catch (e) {
@@ -94,6 +99,7 @@ goog.fs.FileWriter.prototype.seek = function(offset) {
  * @param {number} size The new size of the file, in bytes.
  */
 goog.fs.FileWriter.prototype.truncate = function(size) {
+  'use strict';
   try {
     this.writer_.truncate(size);
   } catch (e) {

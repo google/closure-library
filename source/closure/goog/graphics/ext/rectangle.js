@@ -25,6 +25,7 @@ goog.requireType('goog.graphics.ext.Group');
  * @final
  */
 goog.graphics.ext.Rectangle = function(group) {
+  'use strict';
   // Initialize with some stock values.
   var wrapper = group.getGraphicsImplementation().drawRect(
       0, 0, 1, 1, null, null, group.getWrapper());
@@ -40,6 +41,7 @@ goog.inherits(
  * @override
  */
 goog.graphics.ext.Rectangle.prototype.redraw = function() {
+  'use strict';
   goog.graphics.ext.Rectangle.superClass_.redraw.call(this);
 
   // Our position is already handled by transform_.

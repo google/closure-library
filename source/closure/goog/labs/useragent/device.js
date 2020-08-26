@@ -23,6 +23,7 @@ goog.require('goog.labs.userAgent.util');
  * @return {boolean} Whether the user is using a mobile device.
  */
 goog.labs.userAgent.device.isMobile = function() {
+  'use strict';
   return !goog.labs.userAgent.device.isTablet() &&
       (goog.labs.userAgent.util.matchUserAgent('iPod') ||
        goog.labs.userAgent.util.matchUserAgent('iPhone') ||
@@ -38,6 +39,7 @@ goog.labs.userAgent.device.isMobile = function() {
  * @return {boolean} Whether the user is using a tablet.
  */
 goog.labs.userAgent.device.isTablet = function() {
+  'use strict';
   return goog.labs.userAgent.util.matchUserAgent('iPad') ||
       (goog.labs.userAgent.util.matchUserAgent('Android') &&
        !goog.labs.userAgent.util.matchUserAgent('Mobile')) ||
@@ -51,6 +53,7 @@ goog.labs.userAgent.device.isTablet = function() {
  *     device).
  */
 goog.labs.userAgent.device.isDesktop = function() {
+  'use strict';
   return !goog.labs.userAgent.device.isMobile() &&
       !goog.labs.userAgent.device.isTablet();
 };

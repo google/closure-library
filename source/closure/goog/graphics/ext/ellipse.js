@@ -25,6 +25,7 @@ goog.requireType('goog.graphics.ext.Group');
  * @final
  */
 goog.graphics.ext.Ellipse = function(group) {
+  'use strict';
   // Initialize with some stock values.
   var wrapper = group.getGraphicsImplementation().drawEllipse(
       1, 1, 2, 2, null, null, group.getWrapper());
@@ -40,6 +41,7 @@ goog.inherits(
  * @override
  */
 goog.graphics.ext.Ellipse.prototype.redraw = function() {
+  'use strict';
   goog.graphics.ext.Ellipse.superClass_.redraw.call(this);
 
   // Our position is already transformed in transform_, but because this is an

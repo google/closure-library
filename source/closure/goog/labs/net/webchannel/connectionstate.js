@@ -23,6 +23,7 @@ goog.provide('goog.labs.net.webChannel.ConnectionState');
  * @struct
  */
 goog.labs.net.webChannel.ConnectionState = function() {
+  'use strict';
   /**
    * Handshake result.
    * @type {?Array<string>}

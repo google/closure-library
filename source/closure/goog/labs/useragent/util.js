@@ -23,6 +23,7 @@ goog.require('goog.string.internal');
  * @private
  */
 goog.labs.userAgent.util.getNativeUserAgentString_ = function() {
+  'use strict';
   var navigator = goog.labs.userAgent.util.getNavigator_();
   if (navigator) {
     var userAgent = navigator.userAgent;
@@ -41,6 +42,7 @@ goog.labs.userAgent.util.getNativeUserAgentString_ = function() {
  * @private
  */
 goog.labs.userAgent.util.getNavigator_ = function() {
+  'use strict';
   return goog.global.navigator;
 };
 
@@ -61,6 +63,7 @@ goog.labs.userAgent.util.userAgent_ =
  * @param {?string=} opt_userAgent The User-Agent override.
  */
 goog.labs.userAgent.util.setUserAgent = function(opt_userAgent) {
+  'use strict';
   goog.labs.userAgent.util.userAgent_ =
       opt_userAgent || goog.labs.userAgent.util.getNativeUserAgentString_();
 };
@@ -70,6 +73,7 @@ goog.labs.userAgent.util.setUserAgent = function(opt_userAgent) {
  * @return {string} The user agent string.
  */
 goog.labs.userAgent.util.getUserAgent = function() {
+  'use strict';
   return goog.labs.userAgent.util.userAgent_;
 };
 
@@ -79,6 +83,7 @@ goog.labs.userAgent.util.getUserAgent = function() {
  * @return {boolean} Whether the user agent contains the given string.
  */
 goog.labs.userAgent.util.matchUserAgent = function(str) {
+  'use strict';
   var userAgent = goog.labs.userAgent.util.getUserAgent();
   return goog.string.internal.contains(userAgent, str);
 };
@@ -90,6 +95,7 @@ goog.labs.userAgent.util.matchUserAgent = function(str) {
  *     case.
  */
 goog.labs.userAgent.util.matchUserAgentIgnoreCase = function(str) {
+  'use strict';
   var userAgent = goog.labs.userAgent.util.getUserAgent();
   return goog.string.internal.caseInsensitiveContains(userAgent, str);
 };
@@ -102,6 +108,7 @@ goog.labs.userAgent.util.matchUserAgentIgnoreCase = function(str) {
  *     of the parenthetical.
  */
 goog.labs.userAgent.util.extractVersionTuples = function(userAgent) {
+  'use strict';
   // Matches each section of a user agent string.
   // Example UA:
   // Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us)

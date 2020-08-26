@@ -70,6 +70,7 @@ goog.requireType('goog.html.SafeHtml');
  * @constructor
  */
 goog.ui.media.FlashObject = function(flashUrl, opt_domHelper) {
+  'use strict';
   goog.ui.Component.call(this, opt_domHelper);
 
   /**
@@ -274,6 +275,7 @@ goog.ui.media.FlashObject.prototype.allowScriptAccess_ =
  * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setWmode = function(wmode) {
+  'use strict';
   this.wmode_ = wmode;
   return this;
 };
@@ -283,6 +285,7 @@ goog.ui.media.FlashObject.prototype.setWmode = function(wmode) {
  * @return {string} Returns the flash movie wmode.
  */
 goog.ui.media.FlashObject.prototype.getWmode = function() {
+  'use strict';
   return this.wmode_;
 };
 
@@ -294,6 +297,7 @@ goog.ui.media.FlashObject.prototype.getWmode = function() {
  * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.addFlashVars = function(map) {
+  'use strict';
   this.flashVars_.addAll(map);
   return this;
 };
@@ -307,6 +311,7 @@ goog.ui.media.FlashObject.prototype.addFlashVars = function(map) {
  * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setFlashVar = function(key, value) {
+  'use strict';
   this.flashVars_.set(key, value);
   return this;
 };
@@ -327,6 +332,7 @@ goog.ui.media.FlashObject.prototype.setFlashVar = function(key, value) {
  */
 goog.ui.media.FlashObject.prototype.setFlashVars = function(
     flashVar, opt_value) {
+  'use strict';
   if (flashVar instanceof goog.structs.Map ||
       goog.typeOf(flashVar) == 'object') {
     this.addFlashVars(/**@type {!goog.structs.Map|!Object}*/ (flashVar));
@@ -346,6 +352,7 @@ goog.ui.media.FlashObject.prototype.setFlashVars = function(
  * @return {goog.structs.Map} The current flash variables.
  */
 goog.ui.media.FlashObject.prototype.getFlashVars = function() {
+  'use strict';
   return this.flashVars_;
 };
 
@@ -357,6 +364,7 @@ goog.ui.media.FlashObject.prototype.getFlashVars = function() {
  * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setBackgroundColor = function(color) {
+  'use strict';
   this.backgroundColor_ = color;
   return this;
 };
@@ -366,6 +374,7 @@ goog.ui.media.FlashObject.prototype.setBackgroundColor = function(color) {
  * @return {string} The background color of the movie.
  */
 goog.ui.media.FlashObject.prototype.getBackgroundColor = function() {
+  'use strict';
   return this.backgroundColor_;
 };
 
@@ -377,6 +386,7 @@ goog.ui.media.FlashObject.prototype.getBackgroundColor = function() {
  * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setAllowScriptAccess = function(value) {
+  'use strict';
   this.allowScriptAccess_ = value;
   return this;
 };
@@ -386,6 +396,7 @@ goog.ui.media.FlashObject.prototype.setAllowScriptAccess = function(value) {
  * @return {string} The allowScriptAccess setting color of the movie.
  */
 goog.ui.media.FlashObject.prototype.getAllowScriptAccess = function() {
+  'use strict';
   return this.allowScriptAccess_;
 };
 
@@ -398,6 +409,7 @@ goog.ui.media.FlashObject.prototype.getAllowScriptAccess = function() {
  * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setSize = function(width, height) {
+  'use strict';
   this.width_ = (typeof width === 'string') ? width : Math.round(width) + 'px';
   this.height_ =
       (typeof height === 'string') ? height : Math.round(height) + 'px';
@@ -412,6 +424,7 @@ goog.ui.media.FlashObject.prototype.setSize = function(width, height) {
  * @return {?string} The flash required version.
  */
 goog.ui.media.FlashObject.prototype.getRequiredVersion = function() {
+  'use strict';
   return this.requiredVersion_;
 };
 
@@ -424,6 +437,7 @@ goog.ui.media.FlashObject.prototype.getRequiredVersion = function() {
  * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
  */
 goog.ui.media.FlashObject.prototype.setRequiredVersion = function(version) {
+  'use strict';
   this.requiredVersion_ = version;
   return this;
 };
@@ -435,6 +449,7 @@ goog.ui.media.FlashObject.prototype.setRequiredVersion = function(version) {
  * @return {boolean} Whether a required version was set or not.
  */
 goog.ui.media.FlashObject.prototype.hasRequiredVersion = function() {
+  'use strict';
   return this.requiredVersion_ != null;
 };
 
@@ -445,6 +460,7 @@ goog.ui.media.FlashObject.prototype.hasRequiredVersion = function() {
  * @override
  */
 goog.ui.media.FlashObject.prototype.enterDocument = function() {
+  'use strict';
   goog.ui.media.FlashObject.superClass_.enterDocument.call(this);
 
   // The SWF tag must be written after this component's element is appended to
@@ -489,6 +505,7 @@ goog.ui.media.FlashObject.prototype.enterDocument = function() {
  * @override
  */
 goog.ui.media.FlashObject.prototype.createDom = function() {
+  'use strict';
   if (this.hasRequiredVersion() &&
       !goog.userAgent.flash.isVersion(
           /** @type {string} */ (this.getRequiredVersion()))) {
@@ -512,6 +529,7 @@ goog.ui.media.FlashObject.prototype.createDom = function() {
  * @private
  */
 goog.ui.media.FlashObject.prototype.createSwfTag_ = function() {
+  'use strict';
   var keys = this.flashVars_.getKeys();
   var values = this.flashVars_.getValues();
   var flashVars = [];
@@ -538,6 +556,7 @@ goog.ui.media.FlashObject.prototype.createSwfTag_ = function() {
  * @private
  */
 goog.ui.media.FlashObject.prototype.createSwfTagModern_ = function(flashVars) {
+  'use strict';
   return goog.html.flash.createEmbed(this.flashUrl_, {
     'AllowScriptAccess': this.allowScriptAccess_,
     'allowFullScreen': 'true',
@@ -563,6 +582,7 @@ goog.ui.media.FlashObject.prototype.createSwfTagModern_ = function(flashVars) {
  * @private
  */
 goog.ui.media.FlashObject.prototype.createSwfTagOldIe_ = function(flashVars) {
+  'use strict';
   return goog.html.flash.createObjectForOldIe(
       this.flashUrl_, {
         'allowFullScreen': 'true',
@@ -587,6 +607,7 @@ goog.ui.media.FlashObject.prototype.createSwfTagOldIe_ = function(flashVars) {
  *     be found.
  */
 goog.ui.media.FlashObject.prototype.getFlashElement = function() {
+  'use strict';
   return /** @type {HTMLObjectElement} */ (
       this.getElement() ? this.getElement().firstChild : null);
 };
@@ -594,6 +615,7 @@ goog.ui.media.FlashObject.prototype.getFlashElement = function() {
 
 /** @override */
 goog.ui.media.FlashObject.prototype.disposeInternal = function() {
+  'use strict';
   goog.ui.media.FlashObject.superClass_.disposeInternal.call(this);
   this.flashVars_ = null;
 
@@ -606,6 +628,7 @@ goog.ui.media.FlashObject.prototype.disposeInternal = function() {
  * @return {boolean} whether the SWF has finished loading or not.
  */
 goog.ui.media.FlashObject.prototype.isLoaded = function() {
+  'use strict';
   if (!this.isInDocument() || !this.getElement()) {
     return false;
   }

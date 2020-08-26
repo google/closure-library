@@ -31,6 +31,7 @@ goog.require('goog.string');
  */
 goog.string.linkify.linkifyPlainTextAsHtml = function(
     text, opt_attributes, opt_preserveNewlines) {
+  'use strict';
   // This shortcut makes linkifyPlainText ~10x faster if text doesn't contain
   // URLs or email addresses and adds insignificant performance penalty if it
   // does.
@@ -64,6 +65,7 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
   text.replace(
       goog.string.linkify.FIND_LINKS_RE_,
       function(part, before, original, email, protocol) {
+        'use strict';
         output.push(
             opt_preserveNewlines ?
                 goog.html.SafeHtml.htmlEscapePreservingNewlines(before) :
@@ -137,6 +139,7 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
  * @return {string} The first URL, or an empty string if not found.
  */
 goog.string.linkify.findFirstUrl = function(text) {
+  'use strict';
   var link = text.match(goog.string.linkify.URL_RE_);
   return link != null ? link[0] : '';
 };
@@ -148,6 +151,7 @@ goog.string.linkify.findFirstUrl = function(text) {
  * @return {string} The first email address, or an empty string if not found.
  */
 goog.string.linkify.findFirstEmail = function(text) {
+  'use strict';
   var email = text.match(goog.string.linkify.EMAIL_RE_);
   return email != null ? email[0] : '';
 };

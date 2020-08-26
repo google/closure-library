@@ -40,6 +40,7 @@ goog.requireType('goog.math.Rect');
  * @final
  */
 goog.graphics.ext.Shape = function(group, path, opt_autoSize) {
+  'use strict';
   this.autoSize_ = !!opt_autoSize;
 
   var graphics = group.getGraphicsImplementation();
@@ -88,6 +89,7 @@ goog.graphics.ext.Shape.prototype.scaledPath_;
  * @return {goog.graphics.Path?} The path drawn by this shape.
  */
 goog.graphics.ext.Shape.prototype.getPath = function() {
+  'use strict';
   return this.path_;
 };
 
@@ -97,6 +99,7 @@ goog.graphics.ext.Shape.prototype.getPath = function() {
  * @param {goog.graphics.ext.Path} path The path to draw.
  */
 goog.graphics.ext.Shape.prototype.setPath = function(path) {
+  'use strict';
   this.path_ = path;
 
   if (this.autoSize_) {
@@ -112,6 +115,7 @@ goog.graphics.ext.Shape.prototype.setPath = function(path) {
  * @private
  */
 goog.graphics.ext.Shape.prototype.scaleAndSetPath_ = function() {
+  'use strict';
   this.scaledPath_ = this.boundingBox_ ?
       this.path_.clone().modifyBounds(
           -this.boundingBox_.left, -this.boundingBox_.top,
@@ -132,6 +136,7 @@ goog.graphics.ext.Shape.prototype.scaleAndSetPath_ = function() {
  * @override
  */
 goog.graphics.ext.Shape.prototype.redraw = function() {
+  'use strict';
   goog.graphics.ext.Shape.superClass_.redraw.call(this);
   if (this.autoSize_) {
     this.scaleAndSetPath_();
@@ -145,6 +150,7 @@ goog.graphics.ext.Shape.prototype.redraw = function() {
  * @override
  */
 goog.graphics.ext.Shape.prototype.checkParentDependent = function() {
+  'use strict';
   return this.autoSize_ ||
       goog.graphics.ext.Shape.superClass_.checkParentDependent.call(this);
 };

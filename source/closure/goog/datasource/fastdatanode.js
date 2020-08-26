@@ -35,6 +35,7 @@ goog.require('goog.ds.DataManager');
 goog.require('goog.ds.DataNodeList');
 goog.require('goog.ds.EmptyNodeList');
 goog.require('goog.string');
+goog.requireType('goog.ds.DataNode');
 
 /*
  * Implementation note: In order to reduce the number of objects,

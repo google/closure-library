@@ -18,6 +18,7 @@ goog.require('goog.log');
 goog.require('goog.net.BulkLoaderHelper');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
+goog.requireType('goog.Uri');
 
 
 

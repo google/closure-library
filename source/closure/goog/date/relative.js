@@ -23,6 +23,7 @@ goog.require('goog.i18n.RelativeDateTimeFormat');
 goog.requireType('goog.date.DateTime');
 
 goog.scope(function() {
+'use strict';
 // For referencing this module.
 var RelativeDateTimeFormat =
     goog.module.get('goog.i18n.RelativeDateTimeFormat');
@@ -138,6 +139,7 @@ goog.date.relative.TimeDeltaFormatter;
  *     for formatting time deltas (i.e. relative times).
  */
 goog.date.relative.setTimeDeltaFormatter = function(formatter) {
+  'use strict';
   goog.date.relative.formatTimeDelta_ = formatter;
 };
 
@@ -150,6 +152,7 @@ goog.date.relative.setTimeDeltaFormatter = function(formatter) {
  * @param {boolean} capitalizeMode
  */
 goog.date.relative.setCasingMode = function(capitalizeMode) {
+  'use strict';
   goog.date.relative.casingMode_ = capitalizeMode;
 };
 
@@ -161,6 +164,7 @@ goog.date.relative.setCasingMode = function(capitalizeMode) {
  * @package Visible for testing
  */
 goog.date.relative.upcase = function(text) {
+  'use strict';
   // Note: Casing is harder than just handling the first character, so
   // this is an approximation.
 
@@ -190,6 +194,7 @@ goog.date.relative.upcase = function(text) {
  * @private
  */
 goog.date.relative.relativeCasedString_ = function(dayOffset) {
+  'use strict';
   var rdtf_formatter =
       new RelativeDateTimeFormat(RelativeDateTimeFormat.NumericOption.AUTO);
 
@@ -217,6 +222,7 @@ goog.date.relative.relativeCasedString_ = function(dayOffset) {
  * @private
  */
 goog.date.relative.formatMonth_ = function(date) {
+  'use strict';
   if (!goog.date.relative.monthDateFormatter_) {
     goog.date.relative.monthDateFormatter_ =
         new goog.i18n.DateTimeFormat(goog.i18n.DateTimePatterns.MONTH_DAY_ABBR);
@@ -232,6 +238,7 @@ goog.date.relative.formatMonth_ = function(date) {
  * @private
  */
 goog.date.relative.formatShortTime_ = function(date) {
+  'use strict';
   if (!goog.date.relative.shortTimeFormatter_) {
     goog.date.relative.shortTimeFormatter_ = new goog.i18n.DateTimeFormat(
         goog.i18n.DateTimeFormat.Format.SHORT_TIME);
@@ -247,6 +254,7 @@ goog.date.relative.formatShortTime_ = function(date) {
  * @private
  */
 goog.date.relative.formatFullDate_ = function(date) {
+  'use strict';
   if (!goog.date.relative.fullDateFormatter_) {
     goog.date.relative.fullDateFormatter_ =
         new goog.i18n.DateTimeFormat(goog.i18n.DateTimeFormat.Format.FULL_DATE);
@@ -267,6 +275,7 @@ goog.date.relative.formatFullDate_ = function(date) {
  * @private
  */
 goog.date.relative.rdtformat_ = function(absQuantity, futureFlag, relUnit) {
+  'use strict';
   // Convert absolute value to negative for past, non-negative for future.
   var quantity = futureFlag ? absQuantity : -absQuantity;
 
@@ -298,6 +307,7 @@ goog.date.relative.rdtformat_ = function(absQuantity, futureFlag, relUnit) {
  * @return {string} The formatted date.
  */
 goog.date.relative.format = function(dateMs) {
+  'use strict';
   var now = goog.now();
   var delta = Math.floor((now - dateMs) / goog.date.relative.MINUTE_MS_);
 
@@ -364,6 +374,7 @@ goog.date.relative.format = function(dateMs) {
  * @return {string} The formatted date.
  */
 goog.date.relative.formatPast = function(dateMs) {
+  'use strict';
   var now = goog.now();
   if (now < dateMs) {
     dateMs = now;
@@ -382,6 +393,7 @@ goog.date.relative.formatPast = function(dateMs) {
  * @return {string} The formatted date.
  */
 goog.date.relative.formatDay = function(dateMs, opt_formatter) {
+  'use strict';
   var today = new Date(goog.now());
 
   today.setHours(0);
@@ -424,6 +436,7 @@ goog.date.relative.formatDay = function(dateMs, opt_formatter) {
  */
 goog.date.relative.getDateString = function(
     date, opt_shortTimeMsg, opt_fullDateMsg) {
+  'use strict';
   return goog.date.relative.getDateString_(
       date, goog.date.relative.format, opt_shortTimeMsg, opt_fullDateMsg);
 };
@@ -447,6 +460,7 @@ goog.date.relative.getDateString = function(
  */
 goog.date.relative.getPastDateString = function(
     date, opt_shortTimeMsg, opt_fullDateMsg) {
+  'use strict';
   return goog.date.relative.getDateString_(
       date, goog.date.relative.formatPast, opt_shortTimeMsg, opt_fullDateMsg);
 };
@@ -472,6 +486,7 @@ goog.date.relative.getPastDateString = function(
  */
 goog.date.relative.getDateString_ = function(
     date, relativeFormatter, opt_shortTimeMsg, opt_fullDateMsg) {
+  'use strict';
   var dateMs = date.getTime();
 
   var relativeDate = relativeFormatter(dateMs);

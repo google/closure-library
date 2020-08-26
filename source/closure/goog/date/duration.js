@@ -46,6 +46,7 @@ goog.date.duration.DAY_MS_ = 86400000;
  * @return {string} The formatted duration.
  */
 goog.date.duration.format = function(durationMs) {
+  'use strict';
   var ms = Math.abs(durationMs);
 
   // Handle durations shorter than 1 minute.
@@ -136,6 +137,7 @@ goog.date.duration.format = function(durationMs) {
  * @private
  */
 goog.date.duration.getDurationMessagePart_ = function(pattern, count, text) {
+  'use strict';
   var formatter = new goog.i18n.MessageFormat(pattern);
   return formatter.format({'COUNT': count, 'TEXT': text});
 };

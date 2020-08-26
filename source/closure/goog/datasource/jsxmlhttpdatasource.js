@@ -25,6 +25,7 @@ goog.require('goog.events');
 goog.require('goog.log');
 goog.require('goog.net.EventType');
 goog.require('goog.net.XhrIo');
+goog.requireType('goog.events.Event');
 
 
 

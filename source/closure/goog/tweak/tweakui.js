@@ -31,6 +31,7 @@ goog.require('goog.tweak.NumericSetting');
 goog.require('goog.tweak.StringSetting');
 goog.require('goog.ui.Zippy');
 goog.require('goog.userAgent');
+goog.requireType('goog.tweak.Registry');
 
 
 

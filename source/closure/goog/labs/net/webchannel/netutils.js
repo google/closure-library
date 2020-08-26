@@ -17,6 +17,7 @@ goog.require('goog.Uri');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
 
 goog.scope(function() {
+'use strict';
 var netUtils = goog.labs.net.webChannel.netUtils;
 var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
 
@@ -40,6 +41,7 @@ netUtils.NETWORK_TIMEOUT = 10000;
  *     test.
  */
 netUtils.testNetwork = function(callback, opt_imageUri) {
+  'use strict';
   var uri = opt_imageUri;
   if (!uri) {
     // default google.com image
@@ -67,6 +69,7 @@ netUtils.testNetwork = function(callback, opt_imageUri) {
  */
 netUtils.testLoadImageWithRetries = function(
     url, timeout, callback, retries, channelDebug, opt_pauseBetweenRetriesMS) {
+  'use strict';
   channelDebug.debug('TestLoadImageWithRetries: ' + opt_pauseBetweenRetriesMS);
   if (retries == 0) {
     // no more retries, give up
@@ -77,11 +80,13 @@ netUtils.testLoadImageWithRetries = function(
   var pauseBetweenRetries = opt_pauseBetweenRetriesMS || 0;
   retries--;
   netUtils.testLoadImage(url, timeout, function(succeeded) {
+    'use strict';
     if (succeeded) {
       callback(true);
     } else {
       // try again
       goog.global.setTimeout(function() {
+        'use strict';
         netUtils.testLoadImageWithRetries(
             url, timeout, callback, retries, channelDebug, pauseBetweenRetries);
       }, pauseBetweenRetries);
@@ -98,6 +103,7 @@ netUtils.testLoadImageWithRetries = function(
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 netUtils.testLoadImage = function(url, timeout, callback) {
+  'use strict';
   var channelDebug = new WebChannelDebug();
   channelDebug.debug('TestLoadImage: loading ' + url);
   if (goog.global.Image) {
@@ -116,6 +122,7 @@ netUtils.testLoadImage = function(url, timeout, callback) {
         false, callback);
 
     goog.global.setTimeout(function() {
+      'use strict';
       if (img.ontimeout) {
         img.ontimeout();
       }
@@ -139,6 +146,7 @@ netUtils.testLoadImage = function(url, timeout, callback) {
  */
 netUtils.imageCallback_ = function(
     channelDebug, img, debugText, result, callback) {
+  'use strict';
   try {
     channelDebug.debug(debugText);
     netUtils.clearImageCallbacks_(img);
@@ -156,6 +164,7 @@ netUtils.imageCallback_ = function(
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 netUtils.clearImageCallbacks_ = function(img) {
+  'use strict';
   img.onload = null;
   img.onerror = null;
   img.onabort = null;

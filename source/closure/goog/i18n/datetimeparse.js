@@ -18,6 +18,7 @@ goog.require('goog.asserts');
 goog.require('goog.date');
 goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
+goog.requireType('goog.i18n.DateTimeSymbolsType');
 
 
 /**
@@ -124,6 +125,7 @@ goog.require('goog.i18n.DateTimeSymbols');
  * @final
  */
 goog.i18n.DateTimeParse = function(pattern, opt_dateTimeSymbols) {
+  'use strict';
   goog.asserts.assert(
       opt_dateTimeSymbols !== undefined ||
           goog.i18n.DateTimeSymbols !== undefined,
@@ -166,6 +168,7 @@ goog.i18n.DateTimeParse.ambiguousYearCenturyStart = 80;
  * @private
  */
 goog.i18n.DateTimeParse.prototype.applyPattern_ = function(pattern) {
+  'use strict';
   var inQuote = false;
   var buf = '';
 
@@ -234,6 +237,7 @@ goog.i18n.DateTimeParse.prototype.applyPattern_ = function(pattern) {
  * @private
  */
 goog.i18n.DateTimeParse.prototype.applyStandardPattern_ = function(formatType) {
+  'use strict';
   var pattern;
   // formatType constants are in consecutive numbers. So it can be used to
   // index array in following way.
@@ -267,6 +271,7 @@ goog.i18n.DateTimeParse.prototype.applyStandardPattern_ = function(formatType) {
  * @return {number} How many characters parser advanced.
  */
 goog.i18n.DateTimeParse.prototype.parse = function(text, date, opt_start) {
+  'use strict';
   var start = opt_start || 0;
   return this.internalParse_(text, date, start, false /*validation*/);
 };
@@ -282,6 +287,7 @@ goog.i18n.DateTimeParse.prototype.parse = function(text, date, opt_start) {
  */
 goog.i18n.DateTimeParse.prototype.strictParse = function(
     text, date, opt_start) {
+  'use strict';
   var start = opt_start || 0;
   return this.internalParse_(text, date, start, true /*validation*/);
 };
@@ -299,6 +305,7 @@ goog.i18n.DateTimeParse.prototype.strictParse = function(
  */
 goog.i18n.DateTimeParse.prototype.internalParse_ = function(
     text, date, start, validation) {
+  'use strict';
   var cal = new goog.i18n.DateTimeParse.MyDate_();
   var parsePos = [start];
 
@@ -401,6 +408,7 @@ goog.i18n.DateTimeParse.prototype.internalParse_ = function(
  * @private
  */
 goog.i18n.DateTimeParse.prototype.getNextCharCount_ = function(pattern, start) {
+  'use strict';
   var ch = pattern.charAt(start);
   var next = start + 1;
   while (next < pattern.length && pattern.charAt(next) == ch) {
@@ -433,6 +441,7 @@ goog.i18n.DateTimeParse.NUMERIC_FORMAT_CHARS_ = 'MydhHmsSDkK';
  * @private
  */
 goog.i18n.DateTimeParse.prototype.isNumericField_ = function(part) {
+  'use strict';
   if (part.count <= 0) {
     return false;
   }
@@ -455,6 +464,7 @@ goog.i18n.DateTimeParse.prototype.isNumericField_ = function(part) {
  * @private
  */
 goog.i18n.DateTimeParse.prototype.markAbutStart_ = function() {
+  'use strict';
   // abut parts are continuous numeric parts. abutStart is the switch
   // point from non-abut to abut
   var abut = false;
@@ -483,6 +493,7 @@ goog.i18n.DateTimeParse.prototype.markAbutStart_ = function() {
  * @private
  */
 goog.i18n.DateTimeParse.prototype.skipSpace_ = function(text, pos) {
+  'use strict';
   var m = text.substring(pos[0]).match(/^\s+/);
   if (m) {
     pos[0] += m[0].length;
@@ -505,6 +516,7 @@ goog.i18n.DateTimeParse.prototype.skipSpace_ = function(text, pos) {
  */
 goog.i18n.DateTimeParse.prototype.subParse_ = function(
     text, pos, part, digitCount, cal) {
+  'use strict';
   this.skipSpace_(text, pos);
 
   var start = pos[0];
@@ -602,6 +614,7 @@ goog.i18n.DateTimeParse.prototype.subParse_ = function(
  */
 goog.i18n.DateTimeParse.prototype.subParseYear_ = function(
     text, pos, start, value, part, cal) {
+  'use strict';
   var ch;
   if (value < 0) {
     // possible sign
@@ -643,6 +656,7 @@ goog.i18n.DateTimeParse.prototype.subParseYear_ = function(
  */
 goog.i18n.DateTimeParse.prototype.subParseMonth_ = function(
     text, pos, cal, value) {
+  'use strict';
   // when month is symbols, i.e., MMM, MMMM, LLL or LLLL, value will be -1
   if (value < 0) {
     // Want to be able to parse both short and long forms.
@@ -680,6 +694,7 @@ goog.i18n.DateTimeParse.prototype.subParseMonth_ = function(
  */
 goog.i18n.DateTimeParse.prototype.subParseQuarter_ = function(
     text, pos, cal, value) {
+  'use strict';
   // value should be -1, since this is a non-numeric field.
   if (value < 0) {
     // Want to be able to parse both short and long forms.
@@ -710,6 +725,7 @@ goog.i18n.DateTimeParse.prototype.subParseQuarter_ = function(
  */
 goog.i18n.DateTimeParse.prototype.subParseDayOfWeek_ = function(
     text, pos, cal) {
+  'use strict';
   // Handle both short and long forms.
   // Try count == 4 (DDDD) first:
   var value = this.matchString_(text, pos, this.dateTimeSymbols_.WEEKDAYS);
@@ -737,6 +753,7 @@ goog.i18n.DateTimeParse.prototype.subParseDayOfWeek_ = function(
  */
 goog.i18n.DateTimeParse.prototype.subParseFractionalSeconds_ = function(
     value, pos, start, cal) {
+  'use strict';
   // Fractional seconds left-justify
   var len = pos[0] - start;
   cal.milliseconds = len < 3 ? value * Math.pow(10, 3 - len) :
@@ -757,6 +774,7 @@ goog.i18n.DateTimeParse.prototype.subParseFractionalSeconds_ = function(
  */
 goog.i18n.DateTimeParse.prototype.subparseTimeZoneInGMT_ = function(
     text, pos, cal) {
+  'use strict';
   // First try to parse generic forms such as GMT-07:00. Do this first
   // in case localized DateFormatZoneData contains the string "GMT"
   // for a zone; in that case, we don't want to match the first three
@@ -797,6 +815,7 @@ goog.i18n.DateTimeParse.prototype.subparseTimeZoneInGMT_ = function(
  */
 goog.i18n.DateTimeParse.prototype.parseTimeZoneOffset_ = function(
     text, pos, cal) {
+  'use strict';
   if (pos[0] >= text.length) {
     cal.tzOffset = 0;
     return true;
@@ -856,6 +875,7 @@ goog.i18n.DateTimeParse.prototype.parseTimeZoneOffset_ = function(
  * @private
  */
 goog.i18n.DateTimeParse.prototype.parseInt_ = function(text, pos) {
+  'use strict';
   // Delocalizes the string containing native digits specified by the locale,
   // replaces the native digits with ASCII digits. Leaves other characters.
   // This is the reverse operation of localizeNumbers_ in datetimeformat.js.
@@ -895,6 +915,7 @@ goog.i18n.DateTimeParse.prototype.parseInt_ = function(text, pos) {
  * @private
  */
 goog.i18n.DateTimeParse.prototype.matchString_ = function(text, pos, data) {
+  'use strict';
   // There may be multiple strings in the data[] array which begin with
   // the same prefix (e.g., Cerven and Cervenec (June and July) in Czech).
   // We keep track of the longest match, and return that. Note that this
@@ -1021,6 +1042,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.dayOfWeek;
  * @private
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.setTwoDigitYear_ = function(year) {
+  'use strict';
   var now = new Date();
   var defaultCenturyStartYear =
       now.getFullYear() - goog.i18n.DateTimeParse.ambiguousYearCenturyStart;
@@ -1045,6 +1067,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.setTwoDigitYear_ = function(year) {
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
     date, validation) {
+  'use strict';
   // Throw exception if date if null.
   if (date == null) {
     throw new Error('Parameter \'date\' should not be null.');

@@ -23,6 +23,7 @@ goog.require('goog.graphics.CanvasGraphics');
 goog.require('goog.graphics.SvgGraphics');
 goog.require('goog.graphics.VmlGraphics');
 goog.require('goog.userAgent');
+goog.requireType('goog.graphics.AbstractGraphics');
 
 
 /**

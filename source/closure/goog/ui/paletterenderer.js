@@ -26,6 +26,8 @@ goog.require('goog.iter');
 goog.require('goog.style');
 goog.require('goog.ui.ControlRenderer');
 goog.require('goog.userAgent');
+goog.requireType('goog.math.Size');
+goog.requireType('goog.ui.ControlContent');
 
 
 

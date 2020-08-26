@@ -27,6 +27,7 @@ goog.require('goog.events.EventTarget');
  * @extends {goog.events.EventTarget}
  */
 goog.editor.plugins.UndoRedoState = function(asynchronous) {
+  'use strict';
   goog.editor.plugins.UndoRedoState.base(this, 'constructor');
 
   /**
@@ -53,6 +54,7 @@ goog.editor.plugins.UndoRedoState.ACTION_COMPLETED = 'action_completed';
  *     event when an undo or redo action is complete.
  */
 goog.editor.plugins.UndoRedoState.prototype.isAsynchronous = function() {
+  'use strict';
   return this.asynchronous_;
 };
 

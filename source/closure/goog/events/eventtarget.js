@@ -22,6 +22,7 @@ goog.require('goog.events.Event');
 goog.require('goog.events.Listenable');
 goog.require('goog.events.ListenerMap');
 goog.require('goog.object');
+goog.requireType('goog.events.EventId');
 
 
 

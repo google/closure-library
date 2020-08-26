@@ -23,6 +23,9 @@ goog.require('goog.events.EventType');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.HsvPalette');
+goog.requireType('goog.dom.DomHelper');
+goog.requireType('goog.events.Event');
+goog.requireType('goog.math.Rect');
 
 
 
