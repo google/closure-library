@@ -9,9 +9,10 @@
  */
 
 
-goog.provide('goog.array');
+goog.module('goog.array');
+goog.module.declareLegacyNamespace();
 
-goog.require('goog.asserts');
+const asserts = goog.require('goog.asserts');
 
 
 /**
@@ -38,30 +39,32 @@ goog.NATIVE_ARRAY_PROTOTYPES =
  * array functions where appropriate (e.g., `Array#filter`) and remove the
  * unused pure JS implementation.
  */
-goog.array.ASSUME_NATIVE_FUNCTIONS = goog.define(
+const ASSUME_NATIVE_FUNCTIONS = goog.define(
     'goog.array.ASSUME_NATIVE_FUNCTIONS', goog.FEATURESET_YEAR > 2012);
+exports.ASSUME_NATIVE_FUNCTIONS = ASSUME_NATIVE_FUNCTIONS;
 
 
 /**
  * Returns the last element in an array without removing it.
- * Same as goog.array.last.
+ * Same as {@link goog.array.last}.
  * @param {IArrayLike<T>|string} array The array.
  * @return {T} Last item in array.
  * @template T
  */
-goog.array.peek = function(array) {
+function peek(array) {
   return array[array.length - 1];
-};
+}
+exports.peek = peek;
 
 
 /**
  * Returns the last element in an array without removing it.
- * Same as goog.array.peek.
+ * Same as {@link goog.array.peek}.
  * @param {IArrayLike<T>|string} array The array.
  * @return {T} Last item in array.
  * @template T
  */
-goog.array.last = goog.array.peek;
+exports.last = peek;
 
 // NOTE(arv): Since most of the array functions are generic it allows you to
 // pass an array-like object. Strings have a length and are considered array-
@@ -83,10 +86,10 @@ goog.array.last = goog.array.peek;
  * @return {number} The index of the first matching array element.
  * @template T
  */
-goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
-        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.indexOf) ?
+const indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
+        (ASSUME_NATIVE_FUNCTIONS || Array.prototype.indexOf) ?
     function(arr, obj, opt_fromIndex) {
-      goog.asserts.assert(arr.length != null);
+      asserts.assert(arr.length != null);
 
       return Array.prototype.indexOf.call(arr, obj, opt_fromIndex);
     } :
@@ -109,6 +112,7 @@ goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
       }
       return -1;
     };
+exports.indexOf = indexOf;
 
 
 /**
@@ -124,10 +128,10 @@ goog.array.indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @return {number} The index of the last matching array element.
  * @template T
  */
-goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
-        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.lastIndexOf) ?
+const lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
+        (ASSUME_NATIVE_FUNCTIONS || Array.prototype.lastIndexOf) ?
     function(arr, obj, opt_fromIndex) {
-      goog.asserts.assert(arr.length != null);
+      asserts.assert(arr.length != null);
 
       // Firefox treats undefined and null as 0 in the fromIndex argument which
       // leads it to always return -1
@@ -154,6 +158,7 @@ goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
       }
       return -1;
     };
+exports.lastIndexOf = lastIndexOf;
 
 
 /**
@@ -168,10 +173,10 @@ goog.array.lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @param {S=} opt_obj The object to be used as the value of 'this' within f.
  * @template T,S
  */
-goog.array.forEach = goog.NATIVE_ARRAY_PROTOTYPES &&
-        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.forEach) ?
+const forEach = goog.NATIVE_ARRAY_PROTOTYPES &&
+        (ASSUME_NATIVE_FUNCTIONS || Array.prototype.forEach) ?
     function(arr, f, opt_obj) {
-      goog.asserts.assert(arr.length != null);
+      asserts.assert(arr.length != null);
 
       Array.prototype.forEach.call(arr, f, opt_obj);
     } :
@@ -184,6 +189,7 @@ goog.array.forEach = goog.NATIVE_ARRAY_PROTOTYPES &&
         }
       }
     };
+exports.forEach = forEach;
 
 
 /**
@@ -200,7 +206,7 @@ goog.array.forEach = goog.NATIVE_ARRAY_PROTOTYPES &&
  *     within f.
  * @template T,S
  */
-goog.array.forEachRight = function(arr, f, opt_obj) {
+function forEachRight(arr, f, opt_obj) {
   var l = arr.length;  // must be fixed during loop... see docs
   var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
   for (var i = l - 1; i >= 0; --i) {
@@ -208,7 +214,8 @@ goog.array.forEachRight = function(arr, f, opt_obj) {
       f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
     }
   }
-};
+}
+exports.forEachRight = forEachRight;
 
 
 /**
@@ -230,10 +237,10 @@ goog.array.forEachRight = function(arr, f, opt_obj) {
  *     are present.
  * @template T,S
  */
-goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
-        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.filter) ?
+const filter = goog.NATIVE_ARRAY_PROTOTYPES &&
+        (ASSUME_NATIVE_FUNCTIONS || Array.prototype.filter) ?
     function(arr, f, opt_obj) {
-      goog.asserts.assert(arr.length != null);
+      asserts.assert(arr.length != null);
 
       return Array.prototype.filter.call(arr, f, opt_obj);
     } :
@@ -252,6 +259,7 @@ goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
       }
       return res;
     };
+exports.filter = filter;
 
 
 /**
@@ -270,10 +278,10 @@ goog.array.filter = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @return {!Array<RESULT>} a new array with the results from f.
  * @template THIS, VALUE, RESULT
  */
-goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
-        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.map) ?
+const map = goog.NATIVE_ARRAY_PROTOTYPES &&
+        (ASSUME_NATIVE_FUNCTIONS || Array.prototype.map) ?
     function(arr, f, opt_obj) {
-      goog.asserts.assert(arr.length != null);
+      asserts.assert(arr.length != null);
 
       return Array.prototype.map.call(arr, f, opt_obj);
     } :
@@ -288,6 +296,7 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
       }
       return res;
     };
+exports.map = map;
 
 
 /**
@@ -300,7 +309,7 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
  *
  * For example:
  * var a = [1, 2, 3, 4];
- * goog.array.reduce(a, function(r, v, i, arr) {return r + v;}, 0);
+ * reduce(a, function(r, v, i, arr) {return r + v;}, 0);
  * returns 10
  *
  * @param {IArrayLike<T>|string} arr Array or array
@@ -317,10 +326,10 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @return {R} Result of evaluating f repeatedly across the values of the array.
  * @template T,S,R
  */
-goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
-        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.reduce) ?
+const reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
+        (ASSUME_NATIVE_FUNCTIONS || Array.prototype.reduce) ?
     function(arr, f, val, opt_obj) {
-      goog.asserts.assert(arr.length != null);
+      asserts.assert(arr.length != null);
       if (opt_obj) {
         f = goog.bind(f, opt_obj);
       }
@@ -328,11 +337,12 @@ goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
     } :
     function(arr, f, val, opt_obj) {
       var rval = val;
-      goog.array.forEach(arr, function(val, index) {
+      forEach(arr, function(val, index) {
         rval = f.call(/** @type {?} */ (opt_obj), rval, val, index, arr);
       });
       return rval;
     };
+exports.reduce = reduce;
 
 
 /**
@@ -343,7 +353,7 @@ goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
  *
  * For example:
  * var a = ['a', 'b', 'c'];
- * goog.array.reduceRight(a, function(r, v, i, arr) {return r + v;}, '');
+ * reduceRight(a, function(r, v, i, arr) {return r + v;}, '');
  * returns 'cba'
  *
  * @param {IArrayLike<T>|string} arr Array or array
@@ -361,11 +371,11 @@ goog.array.reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
  *     values of the array.
  * @template T,S,R
  */
-goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
-        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.reduceRight) ?
+const reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
+        (ASSUME_NATIVE_FUNCTIONS || Array.prototype.reduceRight) ?
     function(arr, f, val, opt_obj) {
-      goog.asserts.assert(arr.length != null);
-      goog.asserts.assert(f != null);
+      asserts.assert(arr.length != null);
+      asserts.assert(f != null);
       if (opt_obj) {
         f = goog.bind(f, opt_obj);
       }
@@ -373,11 +383,12 @@ goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
     } :
     function(arr, f, val, opt_obj) {
       var rval = val;
-      goog.array.forEachRight(arr, function(val, index) {
+      forEachRight(arr, function(val, index) {
         rval = f.call(/** @type {?} */ (opt_obj), rval, val, index, arr);
       });
       return rval;
     };
+exports.reduceRight = reduceRight;
 
 
 /**
@@ -397,10 +408,10 @@ goog.array.reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @return {boolean} true if any element passes the test.
  * @template T,S
  */
-goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES &&
-        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.some) ?
+const some = goog.NATIVE_ARRAY_PROTOTYPES &&
+        (ASSUME_NATIVE_FUNCTIONS || Array.prototype.some) ?
     function(arr, f, opt_obj) {
-      goog.asserts.assert(arr.length != null);
+      asserts.assert(arr.length != null);
 
       return Array.prototype.some.call(arr, f, opt_obj);
     } :
@@ -414,6 +425,7 @@ goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES &&
       }
       return false;
     };
+exports.some = some;
 
 
 /**
@@ -433,10 +445,10 @@ goog.array.some = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @return {boolean} false if any element fails the test.
  * @template T,S
  */
-goog.array.every = goog.NATIVE_ARRAY_PROTOTYPES &&
-        (goog.array.ASSUME_NATIVE_FUNCTIONS || Array.prototype.every) ?
+const every = goog.NATIVE_ARRAY_PROTOTYPES &&
+        (ASSUME_NATIVE_FUNCTIONS || Array.prototype.every) ?
     function(arr, f, opt_obj) {
-      goog.asserts.assert(arr.length != null);
+      asserts.assert(arr.length != null);
 
       return Array.prototype.every.call(arr, f, opt_obj);
     } :
@@ -450,6 +462,7 @@ goog.array.every = goog.NATIVE_ARRAY_PROTOTYPES &&
       }
       return true;
     };
+exports.every = every;
 
 
 /**
@@ -464,15 +477,16 @@ goog.array.every = goog.NATIVE_ARRAY_PROTOTYPES &&
  * @return {number} The number of the matching elements.
  * @template T,S
  */
-goog.array.count = function(arr, f, opt_obj) {
+function count(arr, f, opt_obj) {
   var count = 0;
-  goog.array.forEach(arr, function(element, index, arr) {
+  forEach(arr, function(element, index, arr) {
     if (f.call(/** @type {?} */ (opt_obj), element, index, arr)) {
       ++count;
     }
   }, opt_obj);
   return count;
-};
+}
+exports.count = count;
 
 
 /**
@@ -488,10 +502,11 @@ goog.array.count = function(arr, f, opt_obj) {
  *     element is found.
  * @template T,S
  */
-goog.array.find = function(arr, f, opt_obj) {
-  var i = goog.array.findIndex(arr, f, opt_obj);
+function find(arr, f, opt_obj) {
+  var i = findIndex(arr, f, opt_obj);
   return i < 0 ? null : typeof arr === 'string' ? arr.charAt(i) : arr[i];
-};
+}
+exports.find = find;
 
 
 /**
@@ -508,7 +523,7 @@ goog.array.find = function(arr, f, opt_obj) {
  *     or -1 if no element is found.
  * @template T,S
  */
-goog.array.findIndex = function(arr, f, opt_obj) {
+function findIndex(arr, f, opt_obj) {
   var l = arr.length;  // must be fixed during loop... see docs
   var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
   for (var i = 0; i < l; i++) {
@@ -517,7 +532,8 @@ goog.array.findIndex = function(arr, f, opt_obj) {
     }
   }
   return -1;
-};
+}
+exports.findIndex = findIndex;
 
 
 /**
@@ -534,10 +550,11 @@ goog.array.findIndex = function(arr, f, opt_obj) {
  *     element is found.
  * @template T,S
  */
-goog.array.findRight = function(arr, f, opt_obj) {
-  var i = goog.array.findIndexRight(arr, f, opt_obj);
+function findRight(arr, f, opt_obj) {
+  var i = findIndexRight(arr, f, opt_obj);
   return i < 0 ? null : typeof arr === 'string' ? arr.charAt(i) : arr[i];
-};
+}
+exports.findRight = findRight;
 
 
 /**
@@ -554,7 +571,7 @@ goog.array.findRight = function(arr, f, opt_obj) {
  *     or -1 if no element is found.
  * @template T,S
  */
-goog.array.findIndexRight = function(arr, f, opt_obj) {
+function findIndexRight(arr, f, opt_obj) {
   var l = arr.length;  // must be fixed during loop... see docs
   var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
   for (var i = l - 1; i >= 0; i--) {
@@ -563,7 +580,8 @@ goog.array.findIndexRight = function(arr, f, opt_obj) {
     }
   }
   return -1;
-};
+}
+exports.findIndexRight = findIndexRight;
 
 
 /**
@@ -573,9 +591,10 @@ goog.array.findIndexRight = function(arr, f, opt_obj) {
  * @param {*} obj The object for which to test.
  * @return {boolean} true if obj is present.
  */
-goog.array.contains = function(arr, obj) {
-  return goog.array.indexOf(arr, obj) >= 0;
-};
+function contains(arr, obj) {
+  return indexOf(arr, obj) >= 0;
+}
+exports.contains = contains;
 
 
 /**
@@ -583,16 +602,17 @@ goog.array.contains = function(arr, obj) {
  * @param {IArrayLike<?>|string} arr The array to test.
  * @return {boolean} true if empty.
  */
-goog.array.isEmpty = function(arr) {
+function isEmpty(arr) {
   return arr.length == 0;
-};
+}
+exports.isEmpty = isEmpty;
 
 
 /**
  * Clears the array.
  * @param {IArrayLike<?>} arr Array or array like object to clear.
  */
-goog.array.clear = function(arr) {
+function clear(arr) {
   // For non real arrays we don't have the magic length so we delete the
   // indices.
   if (!Array.isArray(arr)) {
@@ -601,7 +621,8 @@ goog.array.clear = function(arr) {
     }
   }
   arr.length = 0;
-};
+}
+exports.clear = clear;
 
 
 /**
@@ -610,11 +631,12 @@ goog.array.clear = function(arr) {
  * @param {T} obj Value to add.
  * @template T
  */
-goog.array.insert = function(arr, obj) {
-  if (!goog.array.contains(arr, obj)) {
+function insert(arr, obj) {
+  if (!contains(arr, obj)) {
     arr.push(obj);
   }
-};
+}
+exports.insert = insert;
 
 
 /**
@@ -624,9 +646,10 @@ goog.array.insert = function(arr, obj) {
  * @param {number=} opt_i The index at which to insert the object. If omitted,
  *      treated as 0. A negative index is counted from the end of the array.
  */
-goog.array.insertAt = function(arr, obj, opt_i) {
-  goog.array.splice(arr, opt_i, 0, obj);
-};
+function insertAt(arr, obj, opt_i) {
+  splice(arr, opt_i, 0, obj);
+}
+exports.insertAt = insertAt;
 
 
 /**
@@ -636,9 +659,10 @@ goog.array.insertAt = function(arr, obj, opt_i) {
  * @param {number=} opt_i The index at which to insert the object. If omitted,
  *      treated as 0. A negative index is counted from the end of the array.
  */
-goog.array.insertArrayAt = function(arr, elementsToAdd, opt_i) {
-  goog.partial(goog.array.splice, arr, opt_i, 0).apply(null, elementsToAdd);
-};
+function insertArrayAt(arr, elementsToAdd, opt_i) {
+  goog.partial(splice, arr, opt_i, 0).apply(null, elementsToAdd);
+}
+exports.insertArrayAt = insertArrayAt;
 
 
 /**
@@ -649,14 +673,15 @@ goog.array.insertArrayAt = function(arr, elementsToAdd, opt_i) {
  *     is omitted or not found, obj is inserted at the end of the array.
  * @template T
  */
-goog.array.insertBefore = function(arr, obj, opt_obj2) {
+function insertBefore(arr, obj, opt_obj2) {
   var i;
-  if (arguments.length == 2 || (i = goog.array.indexOf(arr, opt_obj2)) < 0) {
+  if (arguments.length == 2 || (i = indexOf(arr, opt_obj2)) < 0) {
     arr.push(obj);
   } else {
-    goog.array.insertAt(arr, obj, i);
+    insertAt(arr, obj, i);
   }
-};
+}
+exports.insertBefore = insertBefore;
 
 
 /**
@@ -667,14 +692,15 @@ goog.array.insertBefore = function(arr, obj, opt_obj2) {
  * @return {boolean} True if an element was removed.
  * @template T
  */
-goog.array.remove = function(arr, obj) {
-  var i = goog.array.indexOf(arr, obj);
+function remove(arr, obj) {
+  var i = indexOf(arr, obj);
   var rv;
   if ((rv = i >= 0)) {
-    goog.array.removeAt(arr, i);
+    removeAt(arr, i);
   }
   return rv;
-};
+}
+exports.remove = remove;
 
 
 /**
@@ -684,14 +710,15 @@ goog.array.remove = function(arr, obj) {
  * @return {boolean} True if an element was removed.
  * @template T
  */
-goog.array.removeLast = function(arr, obj) {
-  var i = goog.array.lastIndexOf(arr, obj);
+function removeLast(arr, obj) {
+  var i = lastIndexOf(arr, obj);
   if (i >= 0) {
-    goog.array.removeAt(arr, i);
+    removeAt(arr, i);
     return true;
   }
   return false;
-};
+}
+exports.removeLast = removeLast;
 
 
 /**
@@ -701,14 +728,15 @@ goog.array.removeLast = function(arr, obj) {
  * @param {number} i The index to remove.
  * @return {boolean} True if an element was removed.
  */
-goog.array.removeAt = function(arr, i) {
-  goog.asserts.assert(arr.length != null);
+function removeAt(arr, i) {
+  asserts.assert(arr.length != null);
 
   // use generic form of splice
   // splice returns the removed items and if successful the length of that
   // will be 1
   return Array.prototype.splice.call(arr, i, 1).length == 1;
-};
+}
+exports.removeAt = removeAt;
 
 
 /**
@@ -723,14 +751,15 @@ goog.array.removeAt = function(arr, i) {
  * @return {boolean} True if an element was removed.
  * @template T,S
  */
-goog.array.removeIf = function(arr, f, opt_obj) {
-  var i = goog.array.findIndex(arr, f, opt_obj);
+function removeIf(arr, f, opt_obj) {
+  var i = findIndex(arr, f, opt_obj);
   if (i >= 0) {
-    goog.array.removeAt(arr, i);
+    removeAt(arr, i);
     return true;
   }
   return false;
-};
+}
+exports.removeIf = removeIf;
 
 
 /**
@@ -745,17 +774,18 @@ goog.array.removeIf = function(arr, f, opt_obj) {
  * @return {number} The number of items removed
  * @template T,S
  */
-goog.array.removeAllIf = function(arr, f, opt_obj) {
+function removeAllIf(arr, f, opt_obj) {
   var removedCount = 0;
-  goog.array.forEachRight(arr, function(val, index) {
+  forEachRight(arr, function(val, index) {
     if (f.call(/** @type {?} */ (opt_obj), val, index, arr)) {
-      if (goog.array.removeAt(arr, index)) {
+      if (removeAt(arr, index)) {
         removedCount++;
       }
     }
   });
   return removedCount;
-};
+}
+exports.removeAllIf = removeAllIf;
 
 
 /**
@@ -766,9 +796,9 @@ goog.array.removeAllIf = function(arr, f, opt_obj) {
  * Note that ArrayLike objects will be added as is, rather than having their
  * items added.
  *
- * goog.array.concat([1, 2], [3, 4]) -> [1, 2, 3, 4]
- * goog.array.concat(0, [1, 2]) -> [0, 1, 2]
- * goog.array.concat([1, 2], null) -> [1, 2, null]
+ * concat([1, 2], [3, 4]) -> [1, 2, 3, 4]
+ * concat(0, [1, 2]) -> [0, 1, 2]
+ * concat([1, 2], null) -> [1, 2, null]
  *
  * There is bug in all current versions of IE (6, 7 and 8) where arrays created
  * in an iframe become corrupted soon (not immediately) after the iframe is
@@ -785,9 +815,10 @@ goog.array.removeAllIf = function(arr, f, opt_obj) {
  *     added, while primitives and objects will be added as is.
  * @return {!Array<?>} The new resultant array.
  */
-goog.array.concat = function(var_args) {
+function concat(var_args) {
   return Array.prototype.concat.apply([], arguments);
-};
+}
+exports.concat = concat;
 
 
 /**
@@ -796,9 +827,10 @@ goog.array.concat = function(var_args) {
  * @return {!Array<T>}
  * @template T
  */
-goog.array.join = function(var_args) {
+function join(var_args) {
   return Array.prototype.concat.apply([], arguments);
-};
+}
+exports.join = join;
 
 
 /**
@@ -811,7 +843,7 @@ goog.array.join = function(var_args) {
  *     have a length property, an empty array will be returned.
  * @template T
  */
-goog.array.toArray = function(object) {
+function toArray(object) {
   var length = object.length;
 
   // If length is not a number the following is false. This case is kept for
@@ -825,7 +857,8 @@ goog.array.toArray = function(object) {
     return rv;
   }
   return [];
-};
+}
+exports.toArray = toArray;
 
 
 /**
@@ -835,7 +868,8 @@ goog.array.toArray = function(object) {
  * @return {!Array<T>} Clone of the input array.
  * @template T
  */
-goog.array.clone = goog.array.toArray;
+const clone = toArray;
+exports.clone = clone;
 
 
 /**
@@ -844,9 +878,9 @@ goog.array.clone = goog.array.toArray;
  *
  * Example:
  * var a = [];
- * goog.array.extend(a, [0, 1]);
+ * extend(a, [0, 1]);
  * a; // [0, 1]
- * goog.array.extend(a, 2);
+ * extend(a, 2);
  * a; // [0, 1, 2]
  *
  * @param {Array<VALUE>} arr1  The array to modify.
@@ -854,7 +888,7 @@ goog.array.clone = goog.array.toArray;
  *     elements to add to arr1.
  * @template VALUE
  */
-goog.array.extend = function(arr1, var_args) {
+function extend(arr1, var_args) {
   for (var i = 1; i < arguments.length; i++) {
     var arr2 = arguments[i];
     if (goog.isArrayLike(arr2)) {
@@ -868,7 +902,8 @@ goog.array.extend = function(arr1, var_args) {
       arr1.push(arr2);
     }
   }
-};
+}
+exports.extend = extend;
 
 
 /**
@@ -887,11 +922,12 @@ goog.array.extend = function(arr1, var_args) {
  * @return {!Array<T>} the removed elements.
  * @template T
  */
-goog.array.splice = function(arr, index, howMany, var_args) {
-  goog.asserts.assert(arr.length != null);
+function splice(arr, index, howMany, var_args) {
+  asserts.assert(arr.length != null);
 
-  return Array.prototype.splice.apply(arr, goog.array.slice(arguments, 1));
-};
+  return Array.prototype.splice.apply(arr, slice(arguments, 1));
+}
+exports.splice = splice;
 
 
 /**
@@ -907,8 +943,8 @@ goog.array.splice = function(arr, index, howMany, var_args) {
  *     original array.
  * @template T
  */
-goog.array.slice = function(arr, start, opt_end) {
-  goog.asserts.assert(arr.length != null);
+function slice(arr, start, opt_end) {
+  asserts.assert(arr.length != null);
 
   // passing 1 arg to slice is not the same as passing 2 where the second is
   // null or undefined (in that case the second argument is treated as 0).
@@ -919,7 +955,8 @@ goog.array.slice = function(arr, start, opt_end) {
   } else {
     return Array.prototype.slice.call(arr, start, opt_end);
   }
-};
+}
+exports.slice = slice;
 
 
 /**
@@ -946,7 +983,7 @@ goog.array.slice = function(arr, start, opt_end) {
  *     value for each item in the array it should consider unique.
  * @template T
  */
-goog.array.removeDuplicates = function(arr, opt_rv, opt_hashFn) {
+function removeDuplicates(arr, opt_rv, opt_hashFn) {
   var returnArray = opt_rv || arr;
   var defaultHashFn = function(item) {
     // Prefix each type with a single character representing the type to
@@ -966,13 +1003,14 @@ goog.array.removeDuplicates = function(arr, opt_rv, opt_hashFn) {
     }
   }
   returnArray.length = cursorInsert;
-};
+}
+exports.removeDuplicates = removeDuplicates;
 
 
 /**
  * Searches the specified array for the specified target using the binary
  * search algorithm.  If no opt_compareFn is specified, elements are compared
- * using <code>goog.array.defaultCompare</code>, which compares the elements
+ * using <code>defaultCompare</code>, which compares the elements
  * using the built in < and > operators.  This will produce the expected
  * behavior for homogeneous arrays of String(s) and Number(s). The array
  * specified <b>must</b> be sorted in ascending order (as defined by the
@@ -995,18 +1033,18 @@ goog.array.removeDuplicates = function(arr, opt_rv, opt_hashFn) {
  *     iff target is found.
  * @template TARGET, VALUE
  */
-goog.array.binarySearch = function(arr, target, opt_compareFn) {
-  return goog.array.binarySearch_(
-      arr, opt_compareFn || goog.array.defaultCompare, false /* isEvaluator */,
-      target);
-};
+function binarySearch(arr, target, opt_compareFn) {
+  return binarySearch_(
+      arr, opt_compareFn || defaultCompare, false /* isEvaluator */, target);
+}
+exports.binarySearch = binarySearch;
 
 
 /**
  * Selects an index in the specified array using the binary search algorithm.
  * The evaluator receives an element and determines whether the desired index
  * is before, at, or after it.  The evaluator must be consistent (formally,
- * goog.array.map(goog.array.map(arr, evaluator, opt_obj), goog.math.sign)
+ * map(map(arr, evaluator, opt_obj), goog.math.sign)
  * must be monotonically non-increasing).
  *
  * Runtime: O(log n)
@@ -1026,11 +1064,12 @@ goog.array.binarySearch = function(arr, target, opt_compareFn) {
  *     iff a match is found.
  * @template THIS, VALUE
  */
-goog.array.binarySelect = function(arr, evaluator, opt_obj) {
-  return goog.array.binarySearch_(
+function binarySelect(arr, evaluator, opt_obj) {
+  return binarySearch_(
       arr, evaluator, true /* isEvaluator */, undefined /* opt_target */,
       opt_obj);
-};
+}
+exports.binarySelect = binarySelect;
 
 
 /**
@@ -1061,8 +1100,7 @@ goog.array.binarySelect = function(arr, evaluator, opt_obj) {
  *     iff target is found.
  * @private
  */
-goog.array.binarySearch_ = function(
-    arr, compareFn, isEvaluator, opt_target, opt_selfObj) {
+function binarySearch_(arr, compareFn, isEvaluator, opt_target, opt_selfObj) {
   var left = 0;            // inclusive
   var right = arr.length;  // exclusive
   var found;
@@ -1090,13 +1128,13 @@ goog.array.binarySearch_ = function(
   // indexes outside the bounds of a 32-bit signed integer.  Array indexes have
   // a maximum value of 2^32-2 https://tc39.es/ecma262/#array-index
   return found ? left : -left - 1;
-};
+}
 
 
 /**
  * Sorts the specified array into ascending order.  If no opt_compareFn is
  * specified, elements are compared using
- * <code>goog.array.defaultCompare</code>, which compares the elements using
+ * <code>defaultCompare</code>, which compares the elements using
  * the built in < and > operators.  This will produce the expected behavior
  * for homogeneous arrays of String(s) and Number(s), unlike the native sort,
  * but will give unpredictable results for heterogeneous lists of strings and
@@ -1104,7 +1142,7 @@ goog.array.binarySearch_ = function(
  *
  * This sort is not guaranteed to be stable.
  *
- * Runtime: Same as <code>Array.prototype.sort</code>
+ * Runtime: Same as `Array.prototype.sort`
  *
  * @param {Array<T>} arr The array to be sorted.
  * @param {?function(T,T):number=} opt_compareFn Optional comparison
@@ -1114,20 +1152,21 @@ goog.array.binarySearch_ = function(
  *     first argument is less than, equal to, or greater than the second.
  * @template T
  */
-goog.array.sort = function(arr, opt_compareFn) {
+function sort(arr, opt_compareFn) {
   // TODO(arv): Update type annotation since null is not accepted.
-  arr.sort(opt_compareFn || goog.array.defaultCompare);
-};
+  arr.sort(opt_compareFn || defaultCompare);
+}
+exports.sort = sort;
 
 
 /**
  * Sorts the specified array into ascending order in a stable way.  If no
  * opt_compareFn is specified, elements are compared using
- * <code>goog.array.defaultCompare</code>, which compares the elements using
+ * <code>defaultCompare</code>, which compares the elements using
  * the built in < and > operators.  This will produce the expected behavior
  * for homogeneous arrays of String(s) and Number(s).
  *
- * Runtime: Same as <code>Array.prototype.sort</code>, plus an additional
+ * Runtime: Same as `Array.prototype.sort`, plus an additional
  * O(n) overhead of copying the array twice.
  *
  * @param {Array<T>} arr The array to be sorted.
@@ -1138,29 +1177,30 @@ goog.array.sort = function(arr, opt_compareFn) {
  *     second.
  * @template T
  */
-goog.array.stableSort = function(arr, opt_compareFn) {
+function stableSort(arr, opt_compareFn) {
   var compArr = new Array(arr.length);
   for (var i = 0; i < arr.length; i++) {
     compArr[i] = {index: i, value: arr[i]};
   }
-  var valueCompareFn = opt_compareFn || goog.array.defaultCompare;
+  var valueCompareFn = opt_compareFn || defaultCompare;
   function stableCompareFn(obj1, obj2) {
     return valueCompareFn(obj1.value, obj2.value) || obj1.index - obj2.index;
   }
-  goog.array.sort(compArr, stableCompareFn);
+  sort(compArr, stableCompareFn);
   for (var i = 0; i < arr.length; i++) {
     arr[i] = compArr[i].value;
   }
-};
+}
+exports.stableSort = stableSort;
 
 
 /**
  * Sort the specified array into ascending order based on item keys
  * returned by the specified key function.
  * If no opt_compareFn is specified, the keys are compared in ascending order
- * using <code>goog.array.defaultCompare</code>.
+ * using <code>defaultCompare</code>.
  *
- * Runtime: O(S(f(n)), where S is runtime of <code>goog.array.sort</code>
+ * Runtime: O(S(f(n)), where S is runtime of <code>sort</code>
  * and f(n) is runtime of the key function.
  *
  * @param {Array<T>} arr The array to be sorted.
@@ -1173,17 +1213,19 @@ goog.array.stableSort = function(arr, opt_compareFn) {
  *     second.
  * @template T,K
  */
-goog.array.sortByKey = function(arr, keyFn, opt_compareFn) {
-  var keyCompareFn = opt_compareFn || goog.array.defaultCompare;
-  goog.array.sort(
-      arr, function(a, b) { return keyCompareFn(keyFn(a), keyFn(b)); });
-};
+function sortByKey(arr, keyFn, opt_compareFn) {
+  var keyCompareFn = opt_compareFn || defaultCompare;
+  sort(arr, function(a, b) {
+    return keyCompareFn(keyFn(a), keyFn(b));
+  });
+}
+exports.sortByKey = sortByKey;
 
 
 /**
  * Sorts an array of objects by the specified object key and compare
  * function. If no compare function is provided, the key values are
- * compared in ascending order using <code>goog.array.defaultCompare</code>.
+ * compared in ascending order using <code>defaultCompare</code>.
  * This won't work for keys that get renamed by the compiler. So use
  * {'foo': 1, 'bar': 2} rather than {foo: 1, bar: 2}.
  * @param {Array<Object>} arr An array of objects to sort.
@@ -1191,9 +1233,12 @@ goog.array.sortByKey = function(arr, keyFn, opt_compareFn) {
  * @param {Function=} opt_compareFn The function to use to compare key
  *     values.
  */
-goog.array.sortObjectsByKey = function(arr, key, opt_compareFn) {
-  goog.array.sortByKey(arr, function(obj) { return obj[key]; }, opt_compareFn);
-};
+function sortObjectsByKey(arr, key, opt_compareFn) {
+  sortByKey(arr, function(obj) {
+    return obj[key];
+  }, opt_compareFn);
+}
+exports.sortObjectsByKey = sortObjectsByKey;
 
 
 /**
@@ -1208,8 +1253,8 @@ goog.array.sortObjectsByKey = function(arr, key, opt_compareFn) {
  * @return {boolean} Whether the array is sorted.
  * @template T
  */
-goog.array.isSorted = function(arr, opt_compareFn, opt_strict) {
-  var compare = opt_compareFn || goog.array.defaultCompare;
+function isSorted(arr, opt_compareFn, opt_strict) {
+  var compare = opt_compareFn || defaultCompare;
   for (var i = 1; i < arr.length; i++) {
     var compareResult = compare(arr[i - 1], arr[i]);
     if (compareResult > 0 || compareResult == 0 && opt_strict) {
@@ -1217,7 +1262,8 @@ goog.array.isSorted = function(arr, opt_compareFn, opt_strict) {
     }
   }
   return true;
-};
+}
+exports.isSorted = isSorted;
 
 
 /**
@@ -1235,20 +1281,21 @@ goog.array.isSorted = function(arr, opt_compareFn, opt_strict) {
  * @template A
  * @template B
  */
-goog.array.equals = function(arr1, arr2, opt_equalsFn) {
+function equals(arr1, arr2, opt_equalsFn) {
   if (!goog.isArrayLike(arr1) || !goog.isArrayLike(arr2) ||
       arr1.length != arr2.length) {
     return false;
   }
   var l = arr1.length;
-  var equalsFn = opt_equalsFn || goog.array.defaultCompareEquality;
+  var equalsFn = opt_equalsFn || defaultCompareEquality;
   for (var i = 0; i < l; i++) {
     if (!equalsFn(arr1[i], arr2[i])) {
       return false;
     }
   }
   return true;
-};
+}
+exports.equals = equals;
 
 
 /**
@@ -1267,8 +1314,8 @@ goog.array.equals = function(arr1, arr2, opt_equalsFn) {
  *     second.
  * @template VALUE
  */
-goog.array.compare3 = function(arr1, arr2, opt_compareFn) {
-  var compare = opt_compareFn || goog.array.defaultCompare;
+function compare3(arr1, arr2, opt_compareFn) {
+  var compare = opt_compareFn || defaultCompare;
   var l = Math.min(arr1.length, arr2.length);
   for (var i = 0; i < l; i++) {
     var result = compare(arr1[i], arr2[i]);
@@ -1276,8 +1323,9 @@ goog.array.compare3 = function(arr1, arr2, opt_compareFn) {
       return result;
     }
   }
-  return goog.array.defaultCompare(arr1.length, arr2.length);
-};
+  return defaultCompare(arr1.length, arr2.length);
+}
+exports.compare3 = compare3;
 
 
 /**
@@ -1290,9 +1338,10 @@ goog.array.compare3 = function(arr1, arr2, opt_compareFn) {
  *     respectively.
  * @template VALUE
  */
-goog.array.defaultCompare = function(a, b) {
+function defaultCompare(a, b) {
   return a > b ? 1 : a < b ? -1 : 0;
-};
+}
+exports.defaultCompare = defaultCompare;
 
 
 /**
@@ -1305,9 +1354,10 @@ goog.array.defaultCompare = function(a, b) {
  *     respectively.
  * @template VALUE
  */
-goog.array.inverseDefaultCompare = function(a, b) {
-  return -goog.array.defaultCompare(a, b);
-};
+function inverseDefaultCompare(a, b) {
+  return -defaultCompare(a, b);
+}
+exports.inverseDefaultCompare = inverseDefaultCompare;
 
 
 /**
@@ -1316,9 +1366,10 @@ goog.array.inverseDefaultCompare = function(a, b) {
  * @param {*} b The second object to compare.
  * @return {boolean} True if the two arguments are equal, false otherwise.
  */
-goog.array.defaultCompareEquality = function(a, b) {
+function defaultCompareEquality(a, b) {
   return a === b;
-};
+}
+exports.defaultCompareEquality = defaultCompareEquality;
 
 
 /**
@@ -1334,14 +1385,15 @@ goog.array.defaultCompareEquality = function(a, b) {
  * @return {boolean} True if an element was inserted.
  * @template VALUE
  */
-goog.array.binaryInsert = function(array, value, opt_compareFn) {
-  var index = goog.array.binarySearch(array, value, opt_compareFn);
+function binaryInsert(array, value, opt_compareFn) {
+  var index = binarySearch(array, value, opt_compareFn);
   if (index < 0) {
-    goog.array.insertAt(array, value, -(index + 1));
+    insertAt(array, value, -(index + 1));
     return true;
   }
   return false;
-};
+}
+exports.binaryInsert = binaryInsert;
 
 
 /**
@@ -1356,10 +1408,11 @@ goog.array.binaryInsert = function(array, value, opt_compareFn) {
  * @return {boolean} True if an element was removed.
  * @template VALUE
  */
-goog.array.binaryRemove = function(array, value, opt_compareFn) {
-  var index = goog.array.binarySearch(array, value, opt_compareFn);
-  return (index >= 0) ? goog.array.removeAt(array, index) : false;
-};
+function binaryRemove(array, value, opt_compareFn) {
+  var index = binarySearch(array, value, opt_compareFn);
+  return (index >= 0) ? removeAt(array, index) : false;
+}
+exports.binaryRemove = binaryRemove;
 
 
 /**
@@ -1376,7 +1429,7 @@ goog.array.binaryRemove = function(array, value, opt_compareFn) {
  *     which the splitter returned that key.
  * @template T,S
  */
-goog.array.bucket = function(array, sorter, opt_obj) {
+function bucket(array, sorter, opt_obj) {
   var buckets = {};
 
   for (var i = 0; i < array.length; i++) {
@@ -1390,7 +1443,8 @@ goog.array.bucket = function(array, sorter, opt_obj) {
   }
 
   return buckets;
-};
+}
+exports.bucket = bucket;
 
 
 /**
@@ -1409,14 +1463,15 @@ goog.array.bucket = function(array, sorter, opt_obj) {
  * @return {!Object<T>} The new object.
  * @template T,S
  */
-goog.array.toObject = function(arr, keyFunc, opt_obj) {
+function toObject(arr, keyFunc, opt_obj) {
   var ret = {};
-  goog.array.forEach(arr, function(element, index) {
+  forEach(arr, function(element, index) {
     ret[keyFunc.call(/** @type {?} */ (opt_obj), element, index, arr)] =
         element;
   });
   return ret;
-};
+}
+exports.toObject = toObject;
 
 
 /**
@@ -1439,7 +1494,7 @@ goog.array.toObject = function(arr, keyFunc, opt_obj) {
  *     an empty array if adding the step would not converge toward the end
  *     value.
  */
-goog.array.range = function(startOrEnd, opt_end, opt_step) {
+function range(startOrEnd, opt_end, opt_step) {
   var array = [];
   var start = 0;
   var end = startOrEnd;
@@ -1464,7 +1519,8 @@ goog.array.range = function(startOrEnd, opt_end, opt_step) {
     }
   }
   return array;
-};
+}
+exports.range = range;
 
 
 /**
@@ -1475,13 +1531,14 @@ goog.array.range = function(startOrEnd, opt_end, opt_step) {
  * @return {!Array<VALUE>} An array with the repeated value.
  * @template VALUE
  */
-goog.array.repeat = function(value, n) {
+function repeat(value, n) {
   var array = [];
   for (var i = 0; i < n; i++) {
     array[i] = value;
   }
   return array;
-};
+}
+exports.repeat = repeat;
 
 
 /**
@@ -1491,7 +1548,7 @@ goog.array.repeat = function(value, n) {
  * @param {...*} var_args The values to flatten.
  * @return {!Array<?>} An array containing the flattened values.
  */
-goog.array.flatten = function(var_args) {
+function flatten(var_args) {
   var CHUNK_SIZE = 8192;
 
   var result = [];
@@ -1499,8 +1556,8 @@ goog.array.flatten = function(var_args) {
     var element = arguments[i];
     if (Array.isArray(element)) {
       for (var c = 0; c < element.length; c += CHUNK_SIZE) {
-        var chunk = goog.array.slice(element, c, c + CHUNK_SIZE);
-        var recurseResult = goog.array.flatten.apply(null, chunk);
+        var chunk = slice(element, c, c + CHUNK_SIZE);
+        var recurseResult = flatten.apply(null, chunk);
         for (var r = 0; r < recurseResult.length; r++) {
           result.push(recurseResult[r]);
         }
@@ -1510,7 +1567,8 @@ goog.array.flatten = function(var_args) {
     }
   }
   return result;
-};
+}
+exports.flatten = flatten;
 
 
 /**
@@ -1527,8 +1585,8 @@ goog.array.flatten = function(var_args) {
  * @return {!Array<T>} The array.
  * @template T
  */
-goog.array.rotate = function(array, n) {
-  goog.asserts.assert(array.length != null);
+function rotate(array, n) {
+  asserts.assert(array.length != null);
 
   if (array.length) {
     n %= array.length;
@@ -1539,7 +1597,8 @@ goog.array.rotate = function(array, n) {
     }
   }
   return array;
-};
+}
+exports.rotate = rotate;
 
 
 /**
@@ -1549,19 +1608,20 @@ goog.array.rotate = function(array, n) {
  * elements has been dragged to a new position.
  * @param {!IArrayLike<?>} arr The array to modify.
  * @param {number} fromIndex Index of the item to move between 0 and
- *     {@code arr.length - 1}.
- * @param {number} toIndex Target index between 0 and {@code arr.length - 1}.
+ *     `arr.length - 1`.
+ * @param {number} toIndex Target index between 0 and `arr.length - 1`.
  */
-goog.array.moveItem = function(arr, fromIndex, toIndex) {
-  goog.asserts.assert(fromIndex >= 0 && fromIndex < arr.length);
-  goog.asserts.assert(toIndex >= 0 && toIndex < arr.length);
+function moveItem(arr, fromIndex, toIndex) {
+  asserts.assert(fromIndex >= 0 && fromIndex < arr.length);
+  asserts.assert(toIndex >= 0 && toIndex < arr.length);
   // Remove 1 item at fromIndex.
   var removedItems = Array.prototype.splice.call(arr, fromIndex, 1);
   // Insert the removed item at toIndex.
   Array.prototype.splice.call(arr, toIndex, 0, removedItems[0]);
   // We don't use goog.array.insertAt and goog.array.removeAt, because they're
   // significantly slower than splice.
-};
+}
+exports.moveItem = moveItem;
 
 
 /**
@@ -1577,7 +1637,7 @@ goog.array.moveItem = function(arr, fromIndex, toIndex) {
  * @return {!Array<!Array<?>>} A new array of arrays created from
  *     provided arrays.
  */
-goog.array.zip = function(var_args) {
+function zip(var_args) {
   if (!arguments.length) {
     return [];
   }
@@ -1596,7 +1656,8 @@ goog.array.zip = function(var_args) {
     result.push(value);
   }
   return result;
-};
+}
+exports.zip = zip;
 
 
 /**
@@ -1613,7 +1674,7 @@ goog.array.zip = function(var_args) {
  *     Takes no arguments, and returns a random number on the interval [0, 1).
  *     Defaults to Math.random() using JavaScript's built-in Math library.
  */
-goog.array.shuffle = function(arr, opt_randFn) {
+function shuffle(arr, opt_randFn) {
   var randFn = opt_randFn || Math.random;
 
   for (var i = arr.length - 1; i > 0; i--) {
@@ -1624,7 +1685,8 @@ goog.array.shuffle = function(arr, opt_randFn) {
     arr[i] = arr[j];
     arr[j] = tmp;
   }
-};
+}
+exports.shuffle = shuffle;
 
 
 /**
@@ -1637,11 +1699,14 @@ goog.array.shuffle = function(arr, opt_randFn) {
  * @return {!Array<T>} A new array of elements from arr in index_arr order.
  * @template T
  */
-goog.array.copyByIndex = function(arr, index_arr) {
+function copyByIndex(arr, index_arr) {
   var result = [];
-  goog.array.forEach(index_arr, function(index) { result.push(arr[index]); });
+  forEach(index_arr, function(index) {
+    result.push(arr[index]);
+  });
   return result;
-};
+}
+exports.copyByIndex = copyByIndex;
 
 
 /**
@@ -1659,6 +1724,7 @@ goog.array.copyByIndex = function(arr, index_arr) {
  *     returned from f.
  * @template THIS, VALUE, RESULT
  */
-goog.array.concatMap = function(arr, f, opt_obj) {
-  return goog.array.concat.apply([], goog.array.map(arr, f, opt_obj));
-};
+function concatMap(arr, f, opt_obj) {
+  return concat.apply([], map(arr, f, opt_obj));
+}
+exports.concatMap = concatMap;

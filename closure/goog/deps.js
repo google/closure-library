@@ -14,7 +14,7 @@ goog.addDependency('a11y/aria/aria.js', ['goog.a11y.aria'], ['goog.a11y.aria.Rol
 goog.addDependency('a11y/aria/attributes.js', ['goog.a11y.aria.AutoCompleteValues', 'goog.a11y.aria.CheckedValues', 'goog.a11y.aria.DropEffectValues', 'goog.a11y.aria.ExpandedValues', 'goog.a11y.aria.GrabbedValues', 'goog.a11y.aria.InvalidValues', 'goog.a11y.aria.LivePriority', 'goog.a11y.aria.OrientationValues', 'goog.a11y.aria.PressedValues', 'goog.a11y.aria.RelevantValues', 'goog.a11y.aria.SelectedValues', 'goog.a11y.aria.SortValues', 'goog.a11y.aria.State'], [], {});
 goog.addDependency('a11y/aria/datatables.js', ['goog.a11y.aria.datatables'], ['goog.a11y.aria.State', 'goog.object'], {});
 goog.addDependency('a11y/aria/roles.js', ['goog.a11y.aria.Role'], [], {});
-goog.addDependency('array/array.js', ['goog.array'], ['goog.asserts'], {});
+goog.addDependency('array/array.js', ['goog.array'], ['goog.asserts'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('asserts/asserts.js', ['goog.asserts', 'goog.asserts.AssertionError'], ['goog.debug.Error', 'goog.dom.NodeType'], {});
 goog.addDependency('asserts/dom.js', ['goog.asserts.dom'], ['goog.asserts', 'goog.dom.TagName', 'goog.dom.element'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/animationdelay.js', ['goog.async.AnimationDelay'], ['goog.Disposable', 'goog.events', 'goog.functions'], {});
