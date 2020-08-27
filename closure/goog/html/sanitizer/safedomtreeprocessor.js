@@ -20,6 +20,7 @@ goog.module.declareLegacyNamespace();
 
 var Const = goog.require('goog.string.Const');
 var ElementWeakMap = goog.require('goog.html.sanitizer.ElementWeakMap');
+var Logger = goog.require('goog.log.Logger');
 var NodeType = goog.require('goog.dom.NodeType');
 var TagName = goog.require('goog.dom.TagName');
 var googDom = goog.require('goog.dom');
@@ -29,7 +30,7 @@ var safe = goog.require('goog.dom.safe');
 var uncheckedconversions = goog.require('goog.html.uncheckedconversions');
 var userAgent = goog.require('goog.userAgent');
 
-/** @const {?googLog.Logger} */
+/** @const {?Logger} */
 var logger = googLog.getLogger('goog.html.sanitizer.SafeDomTreeProcessor');
 
 /**
