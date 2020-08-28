@@ -267,7 +267,7 @@ def main():
   elif output_mode == 'compiled':
     logging.warning("""\
 Closure Compiler now natively understands and orders Closure dependencies and
-is prefererred over using this script for performing JavaScript compilation.
+is preferred over using this script for performing JavaScript compilation.
 
 Please migrate your codebase.
 
