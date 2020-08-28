@@ -19,6 +19,7 @@ goog.provide('proto2.TestDefaultParent');
 goog.setTestOnly('proto2.TestAllTypes');
 
 goog.require('goog.proto2.Message');
+goog.requireType('goog.proto2.Descriptor');
 
 
 
