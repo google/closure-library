@@ -13,11 +13,10 @@
 
 goog.provide('goog.debug.Console');
 
-goog.require('goog.debug.LogManager');
 goog.require('goog.debug.Logger');
 goog.require('goog.debug.TextFormatter');
-goog.requireType('goog.debug.LogRecord');
-
+goog.require('goog.log');
+goog.requireType('goog.log.LogRecord');
 
 
 /**
@@ -69,11 +68,11 @@ goog.debug.Console.prototype.setCapturing = function(capturing) {
   }
 
   // attach or detach handler from the root logger
-  var rootLogger = goog.debug.LogManager.getRoot();
+  var rootLogger = goog.log.getRootLogger();
   if (capturing) {
-    rootLogger.addHandler(this.publishHandler_);
+    goog.log.addHandler(rootLogger, this.publishHandler_);
   } else {
-    rootLogger.removeHandler(this.publishHandler_);
+    goog.log.removeHandler(rootLogger, this.publishHandler_);
   }
   this.isCapturing_ = capturing;
 };
@@ -81,7 +80,7 @@ goog.debug.Console.prototype.setCapturing = function(capturing) {
 
 /**
  * Adds a log record.
- * @param {?goog.debug.LogRecord} logRecord The log entry.
+ * @param {?goog.log.LogRecord} logRecord The log entry.
  */
 goog.debug.Console.prototype.addLogRecord = function(logRecord) {
   // Check to see if the log record is filtered or not.

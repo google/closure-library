@@ -25,7 +25,6 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.log');
 goog.require('goog.net.XhrIo');
 goog.require('goog.object');
-goog.require('goog.string');
 goog.require('goog.uri.utils');
 goog.require('goog.userAgent');
 goog.requireType('goog.structs.Map');
@@ -389,10 +388,11 @@ goog.debug.ErrorReporter.prototype.sendErrorReport = function(
     // Send the request with the contents of the error.
     this.xhrSender_(requestUrl, 'POST', queryData, this.extraHeaders_);
   } catch (e) {
-    var logMessage = goog.string.buildString(
-        'Error occurred in sending an error report.\n\n', 'script:', fileName,
-        '\n', 'line:', line, '\n', 'error:', message, '\n', 'trace:',
-        opt_trace);
+    var logMessage = 'Error occurred in sending an error report.\n\n' +
+        'script:' + fileName + '\n' +
+        'line:' + line + '\n' +
+        'error:' + message + '\n' +
+        'trace:' + opt_trace;
     goog.log.info(goog.debug.ErrorReporter.logger_, logMessage);
   }
 };

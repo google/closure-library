@@ -56,14 +56,14 @@ testSuite({
   },
 
   testConstructorAssertsThatObjectPrototypeHasNoEnumerableKeys() {
-    assertNotThrows(StringSet);
+    assertNotThrows(() => new StringSet());
     Object.prototype.foo = 0;
     try {
-      assertThrows(StringSet);
+      assertThrows(() => new StringSet());
     } finally {
       delete Object.prototype.foo;
     }
-    assertNotThrows(StringSet);
+    assertNotThrows(() => new StringSet());
   },
 
   testOverridingObjectPrototypeToStringIsSafe() {

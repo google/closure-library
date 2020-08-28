@@ -1065,7 +1065,7 @@ goog.uri.utils.appendPath = function(baseUri, path) {
   if (goog.string.startsWith(path, '/')) {
     path = path.substr(1);
   }
-  return goog.string.buildString(baseUri, '/', path);
+  return '' + baseUri + '/' + path;
 };
 
 

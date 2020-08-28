@@ -17,8 +17,8 @@ goog.provide('goog.net.ChannelDebug');
 
 goog.require('goog.json');
 goog.require('goog.log');
+goog.require('goog.log.Logger');
 goog.requireType('goog.Uri');
-goog.requireType('goog.debug.Logger');
 goog.requireType('goog.net.XmlHttp.ReadyState');
 
 
@@ -32,7 +32,7 @@ goog.net.ChannelDebug = function() {
   /**
    * The logger instance.
    * @const
-   * @private {?goog.debug.Logger}
+   * @private {?goog.log.Logger}
    */
   this.logger_ = goog.log.getLogger('goog.net.BrowserChannel');
 };
@@ -40,7 +40,7 @@ goog.net.ChannelDebug = function() {
 
 /**
  * Gets the logger used by this ChannelDebug.
- * @return {goog.debug.Logger} The logger used by this ChannelDebug.
+ * @return {?goog.log.Logger} The logger used by this ChannelDebug.
  */
 goog.net.ChannelDebug.prototype.getLogger = function() {
   return this.logger_;

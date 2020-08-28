@@ -21,8 +21,7 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.string.Const');
-goog.requireType('goog.debug.LogRecord');
-
+goog.requireType('goog.log.LogRecord');
 
 
 /**
@@ -89,7 +88,7 @@ goog.debug.Formatter.prototype.showSeverityLevel = false;
 
 /**
  * Formats a record.
- * @param {goog.debug.LogRecord} logRecord the logRecord to format.
+ * @param {?goog.log.LogRecord} logRecord the logRecord to format.
  * @return {string} The formatted string.
  */
 goog.debug.Formatter.prototype.formatRecord = goog.abstractMethod;
@@ -97,7 +96,7 @@ goog.debug.Formatter.prototype.formatRecord = goog.abstractMethod;
 
 /**
  * Formats a record as SafeHtml.
- * @param {goog.debug.LogRecord} logRecord the logRecord to format.
+ * @param {?goog.log.LogRecord} logRecord the logRecord to format.
  * @return {!goog.html.SafeHtml} The formatted string as SafeHtml.
  */
 goog.debug.Formatter.prototype.formatRecordAsHtml = goog.abstractMethod;
@@ -133,7 +132,7 @@ goog.debug.Formatter.prototype.resetRelativeTimeStart = function() {
 
 /**
  * Returns a string for the time/date of the LogRecord.
- * @param {goog.debug.LogRecord} logRecord The record to get a time stamp for.
+ * @param {?goog.log.LogRecord} logRecord The record to get a time stamp for.
  * @return {string} A string representation of the time/date of the LogRecord.
  * @private
  */
@@ -169,7 +168,7 @@ goog.debug.Formatter.getTwoDigitString_ = function(n) {
  * Returns a string for the number of seconds relative to the start time.
  * Prepads with spaces so that anything less than 1000 seconds takes up the
  * same number of characters for better formatting.
- * @param {goog.debug.LogRecord} logRecord The log to compare time to.
+ * @param {?goog.log.LogRecord} logRecord The log to compare time to.
  * @param {number} relativeTimeStart The start time to compare to.
  * @return {string} The number of seconds of the LogRecord relative to the
  *     start time.
@@ -294,7 +293,7 @@ goog.debug.HtmlFormatter.prototype.showExceptionText = true;
 
 /**
  * Formats a record
- * @param {goog.debug.LogRecord} logRecord the logRecord to format.
+ * @param {?goog.log.LogRecord} logRecord the logRecord to format.
  * @return {string} The formatted string as html.
  * @override
  */
@@ -309,7 +308,7 @@ goog.debug.HtmlFormatter.prototype.formatRecord = function(logRecord) {
 
 /**
  * Formats a record.
- * @param {goog.debug.LogRecord} logRecord the logRecord to format.
+ * @param {?goog.log.LogRecord} logRecord the logRecord to format.
  * @return {!goog.html.SafeHtml} The formatted string as SafeHtml.
  * @override
  */
@@ -403,7 +402,7 @@ goog.inherits(goog.debug.TextFormatter, goog.debug.Formatter);
 
 /**
  * Formats a record as text
- * @param {goog.debug.LogRecord} logRecord the logRecord to format.
+ * @param {?goog.log.LogRecord} logRecord the logRecord to format.
  * @return {string} The formatted string.
  * @override
  */
@@ -444,7 +443,7 @@ goog.debug.TextFormatter.prototype.formatRecord = function(logRecord) {
 
 /**
  * Formats a record as text
- * @param {goog.debug.LogRecord} logRecord the logRecord to format.
+ * @param {?goog.log.LogRecord} logRecord the logRecord to format.
  * @return {!goog.html.SafeHtml} The formatted string as SafeHtml. This is
  *     just an HTML-escaped version of the text obtained from formatRecord().
  * @override

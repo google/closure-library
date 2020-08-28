@@ -20,7 +20,6 @@ goog.require('goog.dom.SavedRange');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.TextRangeIterator');
 goog.require('goog.dom.browserrange');
-goog.require('goog.string');
 goog.require('goog.userAgent');
 goog.requireType('goog.dom.browserrange.AbstractRange');
 
@@ -451,7 +450,7 @@ goog.dom.TextRange.prototype.getPastableHtml = function() {
       }
       container = container.parentNode;
     }
-    html = goog.string.buildString('<', tagType, '>', html, '</', tagType, '>');
+    html = '<' + tagType + '>' + html + '</' + tagType + '>';
   }
 
   return html;

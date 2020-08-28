@@ -44,7 +44,7 @@ testSuite({
       new DebugConsole().setCapturing(true);
     }
     const logger = log.getLogger('goog.messaging');
-    logger.setLevel(Level.ALL);
+    log.setLevel(logger, Level.ALL);
     log.addHandler(logger, (logRecord) => {
       const msg = dom.createDom(TagName.DIV);
       msg.innerHTML = logRecord.getMessage();
