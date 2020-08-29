@@ -58,6 +58,15 @@ goog.testing.net.XhrIoPool.prototype.createObject = function() {
 
 
 /**
+ * Override adjustForMinMax to not call handleRequests because that causes
+ * problems.  See b/31041087.
+ *
+ * @override
+ */
+goog.testing.net.XhrIoPool.prototype.adjustForMinMax = function() {};
+
+
+/**
  * Get the mock XhrIo used by this pool.
  *
  * @return {!goog.testing.net.XhrIo} The mock XhrIo.
