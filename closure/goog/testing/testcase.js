@@ -1435,7 +1435,7 @@ goog.testing.TestCase.prototype.addTestObj_ = function(obj, name, objChain) {
       var fullTestName = name + (testName && name ? '_' : '') + testName;
       if (goog.isFunction(testProperty)) {
         this.addNewTest(fullTestName, testProperty, obj, objChain);
-      } else if (goog.isObject(testProperty)) {
+      } else if (goog.isObject(testProperty) && !Array.isArray(testProperty)) {
         // To prevent infinite loops.
         if (!goog.array.contains(objChain, testProperty)) {
           goog.asserts.assertObject(testProperty);
