@@ -191,6 +191,36 @@ testSuite({
     assertEquals(5, clone.e.f.h);
   },
 
+  testUnsafeCloneTypedArray() {
+    if (typeof ArrayBuffer !== 'function' ||
+        typeof ArrayBuffer.isView !== 'function') {
+      return;
+    }
+    function array(ctor, ...elems) {  // IE 11 does not support TypedArray.of
+      const arr = new ctor(elems.length);
+      for (let i = 0; i < elems.length; i++) {
+        arr[i] = elems[i];
+      }
+      return arr;
+    }
+
+    const original = {a: array(Uint8Array, 1, 2), b: array(Int16Array, 3, 4)};
+    const clone = googObject.unsafeClone(original);
+
+    assertNotEquals(original, clone);
+    assertNotEquals(original.a, clone.a);
+    assertNotEquals(original.b, clone.b);
+
+    assertTrue(clone.a instanceof Uint8Array);
+    assertEquals(2, clone.a.length);
+    assertEquals(1, clone.a[0]);
+    assertEquals(2, clone.a[1]);
+    assertTrue(clone.b instanceof Int16Array);
+    assertEquals(2, clone.b.length);
+    assertEquals(3, clone.b[0]);
+    assertEquals(4, clone.b[1]);
+  },
+
   testUnsafeCloneFunctions() {
     const original = {f: functions.constant('hi')};
     const clone = googObject.unsafeClone(original);
