@@ -64,7 +64,7 @@ goog.Timer = function(opt_interval, opt_timerObject) {
    * {@link goog.Timer.intervalScale}.
    * @private {number}
    */
-  this.last_ = goog.now();
+  this.last_ = Date.now();
 };
 goog.inherits(goog.Timer, goog.events.EventTarget);
 
@@ -163,7 +163,7 @@ goog.Timer.prototype.setInterval = function(interval) {
 goog.Timer.prototype.tick_ = function() {
   'use strict';
   if (this.enabled) {
-    var elapsed = goog.now() - this.last_;
+    var elapsed = Date.now() - this.last_;
     if (elapsed > 0 && elapsed < this.interval_ * goog.Timer.intervalScale) {
       this.timer_ = this.timerObject_.setTimeout(
           this.boundTick_, this.interval_ - elapsed);
@@ -220,7 +220,7 @@ goog.Timer.prototype.start = function() {
     //     https://bugzilla.mozilla.org/show_bug.cgi?id=376643
     //
     this.timer_ = this.timerObject_.setTimeout(this.boundTick_, this.interval_);
-    this.last_ = goog.now();
+    this.last_ = Date.now();
   }
 };
 
