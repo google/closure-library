@@ -70,9 +70,9 @@ goog.require('goog.async.Deferred');
 goog.async.DeferredList = function(
     list, opt_fireOnOneCallback, opt_fireOnOneErrback, opt_consumeErrors,
     opt_canceler, opt_defaultScope) {
-
-  goog.async.DeferredList.base(this, 'constructor',
-      opt_canceler, opt_defaultScope);
+  'use strict';
+  goog.async.DeferredList.base(
+      this, 'constructor', opt_canceler, opt_defaultScope);
 
   /**
    * The list of Deferred objects to wait for.
@@ -148,7 +148,7 @@ goog.inherits(goog.async.DeferredList, goog.async.Deferred);
  */
 goog.async.DeferredList.prototype.handleCallback_ = function(
     index, success, result) {
-
+  'use strict';
   this.numFinished_++;
   this.deferredResults_[index] = [success, result];
 
@@ -172,6 +172,7 @@ goog.async.DeferredList.prototype.handleCallback_ = function(
 
 /** @override */
 goog.async.DeferredList.prototype.errback = function(res) {
+  'use strict';
   goog.async.DeferredList.base(this, 'errback', res);
 
   // On error, cancel any pending requests.
@@ -194,8 +195,10 @@ goog.async.DeferredList.prototype.errback = function(res) {
  *     if they all succeed, or the error result of the first input to fail.
  */
 goog.async.DeferredList.gatherResults = function(list) {
-  return new goog.async.DeferredList(list, false, true).
-      addCallback(function(results) {
+  'use strict';
+  return new goog.async.DeferredList(list, false, true)
+      .addCallback(function(results) {
+        'use strict';
         var output = [];
         for (var i = 0; i < results.length; i++) {
           output[i] = results[i][1];

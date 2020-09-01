@@ -63,6 +63,7 @@ goog.require('goog.style.transition');
  */
 goog.fx.css3.Transition = function(
     element, duration, initialStyle, finalStyle, transitions) {
+  'use strict';
   goog.fx.css3.Transition.base(this, 'constructor');
 
   /**
@@ -106,6 +107,7 @@ goog.inherits(goog.fx.css3.Transition, goog.fx.TransitionBase);
 
 /** @override */
 goog.fx.css3.Transition.prototype.play = function() {
+  'use strict';
   if (this.isPlaying()) {
     return false;
   }
@@ -134,6 +136,7 @@ goog.fx.css3.Transition.prototype.play = function() {
  * @private
  */
 goog.fx.css3.Transition.prototype.play_ = function() {
+  'use strict';
   // This measurement of the DOM element causes the browser to recalculate its
   // initial state before the transition starts.
   goog.style.getSize(this.element_);
@@ -146,6 +149,7 @@ goog.fx.css3.Transition.prototype.play_ = function() {
 
 /** @override */
 goog.fx.css3.Transition.prototype.stop = function() {
+  'use strict';
   if (!this.isPlaying()) return;
 
   this.stop_(true);
@@ -158,6 +162,7 @@ goog.fx.css3.Transition.prototype.stop = function() {
  * @private
  */
 goog.fx.css3.Transition.prototype.stop_ = function(stopped) {
+  'use strict';
   goog.style.transition.removeAll(this.element_);
 
   // Clear the timer.
@@ -180,6 +185,7 @@ goog.fx.css3.Transition.prototype.stop_ = function(stopped) {
 
 /** @override */
 goog.fx.css3.Transition.prototype.disposeInternal = function() {
+  'use strict';
   this.stop();
   goog.fx.css3.Transition.base(this, 'disposeInternal');
 };
@@ -190,5 +196,6 @@ goog.fx.css3.Transition.prototype.disposeInternal = function() {
  * @override
  */
 goog.fx.css3.Transition.prototype.pause = function() {
+  'use strict';
   goog.asserts.assert(false, 'Css3 transitions does not support pause action.');
 };

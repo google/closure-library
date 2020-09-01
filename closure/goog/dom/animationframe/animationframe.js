@@ -150,6 +150,7 @@ goog.dom.animationFrame.running_ = false;
  * @template THIS
  */
 goog.dom.animationFrame.createTask = function(spec, opt_context) {
+  'use strict';
   var id = goog.dom.animationFrame.taskId_++;
   var measureTask = {id: id, fn: spec.measure, context: opt_context};
   var mutateTask = {id: id, fn: spec.mutate, context: opt_context};
@@ -163,6 +164,7 @@ goog.dom.animationFrame.createTask = function(spec, opt_context) {
   };
 
   return function() {
+    'use strict';
     // Save args and state.
     if (arguments.length > 0) {
       // The state argument goes last. That is kinda horrible but compatible
@@ -198,6 +200,7 @@ goog.dom.animationFrame.createTask = function(spec, opt_context) {
  * @private
  */
 goog.dom.animationFrame.runTasks_ = function() {
+  'use strict';
   goog.dom.animationFrame.running_ = true;
   goog.dom.animationFrame.requestedFrame_ = false;
   var tasksArray = goog.dom.animationFrame
@@ -248,6 +251,7 @@ goog.dom.animationFrame.runTasks_ = function() {
  *     additional frame.
  */
 goog.dom.animationFrame.isRunning = function() {
+  'use strict';
   return goog.dom.animationFrame.running_;
 };
 
@@ -258,6 +262,7 @@ goog.dom.animationFrame.isRunning = function() {
  * @private
  */
 goog.dom.animationFrame.requestAnimationFrame_ = function() {
+  'use strict';
   if (goog.dom.animationFrame.requestedFrame_) {
     return;
   }
