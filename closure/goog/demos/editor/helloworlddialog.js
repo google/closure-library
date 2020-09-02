@@ -24,6 +24,7 @@ goog.require('goog.dom.TagName');
 goog.require('goog.events.Event');
 goog.require('goog.string');
 goog.require('goog.ui.editor.AbstractDialog');
+goog.requireType('goog.dom.DomHelper');
 
 
 // *** Public interface ***************************************************** //
