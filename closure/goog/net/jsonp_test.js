@@ -299,12 +299,16 @@ testSuite({
     const checkCleanup = newCleanupGuard();
 
     const jsonp = new Jsonp(fakeTrustedUrl);
-    jsonp.setNonce('foo');
+    let nonce = goog.getScriptNonce();
+    if (!nonce) {
+      nonce = 'foo';
+    }
+    jsonp.setNonce(nonce);
     const result = jsonp.send();
 
     const script = getScriptElement(result);
     assertEquals(
-        'Nonce attribute should have been added to script element.', 'foo',
+        'Nonce attribute should have been added to script element.', nonce,
         (script['nonce'] || script.getAttribute('nonce')));
 
     checkCleanup();

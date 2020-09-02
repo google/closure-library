@@ -676,11 +676,15 @@ testSuite({
         this[attr] = value;
       },
     });
-    // clear nonce cache for test.
-    /** @type {?} */ (goog).cspNonce_ = null;
+    let nonce = goog.getScriptNonce();
+    if (!nonce) {
+      // clear nonce cache for test.
+      /** @type {?} */ (goog).cspNonce_ = null;
 
-    // Place a nonced script in the page.
-    const nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
+      // Place a nonced script in the page.
+      nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
+    }
+
     const noncedScript = dom.createElement(TagName.SCRIPT);
     noncedScript.setAttribute('nonce', nonce);
     document.body.appendChild(noncedScript);
@@ -710,7 +714,11 @@ testSuite({
     // clear nonce cache for test.
     /** @type {?} */ (goog).cspNonce_ = null;
     // create the iframe and set up a script inside the iframe.
-    const nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
+    let nonce = goog.getScriptNonce();
+    if (!nonce) {
+      nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
+    }
+
     const iframe = dom.createElement(TagName.IFRAME);
     document.body.appendChild(iframe);
     const iframeWindow = iframe.contentWindow;
@@ -748,7 +756,13 @@ testSuite({
     /** @type {?} */ (goog).cspNonce_ = null;
 
     // Place a nonced script in the page.
-    const nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
+    let nonce = goog.getScriptNonce();
+    if (!nonce) {
+      nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
+    }
+
+    /** @type {?} */ (goog).cspNonce_ = null;
+
     const noncedScript = dom.createElement(TagName.SCRIPT);
     noncedScript.setAttribute('nonce', nonce);
     document.body.appendChild(noncedScript);

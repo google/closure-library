@@ -2171,6 +2171,19 @@ goog.defineClass.applyProperties_ = function(target, source) {
 if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
   /**
+   * Returns the most recently added script element in the DOM.
+   * @return {?Element}
+   * @private
+   */
+  goog.getLastScript_ = function() {
+    var elem = document.documentElement;
+    while (elem.nodeName != 'SCRIPT' && elem.lastChild) {
+      elem = elem.lastChild;
+    }
+    return /** @type {?Element} */ (elem);
+  };
+
+  /**
    * Tries to detect whether is in the context of an HTML document.
    * @return {boolean} True if it looks like HTML document.
    * @private
@@ -3094,28 +3107,40 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       }
     }
 
+    var nonce = goog.getScriptNonce();
     if (!goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING &&
         goog.isDocumentLoading_()) {
+      var allowInlineEventHandlers = !nonce;
       var key = goog.Dependency.registerCallback_(function(script) {
         if (!goog.DebugLoader_.IS_OLD_IE_ || script.readyState == 'complete') {
           goog.Dependency.unregisterCallback_(key);
           controller.loaded();
         }
       });
-      var nonceAttr = !goog.DebugLoader_.IS_OLD_IE_ && goog.getScriptNonce() ?
-          ' nonce="' + goog.getScriptNonce() + '"' :
-          '';
-      var event =
+      var eventName =
           goog.DebugLoader_.IS_OLD_IE_ ? 'onreadystatechange' : 'onload';
-      var defer = goog.Dependency.defer_ ? 'defer' : '';
-      var script = '<script src="' + this.path + '" ' + event +
-          '="goog.Dependency.callback_(\'' + key +
-          '\', this)" type="text/javascript" ' + defer + nonceAttr + '><' +
-          '/script>';
+      var event = '';
+      if (allowInlineEventHandlers) {
+        event = ' ' + eventName + '="goog.Dependency.callback_(\'' + key +
+            '\', this)"';
+      }
+
+      var defer = goog.Dependency.defer_ ? ' defer' : '';
+      var nonceAttr = nonce ? ' nonce="' + nonce + '"' : '';
+      var script = '<script src="' + this.path + '"' + nonceAttr + event +
+          defer + '><\/script>';
+
       doc.write(
           goog.TRUSTED_TYPES_POLICY_ ?
               goog.TRUSTED_TYPES_POLICY_.createHTML(script) :
               script);
+
+      if (!allowInlineEventHandlers) {
+        var elem = goog.getLastScript_();
+        elem.onload = /** @this {!HTMLScriptElement} */ function() {
+          goog.Dependency.callback_(key, this);
+        };
+      }
     } else {
       var scriptEl =
           /** @type {!HTMLScriptElement} */ (doc.createElement('script'));
@@ -3125,7 +3150,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
       // If CSP nonces are used, propagate them to dynamically created scripts.
       // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
-      var nonce = goog.getScriptNonce();
       if (nonce) {
         scriptEl.setAttribute('nonce', nonce);
       }
@@ -3428,7 +3452,9 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
         load();
       });
 
-      var script = '<script type="text/javascript">' +
+      var nonce = goog.getScriptNonce();
+      var nonceAttr = nonce ? ' nonce="' + nonce + '"' : '';
+      var script = '<script' + nonceAttr + '>' +
           goog.protectScriptTag_('goog.Dependency.callback_("' + key + '");') +
           '</' +
           'script>';
