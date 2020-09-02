@@ -47,7 +47,6 @@ goog.require('goog.net.XmlHttpFactory');
  * to be enabled.
  *
  * @interface
- * @extends {EventTarget}
  * @extends {goog.events.Listenable}
  */
 goog.net.WebChannel = function() {};
