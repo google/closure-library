@@ -2176,7 +2176,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.getLastScript_ = function() {
-    var elem = document.documentElement;
+    var elem = goog.global.document.documentElement;
     while (elem.nodeName != 'SCRIPT' && elem.lastChild) {
       elem = elem.lastChild;
     }
