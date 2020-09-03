@@ -654,7 +654,7 @@ goog.async.Deferred.prototype.hasErrback_ = function() {
   return goog.array.some(this.sequence_, function(sequenceRow) {
     'use strict';
     // The errback is the second element in the array.
-    return goog.isFunction(sequenceRow[1]);
+    return typeof sequenceRow[1] === 'function';
   });
 };
 

@@ -470,7 +470,7 @@ goog.testing.asserts.assertRejects = function(a, opt_b) {
   var thenable = /** @type {!IThenable<*>} */ (nonCommentArg(1, 1, arguments));
   var comment = commentArg(1, arguments);
   _assert(
-      comment, goog.isObject(thenable) && goog.isFunction(thenable.then),
+      comment, goog.isObject(thenable) && typeof thenable.then === 'function',
       'Argument passed to assertRejects is not an IThenable');
 
   return thenable.then(
@@ -923,7 +923,7 @@ goog.testing.asserts.findDifferences = function(
           }
         } else {
           // special-case for closure objects that have iterators
-          if (goog.isFunction(var1.equals)) {
+          if (typeof var1.equals === 'function') {
             // use the object's own equals function, assuming it accepts an
             // object and returns a boolean
             if (!var1.equals(var2)) {

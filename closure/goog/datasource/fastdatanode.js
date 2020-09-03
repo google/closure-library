@@ -277,7 +277,7 @@ goog.ds.FastDataNode.prototype.isList = function() {
 goog.ds.FastDataNode.prototype.getJsObject = function() {
   var result = {};
   for (var key in this) {
-    if (!goog.string.startsWith(key, '__') && !goog.isFunction(this[key])) {
+    if (!goog.string.startsWith(key, '__') && typeof this[key] !== 'function') {
       result[key] =
           (this[key]['__dataName'] ? this[key].getJsObject() : this[key]);
     }
@@ -339,7 +339,7 @@ goog.ds.FastDataNode.prototype.get = function(opt_key) {
 goog.ds.FastDataNode.prototype.getByIndex = function(index) {
   var i = 0;
   for (var key in this) {
-    if (!goog.string.startsWith(key, '__') && !goog.isFunction(this[key])) {
+    if (!goog.string.startsWith(key, '__') && typeof this[key] !== 'function') {
       if (i == index) {
         this.wrapChild_(key);
         return this[key];
@@ -361,7 +361,7 @@ goog.ds.FastDataNode.prototype.getByIndex = function(index) {
 goog.ds.FastDataNode.prototype.getCount = function() {
   var count = 0;
   for (var key in this) {
-    if (!goog.string.startsWith(key, '__') && !goog.isFunction(this[key])) {
+    if (!goog.string.startsWith(key, '__') && typeof this[key] !== 'function') {
       ++count;
     }
   }

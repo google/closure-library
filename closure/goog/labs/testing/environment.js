@@ -491,7 +491,7 @@ goog.labs.testing.EnvironmentTest_ = function(name, ref, scope, objChain) {
           objChain || [],
           function(obj) {
             'use strict';
-            return goog.isFunction(obj.configureEnvironment);
+            return typeof obj.configureEnvironment === 'function';
           }), /**
                * @param  {{configureEnvironment: function()}} obj
                * @return {function()}

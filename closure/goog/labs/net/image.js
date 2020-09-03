@@ -39,7 +39,7 @@ goog.labs.net.image.load = function(uri, opt_image) {
     var image;
     if (opt_image === undefined) {
       image = new Image();
-    } else if (goog.isFunction(opt_image)) {
+    } else if (typeof opt_image === 'function') {
       image = opt_image();
     } else {
       image = opt_image;

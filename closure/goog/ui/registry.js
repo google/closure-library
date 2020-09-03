@@ -43,7 +43,7 @@ goog.ui.registry.getDefaultRenderer = function(componentCtor) {
   // If the renderer has a static getInstance method, return the singleton
   // instance; otherwise create and return a new instance.
   if (rendererCtor) {
-    return goog.isFunction(rendererCtor.getInstance) ?
+    return typeof rendererCtor.getInstance === 'function' ?
         rendererCtor.getInstance() :
         new rendererCtor();
   }
@@ -64,10 +64,10 @@ goog.ui.registry.getDefaultRenderer = function(componentCtor) {
 goog.ui.registry.setDefaultRenderer = function(componentCtor, rendererCtor) {
   // In this case, explicit validation has negligible overhead (since each
   // renderer is only registered once), and helps catch subtle bugs.
-  if (!goog.isFunction(componentCtor)) {
+  if (typeof componentCtor !== 'function') {
     throw new Error('Invalid component class ' + componentCtor);
   }
-  if (!goog.isFunction(rendererCtor)) {
+  if (typeof rendererCtor !== 'function') {
     throw new Error('Invalid renderer class ' + rendererCtor);
   }
 
@@ -106,7 +106,7 @@ goog.ui.registry.setDecoratorByClassName = function(className, decoratorFn) {
   if (!className) {
     throw new Error('Invalid class name ' + className);
   }
-  if (!goog.isFunction(decoratorFn)) {
+  if (typeof decoratorFn !== 'function') {
     throw new Error('Invalid decorator function ' + decoratorFn);
   }
 

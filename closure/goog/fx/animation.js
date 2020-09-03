@@ -418,7 +418,7 @@ goog.fx.Animation.prototype.cycle = function(now) {
  * @private
  */
 goog.fx.Animation.prototype.updateCoords_ = function(t) {
-  if (goog.isFunction(this.accel_)) {
+  if (typeof this.accel_ === 'function') {
     t = this.accel_(t);
   }
   this.coords = new Array(this.startPoint.length);

@@ -284,8 +284,8 @@ goog.net.xpc.CrossPageChannel.prototype.isPeerAvailable = function() {
  */
 goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
   var transportType;
-  if (goog.isFunction(document.postMessage) ||
-      goog.isFunction(window.postMessage) ||
+  if (typeof document.postMessage === 'function' ||
+      typeof window.postMessage === 'function' ||
       // IE8 supports window.postMessage, but
       // typeof window.postMessage returns "object"
       (goog.userAgent.IE && window.postMessage)) {
@@ -318,7 +318,7 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
   // If TRANSPORT cfg is a function, we assume it's a constructor to a
   // Transport implementation. Allows fine-grained dependency control over
   // what Transport impls are brought in.
-  if (goog.isFunction(this.cfg_[CfgFields.TRANSPORT])) {
+  if (typeof this.cfg_[CfgFields.TRANSPORT] === 'function') {
     this.transport_ = /** @type {!goog.net.xpc.Transport} */ (
         new this.cfg_[CfgFields.TRANSPORT](this, this.domHelper_));
   } else {

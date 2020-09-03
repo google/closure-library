@@ -539,7 +539,7 @@ goog.debug.Logger.prototype.log = function(level, msg, opt_exception) {
   // java caches the effective level, not sure it's necessary here
   if (goog.debug.LOGGING_ENABLED && this.isLoggable(level)) {
     // Message callbacks can be useful when a log message is expensive to build.
-    if (goog.isFunction(msg)) {
+    if (typeof msg === 'function') {
       msg = msg();
     }
 

@@ -120,7 +120,7 @@ goog.debug.expose = function(obj, opt_showFn) {
   var str = [];
 
   for (var x in obj) {
-    if (!opt_showFn && goog.isFunction(obj[x])) {
+    if (!opt_showFn && typeof obj[x] === 'function') {
       continue;
     }
     var s = x + ' = ';
@@ -170,7 +170,7 @@ goog.debug.deepExpose = function(obj, opt_showFn) {
         str.push('NULL');
       } else if (typeof obj === 'string') {
         str.push('"' + indentMultiline(obj) + '"');
-      } else if (goog.isFunction(obj)) {
+      } else if (typeof obj === 'function') {
         str.push(indentMultiline(String(obj)));
       } else if (goog.isObject(obj)) {
         // Add a Uid if needed. The struct calls implicitly adds them.
@@ -184,7 +184,7 @@ goog.debug.deepExpose = function(obj, opt_showFn) {
           ancestorUids[uid] = true;
           str.push('{');
           for (var x in obj) {
-            if (!opt_showFn && goog.isFunction(obj[x])) {
+            if (!opt_showFn && typeof obj[x] === 'function') {
               continue;
             }
             str.push('\n');

@@ -861,11 +861,11 @@ goog.testing.TestCase.prototype.shouldRunTestsHelper_ = function() {
   for (var i = 0; i < objChain.length; i++) {
     var obj = objChain[i];
 
-    if (!goog.isFunction(obj.shouldRunTests)) {
+    if (typeof obj.shouldRunTests !== 'function') {
       return true;
     }
 
-    if (goog.isFunction(obj.shouldRunTests['$cachedResult'])) {
+    if (typeof obj.shouldRunTests['$cachedResult'] === 'function') {
       if (!obj.shouldRunTests['$cachedResult']()) {
         return false;
       }
@@ -1005,7 +1005,7 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
   try {
     var retval = fn.call(this);
     if (goog.Thenable.isImplementedBy(retval) ||
-        goog.isFunction(retval && retval['then'])) {
+        (retval && typeof retval['then'] === 'function')) {
       // Resolve Thenable into a proper Promise to avoid hard to debug
       // problems.
       var promise = goog.Promise.resolve(retval);
@@ -1433,7 +1433,7 @@ goog.testing.TestCase.prototype.addTestObj_ = function(obj, name, objChain) {
         testName = testName.slice(this.getAutoDiscoveryPrefix().length);
       }
       var fullTestName = name + (testName && name ? '_' : '') + testName;
-      if (goog.isFunction(testProperty)) {
+      if (typeof testProperty === 'function') {
         this.addNewTest(fullTestName, testProperty, obj, objChain);
       } else if (goog.isObject(testProperty) && !Array.isArray(testProperty)) {
         // To prevent infinite loops.
@@ -1863,10 +1863,10 @@ goog.testing.TestCase.Test = function(name, ref, scope, objChain) {
 
   if (objChain) {
     for (var i = 0; i < objChain.length; i++) {
-      if (goog.isFunction(objChain[i].setUp)) {
+      if (typeof objChain[i].setUp === 'function') {
         this.setUps.push(goog.bind(objChain[i].setUp, objChain[i]));
       }
-      if (goog.isFunction(objChain[i].tearDown)) {
+      if (typeof objChain[i].tearDown === 'function') {
         this.tearDowns.push(goog.bind(objChain[i].tearDown, objChain[i]));
       }
     }

@@ -1105,7 +1105,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
     date.setDate(orgDate > maxDate ? maxDate : orgDate);
   }
 
-  if (goog.isFunction(date.setHours)) {
+  if (typeof date.setHours === 'function') {
     if (this.hours == undefined) {
       this.hours = date.getHours();
     }
@@ -1116,15 +1116,16 @@ goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
     date.setHours(this.hours);
   }
 
-  if (goog.isFunction(date.setMinutes) && this.minutes != undefined) {
+  if (typeof date.setMinutes === 'function' && this.minutes != undefined) {
     date.setMinutes(this.minutes);
   }
 
-  if (goog.isFunction(date.setSeconds) && this.seconds != undefined) {
+  if (typeof date.setSeconds === 'function' && this.seconds != undefined) {
     date.setSeconds(this.seconds);
   }
 
-  if (goog.isFunction(date.setMilliseconds) && this.milliseconds != undefined) {
+  if (typeof date.setMilliseconds === 'function' &&
+      this.milliseconds != undefined) {
     date.setMilliseconds(this.milliseconds);
   }
 

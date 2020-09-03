@@ -567,7 +567,7 @@ goog.testing.MockClock.prototype.runNextQueuedTimeout_ = function() {
  */
 goog.testing.MockClock.prototype.scheduleFunction_ = function(
     timeoutKey, funcToCall, millis, recurring) {
-  if (!goog.isFunction(funcToCall)) {
+  if (typeof funcToCall !== 'function') {
     // Early error for debuggability rather than dying in the next .tick()
     throw new TypeError(
         'The provided callback must be a function, not a ' + typeof funcToCall);

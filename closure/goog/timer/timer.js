@@ -270,7 +270,7 @@ goog.Timer.TICK = 'tick';
  */
 goog.Timer.callOnce = function(listener, opt_delay, opt_handler) {
   'use strict';
-  if (goog.isFunction(listener)) {
+  if (typeof listener === 'function') {
     if (opt_handler) {
       listener = goog.bind(listener, opt_handler);
     }

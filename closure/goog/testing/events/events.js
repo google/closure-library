@@ -853,7 +853,7 @@ goog.testing.events.mixinListenable = function(obj) {
     if (listenablePrototype.hasOwnProperty(key) ||
         disposablePrototype.hasOwnProperty(key)) {
       var member = listenablePrototype[key];
-      if (goog.isFunction(member)) {
+      if (typeof member === 'function') {
         obj[key] = goog.bind(member, listenable);
       } else {
         obj[key] = member;

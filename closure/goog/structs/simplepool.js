@@ -166,7 +166,7 @@ goog.structs.SimplePool.prototype.disposeObject = function(obj) {
   if (this.disposeObjectFn_) {
     this.disposeObjectFn_(obj);
   } else if (goog.isObject(obj)) {
-    if (goog.isFunction(obj.dispose)) {
+    if (typeof obj.dispose === 'function') {
       obj.dispose();
     } else {
       for (var i in obj) {

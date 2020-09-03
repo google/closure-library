@@ -85,7 +85,7 @@ goog.ui.Zippy = function(
    * @type {?function():Element}
    * @private
    */
-  this.lazyCreateFunc_ = goog.isFunction(opt_content) ? opt_content : null;
+  this.lazyCreateFunc_ = typeof opt_content === 'function' ? opt_content : null;
 
   /**
    * ARIA role.

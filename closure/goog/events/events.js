@@ -981,7 +981,7 @@ goog.events.LISTENER_WRAPPER_PROP_ =
 goog.events.wrapListener = function(listener) {
   goog.asserts.assert(listener, 'Listener can not be null.');
 
-  if (goog.isFunction(listener)) {
+  if (typeof listener === 'function') {
     return listener;
   }
 

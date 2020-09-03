@@ -288,7 +288,7 @@ goog.asserts.assertString = function(value, opt_message, var_args) {
  * @closurePrimitive {asserts.matchesReturn}
  */
 goog.asserts.assertFunction = function(value, opt_message, var_args) {
-  if (goog.asserts.ENABLE_ASSERTS && !goog.isFunction(value)) {
+  if (goog.asserts.ENABLE_ASSERTS && typeof value !== 'function') {
     goog.asserts.doAssertFailure_(
         'Expected function but got %s: %s.', [goog.typeOf(value), value],
         opt_message, Array.prototype.slice.call(arguments, 2));

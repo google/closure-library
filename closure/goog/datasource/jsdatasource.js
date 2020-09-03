@@ -165,7 +165,7 @@ goog.ds.JsDataSource.prototype.createChildNodes_ = function(opt_force) {
       // If the node is already a datasource, then add it.
       if (obj.getDataName) {
         childNodeList.add(obj);
-      } else if (!goog.isFunction(obj)) {
+      } else if (typeof obj !== 'function') {
         newNode = new goog.ds.JsDataSource(obj, name, this);
         childNodeList.add(newNode);
       }

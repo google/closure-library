@@ -50,7 +50,7 @@ goog.testing.benchmark.run_ = function() {
           ref = undefined;
         }
 
-        if (goog.isFunction(ref)) {
+        if (typeof ref === 'function') {
           benchmarks[name] = ref;
           names.push(name);
         }

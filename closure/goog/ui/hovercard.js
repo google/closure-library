@@ -69,7 +69,7 @@ goog.ui.HoverCard = function(
     isAnchor, opt_checkDescendants, opt_domHelper, opt_triggeringDocument) {
   goog.ui.AdvancedTooltip.call(this, null, null, opt_domHelper);
 
-  if (goog.isFunction(isAnchor)) {
+  if (typeof isAnchor === 'function') {
     // Override default implementation of `isAnchor_`.
     this.isAnchor_ = isAnchor;
   } else {

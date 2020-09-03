@@ -61,7 +61,7 @@ goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
   // to accept the possible tradeoffs of incorrectness in exchange for speed.
   // The IE fallback of readystate change is much slower. See useSetImmediate_
   // for details.
-  if (goog.isFunction(goog.global.setImmediate) &&
+  if (typeof goog.global.setImmediate === 'function' &&
       (opt_useSetImmediate || goog.async.nextTick.useSetImmediate_())) {
     goog.global.setImmediate(cb);
     return;

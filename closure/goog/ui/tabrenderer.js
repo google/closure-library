@@ -105,7 +105,7 @@ goog.ui.TabRenderer.prototype.decorate = function(tab, element) {
   // selection model.
   if (tab.isSelected()) {
     var tabBar = tab.getParent();
-    if (tabBar && goog.isFunction(tabBar.setSelectedTab)) {
+    if (tabBar && typeof tabBar.setSelectedTab === 'function') {
       // We need to temporarily deselect the tab, so the tab bar can re-select
       // it and thereby correctly initialize its state.  We use the protected
       // setState() method to avoid dispatching useless events.

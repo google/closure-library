@@ -183,11 +183,11 @@ goog.labs.mock.formatMethodCall_ = function(methodName, opt_args) {
   opt_args = opt_args || [];
   opt_args = goog.array.map(opt_args, function(arg) {
     'use strict';
-    if (goog.isFunction(arg)) {
+    if (typeof arg === 'function') {
       var funcName = goog.labs.mock.getFunctionName_(arg);
       return '<function ' + funcName + '>';
     } else {
-      var isObjectWithClass = goog.isObject(arg) && !goog.isFunction(arg) &&
+      var isObjectWithClass = goog.isObject(arg) && typeof arg !== 'function' &&
           !Array.isArray(arg) && arg.constructor != Object;
 
       if (isObjectWithClass) {
@@ -255,7 +255,7 @@ goog.labs.mock.formatValue_ = function(obj, opt_id) {
         output.push('NULL');
       } else if (typeof obj === 'string') {
         output.push('"' + indentMultiline(obj) + '"');
-      } else if (goog.isFunction(obj)) {
+      } else if (typeof obj === 'function') {
         var funcName = goog.labs.mock.getFunctionName_(obj);
         output.push('<function ' + funcName + '>');
       } else if (goog.isObject(obj)) {
@@ -778,7 +778,7 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   this.objectCallWaiter_ = {};
 
   var obj;
-  if (goog.isFunction(objOrClass)) {
+  if (typeof objOrClass === 'function') {
     // Create a temporary subclass with a no-op constructor so that we can
     // create an instance and determine what methods it has.
     /**
@@ -802,7 +802,8 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   mockedItemCtor.prototype = obj;
   this.mockedItem = new mockedItemCtor();
 
-  var propObj = goog.isFunction(objOrClass) ? objOrClass.prototype : objOrClass;
+  var propObj =
+      typeof objOrClass === 'function' ? objOrClass.prototype : objOrClass;
   var enumerableProperties = goog.object.getAllPropertyNames(propObj);
   // The non enumerable properties are added due to the fact that IE8 does not
   // enumerate any of the prototype Object functions even when overridden and
@@ -818,7 +819,7 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   // the instance.
   for (var i = 0; i < enumerableProperties.length; i++) {
     var prop = enumerableProperties[i];
-    if (goog.isFunction(propObj[prop])) {
+    if (typeof propObj[prop] === 'function') {
       this.mockedItem[prop] = goog.bind(this.executeStub, this, prop);
       // The stub binder used to create bindings.
       this.objectStubBinder_[prop] =
@@ -1194,7 +1195,7 @@ goog.labs.mock.MethodBinding_.prototype.matches = function(
         'use strict';
         // Duck-type to see if this is an object that implements the
         // goog.labs.testing.Matcher interface.
-        if (spec && goog.isFunction(spec.matches)) {
+        if (spec && typeof spec.matches === 'function') {
           return spec.matches(arg);
         } else {
           return goog.array.defaultCompareEquality(spec, arg);

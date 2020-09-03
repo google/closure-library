@@ -38,7 +38,7 @@ testSuite({
     const keysToTest = {};
     for (const keyId in KeyCodes) {
       const key = KeyCodes[keyId];
-      if (goog.isFunction(key)) {
+      if (typeof key === 'function') {
         // skip static methods
         continue;
       }
