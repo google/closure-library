@@ -360,6 +360,13 @@ goog.cssom.addCssText = function(cssText, opt_domHelper) {
   var domHelper = opt_domHelper || goog.dom.getDomHelper();
   var document = domHelper.getDocument();
   var cssNode = domHelper.createElement(goog.dom.TagName.STYLE);
+
+  // If a CSP nonce is present, propagate it to style blocks
+  var nonce = goog.getScriptNonce();
+  if (nonce) {
+    cssNode.setAttribute('nonce', nonce);
+  }
+
   cssNode.type = 'text/css';
   var head = domHelper.getElementsByTagName(goog.dom.TagName.HEAD)[0];
   head.appendChild(cssNode);
