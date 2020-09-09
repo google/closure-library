@@ -42,6 +42,7 @@ goog.requireType('goog.ui.ControlContent');
  * @final
  */
 goog.ui.ImagelessMenuButtonRenderer = function() {
+  'use strict';
   goog.ui.MenuButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.ImagelessMenuButtonRenderer, goog.ui.MenuButtonRenderer);
@@ -60,6 +61,7 @@ goog.ui.ImagelessMenuButtonRenderer.CSS_CLASS =
 /** @override */
 goog.ui.ImagelessMenuButtonRenderer.prototype.getContentElement = function(
     element) {
+  'use strict';
   if (element) {
     var captionElem = goog.dom.getElementsByTagNameAndClass(
         '*', goog.getCssName(this.getCssClass(), 'caption'), element)[0];
@@ -78,6 +80,7 @@ goog.ui.ImagelessMenuButtonRenderer.prototype.getContentElement = function(
  * @override
  */
 goog.ui.ImagelessMenuButtonRenderer.prototype.canDecorate = function(element) {
+  'use strict';
   return element.tagName == goog.dom.TagName.DIV;
 };
 
@@ -110,6 +113,7 @@ goog.ui.ImagelessMenuButtonRenderer.prototype.canDecorate = function(element) {
  */
 goog.ui.ImagelessMenuButtonRenderer.prototype.createButton = function(
     content, dom) {
+  'use strict';
   var baseClass = this.getCssClass();
   var inlineBlock = goog.ui.INLINE_BLOCK_CLASSNAME + ' ';
   return dom.createDom(
@@ -149,6 +153,7 @@ goog.ui.ImagelessMenuButtonRenderer.prototype.createButton = function(
  */
 goog.ui.ImagelessMenuButtonRenderer.prototype.hasBoxStructure = function(
     button, element) {
+  'use strict';
   var outer = button.getDomHelper().getFirstElementChild(element);
   var outerClassName = goog.getCssName(this.getCssClass(), 'outer-box');
   if (outer && goog.dom.classlist.contains(outer, outerClassName)) {
@@ -183,6 +188,7 @@ goog.ui.ImagelessMenuButtonRenderer.prototype.hasBoxStructure = function(
  * @override
  */
 goog.ui.ImagelessMenuButtonRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.ImagelessMenuButtonRenderer.CSS_CLASS;
 };
 
@@ -194,6 +200,7 @@ goog.ui.ImagelessMenuButtonRenderer.prototype.getCssClass = function() {
 // goog-imageless-menu-button here.
 goog.ui.registry.setDecoratorByClassName(
     goog.getCssName('goog-imageless-menu-button'), function() {
+      'use strict';
       return new goog.ui.MenuButton(
           null, null, goog.ui.ImagelessMenuButtonRenderer.getInstance());
     });

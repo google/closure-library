@@ -28,6 +28,7 @@ goog.requireType('goog.ui.ControlRenderer');
  *     no default renderer was found.
  */
 goog.ui.registry.getDefaultRenderer = function(componentCtor) {
+  'use strict';
   // TODO(user): This should probably be implemented with a `WeakMap`.
   // Locate the default renderer based on the constructor's unique ID.  If no
   // renderer is registered for this class, walk up the superClass_ chain.
@@ -62,6 +63,7 @@ goog.ui.registry.getDefaultRenderer = function(componentCtor) {
  * @throws {Error} If the arguments aren't functions.
  */
 goog.ui.registry.setDefaultRenderer = function(componentCtor, rendererCtor) {
+  'use strict';
   // In this case, explicit validation has negligible overhead (since each
   // renderer is only registered once), and helps catch subtle bugs.
   if (typeof componentCtor !== 'function') {
@@ -85,6 +87,7 @@ goog.ui.registry.setDefaultRenderer = function(componentCtor, rendererCtor) {
  * @return {goog.ui.Component?} Component instance.
  */
 goog.ui.registry.getDecoratorByClassName = function(className) {
+  'use strict';
   return className in goog.ui.registry.decoratorFunctions_ ?
       goog.ui.registry.decoratorFunctions_[className]() :
       null;
@@ -101,6 +104,7 @@ goog.ui.registry.getDecoratorByClassName = function(className) {
  * @throws {Error} If the class name or the decorator function is invalid.
  */
 goog.ui.registry.setDecoratorByClassName = function(className, decoratorFn) {
+  'use strict';
   // In this case, explicit validation has negligible overhead (since each
   // decorator  is only registered once), and helps catch subtle bugs.
   if (!className) {
@@ -125,6 +129,7 @@ goog.ui.registry.setDecoratorByClassName = function(className, decoratorFn) {
  *     none).
  */
 goog.ui.registry.getDecorator = function(element) {
+  'use strict';
   var decorator;
   goog.asserts.assert(element);
   var classNames = goog.dom.classlist.get(element);
@@ -141,6 +146,7 @@ goog.ui.registry.getDecorator = function(element) {
  * Resets the global renderer and decorator registry.
  */
 goog.ui.registry.reset = function() {
+  'use strict';
   goog.ui.registry.defaultRenderers_ = {};
   goog.ui.registry.decoratorFunctions_ = {};
 };

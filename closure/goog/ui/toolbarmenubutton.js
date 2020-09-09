@@ -36,6 +36,7 @@ goog.requireType('goog.ui.Menu');
  */
 goog.ui.ToolbarMenuButton = function(
     content, opt_menu, opt_renderer, opt_domHelper) {
+  'use strict';
   goog.ui.MenuButton.call(
       this, content, opt_menu,
       opt_renderer || goog.ui.ToolbarMenuButtonRenderer.getInstance(),
@@ -46,5 +47,7 @@ goog.inherits(goog.ui.ToolbarMenuButton, goog.ui.MenuButton);
 
 // Registers a decorator factory function for toolbar menu buttons.
 goog.ui.registry.setDecoratorByClassName(
-    goog.ui.ToolbarMenuButtonRenderer.CSS_CLASS,
-    function() { return new goog.ui.ToolbarMenuButton(null); });
+    goog.ui.ToolbarMenuButtonRenderer.CSS_CLASS, function() {
+      'use strict';
+      return new goog.ui.ToolbarMenuButton(null);
+    });

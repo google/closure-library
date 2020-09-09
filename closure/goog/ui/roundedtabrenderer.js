@@ -28,6 +28,7 @@ goog.requireType('goog.ui.ControlContent');
  * @final
  */
 goog.ui.RoundedTabRenderer = function() {
+  'use strict';
   goog.ui.TabRenderer.call(this);
 };
 goog.inherits(goog.ui.RoundedTabRenderer, goog.ui.TabRenderer);
@@ -49,6 +50,7 @@ goog.ui.RoundedTabRenderer.CSS_CLASS = goog.getCssName('goog-rounded-tab');
  * @override
  */
 goog.ui.RoundedTabRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.RoundedTabRenderer.CSS_CLASS;
 };
 
@@ -81,6 +83,7 @@ goog.ui.RoundedTabRenderer.prototype.getCssClass = function() {
  * @override
  */
 goog.ui.RoundedTabRenderer.prototype.createDom = function(tab) {
+  'use strict';
   return this.decorate(
       tab, goog.ui.RoundedTabRenderer.superClass_.createDom.call(this, tab));
 };
@@ -95,6 +98,7 @@ goog.ui.RoundedTabRenderer.prototype.createDom = function(tab) {
  * @override
  */
 goog.ui.RoundedTabRenderer.prototype.decorate = function(tab, element) {
+  'use strict';
   var tabBar = tab.getParent();
 
   if (!this.getContentElement(element)) {
@@ -122,6 +126,7 @@ goog.ui.RoundedTabRenderer.prototype.decorate = function(tab, element) {
  */
 goog.ui.RoundedTabRenderer.prototype.createTab = function(
     dom, caption, location) {
+  'use strict';
   var rows = [];
 
   if (location != goog.ui.TabBar.Location.BOTTOM) {
@@ -153,6 +158,7 @@ goog.ui.RoundedTabRenderer.prototype.createTab = function(
  * @protected
  */
 goog.ui.RoundedTabRenderer.prototype.createCaption = function(dom, caption) {
+  'use strict';
   var baseClass = this.getStructuralCssClass();
   return dom.createDom(
       goog.dom.TagName.TR, null,
@@ -172,6 +178,7 @@ goog.ui.RoundedTabRenderer.prototype.createCaption = function(dom, caption) {
  * @protected
  */
 goog.ui.RoundedTabRenderer.prototype.createEdge = function(dom, isTopEdge) {
+  'use strict';
   var baseClass = this.getStructuralCssClass();
   var inner = dom.createDom(
       goog.dom.TagName.DIV, goog.getCssName(baseClass, 'inner-edge'));
@@ -187,6 +194,7 @@ goog.ui.RoundedTabRenderer.prototype.createEdge = function(dom, isTopEdge) {
 
 /** @override */
 goog.ui.RoundedTabRenderer.prototype.getContentElement = function(element) {
+  'use strict';
   var baseClass = this.getStructuralCssClass();
   return element &&
       goog.dom.getElementsByTagNameAndClass(
@@ -199,5 +207,6 @@ goog.ui.RoundedTabRenderer.prototype.getContentElement = function(element) {
 // tab renderer.
 goog.ui.registry.setDecoratorByClassName(
     goog.ui.RoundedTabRenderer.CSS_CLASS, function() {
+      'use strict';
       return new goog.ui.Tab(null, goog.ui.RoundedTabRenderer.getInstance());
     });

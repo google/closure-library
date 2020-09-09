@@ -24,6 +24,7 @@ goog.require('goog.ui.ContainerRenderer');
  * @final
  */
 goog.ui.MenuBarRenderer = function() {
+  'use strict';
   goog.ui.MenuBarRenderer.base(
       this, 'constructor', goog.a11y.aria.Role.MENUBAR);
 };
@@ -43,6 +44,7 @@ goog.ui.MenuBarRenderer.CSS_CLASS = goog.getCssName('goog-menubar');
  * @override
  */
 goog.ui.MenuBarRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.MenuBarRenderer.CSS_CLASS;
 };
 
@@ -55,5 +57,6 @@ goog.ui.MenuBarRenderer.prototype.getCssClass = function() {
  * @override
  */
 goog.ui.MenuBarRenderer.prototype.getDefaultOrientation = function() {
+  'use strict';
   return goog.ui.Container.Orientation.HORIZONTAL;
 };

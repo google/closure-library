@@ -22,6 +22,7 @@ goog.require('goog.events.PointerAsMouseEventType');
  *     to for the given mouse events.
  */
 goog.ui.ComponentUtil.getMouseEventType = function(component) {
+  'use strict';
   return component.pointerEventsEnabled() ?
       goog.events.PointerAsMouseEventType :
       goog.events.MouseAsMouseEventType;

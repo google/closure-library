@@ -32,6 +32,7 @@ goog.requireType('goog.dom.DomHelper');
  * @extends {goog.ui.Container}
  */
 goog.ui.Toolbar = function(opt_renderer, opt_orientation, opt_domHelper) {
+  'use strict';
   goog.ui.Container.call(
       this, opt_orientation,
       opt_renderer || goog.ui.ToolbarRenderer.getInstance(), opt_domHelper);
@@ -41,6 +42,7 @@ goog.inherits(goog.ui.Toolbar, goog.ui.Container);
 
 /** @override */
 goog.ui.Toolbar.prototype.handleFocus = function(e) {
+  'use strict';
   goog.ui.Toolbar.base(this, 'handleFocus', e);
   // Highlight the first highlightable item on focus via the keyboard for ARIA
   // spec compliance. Do not highlight the item if the mouse button is pressed,

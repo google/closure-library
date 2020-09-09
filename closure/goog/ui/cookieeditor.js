@@ -30,6 +30,7 @@ goog.requireType('goog.events.Event');
  * @final
  */
 goog.ui.CookieEditor = function(opt_domHelper) {
+  'use strict';
   goog.ui.CookieEditor.base(this, 'constructor', opt_domHelper);
 };
 goog.inherits(goog.ui.CookieEditor, goog.ui.Component);
@@ -81,6 +82,7 @@ goog.ui.CookieEditor.prototype.updateButtonElem_;
  * @param {string} cookieKey Cookie key.
  */
 goog.ui.CookieEditor.prototype.selectCookie = function(cookieKey) {
+  'use strict';
   goog.asserts.assert(goog.net.cookies.isValidName(cookieKey));
   this.cookieKey_ = cookieKey;
   if (this.textAreaElem_) {
@@ -91,12 +93,14 @@ goog.ui.CookieEditor.prototype.selectCookie = function(cookieKey) {
 
 /** @override */
 goog.ui.CookieEditor.prototype.canDecorate = function() {
+  'use strict';
   return false;
 };
 
 
 /** @override */
 goog.ui.CookieEditor.prototype.createDom = function() {
+  'use strict';
   // Debug-only, so we don't need i18n.
   this.clearButtonElem_ = goog.dom.createDom(
       goog.dom.TagName.BUTTON, /* attributes */ null, 'Clear');
@@ -121,6 +125,7 @@ goog.ui.CookieEditor.prototype.createDom = function() {
 
 /** @override */
 goog.ui.CookieEditor.prototype.enterDocument = function() {
+  'use strict';
   goog.ui.CookieEditor.base(this, 'enterDocument');
   this.getHandler().listen(
       this.clearButtonElem_, goog.events.EventType.CLICK, this.handleClear_);
@@ -135,6 +140,7 @@ goog.ui.CookieEditor.prototype.enterDocument = function() {
  * @private
  */
 goog.ui.CookieEditor.prototype.handleClear_ = function(e) {
+  'use strict';
   if (this.cookieKey_) {
     goog.net.cookies.remove(this.cookieKey_);
   }
@@ -148,6 +154,7 @@ goog.ui.CookieEditor.prototype.handleClear_ = function(e) {
  * @private
  */
 goog.ui.CookieEditor.prototype.handleUpdate_ = function(e) {
+  'use strict';
   if (this.cookieKey_) {
     var value = this.textAreaElem_.value;
     if (value) {
@@ -166,6 +173,7 @@ goog.ui.CookieEditor.prototype.handleUpdate_ = function(e) {
 
 /** @override */
 goog.ui.CookieEditor.prototype.disposeInternal = function() {
+  'use strict';
   this.clearButtonElem_ = null;
   this.cookieKey_ = null;
   this.textAreaElem_ = null;

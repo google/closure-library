@@ -45,6 +45,7 @@ goog.requireType('goog.ui.MenuButtonRenderer');
  */
 goog.ui.ColorMenuButton = function(
     content, opt_menu, opt_renderer, opt_domHelper) {
+  'use strict';
   goog.ui.MenuButton.call(
       this, content, opt_menu,
       opt_renderer || goog.ui.ColorMenuButtonRenderer.getInstance(),
@@ -98,14 +99,18 @@ goog.ui.ColorMenuButton.NO_COLOR = 'none';
  * @return {!goog.ui.Menu} Color menu.
  */
 goog.ui.ColorMenuButton.newColorMenu = function(opt_extraItems, opt_domHelper) {
+  'use strict';
   var menu = new goog.ui.Menu(opt_domHelper);
 
   if (opt_extraItems) {
-    goog.array.forEach(
-        opt_extraItems, function(item) { menu.addChild(item, true); });
+    goog.array.forEach(opt_extraItems, function(item) {
+      'use strict';
+      menu.addChild(item, true);
+    });
   }
 
   goog.object.forEach(goog.ui.ColorMenuButton.PALETTES, function(colors) {
+    'use strict';
     var palette = new goog.ui.ColorPalette(colors, null, opt_domHelper);
     palette.setSize(8);
     menu.addChild(palette, true);
@@ -120,6 +125,7 @@ goog.ui.ColorMenuButton.newColorMenu = function(opt_extraItems, opt_domHelper) {
  * @return {string} The selected color.
  */
 goog.ui.ColorMenuButton.prototype.getSelectedColor = function() {
+  'use strict';
   return /** @type {string} */ (this.getValue());
 };
 
@@ -130,6 +136,7 @@ goog.ui.ColorMenuButton.prototype.getSelectedColor = function() {
  * @param {?string} color New color.
  */
 goog.ui.ColorMenuButton.prototype.setSelectedColor = function(color) {
+  'use strict';
   this.setValue(color);
 };
 
@@ -142,6 +149,7 @@ goog.ui.ColorMenuButton.prototype.setSelectedColor = function(color) {
  * @override
  */
 goog.ui.ColorMenuButton.prototype.setValue = function(value) {
+  'use strict';
   var color = /** @type {?string} */ (value);
   for (var i = 0, item; item = this.getItemAt(i); i++) {
     if (typeof item.setSelectedColor == 'function') {
@@ -164,6 +172,7 @@ goog.ui.ColorMenuButton.prototype.setValue = function(value) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.ColorMenuButton.prototype.handleMenuAction = function(e) {
+  'use strict';
   if (typeof e.target.getSelectedColor == 'function') {
     // User clicked something that looks like a color palette.
     this.setValue(e.target.getSelectedColor());
@@ -186,6 +195,7 @@ goog.ui.ColorMenuButton.prototype.handleMenuAction = function(e) {
  * @override
  */
 goog.ui.ColorMenuButton.prototype.setOpen = function(open, opt_e) {
+  'use strict';
   if (open && this.getItemCount() == 0) {
     this.setMenu(
         goog.ui.ColorMenuButton.newColorMenu(null, this.getDomHelper()));
@@ -197,5 +207,7 @@ goog.ui.ColorMenuButton.prototype.setOpen = function(open, opt_e) {
 
 // Register a decorator factory function for goog.ui.ColorMenuButtons.
 goog.ui.registry.setDecoratorByClassName(
-    goog.ui.ColorMenuButtonRenderer.CSS_CLASS,
-    function() { return new goog.ui.ColorMenuButton(null); });
+    goog.ui.ColorMenuButtonRenderer.CSS_CLASS, function() {
+      'use strict';
+      return new goog.ui.ColorMenuButton(null);
+    });

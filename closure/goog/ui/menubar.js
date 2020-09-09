@@ -31,6 +31,7 @@ goog.requireType('goog.ui.ContainerRenderer');
  * @return {!goog.ui.Container} The created menu bar.
  */
 goog.ui.menuBar.create = function(opt_renderer, opt_domHelper) {
+  'use strict';
   return new goog.ui.Container(
       null, opt_renderer ? opt_renderer : goog.ui.MenuBarRenderer.getInstance(),
       opt_domHelper);

@@ -37,6 +37,7 @@ goog.requireType('goog.ui.PaletteRenderer');
  * @final
  */
 goog.ui.CustomColorPalette = function(initColors, opt_renderer, opt_domHelper) {
+  'use strict';
   goog.ui.ColorPalette.call(this, initColors, opt_renderer, opt_domHelper);
   this.setSupportedState(goog.ui.Component.State.OPENED, true);
 };
@@ -49,6 +50,7 @@ goog.inherits(goog.ui.CustomColorPalette, goog.ui.ColorPalette);
  * @override
  */
 goog.ui.CustomColorPalette.prototype.createColorNodes = function() {
+  'use strict';
   /** @desc Hover caption for the button that allows the user to add a color. */
   var MSG_CLOSURE_CUSTOM_COLOR_BUTTON = goog.getMsg('Add a color');
 
@@ -70,6 +72,7 @@ goog.ui.CustomColorPalette.prototype.createColorNodes = function() {
  * @return {boolean} True if the action was allowed to proceed, false otherwise.
  */
 goog.ui.CustomColorPalette.prototype.performActionInternal = function(e) {
+  'use strict';
   var item = /** @type {Element} */ (this.getHighlightedItem());
   if (item) {
     if (goog.dom.classlist.contains(
@@ -91,6 +94,7 @@ goog.ui.CustomColorPalette.prototype.performActionInternal = function(e) {
  * but could be updated to use a dialog box with a WheelColorPalette.
  */
 goog.ui.CustomColorPalette.prototype.promptForCustomColor = function() {
+  'use strict';
   /** @desc Default custom color dialog. */
   var MSG_CLOSURE_CUSTOM_COLOR_PROMPT = goog.getMsg(
       'Input custom color, i.e. pink, #F00, #D015FF or rgb(100, 50, 25)');

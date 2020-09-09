@@ -35,6 +35,7 @@ goog.ui.GaugeTheme = function() {};
  * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getExternalBorderStroke = function() {
+  'use strict';
   return new goog.graphics.Stroke(1, '#333333');
 };
 
@@ -47,6 +48,7 @@ goog.ui.GaugeTheme.prototype.getExternalBorderStroke = function() {
  * @return {!goog.graphics.Fill} The fill to use.
  */
 goog.ui.GaugeTheme.prototype.getExternalBorderFill = function(cx, cy, r) {
+  'use strict';
   return new goog.graphics.LinearGradient(
       cx + r, cy - r, cx - r, cy + r, '#f7f7f7', '#cccccc');
 };
@@ -57,6 +59,7 @@ goog.ui.GaugeTheme.prototype.getExternalBorderFill = function(cx, cy, r) {
  * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getInternalBorderStroke = function() {
+  'use strict';
   return new goog.graphics.Stroke(2, '#e0e0e0');
 };
 
@@ -69,6 +72,7 @@ goog.ui.GaugeTheme.prototype.getInternalBorderStroke = function() {
  * @return {!goog.graphics.Fill} The fill to use.
  */
 goog.ui.GaugeTheme.prototype.getInternalBorderFill = function(cx, cy, r) {
+  'use strict';
   return new goog.graphics.SolidFill('#f7f7f7');
 };
 
@@ -78,6 +82,7 @@ goog.ui.GaugeTheme.prototype.getInternalBorderFill = function(cx, cy, r) {
  * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getMajorTickStroke = function() {
+  'use strict';
   return new goog.graphics.Stroke(2, '#333333');
 };
 
@@ -87,6 +92,7 @@ goog.ui.GaugeTheme.prototype.getMajorTickStroke = function() {
  * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getMinorTickStroke = function() {
+  'use strict';
   return new goog.graphics.Stroke(1, '#666666');
 };
 
@@ -96,6 +102,7 @@ goog.ui.GaugeTheme.prototype.getMinorTickStroke = function() {
  * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getHingeStroke = function() {
+  'use strict';
   return new goog.graphics.Stroke(1, '#666666');
 };
 
@@ -108,6 +115,7 @@ goog.ui.GaugeTheme.prototype.getHingeStroke = function() {
  * @return {!goog.graphics.Fill} The fill to use.
  */
 goog.ui.GaugeTheme.prototype.getHingeFill = function(cx, cy, r) {
+  'use strict';
   return new goog.graphics.LinearGradient(
       cx + r, cy - r, cx - r, cy + r, '#4684ee', '#3776d6');
 };
@@ -118,6 +126,7 @@ goog.ui.GaugeTheme.prototype.getHingeFill = function(cx, cy, r) {
  * @return {!goog.graphics.Stroke} The stroke to use.
  */
 goog.ui.GaugeTheme.prototype.getNeedleStroke = function() {
+  'use strict';
   return new goog.graphics.Stroke(1, '#c63310');
 };
 
@@ -130,6 +139,7 @@ goog.ui.GaugeTheme.prototype.getNeedleStroke = function() {
  * @return {!goog.graphics.Fill} The fill to use.
  */
 goog.ui.GaugeTheme.prototype.getNeedleFill = function(cx, cy, r) {
+  'use strict';
   // Make needle a bit transparent so that text underneeth is still visible.
   return new goog.graphics.SolidFill('#dc3912', 0.7);
 };
@@ -140,6 +150,7 @@ goog.ui.GaugeTheme.prototype.getNeedleFill = function(cx, cy, r) {
  * @return {string} The color to use.
  */
 goog.ui.GaugeTheme.prototype.getTitleColor = function() {
+  'use strict';
   return '#333333';
 };
 
@@ -149,6 +160,7 @@ goog.ui.GaugeTheme.prototype.getTitleColor = function() {
  * @return {string} The color to use.
  */
 goog.ui.GaugeTheme.prototype.getValueColor = function() {
+  'use strict';
   return 'black';
 };
 
@@ -158,5 +170,6 @@ goog.ui.GaugeTheme.prototype.getValueColor = function() {
  * @return {string} The color to use.
  */
 goog.ui.GaugeTheme.prototype.getTickLabelColor = function() {
+  'use strict';
   return '#333333';
 };

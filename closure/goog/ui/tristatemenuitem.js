@@ -42,6 +42,7 @@ goog.requireType('goog.ui.MenuItemRenderer');
  */
 goog.ui.TriStateMenuItem = function(
     content, opt_model, opt_domHelper, opt_renderer, opt_alwaysAllowPartial) {
+  'use strict';
   goog.ui.MenuItem.call(
       this, content, opt_model, opt_domHelper,
       opt_renderer || new goog.ui.TriStateMenuItemRenderer());
@@ -103,6 +104,7 @@ goog.ui.TriStateMenuItem.prototype.alwaysAllowPartial_ = false;
  * @return {goog.ui.TriStateMenuItem.State} The menu item's check state.
  */
 goog.ui.TriStateMenuItem.prototype.getCheckedState = function() {
+  'use strict';
   return this.checkState_;
 };
 
@@ -112,6 +114,7 @@ goog.ui.TriStateMenuItem.prototype.getCheckedState = function() {
  * @param {goog.ui.TriStateMenuItem.State} state The checked state.
  */
 goog.ui.TriStateMenuItem.prototype.setCheckedState = function(state) {
+  'use strict';
   this.setCheckedState_(state);
   this.allowPartial_ =
       state == goog.ui.TriStateMenuItem.State.PARTIALLY_CHECKED;
@@ -127,6 +130,7 @@ goog.ui.TriStateMenuItem.prototype.setCheckedState = function(state) {
  * @private
  */
 goog.ui.TriStateMenuItem.prototype.setCheckedState_ = function(state) {
+  'use strict';
   if (this.dispatchEvent(
           state != goog.ui.TriStateMenuItem.State.NOT_CHECKED ?
               goog.ui.Component.EventType.CHECK :
@@ -142,6 +146,7 @@ goog.ui.TriStateMenuItem.prototype.setCheckedState_ = function(state) {
 
 /** @override */
 goog.ui.TriStateMenuItem.prototype.performActionInternal = function(e) {
+  'use strict';
   switch (this.getCheckedState()) {
     case goog.ui.TriStateMenuItem.State.NOT_CHECKED:
       this.setCheckedState_(
@@ -175,6 +180,7 @@ goog.ui.TriStateMenuItem.prototype.performActionInternal = function(e) {
  * @private
  */
 goog.ui.TriStateMenuItem.prototype.updatedCheckedStateClassNames_ = function() {
+  'use strict';
   var renderer = this.getRenderer();
   renderer.enableExtraClassName(
       this, goog.getCssName(renderer.getCssClass(), 'partially-checked'),
@@ -189,6 +195,7 @@ goog.ui.TriStateMenuItem.prototype.updatedCheckedStateClassNames_ = function() {
 // Register a decorator factory function for goog.ui.TriStateMenuItemRenderer.
 goog.ui.registry.setDecoratorByClassName(
     goog.ui.TriStateMenuItemRenderer.CSS_CLASS, function() {
+      'use strict';
       // TriStateMenuItem defaults to using TriStateMenuItemRenderer.
       return new goog.ui.TriStateMenuItem(null);
     });

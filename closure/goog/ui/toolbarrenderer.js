@@ -27,6 +27,7 @@ goog.requireType('goog.ui.Control');
  * @extends {goog.ui.ContainerRenderer}
  */
 goog.ui.ToolbarRenderer = function() {
+  'use strict';
   goog.ui.ContainerRenderer.call(this, goog.a11y.aria.Role.TOOLBAR);
 };
 goog.inherits(goog.ui.ToolbarRenderer, goog.ui.ContainerRenderer);
@@ -51,6 +52,7 @@ goog.ui.ToolbarRenderer.CSS_CLASS = goog.getCssName('goog-toolbar');
  * @override
  */
 goog.ui.ToolbarRenderer.prototype.getDecoratorForChild = function(element) {
+  'use strict';
   return element.tagName == goog.dom.TagName.HR ?
       new goog.ui.Separator(goog.ui.ToolbarSeparatorRenderer.getInstance()) :
       goog.ui.ToolbarRenderer.superClass_.getDecoratorForChild.call(
@@ -65,6 +67,7 @@ goog.ui.ToolbarRenderer.prototype.getDecoratorForChild = function(element) {
  * @override
  */
 goog.ui.ToolbarRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.ToolbarRenderer.CSS_CLASS;
 };
 
@@ -77,5 +80,6 @@ goog.ui.ToolbarRenderer.prototype.getCssClass = function() {
  * @override
  */
 goog.ui.ToolbarRenderer.prototype.getDefaultOrientation = function() {
+  'use strict';
   return goog.ui.Container.Orientation.HORIZONTAL;
 };

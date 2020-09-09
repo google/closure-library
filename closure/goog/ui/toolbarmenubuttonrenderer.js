@@ -21,6 +21,7 @@ goog.require('goog.ui.MenuButtonRenderer');
  * @extends {goog.ui.MenuButtonRenderer}
  */
 goog.ui.ToolbarMenuButtonRenderer = function() {
+  'use strict';
   goog.ui.MenuButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.ToolbarMenuButtonRenderer, goog.ui.MenuButtonRenderer);
@@ -43,5 +44,6 @@ goog.ui.ToolbarMenuButtonRenderer.CSS_CLASS =
  * @override
  */
 goog.ui.ToolbarMenuButtonRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.ToolbarMenuButtonRenderer.CSS_CLASS;
 };

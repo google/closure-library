@@ -46,6 +46,7 @@ goog.requireType('goog.events.KeyEvent');
  * @final
  */
 goog.ui.AttachableMenu = function(opt_element) {
+  'use strict';
   goog.ui.MenuBase.call(this, opt_element);
 };
 goog.inherits(goog.ui.AttachableMenu, goog.ui.MenuBase);
@@ -86,6 +87,7 @@ goog.ui.AttachableMenu.prototype.lastKeyDown_ = goog.now();
 
 /** @override */
 goog.ui.AttachableMenu.prototype.disposeInternal = function() {
+  'use strict';
   goog.ui.AttachableMenu.superClass_.disposeInternal.call(this);
   this.selectedElement_ = null;
 };
@@ -97,6 +99,7 @@ goog.ui.AttachableMenu.prototype.disposeInternal = function() {
  * @return {string} The class name to use for items.
  */
 goog.ui.AttachableMenu.prototype.getItemClassName = function() {
+  'use strict';
   return this.itemClassName_;
 };
 
@@ -107,6 +110,7 @@ goog.ui.AttachableMenu.prototype.getItemClassName = function() {
  * @param {string} name The class name to use for items.
  */
 goog.ui.AttachableMenu.prototype.setItemClassName = function(name) {
+  'use strict';
   this.itemClassName_ = name;
 };
 
@@ -118,6 +122,7 @@ goog.ui.AttachableMenu.prototype.setItemClassName = function(name) {
  * @return {string} The class name to use for selected items.
  */
 goog.ui.AttachableMenu.prototype.getSelectedItemClassName = function() {
+  'use strict';
   return this.selectedItemClassName_;
 };
 
@@ -129,6 +134,7 @@ goog.ui.AttachableMenu.prototype.getSelectedItemClassName = function() {
  * @param {string} name The class name to use for selected items.
  */
 goog.ui.AttachableMenu.prototype.setSelectedItemClassName = function(name) {
+  'use strict';
   this.selectedItemClassName_ = name;
 };
 
@@ -140,12 +146,14 @@ goog.ui.AttachableMenu.prototype.setSelectedItemClassName = function(name) {
  * @override
  */
 goog.ui.AttachableMenu.prototype.getSelectedItem = function() {
+  'use strict';
   return this.selectedElement_;
 };
 
 
 /** @override */
 goog.ui.AttachableMenu.prototype.setSelectedItem = function(obj) {
+  'use strict';
   var elt = /** @type {HTMLElement} */ (obj);
   if (this.selectedElement_) {
     goog.dom.classlist.remove(
@@ -188,6 +196,7 @@ goog.ui.AttachableMenu.prototype.setSelectedItem = function(obj) {
 
 /** @override */
 goog.ui.AttachableMenu.prototype.showPopupElement = function() {
+  'use strict';
   // The scroll position cannot be set for hidden (display: none) elements in
   // gecko browsers.
   var el = /** @type {Element} */ (this.getElement());
@@ -204,6 +213,7 @@ goog.ui.AttachableMenu.prototype.showPopupElement = function() {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.AttachableMenu.prototype.onShow = function() {
+  'use strict';
   goog.ui.AttachableMenu.superClass_.onShow.call(this);
 
   // In IE, focusing the menu causes weird scrolling to happen. Focusing the
@@ -223,6 +233,7 @@ goog.ui.AttachableMenu.prototype.onShow = function() {
  * @protected
  */
 goog.ui.AttachableMenu.prototype.getNextPrevItem = function(prev) {
+  'use strict';
   // first find the index of the next element
   var elements = this.getElement().getElementsByTagName('*');
   var elementCount = elements.length;
@@ -270,6 +281,7 @@ goog.ui.AttachableMenu.prototype.getNextPrevItem = function(prev) {
  * @override
  */
 goog.ui.AttachableMenu.prototype.onMouseOver = function(e) {
+  'use strict';
   var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
   if (eltItem == null) {
     return;
@@ -289,6 +301,7 @@ goog.ui.AttachableMenu.prototype.onMouseOver = function(e) {
  * @override
  */
 goog.ui.AttachableMenu.prototype.onMouseOut = function(e) {
+  'use strict';
   var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
   if (eltItem == null) {
     return;
@@ -317,6 +330,7 @@ goog.ui.AttachableMenu.prototype.onMouseDown = goog.events.Event.preventDefault;
  * @override
  */
 goog.ui.AttachableMenu.prototype.onMouseUp = function(e) {
+  'use strict';
   var eltItem = this.getAncestorMenuItem_(/** @type {Element} */ (e.target));
   if (eltItem == null) {
     return;
@@ -333,6 +347,7 @@ goog.ui.AttachableMenu.prototype.onMouseUp = function(e) {
  * @override
  */
 goog.ui.AttachableMenu.prototype.onKeyDown = function(e) {
+  'use strict';
   switch (e.keyCode) {
     case goog.events.KeyCodes.DOWN:
       this.setSelectedItem(this.getNextPrevItem(false));
@@ -382,6 +397,7 @@ goog.ui.AttachableMenu.prototype.onKeyDown = function(e) {
  */
 goog.ui.AttachableMenu.prototype.selectByName_ = function(
     prefix, opt_direction, opt_skip) {
+  'use strict';
   var elements = this.getElement().getElementsByTagName('*');
   var elementCount = elements.length;
   var index;
@@ -428,10 +444,10 @@ goog.ui.AttachableMenu.prototype.selectByName_ = function(
  * @private
  */
 goog.ui.AttachableMenu.prototype.onItemSelected_ = function(opt_item) {
-  this.dispatchEvent(
-      new goog.ui.ItemEvent(
-          goog.ui.MenuBase.Events.ITEM_ACTION, this,
-          opt_item || this.selectedElement_));
+  'use strict';
+  this.dispatchEvent(new goog.ui.ItemEvent(
+      goog.ui.MenuBase.Events.ITEM_ACTION, this,
+      opt_item || this.selectedElement_));
 };
 
 
@@ -442,6 +458,7 @@ goog.ui.AttachableMenu.prototype.onItemSelected_ = function(opt_item) {
  * @private
  */
 goog.ui.AttachableMenu.prototype.isMenuItem_ = function(elt) {
+  'use strict';
   return !!elt && goog.dom.classlist.contains(elt, this.itemClassName_);
 };
 
@@ -455,6 +472,7 @@ goog.ui.AttachableMenu.prototype.isMenuItem_ = function(elt) {
  * @private
  */
 goog.ui.AttachableMenu.prototype.getAncestorMenuItem_ = function(elt) {
+  'use strict';
   if (elt) {
     var ownerDocumentBody = goog.dom.getOwnerDocument(elt).body;
     while (elt != null && elt != ownerDocumentBody) {

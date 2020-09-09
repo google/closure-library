@@ -29,6 +29,7 @@ goog.require('goog.ui.DatePickerRenderer');
  * @implements {goog.ui.DatePickerRenderer}
  */
 goog.ui.DefaultDatePickerRenderer = function(baseCssClass, opt_domHelper) {
+  'use strict';
   /**
    * Name of base CSS class of datepicker
    * @type {string}
@@ -49,6 +50,7 @@ goog.ui.DefaultDatePickerRenderer = function(baseCssClass, opt_domHelper) {
  * @return {!goog.dom.DomHelper} The dom helper used on this component.
  */
 goog.ui.DefaultDatePickerRenderer.prototype.getDomHelper = function() {
+  'use strict';
   return this.dom_;
 };
 
@@ -60,6 +62,7 @@ goog.ui.DefaultDatePickerRenderer.prototype.getDomHelper = function() {
  * @return {string} Base CSS class.
  */
 goog.ui.DefaultDatePickerRenderer.prototype.getBaseCssClass = function() {
+  'use strict';
   return this.baseCssClass_;
 };
 
@@ -80,6 +83,7 @@ goog.ui.DefaultDatePickerRenderer.prototype.getBaseCssClass = function() {
  */
 goog.ui.DefaultDatePickerRenderer.prototype.renderNavigationRow = function(
     row, simpleNavigation, showWeekNum, fullDateFormat) {
+  'use strict';
   // Populate the navigation row according to the configured navigation mode.
   var cell, monthCell, yearCell;
 
@@ -149,6 +153,7 @@ goog.ui.DefaultDatePickerRenderer.prototype.renderNavigationRow = function(
  */
 goog.ui.DefaultDatePickerRenderer.prototype.renderFooterRow = function(
     row, showWeekNum) {
+  'use strict';
   // Populate the footer row with buttons for Today and None.
   var cell = this.getDomHelper().createElement(goog.dom.TagName.TD);
   cell.colSpan = showWeekNum ? 2 : 3;
@@ -190,6 +195,7 @@ goog.ui.DefaultDatePickerRenderer.prototype.renderFooterRow = function(
  */
 goog.ui.DefaultDatePickerRenderer.prototype.createButton_ = function(
     parentNode, label, opt_className) {
+  'use strict';
   var classes = [goog.getCssName(this.getBaseCssClass(), 'btn')];
   if (opt_className) {
     classes.push(opt_className);

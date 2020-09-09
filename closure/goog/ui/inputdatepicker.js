@@ -48,6 +48,7 @@ goog.requireType('goog.ui.DatePickerEvent');
  */
 goog.ui.InputDatePicker = function(
     dateTimeFormatter, dateTimeParser, opt_datePicker, opt_domHelper) {
+  'use strict';
   goog.ui.Component.call(this, opt_domHelper);
 
   this.dateTimeFormatter_ = dateTimeFormatter;
@@ -101,6 +102,7 @@ goog.ui.InputDatePicker.prototype.popupParentElement_ = null;
  * @return {goog.ui.DatePicker} The internal DatePicker instance.
  */
 goog.ui.InputDatePicker.prototype.getDatePicker = function() {
+  'use strict';
   return this.popupDatePicker_.getDatePicker();
 };
 
@@ -111,6 +113,7 @@ goog.ui.InputDatePicker.prototype.getDatePicker = function() {
  * @return {goog.ui.PopupDatePicker} Popup instance.
  */
 goog.ui.InputDatePicker.prototype.getPopupDatePicker = function() {
+  'use strict';
   return this.popupDatePicker_;
 };
 
@@ -121,7 +124,7 @@ goog.ui.InputDatePicker.prototype.getPopupDatePicker = function() {
  * @return {goog.date.DateTime} The selected date, if any.
  */
 goog.ui.InputDatePicker.prototype.getDate = function() {
-
+  'use strict';
   // The user expectation is that the date be whatever the input shows.
   // This method biases towards the input value to conform to that expectation.
 
@@ -145,6 +148,7 @@ goog.ui.InputDatePicker.prototype.getDate = function() {
  * @param {goog.date.Date} date The date to set.
  */
 goog.ui.InputDatePicker.prototype.setDate = function(date) {
+  'use strict';
   this.popupDatePicker_.setDate(date);
 };
 
@@ -156,6 +160,7 @@ goog.ui.InputDatePicker.prototype.setDate = function(date) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.InputDatePicker.prototype.setInputValue = function(value) {
+  'use strict';
   var el = this.getElement();
   if (el.labelInput_) {
     var labelInput = /** @type {goog.ui.LabelInput} */ (el.labelInput_);
@@ -173,6 +178,7 @@ goog.ui.InputDatePicker.prototype.setInputValue = function(value) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.InputDatePicker.prototype.getInputValue = function() {
+  'use strict';
   var el = this.getElement();
   if (el.labelInput_) {
     var labelInput = /** @type {goog.ui.LabelInput} */ (el.labelInput_);
@@ -190,6 +196,7 @@ goog.ui.InputDatePicker.prototype.getInputValue = function() {
  * @private
  */
 goog.ui.InputDatePicker.prototype.setInputValueAsDate_ = function(date) {
+  'use strict';
   this.setInputValue(date ? this.dateTimeFormatter_.format(date) : '');
 };
 
@@ -202,6 +209,7 @@ goog.ui.InputDatePicker.prototype.setInputValueAsDate_ = function(date) {
  * @private
  */
 goog.ui.InputDatePicker.prototype.getInputValueAsDate_ = function() {
+  'use strict';
   var value = goog.string.trim(this.getInputValue());
   if (value) {
     var date = new goog.date.DateTime();
@@ -228,9 +236,9 @@ goog.ui.InputDatePicker.prototype.getInputValueAsDate_ = function() {
  * @override
  */
 goog.ui.InputDatePicker.prototype.createDom = function() {
-  this.setElementInternal(
-      this.getDomHelper().createDom(
-          goog.dom.TagName.INPUT, {'type': goog.dom.InputType.TEXT}));
+  'use strict';
+  this.setElementInternal(this.getDomHelper().createDom(
+      goog.dom.TagName.INPUT, {'type': goog.dom.InputType.TEXT}));
   this.popupDatePicker_.createDom();
 };
 
@@ -242,12 +250,14 @@ goog.ui.InputDatePicker.prototype.createDom = function() {
  *     to.
  */
 goog.ui.InputDatePicker.prototype.setPopupParentElement = function(el) {
+  'use strict';
   this.popupParentElement_ = el;
 };
 
 
 /** @override */
 goog.ui.InputDatePicker.prototype.enterDocument = function() {
+  'use strict';
   // this.popupDatePicker_ has been added as a child even though it isn't really
   // a child (since its root element is not within InputDatePicker's DOM tree).
   // The PopupDatePicker will have its enterDocument method called as a result
@@ -286,6 +296,7 @@ goog.ui.InputDatePicker.prototype.enterDocument = function() {
 
 /** @override */
 goog.ui.InputDatePicker.prototype.exitDocument = function() {
+  'use strict';
   goog.ui.InputDatePicker.superClass_.exitDocument.call(this);
   var el = this.getElement();
 
@@ -297,6 +308,7 @@ goog.ui.InputDatePicker.prototype.exitDocument = function() {
 
 /** @override */
 goog.ui.InputDatePicker.prototype.decorateInternal = function(element) {
+  'use strict';
   goog.ui.InputDatePicker.superClass_.decorateInternal.call(this, element);
 
   this.popupDatePicker_.createDom();
@@ -305,6 +317,7 @@ goog.ui.InputDatePicker.prototype.decorateInternal = function(element) {
 
 /** @override */
 goog.ui.InputDatePicker.prototype.disposeInternal = function() {
+  'use strict';
   goog.ui.InputDatePicker.superClass_.disposeInternal.call(this);
   this.popupDatePicker_.dispose();
   this.popupDatePicker_ = null;
@@ -318,6 +331,7 @@ goog.ui.InputDatePicker.prototype.disposeInternal = function() {
  *     will appear at the bottom-left corner of this element.
  */
 goog.ui.InputDatePicker.prototype.showForElement = function(element) {
+  'use strict';
   this.popupDatePicker_.showPopup(element);
 };
 
@@ -326,6 +340,7 @@ goog.ui.InputDatePicker.prototype.showForElement = function(element) {
  * See goog.ui.PopupDatePicker.hidePopup().
  */
 goog.ui.InputDatePicker.prototype.hidePopup = function() {
+  'use strict';
   this.popupDatePicker_.hidePopup();
 };
 
@@ -337,6 +352,7 @@ goog.ui.InputDatePicker.prototype.hidePopup = function() {
  * @private
  */
 goog.ui.InputDatePicker.prototype.onPopup_ = function(e) {
+  'use strict';
   var inputValueAsDate = this.getInputValueAsDate_();
   this.setDate(inputValueAsDate);
   // don't overwrite the input value with empty date if input is not valid
@@ -353,5 +369,6 @@ goog.ui.InputDatePicker.prototype.onPopup_ = function(e) {
  * @private
  */
 goog.ui.InputDatePicker.prototype.onDateChanged_ = function(e) {
+  'use strict';
   this.setInputValueAsDate_(e.date);
 };

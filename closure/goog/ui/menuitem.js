@@ -43,6 +43,7 @@ goog.requireType('goog.ui.ControlContent');  // circular
  * @extends {goog.ui.Control}
  */
 goog.ui.MenuItem = function(content, opt_model, opt_domHelper, opt_renderer) {
+  'use strict';
   goog.ui.Control.call(
       this, content, opt_renderer || goog.ui.MenuItemRenderer.getInstance(),
       opt_domHelper);
@@ -93,6 +94,7 @@ goog.ui.MenuItem.ACCELERATOR_CLASS = goog.getCssName('goog-menuitem-accel');
  * @return {*} Value associated with the menu item, if any, or its caption.
  */
 goog.ui.MenuItem.prototype.getValue = function() {
+  'use strict';
   var model = this.getModel();
   return model != null ? model : this.getCaption();
 };
@@ -104,12 +106,14 @@ goog.ui.MenuItem.prototype.getValue = function() {
  * @param {*} value Value to be associated with the menu item.
  */
 goog.ui.MenuItem.prototype.setValue = function(value) {
+  'use strict';
   this.setModel(value);
 };
 
 
 /** @override */
 goog.ui.MenuItem.prototype.setSupportedState = function(state, support) {
+  'use strict';
   goog.ui.MenuItem.base(this, 'setSupportedState', state, support);
   switch (state) {
     case goog.ui.Component.State.SELECTED:
@@ -128,6 +132,7 @@ goog.ui.MenuItem.prototype.setSupportedState = function(state, support) {
  * @param {boolean} selectable Whether the menu item is selectable.
  */
 goog.ui.MenuItem.prototype.setSelectable = function(selectable) {
+  'use strict';
   this.setSupportedState(goog.ui.Component.State.SELECTED, selectable);
 };
 
@@ -138,6 +143,7 @@ goog.ui.MenuItem.prototype.setSelectable = function(selectable) {
  * @private
  */
 goog.ui.MenuItem.prototype.setSelectableInternal_ = function(selectable) {
+  'use strict';
   if (this.isChecked() && !selectable) {
     this.setChecked(false);
   }
@@ -155,6 +161,7 @@ goog.ui.MenuItem.prototype.setSelectableInternal_ = function(selectable) {
  * @param {boolean} checkable Whether the menu item is checkable.
  */
 goog.ui.MenuItem.prototype.setCheckable = function(checkable) {
+  'use strict';
   this.setSupportedState(goog.ui.Component.State.CHECKED, checkable);
 };
 
@@ -165,6 +172,7 @@ goog.ui.MenuItem.prototype.setCheckable = function(checkable) {
  * @private
  */
 goog.ui.MenuItem.prototype.setCheckableInternal_ = function(checkable) {
+  'use strict';
   var element = this.getElement();
   if (element) {
     this.getRenderer().setCheckable(this, element, checkable);
@@ -177,6 +185,7 @@ goog.ui.MenuItem.prototype.setCheckableInternal_ = function(checkable) {
  * @override
  */
 goog.ui.MenuItem.prototype.getCaption = function() {
+  'use strict';
   var content = this.getContent();
   if (Array.isArray(content)) {
     var acceleratorClass = goog.ui.MenuItem.ACCELERATOR_CLASS;
@@ -186,6 +195,7 @@ goog.ui.MenuItem.prototype.getCaption = function() {
             .map(
                 content,
                 function(node) {
+                  'use strict';
                   if (goog.dom.isElement(node) &&
                       (goog.dom.classlist.contains(
                            /** @type {!Element} */ (node), acceleratorClass) ||
@@ -209,10 +219,12 @@ goog.ui.MenuItem.prototype.getCaption = function() {
  *     doesn't have one.
  */
 goog.ui.MenuItem.prototype.getAccelerator = function() {
+  'use strict';
   var dom = this.getDomHelper();
   var content = this.getContent();
   if (Array.isArray(content)) {
     var acceleratorEl = goog.array.find(content, function(e) {
+      'use strict';
       return goog.dom.classlist.contains(
           /** @type {!Element} */ (e), goog.ui.MenuItem.ACCELERATOR_CLASS);
     });
@@ -226,6 +238,7 @@ goog.ui.MenuItem.prototype.getAccelerator = function() {
 
 /** @override */
 goog.ui.MenuItem.prototype.handleMouseUp = function(e) {
+  'use strict';
   var parentMenu = /** @type {goog.ui.Menu} */ (this.getParent());
 
   if (parentMenu) {
@@ -252,6 +265,7 @@ goog.ui.MenuItem.prototype.handleMouseUp = function(e) {
 
 /** @override */
 goog.ui.MenuItem.prototype.handleKeyEventInternal = function(e) {
+  'use strict';
   if (e.keyCode == this.getMnemonic() && this.performActionInternal(e)) {
     return true;
   } else {
@@ -266,6 +280,7 @@ goog.ui.MenuItem.prototype.handleKeyEventInternal = function(e) {
  * @param {goog.events.KeyCodes} key The key code.
  */
 goog.ui.MenuItem.prototype.setMnemonic = function(key) {
+  'use strict';
   this.mnemonicKey_ = key;
 };
 
@@ -276,6 +291,7 @@ goog.ui.MenuItem.prototype.setMnemonic = function(key) {
  * @return {goog.events.KeyCodes} The key code of the mnemonic key.
  */
 goog.ui.MenuItem.prototype.getMnemonic = function() {
+  'use strict';
   return this.mnemonicKey_;
 };
 
@@ -283,6 +299,7 @@ goog.ui.MenuItem.prototype.getMnemonic = function() {
 // Register a decorator factory function for goog.ui.MenuItems.
 goog.ui.registry.setDecoratorByClassName(
     goog.ui.MenuItemRenderer.CSS_CLASS, function() {
+      'use strict';
       // MenuItem defaults to using MenuItemRenderer.
       return new goog.ui.MenuItem(null);
     });
@@ -292,6 +309,7 @@ goog.ui.registry.setDecoratorByClassName(
  * @override
  */
 goog.ui.MenuItem.prototype.getPreferredAriaRole = function() {
+  'use strict';
   if (this.isSupportedState(goog.ui.Component.State.CHECKED)) {
     return goog.a11y.aria.Role.MENU_ITEM_CHECKBOX;
   }
@@ -307,6 +325,7 @@ goog.ui.MenuItem.prototype.getPreferredAriaRole = function() {
  * @return {goog.ui.Menu}
  */
 goog.ui.MenuItem.prototype.getParent = function() {
+  'use strict';
   return /** @type {goog.ui.Menu} */ (
       goog.ui.Control.prototype.getParent.call(this));
 };
@@ -317,6 +336,7 @@ goog.ui.MenuItem.prototype.getParent = function() {
  * @return {goog.ui.Menu}
  */
 goog.ui.MenuItem.prototype.getParentEventTarget = function() {
+  'use strict';
   return /** @type {goog.ui.Menu} */ (
       goog.ui.Control.prototype.getParentEventTarget.call(this));
 };

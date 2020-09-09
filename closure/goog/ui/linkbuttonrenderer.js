@@ -29,6 +29,7 @@ goog.require('goog.ui.registry');
  * @extends {goog.ui.FlatButtonRenderer}
  */
 goog.ui.LinkButtonRenderer = function() {
+  'use strict';
   goog.ui.FlatButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.LinkButtonRenderer, goog.ui.FlatButtonRenderer);
@@ -45,6 +46,7 @@ goog.ui.LinkButtonRenderer.CSS_CLASS = goog.getCssName('goog-link-button');
 
 /** @override */
 goog.ui.LinkButtonRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.LinkButtonRenderer.CSS_CLASS;
 };
 
@@ -52,6 +54,7 @@ goog.ui.LinkButtonRenderer.prototype.getCssClass = function() {
 // Register a decorator factory function for Link Buttons.
 goog.ui.registry.setDecoratorByClassName(
     goog.ui.LinkButtonRenderer.CSS_CLASS, function() {
+      'use strict';
       // Uses goog.ui.Button, but with LinkButtonRenderer.
       return new goog.ui.Button(null, goog.ui.LinkButtonRenderer.getInstance());
     });

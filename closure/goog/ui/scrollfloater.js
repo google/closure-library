@@ -56,6 +56,7 @@ goog.requireType('goog.math.Rect');
  * @extends {goog.ui.Component}
  */
 goog.ui.ScrollFloater = function(opt_parentElement, opt_domHelper) {
+  'use strict';
   // If a parentElement is supplied, we want to use its domHelper,
   // ignoring the caller-supplied one.
   var domHelper = opt_parentElement ? goog.dom.getDomHelper(opt_parentElement) :
@@ -230,6 +231,7 @@ goog.ui.ScrollFloater.CSS_CLASS_ = goog.getCssName('goog-scrollfloater');
  * @override
  */
 goog.ui.ScrollFloater.prototype.createDom = function() {
+  'use strict';
   goog.ui.ScrollFloater.base(this, 'createDom');
 
   this.decorateInternal(this.getElement());
@@ -242,6 +244,7 @@ goog.ui.ScrollFloater.prototype.createDom = function() {
  * @override
  */
 goog.ui.ScrollFloater.prototype.decorateInternal = function(element) {
+  'use strict';
   goog.ui.ScrollFloater.base(this, 'decorateInternal', element);
   goog.asserts.assert(element);
   goog.dom.classlist.add(element, goog.ui.ScrollFloater.CSS_CLASS_);
@@ -250,6 +253,7 @@ goog.ui.ScrollFloater.prototype.decorateInternal = function(element) {
 
 /** @override */
 goog.ui.ScrollFloater.prototype.enterDocument = function() {
+  'use strict';
   goog.ui.ScrollFloater.base(this, 'enterDocument');
 
   if (!this.placeholder_) {
@@ -272,6 +276,7 @@ goog.ui.ScrollFloater.prototype.enterDocument = function() {
  * to re-evaluate whether the component should be docked, floated or pinned.
  */
 goog.ui.ScrollFloater.prototype.update = function() {
+  'use strict';
   if (!this.isInDocument()) {
     return;
   }
@@ -292,6 +297,7 @@ goog.ui.ScrollFloater.prototype.update = function() {
 
 /** @override */
 goog.ui.ScrollFloater.prototype.disposeInternal = function() {
+  'use strict';
   goog.ui.ScrollFloater.base(this, 'disposeInternal');
 
   this.placeholder_ = null;
@@ -303,6 +309,7 @@ goog.ui.ScrollFloater.prototype.disposeInternal = function() {
  * @param {boolean} enable Whether floating is enabled for this element.
  */
 goog.ui.ScrollFloater.prototype.setScrollingEnabled = function(enable) {
+  'use strict';
   this.scrollingEnabled_ = enable;
 
   if (enable) {
@@ -318,6 +325,7 @@ goog.ui.ScrollFloater.prototype.setScrollingEnabled = function(enable) {
  * @return {boolean} Whether the component is enabled for scroll-floating.
  */
 goog.ui.ScrollFloater.prototype.isScrollingEnabled = function() {
+  'use strict';
   return this.scrollingEnabled_;
 };
 
@@ -326,6 +334,7 @@ goog.ui.ScrollFloater.prototype.isScrollingEnabled = function() {
  * @return {boolean} Whether the component is currently scroll-floating.
  */
 goog.ui.ScrollFloater.prototype.isFloating = function() {
+  'use strict';
   return this.floating_;
 };
 
@@ -335,6 +344,7 @@ goog.ui.ScrollFloater.prototype.isFloating = function() {
  *     of the container.
  */
 goog.ui.ScrollFloater.prototype.isPinned = function() {
+  'use strict';
   return this.pinned_;
 };
 
@@ -345,6 +355,7 @@ goog.ui.ScrollFloater.prototype.isPinned = function() {
  *    when there are 'position:fixed' elements covering up part of the viewport.
  */
 goog.ui.ScrollFloater.prototype.setViewportTopOffset = function(offset) {
+  'use strict';
   this.viewportTopOffset_ = offset;
   this.update();
 };
@@ -361,6 +372,7 @@ goog.ui.ScrollFloater.prototype.setViewportTopOffset = function(offset) {
  *     the container.
  */
 goog.ui.ScrollFloater.prototype.setContainerElement = function(container) {
+  'use strict';
   this.containerElement_ = container;
   this.update();
 };
@@ -373,6 +385,7 @@ goog.ui.ScrollFloater.prototype.setContainerElement = function(container) {
  * @private
  */
 goog.ui.ScrollFloater.prototype.handleScroll_ = function(opt_e) {
+  'use strict';
   if (this.scrollingEnabled_) {
     var scrollTop = this.getDomHelper().getDocumentScroll().y;
 
@@ -425,6 +438,7 @@ goog.ui.ScrollFloater.prototype.handleScroll_ = function(opt_e) {
  * @private
  */
 goog.ui.ScrollFloater.prototype.pin_ = function() {
+  'use strict';
   if (this.floating_ && !this.dock_()) {
     return;
   }
@@ -457,6 +471,7 @@ goog.ui.ScrollFloater.prototype.pin_ = function() {
  * @private
  */
 goog.ui.ScrollFloater.prototype.float_ = function(floatMode) {
+  'use strict';
   var isTop = floatMode == goog.ui.ScrollFloater.FloatMode_.TOP;
   if (this.pinned_ && !this.dock_()) {
     return;
@@ -533,6 +548,7 @@ goog.ui.ScrollFloater.prototype.float_ = function(floatMode) {
  * @private
  */
 goog.ui.ScrollFloater.prototype.dock_ = function() {
+  'use strict';
   // Ignore if the component is docked or the DOCK event is cancelled.
   if (!(this.floating_ || this.pinned_) ||
       !this.dispatchEvent(goog.ui.ScrollFloater.EventType.DOCK)) {
@@ -576,6 +592,7 @@ goog.ui.ScrollFloater.prototype.dock_ = function() {
  * @private
  */
 goog.ui.ScrollFloater.prototype.updateFloatingLeftPosition_ = function() {
+  'use strict';
   goog.asserts.assert(this.floating_);
 
   var newWindowLeftOffset_ = goog.dom.getDocumentScroll().x;
@@ -590,6 +607,7 @@ goog.ui.ScrollFloater.prototype.updateFloatingLeftPosition_ = function() {
  * @private
  */
 goog.ui.ScrollFloater.prototype.storeOriginalStyles_ = function() {
+  'use strict';
   var elem = this.getElement();
   this.originalStyles_ = {};
 
@@ -597,6 +615,7 @@ goog.ui.ScrollFloater.prototype.storeOriginalStyles_ = function() {
   // element stops floating.
   goog.array.forEach(
       goog.ui.ScrollFloater.STORED_STYLE_PROPS_, function(property) {
+        'use strict';
         this.originalStyles_[property] = elem.style[property];
       }, this);
 
@@ -604,6 +623,7 @@ goog.ui.ScrollFloater.prototype.storeOriginalStyles_ = function() {
   // as the element that's about to be floated.
   goog.array.forEach(
       goog.ui.ScrollFloater.PLACEHOLDER_STYLE_PROPS_, function(property) {
+        'use strict';
         this.placeholder_.style[property] = elem.style[property] ||
             goog.style.getCascadedStyle(elem, property) ||
             goog.style.getComputedStyle(elem, property);
@@ -615,6 +635,7 @@ goog.ui.ScrollFloater.prototype.storeOriginalStyles_ = function() {
  * @private
  */
 goog.ui.ScrollFloater.prototype.restoreOriginalStyles_ = function() {
+  'use strict';
   var elem = this.getElement();
   for (var prop in this.originalStyles_) {
     elem.style[prop] = this.originalStyles_[prop];
@@ -629,6 +650,7 @@ goog.ui.ScrollFloater.prototype.restoreOriginalStyles_ = function() {
  * @private
  */
 goog.ui.ScrollFloater.prototype.needsIePositionHack_ = function() {
+  'use strict';
   return goog.userAgent.IE &&
       !(goog.userAgent.isVersionOrHigher('7') &&
         this.getDomHelper().isCss1CompatMode());
@@ -646,6 +668,7 @@ goog.ui.ScrollFloater.prototype.needsIePositionHack_ = function() {
  * @private
  */
 goog.ui.ScrollFloater.prototype.applyIeBgHack_ = function() {
+  'use strict';
   if (this.needsIePositionHack_()) {
     var doc = this.getDomHelper().getDocument();
     var topLevelElement = goog.style.getClientViewportElement(doc);

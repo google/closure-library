@@ -28,6 +28,7 @@ goog.require('goog.events.EventType');
  * @constructor
  */
 goog.ui.SelectionModel = function(opt_items) {
+  'use strict';
   goog.events.EventTarget.call(this);
 
   /**
@@ -67,6 +68,7 @@ goog.ui.SelectionModel.prototype.selectionHandler_ = null;
  * @return {Function} Selection handler function (null if none).
  */
 goog.ui.SelectionModel.prototype.getSelectionHandler = function() {
+  'use strict';
   return this.selectionHandler_;
 };
 
@@ -81,6 +83,7 @@ goog.ui.SelectionModel.prototype.getSelectionHandler = function() {
  * @param {Function} handler Selection handler function.
  */
 goog.ui.SelectionModel.prototype.setSelectionHandler = function(handler) {
+  'use strict';
   this.selectionHandler_ = handler;
 };
 
@@ -90,6 +93,7 @@ goog.ui.SelectionModel.prototype.setSelectionHandler = function(handler) {
  * @return {number} Number of items.
  */
 goog.ui.SelectionModel.prototype.getItemCount = function() {
+  'use strict';
   return this.items_.length;
 };
 
@@ -101,6 +105,7 @@ goog.ui.SelectionModel.prototype.getItemCount = function() {
  * @return {number} Index of the given item (-1 if none).
  */
 goog.ui.SelectionModel.prototype.indexOfItem = function(item) {
+  'use strict';
   return item ? goog.array.indexOf(this.items_, item) : -1;
 };
 
@@ -110,6 +115,7 @@ goog.ui.SelectionModel.prototype.indexOfItem = function(item) {
  *     in the model.
  */
 goog.ui.SelectionModel.prototype.getFirst = function() {
+  'use strict';
   return this.items_[0];
 };
 
@@ -119,6 +125,7 @@ goog.ui.SelectionModel.prototype.getFirst = function() {
  *     in the model.
  */
 goog.ui.SelectionModel.prototype.getLast = function() {
+  'use strict';
   return this.items_[this.items_.length - 1];
 };
 
@@ -129,6 +136,7 @@ goog.ui.SelectionModel.prototype.getLast = function() {
  * @return {Object} Item at the given index (null if none).
  */
 goog.ui.SelectionModel.prototype.getItemAt = function(index) {
+  'use strict';
   return this.items_[index] || null;
 };
 
@@ -139,10 +147,13 @@ goog.ui.SelectionModel.prototype.getItemAt = function(index) {
  * @param {Array<Object>|undefined} items New items to add.
  */
 goog.ui.SelectionModel.prototype.addItems = function(items) {
+  'use strict';
   if (items) {
     // New items shouldn't be selected.
-    goog.array.forEach(
-        items, function(item) { this.selectItem_(item, false); }, this);
+    goog.array.forEach(items, function(item) {
+      'use strict';
+      this.selectItem_(item, false);
+    }, this);
     goog.array.extend(this.items_, items);
   }
 };
@@ -153,6 +164,7 @@ goog.ui.SelectionModel.prototype.addItems = function(items) {
  * @param {Object} item Item to add.
  */
 goog.ui.SelectionModel.prototype.addItem = function(item) {
+  'use strict';
   this.addItemAt(item, this.getItemCount());
 };
 
@@ -163,6 +175,7 @@ goog.ui.SelectionModel.prototype.addItem = function(item) {
  * @param {number} index Index at which to add the new item.
  */
 goog.ui.SelectionModel.prototype.addItemAt = function(item, index) {
+  'use strict';
   if (item) {
     // New items must not be selected.
     this.selectItem_(item, false);
@@ -177,6 +190,7 @@ goog.ui.SelectionModel.prototype.addItemAt = function(item, index) {
  * @param {Object} item Item to remove.
  */
 goog.ui.SelectionModel.prototype.removeItem = function(item) {
+  'use strict';
   if (item && goog.array.remove(this.items_, item)) {
     if (item == this.selectedItem_) {
       this.selectedItem_ = null;
@@ -191,6 +205,7 @@ goog.ui.SelectionModel.prototype.removeItem = function(item) {
  * @param {number} index Index of the item to remove.
  */
 goog.ui.SelectionModel.prototype.removeItemAt = function(index) {
+  'use strict';
   this.removeItem(this.getItemAt(index));
 };
 
@@ -199,6 +214,7 @@ goog.ui.SelectionModel.prototype.removeItemAt = function(index) {
  * @return {Object} The currently selected item, or null if none.
  */
 goog.ui.SelectionModel.prototype.getSelectedItem = function() {
+  'use strict';
   return this.selectedItem_;
 };
 
@@ -207,6 +223,7 @@ goog.ui.SelectionModel.prototype.getSelectedItem = function() {
  * @return {!Array<Object>} All items in the selection model.
  */
 goog.ui.SelectionModel.prototype.getItems = function() {
+  'use strict';
   return goog.array.clone(this.items_);
 };
 
@@ -217,6 +234,7 @@ goog.ui.SelectionModel.prototype.getItems = function() {
  * @param {Object} item Item to select (null to clear the selection).
  */
 goog.ui.SelectionModel.prototype.setSelectedItem = function(item) {
+  'use strict';
   if (item != this.selectedItem_) {
     this.selectItem_(this.selectedItem_, false);
     this.selectedItem_ = item;
@@ -234,6 +252,7 @@ goog.ui.SelectionModel.prototype.setSelectedItem = function(item) {
  *     if none.
  */
 goog.ui.SelectionModel.prototype.getSelectedIndex = function() {
+  'use strict';
   return this.indexOfItem(this.selectedItem_);
 };
 
@@ -244,6 +263,7 @@ goog.ui.SelectionModel.prototype.getSelectedIndex = function() {
  * @param {number} index Index to select (-1 to clear the selection).
  */
 goog.ui.SelectionModel.prototype.setSelectedIndex = function(index) {
+  'use strict';
   this.setSelectedItem(this.getItemAt(index));
 };
 
@@ -252,6 +272,7 @@ goog.ui.SelectionModel.prototype.setSelectedIndex = function(index) {
  * Clears the selection model by removing all items from the selection.
  */
 goog.ui.SelectionModel.prototype.clear = function() {
+  'use strict';
   goog.array.clear(this.items_);
   this.selectedItem_ = null;
 };
@@ -259,6 +280,7 @@ goog.ui.SelectionModel.prototype.clear = function() {
 
 /** @override */
 goog.ui.SelectionModel.prototype.disposeInternal = function() {
+  'use strict';
   goog.ui.SelectionModel.superClass_.disposeInternal.call(this);
   delete this.items_;
   this.selectedItem_ = null;
@@ -277,6 +299,7 @@ goog.ui.SelectionModel.prototype.disposeInternal = function() {
  * @private
  */
 goog.ui.SelectionModel.prototype.selectItem_ = function(item, select) {
+  'use strict';
   if (item) {
     if (typeof this.selectionHandler_ == 'function') {
       // Use the registered selection handler function.

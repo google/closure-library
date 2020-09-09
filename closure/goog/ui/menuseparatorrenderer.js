@@ -24,6 +24,7 @@ goog.requireType('goog.ui.ControlContent');
  * @extends {goog.ui.ControlRenderer}
  */
 goog.ui.MenuSeparatorRenderer = function() {
+  'use strict';
   goog.ui.ControlRenderer.call(this);
 };
 goog.inherits(goog.ui.MenuSeparatorRenderer, goog.ui.ControlRenderer);
@@ -46,6 +47,7 @@ goog.ui.MenuSeparatorRenderer.CSS_CLASS = goog.getCssName('goog-menuseparator');
  * @override
  */
 goog.ui.MenuSeparatorRenderer.prototype.createDom = function(separator) {
+  'use strict';
   return separator.getDomHelper().createDom(
       goog.dom.TagName.DIV, this.getCssClass());
 };
@@ -62,6 +64,7 @@ goog.ui.MenuSeparatorRenderer.prototype.createDom = function(separator) {
  */
 goog.ui.MenuSeparatorRenderer.prototype.decorate = function(
     separator, element) {
+  'use strict';
   // Normally handled in the superclass. But we don't call the superclass.
   if (element.id) {
     separator.setId(element.id);
@@ -101,5 +104,6 @@ goog.ui.MenuSeparatorRenderer.prototype.setContent = function(
  * @override
  */
 goog.ui.MenuSeparatorRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.MenuSeparatorRenderer.CSS_CLASS;
 };

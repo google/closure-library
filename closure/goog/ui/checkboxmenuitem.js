@@ -31,6 +31,7 @@ goog.requireType('goog.ui.ControlContent');
  * @extends {goog.ui.MenuItem}
  */
 goog.ui.CheckBoxMenuItem = function(content, opt_model, opt_domHelper) {
+  'use strict';
   goog.ui.MenuItem.call(this, content, opt_model, opt_domHelper);
   this.setCheckable(true);
 };
@@ -40,6 +41,7 @@ goog.inherits(goog.ui.CheckBoxMenuItem, goog.ui.MenuItem);
 // Register a decorator factory function for goog.ui.CheckBoxMenuItems.
 goog.ui.registry.setDecoratorByClassName(
     goog.getCssName('goog-checkbox-menuitem'), function() {
+      'use strict';
       // CheckBoxMenuItem defaults to using MenuItemRenderer.
       return new goog.ui.CheckBoxMenuItem(null);
     });

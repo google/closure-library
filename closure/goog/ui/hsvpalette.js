@@ -45,6 +45,7 @@ goog.requireType('goog.math.Rect');
  * @constructor
  */
 goog.ui.HsvPalette = function(opt_domHelper, opt_color, opt_class) {
+  'use strict';
   goog.ui.Component.call(this, opt_domHelper);
 
   this.setColorInternal(opt_color || '#f00');
@@ -164,6 +165,7 @@ goog.ui.HsvPalette.prototype.color;
  * @return {string} The string of the selected color.
  */
 goog.ui.HsvPalette.prototype.getColor = function() {
+  'use strict';
   return this.color;
 };
 
@@ -175,6 +177,7 @@ goog.ui.HsvPalette.prototype.getColor = function() {
  * @return {number} The current alpha value.
  */
 goog.ui.HsvPalette.prototype.getAlpha = function() {
+  'use strict';
   return 1;
 };
 
@@ -185,6 +188,7 @@ goog.ui.HsvPalette.prototype.getAlpha = function() {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.HsvPalette.prototype.updateInput = function() {
+  'use strict';
   var parsed;
   try {
     parsed = goog.color.parse(this.inputElement.value).hex;
@@ -205,6 +209,7 @@ goog.ui.HsvPalette.prototype.updateInput = function() {
  */
 goog.ui.HsvPalette.prototype.setColor = function(
     color, opt_disableDispatchEvent) {
+  'use strict';
   if (color != this.color) {
     this.setColorInternal(color);
     this.updateUi();
@@ -221,6 +226,7 @@ goog.ui.HsvPalette.prototype.setColor = function(
  * @protected
  */
 goog.ui.HsvPalette.prototype.setColorInternal = function(color) {
+  'use strict';
   var rgbHex = goog.color.parse(color).hex;
   var rgbArray = goog.color.hexToRgb(rgbHex);
   this.hsv_ = goog.color.rgbArrayToHsv(rgbArray);
@@ -241,6 +247,7 @@ goog.ui.HsvPalette.prototype.setColorInternal = function(color) {
  */
 goog.ui.HsvPalette.prototype.setHsv = function(
     opt_hue, opt_saturation, opt_value) {
+  'use strict';
   if (opt_hue != null || opt_saturation != null || opt_value != null) {
     this.setHsv_(opt_hue, opt_saturation, opt_value);
     this.updateUi();
@@ -258,6 +265,7 @@ goog.ui.HsvPalette.prototype.setHsv = function(
  */
 goog.ui.HsvPalette.prototype.setHsv_ = function(
     opt_hue, opt_saturation, opt_value) {
+  'use strict';
   this.hsv_[0] = (opt_hue != null) ? opt_hue : this.hsv_[0];
   this.hsv_[1] = (opt_saturation != null) ? opt_saturation : this.hsv_[1];
   this.hsv_[2] = (opt_value != null) ? opt_value : this.hsv_[2];
@@ -277,12 +285,14 @@ goog.ui.HsvPalette.prototype.setHsv_ = function(
  * @override
  */
 goog.ui.HsvPalette.prototype.canDecorate = function(element) {
+  'use strict';
   return false;
 };
 
 
 /** @override */
 goog.ui.HsvPalette.prototype.createDom = function() {
+  'use strict';
   var dom = this.getDomHelper();
   var noalpha = (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7')) ?
       ' ' + goog.getCssName(this.className, 'noalpha') :
@@ -340,6 +350,7 @@ goog.ui.HsvPalette.prototype.createDom = function() {
  * @override
  */
 goog.ui.HsvPalette.prototype.enterDocument = function() {
+  'use strict';
   goog.ui.HsvPalette.superClass_.enterDocument.call(this);
 
   // TODO(user): Accessibility.
@@ -364,6 +375,7 @@ goog.ui.HsvPalette.prototype.enterDocument = function() {
 
 /** @override */
 goog.ui.HsvPalette.prototype.disposeInternal = function() {
+  'use strict';
   goog.ui.HsvPalette.superClass_.disposeInternal.call(this);
 
   delete this.hsImageEl_;
@@ -387,6 +399,7 @@ goog.ui.HsvPalette.prototype.disposeInternal = function() {
  * @protected
  */
 goog.ui.HsvPalette.prototype.updateUi = function() {
+  'use strict';
   if (this.isInDocument()) {
     var h = this.hsv_[0];
     var s = this.hsv_[1];
@@ -438,6 +451,7 @@ goog.ui.HsvPalette.prototype.updateUi = function() {
  * @protected
  */
 goog.ui.HsvPalette.prototype.handleMouseDown = function(e) {
+  'use strict';
   if (e.target == this.valueBackgroundImageElement ||
       e.target == this.vHandleEl_) {
     // Setup value change listeners
@@ -472,6 +486,7 @@ goog.ui.HsvPalette.prototype.handleMouseDown = function(e) {
  * @private
  */
 goog.ui.HsvPalette.prototype.handleMouseMoveV_ = function(b, e) {
+  'use strict';
   e.preventDefault();
   var vportPos = this.getDomHelper().getDocumentScroll();
 
@@ -493,6 +508,7 @@ goog.ui.HsvPalette.prototype.handleMouseMoveV_ = function(b, e) {
  * @private
  */
 goog.ui.HsvPalette.prototype.handleMouseMoveHs_ = function(b, e) {
+  'use strict';
   e.preventDefault();
   var vportPos = this.getDomHelper().getDocumentScroll();
   var newH =
@@ -513,6 +529,7 @@ goog.ui.HsvPalette.prototype.handleMouseMoveHs_ = function(b, e) {
  * @protected
  */
 goog.ui.HsvPalette.prototype.handleMouseUp = function(e) {
+  'use strict';
   goog.events.unlistenByKey(this.mouseMoveListener);
   goog.events.unlistenByKey(this.mouseUpListener);
 };
@@ -525,6 +542,7 @@ goog.ui.HsvPalette.prototype.handleMouseUp = function(e) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.HsvPalette.prototype.handleInput = function(e) {
+  'use strict';
   if (/^#?[0-9a-f]{6}$/i.test(this.inputElement.value)) {
     this.setColor(this.inputElement.value);
   }

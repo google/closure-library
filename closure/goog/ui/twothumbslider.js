@@ -46,6 +46,7 @@ goog.require('goog.ui.SliderBase');
  * @extends {goog.ui.SliderBase}
  */
 goog.ui.TwoThumbSlider = function(opt_domHelper) {
+  'use strict';
   goog.ui.SliderBase.call(this, opt_domHelper);
   this.rangeModel.setValue(this.getMinimum());
   this.rangeModel.setExtent(this.getMaximum() - this.getMinimum());
@@ -92,6 +93,7 @@ goog.ui.TwoThumbSlider.RANGE_HIGHLIGHT_CSS_CLASS =
  * @override
  */
 goog.ui.TwoThumbSlider.prototype.getCssClass = function(orient) {
+  'use strict';
   return orient == goog.ui.SliderBase.Orientation.VERTICAL ?
       goog.getCssName(goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX, 'vertical') :
       goog.getCssName(goog.ui.TwoThumbSlider.CSS_CLASS_PREFIX, 'horizontal');
@@ -105,6 +107,7 @@ goog.ui.TwoThumbSlider.prototype.getCssClass = function(orient) {
  * @private
  */
 goog.ui.TwoThumbSlider.prototype.createThumb_ = function(cs) {
+  'use strict';
   var thumb = this.getDomHelper().createDom(goog.dom.TagName.DIV, cs);
   goog.a11y.aria.setRole(thumb, goog.a11y.aria.Role.BUTTON);
   return /** @type {!HTMLDivElement} */ (thumb);
@@ -121,6 +124,7 @@ goog.ui.TwoThumbSlider.prototype.createThumb_ = function(cs) {
  * @override
  */
 goog.ui.TwoThumbSlider.prototype.createThumbs = function() {
+  'use strict';
   // find range highlight and thumbs
   var valueThumb = goog.dom.getElementsByTagNameAndClass(
       null, goog.ui.TwoThumbSlider.VALUE_THUMB_CSS_CLASS, this.getElement())[0];

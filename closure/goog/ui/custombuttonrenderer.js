@@ -33,6 +33,7 @@ goog.requireType('goog.ui.ControlContent');
  * @extends {goog.ui.ButtonRenderer}
  */
 goog.ui.CustomButtonRenderer = function() {
+  'use strict';
   goog.ui.ButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.CustomButtonRenderer, goog.ui.ButtonRenderer);
@@ -64,6 +65,7 @@ goog.ui.CustomButtonRenderer.CSS_CLASS = goog.getCssName('goog-custom-button');
  * @override
  */
 goog.ui.CustomButtonRenderer.prototype.createDom = function(control) {
+  'use strict';
   var button = /** @type {goog.ui.Button} */ (control);
   var classNames = this.getClassNames(button);
   var buttonElement = button.getDomHelper().createDom(
@@ -82,6 +84,7 @@ goog.ui.CustomButtonRenderer.prototype.createDom = function(control) {
  * @override
  */
 goog.ui.CustomButtonRenderer.prototype.getAriaRole = function() {
+  'use strict';
   return goog.a11y.aria.Role.BUTTON;
 };
 
@@ -96,6 +99,7 @@ goog.ui.CustomButtonRenderer.prototype.getAriaRole = function() {
  * @override
  */
 goog.ui.CustomButtonRenderer.prototype.getContentElement = function(element) {
+  'use strict';
   return element && element.firstChild &&
       /** @type {Element} */ (element.firstChild.firstChild);
 };
@@ -119,11 +123,14 @@ goog.ui.CustomButtonRenderer.prototype.getContentElement = function(element) {
  * @return {!Element} Pseudo-rounded-corner box containing the content.
  */
 goog.ui.CustomButtonRenderer.prototype.createButton = function(content, dom) {
+  'use strict';
   return dom.createDom(
-      goog.dom.TagName.DIV, goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
+      goog.dom.TagName.DIV,
+      goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
           goog.getCssName(this.getCssClass(), 'outer-box'),
       dom.createDom(
-          goog.dom.TagName.DIV, goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
+          goog.dom.TagName.DIV,
+          goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
               goog.getCssName(this.getCssClass(), 'inner-box'),
           content));
 };
@@ -138,6 +145,7 @@ goog.ui.CustomButtonRenderer.prototype.createButton = function(content, dom) {
  * @override
  */
 goog.ui.CustomButtonRenderer.prototype.canDecorate = function(element) {
+  'use strict';
   return element.tagName == goog.dom.TagName.DIV;
 };
 
@@ -152,6 +160,7 @@ goog.ui.CustomButtonRenderer.prototype.canDecorate = function(element) {
  */
 goog.ui.CustomButtonRenderer.prototype.hasBoxStructure = function(
     button, element) {
+  'use strict';
   var outer = button.getDomHelper().getFirstElementChild(element);
   var outerClassName = goog.getCssName(this.getCssClass(), 'outer-box');
   if (outer && goog.dom.classlist.contains(outer, outerClassName)) {
@@ -177,6 +186,7 @@ goog.ui.CustomButtonRenderer.prototype.hasBoxStructure = function(
  * @override
  */
 goog.ui.CustomButtonRenderer.prototype.decorate = function(control, element) {
+  'use strict';
   goog.asserts.assert(element);
 
   var button = /** @type {goog.ui.Button} */ (control);
@@ -206,6 +216,7 @@ goog.ui.CustomButtonRenderer.prototype.decorate = function(control, element) {
  * @override
  */
 goog.ui.CustomButtonRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.CustomButtonRenderer.CSS_CLASS;
 };
 
@@ -242,6 +253,7 @@ goog.ui.CustomButtonRenderer.prototype.getCssClass = function() {
  * @private
  */
 goog.ui.CustomButtonRenderer.trimTextNodes_ = function(element, fromStart) {
+  'use strict';
   if (element) {
     var node = fromStart ? element.firstChild : element.lastChild, next;
     // Tag soup HTML may result in a DOM where siblings have different parents.

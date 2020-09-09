@@ -46,6 +46,7 @@ goog.ui.IdGenerator.prototype.idPrefix_ = '';
  * @param {string} idPrefix
  */
 goog.ui.IdGenerator.prototype.setIdPrefix = function(idPrefix) {
+  'use strict';
   this.idPrefix_ = idPrefix;
 };
 
@@ -55,5 +56,6 @@ goog.ui.IdGenerator.prototype.setIdPrefix = function(idPrefix) {
  * @return {string} The next unique identifier.
  */
 goog.ui.IdGenerator.prototype.getNextUniqueId = function() {
+  'use strict';
   return this.idPrefix_ + ':' + (this.nextId_++).toString(36);
 };

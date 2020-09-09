@@ -28,6 +28,7 @@ goog.require('goog.events.Event');
  * @final
  */
 goog.ui.ItemEvent = function(type, target, item) {
+  'use strict';
   goog.events.Event.call(this, type, target);
 
   /**

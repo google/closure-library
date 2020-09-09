@@ -33,6 +33,7 @@ goog.requireType('goog.ui.ControlContent');
  * @extends {goog.ui.MenuItem}
  */
 goog.ui.Option = function(content, opt_model, opt_domHelper) {
+  'use strict';
   goog.ui.MenuItem.call(this, content, opt_model, opt_domHelper);
   this.setSelectable(true);
 };
@@ -49,6 +50,7 @@ goog.inherits(goog.ui.Option, goog.ui.MenuItem);
  * @override
  */
 goog.ui.Option.prototype.performActionInternal = function(e) {
+  'use strict';
   return this.dispatchEvent(goog.ui.Component.EventType.ACTION);
 };
 
@@ -56,6 +58,7 @@ goog.ui.Option.prototype.performActionInternal = function(e) {
 // Register a decorator factory function for goog.ui.Options.
 goog.ui.registry.setDecoratorByClassName(
     goog.getCssName('goog-option'), function() {
+      'use strict';
       // Option defaults to using MenuItemRenderer.
       return new goog.ui.Option(null);
     });
