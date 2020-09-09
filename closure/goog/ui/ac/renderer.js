@@ -60,6 +60,7 @@ goog.requireType('goog.fx.Animation');
 goog.ui.ac.Renderer = function(
     opt_parentNode, opt_customRenderer, opt_rightAlign,
     opt_useStandardHighlighting) {
+  'use strict';
   goog.ui.ac.Renderer.base(this, 'constructor');
 
   /**
@@ -302,6 +303,7 @@ goog.ui.ac.Renderer.DELAY_BEFORE_MOUSEOVER = 300;
  * @return {Element} The  main element that controls the rendered autocomplete.
  */
 goog.ui.ac.Renderer.prototype.getElement = function() {
+  'use strict';
   return this.element_;
 };
 
@@ -332,6 +334,7 @@ goog.ui.ac.Renderer.prototype.setWidthProvider = function(
  * @param {boolean} align If true, align to top.
  */
 goog.ui.ac.Renderer.prototype.setTopAlign = function(align) {
+  'use strict';
   this.topAlign_ = align;
 };
 
@@ -341,6 +344,7 @@ goog.ui.ac.Renderer.prototype.setTopAlign = function(align) {
  *     the target element.
  */
 goog.ui.ac.Renderer.prototype.getTopAlign = function() {
+  'use strict';
   return this.topAlign_;
 };
 
@@ -350,6 +354,7 @@ goog.ui.ac.Renderer.prototype.getTopAlign = function() {
  * @param {boolean} align If true, align to right.
  */
 goog.ui.ac.Renderer.prototype.setRightAlign = function(align) {
+  'use strict';
   this.rightAlign_ = align;
 };
 
@@ -358,6 +363,7 @@ goog.ui.ac.Renderer.prototype.setRightAlign = function(align) {
  * @return {boolean} Whether the autocomplete menu should be right aligned.
  */
 goog.ui.ac.Renderer.prototype.getRightAlign = function() {
+  'use strict';
   return this.rightAlign_;
 };
 
@@ -368,6 +374,7 @@ goog.ui.ac.Renderer.prototype.getRightAlign = function() {
  *     dropdown.
  */
 goog.ui.ac.Renderer.prototype.setShowScrollbarsIfTooLarge = function(show) {
+  'use strict';
   this.showScrollbarsIfTooLarge_ = show;
 };
 
@@ -378,6 +385,7 @@ goog.ui.ac.Renderer.prototype.setShowScrollbarsIfTooLarge = function(show) {
  */
 goog.ui.ac.Renderer.prototype.setUseStandardHighlighting = function(
     useStandardHighlighting) {
+  'use strict';
   this.useStandardHighlighting_ = useStandardHighlighting;
 };
 
@@ -389,6 +397,7 @@ goog.ui.ac.Renderer.prototype.setUseStandardHighlighting = function(
  */
 goog.ui.ac.Renderer.prototype.setMatchWordBoundary = function(
     matchWordBoundary) {
+  'use strict';
   this.matchWordBoundary_ = matchWordBoundary;
 };
 
@@ -401,6 +410,7 @@ goog.ui.ac.Renderer.prototype.setMatchWordBoundary = function(
  */
 goog.ui.ac.Renderer.prototype.setHighlightAllTokens = function(
     highlightAllTokens) {
+  'use strict';
   this.highlightAllTokens_ = highlightAllTokens;
 };
 
@@ -412,6 +422,7 @@ goog.ui.ac.Renderer.prototype.setHighlightAllTokens = function(
  *     no animation).
  */
 goog.ui.ac.Renderer.prototype.setMenuFadeDuration = function(duration) {
+  'use strict';
   this.menuFadeDuration_ = duration;
 };
 
@@ -421,6 +432,7 @@ goog.ui.ac.Renderer.prototype.setMenuFadeDuration = function(duration) {
  * @param {Element} anchor The anchor element.
  */
 goog.ui.ac.Renderer.prototype.setAnchorElement = function(anchor) {
+  'use strict';
   this.anchorElement_ = anchor;
 };
 
@@ -430,6 +442,7 @@ goog.ui.ac.Renderer.prototype.setAnchorElement = function(anchor) {
  * @protected
  */
 goog.ui.ac.Renderer.prototype.getAnchorElement = function() {
+  'use strict';
   return this.anchorElement_;
 };
 
@@ -443,6 +456,7 @@ goog.ui.ac.Renderer.prototype.getAnchorElement = function() {
  *     this node.
  */
 goog.ui.ac.Renderer.prototype.renderRows = function(rows, token, opt_target) {
+  'use strict';
   this.token_ = token;
   this.rows_ = rows;
   this.hilitedRow_ = -1;
@@ -457,6 +471,7 @@ goog.ui.ac.Renderer.prototype.renderRows = function(rows, token, opt_target) {
  * Hide the object.
  */
 goog.ui.ac.Renderer.prototype.dismiss = function() {
+  'use strict';
   if (this.visible_) {
     this.visible_ = false;
     this.toggleAriaMarkup_(false /* isShown */);
@@ -477,6 +492,7 @@ goog.ui.ac.Renderer.prototype.dismiss = function() {
  * Show the object.
  */
 goog.ui.ac.Renderer.prototype.show = function() {
+  'use strict';
   if (!this.visible_) {
     this.visible_ = true;
     this.toggleAriaMarkup_(true /* isShown */);
@@ -500,6 +516,7 @@ goog.ui.ac.Renderer.prototype.show = function() {
  * @private
  */
 goog.ui.ac.Renderer.prototype.toggleAriaMarkup_ = function(isShown) {
+  'use strict';
   if (!this.target_) {
     return;
   }
@@ -523,6 +540,7 @@ goog.ui.ac.Renderer.prototype.toggleAriaMarkup_ = function(isShown) {
  * @return {boolean} True if the object is visible.
  */
 goog.ui.ac.Renderer.prototype.isVisible = function() {
+  'use strict';
   return this.visible_;
 };
 
@@ -533,6 +551,7 @@ goog.ui.ac.Renderer.prototype.isVisible = function() {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
+  'use strict';
   var row =
       index >= 0 && index < this.rows_.length ? this.rows_[index] : undefined;
   var rowDiv = index >= 0 && index < this.rowDivs_.length ?
@@ -563,6 +582,7 @@ goog.ui.ac.Renderer.prototype.hiliteRow = function(index) {
  * Removes the 'active' class from the currently selected row.
  */
 goog.ui.ac.Renderer.prototype.hiliteNone = function() {
+  'use strict';
   if (this.hilitedRow_ >= 0) {
     goog.dom.classlist.removeAll(
         goog.asserts.assert(this.rowDivs_[this.hilitedRow_]),
@@ -578,6 +598,7 @@ goog.ui.ac.Renderer.prototype.hiliteNone = function() {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.ac.Renderer.prototype.hiliteId = function(id) {
+  'use strict';
   if (id == -1) {
     this.hiliteRow(-1);
   } else {
@@ -598,6 +619,7 @@ goog.ui.ac.Renderer.prototype.hiliteId = function(id) {
  * @private
  */
 goog.ui.ac.Renderer.prototype.setMenuClasses_ = function(elem) {
+  'use strict';
   goog.asserts.assert(elem);
   // Legacy clients may set the renderer's className to a space-separated list
   // or even have a trailing space.
@@ -611,6 +633,7 @@ goog.ui.ac.Renderer.prototype.setMenuClasses_ = function(elem) {
  * @private
  */
 goog.ui.ac.Renderer.prototype.maybeCreateElement_ = function() {
+  'use strict';
   if (!this.element_) {
     // Make element and add it to the parent
     var el = this.dom_.createDom(goog.dom.TagName.DIV, {style: 'display:none'});
@@ -646,6 +669,7 @@ goog.ui.ac.Renderer.prototype.maybeCreateElement_ = function() {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.ac.Renderer.prototype.redraw = function() {
+  'use strict';
   // Create the element if it doesn't yet exist
   this.maybeCreateElement_();
 
@@ -677,6 +701,7 @@ goog.ui.ac.Renderer.prototype.redraw = function() {
   } else {
     var curRow = null;
     goog.array.forEach(this.rows_, function(row) {
+      'use strict';
       row = this.renderRowHtml(row, this.token_);
       if (this.topAlign_) {
         // Aligned with top of target = best match at bottom
@@ -709,6 +734,7 @@ goog.ui.ac.Renderer.prototype.redraw = function() {
  * @protected
  */
 goog.ui.ac.Renderer.prototype.getAnchorCorner = function() {
+  'use strict';
   var anchorCorner = this.rightAlign_ ? goog.positioning.Corner.BOTTOM_RIGHT :
                                         goog.positioning.Corner.BOTTOM_LEFT;
   if (this.topAlign_) {
@@ -723,6 +749,7 @@ goog.ui.ac.Renderer.prototype.getAnchorCorner = function() {
  * exists and the auto position has been set.
  */
 goog.ui.ac.Renderer.prototype.reposition = function() {
+  'use strict';
   if (this.target_ && this.reposition_) {
     var anchorElement = this.anchorElement_ || this.target_;
     var anchorCorner = this.getAnchorCorner();
@@ -760,6 +787,7 @@ goog.ui.ac.Renderer.prototype.reposition = function() {
  * @param {boolean} auto Whether to autoposition the drop down.
  */
 goog.ui.ac.Renderer.prototype.setAutoPosition = function(auto) {
+  'use strict';
   this.reposition_ = auto;
 };
 
@@ -769,6 +797,7 @@ goog.ui.ac.Renderer.prototype.setAutoPosition = function(auto) {
  * @protected
  */
 goog.ui.ac.Renderer.prototype.getAutoPosition = function() {
+  'use strict';
   return this.reposition_;
 };
 
@@ -778,6 +807,7 @@ goog.ui.ac.Renderer.prototype.getAutoPosition = function() {
  * @protected
  */
 goog.ui.ac.Renderer.prototype.getTarget = function() {
+  'use strict';
   return this.target_ || null;
 };
 
@@ -788,6 +818,7 @@ goog.ui.ac.Renderer.prototype.getTarget = function() {
  * @protected
  */
 goog.ui.ac.Renderer.prototype.disposeInternal = function() {
+  'use strict';
   if (this.element_) {
     goog.events.unlisten(
         this.element_, goog.events.EventType.CLICK, this.handleClick_, false,
@@ -822,6 +853,7 @@ goog.ui.ac.Renderer.prototype.disposeInternal = function() {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.ac.Renderer.prototype.renderRowContents_ = function(row, token, node) {
+  'use strict';
   goog.dom.setTextContent(node, row.data.toString());
 };
 
@@ -841,6 +873,7 @@ goog.ui.ac.Renderer.prototype.renderRowContents_ = function(row, token, node) {
  */
 goog.ui.ac.Renderer.prototype.startHiliteMatchingText_ = function(
     node, tokenOrArray) {
+  'use strict';
   this.wasHighlightedAtLeastOnce_ = false;
   this.hiliteMatchingText_(node, tokenOrArray);
 };
@@ -854,6 +887,7 @@ goog.ui.ac.Renderer.prototype.startHiliteMatchingText_ = function(
  */
 goog.ui.ac.Renderer.prototype.hiliteMatchingText_ = function(
     node, tokenOrArray) {
+  'use strict';
   if (!this.highlightAllTokens_ && this.wasHighlightedAtLeastOnce_) {
     return;
   }
@@ -952,6 +986,7 @@ goog.ui.ac.Renderer.prototype.hiliteMatchingText_ = function(
  * @private
  */
 goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
+  'use strict';
   var token = '';
 
   if (!tokenOrArray) {
@@ -961,6 +996,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
   if (Array.isArray(tokenOrArray)) {
     // Remove invalid tokens from the array, which may leave us with nothing.
     tokenOrArray = goog.array.filter(tokenOrArray, function(str) {
+      'use strict';
       return !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(str));
     });
   }
@@ -1014,6 +1050,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
  * @return {!Element} An element with the rendered HTML.
  */
 goog.ui.ac.Renderer.prototype.renderRowHtml = function(row, token) {
+  'use strict';
   // Create and return the element.
   var elem = this.dom_.createDom(goog.dom.TagName.DIV, {
     className: this.rowClassName,
@@ -1045,6 +1082,7 @@ goog.ui.ac.Renderer.prototype.renderRowHtml = function(row, token) {
  * @private
  */
 goog.ui.ac.Renderer.prototype.getRowFromEventTarget_ = function(et) {
+  'use strict';
   while (et && et != this.element_ &&
          !goog.dom.classlist.contains(et, this.rowClassName)) {
     et = /** @type {Element} */ (et.parentNode);
@@ -1061,6 +1099,7 @@ goog.ui.ac.Renderer.prototype.getRowFromEventTarget_ = function(et) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.ac.Renderer.prototype.handleClick_ = function(e) {
+  'use strict';
   var index = this.getRowFromEventTarget_(/** @type {Element} */ (e.target));
   if (index >= 0) {
     this.dispatchEvent(/** @lends {goog.events.Event.prototype} */ ({
@@ -1078,6 +1117,7 @@ goog.ui.ac.Renderer.prototype.handleClick_ = function(e) {
  * @private
  */
 goog.ui.ac.Renderer.prototype.handleMouseDown_ = function(e) {
+  'use strict';
   e.stopPropagation();
   e.preventDefault();
 };
@@ -1093,6 +1133,7 @@ goog.ui.ac.Renderer.prototype.handleMouseDown_ = function(e) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.ac.Renderer.prototype.handleMouseOver_ = function(e) {
+  'use strict';
   var index = this.getRowFromEventTarget_(/** @type {Element} */ (e.target));
   if (index >= 0) {
     if ((goog.now() - this.startRenderingRows_) <

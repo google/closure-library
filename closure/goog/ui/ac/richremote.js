@@ -49,10 +49,12 @@ goog.require('goog.ui.ac.RichRemoteArrayMatcher');
  * @extends {goog.ui.ac.Remote}
  */
 goog.ui.ac.RichRemote = function(url, input, opt_multi, opt_useSimilar) {
+  'use strict';
   // Create a custom renderer that renders rich rows.  The renderer calls
   // row.render(node, token) for each row.
   var customRenderer = {};
   customRenderer.renderRow = function(row, token, node) {
+    'use strict';
     return row.data.render(node, token);
   };
 
@@ -93,6 +95,7 @@ goog.inherits(goog.ui.ac.RichRemote, goog.ui.ac.Remote);
  *     a subset of the rows input array.
  */
 goog.ui.ac.RichRemote.prototype.setRowFilter = function(rowFilter) {
+  'use strict';
   this.matcher_.setRowFilter(rowFilter);
 };
 
@@ -104,5 +107,6 @@ goog.ui.ac.RichRemote.prototype.setRowFilter = function(rowFilter) {
  *     an object with two methods: render(node, token) and select(target).
  */
 goog.ui.ac.RichRemote.prototype.setRowBuilder = function(rowBuilder) {
+  'use strict';
   this.matcher_.setRowBuilder(rowBuilder);
 };

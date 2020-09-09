@@ -33,6 +33,7 @@ goog.require('goog.dom.pattern.Tag');
  * @final
  */
 goog.dom.pattern.EndTag = function(tag, opt_attrs, opt_styles, opt_test) {
+  'use strict';
   goog.dom.pattern.Tag.call(
       this, tag, goog.dom.TagWalkType.END_TAG, opt_attrs, opt_styles, opt_test);
 };

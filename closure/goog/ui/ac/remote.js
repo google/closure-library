@@ -34,6 +34,7 @@ goog.requireType('goog.structs.Map');
  * @extends {goog.ui.ac.AutoComplete}
  */
 goog.ui.ac.Remote = function(url, input, opt_multi, opt_useSimilar) {
+  'use strict';
   var matcher = new goog.ui.ac.RemoteArrayMatcher(url, !opt_useSimilar);
   this.matcher_ = matcher;
 
@@ -55,6 +56,7 @@ goog.inherits(goog.ui.ac.Remote, goog.ui.ac.AutoComplete);
  */
 goog.ui.ac.Remote.prototype.setUseStandardHighlighting = function(
     useStandardHighlighting) {
+  'use strict';
   this.renderer_.setUseStandardHighlighting(useStandardHighlighting);
 };
 
@@ -64,6 +66,7 @@ goog.ui.ac.Remote.prototype.setUseStandardHighlighting = function(
  * @return {goog.ui.ac.InputHandler} The input handler.
  */
 goog.ui.ac.Remote.prototype.getInputHandler = function() {
+  'use strict';
   return /** @type {goog.ui.ac.InputHandler} */ (this.selectionHandler_);
 };
 
@@ -73,6 +76,7 @@ goog.ui.ac.Remote.prototype.getInputHandler = function() {
  * @param {string} method The send method; default: GET.
  */
 goog.ui.ac.Remote.prototype.setMethod = function(method) {
+  'use strict';
   this.matcher_.setMethod(method);
 };
 
@@ -82,6 +86,7 @@ goog.ui.ac.Remote.prototype.setMethod = function(method) {
  * @param {string} content Post data.
  */
 goog.ui.ac.Remote.prototype.setContent = function(content) {
+  'use strict';
   this.matcher_.setContent(content);
 };
 
@@ -92,6 +97,7 @@ goog.ui.ac.Remote.prototype.setContent = function(content) {
  *     request.
  */
 goog.ui.ac.Remote.prototype.setHeaders = function(headers) {
+  'use strict';
   this.matcher_.setHeaders(headers);
 };
 
@@ -102,5 +108,6 @@ goog.ui.ac.Remote.prototype.setHeaders = function(headers) {
  *     incomplete request will be aborted; 0 means no timeout is set.
  */
 goog.ui.ac.Remote.prototype.setTimeoutInterval = function(interval) {
+  'use strict';
   this.matcher_.setTimeoutInterval(interval);
 };

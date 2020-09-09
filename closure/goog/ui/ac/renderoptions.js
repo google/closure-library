@@ -42,6 +42,7 @@ goog.ui.ac.RenderOptions.prototype.autoHilite_;
  * @param {boolean} flag The new value for the preserveHilited_ flag.
  */
 goog.ui.ac.RenderOptions.prototype.setPreserveHilited = function(flag) {
+  'use strict';
   this.preserveHilited_ = flag;
 };
 
@@ -50,6 +51,7 @@ goog.ui.ac.RenderOptions.prototype.setPreserveHilited = function(flag) {
  * @return {boolean} The value of the preserveHilited_ flag.
  */
 goog.ui.ac.RenderOptions.prototype.getPreserveHilited = function() {
+  'use strict';
   return this.preserveHilited_;
 };
 
@@ -58,6 +60,7 @@ goog.ui.ac.RenderOptions.prototype.getPreserveHilited = function() {
  * @param {boolean} flag The new value for the autoHilite_ flag.
  */
 goog.ui.ac.RenderOptions.prototype.setAutoHilite = function(flag) {
+  'use strict';
   this.autoHilite_ = flag;
 };
 
@@ -66,5 +69,6 @@ goog.ui.ac.RenderOptions.prototype.setAutoHilite = function(flag) {
  * @return {boolean|undefined} The value of the autoHilite_ flag.
  */
 goog.ui.ac.RenderOptions.prototype.getAutoHilite = function() {
+  'use strict';
   return this.autoHilite_;
 };

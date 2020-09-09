@@ -21,6 +21,7 @@ goog.require('goog.dom.pattern.MatchType');
  * @constructor
  */
 goog.dom.pattern.AbstractPattern = function() {
+  'use strict';
   /**
    * The first node matched by this pattern.
    * @type {?Node}
@@ -45,5 +46,6 @@ goog.dom.pattern.AbstractPattern.prototype.reset = function() {
  * @return {goog.dom.pattern.MatchType} `MATCH` if the pattern matches.
  */
 goog.dom.pattern.AbstractPattern.prototype.matchToken = function(token, type) {
+  'use strict';
   return goog.dom.pattern.MatchType.NO_MATCH;
 };

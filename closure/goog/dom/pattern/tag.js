@@ -36,6 +36,7 @@ goog.requireType('goog.dom.TagWalkType');
  * @extends {goog.dom.pattern.AbstractPattern}
  */
 goog.dom.pattern.Tag = function(tag, type, opt_attrs, opt_styles, opt_test) {
+  'use strict';
   /**
    * The tag to match.
    *
@@ -86,6 +87,7 @@ goog.inherits(goog.dom.pattern.Tag, goog.dom.pattern.AbstractPattern);
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.dom.pattern.Tag.prototype.matchToken = function(token, type) {
+  'use strict';
   // Check the direction and tag name.
   if (type == this.type_ &&
       goog.dom.pattern.matchStringOrRegex(this.tag_, token.nodeName)) {

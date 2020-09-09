@@ -44,6 +44,7 @@ goog.requireType('goog.dom.TagWalkType');
  * @final
  */
 goog.dom.pattern.FullTag = function(tag, opt_attrs, opt_styles, opt_test) {
+  'use strict';
   /**
    * Tracks the matcher's depth to detect the end of the tag.
    *
@@ -69,6 +70,7 @@ goog.inherits(goog.dom.pattern.FullTag, goog.dom.pattern.StartTag);
  * @override
  */
 goog.dom.pattern.FullTag.prototype.matchToken = function(token, type) {
+  'use strict';
   if (!this.depth_) {
     // If we have not yet started, make sure we match as a StartTag.
     if (goog.dom.pattern.Tag.prototype.matchToken.call(this, token, type)) {

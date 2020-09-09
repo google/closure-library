@@ -24,6 +24,7 @@ goog.require('goog.string');
  *     input token against the dictionary.
  */
 goog.ui.ac.ArrayMatcher = function(rows, opt_noSimilar) {
+  'use strict';
   this.rows_ = rows || [];
   this.useSimilar_ = !opt_noSimilar;
 };
@@ -34,6 +35,7 @@ goog.ui.ac.ArrayMatcher = function(rows, opt_noSimilar) {
  * @param {Array<?>} rows Dictionary of items to match.
  */
 goog.ui.ac.ArrayMatcher.prototype.setRows = function(rows) {
+  'use strict';
   this.rows_ = rows || [];
 };
 
@@ -47,7 +49,7 @@ goog.ui.ac.ArrayMatcher.prototype.setRows = function(rows) {
  */
 goog.ui.ac.ArrayMatcher.prototype.requestMatchingRows = function(
     token, maxMatches, matchHandler, opt_fullString) {
-
+  'use strict';
   var matches = this.useSimilar_ ?
       goog.ui.ac.ArrayMatcher.getMatchesForRows(token, maxMatches, this.rows_) :
       this.getPrefixMatches(token, maxMatches);
@@ -67,6 +69,7 @@ goog.ui.ac.ArrayMatcher.prototype.requestMatchingRows = function(
  * @return {!Array<?>} Rows that match.
  */
 goog.ui.ac.ArrayMatcher.getMatchesForRows = function(token, maxMatches, rows) {
+  'use strict';
   var matches =
       goog.ui.ac.ArrayMatcher.getPrefixMatchesForRows(token, maxMatches, rows);
 
@@ -86,6 +89,7 @@ goog.ui.ac.ArrayMatcher.getMatchesForRows = function(token, maxMatches, rows) {
  */
 goog.ui.ac.ArrayMatcher.prototype.getPrefixMatches = function(
     token, maxMatches) {
+  'use strict';
   return goog.ui.ac.ArrayMatcher.getPrefixMatchesForRows(
       token, maxMatches, this.rows_);
 };
@@ -102,6 +106,7 @@ goog.ui.ac.ArrayMatcher.prototype.getPrefixMatches = function(
  */
 goog.ui.ac.ArrayMatcher.getPrefixMatchesForRows = function(
     token, maxMatches, rows) {
+  'use strict';
   var matches = [];
 
   if (token != '') {
@@ -127,6 +132,7 @@ goog.ui.ac.ArrayMatcher.getPrefixMatchesForRows = function(
  * @return {!Array<?>} The best maxMatches rows.
  */
 goog.ui.ac.ArrayMatcher.prototype.getSimilarRows = function(token, maxMatches) {
+  'use strict';
   return goog.ui.ac.ArrayMatcher.getSimilarMatchesForRows(
       token, maxMatches, this.rows_);
 };
@@ -144,6 +150,7 @@ goog.ui.ac.ArrayMatcher.prototype.getSimilarRows = function(token, maxMatches) {
  */
 goog.ui.ac.ArrayMatcher.getSimilarMatchesForRows = function(
     token, maxMatches, rows) {
+  'use strict';
   var results = [];
 
   for (var index = 0; index < rows.length; index++) {
@@ -187,6 +194,7 @@ goog.ui.ac.ArrayMatcher.getSimilarMatchesForRows = function(
   }
 
   results.sort(function(a, b) {
+    'use strict';
     var diff = a.score - b.score;
     if (diff != 0) {
       return diff;
