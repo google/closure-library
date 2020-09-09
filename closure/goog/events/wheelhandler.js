@@ -53,6 +53,7 @@ goog.requireType('goog.events.BrowserEvent');
  * @extends {goog.events.EventTarget}
  */
 goog.events.WheelHandler = function(element, opt_capture) {
+  'use strict';
   goog.events.WheelHandler.base(this, 'constructor');
 
   /**
@@ -87,6 +88,7 @@ goog.inherits(goog.events.WheelHandler, goog.events.EventTarget);
  * @return {string} The dom event type.
  */
 goog.events.WheelHandler.getDomEventType = function() {
+  'use strict';
   // Prefer to use wheel events whenever supported.
   if (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher(17) ||
       goog.userAgent.IE && goog.userAgent.isVersionOrHigher(9) ||
@@ -105,6 +107,7 @@ goog.events.WheelHandler.getDomEventType = function() {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.WheelHandler.prototype.handleEvent = function(e) {
+  'use strict';
   var deltaMode = goog.events.WheelEvent.DeltaMode.PIXEL;
   var deltaX = 0;
   var deltaY = 0;
@@ -146,6 +149,7 @@ goog.events.WheelHandler.prototype.handleEvent = function(e) {
 
 /** @override */
 goog.events.WheelHandler.prototype.disposeInternal = function() {
+  'use strict';
   goog.events.WheelHandler.superClass_.disposeInternal.call(this);
   goog.events.unlistenByKey(this.listenKey_);
   this.listenKey_ = null;

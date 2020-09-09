@@ -41,6 +41,7 @@ goog.require('goog.net.NetworkStatusMonitor');
  * @implements {goog.net.NetworkStatusMonitor}
  */
 goog.events.OnlineHandler = function() {
+  'use strict';
   goog.events.OnlineHandler.base(this, 'constructor');
 
   /**
@@ -106,6 +107,7 @@ goog.events.OnlineHandler.prototype.timer_;
 
 /** @override */
 goog.events.OnlineHandler.prototype.isOnline = function() {
+  'use strict';
   return goog.events.BrowserFeature.HAS_NAVIGATOR_ONLINE_PROPERTY ?
       navigator.onLine :
       true;
@@ -118,6 +120,7 @@ goog.events.OnlineHandler.prototype.isOnline = function() {
  * @private
  */
 goog.events.OnlineHandler.prototype.handleTick_ = function() {
+  'use strict';
   var online = this.isOnline();
   if (online != this.online_) {
     this.online_ = online;
@@ -132,6 +135,7 @@ goog.events.OnlineHandler.prototype.handleTick_ = function() {
  * @private
  */
 goog.events.OnlineHandler.prototype.handleChange_ = function() {
+  'use strict';
   var type = this.isOnline() ? goog.net.NetworkStatusMonitor.EventType.ONLINE :
                                goog.net.NetworkStatusMonitor.EventType.OFFLINE;
   this.dispatchEvent(type);
@@ -140,6 +144,7 @@ goog.events.OnlineHandler.prototype.handleChange_ = function() {
 
 /** @override */
 goog.events.OnlineHandler.prototype.disposeInternal = function() {
+  'use strict';
   goog.events.OnlineHandler.base(this, 'disposeInternal');
   this.eventHandler_.dispose();
   this.eventHandler_ = null;

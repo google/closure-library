@@ -26,6 +26,7 @@ goog.provide('goog.events.EventId');
  * @final
  */
 goog.events.EventId = function(eventId) {
+  'use strict';
   /** @const */ this.id = eventId;
 };
 
@@ -34,5 +35,6 @@ goog.events.EventId = function(eventId) {
  * @override
  */
 goog.events.EventId.prototype.toString = function() {
+  'use strict';
   return this.id;
 };

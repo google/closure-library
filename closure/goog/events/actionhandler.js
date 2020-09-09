@@ -44,6 +44,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.events.ActionHandler = function(element) {
+  'use strict';
   goog.events.EventTarget.call(this);
 
   /**
@@ -77,6 +78,7 @@ goog.events.ActionHandler.EventType = {
  * @private
  */
 goog.events.ActionHandler.prototype.handleKeyDown_ = function(e) {
+  'use strict';
   if (e.keyCode == goog.events.KeyCodes.ENTER ||
       goog.userAgent.WEBKIT && e.keyCode == goog.events.KeyCodes.MAC_ENTER) {
     this.dispatchEvents_(e);
@@ -90,6 +92,7 @@ goog.events.ActionHandler.prototype.handleKeyDown_ = function(e) {
  * @private
  */
 goog.events.ActionHandler.prototype.handleClick_ = function(e) {
+  'use strict';
   this.dispatchEvents_(e);
 };
 
@@ -100,6 +103,7 @@ goog.events.ActionHandler.prototype.handleClick_ = function(e) {
  * @private
  */
 goog.events.ActionHandler.prototype.dispatchEvents_ = function(e) {
+  'use strict';
   var beforeActionEvent = new goog.events.BeforeActionEvent(e);
 
   // Allow application specific logic here before the ACTION event.
@@ -124,6 +128,7 @@ goog.events.ActionHandler.prototype.dispatchEvents_ = function(e) {
 
 /** @override */
 goog.events.ActionHandler.prototype.disposeInternal = function() {
+  'use strict';
   goog.events.ActionHandler.superClass_.disposeInternal.call(this);
   goog.events.unlisten(
       this.element_, goog.events.EventType.KEYDOWN, this.handleKeyDown_, false,
@@ -144,6 +149,7 @@ goog.events.ActionHandler.prototype.disposeInternal = function() {
  * @final
  */
 goog.events.ActionEvent = function(browserEvent) {
+  'use strict';
   goog.events.BrowserEvent.call(this, browserEvent.getBrowserEvent());
   this.type = goog.events.ActionHandler.EventType.ACTION;
 };
@@ -161,6 +167,7 @@ goog.inherits(goog.events.ActionEvent, goog.events.BrowserEvent);
  * @final
  */
 goog.events.BeforeActionEvent = function(browserEvent) {
+  'use strict';
   goog.events.BrowserEvent.call(this, browserEvent.getBrowserEvent());
   this.type = goog.events.ActionHandler.EventType.BEFOREACTION;
 };

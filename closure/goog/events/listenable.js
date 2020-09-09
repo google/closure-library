@@ -67,6 +67,7 @@ goog.events.Listenable.IMPLEMENTED_BY_PROP =
  *     The corresponding class must have already implemented the interface.
  */
 goog.events.Listenable.addImplementation = function(cls) {
+  'use strict';
   cls.prototype[goog.events.Listenable.IMPLEMENTED_BY_PROP] = true;
 };
 
@@ -77,6 +78,7 @@ goog.events.Listenable.addImplementation = function(cls) {
  *     class/superclass of the instance must call addImplementation.
  */
 goog.events.Listenable.isImplementedBy = function(obj) {
+  'use strict';
   return !!(obj && obj[goog.events.Listenable.IMPLEMENTED_BY_PROP]);
 };
 
@@ -280,6 +282,7 @@ goog.events.ListenableKey.counter_ = 0;
  *     field.
  */
 goog.events.ListenableKey.reserveKey = function() {
+  'use strict';
   return ++goog.events.ListenableKey.counter_;
 };
 

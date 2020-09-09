@@ -48,6 +48,7 @@ goog.require('goog.events.BrowserEvent');
  */
 goog.events.WheelEvent = function(
     browserEvent, deltaMode, deltaX, deltaY, deltaZ) {
+  'use strict';
   goog.events.WheelEvent.base(this, 'constructor', browserEvent);
   goog.asserts.assert(browserEvent, 'Expecting a non-null browserEvent');
 

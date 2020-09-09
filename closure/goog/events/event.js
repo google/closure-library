@@ -44,6 +44,7 @@ goog.events.EventLike;
  * @constructor
  */
 goog.events.Event = function(type, opt_target) {
+  'use strict';
   /**
    * Event type.
    * @type {string}
@@ -87,6 +88,7 @@ goog.events.Event = function(type, opt_target) {
  * @return {boolean} true iff internal propagation has been stopped.
  */
 goog.events.Event.prototype.hasPropagationStopped = function() {
+  'use strict';
   return this.propagationStopped_;
 };
 
@@ -94,6 +96,7 @@ goog.events.Event.prototype.hasPropagationStopped = function() {
  * Stops event propagation.
  */
 goog.events.Event.prototype.stopPropagation = function() {
+  'use strict';
   this.propagationStopped_ = true;
 };
 
@@ -102,6 +105,7 @@ goog.events.Event.prototype.stopPropagation = function() {
  * Prevents the default action, for example a link redirecting to a url.
  */
 goog.events.Event.prototype.preventDefault = function() {
+  'use strict';
   this.defaultPrevented = true;
 };
 
@@ -113,6 +117,7 @@ goog.events.Event.prototype.preventDefault = function() {
  * @param {!goog.events.Event} e An event.
  */
 goog.events.Event.stopPropagation = function(e) {
+  'use strict';
   e.stopPropagation();
 };
 
@@ -124,5 +129,6 @@ goog.events.Event.stopPropagation = function(e) {
  * @param {!goog.events.Event} e An event.
  */
 goog.events.Event.preventDefault = function(e) {
+  'use strict';
   e.preventDefault();
 };

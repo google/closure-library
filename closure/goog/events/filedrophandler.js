@@ -38,6 +38,7 @@ goog.require('goog.log.Level');
  * @final
  */
 goog.events.FileDropHandler = function(element, opt_preventDropOutside) {
+  'use strict';
   goog.events.EventTarget.call(this);
 
   /**
@@ -108,6 +109,7 @@ goog.events.FileDropHandler.EventType = {
 
 /** @override */
 goog.events.FileDropHandler.prototype.disposeInternal = function() {
+  'use strict';
   goog.events.FileDropHandler.superClass_.disposeInternal.call(this);
   this.eventHandler_.dispose();
 };
@@ -119,6 +121,7 @@ goog.events.FileDropHandler.prototype.disposeInternal = function() {
  * @private
  */
 goog.events.FileDropHandler.prototype.dispatch_ = function(e) {
+  'use strict';
   goog.log.fine(this.logger_, 'Firing DROP event...');
   var event = new goog.events.BrowserEvent(e.getBrowserEvent());
   event.type = goog.events.FileDropHandler.EventType.DROP;
@@ -133,6 +136,7 @@ goog.events.FileDropHandler.prototype.dispatch_ = function(e) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.FileDropHandler.prototype.onDocDragEnter_ = function(e) {
+  'use strict';
   goog.log.log(
       this.logger_, goog.log.Level.FINER,
       '"' + e.target.id + '" (' + e.target + ') dispatched: ' + e.type);
@@ -160,6 +164,7 @@ goog.events.FileDropHandler.prototype.onDocDragEnter_ = function(e) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.FileDropHandler.prototype.onDocDragOver_ = function(e) {
+  'use strict';
   goog.log.log(
       this.logger_, goog.log.Level.FINEST,
       '"' + e.target.id + '" (' + e.target + ') dispatched: ' + e.type);
@@ -180,6 +185,7 @@ goog.events.FileDropHandler.prototype.onDocDragOver_ = function(e) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.FileDropHandler.prototype.onElemDragOver_ = function(e) {
+  'use strict';
   goog.log.log(
       this.logger_, goog.log.Level.FINEST,
       '"' + e.target.id + '" (' + e.target + ') dispatched: ' + e.type);
@@ -210,6 +216,7 @@ goog.events.FileDropHandler.prototype.onElemDragOver_ = function(e) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.events.FileDropHandler.prototype.onElemDrop_ = function(e) {
+  'use strict';
   goog.log.log(
       this.logger_, goog.log.Level.FINER,
       '"' + e.target.id + '" (' + e.target + ') dispatched: ' + e.type);
