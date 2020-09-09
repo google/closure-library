@@ -56,6 +56,7 @@ goog.require('goog.userAgent');
  * @extends {goog.debug.DebugWindow}
  */
 goog.debug.FancyWindow = function(opt_identifier, opt_prefix) {
+  'use strict';
   this.readOptionsFromLocalStorage_();
   goog.debug.FancyWindow.base(this, 'constructor', opt_identifier, opt_prefix);
   /** @private {?goog.dom.DomHelper} */
@@ -69,7 +70,7 @@ goog.inherits(goog.debug.FancyWindow, goog.debug.DebugWindow);
  * @type {boolean}
  */
 goog.debug.FancyWindow.HAS_LOCAL_STORE = (function() {
-
+  'use strict';
   try {
     return !!window['localStorage'].getItem;
   } catch (e) {
@@ -87,6 +88,7 @@ goog.debug.FancyWindow.LOCAL_STORE_PREFIX = 'fancywindow.sel.';
 
 /** @override */
 goog.debug.FancyWindow.prototype.writeBufferToLog = function() {
+  'use strict';
   this.lastCall = goog.now();
   if (this.hasActiveWindow()) {
     var logel = /** @type {!HTMLElement} */ (this.dh_.getElement('log'));
@@ -112,6 +114,7 @@ goog.debug.FancyWindow.prototype.writeBufferToLog = function() {
 
 /** @override */
 goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
+  'use strict';
   if (!this.hasActiveWindow()) {
     return;
   }
@@ -145,6 +148,7 @@ goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
  * @private
  */
 goog.debug.FancyWindow.prototype.openOptions_ = function() {
+  'use strict';
   var el = goog.asserts.assert(this.dh_.getElement('optionsarea'));
   goog.dom.safe.setInnerHtml(el, goog.html.SafeHtml.EMPTY);
 
@@ -173,6 +177,7 @@ goog.debug.FancyWindow.prototype.openOptions_ = function() {
  * @private
  */
 goog.debug.FancyWindow.prototype.getDropDown_ = function(id, selected) {
+  'use strict';
   var dh = this.dh_;
   var sel = dh.createDom(goog.dom.TagName.SELECT, {'id': id});
   var levels = goog.debug.Logger.Level.PREDEFINED_LEVELS;
@@ -198,6 +203,7 @@ goog.debug.FancyWindow.prototype.getDropDown_ = function(id, selected) {
  * @private
  */
 goog.debug.FancyWindow.prototype.closeOptions_ = function() {
+  'use strict';
   this.dh_.getElement('options').style.display = 'none';
   var loggers = goog.debug.FancyWindow.getLoggers_();
   var dh = this.dh_;
@@ -222,6 +228,7 @@ goog.debug.FancyWindow.prototype.closeOptions_ = function() {
  * @private
  */
 goog.debug.FancyWindow.prototype.resizeStuff_ = function() {
+  'use strict';
   var dh = this.dh_;
   var logel = /** @type {!HTMLElement} */ (dh.getElement('log'));
   var headel = /** @type {!HTMLElement} */ (dh.getElement('head'));
@@ -239,6 +246,7 @@ goog.debug.FancyWindow.prototype.resizeStuff_ = function() {
  * @private
  */
 goog.debug.FancyWindow.prototype.exit_ = function(e) {
+  'use strict';
   this.setEnabled(false);
   if (this.win) {
     this.win.close();
@@ -248,6 +256,7 @@ goog.debug.FancyWindow.prototype.exit_ = function(e) {
 
 /** @override */
 goog.debug.FancyWindow.prototype.getStyleRules = function() {
+  'use strict';
   var baseRules = goog.debug.FancyWindow.base(this, 'getStyleRules');
   var extraRules = goog.html.SafeStyleSheet.fromConstant(
       goog.string.Const.from(
@@ -280,6 +289,7 @@ goog.debug.FancyWindow.prototype.getStyleRules = function() {
  * @private
  */
 goog.debug.FancyWindow.prototype.getHtml_ = function() {
+  'use strict';
   var SafeHtml = goog.html.SafeHtml;
   var head = SafeHtml.create(
       'head', {},
@@ -321,6 +331,7 @@ goog.debug.FancyWindow.prototype.getHtml_ = function() {
  * @private
  */
 goog.debug.FancyWindow.prototype.writeOptionsToLocalStorage_ = function() {
+  'use strict';
   if (!goog.debug.FancyWindow.HAS_LOCAL_STORE) {
     return;
   }
@@ -347,6 +358,7 @@ goog.debug.FancyWindow.prototype.writeOptionsToLocalStorage_ = function() {
  * @private
  */
 goog.debug.FancyWindow.prototype.readOptionsFromLocalStorage_ = function() {
+  'use strict';
   if (!goog.debug.FancyWindow.HAS_LOCAL_STORE) {
     return;
   }
@@ -370,6 +382,7 @@ goog.debug.FancyWindow.prototype.readOptionsFromLocalStorage_ = function() {
  * @private
  */
 goog.debug.FancyWindow.getStoredKeys_ = function() {
+  'use strict';
   var storedKeys = {};
   for (var i = 0, len = window.localStorage.length; i < len; i++) {
     var key = window.localStorage.key(i);
@@ -389,6 +402,7 @@ goog.debug.FancyWindow.getStoredKeys_ = function() {
  * @private
  */
 goog.debug.FancyWindow.getLoggers_ = function() {
+  'use strict';
   var loggers = goog.object.getValues(goog.debug.LogManager.getLoggers());
 
   /**
@@ -397,6 +411,7 @@ goog.debug.FancyWindow.getLoggers_ = function() {
    * @return {number}
    */
   var loggerSort = function(a, b) {
+    'use strict';
     return goog.array.defaultCompare(a.getName(), b.getName());
   };
   goog.array.sort(loggers, loggerSort);

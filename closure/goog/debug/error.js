@@ -23,7 +23,7 @@ goog.provide('goog.debug.Error');
  * @extends {Error}
  */
 goog.debug.Error = function(opt_msg) {
-
+  'use strict';
   // Attempt to ensure there is a stack trace.
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, goog.debug.Error);

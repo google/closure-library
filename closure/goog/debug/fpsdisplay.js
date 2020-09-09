@@ -33,6 +33,7 @@ goog.require('goog.ui.Component');
  * @final
  */
 goog.debug.FpsDisplay = function(opt_domHelper) {
+  'use strict';
   goog.debug.FpsDisplay.base(this, 'constructor', opt_domHelper);
 };
 goog.inherits(goog.debug.FpsDisplay, goog.ui.Component);
@@ -60,14 +61,15 @@ goog.debug.FpsDisplay.prototype.animation_ = null;
 
 /** @override */
 goog.debug.FpsDisplay.prototype.createDom = function() {
-  this.setElementInternal(
-      this.getDomHelper().createDom(
-          goog.dom.TagName.DIV, goog.debug.FpsDisplay.CSS));
+  'use strict';
+  this.setElementInternal(this.getDomHelper().createDom(
+      goog.dom.TagName.DIV, goog.debug.FpsDisplay.CSS));
 };
 
 
 /** @override */
 goog.debug.FpsDisplay.prototype.enterDocument = function() {
+  'use strict';
   goog.debug.FpsDisplay.base(this, 'enterDocument');
   this.animation_ = new goog.debug.FpsDisplay.FpsAnimation_(this.getElement());
   this.delay_ = new goog.async.AnimationDelay(
@@ -81,6 +83,7 @@ goog.debug.FpsDisplay.prototype.enterDocument = function() {
  * @private
  */
 goog.debug.FpsDisplay.prototype.handleDelay_ = function(now) {
+  'use strict';
   if (this.isInDocument()) {
     this.animation_.onAnimationFrame(now);
     this.delay_.start();
@@ -90,6 +93,7 @@ goog.debug.FpsDisplay.prototype.handleDelay_ = function(now) {
 
 /** @override */
 goog.debug.FpsDisplay.prototype.exitDocument = function() {
+  'use strict';
   goog.debug.FpsDisplay.base(this, 'exitDocument');
   this.animation_ = null;
   goog.dispose(this.delay_);
@@ -100,6 +104,7 @@ goog.debug.FpsDisplay.prototype.exitDocument = function() {
  * @return {number} The average frames per second.
  */
 goog.debug.FpsDisplay.prototype.getFps = function() {
+  'use strict';
   goog.asserts.assert(
       this.isInDocument(), 'Render the FPS display before querying FPS');
   return this.animation_.lastFps_;
@@ -113,6 +118,7 @@ goog.debug.FpsDisplay.prototype.getFps = function() {
  * @private
  */
 goog.debug.FpsDisplay.FpsAnimation_ = function(elem) {
+  'use strict';
   /**
    * An element to hold the current FPS rate.
    * @type {Element}
@@ -149,6 +155,7 @@ goog.debug.FpsDisplay.FpsAnimation_.prototype.lastFps_ = -1;
  * @param {number} now The current time.
  */
 goog.debug.FpsDisplay.FpsAnimation_.prototype.onAnimationFrame = function(now) {
+  'use strict';
   var SAMPLES = goog.debug.FpsDisplay.SAMPLES;
   if (this.frameNumber_ % SAMPLES == 0) {
     this.lastFps_ = Math.round((1000 * SAMPLES) / (now - this.lastTime_));

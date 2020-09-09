@@ -28,6 +28,7 @@ goog.provide('goog.debug.LogRecord');
  */
 goog.debug.LogRecord = function(
     level, msg, loggerName, opt_time, opt_sequenceNumber) {
+  'use strict';
   this.reset(level, msg, loggerName, opt_time, opt_sequenceNumber);
 };
 
@@ -109,6 +110,7 @@ goog.debug.LogRecord.nextSequenceNumber_ = 0;
  */
 goog.debug.LogRecord.prototype.reset = function(
     level, msg, loggerName, opt_time, opt_sequenceNumber) {
+  'use strict';
   if (goog.debug.LogRecord.ENABLE_SEQUENCE_NUMBERS) {
     this.sequenceNumber_ = typeof opt_sequenceNumber == 'number' ?
         opt_sequenceNumber :
@@ -129,6 +131,7 @@ goog.debug.LogRecord.prototype.reset = function(
  * @return {string} source logger name (may be null).
  */
 goog.debug.LogRecord.prototype.getLoggerName = function() {
+  'use strict';
   return this.loggerName_;
 };
 
@@ -139,6 +142,7 @@ goog.debug.LogRecord.prototype.getLoggerName = function() {
  * @return {Object} the exception.
  */
 goog.debug.LogRecord.prototype.getException = function() {
+  'use strict';
   return this.exception_;
 };
 
@@ -149,6 +153,7 @@ goog.debug.LogRecord.prototype.getException = function() {
  * @param {Object} exception the exception.
  */
 goog.debug.LogRecord.prototype.setException = function(exception) {
+  'use strict';
   this.exception_ = exception;
 };
 
@@ -159,6 +164,7 @@ goog.debug.LogRecord.prototype.setException = function(exception) {
  * @param {string} loggerName source logger name (may be null).
  */
 goog.debug.LogRecord.prototype.setLoggerName = function(loggerName) {
+  'use strict';
   this.loggerName_ = loggerName;
 };
 
@@ -168,6 +174,7 @@ goog.debug.LogRecord.prototype.setLoggerName = function(loggerName) {
  * @return {goog.debug.Logger.Level} the logging message level.
  */
 goog.debug.LogRecord.prototype.getLevel = function() {
+  'use strict';
   return this.level_;
 };
 
@@ -177,6 +184,7 @@ goog.debug.LogRecord.prototype.getLevel = function() {
  * @param {goog.debug.Logger.Level} level the logging message level.
  */
 goog.debug.LogRecord.prototype.setLevel = function(level) {
+  'use strict';
   this.level_ = level;
 };
 
@@ -187,6 +195,7 @@ goog.debug.LogRecord.prototype.setLevel = function(level) {
  * @return {string} the raw message string.
  */
 goog.debug.LogRecord.prototype.getMessage = function() {
+  'use strict';
   return this.msg_;
 };
 
@@ -197,6 +206,7 @@ goog.debug.LogRecord.prototype.getMessage = function() {
  * @param {string} msg the raw message string.
  */
 goog.debug.LogRecord.prototype.setMessage = function(msg) {
+  'use strict';
   this.msg_ = msg;
 };
 
@@ -207,6 +217,7 @@ goog.debug.LogRecord.prototype.setMessage = function(msg) {
  * @return {number} event time in millis since 1970.
  */
 goog.debug.LogRecord.prototype.getMillis = function() {
+  'use strict';
   return this.time_;
 };
 
@@ -217,6 +228,7 @@ goog.debug.LogRecord.prototype.getMillis = function() {
  * @param {number} time event time in millis since 1970.
  */
 goog.debug.LogRecord.prototype.setMillis = function(time) {
+  'use strict';
   this.time_ = time;
 };
 
@@ -230,5 +242,6 @@ goog.debug.LogRecord.prototype.setMillis = function(time) {
  * @return {number} the sequence number.
  */
 goog.debug.LogRecord.prototype.getSequenceNumber = function() {
+  'use strict';
   return this.sequenceNumber_;
 };

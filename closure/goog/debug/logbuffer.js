@@ -25,6 +25,7 @@ goog.require('goog.debug.LogRecord');
  * @final
  */
 goog.debug.LogBuffer = function() {
+  'use strict';
   goog.asserts.assert(
       goog.debug.LogBuffer.isBufferingEnabled(),
       'Cannot use goog.debug.LogBuffer without defining ' +
@@ -38,6 +39,7 @@ goog.debug.LogBuffer = function() {
  * @return {!goog.debug.LogBuffer} The LogBuffer singleton instance.
  */
 goog.debug.LogBuffer.getInstance = function() {
+  'use strict';
   if (!goog.debug.LogBuffer.instance_) {
     // This function is written with the return statement after the assignment
     // to avoid the jscompiler StripCode bug described in http://b/2608064.
@@ -87,6 +89,7 @@ goog.debug.LogBuffer.prototype.isFull_;
  * @return {!goog.debug.LogRecord} The log record.
  */
 goog.debug.LogBuffer.prototype.addRecord = function(level, msg, loggerName) {
+  'use strict';
   var curIndex = (this.curIndex_ + 1) % goog.debug.LogBuffer.CAPACITY;
   this.curIndex_ = curIndex;
   if (this.isFull_) {
@@ -104,6 +107,7 @@ goog.debug.LogBuffer.prototype.addRecord = function(level, msg, loggerName) {
  * @return {boolean} Whether the log buffer is enabled.
  */
 goog.debug.LogBuffer.isBufferingEnabled = function() {
+  'use strict';
   return goog.debug.LogBuffer.CAPACITY > 0;
 };
 
@@ -112,6 +116,7 @@ goog.debug.LogBuffer.isBufferingEnabled = function() {
  * Removes all buffered log records.
  */
 goog.debug.LogBuffer.prototype.clear = function() {
+  'use strict';
   this.buffer_ = new Array(goog.debug.LogBuffer.CAPACITY);
   this.curIndex_ = -1;
   this.isFull_ = false;
@@ -124,6 +129,7 @@ goog.debug.LogBuffer.prototype.clear = function() {
  * @param {function(!goog.debug.LogRecord)} func The function to call.
  */
 goog.debug.LogBuffer.prototype.forEachRecord = function(func) {
+  'use strict';
   var buffer = this.buffer_;
   // Corner case: no records.
   if (!buffer[0]) {

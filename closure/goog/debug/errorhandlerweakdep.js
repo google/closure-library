@@ -25,5 +25,8 @@ goog.debug.errorHandlerWeakDep = {
    * @return {Function} A protected wrapper function that calls the
    *     entry point function.
    */
-  protectEntryPoint: function(fn, opt_tracers) { return fn; }
+  protectEntryPoint: function(fn, opt_tracers) {
+    'use strict';
+    return fn;
+  }
 };
