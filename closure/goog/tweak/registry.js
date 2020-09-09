@@ -37,6 +37,7 @@ goog.requireType('goog.tweak.BaseEntry');
  * @final
  */
 goog.tweak.Registry = function(queryParams, compilerOverrides) {
+  'use strict';
   /**
    * A map of entry id -> entry object
    * @type {!Object<!goog.tweak.BaseEntry>}
@@ -91,6 +92,7 @@ goog.tweak.Registry.prototype.logger_ =
  * @return {!Object<string>} map of key->value.
  */
 goog.tweak.Registry.parseQueryParams = function(queryParams) {
+  'use strict';
   // Strip off the leading ? and split on &.
   var parts = queryParams.substr(1).split('&');
   var ret = {};
@@ -111,6 +113,7 @@ goog.tweak.Registry.parseQueryParams = function(queryParams) {
  * @param {goog.tweak.BaseEntry} entry The entry.
  */
 goog.tweak.Registry.prototype.register = function(entry) {
+  'use strict';
   var id = entry.getId();
   var oldBaseEntry = this.entryMap_[id];
   if (oldBaseEntry) {
@@ -156,6 +159,7 @@ goog.tweak.Registry.prototype.register = function(entry) {
  * @param {!Function} func The callback.
  */
 goog.tweak.Registry.prototype.addOnRegisterListener = function(func) {
+  'use strict';
   this.onRegisterListeners_.push(func);
 };
 
@@ -165,6 +169,7 @@ goog.tweak.Registry.prototype.addOnRegisterListener = function(func) {
  * @return {boolean} Whether a tweak with the given ID is registered.
  */
 goog.tweak.Registry.prototype.hasEntry = function(id) {
+  'use strict';
   return id in this.entryMap_;
 };
 
@@ -175,6 +180,7 @@ goog.tweak.Registry.prototype.hasEntry = function(id) {
  * @return {!goog.tweak.BaseEntry} The entry.
  */
 goog.tweak.Registry.prototype.getEntry = function(id) {
+  'use strict';
   var ret = this.entryMap_[id];
   goog.asserts.assert(ret, 'Tweak not registered: %s', id);
   return ret;
@@ -188,6 +194,7 @@ goog.tweak.Registry.prototype.getEntry = function(id) {
  * @return {!goog.tweak.BooleanSetting} The entry.
  */
 goog.tweak.Registry.prototype.getBooleanSetting = function(id) {
+  'use strict';
   var entry = this.getEntry(id);
   goog.asserts.assertInstanceof(
       entry, goog.tweak.BooleanSetting,
@@ -203,6 +210,7 @@ goog.tweak.Registry.prototype.getBooleanSetting = function(id) {
  * @return {!goog.tweak.StringSetting} The entry.
  */
 goog.tweak.Registry.prototype.getStringSetting = function(id) {
+  'use strict';
   var entry = this.getEntry(id);
   goog.asserts.assertInstanceof(
       entry, goog.tweak.StringSetting,
@@ -218,6 +226,7 @@ goog.tweak.Registry.prototype.getStringSetting = function(id) {
  * @return {!goog.tweak.NumericSetting} The entry.
  */
 goog.tweak.Registry.prototype.getNumericSetting = function(id) {
+  'use strict';
   var entry = this.getEntry(id);
   goog.asserts.assertInstanceof(
       entry, goog.tweak.NumericSetting,
@@ -236,6 +245,7 @@ goog.tweak.Registry.prototype.getNumericSetting = function(id) {
  */
 goog.tweak.Registry.prototype.extractEntries = function(
     excludeChildEntries, excludeNonSettings) {
+  'use strict';
   var entries = [];
   for (var id in this.entryMap_) {
     var entry = this.entryMap_[id];
@@ -259,6 +269,7 @@ goog.tweak.Registry.prototype.extractEntries = function(
  * @return {string} The query string.
  */
 goog.tweak.Registry.prototype.makeUrlQuery = function(opt_existingSearchStr) {
+  'use strict';
   var existingParams = opt_existingSearchStr == undefined ?
       window.location.search :
       opt_existingSearchStr;
@@ -267,6 +278,7 @@ goog.tweak.Registry.prototype.makeUrlQuery = function(opt_existingSearchStr) {
       true /* excludeChildEntries */, true /* excludeNonSettings */);
   // Sort the params so that the urlQuery has stable ordering.
   sortedEntries.sort(function(a, b) {
+    'use strict';
     return goog.array.defaultCompare(a.getParamName(), b.getParamName());
   });
 
@@ -304,6 +316,7 @@ goog.tweak.Registry.prototype.makeUrlQuery = function(opt_existingSearchStr) {
  *     default value for the setting.
  */
 goog.tweak.Registry.prototype.overrideDefaultValue = function(id, value) {
+  'use strict';
   goog.asserts.assert(
       !this.hasEntry(id),
       'goog.tweak.overrideDefaultValue must be called before the tweak is ' +

@@ -27,6 +27,7 @@ goog.require('goog.testing.MockControl');
  * @final
  */
 goog.testing.messaging.MockMessagePort = function(id, mockControl) {
+  'use strict';
   goog.testing.messaging.MockMessagePort.base(this, 'constructor');
 
   /**
@@ -67,6 +68,7 @@ goog.testing.messaging.MockMessagePort.prototype.postMessage = function(
  * Starts the port.
  */
 goog.testing.messaging.MockMessagePort.prototype.start = function() {
+  'use strict';
   this.started = true;
 };
 
@@ -75,5 +77,6 @@ goog.testing.messaging.MockMessagePort.prototype.start = function() {
  * Closes the port.
  */
 goog.testing.messaging.MockMessagePort.prototype.close = function() {
+  'use strict';
   this.closed = true;
 };

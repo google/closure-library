@@ -71,6 +71,7 @@ goog.soy.TextTemplate;
  * @template ARG_TYPES
  */
 goog.soy.renderHtml = function(element, templateResult) {
+  'use strict';
   goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
       goog.asserts.assert(element),
       goog.soy.ensureTemplateOutputHtml_(templateResult));
@@ -92,6 +93,7 @@ goog.soy.renderHtml = function(element, templateResult) {
  */
 goog.soy.renderElement = function(
     element, template, opt_templateData, opt_injectedData) {
+  'use strict';
   var html = goog.soy.ensureTemplateOutputHtml_(template(
       opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData));
   goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
@@ -117,6 +119,7 @@ goog.soy.renderElement = function(
  */
 goog.soy.renderAsFragment = function(
     template, opt_templateData, opt_injectedData, opt_domHelper) {
+  'use strict';
   var dom = opt_domHelper || goog.dom.getDomHelper();
   var output = template(
       opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData);
@@ -142,6 +145,7 @@ goog.soy.renderAsFragment = function(
  */
 goog.soy.renderAsElement = function(
     template, opt_templateData, opt_injectedData, opt_domHelper) {
+  'use strict';
   return goog.soy.convertToElement_(
       template(
           opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData),
@@ -162,6 +166,7 @@ goog.soy.renderAsElement = function(
  *     element if necessary.
  */
 goog.soy.convertToElement = function(templateResult, opt_domHelper) {
+  'use strict';
   return goog.soy.convertToElement_(templateResult, opt_domHelper);
 };
 
@@ -177,6 +182,7 @@ goog.soy.convertToElement = function(templateResult, opt_domHelper) {
  * @private
  */
 goog.soy.convertToElement_ = function(templateResult, opt_domHelper) {
+  'use strict';
   var dom = opt_domHelper || goog.dom.getDomHelper();
   var wrapper = dom.createElement(goog.dom.TagName.DIV);
   var html = goog.soy.ensureTemplateOutputHtml_(templateResult);
@@ -208,6 +214,7 @@ goog.soy.convertToElement_ = function(templateResult, opt_domHelper) {
  * @private
  */
 goog.soy.ensureTemplateOutputHtml_ = function(templateResult) {
+  'use strict';
   // Note we allow everything that isn't an object, because some non-escaping
   // templates end up returning non-strings if their only print statement is a
   // non-escaped argument, plus some unit tests spoof templates.
@@ -238,6 +245,7 @@ goog.soy.ensureTemplateOutputHtml_ = function(templateResult) {
  * @private
  */
 goog.soy.assertFirstTagValid_ = function(html) {
+  'use strict';
   if (goog.asserts.ENABLE_ASSERTS) {
     var matches = html.match(goog.soy.INVALID_TAG_TO_RENDER_);
     goog.asserts.assert(

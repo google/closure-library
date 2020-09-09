@@ -29,6 +29,7 @@ goog.requireType('goog.testing.MockControl');
  * @final
  */
 goog.testing.messaging.MockPortNetwork = function(mockControl) {
+  'use strict';
   /**
    * The mock control for creating mock message channels.
    * @type {!goog.testing.MockControl}
@@ -52,6 +53,7 @@ goog.testing.messaging.MockPortNetwork = function(mockControl) {
  * @override
  */
 goog.testing.messaging.MockPortNetwork.prototype.dial = function(name) {
+  'use strict';
   if (!(name in this.ports_)) {
     this.ports_[name] =
         new goog.testing.messaging.MockMessageChannel(this.mockControl_);

@@ -33,6 +33,7 @@ goog.requireType('goog.html.SafeHtml');  // circular
  * @extends {goog.ui.tree.BaseNode}
  */
 goog.ui.tree.TreeNode = function(content, opt_config, opt_domHelper) {
+  'use strict';
   goog.ui.tree.BaseNode.call(this, content, opt_config, opt_domHelper);
 };
 goog.inherits(goog.ui.tree.TreeNode, goog.ui.tree.BaseNode);
@@ -44,6 +45,7 @@ goog.inherits(goog.ui.tree.TreeNode, goog.ui.tree.BaseNode);
  * @override
  */
 goog.ui.tree.TreeNode.prototype.getTree = function() {
+  'use strict';
   if (this.tree) {
     return this.tree;
   }
@@ -65,6 +67,7 @@ goog.ui.tree.TreeNode.prototype.getTree = function() {
  * @override
  */
 goog.ui.tree.TreeNode.prototype.getCalculatedIconClass = function() {
+  'use strict';
   var expanded = this.getExpanded();
   var expandedIconClass = this.getExpandedIconClass();
   if (expanded && expandedIconClass) {

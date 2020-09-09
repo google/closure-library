@@ -35,6 +35,7 @@ goog.require('goog.locale');
  *    and ids.
  */
 goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
+  'use strict';
   return goog.locale.getTimeZoneNameList_(
       'TimeZoneSelectedShortNames', opt_regionOrLang);
 };
@@ -58,6 +59,7 @@ goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
  *    and ids.
  */
 goog.locale.getTimeZoneSelectedLongNames = function(opt_regionOrLang) {
+  'use strict';
   return goog.locale.getTimeZoneNameList_(
       'TimeZoneSelectedLongNames', opt_regionOrLang);
 };
@@ -75,6 +77,7 @@ goog.locale.getTimeZoneSelectedLongNames = function(opt_regionOrLang) {
  *    and ids.
  */
 goog.locale.getTimeZoneAllLongNames = function() {
+  'use strict';
   var locale = goog.locale.getLocale();
   return /** @type {Array<Object>} */ (
       goog.locale.getResource('TimeZoneAllLongNames', locale));
@@ -101,6 +104,7 @@ goog.locale.getTimeZoneAllLongNames = function() {
  * @private
  */
 goog.locale.getTimeZoneNameList_ = function(nameType, opt_resource) {
+  'use strict';
   var locale = goog.locale.getLocale();
 
   if (!opt_resource) {

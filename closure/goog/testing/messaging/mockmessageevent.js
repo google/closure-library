@@ -34,6 +34,7 @@ goog.require('goog.testing.events.Event');
  */
 goog.testing.messaging.MockMessageEvent = function(
     data, opt_origin, opt_lastEventId, opt_source, opt_ports) {
+  'use strict';
   goog.testing.messaging.MockMessageEvent.base(
       this, 'constructor', goog.events.EventType.MESSAGE);
 
@@ -88,6 +89,7 @@ goog.inherits(
  */
 goog.testing.messaging.MockMessageEvent.wrap = function(
     data, opt_origin, opt_lastEventId, opt_source, opt_ports) {
+  'use strict';
   return new goog.events.BrowserEvent(
       new goog.testing.messaging.MockMessageEvent(
           data, opt_origin, opt_lastEventId, opt_source, opt_ports));

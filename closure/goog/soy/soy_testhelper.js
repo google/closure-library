@@ -108,6 +108,7 @@ const example = {};
  * @return {!goog.soy.data.SanitizedContent}
  */
 example.textNodeTemplate = function(data, opt_injectedData) {
+  'use strict';
   assertNotNull(data);
   assertNotUndefined(data);
   return makeSanitizedContent(
@@ -122,6 +123,7 @@ example.textNodeTemplate = function(data, opt_injectedData) {
  * @return {!goog.soy.data.SanitizedContent}
  */
 example.singleRootTemplate = function(data, opt_injectedData) {
+  'use strict';
   assertNotNull(data);
   assertNotUndefined(data);
   return makeSanitizedContent(
@@ -136,6 +138,7 @@ example.singleRootTemplate = function(data, opt_injectedData) {
  * @return {!goog.soy.data.SanitizedContent}
  */
 example.multiRootTemplate = function(data, opt_injectedData) {
+  'use strict';
   assertNotNull(data);
   assertNotUndefined(data);
   return makeSanitizedContent(
@@ -150,6 +153,7 @@ example.multiRootTemplate = function(data, opt_injectedData) {
  * @return {!goog.soy.data.SanitizedContent}
  */
 example.injectedDataTemplate = function(data, opt_injectedData) {
+  'use strict';
   assertNotNull(data);
   assertNotUndefined(data);
   return makeSanitizedContent(
@@ -165,6 +169,7 @@ example.injectedDataTemplate = function(data, opt_injectedData) {
  * @return {!goog.soy.data.SanitizedContent}
  */
 example.noDataTemplate = function(data, opt_injectedData) {
+  'use strict';
   assertNotNull(data);
   assertNotUndefined(data);
   return makeSanitizedContent(
@@ -178,6 +183,7 @@ example.noDataTemplate = function(data, opt_injectedData) {
  * @return {!SanitizedContentSubclass}
  */
 example.sanitizedHtmlTemplate = function(data, opt_injectedData) {
+  'use strict';
   // Test the SanitizedContent constructor.
   const sanitized = makeSanitizedContent(
       'Hello <b>World</b>', goog.soy.data.SanitizedContentKind.HTML);
@@ -192,6 +198,7 @@ example.sanitizedHtmlTemplate = function(data, opt_injectedData) {
  * @return {!SanitizedContentSubclass}
  */
 example.sanitizedHtmlAttributesTemplate = function(data, opt_injectedData) {
+  'use strict';
   return makeSanitizedContent(
       'foo="bar"', goog.soy.data.SanitizedContentKind.ATTRIBUTES);
 };
@@ -203,6 +210,7 @@ example.sanitizedHtmlAttributesTemplate = function(data, opt_injectedData) {
  * @return {!SanitizedContentSubclass}
  */
 example.sanitizedSmsUrlTemplate = function(data, opt_injectedData) {
+  'use strict';
   // Test the SanitizedContent constructor.
   const sanitized = makeSanitizedContent(
       'sms:123456789', goog.soy.data.SanitizedContentKind.URI);
@@ -216,6 +224,7 @@ example.sanitizedSmsUrlTemplate = function(data, opt_injectedData) {
  * @return {!SanitizedContentSubclass}
  */
 example.sanitizedHttpUrlTemplate = function(data, opt_injectedData) {
+  'use strict';
   // Test the SanitizedContent constructor.
   const sanitized = makeSanitizedContent(
       'https://google.com/foo?n=917', goog.soy.data.SanitizedContentKind.URI);
@@ -229,6 +238,7 @@ example.sanitizedHttpUrlTemplate = function(data, opt_injectedData) {
  * @return {!goog.soy.data.SanitizedTrustedResourceUri}
  */
 example.sanitizedTrustedResourceUriTemplate = function(data, opt_injectedData) {
+  'use strict';
   return new SanitizedTrustedResourceUriSubclass('https://google.com/a.js');
 };
 
@@ -239,6 +249,7 @@ example.sanitizedTrustedResourceUriTemplate = function(data, opt_injectedData) {
  * @return {!goog.soy.data.SanitizedCss}
  */
 example.sanitizedCssTemplate = function(data, opt_injectedData) {
+  'use strict';
   return new SanitizedCssSubclass('html{display:none}');
 };
 
@@ -249,6 +260,7 @@ example.sanitizedCssTemplate = function(data, opt_injectedData) {
  * @return {string}
  */
 example.stringTemplate = function(data, opt_injectedData) {
+  'use strict';
   return '<b>XSS</b>';
 };
 
@@ -259,6 +271,7 @@ example.stringTemplate = function(data, opt_injectedData) {
  * @return {!SanitizedContentSubclass}
  */
 example.sanitizedUriTemplate = function(data, opt_injectedData) {
+  'use strict';
   return makeSanitizedContent(
       'https://example.com', goog.soy.data.SanitizedContentKind.URI);
 };
@@ -271,6 +284,7 @@ example.sanitizedUriTemplate = function(data, opt_injectedData) {
  */
 example.templateSpoofingSanitizedContentString = function(
     data, opt_injectedData) {
+  'use strict';
   return makeSanitizedContent(
       'Hello World',
       // This is to ensure we're using triple-equals against a unique JavaScript
@@ -286,6 +300,7 @@ example.templateSpoofingSanitizedContentString = function(
  * @return {!goog.soy.data.SanitizedContent}
  */
 example.tableRowTemplate = function(data, opt_injectedData) {
+  'use strict';
   return makeSanitizedContent(
       '<tr><td></td></tr>', goog.soy.data.SanitizedContentKind.HTML);
 };
@@ -297,6 +312,7 @@ example.tableRowTemplate = function(data, opt_injectedData) {
  * @return {!goog.soy.data.SanitizedContent}
  */
 example.colGroupTemplateCaps = function(data, opt_injectedData) {
+  'use strict';
   return makeSanitizedContent(
       '<COLGROUP></COLGROUP>', goog.soy.data.SanitizedContentKind.HTML);
 };

@@ -40,7 +40,7 @@ goog.requireType('goog.events.EventId');
  * @final
  */
 goog.testing.events.EventObserver = function() {
-
+  'use strict';
   /**
    * A list of events handled by the observer in order of handling, oldest to
    * newest.
@@ -59,6 +59,7 @@ goog.testing.events.EventObserver = function() {
  * @param {!goog.events.Event} e Event to handle.
  */
 goog.testing.events.EventObserver.prototype.handleEvent = function(e) {
+  'use strict';
   this.events_.push(e);
 };
 
@@ -69,10 +70,12 @@ goog.testing.events.EventObserver.prototype.handleEvent = function(e) {
  * @return {!Array<!goog.events.Event>} The events handled, oldest to newest.
  */
 goog.testing.events.EventObserver.prototype.getEvents = function(opt_type) {
+  'use strict';
   var events = goog.array.clone(this.events_);
 
   if (opt_type) {
     events = goog.array.filter(events, function(event) {
+      'use strict';
       return event.type == String(opt_type);
     });
   }
@@ -83,5 +86,6 @@ goog.testing.events.EventObserver.prototype.getEvents = function(opt_type) {
 
 /** Clears the list of events seen by this observer. */
 goog.testing.events.EventObserver.prototype.clear = function() {
+  'use strict';
   this.events_ = [];
 };
