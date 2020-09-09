@@ -42,6 +42,7 @@ goog.require('goog.structs.Node');
  * @template K, V
  */
 goog.structs.Heap = function(opt_heap) {
+  'use strict';
   /**
    * The nodes of the heap.
    * @private
@@ -61,6 +62,7 @@ goog.structs.Heap = function(opt_heap) {
  * @param {V} value The value.
  */
 goog.structs.Heap.prototype.insert = function(key, value) {
+  'use strict';
   var node = new goog.structs.Node(key, value);
   var nodes = this.nodes_;
   nodes.push(node);
@@ -73,6 +75,7 @@ goog.structs.Heap.prototype.insert = function(key, value) {
  * @param {goog.structs.Heap|Object} heap Object containing the data to add.
  */
 goog.structs.Heap.prototype.insertAll = function(heap) {
+  'use strict';
   var keys, values;
   if (heap instanceof goog.structs.Heap) {
     keys = heap.getKeys();
@@ -105,6 +108,7 @@ goog.structs.Heap.prototype.insertAll = function(heap) {
  *     undefined if the heap is empty.
  */
 goog.structs.Heap.prototype.remove = function() {
+  'use strict';
   var nodes = this.nodes_;
   var count = nodes.length;
   var rootNode = nodes[0];
@@ -126,6 +130,7 @@ goog.structs.Heap.prototype.remove = function() {
  *     undefined if the heap is empty.
  */
 goog.structs.Heap.prototype.peek = function() {
+  'use strict';
   var nodes = this.nodes_;
   if (nodes.length == 0) {
     return undefined;
@@ -140,6 +145,7 @@ goog.structs.Heap.prototype.peek = function() {
  *     heap is empty.
  */
 goog.structs.Heap.prototype.peekKey = function() {
+  'use strict';
   return this.nodes_[0] && this.nodes_[0].getKey();
 };
 
@@ -150,6 +156,7 @@ goog.structs.Heap.prototype.peekKey = function() {
  * @private
  */
 goog.structs.Heap.prototype.moveDown_ = function(index) {
+  'use strict';
   var nodes = this.nodes_;
   var count = nodes.length;
 
@@ -186,6 +193,7 @@ goog.structs.Heap.prototype.moveDown_ = function(index) {
  * @private
  */
 goog.structs.Heap.prototype.moveUp_ = function(index) {
+  'use strict';
   var nodes = this.nodes_;
   var node = nodes[index];
 
@@ -211,6 +219,7 @@ goog.structs.Heap.prototype.moveUp_ = function(index) {
  * @private
  */
 goog.structs.Heap.prototype.getLeftChildIndex_ = function(index) {
+  'use strict';
   return index * 2 + 1;
 };
 
@@ -222,6 +231,7 @@ goog.structs.Heap.prototype.getLeftChildIndex_ = function(index) {
  * @private
  */
 goog.structs.Heap.prototype.getRightChildIndex_ = function(index) {
+  'use strict';
   return index * 2 + 2;
 };
 
@@ -233,6 +243,7 @@ goog.structs.Heap.prototype.getRightChildIndex_ = function(index) {
  * @private
  */
 goog.structs.Heap.prototype.getParentIndex_ = function(index) {
+  'use strict';
   return (index - 1) >> 1;
 };
 
@@ -242,6 +253,7 @@ goog.structs.Heap.prototype.getParentIndex_ = function(index) {
  * @return {!Array<V>} The values in the heap.
  */
 goog.structs.Heap.prototype.getValues = function() {
+  'use strict';
   var nodes = this.nodes_;
   var rv = [];
   var l = nodes.length;
@@ -257,6 +269,7 @@ goog.structs.Heap.prototype.getValues = function() {
  * @return {!Array<K>} The keys in the heap.
  */
 goog.structs.Heap.prototype.getKeys = function() {
+  'use strict';
   var nodes = this.nodes_;
   var rv = [];
   var l = nodes.length;
@@ -273,8 +286,11 @@ goog.structs.Heap.prototype.getKeys = function() {
  * @return {boolean} Whether the heap contains the value.
  */
 goog.structs.Heap.prototype.containsValue = function(val) {
-  return goog.array.some(
-      this.nodes_, function(node) { return node.getValue() == val; });
+  'use strict';
+  return goog.array.some(this.nodes_, function(node) {
+    'use strict';
+    return node.getValue() == val;
+  });
 };
 
 
@@ -284,8 +300,11 @@ goog.structs.Heap.prototype.containsValue = function(val) {
  * @return {boolean} Whether the heap contains the key.
  */
 goog.structs.Heap.prototype.containsKey = function(key) {
-  return goog.array.some(
-      this.nodes_, function(node) { return node.getKey() == key; });
+  'use strict';
+  return goog.array.some(this.nodes_, function(node) {
+    'use strict';
+    return node.getKey() == key;
+  });
 };
 
 
@@ -295,6 +314,7 @@ goog.structs.Heap.prototype.containsKey = function(key) {
  *     pairs.
  */
 goog.structs.Heap.prototype.clone = function() {
+  'use strict';
   return new goog.structs.Heap(this);
 };
 
@@ -304,6 +324,7 @@ goog.structs.Heap.prototype.clone = function() {
  * @return {number} The number of pairs.
  */
 goog.structs.Heap.prototype.getCount = function() {
+  'use strict';
   return this.nodes_.length;
 };
 
@@ -313,6 +334,7 @@ goog.structs.Heap.prototype.getCount = function() {
  * @return {boolean} Whether this heap contains no elements.
  */
 goog.structs.Heap.prototype.isEmpty = function() {
+  'use strict';
   return goog.array.isEmpty(this.nodes_);
 };
 
@@ -321,5 +343,6 @@ goog.structs.Heap.prototype.isEmpty = function() {
  * Removes all elements from the heap.
  */
 goog.structs.Heap.prototype.clear = function() {
+  'use strict';
   goog.array.clear(this.nodes_);
 };

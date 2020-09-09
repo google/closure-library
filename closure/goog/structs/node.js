@@ -22,6 +22,7 @@ goog.provide('goog.structs.Node');
  * @template K, V
  */
 goog.structs.Node = function(key, value) {
+  'use strict';
   /**
    * The key.
    * @private {K}
@@ -41,6 +42,7 @@ goog.structs.Node = function(key, value) {
  * @return {K} The key.
  */
 goog.structs.Node.prototype.getKey = function() {
+  'use strict';
   return this.key_;
 };
 
@@ -50,6 +52,7 @@ goog.structs.Node.prototype.getKey = function() {
  * @return {V} The value.
  */
 goog.structs.Node.prototype.getValue = function() {
+  'use strict';
   return this.value_;
 };
 
@@ -60,5 +63,6 @@ goog.structs.Node.prototype.getValue = function() {
  *     key value pair.
  */
 goog.structs.Node.prototype.clone = function() {
+  'use strict';
   return new goog.structs.Node(this.key_, this.value_);
 };

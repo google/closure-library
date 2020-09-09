@@ -24,6 +24,7 @@ goog.provide('goog.structs.CircularBuffer');
  * @template T
  */
 goog.structs.CircularBuffer = function(opt_maxSize) {
+  'use strict';
   /**
    * Index of the next element in the circular array structure.
    * @private {number}
@@ -52,6 +53,7 @@ goog.structs.CircularBuffer = function(opt_maxSize) {
  *     Return undefined, otherwise.
  */
 goog.structs.CircularBuffer.prototype.add = function(item) {
+  'use strict';
   const previousItem = this.buff_[this.nextPtr_];
   this.buff_[this.nextPtr_] = item;
   this.nextPtr_ = (this.nextPtr_ + 1) % this.maxSize_;
@@ -66,6 +68,7 @@ goog.structs.CircularBuffer.prototype.add = function(item) {
  * @return {T} The item at the specified index.
  */
 goog.structs.CircularBuffer.prototype.get = function(index) {
+  'use strict';
   index = this.normalizeIndex_(index);
   return this.buff_[index];
 };
@@ -78,6 +81,7 @@ goog.structs.CircularBuffer.prototype.get = function(index) {
  * @param {T} item The item to add.
  */
 goog.structs.CircularBuffer.prototype.set = function(index, item) {
+  'use strict';
   index = this.normalizeIndex_(index);
   this.buff_[index] = item;
 };
@@ -88,6 +92,7 @@ goog.structs.CircularBuffer.prototype.set = function(index, item) {
  * @return {number} The current number of items in the buffer.
  */
 goog.structs.CircularBuffer.prototype.getCount = function() {
+  'use strict';
   return this.buff_.length;
 };
 
@@ -96,6 +101,7 @@ goog.structs.CircularBuffer.prototype.getCount = function() {
  * @return {boolean} Whether the buffer is empty.
  */
 goog.structs.CircularBuffer.prototype.isEmpty = function() {
+  'use strict';
   return this.buff_.length == 0;
 };
 
@@ -104,6 +110,7 @@ goog.structs.CircularBuffer.prototype.isEmpty = function() {
  * Empties the current buffer.
  */
 goog.structs.CircularBuffer.prototype.clear = function() {
+  'use strict';
   this.buff_.length = 0;
   this.nextPtr_ = 0;
 };
@@ -113,6 +120,7 @@ goog.structs.CircularBuffer.prototype.clear = function() {
  * @return {!Array<T>} The values in the buffer ordered from oldest to newest.
  */
 goog.structs.CircularBuffer.prototype.getValues = function() {
+  'use strict';
   // getNewestValues returns all the values if the maxCount parameter is the
   // count
   return this.getNewestValues(this.getCount());
@@ -127,6 +135,7 @@ goog.structs.CircularBuffer.prototype.getValues = function() {
  *     values are ordered from oldest to newest.
  */
 goog.structs.CircularBuffer.prototype.getNewestValues = function(maxCount) {
+  'use strict';
   const l = this.getCount();
   const start = this.getCount() - maxCount;
   const rv = [];
@@ -139,6 +148,7 @@ goog.structs.CircularBuffer.prototype.getNewestValues = function(maxCount) {
 
 /** @return {!Array<number>} The indexes in the buffer. */
 goog.structs.CircularBuffer.prototype.getKeys = function() {
+  'use strict';
   const rv = [];
   const l = this.getCount();
   for (let i = 0; i < l; i++) {
@@ -154,6 +164,7 @@ goog.structs.CircularBuffer.prototype.getKeys = function() {
  * @return {boolean} Whether the buffer contains the key/index.
  */
 goog.structs.CircularBuffer.prototype.containsKey = function(key) {
+  'use strict';
   return key < this.getCount();
 };
 
@@ -164,6 +175,7 @@ goog.structs.CircularBuffer.prototype.containsKey = function(key) {
  * @return {boolean} Whether the buffer contains the given value.
  */
 goog.structs.CircularBuffer.prototype.containsValue = function(value) {
+  'use strict';
   const l = this.getCount();
   for (let i = 0; i < l; i++) {
     if (this.get(i) == value) {
@@ -180,6 +192,7 @@ goog.structs.CircularBuffer.prototype.containsValue = function(value) {
  *     or null if the buffer is empty.
  */
 goog.structs.CircularBuffer.prototype.getLast = function() {
+  'use strict';
   if (this.getCount() == 0) {
     return null;
   }
@@ -198,6 +211,7 @@ goog.structs.CircularBuffer.prototype.getLast = function() {
  * @private
  */
 goog.structs.CircularBuffer.prototype.normalizeIndex_ = function(index) {
+  'use strict';
   if (index >= this.buff_.length) {
     throw new Error('Out of bounds exception');
   }
