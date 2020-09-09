@@ -1635,7 +1635,9 @@ goog.mixin = function(target, source) {
  *     between midnight, January 1, 1970 and the current time.
  * @deprecated Use Date.now
  */
-goog.now = Date.now;
+goog.now = function() {
+  return Date.now();
+};
 
 
 /**
