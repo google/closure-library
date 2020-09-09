@@ -26,6 +26,7 @@ goog.require('goog.dom.browserrange.W3cRange');
  * @final
  */
 goog.dom.browserrange.OperaRange = function(range) {
+  'use strict';
   goog.dom.browserrange.W3cRange.call(this, range);
 };
 goog.inherits(goog.dom.browserrange.OperaRange, goog.dom.browserrange.W3cRange);
@@ -37,6 +38,7 @@ goog.inherits(goog.dom.browserrange.OperaRange, goog.dom.browserrange.W3cRange);
  * @return {!goog.dom.browserrange.OperaRange} A Opera range wrapper object.
  */
 goog.dom.browserrange.OperaRange.createFromNodeContents = function(node) {
+  'use strict';
   return new goog.dom.browserrange.OperaRange(
       goog.dom.browserrange.W3cRange.getBrowserRangeForNode(node));
 };
@@ -52,6 +54,7 @@ goog.dom.browserrange.OperaRange.createFromNodeContents = function(node) {
  */
 goog.dom.browserrange.OperaRange.createFromNodes = function(
     startNode, startOffset, endNode, endOffset) {
+  'use strict';
   return new goog.dom.browserrange.OperaRange(
       goog.dom.browserrange.W3cRange.getBrowserRangeForNodes(
           startNode, startOffset, endNode, endOffset));
@@ -61,6 +64,7 @@ goog.dom.browserrange.OperaRange.createFromNodes = function(
 /** @override */
 goog.dom.browserrange.OperaRange.prototype.selectInternal = function(
     selection, reversed) {
+  'use strict';
   // Avoid using addRange as we have to removeAllRanges first, which
   // blurs editable fields in Opera.
   selection.collapse(this.getStartNode(), this.getStartOffset());

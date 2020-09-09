@@ -26,6 +26,7 @@ goog.requireType('goog.storage.mechanism.Mechanism');
  * @struct
  */
 goog.storage.Storage = function(mechanism) {
+  'use strict';
   /**
    * The mechanism used to persist key-value pairs.
    *
@@ -42,6 +43,7 @@ goog.storage.Storage = function(mechanism) {
  * @param {*} value The value to serialize to a string and save.
  */
 goog.storage.Storage.prototype.set = function(key, value) {
+  'use strict';
   if (value === undefined) {
     this.mechanism.remove(key);
     return;
@@ -57,6 +59,7 @@ goog.storage.Storage.prototype.set = function(key, value) {
  * @return {*} Deserialized value or undefined if not found.
  */
 goog.storage.Storage.prototype.get = function(key) {
+  'use strict';
   var json;
   try {
     json = this.mechanism.get(key);
@@ -85,5 +88,6 @@ goog.storage.Storage.prototype.get = function(key) {
  * @param {string} key The key to remove.
  */
 goog.storage.Storage.prototype.remove = function(key) {
+  'use strict';
   this.mechanism.remove(key);
 };

@@ -19,6 +19,7 @@ goog.require('goog.testing.asserts');
  * @param {!goog.storage.Storage} storage
  */
 goog.storage.storageTester.runBasicTests = function(storage) {
+  'use strict';
   // Simple Objects.
   storage.set('first', 'Hello world!');
   storage.set('second', ['one', 'two', 'three']);

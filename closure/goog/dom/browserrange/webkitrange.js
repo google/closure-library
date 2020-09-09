@@ -28,6 +28,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.dom.browserrange.WebKitRange = function(range) {
+  'use strict';
   goog.dom.browserrange.W3cRange.call(this, range);
 };
 goog.inherits(
@@ -40,6 +41,7 @@ goog.inherits(
  * @return {!goog.dom.browserrange.WebKitRange} A WebKit range wrapper object.
  */
 goog.dom.browserrange.WebKitRange.createFromNodeContents = function(node) {
+  'use strict';
   return new goog.dom.browserrange.WebKitRange(
       goog.dom.browserrange.W3cRange.getBrowserRangeForNode(node));
 };
@@ -55,6 +57,7 @@ goog.dom.browserrange.WebKitRange.createFromNodeContents = function(node) {
  */
 goog.dom.browserrange.WebKitRange.createFromNodes = function(
     startNode, startOffset, endNode, endOffset) {
+  'use strict';
   return new goog.dom.browserrange.WebKitRange(
       goog.dom.browserrange.W3cRange.getBrowserRangeForNodes(
           startNode, startOffset, endNode, endOffset));
@@ -64,6 +67,7 @@ goog.dom.browserrange.WebKitRange.createFromNodes = function(
 /** @override */
 goog.dom.browserrange.WebKitRange.prototype.compareBrowserRangeEndpoints =
     function(range, thisEndpoint, otherEndpoint) {
+  'use strict';
   // Webkit pre-528 has some bugs where compareBoundaryPoints() doesn't work the
   // way it is supposed to, but if we reverse the sense of two comparisons,
   // it works fine.
@@ -89,6 +93,7 @@ goog.dom.browserrange.WebKitRange.prototype.compareBrowserRangeEndpoints =
 /** @override */
 goog.dom.browserrange.WebKitRange.prototype.selectInternal = function(
     selection, reversed) {
+  'use strict';
   if (reversed) {
     selection.setBaseAndExtent(
         this.getEndNode(), this.getEndOffset(), this.getStartNode(),

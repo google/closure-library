@@ -35,6 +35,7 @@ goog.requireType('goog.ui.emoji.SpriteInfo');
  * @extends {goog.ui.PaletteRenderer}
  */
 goog.ui.emoji.EmojiPaletteRenderer = function(defaultImgUrl) {
+  'use strict';
   goog.ui.PaletteRenderer.call(this);
 
   this.defaultImgUrl_ = defaultImgUrl;
@@ -63,6 +64,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.defaultImgUrl_ = null;
 
 /** @override */
 goog.ui.emoji.EmojiPaletteRenderer.getCssClass = function() {
+  'use strict';
   return goog.getCssName('goog-ui-emojipalette');
 };
 
@@ -79,6 +81,7 @@ goog.ui.emoji.EmojiPaletteRenderer.getCssClass = function() {
  */
 goog.ui.emoji.EmojiPaletteRenderer.prototype.createPaletteItem = function(
     dom, id, spriteInfo, displayUrl) {
+  'use strict';
   var el;
 
   if (spriteInfo) {
@@ -109,6 +112,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.createPaletteItem = function(
  */
 goog.ui.emoji.EmojiPaletteRenderer.prototype.updateAnimatedPaletteItem =
     function(item, animatedImg) {
+  'use strict';
   // An animated emoji is one that had sprite info for a static version and is
   // now being updated. See createPaletteItem for the structure of the palette
   // items we're modifying.
@@ -142,6 +146,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.updateAnimatedPaletteItem =
  */
 goog.ui.emoji.EmojiPaletteRenderer.prototype.buildElementFromSpriteMetadata =
     function(dom, spriteInfo, displayUrl) {
+  'use strict';
   var width = spriteInfo.getWidthCssValue();
   var height = spriteInfo.getHeightCssValue();
   var x = spriteInfo.getXOffsetCssValue();
@@ -162,6 +167,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.buildElementFromSpriteMetadata =
 
 /** @override */
 goog.ui.emoji.EmojiPaletteRenderer.prototype.createCell = function(node, dom) {
+  'use strict';
   // Create a cell with  the default img if we're out of items, in order to
   // prevent jitter in the table. If there's no default img url, just create an
   // empty div, to prevent trying to fetch a null url.
@@ -197,6 +203,7 @@ goog.ui.emoji.EmojiPaletteRenderer.prototype.createCell = function(node, dom) {
  */
 goog.ui.emoji.EmojiPaletteRenderer.prototype.getContainingItem = function(
     palette, node) {
+  'use strict';
   var root = palette.getElement();
   while (node && node.nodeType == goog.dom.NodeType.ELEMENT && node != root) {
     if (node.tagName == goog.dom.TagName.TD) {

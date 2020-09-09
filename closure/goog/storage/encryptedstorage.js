@@ -48,6 +48,7 @@ goog.requireType('goog.storage.mechanism.IterableMechanism');
  * @final
  */
 goog.storage.EncryptedStorage = function(mechanism, secret) {
+  'use strict';
   goog.storage.EncryptedStorage.base(this, 'constructor', mechanism);
   /**
    * The secret used to encrypt the storage.
@@ -85,6 +86,7 @@ goog.storage.EncryptedStorage.SALT_KEY = 'salt';
  * @private
  */
 goog.storage.EncryptedStorage.prototype.hashKeyWithSecret_ = function(key) {
+  'use strict';
   var sha1 = new goog.crypt.Sha1();
   sha1.update(goog.crypt.stringToByteArray(key));
   sha1.update(this.secret_);
@@ -104,6 +106,7 @@ goog.storage.EncryptedStorage.prototype.hashKeyWithSecret_ = function(key) {
  */
 goog.storage.EncryptedStorage.prototype.encryptValue_ = function(
     salt, key, value) {
+  'use strict';
   if (!(salt.length > 0)) {
     throw new Error('Non-empty salt must be provided');
   }
@@ -132,6 +135,7 @@ goog.storage.EncryptedStorage.prototype.encryptValue_ = function(
  */
 goog.storage.EncryptedStorage.prototype.decryptValue_ = function(
     salt, key, value) {
+  'use strict';
   // ARC4 is symmetric.
   return this.encryptValue_(salt, key, value);
 };
@@ -140,6 +144,7 @@ goog.storage.EncryptedStorage.prototype.decryptValue_ = function(
 /** @override */
 goog.storage.EncryptedStorage.prototype.set = function(
     key, value, opt_expiration) {
+  'use strict';
   if (value === undefined) {
     goog.storage.EncryptedStorage.prototype.remove.call(this, key);
     return;
@@ -161,6 +166,7 @@ goog.storage.EncryptedStorage.prototype.set = function(
 /** @override */
 goog.storage.EncryptedStorage.prototype.getWrapper = function(
     key, opt_expired) {
+  'use strict';
   var wrapper = goog.storage.EncryptedStorage.base(
       this, 'getWrapper', this.hashKeyWithSecret_(key), opt_expired);
   if (!wrapper) {
@@ -184,6 +190,7 @@ goog.storage.EncryptedStorage.prototype.getWrapper = function(
 
 /** @override */
 goog.storage.EncryptedStorage.prototype.remove = function(key) {
+  'use strict';
   goog.storage.EncryptedStorage.base(
       this, 'remove', this.hashKeyWithSecret_(key));
 };
