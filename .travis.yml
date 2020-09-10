@@ -58,3 +58,9 @@ addons:
     packages:
       # Required for jdk_switcher use oraclejdk8
       - oracle-java8-installer
+
+# Don't build the pending branch (it generates a ton of noise due to how our
+# tools push our changes, and we don't check the results anyway).
+branches:
+  except:
+    - pending
