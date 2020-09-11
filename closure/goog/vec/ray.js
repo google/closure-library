@@ -29,6 +29,7 @@ goog.requireType('goog.vec.AnyType');
  * @final
  */
 goog.vec.Ray = function(opt_origin, opt_dir) {
+  'use strict';
   /**
    * @type {goog.vec.Vec3.Float64}
    */
@@ -53,6 +54,7 @@ goog.vec.Ray = function(opt_origin, opt_dir) {
  * @param {goog.vec.AnyType} dir The new direction.
  */
 goog.vec.Ray.prototype.set = function(origin, dir) {
+  'use strict';
   goog.vec.Vec3.setFromArray(this.origin, origin);
   goog.vec.Vec3.setFromArray(this.dir, dir);
 };
@@ -63,6 +65,7 @@ goog.vec.Ray.prototype.set = function(origin, dir) {
  * @param {goog.vec.AnyType} origin the new origin.
  */
 goog.vec.Ray.prototype.setOrigin = function(origin) {
+  'use strict';
   goog.vec.Vec3.setFromArray(this.origin, origin);
 };
 
@@ -72,6 +75,7 @@ goog.vec.Ray.prototype.setOrigin = function(origin) {
  * @param {goog.vec.AnyType} dir The new direction.
  */
 goog.vec.Ray.prototype.setDir = function(dir) {
+  'use strict';
   goog.vec.Vec3.setFromArray(this.dir, dir);
 };
 
@@ -82,6 +86,7 @@ goog.vec.Ray.prototype.setDir = function(dir) {
  * @return {boolean} True if this ray is equal to the other ray.
  */
 goog.vec.Ray.prototype.equals = function(other) {
+  'use strict';
   return other != null && goog.vec.Vec3.equals(this.origin, other.origin) &&
       goog.vec.Vec3.equals(this.dir, other.dir);
 };
