@@ -8,12 +8,11 @@
  * @fileoverview Provides a base class for custom Error objects such that the
  * stack is correctly maintained.
  *
- * You should never need to throw DebugError(msg) directly, Error(msg) is
+ * You should never need to throw goog.debug.Error(msg) directly, Error(msg) is
  * sufficient.
  */
 
-goog.module('goog.debug.Error');
-goog.module.declareLegacyNamespace();
+goog.provide('goog.debug.Error');
 
 
 
@@ -23,10 +22,11 @@ goog.module.declareLegacyNamespace();
  * @constructor
  * @extends {Error}
  */
-function DebugError(opt_msg) {
+goog.debug.Error = function(opt_msg) {
+  'use strict';
   // Attempt to ensure there is a stack trace.
   if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, DebugError);
+    Error.captureStackTrace(this, goog.debug.Error);
   } else {
     const stack = new Error().stack;
     if (stack) {
@@ -48,12 +48,9 @@ function DebugError(opt_msg) {
    * @type {boolean}
    */
   this.reportErrorToServer = true;
-}
-goog.inherits(DebugError, Error);
+};
+goog.inherits(goog.debug.Error, Error);
 
 
 /** @override */
-DebugError.prototype.name = 'CustomError';
-
-
-exports = DebugError;
+goog.debug.Error.prototype.name = 'CustomError';

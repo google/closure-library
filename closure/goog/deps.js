@@ -92,7 +92,7 @@ goog.addDependency('debug/devcss/devcss.js', ['goog.debug.DevCss', 'goog.debug.D
 goog.addDependency('debug/devcss/devcssrunner.js', ['goog.debug.devCssRunner'], ['goog.debug.DevCss'], {});
 goog.addDependency('debug/divconsole.js', ['goog.debug.DivConsole'], ['goog.debug.HtmlFormatter', 'goog.dom.DomHelper', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.log', 'goog.string.Const', 'goog.style'], {});
 goog.addDependency('debug/entrypointregistry.js', ['goog.debug.EntryPointMonitor', 'goog.debug.entryPointRegistry'], ['goog.asserts'], {});
-goog.addDependency('debug/error.js', ['goog.debug.Error'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('debug/error.js', ['goog.debug.Error'], [], {'lang': 'es6'});
 goog.addDependency('debug/errorcontext.js', ['goog.debug.errorcontext'], [], {});
 goog.addDependency('debug/errorhandler.js', ['goog.debug.ErrorHandler', 'goog.debug.ErrorHandler.ProtectedFunctionError'], ['goog.Disposable', 'goog.asserts', 'goog.debug', 'goog.debug.EntryPointMonitor', 'goog.debug.Error', 'goog.debug.Trace'], {'lang': 'es6'});
 goog.addDependency('debug/errorhandlerweakdep.js', ['goog.debug.errorHandlerWeakDep'], [], {});
