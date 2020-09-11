@@ -27,6 +27,7 @@ goog.require('goog.ui.style.app.ButtonRenderer');
  * @final
  */
 goog.ui.style.app.PrimaryActionButtonRenderer = function() {
+  'use strict';
   goog.ui.style.app.ButtonRenderer.call(this);
 };
 goog.inherits(
@@ -60,6 +61,7 @@ goog.ui.style.app.PrimaryActionButtonRenderer.IE6_CLASS_COMBINATIONS = [
 /** @override */
 goog.ui.style.app.PrimaryActionButtonRenderer.prototype.getCssClass =
     function() {
+  'use strict';
   return goog.ui.style.app.PrimaryActionButtonRenderer.CSS_CLASS;
 };
 
@@ -67,6 +69,7 @@ goog.ui.style.app.PrimaryActionButtonRenderer.prototype.getCssClass =
 /** @override */
 goog.ui.style.app.PrimaryActionButtonRenderer.prototype
     .getIe6ClassCombinations = function() {
+  'use strict';
   return goog.ui.style.app.PrimaryActionButtonRenderer.IE6_CLASS_COMBINATIONS;
 };
 
@@ -75,6 +78,7 @@ goog.ui.style.app.PrimaryActionButtonRenderer.prototype
 // goog.ui.style.app.PrimaryActionButtonRenderer.
 goog.ui.registry.setDecoratorByClassName(
     goog.ui.style.app.PrimaryActionButtonRenderer.CSS_CLASS, function() {
+      'use strict';
       return new goog.ui.Button(
           null, goog.ui.style.app.PrimaryActionButtonRenderer.getInstance());
     });

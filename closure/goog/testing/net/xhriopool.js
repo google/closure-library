@@ -35,6 +35,7 @@ goog.requireType('goog.net.XhrIo');
  * @final
  */
 goog.testing.net.XhrIoPool = function(opt_xhr) {
+  'use strict';
   /**
    * The mock XhrIo object.
    * @type {!goog.testing.net.XhrIo}
@@ -53,6 +54,7 @@ goog.inherits(goog.testing.net.XhrIoPool, goog.net.XhrIoPool);
  * @suppress {invalidCasts}
  */
 goog.testing.net.XhrIoPool.prototype.createObject = function() {
+  'use strict';
   return (/** @type {!goog.net.XhrIo} */ (this.xhr_));
 };
 
@@ -72,5 +74,6 @@ goog.testing.net.XhrIoPool.prototype.adjustForMinMax = function() {};
  * @return {!goog.testing.net.XhrIo} The mock XhrIo.
  */
 goog.testing.net.XhrIoPool.prototype.getXhr = function() {
+  'use strict';
   return this.xhr_;
 };

@@ -32,10 +32,12 @@ function testSerialize() {
   var obj = populateObject({}, 50, 4);
 
   table.run(function() {
+    'use strict';
     var s = JSON.stringify(obj);
   }, 'Stringify using JSON.stringify');
 
   table.run(function() {
+    'use strict';
     var s = goog.json.serialize(obj);
   }, 'Stringify using goog.json.serialize');
 }
@@ -44,9 +46,13 @@ function testParse() {
   var obj = populateObject({}, 50, 4);
   var s = JSON.stringify(obj);
 
-  table.run(function() { var o = JSON.parse(s); }, 'Parse using JSON.parse');
+  table.run(function() {
+    'use strict';
+    var o = JSON.parse(s);
+  }, 'Parse using JSON.parse');
 
   table.run(function() {
+    'use strict';
     var o = goog.json.parse(s);
   }, 'Parse using goog.json.parse');
 }

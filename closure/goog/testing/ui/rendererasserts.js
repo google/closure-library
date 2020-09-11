@@ -23,6 +23,7 @@ goog.require('goog.ui.ControlRenderer');
  */
 goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor =
     function(rendererClassUnderTest) {
+  'use strict';
   var getCssClassCalls = 0;
 
   /**
@@ -30,11 +31,14 @@ goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor =
    * @extends {goog.ui.ControlRenderer}
    * @final
    */
-  function TestControlRenderer() { rendererClassUnderTest.call(this); }
+  function TestControlRenderer() {
+    rendererClassUnderTest.call(this);
+  }
   goog.inherits(TestControlRenderer, rendererClassUnderTest);
 
   /** @override */
   TestControlRenderer.prototype.getCssClass = function() {
+    'use strict';
     getCssClassCalls++;
     return TestControlRenderer.superClass_.getCssClass.call(this);
   };

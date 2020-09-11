@@ -34,6 +34,7 @@ goog.require('goog.ui.ControlRenderer');
  */
 goog.testing.ui.RendererHarness = function(
     renderer, renderParent, decorateParent) {
+  'use strict';
   goog.Disposable.call(this);
 
   /**
@@ -105,6 +106,7 @@ goog.testing.ui.RendererHarness.prototype.verified_ = false;
  */
 goog.testing.ui.RendererHarness.prototype.attachControlAndRender = function(
     control) {
+  'use strict';
   this.renderControl_ = control;
 
   control.setRenderer(this.renderer_);
@@ -120,6 +122,7 @@ goog.testing.ui.RendererHarness.prototype.attachControlAndRender = function(
  */
 goog.testing.ui.RendererHarness.prototype.attachControlAndDecorate = function(
     control) {
+  'use strict';
   this.decorateControl_ = control;
 
   control.setRenderer(this.renderer_);
@@ -137,6 +140,7 @@ goog.testing.ui.RendererHarness.prototype.attachControlAndDecorate = function(
  * Assert that the rendered element and the decorated element match.
  */
 goog.testing.ui.RendererHarness.prototype.assertDomMatches = function() {
+  'use strict';
   assert(
       'Both elements were not generated',
       !!(this.renderControl_ && this.decorateControl_));
@@ -153,6 +157,7 @@ goog.testing.ui.RendererHarness.prototype.assertDomMatches = function() {
  * @protected
  */
 goog.testing.ui.RendererHarness.prototype.disposeInternal = function() {
+  'use strict';
   // If the harness was not verified appropriately, throw an exception.
   assert(
       'Expected assertDomMatches to be called',

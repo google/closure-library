@@ -37,6 +37,7 @@ goog.require('goog.testing.asserts');
  */
 goog.testing.editor.dom.getPreviousNonEmptyTextNode = function(
     node, opt_stopAt, opt_skipDescendants) {
+  'use strict';
   return goog.testing.editor.dom.getPreviousNextNonEmptyTextNodeHelper_(
       node, opt_stopAt, opt_skipDescendants, true);
 };
@@ -60,6 +61,7 @@ goog.testing.editor.dom.getPreviousNonEmptyTextNode = function(
  */
 goog.testing.editor.dom.getNextNonEmptyTextNode = function(
     node, opt_stopAt, opt_skipDescendants) {
+  'use strict';
   return goog.testing.editor.dom.getPreviousNextNonEmptyTextNodeHelper_(
       node, opt_stopAt, opt_skipDescendants, false);
 };
@@ -88,6 +90,7 @@ goog.testing.editor.dom.getNextNonEmptyTextNode = function(
  */
 goog.testing.editor.dom.getPreviousNextNonEmptyTextNodeHelper_ = function(
     node, opt_stopAt, opt_skipDescendants, opt_isPrevious) {
+  'use strict';
   opt_stopAt = opt_stopAt || node.ownerDocument.body;
   // Initializing the iterator to iterate over the children of opt_stopAt
   // makes it stop only when it finishes iterating through all of that
@@ -142,6 +145,7 @@ goog.testing.editor.dom.getPreviousNextNonEmptyTextNodeHelper_ = function(
  * @private
  */
 goog.testing.editor.dom.isNonEmptyTextNode_ = function(node) {
+  'use strict';
   if (node && node.nodeType == goog.dom.NodeType.TEXT) {
     node = /** @type {!Text} */ (node);
     return node.length > 0;
@@ -165,6 +169,7 @@ goog.testing.editor.dom.isNonEmptyTextNode_ = function(node) {
  * @private
  */
 goog.testing.editor.dom.getRelativeDepth_ = function(node, parentNode) {
+  'use strict';
   var depth = 0;
   while (node) {
     if (node == parentNode) {
@@ -195,6 +200,7 @@ goog.testing.editor.dom.getRelativeDepth_ = function(node, parentNode) {
  */
 goog.testing.editor.dom.assertRangeBetweenText = function(
     before, after, range, opt_stopAt) {
+  'use strict';
   var previousText =
       goog.testing.editor.dom.getTextFollowingRange_(range, true, opt_stopAt);
   if (before == '') {
@@ -243,6 +249,7 @@ goog.testing.editor.dom.assertRangeBetweenText = function(
  */
 goog.testing.editor.dom.getTextFollowingRange_ = function(
     range, isBefore, opt_stopAt) {
+  'use strict';
   var followingTextNode;
   var endpointNode = isBefore ? range.getStartNode() : range.getEndNode();
   var endpointOffset = isBefore ? range.getStartOffset() : range.getEndOffset();

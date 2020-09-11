@@ -37,6 +37,7 @@ goog.require('goog.json.Processor');
  * @final
  */
 goog.json.NativeJsonProcessor = function(opt_replacer, opt_reviver) {
+  'use strict';
   goog.asserts.assert(goog.global['JSON'] !== undefined, 'JSON not defined');
 
   /**
@@ -55,11 +56,13 @@ goog.json.NativeJsonProcessor = function(opt_replacer, opt_reviver) {
 
 /** @override */
 goog.json.NativeJsonProcessor.prototype.stringify = function(object) {
+  'use strict';
   return goog.global['JSON'].stringify(object, this.replacer_);
 };
 
 
 /** @override */
 goog.json.NativeJsonProcessor.prototype.parse = function(s) {
+  'use strict';
   return goog.global['JSON'].parse(s, this.reviver_);
 };

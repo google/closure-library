@@ -21,6 +21,7 @@ goog.requireType('goog.pubsub.TopicId');
  * @extends {goog.Disposable}
  */
 goog.pubsub.TypedPubSub = function(opt_async) {
+  'use strict';
   goog.pubsub.TypedPubSub.base(this, 'constructor');
 
   this.pubSub_ = new goog.pubsub.PubSub(opt_async);
@@ -40,6 +41,7 @@ goog.inherits(goog.pubsub.TypedPubSub, goog.Disposable);
  * @template PAYLOAD, CONTEXT
  */
 goog.pubsub.TypedPubSub.prototype.subscribe = function(topic, fn, opt_context) {
+  'use strict';
   return this.pubSub_.subscribe(topic.toString(), fn, opt_context);
 };
 
@@ -56,6 +58,7 @@ goog.pubsub.TypedPubSub.prototype.subscribe = function(topic, fn, opt_context) {
  */
 goog.pubsub.TypedPubSub.prototype.subscribeOnce = function(
     topic, fn, opt_context) {
+  'use strict';
   return this.pubSub_.subscribeOnce(topic.toString(), fn, opt_context);
 };
 
@@ -71,6 +74,7 @@ goog.pubsub.TypedPubSub.prototype.subscribeOnce = function(
  */
 goog.pubsub.TypedPubSub.prototype.unsubscribe = function(
     topic, fn, opt_context) {
+  'use strict';
   return this.pubSub_.unsubscribe(topic.toString(), fn, opt_context);
 };
 
@@ -81,6 +85,7 @@ goog.pubsub.TypedPubSub.prototype.unsubscribe = function(
  * @return {boolean} Whether a matching subscription was removed.
  */
 goog.pubsub.TypedPubSub.prototype.unsubscribeByKey = function(key) {
+  'use strict';
   return this.pubSub_.unsubscribeByKey(key);
 };
 
@@ -93,6 +98,7 @@ goog.pubsub.TypedPubSub.prototype.unsubscribeByKey = function(key) {
  * @template PAYLOAD
  */
 goog.pubsub.TypedPubSub.prototype.publish = function(topic, payload) {
+  'use strict';
   return this.pubSub_.publish(topic.toString(), payload);
 };
 
@@ -104,6 +110,7 @@ goog.pubsub.TypedPubSub.prototype.publish = function(topic, payload) {
  * @template PAYLOAD
  */
 goog.pubsub.TypedPubSub.prototype.clear = function(opt_topic) {
+  'use strict';
   this.pubSub_.clear(
       opt_topic !== undefined ? opt_topic.toString() : undefined);
 };
@@ -117,6 +124,7 @@ goog.pubsub.TypedPubSub.prototype.clear = function(opt_topic) {
  * @template PAYLOAD
  */
 goog.pubsub.TypedPubSub.prototype.getCount = function(opt_topic) {
+  'use strict';
   return this.pubSub_.getCount(
       opt_topic !== undefined ? opt_topic.toString() : undefined);
 };
