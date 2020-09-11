@@ -36,6 +36,7 @@ goog.requireType('goog.math.Size');
  */
 goog.positioning.AnchoredPosition = function(
     anchorElement, corner, opt_overflow) {
+  'use strict';
   /**
    * Element the movable element should be anchored against.
    * @type {Element}
@@ -73,6 +74,7 @@ goog.inherits(
  */
 goog.positioning.AnchoredPosition.prototype.reposition = function(
     movableElement, movableCorner, opt_margin, opt_preferredSize) {
+  'use strict';
   goog.positioning.positionAtAnchor(
       this.element, this.corner, movableElement, movableCorner, undefined,
       opt_margin, this.overflow_);

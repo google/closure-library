@@ -37,6 +37,7 @@ goog.require('goog.ds.LoadState');
  */
 // TODO(arv): Use interfaces when available.
 goog.ds.JsDataSource = function(root, dataName, opt_parent) {
+  'use strict';
   this.parent_ = opt_parent;
   this.dataName_ = dataName;
   this.setRoot(root);
@@ -59,6 +60,7 @@ goog.ds.JsDataSource.prototype.root_;
  * @protected
  */
 goog.ds.JsDataSource.prototype.setRoot = function(root) {
+  'use strict';
   this.root_ = root;
   this.childNodeList_ = null;
 };
@@ -73,12 +75,14 @@ goog.ds.JsDataSource.prototype.setRoot = function(root) {
  * @private
  */
 goog.ds.JsDataSource.prototype.setIsList_ = function(isList) {
+  'use strict';
   this.isList_ = isList;
 };
 
 
 /** @override */
 goog.ds.JsDataSource.prototype.get = function() {
+  'use strict';
   return !goog.isObject(this.root_) ? this.root_ : this.getChildNodes();
 };
 
@@ -89,6 +93,7 @@ goog.ds.JsDataSource.prototype.get = function() {
  * @override
  */
 goog.ds.JsDataSource.prototype.set = function(value) {
+  'use strict';
   if (value && goog.isObject(this.root_)) {
     throw new Error('Can\'t set group nodes to new values yet');
   }
@@ -108,6 +113,7 @@ goog.ds.JsDataSource.prototype.set = function(value) {
  * @override
  */
 goog.ds.JsDataSource.prototype.getChildNodes = function(opt_selector) {
+  'use strict';
   if (!this.root_) {
     return new goog.ds.EmptyNodeList();
   }
@@ -124,7 +130,6 @@ goog.ds.JsDataSource.prototype.getChildNodes = function(opt_selector) {
   } else {
     throw new Error('Selector not supported yet (' + opt_selector + ')');
   }
-
 };
 
 
@@ -137,6 +142,7 @@ goog.ds.JsDataSource.prototype.getChildNodes = function(opt_selector) {
  * @private
  */
 goog.ds.JsDataSource.prototype.createChildNodes_ = function(opt_force) {
+  'use strict';
   if (this.childNodeList_ && !opt_force) {
     return;
   }
@@ -184,6 +190,7 @@ goog.ds.JsDataSource.prototype.createChildNodes_ = function(opt_force) {
  * @override
  */
 goog.ds.JsDataSource.prototype.getChildNode = function(name, opt_canCreate) {
+  'use strict';
   if (!this.root_) {
     return null;
   }
@@ -213,6 +220,7 @@ goog.ds.JsDataSource.prototype.getChildNode = function(name, opt_canCreate) {
  * @override
  */
 goog.ds.JsDataSource.prototype.getChildNodeValue = function(name) {
+  'use strict';
   if (this.childNodeList_) {
     var node = this.getChildNodes().get(name);
     return node ? node.get() : null;
@@ -234,6 +242,7 @@ goog.ds.JsDataSource.prototype.getChildNodeValue = function(name) {
  * @override
  */
 goog.ds.JsDataSource.prototype.setChildNode = function(name, value) {
+  'use strict';
   var removedPath = null;
   var node = null;
   var addedNode = false;
@@ -330,6 +339,7 @@ goog.ds.JsDataSource.prototype.setChildNode = function(name, value) {
  * @override
  */
 goog.ds.JsDataSource.prototype.getDataName = function() {
+  'use strict';
   return this.dataName_;
 };
 
@@ -340,6 +350,7 @@ goog.ds.JsDataSource.prototype.getDataName = function() {
  * @override
  */
 goog.ds.JsDataSource.prototype.setDataName = function(dataName) {
+  'use strict';
   this.dataName_ = dataName;
 };
 
@@ -350,6 +361,7 @@ goog.ds.JsDataSource.prototype.setDataName = function(dataName) {
  * @override
  */
 goog.ds.JsDataSource.prototype.getDataPath = function() {
+  'use strict';
   var parentPath = '';
   if (this.parent_) {
     parentPath = this.parent_.getDataPath() + goog.ds.STR_PATH_SEPARATOR;
@@ -375,6 +387,7 @@ goog.ds.JsDataSource.prototype.load = function() {
  * @override
  */
 goog.ds.JsDataSource.prototype.getLoadState = function() {
+  'use strict';
   return (this.root_ == null) ? goog.ds.LoadState.NOT_LOADED :
                                 goog.ds.LoadState.LOADED;
 };
@@ -386,6 +399,7 @@ goog.ds.JsDataSource.prototype.getLoadState = function() {
  * @override
  */
 goog.ds.JsDataSource.prototype.isList = function() {
+  'use strict';
   return this.isList_ != null ? this.isList_ : Array.isArray(this.root_);
 };
 
@@ -405,6 +419,7 @@ goog.ds.JsDataSource.prototype.isList = function() {
  * @final
  */
 goog.ds.JsPropertyDataSource = function(parent, dataName, opt_parentDataNode) {
+  'use strict';
   goog.ds.BaseDataNode.call(this);
   this.dataName_ = dataName;
   this.parent_ = parent;
@@ -418,6 +433,7 @@ goog.inherits(goog.ds.JsPropertyDataSource, goog.ds.BaseDataNode);
  * @return {Object} The value of the node, or null if no value.
  */
 goog.ds.JsPropertyDataSource.prototype.get = function() {
+  'use strict';
   return this.parent_[this.dataName_];
 };
 
@@ -428,6 +444,7 @@ goog.ds.JsPropertyDataSource.prototype.get = function() {
  * @override
  */
 goog.ds.JsPropertyDataSource.prototype.set = function(value) {
+  'use strict';
   var oldValue = this.parent_[this.dataName_];
   this.parent_[this.dataName_] = value;
 
@@ -443,11 +460,13 @@ goog.ds.JsPropertyDataSource.prototype.set = function(value) {
  * @override
  */
 goog.ds.JsPropertyDataSource.prototype.getDataName = function() {
+  'use strict';
   return this.dataName_;
 };
 
 
 /** @override */
 goog.ds.JsPropertyDataSource.prototype.getParent = function() {
+  'use strict';
   return this.parentDataNode_;
 };

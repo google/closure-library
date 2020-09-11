@@ -51,6 +51,7 @@ goog.requireType('goog.html.TrustedResourceUrl');
  * @final
  */
 goog.ds.JsonDataSource = function(uri, name, opt_callbackParamName) {
+  'use strict';
   goog.ds.JsDataSource.call(this, null, name, null);
   this.uri_ = uri;
 
@@ -60,7 +61,6 @@ goog.ds.JsonDataSource = function(uri, name, opt_callbackParamName) {
    * @private
    */
   this.callbackParamName_ = opt_callbackParamName || 'callback';
-
 };
 goog.inherits(goog.ds.JsonDataSource, goog.ds.JsDataSource);
 
@@ -85,6 +85,7 @@ goog.ds.JsonDataSource['dataSources'] = {};
  * @override
  */
 goog.ds.JsonDataSource.prototype.load = function() {
+  'use strict';
   if (this.uri_) {
     // NOTE: "dataSources" is expose above by name so that it will not be
     // renamed.  It should therefore be accessed via array notation here so
@@ -121,6 +122,7 @@ goog.ds.JsonDataSource.prototype.load = function() {
  * @override
  */
 goog.ds.JsonDataSource.prototype.getLoadState = function() {
+  'use strict';
   return this.loadState_;
 };
 
@@ -130,6 +132,7 @@ goog.ds.JsonDataSource.prototype.getLoadState = function() {
  * @param {Object} obj The JSON data.
  */
 goog.ds.JsonDataSource.prototype.receiveData = function(obj) {
+  'use strict';
   this.setRoot(obj);
   this.loadState_ = goog.ds.LoadState.LOADED;
   goog.ds.DataManager.getInstance().fireDataChange(this.getDataName());

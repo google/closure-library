@@ -39,6 +39,7 @@ goog.requireType('goog.events.Event');
  */
 // TODO(arv): Use interfaces when available.
 goog.ds.XmlDataSource = function(node, parent, opt_name) {
+  'use strict';
   this.parent_ = parent;
   this.dataName_ = opt_name || (node ? node.nodeName : '');
   this.setNode_(node);
@@ -61,6 +62,7 @@ goog.ds.XmlDataSource.ATTRIBUTE_SELECTOR_ = '@*';
  * @private
  */
 goog.ds.XmlDataSource.prototype.setNode_ = function(node) {
+  'use strict';
   this.node_ = node;
   if (node != null) {
     switch (node.nodeType) {
@@ -85,6 +87,7 @@ goog.ds.XmlDataSource.prototype.setNode_ = function(node) {
  * @private
  */
 goog.ds.XmlDataSource.prototype.createChildNodes_ = function() {
+  'use strict';
   if (this.childNodeList_) {
     return;
   }
@@ -111,6 +114,7 @@ goog.ds.XmlDataSource.prototype.createChildNodes_ = function() {
  * @private
  */
 goog.ds.XmlDataSource.prototype.createAttributes_ = function() {
+  'use strict';
   if (this.attributes_) {
     return;
   }
@@ -132,6 +136,7 @@ goog.ds.XmlDataSource.prototype.createAttributes_ = function() {
  * @override
  */
 goog.ds.XmlDataSource.prototype.get = function() {
+  'use strict';
   this.createChildNodes_();
   return this.value_;
 };
@@ -143,12 +148,14 @@ goog.ds.XmlDataSource.prototype.get = function() {
  * @override
  */
 goog.ds.XmlDataSource.prototype.set = function(value) {
+  'use strict';
   throw new Error('Can\'t set on XmlDataSource yet');
 };
 
 
 /** @override */
 goog.ds.XmlDataSource.prototype.getChildNodes = function(opt_selector) {
+  'use strict';
   if (opt_selector &&
       opt_selector == goog.ds.XmlDataSource.ATTRIBUTE_SELECTOR_) {
     this.createAttributes_();
@@ -161,7 +168,6 @@ goog.ds.XmlDataSource.prototype.getChildNodes = function(opt_selector) {
   } else {
     throw new Error('Unsupported selector');
   }
-
 };
 
 
@@ -173,6 +179,7 @@ goog.ds.XmlDataSource.prototype.getChildNodes = function(opt_selector) {
  * @override
  */
 goog.ds.XmlDataSource.prototype.getChildNode = function(name) {
+  'use strict';
   if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START)) {
     var att = this.node_.getAttributeNode(name.substring(1));
     return att ? new goog.ds.XmlDataSource(att, this) : null;
@@ -190,6 +197,7 @@ goog.ds.XmlDataSource.prototype.getChildNode = function(name) {
  * @override
  */
 goog.ds.XmlDataSource.prototype.getChildNodeValue = function(name) {
+  'use strict';
   if (goog.string.startsWith(name, goog.ds.STR_ATTRIBUTE_START)) {
     var node = this.node_.getAttributeNode(name.substring(1));
     return node ? node.nodeValue : null;
@@ -206,6 +214,7 @@ goog.ds.XmlDataSource.prototype.getChildNodeValue = function(name) {
  * @override
  */
 goog.ds.XmlDataSource.prototype.getDataName = function() {
+  'use strict';
   return this.dataName_;
 };
 
@@ -216,6 +225,7 @@ goog.ds.XmlDataSource.prototype.getDataName = function() {
  * @override
  */
 goog.ds.XmlDataSource.prototype.setDataName = function(name) {
+  'use strict';
   this.dataName_ = name;
 };
 
@@ -226,6 +236,7 @@ goog.ds.XmlDataSource.prototype.setDataName = function(name) {
  * @override
  */
 goog.ds.XmlDataSource.prototype.getDataPath = function() {
+  'use strict';
   var parentPath = '';
   if (this.parent_) {
     parentPath = this.parent_.getDataPath() +
@@ -253,6 +264,7 @@ goog.ds.XmlDataSource.prototype.load = function() {
  * @override
  */
 goog.ds.XmlDataSource.prototype.getLoadState = function() {
+  'use strict';
   return this.node_ ? goog.ds.LoadState.LOADED : goog.ds.LoadState.NOT_LOADED;
 };
 
@@ -266,6 +278,7 @@ goog.ds.XmlDataSource.prototype.getLoadState = function() {
  * @private
  */
 goog.ds.XmlDataSource.isEmptyTextNodeValue_ = function(str) {
+  'use strict';
   return /^[\r\n\t ]*$/.test(str);
 };
 
@@ -279,6 +292,7 @@ goog.ds.XmlDataSource.isEmptyTextNodeValue_ = function(str) {
  * @private
  */
 goog.ds.XmlDataSource.createChildlessDocument_ = function() {
+  'use strict';
   return goog.dom.xml.createDocument('nothing');
 };
 
@@ -299,6 +313,7 @@ goog.ds.XmlDataSource.createChildlessDocument_ = function() {
  * @final
  */
 goog.ds.XmlHttpDataSource = function(uri, name) {
+  'use strict';
   goog.ds.XmlDataSource.call(this, null, null, name);
   if (uri) {
     this.uri_ = new goog.Uri(uri);
@@ -322,6 +337,7 @@ goog.ds.XmlHttpDataSource.prototype.loadState_ = goog.ds.LoadState.NOT_LOADED;
  * @override
  */
 goog.ds.XmlHttpDataSource.prototype.load = function() {
+  'use strict';
   if (this.uri_) {
     goog.log.info(
         goog.ds.logger, 'Sending XML request for DataSource ' +
@@ -342,6 +358,7 @@ goog.ds.XmlHttpDataSource.prototype.load = function() {
  * @override
  */
 goog.ds.XmlHttpDataSource.prototype.getLoadState = function() {
+  'use strict';
   return this.loadState_;
 };
 
@@ -353,6 +370,7 @@ goog.ds.XmlHttpDataSource.prototype.getLoadState = function() {
  * @private
  */
 goog.ds.XmlHttpDataSource.prototype.complete_ = function(e) {
+  'use strict';
   var xhr = /** @type {goog.net.XhrIo} */ (e.target);
   if (xhr && xhr.isSuccess()) {
     this.success_(xhr);
@@ -370,6 +388,7 @@ goog.ds.XmlHttpDataSource.prototype.complete_ = function(e) {
  * @private
  */
 goog.ds.XmlHttpDataSource.prototype.success_ = function(xhr) {
+  'use strict';
   goog.log.info(
       goog.ds.logger, 'Got data for DataSource ' + this.getDataName());
   var xml = xhr.getResponseXml();
@@ -400,6 +419,7 @@ goog.ds.XmlHttpDataSource.prototype.success_ = function(xhr) {
  * @private
  */
 goog.ds.XmlHttpDataSource.prototype.failure_ = function() {
+  'use strict';
   goog.log.info(
       goog.ds.logger,
       'Data retrieve failed for DataSource ' + this.getDataName());

@@ -32,6 +32,7 @@ goog.requireType('goog.math.Size');
  * @extends {goog.positioning.AbstractPosition}
  */
 goog.positioning.ViewportPosition = function(arg1, opt_arg2) {
+  'use strict';
   this.coordinate = arg1 instanceof goog.math.Coordinate ?
       arg1 :
       new goog.math.Coordinate(/** @type {number} */ (arg1), opt_arg2);
@@ -52,6 +53,7 @@ goog.inherits(
  */
 goog.positioning.ViewportPosition.prototype.reposition = function(
     element, popupCorner, opt_margin, opt_preferredSize) {
+  'use strict';
   goog.positioning.positionAtAnchor(
       goog.style.getClientViewportElement(element),
       goog.positioning.Corner.TOP_LEFT, element, popupCorner, this.coordinate,

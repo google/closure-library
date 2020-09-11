@@ -40,6 +40,7 @@ goog.requireType('goog.positioning.Corner');
  */
 goog.positioning.MenuAnchoredPosition = function(
     anchorElement, corner, opt_adjust, opt_resize) {
+  'use strict';
   goog.positioning.AnchoredViewportPosition.call(
       this, anchorElement, corner, opt_adjust || opt_resize);
 

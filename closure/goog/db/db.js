@@ -112,6 +112,7 @@ goog.db.UpgradeNeededCallback;
  */
 goog.db.openDatabase = function(
     name, opt_version, opt_onUpgradeNeeded, opt_onBlocked) {
+  'use strict';
   goog.asserts.assert(
       (opt_version !== undefined) == (opt_onUpgradeNeeded !== undefined),
       'opt_version must be passed to goog.db.openDatabase if and only if ' +
@@ -121,14 +122,17 @@ goog.db.openDatabase = function(
   var openRequest = opt_version ? goog.db.indexedDb_.open(name, opt_version) :
                                   goog.db.indexedDb_.open(name);
   openRequest.onsuccess = function(ev) {
+    'use strict';
     var db = new goog.db.IndexedDb(ev.target.result);
     d.callback(db);
   };
   openRequest.onerror = function(ev) {
+    'use strict';
     var msg = 'opening database ' + name;
     d.errback(goog.db.Error.fromRequest(ev.target, msg));
   };
   openRequest.onupgradeneeded = function(ev) {
+    'use strict';
     if (!opt_onUpgradeNeeded) return;
     var db = new goog.db.IndexedDb(ev.target.result);
     opt_onUpgradeNeeded(
@@ -136,6 +140,7 @@ goog.db.openDatabase = function(
         db, new goog.db.Transaction(ev.target.transaction, db));
   };
   openRequest.onblocked = function(ev) {
+    'use strict';
     if (opt_onBlocked) {
       opt_onBlocked(
           new goog.db.IndexedDb.VersionChangeEvent(
@@ -156,14 +161,20 @@ goog.db.openDatabase = function(
  *     database is deleted.
  */
 goog.db.deleteDatabase = function(name, opt_onBlocked) {
+  'use strict';
   var d = new goog.async.Deferred();
   var deleteRequest = goog.db.indexedDb_.deleteDatabase(name);
-  deleteRequest.onsuccess = function(ev) { d.callback(); };
+  deleteRequest.onsuccess = function(ev) {
+    'use strict';
+    d.callback();
+  };
   deleteRequest.onerror = function(ev) {
+    'use strict';
     var msg = 'deleting database ' + name;
     d.errback(goog.db.Error.fromRequest(ev.target, msg));
   };
   deleteRequest.onblocked = function(ev) {
+    'use strict';
     if (opt_onBlocked) {
       opt_onBlocked(
           new goog.db.IndexedDb.VersionChangeEvent(
