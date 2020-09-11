@@ -38,6 +38,7 @@ goog.require('goog.log');
  * @extends {goog.editor.Field}
  */
 goog.editor.ContentEditableField = function(id, opt_doc) {
+  'use strict';
   goog.editor.Field.call(this, id, opt_doc);
 };
 goog.inherits(goog.editor.ContentEditableField, goog.editor.Field);
@@ -52,6 +53,7 @@ goog.editor.ContentEditableField.prototype.logger =
 
 /** @override */
 goog.editor.ContentEditableField.prototype.usesIframe = function() {
+  'use strict';
   // Never uses an iframe in any browser.
   return false;
 };
@@ -65,6 +67,7 @@ goog.editor.ContentEditableField.prototype.turnOnDesignModeGecko =
 
 /** @override */
 goog.editor.ContentEditableField.prototype.installStyles = function() {
+  'use strict';
   goog.asserts.assert(
       !this.cssStyles.getTypedStringValue(),
       'ContentEditableField does not support CSS styles; instead just write ' +
@@ -75,6 +78,7 @@ goog.editor.ContentEditableField.prototype.installStyles = function() {
 /** @override */
 goog.editor.ContentEditableField.prototype.makeEditableInternal = function(
     opt_iframeSrc) {
+  'use strict';
   var field = this.getOriginalElement();
   if (field) {
     this.setupFieldObject(field);

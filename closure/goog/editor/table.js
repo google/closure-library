@@ -35,6 +35,7 @@ goog.require('goog.style');
  * @final
  */
 goog.editor.Table = function(node) {
+  'use strict';
   this.element =
       goog.dom.getAncestorByTagNameAndClass(node, goog.dom.TagName.TABLE);
   if (!this.element) {
@@ -65,6 +66,7 @@ goog.editor.Table.prototype.logger_ = goog.log.getLogger('goog.editor.Table');
 // TODO(user): support partial refresh to save cost of full update
 // every time there is a change to the DOM.
 goog.editor.Table.prototype.refresh = function() {
+  'use strict';
   var rows = this.rows = [];
   var tbody = goog.dom.getElementsByTagName(
       goog.dom.TagName.TBODY, goog.asserts.assert(this.element))[0];
@@ -124,6 +126,7 @@ goog.editor.Table.prototype.refresh = function() {
  * @return {!Array<Element>} array of child cell elements.
  */
 goog.editor.Table.getChildCellElements = function(tr) {
+  'use strict';
   var cells = [];
   for (var i = 0, cell; cell = tr.childNodes[i]; i++) {
     if (cell.nodeName == goog.dom.TagName.TD ||
@@ -144,6 +147,7 @@ goog.editor.Table.getChildCellElements = function(tr) {
  * @return {!Element} The new row.
  */
 goog.editor.Table.prototype.insertRow = function(opt_rowIndex) {
+  'use strict';
   var rowIndex = (opt_rowIndex != null) ? opt_rowIndex : this.rows.length;
   var refRow;
   var insertAfter;
@@ -190,6 +194,7 @@ goog.editor.Table.prototype.insertRow = function(opt_rowIndex) {
  *     to populate the new column.
  */
 goog.editor.Table.prototype.insertColumn = function(opt_colIndex) {
+  'use strict';
   // TODO(user): set column widths in a way that makes sense.
   var colIndex = (opt_colIndex != null) ?
       opt_colIndex :
@@ -220,6 +225,7 @@ goog.editor.Table.prototype.insertColumn = function(opt_colIndex) {
  * @param {number} rowIndex Index of the row to delete.
  */
 goog.editor.Table.prototype.removeRow = function(rowIndex) {
+  'use strict';
   var row = this.rows[rowIndex];
   if (!row) {
     goog.log.warning(
@@ -246,6 +252,7 @@ goog.editor.Table.prototype.removeRow = function(rowIndex) {
  * @param {number} colIndex Index of the column to delete.
  */
 goog.editor.Table.prototype.removeColumn = function(colIndex) {
+  'use strict';
   for (var i = 0, row; row = this.rows[i]; i++) {
     var cell = row.columns[colIndex];
     if (!cell) {
@@ -277,6 +284,7 @@ goog.editor.Table.prototype.removeColumn = function(colIndex) {
  */
 goog.editor.Table.prototype.mergeCells = function(
     startRowIndex, startColIndex, endRowIndex, endColIndex) {
+  'use strict';
   // TODO(user): take a single goog.math.Rect parameter instead?
   var cells = [];
   var cell;
@@ -349,6 +357,7 @@ goog.editor.Table.prototype.mergeCells = function(
 // TODO(user): support splitting only horizontally or vertically,
 // support splitting cells that aren't already row/colspanned.
 goog.editor.Table.prototype.splitCell = function(rowIndex, colIndex) {
+  'use strict';
   var row = this.rows[rowIndex];
   var cell = row.columns[colIndex];
   var newTds = [];
@@ -379,6 +388,7 @@ goog.editor.Table.prototype.splitCell = function(rowIndex, colIndex) {
  */
 goog.editor.Table.prototype.insertCellElement = function(
     td, rowIndex, colIndex) {
+  'use strict';
   var row = this.rows[rowIndex];
   var nextSiblingElement = null;
   for (var i = colIndex, cell; cell = row.columns[i]; i += cell.colSpan) {
@@ -397,6 +407,7 @@ goog.editor.Table.prototype.insertCellElement = function(
  * @return {!Element} a new TD element.
  */
 goog.editor.Table.prototype.createEmptyTd = function() {
+  'use strict';
   // TODO(user): more cross-browser testing to determine best
   // and least annoying filler content.
   return this.dom_.createDom(goog.dom.TagName.TD, {}, goog.string.Unicode.NBSP);
@@ -413,6 +424,7 @@ goog.editor.Table.prototype.createEmptyTd = function() {
  * @final
  */
 goog.editor.TableRow = function(trElement, rowIndex) {
+  'use strict';
   this.index = rowIndex;
   this.element = trElement;
   this.columns = [];
@@ -430,6 +442,7 @@ goog.editor.TableRow = function(trElement, rowIndex) {
  * @final
  */
 goog.editor.TableCell = function(td, startRow, startCol) {
+  'use strict';
   this.element = td;
   this.colSpan = parseInt(td.colSpan, 10) || 1;
   this.rowSpan = parseInt(td.rowSpan, 10) || 1;
@@ -444,6 +457,7 @@ goog.editor.TableCell = function(td, startRow, startCol) {
  * @private
  */
 goog.editor.TableCell.prototype.updateCoordinates_ = function() {
+  'use strict';
   this.endCol = this.startCol + this.colSpan - 1;
   this.endRow = this.startRow + this.rowSpan - 1;
 };
@@ -455,6 +469,7 @@ goog.editor.TableCell.prototype.updateCoordinates_ = function() {
  * @param {number} colSpan The new colSpan.
  */
 goog.editor.TableCell.prototype.setColSpan = function(colSpan) {
+  'use strict';
   if (colSpan != this.colSpan) {
     if (colSpan > 1) {
       this.element.colSpan = colSpan;
@@ -473,6 +488,7 @@ goog.editor.TableCell.prototype.setColSpan = function(colSpan) {
  * @param {number} rowSpan The new rowSpan.
  */
 goog.editor.TableCell.prototype.setRowSpan = function(rowSpan) {
+  'use strict';
   if (rowSpan != this.rowSpan) {
     if (rowSpan > 1) {
       this.element.rowSpan = rowSpan.toString();
@@ -518,6 +534,7 @@ goog.editor.Table.DEFAULT_BORDER_COLOR = '#888';
  */
 goog.editor.Table.createDomTable = function(
     doc, columns, rows, opt_tableStyle) {
+  'use strict';
   // TODO(user): define formatting properties as constants,
   // make separate formatTable() function
   var style = {

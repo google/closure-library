@@ -39,6 +39,7 @@ goog.require('goog.userAgent');
  */
 goog.editor.icontent.FieldFormatInfo = function(
     fieldId, standards, blended, fixedHeight, opt_extraStyles) {
+  'use strict';
   this.fieldId_ = fieldId;
   this.standards_ = standards;
   this.blended_ = blended;
@@ -57,6 +58,7 @@ goog.editor.icontent.FieldFormatInfo = function(
  * @final
  */
 goog.editor.icontent.FieldStyleInfo = function(wrapper, css) {
+  'use strict';
   this.wrapper_ = wrapper;
   this.css_ = css;
 };
@@ -74,6 +76,7 @@ goog.editor.icontent.useStandardsModeIframes_ = false;
  * Sets up goog.editor.icontent to always use standards-mode iframes.
  */
 goog.editor.icontent.forceStandardsModeIframes = function() {
+  'use strict';
   goog.editor.icontent.useStandardsModeIframes_ = true;
 };
 
@@ -90,6 +93,7 @@ goog.editor.icontent.forceStandardsModeIframes = function() {
  */
 goog.editor.icontent.getInitialIframeContent_ = function(
     info, bodyHtml, style) {
+  'use strict';
   var html = [];
 
   if (info.blended_ && info.standards_ ||
@@ -216,6 +220,7 @@ goog.editor.icontent.getInitialIframeContent_ = function(
  */
 goog.editor.icontent.writeNormalInitialBlendedIframe = function(
     info, bodyHtml, style, iframe) {
+  'use strict';
   // Firefox blended needs to inherit all the css from the original page.
   // Firefox standards mode needs to set extra style for images.
   if (info.blended_) {
@@ -250,7 +255,7 @@ goog.editor.icontent.writeNormalInitialBlendedIframe = function(
  */
 goog.editor.icontent.writeNormalInitialIframe = function(
     info, bodyHtml, style, iframe) {
-
+  'use strict';
   var html =
       goog.editor.icontent.getInitialIframeContent_(info, bodyHtml, style);
 
@@ -269,6 +274,7 @@ goog.editor.icontent.writeNormalInitialIframe = function(
  * @param {string} bodyHtml The HTML to insert as the iframe body.
  */
 goog.editor.icontent.writeHttpsInitialIframe = function(info, doc, bodyHtml) {
+  'use strict';
   var body = doc.body;
 
   // For HTTPS we already have a document with a doc type and a body element
