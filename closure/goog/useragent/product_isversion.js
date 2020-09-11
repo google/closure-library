@@ -30,6 +30,7 @@ goog.require('goog.userAgent.product');
  * @private
  */
 goog.userAgent.product.determineVersion_ = function() {
+  'use strict';
   // All browsers have different ways to detect the version and they all have
   // different naming schemes.
 
@@ -101,6 +102,7 @@ goog.userAgent.product.determineVersion_ = function() {
  * @private
  */
 goog.userAgent.product.getFirstRegExpGroup_ = function(re) {
+  'use strict';
   var arr = goog.userAgent.product.execRegExp_(re);
   return arr ? arr[1] : '';
 };
@@ -113,6 +115,7 @@ goog.userAgent.product.getFirstRegExpGroup_ = function(re) {
  * @private
  */
 goog.userAgent.product.execRegExp_ = function(re) {
+  'use strict';
   return re.exec(goog.userAgent.getUserAgentString());
 };
 
@@ -134,6 +137,7 @@ goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
  *     same as the given version.
  */
 goog.userAgent.product.isVersion = function(version) {
+  'use strict';
   return goog.string.compareVersions(goog.userAgent.product.VERSION, version) >=
       0;
 };

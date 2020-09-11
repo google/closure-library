@@ -112,6 +112,7 @@ goog.userAgent.product.FIREFOX = goog.userAgent.product.PRODUCT_KNOWN_ ?
  * @private
  */
 goog.userAgent.product.isIphoneOrIpod_ = function() {
+  'use strict';
   return goog.labs.userAgent.platform.isIphone() ||
       goog.labs.userAgent.platform.isIpod();
 };
@@ -162,6 +163,7 @@ goog.userAgent.product.CHROME = goog.userAgent.product.PRODUCT_KNOWN_ ?
  * @private
  */
 goog.userAgent.product.isSafariDesktop_ = function() {
+  'use strict';
   return goog.labs.userAgent.browser.isSafari() &&
       !goog.labs.userAgent.platform.isIos();
 };

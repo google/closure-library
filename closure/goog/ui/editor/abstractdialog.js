@@ -35,6 +35,7 @@ goog.requireType('goog.events.Event');
  * @extends {goog.events.EventTarget}
  */
 goog.ui.editor.AbstractDialog = function(domHelper) {
+  'use strict';
   goog.ui.editor.AbstractDialog.base(this, 'constructor');
   this.dom = domHelper;
 
@@ -49,6 +50,7 @@ goog.inherits(goog.ui.editor.AbstractDialog, goog.events.EventTarget);
  * dialog if needed.
  */
 goog.ui.editor.AbstractDialog.prototype.show = function() {
+  'use strict';
   // Lazily create the wrapped dialog to be shown.
   if (!this.dialogInternal_) {
     this.dialogInternal_ = this.createDialogControl();
@@ -64,6 +66,7 @@ goog.ui.editor.AbstractDialog.prototype.show = function() {
  * Hides the dialog, causing AFTER_HIDE to fire.
  */
 goog.ui.editor.AbstractDialog.prototype.hide = function() {
+  'use strict';
   if (this.dialogInternal_) {
     // This eventually fires the wrapped dialog's AFTER_HIDE event, calling our
     // handleAfterHide_().
@@ -76,6 +79,7 @@ goog.ui.editor.AbstractDialog.prototype.hide = function() {
  * @return {boolean} Whether the dialog is open.
  */
 goog.ui.editor.AbstractDialog.prototype.isOpen = function() {
+  'use strict';
   return !!this.dialogInternal_ && this.dialogInternal_.isVisible();
 };
 
@@ -88,6 +92,7 @@ goog.ui.editor.AbstractDialog.prototype.isOpen = function() {
  * @protected
  */
 goog.ui.editor.AbstractDialog.prototype.processOkAndClose = function() {
+  'use strict';
   // Fake an OK event from the wrapped dialog control.
   var evt = new goog.ui.Dialog.Event(goog.ui.Dialog.DefaultButtonKeys.OK, null);
   if (this.handleOk(evt)) {
@@ -127,6 +132,7 @@ goog.ui.editor.AbstractDialog.EventType = {
  * @constructor
  */
 goog.ui.editor.AbstractDialog.Builder = function(editorDialog) {
+  'use strict';
   // We require the editor dialog to be passed in so that the builder can set up
   // ok/cancel listeners by default, making it easier for most dialogs.
   this.editorDialog_ = editorDialog;
@@ -143,6 +149,7 @@ goog.ui.editor.AbstractDialog.Builder = function(editorDialog) {
  * @return {!goog.ui.editor.AbstractDialog.Builder} This.
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.setTitle = function(title) {
+  'use strict';
   this.wrappedDialog_.setTitle(title);
   return this;
 };
@@ -156,6 +163,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.setTitle = function(title) {
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.addOkButton = function(
     opt_label) {
+  'use strict';
   var key = goog.ui.Dialog.DefaultButtonKeys.OK;
   /** @desc Label for an OK button in an editor dialog. */
   var MSG_TR_DIALOG_OK = goog.getMsg('OK');
@@ -175,6 +183,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addOkButton = function(
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.addCancelButton = function(
     opt_label) {
+  'use strict';
   var key = goog.ui.Dialog.DefaultButtonKeys.CANCEL;
   /** @desc Label for a cancel button in an editor dialog. */
   var MSG_TR_DIALOG_CANCEL = goog.getMsg('Cancel');
@@ -199,6 +208,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addCancelButton = function(
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.addButton = function(
     label, handler, opt_buttonId) {
+  'use strict';
   // We don't care what the key is, just that we can match the button with the
   // handler function later.
   var key = opt_buttonId || goog.string.createUniqueString();
@@ -215,6 +225,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addButton = function(
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.addClassName = function(
     className) {
+  'use strict';
   goog.dom.classlist.add(
       goog.asserts.assert(this.wrappedDialog_.getDialogElement()), className);
   return this;
@@ -228,6 +239,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addClassName = function(
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.setContent = function(
     contentElem) {
+  'use strict';
   goog.dom.appendChild(this.wrappedDialog_.getContentElement(), contentElem);
   return this;
 };
@@ -239,6 +251,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.setContent = function(
  * @return {!goog.ui.Dialog} The wrapped dialog control.
  */
 goog.ui.editor.AbstractDialog.Builder.prototype.build = function() {
+  'use strict';
   if (this.buttonSet_.isEmpty()) {
     // If caller didn't set any buttons, add an OK and Cancel button by default.
     this.addOkButton();
@@ -253,6 +266,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.build = function() {
       // Listen for the SELECT event, which means a button was clicked, and
       // call the handler associated with that button via the key property.
       function(e) {
+        'use strict';
         if (handlers[e.key]) {
           return handlers[e.key](e);
         }
@@ -327,6 +341,7 @@ goog.ui.editor.AbstractDialog.prototype.createDialogControl =
  * @protected
  */
 goog.ui.editor.AbstractDialog.prototype.getOkButtonElement = function() {
+  'use strict';
   return this.getButtonElement(goog.ui.Dialog.DefaultButtonKeys.OK);
 };
 
@@ -337,6 +352,7 @@ goog.ui.editor.AbstractDialog.prototype.getOkButtonElement = function() {
  * @protected
  */
 goog.ui.editor.AbstractDialog.prototype.getCancelButtonElement = function() {
+  'use strict';
   return this.getButtonElement(goog.ui.Dialog.DefaultButtonKeys.CANCEL);
 };
 
@@ -349,6 +365,7 @@ goog.ui.editor.AbstractDialog.prototype.getCancelButtonElement = function() {
  * @protected
  */
 goog.ui.editor.AbstractDialog.prototype.getButtonElement = function(buttonId) {
+  'use strict';
   return this.dialogInternal_.getButtonSet().getButton(buttonId);
 };
 
@@ -379,6 +396,7 @@ goog.ui.editor.AbstractDialog.prototype.createOkEvent = goog.abstractMethod;
  * @protected
  */
 goog.ui.editor.AbstractDialog.prototype.handleOk = function(e) {
+  'use strict';
   var eventObj = this.createOkEvent(e);
   if (eventObj) {
     return this.dispatchEvent(eventObj);
@@ -396,6 +414,7 @@ goog.ui.editor.AbstractDialog.prototype.handleOk = function(e) {
  * @protected
  */
 goog.ui.editor.AbstractDialog.prototype.handleCancel = function() {
+  'use strict';
   return this.dispatchEvent(goog.ui.editor.AbstractDialog.EventType.CANCEL);
 };
 
@@ -407,6 +426,7 @@ goog.ui.editor.AbstractDialog.prototype.handleCancel = function() {
  * @protected
  */
 goog.ui.editor.AbstractDialog.prototype.disposeInternal = function() {
+  'use strict';
   if (this.dialogInternal_) {
     this.hide();
 
@@ -427,5 +447,6 @@ goog.ui.editor.AbstractDialog.prototype.disposeInternal = function() {
  * @private
  */
 goog.ui.editor.AbstractDialog.prototype.handleAfterHide_ = function() {
+  'use strict';
   this.dispatchEvent(goog.ui.editor.AbstractDialog.EventType.AFTER_HIDE);
 };

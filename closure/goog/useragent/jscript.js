@@ -45,6 +45,7 @@ goog.userAgent.jscript.VERSION = '0';
  * @package
  */
 goog.userAgent.jscript.init = function() {
+  'use strict';
   var hasScriptEngine = 'ScriptEngine' in goog.global;
   goog.userAgent.jscript.HAS_JSCRIPT =
       hasScriptEngine && goog.global['ScriptEngine']() == 'JScript';
@@ -67,6 +68,7 @@ if (!goog.userAgent.jscript.ASSUME_NO_JSCRIPT) {
  *     newer than the given version.
  */
 goog.userAgent.jscript.isVersion = function(version) {
+  'use strict';
   return goog.string.compareVersions(goog.userAgent.jscript.VERSION, version) >=
       0;
 };

@@ -27,6 +27,7 @@ goog.userAgent.keyboard.ASSUME_MAC_KEYBOARD =
  * @private
  */
 goog.userAgent.keyboard.determineMacKeyboard_ = function() {
+  'use strict';
   return goog.labs.userAgent.platform.isMacintosh() ||
       goog.labs.userAgent.platform.isIos();
 };

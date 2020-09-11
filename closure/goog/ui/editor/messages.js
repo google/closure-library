@@ -50,6 +50,7 @@ goog.ui.editor.messages.MSG_TEST_THIS_LINK = goog.getMsg('Test this link');
  * @return {!goog.html.SafeHtml} SafeHtml version of MSG_TR_LINK_EXPLANATION.
  */
 goog.ui.editor.messages.getTrLinkExplanationSafeHtml = function() {
+  'use strict';
   var formatter = new goog.html.SafeHtmlFormatter();
 
   /**
@@ -110,6 +111,7 @@ goog.ui.editor.messages.MSG_WHAT_EMAIL =
  * @return {!goog.html.SafeHtml} SafeHtml version of MSG_EMAIL_EXPLANATION.
  */
 goog.ui.editor.messages.getEmailExplanationSafeHtml = function() {
+  'use strict';
   var formatter = new goog.html.SafeHtmlFormatter();
 
   /**
