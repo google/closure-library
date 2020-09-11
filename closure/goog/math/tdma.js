@@ -39,6 +39,7 @@ goog.provide('goog.math.tdma');
  */
 goog.math.tdma.solve = function(
     subDiag, mainDiag, supDiag, vecRight, opt_result) {
+  'use strict';
   // Make a local copy of the main diagonal and the right vector.
   mainDiag = mainDiag.slice();
   vecRight = vecRight.slice();
