@@ -39,6 +39,7 @@ goog.require('goog.graphics.Fill');
  */
 goog.graphics.LinearGradient = function(
     x1, y1, x2, y2, color1, color2, opt_opacity1, opt_opacity2) {
+  'use strict';
   /**
    * Start X position of the gradient.
    * @type {number}
@@ -106,6 +107,7 @@ goog.inherits(goog.graphics.LinearGradient, goog.graphics.Fill);
  * @return {number} The start X position of the gradient.
  */
 goog.graphics.LinearGradient.prototype.getX1 = function() {
+  'use strict';
   return this.x1_;
 };
 
@@ -114,6 +116,7 @@ goog.graphics.LinearGradient.prototype.getX1 = function() {
  * @return {number} The start Y position of the gradient.
  */
 goog.graphics.LinearGradient.prototype.getY1 = function() {
+  'use strict';
   return this.y1_;
 };
 
@@ -122,6 +125,7 @@ goog.graphics.LinearGradient.prototype.getY1 = function() {
  * @return {number} The end X position of the gradient.
  */
 goog.graphics.LinearGradient.prototype.getX2 = function() {
+  'use strict';
   return this.x2_;
 };
 
@@ -130,6 +134,7 @@ goog.graphics.LinearGradient.prototype.getX2 = function() {
  * @return {number} The end Y position of the gradient.
  */
 goog.graphics.LinearGradient.prototype.getY2 = function() {
+  'use strict';
   return this.y2_;
 };
 
@@ -138,6 +143,7 @@ goog.graphics.LinearGradient.prototype.getY2 = function() {
  * @override
  */
 goog.graphics.LinearGradient.prototype.getColor1 = function() {
+  'use strict';
   return this.color1_;
 };
 
@@ -146,6 +152,7 @@ goog.graphics.LinearGradient.prototype.getColor1 = function() {
  * @override
  */
 goog.graphics.LinearGradient.prototype.getColor2 = function() {
+  'use strict';
   return this.color2_;
 };
 
@@ -154,6 +161,7 @@ goog.graphics.LinearGradient.prototype.getColor2 = function() {
  * @return {?number} The start opacity of the gradient.
  */
 goog.graphics.LinearGradient.prototype.getOpacity1 = function() {
+  'use strict';
   return this.opacity1_;
 };
 
@@ -162,5 +170,6 @@ goog.graphics.LinearGradient.prototype.getOpacity1 = function() {
  * @return {?number} The end opacity of the gradient.
  */
 goog.graphics.LinearGradient.prototype.getOpacity2 = function() {
+  'use strict';
   return this.opacity2_;
 };

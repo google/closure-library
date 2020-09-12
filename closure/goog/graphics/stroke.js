@@ -28,6 +28,7 @@ goog.provide('goog.graphics.Stroke');
  *     http://en.wikipedia.org/wiki/Canvas_element for details.
  */
 goog.graphics.Stroke = function(width, color, opt_opacity) {
+  'use strict';
   /**
    * The width of the stroke.
    * @type {number|string}
@@ -57,6 +58,7 @@ goog.graphics.Stroke = function(width, color, opt_opacity) {
  * @return {number|string} The width of this stroke.
  */
 goog.graphics.Stroke.prototype.getWidth = function() {
+  'use strict';
   return this.width_;
 };
 
@@ -65,6 +67,7 @@ goog.graphics.Stroke.prototype.getWidth = function() {
  * @return {string} The color of this stroke.
  */
 goog.graphics.Stroke.prototype.getColor = function() {
+  'use strict';
   return this.color_;
 };
 
@@ -73,5 +76,6 @@ goog.graphics.Stroke.prototype.getColor = function() {
  * @return {number} The opacity of this fill.
  */
 goog.graphics.Stroke.prototype.getOpacity = function() {
+  'use strict';
   return this.opacity_;
 };
