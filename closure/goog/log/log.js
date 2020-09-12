@@ -11,6 +11,7 @@
 
 goog.provide('goog.log');
 goog.provide('goog.log.Level');
+goog.provide('goog.log.LogBuffer');
 goog.provide('goog.log.LogRecord');
 goog.provide('goog.log.Logger');
 

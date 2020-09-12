@@ -452,7 +452,7 @@ goog.addDependency('locale/scriptToLanguages.js', ['goog.locale.scriptToLanguage
 goog.addDependency('locale/timezonedetection.js', ['goog.locale.timeZoneDetection'], ['goog.locale.TimeZoneFingerprint'], {});
 goog.addDependency('locale/timezonefingerprint.js', ['goog.locale.TimeZoneFingerprint'], [], {});
 goog.addDependency('locale/timezonelist.js', ['goog.locale.TimeZoneList', 'goog.locale.getTimeZoneAllLongNames', 'goog.locale.getTimeZoneSelectedLongNames', 'goog.locale.getTimeZoneSelectedShortNames'], ['goog.locale'], {});
-goog.addDependency('log/log.js', ['goog.log', 'goog.log.Level', 'goog.log.LogRecord', 'goog.log.Logger'], ['goog.debug', 'goog.debug.LogBuffer', 'goog.debug.LogManager', 'goog.debug.LogRecord', 'goog.debug.Logger'], {});
+goog.addDependency('log/log.js', ['goog.log', 'goog.log.Level', 'goog.log.LogBuffer', 'goog.log.LogRecord', 'goog.log.Logger'], ['goog.debug', 'goog.debug.LogBuffer', 'goog.debug.LogManager', 'goog.debug.LogRecord', 'goog.debug.Logger'], {});
 goog.addDependency('math/affinetransform.js', ['goog.math.AffineTransform'], [], {'lang': 'es6'});
 goog.addDependency('math/bezier.js', ['goog.math.Bezier'], ['goog.math', 'goog.math.Coordinate'], {});
 goog.addDependency('math/box.js', ['goog.math.Box'], ['goog.asserts', 'goog.math.Coordinate'], {});
