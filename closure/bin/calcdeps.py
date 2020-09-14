@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Lint as: python2, python3
 #
 # Copyright 2006 The Closure Library Authors. All Rights Reserved.
 #
@@ -26,12 +27,6 @@ required for compilation.
 """
 
 
-try:
-  import distutils.version
-except ImportError:
-  # distutils is not available in all environments
-  distutils = None
-
 import logging
 import optparse
 import os
@@ -39,6 +34,14 @@ import re
 import subprocess
 import sys
 
+# Disable import-not-at-top as we really do need to dynamically import this
+# module.
+# pylint: disable=g-import-not-at-top
+try:
+  import distutils.version
+except ImportError:
+  # distutils is not available in all environments
+  distutils = None
 
 _BASE_REGEX_STRING = '^\s*goog\.%s\(\s*[\'"](.+)[\'"]\s*\)'
 req_regex = re.compile(_BASE_REGEX_STRING % 'require')
@@ -85,9 +88,7 @@ def ExpandDirectories(refs):
   result = []
   for ref in refs:
     if IsDirectory(ref):
-      # Disable 'Unused variable' for subdirs
-      # pylint: disable=unused-variable
-      for (directory, subdirs, filenames) in os.walk(ref):
+      for (directory, _, filenames) in os.walk(ref):
         for filename in filenames:
           if IsJsFile(filename):
             result.append(os.path.join(directory, filename))
@@ -105,9 +106,8 @@ class DependencyInfo(object):
     self.requires = []
 
   def __str__(self):
-    return '%s Provides: %s Requires: %s' % (self.filename,
-                                             repr(self.provides),
-                                             repr(self.requires))
+    return '%s Provides: %s Requires: %s' % (self.filename, repr(
+        self.provides), repr(self.requires))
 
 
 def BuildDependenciesFromFiles(files):
@@ -130,7 +130,7 @@ def BuildDependenciesFromFiles(files):
       continue
 
     # Python 3 requires the file encoding to be specified
-    if (sys.version_info[0] < 3):
+    if sys.version_info[0] < 3:
       file_handle = open(filename, 'r')
     else:
       file_handle = open(filename, 'r', encoding='utf8')
@@ -187,10 +187,8 @@ def BuildDependencyHashFromDependencies(deps):
   for dep in deps:
     for provide in dep.provides:
       if provide in dep_hash:
-        raise Exception('Duplicate provide (%s) in (%s, %s)' % (
-            provide,
-            dep_hash[provide].filename,
-            dep.filename))
+        raise Exception('Duplicate provide (%s) in (%s, %s)' %
+                        (provide, dep_hash[provide].filename, dep.filename))
       dep_hash[provide] = dep
   return dep_hash
 
@@ -263,7 +261,7 @@ def FindClosureBasePath(paths):
   """
 
   for path in paths:
-    pathname, filename = os.path.split(path)
+    _, filename = os.path.split(path)
 
     if filename == 'base.js':
       f = open(path)
@@ -283,6 +281,7 @@ def FindClosureBasePath(paths):
       if is_base:
         return path
 
+
 def ResolveDependencies(require, search_hash, result_list, seen_list):
   """Takes a given requirement and resolves all of the dependencies for it.
 
@@ -298,14 +297,14 @@ def ResolveDependencies(require, search_hash, result_list, seen_list):
     search_hash: the data structure used for resolving dependencies.
     result_list: a list of filenames that have been calculated as dependencies.
       This variable is the output for this function.
-    seen_list: a list of filenames that have been 'seen'.  This is required
-      for the dependency->dependent ordering.
+    seen_list: a list of filenames that have been 'seen'.  This is required for
+      the dependency->dependent ordering.
   """
   if require not in search_hash:
     raise Exception('Missing provider for (%s)' % require)
 
   dep = search_hash[require]
-  if not dep.filename in seen_list:
+  if dep.filename not in seen_list:
     seen_list.append(dep.filename)
     for sub_require in dep.requires:
       ResolveDependencies(sub_require, search_hash, result_list, seen_list)
@@ -319,8 +318,8 @@ def GetDepsLine(dep, base_path):
     dep: The dependency that we're printing.
     base_path: The path to Closure's base.js including filename.
   """
-  return 'goog.addDependency("%s", %s, %s);' % (
-      GetRelpath(dep.filename, base_path), dep.provides, dep.requires)
+  return 'goog.addDependency("%s", %s, %s);' % (GetRelpath(
+      dep.filename, base_path), dep.provides, dep.requires)
 
 
 def GetRelpath(path, start):
@@ -329,8 +328,8 @@ def GetRelpath(path, start):
   # functionality as this function. Since we want to support 2.4, we have
   # to implement it manually. :(
   path_list = os.path.abspath(os.path.normpath(path)).split(os.sep)
-  start_list = os.path.abspath(
-      os.path.normpath(os.path.dirname(start))).split(os.sep)
+  start_list = os.path.abspath(os.path.normpath(os.path.dirname(start))).split(
+      os.sep)
 
   common_prefix_count = 0
   for i in range(0, min(len(path_list), len(start_list))):
@@ -354,8 +353,8 @@ def PrintDeps(source_paths, deps, out):
 
   Args:
     source_paths: Paths that we should generate dependency info for.
-    deps: Paths that provide dependency info. Their dependency info should
-        not appear in the deps file.
+    deps: Paths that provide dependency info. Their dependency info should not
+      appear in the deps file.
     out: The output file.
 
   Returns:
@@ -367,10 +366,10 @@ def PrintDeps(source_paths, deps, out):
     return False
 
   PrintLine('// This file was autogenerated by calcdeps.py', out)
-  excludesSet = set(deps)
+  excludes_set = set(deps)
 
   for dep in BuildDependenciesFromFiles(source_paths + deps):
-    if not dep.filename in excludesSet:
+    if dep.filename not in excludes_set:
       PrintLine(GetDepsLine(dep, base_path), out)
 
   return True
@@ -398,6 +397,7 @@ def FilterByExcludes(options, files):
   Args:
     options: The flags to calcdeps.
     files: The files to filter.
+
   Returns:
     A list of files.
   """
@@ -405,8 +405,8 @@ def FilterByExcludes(options, files):
   if options.excludes:
     excludes = ExpandDirectories(options.excludes)
 
-  excludesSet = set(excludes)
-  return [i for i in files if not i in excludesSet]
+  excludes_set = set(excludes)
+  return [i for i in files if i not in excludes_set]
 
 
 def GetPathsFromOptions(options):
@@ -414,6 +414,7 @@ def GetPathsFromOptions(options):
 
   Args:
     options: The flags to calcdeps.
+
   Returns:
     A list of files in the specified paths. (strings).
   """
@@ -431,6 +432,7 @@ def GetInputsFromOptions(options):
 
   Args:
     options: The flags to calcdeps.
+
   Returns:
     A list of inputs (strings).
   """
@@ -451,6 +453,7 @@ def Compile(compiler_jar_path, source_paths, out, flags=None):
   Args:
     compiler_jar_path: Path to the Closure compiler .jar file.
     source_paths: Source paths to build, in order.
+    out: File object to write compilation result to.
     flags: A list of additional flags to pass on to Closure compiler.
   """
   args = ['java', '-jar', compiler_jar_path]
@@ -462,7 +465,7 @@ def Compile(compiler_jar_path, source_paths, out, flags=None):
 
   logging.info('Compiling with the following command: %s', ' '.join(args))
   proc = subprocess.Popen(args, stdout=subprocess.PIPE)
-  (stdoutdata, stderrdata) = proc.communicate()
+  (stdoutdata, _) = proc.communicate()
   if proc.returncode != 0:
     logging.error('JavaScript compilation failed.')
     sys.exit(1)
@@ -477,64 +480,72 @@ def main():
 
   usage = 'usage: %prog [options] arg'
   parser = optparse.OptionParser(usage)
-  parser.add_option('-i',
-                    '--input',
-                    dest='inputs',
-                    action='append',
-                    help='The inputs to calculate dependencies for. Valid '
-                    'values can be files, directories, or namespaces '
-                    '(ns:goog.net.XhrIo).  Only relevant to "list" and '
-                    '"script" output.')
-  parser.add_option('-p',
-                    '--path',
-                    dest='paths',
-                    action='append',
-                    help='The paths that should be traversed to build the '
-                    'dependencies.')
-  parser.add_option('-d',
-                    '--dep',
-                    dest='deps',
-                    action='append',
-                    help='Directories or files that should be traversed to '
-                    'find required dependencies for the deps file. '
-                    'Does not generate dependency information for names '
-                    'provided by these files. Only useful in "deps" mode.')
-  parser.add_option('-e',
-                    '--exclude',
-                    dest='excludes',
-                    action='append',
-                    help='Files or directories to exclude from the --path '
-                    'and --input flags')
-  parser.add_option('-o',
-                    '--output_mode',
-                    dest='output_mode',
-                    action='store',
-                    default='list',
-                    help='The type of output to generate from this script. '
-                    'Options are "list" for a list of filenames, "script" '
-                    'for a single script containing the contents of all the '
-                    'file, "deps" to generate a deps.js file for all '
-                    'paths, or "compiled" to produce compiled output with '
-                    'the Closure compiler.')
-  parser.add_option('-c',
-                    '--compiler_jar',
-                    dest='compiler_jar',
-                    action='store',
-                    help='The location of the Closure compiler .jar file.')
-  parser.add_option('-f',
-                    '--compiler_flag',
-                    '--compiler_flags', # for backwards compatibility
-                    dest='compiler_flags',
-                    action='append',
-                    help='Additional flag to pass to the Closure compiler. '
-                    'May be specified multiple times to pass multiple flags.')
-  parser.add_option('--output_file',
-                    dest='output_file',
-                    action='store',
-                    help=('If specified, write output to this path instead of '
-                          'writing to standard output.'))
+  parser.add_option(
+      '-i',
+      '--input',
+      dest='inputs',
+      action='append',
+      help='The inputs to calculate dependencies for. Valid '
+      'values can be files, directories, or namespaces '
+      '(ns:goog.net.XhrIo).  Only relevant to "list" and '
+      '"script" output.')
+  parser.add_option(
+      '-p',
+      '--path',
+      dest='paths',
+      action='append',
+      help='The paths that should be traversed to build the '
+      'dependencies.')
+  parser.add_option(
+      '-d',
+      '--dep',
+      dest='deps',
+      action='append',
+      help='Directories or files that should be traversed to '
+      'find required dependencies for the deps file. '
+      'Does not generate dependency information for names '
+      'provided by these files. Only useful in "deps" mode.')
+  parser.add_option(
+      '-e',
+      '--exclude',
+      dest='excludes',
+      action='append',
+      help='Files or directories to exclude from the --path '
+      'and --input flags')
+  parser.add_option(
+      '-o',
+      '--output_mode',
+      dest='output_mode',
+      action='store',
+      default='list',
+      help='The type of output to generate from this script. '
+      'Options are "list" for a list of filenames, "script" '
+      'for a single script containing the contents of all the '
+      'file, "deps" to generate a deps.js file for all '
+      'paths, or "compiled" to produce compiled output with '
+      'the Closure compiler.')
+  parser.add_option(
+      '-c',
+      '--compiler_jar',
+      dest='compiler_jar',
+      action='store',
+      help='The location of the Closure compiler .jar file.')
+  parser.add_option(
+      '-f',
+      '--compiler_flag',
+      '--compiler_flags',  # for backwards compatibility
+      dest='compiler_flags',
+      action='append',
+      help='Additional flag to pass to the Closure compiler. '
+      'May be specified multiple times to pass multiple flags.')
+  parser.add_option(
+      '--output_file',
+      dest='output_file',
+      action='store',
+      help=('If specified, write output to this path instead of '
+            'writing to standard output.'))
 
-  (options, args) = parser.parse_args()
+  (options, _) = parser.parse_args()
 
   search_paths = GetPathsFromOptions(options)
 
@@ -572,7 +583,7 @@ def main():
 
     # User friendly version check.
     if distutils and not (distutils.version.LooseVersion(GetJavaVersion()) >
-        distutils.version.LooseVersion('1.6')):
+                          distutils.version.LooseVersion('1.6')):
       logging.error('Closure Compiler requires Java 1.6 or higher.')
       logging.error('Please visit http://www.java.com/getjava')
       sys.exit(1)
@@ -582,6 +593,7 @@ def main():
   else:
     logging.error('Invalid value for --output flag.')
     sys.exit(1)
+
 
 if __name__ == '__main__':
   main()
