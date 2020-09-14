@@ -17,6 +17,7 @@ goog.provide('goog.fx.easing');
  * @return {number} Output between 0 and 1.
  */
 goog.fx.easing.easeIn = function(t) {
+  'use strict';
   return goog.fx.easing.easeInInternal_(t, 3);
 };
 
@@ -29,6 +30,7 @@ goog.fx.easing.easeIn = function(t) {
  * @private
  */
 goog.fx.easing.easeInInternal_ = function(t, exp) {
+  'use strict';
   return Math.pow(t, exp);
 };
 
@@ -39,6 +41,7 @@ goog.fx.easing.easeInInternal_ = function(t, exp) {
  * @return {number} Output between 0 and 1.
  */
 goog.fx.easing.easeOut = function(t) {
+  'use strict';
   return goog.fx.easing.easeOutInternal_(t, 3);
 };
 
@@ -51,6 +54,7 @@ goog.fx.easing.easeOut = function(t) {
  * @private
  */
 goog.fx.easing.easeOutInternal_ = function(t, exp) {
+  'use strict';
   return 1 - goog.fx.easing.easeInInternal_(1 - t, exp);
 };
 
@@ -61,6 +65,7 @@ goog.fx.easing.easeOutInternal_ = function(t, exp) {
  * @return {number} Output between 0 and 1.
  */
 goog.fx.easing.easeOutLong = function(t) {
+  'use strict';
   return goog.fx.easing.easeOutInternal_(t, 4);
 };
 
@@ -71,5 +76,6 @@ goog.fx.easing.easeOutLong = function(t) {
  * @return {number} Output between 0 and 1.
  */
 goog.fx.easing.inAndOut = function(t) {
+  'use strict';
   return 3 * t * t - 2 * t * t * t;
 };

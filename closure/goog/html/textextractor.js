@@ -30,6 +30,7 @@ goog.require('goog.userAgent');
 // TODO(pelizzi): consider an optional bool parameter to also extract the text
 // content of alt attributes and such.
 goog.html.textExtractor.extractTextContent = function(html) {
+  'use strict';
   if (!goog.html.textExtractor.isSupported()) {
     return '';
   }
@@ -57,6 +58,7 @@ goog.html.textExtractor.extractTextContent = function(html) {
  * @private
  */
 goog.html.textExtractor.extractTextContentFromNode_ = function(node) {
+  'use strict';
   switch (node.nodeType) {
     case Node.ELEMENT_NODE:
       var element = /** @type {!Element} */ (node);
@@ -102,6 +104,7 @@ goog.html.textExtractor.BLOCK_ELEMENTS_ = goog.object.createSet(
  * @private
  */
 goog.html.textExtractor.isBlockElement_ = function(element) {
+  'use strict';
   return element.style.display == 'block' ||
       goog.html.textExtractor.BLOCK_ELEMENTS_.hasOwnProperty(element.tagName);
 };
@@ -115,5 +118,6 @@ goog.html.textExtractor.isBlockElement_ = function(element) {
  * @package
  */
 goog.html.textExtractor.isSupported = function() {
+  'use strict';
   return !goog.userAgent.IE || goog.userAgent.isVersionOrHigher(10);
 };

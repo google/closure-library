@@ -129,6 +129,7 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
  * @override
  */
 goog.html.SafeUrl.prototype.getTypedStringValue = function() {
+  'use strict';
   return this.privateDoNotAccessOrElseSafeUrlWrappedValue_.toString();
 };
 
@@ -145,6 +146,7 @@ goog.html.SafeUrl.prototype.implementsGoogI18nBidiDirectionalString = true;
  * @override
  */
 goog.html.SafeUrl.prototype.getDirection = function() {
+  'use strict';
   return goog.i18n.bidi.Dir.LTR;
 };
 
@@ -160,6 +162,7 @@ if (goog.DEBUG) {
    * @override
    */
   goog.html.SafeUrl.prototype.toString = function() {
+    'use strict';
     return 'SafeUrl{' + this.privateDoNotAccessOrElseSafeUrlWrappedValue_ + '}';
   };
 }
@@ -183,6 +186,7 @@ if (goog.DEBUG) {
  *     `goog.asserts.AssertionError`.
  */
 goog.html.SafeUrl.unwrap = function(safeUrl) {
+  'use strict';
   // Perform additional Run-time type-checking to ensure that safeUrl is indeed
   // an instance of the expected type.  This provides some additional protection
   // against security bugs due to application code that disables type checks.
@@ -211,6 +215,7 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
  * @return {!goog.html.SafeUrl} A SafeUrl object initialized to `url`.
  */
 goog.html.SafeUrl.fromConstant = function(url) {
+  'use strict';
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
       goog.string.Const.unwrap(url));
 };
@@ -253,6 +258,7 @@ goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
  *   otherwise.
  */
 goog.html.SafeUrl.isSafeMimeType = function(mimeType) {
+  'use strict';
   return goog.html.SAFE_MIME_TYPE_PATTERN_.test(mimeType);
 };
 
@@ -273,6 +279,7 @@ goog.html.SafeUrl.isSafeMimeType = function(mimeType) {
  *   as a SafeUrl.
  */
 goog.html.SafeUrl.fromBlob = function(blob) {
+  'use strict';
   var url = goog.html.SafeUrl.isSafeMimeType(blob.type) ?
       goog.fs.url.createObjectUrl(blob) :
       goog.html.SafeUrl.INNOCUOUS_STRING;
@@ -285,6 +292,7 @@ goog.html.SafeUrl.fromBlob = function(blob) {
  * @param {!goog.html.SafeUrl} safeUrl SafeUrl wrapping a blob object.
  */
 goog.html.SafeUrl.revokeObjectUrl = function(safeUrl) {
+  'use strict';
   var url = safeUrl.getTypedStringValue();
   if (url !== goog.html.SafeUrl.INNOCUOUS_STRING) {
     goog.fs.url.revokeObjectUrl(url);
@@ -298,6 +306,7 @@ goog.html.SafeUrl.revokeObjectUrl = function(safeUrl) {
  * @return {!goog.html.SafeUrl} The blob URL.
  */
 goog.html.SafeUrl.fromMediaSource = function(mediaSource) {
+  'use strict';
   goog.asserts.assert(
       'MediaSource' in goog.global, 'No support for MediaSource');
   const url = mediaSource instanceof MediaSource ?
@@ -325,6 +334,7 @@ goog.html.DATA_URL_PATTERN_ = /^data:(.*);base64,[a-z0-9+\/]+=*$/i;
  *     pass.
  */
 goog.html.SafeUrl.tryFromDataUrl = function(dataUrl) {
+  'use strict';
   // For defensive purposes, in case users cast around the parameter type.
   dataUrl = String(dataUrl);
   // RFC4648 suggest to ignore CRLF in base64 encoding.
@@ -359,6 +369,7 @@ goog.html.SafeUrl.tryFromDataUrl = function(dataUrl) {
  *     `goog.html.SafeUrl.INNOCUOUS_URL` if it does not pass.
  */
 goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
+  'use strict';
   return goog.html.SafeUrl.tryFromDataUrl(dataUrl) ||
       goog.html.SafeUrl.INNOCUOUS_URL;
 };
@@ -372,6 +383,7 @@ goog.html.SafeUrl.fromDataUrl = function(dataUrl) {
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromTelUrl = function(telUrl) {
+  'use strict';
   // There's a risk that a tel: URL could immediately place a call once
   // clicked, without requiring user confirmation. For that reason it is
   // handled in this separate function.
@@ -405,6 +417,7 @@ goog.html.SIP_URL_PATTERN_ = new RegExp(
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromSipUrl = function(sipUrl) {
+  'use strict';
   if (!goog.html.SIP_URL_PATTERN_.test(decodeURIComponent(sipUrl))) {
     sipUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
   }
@@ -421,6 +434,7 @@ goog.html.SafeUrl.fromSipUrl = function(sipUrl) {
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromFacebookMessengerUrl = function(facebookMessengerUrl) {
+  'use strict';
   if (!goog.string.internal.caseInsensitiveStartsWith(
           facebookMessengerUrl, 'fb-messenger://share')) {
     facebookMessengerUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
@@ -437,6 +451,7 @@ goog.html.SafeUrl.fromFacebookMessengerUrl = function(facebookMessengerUrl) {
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromWhatsAppUrl = function(whatsAppUrl) {
+  'use strict';
   if (!goog.string.internal.caseInsensitiveStartsWith(
           whatsAppUrl, 'whatsapp://send')) {
     whatsAppUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
@@ -453,6 +468,7 @@ goog.html.SafeUrl.fromWhatsAppUrl = function(whatsAppUrl) {
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromSmsUrl = function(smsUrl) {
+  'use strict';
   if (!goog.string.internal.caseInsensitiveStartsWith(smsUrl, 'sms:') ||
       !goog.html.SafeUrl.isSmsUrlBodyValid_(smsUrl)) {
     smsUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
@@ -473,6 +489,7 @@ goog.html.SafeUrl.fromSmsUrl = function(smsUrl) {
  * @private
  */
 goog.html.SafeUrl.isSmsUrlBodyValid_ = function(smsUrl) {
+  'use strict';
   var hash = smsUrl.indexOf('#');
   if (hash > 0) {
     smsUrl = smsUrl.substring(0, hash);
@@ -508,6 +525,7 @@ goog.html.SafeUrl.isSmsUrlBodyValid_ = function(smsUrl) {
  *     wrapped as a SafeUrl if it does not pass.
  */
 goog.html.SafeUrl.fromSshUrl = function(sshUrl) {
+  'use strict';
   if (!goog.string.internal.caseInsensitiveStartsWith(sshUrl, 'ssh://')) {
     sshUrl = goog.html.SafeUrl.INNOCUOUS_STRING;
   }
@@ -528,6 +546,7 @@ goog.html.SafeUrl.fromSshUrl = function(sshUrl) {
  *     `INNOCUOUS_STRING` if it's not.
  */
 goog.html.SafeUrl.sanitizeChromeExtensionUrl = function(url, extensionId) {
+  'use strict';
   return goog.html.SafeUrl.sanitizeExtensionUrl_(
       /^chrome-extension:\/\/([^\/]+)\//, url, extensionId);
 };
@@ -545,6 +564,7 @@ goog.html.SafeUrl.sanitizeChromeExtensionUrl = function(url, extensionId) {
  *     `INNOCUOUS_STRING` if it's not.
  */
 goog.html.SafeUrl.sanitizeFirefoxExtensionUrl = function(url, extensionId) {
+  'use strict';
   return goog.html.SafeUrl.sanitizeExtensionUrl_(
       /^moz-extension:\/\/([^\/]+)\//, url, extensionId);
 };
@@ -562,6 +582,7 @@ goog.html.SafeUrl.sanitizeFirefoxExtensionUrl = function(url, extensionId) {
  *     `INNOCUOUS_STRING` if it's not.
  */
 goog.html.SafeUrl.sanitizeEdgeExtensionUrl = function(url, extensionId) {
+  'use strict';
   return goog.html.SafeUrl.sanitizeExtensionUrl_(
       /^ms-browser-extension:\/\/([^\/]+)\//, url, extensionId);
 };
@@ -584,6 +605,7 @@ goog.html.SafeUrl.sanitizeEdgeExtensionUrl = function(url, extensionId) {
  *     `INNOCUOUS_STRING` if it's not.
  */
 goog.html.SafeUrl.sanitizeExtensionUrl_ = function(scheme, url, extensionId) {
+  'use strict';
   var matches = scheme.exec(url);
   if (!matches) {
     url = goog.html.SafeUrl.INNOCUOUS_STRING;
@@ -594,6 +616,7 @@ goog.html.SafeUrl.sanitizeExtensionUrl_ = function(scheme, url, extensionId) {
       acceptedExtensionIds = [goog.string.Const.unwrap(extensionId)];
     } else {
       acceptedExtensionIds = extensionId.map(function unwrap(x) {
+        'use strict';
         return goog.string.Const.unwrap(x);
       });
     }
@@ -613,6 +636,7 @@ goog.html.SafeUrl.sanitizeExtensionUrl_ = function(scheme, url, extensionId) {
  * @return {!goog.html.SafeUrl}
  */
 goog.html.SafeUrl.fromTrustedResourceUrl = function(trustedResourceUrl) {
+  'use strict';
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
       goog.html.TrustedResourceUrl.unwrap(trustedResourceUrl));
 };
@@ -667,6 +691,7 @@ goog.html.SafeUrl.SAFE_URL_PATTERN = goog.html.SAFE_URL_PATTERN_;
  *     if validation fails.
  */
 goog.html.SafeUrl.trySanitize = function(url) {
+  'use strict';
   if (url instanceof goog.html.SafeUrl) {
     return url;
   }
@@ -697,6 +722,7 @@ goog.html.SafeUrl.trySanitize = function(url) {
  * @return {!goog.html.SafeUrl} The validated URL, wrapped as a SafeUrl.
  */
 goog.html.SafeUrl.sanitize = function(url) {
+  'use strict';
   return goog.html.SafeUrl.trySanitize(url) || goog.html.SafeUrl.INNOCUOUS_URL;
 };
 
@@ -719,6 +745,7 @@ goog.html.SafeUrl.sanitize = function(url) {
  * @return {!goog.html.SafeUrl} The validated URL, wrapped as a SafeUrl.
  */
 goog.html.SafeUrl.sanitizeAssertUnchanged = function(url, opt_allowDataUrl) {
+  'use strict';
   if (url instanceof goog.html.SafeUrl) {
     return url;
   } else if (typeof url == 'object' && url.implementsGoogStringTypedString) {
@@ -757,6 +784,7 @@ goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_ = {};
  */
 goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
     url) {
+  'use strict';
   return new goog.html.SafeUrl(
       url, goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_);
 };

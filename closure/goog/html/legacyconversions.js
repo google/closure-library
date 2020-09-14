@@ -77,6 +77,7 @@ goog.require('goog.html.TrustedResourceUrl');
  *     object.
  */
 goog.html.legacyconversions.safeHtmlFromString = function(html) {
+  'use strict';
   goog.html.legacyconversions.reportCallback_();
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       html, null /* dir */);
@@ -94,6 +95,7 @@ goog.html.legacyconversions.safeHtmlFromString = function(html) {
  *     object.
  */
 goog.html.legacyconversions.safeScriptFromString = function(script) {
+  'use strict';
   goog.html.legacyconversions.reportCallback_();
   return goog.html.SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse(
       script);
@@ -111,6 +113,7 @@ goog.html.legacyconversions.safeScriptFromString = function(script) {
  *     object.
  */
 goog.html.legacyconversions.safeStyleFromString = function(style) {
+  'use strict';
   goog.html.legacyconversions.reportCallback_();
   return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       style);
@@ -128,6 +131,7 @@ goog.html.legacyconversions.safeStyleFromString = function(style) {
  *     a SafeStyleSheet object.
  */
 goog.html.legacyconversions.safeStyleSheetFromString = function(styleSheet) {
+  'use strict';
   goog.html.legacyconversions.reportCallback_();
   return goog.html.SafeStyleSheet
       .createSafeStyleSheetSecurityPrivateDoNotAccessOrElse(styleSheet);
@@ -145,6 +149,7 @@ goog.html.legacyconversions.safeStyleSheetFromString = function(styleSheet) {
  *     object.
  */
 goog.html.legacyconversions.safeUrlFromString = function(url) {
+  'use strict';
   goog.html.legacyconversions.reportCallback_();
   return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
@@ -161,6 +166,7 @@ goog.html.legacyconversions.safeUrlFromString = function(url) {
  *     TrustedResourceUrl object.
  */
 goog.html.legacyconversions.trustedResourceUrlFromString = function(url) {
+  'use strict';
   goog.html.legacyconversions.reportCallback_();
   return goog.html.TrustedResourceUrl
       .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(url);
@@ -180,5 +186,6 @@ goog.html.legacyconversions.reportCallback_ = goog.nullFunction;
  * @param {function(): undefined} callback Error callback as defined above.
  */
 goog.html.legacyconversions.setReportCallback = function(callback) {
+  'use strict';
   goog.html.legacyconversions.reportCallback_ = callback;
 };

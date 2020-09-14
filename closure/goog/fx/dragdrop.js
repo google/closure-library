@@ -33,6 +33,7 @@ goog.require('goog.fx.DragDropItem');
  * @struct
  */
 goog.fx.DragDrop = function(element, opt_data) {
+  'use strict';
   goog.fx.AbstractDragDrop.call(this);
 
   var item = new goog.fx.DragDropItem(element, opt_data);
