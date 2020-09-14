@@ -30,7 +30,7 @@ goog.require('goog.crypt.BlockCipher');
  * @struct
  */
 goog.crypt.Cbc = function(cipher) {
-
+  'use strict';
   /**
    * Block cipher.
    * @type {!goog.crypt.BlockCipher}
@@ -50,7 +50,7 @@ goog.crypt.Cbc = function(cipher) {
  * @return {!Array<number>} Encrypted message.
  */
 goog.crypt.Cbc.prototype.encrypt = function(plainText, initialVector) {
-
+  'use strict';
   goog.asserts.assert(
       plainText.length % this.cipher_.BLOCK_SIZE == 0,
       'Data\'s length must be multiple of block size.');
@@ -93,7 +93,7 @@ goog.crypt.Cbc.prototype.encrypt = function(plainText, initialVector) {
  * @return {!Array<number>} Decrypted message.
  */
 goog.crypt.Cbc.prototype.decrypt = function(cipherText, initialVector) {
-
+  'use strict';
   goog.asserts.assert(
       cipherText.length % this.cipher_.BLOCK_SIZE == 0,
       'Data\'s length must be multiple of block size.');

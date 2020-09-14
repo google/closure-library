@@ -38,6 +38,7 @@ goog.require('goog.crypt.Sha1');
  */
 goog.crypt.pbkdf2.deriveKeySha1 = function(
     password, initialSalt, iterations, keyLength) {
+  'use strict';
   // Length of the HMAC-SHA1 output in bits.
   var HASH_LENGTH = 160;
 
@@ -48,6 +49,7 @@ goog.crypt.pbkdf2.deriveKeySha1 = function(
    * @return {!Array<number>} Byte array representation of the output block.
    */
   var computeBlock = function(index) {
+    'use strict';
     // Initialize the result to be array of 0 such that its xor with the first
     // block would be the first block.
     var result = goog.array.repeat(0, HASH_LENGTH / 8);
@@ -81,6 +83,7 @@ goog.crypt.pbkdf2.deriveKeySha1 = function(
  */
 goog.crypt.pbkdf2.deriveKeyFromPassword_ = function(
     computeBlock, hashLength, keyLength) {
+  'use strict';
   goog.asserts.assert(keyLength % 8 == 0, 'invalid output key length');
 
   // Compute and concactate each block of the output key.
@@ -110,6 +113,7 @@ goog.crypt.pbkdf2.deriveKeyFromPassword_ = function(
  * @private
  */
 goog.crypt.pbkdf2.integerToByteArray_ = function(n) {
+  'use strict';
   var result = new Array(4);
   result[0] = n >> 24 & 0xFF;
   result[1] = n >> 16 & 0xFF;

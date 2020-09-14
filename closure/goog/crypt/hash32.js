@@ -37,6 +37,7 @@ goog.crypt.hash32.CONSTANT32 = -1640531527;
  * @return {number} 32-bit hash.
  */
 goog.crypt.hash32.encodeString = function(str) {
+  'use strict';
   return goog.crypt.hash32.encodeByteArray(goog.crypt.stringToByteArray(str));
 };
 
@@ -48,6 +49,7 @@ goog.crypt.hash32.encodeString = function(str) {
  * @return {number} 32-bit hash.
  */
 goog.crypt.hash32.encodeStringUtf8 = function(str) {
+  'use strict';
   return goog.crypt.hash32.encodeByteArray(
       goog.crypt.stringToUtf8ByteArray(str));
 };
@@ -59,6 +61,7 @@ goog.crypt.hash32.encodeStringUtf8 = function(str) {
  * @return {number} 32-bit hash.
  */
 goog.crypt.hash32.encodeInteger = function(value) {
+  'use strict';
   // TODO(user): Does this make sense in JavaScript with doubles?  Should we
   // force the value to be in the correct range?
   return goog.crypt.hash32.mix32_(
@@ -77,6 +80,7 @@ goog.crypt.hash32.encodeInteger = function(value) {
  */
 goog.crypt.hash32.encodeByteArray = function(
     bytes, opt_offset, opt_length, opt_seed) {
+  'use strict';
   var offset = opt_offset || 0;
   var length = opt_length || bytes.length;
   var seed = opt_seed || goog.crypt.hash32.SEED32;
@@ -137,6 +141,7 @@ goog.crypt.hash32.encodeByteArray = function(
  * @private
  */
 goog.crypt.hash32.mix32_ = function(mix) {
+  'use strict';
   var a = mix.a, b = mix.b, c = mix.c;
   a -= b;
   a -= c;
@@ -181,6 +186,7 @@ goog.crypt.hash32.mix32_ = function(mix) {
  * @private
  */
 goog.crypt.hash32.wordAt_ = function(bytes, offset) {
+  'use strict';
   var a = goog.crypt.hash32.toSigned_(bytes[offset + 0]);
   var b = goog.crypt.hash32.toSigned_(bytes[offset + 1]);
   var c = goog.crypt.hash32.toSigned_(bytes[offset + 2]);
@@ -197,5 +203,6 @@ goog.crypt.hash32.wordAt_ = function(bytes, offset) {
  * @private
  */
 goog.crypt.hash32.toSigned_ = function(n) {
+  'use strict';
   return n > 127 ? n - 256 : n;
 };

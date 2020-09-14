@@ -37,6 +37,7 @@ goog.require('goog.crypt.Hash');
  * @struct
  */
 goog.crypt.Md5 = function() {
+  'use strict';
   goog.crypt.Md5.base(this, 'constructor');
 
   this.blockSize = 512 / 8;
@@ -119,6 +120,7 @@ goog.crypt.Md5.T_ = [
 
 /** @override */
 goog.crypt.Md5.prototype.reset = function() {
+  'use strict';
   this.chain_[0] = 0x67452301;
   this.chain_[1] = 0xefcdab89;
   this.chain_[2] = 0x98badcfe;
@@ -137,6 +139,7 @@ goog.crypt.Md5.prototype.reset = function() {
  * @private
  */
 goog.crypt.Md5.prototype.compress_ = function(buf, opt_offset) {
+  'use strict';
   if (!opt_offset) {
     opt_offset = 0;
   }
@@ -340,6 +343,7 @@ goog.crypt.Md5.prototype.compress_ = function(buf, opt_offset) {
 
 /** @override */
 goog.crypt.Md5.prototype.update = function(bytes, opt_length) {
+  'use strict';
   if (opt_length === undefined) {
     opt_length = bytes.length;
   }
@@ -394,6 +398,7 @@ goog.crypt.Md5.prototype.update = function(bytes, opt_length) {
 
 /** @override */
 goog.crypt.Md5.prototype.digest = function() {
+  'use strict';
   // This must accommodate at least 1 padding byte (0x80), 8 bytes of
   // total bitlength, and must end at a 64-byte boundary.
   var pad = new Array(
