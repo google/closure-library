@@ -25,6 +25,14 @@ class HasString {
   }
 }
 
+/**
+ * @param {string} stringValue The result of toString.
+ * @return {?}
+ */
+const createHasString = (stringValue) => {
+  return new HasString(stringValue);
+};
+
 testSuite({
   setUpPage() {
     googString.getRandomString = functions.constant('RANDOM');
@@ -351,10 +359,10 @@ testSuite({
         'should handle params of non-primitive types',
         'http://foo@www.google.com:80/path?q=query#fragment',
         utils.buildFromEncodedParts(
-            new HasString('http'), new HasString('foo'),
-            new HasString('www.google.com'), new HasString('80'),
-            new HasString('/path'), new HasString('q=query'),
-            new HasString('fragment')));
+            createHasString('http'), createHasString('foo'),
+            createHasString('www.google.com'), createHasString('80'),
+            createHasString('/path'), createHasString('q=query'),
+            createHasString('fragment')));
   },
 
   testAppendParam() {
@@ -409,8 +417,8 @@ testSuite({
     assertEquals(
         'should handle objects with to-string', 'http://foo.com?q=a&r=b',
         utils.appendParams(
-            'http://foo.com', 'q', new HasString('a'), 'r',
-            [new HasString('b')]));
+            'http://foo.com', 'q', createHasString('a'), 'r',
+            [createHasString('b')]));
 
     assertThrows(
         'appendParams should fail with an odd number of arguments.', () => {
@@ -454,7 +462,7 @@ testSuite({
         'http://foo.com?q=1&r=2&s=3&s=4&s=null&s=undefined#preserve',
         utils.appendParams(
             'http://foo.com#preserve',
-            ['q', 1, 'r', 2, 's', [3, new HasString('4'), null, undefined]]));
+            ['q', 1, 'r', 2, 's', [3, createHasString('4'), null, undefined]]));
   },
 
   testAppendParamEscapes() {
@@ -468,7 +476,7 @@ testSuite({
   testAppendParamsFromMap() {
     const uri = utils.appendParamsFromMap(
         'http://www.foo.com',
-        {'a': 1, 'b': 'bob', 'c': [1, 2, new HasString('3')]});
+        {'a': 1, 'b': 'bob', 'c': [1, 2, createHasString('3')]});
     assertArrayEquals(['1'], utils.getParamValues(uri, 'a'));
     assertArrayEquals(['bob'], utils.getParamValues(uri, 'b'));
     assertArrayEquals(['1', '2', '3'], utils.getParamValues(uri, 'c'));
@@ -478,7 +486,7 @@ testSuite({
     assertEquals('a=1', utils.buildQueryDataFromMap({'a': 1}));
     const uri = 'foo.com?' +
         utils.buildQueryDataFromMap(
-            {'a': 1, 'b': 'bob', 'c': [1, 2, new HasString('3')]});
+            {'a': 1, 'b': 'bob', 'c': [1, 2, createHasString('3')]});
     assertArrayEquals(['1'], utils.getParamValues(uri, 'a'));
     assertArrayEquals(['bob'], utils.getParamValues(uri, 'b'));
     assertArrayEquals(['1', '2', '3'], utils.getParamValues(uri, 'c'));

@@ -17,6 +17,7 @@ const userAgentTestUtil = goog.require('goog.userAgentTestUtil');
 const util = goog.require('goog.labs.userAgent.util');
 
 let documentMode;
+/** @suppress {visibility} */
 userAgent.getDocumentMode_ = function() {
   return documentMode;
 };
@@ -264,7 +265,8 @@ testSuite({
 
   testDocumentModeInStandardsMode() {
     userAgentTestUtil.reinitializeUserAgent();
-    const expectedMode = userAgent.IE ? parseInt(userAgent.VERSION) : undefined;
+    const expectedMode =
+        userAgent.IE ? parseInt(userAgent.VERSION, 10) : undefined;
     assertEquals(expectedMode, userAgent.DOCUMENT_MODE);
   },
 
@@ -298,7 +300,7 @@ testSuite({
 
   testUnknownBrowser() {
     assertUserAgent([], 'MyWebBrowser');
-    assertUserAgent([], undefined);
+    assertUserAgent([], /** @type {?} */ (undefined));
   },
 
   testNoNavigator() {
