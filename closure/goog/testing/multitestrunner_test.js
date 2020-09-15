@@ -7,9 +7,11 @@
 goog.module('goog.testing.MultiTestRunnerTest');
 goog.setTestOnly('goog.testing.MultiTestRunnerTest');
 
+const jsunit = goog.require('goog.testing.jsunit');
+
 // Delay running the tests after page load. This test has some asynchronous
 // behavior that interacts with page load detection.
-goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS = 500;
+jsunit.AUTO_RUN_DELAY_IN_MS = 500;
 
 const MockControl = goog.require('goog.testing.MockControl');
 const MultiTestRunner = goog.require('goog.testing.MultiTestRunner');

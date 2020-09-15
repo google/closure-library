@@ -52,7 +52,6 @@ const doAsyncSignals = () => {
 const asyncTestCase = new AsyncTestCase(document.title);
 asyncTestCase.setTestObj({
   setUpPage() {
-    debug('setUpPage was called.');
     doAsyncStuff(3, 'setUpPage');
   },
 
@@ -93,7 +92,6 @@ asyncTestCase.setTestObj({
   },
 
   tearDownPage() {
-    debug('tearDownPage was called.');
     assertTrue(curTestIsDone);
   },
 
