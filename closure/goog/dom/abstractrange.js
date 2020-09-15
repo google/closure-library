@@ -48,6 +48,7 @@ goog.dom.AbstractRange = function() {};
  * @param {Window} win The window to get the selection object from.
  * @return {Object} The browser native selection object, or null if it could
  *     not be retrieved.
+ * @deprecated use window#getSelection instead.
  */
 goog.dom.AbstractRange.getBrowserSelectionForWindow = function(win) {
   return win.getSelection();
