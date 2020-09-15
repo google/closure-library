@@ -241,7 +241,7 @@ goog.addDependency('events/onlinehandler.js', ['goog.events.OnlineHandler', 'goo
 goog.addDependency('events/pastehandler.js', ['goog.events.PasteHandler', 'goog.events.PasteHandler.EventType', 'goog.events.PasteHandler.State'], ['goog.Timer', 'goog.async.ConditionalDelay', 'goog.events.BrowserEvent', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.log', 'goog.userAgent'], {});
 goog.addDependency('events/wheelevent.js', ['goog.events.WheelEvent'], ['goog.asserts', 'goog.events.BrowserEvent'], {});
 goog.addDependency('events/wheelhandler.js', ['goog.events.WheelHandler'], ['goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.WheelEvent', 'goog.style', 'goog.userAgent', 'goog.userAgent.product', 'goog.userAgent.product.isVersion'], {});
-goog.addDependency('format/emailaddress.js', ['goog.format.EmailAddress'], ['goog.string'], {});
+goog.addDependency('format/emailaddress.js', ['goog.format.EmailAddress'], ['goog.i18n.bidi', 'goog.object', 'goog.string'], {});
 goog.addDependency('format/format.js', ['goog.format'], ['goog.i18n.GraphemeBreak', 'goog.string', 'goog.userAgent'], {});
 goog.addDependency('format/htmlprettyprinter.js', ['goog.format.HtmlPrettyPrinter', 'goog.format.HtmlPrettyPrinter.Buffer'], ['goog.dom.TagName', 'goog.object', 'goog.string.StringBuffer'], {});
 goog.addDependency('format/internationalizedemailaddress.js', ['goog.format.InternationalizedEmailAddress'], ['goog.format.EmailAddress', 'goog.string'], {});

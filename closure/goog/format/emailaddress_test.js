@@ -8,8 +8,14 @@ goog.module('goog.format.EmailAddressTest');
 goog.setTestOnly();
 
 const EmailAddress = goog.require('goog.format.EmailAddress');
+const Format = goog.require('goog.i18n.bidi.Format');
 const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
+const LRM = Format.LRM;
+const RLM = Format.RLM;
+const LRE = Format.LRE;
+const RLE = Format.RLE;
+const PDF = Format.PDF;
 
 function doIsValidTest(testFunc, valid, invalid) {
   googArray.forEach(valid, (str) => {
@@ -140,6 +146,18 @@ testSuite({
         'Failed to parse pre-OS X Mac newlines');
   },
 
+  testparseListBidiMarks() {
+    // These bidi marks can be copy pasted from an RTL formatted email
+    assertParsedList(
+        `ab ${LRE}${PDF}${RLM}<${LRE}a@b.com${PDF}${RLM}>` +
+            `${PDF}${RLM},c@d.com${PDF}${RLM} `,
+        ['a@b.com', 'c@d.com']);
+    assertParsedList(
+        `${PDF}ab ${RLE}${PDF}${LRM}<${RLE}a@b.com${PDF}${LRM}>` +
+            `${PDF}${LRM},c@d.com${PDF}${LRM} `,
+        ['a@b.com', 'c@d.com']);
+  },
+
   testToString() {
     const f = (str) => EmailAddress.parse(str).toString();
 
@@ -197,17 +215,11 @@ testSuite({
 
   testIsValid() {
     const valid = [
-      'e@b.eu',
-      '<a.b+foo@c.com>',
-      'eric <e@b.com>',
-      '"e" <e@b.com>',
-      'a@FOO.MUSEUM',
-      'bla@b.co.ac.uk',
-      'bla@a.b.com',
-      'o\'hara@gm.com',
-      'plus+is+allowed@gmail.com',
-      '!/#$%&\'*+-=~|`{}?^_@expample.com',
+      'e@b.eu', '<a.b+foo@c.com>', 'eric <e@b.com>', '"e" <e@b.com>',
+      'a@FOO.MUSEUM', 'bla@b.co.ac.uk', 'bla@a.b.com', 'o\'hara@gm.com',
+      'plus+is+allowed@gmail.com', '!/#$%&\'*+-=~|`{}?^_@expample.com',
       'confirm-bhk=modulo.org@yahoogroups.com',
+      `blah blahson ${LRE}${PDF}${RLM}<${LRE}blah@blah.com${PDF}${RLM}>`
     ];
     const invalid = [
       'e',

@@ -10,9 +10,9 @@
 
 goog.provide('goog.format.EmailAddress');
 
+goog.require('goog.i18n.bidi');
+goog.require('goog.object');
 goog.require('goog.string');
-
-
 
 /**
  * Formats an email address string for display, and allows for extraction of
@@ -133,7 +133,6 @@ goog.format.EmailAddress.LOCAL_PART_REGEXP_STR_ =
 goog.format.EmailAddress.DOMAIN_PART_REGEXP_STR_ =
     '([a-zA-Z0-9-]+\\.)+[a-zA-Z0-9]{2,63}';
 
-
 /**
  * A RegExp to match the local part of an email address.
  * @private {!RegExp}
@@ -157,6 +156,14 @@ goog.format.EmailAddress.DOMAIN_PART_ =
 goog.format.EmailAddress.EMAIL_ADDRESS_ = new RegExp(
     '^' + goog.format.EmailAddress.LOCAL_PART_REGEXP_STR_ + '@' +
     goog.format.EmailAddress.DOMAIN_PART_REGEXP_STR_ + '$');
+
+/**
+ * Regular expression for bidi format character replacement in text.
+ * @type {!RegExp}
+ * @private
+ */
+goog.format.EmailAddress.ALL_BIDI_FORMAT_CHARS_ = new RegExp(
+    '[' + goog.object.getValues(goog.i18n.bidi.Format).join('') + ']', 'g');
 
 
 /**
@@ -341,7 +348,7 @@ goog.format.EmailAddress.isValidDomainPartSpec = function(str) {
  */
 goog.format.EmailAddress.parseInternal = function(addr, ctor) {
   'use strict';
-  // TODO(ecattell): Strip bidi markers.
+  addr = goog.format.EmailAddress.stripBidiChars_(addr);
   var name = '';
   var address = '';
   for (var i = 0; i < addr.length;) {
@@ -503,4 +510,16 @@ goog.format.EmailAddress.isEscapedDlQuote_ = function(str, pos) {
 goog.format.EmailAddress.isAddressSeparator = function(ch) {
   'use strict';
   return goog.string.contains(goog.format.EmailAddress.ADDRESS_SEPARATORS_, ch);
+};
+
+/**
+ * Returns the input text without Unicode formatting characters
+ * and directionality string constants as defined in {@link
+ * goog.i18n.bidi.Format}.
+ * @param {string} str The given string.
+ * @return {string} The given string cleaned of formatting characters.
+ * @private
+ */
+goog.format.EmailAddress.stripBidiChars_ = function(str) {
+  return str.replace(goog.format.EmailAddress.ALL_BIDI_FORMAT_CHARS_, '');
 };
