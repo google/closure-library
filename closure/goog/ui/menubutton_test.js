@@ -81,7 +81,7 @@ function checkHasPopUp() {
       'Menu button must have aria-haspopup attribute set to true',
       aria.getState(menuButton.getElement(), State.HASPOPUP));
   menuButton.setMenu(null);
-  assertFale(
+  assertFalse(
       'Menu button must have aria-haspopup attribute set to false',
       aria.getState(menuButton.getElement(), State.HASPOPUP));
 }
