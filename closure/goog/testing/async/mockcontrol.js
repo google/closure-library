@@ -54,6 +54,7 @@ goog.require('goog.testing.mockmatchers.IgnoreArgument');
  * @final
  */
 goog.testing.async.MockControl = function(mockControl) {
+  'use strict';
   /**
    * The parent MockControl.
    * @type {goog.testing.MockControl}
@@ -78,6 +79,7 @@ goog.testing.async.MockControl = function(mockControl) {
  */
 goog.testing.async.MockControl.prototype.createCallbackMock = function(
     name, callback, opt_selfObj) {
+  'use strict';
   goog.asserts.assert(
       typeof name === 'string',
       'name parameter ' + goog.debug.deepExpose(name) + ' should be a string');
@@ -89,10 +91,12 @@ goog.testing.async.MockControl.prototype.createCallbackMock = function(
   var mockAsFn = /** @type {Function} */ (/** @type {*} */ (mock));
 
   mockAsFn(ignored).$does(function(args) {
+    'use strict';
     return callback.apply(opt_selfObj || /** @type {?} */ (this), args);
   });
   mock.$replay();
   return function() {
+    'use strict';
     return mockAsFn(arguments);
   };
 };
@@ -109,8 +113,10 @@ goog.testing.async.MockControl.prototype.createCallbackMock = function(
  */
 goog.testing.async.MockControl.prototype.asyncAssertEquals = function(
     message, var_args) {
+  'use strict';
   var expectedArgs = Array.prototype.slice.call(arguments, 1);
   return this.createCallbackMock('asyncAssertEquals', function() {
+    'use strict';
     assertObjectEquals(
         message, expectedArgs, Array.prototype.slice.call(arguments));
   });
@@ -126,6 +132,7 @@ goog.testing.async.MockControl.prototype.asyncAssertEquals = function(
  */
 goog.testing.async.MockControl.prototype.assertDeferredError = function(
     deferred, fn) {
+  'use strict';
   deferred.addErrback(
       this.createCallbackMock('assertDeferredError', function() {}));
   fn();
@@ -144,10 +151,12 @@ goog.testing.async.MockControl.prototype.assertDeferredError = function(
  */
 goog.testing.async.MockControl.prototype.assertDeferredEquals = function(
     message, expected, actual) {
+  'use strict';
   if (expected instanceof goog.async.Deferred) {
     // Assert that the first deferred is resolved.
     expected.addCallback(
         this.createCallbackMock('assertDeferredEquals', function(exp) {
+          'use strict';
           // Assert that the second deferred is resolved, and that the value is
           // as expected.
           if (actual instanceof goog.async.Deferred) {

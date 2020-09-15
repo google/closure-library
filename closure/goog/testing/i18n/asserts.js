@@ -57,6 +57,7 @@ goog.testing.i18n.asserts.EXPECTED_VALUE_MAP_ = {
  * @param {string} actual The actual value.
  */
 goog.testing.i18n.asserts.assertI18nEquals = function(expected, actual) {
+  'use strict';
   if (expected === actual) {
     return;
   }
@@ -78,6 +79,7 @@ goog.testing.i18n.asserts.assertI18nEquals = function(expected, actual) {
  * @param {string} haystack The string to search within.
  */
 goog.testing.i18n.asserts.assertI18nContains = function(needle, haystack) {
+  'use strict';
   if (needle === haystack) {
     return;
   }
@@ -99,6 +101,7 @@ goog.testing.i18n.asserts.assertI18nContains = function(needle, haystack) {
  * @param {string} equivalent A string which is i18n-equal.
  */
 goog.testing.i18n.asserts.addI18nMapping = function(expected, equivalent) {
+  'use strict';
   if (goog.testing.i18n.asserts.EXPECTED_VALUE_MAP_.hasOwnProperty(expected)) {
     throw new RangeError('Mapping for string already exists');
   }

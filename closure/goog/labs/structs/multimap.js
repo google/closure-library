@@ -67,6 +67,7 @@ goog.labs.structs.Multimap = class {
    */
   addAllValues(key, values) {
     goog.array.forEach(values, function(v) {
+      'use strict';
       this.add(key, v);
     }, this);
   }
@@ -78,6 +79,7 @@ goog.labs.structs.Multimap = class {
    */
   addAllFromMultimap(map) {
     goog.array.forEach(map.getEntries(), function(entry) {
+      'use strict';
       this.add(entry[0], entry[1]);
     }, this);
   }
@@ -118,6 +120,7 @@ goog.labs.structs.Multimap = class {
     }
 
     var removed = goog.array.removeIf(values, function(v) {
+      'use strict';
       return Object.is(value, v);
     });
 
@@ -174,6 +177,7 @@ goog.labs.structs.Multimap = class {
     }
 
     var index = goog.array.findIndex(values, function(v) {
+      'use strict';
       return Object.is(v, value);
     });
     return index >= 0;

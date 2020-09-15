@@ -40,6 +40,7 @@ goog.requireType('goog.dom.DomHelper');
  * @final
  */
 goog.demos.editor.HelloWorldDialog = function(domHelper) {
+  'use strict';
   goog.ui.editor.AbstractDialog.call(this, domHelper);
 };
 goog.inherits(
@@ -58,6 +59,7 @@ goog.inherits(
  * @final
  */
 goog.demos.editor.HelloWorldDialog.OkEvent = function(message) {
+  'use strict';
   this.message = message;
 };
 goog.inherits(goog.demos.editor.HelloWorldDialog.OkEvent, goog.events.Event);
@@ -84,6 +86,7 @@ goog.demos.editor.HelloWorldDialog.OkEvent.prototype.message;
 
 /** @override */
 goog.demos.editor.HelloWorldDialog.prototype.createDialogControl = function() {
+  'use strict';
   var builder = new goog.ui.editor.AbstractDialog.Builder(this);
   /** @desc Title of the hello world dialog. */
   var MSG_HELLO_WORLD_DIALOG_TITLE = goog.getMsg('Add a Hello World message');
@@ -104,6 +107,7 @@ goog.demos.editor.HelloWorldDialog.prototype.createDialogControl = function() {
  * @override
  */
 goog.demos.editor.HelloWorldDialog.prototype.createOkEvent = function(e) {
+  'use strict';
   var message = this.getMessage_();
   if (message &&
       goog.demos.editor.HelloWorldDialog.isValidHelloWorld_(message)) {
@@ -135,6 +139,7 @@ goog.demos.editor.HelloWorldDialog.prototype.input_;
  * @private
  */
 goog.demos.editor.HelloWorldDialog.prototype.createContent_ = function() {
+  'use strict';
   /** @desc Sample hello world message to prepopulate the dialog with. */
   var MSG_HELLO_WORLD_DIALOG_SAMPLE = goog.getMsg('Hello, world!');
   this.input_ = this.dom.createDom(
@@ -154,6 +159,7 @@ goog.demos.editor.HelloWorldDialog.prototype.createContent_ = function() {
  * @private
  */
 goog.demos.editor.HelloWorldDialog.prototype.getMessage_ = function() {
+  'use strict';
   return this.input_ && this.input_.value;
 };
 
@@ -167,6 +173,7 @@ goog.demos.editor.HelloWorldDialog.prototype.getMessage_ = function() {
  * @private
  */
 goog.demos.editor.HelloWorldDialog.isValidHelloWorld_ = function(message) {
+  'use strict';
   message = message.toLowerCase();
   return goog.string.contains(message, 'hello') &&
       goog.string.contains(message, 'world');

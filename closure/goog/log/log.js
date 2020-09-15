@@ -79,6 +79,7 @@ goog.log.LogBuffer = goog.debug.LogBuffer;
  * @return {goog.log.Logger} The named logger or null if logging is disabled.
  */
 goog.log.getLogger = function(name, opt_level) {
+  'use strict';
   if (goog.log.ENABLED) {
     var logger = goog.debug.LogManager.getLogger(name);
     if (opt_level && logger) {
@@ -97,6 +98,7 @@ goog.log.getLogger = function(name, opt_level) {
  * @return {?goog.log.Logger} The root logger, or null if logging is disabled.
  */
 goog.log.getRootLogger = function() {
+  'use strict';
   return goog.log.getLogger(goog.log.ROOT_LOGGER_NAME);
 };
 
@@ -109,6 +111,7 @@ goog.log.getRootLogger = function() {
  * @param {Function} handler Handler function to add.
  */
 goog.log.addHandler = function(logger, handler) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     logger.addHandler(handler);
   }
@@ -123,6 +126,7 @@ goog.log.addHandler = function(logger, handler) {
  * @return {boolean} Whether the handler was removed.
  */
 goog.log.removeHandler = function(logger, handler) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     return logger.removeHandler(handler);
   } else {
@@ -138,6 +142,7 @@ goog.log.removeHandler = function(logger, handler) {
  * @param {?goog.debug.Logger.Level} level The level to set.
  */
 goog.log.setLevel = function(logger, level) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     logger.setLevel(level);
   }
@@ -154,6 +159,7 @@ goog.log.setLevel = function(logger, level) {
  * @return {?goog.debug.Logger.Level} The level.
  */
 goog.log.getLevel = function(logger) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     return logger.getLevel();
   }
@@ -168,6 +174,7 @@ goog.log.getLevel = function(logger) {
  * @return {?goog.debug.Logger.Level} The level.
  */
 goog.log.getEffectiveLevel = function(logger) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     return logger.getEffectiveLevel();
   }
@@ -184,6 +191,7 @@ goog.log.getEffectiveLevel = function(logger) {
  * @return {boolean} Whether the message would be logged.
  */
 goog.log.isLoggable = function(logger, level) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     return logger.isLoggable(level);
   }
@@ -201,6 +209,7 @@ goog.log.isLoggable = function(logger, level) {
  * @return {?goog.debug.LogRecord} A log record.
  */
 goog.log.getLogRecord = function(logger, level, msg, opt_exception) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     return logger.getLogRecord(level, msg, opt_exception);
   }
@@ -216,6 +225,7 @@ goog.log.getLogRecord = function(logger, level, msg, opt_exception) {
  * @param {?goog.debug.LogRecord} logRecord A log record to log.
  */
 goog.log.publishLogRecord = function(logger, logRecord) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     logger.logRecord(logRecord);
   }
@@ -233,6 +243,7 @@ goog.log.publishLogRecord = function(logger, logRecord) {
  *     message.
  */
 goog.log.log = function(logger, level, msg, opt_exception) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     logger.log(level, msg, opt_exception);
   }
@@ -248,6 +259,7 @@ goog.log.log = function(logger, level, msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.error = function(logger, msg, opt_exception) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     logger.severe(msg, opt_exception);
   }
@@ -263,6 +275,7 @@ goog.log.error = function(logger, msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.warning = function(logger, msg, opt_exception) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     logger.warning(msg, opt_exception);
   }
@@ -278,6 +291,7 @@ goog.log.warning = function(logger, msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.info = function(logger, msg, opt_exception) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     logger.info(msg, opt_exception);
   }
@@ -293,6 +307,7 @@ goog.log.info = function(logger, msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.log.fine = function(logger, msg, opt_exception) {
+  'use strict';
   if (goog.log.ENABLED && logger) {
     logger.fine(msg, opt_exception);
   }

@@ -24,6 +24,7 @@ goog.provide('goog.reflect');
  * @return {Object} The object literal.
  */
 goog.reflect.object = function(type, object) {
+  'use strict';
   return object;
 };
 
@@ -44,6 +45,7 @@ goog.reflect.object = function(type, object) {
  * @return {string} The renamed property.
  */
 goog.reflect.objectProperty = function(prop, object) {
+  'use strict';
   return prop;
 };
 
@@ -59,6 +61,7 @@ goog.reflect.objectProperty = function(prop, object) {
  * @template T
  */
 goog.reflect.sinkValue = function(x) {
+  'use strict';
   goog.reflect.sinkValue[' '](x);
   return x;
 };
@@ -79,7 +82,7 @@ goog.reflect.sinkValue[' '] = goog.nullFunction;
  *     if obj is null.
  */
 goog.reflect.canAccessProperty = function(obj, prop) {
-
+  'use strict';
   try {
     goog.reflect.sinkValue(obj[prop]);
     return true;
@@ -118,6 +121,7 @@ goog.reflect.canAccessProperty = function(obj, prop) {
  * @template V
  */
 goog.reflect.cache = function(cacheObj, key, valueFn, opt_keyFn) {
+  'use strict';
   const storedKey = opt_keyFn ? opt_keyFn(key) : key;
 
   if (Object.prototype.hasOwnProperty.call(cacheObj, storedKey)) {

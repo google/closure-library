@@ -40,6 +40,7 @@ goog.requireType('goog.dom.DomHelper');
  * @final
  */
 goog.labs.style.PixelDensityMonitor = function(opt_domHelper) {
+  'use strict';
   goog.labs.style.PixelDensityMonitor.base(this, 'constructor');
 
   /**
@@ -129,6 +130,7 @@ goog.labs.style.PixelDensityMonitor.HIGH_DENSITY_QUERY_ =
  * Starts monitoring for changes in pixel density.
  */
 goog.labs.style.PixelDensityMonitor.prototype.start = function() {
+  'use strict';
   if (this.mediaQueryList_) {
     this.mediaQueryList_.addListener(this.listener_);
   }
@@ -140,6 +142,7 @@ goog.labs.style.PixelDensityMonitor.prototype.start = function() {
  *     window.
  */
 goog.labs.style.PixelDensityMonitor.prototype.getDensity = function() {
+  'use strict';
   if (this.window_.devicePixelRatio >=
       goog.labs.style.PixelDensityMonitor.HIGH_DENSITY_RATIO_) {
     return goog.labs.style.PixelDensityMonitor.Density.HIGH;
@@ -157,6 +160,7 @@ goog.labs.style.PixelDensityMonitor.prototype.getDensity = function() {
  */
 goog.labs.style.PixelDensityMonitor.prototype.handleMediaQueryChange_ =
     function(mql) {
+  'use strict';
   var newDensity = this.getDensity();
   if (this.lastDensity_ != newDensity) {
     this.lastDensity_ = newDensity;
@@ -167,6 +171,7 @@ goog.labs.style.PixelDensityMonitor.prototype.handleMediaQueryChange_ =
 
 /** @override */
 goog.labs.style.PixelDensityMonitor.prototype.disposeInternal = function() {
+  'use strict';
   if (this.mediaQueryList_) {
     this.mediaQueryList_.removeListener(this.listener_);
   }
