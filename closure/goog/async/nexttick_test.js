@@ -25,13 +25,14 @@ testSuite({
     clock = null;
   },
 
+  /** @suppress {visibility} */
   tearDown() {
     if (clock) {
       clock.uninstall();
     }
     // Unset the cached setImmediate_ behavior so it's re-evaluated for each
     // test.
-    nextTick.setImmediate_ = undefined;
+    nextTick.setImmediate_ = /** @type {?} */ (undefined);
     propertyReplacer.reset();
   },
 
