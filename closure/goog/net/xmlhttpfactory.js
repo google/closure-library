@@ -42,6 +42,7 @@ goog.net.XmlHttpFactory.prototype.createInstance = goog.abstractMethod;
  *     factory should be used.
  */
 goog.net.XmlHttpFactory.prototype.getOptions = function() {
+  'use strict';
   return this.cachedOptions_ ||
       (this.cachedOptions_ = this.internalGetOptions());
 };

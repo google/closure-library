@@ -30,6 +30,7 @@ goog.require('goog.net.XmlHttpFactory');
  * @final
  */
 goog.net.WrapperXmlHttpFactory = function(xhrFactory, optionsFactory) {
+  'use strict';
   goog.net.XmlHttpFactory.call(this);
 
   /**
@@ -51,11 +52,13 @@ goog.inherits(goog.net.WrapperXmlHttpFactory, goog.net.XmlHttpFactory);
 
 /** @override */
 goog.net.WrapperXmlHttpFactory.prototype.createInstance = function() {
+  'use strict';
   return this.xhrFactory_();
 };
 
 
 /** @override */
 goog.net.WrapperXmlHttpFactory.prototype.getOptions = function() {
+  'use strict';
   return this.optionsFactory_();
 };

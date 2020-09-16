@@ -100,6 +100,7 @@ goog.net.jsloader.scriptLoadingDeferred_;
  *     callbacks
  */
 goog.net.jsloader.safeLoadMany = function(trustedUris, opt_options) {
+  'use strict';
   // Loading the scripts in serial introduces asynchronosity into the flow.
   // Therefore, there are race conditions where client A can kick off the load
   // sequence for client B, even though client A's scripts haven't all been
@@ -123,6 +124,7 @@ goog.net.jsloader.safeLoadMany = function(trustedUris, opt_options) {
 
   trustedUris = goog.net.jsloader.scriptsToLoad_;
   var popAndLoadNextScript = function() {
+    'use strict';
     var trustedUri = trustedUris.shift();
     var deferred = goog.net.jsloader.safeLoad(trustedUri, opt_options);
     if (trustedUris.length) {
@@ -149,6 +151,7 @@ goog.net.jsloader.safeLoadMany = function(trustedUris, opt_options) {
  *     parameter.
  */
 goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
+  'use strict';
   var options = opt_options || {};
   var doc = options.document || document;
   var uri = goog.html.TrustedResourceUrl.unwrap(trustedUri);
@@ -164,6 +167,7 @@ goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
       goog.net.jsloader.DEFAULT_TIMEOUT;
   if (timeoutDuration > 0) {
     timeout = window.setTimeout(function() {
+      'use strict';
       goog.net.jsloader.cleanup_(script, true);
       deferred.errback(
           new goog.net.jsloader.Error(
@@ -178,6 +182,7 @@ goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
   // case it is the client's responsibility to verify that the script ran
   // successfully.
   script.onload = script.onreadystatechange = function() {
+    'use strict';
     if (!script.readyState || script.readyState == 'loaded' ||
         script.readyState == 'complete') {
       var removeScriptNode = options.cleanupWhenDone || false;
@@ -189,6 +194,7 @@ goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
   // Add an error callback.
   // NOTE(user): Not supported in IE.
   script.onerror = function() {
+    'use strict';
     goog.net.jsloader.cleanup_(script, true, timeout);
     deferred.errback(
         new goog.net.jsloader.Error(
@@ -232,6 +238,7 @@ goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
  */
 goog.net.jsloader.safeLoadAndVerify = function(
     trustedUri, verificationObjName, options) {
+  'use strict';
   // Define the global objects variable.
   if (!goog.global[goog.net.jsloader.GLOBAL_VERIFY_OBJS_]) {
     goog.global[goog.net.jsloader.GLOBAL_VERIFY_OBJS_] = {};
@@ -258,6 +265,7 @@ goog.net.jsloader.safeLoadAndVerify = function(
 
   // Call user back with object that was set by the script.
   sendDeferred.addCallback(function() {
+    'use strict';
     var result = verifyObjs[verificationObjName];
     if (result !== undefined) {
       deferred.callback(result);
@@ -274,6 +282,7 @@ goog.net.jsloader.safeLoadAndVerify = function(
 
   // Pass error to new deferred object.
   sendDeferred.addErrback(function(error) {
+    'use strict';
     if (verifyObjs[verificationObjName] !== undefined) {
       delete verifyObjs[verificationObjName];
     }
@@ -294,6 +303,7 @@ goog.net.jsloader.safeLoadAndVerify = function(
  * @private
  */
 goog.net.jsloader.getScriptParentElement_ = function(doc) {
+  'use strict';
   var headElements = goog.dom.getElementsByTagName(goog.dom.TagName.HEAD, doc);
   if (!headElements || goog.array.isEmpty(headElements)) {
     return doc.documentElement;
@@ -309,6 +319,7 @@ goog.net.jsloader.getScriptParentElement_ = function(doc) {
  * @private
  */
 goog.net.jsloader.cancel_ = function() {
+  'use strict';
   var request = this;
   if (request && request.script_) {
     var scriptNode = request.script_;
@@ -329,6 +340,7 @@ goog.net.jsloader.cancel_ = function() {
  */
 goog.net.jsloader.cleanup_ = function(
     scriptNode, removeScriptNode, opt_timeout) {
+  'use strict';
   if (opt_timeout != null) {
     goog.global.clearTimeout(opt_timeout);
   }
@@ -340,7 +352,10 @@ goog.net.jsloader.cleanup_ = function(
   // Do this after a delay (removing the script node of a running script can
   // confuse older IEs).
   if (removeScriptNode) {
-    window.setTimeout(function() { goog.dom.removeNode(scriptNode); }, 0);
+    window.setTimeout(function() {
+      'use strict';
+      goog.dom.removeNode(scriptNode);
+    }, 0);
   }
 };
 
@@ -368,6 +383,7 @@ goog.net.jsloader.ErrorCode = {
  * @final
  */
 goog.net.jsloader.Error = function(code, opt_message) {
+  'use strict';
   var msg = 'Jsloader error (code #' + code + ')';
   if (opt_message) {
     msg += ': ' + opt_message;

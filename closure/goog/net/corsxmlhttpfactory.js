@@ -34,6 +34,7 @@ goog.require('goog.net.XmlHttpFactory');
  * @final
  */
 goog.net.CorsXmlHttpFactory = function() {
+  'use strict';
   goog.net.XmlHttpFactory.call(this);
 };
 goog.inherits(goog.net.CorsXmlHttpFactory, goog.net.XmlHttpFactory);
@@ -41,6 +42,7 @@ goog.inherits(goog.net.CorsXmlHttpFactory, goog.net.XmlHttpFactory);
 
 /** @override */
 goog.net.CorsXmlHttpFactory.prototype.createInstance = function() {
+  'use strict';
   var xhr = new XMLHttpRequest();
   if (('withCredentials' in xhr)) {
     return xhr;
@@ -54,6 +56,7 @@ goog.net.CorsXmlHttpFactory.prototype.createInstance = function() {
 
 /** @override */
 goog.net.CorsXmlHttpFactory.prototype.internalGetOptions = function() {
+  'use strict';
   return {};
 };
 
@@ -70,6 +73,7 @@ goog.net.CorsXmlHttpFactory.prototype.internalGetOptions = function() {
  * @final
  */
 goog.net.IeCorsXhrAdapter = function() {
+  'use strict';
   /**
    * The underlying XDomainRequest used to make the HTTP request.
    * @type {!XDomainRequest}
@@ -136,6 +140,7 @@ goog.net.IeCorsXhrAdapter = function() {
  * @override
  */
 goog.net.IeCorsXhrAdapter.prototype.open = function(method, url, opt_async) {
+  'use strict';
   if (opt_async != null && (!opt_async)) {
     throw new Error('Only async requests are supported.');
   }
@@ -152,6 +157,7 @@ goog.net.IeCorsXhrAdapter.prototype.open = function(method, url, opt_async) {
  * @override
  */
 goog.net.IeCorsXhrAdapter.prototype.send = function(opt_content) {
+  'use strict';
   if (opt_content) {
     if (typeof opt_content == 'string') {
       this.xdr_.send(opt_content);
@@ -168,6 +174,7 @@ goog.net.IeCorsXhrAdapter.prototype.send = function(opt_content) {
  * @override
  */
 goog.net.IeCorsXhrAdapter.prototype.abort = function() {
+  'use strict';
   this.xdr_.abort();
 };
 
@@ -196,6 +203,7 @@ goog.net.IeCorsXhrAdapter.prototype.setRequestHeader = function(key, value) {
  * @override
  */
 goog.net.IeCorsXhrAdapter.prototype.getResponseHeader = function(key) {
+  'use strict';
   if (key.toLowerCase() == 'content-type') {
     return this.xdr_.contentType;
   }
@@ -208,6 +216,7 @@ goog.net.IeCorsXhrAdapter.prototype.getResponseHeader = function(key) {
  * @private
  */
 goog.net.IeCorsXhrAdapter.prototype.handleLoad_ = function() {
+  'use strict';
   // IE only calls onload if the status is 200, so the status code must be OK.
   this.status = goog.net.HttpStatus.OK;
   this.response = this.responseText = this.xdr_.responseText;
@@ -220,6 +229,7 @@ goog.net.IeCorsXhrAdapter.prototype.handleLoad_ = function() {
  * @private
  */
 goog.net.IeCorsXhrAdapter.prototype.handleError_ = function() {
+  'use strict';
   // IE doesn't tell us what the status code actually is (other than the fact
   // that it is not 200), so simulate an INTERNAL_SERVER_ERROR.
   this.status = goog.net.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -233,6 +243,7 @@ goog.net.IeCorsXhrAdapter.prototype.handleError_ = function() {
  * @private
  */
 goog.net.IeCorsXhrAdapter.prototype.handleTimeout_ = function() {
+  'use strict';
   this.handleError_();
 };
 
@@ -242,6 +253,7 @@ goog.net.IeCorsXhrAdapter.prototype.handleTimeout_ = function() {
  * @private
  */
 goog.net.IeCorsXhrAdapter.prototype.handleProgress_ = function() {
+  'use strict';
   // IE only calls onprogress if the status is 200, so the status code must be
   // OK.
   this.status = goog.net.HttpStatus.OK;
@@ -256,6 +268,7 @@ goog.net.IeCorsXhrAdapter.prototype.handleProgress_ = function() {
  * @private
  */
 goog.net.IeCorsXhrAdapter.prototype.setReadyState_ = function(readyState) {
+  'use strict';
   this.readyState = readyState;
   if (this.onreadystatechange) {
     this.onreadystatechange();
@@ -270,5 +283,6 @@ goog.net.IeCorsXhrAdapter.prototype.setReadyState_ = function(readyState) {
  * @override
  */
 goog.net.IeCorsXhrAdapter.prototype.getAllResponseHeaders = function() {
+  'use strict';
   return 'content-type: ' + this.xdr_.contentType;
 };

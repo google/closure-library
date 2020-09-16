@@ -39,6 +39,7 @@ goog.requireType('goog.net.XhrIo');
  * @final
  */
 goog.net.BrowserTestChannel = function(channel, channelDebug) {
+  'use strict';
   /**
    * The BrowserChannel that owns this test channel
    * @type {goog.net.BrowserChannel}
@@ -227,6 +228,7 @@ goog.net.BrowserTestChannel.MIN_TIME_EXPECTED_BETWEEN_DATA_ = 500;
  * @param {Object} extraHeaders The HTTP headers.
  */
 goog.net.BrowserTestChannel.prototype.setExtraHeaders = function(extraHeaders) {
+  'use strict';
   this.extraHeaders_ = extraHeaders;
 };
 
@@ -236,6 +238,7 @@ goog.net.BrowserTestChannel.prototype.setExtraHeaders = function(extraHeaders) {
  * @param {!goog.string.Parser} parser Parser.
  */
 goog.net.BrowserTestChannel.prototype.setParser = function(parser) {
+  'use strict';
   this.parser_ = parser;
 };
 
@@ -246,6 +249,7 @@ goog.net.BrowserTestChannel.prototype.setParser = function(parser) {
  * @param {string} path The relative uri for the test connection.
  */
 goog.net.BrowserTestChannel.prototype.connect = function(path) {
+  'use strict';
   this.path_ = path;
   var sendDataUri = this.channel_.getForwardChannelUri(this.path_);
 
@@ -290,6 +294,7 @@ goog.net.BrowserTestChannel.prototype.connect = function(path) {
  * @private
  */
 goog.net.BrowserTestChannel.prototype.checkBlocked_ = function() {
+  'use strict';
   var uri = this.channel_.createDataUri(
       this.blockedPrefix_, '/mail/images/cleardot.gif');
   uri.makeUnique();
@@ -311,6 +316,7 @@ goog.net.BrowserTestChannel.prototype.checkBlocked_ = function() {
  */
 goog.net.BrowserTestChannel.prototype.checkBlockedCallback_ = function(
     succeeded) {
+  'use strict';
   if (succeeded) {
     this.state_ = goog.net.BrowserTestChannel.State_.CONNECTION_TESTING;
     this.connectStage2_();
@@ -340,6 +346,7 @@ goog.net.BrowserTestChannel.prototype.checkBlockedCallback_ = function(
  * @suppress {missingRequire} goog.net.BrowserChannel
  */
 goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
+  'use strict';
   this.channelDebug_.debug('TestConnection: starting stage 2');
 
   // If the second test results are available, skip its execution.
@@ -392,6 +399,7 @@ goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
  * @return {!goog.net.XhrIo} New XhrIo object.
  */
 goog.net.BrowserTestChannel.prototype.createXhrIo = function(hostPrefix) {
+  'use strict';
   return this.channel_.createXhrIo(hostPrefix);
 };
 
@@ -400,6 +408,7 @@ goog.net.BrowserTestChannel.prototype.createXhrIo = function(hostPrefix) {
  * Aborts the test channel.
  */
 goog.net.BrowserTestChannel.prototype.abort = function() {
+  'use strict';
   if (this.request_) {
     this.request_.cancel();
     this.request_ = null;
@@ -415,6 +424,7 @@ goog.net.BrowserTestChannel.prototype.abort = function() {
  * @return {boolean} Whether the channel is closed.
  */
 goog.net.BrowserTestChannel.prototype.isClosed = function() {
+  'use strict';
   return false;
 };
 
@@ -427,6 +437,7 @@ goog.net.BrowserTestChannel.prototype.isClosed = function() {
  */
 goog.net.BrowserTestChannel.prototype.onRequestData = function(
     req, responseText) {
+  'use strict';
   this.lastStatusCode_ = req.getLastStatusCode();
   if (this.state_ == goog.net.BrowserTestChannel.State_.INIT) {
     this.channelDebug_.debug('TestConnection: Got data for stage 1');
@@ -492,6 +503,7 @@ goog.net.BrowserTestChannel.prototype.onRequestData = function(
  *     it creates a circular dependency.
  */
 goog.net.BrowserTestChannel.prototype.onRequestComplete = function(req) {
+  'use strict';
   this.lastStatusCode_ = this.request_.getLastStatusCode();
   if (!this.request_.getSuccess()) {
     this.channelDebug_.debug(
@@ -563,6 +575,7 @@ goog.net.BrowserTestChannel.prototype.onRequestComplete = function(req) {
  * @return {number} The last status code received for a request.
  */
 goog.net.BrowserTestChannel.prototype.getLastStatusCode = function() {
+  'use strict';
   return this.lastStatusCode_;
 };
 
@@ -572,6 +585,7 @@ goog.net.BrowserTestChannel.prototype.getLastStatusCode = function() {
  *     server instructs us to do so.
  */
 goog.net.BrowserTestChannel.prototype.shouldUseSecondaryDomains = function() {
+  'use strict';
   return this.channel_.shouldUseSecondaryDomains();
 };
 
@@ -584,6 +598,7 @@ goog.net.BrowserTestChannel.prototype.shouldUseSecondaryDomains = function() {
  * @return {boolean} Whether the channel is currently active.
  */
 goog.net.BrowserTestChannel.prototype.isActive = function(browserChannel) {
+  'use strict';
   return this.channel_.isActive();
 };
 
@@ -594,6 +609,7 @@ goog.net.BrowserTestChannel.prototype.isActive = function(browserChannel) {
  * @private
  */
 goog.net.BrowserTestChannel.prototype.checkForEarlyNonBuffered_ = function() {
+  'use strict';
   var ms = this.firstTime_ - this.startTime_;
 
   // we always get Trident responses in separate calls to
@@ -612,5 +628,6 @@ goog.net.BrowserTestChannel.prototype.checkForEarlyNonBuffered_ = function() {
  */
 goog.net.BrowserTestChannel.prototype.notifyServerReachabilityEvent = function(
     reachabilityType) {
+  'use strict';
   this.channel_.notifyServerReachabilityEvent(reachabilityType);
 };
