@@ -209,7 +209,7 @@ goog.math.Vec2.rotateAroundPoint = function(v, axisPoint, angle) {
 /** @override */
 goog.math.Vec2.prototype.equals = function(b) {
   'use strict';
-  if (this == b) {
+  if (this === b) {
     return true;
   }
   return b instanceof goog.math.Vec2 && !!b && this.x == b.x && this.y == b.y;

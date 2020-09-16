@@ -595,7 +595,7 @@ goog.graphics.AffineTransform.prototype.setToRotation = function(theta, x, y) {
  */
 goog.graphics.AffineTransform.prototype.equals = function(tx) {
   'use strict';
-  if (this == tx) {
+  if (this === tx) {
     return true;
   }
   if (!tx) {
