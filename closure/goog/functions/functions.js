@@ -157,9 +157,18 @@ goog.functions.nth = function(n) {
  *     was invoked as a method of.
  */
 goog.functions.partialRight = function(fn, var_args) {
+  'use strict';
   const rightArgs = Array.prototype.slice.call(arguments, 1);
   return function() {
-    const self = /** @type {*} */ (this);
+    'use strict';
+    // Even in strict mode, IE10/11 and Edge (non-Chromium) use global context
+    // when free-calling functions. To catch cases where people were using this
+    // erroneously, we explicitly change the context to undefined to match
+    // strict mode specifications.
+    let self = /** @type {*} */ (this);
+    if (self === goog.global) {
+      self = undefined;
+    }
     const newArgs = Array.prototype.slice.call(arguments);
     newArgs.push.apply(newArgs, rightArgs);
     return fn.apply(self, newArgs);

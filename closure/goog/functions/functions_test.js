@@ -150,9 +150,9 @@ testSuite({
     assertEquals(2, i(4, 2));
   },
 
-  testPartialRightUsesGlobal() {
+  testPartialRightFreeFunction() {
     const f = function(x, y) {
-      assertEquals(goog.global, this);
+      assertUndefined(this);
       return x / y;
     };
     const g = functions.partialRight(f, 2);
