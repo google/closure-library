@@ -40,6 +40,7 @@ goog.require('goog.net.streams.utils');
 goog.scope(function() {
 
 
+'use strict';
 var utils = goog.module.get('goog.net.streams.utils');
 
 
@@ -54,6 +55,7 @@ var utils = goog.module.get('goog.net.streams.utils');
  * @final
  */
 goog.net.streams.JsonStreamParser = function(opt_options) {
+  'use strict';
   /**
    * The current error message, if any.
    * @private {?string}
@@ -194,6 +196,7 @@ Parser.State_ = {
  * @override
  */
 Parser.prototype.isInputValid = function() {
+  'use strict';
   return this.streamState_ != Parser.StreamState_.INVALID;
 };
 
@@ -202,6 +205,7 @@ Parser.prototype.isInputValid = function() {
  * @override
  */
 Parser.prototype.getErrorMessage = function() {
+  'use strict';
   return this.errorMessage_;
 };
 
@@ -212,6 +216,7 @@ Parser.prototype.getErrorMessage = function() {
  * TODO(updogliu): move this API to the base type.
  */
 Parser.prototype.done = function() {
+  'use strict';
   return this.streamState_ === Parser.StreamState_.ARRAY_END;
 };
 
@@ -225,6 +230,7 @@ Parser.prototype.done = function() {
  * TODO(updogliu): move this API to the base type.
  */
 Parser.prototype.getExtraInput = function() {
+  'use strict';
   return this.buffer_;
 };
 
@@ -237,6 +243,7 @@ Parser.prototype.getExtraInput = function() {
  * @private
  */
 Parser.prototype.error_ = function(input, pos) {
+  'use strict';
   this.streamState_ = Parser.StreamState_.INVALID;
   this.errorMessage_ = 'The stream is broken @' + this.pos_ + '/' + pos +
       '. With input:\n' + input;
@@ -249,6 +256,7 @@ Parser.prototype.error_ = function(input, pos) {
  * @override
  */
 Parser.prototype.parse = function(input) {
+  'use strict';
   goog.asserts.assertString(input);
 
   // captures
@@ -715,5 +723,4 @@ Parser.prototype.parse = function(input) {
     msgStart = i;
   }
 };
-
 });  // goog.scope

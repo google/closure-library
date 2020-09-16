@@ -53,6 +53,7 @@ goog.requireType('goog.net.xpc.CrossPageChannel');
 goog.net.xpc.NativeMessagingTransport = function(
     channel, peerHostname, opt_domHelper, opt_oneSidedHandshake,
     opt_protocolVersion) {
+  'use strict';
   goog.net.xpc.NativeMessagingTransport.base(
       this, 'constructor', opt_domHelper);
 
@@ -246,6 +247,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.sendTimerId_ = 0;
  */
 goog.net.xpc.NativeMessagingTransport.prototype.couldPeerVersionBe_ = function(
     version) {
+  'use strict';
   return this.peerProtocolVersion_ == null ||
       this.peerProtocolVersion_ == version;
 };
@@ -258,6 +260,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.couldPeerVersionBe_ = function(
  * @private
  */
 goog.net.xpc.NativeMessagingTransport.initialize_ = function(listenWindow) {
+  'use strict';
   var uid = goog.getUid(listenWindow);
   var value = goog.net.xpc.NativeMessagingTransport.activeCount_[uid];
   if (typeof value !== 'number') {
@@ -282,6 +285,7 @@ goog.net.xpc.NativeMessagingTransport.initialize_ = function(listenWindow) {
  * @private
  */
 goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
+  'use strict';
   var data = msgEvt.getBrowserEvent().data;
 
   if (typeof data !== 'string') {
@@ -359,6 +363,7 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
  */
 goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
     function(payload) {
+  'use strict';
   var transportParts =
       goog.net.xpc.NativeMessagingTransport.parseTransportPayload_(payload);
   var transportMessageType = transportParts[0];
@@ -408,6 +413,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
  * @private
  */
 goog.net.xpc.NativeMessagingTransport.prototype.sendSetupMessage_ = function() {
+  'use strict';
   // 'real' (legacy) v1 transports don't know about there being v2 ones out
   // there, and we shouldn't either.
   goog.asserts.assert(
@@ -439,6 +445,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.sendSetupMessage_ = function() {
  */
 goog.net.xpc.NativeMessagingTransport.prototype.sendSetupAckMessage_ = function(
     protocolVersion) {
+  'use strict';
   goog.asserts.assert(
       this.protocolVersion_ != 1 || protocolVersion != 2,
       'Shouldn\'t try to send a v2 setup ack in v1 mode.');
@@ -465,6 +472,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.sendSetupAckMessage_ = function(
  */
 goog.net.xpc.NativeMessagingTransport.prototype.setPeerProtocolVersion_ =
     function(version) {
+  'use strict';
   if (version > this.peerProtocolVersion_) {
     this.peerProtocolVersion_ = version;
   }
@@ -482,6 +490,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.setPeerProtocolVersion_ =
  * @override
  */
 goog.net.xpc.NativeMessagingTransport.prototype.connect = function() {
+  'use strict';
   goog.net.xpc.NativeMessagingTransport.initialize_(this.getWindow());
   this.initialized_ = true;
   this.maybeAttemptToConnect_();
@@ -499,6 +508,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.connect = function() {
  */
 goog.net.xpc.NativeMessagingTransport.prototype.maybeAttemptToConnect_ =
     function() {
+  'use strict';
   // In a one-sided handshake, the outer frame does not send a SETUP message,
   // but the inner frame does.
   var outerFrame =
@@ -522,6 +532,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.maybeAttemptToConnect_ =
  */
 goog.net.xpc.NativeMessagingTransport.prototype.send = function(
     service, payload) {
+  'use strict';
   var win = this.channel_.getPeerWindowObject();
   if (!win) {
     goog.log.fine(goog.net.xpc.logger, 'send(): window not ready');
@@ -529,6 +540,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(
   }
 
   this.send = function(service, payload) {
+    'use strict';
     // In IE8 (and perhaps elsewhere), it seems like postMessage is sometimes
     // implemented as a synchronous call.  That is, calling it synchronously
     // calls whatever listeners it has, and control is not returned to the
@@ -538,6 +550,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(
     var transport = this;
     var channelName = this.channel_.name;
     var sendFunctor = function() {
+      'use strict';
       transport.sendTimerId_ = 0;
 
       try {
@@ -580,6 +593,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(
  * @private
  */
 goog.net.xpc.NativeMessagingTransport.prototype.notifyConnected_ = function() {
+  'use strict';
   var delay = (this.protocolVersion_ == 1 || this.peerProtocolVersion_ == 1) ?
       goog.net.xpc.NativeMessagingTransport.CONNECTION_DELAY_MS_ :
       undefined;
@@ -589,6 +603,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.notifyConnected_ = function() {
 
 /** @override */
 goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
+  'use strict';
   if (this.initialized_) {
     var listenWindow = this.getWindow();
     var uid = goog.getUid(listenWindow);
@@ -641,6 +656,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
  */
 goog.net.xpc.NativeMessagingTransport.parseTransportPayload_ = function(
     payload) {
+  'use strict';
   var transportParts = /** @type {!Array<?string>} */ (
       payload.split(goog.net.xpc.NativeMessagingTransport.MESSAGE_DELIMITER_));
   transportParts[1] = transportParts[1] || null;

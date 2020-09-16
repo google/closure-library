@@ -26,6 +26,7 @@ goog.require('goog.module');
  * @extends {goog.Disposable}
  */
 goog.module.BaseModule = function() {
+  'use strict';
   goog.Disposable.call(this);
 };
 goog.inherits(goog.module.BaseModule, goog.Disposable);

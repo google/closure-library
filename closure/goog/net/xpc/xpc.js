@@ -243,6 +243,7 @@ goog.net.xpc.SETUP_ACK_NTPV2 = 'SETUP_ACK_NTPV2';
  * @return {string} The random string.
  */
 goog.net.xpc.getRandomString = function(length, opt_characters) {
+  'use strict';
   var chars = opt_characters || goog.net.xpc.randomStringCharacters_;
   var charsLength = chars.length;
   var s = '';

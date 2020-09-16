@@ -29,8 +29,12 @@ goog.require('goog.labs.userAgent.engine');
  * @param {*} exception
  */
 goog.async.throwException = function(exception) {
+  'use strict';
   // Each throw needs to be in its own context.
-  goog.global.setTimeout(function() { throw exception; }, 0);
+  goog.global.setTimeout(function() {
+    'use strict';
+    throw exception;
+  }, 0);
 };
 
 
@@ -52,6 +56,7 @@ goog.async.throwException = function(exception) {
  * @template SCOPE
  */
 goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
+  'use strict';
   var cb = callback;
   if (opt_context) {
     cb = goog.bind(callback, opt_context);
@@ -95,6 +100,7 @@ goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
  * @suppress {missingProperties} For "Window.prototype.setImmediate"
  */
 goog.async.nextTick.useSetImmediate_ = function() {
+  'use strict';
   // Not a browser environment.
   if (!goog.global.Window || !goog.global.Window.prototype) {
     return true;
@@ -134,6 +140,7 @@ goog.async.nextTick.setImmediate_;
  * @private
  */
 goog.async.nextTick.getSetImmediateEmulator_ = function() {
+  'use strict';
   // Create a private message channel and use it to postMessage empty messages
   // to ourselves.
   /** @type {!Function|undefined} */
@@ -149,6 +156,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       !goog.labs.userAgent.engine.isPresto()) {
     /** @constructor */
     Channel = function() {
+      'use strict';
       // Make an empty, invisible iframe.
       var iframe = goog.dom.createElement(goog.dom.TagName.IFRAME);
       iframe.style.display = 'none';
@@ -167,6 +175,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
           '*' :
           win.location.protocol + '//' + win.location.host;
       var onmessage = goog.bind(function(e) {
+        'use strict';
         // Validate origin and message to make sure that this message was
         // intended for us. If the origin is set to '*' (see above) only the
         // message needs to match since, for example, '*' != 'file://'. Allowing
@@ -179,7 +188,10 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       win.addEventListener('message', onmessage, false);
       this['port1'] = {};
       this['port2'] = {
-        postMessage: function() { win.postMessage(message, origin); }
+        postMessage: function() {
+          'use strict';
+          win.postMessage(message, origin);
+        }
       };
     };
   }
@@ -194,6 +206,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
     var head = {};
     var tail = head;
     channel['port1'].onmessage = function() {
+      'use strict';
       if (head.next !== undefined) {
         head = head.next;
         var cb = head.cb;
@@ -202,6 +215,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       }
     };
     return function(cb) {
+      'use strict';
       tail.next = {cb: cb};
       tail = tail.next;
       channel['port2'].postMessage(0);
@@ -211,6 +225,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
   // or more.
   // NOTE(user): This fallback is used for IE.
   return function(cb) {
+    'use strict';
     goog.global.setTimeout(/** @type {function()} */ (cb), 0);
   };
 };
@@ -234,4 +249,7 @@ goog.debug.entryPointRegistry.register(
      * @param {function(!Function): !Function} transformer The transforming
      *     function.
      */
-    function(transformer) { goog.async.nextTick.wrapCallback_ = transformer; });
+    function(transformer) {
+      'use strict';
+      goog.async.nextTick.wrapCallback_ = transformer;
+    });

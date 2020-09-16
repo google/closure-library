@@ -48,6 +48,7 @@ goog.requireType('goog.net.streams.NodeReadableStream');
  * null if streaming response is not supported by the current User Agent.
  */
 goog.net.streams.createXhrNodeReadableStream = function(xhr) {
+  'use strict';
   goog.asserts.assert(!xhr.isActive(), 'XHR is already sent.');
 
   if (!goog.net.streams.XhrStreamReader.isStreamingSupported()) {

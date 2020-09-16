@@ -60,6 +60,7 @@ goog.require('goog.net.streams.StreamParser');
  * @final
  */
 goog.net.streams.PbStreamParser = function() {
+  'use strict';
   /**
    * The current error message, if any.
    * @private {?string}
@@ -140,6 +141,7 @@ goog.net.streams.PbStreamParser.PADDING_TAG_ = 15;
  * @override
  */
 goog.net.streams.PbStreamParser.prototype.isInputValid = function() {
+  'use strict';
   return this.state_ != goog.net.streams.PbStreamParser.State_.INVALID;
 };
 
@@ -148,6 +150,7 @@ goog.net.streams.PbStreamParser.prototype.isInputValid = function() {
  * @override
  */
 goog.net.streams.PbStreamParser.prototype.getErrorMessage = function() {
+  'use strict';
   return this.errorMessage_;
 };
 
@@ -161,6 +164,7 @@ goog.net.streams.PbStreamParser.prototype.getErrorMessage = function() {
  */
 goog.net.streams.PbStreamParser.prototype.error_ = function(
     inputBytes, pos, errorMsg) {
+  'use strict';
   this.state_ = goog.net.streams.PbStreamParser.State_.INVALID;
   this.errorMessage_ = 'The stream is broken @' + this.streamPos_ + '/' + pos +
       '. ' +
@@ -175,6 +179,7 @@ goog.net.streams.PbStreamParser.prototype.error_ = function(
  * @override
  */
 goog.net.streams.PbStreamParser.prototype.parse = function(input) {
+  'use strict';
   goog.asserts.assert(input instanceof Array || input instanceof ArrayBuffer);
 
   var parser = this;
