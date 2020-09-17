@@ -115,6 +115,7 @@ goog.require('goog.testing.asserts');
  * @constructor
  */
 goog.testing.TestCase = function(opt_name) {
+  'use strict';
   /**
    * A name for the test case.
    * @type {string}
@@ -238,6 +239,7 @@ goog.testing.TestCase.Order = {
  * @return {string} The name of the test.
  */
 goog.testing.TestCase.prototype.getName = function() {
+  'use strict';
   return this.name_;
 };
 
@@ -247,6 +249,7 @@ goog.testing.TestCase.prototype.getName = function() {
  * @protected
  */
 goog.testing.TestCase.prototype.getCurrentTest = function() {
+  'use strict';
   return this.curTest_;
 };
 
@@ -367,6 +370,7 @@ goog.testing.TestCase.prototype.currentTestPointer_ = 0;
  * @param {!goog.testing.TestCase.Test} test The test to add.
  */
 goog.testing.TestCase.prototype.add = function(test) {
+  'use strict';
   goog.asserts.assert(test);
   if (this.started) {
     throw new Error(
@@ -393,6 +397,7 @@ goog.testing.TestCase.prototype.add = function(test) {
  */
 goog.testing.TestCase.prototype.addNewTest = function(
     name, ref, scope, objChain) {
+  'use strict';
   this.add(this.createTest(name, ref, scope || this, objChain));
 };
 
@@ -403,6 +408,7 @@ goog.testing.TestCase.prototype.addNewTest = function(
  * @protected
  */
 goog.testing.TestCase.prototype.setTests = function(tests) {
+  'use strict';
   this.tests_ = tests;
 };
 
@@ -412,6 +418,7 @@ goog.testing.TestCase.prototype.setTests = function(tests) {
  * @return {!Array<goog.testing.TestCase.Test>} The test array.
  */
 goog.testing.TestCase.prototype.getTests = function() {
+  'use strict';
   return this.tests_;
 };
 
@@ -421,6 +428,7 @@ goog.testing.TestCase.prototype.getTests = function() {
  * @return {number} The number of tests.
  */
 goog.testing.TestCase.prototype.getCount = function() {
+  'use strict';
   return this.tests_.length;
 };
 
@@ -431,6 +439,7 @@ goog.testing.TestCase.prototype.getCount = function() {
  * @return {number} The number of un-ignored tests.
  */
 goog.testing.TestCase.prototype.getActuallyRunCount = function() {
+  'use strict';
   return this.testsToRun_ ? goog.object.getCount(this.testsToRun_) : 0;
 };
 
@@ -440,6 +449,7 @@ goog.testing.TestCase.prototype.getActuallyRunCount = function() {
  * @return {goog.testing.TestCase.Test} The current test case.
  */
 goog.testing.TestCase.prototype.next = function() {
+  'use strict';
   var test;
   while ((test = this.tests_[this.currentTestPointer_++])) {
     if (!this.testsToRun_ || this.testsToRun_[test.name] ||
@@ -455,6 +465,7 @@ goog.testing.TestCase.prototype.next = function() {
  * Resets the test case pointer, so that next returns the first test.
  */
 goog.testing.TestCase.prototype.reset = function() {
+  'use strict';
   this.currentTestPointer_ = 0;
   this.result_ = new goog.testing.TestCase.Result(this);
 };
@@ -466,6 +477,7 @@ goog.testing.TestCase.prototype.reset = function() {
  * @param {function()} fn The callback function.
  */
 goog.testing.TestCase.prototype.addCompletedCallback = function(fn) {
+  'use strict';
   this.onCompletedCallbacks_.push(fn);
 };
 
@@ -474,6 +486,7 @@ goog.testing.TestCase.prototype.addCompletedCallback = function(fn) {
  * @param {goog.testing.TestCase.Order} order The sort order for running tests.
  */
 goog.testing.TestCase.prototype.setOrder = function(order) {
+  'use strict';
   this.order = order;
 };
 
@@ -484,6 +497,7 @@ goog.testing.TestCase.prototype.setOrder = function(order) {
  *     tests identified by name or by index will be executed.
  */
 goog.testing.TestCase.prototype.setTestsToRun = function(testsToRun) {
+  'use strict';
   this.testsToRun_ = testsToRun;
 };
 
@@ -496,6 +510,7 @@ goog.testing.TestCase.prototype.setTestsToRun = function(testsToRun) {
  * @return {boolean} Whether any of the tests in the case should be run.
  */
 goog.testing.TestCase.prototype.shouldRunTests = function() {
+  'use strict';
   return true;
 };
 
@@ -508,6 +523,7 @@ goog.testing.TestCase.prototype.shouldRunTests = function() {
  * {@link #runTestsReturningPromise}.
  */
 goog.testing.TestCase.prototype.execute = function() {
+  'use strict';
   if (!this.prepareForRun_()) {
     return;
   }
@@ -524,6 +540,7 @@ goog.testing.TestCase.prototype.execute = function() {
  * @private
  */
 goog.testing.TestCase.prototype.prepareForRun_ = function() {
+  'use strict';
   this.started = true;
   this.reset();
   this.startTime_ = this.now();
@@ -543,6 +560,7 @@ goog.testing.TestCase.prototype.prepareForRun_ = function() {
  * Finalizes the test case, called when the tests have finished executing.
  */
 goog.testing.TestCase.prototype.finalize = function() {
+  'use strict';
   this.saveMessage('Done');
 
   try {
@@ -566,6 +584,7 @@ goog.testing.TestCase.prototype.finalize = function() {
     this.log('Tests Failed');
   }
   goog.array.forEach(this.onCompletedCallbacks_, function(cb) {
+    'use strict';
     cb();
   });
   this.onCompletedCallbacks_ = [];
@@ -578,6 +597,7 @@ goog.testing.TestCase.prototype.finalize = function() {
  * @param {string} message The message to save.
  */
 goog.testing.TestCase.prototype.saveMessage = function(message) {
+  'use strict';
   this.result_.messages.push(this.getTimeStamp_() + '  ' + message);
 };
 
@@ -587,6 +607,7 @@ goog.testing.TestCase.prototype.saveMessage = function(message) {
  *     runner.
  */
 goog.testing.TestCase.prototype.isInsideMultiTestRunner = function() {
+  'use strict';
   var top = goog.global['top'];
   return top && typeof top['_allTests'] != 'undefined';
 };
@@ -595,6 +616,7 @@ goog.testing.TestCase.prototype.isInsideMultiTestRunner = function() {
  * @return {boolean} Whether the test-progress should be logged to the console.
  */
 goog.testing.TestCase.prototype.shouldLogTestProgress = function() {
+  'use strict';
   return !goog.global['skipClosureTestProgress'] &&
       !this.isInsideMultiTestRunner();
 };
@@ -604,6 +626,7 @@ goog.testing.TestCase.prototype.shouldLogTestProgress = function() {
  * @param {*} val The value to log. Will be ToString'd.
  */
 goog.testing.TestCase.prototype.log = function(val) {
+  'use strict';
   if (this.shouldLogTestProgress() && goog.global.console) {
     if (typeof val == 'string') {
       val = this.getTimeStamp_() + ' : ' + val;
@@ -621,6 +644,7 @@ goog.testing.TestCase.prototype.log = function(val) {
  * Groups the upcoming logs in the same log group
  */
 goog.testing.TestCase.prototype.groupLogsStart = function() {
+  'use strict';
   if (!this.isInsideMultiTestRunner() && goog.global.console &&
       goog.global.console.group) {
     goog.global.console.group(
@@ -633,6 +657,7 @@ goog.testing.TestCase.prototype.groupLogsStart = function() {
  * Closes the group of the upcoming logs
  */
 goog.testing.TestCase.prototype.groupLogsEnd = function() {
+  'use strict';
   if (!this.isInsideMultiTestRunner() && goog.global.console &&
       goog.global.console.groupEnd) {
     goog.global.console.groupEnd();
@@ -644,6 +669,7 @@ goog.testing.TestCase.prototype.groupLogsEnd = function() {
  * @return {boolean} Whether the test was a success.
  */
 goog.testing.TestCase.prototype.isSuccess = function() {
+  'use strict';
   return !!this.result_ && this.result_.isSuccess();
 };
 
@@ -655,6 +681,7 @@ goog.testing.TestCase.prototype.isSuccess = function() {
  * @return {string} The results from the test.
  */
 goog.testing.TestCase.prototype.getReport = function(opt_verbose) {
+  'use strict';
   var rv = [];
 
   if (this.running) {
@@ -690,6 +717,7 @@ goog.testing.TestCase.prototype.getReport = function(opt_verbose) {
  * @package
  */
 goog.testing.TestCase.prototype.getResult = function() {
+  'use strict';
   return this.result_;
 };
 
@@ -699,6 +727,7 @@ goog.testing.TestCase.prototype.getResult = function() {
  * @return {number} The run time, in milliseconds.
  */
 goog.testing.TestCase.prototype.getRunTime = function() {
+  'use strict';
   return this.result_.runTime;
 };
 
@@ -708,6 +737,7 @@ goog.testing.TestCase.prototype.getRunTime = function() {
  * @return {number} The number of script files.
  */
 goog.testing.TestCase.prototype.getNumFilesLoaded = function() {
+  'use strict';
   return this.result_.numFilesLoaded;
 };
 
@@ -729,8 +759,10 @@ goog.testing.TestCase.IResult;
  *     results object.
  */
 goog.testing.TestCase.prototype.getTestResults = function() {
+  'use strict';
   var map = {};
   goog.object.forEach(this.result_.resultsByName, function(resultArray, key) {
+    'use strict';
     // Make sure we only use properties on the actual map
     if (!Object.prototype.hasOwnProperty.call(
             this.result_.resultsByName, key)) {
@@ -756,6 +788,7 @@ goog.testing.TestCase.prototype.getTestResults = function() {
  * called by the test to indicate it has finished.
  */
 goog.testing.TestCase.prototype.runTests = function() {
+  'use strict';
   goog.testing.Continuation_.run(this.runSetUpPage_(this.execute));
 };
 
@@ -768,8 +801,11 @@ goog.testing.TestCase.prototype.runTests = function() {
  * @package
  */
 goog.testing.TestCase.prototype.runTestsReturningPromise = function() {
+  'use strict';
   return new goog.Promise(function(resolve) {
+    'use strict';
     goog.testing.Continuation_.run(this.runSetUpPage_(function() {
+      'use strict';
       if (!this.prepareForRun_()) {
         resolve(this.result_);
         return;
@@ -793,7 +829,9 @@ goog.testing.TestCase.prototype.runTestsReturningPromise = function() {
  * @private
  */
 goog.testing.TestCase.prototype.runSetUpPage_ = function(runTestsFn) {
+  'use strict';
   return this.invokeFunction_(this.setUpPage, runTestsFn, function(e) {
+    'use strict';
     this.exceptionBeforeTest = e;
     runTestsFn.call(this);
   }, 'setUpPage');
@@ -817,6 +855,7 @@ goog.testing.TestCase.prototype.runSetUpPage_ = function(runTestsFn) {
  * @private
  */
 goog.testing.TestCase.prototype.runNextTest_ = function() {
+  'use strict';
   this.curTest_ = this.next();
   if (!this.curTest_ || !this.running) {
     this.finalize();
@@ -855,6 +894,7 @@ goog.testing.TestCase.prototype.runNextTest_ = function() {
  * @private
  */
 goog.testing.TestCase.prototype.shouldRunTestsHelper_ = function() {
+  'use strict';
   var objChain =
       this.curTest_.objChain.length ? this.curTest_.objChain : [this];
 
@@ -873,6 +913,7 @@ goog.testing.TestCase.prototype.shouldRunTestsHelper_ = function() {
 
     var result;
     (function() {
+      'use strict';
       // Cache the result by storing a function. This way we only call
       // shouldRunTests once per object in the chain. This enforces that people
       // do not attempt to suppress some tests and not others with the same
@@ -880,10 +921,12 @@ goog.testing.TestCase.prototype.shouldRunTestsHelper_ = function() {
       try {
         var cached = result = obj.shouldRunTests.call(obj);
         obj.shouldRunTests['$cachedResult'] = function() {
+          'use strict';
           return cached;
         };
       } catch (error) {
         obj.shouldRunTests['$cachedResult'] = function() {
+          'use strict';
           throw error;
         };
         throw error;
@@ -905,6 +948,7 @@ goog.testing.TestCase.prototype.shouldRunTestsHelper_ = function() {
  * @private
  */
 goog.testing.TestCase.prototype.safeSetUp_ = function() {
+  'use strict';
   var setUps =
       this.curTest_.setUps.length ? this.curTest_.setUps.slice() : [this.setUp];
   return this.safeSetUpHelper_(setUps).call(this);
@@ -917,6 +961,7 @@ goog.testing.TestCase.prototype.safeSetUp_ = function() {
  * @private
  */
 goog.testing.TestCase.prototype.safeSetUpHelper_ = function(setUps) {
+  'use strict';
   if (!setUps.length) {
     return this.safeRunTest_;
   }
@@ -931,6 +976,7 @@ goog.testing.TestCase.prototype.safeSetUpHelper_ = function(setUps) {
  * @private
  */
 goog.testing.TestCase.prototype.safeRunTest_ = function() {
+  'use strict';
   return this.invokeFunction_(
       goog.bind(this.curTest_.ref, this.curTest_.scope), this.safeTearDown_,
       this.safeTearDown_, this.curTest_.name);
@@ -944,6 +990,7 @@ goog.testing.TestCase.prototype.safeRunTest_ = function() {
  * @private
  */
 goog.testing.TestCase.prototype.safeTearDown_ = function(opt_error) {
+  'use strict';
   // If the test itself failed, report that before running any tearDown()s.
   if (arguments.length == 1) {
     this.recordError(this.curTest_.name, opt_error);
@@ -961,6 +1008,7 @@ goog.testing.TestCase.prototype.safeTearDown_ = function(opt_error) {
  * @private
  */
 goog.testing.TestCase.prototype.safeTearDownHelper_ = function(tearDowns) {
+  'use strict';
   if (!tearDowns.length) {
     return this.finishTestInvocation_;
   }
@@ -1000,6 +1048,7 @@ goog.testing.TestCase.prototype.safeTearDownHelper_ = function(tearDowns) {
  */
 goog.testing.TestCase.prototype.invokeFunction_ = function(
     fn, onSuccess, onFailure, fnName) {
+  'use strict';
   var self = this;
   this.thrownAssertionExceptions_ = [];
   try {
@@ -1016,6 +1065,7 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
               '.promiseTimeout to adjust the timeout.');
       promise.then(
           function() {
+            'use strict';
             self.resetBatchTimeAfterPromise_();
             if (self.thrownAssertionExceptions_.length == 0) {
               goog.testing.Continuation_.run(onSuccess.call(self));
@@ -1025,6 +1075,7 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
             }
           },
           function(e) {
+            'use strict';
             self.reportUnpropagatedAssertionExceptions_(fnName, e);
             self.resetBatchTimeAfterPromise_();
             goog.testing.Continuation_.run(onFailure.call(self, e));
@@ -1063,6 +1114,7 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
  */
 goog.testing.TestCase.prototype.reportUnpropagatedAssertionExceptions_ =
     function(testName, actualError) {
+  'use strict';
   var extraExceptions = this.thrownAssertionExceptions_.slice();
   // If the actual error isn't a JSUnit exception, it won't be in this array.
   goog.array.remove(extraExceptions, actualError);
@@ -1094,6 +1146,7 @@ goog.testing.TestCase.prototype.reportUnpropagatedAssertionExceptions_ =
  * @private
  */
 goog.testing.TestCase.prototype.resetBatchTimeAfterPromise_ = function() {
+  'use strict';
   this.batchTime_ = this.now();
 };
 
@@ -1106,6 +1159,7 @@ goog.testing.TestCase.prototype.resetBatchTimeAfterPromise_ = function() {
  * @private
  */
 goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
+  'use strict';
   if (arguments.length == 1) {
     this.recordError(this.curTest_.name, opt_error);
   }
@@ -1142,6 +1196,7 @@ goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
  * @private
  */
 goog.testing.TestCase.prototype.startNextBatch_ = function() {
+  'use strict';
   this.batchTime_ = this.now();
   goog.testing.Continuation_.run(this.runNextTest_());
 };
@@ -1152,6 +1207,7 @@ goog.testing.TestCase.prototype.startNextBatch_ = function() {
  * @private
  */
 goog.testing.TestCase.prototype.orderTests_ = function() {
+  'use strict';
   switch (this.order) {
     case goog.testing.TestCase.Order.RANDOM:
       // Fisher-Yates shuffle
@@ -1168,6 +1224,7 @@ goog.testing.TestCase.prototype.orderTests_ = function() {
 
     case goog.testing.TestCase.Order.SORTED:
       this.tests_.sort(function(t1, t2) {
+        'use strict';
         if (t1.name == t2.name) {
           return 0;
         }
@@ -1194,6 +1251,7 @@ goog.testing.TestCase.prototype.orderTests_ = function() {
  * @return {!Array<!Object>} A list of objects that should be inspected.
  */
 goog.testing.TestCase.prototype.getGlobals = function(opt_prefix) {
+  'use strict';
   return goog.testing.TestCase.getGlobals(opt_prefix);
 };
 
@@ -1212,6 +1270,7 @@ goog.testing.TestCase.prototype.getGlobals = function(opt_prefix) {
  * @return {!Array<!Object>} A list of objects that should be inspected.
  */
 goog.testing.TestCase.getGlobals = function(opt_prefix) {
+  'use strict';
   // Look in the global scope for most browsers, on IE we use the little known
   // RuntimeObject which holds references to all globals. We reference this
   // via goog.global so that there isn't an aliasing that throws an exception
@@ -1234,6 +1293,7 @@ goog.testing.TestCase.activeTestCase_ = null;
  *     value (when run outside of G_testRunner.
  */
 goog.testing.TestCase.getActiveTestCase = function() {
+  'use strict';
   var gTestRunner = goog.global['G_testRunner'];
   if (gTestRunner && gTestRunner.testCase) {
     return gTestRunner.testCase;
@@ -1250,6 +1310,7 @@ goog.testing.TestCase.getActiveTestCase = function() {
  * @package
  */
 goog.testing.TestCase.invalidateAssertionException = function(e) {
+  'use strict';
   var testCase = goog.testing.TestCase.getActiveTestCase();
   if (testCase) {
     testCase.invalidateAssertionException(e);
@@ -1295,6 +1356,7 @@ goog.testing.TestCase.prototype.tearDown = function() {};
  * @return {string} The function name prefix used to auto-discover tests.
  */
 goog.testing.TestCase.prototype.getAutoDiscoveryPrefix = function() {
+  'use strict';
   return 'test';
 };
 
@@ -1304,6 +1366,7 @@ goog.testing.TestCase.prototype.getAutoDiscoveryPrefix = function() {
  * @protected
  */
 goog.testing.TestCase.prototype.getBatchTime = function() {
+  'use strict';
   return this.batchTime_;
 };
 
@@ -1313,6 +1376,7 @@ goog.testing.TestCase.prototype.getBatchTime = function() {
  * @protected
  */
 goog.testing.TestCase.prototype.setBatchTime = function(batchTime) {
+  'use strict';
   this.batchTime_ = batchTime;
 };
 
@@ -1329,6 +1393,7 @@ goog.testing.TestCase.prototype.setBatchTime = function(batchTime) {
  */
 goog.testing.TestCase.prototype.createTest = function(
     name, ref, scope, objChain) {
+  'use strict';
   return new goog.testing.TestCase.Test(name, ref, scope, objChain);
 };
 
@@ -1340,6 +1405,7 @@ goog.testing.TestCase.prototype.createTest = function(
  * if they are defined on global object.
  */
 goog.testing.TestCase.prototype.autoDiscoverLifecycle = function() {
+  'use strict';
   this.setLifecycleObj(goog.global);
 };
 
@@ -1352,6 +1418,7 @@ goog.testing.TestCase.prototype.autoDiscoverLifecycle = function() {
  * @param {!Object} obj
  */
 goog.testing.TestCase.prototype.setLifecycleObj = function(obj) {
+  'use strict';
   if (obj['setUp']) {
     this.setUp = goog.bind(obj['setUp'], obj);
   }
@@ -1379,6 +1446,7 @@ goog.testing.TestCase.prototype.setLifecycleObj = function(obj) {
  * methods.
  */
 goog.testing.TestCase.prototype.setTestObj = function(obj) {
+  'use strict';
   // Check any previously added (likely auto-discovered) tests, only one source
   // of discovered test and life-cycle methods is allowed.
   if (this.tests_.length > 0) {
@@ -1387,12 +1455,14 @@ goog.testing.TestCase.prototype.setTestObj = function(obj) {
         'Tests previously found:\n' +
         this.tests_
             .map(function(test) {
+              'use strict';
               return test.name;
             })
             .join('\n') +
         '\nNew tests found:\n' +
         Object.keys(obj)
             .filter(function(name) {
+              'use strict';
               return name.startsWith('test');
             })
             .join('\n'));
@@ -1414,6 +1484,7 @@ goog.testing.TestCase.prototype.setTestObj = function(obj) {
  * @private
  */
 goog.testing.TestCase.prototype.addTestObj_ = function(obj, name, objChain) {
+  'use strict';
   var regex = new RegExp('^' + this.getAutoDiscoveryPrefix());
   var properties = goog.object.getAllPropertyNames(obj);
   for (var i = 0; i < properties.length; i++) {
@@ -1454,6 +1525,7 @@ goog.testing.TestCase.prototype.addTestObj_ = function(obj, name, objChain) {
  * "test" to the test case.
  */
 goog.testing.TestCase.prototype.autoDiscoverTests = function() {
+  'use strict';
   this.autoDiscoverLifecycle();
   var prefix = this.getAutoDiscoveryPrefix();
   var testSources = this.getGlobals(prefix);
@@ -1478,6 +1550,7 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
  * @protected
  */
 goog.testing.TestCase.prototype.maybeFailTestEarly = function(testCase) {
+  'use strict';
   if (this.exceptionBeforeTest) {
     // We just use the first error to report an error on a failed test.
     testCase.name = 'setUpPage for ' + testCase.name;
@@ -1496,6 +1569,7 @@ goog.testing.TestCase.prototype.maybeFailTestEarly = function(testCase) {
  * {@link #addCompletedCallback} or {@link #runTestsReturningPromise}.
  */
 goog.testing.TestCase.prototype.cycleTests = function() {
+  'use strict';
   this.saveMessage('Start');
   this.batchTime_ = this.now();
   if (this.running) {
@@ -1514,6 +1588,7 @@ goog.testing.TestCase.prototype.cycleTests = function() {
  * @private
  */
 goog.testing.TestCase.prototype.countNumFilesLoaded_ = function() {
+  'use strict';
   var scripts = goog.dom.getElementsByTagName(goog.dom.TagName.SCRIPT);
   var count = 0;
   for (var i = 0, n = scripts.length; i < n; i++) {
@@ -1533,6 +1608,7 @@ goog.testing.TestCase.prototype.countNumFilesLoaded_ = function() {
  * @protected
  */
 goog.testing.TestCase.prototype.timeout = function(fn, time) {
+  'use strict';
   // NOTE: invoking protectedSetTimeout_ as a member of goog.testing.TestCase
   // would result in an Illegal Invocation error. The method must be executed
   // with the global context.
@@ -1547,6 +1623,7 @@ goog.testing.TestCase.prototype.timeout = function(fn, time) {
  * @protected
  */
 goog.testing.TestCase.prototype.clearTimeout = function(id) {
+  'use strict';
   // NOTE: see execution note for protectedSetTimeout above.
   var protectedClearTimeout = goog.testing.TestCase.protectedClearTimeout_;
   protectedClearTimeout(id);
@@ -1558,6 +1635,7 @@ goog.testing.TestCase.prototype.clearTimeout = function(id) {
  * @protected
  */
 goog.testing.TestCase.prototype.now = function() {
+  'use strict';
   return goog.testing.TestCase.now();
 };
 
@@ -1567,6 +1645,7 @@ goog.testing.TestCase.prototype.now = function() {
  * @protected
  */
 goog.testing.TestCase.now = function() {
+  'use strict';
   // don't use goog.now as some tests override it.
   if (goog.testing.TestCase.protectedPerformance_) {
     return goog.testing.TestCase.protectedPerformance_.now();
@@ -1584,6 +1663,7 @@ goog.testing.TestCase.now = function() {
  * @private
  */
 goog.testing.TestCase.prototype.getTimeStamp_ = function() {
+  'use strict';
   // Cannot use "new goog.testing.TestCase.protectedDate_()" due to b/8323223.
   var protectedDate = goog.testing.TestCase.protectedDate_;
   var d = new protectedDate();
@@ -1604,6 +1684,7 @@ goog.testing.TestCase.prototype.getTimeStamp_ = function() {
  * @private
  */
 goog.testing.TestCase.prototype.pad_ = function(number) {
+  'use strict';
   return number < 10 ? '0' + number : String(number);
 };
 
@@ -1615,6 +1696,7 @@ goog.testing.TestCase.prototype.pad_ = function(number) {
  * @private
  */
 goog.testing.TestCase.prototype.trimPath_ = function(path) {
+  'use strict';
   return path.substring(path.indexOf('google3') + 8);
 };
 
@@ -1625,6 +1707,7 @@ goog.testing.TestCase.prototype.trimPath_ = function(path) {
  * @protected
  */
 goog.testing.TestCase.prototype.doSuccess = function(test) {
+  'use strict';
   this.result_.successCount++;
   // An empty list of error messages indicates that the test passed.
   // If we already have a failure for this test, do not set to empty list.
@@ -1646,6 +1729,7 @@ goog.testing.TestCase.prototype.doSuccess = function(test) {
  * @protected
  */
 goog.testing.TestCase.prototype.doSkipped = function(test) {
+  'use strict';
   this.result_.skipCount++;
   // An empty list of error messages indicates that the test passed.
   // If we already have a failure for this test, do not set to empty list.
@@ -1676,6 +1760,7 @@ goog.testing.TestCase.prototype.doSkipped = function(test) {
  *     already been logged, nothing will happen.
  */
 goog.testing.TestCase.prototype.recordTestError = function(error) {
+  'use strict';
   this.recordError(
       this.curTest_ ? this.curTest_.name : '<No active test>', error);
 };
@@ -1690,6 +1775,7 @@ goog.testing.TestCase.prototype.recordTestError = function(error) {
  * @protected
  */
 goog.testing.TestCase.prototype.recordError = function(testName, error) {
+  'use strict';
   if (error && error['isJsUnitException'] && error['loggedJsUnitException']) {
     // We already logged this error; don't record it again. This is particularly
     // important for errors from mocks, which are rethrown by $verify, called by
@@ -1717,6 +1803,7 @@ goog.testing.TestCase.prototype.recordError = function(testName, error) {
  * @protected
  */
 goog.testing.TestCase.prototype.doError = function(test) {
+  'use strict';
   var message = test.name + ' : FAILED';
   this.log(message);
   this.saveMessage(message);
@@ -1741,6 +1828,7 @@ goog.testing.TestCase.prototype.doError = function(test) {
  * @package
  */
 goog.testing.TestCase.prototype.raiseAssertionException = function(e) {
+  'use strict';
   this.thrownAssertionExceptions_.push(e);
   throw e;
 };
@@ -1755,6 +1843,7 @@ goog.testing.TestCase.prototype.raiseAssertionException = function(e) {
  * @package
  */
 goog.testing.TestCase.prototype.invalidateAssertionException = function(e) {
+  'use strict';
   goog.array.remove(this.thrownAssertionExceptions_, e);
 };
 
@@ -1767,6 +1856,7 @@ goog.testing.TestCase.prototype.invalidateAssertionException = function(e) {
  * @suppress {missingProperties} message and stack properties
  */
 goog.testing.TestCase.prototype.logError = function(name, error) {
+  'use strict';
   if (error) {
     this.log(error);
   }
@@ -1789,6 +1879,7 @@ goog.testing.TestCase.prototype.logError = function(name, error) {
  * @private
  */
 goog.testing.TestCase.prototype.cleanStackTrace_ = function(stack, errMsg) {
+  'use strict';
   if (!stack) {
     return;
   }
@@ -1827,6 +1918,7 @@ goog.testing.TestCase.prototype.cleanStackTrace_ = function(stack, errMsg) {
  * @constructor
  */
 goog.testing.TestCase.Test = function(name, ref, scope, objChain) {
+  'use strict';
   /**
    * The name of the test.
    * @type {string}
@@ -1896,6 +1988,7 @@ goog.testing.TestCase.Test = function(name, ref, scope, objChain) {
  * @package
  */
 goog.testing.TestCase.Test.prototype.execute = function() {
+  'use strict';
   this.ref.call(this.scope);
 };
 
@@ -1903,6 +1996,7 @@ goog.testing.TestCase.Test.prototype.execute = function() {
  * Sets the start time
  */
 goog.testing.TestCase.Test.prototype.started = function() {
+  'use strict';
   this.startTime_ = goog.testing.TestCase.now();
 };
 
@@ -1910,6 +2004,7 @@ goog.testing.TestCase.Test.prototype.started = function() {
  * Sets the stop time
  */
 goog.testing.TestCase.Test.prototype.stopped = function() {
+  'use strict';
   this.stoppedTime_ = goog.testing.TestCase.now();
 };
 
@@ -1918,6 +2013,7 @@ goog.testing.TestCase.Test.prototype.stopped = function() {
  * @return {number} milliseconds takenn by the test.
  */
 goog.testing.TestCase.Test.prototype.getElapsedTime = function() {
+  'use strict';
   return this.stoppedTime_ - this.startTime_;
 };
 
@@ -1928,6 +2024,7 @@ goog.testing.TestCase.Test.prototype.getElapsedTime = function() {
  * @final
  */
 goog.testing.TestCase.Result = function(testCase) {
+  'use strict';
   /**
    * The test case that owns this result.
    * @type {goog.testing.TestCase}
@@ -2016,6 +2113,7 @@ goog.testing.TestCase.Result = function(testCase) {
  * @return {boolean} Whether the test was successful.
  */
 goog.testing.TestCase.Result.prototype.isSuccess = function() {
+  'use strict';
   return this.complete && this.errors.length == 0;
 };
 
@@ -2025,6 +2123,7 @@ goog.testing.TestCase.Result.prototype.isSuccess = function() {
  *     passed, failed, and the time taken.
  */
 goog.testing.TestCase.Result.prototype.getSummary = function() {
+  'use strict';
   var summary = this.runCount + ' of ' + this.totalCount + ' tests run in ' +
       this.runTime + 'ms.\n';
   if (this.testSuppressed) {
@@ -2057,6 +2156,7 @@ goog.testing.TestCase.Result.prototype.getSummary = function() {
  * @param {function(goog.testing.TestCase.Test, !Array<string>)} testDone
  */
 goog.testing.TestCase.prototype.setTestDoneCallback = function(testDone) {
+  'use strict';
   this.testDone_ = testDone;
 };
 
@@ -2067,6 +2167,7 @@ goog.testing.TestCase.prototype.setTestDoneCallback = function(testDone) {
  * @private
  */
 goog.testing.TestCase.prototype.doTestDone_ = function(test, errMsgs) {
+  'use strict';
   test.stopped();
   this.testDone_(test, errMsgs);
 };
@@ -2078,6 +2179,7 @@ goog.testing.TestCase.prototype.doTestDone_ = function(test, errMsgs) {
  *     Called when each test completes.
  */
 goog.testing.TestCase.initializeTestCase = function(testCase, opt_testDone) {
+  'use strict';
   if (opt_testDone) {
     testCase.setTestDoneCallback(opt_testDone);
   }
@@ -2104,6 +2206,7 @@ goog.testing.TestCase.initializeTestCase = function(testCase, opt_testDone) {
  *     Called when each test completes.
  */
 goog.testing.TestCase.initializeTestRunner = function(testCase, opt_testDone) {
+  'use strict';
   goog.testing.TestCase.initializeTestCase(testCase, opt_testDone);
 
   var gTestRunner = goog.global['G_testRunner'];
@@ -2125,6 +2228,7 @@ goog.testing.TestCase.initializeTestRunner = function(testCase, opt_testDone) {
  * @private
  */
 goog.testing.TestCase.parseRunTests_ = function(search) {
+  'use strict';
   var testsToRun = null;
   var runTestsMatch = search.match(/(?:\?|&)runTests=([^?&]+)/i);
   if (runTestsMatch) {
@@ -2153,10 +2257,13 @@ goog.testing.TestCase.parseRunTests_ = function(search) {
  */
 goog.testing.TestCase.prototype.rejectIfPromiseTimesOut_ = function(
     promise, timeoutInMs, errorMsg) {
+  'use strict';
   var self = this;
   var start = this.now();
   return new goog.Promise(function(resolve, reject) {
+    'use strict';
     var timeoutId = self.timeout(function() {
+      'use strict';
       var elapsed = self.now() - start;
       reject(new Error(errorMsg + '\nElapsed time: ' + elapsed + 'ms.'));
     }, timeoutInMs);
@@ -2177,6 +2284,7 @@ goog.testing.TestCase.prototype.rejectIfPromiseTimesOut_ = function(
  * @final
  */
 goog.testing.TestCase.Error = function(source, message, opt_stack) {
+  'use strict';
   /**
    * The name of the test which threw the error.
    * @type {string}
@@ -2218,6 +2326,7 @@ goog.testing.TestCase.Error = function(source, message, opt_stack) {
  * @override
  */
 goog.testing.TestCase.Error.prototype.toString = function() {
+  'use strict';
   return 'ERROR in ' + this.source + '\n' + this.message +
       (this.stack ? '\n' + this.stack : '');
 };
@@ -2229,6 +2338,7 @@ goog.testing.TestCase.Error.prototype.toString = function() {
  * @private
  */
 goog.testing.TestCase.Error.prototype.toObject_ = function() {
+  'use strict';
   return {
     'source': this.source,
     'message': this.message,
@@ -2244,6 +2354,7 @@ goog.testing.TestCase.Error.prototype.toObject_ = function() {
  * @private
  */
 goog.testing.Continuation_ = function(fn) {
+  'use strict';
   /** @private @const */
   this.fn_ = fn;
 };
@@ -2251,6 +2362,7 @@ goog.testing.Continuation_ = function(fn) {
 
 /** @param {?goog.testing.Continuation_|undefined} continuation */
 goog.testing.Continuation_.run = function(continuation) {
+  'use strict';
   var fn = continuation && continuation.fn_;
   while (fn) {
     continuation = fn();

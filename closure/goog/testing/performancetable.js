@@ -35,6 +35,7 @@ goog.require('goog.testing.PerformanceTimer');
  */
 goog.testing.PerformanceTable = function(
     root, opt_timer, opt_precision, opt_numSamples) {
+  'use strict';
   /**
    * Where the table should be attached.
    * @private {Element}
@@ -69,6 +70,7 @@ goog.testing.PerformanceTable = function(
  * @return {goog.testing.PerformanceTimer} The timer being used.
  */
 goog.testing.PerformanceTable.prototype.getTimer = function() {
+  'use strict';
   return this.timer_;
 };
 
@@ -78,6 +80,7 @@ goog.testing.PerformanceTable.prototype.getTimer = function() {
  * @private
  */
 goog.testing.PerformanceTable.prototype.initRoot_ = function() {
+  'use strict';
   goog.dom.safe.setInnerHtmlFromConstant(
       goog.asserts.assert(this.root_),
       goog.string.Const.from(
@@ -107,6 +110,7 @@ goog.testing.PerformanceTable.prototype.initRoot_ = function() {
  * @private
  */
 goog.testing.PerformanceTable.prototype.getTableBody_ = function() {
+  'use strict';
   return goog.dom.getElementsByTagName(
       goog.dom.TagName.TBODY, goog.asserts.assert(this.root_))[0];
 };
@@ -119,6 +123,7 @@ goog.testing.PerformanceTable.prototype.getTableBody_ = function() {
  * @private
  */
 goog.testing.PerformanceTable.prototype.round_ = function(num) {
+  'use strict';
   var factor = Math.pow(10, this.precision_);
   return String(Math.round(num * factor) / factor);
 };
@@ -130,6 +135,7 @@ goog.testing.PerformanceTable.prototype.round_ = function(num) {
  * @param {string=} opt_desc A description to associate with this run.
  */
 goog.testing.PerformanceTable.prototype.run = function(fn, opt_desc) {
+  'use strict';
   this.runTask(
       new goog.testing.PerformanceTimer.Task(/** @type {function()} */ (fn)),
       opt_desc);
@@ -143,6 +149,7 @@ goog.testing.PerformanceTable.prototype.run = function(fn, opt_desc) {
  * @param {string=} opt_desc A description to associate with this run.
  */
 goog.testing.PerformanceTable.prototype.runTask = function(task, opt_desc) {
+  'use strict';
   var results = this.timer_.runTask(task);
   this.recordResults(results, opt_desc);
 };
@@ -157,6 +164,7 @@ goog.testing.PerformanceTable.prototype.runTask = function(task, opt_desc) {
  */
 goog.testing.PerformanceTable.prototype.recordResults = function(
     results, opt_desc) {
+  'use strict';
   var average = results['average'];
   var standardDeviation = results['standardDeviation'];
   var isSuspicious = average < 0 || standardDeviation > average * .5;
@@ -190,10 +198,10 @@ goog.testing.PerformanceTable.prototype.recordResults = function(
  * @param {*} reason The reason for the error.
  */
 goog.testing.PerformanceTable.prototype.reportError = function(reason) {
-  this.getTableBody_().appendChild(
+  'use strict';
+  this.getTableBody_().appendChild(goog.dom.createDom(
+      goog.dom.TagName.TR, null,
       goog.dom.createDom(
-          goog.dom.TagName.TR, null,
-          goog.dom.createDom(
-              goog.dom.TagName.TD, {'class': 'test-error', 'colSpan': 5},
-              String(reason))));
+          goog.dom.TagName.TD, {'class': 'test-error', 'colSpan': 5},
+          String(reason))));
 };

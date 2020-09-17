@@ -36,7 +36,9 @@ goog.require('goog.testing.StrictMock');
  * @suppress {missingProperties} Mocks do not fit in the type system well.
  */
 goog.testing.FunctionMock = function(opt_functionName, opt_strictness) {
+  'use strict';
   var fn = function() {
+    'use strict';
     var args = Array.prototype.slice.call(arguments);
     args.splice(0, 0, opt_functionName || '[anonymous mocked function]');
     return fn.$mockMethod.apply(fn, args);
@@ -62,6 +64,7 @@ goog.testing.FunctionMock = function(opt_functionName, opt_strictness) {
  *     not defined on goog.testing.MockInterface
  */
 goog.testing.MethodMock = function(scope, functionName, opt_strictness) {
+  'use strict';
   if (!(functionName in scope)) {
     throw new Error(functionName + ' is not a property of the given scope.');
   }
@@ -91,6 +94,7 @@ goog.testing.MethodMock.MockInternalInterface_.prototype.$propertyReplacer_;
  * @this {goog.testing.MockInterface}
  */
 goog.testing.MethodMock.$tearDown = function() {
+  'use strict';
   /** @type {!goog.testing.MethodMock.MockInternalInterface_} */ (this)
       .$propertyReplacer_.reset();
 };
@@ -105,6 +109,7 @@ goog.testing.MethodMock.$tearDown = function() {
  * @return {!goog.testing.MockInterface} The mocked global function.
  */
 goog.testing.GlobalFunctionMock = function(functionName, opt_strictness) {
+  'use strict';
   return goog.testing.MethodMock(goog.global, functionName, opt_strictness);
 };
 
@@ -118,6 +123,7 @@ goog.testing.GlobalFunctionMock = function(functionName, opt_strictness) {
  * @return {!goog.testing.MockInterface} The mocked function.
  */
 goog.testing.createFunctionMock = function(opt_functionName, opt_strictness) {
+  'use strict';
   return goog.testing.FunctionMock(opt_functionName, opt_strictness);
 };
 
@@ -131,6 +137,7 @@ goog.testing.createFunctionMock = function(opt_functionName, opt_strictness) {
  * @return {!goog.testing.MockInterface} The mocked global function.
  */
 goog.testing.createMethodMock = function(scope, functionName, opt_strictness) {
+  'use strict';
   return goog.testing.MethodMock(scope, functionName, opt_strictness);
 };
 
@@ -152,6 +159,7 @@ goog.testing.createMethodMock = function(scope, functionName, opt_strictness) {
  */
 goog.testing.createConstructorMock = function(
     scope, constructorName, opt_strictness) {
+  'use strict';
   var realConstructor = scope[constructorName];
   var constructorMock =
       goog.testing.MethodMock(scope, constructorName, opt_strictness);
@@ -179,5 +187,6 @@ goog.testing.createConstructorMock = function(
  * @return {!goog.testing.MockInterface} The mocked global function.
  */
 goog.testing.createGlobalFunctionMock = function(functionName, opt_strictness) {
+  'use strict';
   return goog.testing.GlobalFunctionMock(functionName, opt_strictness);
 };

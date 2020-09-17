@@ -29,6 +29,7 @@ goog.require('goog.Disposable');
  * @final
  */
 goog.testing.PseudoRandom = function(opt_seed, opt_install) {
+  'use strict';
   goog.Disposable.call(this);
 
   if (opt_seed === undefined) {
@@ -116,6 +117,7 @@ goog.testing.PseudoRandom.prototype.mathRandom_;
  * Installs this PseudoRandom as the system number generator.
  */
 goog.testing.PseudoRandom.prototype.install = function() {
+  'use strict';
   if (!this.installed_) {
     this.mathRandom_ = Math.random;
     Math.random = goog.bind(this.random, this);
@@ -126,6 +128,7 @@ goog.testing.PseudoRandom.prototype.install = function() {
 
 /** @override */
 goog.testing.PseudoRandom.prototype.disposeInternal = function() {
+  'use strict';
   goog.testing.PseudoRandom.superClass_.disposeInternal.call(this);
   this.uninstall();
 };
@@ -135,6 +138,7 @@ goog.testing.PseudoRandom.prototype.disposeInternal = function() {
  * Uninstalls the PseudoRandom.
  */
 goog.testing.PseudoRandom.prototype.uninstall = function() {
+  'use strict';
   if (this.installed_) {
     Math.random = this.mathRandom_;
     this.installed_ = false;
@@ -148,6 +152,7 @@ goog.testing.PseudoRandom.prototype.uninstall = function() {
  * @param {number=} opt_seed The seed to use.
  */
 goog.testing.PseudoRandom.prototype.seed = function(opt_seed) {
+  'use strict';
   this.seed_ = (opt_seed || 0) % (goog.testing.PseudoRandom.M - 1);
   if (this.seed_ <= 0) {
     this.seed_ += goog.testing.PseudoRandom.M - 1;
@@ -159,6 +164,7 @@ goog.testing.PseudoRandom.prototype.seed = function(opt_seed) {
  * @return {number} The next number in the sequence.
  */
 goog.testing.PseudoRandom.prototype.random = function() {
+  'use strict';
   var hi = Math.floor(this.seed_ / goog.testing.PseudoRandom.Q);
   var lo = this.seed_ % goog.testing.PseudoRandom.Q;
   var test =

@@ -44,6 +44,7 @@ goog.require('goog.userAgent');
  * @constructor
  */
 goog.testing.TestRunner = function() {
+  'use strict';
   /**
    * Errors that occurred in the window.
    * @type {!Array<string>}
@@ -103,7 +104,6 @@ goog.testing.TestRunner = function() {
     self.clearUniqueId();
   }
   window.addEventListener('pagehide', onPageHide);
-
 };
 
 /**
@@ -112,6 +112,7 @@ goog.testing.TestRunner = function() {
  * @return {string}
  */
 goog.testing.TestRunner.prototype.getSearchString = function() {
+  'use strict';
   return window.location.search;
 };
 
@@ -120,6 +121,7 @@ goog.testing.TestRunner.prototype.getSearchString = function() {
  * @return {string}
  */
 goog.testing.TestRunner.prototype.getUniqueId = function() {
+  'use strict';
   return this.uniqueId_;
 };
 
@@ -127,6 +129,7 @@ goog.testing.TestRunner.prototype.getUniqueId = function() {
  * Clears the unique id for this page. The value will hint the reason.
  */
 goog.testing.TestRunner.prototype.clearUniqueId = function() {
+  'use strict';
   this.uniqueId_ = 'pagehide';
 };
 
@@ -135,6 +138,7 @@ goog.testing.TestRunner.prototype.clearUniqueId = function() {
  * @param {goog.testing.TestCase} testCase The test case to initialize with.
  */
 goog.testing.TestRunner.prototype.initialize = function(testCase) {
+  'use strict';
   if (this.testCase && this.testCase.running) {
     throw new Error(
         'The test runner is already waiting for a test to complete');
@@ -151,6 +155,7 @@ goog.testing.TestRunner.prototype.initialize = function(testCase) {
  *     test case.
  */
 goog.testing.TestRunner.prototype.setStrict = function(strict) {
+  'use strict';
   this.strict_ = strict;
 };
 
@@ -160,6 +165,7 @@ goog.testing.TestRunner.prototype.setStrict = function(strict) {
  *     test case.
  */
 goog.testing.TestRunner.prototype.isStrict = function() {
+  'use strict';
   return this.strict_;
 };
 
@@ -170,6 +176,7 @@ goog.testing.TestRunner.prototype.isStrict = function() {
  * @return {boolean} Whether the test runner is active.
  */
 goog.testing.TestRunner.prototype.isInitialized = function() {
+  'use strict';
   return this.initialized;
 };
 
@@ -180,6 +187,7 @@ goog.testing.TestRunner.prototype.isInitialized = function() {
  * @return {boolean} Whether the test runner is not active.
  */
 goog.testing.TestRunner.prototype.isFinished = function() {
+  'use strict';
   return this.errors.length > 0 || this.isComplete();
 };
 
@@ -189,6 +197,7 @@ goog.testing.TestRunner.prototype.isFinished = function() {
  * @return {boolean} True if the test runner started and subsequently completed.
  */
 goog.testing.TestRunner.prototype.isComplete = function() {
+  'use strict';
   return this.initialized && !!this.testCase && this.testCase.started &&
       !this.testCase.running;
 };
@@ -199,6 +208,7 @@ goog.testing.TestRunner.prototype.isComplete = function() {
  * @return {boolean} Whether the current test returned successfully.
  */
 goog.testing.TestRunner.prototype.isSuccess = function() {
+  'use strict';
   return !this.hasErrors() && !!this.testCase && this.testCase.isSuccess();
 };
 
@@ -209,6 +219,7 @@ goog.testing.TestRunner.prototype.isSuccess = function() {
  * @return {boolean} Whether there were JS errors.
  */
 goog.testing.TestRunner.prototype.hasErrors = function() {
+  'use strict';
   return this.errors.length > 0;
 };
 
@@ -219,6 +230,7 @@ goog.testing.TestRunner.prototype.hasErrors = function() {
  * @param {string} msg Error message.
  */
 goog.testing.TestRunner.prototype.logError = function(msg) {
+  'use strict';
   if (this.isComplete()) {
     // Once the user has checked their code, subsequent errors can occur
     // because of tearDown actions. For now, log these but do not fail the test.
@@ -236,6 +248,7 @@ goog.testing.TestRunner.prototype.logError = function(msg) {
  * @param {Error} ex Exception.
  */
 goog.testing.TestRunner.prototype.logTestFailure = function(ex) {
+  'use strict';
   var testName = /** @type {string} */ (goog.testing.TestCase.currentTestName);
   if (this.testCase) {
     this.testCase.logError(testName, ex);
@@ -253,6 +266,7 @@ goog.testing.TestRunner.prototype.logTestFailure = function(ex) {
  * @param {function(string)} fn Filter function.
  */
 goog.testing.TestRunner.prototype.setErrorFilter = function(fn) {
+  'use strict';
   this.errorFilter_ = fn;
 };
 
@@ -265,6 +279,7 @@ goog.testing.TestRunner.prototype.setErrorFilter = function(fn) {
  * @return {string} A report summary of the test.
  */
 goog.testing.TestRunner.prototype.getReport = function(opt_verbose) {
+  'use strict';
   var report = [];
   if (this.testCase) {
     report.push(this.testCase.getReport(opt_verbose));
@@ -284,6 +299,7 @@ goog.testing.TestRunner.prototype.getReport = function(opt_verbose) {
  * @return {number} The run time, in milliseconds.
  */
 goog.testing.TestRunner.prototype.getRunTime = function() {
+  'use strict';
   return this.testCase ? this.testCase.getRunTime() : 0;
 };
 
@@ -293,6 +309,7 @@ goog.testing.TestRunner.prototype.getRunTime = function() {
  * @return {number} The number of script files.
  */
 goog.testing.TestRunner.prototype.getNumFilesLoaded = function() {
+  'use strict';
   return this.testCase ? this.testCase.getNumFilesLoaded() : 0;
 };
 
@@ -301,6 +318,7 @@ goog.testing.TestRunner.prototype.getNumFilesLoaded = function() {
  * Executes a test case and prints the results to the window.
  */
 goog.testing.TestRunner.prototype.execute = function() {
+  'use strict';
   if (!this.testCase) {
     throw new Error(
         'The test runner must be initialized with a test case ' +
@@ -330,6 +348,7 @@ goog.testing.TestRunner.prototype.execute = function() {
  * @private
  */
 goog.testing.TestRunner.shouldUsePromises_ = function(testCase) {
+  'use strict';
   return testCase.constructor === goog.testing.TestCase;
 };
 
@@ -343,6 +362,7 @@ goog.testing.TestRunner.TEST_LOG_ID = 'closureTestRunnerLog';
  * @private
  */
 goog.testing.TestRunner.prototype.onComplete_ = function() {
+  'use strict';
   var log = this.testCase.getReport(true);
   if (this.errors.length > 0) {
     log += '\n' + this.errors.join('\n');
@@ -369,6 +389,7 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
   runAgainLink.style.marginBottom = '16px';
   runAgainLink.href = '';
   runAgainLink.onclick = goog.bind(function() {
+    'use strict';
     this.execute();
     return false;
   }, this);
@@ -382,6 +403,7 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
  * @param {string} log The string to write.
  */
 goog.testing.TestRunner.prototype.writeLog = function(log) {
+  'use strict';
   var lines = log.split('\n');
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i];
@@ -488,6 +510,7 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
  * @param {string} s The text to output to the log.
  */
 goog.testing.TestRunner.prototype.log = function(s) {
+  'use strict';
   if (this.testCase) {
     this.testCase.log(s);
   }
@@ -502,6 +525,7 @@ goog.testing.TestRunner.prototype.log = function(s) {
  * for the test runner.
  */
 goog.testing.TestRunner.prototype.getTestResults = function() {
+  'use strict';
   if (this.testCase) {
     return this.testCase.getTestResults();
   }
@@ -515,6 +539,7 @@ goog.testing.TestRunner.prototype.getTestResults = function() {
  * @return {?string} Tests results object.
  */
 goog.testing.TestRunner.prototype.getTestResultsAsJson = function() {
+  'use strict';
   if (this.testCase) {
     var testCaseResults
         /** {Object<string, !Array<!goog.testing.TestCase.IResult>>} */

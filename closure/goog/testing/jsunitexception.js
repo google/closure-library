@@ -18,6 +18,7 @@ goog.require('goog.testing.stacktrace');
  * @final
  */
 goog.testing.JsUnitException = function(comment, opt_message) {
+  'use strict';
   this.isJsUnitException = true;
   this.message =
       goog.testing.JsUnitException.generateMessage(comment, opt_message);
@@ -42,6 +43,7 @@ goog.inherits(goog.testing.JsUnitException, Error);
  * @package
  */
 goog.testing.JsUnitException.generateMessage = function(comment, opt_message) {
+  'use strict';
   return (comment || '') + (comment && opt_message ? '\n' : '') +
       (opt_message || '');
 };
@@ -49,5 +51,6 @@ goog.testing.JsUnitException.generateMessage = function(comment, opt_message) {
 
 /** @override */
 goog.testing.JsUnitException.prototype.toString = function() {
+  'use strict';
   return this.message || this.jsUnitMessage;
 };

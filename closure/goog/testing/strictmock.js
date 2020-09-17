@@ -37,6 +37,7 @@ goog.requireType('goog.testing.MockExpectation');
  */
 goog.testing.StrictMock = function(
     objectToMock, opt_mockStaticMethods, opt_createProxy) {
+  'use strict';
   goog.testing.Mock.call(
       this, objectToMock, opt_mockStaticMethods, opt_createProxy);
 
@@ -55,6 +56,7 @@ goog.inherits(goog.testing.StrictMock, goog.testing.Mock);
 
 /** @override */
 goog.testing.StrictMock.prototype.$recordExpectation = function() {
+  'use strict';
   if (this.$pendingExpectation) {
     this.$expectations_.push(this.$pendingExpectation);
     this.awaitingExpectations_.add(this.$pendingExpectation);
@@ -64,6 +66,7 @@ goog.testing.StrictMock.prototype.$recordExpectation = function() {
 
 /** @override */
 goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
+  'use strict';
   if (this.$expectations_.length == 0) {
     this.$throwCallException(name, args);
   }
@@ -110,6 +113,7 @@ goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
 
 /** @override */
 goog.testing.StrictMock.prototype.$reset = function() {
+  'use strict';
   goog.testing.StrictMock.superClass_.$reset.call(this);
 
   goog.array.clear(this.$expectations_);
@@ -119,6 +123,7 @@ goog.testing.StrictMock.prototype.$reset = function() {
 
 /** @override */
 goog.testing.StrictMock.prototype.$waitAndVerify = function() {
+  'use strict';
   for (var i = 0; i < this.$expectations_.length; i++) {
     var expectation = this.$expectations_[i];
     goog.asserts.assert(
@@ -136,8 +141,10 @@ goog.testing.StrictMock.prototype.$waitAndVerify = function() {
  * @private
  */
 goog.testing.StrictMock.prototype.maybeFinishedWithExpectations_ = function() {
+  'use strict';
   var unresolvedExpectations =
       goog.array.count(this.$expectations_, function(expectation) {
+        'use strict';
         return expectation.actualCalls < expectation.minCalls;
       });
   if (this.waitingForExpectations && !unresolvedExpectations) {
@@ -148,6 +155,7 @@ goog.testing.StrictMock.prototype.maybeFinishedWithExpectations_ = function() {
 
 /** @override */
 goog.testing.StrictMock.prototype.$verify = function() {
+  'use strict';
   goog.testing.StrictMock.superClass_.$verify.call(this);
 
   while (this.$expectations_.length > 0) {

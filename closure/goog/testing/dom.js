@@ -35,6 +35,7 @@ goog.require('goog.userAgent');
  * @private
  */
 goog.testing.dom.createEndTagMarker_ = function() {
+  'use strict';
   var marker = goog.dom.createElement(goog.dom.TagName.DIV);
   marker.id = goog.getUid(marker);
   return marker;
@@ -62,8 +63,10 @@ goog.testing.dom.END_TAG_MARKER_ = goog.testing.dom.createEndTagMarker_();
  *         other string: Match the text node's contents.
  */
 goog.testing.dom.assertNodesMatch = function(it, array) {
+  'use strict';
   var i = 0;
   goog.iter.forEach(it, function(node) {
+    'use strict';
     if (array.length <= i) {
       fail(
           'Got more nodes than expected: ' +
@@ -105,6 +108,7 @@ goog.testing.dom.assertNodesMatch = function(it, array) {
  * @return {string} A string representation of the node.
  */
 goog.testing.dom.exposeNode = function(node) {
+  'use strict';
   node = /** @type {!Element} */ (node);
   var result = node.nodeName || node.nodeValue;
   if (node.id) {
@@ -121,6 +125,7 @@ goog.testing.dom.exposeNode = function(node) {
  * @return {string} A string representation of the range.
  */
 goog.testing.dom.exposeRange = function(range) {
+  'use strict';
   // This is deliberately not implemented as
   // goog.dom.AbstractRange.prototype.toString, because it is non-authoritative.
   // Two equivalent ranges may have very different exposeRange values, and
@@ -146,6 +151,7 @@ goog.testing.dom.exposeRange = function(range) {
  * @private
  */
 goog.testing.dom.checkUserAgents_ = function(userAgents) {
+  'use strict';
   if (goog.string.startsWith(userAgents, '!')) {
     if (goog.string.contains(userAgents, ' ')) {
       throw new Error('Only a single negative user agent may be specified');
@@ -178,6 +184,7 @@ goog.testing.dom.checkUserAgents_ = function(userAgents) {
  * @private
  */
 goog.testing.dom.endTagMap_ = function(node, ignore, iterator) {
+  'use strict';
   goog.asserts.assertInstanceof(iterator, goog.dom.TagIterator);
   return iterator.isEndTag() ? goog.testing.dom.END_TAG_MARKER_ : node;
 };
@@ -196,6 +203,7 @@ goog.testing.dom.endTagMap_ = function(node, ignore, iterator) {
  * @private
  */
 goog.testing.dom.nodeFilter_ = function(node) {
+  'use strict';
   if (node.nodeType == goog.dom.NodeType.TEXT) {
     // If a node is part of a string of text nodes and it has spaces in it,
     // we allow it since it's going to affect the merging of nodes done below.
@@ -234,6 +242,7 @@ goog.testing.dom.nodeFilter_ = function(node) {
  * @private
  */
 goog.testing.dom.getExpectedText_ = function(node) {
+  'use strict';
   // Strip off the browser specifications.
   return node.nodeValue.match(/^(\[\[.+\]\])?([\s\S]*)/)[2];
 };
@@ -246,6 +255,7 @@ goog.testing.dom.getExpectedText_ = function(node) {
  * @private
  */
 goog.testing.dom.describeNode_ = function(node) {
+  'use strict';
   if (node.nodeType == goog.dom.NodeType.TEXT) {
     return '[Text: ' + node.nodeValue + ']';
   } else {
@@ -275,6 +285,7 @@ goog.testing.dom.describeNode_ = function(node) {
  */
 goog.testing.dom.assertHtmlContentsMatch = function(
     htmlPattern, actual, opt_strictAttributes) {
+  'use strict';
   var div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.innerHTML = htmlPattern;
 
@@ -292,6 +303,7 @@ goog.testing.dom.assertHtmlContentsMatch = function(
   var actualNode;
   var preIterated = false;
   var advanceActualNode = function() {
+    'use strict';
     // If the iterator has already been advanced, don't advance it again.
     if (!preIterated) {
       actualNode = goog.iter.nextOrValue(actualIt, null);
@@ -318,6 +330,7 @@ goog.testing.dom.assertHtmlContentsMatch = function(
 
   var number = 0;
   goog.iter.forEach(expectedIt, function(expectedNode) {
+    'use strict';
     advanceActualNode();
     assertNotNull(
         'Finished actual HTML before finishing expected HTML at ' +
@@ -430,6 +443,7 @@ goog.testing.dom.assertHtmlContentsMatch = function(
  */
 goog.testing.dom.assertHtmlMatches = function(
     htmlPattern, actual, opt_strictAttributes) {
+  'use strict';
   var div = goog.dom.createDom(goog.dom.TagName.DIV);
   div.innerHTML = actual;
 
@@ -448,8 +462,10 @@ goog.testing.dom.assertHtmlMatches = function(
  * @return {?Node} The first text node that matches, or null if none is found.
  */
 goog.testing.dom.findTextNode = function(textOrRegexp, root) {
+  'use strict';
   var it = new goog.dom.NodeIterator(root);
   var ret = goog.iter.nextOrValue(goog.iter.filter(it, function(node) {
+    'use strict';
     if (node.nodeType == goog.dom.NodeType.TEXT) {
       if (typeof textOrRegexp === 'string') {
         return node.nodeValue == textOrRegexp;
@@ -480,6 +496,7 @@ goog.testing.dom.findTextNode = function(textOrRegexp, root) {
  */
 goog.testing.dom.assertRangeEquals = function(
     start, startOffset, end, endOffset, range) {
+  'use strict';
   assertEquals('Unexpected start node', start, range.getStartNode());
   assertEquals('Unexpected end node', end, range.getEndNode());
   assertEquals('Unexpected start offset', startOffset, range.getStartOffset());
@@ -495,6 +512,7 @@ goog.testing.dom.assertRangeEquals = function(
  * @private
  */
 goog.testing.dom.getAttributeValue_ = function(node, name) {
+  'use strict';
   // These hacks avoid nondetermistic results in the following cases:
   // WebKit: Two radio buttons with the same name can't be checked at the same
   //      time, even if only one of them is in the document.
@@ -534,6 +552,7 @@ goog.testing.dom.getAttributeValue_ = function(node, name) {
  */
 goog.testing.dom.assertAttributesEqual_ = function(
     errorSuffix, expectedElem, actualElem, strictAttributes) {
+  'use strict';
   if (strictAttributes) {
     goog.testing.dom.compareClassAttribute_(expectedElem, actualElem);
   }
@@ -606,6 +625,7 @@ goog.testing.dom.assertAttributesEqual_ = function(
  * @private
  */
 goog.testing.dom.compareClassAttribute_ = function(expectedElem, actualElem) {
+  'use strict';
   var classes = goog.dom.classlist.get(expectedElem);
 
   var expectedClasses = [];
@@ -643,6 +663,7 @@ goog.testing.dom.BAD_IE_ATTRIBUTES_ = goog.object.createSet(
  * @private
  */
 goog.testing.dom.ignoreAttribute_ = function(name) {
+  'use strict';
   if (name == 'style' || name == 'class' || name == 'xmlns') {
     return true;
   }
@@ -663,6 +684,7 @@ goog.testing.dom.ignoreAttribute_ = function(name) {
  */
 goog.testing.dom.compareIdAttributeForIe_ = function(
     expectedValue, actualAttribute, strictAttributes, errorSuffix) {
+  'use strict';
   if (expectedValue === '') {
     if (strictAttributes) {
       assertTrue(

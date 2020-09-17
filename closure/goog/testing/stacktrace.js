@@ -28,6 +28,7 @@ goog.provide('goog.testing.stacktrace.Frame');
  * @final
  */
 goog.testing.stacktrace.Frame = function(context, name, alias, path) {
+  'use strict';
   this.context_ = context;
   this.name_ = name;
   this.alias_ = alias;
@@ -40,6 +41,7 @@ goog.testing.stacktrace.Frame = function(context, name, alias, path) {
  *     anonymous and the object field which it's assigned to is unknown.
  */
 goog.testing.stacktrace.Frame.prototype.getName = function() {
+  'use strict';
   return this.name_;
 };
 
@@ -48,6 +50,7 @@ goog.testing.stacktrace.Frame.prototype.getName = function() {
  * @return {boolean} Whether the stack frame contains an anonymous function.
  */
 goog.testing.stacktrace.Frame.prototype.isAnonymous = function() {
+  'use strict';
   return !this.name_ || this.context_ == '[object Object]';
 };
 
@@ -57,6 +60,7 @@ goog.testing.stacktrace.Frame.prototype.isAnonymous = function() {
  * @return {string} Pretty printed stack frame.
  */
 goog.testing.stacktrace.Frame.prototype.toCanonicalString = function() {
+  'use strict';
   const htmlEscape = goog.testing.stacktrace.htmlEscape_;
   const deobfuscate = goog.testing.stacktrace.maybeDeobfuscateFunctionName_;
 
@@ -293,6 +297,7 @@ goog.testing.stacktrace.IE_STACK_FRAME_REGEXP_ = new RegExp(
  * @suppress {es5Strict}
  */
 goog.testing.stacktrace.followCallChain_ = function() {
+  'use strict';
   const frames = [];
   let fn = arguments.callee.caller;
   let depth = 0;
@@ -326,6 +331,7 @@ goog.testing.stacktrace.followCallChain_ = function() {
  * @private
  */
 goog.testing.stacktrace.parseStackFrame_ = function(frameStr) {
+  'use strict';
   // This match includes newer versions of Opera (15+).
   let m = frameStr.match(goog.testing.stacktrace.V8_STACK_FRAME_REGEXP_);
   if (m) {
@@ -374,6 +380,7 @@ goog.testing.stacktrace.deobfuscateFunctionName_;
  * @param {function(string): string} fn function to deobfuscate function names.
  */
 goog.testing.stacktrace.setDeobfuscateFunctionName = function(fn) {
+  'use strict';
   goog.testing.stacktrace.deobfuscateFunctionName_ = fn;
 };
 
@@ -387,6 +394,7 @@ goog.testing.stacktrace.setDeobfuscateFunctionName = function(fn) {
  * @private
  */
 goog.testing.stacktrace.maybeDeobfuscateFunctionName_ = function(name) {
+  'use strict';
   return goog.testing.stacktrace.deobfuscateFunctionName_ ?
       goog.testing.stacktrace.deobfuscateFunctionName_(name) :
       name;
@@ -400,6 +408,7 @@ goog.testing.stacktrace.maybeDeobfuscateFunctionName_ = function(name) {
  * @private
  */
 goog.testing.stacktrace.htmlEscape_ = function(text) {
+  'use strict';
   return text.replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
@@ -415,6 +424,7 @@ goog.testing.stacktrace.htmlEscape_ = function(text) {
  * @private
  */
 goog.testing.stacktrace.framesToString_ = function(frames) {
+  'use strict';
   // Removes the anonymous calls from the end of the stack trace (they come
   // from testrunner.js, testcase.js and asserts.js), so the stack trace will
   // end with the test... method.
@@ -456,6 +466,7 @@ goog.testing.stacktrace.framesToString_ = function(frames) {
  * @private
  */
 goog.testing.stacktrace.parse_ = function(stack) {
+  'use strict';
   const lines = stack.replace(/\s*$/, '').split('\n');
   const frames = [];
   for (let i = 0; i < lines.length; i++) {
@@ -471,6 +482,7 @@ goog.testing.stacktrace.parse_ = function(stack) {
  * @return {string} Same stack trace in common format.
  */
 goog.testing.stacktrace.canonicalize = function(stack) {
+  'use strict';
   const frames = goog.testing.stacktrace.parse_(stack);
   return goog.testing.stacktrace.framesToString_(frames);
 };
@@ -482,6 +494,7 @@ goog.testing.stacktrace.canonicalize = function(stack) {
  * @private
  */
 goog.testing.stacktrace.getNativeStack_ = function() {
+  'use strict';
   const tmpError = new Error();
   if (tmpError.stack) {
     return tmpError.stack;
@@ -505,6 +518,7 @@ goog.testing.stacktrace.getNativeStack_ = function() {
  * @return {string} The stack trace in canonical format.
  */
 goog.testing.stacktrace.get = function() {
+  'use strict';
   const stack = goog.testing.stacktrace.getNativeStack_();
   let frames;
   if (!stack) {
@@ -527,6 +541,7 @@ goog.testing.stacktrace.get = function() {
  * @private
  */
 goog.testing.stacktrace.callSitesToFrames_ = function(stack) {
+  'use strict';
   const frames = [];
   for (let i = 0; i < stack.length; i++) {
     const callSite = stack[i];
