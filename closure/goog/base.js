@@ -1120,7 +1120,7 @@ goog.loadModule = function(moduleDef) {
     };
     var origExports = {};
     var exports = origExports;
-    if (goog.isFunction(moduleDef)) {
+    if (typeof moduleDef === 'function') {
       exports = moduleDef.call(undefined, exports);
     } else if (typeof moduleDef === 'string') {
       if (goog.useSafari10Workaround()) {
@@ -1352,17 +1352,6 @@ goog.isArrayLike = function(val) {
  */
 goog.isDateLike = function(val) {
   return goog.isObject(val) && typeof val.getFullYear == 'function';
-};
-
-
-/**
- * Returns true if the specified value is a function.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is a function.
- * @deprecated use "typeof val === 'function'" instead.
- */
-goog.isFunction = function(val) {
-  return goog.typeOf(val) == 'function';
 };
 
 
@@ -3521,7 +3510,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
           load();
           controller.resume();
         }
-        if (goog.isFunction(oldCallback)) {
+        if (typeof oldCallback === 'function') {
           oldCallback.apply(undefined, arguments);
         }
       };
