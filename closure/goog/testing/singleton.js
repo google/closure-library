@@ -24,7 +24,6 @@ goog.provide('goog.testing.singleton');
  * @const
  */
 goog.testing.singleton.resetAll = function() {
-  'use strict';
   const singletons = goog.getObjectByName('goog.instantiatedSingletons_');
   let ctor;
   while (ctor = singletons.pop()) {
@@ -41,7 +40,6 @@ goog.testing.singleton.resetAll = function() {
  * type.
  */
 goog.testing.singleton.reset = function(singleton) {
-  'use strict';
   delete /** @type {?} */ (singleton).instance_;
 };
 

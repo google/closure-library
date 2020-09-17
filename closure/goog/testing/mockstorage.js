@@ -27,7 +27,6 @@ goog.require('goog.structs.Map');
  * @final
  */
 goog.testing.MockStorage = function() {
-  'use strict';
   /**
    * The underlying storage object.
    * @type {goog.structs.Map}
@@ -50,7 +49,6 @@ goog.testing.MockStorage = function() {
  * @override
  */
 goog.testing.MockStorage.prototype.setItem = function(key, value) {
-  'use strict';
   this.store_.set(key, String(value));
   this.length = this.store_.getCount();
 };
@@ -65,7 +63,6 @@ goog.testing.MockStorage.prototype.setItem = function(key, value) {
  * @override
  */
 goog.testing.MockStorage.prototype.getItem = function(key) {
-  'use strict';
   var val = this.store_.get(key);
   // Enforce that getItem returns string values.
   return (val != null) ? /** @type {string} */ (val) : null;
@@ -78,7 +75,6 @@ goog.testing.MockStorage.prototype.getItem = function(key) {
  * @override
  */
 goog.testing.MockStorage.prototype.removeItem = function(key) {
-  'use strict';
   this.store_.remove(key);
   this.length = this.store_.getCount();
 };
@@ -89,7 +85,6 @@ goog.testing.MockStorage.prototype.removeItem = function(key) {
  * @override
  */
 goog.testing.MockStorage.prototype.clear = function() {
-  'use strict';
   this.store_.clear();
   this.length = 0;
 };
@@ -102,6 +97,5 @@ goog.testing.MockStorage.prototype.clear = function() {
  * @override
  */
 goog.testing.MockStorage.prototype.key = function(index) {
-  'use strict';
   return this.store_.getKeys()[index] || null;
 };

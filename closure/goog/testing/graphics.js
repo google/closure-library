@@ -21,7 +21,6 @@ goog.require('goog.testing.asserts');
  * @private
  */
 goog.testing.graphics.SEGMENT_NAMES_ = function() {
-  'use strict';
   var arr = [];
   arr[goog.graphics.Path.Segment.MOVETO] = 'M';
   arr[goog.graphics.Path.Segment.LINETO] = 'L';
@@ -39,10 +38,8 @@ goog.testing.graphics.SEGMENT_NAMES_ = function() {
  * @param {goog.graphics.Path} path The path to test against.
  */
 goog.testing.graphics.assertPathEquals = function(expected, path) {
-  'use strict';
   var actual = [];
   path.forEachSegment(function(seg, args) {
-    'use strict';
     actual.push(goog.testing.graphics.SEGMENT_NAMES_[seg]);
     Array.prototype.push.apply(actual, args);
   });

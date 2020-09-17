@@ -34,14 +34,12 @@ goog.require('goog.testing.jsunit');
  */
 goog.testing.JsTdTestCaseAdapter.TestCaseFactory_ = function(
     testCaseName, condition, opt_proto, opt_isAsync) {
-  'use strict';
   /** @constructor */
   var T = function() {};
   if (opt_proto) T.prototype = opt_proto;
   T.displayName = testCaseName;
 
   goog.async.run(function() {
-    'use strict';
     var t = new T();
     if (opt_isAsync) {
       t = goog.testing.JsTdAsyncWrapper.convertToAsyncTestObj(t);
@@ -64,7 +62,6 @@ goog.testing.JsTdTestCaseAdapter.TestCaseFactory_ = function(
  * @private
  */
 goog.testing.JsTdTestCaseAdapter.TestCase_ = function(testCaseName, opt_proto) {
-  'use strict';
   return goog.testing.JsTdTestCaseAdapter.TestCaseFactory_(
       testCaseName, goog.functions.TRUE, opt_proto);
 };
@@ -80,7 +77,6 @@ goog.testing.JsTdTestCaseAdapter.TestCase_ = function(testCaseName, opt_proto) {
  */
 goog.testing.JsTdTestCaseAdapter.ConditionalTestCase_ = function(
     testCaseName, condition, opt_proto) {
-  'use strict';
   return goog.testing.JsTdTestCaseAdapter.TestCaseFactory_(
       testCaseName, condition, opt_proto);
 };
@@ -94,7 +90,6 @@ goog.testing.JsTdTestCaseAdapter.ConditionalTestCase_ = function(
  */
 goog.testing.JsTdTestCaseAdapter.AsyncTestCase_ = function(
     testCaseName, opt_proto) {
-  'use strict';
   return goog.testing.JsTdTestCaseAdapter.TestCaseFactory_(
       testCaseName, goog.functions.TRUE, opt_proto, true);
 };
@@ -110,7 +105,6 @@ goog.testing.JsTdTestCaseAdapter.AsyncTestCase_ = function(
  */
 goog.testing.JsTdTestCaseAdapter.AsyncConditionalTestCase_ = function(
     testCaseName, condition, opt_proto) {
-  'use strict';
   return goog.testing.JsTdTestCaseAdapter.TestCaseFactory_(
       testCaseName, condition, opt_proto, true);
 };

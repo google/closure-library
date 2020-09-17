@@ -31,7 +31,6 @@ goog.require('goog.math');
  * @constructor
  */
 goog.testing.PerformanceTimer = function(opt_numSamples, opt_timeoutInterval) {
-  'use strict';
   /**
    * Number of times the test function is to be run; defaults to 10.
    * @private {number}
@@ -62,7 +61,6 @@ goog.testing.PerformanceTimer = function(opt_numSamples, opt_timeoutInterval) {
  * @private
  */
 goog.testing.PerformanceTimer.now_ = function() {
-  'use strict';
   // goog.now is used in DEBUG mode to make the class easier to test.
   return !goog.DEBUG && window.performance && window.performance.now ?
       window.performance.now() :
@@ -74,7 +72,6 @@ goog.testing.PerformanceTimer.now_ = function() {
  * @return {number} The number of times the test function will be run.
  */
 goog.testing.PerformanceTimer.prototype.getNumSamples = function() {
-  'use strict';
   return this.numSamples_;
 };
 
@@ -84,7 +81,6 @@ goog.testing.PerformanceTimer.prototype.getNumSamples = function() {
  * @param {number} numSamples Number of times to run the test function.
  */
 goog.testing.PerformanceTimer.prototype.setNumSamples = function(numSamples) {
-  'use strict';
   this.numSamples_ = numSamples;
 };
 
@@ -93,7 +89,6 @@ goog.testing.PerformanceTimer.prototype.setNumSamples = function(numSamples) {
  * @return {number} The number of milliseconds after which the test times out.
  */
 goog.testing.PerformanceTimer.prototype.getTimeoutInterval = function() {
-  'use strict';
   return this.timeoutInterval_;
 };
 
@@ -104,7 +99,6 @@ goog.testing.PerformanceTimer.prototype.getTimeoutInterval = function() {
  */
 goog.testing.PerformanceTimer.prototype.setTimeoutInterval = function(
     timeoutInterval) {
-  'use strict';
   this.timeoutInterval_ = timeoutInterval;
 };
 
@@ -115,7 +109,6 @@ goog.testing.PerformanceTimer.prototype.setTimeoutInterval = function(
  * @param {boolean} discard Whether to discard outlier values.
  */
 goog.testing.PerformanceTimer.prototype.setDiscardOutliers = function(discard) {
-  'use strict';
   this.discardOutliers_ = discard;
 };
 
@@ -125,7 +118,6 @@ goog.testing.PerformanceTimer.prototype.setDiscardOutliers = function(discard) {
  *     stats.
  */
 goog.testing.PerformanceTimer.prototype.isDiscardOutliers = function() {
-  'use strict';
   return this.discardOutliers_;
 };
 
@@ -150,9 +142,9 @@ goog.testing.PerformanceTimer.prototype.isDiscardOutliers = function() {
  * @return {!Object} Object containing performance stats.
  */
 goog.testing.PerformanceTimer.prototype.run = function(testFn) {
-  'use strict';
-  return this.runTask(new goog.testing.PerformanceTimer.Task(
-      /** @type {goog.testing.PerformanceTimer.TestFunction} */ (testFn)));
+  return this.runTask(
+      new goog.testing.PerformanceTimer.Task(
+          /** @type {goog.testing.PerformanceTimer.TestFunction} */ (testFn)));
 };
 
 
@@ -166,7 +158,6 @@ goog.testing.PerformanceTimer.prototype.run = function(testFn) {
  * @return {!Object} Object containing performance stats.
  */
 goog.testing.PerformanceTimer.prototype.runTask = function(task) {
-  'use strict';
   var samples = [];
   var testStart = goog.testing.PerformanceTimer.now_();
   var totalRunTime = 0;
@@ -199,7 +190,6 @@ goog.testing.PerformanceTimer.prototype.runTask = function(task) {
  * @private
  */
 goog.testing.PerformanceTimer.prototype.finishTask_ = function(samples) {
-  'use strict';
   if (this.discardOutliers_ && samples.length > 2) {
     goog.array.remove(samples, Math.min.apply(null, samples));
     goog.array.remove(samples, Math.max.apply(null, samples));
@@ -223,7 +213,6 @@ goog.testing.PerformanceTimer.prototype.finishTask_ = function(samples) {
  *     containing performance stats.
  */
 goog.testing.PerformanceTimer.prototype.runAsyncTask = function(task) {
-  'use strict';
   var samples = [];
   var testStart = goog.testing.PerformanceTimer.now_();
 
@@ -259,16 +248,12 @@ goog.testing.PerformanceTimer.prototype.runAsyncTask = function(task) {
  */
 goog.testing.PerformanceTimer.prototype.runAsyncTaskSample_ = function(
     testFn, setUpFn, tearDownFn, result, samples, testStart) {
-  'use strict';
   var timer = this;
   timer.handleOptionalDeferred_(setUpFn, function() {
-    'use strict';
     var sampleStart = goog.testing.PerformanceTimer.now_();
     timer.handleOptionalDeferred_(testFn, function() {
-      'use strict';
       var sampleEnd = goog.testing.PerformanceTimer.now_();
       timer.handleOptionalDeferred_(tearDownFn, function() {
-        'use strict';
         samples.push(sampleEnd - sampleStart);
         var totalRunTime = sampleEnd - testStart;
         if (samples.length < timer.numSamples_ &&
@@ -290,9 +275,7 @@ goog.testing.PerformanceTimer.prototype.runAsyncTaskSample_ = function(
  * @return {number}
  */
 goog.testing.PerformanceTimer.median = function(samples) {
-  'use strict';
   samples.sort(function(a, b) {
-    'use strict';
     return a - b;
   });
   let half = Math.floor(samples.length / 2);
@@ -316,7 +299,6 @@ goog.testing.PerformanceTimer.median = function(samples) {
  */
 goog.testing.PerformanceTimer.prototype.handleOptionalDeferred_ = function(
     deferredFactory, continuationFunction) {
-  'use strict';
   var deferred = deferredFactory();
   if (deferred) {
     deferred.addCallback(continuationFunction);
@@ -333,7 +315,6 @@ goog.testing.PerformanceTimer.prototype.handleOptionalDeferred_ = function(
  * @return {!Object} Object containing performance stats.
  */
 goog.testing.PerformanceTimer.createResults = function(samples) {
-  'use strict';
   return {
     'average': goog.math.average.apply(null, samples),
     'count': samples.length,
@@ -369,7 +350,6 @@ goog.testing.PerformanceTimer.TestFunction;
  * @final
  */
 goog.testing.PerformanceTimer.Task = function(test) {
-  'use strict';
   /**
    * The test function to time.
    * @type {goog.testing.PerformanceTimer.TestFunction}
@@ -402,7 +382,6 @@ goog.testing.PerformanceTimer.Task.prototype.tearDown_ = goog.nullFunction;
  *     time.
  */
 goog.testing.PerformanceTimer.Task.prototype.getTest = function() {
-  'use strict';
   return this.test_;
 };
 
@@ -415,7 +394,6 @@ goog.testing.PerformanceTimer.Task.prototype.getTest = function() {
  * @return {!goog.testing.PerformanceTimer.Task} This task.
  */
 goog.testing.PerformanceTimer.Task.prototype.withSetUp = function(setUp) {
-  'use strict';
   this.setUp_ = setUp;
   return this;
 };
@@ -426,7 +404,6 @@ goog.testing.PerformanceTimer.Task.prototype.withSetUp = function(setUp) {
  *     the default no-op function if none was specified.
  */
 goog.testing.PerformanceTimer.Task.prototype.getSetUp = function() {
-  'use strict';
   return this.setUp_;
 };
 
@@ -439,7 +416,6 @@ goog.testing.PerformanceTimer.Task.prototype.getSetUp = function() {
  * @return {!goog.testing.PerformanceTimer.Task} This task.
  */
 goog.testing.PerformanceTimer.Task.prototype.withTearDown = function(tearDown) {
-  'use strict';
   this.tearDown_ = tearDown;
   return this;
 };
@@ -450,6 +426,5 @@ goog.testing.PerformanceTimer.Task.prototype.withTearDown = function(tearDown) {
  *     or the default no-op function if none was specified.
  */
 goog.testing.PerformanceTimer.Task.prototype.getTearDown = function() {
-  'use strict';
   return this.tearDown_;
 };
