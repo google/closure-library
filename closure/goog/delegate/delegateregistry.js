@@ -330,7 +330,7 @@ class DelegateRegistry extends DelegateRegistryBase {
  */
 DelegateRegistry.Prioritized = class extends DelegateRegistryBase {
   /**
-   * @param {function(new: T)} ctor
+   * @param {function(new: T, ...?)} ctor
    * @param {number} priority
    */
   registerClass(ctor, priority) {
