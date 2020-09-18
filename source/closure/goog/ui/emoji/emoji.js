@@ -29,6 +29,7 @@ goog.provide('goog.ui.emoji.Emoji');
  * @final
  */
 goog.ui.emoji.Emoji = function(url, id, opt_height, opt_width, opt_altText) {
+  'use strict';
   /**
    * The URL pointing to the source image for the emoji
    *
@@ -91,6 +92,7 @@ goog.ui.emoji.Emoji.DATA_ATTRIBUTE = 'data-' + goog.ui.emoji.Emoji.ATTRIBUTE;
  * @return {string} The URL for this emoji.
  */
 goog.ui.emoji.Emoji.prototype.getUrl = function() {
+  'use strict';
   return this.url_;
 };
 
@@ -99,6 +101,7 @@ goog.ui.emoji.Emoji.prototype.getUrl = function() {
  * @return {string} The id of this emoji.
  */
 goog.ui.emoji.Emoji.prototype.getId = function() {
+  'use strict';
   return this.id_;
 };
 
@@ -107,6 +110,7 @@ goog.ui.emoji.Emoji.prototype.getId = function() {
  * @return {?number} The height of this emoji.
  */
 goog.ui.emoji.Emoji.prototype.getHeight = function() {
+  'use strict';
   return this.height_;
 };
 
@@ -115,6 +119,7 @@ goog.ui.emoji.Emoji.prototype.getHeight = function() {
  * @return {?number} The width of this emoji.
  */
 goog.ui.emoji.Emoji.prototype.getWidth = function() {
+  'use strict';
   return this.width_;
 };
 
@@ -124,5 +129,6 @@ goog.ui.emoji.Emoji.prototype.getWidth = function() {
  *     representation of the emoji.
  */
 goog.ui.emoji.Emoji.prototype.getAltText = function() {
+  'use strict';
   return this.altText_;
 };

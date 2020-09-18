@@ -26,6 +26,7 @@ goog.require('goog.style');
  *     intersect.
  */
 goog.testing.style.intersects = function(element, otherElement) {
+  'use strict';
   var elementRect = goog.style.getBounds(element);
   var otherElementRect = goog.style.getBounds(otherElement);
   return goog.math.Rect.intersects(elementRect, otherElementRect);
@@ -38,6 +39,7 @@ goog.testing.style.intersects = function(element, otherElement) {
  * @return {boolean} Whether the element has visible dimensions.
  */
 goog.testing.style.hasVisibleDimensions = function(element) {
+  'use strict';
   var elSize = goog.style.getSize(element);
   var shortest = elSize.getShortest();
   if (shortest <= 0) {
@@ -55,6 +57,7 @@ goog.testing.style.hasVisibleDimensions = function(element) {
  * @return {boolean} Whether the CSS style of the element renders it visible.
  */
 goog.testing.style.isVisible = function(element) {
+  'use strict';
   if (!goog.dom.isInDocument(element)) {
     return false;
   }
@@ -69,6 +72,7 @@ goog.testing.style.isVisible = function(element) {
  * @return {boolean} Whether the element is on the screen.
  */
 goog.testing.style.isOnScreen = function(el) {
+  'use strict';
   var doc = goog.dom.getDomHelper(el).getDocument();
   var viewport = goog.style.getVisibleRectForElement(doc.body);
   var viewportRect = goog.math.Rect.createFromBox(viewport);

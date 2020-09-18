@@ -93,6 +93,7 @@ goog.crypt.baseN.BASE_64_URL_SAFE =
  * @return {string} The converted number.
  */
 goog.crypt.baseN.recodeString = function(number, inputBase, outputBase) {
+  'use strict';
   if (outputBase == '') {
     throw new Error('Empty output base');
   }
@@ -184,6 +185,7 @@ goog.crypt.baseN.recodeString = function(number, inputBase, outputBase) {
  * @private
  */
 goog.crypt.baseN.stringToArray_ = function(number, base) {
+  'use strict';
   const index = {};
   const n = base.length;
   for (let i = 0; i < n; i++) {
@@ -221,6 +223,7 @@ goog.crypt.baseN.stringToArray_ = function(number, base) {
  * @private
  */
 goog.crypt.baseN.arrayToString_ = function(number, base) {
+  'use strict';
   const n = number.length;
   const chars = [];
   const baseSize = base.length;

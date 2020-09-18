@@ -30,6 +30,7 @@ goog.requireType('goog.events.BrowserEvent');
  * @package
  */
 goog.editor.PluginImpl = function() {
+  'use strict';
   goog.events.EventTarget.call(this);
 
   /**
@@ -72,6 +73,7 @@ goog.inherits(goog.editor.PluginImpl, goog.events.EventTarget);
  *     currently active field.
  */
 goog.editor.PluginImpl.prototype.getFieldDomHelper = function() {
+  'use strict';
   return this.getFieldObject() && this.getFieldObject().getEditableDomHelper();
 };
 
@@ -83,6 +85,7 @@ goog.editor.PluginImpl.prototype.getFieldDomHelper = function() {
  * @suppress {deprecated} Until fieldObject can be made private.
  */
 goog.editor.PluginImpl.prototype.getFieldObject = function() {
+  'use strict';
   return this.fieldObject;
 };
 
@@ -94,6 +97,7 @@ goog.editor.PluginImpl.prototype.getFieldObject = function() {
  * @suppress {deprecated} Until fieldObject can be made private.
  */
 goog.editor.PluginImpl.prototype.setFieldObject = function(fieldObject) {
+  'use strict';
   this.fieldObject = fieldObject;
 };
 
@@ -103,6 +107,7 @@ goog.editor.PluginImpl.prototype.setFieldObject = function(fieldObject) {
  * @param {goog.editor.Field} fieldObject The editable field object.
  */
 goog.editor.PluginImpl.prototype.registerFieldObject = function(fieldObject) {
+  'use strict';
   this.setFieldObject(fieldObject);
 };
 
@@ -113,6 +118,7 @@ goog.editor.PluginImpl.prototype.registerFieldObject = function(fieldObject) {
  *     plugins, this parameter is ignored.
  */
 goog.editor.PluginImpl.prototype.unregisterFieldObject = function(fieldObj) {
+  'use strict';
   if (this.getFieldObject()) {
     this.disable(this.getFieldObject());
     this.setFieldObject(null);
@@ -126,6 +132,7 @@ goog.editor.PluginImpl.prototype.unregisterFieldObject = function(fieldObj) {
  * @param {goog.editor.Field} fieldObject The field object.
  */
 goog.editor.PluginImpl.prototype.enable = function(fieldObject) {
+  'use strict';
   if (this.getFieldObject() == fieldObject) {
     this.enabled_ = true;
   } else {
@@ -141,6 +148,7 @@ goog.editor.PluginImpl.prototype.enable = function(fieldObject) {
  * @param {goog.editor.Field} fieldObject The field object.
  */
 goog.editor.PluginImpl.prototype.disable = function(fieldObject) {
+  'use strict';
   if (this.getFieldObject() == fieldObject) {
     this.enabled_ = false;
   } else {
@@ -158,6 +166,7 @@ goog.editor.PluginImpl.prototype.disable = function(fieldObject) {
  * @return {boolean} Whether this plugin is enabled for the field object.
  */
 goog.editor.PluginImpl.prototype.isEnabled = function(fieldObject) {
+  'use strict';
   return this.getFieldObject() == fieldObject ? this.enabled_ : false;
 };
 
@@ -168,6 +177,7 @@ goog.editor.PluginImpl.prototype.isEnabled = function(fieldObject) {
  * @param {boolean} autoDispose Whether to autoDispose.
  */
 goog.editor.PluginImpl.prototype.setAutoDispose = function(autoDispose) {
+  'use strict';
   this.autoDispose_ = autoDispose;
 };
 
@@ -177,6 +187,7 @@ goog.editor.PluginImpl.prototype.setAutoDispose = function(autoDispose) {
  *     when it's registered field is disposed.
  */
 goog.editor.PluginImpl.prototype.isAutoDispose = function() {
+  'use strict';
   return this.autoDispose_;
 };
 
@@ -200,6 +211,7 @@ goog.editor.PluginImpl.prototype.isSilentCommand = goog.functions.FALSE;
 
 /** @override */
 goog.editor.PluginImpl.prototype.disposeInternal = function() {
+  'use strict';
   if (this.getFieldObject()) {
     this.unregisterFieldObject(this.getFieldObject());
   }
@@ -340,6 +352,7 @@ goog.editor.PluginImpl.prototype.handleKeyboardShortcut;
  * @return {*} The result of the execCommand, if any.
  */
 goog.editor.PluginImpl.prototype.execCommand = function(command, var_args) {
+  'use strict';
   // TODO(user): Replace all uses of isSilentCommand with plugins that just
   // override this base execCommand method.
   var silent = this.isSilentCommand(command);
@@ -452,6 +465,7 @@ goog.editor.PluginImpl.prototype.cleanContentsHtml;
  * @return {boolean} Whether the plugin handles this type of command.
  */
 goog.editor.PluginImpl.prototype.isSupportedCommand = function(command) {
+  'use strict';
   return false;
 };
 
@@ -464,6 +478,7 @@ goog.editor.PluginImpl.prototype.isSupportedCommand = function(command) {
  * @protected
  */
 goog.editor.PluginImpl.prototype.saveScrollPosition = function() {
+  'use strict';
   if (this.getFieldObject() && goog.userAgent.EDGE) {
     var win = this.getFieldObject().getEditableDomHelper().getWindow();
     return win.scrollTo.bind(win, win.scrollX, win.scrollY);

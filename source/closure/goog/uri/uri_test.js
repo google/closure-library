@@ -899,7 +899,7 @@ testSuite({
     // Some unit tests pass undefined to get method (even though the type
     // for key is {string}). This is not caught by JsCompiler as
     // tests aren't typically compiled.
-    assertUndefined(qd.get(undefined));
+    assertUndefined(qd.get(/** @type {?} */ (undefined)));
   },
 
   testQueryDataSetValues() {
@@ -1031,7 +1031,7 @@ testSuite({
   },
 
   testComponentsAfterUriCreate() {
-    const createdUri = new Uri.create(
+    const createdUri = Uri.create(
         '%40',   // scheme
         '%41',   // user info
         '%42',   // domain

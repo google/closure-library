@@ -30,6 +30,7 @@ goog.require('goog.ui.MenuItemRenderer');
  * @final
  */
 goog.ui.TriStateMenuItemRenderer = function() {
+  'use strict';
   goog.ui.MenuItemRenderer.call(this);
 };
 goog.inherits(goog.ui.TriStateMenuItemRenderer, goog.ui.MenuItemRenderer);
@@ -55,6 +56,7 @@ goog.ui.TriStateMenuItemRenderer.CSS_CLASS =
  * @override
  */
 goog.ui.TriStateMenuItemRenderer.prototype.decorate = function(item, element) {
+  'use strict';
   element = goog.ui.TriStateMenuItemRenderer.superClass_.decorate.call(
       this, item, element);
   this.setCheckable(item, element, true);
@@ -81,5 +83,6 @@ goog.ui.TriStateMenuItemRenderer.prototype.decorate = function(item, element) {
 
 /** @override */
 goog.ui.TriStateMenuItemRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.TriStateMenuItemRenderer.CSS_CLASS;
 };

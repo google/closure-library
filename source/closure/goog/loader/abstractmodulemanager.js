@@ -28,6 +28,7 @@ goog.requireType('goog.html.TrustedResourceUrl');
  * @struct
  */
 goog.loader.AbstractModuleManager = function() {
+  'use strict';
   /**
    * The module context needed for module initialization.
    * @private {?Object}
@@ -173,6 +174,7 @@ goog.loader.AbstractModuleManager.prototype.getModuleInfo = function(id) {};
  */
 goog.loader.AbstractModuleManager.prototype.addExtraEdge = function(
     fromModule, toModule) {
+  'use strict';
   throw new Error('addExtraEdge is not implemented.');
 };
 
@@ -185,6 +187,7 @@ goog.loader.AbstractModuleManager.prototype.addExtraEdge = function(
  */
 goog.loader.AbstractModuleManager.prototype.removeExtraEdge = function(
     fromModule, toModule) {
+  'use strict';
   throw new Error('removeExtraEdge is not implemented.');
 };
 
@@ -202,6 +205,7 @@ goog.loader.AbstractModuleManager.prototype.setModuleTrustedUris = function(
  * @return {?goog.module.AbstractModuleLoader} the loader.
  */
 goog.loader.AbstractModuleManager.prototype.getLoader = function() {
+  'use strict';
   return this.loader_;
 };
 
@@ -211,6 +215,7 @@ goog.loader.AbstractModuleManager.prototype.getLoader = function() {
  * @param {!goog.module.AbstractModuleLoader} loader
  */
 goog.loader.AbstractModuleManager.prototype.setLoader = function(loader) {
+  'use strict';
   this.loader_ = loader;
 };
 
@@ -220,6 +225,7 @@ goog.loader.AbstractModuleManager.prototype.setLoader = function(loader) {
  * @return {?Object} The context.
  */
 goog.loader.AbstractModuleManager.prototype.getModuleContext = function() {
+  'use strict';
   return this.moduleContext_;
 };
 
@@ -230,6 +236,7 @@ goog.loader.AbstractModuleManager.prototype.getModuleContext = function() {
  */
 goog.loader.AbstractModuleManager.prototype.setModuleContext = function(
     context) {
+  'use strict';
   this.moduleContext_ = context;
 };
 
@@ -239,6 +246,7 @@ goog.loader.AbstractModuleManager.prototype.setModuleContext = function(
  * @return {boolean} TRUE iff the ModuleManager is active (i.e., not idle).
  */
 goog.loader.AbstractModuleManager.prototype.isActive = function() {
+  'use strict';
   return false;
 };
 
@@ -248,6 +256,7 @@ goog.loader.AbstractModuleManager.prototype.isActive = function() {
  * @return {boolean} TRUE iff the ModuleManager is user active (i.e., not idle).
  */
 goog.loader.AbstractModuleManager.prototype.isUserActive = function() {
+  'use strict';
   return false;
 };
 
@@ -274,6 +283,7 @@ goog.loader.AbstractModuleManager.prototype.preloadModule = function(
  * @param {string} id The id of the module to prefetch.
  */
 goog.loader.AbstractModuleManager.prototype.prefetchModule = function(id) {
+  'use strict';
   throw new Error('prefetchModule is not implemented.');
 };
 

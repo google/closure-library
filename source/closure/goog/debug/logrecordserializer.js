@@ -42,6 +42,7 @@ goog.debug.logRecordSerializer.Param_ = {
  * @suppress {strictMissingProperties} message is not defined on Object
  */
 goog.debug.logRecordSerializer.serialize = function(record) {
+  'use strict';
   var param = goog.debug.logRecordSerializer.Param_;
   return goog.json.serialize(
       goog.object.create(
@@ -60,6 +61,7 @@ goog.debug.logRecordSerializer.serialize = function(record) {
  * @return {!goog.debug.LogRecord} The deserialized record.
  */
 goog.debug.logRecordSerializer.parse = function(s) {
+  'use strict';
   return goog.debug.logRecordSerializer.reconstitute_(
       /** @type {!Object} */ (JSON.parse(s)));
 };
@@ -72,6 +74,7 @@ goog.debug.logRecordSerializer.parse = function(s) {
  * @private
  */
 goog.debug.logRecordSerializer.reconstitute_ = function(o) {
+  'use strict';
   var param = goog.debug.logRecordSerializer.Param_;
   var level = goog.debug.logRecordSerializer.getLevel_(
       o[param.LEVEL_NAME], o[param.LEVEL_VALUE]);
@@ -97,6 +100,7 @@ goog.debug.logRecordSerializer.reconstitute_ = function(o) {
  * @private
  */
 goog.debug.logRecordSerializer.getLevel_ = function(name, value) {
+  'use strict';
   var level = goog.debug.Logger.Level.getPredefinedLevel(name);
   return level && level.value == value ? level : new goog.debug.Logger.Level(
                                                      name, value);

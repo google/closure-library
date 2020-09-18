@@ -40,6 +40,7 @@ goog.requireType('goog.ui.ControlContent');
  * @final
  */
 goog.ui.Css3MenuButtonRenderer = function() {
+  'use strict';
   goog.ui.MenuButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.Css3MenuButtonRenderer, goog.ui.MenuButtonRenderer);
@@ -56,6 +57,7 @@ goog.ui.Css3MenuButtonRenderer.CSS_CLASS = goog.getCssName('goog-css3-button');
 
 /** @override */
 goog.ui.Css3MenuButtonRenderer.prototype.getContentElement = function(element) {
+  'use strict';
   if (element) {
     var captionElem = goog.dom.getElementsByTagNameAndClass(
         '*', goog.getCssName(this.getCssClass(), 'caption'), element)[0];
@@ -74,6 +76,7 @@ goog.ui.Css3MenuButtonRenderer.prototype.getContentElement = function(element) {
  * @override
  */
 goog.ui.Css3MenuButtonRenderer.prototype.canDecorate = function(element) {
+  'use strict';
   return element.tagName == goog.dom.TagName.DIV;
 };
 
@@ -96,6 +99,7 @@ goog.ui.Css3MenuButtonRenderer.prototype.canDecorate = function(element) {
  * @override
  */
 goog.ui.Css3MenuButtonRenderer.prototype.createButton = function(content, dom) {
+  'use strict';
   var baseClass = this.getCssClass();
   var inlineBlock = goog.ui.INLINE_BLOCK_CLASSNAME + ' ';
   return dom.createDom(
@@ -121,6 +125,7 @@ goog.ui.Css3MenuButtonRenderer.prototype.createButton = function(content, dom) {
  * @override
  */
 goog.ui.Css3MenuButtonRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.Css3MenuButtonRenderer.CSS_CLASS;
 };
 
@@ -131,6 +136,7 @@ goog.ui.Css3MenuButtonRenderer.prototype.getCssClass = function() {
 // giving goog-css3-menu-button here.
 goog.ui.registry.setDecoratorByClassName(
     goog.getCssName('goog-css3-menu-button'), function() {
+      'use strict';
       return new goog.ui.MenuButton(
           null, null, goog.ui.Css3MenuButtonRenderer.getInstance());
     });

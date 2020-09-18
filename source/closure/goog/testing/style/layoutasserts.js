@@ -26,6 +26,7 @@ goog.require('goog.testing.style');
  * @param {Element=} opt_b The element when a comment string is present.
  */
 var assertIsVisible = function(a, opt_b) {
+  'use strict';
   _validateArguments(1, arguments);
   var element = nonCommentArg(1, 1, arguments);
 
@@ -42,6 +43,7 @@ var assertIsVisible = function(a, opt_b) {
  * @param {Element=} opt_b The element when a comment string is present.
  */
 var assertNotVisible = function(a, opt_b) {
+  'use strict';
   _validateArguments(1, arguments);
   var element = nonCommentArg(1, 1, arguments);
   if (!element) {
@@ -63,6 +65,7 @@ var assertNotVisible = function(a, opt_b) {
  * @param {Element=} opt_c The second element if comment string is present.
  */
 var assertIntersect = function(a, b, opt_c) {
+  'use strict';
   _validateArguments(2, arguments);
   var element = nonCommentArg(1, 2, arguments);
   var otherElement = nonCommentArg(2, 2, arguments);
@@ -82,6 +85,7 @@ var assertIntersect = function(a, b, opt_c) {
  * @param {Element=} opt_c The second element if comment string is present.
  */
 var assertNoIntersect = function(a, b, opt_c) {
+  'use strict';
   _validateArguments(2, arguments);
   var element = nonCommentArg(1, 2, arguments);
   var otherElement = nonCommentArg(2, 2, arguments);
@@ -101,6 +105,7 @@ var assertNoIntersect = function(a, b, opt_c) {
  * @param {Element=} opt_c The second element if comment string is present.
  */
 var assertWidth = function(a, b, opt_c) {
+  'use strict';
   _validateArguments(2, arguments);
   var element = nonCommentArg(1, 2, arguments);
   var width = nonCommentArg(2, 2, arguments);
@@ -126,6 +131,7 @@ var assertWidth = function(a, b, opt_c) {
  * @param {number=} opt_d The tolerance if comment string is present.
  */
 var assertWidthWithinTolerance = function(a, b, c, opt_d) {
+  'use strict';
   _validateArguments(3, arguments);
   var element = nonCommentArg(1, 3, arguments);
   var width = nonCommentArg(2, 3, arguments);
@@ -150,6 +156,7 @@ var assertWidthWithinTolerance = function(a, b, c, opt_d) {
  * @param {Element=} opt_c The second element if comment string is present.
  */
 var assertHeight = function(a, b, opt_c) {
+  'use strict';
   _validateArguments(2, arguments);
   var element = nonCommentArg(1, 2, arguments);
   var height = nonCommentArg(2, 2, arguments);
@@ -175,6 +182,7 @@ var assertHeight = function(a, b, opt_c) {
  * @param {number=} opt_d The tolerance if comment string is present.
  */
 var assertHeightWithinTolerance = function(a, b, c, opt_d) {
+  'use strict';
   _validateArguments(3, arguments);
   var element = nonCommentArg(1, 3, arguments);
   var height = nonCommentArg(2, 3, arguments);
@@ -199,6 +207,7 @@ var assertHeightWithinTolerance = function(a, b, c, opt_d) {
  * @param {Element=} opt_c The second element if comment string is present.
  */
 var assertIsLeftOf = function(a, b, opt_c) {
+  'use strict';
   _validateArguments(2, arguments);
   var element = nonCommentArg(1, 2, arguments);
   var otherElement = nonCommentArg(2, 2, arguments);
@@ -219,6 +228,7 @@ var assertIsLeftOf = function(a, b, opt_c) {
  * @param {Element=} opt_c The second element if comment string is present.
  */
 var assertIsStrictlyLeftOf = function(a, b, opt_c) {
+  'use strict';
   _validateArguments(2, arguments);
   var element = nonCommentArg(1, 2, arguments);
   var otherElement = nonCommentArg(2, 2, arguments);
@@ -240,6 +250,7 @@ var assertIsStrictlyLeftOf = function(a, b, opt_c) {
  * @param {Element=} opt_c The second element if comment string is present.
  */
 var assertIsAbove = function(a, b, opt_c) {
+  'use strict';
   _validateArguments(2, arguments);
   var element = nonCommentArg(1, 2, arguments);
   var otherElement = nonCommentArg(2, 2, arguments);
@@ -260,6 +271,7 @@ var assertIsAbove = function(a, b, opt_c) {
  * @param {Element=} opt_c The second element if comment string is present.
  */
 var assertIsStrictlyAbove = function(a, b, opt_c) {
+  'use strict';
   _validateArguments(2, arguments);
   var element = nonCommentArg(1, 2, arguments);
   var otherElement = nonCommentArg(2, 2, arguments);
@@ -282,6 +294,7 @@ var assertIsStrictlyAbove = function(a, b, opt_c) {
  * @param {Element=} opt_c The second element if comment string is present.
  */
 var assertContained = function(a, b, opt_c) {
+  'use strict';
   _validateArguments(2, arguments);
   var element = nonCommentArg(1, 2, arguments);
   var otherElement = nonCommentArg(2, 2, arguments);
@@ -305,5 +318,6 @@ var assertContained = function(a, b, opt_c) {
  */
 goog.testing.style.layoutasserts.isWithinThreshold_ = function(
     val1, val2, threshold) {
+  'use strict';
   return Math.abs(val1 - val2) <= threshold;
 };

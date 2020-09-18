@@ -26,6 +26,7 @@ goog.html.trustedtypes.cachedPolicy_;
  * @package
  */
 goog.html.trustedtypes.getPolicyPrivateDoNotAccessOrElse = function() {
+  'use strict';
   if (!goog.TRUSTED_TYPES_POLICY_NAME) {
     // Binary not configured for Trusted Types.
     return null;

@@ -41,6 +41,7 @@ goog.json.TRY_NATIVE_JSON = goog.define('goog.json.TRY_NATIVE_JSON', false);
  * @return {boolean} True if the input is a valid JSON string.
  */
 goog.json.isValid = function(s) {
+  'use strict';
   // All empty whitespace is not valid.
   if (/^\s*$/.test(s)) {
     return false;
@@ -99,6 +100,7 @@ goog.json.errorLogger_ = goog.nullFunction;
  *     error message, the second is the exception thrown by `JSON.parse`.
  */
 goog.json.setErrorLogger = function(errorLogger) {
+  'use strict';
   goog.json.errorLogger_ = errorLogger;
 };
 
@@ -117,6 +119,7 @@ goog.json.setErrorLogger = function(errorLogger) {
 goog.json.parse = goog.json.USE_NATIVE_JSON ?
     /** @type {function(*):Object} */ (goog.global['JSON']['parse']) :
     function(s) {
+      'use strict';
       let error;
       if (goog.json.TRY_NATIVE_JSON) {
         try {
@@ -176,6 +179,7 @@ goog.json.serialize = goog.json.USE_NATIVE_JSON ?
     /** @type {function(*, ?goog.json.Replacer=):string} */
     (goog.global['JSON']['stringify']) :
     function(object, opt_replacer) {
+      'use strict';
       // NOTE(nicksantos): Currently, we never use JSON.stringify.
       //
       // The last time I evaluated this, JSON.stringify had subtle bugs and
@@ -196,6 +200,7 @@ goog.json.serialize = goog.json.USE_NATIVE_JSON ?
  * @constructor
  */
 goog.json.Serializer = function(opt_replacer) {
+  'use strict';
   /**
    * @type {goog.json.Replacer|null|undefined}
    * @private
@@ -212,6 +217,7 @@ goog.json.Serializer = function(opt_replacer) {
  * @return {string} A JSON string representation of the input.
  */
 goog.json.Serializer.prototype.serialize = function(object) {
+  'use strict';
   const sb = [];
   this.serializeInternal(object, sb);
   return sb.join('');
@@ -226,6 +232,7 @@ goog.json.Serializer.prototype.serialize = function(object) {
  * @throws Error if there are loops in the object graph.
  */
 goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
+  'use strict';
   if (object == null) {
     // undefined == null so this branch covers undefined as well as null
     sb.push('null');
@@ -305,9 +312,11 @@ goog.json.Serializer.charsToReplace_ = /\uffff/.test('\uffff') ?
  * @param {Array<string>} sb Array used as a string builder.
  */
 goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
+  'use strict';
   // The official JSON implementation does not work with international
   // characters.
   sb.push('"', s.replace(goog.json.Serializer.charsToReplace_, function(c) {
+    'use strict';
     // caching the result improves performance by a factor 2-3
     let rv = goog.json.Serializer.charToJsonCharCache_[c];
     if (!rv) {
@@ -326,6 +335,7 @@ goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
  * @param {Array<string>} sb Array used as a string builder.
  */
 goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
+  'use strict';
   sb.push(isFinite(n) && !isNaN(n) ? String(n) : 'null');
 };
 
@@ -337,6 +347,7 @@ goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
  * @protected
  */
 goog.json.Serializer.prototype.serializeArray = function(arr, sb) {
+  'use strict';
   const l = arr.length;
   sb.push('[');
   let sep = '';
@@ -361,6 +372,7 @@ goog.json.Serializer.prototype.serializeArray = function(arr, sb) {
  * @param {Array<string>} sb Array used as a string builder.
  */
 goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
+  'use strict';
   sb.push('{');
   let sep = '';
   for (const key in obj) {

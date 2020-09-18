@@ -35,6 +35,7 @@ goog.requireType('goog.proto2.Message');
  */
 goog.proto2.ObjectSerializer = function(
     opt_keyOption, opt_serializeBooleanAsNumber, opt_ignoreUnknownFields) {
+  'use strict';
   this.keyOption_ = opt_keyOption;
   this.serializeBooleanAsNumber_ = opt_serializeBooleanAsNumber;
   this.ignoreUnknownFields_ = opt_ignoreUnknownFields;
@@ -85,6 +86,7 @@ goog.proto2.ObjectSerializer.KeyOption = {
  * @override
  */
 goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
+  'use strict';
   var descriptor = message.getDescriptor();
   var fields = descriptor.getFields();
 
@@ -140,7 +142,10 @@ goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
   }
 
   // Add the unknown fields, if any.
-  message.forEachUnknown(function(tag, value) { objectValue[tag] = value; });
+  message.forEachUnknown(function(tag, value) {
+    'use strict';
+    objectValue[tag] = value;
+  });
 
   return objectValue;
 };
@@ -149,7 +154,7 @@ goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
 /** @override */
 goog.proto2.ObjectSerializer.prototype.getSerializedValue = function(
     field, value) {
-
+  'use strict';
   // Handle the case where a boolean should be serialized as 0/1.
   // Some deserialization libraries, such as GWT, can use this notation.
   if (this.serializeBooleanAsNumber_ &&
@@ -166,7 +171,7 @@ goog.proto2.ObjectSerializer.prototype.getSerializedValue = function(
 /** @override */
 goog.proto2.ObjectSerializer.prototype.getDeserializedValue = function(
     field, value) {
-
+  'use strict';
   // Gracefully handle the case where a boolean is represented by 0/1.
   // Some serialization libraries, such as GWT, can use this notation.
   if (field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.BOOL &&
@@ -189,6 +194,7 @@ goog.proto2.ObjectSerializer.prototype.getDeserializedValue = function(
  * @override
  */
 goog.proto2.ObjectSerializer.prototype.deserializeTo = function(message, data) {
+  'use strict';
   var descriptor = message.getDescriptor();
 
   for (var key in data) {

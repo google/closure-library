@@ -81,7 +81,9 @@ goog.events.ActionEventWrapper_.EVENT_TYPES_ = [
  */
 goog.events.ActionEventWrapper_.prototype.listen = function(
     target, listener, opt_capt, opt_scope, opt_eventHandler) {
+  'use strict';
   var callback = function(e) {
+    'use strict';
     var listenerFn = goog.events.wrapListener(listener);
     var role = goog.dom.isElement(e.target) ?
         goog.a11y.aria.getRole(/** @type {!Element} */ (e.target)) :
@@ -134,6 +136,7 @@ goog.events.ActionEventWrapper_.prototype.listen = function(
  */
 goog.events.ActionEventWrapper_.prototype.unlisten = function(
     target, listener, opt_capt, opt_scope, opt_eventHandler) {
+  'use strict';
   for (var type, j = 0; type = goog.events.ActionEventWrapper_.EVENT_TYPES_[j];
        j++) {
     var listeners = goog.events.getListeners(target, type, !!opt_capt);

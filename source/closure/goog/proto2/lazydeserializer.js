@@ -34,6 +34,7 @@ goog.inherits(goog.proto2.LazyDeserializer, goog.proto2.Serializer);
 /** @override */
 goog.proto2.LazyDeserializer.prototype.deserialize = function(
     descriptor, data) {
+  'use strict';
   var message = descriptor.createMessageInstance();
   message.initializeForLazyDeserializer(this, data);
   goog.asserts.assert(message instanceof goog.proto2.Message);
@@ -43,6 +44,7 @@ goog.proto2.LazyDeserializer.prototype.deserialize = function(
 
 /** @override */
 goog.proto2.LazyDeserializer.prototype.deserializeTo = function(message, data) {
+  'use strict';
   throw new Error('Unimplemented');
 };
 

@@ -38,6 +38,7 @@ goog.requireType('goog.events.BrowserEvent');
  * @extends {goog.ui.Component}
  */
 goog.ui.TableSorter = function(opt_domHelper) {
+  'use strict';
   goog.ui.Component.call(this, opt_domHelper);
 
   /**
@@ -86,6 +87,7 @@ goog.ui.TableSorter.prototype.sortableHeaderRowIndex_ = 0;
  * @param {number} index The row index.
  */
 goog.ui.TableSorter.prototype.setSortableHeaderRowIndex = function(index) {
+  'use strict';
   if (this.isInDocument()) {
     throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
   }
@@ -105,6 +107,7 @@ goog.ui.TableSorter.EventType = {
 
 /** @override */
 goog.ui.TableSorter.prototype.canDecorate = function(element) {
+  'use strict';
   return element.tagName == goog.dom.TagName.TABLE;
 };
 
@@ -114,6 +117,7 @@ goog.ui.TableSorter.prototype.canDecorate = function(element) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.TableSorter.prototype.enterDocument = function() {
+  'use strict';
   goog.ui.TableSorter.superClass_.enterDocument.call(this);
 
   var table = this.getElement();
@@ -127,6 +131,7 @@ goog.ui.TableSorter.prototype.enterDocument = function() {
  * @return {number} The current sort column of the table, or -1 if none.
  */
 goog.ui.TableSorter.prototype.getSortColumn = function() {
+  'use strict';
   return this.header_ ? this.header_.cellIndex : -1;
 };
 
@@ -135,6 +140,7 @@ goog.ui.TableSorter.prototype.getSortColumn = function() {
  * @return {boolean} Whether the last sort was in reverse.
  */
 goog.ui.TableSorter.prototype.isSortReversed = function() {
+  'use strict';
   return this.reversed_;
 };
 
@@ -144,6 +150,7 @@ goog.ui.TableSorter.prototype.isSortReversed = function() {
  *     all columns.
  */
 goog.ui.TableSorter.prototype.getDefaultSortFunction = function() {
+  'use strict';
   return this.defaultSortFunction_;
 };
 
@@ -154,6 +161,7 @@ goog.ui.TableSorter.prototype.getDefaultSortFunction = function() {
  * @param {function(*, *) : number} sortFunction The new default sort function.
  */
 goog.ui.TableSorter.prototype.setDefaultSortFunction = function(sortFunction) {
+  'use strict';
   this.defaultSortFunction_ = sortFunction;
 };
 
@@ -165,6 +173,7 @@ goog.ui.TableSorter.prototype.setDefaultSortFunction = function(sortFunction) {
  * @return {function(*, *) : number} The sort function used by the column.
  */
 goog.ui.TableSorter.prototype.getSortFunction = function(column) {
+  'use strict';
   return this.sortFunctions_[column] || this.defaultSortFunction_;
 };
 
@@ -176,6 +185,7 @@ goog.ui.TableSorter.prototype.getSortFunction = function(column) {
  * @param {function(*, *) : number} sortFunction The new sort function.
  */
 goog.ui.TableSorter.prototype.setSortFunction = function(column, sortFunction) {
+  'use strict';
   this.sortFunctions_[column] = sortFunction;
 };
 
@@ -186,6 +196,7 @@ goog.ui.TableSorter.prototype.setSortFunction = function(column, sortFunction) {
  * @private
  */
 goog.ui.TableSorter.prototype.sort_ = function(e) {
+  'use strict';
   // Determine what column was clicked.
   // TODO(robbyw): If this table cell contains another table, this could break.
   var target = e.target;
@@ -212,6 +223,7 @@ goog.ui.TableSorter.prototype.sort_ = function(e) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
+  'use strict';
   var sortFunction = this.getSortFunction(column);
   if (sortFunction === goog.ui.TableSorter.noSort) {
     return false;
@@ -230,14 +242,17 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
   this.reversed_ = !!opt_reverse;
   var multiplier = this.reversed_ ? -1 : 1;
   var cmpFn = function(a, b) {
+    'use strict';
     return multiplier * sortFunction(a[0], b[0]) || a[1] - b[1];
   };
 
   // Sort all tBodies
   var table = this.getElement();
   goog.array.forEach(table.tBodies, function(tBody) {
+    'use strict';
     // Collect all of the rows into an array.
     var values = goog.array.map(tBody.rows, function(row, rowIndex) {
+      'use strict';
       return [goog.dom.getTextContent(row.cells[column]), rowIndex, row];
     });
 
@@ -249,7 +264,10 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
     table.removeChild(tBody);
 
     // Sort the rows, using the resulting array.
-    goog.array.forEach(values, function(row) { tBody.appendChild(row[2]); });
+    goog.array.forEach(values, function(row) {
+      'use strict';
+      tBody.appendChild(row[2]);
+    });
 
     // Reinstate the tBody.
     table.insertBefore(tBody, nextSibling);
@@ -286,6 +304,7 @@ goog.ui.TableSorter.noSort = goog.functions.error('no sort');
  * @return {number} Negative if a < b, 0 if a = b, and positive if a > b.
  */
 goog.ui.TableSorter.numericSort = function(a, b) {
+  'use strict';
   a = parseFloat(a);
   b = parseFloat(b);
   // foo == foo is false if and only if foo is NaN.
@@ -313,5 +332,9 @@ goog.ui.TableSorter.alphaSort = goog.array.defaultCompare;
  *     given sort function.
  */
 goog.ui.TableSorter.createReverseSort = function(sortFunction) {
-  return function(a, b) { return -1 * sortFunction(a, b); };
+  'use strict';
+  return function(a, b) {
+    'use strict';
+    return -1 * sortFunction(a, b);
+  };
 };

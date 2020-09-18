@@ -26,6 +26,7 @@ goog.require('goog.dom.browserrange.W3cRange');
  * @final
  */
 goog.dom.browserrange.GeckoRange = function(range) {
+  'use strict';
   goog.dom.browserrange.W3cRange.call(this, range);
 };
 goog.inherits(goog.dom.browserrange.GeckoRange, goog.dom.browserrange.W3cRange);
@@ -37,6 +38,7 @@ goog.inherits(goog.dom.browserrange.GeckoRange, goog.dom.browserrange.W3cRange);
  * @return {!goog.dom.browserrange.GeckoRange} A Gecko range wrapper object.
  */
 goog.dom.browserrange.GeckoRange.createFromNodeContents = function(node) {
+  'use strict';
   return new goog.dom.browserrange.GeckoRange(
       goog.dom.browserrange.W3cRange.getBrowserRangeForNode(node));
 };
@@ -52,6 +54,7 @@ goog.dom.browserrange.GeckoRange.createFromNodeContents = function(node) {
  */
 goog.dom.browserrange.GeckoRange.createFromNodes = function(
     startNode, startOffset, endNode, endOffset) {
+  'use strict';
   return new goog.dom.browserrange.GeckoRange(
       goog.dom.browserrange.W3cRange.getBrowserRangeForNodes(
           startNode, startOffset, endNode, endOffset));
@@ -61,6 +64,7 @@ goog.dom.browserrange.GeckoRange.createFromNodes = function(
 /** @override */
 goog.dom.browserrange.GeckoRange.prototype.selectInternal = function(
     selection, reversed) {
+  'use strict';
   if (!reversed || this.isCollapsed()) {
     // The base implementation for select() is more robust, and works fine for
     // collapsed and forward ranges.  This works around

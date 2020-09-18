@@ -26,6 +26,7 @@ goog.require('goog.testing.asserts');
  * @private
  */
 goog.testing.proto2.findDifferences_ = function(expected, actual, path) {
+  'use strict';
   var fields = expected.getDescriptor().getFields();
   for (var i = 0; i < fields.length; i++) {
     var field = fields[i];
@@ -101,6 +102,7 @@ goog.testing.proto2.findDifferences_ = function(expected, actual, path) {
  */
 goog.testing.proto2.assertEquals = function(
     expected, actual, opt_failureMessage) {
+  'use strict';
   var failureSummary = opt_failureMessage || '';
   if (!(expected instanceof goog.proto2.Message) ||
       !(actual instanceof goog.proto2.Message)) {
@@ -130,6 +132,7 @@ goog.testing.proto2.assertEquals = function(
  * @template MessageType
  */
 goog.testing.proto2.fromObject = function(messageCtor, json) {
+  'use strict';
   var serializer = new goog.proto2.ObjectSerializer(
       goog.proto2.ObjectSerializer.KeyOption.NAME);
   var message = new messageCtor;

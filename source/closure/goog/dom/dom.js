@@ -2119,7 +2119,7 @@ goog.dom.nativelySupportsFocus_ = function(element) {
  */
 goog.dom.hasNonZeroBoundingRect_ = function(element) {
   var rect;
-  if (!goog.isFunction(element['getBoundingClientRect']) ||
+  if (typeof element['getBoundingClientRect'] !== 'function' ||
       // In IE, getBoundingClientRect throws on detached nodes.
       (goog.userAgent.IE && element.parentElement == null)) {
     rect = {'height': element.offsetHeight, 'width': element.offsetWidth};
@@ -2314,7 +2314,7 @@ goog.dom.isNodeList = function(val) {
       // A NodeList must have an item function (on non-IE platforms) or an item
       // property of type 'string' (on IE).
       return typeof val.item == 'function' || typeof val.item == 'string';
-    } else if (goog.isFunction(val)) {
+    } else if (typeof val === 'function') {
       // On Safari, a NodeList is a function with an item property that is also
       // a function.
       return typeof /** @type {?} */ (val.item) == 'function';

@@ -30,6 +30,7 @@ goog.requireType('goog.dom.AbstractRange');
  * @final
  */
 goog.testing.editor.TestHelper = function(root) {
+  'use strict';
   if (!root) {
     throw new Error('Null root');
   }
@@ -57,6 +58,7 @@ goog.inherits(goog.testing.editor.TestHelper, goog.Disposable);
  * @param {Element} root The root editable element.
  */
 goog.testing.editor.TestHelper.prototype.setRoot = function(root) {
+  'use strict';
   if (!root) {
     throw new Error('Null root');
   }
@@ -69,6 +71,7 @@ goog.testing.editor.TestHelper.prototype.setRoot = function(root) {
  * in tearDown.
  */
 goog.testing.editor.TestHelper.prototype.setUpEditableElement = function() {
+  'use strict';
   this.savedHtml_ = this.root_.innerHTML;
   if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
     this.root_.contentEditable = true;
@@ -87,6 +90,7 @@ goog.testing.editor.TestHelper.prototype.setUpEditableElement = function() {
  *     purposes.
  */
 goog.testing.editor.TestHelper.prototype.tearDownEditableElement = function() {
+  'use strict';
   if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
     this.root_.contentEditable = false;
   } else {
@@ -118,6 +122,7 @@ goog.testing.editor.TestHelper.prototype.tearDownEditableElement = function() {
  */
 goog.testing.editor.TestHelper.prototype.assertHtmlMatches = function(
     htmlPattern) {
+  'use strict';
   goog.testing.dom.assertHtmlContentsMatch(htmlPattern, this.root_);
 };
 
@@ -129,6 +134,7 @@ goog.testing.editor.TestHelper.prototype.assertHtmlMatches = function(
  * @return {Node} The first text node that matches, or null if none is found.
  */
 goog.testing.editor.TestHelper.prototype.findTextNode = function(textOrRegexp) {
+  'use strict';
   return goog.testing.dom.findTextNode(textOrRegexp, this.root_);
 };
 
@@ -149,6 +155,7 @@ goog.testing.editor.TestHelper.prototype.findTextNode = function(textOrRegexp) {
  */
 goog.testing.editor.TestHelper.prototype.select = function(
     from, fromOffset, opt_to, opt_toOffset) {
+  'use strict';
   var end;
   var start = end = (typeof from === 'string') ? this.findTextNode(from) : from;
   var endOffset;
@@ -168,6 +175,7 @@ goog.testing.editor.TestHelper.prototype.select = function(
 
 /** @override */
 goog.testing.editor.TestHelper.prototype.disposeInternal = function() {
+  'use strict';
   if (goog.editor.node.isEditableContainer(this.root_)) {
     this.tearDownEditableElement();
   }

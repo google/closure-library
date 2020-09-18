@@ -161,11 +161,11 @@ goog.testing.MockExpectation.prototype.getErrorMessageCount = function() {
  */
 goog.testing.Mock = function(
     objectToMock, opt_mockStaticMethods, opt_createProxy) {
-  if (!goog.isObject(objectToMock) && !goog.isFunction(objectToMock)) {
+  if (!goog.isObject(objectToMock) && typeof objectToMock !== 'function') {
     throw new Error('objectToMock must be an object or constructor.');
   }
   if (opt_createProxy && !opt_mockStaticMethods &&
-      goog.isFunction(objectToMock)) {
+      typeof objectToMock === 'function') {
     /**
  * @constructor
  * @final
@@ -175,13 +175,13 @@ goog.testing.Mock = function(
     this.$proxy = new tempCtor();
   } else if (
       opt_createProxy && opt_mockStaticMethods &&
-      goog.isFunction(objectToMock)) {
+      typeof objectToMock === 'function') {
     throw new Error('Cannot create a proxy when opt_mockStaticMethods is true');
-  } else if (opt_createProxy && !goog.isFunction(objectToMock)) {
+  } else if (opt_createProxy && typeof objectToMock !== 'function') {
     throw new Error('Must have a constructor to create a proxy');
   }
 
-  if (goog.isFunction(objectToMock) && !opt_mockStaticMethods) {
+  if (typeof objectToMock === 'function' && !opt_mockStaticMethods) {
     this.$initializeFunctions_(objectToMock.prototype);
   } else {
     this.$initializeFunctions_(objectToMock);
@@ -317,7 +317,7 @@ goog.testing.Mock.prototype.$initializeFunctions_ = function(objectToMock) {
       objectToMock, false /* opt_includeObjectPrototype */,
       false /* opt_includeFunctionPrototype */);
 
-  if (goog.isFunction(objectToMock)) {
+  if (typeof objectToMock === 'function') {
     for (var i = 0; i < goog.testing.Mock.FUNCTION_PROTOTYPE_FIELDS_.length;
          i++) {
       var prop = goog.testing.Mock.FUNCTION_PROTOTYPE_FIELDS_[i];

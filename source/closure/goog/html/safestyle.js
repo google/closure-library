@@ -151,6 +151,7 @@ goog.html.SafeStyle.prototype.implementsGoogStringTypedString = true;
  *     `style`.
  */
 goog.html.SafeStyle.fromConstant = function(style) {
+  'use strict';
   var styleString = goog.string.Const.unwrap(style);
   if (styleString.length === 0) {
     return goog.html.SafeStyle.EMPTY;
@@ -189,6 +190,7 @@ goog.html.SafeStyle.fromConstant = function(style) {
  * @override
  */
 goog.html.SafeStyle.prototype.getTypedStringValue = function() {
+  'use strict';
   return this.privateDoNotAccessOrElseSafeStyleWrappedValue_;
 };
 
@@ -204,6 +206,7 @@ if (goog.DEBUG) {
    * @override
    */
   goog.html.SafeStyle.prototype.toString = function() {
+    'use strict';
     return 'SafeStyle{' + this.privateDoNotAccessOrElseSafeStyleWrappedValue_ +
         '}';
   };
@@ -221,6 +224,7 @@ if (goog.DEBUG) {
  *     `goog.asserts.AssertionError`.
  */
 goog.html.SafeStyle.unwrap = function(safeStyle) {
+  'use strict';
   // Perform additional Run-time type-checking to ensure that
   // safeStyle is indeed an instance of the expected type.  This
   // provides some additional protection against security bugs due to
@@ -258,6 +262,7 @@ goog.html.SafeStyle.CONSTRUCTOR_TOKEN_PRIVATE_ = {};
  */
 goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse = function(
     style) {
+  'use strict';
   return new goog.html.SafeStyle(
       style, goog.html.SafeStyle.CONSTRUCTOR_TOKEN_PRIVATE_);
 };
@@ -316,6 +321,7 @@ goog.html.SafeStyle.PropertyMap;
  *     goog.html.SafeStyle.INNOCUOUS_STRING.
  */
 goog.html.SafeStyle.create = function(map) {
+  'use strict';
   var style = '';
   for (var name in map) {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty#Using_hasOwnProperty_as_a_property_name
@@ -352,6 +358,7 @@ goog.html.SafeStyle.create = function(map) {
  * @private
  */
 goog.html.SafeStyle.sanitizePropertyValue_ = function(value) {
+  'use strict';
   if (value instanceof goog.html.SafeUrl) {
     var url = goog.html.SafeUrl.unwrap(value);
     return 'url("' + url.replace(/</g, '%3c').replace(/[\\"]/g, '\\$&') + '")';
@@ -376,6 +383,7 @@ goog.html.SafeStyle.sanitizePropertyValue_ = function(value) {
  * @private
  */
 goog.html.SafeStyle.sanitizePropertyValueString_ = function(value) {
+  'use strict';
   // Some CSS property values permit nested functions. We allow one level of
   // nesting, and all nested functions must also be in the FUNCTIONS_RE_ list.
   var valueWithoutFunctions =
@@ -414,6 +422,7 @@ goog.html.SafeStyle.sanitizePropertyValueString_ = function(value) {
  * @private
  */
 goog.html.SafeStyle.hasBalancedQuotes_ = function(value) {
+  'use strict';
   var outsideSingle = true;
   var outsideDouble = true;
   for (var i = 0; i < value.length; i++) {
@@ -441,6 +450,7 @@ goog.html.SafeStyle.hasBalancedQuotes_ = function(value) {
  * @private
  */
 goog.html.SafeStyle.hasBalancedSquareBrackets_ = function(value) {
+  'use strict';
   var outside = true;
   var tokenRe = /^[-_a-zA-Z0-9]$/;
   for (var i = 0; i < value.length; i++) {
@@ -555,10 +565,13 @@ goog.html.SafeStyle.COMMENT_RE_ = /\/\*/;
  * @private
  */
 goog.html.SafeStyle.sanitizeUrl_ = function(value) {
+  'use strict';
   return value.replace(
       goog.html.SafeStyle.URL_RE_, function(match, before, url, after) {
+        'use strict';
         var quote = '';
         url = url.replace(/^(['"])(.*)\1$/, function(match, start, inside) {
+          'use strict';
           quote = start;
           return inside;
         });
@@ -575,12 +588,14 @@ goog.html.SafeStyle.sanitizeUrl_ = function(value) {
  * @return {!goog.html.SafeStyle}
  */
 goog.html.SafeStyle.concat = function(var_args) {
+  'use strict';
   var style = '';
 
   /**
    * @param {!goog.html.SafeStyle|!Array<!goog.html.SafeStyle>} argument
    */
   var addArgument = function(argument) {
+    'use strict';
     if (Array.isArray(argument)) {
       goog.array.forEach(argument, addArgument);
     } else {

@@ -46,6 +46,7 @@ goog.requireType('goog.graphics.AbstractGraphics');
  */
 goog.graphics.createGraphics = function(
     width, height, opt_coordWidth, opt_coordHeight, opt_domHelper) {
+  'use strict';
   var graphics;
   // On IE9 and above, SVG is available, except in compatibility mode.
   // We check createElementNS on document object that is not exist in
@@ -94,6 +95,7 @@ goog.graphics.createGraphics = function(
  */
 goog.graphics.createSimpleGraphics = function(
     width, height, opt_coordWidth, opt_coordHeight, opt_domHelper) {
+  'use strict';
   if (goog.userAgent.MAC && goog.userAgent.GECKO &&
       !goog.userAgent.isVersionOrHigher('1.9a')) {
     // Canvas is 6x faster than SVG on Mac FF 2.0
@@ -117,6 +119,7 @@ goog.graphics.createSimpleGraphics = function(
  *     http://en.wikipedia.org/wiki/Canvas_element for details.
  */
 goog.graphics.isBrowserSupported = function() {
+  'use strict';
   if (goog.userAgent.IE) {
     return goog.userAgent.isVersionOrHigher('5.5');
   }

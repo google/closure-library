@@ -24,6 +24,7 @@ goog.provide('goog.db.KeyRange');
  * @final
  */
 goog.db.KeyRange = function(range) {
+  'use strict';
   /**
    * Underlying IDBKeyRange object.
    *
@@ -50,6 +51,7 @@ goog.db.KeyRange.IDB_KEY_RANGE_ =
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.db.KeyRange.only = function(key) {
+  'use strict';
   return new goog.db.KeyRange(goog.db.KeyRange.IDB_KEY_RANGE_.only(key));
 };
 
@@ -66,9 +68,9 @@ goog.db.KeyRange.only = function(key) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.db.KeyRange.bound = function(lower, upper, opt_lowerOpen, opt_upperOpen) {
-  return new goog.db.KeyRange(
-      goog.db.KeyRange.IDB_KEY_RANGE_.bound(
-          lower, upper, opt_lowerOpen, opt_upperOpen));
+  'use strict';
+  return new goog.db.KeyRange(goog.db.KeyRange.IDB_KEY_RANGE_.bound(
+      lower, upper, opt_lowerOpen, opt_upperOpen));
 };
 
 
@@ -81,6 +83,7 @@ goog.db.KeyRange.bound = function(lower, upper, opt_lowerOpen, opt_upperOpen) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.db.KeyRange.lowerBound = function(lower, opt_lowerOpen) {
+  'use strict';
   return new goog.db.KeyRange(
       goog.db.KeyRange.IDB_KEY_RANGE_.lowerBound(lower, opt_lowerOpen));
 };
@@ -95,6 +98,7 @@ goog.db.KeyRange.lowerBound = function(lower, opt_lowerOpen) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.db.KeyRange.upperBound = function(upper, opt_upperOpen) {
+  'use strict';
   return new goog.db.KeyRange(
       goog.db.KeyRange.IDB_KEY_RANGE_.upperBound(upper, opt_upperOpen));
 };
@@ -106,5 +110,6 @@ goog.db.KeyRange.upperBound = function(upper, opt_upperOpen) {
  * @return {!IDBKeyRange}
  */
 goog.db.KeyRange.prototype.range = function() {
+  'use strict';
   return this.range_;
 };

@@ -54,6 +54,7 @@ goog.requireType('goog.events.Event');
  * @final
  */
 goog.net.ImageLoader = function(opt_parent) {
+  'use strict';
   goog.events.EventTarget.call(this);
 
   /**
@@ -169,6 +170,7 @@ goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
  */
 goog.net.ImageLoader.prototype.addImage = function(
     id, image, opt_corsRequestType) {
+  'use strict';
   var src = (typeof image === 'string') ? image : image.src;
   if (src) {
     this.completionFired_ = false;
@@ -188,6 +190,7 @@ goog.net.ImageLoader.prototype.addImage = function(
  * @param {string} id The ID of the image to remove.
  */
 goog.net.ImageLoader.prototype.removeImage = function(id) {
+  'use strict';
   delete this.imageIdToRequestMap_[id];
 
   var image = this.imageIdToImageMap_[id];
@@ -207,11 +210,13 @@ goog.net.ImageLoader.prototype.removeImage = function(id) {
  * images have finished loading.
  */
 goog.net.ImageLoader.prototype.start = function() {
+  'use strict';
   // Iterate over the keys, rather than the full object, to essentially clone
   // the initial queued images in case any event handlers decide to add more
   // images before this loop has finished executing.
   var imageIdToRequestMap = this.imageIdToRequestMap_;
   goog.array.forEach(goog.object.getKeys(imageIdToRequestMap), function(id) {
+    'use strict';
     var imageRequest = imageIdToRequestMap[id];
     if (imageRequest) {
       delete imageIdToRequestMap[id];
@@ -229,6 +234,7 @@ goog.net.ImageLoader.prototype.start = function() {
  * @private
  */
 goog.net.ImageLoader.prototype.loadImage_ = function(imageRequest, id) {
+  'use strict';
   if (this.isDisposed()) {
     // When loading an image in IE7 (and maybe IE8), the error handler
     // may fire before we yield JS control. If the error handler
@@ -265,6 +271,7 @@ goog.net.ImageLoader.prototype.loadImage_ = function(imageRequest, id) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
+  'use strict';
   var image = /** @type {Element} */ (evt.currentTarget);
 
   if (!image) {
@@ -326,6 +333,7 @@ goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
 
 /** If there are no more images pending, raise a COMPLETE event. */
 goog.net.ImageLoader.prototype.maybeFireCompletionEvent_ = function() {
+  'use strict';
   if (goog.object.isEmpty(this.imageIdToImageMap_) &&
       goog.object.isEmpty(this.imageIdToRequestMap_) &&
       !this.completionFired_) {
@@ -336,6 +344,7 @@ goog.net.ImageLoader.prototype.maybeFireCompletionEvent_ = function() {
 
 /** @override */
 goog.net.ImageLoader.prototype.disposeInternal = function() {
+  'use strict';
   delete this.imageIdToRequestMap_;
   delete this.imageIdToImageMap_;
   goog.dispose(this.handler_);

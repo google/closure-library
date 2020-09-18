@@ -19,6 +19,7 @@ goog.provide('goog.debug.errorcontext');
  */
 goog.debug.errorcontext.addErrorContext = function(
     err, contextKey, contextValue) {
+  'use strict';
   if (!err[goog.debug.errorcontext.CONTEXT_KEY_]) {
     err[goog.debug.errorcontext.CONTEXT_KEY_] = {};
   }
@@ -31,6 +32,7 @@ goog.debug.errorcontext.addErrorContext = function(
  * @return {!Object<string, string>} The context of the provided error.
  */
 goog.debug.errorcontext.getErrorContext = function(err) {
+  'use strict';
   return err[goog.debug.errorcontext.CONTEXT_KEY_] || {};
 };
 

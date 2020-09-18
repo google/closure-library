@@ -26,6 +26,7 @@ goog.provide('goog.graphics.Font');
  * @final
  */
 goog.graphics.Font = function(size, family) {
+  'use strict';
   /**
    * Font size.
    * @type {number}

@@ -30,6 +30,7 @@ goog.requireType('goog.ui.ControlContent');
  * @extends {goog.ui.CustomButtonRenderer}
  */
 goog.ui.MenuButtonRenderer = function() {
+  'use strict';
   goog.ui.CustomButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.MenuButtonRenderer, goog.ui.CustomButtonRenderer);
@@ -54,6 +55,7 @@ goog.ui.MenuButtonRenderer.CSS_CLASS = goog.getCssName('goog-menu-button');
  * @override
  */
 goog.ui.MenuButtonRenderer.prototype.getContentElement = function(element) {
+  'use strict';
   return goog.ui.MenuButtonRenderer.superClass_.getContentElement.call(
       this,
       /** @type {Element} */ (element && element.firstChild));
@@ -71,6 +73,7 @@ goog.ui.MenuButtonRenderer.prototype.getContentElement = function(element) {
  * @override
  */
 goog.ui.MenuButtonRenderer.prototype.decorate = function(control, element) {
+  'use strict';
   var button = /** @type {goog.ui.MenuButton} */ (control);
   // TODO(attila):  Add more robust support for subclasses of goog.ui.Menu.
   var menuElem = goog.dom.getElementsByTagNameAndClass(
@@ -116,6 +119,7 @@ goog.ui.MenuButtonRenderer.prototype.decorate = function(control, element) {
  * @override
  */
 goog.ui.MenuButtonRenderer.prototype.createButton = function(content, dom) {
+  'use strict';
   return goog.ui.MenuButtonRenderer.superClass_.createButton.call(
       this, [this.createCaption(content, dom), this.createDropdown(dom)], dom);
 };
@@ -135,6 +139,7 @@ goog.ui.MenuButtonRenderer.prototype.createButton = function(content, dom) {
  * @return {!Element} Caption element.
  */
 goog.ui.MenuButtonRenderer.prototype.createCaption = function(content, dom) {
+  'use strict';
   return goog.ui.MenuButtonRenderer.wrapCaption(
       content, this.getCssClass(), dom);
 };
@@ -155,8 +160,10 @@ goog.ui.MenuButtonRenderer.prototype.createCaption = function(content, dom) {
  * @return {!Element} Caption element.
  */
 goog.ui.MenuButtonRenderer.wrapCaption = function(content, cssClass, dom) {
+  'use strict';
   return dom.createDom(
-      goog.dom.TagName.DIV, goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
+      goog.dom.TagName.DIV,
+      goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
           goog.getCssName(cssClass, 'caption'),
       content);
 };
@@ -174,6 +181,7 @@ goog.ui.MenuButtonRenderer.wrapCaption = function(content, cssClass, dom) {
  * @return {!Element} Dropdown element.
  */
 goog.ui.MenuButtonRenderer.prototype.createDropdown = function(dom) {
+  'use strict';
   // 00A0 is &nbsp;
   return dom.createDom(
       goog.dom.TagName.DIV, goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
@@ -189,5 +197,6 @@ goog.ui.MenuButtonRenderer.prototype.createDropdown = function(dom) {
  * @override
  */
 goog.ui.MenuButtonRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.MenuButtonRenderer.CSS_CLASS;
 };

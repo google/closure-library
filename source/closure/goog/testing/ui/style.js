@@ -27,6 +27,7 @@ goog.require('goog.testing.asserts');
  * @param {string} referencePath A path to a reference HTML file.
  */
 goog.testing.ui.style.writeReferenceFrame = function(referencePath) {
+  'use strict';
   document.write(
       '<iframe id="reference" name="reference" ' +
       'src="' + referencePath + '"></iframe>');
@@ -42,6 +43,7 @@ goog.testing.ui.style.writeReferenceFrame = function(referencePath) {
  * @return {Node} The root element of the reference structure.
  */
 goog.testing.ui.style.getReferenceNode = function(referenceId) {
+  'use strict';
   return goog.dom.getFirstElementChild(
       window.frames['reference'].document.getElementById(referenceId));
 };
@@ -53,6 +55,7 @@ goog.testing.ui.style.getReferenceNode = function(referenceId) {
  * @return {!Array<!Node>} An array of all the element children.
  */
 goog.testing.ui.style.getElementChildren = function(element) {
+  'use strict';
   var first = goog.dom.getFirstElementChild(element);
   if (!first) {
     return [];
@@ -73,6 +76,7 @@ goog.testing.ui.style.getElementChildren = function(element) {
  * @suppress {missingProperties} "className" not defined on Node
  */
 goog.testing.ui.style.isContentNode = function(element) {
+  'use strict';
   return element.className.indexOf('content') != -1;
 };
 
@@ -88,6 +92,7 @@ goog.testing.ui.style.isContentNode = function(element) {
  */
 goog.testing.ui.style.assertStructureMatchesReference = function(
     element, referenceId) {
+  'use strict';
   goog.testing.ui.style.assertStructureMatchesReferenceInner_(
       element, goog.testing.ui.style.getReferenceNode(referenceId));
 };
@@ -104,6 +109,7 @@ goog.testing.ui.style.assertStructureMatchesReference = function(
  */
 goog.testing.ui.style.assertStructureMatchesReferenceInner_ = function(
     element, reference) {
+  'use strict';
   if (!element && !reference) {
     return;
   }
@@ -115,6 +121,7 @@ goog.testing.ui.style.assertStructureMatchesReferenceInner_ = function(
   var refElem = goog.asserts.assertElement(reference);
   var elementClasses = goog.dom.classlist.get(testElem);
   goog.array.forEach(goog.dom.classlist.get(refElem), function(referenceClass) {
+    'use strict';
     assertContains(
         'Expected test node to have all reference classes.', referenceClass,
         elementClasses);

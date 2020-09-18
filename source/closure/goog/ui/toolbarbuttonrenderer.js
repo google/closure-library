@@ -21,6 +21,7 @@ goog.require('goog.ui.CustomButtonRenderer');
  * @extends {goog.ui.CustomButtonRenderer}
  */
 goog.ui.ToolbarButtonRenderer = function() {
+  'use strict';
   goog.ui.CustomButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.ToolbarButtonRenderer, goog.ui.CustomButtonRenderer);
@@ -43,5 +44,6 @@ goog.ui.ToolbarButtonRenderer.CSS_CLASS =
  * @override
  */
 goog.ui.ToolbarButtonRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.ToolbarButtonRenderer.CSS_CLASS;
 };

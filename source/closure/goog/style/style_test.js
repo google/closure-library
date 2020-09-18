@@ -114,6 +114,8 @@ testSuite({
     userAgentTestUtil.reinitializeUserAgent();
     mockUserAgent = new MockUserAgent();
     mockUserAgent.install();
+
+    goog.cspNonce_ = 'thisIsANonce';
   },
 
   tearDown() {
@@ -128,6 +130,8 @@ testSuite({
 
     // Prevent multiple vendor prefixed mock elements from poisoning the cache.
     googStyle.styleNameCache_ = {};
+
+    goog.cspNonce_ = undefined;
   },
 
   testSetStyle() {
@@ -988,6 +992,21 @@ testSuite({
 
     googStyle.uninstallStyles(result);
     assertEquals(originalBackground, googStyle.getBackgroundColor(el));
+  },
+
+  testInstallSafeStyleSheetWithNonce() {
+    // IE < 11 doesn't support nonce-based CSP
+    if (userAgent.IE && !userAgent.isVersionOrHigher(11)) {
+      return;
+    }
+    const result =
+        googStyle.installSafeStyleSheet(testing.newSafeStyleSheetForTest(''));
+
+    const styles = document.head.querySelectorAll('style[nonce]');
+    assertEquals(1, styles.length);
+    assertEquals('thisIsANonce', styles[0].getAttribute('nonce'));
+
+    googStyle.uninstallStyles(result);
   },
 
   testSetSafeStyleSheet() {

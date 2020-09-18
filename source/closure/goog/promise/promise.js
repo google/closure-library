@@ -567,8 +567,9 @@ goog.Promise.prototype.then = function(
   }
 
   return this.addChildPromise_(
-      goog.isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
-      goog.isFunction(opt_onRejected) ? opt_onRejected : null, opt_context);
+      typeof opt_onFulfilled === 'function' ? opt_onFulfilled : null,
+      typeof opt_onRejected === 'function' ? opt_onRejected : null,
+      opt_context);
 };
 goog.Thenable.addImplementation(goog.Promise);
 
@@ -950,7 +951,7 @@ goog.Promise.maybeThen_ = function(value, onFulfilled, onRejected, context) {
     const thenable = /** @type {!Thenable} */ (value);
     try {
       var then = thenable.then;
-      if (goog.isFunction(then)) {
+      if (typeof then === 'function') {
         goog.Promise.tryThen_(thenable, then, onFulfilled, onRejected, context);
         return true;
       }

@@ -126,6 +126,7 @@ goog.html.SafeHtml.prototype.implementsGoogI18nBidiDirectionalString = true;
 
 /** @override */
 goog.html.SafeHtml.prototype.getDirection = function() {
+  'use strict';
   return this.dir_;
 };
 
@@ -159,6 +160,7 @@ goog.html.SafeHtml.prototype.implementsGoogStringTypedString = true;
  * @override
  */
 goog.html.SafeHtml.prototype.getTypedStringValue = function() {
+  'use strict';
   return this.privateDoNotAccessOrElseSafeHtmlWrappedValue_.toString();
 };
 
@@ -174,6 +176,7 @@ if (goog.DEBUG) {
    * @override
    */
   goog.html.SafeHtml.prototype.toString = function() {
+    'use strict';
     return 'SafeHtml{' + this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ +
         '}';
   };
@@ -190,6 +193,7 @@ if (goog.DEBUG) {
  *     `goog.asserts.AssertionError`.
  */
 goog.html.SafeHtml.unwrap = function(safeHtml) {
+  'use strict';
   return goog.html.SafeHtml.unwrapTrustedHTML(safeHtml).toString();
 };
 
@@ -201,6 +205,7 @@ goog.html.SafeHtml.unwrap = function(safeHtml) {
  * @see goog.html.SafeHtml.unwrap
  */
 goog.html.SafeHtml.unwrapTrustedHTML = function(safeHtml) {
+  'use strict';
   // Perform additional run-time type-checking to ensure that safeHtml is indeed
   // an instance of the expected type.  This provides some additional protection
   // against security bugs due to application code that disables type checks.
@@ -244,6 +249,7 @@ goog.html.SafeHtml.TextOrHtml_;
  * @return {!goog.html.SafeHtml} The escaped text, wrapped as a SafeHtml.
  */
 goog.html.SafeHtml.htmlEscape = function(textOrHtml) {
+  'use strict';
   if (textOrHtml instanceof goog.html.SafeHtml) {
     return textOrHtml;
   }
@@ -274,6 +280,7 @@ goog.html.SafeHtml.htmlEscape = function(textOrHtml) {
  * @return {!goog.html.SafeHtml} The escaped text, wrapped as a SafeHtml.
  */
 goog.html.SafeHtml.htmlEscapePreservingNewlines = function(textOrHtml) {
+  'use strict';
   if (textOrHtml instanceof goog.html.SafeHtml) {
     return textOrHtml;
   }
@@ -295,6 +302,7 @@ goog.html.SafeHtml.htmlEscapePreservingNewlines = function(textOrHtml) {
  */
 goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces = function(
     textOrHtml) {
+  'use strict';
   if (textOrHtml instanceof goog.html.SafeHtml) {
     return textOrHtml;
   }
@@ -333,6 +341,7 @@ goog.html.SafeHtml.from = goog.html.SafeHtml.htmlEscape;
  * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.comment = function(text) {
+  'use strict';
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       '<!--' + goog.string.internal.htmlEscape(text) + '-->', null);
 };
@@ -429,6 +438,7 @@ goog.html.SafeHtml.AttributeValue;
  * @throws {!goog.asserts.AssertionError} If content for void tag is provided.
  */
 goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
+  'use strict';
   goog.html.SafeHtml.verifyTagName(String(tagName));
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
       String(tagName), opt_attributes, opt_content);
@@ -444,6 +454,7 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
  * @package
  */
 goog.html.SafeHtml.verifyTagName = function(tagName) {
+  'use strict';
   if (!goog.html.SafeHtml.VALID_NAMES_IN_TAG_.test(tagName)) {
     throw new Error(
         goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ?
@@ -489,6 +500,7 @@ goog.html.SafeHtml.verifyTagName = function(tagName) {
  */
 goog.html.SafeHtml.createIframe = function(
     opt_src, opt_srcdoc, opt_attributes, opt_content) {
+  'use strict';
   if (opt_src) {
     // Check whether this is really TrustedResourceUrl.
     goog.html.TrustedResourceUrl.unwrap(opt_src);
@@ -540,6 +552,7 @@ goog.html.SafeHtml.createIframe = function(
  */
 goog.html.SafeHtml.createSandboxIframe = function(
     opt_src, opt_srcdoc, opt_attributes, opt_content) {
+  'use strict';
   if (!goog.html.SafeHtml.canUseSandboxIframe()) {
     throw new Error(
         goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ?
@@ -569,6 +582,7 @@ goog.html.SafeHtml.createSandboxIframe = function(
  * @return {boolean}
  */
 goog.html.SafeHtml.canUseSandboxIframe = function() {
+  'use strict';
   return goog.global['HTMLIFrameElement'] &&
       ('sandbox' in goog.global['HTMLIFrameElement'].prototype);
 };
@@ -588,6 +602,7 @@ goog.html.SafeHtml.canUseSandboxIframe = function() {
  *     opt_attributes contains the src attribute.
  */
 goog.html.SafeHtml.createScriptSrc = function(src, opt_attributes) {
+  'use strict';
   // TODO(mlourenco): The charset attribute should probably be blocked. If
   // its value is attacker controlled, the script contains attacker controlled
   // sub-strings (even if properly escaped) and the server does not set charset
@@ -621,6 +636,7 @@ goog.html.SafeHtml.createScriptSrc = function(src, opt_attributes) {
  *     opt_attributes contains the language, src, text or type attribute.
  */
 goog.html.SafeHtml.createScript = function(script, opt_attributes) {
+  'use strict';
   for (var attr in opt_attributes) {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty#Using_hasOwnProperty_as_a_property_name
     if (Object.prototype.hasOwnProperty.call(opt_attributes, attr)) {
@@ -665,6 +681,7 @@ goog.html.SafeHtml.createScript = function(script, opt_attributes) {
  *     opt_attributes contains the type attribute.
  */
 goog.html.SafeHtml.createStyle = function(styleSheet, opt_attributes) {
+  'use strict';
   var fixedAttributes = {'type': 'text/css'};
   var defaultAttributes = {};
   var attributes = goog.html.SafeHtml.combineAttributes(
@@ -694,6 +711,7 @@ goog.html.SafeHtml.createStyle = function(styleSheet, opt_attributes) {
  * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
  */
 goog.html.SafeHtml.createMetaRefresh = function(url, opt_secs) {
+  'use strict';
   // Note that sanitize is a no-op on SafeUrl.
   var unwrappedUrl = goog.html.SafeUrl.unwrap(goog.html.SafeUrl.sanitize(url));
 
@@ -739,6 +757,7 @@ goog.html.SafeHtml.createMetaRefresh = function(url, opt_secs) {
  * @private
  */
 goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
+  'use strict';
   // If it's goog.string.Const, allow any valid attribute name.
   if (value instanceof goog.string.Const) {
     value = goog.string.Const.unwrap(value);
@@ -801,6 +820,7 @@ goog.html.SafeHtml.getAttrNameAndValue_ = function(tagName, name, value) {
  * @private
  */
 goog.html.SafeHtml.getStyleValue_ = function(value) {
+  'use strict';
   if (!goog.isObject(value)) {
     throw new Error(
         goog.html.SafeHtml.ENABLE_ERROR_MESSAGES ?
@@ -828,6 +848,7 @@ goog.html.SafeHtml.getStyleValue_ = function(value) {
  */
 goog.html.SafeHtml.createWithDir = function(
     dir, tagName, opt_attributes, opt_content) {
+  'use strict';
   var html = goog.html.SafeHtml.create(tagName, opt_attributes, opt_content);
   html.dir_ = dir;
   return html;
@@ -844,6 +865,7 @@ goog.html.SafeHtml.createWithDir = function(
  * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.join = function(separator, parts) {
+  'use strict';
   var separatorHtml = goog.html.SafeHtml.htmlEscape(separator);
   var dir = separatorHtml.getDirection();
   var content = [];
@@ -853,6 +875,7 @@ goog.html.SafeHtml.join = function(separator, parts) {
    *     !Array<!goog.html.SafeHtml.TextOrHtml_>} argument
    */
   var addArgument = function(argument) {
+    'use strict';
     if (Array.isArray(argument)) {
       goog.array.forEach(argument, addArgument);
     } else {
@@ -880,6 +903,7 @@ goog.html.SafeHtml.join = function(separator, parts) {
  * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.concat = function(var_args) {
+  'use strict';
   return goog.html.SafeHtml.join(
       goog.html.SafeHtml.EMPTY, Array.prototype.slice.call(arguments));
 };
@@ -895,6 +919,7 @@ goog.html.SafeHtml.concat = function(var_args) {
  * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.concatWithDir = function(dir, var_args) {
+  'use strict';
   var html = goog.html.SafeHtml.concat(goog.array.slice(arguments, 1));
   html.dir_ = dir;
   return html;
@@ -921,6 +946,7 @@ goog.html.SafeHtml.CONSTRUCTOR_TOKEN_PRIVATE_ = {};
  */
 goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse = function(
     html, dir) {
+  'use strict';
   const policy = goog.html.trustedtypes.getPolicyPrivateDoNotAccessOrElse();
   const trustedHtml = policy ? policy.createHTML(html) : html;
   return new goog.html.SafeHtml(
@@ -942,6 +968,7 @@ goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse = function(
  */
 goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse = function(
     tagName, opt_attributes, opt_content) {
+  'use strict';
   var dir = null;
   var result = '<' + tagName;
   result += goog.html.SafeHtml.stringifyAttributes(tagName, opt_attributes);
@@ -990,6 +1017,7 @@ goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse = function(
  * @package
  */
 goog.html.SafeHtml.stringifyAttributes = function(tagName, opt_attributes) {
+  'use strict';
   var result = '';
   if (opt_attributes) {
     for (var name in opt_attributes) {
@@ -1026,6 +1054,7 @@ goog.html.SafeHtml.stringifyAttributes = function(tagName, opt_attributes) {
  */
 goog.html.SafeHtml.combineAttributes = function(
     fixedAttributes, defaultAttributes, opt_attributes) {
+  'use strict';
   var combinedAttributes = {};
   var name;
 
@@ -1075,6 +1104,7 @@ goog.html.SafeHtml.DOCTYPE_HTML = /** @type {!goog.html.SafeHtml} */ ({
   // SafeHtml creation (due to calling trustedTypes.createPolicy) from the
   // compiler so that the entire call can be removed if the result is not used.
   valueOf: function() {
+    'use strict';
     return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
         '<!DOCTYPE html>', goog.i18n.bidi.Dir.NEUTRAL);
   },
@@ -1097,6 +1127,7 @@ goog.html.SafeHtml.BR = /** @type {!goog.html.SafeHtml} */ ({
   // SafeHtml creation (due to calling trustedTypes.createPolicy) from the
   // compiler so that the entire call can be removed if the result is not used.
   valueOf: function() {
+    'use strict';
     return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
         '<br>', goog.i18n.bidi.Dir.NEUTRAL);
   },

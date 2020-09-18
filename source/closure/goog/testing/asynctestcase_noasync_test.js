@@ -53,7 +53,7 @@ const doAsyncSignals = () => {
 
 testSuite({
   setUpPage() {
-    debug('setUpPage was called.');
+    goog.global.debug('setUpPage was called.');
     // Don't do anything asynchronously.
     window.setTimeout = (callback, time) => {
       callback();
@@ -106,7 +106,7 @@ testSuite({
   },
 
   tearDownPage() {
-    debug('tearDownPage was called.');
+    goog.global.debug('tearDownPage was called.');
     assertTrue(curTestIsDone);
     window.setTimeout = oldTimeout;
   },

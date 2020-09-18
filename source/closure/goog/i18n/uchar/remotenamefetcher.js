@@ -46,6 +46,7 @@ goog.require('goog.net.XhrIo');
  * @final
  */
 goog.i18n.uChar.RemoteNameFetcher = function(dataSourceUri) {
+  'use strict';
   goog.i18n.uChar.RemoteNameFetcher.base(this, 'constructor');
 
   /**
@@ -113,6 +114,7 @@ goog.i18n.uChar.RemoteNameFetcher.logger_ =
 
 /** @override */
 goog.i18n.uChar.RemoteNameFetcher.prototype.disposeInternal = function() {
+  'use strict';
   goog.i18n.uChar.RemoteNameFetcher.base(this, 'disposeInternal');
   this.prefetchXhrIo_.dispose();
   this.getNameXhrIo_.dispose();
@@ -121,6 +123,7 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.disposeInternal = function() {
 
 /** @override */
 goog.i18n.uChar.RemoteNameFetcher.prototype.prefetch = function(characters) {
+  'use strict';
   // Abort the current request if there is one
   if (this.prefetchXhrIo_.isActive()) {
     goog.log.info(
@@ -149,6 +152,7 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.prefetch = function(characters) {
  * @private
  */
 goog.i18n.uChar.RemoteNameFetcher.prototype.prefetchCallback_ = function() {
+  'use strict';
   this.processResponse_(this.prefetchXhrIo_);
 };
 
@@ -156,6 +160,7 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.prefetchCallback_ = function() {
 /** @override */
 goog.i18n.uChar.RemoteNameFetcher.prototype.getName = function(
     character, callback) {
+  'use strict';
   var codepoint = goog.i18n.uChar.toCharCode(character).toString(16);
 
   if (this.charNames_.has(codepoint)) {
@@ -199,6 +204,7 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.getName = function(
  */
 goog.i18n.uChar.RemoteNameFetcher.prototype.getNameCallback_ = function(
     codepoint, callback) {
+  'use strict';
   this.processResponse_(this.getNameXhrIo_);
   var name =
       this.charNames_.has(codepoint) ? this.charNames_.get(codepoint) : null;
@@ -213,6 +219,7 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.getNameCallback_ = function(
  * @private
  */
 goog.i18n.uChar.RemoteNameFetcher.prototype.processResponse_ = function(xhrIo) {
+  'use strict';
   if (!xhrIo.isSuccess()) {
     goog.log.error(
         goog.i18n.uChar.RemoteNameFetcher.logger_,
@@ -263,6 +270,7 @@ goog.i18n.uChar.RemoteNameFetcher.RequestType_ = {
  */
 goog.i18n.uChar.RemoteNameFetcher.prototype.fetch_ = function(
     requestType, requestInput, xhrIo) {
+  'use strict';
   var url = new goog.Uri(this.dataSourceUri_);
   url.setParameterValue(requestType, requestInput);
   url.setParameterValue('p', 'name');
@@ -275,5 +283,6 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.fetch_ = function(
 /** @override */
 goog.i18n.uChar.RemoteNameFetcher.prototype.isNameAvailable = function(
     character) {
+  'use strict';
   return true;
 };

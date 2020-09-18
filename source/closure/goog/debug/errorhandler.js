@@ -38,6 +38,7 @@ goog.require('goog.debug.Trace');
  * @implements {goog.debug.EntryPointMonitor}
  */
 goog.debug.ErrorHandler = function(handler) {
+  'use strict';
   goog.debug.ErrorHandler.base(this, 'constructor');
 
   /**
@@ -81,18 +82,21 @@ goog.debug.ErrorHandler.prototype.addTracersToProtectedFunctions_ = false;
  */
 goog.debug.ErrorHandler.prototype.setAddTracersToProtectedFunctions = function(
     newVal) {
+  'use strict';
   this.addTracersToProtectedFunctions_ = newVal;
 };
 
 
 /** @override */
 goog.debug.ErrorHandler.prototype.wrap = function(fn) {
+  'use strict';
   return this.protectEntryPoint(goog.asserts.assertFunction(fn));
 };
 
 
 /** @override */
 goog.debug.ErrorHandler.prototype.unwrap = function(fn) {
+  'use strict';
   goog.asserts.assertFunction(fn);
   return fn[this.getFunctionIndex_(false)] || fn;
 };
@@ -107,6 +111,7 @@ goog.debug.ErrorHandler.prototype.unwrap = function(fn) {
  * @private
  */
 goog.debug.ErrorHandler.prototype.getStackTraceHolder_ = function(stackTrace) {
+  'use strict';
   var buffer = [];
   buffer.push('##PE_STACK_START##');
   buffer.push(stackTrace.replace(/(\r\n|\r|\n)/g, '##STACK_BR##'));
@@ -123,6 +128,7 @@ goog.debug.ErrorHandler.prototype.getStackTraceHolder_ = function(stackTrace) {
  * @private
  */
 goog.debug.ErrorHandler.prototype.getFunctionIndex_ = function(wrapper) {
+  'use strict';
   return (wrapper ? '__wrapper_' : '__protected_') + goog.getUid(this) + '__';
 };
 
@@ -136,6 +142,7 @@ goog.debug.ErrorHandler.prototype.getFunctionIndex_ = function(wrapper) {
  *     function.
  */
 goog.debug.ErrorHandler.prototype.protectEntryPoint = function(fn) {
+  'use strict';
   var protectedFnName = this.getFunctionIndex_(true);
   if (!fn[protectedFnName]) {
     var wrapper = fn[protectedFnName] = this.getProtectedFunction(fn);
@@ -156,12 +163,14 @@ goog.debug.ErrorHandler.prototype.protectEntryPoint = function(fn) {
  * @protected
  */
 goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
+  'use strict';
   var that = this;
   var tracers = this.addTracersToProtectedFunctions_;
   if (tracers) {
     var stackTrace = goog.debug.getStacktraceSimple(15);
   }
   var googDebugErrorHandlerProtectedFunction = function() {
+    'use strict';
     var self = /** @type {?} */ (this);
     if (that.isDisposed()) {
       return fn.apply(self, arguments);
@@ -192,6 +201,7 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
  * @private
  */
 goog.debug.ErrorHandler.prototype.handleError_ = function(e) {
+  'use strict';
   // Don't re-report errors that have already been handled by this code.
   var MESSAGE_PREFIX =
       goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX;
@@ -236,6 +246,7 @@ goog.debug.ErrorHandler.prototype.handleError_ = function(e) {
  * Installs exception protection for window.setTimeout to handle exceptions.
  */
 goog.debug.ErrorHandler.prototype.protectWindowSetTimeout = function() {
+  'use strict';
   this.protectWindowFunctionsHelper_('setTimeout');
 };
 
@@ -244,6 +255,7 @@ goog.debug.ErrorHandler.prototype.protectWindowSetTimeout = function() {
  * Install exception protection for window.setInterval to handle exceptions.
  */
 goog.debug.ErrorHandler.prototype.protectWindowSetInterval = function() {
+  'use strict';
   this.protectWindowFunctionsHelper_('setInterval');
 };
 
@@ -254,6 +266,7 @@ goog.debug.ErrorHandler.prototype.protectWindowSetInterval = function() {
  * way to report uncaught errors in aysnc/await functions.
  */
 goog.debug.ErrorHandler.prototype.catchUnhandledRejections = function() {
+  'use strict';
   if ('onunhandledrejection' in goog.global) {
     goog.global.onunhandledrejection = (event) => {
       // event.reason contains the rejection reason. When an Error is
@@ -273,6 +286,7 @@ goog.debug.ErrorHandler.prototype.catchUnhandledRejections = function() {
  */
 goog.debug.ErrorHandler.prototype.protectWindowRequestAnimationFrame =
     function() {
+  'use strict';
   var win = goog.global['window'];
   var fnNames = [
     'requestAnimationFrame', 'mozRequestAnimationFrame', 'webkitAnimationFrame',
@@ -295,10 +309,12 @@ goog.debug.ErrorHandler.prototype.protectWindowRequestAnimationFrame =
  */
 goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ = function(
     fnName) {
+  'use strict';
   var win = goog.global['window'];
   var originalFn = win[fnName];
   var that = this;
   win[fnName] = function(fn, time) {
+    'use strict';
     // Don't try to protect strings. In theory, we could try to globalEval
     // the string, but this seems to lead to permission errors on IE6.
     if (typeof fn === 'string') {
@@ -316,6 +332,7 @@ goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ = function(
       if (arguments.length > 2) {
         var args = Array.prototype.slice.call(arguments, 2);
         callback = function() {
+          'use strict';
           fn.apply(/** @type {?} */ (this), args);
         };
       }
@@ -332,6 +349,7 @@ goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ = function(
  * @param {boolean} wrapErrors Whether to wrap errors.
  */
 goog.debug.ErrorHandler.prototype.setWrapErrors = function(wrapErrors) {
+  'use strict';
   this.wrapErrors_ = wrapErrors;
 };
 
@@ -344,12 +362,14 @@ goog.debug.ErrorHandler.prototype.setWrapErrors = function(wrapErrors) {
  */
 goog.debug.ErrorHandler.prototype.setPrefixErrorMessages = function(
     prefixErrorMessages) {
+  'use strict';
   this.prefixErrorMessages_ = prefixErrorMessages;
 };
 
 
 /** @override */
 goog.debug.ErrorHandler.prototype.disposeInternal = function() {
+  'use strict';
   // Try to unwrap window.setTimeout and window.setInterval.
   var win = goog.global['window'];
   win.setTimeout = this.unwrap(win.setTimeout);
@@ -369,6 +389,7 @@ goog.debug.ErrorHandler.prototype.disposeInternal = function() {
  * @final
  */
 goog.debug.ErrorHandler.ProtectedFunctionError = function(cause) {
+  'use strict';
   /** @suppress {missingProperties} message may not be defined. */
   var message = goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
       (cause && cause.message ? String(cause.message) : String(cause));

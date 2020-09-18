@@ -33,6 +33,7 @@ goog.requireType('goog.graphics.AbstractGraphics');
  *     http://en.wikipedia.org/wiki/Canvas_element for details.
  */
 goog.graphics.ImageElement = function(element, graphics) {
+  'use strict';
   goog.graphics.Element.call(this, element, graphics);
 };
 goog.inherits(goog.graphics.ImageElement, goog.graphics.Element);

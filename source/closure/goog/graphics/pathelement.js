@@ -36,6 +36,7 @@ goog.requireType('goog.graphics.Stroke');
  *     http://en.wikipedia.org/wiki/Canvas_element for details.
  */
 goog.graphics.PathElement = function(element, graphics, stroke, fill) {
+  'use strict';
   goog.graphics.StrokeAndFillElement.call(
       this, element, graphics, stroke, fill);
 };

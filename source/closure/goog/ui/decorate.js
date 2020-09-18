@@ -22,6 +22,7 @@ goog.requireType('goog.ui.Component');
  * @return {goog.ui.Component?} New component instance, decorating the element.
  */
 goog.ui.decorate = function(element) {
+  'use strict';
   var decorator = goog.ui.registry.getDecorator(element);
   if (decorator) {
     decorator.decorate(element);

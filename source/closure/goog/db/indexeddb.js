@@ -32,6 +32,7 @@ goog.require('goog.events.EventTarget');
  * @final
  */
 goog.db.IndexedDb = function(db) {
+  'use strict';
   goog.db.IndexedDb.base(this, 'constructor');
 
   /**
@@ -80,6 +81,7 @@ goog.db.IndexedDb.prototype.open_ = true;
  * @private
  */
 goog.db.IndexedDb.prototype.dispatchError_ = function(ev) {
+  'use strict';
   const idbRequest = /** @type {?IDBRequest} */ (ev.target);
   const domError = idbRequest && idbRequest.error;
   const /** ?number */ errorCode = domError && domError.severity;
@@ -98,6 +100,7 @@ goog.db.IndexedDb.prototype.dispatchError_ = function(ev) {
  * @private
  */
 goog.db.IndexedDb.prototype.dispatchVersionChange_ = function(ev) {
+  'use strict';
   this.dispatchEvent(new goog.db.IndexedDb.VersionChangeEvent(
       ev.oldVersion, /** @type {number} */ (ev.newVersion)));
 };
@@ -108,6 +111,7 @@ goog.db.IndexedDb.prototype.dispatchVersionChange_ = function(ev) {
  * method is called, but otherwise this wrapper should not be used further.
  */
 goog.db.IndexedDb.prototype.close = function() {
+  'use strict';
   if (this.open_) {
     this.db_.close();
     this.open_ = false;
@@ -119,6 +123,7 @@ goog.db.IndexedDb.prototype.close = function() {
  * @return {boolean} Whether a connection is open and the database can be used.
  */
 goog.db.IndexedDb.prototype.isOpen = function() {
+  'use strict';
   return this.open_;
 };
 
@@ -127,6 +132,7 @@ goog.db.IndexedDb.prototype.isOpen = function() {
  * @return {string} The name of this database.
  */
 goog.db.IndexedDb.prototype.getName = function() {
+  'use strict';
   return this.db_.name;
 };
 
@@ -135,6 +141,7 @@ goog.db.IndexedDb.prototype.getName = function() {
  * @return {number} The current database version.
  */
 goog.db.IndexedDb.prototype.getVersion = function() {
+  'use strict';
   // TODO(bradfordcsmith): drop Number() call once closure compiler's externs
   // are updated
   return Number(this.db_.version);
@@ -145,6 +152,7 @@ goog.db.IndexedDb.prototype.getVersion = function() {
  * @return {!DOMStringList} List of object stores in this database.
  */
 goog.db.IndexedDb.prototype.getObjectStoreNames = function() {
+  'use strict';
   return this.db_.objectStoreNames;
 };
 
@@ -166,6 +174,7 @@ goog.db.IndexedDb.prototype.getObjectStoreNames = function() {
  * @throws {goog.db.Error} If there's a problem creating the object store.
  */
 goog.db.IndexedDb.prototype.createObjectStore = function(name, opt_params) {
+  'use strict';
   try {
     return new goog.db.ObjectStore(
         this.db_.createObjectStore(name, opt_params));
@@ -183,6 +192,7 @@ goog.db.IndexedDb.prototype.createObjectStore = function(name, opt_params) {
  * @throws {goog.db.Error} If there's a problem deleting the object store.
  */
 goog.db.IndexedDb.prototype.deleteObjectStore = function(name) {
+  'use strict';
   try {
     this.db_.deleteObjectStore(name);
   } catch (ex) {
@@ -203,6 +213,7 @@ goog.db.IndexedDb.prototype.deleteObjectStore = function(name) {
  * @throws {goog.db.Error} If there's a problem creating the transaction.
  */
 goog.db.IndexedDb.prototype.createTransaction = function(storeNames, opt_mode) {
+  'use strict';
   try {
     // IndexedDB on Chrome 22+ requires that opt_mode not be passed rather than
     // be explicitly passed as undefined.
@@ -217,6 +228,7 @@ goog.db.IndexedDb.prototype.createTransaction = function(storeNames, opt_mode) {
 
 /** @override */
 goog.db.IndexedDb.prototype.disposeInternal = function() {
+  'use strict';
   goog.db.IndexedDb.base(this, 'disposeInternal');
   this.eventHandler_.dispose();
 };
@@ -272,6 +284,7 @@ goog.db.IndexedDb.EventType = {
  * @final
  */
 goog.db.IndexedDb.VersionChangeEvent = function(oldVersion, newVersion) {
+  'use strict';
   goog.db.IndexedDb.VersionChangeEvent.base(
       this, 'constructor', goog.db.IndexedDb.EventType.VERSION_CHANGE);
 

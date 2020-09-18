@@ -1120,7 +1120,7 @@ goog.loadModule = function(moduleDef) {
     };
     var origExports = {};
     var exports = origExports;
-    if (goog.isFunction(moduleDef)) {
+    if (typeof moduleDef === 'function') {
       exports = moduleDef.call(undefined, exports);
     } else if (typeof moduleDef === 'string') {
       if (goog.useSafari10Workaround()) {
@@ -1352,17 +1352,6 @@ goog.isArrayLike = function(val) {
  */
 goog.isDateLike = function(val) {
   return goog.isObject(val) && typeof val.getFullYear == 'function';
-};
-
-
-/**
- * Returns true if the specified value is a function.
- * @param {?} val Variable to test.
- * @return {boolean} Whether variable is a function.
- * @deprecated use "typeof val === 'function'" instead.
- */
-goog.isFunction = function(val) {
-  return goog.typeOf(val) == 'function';
 };
 
 
@@ -1635,7 +1624,9 @@ goog.mixin = function(target, source) {
  *     between midnight, January 1, 1970 and the current time.
  * @deprecated Use Date.now
  */
-goog.now = Date.now;
+goog.now = function() {
+  return Date.now();
+};
 
 
 /**
@@ -1825,11 +1816,15 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
  *
  * @param {string} str Translatable string, places holders in the form {$foo}.
  * @param {Object<string, string>=} opt_values Maps place holder name to value.
- * @param {{html: boolean}=} opt_options Options:
+ * @param {{html: (boolean|undefined),
+ *         unescapeHtmlEntities: (boolean|undefined)}=} opt_options Options:
  *     html: Escape '<' in str to '&lt;'. Used by Closure Templates where the
  *     generated code size and performance is critical which is why {@link
  *     goog.html.SafeHtmlFormatter} is not used. The value must be literal true
  *     or false.
+ *     unescapeHtmlEntities: Unescape common html entities: &gt;, &lt;, &apos;,
+ *     &quot; and &amp;. Used for messages not in HTML context, such as with
+ *     `textContent` property.
  * @return {string} message with placeholders filled.
  */
 goog.getMsg = function(str, opt_values, opt_options) {
@@ -1837,6 +1832,14 @@ goog.getMsg = function(str, opt_values, opt_options) {
     // Note that '&' is not replaced because the translation can contain HTML
     // entities.
     str = str.replace(/</g, '&lt;');
+  }
+  if (opt_options && opt_options.unescapeHtmlEntities) {
+    // Note that "&amp;" must be the last to avoid "creating" new entities.
+    str = str.replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&apos;/g, '\'')
+              .replace(/&quot;/g, '"')
+              .replace(/&amp;/g, '&');
   }
   if (opt_values) {
     str = str.replace(/\{\$([^}]+)}/g, function(match, key) {
@@ -2169,6 +2172,7 @@ goog.defineClass.applyProperties_ = function(target, source) {
 // Closure namespace defines do not guard code correctly. To help reduce code
 // size also check for !COMPILED even though it redundant until this is fixed.
 if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
+
 
   /**
    * Tries to detect whether is in the context of an HTML document.
@@ -3094,24 +3098,39 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       }
     }
 
+    var nonce = goog.getScriptNonce();
     if (!goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING &&
         goog.isDocumentLoading_()) {
-      var key = goog.Dependency.registerCallback_(function(script) {
-        if (!goog.DebugLoader_.IS_OLD_IE_ || script.readyState == 'complete') {
-          goog.Dependency.unregisterCallback_(key);
-          controller.loaded();
+      var key;
+      var callback = function(script) {
+        if (script.readyState && script.readyState != 'complete') {
+          script.onload = callback;
+          return;
         }
-      });
-      var nonceAttr = !goog.DebugLoader_.IS_OLD_IE_ && goog.getScriptNonce() ?
-          ' nonce="' + goog.getScriptNonce() + '"' :
-          '';
-      var event =
-          goog.DebugLoader_.IS_OLD_IE_ ? 'onreadystatechange' : 'onload';
-      var defer = goog.Dependency.defer_ ? 'defer' : '';
-      var script = '<script src="' + this.path + '" ' + event +
-          '="goog.Dependency.callback_(\'' + key +
-          '\', this)" type="text/javascript" ' + defer + nonceAttr + '><' +
-          '/script>';
+        goog.Dependency.unregisterCallback_(key);
+        controller.loaded();
+      };
+      key = goog.Dependency.registerCallback_(callback);
+
+      var defer = goog.Dependency.defer_ ? ' defer' : '';
+      var nonceAttr = nonce ? ' nonce="' + nonce + '"' : '';
+      var script = '<script src="' + this.path + '"' + nonceAttr + defer +
+          ' id="script-' + key + '"><\/script>';
+
+      script += '<script' + nonceAttr + '>';
+
+      if (goog.Dependency.defer_) {
+        script += 'document.getElementById(\'script-' + key +
+            '\').onload = function() {\n' +
+            '  goog.Dependency.callback_(\'' + key + '\', this);\n' +
+            '};\n';
+      } else {
+        script += 'goog.Dependency.callback_(\'' + key +
+            '\', document.getElementById(\'script-' + key + '\'));';
+      }
+
+      script += '<\/script>';
+
       doc.write(
           goog.TRUSTED_TYPES_POLICY_ ?
               goog.TRUSTED_TYPES_POLICY_.createHTML(script) :
@@ -3121,13 +3140,11 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
           /** @type {!HTMLScriptElement} */ (doc.createElement('script'));
       scriptEl.defer = goog.Dependency.defer_;
       scriptEl.async = false;
-      scriptEl.type = 'text/javascript';
 
       // If CSP nonces are used, propagate them to dynamically created scripts.
       // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
-      var nonce = goog.getScriptNonce();
       if (nonce) {
-        scriptEl.setAttribute('nonce', nonce);
+        scriptEl.nonce = nonce;
       }
 
       if (goog.DebugLoader_.IS_OLD_IE_) {
@@ -3203,15 +3220,23 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     // difference between this and just waiting for interactive mode and then
     // appending?
     function write(src, contents) {
+      var nonceAttr = '';
+      var nonce = goog.getScriptNonce();
+      if (nonce) {
+        nonceAttr = ' nonce="' + nonce + '"';
+      }
+
       if (contents) {
-        var script = '<script type="module" crossorigin>' + contents + '</' +
+        var script = '<script type="module" crossorigin' + nonceAttr + '>' +
+            contents + '</' +
             'script>';
         doc.write(
             goog.TRUSTED_TYPES_POLICY_ ?
                 goog.TRUSTED_TYPES_POLICY_.createHTML(script) :
                 script);
       } else {
-        var script = '<script type="module" crossorigin src="' + src + '"></' +
+        var script = '<script type="module" crossorigin src="' + src + '"' +
+            nonceAttr + '></' +
             'script>';
         doc.write(
             goog.TRUSTED_TYPES_POLICY_ ?
@@ -3232,11 +3257,11 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
       var nonce = goog.getScriptNonce();
       if (nonce) {
-        scriptEl.setAttribute('nonce', nonce);
+        scriptEl.nonce = nonce;
       }
 
       if (contents) {
-        scriptEl.textContent = goog.TRUSTED_TYPES_POLICY_ ?
+        scriptEl.text = goog.TRUSTED_TYPES_POLICY_ ?
             goog.TRUSTED_TYPES_POLICY_.createScript(contents) :
             contents;
       } else {
@@ -3428,7 +3453,9 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
         load();
       });
 
-      var script = '<script type="text/javascript">' +
+      var nonce = goog.getScriptNonce();
+      var nonceAttr = nonce ? ' nonce="' + nonce + '"' : '';
+      var script = '<script' + nonceAttr + '>' +
           goog.protectScriptTag_('goog.Dependency.callback_("' + key + '");') +
           '</' +
           'script>';
@@ -3493,7 +3520,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
           load();
           controller.resume();
         }
-        if (goog.isFunction(oldCallback)) {
+        if (typeof oldCallback === 'function') {
           oldCallback.apply(undefined, arguments);
         }
       };

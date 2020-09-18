@@ -82,6 +82,7 @@ goog.dom.browserrange.AbstractRange.prototype.getStartOffset =
  *     and offset.
  */
 goog.dom.browserrange.AbstractRange.prototype.getStartPosition = function() {
+  'use strict';
   return this.getPosition_(true);
 };
 
@@ -108,6 +109,7 @@ goog.dom.browserrange.AbstractRange.prototype.getEndOffset =
  *     and offset.
  */
 goog.dom.browserrange.AbstractRange.prototype.getEndPosition = function() {
+  'use strict';
   return this.getPosition_(false);
 };
 
@@ -118,6 +120,7 @@ goog.dom.browserrange.AbstractRange.prototype.getEndPosition = function() {
  * @private
  */
 goog.dom.browserrange.AbstractRange.prototype.getPosition_ = function(start) {
+  'use strict';
   goog.asserts.assert(
       this.range_.getClientRects,
       'Getting selection coordinates is not supported.');
@@ -156,6 +159,7 @@ goog.dom.browserrange.AbstractRange.prototype.compareBrowserRangeEndpoints =
  */
 goog.dom.browserrange.AbstractRange.prototype.containsRange = function(
     abstractRange, opt_allowPartial) {
+  'use strict';
   // IE sometimes misreports the boundaries for collapsed ranges. So if the
   // other range is collapsed, make sure the whole range is contained. This is
   // logically equivalent, and works around IE's bug.
@@ -201,6 +205,7 @@ goog.dom.browserrange.AbstractRange.prototype.containsRange = function(
  */
 goog.dom.browserrange.AbstractRange.prototype.containsNode = function(
     node, opt_allowPartial) {
+  'use strict';
   /** @suppress {missingRequire} Circular dep with browserrange */
   return this.containsRange(
       goog.dom.browserrange.createRangeFromNodeContents(node),
@@ -228,8 +233,10 @@ goog.dom.browserrange.AbstractRange.prototype.getText = goog.abstractMethod;
  * @suppress {missingProperties}
  */
 goog.dom.browserrange.AbstractRange.prototype.getHtmlFragment = function() {
+  'use strict';
   var output = new goog.string.StringBuffer();
   goog.iter.forEach(this, function(node, ignore, it) {
+    'use strict';
     if (node.nodeType == goog.dom.NodeType.TEXT) {
       output.append(
           goog.string.htmlEscape(
@@ -276,6 +283,7 @@ goog.dom.browserrange.AbstractRange.prototype.getValidHtml =
  */
 goog.dom.browserrange.AbstractRange.prototype.__iterator__ = function(
     opt_keys) {
+  'use strict';
   return new goog.dom.TextRangeIterator(
       this.getStartNode(), this.getStartOffset(), this.getEndNode(),
       this.getEndOffset());

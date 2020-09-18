@@ -16,6 +16,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.ui.Component');
+goog.requireType('goog.events.Event');
 
 
 

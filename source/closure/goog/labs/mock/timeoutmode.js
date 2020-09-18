@@ -38,5 +38,6 @@ goog.labs.mock.timeout.TimeoutMode = class TimeoutMode {
  * @return {!goog.labs.mock.timeout.TimeoutMode}
  */
 goog.labs.mock.timeout.timeout = function(duration) {
+  'use strict';
   return new goog.labs.mock.timeout.TimeoutMode(duration);
 };

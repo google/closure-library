@@ -32,6 +32,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.events.FocusHandler = function(element) {
+  'use strict';
   goog.events.EventTarget.call(this);
 
   /**
@@ -80,6 +81,7 @@ goog.events.FocusHandler.EventType = {
  * @param {goog.events.BrowserEvent} e  The underlying browser event.
  */
 goog.events.FocusHandler.prototype.handleEvent = function(e) {
+  'use strict';
   var be = e.getBrowserEvent();
   var event = new goog.events.BrowserEvent(be);
   event.type = e.type == 'focusin' || e.type == 'focus' ?
@@ -91,6 +93,7 @@ goog.events.FocusHandler.prototype.handleEvent = function(e) {
 
 /** @override */
 goog.events.FocusHandler.prototype.disposeInternal = function() {
+  'use strict';
   goog.events.FocusHandler.superClass_.disposeInternal.call(this);
   goog.events.unlistenByKey(this.listenKeyIn_);
   goog.events.unlistenByKey(this.listenKeyOut_);

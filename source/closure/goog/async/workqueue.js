@@ -26,6 +26,7 @@ goog.require('goog.async.FreeList');
  * @struct
  */
 goog.async.WorkQueue = function() {
+  'use strict';
   this.workHead_ = null;
   this.workTail_ = null;
 };
@@ -38,8 +39,15 @@ goog.async.WorkQueue.DEFAULT_MAX_UNUSED =
 
 /** @const @private {goog.async.FreeList<goog.async.WorkItem>} */
 goog.async.WorkQueue.freelist_ = new goog.async.FreeList(
-    function() { return new goog.async.WorkItem(); },
-    function(item) { item.reset(); }, goog.async.WorkQueue.DEFAULT_MAX_UNUSED);
+    function() {
+      'use strict';
+      return new goog.async.WorkItem();
+    },
+    function(item) {
+      'use strict';
+      item.reset();
+    },
+    goog.async.WorkQueue.DEFAULT_MAX_UNUSED);
 
 
 /**
@@ -47,6 +55,7 @@ goog.async.WorkQueue.freelist_ = new goog.async.FreeList(
  * @param {Object|null|undefined} scope
  */
 goog.async.WorkQueue.prototype.add = function(fn, scope) {
+  'use strict';
   var item = this.getUnusedItem_();
   item.set(fn, scope);
 
@@ -65,6 +74,7 @@ goog.async.WorkQueue.prototype.add = function(fn, scope) {
  * @return {goog.async.WorkItem}
  */
 goog.async.WorkQueue.prototype.remove = function() {
+  'use strict';
   var item = null;
 
   if (this.workHead_) {
@@ -83,6 +93,7 @@ goog.async.WorkQueue.prototype.remove = function() {
  * @param {goog.async.WorkItem} item
  */
 goog.async.WorkQueue.prototype.returnUnused = function(item) {
+  'use strict';
   goog.async.WorkQueue.freelist_.put(item);
 };
 
@@ -92,6 +103,7 @@ goog.async.WorkQueue.prototype.returnUnused = function(item) {
  * @private
  */
 goog.async.WorkQueue.prototype.getUnusedItem_ = function() {
+  'use strict';
   return goog.async.WorkQueue.freelist_.get();
 };
 
@@ -103,6 +115,7 @@ goog.async.WorkQueue.prototype.getUnusedItem_ = function() {
  * @struct
  */
 goog.async.WorkItem = function() {
+  'use strict';
   /** @type {?function()} */
   this.fn = null;
   /** @type {?Object|null|undefined} */
@@ -117,6 +130,7 @@ goog.async.WorkItem = function() {
  * @param {Object|null|undefined} scope
  */
 goog.async.WorkItem.prototype.set = function(fn, scope) {
+  'use strict';
   this.fn = fn;
   this.scope = scope;
   this.next = null;
@@ -125,6 +139,7 @@ goog.async.WorkItem.prototype.set = function(fn, scope) {
 
 /** Reset the work item so they don't prevent GC before reuse */
 goog.async.WorkItem.prototype.reset = function() {
+  'use strict';
   this.fn = null;
   this.scope = null;
   this.next = null;

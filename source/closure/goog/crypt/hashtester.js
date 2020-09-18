@@ -27,6 +27,7 @@ goog.setTestOnly('hashTester');
  * @param {!goog.crypt.Hash} hash A hash instance.
  */
 goog.crypt.hashTester.runBasicTests = function(hash) {
+  'use strict';
   // Compute first hash.
   hash.update([97, 158]);
   var golden1 = hash.digest();
@@ -105,6 +106,7 @@ goog.crypt.hashTester.runBasicTests = function(hash) {
  * @param {number} blockBytes Size of the hash block.
  */
 goog.crypt.hashTester.runBlockTests = function(hash, blockBytes) {
+  'use strict';
   // Compute a message which is 1 byte shorter than hash block size.
   var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var message = '';
@@ -171,6 +173,7 @@ goog.crypt.hashTester.runBlockTests = function(hash, blockBytes) {
  * @param {string} hashName Name of the hashing function.
  */
 goog.crypt.hashTester.runPerfTests = function(hashFactory, hashName) {
+  'use strict';
   var body = goog.dom.getDocument().body;
   var perfTable = goog.dom.createElement(goog.dom.TagName.DIV);
   goog.dom.appendChild(body, perfTable);
@@ -184,6 +187,7 @@ goog.crypt.hashTester.runPerfTests = function(hashFactory, hashName) {
 
     function run(data, dataType) {
       table.run(function() {
+        'use strict';
         var hash = hashFactory();
         for (var i = 0; i < updateCount; i++) {
           hash.update(data, byteLength);
@@ -217,6 +221,7 @@ goog.crypt.hashTester.runPerfTests = function(hashFactory, hashName) {
  * @private
  */
 goog.crypt.hashTester.createRandomByteArray_ = function(length) {
+  'use strict';
   var random = new goog.testing.PseudoRandom(0);
   var bytes = [];
 
@@ -238,7 +243,11 @@ goog.crypt.hashTester.createRandomByteArray_ = function(length) {
  * @private
  */
 goog.crypt.hashTester.createByteString_ = function(bytes) {
+  'use strict';
   var str = '';
-  goog.array.forEach(bytes, function(b) { str += String.fromCharCode(b); });
+  goog.array.forEach(bytes, function(b) {
+    'use strict';
+    str += String.fromCharCode(b);
+  });
   return str;
 };

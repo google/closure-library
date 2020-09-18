@@ -48,12 +48,13 @@ testSuite({
     stubs.reset();
   },
 
+  /** @suppress {missingRequire} reference to fully qualified goog.Timer. */
   testModuleDecl: function() {
     // assert that goog.module doesn't modify the global namespace
-    assertUndefined(
+    assertNull(
         'module failed to protect global namespace: ' +
             'goog.baseModuleTest',
-        goog.baseModuleTest);
+        goog.getObjectByName('goog.baseModuleTest'));
   },
 
   testModuleScoping: function() {
@@ -70,6 +71,7 @@ testSuite({
     assertProvideFails('goog.baseModuleTest');  // this file.
   },
 
+  /** @suppress {visibility} */
   testProvideStrictness2: function() {
     // goog.module "provides" a namespace
     assertTrue(goog.isProvided_('goog.baseModuleTest'));
@@ -94,7 +96,7 @@ testSuite({
   },
 
   //=== tests for Require logic ===
-
+  /** @suppress {missingRequire} reference to fully qualified goog.Timer. */
   testLegacyRequire: function() {
     // goog.Timer is a legacy module loaded above
     assertNotUndefined('goog.Timer should be available', goog.Timer);
@@ -106,10 +108,13 @@ testSuite({
 
     // and its dependencies
     assertNotUndefined(
-        'goog.events.EventTarget should be available',
-        /** @suppress {missingRequire} */ goog.events.EventTarget);
+        'goog.events.EventTarget should be available', goog.events.EventTarget);
   },
 
+  /**
+   * @suppress {missingRequire, missingProperties} reference to fully qualified
+   * goog.test_module.
+   */
   testRequireModule: function() {
     assertEquals(
         'module failed to export legacy namespace: ' +
@@ -127,17 +132,5 @@ testSuite({
     // Test that any escaping of </script> in test files is correct. Escape the
     // / in </script> here so that any such code does not affect it here.
     assertEquals('<\/script>', testModule.CLOSING_SCRIPT_TAG);
-  },
-
-  testThisInModule: goog.bind(
-      function() {
-        // IE9 and below don't support "strict" mode and "undefined" gets
-        // coersed to "window".
-        if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('10')) {
-          assertEquals(this, undefined);
-        } else {
-          assertEquals(this, goog.global);
-        }
-      },
-      this),
+  }
 });

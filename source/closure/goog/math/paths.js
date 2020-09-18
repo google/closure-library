@@ -26,6 +26,7 @@ goog.require('goog.math.Path');
  * @return {!goog.math.Path} The path.
  */
 goog.math.paths.createRegularNGon = function(center, vertex, n) {
+  'use strict';
   var path = new goog.math.Path();
   path.moveTo(vertex.x, vertex.y);
 
@@ -53,6 +54,7 @@ goog.math.paths.createRegularNGon = function(center, vertex, n) {
  * @return {!goog.math.Path} The path.
  */
 goog.math.paths.createArrow = function(a, b, aHead, bHead) {
+  'use strict';
   var path = new goog.math.Path();
   path.moveTo(a.x, a.y);
   path.lineTo(b.x, b.y);

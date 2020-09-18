@@ -55,6 +55,7 @@ goog.require('goog.ui.SliderBase');
  * @extends {goog.ui.SliderBase}
  */
 goog.ui.Slider = function(opt_domHelper, opt_labelFn) {
+  'use strict';
   goog.ui.SliderBase.call(this, opt_domHelper, opt_labelFn);
   this.rangeModel.setExtent(0);
 };
@@ -93,6 +94,7 @@ goog.ui.Slider.THUMB_CSS_CLASS =
  * @override
  */
 goog.ui.Slider.prototype.getCssClass = function(orient) {
+  'use strict';
   return orient == goog.ui.SliderBase.Orientation.VERTICAL ?
       goog.getCssName(goog.ui.Slider.CSS_CLASS_PREFIX, 'vertical') :
       goog.getCssName(goog.ui.Slider.CSS_CLASS_PREFIX, 'horizontal');
@@ -105,12 +107,14 @@ goog.ui.Slider.prototype.getCssClass = function(orient) {
  * @protected
  */
 goog.ui.Slider.prototype.getThumbCssClass = function() {
+  'use strict';
   return goog.ui.Slider.THUMB_CSS_CLASS;
 };
 
 
 /** @override */
 goog.ui.Slider.prototype.createThumbs = function() {
+  'use strict';
   // find thumb
   var element = this.getElement();
   var thumb = goog.dom.getElementsByTagNameAndClass(
@@ -129,6 +133,7 @@ goog.ui.Slider.prototype.createThumbs = function() {
  * @private
  */
 goog.ui.Slider.prototype.createThumb_ = function() {
+  'use strict';
   var thumb = this.getDomHelper().createDom(
       goog.dom.TagName.DIV, this.getThumbCssClass());
   goog.a11y.aria.setRole(thumb, goog.a11y.aria.Role.BUTTON);

@@ -35,6 +35,7 @@ goog.require('goog.Timer');
  * @template T
  */
 goog.async.Debouncer = function(listener, interval, opt_handler) {
+  'use strict';
   goog.async.Debouncer.base(this, 'constructor');
 
   /**
@@ -101,6 +102,7 @@ goog.inherits(goog.async.Debouncer, goog.Disposable);
  * @param {...?} var_args Arguments to pass on to the debounced function.
  */
 goog.async.Debouncer.prototype.fire = function(var_args) {
+  'use strict';
   this.args_ = arguments;
   // When this method is called, we need to prevent fire() calls from within the
   // previous interval from calling the callback. The simplest way of doing this
@@ -121,6 +123,7 @@ goog.async.Debouncer.prototype.fire = function(var_args) {
  * calling {@link #fire}.
  */
 goog.async.Debouncer.prototype.stop = function() {
+  'use strict';
   if (this.timer_) {
     goog.Timer.clear(this.timer_);
     this.timer_ = null;
@@ -136,6 +139,7 @@ goog.async.Debouncer.prototype.stop = function() {
  * until the debouncer is resumed. Pauses can be nested.
  */
 goog.async.Debouncer.prototype.pause = function() {
+  'use strict';
   ++this.pauseCount_;
 };
 
@@ -147,6 +151,7 @@ goog.async.Debouncer.prototype.pause = function() {
  * will be executed as normal.
  */
 goog.async.Debouncer.prototype.resume = function() {
+  'use strict';
   if (!this.pauseCount_) {
     return;
   }
@@ -160,6 +165,7 @@ goog.async.Debouncer.prototype.resume = function() {
 
 /** @override */
 goog.async.Debouncer.prototype.disposeInternal = function() {
+  'use strict';
   this.stop();
   goog.async.Debouncer.base(this, 'disposeInternal');
 };
@@ -170,6 +176,7 @@ goog.async.Debouncer.prototype.disposeInternal = function() {
  * @private
  */
 goog.async.Debouncer.prototype.onTimer_ = function() {
+  'use strict';
   // There is a newer call to fire() within the debounce interval.
   // Reschedule the callback and return.
   if (this.refireAt_) {
@@ -193,6 +200,7 @@ goog.async.Debouncer.prototype.onTimer_ = function() {
  * @private
  */
 goog.async.Debouncer.prototype.doAction_ = function() {
+  'use strict';
   this.shouldFire_ = false;
   this.listener_.apply(null, this.args_);
 };

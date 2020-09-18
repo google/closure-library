@@ -60,6 +60,7 @@ goog.proto2.Serializer.prototype.serialize = goog.abstractMethod;
  * @protected
  */
 goog.proto2.Serializer.prototype.getSerializedValue = function(field, value) {
+  'use strict';
   if (field.isCompositeType()) {
     return this.serialize(/** @type {goog.proto2.Message} */ (value));
   } else if (typeof value === 'number' && !isFinite(value)) {
@@ -80,6 +81,7 @@ goog.proto2.Serializer.prototype.getSerializedValue = function(field, value) {
  * @return {!goog.proto2.Message} The message created.
  */
 goog.proto2.Serializer.prototype.deserialize = function(descriptor, data) {
+  'use strict';
   var message = descriptor.createMessageInstance();
   this.deserializeTo(message, data);
   goog.asserts.assert(message instanceof goog.proto2.Message);
@@ -112,6 +114,7 @@ goog.proto2.Serializer.prototype.deserializeTo = goog.abstractMethod;
  * @protected
  */
 goog.proto2.Serializer.prototype.getDeserializedValue = function(field, value) {
+  'use strict';
   // Composite types are deserialized recursively.
   if (field.isCompositeType()) {
     if (value instanceof goog.proto2.Message) {

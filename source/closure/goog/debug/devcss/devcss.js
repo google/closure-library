@@ -37,6 +37,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.debug.DevCss = function(opt_userAgent, opt_userAgentVersion) {
+  'use strict';
   if (!opt_userAgent) {
     // Walks through the known goog.userAgents.
     if (goog.userAgent.IE) {
@@ -113,6 +114,7 @@ goog.debug.DevCss = function(opt_userAgent, opt_userAgentVersion) {
  */
 goog.debug.DevCss.prototype.activateBrowserSpecificCssRules = function(
     opt_enableIe6ReadyHandler) {
+  'use strict';
   var enableIe6EventHandler = (opt_enableIe6ReadyHandler !== undefined) ?
       opt_enableIe6ReadyHandler :
       true;
@@ -183,6 +185,7 @@ goog.debug.DevCss.CssToken_ = {
  * @private
  */
 goog.debug.DevCss.prototype.generateUserAgentTokens_ = function() {
+  'use strict';
   this.userAgentTokens_.ANY = goog.debug.DevCss.CssToken_.USERAGENT +
       goog.debug.DevCss.CssToken_.SEPARATOR + this.userAgent_;
   this.userAgentTokens_.EQUALS =
@@ -211,6 +214,7 @@ goog.debug.DevCss.prototype.generateUserAgentTokens_ = function() {
  */
 goog.debug.DevCss.prototype.getVersionNumberFromSelectorText_ = function(
     selectorText, userAgentToken) {
+  'use strict';
   var regex = new RegExp(userAgentToken + '([\\d\\.]+)');
   var matches = regex.exec(selectorText);
   if (matches && matches.length == 2) {
@@ -231,6 +235,7 @@ goog.debug.DevCss.prototype.getVersionNumberFromSelectorText_ = function(
  */
 goog.debug.DevCss.prototype.getRuleVersionAndCompare_ = function(
     cssRule, token) {
+  'use strict';
   if (!cssRule.selectorText || !cssRule.selectorText.match(token)) {
     return;
   }
@@ -256,7 +261,7 @@ goog.debug.DevCss.prototype.getRuleVersionAndCompare_ = function(
  */
 goog.debug.DevCss.prototype.replaceBrowserSpecificClassNames_ = function(
     cssRule) {
-
+  'use strict';
   // If we don't match the browser token, we can stop now.
   if (!cssRule.selectorText ||
       !cssRule.selectorText.match(this.userAgentTokens_.ANY)) {
@@ -351,6 +356,7 @@ goog.debug.DevCss.prototype.replaceBrowserSpecificClassNames_ = function(
  * @private
  */
 goog.debug.DevCss.prototype.replaceIe6CombinedSelectors_ = function(cssRule) {
+  'use strict';
   // This match only ever works in IE because other UA's won't have our
   // IE6_SELECTOR_TEXT in the cssText property.
   if (cssRule.style && cssRule.style.cssText &&
@@ -379,6 +385,7 @@ goog.debug.DevCss.prototype.replaceIe6CombinedSelectors_ = function(cssRule) {
  * @private
  */
 goog.debug.DevCss.prototype.getIe6CombinedSelectorText_ = function(cssText) {
+  'use strict';
   var regex = new RegExp(
       goog.debug.DevCss.CssToken_.IE6_SELECTOR_TEXT +
           '\\s*:\\s*\\"([^\\"]+)\\"',
@@ -413,6 +420,7 @@ goog.debug.DevCss.prototype.getIe6CombinedSelectorText_ = function(cssText) {
  * @private
  */
 goog.debug.DevCss.prototype.addIe6CombinedClassNames_ = function() {
+  'use strict';
   if (!this.ie6CombinedMatches_.length) {
     return;
   }

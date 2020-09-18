@@ -7,6 +7,7 @@
 goog.module('goog.ui.ac.RichRemoteArrayMatcherTest');
 goog.setTestOnly();
 
+const ArgumentMatcher = goog.require('goog.testing.mockmatchers.ArgumentMatcher');
 const MockControl = goog.require('goog.testing.MockControl');
 const NetXhrIo = goog.require('goog.testing.net.XhrIo');
 const RichRemoteArrayMatcher = goog.require('goog.ui.ac.RichRemoteArrayMatcher');
@@ -18,8 +19,26 @@ const url = 'http://www.google.com';
 const token = 'goog';
 const maxMatches = 5;
 
-const responseJsonText = '[["type1", "eric", "larry", "sergey"]]';
-const responseJsonType1 = ['eric', 'larry', 'sergey'];
+const responseJsonText =
+    '[["type1", {"name":"eric"}, {"name":"larry"}, {"name":"sergey"}]]';
+// This matcher is used to match the value used in the `matchHandler` callback
+// in tests.
+// The `RichRemoteArrayMatcher` takes in the parsed `responseJsonTest`
+// above and augments each object within the array with methods that it defines.
+// By default mocks do === comparison between the expected and actual value,
+// so to avoid copying those method implementations into the test, we instead
+// implement a matcher that checks to see that the value given to the callback
+// is roughly what we expected it to be: an array whose objects have the names
+// listed above.
+// Effectively, this is structurally matching the following:
+// [{name: 'eric'},{name:'larry'},{name:'sergey'}]
+const ignoresRenderAndSelectMatcher = new ArgumentMatcher((arg) => {
+  if (!Array.isArray(arg)) {
+    return false;
+  }
+  return arg[0].name === 'eric' && arg[1].name === 'larry' &&
+      arg[2].name === 'sergey';
+}, 'matchesType1');
 
 let mockControl;
 let mockMatchHandler;
@@ -42,7 +61,7 @@ testSuite({
 
   testRequestMatchingRows() {
     const matcher = new RichRemoteArrayMatcher(url);
-    mockMatchHandler(token, responseJsonType1);
+    mockMatchHandler(token, ignoresRenderAndSelectMatcher);
     mockControl.$replayAll();
     matcher.requestMatchingRows(token, maxMatches, mockMatchHandler);
     matcher.xhr_.simulateResponse(200, responseJsonText);
@@ -56,7 +75,7 @@ testSuite({
       assertEquals('type1', type);
       return response;
     });
-    mockMatchHandler(token, responseJsonType1);
+    mockMatchHandler(token, ignoresRenderAndSelectMatcher);
     mockControl.$replayAll();
     matcher.requestMatchingRows(token, maxMatches, mockMatchHandler);
     matcher.xhr_.simulateResponse(200, responseJsonText);

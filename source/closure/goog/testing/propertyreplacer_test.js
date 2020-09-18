@@ -322,7 +322,7 @@ testSuite({
 
   // Test PropertyReplacer trying to override a sealed property.
   testSealedProperties() {
-    if (!goog.isFunction(Object.seal)) {
+    if (typeof Object.seal !== 'function') {
       return;
     }
 
@@ -372,7 +372,7 @@ testSuite({
 
   // Test PropertyReplacer trying to override a frozen property.
   testFrozenProperty() {
-    if (!goog.isFunction(Object.freeze)) {
+    if (typeof Object.freeze !== 'function') {
       return;
     }
 

@@ -117,6 +117,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.events.KeyHandler = function(opt_element, opt_capture) {
+  'use strict';
   goog.events.EventTarget.call(this);
 
   if (opt_element) {
@@ -292,6 +293,7 @@ goog.events.KeyHandler.SAVE_ALT_FOR_KEYPRESS_ =
  * @private
  */
 goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
+  'use strict';
   // Ctrl-Tab and Alt-Tab can cause the focus to be moved to another window
   // before we've caught a key-up event.  If the last-key was one of these we
   // reset the state.
@@ -334,6 +336,7 @@ goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
  * when having finished with repeat key possibilities.
  */
 goog.events.KeyHandler.prototype.resetState = function() {
+  'use strict';
   this.lastKey_ = -1;
   this.keyCode_ = -1;
 };
@@ -347,6 +350,7 @@ goog.events.KeyHandler.prototype.resetState = function() {
  * @private
  */
 goog.events.KeyHandler.prototype.handleKeyup_ = function(e) {
+  'use strict';
   this.resetState();
   this.altKey_ = e.altKey;
 };
@@ -358,6 +362,7 @@ goog.events.KeyHandler.prototype.handleKeyup_ = function(e) {
  *     browser.
  */
 goog.events.KeyHandler.prototype.handleEvent = function(e) {
+  'use strict';
   var be = e.getBrowserEvent();
   var keyCode, charCode;
   var altKey = be.altKey;
@@ -483,6 +488,7 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
  *     keyboard events.
  */
 goog.events.KeyHandler.prototype.getElement = function() {
+  'use strict';
   return this.element_;
 };
 
@@ -494,6 +500,7 @@ goog.events.KeyHandler.prototype.getElement = function() {
  *     capture phase (defaults to false).
  */
 goog.events.KeyHandler.prototype.attach = function(element, opt_capture) {
+  'use strict';
   if (this.keyUpKey_) {
     this.detach();
   }
@@ -522,6 +529,7 @@ goog.events.KeyHandler.prototype.attach = function(element, opt_capture) {
  * Removes the listeners that may exist.
  */
 goog.events.KeyHandler.prototype.detach = function() {
+  'use strict';
   if (this.keyPressKey_) {
     goog.events.unlistenByKey(this.keyPressKey_);
     goog.events.unlistenByKey(this.keyDownKey_);
@@ -538,6 +546,7 @@ goog.events.KeyHandler.prototype.detach = function() {
 
 /** @override */
 goog.events.KeyHandler.prototype.disposeInternal = function() {
+  'use strict';
   goog.events.KeyHandler.superClass_.disposeInternal.call(this);
   this.detach();
 };
@@ -556,6 +565,7 @@ goog.events.KeyHandler.prototype.disposeInternal = function() {
  * @final
  */
 goog.events.KeyEvent = function(keyCode, charCode, repeat, browserEvent) {
+  'use strict';
   goog.events.BrowserEvent.call(this, browserEvent);
   this.type = goog.events.KeyHandler.EventType.KEY;
 

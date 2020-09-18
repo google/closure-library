@@ -61,6 +61,7 @@ goog.require('goog.async.Delay');
  * @extends {goog.Disposable}
  */
 goog.async.ConditionalDelay = function(listener, opt_handler) {
+  'use strict';
   goog.async.ConditionalDelay.base(this, 'constructor');
 
   /**
@@ -108,6 +109,7 @@ goog.inherits(goog.async.ConditionalDelay, goog.Disposable);
 
 /** @override */
 goog.async.ConditionalDelay.prototype.disposeInternal = function() {
+  'use strict';
   this.delay_.dispose();
   delete this.listener_;
   delete this.handler_;
@@ -129,6 +131,7 @@ goog.async.ConditionalDelay.prototype.disposeInternal = function() {
  */
 goog.async.ConditionalDelay.prototype.start = function(
     opt_interval, opt_timeout) {
+  'use strict';
   this.stop();
   this.isDone_ = false;
 
@@ -145,6 +148,7 @@ goog.async.ConditionalDelay.prototype.start = function(
  * in use.
  */
 goog.async.ConditionalDelay.prototype.stop = function() {
+  'use strict';
   this.delay_.stop();
 };
 
@@ -153,6 +157,7 @@ goog.async.ConditionalDelay.prototype.stop = function() {
  * @return {boolean} True if the delay is currently active, false otherwise.
  */
 goog.async.ConditionalDelay.prototype.isActive = function() {
+  'use strict';
   return this.delay_.isActive();
 };
 
@@ -162,6 +167,7 @@ goog.async.ConditionalDelay.prototype.isActive = function() {
  *     `true` since the last call to {@see #start}.
  */
 goog.async.ConditionalDelay.prototype.isDone = function() {
+  'use strict';
   return this.isDone_;
 };
 
@@ -197,6 +203,7 @@ goog.async.ConditionalDelay.prototype.onFailure = function() {
  * @private
  */
 goog.async.ConditionalDelay.prototype.onTick_ = function() {
+  'use strict';
   var successful = this.listener_.call(this.handler_);
   if (successful) {
     this.isDone_ = true;

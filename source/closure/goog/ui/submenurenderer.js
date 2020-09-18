@@ -40,6 +40,7 @@ goog.requireType('goog.ui.ControlContent');
  * @extends {goog.ui.MenuItemRenderer}
  */
 goog.ui.SubMenuRenderer = function() {
+  'use strict';
   goog.ui.MenuItemRenderer.call(this);
 };
 goog.inherits(goog.ui.SubMenuRenderer, goog.ui.MenuItemRenderer);
@@ -73,6 +74,7 @@ goog.ui.SubMenuRenderer.CSS_CLASS_SUBMENU_ =
  * @override
  */
 goog.ui.SubMenuRenderer.prototype.createDom = function(control) {
+  'use strict';
   var subMenu = /** @type {goog.ui.SubMenu} */ (control);
   var element =
       goog.ui.SubMenuRenderer.superClass_.createDom.call(this, subMenu);
@@ -97,6 +99,7 @@ goog.ui.SubMenuRenderer.prototype.createDom = function(control) {
  * @override
  */
 goog.ui.SubMenuRenderer.prototype.decorate = function(control, element) {
+  'use strict';
   var subMenu = /** @type {goog.ui.SubMenu} */ (control);
   element =
       goog.ui.SubMenuRenderer.superClass_.decorate.call(this, subMenu, element);
@@ -131,6 +134,7 @@ goog.ui.SubMenuRenderer.prototype.decorate = function(control, element) {
  * @override
  */
 goog.ui.SubMenuRenderer.prototype.setContent = function(element, content) {
+  'use strict';
   // Save the submenu arrow element, if present.
   var contentElement = this.getContentElement(element);
   var arrowElement = contentElement && contentElement.lastChild;
@@ -159,6 +163,7 @@ goog.ui.SubMenuRenderer.prototype.setContent = function(element, content) {
  * @override
  */
 goog.ui.SubMenuRenderer.prototype.initializeDom = function(control) {
+  'use strict';
   var subMenu = /** @type {goog.ui.SubMenu} */ (control);
   goog.ui.SubMenuRenderer.superClass_.initializeDom.call(this, subMenu);
   var element = subMenu.getContentElement();
@@ -185,6 +190,7 @@ goog.ui.SubMenuRenderer.prototype.initializeDom = function(control) {
  * @private
  */
 goog.ui.SubMenuRenderer.prototype.addArrow_ = function(subMenu, element) {
+  'use strict';
   var arrow = subMenu.getDomHelper().createDom(goog.dom.TagName.SPAN);
   arrow.className = goog.ui.SubMenuRenderer.CSS_CLASS_SUBMENU_;
   goog.ui.SubMenuRenderer.setArrowTextContent_(subMenu, arrow);
@@ -215,6 +221,7 @@ goog.ui.SubMenuRenderer.RIGHT_ARROW_ = '\u25BA';
  * @private
  */
 goog.ui.SubMenuRenderer.setArrowTextContent_ = function(subMenu, arrow) {
+  'use strict';
   // Fix arrow rtl
   var leftArrow = goog.ui.SubMenuRenderer.LEFT_ARROW_;
   var rightArrow = goog.ui.SubMenuRenderer.RIGHT_ARROW_;

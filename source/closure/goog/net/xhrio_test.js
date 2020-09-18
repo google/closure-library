@@ -791,10 +791,10 @@ testSuite({
     progressEnabled.send('url');
     assertTrue(
         'Progress handler should be set for downloads.',
-        goog.isFunction(progressEnabled.xhr_.onprogress));
+        typeof progressEnabled.xhr_.onprogress === 'function');
     assertTrue(
         'Progress handler should be set for uploads.',
-        goog.isFunction(progressEnabled.xhr_.upload.onprogress));
+        typeof progressEnabled.xhr_.upload.onprogress === 'function');
 
     // Clean-up.
     delete MockXmlHttp.prototype.onprogress;

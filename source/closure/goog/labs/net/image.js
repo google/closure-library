@@ -34,12 +34,13 @@ goog.require('goog.userAgent');
  *     given image if the image successfully loads.
  */
 goog.labs.net.image.load = function(uri, opt_image) {
+  'use strict';
   return new goog.Promise(/** @suppress {strictPrimitiveOperators} Part of the go/strict_warnings_migration */
                           function(resolve, reject) {
     var image;
     if (opt_image === undefined) {
       image = new Image();
-    } else if (goog.isFunction(opt_image)) {
+    } else if (typeof opt_image === 'function') {
       image = opt_image();
     } else {
       image = opt_image;
@@ -58,32 +59,36 @@ goog.labs.net.image.load = function(uri, opt_image) {
         goog.net.EventType.READY_STATE_CHANGE :
         goog.events.EventType.LOAD;
 
-    var handler = new goog.events.EventHandler();
-    handler.listen(
-        image, [loadEvent, goog.net.EventType.ABORT, goog.net.EventType.ERROR],
-        function(e) {
+                 var handler = new goog.events.EventHandler();
+                 handler.listen(
+                     image,
+                     [
+                       loadEvent, goog.net.EventType.ABORT,
+                       goog.net.EventType.ERROR
+                     ],
+                     function(e) {
+                       'use strict';
+                       // We only registered listeners for READY_STATE_CHANGE
+                       // for IE. If readyState is now COMPLETE, the image has
+                       // loaded. See related comment above.
+                       if (e.type == goog.net.EventType.READY_STATE_CHANGE &&
+                           image.readyState != goog.net.EventType.COMPLETE) {
+                         return;
+                       }
 
-          // We only registered listeners for READY_STATE_CHANGE for IE.
-          // If readyState is now COMPLETE, the image has loaded.
-          // See related comment above.
-          if (e.type == goog.net.EventType.READY_STATE_CHANGE &&
-              image.readyState != goog.net.EventType.COMPLETE) {
-            return;
-          }
+                       // At this point, we know whether the image load was
+                       // successful and no longer care about image events.
+                       goog.dispose(handler);
 
-          // At this point, we know whether the image load was successful
-          // and no longer care about image events.
-          goog.dispose(handler);
+                       // Whether the image successfully loaded.
+                       if (e.type == loadEvent) {
+                         resolve(image);
+                       } else {
+                         reject(null);
+                       }
+                     });
 
-          // Whether the image successfully loaded.
-          if (e.type == loadEvent) {
-            resolve(image);
-          } else {
-            reject(null);
-          }
-        });
-
-    // Initiate the image request.
-    goog.dom.safe.setImageSrc(image, uri);
-  });
+                 // Initiate the image request.
+                 goog.dom.safe.setImageSrc(image, uri);
+               });
 };

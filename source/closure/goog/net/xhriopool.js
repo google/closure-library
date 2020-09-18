@@ -31,6 +31,7 @@ goog.requireType('goog.structs.Map');
  */
 goog.net.XhrIoPool = function(
     opt_headers, opt_minCount, opt_maxCount, opt_withCredentials) {
+  'use strict';
   /**
    * Map of default headers to add to every request.
    * @type {goog.structs.Map|undefined}
@@ -65,10 +66,14 @@ goog.inherits(goog.net.XhrIoPool, goog.structs.PriorityPool);
  * @override
  */
 goog.net.XhrIoPool.prototype.createObject = function() {
+  'use strict';
   var xhrIo = new goog.net.XhrIo();
   var headers = this.headers_;
   if (headers) {
-    headers.forEach(function(value, key) { xhrIo.headers.set(key, value); });
+    headers.forEach(function(value, key) {
+      'use strict';
+      xhrIo.headers.set(key, value);
+    });
   }
   if (this.withCredentials_) {
     xhrIo.setWithCredentials(true);
@@ -85,6 +90,7 @@ goog.net.XhrIoPool.prototype.createObject = function() {
  * @override
  */
 goog.net.XhrIoPool.prototype.objectCanBeReused = function(obj) {
+  'use strict';
   // An active XhrIo object should never be used.
   var xhr = /** @type {goog.net.XhrIo} */ (obj);
   return !xhr.isDisposed() && !xhr.isActive();

@@ -55,6 +55,7 @@ goog.requireType('goog.i18n.bidi.Dir');
  */
 goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract =
     function(justification, html, opt_dir) {
+  'use strict';
   // unwrap() called inside an assert so that justification can be optimized
   // away in production code.
   goog.asserts.assertString(
@@ -86,6 +87,7 @@ goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract =
  */
 goog.html.uncheckedconversions.safeScriptFromStringKnownToSatisfyTypeContract =
     function(justification, script) {
+  'use strict';
   // unwrap() called inside an assert so that justification can be optimized
   // away in production code.
   goog.asserts.assertString(
@@ -117,6 +119,7 @@ goog.html.uncheckedconversions.safeScriptFromStringKnownToSatisfyTypeContract =
  */
 goog.html.uncheckedconversions.safeStyleFromStringKnownToSatisfyTypeContract =
     function(justification, style) {
+  'use strict';
   // unwrap() called inside an assert so that justification can be optimized
   // away in production code.
   goog.asserts.assertString(
@@ -149,6 +152,7 @@ goog.html.uncheckedconversions.safeStyleFromStringKnownToSatisfyTypeContract =
 goog.html.uncheckedconversions
     .safeStyleSheetFromStringKnownToSatisfyTypeContract = function(
     justification, styleSheet) {
+  'use strict';
   // unwrap() called inside an assert so that justification can be optimized
   // away in production code.
   goog.asserts.assertString(
@@ -180,6 +184,7 @@ goog.html.uncheckedconversions
  */
 goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract =
     function(justification, url) {
+  'use strict';
   // unwrap() called inside an assert so that justification can be optimized
   // away in production code.
   goog.asserts.assertString(
@@ -211,6 +216,7 @@ goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract =
 goog.html.uncheckedconversions
     .trustedResourceUrlFromStringKnownToSatisfyTypeContract = function(
     justification, url) {
+  'use strict';
   // unwrap() called inside an assert so that justification can be optimized
   // away in production code.
   goog.asserts.assertString(

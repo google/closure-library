@@ -35,6 +35,7 @@ goog.requireType('goog.ui.ControlContent');
  * @extends {goog.ui.Control}
  */
 goog.ui.Tab = function(content, opt_renderer, opt_domHelper) {
+  'use strict';
   goog.ui.Control.call(
       this, content, opt_renderer || goog.ui.TabRenderer.getInstance(),
       opt_domHelper);
@@ -63,6 +64,7 @@ goog.ui.Tab.prototype.tooltip_;
  * @return {string|undefined} Tab tooltip text (if any).
  */
 goog.ui.Tab.prototype.getTooltip = function() {
+  'use strict';
   return this.tooltip_;
 };
 
@@ -73,6 +75,7 @@ goog.ui.Tab.prototype.getTooltip = function() {
  * @param {string} tooltip New tooltip text.
  */
 goog.ui.Tab.prototype.setTooltip = function(tooltip) {
+  'use strict';
   this.getRenderer().setTooltip(this.getElement(), tooltip);
   this.setTooltipInternal(tooltip);
 };
@@ -85,11 +88,14 @@ goog.ui.Tab.prototype.setTooltip = function(tooltip) {
  * @protected
  */
 goog.ui.Tab.prototype.setTooltipInternal = function(tooltip) {
+  'use strict';
   this.tooltip_ = tooltip;
 };
 
 
 // Register a decorator factory function for goog.ui.Tabs.
 goog.ui.registry.setDecoratorByClassName(
-    goog.ui.TabRenderer.CSS_CLASS,
-    function() { return new goog.ui.Tab(null); });
+    goog.ui.TabRenderer.CSS_CLASS, function() {
+      'use strict';
+      return new goog.ui.Tab(null);
+    });

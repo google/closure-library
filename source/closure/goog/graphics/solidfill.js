@@ -31,6 +31,7 @@ goog.require('goog.graphics.Fill');
  *     http://en.wikipedia.org/wiki/Canvas_element for details.
  */
 goog.graphics.SolidFill = function(color, opt_opacity) {
+  'use strict';
   /**
    * The color with which to fill.
    * @type {string}
@@ -53,6 +54,7 @@ goog.inherits(goog.graphics.SolidFill, goog.graphics.Fill);
  * @return {string} The color of this fill.
  */
 goog.graphics.SolidFill.prototype.getColor = function() {
+  'use strict';
   return this.color_;
 };
 
@@ -61,5 +63,6 @@ goog.graphics.SolidFill.prototype.getColor = function() {
  * @return {number} The opacity of this fill.
  */
 goog.graphics.SolidFill.prototype.getOpacity = function() {
+  'use strict';
   return this.opacity_;
 };

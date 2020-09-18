@@ -60,6 +60,7 @@ goog.html.silverlight.FORBIDDEN_ATTRS_AND_PARAMS_ON_SILVERLIGHT_ = [
  */
 goog.html.silverlight.createObject = function(
     source, opt_params, opt_attributes) {
+  'use strict';
   goog.html.flash.verifyKeysNotInMaps(
       goog.html.silverlight.FORBIDDEN_ATTRS_AND_PARAMS_ON_SILVERLIGHT_,
       opt_attributes, opt_params);

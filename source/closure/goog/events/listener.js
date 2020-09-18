@@ -30,6 +30,7 @@ goog.requireType('goog.events.Listenable');
  */
 goog.events.Listener = function(
     listener, proxy, src, type, capture, opt_handler) {
+  'use strict';
   if (goog.events.Listener.ENABLE_MONITORING) {
     this.creationStack = new Error().stack;
   }
@@ -114,6 +115,7 @@ goog.events.Listener.prototype.creationStack;
  * this listener object (such as listener and event source).
  */
 goog.events.Listener.prototype.markAsRemoved = function() {
+  'use strict';
   this.removed = true;
   this.listener = null;
   this.proxy = null;

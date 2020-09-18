@@ -34,6 +34,7 @@ goog.require('goog.crypt.Sha2_64bit');
  * @struct
  */
 goog.crypt.Sha512_256 = function() {
+  'use strict';
   goog.crypt.Sha512_256.base(
       this, 'constructor', 4 /* numHashBlocks */,
       goog.crypt.Sha512_256.INIT_HASH_BLOCK_);

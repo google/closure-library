@@ -45,6 +45,7 @@ goog.requireType('goog.events.Event');
  */
 goog.ds.JsXmlHttpDataSource = function(
     uri, name, opt_startText, opt_endText, opt_usePost) {
+  'use strict';
   goog.ds.FastDataNode.call(this, {}, name, null);
   if (uri) {
     this.uri_ = new goog.Uri(uri);
@@ -86,6 +87,7 @@ goog.ds.JsXmlHttpDataSource.prototype.endText_;
  * @override
  */
 goog.ds.JsXmlHttpDataSource.prototype.getLoadState = function() {
+  'use strict';
   return this.loadState_;
 };
 
@@ -97,6 +99,7 @@ goog.ds.JsXmlHttpDataSource.prototype.getLoadState = function() {
  * @param {string} data The data to send in the request body.
  */
 goog.ds.JsXmlHttpDataSource.prototype.setQueryData = function(data) {
+  'use strict';
   this.queryData_ = data;
 };
 
@@ -107,9 +110,11 @@ goog.ds.JsXmlHttpDataSource.prototype.setQueryData = function(data) {
  * @override
  */
 goog.ds.JsXmlHttpDataSource.prototype.load = function() {
+  'use strict';
   goog.log.info(
-      goog.ds.logger, 'Sending JS request for DataSource ' +
-          this.getDataName() + ' to ' + this.uri_);
+      goog.ds.logger,
+      'Sending JS request for DataSource ' + this.getDataName() + ' to ' +
+          this.uri_);
 
   if (this.uri_) {
     if (this.usePost_) {
@@ -137,6 +142,7 @@ goog.ds.JsXmlHttpDataSource.prototype.load = function() {
  * @private
  */
 goog.ds.JsXmlHttpDataSource.prototype.success_ = function() {
+  'use strict';
   goog.ds.DataManager.getInstance().fireDataChange(this.getDataName());
 };
 
@@ -148,6 +154,7 @@ goog.ds.JsXmlHttpDataSource.prototype.success_ = function() {
  * @private
  */
 goog.ds.JsXmlHttpDataSource.prototype.completed_ = function(e) {
+  'use strict';
   if (this.xhr_.isSuccess()) {
     goog.log.info(
         goog.ds.logger, 'Got data for DataSource ' + this.getDataName());

@@ -36,6 +36,7 @@ goog.requireType('goog.dom.AbstractRange');
  * @final
  */
 goog.testing.editor.FieldMock = function(opt_window, opt_appWindow, opt_range) {
+  'use strict';
   goog.testing.LooseMock.call(this, goog.editor.Field);
   opt_window = opt_window || window;
   opt_appWindow = opt_appWindow || opt_window;
@@ -51,6 +52,7 @@ goog.testing.editor.FieldMock = function(opt_window, opt_appWindow, opt_range) {
   thisField.getRange();
   this.$anyTimes();
   this.$does(function() {
+    'use strict';
     return opt_range || goog.dom.Range.createFromWindow(opt_window);
   });
 
@@ -69,6 +71,7 @@ goog.testing.editor.FieldMock = function(opt_window, opt_appWindow, opt_range) {
       /** @type {?} */ (goog.testing.mockmatchers.ignoreArgument));
   this.$anyTimes();
   this.$does(function(range) {
+    'use strict';
     if (range) {
       range.restore();
     }
@@ -82,23 +85,35 @@ goog.testing.editor.FieldMock = function(opt_window, opt_appWindow, opt_range) {
   /**
    * @return {boolean} Whether we're in modal interaction mode.
    */
-  this.inModalMode = function() { return inModalMode; };
+  this.inModalMode = function() {
+    'use strict';
+    return inModalMode;
+  };
 
   /**
    * @param {boolean} mode Sets whether we're in modal interaction mode.
    */
-  this.setModalMode = function(mode) { inModalMode = mode; };
+  this.setModalMode = function(mode) {
+    'use strict';
+    inModalMode = mode;
+  };
 
   var uneditable = false;
 
   /**
    * @return {boolean} Whether the field is uneditable.
    */
-  this.isUneditable = function() { return uneditable; };
+  this.isUneditable = function() {
+    'use strict';
+    return uneditable;
+  };
 
   /**
    * @param {boolean} isUneditable Whether the field is uneditable.
    */
-  this.setUneditable = function(isUneditable) { uneditable = isUneditable; };
+  this.setUneditable = function(isUneditable) {
+    'use strict';
+    uneditable = isUneditable;
+  };
 };
 goog.inherits(goog.testing.editor.FieldMock, goog.testing.LooseMock);

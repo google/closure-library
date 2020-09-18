@@ -55,6 +55,7 @@ goog.debug.Loggable;
  * @final
  */
 goog.debug.Logger = function(name) {
+  'use strict';
   /**
    * Name of the Logger. Generally a dot-separated namespace
    * @private {string}
@@ -156,6 +157,7 @@ if (!goog.debug.Logger.ENABLE_HIERARCHY) {
  * @final
  */
 goog.debug.Logger.Level = function(name, value) {
+  'use strict';
   /**
    * The name of the level
    * @type {string}
@@ -175,6 +177,7 @@ goog.debug.Logger.Level = function(name, value) {
  * @override
  */
 goog.debug.Logger.Level.prototype.toString = function() {
+  'use strict';
   return this.name;
 };
 
@@ -287,6 +290,7 @@ goog.debug.Logger.Level.predefinedLevelsCache_ = null;
  * @private
  */
 goog.debug.Logger.Level.createPredefinedLevelsCache_ = function() {
+  'use strict';
   goog.debug.Logger.Level.predefinedLevelsCache_ = {};
   for (var i = 0, level; level = goog.debug.Logger.Level.PREDEFINED_LEVELS[i];
        i++) {
@@ -302,6 +306,7 @@ goog.debug.Logger.Level.createPredefinedLevelsCache_ = function() {
  * @return {goog.debug.Logger.Level} The level, or null if none found.
  */
 goog.debug.Logger.Level.getPredefinedLevel = function(name) {
+  'use strict';
   if (!goog.debug.Logger.Level.predefinedLevelsCache_) {
     goog.debug.Logger.Level.createPredefinedLevelsCache_();
   }
@@ -316,6 +321,7 @@ goog.debug.Logger.Level.getPredefinedLevel = function(name) {
  * @return {goog.debug.Logger.Level} The level, or null if none found.
  */
 goog.debug.Logger.Level.getPredefinedLevelByValue = function(value) {
+  'use strict';
   if (!goog.debug.Logger.Level.predefinedLevelsCache_) {
     goog.debug.Logger.Level.createPredefinedLevelsCache_();
   }
@@ -350,6 +356,7 @@ goog.debug.Logger.Level.getPredefinedLevelByValue = function(value) {
  * @deprecated use {@link goog.log} instead.
  */
 goog.debug.Logger.getLogger = function(name) {
+  'use strict';
   return goog.debug.LogManager.getLogger(name);
 };
 
@@ -361,6 +368,7 @@ goog.debug.Logger.getLogger = function(name) {
  * @param {string} msg The message to log.
  */
 goog.debug.Logger.logToProfilers = function(msg) {
+  'use strict';
   // Some browsers also log timeStamp calls to the console, only log
   // if actually asked.
   if (goog.debug.Logger.ENABLE_PROFILER_LOGGING) {
@@ -387,6 +395,7 @@ goog.debug.Logger.logToProfilers = function(msg) {
  * @return {string} The name of this logger.
  */
 goog.debug.Logger.prototype.getName = function() {
+  'use strict';
   return this.name_;
 };
 
@@ -397,6 +406,7 @@ goog.debug.Logger.prototype.getName = function() {
  * @param {Function} handler Handler function to add.
  */
 goog.debug.Logger.prototype.addHandler = function(handler) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     if (goog.debug.Logger.ENABLE_HIERARCHY) {
       if (!this.handlers_) {
@@ -420,6 +430,7 @@ goog.debug.Logger.prototype.addHandler = function(handler) {
  * @return {boolean} Whether the handler was removed.
  */
 goog.debug.Logger.prototype.removeHandler = function(handler) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     var handlers = goog.debug.Logger.ENABLE_HIERARCHY ?
         this.handlers_ :
@@ -436,6 +447,7 @@ goog.debug.Logger.prototype.removeHandler = function(handler) {
  * @return {goog.debug.Logger} The parent logger or null if this is the root.
  */
 goog.debug.Logger.prototype.getParent = function() {
+  'use strict';
   return this.parent_;
 };
 
@@ -446,6 +458,7 @@ goog.debug.Logger.prototype.getParent = function() {
  *     values are the Logger objects.
  */
 goog.debug.Logger.prototype.getChildren = function() {
+  'use strict';
   if (!this.children_) {
     this.children_ = {};
   }
@@ -463,6 +476,7 @@ goog.debug.Logger.prototype.getChildren = function() {
  * @param {goog.debug.Logger.Level} level The new level.
  */
 goog.debug.Logger.prototype.setLevel = function(level) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     if (goog.debug.Logger.ENABLE_HIERARCHY) {
       this.level_ = level;
@@ -486,6 +500,7 @@ goog.debug.Logger.prototype.setLevel = function(level) {
  * @return {goog.debug.Logger.Level} The level.
  */
 goog.debug.Logger.prototype.getLevel = function() {
+  'use strict';
   return goog.debug.LOGGING_ENABLED ? this.level_ : goog.debug.Logger.Level.OFF;
 };
 
@@ -495,6 +510,7 @@ goog.debug.Logger.prototype.getLevel = function() {
  * @return {goog.debug.Logger.Level} The level.
  */
 goog.debug.Logger.prototype.getEffectiveLevel = function() {
+  'use strict';
   if (!goog.debug.LOGGING_ENABLED) {
     return goog.debug.Logger.Level.OFF;
   }
@@ -521,6 +537,7 @@ goog.debug.Logger.prototype.getEffectiveLevel = function() {
  * @return {boolean} Whether the message would be logged.
  */
 goog.debug.Logger.prototype.isLoggable = function(level) {
+  'use strict';
   return goog.debug.LOGGING_ENABLED &&
       level.value >= this.getEffectiveLevel().value;
 };
@@ -536,10 +553,11 @@ goog.debug.Logger.prototype.isLoggable = function(level) {
  *     message.
  */
 goog.debug.Logger.prototype.log = function(level, msg, opt_exception) {
+  'use strict';
   // java caches the effective level, not sure it's necessary here
   if (goog.debug.LOGGING_ENABLED && this.isLoggable(level)) {
     // Message callbacks can be useful when a log message is expensive to build.
-    if (goog.isFunction(msg)) {
+    if (typeof msg === 'function') {
       msg = msg();
     }
 
@@ -558,6 +576,7 @@ goog.debug.Logger.prototype.log = function(level, msg, opt_exception) {
  * @suppress {es5Strict}
  */
 goog.debug.Logger.prototype.getLogRecord = function(level, msg, opt_exception) {
+  'use strict';
   if (goog.debug.LogBuffer.isBufferingEnabled()) {
     var logRecord =
         goog.debug.LogBuffer.getInstance().addRecord(level, msg, this.name_);
@@ -579,6 +598,7 @@ goog.debug.Logger.prototype.getLogRecord = function(level, msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.shout = function(msg, opt_exception) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     this.log(goog.debug.Logger.Level.SHOUT, msg, opt_exception);
   }
@@ -593,6 +613,7 @@ goog.debug.Logger.prototype.shout = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.severe = function(msg, opt_exception) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     this.log(goog.debug.Logger.Level.SEVERE, msg, opt_exception);
   }
@@ -607,6 +628,7 @@ goog.debug.Logger.prototype.severe = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.warning = function(msg, opt_exception) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     this.log(goog.debug.Logger.Level.WARNING, msg, opt_exception);
   }
@@ -621,6 +643,7 @@ goog.debug.Logger.prototype.warning = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.info = function(msg, opt_exception) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     this.log(goog.debug.Logger.Level.INFO, msg, opt_exception);
   }
@@ -635,6 +658,7 @@ goog.debug.Logger.prototype.info = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.config = function(msg, opt_exception) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     this.log(goog.debug.Logger.Level.CONFIG, msg, opt_exception);
   }
@@ -649,6 +673,7 @@ goog.debug.Logger.prototype.config = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.fine = function(msg, opt_exception) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     this.log(goog.debug.Logger.Level.FINE, msg, opt_exception);
   }
@@ -663,6 +688,7 @@ goog.debug.Logger.prototype.fine = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.finer = function(msg, opt_exception) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     this.log(goog.debug.Logger.Level.FINER, msg, opt_exception);
   }
@@ -677,6 +703,7 @@ goog.debug.Logger.prototype.finer = function(msg, opt_exception) {
  * @param {Error=} opt_exception An exception associated with the message.
  */
 goog.debug.Logger.prototype.finest = function(msg, opt_exception) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED) {
     this.log(goog.debug.Logger.Level.FINEST, msg, opt_exception);
   }
@@ -690,6 +717,7 @@ goog.debug.Logger.prototype.finest = function(msg, opt_exception) {
  * @param {goog.debug.LogRecord} logRecord A log record to log.
  */
 goog.debug.Logger.prototype.logRecord = function(logRecord) {
+  'use strict';
   if (goog.debug.LOGGING_ENABLED && this.isLoggable(logRecord.getLevel())) {
     this.doLogRecord_(logRecord);
   }
@@ -702,6 +730,7 @@ goog.debug.Logger.prototype.logRecord = function(logRecord) {
  * @private
  */
 goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
+  'use strict';
   if (goog.debug.Logger.ENABLE_PROFILER_LOGGING) {
     goog.debug.Logger.logToProfilers('log:' + logRecord.getMessage());
   }
@@ -725,6 +754,7 @@ goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
  * @private
  */
 goog.debug.Logger.prototype.callPublish_ = function(logRecord) {
+  'use strict';
   if (this.handlers_) {
     for (var i = 0, handler; handler = this.handlers_[i]; i++) {
       handler(logRecord);
@@ -739,6 +769,7 @@ goog.debug.Logger.prototype.callPublish_ = function(logRecord) {
  * @private
  */
 goog.debug.Logger.prototype.setParent_ = function(parent) {
+  'use strict';
   this.parent_ = parent;
 };
 
@@ -750,6 +781,7 @@ goog.debug.Logger.prototype.setParent_ = function(parent) {
  * @private
  */
 goog.debug.Logger.prototype.addChild_ = function(name, logger) {
+  'use strict';
   this.getChildren()[name] = logger;
 };
 
@@ -784,6 +816,7 @@ goog.debug.LogManager.rootLogger_ = null;
  * Initializes the LogManager if not already initialized.
  */
 goog.debug.LogManager.initialize = function() {
+  'use strict';
   if (!goog.debug.LogManager.rootLogger_) {
     goog.debug.LogManager.rootLogger_ =
         new goog.debug.Logger(goog.debug.Logger.ROOT_LOGGER_NAME);
@@ -800,6 +833,7 @@ goog.debug.LogManager.initialize = function() {
  *     objects.
  */
 goog.debug.LogManager.getLoggers = function() {
+  'use strict';
   return goog.debug.LogManager.loggers_;
 };
 
@@ -811,6 +845,7 @@ goog.debug.LogManager.getLoggers = function() {
  * @return {!goog.debug.Logger} The root logger.
  */
 goog.debug.LogManager.getRoot = function() {
+  'use strict';
   goog.debug.LogManager.initialize();
   return /** @type {!goog.debug.Logger} */ (goog.debug.LogManager.rootLogger_);
 };
@@ -825,6 +860,7 @@ goog.debug.LogManager.getRoot = function() {
  * @return {!goog.debug.Logger} The named logger.
  */
 goog.debug.LogManager.getLogger = function(name) {
+  'use strict';
   goog.debug.LogManager.initialize();
   var ret = goog.debug.LogManager.loggers_[name];
   return ret || goog.debug.LogManager.createLogger_(name);
@@ -839,7 +875,9 @@ goog.debug.LogManager.getLogger = function(name) {
  * @return {function(Object)} The created function.
  */
 goog.debug.LogManager.createFunctionForCatchErrors = function(opt_logger) {
+  'use strict';
   return function(info) {
+    'use strict';
     var logger = opt_logger || goog.debug.LogManager.getRoot();
     logger.severe(
         'Error: ' + info.message + ' (' + info.fileName + ' @ Line: ' +
@@ -856,6 +894,7 @@ goog.debug.LogManager.createFunctionForCatchErrors = function(opt_logger) {
  * @private
  */
 goog.debug.LogManager.createLogger_ = function(name) {
+  'use strict';
   // find parent logger
   var logger = new goog.debug.Logger(name);
   if (goog.debug.Logger.ENABLE_HIERARCHY) {

@@ -37,6 +37,7 @@ goog.requireType('goog.ui.ControlContent');
  * @extends {goog.ui.FlatButtonRenderer}
  */
 goog.ui.FlatMenuButtonRenderer = function() {
+  'use strict';
   goog.ui.FlatButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.FlatMenuButtonRenderer, goog.ui.FlatButtonRenderer);
@@ -70,6 +71,7 @@ goog.ui.FlatMenuButtonRenderer.CSS_CLASS =
  * @override
  */
 goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(control) {
+  'use strict';
   var button = /** @type {goog.ui.Button} */ (control);
   var classNames = this.getClassNames(button);
   var element = button.getDomHelper().createDom(
@@ -92,6 +94,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.createDom = function(control) {
  * @override
  */
 goog.ui.FlatMenuButtonRenderer.prototype.getContentElement = function(element) {
+  'use strict';
   return element && /** @type {Element} */ (element.firstChild);
 };
 
@@ -107,6 +110,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.getContentElement = function(element) {
  * @override
  */
 goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
+  'use strict';
   // TODO(user): MenuButtonRenderer uses the exact same code.
   // Refactor this block to its own module where both can use it.
   var menuElem = goog.dom.getElementsByTagNameAndClass(
@@ -160,8 +164,10 @@ goog.ui.FlatMenuButtonRenderer.prototype.decorate = function(button, element) {
  */
 goog.ui.FlatMenuButtonRenderer.prototype.createCaption = function(
     content, dom) {
+  'use strict';
   return dom.createDom(
-      goog.dom.TagName.DIV, goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
+      goog.dom.TagName.DIV,
+      goog.ui.INLINE_BLOCK_CLASSNAME + ' ' +
           goog.getCssName(this.getCssClass(), 'caption'),
       content);
 };
@@ -179,6 +185,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.createCaption = function(
  * @return {!Element} Dropdown element.
  */
 goog.ui.FlatMenuButtonRenderer.prototype.createDropdown = function(dom) {
+  'use strict';
   // 00A0 is &nbsp;
   return dom.createDom(
       goog.dom.TagName.DIV, {
@@ -197,6 +204,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.createDropdown = function(dom) {
  * @override
  */
 goog.ui.FlatMenuButtonRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.FlatMenuButtonRenderer.CSS_CLASS;
 };
 
@@ -204,6 +212,7 @@ goog.ui.FlatMenuButtonRenderer.prototype.getCssClass = function() {
 // Register a decorator factory function for Flat Menu Buttons.
 goog.ui.registry.setDecoratorByClassName(
     goog.ui.FlatMenuButtonRenderer.CSS_CLASS, function() {
+      'use strict';
       // Uses goog.ui.MenuButton, but with FlatMenuButtonRenderer.
       return new goog.ui.MenuButton(
           null, null, goog.ui.FlatMenuButtonRenderer.getInstance());

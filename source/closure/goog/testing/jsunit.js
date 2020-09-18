@@ -134,7 +134,7 @@ goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS =
   window["__onerror_at_boot"] = window["__onerror_at_boot"] || null;
   /**
    * The arguments for any call to window.onerror occuring before this point.
-   * @type {Array<!Array<?>>} */
+   * @type {?Array<!Array<?>>} */
   window["__errors_since_boot"] = window["__errors_since_boot"] || null;
 
   if (window["__onerror_at_boot"]) {

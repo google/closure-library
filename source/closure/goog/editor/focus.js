@@ -19,6 +19,7 @@ goog.require('goog.dom.selection');
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.editor.focus.focusInputField = function(inputElem) {
+  'use strict';
   inputElem.focus();
   goog.dom.selection.setCursorPosition(inputElem, inputElem.value.length);
 };

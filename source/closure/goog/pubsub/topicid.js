@@ -39,6 +39,7 @@ goog.provide('goog.pubsub.TopicId');
  * @struct
  */
 goog.pubsub.TopicId = function(topicId) {
+  'use strict';
   /**
    * @const
    * @private
@@ -49,5 +50,6 @@ goog.pubsub.TopicId = function(topicId) {
 
 /** @override */
 goog.pubsub.TopicId.prototype.toString = function() {
+  'use strict';
   return this.topicId_;
 };

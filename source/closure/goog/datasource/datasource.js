@@ -173,6 +173,7 @@ goog.ds.BaseDataNode.prototype.set = goog.abstractMethod;
  * @return {!goog.ds.DataNodeList} The child nodes.
  */
 goog.ds.BaseDataNode.prototype.getChildNodes = function(opt_selector) {
+  'use strict';
   return new goog.ds.EmptyNodeList();
 };
 
@@ -186,6 +187,7 @@ goog.ds.BaseDataNode.prototype.getChildNodes = function(opt_selector) {
  *     this name exists and opt_create is false.
  */
 goog.ds.BaseDataNode.prototype.getChildNode = function(name, opt_canCreate) {
+  'use strict';
   return null;
 };
 
@@ -197,6 +199,7 @@ goog.ds.BaseDataNode.prototype.getChildNode = function(name, opt_canCreate) {
  *     child node doesn't exist.
  */
 goog.ds.BaseDataNode.prototype.getChildNodeValue = function(name) {
+  'use strict';
   return null;
 };
 
@@ -213,6 +216,7 @@ goog.ds.BaseDataNode.prototype.getDataName = goog.abstractMethod;
  * @return {string} The data path.
  */
 goog.ds.BaseDataNode.prototype.getDataPath = function() {
+  'use strict';
   var parentPath = '';
   var myName = this.getDataName();
   if (this.getParent()) {
@@ -238,6 +242,7 @@ goog.ds.BaseDataNode.prototype.load = goog.nullFunction;
  * @return {goog.ds.LoadState} The state.
  */
 goog.ds.BaseDataNode.prototype.getLoadState = function() {
+  'use strict';
   return goog.ds.LoadState.LOADED;
 };
 
@@ -330,6 +335,7 @@ goog.ds.DataNodeList.prototype.removeNode = goog.abstractMethod;
  */
 // TODO(arv): Use interfaces when available.
 goog.ds.BasicNodeList = function(opt_nodes) {
+  'use strict';
   this.map_ = {};
   this.list_ = [];
   this.indexMap_ = {};
@@ -350,6 +356,7 @@ goog.ds.BasicNodeList = function(opt_nodes) {
  * @override
  */
 goog.ds.BasicNodeList.prototype.add = function(node) {
+  'use strict';
   this.list_.push(node);
   var dataName = node.getDataName();
   if (dataName) {
@@ -368,6 +375,7 @@ goog.ds.BasicNodeList.prototype.add = function(node) {
  * @override
  */
 goog.ds.BasicNodeList.prototype.get = function(key) {
+  'use strict';
   return this.map_[key] || null;
 };
 
@@ -381,6 +389,7 @@ goog.ds.BasicNodeList.prototype.get = function(key) {
  * @override
  */
 goog.ds.BasicNodeList.prototype.getByIndex = function(index) {
+  'use strict';
   return this.list_[index] || null;
 };
 
@@ -392,6 +401,7 @@ goog.ds.BasicNodeList.prototype.getByIndex = function(index) {
  * @override
  */
 goog.ds.BasicNodeList.prototype.getCount = function() {
+  'use strict';
   return this.list_.length;
 };
 
@@ -403,6 +413,7 @@ goog.ds.BasicNodeList.prototype.getCount = function() {
  * @override
  */
 goog.ds.BasicNodeList.prototype.setNode = function(name, node) {
+  'use strict';
   if (node == null) {
     this.removeNode(name);
   } else {
@@ -424,6 +435,7 @@ goog.ds.BasicNodeList.prototype.setNode = function(name, node) {
  * @override
  */
 goog.ds.BasicNodeList.prototype.removeNode = function(name) {
+  'use strict';
   var existingNode = this.indexMap_[name];
   if (existingNode != null) {
     this.list_.splice(existingNode, 1);
@@ -445,6 +457,7 @@ goog.ds.BasicNodeList.prototype.removeNode = function(name) {
  * @return {number|undefined} The index.
  */
 goog.ds.BasicNodeList.prototype.indexOf = function(name) {
+  'use strict';
   return this.indexMap_[name];
 };
 
@@ -457,6 +470,7 @@ goog.ds.BasicNodeList.prototype.indexOf = function(name) {
  */
 
 goog.ds.EmptyNodeList = function() {
+  'use strict';
   goog.ds.BasicNodeList.call(this);
 };
 goog.inherits(goog.ds.EmptyNodeList, goog.ds.BasicNodeList);
@@ -470,6 +484,7 @@ goog.inherits(goog.ds.EmptyNodeList, goog.ds.BasicNodeList);
  * @override
  */
 goog.ds.EmptyNodeList.prototype.add = function(node) {
+  'use strict';
   throw new Error('Can\'t add to EmptyNodeList');
 };
 
@@ -496,6 +511,7 @@ goog.ds.EmptyNodeList.prototype.add = function(node) {
  * @constructor
  */
 goog.ds.SortedNodeList = function(compareFn, opt_nodes) {
+  'use strict';
   this.compareFn_ = compareFn;
   goog.ds.BasicNodeList.call(this, opt_nodes);
 };
@@ -510,6 +526,7 @@ goog.inherits(goog.ds.SortedNodeList, goog.ds.BasicNodeList);
  * @override
  */
 goog.ds.SortedNodeList.prototype.add = function(node) {
+  'use strict';
   if (!this.compareFn_) {
     this.append(node);
     return;
@@ -549,6 +566,7 @@ goog.ds.SortedNodeList.prototype.add = function(node) {
  * @param {goog.ds.DataNode} node The node to append.
  */
 goog.ds.SortedNodeList.prototype.append = function(node) {
+  'use strict';
   goog.ds.SortedNodeList.superClass_.add.call(this, node);
 };
 
@@ -560,6 +578,7 @@ goog.ds.SortedNodeList.prototype.append = function(node) {
  * @override
  */
 goog.ds.SortedNodeList.prototype.setNode = function(name, node) {
+  'use strict';
   if (node == null) {
     this.removeNode(name);
   } else {
@@ -636,6 +655,7 @@ goog.ds.logger = goog.log.getLogger('goog.ds');
  * @return {!goog.ds.DataNode} The new data node.
  */
 goog.ds.Util.makeReferenceNode = function(node, name) {
+  'use strict';
   /**
    * @constructor
    * @extends {goog.ds.DataNode}
@@ -644,6 +664,9 @@ goog.ds.Util.makeReferenceNode = function(node, name) {
   var nodeCreator = function() {};
   nodeCreator.prototype = node;
   var newNode = new nodeCreator();
-  newNode.getDataName = function() { return name; };
+  newNode.getDataName = function() {
+    'use strict';
+    return name;
+  };
   return newNode;
 };

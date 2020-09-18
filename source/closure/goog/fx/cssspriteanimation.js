@@ -49,6 +49,7 @@ goog.requireType('goog.math.Size');
  */
 goog.fx.CssSpriteAnimation = function(
     element, size, box, time, opt_acc, opt_disableLoop) {
+  'use strict';
   var start = [box.left, box.top];
   // We never draw for the end so we do not need to subtract for the size
   var end = [box.right, box.bottom];
@@ -82,6 +83,7 @@ goog.inherits(goog.fx.CssSpriteAnimation, goog.fx.Animation);
 
 /** @override */
 goog.fx.CssSpriteAnimation.prototype.onAnimate = function() {
+  'use strict';
   // Round to nearest sprite.
   var x = -Math.floor(this.coords[0] / this.size_.width) * this.size_.width;
   var y = -Math.floor(this.coords[1] / this.size_.height) * this.size_.height;
@@ -93,6 +95,7 @@ goog.fx.CssSpriteAnimation.prototype.onAnimate = function() {
 
 /** @override */
 goog.fx.CssSpriteAnimation.prototype.onFinish = function() {
+  'use strict';
   if (!this.disableLoop_) {
     this.play(true);
   }
@@ -106,6 +109,7 @@ goog.fx.CssSpriteAnimation.prototype.onFinish = function() {
  * same element when the sprite animation is not runniing.
  */
 goog.fx.CssSpriteAnimation.prototype.clearSpritePosition = function() {
+  'use strict';
   var style = this.element_.style;
   style.backgroundPosition = '';
 
@@ -119,6 +123,7 @@ goog.fx.CssSpriteAnimation.prototype.clearSpritePosition = function() {
 
 /** @override */
 goog.fx.CssSpriteAnimation.prototype.disposeInternal = function() {
+  'use strict';
   goog.fx.CssSpriteAnimation.superClass_.disposeInternal.call(this);
   this.element_ = null;
 };

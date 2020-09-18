@@ -25,6 +25,7 @@ goog.requireType('goog.Uri');
  * @final
  */
 goog.net.BulkLoaderHelper = function(uris) {
+  'use strict';
   goog.Disposable.call(this);
 
   /**
@@ -51,6 +52,7 @@ goog.inherits(goog.net.BulkLoaderHelper, goog.Disposable);
  * @return {string|goog.Uri} The URI specified by the id.
  */
 goog.net.BulkLoaderHelper.prototype.getUri = function(id) {
+  'use strict';
   return this.uris_[id];
 };
 
@@ -60,6 +62,7 @@ goog.net.BulkLoaderHelper.prototype.getUri = function(id) {
  * @return {Array<string|goog.Uri>} The URIs.
  */
 goog.net.BulkLoaderHelper.prototype.getUris = function() {
+  'use strict';
   return this.uris_;
 };
 
@@ -69,6 +72,7 @@ goog.net.BulkLoaderHelper.prototype.getUris = function() {
  * @return {Array<string>} The response texts.
  */
 goog.net.BulkLoaderHelper.prototype.getResponseTexts = function() {
+  'use strict';
   return this.responseTexts_;
 };
 
@@ -80,6 +84,7 @@ goog.net.BulkLoaderHelper.prototype.getResponseTexts = function() {
  */
 goog.net.BulkLoaderHelper.prototype.setResponseText = function(
     id, responseText) {
+  'use strict';
   this.responseTexts_[id] = responseText;
 };
 
@@ -89,6 +94,7 @@ goog.net.BulkLoaderHelper.prototype.setResponseText = function(
  * @return {boolean} TRUE iff the load is complete.
  */
 goog.net.BulkLoaderHelper.prototype.isLoadComplete = function() {
+  'use strict';
   var responseTexts = this.responseTexts_;
   if (responseTexts.length == this.uris_.length) {
     for (var i = 0; i < responseTexts.length; i++) {
@@ -104,6 +110,7 @@ goog.net.BulkLoaderHelper.prototype.isLoadComplete = function() {
 
 /** @override */
 goog.net.BulkLoaderHelper.prototype.disposeInternal = function() {
+  'use strict';
   goog.net.BulkLoaderHelper.superClass_.disposeInternal.call(this);
 
   this.uris_ = null;

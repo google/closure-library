@@ -47,7 +47,6 @@ goog.require('goog.net.XmlHttpFactory');
  * to be enabled.
  *
  * @interface
- * @extends {EventTarget}
  * @extends {goog.events.Listenable}
  */
 goog.net.WebChannel = function() {};
@@ -392,6 +391,7 @@ goog.net.WebChannel.EventType = {
  * @extends {goog.events.Event}
  */
 goog.net.WebChannel.MessageEvent = function() {
+  'use strict';
   goog.net.WebChannel.MessageEvent.base(
       this, 'constructor', goog.net.WebChannel.EventType.MESSAGE);
 };
@@ -476,6 +476,7 @@ goog.net.WebChannel.ErrorStatus = {
  * @extends {goog.events.Event}
  */
 goog.net.WebChannel.ErrorEvent = function() {
+  'use strict';
   goog.net.WebChannel.ErrorEvent.base(
       this, 'constructor', goog.net.WebChannel.EventType.ERROR);
 };

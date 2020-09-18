@@ -54,6 +54,7 @@ goog.requireType('goog.ui.ControlContent');
  * @extends {goog.ui.ControlRenderer}
  */
 goog.ui.PaletteRenderer = function() {
+  'use strict';
   goog.ui.ControlRenderer.call(this);
 };
 goog.inherits(goog.ui.PaletteRenderer, goog.ui.ControlRenderer);
@@ -92,6 +93,7 @@ goog.ui.PaletteRenderer.GRID_WIDTH_ATTRIBUTE = 'gridWidth';
  * @override
  */
 goog.ui.PaletteRenderer.prototype.createDom = function(palette) {
+  'use strict';
   var classNames = this.getClassNames(palette);
   var element = palette.getDomHelper().createDom(
       goog.dom.TagName.DIV, classNames,
@@ -120,6 +122,7 @@ goog.ui.PaletteRenderer.prototype.createDom = function(palette) {
  * @return {!Element} Palette table element.
  */
 goog.ui.PaletteRenderer.prototype.createGrid = function(items, size, dom) {
+  'use strict';
   var rows = [];
   for (var row = 0, index = 0; row < size.height; row++) {
     var cells = [];
@@ -141,6 +144,7 @@ goog.ui.PaletteRenderer.prototype.createGrid = function(items, size, dom) {
  * @return {!Element} Palette table element.
  */
 goog.ui.PaletteRenderer.prototype.createTable = function(rows, dom) {
+  'use strict';
   var table = dom.createDom(
       goog.dom.TagName.TABLE, goog.getCssName(this.getCssClass(), 'table'),
       dom.createDom(
@@ -159,6 +163,7 @@ goog.ui.PaletteRenderer.prototype.createTable = function(rows, dom) {
  * @return {!Element} Row element.
  */
 goog.ui.PaletteRenderer.prototype.createRow = function(cells, dom) {
+  'use strict';
   var row = dom.createDom(
       goog.dom.TagName.TR, goog.getCssName(this.getCssClass(), 'row'), cells);
   goog.a11y.aria.setRole(row, goog.a11y.aria.Role.ROW);
@@ -174,6 +179,7 @@ goog.ui.PaletteRenderer.prototype.createRow = function(cells, dom) {
  * @return {!Element} Cell element.
  */
 goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
+  'use strict';
   var cell = dom.createDom(
       goog.dom.TagName.TD, {
         'class': goog.getCssName(this.getCssClass(), 'cell'),
@@ -199,6 +205,7 @@ goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
  * @private
  */
 goog.ui.PaletteRenderer.prototype.maybeUpdateAriaLabel_ = function(cell) {
+  'use strict';
   if (goog.dom.getTextContent(cell) || goog.a11y.aria.getLabel(cell)) {
     return;
   }
@@ -227,6 +234,7 @@ goog.ui.PaletteRenderer.prototype.maybeUpdateAriaLabel_ = function(cell) {
  * @override
  */
 goog.ui.PaletteRenderer.prototype.canDecorate = function(element) {
+  'use strict';
   return false;
 };
 
@@ -240,6 +248,7 @@ goog.ui.PaletteRenderer.prototype.canDecorate = function(element) {
  * @override
  */
 goog.ui.PaletteRenderer.prototype.decorate = function(palette, element) {
+  'use strict';
   return null;
 };
 
@@ -257,6 +266,7 @@ goog.ui.PaletteRenderer.prototype.decorate = function(palette, element) {
  * @override
  */
 goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
+  'use strict';
   var items = /** @type {Array<Node>} */ (content);
   if (element) {
     var tbody = goog.dom.getElementsByTagNameAndClass(
@@ -265,7 +275,9 @@ goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
     if (tbody) {
       var index = 0;
       goog.array.forEach(tbody.rows, function(row) {
+        'use strict';
         goog.array.forEach(row.cells, function(cell) {
+          'use strict';
           goog.dom.removeChildren(cell);
           goog.a11y.aria.removeState(cell, goog.a11y.aria.State.LABEL);
           if (items) {
@@ -316,6 +328,7 @@ goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
  * @return {Node} The corresponding palette item (null if not found).
  */
 goog.ui.PaletteRenderer.prototype.getContainingItem = function(palette, node) {
+  'use strict';
   var root = palette.getElement();
   while (node && node.nodeType == goog.dom.NodeType.ELEMENT && node != root) {
     if (node.tagName == goog.dom.TagName.TD &&
@@ -341,6 +354,7 @@ goog.ui.PaletteRenderer.prototype.getContainingItem = function(palette, node) {
  */
 goog.ui.PaletteRenderer.prototype.highlightCell = function(
     palette, node, highlight) {
+  'use strict';
   if (node) {
     var cell = this.getCellForItem(node);
     goog.asserts.assert(cell);
@@ -369,6 +383,7 @@ goog.ui.PaletteRenderer.prototype.highlightCell = function(
  * @return {Element} The grid cell for the palette item.
  */
 goog.ui.PaletteRenderer.prototype.getCellForItem = function(node) {
+  'use strict';
   return /** @type {Element} */ (node ? node.parentNode : null);
 };
 
@@ -382,6 +397,7 @@ goog.ui.PaletteRenderer.prototype.getCellForItem = function(node) {
  *     deselected.
  */
 goog.ui.PaletteRenderer.prototype.selectCell = function(palette, node, select) {
+  'use strict';
   if (node) {
     var cell = /** @type {!Element} */ (node.parentNode);
     goog.dom.classlist.enable(
@@ -398,5 +414,6 @@ goog.ui.PaletteRenderer.prototype.selectCell = function(palette, node, select) {
  * @override
  */
 goog.ui.PaletteRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.PaletteRenderer.CSS_CLASS;
 };

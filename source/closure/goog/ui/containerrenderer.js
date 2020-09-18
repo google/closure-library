@@ -34,6 +34,7 @@ goog.requireType('goog.ui.Control');
  * @constructor
  */
 goog.ui.ContainerRenderer = function(opt_ariaRole) {
+  'use strict';
   // By default, the ARIA role is unspecified.
   /** @private {string|undefined} */
   this.ariaRole_ = opt_ariaRole;
@@ -74,6 +75,7 @@ goog.addSingletonGetter(goog.ui.ContainerRenderer);
  *     class name.
  */
 goog.ui.ContainerRenderer.getCustomRenderer = function(ctor, cssClassName) {
+  'use strict';
   var renderer = new ctor();
 
   /**
@@ -81,7 +83,10 @@ goog.ui.ContainerRenderer.getCustomRenderer = function(ctor, cssClassName) {
    * rendered using this renderer.
    * @return {string} Renderer-specific CSS class.
    */
-  renderer.getCssClass = function() { return cssClassName; };
+  renderer.getCssClass = function() {
+    'use strict';
+    return cssClassName;
+  };
 
   return renderer;
 };
@@ -101,6 +106,7 @@ goog.ui.ContainerRenderer.CSS_CLASS = goog.getCssName('goog-container');
  * @return {undefined|string} ARIA role.
  */
 goog.ui.ContainerRenderer.prototype.getAriaRole = function() {
+  'use strict';
   return this.ariaRole_;
 };
 
@@ -112,6 +118,7 @@ goog.ui.ContainerRenderer.prototype.getAriaRole = function() {
  * @param {boolean} enable Whether to add or remove the element's tab index.
  */
 goog.ui.ContainerRenderer.prototype.enableTabIndex = function(element, enable) {
+  'use strict';
   if (element) {
     element.tabIndex = enable ? 0 : -1;
   }
@@ -126,6 +133,7 @@ goog.ui.ContainerRenderer.prototype.enableTabIndex = function(element, enable) {
  * @return {Element} Root element for the container.
  */
 goog.ui.ContainerRenderer.prototype.createDom = function(container) {
+  'use strict';
   return container.getDomHelper().createDom(
       goog.dom.TagName.DIV, this.getClassNames(container).join(' '));
 };
@@ -139,6 +147,7 @@ goog.ui.ContainerRenderer.prototype.createDom = function(container) {
  * @return {Element} Element to contain child elements (null if none).
  */
 goog.ui.ContainerRenderer.prototype.getContentElement = function(element) {
+  'use strict';
   return element;
 };
 
@@ -150,6 +159,7 @@ goog.ui.ContainerRenderer.prototype.getContentElement = function(element) {
  * @return {boolean} Whether the renderer can decorate the element.
  */
 goog.ui.ContainerRenderer.prototype.canDecorate = function(element) {
+  'use strict';
   return element.tagName == 'DIV';
 };
 
@@ -163,6 +173,7 @@ goog.ui.ContainerRenderer.prototype.canDecorate = function(element) {
  * @return {!Element} Decorated element.
  */
 goog.ui.ContainerRenderer.prototype.decorate = function(container, element) {
+  'use strict';
   // Set the container's ID to the decorated element's DOM ID, if any.
   if (element.id) {
     container.setId(element.id);
@@ -174,6 +185,7 @@ goog.ui.ContainerRenderer.prototype.decorate = function(container, element) {
   var classNames = goog.dom.classlist.get(element);
   if (classNames) {
     goog.array.forEach(classNames, function(className) {
+      'use strict';
       if (className == baseClass) {
         hasBaseClass = true;
       } else if (className) {
@@ -210,6 +222,7 @@ goog.ui.ContainerRenderer.prototype.decorate = function(container, element) {
  */
 goog.ui.ContainerRenderer.prototype.setStateFromClassName = function(
     container, className, baseClass) {
+  'use strict';
   if (className == goog.getCssName(baseClass, 'disabled')) {
     container.setEnabled(false);
   } else if (className == goog.getCssName(baseClass, 'horizontal')) {
@@ -232,6 +245,7 @@ goog.ui.ContainerRenderer.prototype.setStateFromClassName = function(
  */
 goog.ui.ContainerRenderer.prototype.decorateChildren = function(
     container, element, opt_firstChild) {
+  'use strict';
   if (element) {
     var node = opt_firstChild || element.firstChild, next;
     // Tag soup HTML may result in a DOM where siblings have different parents.
@@ -274,6 +288,7 @@ goog.ui.ContainerRenderer.prototype.decorateChildren = function(
  *     (null if none).
  */
 goog.ui.ContainerRenderer.prototype.getDecoratorForChild = function(element) {
+  'use strict';
   return /** @type {goog.ui.Control} */ (
       goog.ui.registry.getDecorator(element));
 };
@@ -286,6 +301,7 @@ goog.ui.ContainerRenderer.prototype.getDecoratorForChild = function(element) {
  *     as it enters the document.
  */
 goog.ui.ContainerRenderer.prototype.initializeDom = function(container) {
+  'use strict';
   var elem = container.getElement();
   goog.asserts.assert(elem, 'The container DOM element cannot be null.');
   // Make sure the container's element isn't selectable.  On Gecko, recursively
@@ -315,6 +331,7 @@ goog.ui.ContainerRenderer.prototype.initializeDom = function(container) {
  * @return {Element} Key event target (null if none).
  */
 goog.ui.ContainerRenderer.prototype.getKeyEventTarget = function(container) {
+  'use strict';
   return container.getElement();
 };
 
@@ -325,6 +342,7 @@ goog.ui.ContainerRenderer.prototype.getKeyEventTarget = function(container) {
  * @return {string} Renderer-specific CSS class.
  */
 goog.ui.ContainerRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.ContainerRenderer.CSS_CLASS;
 };
 
@@ -340,6 +358,7 @@ goog.ui.ContainerRenderer.prototype.getCssClass = function() {
  *     container.
  */
 goog.ui.ContainerRenderer.prototype.getClassNames = function(container) {
+  'use strict';
   var baseClass = this.getCssClass();
   var isHorizontal =
       container.getOrientation() == goog.ui.Container.Orientation.HORIZONTAL;
@@ -362,5 +381,6 @@ goog.ui.ContainerRenderer.prototype.getClassNames = function(container) {
  * @suppress {missingRequire} goog.ui.Container
  */
 goog.ui.ContainerRenderer.prototype.getDefaultOrientation = function() {
+  'use strict';
   return goog.ui.Container.Orientation.VERTICAL;
 };

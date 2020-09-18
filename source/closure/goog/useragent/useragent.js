@@ -89,6 +89,7 @@ goog.userAgent.BROWSER_KNOWN_ = goog.userAgent.ASSUME_IE ||
  * @return {string} The userAgent string.
  */
 goog.userAgent.getUserAgentString = function() {
+  'use strict';
   return goog.labs.userAgent.util.getUserAgent();
 };
 
@@ -97,6 +98,7 @@ goog.userAgent.getUserAgentString = function() {
  * @return {?Navigator} The native navigator object.
  */
 goog.userAgent.getNavigatorTyped = function() {
+  'use strict';
   // Need a local navigator reference instead of using the global one,
   // to avoid the rare case where they reference different objects.
   // (in a WorkerPool, for example).
@@ -109,6 +111,7 @@ goog.userAgent.getNavigatorTyped = function() {
  * @return {?Object} The native navigator object.
  */
 goog.userAgent.getNavigator = function() {
+  'use strict';
   return goog.userAgent.getNavigatorTyped();
 };
 
@@ -178,6 +181,7 @@ goog.userAgent.WEBKIT = goog.userAgent.BROWSER_KNOWN_ ?
  * @private
  */
 goog.userAgent.isMobile_ = function() {
+  'use strict';
   return goog.userAgent.WEBKIT &&
       goog.labs.userAgent.util.matchUserAgent('Mobile');
 };
@@ -211,6 +215,7 @@ goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
  * @private
  */
 goog.userAgent.determinePlatform_ = function() {
+  'use strict';
   var navigator = goog.userAgent.getNavigatorTyped();
   return navigator && navigator.platform || '';
 };
@@ -323,6 +328,7 @@ goog.userAgent.WINDOWS = goog.userAgent.PLATFORM_KNOWN_ ?
  * @private
  */
 goog.userAgent.isLegacyLinux_ = function() {
+  'use strict';
   return goog.labs.userAgent.platform.isLinux() ||
       goog.labs.userAgent.platform.isChromeOS();
 };
@@ -347,6 +353,7 @@ goog.userAgent.LINUX = goog.userAgent.PLATFORM_KNOWN_ ?
  * @private
  */
 goog.userAgent.isX11_ = function() {
+  'use strict';
   var navigator = goog.userAgent.getNavigatorTyped();
   return !!navigator &&
       goog.string.contains(navigator['appVersion'] || '', 'X11');
@@ -422,6 +429,7 @@ goog.userAgent.KAIOS = goog.userAgent.PLATFORM_KNOWN_ ?
  * @private
  */
 goog.userAgent.determineVersion_ = function() {
+  'use strict';
   // All browsers have different ways to detect the version and they all have
   // different naming schemes.
   // version is a string rather than a number because it may contain 'b', 'a',
@@ -457,6 +465,7 @@ goog.userAgent.determineVersion_ = function() {
  * @private
  */
 goog.userAgent.getVersionRegexResult_ = function() {
+  'use strict';
   var userAgent = goog.userAgent.getUserAgentString();
   if (goog.userAgent.GECKO) {
     return /rv\:([^\);]+)(\)|;)/.exec(userAgent);
@@ -485,6 +494,7 @@ goog.userAgent.getVersionRegexResult_ = function() {
  * @private
  */
 goog.userAgent.getDocumentMode_ = function() {
+  'use strict';
   // NOTE(user): goog.userAgent may be used in context where there is no DOM.
   var doc = goog.global['document'];
   return doc ? doc['documentMode'] : undefined;
@@ -511,6 +521,7 @@ goog.userAgent.VERSION = goog.userAgent.determineVersion_();
  * @deprecated Use goog.string.compareVersions.
  */
 goog.userAgent.compare = function(v1, v2) {
+  'use strict';
   return goog.string.compareVersions(v1, v2);
 };
 
@@ -540,9 +551,11 @@ goog.userAgent.isVersionOrHigherCache_ = {};
  *     the given version.
  */
 goog.userAgent.isVersionOrHigher = function(version) {
+  'use strict';
   return goog.userAgent.ASSUME_ANY_VERSION ||
       goog.reflect.cache(
           goog.userAgent.isVersionOrHigherCache_, version, function() {
+            'use strict';
             return goog.string.compareVersions(
                        goog.userAgent.VERSION, version) >= 0;
           });
@@ -569,6 +582,7 @@ goog.userAgent.isVersion = goog.userAgent.isVersionOrHigher;
  *     same as the given version.
  */
 goog.userAgent.isDocumentModeOrHigher = function(documentMode) {
+  'use strict';
   return Number(goog.userAgent.DOCUMENT_MODE) >= documentMode;
 };
 
@@ -596,6 +610,7 @@ goog.userAgent.isDocumentMode = goog.userAgent.isDocumentModeOrHigher;
  * @const
  */
 goog.userAgent.DOCUMENT_MODE = (function() {
+  'use strict';
   var doc = goog.global['document'];
   if (!doc || !goog.userAgent.IE) return undefined;
   // This must be an IE user agent.

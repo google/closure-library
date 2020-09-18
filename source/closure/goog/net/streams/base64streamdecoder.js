@@ -24,6 +24,7 @@ goog.require('goog.crypt.base64');
 goog.scope(function() {
 
 
+'use strict';
 /**
  * Base64 stream decoder.
  *
@@ -33,6 +34,7 @@ goog.scope(function() {
  * @package
  */
 goog.net.streams.Base64StreamDecoder = function() {
+  'use strict';
   /**
    * If the input stream is still valid.
    * @private {boolean}
@@ -63,6 +65,7 @@ var Decoder = goog.net.streams.Base64StreamDecoder;
  * @return {boolean} true if the input is still valid.
  */
 Decoder.prototype.isInputValid = function() {
+  'use strict';
   return this.isInputValid_;
 };
 
@@ -74,6 +77,7 @@ Decoder.prototype.isInputValid = function() {
  * @private
  */
 Decoder.prototype.error_ = function(input, errorMsg) {
+  'use strict';
   this.isInputValid_ = false;
   throw new Error(
       'The stream is broken @' + this.streamPos_ + '. Error: ' + errorMsg +
@@ -90,6 +94,7 @@ Decoder.prototype.error_ = function(input, errorMsg) {
  * @throws {!Error} Throws an error message if the input is invalid
  */
 Decoder.prototype.decode = function(input) {
+  'use strict';
   goog.asserts.assertString(input);
 
   if (!this.isInputValid_) {
@@ -114,6 +119,4 @@ Decoder.prototype.decode = function(input) {
   this.leftoverInput_ = this.leftoverInput_.substr(groups * 4);
   return result;
 };
-
-
 });  // goog.scope

@@ -38,6 +38,7 @@ goog.requireType('goog.dom.DomHelper');
  * @extends {goog.ui.Palette}
  */
 goog.ui.ColorPalette = function(opt_colors, opt_renderer, opt_domHelper) {
+  'use strict';
   /**
    * Array of colors to show in the palette.
    * @type {Array<string>}
@@ -78,6 +79,7 @@ goog.ui.ColorPalette.prototype.labels_ = null;
  * @return {Array<string>} Array of colors.
  */
 goog.ui.ColorPalette.prototype.getColors = function() {
+  'use strict';
   return this.colors_;
 };
 
@@ -89,6 +91,7 @@ goog.ui.ColorPalette.prototype.getColors = function() {
  *        tooltips. When not provided, the color value will be used.
  */
 goog.ui.ColorPalette.prototype.setColors = function(colors, opt_labels) {
+  'use strict';
   this.colors_ = colors;
   this.labels_ = opt_labels || null;
   this.normalizedColors_ = null;
@@ -100,6 +103,7 @@ goog.ui.ColorPalette.prototype.setColors = function(colors, opt_labels) {
  * @return {?string} The current selected color in hex, or null.
  */
 goog.ui.ColorPalette.prototype.getSelectedColor = function() {
+  'use strict';
   var selectedItem = /** @type {Element} */ (this.getSelectedItem());
   if (selectedItem) {
     var color = goog.style.getStyle(selectedItem, 'background-color');
@@ -117,9 +121,11 @@ goog.ui.ColorPalette.prototype.getSelectedColor = function() {
  *     selection.
  */
 goog.ui.ColorPalette.prototype.setSelectedColor = function(color) {
+  'use strict';
   var hexColor = goog.ui.ColorPalette.parseColor_(color);
   if (!this.normalizedColors_) {
     this.normalizedColors_ = goog.array.map(this.colors_, function(color) {
+      'use strict';
       return goog.ui.ColorPalette.parseColor_(color);
     });
   }
@@ -133,7 +139,9 @@ goog.ui.ColorPalette.prototype.setSelectedColor = function(color) {
  * @protected
  */
 goog.ui.ColorPalette.prototype.createColorNodes = function() {
+  'use strict';
   return goog.array.map(this.colors_, function(color, index) {
+    'use strict';
     var swatch = this.getDomHelper().createDom(goog.dom.TagName.DIV, {
       'class': goog.getCssName(this.getRenderer().getCssClass(), 'colorswatch'),
       'style': 'background-color:' + color
@@ -159,8 +167,8 @@ goog.ui.ColorPalette.prototype.createColorNodes = function() {
  * @private
  */
 goog.ui.ColorPalette.parseColor_ = function(color) {
+  'use strict';
   if (color) {
-
     try {
       return goog.color.parse(color).hex;
     } catch (ex) {

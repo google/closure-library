@@ -33,6 +33,7 @@ goog.require('goog.crypt.Hash');
  * @struct
  */
 goog.crypt.Hmac = function(hasher, key, opt_blockSize) {
+  'use strict';
   goog.crypt.Hmac.base(this, 'constructor');
 
   /**
@@ -93,6 +94,7 @@ goog.crypt.Hmac.IPAD_ = 0x36;
  * @private
  */
 goog.crypt.Hmac.prototype.initialize_ = function(key) {
+  'use strict';
   if (key.length > this.blockSize) {
     this.hasher_.update(key);
     key = this.hasher_.digest();
@@ -116,6 +118,7 @@ goog.crypt.Hmac.prototype.initialize_ = function(key) {
 
 /** @override */
 goog.crypt.Hmac.prototype.reset = function() {
+  'use strict';
   this.hasher_.reset();
   this.hasher_.update(this.keyI_);
 };
@@ -123,12 +126,14 @@ goog.crypt.Hmac.prototype.reset = function() {
 
 /** @override */
 goog.crypt.Hmac.prototype.update = function(bytes, opt_length) {
+  'use strict';
   this.hasher_.update(bytes, opt_length);
 };
 
 
 /** @override */
 goog.crypt.Hmac.prototype.digest = function() {
+  'use strict';
   var temp = this.hasher_.digest();
   this.hasher_.reset();
   this.hasher_.update(this.keyO_);
@@ -144,6 +149,7 @@ goog.crypt.Hmac.prototype.digest = function() {
  * @return {!Array<number>} the digest of the given message.
  */
 goog.crypt.Hmac.prototype.getHmac = function(message) {
+  'use strict';
   this.reset();
   this.update(message);
   return this.digest();

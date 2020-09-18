@@ -194,31 +194,6 @@ goog.inherits(WebChannelBaseTransport.Channel, goog.events.EventTarget);
 
 /**
  * @override
- * @suppress {checkTypes}
- */
-WebChannelBaseTransport.Channel.prototype.addEventListener = function(
-    type, handler, /** boolean= */ opt_capture, opt_handlerScope) {
-  'use strict';
-  WebChannelBaseTransport.Channel.base(
-      this, 'addEventListener', type, handler, opt_capture, opt_handlerScope);
-};
-
-
-/**
- * @override
- * @suppress {checkTypes}
- */
-WebChannelBaseTransport.Channel.prototype.removeEventListener = function(
-    type, handler, /** boolean= */ opt_capture, opt_handlerScope) {
-  'use strict';
-  WebChannelBaseTransport.Channel.base(
-      this, 'removeEventListener', type, handler, opt_capture,
-      opt_handlerScope);
-};
-
-
-/**
- * @override
  */
 WebChannelBaseTransport.Channel.prototype.open = function() {
   'use strict';

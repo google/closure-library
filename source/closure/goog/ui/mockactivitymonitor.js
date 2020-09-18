@@ -24,6 +24,7 @@ goog.require('goog.ui.ActivityMonitor');
  * @final
  */
 goog.ui.MockActivityMonitor = function() {
+  'use strict';
   goog.ui.MockActivityMonitor.base(this, 'constructor');
 
   /**
@@ -42,6 +43,7 @@ goog.inherits(goog.ui.MockActivityMonitor, goog.ui.ActivityMonitor);
  *     not idle. If not specified, defaults to MOUSEMOVE.
  */
 goog.ui.MockActivityMonitor.prototype.simulateEvent = function(opt_type) {
+  'use strict';
   var eventTime = goog.now();
   var eventType = opt_type || goog.events.EventType.MOUSEMOVE;
 
@@ -58,6 +60,7 @@ goog.ui.MockActivityMonitor.prototype.simulateEvent = function(opt_type) {
  * @override
  */
 goog.ui.MockActivityMonitor.prototype.dispatchEvent = function(e) {
+  'use strict';
   var rv = goog.ui.MockActivityMonitor.base(this, 'dispatchEvent', e);
   this.eventFired_ = true;
   return rv;

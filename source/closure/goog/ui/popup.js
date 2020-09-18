@@ -37,6 +37,7 @@ goog.require('goog.ui.PopupBase');
  * @extends {goog.ui.PopupBase}
  */
 goog.ui.Popup = function(opt_element, opt_position) {
+  'use strict';
   /**
    * Corner of the popup to used in the positioning algorithm.
    *
@@ -71,6 +72,7 @@ goog.ui.Popup.prototype.margin_;
  * @return {goog.positioning.Corner} The popup corner used for positioning.
  */
 goog.ui.Popup.prototype.getPinnedCorner = function() {
+  'use strict';
   return this.popupCorner_;
 };
 
@@ -82,6 +84,7 @@ goog.ui.Popup.prototype.getPinnedCorner = function() {
  *     positioning.
  */
 goog.ui.Popup.prototype.setPinnedCorner = function(corner) {
+  'use strict';
   this.popupCorner_ = corner;
   if (this.isVisible()) {
     this.reposition();
@@ -94,6 +97,7 @@ goog.ui.Popup.prototype.setPinnedCorner = function(corner) {
  *     associated with the popup.
  */
 goog.ui.Popup.prototype.getPosition = function() {
+  'use strict';
   return this.position_ || null;
 };
 
@@ -104,6 +108,7 @@ goog.ui.Popup.prototype.getPosition = function() {
  * @param {goog.positioning.AbstractPosition} position A position helper object.
  */
 goog.ui.Popup.prototype.setPosition = function(position) {
+  'use strict';
   this.position_ = position || undefined;
   if (this.isVisible()) {
     this.reposition();
@@ -117,6 +122,7 @@ goog.ui.Popup.prototype.setPosition = function(position) {
  * @return {goog.math.Box?} The margin.
  */
 goog.ui.Popup.prototype.getMargin = function() {
+  'use strict';
   return this.margin_ || null;
 };
 
@@ -131,6 +137,7 @@ goog.ui.Popup.prototype.getMargin = function() {
  */
 goog.ui.Popup.prototype.setMargin = function(
     arg1, opt_arg2, opt_arg3, opt_arg4) {
+  'use strict';
   if (arg1 == null || arg1 instanceof goog.math.Box) {
     this.margin_ = arg1;
   } else {
@@ -151,6 +158,7 @@ goog.ui.Popup.prototype.setMargin = function(
  * @override
  */
 goog.ui.Popup.prototype.reposition = function() {
+  'use strict';
   if (!this.position_) {
     return;
   }

@@ -83,6 +83,7 @@ goog.crypt.base64.paddingChars_ = '=.';
  * @private
  */
 goog.crypt.base64.isPadding_ = function(char) {
+  'use strict';
   return goog.string.contains(goog.crypt.base64.paddingChars_, char);
 };
 
@@ -154,6 +155,7 @@ goog.crypt.base64.HAS_NATIVE_DECODE_ =
  * @return {string} The base64 encoded string.
  */
 goog.crypt.base64.encodeByteArray = function(input, alphabet) {
+  'use strict';
   // Assert avoids runtime dependency on goog.isArrayLike, which helps reduce
   // size of jscompiler output, and which yields slight performance increase.
   goog.asserts.assert(
@@ -207,6 +209,7 @@ goog.crypt.base64.encodeByteArray = function(input, alphabet) {
  * @return {string} The base64 encoded string.
  */
 goog.crypt.base64.encodeString = function(input, alphabet) {
+  'use strict';
   // Shortcut for browsers that implement
   // a native base64 encoder in the form of "btoa/atob"
   if (goog.crypt.base64.HAS_NATIVE_ENCODE_ && !alphabet) {
@@ -228,6 +231,7 @@ goog.crypt.base64.encodeString = function(input, alphabet) {
  * @return {string} string representing the decoded value.
  */
 goog.crypt.base64.decodeString = function(input, useCustomDecoder) {
+  'use strict';
   // Shortcut for browsers that implement
   // a native base64 encoder in the form of "btoa/atob"
   if (goog.crypt.base64.HAS_NATIVE_DECODE_ && !useCustomDecoder) {
@@ -261,8 +265,11 @@ goog.crypt.base64.decodeString = function(input, useCustomDecoder) {
  * @return {!Array<number>} bytes representing the decoded value.
  */
 goog.crypt.base64.decodeStringToByteArray = function(input, opt_ignored) {
+  'use strict';
   var output = [];
-  function pushByte(b) { output.push(b); }
+  function pushByte(b) {
+    output.push(b);
+  }
 
   goog.crypt.base64.decodeStringInternal_(input, pushByte);
 
@@ -289,6 +296,7 @@ goog.crypt.base64.decodeStringToByteArray = function(input, opt_ignored) {
  * @return {!Uint8Array} bytes representing the decoded value.
  */
 goog.crypt.base64.decodeStringToUint8Array = function(input) {
+  'use strict';
   goog.asserts.assert(
       !goog.userAgent.IE || goog.userAgent.isVersionOrHigher('10'),
       'Browser does not support typed arrays');
@@ -351,6 +359,7 @@ goog.crypt.base64.decodeStringToUint8Array = function(input) {
  * @private
  */
 goog.crypt.base64.decodeStringInternal_ = function(input, pushByte) {
+  'use strict';
   goog.crypt.base64.init_();
 
   var nextCharIndex = 0;
@@ -414,6 +423,7 @@ goog.crypt.base64.decodeStringInternal_ = function(input, pushByte) {
  * @private
  */
 goog.crypt.base64.init_ = function() {
+  'use strict';
   if (goog.crypt.base64.charToByteMap_) {
     return;
   }

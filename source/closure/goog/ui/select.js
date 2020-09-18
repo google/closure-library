@@ -59,6 +59,7 @@ goog.requireType('goog.ui.MenuSeparator');
  */
 goog.ui.Select = function(
     opt_caption, opt_menu, opt_renderer, opt_domHelper, opt_menuRenderer) {
+  'use strict';
   goog.ui.Select.base(
       this, 'constructor', opt_caption, opt_menu, opt_renderer, opt_domHelper,
       opt_menuRenderer ||
@@ -91,6 +92,7 @@ goog.ui.Select.prototype.selectionModel_ = null;
 
 /** @override */
 goog.ui.Select.prototype.enterDocument = function() {
+  'use strict';
   goog.ui.Select.superClass_.enterDocument.call(this);
   this.updateCaption();
   this.listenToSelectionModelEvents_();
@@ -104,6 +106,7 @@ goog.ui.Select.prototype.enterDocument = function() {
  * @override
  */
 goog.ui.Select.prototype.decorateInternal = function(element) {
+  'use strict';
   goog.ui.Select.superClass_.decorateInternal.call(this, element);
   var caption = this.getCaption();
   if (caption) {
@@ -120,6 +123,7 @@ goog.ui.Select.prototype.decorateInternal = function(element) {
 
 /** @override */
 goog.ui.Select.prototype.disposeInternal = function() {
+  'use strict';
   goog.ui.Select.superClass_.disposeInternal.call(this);
 
   if (this.selectionModel_) {
@@ -141,6 +145,7 @@ goog.ui.Select.prototype.disposeInternal = function() {
  * @override
  */
 goog.ui.Select.prototype.handleMenuAction = function(e) {
+  'use strict';
   this.setSelectedItem(/** @type {goog.ui.MenuItem} */ (e.target));
   goog.ui.Select.base(this, 'handleMenuAction', e);
 
@@ -159,6 +164,7 @@ goog.ui.Select.prototype.handleMenuAction = function(e) {
  * @param {goog.events.Event} e Selection event to handle.
  */
 goog.ui.Select.prototype.handleSelectionChange = function(e) {
+  'use strict';
   var item = this.getSelectedItem();
   goog.ui.Select.superClass_.setValue.call(this, item && item.getValue());
   this.updateCaption();
@@ -174,6 +180,7 @@ goog.ui.Select.prototype.handleSelectionChange = function(e) {
  * @override
  */
 goog.ui.Select.prototype.setMenu = function(menu) {
+  'use strict';
   // Call superclass implementation to replace the menu.
   var oldMenu = goog.ui.Select.superClass_.setMenu.call(this, menu);
 
@@ -188,6 +195,7 @@ goog.ui.Select.prototype.setMenu = function(menu) {
     if (menu) {
       if (this.selectionModel_) {
         menu.forEachChild(function(child, index) {
+          'use strict';
           this.setCorrectAriaRole_(
               /** @type {goog.ui.MenuItem|goog.ui.MenuSeparator} */ (child));
           this.selectionModel_.addItem(child);
@@ -207,6 +215,7 @@ goog.ui.Select.prototype.setMenu = function(menu) {
  * @return {goog.ui.ControlContent} Default caption.
  */
 goog.ui.Select.prototype.getDefaultCaption = function() {
+  'use strict';
   return this.defaultCaption_;
 };
 
@@ -217,6 +226,7 @@ goog.ui.Select.prototype.getDefaultCaption = function() {
  *    when no option is selected.
  */
 goog.ui.Select.prototype.setDefaultCaption = function(caption) {
+  'use strict';
   this.defaultCaption_ = caption;
   this.updateCaption();
 };
@@ -228,6 +238,7 @@ goog.ui.Select.prototype.setDefaultCaption = function(caption) {
  * @override
  */
 goog.ui.Select.prototype.addItem = function(item) {
+  'use strict';
   this.setCorrectAriaRole_(
       /** @type {goog.ui.MenuItem|goog.ui.MenuSeparator} */ (item));
   goog.ui.Select.superClass_.addItem.call(this, item);
@@ -249,6 +260,7 @@ goog.ui.Select.prototype.addItem = function(item) {
  * @override
  */
 goog.ui.Select.prototype.addItemAt = function(item, index) {
+  'use strict';
   this.setCorrectAriaRole_(
       /** @type {goog.ui.MenuItem|goog.ui.MenuSeparator} */ (item));
   goog.ui.Select.superClass_.addItemAt.call(this, item, index);
@@ -267,6 +279,7 @@ goog.ui.Select.prototype.addItemAt = function(item, index) {
  * @override
  */
 goog.ui.Select.prototype.removeItem = function(item) {
+  'use strict';
   goog.ui.Select.superClass_.removeItem.call(this, item);
   if (this.selectionModel_) {
     this.selectionModel_.removeItem(item);
@@ -280,6 +293,7 @@ goog.ui.Select.prototype.removeItem = function(item) {
  * @override
  */
 goog.ui.Select.prototype.removeItemAt = function(index) {
+  'use strict';
   goog.ui.Select.superClass_.removeItemAt.call(this, index);
   if (this.selectionModel_) {
     this.selectionModel_.removeItemAt(index);
@@ -295,6 +309,7 @@ goog.ui.Select.prototype.removeItemAt = function(index) {
  *     the selection).
  */
 goog.ui.Select.prototype.setSelectedItem = function(item) {
+  'use strict';
   if (this.selectionModel_) {
     var prevItem = this.getSelectedItem();
     this.selectionModel_.setSelectedItem(item);
@@ -312,6 +327,7 @@ goog.ui.Select.prototype.setSelectedItem = function(item) {
  * @param {number} index Index of the option to be selected.
  */
 goog.ui.Select.prototype.setSelectedIndex = function(index) {
+  'use strict';
   if (this.selectionModel_) {
     this.setSelectedItem(/** @type {goog.ui.MenuItem} */
         (this.selectionModel_.getItemAt(index)));
@@ -329,6 +345,7 @@ goog.ui.Select.prototype.setSelectedIndex = function(index) {
  * @override
  */
 goog.ui.Select.prototype.setValue = function(value) {
+  'use strict';
   if (value != null && this.selectionModel_) {
     for (var i = 0, item; item = this.selectionModel_.getItemAt(i); i++) {
       if (item && typeof item.getValue == 'function' &&
@@ -359,6 +376,7 @@ goog.ui.Select.prototype.setValue = function(value) {
  * @override
  */
 goog.ui.Select.prototype.getValue = function() {
+  'use strict';
   var selectedItem = this.getSelectedItem();
   return selectedItem ? selectedItem.getValue() : null;
 };
@@ -369,9 +387,10 @@ goog.ui.Select.prototype.getValue = function() {
  * @return {goog.ui.MenuItem} The currently selected option (null if none).
  */
 goog.ui.Select.prototype.getSelectedItem = function() {
+  'use strict';
   return this.selectionModel_ ?
       /** @type {goog.ui.MenuItem} */ (this.selectionModel_.getSelectedItem()) :
-                                      null;
+      null;
 };
 
 
@@ -380,6 +399,7 @@ goog.ui.Select.prototype.getSelectedItem = function() {
  * @return {number} 0-based index of the currently selected option (-1 if none).
  */
 goog.ui.Select.prototype.getSelectedIndex = function() {
+  'use strict';
   return this.selectionModel_ ? this.selectionModel_.getSelectedIndex() : -1;
 };
 
@@ -389,6 +409,7 @@ goog.ui.Select.prototype.getSelectedIndex = function() {
  * @protected
  */
 goog.ui.Select.prototype.getSelectionModel = function() {
+  'use strict';
   return this.selectionModel_;
 };
 
@@ -401,9 +422,11 @@ goog.ui.Select.prototype.getSelectionModel = function() {
  * @private
  */
 goog.ui.Select.prototype.createSelectionModel_ = function(opt_component) {
+  'use strict';
   this.selectionModel_ = new goog.ui.SelectionModel();
   if (opt_component) {
     opt_component.forEachChild(function(child, index) {
+      'use strict';
       this.setCorrectAriaRole_(
           /** @type {goog.ui.MenuItem|goog.ui.MenuSeparator} */ (child));
       this.selectionModel_.addItem(child);
@@ -418,6 +441,7 @@ goog.ui.Select.prototype.createSelectionModel_ = function(opt_component) {
  * @private
  */
 goog.ui.Select.prototype.listenToSelectionModelEvents_ = function() {
+  'use strict';
   if (this.selectionModel_) {
     this.getHandler().listen(
         this.selectionModel_, goog.events.EventType.SELECT,
@@ -433,6 +457,7 @@ goog.ui.Select.prototype.listenToSelectionModelEvents_ = function() {
  * @protected
  */
 goog.ui.Select.prototype.updateCaption = function() {
+  'use strict';
   var item = this.getSelectedItem();
   this.setContent(item ? item.getCaption() : this.defaultCaption_);
 
@@ -458,6 +483,7 @@ goog.ui.Select.prototype.updateCaption = function() {
  * @private
  */
 goog.ui.Select.prototype.updateAriaActiveDescendant_ = function() {
+  'use strict';
   var renderer = this.getRenderer();
   if (renderer) {
     var contentElement = renderer.getContentElement(this.getElement());
@@ -500,8 +526,11 @@ goog.ui.Select.prototype.updateAriaActiveDescendant_ = function() {
  * @private
  */
 goog.ui.Select.prototype.getNumMenuItems_ = function(items) {
-  return goog.array.count(
-      items, function(item) { return item instanceof goog.ui.MenuItem; });
+  'use strict';
+  return goog.array.count(items, function(item) {
+    'use strict';
+    return item instanceof goog.ui.MenuItem;
+  });
 };
 
 
@@ -511,6 +540,7 @@ goog.ui.Select.prototype.getNumMenuItems_ = function(items) {
  * @private
  */
 goog.ui.Select.prototype.setCorrectAriaRole_ = function(item) {
+  'use strict';
   item.setPreferredAriaRole(
       item instanceof goog.ui.MenuItem ? goog.a11y.aria.Role.OPTION :
                                          goog.a11y.aria.Role.SEPARATOR);
@@ -526,6 +556,7 @@ goog.ui.Select.prototype.setCorrectAriaRole_ = function(item) {
  * @override
  */
 goog.ui.Select.prototype.setOpen = function(open, opt_e) {
+  'use strict';
   goog.ui.Select.superClass_.setOpen.call(this, open, opt_e);
 
   if (this.isOpen()) {
@@ -539,6 +570,7 @@ goog.ui.Select.prototype.setOpen = function(open, opt_e) {
 // Register a decorator factory function for goog.ui.Selects.
 goog.ui.registry.setDecoratorByClassName(
     goog.getCssName('goog-select'), function() {
+      'use strict';
       // Select defaults to using MenuButtonRenderer, since it shares its L&F.
       return new goog.ui.Select(null);
     });

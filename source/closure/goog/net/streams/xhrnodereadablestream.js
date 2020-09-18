@@ -29,6 +29,7 @@ goog.require('goog.net.streams.XhrStreamReader');
  * @package
  */
 goog.net.streams.XhrNodeReadableStream = function(xhrReader) {
+  'use strict';
   /**
    * @const
    * @private {?goog.log.Logger} the logger.
@@ -67,6 +68,7 @@ goog.net.streams.XhrNodeReadableStream = function(xhrReader) {
  */
 goog.net.streams.XhrNodeReadableStream.prototype.on = function(
     eventType, callback) {
+  'use strict';
   var callbacks = this.callbackMap_[eventType];
   if (!callbacks) {
     callbacks = [];
@@ -83,6 +85,7 @@ goog.net.streams.XhrNodeReadableStream.prototype.on = function(
  */
 goog.net.streams.XhrNodeReadableStream.prototype.addListener = function(
     eventType, callback) {
+  'use strict';
   this.on(eventType, callback);
   return this;
 };
@@ -93,6 +96,7 @@ goog.net.streams.XhrNodeReadableStream.prototype.addListener = function(
  */
 goog.net.streams.XhrNodeReadableStream.prototype.removeListener = function(
     eventType, callback) {
+  'use strict';
   var callbacks = this.callbackMap_[eventType];
   if (callbacks) {
     goog.array.remove(callbacks, callback);  // keep the empty array
@@ -112,6 +116,7 @@ goog.net.streams.XhrNodeReadableStream.prototype.removeListener = function(
  */
 goog.net.streams.XhrNodeReadableStream.prototype.once = function(
     eventType, callback) {
+  'use strict';
   var callbacks = this.callbackOnceMap_[eventType];
   if (!callbacks) {
     callbacks = [];
@@ -131,6 +136,7 @@ goog.net.streams.XhrNodeReadableStream.prototype.once = function(
  * @private
  */
 goog.net.streams.XhrNodeReadableStream.prototype.onData_ = function(messages) {
+  'use strict';
   var callbacks =
       this.callbackMap_[goog.net.streams.NodeReadableStream.EventType.DATA];
   if (callbacks) {
@@ -158,11 +164,13 @@ goog.net.streams.XhrNodeReadableStream.prototype.onData_ = function(messages) {
  */
 goog.net.streams.XhrNodeReadableStream.prototype.doMessages_ = function(
     messages, callbacks) {
+  'use strict';
   var self = this;
   for (var i = 0; i < messages.length; i++) {
     var message = messages[i];
 
     goog.array.forEach(callbacks, function(callback) {
+      'use strict';
       try {
         callback(message);
       } catch (ex) {
@@ -179,6 +187,7 @@ goog.net.streams.XhrNodeReadableStream.prototype.doMessages_ = function(
  * @private
  */
 goog.net.streams.XhrNodeReadableStream.prototype.onStatusChange_ = function() {
+  'use strict';
   var currentStatus = this.xhrReader_.getStatus();
   var Status = goog.net.streams.XhrStreamReader.Status;
   var EventType = goog.net.streams.NodeReadableStream.EventType;
@@ -215,10 +224,12 @@ goog.net.streams.XhrNodeReadableStream.prototype.onStatusChange_ = function() {
  */
 goog.net.streams.XhrNodeReadableStream.prototype.doStatus_ = function(
     eventType) {
+  'use strict';
   var callbacks = this.callbackMap_[eventType];
   var self = this;
   if (callbacks) {
     goog.array.forEach(callbacks, function(callback) {
+      'use strict';
       try {
         callback();
       } catch (ex) {
@@ -229,7 +240,10 @@ goog.net.streams.XhrNodeReadableStream.prototype.doStatus_ = function(
 
   var onceCallbacks = this.callbackOnceMap_[eventType];
   if (onceCallbacks) {
-    goog.array.forEach(onceCallbacks, function(callback) { callback(); });
+    goog.array.forEach(onceCallbacks, function(callback) {
+      'use strict';
+      callback();
+    });
   }
 
   this.callbackOnceMap_[eventType] = [];
@@ -244,5 +258,6 @@ goog.net.streams.XhrNodeReadableStream.prototype.doStatus_ = function(
  */
 goog.net.streams.XhrNodeReadableStream.prototype.handleError_ = function(
     message) {
+  'use strict';
   goog.log.error(this.logger_, message);
 };

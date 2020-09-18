@@ -23,6 +23,7 @@ goog.provide('goog.dom.pattern.MatchType');
  *     the regular expression.
  */
 goog.dom.pattern.matchStringOrRegex = function(obj, str) {
+  'use strict';
   if (typeof obj === 'string') {
     // Match a string
     return str == obj;
@@ -46,10 +47,11 @@ goog.dom.pattern.matchStringOrRegex = function(obj, str) {
  * @this {Element} Called using goog.object every on an Element.
  */
 goog.dom.pattern.matchStringOrRegexMap = function(elem, index, orig) {
+  'use strict';
   return goog.dom.pattern.matchStringOrRegex(
-      elem, index in this ?
-          this[index] :
-          (this.getAttribute ? this.getAttribute(index) : null));
+      elem,
+      index in this ? this[index] :
+                      (this.getAttribute ? this.getAttribute(index) : null));
 };
 
 

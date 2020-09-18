@@ -31,6 +31,7 @@ goog.requireType('goog.math.Size');
  * @extends {goog.positioning.AbstractPosition}
  */
 goog.positioning.AbsolutePosition = function(arg1, opt_arg2) {
+  'use strict';
   /**
    * Coordinate to position popup at.
    * @type {goog.math.Coordinate}
@@ -56,6 +57,7 @@ goog.inherits(
  */
 goog.positioning.AbsolutePosition.prototype.reposition = function(
     movableElement, movableCorner, opt_margin, opt_preferredSize) {
+  'use strict';
   goog.positioning.positionAtCoordinate(
       this.coordinate, movableElement, movableCorner, opt_margin, null, null,
       opt_preferredSize);

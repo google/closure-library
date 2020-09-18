@@ -379,7 +379,7 @@ requestStats.onEndExecution = function() {
  */
 requestStats.setTimeout = function(fn, ms) {
   'use strict';
-  if (!goog.isFunction(fn)) {
+  if (typeof fn !== 'function') {
     throw new Error('Fn must not be null and must be a function');
   }
   return goog.global.setTimeout(function() {

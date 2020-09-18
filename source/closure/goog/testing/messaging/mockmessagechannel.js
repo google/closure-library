@@ -28,6 +28,7 @@ goog.require('goog.testing.asserts');
  * @final
  */
 goog.testing.messaging.MockMessageChannel = function(mockControl) {
+  'use strict';
   goog.testing.messaging.MockMessageChannel.base(this, 'constructor');
 
   /**
@@ -58,6 +59,7 @@ goog.testing.messaging.MockMessageChannel.prototype.send = function(
  * @override
  */
 goog.testing.messaging.MockMessageChannel.prototype.dispose = function() {
+  'use strict';
   this.disposed = true;
 };
 
@@ -69,5 +71,6 @@ goog.testing.messaging.MockMessageChannel.prototype.dispose = function() {
  */
 goog.testing.messaging.MockMessageChannel.prototype.receive = function(
     serviceName, payload) {
+  'use strict';
   this.deliver(serviceName, payload);
 };

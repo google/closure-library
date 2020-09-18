@@ -34,6 +34,7 @@ goog.locale.timeZoneDetection.TZ_POKE_POINTS_ = [
  * @return {number} Fingerprint of user's time zone setting.
  */
 goog.locale.timeZoneDetection.getFingerprint = function(date) {
+  'use strict';
   var hash = 0;
   var stdOffset;
   var isComplex = false;
@@ -61,6 +62,7 @@ goog.locale.timeZoneDetection.getFingerprint = function(date) {
  * @return {string} Time zone ID of best guess.
  */
 goog.locale.timeZoneDetection.detectTimeZone = function(opt_country, opt_date) {
+  'use strict';
   var date = opt_date || new Date();
   var fingerprint = goog.locale.timeZoneDetection.getFingerprint(date);
   var timeZoneList = goog.locale.TimeZoneFingerprint[fingerprint];
@@ -93,6 +95,7 @@ goog.locale.timeZoneDetection.detectTimeZone = function(opt_country, opt_date) {
  */
 goog.locale.timeZoneDetection.getTimeZoneList = function(
     opt_country, opt_date) {
+  'use strict';
   var date = opt_date || new Date();
   var fingerprint = goog.locale.timeZoneDetection.getFingerprint(date);
   var timeZoneList = goog.locale.TimeZoneFingerprint[fingerprint];

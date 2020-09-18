@@ -22,6 +22,7 @@ goog.require('goog.userAgent');
  * @return {string} The platform version.
  */
 goog.userAgent.platform.determineVersion_ = function() {
+  'use strict';
   var re;
   if (goog.userAgent.WINDOWS) {
     re = /Windows NT ([0-9.]+)/;
@@ -71,6 +72,7 @@ goog.userAgent.platform.VERSION = goog.userAgent.platform.determineVersion_();
  *     same as the given version.
  */
 goog.userAgent.platform.isVersion = function(version) {
+  'use strict';
   return goog.string.compareVersions(
              goog.userAgent.platform.VERSION, version) >= 0;
 };

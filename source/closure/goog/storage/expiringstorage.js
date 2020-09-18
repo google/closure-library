@@ -25,6 +25,7 @@ goog.requireType('goog.storage.mechanism.Mechanism');
  * @extends {goog.storage.RichStorage}
  */
 goog.storage.ExpiringStorage = function(mechanism) {
+  'use strict';
   goog.storage.ExpiringStorage.base(this, 'constructor', mechanism);
 };
 goog.inherits(goog.storage.ExpiringStorage, goog.storage.RichStorage);
@@ -55,6 +56,7 @@ goog.storage.ExpiringStorage.CREATION_TIME_KEY = 'creation';
  * @return {number|undefined} Wrapper creation time.
  */
 goog.storage.ExpiringStorage.getCreationTime = function(wrapper) {
+  'use strict';
   return wrapper[goog.storage.ExpiringStorage.CREATION_TIME_KEY];
 };
 
@@ -66,6 +68,7 @@ goog.storage.ExpiringStorage.getCreationTime = function(wrapper) {
  * @return {number|undefined} Wrapper expiration time.
  */
 goog.storage.ExpiringStorage.getExpirationTime = function(wrapper) {
+  'use strict';
   return wrapper[goog.storage.ExpiringStorage.EXPIRATION_TIME_KEY];
 };
 
@@ -77,6 +80,7 @@ goog.storage.ExpiringStorage.getExpirationTime = function(wrapper) {
  * @return {boolean} True if the item has expired.
  */
 goog.storage.ExpiringStorage.isExpired = function(wrapper) {
+  'use strict';
   var creation = goog.storage.ExpiringStorage.getCreationTime(wrapper);
   var expiration = goog.storage.ExpiringStorage.getExpirationTime(wrapper);
   return !!expiration && expiration < goog.now() ||
@@ -96,6 +100,7 @@ goog.storage.ExpiringStorage.isExpired = function(wrapper) {
  */
 goog.storage.ExpiringStorage.prototype.set = function(
     key, value, opt_expiration) {
+  'use strict';
   var wrapper = goog.storage.RichStorage.Wrapper.wrapIfNecessary(value);
   if (wrapper) {
     if (opt_expiration) {
@@ -121,6 +126,7 @@ goog.storage.ExpiringStorage.prototype.set = function(
  * @override
  */
 goog.storage.ExpiringStorage.prototype.getWrapper = function(key, opt_expired) {
+  'use strict';
   var wrapper = goog.storage.ExpiringStorage.base(this, 'getWrapper', key);
   if (!wrapper) {
     return undefined;

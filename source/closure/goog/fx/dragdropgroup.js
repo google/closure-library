@@ -31,6 +31,7 @@ goog.require('goog.fx.DragDropItem');
  * @struct
  */
 goog.fx.DragDropGroup = function() {
+  'use strict';
   goog.fx.AbstractDragDrop.call(this);
 };
 goog.inherits(goog.fx.DragDropGroup, goog.fx.AbstractDragDrop);
@@ -47,6 +48,7 @@ goog.inherits(goog.fx.DragDropGroup, goog.fx.AbstractDragDrop);
  * @override
  */
 goog.fx.DragDropGroup.prototype.addItem = function(element, opt_data) {
+  'use strict';
   var item = new goog.fx.DragDropItem(element, opt_data);
   this.addDragDropItem(item);
 };
@@ -61,6 +63,7 @@ goog.fx.DragDropGroup.prototype.addItem = function(element, opt_data) {
  *     invalid
  */
 goog.fx.DragDropGroup.prototype.addDragDropItem = function(item) {
+  'use strict';
   item.setParent(this);
   this.items_.push(item);
   if (this.isInitialized()) {
@@ -76,6 +79,7 @@ goog.fx.DragDropGroup.prototype.addDragDropItem = function(item) {
  *     id, that was previously added with addItem().
  */
 goog.fx.DragDropGroup.prototype.removeItem = function(element) {
+  'use strict';
   element = goog.dom.getElement(element);
   for (var item, i = 0; item = this.items_[i]; i++) {
     if (item.element == element) {

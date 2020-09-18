@@ -63,6 +63,7 @@ goog.requireType('goog.ui.MenuRenderer');
  * @constructor
  */
 goog.ui.PopupMenu = function(opt_domHelper, opt_renderer) {
+  'use strict';
   goog.ui.Menu.call(this, opt_domHelper, opt_renderer);
 
   this.setAllowAutoFocus(true);
@@ -121,6 +122,7 @@ goog.ui.PopupMenu.prototype.currentAnchor_ = null;
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.PopupMenu.prototype.decorateInternal = function(element) {
+  'use strict';
   goog.ui.PopupMenu.superClass_.decorateInternal.call(this, element);
   // 'for' is a custom attribute for attaching the menu to a click target
   var htmlFor = element.getAttribute('for') || element.htmlFor;
@@ -134,6 +136,7 @@ goog.ui.PopupMenu.prototype.decorateInternal = function(element) {
 
 /** @override */
 goog.ui.PopupMenu.prototype.enterDocument = function() {
+  'use strict';
   goog.ui.PopupMenu.superClass_.enterDocument.call(this);
 
   this.targets_.forEach(this.attachEvent_, this);
@@ -165,7 +168,7 @@ goog.ui.PopupMenu.prototype.enterDocument = function() {
  */
 goog.ui.PopupMenu.prototype.attach = function(
     element, opt_targetCorner, opt_menuCorner, opt_contextMenu, opt_margin) {
-
+  'use strict';
   if (this.isAttachTarget(element)) {
     // Already in the popup, so just return.
     return;
@@ -203,6 +206,7 @@ goog.ui.PopupMenu.prototype.attach = function(
  * @private
  */
 goog.ui.PopupMenu.prototype.onMenuKeyboardAction_ = function(element, e) {
+  'use strict';
   if (e.keyCode == goog.events.KeyCodes.ESC) {
     element.focus();
     return;
@@ -258,6 +262,7 @@ goog.ui.PopupMenu.prototype.onMenuKeyboardAction_ = function(element, e) {
  */
 goog.ui.PopupMenu.prototype.createAttachTarget = function(
     element, opt_targetCorner, opt_menuCorner, opt_contextMenu, opt_margin) {
+  'use strict';
   if (!element) {
     return null;
   }
@@ -290,9 +295,10 @@ goog.ui.PopupMenu.prototype.createAttachTarget = function(
  * @protected
  */
 goog.ui.PopupMenu.prototype.getAttachTarget = function(element) {
+  'use strict';
   return element ?
       /** @type {?Object} */ (this.targets_.get(goog.getUid(element))) :
-                             null;
+      null;
 };
 
 
@@ -304,6 +310,7 @@ goog.ui.PopupMenu.prototype.getAttachTarget = function(element) {
  * @protected
  */
 goog.ui.PopupMenu.prototype.isAttachTarget = function(element) {
+  'use strict';
   return element ? this.targets_.containsKey(goog.getUid(element)) : false;
 };
 
@@ -313,6 +320,7 @@ goog.ui.PopupMenu.prototype.isAttachTarget = function(element) {
  *     visible.
  */
 goog.ui.PopupMenu.prototype.getAttachedElement = function() {
+  'use strict';
   return this.currentAnchor_;
 };
 
@@ -325,6 +333,7 @@ goog.ui.PopupMenu.prototype.getAttachedElement = function() {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.PopupMenu.prototype.attachEvent_ = function(target) {
+  'use strict';
   this.getHandler().listen(
       target.element_, target.eventType_, this.onTargetClick_);
   if (target.eventType_ != goog.events.EventType.CONTEXTMENU) {
@@ -339,6 +348,7 @@ goog.ui.PopupMenu.prototype.attachEvent_ = function(target) {
  * Detaches all listeners
  */
 goog.ui.PopupMenu.prototype.detachAll = function() {
+  'use strict';
   if (this.isInDocument()) {
     var keys = this.targets_.getKeys();
     for (var i = 0; i < keys.length; i++) {
@@ -355,6 +365,7 @@ goog.ui.PopupMenu.prototype.detachAll = function() {
  * @param {?Element} element Element whose click event should trigger the menu.
  */
 goog.ui.PopupMenu.prototype.detach = function(element) {
+  'use strict';
   if (!this.isAttachTarget(element)) {
     throw new Error('Menu not attached to provided element, unable to detach.');
   }
@@ -375,6 +386,7 @@ goog.ui.PopupMenu.prototype.detach = function(element) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.PopupMenu.prototype.detachEvent_ = function(target) {
+  'use strict';
   this.getHandler().unlisten(
       target.element_, target.eventType_, this.onTargetClick_);
 };
@@ -386,6 +398,7 @@ goog.ui.PopupMenu.prototype.detachEvent_ = function(target) {
  * @param {boolean} toggle The new toggle mode.
  */
 goog.ui.PopupMenu.prototype.setToggleMode = function(toggle) {
+  'use strict';
   this.toggleMode_ = toggle;
 };
 
@@ -395,6 +408,7 @@ goog.ui.PopupMenu.prototype.setToggleMode = function(toggle) {
  * @param {boolean} shiftOverride
  */
 goog.ui.PopupMenu.prototype.setShiftOverride = function(shiftOverride) {
+  'use strict';
   this.shiftOverride_ = shiftOverride;
 };
 
@@ -403,6 +417,7 @@ goog.ui.PopupMenu.prototype.setShiftOverride = function(shiftOverride) {
  * @return {boolean} toggle.
  */
 goog.ui.PopupMenu.prototype.getToggleMode = function() {
+  'use strict';
   return this.toggleMode_;
 };
 
@@ -412,6 +427,7 @@ goog.ui.PopupMenu.prototype.getToggleMode = function() {
  * @return {boolean}
  */
 goog.ui.PopupMenu.prototype.getShiftOverride = function() {
+  'use strict';
   return this.shiftOverride_;
 };
 
@@ -428,6 +444,7 @@ goog.ui.PopupMenu.prototype.getShiftOverride = function() {
  */
 goog.ui.PopupMenu.prototype.showWithPosition = function(
     position, opt_menuCorner, opt_margin, opt_anchor) {
+  'use strict';
   var isVisible = this.isVisible();
   if (this.isOrWasRecentlyVisible() && this.toggleMode_) {
     this.hide();
@@ -481,6 +498,7 @@ goog.ui.PopupMenu.prototype.showWithPosition = function(
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
+  'use strict';
   var position = (target.targetCorner_ !== undefined) ?
       new goog.positioning.AnchoredViewportPosition(
           target.element_, target.targetCorner_, true) :
@@ -506,6 +524,7 @@ goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
  *     should be anchored.
  */
 goog.ui.PopupMenu.prototype.showAt = function(x, y, opt_menuCorner) {
+  'use strict';
   this.showWithPosition(
       new goog.positioning.ViewportClientPosition(x, y), opt_menuCorner);
 };
@@ -521,6 +540,7 @@ goog.ui.PopupMenu.prototype.showAt = function(x, y, opt_menuCorner) {
  */
 goog.ui.PopupMenu.prototype.showAtElement = function(
     element, targetCorner, opt_menuCorner) {
+  'use strict';
   this.showWithPosition(
       new goog.positioning.MenuAnchoredPosition(element, targetCorner, true),
       opt_menuCorner, null, element);
@@ -531,6 +551,7 @@ goog.ui.PopupMenu.prototype.showAtElement = function(
  * Hides the menu.
  */
 goog.ui.PopupMenu.prototype.hide = function() {
+  'use strict';
   if (!this.isVisible()) {
     return;
   }
@@ -553,6 +574,7 @@ goog.ui.PopupMenu.prototype.hide = function() {
  *     within about 150 ms ago.
  */
 goog.ui.PopupMenu.prototype.isOrWasRecentlyVisible = function() {
+  'use strict';
   return this.isVisible() || this.wasRecentlyHidden();
 };
 
@@ -563,6 +585,7 @@ goog.ui.PopupMenu.prototype.isOrWasRecentlyVisible = function() {
  * @protected
  */
 goog.ui.PopupMenu.prototype.wasRecentlyHidden = function() {
+  'use strict';
   return goog.now() - this.lastHide_ < goog.ui.PopupBase.DEBOUNCE_DELAY_MS;
 };
 
@@ -573,6 +596,7 @@ goog.ui.PopupMenu.prototype.wasRecentlyHidden = function() {
  * @private
  */
 goog.ui.PopupMenu.prototype.onAction_ = function(opt_e) {
+  'use strict';
   this.hide();
 };
 
@@ -583,6 +607,7 @@ goog.ui.PopupMenu.prototype.onAction_ = function(opt_e) {
  * @private
  */
 goog.ui.PopupMenu.prototype.onTargetClick_ = function(e) {
+  'use strict';
   if (this.shiftOverride_ && e.shiftKey &&
       e.button == goog.events.BrowserEvent.MouseButton.RIGHT) {
     return;
@@ -597,6 +622,7 @@ goog.ui.PopupMenu.prototype.onTargetClick_ = function(e) {
  * @private
  */
 goog.ui.PopupMenu.prototype.onTargetKeyboardAction_ = function(e) {
+  'use strict';
   if (e.keyCode == goog.events.KeyCodes.SPACE ||
       e.keyCode == goog.events.KeyCodes.ENTER ||
       e.keyCode == goog.events.KeyCodes.DOWN) {
@@ -617,6 +643,7 @@ goog.ui.PopupMenu.prototype.onTargetKeyboardAction_ = function(e) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.PopupMenu.prototype.onTargetActivation_ = function(e) {
+  'use strict';
   var keys = this.targets_.getKeys();
   for (var i = 0; i < keys.length; i++) {
     var target = /** @type {!Object} */ (this.targets_.get(keys[i]));
@@ -636,6 +663,7 @@ goog.ui.PopupMenu.prototype.onTargetActivation_ = function(e) {
  * @protected
  */
 goog.ui.PopupMenu.prototype.onDocClick = function(e) {
+  'use strict';
   if (this.isVisible() &&
       !this.containsElement(/** @type {!Element} */ (e.target))) {
     this.hide();
@@ -649,6 +677,7 @@ goog.ui.PopupMenu.prototype.onDocClick = function(e) {
  * @override
  */
 goog.ui.PopupMenu.prototype.handleBlur = function(e) {
+  'use strict';
   goog.ui.PopupMenu.superClass_.handleBlur.call(this, e);
   this.hide();
 };
@@ -656,6 +685,7 @@ goog.ui.PopupMenu.prototype.handleBlur = function(e) {
 
 /** @override */
 goog.ui.PopupMenu.prototype.disposeInternal = function() {
+  'use strict';
   // Always call the superclass' disposeInternal() first (Bug 715885).
   goog.ui.PopupMenu.superClass_.disposeInternal.call(this);
 

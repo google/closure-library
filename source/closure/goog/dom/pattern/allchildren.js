@@ -23,6 +23,7 @@ goog.requireType('goog.dom.TagWalkType');
  * @extends {goog.dom.pattern.AbstractPattern}
  */
 goog.dom.pattern.AllChildren = function() {
+  'use strict';
   /**
    * Tracks the matcher's depth to detect the end of the tag.
    *
@@ -43,6 +44,7 @@ goog.inherits(goog.dom.pattern.AllChildren, goog.dom.pattern.AbstractPattern);
  * @override
  */
 goog.dom.pattern.AllChildren.prototype.matchToken = function(token, type) {
+  'use strict';
   this.depth_ += type;
 
   if (this.depth_ >= 0) {
@@ -59,5 +61,6 @@ goog.dom.pattern.AllChildren.prototype.matchToken = function(token, type) {
  * @override
  */
 goog.dom.pattern.AllChildren.prototype.reset = function() {
+  'use strict';
   this.depth_ = 0;
 };

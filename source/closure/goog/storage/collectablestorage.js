@@ -30,6 +30,7 @@ goog.requireType('goog.storage.mechanism.IterableMechanism');
  * @extends {goog.storage.ExpiringStorage}
  */
 goog.storage.CollectableStorage = function(mechanism) {
+  'use strict';
   goog.storage.CollectableStorage.base(this, 'constructor', mechanism);
 };
 goog.inherits(goog.storage.CollectableStorage, goog.storage.ExpiringStorage);
@@ -45,8 +46,10 @@ goog.inherits(goog.storage.CollectableStorage, goog.storage.ExpiringStorage);
  */
 goog.storage.CollectableStorage.prototype.getExpiredKeys_ = function(
     keys, opt_strict) {
+  'use strict';
   var keysToRemove = [];
   goog.iter.forEach(keys, function(key) {
+    'use strict';
     // Get the wrapper.
     var wrapper;
 
@@ -106,8 +109,10 @@ goog.storage.CollectableStorage.prototype.getExpiredKeys_ = function(
  */
 goog.storage.CollectableStorage.prototype.collectInternal = function(
     keys, opt_strict) {
+  'use strict';
   var keysToRemove = this.getExpiredKeys_(keys, opt_strict);
   goog.array.forEach(keysToRemove, function(key) {
+    'use strict';
     goog.storage.CollectableStorage.prototype.remove.call(this, key);
   }, this);
   return keysToRemove;
@@ -120,6 +125,7 @@ goog.storage.CollectableStorage.prototype.collectInternal = function(
  * @param {boolean=} opt_strict Also remove invalid keys.
  */
 goog.storage.CollectableStorage.prototype.collect = function(opt_strict) {
+  'use strict';
   this.collectInternal(
       /** @type {goog.storage.mechanism.IterableMechanism} */ (this.mechanism)
           .__iterator__(true),

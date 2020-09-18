@@ -24,6 +24,7 @@ goog.require('goog.ui.MenuSeparatorRenderer');
  * @extends {goog.ui.MenuSeparatorRenderer}
  */
 goog.ui.ToolbarSeparatorRenderer = function() {
+  'use strict';
   goog.ui.MenuSeparatorRenderer.call(this);
 };
 goog.inherits(goog.ui.ToolbarSeparatorRenderer, goog.ui.MenuSeparatorRenderer);
@@ -50,6 +51,7 @@ goog.ui.ToolbarSeparatorRenderer.CSS_CLASS =
  * @override
  */
 goog.ui.ToolbarSeparatorRenderer.prototype.createDom = function(separator) {
+  'use strict';
   // 00A0 is &nbsp;
   return separator.getDomHelper().createDom(
       goog.dom.TagName.DIV, this.getClassNames(separator).join(' ') + ' ' +
@@ -68,6 +70,7 @@ goog.ui.ToolbarSeparatorRenderer.prototype.createDom = function(separator) {
  */
 goog.ui.ToolbarSeparatorRenderer.prototype.decorate = function(
     separator, element) {
+  'use strict';
   element = goog.ui.ToolbarSeparatorRenderer.superClass_.decorate.call(
       this, separator, element);
   goog.asserts.assert(element);
@@ -83,5 +86,6 @@ goog.ui.ToolbarSeparatorRenderer.prototype.decorate = function(
  * @override
  */
 goog.ui.ToolbarSeparatorRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.ToolbarSeparatorRenderer.CSS_CLASS;
 };

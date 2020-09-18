@@ -49,6 +49,7 @@ goog.requireType('goog.soy.data.SanitizedUri');
  * @constructor
  */
 goog.soy.Renderer = function(opt_injectedDataSupplier, opt_domHelper) {
+  'use strict';
   /**
    * @const {!goog.dom.DomHelper}
    * @private
@@ -75,6 +76,7 @@ goog.soy.Renderer = function(opt_injectedDataSupplier, opt_domHelper) {
  */
 goog.soy.Renderer.prototype.renderAsFragment = function(
     template, opt_templateData) {
+  'use strict';
   var node = goog.soy.renderAsFragment(
       template, opt_templateData, this.getInjectedData_(), this.dom_);
   this.handleRender(node, goog.soy.data.SanitizedContentKind.HTML);
@@ -97,6 +99,7 @@ goog.soy.Renderer.prototype.renderAsFragment = function(
  */
 goog.soy.Renderer.prototype.renderAsElement = function(
     template, opt_templateData) {
+  'use strict';
   var element = goog.soy.renderAsElement(
       template, opt_templateData, this.getInjectedData_(), this.dom_);
   this.handleRender(element, goog.soy.data.SanitizedContentKind.HTML);
@@ -116,6 +119,7 @@ goog.soy.Renderer.prototype.renderAsElement = function(
  */
 goog.soy.Renderer.prototype.renderElement = function(
     element, template, opt_templateData) {
+  'use strict';
   goog.soy.renderElement(
       element, template, opt_templateData, this.getInjectedData_());
   this.handleRender(element, goog.soy.data.SanitizedContentKind.HTML);
@@ -135,6 +139,7 @@ goog.soy.Renderer.prototype.renderElement = function(
  * @template ARG_TYPES
  */
 goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
+  'use strict';
   var result = template(opt_templateData || {}, this.getInjectedData_());
   goog.asserts.assert(
       !(result instanceof goog.soy.data.SanitizedContent) ||
@@ -160,6 +165,7 @@ goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
  * @template ARG_TYPES
  */
 goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
+  'use strict';
   var result = template(opt_templateData || {}, this.getInjectedData_());
   if (goog.asserts.ENABLE_ASSERTS) {
     /** @suppress {checkTypes} Runtime check for untyped code. */
@@ -185,6 +191,7 @@ goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
  */
 goog.soy.Renderer.prototype.renderStrict = function(
     template, opt_templateData) {
+  'use strict';
   return this.renderStrictOfKind(
       template, opt_templateData, goog.soy.data.SanitizedContentKind.HTML);
 };
@@ -201,6 +208,7 @@ goog.soy.Renderer.prototype.renderStrict = function(
  */
 goog.soy.Renderer.prototype.renderStrictUri = function(
     template, opt_templateData) {
+  'use strict';
   return this.renderStrictOfKind(
       template, opt_templateData, goog.soy.data.SanitizedContentKind.URI);
 };
@@ -222,6 +230,7 @@ goog.soy.Renderer.prototype.renderStrictUri = function(
  */
 goog.soy.Renderer.prototype.renderStrictOfKind = function(
     template, opt_templateData, opt_kind) {
+  'use strict';
   var result = template(opt_templateData || {}, this.getInjectedData_());
   goog.asserts.assertInstanceof(
       result, goog.soy.data.SanitizedContent,
@@ -250,6 +259,7 @@ goog.soy.Renderer.prototype.renderStrictOfKind = function(
  */
 goog.soy.Renderer.prototype.renderSafeHtml = function(
     template, opt_templateData) {
+  'use strict';
   var result = this.renderStrict(template, opt_templateData);
   // Convert from SanitizedHtml to SafeHtml.
   return result.toSafeHtml();
@@ -271,6 +281,7 @@ goog.soy.Renderer.prototype.renderSafeHtml = function(
  */
 goog.soy.Renderer.prototype.renderSafeStyleSheet = function(
     template, opt_templateData) {
+  'use strict';
   var result = this.renderStrictOfKind(
       template, opt_templateData, goog.soy.data.SanitizedContentKind.CSS);
   return result.toSafeStyleSheet();
@@ -282,6 +293,7 @@ goog.soy.Renderer.prototype.renderSafeStyleSheet = function(
  * @protected
  */
 goog.soy.Renderer.prototype.getDom = function() {
+  'use strict';
   return this.dom_;
 };
 
@@ -305,6 +317,7 @@ goog.soy.Renderer.prototype.handleRender = goog.nullFunction;
  * @private
  */
 goog.soy.Renderer.prototype.getInjectedData_ = function() {
+  'use strict';
   return this.supplier_ ? this.supplier_.getData() : {};
 };
 

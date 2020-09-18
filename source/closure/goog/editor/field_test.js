@@ -255,7 +255,7 @@ testSuite({
     googDom.getElement('parent').innerHTML = HTML;
     assertTrue(
         'FieldConstructor should be set by the test HTML file',
-        goog.isFunction(FieldConstructor));
+        typeof FieldConstructor === 'function');
   },
 
   tearDown() {

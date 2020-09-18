@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview A class that wraps several types of HTML5 message-passing
- * entities ({@link MessagePort}s, {@link WebWorker}s, and {@link Window}s),
+ * entities ({@link MessagePort}s, {@link Worker}s, and {@link Window}s),
  * providing a unified interface.
  *
  * This is tested under Chrome, Safari, and Firefox. Since Firefox 3.6 has an
@@ -38,14 +38,14 @@ goog.requireType('goog.messaging.MessageChannel');
 
 /**
  * A wrapper for several types of HTML5 message-passing entities
- * ({@link MessagePort}s and {@link WebWorker}s). This class implements the
+ * ({@link MessagePort}s and {@link Worker}s). This class implements the
  * {@link goog.messaging.MessageChannel} interface.
  *
  * This class can be used in conjunction with other communication on the port.
  * It sets {@link goog.messaging.PortChannel.FLAG} to true on all messages it
  * sends.
  *
- * @param {!MessagePort|!WebWorker} underlyingPort The message-passing
+ * @param {!MessagePort|!Worker} underlyingPort The message-passing
  *     entity to wrap. If this is a {@link MessagePort}, it should be started.
  *     The remote end should also be wrapped in a PortChannel. This will be
  *     disposed along with the PortChannel; this means terminating it if it's a
@@ -60,7 +60,7 @@ goog.messaging.PortChannel = function(underlyingPort) {
 
   /**
    * The wrapped message-passing entity.
-   * @type {!MessagePort|!WebWorker}
+   * @type {!MessagePort|!Worker}
    * @private
    */
   this.port_ = underlyingPort;

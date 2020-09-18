@@ -17,6 +17,7 @@ goog.require('goog.editor.plugins.AbstractDialogPlugin');
 goog.require('goog.editor.range');
 goog.require('goog.functions');
 goog.require('goog.ui.editor.AbstractDialog');
+goog.requireType('goog.dom.DomHelper');
 
 
 // *** Public interface ***************************************************** //

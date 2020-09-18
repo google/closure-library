@@ -51,6 +51,7 @@ goog.requireType('goog.events.EventHandler');
  * @struct
  */
 goog.fx.dom.PredefinedEffect = function(element, start, end, time, opt_acc) {
+  'use strict';
   goog.fx.dom.PredefinedEffect.base(
       this, 'constructor', start, end, time, opt_acc);
 
@@ -83,6 +84,7 @@ goog.fx.dom.PredefinedEffect.prototype.updateStyle = goog.nullFunction;
  *     otherwise.
  */
 goog.fx.dom.PredefinedEffect.prototype.isRightToLeft = function() {
+  'use strict';
   if (this.rightToLeft_ === undefined) {
     this.rightToLeft_ = goog.style.isRightToLeft(this.element);
   }
@@ -92,6 +94,7 @@ goog.fx.dom.PredefinedEffect.prototype.isRightToLeft = function() {
 
 /** @override */
 goog.fx.dom.PredefinedEffect.prototype.onAnimate = function() {
+  'use strict';
   this.updateStyle();
   goog.fx.dom.PredefinedEffect.superClass_.onAnimate.call(this);
 };
@@ -99,6 +102,7 @@ goog.fx.dom.PredefinedEffect.prototype.onAnimate = function() {
 
 /** @override */
 goog.fx.dom.PredefinedEffect.prototype.onEnd = function() {
+  'use strict';
   this.updateStyle();
   goog.fx.dom.PredefinedEffect.superClass_.onEnd.call(this);
 };
@@ -106,6 +110,7 @@ goog.fx.dom.PredefinedEffect.prototype.onEnd = function() {
 
 /** @override */
 goog.fx.dom.PredefinedEffect.prototype.onBegin = function() {
+  'use strict';
   this.updateStyle();
   goog.fx.dom.PredefinedEffect.superClass_.onBegin.call(this);
 };
@@ -128,6 +133,7 @@ goog.fx.dom.PredefinedEffect.prototype.onBegin = function() {
  * @struct
  */
 goog.fx.dom.Slide = function(element, start, end, time, opt_acc) {
+  'use strict';
   if (start.length != 2 || end.length != 2) {
     throw new Error('Start and end points must be 2D');
   }
@@ -139,6 +145,7 @@ goog.inherits(goog.fx.dom.Slide, goog.fx.dom.PredefinedEffect);
 
 /** @override */
 goog.fx.dom.Slide.prototype.updateStyle = function() {
+  'use strict';
   var pos = (this.isRightPositioningForRtlEnabled() && this.isRightToLeft()) ?
       'right' :
       'left';
@@ -160,6 +167,7 @@ goog.fx.dom.Slide.prototype.updateStyle = function() {
  * @struct
  */
 goog.fx.dom.SlideFrom = function(element, end, time, opt_acc) {
+  'use strict';
   var offsetLeft = /** @type {!HTMLElement} */ (element).offsetLeft;
   var start = [offsetLeft, /** @type {!HTMLElement} */ (element).offsetTop];
   goog.fx.dom.SlideFrom.base(
@@ -172,6 +180,7 @@ goog.inherits(goog.fx.dom.SlideFrom, goog.fx.dom.Slide);
 
 /** @override */
 goog.fx.dom.SlideFrom.prototype.onBegin = function() {
+  'use strict';
   var offsetLeft = this.isRightPositioningForRtlEnabled() ?
       goog.style.bidi.getOffsetStart(this.element) :
       /** @type {!HTMLElement} */ (this.element).offsetLeft;
@@ -198,6 +207,7 @@ goog.fx.dom.SlideFrom.prototype.onBegin = function() {
  * @struct
  */
 goog.fx.dom.Swipe = function(element, start, end, time, opt_acc) {
+  'use strict';
   if (start.length != 2 || end.length != 2) {
     throw new Error('Start and end points must be 2D');
   }
@@ -228,6 +238,7 @@ goog.inherits(goog.fx.dom.Swipe, goog.fx.dom.PredefinedEffect);
  * @override
  */
 goog.fx.dom.Swipe.prototype.updateStyle = function() {
+  'use strict';
   var x = this.coords[0];
   var y = this.coords[1];
   this.clip_(Math.round(x), Math.round(y), this.maxWidth_, this.maxHeight_);
@@ -251,6 +262,7 @@ goog.fx.dom.Swipe.prototype.updateStyle = function() {
  * @private
  */
 goog.fx.dom.Swipe.prototype.clip_ = function(x, y, w, h) {
+  'use strict';
   this.element.style.clip =
       'rect(' + (h - y) + 'px ' + w + 'px ' + h + 'px ' + (w - x) + 'px)';
 };
@@ -272,6 +284,7 @@ goog.fx.dom.Swipe.prototype.clip_ = function(x, y, w, h) {
  * @struct
  */
 goog.fx.dom.Scroll = function(element, start, end, time, opt_acc) {
+  'use strict';
   if (start.length != 2 || end.length != 2) {
     throw new Error('Start and end points must be 2D');
   }
@@ -287,6 +300,7 @@ goog.inherits(goog.fx.dom.Scroll, goog.fx.dom.PredefinedEffect);
  * @override
  */
 goog.fx.dom.Scroll.prototype.updateStyle = function() {
+  'use strict';
   if (this.isRightPositioningForRtlEnabled()) {
     goog.style.bidi.setScrollOffset(this.element, Math.round(this.coords[0]));
   } else {
@@ -313,6 +327,7 @@ goog.fx.dom.Scroll.prototype.updateStyle = function() {
  * @struct
  */
 goog.fx.dom.Resize = function(element, start, end, time, opt_acc) {
+  'use strict';
   if (start.length != 2 || end.length != 2) {
     throw new Error('Start and end points must be 2D');
   }
@@ -329,6 +344,7 @@ goog.inherits(goog.fx.dom.Resize, goog.fx.dom.PredefinedEffect);
  * @override
  */
 goog.fx.dom.Resize.prototype.updateStyle = function() {
+  'use strict';
   this.element.style.width = Math.round(this.coords[0]) + 'px';
   this.element.style.height = Math.round(this.coords[1]) + 'px';
 };
@@ -350,6 +366,7 @@ goog.fx.dom.Resize.prototype.updateStyle = function() {
  * @struct
  */
 goog.fx.dom.ResizeWidth = function(element, start, end, time, opt_acc) {
+  'use strict';
   goog.fx.dom.ResizeWidth.base(
       this, 'constructor', element, [start], [end], time, opt_acc);
 };
@@ -362,6 +379,7 @@ goog.inherits(goog.fx.dom.ResizeWidth, goog.fx.dom.PredefinedEffect);
  * @override
  */
 goog.fx.dom.ResizeWidth.prototype.updateStyle = function() {
+  'use strict';
   this.element.style.width = Math.round(this.coords[0]) + 'px';
 };
 
@@ -382,6 +400,7 @@ goog.fx.dom.ResizeWidth.prototype.updateStyle = function() {
  * @struct
  */
 goog.fx.dom.ResizeHeight = function(element, start, end, time, opt_acc) {
+  'use strict';
   goog.fx.dom.ResizeHeight.base(
       this, 'constructor', element, [start], [end], time, opt_acc);
 };
@@ -394,6 +413,7 @@ goog.inherits(goog.fx.dom.ResizeHeight, goog.fx.dom.PredefinedEffect);
  * @override
  */
 goog.fx.dom.ResizeHeight.prototype.updateStyle = function() {
+  'use strict';
   this.element.style.height = Math.round(this.coords[0]) + 'px';
 };
 
@@ -415,6 +435,7 @@ goog.fx.dom.ResizeHeight.prototype.updateStyle = function() {
  * @struct
  */
 goog.fx.dom.Fade = function(element, start, end, time, opt_acc) {
+  'use strict';
   if (typeof start === 'number') start = [start];
   if (typeof end === 'number') end = [end];
 
@@ -454,6 +475,7 @@ goog.fx.dom.Fade.OPACITY_UNSET_ = -1;
  * @override
  */
 goog.fx.dom.Fade.prototype.updateStyle = function() {
+  'use strict';
   var opacity = this.coords[0];
   var delta = Math.abs(opacity - this.lastOpacityUpdate_);
   // In order to keep eager browsers from over-rendering, only update
@@ -467,6 +489,7 @@ goog.fx.dom.Fade.prototype.updateStyle = function() {
 
 /** @override */
 goog.fx.dom.Fade.prototype.onBegin = function() {
+  'use strict';
   this.lastOpacityUpdate_ = goog.fx.dom.Fade.OPACITY_UNSET_;
   goog.fx.dom.Fade.base(this, 'onBegin');
 };
@@ -474,6 +497,7 @@ goog.fx.dom.Fade.prototype.onBegin = function() {
 
 /** @override */
 goog.fx.dom.Fade.prototype.onEnd = function() {
+  'use strict';
   this.lastOpacityUpdate_ = goog.fx.dom.Fade.OPACITY_UNSET_;
   goog.fx.dom.Fade.base(this, 'onEnd');
 };
@@ -483,6 +507,7 @@ goog.fx.dom.Fade.prototype.onEnd = function() {
  * Animation event handler that will show the element.
  */
 goog.fx.dom.Fade.prototype.show = function() {
+  'use strict';
   this.element.style.display = '';
 };
 
@@ -491,6 +516,7 @@ goog.fx.dom.Fade.prototype.show = function() {
  * Animation event handler that will hide the element
  */
 goog.fx.dom.Fade.prototype.hide = function() {
+  'use strict';
   this.element.style.display = 'none';
 };
 
@@ -507,6 +533,7 @@ goog.fx.dom.Fade.prototype.hide = function() {
  * @struct
  */
 goog.fx.dom.FadeOut = function(element, time, opt_acc) {
+  'use strict';
   goog.fx.dom.FadeOut.base(this, 'constructor', element, 1, 0, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.FadeOut, goog.fx.dom.Fade);
@@ -524,6 +551,7 @@ goog.inherits(goog.fx.dom.FadeOut, goog.fx.dom.Fade);
  * @struct
  */
 goog.fx.dom.FadeIn = function(element, time, opt_acc) {
+  'use strict';
   goog.fx.dom.FadeIn.base(this, 'constructor', element, 0, 1, time, opt_acc);
 };
 goog.inherits(goog.fx.dom.FadeIn, goog.fx.dom.Fade);
@@ -542,6 +570,7 @@ goog.inherits(goog.fx.dom.FadeIn, goog.fx.dom.Fade);
  * @struct
  */
 goog.fx.dom.FadeOutAndHide = function(element, time, opt_acc) {
+  'use strict';
   goog.fx.dom.FadeOutAndHide.base(
       this, 'constructor', element, 1, 0, time, opt_acc);
 };
@@ -550,6 +579,7 @@ goog.inherits(goog.fx.dom.FadeOutAndHide, goog.fx.dom.Fade);
 
 /** @override */
 goog.fx.dom.FadeOutAndHide.prototype.onBegin = function() {
+  'use strict';
   this.show();
   goog.fx.dom.FadeOutAndHide.superClass_.onBegin.call(this);
 };
@@ -557,6 +587,7 @@ goog.fx.dom.FadeOutAndHide.prototype.onBegin = function() {
 
 /** @override */
 goog.fx.dom.FadeOutAndHide.prototype.onEnd = function() {
+  'use strict';
   this.hide();
   goog.fx.dom.FadeOutAndHide.superClass_.onEnd.call(this);
 };
@@ -575,6 +606,7 @@ goog.fx.dom.FadeOutAndHide.prototype.onEnd = function() {
  * @struct
  */
 goog.fx.dom.FadeInAndShow = function(element, time, opt_acc) {
+  'use strict';
   goog.fx.dom.FadeInAndShow.base(
       this, 'constructor', element, 0, 1, time, opt_acc);
 };
@@ -583,6 +615,7 @@ goog.inherits(goog.fx.dom.FadeInAndShow, goog.fx.dom.Fade);
 
 /** @override */
 goog.fx.dom.FadeInAndShow.prototype.onBegin = function() {
+  'use strict';
   this.show();
   goog.fx.dom.FadeInAndShow.superClass_.onBegin.call(this);
 };
@@ -604,6 +637,7 @@ goog.fx.dom.FadeInAndShow.prototype.onBegin = function() {
  * @struct
  */
 goog.fx.dom.BgColorTransform = function(element, start, end, time, opt_acc) {
+  'use strict';
   if (start.length != 3 || end.length != 3) {
     throw new Error('Start and end points must be 3D');
   }
@@ -617,6 +651,7 @@ goog.inherits(goog.fx.dom.BgColorTransform, goog.fx.dom.PredefinedEffect);
  * Animation event handler that will set the background-color of an element
  */
 goog.fx.dom.BgColorTransform.prototype.setColor = function() {
+  'use strict';
   var coordsAsInts = [];
   for (var i = 0; i < this.coords.length; i++) {
     coordsAsInts[i] = Math.round(this.coords[i]);
@@ -628,6 +663,7 @@ goog.fx.dom.BgColorTransform.prototype.setColor = function() {
 
 /** @override */
 goog.fx.dom.BgColorTransform.prototype.updateStyle = function() {
+  'use strict';
   this.setColor();
 };
 
@@ -645,6 +681,7 @@ goog.fx.dom.BgColorTransform.prototype.updateStyle = function() {
  *     to use when listening for events.
  */
 goog.fx.dom.bgColorFadeIn = function(element, start, time, opt_eventHandler) {
+  'use strict';
   var initialBgColor = element.style.backgroundColor || '';
   var computedBgColor = goog.style.getBackgroundColor(element);
   var end;
@@ -658,7 +695,9 @@ goog.fx.dom.bgColorFadeIn = function(element, start, time, opt_eventHandler) {
 
   var anim = new goog.fx.dom.BgColorTransform(element, start, end, time);
 
-  function setBgColor() { element.style.backgroundColor = initialBgColor; }
+  function setBgColor() {
+    element.style.backgroundColor = initialBgColor;
+  }
 
   if (opt_eventHandler) {
     opt_eventHandler.listen(anim, goog.fx.Transition.EventType.END, setBgColor);
@@ -684,6 +723,7 @@ goog.fx.dom.bgColorFadeIn = function(element, start, time, opt_eventHandler) {
  * @extends {goog.fx.dom.PredefinedEffect}
  */
 goog.fx.dom.ColorTransform = function(element, start, end, time, opt_acc) {
+  'use strict';
   if (start.length != 3 || end.length != 3) {
     throw new Error('Start and end points must be 3D');
   }
@@ -699,6 +739,7 @@ goog.inherits(goog.fx.dom.ColorTransform, goog.fx.dom.PredefinedEffect);
  * @override
  */
 goog.fx.dom.ColorTransform.prototype.updateStyle = function() {
+  'use strict';
   var coordsAsInts = [];
   for (var i = 0; i < this.coords.length; i++) {
     coordsAsInts[i] = Math.round(this.coords[i]);

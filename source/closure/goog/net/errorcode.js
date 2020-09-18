@@ -85,6 +85,7 @@ goog.net.ErrorCode = {
  * @return {string} A message for debugging.
  */
 goog.net.ErrorCode.getDebugMessage = function(errorCode) {
+  'use strict';
   switch (errorCode) {
     case goog.net.ErrorCode.NO_ERROR:
       return 'No Error';

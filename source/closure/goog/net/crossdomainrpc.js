@@ -81,6 +81,7 @@ goog.require('goog.userAgent');
  * @final
  */
 goog.net.CrossDomainRpc = function() {
+  'use strict';
   goog.events.EventTarget.call(this);
 };
 goog.inherits(goog.net.CrossDomainRpc, goog.events.EventTarget);
@@ -142,6 +143,7 @@ goog.net.CrossDomainRpc.prototype.loadListenerKey_;
  * @private
  */
 goog.net.CrossDomainRpc.isInResponseIframe_ = function() {
+  'use strict';
   return window.location &&
       (window.location.hash.indexOf(goog.net.CrossDomainRpc.RESPONSE_MARKER_) ==
            1 ||
@@ -173,6 +175,7 @@ if (goog.net.CrossDomainRpc.isInResponseIframe_()) {
  *    of caller's page.
  */
 goog.net.CrossDomainRpc.setDummyResourceUri = function(dummyResourceUri) {
+  'use strict';
   goog.net.CrossDomainRpc.dummyResourceUri_ = dummyResourceUri;
 };
 
@@ -184,6 +187,7 @@ goog.net.CrossDomainRpc.setDummyResourceUri = function(dummyResourceUri) {
  * @param {boolean} useFallBack Whether to use fallback or not.
  */
 goog.net.CrossDomainRpc.setUseFallBackDummyResource = function(useFallBack) {
+  'use strict';
   goog.net.CrossDomainRpc.useFallBackDummyResource_ = useFallBack;
 };
 
@@ -205,6 +209,7 @@ goog.net.CrossDomainRpc.setUseFallBackDummyResource = function(useFallBack) {
  */
 goog.net.CrossDomainRpc.send = function(
     uri, opt_continuation, opt_method, opt_params, opt_headers) {
+  'use strict';
   var xdrpc = new goog.net.CrossDomainRpc();
   if (opt_continuation) {
     goog.events.listen(xdrpc, goog.net.EventType.COMPLETE, opt_continuation);
@@ -221,6 +226,7 @@ goog.net.CrossDomainRpc.send = function(
  *     (true) or off (false).
  */
 goog.net.CrossDomainRpc.setDebugMode = function(flag) {
+  'use strict';
   goog.net.CrossDomainRpc.debugMode_ = flag;
 };
 
@@ -241,6 +247,7 @@ goog.net.CrossDomainRpc.logger_ = goog.log.getLogger('goog.net.CrossDomainRpc');
  * @private
  */
 goog.net.CrossDomainRpc.createInputHtml_ = function(name, value) {
+  'use strict';
   return goog.html.SafeHtml.create('textarea', {'name': name}, String(value));
 };
 
@@ -252,6 +259,7 @@ goog.net.CrossDomainRpc.createInputHtml_ = function(name, value) {
  * @private
  */
 goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
+  'use strict';
   if (goog.net.CrossDomainRpc.dummyResourceUri_) {
     return goog.net.CrossDomainRpc.dummyResourceUri_;
   }
@@ -314,6 +322,7 @@ goog.net.CrossDomainRpc.getDummyResourceUri_ = function() {
  * @private
  */
 goog.net.CrossDomainRpc.removeHash_ = function(uri) {
+  'use strict';
   return uri.split('#')[0];
 };
 
@@ -386,6 +395,7 @@ goog.net.CrossDomainRpc.REQUEST_MARKER_ = 'xdrq';
  */
 goog.net.CrossDomainRpc.prototype.sendRequest = function(
     uri, opt_method, opt_params, opt_headers) {
+  'use strict';
   // create request frame
   var requestFrame = this.requestFrame_ =
       goog.dom.createElement(goog.dom.TagName.IFRAME);
@@ -449,6 +459,7 @@ goog.net.CrossDomainRpc.prototype.sendRequest = function(
 
   this.loadListenerKey_ =
       goog.events.listen(requestFrame, goog.events.EventType.LOAD, function() {
+        'use strict';
         goog.log.fine(goog.net.CrossDomainRpc.logger_, 'response ready');
         this.responseReady_ = true;
       }, false, this);
@@ -479,8 +490,10 @@ goog.net.CrossDomainRpc.SEND_RESPONSE_TIME_OUT_ = 500;
  * @private
  */
 goog.net.CrossDomainRpc.prototype.receiveResponse_ = function() {
+  'use strict';
   this.timeWaitedAfterResponseReady_ = 0;
   var responseDetectorHandle = window.setInterval(goog.bind(function() {
+    'use strict';
     this.detectResponse_(responseDetectorHandle);
   }, this), goog.net.CrossDomainRpc.RESPONSE_POLLING_PERIOD_);
 };
@@ -493,6 +506,7 @@ goog.net.CrossDomainRpc.prototype.receiveResponse_ = function() {
  */
 goog.net.CrossDomainRpc.prototype.detectResponse_ = function(
     responseDetectorHandle) {
+  'use strict';
   var requestFrameWindow = this.requestFrame_.contentWindow;
   var grandChildrenLength = requestFrameWindow.frames.length;
   var responseInfoFrame = null;
@@ -579,7 +593,7 @@ goog.net.CrossDomainRpc.prototype.detectResponse_ = function(
  * @private
  */
 goog.net.CrossDomainRpc.isResponseInfoFrame_ = function(frame) {
-
+  'use strict';
   try {
     return goog.net.CrossDomainRpc.getFramePayload_(frame).indexOf(
                goog.net.CrossDomainRpc.RESPONSE_INFO_MARKER_) == 1;
@@ -599,6 +613,7 @@ goog.net.CrossDomainRpc.isResponseInfoFrame_ = function(frame) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.CrossDomainRpc.getFramePayload_ = function(frame) {
+  'use strict';
   var href = frame.location.href;
   var question = href.indexOf('?');
   var hash = href.indexOf('#');
@@ -618,6 +633,7 @@ goog.net.CrossDomainRpc.getFramePayload_ = function(frame) {
  *     or undefined.
  */
 goog.net.CrossDomainRpc.prototype.getResponseJson = function() {
+  'use strict';
   return this.responseTextIsJson_ ?
       /** @type {?Object} */ (JSON.parse(this.responseText)) :
       undefined;
@@ -628,6 +644,7 @@ goog.net.CrossDomainRpc.prototype.getResponseJson = function() {
  * @return {boolean} Whether the request completed with a success.
  */
 goog.net.CrossDomainRpc.prototype.isSuccess = function() {
+  'use strict';
   // Definition similar to goog.net.XhrIo.prototype.isSuccess.
   switch (this.status) {
     case goog.net.HttpStatus.OK:
@@ -644,6 +661,7 @@ goog.net.CrossDomainRpc.prototype.isSuccess = function() {
  * Removes request iframe used.
  */
 goog.net.CrossDomainRpc.prototype.reset = function() {
+  'use strict';
   if (!goog.net.CrossDomainRpc.debugMode_) {
     goog.log.fine(
         goog.net.CrossDomainRpc.logger_,
@@ -717,6 +735,7 @@ goog.net.CrossDomainRpc.CHUNK_PREFIX_ =
  */
 goog.net.CrossDomainRpc.sendResponse = function(
     data, isDataJson, echo, status, headers) {
+  'use strict';
   var dummyUri = echo[goog.net.CrossDomainRpc.PARAM_ECHO_DUMMY_URI];
 
   // since the dummy-uri can be specified by the user, verify that it doesn't
@@ -765,6 +784,7 @@ goog.net.CrossDomainRpc.sendResponse = function(
   } else {
     var numChunksSent = 0;
     var checkToCreateResponseInfo_ = function() {
+      'use strict';
       if (++numChunksSent == numChunksToSend) {
         goog.net.CrossDomainRpc.createResponseInfo_(
             dummyUri, numChunksToSend, isDataJson, status, headers);
@@ -805,6 +825,7 @@ goog.net.CrossDomainRpc.sendResponse = function(
  */
 goog.net.CrossDomainRpc.createResponseInfo_ = function(
     dummyUri, numChunks, isDataJson, status, headers) {
+  'use strict';
   var responseInfoFrame = goog.dom.createElement(goog.dom.TagName.IFRAME);
   document.body.appendChild(responseInfoFrame);
   responseInfoFrame.src = dummyUri +
@@ -825,6 +846,7 @@ goog.net.CrossDomainRpc.createResponseInfo_ = function(
  * @private
  */
 goog.net.CrossDomainRpc.getPayloadDelimiter_ = function(dummyUri) {
+  'use strict';
   return goog.net.CrossDomainRpc.REFERRER_ == dummyUri ? '?' : '#';
 };
 
@@ -836,6 +858,7 @@ goog.net.CrossDomainRpc.getPayloadDelimiter_ = function(dummyUri) {
  * @private
  */
 goog.net.CrossDomainRpc.removeUriParams_ = function(uri) {
+  'use strict';
   // remove everything after question mark
   var question = uri.indexOf('?');
   if (question > 0) {
@@ -858,6 +881,7 @@ goog.net.CrossDomainRpc.removeUriParams_ = function(uri) {
  * @return {string|undefined} Value of response header; undefined if not found.
  */
 goog.net.CrossDomainRpc.prototype.getResponseHeader = function(name) {
+  'use strict';
   return goog.isObject(this.responseHeaders) ? this.responseHeaders[name] :
                                                undefined;
 };

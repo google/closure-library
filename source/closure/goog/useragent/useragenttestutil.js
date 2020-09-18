@@ -31,6 +31,7 @@ goog.setTestOnly('goog.userAgentTestUtil');
  * @suppress {accessControls}
  */
 goog.userAgentTestUtil.reinitializeUserAgent = function() {
+  'use strict';
   // Unfortunately we can't isolate the useragent setting in a function
   // we can call, because things rely on it compiling to nothing when
   // one of the ASSUME flags is set, and the compiler isn't smart enough
@@ -104,6 +105,7 @@ goog.userAgentTestUtil.UserAgents = {
  * @return {boolean} Whether the user agent has been detected.
  */
 goog.userAgentTestUtil.getUserAgentDetected = function(agent) {
+  'use strict';
   switch (agent) {
     case goog.userAgentTestUtil.UserAgents.GECKO:
       return goog.userAgent.GECKO;

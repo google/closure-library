@@ -25,7 +25,9 @@ goog.require('goog.testing.mockmatchers.ArgumentMatcher');
  * @final
  */
 goog.testing.events.EventMatcher = function(type) {
+  'use strict';
   goog.testing.mockmatchers.ArgumentMatcher.call(this, function(obj) {
+    'use strict';
     return obj instanceof goog.events.Event && obj.type == type;
   }, 'isEventOfType(' + type + ')');
 };

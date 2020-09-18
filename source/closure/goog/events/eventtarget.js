@@ -23,6 +23,8 @@ goog.require('goog.events.Listenable');
 goog.require('goog.events.ListenerMap');
 goog.require('goog.object');
 goog.requireType('goog.events.EventId');
+goog.requireType('goog.events.EventLike');
+goog.requireType('goog.events.ListenableKey');
 
 
 
@@ -59,6 +61,7 @@ goog.requireType('goog.events.EventId');
  * @implements {goog.events.Listenable}
  */
 goog.events.EventTarget = function() {
+  'use strict';
   goog.Disposable.call(this);
 
   /**
@@ -106,6 +109,7 @@ goog.events.EventTarget.MAX_ANCESTORS_ = 1000;
  * @override
  */
 goog.events.EventTarget.prototype.getParentEventTarget = function() {
+  'use strict';
   return this.parentEventTarget_;
 };
 
@@ -116,6 +120,7 @@ goog.events.EventTarget.prototype.getParentEventTarget = function() {
  * @param {goog.events.EventTarget} parent Parent listenable (null if none).
  */
 goog.events.EventTarget.prototype.setParentEventTarget = function(parent) {
+  'use strict';
   this.parentEventTarget_ = parent;
 };
 
@@ -141,6 +146,7 @@ goog.events.EventTarget.prototype.setParentEventTarget = function(parent) {
  */
 goog.events.EventTarget.prototype.addEventListener = function(
     type, handler, opt_capture, opt_handlerScope) {
+  'use strict';
   goog.events.listen(this, type, handler, opt_capture, opt_handlerScope);
 };
 
@@ -165,6 +171,7 @@ goog.events.EventTarget.prototype.addEventListener = function(
  */
 goog.events.EventTarget.prototype.removeEventListener = function(
     type, handler, opt_capture, opt_handlerScope) {
+  'use strict';
   goog.events.unlisten(this, type, handler, opt_capture, opt_handlerScope);
 };
 
@@ -176,6 +183,7 @@ goog.events.EventTarget.prototype.removeEventListener = function(
  * @override
  */
 goog.events.EventTarget.prototype.dispatchEvent = function(e) {
+  'use strict';
   this.assertInitialized_();
 
   var ancestorsTree, ancestor = this.getParentEventTarget();
@@ -203,6 +211,7 @@ goog.events.EventTarget.prototype.dispatchEvent = function(e) {
  * @protected
  */
 goog.events.EventTarget.prototype.disposeInternal = function() {
+  'use strict';
   goog.events.EventTarget.superClass_.disposeInternal.call(this);
 
   this.removeAllListeners();
@@ -224,6 +233,7 @@ goog.events.EventTarget.prototype.disposeInternal = function() {
  */
 goog.events.EventTarget.prototype.listen = function(
     type, listener, opt_useCapture, opt_listenerScope) {
+  'use strict';
   this.assertInitialized_();
   return this.eventTargetListeners_.add(
       String(type), listener, false /* callOnce */, opt_useCapture,
@@ -245,6 +255,7 @@ goog.events.EventTarget.prototype.listen = function(
  */
 goog.events.EventTarget.prototype.listenOnce = function(
     type, listener, opt_useCapture, opt_listenerScope) {
+  'use strict';
   return this.eventTargetListeners_.add(
       String(type), listener, true /* callOnce */, opt_useCapture,
       opt_listenerScope);
@@ -265,6 +276,7 @@ goog.events.EventTarget.prototype.listenOnce = function(
  */
 goog.events.EventTarget.prototype.unlisten = function(
     type, listener, opt_useCapture, opt_listenerScope) {
+  'use strict';
   return this.eventTargetListeners_.remove(
       String(type), listener, opt_useCapture, opt_listenerScope);
 };
@@ -277,6 +289,7 @@ goog.events.EventTarget.prototype.unlisten = function(
  * @override
  */
 goog.events.EventTarget.prototype.unlistenByKey = function(key) {
+  'use strict';
   return this.eventTargetListeners_.removeByKey(key);
 };
 
@@ -288,6 +301,7 @@ goog.events.EventTarget.prototype.unlistenByKey = function(key) {
  * @override
  */
 goog.events.EventTarget.prototype.removeAllListeners = function(opt_type) {
+  'use strict';
   // TODO(chrishenry): Previously, removeAllListeners can be called on
   // uninitialized EventTarget, so we preserve that behavior. We
   // should remove this when usages that rely on that fact are purged.
@@ -312,6 +326,7 @@ goog.events.EventTarget.prototype.removeAllListeners = function(opt_type) {
  */
 goog.events.EventTarget.prototype.fireListeners = function(
     type, capture, eventObject) {
+  'use strict';
   // TODO(chrishenry): Original code avoids array creation when there
   // is no listener, so we do the same. If this optimization turns
   // out to be not required, we can replace this with
@@ -350,6 +365,7 @@ goog.events.EventTarget.prototype.fireListeners = function(
  * @override
  */
 goog.events.EventTarget.prototype.getListeners = function(type, capture) {
+  'use strict';
   return this.eventTargetListeners_.getListeners(String(type), capture);
 };
 
@@ -368,6 +384,7 @@ goog.events.EventTarget.prototype.getListeners = function(type, capture) {
  */
 goog.events.EventTarget.prototype.getListener = function(
     type, listener, capture, opt_listenerScope) {
+  'use strict';
   return this.eventTargetListeners_.getListener(
       String(type), listener, capture, opt_listenerScope);
 };
@@ -384,6 +401,7 @@ goog.events.EventTarget.prototype.getListener = function(
  */
 goog.events.EventTarget.prototype.hasListener = function(
     opt_type, opt_capture) {
+  'use strict';
   var id = (opt_type !== undefined) ? String(opt_type) : undefined;
   return this.eventTargetListeners_.hasListener(id, opt_capture);
 };
@@ -396,6 +414,7 @@ goog.events.EventTarget.prototype.hasListener = function(
  * @param {!Object} target The target.
  */
 goog.events.EventTarget.prototype.setTargetForTesting = function(target) {
+  'use strict';
   this.actualEventTarget_ = target;
 };
 
@@ -405,6 +424,7 @@ goog.events.EventTarget.prototype.setTargetForTesting = function(target) {
  * @private
  */
 goog.events.EventTarget.prototype.assertInitialized_ = function() {
+  'use strict';
   goog.asserts.assert(
       this.eventTargetListeners_,
       'Event target is not initialized. Did you call the superclass ' +
@@ -426,6 +446,7 @@ goog.events.EventTarget.prototype.assertInitialized_ = function() {
  */
 goog.events.EventTarget.dispatchEventInternal_ = function(
     target, e, opt_ancestorsTree) {
+  'use strict';
   /** @suppress {missingProperties} */
   var type = e.type || /** @type {string} */ (e);
 

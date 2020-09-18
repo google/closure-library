@@ -28,6 +28,7 @@ goog.requireType('goog.ui.ControlContent');
  * @final
  */
 goog.ui.ToolbarColorMenuButtonRenderer = function() {
+  'use strict';
   goog.ui.ToolbarMenuButtonRenderer.call(this);
 };
 goog.inherits(
@@ -53,6 +54,7 @@ goog.addSingletonGetter(goog.ui.ToolbarColorMenuButtonRenderer);
  */
 goog.ui.ToolbarColorMenuButtonRenderer.prototype.createCaption = function(
     content, dom) {
+  'use strict';
   return goog.ui.MenuButtonRenderer.wrapCaption(
       goog.ui.ColorMenuButtonRenderer.wrapCaption(content, dom),
       this.getCssClass(), dom);
@@ -69,6 +71,7 @@ goog.ui.ToolbarColorMenuButtonRenderer.prototype.createCaption = function(
  */
 goog.ui.ToolbarColorMenuButtonRenderer.prototype.setValue = function(
     element, value) {
+  'use strict';
   if (element) {
     goog.ui.ColorMenuButtonRenderer.setCaptionValue(
         this.getContentElement(element), value);
@@ -86,6 +89,7 @@ goog.ui.ToolbarColorMenuButtonRenderer.prototype.setValue = function(
  */
 goog.ui.ToolbarColorMenuButtonRenderer.prototype.initializeDom = function(
     button) {
+  'use strict';
   this.setValue(button.getElement(), button.getValue());
   goog.dom.classlist.add(
       goog.asserts.assert(button.getElement()),

@@ -39,7 +39,7 @@ goog.labs.events.touch.TouchData;
  * @return {!goog.labs.events.touch.TouchData}
  */
 goog.labs.events.touch.getTouchData = function(e) {
-
+  'use strict';
   var source = e;
   goog.asserts.assert(
       goog.string.startsWith(e.type, 'touch') ||

@@ -27,6 +27,7 @@ goog.require('goog.string');
  * @final
  */
 goog.proto.Serializer = function() {
+  'use strict';
   goog.json.Serializer.call(this);
 };
 goog.inherits(goog.proto.Serializer, goog.json.Serializer);
@@ -40,6 +41,7 @@ goog.inherits(goog.proto.Serializer, goog.json.Serializer);
  * @override
  */
 goog.proto.Serializer.prototype.serializeArray = function(arr, sb) {
+  'use strict';
   var l = arr.length;
   sb.push('[');
   var emptySlots = 0;

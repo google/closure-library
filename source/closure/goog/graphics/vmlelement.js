@@ -49,6 +49,7 @@ goog.require('goog.graphics.TextElement');
  * @private
  */
 goog.graphics.vmlGetElement_ = function() {
+  'use strict';
   this.element_ = this.getGraphics().getVmlElement(this.id_) || this.element_;
   return this.element_;
 };
@@ -71,6 +72,7 @@ goog.graphics.vmlGetElement_ = function() {
  * @final
  */
 goog.graphics.VmlGroupElement = function(element, graphics) {
+  'use strict';
   this.id_ = element.id;
   goog.graphics.GroupElement.call(this, element, graphics);
 };
@@ -87,6 +89,7 @@ goog.graphics.VmlGroupElement.prototype.getElement =
  * @override
  */
 goog.graphics.VmlGroupElement.prototype.clear = function() {
+  'use strict';
   goog.dom.removeChildren(this.getElement());
 };
 
@@ -96,6 +99,7 @@ goog.graphics.VmlGroupElement.prototype.clear = function() {
  * @private
  */
 goog.graphics.VmlGroupElement.prototype.isRootElement_ = function() {
+  'use strict';
   return this.getGraphics().getCanvasElement() == this;
 };
 
@@ -108,6 +112,7 @@ goog.graphics.VmlGroupElement.prototype.isRootElement_ = function() {
  * @suppress {missingRequire} goog.graphics.VmlGraphics
  */
 goog.graphics.VmlGroupElement.prototype.setSize = function(width, height) {
+  'use strict';
   var element = this.getElement();
 
   var style = element.style;
@@ -148,6 +153,7 @@ goog.graphics.VmlGroupElement.prototype.setSize = function(width, height) {
  */
 goog.graphics.VmlEllipseElement = function(
     element, graphics, cx, cy, rx, ry, stroke, fill) {
+  'use strict';
   this.id_ = element.id;
 
   goog.graphics.EllipseElement.call(this, element, graphics, stroke, fill);
@@ -196,6 +202,7 @@ goog.graphics.VmlEllipseElement.prototype.getElement =
  * @override
  */
 goog.graphics.VmlEllipseElement.prototype.setCenter = function(cx, cy) {
+  'use strict';
   this.cx = cx;
   this.cy = cy;
   /** @suppress {missingRequire} */
@@ -211,6 +218,7 @@ goog.graphics.VmlEllipseElement.prototype.setCenter = function(cx, cy) {
  * @override
  */
 goog.graphics.VmlEllipseElement.prototype.setRadius = function(rx, ry) {
+  'use strict';
   this.rx = rx;
   this.ry = ry;
   /** @suppress {missingRequire} */
@@ -238,6 +246,7 @@ goog.graphics.VmlEllipseElement.prototype.setRadius = function(rx, ry) {
  * @final
  */
 goog.graphics.VmlRectElement = function(element, graphics, stroke, fill) {
+  'use strict';
   this.id_ = element.id;
   goog.graphics.RectElement.call(this, element, graphics, stroke, fill);
 };
@@ -256,6 +265,7 @@ goog.graphics.VmlRectElement.prototype.getElement =
  * @override
  */
 goog.graphics.VmlRectElement.prototype.setPosition = function(x, y) {
+  'use strict';
   var style = this.getElement().style;
 
   style.left = /** @suppress {missingRequire} */
@@ -273,6 +283,7 @@ goog.graphics.VmlRectElement.prototype.setPosition = function(x, y) {
  * @suppress {missingRequire} goog.graphics.VmlGraphics
  */
 goog.graphics.VmlRectElement.prototype.setSize = function(width, height) {
+  'use strict';
   var style = this.getElement().style;
   style.width = goog.graphics.VmlGraphics.toSizePx(width);
   style.height = goog.graphics.VmlGraphics.toSizePx(height);
@@ -298,6 +309,7 @@ goog.graphics.VmlRectElement.prototype.setSize = function(width, height) {
  * @final
  */
 goog.graphics.VmlPathElement = function(element, graphics, stroke, fill) {
+  'use strict';
   this.id_ = element.id;
   goog.graphics.PathElement.call(this, element, graphics, stroke, fill);
 };
@@ -315,6 +327,7 @@ goog.graphics.VmlPathElement.prototype.getElement =
  * @override
  */
 goog.graphics.VmlPathElement.prototype.setPath = function(path) {
+  'use strict';
   /** @suppress {missingRequire} */
   goog.graphics.VmlGraphics.setAttribute(
       this.getElement(), 'path',
@@ -342,6 +355,7 @@ goog.graphics.VmlPathElement.prototype.setPath = function(path) {
  * @final
  */
 goog.graphics.VmlTextElement = function(element, graphics, stroke, fill) {
+  'use strict';
   this.id_ = element.id;
   goog.graphics.TextElement.call(this, element, graphics, stroke, fill);
 };
@@ -359,6 +373,7 @@ goog.graphics.VmlTextElement.prototype.getElement =
  * @override
  */
 goog.graphics.VmlTextElement.prototype.setText = function(text) {
+  'use strict';
   /** @suppress {missingRequire} */
   goog.graphics.VmlGraphics.setAttribute(
       /** @type {!Element} */ (this.getElement().childNodes[1]), 'string',
@@ -383,6 +398,7 @@ goog.graphics.VmlTextElement.prototype.setText = function(text) {
  * @final
  */
 goog.graphics.VmlImageElement = function(element, graphics) {
+  'use strict';
   this.id_ = element.id;
   goog.graphics.ImageElement.call(this, element, graphics);
 };
@@ -401,6 +417,7 @@ goog.graphics.VmlImageElement.prototype.getElement =
  * @override
  */
 goog.graphics.VmlImageElement.prototype.setPosition = function(x, y) {
+  'use strict';
   var style = this.getElement().style;
 
   style.left = /** @suppress {missingRequire} */
@@ -418,6 +435,7 @@ goog.graphics.VmlImageElement.prototype.setPosition = function(x, y) {
  * @suppress {missingRequire} goog.graphics.VmlGraphics
  */
 goog.graphics.VmlImageElement.prototype.setSize = function(width, height) {
+  'use strict';
   var style = this.getElement().style;
   style.width = goog.graphics.VmlGraphics.toPosPx(width);
   style.height = goog.graphics.VmlGraphics.toPosPx(height);
@@ -430,6 +448,7 @@ goog.graphics.VmlImageElement.prototype.setSize = function(width, height) {
  * @override
  */
 goog.graphics.VmlImageElement.prototype.setSource = function(src) {
+  'use strict';
   /** @suppress {missingRequire} */
   goog.graphics.VmlGraphics.setAttribute(this.getElement(), 'src', src);
 };

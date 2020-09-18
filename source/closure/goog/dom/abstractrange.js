@@ -48,45 +48,10 @@ goog.dom.AbstractRange = function() {};
  * @param {Window} win The window to get the selection object from.
  * @return {Object} The browser native selection object, or null if it could
  *     not be retrieved.
+ * @deprecated use window#getSelection instead.
  */
 goog.dom.AbstractRange.getBrowserSelectionForWindow = function(win) {
-  if (win.getSelection) {
-    // W3C
-    return win.getSelection();
-  } else {
-    // IE
-    var doc = win.document;
-    var sel = doc.selection;
-    if (sel) {
-      // IE has a bug where it sometimes returns a selection from the wrong
-      // document. Catching these cases now helps us avoid problems later.
-      try {
-        var range = sel.createRange();
-        // Only TextRanges have a parentElement method.
-        if (range.parentElement) {
-          if (range.parentElement().document != doc) {
-            return null;
-          }
-        } else if (
-            !range.length ||
-            /** @type {ControlRange} */ (range).item(0).document != doc) {
-          // For ControlRanges, check that the range has items, and that
-          // the first item in the range is in the correct document.
-          return null;
-        }
-      } catch (e) {
-        // If the selection is in the wrong document, and the wrong document is
-        // in a different domain, IE will throw an exception.
-        return null;
-      }
-      // TODO(user) Sometimes IE 6 returns a selection instance
-      // when there is no selection.  This object has a 'type' property equals
-      // to 'None' and a typeDetail property bound to undefined. Ideally this
-      // function should not return this instance.
-      return sel;
-    }
-    return null;
-  }
+  return win.getSelection();
 };
 
 

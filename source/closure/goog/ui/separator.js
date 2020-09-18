@@ -33,6 +33,7 @@ goog.requireType('goog.dom.DomHelper');
  * @extends {goog.ui.Control}
  */
 goog.ui.Separator = function(opt_renderer, opt_domHelper) {
+  'use strict';
   goog.ui.Control.call(
       this, null, opt_renderer || goog.ui.MenuSeparatorRenderer.getInstance(),
       opt_domHelper);
@@ -55,6 +56,7 @@ goog.inherits(goog.ui.Separator, goog.ui.Control);
  * @override
  */
 goog.ui.Separator.prototype.enterDocument = function() {
+  'use strict';
   goog.ui.Separator.superClass_.enterDocument.call(this);
   var element = this.getElement();
   goog.asserts.assert(
@@ -66,6 +68,7 @@ goog.ui.Separator.prototype.enterDocument = function() {
 // Register a decorator factory function for goog.ui.MenuSeparators.
 goog.ui.registry.setDecoratorByClassName(
     goog.ui.MenuSeparatorRenderer.CSS_CLASS, function() {
+      'use strict';
       // Separator defaults to using MenuSeparatorRenderer.
       return new goog.ui.Separator();
     });

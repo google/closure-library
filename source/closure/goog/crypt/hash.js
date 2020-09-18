@@ -21,6 +21,7 @@ goog.provide('goog.crypt.Hash');
  * @struct
  */
 goog.crypt.Hash = function() {
+  'use strict';
   /**
    * The block size for the hasher.
    * @type {number}

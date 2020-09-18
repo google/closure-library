@@ -29,6 +29,7 @@ goog.requireType('goog.log.LogRecord');
  * @constructor
  */
 goog.debug.DivConsole = function(element) {
+  'use strict';
   this.publishHandler_ = goog.bind(this.addLogRecord, this);
   this.formatter_ = new goog.debug.HtmlFormatter();
   this.formatter_.showAbsoluteTime = false;
@@ -46,6 +47,7 @@ goog.debug.DivConsole = function(element) {
  * Installs styles for the log messages and its div
  */
 goog.debug.DivConsole.prototype.installStyles = function() {
+  'use strict';
   goog.style.installSafeStyleSheet(
       goog.html.SafeStyleSheet.fromConstant(goog.string.Const.from(
           '.dbg-sev{color:#F00}' +
@@ -69,6 +71,7 @@ goog.debug.DivConsole.prototype.installStyles = function() {
  * @param {boolean} capturing Whether to capture logger output.
  */
 goog.debug.DivConsole.prototype.setCapturing = function(capturing) {
+  'use strict';
   if (capturing == this.isCapturing_) {
     return;
   }
@@ -89,6 +92,7 @@ goog.debug.DivConsole.prototype.setCapturing = function(capturing) {
  * @param {?goog.log.LogRecord} logRecord The log entry.
  */
 goog.debug.DivConsole.prototype.addLogRecord = function(logRecord) {
+  'use strict';
   if (!logRecord) {
     return;
   }
@@ -114,6 +118,7 @@ goog.debug.DivConsole.prototype.addLogRecord = function(logRecord) {
  * @return {!goog.debug.Formatter} The formatter in use.
  */
 goog.debug.DivConsole.prototype.getFormatter = function() {
+  'use strict';
   return this.formatter_;
 };
 
@@ -123,6 +128,7 @@ goog.debug.DivConsole.prototype.getFormatter = function() {
  * @param {goog.debug.HtmlFormatter} formatter The formatter to use.
  */
 goog.debug.DivConsole.prototype.setFormatter = function(formatter) {
+  'use strict';
   this.formatter_ = formatter;
 };
 
@@ -131,6 +137,7 @@ goog.debug.DivConsole.prototype.setFormatter = function(formatter) {
  * Adds a separator to the debug window.
  */
 goog.debug.DivConsole.prototype.addSeparator = function() {
+  'use strict';
   var div = this.domHelper_.createElement(goog.dom.TagName.DIV);
   div.className = 'logmsg logsep';
   this.element_.appendChild(div);
@@ -141,6 +148,7 @@ goog.debug.DivConsole.prototype.addSeparator = function() {
  * Clears the console.
  */
 goog.debug.DivConsole.prototype.clear = function() {
+  'use strict';
   if (this.element_) {
     goog.dom.safe.setInnerHtml(this.element_, goog.html.SafeHtml.EMPTY);
   }

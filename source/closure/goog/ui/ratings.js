@@ -45,6 +45,7 @@ goog.requireType('goog.events.BrowserEvent');
  * @extends {goog.ui.Component}
  */
 goog.ui.Ratings = function(opt_ratings, opt_domHelper) {
+  'use strict';
   goog.ui.Component.call(this, opt_domHelper);
 
   /**
@@ -135,6 +136,7 @@ goog.ui.Ratings.EventType = {
  * @override
  */
 goog.ui.Ratings.prototype.decorateInternal = function(el) {
+  'use strict';
   var select = goog.dom.getElementsByTagName(
       goog.dom.TagName.SELECT, goog.asserts.assert(el))[0];
   if (!select) {
@@ -162,6 +164,7 @@ goog.ui.Ratings.prototype.decorateInternal = function(el) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Ratings.prototype.enterDocument = function() {
+  'use strict';
   var el = this.getElement();
   goog.asserts.assert(el, 'The DOM element for ratings cannot be null.');
   goog.ui.Ratings.base(this, 'enterDocument');
@@ -200,6 +203,7 @@ goog.ui.Ratings.prototype.enterDocument = function() {
  * @override
  */
 goog.ui.Ratings.prototype.exitDocument = function() {
+  'use strict';
   goog.ui.Ratings.superClass_.exitDocument.call(this);
   for (var i = 0; i < this.stars_.length; i++) {
     this.getDomHelper().removeNode(this.stars_[i]);
@@ -210,6 +214,7 @@ goog.ui.Ratings.prototype.exitDocument = function() {
 
 /** @override */
 goog.ui.Ratings.prototype.disposeInternal = function() {
+  'use strict';
   goog.ui.Ratings.superClass_.disposeInternal.call(this);
   this.ratings_.length = 0;
 };
@@ -220,6 +225,7 @@ goog.ui.Ratings.prototype.disposeInternal = function() {
  * @return {string} Component-specific CSS class.
  */
 goog.ui.Ratings.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.Ratings.CSS_CLASS;
 };
 
@@ -230,6 +236,7 @@ goog.ui.Ratings.prototype.getCssClass = function() {
  * @param {number} index The index of the rating to select.
  */
 goog.ui.Ratings.prototype.setSelectedIndex = function(index) {
+  'use strict';
   index = Math.max(-1, Math.min(index, this.ratings_.length - 1));
   if (index != this.selectedIndex_) {
     this.selectedIndex_ = index;
@@ -256,6 +263,7 @@ goog.ui.Ratings.prototype.setSelectedIndex = function(index) {
  * @return {number} The index of the currently selected rating.
  */
 goog.ui.Ratings.prototype.getSelectedIndex = function() {
+  'use strict';
   return this.selectedIndex_;
 };
 
@@ -265,6 +273,7 @@ goog.ui.Ratings.prototype.getSelectedIndex = function() {
  * @return {?string} The value of the currently selected rating (or null).
  */
 goog.ui.Ratings.prototype.getValue = function() {
+  'use strict';
   return this.selectedIndex_ == -1 ? null : this.ratings_[this.selectedIndex_];
 };
 
@@ -275,6 +284,7 @@ goog.ui.Ratings.prototype.getValue = function() {
  * @return {number} The index of the currently highlighted rating.
  */
 goog.ui.Ratings.prototype.getHighlightedIndex = function() {
+  'use strict';
   return this.highlightedIndex_;
 };
 
@@ -285,6 +295,7 @@ goog.ui.Ratings.prototype.getHighlightedIndex = function() {
  * @return {?string} The value of the currently highlighted rating, or null.
  */
 goog.ui.Ratings.prototype.getHighlightedValue = function() {
+  'use strict';
   return this.highlightedIndex_ == -1 ? null :
                                         this.ratings_[this.highlightedIndex_];
 };
@@ -295,6 +306,7 @@ goog.ui.Ratings.prototype.getHighlightedValue = function() {
  * @param {Array<string>} ratings Array of value to use as ratings.
  */
 goog.ui.Ratings.prototype.setRatings = function(ratings) {
+  'use strict';
   this.ratings_ = ratings;
   // TODO(user): If rendered update stars
 };
@@ -305,6 +317,7 @@ goog.ui.Ratings.prototype.setRatings = function(ratings) {
  * @return {Array<string>} Array of ratings.
  */
 goog.ui.Ratings.prototype.getRatings = function() {
+  'use strict';
   return this.ratings_;
 };
 
@@ -315,6 +328,7 @@ goog.ui.Ratings.prototype.getRatings = function() {
  * @param {HTMLSelectElement|HTMLInputElement} field The field to attach to.
  */
 goog.ui.Ratings.prototype.setAttachedFormField = function(field) {
+  'use strict';
   this.attachedFormField_ = field;
 };
 
@@ -324,6 +338,7 @@ goog.ui.Ratings.prototype.setAttachedFormField = function(field) {
  * @return {HTMLSelectElement|HTMLInputElement|null} The attached form field.
  */
 goog.ui.Ratings.prototype.getAttachedFormField = function() {
+  'use strict';
   return this.attachedFormField_;
 };
 
@@ -333,6 +348,7 @@ goog.ui.Ratings.prototype.getAttachedFormField = function() {
  * @param {boolean} enable Whether to enable or disable the control.
  */
 goog.ui.Ratings.prototype.setEnabled = function(enable) {
+  'use strict';
   this.isEnabled_ = enable;
   if (!enable) {
     // Undo any highlighting done during mouseover when disabling the control
@@ -346,6 +362,7 @@ goog.ui.Ratings.prototype.setEnabled = function(enable) {
  * @return {boolean} Whether the ratings control is enabled.
  */
 goog.ui.Ratings.prototype.isEnabled = function() {
+  'use strict';
   return this.isEnabled_;
 };
 
@@ -357,6 +374,7 @@ goog.ui.Ratings.prototype.isEnabled = function() {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Ratings.prototype.onMouseOver_ = function(e) {
+  'use strict';
   if (!this.isEnabled()) {
     return;
   }
@@ -379,6 +397,7 @@ goog.ui.Ratings.prototype.onMouseOver_ = function(e) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Ratings.prototype.onMouseOut_ = function(e) {
+  'use strict';
   // Only remove the highlight if the mouse is not moving to another star
   if (e.relatedTarget && e.relatedTarget.index === undefined) {
     this.resetHighlights_();
@@ -393,6 +412,7 @@ goog.ui.Ratings.prototype.onMouseOut_ = function(e) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.ui.Ratings.prototype.onClick_ = function(e) {
+  'use strict';
   if (!this.isEnabled()) {
     return;
   }
@@ -409,6 +429,7 @@ goog.ui.Ratings.prototype.onClick_ = function(e) {
  * @private
  */
 goog.ui.Ratings.prototype.onKeyDown_ = function(e) {
+  'use strict';
   if (!this.isEnabled()) {
     return;
   }
@@ -445,6 +466,7 @@ goog.ui.Ratings.prototype.onKeyDown_ = function(e) {
  * @private
  */
 goog.ui.Ratings.prototype.resetHighlights_ = function() {
+  'use strict';
   this.highlightIndex_(this.selectedIndex_);
   this.highlightedIndex_ = -1;
   this.dispatchEvent(goog.ui.Ratings.EventType.HIGHLIGHT_CHANGE);
@@ -458,6 +480,7 @@ goog.ui.Ratings.prototype.resetHighlights_ = function() {
  * @private
  */
 goog.ui.Ratings.prototype.highlightIndex_ = function(n) {
+  'use strict';
   for (var i = 0, star; star = this.stars_[i]; i++) {
     goog.dom.classlist.set(star, this.getClassName_(i, i <= n));
   }
@@ -480,6 +503,7 @@ goog.ui.Ratings.prototype.highlightIndex_ = function(n) {
  * @private
  */
 goog.ui.Ratings.prototype.getClassName_ = function(i, on) {
+  'use strict';
   var className;
   var enabledClassName;
   var baseClass = this.getCssClass();

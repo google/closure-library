@@ -48,6 +48,7 @@ goog.require('goog.labs.i18n.ListFormatSymbols');
  * @final
  */
 goog.labs.i18n.ListFormat = function() {
+  'use strict';
   /**
    * String for lists of exactly two items, containing {0} for the first,
    * and {1} for the second.
@@ -105,6 +106,7 @@ goog.labs.i18n.ListFormat = function() {
  */
 goog.labs.i18n.ListFormat.prototype.patternBasedJoinTwoStrings_ = function(
     pattern, first, second) {
+  'use strict';
   return pattern.replace('{0}', first).replace('{1}', second);
 };
 
@@ -117,6 +119,7 @@ goog.labs.i18n.ListFormat.prototype.patternBasedJoinTwoStrings_ = function(
  * @return {string} The items formatted into a string, as a list.
  */
 goog.labs.i18n.ListFormat.prototype.format = function(items) {
+  'use strict';
   var count = items.length;
   switch (count) {
     case 0:
@@ -155,6 +158,7 @@ goog.labs.i18n.ListFormat.prototype.format = function(items) {
  * @final
  */
 goog.labs.i18n.GenderInfo = function() {
+  'use strict';
   /**
    * Stores the language-aware mode of determining the gender of a list.
    * @private {goog.labs.i18n.GenderInfo.ListGenderStyle_}
@@ -202,6 +206,7 @@ goog.labs.i18n.GenderInfo.Gender = {
  * @return {goog.labs.i18n.GenderInfo.Gender} Get the gender of the list.
 */
 goog.labs.i18n.GenderInfo.prototype.getListGender = function(genders) {
+  'use strict';
   var Gender = goog.labs.i18n.GenderInfo.Gender;
 
   var count = genders.length;

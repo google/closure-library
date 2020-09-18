@@ -25,6 +25,7 @@ goog.require('goog.net.xpc.TransportNames');
  * @extends {goog.Disposable};
  */
 goog.net.xpc.Transport = function(opt_domHelper) {
+  'use strict';
   goog.Disposable.call(this);
 
   /**
@@ -49,6 +50,7 @@ goog.net.xpc.Transport.prototype.transportType = 0;
  * @return {number} The transport type identifier.
  */
 goog.net.xpc.Transport.prototype.getType = function() {
+  'use strict';
   return this.transportType;
 };
 
@@ -58,6 +60,7 @@ goog.net.xpc.Transport.prototype.getType = function() {
  * @return {!Window} The window to use.
  */
 goog.net.xpc.Transport.prototype.getWindow = function() {
+  'use strict';
   return this.domHelper_.getWindow();
 };
 
@@ -67,6 +70,7 @@ goog.net.xpc.Transport.prototype.getWindow = function() {
  * @return {string} the transport name.
  */
 goog.net.xpc.Transport.prototype.getName = function() {
+  'use strict';
   return goog.net.xpc.TransportNames[String(this.transportType)] || '';
 };
 

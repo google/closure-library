@@ -39,6 +39,7 @@ goog.requireType('goog.events.Event');
  * @extends {goog.events.EventTarget}
  */
 goog.ui.editor.ToolbarController = function(field, toolbar) {
+  'use strict';
   goog.events.EventTarget.call(this);
 
   /**
@@ -73,6 +74,7 @@ goog.ui.editor.ToolbarController = function(field, toolbar) {
   // queryable commands. Add them to the list of commands to query on
   // each COMMAND_VALUE_CHANGE event.
   this.toolbar_.forEachChild(function(button) {
+    'use strict';
     if (button.queryable) {
       this.queryCommands_.push(this.getComponentId(button.getId()));
     }
@@ -104,6 +106,7 @@ goog.inherits(goog.ui.editor.ToolbarController, goog.events.EventTarget);
  * @protected
  */
 goog.ui.editor.ToolbarController.prototype.getComponentId = function(command) {
+  'use strict';
   // The default implementation assumes that the component ID is the same as
   // the command constant.
   return command;
@@ -121,6 +124,7 @@ goog.ui.editor.ToolbarController.prototype.getComponentId = function(command) {
  * @protected
  */
 goog.ui.editor.ToolbarController.prototype.getCommand = function(id) {
+  'use strict';
   // The default implementation assumes that the component ID is the same as
   // the command constant.
   return id;
@@ -136,6 +140,7 @@ goog.ui.editor.ToolbarController.prototype.getCommand = function(id) {
  * @template T
  */
 goog.ui.editor.ToolbarController.prototype.getHandler = function() {
+  'use strict';
   return this.handler_;
 };
 
@@ -147,6 +152,7 @@ goog.ui.editor.ToolbarController.prototype.getHandler = function() {
  * @protected
  */
 goog.ui.editor.ToolbarController.prototype.getField = function() {
+  'use strict';
   return this.field_;
 };
 
@@ -157,6 +163,7 @@ goog.ui.editor.ToolbarController.prototype.getField = function() {
  * @return {!goog.ui.Toolbar} The toolbar UI component.
  */
 goog.ui.editor.ToolbarController.prototype.getToolbar = function() {
+  'use strict';
   return this.toolbar_;
 };
 
@@ -165,6 +172,7 @@ goog.ui.editor.ToolbarController.prototype.getToolbar = function() {
  * @return {boolean} Whether the toolbar is visible.
  */
 goog.ui.editor.ToolbarController.prototype.isVisible = function() {
+  'use strict';
   return this.toolbar_.isVisible();
 };
 
@@ -174,6 +182,7 @@ goog.ui.editor.ToolbarController.prototype.isVisible = function() {
  * @param {boolean} visible Whether to show or hide the toolbar.
  */
 goog.ui.editor.ToolbarController.prototype.setVisible = function(visible) {
+  'use strict';
   this.toolbar_.setVisible(visible);
 };
 
@@ -182,6 +191,7 @@ goog.ui.editor.ToolbarController.prototype.setVisible = function(visible) {
  * @return {boolean} Whether the toolbar is enabled.
  */
 goog.ui.editor.ToolbarController.prototype.isEnabled = function() {
+  'use strict';
   return this.toolbar_.isEnabled();
 };
 
@@ -191,6 +201,7 @@ goog.ui.editor.ToolbarController.prototype.isEnabled = function() {
  * @param {boolean} enabled Whether to enable or disable the toolbar.
  */
 goog.ui.editor.ToolbarController.prototype.setEnabled = function(enabled) {
+  'use strict';
   this.toolbar_.setEnabled(enabled);
 };
 
@@ -200,6 +211,7 @@ goog.ui.editor.ToolbarController.prototype.setEnabled = function(enabled) {
  * highlighted item, and closing the currently open menu (if any).
  */
 goog.ui.editor.ToolbarController.prototype.blur = function() {
+  'use strict';
   // We can't just call this.toolbar_.getElement().blur(), because the toolbar
   // element itself isn't focusable, so goog.ui.Container#handleBlur isn't
   // registered to handle blur events.
@@ -209,6 +221,7 @@ goog.ui.editor.ToolbarController.prototype.blur = function() {
 
 /** @override */
 goog.ui.editor.ToolbarController.prototype.disposeInternal = function() {
+  'use strict';
   goog.ui.editor.ToolbarController.superClass_.disposeInternal.call(this);
   if (this.handler_) {
     this.handler_.dispose();
@@ -231,6 +244,7 @@ goog.ui.editor.ToolbarController.prototype.disposeInternal = function() {
  * @protected
  */
 goog.ui.editor.ToolbarController.prototype.updateToolbar = function(e) {
+  'use strict';
   if (!this.toolbar_.isEnabled() || !this.field_.isSelectionEditable() ||
       !this.dispatchEvent(goog.ui.Component.EventType.CHANGE)) {
     return;
@@ -263,6 +277,7 @@ goog.ui.editor.ToolbarController.prototype.updateToolbar = function(e) {
  */
 goog.ui.editor.ToolbarController.prototype.updateToolbarFromState = function(
     state) {
+  'use strict';
   for (var command in state) {
     var button = this.toolbar_.getChild(this.getComponentId(command));
     if (button) {
@@ -284,6 +299,7 @@ goog.ui.editor.ToolbarController.prototype.updateToolbarFromState = function(
  * @protected
  */
 goog.ui.editor.ToolbarController.prototype.handleAction = function(e) {
+  'use strict';
   var command = this.getCommand(e.target.getId());
   this.field_.execCommand(command, e.target.getValue());
 };

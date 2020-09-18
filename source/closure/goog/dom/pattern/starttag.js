@@ -32,6 +32,7 @@ goog.require('goog.dom.pattern.Tag');
  * @extends {goog.dom.pattern.Tag}
  */
 goog.dom.pattern.StartTag = function(tag, opt_attrs, opt_styles, opt_test) {
+  'use strict';
   goog.dom.pattern.Tag.call(
       this, tag, goog.dom.TagWalkType.START_TAG, opt_attrs, opt_styles,
       opt_test);

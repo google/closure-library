@@ -67,6 +67,7 @@ goog.proto2.PbLiteSerializer.prototype.zeroIndexing_ = false;
  *     0-indexed protos.
  */
 goog.proto2.PbLiteSerializer.prototype.setZeroIndexed = function(zeroIndexing) {
+  'use strict';
   this.zeroIndexing_ = zeroIndexing;
 };
 
@@ -79,6 +80,7 @@ goog.proto2.PbLiteSerializer.prototype.setZeroIndexed = function(zeroIndexing) {
  * @override
  */
 goog.proto2.PbLiteSerializer.prototype.serialize = function(message) {
+  'use strict';
   var descriptor = message.getDescriptor();
   var fields = descriptor.getFields();
 
@@ -110,6 +112,7 @@ goog.proto2.PbLiteSerializer.prototype.serialize = function(message) {
 
   // Add any unknown fields.
   message.forEachUnknown(function(tag, value) {
+    'use strict';
     var index = zeroIndexing ? tag - 1 : tag;
     serialized[index] = value;
   });
@@ -121,7 +124,7 @@ goog.proto2.PbLiteSerializer.prototype.serialize = function(message) {
 /** @override */
 goog.proto2.PbLiteSerializer.prototype.deserializeField = function(
     message, field, value) {
-
+  'use strict';
   if (value == null) {
     // Since value double-equals null, it may be either null or undefined.
     // Ensure we return the same one, since they have different meanings.
@@ -149,6 +152,7 @@ goog.proto2.PbLiteSerializer.prototype.deserializeField = function(
 /** @override */
 goog.proto2.PbLiteSerializer.prototype.getSerializedValue = function(
     field, value) {
+  'use strict';
   if (field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.BOOL) {
     // Booleans are serialized in numeric form.
     return value ? 1 : 0;
@@ -162,7 +166,7 @@ goog.proto2.PbLiteSerializer.prototype.getSerializedValue = function(
 /** @override */
 goog.proto2.PbLiteSerializer.prototype.getDeserializedValue = function(
     field, value) {
-
+  'use strict';
   if (field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.BOOL) {
     goog.asserts.assert(
         typeof value === 'number' || typeof value === 'boolean',
@@ -178,6 +182,7 @@ goog.proto2.PbLiteSerializer.prototype.getDeserializedValue = function(
 /** @override */
 goog.proto2.PbLiteSerializer.prototype.deserialize = function(
     descriptor, data) {
+  'use strict';
   var toConvert = data;
   if (this.zeroIndexing_) {
     // Make the data align with tag-IDs (1-indexed) by shifting everything

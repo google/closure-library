@@ -47,6 +47,7 @@ goog.dom.browserrange.Error = {
  * @return {!goog.dom.browserrange.AbstractRange} A wrapper object.
  */
 goog.dom.browserrange.createRange = function(range) {
+  'use strict';
   if (goog.dom.BrowserFeature.LEGACY_IE_RANGES) {
     return new goog.dom.browserrange.IeRange(
         /** @type {TextRange} */ (range),
@@ -74,6 +75,7 @@ goog.dom.browserrange.createRange = function(range) {
  * @return {!goog.dom.browserrange.AbstractRange} A wrapper object.
  */
 goog.dom.browserrange.createRangeFromNodeContents = function(node) {
+  'use strict';
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
     return goog.dom.browserrange.IeRange.createFromNodeContents(node);
   } else if (goog.userAgent.WEBKIT) {
@@ -103,6 +105,7 @@ goog.dom.browserrange.createRangeFromNodeContents = function(node) {
  */
 goog.dom.browserrange.createRangeFromNodes = function(
     startNode, startOffset, endNode, endOffset) {
+  'use strict';
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
     return goog.dom.browserrange.IeRange.createFromNodes(
         startNode, startOffset, endNode, endOffset);
@@ -129,6 +132,7 @@ goog.dom.browserrange.createRangeFromNodes = function(
  * @return {boolean} Whether the given node can contain a range end point.
  */
 goog.dom.browserrange.canContainRangeEndpoint = function(node) {
+  'use strict';
   // NOTE(user): This is not complete, as divs with style -
   // 'display:inline-block' or 'position:absolute' can also not contain range
   // endpoints. A more complete check is to see if that element can be partially

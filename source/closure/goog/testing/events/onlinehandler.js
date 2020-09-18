@@ -25,6 +25,7 @@ goog.require('goog.net.NetworkStatusMonitor');
  * @final
  */
 goog.testing.events.OnlineHandler = function(initialState) {
+  'use strict';
   goog.testing.events.OnlineHandler.base(this, 'constructor');
 
   /**
@@ -38,6 +39,7 @@ goog.inherits(goog.testing.events.OnlineHandler, goog.events.EventTarget);
 
 /** @override */
 goog.testing.events.OnlineHandler.prototype.isOnline = function() {
+  'use strict';
   return this.online_;
 };
 
@@ -48,6 +50,7 @@ goog.testing.events.OnlineHandler.prototype.isOnline = function() {
  */
 goog.testing.events.OnlineHandler.prototype.setOnline = function(
     newOnlineState) {
+  'use strict';
   if (newOnlineState != this.online_) {
     this.online_ = newOnlineState;
     this.dispatchEvent(

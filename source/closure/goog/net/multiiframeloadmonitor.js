@@ -30,6 +30,7 @@ goog.requireType('goog.events.Event');
  * @final
  */
 goog.net.MultiIframeLoadMonitor = function(iframes, callback, opt_hasContent) {
+  'use strict';
   /**
    * Array of IframeLoadMonitors we use to track the loaded status of any
    * currently unloaded iframes.
@@ -73,6 +74,7 @@ goog.net.MultiIframeLoadMonitor = function(iframes, callback, opt_hasContent) {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.net.MultiIframeLoadMonitor.prototype.handleEvent = function(e) {
+  'use strict';
   var iframeLoadMonitor = e.target;
   // iframeLoadMonitor is now loaded, remove it from the array of
   // pending iframe load monitors.
@@ -104,6 +106,7 @@ goog.net.MultiIframeLoadMonitor.prototype.handleEvent = function(e) {
  * implementing a timeout).
  */
 goog.net.MultiIframeLoadMonitor.prototype.stopMonitoring = function() {
+  'use strict';
   for (var i = 0; i < this.pendingIframeLoadMonitors_.length; i++) {
     this.pendingIframeLoadMonitors_[i].dispose();
   }

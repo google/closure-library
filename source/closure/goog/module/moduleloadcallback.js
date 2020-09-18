@@ -26,6 +26,7 @@ goog.require('goog.module');
  * @final
  */
 goog.module.ModuleLoadCallback = function(fn, opt_handler) {
+  'use strict';
   /**
    * Callback function.
    * @type {Function}
@@ -47,6 +48,7 @@ goog.module.ModuleLoadCallback = function(fn, opt_handler) {
  * @param {*} context The module context.
  */
 goog.module.ModuleLoadCallback.prototype.execute = function(context) {
+  'use strict';
   if (this.fn_) {
     this.fn_.call(this.handler_ || null, context);
     this.handler_ = null;
@@ -59,6 +61,7 @@ goog.module.ModuleLoadCallback.prototype.execute = function(context) {
  * Abort the callback, but not the actual module load.
  */
 goog.module.ModuleLoadCallback.prototype.abort = function() {
+  'use strict';
   this.fn_ = null;
   this.handler_ = null;
 };
@@ -72,6 +75,7 @@ goog.debug.entryPointRegistry.register(
      *     function.
      */
     function(transformer) {
+      'use strict';
       goog.module.ModuleLoadCallback.prototype.execute =
           transformer(goog.module.ModuleLoadCallback.prototype.execute);
     });

@@ -40,6 +40,7 @@ goog.requireType('goog.net.streams.StreamParser');
 
 goog.scope(function() {
 
+'use strict';
 var Base64PbStreamParser =
     goog.module.get('goog.net.streams.Base64PbStreamParser');
 var PbJsonStreamParser = goog.module.get('goog.net.streams.PbJsonStreamParser');
@@ -58,6 +59,7 @@ var PbJsonStreamParser = goog.module.get('goog.net.streams.PbJsonStreamParser');
  * @package
  */
 goog.net.streams.XhrStreamReader = function(xhr) {
+  'use strict';
   /**
    * @const
    * @private {?goog.log.Logger} the logger.
@@ -178,6 +180,7 @@ goog.net.streams.XhrStreamReader.Status = {
  * @return {boolean} false if response streaming is not supported.
  */
 goog.net.streams.XhrStreamReader.isStreamingSupported = function() {
+  'use strict';
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
     // No active-x due to security issues.
     return false;
@@ -209,6 +212,7 @@ goog.net.streams.XhrStreamReader.isStreamingSupported = function() {
  */
 goog.net.streams.XhrStreamReader.prototype.getParserByResponseHeader_ =
     function() {
+  'use strict';
   var contentType =
       this.xhr_.getStreamingResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER);
   if (!contentType) {
@@ -251,6 +255,7 @@ goog.net.streams.XhrStreamReader.prototype.getParserByResponseHeader_ =
  *    null if the reader has been cleared.
  */
 goog.net.streams.XhrStreamReader.prototype.getXhr = function() {
+  'use strict';
   return this.xhr_;
 };
 
@@ -261,6 +266,7 @@ goog.net.streams.XhrStreamReader.prototype.getXhr = function() {
  * @return {!goog.net.streams.XhrStreamReader.Status} The stream status.
  */
 goog.net.streams.XhrStreamReader.prototype.getStatus = function() {
+  'use strict';
   return this.status_;
 };
 
@@ -272,6 +278,7 @@ goog.net.streams.XhrStreamReader.prototype.getStatus = function() {
  */
 goog.net.streams.XhrStreamReader.prototype.setStatusHandler = function(
     handler) {
+  'use strict';
   this.statusHandler_ = handler;
 };
 
@@ -282,6 +289,7 @@ goog.net.streams.XhrStreamReader.prototype.setStatusHandler = function(
  * @param {function(!Array<!Object>)} handler The handler for new data.
  */
 goog.net.streams.XhrStreamReader.prototype.setDataHandler = function(handler) {
+  'use strict';
   this.dataHandler_ = handler;
 };
 
@@ -296,6 +304,7 @@ goog.net.streams.XhrStreamReader.prototype.setDataHandler = function(handler) {
  */
 goog.net.streams.XhrStreamReader.prototype.readyStateChangeHandler_ = function(
     event) {
+  'use strict';
   var xhr = /** @type {goog.net.XhrIo} */ (event.target);
 
 
@@ -323,6 +332,7 @@ goog.net.streams.XhrStreamReader.prototype.readyStateChangeHandler_ = function(
  * @private
  */
 goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
+  'use strict';
   var readyState = this.xhr_.getReadyState();
   var errorCode = this.xhr_.getLastErrorCode();
   var statusCode = this.xhr_.getStatus();
@@ -410,6 +420,7 @@ goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
  * @private
  */
 goog.net.streams.XhrStreamReader.prototype.updateStatus_ = function(status) {
+  'use strict';
   var current = this.status_;
   if (current != status) {
     this.status_ = status;
@@ -426,6 +437,7 @@ goog.net.streams.XhrStreamReader.prototype.updateStatus_ = function(status) {
  * @private
  */
 goog.net.streams.XhrStreamReader.prototype.clear_ = function() {
+  'use strict';
   this.eventHandler_.removeAll();
 
   if (this.xhr_) {
@@ -436,5 +448,4 @@ goog.net.streams.XhrStreamReader.prototype.clear_ = function() {
     xhr.dispose();
   }
 };
-
 });  // goog.scope

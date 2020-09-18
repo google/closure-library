@@ -29,6 +29,7 @@ goog.require('goog.ui.ac.InputHandler');
  */
 goog.ui.ac.RichInputHandler = function(
     opt_separators, opt_literals, opt_multi, opt_throttleTime) {
+  'use strict';
   goog.ui.ac.InputHandler.call(
       this, opt_separators, opt_literals, opt_multi, opt_throttleTime);
 };
@@ -42,6 +43,7 @@ goog.inherits(goog.ui.ac.RichInputHandler, goog.ui.ac.InputHandler);
  * @override
  */
 goog.ui.ac.RichInputHandler.prototype.selectRow = function(row) {
+  'use strict';
   var suppressUpdate =
       goog.ui.ac.RichInputHandler.superClass_.selectRow.call(this, row);
   row.select(this.ac_.getTarget());

@@ -53,7 +53,7 @@ function assertSerialize(expected, obj, replacer = undefined) {
   if (obj instanceof Function) return;
 
   // goog.json.serialize doesn't use the toJSON method.
-  if (goog.isObject(obj) && goog.isFunction(obj.toJSON)) return;
+  if (goog.isObject(obj) && typeof obj.toJSON === 'function') return;
 
   if (typeof JSON != 'undefined') {
     assertEquals(

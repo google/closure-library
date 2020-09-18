@@ -46,6 +46,7 @@ goog.userAgent.flash.detectedFlashVersion_ = '';
  * @private
  */
 goog.userAgent.flash.init_ = function() {
+  'use strict';
   if (navigator.plugins && navigator.plugins.length) {
     var plugin = navigator.plugins['Shockwave Flash'];
     if (plugin) {
@@ -121,6 +122,7 @@ goog.userAgent.flash.init_ = function() {
  * @private
  */
 goog.userAgent.flash.getVersion_ = function(desc) {
+  'use strict';
   var matches = desc.match(/[\d]+/g);
   if (!matches) {
     return '';
@@ -156,6 +158,7 @@ goog.userAgent.flash.VERSION = goog.userAgent.flash.detectedFlashVersion_;
  *     than a given version.
  */
 goog.userAgent.flash.isVersion = function(version) {
+  'use strict';
   return goog.string.compareVersions(goog.userAgent.flash.VERSION, version) >=
       0;
 };

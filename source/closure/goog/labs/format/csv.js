@@ -54,7 +54,7 @@ goog.labs.format.csv.ENABLE_VERBOSE_DEBUGGING = goog.DEBUG;
  * @final
  */
 goog.labs.format.csv.ParseError = function(text, index, opt_message) {
-
+  'use strict';
   var message;
 
   /**
@@ -100,8 +100,10 @@ goog.labs.format.csv.ParseError.prototype.name = 'ParseError';
  * @private
  */
 goog.labs.format.csv.ParseError.findLineInfo_ = function(str, index) {
+  'use strict';
   var lines = goog.string.newlines.getLines(str);
   var lineIndex = goog.array.findIndex(lines, function(line) {
+    'use strict';
     return line.startLineIndex <= index && line.endLineIndex > index;
   });
 
@@ -122,6 +124,7 @@ goog.labs.format.csv.ParseError.findLineInfo_ = function(str, index) {
  * @private
  */
 goog.labs.format.csv.ParseError.getLineDebugString_ = function(str, column) {
+  'use strict';
   var returnString = str + '\n';
   returnString += goog.string.repeat(' ', column - 1) + '^';
   return returnString;
@@ -148,7 +151,7 @@ goog.labs.format.csv.Token;
  * @return {!Array<!Array<string>>} The parsed CSV.
  */
 goog.labs.format.csv.parse = function(text, opt_ignoreErrors, opt_delimiter) {
-
+  'use strict';
   var index = 0;  // current char offset being considered
 
   var delimiter = opt_delimiter || ',';
@@ -389,6 +392,7 @@ goog.labs.format.csv.Sentinels_ = {
  * @private
  */
 goog.labs.format.csv.isCharacterString_ = function(str) {
+  'use strict';
   return typeof str === 'string' && str.length == 1;
 };
 
@@ -400,6 +404,7 @@ goog.labs.format.csv.isCharacterString_ = function(str) {
  * @private
  */
 goog.labs.format.csv.assertToken_ = function(o) {
+  'use strict';
   if (typeof o === 'string') {
     goog.asserts.assertString(o);
     goog.asserts.assert(

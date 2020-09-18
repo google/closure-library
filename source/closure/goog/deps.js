@@ -92,7 +92,7 @@ goog.addDependency('debug/devcss/devcss.js', ['goog.debug.DevCss', 'goog.debug.D
 goog.addDependency('debug/devcss/devcssrunner.js', ['goog.debug.devCssRunner'], ['goog.debug.DevCss'], {});
 goog.addDependency('debug/divconsole.js', ['goog.debug.DivConsole'], ['goog.debug.HtmlFormatter', 'goog.dom.DomHelper', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.log', 'goog.string.Const', 'goog.style'], {});
 goog.addDependency('debug/entrypointregistry.js', ['goog.debug.EntryPointMonitor', 'goog.debug.entryPointRegistry'], ['goog.asserts'], {});
-goog.addDependency('debug/error.js', ['goog.debug.Error'], [], {'lang': 'es6'});
+goog.addDependency('debug/error.js', ['goog.debug.Error'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('debug/errorcontext.js', ['goog.debug.errorcontext'], [], {});
 goog.addDependency('debug/errorhandler.js', ['goog.debug.ErrorHandler', 'goog.debug.ErrorHandler.ProtectedFunctionError'], ['goog.Disposable', 'goog.asserts', 'goog.debug', 'goog.debug.EntryPointMonitor', 'goog.debug.Error', 'goog.debug.Trace'], {'lang': 'es6'});
 goog.addDependency('debug/errorhandlerweakdep.js', ['goog.debug.errorHandlerWeakDep'], [], {});
@@ -241,7 +241,7 @@ goog.addDependency('events/onlinehandler.js', ['goog.events.OnlineHandler', 'goo
 goog.addDependency('events/pastehandler.js', ['goog.events.PasteHandler', 'goog.events.PasteHandler.EventType', 'goog.events.PasteHandler.State'], ['goog.Timer', 'goog.async.ConditionalDelay', 'goog.events.BrowserEvent', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.log', 'goog.userAgent'], {});
 goog.addDependency('events/wheelevent.js', ['goog.events.WheelEvent'], ['goog.asserts', 'goog.events.BrowserEvent'], {});
 goog.addDependency('events/wheelhandler.js', ['goog.events.WheelHandler'], ['goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.WheelEvent', 'goog.style', 'goog.userAgent', 'goog.userAgent.product', 'goog.userAgent.product.isVersion'], {});
-goog.addDependency('format/emailaddress.js', ['goog.format.EmailAddress'], ['goog.string'], {});
+goog.addDependency('format/emailaddress.js', ['goog.format.EmailAddress'], ['goog.i18n.bidi', 'goog.object', 'goog.string'], {});
 goog.addDependency('format/format.js', ['goog.format'], ['goog.i18n.GraphemeBreak', 'goog.string', 'goog.userAgent'], {});
 goog.addDependency('format/htmlprettyprinter.js', ['goog.format.HtmlPrettyPrinter', 'goog.format.HtmlPrettyPrinter.Buffer'], ['goog.dom.TagName', 'goog.object', 'goog.string.StringBuffer'], {});
 goog.addDependency('format/internationalizedemailaddress.js', ['goog.format.InternationalizedEmailAddress'], ['goog.format.EmailAddress', 'goog.string'], {});
@@ -452,7 +452,7 @@ goog.addDependency('locale/scriptToLanguages.js', ['goog.locale.scriptToLanguage
 goog.addDependency('locale/timezonedetection.js', ['goog.locale.timeZoneDetection'], ['goog.locale.TimeZoneFingerprint'], {});
 goog.addDependency('locale/timezonefingerprint.js', ['goog.locale.TimeZoneFingerprint'], [], {});
 goog.addDependency('locale/timezonelist.js', ['goog.locale.TimeZoneList', 'goog.locale.getTimeZoneAllLongNames', 'goog.locale.getTimeZoneSelectedLongNames', 'goog.locale.getTimeZoneSelectedShortNames'], ['goog.locale'], {});
-goog.addDependency('log/log.js', ['goog.log', 'goog.log.Level', 'goog.log.LogRecord', 'goog.log.Logger'], ['goog.debug', 'goog.debug.LogBuffer', 'goog.debug.LogManager', 'goog.debug.LogRecord', 'goog.debug.Logger'], {});
+goog.addDependency('log/log.js', ['goog.log', 'goog.log.Level', 'goog.log.LogBuffer', 'goog.log.LogRecord', 'goog.log.Logger'], ['goog.debug', 'goog.debug.LogBuffer', 'goog.debug.LogManager', 'goog.debug.LogRecord', 'goog.debug.Logger'], {});
 goog.addDependency('math/affinetransform.js', ['goog.math.AffineTransform'], [], {'lang': 'es6'});
 goog.addDependency('math/bezier.js', ['goog.math.Bezier'], ['goog.math', 'goog.math.Coordinate'], {});
 goog.addDependency('math/box.js', ['goog.math.Box'], ['goog.asserts', 'goog.math.Coordinate'], {});
@@ -665,7 +665,7 @@ goog.addDependency('structs/stringset.js', ['goog.structs.StringSet'], ['goog.as
 goog.addDependency('structs/structs.js', ['goog.structs'], ['goog.array', 'goog.object'], {});
 goog.addDependency('structs/treenode.js', ['goog.structs.TreeNode'], ['goog.array', 'goog.asserts', 'goog.structs.Node'], {});
 goog.addDependency('structs/trie.js', ['goog.structs.Trie'], ['goog.object', 'goog.structs'], {});
-goog.addDependency('style/bidi.js', ['goog.style.bidi'], ['goog.dom', 'goog.style', 'goog.userAgent', 'goog.userAgent.platform', 'goog.userAgent.product', 'goog.userAgent.product.isVersion'], {});
+goog.addDependency('style/bidi.js', ['goog.style.bidi'], ['goog.dom', 'goog.style', 'goog.userAgent', 'goog.userAgent.platform', 'goog.userAgent.product', 'goog.userAgent.product.isVersion'], {'lang': 'es6'});
 goog.addDependency('style/cursor.js', ['goog.style.cursor'], ['goog.userAgent'], {});
 goog.addDependency('style/style.js', ['goog.style'], ['goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.dom.vendor', 'goog.html.SafeStyleSheet', 'goog.math.Box', 'goog.math.Coordinate', 'goog.math.Rect', 'goog.math.Size', 'goog.object', 'goog.reflect', 'goog.string', 'goog.userAgent'], {});
 goog.addDependency('style/stylescrollbartester.js', ['goog.styleScrollbarTester'], ['goog.dom', 'goog.dom.TagName', 'goog.style', 'goog.testing.asserts'], {});

@@ -172,7 +172,10 @@ goog.style.bidi.usesNegativeScrollLeftInRtl_ = function() {
   var isSafari10Plus =
       goog.userAgent.product.SAFARI && goog.userAgent.product.isVersion(10);
   var isIOS10Plus = goog.userAgent.IOS && goog.userAgent.platform.isVersion(10);
-  return goog.userAgent.GECKO || isSafari10Plus || isIOS10Plus;
+  const isChrome85Plus =
+      goog.userAgent.product.CHROME && goog.userAgent.product.isVersion(85);
+  return goog.userAgent.GECKO || isSafari10Plus || isIOS10Plus ||
+      isChrome85Plus;
 };
 
 

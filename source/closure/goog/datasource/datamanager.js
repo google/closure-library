@@ -36,6 +36,7 @@ goog.requireType('goog.ds.LoadState');
  * @final
  */
 goog.ds.DataManager = function() {
+  'use strict';
   this.dataSources_ = new goog.ds.BasicNodeList();
   this.autoloads_ = new goog.structs.Map();
   this.listenerMap_ = {};
@@ -59,6 +60,7 @@ goog.inherits(goog.ds.DataManager, goog.ds.DataNode);
  * @return {!goog.ds.DataManager} The data manager singleton.
  */
 goog.ds.DataManager.getInstance = function() {
+  'use strict';
   if (!goog.ds.DataManager.instance_) {
     goog.ds.DataManager.instance_ = new goog.ds.DataManager();
   }
@@ -70,6 +72,7 @@ goog.ds.DataManager.getInstance = function() {
  * Clears the global instance (for unit tests to reset state).
  */
 goog.ds.DataManager.clearInstance = function() {
+  'use strict';
   goog.ds.DataManager.instance_ = null;
 };
 
@@ -84,6 +87,7 @@ goog.ds.DataManager.clearInstance = function() {
  */
 goog.ds.DataManager.prototype.addDataSource = function(
     ds, opt_autoload, opt_name) {
+  'use strict';
   var autoload = !!opt_autoload;
   var name = opt_name || ds.getDataName();
   if (!goog.string.startsWith(name, '$')) {
@@ -106,6 +110,7 @@ goog.ds.DataManager.prototype.addDataSource = function(
  * @param {string} dataPath Data path being aliased.
  */
 goog.ds.DataManager.prototype.aliasDataSource = function(name, dataPath) {
+  'use strict';
   if (!this.aliasListener_) {
     this.aliasListener_ = goog.bind(this.listenForAlias_, this);
   }
@@ -128,6 +133,7 @@ goog.ds.DataManager.prototype.aliasDataSource = function(name, dataPath) {
  * @private
  */
 goog.ds.DataManager.prototype.listenForAlias_ = function(dataPath, name) {
+  'use strict';
   var aliasedExpr = this.aliases_[name];
 
   if (aliasedExpr) {
@@ -151,6 +157,7 @@ goog.ds.DataManager.prototype.listenForAlias_ = function(dataPath, name) {
  *   or null if no node of this name exists.
  */
 goog.ds.DataManager.prototype.getDataSource = function(name) {
+  'use strict';
   if (this.aliases_[name]) {
     return this.aliases_[name].getNode();
   } else {
@@ -165,18 +172,21 @@ goog.ds.DataManager.prototype.getDataSource = function(name) {
  * @override
  */
 goog.ds.DataManager.prototype.get = function() {
+  'use strict';
   return this.dataSources_;
 };
 
 
 /** @override */
 goog.ds.DataManager.prototype.set = function(value) {
+  'use strict';
   throw new Error('Can\'t set on DataManager');
 };
 
 
 /** @override */
 goog.ds.DataManager.prototype.getChildNodes = function(opt_selector) {
+  'use strict';
   if (opt_selector) {
     return new goog.ds.BasicNodeList(
         [this.getChildNode(/** @type {string} */ (opt_selector))]);
@@ -194,12 +204,14 @@ goog.ds.DataManager.prototype.getChildNodes = function(opt_selector) {
  * @override
  */
 goog.ds.DataManager.prototype.getChildNode = function(name) {
+  'use strict';
   return this.getDataSource(name);
 };
 
 
 /** @override */
 goog.ds.DataManager.prototype.getChildNodeValue = function(name) {
+  'use strict';
   var ds = this.getDataSource(name);
   return ds ? ds.get() : null;
 };
@@ -211,6 +223,7 @@ goog.ds.DataManager.prototype.getChildNodeValue = function(name) {
  * @override
  */
 goog.ds.DataManager.prototype.getDataName = function() {
+  'use strict';
   return '';
 };
 
@@ -221,6 +234,7 @@ goog.ds.DataManager.prototype.getDataName = function() {
  * @override
  */
 goog.ds.DataManager.prototype.getDataPath = function() {
+  'use strict';
   return '';
 };
 
@@ -231,6 +245,7 @@ goog.ds.DataManager.prototype.getDataPath = function() {
  * @override
  */
 goog.ds.DataManager.prototype.load = function() {
+  'use strict';
   var len = this.dataSources_.getCount();
   for (var i = 0; i < len; i++) {
     var ds = this.dataSources_.getByIndex(i);
@@ -256,6 +271,7 @@ goog.ds.DataManager.prototype.getLoadState = goog.abstractMethod;
  * @override
  */
 goog.ds.DataManager.prototype.isList = function() {
+  'use strict';
   return false;
 };
 
@@ -265,6 +281,7 @@ goog.ds.DataManager.prototype.isList = function() {
  * @return {number} Count of events.
  */
 goog.ds.DataManager.prototype.getEventCount = function() {
+  'use strict';
   return this.eventCount_;
 };
 
@@ -281,6 +298,7 @@ goog.ds.DataManager.prototype.getEventCount = function() {
  *   is matched.
  */
 goog.ds.DataManager.prototype.addListener = function(fn, dataPath, opt_id) {
+  'use strict';
   // maxAncestor sets how distant an ancestor you can be of the fired event
   // and still fire (you always fire if you are a descendant).
   // 0 means you don't fire if you are an ancestor
@@ -340,6 +358,7 @@ goog.ds.DataManager.prototype.addListener = function(fn, dataPath, opt_id) {
  */
 goog.ds.DataManager.prototype.addIndexedListener = function(
     fn, dataPath, opt_id) {
+  'use strict';
   var firstStarPos = dataPath.indexOf('*');
   // Just need a regular listener
   if (firstStarPos == -1) {
@@ -362,6 +381,7 @@ goog.ds.DataManager.prototype.addIndexedListener = function(
   // if the regex matches, passing in an array of the matched values
   var matchRegExpRe = new RegExp(matchRegExp);
   var matcher = function(path, id) {
+    'use strict';
     var match = matchRegExpRe.exec(path);
     if (match) {
       match.shift();
@@ -393,6 +413,7 @@ goog.ds.DataManager.prototype.addIndexedListener = function(
  */
 goog.ds.DataManager.prototype.removeIndexedListeners = function(
     fn, opt_dataPath, opt_id) {
+  'use strict';
   this.removeListenersByFunction_(
       this.indexedListenersByFunction_, true, fn, opt_dataPath, opt_id);
 };
@@ -409,7 +430,7 @@ goog.ds.DataManager.prototype.removeIndexedListeners = function(
  */
 goog.ds.DataManager.prototype.removeListeners = function(
     fn, opt_dataPath, opt_id) {
-
+  'use strict';
   // Normalize data path root
   if (opt_dataPath && goog.string.endsWith(opt_dataPath, '/...')) {
     opt_dataPath = opt_dataPath.substring(0, opt_dataPath.length - 4);
@@ -438,6 +459,7 @@ goog.ds.DataManager.prototype.removeListeners = function(
  */
 goog.ds.DataManager.prototype.removeListenersByFunction_ = function(
     listenersByFunction, indexed, fn, opt_dataPath, opt_id) {
+  'use strict';
   var fnUid = goog.getUid(fn);
   var functionMatches = listenersByFunction[fnUid];
   if (functionMatches != null) {
@@ -468,8 +490,10 @@ goog.ds.DataManager.prototype.removeListenersByFunction_ = function(
  * @return {number} Number of listeners.
  */
 goog.ds.DataManager.prototype.getListenerCount = function() {
+  'use strict';
   var /** number */ count = 0;
   goog.object.forEach(this.listenerMap_, function(matchingListeners) {
+    'use strict';
     count += goog.structs.getCount(matchingListeners);
   });
   return count;
@@ -487,6 +511,7 @@ goog.ds.DataManager.prototype.getListenerCount = function() {
  * @param {Function} callback Zero-arg function to execute.
  */
 goog.ds.DataManager.prototype.runWithoutFiringDataChanges = function(callback) {
+  'use strict';
   if (this.disableFiring_) {
     throw new Error('Can not nest calls to runWithoutFiringDataChanges');
   }
@@ -523,6 +548,7 @@ goog.ds.DataManager.prototype.runWithoutFiringDataChanges = function(callback) {
  * @param {string} dataPath Fully qualified data path.
  */
 goog.ds.DataManager.prototype.fireDataChange = function(dataPath) {
+  'use strict';
   if (this.disableFiring_) {
     return;
   }

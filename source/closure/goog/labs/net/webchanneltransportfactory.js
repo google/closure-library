@@ -23,5 +23,6 @@ goog.requireType('goog.net.WebChannelTransport');
  * @return {!goog.net.WebChannelTransport} the newly created transport instance.
  */
 goog.net.createWebChannelTransport = function() {
+  'use strict';
   return new goog.labs.net.webChannel.WebChannelBaseTransport();
 };

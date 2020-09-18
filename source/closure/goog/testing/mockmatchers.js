@@ -330,7 +330,7 @@ goog.testing.mockmatchers.isNumber =
  */
 goog.testing.mockmatchers.isFunction =
     new goog.testing.mockmatchers.ArgumentMatcher(
-        goog.isFunction, 'isFunction');
+        x => typeof x === 'function', 'isFunction');
 
 
 /**

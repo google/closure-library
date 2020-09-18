@@ -179,6 +179,20 @@ goog.global.mockTestName = function() {
   return failGoogPromise();
 };
 
+/**
+ * A variable with the same autodiscovery prefix, used by
+ * `testInitializeTestCase`. TestCase does not support auto-discovering tests
+ * within Arrays, either as functions added to the array object or as a value
+ * within the array (as it never recurses into the content of the array).
+ */
+goog.global.mockTestNameValues = ['hello', 'world'];
+/**
+ * @return {!GoogPromise<?>}
+ */
+goog.global.mockTestNameValues.mockTestNameTestShouldNotBeRun = function() {
+  return failGoogPromise();
+};
+
 testSuite({
   setUp() {
     events = [];

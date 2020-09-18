@@ -27,6 +27,7 @@ goog.requireType('goog.testing.MockClock');
   */
 goog.storage.collectableStorageTester.runBasicTests = function(
     mechanism, clock, storage) {
+  'use strict';
   // No expiration.
   storage.set('first', 'three seconds', 3000);
   storage.set('second', 'one second', 1000);

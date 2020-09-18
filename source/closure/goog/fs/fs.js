@@ -36,7 +36,7 @@ goog.fs.get_ = function(type, size) {
   var requestFileSystem =
       goog.global.requestFileSystem || goog.global.webkitRequestFileSystem;
 
-  if (!goog.isFunction(requestFileSystem)) {
+  if (typeof requestFileSystem !== 'function') {
     return goog.async.Deferred.fail(new Error('File API unsupported'));
   }
 

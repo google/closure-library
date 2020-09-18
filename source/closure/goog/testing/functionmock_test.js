@@ -234,6 +234,7 @@ testSuite({
   },
 
   //----- Tests for goog.testing.createGlobalFunctionMock
+  /** @suppress {undefinedVars} globalFoo is created indirectly */
   testMocksGlobalFunctionWithNoArgs() {
     mockGlobal = testing.createGlobalFunctionMock('globalFoo');
     mockGlobal().$returns('No, I am Spartacus!');
@@ -243,6 +244,7 @@ testSuite({
     mockGlobal.$verify();
   },
 
+  /** @suppress {undefinedVars} globalBar is created indirectly */
   testMocksGlobalFunctionUsingGlobalName() {
     testing.createGlobalFunctionMock('globalFoo');
     globalFoo().$returns('No, I am Spartacus!');
@@ -253,6 +255,7 @@ testSuite({
     globalFoo.$tearDown();
   },
 
+  /** @suppress {undefinedVars} globalBar is created indirectly */
   testMocksGlobalFunctionWithArgs() {
     const mockReturnValue = 'Noam is Chomsky!';
     mockGlobal = testing.createGlobalFunctionMock('globalBar');

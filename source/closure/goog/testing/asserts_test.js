@@ -19,6 +19,7 @@ const dom = goog.require('goog.dom');
 const googArray = goog.require('goog.array');
 const product = goog.require('goog.userAgent.product');
 const testSuite = goog.require('goog.testing.testSuite');
+const throwException = goog.require('goog.async.throwException');
 const userAgent = goog.require('goog.userAgent');
 
 const SUPPORTS_TYPED_ARRAY =
@@ -78,7 +79,7 @@ async function internalTestAssertRejects(swallowUnhandledRejections, factory) {
     TestCase.invalidateAssertionException(/** @type {?} */ (e));
   } finally {
     // restore the default exception handler.
-    GoogPromise.setUnhandledRejectionHandler(goog.async.throwException);
+    GoogPromise.setUnhandledRejectionHandler(throwException);
   }
 }
 

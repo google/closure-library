@@ -29,6 +29,7 @@ goog.requireType('goog.events.KeyEvent');
  * @extends {goog.ui.Popup}
  */
 goog.ui.MenuBase = function(opt_element) {
+  'use strict';
   goog.ui.Popup.call(this, opt_element);
 
   /**
@@ -63,6 +64,7 @@ goog.ui.MenuBase.Events.ITEM_ACTION = 'itemaction';
 
 /** @override */
 goog.ui.MenuBase.prototype.disposeInternal = function() {
+  'use strict';
   goog.ui.MenuBase.superClass_.disposeInternal.call(this);
   this.eventHandler_.dispose();
   this.keyHandler_.dispose();
@@ -77,6 +79,7 @@ goog.ui.MenuBase.prototype.disposeInternal = function() {
  * @override
  */
 goog.ui.MenuBase.prototype.onShow = function() {
+  'use strict';
   goog.ui.MenuBase.superClass_.onShow.call(this);
 
   // register common event handlers for derived classes
@@ -102,6 +105,7 @@ goog.ui.MenuBase.prototype.onShow = function() {
  * @override
  */
 goog.ui.MenuBase.prototype.onHide = function(opt_target) {
+  'use strict';
   goog.ui.MenuBase.superClass_.onHide.call(this, opt_target);
 
   // remove listeners when hidden
@@ -115,6 +119,7 @@ goog.ui.MenuBase.prototype.onHide = function(opt_target) {
  * @return {Object} The item selected or null if no item is selected.
  */
 goog.ui.MenuBase.prototype.getSelectedItem = function() {
+  'use strict';
   return null;
 };
 

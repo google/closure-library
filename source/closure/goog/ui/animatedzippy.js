@@ -42,6 +42,7 @@ goog.requireType('goog.events.Event');
  */
 goog.ui.AnimatedZippy = function(
     header, content, opt_expanded, opt_domHelper, opt_role) {
+  'use strict';
   var domHelper = opt_domHelper || goog.dom.getDomHelper();
 
   // Create wrapper element and move content into it.
@@ -111,6 +112,7 @@ goog.ui.AnimatedZippy.prototype.animationAcceleration = goog.fx.easing.easeOut;
  *     collapsed.
  */
 goog.ui.AnimatedZippy.prototype.isBusy = function() {
+  'use strict';
   return this.anim_ != null;
 };
 
@@ -122,6 +124,7 @@ goog.ui.AnimatedZippy.prototype.isBusy = function() {
  * @override
  */
 goog.ui.AnimatedZippy.prototype.setExpanded = function(expanded) {
+  'use strict';
   if (this.isExpanded() == expanded && !this.anim_) {
     return;
   }
@@ -179,6 +182,7 @@ goog.ui.AnimatedZippy.prototype.setExpanded = function(expanded) {
  * @private
  */
 goog.ui.AnimatedZippy.prototype.onAnimate_ = function(e) {
+  'use strict';
   var contentElement = this.getContentElement();
   var h = contentElement.offsetHeight;
   contentElement.style.marginTop = (e.y - h) + 'px';
@@ -192,6 +196,7 @@ goog.ui.AnimatedZippy.prototype.onAnimate_ = function(e) {
  * @private
  */
 goog.ui.AnimatedZippy.prototype.onAnimationBegin_ = function(expanding) {
+  'use strict';
   this.dispatchEvent(new goog.ui.ZippyEvent(
       goog.ui.AnimatedZippy.Events.TOGGLE_ANIMATION_BEGIN, this, expanding));
 };
@@ -204,6 +209,7 @@ goog.ui.AnimatedZippy.prototype.onAnimationBegin_ = function(expanding) {
  * @private
  */
 goog.ui.AnimatedZippy.prototype.onAnimationCompleted_ = function(expanded) {
+  'use strict';
   // Fix wrong end position if the content has changed during the animation.
   if (expanded) {
     this.getContentElement().style.marginTop = '0';

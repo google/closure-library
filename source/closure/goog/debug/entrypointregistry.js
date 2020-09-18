@@ -94,6 +94,7 @@ goog.debug.entryPointRegistry.monitorsMayExist_ = false;
  *     transforming function.
  */
 goog.debug.entryPointRegistry.register = function(callback) {
+  'use strict';
   // Don't use push(), so that this can be compiled out.
   goog.debug.entryPointRegistry
       .refList_[goog.debug.entryPointRegistry.refList_.length] = callback;
@@ -117,6 +118,7 @@ goog.debug.entryPointRegistry.register = function(callback) {
  * @param {!goog.debug.EntryPointMonitor} monitor An entry point monitor.
  */
 goog.debug.entryPointRegistry.monitorAll = function(monitor) {
+  'use strict';
   goog.debug.entryPointRegistry.monitorsMayExist_ = true;
   var transformer = goog.bind(monitor.wrap, monitor);
   for (var i = 0; i < goog.debug.entryPointRegistry.refList_.length; i++) {
@@ -137,6 +139,7 @@ goog.debug.entryPointRegistry.monitorAll = function(monitor) {
  * @throws {Error} If the monitor is not the most recently configured monitor.
  */
 goog.debug.entryPointRegistry.unmonitorAllIfPossible = function(monitor) {
+  'use strict';
   var monitors = goog.debug.entryPointRegistry.monitors_;
   goog.asserts.assert(
       monitor == monitors[monitors.length - 1],

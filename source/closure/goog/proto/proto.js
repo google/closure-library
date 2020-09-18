@@ -28,6 +28,7 @@ goog.proto.serializer_ = null;
  * @return {string} The serialized protocol buffer string.
  */
 goog.proto.serialize = function(object) {
+  'use strict';
   if (!goog.proto.serializer_) {
     goog.proto.serializer_ = new goog.proto.Serializer;
   }

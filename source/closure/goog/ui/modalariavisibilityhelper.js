@@ -30,6 +30,7 @@ goog.requireType('goog.dom.DomHelper');
  * @constructor
  */
 goog.ui.ModalAriaVisibilityHelper = function(element, domHelper) {
+  'use strict';
   /**
    * @private {!Element}
    */
@@ -57,6 +58,7 @@ goog.ui.ModalAriaVisibilityHelper.prototype.hiddenElements_;
  */
 goog.ui.ModalAriaVisibilityHelper.prototype.setBackgroundVisibility = function(
     hide) {
+  'use strict';
   if (hide) {
     if (!this.hiddenElements_) {
       this.hiddenElements_ = [];

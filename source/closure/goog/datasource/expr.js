@@ -41,6 +41,7 @@ goog.require('goog.string');
  * @final
  */
 goog.ds.Expr = function(opt_expr) {
+  'use strict';
   if (opt_expr) {
     this.setSource_(opt_expr);
   }
@@ -61,6 +62,7 @@ goog.ds.Expr = function(opt_expr) {
  */
 goog.ds.Expr.prototype.setSource_ = function(
     expr, opt_parts, opt_childExpr, opt_prevExpr) {
+  'use strict';
   this.src_ = expr;
 
   if (!opt_childExpr && !opt_prevExpr) {
@@ -128,6 +130,7 @@ goog.ds.Expr.prototype.setSource_ = function(
  * @return {string} The path.
  */
 goog.ds.Expr.prototype.getSource = function() {
+  'use strict';
   return this.src_;
 };
 
@@ -137,6 +140,7 @@ goog.ds.Expr.prototype.getSource = function() {
  * @return {?string} Last part of the expression.
  */
 goog.ds.Expr.prototype.getLast = function() {
+  'use strict';
   return this.last_;
 };
 
@@ -146,6 +150,7 @@ goog.ds.Expr.prototype.getLast = function() {
  * @return {goog.ds.Expr} The parent.
  */
 goog.ds.Expr.prototype.getParent = function() {
+  'use strict';
   if (!this.parentExprSet_) {
     if (this.size_ > 1) {
       this.parentExpr_ = goog.ds.Expr.createInternal_(
@@ -162,6 +167,7 @@ goog.ds.Expr.prototype.getParent = function() {
  * @return {goog.ds.Expr} The parent.
  */
 goog.ds.Expr.prototype.getNext = function() {
+  'use strict';
   if (!this.nextExprSet_) {
     if (this.size_ > 1) {
       this.nextExpr_ =
@@ -185,6 +191,7 @@ goog.ds.Expr.prototype.getNext = function() {
  *     it creates a circular dependency.
  */
 goog.ds.Expr.prototype.getValue = function(opt_ds) {
+  'use strict';
   if (opt_ds == null) {
     opt_ds = goog.ds.DataManager.getInstance();
   } else if (this.isAbsolute_) {
@@ -223,6 +230,7 @@ goog.ds.Expr.prototype.getValue = function(opt_ds) {
  * @return {goog.ds.DataNodeList} Matching nodes.
  */
 goog.ds.Expr.prototype.getNodes = function(opt_ds, opt_canCreate) {
+  'use strict';
   return /** @type {goog.ds.DataNodeList} */ (
       this.getNodes_(opt_ds, false, opt_canCreate));
 };
@@ -238,6 +246,7 @@ goog.ds.Expr.prototype.getNodes = function(opt_ds, opt_canCreate) {
  * @return {goog.ds.DataNode} Matching nodes, or null if doesn't exist.
  */
 goog.ds.Expr.prototype.getNode = function(opt_ds, opt_canCreate) {
+  'use strict';
   return /** @type {goog.ds.DataNode} */ (
       this.getNodes_(opt_ds, true, opt_canCreate));
 };
@@ -260,6 +269,7 @@ goog.ds.Expr.prototype.getNode = function(opt_ds, opt_canCreate) {
  */
 goog.ds.Expr.prototype.getNodes_ = function(
     opt_ds, opt_selectOne, opt_canCreate) {
+  'use strict';
   if (opt_ds == null) {
     opt_ds = goog.ds.DataManager.getInstance();
   } else if (this.isAbsolute_) {
@@ -416,6 +426,7 @@ goog.ds.Expr.prototype.nextExpr_ = null;
  * @return {goog.ds.Expr} The expression object.
  */
 goog.ds.Expr.create = function(expr) {
+  'use strict';
   var result = goog.ds.Expr.cache_[expr];
 
   if (result == null) {
@@ -442,6 +453,7 @@ goog.ds.Expr.create = function(expr) {
  */
 goog.ds.Expr.createInternal_ = function(
     opt_expr, opt_parts, opt_childExpr, opt_prevExpr) {
+  'use strict';
   var expr = opt_expr || opt_parts.join('/');
   var result = goog.ds.Expr.cache_[expr];
 

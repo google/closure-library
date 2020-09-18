@@ -251,7 +251,7 @@ goog.testing.PropertyReplacer.prototype.setPath = function(path, value) {
       throw new Error(
           'Cannot set the prototype of ' + parts.slice(0, i).join('.'));
     }
-    if (!goog.isObject(obj[part]) && !goog.isFunction(obj[part])) {
+    if (!goog.isObject(obj[part]) && typeof obj[part] !== 'function') {
       this.set(obj, part, {});
     }
     obj = obj[part];

@@ -48,6 +48,7 @@ goog.require('goog.userAgent');
  * @extends {goog.events.EventTarget}
  */
 goog.events.PasteHandler = function(element) {
+  'use strict';
   goog.events.EventTarget.call(this);
 
   /**
@@ -105,7 +106,6 @@ goog.events.PasteHandler = function(element) {
    */
   this.delay_ =
       new goog.async.ConditionalDelay(goog.bind(this.checkUpdatedText_, this));
-
 };
 goog.inherits(goog.events.PasteHandler, goog.events.EventTarget);
 
@@ -201,6 +201,7 @@ goog.events.PasteHandler.prototype.logger_ =
 
 /** @override */
 goog.events.PasteHandler.prototype.disposeInternal = function() {
+  'use strict';
   goog.events.PasteHandler.superClass_.disposeInternal.call(this);
   this.eventHandler_.dispose();
   this.eventHandler_ = null;
@@ -215,6 +216,7 @@ goog.events.PasteHandler.prototype.disposeInternal = function() {
  * @return {goog.events.PasteHandler.State} The current state of the class.
  */
 goog.events.PasteHandler.prototype.getState = function() {
+  'use strict';
   return this.state_;
 };
 
@@ -226,6 +228,7 @@ goog.events.PasteHandler.prototype.getState = function() {
  * @protected
  */
 goog.events.PasteHandler.prototype.getEventHandler = function() {
+  'use strict';
   return this.eventHandler_;
 };
 
@@ -238,6 +241,7 @@ goog.events.PasteHandler.prototype.getEventHandler = function() {
  * @private
  */
 goog.events.PasteHandler.prototype.checkUpdatedText_ = function() {
+  'use strict';
   if (this.oldValue_ == this.element_.value) {
     return false;
   }
@@ -253,6 +257,7 @@ goog.events.PasteHandler.prototype.checkUpdatedText_ = function() {
  * @private
  */
 goog.events.PasteHandler.prototype.dispatch_ = function(e) {
+  'use strict';
   var event = new goog.events.BrowserEvent(e.getBrowserEvent());
   event.type = goog.events.PasteHandler.EventType.PASTE;
   this.dispatchEvent(event);
@@ -262,6 +267,7 @@ goog.events.PasteHandler.prototype.dispatch_ = function(e) {
   // async delay of 0 msec since some browsers update the text right away and
   // our poller will always wait one period before checking).
   goog.Timer.callOnce(function() {
+    'use strict';
     if (!this.checkUpdatedText_()) {
       this.delay_.start(
           goog.events.PasteHandler.PASTE_POLLING_PERIOD_MS_,
@@ -322,6 +328,7 @@ goog.events.PasteHandler.prototype.dispatch_ = function(e) {
  * @private
  */
 goog.events.PasteHandler.prototype.handleEvent_ = function(e) {
+  'use strict';
   // transition between states happen at each browser event, and depend on the
   // current state, the event that led to this state, and the event input.
   switch (this.state_) {
@@ -362,6 +369,7 @@ goog.events.PasteHandler.prototype.handleEvent_ = function(e) {
  * @private
  */
 goog.events.PasteHandler.prototype.handleUnderInit_ = function(e) {
+  'use strict';
   switch (e.type) {
     case goog.events.EventType.BLUR: {
       this.state_ = goog.events.PasteHandler.State.INIT;
@@ -409,6 +417,7 @@ goog.events.PasteHandler.prototype.handleUnderInit_ = function(e) {
  * @private
  */
 goog.events.PasteHandler.prototype.handleUnderFocused_ = function(e) {
+  'use strict';
   switch (e.type) {
     case 'input': {
       // there are two different events that happen in practice that involves
@@ -474,6 +483,7 @@ goog.events.PasteHandler.prototype.handleUnderFocused_ = function(e) {
  * @private
  */
 goog.events.PasteHandler.prototype.handleUnderTyping_ = function(e) {
+  'use strict';
   switch (e.type) {
     case 'input': {
       this.state_ = goog.events.PasteHandler.State.FOCUSED;

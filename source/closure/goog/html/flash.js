@@ -60,6 +60,7 @@ goog.html.flash.FORBIDDEN_ATTRS_AND_PARAMS_ON_FLASH_ = [
  *     to fixed values, documented above, or contains src.
  */
 goog.html.flash.createEmbed = function(src, opt_attributes) {
+  'use strict';
   var fixedAttributes = {
     'src': src,
     'type': 'application/x-shockwave-flash',
@@ -105,6 +106,7 @@ goog.html.flash.createEmbed = function(src, opt_attributes) {
  *     contains classid, data or movie.
  */
 goog.html.flash.createObject = function(data, opt_params, opt_attributes) {
+  'use strict';
   goog.html.flash.verifyKeysNotInMaps(
       goog.html.flash.FORBIDDEN_ATTRS_AND_PARAMS_ON_FLASH_, opt_attributes,
       opt_params);
@@ -153,6 +155,7 @@ goog.html.flash.createObject = function(data, opt_params, opt_attributes) {
  */
 goog.html.flash.createObjectForOldIe = function(
     movie, opt_params, opt_attributes) {
+  'use strict';
   goog.html.flash.verifyKeysNotInMaps(
       goog.html.flash.FORBIDDEN_ATTRS_AND_PARAMS_ON_FLASH_, opt_attributes,
       opt_params);
@@ -181,6 +184,7 @@ goog.html.flash.createObjectForOldIe = function(
  * @package
  */
 goog.html.flash.combineParams = function(defaultParams, opt_params) {
+  'use strict';
   var combinedParams = {};
   var name;
 
@@ -226,7 +230,9 @@ goog.html.flash.combineParams = function(defaultParams, opt_params) {
  */
 goog.html.flash.verifyKeysNotInMaps = function(
     keys, opt_attributes, opt_params) {
+  'use strict';
   var verifyNotInMap = function(keys, map, type) {
+    'use strict';
     for (var keyMap in map) {
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty#Using_hasOwnProperty_as_a_property_name
       if (Object.prototype.hasOwnProperty.call(map, keyMap)) {

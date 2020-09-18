@@ -646,8 +646,9 @@ class UrlPrimitivePartsPartial {
 
     /** @const {string|undefined} */
     this.password;
+
     /** @const {string|undefined} */
-    this.host;
+    this.hostname;
 
     /** @const {string|undefined} */
     this.port;

@@ -25,6 +25,7 @@ goog.requireType('goog.dom.TagWalkType');
  * @final
  */
 goog.dom.pattern.NodeType = function(nodeType) {
+  'use strict';
   /**
    * The node type to match.
    * @type {goog.dom.NodeType}
@@ -45,6 +46,7 @@ goog.inherits(goog.dom.pattern.NodeType, goog.dom.pattern.AbstractPattern);
  * @override
  */
 goog.dom.pattern.NodeType.prototype.matchToken = function(token, type) {
+  'use strict';
   return token.nodeType == this.nodeType_ ? goog.dom.pattern.MatchType.MATCH :
                                             goog.dom.pattern.MatchType.NO_MATCH;
 };

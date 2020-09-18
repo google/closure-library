@@ -359,7 +359,7 @@ goog.testing.MockClassFactory.prototype.createProxy_ = function(
   proxy.base = classToMockBase;
 
   for (var prop in protoToProxy) {
-    if (goog.isFunction(protoToProxy[prop])) {
+    if (typeof protoToProxy[prop] === 'function') {
       proxy.prototype[prop] = this.getProxyFunction_(prop);
     }
   }
@@ -405,7 +405,7 @@ goog.testing.MockClassFactory.prototype.getMockClass_ = function(
   // passed in argument stack.
   ctorArgs = goog.array.slice(ctorArgs, 2);
 
-  if (goog.isFunction(classToMock)) {
+  if (typeof classToMock === 'function') {
     var mock = isStrict ? new goog.testing.StrictMock(classToMock) :
                           new goog.testing.LooseMock(classToMock);
 
@@ -478,7 +478,7 @@ goog.testing.MockClassFactory.prototype.createStaticMock_ = function(
                         new goog.testing.LooseMock(classToMock, false, true);
 
   for (var prop in classToMock) {
-    if (goog.isFunction(classToMock[prop])) {
+    if (typeof classToMock[prop] === 'function') {
       proxy[prop] = goog.bind(mock.$mockMethod, mock, prop);
     } else if (classToMock[prop] !== classToMock.prototype) {
       proxy[prop] = classToMock[prop];
@@ -504,7 +504,7 @@ goog.testing.MockClassFactory.prototype.getStaticMock_ = function(
     namespace, classToMock, isStrict) {
   var className = this.getClassName_(namespace, classToMock);
 
-  if (goog.isFunction(classToMock)) {
+  if (typeof classToMock === 'function') {
     if (!this.classHasMock_(className)) {
       var proxy = this.createProxy_(namespace, classToMock, className);
       var mock =

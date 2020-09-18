@@ -597,14 +597,15 @@ function testGoogRequireCheck() {
 
 function testGetScriptNonce() {
   // clear nonce cache for test.
+  const origNonce = goog.getScriptNonce();
   goog.cspNonce_ = null;
-  const nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
+  const nonce = origNonce ? origNonce : 'ThisIsANonceThisIsANonceThisIsANonce';
   const script = goog.dom.createElement(goog.dom.TagName.SCRIPT);
   script.setAttribute('nonce', 'invalid nonce');
   document.body.appendChild(script);
 
   try {
-    assertEquals('', goog.getScriptNonce());
+    assertEquals(origNonce, goog.getScriptNonce());
     // clear nonce cache for test.
     goog.cspNonce_ = null;
     script.nonce = nonce;

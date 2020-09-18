@@ -25,6 +25,7 @@ goog.require('goog.fx.css3.Transition');
  */
 goog.fx.css3.fade = function(
     element, duration, timing, startOpacity, endOpacity) {
+  'use strict';
   return new goog.fx.css3.Transition(
       element, duration, {'opacity': startOpacity}, {'opacity': endOpacity},
       {property: 'opacity', duration: duration, timing: timing, delay: 0});
@@ -38,6 +39,7 @@ goog.fx.css3.fade = function(
  * @return {!goog.fx.css3.Transition} The transition object.
  */
 goog.fx.css3.fadeIn = function(element, duration) {
+  'use strict';
   return goog.fx.css3.fade(element, duration, 'ease-out', 0, 1);
 };
 
@@ -49,5 +51,6 @@ goog.fx.css3.fadeIn = function(element, duration) {
  * @return {!goog.fx.css3.Transition} The transition object.
  */
 goog.fx.css3.fadeOut = function(element, duration) {
+  'use strict';
   return goog.fx.css3.fade(element, duration, 'ease-in', 1, 0);
 };

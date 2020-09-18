@@ -32,6 +32,7 @@ goog.requireType('goog.ui.Container');
  * @extends {goog.ui.ContainerRenderer}
  */
 goog.ui.TabBarRenderer = function() {
+  'use strict';
   goog.ui.ContainerRenderer.call(this, goog.a11y.aria.Role.TAB_LIST);
 };
 goog.inherits(goog.ui.TabBarRenderer, goog.ui.ContainerRenderer);
@@ -53,6 +54,7 @@ goog.ui.TabBarRenderer.CSS_CLASS = goog.getCssName('goog-tab-bar');
  * @override
  */
 goog.ui.TabBarRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.TabBarRenderer.CSS_CLASS;
 };
 
@@ -70,6 +72,7 @@ goog.ui.TabBarRenderer.prototype.getCssClass = function() {
  */
 goog.ui.TabBarRenderer.prototype.setStateFromClassName = function(
     tabBar, className, baseClass) {
+  'use strict';
   // Create the class-to-location lookup table on first access.
   if (!this.locationByClass_) {
     this.createLocationByClassMap_();
@@ -97,6 +100,7 @@ goog.ui.TabBarRenderer.prototype.setStateFromClassName = function(
  * @override
  */
 goog.ui.TabBarRenderer.prototype.getClassNames = function(tabBar) {
+  'use strict';
   var classNames =
       goog.ui.TabBarRenderer.superClass_.getClassNames.call(this, tabBar);
 
@@ -116,6 +120,7 @@ goog.ui.TabBarRenderer.prototype.getClassNames = function(tabBar) {
  * @private
  */
 goog.ui.TabBarRenderer.prototype.createClassByLocationMap_ = function() {
+  'use strict';
   var baseClass = this.getCssClass();
 
   /**
@@ -139,6 +144,7 @@ goog.ui.TabBarRenderer.prototype.createClassByLocationMap_ = function() {
  * @private
  */
 goog.ui.TabBarRenderer.prototype.createLocationByClassMap_ = function() {
+  'use strict';
   // We need the classByLocation_ map so we can transpose it.
   if (!this.classByLocation_) {
     this.createClassByLocationMap_();

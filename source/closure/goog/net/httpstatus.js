@@ -100,6 +100,7 @@ goog.net.HttpStatus = {
  * @return {boolean} Whether the status code should be considered successful.
  */
 goog.net.HttpStatus.isSuccess = function(status) {
+  'use strict';
   switch (status) {
     case goog.net.HttpStatus.OK:
     case goog.net.HttpStatus.CREATED:

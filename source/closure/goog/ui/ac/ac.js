@@ -30,6 +30,7 @@ goog.require('goog.ui.ac.Renderer');
  */
 goog.ui.ac.createSimpleAutoComplete = function(
     data, input, opt_multi, opt_useSimilar) {
+  'use strict';
   var matcher = new goog.ui.ac.ArrayMatcher(data, !opt_useSimilar);
   var renderer = new goog.ui.ac.Renderer();
   var inputHandler = new goog.ui.ac.InputHandler(null, null, !!opt_multi);

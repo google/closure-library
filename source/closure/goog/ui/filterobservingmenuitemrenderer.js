@@ -28,6 +28,7 @@ goog.require('goog.ui.MenuItemRenderer');
  * @final
  */
 goog.ui.FilterObservingMenuItemRenderer = function() {
+  'use strict';
   goog.ui.MenuItemRenderer.call(this);
 };
 goog.inherits(
@@ -50,5 +51,6 @@ goog.ui.FilterObservingMenuItemRenderer.CSS_CLASS =
  * @override
  */
 goog.ui.FilterObservingMenuItemRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.FilterObservingMenuItemRenderer.CSS_CLASS;
 };

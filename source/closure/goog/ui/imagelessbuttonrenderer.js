@@ -41,6 +41,7 @@ goog.requireType('goog.ui.ControlContent');
  * @extends {goog.ui.CustomButtonRenderer}
  */
 goog.ui.ImagelessButtonRenderer = function() {
+  'use strict';
   goog.ui.CustomButtonRenderer.call(this);
 };
 goog.inherits(goog.ui.ImagelessButtonRenderer, goog.ui.CustomButtonRenderer);
@@ -77,6 +78,7 @@ goog.ui.ImagelessButtonRenderer.prototype.createDom;
 /** @override */
 goog.ui.ImagelessButtonRenderer.prototype.getContentElement = function(
     element) {
+  'use strict';
   return /** @type {Element} */ (
       element && element.firstChild && element.firstChild.firstChild &&
       element.firstChild.firstChild.firstChild.lastChild);
@@ -106,6 +108,7 @@ goog.ui.ImagelessButtonRenderer.prototype.getContentElement = function(
  */
 goog.ui.ImagelessButtonRenderer.prototype.createButton = function(
     content, dom) {
+  'use strict';
   var baseClass = this.getCssClass();
   var inlineBlock = goog.ui.INLINE_BLOCK_CLASSNAME + ' ';
   return dom.createDom(
@@ -136,6 +139,7 @@ goog.ui.ImagelessButtonRenderer.prototype.createButton = function(
  */
 goog.ui.ImagelessButtonRenderer.prototype.hasBoxStructure = function(
     button, element) {
+  'use strict';
   var outer = button.getDomHelper().getFirstElementChild(element);
   var outerClassName = goog.getCssName(this.getCssClass(), 'outer-box');
   if (outer && goog.dom.classlist.contains(outer, outerClassName)) {
@@ -170,6 +174,7 @@ goog.ui.ImagelessButtonRenderer.prototype.hasBoxStructure = function(
  * @override
  */
 goog.ui.ImagelessButtonRenderer.prototype.getCssClass = function() {
+  'use strict';
   return goog.ui.ImagelessButtonRenderer.CSS_CLASS;
 };
 
@@ -177,6 +182,7 @@ goog.ui.ImagelessButtonRenderer.prototype.getCssClass = function() {
 // Register a decorator factory function for goog.ui.ImagelessButtonRenderer.
 goog.ui.registry.setDecoratorByClassName(
     goog.ui.ImagelessButtonRenderer.CSS_CLASS, function() {
+      'use strict';
       return new goog.ui.Button(
           null, goog.ui.ImagelessButtonRenderer.getInstance());
     });
@@ -186,6 +192,7 @@ goog.ui.registry.setDecoratorByClassName(
 // goog.ui.ImagelessButtonRenderer.
 goog.ui.registry.setDecoratorByClassName(
     goog.getCssName('goog-imageless-toggle-button'), function() {
+      'use strict';
       var button = new goog.ui.Button(
           null, goog.ui.ImagelessButtonRenderer.getInstance());
       button.setSupportedState(goog.ui.Component.State.CHECKED, true);

@@ -32,7 +32,7 @@ goog.require('goog.iter.StopIteration');
  * @deprecated This type is misleading: use ES6 Map instead.
  */
 goog.structs.Map = function(opt_map, var_args) {
-
+  'use strict';
   /**
    * Underlying JS object used to implement the map.
    * @private {!Object}
@@ -85,6 +85,7 @@ goog.structs.Map = function(opt_map, var_args) {
  * @return {number} The number of key-value pairs in the map.
  */
 goog.structs.Map.prototype.getCount = function() {
+  'use strict';
   return this.count_;
 };
 
@@ -94,6 +95,7 @@ goog.structs.Map.prototype.getCount = function() {
  * @return {!Array<V>} The values in the map.
  */
 goog.structs.Map.prototype.getValues = function() {
+  'use strict';
   this.cleanupKeysArray_();
 
   var rv = [];
@@ -110,6 +112,7 @@ goog.structs.Map.prototype.getValues = function() {
  * @return {!Array<string>} Array of string values.
  */
 goog.structs.Map.prototype.getKeys = function() {
+  'use strict';
   this.cleanupKeysArray_();
   return /** @type {!Array<string>} */ (this.keys_.concat());
 };
@@ -121,6 +124,7 @@ goog.structs.Map.prototype.getKeys = function() {
  * @return {boolean} Whether the map contains the key.
  */
 goog.structs.Map.prototype.containsKey = function(key) {
+  'use strict';
   return goog.structs.Map.hasKey_(this.map_, key);
 };
 
@@ -131,6 +135,7 @@ goog.structs.Map.prototype.containsKey = function(key) {
  * @return {boolean} Whether the map contains the value.
  */
 goog.structs.Map.prototype.containsValue = function(val) {
+  'use strict';
   for (var i = 0; i < this.keys_.length; i++) {
     var key = this.keys_[i];
     if (goog.structs.Map.hasKey_(this.map_, key) && this.map_[key] == val) {
@@ -150,6 +155,7 @@ goog.structs.Map.prototype.containsValue = function(val) {
  * @return {boolean} Whether the maps are equal.
  */
 goog.structs.Map.prototype.equals = function(otherMap, opt_equalityFn) {
+  'use strict';
   if (this === otherMap) {
     return true;
   }
@@ -178,6 +184,7 @@ goog.structs.Map.prototype.equals = function(otherMap, opt_equalityFn) {
  * @return {boolean} Whether a and b reference the same object.
  */
 goog.structs.Map.defaultEquals = function(a, b) {
+  'use strict';
   return a === b;
 };
 
@@ -186,6 +193,7 @@ goog.structs.Map.defaultEquals = function(a, b) {
  * @return {boolean} Whether the map is empty.
  */
 goog.structs.Map.prototype.isEmpty = function() {
+  'use strict';
   return this.count_ == 0;
 };
 
@@ -194,6 +202,7 @@ goog.structs.Map.prototype.isEmpty = function() {
  * Removes all key-value pairs from the map.
  */
 goog.structs.Map.prototype.clear = function() {
+  'use strict';
   this.map_ = {};
   this.keys_.length = 0;
   this.count_ = 0;
@@ -209,6 +218,7 @@ goog.structs.Map.prototype.clear = function() {
  * @return {boolean} Whether object was removed.
  */
 goog.structs.Map.prototype.remove = function(key) {
+  'use strict';
   if (goog.structs.Map.hasKey_(this.map_, key)) {
     delete this.map_[key];
     this.count_--;
@@ -231,6 +241,7 @@ goog.structs.Map.prototype.remove = function(key) {
  * @private
  */
 goog.structs.Map.prototype.cleanupKeysArray_ = function() {
+  'use strict';
   if (this.count_ != this.keys_.length) {
     // First remove keys that are no longer in the map.
     var srcIndex = 0;
@@ -277,6 +288,7 @@ goog.structs.Map.prototype.cleanupKeysArray_ = function() {
  * @template DEFAULT
  */
 goog.structs.Map.prototype.get = function(key, opt_val) {
+  'use strict';
   if (goog.structs.Map.hasKey_(this.map_, key)) {
     return this.map_[key];
   }
@@ -291,6 +303,7 @@ goog.structs.Map.prototype.get = function(key, opt_val) {
  * @return {*} Some subclasses return a value.
  */
 goog.structs.Map.prototype.set = function(key, value) {
+  'use strict';
   if (!(goog.structs.Map.hasKey_(this.map_, key))) {
     this.count_++;
     // TODO(johnlenz): This class lies, it claims to return an array of string
@@ -308,6 +321,7 @@ goog.structs.Map.prototype.set = function(key, value) {
  * @param {?Object} map Object containing the data to add.
  */
 goog.structs.Map.prototype.addAll = function(map) {
+  'use strict';
   if (map instanceof goog.structs.Map) {
     var keys = map.getKeys();
     for (var i = 0; i < keys.length; i++) {
@@ -328,6 +342,7 @@ goog.structs.Map.prototype.addAll = function(map) {
  * @template T
  */
 goog.structs.Map.prototype.forEach = function(f, opt_obj) {
+  'use strict';
   var keys = this.getKeys();
   for (var i = 0; i < keys.length; i++) {
     var key = keys[i];
@@ -342,6 +357,7 @@ goog.structs.Map.prototype.forEach = function(f, opt_obj) {
  * @return {!goog.structs.Map} A new map with the same key-value pairs.
  */
 goog.structs.Map.prototype.clone = function() {
+  'use strict';
   return new goog.structs.Map(this);
 };
 
@@ -356,6 +372,7 @@ goog.structs.Map.prototype.clone = function() {
  * @return {!goog.structs.Map} The transposed map.
  */
 goog.structs.Map.prototype.transpose = function() {
+  'use strict';
   var transposed = new goog.structs.Map();
   for (var i = 0; i < this.keys_.length; i++) {
     var key = this.keys_[i];
@@ -371,6 +388,7 @@ goog.structs.Map.prototype.transpose = function() {
  * @return {!Object} Object representation of the map.
  */
 goog.structs.Map.prototype.toObject = function() {
+  'use strict';
   this.cleanupKeysArray_();
   var obj = {};
   for (var i = 0; i < this.keys_.length; i++) {
@@ -387,6 +405,7 @@ goog.structs.Map.prototype.toObject = function() {
  * @return {!goog.iter.Iterator} An iterator over the keys in the map.
  */
 goog.structs.Map.prototype.getKeyIterator = function() {
+  'use strict';
   return this.__iterator__(true);
 };
 
@@ -397,6 +416,7 @@ goog.structs.Map.prototype.getKeyIterator = function() {
  * @return {!goog.iter.Iterator} An iterator over the values in the map.
  */
 goog.structs.Map.prototype.getValueIterator = function() {
+  'use strict';
   return this.__iterator__(false);
 };
 
@@ -410,6 +430,7 @@ goog.structs.Map.prototype.getValueIterator = function() {
  * @return {!goog.iter.Iterator} An iterator over the values or keys in the map.
  */
 goog.structs.Map.prototype.__iterator__ = function(opt_keys) {
+  'use strict';
   // Clean up keys to minimize the risk of iterating over dead keys.
   this.cleanupKeysArray_();
 
@@ -419,6 +440,7 @@ goog.structs.Map.prototype.__iterator__ = function(opt_keys) {
 
   var newIter = new goog.iter.Iterator;
   newIter.next = function() {
+    'use strict';
     if (version != selfObj.version_) {
       throw new Error('The map has changed since the iterator was created');
     }
@@ -441,5 +463,6 @@ goog.structs.Map.prototype.__iterator__ = function(opt_keys) {
  * @private
  */
 goog.structs.Map.hasKey_ = function(obj, key) {
+  'use strict';
   return Object.prototype.hasOwnProperty.call(obj, key);
 };
