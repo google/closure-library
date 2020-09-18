@@ -860,9 +860,27 @@ testSuite({
 
 
   testGetMsgWithHtml() {
-    let msg =
+    const msg =
         goog.getMsg('Hello <{$a}&gt;!', {a: '<b>World</b>'}, {html: true});
     assertEquals('Hello &lt;<b>World</b>&gt;!', msg);
+  },
+
+  testGetMsgWithUnescapeHtmlEntities() {
+    let msg = goog.getMsg(
+        'User&apos;s &lt; email &amp; address &gt; are &quot;correct&quot;', {},
+        {unescapeHtmlEntities: true});
+    assertEquals('User\'s < email & address > are "correct"', msg);
+    // No escaping for placeholder values.
+    msg = goog.getMsg(
+        '{$username}&apos;s {$fields} are {$status}', {
+          username: 'Alice &amp; Bob',
+          fields: '&lt; email details &gt;',
+          status: '&quot;correct&quot;',
+        },
+        {unescapeHtmlEntities: true});
+    assertEquals(
+        'Alice &amp; Bob\'s &lt; email details &gt; are &quot;correct&quot;',
+        msg);
   },
 
 

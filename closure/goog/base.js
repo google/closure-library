@@ -1816,11 +1816,15 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
  *
  * @param {string} str Translatable string, places holders in the form {$foo}.
  * @param {Object<string, string>=} opt_values Maps place holder name to value.
- * @param {{html: boolean}=} opt_options Options:
+ * @param {{html: (boolean|undefined),
+ *         unescapeHtmlEntities: (boolean|undefined)}=} opt_options Options:
  *     html: Escape '<' in str to '&lt;'. Used by Closure Templates where the
  *     generated code size and performance is critical which is why {@link
  *     goog.html.SafeHtmlFormatter} is not used. The value must be literal true
  *     or false.
+ *     unescapeHtmlEntities: Unescape common html entities: &gt;, &lt;, &apos;,
+ *     &quot; and &amp;. Used for messages not in HTML context, such as with
+ *     `textContent` property.
  * @return {string} message with placeholders filled.
  */
 goog.getMsg = function(str, opt_values, opt_options) {
@@ -1828,6 +1832,14 @@ goog.getMsg = function(str, opt_values, opt_options) {
     // Note that '&' is not replaced because the translation can contain HTML
     // entities.
     str = str.replace(/</g, '&lt;');
+  }
+  if (opt_options && opt_options.unescapeHtmlEntities) {
+    // Note that "&amp;" must be the last to avoid "creating" new entities.
+    str = str.replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&apos;/g, '\'')
+              .replace(/&quot;/g, '"')
+              .replace(/&amp;/g, '&');
   }
   if (opt_values) {
     str = str.replace(/\{\$([^}]+)}/g, function(match, key) {
