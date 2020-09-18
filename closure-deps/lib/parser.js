@@ -18,7 +18,7 @@
 const {SourceError} = require('./sourceerror');
 const depGraph = require('./depgraph');
 const fs = require('fs');
-const {gjd} = require('google-closure-compiler');
+const {gjd} = require('./jsfile_parser');
 const path = require('path');
 
 
