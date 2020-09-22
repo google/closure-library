@@ -28,6 +28,7 @@ goog.require('goog.iter.StopIteration');
  * @extends {goog.iter.Iterator}
  */
 goog.dom.iter.SiblingIterator = function(node, opt_includeNode, opt_reverse) {
+  'use strict';
   /**
    * The current node, or null if iteration is finished.
    * @type {Node}
@@ -51,6 +52,7 @@ goog.inherits(goog.dom.iter.SiblingIterator, goog.iter.Iterator);
 
 /** @override */
 goog.dom.iter.SiblingIterator.prototype.next = function() {
+  'use strict';
   var node = this.node_;
   if (!node) {
     throw goog.iter.StopIteration;
@@ -72,6 +74,7 @@ goog.dom.iter.SiblingIterator.prototype.next = function() {
  * @final
  */
 goog.dom.iter.ChildIterator = function(element, opt_reverse, opt_startIndex) {
+  'use strict';
   if (opt_startIndex === undefined) {
     opt_startIndex = opt_reverse && element.childNodes.length ?
         element.childNodes.length - 1 :
@@ -94,6 +97,7 @@ goog.inherits(goog.dom.iter.ChildIterator, goog.dom.iter.SiblingIterator);
  * @final
  */
 goog.dom.iter.AncestorIterator = function(node, opt_includeNode) {
+  'use strict';
   /**
    * The current node, or null if iteration is finished.
    * @type {Node}
@@ -110,6 +114,7 @@ goog.inherits(goog.dom.iter.AncestorIterator, goog.iter.Iterator);
 
 /** @override */
 goog.dom.iter.AncestorIterator.prototype.next = function() {
+  'use strict';
   var node = this.node_;
   if (!node) {
     throw goog.iter.StopIteration;

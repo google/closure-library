@@ -28,6 +28,7 @@ goog.require('goog.array');
  * @deprecated Use goog.dom.classlist.set instead.
  */
 goog.dom.classes.set = function(element, className) {
+  'use strict';
   /** @type {!HTMLElement} */ (element).className = className;
 };
 
@@ -40,6 +41,7 @@ goog.dom.classes.set = function(element, className) {
  * @deprecated Use goog.dom.classlist.get instead.
  */
 goog.dom.classes.get = function(element) {
+  'use strict';
   var className = /** @type {!Element} */ (element).className;
   // Some types of elements don't have a className in IE (e.g. iframes).
   // Furthermore, in Firefox, className is not a string when the element is
@@ -56,6 +58,7 @@ goog.dom.classes.get = function(element) {
  * @deprecated Use goog.dom.classlist.add or goog.dom.classlist.addAll instead.
  */
 goog.dom.classes.add = function(element, var_args) {
+  'use strict';
   var classes = goog.dom.classes.get(element);
   var args = goog.array.slice(arguments, 1);
   var expectedCount = classes.length + args.length;
@@ -75,6 +78,7 @@ goog.dom.classes.add = function(element, var_args) {
  *     instead.
  */
 goog.dom.classes.remove = function(element, var_args) {
+  'use strict';
   var classes = goog.dom.classes.get(element);
   var args = goog.array.slice(arguments, 1);
   var newClasses = goog.dom.classes.getDifference_(classes, args);
@@ -93,6 +97,7 @@ goog.dom.classes.remove = function(element, var_args) {
  * @private
  */
 goog.dom.classes.add_ = function(classes, args) {
+  'use strict';
   for (var i = 0; i < args.length; i++) {
     if (!goog.array.contains(classes, args[i])) {
       classes.push(args[i]);
@@ -111,8 +116,11 @@ goog.dom.classes.add_ = function(classes, args) {
  * @private
  */
 goog.dom.classes.getDifference_ = function(arr1, arr2) {
-  return goog.array.filter(
-      arr1, function(item) { return !goog.array.contains(arr2, item); });
+  'use strict';
+  return goog.array.filter(arr1, function(item) {
+    'use strict';
+    return !goog.array.contains(arr2, item);
+  });
 };
 
 
@@ -126,6 +134,7 @@ goog.dom.classes.getDifference_ = function(arr1, arr2) {
  * @deprecated Use goog.dom.classlist.swap instead.
  */
 goog.dom.classes.swap = function(element, fromClass, toClass) {
+  'use strict';
   var classes = goog.dom.classes.get(element);
 
   var removed = false;
@@ -163,6 +172,7 @@ goog.dom.classes.swap = function(element, fromClass, toClass) {
  * @deprecated Use goog.dom.classlist.addRemove instead.
  */
 goog.dom.classes.addRemove = function(element, classesToRemove, classesToAdd) {
+  'use strict';
   var classes = goog.dom.classes.get(element);
   if (typeof classesToRemove === 'string') {
     goog.array.remove(classes, classesToRemove);
@@ -189,6 +199,7 @@ goog.dom.classes.addRemove = function(element, classesToRemove, classesToAdd) {
  * @deprecated Use goog.dom.classlist.contains instead.
  */
 goog.dom.classes.has = function(element, className) {
+  'use strict';
   return goog.array.contains(goog.dom.classes.get(element), className);
 };
 
@@ -203,6 +214,7 @@ goog.dom.classes.has = function(element, className) {
  *     instead.
  */
 goog.dom.classes.enable = function(element, className, enabled) {
+  'use strict';
   if (enabled) {
     goog.dom.classes.add(element, className);
   } else {
@@ -222,6 +234,7 @@ goog.dom.classes.enable = function(element, className, enabled) {
  * @deprecated Use goog.dom.classlist.toggle instead.
  */
 goog.dom.classes.toggle = function(element, className) {
+  'use strict';
   var add = !goog.dom.classes.has(element, className);
   goog.dom.classes.enable(element, className, add);
   return add;

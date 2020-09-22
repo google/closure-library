@@ -36,6 +36,7 @@ goog.dom.BrowserFeature.ASSUME_OFFSCREEN_CANVAS =
  * @private
  */
 goog.dom.BrowserFeature.detectOffscreenCanvas_ = function(contextName) {
+  'use strict';
   // This code only gets removed because we forced @nosideeffects on
   // the functions. See: b/138802376
   try {

@@ -26,6 +26,7 @@ goog.requireType('goog.dom.AbstractRange');
  * @abstract
  */
 goog.dom.SavedRange = function() {
+  'use strict';
   goog.Disposable.call(this);
 };
 goog.inherits(goog.dom.SavedRange, goog.Disposable);
@@ -47,6 +48,7 @@ goog.dom.SavedRange.logger_ = goog.log.getLogger('goog.dom.SavedRange');
  * @return {goog.dom.AbstractRange} The restored range.
  */
 goog.dom.SavedRange.prototype.restore = function(opt_stayAlive) {
+  'use strict';
   if (this.isDisposed()) {
     goog.log.error(
         goog.dom.SavedRange.logger_,
@@ -74,6 +76,7 @@ goog.dom.SavedRange.prototype.restoreInternal = goog.abstractMethod;
  * @abstract
  */
 goog.dom.AbstractSavedCaretRange = function() {
+  'use strict';
   goog.dom.SavedRange.call(this);
 };
 goog.inherits(goog.dom.AbstractSavedCaretRange, goog.dom.SavedRange);

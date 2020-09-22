@@ -33,6 +33,7 @@ goog.inherits(goog.dom.AbstractMultiRange, goog.dom.AbstractRange);
 /** @override */
 goog.dom.AbstractMultiRange.prototype.containsRange = function(
     otherRange, opt_allowPartial) {
+  'use strict';
   // TODO(user): This will incorrectly return false if two (or more) adjacent
   // elements are both in the control range, and are also in the text range
   // being compared to.
@@ -41,7 +42,9 @@ goog.dom.AbstractMultiRange.prototype.containsRange = function(
 
   var fn = opt_allowPartial ? goog.array.some : goog.array.every;
   return fn(otherRanges, function(otherRange) {
+    'use strict';
     return goog.array.some(ranges, function(range) {
+      'use strict';
       return range.containsRange(otherRange, opt_allowPartial);
     });
   });
@@ -51,6 +54,7 @@ goog.dom.AbstractMultiRange.prototype.containsRange = function(
 /** @override */
 goog.dom.AbstractMultiRange.prototype.containsNode = function(
     node, opt_allowPartial) {
+  'use strict';
   return this.containsRange(
       goog.dom.TextRange.createFromNodeContents(node), opt_allowPartial);
 };
@@ -59,6 +63,7 @@ goog.dom.AbstractMultiRange.prototype.containsNode = function(
 
 /** @override */
 goog.dom.AbstractMultiRange.prototype.insertNode = function(node, before) {
+  'use strict';
   if (before) {
     goog.dom.insertSiblingBefore(node, this.getStartNode());
   } else {
@@ -71,6 +76,7 @@ goog.dom.AbstractMultiRange.prototype.insertNode = function(node, before) {
 /** @override */
 goog.dom.AbstractMultiRange.prototype.surroundWithNodes = function(
     startNode, endNode) {
+  'use strict';
   this.insertNode(startNode, true);
   this.insertNode(endNode, false);
 };

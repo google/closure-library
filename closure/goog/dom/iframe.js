@@ -114,6 +114,7 @@ goog.dom.iframe.STYLES_ = 'border:0;vertical-align:bottom;';
  * @return {!HTMLIFrameElement} A completely blank iframe.
  */
 goog.dom.iframe.createBlank = function(domHelper, opt_styles) {
+  'use strict';
   var styles;
   if (opt_styles) {
     // SafeStyle has to be converted back to a string for now, since there's
@@ -143,6 +144,7 @@ goog.dom.iframe.createBlank = function(domHelper, opt_styles) {
  *     from doctype to the HTML close tag.
  */
 goog.dom.iframe.writeSafeContent = function(iframe, content) {
+  'use strict';
   var doc = goog.dom.getFrameContentDocument(iframe);
   doc.open();
   goog.dom.safe.documentWrite(doc, content);
@@ -175,6 +177,7 @@ goog.dom.iframe.writeSafeContent = function(iframe, content) {
  */
 goog.dom.iframe.createWithContent = function(
     parentElement, opt_headContents, opt_bodyContents, opt_styles, opt_quirks) {
+  'use strict';
   var domHelper = goog.dom.getDomHelper(parentElement);
 
   var content = goog.html.SafeHtml.create(

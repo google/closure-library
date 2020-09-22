@@ -27,6 +27,7 @@ goog.require('goog.dom.TagName');
  * @final
  */
 goog.dom.NodeOffset = function(node, baseNode) {
+  'use strict';
   goog.Disposable.call(this);
 
   /**
@@ -65,6 +66,7 @@ goog.inherits(goog.dom.NodeOffset, goog.Disposable);
  * @override
  */
 goog.dom.NodeOffset.prototype.toString = function() {
+  'use strict';
   var strs = [];
   var name;
   for (var i = 0; name = this.nameStack_[i]; i++) {
@@ -83,6 +85,7 @@ goog.dom.NodeOffset.prototype.toString = function() {
  * @return {Node} The node relative to baseNode, or null on failure.
  */
 goog.dom.NodeOffset.prototype.findTargetNode = function(baseNode) {
+  'use strict';
   var name;
   var curNode = baseNode;
   for (var i = 0; name = this.nameStack_[i]; ++i) {
@@ -99,6 +102,7 @@ goog.dom.NodeOffset.prototype.findTargetNode = function(baseNode) {
 
 /** @override */
 goog.dom.NodeOffset.prototype.disposeInternal = function() {
+  'use strict';
   delete this.offsetStack_;
   delete this.nameStack_;
 };

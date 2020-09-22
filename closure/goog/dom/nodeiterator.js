@@ -56,6 +56,7 @@ goog.require('goog.dom.TagIterator');
  */
 goog.dom.NodeIterator = function(
     opt_node, opt_reversed, opt_unconstrained, opt_depth) {
+  'use strict';
   goog.dom.TagIterator.call(
       this, opt_node, opt_reversed, opt_unconstrained, null, opt_depth);
 };
@@ -69,6 +70,7 @@ goog.inherits(goog.dom.NodeIterator, goog.dom.TagIterator);
  * @override
  */
 goog.dom.NodeIterator.prototype.next = function() {
+  'use strict';
   do {
     goog.dom.NodeIterator.superClass_.next.call(this);
   } while (this.isEndTag());

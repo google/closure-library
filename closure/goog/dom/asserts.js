@@ -53,6 +53,7 @@ goog.require('goog.asserts');
  * @return {!Location}
  */
 goog.dom.asserts.assertIsLocation = function(o) {
+  'use strict';
   if (goog.asserts.ENABLE_ASSERTS) {
     var win = goog.dom.asserts.getWindow_(o);
     if (win) {
@@ -90,6 +91,7 @@ goog.dom.asserts.assertIsLocation = function(o) {
  */
 // TODO(bangert): Make an analog of goog.dom.TagName to correctly handle casts?
 goog.dom.asserts.assertIsElementType_ = function(o, typename) {
+  'use strict';
   if (goog.asserts.ENABLE_ASSERTS) {
     var win = goog.dom.asserts.getWindow_(o);
     if (win && typeof win[typename] != 'undefined') {
@@ -118,6 +120,7 @@ goog.dom.asserts.assertIsElementType_ = function(o, typename) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlAnchorElement instead.
  */
 goog.dom.asserts.assertIsHTMLAnchorElement = function(o) {
+  'use strict';
   return /** @type {!HTMLAnchorElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLAnchorElement'));
 };
@@ -133,6 +136,7 @@ goog.dom.asserts.assertIsHTMLAnchorElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlButtonElement instead.
  */
 goog.dom.asserts.assertIsHTMLButtonElement = function(o) {
+  'use strict';
   return /** @type {!HTMLButtonElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLButtonElement'));
 };
@@ -148,6 +152,7 @@ goog.dom.asserts.assertIsHTMLButtonElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlLinkElement instead.
  */
 goog.dom.asserts.assertIsHTMLLinkElement = function(o) {
+  'use strict';
   return /** @type {!HTMLLinkElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLLinkElement'));
 };
@@ -163,6 +168,7 @@ goog.dom.asserts.assertIsHTMLLinkElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlImageElement instead.
  */
 goog.dom.asserts.assertIsHTMLImageElement = function(o) {
+  'use strict';
   return /** @type {!HTMLImageElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLImageElement'));
 };
@@ -178,6 +184,7 @@ goog.dom.asserts.assertIsHTMLImageElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlAudioElement instead.
  */
 goog.dom.asserts.assertIsHTMLAudioElement = function(o) {
+  'use strict';
   return /** @type {!HTMLAudioElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLAudioElement'));
 };
@@ -193,6 +200,7 @@ goog.dom.asserts.assertIsHTMLAudioElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlVideoElement instead.
  */
 goog.dom.asserts.assertIsHTMLVideoElement = function(o) {
+  'use strict';
   return /** @type {!HTMLVideoElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLVideoElement'));
 };
@@ -208,6 +216,7 @@ goog.dom.asserts.assertIsHTMLVideoElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlInputElement instead.
  */
 goog.dom.asserts.assertIsHTMLInputElement = function(o) {
+  'use strict';
   return /** @type {!HTMLInputElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLInputElement'));
 };
@@ -223,6 +232,7 @@ goog.dom.asserts.assertIsHTMLInputElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlTextAreaElement instead.
  */
 goog.dom.asserts.assertIsHTMLTextAreaElement = function(o) {
+  'use strict';
   return /** @type {!HTMLTextAreaElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLTextAreaElement'));
 };
@@ -238,6 +248,7 @@ goog.dom.asserts.assertIsHTMLTextAreaElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlCanvasElement instead.
  */
 goog.dom.asserts.assertIsHTMLCanvasElement = function(o) {
+  'use strict';
   return /** @type {!HTMLCanvasElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLCanvasElement'));
 };
@@ -253,6 +264,7 @@ goog.dom.asserts.assertIsHTMLCanvasElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlEmbedElement instead.
  */
 goog.dom.asserts.assertIsHTMLEmbedElement = function(o) {
+  'use strict';
   return /** @type {!HTMLEmbedElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLEmbedElement'));
 };
@@ -268,6 +280,7 @@ goog.dom.asserts.assertIsHTMLEmbedElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlFormElement instead.
  */
 goog.dom.asserts.assertIsHTMLFormElement = function(o) {
+  'use strict';
   return /** @type {!HTMLFormElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLFormElement'));
 };
@@ -283,6 +296,7 @@ goog.dom.asserts.assertIsHTMLFormElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlFrameElement instead.
  */
 goog.dom.asserts.assertIsHTMLFrameElement = function(o) {
+  'use strict';
   return /** @type {!HTMLFrameElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLFrameElement'));
 };
@@ -298,6 +312,7 @@ goog.dom.asserts.assertIsHTMLFrameElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlIFrameElement instead.
  */
 goog.dom.asserts.assertIsHTMLIFrameElement = function(o) {
+  'use strict';
   return /** @type {!HTMLIFrameElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLIFrameElement'));
 };
@@ -313,6 +328,7 @@ goog.dom.asserts.assertIsHTMLIFrameElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlObjectElement instead.
  */
 goog.dom.asserts.assertIsHTMLObjectElement = function(o) {
+  'use strict';
   return /** @type {!HTMLObjectElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLObjectElement'));
 };
@@ -328,6 +344,7 @@ goog.dom.asserts.assertIsHTMLObjectElement = function(o) {
  * @deprecated Use goog.asserts.dom.assertIsHtmlScriptElement instead.
  */
 goog.dom.asserts.assertIsHTMLScriptElement = function(o) {
+  'use strict';
   return /** @type {!HTMLScriptElement} */ (
       goog.dom.asserts.assertIsElementType_(o, 'HTMLScriptElement'));
 };
@@ -340,6 +357,7 @@ goog.dom.asserts.assertIsHTMLScriptElement = function(o) {
  * @private
  */
 goog.dom.asserts.debugStringForType_ = function(value) {
+  'use strict';
   if (goog.isObject(value)) {
     try {
       return /** @type {string|undefined} */ (value.constructor.displayName) ||
@@ -361,6 +379,7 @@ goog.dom.asserts.debugStringForType_ = function(value) {
  * @suppress {strictMissingProperties} ownerDocument not defined on Object
  */
 goog.dom.asserts.getWindow_ = function(o) {
+  'use strict';
   try {
     var doc = o && o.ownerDocument;
     // This can throw “Blocked a frame with origin "chrome-extension://..." from

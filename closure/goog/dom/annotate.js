@@ -54,6 +54,7 @@ goog.dom.annotate.AnnotateFn;
  */
 goog.dom.annotate.annotateTerms = function(
     node, terms, annotateFn, opt_ignoreCase, opt_classesToSkip, opt_maxMs) {
+  'use strict';
   if (opt_ignoreCase) {
     terms = goog.dom.annotate.lowercaseTerms_(terms);
   }
@@ -105,6 +106,7 @@ goog.dom.annotate.NODES_TO_SKIP_ = goog.object.createSet(
 goog.dom.annotate.annotateTermsInNode_ = function(
     node, terms, annotateFn, ignoreCase, classesToSkip, stopTime,
     recursionLevel) {
+  'use strict';
   if ((stopTime > 0 && goog.now() >= stopTime) ||
       recursionLevel > goog.dom.annotate.MAX_RECURSION_) {
     return false;
@@ -141,6 +143,7 @@ goog.dom.annotate.annotateTermsInNode_ = function(
            .NODES_TO_SKIP_[/** @type {!Element} */ (node).tagName]) {
     var classes = /** @type {!Element} */ (node).className.split(/\s+/);
     var skip = goog.array.some(classes, function(className) {
+      'use strict';
       return goog.array.contains(classesToSkip, className);
     });
 
@@ -198,6 +201,7 @@ goog.dom.annotate.NONWORD_RE_ = /\W/;
  */
 goog.dom.annotate.annotateText = function(
     text, terms, annotateFn, opt_ignoreCase) {
+  'use strict';
   if (opt_ignoreCase) {
     terms = goog.dom.annotate.lowercaseTerms_(terms);
   }
@@ -228,6 +232,7 @@ goog.dom.annotate.annotateText = function(
  */
 goog.dom.annotate.helpAnnotateText_ = function(
     text, terms, annotateFn, ignoreCase) {
+  'use strict';
   var hit = false;
   var textToSearch = ignoreCase ? text.toLowerCase() : text;
   var textLen = textToSearch.length;
@@ -340,6 +345,7 @@ goog.dom.annotate.helpAnnotateText_ = function(
  * @private
  */
 goog.dom.annotate.lowercaseTerms_ = function(terms) {
+  'use strict';
   var lowercaseTerms = [];
   for (var i = 0; i < terms.length; ++i) {
     var term = terms[i];

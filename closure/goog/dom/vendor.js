@@ -21,6 +21,7 @@ goog.require('goog.userAgent');
  * @return {?string} The JS vendor prefix or null if there is none.
  */
 goog.dom.vendor.getVendorJsPrefix = function() {
+  'use strict';
   if (goog.userAgent.WEBKIT) {
     return 'Webkit';
   } else if (goog.userAgent.GECKO) {
@@ -41,6 +42,7 @@ goog.dom.vendor.getVendorJsPrefix = function() {
  * @return {?string} The vendor prefix or null if there is none.
  */
 goog.dom.vendor.getVendorPrefix = function() {
+  'use strict';
   if (goog.userAgent.WEBKIT) {
     return '-webkit';
   } else if (goog.userAgent.GECKO) {
@@ -63,6 +65,7 @@ goog.dom.vendor.getVendorPrefix = function() {
  *     exist.
  */
 goog.dom.vendor.getPrefixedPropertyName = function(propertyName, opt_object) {
+  'use strict';
   // We first check for a non-prefixed property, if available.
   if (opt_object && propertyName in opt_object) {
     return propertyName;
@@ -84,6 +87,7 @@ goog.dom.vendor.getPrefixedPropertyName = function(propertyName, opt_object) {
  * @return {string} A lower-cased vendor prefixed event type.
  */
 goog.dom.vendor.getPrefixedEventType = function(eventType) {
+  'use strict';
   var prefix = goog.dom.vendor.getVendorJsPrefix() || '';
   return (prefix + eventType).toLowerCase();
 };
