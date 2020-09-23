@@ -440,8 +440,7 @@ goog.addDependency('labs/useragent/test_agents.js', ['goog.labs.userAgent.testAg
 goog.addDependency('labs/useragent/util.js', ['goog.labs.userAgent.util'], ['goog.string.internal'], {});
 goog.addDependency('labs/useragent/verifier.js', ['goog.labs.useragent.verifier'], [], {'lang': 'es6'});
 goog.addDependency('loader/abstractmodulemanager.js', ['goog.loader.AbstractModuleManager', 'goog.loader.AbstractModuleManager.CallbackType', 'goog.loader.AbstractModuleManager.FailureType'], ['goog.module.AbstractModuleLoader', 'goog.module.ModuleInfo', 'goog.module.ModuleLoadCallback'], {});
-goog.addDependency('loader/activemodulemanager.js', ['goog.loader.activeModuleManager'], ['goog.asserts', 'goog.loader.AbstractModuleManager', 'goog.loader.NoopModuleManager'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('loader/noopmodulemanager.js', ['goog.loader.NoopModuleManager'], ['goog.loader.AbstractModuleManager'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('loader/activemodulemanager.js', ['goog.loader.activeModuleManager'], ['goog.asserts', 'goog.loader.AbstractModuleManager'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('locale/countries.js', ['goog.locale.countries'], [], {});
 goog.addDependency('locale/defaultlocalenameconstants.js', ['goog.locale.defaultLocaleNameConstants'], [], {});
 goog.addDependency('locale/genericfontnames.js', ['goog.locale.genericFontNames'], [], {});
