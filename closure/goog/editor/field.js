@@ -2243,7 +2243,6 @@ goog.editor.Field.prototype.getFieldCopy = function() {
   }
   goog.dom.safe.setInnerHtml(
       fieldCopy, goog.html.legacyconversions.safeHtmlFromString(html));
-  fieldCopy.innerHTML = html;
   return fieldCopy;
 };
 
