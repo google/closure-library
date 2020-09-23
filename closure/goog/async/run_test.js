@@ -12,7 +12,9 @@ const run = goog.require('goog.async.run');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let mockClock;
+/** @type {?} */
 let futureCallback1;
+/** @type {?} */
 let futureCallback2;
 
 let futurePromise1;
@@ -26,10 +28,10 @@ testSuite({
 
   setUp() {
     futurePromise1 = new Promise((resolve) => {
-      futureCallback1 = new recordFunction(resolve);
+      futureCallback1 = recordFunction(resolve);
     });
     futurePromise2 = new Promise((resolve) => {
-      futureCallback2 = new recordFunction(resolve);
+      futureCallback2 = recordFunction(resolve);
     });
   },
 

@@ -44,6 +44,7 @@ testSuite({
     assertNull(item);
   },
 
+  /** @suppress {visibility} access private fields */
   testReturnedItemReused() {
     const fn1 = () => {};
     const scope1 = {};
