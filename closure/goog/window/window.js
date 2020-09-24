@@ -231,7 +231,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
       // During window loading `newWin.document` may be unset in some browsers.
       // Storing and checking a reference to the document prevents NPEs.
       var newDoc = newWin.document;
-      if (newDoc) {
+      if (newDoc && newDoc.write) {
         goog.dom.safe.documentWrite(newDoc, safeHtml);
         newDoc.close();
       }
