@@ -39,6 +39,7 @@ testSuite({
     function expected() {
       this.x = 1;
     }
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const input = new expected();
     assertThat(
         input, instanceOfClass(expected), 'input is an instance of expected');

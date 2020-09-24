@@ -10,6 +10,7 @@ goog.setTestOnly();
 const genericFontNames = goog.require('goog.locale.genericFontNames');
 const testSuite = goog.require('goog.testing.testSuite');
 
+/** @suppress {visibility} suppression added to enable type checking */
 genericFontNames.data_['zh_TW'] = [
   {
     'caption': '\u5fae\u8edf\u6b63\u9ed1\u9ad4',
@@ -41,10 +42,13 @@ genericFontNames.data_['zh_TW'] = [
 
 testSuite({
   testNormalize() {
+    /** @suppress {visibility} suppression added to enable type checking */
     let result = genericFontNames.normalize_('zh');
     assertEquals('zh', result);
+    /** @suppress {visibility} suppression added to enable type checking */
     result = genericFontNames.normalize_('zh-hant');
     assertEquals('zh_Hant', result);
+    /** @suppress {visibility} suppression added to enable type checking */
     result = genericFontNames.normalize_('zh-hant-tw');
     assertEquals('zh_Hant_TW', result);
   },

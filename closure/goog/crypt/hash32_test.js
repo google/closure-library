@@ -1,4 +1,9 @@
 /**
+ * @fileoverview
+ * @suppress {strictMissingProperties,missingProperties} suppression added to
+ * enable type checking
+ */
+/**
  * @license
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
@@ -173,6 +178,7 @@ testSuite({
     assertEquals(170907881, hash32.encodeByteArray([9, 1, 1]));
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testKnownByteArrays() {
     for (let i = 0; i < byteArrays.length; i++) {
       assertEquals(byteArrays[i], hash32.encodeByteArray(createByteArray(i)));

@@ -88,6 +88,10 @@ testSuite({
     assertEquals('jon.doe@gmail.com', childValues[1]);
   },
 
+  /**
+     @suppress {strictMissingProperties,checkTypes} suppression added to enable
+     type checking
+   */
   testGetDistinguishesBetweenOverloads() {
     const node = FastDataNode.fromJs(simpleObject, 'Simple');
     assertEquals(node, node.get());
@@ -163,6 +167,10 @@ testSuite({
 
   testClone() {
     const node = FastDataNode.fromJs(complexObject, 'Object');
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     const clone = node.clone();
     node.getChildNode('Name').set('Foo Bar');
     assertEquals('Jon Doe', clone.getChildNodeValue('Name'));
@@ -182,6 +190,7 @@ testSuite({
     assertEquals(node, list.getChildNodes().get('42'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCreateNewValueWithSetChildNode() {
     const node = FastDataNode.fromJs({}, 'object');
     node.setChildNode('Foo', 'Bar');
@@ -197,6 +206,7 @@ testSuite({
         node.getChildNodes().getCount());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetChildNotWithNull_list() {
     const list = FastDataNode.fromJs([], 'list');
     list.setChildNode('foo', 'bar');
@@ -222,6 +232,7 @@ testSuite({
     verifyDataChangeEvents(['Simple/Name']);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testFireDataChangeOnSetChildNode_object() {
     const node = new FastDataNode(simpleObject, 'Simple');
     node.setChildNode('Name', 'Foo Bar');
@@ -229,6 +240,7 @@ testSuite({
     verifyDataChangeEvents(['Simple/Name', 'Simple/Email']);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testFireDataChangeOnSetChildNode_list() {
     const node = new FastDataNode(complexObject, 'Node');
     node.getChildNode('GroupIds').setChildNode('[0]', 1001);

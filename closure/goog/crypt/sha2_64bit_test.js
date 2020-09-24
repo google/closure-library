@@ -179,9 +179,12 @@ testSuite({
   /** Check that the code throws an error for bad input */
   testBadInput_nullNotAllowed() {
     const hasher = new Sha512();
-    assertThrows('Null input not allowed', () => {
-      hasher.update({});
-    });
+    assertThrows(
+        'Null input not allowed',
+        /** @suppress {checkTypes} array like isn't a supported type */
+        () => {
+          hasher.update({});
+        });
   },
 
   testBadInput_noFloatingPoint() {
@@ -237,6 +240,7 @@ testSuite({
     });
   },
 
+  /** @suppress {checkTypes} array like isn't a supported type */
   testHashingArrayLike() {
     // Create array-like object
     const obj = {};

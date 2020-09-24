@@ -22,6 +22,7 @@ const userAgent = goog.require('goog.userAgent');
 class PerfectlySlowStat {
   constructor(interval) {
     this.interval_ = interval;
+    /** @suppress {visibility} suppression added to enable type checking */
     this.slotSize_ = Math.floor(interval / BasicStat.NUM_SLOTS_);
     this.events_ = [];
   }
@@ -46,6 +47,7 @@ class PerfectlySlowStat {
 }
 
 testSuite({
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetSlotBoundary() {
     const stat = new BasicStat(1654);
     assertEquals('Checking interval', 33, stat.slotInterval_);
@@ -56,6 +58,7 @@ testSuite({
     assertEquals(99, stat.getSlotBoundary_(98));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCheckForTimeTravel() {
     const stat = new BasicStat(1000);
 

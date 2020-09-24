@@ -294,6 +294,7 @@ testSuite({
     assertEquals('Value must have been updated', 17, value);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSelfResubscribe() {
     let value = null;
 
@@ -573,6 +574,7 @@ testSuite({
         'The second subscriber must also have been called', secondCalled);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testUnsubscribeWhilePublishing() {
     // It's OK for a subscriber to unsubscribe another subscriber from its
     // own topic, but the subscriber in question won't actually be removed
@@ -624,6 +626,7 @@ testSuite({
         pubsub.pendingKeys_.length);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testUnsubscribeSelfWhilePublishing() {
     // It's OK for a subscriber to unsubscribe itself, but it won't actually
     // be removed until after publishing is complete.

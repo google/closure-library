@@ -18,6 +18,7 @@ testSuite({
     hashTester.runBasicTests(sha224);
   },
 
+  /** @suppress {visibility} accessing private properties */
   testHashing() {
     // Some test vectors from:
     // csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf

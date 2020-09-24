@@ -55,10 +55,12 @@ testSuite({
                  }));
 
     // Weird values.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const wrapperA = new RichStorage.Wrapper.wrapIfNecessary(null);
     wrapperA['one'] = 1;
     storage.set('first', wrapperA);
     assertObjectEquals(wrapperA, storage.getWrapper('first'));
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const wrapperB = new RichStorage.Wrapper.wrapIfNecessary('');
     wrapperA['two'] = [];
     storage.set('second', wrapperB);

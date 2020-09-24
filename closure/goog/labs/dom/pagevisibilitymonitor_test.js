@@ -10,6 +10,7 @@ goog.setTestOnly();
 const GoogTestingEvent = goog.require('goog.testing.events.Event');
 const PageVisibilityMonitor = goog.require('goog.labs.dom.PageVisibilityMonitor');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const dispose = goog.require('goog.dispose');
 const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
 const recordFunction = goog.require('goog.testing.recordFunction');
@@ -21,7 +22,7 @@ let vh;
 
 testSuite({
   tearDown() {
-    goog.dispose(vh);
+    dispose(vh);
     vh = null;
     stubs.reset();
   },
@@ -57,6 +58,9 @@ testSuite({
     events.listen(vh, 'visibilitychange', listener);
 
     const e = new GoogTestingEvent('visibilitychange');
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     e.target = window.document;
     testingEvents.fireBrowserEvent(e);
 
@@ -74,6 +78,9 @@ testSuite({
     events.listen(vh, 'visibilitychange', listener);
 
     const e = new GoogTestingEvent('webkitvisibilitychange');
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     e.target = window.document;
     testingEvents.fireBrowserEvent(e);
 

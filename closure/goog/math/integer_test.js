@@ -1522,6 +1522,7 @@ testSuite({
       assertEquals(TEST_BITS[i + 1], val.getBits(0));
     }
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const val = new Integer.fromBits([0x20000000, 0x01010000], 0);
 
     const val58 = val.shorten(58);
@@ -1657,23 +1658,35 @@ testSuite({
     let a = Integer.fromString('-10');
     let b = Integer.fromString('2');
 
-    assertThrows(() => {
-      a.slowDivide_(b);
-    });
+    assertThrows(/**
+                    @suppress {visibility} suppression added to enable type
+                    checking
+                  */
+                 () => {
+                   a.slowDivide_(b);
+                 });
 
     a = Integer.fromString('10');
     b = Integer.fromString('-2');
 
-    assertThrows(() => {
-      a.slowDivide_(b);
-    });
+    assertThrows(/**
+                    @suppress {visibility} suppression added to enable type
+                    checking
+                  */
+                 () => {
+                   a.slowDivide_(b);
+                 });
 
     a = Integer.fromString('-10');
     b = Integer.fromString('-2');
 
-    assertThrows(() => {
-      a.slowDivide_(b);
-    });
+    assertThrows(/**
+                    @suppress {visibility} suppression added to enable type
+                    checking
+                  */
+                 () => {
+                   a.slowDivide_(b);
+                 });
   },
 
   testBigShift() {

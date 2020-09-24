@@ -105,6 +105,10 @@ testSuite({
         'Top edge of popup should be at specified y coordinate.', 0, offset.y);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testOverflowRightFlipHor() {
     const pos = new ViewportClientPosition(frameRect.right, 100);
     pos.reposition(popup, Corner.TOP_LEFT);
@@ -133,6 +137,10 @@ testSuite({
         0, offset.y);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testOverflowBottomRightFlipBoth() {
     const pos = new ViewportClientPosition(frameRect.right, frameRect.bottom);
     pos.reposition(popup, Corner.TOP_LEFT);
@@ -148,6 +156,10 @@ testSuite({
         frameRect.bottom - popup.offsetHeight, offset.y);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testLastRespotOverflow() {
     const large = 2000;
     style.setSize(popup, 20, large);

@@ -28,6 +28,7 @@ testSuite({
     clock.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testParallelEvents() {
     const anim = new AnimationParallelQueue();
     anim.add(new Animation([0], [100], 200));
@@ -101,6 +102,7 @@ testSuite({
     assertEquals(1, finishEvents);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSerialEvents() {
     const anim = new AnimationSerialQueue();
     anim.add(new Animation([0], [100], 100));
@@ -174,6 +176,7 @@ testSuite({
     assertEquals(1, finishEvents);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testParallelPause() {
     const anim = new AnimationParallelQueue();
     anim.add(new Animation([0], [100], 100));
@@ -256,6 +259,7 @@ testSuite({
     assertTrue(anim.isStopped());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSerialPause() {
     const anim = new AnimationSerialQueue();
     anim.add(new Animation([0], [100], 100));

@@ -44,6 +44,7 @@ testSuite({
     assertEquals(nSteps, nFrames);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testPauseOffset() {
     const anim = new Animation([0], [1000], 1000);
     anim.play();
@@ -94,6 +95,7 @@ testSuite({
     assertEquals(Animation.State.STOPPED, anim.getStateInternal());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testClockReset() {
     const anim = new Animation([0], [1000], 1000);
     anim.play();
@@ -102,6 +104,7 @@ testSuite({
     assertRoughlyEquals(0, anim.progress, 1e-4);
 
     // Possible when clock is reset.
+    /** @suppress {visibility} suppression added to enable type checking */
     clock.nowMillis_ -= 200000;
     anim.pause();
     anim.play();

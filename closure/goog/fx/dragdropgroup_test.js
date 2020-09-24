@@ -51,6 +51,7 @@ testSuite({
     target.removeItems();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAddItemsBeforeInit() {
     addElementsToGroups();
     source.init();
@@ -70,6 +71,7 @@ testSuite({
     assertFalse(events.hasListener(t2));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAddItemsAfterInit() {
     source.init();
     target.init();
@@ -89,6 +91,7 @@ testSuite({
     assertFalse(events.hasListener(t2));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveItems() {
     source.init();
     target.init();
@@ -113,6 +116,7 @@ testSuite({
     assertFalse(events.hasListener(s2));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveSourceItem1() {
     source.init();
     target.init();
@@ -138,6 +142,7 @@ testSuite({
     assertTrue(events.hasListener(s2));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveSourceItem2() {
     source.init();
     target.init();
@@ -163,6 +168,7 @@ testSuite({
     assertFalse(events.hasListener(s2));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveTargetItem1() {
     source.init();
     target.init();
@@ -188,6 +194,7 @@ testSuite({
     assertFalse(events.hasListener(t2));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveTargetItem2() {
     source.init();
     target.init();

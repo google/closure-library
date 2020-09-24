@@ -141,11 +141,13 @@ testSuite({
    * bad internal state.
    */
   testRegexMakesProgress() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const original = HtmlPrettyPrinter.TOKEN_REGEX_;
 
     try {
       // This regex matches \B, an index between 2 word characters, so the regex
       // index does not advance when matching this.
+      /** @suppress {visibility} suppression added to enable type checking */
       HtmlPrettyPrinter.TOKEN_REGEX_ =
           /(?:\B|<!--.*?-->|<!.*?>|<(\/?)(\w+)[^>]*>|[^<]+|<)/g;
 
@@ -159,6 +161,10 @@ testSuite({
       assertEquals(
           'Regex failed to make progress through source html.', ex.message);
     } finally {
+      /**
+       * @suppress {visibility,constantProperty} suppression added to enable
+       * type checking
+       */
       HtmlPrettyPrinter.TOKEN_REGEX_ = original;
     }
   },
@@ -183,11 +189,16 @@ testSuite({
    * bad internal state.
    */
   testAvoidDataLoss() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const original = HtmlPrettyPrinter.TOKEN_REGEX_;
 
     try {
       // This regex does not match stranded '<' characters, so does not fully
       // tokenize the string.
+      /**
+       * @suppress {visibility,constantProperty} suppression added to enable
+       * type checking
+       */
       HtmlPrettyPrinter.TOKEN_REGEX_ =
           /(?:<!--.*?-->|<!.*?>|<(\/?)(\w+)[^>]*>|[^<]+)/g;
 
@@ -200,6 +211,10 @@ testSuite({
           goog.partial(HtmlPrettyPrinter.format, COMPLEX_HTML));
       assertEquals('Lost data pretty printing html.', ex.message);
     } finally {
+      /**
+       * @suppress {visibility,constantProperty} suppression added to enable
+       * type checking
+       */
       HtmlPrettyPrinter.TOKEN_REGEX_ = original;
     }
   },

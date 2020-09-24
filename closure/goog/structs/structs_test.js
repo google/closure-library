@@ -71,6 +71,7 @@ const allTagNames2 = `${allTagNames1},SPAN`;
 // For each
 
 testSuite({
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetCount() {
     const arr = ['a', 'b', 'c'];
     assertEquals('count, should be 3', 3, structs.getCount(arr));
@@ -105,6 +106,7 @@ testSuite({
     aMap.remove('a');
     assertEquals('count, should be 3', 3, structs.getCount(aMap));
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const aSet = new StructsSet('abc');
     assertEquals('count, should be 3', 3, structs.getCount(aSet));
     aSet.add('d');
@@ -113,6 +115,7 @@ testSuite({
     assertEquals('count, should be 3', 3, structs.getCount(aSet));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetValues() {
     const arr = ['a', 'b', 'c', 'd'];
     assertEquals('abcd', structs.getValues(arr).join(''));
@@ -139,6 +142,7 @@ testSuite({
     assertEquals('123', structs.getValues(aMap).join(''));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetKeys() {
     const arr = ['a', 'b', 'c', 'd'];
     assertEquals('0123', structs.getKeys(arr).join(''));
@@ -165,6 +169,7 @@ testSuite({
     assertUndefined(structs.getKeys(aSet));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testContains() {
     const arr = ['a', 'b', 'c', 'd'];
     assertTrue('contains, Should contain \'a\'', structs.contains(arr, 'a'));
@@ -369,6 +374,7 @@ testSuite({
     assertEquals('HRPPPPPPPPH1', structs.map(col, f, THIS_OBJ).join(''));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testFilter() {
     const RV = {};
     const obj = {
@@ -382,6 +388,7 @@ testSuite({
     assertEquals(RV, structs.filter(obj, f));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testFilter2() {
     const THIS_OBJ = {};
     const RV = {};
@@ -510,6 +517,7 @@ testSuite({
         'P,P,P,P,P,P,P,P', nodeNames(structs.filter(col, f, THIS_OBJ)));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSome() {
     const RV = {};
     const obj = {
@@ -523,6 +531,7 @@ testSuite({
     assertEquals(RV, structs.some(obj, f));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSome2() {
     const THIS_OBJ = {};
     const RV = {};
@@ -680,6 +689,7 @@ testSuite({
     assertFalse(structs.some(col, f, THIS_OBJ));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEvery() {
     const RV = {};
     const obj = {
@@ -693,6 +703,7 @@ testSuite({
     assertEquals(RV, structs.every(obj, f));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEvery2() {
     const THIS_OBJ = {};
     const RV = {};

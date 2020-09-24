@@ -62,7 +62,9 @@ testSuite({
       return this.x - z;
     });
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const obj1 = new Class(10);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const obj2 = new Class(20);
 
     assertEquals('10+1', 11, obj1.f(1));

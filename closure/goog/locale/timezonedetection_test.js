@@ -59,12 +59,14 @@ testSuite({
   testGetFingerprint() {
     let mockDate = new MockDate();
     mockDate.setTimezoneOffset([-480]);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     let fingerprint = timeZoneDetection.getFingerprint(mockDate);
     assertEquals(32, fingerprint);
 
     mockDate = new MockDate();
     mockDate.setTimezoneOffset(
         [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     fingerprint = timeZoneDetection.getFingerprint(mockDate);
     assertEquals(1294772902, fingerprint);
   },
@@ -72,18 +74,21 @@ testSuite({
   testDetectTimeZone() {
     let mockDate = new MockDate();
     mockDate.setTimezoneOffset([-480]);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     let timeZoneId = timeZoneDetection.detectTimeZone(undefined, mockDate);
     assertEquals('Asia/Hong_Kong', timeZoneId);
 
     mockDate = new MockDate();
     mockDate.setTimezoneOffset(
         [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     timeZoneId = timeZoneDetection.detectTimeZone('US', mockDate);
     assertEquals('America/Los_Angeles', timeZoneId);
 
     mockDate = new MockDate();
     mockDate.setTimezoneOffset(
         [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     timeZoneId = timeZoneDetection.detectTimeZone('CA', mockDate);
     assertEquals('America/Dawson', timeZoneId);
   },
@@ -92,6 +97,7 @@ testSuite({
     let mockDate = new MockDate();
     mockDate.setTimezoneOffset(
         [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     let timeZoneList = timeZoneDetection.getTimeZoneList(undefined, mockDate);
     assertEquals('America/Los_Angeles', timeZoneList[0]);
     assertEquals('America/Whitehorse', timeZoneList[4]);
@@ -99,11 +105,13 @@ testSuite({
 
     mockDate = new MockDate();
     mockDate.setTimezoneOffset([-480]);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     timeZoneList = timeZoneDetection.getTimeZoneList(undefined, mockDate);
     assertEquals('Asia/Hong_Kong', timeZoneList[0]);
     assertEquals('Asia/Chongqing', timeZoneList[7]);
     assertEquals(16, timeZoneList.length);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     timeZoneList = timeZoneDetection.getTimeZoneList('AU', mockDate);
     assertEquals(1, timeZoneList.length);
     assertEquals('Australia/Perth', timeZoneList[0]);

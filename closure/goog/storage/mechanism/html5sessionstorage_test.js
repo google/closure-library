@@ -29,24 +29,37 @@ testSuite({
   setUp() {
     const sessionStorage = new HTML5SessionStorage();
     if (sessionStorage.isAvailable()) {
+      /** @suppress {const} suppression added to enable type checking */
       mechanism = sessionStorage;
       // There should be at least 2 MiB.
+      /** @suppress {const} suppression added to enable type checking */
       minimumQuota = 2 * 1024 * 1024;
+      /** @suppress {const} suppression added to enable type checking */
       mechanism_shared = new HTML5SessionStorage();
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   tearDown() {
     if (!!mechanism) {
       mechanism.clear();
+      /** @suppress {const} suppression added to enable type checking */
       mechanism = null;
     }
     if (!!mechanism_shared) {
       mechanism_shared.clear();
+      /** @suppress {const} suppression added to enable type checking */
       mechanism_shared = null;
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testAvailability() {
     if (userAgent.WEBKIT && userAgent.isVersionOrHigher('532.5') ||
         userAgent.GECKO && userAgent.isVersionOrHigher('1.9.1') &&

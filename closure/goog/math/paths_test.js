@@ -26,10 +26,11 @@ function assertArrayRoughlyEquals(expected, actual, delta) {
 }
 
 function $coord(x, y) {
-  return new goog.math.Coordinate(x, y);
+  return new Coordinate(x, y);
 }
 
 testSuite({
+  /** @suppress {visibility} suppression added to enable type checking */
   testSquare() {
     const square = regularNGon($coord(10, 10), $coord(0, 10), 4);
     assertArrayRoughlyEquals(

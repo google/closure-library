@@ -14,6 +14,7 @@ const url = goog.require('goog.fs.url');
 const stubs = new PropertyReplacer();
 
 testSuite({
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testBrowserSupportsObjectUrls() {
     stubs.remove(goog.global, 'URL');
     stubs.remove(goog.global, 'webkitURL');

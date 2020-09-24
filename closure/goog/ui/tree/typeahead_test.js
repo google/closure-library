@@ -113,7 +113,15 @@ testSuite({
 
     // Simulate a DOWN key on the tree, now the selection should be on 'eve3'
     const e = new Object();
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.keyCode = KeyCodes.DOWN;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.preventDefault = () => {};
     handled = tree.handleKeyEvent(e);
     selectedItem = tree.getSelectedItem();
@@ -129,22 +137,50 @@ testSuite({
     // Period character('.'): keyCode = 190, charCode = 46
     // String.fromCharCode(190) = '3/4'  <-- incorrect
     // String.fromCharCode(46) = '.'  <-- correct
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.keyCode = KeyCodes.PERIOD;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.charCode = 46;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.preventDefault = () => {};
     typeAhead.handleTypeAheadChar(e);
     assertEquals('.', typeAhead.buffer_);
 
     // charCode not supplied.
     // This is expected to work only for alpha-num characters.
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.keyCode = KeyCodes.A;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.charCode = undefined;
     typeAhead.buffer_ = '';
     typeAhead.handleTypeAheadChar(e);
     assertEquals('a', typeAhead.buffer_);
 
     // keyCodes should not be used for keys that produce non-printable chars.
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.keyCode = KeyCodes.F5;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.charCode = 0;
     typeAhead.buffer_ = '';
     typeAhead.handleTypeAheadChar(e);

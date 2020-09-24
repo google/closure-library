@@ -26,6 +26,7 @@ const testSuite = goog.require('goog.testing.testSuite');
  *     skipped by the tokenizer.
  */
 function assertTokens(value, tokens, ignoreWhitespace = undefined) {
+  /** @suppress {visibility} suppression added to enable type checking */
   const tokenizer =
       new TextFormatSerializer.Tokenizer_(value, ignoreWhitespace);
   const tokensFound = [];
@@ -580,6 +581,7 @@ testSuite({
   },
 
   testParseNumericalConstant() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const parseNumericalConstant =
         TextFormatSerializer.Parser.parseNumericalConstant_;
 
@@ -638,6 +640,7 @@ testSuite({
   testGetNumberFromStringExponentialNotation() {
     for (let i = 0; i < floatFormatCases.length; ++i) {
       const thistest = floatFormatCases[i];
+      /** @suppress {visibility} suppression added to enable type checking */
       const result =
           TextFormatSerializer.Parser.getNumberFromString_(thistest.given);
       assertEquals(thistest.expect, result);
@@ -656,6 +659,7 @@ testSuite({
   },
 
   testGetNumberFromString() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const getNumberFromString =
         TextFormatSerializer.Parser.getNumberFromString_;
 

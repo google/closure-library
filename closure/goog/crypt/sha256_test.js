@@ -18,6 +18,7 @@ testSuite({
     hashTester.runBasicTests(sha256);
   },
 
+  /** @suppress {visibility} accessing private properties */
   testHashing() {
     // Some test vectors from:
     // csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf
@@ -76,9 +77,12 @@ testSuite({
 
   /** Check that the code checks for bad input */
   testBadInput() {
-    assertThrows('Bad input', () => {
-      new Sha256().update({});
-    });
+    assertThrows(
+        'Bad input',
+        /** @suppress {checkTypes} array like isn't a supported type */
+        () => {
+          new Sha256().update({});
+        });
     assertThrows('Floating point not allows', () => {
       new Sha256().update([1, 2, 3, 4, 4.5]);
     });

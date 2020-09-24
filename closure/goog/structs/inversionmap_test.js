@@ -132,6 +132,7 @@ testSuite({
     assertEquals(null, alphabetNames.at(101));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testInversionMapSplice5() {
     const map = new InversionMap([0, 97, 98, 99], [
       null,

@@ -9,6 +9,7 @@ goog.setTestOnly();
 
 const MockClock = goog.require('goog.testing.MockClock');
 const Pool = goog.require('goog.structs.Pool');
+const dispose = goog.require('goog.dispose');
 const testSuite = goog.require('goog.testing.testSuite');
 
 // Implementation of the Pool class with isObjectDead() always returning TRUE,
@@ -260,6 +261,6 @@ testSuite({
     clock.tick(100);
     assertUndefined(p.getObject());
 
-    goog.dispose(clock);
+    dispose(clock);
   },
 });

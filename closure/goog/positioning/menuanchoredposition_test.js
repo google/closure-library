@@ -37,6 +37,10 @@ testSuite({
     menu.innerHTML = savedMenuHtml;
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testRepositionWithAdjustAndOnscreenAnchor() {
     // Add so many children that it can't possibly fit onscreen.
     for (let i = 0; i < 200; i++) {
@@ -51,6 +55,10 @@ testSuite({
     assertEquals(5, menu.offsetLeft);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testRepositionWithAdjustAndOffscreenAnchor() {
     // This does not get adjusted because it's too far offscreen.
     const pos =
@@ -61,6 +69,10 @@ testSuite({
     assertEquals(-1000, menu.offsetLeft);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testRespositionFailoverEvenWhenResizeHeightIsOn() {
     const pos =
         new MenuAnchoredPosition(onscreenAnchor, Corner.TOP_LEFT, true, true);
@@ -71,6 +83,10 @@ testSuite({
     assertEquals(5, menu.offsetLeft);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testRepositionToBottomLeftWhenBottomFailsAndRightFailsAndResizeOn() {
     const pageSize = dom.getViewportSize();
     customAnchor.style.left = (pageSize.width - 10) + 'px';

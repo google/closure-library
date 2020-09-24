@@ -18,6 +18,7 @@ function assertMatcherError(callable, errorString) {
   assertTrue(e instanceof MatcherError);
 }
 testSuite({
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testAnyNumber() {
     assertThat(0, anyNumber(3), 'typeof 0 == "number"');
     assertMatcherError(() => {

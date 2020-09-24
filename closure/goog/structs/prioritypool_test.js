@@ -9,6 +9,7 @@ goog.setTestOnly();
 
 const MockClock = goog.require('goog.testing.MockClock');
 const PriorityPool = goog.require('goog.structs.PriorityPool');
+const dispose = goog.require('goog.dispose');
 const testSuite = goog.require('goog.testing.testSuite');
 
 // Implementation of the Pool class with isObjectDead() always returning TRUE,
@@ -516,7 +517,7 @@ testSuite({
     clock.tick(100);
     assertEquals(4, getCount);
 
-    goog.dispose(clock);
+    dispose(clock);
   },
 
   testRateLimitingWithChangingDelay() {
@@ -556,6 +557,6 @@ testSuite({
     clock.tick(20);
     assertEquals(3, getCount);
 
-    goog.dispose(clock);
+    dispose(clock);
   },
 });

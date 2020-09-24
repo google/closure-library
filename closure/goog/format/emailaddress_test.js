@@ -33,6 +33,7 @@ function doIsValidTest(testFunc, valid, invalid) {
  * @param {Array<string>} expectedList The expected results.
  * @param {string=} opt_message An assertion message.
  * @return {string} the resulting email address objects.
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function assertParsedList(inputString, expectedList, opt_message) {
   const message = opt_message || 'Should parse address correctly';

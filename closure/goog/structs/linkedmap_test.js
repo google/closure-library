@@ -251,8 +251,13 @@ testSuite({
     assertFalse(m.containsKey('undefined'));
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testRemoveNodeCalls() {
     const m = new LinkedMap(1);
+    /** @suppress {visibility} suppression added to enable type checking */
     m.removeNode = recordFunction(m.removeNode);
 
     m.set('1', 1);

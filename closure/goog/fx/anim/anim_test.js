@@ -26,6 +26,7 @@ let replacer;
 /**
  * @param {!Function} delayType The constructor for Delay or AnimationDelay.
  *     The methods will be mocked out.
+ * @suppress {checkTypes,visibility} suppression added to enable type checking
  */
 function registerAndUnregisterAnimationWithMocks(delayType) {
   let timerCount = 0;
@@ -112,6 +113,7 @@ testSuite({
     registerAndUnregisterAnimationWithMocks(AnimationDelay);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRegisterAndUnregisterAnimationWithRequestAnimationFrameGecko() {
     // Only FF4 onwards support requestAnimationFrame.
     if (!userAgent.GECKO || !userAgent.isVersionOrHigher('2.0') ||
@@ -168,6 +170,7 @@ testSuite({
     fxAnim.setAnimationWindow(null);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRegisterUnregisterAnimation() {
     const anim = new Animation([0], [1], 1000);
 
@@ -192,6 +195,7 @@ testSuite({
     anim.dispose();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testCycleWithMockClock() {
     fxAnim.setAnimationWindow(null);
     const anim = new Animation([0], [1], 1000);
@@ -203,6 +207,7 @@ testSuite({
     assertEquals(1, anim.onAnimationFrame.getCallCount());
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testCycleWithMockClockAndAnimationWindow() {
     fxAnim.setAnimationWindow(window);
     const anim = new Animation([0], [1], 1000);

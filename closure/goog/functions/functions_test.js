@@ -28,6 +28,7 @@ const obj = {
   foo: 'obj'
 };
 
+/** @suppress {globalThis} suppression added to enable type checking */
 function getFoo(arg1, arg2) {
   return {foo: this.foo, arg1: arg1, arg2: arg2};
 }
@@ -53,6 +54,7 @@ function assertCallOrderAndReset(expectedArray) {
  *     mapping string command sequences (where 'f' is 'fire' and 'w' is 'wait')
  *     to the number times we expect a decorated function to be called during
  *     the execution of those commands.
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function assertAsyncDecoratorCommandSequenceCalls(
     decorator, expectedCommandSequenceCalls) {
@@ -61,6 +63,7 @@ function assertAsyncDecoratorCommandSequenceCalls(
   const mockClock = new MockClock(true);
   for (let commandSequence in expectedCommandSequenceCalls) {
     const recordedFunction = recordFunction();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const f = decorator(recordedFunction, interval);
 
     for (let i = 0; i < commandSequence.length; ++i) {
@@ -226,6 +229,7 @@ testSuite({
     assertEquals(obj, functions.identity(obj));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testConstant() {
     assertEquals(3, functions.constant(3)());
     assertEquals(undefined, functions.constant()());
@@ -246,6 +250,7 @@ testSuite({
     assertEquals(obj, e);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCompose() {
     const add2 = (x) => x + 2;
 
@@ -438,6 +443,7 @@ testSuite({
     assertEquals(1, recordedFunction.getCallCount());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDebounce() {
     // Encoded sequences of commands to perform mapped to expected # of calls.
     //   f: fire
@@ -526,6 +532,7 @@ testSuite({
     mockClock.uninstall();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testThrottle() {
     // Encoded sequences of commands to perform mapped to expected # of calls.
     //   f: fire
@@ -619,6 +626,7 @@ testSuite({
     mockClock.uninstall();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRateLimit() {
     // Encoded sequences of commands to perform mapped to expected # of calls.
     //   f: fire
