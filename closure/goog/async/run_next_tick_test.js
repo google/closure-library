@@ -137,7 +137,7 @@ testSuite({
     // and get the correct scope.
     const last1 = futureCallback1.popLastCall();
     assertEquals(0, last1.getArguments().length);
-    assertEquals(goog.global, last1.getThis());
+    assertEquals(undefined, last1.getThis());
 
     const last2 = futureCallback2.popLastCall();
     assertEquals(0, last2.getArguments().length);

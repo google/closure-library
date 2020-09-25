@@ -34,7 +34,7 @@ testSuite({
     const lastCall = f.getLastCall();
     assertEquals(
         'original function', goog.nullFunction, lastCall.getFunction());
-    assertEquals('this context', window, lastCall.getThis());
+    assertEquals('this context', undefined, lastCall.getThis());
     assertArrayEquals('arguments', [1], lastCall.getArguments());
     assertEquals('arguments[0]', 1, lastCall.getArgument(0));
     assertUndefined('arguments[1]', lastCall.getArgument(1));
@@ -54,7 +54,7 @@ testSuite({
     assertEquals('last call', calls[1], lastCall);
     assertEquals(
         'original function', functions.identity, lastCall.getFunction());
-    assertEquals('this context of first call', window, firstCall.getThis());
+    assertEquals('this context of first call', undefined, firstCall.getThis());
     assertEquals('this context of last call', dummyThis, lastCall.getThis());
     assertArrayEquals(
         'arguments of the first call', [1], firstCall.getArguments());
@@ -76,7 +76,7 @@ testSuite({
     assertEquals('error message', 'error', error.message);
     assertEquals('call count', 1, f.getCallCount());
     const lastCall = f.getLastCall();
-    assertEquals('this context', window, lastCall.getThis());
+    assertEquals('this context', undefined, lastCall.getThis());
     assertArrayEquals('arguments', [1], lastCall.getArguments());
     assertUndefined('return value', lastCall.getReturnValue());
     assertEquals(

@@ -1497,7 +1497,7 @@ testSuite({
       assertEquals(1, rejectionCall.getArguments().length);
       const err = rejectionCall.getArguments()[0];
       assertEquals('thenAlways throw', err.message);
-      assertEquals(goog.global, rejectionCall.getThis());
+      assertEquals(null, rejectionCall.getThis());
     });
 
     return p.thenAlways(() => {
@@ -2041,7 +2041,7 @@ testSuite({
     assertEquals(1, unhandledRejections.getCallCount());
     const rejectionCall = unhandledRejections.popLastCall();
     assertArrayEquals([sentinel], rejectionCall.getArguments());
-    assertEquals(goog.global, rejectionCall.getThis());
+    assertEquals(null, rejectionCall.getThis());
   },
 
   testUnhandledRejection2() {
@@ -2052,7 +2052,7 @@ testSuite({
     assertEquals(1, unhandledRejections.getCallCount());
     const rejectionCall = unhandledRejections.popLastCall();
     assertArrayEquals([sentinel], rejectionCall.getArguments());
-    assertEquals(goog.global, rejectionCall.getThis());
+    assertEquals(null, rejectionCall.getThis());
   },
 
   testThenVoidUnhandledRejection() {
@@ -2063,7 +2063,7 @@ testSuite({
     assertEquals(1, unhandledRejections.getCallCount());
     const rejectionCall = unhandledRejections.popLastCall();
     assertArrayEquals([sentinel], rejectionCall.getArguments());
-    assertEquals(goog.global, rejectionCall.getThis());
+    assertEquals(null, rejectionCall.getThis());
   },
 
   testUnhandledRejection() {
@@ -2116,7 +2116,7 @@ testSuite({
     assertEquals(1, unhandledRejections.getCallCount());
     const rejectionCall = unhandledRejections.popLastCall();
     assertArrayEquals([sentinel], rejectionCall.getArguments());
-    assertEquals(goog.global, rejectionCall.getThis());
+    assertEquals(null, rejectionCall.getThis());
   },
 
   testUnhandledRejectionAfterThenAlways() {
@@ -2129,7 +2129,7 @@ testSuite({
     assertEquals(1, unhandledRejections.getCallCount());
     const rejectionCall = unhandledRejections.popLastCall();
     assertArrayEquals([sentinel], rejectionCall.getArguments());
-    assertEquals(goog.global, rejectionCall.getThis());
+    assertEquals(null, rejectionCall.getThis());
   },
 
   testHandledBlockingRejection() {
