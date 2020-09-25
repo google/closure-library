@@ -93,11 +93,6 @@ function maybeInitialize(info, loadingModuleIds) {
   moduleManager.setAllModuleInfoString(info, loadingModuleIds);
 }
 
-/**
- * Alias for the maybeInitialize method.
- */
-const initialize = maybeInitialize;
-
 /** Test-only method for removing the active module manager. */
 const reset = function() {
   moduleManager = null;
@@ -110,6 +105,5 @@ exports = {
   beforeLoadModuleCode,
   setLoaded,
   maybeInitialize,
-  initialize,
   reset,
 };
