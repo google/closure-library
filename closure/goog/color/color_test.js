@@ -40,6 +40,7 @@ function rgbColorsAreEqual(rgb1, rgb2) {
  * @param {Function} funcTwo Function that converts from 2nd colorspace to 2nd
  * @param {Array<number>} color The color array passed to funcOne
  * @param {number} DELTA Margin of error for each element in color
+ * @suppress {visibility} accessing private properties
  */
 function colorConversionTestHelper(funcOne, funcTwo, color, DELTA) {
   const temp = funcOne(color);
@@ -110,6 +111,9 @@ testSuite({
     }
   },
 
+  /**
+   * @suppress {visibility} accessing private properties
+   */
   testIsValidHexColor() {
     const goodHexColors = ['#ffffff', '#ff7812', '#012345', '#Ff003D', '#3CA'];
     const badHexColors =
@@ -123,6 +127,9 @@ testSuite({
     }
   },
 
+  /**
+   * @suppress {visibility} accessing private properties
+   */
   testIsValidRgbColor() {
     const goodRgbColors =
         ['(255, 26, 75)', 'RGB(2, 3, 4)', '(0,0,0)', 'rgb(255,255,255)'];
@@ -187,7 +194,7 @@ testSuite({
   },
 
   testHexToRgbStyle() {
-    assertEquals('rgb(255,0,0)', googColor.hexToRgbStyle(names.red));
+    assertEquals('rgb(255,0,0)', googColor.hexToRgbStyle(names['red']));
     assertEquals('rgb(206,206,206)', googColor.hexToRgbStyle('#cecece'));
     assertEquals('rgb(51,204,170)', googColor.hexToRgbStyle('#3CA'));
     const badHexColors = ['#1234', null, undefined, '#.1234567890'];
@@ -200,7 +207,7 @@ testSuite({
   },
 
   testRgbToHex() {
-    assertEquals(names.red, googColor.rgbToHex(255, 0, 0));
+    assertEquals(names['red'], googColor.rgbToHex(255, 0, 0));
     assertEquals('#af13ff', googColor.rgbToHex(175, 19, 255));
     const badRgb = [
       [-1, -1, -1],
@@ -530,7 +537,10 @@ testSuite({
         'The HSL distance between white and black is 1.', hslDistance == 1);
   },
 
-  /** This method runs unit tests against googColor.yiqBrightness_(). */
+  /**
+   * This method runs unit tests against googColor.yiqBrightness_().
+   * @suppress {visibility} accessing private properties
+   */
   testYiqBrightness() {
     const white = [255, 255, 255];
     const black = [0, 0, 0];
@@ -555,7 +565,10 @@ testSuite({
     assertEquals('Lightgreen brightness is 199', lightgreenBrightness, 199);
   },
 
-  /** This method runs unit tests against googColor.yiqBrightnessDiff_(). */
+  /**
+   * This method runs unit tests against googColor.yiqBrightnessDiff_().
+   * @suppress {visibility} accessing private properties
+   */
   testYiqBrightnessDiff() {
     const colors = {
       'deeppink': [255, 20, 147],
@@ -594,7 +607,10 @@ testSuite({
         'saddlebrown-indigo is also 47.', diffs['saddlebrown-indigo'], 47);
   },
 
-  /** This method runs unit tests against googColor.colorDiff_(). */
+  /**
+   * This method runs unit tests against googColor.colorDiff_().
+   * @suppress {visibility} accessing private properties
+   */
   testColorDiff() {
     const colors = {
       'mediumblue': [0, 0, 205],
