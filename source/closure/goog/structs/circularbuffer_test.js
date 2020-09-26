@@ -76,6 +76,7 @@ testSuite({
     assertFalse(buff.containsValue('third'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testContainsKey() {
     const buff = new CircularBuffer(3);
     assertUndefined(buff.add('first'));

@@ -27,6 +27,7 @@ goog.require('goog.dom.TagName');
  * @return {string}
  */
 goog.dom.textAssert.assertHtmlFree = function(text) {
+  'use strict';
   if (goog.asserts.ENABLE_ASSERTS) {
     var elmt = goog.dom.createElement(goog.dom.TagName.BODY);
     elmt.textContent = text;

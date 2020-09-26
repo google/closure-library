@@ -425,6 +425,7 @@ testSuite({
     assertTrue('clone so it should contain \'c\' key', s2.contains('c'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEquals() {
     helperForTestEquals(1, 2, 3, 4);
     helperForTestEquals('a', 'b', 'c', 'd');
@@ -432,6 +433,7 @@ testSuite({
         new String('a'), new String('b'), new String('c'), new String('d'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testIsSubsetOf() {
     helperForTestIsSubsetOf(1, 2, 3, 4);
     helperForTestIsSubsetOf('a', 'b', 'c', 'd');

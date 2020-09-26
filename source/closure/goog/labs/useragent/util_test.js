@@ -74,16 +74,19 @@ testSuite({
     assertFalse(util.matchUserAgentIgnoreCase('Mozilla'));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testNoNavigator() {
     stubs.set(util, 'getNavigator_', functions.constant(undefined));
     assertEquals('', util.getNativeUserAgentString_());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testNavigatorWithNoUserAgent() {
     stubs.set(util, 'getNavigator_', functions.constant(undefined));
     assertEquals('', util.getNativeUserAgentString_());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testNavigatorWithUserAgent() {
     stubs.set(
         util, 'getNavigator_', functions.constant({'userAgent': 'moose'}));

@@ -22,10 +22,12 @@ function getEncryptedWrapper(storage, key) {
   return JSON.parse(storage.mechanism.get(storage.hashKeyWithSecret_(key)));
 }
 
+/** @suppress {visibility} suppression added to enable type checking */
 function getEncryptedData(storage, key) {
   return getEncryptedWrapper(storage, key)[RichStorage.DATA_KEY];
 }
 
+/** @suppress {visibility} suppression added to enable type checking */
 function decryptWrapper(storage, key, wrapper) {
   return JSON.parse(storage.decryptValue_(
       wrapper[EncryptedStorage.SALT_KEY], key, wrapper[RichStorage.DATA_KEY]));
@@ -59,6 +61,7 @@ testSuite({
     collectableStorageTester.runBasicTests(mechanism, clock, storage);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testEncryption() {
     const mechanism = new FakeMechanism();
     const clock = new MockClock(true);
@@ -98,6 +101,7 @@ testSuite({
     });
 
     // If the value is overwritten, it can't be decrypted.
+    /** @suppress {visibility} suppression added to enable type checking */
     encryptedWrapper[RichStorage.DATA_KEY] = 'kaboom';
     mechanism.set(
         storage.hashKeyWithSecret_('first'),

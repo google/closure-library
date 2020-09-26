@@ -217,6 +217,7 @@ testSuite({
             collectorFn));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSum() {
     assertEquals(
         'sum() must return 0 if there are no arguments', 0, googMath.sum());
@@ -232,6 +233,7 @@ testSuite({
         isNaN(googMath.sum(1, 2, 'foo', 3)));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testAverage() {
     assertTrue(
         'average() must return NaN if there are no arguments',

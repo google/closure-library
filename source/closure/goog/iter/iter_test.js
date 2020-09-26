@@ -45,6 +45,7 @@ testSuite({
     assertEquals('abcd', s);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testJoin() {
     let iter = new ArrayIterator(['a', 'b', 'c', 'd']);
     assertEquals('abcd', googIter.join(iter, ''));
@@ -365,6 +366,7 @@ testSuite({
   },
 
   testToIterator() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     let iter = new googIter.range(5);
     let iter2 = googIter.toIterator(iter);
     assertEquals(
@@ -657,6 +659,7 @@ testSuite({
   },
 
   testZipLongestNoArgs() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const iter = googIter.zipLongest();
     assertArrayEquals([], googIter.toArray(iter));
     const iter2 = googIter.zipLongest('fill');
@@ -718,6 +721,7 @@ testSuite({
   },
 
   testStarMap() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const iter = googIter.starMap([[2, 5], [3, 2], [10, 3]], Math.pow);
     assertEquals(32, iter.next());
     assertEquals(9, iter.next());
@@ -734,6 +738,7 @@ testSuite({
       assertTrue(iterator instanceof IterIterator);
       return parseInt(string, radix);
     };
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const iter = googIter.starMap([['42', 10], ['0xFF', 16], ['101', 2]], func);
     assertEquals(42, iter.next());
     assertEquals(255, iter.next());

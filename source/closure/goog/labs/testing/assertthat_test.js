@@ -21,8 +21,11 @@ let failureTestMatcher;
 
 testSuite({
   setUp() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     successMatchesFn = new recordFunction(() => true);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     failureMatchesFn = new recordFunction(() => false);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     describeFn = new recordFunction();
 
     successTestMatcher = () =>

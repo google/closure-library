@@ -9,8 +9,10 @@ goog.setTestOnly();
 
 const Vec3 = goog.require('goog.vec.Vec3');
 const testSuite = goog.require('goog.testing.testSuite');
+const vec = goog.require('goog.vec');
 
 testSuite({
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDeprecatedConstructor() {
     let v = Vec3.create();
     assertElementsEquals(0, v[0]);
@@ -27,6 +29,7 @@ testSuite({
     assertElementsEquals([1, 2, 3], Vec3.clone(v));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testConstructor() {
     const v = Vec3.createFloat32();
     assertElementsEquals(0, v[0]);
@@ -223,7 +226,7 @@ testSuite({
     Vec3.direction(v0, v1, dirVec);
     assertElementsRoughlyEqual(
         [-0.5773502588272095, -0.5773502588272095, -0.5773502588272095], dirVec,
-        goog.vec.EPSILON);
+        vec.EPSILON);
   },
 
   testLerp() {

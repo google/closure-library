@@ -12,6 +12,7 @@ const MockControl = goog.require('goog.testing.MockControl');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const TestCase = goog.require('goog.testing.TestCase');
 const asserts = goog.require('goog.asserts');
+const googTesting = goog.require('goog.testing');
 const testingTestSuite = goog.require('goog.testing.testSuite');
 
 let testCase = null;
@@ -51,7 +52,8 @@ function assertTestFailure(testCase, name, message) {
 /**
  * @param {?TestCase} testCase
  * @param {!Environment} environment
- * @suppress {visibility}
+ * @suppress {visibility,strictMissingProperties} suppression added to enable
+ * type checking
  */
 function registerEnvironment(testCase, environment) {
   asserts.assert(testCase).registerEnvironment_(environment);
@@ -271,7 +273,7 @@ testingTestSuite(testSuite = {
 
     const mockControlMock = mockControl.createStrictMock(MockControl);
     const mockControlCtorMock =
-        mockControl.createMethodMock(goog.testing, 'MockControl');
+        mockControl.createMethodMock(googTesting, 'MockControl');
     mockControlCtorMock().$times(1).$returns(mockControlMock);
     // Expecting verify / reset calls twice since two environments use the same
     // mockControl, but only one created it and is allowed to tear it down.
@@ -304,7 +306,15 @@ testingTestSuite(testSuite = {
     const tearDownFn = testCase.tearDown;
     const tearDownPageFn = testCase.tearDownPage;
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     goog.global.testDummy1 = function() {};
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     goog.global.testDummy2 = function() {};
     testCase.autoDiscoverTests();
 

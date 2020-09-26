@@ -51,6 +51,7 @@ testSuite({
     const mechanism = {
       get: functions.error('Invalid value'),
     };
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const storage = new StorageStorage(mechanism);
     assertUndefined(storage.get('foobar'));
   },

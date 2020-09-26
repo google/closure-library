@@ -131,6 +131,7 @@ testSuite({
         ['M', 58.66, 70, 'A', 10, 20, 30, 30, 55, 77.32], path);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testArcNonConnectClose() {
     const path = new Path();
     path.moveTo(0, 0);
@@ -176,6 +177,7 @@ testSuite({
     graphics.assertPathEquals(['M', 10, 0, 'A', 10, 10, 0, 360, 10, 0], path);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testClose() {
     const path = new Path();
     try {
@@ -250,6 +252,7 @@ testSuite({
     assertRoughlyEquals(70, p[1], 0.01);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testArcToAsCurves() {
     const path = new Path();
     path.moveTo(58.66, 70);

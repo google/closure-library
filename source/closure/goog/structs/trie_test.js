@@ -128,6 +128,7 @@ testSuite({
     assertEquals('count, should be 0', trieTwo.getCount(), 0);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveKeyFromTrie() {
     const trie = new Trie();
     trie.add('key1', 'value1');
@@ -175,6 +176,7 @@ testSuite({
     assertUndefined('get "akey1", should be undefined', trie.get('akey1'));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveKeyFromTrieWithNulls() {
     const trie = new Trie();
     trie.add('key1', null);

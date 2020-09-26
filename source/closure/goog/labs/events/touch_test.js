@@ -25,6 +25,7 @@ testSuite({
       'type': 'mousemove',
     };
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const data = touch.getTouchData(fakeMouseMove);
     assertEquals(1, data.clientX);
     assertEquals(2, data.clientY);
@@ -50,6 +51,7 @@ testSuite({
       'type': 'touchstart',
     };
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const data = touch.getTouchData(fakeTouchStart);
     assertEquals(1, data.clientX);
     assertEquals(2, data.clientY);
@@ -75,6 +77,7 @@ testSuite({
       'type': 'touchend'
     };
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const data = touch.getTouchData(fakeTouchStart);
     assertEquals(1, data.clientX);
     assertEquals(2, data.clientY);

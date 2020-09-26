@@ -39,6 +39,7 @@ testSuite({
   setUp() {
     const xmltext = '<test><node value="5">some data</node></test>';
     const doc = xml.loadXml(xmltext);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     xmlDs = new XmlDataSource(doc.documentElement, null, null);
 
     const jsObj = {

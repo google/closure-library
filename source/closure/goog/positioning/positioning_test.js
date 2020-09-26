@@ -260,6 +260,10 @@ testSuite({
         anchorRect.top, popupRect.top - 1);
   },
 
+  /**
+     @suppress {strictPrimitiveOperators} suppression added to enable type
+     checking
+   */
   testPositionAtAnchorOverflowLeftEdgeRightToLeft() {
     const anchor = document.getElementById('anchor5');
     const popup = document.getElementById('popup5');
@@ -292,6 +296,7 @@ testSuite({
 
     const anchorRect = style.getBounds(anchor);
     const popupRect = style.getBounds(popup);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const parentRect = style.getBounds(anchor.parentNode);
     assertTrue(
         'Position should have been adjusted so that the left edge of ' +
@@ -324,6 +329,7 @@ testSuite({
     anchorRect = style.getBounds(anchor);
     popupRect = style.getBounds(popup);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const visibleAnchorRect = positioning.getVisiblePart_(anchor);
 
     assertRoundedEquals(
@@ -420,6 +426,7 @@ testSuite({
     anchorRect = style.getBounds(anchor);
     popupRect = style.getBounds(popup);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const visibleAnchorRect = positioning.getVisiblePart_(anchor);
     const visibleAnchorBox = visibleAnchorRect.toBox();
 
@@ -507,6 +514,7 @@ testSuite({
     // position again within box1.
     const box = document.getElementById('box1');
     const viewport = style.getBounds(box);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     status = positioning.positionAtAnchor(
         anchor, corner.TOP_LEFT, popup, corner.TOP_RIGHT, undefined, undefined,
         overflow.FAIL_X, undefined, viewport);
@@ -515,6 +523,7 @@ testSuite({
         (status & OverflowStatus.FAILED) == 0);
 
     // Change overflow strategy to adjust.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     status = positioning.positionAtAnchor(
         anchor, corner.TOP_LEFT, popup, corner.TOP_RIGHT, undefined, undefined,
         overflow.ADJUST_X, undefined, viewport);
@@ -591,6 +600,7 @@ testSuite({
   },
 
   testAdjustForViewportFailIgnore() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const f = positioning.adjustForViewport_;
     const viewport = new Box(100, 200, 200, 100);
     const overflow = Overflow.IGNORE;
@@ -615,6 +625,7 @@ testSuite({
   },
 
   testAdjustForViewportFailXY() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const f = positioning.adjustForViewport_;
     const viewport = new Box(100, 200, 200, 100);
     const overflow = Overflow.FAIL_X | Overflow.FAIL_Y;
@@ -658,6 +669,7 @@ testSuite({
   },
 
   testAdjustForViewportAdjustXFailY() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const f = positioning.adjustForViewport_;
     const viewport = new Box(100, 200, 200, 100);
     const overflow = Overflow.ADJUST_X | Overflow.FAIL_Y;
@@ -700,6 +712,7 @@ testSuite({
   },
 
   testAdjustForViewportResizeHeight() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const f = positioning.adjustForViewport_;
     const viewport = new Box(0, 200, 200, 0);
     const overflow = Overflow.RESIZE_HEIGHT;
@@ -772,6 +785,7 @@ testSuite({
   },
 
   testAdjustForViewportResizeWidth() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const f = positioning.adjustForViewport_;
     const viewport = new Box(0, 200, 200, 0);
     const overflow = Overflow.RESIZE_WIDTH;
@@ -1112,6 +1126,10 @@ testSuite({
     new DomHelper(iframeDoc).getDocumentScrollElement().scrollTop = 100;
     const anchor = iframeDoc.getElementById('anchor1');
     const popup = document.getElementById('popup7');
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     popup.offsetParent.scrollTop = 50;
 
     const status = positioning.positionAtAnchor(
@@ -1188,6 +1206,7 @@ testSuite({
     assertObjectEquals(newCoord(-1000, -1000), style.getPageOffset(popup));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPositionAtAnchorWithOverflowScrollOffsetParent() {
     const testAreaOffset = style.getPageOffset(testArea);
     const scrollbarWidth = style.getScrollbarWidth();
@@ -1257,6 +1276,7 @@ testSuite({
         style.getPageOffset(popup), 1);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPositionAtAnchorWithOverflowHiddenParent() {
     const testAreaOffset = style.getPageOffset(testArea);
     window.scrollTo(testAreaOffset.x, testAreaOffset.y);

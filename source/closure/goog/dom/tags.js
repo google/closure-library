@@ -29,5 +29,6 @@ goog.dom.tags.VOID_TAGS_ = goog.object.createSet(
  * @return {boolean}
  */
 goog.dom.tags.isVoidTag = function(tagName) {
+  'use strict';
   return goog.dom.tags.VOID_TAGS_[tagName] === true;
 };

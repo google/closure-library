@@ -31,6 +31,7 @@ testSuite({
 
     parentType.getDescriptor = () => parentDescriptor;
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const descriptor = new Descriptor(
         messageType,
         {name: 'test', fullName: 'this.is.a.test', containingType: parentType},

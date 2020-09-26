@@ -15,6 +15,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 
 let graphics;
 
+/** @suppress {missingProperties} suppression added to enable type checking */
 function shouldRunTests() {
   graphics = new CanvasGraphics(100, 100);
   graphics.createDom();
@@ -34,8 +35,10 @@ testSuite({
     dom.removeNode(graphics.getElement());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDrawRemoveRect() {
     const fill = new SolidFill('red');
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const stroke = new Stroke('blue');
     const element = graphics.drawRect(10, 10, 80, 80, stroke, fill);
     assertEquals(1, graphics.canvasElement.children_.length);
@@ -43,8 +46,10 @@ testSuite({
     assertEquals(0, graphics.canvasElement.children_.length);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDrawRemoveNestedRect() {
     const fill = new SolidFill('red');
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const stroke = new Stroke('blue');
     const group = graphics.createGroup();
     assertEquals(1, graphics.canvasElement.children_.length);

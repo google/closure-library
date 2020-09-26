@@ -12,12 +12,17 @@ goog.module('goog.async.runNextTickTest');
 goog.setTestOnly();
 
 const MockClock = goog.require('goog.testing.MockClock');
+const dispose = goog.require('goog.dispose');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const run = goog.require('goog.async.run');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let mockClock;
+
+/** @type {?} */
 let futureCallback1;
+
+/** @type {?} */
 let futureCallback2;
 
 testSuite({
@@ -28,8 +33,8 @@ testSuite({
 
   setUp() {
     mockClock.reset();
-    futureCallback1 = new recordFunction();
-    futureCallback2 = new recordFunction();
+    futureCallback1 = recordFunction();
+    futureCallback2 = recordFunction();
   },
 
   tearDown() {
@@ -39,7 +44,7 @@ testSuite({
 
   tearDownPage() {
     mockClock.uninstall();
-    goog.dispose(mockClock);
+    dispose(mockClock);
   },
 
   testCalledAsync() {
@@ -62,11 +67,11 @@ testSuite({
   },
 
   testSequenceCalledInOrder() {
-    futureCallback1 = new recordFunction(() => {
+    futureCallback1 = recordFunction(() => {
       // called before futureCallback2
       assertEquals(0, futureCallback2.getCallCount());
     });
-    futureCallback2 = new recordFunction(() => {
+    futureCallback2 = recordFunction(() => {
       // called after futureCallback1
       assertEquals(1, futureCallback1.getCallCount());
     });
@@ -99,7 +104,7 @@ testSuite({
   },
 
   testSequenceCalledSync() {
-    futureCallback1 = new recordFunction(() => {
+    futureCallback1 = recordFunction(() => {
       run(futureCallback2);
       // goog.async.run doesn't call the inner callback immediately.
       assertEquals(0, futureCallback2.getCallCount());
@@ -132,7 +137,7 @@ testSuite({
     // and get the correct scope.
     const last1 = futureCallback1.popLastCall();
     assertEquals(0, last1.getArguments().length);
-    assertEquals(goog.global, last1.getThis());
+    assertEquals(undefined, last1.getThis());
 
     const last2 = futureCallback2.popLastCall();
     assertEquals(0, last2.getArguments().length);

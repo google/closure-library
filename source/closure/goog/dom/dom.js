@@ -73,6 +73,7 @@ goog.dom.COMPAT_MODE_KNOWN_ =
  * @return {!goog.dom.DomHelper} The DomHelper.
  */
 goog.dom.getDomHelper = function(opt_element) {
+  'use strict';
   return opt_element ?
       new goog.dom.DomHelper(goog.dom.getOwnerDocument(opt_element)) :
       (goog.dom.defaultDomHelper_ ||
@@ -93,6 +94,7 @@ goog.dom.defaultDomHelper_;
  * @return {!Document} Document object.
  */
 goog.dom.getDocument = function() {
+  'use strict';
   return document;
 };
 
@@ -106,6 +108,7 @@ goog.dom.getDocument = function() {
  * @return {Element} The element with the given ID, or the node passed in.
  */
 goog.dom.getElement = function(element) {
+  'use strict';
   return goog.dom.getElementHelper_(document, element);
 };
 
@@ -119,6 +122,7 @@ goog.dom.getElement = function(element) {
  * @private
  */
 goog.dom.getElementHelper_ = function(doc, element) {
+  'use strict';
   return typeof element === 'string' ? doc.getElementById(element) : element;
 };
 
@@ -133,6 +137,7 @@ goog.dom.getElementHelper_ = function(doc, element) {
  * @return {!Element} The element with the given ID, if it exists.
  */
 goog.dom.getRequiredElement = function(id) {
+  'use strict';
   return goog.dom.getRequiredElementHelper_(document, id);
 };
 
@@ -146,6 +151,7 @@ goog.dom.getRequiredElement = function(id) {
  * @private
  */
 goog.dom.getRequiredElementHelper_ = function(doc, id) {
+  'use strict';
   // To prevent users passing in Elements as is permitted in getElement().
   goog.asserts.assertString(id);
   var element = goog.dom.getElementHelper_(doc, id);
@@ -177,6 +183,7 @@ goog.dom.$ = goog.dom.getElement;
  * @template R := cond(isUnknown(T), 'Element', T) =:
  */
 goog.dom.getElementsByTagName = function(tagName, opt_parent) {
+  'use strict';
   var parent = opt_parent || document;
   return parent.getElementsByTagName(String(tagName));
 };
@@ -211,6 +218,7 @@ goog.dom.getElementsByTagName = function(tagName, opt_parent) {
  * @template R := cond(isUnknown(T), 'Element', T) =:
  */
 goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
+  'use strict';
   return goog.dom.getElementsByTagNameAndClass_(
       document, opt_tag, opt_class, opt_el);
 };
@@ -229,6 +237,7 @@ goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
  * @template R := cond(isUnknown(T), 'Element', T) =:
  */
 goog.dom.getElementByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
+  'use strict';
   return goog.dom.getElementByTagNameAndClass_(
       document, opt_tag, opt_class, opt_el);
 };
@@ -243,6 +252,7 @@ goog.dom.getElementByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
  * @return {!IArrayLike<!Element>} The items found with the class name provided.
  */
 goog.dom.getElementsByClass = function(className, opt_el) {
+  'use strict';
   var parent = opt_el || document;
   if (goog.dom.canUseQuerySelector_(parent)) {
     return parent.querySelectorAll('.' + className);
@@ -260,6 +270,7 @@ goog.dom.getElementsByClass = function(className, opt_el) {
  * @return {Element} The first item with the class name provided.
  */
 goog.dom.getElementByClass = function(className, opt_el) {
+  'use strict';
   var parent = opt_el || document;
   var retVal = null;
   if (parent.getElementsByClassName) {
@@ -283,6 +294,7 @@ goog.dom.getElementByClass = function(className, opt_el) {
  * @throws {goog.asserts.AssertionError} Thrown if no element is found.
  */
 goog.dom.getRequiredElementByClass = function(className, opt_root) {
+  'use strict';
   var retValue = goog.dom.getElementByClass(className, opt_root);
   return goog.asserts.assert(
       retValue, 'No element found with className: ' + className);
@@ -297,6 +309,7 @@ goog.dom.getRequiredElementByClass = function(className, opt_root) {
  * @private
  */
 goog.dom.canUseQuerySelector_ = function(parent) {
+  'use strict';
   return !!(parent.querySelectorAll && parent.querySelector);
 };
 
@@ -318,6 +331,7 @@ goog.dom.canUseQuerySelector_ = function(parent) {
  */
 goog.dom.getElementsByTagNameAndClass_ = function(
     doc, opt_tag, opt_class, opt_el) {
+  'use strict';
   var parent = opt_el || doc;
   var tagName =
       (opt_tag && opt_tag != '*') ? String(opt_tag).toUpperCase() : '';
@@ -388,6 +402,7 @@ goog.dom.getElementsByTagNameAndClass_ = function(
  */
 goog.dom.getElementByTagNameAndClass_ = function(
     doc, opt_tag, opt_class, opt_el) {
+  'use strict';
   var parent = opt_el || doc;
   var tag = (opt_tag && opt_tag != '*') ? String(opt_tag).toUpperCase() : '';
   if (goog.dom.canUseQuerySelector_(parent) && (tag || opt_class)) {
@@ -443,7 +458,9 @@ goog.dom.$$ = goog.dom.getElementsByTagNameAndClass;
  *     goog.html.SafeUrl).
  */
 goog.dom.setProperties = function(element, properties) {
+  'use strict';
   goog.object.forEach(properties, function(val, key) {
+    'use strict';
     if (val && typeof val == 'object' && val.implementsGoogStringTypedString) {
       val = val.getTypedStringValue();
     }
@@ -557,6 +574,7 @@ goog.dom.DIRECT_ATTRIBUTE_MAP_ = {
  * @return {!goog.math.Size} Object with values 'width' and 'height'.
  */
 goog.dom.getViewportSize = function(opt_window) {
+  'use strict';
   // TODO(arv): This should not take an argument
   return goog.dom.getViewportSize_(opt_window || window);
 };
@@ -569,6 +587,7 @@ goog.dom.getViewportSize = function(opt_window) {
  * @private
  */
 goog.dom.getViewportSize_ = function(win) {
+  'use strict';
   var doc = win.document;
   var el = goog.dom.isCss1CompatMode_(doc) ? doc.documentElement : doc.body;
   return new goog.math.Size(el.clientWidth, el.clientHeight);
@@ -581,6 +600,7 @@ goog.dom.getViewportSize_ = function(win) {
  * @return {number} The height of the current document.
  */
 goog.dom.getDocumentHeight = function() {
+  'use strict';
   return goog.dom.getDocumentHeight_(window);
 };
 
@@ -591,6 +611,7 @@ goog.dom.getDocumentHeight = function() {
  * @return {number} The height of the document of the given window.
  */
 goog.dom.getDocumentHeightForWindow = function(win) {
+  'use strict';
   return goog.dom.getDocumentHeight_(win);
 };
 
@@ -605,6 +626,7 @@ goog.dom.getDocumentHeightForWindow = function(win) {
  * @return {number} The height of the document of the given window.
  */
 goog.dom.getDocumentHeight_ = function(win) {
+  'use strict';
   // NOTE(eae): This method will return the window size rather than the document
   // size in webkit quirks mode.
   var doc = win.document;
@@ -679,6 +701,7 @@ goog.dom.getDocumentHeight_ = function(win) {
  * @deprecated Use {@link goog.dom.getDocumentScroll} instead.
  */
 goog.dom.getPageScroll = function(opt_window) {
+  'use strict';
   var win = opt_window || goog.global || window;
   return goog.dom.getDomHelper(win.document).getDocumentScroll();
 };
@@ -690,6 +713,7 @@ goog.dom.getPageScroll = function(opt_window) {
  * @return {!goog.math.Coordinate} Object with values 'x' and 'y'.
  */
 goog.dom.getDocumentScroll = function() {
+  'use strict';
   return goog.dom.getDocumentScroll_(document);
 };
 
@@ -702,6 +726,7 @@ goog.dom.getDocumentScroll = function() {
  * @private
  */
 goog.dom.getDocumentScroll_ = function(doc) {
+  'use strict';
   var el = goog.dom.getDocumentScrollElement_(doc);
   var win = goog.dom.getWindow_(doc);
   if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10') &&
@@ -721,6 +746,7 @@ goog.dom.getDocumentScroll_ = function(doc) {
  * @return {!Element} Scrolling element.
  */
 goog.dom.getDocumentScrollElement = function() {
+  'use strict';
   return goog.dom.getDocumentScrollElement_(document);
 };
 
@@ -732,6 +758,7 @@ goog.dom.getDocumentScrollElement = function() {
  * @private
  */
 goog.dom.getDocumentScrollElement_ = function(doc) {
+  'use strict';
   // Old WebKit needs body.scrollLeft in both quirks mode and strict mode. We
   // also default to the documentElement if the document does not have a body
   // (e.g. a SVG document).
@@ -754,6 +781,7 @@ goog.dom.getDocumentScrollElement_ = function(doc) {
  * @return {!Window} The window associated with the given document.
  */
 goog.dom.getWindow = function(opt_doc) {
+  'use strict';
   // TODO(arv): This should not take an argument.
   return opt_doc ? goog.dom.getWindow_(opt_doc) : window;
 };
@@ -767,6 +795,7 @@ goog.dom.getWindow = function(opt_doc) {
  * @private
  */
 goog.dom.getWindow_ = function(doc) {
+  'use strict';
   return /** @type {!Window} */ (doc.parentWindow || doc.defaultView);
 };
 
@@ -799,6 +828,7 @@ goog.dom.getWindow_ = function(doc) {
  * @template R := cond(isUnknown(T), 'Element', T) =:
  */
 goog.dom.createDom = function(tagName, opt_attributes, var_args) {
+  'use strict';
   return goog.dom.createDom_(document, arguments);
 };
 
@@ -812,6 +842,7 @@ goog.dom.createDom = function(tagName, opt_attributes, var_args) {
  * @private
  */
 goog.dom.createDom_ = function(doc, args) {
+  'use strict';
   var tagName = String(args[0]);
   var attributes = args[1];
 
@@ -872,6 +903,7 @@ goog.dom.createDom_ = function(doc, args) {
  * @private
  */
 goog.dom.append_ = function(doc, parent, args, startIndex) {
+  'use strict';
   function childHandler(child) {
     // TODO(user): More coercion, ala MochiKit?
     if (child) {
@@ -926,6 +958,7 @@ goog.dom.$dom = goog.dom.createDom;
  * @template R := cond(isUnknown(T), 'Element', T) =:
  */
 goog.dom.createElement = function(name) {
+  'use strict';
   return goog.dom.createElement_(document, name);
 };
 
@@ -942,6 +975,7 @@ goog.dom.createElement = function(name) {
  * @private
  */
 goog.dom.createElement_ = function(doc, name) {
+  'use strict';
   name = String(name);
   if (doc.contentType === 'application/xhtml+xml') name = name.toLowerCase();
   return doc.createElement(name);
@@ -954,6 +988,7 @@ goog.dom.createElement_ = function(doc, name) {
  * @return {!Text} The new text node.
  */
 goog.dom.createTextNode = function(content) {
+  'use strict';
   return document.createTextNode(String(content));
 };
 
@@ -967,6 +1002,7 @@ goog.dom.createTextNode = function(content) {
  * @return {!Element} The created table.
  */
 goog.dom.createTable = function(rows, columns, opt_fillWithNbsp) {
+  'use strict';
   // TODO(mlourenco): Return HTMLTableElement, also in prototype function.
   // Callers need to be updated to e.g. not assign numbers to table.cellSpacing.
   return goog.dom.createTable_(document, rows, columns, !!opt_fillWithNbsp);
@@ -984,6 +1020,7 @@ goog.dom.createTable = function(rows, columns, opt_fillWithNbsp) {
  * @private
  */
 goog.dom.createTable_ = function(doc, rows, columns, fillWithNbsp) {
+  'use strict';
   var table = goog.dom.createElement_(doc, goog.dom.TagName.TABLE);
   var tbody =
       table.appendChild(goog.dom.createElement_(doc, goog.dom.TagName.TBODY));
@@ -1013,6 +1050,7 @@ goog.dom.createTable_ = function(doc, rows, columns, fillWithNbsp) {
  * @return {!Node}
  */
 goog.dom.constHtmlToNode = function(var_args) {
+  'use strict';
   var stringArray = goog.array.map(arguments, goog.string.Const.unwrap);
   var safeHtml =
       goog.html.uncheckedconversions
@@ -1032,6 +1070,7 @@ goog.dom.constHtmlToNode = function(var_args) {
  * @return {!Node} The resulting node.
  */
 goog.dom.safeHtmlToNode = function(html) {
+  'use strict';
   return goog.dom.safeHtmlToNode_(document, html);
 };
 
@@ -1044,6 +1083,7 @@ goog.dom.safeHtmlToNode = function(html) {
  * @private
  */
 goog.dom.safeHtmlToNode_ = function(doc, html) {
+  'use strict';
   var tempDiv = goog.dom.createElement_(doc, goog.dom.TagName.DIV);
   if (goog.dom.BrowserFeature.INNER_HTML_NEEDS_SCOPED_ELEMENT) {
     goog.dom.safe.setInnerHtml(
@@ -1064,6 +1104,7 @@ goog.dom.safeHtmlToNode_ = function(doc, html) {
  * @private
  */
 goog.dom.childrenToNode_ = function(doc, tempDiv) {
+  'use strict';
   if (tempDiv.childNodes.length == 1) {
     return tempDiv.removeChild(goog.asserts.assert(tempDiv.firstChild));
   } else {
@@ -1082,6 +1123,7 @@ goog.dom.childrenToNode_ = function(doc, tempDiv) {
  * @return {boolean} True if in CSS1-compatible mode.
  */
 goog.dom.isCss1CompatMode = function() {
+  'use strict';
   return goog.dom.isCss1CompatMode_(document);
 };
 
@@ -1094,6 +1136,7 @@ goog.dom.isCss1CompatMode = function() {
  * @private
  */
 goog.dom.isCss1CompatMode_ = function(doc) {
+  'use strict';
   if (goog.dom.COMPAT_MODE_KNOWN_) {
     return goog.dom.ASSUME_STANDARDS_MODE;
   }
@@ -1130,6 +1173,7 @@ goog.dom.isCss1CompatMode_ = function(doc) {
  * @return {boolean} Whether the node can contain children.
  */
 goog.dom.canHaveChildren = function(node) {
+  'use strict';
   if (node.nodeType != goog.dom.NodeType.ELEMENT) {
     return false;
   }
@@ -1171,6 +1215,7 @@ goog.dom.canHaveChildren = function(node) {
  * @param {Node} child Child.
  */
 goog.dom.appendChild = function(parent, child) {
+  'use strict';
   goog.asserts.assert(
       parent != null && child != null,
       'goog.dom.appendChild expects non-null arguments');
@@ -1187,6 +1232,7 @@ goog.dom.appendChild = function(parent, child) {
  *     If this is an array like object then fields 0 to length - 1 are appended.
  */
 goog.dom.append = function(parent, var_args) {
+  'use strict';
   goog.dom.append_(goog.dom.getOwnerDocument(parent), parent, arguments, 1);
 };
 
@@ -1196,6 +1242,7 @@ goog.dom.append = function(parent, var_args) {
  * @param {Node} node Node to remove children from.
  */
 goog.dom.removeChildren = function(node) {
+  'use strict';
   // Note: Iterations over live collections can be slow, this is the fastest
   // we could find. The double parenthesis are used to prevent JsCompiler and
   // strict warnings.
@@ -1213,6 +1260,7 @@ goog.dom.removeChildren = function(node) {
  * @param {Node} refNode Reference node to insert before.
  */
 goog.dom.insertSiblingBefore = function(newNode, refNode) {
+  'use strict';
   goog.asserts.assert(
       newNode != null && refNode != null,
       'goog.dom.insertSiblingBefore expects non-null arguments');
@@ -1229,6 +1277,7 @@ goog.dom.insertSiblingBefore = function(newNode, refNode) {
  * @param {Node} refNode Reference node to insert after.
  */
 goog.dom.insertSiblingAfter = function(newNode, refNode) {
+  'use strict';
   goog.asserts.assert(
       newNode != null && refNode != null,
       'goog.dom.insertSiblingAfter expects non-null arguments');
@@ -1248,6 +1297,7 @@ goog.dom.insertSiblingAfter = function(newNode, refNode) {
  *     not be negative.
  */
 goog.dom.insertChildAt = function(parent, child, index) {
+  'use strict';
   // Note that if the second argument is null, insertBefore
   // will append the child at the end of the list of children.
   goog.asserts.assert(
@@ -1263,6 +1313,7 @@ goog.dom.insertChildAt = function(parent, child, index) {
  * @return {Node} The node removed if removed; else, null.
  */
 goog.dom.removeNode = function(node) {
+  'use strict';
   return node && node.parentNode ? node.parentNode.removeChild(node) : null;
 };
 
@@ -1274,6 +1325,7 @@ goog.dom.removeNode = function(node) {
  * @param {Node} oldNode Node to replace.
  */
 goog.dom.replaceNode = function(newNode, oldNode) {
+  'use strict';
   goog.asserts.assert(
       newNode != null && oldNode != null,
       'goog.dom.replaceNode expects non-null arguments');
@@ -1293,6 +1345,7 @@ goog.dom.replaceNode = function(newNode, oldNode) {
  *     so they will stay in source.
  */
 goog.dom.copyContents = function(target, source) {
+  'use strict';
   goog.asserts.assert(
       target != null && source != null,
       'goog.dom.copyContents expects non-null arguments');
@@ -1313,6 +1366,7 @@ goog.dom.copyContents = function(target, source) {
  *     to begin with.
  */
 goog.dom.flattenElement = function(element) {
+  'use strict';
   var child, parent = element.parentNode;
   if (parent && parent.nodeType != goog.dom.NodeType.DOCUMENT_FRAGMENT) {
     // Use IE DOM method (supported by Opera too) if available
@@ -1338,6 +1392,7 @@ goog.dom.flattenElement = function(element) {
  *     of just the element children of the given element.
  */
 goog.dom.getChildren = function(element) {
+  'use strict';
   // We check if the children attribute is supported for child elements
   // since IE8 misuses the attribute by also including comments.
   if (goog.dom.BrowserFeature.CAN_USE_CHILDREN_ATTRIBUTE &&
@@ -1346,6 +1401,7 @@ goog.dom.getChildren = function(element) {
   }
   // Fall back to manually filtering the element's child nodes.
   return goog.array.filter(element.childNodes, function(node) {
+    'use strict';
     return node.nodeType == goog.dom.NodeType.ELEMENT;
   });
 };
@@ -1357,6 +1413,7 @@ goog.dom.getChildren = function(element) {
  * @return {Element} The first child node of `node` that is an element.
  */
 goog.dom.getFirstElementChild = function(node) {
+  'use strict';
   if (node.firstElementChild !== undefined) {
     return /** @type {!Element} */ (node).firstElementChild;
   }
@@ -1370,6 +1427,7 @@ goog.dom.getFirstElementChild = function(node) {
  * @return {Element} The last child node of `node` that is an element.
  */
 goog.dom.getLastElementChild = function(node) {
+  'use strict';
   if (node.lastElementChild !== undefined) {
     return /** @type {!Element} */ (node).lastElementChild;
   }
@@ -1383,6 +1441,7 @@ goog.dom.getLastElementChild = function(node) {
  * @return {Element} The next sibling of `node` that is an element.
  */
 goog.dom.getNextElementSibling = function(node) {
+  'use strict';
   if (node.nextElementSibling !== undefined) {
     return /** @type {!Element} */ (node).nextElementSibling;
   }
@@ -1397,6 +1456,7 @@ goog.dom.getNextElementSibling = function(node) {
  *     an element.
  */
 goog.dom.getPreviousElementSibling = function(node) {
+  'use strict';
   if (node.previousElementSibling !== undefined) {
     return /** @type {!Element} */ (node).previousElementSibling;
   }
@@ -1413,6 +1473,7 @@ goog.dom.getPreviousElementSibling = function(node) {
  * @private
  */
 goog.dom.getNextElementNode_ = function(node, forward) {
+  'use strict';
   while (node && node.nodeType != goog.dom.NodeType.ELEMENT) {
     node = forward ? node.nextSibling : node.previousSibling;
   }
@@ -1428,6 +1489,7 @@ goog.dom.getNextElementNode_ = function(node, forward) {
  *     node.
  */
 goog.dom.getNextNode = function(node) {
+  'use strict';
   if (!node) {
     return null;
   }
@@ -1451,6 +1513,7 @@ goog.dom.getNextNode = function(node) {
  *     first node.
  */
 goog.dom.getPreviousNode = function(node) {
+  'use strict';
   if (!node) {
     return null;
   }
@@ -1474,6 +1537,7 @@ goog.dom.getPreviousNode = function(node) {
  * @return {boolean} Whether the object looks like a DOM node.
  */
 goog.dom.isNodeLike = function(obj) {
+  'use strict';
   return goog.isObject(obj) && obj.nodeType > 0;
 };
 
@@ -1484,6 +1548,7 @@ goog.dom.isNodeLike = function(obj) {
  * @return {boolean} Whether the object looks like an Element.
  */
 goog.dom.isElement = function(obj) {
+  'use strict';
   return goog.isObject(obj) && obj.nodeType == goog.dom.NodeType.ELEMENT;
 };
 
@@ -1495,6 +1560,7 @@ goog.dom.isElement = function(obj) {
  * @return {boolean} Whether the variable is a window.
  */
 goog.dom.isWindow = function(obj) {
+  'use strict';
   return goog.isObject(obj) && obj['window'] == obj;
 };
 
@@ -1505,6 +1571,7 @@ goog.dom.isWindow = function(obj) {
  * @return {Element} The parent, or null if not an Element.
  */
 goog.dom.getParentElement = function(element) {
+  'use strict';
   var parent;
   if (goog.dom.BrowserFeature.CAN_USE_PARENT_ELEMENT_PROPERTY) {
     var isIe9 = goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9') &&
@@ -1531,6 +1598,7 @@ goog.dom.getParentElement = function(element) {
  * @return {boolean} Whether the parent node contains the descendant node.
  */
 goog.dom.contains = function(parent, descendant) {
+  'use strict';
   if (!parent || !descendant) {
     return false;
   }
@@ -1569,6 +1637,7 @@ goog.dom.contains = function(parent, descendant) {
  *     is before node2, and a positive number if node2 is before node1.
  */
 goog.dom.compareNodeOrder = function(node1, node2) {
+  'use strict';
   // Fall out quickly for equality.
   if (node1 == node2) {
     return 0;
@@ -1648,6 +1717,7 @@ goog.dom.compareNodeOrder = function(node1, node2) {
  * @private
  */
 goog.dom.compareParentsDescendantNodeIe_ = function(textNode, node) {
+  'use strict';
   var parent = textNode.parentNode;
   if (parent == node) {
     // If textNode is a child of node, then node comes first.
@@ -1670,6 +1740,7 @@ goog.dom.compareParentsDescendantNodeIe_ = function(textNode, node) {
  * @private
  */
 goog.dom.compareSiblingOrder_ = function(node1, node2) {
+  'use strict';
   var s = node2;
   while ((s = s.previousSibling)) {
     if (s == node1) {
@@ -1691,6 +1762,7 @@ goog.dom.compareSiblingOrder_ = function(node1, node2) {
  *     documents.
  */
 goog.dom.findCommonAncestor = function(var_args) {
+  'use strict';
   var i, count = arguments.length;
   if (!count) {
     return null;
@@ -1737,6 +1809,7 @@ goog.dom.findCommonAncestor = function(var_args) {
  * @return {boolean}
  */
 goog.dom.isInDocument = function(node) {
+  'use strict';
   return (node.ownerDocument.compareDocumentPosition(node) & 16) == 16;
 };
 
@@ -1747,6 +1820,7 @@ goog.dom.isInDocument = function(node) {
  * @return {!Document} The document owning the node.
  */
 goog.dom.getOwnerDocument = function(node) {
+  'use strict';
   // TODO(nnaze): Update param signature to be non-nullable.
   goog.asserts.assert(node, 'Node cannot be null or undefined.');
   return /** @type {!Document} */ (
@@ -1761,6 +1835,7 @@ goog.dom.getOwnerDocument = function(node) {
  * @return {!Document} The frame content document.
  */
 goog.dom.getFrameContentDocument = function(frame) {
+  'use strict';
   return frame.contentDocument ||
       /** @type {!HTMLFrameElement} */ (frame).contentWindow.document;
 };
@@ -1773,6 +1848,7 @@ goog.dom.getFrameContentDocument = function(frame) {
  *     exists.
  */
 goog.dom.getFrameContentWindow = function(frame) {
+  'use strict';
   try {
     return frame.contentWindow ||
         (frame.contentDocument ? goog.dom.getWindow(frame.contentDocument) :
@@ -1793,6 +1869,7 @@ goog.dom.getFrameContentWindow = function(frame) {
  * @param {string|number} text The value that should replace the node's content.
  */
 goog.dom.setTextContent = function(node, text) {
+  'use strict';
   goog.asserts.assert(
       node != null,
       'goog.dom.setTextContent expects a non-null value for node');
@@ -1824,6 +1901,7 @@ goog.dom.setTextContent = function(node, text) {
  * @return {string} The outerHTML of the given element.
  */
 goog.dom.getOuterHtml = function(element) {
+  'use strict';
   goog.asserts.assert(
       element !== null,
       'goog.dom.getOuterHtml expects a non-null value for element');
@@ -1853,6 +1931,7 @@ goog.dom.getOuterHtml = function(element) {
  * @return {Node|undefined} The found node or undefined if none is found.
  */
 goog.dom.findNode = function(root, p) {
+  'use strict';
   var rv = [];
   var found = goog.dom.findNodes_(root, p, rv, true);
   return found ? rv[0] : undefined;
@@ -1873,6 +1952,7 @@ goog.dom.findNode = function(root, p) {
  * @return {!Array<!Node>} The found nodes or an empty array if none are found.
  */
 goog.dom.findNodes = function(root, p) {
+  'use strict';
   var rv = [];
   goog.dom.findNodes_(root, p, rv, false);
   return rv;
@@ -1891,6 +1971,7 @@ goog.dom.findNodes = function(root, p) {
  * @private
  */
 goog.dom.findNodes_ = function(root, p, rv, findOne) {
+  'use strict';
   if (root != null) {
     var child = root.firstChild;
     while (child) {
@@ -1920,6 +2001,7 @@ goog.dom.findNodes_ = function(root, p, rv, findOne) {
  * @return {?Element} First matching element or null if there is none.
  */
 goog.dom.findElement = function(root, pred) {
+  'use strict';
   var stack = goog.dom.getChildrenReverse_(root);
   while (stack.length > 0) {
     var next = stack.pop();
@@ -1942,6 +2024,7 @@ goog.dom.findElement = function(root, pred) {
  * @return {!Array<!Element>}
  */
 goog.dom.findElements = function(root, pred) {
+  'use strict';
   var result = [], stack = goog.dom.getChildrenReverse_(root);
   while (stack.length > 0) {
     var next = stack.pop();
@@ -1960,6 +2043,7 @@ goog.dom.findElements = function(root, pred) {
  * @private
  */
 goog.dom.getChildrenReverse_ = function(node) {
+  'use strict';
   // document.lastElementChild doesn't exist in IE9; fall back to
   // documentElement.
   if (node.nodeType == goog.dom.NodeType.DOCUMENT) {
@@ -2008,6 +2092,7 @@ goog.dom.PREDEFINED_TAG_VALUES_ = {
  *     focus.
  */
 goog.dom.isFocusableTabIndex = function(element) {
+  'use strict';
   return goog.dom.hasSpecifiedTabIndex_(element) &&
       goog.dom.isTabIndexFocusable_(element);
 };
@@ -2023,6 +2108,7 @@ goog.dom.isFocusableTabIndex = function(element) {
  *     that supports keyboard focus.
  */
 goog.dom.setFocusableTabIndex = function(element, enable) {
+  'use strict';
   if (enable) {
     element.tabIndex = 0;
   } else {
@@ -2044,6 +2130,7 @@ goog.dom.setFocusableTabIndex = function(element, enable) {
  * @return {boolean} Whether the element allows keyboard focus.
  */
 goog.dom.isFocusable = function(element) {
+  'use strict';
   var focusable;
   // Some elements can have unspecified tab index and still receive focus.
   if (goog.dom.nativelySupportsFocus_(element)) {
@@ -2070,6 +2157,7 @@ goog.dom.isFocusable = function(element) {
  * @private
  */
 goog.dom.hasSpecifiedTabIndex_ = function(element) {
+  'use strict';
   // IE8 and below don't support hasAttribute(), instead check whether the
   // 'tabindex' attributeNode is specified. Otherwise check hasAttribute().
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
@@ -2088,6 +2176,7 @@ goog.dom.hasSpecifiedTabIndex_ = function(element) {
  * @private
  */
 goog.dom.isTabIndexFocusable_ = function(element) {
+  'use strict';
   var index = /** @type {!HTMLElement} */ (element).tabIndex;
   // NOTE: IE9 puts tabIndex in 16-bit int, e.g. -2 is 65534.
   return typeof (index) === 'number' && index >= 0 && index < 32768;
@@ -2101,6 +2190,7 @@ goog.dom.isTabIndexFocusable_ = function(element) {
  * @private
  */
 goog.dom.nativelySupportsFocus_ = function(element) {
+  'use strict';
   return (
       element.tagName == goog.dom.TagName.A && element.hasAttribute('href') ||
       element.tagName == goog.dom.TagName.INPUT ||
@@ -2118,6 +2208,7 @@ goog.dom.nativelySupportsFocus_ = function(element) {
  * @private
  */
 goog.dom.hasNonZeroBoundingRect_ = function(element) {
+  'use strict';
   var rect;
   if (typeof element['getBoundingClientRect'] !== 'function' ||
       // In IE, getBoundingClientRect throws on detached nodes.
@@ -2142,6 +2233,7 @@ goog.dom.hasNonZeroBoundingRect_ = function(element) {
  * @return {string} The text content.
  */
 goog.dom.getTextContent = function(node) {
+  'use strict';
   var textContent;
   // Note(arv): IE9, Opera, and Safari 3 support innerText but they include
   // text nodes in script tags. So we revert to use a user agent test here.
@@ -2185,6 +2277,7 @@ goog.dom.getTextContent = function(node) {
  * @return {string} The raw text content.
  */
 goog.dom.getRawTextContent = function(node) {
+  'use strict';
   var buf = [];
   goog.dom.getTextContent_(node, buf, false);
 
@@ -2201,6 +2294,7 @@ goog.dom.getRawTextContent = function(node) {
  * @private
  */
 goog.dom.getTextContent_ = function(node, buf, normalizeWhitespace) {
+  'use strict';
   if (node.nodeName in goog.dom.TAGS_TO_IGNORE_) {
     // ignore certain tags
   } else if (node.nodeType == goog.dom.NodeType.TEXT) {
@@ -2231,6 +2325,7 @@ goog.dom.getTextContent_ = function(node, buf, normalizeWhitespace) {
  * @return {number} The length of `node`'s text content.
  */
 goog.dom.getNodeTextLength = function(node) {
+  'use strict';
   return goog.dom.getTextContent(node).length;
 };
 
@@ -2245,6 +2340,7 @@ goog.dom.getNodeTextLength = function(node) {
  * @return {number} The text offset.
  */
 goog.dom.getNodeTextOffset = function(node, opt_offsetParent) {
+  'use strict';
   var root = opt_offsetParent || goog.dom.getOwnerDocument(node).body;
   var buf = [];
   while (node && node != root) {
@@ -2272,6 +2368,7 @@ goog.dom.getNodeTextOffset = function(node, opt_offsetParent) {
  * @return {Node} The node at the given offset.
  */
 goog.dom.getNodeAtOffset = function(parent, offset, opt_result) {
+  'use strict';
   var stack = [parent], pos = 0, cur = null;
   while (stack.length > 0 && pos < offset) {
     cur = stack.pop();
@@ -2305,6 +2402,7 @@ goog.dom.getNodeAtOffset = function(parent, offset, opt_result) {
  * @return {boolean} Whether the object is a NodeList.
  */
 goog.dom.isNodeList = function(val) {
+  'use strict';
   // TODO(attila): Now the isNodeList is part of goog.dom we can use
   // goog.userAgent to make this simpler.
   // A NodeList must have a length property of type 'number' on all platforms.
@@ -2346,11 +2444,13 @@ goog.dom.isNodeList = function(val) {
  */
 goog.dom.getAncestorByTagNameAndClass = function(
     element, opt_tag, opt_class, opt_maxSearchSteps) {
+  'use strict';
   if (!opt_tag && !opt_class) {
     return null;
   }
   var tagName = opt_tag ? String(opt_tag).toUpperCase() : null;
   return /** @type {Element} */ (goog.dom.getAncestor(element, function(node) {
+    'use strict';
     return (!tagName || node.nodeName == tagName) &&
         (!opt_class ||
          typeof node.className === 'string' &&
@@ -2371,6 +2471,7 @@ goog.dom.getAncestorByTagNameAndClass = function(
  *     null if none match.
  */
 goog.dom.getAncestorByClass = function(element, className, opt_maxSearchSteps) {
+  'use strict';
   return goog.dom.getAncestorByTagNameAndClass(
       element, null, className, opt_maxSearchSteps);
 };
@@ -2392,6 +2493,7 @@ goog.dom.getAncestorByClass = function(element, className, opt_maxSearchSteps) {
  */
 goog.dom.getAncestor = function(
     element, matcher, opt_includeNode, opt_maxSearchSteps) {
+  'use strict';
   if (element && !opt_includeNode) {
     element = element.parentNode;
   }
@@ -2416,6 +2518,7 @@ goog.dom.getAncestor = function(
  * @return {Element} The active element.
  */
 goog.dom.getActiveElement = function(doc) {
+  'use strict';
   // While in an iframe, IE9 will throw "Unspecified error" when accessing
   // activeElement.
   try {
@@ -2444,6 +2547,7 @@ goog.dom.getActiveElement = function(doc) {
  * @return {number} The number of actual pixels per virtual pixel.
  */
 goog.dom.getPixelRatio = function() {
+  'use strict';
   var win = goog.dom.getWindow();
   if (win.devicePixelRatio !== undefined) {
     return win.devicePixelRatio;
@@ -2466,6 +2570,7 @@ goog.dom.getPixelRatio = function() {
  * @private
  */
 goog.dom.matchesPixelRatio_ = function(pixelRatio) {
+  'use strict';
   var win = goog.dom.getWindow();
   /**
    * Due to the 1:96 fixed ratio of CSS in to CSS px, 1dppx is equivalent to
@@ -2492,6 +2597,7 @@ goog.dom.matchesPixelRatio_ = function(pixelRatio) {
  * @return {!CanvasRenderingContext2D}
  */
 goog.dom.getCanvasContext2D = function(canvas) {
+  'use strict';
   return /** @type {!CanvasRenderingContext2D} */ (canvas.getContext('2d'));
 };
 
@@ -2504,6 +2610,7 @@ goog.dom.getCanvasContext2D = function(canvas) {
  * @constructor
  */
 goog.dom.DomHelper = function(opt_document) {
+  'use strict';
   /**
    * Reference to the document object to use
    * @type {!Document}
@@ -2526,6 +2633,7 @@ goog.dom.DomHelper.prototype.getDomHelper = goog.dom.getDomHelper;
  * @param {!Document} document Document object.
  */
 goog.dom.DomHelper.prototype.setDocument = function(document) {
+  'use strict';
   this.document_ = document;
 };
 
@@ -2535,6 +2643,7 @@ goog.dom.DomHelper.prototype.setDocument = function(document) {
  * @return {!Document} Document object.
  */
 goog.dom.DomHelper.prototype.getDocument = function() {
+  'use strict';
   return this.document_;
 };
 
@@ -2546,6 +2655,7 @@ goog.dom.DomHelper.prototype.getDocument = function() {
  * @return {Element} The element with the given ID, or the node passed in.
  */
 goog.dom.DomHelper.prototype.getElement = function(element) {
+  'use strict';
   return goog.dom.getElementHelper_(this.document_, element);
 };
 
@@ -2560,6 +2670,7 @@ goog.dom.DomHelper.prototype.getElement = function(element) {
  * @return {!Element} The element with the given ID, if it exists.
  */
 goog.dom.DomHelper.prototype.getRequiredElement = function(id) {
+  'use strict';
   return goog.dom.getRequiredElementHelper_(this.document_, id);
 };
 
@@ -2585,8 +2696,9 @@ goog.dom.DomHelper.prototype.$ = goog.dom.DomHelper.prototype.getElement;
  * @template T
  * @template R := cond(isUnknown(T), 'Element', T) =:
  */
-goog.dom.DomHelper.prototype.getElementsByTagName =
-    function(tagName, opt_parent) {
+goog.dom.DomHelper.prototype.getElementsByTagName = function(
+    tagName, opt_parent) {
+  'use strict';
   var parent = opt_parent || this.document_;
   return parent.getElementsByTagName(String(tagName));
 };
@@ -2612,6 +2724,7 @@ goog.dom.DomHelper.prototype.getElementsByTagName =
  */
 goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(
     opt_tag, opt_class, opt_el) {
+  'use strict';
   return goog.dom.getElementsByTagNameAndClass_(
       this.document_, opt_tag, opt_class, opt_el);
 };
@@ -2631,6 +2744,7 @@ goog.dom.DomHelper.prototype.getElementsByTagNameAndClass = function(
  */
 goog.dom.DomHelper.prototype.getElementByTagNameAndClass = function(
     opt_tag, opt_class, opt_el) {
+  'use strict';
   return goog.dom.getElementByTagNameAndClass_(
       this.document_, opt_tag, opt_class, opt_el);
 };
@@ -2643,6 +2757,7 @@ goog.dom.DomHelper.prototype.getElementByTagNameAndClass = function(
  * @return {!IArrayLike<!Element>} The items found with the class name provided.
  */
 goog.dom.DomHelper.prototype.getElementsByClass = function(className, opt_el) {
+  'use strict';
   var doc = opt_el || this.document_;
   return goog.dom.getElementsByClass(className, doc);
 };
@@ -2655,6 +2770,7 @@ goog.dom.DomHelper.prototype.getElementsByClass = function(className, opt_el) {
  * @return {Element} The first item found with the class name provided.
  */
 goog.dom.DomHelper.prototype.getElementByClass = function(className, opt_el) {
+  'use strict';
   var doc = opt_el || this.document_;
   return goog.dom.getElementByClass(className, doc);
 };
@@ -2671,6 +2787,7 @@ goog.dom.DomHelper.prototype.getElementByClass = function(className, opt_el) {
  */
 goog.dom.DomHelper.prototype.getRequiredElementByClass = function(
     className, opt_root) {
+  'use strict';
   var root = opt_root || this.document_;
   return goog.dom.getRequiredElementByClass(className, root);
 };
@@ -2710,6 +2827,7 @@ goog.dom.DomHelper.prototype.setProperties = goog.dom.setProperties;
  * @return {!goog.math.Size} Object with values 'width' and 'height'.
  */
 goog.dom.DomHelper.prototype.getViewportSize = function(opt_window) {
+  'use strict';
   // TODO(arv): This should not take an argument. That breaks the rule of a
   // a DomHelper representing a single frame/window/document.
   return goog.dom.getViewportSize(opt_window || this.getWindow());
@@ -2722,6 +2840,7 @@ goog.dom.DomHelper.prototype.getViewportSize = function(opt_window) {
  * @return {number} The height of the document.
  */
 goog.dom.DomHelper.prototype.getDocumentHeight = function() {
+  'use strict';
   return goog.dom.getDocumentHeight_(this.getWindow());
 };
 
@@ -2765,6 +2884,7 @@ goog.dom.Appendable;
  */
 goog.dom.DomHelper.prototype.createDom = function(
     tagName, opt_attributes, var_args) {
+  'use strict';
   return goog.dom.createDom_(this.document_, arguments);
 };
 
@@ -2799,6 +2919,7 @@ goog.dom.DomHelper.prototype.$dom = goog.dom.DomHelper.prototype.createDom;
  * @template R := cond(isUnknown(T), 'Element', T) =:
  */
 goog.dom.DomHelper.prototype.createElement = function(name) {
+  'use strict';
   return goog.dom.createElement_(this.document_, name);
 };
 
@@ -2809,6 +2930,7 @@ goog.dom.DomHelper.prototype.createElement = function(name) {
  * @return {!Text} The new text node.
  */
 goog.dom.DomHelper.prototype.createTextNode = function(content) {
+  'use strict';
   return this.document_.createTextNode(String(content));
 };
 
@@ -2823,6 +2945,7 @@ goog.dom.DomHelper.prototype.createTextNode = function(content) {
  */
 goog.dom.DomHelper.prototype.createTable = function(
     rows, columns, opt_fillWithNbsp) {
+  'use strict';
   return goog.dom.createTable_(
       this.document_, rows, columns, !!opt_fillWithNbsp);
 };
@@ -2838,6 +2961,7 @@ goog.dom.DomHelper.prototype.createTable = function(
  * @return {!Node} The resulting node.
  */
 goog.dom.DomHelper.prototype.safeHtmlToNode = function(html) {
+  'use strict';
   return goog.dom.safeHtmlToNode_(this.document_, html);
 };
 
@@ -2848,6 +2972,7 @@ goog.dom.DomHelper.prototype.safeHtmlToNode = function(html) {
  * @return {boolean} True if in CSS1-compatible mode.
  */
 goog.dom.DomHelper.prototype.isCss1CompatMode = function() {
+  'use strict';
   return goog.dom.isCss1CompatMode_(this.document_);
 };
 
@@ -2857,6 +2982,7 @@ goog.dom.DomHelper.prototype.isCss1CompatMode = function() {
  * @return {!Window} The window associated with the given document.
  */
 goog.dom.DomHelper.prototype.getWindow = function() {
+  'use strict';
   return goog.dom.getWindow_(this.document_);
 };
 
@@ -2866,6 +2992,7 @@ goog.dom.DomHelper.prototype.getWindow = function() {
  * @return {!Element} Scrolling element.
  */
 goog.dom.DomHelper.prototype.getDocumentScrollElement = function() {
+  'use strict';
   return goog.dom.getDocumentScrollElement_(this.document_);
 };
 
@@ -2875,6 +3002,7 @@ goog.dom.DomHelper.prototype.getDocumentScrollElement = function() {
  * @return {!goog.math.Coordinate} Object with properties 'x' and 'y'.
  */
 goog.dom.DomHelper.prototype.getDocumentScroll = function() {
+  'use strict';
   return goog.dom.getDocumentScroll_(this.document_);
 };
 
@@ -2885,6 +3013,7 @@ goog.dom.DomHelper.prototype.getDocumentScroll = function() {
  * @return {Element} The active element.
  */
 goog.dom.DomHelper.prototype.getActiveElement = function(opt_doc) {
+  'use strict';
   return goog.dom.getActiveElement(opt_doc || this.document_);
 };
 

@@ -36,6 +36,7 @@ testSuite({
     clock.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDragZeroMarginDivVContainer() {
     const dsc = new DragScrollSupport(vContainerDiv);
 
@@ -87,6 +88,7 @@ testSuite({
     dsc.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDragZeroMarginDivHContainer() {
     const dsc = new DragScrollSupport(hContainerDiv);
 
@@ -139,6 +141,7 @@ testSuite({
     dsc.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDragMarginDivVContainer() {
     const dsc = new DragScrollSupport(vContainerDiv, 20);
 
@@ -195,6 +198,7 @@ testSuite({
     dsc.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDragMarginScrollConstrainedDivVContainer() {
     const dsc = new DragScrollSupport(vContainerDiv, 20);
     dsc.setConstrainScroll(true);
@@ -292,6 +296,7 @@ testSuite({
     dsc.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSetHorizontalScrolling() {
     const dsc = new DragScrollSupport(hContainerDiv);
     dsc.setHorizontalScrolling(false);
@@ -325,6 +330,10 @@ testSuite({
   },
 
   testConstrainBoundsWithMargin() {
+    /**
+     * @suppress {visibility,checkTypes} suppression added to enable type
+     * checking
+     */
     const rect = DragScrollSupport.prototype.constrainBounds_.call(
         {margin_: 25}, new GoogRect(0, 0, 100, 100));
     assertEquals(25, rect.left);

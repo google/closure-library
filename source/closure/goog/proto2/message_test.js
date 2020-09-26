@@ -15,8 +15,7 @@ const TestAllTypes = goog.require('proto2.TestAllTypes');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
-  setUp() {
-  },
+  setUp() {},
 
   testEqualsWithEmptyMessages() {
     const message1 = new TestAllTypes();
@@ -447,11 +446,13 @@ testSuite({
   },
 
   testClassGetDescriptorEqualToInstanceGetDescriptor() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const classDescriptor = TestAllTypes.getDescriptor();
     const instanceDescriptor = new TestAllTypes().getDescriptor();
     assertEquals(classDescriptor, instanceDescriptor);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetAfterSetWithLazyDeserializer() {
     // Test makes sure that the lazy deserializer for a field is not
     // erroneously called when get$Value is called after set$Value.
@@ -463,6 +464,7 @@ testSuite({
     assertEquals(true, message.getOptionalBool());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHasOnLazyDeserializer() {
     // Test that null values for fields are treated as absent by the lazy
     // deserializer.
@@ -474,6 +476,7 @@ testSuite({
     assertEquals(true, message.hasOptionalBool());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHasOnLazyDeserializerWithNulls() {
     // Test that null values for fields are treated as absent by the lazy
     // deserializer.

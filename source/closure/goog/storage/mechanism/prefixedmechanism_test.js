@@ -21,23 +21,33 @@ testSuite({
   setUp() {
     submechanism = new HTML5LocalStorage();
     if (submechanism.isAvailable()) {
+      /** @suppress {const} suppression added to enable type checking */
       mechanism = new PrefixedMechanism(submechanism, 'test');
+      /** @suppress {const} suppression added to enable type checking */
       mechanism_shared = new PrefixedMechanism(submechanism, 'test');
+      /** @suppress {const} suppression added to enable type checking */
       mechanism_separate = new PrefixedMechanism(submechanism, 'test2');
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   tearDown() {
     if (!!mechanism) {
       mechanism.clear();
+      /** @suppress {const} suppression added to enable type checking */
       mechanism = null;
     }
     if (!!mechanism_shared) {
       mechanism_shared.clear();
+      /** @suppress {const} suppression added to enable type checking */
       mechanism_shared = null;
     }
     if (!!mechanism_separate) {
       mechanism_separate.clear();
+      /** @suppress {const} suppression added to enable type checking */
       mechanism_separate = null;
     }
   },

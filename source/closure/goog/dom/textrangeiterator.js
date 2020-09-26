@@ -47,6 +47,7 @@ goog.require('goog.iter.StopIteration');
  */
 goog.dom.TextRangeIterator = function(
     startNode, startOffset, endNode, endOffset, opt_reverse) {
+  'use strict';
   /**
    * The first node in the selection.
    * @private {?Node}
@@ -133,6 +134,7 @@ goog.inherits(goog.dom.TextRangeIterator, goog.dom.RangeIterator);
 
 /** @override */
 goog.dom.TextRangeIterator.prototype.getStartTextOffset = function() {
+  'use strict';
   // Offsets only apply to text nodes.  If our current node is the start node,
   // return the saved offset.  Otherwise, return 0.
   return this.node.nodeType != goog.dom.NodeType.TEXT ?
@@ -143,6 +145,7 @@ goog.dom.TextRangeIterator.prototype.getStartTextOffset = function() {
 
 /** @override */
 goog.dom.TextRangeIterator.prototype.getEndTextOffset = function() {
+  'use strict';
   // Offsets only apply to text nodes.  If our current node is the end node,
   // return the saved offset.  Otherwise, return the length of the node.
   return this.node.nodeType != goog.dom.NodeType.TEXT ?
@@ -153,6 +156,7 @@ goog.dom.TextRangeIterator.prototype.getEndTextOffset = function() {
 
 /** @override */
 goog.dom.TextRangeIterator.prototype.getStartNode = function() {
+  'use strict';
   return this.startNode_;
 };
 
@@ -162,6 +166,7 @@ goog.dom.TextRangeIterator.prototype.getStartNode = function() {
  * @param {Node} node The new start node.
  */
 goog.dom.TextRangeIterator.prototype.setStartNode = function(node) {
+  'use strict';
   if (!this.isStarted()) {
     this.setPosition(node);
   }
@@ -173,6 +178,7 @@ goog.dom.TextRangeIterator.prototype.setStartNode = function(node) {
 
 /** @override */
 goog.dom.TextRangeIterator.prototype.getEndNode = function() {
+  'use strict';
   return this.endNode_;
 };
 
@@ -182,12 +188,14 @@ goog.dom.TextRangeIterator.prototype.getEndNode = function() {
  * @param {Node} node The new end node.
  */
 goog.dom.TextRangeIterator.prototype.setEndNode = function(node) {
+  'use strict';
   this.endNode_ = node;
   this.endOffset_ = 0;
 };
 
 /** @override */
 goog.dom.TextRangeIterator.prototype.isLast = function() {
+  'use strict';
   return this.isStarted() && this.isLastTag_();
 };
 
@@ -198,6 +206,7 @@ goog.dom.TextRangeIterator.prototype.isLast = function() {
  * @private
  */
 goog.dom.TextRangeIterator.prototype.isLastTag_ = function() {
+  'use strict';
   if (this.node != this.lastNode_()) {
     return false;
   }
@@ -219,6 +228,7 @@ goog.dom.TextRangeIterator.prototype.isLastTag_ = function() {
  * @override
  */
 goog.dom.TextRangeIterator.prototype.next = function() {
+  'use strict';
   if (this.isLast()) {
     throw goog.iter.StopIteration;
   }
@@ -233,11 +243,13 @@ goog.dom.TextRangeIterator.prototype.next = function() {
  * @private
  */
 goog.dom.TextRangeIterator.prototype.lastNode_ = function() {
+  'use strict';
   return this.isReversed_ ? this.startNode_ : this.endNode_;
 };
 
 /** @override */
 goog.dom.TextRangeIterator.prototype.skipTag = function() {
+  'use strict';
   goog.dom.TextRangeIterator.superClass_.skipTag.apply(this);
 
   // If the node we are skipping contains the end node, we just skipped past
@@ -253,6 +265,7 @@ goog.dom.TextRangeIterator.prototype.skipTag = function() {
  * @suppress {strictMissingProperties} Part of the go/strict_warnings_migration
  */
 goog.dom.TextRangeIterator.prototype.copyFrom = function(other) {
+  'use strict';
   this.startNode_ = other.startNode_;
   this.endNode_ = other.endNode_;
   this.startOffset_ = other.startOffset_;
@@ -268,6 +281,7 @@ goog.dom.TextRangeIterator.prototype.copyFrom = function(other) {
  * @override
  */
 goog.dom.TextRangeIterator.prototype.clone = function() {
+  'use strict';
   var copy = new goog.dom.TextRangeIterator(
       this.startNode_, this.startOffset_, this.endNode_, this.endOffset_,
       this.isReversed_);

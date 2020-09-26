@@ -62,6 +62,7 @@ goog.dom.safe.InsertAdjacentHtmlPosition = {
  * @param {!goog.html.SafeHtml} html The known-safe HTML to insert.
  */
 goog.dom.safe.insertAdjacentHtml = function(node, position, html) {
+  'use strict';
   node.insertAdjacentHTML(position, goog.html.SafeHtml.unwrapTrustedHTML(html));
 };
 
@@ -99,6 +100,7 @@ goog.dom.safe.SET_INNER_HTML_DISALLOWED_TAGS_ = {
  */
 goog.dom.safe.isInnerHtmlCleanupRecursive_ =
     goog.functions.cacheReturnValue(function() {
+      'use strict';
       // `document` missing in some test frameworks.
       if (goog.DEBUG && typeof document === 'undefined') {
         return false;
@@ -129,6 +131,7 @@ goog.dom.safe.isInnerHtmlCleanupRecursive_ =
  * @param {!goog.html.SafeHtml} html
  */
 goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse = function(elem, html) {
+  'use strict';
   // See comment above goog.dom.safe.isInnerHtmlCleanupRecursive_.
   if (goog.dom.safe.isInnerHtmlCleanupRecursive_()) {
     while (elem.lastChild) {
@@ -148,6 +151,7 @@ goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse = function(elem, html) {
  *     template.
  */
 goog.dom.safe.setInnerHtml = function(elem, html) {
+  'use strict';
   if (goog.asserts.ENABLE_ASSERTS && elem.tagName) {
     var tagName = elem.tagName.toUpperCase();
     if (goog.dom.safe.SET_INNER_HTML_DISALLOWED_TAGS_[tagName]) {
@@ -169,6 +173,7 @@ goog.dom.safe.setInnerHtml = function(elem, html) {
  *     template.
  */
 goog.dom.safe.setInnerHtmlFromConstant = function(element, constHtml) {
+  'use strict';
   goog.dom.safe.setInnerHtml(
       element,
       goog.html.uncheckedconversions
@@ -184,6 +189,7 @@ goog.dom.safe.setInnerHtmlFromConstant = function(element, constHtml) {
  * @param {!goog.html.SafeHtml} html The known-safe HTML to assign.
  */
 goog.dom.safe.setOuterHtml = function(elem, html) {
+  'use strict';
   elem.outerHTML = goog.html.SafeHtml.unwrapTrustedHTML(html);
 };
 
@@ -208,6 +214,7 @@ goog.dom.safe.setOuterHtml = function(elem, html) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setFormElementAction = function(form, url) {
+  'use strict';
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
@@ -239,6 +246,7 @@ goog.dom.safe.setFormElementAction = function(form, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setButtonFormAction = function(button, url) {
+  'use strict';
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
@@ -269,6 +277,7 @@ goog.dom.safe.setButtonFormAction = function(button, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setInputFormAction = function(input, url) {
+  'use strict';
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
@@ -287,6 +296,7 @@ goog.dom.safe.setInputFormAction = function(input, url) {
  * @param {!goog.html.SafeStyle} style
  */
 goog.dom.safe.setStyle = function(elem, style) {
+  'use strict';
   elem.style.cssText = goog.html.SafeStyle.unwrap(style);
 };
 
@@ -297,6 +307,7 @@ goog.dom.safe.setStyle = function(elem, style) {
  * @param {!goog.html.SafeHtml} html The known-safe HTML to assign.
  */
 goog.dom.safe.documentWrite = function(doc, html) {
+  'use strict';
   doc.write(goog.html.SafeHtml.unwrapTrustedHTML(html));
 };
 
@@ -321,6 +332,7 @@ goog.dom.safe.documentWrite = function(doc, html) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setAnchorHref = function(anchor, url) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLAnchorElement(anchor);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
@@ -346,6 +358,7 @@ goog.dom.safe.setAnchorHref = function(anchor, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setImageSrc = function(imageElement, url) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLImageElement(imageElement);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
@@ -371,6 +384,7 @@ goog.dom.safe.setImageSrc = function(imageElement, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setAudioSrc = function(audioElement, url) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLAudioElement(audioElement);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
@@ -396,6 +410,7 @@ goog.dom.safe.setAudioSrc = function(audioElement, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setVideoSrc = function(videoElement, url) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLVideoElement(videoElement);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
@@ -423,6 +438,7 @@ goog.dom.safe.setVideoSrc = function(videoElement, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setEmbedSrc = function(embed, url) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLEmbedElement(embed);
   embed.src = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
 };
@@ -443,6 +459,7 @@ goog.dom.safe.setEmbedSrc = function(embed, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setFrameSrc = function(frame, url) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLFrameElement(frame);
   frame.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
@@ -463,6 +480,7 @@ goog.dom.safe.setFrameSrc = function(frame, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setIframeSrc = function(iframe, url) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLIFrameElement(iframe);
   iframe.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
@@ -482,6 +500,7 @@ goog.dom.safe.setIframeSrc = function(iframe, url) {
  * @param {!goog.html.SafeHtml} html The HTML to assign.
  */
 goog.dom.safe.setIframeSrcdoc = function(iframe, html) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLIFrameElement(iframe);
   iframe.srcdoc = goog.html.SafeHtml.unwrapTrustedHTML(html);
 };
@@ -513,6 +532,7 @@ goog.dom.safe.setIframeSrcdoc = function(iframe, html) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLLinkElement(link);
   link.rel = rel;
   if (goog.string.internal.caseInsensitiveContains(rel, 'stylesheet')) {
@@ -547,6 +567,7 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setObjectData = function(object, url) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLObjectElement(object);
   object.data = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
 };
@@ -567,6 +588,7 @@ goog.dom.safe.setObjectData = function(object, url) {
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
  */
 goog.dom.safe.setScriptSrc = function(script, url) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLScriptElement(script);
   script.src = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
   goog.dom.safe.setNonceForScriptElement_(script);
@@ -588,6 +610,7 @@ goog.dom.safe.setScriptSrc = function(script, url) {
  * @param {!goog.html.SafeScript} content The content to assign.
  */
 goog.dom.safe.setScriptContent = function(script, content) {
+  'use strict';
   goog.dom.asserts.assertIsHTMLScriptElement(script);
   script.textContent = goog.html.SafeScript.unwrapTrustedScript(content);
   goog.dom.safe.setNonceForScriptElement_(script);
@@ -601,6 +624,7 @@ goog.dom.safe.setScriptContent = function(script, content) {
  * @private
  */
 goog.dom.safe.setNonceForScriptElement_ = function(script) {
+  'use strict';
   var win = script.ownerDocument && script.ownerDocument.defaultView;
   var nonce = goog.getScriptNonce(win);
   if (nonce) {
@@ -629,6 +653,7 @@ goog.dom.safe.setNonceForScriptElement_ = function(script) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.setLocationHref = function(loc, url) {
+  'use strict';
   goog.dom.asserts.assertIsLocation(loc);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
@@ -662,6 +687,7 @@ goog.dom.safe.setLocationHref = function(loc, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.assignLocation = function(loc, url) {
+  'use strict';
   goog.dom.asserts.assertIsLocation(loc);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
@@ -693,6 +719,7 @@ goog.dom.safe.assignLocation = function(loc, url) {
  * @see goog.html.SafeUrl#sanitize
  */
 goog.dom.safe.replaceLocation = function(loc, url) {
+  'use strict';
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
@@ -735,6 +762,7 @@ goog.dom.safe.replaceLocation = function(loc, url) {
  */
 goog.dom.safe.openInWindow = function(
     url, opt_openerWin, opt_name, opt_specs, opt_replace) {
+  'use strict';
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
@@ -762,6 +790,7 @@ goog.dom.safe.openInWindow = function(
  * @return {?Document}
  */
 goog.dom.safe.parseFromStringHtml = function(parser, html) {
+  'use strict';
   return goog.dom.safe.parseFromString(parser, html, 'text/html');
 };
 
@@ -775,6 +804,7 @@ goog.dom.safe.parseFromStringHtml = function(parser, html) {
  * @return {?Document}
  */
 goog.dom.safe.parseFromString = function(parser, content, type) {
+  'use strict';
   return parser.parseFromString(
       goog.html.SafeHtml.unwrapTrustedHTML(content), type);
 };
@@ -794,6 +824,7 @@ goog.dom.safe.parseFromString = function(parser, content, type) {
  * @throws {!Error} If called with a Blob with a MIME type other than image/.*.
  */
 goog.dom.safe.createImageFromBlob = function(blob) {
+  'use strict';
   // Any image/* MIME type is accepted as safe.
   if (!/^image\/.*/g.test(blob.type)) {
     throw new Error(
@@ -802,6 +833,7 @@ goog.dom.safe.createImageFromBlob = function(blob) {
   var objectUrl = goog.global.URL.createObjectURL(blob);
   var image = new goog.global.Image();
   image.onload = function() {
+    'use strict';
     goog.global.URL.revokeObjectURL(objectUrl);
   };
   goog.dom.safe.setImageSrc(

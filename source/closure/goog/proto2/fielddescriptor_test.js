@@ -14,6 +14,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 testSuite({
   testFieldDescriptorConstruction() {
     const messageType = {};
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const fieldDescriptor = new FieldDescriptor(messageType, 10, {
       name: 'test',
       repeated: true,
@@ -36,6 +37,7 @@ testSuite({
   },
 
   testGetDefaultValueOfString() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const fieldDescriptor = new FieldDescriptor({}, 10, {
       name: 'test',
       fieldType: FieldDescriptor.FieldType.STRING,
@@ -46,6 +48,7 @@ testSuite({
   },
 
   testGetDefaultValueOfBool() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const fieldDescriptor = new FieldDescriptor({}, 10, {
       name: 'test',
       fieldType: FieldDescriptor.FieldType.BOOL,
@@ -56,6 +59,7 @@ testSuite({
   },
 
   testGetDefaultValueOfInt64() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const fieldDescriptor = new FieldDescriptor({}, 10, {
       name: 'test',
       fieldType: FieldDescriptor.FieldType.INT64,
@@ -67,6 +71,7 @@ testSuite({
 
   testRepeatedField() {
     const messageType = {};
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const fieldDescriptor = new FieldDescriptor(
         messageType, 10,
         {name: 'test', repeated: true, fieldType: 7, type: Number});
@@ -78,6 +83,7 @@ testSuite({
 
   testRequiredField() {
     const messageType = {};
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const fieldDescriptor = new FieldDescriptor(
         messageType, 10,
         {name: 'test', required: true, fieldType: 7, type: Number});
@@ -89,6 +95,7 @@ testSuite({
 
   testOptionalField() {
     const messageType = {};
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const fieldDescriptor = new FieldDescriptor(
         messageType, 10, {name: 'test', fieldType: 7, type: Number});
 

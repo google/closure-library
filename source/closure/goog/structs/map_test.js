@@ -110,6 +110,7 @@ testSuite({
     assertTrue('clone so it should contain \'c\' key', m2.containsKey('c'));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemove() {
     const m = new StructsMap();
     for (let i = 0; i < 1000; i++) {

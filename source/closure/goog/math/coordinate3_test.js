@@ -56,6 +56,7 @@ testSuite({
   },
 
   testCoordinate3OneNonNumericValue() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const dim5 = new Coordinate3('ten', 1000, 85);
     assertTrue(isNaN(dim5.x));
     assertEquals(1000, dim5.y);
@@ -63,6 +64,7 @@ testSuite({
   },
 
   testCoordinate3AllNonNumericValues() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const nonNumeric = new Coordinate3('ten', {woop: 'test'}, Math.sqrt(-1));
     assertTrue(isNaN(nonNumeric.x));
     assertTrue(isNaN(nonNumeric.y));
@@ -137,6 +139,7 @@ testSuite({
     assertEquals(b[1], 11);
     assertEquals(b[2], 1);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const c = new Coordinate3('abc', 'def', 'xyz');
     const result = c.toArray();
     assertTrue(isNaN(result[0]));

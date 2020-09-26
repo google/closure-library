@@ -12,7 +12,9 @@ const run = goog.require('goog.async.run');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let mockClock;
+/** @type {?} */
 let futureCallback1;
+/** @type {?} */
 let futureCallback2;
 
 let futurePromise1;
@@ -26,10 +28,10 @@ testSuite({
 
   setUp() {
     futurePromise1 = new Promise((resolve) => {
-      futureCallback1 = new recordFunction(resolve);
+      futureCallback1 = recordFunction(resolve);
     });
     futurePromise2 = new Promise((resolve) => {
-      futureCallback2 = new recordFunction(resolve);
+      futureCallback2 = recordFunction(resolve);
     });
   },
 
@@ -154,7 +156,7 @@ testSuite({
         // and get the correct scope.
         const last1 = futureCallback1.popLastCall();
         assertEquals(0, last1.getArguments().length);
-        assertEquals(goog.global, last1.getThis());
+        assertEquals(undefined, last1.getThis());
 
         const last2 = futureCallback2.popLastCall();
         assertEquals(0, last2.getArguments().length);

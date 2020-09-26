@@ -21,29 +21,44 @@ testSuite({
   setUp() {
     const ieUserData = new IEUserData('test');
     if (ieUserData.isAvailable()) {
+      /** @suppress {const} suppression added to enable type checking */
       mechanism = ieUserData;
       // There should be at least 32 KiB.
+      /** @suppress {const} suppression added to enable type checking */
       minimumQuota = 32 * 1024;
+      /** @suppress {const} suppression added to enable type checking */
       mechanism_shared = new IEUserData('test');
+      /** @suppress {const} suppression added to enable type checking */
       mechanism_separate = new IEUserData('test2');
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   tearDown() {
     if (!!mechanism) {
       mechanism.clear();
+      /** @suppress {const} suppression added to enable type checking */
       mechanism = null;
     }
     if (!!mechanism_shared) {
       mechanism_shared.clear();
+      /** @suppress {const} suppression added to enable type checking */
       mechanism_shared = null;
     }
     if (!!mechanism_separate) {
       mechanism_separate.clear();
+      /** @suppress {const} suppression added to enable type checking */
       mechanism_separate = null;
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testAvailability() {
     if (userAgent.IE && !userAgent.isDocumentModeOrHigher(9)) {
       assertNotNull(mechanism);
@@ -56,6 +71,7 @@ testSuite({
   },
 
   testEncoding() {
+    /** @suppress {visibility} suppression added to enable type checking */
     function assertEncodingPair(cleartext, encoded) {
       assertEquals(encoded, IEUserData.encodeKey_(cleartext));
       assertEquals(cleartext, IEUserData.decodeKey_(encoded));

@@ -21,19 +21,36 @@ const testSuite = goog.require('goog.testing.testSuite');
 const testingEvents = goog.require('goog.testing.events');
 const userAgent = goog.require('goog.userAgent');
 
+/** @suppress {visibility} suppression added to enable type checking */
 const HAS_SET_CAPTURE = Dragger.HAS_SET_CAPTURE_;
 
 let target;
 let targetRtl;
 
+/**
+ * @suppress {missingProperties,checkTypes} suppression added to enable type
+ * checking
+ */
 function runStartDragTest(handleId, targetElement) {
   let dragger = new Dragger(targetElement, dom.getElement(handleId));
   if (handleId == 'handle_rtl') {
     dragger.enableRightPositioningForRtl(true);
   }
   const e = new StrictMock(BrowserEvent);
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   e.type = EventType.MOUSEDOWN;
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   e.clientX = 1;
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   e.clientY = 2;
   e.isMouseActionButton().$returns(true);
   e.preventDefault();
@@ -114,13 +131,29 @@ testSuite({
     runStartDragTest('handle_rtl', targetRtl);
   },
 
-  /** @bug 1381317 Cancelling start drag didn't end the attempt to drag. */
+  /**
+     @bug 1381317 Cancelling start drag didn't end the attempt to drag.
+     @suppress {missingProperties,checkTypes,visibility} suppression added to
+     enable type checking
+   */
   testStartDrag_Cancel() {
     const dragger = new Dragger(target);
 
     const e = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.type = EventType.MOUSEDOWN;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientX = 1;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientY = 2;
     e.isMouseActionButton().$returns(true);
     e.$replay();
@@ -144,13 +177,29 @@ testSuite({
     e.$verify();
   },
 
-  /** Tests that start drag happens on left mousedown. */
+  /**
+     Tests that start drag happens on left mousedown.
+     @suppress {missingProperties,checkTypes,visibility} suppression added to
+     enable type checking
+   */
   testStartDrag_LeftMouseDownOnly() {
     const dragger = new Dragger(target);
 
     const e = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.type = EventType.MOUSEDOWN;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientX = 1;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientY = 2;
     e.isMouseActionButton().$returns(false);
     e.$replay();
@@ -171,13 +220,28 @@ testSuite({
     e.$verify();
   },
 
-  /** Tests that start drag happens on other event type than MOUSEDOWN. */
+  /**
+     Tests that start drag happens on other event type than MOUSEDOWN.
+     @suppress {checkTypes,visibility} suppression added to enable type checking
+   */
   testStartDrag_MouseMove() {
     const dragger = new Dragger(target);
 
     const e = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.type = EventType.MOUSEMOVE;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientX = 1;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientY = 2;
     // preventDefault is not called.
     e.$replay();
@@ -202,11 +266,18 @@ testSuite({
     e.$verify();
   },
 
-  /** Tests that preventDefault is not called for TOUCHSTART event. */
+  /**
+     Tests that preventDefault is not called for TOUCHSTART event.
+     @suppress {checkTypes} suppression added to enable type checking
+   */
   testStartDrag_TouchStart() {
     const dragger = new Dragger(target);
 
     const e = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.type = EventType.TOUCHSTART;
     // preventDefault is not called.
     e.$replay();
@@ -230,11 +301,16 @@ testSuite({
   /**
    * Tests that preventDefault is not called for TOUCHSTART event when
    * hysteresis is set to be greater than zero.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testStartDrag_TouchStart_NonZeroHysteresis() {
     const dragger = new Dragger(target);
     dragger.setHysteresis(5);
     const e = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.type = EventType.TOUCHSTART;
     // preventDefault is not called.
     e.$replay();
@@ -256,7 +332,11 @@ testSuite({
     e.$verify();
   },
 
-  /** @bug 1381317 Cancelling start drag didn't end the attempt to drag. */
+  /**
+     @bug 1381317 Cancelling start drag didn't end the attempt to drag.
+     @suppress {missingProperties,checkTypes,visibility} suppression added to
+     enable type checking
+   */
   testHandleMove_Cancel() {
     const dragger = new Dragger(target);
     dragger.setHysteresis(5);
@@ -267,7 +347,15 @@ testSuite({
     });
 
     const e = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientX = 1;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientY = 2;
     e.isMouseActionButton().$returns(true).$anyTimes();
     // preventDefault is not called.
@@ -285,7 +373,15 @@ testSuite({
         events.hasListener(
             dragger.document_, EventType.MOUSEUP, !HAS_SET_CAPTURE));
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientX = 10;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientY = 10;
     dragger.handleMove_(e);
     assertFalse('Drag must be cancelled.', dragger.isDragging());
@@ -298,7 +394,10 @@ testSuite({
     e.$verify();
   },
 
-  /** @bug 1714667 IE<9 built in drag and drop handling stops dragging. */
+  /**
+     @bug 1714667 IE<9 built in drag and drop handling stops dragging.
+     @suppress {checkTypes} suppression added to enable type checking
+   */
   testIeDragStartCancelling() {
     // Testing only IE<9.
     if (!userAgent.IE || userAgent.isVersionOrHigher(9)) {
@@ -309,14 +408,28 @@ testSuite({
     let dragger = new Dragger(target);
 
     let e = new GoogEvent(EventType.MOUSEDOWN);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientX = 1;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientY = 2;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.button = 1;  // IE only constant for left button.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     let be = new BrowserEvent(e);
     dragger.startDrag(be);
     assertTrue('The drag should have started.', dragger.isDragging());
 
     e = new GoogEvent(EventType.DRAGSTART);
+    /** @suppress {visibility} suppression added to enable type checking */
     e.target = dragger.document_.documentElement;
     assertTrue(
         'The event should not be canceled.', testingEvents.fireBrowserEvent(e));
@@ -328,14 +441,28 @@ testSuite({
     dragger.setCancelIeDragStart(true);
 
     e = new GoogEvent(EventType.MOUSEDOWN);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientX = 1;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientY = 2;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.button = 1;  // IE only constant for left button.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     be = new BrowserEvent(e);
     dragger.startDrag(be);
     assertTrue('The drag should have started.', dragger.isDragging());
 
     e = new GoogEvent(EventType.DRAGSTART);
+    /** @suppress {visibility} suppression added to enable type checking */
     e.target = dragger.document_.documentElement;
     assertFalse(
         'The event should be canceled.', testingEvents.fireBrowserEvent(e));
@@ -343,13 +470,29 @@ testSuite({
     dragger.dispose();
   },
 
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testPreventMouseDown() {
     const dragger = new Dragger(target);
     dragger.setPreventMouseDown(false);
 
     const e = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.type = EventType.MOUSEDOWN;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientX = 1;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientY = 2;
     e.isMouseActionButton().$returns(true);
     // preventDefault is not called.
@@ -375,6 +518,10 @@ testSuite({
     assertEquals(60, dragger.limitY(100));
   },
 
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testWindowBlur() {
     const dragger = new Dragger(target);
     dragger.setAllowSetCapture(false);
@@ -385,8 +532,20 @@ testSuite({
     });
 
     let e = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.type = EventType.MOUSEDOWN;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientX = 1;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientY = 2;
     e.isMouseActionButton().$returns(true);
     e.preventDefault();
@@ -398,13 +557,19 @@ testSuite({
 
     e = new BrowserEvent();
     e.type = EventType.BLUR;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     e.target = window;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     e.currentTarget = window;
     testingEvents.fireBrowserEvent(e);
 
     assertTrue(dragEnded);
   },
 
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testBlur() {
     const dragger = new Dragger(target);
     dragger.setAllowSetCapture(false);
@@ -415,8 +580,20 @@ testSuite({
     });
 
     let e = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.type = EventType.MOUSEDOWN;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientX = 1;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.clientY = 2;
     e.isMouseActionButton().$returns(true);
     e.preventDefault();
@@ -441,20 +618,37 @@ testSuite({
     assertFalse(dragEnded);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCloneNode() {
     const element = dom.createDom(TagName.DIV);
     element.innerHTML = '<input type="hidden" value="v0">' +
         '<textarea>v1</textarea>' +
         '<textarea>v2</textarea>';
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     element.childNodes[0].value = '\'new\'\n"value"';
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     element.childNodes[1].value = '<' +
         '/textarea>&lt;3';
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     element.childNodes[2].value = '<script>\n\talert("oops!");<' +
         '/script>';
     let clone = Dragger.cloneNode(element);
     assertEquals(element.childNodes[0].value, clone.childNodes[0].value);
     assertEquals(element.childNodes[1].value, clone.childNodes[1].value);
     assertEquals(element.childNodes[2].value, clone.childNodes[2].value);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     clone = Dragger.cloneNode(element.childNodes[2]);
     assertEquals(element.childNodes[2].value, clone.value);
   },

@@ -17,6 +17,7 @@ const testSuite = goog.require('goog.testing.testSuite');
  * Asserts expected properties of an AVL tree.
  * @param {function(?, ?): number} comparator
  * @param {?} node
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function assertAvlTree(comparator, node) {
   if (node) {
@@ -69,9 +70,14 @@ testSuite({
 
     // Verify that no nodes are visited if the start value is larger than all
     // values
-    tree.inOrderTraverse((value) => {
-      fail();
-    }, 'zed');
+    tree.inOrderTraverse(/**
+                            @suppress {checkTypes} suppression added to enable
+                            type checking
+                          */
+                         (value) => {
+                           fail();
+                         },
+                         'zed');
 
     // Verify strings are stored in sorted order
     i = values.length;
@@ -83,9 +89,14 @@ testSuite({
 
     // Verify that no nodes are visited if the start value is smaller than all
     // values
-    tree.reverseOrderTraverse((value) => {
-      fail();
-    }, 'aardvark');
+    tree.reverseOrderTraverse(/**
+                                 @suppress {checkTypes} suppression added to
+                                 enable type checking
+                               */
+                              (value) => {
+                                fail();
+                              },
+                              'aardvark');
   },
 
   /**
@@ -306,7 +317,10 @@ testSuite({
     assertEquals(i, NUM_TO_REMOVE - 1);
   },
 
-  /** Verifies correct behavior of getCount(). See http://b/4347755 */
+  /**
+     Verifies correct behavior of getCount(). See http://b/4347755
+     @suppress {visibility} suppression added to enable type checking
+   */
   testGetCountBehavior() {
     const tree = new AvlTree();
     tree.add(1);
@@ -362,6 +376,7 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testTreeHeightAfterRightRotate() {
     const tree = new AvlTree();
     tree.add(0);
@@ -381,6 +396,7 @@ testSuite({
     assertEquals(3, tree.getCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAddLeftLeftCase() {
     const tree = new AvlTree((a, b) => a - b);
     tree.add(100);
@@ -410,6 +426,7 @@ testSuite({
     assertEquals(6, tree.getCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveLeftLeftCase() {
     const tree = new AvlTree((a, b) => a - b);
     tree.add(100);
@@ -442,6 +459,7 @@ testSuite({
     assertEquals(6, tree.getCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAddLeftRightCase() {
     const tree = new AvlTree((a, b) => a - b);
     tree.add(100);
@@ -472,6 +490,7 @@ testSuite({
     assertEquals(6, tree.getCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveLeftRightCase() {
     const tree = new AvlTree((a, b) => a - b);
     tree.add(100);
@@ -505,6 +524,7 @@ testSuite({
     assertEquals(6, tree.getCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAddRightRightCase() {
     const tree = new AvlTree((a, b) => a - b);
     tree.add(100);
@@ -535,6 +555,7 @@ testSuite({
     assertEquals(6, tree.getCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveRightRightCase() {
     const tree = new AvlTree((a, b) => a - b);
     tree.add(100);
@@ -568,6 +589,7 @@ testSuite({
     assertEquals(6, tree.getCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAddRightLeftCase() {
     const tree = new AvlTree((a, b) => a - b);
     tree.add(100);
@@ -599,6 +621,7 @@ testSuite({
     assertEquals(6, tree.getCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveRightLeftCase() {
     const tree = new AvlTree((a, b) => a - b);
     tree.add(100);
@@ -639,6 +662,10 @@ testSuite({
     assertEquals(0, tree.getHeight());
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testCopy() {
     const tree = new AvlTree((a, b) => a - b);
     tree.add(100);
@@ -667,6 +694,10 @@ testSuite({
     assertAvlTree(tree);
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testCopyCustomCopyFunction() {
     const tree = new AvlTree((a, b) => a.i - b.i);
     tree.add({i: 100});
@@ -701,6 +732,7 @@ testSuite({
     assertThrows(() => tree.copy(n => n * -1));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testLargeDatasetIsAvlTree() {
     let arr = [];
     for (let i = 0; i < 1000; i++) {

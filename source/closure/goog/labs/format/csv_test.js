@@ -98,6 +98,10 @@ testSuite({
         csv.parse('a,"""b""","Jonathan ""Smokey"" Feinberg"\nd,e,f\r\n'));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testUnclosedQuote() {
     const e = assertThrows(() => {
       csv.parse('a,"b,c\nd,e,f');
@@ -113,6 +117,10 @@ testSuite({
         e.message);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testQuotesInUnquotedField() {
     const e = assertThrows(() => {
       csv.parse('a,b "and" b,c\nd,e,f');
@@ -130,6 +138,10 @@ testSuite({
         e.message);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testGarbageOutsideQuotes() {
     const e = assertThrows(() => {
       csv.parse('a,"b",c\nd,"e"oops,f');
@@ -186,6 +198,7 @@ testSuite({
 
   testFindLineInfo() {
     const testString = 'abc\ndef\rghi';
+    /** @suppress {visibility} suppression added to enable type checking */
     const info = ParseError.findLineInfo_(testString, 4);
 
     assertEquals(4, info.line.startLineIndex);
@@ -195,6 +208,7 @@ testSuite({
     assertEquals(1, info.lineIndex);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetLineDebugString() {
     const str = 'abcdefghijklmnop';
     const index = str.indexOf('j');
@@ -205,6 +219,10 @@ testSuite({
             '         ^');
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testIsCharacterString() {
     assertTrue(csv.isCharacterString_('a'));
     assertTrue(csv.isCharacterString_('\n'));
@@ -216,23 +234,44 @@ testSuite({
     assertFalse(csv.isCharacterString_('aa'));
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testAssertToken() {
     csv.assertToken_('a');
 
-    googObject.forEach(csv.SENTINELS_, (value) => {
-      csv.assertToken_(value);
-    });
+    googObject.forEach(
+        csv.SENTINELS_, /**
+                           @suppress {visibility} suppression added to enable
+                           type checking
+                         */
+        (value) => {
+          csv.assertToken_(value);
+        });
 
-    assertThrows(() => {
-      csv.assertToken_('aa');
-    });
+    assertThrows(/**
+                    @suppress {visibility} suppression added to enable type
+                    checking
+                  */
+                 () => {
+                   csv.assertToken_('aa');
+                 });
 
-    assertThrows(() => {
-      csv.assertToken_('');
-    });
+    assertThrows(/**
+                    @suppress {visibility} suppression added to enable type
+                    checking
+                  */
+                 () => {
+                   csv.assertToken_('');
+                 });
 
-    assertThrows(() => {
-      csv.assertToken_({});
-    });
+    assertThrows(/**
+                    @suppress {visibility} suppression added to enable type
+                    checking
+                  */
+                 () => {
+                   csv.assertToken_({});
+                 });
   },
 });

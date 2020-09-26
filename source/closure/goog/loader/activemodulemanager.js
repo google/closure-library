@@ -12,7 +12,6 @@ goog.module('goog.loader.activeModuleManager');
 goog.module.declareLegacyNamespace();
 
 const AbstractModuleManager = goog.require('goog.loader.AbstractModuleManager');
-const NoopModuleManager = goog.require('goog.loader.NoopModuleManager');
 const asserts = goog.require('goog.asserts');
 
 
@@ -57,6 +56,28 @@ function setDefault(fn) {
 }
 
 /**
+ * Method called just before module code is loaded.
+ * @param {string} id Identifier of the module.
+ */
+function beforeLoadModuleCode(id) {
+  if (moduleManager) {
+    moduleManager.beforeLoadModuleCode(id);
+  }
+}
+
+/**
+ * Records that the currently loading module was loaded. Also initiates loading
+ * the next module if any module requests are queued. This method is called by
+ * code that is generated and appended to each dynamic module's code at
+ * compilation time.
+ */
+function setLoaded() {
+  if (moduleManager) {
+    moduleManager.setLoaded();
+  }
+}
+
+/**
  * Initialize the module manager.
  * @param {string=} info A string representation of the module dependency
  *      graph, in the form: module1:dep1,dep2/module2:dep1,dep2 etc.
@@ -64,11 +85,9 @@ function setDefault(fn) {
  * @param {!Array<string>=} loadingModuleIds A list of moduleIds that
  *     are currently being loaded.
  */
-function initialize(info, loadingModuleIds) {
+function maybeInitialize(info, loadingModuleIds) {
   if (!moduleManager) {
-    if (!getDefault) {
-      setDefault(() => new NoopModuleManager());
-    }
+    if (!getDefault) return;
     moduleManager = getDefault();
   }
   moduleManager.setAllModuleInfoString(info, loadingModuleIds);
@@ -83,6 +102,8 @@ exports = {
   get,
   set,
   setDefault,
-  initialize,
+  beforeLoadModuleCode,
+  setLoaded,
+  maybeInitialize,
   reset,
 };

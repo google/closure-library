@@ -111,6 +111,7 @@ testSuite({
     assertEquals(viewportSize.height, popupRect.top + popupRect.height);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAdjustCorner() {
     const avp = new AnchoredViewportPosition(anchor, Corner.BOTTOM_LEFT);
     assertEquals(Corner.BOTTOM_LEFT, avp.adjustCorner(0, Corner.BOTTOM_LEFT));

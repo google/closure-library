@@ -23,7 +23,7 @@ testSuite({
       ['c', 3],
     ];
 
-    const /** !Promise<!Map<string, number>> */ resultMap =
+    const /** !Map<string, number> */ resultMap =
         await promises.allMapValues(promiseMap);
     assertArrayEquals(expectedEntries, Array.from(resultMap.entries()));
   },
@@ -45,7 +45,7 @@ testSuite({
 
     const expectedEntries = [];
 
-    const /** !Promise<!Map<string, number>> */ resultMap =
+    const /** !Map<string, number> */ resultMap =
         await promises.allMapValues(promiseMap);
     assertArrayEquals(expectedEntries, Array.from(resultMap.entries()));
   },
@@ -63,7 +63,7 @@ testSuite({
       ['c', 3],
     ];
 
-    const /** !Promise<!Map<string, number>> */ resultMap =
+    const /** !Map<string, number> */ resultMap =
         await promises.allMapValues(promiseMap);
     assertArrayEquals(expectedEntries, Array.from(resultMap.entries()));
   },
@@ -78,7 +78,7 @@ testSuite({
       }
     }
 
-    const /** !Map<string, !TestIThenable<undefined>> */ promiseMap = new Map([
+    const /** !Map<string, !TestIThenable> */ promiseMap = new Map([
       ['a', new TestIThenable()],
     ]);
 
@@ -86,7 +86,7 @@ testSuite({
       ['a', undefined],
     ];
 
-    const /** !Promise<!Map<string, undefined>> */ resultMap =
+    const /** !Map<string, undefined> */ resultMap =
         await promises.allMapValues(promiseMap);
     assertArrayEquals(expectedEntries, Array.from(resultMap.entries()));
   },

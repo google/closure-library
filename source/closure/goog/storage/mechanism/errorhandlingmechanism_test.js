@@ -30,6 +30,7 @@ let mechanism;
 
 testSuite({
   setUp() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     mechanism = new ErrorHandlingMechanism(submechanism, handler);
   },
 

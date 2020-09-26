@@ -359,6 +359,7 @@ testSuite({
     assertEquals('d', b[3]);
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testExtend() {
     let o = {};
     let o2 = {a: 0, b: 1};
@@ -510,7 +511,15 @@ testSuite({
     x.propA = 4;
     x.propB = 6;
     try {
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       y.propA = 5;
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       y.propB = 7;
     } catch (e) {
     }
@@ -543,9 +552,17 @@ testSuite({
     const x = {propA: 3};
     const y = googObject.createImmutableView(x);
     assertThrows(() => {
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       y.propA = 4;
     });
     assertThrows(() => {
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       y.propB = 4;
     });
   },
@@ -607,6 +624,7 @@ testSuite({
         expected, googObject.getAllPropertyNames(child.prototype));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetAllPropertyNames_es6ClassProperties() {
     // Create an ES6 class via eval so we can bail out if it's a syntax error in
     // browsers that don't support ES6 classes.
@@ -651,6 +669,7 @@ testSuite({
 
     // There's slightly different behavior depending on what APIs the browser
     // under test supports.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const additionalProps = !!Object.getOwnPropertyNames ?
         Object.getOwnPropertyNames(Object.prototype) :
         [];

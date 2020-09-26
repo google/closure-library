@@ -12,6 +12,7 @@ const Md5 = goog.require('goog.crypt.Md5');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const crypt = goog.require('goog.crypt');
 const events = goog.require('goog.events');
+const fs = goog.require('goog.fs');
 const testSuite = goog.require('goog.testing.testSuite');
 
 /**
@@ -100,6 +101,8 @@ const stubs = new PropertyReplacer();
  * the test suite from going into infinite loop.
  * @param {!BlobHasher} blobHasher Hasher in action.
  * @param {number} maxReads Max number of read attempts.
+ * @suppress {visibility,missingProperties} suppression added to enable type
+ * checking
  */
 function readFromBlob(blobHasher, maxReads) {
   let counter = 0;
@@ -115,13 +118,14 @@ function readFromBlob(blobHasher, maxReads) {
 testSuite({
   setUp() {
     stubs.set(goog.global, 'FileReader', FileReaderMock);
-    stubs.set(goog.fs, 'sliceBlob', fsSliceBlobMock);
+    stubs.set(fs, 'sliceBlob', fsSliceBlobMock);
   },
 
   tearDown() {
     stubs.reset();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testBasicOperations() {
     if (!window.Blob) {
       return;
@@ -154,6 +158,7 @@ testSuite({
         crypt.byteArrayToHex(blobHasher.getHash()));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testNormalFlow() {
     if (!window.Blob) {
       return;
@@ -200,6 +205,10 @@ testSuite({
     assertEquals(1, completeEvents);
   },
 
+  /**
+     @suppress {checkTypes,visibility,missingProperties} suppression added to
+     enable type checking
+   */
   testAbortsAndErrors() {
     if (!window.Blob) {
       return;
@@ -264,6 +273,10 @@ testSuite({
     abortEvents = 0;
   },
 
+  /**
+     @suppress {checkTypes,visibility} suppression added to enable type
+     checking
+   */
   testBasicThrottling() {
     if (!window.Blob) {
       return;
@@ -321,6 +334,7 @@ testSuite({
         crypt.byteArrayToHex(blobHasher.getHash()));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testLengthZeroThrottling() {
     if (!window.Blob) {
       return;
@@ -348,6 +362,10 @@ testSuite({
         crypt.byteArrayToHex(blobHasher.getHash()));
   },
 
+  /**
+     @suppress {checkTypes,visibility,missingProperties} suppression added to
+     enable type checking
+   */
   testAbortsAndErrorsWhileThrottling() {
     if (!window.Blob) {
       return;

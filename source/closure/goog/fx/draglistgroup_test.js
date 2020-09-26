@@ -1,4 +1,8 @@
 /**
+ * @fileoverview
+ * @suppress {checkTypes} suppression added to enable type checking
+ */
+/**
  * @license
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
@@ -55,6 +59,7 @@ let firedEventTypes;
 /**
  * Asserts that the DragListGroup is in idle state.
  * @param {!DragListGroup} dlg The DragListGroup to examine.
+ * @suppress {visibility} suppression added to enable type checking
  */
 function assertIdle(dlg) {
   assertFalse(dlg.isDragging());
@@ -65,7 +70,10 @@ function assertIdle(dlg) {
       googObject.getCount(dlg.eventHandler_.keys_));
 }
 
-/** @param {!DragListPermission} dragListPermission */
+/**
+ * @param {!DragListPermission} dragListPermission
+ * @suppress {checkTypes} suppression added to enable type checking
+ */
 function setUpWithDragListPermission(dragListPermission) {
   dlg.dispose();
   const sandbox = dom.getElement('sandbox');
@@ -90,6 +98,7 @@ function setUpWithDragListPermission(dragListPermission) {
   dlg.addDragList(list2, DragListDirection.RIGHT);
   dlg.init();
 
+  /** @suppress {visibility} suppression added to enable type checking */
   initialListenerCount = googObject.getCount(dlg.eventHandler_.keys_);
 
   event = new BrowserEvent();
@@ -102,6 +111,7 @@ function setUpWithDragListPermission(dragListPermission) {
 }
 
 testSuite({
+  /** @suppress {checkTypes} suppression added to enable type checking */
   setUp() {
     const sandbox = dom.getElement('sandbox');
     list = dom.createDom(TagName.DIV, {'id': 'horiz_div'});
@@ -118,6 +128,7 @@ testSuite({
     dlg.addDragList(list, DragListDirection.RIGHT);
     dlg.init();
 
+    /** @suppress {visibility} suppression added to enable type checking */
     initialListenerCount = googObject.getCount(dlg.eventHandler_.keys_);
 
     event = new BrowserEvent();
@@ -140,6 +151,7 @@ testSuite({
    * stored in the private arrays after init() but are not added yet to target.
    * (Since initially, we are not yet hovering over any list, in particular,
    * over this target.)
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testSettersAfterInit() {
     assertTrue(googArray.equals(
@@ -167,6 +179,7 @@ testSuite({
    * Test the effect of hovering over a list.
    * Check that after the MOUSEOVER browser event these classes are added to
    * the current target of the event.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testAddDragItemHoverClasses() {
     dlg.handleDragItemMouseover_(event);
@@ -185,6 +198,10 @@ testSuite({
         classlist.contains(event.currentTarget, 'blue_bg'));
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testAddDragItemHandleHoverClasses() {
     dlg.handleDragItemHandleMouseover_(event);
 
@@ -206,6 +223,7 @@ testSuite({
    * Test the effect of stopping hovering over a list.
    * Check that after the MOUSEOUT browser event all CSS classes are removed
    * from the target (as we are no longer hovering over the it).
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testRemoveDragItemHoverClasses() {
     dlg.handleDragItemMouseover_(event);
@@ -225,6 +243,10 @@ testSuite({
         classlist.contains(event.currentTarget, 'blue_bg'));
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testRemoveDragItemHandleHoverClasses() {
     dlg.handleDragItemHandleMouseover_(event);
     dlg.handleDragItemHandleMouseout_(event);
@@ -248,12 +270,18 @@ testSuite({
    * Check that after the MOUSEDOWN browser event is handled by the
    * handlePotentialDragStart_() method the currDragItem has the CSS classes
    * set by the setter method.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testAddCurrentDragItemClasses() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const be = new BrowserEvent({
       type: EventType.MOUSEDOWN,
       button: BrowserFeature.HAS_W3C_BUTTON ? 0 : 1,
     });
+    /**
+     * @suppress {visibility,checkTypes} suppression added to enable type
+     * checking
+     */
     event.event_ = be;
 
     dlg.handlePotentialDragStart_(event);
@@ -276,12 +304,18 @@ testSuite({
    * Test the effect of dragging an item. (DRAGEND event.)
    * Check that after the MOUSEUP browser event handled by the handleDragEnd_()
    * method the currDragItem has no CSS classes set in the dispatched event.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testRemoveCurrentDragItemClasses() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const be = new BrowserEvent({
       type: EventType.MOUSEDOWN,
       button: BrowserFeature.HAS_W3C_BUTTON ? 0 : 1,
     });
+    /**
+     * @suppress {visibility,checkTypes} suppression added to enable type
+     * checking
+     */
     event.event_ = be;
     dlg.handlePotentialDragStart_(event);
 
@@ -290,9 +324,11 @@ testSuite({
     let currDragItem = dom.createDom(
         TagName.DIV, ['cursor_move', 'blue_bg'], dom.createTextNode('4'));
     events.listen(dlg, DragListGroup.EventType.DRAGEND, (e) => {
+      /** @suppress {visibility} suppression added to enable type checking */
       currDragItem = dlg.currDragItem_;
     });
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const dragger = new Dragger(event.currentTarget);
     be.type = EventType.MOUSEUP;
     be.clientX = 1;
@@ -316,6 +352,7 @@ testSuite({
         classlist.contains(currDragItem, 'blue_bg'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testFiredEvents() {
     testingEvents.fireClickSequence(list.firstChild);
     assertArrayEquals(
@@ -332,6 +369,7 @@ testSuite({
     assertIdle(dlg);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testFiredEventsWithHysteresis() {
     dlg.setHysteresis(2);
 
@@ -379,6 +417,7 @@ testSuite({
     assertIdle(dlg);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPreventDefaultBeforeDragStart() {
     events.listen(
         dlg, DragListGroup.EventType.BEFOREDRAGSTART, GoogEvent.preventDefault);
@@ -395,6 +434,7 @@ testSuite({
     assertIdle(dlg);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPreventDefaultBeforeDragStartWithHysteresis() {
     dlg.setHysteresis(5);
     events.listen(
@@ -414,6 +454,7 @@ testSuite({
     assertIdle(dlg);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRightClick() {
     testingEvents.fireMouseDownEvent(
         list.firstChild, BrowserEvent.MouseButton.RIGHT);
@@ -433,6 +474,7 @@ testSuite({
   /**
    * Tests that a new item can be added to a drag list after the control has
    * been initialized.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testAddItemToDragList() {
     const item =
@@ -460,6 +502,7 @@ testSuite({
   /**
    * Tests that a new item added to a drag list after the control has been
    * initialized is inserted at the correct position.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testInsertItemInDragList() {
     const item =
@@ -505,6 +548,7 @@ testSuite({
     firedEventTypes.length = 0;
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testOnlyDropDragPermission_allowsDropOnList() {
     setUpWithDragListPermission(DragListPermission.ONLY_DROP);
 
@@ -515,16 +559,22 @@ testSuite({
         dlg.currDragItem_, list2.firstChild);
     firedEventTypes.length = 0;
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const be = new BrowserEvent({
       type: EventType.MOUSEMOVE,
       button: BrowserFeature.HAS_W3C_BUTTON ? 0 : 1,
     });
+    /**
+     * @suppress {visibility,checkTypes} suppression added to enable type
+     * checking
+     */
     event.event_ = be;
 
     const posList2 = style.getPosition(list2.children[1]);
     be.clientX = posList2.x + 2;
     be.clientY = posList2.y + 2;
 
+    /** @suppress {visibility} suppression added to enable type checking */
     let dragEvent = new FxDragEvent(
         Dragger.EventType.DRAG, dlg.dragger_, be.clientX, be.clientY, be);
     dlg.handleDragMove_(dragEvent);
@@ -545,10 +595,13 @@ testSuite({
     // When the user drags the item over the first list.
     const posList = style.getPosition(list.children[1]);
     be.clientX = posList.x + 2;
+    /** @suppress {visibility} suppression added to enable type checking */
     dlg.draggerEl_.style.left = be.clientX + 'px';
     be.clientY = posList.y + 2;
+    /** @suppress {visibility} suppression added to enable type checking */
     dlg.draggerEl_.style.top = be.clientY + 'px';
 
+    /** @suppress {visibility} suppression added to enable type checking */
     dragEvent = new FxDragEvent(
         Dragger.EventType.DRAG, dlg.dragger_, be.clientX, be.clientY, be);
 
@@ -588,6 +641,7 @@ testSuite({
     firedEventTypes.length = 0;
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testOnlyDragOutDragPermission_doesNotAllowDropOnList() {
     setUpWithDragListPermission(DragListPermission.ONLY_DRAG_OUT);
 
@@ -598,16 +652,22 @@ testSuite({
         dlg.currDragItem_, list2.firstChild);
     firedEventTypes.length = 0;
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const be = new BrowserEvent({
       type: EventType.MOUSEMOVE,
       button: BrowserFeature.HAS_W3C_BUTTON ? 0 : 1,
     });
+    /**
+     * @suppress {visibility,checkTypes} suppression added to enable type
+     * checking
+     */
     event.event_ = be;
 
     const posList2 = style.getPosition(list2.children[1]);
     be.clientX = posList2.x + 2;
     be.clientY = posList2.y + 2;
 
+    /** @suppress {visibility} suppression added to enable type checking */
     let dragEvent = new FxDragEvent(
         Dragger.EventType.DRAG, dlg.dragger_, be.clientX, be.clientY, be);
     dlg.handleDragMove_(dragEvent);
@@ -629,9 +689,12 @@ testSuite({
     const posList = style.getPosition(list.children[1]);
     be.clientX = posList.x + 2;
     be.clientY = posList.y + 2;
+    /** @suppress {visibility} suppression added to enable type checking */
     dlg.draggerEl_.style.left = be.clientX + 'px';
+    /** @suppress {visibility} suppression added to enable type checking */
     dlg.draggerEl_.style.top = be.clientY + 'px';
 
+    /** @suppress {visibility} suppression added to enable type checking */
     dragEvent = new FxDragEvent(
         Dragger.EventType.DRAG, dlg.dragger_, be.clientX, be.clientY, be);
 

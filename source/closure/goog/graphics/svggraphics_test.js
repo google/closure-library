@@ -70,6 +70,7 @@ testSuite({
     assertNull(graphics.getDef(defKey));
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testSetElementAffineTransform() {
     if (!graphics) {
       // setUp has failed (no browser support), we should not run this test.
@@ -89,6 +90,9 @@ testSuite({
     graphics.render();
     // getTransformToElement was deleted in Chrome48. See
     // https://code.google.com/p/chromium/issues/detail?id=524432.
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     function getTransformToElement(element, target) {
       return target.getScreenCTM().inverse().multiply(element.getScreenCTM());
     }

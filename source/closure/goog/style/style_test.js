@@ -115,7 +115,9 @@ testSuite({
     mockUserAgent = new MockUserAgent();
     mockUserAgent.install();
 
-    goog.cspNonce_ = 'thisIsANonce';
+    if (!goog.getScriptNonce()) {
+      goog.cspNonce_ = 'thisIsANonce';
+    }
   },
 
   tearDown() {
@@ -1003,8 +1005,9 @@ testSuite({
         googStyle.installSafeStyleSheet(testing.newSafeStyleSheetForTest(''));
 
     const styles = document.head.querySelectorAll('style[nonce]');
-    assertEquals(1, styles.length);
-    assertEquals('thisIsANonce', styles[0].getAttribute('nonce'));
+    assert(styles.length > 0);
+    assertEquals(
+        goog.cspNonce_, styles[styles.length - 1].getAttribute('nonce'));
 
     googStyle.uninstallStyles(result);
   },

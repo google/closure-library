@@ -32,6 +32,7 @@ goog.requireType('goog.dom.AbstractRange');
  * @extends {goog.dom.AbstractSavedCaretRange}
  */
 goog.dom.SavedCaretRange = function(range) {
+  'use strict';
   goog.dom.AbstractSavedCaretRange.call(this);
 
   /**
@@ -73,6 +74,7 @@ goog.inherits(goog.dom.SavedCaretRange, goog.dom.AbstractSavedCaretRange);
  * @override
  */
 goog.dom.SavedCaretRange.prototype.toAbstractRange = function() {
+  'use strict';
   var range = null;
   var startCaret = this.getCaret(true);
   var endCaret = this.getCaret(false);
@@ -92,6 +94,7 @@ goog.dom.SavedCaretRange.prototype.toAbstractRange = function() {
  * @override
  */
 goog.dom.SavedCaretRange.prototype.getCaret = function(start) {
+  'use strict';
   return this.dom_.getElement(start ? this.startCaretId_ : this.endCaretId_);
 };
 
@@ -106,6 +109,7 @@ goog.dom.SavedCaretRange.prototype.getCaret = function(start) {
  * @override
  */
 goog.dom.SavedCaretRange.prototype.removeCarets = function(opt_range) {
+  'use strict';
   goog.dom.removeNode(this.getCaret(true));
   goog.dom.removeNode(this.getCaret(false));
   // This appears unused, but the range is sometimes adjusted in other
@@ -120,6 +124,7 @@ goog.dom.SavedCaretRange.prototype.removeCarets = function(opt_range) {
  * @override
  */
 goog.dom.SavedCaretRange.prototype.setRestorationDocument = function(doc) {
+  'use strict';
   this.dom_.setDocument(doc);
 };
 
@@ -134,6 +139,7 @@ goog.dom.SavedCaretRange.prototype.setRestorationDocument = function(doc) {
  * @protected
  */
 goog.dom.SavedCaretRange.prototype.restoreInternal = function() {
+  'use strict';
   var range = null;
   var anchorCaret = this.getCaret(!this.reversed_);
   var focusCaret = this.getCaret(this.reversed_);
@@ -169,6 +175,7 @@ goog.dom.SavedCaretRange.prototype.restoreInternal = function() {
  * @override
  */
 goog.dom.SavedCaretRange.prototype.disposeInternal = function() {
+  'use strict';
   this.removeCarets();
   this.dom_ = null;
 };
@@ -182,6 +189,7 @@ goog.dom.SavedCaretRange.prototype.disposeInternal = function() {
  * @private
  */
 goog.dom.SavedCaretRange.prototype.createCaret_ = function(start) {
+  'use strict';
   return this.dom_.createDom(
       goog.dom.TagName.SPAN,
       {'id': start ? this.startCaretId_ : this.endCaretId_});
@@ -206,6 +214,7 @@ goog.dom.SavedCaretRange.CARET_REGEX = /<span\s+id="?goog_\d+"?><\/span>/ig;
  *     saved carets.
  */
 goog.dom.SavedCaretRange.htmlEqual = function(str1, str2) {
+  'use strict';
   return str1 == str2 ||
       str1.replace(goog.dom.SavedCaretRange.CARET_REGEX, '') ==
       str2.replace(goog.dom.SavedCaretRange.CARET_REGEX, '');

@@ -29,6 +29,7 @@ const testSuite = goog.require('goog.testing.testSuite');
  */
 function runCtrAesTest(
     keyBytes, initialVectorBytes, plainTextBytes, cipherTextBytes) {
+  /** @suppress {checkTypes} suppression added to enable type checking */
   const aes = new Aes(keyBytes);
   const ctr = new Ctr(aes);
 
@@ -48,9 +49,9 @@ function runCtrAesTest(
 /**
  * Asserts Ctr.incrementBigEndianCounter turns the first parameter
  * into the second.
- *
  * @param {string} toIncrement
  * @param {string} expectedResult
+ * @suppress {visibility} suppression added to enable type checking
  */
 function assertIncEquals(toIncrement, expectedResult) {
   const counter = googCrypt.hexToByteArray(toIncrement);

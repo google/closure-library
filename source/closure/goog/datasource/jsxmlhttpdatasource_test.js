@@ -25,6 +25,7 @@ testSuite({
 
   testLoad_WithPostAndQueryDataSet() {
     const USE_POST = true;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const dataSource = new JsXmlHttpDataSource(
         'uri', 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
 
@@ -44,10 +45,14 @@ testSuite({
 
   testLoad_WithPostAndNoQueryDataSet() {
     const USE_POST = true;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const dataSource = new JsXmlHttpDataSource(
         'uri?a=1&b=2', 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
 
     const testQueue = new TestQueue();
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     dataSource.xhr_ = new XhrIo(testQueue);
 
     dataSource.load();
@@ -62,10 +67,14 @@ testSuite({
   testLoad_WithGet() {
     const USE_GET = false;
     const expectedUri = 'uri?a=1&b=2';
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const dataSource = new JsXmlHttpDataSource(
         expectedUri, 'namne', TEXT_PREFIX, TEXT_POSTFIX, USE_GET);
 
     const testQueue = new TestQueue();
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     dataSource.xhr_ = new XhrIo(testQueue);
 
     dataSource.load();

@@ -31,6 +31,7 @@ goog.require('goog.dom.TextRange');
  *     was an error.
  */
 goog.dom.Range.createFromWindow = function(opt_win) {
+  'use strict';
   var sel =
       goog.dom.AbstractRange.getBrowserSelectionForWindow(opt_win || window);
   return sel && goog.dom.Range.createFromBrowserSelection(sel);
@@ -46,6 +47,7 @@ goog.dom.Range.createFromWindow = function(opt_win) {
  *    was an error.
  */
 goog.dom.Range.createFromBrowserSelection = function(selection) {
+  'use strict';
   var range;
   var isReversed = false;
   if (selection.createRange) {
@@ -83,6 +85,7 @@ goog.dom.Range.createFromBrowserSelection = function(selection) {
  * @return {!goog.dom.AbstractRange} A range wrapper object.
  */
 goog.dom.Range.createFromBrowserRange = function(range, opt_isReversed) {
+  'use strict';
   // Create an IE control range when appropriate.
   return goog.dom.AbstractRange.isNativeControlRange(range) ?
       goog.dom.ControlRange.createFromBrowserRange(range) :
@@ -98,6 +101,7 @@ goog.dom.Range.createFromBrowserRange = function(range, opt_isReversed) {
  * @return {!goog.dom.AbstractRange} A range wrapper object.
  */
 goog.dom.Range.createFromNodeContents = function(node, opt_isReversed) {
+  'use strict';
   return goog.dom.TextRange.createFromNodeContents(node, opt_isReversed);
 };
 
@@ -111,6 +115,7 @@ goog.dom.Range.createFromNodeContents = function(node, opt_isReversed) {
  * @return {!goog.dom.AbstractRange} A range wrapper object.
  */
 goog.dom.Range.createCaret = function(node, offset) {
+  'use strict';
   return goog.dom.TextRange.createFromNodes(node, offset, node, offset);
 };
 
@@ -126,6 +131,7 @@ goog.dom.Range.createCaret = function(node, offset) {
  */
 goog.dom.Range.createFromNodes = function(
     anchorNode, anchorOffset, focusNode, focusOffset) {
+  'use strict';
   return goog.dom.TextRange.createFromNodes(
       anchorNode, anchorOffset, focusNode, focusOffset);
 };
@@ -137,6 +143,7 @@ goog.dom.Range.createFromNodes = function(
  *     window this class was defined in.
  */
 goog.dom.Range.clearSelection = function(opt_win) {
+  'use strict';
   var sel =
       goog.dom.AbstractRange.getBrowserSelectionForWindow(opt_win || window);
   if (!sel) {
@@ -169,6 +176,7 @@ goog.dom.Range.clearSelection = function(opt_win) {
  * @return {boolean} Whether the window has a selection.
  */
 goog.dom.Range.hasSelection = function(opt_win) {
+  'use strict';
   var sel =
       goog.dom.AbstractRange.getBrowserSelectionForWindow(opt_win || window);
   return !!sel &&
@@ -188,6 +196,7 @@ goog.dom.Range.hasSelection = function(opt_win) {
  */
 goog.dom.Range.isReversed = function(
     anchorNode, anchorOffset, focusNode, focusOffset) {
+  'use strict';
   if (anchorNode == focusNode) {
     return focusOffset < anchorOffset;
   }

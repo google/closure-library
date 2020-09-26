@@ -311,6 +311,7 @@ testSuite({
     assertArrayEquals(result, m.appendRows(b).toArray());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSubmatrixByDeletion() {
     const m = new Matrix(
         [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]]);
@@ -318,11 +319,13 @@ testSuite({
     assertArrayEquals(arr, m.getSubmatrixByDeletion_(2, 3).toArray());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testMinor() {
     const m = new Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
     assertEquals(-3, m.getMinor_(0, 0));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCofactor() {
     const m = new Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
     assertEquals(6, m.getCofactor_(0, 1));
@@ -338,6 +341,7 @@ testSuite({
     assertEquals(0, m.getDeterminant());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetSubmatrix() {
     const m = new Matrix(
         [[2, -1, 0, 1, 0, 0], [-1, 2, -1, 0, 1, 0], [0, -1, 2, 0, 0, 1]]);

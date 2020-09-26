@@ -26,23 +26,31 @@ var Plurals_he = goog.i18n.pluralRules.heSelect_;
 var Plurals_ar = goog.i18n.pluralRules.arSelect_;
 
 
-/**
- * @param {string} locale
- * @param {number} style
- * @param {number} direction
- * @param {number} unit
- * @param {string} expected
- * @param {string|undefined} pluralrules
- * @constructor
- */
-const DirectionData = function(
-    locale, style, direction, unit, expected, pluralrules) {
-  this.locale = locale;
-  this.style = style;
-  this.direction = direction;
-  this.unit = unit;
-  this.expected = expected;
-  this.pluralrules = pluralrules;
+/** @unrestricted */
+const DirectionData = class {
+  /**
+   * @param {string} locale
+   * @param {number} style
+   * @param {number} direction
+   * @param {number} unit
+   * @param {string} expected
+   * @param {string|undefined} pluralrules
+   */
+  constructor(locale, style, direction, unit, expected, pluralrules) {
+    this.locale = locale;
+    this.style = style;
+    this.direction = direction;
+    this.unit = unit;
+    this.expected = expected;
+    this.pluralrules = pluralrules;
+  }
+
+  /** @return {string} Error description. */
+  getErrorDescription() {
+    return 'Error for locale:' + this.locale + ' style: ' + this.style +
+        ' quantity =' + this.direction + ' unit =' + this.unit +
+        ' pluralrules = ' + this.pluralrules + '\'';
+  }
 };
 
 
@@ -283,12 +291,7 @@ var formatAutoRtlData = [
 
 // clang-format on
 
-/** @return {string} Error description. */
-DirectionData.prototype.getErrorDescription = function() {
-  return 'Error for locale:' + this.locale + ' style: ' + this.style +
-      ' quantity =' + this.direction + ' unit =' + this.unit +
-      ' pluralrules = ' + this.pluralrules + '\'';
-};
+
 
 // Tests both JavaScript and ECMAScript on supporting browsers.
 // Sets up goog.USE_ECMASCRIPT_I18N_RDTF flag in each function.

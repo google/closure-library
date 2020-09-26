@@ -43,6 +43,7 @@ testSuite({
     assertEquals('the parent of node4 is node2', node2, node4.getParent());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testAriaExpandedFalseSetByDefaultOnParentAfterAddChild() {
     const tree = new TreeControl('root');
     const node1 = new TreeNode('node1');
@@ -60,6 +61,7 @@ testSuite({
         aria.getState(node1.getElement(), 'expanded'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testAriaExpandedSetProperlyAfterSetExpandedCalledOnLeafNode() {
     const tree = new TreeControl('root');
     const node1 = new TreeNode('node1');
@@ -78,6 +80,7 @@ testSuite({
         aria.getState(node1.getElement(), 'expanded'));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testExpandIconAfterAddChild() {
     const tree = new TreeControl('root');
     const node1 = new TreeNode('node1');
@@ -174,6 +177,7 @@ testSuite({
     assertEquals(1, callCount);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRemoveChild() {
     const tree = new TreeControl('root');
     const node1 = new TreeNode('node1');
@@ -193,6 +197,7 @@ testSuite({
         aria.hasState(node1.getElement(), 'expanded'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRemoveLastChildRemovesAriaExpandedState() {
     const tree = new TreeControl('root');
     const node1 = new TreeNode('node1');

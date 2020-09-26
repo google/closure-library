@@ -50,11 +50,13 @@ function getHmac(key, message, blockSize = undefined) {
 }
 
 testSuite({
+  /** @suppress {checkTypes} hmac doesn't access strings */
   testBasicOperations() {
     const hmac = new Hmac(new Sha1(), 'key', 64);
     hashTester.runBasicTests(hmac);
   },
 
+  /** @suppress {checkTypes} hmac doesn't access strings */
   testBasicOperationsWithNoBlockSize() {
     const hmac = new Hmac(new Sha1(), 'key');
     hashTester.runBasicTests(hmac);

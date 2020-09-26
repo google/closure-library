@@ -49,6 +49,7 @@ testSuite({
     assertEquals(0, Expr.create('$JS/Errors/*/count()').getValue());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCommonExpressions() {
     assertTrue(Expr.create('.').isCurrent_);
     assertFalse(Expr.create('Bob').isCurrent_);
@@ -60,6 +61,7 @@ testSuite({
     assertFalse(Expr.create('Bob').isAllElements_);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testIndexExpressions() {
     assertEquals(Expr.create('node/[5]').getNext().size_, 1);
     assertEquals(Expr.create('node/[5]').getNext().parts_[0], '[5]');

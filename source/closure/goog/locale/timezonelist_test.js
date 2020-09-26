@@ -116,12 +116,20 @@ testSuite({
     locale.setLocale('de_DE');
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testTimeZoneSelectedShortNames() {
     // Shortnames in German for France.
     const result = locale.getTimeZoneSelectedShortNames('FR');
     assertEquals('Honolulu (Vereinigte Staaten)', result[3].name);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testTimeZoneSelectedLongNames() {
     // Long names in German for all English speaking regions.
     let result = locale.getTimeZoneSelectedLongNames('en');
@@ -132,6 +140,10 @@ testSuite({
     assertEquals('GMT-10:00 Adak (Vereinigte Staaten)', result[2].name);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testTimeZoneAllLongNames() {
     // All longnames in German
     const result = locale.getTimeZoneAllLongNames();

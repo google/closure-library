@@ -51,6 +51,7 @@ goog.dom.AbstractRange = function() {};
  * @deprecated use window#getSelection instead.
  */
 goog.dom.AbstractRange.getBrowserSelectionForWindow = function(win) {
+  'use strict';
   return win.getSelection();
 };
 
@@ -61,6 +62,7 @@ goog.dom.AbstractRange.getBrowserSelectionForWindow = function(win) {
  * @return {boolean} Whether the given Object is a controlRange.
  */
 goog.dom.AbstractRange.isNativeControlRange = function(range) {
+  'use strict';
   // For now, tests for presence of a control range function.
   return !!range && !!range.addElement;
 };
@@ -93,6 +95,7 @@ goog.dom.AbstractRange.prototype.getBrowserRangeObject = goog.abstractMethod;
  *     range object.
  */
 goog.dom.AbstractRange.prototype.setBrowserRangeObject = function(nativeRange) {
+  'use strict';
   return false;
 };
 
@@ -118,6 +121,7 @@ goog.dom.AbstractRange.prototype.getTextRange = goog.abstractMethod;
  * @return {!Array<?goog.dom.AbstractRange>} Array of text ranges.
  */
 goog.dom.AbstractRange.prototype.getTextRanges = function() {
+  'use strict';
   var output = [];
   for (var i = 0, len = this.getTextRangeCount(); i < len; i++) {
     output.push(this.getTextRange(i));
@@ -137,6 +141,7 @@ goog.dom.AbstractRange.prototype.getContainer = goog.abstractMethod;
  * @return {Element} The deepest element that contains the entire range.
  */
 goog.dom.AbstractRange.prototype.getContainerElement = function() {
+  'use strict';
   var node = this.getContainer();
   return /** @type {Element} */ (
       node.nodeType == goog.dom.NodeType.ELEMENT ? node : node.parentNode);
@@ -192,6 +197,7 @@ goog.dom.AbstractRange.prototype.getEndPosition = goog.abstractMethod;
  * @return {Node} The element or text node the range is anchored at.
  */
 goog.dom.AbstractRange.prototype.getAnchorNode = function() {
+  'use strict';
   return this.isReversed() ? this.getEndNode() : this.getStartNode();
 };
 
@@ -202,6 +208,7 @@ goog.dom.AbstractRange.prototype.getAnchorNode = function() {
  *     is an offset into the childNodes array.
  */
 goog.dom.AbstractRange.prototype.getAnchorOffset = function() {
+  'use strict';
   return this.isReversed() ? this.getEndOffset() : this.getStartOffset();
 };
 
@@ -211,6 +218,7 @@ goog.dom.AbstractRange.prototype.getAnchorOffset = function() {
  *     the cursor is.
  */
 goog.dom.AbstractRange.prototype.getFocusNode = function() {
+  'use strict';
   return this.isReversed() ? this.getStartNode() : this.getEndNode();
 };
 
@@ -221,6 +229,7 @@ goog.dom.AbstractRange.prototype.getFocusNode = function() {
  *     value.  For elements, this is an offset into the childNodes array.
  */
 goog.dom.AbstractRange.prototype.getFocusOffset = function() {
+  'use strict';
   return this.isReversed() ? this.getStartOffset() : this.getEndOffset();
 };
 
@@ -229,6 +238,7 @@ goog.dom.AbstractRange.prototype.getFocusOffset = function() {
  * @return {boolean} Whether the selection is reversed.
  */
 goog.dom.AbstractRange.prototype.isReversed = function() {
+  'use strict';
   return false;
 };
 
@@ -237,6 +247,7 @@ goog.dom.AbstractRange.prototype.isReversed = function() {
  * @return {!Document} The document this selection is a part of.
  */
 goog.dom.AbstractRange.prototype.getDocument = function() {
+  'use strict';
   // Using start node in IE was crashing the browser in some cases so use
   // getContainer for that browser. It's also faster for IE, but still slower
   // than start node for other browsers so we continue to use getStartNode when
@@ -250,6 +261,7 @@ goog.dom.AbstractRange.prototype.getDocument = function() {
  * @return {!Window} The window this selection is a part of.
  */
 goog.dom.AbstractRange.prototype.getWindow = function() {
+  'use strict';
   return goog.dom.getWindow(this.getDocument());
 };
 
@@ -380,6 +392,7 @@ goog.dom.AbstractRange.prototype.insertNode = goog.abstractMethod;
  *     than the node parameter because on IE we have to clone it.
  */
 goog.dom.AbstractRange.prototype.replaceContentsWithNode = function(node) {
+  'use strict';
   if (!this.isCollapsed()) {
     this.removeContents();
   }
@@ -444,6 +457,7 @@ goog.dom.AbstractRange.prototype.collapse = goog.abstractMethod;
  * @extends {goog.dom.TagIterator}
  */
 goog.dom.RangeIterator = function(node, opt_reverse) {
+  'use strict';
   goog.dom.TagIterator.call(this, node, opt_reverse, true);
 };
 goog.inherits(goog.dom.RangeIterator, goog.dom.TagIterator);

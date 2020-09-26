@@ -142,6 +142,7 @@ testSuite({
     assertEquals(100, Vec3.squaredDistance(a, b));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testVec3Equals() {
     assertTrue(Vec3.equals(null, null, null));
     assertFalse(Vec3.equals(null, new Vec3()));

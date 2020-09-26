@@ -31,6 +31,10 @@ const stubs = new PropertyReplacer();
 // To test goog.window.open we open a new window with this file again. Once
 // the new window parses this file it sets this variable to true, indicating
 // that the parent test may check window properties like referrer and location.
+/**
+ * @suppress {strictMissingProperties} suppression added to enable type
+ * checking
+ */
 window.newWinLoaded = true;
 
 let /** ?Window */ newWin = null;
@@ -49,19 +53,27 @@ function waitForTestWindow(win) {
     }
 
     let attemptCount = 0;
-    const intervalToken = window.setInterval(() => {
-      if (++attemptCount > MAX_WIN_LOAD_TRIES) {
-        try {
-          fail('Window did not load after maximum number of checks.');
-        } catch (e) {
-          window.clearInterval(intervalToken);
-          reject(e);
-        }
-      } else if (win.newWinLoaded) {
-        window.clearInterval(intervalToken);
-        resolve(win);
-      }
-    }, WIN_LOAD_TRY_TIMEOUT);
+    const intervalToken =
+        window
+            .setInterval(/**
+                            @suppress {strictMissingProperties} suppression
+                            added to enable type checking
+                          */
+                         () => {
+                           if (++attemptCount > MAX_WIN_LOAD_TRIES) {
+                             try {
+                               fail(
+                                   'Window did not load after maximum number of checks.');
+                             } catch (e) {
+                               window.clearInterval(intervalToken);
+                               reject(e);
+                             }
+                           } else if (win.newWinLoaded) {
+                             window.clearInterval(intervalToken);
+                             resolve(win);
+                           }
+                         },
+                         WIN_LOAD_TRY_TIMEOUT);
   });
 }
 

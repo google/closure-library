@@ -139,6 +139,7 @@ testSuite({
     assertVersionBetween('5', '7');
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMac() {
     let uaString = testAgents.CHROME_MAC;
     const platform = 'IntelMac';

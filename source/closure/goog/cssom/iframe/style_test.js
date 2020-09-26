@@ -98,6 +98,10 @@ function normalizeCssText(cssText) {
 }
 
 testSuite({
+  /**
+   * @suppress {visibility,missingProperties} CssSelector_ property is private
+   * and selectorPartIndex is unknown.
+   */
   testMatchCssSelector() {
     const container = dom.createElement(TagName.DIV);
     container.className = 'container';
@@ -138,7 +142,8 @@ testSuite({
       const input = expectedResults[i][0];
       const expectedResult = expectedResults[i][1];
       const selector = new style.CssSelector_(input);
-      const result = selector.matchElementAncestry(elementAncestry);
+      const result =
+          /** @type {?} */ (selector.matchElementAncestry(elementAncestry));
       if (expectedResult == null) {
         assertEquals('Expected null result', expectedResult, result);
       } else {
@@ -196,7 +201,7 @@ testSuite({
 
   testCopyBackgroundContext() {
     const testDiv = document.getElementById('backgroundTest');
-    const cssText = style.getElementContext(testDiv, null, true);
+    const cssText = style.getElementContext(testDiv, undefined, true);
     const iframe = dom.createElement(TagName.IFRAME);
     const ancestor = document.getElementById('backgroundTest-ancestor-1');
     ancestor.parentNode.insertBefore(iframe, ancestor.nextSibling);
@@ -245,7 +250,7 @@ testSuite({
     doc.body.style.padding = '0';
     doc.body.innerHTML = '<p style="margin: 0">I am transparent!</p>';
     const normalizedCssText = normalizeCssText(
-        style.getElementContext(doc.body.firstChild, null, true));
+        style.getElementContext(doc.body.firstChild, undefined, true));
     // Background properties should get copied through from the parent
     // document since the iframe is transparent
     assertTrue(

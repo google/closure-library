@@ -10,7 +10,7 @@
 
 goog.provide('goog.messaging');
 
-goog.forwardDeclare('goog.messaging.MessageChannel');
+goog.requireType('goog.messaging.MessageChannel');
 
 
 /**

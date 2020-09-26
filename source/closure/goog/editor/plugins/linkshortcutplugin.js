@@ -10,8 +10,8 @@
 
 goog.provide('goog.editor.plugins.LinkShortcutPlugin');
 
-goog.forwardDeclare('goog.editor.Link');
 goog.require('goog.editor.Command');
+goog.require('goog.editor.Link');
 goog.require('goog.editor.Plugin');
 
 
