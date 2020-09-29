@@ -16,62 +16,64 @@ goog.provide('goog.testing.stacktrace.Frame');
 
 /**
  * Class representing one stack frame.
- * @param {string} context Context object, empty in case of global functions or
- *     if the browser doesn't provide this information.
- * @param {string} name Function name, empty in case of anonymous functions.
- * @param {string} alias Alias of the function if available. For example the
- *     function name will be 'c' and the alias will be 'b' if the function is
- *     defined as <code>a.b = function c() {};</code>.
- * @param {string} path File path or URL including line number and optionally
- *     column number separated by colons.
- * @constructor
  * @final
+ * @unrestricted
  */
-goog.testing.stacktrace.Frame = function(context, name, alias, path) {
-  this.context_ = context;
-  this.name_ = name;
-  this.alias_ = alias;
-  this.path_ = path;
-};
-
-
-/**
- * @return {string} The function name or empty string if the function is
- *     anonymous and the object field which it's assigned to is unknown.
- */
-goog.testing.stacktrace.Frame.prototype.getName = function() {
-  return this.name_;
-};
-
-
-/**
- * @return {boolean} Whether the stack frame contains an anonymous function.
- */
-goog.testing.stacktrace.Frame.prototype.isAnonymous = function() {
-  return !this.name_ || this.context_ == '[object Object]';
-};
-
-
-/**
- * Brings one frame of the stack trace into a common format across browsers.
- * @return {string} Pretty printed stack frame.
- */
-goog.testing.stacktrace.Frame.prototype.toCanonicalString = function() {
-  const htmlEscape = goog.testing.stacktrace.htmlEscape_;
-  const deobfuscate = goog.testing.stacktrace.maybeDeobfuscateFunctionName_;
-
-  const canonical = [
-    this.context_ ? htmlEscape(this.context_) + '.' : '',
-    this.name_ ? htmlEscape(deobfuscate(this.name_)) : 'anonymous',
-    this.alias_ ? ' [as ' + htmlEscape(deobfuscate(this.alias_)) + ']' : ''
-  ];
-
-  if (this.path_) {
-    canonical.push(' at ');
-    canonical.push(htmlEscape(this.path_));
+goog.testing.stacktrace.Frame = class {
+  /**
+   * @param {string} context Context object, empty in case of global functions
+   *     or if the browser doesn't provide this information.
+   * @param {string} name Function name, empty in case of anonymous functions.
+   * @param {string} alias Alias of the function if available. For example the
+   *     function name will be 'c' and the alias will be 'b' if the function is
+   *     defined as <code>a.b = function c() {};</code>.
+   * @param {string} path File path or URL including line number and optionally
+   *     column number separated by colons.
+   */
+  constructor(context, name, alias, path) {
+    this.context_ = context;
+    this.name_ = name;
+    this.alias_ = alias;
+    this.path_ = path;
   }
-  return canonical.join('');
+
+  /**
+   * @return {string} The function name or empty string if the function is
+   *     anonymous and the object field which it's assigned to is unknown.
+   */
+  getName() {
+    return this.name_;
+  }
+
+  /**
+   * @return {boolean} Whether the stack frame contains an anonymous function.
+   */
+  isAnonymous() {
+    return !this.name_ || this.context_ == '[object Object]';
+  }
+
+  /**
+   * Brings one frame of the stack trace into a common format across browsers.
+   * @return {string} Pretty printed stack frame.
+   */
+  toCanonicalString() {
+    const htmlEscape = goog.testing.stacktrace.htmlEscape_;
+    const deobfuscate = goog.testing.stacktrace.maybeDeobfuscateFunctionName_;
+
+    const canonical = [
+      this.context_ ? htmlEscape(this.context_) + '.' : '',
+      this.name_ ? htmlEscape(deobfuscate(this.name_)) : 'anonymous',
+      this.alias_ ? ' [as ' + htmlEscape(deobfuscate(this.alias_)) + ']' : ''
+    ];
+
+    if (this.path_) {
+      canonical.push(' at ');
+      canonical.push(htmlEscape(this.path_));
+    }
+    return canonical.join('');
+  }
 };
+
 
 
 /**
@@ -131,8 +133,9 @@ goog.testing.stacktrace.V8_CONTEXT_PATTERN_ =
  * @private {string}
  * @const
  */
-goog.testing.stacktrace.V8_FUNCTION_NAME_PATTERN_ = '(?:new )?(?:' +
-    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + '|<anonymous>)';
+goog.testing.stacktrace.V8_FUNCTION_NAME_PATTERN_ =
+    '(?:new )?(?:' + goog.testing.stacktrace.IDENTIFIER_PATTERN_ +
+    '|<anonymous>)';
 
 
 /**

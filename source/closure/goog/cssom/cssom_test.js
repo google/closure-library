@@ -45,24 +45,30 @@ function fixCssTextForIe(cssText) {
 
 testSuite({
   testGetFileNameFromStyleSheet() {
-    let styleSheet = {'href': 'http://foo.com/something/filename.css'};
+    // cast to create mock object.
+    let styleSheet =
+        /** @type {?} */ ({'href': 'http://foo.com/something/filename.css'});
     assertEquals('filename.css', cssom.getFileNameFromStyleSheet(styleSheet));
 
-    styleSheet = {'href': 'https://foo.com:123/something/filename.css'};
+    styleSheet = /** @type {?} */ (
+        {'href': 'https://foo.com:123/something/filename.css'});
     assertEquals('filename.css', cssom.getFileNameFromStyleSheet(styleSheet));
 
-    styleSheet = {'href': 'http://foo.com/something/filename.css?bar=bas'};
+    styleSheet = /** @type {?} */ (
+        {'href': 'http://foo.com/something/filename.css?bar=bas'});
     assertEquals('filename.css', cssom.getFileNameFromStyleSheet(styleSheet));
 
-    styleSheet = {'href': 'filename.css?bar=bas'};
+    styleSheet = /** @type {?} */ ({'href': 'filename.css?bar=bas'});
     assertEquals('filename.css', cssom.getFileNameFromStyleSheet(styleSheet));
 
-    styleSheet = {'href': 'filename.css'};
+    styleSheet = /** @type {?} */ ({'href': 'filename.css'});
     assertEquals('filename.css', cssom.getFileNameFromStyleSheet(styleSheet));
   },
 
   testGetAllCssStyleSheets() {
-    const styleSheets = cssom.getAllCssStyleSheets();
+    // NOTE: getAllCssStyleSheets return type is wrong, it should be
+    // !Array<!Stylesheet> rather than nullable array entries
+    const styleSheets = /** @type {?} */ (cssom.getAllCssStyleSheets());
     assertEquals(4, styleSheets.length);
     // Makes sure they're in the right cascade order.
     assertEquals(
@@ -129,6 +135,7 @@ testSuite({
     assertEquals(6, cssRules.length);
   },
 
+  /** @suppress {missingProperties} cssRules not defined on StyleSheet */
   testAddCssRule() {
     // test that addCssRule correctly adds the rule to the style
     // sheet.
@@ -148,6 +155,7 @@ testSuite({
     cssom.removeCssRule(styleSheet, 1);
   },
 
+  /** @suppress {missingProperties} cssRules not defined on StyleSheet */
   testAddCssRuleAtPos() {
     // test that addCssRule correctly adds the rule to the style
     // sheet at the specified position.
@@ -219,6 +227,7 @@ testSuite({
     assertEquals(styleSheet, parentStyleSheet);
   },
 
+  /** @suppress {missingProperties} cssRules not defined on StyleSheet */
   testGetCssRuleIndexInParentStyleSheetAfterGetAllCssStyleRules() {
     const cssRules = cssom.getAllCssStyleRules();
     const cssRule = cssRules[4];
@@ -231,6 +240,7 @@ testSuite({
     assertEquals(ruleIndex, cssom.getCssRuleIndexInParentStyleSheet(cssRule));
   },
 
+  /** @suppress {missingProperties} cssRules not defined on StyleSheet */
   testGetCssRuleIndexInParentStyleSheetNonStyleRule() {
     // IE's styleSheet.rules only contain CSSStyleRules.
     if (!userAgent.IE) {
@@ -273,6 +283,7 @@ testSuite({
     assertEquals(origCssText, fixCssTextForIe(nowCssText));
   },
 
+  /** @suppress {missingProperties} cssRules not defined on StyleSheet */
   testReplaceCssRuleUsingGetAllCssStyleRules() {
     const cssRules = cssom.getAllCssStyleRules();
     const origCssRule = cssRules[4];

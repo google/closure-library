@@ -11,6 +11,9 @@ const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
+  /**
+   * @suppress {visibility} accessing private properties
+   */
   testIsValidAlphaHexColor() {
     const goodAlphaHexColors = [
       '#ffffffff',
@@ -35,6 +38,9 @@ testSuite({
     }
   },
 
+  /**
+   * @suppress {visibility} accessing private properties
+   */
   testIsValidRgbaColor() {
     const goodRgbaColors = [
       'rgba(1, 20, 234, 1)',
@@ -70,6 +76,9 @@ testSuite({
     }
   },
 
+  /**
+   * @suppress {visibility} accessing private properties
+   */
   testIsValidHslaColor() {
     const goodHslaColors = [
       'hsla(120, 0%, 0%, 1)',
@@ -285,6 +294,9 @@ testSuite({
         transparentPurpleHsl);
   },
 
+  /**
+   * @suppress {visibility} accessing private properties
+   */
   testNormalizeAlphaHex() {
     const compactColor = '#abcd';
     const normalizedCompactColor = alpha.normalizeAlphaHex_(compactColor);
@@ -354,6 +366,9 @@ testSuite({
         'rgba(28,23,23,0.9)', alpha.hslaArrayToRgbaStyle([0, 10, 10, 0.9]));
   },
 
+  /**
+   * @suppress {visibility} accessing private properties
+   */
   testRgbaStyleParsableResult() {
     const testColors = [
       [175, 19, 255, 1],
