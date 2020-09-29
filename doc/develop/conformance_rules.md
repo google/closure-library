@@ -3,6 +3,8 @@ title: JavaScript Conformance Rules for Closure Library
 section: develop
 layout: article
 ---
+<!--* freshness: { owner: 'tsjs-libraries-eng' } *-->
+
 <!-- Documentation licensed under CC BY 4.0 -->
 <!-- License available at https://creativecommons.org/licenses/by/4.0/ -->
 

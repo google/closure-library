@@ -6,6 +6,8 @@ title: Develop with Closure
 section: develop
 layout: article
 ---
+<!--* freshness: { owner: 'tsjs-libraries-eng' reviewed: '2020-09-21' } *-->
+
 # Develop with Closure
 
 This section contains information pertaining to the development of applications
