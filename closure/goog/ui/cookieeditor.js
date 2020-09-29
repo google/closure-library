@@ -24,16 +24,117 @@ goog.requireType('goog.events.Event');
 
 /**
  * Displays and edits the value of a cookie.
- * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
- * @constructor
- * @extends {goog.ui.Component}
  * @final
+ * @unrestricted
  */
-goog.ui.CookieEditor = function(opt_domHelper) {
-  'use strict';
-  goog.ui.CookieEditor.base(this, 'constructor', opt_domHelper);
+goog.ui.CookieEditor = class extends goog.ui.Component {
+  /**
+   * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+   */
+  constructor(opt_domHelper) {
+    'use strict';
+    super(opt_domHelper);
+  }
+
+  /**
+   * Sets the cookie which this component will edit.
+   * @param {string} cookieKey Cookie key.
+   */
+  selectCookie(cookieKey) {
+    'use strict';
+    goog.asserts.assert(goog.net.cookies.isValidName(cookieKey));
+    this.cookieKey_ = cookieKey;
+    if (this.textAreaElem_) {
+      this.textAreaElem_.value = goog.net.cookies.get(cookieKey) || '';
+    }
+  }
+
+  /** @override */
+  canDecorate() {
+    'use strict';
+    return false;
+  }
+
+  /** @override */
+  createDom() {
+    'use strict';
+    // Debug-only, so we don't need i18n.
+    this.clearButtonElem_ = goog.dom.createDom(
+        goog.dom.TagName.BUTTON, /* attributes */ null, 'Clear');
+    this.updateButtonElem_ = goog.dom.createDom(
+        goog.dom.TagName.BUTTON, /* attributes */ null, 'Update');
+    var value = this.cookieKey_ && goog.net.cookies.get(this.cookieKey_);
+    this.textAreaElem_ = goog.dom.createDom(
+        goog.dom.TagName.TEXTAREA, /* attibutes */ null, value || '');
+    this.valueWarningElem_ = goog.dom.createDom(
+        goog.dom.TagName.SPAN,
+        /* attibutes */ {'style': 'display:none;color:red'},
+        'Invalid cookie value.');
+    this.setElementInternal(goog.dom.createDom(
+        goog.dom.TagName.DIV,
+        /* attibutes */ null, this.valueWarningElem_,
+        goog.dom.createDom(goog.dom.TagName.BR), this.textAreaElem_,
+        goog.dom.createDom(goog.dom.TagName.BR), this.clearButtonElem_,
+        this.updateButtonElem_));
+  }
+
+  /** @override */
+  enterDocument() {
+    'use strict';
+    super.enterDocument();
+    this.getHandler().listen(
+        this.clearButtonElem_, goog.events.EventType.CLICK, this.handleClear_);
+    this.getHandler().listen(
+        this.updateButtonElem_, goog.events.EventType.CLICK,
+        this.handleUpdate_);
+  }
+
+  /**
+   * Handles user clicking clear button.
+   * @param {!goog.events.Event} e The click event.
+   * @private
+   */
+  handleClear_(e) {
+    'use strict';
+    if (this.cookieKey_) {
+      goog.net.cookies.remove(this.cookieKey_);
+    }
+    this.textAreaElem_.value = '';
+  }
+
+  /**
+   * Handles user clicking update button.
+   * @param {!goog.events.Event} e The click event.
+   * @private
+   */
+  handleUpdate_(e) {
+    'use strict';
+    if (this.cookieKey_) {
+      var value = this.textAreaElem_.value;
+      if (value) {
+        // Strip line breaks.
+        value = goog.string.stripNewlines(value);
+      }
+      if (goog.net.cookies.isValidValue(value)) {
+        goog.net.cookies.set(this.cookieKey_, value);
+        goog.style.setElementShown(this.valueWarningElem_, false);
+      } else {
+        goog.style.setElementShown(this.valueWarningElem_, true);
+      }
+    }
+  }
+
+  /** @override */
+  disposeInternal() {
+    'use strict';
+    this.clearButtonElem_ = null;
+    this.cookieKey_ = null;
+    this.textAreaElem_ = null;
+    this.updateButtonElem_ = null;
+    this.valueWarningElem_ = null;
+  }
 };
-goog.inherits(goog.ui.CookieEditor, goog.ui.Component);
+
 
 
 /**
@@ -77,106 +178,3 @@ goog.ui.CookieEditor.prototype.updateButtonElem_;
 
 
 // TODO(user): add combobox for user to select different cookies
-/**
- * Sets the cookie which this component will edit.
- * @param {string} cookieKey Cookie key.
- */
-goog.ui.CookieEditor.prototype.selectCookie = function(cookieKey) {
-  'use strict';
-  goog.asserts.assert(goog.net.cookies.isValidName(cookieKey));
-  this.cookieKey_ = cookieKey;
-  if (this.textAreaElem_) {
-    this.textAreaElem_.value = goog.net.cookies.get(cookieKey) || '';
-  }
-};
-
-
-/** @override */
-goog.ui.CookieEditor.prototype.canDecorate = function() {
-  'use strict';
-  return false;
-};
-
-
-/** @override */
-goog.ui.CookieEditor.prototype.createDom = function() {
-  'use strict';
-  // Debug-only, so we don't need i18n.
-  this.clearButtonElem_ = goog.dom.createDom(
-      goog.dom.TagName.BUTTON, /* attributes */ null, 'Clear');
-  this.updateButtonElem_ = goog.dom.createDom(
-      goog.dom.TagName.BUTTON, /* attributes */ null, 'Update');
-  var value = this.cookieKey_ && goog.net.cookies.get(this.cookieKey_);
-  this.textAreaElem_ = goog.dom.createDom(
-      goog.dom.TagName.TEXTAREA, /* attibutes */ null, value || '');
-  this.valueWarningElem_ = goog.dom.createDom(
-      goog.dom.TagName.SPAN,
-      /* attibutes */ {'style': 'display:none;color:red'},
-      'Invalid cookie value.');
-  this.setElementInternal(
-      goog.dom.createDom(
-          goog.dom.TagName.DIV,
-          /* attibutes */ null, this.valueWarningElem_,
-          goog.dom.createDom(goog.dom.TagName.BR), this.textAreaElem_,
-          goog.dom.createDom(goog.dom.TagName.BR), this.clearButtonElem_,
-          this.updateButtonElem_));
-};
-
-
-/** @override */
-goog.ui.CookieEditor.prototype.enterDocument = function() {
-  'use strict';
-  goog.ui.CookieEditor.base(this, 'enterDocument');
-  this.getHandler().listen(
-      this.clearButtonElem_, goog.events.EventType.CLICK, this.handleClear_);
-  this.getHandler().listen(
-      this.updateButtonElem_, goog.events.EventType.CLICK, this.handleUpdate_);
-};
-
-
-/**
- * Handles user clicking clear button.
- * @param {!goog.events.Event} e The click event.
- * @private
- */
-goog.ui.CookieEditor.prototype.handleClear_ = function(e) {
-  'use strict';
-  if (this.cookieKey_) {
-    goog.net.cookies.remove(this.cookieKey_);
-  }
-  this.textAreaElem_.value = '';
-};
-
-
-/**
- * Handles user clicking update button.
- * @param {!goog.events.Event} e The click event.
- * @private
- */
-goog.ui.CookieEditor.prototype.handleUpdate_ = function(e) {
-  'use strict';
-  if (this.cookieKey_) {
-    var value = this.textAreaElem_.value;
-    if (value) {
-      // Strip line breaks.
-      value = goog.string.stripNewlines(value);
-    }
-    if (goog.net.cookies.isValidValue(value)) {
-      goog.net.cookies.set(this.cookieKey_, value);
-      goog.style.setElementShown(this.valueWarningElem_, false);
-    } else {
-      goog.style.setElementShown(this.valueWarningElem_, true);
-    }
-  }
-};
-
-
-/** @override */
-goog.ui.CookieEditor.prototype.disposeInternal = function() {
-  'use strict';
-  this.clearButtonElem_ = null;
-  this.cookieKey_ = null;
-  this.textAreaElem_ = null;
-  this.updateButtonElem_ = null;
-  this.valueWarningElem_ = null;
-};
