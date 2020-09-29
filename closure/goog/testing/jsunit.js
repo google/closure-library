@@ -47,6 +47,7 @@ goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS =
 
 
 (function() {
+'use strict';
 // Only allow one global test runner to be created on a page.
 if (goog.global['G_testRunner'] instanceof goog.testing.TestRunner) {
   return;
@@ -94,6 +95,7 @@ if (goog.global['G_errorFilter']) {
 }
 
 var maybeGetStack = function(error) {
+  'use strict';
   var stack = error && error.stack;
   return typeof stack === 'string' ? stack : '';
 };
@@ -102,6 +104,7 @@ var maybeGetStack = function(error) {
 // initialization of the page.
 var onerror = window.onerror;
 window.onerror = function(messageOrEvent, url, line) {
+  'use strict';
   // TODO(johnlenz): fix this function parameters once the "onerror"
   // definition has been corrected.
   // colno and errObj were added later.
@@ -163,6 +166,7 @@ if (window['__onerror_at_boot']) {
 if (goog.testing.jsunit.AUTO_RUN_ONLOAD) {
   var onload = window.onload;
   window.onload = function(e) {
+    'use strict';
     // Call any existing onload handlers.
     if (onload) {
       onload(e);
@@ -177,6 +181,7 @@ if (goog.testing.jsunit.AUTO_RUN_ONLOAD) {
     }
 
     realTimeout(function() {
+      'use strict';
       if (!tr.initialized) {
         var testCase = new goog.testing.TestCase(document.title);
         goog.testing.TestCase.initializeTestCase(testCase);

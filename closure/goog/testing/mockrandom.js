@@ -28,6 +28,7 @@ goog.require('goog.Disposable');
  * @final
  */
 goog.testing.MockRandom = function(sequence, opt_install) {
+  'use strict';
   goog.Disposable.call(this);
 
   /**
@@ -71,6 +72,7 @@ goog.testing.MockRandom.prototype.installed_;
  * Installs this MockRandom as the system number generator.
  */
 goog.testing.MockRandom.prototype.install = function() {
+  'use strict';
   if (!this.installed_) {
     Math.random = goog.bind(this.random, this);
     this.installed_ = true;
@@ -85,6 +87,7 @@ goog.testing.MockRandom.prototype.install = function() {
  *     be thrown.
  */
 goog.testing.MockRandom.prototype.random = function() {
+  'use strict';
   if (this.hasMoreValues()) {
     return this.sequence_.shift();
   }
@@ -99,6 +102,7 @@ goog.testing.MockRandom.prototype.random = function() {
  * @return {boolean} Whether there are more numbers left in the sequence.
  */
 goog.testing.MockRandom.prototype.hasMoreValues = function() {
+  'use strict';
   return this.sequence_.length > 0;
 };
 
@@ -108,6 +112,7 @@ goog.testing.MockRandom.prototype.hasMoreValues = function() {
  * @param {!Array<number>|number} values Number or array of numbers to inject.
  */
 goog.testing.MockRandom.prototype.inject = function(values) {
+  'use strict';
   if (Array.isArray(values)) {
     this.sequence_ = values.concat(this.sequence_);
   } else {
@@ -120,6 +125,7 @@ goog.testing.MockRandom.prototype.inject = function(values) {
  * Uninstalls the MockRandom.
  */
 goog.testing.MockRandom.prototype.uninstall = function() {
+  'use strict';
   if (this.installed_) {
     Math.random = this.mathRandom_;
     this.installed_ = false;
@@ -129,6 +135,7 @@ goog.testing.MockRandom.prototype.uninstall = function() {
 
 /** @override */
 goog.testing.MockRandom.prototype.disposeInternal = function() {
+  'use strict';
   this.uninstall();
   delete this.sequence_;
   delete this.mathRandom_;
@@ -142,5 +149,6 @@ goog.testing.MockRandom.prototype.disposeInternal = function() {
  */
 goog.testing.MockRandom.prototype.setStrictlyFromSequence = function(
     strictlyFromSequence) {
+  'use strict';
   this.strictlyFromSequence_ = strictlyFromSequence;
 };

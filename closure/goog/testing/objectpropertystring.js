@@ -26,6 +26,7 @@ goog.provide('goog.testing.ObjectPropertyString');
  * @deprecated Use goog.reflect.objectProperty instead.
  */
 goog.testing.ObjectPropertyString = function(object, propertyString) {
+  'use strict';
   this.object_ = object;
   this.propertyString_ = /** @type {string} */ (propertyString);
 };
@@ -49,6 +50,7 @@ goog.testing.ObjectPropertyString.prototype.propertyString_;
  * @return {Object} The object.
  */
 goog.testing.ObjectPropertyString.prototype.getObject = function() {
+  'use strict';
   return this.object_;
 };
 
@@ -57,5 +59,6 @@ goog.testing.ObjectPropertyString.prototype.getObject = function() {
  * @return {string} The property string.
  */
 goog.testing.ObjectPropertyString.prototype.getPropertyString = function() {
+  'use strict';
   return this.propertyString_;
 };

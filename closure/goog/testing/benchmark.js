@@ -19,6 +19,7 @@ goog.require('goog.testing.TestCase');
  * @private
  */
 goog.testing.benchmark.run_ = function() {
+  'use strict';
   // Parse the 'times' query parameter if it's set.
   var times = 200;
   var search = window.location.search;
@@ -84,5 +85,6 @@ goog.testing.benchmark.run_ = function() {
  * @param {Event} e The event object.
  */
 window.onload = function(e) {
+  'use strict';
   goog.testing.benchmark.run_();
 };
