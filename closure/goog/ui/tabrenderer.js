@@ -14,7 +14,6 @@ goog.provide('goog.ui.TabRenderer');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ControlRenderer');
-goog.requireType('goog.ui.Control');
 
 
 
@@ -73,7 +72,6 @@ goog.ui.TabRenderer.prototype.getAriaRole = function() {
  * @param {goog.ui.Control} tab Tab to render.
  * @return {Element} Root element for the tab.
  * @override
- * @suppress {missingProperties} tab.getTooltip
  */
 goog.ui.TabRenderer.prototype.createDom = function(tab) {
   'use strict';
@@ -97,7 +95,6 @@ goog.ui.TabRenderer.prototype.createDom = function(tab) {
  * @param {Element} element Element to decorate.
  * @return {Element} Decorated element.
  * @override
- * @suppress {missingProperties} tab.setTooltipInternal
  */
 goog.ui.TabRenderer.prototype.decorate = function(tab, element) {
   'use strict';

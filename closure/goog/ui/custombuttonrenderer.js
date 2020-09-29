@@ -20,8 +20,6 @@ goog.require('goog.string');
 goog.require('goog.ui.ButtonRenderer');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.requireType('goog.dom.DomHelper');
-goog.requireType('goog.ui.Button');
-goog.requireType('goog.ui.Control');
 goog.requireType('goog.ui.ControlContent');
 
 

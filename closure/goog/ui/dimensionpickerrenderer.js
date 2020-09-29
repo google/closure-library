@@ -13,6 +13,7 @@
 
 goog.provide('goog.ui.DimensionPickerRenderer');
 
+goog.forwardDeclare('goog.ui.DimensionPicker');
 goog.require('goog.a11y.aria.Announcer');
 goog.require('goog.a11y.aria.LivePriority');
 goog.require('goog.dom');
@@ -21,8 +22,6 @@ goog.require('goog.i18n.bidi');
 goog.require('goog.style');
 goog.require('goog.ui.ControlRenderer');
 goog.require('goog.userAgent');
-goog.requireType('goog.ui.Control');
-goog.requireType('goog.ui.DimensionPicker');
 
 
 
@@ -184,14 +183,17 @@ goog.ui.DimensionPickerRenderer.prototype.addElementContents_ = function(
       });
   var highlightedDiv = palette.getDomHelper().createDom(
       goog.dom.TagName.DIV, goog.getCssName(this.getCssClass(), 'highlighted'));
-  element.appendChild(palette.getDomHelper().createDom(
-      goog.dom.TagName.DIV,
-      {'style': 'width:100%;height:100%;touch-action:none;'}, mouseCatcherDiv,
-      unhighlightedDiv, highlightedDiv));
+  element.appendChild(
+      palette.getDomHelper().createDom(
+          goog.dom.TagName.DIV, {
+            'style': 'width:100%;height:100%;touch-action:none;'
+          },
+          mouseCatcherDiv, unhighlightedDiv, highlightedDiv));
 
   // Lastly we add a div to store the text version of the current state.
-  element.appendChild(palette.getDomHelper().createDom(
-      goog.dom.TagName.DIV, goog.getCssName(this.getCssClass(), 'status')));
+  element.appendChild(
+      palette.getDomHelper().createDom(
+          goog.dom.TagName.DIV, goog.getCssName(this.getCssClass(), 'status')));
 };
 
 

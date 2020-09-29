@@ -15,7 +15,6 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.MenuSeparatorRenderer');
-goog.requireType('goog.ui.Control');
 
 
 

@@ -10,6 +10,8 @@
 
 goog.provide('goog.ui.ContainerRenderer');
 
+goog.forwardDeclare('goog.ui.Container');
+goog.forwardDeclare('goog.ui.Container.Orientation');
 goog.require('goog.a11y.aria');
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -20,7 +22,6 @@ goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
-goog.requireType('goog.ui.Container');
 goog.requireType('goog.ui.Control');
 
 
@@ -115,7 +116,6 @@ goog.ui.ContainerRenderer.prototype.getAriaRole = function() {
  * valid tab index can receive focus.
  * @param {Element} element Element whose tab index is to be changed.
  * @param {boolean} enable Whether to add or remove the element's tab index.
- * @suppress {strictMissingProperties} element.tabIndex
  */
 goog.ui.ContainerRenderer.prototype.enableTabIndex = function(element, enable) {
   'use strict';
@@ -218,17 +218,17 @@ goog.ui.ContainerRenderer.prototype.decorate = function(container, element) {
  * @param {string} baseClass Base class name used as the root of state-specific
  *     class names (typically the renderer's own class name).
  * @protected
+ * @suppress {missingRequire} goog.ui.Container
  */
 goog.ui.ContainerRenderer.prototype.setStateFromClassName = function(
     container, className, baseClass) {
   'use strict';
-  var Container = goog.module.get('goog.ui.Container');
   if (className == goog.getCssName(baseClass, 'disabled')) {
     container.setEnabled(false);
   } else if (className == goog.getCssName(baseClass, 'horizontal')) {
-    container.setOrientation(Container.Orientation.HORIZONTAL);
+    container.setOrientation(goog.ui.Container.Orientation.HORIZONTAL);
   } else if (className == goog.getCssName(baseClass, 'vertical')) {
-    container.setOrientation(Container.Orientation.VERTICAL);
+    container.setOrientation(goog.ui.Container.Orientation.VERTICAL);
   }
 };
 
@@ -359,10 +359,9 @@ goog.ui.ContainerRenderer.prototype.getCssClass = function() {
  */
 goog.ui.ContainerRenderer.prototype.getClassNames = function(container) {
   'use strict';
-  var Container = goog.module.get('goog.ui.Container');
   var baseClass = this.getCssClass();
   var isHorizontal =
-      container.getOrientation() == Container.Orientation.HORIZONTAL;
+      container.getOrientation() == goog.ui.Container.Orientation.HORIZONTAL;
   var classNames = [
     baseClass, (isHorizontal ? goog.getCssName(baseClass, 'horizontal') :
                                goog.getCssName(baseClass, 'vertical'))
@@ -379,9 +378,9 @@ goog.ui.ContainerRenderer.prototype.getClassNames = function(container) {
  * renderer.  The base class implementation returns `VERTICAL`.
  * @return {goog.ui.Container.Orientation} Default orientation for containers
  *     created or decorated by this renderer.
+ * @suppress {missingRequire} goog.ui.Container
  */
 goog.ui.ContainerRenderer.prototype.getDefaultOrientation = function() {
   'use strict';
-  var Container = goog.module.get('goog.ui.Container');
-  return Container.Orientation.VERTICAL;
+  return goog.ui.Container.Orientation.VERTICAL;
 };

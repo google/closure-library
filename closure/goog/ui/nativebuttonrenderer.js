@@ -17,7 +17,6 @@ goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.ButtonRenderer');
 goog.require('goog.ui.Component');
-goog.requireType('goog.ui.Control');
 
 
 

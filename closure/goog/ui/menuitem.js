@@ -13,6 +13,7 @@
 
 goog.provide('goog.ui.MenuItem');
 
+goog.forwardDeclare('goog.ui.Menu');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -25,7 +26,6 @@ goog.require('goog.ui.MenuItemRenderer');
 goog.require('goog.ui.registry');
 goog.requireType('goog.events.KeyCodes');
 goog.requireType('goog.ui.ControlContent');  // circular
-goog.requireType('goog.ui.Menu');
 
 
 

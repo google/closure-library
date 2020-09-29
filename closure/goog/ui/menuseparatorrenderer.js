@@ -14,7 +14,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.ControlRenderer');
-goog.requireType('goog.ui.Control');
 goog.requireType('goog.ui.ControlContent');
 
 
