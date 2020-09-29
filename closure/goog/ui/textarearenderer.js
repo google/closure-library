@@ -25,6 +25,7 @@ goog.provide('goog.ui.TextareaRenderer');
 goog.require('goog.dom.TagName');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ControlRenderer');
+goog.requireType('goog.ui.Control');
 
 
 

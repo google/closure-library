@@ -16,7 +16,6 @@
 goog.provide('goog.ui.tree.BaseNode');
 goog.provide('goog.ui.tree.BaseNode.EventType');
 
-goog.forwardDeclare('goog.ui.tree.TreeControl');
 goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
@@ -32,6 +31,7 @@ goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.requireType('goog.dom.DomHelper');
 goog.requireType('goog.events.BrowserEvent');  // circular
+goog.requireType('goog.ui.tree.TreeControl');
 
 
 
