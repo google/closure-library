@@ -24,6 +24,7 @@ goog.require('goog.math.interpolator.Interpolator1');
  * @final
  */
 goog.math.interpolator.Linear1 = function() {
+  'use strict';
   /**
    * The abscissa of the data points.
    * @type {!Array<number>}
@@ -42,6 +43,7 @@ goog.math.interpolator.Linear1 = function() {
 
 /** @override */
 goog.math.interpolator.Linear1.prototype.setData = function(x, y) {
+  'use strict';
   goog.asserts.assert(
       x.length == y.length,
       'input arrays to setData should have the same length');
@@ -57,6 +59,7 @@ goog.math.interpolator.Linear1.prototype.setData = function(x, y) {
 
 /** @override */
 goog.math.interpolator.Linear1.prototype.interpolate = function(x) {
+  'use strict';
   var pos = goog.array.binarySearch(this.x_, x);
   if (pos < 0) {
     pos = -pos - 2;
@@ -70,6 +73,7 @@ goog.math.interpolator.Linear1.prototype.interpolate = function(x) {
 
 /** @override */
 goog.math.interpolator.Linear1.prototype.getInverse = function() {
+  'use strict';
   var interpolator = new goog.math.interpolator.Linear1();
   interpolator.setData(this.y_, this.x_);
   return interpolator;

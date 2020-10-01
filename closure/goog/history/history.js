@@ -224,6 +224,7 @@ goog.requireType('goog.events.BrowserEvent');
  */
 goog.History = function(
     opt_invisible, opt_blankPageUrl, opt_input, opt_iframe) {
+  'use strict';
   goog.events.EventTarget.call(this);
 
   if (opt_invisible && !opt_blankPageUrl) {
@@ -415,6 +416,7 @@ goog.History.prototype.lastToken_ = null;
  * @return {boolean} Whether onhashchange is supported.
  */
 goog.History.isOnHashChangeSupported = goog.memoize(function() {
+  'use strict';
   return goog.userAgent.IE ? goog.userAgent.isDocumentModeOrHigher(8) :
                              'onhashchange' in goog.global;
 });
@@ -450,6 +452,7 @@ goog.History.prototype.lockedToken_ = null;
 
 /** @override */
 goog.History.prototype.disposeInternal = function() {
+  'use strict';
   goog.History.superClass_.disposeInternal.call(this);
   this.eventHandler_.dispose();
   this.setEnabled(false);
@@ -469,7 +472,7 @@ goog.History.prototype.disposeInternal = function() {
  * @param {boolean} enable Whether to enable the history polling loop.
  */
 goog.History.prototype.setEnabled = function(enable) {
-
+  'use strict';
   if (enable == this.enabled_) {
     return;
   }
@@ -541,6 +544,7 @@ goog.History.prototype.setEnabled = function(enable) {
  * @protected
  */
 goog.History.prototype.onDocumentLoaded = function() {
+  'use strict';
   this.documentLoaded = true;
 
   if (this.hiddenInput_.value) {
@@ -561,6 +565,7 @@ goog.History.prototype.onDocumentLoaded = function() {
  * @private
  */
 goog.History.prototype.onShow_ = function(e) {
+  'use strict';
   // NOTE(user): persisted is a property passed in the pageshow event that
   // indicates whether the page is being persisted from the cache or is being
   // loaded for the first time.
@@ -580,6 +585,7 @@ goog.History.prototype.onShow_ = function(e) {
  * @private
  */
 goog.History.prototype.onHashChange_ = function(e) {
+  'use strict';
   var hash = this.getLocationFragment_(this.window_);
   if (hash != this.lastToken_) {
     this.update_(hash, true);
@@ -591,6 +597,7 @@ goog.History.prototype.onHashChange_ = function(e) {
  * @return {string} The current token.
  */
 goog.History.prototype.getToken = function() {
+  'use strict';
   if (this.lockedToken_ != null) {
     return this.lockedToken_;
   } else if (this.userVisible_) {
@@ -612,6 +619,7 @@ goog.History.prototype.getToken = function() {
  *     title in IE.
  */
 goog.History.prototype.setToken = function(token, opt_title) {
+  'use strict';
   this.setHistoryState_(token, false, opt_title);
 };
 
@@ -624,6 +632,7 @@ goog.History.prototype.setToken = function(token, opt_title) {
  *     title in IE.
  */
 goog.History.prototype.replaceToken = function(token, opt_title) {
+  'use strict';
   this.setHistoryState_(token, true, opt_title);
 };
 
@@ -638,6 +647,7 @@ goog.History.prototype.replaceToken = function(token, opt_title) {
  * @private
  */
 goog.History.prototype.getLocationFragment_ = function(win) {
+  'use strict';
   var href = win.location.href;
   var index = href.indexOf('#');
   return index < 0 ? '' : href.substring(index + 1);
@@ -658,6 +668,7 @@ goog.History.prototype.getLocationFragment_ = function(win) {
  * @private
  */
 goog.History.prototype.setHistoryState_ = function(token, replace, opt_title) {
+  'use strict';
   if (this.getToken() != token) {
     if (this.userVisible_) {
       this.setHash_(token, replace);
@@ -709,6 +720,7 @@ goog.History.prototype.setHistoryState_ = function(token, replace, opt_title) {
  * @private
  */
 goog.History.prototype.setHash_ = function(token, opt_replace) {
+  'use strict';
   // If the page uses a BASE element, setting location.hash directly will
   // navigate away from the current document. Also, the original URL path may
   // possibly change from HTML5 history pushState. To account for these, the
@@ -754,6 +766,7 @@ goog.History.prototype.setHash_ = function(token, opt_replace) {
  */
 goog.History.prototype.setIframeToken_ = function(
     token, opt_replace, opt_title) {
+  'use strict';
   if (this.unsetIframe_ || token != this.getIframeToken_()) {
     this.unsetIframe_ = false;
     token = goog.string.urlEncode(token);
@@ -807,6 +820,7 @@ goog.History.prototype.setIframeToken_ = function(
  * @private
  */
 goog.History.prototype.getIframeToken_ = function() {
+  'use strict';
   if (goog.userAgent.IE) {
     var doc = goog.dom.getFrameContentDocument(this.iframe_);
     return doc.body ? goog.string.urlDecode(doc.body.innerHTML) : null;
@@ -863,6 +877,7 @@ goog.History.prototype.getIframeToken_ = function() {
  * @private
  */
 goog.History.prototype.check_ = function(isNavigation) {
+  'use strict';
   if (this.userVisible_) {
     var hash = this.getLocationFragment_(this.window_);
     if (hash != this.lastToken_) {
@@ -894,6 +909,7 @@ goog.History.prototype.check_ = function(isNavigation) {
  * @private
  */
 goog.History.prototype.update_ = function(token, isNavigation) {
+  'use strict';
   this.lastToken_ = this.hiddenInput_.value = token;
 
   if (this.userVisible_) {
@@ -917,6 +933,7 @@ goog.History.prototype.update_ = function(token, isNavigation) {
  * @private
  */
 goog.History.prototype.setLongerPolling_ = function(longerPolling) {
+  'use strict';
   if (this.longerPolling_ != longerPolling) {
     this.timer_.setInterval(
         longerPolling ? goog.History.PollingType.LONG :
@@ -939,6 +956,7 @@ goog.History.prototype.setLongerPolling_ = function(longerPolling) {
  * @private
  */
 goog.History.prototype.operaDefibrillator_ = function() {
+  'use strict';
   this.timer_.stop();
   this.timer_.start();
 };

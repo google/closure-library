@@ -27,6 +27,7 @@ goog.require('goog.math.tdma');
  * @constructor
  */
 goog.math.interpolator.Spline1 = function() {
+  'use strict';
   /**
    * The abscissa of the data points.
    * @type {!Array<number>}
@@ -46,6 +47,7 @@ goog.math.interpolator.Spline1 = function() {
 
 /** @override */
 goog.math.interpolator.Spline1.prototype.setData = function(x, y) {
+  'use strict';
   goog.asserts.assert(
       x.length == y.length,
       'input arrays to setData should have the same length');
@@ -61,6 +63,7 @@ goog.math.interpolator.Spline1.prototype.setData = function(x, y) {
 
 /** @override */
 goog.math.interpolator.Spline1.prototype.interpolate = function(x) {
+  'use strict';
   var pos = goog.array.binarySearch(this.x_, x);
   if (pos < 0) {
     pos = -pos - 2;
@@ -84,6 +87,7 @@ goog.math.interpolator.Spline1.prototype.interpolate = function(x) {
  * @private
  */
 goog.math.interpolator.Spline1.prototype.computeSplineCoeffs_ = function(x, y) {
+  'use strict';
   var nIntervals = x.length - 1;
   var dx = new Array(nIntervals);
   var delta = new Array(nIntervals);
@@ -133,6 +137,7 @@ goog.math.interpolator.Spline1.prototype.computeSplineCoeffs_ = function(x, y) {
  */
 goog.math.interpolator.Spline1.prototype.computeDerivatives = function(
     dx, slope) {
+  'use strict';
   var nIntervals = dx.length;
 
   // Compute the main diagonal of the system of equations.
@@ -186,6 +191,7 @@ goog.math.interpolator.Spline1.prototype.computeDerivatives = function(
  * @override
  */
 goog.math.interpolator.Spline1.prototype.getInverse = function() {
+  'use strict';
   var interpolator = new goog.math.interpolator.Spline1();
   var y = [];
   for (var i = 0; i < this.x_.length; i++) {

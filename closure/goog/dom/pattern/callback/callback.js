@@ -27,6 +27,7 @@ goog.requireType('goog.dom.TagIterator');
  * @return {boolean} Returns true to indicate tree changes were made.
  */
 goog.dom.pattern.callback.removeNode = function(node, position) {
+  'use strict';
   // Find out which position would be next.
   position.setPosition(node, goog.dom.TagWalkType.END_TAG);
 
@@ -55,6 +56,7 @@ goog.dom.pattern.callback.removeNode = function(node, position) {
  * @return {boolean} Returns true to indicate tree changes were made.
  */
 goog.dom.pattern.callback.flattenElement = function(node, position) {
+  'use strict';
   // Find out which position would be next.
   position.setPosition(
       node, node.firstChild ? goog.dom.TagWalkType.START_TAG :
