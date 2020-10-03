@@ -91,6 +91,7 @@ goog.Thenable.IMPLEMENTED_BY_PROP = '$goog_Thenable';
  *     corresponding class must have already implemented the interface.
  */
 goog.Thenable.addImplementation = function(ctor) {
+  'use strict';
   if (COMPILED) {
     ctor.prototype[goog.Thenable.IMPLEMENTED_BY_PROP] = true;
   } else {
@@ -106,6 +107,7 @@ goog.Thenable.addImplementation = function(ctor) {
  *     The class/superclass of the instance must call `addImplementation`.
  */
 goog.Thenable.isImplementedBy = function(object) {
+  'use strict';
   if (!object) {
     return false;
   }

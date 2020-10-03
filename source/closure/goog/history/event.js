@@ -29,6 +29,7 @@ goog.require('goog.history.EventType');
  * @final
  */
 goog.history.Event = function(token, isNavigation) {
+  'use strict';
   goog.events.Event.call(this, goog.history.EventType.NAVIGATE);
 
   /**

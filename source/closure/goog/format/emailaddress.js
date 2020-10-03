@@ -521,5 +521,6 @@ goog.format.EmailAddress.isAddressSeparator = function(ch) {
  * @private
  */
 goog.format.EmailAddress.stripBidiChars_ = function(str) {
+  'use strict';
   return str.replace(goog.format.EmailAddress.ALL_BIDI_FORMAT_CHARS_, '');
 };

@@ -18,6 +18,7 @@ goog.provide('goog.testing.TestQueue');
  * @constructor
  */
 goog.testing.TestQueue = function() {
+  'use strict';
   /**
    * Events that have accumulated
    * @type {Array<Object>}
@@ -32,6 +33,7 @@ goog.testing.TestQueue = function() {
  * @param {Object} event The event to queue.
  */
 goog.testing.TestQueue.prototype.enqueue = function(event) {
+  'use strict';
   this.events_.push(event);
 };
 
@@ -41,6 +43,7 @@ goog.testing.TestQueue.prototype.enqueue = function(event) {
  * @return {boolean} Whether the queue is empty.
  */
 goog.testing.TestQueue.prototype.isEmpty = function() {
+  'use strict';
   return this.events_.length == 0;
 };
 
@@ -52,6 +55,7 @@ goog.testing.TestQueue.prototype.isEmpty = function() {
  * @return {Object} The next event from the queue.
  */
 goog.testing.TestQueue.prototype.dequeue = function(opt_comment) {
+  'use strict';
   if (this.isEmpty()) {
     throw new Error('Handler is empty: ' + opt_comment);
   }

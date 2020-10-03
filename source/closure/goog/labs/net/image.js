@@ -35,29 +35,35 @@ goog.require('goog.userAgent');
  */
 goog.labs.net.image.load = function(uri, opt_image) {
   'use strict';
-  return new goog.Promise(/** @suppress {strictPrimitiveOperators} Part of the go/strict_warnings_migration */
-                          function(resolve, reject) {
-    var image;
-    if (opt_image === undefined) {
-      image = new Image();
-    } else if (typeof opt_image === 'function') {
-      image = opt_image();
-    } else {
-      image = opt_image;
-    }
+  return new goog
+      .Promise(/**
+                * @suppress {strictPrimitiveOperators} Part of the
+                * go/strict_warnings_migration
+                */
+               function(resolve, reject) {
+                 'use strict';
+                 var image;
+                 if (opt_image === undefined) {
+                   image = new Image();
+                 } else if (typeof opt_image === 'function') {
+                   image = opt_image();
+                 } else {
+                   image = opt_image;
+                 }
 
-    // IE's load event on images can be buggy.  For older browsers, wait for
-    // readystatechange events and check if readyState is 'complete'.
-    // See:
-    // http://msdn.microsoft.com/en-us/library/ie/ms536957(v=vs.85).aspx
-    // http://msdn.microsoft.com/en-us/library/ie/ms534359(v=vs.85).aspx
-    //
-    // Starting with IE11, start using standard 'load' events.
-    // See:
-    // http://msdn.microsoft.com/en-us/library/ie/dn467845(v=vs.85).aspx
-    var loadEvent = (goog.userAgent.IE && goog.userAgent.VERSION < 11) ?
-        goog.net.EventType.READY_STATE_CHANGE :
-        goog.events.EventType.LOAD;
+                 // IE's load event on images can be buggy.  For older browsers,
+                 // wait for readystatechange events and check if readyState is
+                 // 'complete'. See:
+                 // http://msdn.microsoft.com/en-us/library/ie/ms536957(v=vs.85).aspx
+                 // http://msdn.microsoft.com/en-us/library/ie/ms534359(v=vs.85).aspx
+                 //
+                 // Starting with IE11, start using standard 'load' events.
+                 // See:
+                 // http://msdn.microsoft.com/en-us/library/ie/dn467845(v=vs.85).aspx
+                 var loadEvent =
+                     (goog.userAgent.IE && goog.userAgent.VERSION < 11) ?
+                     goog.net.EventType.READY_STATE_CHANGE :
+                     goog.events.EventType.LOAD;
 
                  var handler = new goog.events.EventHandler();
                  handler.listen(

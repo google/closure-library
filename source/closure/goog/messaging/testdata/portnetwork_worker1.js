@@ -29,6 +29,7 @@ function startListening() {
       new goog.messaging.PortCaller(new goog.messaging.PortChannel(self));
 
   caller.dial('frame').registerService('sendToMain', function(msg) {
+    'use strict';
     msg.push('worker1');
     caller.dial('main').send('result', msg);
   }, true);

@@ -24,6 +24,7 @@ goog.require('goog.math.interpolator.Spline1');
  * @final
  */
 goog.math.interpolator.Pchip1 = function() {
+  'use strict';
   goog.math.interpolator.Pchip1.base(this, 'constructor');
 };
 goog.inherits(goog.math.interpolator.Pchip1, goog.math.interpolator.Spline1);
@@ -32,6 +33,7 @@ goog.inherits(goog.math.interpolator.Pchip1, goog.math.interpolator.Spline1);
 /** @override */
 goog.math.interpolator.Pchip1.prototype.computeDerivatives = function(
     dx, slope) {
+  'use strict';
   var len = dx.length;
   var deriv = new Array(len + 1);
   for (var i = 1; i < len; ++i) {
@@ -62,6 +64,7 @@ goog.math.interpolator.Pchip1.prototype.computeDerivatives = function(
  */
 goog.math.interpolator.Pchip1.prototype.computeDerivativeAtBoundary_ = function(
     dx0, dx1, slope0, slope1) {
+  'use strict';
   var deriv = ((2 * dx0 + dx1) * slope0 - dx0 * slope1) / (dx0 + dx1);
   if (goog.math.sign(deriv) != goog.math.sign(slope0)) {
     deriv = 0;

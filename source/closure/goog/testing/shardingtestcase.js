@@ -42,6 +42,7 @@ goog.require('goog.testing.TestCase');
  * @final
  */
 goog.testing.ShardingTestCase = function(shardIndex, numShards, opt_name) {
+  'use strict';
   goog.testing.ShardingTestCase.base(this, 'constructor', opt_name);
 
   goog.asserts.assert(shardIndex > 0, 'Shard index should be positive');
@@ -78,6 +79,7 @@ goog.testing.ShardingTestCase.prototype.sharded_ = false;
  * @override
  */
 goog.testing.ShardingTestCase.prototype.runTests = function() {
+  'use strict';
   if (!this.sharded_) {
     var numTests = this.getCount();
     goog.asserts.assert(
@@ -104,6 +106,7 @@ goog.testing.ShardingTestCase.prototype.runTests = function() {
  * @param {string=} opt_name A descriptive name for the test case.
  */
 goog.testing.ShardingTestCase.shardByFileName = function(opt_name) {
+  'use strict';
   var path = window.location.pathname;
   var shardMatch = path.match(/_(\d+)of(\d+)_test\.(js|html)/);
   goog.asserts.assert(

@@ -27,6 +27,7 @@ goog.require('goog.testing.LooseMock');
  * @final
  */
 goog.testing.MockRange = function() {
+  'use strict';
   goog.testing.LooseMock.call(this, goog.testing.MockRange.ConcreteRange_);
 };
 goog.inherits(goog.testing.MockRange, goog.testing.LooseMock);
@@ -45,6 +46,7 @@ goog.inherits(goog.testing.MockRange, goog.testing.LooseMock);
  * @private
  */
 goog.testing.MockRange.ConcreteRange_ = function() {
+  'use strict';
   goog.dom.AbstractRange.call(this);
 };
 goog.inherits(goog.testing.MockRange.ConcreteRange_, goog.dom.AbstractRange);
@@ -61,6 +63,7 @@ goog.testing.MockRange.ConcreteRange_.prototype.__iterator__ =
 
 /** @override */
 goog.testing.MockRange.ConcreteRange_.prototype.saveUsingCarets = function() {
+  'use strict';
   return (this.getStartNode() && this.getEndNode()) ?
       new goog.dom.SavedCaretRange(this) :
       null;

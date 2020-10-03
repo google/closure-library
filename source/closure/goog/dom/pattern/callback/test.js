@@ -20,6 +20,7 @@ goog.require('goog.iter.StopIteration');
  * @final
  */
 goog.dom.pattern.callback.Test = function() {
+  'use strict';
   /**
    * Whether or not the pattern matched.
    *
@@ -43,8 +44,10 @@ goog.dom.pattern.callback.Test = function() {
  * @return {!Function} A callback function.
  */
 goog.dom.pattern.callback.Test.prototype.getCallback = function() {
+  'use strict';
   if (!this.callback_) {
     this.callback_ = goog.bind(function(node, position) {
+      'use strict';
       // Mark our match.
       this.matched = true;
 
@@ -60,5 +63,6 @@ goog.dom.pattern.callback.Test.prototype.getCallback = function() {
  * Reset the counter.
  */
 goog.dom.pattern.callback.Test.prototype.reset = function() {
+  'use strict';
   this.matched = false;
 };

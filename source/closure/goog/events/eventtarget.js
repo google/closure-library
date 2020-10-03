@@ -156,7 +156,7 @@ goog.events.EventTarget.prototype.addEventListener = function(
  * same object as the one added. If the handler has not been added then
  * nothing is done.
  *
- * @param {string} type The type of the event to listen for.
+ * @param {string|!goog.events.EventId} type The type of the event to listen for
  * @param {function(?):?|{handleEvent:function(?):?}|null} handler The function
  *     to handle the event. The handler can also be an object that implements
  *     the handleEvent method which takes the event object as argument.
@@ -295,8 +295,8 @@ goog.events.EventTarget.prototype.unlistenByKey = function(key) {
 
 
 /**
- * @param {string=} opt_type Type of event to remove, default is to
- *     remove all types.
+ * @param {string|!goog.events.EventId=} opt_type Type of event to remove,
+ *     default is to remove all types.
  * @return {number} Number of listeners removed.
  * @override
  */

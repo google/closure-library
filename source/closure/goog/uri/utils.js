@@ -77,6 +77,7 @@ goog.uri.utils.CharCode_ = {
 goog.uri.utils.buildFromEncodedParts = function(
     opt_scheme, opt_userInfo, opt_domain, opt_port, opt_path, opt_queryData,
     opt_fragment) {
+  'use strict';
   var out = '';
 
   if (opt_scheme) {
@@ -226,6 +227,7 @@ goog.uri.utils.urlPackageSupportLoggingHandler_ = null;
  *     detected.
  */
 goog.uri.utils.setUrlPackageSupportLoggingHandler = function(handler) {
+  'use strict';
   goog.uri.utils.urlPackageSupportLoggingHandler_ = handler;
 };
 
@@ -245,6 +247,7 @@ goog.uri.utils.setUrlPackageSupportLoggingHandler = function(handler) {
  *     arbitrary strings may still look like path names.
  */
 goog.uri.utils.split = function(uri) {
+  'use strict';
   // See @return comment -- never null.
   var result = /** @type {!Array<string|undefined>} */ (
       uri.match(goog.uri.utils.splitRe_));
@@ -265,6 +268,7 @@ goog.uri.utils.split = function(uri) {
  * @private
  */
 goog.uri.utils.decodeIfPossible_ = function(uri, opt_preserveReserved) {
+  'use strict';
   if (!uri) {
     return uri;
   }
@@ -286,6 +290,7 @@ goog.uri.utils.decodeIfPossible_ = function(uri, opt_preserveReserved) {
  * @private
  */
 goog.uri.utils.getComponentByIndex_ = function(componentIndex, uri) {
+  'use strict';
   // Convert undefined, null, and empty string into null.
   return goog.uri.utils.split(uri)[componentIndex] || null;
 };
@@ -297,6 +302,7 @@ goog.uri.utils.getComponentByIndex_ = function(componentIndex, uri) {
  *     include trailing colons or slashes.
  */
 goog.uri.utils.getScheme = function(uri) {
+  'use strict';
   return goog.uri.utils.getComponentByIndex_(
       goog.uri.utils.ComponentIndex.SCHEME, uri);
 };
@@ -309,6 +315,7 @@ goog.uri.utils.getScheme = function(uri) {
  * @return {string} The protocol or scheme, always lower case.
  */
 goog.uri.utils.getEffectiveScheme = function(uri) {
+  'use strict';
   var scheme = goog.uri.utils.getScheme(uri);
   if (!scheme && goog.global.self && goog.global.self.location) {
     var protocol = goog.global.self.location.protocol;
@@ -325,6 +332,7 @@ goog.uri.utils.getEffectiveScheme = function(uri) {
  * @return {?string} The user name still encoded, or null if none.
  */
 goog.uri.utils.getUserInfoEncoded = function(uri) {
+  'use strict';
   return goog.uri.utils.getComponentByIndex_(
       goog.uri.utils.ComponentIndex.USER_INFO, uri);
 };
@@ -335,6 +343,7 @@ goog.uri.utils.getUserInfoEncoded = function(uri) {
  * @return {?string} The decoded user info, or null if none.
  */
 goog.uri.utils.getUserInfo = function(uri) {
+  'use strict';
   return goog.uri.utils.decodeIfPossible_(
       goog.uri.utils.getUserInfoEncoded(uri));
 };
@@ -345,6 +354,7 @@ goog.uri.utils.getUserInfo = function(uri) {
  * @return {?string} The domain name still encoded, or null if none.
  */
 goog.uri.utils.getDomainEncoded = function(uri) {
+  'use strict';
   return goog.uri.utils.getComponentByIndex_(
       goog.uri.utils.ComponentIndex.DOMAIN, uri);
 };
@@ -355,6 +365,7 @@ goog.uri.utils.getDomainEncoded = function(uri) {
  * @return {?string} The decoded domain, or null if none.
  */
 goog.uri.utils.getDomain = function(uri) {
+  'use strict';
   return goog.uri.utils.decodeIfPossible_(
       goog.uri.utils.getDomainEncoded(uri), true /* opt_preserveReserved */);
 };
@@ -365,6 +376,7 @@ goog.uri.utils.getDomain = function(uri) {
  * @return {?number} The port number, or null if none.
  */
 goog.uri.utils.getPort = function(uri) {
+  'use strict';
   // Coerce to a number.  If the result of getComponentByIndex_ is null or
   // non-numeric, the number coersion yields NaN.  This will then return
   // null for all non-numeric cases (though also zero, which isn't a relevant
@@ -382,6 +394,7 @@ goog.uri.utils.getPort = function(uri) {
  *     leading slash, if any.
  */
 goog.uri.utils.getPathEncoded = function(uri) {
+  'use strict';
   return goog.uri.utils.getComponentByIndex_(
       goog.uri.utils.ComponentIndex.PATH, uri);
 };
@@ -393,6 +406,7 @@ goog.uri.utils.getPathEncoded = function(uri) {
  *     slash, if any.
  */
 goog.uri.utils.getPath = function(uri) {
+  'use strict';
   return goog.uri.utils.decodeIfPossible_(
       goog.uri.utils.getPathEncoded(uri), true /* opt_preserveReserved */);
 };
@@ -404,6 +418,7 @@ goog.uri.utils.getPath = function(uri) {
  *     include the question mark itself.
  */
 goog.uri.utils.getQueryData = function(uri) {
+  'use strict';
   return goog.uri.utils.getComponentByIndex_(
       goog.uri.utils.ComponentIndex.QUERY_DATA, uri);
 };
@@ -415,6 +430,7 @@ goog.uri.utils.getQueryData = function(uri) {
  *     include the hash mark itself.
  */
 goog.uri.utils.getFragmentEncoded = function(uri) {
+  'use strict';
   // The hash mark may not appear in any other part of the URL.
   var hashIndex = uri.indexOf('#');
   return hashIndex < 0 ? null : uri.substr(hashIndex + 1);
@@ -428,6 +444,7 @@ goog.uri.utils.getFragmentEncoded = function(uri) {
  * @return {string} The URI with the fragment set.
  */
 goog.uri.utils.setFragmentEncoded = function(uri, fragment) {
+  'use strict';
   return goog.uri.utils.removeFragment(uri) + (fragment ? '#' + fragment : '');
 };
 
@@ -438,6 +455,7 @@ goog.uri.utils.setFragmentEncoded = function(uri, fragment) {
  *     not include the hash mark.
  */
 goog.uri.utils.getFragment = function(uri) {
+  'use strict';
   return goog.uri.utils.decodeIfPossible_(
       goog.uri.utils.getFragmentEncoded(uri));
 };
@@ -449,6 +467,7 @@ goog.uri.utils.getFragment = function(uri) {
  * @return {string} Everything up to and including the port.
  */
 goog.uri.utils.getHost = function(uri) {
+  'use strict';
   var pieces = goog.uri.utils.split(uri);
   return goog.uri.utils.buildFromEncodedParts(
       pieces[goog.uri.utils.ComponentIndex.SCHEME],
@@ -464,6 +483,7 @@ goog.uri.utils.getHost = function(uri) {
  * @return {string} Everything up to and including the port.
  */
 goog.uri.utils.getOrigin = function(uri) {
+  'use strict';
   var pieces = goog.uri.utils.split(uri);
   return goog.uri.utils.buildFromEncodedParts(
       pieces[goog.uri.utils.ComponentIndex.SCHEME], null /* opt_userInfo */,
@@ -479,6 +499,7 @@ goog.uri.utils.getOrigin = function(uri) {
  *     parameters and fragment identifier.
  */
 goog.uri.utils.getPathAndAfter = function(uri) {
+  'use strict';
   var pieces = goog.uri.utils.split(uri);
   return goog.uri.utils.buildFromEncodedParts(
       null, null, null, null, pieces[goog.uri.utils.ComponentIndex.PATH],
@@ -493,6 +514,7 @@ goog.uri.utils.getPathAndAfter = function(uri) {
  * @return {string} Everything preceding the hash mark.
  */
 goog.uri.utils.removeFragment = function(uri) {
+  'use strict';
   // The hash mark may not appear in any other part of the URL.
   var hashIndex = uri.indexOf('#');
   return hashIndex < 0 ? uri : uri.substr(0, hashIndex);
@@ -510,6 +532,7 @@ goog.uri.utils.removeFragment = function(uri) {
  * @return {boolean} Whether they have the same scheme, domain and port.
  */
 goog.uri.utils.haveSameDomain = function(uri1, uri2) {
+  'use strict';
   var pieces1 = goog.uri.utils.split(uri1);
   var pieces2 = goog.uri.utils.split(uri2);
   return pieces1[goog.uri.utils.ComponentIndex.DOMAIN] ==
@@ -528,6 +551,7 @@ goog.uri.utils.haveSameDomain = function(uri1, uri2) {
  * @private
  */
 goog.uri.utils.assertNoFragmentsOrQueries_ = function(uri) {
+  'use strict';
   goog.asserts.assert(
       uri.indexOf('#') < 0 && uri.indexOf('?') < 0,
       'goog.uri.utils: Fragment or query identifiers are not supported: [%s]',
@@ -589,6 +613,7 @@ goog.uri.utils.QueryArray;
  *     the second argument (value) will be an empty string.
  */
 goog.uri.utils.parseQueryData = function(encodedQuery, callback) {
+  'use strict';
   if (!encodedQuery) {
     return;
   }
@@ -618,6 +643,7 @@ goog.uri.utils.parseQueryData = function(encodedQuery, callback) {
  * @private
  */
 goog.uri.utils.splitQueryData_ = function(uri) {
+  'use strict';
   // Find the query data and hash.
   var hashIndex = uri.indexOf('#');
   if (hashIndex < 0) {
@@ -642,6 +668,7 @@ goog.uri.utils.splitQueryData_ = function(uri) {
  * @private
  */
 goog.uri.utils.joinQueryData_ = function(parts) {
+  'use strict';
   return parts[0] + (parts[1] ? '?' + parts[1] : '') + parts[2];
 };
 
@@ -653,6 +680,7 @@ goog.uri.utils.joinQueryData_ = function(parts) {
  * @private
  */
 goog.uri.utils.appendQueryData_ = function(queryData, newData) {
+  'use strict';
   if (!newData) {
     return queryData;
   }
@@ -667,6 +695,7 @@ goog.uri.utils.appendQueryData_ = function(queryData, newData) {
  * @private
  */
 goog.uri.utils.appendQueryDataToUri_ = function(uri, queryData) {
+  'use strict';
   if (!queryData) {
     return uri;
   }
@@ -685,6 +714,7 @@ goog.uri.utils.appendQueryDataToUri_ = function(uri, queryData) {
  * @private
  */
 goog.uri.utils.appendKeyValuePairs_ = function(key, value, pairs) {
+  'use strict';
   goog.asserts.assertString(key);
   if (Array.isArray(value)) {
     // Convince the compiler it's an array.
@@ -718,6 +748,7 @@ goog.uri.utils.appendKeyValuePairs_ = function(key, value, pairs) {
  * @return {string} The encoded query string, in the form 'a=1&b=2'.
  */
 goog.uri.utils.buildQueryData = function(keysAndValues, opt_startIndex) {
+  'use strict';
   goog.asserts.assert(
       Math.max(keysAndValues.length - (opt_startIndex || 0), 0) % 2 == 0,
       'goog.uri.utils: Key/value lists must be even in length.');
@@ -741,6 +772,7 @@ goog.uri.utils.buildQueryData = function(keysAndValues, opt_startIndex) {
  * @return {string} The encoded query string, in the form 'a=1&b=2'.
  */
 goog.uri.utils.buildQueryDataFromMap = function(map) {
+  'use strict';
   var params = [];
   for (var key in map) {
     goog.uri.utils.appendKeyValuePairs_(key, map[key], params);
@@ -778,6 +810,7 @@ goog.uri.utils.buildQueryDataFromMap = function(map) {
  * @return {string} The URI with all query parameters added.
  */
 goog.uri.utils.appendParams = function(uri, var_args) {
+  'use strict';
   var queryData = arguments.length == 2 ?
       goog.uri.utils.buildQueryData(arguments[1], 0) :
       goog.uri.utils.buildQueryData(arguments, 1);
@@ -795,6 +828,7 @@ goog.uri.utils.appendParams = function(uri, var_args) {
  * @return {string} The new parameters.
  */
 goog.uri.utils.appendParamsFromMap = function(uri, map) {
+  'use strict';
   var queryData = goog.uri.utils.buildQueryDataFromMap(map);
   return goog.uri.utils.appendQueryDataToUri_(uri, queryData);
 };
@@ -814,6 +848,7 @@ goog.uri.utils.appendParamsFromMap = function(uri, map) {
  * @return {string} The URI with the query parameter added.
  */
 goog.uri.utils.appendParam = function(uri, key, opt_value) {
+  'use strict';
   var value = (opt_value != null) ? '=' + goog.string.urlEncode(opt_value) : '';
   return goog.uri.utils.appendQueryDataToUri_(uri, key + value);
 };
@@ -838,6 +873,7 @@ goog.uri.utils.appendParam = function(uri, key, opt_value) {
  */
 goog.uri.utils.findParam_ = function(
     uri, startIndex, keyEncoded, hashOrEndIndex) {
+  'use strict';
   var index = startIndex;
   var keyLength = keyEncoded.length;
 
@@ -884,6 +920,7 @@ goog.uri.utils.hashOrEndRe_ = /#|$/;
  * @return {boolean} Whether the key is present.
  */
 goog.uri.utils.hasParam = function(uri, keyEncoded) {
+  'use strict';
   return goog.uri.utils.findParam_(
              uri, 0, keyEncoded, uri.search(goog.uri.utils.hashOrEndRe_)) >= 0;
 };
@@ -897,6 +934,7 @@ goog.uri.utils.hasParam = function(uri, keyEncoded) {
  *     if the parameter is not found.
  */
 goog.uri.utils.getParamValue = function(uri, keyEncoded) {
+  'use strict';
   var hashOrEndIndex = uri.search(goog.uri.utils.hashOrEndRe_);
   var foundIndex =
       goog.uri.utils.findParam_(uri, 0, keyEncoded, hashOrEndIndex);
@@ -926,6 +964,7 @@ goog.uri.utils.getParamValue = function(uri, keyEncoded) {
  *     If the key is not found, this will have length 0, but never be null.
  */
 goog.uri.utils.getParamValues = function(uri, keyEncoded) {
+  'use strict';
   var hashOrEndIndex = uri.search(goog.uri.utils.hashOrEndRe_);
   var position = 0;
   var foundIndex;
@@ -967,6 +1006,7 @@ goog.uri.utils.trailingQueryPunctuationRe_ = /[?&]($|#)/;
  * @return {string} The URI with all instances of the parameter removed.
  */
 goog.uri.utils.removeParam = function(uri, keyEncoded) {
+  'use strict';
   var hashOrEndIndex = uri.search(goog.uri.utils.hashOrEndRe_);
   var position = 0;
   var foundIndex;
@@ -1008,6 +1048,7 @@ goog.uri.utils.removeParam = function(uri, keyEncoded) {
  * @return {string} The URI with the query parameter added.
  */
 goog.uri.utils.setParam = function(uri, keyEncoded, value) {
+  'use strict';
   return goog.uri.utils.appendParam(
       goog.uri.utils.removeParam(uri, keyEncoded), keyEncoded, value);
 };
@@ -1026,11 +1067,13 @@ goog.uri.utils.setParam = function(uri, keyEncoded, value) {
  *     the params.
  */
 goog.uri.utils.setParamsFromMap = function(uri, params) {
+  'use strict';
   var parts = goog.uri.utils.splitQueryData_(uri);
   var queryData = parts[1];
   var buffer = [];
   if (queryData) {
     queryData.split('&').forEach(function(pair) {
+      'use strict';
       var indexOfEquals = pair.indexOf('=');
       var name = indexOfEquals >= 0 ? pair.substr(0, indexOfEquals) : pair;
       if (!params.hasOwnProperty(name)) {
@@ -1055,6 +1098,7 @@ goog.uri.utils.setParamsFromMap = function(uri, params) {
  * @return {string} Updated URI.
  */
 goog.uri.utils.appendPath = function(baseUri, path) {
+  'use strict';
   goog.uri.utils.assertNoFragmentsOrQueries_(baseUri);
 
   // Remove any trailing '/'
@@ -1076,6 +1120,7 @@ goog.uri.utils.appendPath = function(baseUri, path) {
  * @return {string} Updated URI.
  */
 goog.uri.utils.setPath = function(uri, path) {
+  'use strict';
   // Add any missing '/'.
   if (!goog.string.startsWith(path, '/')) {
     path = '/' + path;
@@ -1109,6 +1154,7 @@ goog.uri.utils.StandardQueryParam = {
  *     contain a random string.
  */
 goog.uri.utils.makeUnique = function(uri) {
+  'use strict';
   return goog.uri.utils.setParam(
       uri, goog.uri.utils.StandardQueryParam.RANDOM,
       goog.string.getRandomString());

@@ -175,8 +175,8 @@ goog.events.Listenable.prototype.dispatchEvent;
  * it will only remove listeners of the particular type. otherwise all
  * registered listeners will be removed.
  *
- * @param {string=} opt_type Type of event to remove, default is to
- *     remove all types.
+ * @param {string|!goog.events.EventId=} opt_type Type of event to remove,
+ *     default is to remove all types.
  * @return {number} Number of listeners removed.
  */
 goog.events.Listenable.prototype.removeAllListeners;
