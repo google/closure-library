@@ -127,6 +127,7 @@ testSuite({
     var d = Deferred.succeed(1).addCallback(assertEqualsCallback('succeed', 1));
 
     // default error
+    /** @suppress {checkTypes} suppression added to enable type checking */
     d = Deferred.fail().addCallback(neverHappen);
     d = d.addErrback(function(res) {
       count++;
@@ -170,30 +171,43 @@ testSuite({
 
   // Test double-calling, double-failing, etc.
   testDoubleCalling() {
-    var ex = assertThrows(function() {
-      Deferred.succeed(1).callback(2);
-      neverHappen();
-    });
+    var ex = assertThrows(/**
+                             @suppress {checkTypes} suppression added to enable
+                             type checking
+                           */
+                          function() {
+                            Deferred.succeed(1).callback(2);
+                            neverHappen();
+                          });
     assertTrue('double call', ex instanceof AlreadyCalledError);
   },
 
   testDoubleCalling2() {
-    var ex = assertThrows(function() {
-      Deferred.fail(1).errback(2);
-      neverHappen();
-    });
+    var ex = assertThrows(/**
+                             @suppress {checkTypes} suppression added to enable
+                             type checking
+                           */
+                          function() {
+                            Deferred.fail(1).errback(2);
+                            neverHappen();
+                          });
     assertTrue('double-fail', ex instanceof AlreadyCalledError);
   },
 
   testDoubleCalling3() {
-    var ex = assertThrows(function() {
-      var d = Deferred.succeed(1);
-      d.cancel();
-      d = d.callback(2);
-      assertTrue('swallowed one callback, no canceler', true);
-      d.callback(3);
-      neverHappen();
-    });
+    var ex =
+        assertThrows(/**
+                        @suppress {checkTypes} suppression added to enable type
+                        checking
+                      */
+                     function() {
+                       var d = Deferred.succeed(1);
+                       d.cancel();
+                       d = d.callback(2);
+                       assertTrue('swallowed one callback, no canceler', true);
+                       d.callback(3);
+                       neverHappen();
+                     });
     assertTrue('swallow cancel', ex instanceof AlreadyCalledError);
   },
 
@@ -217,20 +231,28 @@ testSuite({
   testIncorrectUsage() {
     var d = new Deferred();
 
-    var ex = assertThrows(function() {
-      d.callback(new Deferred());
-      neverHappen();
-    });
+    var ex = assertThrows(/**
+                             @suppress {checkTypes} suppression added to enable
+                             type checking
+                           */
+                          function() {
+                            d.callback(new Deferred());
+                            neverHappen();
+                          });
     assertTrue('deferred not allowed for callback', ex instanceof Error);
   },
 
   testIncorrectUsage2() {
     var d = new Deferred();
 
-    var ex = assertThrows(function() {
-      d.errback(new Deferred());
-      neverHappen();
-    });
+    var ex = assertThrows(/**
+                             @suppress {checkTypes} suppression added to enable
+                             type checking
+                           */
+                          function() {
+                            d.errback(new Deferred());
+                            neverHappen();
+                          });
     assertTrue('deferred not allowed for errback', ex instanceof Error);
   },
 
@@ -242,10 +264,14 @@ testSuite({
         })
         .callback(1);
 
-    var ex = assertThrows(function() {
-      d.addCallback(function() {});
-      neverHappen();
-    });
+    var ex = assertThrows(/**
+                             @suppress {checkTypes} suppression added to enable
+                             type checking
+                           */
+                          function() {
+                            d.addCallback(function() {});
+                            neverHappen();
+                          });
     assertTrue(
         'chained deferred not allowed to be re-used', ex instanceof Error);
   },
@@ -340,10 +366,14 @@ testSuite({
     d1.callback();
     assertEquals('B2,A2', calls.join(','));
 
-    var ex = assertThrows(function() {
-      mockClock.tick();
-      neverHappen();
-    });
+    var ex = assertThrows(/**
+                             @suppress {checkTypes} suppression added to enable
+                             type checking
+                           */
+                          function() {
+                            mockClock.tick();
+                            neverHappen();
+                          });
     assertTrue('Should catch unhandled throw from d2.', ex.message == 'x');
   },
 
@@ -403,11 +433,15 @@ testSuite({
     var d = new Deferred();
     d.addCallback(throwStuff);
 
-    var ex = assertThrows(function() {
-      d.callback(123);
-      mockClock.tick();
-      neverHappen();
-    });
+    var ex = assertThrows(/**
+                             @suppress {checkTypes} suppression added to enable
+                             type checking
+                           */
+                          function() {
+                            d.callback(123);
+                            mockClock.tick();
+                            neverHappen();
+                          });
     assertEquals('Unhandled throws should hit the browser.', 123, ex);
 
     assertNotThrows(
@@ -637,6 +671,7 @@ testSuite({
       };
     }
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     var resolver = new GoogPromise.withResolver();
     resolver.promise.then(fn('b'));
 
@@ -1066,10 +1101,14 @@ testSuite({
     });
     d.callback(1);
 
-    var ex = assertThrows(function() {
-      Deferred.assertNoErrors();
-      neverHappen();
-    });
+    var ex = assertThrows(/**
+                             @suppress {checkTypes} suppression added to enable
+                             type checking
+                           */
+                          function() {
+                            Deferred.assertNoErrors();
+                            neverHappen();
+                          });
     assertEquals('Expected to get thrown error', 'Foo', ex.message);
 
     assertNotThrows(
@@ -1097,6 +1136,10 @@ testSuite({
     assertEquals('done', result2);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testThen_reject() {
     var result, error;
     var d = new Deferred();
@@ -1203,6 +1246,7 @@ testSuite({
         callback('promise');
       }
     };
+    /** @suppress {checkTypes} suppression added to enable type checking */
     var d = Deferred.fromPromise(p);
     d.addCallback(function(value) {
       result = value;

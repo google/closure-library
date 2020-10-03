@@ -12,7 +12,8 @@ const testSuite = goog.require('goog.testing.testSuite');
 
 
 // Re-throw (after a timeout) any errors not handled in an errback.
-Deferred.STRICT_ERRORS = true;
+/** Use a computed property to avoid the compiler check on this define  */
+Deferred['STRICT_ERRORS'] = true;
 
 
 /**

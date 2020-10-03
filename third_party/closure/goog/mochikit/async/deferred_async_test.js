@@ -51,12 +51,17 @@ testSuite({
       d.errback(new Error('Foo'));
     }, 0);
 
-    return d.then(fail, function(error) {
-      assertContains('Foo', error.stack);
-      assertContains('testErrorStack_forErrback', error.stack);
-      assertContains('willThrow', error.stack);
-      assertContains('DEFERRED OPERATION', error.stack);
-    });
+    return d.then(
+        fail, /**
+                 @suppress {strictMissingProperties} suppression added to
+                 enable type checking
+               */
+        function(error) {
+          assertContains('Foo', error.stack);
+          assertContains('testErrorStack_forErrback', error.stack);
+          assertContains('willThrow', error.stack);
+          assertContains('DEFERRED OPERATION', error.stack);
+        });
   },
 
   testErrorStack_nested() {
@@ -74,14 +79,19 @@ testSuite({
       });
     }, 0);
 
-    return d.then(fail, function(error) {
-      assertContains('Foo', error.stack);
-      assertContains('testErrorStack_nested', error.stack);
-      assertContains('async1', error.stack);
-      assertContains('async2', error.stack);
-      assertContains('immediate', error.stack);
-      assertContains('DEFERRED OPERATION', error.stack);
-    });
+    return d.then(
+        fail, /**
+                 @suppress {strictMissingProperties} suppression added to
+                 enable type checking
+               */
+        function(error) {
+          assertContains('Foo', error.stack);
+          assertContains('testErrorStack_nested', error.stack);
+          assertContains('async1', error.stack);
+          assertContains('async2', error.stack);
+          assertContains('immediate', error.stack);
+          assertContains('DEFERRED OPERATION', error.stack);
+        });
   },
 
   testErrorStack_doesNotTouchCustomStack() {
@@ -98,9 +108,14 @@ testSuite({
       })();
     }, 0);
 
-    return d.then(fail, function(error) {
-      assertEquals('STACK', error.stack);
-    });
+    return d.then(
+        fail, /**
+                 @suppress {strictMissingProperties} suppression added to
+                 enable type checking
+               */
+        function(error) {
+          assertEquals('STACK', error.stack);
+        });
   },
 
   testFromPromiseWithDeferred() {
