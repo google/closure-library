@@ -43,7 +43,7 @@ goog.inherits(goog.net.CorsXmlHttpFactory, goog.net.XmlHttpFactory);
 /** @override */
 goog.net.CorsXmlHttpFactory.prototype.createInstance = function() {
   'use strict';
-  var xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
   if (('withCredentials' in xhr)) {
     return xhr;
   } else if (typeof XDomainRequest != 'undefined') {

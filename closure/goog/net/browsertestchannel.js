@@ -251,14 +251,14 @@ goog.net.BrowserTestChannel.prototype.setParser = function(parser) {
 goog.net.BrowserTestChannel.prototype.connect = function(path) {
   'use strict';
   this.path_ = path;
-  var sendDataUri = this.channel_.getForwardChannelUri(this.path_);
+  const sendDataUri = this.channel_.getForwardChannelUri(this.path_);
 
   goog.net.BrowserChannel.notifyStatEvent(
       goog.net.BrowserChannel.Stat.TEST_STAGE_ONE_START);
   this.startTime_ = goog.now();
 
   // If the channel already has the result of the first test, then skip it.
-  var firstTestResults = this.channel_.getFirstTestResults();
+  const firstTestResults = this.channel_.getFirstTestResults();
   if (firstTestResults != null) {
     this.hostPrefix_ = this.channel_.correctHostPrefix(firstTestResults[0]);
     this.blockedPrefix_ = firstTestResults[1];
@@ -295,7 +295,7 @@ goog.net.BrowserTestChannel.prototype.connect = function(path) {
  */
 goog.net.BrowserTestChannel.prototype.checkBlocked_ = function() {
   'use strict';
-  var uri = this.channel_.createDataUri(
+  const uri = this.channel_.createDataUri(
       this.blockedPrefix_, '/mail/images/cleardot.gif');
   uri.makeUnique();
   goog.net.tmpnetwork.testLoadImageWithRetries(
@@ -350,7 +350,7 @@ goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
   this.channelDebug_.debug('TestConnection: starting stage 2');
 
   // If the second test results are available, skip its execution.
-  var secondTestResults = this.channel_.getSecondTestResults();
+  const secondTestResults = this.channel_.getSecondTestResults();
   if (secondTestResults != null) {
     this.channelDebug_.debug(
         'TestConnection: skipping stage 2, precomputed result is ' +
@@ -374,7 +374,7 @@ goog.net.BrowserTestChannel.prototype.connectStage2_ = function() {
   this.request_ =
       goog.net.BrowserChannel.createChannelRequest(this, this.channelDebug_);
   this.request_.setExtraHeaders(this.extraHeaders_);
-  var recvDataUri = this.channel_.getBackChannelUri(
+  const recvDataUri = this.channel_.getBackChannelUri(
       this.hostPrefix_,
       /** @type {string} */ (this.path_));
 
@@ -449,8 +449,9 @@ goog.net.BrowserTestChannel.prototype.onRequestData = function(
       return;
     }
 
+    let respArray;
     try {
-      var respArray = this.parser_.parse(responseText);
+      respArray = this.parser_.parse(responseText);
     } catch (e) {
       this.channelDebug_.dumpException(e);
       this.channel_.testConnectionFailure(
@@ -536,12 +537,12 @@ goog.net.BrowserTestChannel.prototype.onRequestComplete = function(req) {
   } else if (
       this.state_ == goog.net.BrowserTestChannel.State_.CONNECTION_TESTING) {
     this.channelDebug_.debug('TestConnection: request complete for stage 2');
-    var goodConn = false;
+    let goodConn = false;
 
     if (!goog.net.ChannelRequest.supportsXhrStreaming()) {
       // we always get Trident responses in separate calls to
       // onRequestData, so we have to check the time they came
-      var ms = this.lastTime_ - this.firstTime_;
+      const ms = this.lastTime_ - this.firstTime_;
       if (ms < 200) {
         // TODO: need to empirically verify that this number is OK
         // for slow computers
@@ -610,7 +611,7 @@ goog.net.BrowserTestChannel.prototype.isActive = function(browserChannel) {
  */
 goog.net.BrowserTestChannel.prototype.checkForEarlyNonBuffered_ = function() {
   'use strict';
-  var ms = this.firstTime_ - this.startTime_;
+  const ms = this.firstTime_ - this.startTime_;
 
   // we always get Trident responses in separate calls to
   // onRequestData, so we have to check the time that the first came in

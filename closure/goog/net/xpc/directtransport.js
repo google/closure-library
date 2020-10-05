@@ -29,12 +29,12 @@ goog.requireType('goog.net.xpc.CrossPageChannel');
 
 goog.scope(function() {
 'use strict';
-var CfgFields = goog.net.xpc.CfgFields;
-var CrossPageChannelRole = goog.net.xpc.CrossPageChannelRole;
-var Deferred = goog.async.Deferred;
-var EventHandler = goog.events.EventHandler;
-var Timer = goog.Timer;
-var Transport = goog.net.xpc.Transport;
+const CfgFields = goog.net.xpc.CfgFields;
+const CrossPageChannelRole = goog.net.xpc.CrossPageChannelRole;
+const Deferred = goog.async.Deferred;
+const EventHandler = goog.events.EventHandler;
+const Timer = goog.Timer;
+const Transport = goog.net.xpc.Transport;
 
 
 
@@ -160,7 +160,7 @@ goog.net.xpc.DirectTransport = function(channel, opt_domHelper) {
       'DirectTransport created. role=' + this.channel_.getRole());
 };
 goog.inherits(goog.net.xpc.DirectTransport, Transport);
-var DirectTransport = goog.net.xpc.DirectTransport;
+const DirectTransport = goog.net.xpc.DirectTransport;
 
 
 /**
@@ -230,11 +230,11 @@ DirectTransport.MESSAGE_DELIMITER_ = ',';
  */
 DirectTransport.initialize_ = function(listenWindow) {
   'use strict';
-  var uid = goog.getUid(listenWindow);
-  var value = DirectTransport.activeCount_[uid] || 0;
+  const uid = goog.getUid(listenWindow);
+  const value = DirectTransport.activeCount_[uid] || 0;
   if (value == 0) {
     // Set up a handler on the window to proxy messages to class.
-    var globalProxy = goog.getObjectByName(
+    const globalProxy = goog.getObjectByName(
         DirectTransport.GLOBAL_TRANPORT_PATH_, listenWindow);
     if (globalProxy == null) {
       goog.exportSymbol(
@@ -266,11 +266,11 @@ DirectTransport.getRoledChannelName_ = function(channelName, role) {
  */
 DirectTransport.messageReceivedHandler_ = function(literal) {
   'use strict';
-  var msg = DirectTransport.Message_.fromLiteral(literal);
+  const msg = DirectTransport.Message_.fromLiteral(literal);
 
-  var channelName = msg.channelName;
-  var service = msg.service;
-  var payload = msg.payload;
+  const channelName = msg.channelName;
+  const service = msg.service;
+  const payload = msg.payload;
 
   goog.log.fine(
       goog.net.xpc.logger, 'messageReceived: channel=' + channelName +
@@ -283,18 +283,19 @@ DirectTransport.messageReceivedHandler_ = function(literal) {
   //  - channel was created in a different namespace
   //  - message was sent to the wrong window
   //  - channel has become stale (e.g. caching iframes and back clicks)
-  var allChannels = goog.module.get('goog.net.xpc.CrossPageChannel').channels;
-  var channel = allChannels[channelName];
+  const allChannels = goog.module.get('goog.net.xpc.CrossPageChannel').channels;
+  const channel = allChannels[channelName];
   if (channel) {
     channel.xpcDeliver(service, payload);
     return true;
   }
 
-  var transportMessageType = DirectTransport.parseTransportPayload_(payload)[0];
+  const transportMessageType =
+      DirectTransport.parseTransportPayload_(payload)[0];
 
   // Check if there are any stale channel names that can be updated.
-  for (var staleChannelName in allChannels) {
-    var staleChannel = allChannels[staleChannelName];
+  for (let staleChannelName in allChannels) {
+    const staleChannel = allChannels[staleChannelName];
     if (staleChannel.getRole() == CrossPageChannelRole.INNER &&
         !staleChannel.isConnected() &&
         service == goog.net.xpc.TRANSPORT_SERVICE_ &&
@@ -331,9 +332,9 @@ DirectTransport.prototype.transportType = goog.net.xpc.TransportTypes.DIRECT;
  */
 DirectTransport.prototype.transportServiceHandler = function(payload) {
   'use strict';
-  var transportParts = DirectTransport.parseTransportPayload_(payload);
-  var transportMessageType = transportParts[0];
-  var peerEndpointId = transportParts[1];
+  const transportParts = DirectTransport.parseTransportPayload_(payload);
+  const transportMessageType = transportParts[0];
+  const peerEndpointId = transportParts[1];
   switch (transportMessageType) {
     case goog.net.xpc.SETUP_ACK_:
       if (!this.setupAckReceived_.hasFired()) {
@@ -364,7 +365,7 @@ DirectTransport.prototype.sendSetupMessage_ = function() {
   'use strict';
   // Although we could send real objects, since some other transports are
   // limited to strings we also keep this requirement.
-  var payload = goog.net.xpc.SETUP;
+  let payload = goog.net.xpc.SETUP;
   payload += DirectTransport.MESSAGE_DELIMITER_;
   payload += this.endpointId_;
   this.send(goog.net.xpc.TRANSPORT_SERVICE_, payload);
@@ -387,7 +388,7 @@ DirectTransport.prototype.sendSetupAckMessage_ = function() {
 /** @override */
 DirectTransport.prototype.connect = function() {
   'use strict';
-  var win = this.getWindow();
+  const win = this.getWindow();
   if (win) {
     DirectTransport.initialize_(win);
     this.initialized_ = true;
@@ -431,10 +432,10 @@ DirectTransport.prototype.send = function(service, payload) {
     goog.log.fine(goog.net.xpc.logger, 'send(): window not ready');
     return;
   }
-  var channelName = DirectTransport.getRoledChannelName_(
+  const channelName = DirectTransport.getRoledChannelName_(
       this.originalChannelName_, this.getPeerRole_());
 
-  var message = new DirectTransport.Message_(channelName, service, payload);
+  const message = new DirectTransport.Message_(channelName, service, payload);
 
   if (this.channel_.getConfig()[CfgFields.DIRECT_TRANSPORT_SYNC_MODE]) {
     this.executeScheduledSend_(message);
@@ -454,14 +455,15 @@ DirectTransport.prototype.send = function(service, payload) {
  */
 DirectTransport.prototype.executeScheduledSend_ = function(message) {
   'use strict';
-  var messageId = goog.getUid(message);
+  const messageId = goog.getUid(message);
   if (this.asyncSendsMap_[messageId]) {
     delete this.asyncSendsMap_[messageId];
   }
 
 
+  let peerProxy;
   try {
-    var peerProxy = goog.getObjectByName(
+    peerProxy = goog.getObjectByName(
         DirectTransport.GLOBAL_TRANPORT_PATH_,
         this.channel_.getPeerWindowObject());
   } catch (error) {
@@ -496,7 +498,7 @@ DirectTransport.prototype.executeScheduledSend_ = function(message) {
  */
 DirectTransport.prototype.getPeerRole_ = function() {
   'use strict';
-  var role = this.channel_.getRole();
+  const role = this.channel_.getRole();
   return role == goog.net.xpc.CrossPageChannelRole.OUTER ?
       goog.net.xpc.CrossPageChannelRole.INNER :
       goog.net.xpc.CrossPageChannelRole.OUTER;
@@ -522,9 +524,9 @@ DirectTransport.prototype.notifyConnected_ = function() {
 DirectTransport.prototype.disposeInternal = function() {
   'use strict';
   if (this.initialized_) {
-    var listenWindow = this.getWindow();
-    var uid = goog.getUid(listenWindow);
-    var value = --DirectTransport.activeCount_[uid];
+    const listenWindow = this.getWindow();
+    const uid = goog.getUid(listenWindow);
+    const value = --DirectTransport.activeCount_[uid];
     if (value == 1) {
       goog.exportSymbol(
           DirectTransport.GLOBAL_TRANPORT_PATH_, null, listenWindow);
@@ -566,7 +568,7 @@ DirectTransport.prototype.disposeInternal = function() {
  */
 DirectTransport.parseTransportPayload_ = function(payload) {
   'use strict';
-  var transportParts = /** @type {!Array<?string>} */ (
+  const transportParts = /** @type {!Array<?string>} */ (
       payload.split(DirectTransport.MESSAGE_DELIMITER_));
   transportParts[1] = transportParts[1] || null;  // Usually endpointId.
   return transportParts;

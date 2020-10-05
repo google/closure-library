@@ -52,7 +52,7 @@ goog.net.tmpnetwork.testGoogleCom = function(
   'use strict';
   // We need to add a 'rand' to make sure the response is not fulfilled
   // by browser cache.
-  var uri = opt_imageUri;
+  let uri = opt_imageUri;
   if (!uri) {
     uri = new goog.Uri(goog.net.tmpnetwork.TEST_URL);
     uri.makeUnique();
@@ -75,7 +75,7 @@ goog.net.tmpnetwork.testGoogleCom = function(
 goog.net.tmpnetwork.testLoadImageWithRetries = function(
     url, timeout, callback, retries, opt_pauseBetweenRetriesMS) {
   'use strict';
-  var channelDebug = new goog.net.ChannelDebug();
+  const channelDebug = new goog.net.ChannelDebug();
   channelDebug.debug('TestLoadImageWithRetries: ' + opt_pauseBetweenRetriesMS);
   if (retries == 0) {
     // no more retries, give up
@@ -83,7 +83,7 @@ goog.net.tmpnetwork.testLoadImageWithRetries = function(
     return;
   }
 
-  var pauseBetweenRetries = opt_pauseBetweenRetriesMS || 0;
+  const pauseBetweenRetries = opt_pauseBetweenRetriesMS || 0;
   retries--;
   goog.net.tmpnetwork.testLoadImage(url, timeout, function(succeeded) {
     'use strict';
@@ -110,9 +110,9 @@ goog.net.tmpnetwork.testLoadImageWithRetries = function(
  */
 goog.net.tmpnetwork.testLoadImage = function(url, timeout, callback) {
   'use strict';
-  var channelDebug = new goog.net.ChannelDebug();
+  const channelDebug = new goog.net.ChannelDebug();
   channelDebug.debug('TestLoadImage: loading ' + url);
-  var img = new Image();
+  const img = new Image();
   img.onload = function() {
     'use strict';
     try {

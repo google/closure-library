@@ -41,9 +41,10 @@ goog.requireType('goog.net.streams.StreamParser');
 goog.scope(function() {
 
 'use strict';
-var Base64PbStreamParser =
+const Base64PbStreamParser =
     goog.module.get('goog.net.streams.Base64PbStreamParser');
-var PbJsonStreamParser = goog.module.get('goog.net.streams.PbJsonStreamParser');
+const PbJsonStreamParser =
+    goog.module.get('goog.net.streams.PbJsonStreamParser');
 
 
 /**
@@ -213,7 +214,7 @@ goog.net.streams.XhrStreamReader.isStreamingSupported = function() {
 goog.net.streams.XhrStreamReader.prototype.getParserByResponseHeader_ =
     function() {
   'use strict';
-  var contentType =
+  let contentType =
       this.xhr_.getStreamingResponseHeader(goog.net.XhrIo.CONTENT_TYPE_HEADER);
   if (!contentType) {
     goog.log.warning(this.logger_, 'Content-Type unavailable: ' + contentType);
@@ -229,7 +230,7 @@ goog.net.streams.XhrStreamReader.prototype.getParserByResponseHeader_ =
   }
 
   if (goog.string.startsWith(contentType, 'application/x-protobuf')) {
-    var encoding = this.xhr_.getStreamingResponseHeader(
+    const encoding = this.xhr_.getStreamingResponseHeader(
         goog.net.XhrIo.CONTENT_TRANSFER_ENCODING);
     if (!encoding) {
       return new goog.net.streams.PbStreamParser();
@@ -305,7 +306,7 @@ goog.net.streams.XhrStreamReader.prototype.setDataHandler = function(handler) {
 goog.net.streams.XhrStreamReader.prototype.readyStateChangeHandler_ = function(
     event) {
   'use strict';
-  var xhr = /** @type {goog.net.XhrIo} */ (event.target);
+  const xhr = /** @type {goog.net.XhrIo} */ (event.target);
 
 
   try {
@@ -333,10 +334,10 @@ goog.net.streams.XhrStreamReader.prototype.readyStateChangeHandler_ = function(
  */
 goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
   'use strict';
-  var readyState = this.xhr_.getReadyState();
-  var errorCode = this.xhr_.getLastErrorCode();
-  var statusCode = this.xhr_.getStatus();
-  var responseText = this.xhr_.getResponseText();
+  const readyState = this.xhr_.getReadyState();
+  const errorCode = this.xhr_.getLastErrorCode();
+  const statusCode = this.xhr_.getStatus();
+  const responseText = this.xhr_.getResponseText();
 
   // we get partial results in browsers that support ready state interactive.
   // We also make sure that getResponseText is not null in interactive mode
@@ -347,7 +348,7 @@ goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
   }
 
   // TODO(user): white-list other 2xx responses with application payload
-  var successful =
+  const successful =
       (statusCode == goog.net.HttpStatus.OK ||
        statusCode == goog.net.HttpStatus.PARTIAL_CONTENT);
 
@@ -381,10 +382,10 @@ goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
 
   // Parses and delivers any new data, with error status.
   if (responseText.length > this.pos_) {
-    var newData = responseText.substr(this.pos_);
+    const newData = responseText.substr(this.pos_);
     this.pos_ = responseText.length;
     try {
-      var messages = this.parser_.parse(newData);
+      const messages = this.parser_.parse(newData);
       if (messages != null) {
         if (this.dataHandler_) {
           this.dataHandler_(messages);
@@ -421,7 +422,7 @@ goog.net.streams.XhrStreamReader.prototype.onReadyStateChanged_ = function() {
  */
 goog.net.streams.XhrStreamReader.prototype.updateStatus_ = function(status) {
   'use strict';
-  var current = this.status_;
+  const current = this.status_;
   if (current != status) {
     this.status_ = status;
     if (this.statusHandler_) {
@@ -442,7 +443,7 @@ goog.net.streams.XhrStreamReader.prototype.clear_ = function() {
 
   if (this.xhr_) {
     // clear out before aborting to avoid being reentered inside abort
-    var xhr = this.xhr_;
+    const xhr = this.xhr_;
     this.xhr_ = null;
     xhr.abort();
     xhr.dispose();

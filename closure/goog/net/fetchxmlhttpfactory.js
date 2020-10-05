@@ -44,7 +44,7 @@ goog.inherits(goog.net.FetchXmlHttpFactory, goog.net.XmlHttpFactory);
 /** @override */
 goog.net.FetchXmlHttpFactory.prototype.createInstance = function() {
   'use strict';
-  var instance = new goog.net.FetchXmlHttp(this.worker_);
+  const instance = new goog.net.FetchXmlHttp(this.worker_);
   if (this.credentialsMode_) {
     instance.setCredentialsMode(this.credentialsMode_);
   }
@@ -230,7 +230,7 @@ goog.net.FetchXmlHttp.prototype.send = function(opt_data) {
   }
 
   this.inProgress_ = true;
-  var requestInit = {
+  const requestInit = {
     headers: this.requestHeaders_,
     method: this.method_,
     credentials: this.credentialsMode_,
@@ -347,9 +347,9 @@ goog.net.FetchXmlHttp.prototype.handleDataFromStream_ = function(result) {
     return;
   }
 
-  var dataPacket = result.value ? /** @type {!Uint8Array} */ (result.value) :
-                                  new Uint8Array(0);
-  var newText = this.textDecoder_.decode(dataPacket, {stream: !result.done});
+  const dataPacket = result.value ? /** @type {!Uint8Array} */ (result.value) :
+                                    new Uint8Array(0);
+  const newText = this.textDecoder_.decode(dataPacket, {stream: !result.done});
   if (newText) {
     this.responseText += newText;
     this.response = this.responseText;
@@ -407,7 +407,7 @@ goog.net.FetchXmlHttp.prototype.handleResponseArrayBuffer_ = function(
  */
 goog.net.FetchXmlHttp.prototype.handleSendFailure_ = function(error) {
   'use strict';
-  var e = error instanceof Error ? error : Error(error);
+  const e = error instanceof Error ? error : Error(error);
   goog.log.warning(this.logger_, 'Failed to fetch url ' + this.url_, e);
   if (!this.inProgress_) {
     // The request was aborted, ignore.
@@ -466,11 +466,11 @@ goog.net.FetchXmlHttp.prototype.getAllResponseHeaders = function() {
             'received for url: ' + this.url_);
     return '';
   }
-  var lines = [];
-  var iter = this.responseHeaders_.entries();
-  var entry = iter.next();
+  const lines = [];
+  const iter = this.responseHeaders_.entries();
+  let entry = iter.next();
   while (!entry.done) {
-    var pair = entry.value;
+    const pair = entry.value;
     lines.push(pair[0] + ': ' + pair[1]);
     entry = iter.next();
   }

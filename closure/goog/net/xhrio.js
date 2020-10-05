@@ -221,7 +221,7 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
 };
 goog.inherits(goog.net.XhrIo, goog.events.EventTarget);
 
-var XhrIo = goog.net.XhrIo;
+const XhrIo = goog.net.XhrIo;
 
 /**
  * Response types that may be requested for XMLHttpRequests.
@@ -237,7 +237,7 @@ goog.net.XhrIo.ResponseType = {
   ARRAY_BUFFER: 'arraybuffer',
 };
 
-var ResponseType = goog.net.XhrIo.ResponseType;
+const ResponseType = goog.net.XhrIo.ResponseType;
 
 
 /**
@@ -338,7 +338,7 @@ goog.net.XhrIo.send = function(
     url, opt_callback, opt_method, opt_content, opt_headers,
     opt_timeoutInterval, opt_withCredentials) {
   'use strict';
-  var x = new goog.net.XhrIo();
+  const x = new goog.net.XhrIo();
   goog.net.XhrIo.sendInstances_.push(x);
   if (opt_callback) {
     x.listen(goog.net.EventType.COMPLETE, opt_callback);
@@ -373,7 +373,7 @@ goog.net.XhrIo.send = function(
  */
 goog.net.XhrIo.cleanup = function() {
   'use strict';
-  var instances = goog.net.XhrIo.sendInstances_;
+  const instances = goog.net.XhrIo.sendInstances_;
   while (instances.length) {
     instances.pop().dispose();
   }
@@ -526,7 +526,7 @@ goog.net.XhrIo.prototype.send = function(
         this.lastUri_ + '; newUri=' + url);
   }
 
-  var method = opt_method ? opt_method.toUpperCase() : 'GET';
+  const method = opt_method ? opt_method.toUpperCase() : 'GET';
 
   this.lastUri_ = url;
   this.lastError_ = '';
@@ -573,9 +573,9 @@ goog.net.XhrIo.prototype.send = function(
   // We can't use null since this won't allow requests with form data to have a
   // content length specified which will cause some proxies to return a 411
   // error.
-  var content = opt_content || '';
+  const content = opt_content || '';
 
-  var headers = this.headers.clone();
+  const headers = this.headers.clone();
 
   // Add headers specific to this request
   if (opt_headers) {
@@ -588,10 +588,10 @@ goog.net.XhrIo.prototype.send = function(
   // Find whether a content type header is set, ignoring case.
   // HTTP header names are case-insensitive.  See:
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
-  var contentTypeKey =
+  const contentTypeKey =
       goog.array.find(headers.getKeys(), goog.net.XhrIo.isContentTypeHeader_);
 
-  var contentIsFormData =
+  const contentIsFormData =
       (goog.global['FormData'] && (content instanceof goog.global['FormData']));
   if (goog.array.contains(goog.net.XhrIo.METHODS_WITH_FORM_DATA, method) &&
       !contentTypeKey && !contentIsFormData) {
@@ -968,8 +968,8 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
 
     // Save reference so we can mark it as closed after the READY event.  The
     // READY event may trigger another request, thus we must nullify this.xhr_
-    var xhr = this.xhr_;
-    var clearedOnReadyStateChange =
+    const xhr = this.xhr_;
+    const clearedOnReadyStateChange =
         this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ?
         goog.nullFunction :
         null;
@@ -1037,7 +1037,7 @@ goog.net.XhrIo.prototype.isComplete = function() {
  */
 goog.net.XhrIo.prototype.isSuccess = function() {
   'use strict';
-  var status = this.getStatus();
+  const status = this.getStatus();
   // A zero status code is considered successful for local files.
   return goog.net.HttpStatus.isSuccess(status) ||
       status === 0 && !this.isLastUriEffectiveSchemeHttp_();
@@ -1051,7 +1051,7 @@ goog.net.XhrIo.prototype.isSuccess = function() {
  */
 goog.net.XhrIo.prototype.isLastUriEffectiveSchemeHttp_ = function() {
   'use strict';
-  var scheme = goog.uri.utils.getEffectiveScheme(String(this.lastUri_));
+  const scheme = goog.uri.utils.getEffectiveScheme(String(this.lastUri_));
   return goog.net.XhrIo.HTTP_SCHEME_PATTERN.test(scheme);
 };
 
@@ -1208,7 +1208,7 @@ goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
     return undefined;
   }
 
-  var responseText = this.xhr_.responseText;
+  let responseText = this.xhr_.responseText;
   if (opt_xssiPrefix && responseText.indexOf(opt_xssiPrefix) == 0) {
     responseText = responseText.substring(opt_xssiPrefix.length);
   }
@@ -1289,7 +1289,7 @@ goog.net.XhrIo.prototype.getResponseHeader = function(key) {
     return undefined;
   }
 
-  var value = this.xhr_.getResponseHeader(key);
+  const value = this.xhr_.getResponseHeader(key);
   return value === null ? undefined : value;
 };
 
@@ -1327,16 +1327,16 @@ goog.net.XhrIo.prototype.getResponseHeaders = function() {
   // TODO(user): Make this function parse headers as per the spec
   // (https://tools.ietf.org/html/rfc2616#section-4.2).
 
-  var headersObject = {};
-  var headersArray = this.getAllResponseHeaders().split('\r\n');
-  for (var i = 0; i < headersArray.length; i++) {
+  const headersObject = {};
+  const headersArray = this.getAllResponseHeaders().split('\r\n');
+  for (let i = 0; i < headersArray.length; i++) {
     if (goog.string.isEmptyOrWhitespace(headersArray[i])) {
       continue;
     }
-    var keyValue =
+    const keyValue =
         goog.string.splitLimit(headersArray[i], ':', /* maxSplitCount= */ 1);
-    var key = keyValue[0];
-    var value = keyValue[1];
+    const key = keyValue[0];
+    let value = keyValue[1];
 
     if (typeof value !== 'string') {
       // There must be a value but it can be the empty string.
@@ -1347,7 +1347,7 @@ goog.net.XhrIo.prototype.getResponseHeaders = function() {
     value = value.trim();
     // The key should not contain whitespace but we currently ignore that.
 
-    var values = headersObject[key] || [];
+    const values = headersObject[key] || [];
     headersObject[key] = values;
     values.push(value);
   }

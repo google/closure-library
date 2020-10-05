@@ -194,14 +194,14 @@ goog.net.XhrManager.prototype.send = function(
     id, url, opt_method, opt_content, opt_headers, opt_priority, opt_callback,
     opt_maxRetries, opt_responseType, opt_withCredentials) {
   'use strict';
-  var requests = this.requests_;
+  const requests = this.requests_;
   // Check if there is already a request with the given id.
   if (requests.get(id)) {
     throw new Error(goog.net.XhrManager.ERROR_ID_IN_USE_);
   }
 
   // Make the Request object.
-  var request = new goog.net.XhrManager.Request(
+  const request = new goog.net.XhrManager.Request(
       url, goog.bind(this.handleEvent_, this, id), opt_method, opt_content,
       opt_headers, opt_callback,
       opt_maxRetries !== undefined ? opt_maxRetries : this.maxRetries_,
@@ -211,7 +211,7 @@ goog.net.XhrManager.prototype.send = function(
   this.requests_.set(id, request);
 
   // Setup the callback for the pool.
-  var callback = goog.bind(this.handleAvailableXhr_, this, id);
+  const callback = goog.bind(this.handleAvailableXhr_, this, id);
   this.xhrPool_.getObject(callback, opt_priority);
 
   return request;
@@ -226,9 +226,9 @@ goog.net.XhrManager.prototype.send = function(
  */
 goog.net.XhrManager.prototype.abort = function(id, opt_force) {
   'use strict';
-  var request = this.requests_.get(id);
+  const request = this.requests_.get(id);
   if (request) {
-    var xhrIo = request.xhrIo;
+    const xhrIo = request.xhrIo;
     request.setAborted(true);
     if (opt_force) {
       if (xhrIo) {
@@ -258,7 +258,7 @@ goog.net.XhrManager.prototype.abort = function(id, opt_force) {
  */
 goog.net.XhrManager.prototype.handleAvailableXhr_ = function(id, xhrIo) {
   'use strict';
-  var request = this.requests_.get(id);
+  const request = this.requests_.get(id);
   // Make sure the request doesn't already have an XhrIo attached. This can
   // happen if a forced abort occurs before an XhrIo is available, and a new
   // request with the same id is made.
@@ -302,7 +302,7 @@ goog.net.XhrManager.prototype.handleAvailableXhr_ = function(id, xhrIo) {
  */
 goog.net.XhrManager.prototype.handleEvent_ = function(id, e) {
   'use strict';
-  var xhrIo = /** @type {goog.net.XhrIo} */ (e.target);
+  const xhrIo = /** @type {goog.net.XhrIo} */ (e.target);
   switch (e.type) {
     case goog.net.EventType.READY:
       this.retry_(id, xhrIo);
@@ -339,7 +339,7 @@ goog.net.XhrManager.prototype.handleEvent_ = function(id, e) {
  */
 goog.net.XhrManager.prototype.retry_ = function(id, xhrIo) {
   'use strict';
-  var request = this.requests_.get(id);
+  const request = this.requests_.get(id);
 
   // If the request has not completed and it is below its max. retries.
   if (request && !request.getCompleted() && !request.hasReachedMaxRetries()) {
@@ -373,7 +373,7 @@ goog.net.XhrManager.prototype.retry_ = function(id, xhrIo) {
 goog.net.XhrManager.prototype.handleComplete_ = function(id, xhrIo, e) {
   'use strict';
   // Only if the request is done processing should a COMPLETE event be fired.
-  var request = this.requests_.get(id);
+  const request = this.requests_.get(id);
   if (xhrIo.getLastErrorCode() == goog.net.ErrorCode.ABORT ||
       xhrIo.isSuccess() || request.hasReachedMaxRetries()) {
     this.dispatchEvent(
@@ -439,7 +439,7 @@ goog.net.XhrManager.prototype.handleSuccess_ = function(id, xhrIo) {
  */
 goog.net.XhrManager.prototype.handleError_ = function(id, xhrIo) {
   'use strict';
-  var request = this.requests_.get(id);
+  const request = this.requests_.get(id);
 
   // If the maximum number of retries has been reached.
   if (request.hasReachedMaxRetries()) {
@@ -465,7 +465,7 @@ goog.net.XhrManager.prototype.handleError_ = function(id, xhrIo) {
 goog.net.XhrManager.prototype.removeXhrListener_ = function(
     xhrIo, func, opt_types) {
   'use strict';
-  var types = opt_types || goog.net.XhrManager.XHR_EVENT_TYPES_;
+  const types = opt_types || goog.net.XhrManager.XHR_EVENT_TYPES_;
   this.eventHandler_.unlisten(xhrIo, types, func);
 };
 
@@ -481,7 +481,7 @@ goog.net.XhrManager.prototype.removeXhrListener_ = function(
 goog.net.XhrManager.prototype.addXhrListener_ = function(
     xhrIo, func, opt_types) {
   'use strict';
-  var types = opt_types || goog.net.XhrManager.XHR_EVENT_TYPES_;
+  const types = opt_types || goog.net.XhrManager.XHR_EVENT_TYPES_;
   this.eventHandler_.listen(xhrIo, types, func);
 };
 

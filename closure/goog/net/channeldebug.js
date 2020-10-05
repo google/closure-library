@@ -225,9 +225,9 @@ goog.net.ChannelDebug.prototype.redactResponse_ = function(responseText) {
   }
 
   try {
-    var responseArray = JSON.parse(responseText);
+    const responseArray = JSON.parse(responseText);
     if (responseArray) {
-      for (var i = 0; i < responseArray.length; i++) {
+      for (let i = 0; i < responseArray.length; i++) {
         if (Array.isArray(responseArray[i])) {
           this.maybeRedactArray_(responseArray[i]);
         }
@@ -252,7 +252,7 @@ goog.net.ChannelDebug.prototype.maybeRedactArray_ = function(array) {
   if (array.length < 2) {
     return;
   }
-  var dataPart = array[1];
+  const dataPart = array[1];
   if (!Array.isArray(dataPart)) {
     return;
   }
@@ -260,10 +260,10 @@ goog.net.ChannelDebug.prototype.maybeRedactArray_ = function(array) {
     return;
   }
 
-  var type = dataPart[0];
+  const type = dataPart[0];
   if (type != 'noop' && type != 'stop') {
     // redact all fields in the array
-    for (var i = 1; i < dataPart.length; i++) {
+    for (let i = 1; i < dataPart.length; i++) {
       dataPart[i] = '';
     }
   }
@@ -282,16 +282,16 @@ goog.net.ChannelDebug.prototype.maybeRedactPostData_ = function(data) {
   if (!data) {
     return null;
   }
-  var out = '';
-  var params = data.split('&');
-  for (var i = 0; i < params.length; i++) {
-    var param = params[i];
-    var keyValue = param.split('=');
+  let out = '';
+  const params = data.split('&');
+  for (let i = 0; i < params.length; i++) {
+    const param = params[i];
+    const keyValue = param.split('=');
     if (keyValue.length > 1) {
-      var key = keyValue[0];
-      var value = keyValue[1];
+      const key = keyValue[0];
+      const value = keyValue[1];
 
-      var keyParts = key.split('_');
+      const keyParts = key.split('_');
       if (keyParts.length >= 2 && keyParts[1] == 'type') {
         out += key + '=' + value + '&';
       } else {

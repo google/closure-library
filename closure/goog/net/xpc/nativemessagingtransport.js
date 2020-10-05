@@ -261,8 +261,8 @@ goog.net.xpc.NativeMessagingTransport.prototype.couldPeerVersionBe_ = function(
  */
 goog.net.xpc.NativeMessagingTransport.initialize_ = function(listenWindow) {
   'use strict';
-  var uid = goog.getUid(listenWindow);
-  var value = goog.net.xpc.NativeMessagingTransport.activeCount_[uid];
+  const uid = goog.getUid(listenWindow);
+  let value = goog.net.xpc.NativeMessagingTransport.activeCount_[uid];
   if (typeof value !== 'number') {
     value = 0;
   }
@@ -286,23 +286,23 @@ goog.net.xpc.NativeMessagingTransport.initialize_ = function(listenWindow) {
  */
 goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
   'use strict';
-  var data = msgEvt.getBrowserEvent().data;
+  const data = msgEvt.getBrowserEvent().data;
 
   if (typeof data !== 'string') {
     return false;
   }
 
-  var headDelim = data.indexOf('|');
-  var serviceDelim = data.indexOf(':');
+  const headDelim = data.indexOf('|');
+  const serviceDelim = data.indexOf(':');
 
   // make sure we got something reasonable
   if (headDelim == -1 || serviceDelim == -1) {
     return false;
   }
 
-  var channelName = data.substring(0, headDelim);
-  var service = data.substring(headDelim + 1, serviceDelim);
-  var payload = data.substring(serviceDelim + 1);
+  const channelName = data.substring(0, headDelim);
+  const service = data.substring(headDelim + 1, serviceDelim);
+  const payload = data.substring(serviceDelim + 1);
 
   goog.log.fine(
       goog.net.xpc.logger, 'messageReceived: channel=' + channelName +
@@ -315,8 +315,8 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
   //  - channel was created in a different namespace
   //  - message was sent to the wrong window
   //  - channel has become stale (e.g. caching iframes and back clicks)
-  var allChannels = goog.module.get('goog.net.xpc.CrossPageChannel').channels;
-  var channel = allChannels[channelName];
+  const allChannels = goog.module.get('goog.net.xpc.CrossPageChannel').channels;
+  const channel = allChannels[channelName];
   if (channel) {
     channel.xpcDeliver(
         service, payload,
@@ -324,12 +324,12 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
     return true;
   }
 
-  var transportMessageType =
+  const transportMessageType =
       goog.net.xpc.NativeMessagingTransport.parseTransportPayload_(payload)[0];
 
   // Check if there are any stale channel names that can be updated.
-  for (var staleChannelName in allChannels) {
-    var staleChannel = allChannels[staleChannelName];
+  for (let staleChannelName in allChannels) {
+    const staleChannel = allChannels[staleChannelName];
     if (staleChannel.getRole() == goog.net.xpc.CrossPageChannelRole.INNER &&
         !staleChannel.isConnected() &&
         service == goog.net.xpc.TRANSPORT_SERVICE_ &&
@@ -364,10 +364,10 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
 goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
     function(payload) {
   'use strict';
-  var transportParts =
+  const transportParts =
       goog.net.xpc.NativeMessagingTransport.parseTransportPayload_(payload);
-  var transportMessageType = transportParts[0];
-  var peerEndpointId = transportParts[1];
+  const transportMessageType = transportParts[0];
+  const peerEndpointId = transportParts[1];
   switch (transportMessageType) {
     case goog.net.xpc.SETUP_ACK_:
       this.setPeerProtocolVersion_(1);
@@ -389,7 +389,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
       break;
     case goog.net.xpc.SETUP_NTPV2:
       if (this.protocolVersion_ == 2) {
-        var prevPeerProtocolVersion = this.peerProtocolVersion_;
+        const prevPeerProtocolVersion = this.peerProtocolVersion_;
         this.setPeerProtocolVersion_(2);
         this.sendSetupAckMessage_(2);
         if ((prevPeerProtocolVersion == 1 || this.peerEndpointId_ != null) &&
@@ -420,7 +420,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.sendSetupMessage_ = function() {
       !(this.protocolVersion_ == 1 && this.peerProtocolVersion_ == 2));
 
   if (this.protocolVersion_ == 2 && this.couldPeerVersionBe_(2)) {
-    var payload = goog.net.xpc.SETUP_NTPV2;
+    let payload = goog.net.xpc.SETUP_NTPV2;
     payload += goog.net.xpc.NativeMessagingTransport.MESSAGE_DELIMITER_;
     payload += this.endpointId_;
     this.send(goog.net.xpc.TRANSPORT_SERVICE_, payload);
@@ -511,7 +511,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.maybeAttemptToConnect_ =
   'use strict';
   // In a one-sided handshake, the outer frame does not send a SETUP message,
   // but the inner frame does.
-  var outerFrame =
+  const outerFrame =
       this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.OUTER;
   if ((this.oneSidedHandshake_ && outerFrame) || this.channel_.isConnected() ||
       this.isDisposed()) {
@@ -533,7 +533,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.maybeAttemptToConnect_ =
 goog.net.xpc.NativeMessagingTransport.prototype.send = function(
     service, payload) {
   'use strict';
-  var win = this.channel_.getPeerWindowObject();
+  const win = this.channel_.getPeerWindowObject();
   if (!win) {
     goog.log.fine(goog.net.xpc.logger, 'send(): window not ready');
     return;
@@ -547,9 +547,9 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(
     // calling thread until those listeners are run.  This produces different
     // ordering to all other browsers, and breaks this protocol.  This timer
     // callback is introduced to produce standard behavior across all browsers.
-    var transport = this;
-    var channelName = this.channel_.name;
-    var sendFunctor = function() {
+    const transport = this;
+    const channelName = this.channel_.name;
+    const sendFunctor = function() {
       'use strict';
       transport.sendTimerId_ = 0;
 
@@ -558,7 +558,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(
         // versions of Opera, where it is a method of the document object.  It
         // also seems that the appearance of postMessage on the peer window
         // object can sometimes be delayed.
-        var obj = win.postMessage ? win : win.document;
+        const obj = win.postMessage ? win : win.document;
         if (!obj.postMessage) {
           goog.log.warning(
               goog.net.xpc.logger, 'Peer window had no postMessage function.');
@@ -594,7 +594,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.send = function(
  */
 goog.net.xpc.NativeMessagingTransport.prototype.notifyConnected_ = function() {
   'use strict';
-  var delay = (this.protocolVersion_ == 1 || this.peerProtocolVersion_ == 1) ?
+  const delay = (this.protocolVersion_ == 1 || this.peerProtocolVersion_ == 1) ?
       goog.net.xpc.NativeMessagingTransport.CONNECTION_DELAY_MS_ :
       undefined;
   this.channel_.notifyConnected(delay);
@@ -605,9 +605,9 @@ goog.net.xpc.NativeMessagingTransport.prototype.notifyConnected_ = function() {
 goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
   'use strict';
   if (this.initialized_) {
-    var listenWindow = this.getWindow();
-    var uid = goog.getUid(listenWindow);
-    var value = goog.net.xpc.NativeMessagingTransport.activeCount_[uid];
+    const listenWindow = this.getWindow();
+    const uid = goog.getUid(listenWindow);
+    const value = goog.net.xpc.NativeMessagingTransport.activeCount_[uid];
     goog.net.xpc.NativeMessagingTransport.activeCount_[uid] = value - 1;
     if (value == 1) {
       goog.events.unlisten(
@@ -657,7 +657,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
 goog.net.xpc.NativeMessagingTransport.parseTransportPayload_ = function(
     payload) {
   'use strict';
-  var transportParts = /** @type {!Array<?string>} */ (
+  const transportParts = /** @type {!Array<?string>} */ (
       payload.split(goog.net.xpc.NativeMessagingTransport.MESSAGE_DELIMITER_));
   transportParts[1] = transportParts[1] || null;
   return transportParts;

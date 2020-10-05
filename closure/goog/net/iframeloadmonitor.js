@@ -64,10 +64,10 @@ goog.net.IframeLoadMonitor = function(iframe, opt_hasContent) {
     // readystatechange.
     // IE 7 does not reliably fire readystatechange events but listening on load
     // seems to work just fine.
-    var isIe6OrLess =
+    const isIe6OrLess =
         goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7');
-    var loadEvtType = isIe6OrLess ? goog.events.EventType.READYSTATECHANGE :
-                                    goog.events.EventType.LOAD;
+    const loadEvtType = isIe6OrLess ? goog.events.EventType.READYSTATECHANGE :
+                                      goog.events.EventType.LOAD;
     this.onloadListenerKey_ = goog.events.listen(
         this.iframe_, loadEvtType, this.handleLoad_, false, this);
 
@@ -159,7 +159,7 @@ goog.net.IframeLoadMonitor.prototype.disposeInternal = function() {
  */
 goog.net.IframeLoadMonitor.prototype.isLoadedHelper_ = function() {
   'use strict';
-  var isLoaded = false;
+  let isLoaded = false;
 
   try {
     if (!this.hasContent_ && goog.userAgent.IE &&
@@ -174,7 +174,7 @@ goog.net.IframeLoadMonitor.prototype.isLoadedHelper_ = function() {
       // milliseconds later, replace the contentDocument. If the hasContent
       // check is requested, the iframe is considered loaded only once there is
       // content in the body.
-      var body = goog.dom.getFrameContentDocument(this.iframe_).body;
+      const body = goog.dom.getFrameContentDocument(this.iframe_).body;
       isLoaded = this.hasContent_ ? !!body && !!body.firstChild : !!body;
     }
   } catch (e) {

@@ -46,8 +46,8 @@ goog.net.MultiIframeLoadMonitor = function(iframes, callback, opt_hasContent) {
    */
   this.callback_ = callback;
 
-  for (var i = 0; i < iframes.length; i++) {
-    var iframeLoadMonitor =
+  for (let i = 0; i < iframes.length; i++) {
+    const iframeLoadMonitor =
         new goog.net.IframeLoadMonitor(iframes[i], opt_hasContent);
     if (iframeLoadMonitor.isLoaded()) {
       // Already loaded - don't need to wait
@@ -75,10 +75,10 @@ goog.net.MultiIframeLoadMonitor = function(iframes, callback, opt_hasContent) {
  */
 goog.net.MultiIframeLoadMonitor.prototype.handleEvent = function(e) {
   'use strict';
-  var iframeLoadMonitor = e.target;
+  const iframeLoadMonitor = e.target;
   // iframeLoadMonitor is now loaded, remove it from the array of
   // pending iframe load monitors.
-  for (var i = 0; i < this.pendingIframeLoadMonitors_.length; i++) {
+  for (let i = 0; i < this.pendingIframeLoadMonitors_.length; i++) {
     if (this.pendingIframeLoadMonitors_[i] == iframeLoadMonitor) {
       this.pendingIframeLoadMonitors_.splice(i, 1);
       break;
@@ -107,7 +107,7 @@ goog.net.MultiIframeLoadMonitor.prototype.handleEvent = function(e) {
  */
 goog.net.MultiIframeLoadMonitor.prototype.stopMonitoring = function() {
   'use strict';
-  for (var i = 0; i < this.pendingIframeLoadMonitors_.length; i++) {
+  for (let i = 0; i < this.pendingIframeLoadMonitors_.length; i++) {
     this.pendingIframeLoadMonitors_[i].dispose();
   }
   this.pendingIframeLoadMonitors_.length = 0;

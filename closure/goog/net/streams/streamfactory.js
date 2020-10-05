@@ -55,6 +55,6 @@ goog.net.streams.createXhrNodeReadableStream = function(xhr) {
     return null;
   }
 
-  var reader = new goog.net.streams.XhrStreamReader(xhr);
+  const reader = new goog.net.streams.XhrStreamReader(xhr);
   return new goog.net.streams.XhrNodeReadableStream(reader);
 };
