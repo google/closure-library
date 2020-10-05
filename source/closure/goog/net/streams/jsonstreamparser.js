@@ -41,7 +41,7 @@ goog.scope(function() {
 
 
 'use strict';
-var utils = goog.module.get('goog.net.streams.utils');
+const utils = goog.module.get('goog.net.streams.utils');
 
 
 /**
@@ -148,7 +148,7 @@ goog.net.streams.JsonStreamParser = function(opt_options) {
 goog.net.streams.JsonStreamParser.Options;
 
 
-var Parser = goog.net.streams.JsonStreamParser;
+const Parser = goog.net.streams.JsonStreamParser;
 
 
 /**
@@ -260,18 +260,18 @@ Parser.prototype.parse = function(input) {
   goog.asserts.assertString(input);
 
   // captures
-  var parser = this;
-  var stack = parser.stack_;
-  var pattern = parser.stringInputPattern_;
-  var State = Parser.State_;  // enums
+  const parser = this;
+  const stack = parser.stack_;
+  const pattern = parser.stringInputPattern_;
+  const State = Parser.State_;  // enums
 
-  var num = input.length;
+  const num = input.length;
 
-  var streamStart = 0;
+  let streamStart = 0;
 
-  var msgStart = -1;
+  let msgStart = -1;
 
-  var i = 0;
+  let i = 0;
 
   while (i < num) {
     switch (parser.streamState_) {
@@ -287,7 +287,7 @@ Parser.prototype.parse = function(input) {
 
       case Parser.StreamState_.INIT:
         if (readMore()) {
-          var current = input[i++];
+          const current = input[i++];
           parser.pos_++;
 
           if (current === '[') {
@@ -318,7 +318,7 @@ Parser.prototype.parse = function(input) {
         }
 
         if (parser.result_.length > 0) {
-          var msgs = parser.result_;
+          const msgs = parser.result_;
           parser.result_ = [];
           return msgs;
         }
@@ -355,7 +355,7 @@ Parser.prototype.parse = function(input) {
    * Parse the input JSON elements with a streamed state machine.
    */
   function parseData() {
-    var current;
+    let current;
 
     while (true) {
       current = input[i++];
@@ -493,7 +493,7 @@ Parser.prototype.parse = function(input) {
           continue;
 
         case State.STRING:
-          var old = i;
+          const old = i;
 
           STRING_LOOP: while (true) {
             while (parser.unicodeCount_ > 0) {
@@ -533,7 +533,7 @@ Parser.prototype.parse = function(input) {
             }
 
             pattern.lastIndex = i;
-            var patternResult = pattern.exec(input);
+            const patternResult = pattern.exec(input);
             if (!patternResult) {
               i = input.length + 1;
               break;
@@ -688,7 +688,7 @@ Parser.prototype.parse = function(input) {
    *    from the stack, or the general VALUE state.
    */
   function nextState() {
-    var state = stack.pop();
+    const state = stack.pop();
     if (state != null) {
       return state;
     } else {

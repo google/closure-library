@@ -84,13 +84,13 @@ goog.net.BulkLoader.prototype.getRequestUris = function() {
  */
 goog.net.BulkLoader.prototype.load = function() {
   'use strict';
-  var eventHandler = this.eventHandler_;
-  var uris = this.helper_.getUris();
+  const eventHandler = this.eventHandler_;
+  const uris = this.helper_.getUris();
   goog.log.info(
       this.logger_, 'Starting load of code with ' + uris.length + ' uris.');
 
-  for (var i = 0; i < uris.length; i++) {
-    var xhrIo = new goog.net.XhrIo();
+  for (let i = 0; i < uris.length; i++) {
+    const xhrIo = new goog.net.XhrIo();
     eventHandler.listen(
         xhrIo, goog.net.EventType.COMPLETE,
         goog.bind(this.handleEvent_, this, i));
@@ -112,7 +112,7 @@ goog.net.BulkLoader.prototype.handleEvent_ = function(id, e) {
       this.logger_,
       'Received event "' + e.type + '" for id ' + id + ' with uri ' +
           this.helper_.getUri(id));
-  var xhrIo = /** @type {goog.net.XhrIo} */ (e.target);
+  const xhrIo = /** @type {goog.net.XhrIo} */ (e.target);
   if (xhrIo.isSuccess()) {
     this.handleSuccess_(id, xhrIo);
   } else {

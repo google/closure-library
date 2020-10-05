@@ -67,8 +67,8 @@ goog.inherits(goog.net.XhrIoPool, goog.structs.PriorityPool);
  */
 goog.net.XhrIoPool.prototype.createObject = function() {
   'use strict';
-  var xhrIo = new goog.net.XhrIo();
-  var headers = this.headers_;
+  const xhrIo = new goog.net.XhrIo();
+  const headers = this.headers_;
   if (headers) {
     headers.forEach(function(value, key) {
       'use strict';
@@ -92,6 +92,6 @@ goog.net.XhrIoPool.prototype.createObject = function() {
 goog.net.XhrIoPool.prototype.objectCanBeReused = function(obj) {
   'use strict';
   // An active XhrIo object should never be used.
-  var xhr = /** @type {goog.net.XhrIo} */ (obj);
+  const xhr = /** @type {goog.net.XhrIo} */ (obj);
   return !xhr.isDisposed() && !xhr.isActive();
 };

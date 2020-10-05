@@ -533,7 +533,7 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
 
   // send the request either as a POST or GET
   this.xmlHttpChunkStart_ = 0;
-  var useSecondaryDomains = this.channel_.shouldUseSecondaryDomains();
+  const useSecondaryDomains = this.channel_.shouldUseSecondaryDomains();
   this.xmlHttp_ =
       this.channel_.createXhrIo(useSecondaryDomains ? hostPrefix : null);
 
@@ -547,7 +547,8 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
       this.xmlHttp_, goog.net.EventType.READY_STATE_CHANGE,
       this.readyStateChangeHandler_);
 
-  var headers = this.extraHeaders_ ? goog.object.clone(this.extraHeaders_) : {};
+  const headers =
+      this.extraHeaders_ ? goog.object.clone(this.extraHeaders_) : {};
   if (this.postData_) {
     // todo (jonp) - use POST constant when Dan defines it
     this.verb_ = 'POST';
@@ -580,8 +581,8 @@ goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
  */
 goog.net.ChannelRequest.prototype.readyStateChangeHandler_ = function(evt) {
   'use strict';
-  var xhr = /** @type {goog.net.XhrIo} */ (evt.target);
-  var throttle = this.readyStateChangeThrottle_;
+  const xhr = /** @type {goog.net.XhrIo} */ (evt.target);
+  const throttle = this.readyStateChangeThrottle_;
   if (throttle &&
       xhr.getReadyState() == goog.net.XmlHttp.ReadyState.INTERACTIVE) {
     // Only throttle in the partial data case.
@@ -635,9 +636,9 @@ goog.net.ChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
  */
 goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   'use strict';
-  var readyState = this.xmlHttp_.getReadyState();
-  var errorCode = this.xmlHttp_.getLastErrorCode();
-  var statusCode = this.xmlHttp_.getStatus();
+  const readyState = this.xmlHttp_.getReadyState();
+  const errorCode = this.xmlHttp_.getLastErrorCode();
+  const statusCode = this.xmlHttp_.getStatus();
   // If it is Safari less than 420+, there is a bug that causes null to be
   // in the responseText on ready state interactive so we must wait for
   // ready state complete.
@@ -681,9 +682,9 @@ goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   // got some data so cancel the watchdog timer
   this.cancelWatchDogTimer_();
 
-  var status = this.xmlHttp_.getStatus();
+  const status = this.xmlHttp_.getStatus();
   this.lastStatusCode_ = status;
-  var responseText = this.xmlHttp_.getResponseText();
+  const responseText = this.xmlHttp_.getResponseText();
   if (!responseText) {
     this.channelDebug_.debug(
         'No response text for uri ' + this.requestUri_ + ' status ' + status);
@@ -763,9 +764,9 @@ goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
 goog.net.ChannelRequest.prototype.decodeNextChunks_ = function(
     readyState, responseText) {
   'use strict';
-  var decodeNextChunksSuccessful = true;
+  let decodeNextChunksSuccessful = true;
   while (!this.cancelled_ && this.xmlHttpChunkStart_ < responseText.length) {
-    var chunkText = this.getNextChunk_(responseText);
+    const chunkText = this.getNextChunk_(responseText);
     if (chunkText == goog.net.ChannelRequest.INCOMPLETE_CHUNK_) {
       if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
         // should have consumed entire response when the request is done
@@ -822,8 +823,8 @@ goog.net.ChannelRequest.prototype.decodeNextChunks_ = function(
  */
 goog.net.ChannelRequest.prototype.pollResponse_ = function() {
   'use strict';
-  var readyState = this.xmlHttp_.getReadyState();
-  var responseText = this.xmlHttp_.getResponseText();
+  const readyState = this.xmlHttp_.getReadyState();
+  const responseText = this.xmlHttp_.getResponseText();
   if (this.xmlHttpChunkStart_ < responseText.length) {
     this.cancelWatchDogTimer_();
     this.decodeNextChunks_(readyState, responseText);
@@ -867,24 +868,24 @@ goog.net.ChannelRequest.prototype.startPolling_ = function() {
  */
 goog.net.ChannelRequest.prototype.getNextChunk_ = function(responseText) {
   'use strict';
-  var sizeStartIndex = this.xmlHttpChunkStart_;
-  var sizeEndIndex = responseText.indexOf('\n', sizeStartIndex);
+  const sizeStartIndex = this.xmlHttpChunkStart_;
+  const sizeEndIndex = responseText.indexOf('\n', sizeStartIndex);
   if (sizeEndIndex == -1) {
     return goog.net.ChannelRequest.INCOMPLETE_CHUNK_;
   }
 
-  var sizeAsString = responseText.substring(sizeStartIndex, sizeEndIndex);
-  var size = Number(sizeAsString);
+  const sizeAsString = responseText.substring(sizeStartIndex, sizeEndIndex);
+  const size = Number(sizeAsString);
   if (isNaN(size)) {
     return goog.net.ChannelRequest.INVALID_CHUNK_;
   }
 
-  var chunkStartIndex = sizeEndIndex + 1;
+  const chunkStartIndex = sizeEndIndex + 1;
   if (chunkStartIndex + size > responseText.length) {
     return goog.net.ChannelRequest.INCOMPLETE_CHUNK_;
   }
 
-  var chunkText = responseText.substr(chunkStartIndex, size);
+  const chunkText = responseText.substr(chunkStartIndex, size);
   this.xmlHttpChunkStart_ = chunkStartIndex + size;
   return chunkText;
 };
@@ -916,7 +917,7 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   this.requestStartTime_ = goog.now();
   this.ensureWatchDogTimer_();
 
-  var hostname = usingSecondaryDomain ? window.location.hostname : '';
+  const hostname = usingSecondaryDomain ? window.location.hostname : '';
   this.requestUri_ = this.baseUri_.clone();
   this.requestUri_.setParameterValue('DOMAIN', hostname);
   this.requestUri_.setParameterValue('t', this.retryId_);
@@ -944,17 +945,17 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   // the HTML construction in this code, it's brittle and so it's easy to make
   // mistakes.
 
-  var body = '<html><body>';
+  let body = '<html><body>';
   if (usingSecondaryDomain) {
-    var escapedHostname =
+    const escapedHostname =
         goog.net.ChannelRequest.escapeForStringInScript_(hostname);
     body += '<script>document.domain="' + escapedHostname + '"</scr' +
         'ipt>';
   }
   body += '</body></html>';
-  var bodyHtml = goog.html.uncheckedconversions
-                     .safeHtmlFromStringKnownToSatisfyTypeContract(
-                         goog.string.Const.from('b/12014412'), body);
+  const bodyHtml = goog.html.uncheckedconversions
+                       .safeHtmlFromStringKnownToSatisfyTypeContract(
+                           goog.string.Const.from('b/12014412'), body);
 
   this.trident_.open();
   goog.dom.safe.documentWrite(
@@ -966,13 +967,13 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   this.trident_.parentWindow['rpcClose'] =
       goog.bind(this.onTridentDone_, this, false);
 
-  var div = this.trident_.createElement(String(goog.dom.TagName.DIV));
+  const div = this.trident_.createElement(String(goog.dom.TagName.DIV));
   this.trident_.parentWindow.document.body.appendChild(div);
 
-  var safeUrl = goog.html.SafeUrl.sanitize(this.requestUri_.toString());
-  var sanitizedEscapedUrl =
+  const safeUrl = goog.html.SafeUrl.sanitize(this.requestUri_.toString());
+  const sanitizedEscapedUrl =
       goog.string.htmlEscape(goog.html.SafeUrl.unwrap(safeUrl));
-  var iframeHtml =
+  const iframeHtml =
       goog.html.uncheckedconversions
           .safeHtmlFromStringKnownToSatisfyTypeContract(
               goog.string.Const.from('b/12014412'),
@@ -997,9 +998,9 @@ goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
  */
 goog.net.ChannelRequest.escapeForStringInScript_ = function(string) {
   'use strict';
-  var escaped = '';
-  for (var i = 0; i < string.length; i++) {
-    var c = string.charAt(i);
+  let escaped = '';
+  for (let i = 0; i < string.length; i++) {
+    const c = string.charAt(i);
     if (c == '<') {
       escaped += '\\x3c';
     } else if (c == '>') {
@@ -1179,7 +1180,7 @@ goog.net.ChannelRequest.prototype.cancelWatchDogTimer_ = function() {
 goog.net.ChannelRequest.prototype.onWatchDogTimeout_ = function() {
   'use strict';
   this.watchDogTimerId_ = null;
-  var now = goog.now();
+  const now = goog.now();
   if (now - this.watchDogTimeoutTime_ >= 0) {
     this.handleTimeout_();
   } else {
@@ -1260,7 +1261,7 @@ goog.net.ChannelRequest.prototype.cleanup_ = function() {
   if (this.xmlHttp_) {
     // clear out this.xmlHttp_ before aborting so we handle getting reentered
     // inside abort
-    var xmlhttp = this.xmlHttp_;
+    const xmlhttp = this.xmlHttp_;
     this.xmlHttp_ = null;
     xmlhttp.abort();
     xmlhttp.dispose();

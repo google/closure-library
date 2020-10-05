@@ -120,7 +120,7 @@ goog.net.Cookies.prototype.set = function(name, value, options) {
   /** @type {string|undefined} */
   let path;
   /** @type {string|undefined} */
-  var domain;
+  let domain;
   /** @type {boolean} */
   let secure = false;
   /** @type {!goog.net.Cookies.SameSite|undefined} */
@@ -144,11 +144,11 @@ goog.net.Cookies.prototype.set = function(name, value, options) {
     maxAge = -1;
   }
 
-  var domainStr = domain ? ';domain=' + domain : '';
-  var pathStr = path ? ';path=' + path : '';
-  var secureStr = secure ? ';secure' : '';
+  const domainStr = domain ? ';domain=' + domain : '';
+  const pathStr = path ? ';path=' + path : '';
+  const secureStr = secure ? ';secure' : '';
 
-  var expiresStr;
+  let expiresStr;
 
   // Case 1: Set a session cookie.
   if (maxAge < 0) {
@@ -161,16 +161,16 @@ goog.net.Cookies.prototype.set = function(name, value, options) {
     // Note: Don't use Jan 1, 1970 for date because NS 4.76 will try to convert
     // it to local time, and if the local time is before Jan 1, 1970, then the
     // browser will ignore the Expires attribute altogether.
-    var pastDate = new Date(1970, 1 /*Feb*/, 1);  // Feb 1, 1970
+    const pastDate = new Date(1970, 1 /*Feb*/, 1);  // Feb 1, 1970
     expiresStr = ';expires=' + pastDate.toUTCString();
 
     // Case 3: Set a persistent cookie.
   } else {
-    var futureDate = new Date(goog.now() + maxAge * 1000);
+    const futureDate = new Date(goog.now() + maxAge * 1000);
     expiresStr = ';expires=' + futureDate.toUTCString();
   }
 
-  var sameSiteStr = sameSite != null ? ';samesite=' + sameSite : '';
+  const sameSiteStr = sameSite != null ? ';samesite=' + sameSite : '';
 
   this.setCookie_(
       name + '=' + value + domainStr + pathStr + expiresStr + secureStr +
@@ -187,9 +187,9 @@ goog.net.Cookies.prototype.set = function(name, value, options) {
  */
 goog.net.Cookies.prototype.get = function(name, opt_default) {
   'use strict';
-  var nameEq = name + '=';
-  var parts = this.getParts_();
-  for (var i = 0, part; i < parts.length; i++) {
+  const nameEq = name + '=';
+  const parts = this.getParts_();
+  for (let i = 0, part; i < parts.length; i++) {
     part = goog.string.trim(parts[i]);
     // startsWith
     if (part.lastIndexOf(nameEq, 0) == 0) {
@@ -215,7 +215,7 @@ goog.net.Cookies.prototype.get = function(name, opt_default) {
  */
 goog.net.Cookies.prototype.remove = function(name, opt_path, opt_domain) {
   'use strict';
-  var rv = this.containsKey(name);
+  const rv = this.containsKey(name);
   this.set(name, '', {maxAge: 0, path: opt_path, domain: opt_domain});
   return rv;
 };
@@ -255,7 +255,7 @@ goog.net.Cookies.prototype.isEmpty = function() {
  */
 goog.net.Cookies.prototype.getCount = function() {
   'use strict';
-  var cookie = this.getCookie_();
+  const cookie = this.getCookie_();
   if (!cookie) {
     return 0;
   }
@@ -285,8 +285,8 @@ goog.net.Cookies.prototype.containsKey = function(key) {
 goog.net.Cookies.prototype.containsValue = function(value) {
   'use strict';
   // this O(n) in any case so lets do the trivial thing.
-  var values = this.getKeyValues_().values;
-  for (var i = 0; i < values.length; i++) {
+  const values = this.getKeyValues_().values;
+  for (let i = 0; i < values.length; i++) {
     if (values[i] == value) {
       return true;
     }
@@ -302,8 +302,8 @@ goog.net.Cookies.prototype.containsValue = function(value) {
  */
 goog.net.Cookies.prototype.clear = function() {
   'use strict';
-  var keys = this.getKeyValues_().keys;
-  for (var i = keys.length - 1; i >= 0; i--) {
+  const keys = this.getKeyValues_().keys;
+  for (let i = keys.length - 1; i >= 0; i--) {
     this.remove(keys[i]);
   }
 };
@@ -351,9 +351,12 @@ goog.net.Cookies.prototype.getParts_ = function() {
  */
 goog.net.Cookies.prototype.getKeyValues_ = function() {
   'use strict';
-  var parts = this.getParts_();
-  var keys = [], values = [], index, part;
-  for (var i = 0; i < parts.length; i++) {
+  const parts = this.getParts_();
+  const keys = [];
+  const values = [];
+  let index;
+  let part;
+  for (let i = 0; i < parts.length; i++) {
     part = goog.string.trim(parts[i]);
     index = part.indexOf('=');
 

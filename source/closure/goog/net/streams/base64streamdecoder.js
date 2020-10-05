@@ -56,7 +56,7 @@ goog.net.streams.Base64StreamDecoder = function() {
 };
 
 
-var Decoder = goog.net.streams.Base64StreamDecoder;
+const Decoder = goog.net.streams.Base64StreamDecoder;
 
 
 /**
@@ -103,13 +103,14 @@ Decoder.prototype.decode = function(input) {
 
   this.leftoverInput_ += input;
 
-  var groups = Math.floor(this.leftoverInput_.length / 4);
+  const groups = Math.floor(this.leftoverInput_.length / 4);
   if (groups == 0) {
     return null;
   }
 
+  let result;
   try {
-    var result = goog.crypt.base64.decodeStringToByteArray(
+    result = goog.crypt.base64.decodeStringToByteArray(
         this.leftoverInput_.substr(0, groups * 4));
   } catch (e) {
     this.error_(this.leftoverInput_, e.message);

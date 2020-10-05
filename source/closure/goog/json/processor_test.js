@@ -29,6 +29,7 @@ function runParsingTest(parser, input, expected) {
 }
 testSuite({
   setUpPage() {
+    /** @suppress {const} suppression added to enable type checking */
     SUPPORTS_NATIVE_JSON = goog.global['JSON'] &&
         !(userAgent.GECKO && !userAgent.isVersionOrHigher('5.0'));
   },

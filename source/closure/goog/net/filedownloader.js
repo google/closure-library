@@ -126,7 +126,7 @@ goog.net.FileDownloader.prototype.download = function(url) {
     return this.downloads_[url].deferred.branch(true /* opt_propagateCancel */);
   }
 
-  var download = new goog.net.FileDownloader.Download_(url, this);
+  const download = new goog.net.FileDownloader.Download_(url, this);
   this.downloads_[url] = download;
   this.pool_.getObject(goog.bind(this.gotXhr_, this, download));
   return download.deferred.branch(true /* opt_propagateCancel */);
@@ -145,7 +145,7 @@ goog.net.FileDownloader.prototype.download = function(url) {
  */
 goog.net.FileDownloader.prototype.waitForDownload = function(url) {
   'use strict';
-  var deferred = new goog.async.Deferred();
+  const deferred = new goog.async.Deferred();
   if (this.isDownloading(url)) {
     this.downloads_[url].deferred.addBoth(function() {
       'use strict';
@@ -226,8 +226,8 @@ goog.net.FileDownloader.prototype.getLocalUrl = function(url) {
  */
 goog.net.FileDownloader.prototype.isDownloaded = function(url) {
   'use strict';
-  var deferred = new goog.async.Deferred();
-  var blobDeferred = this.getDownloadedBlob(url);
+  const deferred = new goog.async.Deferred();
+  const blobDeferred = this.getDownloadedBlob(url);
   blobDeferred.addCallback(function() {
     'use strict';
     deferred.callback(true);
@@ -287,8 +287,8 @@ goog.net.FileDownloader.prototype.remove = function(url) {
  */
 goog.net.FileDownloader.prototype.setBlob = function(url, blob, opt_name) {
   'use strict';
-  var name = this.sanitize_(opt_name || this.urlToName_(url));
-  var download = new goog.net.FileDownloader.Download_(url, this);
+  const name = this.sanitize_(opt_name || this.urlToName_(url));
+  const download = new goog.net.FileDownloader.Download_(url, this);
   this.downloads_[url] = download;
   download.blob = blob;
   this.getDir_(download.url, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE)
@@ -346,10 +346,9 @@ goog.net.FileDownloader.prototype.xhrSuccess_ = function(download) {
     return;
   }
 
-  var name = this.sanitize_(
-      this.getName_(
-          /** @type {!goog.net.XhrIo} */ (download.xhr)));
-  var resp = /** @type {ArrayBuffer} */ (download.xhr.getResponse());
+  const name = this.sanitize_(this.getName_(
+      /** @type {!goog.net.XhrIo} */ (download.xhr)));
+  const resp = /** @type {ArrayBuffer} */ (download.xhr.getResponse());
   if (!resp) {
     // This should never happen - it indicates the XHR hasn't completed, has
     // failed or has been cleaned up.  If it does happen (eg. due to a bug
@@ -509,7 +508,7 @@ goog.net.FileDownloader.prototype.getDir_ = function(url, behavior) {
   // filenames are URL-decoded before checking their validity, so filenames
   // containing e.g. '%3f' (the URL-encoding of :, an invalid character) are
   // rejected.
-  var dirname = '`' +
+  const dirname = '`' +
       Math.abs(goog.crypt.hash32.encodeString(url))
           .toString(16)
           .substring(0, 3);
@@ -580,8 +579,8 @@ goog.net.FileDownloader.prototype.sanitize_ = function(str) {
  */
 goog.net.FileDownloader.prototype.getName_ = function(xhr) {
   'use strict';
-  var disposition = xhr.getResponseHeader('Content-Disposition');
-  var match =
+  const disposition = xhr.getResponseHeader('Content-Disposition');
+  const match =
       disposition && disposition.match(/^attachment *; *filename="(.*)"$/i);
   if (match) {
     // The Content-Disposition header allows for arbitrary backslash-escaped
@@ -603,7 +602,7 @@ goog.net.FileDownloader.prototype.getName_ = function(xhr) {
  */
 goog.net.FileDownloader.prototype.urlToName_ = function(url) {
   'use strict';
-  var segments = url.split('/');
+  const segments = url.split('/');
   return segments[segments.length - 1];
 };
 

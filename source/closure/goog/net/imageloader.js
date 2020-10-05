@@ -34,7 +34,7 @@ goog.requireType('goog.events.Event');
  * To use this class, run:
  *
  * <pre>
- *   var imageLoader = new goog.net.ImageLoader();
+ *   const imageLoader = new goog.net.ImageLoader();
  *   goog.events.listen(imageLoader, goog.net.EventType.COMPLETE,
  *       function(e) { ... });
  *   imageLoader.addImage("image_id", "http://path/to/image.gif");
@@ -171,7 +171,7 @@ goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
 goog.net.ImageLoader.prototype.addImage = function(
     id, image, opt_corsRequestType) {
   'use strict';
-  var src = (typeof image === 'string') ? image : image.src;
+  const src = (typeof image === 'string') ? image : image.src;
   if (src) {
     this.completionFired_ = false;
     // For now, we just store the source URL for the image.
@@ -193,7 +193,7 @@ goog.net.ImageLoader.prototype.removeImage = function(id) {
   'use strict';
   delete this.imageIdToRequestMap_[id];
 
-  var image = this.imageIdToImageMap_[id];
+  const image = this.imageIdToImageMap_[id];
   if (image) {
     delete this.imageIdToImageMap_[id];
 
@@ -214,10 +214,10 @@ goog.net.ImageLoader.prototype.start = function() {
   // Iterate over the keys, rather than the full object, to essentially clone
   // the initial queued images in case any event handlers decide to add more
   // images before this loop has finished executing.
-  var imageIdToRequestMap = this.imageIdToRequestMap_;
+  const imageIdToRequestMap = this.imageIdToRequestMap_;
   goog.array.forEach(goog.object.getKeys(imageIdToRequestMap), function(id) {
     'use strict';
-    var imageRequest = imageIdToRequestMap[id];
+    const imageRequest = imageIdToRequestMap[id];
     if (imageRequest) {
       delete imageIdToRequestMap[id];
       this.loadImage_(imageRequest, id);
@@ -243,9 +243,9 @@ goog.net.ImageLoader.prototype.loadImage_ = function(imageRequest, id) {
   }
 
   /** @type {!HTMLImageElement} */
-  var image;
+  let image;
   if (this.parent_) {
-    var dom = goog.dom.getDomHelper(this.parent_);
+    const dom = goog.dom.getDomHelper(this.parent_);
     image = dom.createDom(goog.dom.TagName.IMG);
   } else {
     image = new Image();
@@ -272,7 +272,7 @@ goog.net.ImageLoader.prototype.loadImage_ = function(imageRequest, id) {
  */
 goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
   'use strict';
-  var image = /** @type {Element} */ (evt.currentTarget);
+  const image = /** @type {Element} */ (evt.currentTarget);
 
   if (!image) {
     return;

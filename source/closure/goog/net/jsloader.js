@@ -111,7 +111,7 @@ goog.net.jsloader.safeLoadMany = function(trustedUris, opt_options) {
     return goog.async.Deferred.succeed(null);
   }
 
-  var isAnotherModuleLoading = goog.net.jsloader.scriptsToLoad_.length;
+  const isAnotherModuleLoading = goog.net.jsloader.scriptsToLoad_.length;
   goog.array.extend(goog.net.jsloader.scriptsToLoad_, trustedUris);
   if (isAnotherModuleLoading) {
     // jsloader is still loading some other scripts.
@@ -123,10 +123,10 @@ goog.net.jsloader.safeLoadMany = function(trustedUris, opt_options) {
   }
 
   trustedUris = goog.net.jsloader.scriptsToLoad_;
-  var popAndLoadNextScript = function() {
+  const popAndLoadNextScript = function() {
     'use strict';
-    var trustedUri = trustedUris.shift();
-    var deferred = goog.net.jsloader.safeLoad(trustedUri, opt_options);
+    const trustedUri = trustedUris.shift();
+    const deferred = goog.net.jsloader.safeLoad(trustedUri, opt_options);
     if (trustedUris.length) {
       deferred.addBoth(popAndLoadNextScript);
     }
@@ -152,17 +152,17 @@ goog.net.jsloader.safeLoadMany = function(trustedUris, opt_options) {
  */
 goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
   'use strict';
-  var options = opt_options || {};
-  var doc = options.document || document;
-  var uri = goog.html.TrustedResourceUrl.unwrap(trustedUri);
+  const options = opt_options || {};
+  const doc = options.document || document;
+  const uri = goog.html.TrustedResourceUrl.unwrap(trustedUri);
 
-  var script = goog.dom.createElement(goog.dom.TagName.SCRIPT);
-  var request = {script_: script, timeout_: undefined};
-  var deferred = new goog.async.Deferred(goog.net.jsloader.cancel_, request);
+  const script = goog.dom.createElement(goog.dom.TagName.SCRIPT);
+  const request = {script_: script, timeout_: undefined};
+  const deferred = new goog.async.Deferred(goog.net.jsloader.cancel_, request);
 
   // Set a timeout.
-  var timeout = null;
-  var timeoutDuration = (options.timeout != null) ?
+  let timeout = null;
+  const timeoutDuration = (options.timeout != null) ?
       options.timeout :
       goog.net.jsloader.DEFAULT_TIMEOUT;
   if (timeoutDuration > 0) {
@@ -185,7 +185,7 @@ goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
     'use strict';
     if (!script.readyState || script.readyState == 'loaded' ||
         script.readyState == 'complete') {
-      var removeScriptNode = options.cleanupWhenDone || false;
+      const removeScriptNode = options.cleanupWhenDone || false;
       goog.net.jsloader.cleanup_(script, removeScriptNode, timeout);
       deferred.callback(null);
     }
@@ -202,14 +202,14 @@ goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
             'Error while loading script ' + uri));
   };
 
-  var properties = options.attributes || {};
+  const properties = options.attributes || {};
   goog.object.extend(
       properties, {'type': 'text/javascript', 'charset': 'UTF-8'});
   goog.dom.setProperties(script, properties);
   // NOTE(user): Safari never loads the script if we don't set the src
   // attribute before appending.
   goog.dom.safe.setScriptSrc(script, trustedUri);
-  var scriptParent = goog.net.jsloader.getScriptParentElement_(doc);
+  const scriptParent = goog.net.jsloader.getScriptParentElement_(doc);
   scriptParent.appendChild(script);
 
   return deferred;
@@ -243,8 +243,8 @@ goog.net.jsloader.safeLoadAndVerify = function(
   if (!goog.global[goog.net.jsloader.GLOBAL_VERIFY_OBJS_]) {
     goog.global[goog.net.jsloader.GLOBAL_VERIFY_OBJS_] = {};
   }
-  var verifyObjs = goog.global[goog.net.jsloader.GLOBAL_VERIFY_OBJS_];
-  var uri = goog.html.TrustedResourceUrl.unwrap(trustedUri);
+  const verifyObjs = goog.global[goog.net.jsloader.GLOBAL_VERIFY_OBJS_];
+  const uri = goog.html.TrustedResourceUrl.unwrap(trustedUri);
 
   // Verify that the expected object does not exist yet.
   if (verifyObjs[verificationObjName] !== undefined) {
@@ -257,16 +257,16 @@ goog.net.jsloader.safeLoadAndVerify = function(
   }
 
   // Send request to load the JavaScript.
-  var sendDeferred = goog.net.jsloader.safeLoad(trustedUri, options);
+  const sendDeferred = goog.net.jsloader.safeLoad(trustedUri, options);
 
   // Create a deferred object wrapping the send result.
-  var deferred =
+  const deferred =
       new goog.async.Deferred(goog.bind(sendDeferred.cancel, sendDeferred));
 
   // Call user back with object that was set by the script.
   sendDeferred.addCallback(function() {
     'use strict';
-    var result = verifyObjs[verificationObjName];
+    const result = verifyObjs[verificationObjName];
     if (result !== undefined) {
       deferred.callback(result);
       delete verifyObjs[verificationObjName];
@@ -304,7 +304,8 @@ goog.net.jsloader.safeLoadAndVerify = function(
  */
 goog.net.jsloader.getScriptParentElement_ = function(doc) {
   'use strict';
-  var headElements = goog.dom.getElementsByTagName(goog.dom.TagName.HEAD, doc);
+  const headElements =
+      goog.dom.getElementsByTagName(goog.dom.TagName.HEAD, doc);
   if (!headElements || goog.array.isEmpty(headElements)) {
     return doc.documentElement;
   } else {
@@ -320,9 +321,9 @@ goog.net.jsloader.getScriptParentElement_ = function(doc) {
  */
 goog.net.jsloader.cancel_ = function() {
   'use strict';
-  var request = this;
+  const request = this;
   if (request && request.script_) {
-    var scriptNode = request.script_;
+    const scriptNode = request.script_;
     if (scriptNode && scriptNode.tagName == goog.dom.TagName.SCRIPT) {
       goog.net.jsloader.cleanup_(scriptNode, true, request.timeout_);
     }
@@ -384,7 +385,7 @@ goog.net.jsloader.ErrorCode = {
  */
 goog.net.jsloader.Error = function(code, opt_message) {
   'use strict';
-  var msg = 'Jsloader error (code #' + code + ')';
+  let msg = 'Jsloader error (code #' + code + ')';
   if (opt_message) {
     msg += ': ' + opt_message;
   }

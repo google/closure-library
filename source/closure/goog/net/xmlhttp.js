@@ -166,7 +166,7 @@ goog.inherits(goog.net.DefaultXmlHttpFactory, goog.net.XmlHttpFactory);
 /** @override */
 goog.net.DefaultXmlHttpFactory.prototype.createInstance = function() {
   'use strict';
-  var progId = this.getProgId_();
+  const progId = this.getProgId_();
   if (progId) {
     return new ActiveXObject(progId);
   } else {
@@ -178,8 +178,8 @@ goog.net.DefaultXmlHttpFactory.prototype.createInstance = function() {
 /** @override */
 goog.net.DefaultXmlHttpFactory.prototype.internalGetOptions = function() {
   'use strict';
-  var progId = this.getProgId_();
-  var options = {};
+  const progId = this.getProgId_();
+  const options = {};
   if (progId) {
     options[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] = true;
     options[goog.net.XmlHttp.OptionType.LOCAL_REQUEST_ERROR] = true;
@@ -216,14 +216,14 @@ goog.net.DefaultXmlHttpFactory.prototype.getProgId_ = function() {
   if (!this.ieProgId_ && typeof XMLHttpRequest == 'undefined' &&
       typeof ActiveXObject != 'undefined') {
     // Candidate Active X types.
-    var ACTIVE_X_IDENTS = [
+    const ACTIVE_X_IDENTS = [
       'MSXML2.XMLHTTP.6.0',
       'MSXML2.XMLHTTP.3.0',
       'MSXML2.XMLHTTP',
       'Microsoft.XMLHTTP',
     ];
-    for (var i = 0; i < ACTIVE_X_IDENTS.length; i++) {
-      var candidate = ACTIVE_X_IDENTS[i];
+    for (let i = 0; i < ACTIVE_X_IDENTS.length; i++) {
+      const candidate = ACTIVE_X_IDENTS[i];
 
       try {
         new ActiveXObject(candidate);

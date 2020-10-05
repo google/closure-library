@@ -57,7 +57,7 @@ goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
   'use strict';
   goog.net.xpc.CrossPageChannel.base(this, 'constructor');
 
-  for (var i = 0, uriField; uriField = goog.net.xpc.UriCfgFields[i]; i++) {
+  for (let i = 0, uriField; uriField = goog.net.xpc.UriCfgFields[i]; i++) {
     if (uriField in cfg && !/^https?:\/\//.test(cfg[uriField])) {
       throw new Error(
           'URI ' + cfg[uriField] + ' is invalid for field ' + uriField);
@@ -291,7 +291,7 @@ goog.net.xpc.CrossPageChannel.prototype.isPeerAvailable = function() {
  */
 goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
   'use strict';
-  var transportType;
+  let transportType;
   if (typeof document.postMessage === 'function' ||
       typeof window.postMessage === 'function' ||
       // IE8 supports window.postMessage, but
@@ -318,7 +318,7 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
   }
 
   // TODO(user): Use goog.scope.
-  var CfgFields = goog.net.xpc.CfgFields;
+  const CfgFields = goog.net.xpc.CfgFields;
 
   if (!this.cfg_[CfgFields.TRANSPORT]) {
     this.cfg_[CfgFields.TRANSPORT] = this.determineTransportType_();
@@ -333,7 +333,7 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
   } else {
     switch (this.cfg_[CfgFields.TRANSPORT]) {
       case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
-        var protocolVersion =
+        const protocolVersion =
             this.cfg_[CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] || 2;
         this.transport_ = new goog.net.xpc.NativeMessagingTransport(
             this, this.cfg_[CfgFields.PEER_HOSTNAME], this.domHelper_,
@@ -393,7 +393,7 @@ goog.net.xpc.CrossPageChannel.prototype.getTransportName = function() {
  */
 goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
   'use strict';
-  var peerCfg = {};
+  const peerCfg = {};
   peerCfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = this.name;
   peerCfg[goog.net.xpc.CfgFields.TRANSPORT] =
       this.cfg_[goog.net.xpc.CfgFields.TRANSPORT];
@@ -412,7 +412,7 @@ goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
     peerCfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] =
         this.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI];
   }
-  var role = this.cfg_[goog.net.xpc.CfgFields.ROLE];
+  const role = this.cfg_[goog.net.xpc.CfgFields.ROLE];
   if (role) {
     peerCfg[goog.net.xpc.CfgFields.ROLE] =
         role == goog.net.xpc.CrossPageChannelRole.INNER ?
@@ -443,7 +443,7 @@ goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(
   'use strict';
   goog.log.info(goog.net.xpc.logger, 'createPeerIframe()');
 
-  var iframeId = this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID];
+  let iframeId = this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID];
   if (!iframeId) {
     // Create a randomized ID for the iframe element to avoid
     // bfcache-related issues.
@@ -454,7 +454,7 @@ goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(
   // TODO(user) Opera creates a history-entry when creating an iframe
   // programmatically as follows. Find a way which avoids this.
 
-  var iframeElm =
+  const iframeElm =
       goog.dom.getDomHelper(parentElm).createElement(goog.dom.TagName.IFRAME);
   iframeElm.id = iframeElm.name = iframeId;
   if (opt_configureIframeCb) {
@@ -465,7 +465,7 @@ goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(
 
   this.cleanUpIncompleteConnection_();
   this.peerWindowDeferred_ = new goog.async.Deferred(undefined, this);
-  var peerUri = this.getPeerUri(opt_addCfgParam);
+  const peerUri = this.getPeerUri(opt_addCfgParam);
   this.peerLoadHandler_.listenOnceWithScope(
       iframeElm, 'load', this.peerWindowDeferred_.callback, false,
       this.peerWindowDeferred_);
@@ -524,7 +524,7 @@ goog.net.xpc.CrossPageChannel.prototype.cleanUpIncompleteConnection_ =
  */
 goog.net.xpc.CrossPageChannel.prototype.getPeerUri = function(opt_addCfgParam) {
   'use strict';
-  var peerUri = this.cfg_[goog.net.xpc.CfgFields.PEER_URI];
+  let peerUri = this.cfg_[goog.net.xpc.CfgFields.PEER_URI];
   if (typeof peerUri === 'string') {
     peerUri = this.cfg_[goog.net.xpc.CfgFields.PEER_URI] =
         new goog.Uri(peerUri);
@@ -584,7 +584,7 @@ goog.net.xpc.CrossPageChannel.prototype.continueConnection_ = function() {
             this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID]));
   }
   if (this.iframeElement_) {
-    var winObj = this.iframeElement_.contentWindow;
+    let winObj = this.iframeElement_.contentWindow;
     // accessing the window using contentWindow doesn't work in safari
     if (!winObj) {
       winObj = window.frames[this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID]];
@@ -797,7 +797,7 @@ goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_ = function(name) {
  */
 goog.net.xpc.CrossPageChannel.prototype.getRole = function() {
   'use strict';
-  var role = this.cfg_[goog.net.xpc.CfgFields.ROLE];
+  const role = this.cfg_[goog.net.xpc.CfgFields.ROLE];
   if (typeof role === 'number') {
     return role;
   } else {
@@ -835,7 +835,7 @@ goog.net.xpc.CrossPageChannel.prototype.updateChannelNameAndCatalog = function(
 goog.net.xpc.CrossPageChannel.prototype.isMessageOriginAcceptable = function(
     opt_origin) {
   'use strict';
-  var peerHostname = this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME];
+  const peerHostname = this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME];
   return goog.string.isEmptyOrWhitespace(goog.string.makeSafe(opt_origin)) ||
       goog.string.isEmptyOrWhitespace(goog.string.makeSafe(peerHostname)) ||
       opt_origin == this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME];
@@ -862,7 +862,7 @@ goog.net.xpc.CrossPageChannel.prototype.disposeInternal = function() {
  */
 goog.net.xpc.CrossPageChannel.disposeAll_ = function() {
   'use strict';
-  for (var name in goog.net.xpc.CrossPageChannel.channels) {
+  for (let name in goog.net.xpc.CrossPageChannel.channels) {
     goog.dispose(goog.net.xpc.CrossPageChannel.channels[name]);
   }
 };

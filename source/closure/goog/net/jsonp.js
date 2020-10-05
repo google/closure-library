@@ -13,10 +13,10 @@
  * from which it came. The Jsonp class provides a workaround by
  * using dynamically generated script tags. Typical usage:.
  *
- * var trustedUri = goog.html.TrustedResourceUrl.fromConstant(
+ * const trustedUri = goog.html.TrustedResourceUrl.fromConstant(
  *     goog.string.Const.from('https://example.com/servlet'));
- * var jsonp = new goog.net.Jsonp(trustedUri);
- * var payload = {'foo': 1, 'bar': true};
+ * const jsonp = new goog.net.Jsonp(trustedUri);
+ * const payload = {'foo': 1, 'bar': true};
  * jsonp.send(payload, function(reply) { alert(reply) });
  *
  * This script works in all browsers that are currently supported by
@@ -202,30 +202,30 @@ goog.net.Jsonp.prototype.setNonce = function(nonce) {
 goog.net.Jsonp.prototype.send = function(
     opt_payload, opt_replyCallback, opt_errorCallback, opt_callbackParamValue) {
   'use strict';
-  var payload = opt_payload ? goog.object.clone(opt_payload) : {};
+  const payload = opt_payload ? goog.object.clone(opt_payload) : {};
 
-  var id = opt_callbackParamValue ||
+  const id = opt_callbackParamValue ||
       '_' + (goog.net.Jsonp.scriptCounter_++).toString(36) +
           goog.now().toString(36);
-  var callbackId = goog.net.Jsonp.getCallbackId_(id);
+  const callbackId = goog.net.Jsonp.getCallbackId_(id);
 
   if (opt_replyCallback) {
-    var reply = goog.net.Jsonp.newReplyHandler_(id, opt_replyCallback);
+    const reply = goog.net.Jsonp.newReplyHandler_(id, opt_replyCallback);
     // Register the callback on goog.global to make it discoverable
     // by jsonp response.
     goog.global[callbackId] = reply;
     payload[this.callbackParamName_] = callbackId;
   }
 
-  var options = {timeout: this.timeout_, cleanupWhenDone: true};
+  const options = {timeout: this.timeout_, cleanupWhenDone: true};
   if (this.nonce_) {
     options.attributes = {'nonce': this.nonce_};
   }
 
-  var uri = this.uri_.cloneWithParams(payload);
+  const uri = this.uri_.cloneWithParams(payload);
 
-  var deferred = goog.net.jsloader.safeLoad(uri, options);
-  var error = goog.net.Jsonp.newErrorHandler_(id, payload, opt_errorCallback);
+  const deferred = goog.net.jsloader.safeLoad(uri, options);
+  const error = goog.net.Jsonp.newErrorHandler_(id, payload, opt_errorCallback);
   deferred.addErrback(error);
 
   return {id_: id, deferred_: deferred};
@@ -296,7 +296,7 @@ goog.net.Jsonp.newReplyHandler_ = function(id, replyCallback) {
    *
    * @param {...Object} var_args The response data sent from the server.
    */
-  var handler = function(var_args) {
+  const handler = function(var_args) {
     'use strict';
     goog.net.Jsonp.cleanup_(id, true);
     replyCallback.apply(undefined, arguments);
@@ -316,7 +316,7 @@ goog.net.Jsonp.newReplyHandler_ = function(id, replyCallback) {
  */
 goog.net.Jsonp.cleanup_ = function(id, deleteReplyHandler) {
   'use strict';
-  var callbackId = goog.net.Jsonp.getCallbackId_(id);
+  const callbackId = goog.net.Jsonp.getCallbackId_(id);
   if (goog.global[callbackId]) {
     if (deleteReplyHandler) {
       try {

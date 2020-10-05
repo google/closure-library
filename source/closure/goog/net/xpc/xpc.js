@@ -244,9 +244,9 @@ goog.net.xpc.SETUP_ACK_NTPV2 = 'SETUP_ACK_NTPV2';
  */
 goog.net.xpc.getRandomString = function(length, opt_characters) {
   'use strict';
-  var chars = opt_characters || goog.net.xpc.randomStringCharacters_;
-  var charsLength = chars.length;
-  var s = '';
+  const chars = opt_characters || goog.net.xpc.randomStringCharacters_;
+  const charsLength = chars.length;
+  let s = '';
   while (length-- > 0) {
     s += chars.charAt(Math.floor(Math.random() * charsLength));
   }

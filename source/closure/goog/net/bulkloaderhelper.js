@@ -95,9 +95,9 @@ goog.net.BulkLoaderHelper.prototype.setResponseText = function(
  */
 goog.net.BulkLoaderHelper.prototype.isLoadComplete = function() {
   'use strict';
-  var responseTexts = this.responseTexts_;
+  const responseTexts = this.responseTexts_;
   if (responseTexts.length == this.uris_.length) {
-    for (var i = 0; i < responseTexts.length; i++) {
+    for (let i = 0; i < responseTexts.length; i++) {
       if (responseTexts[i] == null) {
         return false;
       }

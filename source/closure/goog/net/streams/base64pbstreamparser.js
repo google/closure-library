@@ -14,10 +14,10 @@
 
 goog.module('goog.net.streams.Base64PbStreamParser');
 
-var Base64StreamDecoder = goog.require('goog.net.streams.Base64StreamDecoder');
-var PbStreamParser = goog.require('goog.net.streams.PbStreamParser');
-var StreamParser = goog.require('goog.net.streams.StreamParser');
-var asserts = goog.require('goog.asserts');
+const Base64StreamDecoder = goog.require('goog.net.streams.Base64StreamDecoder');
+const PbStreamParser = goog.require('goog.net.streams.PbStreamParser');
+const StreamParser = goog.require('goog.net.streams.StreamParser');
+const asserts = goog.require('goog.asserts');
 
 
 /**
@@ -28,7 +28,7 @@ var asserts = goog.require('goog.asserts');
  * @implements {StreamParser}
  * @final
  */
-var Base64PbStreamParser = function() {
+const Base64PbStreamParser = function() {
   /**
    * The current error message, if any.
    * @private {?string}
@@ -88,9 +88,9 @@ Base64PbStreamParser.prototype.parse = function(input) {
     this.error_(input, 'stream already broken');
   }
 
-  var result = null;
+  let result = null;
   try {
-    var rawBytes = this.base64Decoder_.decode(input);
+    const rawBytes = this.base64Decoder_.decode(input);
     result = (rawBytes === null) ? null : this.pbParser_.parse(rawBytes);
   } catch (e) {
     this.error_(input, e.message);

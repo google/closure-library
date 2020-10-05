@@ -13,9 +13,9 @@
  *
  * Typical usage will look like this:
  *
- *  var ws = new goog.net.WebSocket();
+ *  const ws = new goog.net.WebSocket();
  *
- *  var handler = new goog.events.EventHandler();
+ *  const handler = new goog.events.EventHandler();
  *  handler.listen(ws, goog.net.WebSocket.EventType.OPENED, onOpen);
  *  handler.listen(ws, goog.net.WebSocket.EventType.MESSAGE, onMessage);
  *
@@ -237,7 +237,7 @@ goog.net.WebSocket.EXPONENTIAL_BACKOFF_CEILING_ = 60 * 1000;
  */
 goog.net.WebSocket.EXPONENTIAL_BACKOFF_ = function(attempt) {
   'use strict';
-  var time = Math.pow(2, attempt) * 1000;
+  const time = Math.pow(2, attempt) * 1000;
   return Math.min(time, goog.net.WebSocket.EXPONENTIAL_BACKOFF_CEILING_);
 };
 
@@ -424,7 +424,7 @@ goog.net.WebSocket.prototype.onClose_ = function(event) {
     // Only try to reconnect if it is enabled.
     if (this.autoReconnect_) {
       // Log the reconnect attempt.
-      var seconds = Math.floor(this.nextReconnect_ / 1000);
+      const seconds = Math.floor(this.nextReconnect_ / 1000);
       goog.log.info(
           this.logger_, 'Seconds until next reconnect attempt: ' + seconds);
 
@@ -464,7 +464,7 @@ goog.net.WebSocket.prototype.onMessage_ = function(event) {
  */
 goog.net.WebSocket.prototype.onError_ = function(event) {
   'use strict';
-  var data = /** @type {string} */ (event.data);
+  const data = /** @type {string} */ (event.data);
   goog.log.error(this.logger_, 'An error occurred: ' + data);
   this.dispatchEvent(new goog.net.WebSocket.ErrorEvent(data));
 };
