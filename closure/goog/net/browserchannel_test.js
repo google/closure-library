@@ -19,6 +19,7 @@ const functions = goog.require('goog.functions');
 const googArray = goog.require('goog.array');
 const googJson = goog.require('goog.json');
 const recordFunction = goog.require('goog.testing.recordFunction');
+const stats = goog.require('goog.net.browserchannelinternal.stats');
 const testSuite = goog.require('goog.testing.testSuite');
 const tmpnetwork = goog.require('goog.net.tmpnetwork');
 
@@ -323,14 +324,14 @@ function assertHasBackChannel() {
 testSuite({
   setUpPage() {
     // Use our MockChannelRequests instead of the real ones.
-    BrowserChannel.createChannelRequest =
+    ChannelRequest.createChannelRequest =
         (channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId) =>
             new MockChannelRequest(
                 channel, channelDebug, opt_sessionId, opt_requestId,
                 opt_retryId);
 
     // Mock out the stat notification code.
-    BrowserChannel.notifyStatEvent = (stat) => {
+    stats.notifyStatEvent = (stat) => {
       numStatEvents++;
       lastStatEvent = stat;
     };
