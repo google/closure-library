@@ -123,38 +123,14 @@ goog.positioning.OverflowStatus = {
   FAILED_RIGHT: 32,
   FAILED_TOP: 64,
   FAILED_BOTTOM: 128,
-  FAILED_OUTSIDE_VIEWPORT: 256
+  FAILED_OUTSIDE_VIEWPORT: 256,
+  /** Shorthand to check if a status code contains any fail code. */
+  FAILED: 16 | 32 | 64 | 128 | 256,
+  /** Shorthand to check if horizontal positioning failed. */
+  FAILED_HORIZONTAL: 16 | 32,
+  /** Shorthand to check if vertical positioning failed. */
+  FAILED_VERTICAL: 64 | 128,
 };
-
-
-/**
- * Shorthand to check if a status code contains any fail code.
- * @type {number}
- */
-goog.positioning.OverflowStatus.FAILED =
-    goog.positioning.OverflowStatus.FAILED_LEFT |
-    goog.positioning.OverflowStatus.FAILED_RIGHT |
-    goog.positioning.OverflowStatus.FAILED_TOP |
-    goog.positioning.OverflowStatus.FAILED_BOTTOM |
-    goog.positioning.OverflowStatus.FAILED_OUTSIDE_VIEWPORT;
-
-
-/**
- * Shorthand to check if horizontal positioning failed.
- * @type {number}
- */
-goog.positioning.OverflowStatus.FAILED_HORIZONTAL =
-    goog.positioning.OverflowStatus.FAILED_LEFT |
-    goog.positioning.OverflowStatus.FAILED_RIGHT;
-
-
-/**
- * Shorthand to check if vertical positioning failed.
- * @type {number}
- */
-goog.positioning.OverflowStatus.FAILED_VERTICAL =
-    goog.positioning.OverflowStatus.FAILED_TOP |
-    goog.positioning.OverflowStatus.FAILED_BOTTOM;
 
 
 /**
