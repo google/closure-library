@@ -1699,5 +1699,19 @@ testSuite({
 
     d.add(new Interval(Interval.HOURS, 1));
     assertEquals(3, d.getHours());
+
+    // Test adding large intervals across daylight savings start
+    d = DateTime.fromIsoString('2020-01-01T00:00:00Z');
+    d.add(Interval.fromIsoString('P3M'));
+    assertEquals(
+        '3 months from new year\'s day ', '2020-04-01T00:00:00Z',
+        d.toUTCIsoString(true, true));
+
+    // Test adding large intervals across daylight savings end
+    d = DateTime.fromIsoString('2019-09-01T00:00:00Z');
+    d.add(Interval.fromIsoString('P4M'));
+    assertEquals(
+        'new year\'s day ', '2020-01-01T00:00:00Z',
+        d.toUTCIsoString(true, true));
   },
 });

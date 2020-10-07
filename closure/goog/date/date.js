@@ -1300,22 +1300,22 @@ goog.date.Date.prototype.add = function(interval) {
     // 28 or 29. Doing it this way overcomes that problem.
 
     // adjust year and month, accounting for both directions
-    var month = this.getMonth() + interval.months + interval.years * 12;
-    var year = this.getYear() + Math.floor(month / 12);
+    var month = this.getUTCMonth() + interval.months + interval.years * 12;
+    var year = this.getUTCFullYear() + Math.floor(month / 12);
     month %= 12;
     if (month < 0) {
       month += 12;
     }
 
     var daysInTargetMonth = goog.date.getNumberOfDaysInMonth(year, month);
-    var date = Math.min(daysInTargetMonth, this.getDate());
+    var date = Math.min(daysInTargetMonth, this.getUTCDate());
 
     // avoid inadvertently causing rollovers to adjacent months
-    this.setDate(1);
+    this.setUTCDate(1);
 
-    this.setFullYear(year);
-    this.setMonth(month);
-    this.setDate(date);
+    this.setUTCFullYear(year);
+    this.setUTCMonth(month);
+    this.setUTCDate(date);
   }
 
   if (interval.days) {
