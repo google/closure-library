@@ -166,7 +166,7 @@ goog.net.Cookies.prototype.set = function(name, value, options) {
 
     // Case 3: Set a persistent cookie.
   } else {
-    const futureDate = new Date(goog.now() + maxAge * 1000);
+    const futureDate = new Date(Date.now() + maxAge * 1000);
     expiresStr = ';expires=' + futureDate.toUTCString();
   }
 
