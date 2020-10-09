@@ -62,6 +62,7 @@ goog.html.safeUrlTestVectors.BASE_VECTORS = [
       {input: 'itms://itunes.apple.com/us', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'itms-apps://itunes.apple.com/us', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'itms-appss://itunes.apple.com/us', expected: 'about:invalid#zClosurez', safe: false},
+      {input: 'itms-services://?action\u003Ddownload-manifest\u0026url\u003Dfoo', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'geo:37.7,42.0', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'skype:chat?jid\u003Dfoo', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'whatsapp://send?text\u003DHello', expected: 'about:invalid#zClosurez', safe: false},
