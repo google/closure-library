@@ -69,7 +69,10 @@ goog.log.LogBuffer = goog.debug.LogBuffer;
  * created. If a new logger is created its log level will be configured based
  * on the goog.debug.LogManager configuration and it will configured to also
  * send logging output to its parent's handlers.
- * @see goog.debug.LogManager
+ *
+ * To use this logger, pass it to goog.log static methods. Do not call its
+ * prototype methods directly; they will be removed in the near future.
+ * See b/160000629 for more information.
  *
  * @param {string} name A name for the logger. This should be a dot-separated
  *     name and should normally be based on the package name or class name of
