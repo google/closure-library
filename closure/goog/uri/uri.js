@@ -7,6 +7,13 @@
 /**
  * @fileoverview Class for parsing and formatting URIs.
  *
+ * This package is deprecated in favour of the Closure URL package (goog.url)
+ * when manipulating URIs for use by a browser. This package uses regular
+ * expressions to parse a potential URI which can fall out of sync with how a
+ * browser will actually interpret the URI. See
+ * `goog.uri.utils.setUrlPackageSupportLoggingHandler` for one way to identify
+ * URIs that should instead be parsed using the URL package.
+ *
  * Use goog.Uri(string) to parse a URI string.  Use goog.Uri.create(...) to
  * create a new instance of the goog.Uri object from Uri parts.
  *
