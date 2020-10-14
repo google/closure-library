@@ -33,12 +33,17 @@ let worker;
  * @param {number=} expectedStatusCode
  * @param {boolean=} isStream
  * @param {boolean=} isArrayBuffer
+ * @param {boolean=} isStreamBinaryChunks
  * @return {!Promise<void>}
  */
 function verifySend(
     sendMethod, expectedStatusCode = 200, isStream = false,
-    isArrayBuffer = false) {
+    isArrayBuffer = false, isStreamBinaryChunks = false) {
   return new Promise((resolve, reject) => {
+    if (isStreamBinaryChunks) {
+      factory = new FetchXmlHttpFactory(
+          {worker: worker, streamBinaryChunks: isStreamBinaryChunks});
+    }
     const xhr = factory.createInstance();
     const expectedBody = 'responseBody';
     if (isArrayBuffer) {
@@ -76,10 +81,17 @@ function verifySend(
         if (isArrayBuffer) {
           assertTrue(xhr.response instanceof ArrayBuffer);
           assertEquals(8, xhr.response.byteLength);
-        } else {
+        } else if (!isStreamBinaryChunks) {
           assertEquals(expectedBody, xhr.responseText);
         }
-        if (isStream) {
+        if (isStreamBinaryChunks) {
+          const bytes = new TextEncoder().encode('responseBody');
+          assertEquals(bytes.length, xhr.response.length);
+          assertTrue((xhr.response)[0] instanceof Uint8Array);
+          for (let i = 0; i < bytes.length; i++) {
+            assertTrue(bytes[i] === xhr.response[i][0]);
+          }
+        } else if (isStream) {
           assertEquals(expectedBody.length, numberOfUpdates);
         }
         resolve();
@@ -305,6 +317,22 @@ testSuite({
     mockControl.$replayAll();
     return verifySend(
         'POST', 200 /* expectedStatusCode */, true /* isStream */);
+  },
+
+  /**
+   * Tests that streaming responses are properly handled.
+   * @return {!Promise<void>}
+   */
+  testSend_streamBinaryChunks() {
+    fetchMock(new Request('https://www.google.com', {
+      headers: new Headers(),
+      method: 'POST',
+    })).$returns(Promise.resolve(createSuccessStreamingResponse()));
+
+    mockControl.$replayAll();
+    return verifySend(
+        'POST', 200 /* expectedStatusCode */, true /* isStream */,
+        /* isArrayBuffer */ false, /* isStreamBinaryCrunks */ true);
   },
 
   /**
