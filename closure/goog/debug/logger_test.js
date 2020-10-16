@@ -45,20 +45,6 @@ class TestHandler {
 }
 
 testSuite({
-  testParents() {
-    const l1 = Logger.getLogger('goog.test');
-    const l2 = Logger.getLogger('goog.bar');
-    const l3 = Logger.getLogger('goog.bar.foo');
-    const l4 = Logger.getLogger('goog.bar.baaz');
-    const rootLogger = LogManager.getRoot();
-    const googLogger = Logger.getLogger('goog');
-    assertEquals(rootLogger, googLogger.getParent());
-    assertEquals(googLogger, l1.getParent());
-    assertEquals(googLogger, l2.getParent());
-    assertEquals(l2, l3.getParent());
-    assertEquals(l2, l4.getParent());
-  },
-
   testLogging() {
     const root = LogManager.getRoot();
     const handler = new TestHandler();
@@ -130,52 +116,6 @@ testSuite({
     assertNotNull(handler.logRecord);
     assertEquals(Logger.Level.WARNING, handler.logRecord.getLevel());
     assertEquals('heya', handler.logRecord.getMessage());
-  },
-
-  testGetPredefinedLevel() {
-    assertEquals(Logger.Level.OFF, Logger.Level.getPredefinedLevel('OFF'));
-    assertEquals(Logger.Level.SHOUT, Logger.Level.getPredefinedLevel('SHOUT'));
-    assertEquals(
-        Logger.Level.SEVERE, Logger.Level.getPredefinedLevel('SEVERE'));
-    assertEquals(
-        Logger.Level.WARNING, Logger.Level.getPredefinedLevel('WARNING'));
-    assertEquals(Logger.Level.INFO, Logger.Level.getPredefinedLevel('INFO'));
-    assertEquals(
-        Logger.Level.CONFIG, Logger.Level.getPredefinedLevel('CONFIG'));
-    assertEquals(Logger.Level.FINE, Logger.Level.getPredefinedLevel('FINE'));
-    assertEquals(Logger.Level.FINER, Logger.Level.getPredefinedLevel('FINER'));
-    assertEquals(
-        Logger.Level.FINEST, Logger.Level.getPredefinedLevel('FINEST'));
-    assertEquals(Logger.Level.ALL, Logger.Level.getPredefinedLevel('ALL'));
-  },
-
-  testGetPredefinedLevelByValue() {
-    assertEquals(
-        Logger.Level.OFF, Logger.Level.getPredefinedLevelByValue(Infinity));
-    assertEquals(
-        Logger.Level.SHOUT, Logger.Level.getPredefinedLevelByValue(1300));
-    assertEquals(
-        Logger.Level.SHOUT, Logger.Level.getPredefinedLevelByValue(1200));
-    assertEquals(
-        Logger.Level.SEVERE, Logger.Level.getPredefinedLevelByValue(1150));
-    assertEquals(
-        Logger.Level.SEVERE, Logger.Level.getPredefinedLevelByValue(1000));
-    assertEquals(
-        Logger.Level.WARNING, Logger.Level.getPredefinedLevelByValue(900));
-    assertEquals(
-        Logger.Level.INFO, Logger.Level.getPredefinedLevelByValue(800));
-    assertEquals(
-        Logger.Level.CONFIG, Logger.Level.getPredefinedLevelByValue(701));
-    assertEquals(
-        Logger.Level.CONFIG, Logger.Level.getPredefinedLevelByValue(700));
-    assertEquals(
-        Logger.Level.FINE, Logger.Level.getPredefinedLevelByValue(500));
-    assertEquals(
-        Logger.Level.FINER, Logger.Level.getPredefinedLevelByValue(400));
-    assertEquals(
-        Logger.Level.FINEST, Logger.Level.getPredefinedLevelByValue(300));
-    assertEquals(Logger.Level.ALL, Logger.Level.getPredefinedLevelByValue(0));
-    assertNull(Logger.Level.getPredefinedLevelByValue(-1));
   },
 
   testGetLogRecord() {

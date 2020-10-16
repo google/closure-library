@@ -4,29 +4,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('goog.debug.LogBufferTest');
+goog.module('goog.log.LogBufferTest');
 goog.setTestOnly();
 
-const LogBuffer = goog.require('goog.debug.LogBuffer');
-const Logger = goog.require('goog.debug.Logger');
+const Level = goog.require('goog.log.Level');
+const LogBuffer = goog.require('goog.log.LogBuffer');
 const testSuite = goog.require('goog.testing.testSuite');
 
-const DUMMY_LEVELS = [
-  Logger.Level.INFO,
-  Logger.Level.WARNING,
-  Logger.Level.SEVERE,
+const PLACEHOLDER_LEVELS = [
+  Level.INFO,
+  Level.WARNING,
+  Level.SEVERE,
 ];
-const DUMMY_MESSAGES = ['a', 'b', 'c'];
-const DUMMY_NAMES = ['X', 'Y', 'Z'];
+const PLACEHOLDER_MESSAGES = ['a', 'b', 'c'];
+const PLACEHOLDER_NAMES = ['X', 'Y', 'Z'];
+const CAPACITY = 4;
 
 let buffer;
-let dummyIndex = 0;
+let placeholderIndex = 0;
 
 function verifyRecord(expectedIndex, record) {
-  const index = expectedIndex % DUMMY_MESSAGES.length;
-  const message = DUMMY_MESSAGES[index];
-  const level = DUMMY_LEVELS[index];
-  const name = DUMMY_NAMES[index];
+  const index = expectedIndex % PLACEHOLDER_MESSAGES.length;
+  const message = PLACEHOLDER_MESSAGES[index];
+  const level = PLACEHOLDER_LEVELS[index];
+  const name = PLACEHOLDER_NAMES[index];
   assertEquals(
       `Wrong level for record ${expectedIndex}`, level, record.getLevel());
   assertEquals(
@@ -37,13 +38,13 @@ function verifyRecord(expectedIndex, record) {
 }
 
 function addAndVerifyRecord() {
-  const index = dummyIndex % DUMMY_MESSAGES.length;
-  const level = DUMMY_LEVELS[index];
-  const message = DUMMY_MESSAGES[index];
-  const name = DUMMY_NAMES[index];
+  const index = placeholderIndex % PLACEHOLDER_MESSAGES.length;
+  const level = PLACEHOLDER_LEVELS[index];
+  const message = PLACEHOLDER_MESSAGES[index];
+  const name = PLACEHOLDER_NAMES[index];
   const record = buffer.addRecord(level, message, name);
-  verifyRecord(dummyIndex, record);
-  dummyIndex++;
+  verifyRecord(placeholderIndex, record);
+  placeholderIndex++;
 }
 
 function addSomeRecords(howMany) {
@@ -54,28 +55,26 @@ function addSomeRecords(howMany) {
 
 testSuite({
   setUp() {
-    LogBuffer.CAPACITY = 4;
-    LogBuffer.instance_ = null;
-    buffer = LogBuffer.getInstance();
+    buffer = new LogBuffer(CAPACITY);
   },
 
   testAddRecord() {
-    addSomeRecords(LogBuffer.CAPACITY * 3);
+    addSomeRecords(CAPACITY * 3);
   },
 
   testIsFull() {
-    assertFalse('Should not be full.', buffer.isFull_);
-    addSomeRecords(LogBuffer.CAPACITY * 1.5);
-    assertTrue('Should be full.', buffer.isFull_);
+    assertFalse('Should not be full.', buffer.isFull());
+    addSomeRecords(CAPACITY * 1.5);
+    assertTrue('Should be full.', buffer.isFull());
     buffer.clear();
-    assertFalse('Should not be full after clear().', buffer.isFull_);
-    addSomeRecords(LogBuffer.CAPACITY - 1);
-    assertFalse('Should not be full but almost full.', buffer.isFull_);
+    assertFalse('Should not be full after clear().', buffer.isFull());
+    addSomeRecords(CAPACITY - 1);
+    assertFalse('Should not be full but almost full.', buffer.isFull());
   },
 
   testForEachRecord() {
     // Test with it half full.
-    const howMany1 = LogBuffer.CAPACITY / 2;
+    const howMany1 = CAPACITY / 2;
     addSomeRecords(howMany1);
     let counter1 = 0;
     buffer.forEachRecord((record) => {
@@ -84,7 +83,7 @@ testSuite({
     assertEquals('Wrong number of records when half full.', howMany1, counter1);
 
     // Test with it full.
-    const howMany2 = LogBuffer.CAPACITY;
+    const howMany2 = CAPACITY;
     addSomeRecords(howMany2);
     let index = counter1;
     buffer.forEachRecord((record) => {
