@@ -2352,6 +2352,7 @@ goog.net.BrowserChannel.prototype.notifyServerReachabilityEvent = function(
  * @param {number} retries The number of times the POST had to be retried.
  */
 goog.net.BrowserChannel.notifyTimingEvent = function(size, rtt, retries) {
+  'use strict';
   const target = goog.net.browserchannelinternal.stats.getStatEventTarget();
   target.dispatchEvent(
       new goog.net.BrowserChannel.TimingEvent(target, size, rtt, retries));

@@ -27,6 +27,7 @@ goog.require('goog.log');
 goog.require('goog.module');
 goog.require('goog.module.ModuleInfo');
 goog.require('goog.module.ModuleLoadCallback');
+goog.require('goog.module.ModuleLoadFailureType');
 goog.require('goog.object');
 goog.requireType('goog.module.AbstractModuleLoader');
 
@@ -232,8 +233,7 @@ goog.module.ModuleManager.CallbackType =
  * The possible reasons for a module load failure callback being fired.
  * @enum {number}
  */
-goog.module.ModuleManager.FailureType =
-    goog.loader.AbstractModuleManager.FailureType;
+goog.module.ModuleManager.FailureType = goog.module.ModuleLoadFailureType;
 
 
 /**

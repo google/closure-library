@@ -506,7 +506,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.handleRegularEnterGecko_ =
     goog.dom.insertSiblingAfter(newNode, container);
   } else {
     if (!container.firstChild) {
-      container.innerHTML = '\xA0';
+      container.textContent = '\xA0';
     }
 
     var position = goog.editor.range.getDeepEndPoint(range, true);

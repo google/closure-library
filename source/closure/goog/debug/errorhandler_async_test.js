@@ -9,9 +9,13 @@ goog.setTestOnly();
 
 const ErrorHandler = goog.require('goog.debug.ErrorHandler');
 const GoogPromise = goog.require('goog.Promise');
+const TagName = goog.require('goog.dom.TagName');
 // const TestCase = goog.require('goog.testing.TestCase');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
+const {getDomHelper} = goog.require('goog.dom');
+const {newSafeScriptForTest} = goog.require('goog.html.testing');
+const {setScriptContent} = goog.require('goog.dom.safe');
 
 /** @type {!goog.promise.Resolver} */
 let resolver;
@@ -36,6 +40,11 @@ testCase.setUpPage = function() {
   this.handler.protectWindowSetInterval();
   this.handler.protectWindowRequestAnimationFrame();
   this.handler.catchUnhandledRejections();
+  if (this.testingUnhandledRejection) {
+    this.setUpIframe();
+    this.handler.catchUnhandledRejections(this.iframe.contentWindow);
+  }
+
   this.exceptions = [];
   this.errors = 0;
 
@@ -53,6 +62,8 @@ testCase.setUpPage = function() {
 
   if (this.testingUnhandledRejection) {
     this.async();
+    this.iframeAsync();
+    this.iframeAsyncHit = true;
   }
 
   this.promiseTimeout = 10000;  // 10s.
@@ -62,13 +73,37 @@ testCase.tearDownPage = function() {
   window.setTimeout = this.oldTimeout;
   window.setInterval = this.oldInterval;
   window.requestAnimationFrame = this.oldRequestAnimationFrame;
+  if (this.iframe) {
+    document.body.removeChild(this.iframe);
+  }
+};
+
+/** Sets up iframe for catchUnhandledRejection iframe testing. */
+testCase.setUpIframe = function() {
+  const dom = getDomHelper();
+  const iframe = dom.createElement(TagName.IFRAME);
+  dom.appendChild(document.body, iframe);
+
+  const iframeDom = getDomHelper(iframe.contentDocument.head);
+  const scriptEl = iframeDom.createElement(TagName.SCRIPT);
+  setScriptContent(scriptEl, newSafeScriptForTest(`
+      async function iframeAsync() {
+        const p = Promise.resolve();
+        await p;
+        throw iframeAsync;
+      }`));
+  iframeDom.appendChild(iframe.contentDocument.head, scriptEl);
+
+  this.iframe = iframe;
+  this.iframeAsync = this.iframe.contentWindow['iframeAsync'];
 };
 
 testCase.onException = function(e) {
   this.exceptions.push(e);
   if (this.timeoutHit && this.intervalHit &&
       (!this.testingReqAnimFrame || this.animFrameHit) &&
-      (!this.testingUnhandledRejection || this.async)) {
+      (!this.testingUnhandledRejection ||
+       this.asyncHit && this.iframeAsyncHit)) {
     resolver.resolve();
   }
 };
@@ -102,10 +137,14 @@ testCase.async = async function() {
   throw testCase.async;
 };
 
+/** Test uncaught errors in async/await in iframe */
+testCase.iframeAsync = undefined;  // Initialized in setupPage.
+
 testCase.testResults = function() {
   return resolver.promise.then(function() {
     let animFrameHit;
     let asyncHit;
+    let iframeAsyncHit;
     let intervalHit;
     let timeoutHit;
 
@@ -123,6 +162,9 @@ testCase.testResults = function() {
         case this.async:
           asyncHit = true;
           break;
+        case this.iframeAsync:
+          iframeAsyncHit = true;
+          break;
       }
     }
 
@@ -136,6 +178,9 @@ testCase.testResults = function() {
     }
     if (this.testingUnhandledRejection) {
       assertTrue('Unhandled Rejection exception not received', asyncHit);
+      assertTrue(
+          'Unhandled Rejection exception from iframe not received',
+          iframeAsyncHit);
     }
 
     if (!userAgent.WEBKIT) {

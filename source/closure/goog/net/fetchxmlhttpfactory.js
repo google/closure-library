@@ -17,20 +17,45 @@ goog.require('goog.net.XmlHttpFactory');
 
 
 /**
+ * @private
+ * @record
+ */
+goog.net.FetchXmlHttpFactoryOptions_ = function() {
+  /**
+   * @type {!WorkerGlobalScope} The Service Worker global scope.
+   */
+  this.worker;
+
+  /**
+   * @type {boolean|undefined} Whether to store the FetchXmlHttp response as an
+   * array of Uint8Arrays.  If this is true then the 'responseType' attribute
+   * must be empty.
+   */
+  this.streamBinaryChunks;
+};
+
+
+
+/**
  * Factory for creating Xhr objects that uses the native fetch() method.
  * https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
- * Note that this factory is intended for use in Service Worker only.
- * @param {!WorkerGlobalScope} worker The Service Worker global scope.
+ * @param {!goog.net.FetchXmlHttpFactoryOptions_|!WorkerGlobalScope} opts
  * @extends {goog.net.XmlHttpFactory}
  * @struct
  * @constructor
  */
-goog.net.FetchXmlHttpFactory = function(worker) {
+goog.net.FetchXmlHttpFactory = function(opts) {
   'use strict';
   goog.net.FetchXmlHttpFactory.base(this, 'constructor');
+  if (typeof opts.streamBinaryChunks !== 'boolean') {
+    opts = {worker: /** @type {!WorkerGlobalScope} */ (opts)};
+  }
 
   /** @private @final {!WorkerGlobalScope} */
-  this.worker_ = worker;
+  this.worker_ = opts.worker;
+
+  /** @private @final {boolean} */
+  this.streamBinaryChunks_ = opts.streamBinaryChunks || false;
 
   /** @private {!RequestCredentials|undefined} */
   this.credentialsMode_ = undefined;
@@ -44,7 +69,8 @@ goog.inherits(goog.net.FetchXmlHttpFactory, goog.net.XmlHttpFactory);
 /** @override */
 goog.net.FetchXmlHttpFactory.prototype.createInstance = function() {
   'use strict';
-  const instance = new goog.net.FetchXmlHttp(this.worker_);
+  const instance =
+      new goog.net.FetchXmlHttp(this.worker_, this.streamBinaryChunks_);
   if (this.credentialsMode_) {
     instance.setCredentialsMode(this.credentialsMode_);
   }
@@ -84,17 +110,21 @@ goog.net.FetchXmlHttpFactory.prototype.setCacheMode = function(cacheMode) {
 /**
  * FetchXmlHttp object constructor.
  * @param {!WorkerGlobalScope} worker
+ * @param {boolean} streamBinaryChunks
  * @extends {goog.events.EventTarget}
  * @implements {goog.net.XhrLike}
  * @constructor
  * @struct
  */
-goog.net.FetchXmlHttp = function(worker) {
+goog.net.FetchXmlHttp = function(worker, streamBinaryChunks) {
   'use strict';
   goog.net.FetchXmlHttp.base(this, 'constructor');
 
   /** @private @final {!WorkerGlobalScope} */
   this.worker_ = worker;
+
+  /** @private @final {boolean} */
+  this.streamBinaryChunks_ = streamBinaryChunks;
 
   /** @private {RequestCredentials|undefined} */
   this.credentialsMode_ = undefined;
@@ -122,7 +152,7 @@ goog.net.FetchXmlHttp = function(worker) {
 
   /**
    * Content of the response.
-   * @type {string|!ArrayBuffer}
+   * @type {string|!ArrayBuffer|!Array<!Uint8Array>}
    */
   this.response = '';
 
@@ -310,10 +340,18 @@ goog.net.FetchXmlHttp.prototype.handleResponse_ = function(response) {
   } else if (
       typeof (goog.global.ReadableStream) !== 'undefined' &&
       'body' in response) {
-    this.response = this.responseText = '';
     this.currentReader_ =
         /** @type {!ReadableStreamDefaultReader} */ (response.body.getReader());
-    this.textDecoder_ = new TextDecoder();
+    if (this.streamBinaryChunks_) {
+      if (this.responseType) {
+        throw new Error(
+            'responseType must be empty for "streamBinaryChunks" mode responses.');
+      }
+      this.response = [];
+    } else {
+      this.response = this.responseText = '';
+      this.textDecoder_ = new TextDecoder();
+    }
     this.readInputFromFetch_();
   } else {
     response.text().then(
@@ -347,14 +385,19 @@ goog.net.FetchXmlHttp.prototype.handleDataFromStream_ = function(result) {
     return;
   }
 
-  const dataPacket = result.value ? /** @type {!Uint8Array} */ (result.value) :
-                                    new Uint8Array(0);
-  const newText = this.textDecoder_.decode(dataPacket, {stream: !result.done});
-  if (newText) {
-    this.responseText += newText;
-    this.response = this.responseText;
+  if (this.streamBinaryChunks_ && result.value) {
+    this.response.push(/** @type {!Uint8Array} */ (result.value));
+  } else if (!this.streamBinaryChunks_) {
+    const dataPacket = result.value ?
+        /** @type {!Uint8Array} */ (result.value) :
+        new Uint8Array(0);
+    const newText =
+        this.textDecoder_.decode(dataPacket, {stream: !result.done});
+    if (newText) {
+      this.responseText += newText;
+      this.response = this.responseText;
+    }
   }
-
   if (result.done) {
     this.requestDone_();
   } else {
@@ -365,7 +408,6 @@ goog.net.FetchXmlHttp.prototype.handleDataFromStream_ = function(result) {
     this.readInputFromFetch_();
   }
 };
-
 
 /**
  * Handles the response text.

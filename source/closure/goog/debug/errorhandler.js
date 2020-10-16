@@ -264,11 +264,13 @@ goog.debug.ErrorHandler.prototype.protectWindowSetInterval = function() {
  * Install an unhandledrejection event listener that reports rejected promises.
  * Note: this will only work with Chrome 49+ and friends, but so far is the only
  * way to report uncaught errors in aysnc/await functions.
+ * @param {!Window=} win the window to instrument, defaults to current window
  */
-goog.debug.ErrorHandler.prototype.catchUnhandledRejections = function() {
+goog.debug.ErrorHandler.prototype.catchUnhandledRejections = function(win) {
   'use strict';
-  if ('onunhandledrejection' in goog.global) {
-    goog.global.onunhandledrejection = (event) => {
+  win = win || goog.global['window'];
+  if ('onunhandledrejection' in win) {
+    win.onunhandledrejection = (event) => {
       // event.reason contains the rejection reason. When an Error is
       // thrown, this is the Error object. If it is undefined, create a new
       // error object.

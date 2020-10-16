@@ -16,6 +16,7 @@ goog.provide('goog.loader.AbstractModuleManager.FailureType');
 goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.module.ModuleInfo');
 goog.require('goog.module.ModuleLoadCallback');
+goog.require('goog.module.ModuleLoadFailureType');
 goog.requireType('goog.html.TrustedResourceUrl');
 
 
@@ -82,22 +83,8 @@ goog.loader.AbstractModuleManager.CallbackType = {
  * The possible reasons for a module load failure callback being fired.
  * @enum {number}
  */
-goog.loader.AbstractModuleManager.FailureType = {
-  /** 401 Status. */
-  UNAUTHORIZED: 0,
-
-  /** Error status (not 401) returned multiple times. */
-  CONSECUTIVE_FAILURES: 1,
-
-  /** Request timeout. */
-  TIMEOUT: 2,
-
-  /** 410 status, old code gone. */
-  OLD_CODE_GONE: 3,
-
-  /** The onLoad callbacks failed. */
-  INIT_ERROR: 4
-};
+goog.loader.AbstractModuleManager.FailureType =
+    goog.module.ModuleLoadFailureType;
 
 
 /**

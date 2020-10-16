@@ -573,7 +573,6 @@ goog.debug.Logger.prototype.log = function(level, msg, opt_exception) {
  * @param {Error|Object=} opt_exception An exception associated with the
  *     message.
  * @return {!goog.debug.LogRecord} A log record.
- * @suppress {es5Strict}
  */
 goog.debug.Logger.prototype.getLogRecord = function(level, msg, opt_exception) {
   'use strict';
