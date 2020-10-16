@@ -100,9 +100,9 @@ goog.addDependency('debug/errorreporter.js', ['goog.debug.ErrorReporter', 'goog.
 goog.addDependency('debug/fancywindow.js', ['goog.debug.FancyWindow'], ['goog.array', 'goog.asserts', 'goog.debug.DebugWindow', 'goog.debug.LogManager', 'goog.debug.Logger', 'goog.dom.DomHelper', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.userAgent'], {});
 goog.addDependency('debug/formatter.js', ['goog.debug.Formatter', 'goog.debug.HtmlFormatter', 'goog.debug.TextFormatter'], ['goog.debug', 'goog.debug.Logger', 'goog.debug.RelativeTimeProvider', 'goog.html.SafeHtml', 'goog.html.SafeUrl', 'goog.html.uncheckedconversions', 'goog.string.Const'], {});
 goog.addDependency('debug/fpsdisplay.js', ['goog.debug.FpsDisplay'], ['goog.asserts', 'goog.async.AnimationDelay', 'goog.dispose', 'goog.dom', 'goog.dom.TagName', 'goog.ui.Component'], {});
-goog.addDependency('debug/logbuffer.js', ['goog.debug.LogBuffer'], ['goog.asserts', 'goog.debug.LogRecord'], {});
-goog.addDependency('debug/logger.js', ['goog.debug.LogManager', 'goog.debug.Loggable', 'goog.debug.Logger', 'goog.debug.Logger.Level'], ['goog.array', 'goog.asserts', 'goog.debug', 'goog.debug.LogBuffer', 'goog.debug.LogRecord'], {});
-goog.addDependency('debug/logrecord.js', ['goog.debug.LogRecord'], [], {});
+goog.addDependency('debug/logbuffer.js', ['goog.debug.LogBuffer'], ['goog.log.LogBuffer'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('debug/logger.js', ['goog.debug.LogManager', 'goog.debug.Loggable', 'goog.debug.Logger', 'goog.debug.Logger.Level'], ['goog.debug', 'goog.log', 'goog.log.Level', 'goog.log.LogRecord', 'goog.log.Logger'], {'lang': 'es6'});
+goog.addDependency('debug/logrecord.js', ['goog.debug.LogRecord'], ['goog.log.LogRecord'], {});
 goog.addDependency('debug/logrecordserializer.js', ['goog.debug.logRecordSerializer'], ['goog.debug.LogRecord', 'goog.debug.Logger', 'goog.json', 'goog.object'], {});
 goog.addDependency('debug/relativetimeprovider.js', ['goog.debug.RelativeTimeProvider'], [], {});
 goog.addDependency('debug/tracer.js', ['goog.debug.StopTraceDetail', 'goog.debug.Trace'], ['goog.array', 'goog.asserts', 'goog.debug', 'goog.debug.Logger', 'goog.iter', 'goog.log', 'goog.structs.Map', 'goog.structs.SimplePool'], {});
@@ -451,7 +451,7 @@ goog.addDependency('locale/scriptToLanguages.js', ['goog.locale.scriptToLanguage
 goog.addDependency('locale/timezonedetection.js', ['goog.locale.timeZoneDetection'], ['goog.locale.TimeZoneFingerprint'], {});
 goog.addDependency('locale/timezonefingerprint.js', ['goog.locale.TimeZoneFingerprint'], [], {});
 goog.addDependency('locale/timezonelist.js', ['goog.locale.TimeZoneList', 'goog.locale.getTimeZoneAllLongNames', 'goog.locale.getTimeZoneSelectedLongNames', 'goog.locale.getTimeZoneSelectedShortNames'], ['goog.locale'], {});
-goog.addDependency('log/log.js', ['goog.log', 'goog.log.Level', 'goog.log.LogBuffer', 'goog.log.LogRecord', 'goog.log.Logger'], ['goog.debug', 'goog.debug.LogBuffer', 'goog.debug.LogManager', 'goog.debug.LogRecord', 'goog.debug.Logger'], {});
+goog.addDependency('log/log.js', ['goog.log', 'goog.log.Level', 'goog.log.LogBuffer', 'goog.log.LogRecord', 'goog.log.Logger'], ['goog.asserts', 'goog.debug'], {'lang': 'es6'});
 goog.addDependency('math/affinetransform.js', ['goog.math.AffineTransform'], [], {'lang': 'es6'});
 goog.addDependency('math/bezier.js', ['goog.math.Bezier'], ['goog.math', 'goog.math.Coordinate'], {});
 goog.addDependency('math/box.js', ['goog.math.Box'], ['goog.asserts', 'goog.math.Coordinate'], {});
