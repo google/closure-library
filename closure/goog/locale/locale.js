@@ -159,7 +159,7 @@ goog.locale.getNativeCountryName = function(countryCode) {
  * current or provided locale symbols set.
  *
  * This method depends on `goog.locale.LocaleNameConstants__<locale>` available
- * from http://go/js_locale_data. User of this method has to add dependency to
+ * from js_locale_data in go. User of this method has to add dependency to
  * this.
  *
  * @param {string} languageCode Language code to lookup the country name for.
@@ -182,7 +182,7 @@ goog.locale.getLocalizedCountryName = function(
  * current or provided locale symbols set.
  *
  * This method depends on `goog.locale.LocaleNameConstants__<locale>` available
- * from http://go/js_locale_data. User of this method has to add dependency to
+ * from js_locale_data. User of this method has to add dependency to
  * this.
  *
  * @param {string} regionCode Two character country code or three digit region
@@ -231,7 +231,7 @@ goog.locale.getNativeLanguageName = function(languageCode) {
  * the current or provided locale symbols set.
  *
  * This method depends on `goog.locale.LocaleNameConstants__<locale>` available
- * from http://go/js_locale_data. User of this method has to add dependency to
+ * from js_locale_data. User of this method has to add dependency to
  * this.
  *
  * @param {string} languageCode Language code to lookup the language name for.
@@ -428,7 +428,7 @@ goog.locale.getResourceWithFallback = function(resourceName, opt_locale) {
 
 
 // Export global functions that are used by the date time constants files.
-// See http://go/js_locale_data
+// See js_locale_data
 
 /**
  * Registers the LocaleNameConstants constants object for a given locale name.

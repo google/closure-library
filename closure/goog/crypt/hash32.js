@@ -17,7 +17,7 @@ goog.require('goog.crypt');
 
 /**
  * Default seed used during hashing, digits of pie.
- * See SEED32 in http://go/base.hash.java
+ * See SEED32 base.hash.java (go)
  * @type {number}
  */
 goog.crypt.hash32.SEED32 = 314159265;
@@ -25,7 +25,7 @@ goog.crypt.hash32.SEED32 = 314159265;
 
 /**
  * Arbitrary constant used during hashing.
- * See CONSTANT32 in http://go/base.hash.java
+ * See CONSTANT32 in base.hash.java (go)
  * @type {number}
  */
 goog.crypt.hash32.CONSTANT32 = -1640531527;

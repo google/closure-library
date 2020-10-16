@@ -13,7 +13,6 @@ goog.provide('goog.reflect');
 
 /**
  * Syntax for object literal casts.
- * @see http://go/jscompiler-renaming
  * @see https://goo.gl/CRs09P
  *
  * Use this if you have an object literal whose keys need to have the same names
