@@ -32,3 +32,28 @@ exports = {
   /** The onLoad callbacks failed. */
   INIT_ERROR: 4
 };
+
+/**
+ * Gets a human readable error message for a FailureType.
+ * @param {?goog.module.ModuleLoadFailureType} ft A failure type.
+ * @return {string} The readable error message.
+ */
+exports.getReadableError = function(ft) {
+  if (ft === null) {
+    return 'No error type specified';
+  }
+  switch (ft) {
+    case exports.UNAUTHORIZED:
+      return 'Unauthorized';
+    case exports.CONSECUTIVE_FAILURES:
+      return 'Consecutive load failures';
+    case exports.TIMEOUT:
+      return 'Timed out';
+    case exports.OLD_CODE_GONE:
+      return 'Out of date module id';
+    case exports.INIT_ERROR:
+      return 'Init error';
+    default:
+      return `Unknown failure type ${ft}`;
+  }
+};
