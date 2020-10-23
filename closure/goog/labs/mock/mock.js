@@ -13,7 +13,7 @@
  * object (spying) and returning specific values for some or all the inputs to
  * methods (stubbing).
  *
- * Design doc : http://go/closuremock
+ * Manual: http://go/goog.labs.mock
  */
 
 
