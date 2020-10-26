@@ -206,14 +206,19 @@ goog.inherits(goog.module.ModuleManager, goog.loader.AbstractModuleManager);
 /**
  * Error used to indicate a module has failed.
  *
+ * @param {string} moduleID The id of the module that didn't load.
  * @param {?goog.loader.AbstractModuleManager.FailureType} failureType
  * @constructor
  * @extends {goog.debug.Error}
  * @final
  */
-goog.module.ModuleManager.ModuleFailureError = function(failureType) {
+goog.module.ModuleManager.ModuleFailureError = function(moduleID, failureType) {
   'use strict';
-  goog.module.ModuleManager.ModuleFailureError.base(this, 'constructor');
+  /** @type {string} */
+  const msg = `Error loading ${moduleID}: ${
+      goog.module.ModuleLoadFailureType.getReadableError(failureType)}`;
+
+  goog.module.ModuleManager.ModuleFailureError.base(this, 'constructor', msg);
 
   /** @type {?goog.loader.AbstractModuleManager.FailureType} */
   this.failureType = failureType;
@@ -590,7 +595,7 @@ goog.module.ModuleManager.prototype.registerModuleLoadCallbacks_ = function(
   moduleInfo.registerCallback(d.callback, d);
   moduleInfo.registerErrback(function(err) {
     'use strict';
-    d.errback(new goog.module.ModuleManager.ModuleFailureError(err));
+    d.errback(new goog.module.ModuleManager.ModuleFailureError(id, err));
   });
   // If it's already loading, we don't have to do anything besides handle
   // if it was user initiated

@@ -1198,12 +1198,15 @@ testSuite({
 
     assertFalse(calledBack);
 
-    // NOTE: Deferred always calls errbacks with an Error object.  For now
-    // the module manager just passes the FailureType which gets set as the
-    // Error object's message.
+    // NOTE: Deferred always calls errbacks with an Error object.  The failure
+    // type enum is present as error.failureType, while the error message is
+    // human readable and contains the module id.
     assertEquals(
         'Failure cause was not as expected',
-        ModuleManager.FailureType.UNAUTHORIZED, Number(error.message));
+        ModuleManager.FailureType.UNAUTHORIZED, error.failureType);
+    assertEquals(
+        'Error message was not as expected', 'Error loading a: Unauthorized',
+        error.message);
   },
 
   /**
@@ -1277,21 +1280,30 @@ testSuite({
     assertFalse(calledBack21);
     assertFalse(calledBack22);
 
-    // NOTE: Deferred always calls errbacks with an Error object.  For now
-    // the module manager just passes the FailureType which gets set as the
-    // Error object's message.
+    // NOTE: Deferred always calls errbacks with an Error object.  The failure
+    // type enum is present as error.failureType, while the error message is
+    // human readable and contains the module id.
     assertEquals(
         'Failure cause was not as expected',
-        ModuleManager.FailureType.UNAUTHORIZED, Number(error11.message));
+        ModuleManager.FailureType.UNAUTHORIZED, error11.failureType);
+    assertEquals(
+        'Error message was not as expected', 'Error loading a: Unauthorized',
+        error11.message);
     assertEquals(
         'Failure cause was not as expected',
-        ModuleManager.FailureType.UNAUTHORIZED, Number(error12.message));
+        ModuleManager.FailureType.UNAUTHORIZED, error12.failureType);
+    assertEquals(
+        'Error message was not as expected', 'Error loading b: Unauthorized',
+        error12.message);
 
     // The first deferred of the second load should be called since it asks
     // for one of the failed modules.
     assertEquals(
         'Failure cause was not as expected',
-        ModuleManager.FailureType.UNAUTHORIZED, Number(error21.message));
+        ModuleManager.FailureType.UNAUTHORIZED, Number(error21.failureType));
+    assertEquals(
+        'Error message was not as expected', 'Error loading b: Unauthorized',
+        error21.message);
 
     // The last deferred should be dropped so it is neither called back nor
     // an error.
@@ -1386,15 +1398,21 @@ testSuite({
     assertFalse(calledBack22);
     assertFalse(calledBack23);
 
-    // NOTE: Deferred always calls errbacks with an Error object.  For now
-    // the module manager just passes the FailureType which gets set as the
-    // Error object's message.
+    // NOTE: Deferred always calls errbacks with an Error object.  The failure
+    // type enum is present as error.failureType, while the error message is
+    // human readable and contains the module id.
     assertEquals(
         'Failure cause was not as expected',
-        ModuleManager.FailureType.UNAUTHORIZED, Number(error11.message));
+        ModuleManager.FailureType.UNAUTHORIZED, error11.failureType);
+    assertEquals(
+        'Error message was not as expected', 'Error loading a: Unauthorized',
+        error11.message);
     assertEquals(
         'Failure cause was not as expected',
-        ModuleManager.FailureType.UNAUTHORIZED, Number(error12.message));
+        ModuleManager.FailureType.UNAUTHORIZED, error12.failureType);
+    assertEquals(
+        'Error message was not as expected', 'Error loading b: Unauthorized',
+        error12.message);
 
     // Check that among the failed modules, 'c' and 'd' are also cancelled
     // due to dependencies.
