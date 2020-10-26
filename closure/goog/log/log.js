@@ -817,7 +817,13 @@ goog.log.getLogger = function(name, level) {
  *     disabled.
  */
 goog.log.getRootLogger = function() {
-  return goog.log.getLogger(goog.log.ROOT_LOGGER_NAME);
+  if (goog.log.ENABLED) {
+    const loggerEntry = goog.log.LogRegistry.getInstance().getLogRegistryEntry(
+        goog.log.ROOT_LOGGER_NAME);
+    return loggerEntry.logger;
+  } else {
+    return null;
+  }
 };
 
 
