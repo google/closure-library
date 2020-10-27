@@ -1,0 +1,19 @@
+name: Publish on NPM
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  publish-on-npm:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # This action checks out at the commit of the tagged release.
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          registry-url: https://wombat-dressing-room.appspot.com
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
