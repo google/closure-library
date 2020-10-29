@@ -58,10 +58,12 @@ function prepareTargetWithGivenDirection(dir, preferTopPosition = undefined) {
 function getExpectedBubblePositionWithGivenAlignment(alignRight = undefined) {
   const targetPosition = style.getFramedPageOffset(link, window);
   const targetWidth = link.offsetWidth;
+  /** @suppress {visibility} suppression added to enable type checking */
   const bubbleSize = style.getSize(bubble.bubbleContainer_);
   const expectedBubbleX = alignRight ?
       targetPosition.x + targetWidth - bubbleSize.width :
       targetPosition.x;
+  /** @suppress {visibility} suppression added to enable type checking */
   const expectedBubbleY =
       link.offsetHeight + targetPosition.y + Bubble.VERTICAL_CLEARANCE_;
 
@@ -103,6 +105,7 @@ testSuite({
     testHelper.tearDownEditableElement();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCreateBubbleWithLinkPanel() {
     const id = googString.createUniqueString();
     panelId = bubble.addPanel('A', 'Link', link, (container) => {
@@ -136,6 +139,7 @@ testSuite({
       count++;
     });
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const closeBox = dom.getElementsByTagNameAndClass(
         TagName.DIV, 'tr_bubble_closebox', bubble.bubbleContainer_)[0];
     testingEvents.fireClickSequence(closeBox);
@@ -145,6 +149,7 @@ testSuite({
     assertEquals('Hide event should be dispatched', 1, count);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testViewPortSizeMonitorEvent() {
     this.testCreateBubbleWithLinkPanel();
 
@@ -163,6 +168,7 @@ testSuite({
 
   testBubblePositionPreferTop() {
     let called = false;
+    /** @suppress {visibility} suppression added to enable type checking */
     bubble.positionAtAnchor_ = (targetCorner, bubbleCorner, overflow) => {
       called = true;
 
@@ -178,13 +184,16 @@ testSuite({
 
   testBubblePosition() {
     panelId = bubble.addPanel('A', 'Link', link, goog.nullFunction);
+    /** @suppress {visibility} suppression added to enable type checking */
     const CLEARANCE = Bubble.VERTICAL_CLEARANCE_;
+    /** @suppress {visibility} suppression added to enable type checking */
     const bubbleContainer = bubble.bubbleContainer_;
 
     // The field is at a normal place, alomost the top of the viewport, and
     // there is enough space at the bottom of the field.
     const targetPos = style.getFramedPageOffset(link, window);
     const targetSize = style.getSize(link);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     let pos = style.getFramedPageOffset(bubbleContainer);
     assertEquals(targetPos.y + targetSize.height + CLEARANCE, pos.y);
     assertEquals(targetPos.x, pos.x);
@@ -192,6 +201,7 @@ testSuite({
     // Move the target to the bottom of the viewport.
     const field = document.getElementById('field');
     const fieldPos = style.getFramedPageOffset(field, window);
+    /** @suppress {visibility} suppression added to enable type checking */
     fieldPos.y += bubble.dom_.getViewportSize().height -
         (targetPos.y + targetSize.height);
     style.setStyle(field, 'position', 'absolute');
@@ -199,6 +209,7 @@ testSuite({
     bubble.reposition();
     const bubbleSize = style.getSize(bubbleContainer);
     const targetPosition = style.getFramedPageOffset(link, window);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     pos = style.getFramedPageOffset(bubbleContainer);
     assertEquals(targetPosition.y - CLEARANCE - bubbleSize.height, pos.y);
   },
@@ -213,6 +224,10 @@ testSuite({
     prepareTargetWithGivenDirection('rtl');
 
     const expectedPos = getExpectedBubblePositionWithGivenAlignment(true);
+    /**
+     * @suppress {checkTypes,visibility} suppression added to enable type
+     * checking
+     */
     const pos = style.getFramedPageOffset(bubble.bubbleContainer_);
     assertRoughlyEquals(expectedPos.x, pos.x, 0.1);
     assertRoughlyEquals(expectedPos.y, pos.y, 0.1);
@@ -222,6 +237,7 @@ testSuite({
    * Test for bug 1955511, the bubble should align to the right side
    * of the target element when the bubble is RTL, regardless of the
    * target element's directionality.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testBubblePositionLeftToRight() {
     if (product.SAFARI) {
@@ -234,6 +250,10 @@ testSuite({
     prepareTargetWithGivenDirection('rtl');
 
     const expectedPos = getExpectedBubblePositionWithGivenAlignment();
+    /**
+     * @suppress {checkTypes,visibility} suppression added to enable type
+     * checking
+     */
     const pos = style.getFramedPageOffset(bubble.bubbleContainer_);
     assertRoughlyEquals(expectedPos.x, pos.x, 0.1);
     assertRoughlyEquals(expectedPos.y, pos.y, 0.1);
@@ -243,12 +263,17 @@ testSuite({
    * Test for bug 1955511, the bubble should align to the left side
    * of the target element when the bubble is LTR, regardless of the
    * target element's directionality.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testBubblePositionRightToLeft() {
     style.setStyle(bubble.bubbleContainer_, 'direction', 'rtl');
     prepareTargetWithGivenDirection('ltr');
 
     const expectedPos = getExpectedBubblePositionWithGivenAlignment(true);
+    /**
+     * @suppress {checkTypes,visibility} suppression added to enable type
+     * checking
+     */
     const pos = style.getFramedPageOffset(bubble.bubbleContainer_);
     assertEquals(expectedPos.x, pos.x);
     assertEquals(expectedPos.y, pos.y);

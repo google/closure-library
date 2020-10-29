@@ -40,6 +40,7 @@ testSuite({
    * situation where this conversion table's precision is critical. (When it's
    * used to size the labels of the font size menu options it's ok if it's a few
    * pixels off.)
+   * @suppress {visibility} suppression added to enable type checking
    */
   testGetLegacySizeFromPx() {
     // We will be warned if other browsers start behaving like webkit pre-534.7.
