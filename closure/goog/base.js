@@ -1075,10 +1075,10 @@ goog.useSafari10Workaround = function() {
   if (goog.hasBadLetScoping == null) {
     var hasBadLetScoping;
     try {
-      hasBadLetScoping = !eval(
+      hasBadLetScoping = !eval(goog.CLOSURE_EVAL_PREFILTER_.createScript(
           '"use strict";' +
           'let x = 1; function f() { return typeof x; };' +
-          'f() == "number";');
+          'f() == "number";'));
     } catch (e) {
       // Assume that ES6 syntax isn't supported.
       hasBadLetScoping = false;
@@ -1172,7 +1172,7 @@ goog.loadModuleFromSource_ =
       // NOTE: we avoid declaring parameters or local variables here to avoid
       // masking globals or leaking values into the module definition.
       'use strict';
-      eval(arguments[1]);
+      eval(goog.CLOSURE_EVAL_PREFILTER_.createScript(arguments[1]));
       return exports;
     });
 
@@ -3860,3 +3860,25 @@ goog.createTrustedTypesPolicy = function(name) {
   }
   return policy;
 };
+
+if (!COMPILED) {
+  var isNotChrome87 = false;
+  // Cannot run check for Chrome <87 bug in case of strict CSP environments.
+  // TODO(user): Remove once Chrome <87 bug is no longer a problem.
+  try {
+    isNotChrome87 = eval(goog.global.trustedTypes.emptyScript) !==
+        goog.global.trustedTypes.emptyScript;
+  } catch (err) {
+  }
+
+  /**
+   * Trusted Types for running dev servers.
+   *
+   * @private @const
+   */
+  goog.CLOSURE_EVAL_PREFILTER_ =
+      // Detect Chrome <87 bug with TT and eval.
+      goog.global.trustedTypes && isNotChrome87 &&
+          goog.createTrustedTypesPolicy('goog#base#devonly#eval') ||
+      {createScript: goog.identity_};
+}
