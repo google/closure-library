@@ -31,12 +31,12 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug.DebugWindow');
 goog.require('goog.debug.LogManager');
-goog.require('goog.debug.Logger');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyleSheet');
+goog.require('goog.log');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.string.Const');
@@ -156,7 +156,8 @@ goog.debug.FancyWindow.prototype.openOptions_ = function() {
   var dh = this.dh_;
   for (var i = 0; i < loggers.length; i++) {
     var logger = loggers[i];
-    var curlevel = logger.getLevel() ? logger.getLevel().name : 'INHERIT';
+    var curlevel =
+        goog.log.getLevel(logger) ? goog.log.getLevel(logger).name : 'INHERIT';
     var div = dh.createDom(
         goog.dom.TagName.DIV, {},
         this.getDropDown_('sel' + logger.getName(), curlevel),
@@ -180,7 +181,7 @@ goog.debug.FancyWindow.prototype.getDropDown_ = function(id, selected) {
   'use strict';
   var dh = this.dh_;
   var sel = dh.createDom(goog.dom.TagName.SELECT, {'id': id});
-  var levels = goog.debug.Logger.Level.PREDEFINED_LEVELS;
+  var levels = goog.log.Level.PREDEFINED_LEVELS;
   for (var i = 0; i < levels.length; i++) {
     var level = levels[i];
     var option = dh.createDom(goog.dom.TagName.OPTION, {}, level.name);
@@ -213,9 +214,9 @@ goog.debug.FancyWindow.prototype.closeOptions_ = function() {
         dh.getElement('sel' + logger.getName()));
     var level = sel.options[sel.selectedIndex].text;
     if (level == 'INHERIT') {
-      logger.setLevel(null);
+      goog.log.setLevel(logger, null);
     } else {
-      logger.setLevel(goog.debug.Logger.Level.getPredefinedLevel(level));
+      goog.log.setLevel(logger, goog.log.Level.getPredefinedLevel(level));
     }
   }
   this.writeOptionsToLocalStorage_();
@@ -339,7 +340,7 @@ goog.debug.FancyWindow.prototype.writeOptionsToLocalStorage_ = function() {
   var storedKeys = goog.debug.FancyWindow.getStoredKeys_();
   for (var i = 0; i < loggers.length; i++) {
     var key = goog.debug.FancyWindow.LOCAL_STORE_PREFIX + loggers[i].getName();
-    var level = loggers[i].getLevel();
+    var level = goog.log.getLevel(loggers[i]);
     if (key in storedKeys) {
       if (!level) {
         window.localStorage.removeItem(key);
@@ -365,11 +366,11 @@ goog.debug.FancyWindow.prototype.readOptionsFromLocalStorage_ = function() {
   var storedKeys = goog.debug.FancyWindow.getStoredKeys_();
   for (var key in storedKeys) {
     var loggerName = key.replace(goog.debug.FancyWindow.LOCAL_STORE_PREFIX, '');
-    var logger = goog.debug.LogManager.getLogger(loggerName);
-    var curLevel = logger.getLevel();
+    var logger = goog.log.getLogger(loggerName);
+    var curLevel = goog.log.getLevel(logger);
     var storedLevel = window.localStorage.getItem(key).toString();
     if (!curLevel || curLevel.toString() != storedLevel) {
-      logger.setLevel(goog.debug.Logger.Level.getPredefinedLevel(storedLevel));
+      goog.log.setLevel(logger, goog.log.Level.getPredefinedLevel(storedLevel));
     }
   }
 };
@@ -398,19 +399,20 @@ goog.debug.FancyWindow.getStoredKeys_ = function() {
 
 /**
  * Gets a sorted array of all the loggers registered.
- * @return {!Array<!goog.debug.Logger>} Array of logger instances.
+ * @return {!Array<!goog.log.Logger>} Array of logger instances.
  * @private
  */
 goog.debug.FancyWindow.getLoggers_ = function() {
   'use strict';
-  var loggers = goog.object.getValues(goog.debug.LogManager.getLoggers());
+  const loggers = goog.object.getValues(goog.debug.LogManager.getLoggers())
+                      .concat(goog.log.getAllLoggers());
 
   /**
-   * @param {!goog.debug.Logger} a
-   * @param {!goog.debug.Logger} b
+   * @param {!goog.log.Logger} a
+   * @param {!goog.log.Logger} b
    * @return {number}
    */
-  var loggerSort = function(a, b) {
+  const loggerSort = (a, b) => {
     'use strict';
     return goog.array.defaultCompare(a.getName(), b.getName());
   };
