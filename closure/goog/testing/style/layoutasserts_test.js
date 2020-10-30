@@ -107,7 +107,10 @@ testSuite({
     assertIntersect(div1, div2);
   },
 
-  /** Tests assertWidth. */
+  /**
+     Tests assertWidth. @suppress {checkTypes} suppression added to enable type
+     checking
+   */
   testAssertWidth() {
     document.body.appendChild(div1);
 
@@ -127,7 +130,10 @@ testSuite({
         goog.bind(assertWidthWithinTolerance, null, div1, 100, 0.1));
   },
 
-  /** Tests assertHeight. */
+  /**
+     Tests assertHeight. @suppress {checkTypes} suppression added to enable
+     type checking
+   */
   testAssertHeight() {
     document.body.appendChild(div1);
 
@@ -137,7 +143,7 @@ testSuite({
 
     // Test wrong height
     assertThrowsJsUnitException(
-        goog.bind(assertHeightWithinTolerance, null, div1, 300));
+        goog.bind(assertHeightWithinTolerance, null, div1, 300, undefined, undefined));
 
     // Test a valid tolerance value
     assertHeightWithinTolerance(div1, 90, 10);

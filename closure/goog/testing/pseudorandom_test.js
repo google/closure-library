@@ -33,6 +33,7 @@ function runFairnessTest(sides, rolls, chiSquareLimit) {
 }
 
 testSuite({
+  /** @suppress {visibility} suppression added to enable type checking */
   testInstall() {
     const random = new PseudoRandom();
     const originalRandom = Math.random;

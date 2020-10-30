@@ -128,10 +128,16 @@ testCase.setTestObj({
     clock.uninstall();
     stubs.reset();
 
-    waitForTimeout(() => {
-      // Pointless assertion to verify that tearDown methods can contain waits.
-      assertTrue(testCase.now() >= testCase.startTime_);
-    }, 0);
+    waitForTimeout(/**
+                      @suppress {visibility} suppression added to enable type
+                      checking
+                    */
+                   () => {
+                     // Pointless assertion to verify that tearDown methods can
+                     // contain waits.
+                     assertTrue(testCase.now() >= testCase.startTime_);
+                   },
+                   0);
   },
 
   testStepWaiting() {

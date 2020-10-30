@@ -22,10 +22,18 @@ let mockGlobal;
 
 //----- Global functions for goog.testing.GlobalFunctionMock to mock
 
+/**
+ * @suppress {strictMissingProperties} suppression added to enable type
+ * checking
+ */
 window.globalFoo = function() {
   return 'I am Spartacus!';
 };
 
+/**
+ * @suppress {strictMissingProperties} suppression added to enable type
+ * checking
+ */
 window.globalBar = function(who, what) {
   return [who, 'is', what].join(' ');
 };
@@ -82,6 +90,7 @@ function assertQuacksLike(obj, target) {
   }
 }
 testSuite({
+  /** @suppress {missingProperties} suppression added to enable type checking */
   tearDown() {
     if (mockGlobal) {
       mockGlobal.$tearDown();
@@ -130,6 +139,7 @@ testSuite({
     doTest(false, false, [1, 2], [1]);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMocksFunctionWithNoArgs() {
     const mockFoo = testing.createFunctionMock();
     mockFoo();
@@ -138,6 +148,7 @@ testSuite({
     mockFoo.$verify();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMocksFunctionWithOneArg() {
     const mockFoo = testing.createFunctionMock();
     mockFoo('x');
@@ -146,6 +157,7 @@ testSuite({
     mockFoo.$verify();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMocksFunctionWithMultipleArgs() {
     const mockFoo = testing.createFunctionMock();
     mockFoo('x', 'y');
@@ -154,52 +166,78 @@ testSuite({
     mockFoo.$verify();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testFailsIfCalledWithIncorrectArgs() {
     const mockFoo = testing.createFunctionMock();
 
     mockFoo();
     mockFoo.$replay();
-    assertThrowsJsUnitException(() => {
-      mockFoo('x');
-    });
+    assertThrowsJsUnitException(/**
+                                   @suppress {checkTypes} suppression added to
+                                   enable type checking
+                                 */
+                                () => {
+                                  mockFoo('x');
+                                });
     mockFoo.$reset();
 
     mockFoo('x');
     mockFoo.$replay();
-    assertThrowsJsUnitException(() => {
-      mockFoo();
-    });
+    assertThrowsJsUnitException(/**
+                                   @suppress {checkTypes} suppression added to
+                                   enable type checking
+                                 */
+                                () => {
+                                  mockFoo();
+                                });
     mockFoo.$reset();
 
     mockFoo('x');
     mockFoo.$replay();
-    assertThrowsJsUnitException(() => {
-      mockFoo('x', 'y');
-    });
+    assertThrowsJsUnitException(/**
+                                   @suppress {checkTypes} suppression added to
+                                   enable type checking
+                                 */
+                                () => {
+                                  mockFoo('x', 'y');
+                                });
     mockFoo.$reset();
 
     mockFoo('x', 'y');
     mockFoo.$replay();
-    assertThrowsJsUnitException(() => {
-      mockFoo('x');
-    });
+    assertThrowsJsUnitException(/**
+                                   @suppress {checkTypes} suppression added to
+                                   enable type checking
+                                 */
+                                () => {
+                                  mockFoo('x');
+                                });
     mockFoo.$reset();
 
     mockFoo('correct');
     mockFoo.$replay();
-    assertThrowsJsUnitException(() => {
-      mockFoo('wrong');
-    });
+    assertThrowsJsUnitException(/**
+                                   @suppress {checkTypes} suppression added to
+                                   enable type checking
+                                 */
+                                () => {
+                                  mockFoo('wrong');
+                                });
     mockFoo.$reset();
 
     mockFoo('correct', 'args');
     mockFoo.$replay();
-    assertThrowsJsUnitException(() => {
-      mockFoo('wrong', 'args');
-    });
+    assertThrowsJsUnitException(/**
+                                   @suppress {checkTypes} suppression added to
+                                   enable type checking
+                                 */
+                                () => {
+                                  mockFoo('wrong', 'args');
+                                });
     mockFoo.$reset();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMocksFunctionWithReturnValue() {
     const mockFoo = testing.createFunctionMock();
     mockFoo().$returns('bar');
@@ -208,6 +246,7 @@ testSuite({
     mockFoo.$verify();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testFunctionMockWorksWhenPassedAsACallback() {
     const invoker = {
       register: function(callback) {
@@ -234,7 +273,10 @@ testSuite({
   },
 
   //----- Tests for goog.testing.createGlobalFunctionMock
-  /** @suppress {undefinedVars} globalFoo is created indirectly */
+  /**
+     @suppress {undefinedVars,checkTypes} suppression added to enable type
+     checking
+   */
   testMocksGlobalFunctionWithNoArgs() {
     mockGlobal = testing.createGlobalFunctionMock('globalFoo');
     mockGlobal().$returns('No, I am Spartacus!');
@@ -255,7 +297,10 @@ testSuite({
     globalFoo.$tearDown();
   },
 
-  /** @suppress {undefinedVars} globalBar is created indirectly */
+  /**
+     @suppress {undefinedVars,checkTypes} suppression added to enable type
+     checking
+   */
   testMocksGlobalFunctionWithArgs() {
     const mockReturnValue = 'Noam is Chomsky!';
     mockGlobal = testing.createGlobalFunctionMock('globalBar');
@@ -266,6 +311,7 @@ testSuite({
     mockGlobal.$verify();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGlobalFunctionMockFailsWithIncorrectArgs() {
     mockGlobal = testing.createGlobalFunctionMock('globalBar');
     mockGlobal('a', 'b');
@@ -282,6 +328,7 @@ testSuite({
     assertQuacksLike(mockGlobal, FunctionMock);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMockedFunctionsAvailableInGlobalAndGoogGlobalAndWindowScope() {
     mockGlobal = testing.createGlobalFunctionMock('globalFoo');
 
@@ -295,6 +342,10 @@ testSuite({
     mockGlobal.$verify();
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testTearDownRestoresOriginalGlobalFunction() {
     mockGlobal = testing.createGlobalFunctionMock('globalFoo');
     mockGlobal().$returns('No, I am Spartacus!');
@@ -306,6 +357,10 @@ testSuite({
     mockGlobal.$verify();
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testTearDownHandlesMultipleMocking() {
     const mock1 = testing.createGlobalFunctionMock('globalFoo');
     const mock2 = testing.createGlobalFunctionMock('globalFoo');
@@ -326,6 +381,10 @@ testSuite({
     assertEquals('I am Spartacus!', globalFoo());
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testGlobalFunctionMockCallOrdering() {
     let mock = testing.createGlobalFunctionMock('globalFoo');
     mock(1);
@@ -364,6 +423,7 @@ testSuite({
     mock.$tearDown();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMocksMethod() {
     const mockMethod = testing.createMethodMock(mynamespace, 'myMethod');
     mockMethod().$returns('I have been mocked!');
@@ -373,6 +433,7 @@ testSuite({
     mockMethod.$verify();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testMocksMethodInNamespace() {
     testing.createMethodMock(mynamespace, 'myMethod');
     mynamespace.myMethod().$returns('I have been mocked!');
@@ -389,14 +450,22 @@ testSuite({
     });
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testMethodMockCallOrdering() {
     testing.createMethodMock(mynamespace, 'myMethod');
     mynamespace.myMethod(1);
     mynamespace.myMethod(2);
     mynamespace.myMethod.$replay();
-    assertThrowsJsUnitException(() => {
-      mynamespace.myMethod(2);
-    });
+    assertThrowsJsUnitException(/**
+                                   @suppress {checkTypes} suppression added to
+                                   enable type checking
+                                 */
+                                () => {
+                                  mynamespace.myMethod(2);
+                                });
     mynamespace.myMethod.$tearDown();
 
     testing.createMethodMock(mynamespace, 'myMethod', Mock.STRICT);
@@ -412,9 +481,13 @@ testSuite({
     mynamespace.myMethod(1);
     mynamespace.myMethod(2);
     mynamespace.myMethod.$replay();
-    assertThrowsJsUnitException(() => {
-      mynamespace.myMethod(2);
-    });
+    assertThrowsJsUnitException(/**
+                                   @suppress {checkTypes} suppression added to
+                                   enable type checking
+                                 */
+                                () => {
+                                  mynamespace.myMethod(2);
+                                });
     mynamespace.myMethod.$tearDown();
 
     testing.createMethodMock(mynamespace, 'myMethod', Mock.LOOSE);
@@ -427,6 +500,10 @@ testSuite({
     mynamespace.myMethod.$tearDown();
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testConstructorMock() {
     const mockObject = new StrictMock(constructornamespace.MyConstructor);
     const mockConstructor =
@@ -444,6 +521,10 @@ testSuite({
     mockConstructor.$tearDown();
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testConstructorMockWithArgument() {
     const mockObject =
         new StrictMock(constructornamespace.MyConstructorWithArgument);
@@ -464,7 +545,10 @@ testSuite({
     mockConstructor.$tearDown();
   },
 
-  /** Test that class members are copied to the mock constructor. */
+  /**
+     Test that class members are copied to the mock constructor.
+     @suppress {missingProperties} suppression added to enable type checking
+   */
   testConstructorMockWithClassMembers() {
     const mockConstructor = testing.createConstructorMock(
         constructornamespace, 'MyConstructorWithClassMembers');
@@ -476,6 +560,10 @@ testSuite({
     mockConstructor.$tearDown();
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testConstructorMockCallOrdering() {
     const instance = {};
 

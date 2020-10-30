@@ -21,6 +21,10 @@ function isSafari8() {
 
 testSuite({
   // Test PropertyReplacer with JavaScript objects.
+  /**
+     @suppress {strictMissingProperties,missingProperties} suppression added to
+     enable type checking
+   */
   testSetJsProperties() {
     const stubs = new PropertyReplacer();
     const x = {a: 1, b: undefined};
@@ -114,6 +118,10 @@ testSuite({
   },
 
   // Test PropertyReplacer with prototype chain.
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testPrototype() {
     let stubs = new PropertyReplacer();
 
@@ -121,6 +129,7 @@ testSuite({
     const a = {a: 0};
     function B() {}
     B.prototype = a;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const b = new B();
 
     stubs.set(a, 0, 1);
@@ -135,6 +144,7 @@ testSuite({
     C.prototype = c;
     function D() {}
     goog.inherits(D, C);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const d = new D();
 
     stubs = new PropertyReplacer();
@@ -166,6 +176,7 @@ testSuite({
   },
 
   // Test replacing function properties.
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testFunctionProperties() {
     const stubs = new PropertyReplacer();
     stubs.set(Array, 'x', 1);
@@ -180,7 +191,9 @@ testSuite({
   },
 
   // Test the hasKey_ private method.
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHasKey() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const f = PropertyReplacer.hasKey_;
 
     assertFalse('{}.a', f({}, 'a'));
@@ -194,6 +207,7 @@ testSuite({
     C.a = 0;
     assertTrue('C.a set', f(C, 'a'));
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const c = new C();
     assertFalse('C().a, inherited', f(c, 'a'));
     c.a = 0;
@@ -261,8 +275,13 @@ testSuite({
   },
 
   // Test PropertyReplacer with DOM objects' custom attributes.
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testDomCustomAttributes() {
     const div = dom.createElement(TagName.DIV);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     div.attr1 = 'old';
 
     const stubs = new PropertyReplacer();
@@ -299,10 +318,18 @@ testSuite({
         'Trying to remove a read-only property fails silently.',
         goog.bind(stubs.remove, stubs, a, 'length'));
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     window.foo = foo;
     assertThrows(
         'Trying to set a read-only property by path fails silently.',
         goog.bind(stubs.setPath, stubs, 'window.foo.length', 10));
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     window.foo = undefined;
   },
 
@@ -338,6 +365,10 @@ testSuite({
         'Trying to remove a sealed property fails.',
         goog.bind(stubs.remove, stubs, sealed, 'a'));
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     window.sealed = sealed;
     assertThrows(
         'Trying to set a new sealed property by path fails silently in strict ' +
@@ -360,6 +391,10 @@ testSuite({
           'Trying to remove a sealed property fails in strict mode.',
           goog.bind(stubs.remove, stubs, sealed, 'a'));
 
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       window.sealed = sealed;
       assertThrows(
           'Trying to set a new sealed property by path fails silently in ' +
@@ -394,6 +429,10 @@ testSuite({
         'Trying to remove a frozen property fails silently.',
         goog.bind(stubs.remove, stubs, frozen, 'a'));
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     window.frozen = frozen;
     assertThrows(
         'Trying to set a frozen property by path fails silently.',
@@ -421,6 +460,10 @@ testSuite({
           'Trying to remove a frozen property fails silently in strict mode.',
           goog.bind(stubs.remove, stubs, frozen, 'a'));
 
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       window.frozen = frozen;
       assertThrows(
           'Trying to set a new frozen property by path fails silently in ' +
@@ -453,6 +496,7 @@ testSuite({
     }
     C.prototype.b = 1;
     C.prototype.toString = () => 'obj';
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const obj = new C();
 
     stubs.replace(obj, 'a', 2);
@@ -520,7 +564,12 @@ testSuite({
   },
 
   // Tests altering complete namespace paths.
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testSetPath() {
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     goog.global.a = {b: {}};
     const stubs = new PropertyReplacer();
 
@@ -547,8 +596,16 @@ testSuite({
   },
 
   // Tests altering paths with functions in them.
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testSetPathWithFunction() {
     const f = function() {};
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     goog.global.a = {b: f};
     const stubs = new PropertyReplacer();
 
@@ -576,6 +633,10 @@ testSuite({
 
   // Tests restoring original attribute values with restore() rather than
   // reset().
+  /**
+     @suppress {strictMissingProperties,missingProperties} suppression added to
+     enable type checking
+   */
   testRestore() {
     const stubs = new PropertyReplacer();
     const x = {a: 1, b: undefined};

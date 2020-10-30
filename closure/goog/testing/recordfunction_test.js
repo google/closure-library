@@ -67,6 +67,10 @@ testSuite({
     assertNull('error thrown by the last call', lastCall.getError());
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testWithErrorFunction() {
     const f = recordFunction(functions.error('error'));
 
@@ -83,6 +87,7 @@ testSuite({
         'recorded error message', 'error', lastCall.getError().message);
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testWithClass() {
     const ns = {};
     /** @constructor @struct */
@@ -90,6 +95,10 @@ testSuite({
       this.setX(ns.TestClass.identity(1) + num);
     };
     ns.TestClass.prototype.setX = function(x) {
+      /**
+       * @suppress {checkTypes,missingProperties} suppression added to enable
+       * type checking
+       */
       this.x = x;
     };
     ns.TestClass.identity = (x) => x;
@@ -103,6 +112,9 @@ testSuite({
 
     const obj = new ns.TestClass(2);
     assertEquals('constructor is called once', 1, ns.TestClass.getCallCount());
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const lastConstructorCall = ns.TestClass.getLastCall();
     assertArrayEquals(
         '... with argument 2', [2], lastConstructorCall.getArguments());

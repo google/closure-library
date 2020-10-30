@@ -22,6 +22,7 @@ let timer;
  * @param {boolean} useSetUp
  * @param {boolean} useTearDown
  * @param {boolean} runAsync
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function runAndAssert(useSetUp, useTearDown, runAsync) {
   const fakeExecutionTime = [100, 95, 98, 104, 130, 101, 96, 98, 90, 103];
@@ -71,6 +72,7 @@ function runAndAssert(useSetUp, useTearDown, runAsync) {
     let assertsRan = false;
     const deferred = timer.runAsyncTask(task);
     deferred.addCallback((results) => {
+      /** @suppress {checkTypes} suppression added to enable type checking */
       assertsRan = assertResults(
           results, useSetUp, useTearDown, setUpCount, tearDownCount,
           fakeExecutionTime);
@@ -92,6 +94,7 @@ function runAndAssert(useSetUp, useTearDown, runAsync) {
  * @param {boolean} tearDownCount
  * @param {boolean} fakeExecutionTime
  * @return {boolean} true
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function assertResults(
     results, useSetUp, useTearDown, setUpCount, tearDownCount,

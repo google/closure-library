@@ -19,11 +19,13 @@ testSuite({
     mockUserAgent = new MockUserAgent();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   tearDown() {
     dispose(mockUserAgent);
     assertFalse(mockUserAgent.installed_);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testMockUserAgentInstall() {
     const originalUserAgentFunction = userAgent.getUserAgentString;
 
@@ -38,6 +40,7 @@ testSuite({
     assertEquals(originalUserAgentFunction, userAgent.getUserAgentString);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testMockUserAgentGetAgent() {
     const uaString = 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) ' +
         'AppleWebKit/525.13 (KHTML, like Gecko) ' +
@@ -51,6 +54,7 @@ testSuite({
     assertEquals(uaString, userAgent.getUserAgentString());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testMockUserAgentNavigator() {
     const fakeNavigator = {};
 
@@ -62,6 +66,7 @@ testSuite({
     assertEquals(fakeNavigator, userAgent.getNavigator());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testMockUserAgentDocumentMode() {
     const fakeDocumentMode = -1;
 
