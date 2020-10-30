@@ -66,6 +66,7 @@ testSuite({
     assertEquals(`failed to parse flickr url: ${invalidUrl}`, e.message);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testBuildingUrl() {
     assertEquals(
         FLICKRSET_URL,
@@ -80,6 +81,7 @@ testSuite({
     assertUndefined(model.getCaption());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSettingWhichFlashUrlToUse() {
     FlickrSet.setFlashUrl(testing.newTrustedResourceUrlForTest('http://foo'));
     assertEquals('http://foo', FlickrSet.flashUrl_.getTypedStringValue());

@@ -33,6 +33,7 @@ function assertExtractsCorrectly(
 testSuite({
   setUp() {
     picasa = new PicasaAlbum();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const model = new PicasaAlbumModel(
         PICASA_USERNAME, PICASA_ALBUM, null, 'album title');
     control = new Media(model, picasa);

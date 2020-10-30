@@ -80,6 +80,7 @@ testSuite({
   testDoesntCreatesCaptionIfUnavailable() {
     const incompleteModel =
         new MediaModel('http://url.com', undefined, 'a description');
+    /** @suppress {checkTypes} suppression added to enable type checking */
     let incompleteMedia = new Media('', renderer);
     incompleteMedia.setDataModel(incompleteModel);
     incompleteMedia.render();
