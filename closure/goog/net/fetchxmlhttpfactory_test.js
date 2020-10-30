@@ -10,6 +10,7 @@ goog.setTestOnly();
 const FetchXmlHttp = goog.require('goog.net.FetchXmlHttp');
 const FetchXmlHttpFactory = goog.require('goog.net.FetchXmlHttpFactory');
 const MockControl = goog.require('goog.testing.MockControl');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const isVersion = goog.require('goog.userAgent.product.isVersion');
 const product = goog.require('goog.userAgent.product');
 const recordFunction = goog.require('goog.testing.recordFunction');
@@ -27,6 +28,9 @@ let factory;
 /** @type {!WorkerGlobalScope} */
 let worker;
 
+/** @type {!PropertyReplacer} */
+let stubs;
+
 /**
  * Util function to verify send method.
  * @param {string} sendMethod
@@ -40,10 +44,6 @@ function verifySend(
     sendMethod, expectedStatusCode = 200, isStream = false,
     isArrayBuffer = false, isStreamBinaryChunks = false) {
   return new Promise((resolve, reject) => {
-    if (isStreamBinaryChunks) {
-      factory = new FetchXmlHttpFactory(
-          {worker: worker, streamBinaryChunks: isStreamBinaryChunks});
-    }
     const xhr = factory.createInstance();
     const expectedBody = 'responseBody';
     if (isArrayBuffer) {
@@ -176,11 +176,14 @@ testSuite({
     worker = {};
     fetchMock = mockControl.createFunctionMock('fetch');
     worker.fetch = fetchMock;
+    stubs = new PropertyReplacer();
+    stubs.replace(goog.global, 'fetch', fetchMock);
     factory = new FetchXmlHttpFactory(worker);
   },
 
   tearDown() {
     mockControl.$tearDown();
+    stubs.reset();
   },
 
   /** Verifies the open method. */
@@ -238,6 +241,21 @@ testSuite({
     })).$returns(Promise.resolve(createSuccessResponse()));
 
     mockControl.$replayAll();
+    return verifySend('GET');
+  },
+
+  /**
+   * Verifies the send method without Service Worker.
+   * @return {!Promise<void>}
+   */
+  testSend_nonServiceWorker() {
+    fetchMock(new Request('https://www.google.com', {
+      headers: new Headers(),
+      method: 'GET',
+    })).$returns(Promise.resolve(createSuccessResponse()));
+
+    mockControl.$replayAll();
+    factory = new FetchXmlHttpFactory({});
     return verifySend('GET');
   },
 
@@ -320,7 +338,7 @@ testSuite({
   },
 
   /**
-   * Tests that streaming responses are properly handled.
+   * Tests that streaming binary responses are properly handled.
    * @return {!Promise<void>}
    */
   testSend_streamBinaryChunks() {
@@ -330,9 +348,12 @@ testSuite({
     })).$returns(Promise.resolve(createSuccessStreamingResponse()));
 
     mockControl.$replayAll();
+
+    factory =
+        new FetchXmlHttpFactory({worker: worker, streamBinaryChunks: true});
     return verifySend(
         'POST', 200 /* expectedStatusCode */, true /* isStream */,
-        /* isArrayBuffer */ false, /* isStreamBinaryCrunks */ true);
+        false /* isArrayBuffer */, true /* isStreamBinaryCrunks */);
   },
 
   /**

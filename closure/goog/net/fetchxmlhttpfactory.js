@@ -22,7 +22,7 @@ goog.require('goog.net.XmlHttpFactory');
  */
 goog.net.FetchXmlHttpFactoryOptions_ = function() {
   /**
-   * @type {!WorkerGlobalScope} The Service Worker global scope.
+   * @type {!WorkerGlobalScope|undefined} The Service Worker global scope.
    */
   this.worker;
 
@@ -47,12 +47,12 @@ goog.net.FetchXmlHttpFactoryOptions_ = function() {
 goog.net.FetchXmlHttpFactory = function(opts) {
   'use strict';
   goog.net.FetchXmlHttpFactory.base(this, 'constructor');
-  if (typeof opts.streamBinaryChunks !== 'boolean') {
+  if (typeof opts.fetch === 'function') {
     opts = {worker: /** @type {!WorkerGlobalScope} */ (opts)};
   }
 
-  /** @private @final {!WorkerGlobalScope} */
-  this.worker_ = opts.worker;
+  /** @private @final {?WorkerGlobalScope} */
+  this.worker_ = opts.worker || null;
 
   /** @private @final {boolean} */
   this.streamBinaryChunks_ = opts.streamBinaryChunks || false;
@@ -109,7 +109,7 @@ goog.net.FetchXmlHttpFactory.prototype.setCacheMode = function(cacheMode) {
 
 /**
  * FetchXmlHttp object constructor.
- * @param {!WorkerGlobalScope} worker
+ * @param {?WorkerGlobalScope} worker
  * @param {boolean} streamBinaryChunks
  * @extends {goog.events.EventTarget}
  * @implements {goog.net.XhrLike}
@@ -120,7 +120,7 @@ goog.net.FetchXmlHttp = function(worker, streamBinaryChunks) {
   'use strict';
   goog.net.FetchXmlHttp.base(this, 'constructor');
 
-  /** @private @final {!WorkerGlobalScope} */
+  /** @private @final {?WorkerGlobalScope} */
   this.worker_ = worker;
 
   /** @private @final {boolean} */
@@ -269,7 +269,8 @@ goog.net.FetchXmlHttp.prototype.send = function(opt_data) {
   if (opt_data) {
     requestInit['body'] = opt_data;
   }
-  this.worker_
+
+  (this.worker_ || goog.global)
       .fetch(new Request(this.url_, /** @type {!RequestInit} */ (requestInit)))
       .then(
           this.handleResponse_.bind(this), this.handleSendFailure_.bind(this));
