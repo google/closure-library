@@ -1373,7 +1373,9 @@ goog.Promise.setUnhandledRejectionHandler = function(handler) {
 
 
 /**
- * Error used as a rejection reason for canceled Promises.
+ * Error used as a rejection reason for canceled Promises.  This will still be
+ * a rejection, but should generally be ignored by other error handlers (because
+ * cancellation should not be a reportable error).
  *
  * @param {string=} opt_message
  * @constructor
@@ -1383,6 +1385,7 @@ goog.Promise.setUnhandledRejectionHandler = function(handler) {
 goog.Promise.CancellationError = function(opt_message) {
   'use strict';
   goog.Promise.CancellationError.base(this, 'constructor', opt_message);
+  this.reportErrorToServer = false;
 };
 goog.inherits(goog.Promise.CancellationError, goog.debug.Error);
 
