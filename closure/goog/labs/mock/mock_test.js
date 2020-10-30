@@ -685,8 +685,7 @@ testSuite({
   },
 
   async testMockFunctionWait() {
-    const func = function() {};
-    const mockFunc = mock.mockFunction(func);
+    const mockFunc = mock.mockFunction();
 
     setTimeout(() => {
       mockFunc();
@@ -722,8 +721,7 @@ testSuite({
   },
 
   async testMockFunctionWaitOnMultipleMethodCalls() {
-    const func = function() {};
-    const mockFunc = mock.mockFunction(func);
+    const mockFunc = mock.mockFunction();
     const timeoutMode = mockTimeout.timeout(150);
     const verificationMode = mock.verification.times(2);
 
@@ -788,8 +786,7 @@ testSuite({
   },
 
   async testMockFunctionWaitWithDifferentArgs() {
-    const func = function() {};
-    const mockFunc = mock.mockFunction(func);
+    const mockFunc = mock.mockFunction();
 
     setTimeout(() => {
       mockFunc(1);
@@ -912,8 +909,7 @@ testSuite({
   },
 
   async testMockFunctionWaitOnSameMethodTwice() {
-    const func = function() {};
-    const mockFunc = mock.mockFunction(func);
+    const mockFunc = mock.mockFunction();
 
     mockFunc();
 
