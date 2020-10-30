@@ -1068,41 +1068,6 @@ goog.hasBadLetScoping = null;
 
 
 /**
- * @return {boolean}
- * @package Visible for testing.
- */
-goog.useSafari10Workaround = function() {
-  if (goog.hasBadLetScoping == null) {
-    var hasBadLetScoping;
-    try {
-      hasBadLetScoping = !eval(goog.CLOSURE_EVAL_PREFILTER_.createScript(
-          '"use strict";' +
-          'let x = 1; function f() { return typeof x; };' +
-          'f() == "number";'));
-    } catch (e) {
-      // Assume that ES6 syntax isn't supported.
-      hasBadLetScoping = false;
-    }
-    goog.hasBadLetScoping = hasBadLetScoping;
-  }
-  return goog.hasBadLetScoping;
-};
-
-
-/**
- * @param {string} moduleDef
- * @return {string}
- * @package Visible for testing.
- */
-goog.workaroundSafari10EvalBug = function(moduleDef) {
-  return '(function(){' + moduleDef +
-      '\n' +  // Terminate any trailing single line comment.
-      ';' +   // Terminate any trailing expression.
-      '})();\n';
-};
-
-
-/**
  * @param {function(?):?|string} moduleDef The module definition.
  */
 goog.loadModule = function(moduleDef) {
@@ -1123,10 +1088,6 @@ goog.loadModule = function(moduleDef) {
     if (typeof moduleDef === 'function') {
       exports = moduleDef.call(undefined, exports);
     } else if (typeof moduleDef === 'string') {
-      if (goog.useSafari10Workaround()) {
-        moduleDef = goog.workaroundSafari10EvalBug(moduleDef);
-      }
-
       exports = goog.loadModuleFromSource_.call(undefined, exports, moduleDef);
     } else {
       throw new Error('Invalid module definition');

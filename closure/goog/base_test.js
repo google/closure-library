@@ -1176,37 +1176,6 @@ testSuite({
     assertFalse(Object.isSealed(exports2));
   },
 
-  testWorkaroundSafari10EvalBug0() {
-    // Validate the safari module loading workaround isn't triggered for
-    // browsers we know it isn't needed.
-    if (userAgent.SAFARI) {
-      return;
-    }
-    assertFalse(goog.useSafari10Workaround());
-  },
-
-  testWorkaroundSafari10EvalBug1() {
-    assertEquals(
-        '(function(){' +  // no \n
-            'goog.module(\'foo\');\n' +
-            '\n;})();\n',
-        goog.workaroundSafari10EvalBug('goog.module(\'foo\');\n'));
-  },
-
-
-  testWorkaroundSafari10EvalBug2() {
-    assertEquals(
-        '(function(){' +  // no \n
-            'goog.module(\'foo\');\n' +
-            'alert("//# sourceMappingURL a.b.c.map")\n' +
-            'alert("//# sourceURL a.b.c.js")\n' +
-            '\n;})();\n',
-        goog.workaroundSafari10EvalBug(
-            'goog.module(\'foo\');\n' +
-            'alert("//# sourceMappingURL a.b.c.map")\n' +
-            'alert("//# sourceURL a.b.c.js")\n'));
-  },
-
   /**
    * @suppress {missingSourcesWarnings} reference to dynamically loaded
    * namespace.
