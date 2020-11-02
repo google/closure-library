@@ -165,6 +165,7 @@ testSuite({
     },
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testMockClockWasInstalled() {
     const clock = new MockClock();
     const originalTimeout = window.setTimeout;
@@ -602,6 +603,10 @@ testSuite({
     clock.uninstall();
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testQueueInsertionHelper() {
     const queue = [];
 
@@ -727,9 +732,16 @@ testSuite({
     // strings, not undefined, etc). Make sure that if we get a non-function, we
     // fail early rather than on the next .tick() operation.
 
-    assertThrows('setTimeout with a non-function value should fail', () => {
-      window.setTimeout(undefined, 0);
-    });
+    assertThrows(
+        'setTimeout with a non-function value should fail', /**
+                                                               @suppress {checkTypes}
+                                                               suppression added
+                                                               to enable type
+                                                               checking
+                                                             */
+        () => {
+          window.setTimeout(undefined, 0);
+        });
     clock.tick(1);
 
     assertThrows('setTimeout with a string should fail', () => {

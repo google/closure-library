@@ -12,6 +12,7 @@ const GoogEvent = goog.require('goog.events.Event');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEventMatcher() {
     const matcher = new EventMatcher('foo');
     assertFalse(matcher.matches(undefined));

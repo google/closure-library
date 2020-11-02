@@ -261,7 +261,8 @@ goog.editor.icontent.writeNormalInitialIframe = function(
 
   var doc = goog.dom.getFrameContentDocument(iframe);
   doc.open();
-  doc.write(html);
+  goog.dom.safe.documentWrite(
+      doc, goog.html.legacyconversions.safeHtmlFromString(html));
   doc.close();
 };
 

@@ -2481,8 +2481,8 @@ goog.dom.getAncestorByClass = function(element, className, opt_maxSearchSteps) {
  * Walks up the DOM hierarchy returning the first ancestor that passes the
  * matcher function.
  * @param {Node} element The DOM node to start with.
- * @param {function(Node) : boolean} matcher A function that returns true if the
- *     passed node matches the desired criteria.
+ * @param {function(!Node) : boolean} matcher A function that returns true if
+ *     the passed node matches the desired criteria.
  * @param {boolean=} opt_includeNode If true, the node itself is included in
  *     the search (the first call to the matcher will pass startElement as
  *     the node to test).

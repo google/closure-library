@@ -29,6 +29,7 @@ testSuite({
     expectedFailures.handleTearDown();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEdgeCases() {
     // Pass
     asserts.assertI18nEquals(null, null);

@@ -556,9 +556,8 @@ function testGoogRequireCheck() {
 
   // Aliased so that build tools do not mistake this for an actual call.
   const require = goog.require;
-  assertThrows('Requiring non-required namespace should fail', function() {
-    require('far.outnotprovided');
-  });
+  // should not throw
+  require('far.outnotprovided');
 
   assertUndefined(goog.global.far);
   assertEvaluatesToFalse(goog.getObjectByName('far.out'));

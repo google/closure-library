@@ -75,6 +75,9 @@ testSuite({
   testNumericValueToString() {
     const numericValueToString = format.numericValueToString;
 
+    assertEquals('Infinity', numericValueToString(Infinity));
+    assertEquals('-Infinity', numericValueToString(-Infinity));
+
     assertEquals('0', numericValueToString(0.0));
     assertEquals('45', numericValueToString(45));
     assertEquals('454', numericValueToString(454));
@@ -136,6 +139,9 @@ testSuite({
     const epsilon = Math.pow(10, -10);
 
     assertNaN(stringToNumericValue('foo'));
+
+    assertEquals(Infinity, stringToNumericValue('Infinity'));
+    assertEquals(-Infinity, stringToNumericValue('-Infinity'));
 
     assertEquals(45, stringToNumericValue('45'));
     assertEquals(-45, stringToNumericValue('-45'));

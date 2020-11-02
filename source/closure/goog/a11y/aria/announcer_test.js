@@ -13,7 +13,9 @@ const MockClock = goog.require('goog.testing.MockClock');
 const State = goog.require('goog.a11y.aria.State');
 const TagName = goog.require('goog.dom.TagName');
 const aria = goog.require('goog.a11y.aria');
+const asserts = goog.require('goog.asserts');
 const googArray = goog.require('goog.array');
+const googDispose = goog.require('goog.dispose');
 const googDom = goog.require('goog.dom');
 const googString = goog.require('goog.string');
 const iframe = goog.require('goog.dom.iframe');
@@ -44,7 +46,7 @@ function checkLiveRegionContains(text, priority, domHelper = undefined) {
 }
 testSuite({
   setUp() {
-    sandbox = googDom.getElement('sandbox');
+    sandbox = asserts.assert(googDom.getElement('sandbox'));
     someDiv = googDom.createDom(TagName.DIV, {id: 'someDiv'}, 'DIV');
     someSpan = googDom.createDom(TagName.SPAN, {id: 'someSpan'}, 'SPAN');
     sandbox.appendChild(someDiv);
@@ -58,7 +60,7 @@ testSuite({
     someDiv = null;
     someSpan = null;
 
-    goog.dispose(mockClock);
+    googDispose(mockClock);
   },
 
   testAnnouncerAndDispose() {
@@ -66,7 +68,7 @@ testSuite({
     const announcer = new Announcer(googDom.getDomHelper());
     announcer.say(text);
     checkLiveRegionContains(text, 'polite');
-    goog.dispose(announcer);
+    googDispose(announcer);
   },
 
   testAnnouncerTwice() {
@@ -76,7 +78,7 @@ testSuite({
     announcer.say(text);
     announcer.say(text2);
     checkLiveRegionContains(text2, 'polite');
-    goog.dispose(announcer);
+    googDispose(announcer);
   },
 
   testAnnouncerTwiceSameMessage() {
@@ -89,7 +91,7 @@ testSuite({
     const secondLiveRegion = getLiveRegion('polite');
     assertEquals(firstLiveRegion, secondLiveRegion);
     checkLiveRegionContains(repeatedText, 'polite');
-    goog.dispose(announcer);
+    googDispose(announcer);
   },
 
   testAnnouncerAssertive() {
@@ -97,7 +99,7 @@ testSuite({
     const announcer = new Announcer(googDom.getDomHelper());
     announcer.say(text, LivePriority.ASSERTIVE);
     checkLiveRegionContains(text, 'assertive');
-    goog.dispose(announcer);
+    googDispose(announcer);
   },
 
   testAnnouncerInIframe() {
@@ -106,9 +108,9 @@ testSuite({
     const helper =
         googDom.getDomHelper(googDom.getFrameContentDocument(frame).body);
     const announcer = new Announcer(helper);
-    announcer.say(text, 'polite', helper);
+    announcer.say(text, /** @type {?} */ ('polite'));
     checkLiveRegionContains(text, 'polite', helper);
-    goog.dispose(announcer);
+    googDispose(announcer);
   },
 
   testAnnouncerWithAriaHidden() {
@@ -125,6 +127,6 @@ testSuite({
     announcer.say(text2);
     checkLiveRegionContains(text2, 'polite');
     assertEquals('', aria.getState(liveRegion, State.HIDDEN));
-    goog.dispose(announcer);
+    googDispose(announcer);
   },
 });

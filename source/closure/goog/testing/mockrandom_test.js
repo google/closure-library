@@ -11,6 +11,7 @@ const MockRandom = goog.require('goog.testing.MockRandom');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
+  /** @suppress {visibility} suppression added to enable type checking */
   testMockRandomInstall() {
     const random = new MockRandom([]);
     const originalRandom = Math.random;
@@ -48,20 +49,32 @@ testSuite({
     const random = new MockRandom([], /* install */ true);
     random.setStrictlyFromSequence(true);
     assertFalse(random.hasMoreValues());
-    assertThrows(() => {
-      Math.random();
-    });
+    assertThrows(/**
+                    @suppress {uselessCode} suppression added to enable type
+                    checking
+                  */
+                 () => {
+                   Math.random();
+                 });
 
     random.inject(3);
     assertTrue(random.hasMoreValues());
-    assertNotThrows(() => {
-      Math.random();
-    });
+    assertNotThrows(/**
+                       @suppress {uselessCode} suppression added to enable type
+                       checking
+                     */
+                    () => {
+                      Math.random();
+                    });
 
     random.setStrictlyFromSequence(false);
     assertFalse(random.hasMoreValues());
-    assertNotThrows(() => {
-      Math.random();
-    });
+    assertNotThrows(/**
+                       @suppress {uselessCode} suppression added to enable type
+                       checking
+                     */
+                    () => {
+                      Math.random();
+                    });
   },
 });

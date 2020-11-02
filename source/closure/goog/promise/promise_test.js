@@ -1948,6 +1948,7 @@ testSuite({
     const err = new GoogPromise.CancellationError('cancel message');
     assertTrue(err instanceof Error);
     assertTrue(err instanceof GoogPromise.CancellationError);
+    assertFalse(err.reportErrorToServer);
     assertEquals('cancel', err.name);
     assertEquals('cancel message', err.message);
   },

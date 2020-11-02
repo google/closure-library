@@ -34,6 +34,7 @@ const implicitlyFalse = [false, 0, '', null, undefined, NaN];
  * rejection.
  * @param {boolean} swallowUnhandledRejections
  * @param {function(function(function(?), function(?))): !IThenable<?>} factory
+ * @suppress {strictMissingProperties} suppression added to enable type checking
  */
 async function internalTestAssertRejects(swallowUnhandledRejections, factory) {
   try {
@@ -84,6 +85,10 @@ async function internalTestAssertRejects(swallowUnhandledRejections, factory) {
 }
 
 function stringForWindowIEHelper() {
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   window.stringForWindowIEResult = _displayStringForValue(window);
 }
 
@@ -296,8 +301,9 @@ testSuite({
     assertThrowsJsUnitException(() => {
       assertNonEmptyString(['hello']);
     }, 'Expected non-empty string but was <hello> (Array)');
-    // Different browsers return different values/types in the failure message
-    // so don't bother checking if the message is exactly as expected.
+    // Different browsers return different values/types in the failure
+    // message so don't bother checking if the message is exactly as
+    // expected.
     assertThrowsJsUnitException(() => {
       assertNonEmptyString(dom.createTextNode('hello'));
     });
@@ -620,6 +626,7 @@ testSuite({
 
     // Check mutation.
     const arr1 = BigInt64Array.of(BigInt(2), BigInt(-5), BigInt(7));
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const arr2 = BigInt64Array.from(arr1);
     assertObjectEquals('BigInt64Arrays should be equal', arr1, arr2);
     ++arr1[1];
@@ -682,7 +689,15 @@ testSuite({
     };
     Thing.prototype.__iterator__ = function() {
       const iter = new IterIterator;
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable
+       * type checking
+       */
       iter.index = 0;
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable
+       * type checking
+       */
       iter.thing = this;
       iter.next = function() {
         if (this.index < this.thing.what.length) {
@@ -695,8 +710,10 @@ testSuite({
     };
 
     const thing1 = new Thing();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     thing1.name = 'thing1';
     const thing2 = new Thing();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     thing2.name = 'thing2';
     thing1.add('red', 'fish');
     thing1.add('blue', 'fish');
@@ -797,6 +814,10 @@ testSuite({
   testAssertObjectEqualsArraysWithExtraProps() {
     const arr1 = [1];
     const arr2 = [1];
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     arr2.foo = 3;
 
     assertThrowsJsUnitException(() => {
@@ -1019,8 +1040,8 @@ testSuite({
   },
 
   /**
-   * Tests `assertContains` and 'assertNotContains` with an arbitrary type that
-   * has a custom `indexOf`.
+   * Tests `assertContains` and 'assertNotContains` with an arbitrary type
+   * that has a custom `indexOf`.
    */
   testAssertContainsAndAssertNotContainsOnCustomObjectWithIndexof() {
     const valueContained = {toString: () => 'I am in'};
@@ -1109,15 +1130,15 @@ testSuite({
 
   testAssertThrowsThrowsIfJsUnitException() {
     // Asserts that assertThrows will throw a JsUnitException if the method
-    // passed to assertThrows throws a JsUnitException of its own. assertThrows
-    // should not be used for catching JsUnitExceptions.
+    // passed to assertThrows throws a JsUnitException of its own.
+    // assertThrows should not be used for catching JsUnitExceptions.
     const e = assertThrowsJsUnitException(() => {
       assertThrows(() => {
         // We need to invalidate this exception so it's not flagged as a
-        // legitimate failure by the test framework. The only way to get at the
-        // exception thrown by assertTrue is to catch it so we can invalidate
-        // it. We then need to rethrow it so the surrounding assertThrows
-        // behaves as expected.
+        // legitimate failure by the test framework. The only way to get at
+        // the exception thrown by assertTrue is to catch it so we can
+        // invalidate it. We then need to rethrow it so the surrounding
+        // assertThrows behaves as expected.
         try {
           assertTrue(false);
         } catch (ex) {
@@ -1154,8 +1175,8 @@ testSuite({
 
   testAssertNotThrows() {
     if (product.SAFARI) {
-      // TODO(user): Disabled so we can get the rest of the Closure test
-      // suite running in a continuous build. Will investigate later.
+      // TODO(user): Disabled so we can get the rest of the Closure
+      // test suite running in a continuous build. Will investigate later.
       return;
     }
 
@@ -1294,8 +1315,8 @@ testSuite({
     // The following test fails unexpectedly. The bug is tracked at
     // http://code.google.com/p/closure-library/issues/detail?id=419
     // assertThrows(
-    //     'assertArrayEquals distinguishes undefined items from sparse arrays',
-    //     function() {
+    //     'assertArrayEquals distinguishes undefined items from sparse
+    //     arrays', function() {
     //       assertArrayEquals(a1, a2);
     //     });
 
@@ -1345,7 +1366,8 @@ testSuite({
     a2[-1] = -1;
     // The following test fails unexpectedly. The bug is tracked at
     // http://code.google.com/p/closure-library/issues/detail?id=418
-    // assertThrows('assertObjectEquals compares negative indexes', function() {
+    // assertThrows('assertObjectEquals compares negative indexes',
+    // function() {
     //   assertObjectEquals(a1, a2);
     // });
   },
@@ -1566,12 +1588,16 @@ testSuite({
         createBinTree(4, null), createBinTree(5, null)));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testStringForWindowIE() {
     if (userAgent.IE && !userAgent.isVersionOrHigher('8')) {
-      // NOTE(user): This test sees of we are being affected by a JScript bug
-      // in try/finally handling. This bug only affects the lowest try/finally
-      // block in the stack. Calling this function via VBScript allows
-      // us to run the test synchronously in an empty JS stack.
+      // NOTE(user): This test sees of we are being affected by a JScript
+      // bug in try/finally handling. This bug only affects the lowest
+      // try/finally block in the stack. Calling this function via VBScript
+      // allows us to run the test synchronously in an empty JS stack.
       window.execScript('stringForWindowIEHelper()', 'vbscript');
       assertEquals('<[object]> (Object)', window.stringForWindowIEResult);
     }
@@ -1679,6 +1705,7 @@ testSuite({
 
   testToArrayForIterable() {
     const s = new Set([3]);
+    /** @suppress {visibility} suppression added to enable type checking */
     const arr = asserts.toArray_(s);
     assertEquals(3, arr[0]);
   },

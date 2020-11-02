@@ -158,18 +158,24 @@ testSuite({
               dom.createDom(
                   TagName.INPUT, {'id': type, 'type': InputType.CHECKBOX}),
               type, dom.createDom(TagName.BR)));
-      events.listen(testButton, type, (e) => {
-        if (dom.getElement(e.type).checked) {
-          e.preventDefault();
-        }
+      events.listen(
+          testButton, type, /**
+                               @suppress {strictMissingProperties} suppression
+                               added to enable type checking
+                             */
+          (e) => {
+            if (dom.getElement(e.type).checked) {
+              e.preventDefault();
+            }
 
-        log.append(
-            document.createElement('br'),
-            googString.subs('%s (%s, %s)', e.type, e.clientX, e.clientY));
-      });
+            log.append(
+                document.createElement('br'),
+                googString.subs('%s (%s, %s)', e.type, e.clientX, e.clientY));
+          });
     }
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMouseEnter() {
     testingEvents.fireMouseEnterEvent(root, null);
     testingEvents.fireMouseEnterEvent(root, null, coordinate);
@@ -177,6 +183,7 @@ testSuite({
     assertCoordinates([style.getClientPosition(root), coordinate]);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMouseLeave() {
     testingEvents.fireMouseLeaveEvent(root, null);
     testingEvents.fireMouseLeaveEvent(root, null, coordinate);
@@ -203,6 +210,7 @@ testSuite({
     assertEventTypes(['focus']);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testFocusIn() {
     testingEvents.fireFocusInEvent(root);
     assertEventTypes([EventType.FOCUSIN]);
@@ -220,6 +228,7 @@ testSuite({
     assertCoordinates([rootPosition, rootPosition, rootPosition]);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testClickSequenceWithCoordinate() {
     assertTrue(testingEvents.fireClickSequence(root, null, coordinate));
     assertCoordinates([coordinate, coordinate, coordinate]);
@@ -259,6 +268,7 @@ testSuite({
     assertCoordinates([coordinate, coordinate]);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testClickSequenceWithEventProperty() {
     assertTrue(testingEvents.fireClickSequence(
         root, null, undefined, {shiftKey: true}));
@@ -271,6 +281,7 @@ testSuite({
     assertEventTypes(['mousedown', 'mouseup', 'click']);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testClickSequenceCancellingMousedownWithCoordinate() {
     preventDefaultEventType('mousedown');
     assertFalse(testingEvents.fireClickSequence(root, null, coordinate));
@@ -283,6 +294,7 @@ testSuite({
     assertEventTypes(['mousedown', 'mouseup', 'click']);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testClickSequenceCancellingMouseupWithCoordinate() {
     preventDefaultEventType('mouseup');
     assertFalse(testingEvents.fireClickSequence(root, null, coordinate));
@@ -295,6 +307,7 @@ testSuite({
     assertEventTypes(['mousedown', 'mouseup', 'click']);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testClickSequenceCancellingClickWithCoordinate() {
     preventDefaultEventType('click');
     assertFalse(testingEvents.fireClickSequence(root, null, coordinate));
@@ -563,6 +576,10 @@ testSuite({
         eventCount);
   },
 
+  /**
+     @suppress {checkTypes,missingProperties,strictMissingProperties}
+     suppression added to enable type checking
+   */
   testMixinListenable() {
     const obj = {};
     obj.doFoo = recordFunction();

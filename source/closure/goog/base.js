@@ -1068,41 +1068,6 @@ goog.hasBadLetScoping = null;
 
 
 /**
- * @return {boolean}
- * @package Visible for testing.
- */
-goog.useSafari10Workaround = function() {
-  if (goog.hasBadLetScoping == null) {
-    var hasBadLetScoping;
-    try {
-      hasBadLetScoping = !eval(
-          '"use strict";' +
-          'let x = 1; function f() { return typeof x; };' +
-          'f() == "number";');
-    } catch (e) {
-      // Assume that ES6 syntax isn't supported.
-      hasBadLetScoping = false;
-    }
-    goog.hasBadLetScoping = hasBadLetScoping;
-  }
-  return goog.hasBadLetScoping;
-};
-
-
-/**
- * @param {string} moduleDef
- * @return {string}
- * @package Visible for testing.
- */
-goog.workaroundSafari10EvalBug = function(moduleDef) {
-  return '(function(){' + moduleDef +
-      '\n' +  // Terminate any trailing single line comment.
-      ';' +   // Terminate any trailing expression.
-      '})();\n';
-};
-
-
-/**
  * @param {function(?):?|string} moduleDef The module definition.
  */
 goog.loadModule = function(moduleDef) {
@@ -1123,10 +1088,6 @@ goog.loadModule = function(moduleDef) {
     if (typeof moduleDef === 'function') {
       exports = moduleDef.call(undefined, exports);
     } else if (typeof moduleDef === 'string') {
-      if (goog.useSafari10Workaround()) {
-        moduleDef = goog.workaroundSafari10EvalBug(moduleDef);
-      }
-
       exports = goog.loadModuleFromSource_.call(undefined, exports, moduleDef);
     } else {
       throw new Error('Invalid module definition');
@@ -1172,7 +1133,7 @@ goog.loadModuleFromSource_ =
       // NOTE: we avoid declaring parameters or local variables here to avoid
       // masking globals or leaking values into the module definition.
       'use strict';
-      eval(arguments[1]);
+      eval(goog.CLOSURE_EVAL_PREFILTER_.createScript(arguments[1]));
       return exports;
     });
 
@@ -2548,9 +2509,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   goog.DebugLoader_.prototype.load_ = function(namespace) {
     if (!this.getPathFromDeps_(namespace)) {
       var errorMessage = 'goog.require could not find: ' + namespace;
-
       goog.logToConsole_(errorMessage);
-      throw Error(errorMessage);
     } else {
       var loader = this;
 
@@ -3862,3 +3821,25 @@ goog.createTrustedTypesPolicy = function(name) {
   }
   return policy;
 };
+
+if (!COMPILED) {
+  var isNotChrome87 = false;
+  // Cannot run check for Chrome <87 bug in case of strict CSP environments.
+  // TODO(user): Remove once Chrome <87 bug is no longer a problem.
+  try {
+    isNotChrome87 = eval(goog.global.trustedTypes.emptyScript) !==
+        goog.global.trustedTypes.emptyScript;
+  } catch (err) {
+  }
+
+  /**
+   * Trusted Types for running dev servers.
+   *
+   * @private @const
+   */
+  goog.CLOSURE_EVAL_PREFILTER_ =
+      // Detect Chrome <87 bug with TT and eval.
+      goog.global.trustedTypes && isNotChrome87 &&
+          goog.createTrustedTypesPolicy('goog#base#devonly#eval') ||
+      {createScript: goog.identity_};
+}

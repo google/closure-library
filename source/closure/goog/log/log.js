@@ -627,6 +627,7 @@ goog.log.LogRecordHandler;
 
 /**
  * A LogRegistryEntry contains data about a Logger.
+ * @package
  * @final
  */
 goog.log.LogRegistryEntry = class LogRegistryEntry {
@@ -710,6 +711,7 @@ goog.log.LogRegistryEntry = class LogRegistryEntry {
  * A LogRegistry owns references to all loggers, and is responsible for storing
  * all the internal state needed for loggers to operate correctly.
  *
+ * @package
  * @final
  */
 goog.log.LogRegistry = class LogRegistry {
@@ -762,6 +764,15 @@ goog.log.LogRegistry = class LogRegistry {
 
       return logRegistryEntry;
     }
+  }
+
+  /**
+   * Get a list of all loggers.
+   * @return {!Array<!goog.log.Logger>}
+   */
+  getAllLoggers() {
+    return Object.keys(this.entries)
+        .map(loggerName => this.entries[loggerName]);
   }
 };
 
@@ -933,6 +944,18 @@ goog.log.isLoggable = function(logger, level) {
     return level.value >= goog.log.getEffectiveLevel(logger).value;
   }
   return false;
+};
+
+
+/**
+ * Gets a list of all loggers.
+ * @return {!Array<!goog.log.Logger>}
+ */
+goog.log.getAllLoggers = function() {
+  if (goog.log.ENABLED) {
+    return goog.log.LogRegistry.getInstance().getAllLoggers();
+  }
+  return [];
 };
 
 

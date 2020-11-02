@@ -38,6 +38,7 @@ testSuite({
     const mock = new Mock(MockMock);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testAdd() {
     const mockMock = new MockMock();
 
@@ -45,6 +46,7 @@ testSuite({
     assertEquals(mockMock, control.addMock(mockMock));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testReplayAll() {
     const mockMock1 = new MockMock();
     const mockMock2 = new MockMock();
@@ -60,6 +62,7 @@ testSuite({
     assertFalse(mockMockExcluded.replayCalled);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testResetAll() {
     const mockMock1 = new MockMock();
     const mockMock2 = new MockMock();
@@ -75,6 +78,7 @@ testSuite({
     assertFalse(mockMockExcluded.resetCalled);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testVerifyAll() {
     const mockMock1 = new MockMock();
     const mockMock2 = new MockMock();
@@ -90,15 +94,18 @@ testSuite({
     assertFalse(mockMockExcluded.verifyCalled);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testTearDownAll() {
     const mockMock1 = new MockMock();
     const mockMock2 = new MockMock();
     const mockMockExcluded = new MockMock();
 
     // $tearDown is optional.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     mockMock2.$tearDown = function() {
       this.tearDownCalled = true;
     };
+    /** @suppress {checkTypes} suppression added to enable type checking */
     mockMockExcluded.$tearDown = function() {
       this.tearDownCalled = true;
     };

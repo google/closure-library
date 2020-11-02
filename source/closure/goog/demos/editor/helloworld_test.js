@@ -55,6 +55,7 @@ testSuite({
     }
 
     fieldMock.$replay();
+    /** @suppress {visibility} suppression added to enable type checking */
     const result = plugin.execCommandInternal(HelloWorld.COMMAND.HELLO_WORLD);
     assertUndefined(result);
     const spans = FIELD.getElementsByTagName('span');

@@ -49,6 +49,7 @@ testSuite({
   },
 
   testPopupCreation() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const picker = new PopupEmojiPicker();
     picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
     picker.createDom();
@@ -56,6 +57,7 @@ testSuite({
   },
 
   testAutoHideIsSetProperly() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const picker = new PopupEmojiPicker();
     picker.addEmojiGroup(emojiGroup1[0], emojiGroup1[1]);
     picker.createDom();

@@ -55,6 +55,7 @@ testSuite({
 
   testOffsetInDays() {
     const d = new DateDate(2000, 0, 1);
+    /** @suppress {visibility} suppression added to enable type checking */
     const f = DateRange.offsetInDays_;
 
     assertTrue('same day', d.equals(f(d, 0)));
@@ -64,6 +65,7 @@ testSuite({
 
   testOffsetInMonths() {
     const d = new DateDate(2008, 9, 13);
+    /** @suppress {visibility} suppression added to enable type checking */
     const f = DateRange.offsetInMonths_;
 
     assertTrue('this month', new DateDate(2008, 9, 1).equals(f(d, 0)));

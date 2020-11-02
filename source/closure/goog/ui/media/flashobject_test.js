@@ -15,6 +15,7 @@ const MockControl = goog.require('goog.testing.MockControl');
 const TagName = goog.require('goog.dom.TagName');
 const dom = goog.require('goog.dom');
 const events = goog.require('goog.events');
+const jsunit = goog.require('goog.testing.jsunit');
 const testSuite = goog.require('goog.testing.testSuite');
 const testing = goog.require('goog.html.testing');
 const testingEvents = goog.require('goog.testing.events');
@@ -22,7 +23,8 @@ const userAgent = goog.require('goog.userAgent');
 
 // Delay running the tests after page load. This test has some asynchronous
 // behavior that interacts with page load detection.
-goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS = 500;
+/** @suppress {constantProperty} suppression added to enable type checking */
+jsunit.AUTO_RUN_DELAY_IN_MS = 500;
 
 const FLASH_URL = testing.newTrustedResourceUrlForTest(
     'http://www.youtube.com/v/RbI7cCp0v6w&hl=en&fs=1');
@@ -71,6 +73,7 @@ function assertContainsParam(element, expectedName, expectedValue) {
 }
 
 testSuite({
+  /** @suppress {missingProperties} suppression added to enable type checking */
   setUp() {
     control.$resetAll();
     domHelper.getDocument().$returns(documentHelper).$anyTimes();
@@ -85,11 +88,13 @@ testSuite({
   testInstantiationAndRendering() {
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
     flash.render();
     flash.dispose();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRenderedWithCorrectAttributes() {
     if (userAgent.IE && !userAgent.isDocumentModeOrHigher(11)) {
       return;
@@ -97,6 +102,7 @@ testSuite({
 
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
     flash.setAllowScriptAccess('allowScriptAccess');
     flash.setBackgroundColor('backgroundColor');
@@ -123,6 +129,7 @@ testSuite({
     assertEquals('wmode', el.getAttribute('wmode'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRenderedWithCorrectAttributesOldIe() {
     if (!userAgent.IE || userAgent.isDocumentModeOrHigher(11)) {
       return;
@@ -130,6 +137,7 @@ testSuite({
 
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
     flash.setAllowScriptAccess('allowScriptAccess');
     flash.setBackgroundColor('backgroundColor');
@@ -161,6 +169,7 @@ testSuite({
   testSetFlashVar() {
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
 
     assertTrue(flash.getFlashVars().isEmpty());
@@ -177,6 +186,7 @@ testSuite({
   testAddFlashVars() {
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
 
     assertTrue(flash.getFlashVars().isEmpty());
@@ -189,10 +199,14 @@ testSuite({
     flash.dispose();
   },
 
-  /** @deprecated Remove once setFlashVars is removed. */
+  /**
+   * @deprecated Remove once setFlashVars is removed.
+   * @suppress {checkTypes} suppression added to enable type checking
+   */
   testSetFlashVarsUsingFalseAsTheValue() {
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
 
     assertTrue(flash.getFlashVars().isEmpty());
@@ -210,6 +224,7 @@ testSuite({
     control.$replayAll();
 
     assertThrows(() => {
+      /** @suppress {checkTypes} suppression added to enable type checking */
       const flash = new FlashObject(FLASH_URL, domHelper);
       flash.setFlashVars('foo=bar');
       flash.dispose();
@@ -219,6 +234,7 @@ testSuite({
   testSetFlashVarUrlEncoding() {
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
     flash.setFlashVar('foo', 'bar and some extra spaces');
     flash.render();
@@ -231,6 +247,7 @@ testSuite({
   testThrowsRequiredVersionOfFlashNotAvailable() {
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
     flash.setRequiredVersion('999.999.999');
 
@@ -246,6 +263,7 @@ testSuite({
   testIsLoadedForIE() {
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
     flash.render();
     assertNotThrows('isLoaded() should not throw exception', () => {
@@ -257,6 +275,7 @@ testSuite({
   testIsLoadedAfterDispose() {
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
     flash.render();
     // TODO(goto): find out a way to test the loadness of flash movies on
@@ -269,6 +288,10 @@ testSuite({
     assertFalse(flash.isLoaded());
   },
 
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testPropagatesEventsConsistently() {
     const event = control.createLooseMock(GoogEvent);
 
@@ -277,9 +300,18 @@ testSuite({
 
     control.$replayAll();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const flash = new FlashObject(FLASH_URL, domHelper);
     flash.render();
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.target = flash.getElement();
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.type = EventType.CLICK;
     testingEvents.fireBrowserEvent(event);
     flash.dispose();

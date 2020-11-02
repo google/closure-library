@@ -16,11 +16,20 @@ testSuite({
     function SingletonClass() {}
     goog.addSingletonGetter(SingletonClass);
 
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const s1 = SingletonClass.getInstance();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const s2 = SingletonClass.getInstance();
     assertEquals('second getInstance call returns the same instance', s1, s2);
 
     singleton.resetAll();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const s3 = SingletonClass.getInstance();
     assertNotEquals('getInstance returns a new instance after reset', s1, s3);
   },

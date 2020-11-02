@@ -100,9 +100,9 @@ var assertNoIntersect = function(a, b, opt_c) {
 /**
  * Asserts that the element must have the specified width.
  * @param {Element|string} a The first element or optionally the comment string.
- * @param {Element} b The second element or the first element if comment string
+ * @param {Element|number} b The second element or the first element if comment string
  *     is present.
- * @param {Element=} opt_c The second element if comment string is present.
+ * @param {(Element|number)=} opt_c The second element if comment string is present.
  */
 var assertWidth = function(a, b, opt_c) {
   'use strict';
@@ -151,9 +151,9 @@ var assertWidthWithinTolerance = function(a, b, c, opt_d) {
 /**
  * Asserts that the element must have the specified height.
  * @param {Element|string} a The first element or optionally the comment string.
- * @param {Element} b The second element or the first element if comment string
+ * @param {Element|number} b The second element or the first element if comment string
  *     is present.
- * @param {Element=} opt_c The second element if comment string is present.
+ * @param {(Element|number)=} opt_c The second element if comment string is present.
  */
 var assertHeight = function(a, b, opt_c) {
   'use strict';

@@ -136,16 +136,24 @@ testSuite({
     assertThrows(() => {
       new Mock(RealObject, true, true);
     });
-    assertThrows(() => {
-      new Mock(1, false, true);
-    });
+    assertThrows(/**
+                    @suppress {checkTypes} suppression added to enable type
+                    checking
+                  */
+                 () => {
+                   new Mock(1, false, true);
+                 });
   },
 
   testValidConstructorArgument() {
     const someNamespace = {};
-    assertThrows(() => {
-      new Mock(someNamespace.RealObjectWithTypo);
-    });
+    assertThrows(/**
+                    @suppress {missingProperties} suppression added to enable
+                    type checking
+                  */
+                 () => {
+                   new Mock(someNamespace.RealObjectWithTypo);
+                 });
   },
 
   testArgumentsAsString() {
@@ -157,6 +165,7 @@ testSuite({
 
   testThrowCallExceptionBadArgs() {
     let msg;
+    /** @suppress {visibility} suppression added to enable type checking */
     mock.$throwException = (m) => {
       msg = m;
     };
@@ -174,6 +183,10 @@ testSuite({
 
   testThrowCallExceptionUnexpected() {
     let msg;
+    /**
+     * @suppress {visibility,duplicate} suppression added to enable type
+     * checking
+     */
     mock.$throwException = (m) => {
       msg = m;
     };
@@ -187,6 +200,10 @@ testSuite({
 
   testThrowCallExceptionUnexpectedWithNext() {
     let msg;
+    /**
+     * @suppress {visibility,duplicate} suppression added to enable type
+     * checking
+     */
     mock.$throwException = (m) => {
       msg = m;
     };
@@ -207,24 +224,33 @@ testSuite({
 
   // This tests that base Object functions which are not enumerable in IE can
   // be mocked correctly.
+  /**
+     @suppress {checkTypes,missingProperties,strictMissingProperties}
+     suppression added to enable type checking
+   */
   testBindNonEnumerableFunctions() {
     // Create Foo and override non enumerable functions.
     const Foo = class {};
     Foo.prototype.constructor = () => {
       fail('real object should never be called');
     };
+    /** @suppress {missingReturn} suppression added to enable type checking */
     Foo.prototype.hasOwnProperty = () => {
       fail('real object should never be called');
     };
+    /** @suppress {missingReturn} suppression added to enable type checking */
     Foo.prototype.isPrototypeOf = () => {
       fail('real object should never be called');
     };
+    /** @suppress {missingReturn} suppression added to enable type checking */
     Foo.prototype.propertyIsEnumerable = () => {
       fail('real object should never be called');
     };
+    /** @suppress {missingReturn} suppression added to enable type checking */
     Foo.prototype.toLocaleString = () => {
       fail('real object should never be called');
     };
+    /** @suppress {missingReturn} suppression added to enable type checking */
     Foo.prototype.toString = () => {
       fail('real object should never be called');
     };
@@ -255,6 +281,10 @@ testSuite({
     mockControl.$verifyAll();
   },
 
+  /**
+     @suppress {strictMissingProperties,missingProperties} suppression added to
+     enable type checking
+   */
   testMockInheritedMethods() {
     const SubType = () => {};
     goog.inherits(SubType, RealObject);
@@ -276,6 +306,7 @@ testSuite({
     mockControl.$verifyAll();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testMockStaticMethods() {
     const SomeType = () => {};
     SomeType.staticMethod = () => {
@@ -294,6 +325,10 @@ testSuite({
     mockControl.$verifyAll();
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testMockEs6ClassMethods() {
     const Foo = class {
       a() {
@@ -311,11 +346,19 @@ testSuite({
     mockControl.$verifyAll();
   },
 
+  /**
+     @suppress {strictMissingProperties,missingProperties} suppression added to
+     enable type checking
+   */
   testMockEs6ClassStaticMethods() {
     const Foo = class {
       static a() {
         fail('real object should never be called');
       }
+      /**
+       * @suppress {checkPrototypalTypes} suppression added to enable type
+       * checking
+       */
       static apply() {
         fail('real object should never be called');
       }
@@ -335,6 +378,10 @@ testSuite({
     mockControl.$verifyAll();
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   async testLooseMockAsynchronousVerify() {
     const mockControl = new MockControl();
     const looseMock = mockControl.createLooseMock(RealObject);
@@ -344,15 +391,29 @@ testSuite({
     strictMock.a().$returns('a');
 
     mockControl.$replayAll();
-    setTimeout(() => {
-      looseMock.a();
-    }, 0);
-    setTimeout(() => {
-      strictMock.a();
-    }, 0);
+    setTimeout(/**
+                  @suppress {strictMissingProperties} suppression added to
+                  enable type checking
+                */
+               () => {
+                 looseMock.a();
+               },
+               0);
+    setTimeout(/**
+                  @suppress {strictMissingProperties} suppression added to
+                  enable type checking
+                */
+               () => {
+                 strictMock.a();
+               },
+               0);
     await mockControl.$waitAndVerifyAll();
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testVerifyWhileInRecord() {
     const mockControl = new MockControl();
     const looseMock = mockControl.createLooseMock(RealObject);
@@ -378,6 +439,7 @@ testSuite({
     fail('Expected exception');
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testMockRecordWithToString() {
     const string = 'stringified';
     class WithCustomToString {

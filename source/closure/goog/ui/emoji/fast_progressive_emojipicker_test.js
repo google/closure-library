@@ -48,6 +48,7 @@ function si(
 
 // This group contains a mix of sprited emoji via css, sprited emoji via
 // metadata, and non-sprited emoji.
+/** @suppress {checkTypes} suppression added to enable type checking */
 const spritedEmoji2 = [
   'Emoji 1',
   [
@@ -98,6 +99,8 @@ testSuite({
   /**
    * Checks and verifies the structure of a progressive fast-loading picker
    * after the animated emoji have loaded.
+   * @suppress {strictMissingProperties,checkTypes} suppression added to enable
+   * type checking
    */
   testStructure() {
     const emoji = spritedEmoji2;

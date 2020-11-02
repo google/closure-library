@@ -48,6 +48,7 @@ testSuite({
         'value-b', model.findCategoryWithScheme('scheme-b').getValue());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMediaModelFindCreditsWithRole() {
     assertEquals(0, model.findCreditsWithRole('no such role').length);
 

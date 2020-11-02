@@ -19,6 +19,7 @@ const PHOTO_URL = testing.newTrustedResourceUrlForTest('http://foo/bar.jpg');
 
 testSuite({
   setUp() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const photo = new MediaModel(PHOTO_URL, 'title', 'description');
     photo.setPlayer(new MediaModel.Player(PHOTO_URL));
     control = Photo.newControl(photo);

@@ -14,6 +14,7 @@ testSuite({
   /**
    * Tests that a MockRange can be created successfully, a call to a mock
    * method can be recorded, and the correct behavior replayed and verified.
+   * @suppress {missingProperties} suppression added to enable type checking
    */
   testMockMethod() {
     const mockRange = new MockRange();

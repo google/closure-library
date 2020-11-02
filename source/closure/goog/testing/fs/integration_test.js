@@ -24,6 +24,7 @@ const Behavior = FsDirectoryEntry.Behavior;
 const EventType = FsFileSaver.EventType;
 const ReadyState = FsFileSaver.ReadyState;
 
+/** @suppress {checkTypes} suppression added to enable type checking */
 const deferredFs = testingFs.getTemporary();
 
 function loadTestDir() {
@@ -71,6 +72,7 @@ function checkFileContent(content, fileEntry) {
       .then(goog.partial(assertEquals, content));
 }
 
+/** @suppress {checkTypes} suppression added to enable type checking */
 function checkFileRemoved(filename) {
   return loadFile(filename)
       .then(goog.partial(fail, 'expected file to be removed'))

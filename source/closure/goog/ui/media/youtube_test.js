@@ -227,6 +227,7 @@ testSuite({
   },
 
   testUrlMatcher() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const matcher = YoutubeModel.MATCHER_;
     assertTrue(matcher.test('http://www.youtube.com/watch?v=55D-ybnYQSs'));
     assertTrue(matcher.test('https://youtube.com/watch?v=55D-ybnYQSs'));

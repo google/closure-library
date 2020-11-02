@@ -83,6 +83,7 @@ testSuite({
     assertFalse('2000 was not an ISO leap year', f(2000));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetNumberOfDaysInMonth() {
     const f = googRequiredGoogDate.getNumberOfDaysInMonth;
 
@@ -771,6 +772,7 @@ testSuite({
     assertEquals(`Got 00 seconds from ${iso}`, 0, date.getUTCSeconds());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   test_setIso8601TimeOnly_() {
     if (product.SAFARI) {
       // TODO(user): Disabled so we can get the rest of the Closure test
@@ -1014,6 +1016,7 @@ testSuite({
     assertEquals('2008-02-17 + 1d = 2008-02-18', '20080218', d.toIsoString());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDateEquals() {
     let d1 = new DateDate(2004, month.MAR, 1);
     let d2 = new DateDate(2004, month.MAR, 1);
@@ -1092,6 +1095,7 @@ testSuite({
     assertEquals(new Date(2002, 9, 2, 8).getTime(), date.getTime());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDateTimeEquals() {
     let d1 = new DateTime(2004, month.MAR, 1, 12, 30, 30);
     let d2 = new DateTime(2004, month.MAR, 1, 12, 30, 30);

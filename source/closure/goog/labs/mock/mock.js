@@ -57,12 +57,13 @@ goog.labs.mock.mock = function(objectOrClass) {
 /**
  * Mocks a given function.
  *
- * @param {!Function} func A function to be mocked.
+ * @param {!Function=} opt_func A function to be mocked.
  * @return {!Function} The mocked function.
  */
-goog.labs.mock.mockFunction = function(func) {
+goog.labs.mock.mockFunction = function(opt_func) {
   'use strict';
-  var mockFuncManager = new goog.labs.mock.MockFunctionManager_(func);
+  var mockFuncManager = new goog.labs.mock.MockFunctionManager_(
+      goog.labs.mock.getFunctionName_(opt_func || function() {}));
   var mockedFunction = mockFuncManager.getMockedItem();
   goog.asserts.assertFunction(mockedFunction);
   return /** @type {!Function} */ (mockedFunction);
@@ -896,16 +897,16 @@ goog.labs.mock.MockSpyManager_.prototype.getNextBinding = function(
  * @struct
  * @constructor
  * @extends {goog.labs.mock.MockManager_}
- * @param {!Function} func The function to set up the mock for.
+ * @param {string} name The name of the function to set up the mock for.
  * @private
  * @suppress {strictMissingProperties} Part of the
  * go/strict_warnings_migration
  */
-goog.labs.mock.MockFunctionManager_ = function(func) {
+goog.labs.mock.MockFunctionManager_ = function(name) {
   'use strict';
   goog.labs.mock.MockFunctionManager_.base(this, 'constructor');
 
-  this.func_ = func;
+  this.name_ = name;
 
   /**
    * The stub binder used to create bindings.
@@ -958,8 +959,7 @@ goog.labs.mock.MockFunctionManager_.prototype.useMockedFunctionName_ = function(
   return function(var_args) {
     'use strict';
     var args = goog.array.clone(arguments);
-    var name = '#mockFor<' +
-        goog.labs.mock.getFunctionName_(mockFunctionManager.func_) + '>';
+    var name = '#mockFor<' + mockFunctionManager.name_ + '>';
     goog.array.insertAt(args, name, 0);
     return nextFunc.apply(mockFunctionManager, args);
   };

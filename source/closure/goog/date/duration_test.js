@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} swapping goog.i18n.DateTimeSymbols
+ */
+
 goog.module('goog.date.durationTest');
 goog.setTestOnly();
 
