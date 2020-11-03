@@ -17,10 +17,9 @@ goog.require('goog.net.XmlHttpFactory');
 
 
 /**
- * @private
  * @record
  */
-goog.net.FetchXmlHttpFactoryOptions_ = function() {
+goog.net.FetchXmlHttpFactoryOptions = function() {
   /**
    * @type {!WorkerGlobalScope|undefined} The Service Worker global scope.
    */
@@ -39,7 +38,7 @@ goog.net.FetchXmlHttpFactoryOptions_ = function() {
 /**
  * Factory for creating Xhr objects that uses the native fetch() method.
  * https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
- * @param {!goog.net.FetchXmlHttpFactoryOptions_|!WorkerGlobalScope} opts
+ * @param {!goog.net.FetchXmlHttpFactoryOptions|!WorkerGlobalScope} opts
  * @extends {goog.net.XmlHttpFactory}
  * @struct
  * @constructor
