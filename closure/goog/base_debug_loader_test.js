@@ -115,7 +115,9 @@ function setUp() {
 
 
 function tearDown() {
-  goog.setCssNameMapping(undefined);
+  // Use computed property here to avoid the compiler check that the value
+  // is valid.
+  goog['setCssNameMapping'](undefined);
   stubs.reset();
   goog.bind = originalGoogBind;
 }
