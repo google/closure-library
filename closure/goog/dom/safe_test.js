@@ -889,4 +889,17 @@ testSuite({
       safe.createImageFromBlob(blob);
     });
   },
+
+  testCreateContextualFragment() {
+    if (userAgent.IE && !userAgent.isVersionOrHigher('11')) {
+      return;
+    }
+    const html = SafeHtml.create('A', {'class': 'b'}, 'c');
+    const node = safe.createContextualFragment(
+                         /** @type {!Range} */ (document.createRange()), html)
+                     .childNodes[0];
+    assertEquals('A', node.tagName);
+    assertEquals('b', node.className);
+    assertEquals('c', node.textContent);
+  },
 });

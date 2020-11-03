@@ -843,3 +843,16 @@ goog.dom.safe.createImageFromBlob = function(blob) {
               goog.string.Const.from('Image blob URL.'), objectUrl));
   return image;
 };
+
+/**
+ * Creates a DocumentFragment by parsing html in the context of a Range.
+ * @param {!Range} range The Range object starting from the context node to
+ * create a fragment in.
+ * @param {!goog.html.SafeHtml} html HTML to create a fragment from.
+ * @return {?DocumentFragment}
+ */
+goog.dom.safe.createContextualFragment = function(range, html) {
+  'use strict';
+  return range.createContextualFragment(
+      goog.html.SafeHtml.unwrapTrustedHTML(html));
+};
