@@ -2301,14 +2301,23 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     });
     // ** and **= are the only new features in 'es7'
     addNewerLanguageTranspilationCheck('es7', function() {
-      return evalCheck('2 ** 2 == 4');
+      return evalCheck('2**3==8');
     });
     // async functions are the only new features in 'es8'
     addNewerLanguageTranspilationCheck('es8', function() {
-      return evalCheck('async () => 1, true');
+      return evalCheck('async()=>1,1');
     });
     addNewerLanguageTranspilationCheck('es9', function() {
-      return evalCheck('({...rest} = {}), true');
+      return evalCheck('({...rest}={}),1');
+    });
+    // optional catch binding, unescaped unicode paragraph separator in strings
+    addNewerLanguageTranspilationCheck('es_2019', function() {
+      return evalCheck('let r;try{throw 0}catch{r="\u2029"};r');
+    });
+    // optional chaining, nullish coalescing
+    // untested/unsupported: bigint, import meta
+    addNewerLanguageTranspilationCheck('es_2020', function() {
+      return evalCheck('null?.x??1');
     });
     addNewerLanguageTranspilationCheck('es_next', function() {
       return false;  // assume it always need to transpile
