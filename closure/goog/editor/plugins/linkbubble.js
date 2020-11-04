@@ -24,6 +24,7 @@ goog.require('goog.style');
 goog.require('goog.ui.editor.messages');
 goog.require('goog.uri.utils');
 goog.require('goog.window');
+goog.requireType('goog.events.BrowserEvent');
 
 
 
