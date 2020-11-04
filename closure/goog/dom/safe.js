@@ -778,8 +778,15 @@ goog.dom.safe.openInWindow = function(
   var name = opt_name instanceof goog.string.Const ?
       goog.string.Const.unwrap(opt_name) :
       opt_name || '';
-  return win.open(
-      goog.html.SafeUrl.unwrap(safeUrl), name, opt_specs, opt_replace);
+  // Do not pass opt_specs and opt_replace to window.open unless they were
+  // provided by the caller. IE11 will use it as a signal to open a new window
+  // rather than a new tab (even if they're undefined).
+  if (opt_specs !== undefined || opt_replace !== undefined) {
+    return win.open(
+        goog.html.SafeUrl.unwrap(safeUrl), name, opt_specs, opt_replace);
+  } else {
+    return win.open(goog.html.SafeUrl.unwrap(safeUrl), name);
+  }
 };
 
 
