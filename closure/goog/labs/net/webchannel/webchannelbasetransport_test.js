@@ -362,4 +362,39 @@ testSuite({
     simulateMessageEvent(channel, data);
     assertTrue(eventFired);
   },
+
+  testEnableOriginTrials() {
+    const webChannelTransport = new WebChannelBaseTransport();
+    let options = {
+      'enableOriginTrials': true,
+    };
+    webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+    webChannel.open();
+
+    let enabled = webChannel.channel_.enableOriginTrials_;
+    assertTrue(enabled);
+
+    options = {
+      'enableOriginTrials': false,
+    };
+    webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+    webChannel.open();
+
+    enabled = webChannel.channel_.enableOriginTrials_;
+    assertFalse(enabled);
+
+    options = {};
+    webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+    webChannel.open();
+
+    enabled = webChannel.channel_.enableOriginTrials_;
+    assertTrue(enabled);
+
+    options = undefined;
+    webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+    webChannel.open();
+
+    enabled = webChannel.channel_.enableOriginTrials_;
+    assertTrue(enabled);
+  },
 });
