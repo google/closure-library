@@ -65,3 +65,42 @@ exports.getPollingInterval = function() {
 
   return undefined;
 };
+
+
+/**
+ * For Fetch/upload OT, make three requests against the server endpoint.
+ * POST requests contain only dummy payload.
+ *
+ * https://developers.chrome.com/origintrials/#/view_trial/3524066708417413121
+ *
+ * 1) google.com token
+ *
+ * AuTL0jxTc8nlKnzI+gSP2FT6+/0YaQ6Z0nh+TM0l6rrNNp0AXruEG61uZrjwuMBsOE1tNPET+vxEOynShb7B1QcAAABreyJvcmlnaW4iOiJodHRwczovL2dvb2dsZS5jb206NDQzIiwiZmVhdHVyZSI6IkZldGNoVXBsb2FkU3RyZWFtaW5nIiwiZXhwaXJ5IjoxNjA4MzE4Mzg1LCJpc1N1YmRvbWFpbiI6dHJ1ZX0=
+ *
+ * 2) googleapis.com token  (to be fixed)
+ *
+ * https://developers.chrome.com/origintrials/#/trials
+ *
+ * This function is expected to be called from background during the handshake.
+ * Exceptions will be logged by the caller.
+ *
+ * No stats or logs are collected on the client-side. To be disabled once the
+ * OT is expired.
+ *
+ * @param {string} path The base URL path for the requests
+ */
+exports.startOriginTrials = function(path) {
+  // NE: may need check if path has already contains query params?
+
+  // 1st req:  path?ot=1
+  // non-streaming upload request
+
+  // 2nd req:  path?ot=2
+  // h2-only streaming upload request
+
+  // 3rd req:  path?ot=3
+  // h1-allowed streaming upload request
+
+  // Example calling a Chrome API:
+  // goog.global.chrome.loadTimes().wasFetchedViaSpdy
+};

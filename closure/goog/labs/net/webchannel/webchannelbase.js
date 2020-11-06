@@ -23,6 +23,7 @@ goog.require('goog.labs.net.webChannel.ForwardChannelRequestPool');
 goog.require('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.labs.net.webChannel.Wire');
 goog.require('goog.labs.net.webChannel.WireV8');
+goog.require('goog.labs.net.webChannel.environment');
 goog.require('goog.labs.net.webChannel.netUtils');
 goog.require('goog.labs.net.webChannel.requestStats');
 goog.require('goog.net.WebChannel');
@@ -36,18 +37,19 @@ goog.requireType('goog.structs.Map');
 
 goog.scope(function() {
 'use strict';
-var WebChannel = goog.net.WebChannel;
-var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
-var ConnectionState = goog.labs.net.webChannel.ConnectionState;
-var ForwardChannelRequestPool =
+const WebChannel = goog.net.WebChannel;
+const ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
+const ConnectionState = goog.labs.net.webChannel.ConnectionState;
+const ForwardChannelRequestPool =
     goog.labs.net.webChannel.ForwardChannelRequestPool;
-var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
-var Wire = goog.labs.net.webChannel.Wire;
-var WireV8 = goog.labs.net.webChannel.WireV8;
-var netUtils = goog.labs.net.webChannel.netUtils;
-var requestStats = goog.labs.net.webChannel.requestStats;
+const WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
+const Wire = goog.labs.net.webChannel.Wire;
+const WireV8 = goog.labs.net.webChannel.WireV8;
+const environment = goog.labs.net.webChannel.environment;
+const netUtils = goog.labs.net.webChannel.netUtils;
+const requestStats = goog.labs.net.webChannel.requestStats;
 
-var httpCors = goog.module.get('goog.net.rpc.HttpCors');
+const httpCors = goog.module.get('goog.net.rpc.HttpCors');
 
 /**
  * Gets an internal channel parameter in a type-safe way.
@@ -460,11 +462,6 @@ goog.labs.net.webChannel.WebChannelBase = function(
    */
   this.enableOriginTrials_ =
       !opt_options || opt_options.enableOriginTrials !== false;
-
-  if (this.enableOriginTrials_) {
-    this.channelDebug_.info('Enable Origin Trials.');
-    // To be implemented
-  }
 };
 
 var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
@@ -675,6 +672,8 @@ WebChannelBase.prototype.connect = function(
   'use strict';
   this.channelDebug_.debug('connect()');
 
+  this.startOriginTrials_(channelPath);
+
   requestStats.notifyStatEvent(requestStats.Stat.CONNECT_ATTEMPT);
 
   this.path_ = channelPath;
@@ -741,6 +740,40 @@ WebChannelBase.prototype.connectChannel_ = function() {
   this.forwardChannelUri_ =
       this.getForwardChannelUri(/** @type {string} */ (this.path_));
   this.ensureForwardChannel_();
+};
+
+
+/**
+ * Starts the Origin Trials.
+ * @param {string} channelPath  The path for the channel connection.
+ * @private
+ */
+WebChannelBase.prototype.startOriginTrials_ = function(channelPath) {
+  'use strict';
+
+  if (!this.enableOriginTrials_) {
+    return;
+  }
+
+  this.channelDebug_.info('Origin Trials enabled.');
+  goog.async.run(goog.bind(this.runOriginTrials_, this, channelPath));
+};
+
+
+/**
+ * Runs the Origin Trials.
+ * @param {string} channelPath  The path for the channel connection.
+ * @private
+ */
+WebChannelBase.prototype.runOriginTrials_ = function(channelPath) {
+  'use strict';
+
+  try {
+    environment.startOriginTrials(channelPath);
+    this.channelDebug_.info('Origin Trials invoked: ' + channelPath);
+  } catch (e) {
+    this.channelDebug_.dumpException(e, 'Error in running origin trials');
+  }
 };
 
 
