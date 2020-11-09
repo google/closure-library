@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Renderer for toolbar separators.
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.ToolbarSeparatorRenderer');
