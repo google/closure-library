@@ -209,12 +209,7 @@ def main():
   if options.output_file:
     out = io.open(options.output_file, 'wb')
   else:
-    version = sys.version_info[:2]
-    if version >= (3, 0):
-      # Write bytes to stdout
-      out = sys.stdout.buffer
-    else:
-      out = sys.stdout
+    out = sys.stdout
 
   sources = set()
 

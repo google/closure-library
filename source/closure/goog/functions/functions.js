@@ -57,13 +57,28 @@ goog.functions.TRUE = function() {
 
 
 /**
- * Always returns NULL.
+ * Always returns `null`.
  * @type {function(...): null}
  */
 goog.functions.NULL = function() {
   'use strict';
   return null;
 };
+
+
+/**
+ * Always returns `undefined`.
+ * @type {function(...): undefined}
+ */
+goog.functions.UNDEFINED = function() {
+  return undefined;
+};
+
+/**
+ * Always returns `undefined` (loosely-typed version).
+ * @type {!Function}
+ */
+goog.functions.EMPTY = /** @type {?} */ (goog.functions.UNDEFINED);
 
 
 /**

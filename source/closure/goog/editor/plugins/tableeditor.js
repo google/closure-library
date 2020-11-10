@@ -22,6 +22,7 @@ goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.object');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.AbstractRange');
 
 
 

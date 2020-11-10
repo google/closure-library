@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Base class for container renderers.
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.ContainerRenderer');

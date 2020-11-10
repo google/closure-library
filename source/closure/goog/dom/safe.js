@@ -778,8 +778,15 @@ goog.dom.safe.openInWindow = function(
   var name = opt_name instanceof goog.string.Const ?
       goog.string.Const.unwrap(opt_name) :
       opt_name || '';
-  return win.open(
-      goog.html.SafeUrl.unwrap(safeUrl), name, opt_specs, opt_replace);
+  // Do not pass opt_specs and opt_replace to window.open unless they were
+  // provided by the caller. IE11 will use it as a signal to open a new window
+  // rather than a new tab (even if they're undefined).
+  if (opt_specs !== undefined || opt_replace !== undefined) {
+    return win.open(
+        goog.html.SafeUrl.unwrap(safeUrl), name, opt_specs, opt_replace);
+  } else {
+    return win.open(goog.html.SafeUrl.unwrap(safeUrl), name);
+  }
 };
 
 
@@ -842,4 +849,17 @@ goog.dom.safe.createImageFromBlob = function(blob) {
           .safeUrlFromStringKnownToSatisfyTypeContract(
               goog.string.Const.from('Image blob URL.'), objectUrl));
   return image;
+};
+
+/**
+ * Creates a DocumentFragment by parsing html in the context of a Range.
+ * @param {!Range} range The Range object starting from the context node to
+ * create a fragment in.
+ * @param {!goog.html.SafeHtml} html HTML to create a fragment from.
+ * @return {?DocumentFragment}
+ */
+goog.dom.safe.createContextualFragment = function(range, html) {
+  'use strict';
+  return range.createContextualFragment(
+      goog.html.SafeHtml.unwrapTrustedHTML(html));
 };

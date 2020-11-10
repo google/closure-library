@@ -32,6 +32,7 @@ goog.require('goog.string.Unicode');
 goog.require('goog.style');
 goog.require('goog.ui.editor.messages');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.AbstractRange');
 
 
 

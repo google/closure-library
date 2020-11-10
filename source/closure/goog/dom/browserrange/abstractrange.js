@@ -25,6 +25,7 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.userAgent');
+goog.requireType('goog.dom.RangeIterator');
 
 
 

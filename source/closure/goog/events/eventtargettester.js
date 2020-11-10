@@ -10,6 +10,8 @@ goog.setTestOnly();
 const GoogEventsEvent = goog.require('goog.events.Event');
 const GoogEventsEventTarget = goog.require('goog.events.EventTarget');
 const GoogEventsListenable = goog.require('goog.events.Listenable');
+const dispose = goog.require('goog.dispose');
+const events = goog.require('goog.events');
 const googArray = goog.require('goog.array');
 const recordFunction = goog.require('goog.testing.recordFunction');
 /** @suppress {extraRequire} */
@@ -143,9 +145,9 @@ const UnlistenReturnType = {
  * @enum {string}
  */
 var EventType = {
-  A: goog.events.getUniqueId('a'),
-  B: goog.events.getUniqueId('b'),
-  C: goog.events.getUniqueId('c')
+  A: events.getUniqueId('a'),
+  B: events.getUniqueId('b'),
+  C: events.getUniqueId('c')
 };
 
 /**
@@ -253,7 +255,7 @@ exports = {
    */
   tearDown() {
     for (var i = 0; i < MAX_INSTANCE_COUNT; i++) {
-      goog.dispose(eventTargets[i]);
+      dispose(eventTargets[i]);
     }
   },
 
@@ -368,7 +370,7 @@ exports = {
     },
 
     testDispatchEventDoesNotThrowWithDisposedEventTarget() {
-      goog.dispose(eventTargets[0]);
+      dispose(eventTargets[0]);
       assertTrue(dispatchEvent(eventTargets[0], EventType.A));
     },
 
@@ -399,7 +401,7 @@ exports = {
         return;
       }
       listen(eventTargets[0], EventType.A, listeners[0]);
-      goog.dispose(eventTargets[0]);
+      dispose(eventTargets[0]);
       dispatchEvent(eventTargets[0], EventType.A);
 
       assertNoOtherListenerIsCalled();
@@ -415,7 +417,7 @@ exports = {
      */
     testUnlistenWorksAfterDisposal() {
       var key = listen(eventTargets[0], EventType.A, listeners[0]);
-      goog.dispose(eventTargets[0]);
+      dispose(eventTargets[0]);
       unlisten(eventTargets[0], EventType.A, listeners[1]);
       if (unlistenByKey) {
         unlistenByKey(eventTargets[0], key);
@@ -1036,7 +1038,7 @@ exports = {
         t.dispose();
         assertListenerIsCalled(listeners[0], times(1));
       } catch (e) {
-        goog.dispose(t);
+        dispose(t);
       }
     },
 

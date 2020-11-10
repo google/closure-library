@@ -19,6 +19,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.object');
 goog.require('goog.ui.ac.RenderOptions');
+goog.requireType('goog.events.Event');
 goog.requireType('goog.ui.ac.InputHandler');
 
 
