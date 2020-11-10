@@ -570,29 +570,29 @@ testSuite({
      * @suppress {strictMissingProperties} suppression added to enable type
      * checking
      */
-    goog.global.a = {b: {}};
+    globalThis.a = {b: {}};
     const stubs = new PropertyReplacer();
 
     stubs.setPath('a.b.c.d', 1);
-    assertObjectEquals('a.b.c.d=1', {b: {c: {d: 1}}}, goog.global.a);
+    assertObjectEquals('a.b.c.d=1', {b: {c: {d: 1}}}, globalThis.a);
     stubs.setPath('a.b.e', 2);
-    assertObjectEquals('a.b.e=2', {b: {c: {d: 1}, e: 2}}, goog.global.a);
+    assertObjectEquals('a.b.e=2', {b: {c: {d: 1}, e: 2}}, globalThis.a);
     stubs.setPath('a.f', 3);
-    assertObjectEquals('a.f=3', {b: {c: {d: 1}, e: 2}, f: 3}, goog.global.a);
+    assertObjectEquals('a.f=3', {b: {c: {d: 1}, e: 2}, f: 3}, globalThis.a);
     stubs.setPath('a.f.g', 4);
     assertObjectEquals(
-        'a.f.g=4', {b: {c: {d: 1}, e: 2}, f: {g: 4}}, goog.global.a);
+        'a.f.g=4', {b: {c: {d: 1}, e: 2}, f: {g: 4}}, globalThis.a);
     stubs.setPath('a', 5);
-    assertEquals('a=5', 5, goog.global.a);
+    assertEquals('a=5', 5, globalThis.a);
 
     stubs.setPath('x.y.z', 5);
-    assertObjectEquals('x.y.z=5', {y: {z: 5}}, goog.global.x);
+    assertObjectEquals('x.y.z=5', {y: {z: 5}}, globalThis.x);
 
     stubs.reset();
-    assertObjectEquals('a.* reset', {b: {}}, goog.global.a);
+    assertObjectEquals('a.* reset', {b: {}}, globalThis.a);
     // NOTE: it's impossible to delete global variables in Internet Explorer,
-    // so ('x' in goog.global) would be true.
-    assertUndefined('x.* reset', goog.global.x);
+    // so ('x' in globalThis) would be true.
+    assertUndefined('x.* reset', globalThis.x);
   },
 
   // Tests altering paths with functions in them.
@@ -606,20 +606,19 @@ testSuite({
      * @suppress {strictMissingProperties} suppression added to enable type
      * checking
      */
-    goog.global.a = {b: f};
+    globalThis.a = {b: f};
     const stubs = new PropertyReplacer();
 
     stubs.setPath('a.b.c', 1);
-    assertEquals('a.b.c=1, f kept', f, goog.global.a.b);
-    assertEquals('a.b.c=1, c set', 1, goog.global.a.b.c);
+    assertEquals('a.b.c=1, f kept', f, globalThis.a.b);
+    assertEquals('a.b.c=1, c set', 1, globalThis.a.b.c);
 
     stubs.setPath('a.b.prototype.d', 2);
-    assertEquals('a.b.prototype.d=2, b kept', f, goog.global.a.b);
-    assertEquals('a.b.prototype.d=2, c kept', 1, goog.global.a.b.c);
-    assertFalse('a.b.prototype.d=2, a.b.d not set', 'd' in goog.global.a.b);
-    assertTrue(
-        'a.b.prototype.d=2, proto set', 'd' in goog.global.a.b.prototype);
-    assertEquals('a.b.prototype.d=2, d set', 2, new goog.global.a.b().d);
+    assertEquals('a.b.prototype.d=2, b kept', f, globalThis.a.b);
+    assertEquals('a.b.prototype.d=2, c kept', 1, globalThis.a.b.c);
+    assertFalse('a.b.prototype.d=2, a.b.d not set', 'd' in globalThis.a.b);
+    assertTrue('a.b.prototype.d=2, proto set', 'd' in globalThis.a.b.prototype);
+    assertEquals('a.b.prototype.d=2, d set', 2, new globalThis.a.b().d);
 
     const invalidSetPath = () => {
       stubs.setPath('a.prototype.e', 3);
@@ -627,8 +626,8 @@ testSuite({
     assertThrows('setting the prototype of a non-function', invalidSetPath);
 
     stubs.reset();
-    assertObjectEquals('a.b.c reset', {b: f}, goog.global.a);
-    assertObjectEquals('a.b.prototype reset', {}, goog.global.a.b.prototype);
+    assertObjectEquals('a.b.c reset', {b: f}, globalThis.a);
+    assertObjectEquals('a.b.prototype reset', {}, globalThis.a.b.prototype);
   },
 
   // Tests restoring original attribute values with restore() rather than

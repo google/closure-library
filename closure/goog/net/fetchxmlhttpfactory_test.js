@@ -177,7 +177,7 @@ testSuite({
     fetchMock = mockControl.createFunctionMock('fetch');
     worker.fetch = fetchMock;
     stubs = new PropertyReplacer();
-    stubs.replace(goog.global, 'fetch', fetchMock);
+    stubs.replace(globalThis, 'fetch', fetchMock);
     factory = new FetchXmlHttpFactory(worker);
   },
 

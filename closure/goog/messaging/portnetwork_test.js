@@ -40,7 +40,7 @@ testSuite({
   },
 
   testRouteMessageThroughWorkers() {
-    if (!('MessageChannel' in goog.global)) {
+    if (!('MessageChannel' in globalThis)) {
       return;
     }
 

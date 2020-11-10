@@ -189,7 +189,7 @@ testSuite({
   },
 
   testDisposal() {
-    fakeWin = goog.global['window'];
+    fakeWin = globalThis['window'];
     const originalSetTimeout = fakeWin.setTimeout;
     const originalSetInterval = fakeWin.setInterval;
 
@@ -257,7 +257,7 @@ testSuite({
   testGetProtectedFunction_withoutWrappedErrors() {
     const shouldCallErrorLog = !!Error.captureStackTrace;
     if (shouldCallErrorLog) {
-      mockControl.createMethodMock(goog.global.console, 'error');
+      mockControl.createMethodMock(globalThis.console, 'error');
     }
     errorHandler.setWrapErrors(false);
     const fn = () => {
@@ -267,7 +267,7 @@ testSuite({
     };
     const protectedFn = errorHandler.getProtectedFunction(fn);
     if (shouldCallErrorLog) {
-      goog.global.console.error('Foo', 'STACK');
+      globalThis.console.error('Foo', 'STACK');
     }
     mockControl.$replayAll();
     const e = assertThrows(protectedFn);

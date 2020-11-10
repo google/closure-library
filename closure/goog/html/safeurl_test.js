@@ -161,7 +161,7 @@ testSuite({
   },
 
   testSafeUrlFromMediaSource_createsBlob() {
-    if (!('MediaSource' in goog.global)) {
+    if (!('MediaSource' in globalThis)) {
       return;
     }
     const safeUrl = SafeUrl.fromMediaSource(new MediaSource());
@@ -170,7 +170,7 @@ testSuite({
   },
 
   testSafeUrlFromMediaSource_rejectsBlobs() {
-    if (!('MediaSource' in goog.global)) {
+    if (!('MediaSource' in globalThis)) {
       return;
     }
     const safeUrl =

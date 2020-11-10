@@ -653,7 +653,7 @@ testSuite({
   testPostFormDataDoesNotSetContentTypeHeader() {
     function FakeFormData() {}
 
-    propertyReplacer.set(goog.global, 'FormData', FakeFormData);
+    propertyReplacer.set(globalThis, 'FormData', FakeFormData);
 
     const x = new XhrIo;
     x.send('url', 'POST', new FakeFormData());
@@ -664,7 +664,7 @@ testSuite({
   testNonPostFormDataDoesNotSetContentTypeHeader() {
     function FakeFormData() {}
 
-    propertyReplacer.set(goog.global, 'FormData', FakeFormData);
+    propertyReplacer.set(globalThis, 'FormData', FakeFormData);
 
     const x = new XhrIo;
     x.send('url', 'PUT', new FakeFormData());

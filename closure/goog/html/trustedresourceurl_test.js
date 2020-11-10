@@ -176,16 +176,16 @@ testSuite({
     assertEquals('blob:', url.slice(0, 5));
     // Verify the content of the URL is the blob we created.
     // Skip this check on user agents that don't have the fetch API.
-    if (!goog.global.fetch) {
+    if (!globalThis.fetch) {
       return;
     }
-    const fetchedContent = await (await goog.global.fetch(url)).text();
+    const fetchedContent = await (await globalThis.fetch(url)).text();
     assertEquals('(()=>{})()', fetchedContent);
   },
 
   testFromConstantJavaScriptForUserAgentsWithoutBlob() {
-    stubs.set(goog.global, 'BlobBuilder', undefined);
-    stubs.set(goog.global, 'Blob', undefined);
+    stubs.set(globalThis, 'BlobBuilder', undefined);
+    stubs.set(globalThis, 'Blob', undefined);
     assertThrows(() => {
       TrustedResourceUrl.fromSafeScript(
           SafeScript.fromConstant(Const.from('(()=>{})()')));
@@ -394,8 +394,7 @@ testSuite({
     const trustedValue = TrustedResourceUrl.unwrapTrustedScriptURL(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
     assertTrue(
-        goog.global.TrustedScriptURL ?
-            trustedValue instanceof TrustedScriptURL :
-            typeof trustedValue === 'string');
+        globalThis.TrustedScriptURL ? trustedValue instanceof TrustedScriptURL :
+                                      typeof trustedValue === 'string');
   },
 });

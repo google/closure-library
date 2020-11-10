@@ -50,13 +50,13 @@ function newCleanupGuard() {
       let propCounter = 0;
 
       // All callbacks should have been deleted or be the null function.
-      for (const key in goog.global) {
-        // NOTES: callbacks are stored on goog.global with property
+      for (const key in globalThis) {
+        // NOTES: callbacks are stored on globalThis with property
         // name prefixed with goog.net.Jsonp.CALLBACKS.
         if (key.indexOf(Jsonp.CALLBACKS) == 0) {
           const callbackId = Jsonp.getCallbackId_(key);
-          if (goog.global[callbackId] &&
-              goog.global[callbackId] != goog.nullFunction) {
+          if (globalThis[callbackId] &&
+              globalThis[callbackId] != goog.nullFunction) {
             propCounter++;
           }
         }
@@ -264,14 +264,14 @@ testSuite({
     const requestObject = jsonp.send({test: 'foo'}, successCallback);
     jsonp.cancel(requestObject);
 
-    for (const key in goog.global[Jsonp.CALLBACKS]) {
-      // NOTES: callbacks are stored on goog.global with property
+    for (const key in globalThis[Jsonp.CALLBACKS]) {
+      // NOTES: callbacks are stored on globalThis with property
       // name prefixed with goog.net.Jsonp.CALLBACKS.
       if (key.indexOf('goog.net.Jsonp.CALLBACKS') == 0) {
         const callbackId = Jsonp.getCallbackId_(key);
         assertNotEquals(
             'The success callback should have been removed',
-            goog.global[callbackId], successCallback);
+            globalThis[callbackId], successCallback);
       }
     }
 
@@ -321,7 +321,7 @@ testSuite({
     const errorCallback = recordFunction();
 
     const stubs = new PropertyReplacer();
-    stubs.set(goog.global, 'setTimeout', (errorHandler) => {
+    stubs.set(globalThis, 'setTimeout', (errorHandler) => {
       errorHandler();
     });
 

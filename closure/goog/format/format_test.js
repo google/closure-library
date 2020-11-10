@@ -318,8 +318,8 @@ testSuite({
     const wbrEl = dom.createDom(
         TagName.DIV,
         {'style': 'width: 100px; overflow: hidden; margin-top: 15px'});
-    dom.appendChild(goog.global.document.body, overflowEl);
-    dom.appendChild(goog.global.document.body, wbrEl);
+    dom.appendChild(globalThis.document.body, overflowEl);
+    dom.appendChild(globalThis.document.body, wbrEl);
 
     overflowEl.innerHTML = text;
     wbrEl.innerHTML = textWbr;

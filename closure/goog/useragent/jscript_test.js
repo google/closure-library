@@ -13,19 +13,19 @@ const testSuite = goog.require('goog.testing.testSuite');
 
 
 
-goog.global['ScriptEngine'] = function() {
+globalThis['ScriptEngine'] = function() {
   return 'JScript';
 };
 
-goog.global['ScriptEngineMajorVersion'] = function() {
+globalThis['ScriptEngineMajorVersion'] = function() {
   return 1;
 };
 
-goog.global['ScriptEngineMinorVersion'] = function() {
+globalThis['ScriptEngineMinorVersion'] = function() {
   return 2;
 };
 
-goog.global['ScriptEngineBuildVersion'] = function() {
+globalThis['ScriptEngineBuildVersion'] = function() {
   return 3456;
 };
 

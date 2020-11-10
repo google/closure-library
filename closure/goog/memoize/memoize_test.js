@@ -117,7 +117,7 @@ testSuite({
     assertEquals('identity(1)==1', 1, identity(1));
     assertEquals('Expected memozation', 1, computed);
 
-    memoize.clearCache(goog.global);
+    memoize.clearCache(globalThis);
     assertEquals('identity(1)==1', 1, identity(1));
     assertEquals('identity(1)==1', 1, identity(1));
     assertEquals('Expected cleared memoization cache', 2, computed);

@@ -20,7 +20,7 @@ const util = goog.require('goog.labs.userAgent.util');
 const stubs = new PropertyReplacer();
 
 /**
- * Replaces the navigator object on goog.global.
+ * Replaces the navigator object on globalThis.
  * @param {?Object|undefined} navigatorObj The navigator object to set
  */
 function setGlobalNavigator(navigatorObj) {

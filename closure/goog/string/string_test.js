@@ -661,7 +661,7 @@ testSuite({
     // unescapeEntities will blow up if html unescaping is carried out with DOM.
     // Notice that we can't directly set document to empty object since IE8
     // won't let us do so.
-    stubs.set(goog.global.document, 'createElement', {});
+    stubs.set(globalThis.document, 'createElement', {});
     googString.unescapeEntities('&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;');
   },
 

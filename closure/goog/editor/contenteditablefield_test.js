@@ -15,7 +15,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 
 const HTML = '<div id="testField">I am text.</div>';
 
-goog.global.FieldConstructor = ContentEditableField;
+globalThis.FieldConstructor = ContentEditableField;
 
 testSuite({
   setUp() {

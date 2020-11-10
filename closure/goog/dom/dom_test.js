@@ -873,10 +873,10 @@ testSuite({
   },
 
   testIsWindow() {
-    const global = goog.global;
+    const global = globalThis;
     const frame = window.frames['frame'];
     const otherWindow = window.open('', 'blank');
-    const object = {window: goog.global};
+    const object = {window: globalThis};
     const nullVar = null;
     let notDefined;
 
@@ -885,7 +885,7 @@ testSuite({
       // an assertion fails or something else goes wrong.
       assertTrue(
           'global object in HTML context should be a window',
-          googDom.isWindow(goog.global));
+          googDom.isWindow(globalThis));
       assertTrue('iframe window should be a window', googDom.isWindow(frame));
       if (otherWindow) {
         assertTrue(

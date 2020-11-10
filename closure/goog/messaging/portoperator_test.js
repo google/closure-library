@@ -34,7 +34,7 @@ testSuite({
   setUp() {
     mockControl = new MockControl();
     let index = 0;
-    stubs.set(goog.global, 'MessageChannel', function() {
+    stubs.set(globalThis, 'MessageChannel', function() {
       this.port1 = makeMockPort(index, 1);
       this.port2 = makeMockPort(index, 2);
       index += 1;

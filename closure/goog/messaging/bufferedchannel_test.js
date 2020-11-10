@@ -40,7 +40,7 @@ function assertMessageArraysEqual(ma1, ma2) {
 
 testSuite({
   setUpPage() {
-    if (goog.global.console) {
+    if (globalThis.console) {
       new DebugConsole().setCapturing(true);
     }
     const logger = log.getLogger('goog.messaging');

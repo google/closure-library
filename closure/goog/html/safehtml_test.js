@@ -91,8 +91,8 @@ testSuite({
     const trustedValue = SafeHtml.unwrapTrustedHTML(safeValue);
     assertEquals(safeValue.getTypedStringValue(), trustedValue.toString());
     assertTrue(
-        goog.global.TrustedHTML ? trustedValue instanceof TrustedHTML :
-                                  typeof trustedValue === 'string');
+        globalThis.TrustedHTML ? trustedValue instanceof TrustedHTML :
+                                 typeof trustedValue === 'string');
   },
 
   testHtmlEscape() {

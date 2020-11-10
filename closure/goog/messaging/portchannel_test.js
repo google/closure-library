@@ -131,7 +131,7 @@ testSuite({
     // long time in Edge and Safari.
     TestCase.getActiveTestCase().promiseTimeout = 60 * 1000;
 
-    if (!('Worker' in goog.global)) {
+    if (!('Worker' in globalThis)) {
       return;
     }
 
@@ -158,7 +158,7 @@ testSuite({
     mockPort.postMessage = mockControl.createFunctionMock('postMessage');
     portChannel = new PortChannel(mockPort);
 
-    if ('Worker' in goog.global) {
+    if ('Worker' in globalThis) {
       // Ensure the worker channel has started before running each test.
       return setUpPromise;
     }
@@ -178,7 +178,7 @@ testSuite({
   },
 
   testPostMessageWithPorts() {
-    if (!('MessageChannel' in goog.global)) {
+    if (!('MessageChannel' in globalThis)) {
       return;
     }
     const channel = new MessageChannel();
@@ -205,7 +205,7 @@ testSuite({
   },
 
   testReceiveMessageWithPorts() {
-    if (!('MessageChannel' in goog.global)) {
+    if (!('MessageChannel' in globalThis)) {
       return;
     }
     const channel = new MessageChannel();
@@ -255,7 +255,7 @@ testSuite({
   },
 
   testWorker() {
-    if (!('Worker' in goog.global)) {
+    if (!('Worker' in globalThis)) {
       return;
     }
     const promise = registerService(workerChannel, 'pong', true);
@@ -267,7 +267,7 @@ testSuite({
   },
 
   testWorkerWithPorts() {
-    if (!('Worker' in goog.global) || !('MessageChannel' in goog.global)) {
+    if (!('Worker' in globalThis) || !('MessageChannel' in globalThis)) {
       return;
     }
     const messageChannel = new MessageChannel();
@@ -279,7 +279,7 @@ testSuite({
   },
 
   testPort() {
-    if (!('Worker' in goog.global) || !('MessageChannel' in goog.global)) {
+    if (!('Worker' in globalThis) || !('MessageChannel' in globalThis)) {
       return;
     }
     const messageChannel = new MessageChannel();
@@ -298,7 +298,7 @@ testSuite({
   },
 
   testPortIgnoresOrigin() {
-    if (!('Worker' in goog.global) || !('MessageChannel' in goog.global)) {
+    if (!('Worker' in globalThis) || !('MessageChannel' in globalThis)) {
       return;
     }
     const messageChannel = new MessageChannel();
@@ -318,7 +318,7 @@ testSuite({
   },
 
   testWindow() {
-    if (!('Worker' in goog.global) || !('MessageChannel' in goog.global)) {
+    if (!('Worker' in globalThis) || !('MessageChannel' in globalThis)) {
       return;
     }
 
@@ -339,7 +339,7 @@ testSuite({
   },
 
   testWindowCanceled() {
-    if (!('Worker' in goog.global) || !('MessageChannel' in goog.global)) {
+    if (!('Worker' in globalThis) || !('MessageChannel' in globalThis)) {
       return;
     }
 
@@ -363,7 +363,7 @@ testSuite({
   },
 
   testWindowWontSendToWrongOrigin() {
-    if (!('Worker' in goog.global) || !('MessageChannel' in goog.global)) {
+    if (!('Worker' in globalThis) || !('MessageChannel' in globalThis)) {
       return;
     }
 
@@ -383,7 +383,7 @@ testSuite({
   },
 
   testWindowWontReceiveFromWrongOrigin() {
-    if (!('Worker' in goog.global) || !('MessageChannel' in goog.global)) {
+    if (!('Worker' in globalThis) || !('MessageChannel' in globalThis)) {
       return;
     }
 

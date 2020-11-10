@@ -107,7 +107,7 @@ class MockWebSocket {
 testSuite({
   setUp() {
     pr = new PropertyReplacer();
-    pr.set(goog.global, 'WebSocket', MockWebSocket);
+    pr.set(globalThis, 'WebSocket', MockWebSocket);
     mockClock = new MockClock(true);
     testUrl = 'ws://127.0.0.1:4200';
     testProtocol = 'xmpp';
@@ -125,8 +125,8 @@ testSuite({
 
   testOpenInUnsupportingBrowserThrowsException() {
     // Null out WebSocket to simulate lack of support.
-    if (goog.global.WebSocket) {
-      goog.global.WebSocket = null;
+    if (globalThis.WebSocket) {
+      globalThis.WebSocket = null;
     }
 
     webSocket = new NetWebSocket();

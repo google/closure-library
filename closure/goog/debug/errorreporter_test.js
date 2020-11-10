@@ -139,7 +139,7 @@ testSuite({
     }
 
     stubs.set(userAgent, 'IE', false);
-    stubs.set(goog.global, 'setTimeout', (fcn, time) => {
+    stubs.set(globalThis, 'setTimeout', (fcn, time) => {
       fcn.call();
     });
 
@@ -148,7 +148,7 @@ testSuite({
     const errorFunction = goog.partial(throwAnErrorWith, url, 5, 'Hello :)');
 
     try {
-      goog.global.setTimeout(errorFunction, 0);
+      globalThis.setTimeout(errorFunction, 0);
     } catch (e) {
       // Expected. The error is rethrown after sending.
     }
@@ -164,10 +164,10 @@ testSuite({
     stubs.set(userAgent, 'isVersionOrHigher', functions.FALSE);
 
     // Remove test runner's onerror handler so the test doesn't fail.
-    stubs.set(goog.global, 'onerror', null);
+    stubs.set(globalThis, 'onerror', null);
 
     errorReporter = ErrorReporter.install('/errorreporter');
-    goog.global.onerror('Goodbye :(', url, 22);
+    globalThis.onerror('Goodbye :(', url, 22);
     assertEquals(
         `/errorreporter?script=${encodedUrl}` +
             '&error=Goodbye%20%3A(&line=22',
@@ -179,17 +179,17 @@ testSuite({
     stubs.set(userAgent, 'IE', true);
     stubs.set(userAgent, 'isVersionOrHigher', functions.FALSE);
     // Remove test runner's onerror handler so the test doesn't fail.
-    stubs.set(goog.global, 'onerror', null);
+    stubs.set(globalThis, 'onerror', null);
 
     errorReporter = ErrorReporter.install('/errorreporter');
     errorReporter.setLoggingHeaders('header!');
-    goog.global.onerror('Goodbye :(', 'http://www.your.tst/more/bogus.js', 22);
+    globalThis.onerror('Goodbye :(', 'http://www.your.tst/more/bogus.js', 22);
     assertEquals('header!', MockXhrIo.lastHeaders);
   },
 
   test_nonInternetExplorerSendErrorReportWithTrace() {
     stubs.set(userAgent, 'IE', false);
-    stubs.set(goog.global, 'setTimeout', (fcn, time) => {
+    stubs.set(globalThis, 'setTimeout', (fcn, time) => {
       fcn.call();
     });
 
@@ -203,7 +203,7 @@ testSuite({
         goog.partial(throwAnErrorWith, url, 5, 'Hello :)', trace);
 
     try {
-      goog.global.setTimeout(errorFunction, 0);
+      globalThis.setTimeout(errorFunction, 0);
     } catch (e) {
       // Expected. The error is rethrown after sending.
     }
@@ -222,7 +222,7 @@ testSuite({
 
   test_nonInternetExplorerSendErrorReportWithTraceAndCauses() {
     stubs.set(userAgent, 'IE', false);
-    stubs.set(goog.global, 'setTimeout', (fcn, time) => {
+    stubs.set(globalThis, 'setTimeout', (fcn, time) => {
       fcn.call();
     });
 
@@ -260,7 +260,7 @@ testSuite({
         goog.partial(throwAnErrorWith, url, 5, 'MainError', maintrace, cause1);
 
     try {
-      goog.global.setTimeout(errorFunction, 0);
+      globalThis.setTimeout(errorFunction, 0);
     } catch (e) {
       // Expected. The error is rethrown after sending.
     }
@@ -274,7 +274,7 @@ testSuite({
 
   test_nonInternetExplorerSendErrorReportWithCyclicCauses() {
     stubs.set(userAgent, 'IE', false);
-    stubs.set(goog.global, 'setTimeout', (fcn, time) => {
+    stubs.set(globalThis, 'setTimeout', (fcn, time) => {
       fcn.call();
     });
 
@@ -312,7 +312,7 @@ testSuite({
         goog.partial(throwAnErrorWith, url, 5, 'MainError', maintrace, cause1);
 
     try {
-      goog.global.setTimeout(errorFunction, 0);
+      globalThis.setTimeout(errorFunction, 0);
     } catch (e) {
       // Expected. The error is rethrown after sending.
     }

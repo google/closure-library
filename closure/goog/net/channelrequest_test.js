@@ -231,8 +231,7 @@ testSuite({
 
   testActiveXBlocked() {
     createChannelRequest();
-    stubs.set(
-        goog.global, 'ActiveXObject', functions.error('Active X blocked'));
+    stubs.set(globalThis, 'ActiveXObject', functions.error('Active X blocked'));
 
     channelRequest.tridentGet(new Uri('some_uri'), false);
     assertFalse(channelRequest.getSuccess());
