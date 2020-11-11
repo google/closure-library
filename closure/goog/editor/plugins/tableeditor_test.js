@@ -30,6 +30,7 @@ let testHelper;
  * Helper routine which returns the number of cells in the table.
  * @param {Element} table The table in question.
  * @return {number} Number of cells.
+ * @suppress {strictMissingProperties} suppression added to enable type checking
  */
 function getCellCount(table) {
   return table.cells ? table.cells.length :
@@ -41,11 +42,13 @@ function getCellCount(table) {
  * In IE, the cursor isn't positioned in the first cell (TD) and we simulate
  * that behavior explicitly to be consistent across all browsers.
  * @param {Object} op_tableProps Optional table properties.
+ * @suppress {checkTypes,visibility} suppression added to enable type checking
  */
 function createTableAndSelectCell(tableProps = undefined) {
   Range.createCaret(field, 1).select();
   plugin.execCommandInternal(TableEditor.COMMAND.TABLE, tableProps);
   if (userAgent.IE) {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const range = Range.createFromNodeContents(
         dom.getElementsByTagName(TagName.TD, field)[0]);
     range.select();
@@ -57,6 +60,7 @@ testSuite({
     expectedFailures = new ExpectedFailures();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   setUp() {
     testHelper = new TestHelper(dom.getElement('field'));
     testHelper.setUpEditableElement();
@@ -97,6 +101,7 @@ testSuite({
   testCreateTable() {
     fieldMock.$replay();
     createTableAndSelectCell();
+    /** @suppress {visibility} suppression added to enable type checking */
     const table = plugin.getCurrentTable_();
     assertNotNull('Table should not be null', table);
     assertEquals(
@@ -107,10 +112,15 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testInsertRowBefore() {
     fieldMock.$replay();
     createTableAndSelectCell();
+    /** @suppress {visibility} suppression added to enable type checking */
     const table = plugin.getCurrentTable_();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const selectedRow = fieldMock.getRange().getContainerElement().parentNode;
     assertNull(
         'Selected row shouldn\'t have a previous sibling',
@@ -126,10 +136,15 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testInsertRowAfter() {
     fieldMock.$replay();
     createTableAndSelectCell({width: 2, height: 1});
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const selectedRow = fieldMock.getRange().getContainerElement().parentNode;
+    /** @suppress {visibility} suppression added to enable type checking */
     const table = plugin.getCurrentTable_();
     assertEquals('Table should have one row', 1, table.rows.length);
     assertNull(
@@ -142,10 +157,15 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testInsertColumnBefore() {
     fieldMock.$replay();
     createTableAndSelectCell({width: 1, height: 1});
+    /** @suppress {visibility} suppression added to enable type checking */
     const table = plugin.getCurrentTable_();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const selectedCell = fieldMock.getRange().getContainerElement();
     assertEquals('Table should have one cell', 1, getCellCount(table));
     assertNull(
@@ -159,10 +179,15 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testInsertColumnAfter() {
     fieldMock.$replay();
     createTableAndSelectCell({width: 1, height: 1});
+    /** @suppress {visibility} suppression added to enable type checking */
     const table = plugin.getCurrentTable_();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const selectedCell = fieldMock.getRange().getContainerElement();
     assertEquals('Table should have one cell', 1, getCellCount(table));
     assertNull(
@@ -175,10 +200,18 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testRemoveRows() {
     fieldMock.$replay();
     createTableAndSelectCell({width: 1, height: 2});
+    /** @suppress {visibility} suppression added to enable type checking */
     const table = plugin.getCurrentTable_();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const selectedCell = fieldMock.getRange().getContainerElement();
     selectedCell.id = 'selected';
     assertEquals('Table should have two rows', 2, table.rows.length);
@@ -195,10 +228,18 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testRemoveColumns() {
     fieldMock.$replay();
     createTableAndSelectCell({width: 2, height: 1});
+    /** @suppress {visibility} suppression added to enable type checking */
     const table = plugin.getCurrentTable_();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const selectedCell = fieldMock.getRange().getContainerElement();
     selectedCell.id = 'selected';
     assertEquals('Table should have two cells', 2, getCellCount(table));
@@ -216,10 +257,15 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSplitCell() {
     fieldMock.$replay();
     createTableAndSelectCell({width: 1, height: 1});
+    /** @suppress {visibility} suppression added to enable type checking */
     const table = plugin.getCurrentTable_();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const selectedCell = fieldMock.getRange().getContainerElement();
     // Splitting is only supported if we set these attributes.
     selectedCell.rowSpan = '1';
@@ -236,10 +282,15 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testMergeCells() {
     fieldMock.$replay();
     createTableAndSelectCell({width: 2, height: 1});
+    /** @suppress {visibility} suppression added to enable type checking */
     const table = plugin.getCurrentTable_();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const selectedCell = fieldMock.getRange().getContainerElement();
     dom.setTextContent(selectedCell, 'foo');
     dom.setTextContent(selectedCell.nextSibling, 'bar');

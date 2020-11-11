@@ -27,6 +27,10 @@ testSuite({
     expectedFailures.handleTearDown();
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testEmptyNodeNormalization() {
     const root = dom.getElement('root');
     dom.appendChild(root, dom.createTextNode('text'));
@@ -76,6 +80,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testNormalizeCorruption() {
     const root = dom.getElement('testNormalizeCorruption');
     const textNode = root.firstChild;

@@ -22,6 +22,7 @@ const events = goog.require('goog.events');
 const testSuite = goog.require('goog.testing.testSuite');
 const testingEvents = goog.require('goog.testing.events');
 
+/** @suppress {visibility} suppression added to enable type checking */
 const RESIZE_DELAY = BufferedViewportSizeMonitor.RESIZE_EVENT_DELAY_MS_;
 const INITIAL_SIZE = new Size(111, 111);
 

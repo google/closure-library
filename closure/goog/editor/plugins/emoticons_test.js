@@ -34,6 +34,7 @@ testSuite({
     dom.getElement('parent').innerHTML = HTML;
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEmojiWithEmoticonsPlugin() {
     const plugin = new Emoticons();
     const field = new Field('testField');

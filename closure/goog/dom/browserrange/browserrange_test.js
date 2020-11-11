@@ -145,6 +145,10 @@ testSuite({
         'Should contain correct valid html', 'Text', range.getValidHtml());
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testTextNodes() {
     dom.removeChildren(dynamic);
     dynamic.appendChild(dom.createTextNode('Part1'));
@@ -180,6 +184,10 @@ testSuite({
         normalizeHtml(range.getValidHtml()));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testDiv() {
     const range = browserrange.createRangeFromNodeContents(test2);
 
@@ -211,6 +219,7 @@ testSuite({
     assertFalse('Div range is not collapsed', range.isCollapsed());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEmptyNodeHtmlInsert() {
     const range = browserrange.createRangeFromNodeContents(empty);
     const html = '<b>hello</b>';
@@ -220,6 +229,10 @@ testSuite({
     dom.removeChildren(empty);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testEmptyNode() {
     const range = browserrange.createRangeFromNodeContents(empty);
 
@@ -326,6 +339,7 @@ testSuite({
         dom.getTextContent(outer).replace(/\s/g, ''));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCollapse() {
     let range = browserrange.createRangeFromNodeContents(test2);
     assertFalse('Div range is not collapsed', range.isCollapsed());

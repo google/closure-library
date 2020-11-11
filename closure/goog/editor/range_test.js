@@ -408,6 +408,10 @@ testSuite({
         'offset should point to the img tag', 0, range.getStartOffset());
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testPlaceCursorNextTo_rightOfFirstOfTwoImgTags() {
     const div = $('parentNode');
     div.innerHTML =
@@ -580,7 +584,10 @@ testSuite({
     testingDom.assertRangeEquals(ghiText, 1, mnoText, 2, newRange);
   },
 
-  /** Branched from the tests for dom.SavedCaretRange. */
+  /**
+   * Branched from the tests for dom.SavedCaretRange.
+   * @suppress {visibility} suppression added to enable type checking
+   */
   testSavedCaretRange() {
     let def = $('def-1');
     let jkl = $('jkl-1');
@@ -742,6 +749,7 @@ testSuite({
     testingDom.assertRangeEquals(def.firstChild, 1, jkl.firstChild, 2, range);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSelectionPreservingNormalizeAfterPlaceCursorNextTo() {
     const parent = $('normalizeTest-with-div');
     editorRange.placeCursorNextTo(parent.firstChild);
@@ -856,6 +864,10 @@ testSuite({
     assertFalse(editorRange.intersectsTag(range, TagName.U));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testNormalizeNode() {
     let div = dom.createDom(TagName.DIV, null, 'a', 'b', 'c');
     assertEquals(3, div.childNodes.length);

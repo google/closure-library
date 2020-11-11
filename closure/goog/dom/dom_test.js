@@ -51,6 +51,7 @@ function createTestDom(txt) {
  * implementation because of the side effects.
  * @param {!Element} element
  * @return {boolean}
+ * @suppress {strictMissingProperties} suppression added to enable type checking
  */
 function isFocusableAlternativeImpl(element) {
   element.focus();
@@ -89,6 +90,7 @@ function assertConstHtmlToNodeStringifiesToOneOf(
     potentialStringifications, var_args) {
   const node =
       googDom.constHtmlToNode.apply(undefined, googArray.slice(arguments, 1));
+  /** @suppress {checkTypes} suppression added to enable type checking */
   const stringified = googDom.getOuterHtml(node);
   if (googArray.find(
           potentialStringifications, (element) => element == stringified) ===
@@ -182,9 +184,14 @@ testSuite({
     const el = domHelper.getRequiredElement('testEl');
     assertTrue(el != null);
     assertEquals('testEl', el.id);
-    assertThrows(() => {
-      googDom.getRequiredElementByClass('does_not_exist', container);
-    });
+    assertThrows(/**
+                    @suppress {undefinedVars} suppression added to enable type
+                    checking
+                  */
+                 () => {
+                   googDom.getRequiredElementByClass(
+                       'does_not_exist', container);
+                 });
   },
 
   testGetRequiredElementByClassDomHelper() {
@@ -194,9 +201,14 @@ testSuite({
 
     const container = domHelper.getElement('span-container');
     assertNotNull(domHelper.getElementByClass('test1', container));
-    assertThrows(() => {
-      domHelper.getRequiredElementByClass('does_not_exist', container);
-    });
+    assertThrows(/**
+                    @suppress {checkTypes} suppression added to enable type
+                    checking
+                  */
+                 () => {
+                   domHelper.getRequiredElementByClass(
+                       'does_not_exist', container);
+                 });
   },
 
   testGetElementsByTagName() {
@@ -299,6 +311,10 @@ testSuite({
     assertNotNull(googDom.getElementByTagNameAndClass('*', 'test1', container));
   },
 
+  /**
+     @suppress {strictMissingProperties,missingProperties} suppression added to
+     enable type checking
+   */
   testSetProperties() {
     const attrs = {
       'name': 'test3',
@@ -382,6 +398,10 @@ testSuite({
         'Should be equal', '100', el.getAttribute('data-tooltip-delay'));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSetTableProperties() {
     const attrs = {
       'style': 'padding-left: 10px;',
@@ -414,6 +434,7 @@ testSuite({
     assert('Viewport sizes must not match', innerSize.width != outerSize.width);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetDocumentHeightInIframe() {
     const doc = googDom.getDomHelper(myIframeDoc).getDocument();
     const height = googDom.getDomHelper(myIframeDoc).getDocumentHeight();
@@ -426,6 +447,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCreateDom() {
     const el = googDom.createDom(
         TagName.DIV, {
@@ -476,6 +501,10 @@ testSuite({
     assertNull('firstChild should be null', el.firstChild);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCreateDomAcceptsArray() {
     const items = [
       googDom.createDom(TagName.LI, {}, 'Item 1'),
@@ -512,6 +541,10 @@ testSuite({
         el.firstChild.nodeValue);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCreateDomNodeListArg() {
     let el;
     const emptyElem = googDom.createDom(TagName.DIV);
@@ -963,6 +996,7 @@ testSuite({
       firstElementChild: undefined,
     };
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     b1 = googDom.getFirstElementChild(mockP2);
     assertNotNull('First element child of mockP2 should not be null', b1);
     assertEquals('First element child is b1', 'b1', b1.id);
@@ -985,6 +1019,7 @@ testSuite({
       lastElementChild: undefined,
     };
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     b2 = googDom.getLastElementChild(mockP2);
     assertNotNull('Last element child of mockP2 should not be null', b2);
     assertEquals('Last element child is b2', 'b2', b2.id);
@@ -1002,6 +1037,7 @@ testSuite({
     // Test with an undefined nextElementSibling attribute.
     const mockB1 = {nextSibling: b2, nextElementSibling: undefined};
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     b2 = googDom.getNextElementSibling(mockB1);
     assertNotNull('Next element sibling of mockB1 should not be null', b1);
     assertEquals('Next element sibling is b2', 'b2', b2.id);
@@ -1019,6 +1055,7 @@ testSuite({
     // Test with an undefined previousElementSibling attribute.
     const mockB2 = {previousSibling: b1, previousElementSibling: undefined};
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     b1 = googDom.getPreviousElementSibling(mockB2);
     assertNotNull('Previous element sibling of mockB2 should not be null', b1);
     assertEquals('Previous element sibling is b1', 'b1', b1.id);
@@ -1045,6 +1082,7 @@ testSuite({
     // Test with an undefined children attribute.
     const mockP2 = {childNodes: [b1, b2], children: undefined};
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     children = googDom.getChildren(mockP2);
     assertNotNull('Elements array should not be null', children);
     assertEquals(
@@ -1116,6 +1154,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSetTextContent() {
     const p1 = $('p1');
     let s = 'hello world';
@@ -1179,12 +1221,20 @@ testSuite({
     let expected = document.body;
     let result = googDom.findNode(
         document,
+        /**
+           @suppress {strictMissingProperties} suppression added to enable type
+           checking
+         */
         (n) => n.nodeType == NodeType.ELEMENT && n.tagName == TagName.BODY);
     assertEquals(expected, result);
 
     expected = googDom.getElementsByTagName(TagName.P)[0];
     result = googDom.findNode(
         document,
+        /**
+           @suppress {strictMissingProperties} suppression added to enable type
+           checking
+         */
         (n) => n.nodeType == NodeType.ELEMENT && n.tagName == TagName.P);
     assertEquals(expected, result);
 
@@ -1225,6 +1275,10 @@ testSuite({
     const expected = googDom.getElementsByTagName(TagName.P);
     let result = googDom.findNodes(
         document,
+        /**
+           @suppress {strictMissingProperties} suppression added to enable type
+           checking
+         */
         (n) => n.nodeType == NodeType.ELEMENT && n.tagName == TagName.P);
     assertEquals(expected.length, result.length);
     assertEquals(expected[0], result[0]);
@@ -1267,6 +1321,7 @@ testSuite({
     });
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testIsFocusableTabIndex() {
     assertFalse(
         'isFocusableTabIndex() must be false for no tab index',
@@ -1293,6 +1348,7 @@ testSuite({
     }
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetFocusableTabIndex() {
     // WebKit on Mac doesn't support focusable DIVs until version 526 and later.
     if (!userAgent.WEBKIT || !userAgent.MAC ||
@@ -1325,6 +1381,7 @@ testSuite({
     }
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testIsFocusable() {
     // Form elements without explicit tab index
     assertFocusable(googDom.getElement('noTabIndexAnchor'));  // <a href>
@@ -1439,6 +1496,7 @@ testSuite({
     assertEquals(12, googDom.getNodeTextOffset($('offsetTest1')));
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testGetNodeAtOffset() {
     const html =
         '<div id=a>123<b id=b>45</b><span id=c>67<b id=d>89<i id=e>01' +
@@ -1696,6 +1754,10 @@ testSuite({
         googDom.getElementsByTagName(TagName.TD, table)[0].childNodes.length);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSafeHtmlToNode() {
     const docFragment =
         googDom.safeHtmlToNode(testing.newSafeHtmlForTest('<a>1</a><b>2</b>'));
@@ -1824,6 +1886,7 @@ testSuite({
     assertEquals(100, googDom.getDocumentScroll().y);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetDocumentScrollOfFixedViewport() {
     // iOS and perhaps other environments don't actually support scrolling.
     // Instead, you view the document's fixed layout through a screen viewport.
@@ -1856,6 +1919,7 @@ testSuite({
       documentElement: {scrollLeft: 0, scrollTop: 0},
     };
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const dh = new DomHelper(fakeDocument);
     assertEquals(fakeDocument.documentElement, dh.getDocumentScrollElement());
     assertEquals(0, dh.getDocumentScroll().x);
@@ -1865,6 +1929,7 @@ testSuite({
 
   testDefaultToScrollingElement() {
     const fakeDocument = {documentElement: {}, body: {}};
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const dh = new DomHelper(fakeDocument);
 
     // When scrollingElement isn't supported or is null (no element causes
@@ -1896,6 +1961,7 @@ testSuite({
     assertEquals(link, googDom.getActiveElement(document));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testParentElement() {
     const testEl = $('testEl');
     const bodyEl = googDom.getParentElement(testEl);
@@ -1913,6 +1979,7 @@ testSuite({
         '</div>'));
     assertNull(googDom.getParentElement(tree));
     let pEl = googDom.getNextNode(tree);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const fragmentRootEl = googDom.getParentElement(pEl);
     assertEquals(tree, fragmentRootEl);
 
@@ -1951,11 +2018,16 @@ testSuite({
   testDevicePixelRatio() {
     const devicePixelRatio = 1.5;
     setWindow({
-      'matchMedia': function(query) {
-        return {
-          'matches': devicePixelRatio >= parseFloat(query.split(': ')[1], 10),
-        };
-      },
+      'matchMedia': /**
+                       @suppress {checkTypes} suppression added to enable type
+                       checking
+                     */
+          function(query) {
+            return {
+              'matches':
+                  devicePixelRatio >= parseFloat(query.split(': ')[1], 10),
+            };
+          },
     });
 
     assertEquals(devicePixelRatio, googDom.getPixelRatio());

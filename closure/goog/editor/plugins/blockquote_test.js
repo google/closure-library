@@ -22,6 +22,10 @@ let helper;
 let plugin;
 let root;
 
+/**
+ * @suppress {missingProperties,checkTypes} suppression added to enable type
+ * checking
+ */
 function createPlugin(requireClassname, paragraphMode = undefined) {
   field.queryCommandValue('+defaultTag')
       .$anyTimes()
@@ -32,6 +36,7 @@ function createPlugin(requireClassname, paragraphMode = undefined) {
   plugin.enable(field);
 }
 
+/** @suppress {checkTypes} suppression added to enable type checking */
 function execCommand() {
   field.$replay();
 

@@ -20,10 +20,12 @@ const TagName = goog.require('goog.dom.TagName');
 const UserAgents = goog.require('goog.userAgentTestUtil.UserAgents');
 const asserts = goog.require('goog.testing.asserts');
 const color = goog.require('goog.color');
+const dispose = goog.require('goog.dispose');
 const googArray = goog.require('goog.array');
 const googDom = goog.require('goog.dom');
 const googObject = goog.require('goog.object');
 const googStyle = goog.require('goog.style');
+const jsunit = goog.require('goog.testing.jsunit');
 const testSuite = goog.require('goog.testing.testSuite');
 const testing = goog.require('goog.html.testing');
 const userAgent = goog.require('goog.userAgent');
@@ -32,7 +34,8 @@ const util = goog.require('goog.labs.userAgent.util');
 
 // Delay running the tests after page load. This test has some asynchronous
 // behavior that interacts with page load detection.
-goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS = 500;
+/** @suppress {constantProperty} suppression added to enable type checking */
+jsunit.AUTO_RUN_DELAY_IN_MS = 500;
 
 const isBorderBox = !googDom.isCss1CompatMode();
 // IE9 and below throw an error if provided a unit other than 'px'.
@@ -116,6 +119,7 @@ testSuite({
     mockUserAgent.install();
 
     if (!goog.getScriptNonce()) {
+      /** @suppress {visibility} suppression added to enable type checking */
       goog.cspNonce_ = 'thisIsANonce';
     }
   },
@@ -128,11 +132,16 @@ testSuite({
     const testViewport = googDom.getElement('test-viewport');
     testViewport.setAttribute('style', '');
     googDom.removeChildren(testViewport);
-    goog.dispose(mockUserAgent);
+    dispose(mockUserAgent);
 
     // Prevent multiple vendor prefixed mock elements from poisoning the cache.
+    /** @suppress {visibility} suppression added to enable type checking */
     googStyle.styleNameCache_ = {};
 
+    /**
+     * @suppress {visibility,checkTypes} suppression added to enable type
+     * checking
+     */
     goog.cspNonce_ = undefined;
   },
 
@@ -249,6 +258,7 @@ testSuite({
     }
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetComputedBoxSizing() {
     if (!userAgent.IE || userAgent.isVersionOrHigher(8)) {
       const defaultBoxSizing =
@@ -476,6 +486,7 @@ testSuite({
     const mockEvent = {};
     mockEvent.clientX = 100;
     mockEvent.clientY = 200;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const pos = googStyle.getClientPosition(mockEvent);
     assertEquals(100, pos.x);
     assertEquals(200, pos.y);
@@ -487,6 +498,7 @@ testSuite({
     mockTouchEvent.changedTouches[0].clientX = 100;
     mockTouchEvent.changedTouches[0].clientY = 200;
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const pos = googStyle.getClientPosition(mockTouchEvent);
     assertEquals(100, pos.x);
     assertEquals(200, pos.y);
@@ -501,6 +513,7 @@ testSuite({
     mockTouchEvent.changedTouches[0].clientX = 100;
     mockTouchEvent.changedTouches[0].clientY = 200;
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const pos = googStyle.getClientPosition(mockTouchEvent);
     assertEquals(100, pos.x);
     assertEquals(200, pos.y);
@@ -512,6 +525,7 @@ testSuite({
     mockTouchEvent.changedTouches[0].clientX = 100;
     mockTouchEvent.changedTouches[0].clientY = 200;
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const e = new BrowserEvent(mockTouchEvent);
 
     const pos = googStyle.getClientPosition(e);
@@ -923,6 +937,7 @@ testSuite({
     const el = $('rotated');
     googStyle.setSize(el, 300, 200);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const noRotateDims = googStyle.getTransformedSize(el);
     assertEquals(300, noRotateDims.width);
     assertEquals(200, noRotateDims.height);
@@ -949,6 +964,7 @@ testSuite({
     const el = $('scaled');
     googStyle.setSize(el, 300, 200);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const noScaleDims = googStyle.getTransformedSize(el);
     assertEquals(300, noScaleDims.width);
     assertEquals(200, noScaleDims.height);
@@ -996,6 +1012,7 @@ testSuite({
     assertEquals(originalBackground, googStyle.getBackgroundColor(el));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testInstallSafeStyleSheetWithNonce() {
     // IE < 11 doesn't support nonce-based CSP
     if (userAgent.IE && !userAgent.isVersionOrHigher(11)) {
@@ -1146,6 +1163,10 @@ testSuite({
     assertFalse(isNaN(rect.height));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testGetContentBoxSize() {
     // Strict mode
     const getContentBoxSize = googStyle.getContentBoxSize;
@@ -1191,6 +1212,10 @@ testSuite({
     assertEquals(el.offsetHeight, rect.height);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSetBorderBoxSize() {
     // Strict mode
     const el = $('size-e');
@@ -1247,6 +1272,10 @@ testSuite({
     assertEquals(isIeLt8Quirks ? 39 : 20, el.offsetHeight);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSetContentBoxSize() {
     // Strict mode
     const el = $('size-e');
@@ -1296,6 +1325,7 @@ testSuite({
     setContentBoxSize(el, new Size(-10, -10));
 
     // NOTE(nicksantos): I'm not really sure why IE7 is special here.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const isIeLt8Quirks = userAgent.IE &&
         !userAgent.isDocumentModeOrHigher('8') && !googDom.isCss1CompatMode();
     assertEquals(20, el.offsetWidth);
@@ -1651,6 +1681,7 @@ testSuite({
     assertTrue(googStyle.isElementShown(el));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetOpacity() {
     const el1 = {style: {opacity: '0.3'}};
 
@@ -1686,6 +1717,7 @@ testSuite({
     assertEquals('', googStyle.getOpacity($('test-opacity')));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetOpacity() {
     const el1 = {style: {opacity: '0.3'}};
     googStyle.setOpacity(el1, 0.8);
@@ -1905,6 +1937,7 @@ testSuite({
     assertEquals(iframeViewportSize.width, visible.right);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetVisibleRectForElementWithBodyScrolled() {
     const container = googDom.getElement('test-visible2');
     const dom = googDom.getDomHelper(container);
@@ -1961,6 +1994,7 @@ testSuite({
     assertNull(googStyle.getVisibleRectForElement(el));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetVisibleRectForElementWithNestedAreaAndNonOffsetAncestor() {
     // IE7 quirks mode somehow consider container2 below as offset parent
     // of the element, which is incorrect.
@@ -2033,6 +2067,7 @@ testSuite({
     assertNull(googStyle.getVisibleRectForElement(el));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetVisibleRectForElementInsideNestedScrollableArea() {
     const container = googDom.getElement('test-visible2');
     const dom = googDom.getDomHelper(container);
@@ -2258,6 +2293,7 @@ testSuite({
     assertEquals(parent, googStyle.getOffsetParent(child));
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testShadowDomOffsetParent() {
     // Ignore browsers that don't support shadowDOM.
     if (!document.createShadowRoot) {
@@ -2319,6 +2355,7 @@ testSuite({
     // First check the element is actually translated, and we haven't missed
     // one of the vendor-specific transform properties
     const position = googStyle.getClientPosition(element);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const translation = googStyle.getCssTranslation(element);
     const expectedTranslation = new Coordinate(20, 30);
 
@@ -2330,6 +2367,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * with a vendor prefix for Webkit.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleNameWebkit() {
     const mockElement = {'style': {'WebkitTransformOrigin': ''}};
@@ -2343,6 +2381,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * when it exists without a vendor prefix for Webkit.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleNameWebkitNoPrefix() {
     const mockElement = {
@@ -2358,6 +2397,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * with a vendor prefix for Gecko.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleNameGecko() {
     const mockElement = {'style': {'MozTransformOrigin': ''}};
@@ -2371,6 +2411,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * when it exists without a vendor prefix for Gecko.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleNameGeckoNoPrefix() {
     const mockElement = {
@@ -2386,6 +2427,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * with a vendor prefix for IE.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleNameIE() {
     const mockElement = {'style': {'msTransformOrigin': ''}};
@@ -2399,6 +2441,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * when it exists without a vendor prefix for IE.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleNameIENoPrefix() {
     const mockElement = {
@@ -2414,6 +2457,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * with a vendor prefix for Opera.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleNameOpera() {
     const mockElement = {'style': {'OTransformOrigin': ''}};
@@ -2427,6 +2471,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * when it exists without a vendor prefix for Opera.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleNameOperaNoPrefix() {
     const mockElement = {
@@ -2442,6 +2487,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * with a vendor prefix for Webkit.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorJsStyleNameWebkit() {
     const mockElement = {'style': {'WebkitTransformOrigin': ''}};
@@ -2455,6 +2501,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * when it exists without a vendor prefix for Webkit.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorJsStyleNameWebkitNoPrefix() {
     const mockElement = {
@@ -2470,6 +2517,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * with a vendor prefix for Gecko.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorJsStyleNameGecko() {
     const mockElement = {'style': {'MozTransformOrigin': ''}};
@@ -2483,6 +2531,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * when it exists without a vendor prefix for Gecko.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorJsStyleNameGeckoNoPrefix() {
     const mockElement = {
@@ -2498,6 +2547,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * with a vendor prefix for IE.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorJsStyleNameIE() {
     const mockElement = {'style': {'msTransformOrigin': ''}};
@@ -2511,6 +2561,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * when it exists without a vendor prefix for IE.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorJsStyleNameIENoPrefix() {
     const mockElement = {
@@ -2526,6 +2577,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * with a vendor prefix for Opera.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorJsStyleNameOpera() {
     const mockElement = {'style': {'OTransformOrigin': ''}};
@@ -2539,6 +2591,7 @@ testSuite({
   /**
    * Test for the proper vendor style name for a CSS property
    * when it exists without a vendor prefix for Opera.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testGetVendorJsStyleNameOperaNoPrefix() {
     const mockElement = {
@@ -2554,6 +2607,7 @@ testSuite({
   /**
    * Test for the setting a style name for a CSS property
    * with a vendor prefix for Webkit.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testSetVendorStyleWebkit() {
     const mockElement = {'style': {'WebkitTransform': ''}};
@@ -2567,6 +2621,7 @@ testSuite({
   /**
    * Test for the setting a style name for a CSS property
    * with a vendor prefix for Mozilla.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testSetVendorStyleGecko() {
     const mockElement = {'style': {'MozTransform': ''}};
@@ -2580,6 +2635,7 @@ testSuite({
   /**
    * Test for the setting a style name for a CSS property
    * with a vendor prefix for IE.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testSetVendorStyleIE() {
     const mockElement = {'style': {'msTransform': ''}};
@@ -2593,6 +2649,7 @@ testSuite({
   /**
    * Test for the setting a style name for a CSS property
    * with a vendor prefix for Opera.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testSetVendorStyleOpera() {
     const mockElement = {'style': {'OTransform': ''}};
@@ -2606,6 +2663,7 @@ testSuite({
   /**
    * Test for the getting a style name for a CSS property
    * with a vendor prefix for Webkit.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleWebkit() {
     const mockElement = {'style': {'WebkitTransform': ''}};
@@ -2619,6 +2677,7 @@ testSuite({
   /**
    * Test for the getting a style name for a CSS property
    * with a vendor prefix for Mozilla.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleGecko() {
     const mockElement = {'style': {'MozTransform': ''}};
@@ -2632,6 +2691,7 @@ testSuite({
   /**
    * Test for the getting a style name for a CSS property
    * with a vendor prefix for IE.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleIE() {
     const mockElement = {'style': {'msTransform': ''}};
@@ -2645,6 +2705,7 @@ testSuite({
   /**
    * Test for the getting a style name for a CSS property
    * with a vendor prefix for Opera.
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   testGetVendorStyleOpera() {
     const mockElement = {'style': {'OTransform': ''}};
@@ -2655,6 +2716,10 @@ testSuite({
     assertEquals(styleValue, googStyle.getStyle(mockElement, 'transform'));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testParseStyleAttributeWithColon() {
     // Regression test for https://github.com/google/closure-library/issues/127.
     const cssObj = googStyle.parseStyleAttribute(

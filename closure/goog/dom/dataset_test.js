@@ -118,6 +118,7 @@ testSuite({
         dataset.get(el, 'dynamicKey'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetAll() {
     const el = $('el1');
     const expectedDataset = {

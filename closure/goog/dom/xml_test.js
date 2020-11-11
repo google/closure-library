@@ -39,6 +39,10 @@ testSuite({
     assertTrue(/(<\?xml version="1.0"\?>)?<root ?\/>/.test(serializedDoc));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testBelowMaxDepthInIE() {
     if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
       // This value is only effective in IE8 and below
@@ -50,6 +54,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testAboveMaxDepthInIE() {
     if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
       // This value is only effective in IE8 and below
@@ -61,6 +69,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testBelowMaxSizeInIE() {
     if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
       // This value is only effective in IE8 and below
@@ -72,6 +84,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testMaxSizeInIE() {
     if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
       // This value is only effective in IE8 and below

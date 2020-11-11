@@ -24,6 +24,7 @@ testSuite({
     element = {'style': {}};
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetWithNoProperty() {
     try {
       transition.set(element, []);
@@ -33,11 +34,13 @@ testSuite({
     fail('Should fail when no property is given.');
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetWithString() {
     transition.set(element, 'opacity 1s ease-in 0.125s');
     assertEquals('opacity 1s ease-in 0.125s', getTransitionStyle(element));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetWithSingleProperty() {
     transition.set(
         element,
@@ -45,12 +48,14 @@ testSuite({
     assertEquals('opacity 1s ease-in 0.125s', getTransitionStyle(element));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetWithMultipleStrings() {
     transition.set(element, ['width 1s ease-in', 'height 0.5s linear 1s']);
     assertEquals(
         'width 1s ease-in,height 0.5s linear 1s', getTransitionStyle(element));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetWithMultipleProperty() {
     transition.set(element, [
       {property: 'width', duration: 1, timing: 'ease-in', delay: 0},
@@ -61,6 +66,7 @@ testSuite({
         getTransitionStyle(element));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRemoveAll() {
     style.setStyle(element, 'transition', 'opacity 1s ease-in');
     transition.removeAll(element);

@@ -54,6 +54,7 @@ function initSeamlessField(innerHTML, styles) {
  * and that's not what we want.
  * @param {?Field} fieldObj The field.
  * @param {?HTMLIFrameElement} iframe The iframe.
+ * @suppress {visibility} suppression added to enable type checking
  */
 function assertAttachSeamlessIframeSizesCorrectly(fieldObj, iframe) {
   const size = style.getSize(fieldObj.getOriginalElement());
@@ -114,6 +115,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testFieldWithOverflow() {
     if (!BrowserFeature.HAS_CONTENT_EDITABLE) {
       assertAttachSeamlessIframeSizesCorrectly(
@@ -125,6 +130,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testFieldWithOverflowAndPadding() {
     if (!BrowserFeature.HAS_CONTENT_EDITABLE) {
       const blendedField =
@@ -156,6 +165,7 @@ testSuite({
         clock.tick(1);
 
         // Capture starting heights.
+        /** @suppress {visibility} suppression added to enable type checking */
         const unwrappedIframeHeight =
             blendedField.getEditableIframe().offsetHeight;
 
@@ -164,6 +174,7 @@ testSuite({
         blendedField.doFieldSizingGecko();
 
         // Iframe should grow as a result.
+        /** @suppress {visibility} suppression added to enable type checking */
         const wrappedIframeHeight =
             blendedField.getEditableIframe().offsetHeight;
         assertTrue(
@@ -178,6 +189,7 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDispatchIframeResizedForWrapperHeight() {
     if (!BrowserFeature.HAS_CONTENT_EDITABLE) {
       const clock = new MockClock(true);
@@ -213,6 +225,7 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDispatchIframeResizedForBodyHeight() {
     if (!BrowserFeature.HAS_CONTENT_EDITABLE) {
       const clock = new MockClock(true);
@@ -237,7 +250,9 @@ testSuite({
         assertFalse('Iframe resize must not be dispatched yet', resizeCalled);
 
         // Resize the field to a different body height.
+        /** @suppress {visibility} suppression added to enable type checking */
         const bodyHeight = blendedField.getIframeBodyHeightGecko_();
+        /** @suppress {visibility} suppression added to enable type checking */
         blendedField.getIframeBodyHeightGecko_ = () => bodyHeight + 1;
         blendedField.sizeIframeToBodyHeightGecko_();
         assertTrue('Iframe resize must be dispatched for Body', resizeCalled);
@@ -248,6 +263,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testDispatchBlur() {
     if (!BrowserFeature.HAS_CONTENT_EDITABLE &&
         !BrowserFeature.CLEARS_SELECTION_WHEN_FOCUS_LEAVES) {
@@ -263,7 +282,9 @@ testSuite({
       const clearSelection = Range.clearSelection;
       let cleared = false;
       let clearedWindow;
+      /** @suppress {visibility} suppression added to enable type checking */
       blendedField.editableDomHelper = new DomHelper();
+      /** @suppress {visibility} suppression added to enable type checking */
       blendedField.editableDomHelper.getWindow =
           functions.constant(iframe.contentWindow);
       const mockRange = new MockRange();
@@ -291,6 +312,7 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSetMinHeight() {
     if (!BrowserFeature.HAS_CONTENT_EDITABLE) {
       const clock = new MockClock(true);
@@ -352,6 +374,7 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testStartChangeEvents() {
     if (BrowserFeature.USE_MUTATION_EVENTS) {
       const clock = new MockClock(true);
@@ -441,6 +464,7 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAttachIframe() {
     const blendedField = initSeamlessField('Hi!', {});
     const iframe = createSeamlessIframe();

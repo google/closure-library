@@ -23,6 +23,7 @@ function isBuggyGecko() {
 
 let monitor;
 
+/** @suppress {visibility} suppression added to enable type checking */
 function getResizeTarget() {
   return userAgent.IE ? monitor.sizeElement_ :
                         dom.getFrameContentWindow(monitor.sizeElement_);
@@ -37,6 +38,7 @@ testSuite({
     monitor.dispose();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testFontSizeNoChange() {
     // This tests that firing the resize event without changing the font-size
     // does not trigger the event.
@@ -52,6 +54,10 @@ testSuite({
     assertFalse('The font size should not have changed', fired);
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testFontSizeChanged() {
     // One can trigger the iframe resize by changing the
     // document.body.style.fontSize but the event is fired asynchronously in
@@ -197,6 +203,10 @@ testSuite({
     try {
       // 1.9 should clear iframes
       pr.set(userAgent, 'VERSION', '1.9');
+      /**
+       * @suppress {visibility,checkTypes,constantProperty} suppression added
+       * to enable type checking
+       */
       userAgent.isVersionOrHigherCache_ = {};
 
       const frameCount = window.frames.length;
@@ -233,6 +243,10 @@ testSuite({
     try {
       // 1.8 should NOT clear iframes
       pr.set(userAgent, 'VERSION', '1.8');
+      /**
+       * @suppress {visibility,checkTypes,constantProperty} suppression added
+       * to enable type checking
+       */
       userAgent.isVersionOrHigherCache_ = {};
 
       const frameCount = window.frames.length;

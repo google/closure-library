@@ -81,6 +81,7 @@ const setAndAssertScale = (x, y, z) => {
  *     resulting rotation in degrees, or a function to evaluate the resulting
  *     rotation.
  * @param {string=} opt_transform The plaintext CSS transform value.
+ * @suppress {visibility} suppression added to enable type checking
  */
 const setAndAssertRotation = (expectedDegrees, opt_transform) => {
   if (userAgent.GECKO ||

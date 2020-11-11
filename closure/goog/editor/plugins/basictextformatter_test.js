@@ -42,6 +42,7 @@ let OPEN_SUPER;
 let CLOSE_SUPER;
 const MOCK_BLOCKQUOTE_STYLE = 'border-left: 1px solid gray;';
 class MOCK_GET_BLOCKQUOTE_STYLES {
+  /** @suppress {checkTypes} suppression added to enable type checking */
   constructor() {
     return MOCK_BLOCKQUOTE_STYLE;
   }
@@ -60,6 +61,7 @@ function setUpRealField() {
 }
 
 function setUpRealFieldIframe() {
+  /** @suppress {const} suppression added to enable type checking */
   REAL_FIELD = new Field('iframe');
   FORMATTER = new BasicTextFormatter();
   REAL_FIELD.registerPlugin(FORMATTER);
@@ -71,6 +73,7 @@ function selectRealField() {
   REAL_FIELD.dispatchSelectionChangeEvent();
 }
 
+/** @suppress {missingProperties} suppression added to enable type checking */
 function setUpListAndBlockquoteTests() {
   const htmlDiv = document.getElementById('html');
   HELPER = new TestHelper(htmlDiv);
@@ -84,6 +87,7 @@ function setUpListAndBlockquoteTests() {
 function tearDownHelper() {
   HELPER.tearDownEditableElement();
   HELPER.dispose();
+  /** @suppress {const} suppression added to enable type checking */
   HELPER = null;
 }
 
@@ -93,6 +97,7 @@ function tearDownListAndBlockquoteTests() {
 
 function setUpSubSuperTests() {
   dom.setTextContent(ROOT, '12345');
+  /** @suppress {const} suppression added to enable type checking */
   HELPER = new TestHelper(ROOT);
   HELPER.setUpEditableElement();
 }
@@ -101,10 +106,12 @@ function tearDownSubSuperTests() {
   tearDownHelper();
 }
 
+/** @suppress {missingProperties} suppression added to enable type checking */
 function setUpLinkTests(text, url, isEditable) {
   stubs.set(window, 'prompt', () => url);
 
   ROOT.innerHTML = text;
+  /** @suppress {const} suppression added to enable type checking */
   HELPER = new TestHelper(ROOT);
   if (isEditable) {
     HELPER.setUpEditableElement();
@@ -126,8 +133,13 @@ function tearDownLinkTests() {
   tearDownHelper();
 }
 
+/**
+ * @suppress {checkTypes,missingProperties} suppression added to enable type
+ * checking
+ */
 function setUpJustifyTests(html) {
   ROOT.innerHTML = html;
+  /** @suppress {const} suppression added to enable type checking */
   HELPER = new TestHelper(ROOT);
   HELPER.setUpEditableElement(ROOT);
 
@@ -147,10 +159,12 @@ function tearDownJustifyTests() {
 let isFontSizeTest = false;
 let defaultFontSizeMap;
 
+/** @suppress {missingProperties} suppression added to enable type checking */
 function setUpFontSizeTests() {
   isFontSizeTest = true;
   ROOT.innerHTML = '1<span style="font-size:2px">23</span>4' +
       '<span style="font-size:5px; white-space:pre">56</span>7';
+  /** @suppress {const} suppression added to enable type checking */
   HELPER = new TestHelper(ROOT);
   HELPER.setUpEditableElement();
   FIELDMOCK.getElement().$returns(ROOT).$anyTimes();
@@ -222,6 +236,7 @@ function assertFontSizes(msg, sizeChangesMap) {
  * span's style, because our fix for {@bug 1286408} would remove that style.
  * @param {function()} doSelect Function to select the "23" text in the test
  *     content.
+ * @suppress {visibility} suppression added to enable type checking
  */
 function doTestFontSizeStyledSpan(doSelect) {
   // Make sure no new browsers start getting this bad behavior. If they do,
@@ -253,13 +268,23 @@ function doTestFontSizeStyledSpan(doSelect) {
   }
 }
 
+/** @suppress {missingProperties} suppression added to enable type checking */
 function setUpIframeField(content) {
   const ifr = document.getElementById('iframe');
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   const body = ifr.contentWindow.document.body;
   body.innerHTML = content;
 
+  /** @suppress {const} suppression added to enable type checking */
   HELPER = new TestHelper(body);
   HELPER.setUpEditableElement();
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   FIELDMOCK = new FieldMock(ifr.contentWindow);
   FIELDMOCK.getElement();
   FIELDMOCK.$anyTimes();
@@ -267,6 +292,10 @@ function setUpIframeField(content) {
   FIELDMOCK.queryCommandValue('rtl');
   FIELDMOCK.$anyTimes();
   FIELDMOCK.$returns(null);
+  /**
+   * @suppress {visibility,checkTypes} suppression added to enable type
+   * checking
+   */
   FORMATTER.fieldObject = FIELDMOCK;
 }
 
@@ -274,8 +303,10 @@ function tearDownIframeField() {
   tearDownHelper();
 }
 
+/** @suppress {missingProperties} suppression added to enable type checking */
 function setUpConvertBreaksToDivTests() {
   ROOT.innerHTML = '<p>paragraph</p>one<br id="br1">two<br><br><br>three';
+  /** @suppress {const} suppression added to enable type checking */
   HELPER = new TestHelper(ROOT);
   HELPER.setUpEditableElement();
 
@@ -335,7 +366,10 @@ function doTestIsJustificationPInDiv(useCss, align, command) {
       REAL_FIELD.queryCommandValue(command));
 }
 
-/** Assert that the prepared contents matches the expected. */
+/**
+ * Assert that the prepared contents matches the expected.
+ * @suppress {visibility} suppression added to enable type checking
+ */
 function assertPreparedContents(expected, original) {
   assertEquals(
       expected,
@@ -362,6 +396,7 @@ function assertNotBadBrElements(html) {
   }
 }
 testSuite({
+  /** @suppress {uselessCode} suppression added to enable type checking */
   setUpPage() {
     stubs = new PropertyReplacer();
     SAVED_HTML = dom.getElement('html').innerHTML;
@@ -385,9 +420,15 @@ testSuite({
   },
 
   setUp() {
+    /** @suppress {const} suppression added to enable type checking */
     FIELDMOCK = new FieldMock();
 
+    /** @suppress {const} suppression added to enable type checking */
     FORMATTER = new BasicTextFormatter();
+    /**
+     * @suppress {visibility,checkTypes} suppression added to enable type
+     * checking
+     */
     FORMATTER.fieldObject = FIELDMOCK;
   },
 
@@ -397,6 +438,7 @@ testSuite({
     if (REAL_FIELD) {
       REAL_FIELD.makeUneditable();
       REAL_FIELD.dispose();
+      /** @suppress {const} suppression added to enable type checking */
       REAL_FIELD = null;
     }
 
@@ -406,6 +448,10 @@ testSuite({
     dom.getElement('html').innerHTML = SAVED_HTML;
   },
 
+  /**
+     @suppress {missingProperties,visibility,strictMissingProperties}
+     suppression added to enable type checking
+   */
   testIEList() {
     if (userAgent.IE) {
       setUpListAndBlockquoteTests();
@@ -419,12 +465,20 @@ testSuite({
       FORMATTER.fixIELists_();
       assertFalse('Unordered list must not have ordered type', ul.type == '1');
       const ol = dom.getElement('ol');
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       ol.type = 'disc';
       Range.createFromNodeContents(dom.getFirstElementChild(ul).firstChild)
           .select();
       FORMATTER.fixIELists_();
       assertFalse(
           'Ordered list must not have unordered type', ol.type == 'disc');
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       ol.type = '1';
       Range.createFromNodeContents(dom.getFirstElementChild(ul).firstChild)
           .select();
@@ -434,6 +488,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {missingProperties,visibility} suppression added to enable type
+     checking
+   */
   testWebKitList() {
     if (userAgent.WEBKIT) {
       setUpListAndBlockquoteTests();
@@ -452,12 +510,14 @@ testSuite({
       Range.createFromNodeContents(ul).select();
 
       FORMATTER.fixSafariLists_();
+      /** @suppress {checkTypes} suppression added to enable type checking */
       const childULs = dom.getElementsByTagName(TagName.UL, ul);
       assertEquals('UL should have one child UL', 1, childULs.length);
       tearDownListAndBlockquoteTests();
     }
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testGeckoListFont() {
     if (userAgent.GECKO) {
       setUpListAndBlockquoteTests();
@@ -467,11 +527,13 @@ testSuite({
       const p = dom.getElement('geckolist');
       const font = p.firstChild;
       Range.createFromNodeContents(font).select();
+      /** @suppress {visibility} suppression added to enable type checking */
       let retVal = FORMATTER.beforeInsertListGecko_();
       assertFalse('Workaround shouldn\'t be applied when not needed', retVal);
 
       dom.removeChildren(font);
       Range.createFromNodeContents(font).select();
+      /** @suppress {visibility} suppression added to enable type checking */
       retVal = FORMATTER.beforeInsertListGecko_();
       assertTrue('Workaround should be applied when needed', retVal);
       document.execCommand('insertorderedlist', false, true);
@@ -482,6 +544,7 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSwitchListType() {
     if (!userAgent.WEBKIT) {
       return;
@@ -524,6 +587,7 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSubscriptRemovesSuperscript() {
     setUpSubSuperTests();
     FIELDMOCK.$replay();
@@ -538,6 +602,7 @@ testSuite({
     tearDownSubSuperTests();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSuperscriptRemovesSubscript() {
     setUpSubSuperTests();
     FIELDMOCK.$replay();
@@ -552,6 +617,7 @@ testSuite({
     tearDownSubSuperTests();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSubscriptRemovesSuperscriptIntersecting() {
     // Tests: 12345 , sup(23) , sub(34) ==> 1+sup(2)+sub(34)+5
     // This is more complex because the sub and sup calls are made on separate
@@ -572,6 +638,7 @@ testSuite({
     tearDownSubSuperTests();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSuperscriptRemovesSubscriptIntersecting() {
     // Tests: 12345 , sub(23) , sup(34) ==> 1+sub(2)+sup(34)+5
     setUpSubSuperTests();
@@ -589,6 +656,7 @@ testSuite({
     tearDownSubSuperTests();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testLink() {
     setUpLinkTests('12345', 'http://www.x.com/', true);
     FIELDMOCK.$replay();
@@ -604,6 +672,7 @@ testSuite({
     tearDownLinkTests();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testLinks() {
     const url1 = 'http://google.com/1';
     const url2 = 'http://google.com/2';
@@ -624,6 +693,7 @@ testSuite({
         '</a></p>');
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSelectedLink() {
     setUpLinkTests('12345', 'http://www.x.com/', true);
     FIELDMOCK.$replay();
@@ -639,6 +709,10 @@ testSuite({
     tearDownLinkTests();
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testCanceledLink() {
     setUpLinkTests('12345', undefined, true);
     FIELDMOCK.$replay();
@@ -653,6 +727,10 @@ testSuite({
     tearDownLinkTests();
   },
 
+  /**
+     @suppress {missingProperties,visibility} suppression added to enable type
+     checking
+   */
   testUnfocusedLink() {
     FIELDMOCK.$reset();
     FIELDMOCK.getEditableDomHelper().$anyTimes().$returns(
@@ -668,11 +746,16 @@ testSuite({
     tearDownLinkTests();
   },
 
+  /**
+     @suppress {missingProperties,visibility} suppression added to enable type
+     checking
+   */
   testCreateLink() {
     const text = 'some text here';
     const url = 'http://google.com';
 
     ROOT.innerHTML = text;
+    /** @suppress {const} suppression added to enable type checking */
     HELPER = new TestHelper(ROOT);
     HELPER.setUpEditableElement();
     FIELDMOCK.isSelectionEditable().$anyTimes().$returns(true);
@@ -688,6 +771,7 @@ testSuite({
     tearDownLinkTests();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testJustify() {
     setUpJustifyTests('<div>abc</div><p>def</p><div>ghi</div>');
     FIELDMOCK.$replay();
@@ -703,6 +787,7 @@ testSuite({
     tearDownJustifyTests();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testJustifyInInline() {
     setUpJustifyTests('<div>a<i>b</i>c</div><div>d</div>');
     FIELDMOCK.$replay();
@@ -716,6 +801,7 @@ testSuite({
     tearDownJustifyTests();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testJustifyInBlock() {
     setUpJustifyTests('<div>a<div>b</div>c</div>');
     FIELDMOCK.$replay();
@@ -733,6 +819,7 @@ testSuite({
    * Regression test for {@bug 1286408}. Tests that when you change the font
    * size of a selection, any font size styles that were nested inside are
    * removed.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testFontSizeOverridesStyleAttr() {
     setUpFontSizeTests();
@@ -759,6 +846,7 @@ testSuite({
   /**
    * Make sure the style stripping works when the selection starts and stops in
    * different nodes that both contain font size styles.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testFontSizeOverridesStyleAttrMultiNode() {
     setUpFontSizeTests();
@@ -795,6 +883,7 @@ testSuite({
   /**
    * Makes sure the font size style is not removed when only a part of the
    * element with font size style is selected during the font size command.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testFontSizeDoesntOverrideStyleAttr() {
     setUpFontSizeTests();
@@ -815,6 +904,7 @@ testSuite({
    * Makes sure the font size style is not removed when only a part of the
    * element with font size style is selected during the font size command, but
    * is removed for another element that is fully selected.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testFontSizeDoesntOverrideStyleAttrMultiNode() {
     setUpFontSizeTests();
@@ -851,7 +941,11 @@ testSuite({
     });
   },
 
-  /** @bug 1414941 */
+  /**
+   * @bug 1414941
+   * @suppress {visibility,missingProperties} suppression added to
+   *      enable type checking
+   */
   testConvertBreaksToDivsKeepsP() {
     if (BrowserFeature.CAN_LISTIFY_BR) {
       return;
@@ -864,6 +958,9 @@ testSuite({
     assertEquals(
         'There should still be a <p> tag', 1,
         dom.getElementsByTagName(TagName.P, FIELDMOCK.getElement()).length);
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const html = FIELDMOCK.getElement().innerHTML.toLowerCase();
     assertNotBadBrElements(html);
     assertNotContains(
@@ -876,6 +973,7 @@ testSuite({
   /**
    * @bug 1414937
    * @bug 934535
+   * @suppress {visibility} suppression added to enable type checking
    */
   testConvertBreaksToDivsDoesntCollapseBR() {
     if (BrowserFeature.CAN_LISTIFY_BR) {
@@ -886,6 +984,9 @@ testSuite({
 
     HELPER.select('three', 0);
     FORMATTER.convertBreaksToDivs_();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const html = FIELDMOCK.getElement().innerHTML.toLowerCase();
     assertNotBadBrElements(html);
     assertNotContains(
@@ -901,6 +1002,10 @@ testSuite({
     tearDownConvertBreaksToDivTests();
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testConvertBreaksToDivsSelection() {
     if (BrowserFeature.CAN_LISTIFY_BR) {
       return;
@@ -909,6 +1014,9 @@ testSuite({
     FIELDMOCK.$replay();
 
     HELPER.select('two', 1, 'three', 3);
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const before = FIELDMOCK.getRange().getText().replace(/\s/g, '');
     FORMATTER.convertBreaksToDivs_();
     assertEquals(
@@ -919,7 +1027,11 @@ testSuite({
     tearDownConvertBreaksToDivTests();
   },
 
-  /** @bug 1414937 */
+  /**
+   * @bug 1414937
+   * @suppress {visibility,missingProperties} suppression added to
+   *      enable type checking
+   */
   testConvertBreaksToDivsInsertList() {
     setUpConvertBreaksToDivTests();
     FIELDMOCK.$replay();
@@ -937,6 +1049,7 @@ testSuite({
    * Regression test for {@bug 1939883}, where if a br has an id, it causes
    * the convert br code to throw a js error. This goes a step further and
    * ensures that the id is preserved in the resulting div element.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testConvertBreaksToDivsKeepsId() {
     if (BrowserFeature.CAN_LISTIFY_BR) {
@@ -947,6 +1060,9 @@ testSuite({
 
     HELPER.select('one', 0, 'two', 0);
     FORMATTER.convertBreaksToDivs_();
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const html = FIELDMOCK.getElement().innerHTML.toLowerCase();
     assertNotBadBrElements(html);
     const idBr = document.getElementById('br1');
@@ -983,6 +1099,8 @@ testSuite({
    * considered "on" when you first tab into the editable field. In this
    * situation, when lorem ipsum is the only node in the editable field iframe
    * body, mockField.getRange() returns an empty range.
+   * @suppress {missingProperties,visibility} suppression added to enable type
+   * checking
    */
   testIsJustificationEmptySelection() {
     const mockField = new LooseMock(Field);
@@ -993,6 +1111,10 @@ testSuite({
     mockField.getPluginByClassId('Bidi');
     mockField.$anyTimes();
     mockField.$returns(null);
+    /**
+     * @suppress {visibility,checkTypes} suppression added to enable type
+     * checking
+     */
     FORMATTER.fieldObject = mockField;
 
     mockField.$replay();
@@ -1190,6 +1312,9 @@ testSuite({
       'tabIndex': '0',
       'tabIndexSet': '0',
     };
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     attrs[goog.HASH_CODE_PROPERTY_] = '0';
     dom.appendChild(fieldElem, dom.createDom(TagName.IMG, attrs));
 
@@ -1204,6 +1329,7 @@ testSuite({
         -1 != html.indexOf('/foo.jpg'));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGeckoSelectionChange() {
     if (!userAgent.GECKO || !userAgent.isVersionOrHigher('1.9')) {
       return;
@@ -1213,8 +1339,16 @@ testSuite({
     // Use native selection for this test because goog.dom.Range will
     // change selections of <br>
     const ifr = document.getElementById('iframe');
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     ifr.contentWindow.document.body.innerHTML =
         'hello<br id="br1"><br id="br2">';
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     const body = ifr.contentWindow.document.body;
     const range = REAL_FIELD.getRange();
     const browserRange = range.getBrowserRangeObject();
@@ -1239,6 +1373,7 @@ testSuite({
     REAL_FIELD.setSafeHtml(false, SafeHtml.create('blockquote', {}, 'hi'));
     Range.createFromNodeContents(REAL_FIELD.getElement()).select();
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const nodes = REAL_PLUGIN.applyExecCommandIEFixes_('insertOrderedList');
     if (userAgent.isVersionOrHigher('9')) {
       assertHTMLEquals(

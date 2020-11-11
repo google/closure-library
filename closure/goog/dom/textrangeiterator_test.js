@@ -100,6 +100,10 @@ testSuite({
     testingDom.assertNodesMatch(iterator, ['e', '#b1']);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSkipTagDoesNotSkipEnd() {
     // Iterate over 'Tex'.
     const iterator = new TextRangeIterator(
@@ -117,8 +121,13 @@ testSuite({
     assertEquals('xt', node.nodeValue);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSkipTagSkipsEnd() {
     // Iterate over 'Te'.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const iterator = new TextRangeIterator(
         test.firstChild.firstChild, 0,
         dom.getElementsByTagName(TagName.B, test)[0].firstChild, 1);

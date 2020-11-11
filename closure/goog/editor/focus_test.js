@@ -22,6 +22,8 @@ testSuite({
   /**
    * Tests that focusInputField() puts focus in the input field and sets the
    * cursor to the end of the text cointained inside.
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
    */
   testFocusInputField() {
     const input = document.getElementById('myInput');
