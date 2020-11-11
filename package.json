@@ -1,7 +1,7 @@
 {
   "name": "google-closure-library",
   "description": "Google's common JavaScript library",
-  "version": "20201006.0.0",
+  "version": "20201102.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/google/closure-library.git"
