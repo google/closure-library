@@ -1,12 +1,13 @@
 /**
- * @fileoverview
- * @suppress {strictMissingProperties,missingProperties} suppression added to
- * enable type checking
- */
-/**
  * @license
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview
+ * @suppress {strictMissingProperties,missingProperties} suppression added to
+ * enable type checking
  */
 
 goog.module('goog.crypt.hash32Test');
