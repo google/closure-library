@@ -50,8 +50,21 @@ goog.require('goog.db.Transaction');
  * @type {!IDBFactory|undefined}
  * @private
  */
-goog.db.indexedDb_ = goog.global.indexedDB || goog.global.mozIndexedDB ||
-    goog.global.webkitIndexedDB || goog.global.moz_indexedDB;
+goog.db.indexedDb_;
+
+/**
+ * Lazily initializes the IndexedDB factory object.
+ *
+ * @return {!IDBFactory|undefined}
+ * @private
+ */
+goog.db.getIndexedDb_ = function() {
+  if (goog.db.indexedDb_ == undefined) {
+    goog.db.indexedDb_ = goog.global.indexedDB || goog.global.mozIndexedDB ||
+        goog.global.webkitIndexedDB || goog.global.moz_indexedDB;
+  }
+  return goog.db.indexedDb_;
+};
 
 
 /**
@@ -119,8 +132,9 @@ goog.db.openDatabase = function(
           'opt_onUpgradeNeeded is also passed');
 
   var d = new goog.async.Deferred();
-  var openRequest = opt_version ? goog.db.indexedDb_.open(name, opt_version) :
-                                  goog.db.indexedDb_.open(name);
+  let openRequest = opt_version ?
+      goog.db.getIndexedDb_().open(name, opt_version) :
+      goog.db.getIndexedDb_().open(name);
   openRequest.onsuccess = function(ev) {
     'use strict';
     var db = new goog.db.IndexedDb(ev.target.result);
@@ -163,7 +177,7 @@ goog.db.openDatabase = function(
 goog.db.deleteDatabase = function(name, opt_onBlocked) {
   'use strict';
   var d = new goog.async.Deferred();
-  var deleteRequest = goog.db.indexedDb_.deleteDatabase(name);
+  let deleteRequest = goog.db.getIndexedDb_().deleteDatabase(name);
   deleteRequest.onsuccess = function(ev) {
     'use strict';
     d.callback();
