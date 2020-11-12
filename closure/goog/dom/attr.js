@@ -97,6 +97,7 @@ goog.dom.Attr = {
   REL: 'rel',
   REQUIRED: 'required',
   REVERSED: 'reversed',
+  ROLE: 'role',
   ROWS: 'rows',
   ROWSPAN: 'rowspan',
   SANDBOX: 'sandbox',
