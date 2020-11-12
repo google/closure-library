@@ -6,7 +6,7 @@
 /**
  * @fileoverview Number formatting symbols.
  *
- * File generated from CLDR ver. 37
+ * File generated from CLDR ver. 38
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -16,7 +16,7 @@
  * "numberformatsymbolsext.js", which will be generated at
  * the same time together with this file.
  *
- * @suppress {const}
+ * @suppress {const,useOfGoogProvide}
  */
 
 // clang-format off
@@ -1136,7 +1136,7 @@ goog.i18n.NumberFormatSymbols_ga = {
   EXP_SYMBOL: 'E',
   PERMILL: '‰',
   INFINITY: '∞',
-  NAN: 'NaN',
+  NAN: 'Nuimh',
   DECIMAL_PATTERN: '#,##0.###',
   SCIENTIFIC_PATTERN: '#E0',
   PERCENT_PATTERN: '#,##0%',
@@ -1293,7 +1293,7 @@ goog.i18n.NumberFormatSymbols_hr = {
   PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
-  MINUS_SIGN: '-',
+  MINUS_SIGN: '−',
   EXP_SYMBOL: 'E',
   PERMILL: '‰',
   INFINITY: '∞',

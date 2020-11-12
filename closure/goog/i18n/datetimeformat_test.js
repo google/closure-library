@@ -383,7 +383,7 @@ testSuite({
     goog.i18n.DateTimePatterns = DateTimePatterns_bg;
     const fmtBg = new DateTimeFormat(
         goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-    assertEquals('28.06, 13:10 UTC-7', fmtBg.format(date));
+    assertEquals('28.06, 13:10 ч. UTC-7', fmtBg.format(date));
 
     goog.i18n.DateTimePatterns = DateTimePatterns_zh_HK;
     const fmtZhHk = new DateTimeFormat(
@@ -398,7 +398,8 @@ testSuite({
     goog.i18n.DateTimePatterns = DateTimePatterns_en_XA;
     const fmtEnXa = new DateTimeFormat(
         goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-    assertEquals('[[Jun 28], [1:10 PM UTC-7]]', fmtEnXa.format(date));
+    assertEquals(
+        '[[Jun 28 one], [13:10 UTC-7 one two] one two]', fmtEnXa.format(date));
 
     goog.i18n.DateTimePatterns = DateTimePatterns_zh_Hant_TW;
     const fmtZhHantTw = new DateTimeFormat(
@@ -730,7 +731,7 @@ testSuite({
     assertEquals('٢٠٠٦/٠٧/٢٧ ١٣:١٠:١٠٫٢٥', fmt.format(date));
 
     fmt = new DateTimeFormat(11);
-    assertEquals('٢٧\u200f/٧\u200f/٢٠٠٦ ١:١٠ م', fmt.format(date));
+    assertEquals('٢٧\u200f/٧\u200f/٢٠٠٦, ١:١٠ م', fmt.format(date));
 
     // Make sure standardized timezone formats don't use native digits
     fmt = new DateTimeFormat('Z');
@@ -748,7 +749,7 @@ testSuite({
     assertEquals('2006/07/27 13:10:10٫25', fmt.format(date));
 
     fmt = new DateTimeFormat(11);
-    assertEquals('27/7/2006 1:10 م', fmt.format(date));
+    assertEquals('27/7/2006, 1:10 م', fmt.format(date));
 
     // Make sure standardized timezone formats don't use native digits
     fmt = new DateTimeFormat('Z');
@@ -937,10 +938,10 @@ testSuite({
     const fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
 
     const date = new Date(2006, 6, 27, 13, 10, 42, 250);
-    assertEquals('27 juil. 2006 à 13:10:42', fmt.format(date));
+    assertEquals('27 juil. 2006, 13:10:42', fmt.format(date));
 
     const gdatetime = new DateTime(2006, 6, 27, 13, 10, 42, 250);
-    assertEquals('27 juil. 2006 à 13:10:42', fmt.format(gdatetime));
+    assertEquals('27 juil. 2006, 13:10:42', fmt.format(gdatetime));
 
     const gdate = new DateDate(2006, 6, 27);
     const fmtDate = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATE);

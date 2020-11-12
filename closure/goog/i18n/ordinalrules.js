@@ -8,12 +8,7 @@
  * @fileoverview Ordinal rules.
  *
  *
- * File generated from CLDR ver. 36
- *
- * Before check in, this file could have been manually edited. This is to
- * incorporate changes before we could fix CLDR. All manual modification must be
- * documented in this section, and should be removed after those changes land to
- * CLDR.
+ * File generated from CLDR ver. 38
  */
 
 // clang-format off
@@ -53,7 +48,7 @@ goog.i18n.ordinalRules.select;
  */
 goog.i18n.ordinalRules.defaultSelect_ = function(n, opt_precision) {
   "use strict";
-return goog.i18n.ordinalRules.Keyword.OTHER;
+  return goog.i18n.ordinalRules.Keyword.OTHER;
 };
 
 /**
@@ -64,7 +59,7 @@ return goog.i18n.ordinalRules.Keyword.OTHER;
  */
 goog.i18n.ordinalRules.decimals_ = function(n) {
   "use strict";
-const str = n + '';
+  const str = n + '';
   const result = str.indexOf('.');
   return (result == -1) ? 0 : str.length - result - 1;
 };
@@ -80,7 +75,7 @@ const str = n + '';
  */
 goog.i18n.ordinalRules.get_vf_ = function(n, opt_precision) {
   "use strict";
-const DEFAULT_DIGITS = 3;
+  const DEFAULT_DIGITS = 3;
 
   let v;
   if (undefined === opt_precision) {
@@ -106,7 +101,7 @@ const DEFAULT_DIGITS = 3;
  */
 goog.i18n.ordinalRules.get_wt_ = function(v, f) {
   "use strict";
-if (f === 0) {
+  if (f === 0) {
     return {w: 0, t: 0};
   }
 
@@ -119,6 +114,19 @@ if (f === 0) {
 };
 
 /**
+ * Calculates exponent as per CLDR plural rules.
+ * The short names for parameters / return match the CLDR syntax and UTS #35
+ *     (https://unicode.org/reports/tr35/tr35-numbers.html#Plural_rules_syntax)
+ * @param {number} n The count of items.
+ * @return {number} The e (exponent)
+ * @private
+ */
+goog.i18n.ordinalRules.get_e_ = function(n) {
+  "use strict";
+  return 0;
+};
+
+/**
  * Ordinal select rules for cy locale
  *
  * @param {number} n  The count of items.
@@ -128,7 +136,7 @@ if (f === 0) {
  */
 goog.i18n.ordinalRules.cySelect_ = function(n, opt_precision) {
   "use strict";
-if (n == 0 || n == 7 || n == 8 || n == 9) {
+  if (n == 0 || n == 7 || n == 8 || n == 9) {
     return goog.i18n.ordinalRules.Keyword.ZERO;
   }
   if (n == 1) {
@@ -156,7 +164,7 @@ if (n == 0 || n == 7 || n == 8 || n == 9) {
  */
 goog.i18n.ordinalRules.enSelect_ = function(n, opt_precision) {
   "use strict";
-if (n % 10 == 1 && n % 100 != 11) {
+  if (n % 10 == 1 && n % 100 != 11) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   if (n % 10 == 2 && n % 100 != 12) {
@@ -178,7 +186,7 @@ if (n % 10 == 1 && n % 100 != 11) {
  */
 goog.i18n.ordinalRules.ukSelect_ = function(n, opt_precision) {
   "use strict";
-if (n % 10 == 3 && n % 100 != 13) {
+  if (n % 10 == 3 && n % 100 != 13) {
     return goog.i18n.ordinalRules.Keyword.FEW;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
@@ -194,7 +202,7 @@ if (n % 10 == 3 && n % 100 != 13) {
  */
 goog.i18n.ordinalRules.itSelect_ = function(n, opt_precision) {
   "use strict";
-if (n == 11 || n == 8 || n == 80 || n == 800) {
+  if (n == 11 || n == 8 || n == 80 || n == 800) {
     return goog.i18n.ordinalRules.Keyword.MANY;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
@@ -210,7 +218,7 @@ if (n == 11 || n == 8 || n == 80 || n == 800) {
  */
 goog.i18n.ordinalRules.neSelect_ = function(n, opt_precision) {
   "use strict";
-if (n >= 1 && n <= 4) {
+  if (n >= 1 && n <= 4) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
@@ -226,7 +234,7 @@ if (n >= 1 && n <= 4) {
  */
 goog.i18n.ordinalRules.orSelect_ = function(n, opt_precision) {
   "use strict";
-if (n == 1 || n == 5 || n >= 7 && n <= 9) {
+  if (n == 1 || n == 5 || n >= 7 && n <= 9) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   if (n == 2 || n == 3) {
@@ -251,7 +259,7 @@ if (n == 1 || n == 5 || n >= 7 && n <= 9) {
  */
 goog.i18n.ordinalRules.beSelect_ = function(n, opt_precision) {
   "use strict";
-if ((n % 10 == 2 || n % 10 == 3) && n % 100 != 12 && n % 100 != 13) {
+  if ((n % 10 == 2 || n % 10 == 3) && n % 100 != 12 && n % 100 != 13) {
     return goog.i18n.ordinalRules.Keyword.FEW;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
@@ -267,7 +275,7 @@ if ((n % 10 == 2 || n % 10 == 3) && n % 100 != 12 && n % 100 != 13) {
  */
 goog.i18n.ordinalRules.azSelect_ = function(n, opt_precision) {
   "use strict";
-const i = n | 0;
+  const i = n | 0;
   if ((i % 10 == 1 || i % 10 == 2 || i % 10 == 5 || i % 10 == 7 || i % 10 == 8) || (i % 100 == 20 || i % 100 == 50 || i % 100 == 70 || i % 100 == 80)) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
@@ -290,7 +298,7 @@ const i = n | 0;
  */
 goog.i18n.ordinalRules.kaSelect_ = function(n, opt_precision) {
   "use strict";
-const i = n | 0;
+  const i = n | 0;
   if (i == 1) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
@@ -310,7 +318,7 @@ const i = n | 0;
  */
 goog.i18n.ordinalRules.mrSelect_ = function(n, opt_precision) {
   "use strict";
-if (n == 1) {
+  if (n == 1) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   if (n == 2 || n == 3) {
@@ -332,7 +340,7 @@ if (n == 1) {
  */
 goog.i18n.ordinalRules.svSelect_ = function(n, opt_precision) {
   "use strict";
-if ((n % 10 == 1 || n % 10 == 2) && n % 100 != 11 && n % 100 != 12) {
+  if ((n % 10 == 1 || n % 10 == 2) && n % 100 != 11 && n % 100 != 12) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
@@ -348,7 +356,7 @@ if ((n % 10 == 1 || n % 10 == 2) && n % 100 != 11 && n % 100 != 12) {
  */
 goog.i18n.ordinalRules.kkSelect_ = function(n, opt_precision) {
   "use strict";
-if (n % 10 == 6 || n % 10 == 9 || n % 10 == 0 && n != 0) {
+  if (n % 10 == 6 || n % 10 == 9 || n % 10 == 0 && n != 0) {
     return goog.i18n.ordinalRules.Keyword.MANY;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
@@ -364,7 +372,7 @@ if (n % 10 == 6 || n % 10 == 9 || n % 10 == 0 && n != 0) {
  */
 goog.i18n.ordinalRules.mkSelect_ = function(n, opt_precision) {
   "use strict";
-const i = n | 0;
+  const i = n | 0;
   if (i % 10 == 1 && i % 100 != 11) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
@@ -387,7 +395,7 @@ const i = n | 0;
  */
 goog.i18n.ordinalRules.huSelect_ = function(n, opt_precision) {
   "use strict";
-if (n == 1 || n == 5) {
+  if (n == 1 || n == 5) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
@@ -403,7 +411,7 @@ if (n == 1 || n == 5) {
  */
 goog.i18n.ordinalRules.frSelect_ = function(n, opt_precision) {
   "use strict";
-if (n == 1) {
+  if (n == 1) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   return goog.i18n.ordinalRules.Keyword.OTHER;
@@ -419,7 +427,7 @@ if (n == 1) {
  */
 goog.i18n.ordinalRules.sqSelect_ = function(n, opt_precision) {
   "use strict";
-if (n == 1) {
+  if (n == 1) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   if (n % 10 == 4 && n % 100 != 14) {
@@ -438,7 +446,7 @@ if (n == 1) {
  */
 goog.i18n.ordinalRules.caSelect_ = function(n, opt_precision) {
   "use strict";
-if (n == 1 || n == 3) {
+  if (n == 1 || n == 3) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   if (n == 2) {
@@ -460,7 +468,7 @@ if (n == 1 || n == 3) {
  */
 goog.i18n.ordinalRules.guSelect_ = function(n, opt_precision) {
   "use strict";
-if (n == 1) {
+  if (n == 1) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   if (n == 2 || n == 3) {
@@ -476,73 +484,16 @@ if (n == 1) {
 };
 
 /**
- * Ordinal select rules for tk locale
+ * Ordinal select rules for bn locale
  *
  * @param {number} n  The count of items.
  * @param {number=} opt_precision Precision for number formatting, if not default.
  * @return {goog.i18n.ordinalRules.Keyword} Locale-specific ordinal value.
  * @private
  */
-goog.i18n.ordinalRules.tkSelect_ = function(n, opt_precision) {
+goog.i18n.ordinalRules.bnSelect_ = function(n, opt_precision) {
   "use strict";
-if ((n % 10 == 6 || n % 10 == 9) || n == 10) {
-    return goog.i18n.ordinalRules.Keyword.FEW;
-  }
-  return goog.i18n.ordinalRules.Keyword.OTHER;
-};
-
-/**
- * Ordinal select rules for gd locale
- *
- * @param {number} n  The count of items.
- * @param {number=} opt_precision Precision for number formatting, if not default.
- * @return {goog.i18n.ordinalRules.Keyword} Locale-specific ordinal value.
- * @private
- */
-goog.i18n.ordinalRules.gdSelect_ = function(n, opt_precision) {
-  "use strict";
-if (n == 1 || n == 11) {
-    return goog.i18n.ordinalRules.Keyword.ONE;
-  }
-  if (n == 2 || n == 12) {
-    return goog.i18n.ordinalRules.Keyword.TWO;
-  }
-  if (n == 3 || n == 13) {
-    return goog.i18n.ordinalRules.Keyword.FEW;
-  }
-  return goog.i18n.ordinalRules.Keyword.OTHER;
-};
-
-/**
- * Ordinal select rules for kw locale
- *
- * @param {number} n  The count of items.
- * @param {number=} opt_precision Precision for number formatting, if not default.
- * @return {goog.i18n.ordinalRules.Keyword} Locale-specific ordinal value.
- * @private
- */
-goog.i18n.ordinalRules.kwSelect_ = function(n, opt_precision) {
-  "use strict";
-if (n >= 1 && n <= 4 || (n % 100 >= 1 && n % 100 <= 4 || n % 100 >= 21 && n % 100 <= 24 || n % 100 >= 41 && n % 100 <= 44 || n % 100 >= 61 && n % 100 <= 64 || n % 100 >= 81 && n % 100 <= 84)) {
-    return goog.i18n.ordinalRules.Keyword.ONE;
-  }
-  if (n == 5 || n % 100 == 5) {
-    return goog.i18n.ordinalRules.Keyword.MANY;
-  }
-  return goog.i18n.ordinalRules.Keyword.OTHER;
-};
-
-/**
- * Ordinal select rules for as locale
- *
- * @param {number} n  The count of items.
- * @param {number=} opt_precision Precision for number formatting, if not default.
- * @return {goog.i18n.ordinalRules.Keyword} Locale-specific ordinal value.
- * @private
- */
-goog.i18n.ordinalRules.asSelect_ = function(n, opt_precision) {
-  "use strict";
-if (n == 1 || n == 5 || n == 7 || n == 8 || n == 9 || n == 10) {
+  if (n == 1 || n == 5 || n == 7 || n == 8 || n == 9 || n == 10) {
     return goog.i18n.ordinalRules.Keyword.ONE;
   }
   if (n == 2 || n == 3) {
@@ -586,7 +537,7 @@ if (goog.LOCALE == 'bg') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }
 if (goog.LOCALE == 'bn') {
-  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.asSelect_;
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.bnSelect_;
 }
 if (goog.LOCALE == 'br') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
