@@ -34,6 +34,7 @@ function setPopupParentElement(el) {
   }
 
   inputDatePicker.render(dom.getElement('renderElement'));
+  /** @suppress {visibility} suppression added to enable type checking */
   popupDatePicker = inputDatePicker.popupDatePicker_;
 }
 
@@ -81,6 +82,7 @@ testSuite({
     inputDatePicker.createDom();
     inputDatePicker.setInputValue('8/9/2009');
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const parsedDate = inputDatePicker.getInputValueAsDate_();
     assertEquals(2009, parsedDate.getYear());
     assertEquals(7, parsedDate.getMonth());  // Months start from 0

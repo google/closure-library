@@ -31,21 +31,27 @@ function MockXmlHttp() {
   /**
    * The request headers for this XmlHttpRequest.
    * @type {!Object<string>}
+   * @suppress {globalThis} suppression added to enable type checking
    */
   this.requestHeaders = {};
 
   /**
    * The response headers for this XmlHttpRequest.
    * @type {!Object<string>}
+   * @suppress {globalThis} suppression added to enable type checking
    */
   this.responseHeaders = {};
 
-  /** @type {string} */
+  /**
+   * @type {string}
+   * @suppress {globalThis} suppression added to enable type checking
+   */
   this.responseHeadersString = null;
 
   /**
    * The upload object associated with this XmlHttpRequest.
    * @type {!Object}
+   * @suppress {globalThis} suppression added to enable type checking
    */
   this.upload = {};
 }
@@ -103,6 +109,7 @@ MockXmlHttp.prototype.getAllResponseHeaders = function() {
 let lastMockXmlHttp;
 XmlHttp.setGlobalFactory(new WrapperXmlHttpFactory(
     function() {
+      /** @suppress {checkTypes} suppression added to enable type checking */
       lastMockXmlHttp = new MockXmlHttp();
       return lastMockXmlHttp;
     },
@@ -113,6 +120,7 @@ XmlHttp.setGlobalFactory(new WrapperXmlHttpFactory(
 
 const propertyReplacer = new PropertyReplacer();
 let clock;
+/** @suppress {visibility} suppression added to enable type checking */
 const originalEntryPoint = XhrIo.prototype.onReadyStateChangeEntryPoint_;
 
 
@@ -126,6 +134,7 @@ testSuite({
     MockXmlHttp.syncSend = false;
     propertyReplacer.reset();
     clock.dispose();
+    /** @suppress {visibility} suppression added to enable type checking */
     XhrIo.prototype.onReadyStateChangeEntryPoint_ = originalEntryPoint;
   },
 
@@ -562,6 +571,7 @@ testSuite({
         errorHandlerCallbackCalled);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testXHRIsDiposedEvenIfAListenerThrowsAnExceptionOnComplete() {
     MockXmlHttp.syncSend = false;
 
@@ -593,6 +603,7 @@ testSuite({
     };
 
     events.listen(x, EventType.COMPLETE, function(e) {
+      /** @suppress {visibility} suppression added to enable type checking */
       this.active_ = false;
       this.dispose();
     }, false, x);
@@ -642,6 +653,7 @@ testSuite({
         {'content-type': 'testing'}, lastMockXmlHttp.requestHeaders);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testIsContentTypeHeader_() {
     assertTrue(XhrIo.isContentTypeHeader_('content-type'));
     assertTrue(XhrIo.isContentTypeHeader_('Content-type'));
@@ -650,6 +662,7 @@ testSuite({
     assertFalse(XhrIo.isContentTypeHeader_('Content Type'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPostFormDataDoesNotSetContentTypeHeader() {
     function FakeFormData() {}
 
@@ -661,6 +674,7 @@ testSuite({
     assertTrue(object.isEmpty(headers));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testNonPostFormDataDoesNotSetContentTypeHeader() {
     function FakeFormData() {}
 
@@ -673,6 +687,7 @@ testSuite({
   },
 
   testFactoryInjection() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const xhr = new MockXmlHttp();
     let optionsFactoryCalled = 0;
     let xhrFactoryCalled = 0;
@@ -717,7 +732,9 @@ testSuite({
     object.every(xhrIo, propertyComparator, testingXhrIo);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testEntryPointRegistry() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const monitor = new EntryPointMonitor();
     const replacement = function() {};
     monitor.wrap = recordFunction(functions.constant(replacement));
@@ -755,6 +772,7 @@ testSuite({
     delete MockXmlHttp.prototype.withCredentials;
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSetProgressEventsEnabled() {
     // The default MockXhr object contained by the XhrIo object has no
     // reference to the necessary onprogress field. This is equivalent
@@ -808,30 +826,41 @@ testSuite({
     assertEquals(null, x.getResponse());
 
     // XHR with no .response and no response type, gets text.
+    /**
+     * @suppress {visibility,checkTypes} suppression added to enable type
+     * checking
+     */
     x.xhr_ = {};
+    /** @suppress {visibility} suppression added to enable type checking */
     x.xhr_.responseText = 'text';
     assertEquals('text', x.getResponse());
 
     // Response type of text gets text as well.
     x.setResponseType(XhrIo.ResponseType.TEXT);
+    /** @suppress {visibility} suppression added to enable type checking */
     x.xhr_.responseText = '';
     assertEquals('', x.getResponse());
 
     // Response type of array buffer gets the array buffer.
+    /** @suppress {visibility} suppression added to enable type checking */
     x.xhr_.mozResponseArrayBuffer = 'ab';
     x.setResponseType(XhrIo.ResponseType.ARRAY_BUFFER);
     assertEquals('ab', x.getResponse());
 
     // With a response field, it is returned no matter what value it has.
+    /** @suppress {visibility} suppression added to enable type checking */
     x.xhr_.response = undefined;
     assertEquals(undefined, x.getResponse());
 
+    /** @suppress {visibility} suppression added to enable type checking */
     x.xhr_.response = null;
     assertEquals(null, x.getResponse());
 
+    /** @suppress {visibility} suppression added to enable type checking */
     x.xhr_.response = '';
     assertEquals('', x.getResponse());
 
+    /** @suppress {visibility} suppression added to enable type checking */
     x.xhr_.response = 'resp';
     assertEquals('resp', x.getResponse());
   },
@@ -840,8 +869,20 @@ testSuite({
     const x = new XhrIo();
     x.send('http://foo');
 
+    /**
+     * @suppress {visibility,strictMissingProperties} suppression added to
+     * enable type checking
+     */
     x.xhr_.responseHeaders['foo'] = null;
+    /**
+     * @suppress {visibility,strictMissingProperties} suppression added to
+     * enable type checking
+     */
     x.xhr_.responseHeaders['bar'] = 'xyz';
+    /**
+     * @suppress {visibility,strictMissingProperties} suppression added to
+     * enable type checking
+     */
     x.xhr_.responseHeaders['baz'] = '';
 
     // All headers should be undefined prior to the request completing.
@@ -849,6 +890,7 @@ testSuite({
     assertUndefined(x.getResponseHeader('bar'));
     assertUndefined(x.getResponseHeader('baz'));
 
+    /** @suppress {visibility} suppression added to enable type checking */
     x.xhr_.readyState = ReadyState.COMPLETE;
 
     assertUndefined(x.getResponseHeader('foo'));
@@ -856,6 +898,7 @@ testSuite({
     assertEquals('', x.getResponseHeader('baz'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetResponseHeaders() {
     MockXmlHttp.syncSend = true;
     const x = new XhrIo();
@@ -874,6 +917,7 @@ testSuite({
     assertEquals('bar', headers['test2']);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetResponseHeadersWithColonInValue() {
     MockXmlHttp.syncSend = true;
     const x = new XhrIo();
@@ -888,6 +932,7 @@ testSuite({
     assertEquals('f:o : o', headers['test1']);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetResponseHeadersMultipleValuesForOneKey() {
     MockXmlHttp.syncSend = true;
     const x = new XhrIo();
@@ -905,6 +950,7 @@ testSuite({
     assertEquals('foo, bar', headers['test1']);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetResponseHeadersWhitespaceValue() {
     MockXmlHttp.syncSend = true;
     const x = new XhrIo();
@@ -922,6 +968,7 @@ testSuite({
     assertEquals('', headers['test2']);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetResponseHeadersEmptyHeader() {
     MockXmlHttp.syncSend = true;
     const x = new XhrIo();
@@ -940,6 +987,7 @@ testSuite({
   },
 
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetResponseHeadersNullHeader() {
     MockXmlHttp.syncSend = true;
 

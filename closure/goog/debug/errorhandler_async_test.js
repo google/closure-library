@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {checkTypes} suppression added to enable type checking
+ */
+
 goog.module('goog.debug.ErrorHandlerAsyncTest');
 goog.setTestOnly();
 
@@ -17,24 +22,31 @@ const {getDomHelper} = goog.require('goog.dom');
 const {newSafeScriptForTest} = goog.require('goog.html.testing');
 const {setScriptContent} = goog.require('goog.dom.safe');
 
-/** @type {!goog.promise.Resolver} */
+/** @type {!GoogPromise.Resolver} */
 let resolver;
 
 const testCase = {};
 
+/** @suppress {globalThis} suppression added to enable type checking */
 testCase.setUpPage = function() {
   resolver = GoogPromise.withResolver();
 
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.oldTimeout = window.setTimeout;
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.oldInterval = window.setInterval;
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.oldRequestAnimationFrame = window.requestAnimationFrame;
 
   // Whether requestAnimationFrame is available for testing.
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.testingReqAnimFrame = !!window.requestAnimationFrame;
 
   // Whether a rejection handler is available for testing.
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.testingUnhandledRejection = 'onunhandledrejection' in window;
 
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.handler = new ErrorHandler(goog.bind(this.onException, this));
   this.handler.protectWindowSetTimeout();
   this.handler.protectWindowSetInterval();
@@ -45,15 +57,20 @@ testCase.setUpPage = function() {
     this.handler.catchUnhandledRejections(this.iframe.contentWindow);
   }
 
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.exceptions = [];
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.errors = 0;
 
   // Override the error event handler, since we are purposely throwing
   // exceptions from global functions, and expect them
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.oldWindowOnError = window.onerror;
+  /** @suppress {globalThis} suppression added to enable type checking */
   window.onerror = goog.bind(this.onError, this);
 
   window.setTimeout(goog.bind(this.timeOut, this), 10);
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.intervalId = window.setInterval(goog.bind(this.interval, this), 20);
 
   if (this.testingReqAnimFrame) {
@@ -63,15 +80,21 @@ testCase.setUpPage = function() {
   if (this.testingUnhandledRejection) {
     this.async();
     this.iframeAsync();
+    /** @suppress {globalThis} suppression added to enable type checking */
     this.iframeAsyncHit = true;
   }
 
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.promiseTimeout = 10000;  // 10s.
 };
 
+/** @suppress {globalThis} suppression added to enable type checking */
 testCase.tearDownPage = function() {
+  /** @suppress {globalThis} suppression added to enable type checking */
   window.setTimeout = this.oldTimeout;
+  /** @suppress {globalThis} suppression added to enable type checking */
   window.setInterval = this.oldInterval;
+  /** @suppress {globalThis} suppression added to enable type checking */
   window.requestAnimationFrame = this.oldRequestAnimationFrame;
   if (this.iframe) {
     document.body.removeChild(this.iframe);
@@ -94,10 +117,13 @@ testCase.setUpIframe = function() {
       }`));
   iframeDom.appendChild(iframe.contentDocument.head, scriptEl);
 
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.iframe = iframe;
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.iframeAsync = this.iframe.contentWindow['iframeAsync'];
 };
 
+/** @suppress {globalThis} suppression added to enable type checking */
 testCase.onException = function(e) {
   this.exceptions.push(e);
   if (this.timeoutHit && this.intervalHit &&
@@ -108,29 +134,35 @@ testCase.onException = function(e) {
   }
 };
 
+/** @suppress {globalThis} suppression added to enable type checking */
 testCase.onError = function(msg, url, line) {
   this.errors++;
   return true;
 };
 
 testCase.timeOut = function() {
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.timeoutHit = true;
   throw testCase.timeOut;
 };
 
+/** @suppress {globalThis} suppression added to enable type checking */
 testCase.interval = function() {
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.intervalHit = true;
   window.clearTimeout(this.intervalId);
   throw testCase.interval;
 };
 
 testCase.animFrame = function() {
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.animFrameHit = true;
   throw testCase.animFrame;
 };
 
 /** Test uncaught errors in async/await */
 testCase.async = async function() {
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.asyncHit = true;
   const p = Promise.resolve();
   await p;

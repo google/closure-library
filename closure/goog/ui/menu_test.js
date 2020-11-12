@@ -83,6 +83,10 @@ testSuite({
     assertEquals(-1, menu.getHighlightedIndex());
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSetHighlightedIndex() {
     menu.decorate(dom.getElement('scrollableMenu'));
     assertEquals(0, menu.getElement().scrollTop);

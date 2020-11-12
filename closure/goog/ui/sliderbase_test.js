@@ -66,12 +66,14 @@ class OneThumbSlider extends SliderBase {
   /** @override */
   createThumbs() {
     const dirSuffix = this.testOnlyIsRightToLeft_ ? 'Rtl' : '';
+    /** @suppress {checkTypes} suppression added to enable type checking */
     this.valueThumb = this.extentThumb = dom.getElement(`thumb${dirSuffix}`);
   }
 
   /** @override */
   getCssClass(orientation) {
-    return goog.getCssName('test-slider', orientation);
+    // Avoid compiler check on getCssName parameters
+    return goog['getCssName']('test-slider', orientation);
   }
 }
 
@@ -91,14 +93,18 @@ class TwoThumbSlider extends SliderBase {
   /** @override */
   createThumbs() {
     const dirSuffix = this.testOnlyIsRightToLeft_ ? 'Rtl' : '';
+    /** @suppress {checkTypes} suppression added to enable type checking */
     this.valueThumb = dom.getElement(`valueThumb${dirSuffix}`);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     this.extentThumb = dom.getElement(`extentThumb${dirSuffix}`);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     this.rangeHighlight = dom.getElement(`rangeHighlight${dirSuffix}`);
   }
 
   /** @override */
   getCssClass(orientation) {
-    return goog.getCssName('test-slider', orientation);
+    // Avoid compiler check on getCssName parameters
+    return goog['getCssName']('test-slider', orientation);
   }
 }
 
@@ -115,7 +121,10 @@ class AnimationFactory {
     this.testAnimations = testAnimations;
   }
 
-  /** @override */
+  /**
+   * @override
+   * @suppress {checkTypes} suppression added to enable type checking
+   */
   createAnimations() {
     return this.testAnimations;
   }
@@ -129,6 +138,7 @@ class AnimationFactory {
  * @param {number} rangeHighlight The range highlight.
  * @param {number} startValue The start value.
  * @param {number} endValue The end value.
+ * @suppress {missingProperties} suppression added to enable type checking
  */
 function assertHighlightedRange(rangeHighlight, startValue, endValue) {
   const rangeStr = `[${startValue}, ${endValue}]`;
@@ -327,8 +337,8 @@ testSuite({
   },
 
   testGetAndSetExtent() {
-    // Note(user): With a one thumb slider the API only really makes sense if you
-    // always use setValue since there is no extent.
+    // Note(user): With a one thumb slider the API only really makes sense if
+    // you always use setValue since there is no extent.
 
     twoThumbSlider.setExtent(7);
     assertEquals(7, twoThumbSlider.getExtent());
@@ -384,8 +394,10 @@ testSuite({
         'A small value.', oneThumbSlider.getTextValue());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRangeListener() {
     const slider = new SliderBase;
+    /** @suppress {visibility} suppression added to enable type checking */
     slider.updateUi_ = slider.updateAriaStates = () => {};
     slider.rangeModel.setValue(0);
 
@@ -517,6 +529,7 @@ testSuite({
     assertEquals(80, twoThumbSliderRtl.getExtent());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRangeHighlight() {
     const rangeHighlight = dom.getElement('rangeHighlight');
 
@@ -536,12 +549,13 @@ testSuite({
     assertHighlightedRange(rangeHighlight, 50, 50);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRangeHighlightAnimation() {
     let animationDelay =
         160;  // Delay in ms, is a bit higher than actual delay.
     if (userAgent.IE) {
-      // For some reason, (probably due to how timing works), IE7 and IE8 will
-      // not stop if we don't wait for it.
+      // For some reason, (probably due to how timing works), IE7 and IE8
+      // will not stop if we don't wait for it.
       animationDelay = 250;
     }
 
@@ -564,12 +578,14 @@ testSuite({
 
   /**
    * Verifies that no error occurs and that the range highlight is sized
-   * correctly for a zero-size slider (i.e. doesn't attempt to set a negative
-   * size). The test tries to resize the slider from its original size to 0,
-   * then checks that the range highlight's size is correctly set to 0. The size
-   * verification is needed because Webkit/Gecko outright ignore calls to set
-   * negative sizes on an element, leaving it at its former size. IE throws an
-   * error in the same situation.
+   * correctly for a zero-size slider (i.e. doesn't attempt to set a
+   * negative size). The test tries to resize the slider from its original
+   * size to 0, then checks that the range highlight's size is correctly set
+   * to 0. The size verification is needed because Webkit/Gecko outright
+   * ignore calls to set negative sizes on an element, leaving it at its
+   * former size. IE throws an error in the same situation.
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
    */
   testRangeHighlightForZeroSizeSlider() {
     // Make sure range highlight spans whole slider before zeroing width.
@@ -583,6 +599,10 @@ testSuite({
         dom.getElement('rangeHighlight').offsetWidth);
   },
 
+  /**
+     @suppress {missingProperties} suppression added to enable type
+     checking
+   */
   testAnimatedSetValueAnimatesFactoryCreatedAnimations() {
     // Create and set the factory.
     const ignore = mockmatchers.ignoreArgument;
@@ -619,7 +639,8 @@ testSuite({
     oneThumbSlider.setHandleMouseWheel(true);
     assertTrue(oneThumbSlider.isHandleMouseWheel());
 
-    // Test that mouse wheel handling can be disabled before rendering a slider.
+    // Test that mouse wheel handling can be disabled before rendering a
+    // slider.
     const wheelDisabledElem =
         dom.createDom(TagName.DIV, {}, dom.createDom(TagName.SPAN));
     const wheelDisabledSlider = new OneThumbSlider();
@@ -628,10 +649,12 @@ testSuite({
     assertFalse(wheelDisabledSlider.isHandleMouseWheel());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDisabledAndEnabledSlider() {
     // Check that a slider is enabled by default
     assertTrue(oneThumbSlider.isEnabled());
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const listenerCount = oneThumbSlider.getHandler().getListenerCount();
     // Disable the slider and check its state
     oneThumbSlider.setEnabled(false);
@@ -656,9 +679,11 @@ testSuite({
     assertTrue(listenerCount == oneThumbSlider.getHandler().getListenerCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testBlockIncrementingWithEnableAndDisabled() {
     const doc = dom.getOwnerDocument(oneThumbSlider.getElement());
-    // Case when slider is not disabled between the mouse down and up events.
+    // Case when slider is not disabled between the mouse down and up
+    // events.
     testingEvents.fireMouseDownEvent(oneThumbSlider.getElement());
     assertEquals(
         1,
@@ -678,7 +703,8 @@ testSuite({
             .length);
     assertEquals(0, events.getListeners(doc, EventType.MOUSEUP, true).length);
 
-    // Case when the slider is disabled between the mouse down and up events.
+    // Case when the slider is disabled between the mouse down and up
+    // events.
     testingEvents.fireMouseDownEvent(oneThumbSlider.getElement());
     assertEquals(
         1,
@@ -766,7 +792,9 @@ testSuite({
   /** Tests getThumbCoordinateForValue method. */
   testThumbCoordinateForValueWithHorizontalSlider() {
     // Make sure the y-coordinate stays the same for the horizontal slider.
+    /** @suppress {visibility} suppression added to enable type checking */
     const originalY = style.getPosition(oneThumbSlider.valueThumb).y;
+    /** @suppress {visibility} suppression added to enable type checking */
     const width = oneThumbSlider.getElement().clientWidth -
         oneThumbSlider.valueThumb.offsetWidth;
     const range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
@@ -787,7 +815,9 @@ testSuite({
   testThumbCoordinateForValueWithVerticalSlider() {
     // Make sure the x-coordinate stays the same for the vertical slider.
     oneThumbSlider.setOrientation(SliderBase.Orientation.VERTICAL);
+    /** @suppress {visibility} suppression added to enable type checking */
     const originalX = style.getPosition(oneThumbSlider.valueThumb).x;
+    /** @suppress {visibility} suppression added to enable type checking */
     const height = oneThumbSlider.getElement().clientHeight -
         oneThumbSlider.valueThumb.offsetHeight;
     const range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
@@ -805,11 +835,16 @@ testSuite({
     assertObjectEquals(expectedCoord, coord);
   },
 
-  /** Tests getValueFromMousePosition method. */
+  /**
+   * Tests getValueFromMousePosition method.
+   * @suppress {checkTypes} suppression added to enable type checking
+   */
   testValueFromMousePosition() {
     const value = 30;
     oneThumbSlider.setValue(value);
+    /** @suppress {visibility} suppression added to enable type checking */
     const offset = style.getPageOffset(oneThumbSlider.valueThumb);
+    /** @suppress {visibility} suppression added to enable type checking */
     const size = style.getSize(oneThumbSlider.valueThumb);
     offset.x += size.width / 2;
     offset.y += size.height / 2;
@@ -827,11 +862,16 @@ testSuite({
         value, Math.round(oneThumbSlider.getValueFromMousePosition(e)), 1);
   },
 
-  /** Tests ignoring click event after mousedown event. */
+  /**
+     Tests ignoring click event after mousedown event.
+     @suppress {checkTypes} suppression added to enable type checking
+   */
   testClickAfterMousedown() {
     // Get the center of the thumb at value zero.
     oneThumbSlider.setValue(0);
+    /** @suppress {visibility} suppression added to enable type checking */
     const offset = style.getPageOffset(oneThumbSlider.valueThumb);
+    /** @suppress {visibility} suppression added to enable type checking */
     const size = style.getSize(oneThumbSlider.valueThumb);
     offset.x += size.width / 2;
     offset.y += size.height / 2;
@@ -852,7 +892,9 @@ testSuite({
     testingEvents.fireMouseDownEvent(sliderElement, null, offset);
     assertEquals(valueOne, oneThumbSlider.getValue());
 
-    // Verify a click event with another value that follows quickly is ignored.
+    // Verify a click event with another value that follows quickly is
+    // ignored.
+    /** @suppress {visibility} suppression added to enable type checking */
     theTime += oneThumbSlider.MOUSE_DOWN_DELAY_ / 2;
     const valueTwo = 20;
     offset.x = offsetXAtZero + Math.round(valueTwo / range * width);
@@ -860,6 +902,7 @@ testSuite({
     assertEquals(valueOne, oneThumbSlider.getValue());
 
     // Verify a click later in time does move the thumb.
+    /** @suppress {visibility} suppression added to enable type checking */
     theTime += oneThumbSlider.MOUSE_DOWN_DELAY_;
     testingEvents.fireClickEvent(sliderElement, null, offset);
     assertEquals(valueTwo, oneThumbSlider.getValue());
@@ -867,9 +910,15 @@ testSuite({
     goog.now = saveGoogNow;
   },
 
-  /** Tests dragging events. */
+  /**
+   * Tests dragging events.
+   * @suppress {visibility} suppression added to
+   *      enable type checking
+   */
   testDragEvents() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const offset = style.getPageOffset(oneThumbSlider.valueThumb);
+    /** @suppress {visibility} suppression added to enable type checking */
     const size = style.getSize(oneThumbSlider.valueThumb);
     offset.x += size.width / 2;
     offset.y += size.height / 2;
@@ -891,9 +940,9 @@ testSuite({
         ],
         handler);
 
-    // Since the order of the events between value and extent is not guaranteed
-    // across browsers, we need to allow for both here and once we have
-    // them all, make sure that they were different.
+    // Since the order of the events between value and extent is not
+    // guaranteed across browsers, we need to allow for both here and once
+    // we have them all, make sure that they were different.
     function isValueOrExtentDragStart(type) {
       return type == SliderBase.EventType.DRAG_VALUE_START ||
           type == SliderBase.EventType.DRAG_EXTENT_START;
@@ -928,8 +977,8 @@ testSuite({
     assertFalse(event_types[1] == event_types[3]);
     assertFalse(event_types[6] == event_types[8]);
 
-    // Test that clicking the thumb without moving the mouse does not cause a
-    // CHANGE event between DRAG_START/DRAG_END.
+    // Test that clicking the thumb without moving the mouse does not cause
+    // a CHANGE event between DRAG_START/DRAG_END.
     event_types = [];
     testingEvents.fireMouseDownEvent(oneThumbSlider.valueThumb);
     testingEvents.fireMouseUpEvent(oneThumbSlider.valueThumb);
@@ -951,14 +1000,15 @@ testSuite({
     assertFalse(event_types[1] == event_types[3]);
     assertFalse(event_types[5] == event_types[7]);
 
-    // Early listener removal, do not wait for tearDown, to avoid building up
-    // arrays of events unnecessarilly in further tests.
+    // Early listener removal, do not wait for tearDown, to avoid building
+    // up arrays of events unnecessarilly in further tests.
     events.removeAll(oneThumbSlider);
   },
 
   /**
-   * Tests dragging events updates the value correctly in LTR mode based on the
-   * amount of space remaining to the right of the thumb.
+   * Tests dragging events updates the value correctly in LTR mode based on
+   * the amount of space remaining to the right of the thumb.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testDragEventsUpdatesValue() {
     // Get the center of the thumb at minimum value.
@@ -968,12 +1018,14 @@ testSuite({
 
     // Need to set to (0, 0) in IE8 due to a browser bug where the
     // offsetWidth/height is incorrectly calculated as 0 in test files.
+    /** @suppress {visibility} suppression added to enable type checking */
     const offset = (userAgent.IE && !userAgent.isVersionOrHigher('9')) ?
         new Coordinate() :
         style.getPageOffset(oneThumbSlider.valueThumb);
     const offsetXAtZero = offset.x;
 
     const sliderElement = oneThumbSlider.getElementStrict();
+    /** @suppress {visibility} suppression added to enable type checking */
     const thumbSize = style.getSize(oneThumbSlider.valueThumb);
     const width = sliderElement.clientWidth - thumbSize.width;
     const range = oneThumbSlider.getMaximum() - oneThumbSlider.getMinimum();
@@ -997,8 +1049,9 @@ testSuite({
   },
 
   /**
-   * Tests dragging events updates the value correctly in RTL mode based on the
-   * amount of space remaining to the left of the thumb.
+   * Tests dragging events updates the value correctly in RTL mode based on
+   * the amount of space remaining to the left of the thumb.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testDragEventsInRtlModeUpdatesValue() {
     // Get the center of the thumb at minimum value.
@@ -1006,10 +1059,12 @@ testSuite({
     oneThumbSliderRtl.setMaximum(300);
     oneThumbSliderRtl.setValue(100);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const offset = style.getPageOffset(oneThumbSliderRtl.valueThumb);
     let offsetXAtZero = offset.x;
-    // Extra half of the thumb width in IE8 due to a browser bug where the thumb
-    // offsetWidth is incorrectly calculated as 0 in test files.
+    // Extra half of the thumb width in IE8 due to a browser bug where the
+    // thumb offsetWidth is incorrectly calculated as 0 in test files.
+    /** @suppress {visibility} suppression added to enable type checking */
     const thumbSize = style.getSize(oneThumbSliderRtl.valueThumb);
     if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
       offsetXAtZero += thumbSize.width / 2;
@@ -1040,7 +1095,9 @@ testSuite({
 
   /** Tests animationend event after click. */
   testAnimationEndEventAfterClick() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const offset = style.getPageOffset(oneThumbSlider.valueThumb);
+    /** @suppress {visibility} suppression added to enable type checking */
     const size = style.getSize(oneThumbSlider.valueThumb);
     offset.x += size.width / 2;
     offset.y += size.height / 2;
@@ -1051,8 +1108,8 @@ testSuite({
     let animationDelay =
         160;  // Delay in ms, is a bit higher than actual delay.
     if (userAgent.IE) {
-      // For some reason, (probably due to how timing works), IE7 and IE8 will
-      // not stop if we don't wait for it.
+      // For some reason, (probably due to how timing works), IE7 and IE8
+      // will not stop if we don't wait for it.
       animationDelay = 250;
     }
     oneThumbSlider.setMoveToPointEnabled(true);
@@ -1072,8 +1129,8 @@ testSuite({
   },
 
   /**
-   * Tests that focus will be on the top level element when clicking the slider
-   * if `focusElementOnSliderDrag` is true.
+   * Tests that focus will be on the top level element when clicking the
+   * slider if `focusElementOnSliderDrag` is true.
    */
   testFocusOnSliderAfterClickIfFocusElementOnSliderDragTrue() {
     const sliderElement = oneThumbSlider.getElement();

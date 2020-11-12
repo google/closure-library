@@ -38,6 +38,7 @@ testSuite({
     assertTrue('Channel should be connected by default', channel.isConnected());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDeliverString() {
     channel.registerService(
         'foo',
@@ -47,6 +48,7 @@ testSuite({
     channel.deliver('foo', 'bar');
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDeliverDeserializedString() {
     channel.registerService(
         'foo',
@@ -56,6 +58,7 @@ testSuite({
     channel.deliver('foo', {bar: 'baz'});
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDeliverObject() {
     channel.registerService(
         'foo',
@@ -65,6 +68,7 @@ testSuite({
     channel.deliver('foo', {bar: 'baz'});
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDeliverSerializedObject() {
     channel.registerService(
         'foo',

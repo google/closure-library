@@ -27,6 +27,7 @@ class Foo {
 }
 
 function assertListenersExist(el, listenerCount, capt) {
+  /** @suppress {visibility} suppression added to enable type checking */
   const EVENT_TYPES = googEvents.ActionEventWrapper_.EVENT_TYPES_;
   for (let i = 0; i < EVENT_TYPES.length; ++i) {
     assertEquals(
@@ -40,6 +41,7 @@ testSuite({
     a = document.getElementById('a');
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   setUp() {
     events = [];
     eh = new EventHandler();

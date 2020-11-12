@@ -202,6 +202,7 @@ testSuite({
     assertEquals('a\'5\'b', fmt.format({'NUM_COWS': '5'}));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSerbianSimpleSelect() {
     stubs.set(pluralRules, 'select', pluralRules.beSelect_);
 
@@ -214,6 +215,7 @@ testSuite({
     assertEquals('Njen bicikl je crven.', fmt.format({'GENDER': 'female'}));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSerbianSimplePlural() {
     stubs.set(pluralRules, 'select', pluralRules.beSelect_);
 
@@ -244,6 +246,7 @@ testSuite({
         fmt.format({'NUM_PEOPLE': 100, 'PERSON': 'Cibua', 'PLACE': 'bazenu'}));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSerbianSimplePluralNoOffset() {
     stubs.set(pluralRules, 'select', pluralRules.beSelect_);
 
@@ -274,6 +277,7 @@ testSuite({
         fmt.format({'NUM_PEOPLE': 100, 'PERSON': 'Cibua', 'PLACE': 'bazenu'}));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSerbianSelectNestedInPlural() {
     stubs.set(pluralRules, 'select', pluralRules.beSelect_);
     stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_hr);
@@ -307,6 +311,7 @@ testSuite({
         fmt.format({'GENDER': 'male', 'WHO': 'Milan', 'CIRCLES': 1235}));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testFallbackToOtherOptionInPlurals() {
     // Use Arabic plural rules since they have all six cases.
     // Only locale and numbers matter, the actual language of the message

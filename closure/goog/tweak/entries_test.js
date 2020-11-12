@@ -11,6 +11,7 @@ const MockControl = goog.require('goog.testing.MockControl');
 const testSuite = goog.require('goog.testing.testSuite');
 /** @suppress {extraRequire} needed for createRegistryEntries. */
 const testhelpers = goog.require('goog.tweak.testhelpers');
+const tweak = goog.require('goog.tweak');
 
 let mockControl;
 
@@ -20,10 +21,15 @@ testSuite({
   },
 
   tearDown() {
-    goog.tweak.registry_ = null;
+    /** @suppress {visibility} suppression added to enable type checking */
+    tweak.registry_ = null;
     mockControl.$verifyAll();
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testGetValue_defaultValues() {
     createRegistryEntries('');
     assertFalse('wrong initial value for bool', boolEntry.getValue());
@@ -38,6 +44,10 @@ testSuite({
     assertTrue('wrong initial value for BoolTwo', boolTwoEntry.getValue());
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testGetValue_nonDefaultValues() {
     createRegistryEntries('?bool=1&enum=C');
     // These have the restartRequired option set.
@@ -58,6 +68,10 @@ testSuite({
     assertEquals('wrong value for boolOne', true, boolOneEntry.getValue());
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCallbacks() {
     createRegistryEntries('');
     const mockCallback = mockControl.createFunctionMock();

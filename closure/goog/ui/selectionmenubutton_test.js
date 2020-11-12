@@ -59,7 +59,11 @@ testSuite({
         lastMenuItemClicked.getElement());
   },
 
-  /** Tests that the checkbox fires the same events as the first 2 items. */
+  /**
+     Tests that the checkbox fires the same events as the first 2 items.
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCheckboxFireEvents() {
     const node = dom.getElement('demoSelectionMenuButton');
     selectionMenuButton.decorate(node);
@@ -76,6 +80,10 @@ testSuite({
     assertFalse(
         'Checkbox must be unchecked (i.e. unselected)', checkbox.checked);
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     checkbox.checked = true;
     testingEvents.fireClickSequence(checkbox);
     assertFalse(
@@ -87,6 +95,10 @@ testSuite({
         'menuItem1 should be the last menuitem clicked',
         dom.getElement('menuItem1'), lastMenuItemClicked.getElement());
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     checkbox.checked = false;
     testingEvents.fireClickSequence(checkbox);
     assertFalse(
@@ -99,7 +111,11 @@ testSuite({
         dom.getElement('menuItem2'), lastMenuItemClicked.getElement());
   },
 
-  /** Tests that the checkbox state gets updated when the first 2 events fire */
+  /**
+     Tests that the checkbox state gets updated when the first 2 events fire
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCheckboxReceiveEvents() {
     const node = dom.getElement('demoSelectionMenuButton');
     selectionMenuButton.decorate(node);
@@ -116,7 +132,11 @@ testSuite({
         'Checkbox must be unchecked (i.e. unselected)', checkbox.checked);
   },
 
-  /** Tests that set/getSelectionState correctly changes the state */
+  /**
+     Tests that set/getSelectionState correctly changes the state
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSelectionState() {
     const node = dom.getElement('demoSelectionMenuButton');
     selectionMenuButton.decorate(node);
@@ -152,7 +172,11 @@ testSuite({
         SelectionMenuButton.SelectionState.SOME);
   },
 
-  /** Tests that the checkbox gets disabled when the button is disabled */
+  /**
+     Tests that the checkbox gets disabled when the button is disabled
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCheckboxDisabled() {
     const node = dom.getElement('demoSelectionMenuButton');
     selectionMenuButton.decorate(node);

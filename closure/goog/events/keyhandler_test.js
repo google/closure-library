@@ -152,6 +152,7 @@ function fireKeyUp(
   return fakeEvent.returnValue_;
 }
 
+/** @suppress {checkTypes} suppression added to enable type checking */
 function createFakeKeyEvent(
     type, keyCode, opt_charCode, opt_keyIdentifier, opt_ctrlKey, opt_altKey,
     opt_shiftKey) {
@@ -170,6 +171,10 @@ function createFakeKeyEvent(
 testSuite({
   setUp() {
     // Have this based on a fictitious DOCUMENT_MODE constant.
+    /**
+     * @suppress {strictPrimitiveOperators} suppression added to enable type
+     * checking
+     */
     userAgent.isDocumentMode = (mode) => mode <= userAgent.DOCUMENT_MODE;
   },
 
@@ -182,8 +187,10 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     userAgent.VERSION = 8;
     userAgent.DOCUMENT_MODE = 8;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = true;
 
     assertIe8StyleKeyHandling();
@@ -198,8 +205,13 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     userAgent.VERSION = 9;  // Try IE9 in IE8 document mode.
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     userAgent.DOCUMENT_MODE = 8;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = true;
 
     assertIe8StyleKeyHandling();
@@ -214,8 +226,13 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     userAgent.VERSION = 9;
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     userAgent.DOCUMENT_MODE = 9;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = true;
 
     let keyEvent;
@@ -251,6 +268,7 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = true;
 
     let eventsFired = 0;
@@ -366,6 +384,7 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = true;
 
     let eventsFired = 0;
@@ -480,6 +499,7 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = true;
 
     let eventsFired = 0;
@@ -586,7 +606,9 @@ testSuite({
     userAgent.MAC = true;
     userAgent.WINDOWS = false;
     userAgent.LINUX = false;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = true;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     userAgent.VERSION = 525.3;
 
     let keyEvent;
@@ -717,6 +739,7 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = false;
 
     let keyEvent;
@@ -810,6 +833,7 @@ testSuite({
     userAgent.WINDOWS = false;
     userAgent.LINUX = false;
     userAgent.EDGE = false;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.SAVE_ALT_FOR_KEYPRESS_ = true;
 
     let keyEvent;
@@ -847,6 +871,7 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = true;
 
     let keyEvent;
@@ -874,6 +899,7 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = true;
 
     const keyEvents = [];
@@ -902,6 +928,7 @@ testSuite({
     userAgent.MAC = true;
     userAgent.WINDOWS = false;
     userAgent.LINUX = false;
+    /** @suppress {visibility} suppression added to enable type checking */
     KeyHandler.USES_KEYDOWN_ = true;
 
     let keyEvent;
@@ -948,6 +975,7 @@ testSuite({
     assertEquals(target, keyHandler.getElement());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDetach() {
     const target = dom.createDom(TagName.DIV);
     const keyHandler = new KeyHandler(target);

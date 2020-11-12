@@ -42,6 +42,7 @@ testSuite({
         ToolbarSeparatorRenderer.CSS_CLASS, renderer.getCssClass());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCreateDom() {
     const element = renderer.createDom(separator);
     assertNotNull('Created element must not be null', element);

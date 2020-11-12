@@ -322,6 +322,7 @@ testSuite({
         SafeHtml.createIframe(null, null, {'sandbox': null}, '<'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSafeHtmlCreateIframe_withMonkeypatchedObjectPrototype() {
     stubs.set(Object.prototype, 'foo', 'bar');
     const url = TrustedResourceUrl.fromConstant(
@@ -387,6 +388,10 @@ testSuite({
         () => SafeHtml.createSandboxIframe(null, null, null, '<'));
   },
 
+  /**
+     @suppress {strictPrimitiveOperators} suppression added to enable type
+     checking
+   */
   testSafeHtmlCanUseIframeSandbox() {
     // We know that the IE < 10 do not support the sandbox attribute, so use
     // them as a reference.
@@ -437,6 +442,7 @@ testSuite({
     assertEquals(Dir.NEUTRAL, scriptHtml.getDirection());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSafeHtmlCreateScript_withMonkeypatchedObjectPrototype() {
     stubs.set(Object.prototype, 'foo', 'bar');
     stubs.set(Object.prototype, 'type', 'baz');

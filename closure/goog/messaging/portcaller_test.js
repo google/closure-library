@@ -12,6 +12,7 @@ const MockControl = goog.require('goog.testing.MockControl');
 const MockMessageChannel = goog.require('goog.testing.messaging.MockMessageChannel');
 const PortCaller = goog.require('goog.messaging.PortCaller');
 const PortNetwork = goog.require('goog.messaging.PortNetwork');
+const dispose = goog.require('goog.dispose');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let mockControl;
@@ -39,7 +40,7 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(caller);
+    dispose(caller);
     mockControl.$verifyAll();
   },
 

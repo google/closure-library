@@ -4,7 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/** @fileoverview Tests for ModuleLoader. */
+/**
+ * @fileoverview Tests for ModuleLoader.
+ * @suppress {missingRequire} Use of global namespace object.
+ */
 
 goog.module('goog.module.ModuleLoaderTest');
 goog.setTestOnly();
@@ -21,6 +24,7 @@ const TestCase = goog.require('goog.testing.TestCase');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
 const XmlHttp = goog.require('goog.net.XmlHttp');
 const activeModuleManager = goog.require('goog.loader.activeModuleManager');
+const dispose = goog.require('goog.dispose');
 const dom = goog.require('goog.dom');
 const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
@@ -29,8 +33,20 @@ const googObject = goog.require('goog.object');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 
+/**
+ * @suppress {strictMissingProperties} suppression added to enable type
+ * checking
+ */
 window.modA1Loaded = false;
+/**
+ * @suppress {strictMissingProperties} suppression added to enable type
+ * checking
+ */
 window.modA2Loaded = false;
+/**
+ * @suppress {strictMissingProperties} suppression added to enable type
+ * checking
+ */
 window.modB1Loaded = false;
 
 let moduleLoader = null;
@@ -47,31 +63,35 @@ function assertSourceInjection() {
   return new GoogPromise((resolve, reject) => {
            moduleManager.execOnLoad('modB', resolve);
          })
-      .then(() => {
-        assertTrue(!!throwErrorInModuleB);
+      .then(/**
+               @suppress {undefinedVars} suppression added to enable type
+               checking
+             */
+            () => {
+              assertTrue(!!throwErrorInModuleB);
 
-        const ex = assertThrows(() => {
-          throwErrorInModuleB();
-        });
+              const ex = assertThrows(() => {
+                throwErrorInModuleB();
+              });
 
-        if (!ex.stack) {
-          return;
-        }
+              if (!ex.stack) {
+                return;
+              }
 
-        const stackTrace = ex.stack.toString();
-        const expectedString = 'testdata/modB_1.js';
+              const stackTrace = ex.stack.toString();
+              const expectedString = 'testdata/modB_1.js';
 
-        if (ModuleLoader.supportsSourceUrlStackTraces()) {
-          // Source URL should be added in eval or in jsloader.
-          assertContains(expectedString, stackTrace);
-        } else if (moduleLoader.getDebugMode()) {
-          // Browsers used jsloader, thus URLs are present.
-          assertContains(expectedString, stackTrace);
-        } else {
-          // Browser used eval, does not support source URL.
-          assertNotContains(expectedString, stackTrace);
-        }
-      });
+              if (ModuleLoader.supportsSourceUrlStackTraces()) {
+                // Source URL should be added in eval or in jsloader.
+                assertContains(expectedString, stackTrace);
+              } else if (moduleLoader.getDebugMode()) {
+                // Browsers used jsloader, thus URLs are present.
+                assertContains(expectedString, stackTrace);
+              } else {
+                // Browser used eval, does not support source URL.
+                assertNotContains(expectedString, stackTrace);
+              }
+            });
 }
 
 function assertLoaded(id) {
@@ -87,8 +107,11 @@ testSuite({
   },
 
   setUp() {
+    /** @suppress {undefinedVars} suppression added to enable type checking */
     modA1Loaded = false;
+    /** @suppress {undefinedVars} suppression added to enable type checking */
     modA2Loaded = false;
+    /** @suppress {undefinedVars} suppression added to enable type checking */
     modB1Loaded = false;
 
     goog.provide = goog.nullFunction;
@@ -112,7 +135,7 @@ testSuite({
 
   tearDown() {
     stubs.reset();
-    goog.dispose(moduleLoader);
+    dispose(moduleLoader);
 
     // Ensure that the module manager was created.
     assertNotNull(ModuleManager.getInstance());
@@ -263,6 +286,7 @@ testSuite({
     return assertSourceInjection();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testModuleLoaderRecursesTooDeep(opt_numModules) {
     // There was a bug in the module loader where it would retry recursively
     // whenever there was a synchronous failure in the module load. When you
@@ -292,10 +316,7 @@ testSuite({
     // functionality.
     const oldXmlHttp = goog.net.XmlHttp;
     stubs.set(goog.net, 'XmlHttp', function() {
-      return {
-        open: goog.functions.error('mock error'),
-        abort: goog.nullFunction
-      };
+      return {open: functions.error('mock error'), abort: goog.nullFunction};
     });
     googObject.extend(goog.net.XmlHttp, oldXmlHttp);
 
@@ -516,17 +537,15 @@ testSuite({
     });
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testLoadErrorCallbackExecutedWhenPrefetchFails() {
     // Make all XHRs throw an error, so that we test the error-handling
     // functionality.
     const oldXmlHttp = goog.net.XmlHttp;
     stubs.set(goog.net, 'XmlHttp', function() {
-      return {
-        open: goog.functions.error('mock error'),
-        abort: goog.nullFunction
-      };
+      return {open: functions.error('mock error'), abort: goog.nullFunction};
     });
-    goog.object.extend(goog.net.XmlHttp, oldXmlHttp);
+    googObject.extend(goog.net.XmlHttp, oldXmlHttp);
 
     let errorCount = 0;
     const errorHandler = () => {

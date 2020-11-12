@@ -31,24 +31,45 @@ class MockXhrStreamReader {
     // mocked API
 
     this.setStatusHandler = function(handler) {
+      /**
+       * @suppress {checkTypes,missingProperties} suppression added to enable
+       * type checking
+       */
       this.statusHandler_ = handler;
     };
 
     this.setDataHandler = function(handler) {
+      /**
+       * @suppress {checkTypes,missingProperties} suppression added to enable
+       * type checking
+       */
       this.dataHandler_ = handler;
     };
 
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     this.getStatus = function() {
       return this.status_;
     };
 
     // simulated events
 
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     this.onData = function(messages) {
       this.dataHandler_(messages);
     };
 
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     this.onStatus = function(status) {
+      /**
+       * @suppress {checkTypes,missingProperties} suppression added to enable
+       * type checking
+       */
       this.status_ = status;
       this.statusHandler_();
     };
@@ -58,6 +79,7 @@ class MockXhrStreamReader {
 testSuite({
   setUp() {
     xhrReader = new MockXhrStreamReader();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     xhrStream = new XhrNodeReadableStream(xhrReader);
 
     propertyReplacer = new PropertyReplacer();

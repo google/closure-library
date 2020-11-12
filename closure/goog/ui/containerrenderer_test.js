@@ -69,6 +69,10 @@ testSuite({
     assertUndefined('ARIA role must be undefined', renderer.getAriaRole());
   },
 
+  /**
+     @suppress {checkTypes,strictMissingProperties} suppression added to enable
+     type checking
+   */
   testEnableTabIndex() {
     const container = dom.getElement('container');
     assertFalse(
@@ -184,6 +188,7 @@ testSuite({
     });
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSetStateFromClassName() {
     const container = new Container();
 
@@ -221,6 +226,7 @@ testSuite({
         userAgent.IE, !!container.getElement().hideFocus);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDoesntCallGetCssClassInConstructor() {
     rendererasserts.assertNoGetCssClassCallsInConstructor(ContainerRenderer);
   },

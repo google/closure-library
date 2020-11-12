@@ -102,9 +102,12 @@ testSuite({
   },
 
   testInvalidTag() {
-    assertThrows(() => {
-      formatter.startTag('a onclick="alert(1);"');
-    });
+     const formatter = new SafeHtmlFormatter();
+
+    assertThrows(
+                 () => {
+                   formatter.startTag('a onclick="alert(1);"');
+                 });
     assertThrows(() => {
       formatter.startTag('a', {'onclick': 'alert(1);'});
     });

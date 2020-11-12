@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.events.WheelHandlerTest');
 goog.setTestOnly();
 
@@ -38,12 +43,14 @@ let mouseWheelHandlerRtl;
 
 // Be sure to call this after setting up goog.userAgent mock and not before.
 function createHandlerAndListen() {
+  /** @suppress {checkTypes} suppression added to enable type checking */
   mouseWheelHandler = new WheelHandler(dom.getElement('foo'));
 
   events.listen(mouseWheelHandler, EventsWheelEvent.EventType.WHEEL, (e) => {
     mouseWheelEvent = e;
   });
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   mouseWheelHandlerRtl = new WheelHandler(dom.getElement('fooRtl'));
 
   events.listen(mouseWheelHandlerRtl, EventsWheelEvent.EventType.WHEEL, (e) => {
@@ -107,6 +114,7 @@ function assertPixelDeltas(scale) {
       mouseWheelEventRtl.deltaZ * scale, mouseWheelEventRtl.pixelDeltaZ);
 }
 
+/** @suppress {checkTypes} suppression added to enable type checking */
 function createFakePreferredEvent(
     opt_deltaMode, opt_deltaX, opt_deltaY, opt_deltaZ) {
   const event = {
@@ -119,6 +127,7 @@ function createFakePreferredEvent(
   return new BrowserEvent(event);
 }
 
+/** @suppress {checkTypes} suppression added to enable type checking */
 function createFakeLegacyEvent(
     opt_wheelDelta, opt_wheelDeltaX, opt_wheelDeltaY) {
   const event = {
@@ -130,6 +139,7 @@ function createFakeLegacyEvent(
   return new BrowserEvent(event);
 }
 
+/** @suppress {checkTypes} suppression added to enable type checking */
 function createFakeGeckoEvent(opt_detail, opt_axis) {
   const event = {
     type: GECKO_TYPE,
@@ -147,6 +157,7 @@ testSuite({
 
   setUp() {
     stubs.remove(goog, 'userAgent');
+    /** @suppress {checkTypes} suppression added to enable type checking */
     goog.userAgent = {
       product: {
         CHROME: false,
@@ -288,6 +299,7 @@ testSuite({
     goog.userAgent.IE = true;
     const documentObjectWithNoBody = {};
     testingEvents.mixinListenable(documentObjectWithNoBody);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     mouseWheelHandler = new WheelHandler(documentObjectWithNoBody);
   },
 });

@@ -314,6 +314,7 @@ testSuite({
             .getTypedStringValue());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCloneWithParams_withMonkeypatchedObjectPrototype() {
     stubs.set(Object.prototype, 'foo', 'bar');
     const url =

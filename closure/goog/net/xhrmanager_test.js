@@ -8,9 +8,11 @@ goog.module('goog.net.XhrManagerTest');
 goog.setTestOnly();
 
 const EventType = goog.require('goog.net.EventType');
+const TestingNetXhrIo = goog.requireType('goog.testing.net.XhrIo');
 const XhrIo = goog.require('goog.net.XhrIo');
 const XhrIoPool = goog.require('goog.testing.net.XhrIoPool');
 const XhrManager = goog.require('goog.net.XhrManager');
+const dispose = goog.require('goog.dispose');
 const events = goog.require('goog.events');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -18,18 +20,20 @@ const testSuite = goog.require('goog.testing.testSuite');
 /** @type {XhrManager} */
 let xhrManager;
 
-/** @type {goog.testing.net.XhrIo} */
+/** @type {TestingNetXhrIo} */
 let xhrIo;
 
 testSuite({
   setUp() {
     xhrManager = new XhrManager();
+    /** @suppress {visibility} suppression added to enable type checking */
     xhrManager.xhrPool_ = new XhrIoPool();
+    /** @suppress {visibility} suppression added to enable type checking */
     xhrIo = xhrManager.xhrPool_.getXhr();
   },
 
   tearDown() {
-    goog.dispose(xhrManager);
+    dispose(xhrManager);
   },
 
   testGetOutstandingRequestIds() {

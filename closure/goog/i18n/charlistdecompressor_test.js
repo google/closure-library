@@ -13,6 +13,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 const decompressor = new CharListDecompressor();
 
 testSuite({
+  /** @suppress {visibility} suppression added to enable type checking */
   testBuildCharMap() {
     assertEquals(0, decompressor.charMap_['0']);
     assertEquals(10, decompressor.charMap_['A']);
@@ -20,12 +21,14 @@ testSuite({
   },
 
   testGetCodeAt() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const code = decompressor.getCodeAt_('321', 1, 2);
     assertEquals(90, code);
   },
 
   testAddCharsForType0() {
     const list = ['a'];
+    /** @suppress {visibility} suppression added to enable type checking */
     const lastcode = decompressor.addChars_(list, 97, 0, 0);
     assertArrayEquals(['a', 'b'], list);
     assertEquals(98, lastcode);
@@ -33,6 +36,7 @@ testSuite({
 
   testAddCharsForType1() {
     const list = ['a'];
+    /** @suppress {visibility} suppression added to enable type checking */
     const lastcode = decompressor.addChars_(list, 98, 0, 1);
     assertArrayEquals(['a', 'a'], list);
     assertEquals(97, lastcode);
@@ -40,6 +44,7 @@ testSuite({
 
   testAddCharsForType2() {
     const list = ['a'];
+    /** @suppress {visibility} suppression added to enable type checking */
     const lastcode = decompressor.addChars_(list, 97, 1, 2);
     assertArrayEquals(['a', 'b', 'c'], list);
     assertEquals(99, lastcode);

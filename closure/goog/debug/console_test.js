@@ -54,6 +54,7 @@ testSuite({
 
     // Set up a recorder for mockConsole.log
     mockConsole = {log: recordFunction()};
+    /** @suppress {visibility} suppression added to enable type checking */
     DebugConsole.console_ = mockConsole;
 
     loggerName0 = 'debug.logger';
@@ -83,6 +84,7 @@ testSuite({
     assertEquals(9, mockConsole.log.getCallCount());
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testLoggingWithDebugSupported() {
     // Make sure the log function is the default when only 'debug' is available.
     mockConsole['debug'] = recordFunction();
@@ -91,6 +93,7 @@ testSuite({
     assertEquals(4, mockConsole.debug.getCallCount());
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testLoggingWithErrorSupported() {
     // Make sure the log function is the default when only 'error' is available.
     mockConsole['error'] = recordFunction();
@@ -99,6 +102,7 @@ testSuite({
     assertEquals(7, mockConsole.log.getCallCount());
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testLoggingWithWarningSupported() {
     // Make sure the log function is the default when only 'warn' is available.
     mockConsole['warn'] = recordFunction();
@@ -107,6 +111,7 @@ testSuite({
     assertEquals(8, mockConsole.log.getCallCount());
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testLoggingWithEverythingSupported() {
     mockConsole['debug'] = recordFunction();
     mockConsole['error'] = recordFunction();

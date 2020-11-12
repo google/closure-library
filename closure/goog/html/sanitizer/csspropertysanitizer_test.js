@@ -23,6 +23,7 @@ const NAME = 'foo';
  * @param {string} name
  * @param {string} value
  * @return {!CSSStyleDeclaration}
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function getProcessedPropertyValue(name, value) {
   const div = document.createElement('div');
@@ -154,6 +155,7 @@ testSuite({
             'background-image', 'url("http://foo.com", abc)'));
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testBrowserBehavior_relative() {
     // Safari is the only browser that resolves relative URLs.
     assertTrue(
@@ -208,6 +210,7 @@ testSuite({
         CssPropertySanitizer.sanitizeProperty(NAME, expectedValue));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSanitizeProperty_url() {
     const url = 'url("http://foo.com")';
     assertEquals(null, CssPropertySanitizer.sanitizeProperty(NAME, url));

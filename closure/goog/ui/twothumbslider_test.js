@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.ui.TwoThumbSliderTest');
 goog.setTestOnly();
 
@@ -18,6 +23,7 @@ testSuite({
     goog.dispose(slider);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetCssClass() {
     slider = new TwoThumbSlider();
     assertEquals(

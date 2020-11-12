@@ -23,16 +23,21 @@ function assertUnalteredElements() {
 /**
  * @param {string} id Id of the element.
  * @return {!ModalAriaVisibilityHelper}
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function createHelper(id) {
   return new ModalAriaVisibilityHelper(dom.getElement(id), dom.getDomHelper());
 }
 
+/** @suppress {checkTypes} suppression added to enable type checking */
 function clearAriaState(id) {
   aria.removeState(dom.getElement(id), State.HIDDEN);
 }
 
-/** @param {string} id Id of the element. */
+/**
+ * @param {string} id Id of the element.
+ * @suppress {checkTypes} suppression added to enable type checking
+ */
 function assertEmptyAriaHiddenState(id) {
   const element = dom.getElement(id);
   assertTrue(googString.isEmptyOrWhitespace(
@@ -42,6 +47,7 @@ function assertEmptyAriaHiddenState(id) {
 /**
  * @param {string} id Id of the element.
  * @param {string} expectedState
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function assertAriaHiddenState(id, expectedState) {
   const element = dom.getElement(id);

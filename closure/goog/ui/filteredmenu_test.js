@@ -94,6 +94,10 @@ testSuite({
     menu.dispose();
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testFilter() {
     let menu = new FilteredMenu();
     menu.addItem(new MenuItem('Family'));
@@ -329,6 +333,7 @@ testSuite({
     assertFalse('ESC key should not propagate out to parent', gotKeyCode);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testAriaRoles() {
     let menu = new FilteredMenu();
     menu.addItem(new MenuItem('Item 1'));
@@ -341,6 +346,7 @@ testSuite({
     assertEquals('true', aria.getState(input, State.EXPANDED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testInputActiveDescendant() {
     let menu = new FilteredMenu();
     const menuItem1 = new MenuItem('Item 1');

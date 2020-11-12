@@ -22,6 +22,7 @@ testSuite({
   },
 
   tearDown() {
+    /** @suppress {visibility} suppression added to enable type checking */
     tweak.registry_ = null;
   },
 
@@ -41,6 +42,10 @@ testSuite({
 
   testInitializeFromQueryParams() {
     const testCase = 0;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     function assertQuery(
         queryStr, boolValue, enumValue, strValue, subBoolValue, subBoolValue2) {
       createRegistryEntries(queryStr);
@@ -71,6 +76,10 @@ testSuite({
     assertQuery('?s=a+b%20c%26', false, 'A', 'a b c&', false, true);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testMakeUrlQuery() {
     assertEquals('All values are default.', '', registry.makeUrlQuery(''));
     assertEquals(
@@ -103,7 +112,8 @@ testSuite({
   testOverrideDefaultValue_calledBefore() {
     registry.overrideDefaultValue('b', false);
     registry.overrideDefaultValue('b', true);
-    tweak.registerBoolean('b', 'b desc');
+    // use computed properties to avoid compiler checks of tweak
+    tweak['registerBoolean']('b', 'b desc');
     const bEntry = registry.getEntry('b');
     assertTrue('Default value should be true.', bEntry.getDefaultValue());
     assertTrue('Value should be true.', bEntry.getValue());
@@ -116,20 +126,30 @@ testSuite({
     assertTrue('Wrong exception', exception instanceof AssertionError);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCompilerOverrideDefaultValue() {
     createRegistryEntries('', {'b': true});
     registry = tweak.getRegistry();
-    tweak.registerBoolean('b', 'b desc');
+    // use computed properties to avoid compiler checks of tweak
+    tweak['registerBoolean']('b', 'b desc');
     const bEntry = registry.getEntry('b');
     assertTrue('Default value should be true.', bEntry.getDefaultValue());
     assertTrue('Value should be true.', bEntry.getValue());
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCompilerAndJsOverrideDefaultValue() {
     createRegistryEntries('', {'b': false});
     registry = tweak.getRegistry();
     registry.overrideDefaultValue('b', true);
-    tweak.registerBoolean('b', 'b desc', true);
+    // use computed properties to avoid compiler checks of tweak
+    tweak['registerBoolean']('b', 'b desc', true);
     const bEntry = registry.getEntry('b');
     assertFalse('Default value should be false.', bEntry.getDefaultValue());
     assertFalse('Value should be false.', bEntry.getValue());

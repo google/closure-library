@@ -41,8 +41,11 @@ testSuite({
   setUp() {
     dom.getElement('content').innerHTML = oldHtml;
     table = dom.getElement('sortable');
+    /** @suppress {checkTypes} suppression added to enable type checking */
     alphaHeader = dom.getElementsByTagName(TagName.TH, table)[0];
+    /** @suppress {checkTypes} suppression added to enable type checking */
     numberHeader = dom.getElementsByTagName(TagName.TH, table)[1];
+    /** @suppress {checkTypes} suppression added to enable type checking */
     notSortableHeader = dom.getElementsByTagName(TagName.TH, table)[2];
 
     tableSorter = new TableSorter();
@@ -168,6 +171,10 @@ testSuite({
     tableSorter2.dispose();
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSortAfterSwapping() {
     // First click
     events.fireClickEvent(alphaHeader);

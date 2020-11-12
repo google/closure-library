@@ -10,6 +10,7 @@ goog.setTestOnly();
 const DebugError = goog.require('goog.debug.Error');
 const ErrorReporter = goog.require('goog.debug.ErrorReporter');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const dispose = goog.require('goog.dispose');
 const errorcontext = goog.require('goog.debug.errorcontext');
 const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
@@ -82,11 +83,12 @@ function throwAnErrorWith(
 testSuite({
   setUp() {
     stubs.set(goog.net, 'XhrIo', MockXhrIo);
-    ErrorReporter.ALLOW_AUTO_PROTECT = true;
+    // NOTE: bypass compiler check for the define
+    ErrorReporter['ALLOW_AUTO_PROTECT'] = true;
   },
 
   tearDown() {
-    goog.dispose(errorReporter);
+    dispose(errorReporter);
     stubs.reset();
     MockXhrIo.lastUrl = null;
   },
@@ -100,6 +102,7 @@ testSuite({
     assertEquals('trace=trace', MockXhrIo.lastContent);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testsendErrorReportWithCustomSender() {
     let uri = null;
     let method = null;
@@ -159,6 +162,7 @@ testSuite({
     assertEquals('trace=Not%20available', MockXhrIo.lastContent);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   test_internetExplorerSendErrorReport() {
     stubs.set(userAgent, 'IE', true);
     stubs.set(userAgent, 'isVersionOrHigher', functions.FALSE);
@@ -175,6 +179,7 @@ testSuite({
     assertEquals('trace=Not%20available', MockXhrIo.lastContent);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   test_setLoggingHeaders() {
     stubs.set(userAgent, 'IE', true);
     stubs.set(userAgent, 'isVersionOrHigher', functions.FALSE);
@@ -379,6 +384,10 @@ testSuite({
   testContextProvider() {
     errorReporter =
         ErrorReporter.install('/errorreporter', (error, context) => {
+          /**
+           * @suppress {strictMissingProperties} suppression added to enable
+           * type checking
+           */
           context.providedContext = 'value';
         });
     let loggedErrors = 0;
@@ -398,6 +407,10 @@ testSuite({
   testContextProvider_withOtherContext() {
     errorReporter =
         ErrorReporter.install('/errorreporter', (error, context) => {
+          /**
+           * @suppress {strictMissingProperties} suppression added to enable
+           * type checking
+           */
           context.providedContext = 'value';
         });
     let loggedErrors = 0;
@@ -436,6 +449,10 @@ testSuite({
   testErrorWithDifferentContextSources() {
     errorReporter =
         ErrorReporter.install('/errorreporter', (error, context) => {
+          /**
+           * @suppress {strictMissingProperties} suppression added to enable
+           * type checking
+           */
           context.providedContext = 'provided ctx';
         });
     let loggedErrors = 0;
@@ -480,7 +497,7 @@ testSuite({
     if (!userAgent.IE) {
       assertNotEquals(originalSetTimeout, window.setTimeout);
     }
-    goog.dispose(errorReporter);
+    dispose(errorReporter);
     assertEquals(originalSetTimeout, window.setTimeout);
   },
 
@@ -532,7 +549,8 @@ testSuite({
   },
 
   testAttemptAutoProtectWithAllowAutoProtectOff() {
-    ErrorReporter.ALLOW_AUTO_PROTECT = false;
+    // Use computed property to bypass compiler check for the define value
+    ErrorReporter['ALLOW_AUTO_PROTECT'] = false;
     assertThrows(() => {
       errorReporter = new ErrorReporter('/log', (e, context) => {}, false);
     });

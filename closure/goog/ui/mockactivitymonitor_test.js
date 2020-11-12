@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Tests for goog.ui.MockActivityMonitorTest.
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 /** @suppress {extraProvide} */

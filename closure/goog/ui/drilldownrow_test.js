@@ -27,6 +27,7 @@ testSuite({
     const d1 = new DrilldownRow({html: createHtmlForRow('Second row')});
     const d2 = new DrilldownRow({html: createHtmlForRow('Third row')});
     const d21 = new DrilldownRow({html: createHtmlForRow('Fourth row')});
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const d22 = new DrilldownRow(DrilldownRow.sampleProperties);
     d.decorate(ff);
     d.addChild(d1, true);

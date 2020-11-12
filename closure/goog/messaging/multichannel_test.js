@@ -65,6 +65,7 @@ testSuite({
     channel1.send('fooBar', {foo: 'bar'});
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testReceive0() {
     channel0.registerService('fooBar', assertEqualsFn('Baz bang'));
     channel1.registerService('fooBar', notExpectedFn());
@@ -72,6 +73,7 @@ testSuite({
     mockChannel.receive('foo:fooBar', 'Baz bang');
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testReceive1() {
     channel1.registerService('fooBar', assertEqualsFn('Baz bang'));
     channel0.registerService('fooBar', notExpectedFn());
@@ -79,6 +81,7 @@ testSuite({
     mockChannel.receive('bar:fooBar', 'Baz bang');
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDefaultReceive0() {
     channel0.registerDefaultService(assertEqualsFn('fooBar', 'Baz bang'));
     channel1.registerDefaultService(notExpectedFn());
@@ -86,6 +89,7 @@ testSuite({
     mockChannel.receive('foo:fooBar', 'Baz bang');
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDefaultReceive1() {
     channel1.registerDefaultService(assertEqualsFn('fooBar', 'Baz bang'));
     channel0.registerDefaultService(notExpectedFn());

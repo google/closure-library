@@ -15,6 +15,7 @@ const Keyword = pluralRules.Keyword;
 
 testSuite({
   testSimpleSelectEn() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const funcSelect = pluralRules.enSelect_;
 
     assertEquals(Keyword.OTHER, funcSelect(0));  // 0 dollars
@@ -27,6 +28,7 @@ testSuite({
   },
 
   testSimpleSelectRo() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const funcSelect = pluralRules.roSelect_;
 
     assertEquals(Keyword.FEW, funcSelect(0));       // 0 dolari
@@ -47,6 +49,7 @@ testSuite({
   },
 
   testSimpleSelectSr() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const funcSelect = pluralRules.srSelect_;  // Serbian
 
     assertEquals(Keyword.ONE, funcSelect(1));

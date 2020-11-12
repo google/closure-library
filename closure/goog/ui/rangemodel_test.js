@@ -64,6 +64,7 @@ testSuite({
     assertEquals(90, rm.getValue());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMinium() {
     const rm = new RangeModel;
 
@@ -128,6 +129,7 @@ testSuite({
     assertEquals(3, rm.getExtent());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMaximum() {
     const rm = new RangeModel;
 

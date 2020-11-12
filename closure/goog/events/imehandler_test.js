@@ -48,6 +48,10 @@ function fireImeKeySequence() {
   return fireKeySequence(KeyCodes.WIN_IME);
 }
 
+/**
+ * @suppress {strictPrimitiveOperators} suppression added to enable type
+ * checking
+ */
 function fireKeySequence(keyCode) {
   return (
       testingEvents.fireBrowserEvent(
@@ -101,6 +105,10 @@ function setUserAgent(userAgent) {
 
 function setVersion(version) {
   googUserAgent.VERSION = version;
+  /**
+   * @suppress {visibility,checkTypes,constantProperty} suppression added to
+   * enable type checking
+   */
   googUserAgent.isVersionOrHigherCache_ = {};
 }
 

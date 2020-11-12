@@ -67,6 +67,7 @@ function fireMouseEvents(from, to) {
       document, new Coordinate(bounds.left + 1, bounds.top + 1));
 }
 
+/** @suppress {checkTypes} suppression added to enable type checking */
 function checkNestedTooltips(useAdvancedTooltip) {
   popup.appendChild(
       dom.createDom(TagName.SPAN, {id: 'nestedAnchor'}, 'Nested Anchor'));
@@ -150,6 +151,7 @@ testSuite({
     elsewhere = dom.getElement('notpopup');
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   tearDown() {
     // tooltip needs to be hidden as well as disposed of so that it doesn't
     // leave global state hanging around to trip up other tests.
@@ -160,6 +162,7 @@ testSuite({
     clock.uninstall();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCursorTracking() {
     if (isWindowTooSmall()) {
       return;

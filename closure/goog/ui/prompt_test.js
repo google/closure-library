@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.ui.PromptTest');
 goog.setTestOnly();
 
@@ -39,6 +44,7 @@ testSuite({
     goog.dispose(prompt);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testFocusOnInputElement() {
     // FF does not perform focus if the window is not active in the first place.
     if (userAgent.GECKO && document.hasFocus && !document.hasFocus()) {
@@ -59,6 +65,10 @@ testSuite({
     assertEquals('defaultValue', selection.getText(prompt.userInputEl_));
   },
 
+  /**
+     @suppress {strictMissingProperties,visibility} suppression added to enable
+     type checking
+   */
   testValidationFunction() {
     let promptResult = undefined;
     prompt = new Prompt('title', 'Prompt:', (result) => {
@@ -71,14 +81,20 @@ testSuite({
     const okButton = buttonSet.getButton(Dialog.DefaultButtonKeys.OK);
     assertTrue(okButton.disabled);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     prompt.userInputEl_.value = '';
     events.fireKeySequence(prompt.userInputEl_, KeyCodes.SPACE);
     assertTrue(okButton.disabled);
+    /** @suppress {visibility} suppression added to enable type checking */
     prompt.userInputEl_.value = 'foo';
     events.fireKeySequence(prompt.userInputEl_, KeyCodes.X);
     assertFalse(okButton.disabled);
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testBidiInput() {
     const shalomInHebrew = '\u05e9\u05dc\u05d5\u05dd';
     const promptResult = undefined;
@@ -87,12 +103,14 @@ testSuite({
     prompt.setInputDecoratorFn(goog.bind(bidiInput.decorate, bidiInput));
     prompt.setVisible(true);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     prompt.userInputEl_.value = shalomInHebrew;
     events.fireKeySequence(prompt.userInputEl_, KeyCodes.SPACE);
     events.fireBrowserEvent({'target': prompt.userInputEl_, 'type': 'input'});
     bidiInput.inputHandler_.dispatchEvent(InputHandler.EventType.INPUT);
     assertEquals('rtl', prompt.userInputEl_.dir);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     prompt.userInputEl_.value = 'shalomInEnglish';
     events.fireKeySequence(prompt.userInputEl_, KeyCodes.SPACE);
     events.fireBrowserEvent({'target': prompt.userInputEl_, 'type': 'input'});
@@ -101,17 +119,23 @@ testSuite({
     goog.dispose(bidiInput);
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testBidiInput_off() {
     const shalomInHebrew = '\u05e9\u05dc\u05d5\u05dd';
     const promptResult = undefined;
     prompt = new Prompt('title', 'Prompt:', functions.NULL, '');
     prompt.setVisible(true);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     prompt.userInputEl_.value = shalomInHebrew;
     events.fireKeySequence(prompt.userInputEl_, KeyCodes.SPACE);
     events.fireBrowserEvent({'target': prompt.userInputEl_, 'type': 'input'});
     assertEquals('', prompt.userInputEl_.dir);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     prompt.userInputEl_.value = 'shalomInEnglish';
     events.fireKeySequence(prompt.userInputEl_, KeyCodes.SPACE);
     assertEquals('', prompt.userInputEl_.dir);

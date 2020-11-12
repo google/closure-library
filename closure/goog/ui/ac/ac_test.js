@@ -36,6 +36,7 @@ let mockClock;
  * Fire listeners of a given type that are listening to the event's
  * currentTarget.
  * @param {BrowserEvent} event
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function simulateEvent(event) {
   events.fireListeners(event.currentTarget, event.type, true, event);
@@ -53,10 +54,12 @@ function simulateAllKeyEventsOnInput(keyCode) {
 /**
  * @param {string} text
  * @return {Node} Node whose inner text maches the given text.
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function findNodeByInnerText(text) {
   return dom.findNode(document.body, (node) => {
     try {
+      /** @suppress {checkTypes} suppression added to enable type checking */
       const display = userAgent.IE ? style.getCascadedStyle(node, 'display') :
                                      style.getComputedStyle(node, 'display');
 
@@ -79,6 +82,10 @@ testSuite({
   setUp() {
     mockClock = new MockClock(true);
     input = dom.getElement('input');
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     input.value = '';
     autocomplete = ac.createSimpleAutoComplete(data, input, true, false);
   },
@@ -92,6 +99,10 @@ testSuite({
   testBasicDisplay() {
     simulateAllKeyEventsOnInput(KeyCodes.DOWN);
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     input.value = 'a';
     simulateAllKeyEventsOnInput(KeyCodes.A);
     mockClock.tick(500);
@@ -108,6 +119,10 @@ testSuite({
     assert(style.isUnselectable(nodes[1]));
     assert(style.isUnselectable(nodes[2]));
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     input.value = 'aa';
     simulateAllKeyEventsOnInput(KeyCodes.A);
     mockClock.tick(500);
@@ -117,10 +132,18 @@ testSuite({
     assert(!!findNodeByInnerText(data[2]));
   },
 
-  /** Ensure that key navigation with multiple inputs work */
+  /**
+     Ensure that key navigation with multiple inputs work
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testKeyNavigation() {
     simulateAllKeyEventsOnInput(KeyCodes.DOWN);
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     input.value = 'c, a';
     selection.setCursorPosition(input, 'c, a'.length);
     simulateAllKeyEventsOnInput(KeyCodes.A);
@@ -147,10 +170,18 @@ testSuite({
     assertEquals('c, aab, ', input.value);
   },
 
-  /** Ensure that mouse navigation with multiple inputs works. */
+  /**
+     Ensure that mouse navigation with multiple inputs works.
+     @suppress {checkTypes,strictMissingProperties} suppression added to enable
+     type checking
+   */
   testMouseNavigation() {
     simulateAllKeyEventsOnInput(KeyCodes.DOWN);
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     input.value = 'c, a';
     selection.setCursorPosition(input, 'c, a'.length);
     simulateAllKeyEventsOnInput(KeyCodes.A);

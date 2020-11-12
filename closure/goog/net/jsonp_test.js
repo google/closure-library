@@ -54,6 +54,9 @@ function newCleanupGuard() {
         // NOTES: callbacks are stored on globalThis with property
         // name prefixed with goog.net.Jsonp.CALLBACKS.
         if (key.indexOf(Jsonp.CALLBACKS) == 0) {
+          /**
+           * @suppress {visibility} suppression added to enable type checking
+           */
           const callbackId = Jsonp.getCallbackId_(key);
           if (globalThis[callbackId] &&
               globalThis[callbackId] != goog.nullFunction) {
@@ -69,6 +72,7 @@ function newCleanupGuard() {
   };
 }
 
+/** @suppress {missingProperties} suppression added to enable type checking */
 function getScriptElement(result) {
   return result.deferred_.defaultScope_.script_;
 }
@@ -78,6 +82,7 @@ testSuite({
     timeoutWasCalled = false;
     timeoutHandler = null;
     originalTimeout = window.setTimeout;
+    /** @suppress {missingReturn} suppression added to enable type checking */
     window.setTimeout = (handler, time) => {
       timeoutWasCalled = true;
       timeoutHandler = handler;
@@ -89,6 +94,7 @@ testSuite({
   },
 
   // Check that send function is sane when things go well.
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSend() {
     let replyReceived;
     const jsonp = new Jsonp(fakeTrustedUrl);
@@ -130,6 +136,7 @@ testSuite({
   },
 
   // Check that send function is sane when things go well.
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSendWhenCallbackHasTwoParameters() {
     let replyReceived;
     let replyReceived2;
@@ -165,6 +172,10 @@ testSuite({
 
   // Check that send function works correctly when callback param value is
   // specified.
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testSendWithCallbackParamValue() {
     let replyReceived;
     const jsonp = new Jsonp(fakeTrustedUrl);
@@ -192,6 +203,7 @@ testSuite({
 
     // Now, we simulate a returned request using the known callback function
     // name.
+    /** @suppress {visibility} suppression added to enable type checking */
     const callbackFunc =
         eval('window.callback=' + Jsonp.getCallbackId_('dummyId'));
     callbackFunc({some: 'data', another: ['data', 'right', 'here']});
@@ -207,6 +219,7 @@ testSuite({
   },
 
   // Check that the send function is sane when the thing goes south.
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSendFailure() {
     let replyReceived = false;
     let errorReplyReceived = false;
@@ -251,6 +264,7 @@ testSuite({
   },
 
   // Check that a cancel call works and cleans up after itself.
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCancel() {
     const checkCleanup = newCleanupGuard();
 
@@ -268,6 +282,7 @@ testSuite({
       // NOTES: callbacks are stored on globalThis with property
       // name prefixed with goog.net.Jsonp.CALLBACKS.
       if (key.indexOf('goog.net.Jsonp.CALLBACKS') == 0) {
+        /** @suppress {visibility} suppression added to enable type checking */
         const callbackId = Jsonp.getCallbackId_(key);
         assertNotEquals(
             'The success callback should have been removed',
@@ -280,6 +295,7 @@ testSuite({
     timeoutHandler();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPayloadParameters() {
     const checkCleanup = newCleanupGuard();
 
@@ -295,6 +311,7 @@ testSuite({
     timeoutHandler();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testNonce() {
     const checkCleanup = newCleanupGuard();
 

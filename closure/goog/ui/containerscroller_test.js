@@ -29,6 +29,7 @@ testSuite({
   setUp() {
     container = new Container();
     container.decorate(sandbox);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     container.getElement().scrollTop = 0;
     mockClock = new MockClock(true);
     scroller = null;
@@ -45,18 +46,21 @@ testSuite({
     sandbox.innerHTML = sandboxHtml;
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHighlightFirstStaysAtTop() {
     scroller = new ContainerScroller(container);
     container.getChildAt(0).setHighlighted(true);
     assertEquals(0, container.getElement().scrollTop);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHighlightSecondStaysAtTop() {
     scroller = new ContainerScroller(container);
     container.getChildAt(1).setHighlighted(true);
     assertEquals(0, container.getElement().scrollTop);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHighlightSecondLastScrollsNearTheBottom() {
     scroller = new ContainerScroller(container);
     container.getChildAt(8).setHighlighted(true);
@@ -66,15 +70,18 @@ testSuite({
         80, container.getElement().scrollTop);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHighlightLastScrollsToBottom() {
     scroller = new ContainerScroller(container);
     container.getChildAt(9).setHighlighted(true);
     assertEquals(100, container.getElement().scrollTop);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testScrollRestoreIfStillVisible() {
     scroller = new ContainerScroller(container);
     container.getChildAt(9).setHighlighted(true);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const scrollTop = container.getElement().scrollTop;
     container.setVisible(false);
     container.setVisible(true);
@@ -84,8 +91,10 @@ testSuite({
         scrollTop, container.getElement().scrollTop);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testNoScrollRestoreIfNotVisible() {
     scroller = new ContainerScroller(container);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     container.getElement().scrollTop = 100;
     container.setVisible(false);
     container.getChildAt(0).setHighlighted(true);
@@ -98,6 +107,7 @@ testSuite({
         100, container.getElement().scrollTop);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCenterOnHighlightedOnFirstOpen() {
     container.setVisible(false);
     scroller = new ContainerScroller(container);
@@ -152,6 +162,7 @@ testSuite({
         container.getHighlightedIndex());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testInitialItemIsCentered() {
     container.getChildAt(4).setHighlighted(true);
     scroller = new ContainerScroller(container);
@@ -163,6 +174,7 @@ testSuite({
         40, container.getElement().scrollTop);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testInitialItemIsCenteredTopItem() {
     container.getChildAt(0).setHighlighted(true);
     scroller = new ContainerScroller(container);
@@ -171,6 +183,7 @@ testSuite({
 
   testHidingMenuItemsDoesntAffectContainerScroller() {
     scroller = new ContainerScroller(container);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     container.getElement = () => {
       fail(
           'getElement() must not be called when a control in the container is ' +

@@ -59,6 +59,7 @@ testSuite({
     const actionEventFired = false;
     let beforeActionFired = false;
     events.listen(actionHandler, ActionHandler.EventType.ACTION, (e) => {
+      /** @suppress {undefinedVars} suppression added to enable type checking */
       actionEvent = e;
     });
     events.listen(actionHandler, ActionHandler.EventType.BEFOREACTION, (e) => {

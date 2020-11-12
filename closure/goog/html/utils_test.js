@@ -55,6 +55,7 @@ testSuite({
         return;
       }
 
+      /** @suppress {checkTypes} suppression added to enable type checking */
       result = utils.stripHtmlTags(makeHtml(tag, STRIP));
       assertEquals(FAILURE_MESSAGE, STRIP, result);
     });
@@ -66,6 +67,7 @@ testSuite({
         return;
       }
 
+      /** @suppress {checkTypes} suppression added to enable type checking */
       result = utils.stripHtmlTags(makeHtml(tag, STRIP, 1, 0, 'a'));
       assertEquals(FAILURE_MESSAGE, STRIP, result);
     });

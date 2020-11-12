@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire}
+ */
 goog.module('goog.i18n.NumberFormatTest');
 goog.setTestOnly();
 
@@ -874,12 +878,15 @@ testSuite({
   },
 
   testLocaleSwitch() {
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_fr;
 
     // When this test is performed in test cluster, 2 out of 60 machines have
     // problem getting the symbol. It is likely to be caused by size of
     // uncompiled symbol file. There will not be an issue after it is compiled.
-    if (goog.i18n.NumberFormatSymbols.DECIMAL_SEP ==
+    if (NumberFormatSymbols.DECIMAL_SEP ==
         NumberFormatSymbols_en.DECIMAL_SEP) {
       // fails to load French symbols, skip the test.
       return;
@@ -905,12 +912,15 @@ testSuite({
   },
 
   testFrenchParse() {
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_fr;
 
     // When this test is performed in test cluster, 2 out of 60 machines have
     // problem getting the symbol. It is likely to be caused by size of
     // uncompiled symbol file. There will not be an issue after it is compiled.
-    if (goog.i18n.NumberFormatSymbols.DECIMAL_SEP ==
+    if (NumberFormatSymbols.DECIMAL_SEP ==
         NumberFormatSymbols_en.DECIMAL_SEP) {
       // fails to load French symbols, skip the test.
       return;
@@ -951,7 +961,13 @@ testSuite({
   },
 
   testEnforceAscii() {
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_ar_EG;
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols_u_nu_latn =
         NumberFormatSymbols_ar_EG_u_nu_latn;
 
@@ -1075,6 +1091,9 @@ testSuite({
 
   testNegativeDecimalFinnish() {
     // Finnish uses a full-width dash for negative.
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_fi;
 
     const fmt = new NumberFormat(NumberFormat.Format.DECIMAL);
@@ -1085,7 +1104,13 @@ testSuite({
 
   testSimpleCompactFrench() {
     // Switch to French.
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_fr;
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.CompactNumberFormatSymbols = CompactNumberFormatSymbols_fr;
 
     const fmt = new NumberFormat(NumberFormat.Format.COMPACT_SHORT);
@@ -1099,7 +1124,13 @@ testSuite({
 
   testSimpleCompactGerman() {
     // Switch to German.
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_de;
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.CompactNumberFormatSymbols = CompactNumberFormatSymbols_de;
 
     const fmt = new NumberFormat(NumberFormat.Format.COMPACT_SHORT);
@@ -1184,6 +1215,9 @@ testSuite({
       COMPACT_DECIMAL_SHORT_PATTERN: {'1000': {'other': '0K'}}
     };
 
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.CompactNumberFormatSymbols = cdfSymbols;
     const fmt = new NumberFormat(NumberFormat.Format.COMPACT_LONG);
     const str = fmt.format(220000000000000);
@@ -1218,12 +1252,24 @@ testSuite({
   },
 
   testCurrencyCodeOrder() {
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_fr;
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.CompactNumberFormatSymbols = CompactNumberFormatSymbols_fr;
     let fmt = new NumberFormat(NumberFormat.Format.CURRENCY);
     assertFalse(fmt.isCurrencyCodeBeforeValue());
 
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.CompactNumberFormatSymbols = CompactNumberFormatSymbols_en;
     const fmt1 = new NumberFormat(NumberFormat.Format.CURRENCY);
     assertTrue(fmt1.isCurrencyCodeBeforeValue());
@@ -1286,6 +1332,7 @@ testSuite({
     assertTrue(fmt.isCurrencyCodeBeforeValue());  // currency first, en_US style
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCompactWithBaseFormattingNumber() {
     const fmt = new NumberFormat(NumberFormat.Format.COMPACT_SHORT);
 
@@ -1323,14 +1370,23 @@ testSuite({
 
   // Moved Polish, Romanian, other currencies to tier 2, check that it works now
   testPolish() {
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_pl;
     const fmPl = new NumberFormat(NumberFormat.Format.CURRENCY);
     assertEquals('100,00\u00A0z\u0142', fmPl.format(100));  // 100.00 zł
 
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_ro;
     const fmRo = new NumberFormat(NumberFormat.Format.CURRENCY);
     assertEquals('100,00\u00A0RON', fmRo.format(100));
 
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
   },
 
@@ -1376,11 +1432,12 @@ testSuite({
   },
 
   testSymbols_percent() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const f = new NumberFormat(
         NumberFormat.Format.PERCENT, undefined, undefined,
         // Alternate percent symbol.
         Object.create(
-            goog.i18n.NumberFormatSymbols, {PERCENT: {'value': 'Percent'}}));
+            NumberFormatSymbols, {PERCENT: {'value': 'Percent'}}));
     assertEquals('-25Percent', f.format(-0.25));
     assertEquals('25Percent', f.format(0.25));
 
@@ -1389,6 +1446,9 @@ testSuite({
         NumberFormatSymbols_en);
     assertEquals('-25%', f2.format(-0.25));
     assertEquals('25%', f2.format(0.25));
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_ar_EG;
     assertEquals('-25Percent', f.format(-0.25));
     assertEquals('25Percent', f.format(0.25));
@@ -1397,10 +1457,11 @@ testSuite({
   },
 
   testSymbols_permill() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const f = new NumberFormat(
         '#,##0\u2030', undefined, undefined,
         Object.create(
-            goog.i18n.NumberFormatSymbols, {PERMILL: {'value': 'Permill'}}));
+            NumberFormatSymbols, {PERMILL: {'value': 'Permill'}}));
     assertEquals('0Permill', f.format(0));
 
     assertEquals('0\u2030', new NumberFormat('#,##0\u2030').format(0));
@@ -1416,10 +1477,16 @@ testSuite({
     assertEquals('1e3', f.format(1000));
     assertEquals('1E3', defaultLocale.format(1000));
 
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en_AU;
     assertEquals('1e3', f.format(1000));
     assertEquals('1e3', defaultLocale.format(1000));
 
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en_US;
     assertEquals('1e3', f.format(1000));
     assertEquals('1E3', defaultLocale.format(1000));

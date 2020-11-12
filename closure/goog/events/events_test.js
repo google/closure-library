@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
 goog.module('goog.eventsTest');
 goog.setTestOnly();
 
@@ -25,6 +29,7 @@ const functions = goog.require('goog.functions');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
 
+/** @suppress {visibility} suppression added to enable type checking */
 const originalHandleBrowserEvent = events.handleBrowserEvent_;
 let propertyReplacer;
 let et1;
@@ -66,6 +71,10 @@ function runEventPropagationWithReentrantDispatch(useCapture) {
 
   // Fire the first event.
   const firstEvent = new GoogEvent(eventType);
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   firstEvent.isFirstEvent = true;
   child.dispatchEvent(firstEvent);
 
@@ -143,7 +152,9 @@ testSuite({
   },
 
   tearDown() {
-    events.CAPTURE_SIMULATION_MODE = CaptureSimulationMode.ON;
+    /** Use computed properties to avoid compiler checks of defines */
+    events['CAPTURE_SIMULATION_MODE'] = CaptureSimulationMode.ON;
+    /** @suppress {visibility} suppression added to enable type checking */
     events.handleBrowserEvent_ = originalHandleBrowserEvent;
     goog.disposeAll(et1, et2, et3);
     events.removeAll(document.body);
@@ -156,7 +167,9 @@ testSuite({
 
     events.protectBrowserEventEntryPoint(errorHandler);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const browserEventHandler = recordFunction(events.handleBrowserEvent_);
+    /** @suppress {visibility} suppression added to enable type checking */
     events.handleBrowserEvent_ = function() {
       try {
         browserEventHandler.apply(this, arguments);
@@ -370,7 +383,9 @@ testSuite({
 
     // Try again with the new API and without capture simulation:
     if (!BrowserFeature.HAS_W3C_EVENT_SUPPORT) return;
-    events.CAPTURE_SIMULATION_MODE = CaptureSimulationMode.OFF_AND_FAIL;
+
+    /** Use computed properties to avoid compiler checks of defines */
+    events['CAPTURE_SIMULATION_MODE'] = CaptureSimulationMode.OFF_AND_FAIL;
     count = 0;
 
     events.listen(et1, 'test', callbackCapture1, {capture: true});
@@ -476,7 +491,9 @@ testSuite({
     assertEquals(20, count);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testEntryPointRegistry() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const monitor = new EntryPointMonitor();
     const replacement = () => {};
     monitor.wrap = recordFunction(functions.constant(replacement));
@@ -506,6 +523,10 @@ testSuite({
 
     const div = dom.createElement(TagName.DIV);
     const key = events.listen(div, EventType.CLICK, goog.nullFunction);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     const listenerStack = key.creationStack;
 
     // Check that the name of this test function occurs in the stack trace.
@@ -610,6 +631,7 @@ testSuite({
     const SubClass = function() { /* does not call superclass ctor */ };
     goog.inherits(SubClass, GoogEventTarget);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const instance = new SubClass();
 
     let e;
@@ -629,9 +651,13 @@ testSuite({
 
   testAssertWhenDispatchEventIsUsedWithNonCustomEventTarget() {
     const obj = {};
-    let e = assertThrows(() => {
-      events.dispatchEvent(obj, 'test1');
-    });
+    let e = assertThrows(/**
+                            @suppress {checkTypes} suppression added to enable
+                            type checking
+                          */
+                         () => {
+                           events.dispatchEvent(obj, 'test1');
+                         });
     assertTrue(e instanceof AssertionError);
   },
 
@@ -749,7 +775,8 @@ testSuite({
   },
 
   testCaptureSimulationModeOffAndFail() {
-    events.CAPTURE_SIMULATION_MODE = CaptureSimulationMode.OFF_AND_FAIL;
+    /** Use computed properties to avoid compiler checks of defines */
+    events['CAPTURE_SIMULATION_MODE'] = CaptureSimulationMode.OFF_AND_FAIL;
     const captureHandler = recordFunction();
 
     if (!BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
@@ -769,7 +796,8 @@ testSuite({
   },
 
   testCaptureSimulationModeOffAndSilent() {
-    events.CAPTURE_SIMULATION_MODE = CaptureSimulationMode.OFF_AND_SILENT;
+    /** Use computed properties to avoid compiler checks of defines */
+    events['CAPTURE_SIMULATION_MODE'] = CaptureSimulationMode.OFF_AND_SILENT;
     const captureHandler = recordFunction();
 
     events.listen(document.body, 'click', captureHandler, true);

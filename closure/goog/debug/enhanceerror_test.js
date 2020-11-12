@@ -84,6 +84,7 @@ function throwObject() {
   throw {property: 'value'};
 }
 testSuite({
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testEnhanceError() {
     // Tests are like this:
     // [test num, expect something in the stack, expect an extra message]

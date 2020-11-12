@@ -12,9 +12,11 @@ goog.setTestOnly();
 const AttributeWhitelist = goog.require('goog.html.sanitizer.AttributeWhitelist');
 const Const = goog.require('goog.string.Const');
 const HtmlSanitizer = goog.require('goog.html.sanitizer.HtmlSanitizer');
+const HtmlSanitizerAttributePolicy = goog.requireType('goog.html.sanitizer.HtmlSanitizerAttributePolicy');
 const SafeHtml = goog.require('goog.html.SafeHtml');
 const TagWhitelist = goog.require('goog.html.sanitizer.TagWhitelist');
 const dom = goog.require('goog.testing.dom');
+const functions = goog.require('goog.functions');
 const testSuite = goog.require('goog.testing.testSuite');
 const unsafe = goog.require('goog.html.sanitizer.unsafe');
 const userAgent = goog.require('goog.userAgent');
@@ -29,7 +31,7 @@ const just = Const.from('test');
  * @param {string} originalHtml
  * @param {string} expectedHtml
  * @param {?Array<string>=} tags
- * @param {?Array<(string|!goog.html.sanitizer.HtmlSanitizerAttributePolicy)>=}
+ * @param {?Array<(string|!HtmlSanitizerAttributePolicy)>=}
  *     attrs
  * @param {?HtmlSanitizer.Builder=} opt_builder
  */
@@ -148,13 +150,13 @@ testSuite({
   testAllowRelaxExistingAttributePolicyWildcard() {
     const input = '<a href="javascript:alert(1)"></a>';
     // define a tag-specific one, takes precedence
-    assertSanitizedHtml(input, input, null, [
-      {tagName: 'a', attributeName: 'href', policy: goog.functions.identity}
-    ]);
+    assertSanitizedHtml(
+        input, input, null,
+        [{tagName: 'a', attributeName: 'href', policy: functions.identity}]);
     // overwrite the global one
-    assertSanitizedHtml(input, input, null, [
-      {tagName: '*', attributeName: 'href', policy: goog.functions.identity}
-    ]);
+    assertSanitizedHtml(
+        input, input, null,
+        [{tagName: '*', attributeName: 'href', policy: functions.identity}]);
   },
 
   testAllowRelaxExistingAttributePolicySpecific() {
@@ -162,11 +164,11 @@ testSuite({
     const expected = '<a></a>';
     // overwrite the global one, the specific one still has precedence
     assertSanitizedHtml(input, expected, null, [
-      {tagName: '*', attributeName: 'target', policy: goog.functions.identity},
+      {tagName: '*', attributeName: 'target', policy: functions.identity},
     ]);
     // overwrite the tag-specific one, this one should take precedence
     assertSanitizedHtml(input, input, null, [
-      {tagName: 'a', attributeName: 'target', policy: goog.functions.identity},
+      {tagName: 'a', attributeName: 'target', policy: functions.identity},
     ]);
   },
 
@@ -176,9 +178,9 @@ testSuite({
     // to reduce the attack surface.
     const input = '<svg width="1px"><line x1="3" /><path d="M 10 30" /></svg>';
     assertSanitizedHtml(input, input, ['svg', 'line', 'path'], [
-      {tagName: 'svg', attributeName: 'width', policy: goog.functions.identity},
-      {tagName: 'line', attributeName: 'x1', policy: goog.functions.identity},
-      {tagName: 'path', attributeName: 'd', policy: goog.functions.identity},
+      {tagName: 'svg', attributeName: 'width', policy: functions.identity},
+      {tagName: 'line', attributeName: 'x1', policy: functions.identity},
+      {tagName: 'path', attributeName: 'd', policy: functions.identity},
     ]);
   },
 });

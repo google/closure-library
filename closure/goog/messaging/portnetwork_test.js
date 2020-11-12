@@ -13,6 +13,7 @@ const PortOperator = goog.require('goog.messaging.PortOperator');
 const TestCase = goog.require('goog.testing.TestCase');
 const Timer = goog.require('goog.Timer');
 const browser = goog.require('goog.labs.userAgent.browser');
+const dispose = goog.require('goog.dispose');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let timer;
@@ -36,7 +37,7 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(timer);
+    dispose(timer);
   },
 
   testRouteMessageThroughWorkers() {

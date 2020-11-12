@@ -74,6 +74,7 @@ testSuite({
         ['goog-tab-bar', 'goog-tab-bar-start'], classlist.get(element));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSetStateFromClassName() {
     renderer.setStateFromClassName(
         tabBar, 'goog-tab-bar-bottom', renderer.getCssClass());
@@ -134,6 +135,7 @@ testSuite({
         renderer.getClassNames(tabBar));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDoesntCallGetCssClassInConstructor() {
     rendererasserts.assertNoGetCssClassCallsInConstructor(TabBarRenderer);
   },

@@ -119,6 +119,10 @@ testSuite({
         renderer.getTooltip(dom.getElement('baz')));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSetTooltip() {
     sandbox.innerHTML = '<div id="foo">Foo</div>';
     const element = dom.getElement('foo');

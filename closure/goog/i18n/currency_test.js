@@ -7,9 +7,9 @@
 goog.module('goog.i18n.currencyTest');
 goog.setTestOnly();
 
-const RawCurrencyInfo = goog.require('goog.i18n.currency.CurrencyInfo');
 const NumberFormat = goog.require('goog.i18n.NumberFormat');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const RawCurrencyInfo = goog.require('goog.i18n.currency.CurrencyInfo');
 const currency = goog.require('goog.i18n.currency');
 const googObject = goog.require('goog.object');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -21,9 +21,8 @@ const stubs = new PropertyReplacer();
 testSuite({
   setUp() {
     stubs.replace(
-        goog.i18n.currency, 'CurrencyInfo',
-        goog.object.clone(goog.i18n.currency.CurrencyInfo));
-    CurrencyInfo = goog.i18n.currency.CurrencyInfo;
+        currency, 'CurrencyInfo', googObject.clone(currency.CurrencyInfo));
+    CurrencyInfo = currency.CurrencyInfo;
   },
 
   tearDown() {

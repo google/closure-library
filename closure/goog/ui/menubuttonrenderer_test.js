@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.ui.MenuButtonRendererTest');
 goog.setTestOnly();
 
@@ -66,6 +71,7 @@ function checkButtonCaption(button) {
 /**
  * Verify that the menu button has the correct ARIA attributes
  * @param {goog.ui.Button} button A button.
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function checkAriaState(button) {
   assertEquals(

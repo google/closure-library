@@ -450,6 +450,10 @@ testSuite({
       return;  // skip test
     }
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     window.xssFiredInertDocument = false;
     const doc = CssSanitizer.createInertDocument_();
     try {

@@ -347,6 +347,7 @@ testSuite({
     assertTrue('Popup should remain visible', popup.isVisible());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testOnDocumentBlurActiveElementInsidePopupWithoutDelay() {
     popup.setVisible(true);
     const elementInsidePopup = dom.createDom(TagName.DIV);
@@ -358,6 +359,7 @@ testSuite({
     assertTrue('Popup should remain visible', popup.isVisible());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testOnDocumentBlurActiveElementInsidePopupWithDelay() {
     popup.setVisible(true);
     const elementInsidePopup = dom.createDom(TagName.DIV);

@@ -38,6 +38,7 @@ testSuite({
     charPickerData = new CharPickerData();
     charPickerElement = dom.getElement('charpicker');
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     charPicker = new CharPicker(charPickerData, charNameFetcherMock);
   },
 
@@ -47,6 +48,10 @@ testSuite({
     mockControl.$tearDown();
   },
 
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testAriaLabelIsUpdatedOnFocus() {
     const character = '←';
     const characterName = 'right arrow';

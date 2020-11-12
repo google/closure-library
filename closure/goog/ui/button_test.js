@@ -49,6 +49,7 @@ testSuite({
         NativeButtonRenderer.getInstance(), button.getRenderer());
 
     const fakeDomHelper = {};
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const testButton =
         new Button('Hello', ButtonRenderer.getInstance(), fakeDomHelper);
     assertEquals(
@@ -62,6 +63,7 @@ testSuite({
     testButton.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetSetValue() {
     assertUndefined(
         'Button\'s value must default to undefined', button.getValue());
@@ -82,6 +84,7 @@ testSuite({
         'Button element must be unchanged', 'foo', button.getElement().value);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetSetTooltip() {
     assertUndefined(
         'Button\'s tooltip must default to undefined', button.getTooltip());
@@ -160,6 +163,10 @@ testSuite({
 
     dispatchedActionCount = 0;
     let e = new GoogEvent(KeyHandler.EventType.KEY, button);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.keyCode = KeyCodes.ENTER;
     button.handleKeyEvent(e);
     assertEquals(
@@ -168,6 +175,10 @@ testSuite({
 
     dispatchedActionCount = 0;
     e = new GoogEvent(EventType.KEYUP, button);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.keyCode = KeyCodes.SPACE;
     button.handleKeyEvent(e);
     assertEquals(
@@ -210,6 +221,10 @@ testSuite({
 
     dispatchedActionCount = 0;
     let e = new GoogEvent(KeyHandler.EventType.KEY, button);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.keyCode = KeyCodes.SPACE;
     button.handleKeyEvent(e);
     assertEquals(
@@ -222,6 +237,10 @@ testSuite({
 
     dispatchedActionCount = 0;
     e = new GoogEvent(EventType.KEYUP, button);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.keyCode = KeyCodes.SPACE;
     button.handleKeyEvent(e);
     assertEquals(
@@ -240,6 +259,10 @@ testSuite({
 
     dispatchedActionCount = 0;
     let e = new GoogEvent(KeyHandler.EventType.KEY, button);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.keyCode = KeyCodes.ENTER;
     button.handleKeyEvent(e);
     assertEquals(
@@ -248,6 +271,10 @@ testSuite({
 
     dispatchedActionCount = 0;
     e = new GoogEvent(EventType.KEYUP, button);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     e.keyCode = KeyCodes.ENTER;
     button.handleKeyEvent(e);
     assertEquals(

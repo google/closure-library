@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.ui.ac.RichRemoteArrayMatcherTest');
 goog.setTestOnly();
 
@@ -59,6 +64,10 @@ testSuite({
     mockMatchHandler = mockControl.createFunctionMock();
   },
 
+  /**
+     @suppress {checkTypes,visibility,strictMissingProperties} suppression
+     added to enable type checking
+   */
   testRequestMatchingRows() {
     const matcher = new RichRemoteArrayMatcher(url);
     mockMatchHandler(token, ignoresRenderAndSelectMatcher);
@@ -69,12 +78,20 @@ testSuite({
     mockControl.$resetAll();
   },
 
+  /**
+     @suppress {checkTypes,visibility,strictMissingProperties} suppression
+     added to enable type checking
+   */
   testSetRowBuilder() {
     const matcher = new RichRemoteArrayMatcher(url);
-    matcher.setRowBuilder((type, response) => {
-      assertEquals('type1', type);
-      return response;
-    });
+    matcher.setRowBuilder(/**
+                             @suppress {checkTypes} suppression added to enable
+                             type checking
+                           */
+                          (type, response) => {
+                            assertEquals('type1', type);
+                            return response;
+                          });
     mockMatchHandler(token, ignoresRenderAndSelectMatcher);
     mockControl.$replayAll();
     matcher.requestMatchingRows(token, maxMatches, mockMatchHandler);

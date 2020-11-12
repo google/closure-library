@@ -49,6 +49,7 @@ function getInput(bytes) {
 }
 
 testSuite({
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSingleMessage() {
     const parser = new PbStreamParser();
     const input = getInput([0x0a, 0x05, 0xFF, 0xFE, 0x00, 0x01, 0x77]);
@@ -68,6 +69,7 @@ testSuite({
 
     assertEquals(expected.length, result.length);
     for (let i = 0; i < expected.length; i++) {
+      /** @suppress {checkTypes} suppression added to enable type checking */
       const keys = googObject.getKeys(result[i]);
       assertElementsEquals(googObject.getKeys(expected[i]), keys);
 
@@ -82,6 +84,7 @@ testSuite({
     }
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMessagesInChunks() {
     // clang-format off
     const data = [

@@ -28,6 +28,8 @@ const NORMAL_STOP = {};
  * @param {!Function} recorder The output of `recordFunction` for logging all
  *     calls to the fake listener.
  * @return {boolean} True if the recorder's log is expected.
+ * @suppress {strictMissingProperties,missingReturn} suppression added to enable
+ * type checking
  */
 function validateRecordedListener(expected, recorder) {
   assertObjectEquals(
@@ -36,6 +38,10 @@ function validateRecordedListener(expected, recorder) {
 }
 
 testSuite({
+  /**
+     @suppress {strictMissingProperties,checkTypes} suppression added to enable
+     type checking
+   */
   setUp() {
     Trace.initCurrentTrace();
     Trace.removeAllListeners();
@@ -190,6 +196,7 @@ testSuite({
     validateRecordedListener(expected, recorder);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRecord() {
     /** @type {number} */
     const a = 10;

@@ -13,6 +13,7 @@ const MockMessagePort = goog.require('goog.testing.messaging.MockMessagePort');
 const PortNetwork = goog.require('goog.messaging.PortNetwork');
 const PortOperator = goog.require('goog.messaging.PortOperator');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const dispose = goog.require('goog.dispose');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let stubs;
@@ -48,7 +49,7 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(operator);
+    dispose(operator);
     mockControl.$verifyAll();
     stubs.reset();
   },

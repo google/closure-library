@@ -22,10 +22,12 @@ cookies.get = (key) => COOKIE_VALUES[key];
 
 cookies.set = (key, value) => COOKIE_VALUES[key] = value;
 
+/** @suppress {missingReturn} suppression added to enable type checking */
 cookies.remove = (key, value) => {
   delete COOKIE_VALUES[key];
 };
 
+/** @suppress {visibility} suppression added to enable type checking */
 function newCookieEditor(cookieValue = undefined) {
   // Set cookie.
   if (cookieValue) {
@@ -62,6 +64,7 @@ testSuite({
     assertNotNullNorUndefined('missing text area', editor.textAreaElem_);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEditCookie() {
     // Render editor.
     const editor = newCookieEditor();
@@ -81,6 +84,7 @@ testSuite({
     assertEquals('wrong cookie value', newValue, cookies.get(COOKIE_KEY));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testClearCookie() {
     // Render editor.
     const value = 'I will be cleared';

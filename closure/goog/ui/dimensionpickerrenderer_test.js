@@ -35,6 +35,7 @@ testSuite({
     picker.render();
 
     const sayFunction = recordFunction();
+    /** @suppress {visibility} suppression added to enable type checking */
     renderer.announcer_.say = sayFunction;
     renderer.setHighlightedSize(picker, 3, 7);
 

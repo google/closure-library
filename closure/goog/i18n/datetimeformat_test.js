@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire}
+ */
 goog.module('goog.i18n.DateTimeFormatTest');
 goog.setTestOnly();
 
@@ -64,6 +68,7 @@ function timezoneString(date) {
  * Gets timezone id from the date.
  * @param {!DateDate} date
  * @return {string}
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function timezoneId(date) {
   const timeZone = TimeZone.createTimeZone(date.getTimezoneOffset());
@@ -224,6 +229,7 @@ testSuite({
     goog.i18n.DateTimePatterns = DateTimePatterns_de;
     goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
     date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10, 250));
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const timeZone = TimeZone.createTimeZone(420, DateTimeSymbols_de);
     const fmt = new DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
     assertEquals(
@@ -302,6 +308,7 @@ testSuite({
     assertEquals('Q4 2006', fmt.format(date));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMMddyyyyHHmmsszzz() {
     goog.i18n.DateTimePatterns = DateTimePatterns_de;
     goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
@@ -311,6 +318,7 @@ testSuite({
         '07/27/2006 13:10:10 ' + timezoneString(date), fmt.format(date));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMMddyyyyHHmmssZ() {
     goog.i18n.DateTimePatterns = DateTimePatterns_de;
     goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
@@ -401,6 +409,7 @@ testSuite({
     assertEquals(
         '[[Jun 28 one], [13:10 UTC-7 one two] one two]', fmtEnXa.format(date));
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     goog.i18n.DateTimePatterns = DateTimePatterns_zh_Hant_TW;
     const fmtZhHantTw = new DateTimeFormat(
         goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
@@ -447,6 +456,7 @@ testSuite({
     assertEquals('10:25600', fmt.format(date));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPredefinedFormatter() {
     goog.i18n.DateTimePatterns = DateTimePatterns_de;
     goog.i18n.DateTimeSymbols = DateTimeSymbols_de;

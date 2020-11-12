@@ -22,6 +22,7 @@ const Timer = goog.require('goog.Timer');
 const TransportTypes = goog.require('goog.net.xpc.TransportTypes');
 const Uri = goog.require('goog.Uri');
 const browser = goog.require('goog.labs.userAgent.browser');
+const dispose = goog.require('goog.dispose');
 const dom = goog.require('goog.dom');
 const log = goog.require('goog.log');
 const object = goog.require('goog.object');
@@ -34,8 +35,10 @@ goog.require('goog.testing.jsunit');
 // Set this to false when working on this test.  It needs to be true for
 // automated testing, as some browsers (eg IE8) choke on the large numbers of
 // iframes this test would otherwise leave active.
+/** @const */
 var CLEAN_UP_IFRAMES = true;
 
+/** @const */
 var IFRAME_LOAD_WAIT_MS = 1000;
 var stubs = new PropertyReplacer();
 var uniqueId = 0;
@@ -120,6 +123,7 @@ testSuite({
     const channel = new CrossPageChannel(cfg);
     // If the configured role is ignored, this will cause the dynamicly
     // determined role to become INNER.
+    /** @suppress {visibility} suppression added to enable type checking */
     channel.peerWindowObject_ = window.parent;
     assertEquals(
         'Channel should use role from the config.', CrossPageChannelRole.OUTER,
@@ -377,7 +381,9 @@ testSuite({
         true /* reverse */);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEscapeServiceName() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const escape = CrossPageChannel.prototype.escapeServiceName_;
     assertEquals(
         'Shouldn\'t escape alphanumeric name', 'fooBar123',
@@ -429,7 +435,9 @@ testSuite({
   },
 
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testUnescapeServiceName() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const unescape = CrossPageChannel.prototype.unescapeServiceName_;
     assertEquals(
         'Shouldn\'t modify alphanumeric name', 'fooBar123',
@@ -563,6 +571,7 @@ const Driver = class extends Disposable {
      * The peer iframe.
      * @type {!Element}
      * @private
+     * @suppress {checkTypes} suppression added to enable type checking
      */
     this.iframe_ = null;
 
@@ -633,7 +642,7 @@ const Driver = class extends Disposable {
       dom.removeNode(this.iframe_);
       delete this.iframe_;
     }
-    goog.dispose(this.channel_);
+    dispose(this.channel_);
     this.innerFrameResponseReceived_.promise.cancel();
     this.outerFrameResponseReceived_.promise.cancel();
     super.disposeInternal();
@@ -643,6 +652,8 @@ const Driver = class extends Disposable {
    * Returns the child peer's window object.
    * @return {!Window} Child peer's window.
    * @private
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
    */
   getInnerPeer_() {
     return this.iframe_.contentWindow;
@@ -664,6 +675,7 @@ const Driver = class extends Disposable {
    *     channel should be allowed to pick differing, random names.
    * @return {string} The name of the created channel.
    * @private
+   * @suppress {missingReturn} suppression added to enable type checking
    */
   setConfiguration_(
       opt_iframeId, opt_oneSidedHandshake, opt_channelName,
@@ -699,6 +711,7 @@ const Driver = class extends Disposable {
    * Creates an outer frame channel object.
    * @return {string}
    * @private
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   createChannel_() {
     if (this.channel_) {
@@ -715,9 +728,13 @@ const Driver = class extends Disposable {
   /**
    * Checks the names of the inner and outer frames meet expectations.
    * @private
+   * @suppress {undefinedVars} suppression added to enable type checking
    */
   checkChannelNames_() {
     const outerName = this.channel_.name;
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const innerName = this.getInnerPeer_().channel.name;
     const configName = this.innerFrameCfg_[CfgFields.CHANNEL_NAME] || null;
 
@@ -754,6 +771,7 @@ const Driver = class extends Disposable {
    *     should be allowed to pick differing, random names.
    * @return {!Array<string>} The id of the created iframe and the name of the
    *     created channel.
+   * @suppress {missingReturn} suppression added to enable type checking
    */
   createPeerIframe(
       opt_iframeId, opt_oneSidedHandshake, opt_innerProtocolVersion,
@@ -801,6 +819,7 @@ const Driver = class extends Disposable {
    * @param {boolean} innerFrameMigrationSupported
    * @param {boolean} reverse
    * @return {!GoogPromise<undefined>}
+   * @suppress {checkTypes} suppression added to enable type checking
    */
   connect(
       fullLifeCycleTest, outerFrameReconnectSupported,
@@ -828,6 +847,7 @@ const Driver = class extends Disposable {
   /**
    * @param {boolean} reverse
    * @private
+   * @suppress {missingProperties} suppression added to enable type checking
    */
   continueConnect_(reverse) {
     // Wait until the peer is fully established.  Establishment is sometimes
@@ -845,6 +865,9 @@ const Driver = class extends Disposable {
         this.channel_.connect, this.channel_,
         goog.bind(this.outerFrameConnected_, this));
     const innerConfig = this.innerFrameCfg_;
+    /**
+     * @suppress {missingProperties} suppression added to enable type checking
+     */
     const connectFromInnerFrame = goog.bind(
         this.getInnerPeer_().instantiateChannel, this.getInnerPeer_(),
         innerConfig);
@@ -867,6 +890,7 @@ const Driver = class extends Disposable {
 
   /**
    * Called by the inner frame connection callback in inner_peer.html.
+   * @suppress {missingProperties} suppression added to enable type checking
    */
   innerFrameConnected() {
     const payload = this.innerFrameEchoPayload_ = xpc.getRandomString(10);
@@ -877,6 +901,8 @@ const Driver = class extends Disposable {
    * The handler function for incoming echo requests.
    * @param {string} payload The message payload.
    * @private
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
    */
   echoHandler_(payload) {
     assertTrue('outer frame should be connected', this.channel_.isConnected());
@@ -889,6 +915,8 @@ const Driver = class extends Disposable {
    * The handler function for incoming echo responses.
    * @param {string} payload The message payload.
    * @private
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
    */
   responseHandler_(payload) {
     assertTrue('outer frame should be connected', this.channel_.isConnected());
@@ -902,6 +930,8 @@ const Driver = class extends Disposable {
    * The handler function for incoming echo replies. Called from
    * inner_peer.html.
    * @param {string} payload The message payload.
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
    */
   innerFrameGotResponse(payload) {
     assertTrue('outer frame should be connected', this.channel_.isConnected());
@@ -954,6 +984,7 @@ const Driver = class extends Disposable {
   /**
    * Get the inner frame to reconnect, and repeat the echo test.
    * @private
+   * @suppress {missingProperties} suppression added to enable type checking
    */
   performInnerFrameReconnect_() {
     const peer = this.getInnerPeer_();
@@ -1017,6 +1048,7 @@ const Driver = class extends Disposable {
   isTransportTestable_() {
     let testable = false;
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const transportType = this.channel_.determineTransportType_();
     switch (transportType) {
       case TransportTypes.NATIVE_MESSAGING:
@@ -1044,6 +1076,7 @@ const Driver = class extends Disposable {
     this.channel_.connect();
     // Set a listener for when the peer exists.
     return new Promise(
+        /** @suppress {visibility} suppression added to enable type checking */
         (res) => this.channel_.peerWindowDeferred_.addCallback(res));
   }
 };

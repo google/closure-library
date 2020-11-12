@@ -55,6 +55,7 @@ function initCard(
   // This gets around the problem where AdvancedToolTip thinks it's
   // receiving a ghost event because cursor position hasn't moved off of
   // (0, 0).
+  /** @suppress {visibility} suppression added to enable type checking */
   card.cursorPosition = new Coordinate(1, 1);
 }
 
@@ -169,6 +170,7 @@ testSuite({
   /**
    * Verify that a mouse over event with no target will not break
    * hover card.
+   * @suppress {visibility,checkTypes} suppression added to enable type checking
    */
   testMouseOverNoTarget() {
     initCard();
@@ -309,6 +311,7 @@ testSuite({
     assertTrue('Should trigger card', card.isVisible());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testPositionAfterSecondTriggerWithMaxSearchSteps() {
     initCard(undefined, true, 2);
 
@@ -318,6 +321,7 @@ testSuite({
     assertTrue('Should trigger card', card.isVisible());
     assertEquals(
         'Card cursor x coordinate should be 1', card.position_.coordinate.x, 1);
+    /** @suppress {visibility} suppression added to enable type checking */
     card.cursorPosition = new Coordinate(2, 2);
     testingEvents.fireMouseOverEvent(child, elsewhere);
     timer.tick(showDelay);

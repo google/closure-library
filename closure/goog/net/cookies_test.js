@@ -32,15 +32,18 @@ function checkForCookies() {
 // TODO(chrisn): Testing max age > 0 requires a mock clock.
 
 function mockSetCookie(var_args) {
+  /** @suppress {visibility} suppression added to enable type checking */
   const setCookie = cookies.setCookie_;
   try {
     let result;
+    /** @suppress {visibility} suppression added to enable type checking */
     cookies.setCookie_ = function(arg) {
       result = arg;
     };
     cookies.set.apply(cookies, arguments);
     return result;
   } finally {
+    /** @suppress {visibility} suppression added to enable type checking */
     cookies.setCookie_ = setCookie;
   }
 }

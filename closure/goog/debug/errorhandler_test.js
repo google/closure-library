@@ -9,6 +9,7 @@ goog.setTestOnly();
 
 const ErrorHandler = goog.require('goog.debug.ErrorHandler');
 const MockControl = goog.require('goog.testing.MockControl');
+const dispose = goog.require('goog.dispose');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let oldGetObjectByName;
@@ -21,6 +22,10 @@ let errorHandler;
 let mockControl;
 
 function badTimer() {
+  /**
+   * @suppress {es5Strict,strictMissingProperties} suppression added to enable
+   * type checking
+   */
   arguments.callee.called = true;
   throw 'die die die';
 }
@@ -37,6 +42,10 @@ function assertRequestAnimationFrameError(caught) {
   assertMethodCalledHelper('requestAnimationFrame', caught);
 }
 
+/**
+ * @suppress {strictMissingProperties} suppression added to enable type
+ * checking
+ */
 function assertMethodCalledHelper(method, caught) {
   assertTrue('exception not thrown', !!caught);
   assertEquals(
@@ -98,7 +107,7 @@ testSuite({
 
   tearDown() {
     mockControl.$tearDown();
-    goog.dispose(errorHandler);
+    dispose(errorHandler);
     errorHandler = null;
 
     goog.getObjectByName = oldGetObjectByName;
@@ -234,20 +243,30 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testGetProtectedFunction() {
     const fn = () => {
       throw new Error('Foo');
     };
+    /** @suppress {visibility} suppression added to enable type checking */
     const protectedFn = errorHandler.getProtectedFunction(fn);
     const e = assertThrows(protectedFn);
     assertTrue(e instanceof ErrorHandler.ProtectedFunctionError);
     assertEquals('Foo', e.cause.message);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testGetProtectedFunctionNullError() {
     const fn = () => {
       throw null;
     };
+    /** @suppress {visibility} suppression added to enable type checking */
     const protectedFn = errorHandler.getProtectedFunction(fn);
     const e = assertThrows(protectedFn);
     assertTrue(e instanceof ErrorHandler.ProtectedFunctionError);
@@ -265,6 +284,7 @@ testSuite({
       e.stack = 'STACK';
       throw e;
     };
+    /** @suppress {visibility} suppression added to enable type checking */
     const protectedFn = errorHandler.getProtectedFunction(fn);
     if (shouldCallErrorLog) {
       globalThis.console.error('Foo', 'STACK');
@@ -283,6 +303,7 @@ testSuite({
     const fn = () => {
       throw new Error('Foo');
     };
+    /** @suppress {visibility} suppression added to enable type checking */
     let protectedFn = errorHandler.getProtectedFunction(fn);
     let e = assertThrows(protectedFn);
     assertTrue(e instanceof Error);
@@ -292,6 +313,7 @@ testSuite({
     const stringError = () => {
       throw 'String';
     };
+    /** @suppress {visibility} suppression added to enable type checking */
     protectedFn = errorHandler.getProtectedFunction(stringError);
     e = assertThrows(protectedFn);
     assertEquals('string', typeof e);

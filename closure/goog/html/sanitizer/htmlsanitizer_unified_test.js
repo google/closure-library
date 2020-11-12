@@ -4,7 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/** @fileoverview Test for HTML sanitizer with test vectors. */
+/**
+ * @fileoverview Test for HTML sanitizer with test vectors.
+ * @suppress {checkTypes} suppression added to enable type checking
+ */
 
 goog.module('goog.html.HtmlSanitizerUnifiedTest');
 goog.setTestOnly();
@@ -20,6 +23,7 @@ const sanitizer = new SanitizerBuilder().build();
 
 const suite = {};
 for (const v of testVectors.HTML_TEST_VECTORS) {
+  /** @suppress {missingProperties} suppression added to enable type checking */
   suite[`testVector[${v.name}]`] = function() {
     const sanitized = SafeHtml.unwrap(sanitizer.sanitize(v.input));
     if (isSupported) {

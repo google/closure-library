@@ -23,6 +23,7 @@ function UnknownComponent() {}
 // FakeComponentX's default renderer is FakeRenderer.  It also has a
 // decorator.
 function FakeComponentX() {
+  /** @suppress {globalThis} suppression added to enable type checking */
   this.element = null;
 }
 
@@ -49,6 +50,7 @@ function FakeRenderer() {}
 // singleton.
 function FakeSingletonRenderer() {}
 
+/** @suppress {checkTypes} suppression added to enable type checking */
 FakeSingletonRenderer.instance_ = new FakeSingletonRenderer();
 
 FakeSingletonRenderer.getInstance = function() {
@@ -62,9 +64,17 @@ testSuite({
     registry.setDefaultRenderer(FakeComponentZ, FakeSingletonRenderer);
 
     registry.setDecoratorByClassName(
-        'fake-component-x', () => new FakeComponentX());
+        'fake-component-x', /**
+                               @suppress {checkTypes} suppression added to
+                               enable type checking
+                             */
+        () => new FakeComponentX());
     registry.setDecoratorByClassName(
-        'fake-component-y', () => new FakeComponentY());
+        'fake-component-y', /**
+                               @suppress {checkTypes} suppression added to
+                               enable type checking
+                             */
+        () => new FakeComponentY());
   },
 
   tearDown() {
@@ -144,6 +154,7 @@ testSuite({
     assertThrows(
         'Calling setDefaultRenderer with non-function component ' +
             'must throw error',
+        /** @suppress {checkTypes} suppression added to enable type checking */
         () => {
           registry.setDefaultRenderer('Not function', FakeRenderer);
         });
@@ -151,6 +162,7 @@ testSuite({
     assertThrows(
         'Calling setDefaultRenderer with non-function renderer ' +
             'must throw error',
+        /** @suppress {checkTypes} suppression added to enable type checking */
         () => {
           registry.setDefaultRenderer(FakeComponentX, 'Not function');
         });
@@ -194,7 +206,11 @@ testSuite({
         'fake-component-x must be decorated by a FakeComponentX',
         dx1 instanceof FakeComponentX);
     registry.setDecoratorByClassName(
-        'fake-component-x', () => new UnknownComponent());
+        'fake-component-x', /**
+                               @suppress {checkTypes} suppression added to
+                               enable type checking
+                             */
+        () => new UnknownComponent());
     dx2 = registry.getDecoratorByClassName('fake-component-x');
     assertTrue(
         'fake-component-x must now be decorated by UnknownComponent',
@@ -204,12 +220,18 @@ testSuite({
         'Calling setDecoratorByClassName with invalid class name ' +
             'must throw error',
         () => {
-          registry.setDecoratorByClassName('', () => new UnknownComponent());
+          registry.setDecoratorByClassName(
+              '', /**
+                     @suppress {checkTypes} suppression added to enable type
+                     checking
+                   */
+              () => new UnknownComponent());
         });
 
     assertThrows(
         'Calling setDecoratorByClassName with non-function ' +
             'decorator must throw error',
+        /** @suppress {checkTypes} suppression added to enable type checking */
         () => {
           registry.setDecoratorByClassName('fake-component-x', 'Not function');
         });
@@ -235,6 +257,7 @@ testSuite({
     assertNull('Decorator for element without CSS class must be null', du);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testReset() {
     assertNotEquals(
         'Some renderers must be registered', 0,

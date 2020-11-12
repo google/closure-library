@@ -46,23 +46,27 @@ testSuite({
                  'crossdomainrpc_test_response.html', resolve, 'POST',
                  {xyz: '01234567891123456789'});
            })
-        .then((e) => {
-          if (e.target.status < 300) {
-            const elapsed = goog.now() - start;
-            const responseData = eval(e.target.responseText);
-            log.fine(
-                CrossDomainRpc.logger_,
-                `${elapsed}ms: [` + responseData.result.length + '] ' +
-                    print(responseData));
-            assertEquals(16 * 1024, responseData.result.length);
-            assertEquals(123, e.target.status);
-            assertEquals(1, e.target.responseHeaders.a);
-            assertEquals('2', e.target.responseHeaders.b);
-          } else {
-            log.fine(CrossDomainRpc.logger_, print(e));
-            fail();
-          }
-        });
+        .then(/**
+                 @suppress {visibility,strictMissingProperties,checkTypes}
+                 suppression added to enable type checking
+               */
+              (e) => {
+                if (e.target.status < 300) {
+                  const elapsed = goog.now() - start;
+                  const responseData = eval(e.target.responseText);
+                  log.fine(
+                      CrossDomainRpc.logger_,
+                      `${elapsed}ms: [` + responseData.result.length + '] ' +
+                          print(responseData));
+                  assertEquals(16 * 1024, responseData.result.length);
+                  assertEquals(123, e.target.status);
+                  assertEquals(1, e.target.responseHeaders.a);
+                  assertEquals('2', e.target.responseHeaders.b);
+                } else {
+                  log.fine(CrossDomainRpc.logger_, print(e));
+                  fail();
+                }
+              });
   },
 
   testErrorRequest() {
@@ -79,18 +83,23 @@ testSuite({
                reject('CrossDomainRpc.send did not complete within 4000ms');
              }, 4000);
            })
-        .then((e) => {
-          if (e.target.status < 300) {
-            fail('should have failed requesting a non-existent URI');
-          } else {
-            log.fine(
-                CrossDomainRpc.logger_,
-                'expected error seen; event=' + print(e));
-          }
-        });
+        .then(/**
+                 @suppress {visibility} suppression added to enable type
+                 checking
+               */
+              (e) => {
+                if (e.target.status < 300) {
+                  fail('should have failed requesting a non-existent URI');
+                } else {
+                  log.fine(
+                      CrossDomainRpc.logger_,
+                      'expected error seen; event=' + print(e));
+                }
+              });
   },
 
   testGetDummyResourceUri() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const url = CrossDomainRpc.getDummyResourceUri_();
     assertTrue(
         'dummy resource URL should not contain "?"', url.indexOf('?') < 0);
@@ -98,6 +107,7 @@ testSuite({
         'dummy resource URL should not contain "#"', url.indexOf('#') < 0);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRemoveHash() {
     assertEquals('abc', CrossDomainRpc.removeHash_('abc#123'));
     assertEquals('abc', CrossDomainRpc.removeHash_('abc#12#3'));

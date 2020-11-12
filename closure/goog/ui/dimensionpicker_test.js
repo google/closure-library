@@ -125,11 +125,13 @@ testSuite({
     assertEquals('Should have 5 rows visible', 5, size.height);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testHandleMove() {
     picker.render(render);
     const renderer = picker.getRenderer();
     const mouseMoveElem = renderer.getMouseMoveElement(picker);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     picker.rightToLeft_ = false;
     const e = {
       target: mouseMoveElem,
@@ -142,6 +144,7 @@ testSuite({
     assertEquals('Should have 1 column highlighted', 1, size.width);
     assertEquals('Should have 2 rows highlighted', 2, size.height);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     picker.rightToLeft_ = true;
 
     picker.handleMouseMove(e);
@@ -157,6 +160,7 @@ testSuite({
   testHandleKeyboardEvents() {
     picker.render(render);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     picker.rightToLeft_ = false;
 
     let result = picker.handleKeyEvent({keyCode: KeyCodes.DOWN});
@@ -198,6 +202,7 @@ testSuite({
         'Should not handle LEFT key event when there is only one column',
         result);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     picker.rightToLeft_ = true;
 
     // In RTL the roles of the LEFT and RIGHT keys are swapped.
@@ -258,6 +263,7 @@ testSuite({
     const renderer = picker.getRenderer();
     const mouseMoveElem = renderer.getMouseMoveElement(picker);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const e = new BrowserEvent({
       target: mouseMoveElem,
       offsetX: 18,  // Each grid square currently a magic 18px.
@@ -282,6 +288,7 @@ testSuite({
     const renderer = picker.getRenderer();
     const mouseMoveElem = renderer.getMouseMoveElement(picker);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const e = new BrowserEvent({
       target: mouseMoveElem,
       offsetX: 18,   // Each grid square currently a magic 18px.

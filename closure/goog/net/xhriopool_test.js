@@ -9,6 +9,7 @@ goog.setTestOnly();
 
 const StructsMap = goog.require('goog.structs.Map');
 const XhrIoPool = goog.require('goog.net.XhrIoPool');
+const dispose = goog.require('goog.dispose');
 const testSuite = goog.require('goog.testing.testSuite');
 
 const headers = new StructsMap();
@@ -29,7 +30,7 @@ testSuite({
         'Bar');
 
     xhrIoPool.releaseObject(xhrIo);
-    goog.dispose(xhrIoPool);
+    dispose(xhrIoPool);
   },
 
   testSetHeadersForInitializedPoolObjects() {
@@ -46,7 +47,7 @@ testSuite({
         xhrIo.headers.get('X-Foo'));
 
     xhrIoPool.releaseObject(xhrIo);
-    goog.dispose(xhrIoPool);
+    dispose(xhrIoPool);
   },
 
   testSetCredentials() {
@@ -60,6 +61,6 @@ testSuite({
         xhrIo.getWithCredentials());
 
     xhrIoPool.releaseObject(xhrIo);
-    goog.dispose(xhrIoPool);
+    dispose(xhrIoPool);
   },
 });
