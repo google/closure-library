@@ -101,7 +101,7 @@ testSuite({
   },
 
   testPrioritized_registerClass() {
-    /** @type {!DelegateRegistry.Prioritized<string>} */
+    /** @type {!DelegateRegistry.Prioritized<?>} */
     const registry = new DelegateRegistry.Prioritized();
     registry.registerClass(Foo, 0);
     registry.registerClass(Bar, 10);
