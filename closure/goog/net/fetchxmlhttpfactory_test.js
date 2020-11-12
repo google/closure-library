@@ -9,7 +9,6 @@ goog.setTestOnly();
 
 const FetchXmlHttp = goog.require('goog.net.FetchXmlHttp');
 const FetchXmlHttpFactory = goog.require('goog.net.FetchXmlHttpFactory');
-const FunctionMock = goog.requireType('goog.testing.FunctionMock');
 const MockControl = goog.require('goog.testing.MockControl');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const isVersion = goog.require('goog.userAgent.product.isVersion');
@@ -20,7 +19,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 /** @type {!MockControl} */
 let mockControl;
 
-/** @type {!FunctionMock} */
+/** @type {?} */
 let fetchMock;
 
 /** @type {!FetchXmlHttpFactory} */

@@ -211,6 +211,10 @@ testSuite({
     channelName = xpc.getRandomString(10);
 
     const cfg = getConfiguration(CrossPageChannelRole.OUTER, PEER_IFRAME_ID);
+    /**
+     * @suppress {strictPrimitiveOperators} suppression added to enable type
+     * checking
+     */
     cfg[CfgFields.DIRECT_TRANSPORT_SYNC_MODE] = true;
 
     outerXpc = new CrossPageChannel(cfg);
@@ -239,6 +243,10 @@ testSuite({
      */
     window.iframeLoadHandler = () => {
       const cfg = getConfiguration(CrossPageChannelRole.INNER);
+      /**
+       * @suppress {strictPrimitiveOperators} suppression added to enable type
+       * checking
+       */
       cfg[CfgFields.DIRECT_TRANSPORT_SYNC_MODE] = true;
       peerIframe.contentWindow.instantiateChannel(cfg);
     };

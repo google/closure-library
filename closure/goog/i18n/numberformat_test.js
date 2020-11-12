@@ -877,6 +877,10 @@ testSuite({
     assertEquals('(kr1,234.56)', str);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testLocaleSwitch() {
     /**
      * @suppress {constantProperty} suppression added to enable type checking
@@ -911,6 +915,10 @@ testSuite({
     assertEquals('(kr1\u202F234,56)', str);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testFrenchParse() {
     /**
      * @suppress {constantProperty} suppression added to enable type checking

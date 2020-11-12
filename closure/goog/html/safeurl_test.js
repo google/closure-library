@@ -353,7 +353,10 @@ testSuite({
     assertContains('expected object of type SafeUrl', exception.message);
   },
 
-  /** @suppress {missingProperties} suppression added to enable type checking */
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testSafeUrlSanitize_trySanitize() {
     for (const v of safeUrlTestVectors.BASE_VECTORS) {
       const isDataUrl = v.input.match(/^data:/i);
@@ -367,7 +370,10 @@ testSuite({
     }
   },
 
-  /** @suppress {missingProperties} suppression added to enable type checking */
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testSafeUrlSanitize_sanitize() {
     for (const v of safeUrlTestVectors.BASE_VECTORS) {
       const observed = SafeUrl.sanitize(v.input);
@@ -375,7 +381,10 @@ testSuite({
     }
   },
 
-  /** @suppress {missingProperties} suppression added to enable type checking */
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testSafeUrlSanitize_sanitizeAssertUnchanged() {
     for (const v of safeUrlTestVectors.BASE_VECTORS) {
       const isDataUrl = v.input.match(/^data:/i);

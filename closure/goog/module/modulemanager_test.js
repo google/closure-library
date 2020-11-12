@@ -1460,8 +1460,8 @@ testSuite({
   },
 
   /**
-     Test loading dependencies transitively. @suppress {missingProperties}
-     suppression added to enable type checking
+   * Test loading dependencies transitively.
+   * @suppress {missingProperties} suppression added to enable type checking
    */
   testLoadingDepsInNonBatchMode1() {
     const mm =
@@ -1718,8 +1718,8 @@ testSuite({
   },
 
   /**
-     Test loading errors due to old code. @suppress {missingProperties}
-     suppression added to enable type checking
+   * Test loading errors due to old code.
+   * @suppress {missingProperties} suppression added to enable type checking
    */
   testOldCodeGoneError() {
     const mm = getModuleManager({'s': []});
@@ -1743,8 +1743,9 @@ testSuite({
   },
 
   /**
-     Test timeout. @suppress {missingProperties,checkTypes} suppression
-     added to enable type checking
+   * Test timeout.
+   * @suppress {missingProperties,checkTypes} suppression
+   *      added to enable type checking
    */
   testTimeout() {
     const mm = getModuleManager({'s': []});

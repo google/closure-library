@@ -155,8 +155,9 @@ testSuite({
   },
 
   /**
-     Tests the TOGGLE_ANIMATION_BEGIN event. @suppress {checkTypes} suppression
-     added to enable type checking
+   * Tests the TOGGLE_ANIMATION_BEGIN event.
+   * @suppress {checkTypes} suppression
+   *      added to enable type checking
    */
   testToggleBegin() {
     let animationsPlayed = 0;
@@ -216,8 +217,9 @@ testSuite({
   },
 
   /**
-     Tests the TOGGLE_ANIMATION_END event. @suppress {checkTypes} suppression
-     added to enable type checking
+   * Tests the TOGGLE_ANIMATION_END event.
+   * @suppress {checkTypes} suppression
+   *      added to enable type checking
    */
   testToggleEnd() {
     let animationsPlayed = 0;

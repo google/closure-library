@@ -403,6 +403,7 @@ testSuite({
     assertEquals('6月29日 AM6:10 [UTC+10]', fmtZhHk.format(date, timeZone));
 
     // And some from the extended patterns.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     goog.i18n.DateTimePatterns = DateTimePatterns_en_XA;
     const fmtEnXa = new DateTimeFormat(
         goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);

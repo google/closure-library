@@ -46,29 +46,39 @@ function newCleanupGuard() {
 
   return () => {
     // let any timeout queues finish before we check these:
-    window.setTimeout(() => {
-      let propCounter = 0;
+    window.setTimeout(/**
+                         @suppress {checkTypes} suppression added to enable type
+                         checking
+                       */
+                      () => {
+                        let propCounter = 0;
 
-      // All callbacks should have been deleted or be the null function.
-      for (const key in globalThis) {
-        // NOTES: callbacks are stored on globalThis with property
-        // name prefixed with goog.net.Jsonp.CALLBACKS.
-        if (key.indexOf(Jsonp.CALLBACKS) == 0) {
-          /**
-           * @suppress {visibility} suppression added to enable type checking
-           */
-          const callbackId = Jsonp.getCallbackId_(key);
-          if (globalThis[callbackId] &&
-              globalThis[callbackId] != goog.nullFunction) {
-            propCounter++;
-          }
-        }
-      }
+                        // All callbacks should have been deleted or be the null
+                        // function.
+                        for (const key in globalThis) {
+                          // NOTES: callbacks are stored on globalThis with
+                          // property name prefixed with
+                          // goog.net.Jsonp.CALLBACKS.
+                          if (key.indexOf(Jsonp.CALLBACKS) == 0) {
+                            /**
+                             * @suppress {visibility} suppression added to
+                             * enable type checking
+                             */
+                            const callbackId = Jsonp.getCallbackId_(key);
+                            if (globalThis[callbackId] &&
+                                globalThis[callbackId] != goog.nullFunction) {
+                              propCounter++;
+                            }
+                          }
+                        }
 
-      assertEquals(
-          'script cleanup', bodyChildCount, document.body.childNodes.length);
-      assertEquals('window jsonp array empty', 0, propCounter);
-    }, 0);
+                        assertEquals(
+                            'script cleanup', bodyChildCount,
+                            document.body.childNodes.length);
+                        assertEquals(
+                            'window jsonp array empty', 0, propCounter);
+                      },
+                      0);
   };
 }
 
