@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {checkTypes} suppression added to enable type checking
- */
-
 goog.module('goog.ui.RichTextSpellCheckerTest');
 goog.setTestOnly();
 
@@ -69,7 +64,7 @@ function waitForSpellCheckToFinish() {
  * supplied as a constructor parameter for the spell check handler.
  * @param {!Array<string>} words Unknown words that need to be looked up.
  * @param {!SpellCheck} spellChecker The spell check handler.
- * @param {function(!Array.)} callback The lookup callback function.
+ * @param {function(!Array)} callback The lookup callback function.
  */
 function localSpellCheckingFunction(words, spellChecker, callback) {
   const len = words.length;

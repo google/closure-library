@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {checkTypes} suppression added to enable type checking
- */
-
 goog.module('goog.fx.DragListGroupTest');
 goog.setTestOnly();
 
@@ -35,10 +30,10 @@ const testingEvents = goog.require('goog.testing.events');
 /** @type {DragListGroup} */
 let dlg;
 
-/** @type {dom.Element} */
+/** @type {?} */
 let list;
 
-/** @type {!dom.Element} */
+/** @type {?} */
 let list2;
 
 /** @type {BrowserEvent} */

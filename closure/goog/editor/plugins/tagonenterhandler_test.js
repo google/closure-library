@@ -1,8 +1,4 @@
 /**
- * @fileoverview
- * @suppress {checkTypes} suppression added to enable type checking
- */
-/**
  * @license
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
@@ -46,7 +42,7 @@ function assertPreparedContents(expected, original, tag = undefined) {
 
 /**
  * Selects the node at the given id, and simulates an ENTER keypress.
- * @param {googe.editor.Field} field The field with the node.
+ * @param {?} field The field with the node.
  * @param {string} id A DOM id.
  * @return {boolean} Whether preventDefault was called on the event.
  */

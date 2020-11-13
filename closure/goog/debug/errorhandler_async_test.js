@@ -4,16 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {checkTypes} suppression added to enable type checking
- */
-
 goog.module('goog.debug.ErrorHandlerAsyncTest');
 goog.setTestOnly();
 
 const ErrorHandler = goog.require('goog.debug.ErrorHandler');
 const GoogPromise = goog.require('goog.Promise');
+const Resolver = goog.require('goog.promise.Resolver');
 const TagName = goog.require('goog.dom.TagName');
 // const TestCase = goog.require('goog.testing.TestCase');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -22,7 +18,7 @@ const {getDomHelper} = goog.require('goog.dom');
 const {newSafeScriptForTest} = goog.require('goog.html.testing');
 const {setScriptContent} = goog.require('goog.dom.safe');
 
-/** @type {!GoogPromise.Resolver} */
+/** @type {!Resolver} */
 let resolver;
 
 const testCase = {};
