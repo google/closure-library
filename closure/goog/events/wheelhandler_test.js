@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ * @suppress {missingRequire} swapping userAgent
  */
 
 goog.module('goog.events.WheelHandlerTest');

@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview Tests for ModuleLoader.
- * @suppress {missingRequire} Use of global namespace object.
+ * @suppress {missingRequire} swapping XmlHttp
  */
 
 goog.module('goog.module.ModuleLoaderTest');

@@ -4,17 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
- */
-
 goog.module('goog.events.EventHandlerTest');
 goog.setTestOnly();
 
 const EventHandler = goog.require('goog.events.EventHandler');
 const GoogEventTarget = goog.require('goog.events.EventTarget');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const dispose = goog.require('goog.dispose');
 const events = goog.require('goog.events');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -37,7 +33,7 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(eh);
+    dispose(eh);
     propertyReplacer.reset();
   },
 
