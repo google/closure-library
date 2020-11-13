@@ -201,7 +201,7 @@ let mockClock;
  */
 function isRunningLocally() {
   if (window.location.protocol == 'file:') {
-    const testCase = goog.global['G_testRunner'].testCase;
+    const testCase = globalThis['G_testRunner'].testCase;
     testCase.saveMessage('Test skipped while running on local file system.');
     return true;
   }
@@ -273,7 +273,7 @@ testSuite({
     if (isRunningLocally()) return;
 
     // IE9 and earlier do not support blobs.
-    if (!('Blob' in goog.global)) {
+    if (!('Blob' in globalThis)) {
       const err = assertThrows(function() {
         xhr.getBlob(TEST_IMAGE);
       });
@@ -422,10 +422,10 @@ testSuite({
   },
 
   testSendPostDoesntSetHeaderWithFormData() {
-    if (!goog.global['FormData']) {
+    if (!globalThis['FormData']) {
       return;
     }
-    const formData = new goog.global['FormData']();
+    const formData = new globalThis['FormData']();
     formData.append('name', 'value');
 
     stubXhrToReturn(200);
@@ -460,10 +460,10 @@ testSuite({
   },
 
   testSendPostHeadersWithFormData() {
-    if (!goog.global['FormData']) {
+    if (!globalThis['FormData']) {
       return;
     }
-    const formData = new goog.global['FormData']();
+    const formData = new globalThis['FormData']();
     formData.append('name', 'value');
 
     stubXhrToReturn(200);
@@ -504,10 +504,10 @@ testSuite({
   },
 
   testSendNullPostHeadersWithFormData() {
-    if (!goog.global['FormData']) {
+    if (!globalThis['FormData']) {
       return;
     }
-    const formData = new goog.global['FormData']();
+    const formData = new globalThis['FormData']();
     formData.append('name', 'value');
 
     stubXhrToReturn(200);

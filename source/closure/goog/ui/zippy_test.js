@@ -157,6 +157,7 @@ testSuite({
     assertEquals(`expanded must be ${expanded}`, expanded, zippy.isExpanded());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCssClassesAndAria() {
     assertTrue(
         'goog-zippy-header is enabled',
@@ -182,6 +183,7 @@ testSuite({
         buttonZippy.getAriaRole());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testHeaderTabIndex() {
     assertEquals('Header tabIndex is 0', 0, zippy.elHeader_.tabIndex);
   },
@@ -222,6 +224,7 @@ testSuite({
     doTest(headerlessZippy);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testActionEvent() {
     let actionEventCount = 0;
     let toggleEventCount = 0;
@@ -247,6 +250,7 @@ testSuite({
     assertEquals('Zippy TOGGLE event fired', 2, toggleEventCount);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testBasicZippyBehavior() {
     let dispatchedActionCount = 0;
     const handleAction = () => {
@@ -260,6 +264,7 @@ testSuite({
         dispatchedActionCount);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testIsHandleKeyEvent() {
     zippy.setHandleKeyboardEvents(false);
     assertFalse('Zippy is not handling key events', zippy.isHandleKeyEvents());
@@ -276,6 +281,7 @@ testSuite({
     assertNotEquals(0, zippy.keyboardEventHandler_.getListenerCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testIsHandleMouseEvent() {
     zippy.setHandleMouseEvents(false);
     assertFalse(
@@ -293,6 +299,7 @@ testSuite({
     assertNotEquals(0, zippy.mouseEventHandler_.getListenerCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testKeyDownEventTriggersHeader() {
     let actionEventCount = 0;
     let toggleEventCount = 0;

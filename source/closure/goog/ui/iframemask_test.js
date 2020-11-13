@@ -163,6 +163,7 @@ testSuite({
     assertNoIframes();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testIframePool() {
     const iframe = domIframe.createBlank(dom.getDomHelper());
     const mockPool = new StrictMock(Pool);
@@ -175,6 +176,7 @@ testSuite({
 
     // Create a new iframe mask with a pool, and verify that it checks
     // its iframe out of the pool instead of creating one.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     iframeMask = new IframeMask(null, mockPool);
     iframeMask.applyMask();
     mockPool.$verify();

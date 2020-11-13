@@ -40,6 +40,10 @@ function createElement(name) {
 }
 
 testSuite({
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testElement() {
     if (!elementAndNodeSupported) {
       return;
@@ -90,6 +94,10 @@ testSuite({
     assertFalse(noclobber.elementMatches(element, '#bar'));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testElementClobbered() {
     if (!elementAndNodeSupported) {
       return;

@@ -54,7 +54,7 @@ const doAsyncSignals = () => {
 testSuite({
   /** @suppress {missingProperties} suppression added to enable type checking */
   setUpPage() {
-    goog.global.debug('setUpPage was called.');
+    globalThis.debug('setUpPage was called.');
     // Don't do anything asynchronously.
     /**
      * @suppress {missingReturn,checkTypes} suppression added to enable type
@@ -112,7 +112,7 @@ testSuite({
 
   /** @suppress {missingProperties} suppression added to enable type checking */
   tearDownPage() {
-    goog.global.debug('tearDownPage was called.');
+    globalThis.debug('tearDownPage was called.');
     assertTrue(curTestIsDone);
     window.setTimeout = oldTimeout;
   },

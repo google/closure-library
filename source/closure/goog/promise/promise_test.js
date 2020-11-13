@@ -2215,14 +2215,14 @@ testSuite({
 
     // Test COMPILED code path.
     try {
-      goog.global['COMPILED'] = true;
+      globalThis['COMPILED'] = true;
       /** @constructor */
       function C() {}
       C.prototype.then = (opt_a, opt_b, opt_c) => {};
       Thenable.addImplementation(C);
       assertTrue(Thenable.isImplementedBy(new C));
     } finally {
-      goog.global['COMPILED'] = false;
+      globalThis['COMPILED'] = false;
     }
   },
 

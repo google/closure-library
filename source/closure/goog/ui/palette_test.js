@@ -41,6 +41,7 @@ testSuite({
 
   testAfterHighlightListener() {
     palette.setHighlightedIndex(0);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const handler = new recordFunction();
     googEvents.listen(palette, Palette.EventType.AFTER_HIGHLIGHT, handler);
     palette.setHighlightedIndex(2);
@@ -49,6 +50,7 @@ testSuite({
     assertEquals(2, handler.getCallCount());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHighlightItemUpdatesParentA11yActiveDescendant() {
     const container = new Container();
     container.render(document.getElementById('sandbox'));
@@ -74,6 +76,7 @@ testSuite({
     container.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testHighlightCellEvents() {
     const container = new Container();
     container.render(document.getElementById('sandbox'));
@@ -231,6 +234,7 @@ testSuite({
     assertEquals(3, palette.getHighlightedIndex());
 
     // Click somewhere in the palette, but not inside a cell.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const mouseUp = new googEvents.BrowserEvent(
         {type: 'mouseup', button: 1, target: palette});
     palette.handleMouseUp(mouseUp);

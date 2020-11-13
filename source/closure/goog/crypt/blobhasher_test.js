@@ -117,7 +117,7 @@ function readFromBlob(blobHasher, maxReads) {
 
 testSuite({
   setUp() {
-    stubs.set(goog.global, 'FileReader', FileReaderMock);
+    stubs.set(globalThis, 'FileReader', FileReaderMock);
     stubs.set(fs, 'sliceBlob', fsSliceBlobMock);
   },
 

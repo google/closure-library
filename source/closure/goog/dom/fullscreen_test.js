@@ -27,6 +27,10 @@ testSuite({
 
   testGetFullScreenElement() {
     const element = document.createElement('div');
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     mockDoc.fullscreenElement = element;
     assertEquals(element, fullscreen.getFullScreenElement(domHelper));
   },

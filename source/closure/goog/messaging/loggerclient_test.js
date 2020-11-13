@@ -21,7 +21,8 @@ let logger;
 
 testSuite({
   setUp() {
-    debug.FORCE_SLOPPY_STACKS = false;
+    /** Used computed properties to avoid compiler checks of the define */
+    debug['FORCE_SLOPPY_STACKS'] = false;
     mockControl = new MockControl();
     channel = new MockMessageChannel(mockControl);
     client = new LoggerClient(channel, 'log');
@@ -45,11 +46,28 @@ testSuite({
     mockControl.$verifyAll();
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCommandWithException() {
     const ex = Error('oh no');
+    /** @suppress {checkTypes} suppression added to enable type checking */
     ex.stack = ['one', 'two'];
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     ex.message0 = 'message 0';
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     ex.message1 = 'message 1';
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     ex.ignoredProperty = 'ignored';
 
     channel.send('log', {

@@ -71,6 +71,7 @@ testSuite({
     splitpane.decorate(mainDiv);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDecorateWithNestedSplitPane() {
     // Create a standard split pane to be nested within another split pane.
     const innerSplitPaneDiv = dom.createDom(

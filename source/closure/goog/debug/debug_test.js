@@ -161,6 +161,7 @@ testSuite({
     const TestClass = function(text) {
       this.text = text;
     };
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const instance = new TestClass('abc');
     const err = debug.normalizeErrorObject(instance);
 

@@ -30,6 +30,10 @@ testSuite({
     assertNull(thawed.getException());
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testWithException() {
     const err = new Error('it broke!');
     const rec = new LogRecord(

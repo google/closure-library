@@ -44,6 +44,7 @@ function prepareTargetWithGivenDirection(dir) {
   link = fieldDiv.firstChild;
 
   fieldMock.$replay();
+  /** @suppress {visibility} suppression added to enable type checking */
   bubblePlugin.createBubbleContents = (bubbleContainer) => {
     bubbleContainer.innerHTML = '<div style="border:1px solid blue;">B</div>';
     style.setStyle(bubbleContainer, 'border', '1px solid white');
@@ -60,12 +61,19 @@ function prepareTargetWithGivenDirection(dir) {
  */
 function resetFieldMock() {
   fieldMock = new FieldMock();
+  /**
+   * @suppress {visibility,checkTypes} suppression added to enable type
+   * checking
+   */
   bubblePlugin.fieldObject = fieldMock;
 }
 
 function helpTestCreateBubble(fn = undefined) {
   fieldMock.$replay();
   let numCalled = 0;
+  /**
+   * @suppress {visibility,duplicate} suppression added to enable type checking
+   */
   bubblePlugin.createBubbleContents = (bubbleContainer) => {
     numCalled++;
     assertNotNull('bubbleContainer should not be null', bubbleContainer);
@@ -99,6 +107,7 @@ function simulateKeyDownOnBubble(keyCode, isCtrl) {
   // mode, activeElement remains the <body> and isn't changed along with the
   // focus as a result of tab key.
   if (userAgent.GECKO) {
+    /** @suppress {visibility} suppression added to enable type checking */
     bubblePlugin.getSharedBubble_()
         .getContentElement()
         .ownerDocument.designMode = 'off';
@@ -138,7 +147,12 @@ testSuite({
     testHelper.setUpEditableElement();
     fieldMock = new FieldMock();
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     bubblePlugin = new AbstractBubblePlugin(COMMAND);
+    /**
+     * @suppress {visibility,checkTypes} suppression added to enable type
+     * checking
+     */
     bubblePlugin.fieldObject = fieldMock;
 
     fieldDiv.innerHTML = '<a href="http://www.google.com">Google</a>' +
@@ -156,6 +170,7 @@ testSuite({
     testHelper.tearDownEditableElement();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCreateBubble(fn = undefined) {
     helpTestCreateBubble(fn);
     assertTrue(bubblePlugin.getSharedBubble_() instanceof Bubble);
@@ -166,6 +181,7 @@ testSuite({
   testOpeningBubbleCallsOnShow() {
     let numCalled = 0;
     this.testCreateBubble(() => {
+      /** @suppress {visibility} suppression added to enable type checking */
       bubblePlugin.onShow = () => {
         numCalled++;
       };
@@ -183,6 +199,10 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /**
+     @suppress {missingProperties,visibility} suppression added to enable type
+     checking
+   */
   testZindexBehavior() {
     // Don't use the default return values.
     fieldMock.$reset();
@@ -190,6 +210,7 @@ testSuite({
     fieldMock.getEditableDomHelper().$anyTimes().$returns(
         dom.getDomHelper(document));
     fieldMock.getBaseZindex().$returns(2);
+    /** @suppress {visibility} suppression added to enable type checking */
     bubblePlugin.createBubbleContents = goog.nullFunction;
     fieldMock.$replay();
 
@@ -201,6 +222,10 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testNoTwoBubblesOpenAtSameTime() {
     fieldMock.$replay();
     const origClose = goog.bind(bubblePlugin.closeBubble, bubblePlugin);
@@ -210,6 +235,7 @@ testSuite({
       origClose();
     };
     bubblePlugin.getBubbleTargetFromSelection = functions.identity;
+    /** @suppress {visibility} suppression added to enable type checking */
     bubblePlugin.createBubbleContents = goog.nullFunction;
 
     bubblePlugin.handleSelectionChangeInternal(link);
@@ -223,10 +249,13 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testHandleSelectionChangeWithEvent() {
     fieldMock.$replay();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const fakeEvent = new BrowserEvent({type: 'mouseup', target: link});
     bubblePlugin.getBubbleTargetFromSelection = functions.identity;
+    /** @suppress {visibility} suppression added to enable type checking */
     bubblePlugin.createBubbleContents = goog.nullFunction;
     bubblePlugin.handleSelectionChange(fakeEvent);
     assertTrue('Bubble should have been opened', bubblePlugin.isVisible());
@@ -235,9 +264,11 @@ testSuite({
         bubblePlugin.targetElement_);
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testHandleSelectionChangeWithTarget() {
     fieldMock.$replay();
     bubblePlugin.getBubbleTargetFromSelection = functions.identity;
+    /** @suppress {visibility} suppression added to enable type checking */
     bubblePlugin.createBubbleContents = goog.nullFunction;
     bubblePlugin.handleSelectionChange(undefined, link2);
     assertTrue('Bubble should have been opened', bubblePlugin.isVisible());
@@ -250,6 +281,7 @@ testSuite({
   testSelectOneTextCharacterNoError() {
     fieldMock.$replay();
     bubblePlugin.getBubbleTargetFromSelection = functions.identity;
+    /** @suppress {visibility} suppression added to enable type checking */
     bubblePlugin.createBubbleContents = goog.nullFunction;
     // Select first char of first link's text node.
     testHelper.select(link.firstChild, 0, link.firstChild, 1);
@@ -259,6 +291,10 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testTabKeyEvents() {
     fieldMock.$replay();
     bubblePlugin.enableKeyboardNavigation(true);
@@ -267,6 +303,10 @@ testSuite({
     let tabbable1;
     let tabbable2;
     let nonTabbable2;
+    /**
+     * @suppress {visibility,duplicate} suppression added to enable type
+     * checking
+     */
     bubblePlugin.createBubbleContents = (container) => {
       nonTabbable1 = dom.createDom(TagName.DIV);
       tabbable1 = dom.createDom(TagName.DIV);
@@ -299,6 +339,10 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testTabKeyEventsWithShiftKey() {
     fieldMock.$replay();
     bubblePlugin.enableKeyboardNavigation(true);
@@ -306,6 +350,10 @@ testSuite({
     let nonTabbable;
     let tabbable1;
     let tabbable2;
+    /**
+     * @suppress {visibility,duplicate} suppression added to enable type
+     * checking
+     */
     bubblePlugin.createBubbleContents = (container) => {
       nonTabbable = dom.createDom(TagName.DIV);
       tabbable1 = dom.createDom(TagName.DIV);
@@ -335,6 +383,10 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testLinksAreTabbable() {
     fieldMock.$replay();
     bubblePlugin.enableKeyboardNavigation(true);
@@ -343,6 +395,10 @@ testSuite({
     let nonTabbable2;
     let bubbleLink1;
     let bubbleLink2;
+    /**
+     * @suppress {visibility,duplicate} suppression added to enable type
+     * checking
+     */
     bubblePlugin.createBubbleContents = function(container) {
       nonTabbable1 = dom.createDom(TagName.DIV);
       dom.appendChild(container, nonTabbable1);
@@ -369,10 +425,15 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testTabKeyNoEffectKeyboardNavDisabled() {
     fieldMock.$replay();
     bubblePlugin.getBubbleTargetFromSelection = functions.identity;
     let bubbleLink;
+    /**
+     * @suppress {visibility,duplicate} suppression added to enable type
+     * checking
+     */
     bubblePlugin.createBubbleContents = function(container) {
       bubbleLink = this.createLink('linkInBubble', 'Foo', false, container);
     };
@@ -391,11 +452,16 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testOtherKeyEventNoEffectKeyboardNavEnabled() {
     fieldMock.$replay();
     bubblePlugin.enableKeyboardNavigation(true);
     bubblePlugin.getBubbleTargetFromSelection = functions.identity;
     let bubbleLink;
+    /**
+     * @suppress {visibility,duplicate} suppression added to enable type
+     * checking
+     */
     bubblePlugin.createBubbleContents = function(container) {
       bubbleLink = this.createLink('linkInBubble', 'Foo', false, container);
     };
@@ -413,6 +479,7 @@ testSuite({
     fieldMock.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSetTabbableSetsTabIndex() {
     const element1 = dom.createDom(TagName.DIV);
     const element2 = dom.createDom(TagName.DIV);

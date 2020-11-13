@@ -71,6 +71,7 @@ testSuite({
     assertEquals('', new Select('').getDefaultCaption());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testAriaRoles() {
     select.render(sandboxEl);
     const item1 = new MenuItem('item 1');
@@ -184,6 +185,7 @@ testSuite({
     select.addItem(item1);
     select.addItem(item2);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const recordingHandler = new recordFunction();
     events.listen(select, Component.EventType.CHANGE, recordingHandler);
 
@@ -215,6 +217,7 @@ testSuite({
     select.addItem(item1);
     select.addItem(item2);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const recordingHandler = new recordFunction();
     events.listen(select, Component.EventType.CHANGE, recordingHandler);
 
@@ -274,6 +277,7 @@ testSuite({
         select.getRenderer().getContentElement(select.getElement())));
 
     // Add and select an item with aria-label.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const item1 = new MenuItem();
     select.addItem(item1);
     item1.getElement().setAttribute('aria-label', 'item1');
@@ -284,6 +288,7 @@ testSuite({
             select.getRenderer().getContentElement(select.getElement())));
 
     // Add and select an item without a label.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const item2 = new MenuItem();
     select.addItem(item2);
     select.setSelectedIndex(1);

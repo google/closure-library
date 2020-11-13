@@ -62,6 +62,7 @@ function assertSanitizedHtml(originalHtml, expectedHtml, opt_sanitizer) {
 /**
  * @param {!SafeHtml} safeHtml Sanitized HTML which contains a style.
  * @return {string} cssText contained within SafeHtml.
+ * @suppress {strictMissingProperties} suppression added to enable type checking
  */
 function getStyle(safeHtml) {
   const tmpElement = dom.safeHtmlToNode(safeHtml);
@@ -346,7 +347,7 @@ testSuite({
     // grave accent char as seen here:
     // Browser support: [NS8.1-G|FF2.0]
     safeHtml = '';
-    xssHtml = '<BODY onload!#$%&()*~+-_.,:;?@[/|\]^`=alert("XSS")>';
+    xssHtml = '<BODY onload!#$%&()*~+-_.,:;?@[/|]^`=alert("XSS")>';
     assertSanitizedHtml(xssHtml, safeHtml);
 
     // Non-alpha-non-digit part 3 XSS. Yair Amit brought this to my attention
@@ -602,7 +603,7 @@ testSuite({
     // into an infinite loop of alerts):
     // Browser support: [IE6.0|NS8.1-IE]
     safeHtml = '';
-    xssHtml = '<STYLE>@im\port\'\ja\vasc\ript:alert(window)\';</STYLE>';
+    xssHtml = '<STYLE>@import\'ja\vasc\ript:alert(window)\';</STYLE>';
     assertSanitizedHtml(xssHtml, safeHtml);
 
     // STYLE attribute using a comment to break up expression (Thanks to Roman

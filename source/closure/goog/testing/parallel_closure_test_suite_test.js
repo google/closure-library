@@ -22,7 +22,7 @@ const stubs = new PropertyReplacer();
 
 function setTestRunnerGlobals(
     testTimeout, allTests, parallelFrames, parallelTimeout) {
-  const tr = goog.global['G_parallelTestRunner'] = {};
+  const tr = globalThis['G_parallelTestRunner'] = {};
   tr['testTimeout'] = testTimeout;
   tr['allTests'] = allTests;
   tr['parallelFrames'] = parallelFrames;
@@ -31,7 +31,7 @@ function setTestRunnerGlobals(
 
 testSuite({
   tearDown: function() {
-    goog.global['G_parallelTestRunner'] = undefined;
+    globalThis['G_parallelTestRunner'] = undefined;
     mocks.$tearDown();
     stubs.reset();
   },
@@ -127,7 +127,7 @@ testSuite({
         setTestRunnerGlobals(100, ['foo.html', 'bar.html'], 8, 360);
         const mockStart =
             mocks.createMethodMock(MultiTestRunner.prototype, 'start');
-        const mockFail = mocks.createMethodMock(goog.global, 'fail');
+        const mockFail = mocks.createMethodMock(globalThis, 'fail');
         const failureMatcher = new ArgumentMatcher(function(failMsg) {
           return /testA Failed!/.test(failMsg) &&
               /1 of 2 test\(s\) failed/.test(failMsg);
@@ -165,7 +165,7 @@ testSuite({
         setTestRunnerGlobals(100, ['foo.html', 'bar.html'], 8, 360);
         const mockStart =
             mocks.createMethodMock(MultiTestRunner.prototype, 'start');
-        const mockFail = mocks.createMethodMock(goog.global, 'fail');
+        const mockFail = mocks.createMethodMock(globalThis, 'fail');
         const failureMatcher = new ArgumentMatcher(function(failMsg) {
           return /testA Failed!/.test(failMsg) &&
               /1 of 2 test\(s\) failed/.test(failMsg);

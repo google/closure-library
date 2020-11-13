@@ -44,6 +44,7 @@ class NoopProcessor extends SafeDomTreeProcessor {
 }
 
 testSuite({
+  /** @suppress {visibility} suppression added to enable type checking */
   testBasic() {
     let input = '';
     assertHtmlMatchesOnSupportedBrowser(
@@ -62,8 +63,10 @@ testSuite({
         input, new NoopProcessor().processToString(input));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testTagChanged() {
     const processor = new NoopProcessor();
+    /** @suppress {visibility} suppression added to enable type checking */
     processor.createElementWithoutAttributes = anchorToFoo;
     const input = '<a href="bar"><p>baz</p></a>';
     const expected = '<foo href="bar"><p>baz</p></foo>';
@@ -71,8 +74,10 @@ testSuite({
         expected, processor.processToString(input));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testTagDropped() {
     const processor = new NoopProcessor();
+    /** @suppress {visibility} suppression added to enable type checking */
     processor.createElementWithoutAttributes = (originalElement) =>
         originalElement.tagName.toUpperCase() == 'A' ?
         null :
@@ -99,8 +104,10 @@ testSuite({
         expected, processor.processToString(input));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAttributeDropped() {
     const processor = new NoopProcessor();
+    /** @suppress {visibility} suppression added to enable type checking */
     processor.processElementAttribute = (element, attribute) =>
         attribute.name == 'src' ? null : attribute.value;
 
@@ -110,6 +117,7 @@ testSuite({
         expected, processor.processToString(input));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testTemplateDropped() {
     const input = '<div><template id="foo"><p>foo</p></template></div>';
     const expected = '<div></div>';
@@ -117,8 +125,10 @@ testSuite({
         expected, new NoopProcessor().processToString(input));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testProcessRoot() {
     const processor = new NoopProcessor();
+    /** @suppress {visibility} suppression added to enable type checking */
     processor.processRoot = (spanElement) => {
       spanElement.id = 'bar';
     };
@@ -129,8 +139,10 @@ testSuite({
         expected, processor.processToString(input));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testPreprocessHtml() {
     const processor = new NoopProcessor();
+    /** @suppress {visibility} suppression added to enable type checking */
     processor.preProcessHtml = (html) => html.toLowerCase();
 
     const input = '<p id="BAR">FOO</p>';

@@ -10,6 +10,7 @@ goog.setTestOnly();
 const DebugError = goog.require('goog.debug.Error');
 const ErrorReporter = goog.require('goog.debug.ErrorReporter');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const dispose = goog.require('goog.dispose');
 const errorcontext = goog.require('goog.debug.errorcontext');
 const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
@@ -82,11 +83,12 @@ function throwAnErrorWith(
 testSuite({
   setUp() {
     stubs.set(goog.net, 'XhrIo', MockXhrIo);
-    ErrorReporter.ALLOW_AUTO_PROTECT = true;
+    // NOTE: bypass compiler check for the define
+    ErrorReporter['ALLOW_AUTO_PROTECT'] = true;
   },
 
   tearDown() {
-    goog.dispose(errorReporter);
+    dispose(errorReporter);
     stubs.reset();
     MockXhrIo.lastUrl = null;
   },
@@ -100,6 +102,7 @@ testSuite({
     assertEquals('trace=trace', MockXhrIo.lastContent);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testsendErrorReportWithCustomSender() {
     let uri = null;
     let method = null;
@@ -139,7 +142,7 @@ testSuite({
     }
 
     stubs.set(userAgent, 'IE', false);
-    stubs.set(goog.global, 'setTimeout', (fcn, time) => {
+    stubs.set(globalThis, 'setTimeout', (fcn, time) => {
       fcn.call();
     });
 
@@ -148,7 +151,7 @@ testSuite({
     const errorFunction = goog.partial(throwAnErrorWith, url, 5, 'Hello :)');
 
     try {
-      goog.global.setTimeout(errorFunction, 0);
+      globalThis.setTimeout(errorFunction, 0);
     } catch (e) {
       // Expected. The error is rethrown after sending.
     }
@@ -159,15 +162,16 @@ testSuite({
     assertEquals('trace=Not%20available', MockXhrIo.lastContent);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   test_internetExplorerSendErrorReport() {
     stubs.set(userAgent, 'IE', true);
     stubs.set(userAgent, 'isVersionOrHigher', functions.FALSE);
 
     // Remove test runner's onerror handler so the test doesn't fail.
-    stubs.set(goog.global, 'onerror', null);
+    stubs.set(globalThis, 'onerror', null);
 
     errorReporter = ErrorReporter.install('/errorreporter');
-    goog.global.onerror('Goodbye :(', url, 22);
+    globalThis.onerror('Goodbye :(', url, 22);
     assertEquals(
         `/errorreporter?script=${encodedUrl}` +
             '&error=Goodbye%20%3A(&line=22',
@@ -175,21 +179,22 @@ testSuite({
     assertEquals('trace=Not%20available', MockXhrIo.lastContent);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   test_setLoggingHeaders() {
     stubs.set(userAgent, 'IE', true);
     stubs.set(userAgent, 'isVersionOrHigher', functions.FALSE);
     // Remove test runner's onerror handler so the test doesn't fail.
-    stubs.set(goog.global, 'onerror', null);
+    stubs.set(globalThis, 'onerror', null);
 
     errorReporter = ErrorReporter.install('/errorreporter');
     errorReporter.setLoggingHeaders('header!');
-    goog.global.onerror('Goodbye :(', 'http://www.your.tst/more/bogus.js', 22);
+    globalThis.onerror('Goodbye :(', 'http://www.your.tst/more/bogus.js', 22);
     assertEquals('header!', MockXhrIo.lastHeaders);
   },
 
   test_nonInternetExplorerSendErrorReportWithTrace() {
     stubs.set(userAgent, 'IE', false);
-    stubs.set(goog.global, 'setTimeout', (fcn, time) => {
+    stubs.set(globalThis, 'setTimeout', (fcn, time) => {
       fcn.call();
     });
 
@@ -203,7 +208,7 @@ testSuite({
         goog.partial(throwAnErrorWith, url, 5, 'Hello :)', trace);
 
     try {
-      goog.global.setTimeout(errorFunction, 0);
+      globalThis.setTimeout(errorFunction, 0);
     } catch (e) {
       // Expected. The error is rethrown after sending.
     }
@@ -222,7 +227,7 @@ testSuite({
 
   test_nonInternetExplorerSendErrorReportWithTraceAndCauses() {
     stubs.set(userAgent, 'IE', false);
-    stubs.set(goog.global, 'setTimeout', (fcn, time) => {
+    stubs.set(globalThis, 'setTimeout', (fcn, time) => {
       fcn.call();
     });
 
@@ -260,7 +265,7 @@ testSuite({
         goog.partial(throwAnErrorWith, url, 5, 'MainError', maintrace, cause1);
 
     try {
-      goog.global.setTimeout(errorFunction, 0);
+      globalThis.setTimeout(errorFunction, 0);
     } catch (e) {
       // Expected. The error is rethrown after sending.
     }
@@ -274,7 +279,7 @@ testSuite({
 
   test_nonInternetExplorerSendErrorReportWithCyclicCauses() {
     stubs.set(userAgent, 'IE', false);
-    stubs.set(goog.global, 'setTimeout', (fcn, time) => {
+    stubs.set(globalThis, 'setTimeout', (fcn, time) => {
       fcn.call();
     });
 
@@ -312,7 +317,7 @@ testSuite({
         goog.partial(throwAnErrorWith, url, 5, 'MainError', maintrace, cause1);
 
     try {
-      goog.global.setTimeout(errorFunction, 0);
+      globalThis.setTimeout(errorFunction, 0);
     } catch (e) {
       // Expected. The error is rethrown after sending.
     }
@@ -379,6 +384,10 @@ testSuite({
   testContextProvider() {
     errorReporter =
         ErrorReporter.install('/errorreporter', (error, context) => {
+          /**
+           * @suppress {strictMissingProperties} suppression added to enable
+           * type checking
+           */
           context.providedContext = 'value';
         });
     let loggedErrors = 0;
@@ -398,6 +407,10 @@ testSuite({
   testContextProvider_withOtherContext() {
     errorReporter =
         ErrorReporter.install('/errorreporter', (error, context) => {
+          /**
+           * @suppress {strictMissingProperties} suppression added to enable
+           * type checking
+           */
           context.providedContext = 'value';
         });
     let loggedErrors = 0;
@@ -436,6 +449,10 @@ testSuite({
   testErrorWithDifferentContextSources() {
     errorReporter =
         ErrorReporter.install('/errorreporter', (error, context) => {
+          /**
+           * @suppress {strictMissingProperties} suppression added to enable
+           * type checking
+           */
           context.providedContext = 'provided ctx';
         });
     let loggedErrors = 0;
@@ -480,7 +497,7 @@ testSuite({
     if (!userAgent.IE) {
       assertNotEquals(originalSetTimeout, window.setTimeout);
     }
-    goog.dispose(errorReporter);
+    dispose(errorReporter);
     assertEquals(originalSetTimeout, window.setTimeout);
   },
 
@@ -532,7 +549,8 @@ testSuite({
   },
 
   testAttemptAutoProtectWithAllowAutoProtectOff() {
-    ErrorReporter.ALLOW_AUTO_PROTECT = false;
+    // Use computed property to bypass compiler check for the define value
+    ErrorReporter['ALLOW_AUTO_PROTECT'] = false;
     assertThrows(() => {
       errorReporter = new ErrorReporter('/log', (e, context) => {}, false);
     });

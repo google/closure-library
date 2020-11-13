@@ -14,6 +14,7 @@ const KeyCodes = goog.require('goog.events.KeyCodes');
 const MockClock = goog.require('goog.testing.MockClock');
 const Range = goog.require('goog.dom.Range');
 const TestHelper = goog.require('goog.testing.editor.TestHelper');
+const dispose = goog.require('goog.dispose');
 const events = goog.require('goog.testing.events');
 const range = goog.require('goog.editor.range');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -61,10 +62,10 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(field);
-    goog.dispose(helper);
+    dispose(field);
+    dispose(helper);
     triggeredCommand = null;
-    goog.dispose(clock);  // Make sure clock is disposed.
+    dispose(clock);  // Make sure clock is disposed.
   },
 
   testFirstCharacter_RTL() {

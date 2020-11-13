@@ -17,6 +17,7 @@ let range;
 
 testSuite({
   setUp() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     range = new MultiRange.createFromTextRanges([
       Range.createFromNodeContents(dom.getElement('test2')),
       Range.createFromNodeContents(dom.getElement('test1')),
@@ -30,6 +31,10 @@ testSuite({
     assertEquals(6, range.getEndOffset());
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testStartAndEndIterator() {
     const it = iter.toIterator(range);
     assertEquals(dom.getElement('test1').firstChild, it.getStartNode());

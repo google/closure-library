@@ -286,6 +286,10 @@ testSuite({
   testInOtherWindow() {
     const iframe = document.createElement('IFRAME');
     document.body.appendChild(iframe);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     const el = iframe.contentWindow.document.createElement('SCRIPT');
     assertNotThrows(() => {
       asserts.assertIsHTMLScriptElement(el);

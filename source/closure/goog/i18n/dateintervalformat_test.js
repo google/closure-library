@@ -176,6 +176,10 @@ testSuite({
       const symbols = localeSymbols[data.locale];
       const dt1 = new Date(Date.UTC.apply(null, data.firstDate));
       const dt2 = new Date(Date.UTC.apply(null, data.secondDate));
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable
+       * type checking
+       */
       const fmt = new DateIntervalFormat(
           data.pattern, symbols.DateIntervalSymbols, symbols.DateTimeSymbols);
       const tz = TimeZone.createTimeZone(0);
@@ -222,10 +226,15 @@ testSuite({
   testFormatSecondDateWithFirstPattern: function() {
     // Set the new fallback pattern.
     const symbols = object.clone(dateIntervalSymbols.getDateIntervalSymbols());
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     symbols.FALLBACK = '{1} – {0}';
     // Format the dates.
     const dt1 = new GoogDate(2007, 1, 10);
     const dt2 = new GoogDate(2007, 6, 3);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const fmt =
         new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE, symbols);
     assertEquals('July 3 – February 10, 2007', fmt.format(dt1, dt2));
@@ -235,44 +244,61 @@ testSuite({
     // Era
     let dt1 = new DateTime(-1, 1, 10);
     let dt2 = new DateTime(2007, 6, 3);
+    /** @suppress {visibility} suppression added to enable type checking */
     let calField =
         DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
     assertEquals('G', calField);
     // Month
     dt1 = new DateTime(2007, 1, 10);
     dt2 = new DateTime(2007, 6, 3);
+    /** @suppress {visibility} suppression added to enable type checking */
     calField = DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
     assertEquals('M', calField);
     // AmPm
     dt1 = new DateTime(2007, 1, 10, 10);
     dt2 = new DateTime(2007, 1, 10, 14);
+    /** @suppress {visibility} suppression added to enable type checking */
     calField = DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
     assertEquals('a', calField);
     // AmPm + Timezone
     dt1 = new Date(Date.UTC(2007, 1, 10, 8, 25));
     dt2 = new Date(Date.UTC(2007, 1, 10, 8, 35));
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const tz = new TimeZone.createTimeZone(-210);
+    /** @suppress {visibility} suppression added to enable type checking */
     calField =
         DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2, tz);
     assertEquals('a', calField);
     // Seconds
     dt1 = new DateTime(2007, 1, 10, 10, 0, 1);
     dt2 = new DateTime(2007, 1, 10, 10, 0, 10);
+    /** @suppress {visibility} suppression added to enable type checking */
     calField = DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
     assertEquals('s', calField);
   },
 
   testDivideIntervalPattern: function() {
+    /** @suppress {visibility} suppression added to enable type checking */
     let pttn = DateIntervalFormat.divideIntervalPattern_('MMM d – d, y');
     assertObjectEquals({firstPart: 'MMM d – ', secondPart: 'd, y'}, pttn);
+    /** @suppress {visibility} suppression added to enable type checking */
     pttn = DateIntervalFormat.divideIntervalPattern_('MMM d, y');
     assertNull(pttn);
   },
 
-  testIsCalendarFieldLargerOrEqualThan: function() {
-    assertTrue(DateIntervalFormat.isCalendarFieldLargerOrEqualThan_('G', 's'));
-    assertTrue(DateIntervalFormat.isCalendarFieldLargerOrEqualThan_('a', 'm'));
-    assertFalse(DateIntervalFormat.isCalendarFieldLargerOrEqualThan_('a', 'y'));
-    assertFalse(DateIntervalFormat.isCalendarFieldLargerOrEqualThan_('a', '-'));
-  }
+  testIsCalendarFieldLargerOrEqualThan: /**
+                                           @suppress {visibility}
+                                           suppression added to enable type
+                                           checking
+                                         */
+      function() {
+        assertTrue(
+            DateIntervalFormat.isCalendarFieldLargerOrEqualThan_('G', 's'));
+        assertTrue(
+            DateIntervalFormat.isCalendarFieldLargerOrEqualThan_('a', 'm'));
+        assertFalse(
+            DateIntervalFormat.isCalendarFieldLargerOrEqualThan_('a', 'y'));
+        assertFalse(
+            DateIntervalFormat.isCalendarFieldLargerOrEqualThan_('a', '-'));
+      }
 });

@@ -107,7 +107,10 @@ function getNbsp() {
       '&nbsp;';
 }
 
-/** Assert that the prepared contents matches the expected. */
+/**
+ * Assert that the prepared contents matches the expected.
+ * @suppress {visibility} suppression added to enable type checking
+ */
 function assertPreparedContents(expected, original) {
   assertEquals(
       expected, field1.reduceOp_(Plugin.Op.PREPARE_CONTENTS_HTML, original));
@@ -672,6 +675,10 @@ testSuite({
         BrowserFeature.COLLAPSES_EMPTY_NODES ? '<br>' : '', '   ');
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testDeleteW3CSimple() {
     if (BrowserFeature.HAS_W3C_RANGES) {
       container.innerHTML = '<div>abcd</div>';
@@ -685,6 +692,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testDeleteW3CAll() {
     if (BrowserFeature.HAS_W3C_RANGES) {
       container.innerHTML = '<div>abcd</div>';
@@ -698,6 +709,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testDeleteW3CPartialEnd() {
     if (BrowserFeature.HAS_W3C_RANGES) {
       container.innerHTML = '<div>ab</div><div>cd</div>';
@@ -711,6 +726,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testDeleteW3CNonPartialEnd() {
     if (BrowserFeature.HAS_W3C_RANGES) {
       container.innerHTML = '<div>ab</div><div>cd</div>';
@@ -724,6 +743,7 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testIsInOneContainer() {
     if (BrowserFeature.HAS_W3C_RANGES) {
       container.innerHTML = '<div><br></div>';
@@ -736,6 +756,7 @@ testSuite({
     }
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDeletingEndNodesWithNoNewLine() {
     if (BrowserFeature.HAS_W3C_RANGES) {
       container.innerHTML =
@@ -743,6 +764,7 @@ testSuite({
       const range = Range.createFromNodes(
           container.childNodes[2], 0, container.childNodes[4].childNodes[0], 1);
       range.select();
+      /** @suppress {visibility} suppression added to enable type checking */
       const newRange = EnterHandler.deleteW3cRange_(range);
       testingDom.assertHtmlContentsMatch('a<div>b</div>', container);
       assertTrue(newRange.isCollapsed());
@@ -751,6 +773,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testDeleteW3CRemoveEntireLineWithShiftDown() {
     if (!BrowserFeature.HAS_W3C_RANGES) {
       return;
@@ -770,6 +796,10 @@ testSuite({
         '<div>a</div><div>cc</div><div>d</div>', container);
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testDeleteW3CRemoveEntireFirstLineWithShiftDown() {
     if (!BrowserFeature.HAS_W3C_RANGES) {
       return;
@@ -789,6 +819,10 @@ testSuite({
         '<div>b</div><div>cc</div><div>d</div>', container);
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testDeleteW3CRemoveEntireLineWithPartialSecondLine() {
     if (BrowserFeature.HAS_W3C_RANGES) {
       return;

@@ -139,11 +139,13 @@ testSuite({
         2, listener.getCallCount());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAddDocument_duplicate() {
     const defaultDoc = dom.getDomHelper().getDocument();
     const activityMonitor = new ActivityMonitor();
     assertEquals(1, activityMonitor.documents_.length);
     assertEquals(defaultDoc, activityMonitor.documents_[0]);
+    /** @suppress {visibility} suppression added to enable type checking */
     const listenerCount = activityMonitor.eventHandler_.getListenerCount();
 
     activityMonitor.addDocument(defaultDoc);

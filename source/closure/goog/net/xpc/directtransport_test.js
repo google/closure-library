@@ -106,6 +106,10 @@ testSuite({
       innerXpc.dispose();
       innerXpc = null;
     }
+    /**
+     * @suppress {strictMissingProperties,checkTypes} suppression added to
+     * enable type checking
+     */
     window.iframeLoadHandler = null;
     channelName = null;
     messageIsSync = false;
@@ -142,6 +146,10 @@ testSuite({
       outerXpc.send(ECHO_SERVICE_NAME, MESSAGE_PAYLOAD_1);
     });
     // inner_peer.html calls this method at end of html.
+    /**
+     * @suppress {strictMissingProperties,missingProperties} suppression added
+     * to enable type checking
+     */
     window.iframeLoadHandler = () => {
       peerIframe.contentWindow.instantiateChannel(
           getConfiguration(CrossPageChannelRole.INNER));
@@ -203,6 +211,10 @@ testSuite({
     channelName = xpc.getRandomString(10);
 
     const cfg = getConfiguration(CrossPageChannelRole.OUTER, PEER_IFRAME_ID);
+    /**
+     * @suppress {strictPrimitiveOperators} suppression added to enable type
+     * checking
+     */
     cfg[CfgFields.DIRECT_TRANSPORT_SYNC_MODE] = true;
 
     outerXpc = new CrossPageChannel(cfg);
@@ -225,8 +237,16 @@ testSuite({
       messageIsSync = false;
     });
     // inner_peer.html calls this method at end of html.
+    /**
+     * @suppress {strictMissingProperties,missingProperties} suppression added
+     * to enable type checking
+     */
     window.iframeLoadHandler = () => {
       const cfg = getConfiguration(CrossPageChannelRole.INNER);
+      /**
+       * @suppress {strictPrimitiveOperators} suppression added to enable type
+       * checking
+       */
       cfg[CfgFields.DIRECT_TRANSPORT_SYNC_MODE] = true;
       peerIframe.contentWindow.instantiateChannel(cfg);
     };

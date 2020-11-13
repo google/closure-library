@@ -53,6 +53,10 @@ testSuite({
     oh.dispose();
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testNoOnlineProperty() {
     stubs.set(BrowserFeature, 'HAS_NAVIGATOR_ONLINE_PROPERTY', false);
     stubs.set(EventHandler.prototype, 'listen', recordFunction());

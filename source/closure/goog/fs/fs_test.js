@@ -24,8 +24,8 @@ const testSuite = goog.require('goog.testing.testSuite');
 
 const TEST_DIR = 'goog-fs-test-dir';
 
-const fsExists = (goog.global.requestFileSystem !== undefined) ||
-    goog.global.webkitRequestFileSystem !== undefined;
+const fsExists = (globalThis.requestFileSystem !== undefined) ||
+    globalThis.webkitRequestFileSystem !== undefined;
 /** @suppress {checkTypes} suppression added to enable type checking */
 const deferredFs = fsExists ? googFs.getTemporary() : null;
 const stubs = new PropertyReplacer();
@@ -145,8 +145,8 @@ testSuite({
   },
 
   testUnavailableTemporaryFilesystem() {
-    stubs.set(goog.global, 'requestFileSystem', null);
-    stubs.set(goog.global, 'webkitRequestFileSystem', null);
+    stubs.set(globalThis, 'requestFileSystem', null);
+    stubs.set(globalThis, 'webkitRequestFileSystem', null);
 
     return googFs.getTemporary(1024).then(
         fail, /**
@@ -159,8 +159,8 @@ testSuite({
   },
 
   testUnavailablePersistentFilesystem() {
-    stubs.set(goog.global, 'requestFileSystem', null);
-    stubs.set(goog.global, 'webkitRequestFileSystem', null);
+    stubs.set(globalThis, 'requestFileSystem', null);
+    stubs.set(globalThis, 'webkitRequestFileSystem', null);
 
     return googFs.getPersistent(2048).then(
         fail, /**
@@ -598,9 +598,9 @@ testSuite({
 
   /** @suppress {checkTypes} suppression added to enable type checking */
   testGetBlobThrowsError() {
-    stubs.remove(goog.global, 'BlobBuilder');
-    stubs.remove(goog.global, 'WebKitBlobBuilder');
-    stubs.remove(goog.global, 'Blob');
+    stubs.remove(globalThis, 'BlobBuilder');
+    stubs.remove(globalThis, 'WebKitBlobBuilder');
+    stubs.remove(globalThis, 'Blob');
 
     try {
       googFsBlob.getBlob();
@@ -615,7 +615,7 @@ testSuite({
 
   testGetBlobWithProperties() {
     // Skip test if browser doesn't support Blob API.
-    if (typeof (goog.global.Blob) != 'function') {
+    if (typeof (globalThis.Blob) != 'function') {
       return;
     }
 
@@ -626,9 +626,9 @@ testSuite({
 
   /** @suppress {checkTypes} suppression added to enable type checking */
   testGetBlobWithPropertiesThrowsError() {
-    stubs.remove(goog.global, 'BlobBuilder');
-    stubs.remove(goog.global, 'WebKitBlobBuilder');
-    stubs.remove(goog.global, 'Blob');
+    stubs.remove(globalThis, 'BlobBuilder');
+    stubs.remove(globalThis, 'WebKitBlobBuilder');
+    stubs.remove(globalThis, 'Blob');
 
     try {
       googFsBlob.getBlobWithProperties();
@@ -652,7 +652,7 @@ testSuite({
         return {type: type, builder: this};
       };
     }
-    stubs.set(goog.global, 'BlobBuilder', BlobBuilder);
+    stubs.set(globalThis, 'BlobBuilder', BlobBuilder);
 
     const blob =
         googFsBlob.getBlobWithProperties(['test'], 'text/test', 'native');

@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.ui.HsvaPaletteTest');
 goog.setTestOnly();
 
@@ -47,6 +52,7 @@ testSuite({
 
   testCustomClassName() {
     const customClassName = 'custom-plouf';
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const customClassPalette =
         new HsvaPalette(null, null, null, customClassName);
     customClassPalette.createDom();
@@ -85,14 +91,17 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testInputColor() {
     samplePalette.render(document.getElementById('sandbox'));
     const color = '#00112233';
+    /** @suppress {visibility} suppression added to enable type checking */
     samplePalette.inputElement.value = color;
     samplePalette.handleInput(null);
     assertEquals(color, colorAlpha.parse(samplePalette.getColorRgbaHex()).hex);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testHandleMouseMoveAlpha() {
     samplePalette.render(document.getElementById('sandbox'));
     stubs.set(goog.dom, 'getPageScroll', () => new Coordinate(0, 0));
@@ -102,15 +111,22 @@ testSuite({
     samplePalette.setColorRgbaHex('#630c0000');
     style.setPageOffset(samplePalette.aImageEl_, 0, 0);
     style.setSize(samplePalette.aImageEl_, 10, 100);
+    /** @suppress {visibility} suppression added to enable type checking */
     const boundaries = style.getBounds(samplePalette.aImageEl_);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const event = new GoogEvent();
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.clientY = boundaries.top;
     samplePalette.handleMouseMoveA_(boundaries, event);
 
     assertEquals('#630c00ff', samplePalette.getColorRgbaHex());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSwatchOpacity() {
     samplePalette.render(document.getElementById('sandbox'));
 
@@ -124,11 +140,14 @@ testSuite({
     assertEquals(0, style.getOpacity(samplePalette.swatchElement));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testNoTransparencyBehavior() {
     samplePalette.render(document.getElementById('sandbox'));
 
+    /** @suppress {visibility} suppression added to enable type checking */
     samplePalette.inputElement.value = '#abcdef22';
     samplePalette.handleInput(null);
+    /** @suppress {visibility} suppression added to enable type checking */
     samplePalette.inputElement.value = '#abcdef';
     samplePalette.handleInput(null);
     assertEquals(1, style.getOpacity(samplePalette.swatchElement));

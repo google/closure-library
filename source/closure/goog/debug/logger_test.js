@@ -124,6 +124,7 @@ testSuite({
     const msg = 'msg';
 
     const logger = Logger.getLogger(name);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const logRecord = logger.getLogRecord(level, msg);
 
     assertEquals(name, logRecord.getLoggerName());
@@ -140,6 +141,7 @@ testSuite({
     const ex = Error('Hi');
 
     const logger = Logger.getLogger(name);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const logRecord = logger.getLogRecord(level, msg, ex);
 
     assertEquals(name, logRecord.getLoggerName());

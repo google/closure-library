@@ -3,11 +3,10 @@
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
  */
-
 /**
  * @fileoverview Default list of locale specific country and language names.
  *
- * File generated from CLDR ver. 36
+ * File generated from CLDR ver. 38
  */
 
 // clang-format off
@@ -405,6 +404,7 @@ goog.locale.defaultLocaleNameConstants = {
     'chr': 'Cherokee',
     'chy': 'Cheyenne',
     'ckb': 'Central Kurdish',
+    'ckb_Arab': 'Central Kurdish (Arabic)',
     'co': 'Corsican',
     'cop': 'Coptic',
     'cr': 'Cree',
@@ -461,6 +461,7 @@ goog.locale.defaultLocaleNameConstants = {
     'fan': 'Fang',
     'fat': 'Fanti',
     'ff': 'Fulah',
+    'ff_Adlm': 'Fulah (Adlam)',
     'ff_Latn': 'Fulah (Latin)',
     'fi': 'Finnish',
     'fil': 'Filipino',
@@ -571,6 +572,7 @@ goog.locale.defaultLocaleNameConstants = {
     'krl': 'Karelian',
     'kru': 'Kurukh',
     'ks': 'Kashmiri',
+    'ks_Arab': 'Kashmiri (Arabic)',
     'ksb': 'Shambala',
     'ksf': 'Bafia',
     'ksh': 'Colognian',
@@ -630,6 +632,7 @@ goog.locale.defaultLocaleNameConstants = {
     'mn': 'Mongolian',
     'mnc': 'Manchu',
     'mni': 'Manipuri',
+    'mni_Beng': 'Manipuri (Bangla)',
     'mo': 'Romanian (Moldova)',
     'moh': 'Mohawk',
     'mos': 'Mossi',
@@ -691,6 +694,7 @@ goog.locale.defaultLocaleNameConstants = {
     'pam': 'Pampanga',
     'pap': 'Papiamento',
     'pau': 'Palauan',
+    'pcm': 'Nigerian Pidgin',
     'peo': 'Old Persian',
     'phn': 'Phoenician',
     'pi': 'Pali',
@@ -722,12 +726,15 @@ goog.locale.defaultLocaleNameConstants = {
     'saq': 'Samburu',
     'sas': 'Sasak',
     'sat': 'Santali',
+    'sat_Olck': 'Santali (Ol Chiki)',
     'sba': 'Ngambay',
     'sbp': 'Sangu',
     'sc': 'Sardinian',
     'scn': 'Sicilian',
     'sco': 'Scots',
     'sd': 'Sindhi',
+    'sd_Arab': 'Sindhi (Arabic)',
+    'sd_Deva': 'Sindhi (Devanagari)',
     'se': 'Northern Sami',
     'see': 'Seneca',
     'seh': 'Sena',
@@ -764,6 +771,7 @@ goog.locale.defaultLocaleNameConstants = {
     'ssy': 'Saho',
     'st': 'Southern Sotho',
     'su': 'Sundanese',
+    'su_Latn': 'Sundanese (Latin)',
     'suk': 'Sukuma',
     'sus': 'Susu',
     'sux': 'Sumerian',

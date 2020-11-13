@@ -32,6 +32,7 @@ testSuite({
     scrollFloater.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testScrollFloaterEvents() {
     const scrollFloater = new ScrollFloater();
     const floater = dom.getElement('floater');
@@ -71,6 +72,7 @@ testSuite({
     scrollFloater.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testScrollFloaterEventCancellation() {
     const scrollFloater = new ScrollFloater();
     const floater = dom.getElement('floater');
@@ -102,6 +104,10 @@ testSuite({
     scrollFloater.dispose();
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testScrollFloaterUpdateStyleOnFloatEvent() {
     const scrollFloater = new ScrollFloater();
     const floater = dom.getElement('floater');
@@ -132,6 +138,7 @@ testSuite({
     scrollFloater.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testScrollFloaterHandlesHorizontalScrolling() {
     const scrollFloater = new ScrollFloater();
     const floater = dom.getElement('floater');

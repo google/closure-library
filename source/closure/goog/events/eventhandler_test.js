@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.events.EventHandlerTest');
 goog.setTestOnly();
 
@@ -157,6 +162,10 @@ testSuite({
         'No event should have been dispatched', 1, handler.getCallCount());
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testListenOnceArray() {
     const target = new GoogEventTarget();
 

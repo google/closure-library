@@ -325,6 +325,7 @@ testSuite({
     }
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testIsMailToLink() {
     assertFalse(Link.isMailto());
     assertFalse(Link.isMailto(null));
@@ -354,6 +355,10 @@ testSuite({
     const link = new Link(anchor, true);
 
     for (let i = 0; i < textLinkPairs.length; i += 2) {
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       link.currentText_ = textLinkPairs[i];
       const result = link.getValidLinkFromText();
       assertEquals(textLinkPairs[i + 1], result);

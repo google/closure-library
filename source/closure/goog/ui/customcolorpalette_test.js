@@ -16,6 +16,7 @@ let samplePalette;
 
 testSuite({
   setUp() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     samplePalette = new CustomColorPalette();
   },
 

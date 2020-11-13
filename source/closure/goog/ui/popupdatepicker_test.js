@@ -91,6 +91,7 @@ testSuite({
   /**
    * Tests that repositioning based on DatePicker growth happens if the flag is
    * enabled.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testRepositioning_whenDatePickerGrows_withFlagEnabled() {
     // Given a PopupDatePicker showing with KeepAllWeeksInViewport = true.
@@ -118,6 +119,7 @@ testSuite({
   /**
    * Tests that repositioning based on DatePicker growth does not happen if the
    * flag is disabled.
+   * @suppress {visibility} suppression added to enable type checking
    */
   testRepositioning_whenDatePickerGrows_withFlagDisabled() {
     // Given a PopupDatePicker showing with KeepAllWeeksInViewport = false,

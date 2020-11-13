@@ -3,13 +3,12 @@
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
  */
-
 /**
  * @fileoverview Current list of countries of the world. This is generated from
  * CLDR data using ICU. The algorithm is to list only country codes (not
  * containments representing a groups of countries).
  *
- * File generated from CLDR ver. 36
+ * File generated from CLDR ver. 38
  */
 
 // clang-format off

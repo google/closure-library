@@ -3,11 +3,10 @@
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
  */
-
 /**
  * @fileoverview Date interval formatting symbols for all locales.
  *
- * File generated from CLDR ver. 36
+ * File generated from CLDR ver. 38
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -197,58 +196,58 @@ exports.DateIntervalSymbols_am = {
 /** @const {!DateIntervalSymbols} */
 exports.DateIntervalSymbols_ar = {
   FULL_DATE: {
-    'G': 'G y MMMM d, EEEE – G y MMMM d, EEEE',
+    'G': 'EEEE, d MMMM y G – EEEE, d MMMM y G',
     'M': 'EEEE، d MMMM – EEEE، d MMMM، y',
     'd': 'EEEE، d – EEEE، d MMMM، y',
     'y': 'EEEE، d MMMM، y – EEEE، d MMMM، y',
     '_': 'EEEE، d MMMM y'
   },
   LONG_DATE: {
-    'G': 'G y MMMM d – G y MMMM d',
+    'G': 'd MMMM y G – d MMMM y G',
     'M': 'd MMMM – d MMMM، y',
     'd': 'd–d MMMM، y',
     'y': 'd MMMM، y – d MMMM، y',
     '_': 'd MMMM y'
   },
   MEDIUM_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'dd-MM-y GGGG – dd-MM-y GGGG',
     'Mdy': 'd‏/M‏/y – d‏/M‏/y',
     '_': 'dd‏/MM‏/y'
   },
   SHORT_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'dd-MM-y GGGG – dd-MM-y GGGG',
     '_': 'd‏/M‏/y'
   },
   FULL_TIME: {
-    'Mdy': 'd‏/M‏/y h:mm:ss a zzzz',
+    'Mdy': 'd‏/M‏/y, h:mm:ss a zzzz',
     '_': 'h:mm:ss a zzzz'
   },
   LONG_TIME: {
-    'Mdy': 'd‏/M‏/y h:mm:ss a z',
+    'Mdy': 'd‏/M‏/y, h:mm:ss a z',
     '_': 'h:mm:ss a z'
   },
   MEDIUM_TIME: {
-    'Mdy': 'd‏/M‏/y h:mm:ss a',
+    'Mdy': 'd‏/M‏/y, h:mm:ss a',
     '_': 'h:mm:ss a'
   },
   SHORT_TIME: {
-    'Mdy': 'd‏/M‏/y h:mm a',
+    'Mdy': 'd‏/M‏/y, h:mm a',
     'hm': 'h:mm–h:mm a',
     '_': 'h:mm a'
   },
   FULL_DATETIME: {
-    '_': 'EEEE، d MMMM y h:mm:ss a zzzz'
+    '_': 'EEEE، d MMMM y في h:mm:ss a zzzz'
   },
   LONG_DATETIME: {
-    '_': 'd MMMM y h:mm:ss a z'
+    '_': 'd MMMM y في h:mm:ss a z'
   },
   MEDIUM_DATETIME: {
-    '_': 'dd‏/MM‏/y h:mm:ss a'
+    '_': 'dd‏/MM‏/y, h:mm:ss a'
   },
   SHORT_DATETIME: {
-    'a': 'd‏/M‏/y h:mm a – h:mm a',
-    'hm': 'd‏/M‏/y h:mm–h:mm a',
-    '_': 'd‏/M‏/y h:mm a'
+    'a': 'd‏/M‏/y, h:mm a – h:mm a',
+    'hm': 'd‏/M‏/y, h:mm–h:mm a',
+    '_': 'd‏/M‏/y, h:mm a'
   },
   FALLBACK: '{0} – {1}'
 };
@@ -397,33 +396,33 @@ exports.DateIntervalSymbols_bg = {
     '_': 'd.MM.yy \'г\'.'
   },
   FULL_TIME: {
-    'Mdy': 'd.MM.y \'г\'., H:mm:ss zzzz',
-    '_': 'H:mm:ss zzzz'
+    'Mdy': 'd.MM.y \'г\'., H:mm:ss \'ч\'. zzzz',
+    '_': 'H:mm:ss \'ч\'. zzzz'
   },
   LONG_TIME: {
-    'Mdy': 'd.MM.y \'г\'., H:mm:ss z',
-    '_': 'H:mm:ss z'
+    'Mdy': 'd.MM.y \'г\'., H:mm:ss \'ч\'. z',
+    '_': 'H:mm:ss \'ч\'. z'
   },
   MEDIUM_TIME: {
-    'Mdy': 'd.MM.y \'г\'., H:mm:ss',
-    '_': 'H:mm:ss'
+    'Mdy': 'd.MM.y \'г\'., H:mm:ss \'ч\'.',
+    '_': 'H:mm:ss \'ч\'.'
   },
   SHORT_TIME: {
-    'Mdy': 'd.MM.y \'г\'., H:mm',
-    '_': 'H:mm'
+    'Mdy': 'd.MM.y \'г\'., H:mm \'ч\'.',
+    '_': 'H:mm \'ч\'.'
   },
   FULL_DATETIME: {
-    '_': 'EEEE, d MMMM y \'г\'., H:mm:ss zzzz'
+    '_': 'EEEE, d MMMM y \'г\'., H:mm:ss \'ч\'. zzzz'
   },
   LONG_DATETIME: {
-    '_': 'd MMMM y \'г\'., H:mm:ss z'
+    '_': 'd MMMM y \'г\'., H:mm:ss \'ч\'. z'
   },
   MEDIUM_DATETIME: {
-    '_': 'd.MM.y \'г\'., H:mm:ss'
+    '_': 'd.MM.y \'г\'., H:mm:ss \'ч\'.'
   },
   SHORT_DATETIME: {
-    'ahm': 'd.MM.yy \'г\'., H:mm – H:mm',
-    '_': 'd.MM.yy \'г\'., H:mm'
+    'ahm': 'd.MM.yy \'г\'., H:mm \'ч\'. – H:mm \'ч\'.',
+    '_': 'd.MM.yy \'г\'., H:mm \'ч\'.'
   },
   FALLBACK: '{0} – {1}'
 };
@@ -630,11 +629,11 @@ exports.DateIntervalSymbols_ca = {
     '_': 'd/M/yy'
   },
   FULL_TIME: {
-    'Mdy': 'd/M/y, H:mm:ss zzzz',
-    '_': 'H:mm:ss zzzz'
+    'Mdy': 'd/M/y, H:mm:ss (zzzz)',
+    '_': 'H:mm:ss (zzzz)'
   },
   LONG_TIME: {
-    'Mdy': 'd/M/y, H:mm:ss z',
+    'Mdy': 'd/M/y, H:mm:ss (z)',
     '_': 'H:mm:ss z'
   },
   MEDIUM_TIME: {
@@ -647,10 +646,10 @@ exports.DateIntervalSymbols_ca = {
     '_': 'H:mm'
   },
   FULL_DATETIME: {
-    '_': 'EEEE, d MMMM \'de\' y \'a\' \'les\' H:mm:ss zzzz'
+    '_': 'EEEE, d MMMM \'de\' y, \'a\' \'les\' H:mm:ss (zzzz)'
   },
   LONG_DATETIME: {
-    '_': 'd MMMM \'de\' y \'a\' \'les\' H:mm:ss z'
+    '_': 'd MMMM \'de\' y, \'a\' \'les\' H:mm:ss z'
   },
   MEDIUM_DATETIME: {
     '_': 'd MMM y, H:mm:ss'
@@ -858,7 +857,7 @@ exports.DateIntervalSymbols_da = {
     '_': 'd. MMM y'
   },
   SHORT_DATE: {
-    'G': 'd/M/y GGGGG–d/M/y GGGGG',
+    'G': 'dd.MM.y GGGGG–dd.MM.y GGGGG',
     'Mdy': 'dd.MM.y–dd.MM.y',
     '_': 'dd.MM.y'
   },
@@ -1630,34 +1629,34 @@ exports.DateIntervalSymbols_es_MX = {
     '_': 'dd/MM/yy'
   },
   FULL_TIME: {
-    'Mdy': 'd/M/y H:mm:ss zzzz',
-    '_': 'H:mm:ss zzzz'
+    'Mdy': 'd/M/y HH:mm:ss zzzz',
+    '_': 'HH:mm:ss zzzz'
   },
   LONG_TIME: {
-    'Mdy': 'd/M/y H:mm:ss z',
-    '_': 'H:mm:ss z'
+    'Mdy': 'd/M/y HH:mm:ss z',
+    '_': 'HH:mm:ss z'
   },
   MEDIUM_TIME: {
-    'Mdy': 'd/M/y H:mm:ss',
-    '_': 'H:mm:ss'
+    'Mdy': 'd/M/y HH:mm:ss',
+    '_': 'HH:mm:ss'
   },
   SHORT_TIME: {
-    'Mdy': 'd/M/y H:mm',
+    'Mdy': 'd/M/y HH:mm',
     'ahm': 'HH:mm–HH:mm',
-    '_': 'H:mm'
+    '_': 'HH:mm'
   },
   FULL_DATETIME: {
-    '_': 'EEEE, d \'de\' MMMM \'de\' y \'a\' \'las\' H:mm:ss zzzz'
+    '_': 'EEEE, d \'de\' MMMM \'de\' y \'a\' \'las\' HH:mm:ss zzzz'
   },
   LONG_DATETIME: {
-    '_': 'd \'de\' MMMM \'de\' y \'a\' \'las\' H:mm:ss z'
+    '_': 'd \'de\' MMMM \'de\' y \'a\' \'las\' HH:mm:ss z'
   },
   MEDIUM_DATETIME: {
-    '_': 'd MMM y H:mm:ss'
+    '_': 'd MMM y HH:mm:ss'
   },
   SHORT_DATETIME: {
     'ahm': 'dd/MM/yy HH:mm–HH:mm',
-    '_': 'dd/MM/yy H:mm'
+    '_': 'dd/MM/yy HH:mm'
   },
   FALLBACK: '{0} – {1}'
 };
@@ -1899,7 +1898,7 @@ exports.DateIntervalSymbols_fi = {
     '_': 'cccc d. MMMM y'
   },
   LONG_DATE: {
-    'G': 'd.M.y. G – d.M.y G',
+    'G': 'd. MMMM y G – d. MMMM y G',
     'M': 'd. MMMM – d. MMMM y',
     'd': 'd.–d. MMMM y',
     'y': 'd. MMMM y – d. MMMM y',
@@ -2031,19 +2030,19 @@ exports.DateIntervalSymbols_fr = {
     '_': 'dd/MM/y'
   },
   FULL_TIME: {
-    'Mdy': 'dd/MM/y \'à\' HH:mm:ss zzzz',
+    'Mdy': 'dd/MM/y, HH:mm:ss zzzz',
     '_': 'HH:mm:ss zzzz'
   },
   LONG_TIME: {
-    'Mdy': 'dd/MM/y \'à\' HH:mm:ss z',
+    'Mdy': 'dd/MM/y, HH:mm:ss z',
     '_': 'HH:mm:ss z'
   },
   MEDIUM_TIME: {
-    'Mdy': 'dd/MM/y \'à\' HH:mm:ss',
+    'Mdy': 'dd/MM/y, HH:mm:ss',
     '_': 'HH:mm:ss'
   },
   SHORT_TIME: {
-    'Mdy': 'dd/MM/y \'à\' HH:mm',
+    'Mdy': 'dd/MM/y, HH:mm',
     '_': 'HH:mm'
   },
   FULL_DATETIME: {
@@ -2053,10 +2052,10 @@ exports.DateIntervalSymbols_fr = {
     '_': 'd MMMM y \'à\' HH:mm:ss z'
   },
   MEDIUM_DATETIME: {
-    '_': 'd MMM y \'à\' HH:mm:ss'
+    '_': 'd MMM y, HH:mm:ss'
   },
   SHORT_DATETIME: {
-    'ahm': 'dd/MM/y \'à\' HH:mm – HH:mm',
+    'ahm': 'dd/MM/y, HH:mm – HH:mm',
     '_': 'dd/MM/y HH:mm'
   },
   FALLBACK: '{0} – {1}'
@@ -2087,19 +2086,19 @@ exports.DateIntervalSymbols_fr_CA = {
     '_': 'y-MM-dd'
   },
   FULL_TIME: {
-    'Mdy': 'y-MM-dd HH \'h\' mm \'min\' ss \'s\' zzzz',
+    'Mdy': 'y-MM-dd, HH \'h\' mm \'min\' ss \'s\' zzzz',
     '_': 'HH \'h\' mm \'min\' ss \'s\' zzzz'
   },
   LONG_TIME: {
-    'Mdy': 'y-MM-dd HH \'h\' mm \'min\' ss \'s\' z',
+    'Mdy': 'y-MM-dd, HH \'h\' mm \'min\' ss \'s\' z',
     '_': 'HH \'h\' mm \'min\' ss \'s\' z'
   },
   MEDIUM_TIME: {
-    'Mdy': 'y-MM-dd HH \'h\' mm \'min\' ss \'s\'',
+    'Mdy': 'y-MM-dd, HH \'h\' mm \'min\' ss \'s\'',
     '_': 'HH \'h\' mm \'min\' ss \'s\''
   },
   SHORT_TIME: {
-    'Mdy': 'y-MM-dd HH \'h\' mm',
+    'Mdy': 'y-MM-dd, HH \'h\' mm',
     'ahm': 'H \'h\' mm – H \'h\' mm',
     '_': 'HH \'h\' mm'
   },
@@ -2110,10 +2109,10 @@ exports.DateIntervalSymbols_fr_CA = {
     '_': 'd MMMM y \'à\' HH \'h\' mm \'min\' ss \'s\' z'
   },
   MEDIUM_DATETIME: {
-    '_': 'd MMM y HH \'h\' mm \'min\' ss \'s\''
+    '_': 'd MMM y, HH \'h\' mm \'min\' ss \'s\''
   },
   SHORT_DATETIME: {
-    'ahm': 'y-MM-dd H \'h\' mm – H \'h\' mm',
+    'ahm': 'y-MM-dd, H \'h\' mm – H \'h\' mm',
     '_': 'y-MM-dd HH \'h\' mm'
   },
   FALLBACK: '{0} – {1}'
@@ -2964,12 +2963,12 @@ exports.DateIntervalSymbols_iw = {
     '_': 'd.M.y'
   },
   FULL_TIME: {
-    'Mdy': 'd.M.y, H:mm:ss zzzz',
-    '_': 'H:mm:ss zzzz'
+    'Mdy': 'd.M.y, HH:mm:ss zzzz',
+    '_': 'HH:mm:ss zzzz'
   },
   LONG_TIME: {
-    'Mdy': 'd.M.y, H:mm:ss z',
-    '_': 'H:mm:ss z'
+    'Mdy': 'd.M.y, HH:mm:ss z',
+    '_': 'HH:mm:ss z'
   },
   MEDIUM_TIME: {
     'Mdy': 'd.M.y, H:mm:ss',
@@ -2981,10 +2980,10 @@ exports.DateIntervalSymbols_iw = {
     '_': 'H:mm'
   },
   FULL_DATETIME: {
-    '_': 'EEEE, d בMMMM y בשעה H:mm:ss zzzz'
+    '_': 'EEEE, d בMMMM y בשעה HH:mm:ss zzzz'
   },
   LONG_DATETIME: {
-    '_': 'd בMMMM y בשעה H:mm:ss z'
+    '_': 'd בMMMM y בשעה HH:mm:ss z'
   },
   MEDIUM_DATETIME: {
     '_': 'd בMMM y, H:mm:ss'
@@ -3672,34 +3671,34 @@ exports.DateIntervalSymbols_mk = {
     '_': 'd.M.yy'
   },
   FULL_TIME: {
-    'Mdy': 'd.M.y HH:mm:ss zzzz',
+    'Mdy': 'd.M.y, \'во\' HH:mm:ss zzzz',
     '_': 'HH:mm:ss zzzz'
   },
   LONG_TIME: {
-    'Mdy': 'd.M.y HH:mm:ss z',
+    'Mdy': 'd.M.y, \'во\' HH:mm:ss z',
     '_': 'HH:mm:ss z'
   },
   MEDIUM_TIME: {
-    'Mdy': 'd.M.y HH:mm:ss',
+    'Mdy': 'd.M.y, \'во\' HH:mm:ss',
     '_': 'HH:mm:ss'
   },
   SHORT_TIME: {
-    'Mdy': 'd.M.y HH:mm',
+    'Mdy': 'd.M.y, \'во\' HH:mm',
     'ahm': 'HH:mm – HH:mm',
     '_': 'HH:mm'
   },
   FULL_DATETIME: {
-    '_': 'EEEE, d MMMM y HH:mm:ss zzzz'
+    '_': 'EEEE, d MMMM y, \'во\' HH:mm:ss zzzz'
   },
   LONG_DATETIME: {
-    '_': 'd MMMM y HH:mm:ss z'
+    '_': 'd MMMM y, \'во\' HH:mm:ss z'
   },
   MEDIUM_DATETIME: {
-    '_': 'd.M.y HH:mm:ss'
+    '_': 'd.M.y, \'во\' HH:mm:ss'
   },
   SHORT_DATETIME: {
-    'ahm': 'd.M.yy HH:mm – HH:mm',
-    '_': 'd.M.yy HH:mm'
+    'ahm': 'd.M.yy, \'во\' HH:mm – HH:mm',
+    '_': 'd.M.yy, \'во\' HH:mm'
   },
   FALLBACK: '{0} - {1}'
 };
@@ -4156,7 +4155,7 @@ exports.DateIntervalSymbols_nb = {
     '_': 'HH:mm'
   },
   FULL_DATETIME: {
-    '_': 'EEEE d. MMMM y HH:mm:ss zzzz'
+    '_': 'EEEE d. MMMM y \'kl\'. HH:mm:ss zzzz'
   },
   LONG_DATETIME: {
     '_': 'd. MMMM y \'kl\'. HH:mm:ss z'
@@ -4330,7 +4329,7 @@ exports.DateIntervalSymbols_no = {
     '_': 'HH:mm'
   },
   FULL_DATETIME: {
-    '_': 'EEEE d. MMMM y HH:mm:ss zzzz'
+    '_': 'EEEE d. MMMM y \'kl\'. HH:mm:ss zzzz'
   },
   LONG_DATETIME: {
     '_': 'd. MMMM y \'kl\'. HH:mm:ss z'
@@ -4471,26 +4470,26 @@ exports.DateIntervalSymbols_pl = {
   FULL_DATE: {
     'M': 'EEEE, d MMMM – EEEE, d MMMM y',
     'd': 'EEEE, d – EEEE, d MMMM y',
-    'y': 'EEEE, d MMMM y – EEEE, d MMMM y',
     '_': 'EEEE, d MMMM y'
   },
   LONG_DATE: {
     'G': 'd MMMM y G – d MMMM y G',
     'M': 'd MMMM – d MMMM y',
     'd': 'd–d MMMM y',
-    'y': 'd MMMM y – d MMMM y',
     '_': 'd MMMM y'
   },
   MEDIUM_DATE: {
     'G': 'd MMM y G – d MMM y G',
     'M': 'd MMM–d MMM y',
     'd': 'd–d MMM y',
+    'y': 'd MMM y–d MMM y',
     '_': 'd MMM y'
   },
   SHORT_DATE: {
     'G': 'd.M.y GGGGG – d.M.y GGGGG',
     'M': 'dd.MM–dd.MM.y',
     'd': 'dd–dd.MM.y',
+    'y': 'dd.MM.y–dd.MM.y',
     '_': 'dd.MM.y'
   },
   FULL_TIME: {
@@ -4507,6 +4506,7 @@ exports.DateIntervalSymbols_pl = {
   },
   SHORT_TIME: {
     'Mdy': 'd.MM.y, HH:mm',
+    'ahm': 'HH:mm–HH:mm',
     '_': 'HH:mm'
   },
   FULL_DATETIME: {
@@ -4522,34 +4522,34 @@ exports.DateIntervalSymbols_pl = {
     'ahm': 'dd.MM.y, HH:mm–HH:mm',
     '_': 'dd.MM.y, HH:mm'
   },
-  FALLBACK: '{0}–{1}'
+  FALLBACK: '{0} – {1}'
 };
 
 /** @const {!DateIntervalSymbols} */
 exports.DateIntervalSymbols_pt = {
   FULL_DATE: {
-    'G': 'G EEEE, d \'de\' MMMM y – G EEEE, d \'de\' MMMM y',
+    'G': 'EEEE, MMMM d, y G – EEEE, MMMM d, y G',
     'M': 'EEEE, d \'de\' MMMM – EEEE, d \'de\' MMMM \'de\' y',
     'd': 'EEEE, d – EEEE, d \'de\' MMMM \'de\' y',
     'y': 'EEEE, d \'de\' MMMM \'de\' y – EEEE, d \'de\' MMMM \'de\' y',
     '_': 'EEEE, d \'de\' MMMM \'de\' y'
   },
   LONG_DATE: {
-    'G': 'G d \'de\' MMMM y – G d \'de\' MMMM y',
+    'G': 'MMMM d, y G – MMMM d, y G',
     'M': 'd \'de\' MMMM – d \'de\' MMMM \'de\' y',
     'd': 'd – d \'de\' MMMM \'de\' y',
     'y': 'd \'de\' MMMM \'de\' y – d \'de\' MMMM \'de\' y',
     '_': 'd \'de\' MMMM \'de\' y'
   },
   MEDIUM_DATE: {
-    'G': 'G d \'de\' MMM y – G d \'de\' MMM y',
+    'G': 'MMM d, y G – MMM d, y G',
     'M': 'd \'de\' MMM – d \'de\' MMM \'de\' y',
     'd': 'd – d \'de\' MMM \'de\' y',
     'y': 'd \'de\' MMM \'de\' y – d \'de\' MMM \'de\' y',
     '_': 'd \'de\' MMM \'de\' y'
   },
   SHORT_DATE: {
-    'G': 'GGGGG dd/MM/y – GGGGG dd/MM/y',
+    'G': 'M/d/y GGGGG – M/d/y GGGGG',
     'Mdy': 'dd/MM/y – dd/MM/y',
     '_': 'dd/MM/y'
   },
@@ -5132,17 +5132,17 @@ exports.DateIntervalSymbols_sv = {
     '_': 'd MMM y'
   },
   SHORT_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'd/M/y GGGGG–d/M/y GGGGG',
     'M': 'y-MM-dd – MM-dd',
     'd': 'y-MM-dd – dd',
     '_': 'y-MM-dd'
   },
   FULL_TIME: {
-    'Mdy': 'y-MM-dd \'kl\'. HH:mm:ss zzzz',
-    '_': '\'kl\'. HH:mm:ss zzzz'
+    'Mdy': 'y-MM-dd HH:mm:ss zzzz',
+    '_': 'HH:mm:ss zzzz'
   },
   LONG_TIME: {
-    'Mdy': 'y-MM-dd \'kl\'. HH:mm:ss z',
+    'Mdy': 'y-MM-dd HH:mm:ss z',
     '_': 'HH:mm:ss z'
   },
   MEDIUM_TIME: {
@@ -5155,7 +5155,7 @@ exports.DateIntervalSymbols_sv = {
     '_': 'HH:mm'
   },
   FULL_DATETIME: {
-    '_': 'EEEE d MMMM y \'kl\'. HH:mm:ss zzzz'
+    '_': 'EEEE d MMMM y HH:mm:ss zzzz'
   },
   LONG_DATETIME: {
     '_': 'd MMMM y HH:mm:ss z'
@@ -5751,54 +5751,54 @@ exports.DateIntervalSymbols_vi = {
 /** @const {!DateIntervalSymbols} */
 exports.DateIntervalSymbols_zh = {
   FULL_DATE: {
-    'G': 'GGGGG y-MM-dd, EEEE – GGGGG y-MM-dd, EEEE',
+    'G': 'GGGGGy-MM-ddEEEE – GGGGGy-MM-ddEEEE',
     'Mdy': 'y/M/dEEEE至y/M/dEEEE',
     '_': 'y年M月d日EEEE'
   },
   LONG_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'GGGGGy-MM-dd – GGGGGy-MM-dd',
     'Mdy': 'y/M/d – y/M/d',
     '_': 'y年M月d日'
   },
   MEDIUM_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'GGGGGy-MM-dd – GGGGGy-MM-dd',
     'Mdy': 'y/M/d – y/M/d',
     '_': 'y年M月d日'
   },
   SHORT_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'GGGGGy-MM-dd – GGGGGy-MM-dd',
     '_': 'y/M/d'
   },
   FULL_TIME: {
-    'Mdy': 'y/M/d zzzz ah:mm:ss',
+    'Mdy': 'y/M/dzzzz ah:mm:ss',
     '_': 'zzzz ah:mm:ss'
   },
   LONG_TIME: {
-    'Mdy': 'y/M/d z ah:mm:ss',
+    'Mdy': 'y/M/dz ah:mm:ss',
     '_': 'z ah:mm:ss'
   },
   MEDIUM_TIME: {
-    'Mdy': 'y/M/d ah:mm:ss',
+    'Mdy': 'y/M/dah:mm:ss',
     '_': 'ah:mm:ss'
   },
   SHORT_TIME: {
-    'Mdy': 'y/M/d ah:mm',
+    'Mdy': 'y/M/dah:mm',
     'a': 'ah:mm至ah:mm',
     'hm': 'ah:mm至h:mm',
     '_': 'ah:mm'
   },
   FULL_DATETIME: {
-    '_': 'y年M月d日EEEE zzzz ah:mm:ss'
+    '_': 'y年M月d日EEEEzzzz ah:mm:ss'
   },
   LONG_DATETIME: {
     '_': 'y年M月d日 z ah:mm:ss'
   },
   MEDIUM_DATETIME: {
-    '_': 'y年M月d日 ah:mm:ss'
+    '_': 'y年M月d日ah:mm:ss'
   },
   SHORT_DATETIME: {
-    'a': 'y/M/d ah:mm至ah:mm',
-    'hm': 'y/M/d ah:mm至h:mm',
+    'a': 'y/M/dah:mm至ah:mm',
+    'hm': 'y/M/dah:mm至h:mm',
     '_': 'y/M/d ah:mm'
   },
   FALLBACK: '{0} – {1}'
@@ -5810,22 +5810,22 @@ exports.DateIntervalSymbols_zh_CN = exports.DateIntervalSymbols_zh;
 /** @const {!DateIntervalSymbols} */
 exports.DateIntervalSymbols_zh_HK = {
   FULL_DATE: {
-    'G': 'GGGGG y-MM-dd, EEEE – GGGGG y-MM-dd, EEEE',
+    'G': 'GGGGGy-MM-dd, EEEE – GGGGGy-MM-dd, EEEE',
     'Mdy': 'd/M/y（EEEE） 至 d/M/y（EEEE）',
     '_': 'y年M月d日EEEE'
   },
   LONG_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'GGGGGy-MM-dd – GGGGGy-MM-dd',
     'Mdy': 'd/M/y 至 d/M/y',
     '_': 'y年M月d日'
   },
   MEDIUM_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'GGGGGy-MM-dd – GGGGGy-MM-dd',
     'Mdy': 'd/M/y 至 d/M/y',
     '_': 'y年M月d日'
   },
   SHORT_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'GGGGGy-MM-dd – GGGGGy-MM-dd',
     'Mdy': 'd/M/y 至 d/M/y',
     '_': 'd/M/y'
   },
@@ -5867,22 +5867,22 @@ exports.DateIntervalSymbols_zh_HK = {
 /** @const {!DateIntervalSymbols} */
 exports.DateIntervalSymbols_zh_TW = {
   FULL_DATE: {
-    'G': 'GGGGG y-MM-dd, EEEE – GGGGG y-MM-dd, EEEE',
+    'G': 'GGGGGy-MM-dd, EEEE – GGGGGy-MM-dd, EEEE',
     'Mdy': 'y/M/dEEEE至y/M/dEEEE',
     '_': 'y年M月d日 EEEE'
   },
   LONG_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'GGGGGy-MM-dd – GGGGGy-MM-dd',
     'Mdy': 'y/M/d至y/M/d',
     '_': 'y年M月d日'
   },
   MEDIUM_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'GGGGGy-MM-dd – GGGGGy-MM-dd',
     'Mdy': 'y/M/d至y/M/d',
     '_': 'y年M月d日'
   },
   SHORT_DATE: {
-    'G': 'GGGGG y-MM-dd – GGGGG y-MM-dd',
+    'G': 'GGGGGy-MM-dd – GGGGGy-MM-dd',
     'Mdy': 'y/M/d至y/M/d',
     '_': 'y/M/d'
   },

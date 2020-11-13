@@ -1313,7 +1313,7 @@ function createTestComparisons(i) {
 // is necessary because, in some testing configurations, the full combined test
 // can take so long that it times out. These smaller tests run much faster.
 for (let i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global[`testComparisons${i}`] = createTestComparisons(i);
+  globalThis[`testComparisons${i}`] = createTestComparisons(i);
 }
 
 function createTestBitOperations(i) {
@@ -1368,7 +1368,7 @@ function createTestBitOperations(i) {
 }
 
 for (let i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global[`testBitOperations${i}`] = createTestBitOperations(i);
+  globalThis[`testBitOperations${i}`] = createTestBitOperations(i);
 }
 
 function createTestAdd(i, count) {
@@ -1385,7 +1385,7 @@ function createTestAdd(i, count) {
 
 let countAdd = 0;
 for (let i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global[`testAdd${i}`] = createTestAdd(i, countAdd);
+  globalThis[`testAdd${i}`] = createTestAdd(i, countAdd);
   countAdd += i;
 }
 
@@ -1403,7 +1403,7 @@ function createTestSubtract(i, count) {
 
 let countSubtract = 0;
 for (let i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global[`testSubtract${i}`] = createTestSubtract(i, countSubtract);
+  globalThis[`testSubtract${i}`] = createTestSubtract(i, countSubtract);
   countSubtract += TEST_BITS.length;
 }
 
@@ -1421,7 +1421,7 @@ function createTestMultiply(i, count) {
 
 let countMultiply = 0;
 for (let i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global[`testMultiply${i}`] = createTestMultiply(i, countMultiply);
+  globalThis[`testMultiply${i}`] = createTestMultiply(i, countMultiply);
   countMultiply += i;
 }
 
@@ -1457,7 +1457,7 @@ for (let j = 0; j < TEST_BITS.length; j += 2) {
 
 let countDivMod = 0;
 for (let i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global[`testDivMod${i}`] = createTestDivMod(i, countDivMod);
+  globalThis[`testDivMod${i}`] = createTestDivMod(i, countDivMod);
   countDivMod += countPerDivModCall;
 }
 
@@ -1479,7 +1479,7 @@ function createTestToFromString(i) {
 }
 
 for (let i = 0; i < TEST_BITS.length; i += 2) {
-  goog.global[`testToFromString${i}`] = createTestToFromString(i);
+  globalThis[`testToFromString${i}`] = createTestToFromString(i);
 }
 
 // Regression test for

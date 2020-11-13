@@ -70,6 +70,10 @@ testSuite({
     FormPost.prototype.createDom = function() {
       originalCreateDom.apply(this, arguments);
 
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       this.getElement().submit = () => {
         submits++;
       };

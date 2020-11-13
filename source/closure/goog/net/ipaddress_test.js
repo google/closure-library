@@ -164,6 +164,7 @@ testSuite({
     new Ipv6Address('7::0.128.128.127');
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testMappedIpv4Address() {
     const testAddresses = ['::ffff:1.2.3.4', '::FFFF:102:304'];
     const ipv4Str = '1.2.3.4';
@@ -179,6 +180,7 @@ testSuite({
     assertTrue(ipv4.equals(ip2.getMappedIpv4Address()));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testUriString() {
     const ip4Str = '192.168.1.1';
     const ip4Uri = IpAddress.fromUriString(ip4Str);

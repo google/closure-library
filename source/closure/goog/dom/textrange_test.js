@@ -310,6 +310,7 @@ testSuite({
     }
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCloneRangeDeep() {
     const range = DomTextRange.createFromNodeContents(logo);
     assertFalse(range.isCollapsed());

@@ -1,8 +1,4 @@
 /**
- * @fileoverview
- * @suppress {checkTypes} suppression added to enable type checking
- */
-/**
  * @license
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
@@ -34,10 +30,10 @@ const testingEvents = goog.require('goog.testing.events');
 /** @type {DragListGroup} */
 let dlg;
 
-/** @type {dom.Element} */
+/** @type {?} */
 let list;
 
-/** @type {!dom.Element} */
+/** @type {?} */
 let list2;
 
 /** @type {BrowserEvent} */

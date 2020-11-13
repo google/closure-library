@@ -9,6 +9,7 @@ goog.setTestOnly();
 
 const MockUserAgent = goog.require('goog.testing.MockUserAgent');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const dispose = goog.require('goog.dispose');
 const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
@@ -33,6 +34,7 @@ const UserAgents = {
  * Return whether a given user agent has been detected.
  * @param {number} agent Value in UserAgents.
  * @return {boolean} Whether the user agent has been detected.
+ * @suppress {checkTypes} suppression added to enable type checking
  */
 function getUserAgentDetected(agent) {
   switch (agent) {
@@ -97,7 +99,7 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(mockUserAgent);
+    dispose(mockUserAgent);
     documentMode = undefined;
     propertyReplacer.reset();
   },

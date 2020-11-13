@@ -112,6 +112,10 @@ testSuite({
     tearDownGetNodeFunctions();
   },
 
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testMakeUnselectable() {
     const div = dom.createElement(TagName.DIV);
     div.innerHTML = '<div>No input</div>' +

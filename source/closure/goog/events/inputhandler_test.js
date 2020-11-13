@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.events.InputHandlerTest');
 goog.setTestOnly();
 
@@ -65,6 +70,10 @@ testSuite({
     const input = dom.getElement('input-w-placeholder');
     inputHandler = new InputHandler(input);
     const callback = listenToInput(inputHandler);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     input.value = 'foo';
     fireFakeInputEvent(input);
     assertEquals(0, callback.getCallCount());
@@ -75,6 +84,10 @@ testSuite({
     inputHandler = new InputHandler(input);
     const callback = listenToInput(inputHandler);
     input.focus();
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     input.value = 'foo';
 
     fireInputEvent(input, KeyCodes.M);

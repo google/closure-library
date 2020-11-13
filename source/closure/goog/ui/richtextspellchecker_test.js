@@ -64,7 +64,7 @@ function waitForSpellCheckToFinish() {
  * supplied as a constructor parameter for the spell check handler.
  * @param {!Array<string>} words Unknown words that need to be looked up.
  * @param {!SpellCheck} spellChecker The spell check handler.
- * @param {function(!Array.)} callback The lookup callback function.
+ * @param {function(!Array)} callback The lookup callback function.
  */
 function localSpellCheckingFunction(words, spellChecker, callback) {
   const len = words.length;
@@ -93,6 +93,10 @@ function assertCursorAtElement(expectedId) {
   let focusedElementId;
   if (isCaret(range)) {
     if (isMisspelledWordElement(range.getStartNode())) {
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       focusedElementId = range.getStartNode().id;
     }
 
@@ -101,6 +105,10 @@ function assertCursorAtElement(expectedId) {
     if (isCursorAtEndOfStartNode(range) &&
         range.getStartNode().nextSibling != null &&
         isMisspelledWordElement(range.getStartNode().nextSibling)) {
+      /**
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
+       */
       focusedElementId = range.getStartNode().nextSibling.id;
     }
   }
@@ -155,6 +163,7 @@ testSuite({
         el2.innerHTML, el.innerHTML);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testExcludeMarkers() {
     const el = document.getElementById('test1');
     spellChecker.decorate(el);
@@ -212,6 +221,7 @@ testSuite({
         el2.innerHTML, el.innerHTML);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testKeyboardNavigateNext() {
     const el = document.getElementById('test4');
     spellChecker.decorate(el);
@@ -238,6 +248,7 @@ testSuite({
     spellChecker.resume();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testKeyboardNavigateNextOnLastWord() {
     const el = document.getElementById('test5');
     spellChecker.decorate(el);
@@ -277,6 +288,7 @@ testSuite({
     spellChecker.check();
     waitForSpellCheckToFinish();
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const suggestionMenu = spellChecker.getMenu();
 
     events.fireKeySequence(el, KeyCodes.RIGHT, keyEventProperties);
@@ -285,6 +297,10 @@ testSuite({
         'The suggestion menu should not be visible yet.',
         suggestionMenu.isVisible());
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     keyEventProperties.ctrlKey = false;
     const defaultExecuted =
         events.fireKeySequence(el, KeyCodes.DOWN, keyEventProperties);
@@ -299,6 +315,7 @@ testSuite({
     spellChecker.resume();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testKeyboardNavigatePrevious() {
     const el = document.getElementById('test7');
     spellChecker.decorate(el);
@@ -326,6 +343,7 @@ testSuite({
     spellChecker.resume();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testKeyboardNavigatePreviousOnLastWord() {
     const el = document.getElementById('test8');
     spellChecker.decorate(el);

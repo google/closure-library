@@ -22,6 +22,10 @@ const remaining = CharCounter.Display.REMAINING;
 const maxLength = 25;
 
 function setupCheckLength(content, mode) {
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   inputElement.value = content;
   charCounter.setDisplayMode(mode);
   charCounter.checkLength();
@@ -30,9 +34,14 @@ function setupCheckLength(content, mode) {
 testSuite({
   setUp() {
     inputElement = dom.getElement('test-textarea-id');
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     inputElement.value = '';
     countElement = dom.getElementByClass('char-count');
     dom.setTextContent(countElement, '');
+    /** @suppress {checkTypes} suppression added to enable type checking */
     charCounter = new CharCounter(inputElement, countElement, maxLength);
   },
 
@@ -45,11 +54,19 @@ testSuite({
     assertEquals(maxLength.toString(), dom.getTextContent(countElement));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSetMaxLength() {
     charCounter.setMaxLength(10);
     assertEquals('10', dom.getTextContent(countElement));
 
     const tooLongContent = 'This is too long text content';
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     inputElement.value = tooLongContent;
     charCounter.setMaxLength(10);
     assertEquals('0', dom.getTextContent(countElement));
@@ -73,6 +90,7 @@ testSuite({
   testGetDisplayMode() {
     assertEquals(remaining, charCounter.getDisplayMode());
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const incrementalCharCounter =
         new CharCounter(inputElement, countElement, maxLength, incremental);
     assertEquals(incremental, incrementalCharCounter.getDisplayMode());
@@ -88,6 +106,10 @@ testSuite({
     assertEquals('0', dom.getTextContent(countElement));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCheckLength_limitedContent() {
     const limitedContent = 'Limited text content';
     const limitedContentLength = limitedContent.length;
@@ -110,6 +132,10 @@ testSuite({
         limitedContentLength.toString(), dom.getTextContent(countElement));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCheckLength_overflowContent() {
     const tooLongContent = 'This is too long text content';
     const truncatedContent = 'This is too long text con';
@@ -129,6 +155,10 @@ testSuite({
     assertEquals(maxLength.toString(), dom.getTextContent(countElement));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCheckLength_newLineContent() {
     const newLineContent = 'New\nline';
     const newLineContentLength = newLineContent.length;
@@ -173,6 +203,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCheckLength_carriageReturnContent() {
     const newLineContent = 'New\nline';
     const newLineContentLength = newLineContent.length;

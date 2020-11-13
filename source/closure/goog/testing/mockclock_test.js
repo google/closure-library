@@ -297,19 +297,19 @@ testSuite({
   },
 
   testRequestAnimationFrame() {
-    goog.global.requestAnimationFrame = () => {};
+    globalThis.requestAnimationFrame = () => {};
     const clock = new MockClock(true);
     const times = [];
     const recFunc = recordFunction((now) => {
       times.push(now);
     });
-    goog.global.requestAnimationFrame(recFunc);
+    globalThis.requestAnimationFrame(recFunc);
     clock.tick(50);
     assertEquals(1, clock.getCallbacksTriggered());
     assertEquals(1, recFunc.getCallCount());
     assertEquals(20, times[0]);
 
-    goog.global.requestAnimationFrame(recFunc);
+    globalThis.requestAnimationFrame(recFunc);
     clock.tick(100);
     assertEquals(2, clock.getCallbacksTriggered());
     assertEquals(2, recFunc.getCallCount());
@@ -380,16 +380,16 @@ testSuite({
   },
 
   testCancelRequestAnimationFrame() {
-    goog.global.requestAnimationFrame = () => {};
-    goog.global.cancelRequestAnimationFrame = () => {};
+    globalThis.requestAnimationFrame = () => {};
+    globalThis.cancelRequestAnimationFrame = () => {};
     const clock = new MockClock(true);
     let ran = false;
-    const c = goog.global.requestAnimationFrame(() => {
+    const c = globalThis.requestAnimationFrame(() => {
       ran = true;
     });
     clock.tick(10);
     assertFalse(ran);
-    goog.global.cancelRequestAnimationFrame(c);
+    globalThis.cancelRequestAnimationFrame(c);
     clock.tick(20);
     assertFalse(ran);
     clock.uninstall();
@@ -515,7 +515,7 @@ testSuite({
     let timeoutExecuted = false;
 
     timeoutId = setTimeout(function(arg) {
-      assertEquals('"this" must be goog.global', goog.global, this);
+      assertEquals('"this" must be globalThis', globalThis, this);
       assertEquals(
           'The timeout ID must be the first parameter', timeoutId, arg);
       assertEquals('Exactly one argument must be passed', 1, arguments.length);

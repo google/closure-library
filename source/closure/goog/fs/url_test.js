@@ -16,9 +16,9 @@ const stubs = new PropertyReplacer();
 testSuite({
   /** @suppress {checkTypes} suppression added to enable type checking */
   testBrowserSupportsObjectUrls() {
-    stubs.remove(goog.global, 'URL');
-    stubs.remove(goog.global, 'webkitURL');
-    stubs.remove(goog.global, 'createObjectURL');
+    stubs.remove(globalThis, 'URL');
+    stubs.remove(globalThis, 'webkitURL');
+    stubs.remove(globalThis, 'createObjectURL');
 
     assertFalse(url.browserSupportsObjectUrls());
     try {
@@ -33,7 +33,7 @@ testSuite({
     function createObjectURL() {
       return objectUrl;
     }
-    stubs.set(goog.global, 'createObjectURL', createObjectURL);
+    stubs.set(globalThis, 'createObjectURL', createObjectURL);
 
     assertTrue(url.browserSupportsObjectUrls());
     assertEquals(objectUrl, url.createObjectUrl());

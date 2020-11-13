@@ -289,8 +289,8 @@ testSuite({
     assertEquals('mañana', fn(timestamp('24 March 2009 12:10:23')));
 
     // Outside the range. These should be localized.
-    assertEquals('26 mar.', fn(timestamp('26 March 2009 12:10:23')));  //
-    assertEquals('28 feb.', fn(timestamp('28 February 2009 12:10:23')));
+    assertEquals('26 mar', fn(timestamp('26 March 2009 12:10:23')));  //
+    assertEquals('28 feb', fn(timestamp('28 February 2009 12:10:23')));
 
     fn = relative.format;
 

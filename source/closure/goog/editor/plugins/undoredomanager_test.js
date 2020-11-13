@@ -72,11 +72,19 @@ testSuite({
     mockState3 = new StrictMock(UndoRedoState);
     states = [mockState1, mockState2, mockState3];
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     mockState1.equals = mockState2.equals =
         mockState3.equals = function(state) {
           return this == state;
         };
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     mockState1.isAsynchronous = mockState2.isAsynchronous =
         mockState3.isAsynchronous = () => false;
   },
@@ -86,6 +94,7 @@ testSuite({
     manager.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSetMaxUndoDepth() {
     manager.setMaxUndoDepth(2);
     addStatesToManager();
@@ -94,6 +103,7 @@ testSuite({
         [mockState2, mockState3], manager.undoStack_);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testAddState() {
     let stateAddedCount = 0;
     events.listen(manager, UndoRedoManager.EventType.STATE_ADDED, () => {
@@ -182,6 +192,7 @@ testSuite({
         stateChangeCount);
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testUndo() {
     addStatesToManager();
 
@@ -218,6 +229,10 @@ testSuite({
     mockState1.$verify();
   },
 
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testUndo_Asynchronous() {
     // Using a stub instead of a mock here so that the state can behave as an
     // EventTarget and dispatch events.
@@ -269,6 +284,7 @@ testSuite({
         'Third undo must cause before action to dispatch', 3, beforeUndoCount);
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testRedo() {
     addStatesToManager();
     manager.undo();
@@ -322,6 +338,10 @@ testSuite({
     mockState3.$verify();
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testRedo_Asynchronous() {
     const stubState = new UndoRedoState(true);
     let redoCalled = false;
@@ -368,6 +388,7 @@ testSuite({
     mockState2.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testUndoAndRedoPeek() {
     addStatesToManager();
     manager.undo();

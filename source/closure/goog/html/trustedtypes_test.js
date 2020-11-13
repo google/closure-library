@@ -19,6 +19,7 @@ const stubs = new PropertyReplacer();
 testSuite({
 
   setUp() {
+    /** @suppress {visibility} suppression added to enable type checking */
     trustedtypes.cachedPolicy_ = undefined;  // reset the cache.
   },
 

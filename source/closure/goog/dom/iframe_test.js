@@ -31,6 +31,7 @@ testSuite({
     const head = SafeHtml.create('title', {}, 'Foo Title');
     const body = SafeHtml.create('div', {'id': 'blah'}, 'Test');
     const style = SafeStyle.fromConstant(Const.from('position: absolute;'));
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const iframe = domIframe.createWithContent(
         sandbox, head, body, style, false /* opt_quirks */);
 

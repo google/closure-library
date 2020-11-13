@@ -16,18 +16,34 @@ const userAgent = goog.require('goog.userAgent');
 // Updates the calculated metrics.
 function updateInfo() {
   let element = document.getElementById('scrolledElementRtl');
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   document.getElementById('elementScrollLeftRtl').innerHTML =
       element.offsetParent.scrollLeft;
   document.getElementById('bidiOffsetStartRtl').textContent =
       bidi.getOffsetStart(element);
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   document.getElementById('bidiScrollLeftRtl').textContent =
       bidi.getScrollLeft(element.offsetParent);
 
   element = document.getElementById('scrolledElementLtr');
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   document.getElementById('elementScrollLeftLtr').innerHTML =
       element.offsetParent.scrollLeft;
   document.getElementById('bidiOffsetStartLtr').textContent =
       bidi.getOffsetStart(element);
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   document.getElementById('bidiScrollLeftLtr').textContent =
       bidi.getScrollLeft(element.offsetParent);
 }
@@ -93,6 +109,10 @@ testSuite({
     scrollAndAssert(0);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testFixedBodyChildLtr() {
     const bodyChild = document.getElementById('bodyChild');
     assertEquals(
@@ -100,6 +120,10 @@ testSuite({
     assertEquals(60, bidi.getOffsetStart(bodyChild));
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testFixedBodyChildRtl() {
     document.documentElement.dir = 'rtl';
     document.body.dir = 'rtl';
@@ -108,6 +132,10 @@ testSuite({
     assertEquals(
         userAgent.GECKO ? document.body : null, bodyChild.offsetParent);
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     let expectedOffsetStart =
         dom.getViewportSize().width - 60 - bodyChild.offsetWidth;
 

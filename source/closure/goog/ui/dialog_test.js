@@ -115,6 +115,7 @@ testSuite({
     mockClock.dispose();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testCrossFrameFocus() {
     // Firefox (3.6, maybe future versions) fails this test when there are too
     // many other test files being run concurrently.
@@ -122,6 +123,10 @@ testSuite({
       return;
     }
     dialog.setVisible(false);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     const iframeWindow = dom.getElement('f').contentWindow;
     const iframeInput =
         dom.getElementsByTagName(TagName.INPUT, iframeWindow.document)[0];
@@ -301,6 +306,7 @@ testSuite({
     assertTrue('Should have gotten event on the link', call);
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testPreventDefaultedSelectCausesStopPropagation() {
     dialog.setButtonSet(Dialog.ButtonSet.OK_CANCEL);
 
@@ -361,7 +367,9 @@ testSuite({
     assertTrue(selectCalled);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testShiftTabAtTopSetsUpWrapAndDoesNotPreventPropagation() {
+    /** @suppress {visibility} suppression added to enable type checking */
     dialog.setupBackwardTabWrap = recordFunction();
     let shiftTabRecorder = recordFunction();
 
@@ -413,6 +421,7 @@ testSuite({
     assertTrue(wasCalled);
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testCannedButtonSets() {
     dialog.setButtonSet(Dialog.ButtonSet.OK);
     assertButtons([Dialog.DefaultButtonKeys.OK]);
@@ -481,6 +490,7 @@ testSuite({
     let isDefault = false;
     const buttonSetOne = new Dialog.ButtonSet().set(key, msg, isDefault);
     dialog.setButtonSet(buttonSetOne);
+    /** @suppress {visibility} suppression added to enable type checking */
     const defaultClassName = goog.getCssName(buttonSetOne.class_, 'default');
     const buttonOne = buttonSetOne.getButton(key);
     assertNotEquals(defaultClassName, buttonOne.className);
@@ -491,6 +501,7 @@ testSuite({
     assertEquals(defaultClassName, buttonTwo.className);
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testGetButton() {
     dialog.setButtonSet(Dialog.ButtonSet.OK);
     const buttons = document.getElementsByName(Dialog.DefaultButtonKeys.OK);
@@ -499,6 +510,7 @@ testSuite({
         dialog.getButtonSet().getButton(Dialog.DefaultButtonKeys.OK));
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testGetAllButtons() {
     dialog.setButtonSet(Dialog.ButtonSet.YES_NO_CANCEL);
     const buttons =
@@ -508,6 +520,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSetButtonEnabled() {
     const buttonSet = Dialog.ButtonSet.createYesNoCancel();
     dialog.setButtonSet(buttonSet);
@@ -518,6 +534,10 @@ testSuite({
     assertFalse(buttonSet.getButton(Dialog.DefaultButtonKeys.NO).disabled);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSetAllButtonsEnabled() {
     const buttonSet = Dialog.ButtonSet.createContinueSaveCancel();
     dialog.setButtonSet(buttonSet);
@@ -542,6 +562,7 @@ testSuite({
         dom.getElementsByTagNameAndClass(TagName.IFRAME).length;
     // generate a new dialog
     dialog.dispose();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     dialog = new Dialog(null, true /* iframe mask */);
     dialog.setVisible(true);
 
@@ -560,6 +581,7 @@ testSuite({
         dom.getElementsByTagNameAndClass(TagName.IFRAME).length;
     // generate a new dialog
     dialog.dispose();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     dialog = new Dialog(null, true /* iframe mask */);
     dialog.setModal(false);
     assertAriaHidden(false);
@@ -579,6 +601,7 @@ testSuite({
 
   testSwapModalForOpenDialog() {
     dialog.dispose();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     dialog = new Dialog(null, true /* iframe mask */);
     assertAriaHidden(false);
     dialog.setVisible(true);
@@ -616,6 +639,7 @@ testSuite({
         style.isElementShown(dialog.getBackgroundElement()));
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testButtonSetOkFiresDialogEventOnEscape() {
     dialog.setButtonSet(Dialog.ButtonSet.OK);
     let wasCalled = false;
@@ -627,6 +651,10 @@ testSuite({
     assertTrue(wasCalled);
   },
 
+  /**
+     @suppress {missingProperties,visibility} suppression added to enable type
+     checking
+   */
   testHideButtons_afterRender() {
     dialog.setButtonSet(Dialog.ButtonSet.OK);
     assertTrue(style.isElementShown(dialog.buttonEl_));
@@ -636,6 +664,10 @@ testSuite({
     assertTrue(style.isElementShown(dialog.buttonEl_));
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testHideButtons_beforeRender() {
     dialog.dispose();
 
@@ -647,6 +679,10 @@ testSuite({
     assertTrue(style.isElementShown(dialog.buttonEl_));
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testHideButtons_beforeDecorate() {
     dialog.dispose();
 
@@ -659,6 +695,7 @@ testSuite({
     assertTrue(style.isElementShown(dialog.buttonEl_));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testAriaLabelledBy_render() {
     dialog.dispose();
 
@@ -671,6 +708,7 @@ testSuite({
         aria.getState(dialog.getElement(), 'labelledby'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testAriaLabelledBy_decorate() {
     dialog.dispose();
 
@@ -684,6 +722,7 @@ testSuite({
         aria.getState(dialog.getElement(), 'labelledby'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPreferredAriaRole_renderDefault() {
     dialog.dispose();
 
@@ -694,6 +733,7 @@ testSuite({
         dialog.getPreferredAriaRole(), aria.getRole(dialog.getElement()));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPreferredAriaRole_decorateDefault() {
     dialog.dispose();
 
@@ -704,6 +744,7 @@ testSuite({
         dialog.getPreferredAriaRole(), aria.getRole(dialog.getElement()));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPreferredAriaRole_renderOverride() {
     dialog.dispose();
 
@@ -714,6 +755,7 @@ testSuite({
     assertEquals(Role.ALERTDIALOG, aria.getRole(dialog.getElement()));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPreferredAriaRole_decorateOverride() {
     dialog.dispose();
 
@@ -740,6 +782,7 @@ testSuite({
     assertEquals(0.5, style.getOpacity(dialog.getBackgroundElement()));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDraggableStyle() {
     assertTrue(
         'draggable CSS class is set',
@@ -750,10 +793,15 @@ testSuite({
         classlist.contains(dialog.titleEl_, 'modal-dialog-title-draggable'));
   },
 
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
   testDraggingLifecycle() {
     dialog.dispose();
 
     dialog = new Dialog();
+    /** @suppress {visibility} suppression added to enable type checking */
     dialog.setDraggerLimits_ = recordFunction();
     dialog.createDom();
     assertNull('dragger is not created in createDom', dialog.dragger_);
@@ -795,6 +843,7 @@ testSuite({
     assertTrue(dialog.isVisible());
 
     const buttonSet = dialog.getButtonSet();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const button = buttonSet.getButton(buttonSet.getDefault());
 
     // The button event fires while the animation is still going.

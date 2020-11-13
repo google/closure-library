@@ -30,6 +30,7 @@ testSuite({
     testHelper = new TestHelper(field);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   setUp() {
     testHelper.setUpEditableElement();
     editableField = new FieldMock();
@@ -45,6 +46,10 @@ testSuite({
     testHelper.tearDownEditableElement();
   },
 
+  /**
+     @suppress {missingProperties} suppression added to enable type
+     checking
+   */
   testHeaderShortcuts() {
     dom.setTextContent(field, 'myText');
 
@@ -64,11 +69,15 @@ testSuite({
     // Bypass EditableField's execCommand and directly call
     // basicTextFormatter's.  Future version of headerformatter will include
     // that code in its own execCommand.
-    editableField.$does(() => {
-      btf.execCommandInternal(
-          BasicTextFormatter.COMMAND.FORMAT_BLOCK,
-          HeaderFormatter.HEADER_COMMAND.H1);
-    });
+    editableField.$does(/**
+                           @suppress {visibility} suppression added to enable
+                           type checking
+                         */
+                        () => {
+                          btf.execCommandInternal(
+                              BasicTextFormatter.COMMAND.FORMAT_BLOCK,
+                              HeaderFormatter.HEADER_COMMAND.H1);
+                        });
 
     const event = new LooseMock(BrowserEvent);
     if (userAgent.GECKO) {

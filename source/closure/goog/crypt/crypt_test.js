@@ -88,7 +88,7 @@ testSuite({
    * Array<number>.
    */
   testUint8ArrayToString() {
-    if (!goog.global.Uint8Array) {
+    if (!globalThis.Uint8Array) {
       // Uint8Array not supported.
       return;
     }
@@ -139,7 +139,7 @@ testSuite({
      Same as testByteArrayToHex but with Uint8Array instead of Array<number>.
    */
   testUint8ArrayToHex() {
-    if (goog.global.Uint8Array === undefined) {
+    if (globalThis.Uint8Array === undefined) {
       // Uint8Array not supported.
       return;
     }
@@ -164,7 +164,7 @@ testSuite({
 
   /** Same as testXorByteArray but with Uint8Array instead of Array<number>. */
   testXorUint8Array() {
-    if (goog.global.Uint8Array === undefined) {
+    if (globalThis.Uint8Array === undefined) {
       // Uint8Array not supported.
       return;
     }

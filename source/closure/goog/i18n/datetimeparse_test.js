@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire}
+ */
 goog.module('goog.i18n.DateTimeParseTest');
 goog.setTestOnly();
 

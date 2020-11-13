@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.ui.SelectionModelTest');
 goog.setTestOnly();
 
@@ -211,6 +216,7 @@ testSuite({
   },
 
   testSelectionHandler() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const myRecordFunction = new recordFunction();
 
     selectionModel.setSelectionHandler(myRecordFunction);

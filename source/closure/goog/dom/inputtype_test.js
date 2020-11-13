@@ -25,6 +25,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testTypes() {
     assertEquals(InputType.TEXT, document.getElementById('textinput').type);
     // Not all browsers support the time input type.

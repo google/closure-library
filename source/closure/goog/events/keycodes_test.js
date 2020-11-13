@@ -73,6 +73,7 @@ testSuite({
         userAgent.WEBKIT || userAgent.EDGE, KeyCodes.isCharacterKey(0));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPhantomKey() {
     // KeyCode 255 deserves its own test to make sure this does not regress,
     // because it's so weird. See the comments in the KeyCode enum.
@@ -154,6 +155,7 @@ testSuite({
  * @return {!BrowserEvent}
  */
 function createEventWithKeyCode(i) {
+  /** @suppress {checkTypes} suppression added to enable type checking */
   const fakeEvent = new BrowserEvent('keydown');
   fakeEvent.keyCode = i;
   return fakeEvent;

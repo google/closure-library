@@ -46,9 +46,9 @@ function createRangeIterator(start, stop) {
 function createRangeIterable(start, stop) {
   const obj = {};
 
-  // Refer to goog.global['Symbol'] because otherwise this
+  // Refer to globalThis['Symbol'] because otherwise this
   // is a parse error in earlier IEs.
-  obj[goog.global['Symbol'].iterator] = () => createRangeIterator(start, stop);
+  obj[globalThis['Symbol'].iterator] = () => createRangeIterator(start, stop);
   return /** @type {!Iterable<number>} */ (obj);
 }
 
@@ -68,7 +68,7 @@ function* rangeGeneratorWithReturn(start, stop) {
 
 /** @return {boolean} */
 function isSymbolDefined() {
-  return !!goog.global['Symbol'];
+  return !!globalThis['Symbol'];
 }
 
 testSuite({

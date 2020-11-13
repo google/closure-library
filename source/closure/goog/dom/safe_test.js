@@ -829,6 +829,10 @@ testSuite({
         'openInWindow should return the created window', fakeWindow, retVal);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testParseFromStringHtml() {
     if (userAgent.IE && !userAgent.isVersionOrHigher('10')) {
       return;
@@ -890,6 +894,10 @@ testSuite({
     });
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCreateContextualFragment() {
     if (userAgent.IE && !userAgent.isVersionOrHigher('11')) {
       return;

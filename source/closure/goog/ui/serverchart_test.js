@@ -448,10 +448,12 @@ testSuite({
     assertArrayEquals(range[top], [0, 10]);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetConvertedValue() {
     const chart = new ServerChart(ServerChart.ChartType.VERTICAL_STACKED_BAR);
 
     assertThrows('No exception thrown when minValue > maxValue', () => {
+      /** @suppress {visibility} suppression added to enable type checking */
       const result =
           chart.getConvertedValue_(90, 24, 3, ServerChart.EncodingType.SIMPLE);
     });
@@ -502,6 +504,10 @@ testSuite({
         chart.getConvertedValue_(201, 1, 200, ServerChart.EncodingType.TEXT));
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testGetChartServerValues() {
     const chart = new ServerChart(ServerChart.ChartType.HORIZONTAL_STACKED_BAR);
     const values = [0, 1, 2, 56, 90, 120];

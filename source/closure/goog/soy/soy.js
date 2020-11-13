@@ -65,7 +65,8 @@ goog.soy.TextTemplate;
  * hand-written code, so that it will be easier to audit the code for cross-site
  * scripting vulnerabilities.
  *
- * @param {?Element} element The element whose content we are rendering into.
+ * @param {?Element|?ShadowRoot} element The element whose content we are
+ *     rendering into.
  * @param {!goog.soy.data.SanitizedContent} templateResult The processed
  *     template of kind HTML or TEXT (which will be escaped).
  * @template ARG_TYPES
@@ -84,7 +85,8 @@ goog.soy.renderHtml = function(element, templateResult) {
  * instead of directly setting innerHTML in your hand-written code, so that it
  * will be easier to audit the code for cross-site scripting vulnerabilities.
  *
- * @param {Element} element The element whose content we are rendering into.
+ * @param {?Element|?ShadowRoot} element The element whose content we are
+ *     rendering into.
  * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj_=): *} template The Soy
  *     template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.

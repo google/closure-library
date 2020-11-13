@@ -1,8 +1,4 @@
 /**
- * @fileoverview
- * @suppress {checkTypes} suppression added to enable type checking
- */
-/**
  * @license
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
@@ -387,7 +383,7 @@ testSuite({
  * Utility method for checking for an ObjectEquals match failure.  Checks that
  * the expected error message was included in the error messages appended to
  * the expectation object.
- * @param {!ArgumentMatcher.ObjectEquals} matcher
+ * @param {?} matcher
  *     The matcher to test against.
  * @param {!Object} matchObject The object to compare.
  * @param {string=} opt_errorMsg The deep object comparison failure message

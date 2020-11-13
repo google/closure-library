@@ -24,6 +24,7 @@ testSuite({
     errorHandler = new ErrorHandler((ex) => {
       lastError = ex;
     });
+    /** @suppress {visibility} suppression added to enable type checking */
     entryPointRegistry.refList_ = [];
   },
 
@@ -63,6 +64,7 @@ testSuite({
 
   testInvalidUnmonitor() {
     entryPointRegistry.monitorAll(errorHandler);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const e = assertThrows(
         'expected error',
         goog.partial(

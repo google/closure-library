@@ -77,9 +77,13 @@ testSuite({
     popup.dispose();
   },
 
-  /** Test menu receives BEFORE_SHOW event before it's displayed. */
+  /**
+     Test menu receives BEFORE_SHOW event before it's displayed.
+     @suppress {visibility} suppression added to enable type checking
+   */
   testBeforeShowEvent() {
     popup.render();
+    /** @suppress {visibility} suppression added to enable type checking */
     const target = popup.createAttachTarget(anchor);
     popup.attach(anchor);
 
@@ -126,7 +130,10 @@ testSuite({
         style.isElementShown(popup.getElement()));
   },
 
-  /** Test the behavior of {@link PopupMenu.isAttachTarget}. */
+  /**
+     Test the behavior of {@link PopupMenu.isAttachTarget}.
+     @suppress {visibility} suppression added to enable type checking
+   */
   testIsAttachTarget() {
     popup.render();
     // Before 'attach' is called.
@@ -144,7 +151,10 @@ testSuite({
         popup.isAttachTarget(anchor));
   },
 
-  /** Tests the behavior of {@link PopupMenu.createAttachTarget}. */
+  /**
+     Tests the behavior of {@link PopupMenu.createAttachTarget}.
+     @suppress {visibility,checkTypes} suppression added to enable type checking
+   */
   testCreateAttachTarget() {
     // Randomly picking parameters.
     const targetCorner = Corner.TOP_END;
@@ -153,12 +163,14 @@ testSuite({
     const margin = new Box(0, 10, 5, 25);
 
     // Simply setting the required parameters.
+    /** @suppress {visibility} suppression added to enable type checking */
     let target = popup.createAttachTarget(anchor);
     assertTrue(popup.isAttachTarget(anchor));
     assertTarget(
         target, anchor, undefined, undefined, EventType.MOUSEDOWN, undefined);
 
     // Creating another target with all the parameters.
+    /** @suppress {visibility} suppression added to enable type checking */
     target = popup.createAttachTarget(
         anchor, targetCorner, menuCorner, contextMenu, margin);
     assertTrue(popup.isAttachTarget(anchor));
@@ -166,6 +178,7 @@ testSuite({
         target, anchor, targetCorner, menuCorner, EventType.MOUSEDOWN, margin);
 
     // Finally, switch up the 'contextMenu'
+    /** @suppress {visibility} suppression added to enable type checking */
     target = popup.createAttachTarget(
         anchor, undefined, undefined, true /*opt_contextMenu*/, undefined);
     assertTarget(
@@ -176,6 +189,7 @@ testSuite({
   testGetAttachTarget() {
     popup.render();
     // Before the menu is attached to the anchor.
+    /** @suppress {visibility} suppression added to enable type checking */
     let target = popup.getAttachTarget(anchor);
     assertTrue(
         'Not expecting a target before the element is attach to the menu',
@@ -188,6 +202,7 @@ testSuite({
     const margin = new Box(0, 10, 5, 25);
 
     popup.attach(anchor, targetCorner, menuCorner, contextMenu, margin);
+    /** @suppress {visibility} suppression added to enable type checking */
     target = popup.getAttachTarget(anchor);
     assertTrue(
         'Failed to get target after attaching element to menu', target != null);
@@ -197,6 +212,7 @@ testSuite({
         target, anchor, targetCorner, menuCorner, EventType.MOUSEDOWN, margin);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSmallViewportSliding() {
     popup.render();
     popup.getElement().style.position = 'absolute';
@@ -223,6 +239,7 @@ testSuite({
     // its upper left corner where we tell it to in all three positions.
     popup.getElement().style.width = `${smallWidth}px`;
 
+    /** @suppress {visibility} suppression added to enable type checking */
     let target = popup.createAttachTarget(anchor);
     popup.attach(anchor);
 
@@ -293,6 +310,7 @@ testSuite({
     anchor.style.left = '24px';
     anchor.style.top = '24px';
     const targetCorner = Corner.TOP_END;
+    /** @suppress {visibility} suppression added to enable type checking */
     target = popup.createAttachTarget(anchor, targetCorner);
     popup.attach(anchor, targetCorner);
     popup.getElement().style.width = `${smallWidth}px`;

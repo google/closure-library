@@ -79,6 +79,7 @@ testSuite({
     handler.listen(tt, PopupBase.EventType.HIDE, eventQueue.enqueue);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   tearDown() {
     // tooltip needs to be hidden as well as disposed of so that it doesn't
     // leave global state hanging around to trip up other tests.
@@ -131,6 +132,7 @@ testSuite({
     assertTrue(eventQueue.isEmpty());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testMultipleTargets() {
     const firstTarget = dom.getElement('hovertarget');
     const secondTarget = dom.getElement('second');
@@ -195,6 +197,7 @@ testSuite({
     assertTrue(eventQueue.isEmpty());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testRequireInteraction() {
     const hoverTarget = dom.getElement('hovertarget');
     const elsewhere = dom.getElement('notpopup');
@@ -250,6 +253,10 @@ testSuite({
         element.parentNode);
   },
 
+  /**
+     @suppress {checkTypes,visibility} suppression added to enable type
+     checking
+   */
   testNested() {
     let ttNested;
     tt.getElement().appendChild(
@@ -328,7 +335,9 @@ testSuite({
     const tooltip = new Tooltip(anchor, 'foo');
     tooltip.getElement().style.position = 'absolute';
 
+    /** @suppress {visibility} suppression added to enable type checking */
     tooltip.cursorPosition.x = 100;
+    /** @suppress {visibility} suppression added to enable type checking */
     tooltip.cursorPosition.y = 100;
     tooltip.showForElement(anchor);
 
@@ -375,6 +384,7 @@ testSuite({
     tt.setElement(null);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testFocusBlurElementsInTooltip() {
     const anchorEl = dom.getElement('hovertarget');
     googDom.setFocusableTabIndex(anchorEl, true);
@@ -400,6 +410,7 @@ testSuite({
     assertEquals('hidden', tt.getElement().style.visibility);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testFocusElementInTooltipThenBackToAnchor() {
     const anchorEl = dom.getElement('hovertarget');
     googDom.setFocusableTabIndex(anchorEl, true);

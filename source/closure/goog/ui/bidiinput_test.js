@@ -17,7 +17,15 @@ testSuite({
   },
 
   tearDown() {
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     document.getElementById('emptyText').value = '';
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     document.getElementById('bidiText').value = 'hello, world!';
   },
 

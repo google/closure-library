@@ -17,6 +17,7 @@ testSuite({
   },
 
   testPadString() {
+    /** @suppress {visibility} suppression added to enable type checking */
     const result = uChar.padString_('abc', 4, '0');
     assertEquals('0abc', result);
   },
@@ -89,12 +90,15 @@ testSuite({
     let result = uChar.fromCharCode(-1);
     assertEquals(null, result);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     result = uChar.fromCharCode(uChar.CODE_POINT_MAX_VALUE_ + 1);
     assertEquals(null, result);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     result = uChar.fromCharCode(null);
     assertEquals(null, result);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     result = uChar.fromCharCode(undefined);
     assertEquals(null, result);
 

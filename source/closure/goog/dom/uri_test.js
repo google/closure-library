@@ -21,12 +21,14 @@ testSuite({
         'https://google.com/test', uri.normalizeUri('https://google.com/test'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetHref_withoutCredentials() {
     const div = document.createElement('div');
     div.innerHTML = '<a href="http://domain.com/">foo</a>';
     assertEquals(uri.getHref(div.children[0]), 'http://domain.com/');
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testGetHref_withCredentials() {
     const div = document.createElement('div');
     div.innerHTML = '<a href="http://user:pass@domain.com/">foo</a>';

@@ -277,6 +277,7 @@ testSuite({
     assertTrue('Empty range is collapsed', range.isCollapsed());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCollapse() {
     let range = Range.createFromNodeContents(dom.getElement('test2'));
     assertFalse('Div range is not collapsed', range.isCollapsed());
@@ -290,6 +291,7 @@ testSuite({
     assertTrue('Empty range is still collapsed', range.isCollapsed());
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testIterator() {
     testingDom.assertNodesMatch(
         Range.createFromNodeContents(dom.getElement('test2')),
@@ -397,6 +399,10 @@ testSuite({
         outer.lastChild.nodeValue.length - 3);
 
     const div = dom.createDom(TagName.DIV, {'style': 'color: red'});
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     const output = range.surroundContents(div);
 
     assertEquals(
@@ -468,6 +474,7 @@ testSuite({
     testingDom.assertHtmlContentsMatch('ABC', outer);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSurroundWithNodes() {
     const outer = dom.getElement('insertTest');
     dom.setTextContent(outer, 'ACE');
@@ -632,6 +639,10 @@ testSuite({
   testRangeBeforeBreak() {
     const container = dom.getElement('rangeAroundBreaks');
     const text = container.firstChild;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     const offset = text.length;
     assertEquals(4, offset);
 

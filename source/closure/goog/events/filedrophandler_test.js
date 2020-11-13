@@ -25,7 +25,12 @@ testSuite({
   setUp() {
     textarea = new GoogEventTarget();
     doc = new GoogEventTarget();
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     textarea.ownerDocument = doc;
+    /** @suppress {checkTypes} suppression added to enable type checking */
     handler = new FileDropHandler(textarea);
     dnd = false;
     files = null;
@@ -41,6 +46,10 @@ testSuite({
     handler.dispose();
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testOneFile() {
     let preventDefault = false;
     const expectedfiles = [{fileName: 'file1.jpg'}];
@@ -86,6 +95,10 @@ testSuite({
     assertEquals(expectedfiles[0].fileName, files[0].fileName);
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testMultipleFiles() {
     let preventDefault = false;
     const expectedfiles = [{fileName: 'file1.jpg'}, {fileName: 'file2.jpg'}];
@@ -132,6 +145,7 @@ testSuite({
     assertEquals(expectedfiles[1].fileName, files[1].fileName);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testNoFiles() {
     let preventDefault = false;
     const dt = {types: ['text']};
@@ -173,6 +187,7 @@ testSuite({
     assertNull(files);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDragEnter() {
     let preventDefault = false;
 
@@ -214,6 +229,10 @@ testSuite({
     assertFalse(preventDefault);
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testPreventDropOutside() {
     let preventDefault = false;
     const dt = {types: ['Files'], files: [{fileName: 'file1.jpg'}]};
@@ -244,6 +263,7 @@ testSuite({
 
     handler.dispose();
     // Create a new FileDropHandler that prevents drops outside the text area.
+    /** @suppress {checkTypes} suppression added to enable type checking */
     handler = new FileDropHandler(textarea, true);
 
     // Assert that default actions are now prevented on dragenter on the
@@ -273,6 +293,7 @@ testSuite({
     assertEquals('none', dt.dropEffect);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEffectAllowedExceptionIsCaught() {
     // This bug was only affecting IE10+.
     if (!userAgent.IE || !userAgent.isVersionOrHigher(10)) {

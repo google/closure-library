@@ -29,7 +29,10 @@ let savedHtml;
 let editor;
 let field1;
 
-/** Assert that the prepared contents matches the expected. */
+/**
+ * Assert that the prepared contents matches the expected.
+ * @suppress {visibility} suppression added to enable type checking
+ */
 function assertPreparedContents(expected, original, tag = undefined) {
   const field = makeField('field1', tag);
   field.makeEditable();
@@ -39,7 +42,7 @@ function assertPreparedContents(expected, original, tag = undefined) {
 
 /**
  * Selects the node at the given id, and simulates an ENTER keypress.
- * @param {googe.editor.Field} field The field with the node.
+ * @param {?} field The field with the node.
  * @param {string} id A DOM id.
  * @return {boolean} Whether preventDefault was called on the event.
  */
@@ -72,6 +75,8 @@ function makeField(id, tag = undefined) {
  *     DOM.
  * @param {boolean=} opt_goToRoot True if the root argument for splitDom should
  *     be excluded.
+ * @suppress {checkTypes,strictMissingProperties} suppression added to enable
+ * type checking
  */
 function helpTestSplit(
     offset, firstHalfString, secondHalfString, isAppend, goToBody = undefined) {
@@ -81,8 +86,10 @@ function helpTestSplit(
 
   const italic = dom.getElementsByTagName(TagName.I, node)[0].firstChild;
 
+  /** @suppress {visibility} suppression added to enable type checking */
   const splitFn = isAppend ? TagOnEnterHandler.splitDomAndAppend_ :
                              TagOnEnterHandler.splitDom_;
+  /** @suppress {checkTypes} suppression added to enable type checking */
   const secondHalf = splitFn(italic, offset, goToBody ? undefined : node);
 
   if (goToBody) {
@@ -431,6 +438,7 @@ testSuite({
     });
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSplitDomAtElement() {
     const node = dom.createElement(TagName.DIV);
     node.innerHTML = '<div>abc<br>def</div>';
@@ -444,6 +452,7 @@ testSuite({
     dom.removeNode(node);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSplitDomAtElementStart() {
     const node = dom.createElement(TagName.DIV);
     node.innerHTML = '<div>abc<br>def</div>';
@@ -457,6 +466,7 @@ testSuite({
     dom.removeNode(node);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSplitDomAtChildlessElement() {
     const node = dom.createElement(TagName.DIV);
     node.innerHTML = '<div>abc<br>def</div>';
@@ -471,6 +481,7 @@ testSuite({
     dom.removeNode(node);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testReplaceWhiteSpaceWithNbsp() {
     const node = dom.createElement(TagName.DIV);
     const textNode = document.createTextNode('');

@@ -27,6 +27,7 @@ testSuite({
     plugin.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testRegisterFieldObject() {
     plugin.registerFieldObject(fieldObject);
     assertEquals(
@@ -38,6 +39,7 @@ testSuite({
         plugin.isEnabled(fieldObject));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testUnregisterFieldObject() {
     plugin.registerFieldObject(fieldObject);
     plugin.enable(fieldObject);
@@ -87,6 +89,10 @@ testSuite({
         plugin.isSupportedCommand('+indent'));
   },
 
+  /**
+     @suppress {missingProperties} suppression added to enable type
+     checking
+   */
   testExecCommand() {
     const mockField = new StrictMock(Field);
     plugin.registerFieldObject(mockField);
@@ -103,6 +109,7 @@ testSuite({
     let passedArg;
     let passedCommand;
 
+    /** @suppress {visibility} suppression added to enable type checking */
     plugin.execCommandInternal = (command, arg) => {
       passedCommand = command;
       passedArg = arg;
@@ -112,7 +119,8 @@ testSuite({
     // Verify that execCommand dispatched the expected events.
     mockField.$verify();
     mockField.$reset();
-    // Verify that execCommandInternal was called with the correct arguments.
+    // Verify that execCommandInternal was called with the correct
+    // arguments.
     assertEquals('+indent', passedCommand);
     assertTrue(passedArg);
 
@@ -121,15 +129,23 @@ testSuite({
     plugin.execCommand('+outdent', false);
     // Verify that execCommand on a silent plugin dispatched no events.
     mockField.$verify();
-    // Verify that execCommandInternal was called with the correct arguments.
+    // Verify that execCommandInternal was called with the correct
+    // arguments.
     assertEquals('+outdent', passedCommand);
     assertFalse(passedArg);
   },
 
-  /** Regression test for http://b/issue?id=1471355 . */
+  /**
+     Regression test for http://b/issue?id=1471355 .
+     @suppress {missingProperties} suppression added to enable type checking
+   */
   testExecCommandException() {
     const mockField = new StrictMock(Field);
     plugin.registerFieldObject(mockField);
+    /**
+     * @suppress {visibility,duplicate} suppression added to enable type
+     * checking
+     */
     plugin.execCommandInternal = () => {
       throw 1;
     };
@@ -151,6 +167,7 @@ testSuite({
     mockField.$verify();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDisposed() {
     plugin.registerFieldObject(fieldObject);
     plugin.dispose();

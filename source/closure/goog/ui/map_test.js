@@ -66,6 +66,7 @@ testSuite({
         'cleared so it should not contain \'a\' key', !m.containsKey('a'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testAddAll() {
     const m = new StructsMap;
     m.addAll({a: 0, b: 1, c: 2, d: 3});
@@ -89,16 +90,19 @@ testSuite({
   },
 
   testConstructorWithVarArgs() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     let m = new StructsMap('a', 1);
     assertTrue('constr with var_args so it should not be empty', !m.isEmpty());
     assertEquals('constr with var_args', 1, m.get('a'));
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     m = new StructsMap('a', 1, 'b', 2);
     assertTrue('constr with var_args so it should not be empty', !m.isEmpty());
     assertEquals('constr with var_args', 1, m.get('a'));
     assertEquals('constr with var_args', 2, m.get('b'));
 
     assertThrows('Odd number of arguments is not allowed', () => {
+      /** @suppress {checkTypes} suppression added to enable type checking */
       const m = new StructsMap('a', 1, 'b');
     });
   },

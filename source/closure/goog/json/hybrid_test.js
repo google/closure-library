@@ -45,13 +45,13 @@ testSuite({
     propertyReplacer.set(googJson, 'parse', googJsonParse);
     propertyReplacer.set(googJson, 'serialize', googJsonSerialize);
 
-    jsonParse = recordFunction(goog.global.JSON && goog.global.JSON.parse);
+    jsonParse = recordFunction(globalThis.JSON && globalThis.JSON.parse);
     jsonStringify =
-        recordFunction(goog.global.JSON && goog.global.JSON.stringify);
+        recordFunction(globalThis.JSON && globalThis.JSON.stringify);
 
-    if (goog.global.JSON) {
-      propertyReplacer.set(goog.global.JSON, 'parse', jsonParse);
-      propertyReplacer.set(goog.global.JSON, 'stringify', jsonStringify);
+    if (globalThis.JSON) {
+      propertyReplacer.set(globalThis.JSON, 'parse', jsonParse);
+      propertyReplacer.set(globalThis.JSON, 'stringify', jsonStringify);
     }
   },
 
@@ -83,7 +83,7 @@ testSuite({
   },
 
   testParseNativeJsonAbsent() {
-    propertyReplacer.set(goog.global, 'JSON', null);
+    propertyReplacer.set(globalThis, 'JSON', null);
 
     parseJson();
 
@@ -93,7 +93,7 @@ testSuite({
   },
 
   testStringifyNativeJsonAbsent() {
-    propertyReplacer.set(goog.global, 'JSON', null);
+    propertyReplacer.set(globalThis, 'JSON', null);
 
     serializeJson();
 

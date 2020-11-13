@@ -55,9 +55,11 @@ testSuite({
     aria.removeState(main, State.HIDDEN);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testOrientationChange() {
     let i = 0;
     popup = new ModalPopup();
+    /** @suppress {visibility} suppression added to enable type checking */
     popup.resizeBackgroundTask_ = () => {
       i++;
     };
@@ -196,6 +198,10 @@ testSuite({
       beforeShowCallCount++;
     };
     let showCallCount = false;
+    /**
+     * @suppress {strictPrimitiveOperators} suppression added to enable type
+     * checking
+     */
     const showHandler = () => {
       assertEquals(
           'BEFORE_SHOW is not dispatched before SHOW', 1, beforeShowCallCount);
@@ -221,6 +227,10 @@ testSuite({
       beforeHideCallCount++;
     };
     let hideCallCount = false;
+    /**
+     * @suppress {strictPrimitiveOperators} suppression added to enable type
+     * checking
+     */
     const hideHandler = () => {
       assertEquals(
           'BEFORE_HIDE is not dispatched before HIDE', 1, beforeHideCallCount);
@@ -423,6 +433,7 @@ testSuite({
     }
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testSetupBackwardTabWrapResetsFlagAfterTimeout() {
     popup.setupBackwardTabWrap();
     assertTrue(

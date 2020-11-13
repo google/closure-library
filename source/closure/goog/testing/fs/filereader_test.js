@@ -33,7 +33,7 @@ let reader;
 let observer;
 
 /** @const */
-const hasArrayBuffer = (goog.global.ArrayBuffer !== undefined);
+const hasArrayBuffer = (globalThis.ArrayBuffer !== undefined);
 
 testSuite({
   setUp() {

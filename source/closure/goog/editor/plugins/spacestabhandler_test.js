@@ -24,6 +24,7 @@ let tabHandler;
 let testHelper;
 
 testSuite({
+  /** @suppress {checkTypes} suppression added to enable type checking */
   setUp() {
     field = dom.getElement('field');
     editableField = new FieldMock();
@@ -42,6 +43,7 @@ testSuite({
     tabHandler.dispose();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testSelectedTextIndent() {
     dom.setTextContent(field, 'Test');
 
@@ -49,7 +51,15 @@ testSuite({
     testHelper.select(testText, 0, testText, 4);
 
     const event = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.keyCode = KeyCodes.TAB;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.shiftKey = false;
 
     editableField.stopChangeEvents(true, true);
@@ -73,6 +83,7 @@ testSuite({
     event.$verify();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testCursorIndent() {
     dom.setTextContent(field, 'Test');
 
@@ -80,7 +91,15 @@ testSuite({
     testHelper.select(testText, 2, testText, 2);
 
     const event = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.keyCode = KeyCodes.TAB;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.shiftKey = false;
 
     editableField.stopChangeEvents(true, true);
@@ -103,6 +122,10 @@ testSuite({
     event.$verify();
   },
 
+  /**
+     @suppress {checkTypes,missingProperties} suppression added to enable type
+     checking
+   */
   testShiftTabNoOp() {
     dom.setTextContent(field, 'Test');
 
@@ -111,7 +134,15 @@ testSuite({
     range.select();
 
     const event = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.keyCode = KeyCodes.TAB;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.shiftKey = true;
 
     event.preventDefault();
@@ -135,7 +166,15 @@ testSuite({
     testHelper.select(testText, 2, testText, 2);
 
     const event = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.keyCode = KeyCodes.TAB;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.shiftKey = false;
 
     editableField.$replay();
@@ -157,7 +196,15 @@ testSuite({
     testHelper.select(field.firstChild, 0, testText, 2);
 
     const event = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.keyCode = KeyCodes.TAB;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.shiftKey = false;
 
     editableField.$replay();

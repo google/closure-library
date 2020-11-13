@@ -19,7 +19,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 /** @type {!MockControl} */
 let mockControl;
 
-/** @type {!goog.testing.FunctionMock} */
+/** @type {?} */
 let fetchMock;
 
 /** @type {!FetchXmlHttpFactory} */
@@ -53,6 +53,10 @@ function verifySend(
     let lastState;
     let lastBufferSize = 0;
     let numberOfUpdates = 0;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     xhr.onreadystatechange = () => {
       if (xhr.readyState === FetchXmlHttp.RequestState.HEADER_RECEIVED) {
         lastState = xhr.readyState;
@@ -171,13 +175,16 @@ testSuite({
     return product.CHROME && isVersion(43);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   setUp() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
     mockControl = new MockControl();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     worker = {};
     fetchMock = mockControl.createFunctionMock('fetch');
     worker.fetch = fetchMock;
     stubs = new PropertyReplacer();
-    stubs.replace(goog.global, 'fetch', fetchMock);
+    stubs.replace(globalThis, 'fetch', fetchMock);
     factory = new FetchXmlHttpFactory(worker);
   },
 
@@ -186,7 +193,10 @@ testSuite({
     stubs.reset();
   },
 
-  /** Verifies the open method. */
+  /**
+     Verifies the open method. @suppress {checkTypes} suppression added to
+     enable type checking
+   */
   testOpen() {
     mockControl.$replayAll();
 
@@ -195,6 +205,7 @@ testSuite({
     assertEquals('', xhr.responseText);
     assertEquals(xhr.readyState, FetchXmlHttp.RequestState.UNSENT);
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const onReadyStateChangeHandler = new recordFunction();
     xhr.onreadystatechange = onReadyStateChangeHandler;
     xhr.open('GET', 'https://www.google.com', true /* opt_async */);
@@ -401,18 +412,34 @@ testSuite({
     });
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testWithCredentials_set() {
     const xhr = factory.createInstance();
 
     assertEquals(xhr.getCredentialsMode(), undefined);
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     xhr.withCredentials = true;
     assertEquals(xhr.getCredentialsMode(), 'include');
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     xhr.withCredentials = false;
     assertEquals(xhr.getCredentialsMode(), 'same-origin');
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testWithCredentials_get() {
     const xhr = factory.createInstance();
 

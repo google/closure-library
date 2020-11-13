@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.ui.ac.RendererTest');
 goog.setTestOnly();
 
@@ -97,7 +102,9 @@ testSuite({
 
   setUp() {
     renderer = new Renderer();
+    /** @suppress {visibility} suppression added to enable type checking */
     renderer.rowDivs_ = [];
+    /** @suppress {visibility} suppression added to enable type checking */
     renderer.target_ = target;
   },
 
@@ -504,6 +511,7 @@ testSuite({
     assertLastNodeText(node, 'nderson');
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testMenuFadeDuration() {
     renderer.maybeCreateElement_();
 
@@ -553,6 +561,10 @@ testSuite({
     assertTrue(hideAnimCalled);
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testAriaTags() {
     renderer.maybeCreateElement_();
 
@@ -575,6 +587,7 @@ testSuite({
     assertEquals('', aria.getState(target, State.OWNS));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testHiliteRowWithDefaultRenderer() {
     renderer.renderRows(rendRows, '');
     renderer.hiliteRow(2);
@@ -583,6 +596,7 @@ testSuite({
         classlist.contains(renderer.rowDivs_[2], renderer.activeClassName));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testHiliteRowWithCustomRenderer() {
     goog.dispose(renderer);
 

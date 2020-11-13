@@ -56,7 +56,10 @@ class TestRenderer extends ControlRenderer {
     return 'goog-base';
   }
 
-  /** @override */
+  /**
+   * @override
+   * @suppress {checkTypes} suppression added to enable type checking
+   */
   getIe6ClassCombinations() {
     return TestRenderer.IE6_CLASS_COMBINATIONS;
   }
@@ -376,6 +379,7 @@ testSuite({
         classlist.get(control.getElement()));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaRole() {
     sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
 
@@ -390,6 +394,7 @@ testSuite({
         'Element must have expected ARIA role', Role.BUTTON, aria.getRole(bar));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStatesHidden() {
     sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
     const foo = dom.getElement('foo');
@@ -409,6 +414,7 @@ testSuite({
         aria.getState(foo, State.HIDDEN));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStatesDisabled() {
     sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
     const foo = dom.getElement('foo');
@@ -428,6 +434,7 @@ testSuite({
         aria.getState(foo, State.DISABLED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStatesSelected() {
     sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
     const foo = dom.getElement('foo');
@@ -448,6 +455,7 @@ testSuite({
         aria.getState(foo, State.SELECTED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStatesChecked() {
     sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
     const foo = dom.getElement('foo');
@@ -468,6 +476,7 @@ testSuite({
         aria.getState(foo, State.CHECKED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStatesExpanded() {
     sandbox.innerHTML = '<div id="foo">Foo</div><div id="bar">Bar</div>';
     const foo = dom.getElement('foo');
@@ -488,6 +497,7 @@ testSuite({
         aria.getState(foo, State.EXPANDED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAllowTextSelection() {
     sandbox.innerHTML = '<div id="foo"><span>Foo</span></div>';
     const foo = dom.getElement('foo');
@@ -653,6 +663,7 @@ testSuite({
         ['goog-button', 'goog-base'], classlist.get(element));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testUpdateAriaStateDisabled() {
     control.createDom();
     const element = control.getElement();
@@ -681,6 +692,7 @@ testSuite({
         aria.getState(element, State.DISABLED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStatesDecorate_ariaStateDisabled() {
     sandbox.innerHTML = '<div id="foo" class="app goog-base-disabled"></div>';
     const element = dom.getElement('foo');
@@ -694,6 +706,7 @@ testSuite({
         aria.getState(element, State.DISABLED));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testUpdateAriaStateSelected() {
     control.createDom();
     const element = control.getElement();
@@ -738,6 +751,7 @@ testSuite({
         aria.getState(element, State.SELECTED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStatesDecorate_ariaStateSelected() {
     control.setSupportedState(Component.State.SELECTED, true);
 
@@ -754,6 +768,7 @@ testSuite({
         aria.getState(element, State.SELECTED));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testUpdateAriaStateChecked() {
     control.createDom();
     const element = control.getElement();
@@ -784,6 +799,7 @@ testSuite({
         aria.getState(element, State.CHECKED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStatesDecorate_ariaStateChecked() {
     sandbox.innerHTML = '<div id="foo" class="app goog-control-checked"></div>';
     const element = dom.getElement('foo');
@@ -797,6 +813,7 @@ testSuite({
         aria.getState(element, State.CHECKED));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testUpdateAriaStateOpened() {
     control.createDom();
     const element = control.getElement();
@@ -827,6 +844,7 @@ testSuite({
         aria.getState(element, State.EXPANDED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStatesDecorate_ariaStateOpened() {
     sandbox.innerHTML = '<div id="foo" class="app goog-base-open"></div>';
     const element = dom.getElement('foo');
@@ -841,6 +859,7 @@ testSuite({
         aria.getState(element, State.EXPANDED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStateRoleNotInMap() {
     sandbox.innerHTML = '<div id="foo" role="option">Hello, world!</div>';
     control.setRenderer(controlRenderer);
@@ -862,6 +881,7 @@ testSuite({
         aria.getState(element, State.CHECKED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStateRoleInMapMatches() {
     sandbox.innerHTML = '<div id="foo" role="checkbox">Hello, world!</div>';
     control.setRenderer(controlRenderer);
@@ -883,6 +903,7 @@ testSuite({
         aria.getState(element, State.CHECKED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSetAriaStateRoleInMapNotMatches() {
     sandbox.innerHTML = '<div id="foo" role="button">Hello, world!</div>';
     control.setRenderer(controlRenderer);
@@ -907,6 +928,10 @@ testSuite({
         aria.getState(element, State.CHECKED));
   },
 
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testToggleAriaStateMap() {
     const map = googObject.create(
         Role.BUTTON, State.PRESSED, Role.CHECKBOX, State.CHECKED,
@@ -1058,6 +1083,7 @@ testSuite({
         'goog-base', testRenderer.getStructuralCssClass());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetClassNames() {
     // These tests use assertArrayEquals, because the order is significant.
     assertArrayEquals(
@@ -1070,6 +1096,7 @@ testSuite({
         ['goog-button', 'goog-base'], testRenderer.getClassNames(control));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetClassNamesForControlWithState() {
     control.setStateInternal(Component.State.HOVER | Component.State.ACTIVE);
 
@@ -1086,6 +1113,7 @@ testSuite({
         testRenderer.getClassNames(control));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetClassNamesForControlWithExtraClassNames() {
     control.addClassName('foo');
     control.addClassName('bar');
@@ -1102,6 +1130,7 @@ testSuite({
         testRenderer.getClassNames(control));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetClassNamesForControlWithStateAndExtraClassNames() {
     control.setStateInternal(Component.State.HOVER | Component.State.ACTIVE);
     control.addClassName('foo');
@@ -1133,6 +1162,7 @@ testSuite({
         testRenderer.getClassNames(control));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetClassNamesForState() {
     // These tests use assertArrayEquals, because the order is significant.
     assertArrayEquals(
@@ -1149,6 +1179,10 @@ testSuite({
             Component.State.HOVER | Component.State.CHECKED));
   },
 
+  /**
+     @suppress {missingProperties,visibility,checkTypes} suppression added to
+     enable type checking
+   */
   testGetClassForState() {
     const renderer = new ControlRenderer();
     assertUndefined(
@@ -1163,6 +1197,10 @@ testSuite({
         renderer.getClassForState('foo'));
   },
 
+  /**
+     @suppress {missingProperties,visibility} suppression added to enable type
+     checking
+   */
   testGetStateFromClass() {
     const renderer = new ControlRenderer();
     assertUndefined(

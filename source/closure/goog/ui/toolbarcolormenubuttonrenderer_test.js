@@ -27,6 +27,7 @@ testSuite({
     harness.dispose();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEquality() {
     harness.attachControlAndRender(new ToolbarColorMenuButton('Foo'));
     harness.attachControlAndDecorate(new ToolbarColorMenuButton());

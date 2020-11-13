@@ -185,8 +185,8 @@ RelativeDateTimeFormat.prototype.formatPolyfill_ = function(
   // Formats using Closure Javascript. Check for forcing numeric and having
   // relative value with the given quantity.
   if (!useNumeric && rdtfUnitPattern && rdtfUnitPattern.R &&
-      rdtfUnitPattern.R[quantity]) {
-    return rdtfUnitPattern.R[quantity];
+      rdtfUnitPattern.R['' + quantity]) {
+    return rdtfUnitPattern.R['' + quantity];
   } else {
     // Direction data doesn't exist. Fallback to format numeric.
     return this.formatNumericInternal_(quantity, rdtfUnitPattern);
@@ -408,8 +408,8 @@ RelativeDateTimeFormat.prototype.isOffsetDefinedForUnit = function(
   if (typeof (offset) == 'string') {
     offset = Number(offset);
   }
-  if (rdtfUnitPattern && rdtfUnitPattern.R && rdtfUnitPattern.R[offset]) {
-    return rdtfUnitPattern.R[offset];
+  if (rdtfUnitPattern && rdtfUnitPattern.R && rdtfUnitPattern.R['' + offset]) {
+    return rdtfUnitPattern.R['' + offset];
   } else {
     return undefined;
   }

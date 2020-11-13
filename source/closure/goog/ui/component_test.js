@@ -33,6 +33,7 @@ testSuite({
     propertyReplacer.reset();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testConstructor() {
     assertTrue(
         'Instance must be non-null and have the expected class',
@@ -42,6 +43,7 @@ testSuite({
         component.dom_ instanceof DomHelper);
 
     const fakeDom = {};
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const otherComponent = new Component(fakeDom);
     assertEquals(
         'DOM helper must refer to expected object', fakeDom,
@@ -50,6 +52,7 @@ testSuite({
     otherComponent.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetId() {
     assertNull('Component ID should be initialized to null', component.id_);
     const id = component.getId();
@@ -295,18 +298,21 @@ testSuite({
   },
 
   testDecorate_AllowDetached_NotInDocument() {
-    Component.ALLOW_DETACHED_DECORATION = true;
+    /** Computed properties to avoid compiler checks of the define value. */
+    Component['ALLOW_DETACHED_DECORATION'] = true;
     const element = dom.createElement(TagName.DIV);
     component.decorate(element);
     assertFalse(
         'Component should not call enterDocument when decorated ' +
             'with an element that is not in the document.',
         component.isInDocument());
-    Component.ALLOW_DETACHED_DECORATION = false;
+    /** Computed properties to avoid compiler checks of the define value. */
+    Component['ALLOW_DETACHED_DECORATION'] = false;
   },
 
   testDecorate_AllowDetached_InDocument() {
-    Component.ALLOW_DETACHED_DECORATION = true;
+    /** Computed properties to avoid compiler checks of the define value. */
+    Component['ALLOW_DETACHED_DECORATION'] = true;
     const element = dom.createElement(TagName.DIV);
     sandbox.appendChild(element);
     component.decorate(element);
@@ -314,7 +320,8 @@ testSuite({
         'Component should call enterDocument when decorated ' +
             'with an element that is in the document.',
         component.isInDocument());
-    Component.ALLOW_DETACHED_DECORATION = false;
+    /** Computed properties to avoid compiler checks of the define value. */
+    Component['ALLOW_DETACHED_DECORATION'] = false;
   },
 
   testCannotDecorate() {
@@ -344,6 +351,7 @@ testSuite({
         component.wasDecorated());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testDecorateInternal() {
     assertNull('Element must be null by default', component.getElement());
     const element = dom.createElement(TagName.DIV);
@@ -533,6 +541,7 @@ testSuite({
   testGetElementByFragment() {
     component.render(sandbox);
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const element = component.dom_.createDom(
         TagName.DIV, {id: component.makeId('foo')}, 'Hello');
     sandbox.appendChild(element);
@@ -793,6 +802,7 @@ testSuite({
         'Parent must no longer contain this child', component.getChild('a'));
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testMovingChildrenUsingAddChildAt() {
     component.render(sandbox);
 

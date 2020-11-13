@@ -99,6 +99,7 @@ testSuite({
     });
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCreateEmbed_withMonkeypatchedObjectPrototype() {
     stubs.set(Object.prototype, 'foo', 'bar');
     stubs.set(Object.prototype, 'type', 'baz');

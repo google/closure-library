@@ -173,7 +173,7 @@ testSuite({
         {num: 11, truth: false},
       ],
     }];
-    replacer.set(goog.global, 'opera', opera);
+    replacer.set(globalThis, 'opera', opera);
     opera.version = '10.01';
     checkEachUserAgentDetected(userAgents, 'OPERA');
   },

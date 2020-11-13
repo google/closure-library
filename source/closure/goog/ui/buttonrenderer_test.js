@@ -152,6 +152,7 @@ testSuite({
         aria.getState(element, State.DISABLED));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testDecorate() {
     sandbox.innerHTML = '<div id="foo">Foo</div>\n' +
         '<div id="bar" title="Hello, world!">Bar</div>\n' +
@@ -181,6 +182,7 @@ testSuite({
     toggle.dispose();
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCollapse() {
     buttonRenderer.setCollapsed(button, ButtonSide.START);
     assertSameElements(
@@ -197,6 +199,7 @@ testSuite({
         button.getExtraClassNames());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCollapseRtl() {
     button.setRightToLeft(true);
     buttonRenderer.setCollapsed(button, ButtonSide.START);
@@ -214,6 +217,7 @@ testSuite({
         button.getExtraClassNames());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCollapseWithStructuralClass() {
     testRenderer.setCollapsed(button, ButtonSide.BOTH);
     assertSameElements(
@@ -222,6 +226,7 @@ testSuite({
         button.getExtraClassNames());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testUpdateAriaState() {
     const element = buttonRenderer.createDom(button);
     buttonRenderer.updateAriaState(element, Component.State.CHECKED, true);

@@ -161,7 +161,7 @@ testSuite({
   },
 
   testSafeUrlFromMediaSource_createsBlob() {
-    if (!('MediaSource' in goog.global)) {
+    if (!('MediaSource' in globalThis)) {
       return;
     }
     const safeUrl = SafeUrl.fromMediaSource(new MediaSource());
@@ -170,9 +170,10 @@ testSuite({
   },
 
   testSafeUrlFromMediaSource_rejectsBlobs() {
-    if (!('MediaSource' in goog.global)) {
+    if (!('MediaSource' in globalThis)) {
       return;
     }
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const safeUrl =
         SafeUrl.fromMediaSource(new Blob([''], {type: 'text/plain'}));
     const extracted = SafeUrl.unwrap(safeUrl);
@@ -203,6 +204,7 @@ testSuite({
     assertEquals(SafeUrl.INNOCUOUS_STRING, SafeUrl.unwrap(observed));
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testSafeUrlSanitize_sanitizeTelUrl() {
     const vectors = safeUrlTestVectors.TEL_VECTORS;
     for (let i = 0; i < vectors.length; ++i) {
@@ -212,6 +214,7 @@ testSuite({
     }
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testSafeUrlSanitize_sanitizeSshUrl() {
     const vectors = safeUrlTestVectors.SSH_VECTORS;
     for (let i = 0; i < vectors.length; ++i) {
@@ -269,6 +272,7 @@ testSuite({
     assertEquals(SafeUrl.INNOCUOUS_STRING, SafeUrl.unwrap(observed));
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testSafeUrlSanitize_sanitizeSmsUrl() {
     const vectors = safeUrlTestVectors.SMS_VECTORS;
     for (let i = 0; i < vectors.length; ++i) {
@@ -349,6 +353,10 @@ testSuite({
     assertContains('expected object of type SafeUrl', exception.message);
   },
 
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testSafeUrlSanitize_trySanitize() {
     for (const v of safeUrlTestVectors.BASE_VECTORS) {
       const isDataUrl = v.input.match(/^data:/i);
@@ -362,6 +370,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testSafeUrlSanitize_sanitize() {
     for (const v of safeUrlTestVectors.BASE_VECTORS) {
       const observed = SafeUrl.sanitize(v.input);
@@ -369,6 +381,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
   testSafeUrlSanitize_sanitizeAssertUnchanged() {
     for (const v of safeUrlTestVectors.BASE_VECTORS) {
       const isDataUrl = v.input.match(/^data:/i);

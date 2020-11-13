@@ -15,6 +15,7 @@ const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const TestCase = goog.require('goog.testing.TestCase');
 const XhrIo = goog.require('goog.net.XhrIo');
 const XhrIoPool = goog.require('goog.testing.net.XhrIoPool');
+const dispose = goog.require('goog.dispose');
 const testSuite = goog.require('goog.testing.testSuite');
 const testingFs = goog.require('goog.testing.fs');
 
@@ -42,7 +43,7 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(downloader);
+    dispose(downloader);
   },
 
   testDownload() {

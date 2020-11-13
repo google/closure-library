@@ -36,6 +36,10 @@ function assertLabelValue(labelInput, expectedLabel) {
   }
 }
 
+/**
+ * @suppress {strictMissingProperties} suppression added to enable type
+ * checking
+ */
 function isPlaceholderSupported() {
   if (dom.getElement('i').placeholder != null) {
     return true;
@@ -75,6 +79,10 @@ testSuite({
     assertLabelValue(labelInput, 'new label');
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testPlaceholderAttribute() {
     labelInput = new LabelInput();
     labelInput.setLabel('search');
@@ -98,6 +106,10 @@ testSuite({
         labelInput.getElement().placeholder);
   },
 
+  /**
+     @suppress {strictMissingProperties,checkTypes} suppression added to enable
+     type checking
+   */
   testDecorateElementWithExistingPlaceholderAttribute() {
     labelInput = new LabelInput();
     labelInput.setLabel('search');
@@ -123,12 +135,20 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testDecorateElementWithFocus() {
     labelInput = new LabelInput();
     labelInput.setLabel('search');
 
     const decoratedElement = dom.getElement('i');
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     decoratedElement.value = '';
     decoratedElement.focus();
 
@@ -157,6 +177,10 @@ testSuite({
     }
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testDecorateElementWithFocusDelay() {
     if (isPlaceholderSupported()) {
       return;  // Delay only affects the older browsers.
@@ -166,10 +190,15 @@ testSuite({
     labelInput = new LabelInput();
     labelInput.setLabel(placeholder);
     const delay = 150;
+    /** @suppress {visibility} suppression added to enable type checking */
     labelInput.labelRestoreDelayMs = delay;
 
     const decoratedElement = dom.getElement('i');
 
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     decoratedElement.value = '';
     decoratedElement.focus();
 
@@ -195,6 +224,7 @@ testSuite({
         placeholder, labelInput.getElement().value);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testClassName() {
     labelInput = new LabelInput();
 
@@ -234,6 +264,7 @@ testSuite({
     labelInput.enterDocument();
 
     const labelElement = labelInput.getElement();
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const disabledClass =
         goog.getCssName(labelInput.labelCssClassName, 'disabled');
 

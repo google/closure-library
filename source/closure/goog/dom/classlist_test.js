@@ -235,6 +235,7 @@ testSuite({
         'Should have SOMECLASS class', classlist.contains(el, 'SOMECLASS'));
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testEnableNotAddingMultiples() {
     const el = dom.createElement(TagName.DIV);
     classlist.enable(el, 'A', true);

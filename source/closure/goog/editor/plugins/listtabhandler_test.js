@@ -28,6 +28,7 @@ testSuite({
     field = dom.getElement('field');
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   setUp() {
     editableField = new FieldMock();
     // Modal mode behavior tested as part of AbstractTabHandler tests.
@@ -46,6 +47,7 @@ testSuite({
     tabHandler.dispose();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testListIndentInLi() {
     field.innerHTML = '<ul><li>Text</li></ul>';
 
@@ -53,7 +55,15 @@ testSuite({
     testHelper.select(testText, 0, testText, 4);
 
     const event = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.keyCode = KeyCodes.TAB;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.shiftKey = false;
 
     editableField.execCommand(Command.INDENT);
@@ -70,6 +80,7 @@ testSuite({
     event.$verify();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testListIndentContainLi() {
     field.innerHTML = '<ul><li>Text</li></ul>';
 
@@ -77,7 +88,15 @@ testSuite({
     testHelper.select(field.firstChild, 0, testText, 4);
 
     const event = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.keyCode = KeyCodes.TAB;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.shiftKey = false;
 
     editableField.execCommand(Command.INDENT);
@@ -94,6 +113,7 @@ testSuite({
     event.$verify();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testListOutdentInLi() {
     field.innerHTML = '<ul><li>Text</li></ul>';
 
@@ -101,7 +121,15 @@ testSuite({
     testHelper.select(testText, 0, testText, 4);
 
     const event = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.keyCode = KeyCodes.TAB;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.shiftKey = true;
 
     editableField.execCommand(Command.OUTDENT);
@@ -118,6 +146,7 @@ testSuite({
     event.$verify();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testListOutdentContainLi() {
     field.innerHTML = '<ul><li>Text</li></ul>';
 
@@ -125,7 +154,15 @@ testSuite({
     testHelper.select(field.firstChild, 0, testText, 4);
 
     const event = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.keyCode = KeyCodes.TAB;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.shiftKey = true;
 
     editableField.execCommand(Command.OUTDENT);
@@ -149,7 +186,15 @@ testSuite({
     testHelper.select(testText, 0, testText, 4);
 
     const event = new StrictMock(BrowserEvent);
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.keyCode = KeyCodes.TAB;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     event.shiftKey = true;
 
     editableField.$replay();

@@ -11,7 +11,7 @@ const FsBlob = goog.require('goog.testing.fs.Blob');
 const dom = goog.require('goog.dom');
 const testSuite = goog.require('goog.testing.testSuite');
 
-const hasArrayBuffer = (goog.global.ArrayBuffer !== undefined);
+const hasArrayBuffer = (globalThis.ArrayBuffer !== undefined);
 
 testSuite({
   /** @suppress {visibility} suppression added to enable type checking */

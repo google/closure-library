@@ -1,12 +1,13 @@
 /**
- * @fileoverview
- * @suppress {strictMissingProperties,missingProperties} suppression added to
- * enable type checking
- */
-/**
  * @license
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview
+ * @suppress {strictMissingProperties,missingProperties} suppression added to
+ * enable type checking
  */
 
 goog.module('goog.crypt.hash32Test');
@@ -161,10 +162,10 @@ const byteArrays = {
 };
 
 let testCase;
-if (goog.global.G_testRunner) {
+if (globalThis.G_testRunner) {
   testCase = new TestCase(document.title);
   testCase.autoDiscoverTests();
-  goog.global.G_testRunner.initialize(testCase);
+  globalThis.G_testRunner.initialize(testCase);
 }
 testSuite({
   testEncodeInteger() {

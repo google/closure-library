@@ -74,6 +74,7 @@ function makeLoaderSynchronous(loader) {
     originalLoadImage.call(this, request, id);
 
     const event = new GoogEvent(EventType.LOAD);
+    /** @suppress {globalThis} suppression added to enable type checking */
     event.currentTarget = this.imageIdToImageMap_[id];
     loader.onNetworkEvent_(event);
   };
@@ -400,6 +401,7 @@ class TestingClientImageLoader extends GoogEventTarget {
         this.imagesRemaining -= 1;
     }
 
+    /** @suppress {visibility} suppression added to enable type checking */
     this.imageLoaderRemainingSize =
         googObject.getKeys(this.imageLoader_.imageIdToRequestMap_).length;
 

@@ -78,6 +78,10 @@ testSuite({
     const saved = range.saveUsingCarets();
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSavedCaretRange() {
     if (userAgent.IE && !userAgent.isDocumentModeOrHigher(8)) {
       // testSavedCaretRange fails in IE7 unless the source files are loaded in

@@ -55,8 +55,10 @@ testSuite({
     const textNode = testingDom.findTextNode('http://www.google.com/', fieldEl);
     events.fireKeySequence(field.getElement(), KeyCodes.K, {ctrlKey: true});
 
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const href = dom.getElementsByTagName(TagName.A, field.getElement())[0];
     assertEquals('http://www.google.com/', href.href);
+    /** @suppress {visibility} suppression added to enable type checking */
     const bubbleLink = document.getElementById(LinkBubble.TEST_LINK_ID_);
     assertEquals('http://www.google.com/', bubbleLink.innerHTML);
   },

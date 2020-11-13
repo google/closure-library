@@ -46,29 +46,43 @@ function newCleanupGuard() {
 
   return () => {
     // let any timeout queues finish before we check these:
-    window.setTimeout(() => {
-      let propCounter = 0;
+    window.setTimeout(/**
+                         @suppress {checkTypes} suppression added to enable type
+                         checking
+                       */
+                      () => {
+                        let propCounter = 0;
 
-      // All callbacks should have been deleted or be the null function.
-      for (const key in goog.global) {
-        // NOTES: callbacks are stored on goog.global with property
-        // name prefixed with goog.net.Jsonp.CALLBACKS.
-        if (key.indexOf(Jsonp.CALLBACKS) == 0) {
-          const callbackId = Jsonp.getCallbackId_(key);
-          if (goog.global[callbackId] &&
-              goog.global[callbackId] != goog.nullFunction) {
-            propCounter++;
-          }
-        }
-      }
+                        // All callbacks should have been deleted or be the null
+                        // function.
+                        for (const key in globalThis) {
+                          // NOTES: callbacks are stored on globalThis with
+                          // property name prefixed with
+                          // goog.net.Jsonp.CALLBACKS.
+                          if (key.indexOf(Jsonp.CALLBACKS) == 0) {
+                            /**
+                             * @suppress {visibility} suppression added to
+                             * enable type checking
+                             */
+                            const callbackId = Jsonp.getCallbackId_(key);
+                            if (globalThis[callbackId] &&
+                                globalThis[callbackId] != goog.nullFunction) {
+                              propCounter++;
+                            }
+                          }
+                        }
 
-      assertEquals(
-          'script cleanup', bodyChildCount, document.body.childNodes.length);
-      assertEquals('window jsonp array empty', 0, propCounter);
-    }, 0);
+                        assertEquals(
+                            'script cleanup', bodyChildCount,
+                            document.body.childNodes.length);
+                        assertEquals(
+                            'window jsonp array empty', 0, propCounter);
+                      },
+                      0);
   };
 }
 
+/** @suppress {missingProperties} suppression added to enable type checking */
 function getScriptElement(result) {
   return result.deferred_.defaultScope_.script_;
 }
@@ -78,6 +92,7 @@ testSuite({
     timeoutWasCalled = false;
     timeoutHandler = null;
     originalTimeout = window.setTimeout;
+    /** @suppress {missingReturn} suppression added to enable type checking */
     window.setTimeout = (handler, time) => {
       timeoutWasCalled = true;
       timeoutHandler = handler;
@@ -89,6 +104,7 @@ testSuite({
   },
 
   // Check that send function is sane when things go well.
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSend() {
     let replyReceived;
     const jsonp = new Jsonp(fakeTrustedUrl);
@@ -130,6 +146,7 @@ testSuite({
   },
 
   // Check that send function is sane when things go well.
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSendWhenCallbackHasTwoParameters() {
     let replyReceived;
     let replyReceived2;
@@ -165,6 +182,10 @@ testSuite({
 
   // Check that send function works correctly when callback param value is
   // specified.
+  /**
+     @suppress {visibility,checkTypes} suppression added to enable type
+     checking
+   */
   testSendWithCallbackParamValue() {
     let replyReceived;
     const jsonp = new Jsonp(fakeTrustedUrl);
@@ -192,6 +213,7 @@ testSuite({
 
     // Now, we simulate a returned request using the known callback function
     // name.
+    /** @suppress {visibility} suppression added to enable type checking */
     const callbackFunc =
         eval('window.callback=' + Jsonp.getCallbackId_('dummyId'));
     callbackFunc({some: 'data', another: ['data', 'right', 'here']});
@@ -207,6 +229,7 @@ testSuite({
   },
 
   // Check that the send function is sane when the thing goes south.
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testSendFailure() {
     let replyReceived = false;
     let errorReplyReceived = false;
@@ -251,6 +274,7 @@ testSuite({
   },
 
   // Check that a cancel call works and cleans up after itself.
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testCancel() {
     const checkCleanup = newCleanupGuard();
 
@@ -264,14 +288,15 @@ testSuite({
     const requestObject = jsonp.send({test: 'foo'}, successCallback);
     jsonp.cancel(requestObject);
 
-    for (const key in goog.global[Jsonp.CALLBACKS]) {
-      // NOTES: callbacks are stored on goog.global with property
+    for (const key in globalThis[Jsonp.CALLBACKS]) {
+      // NOTES: callbacks are stored on globalThis with property
       // name prefixed with goog.net.Jsonp.CALLBACKS.
       if (key.indexOf('goog.net.Jsonp.CALLBACKS') == 0) {
+        /** @suppress {visibility} suppression added to enable type checking */
         const callbackId = Jsonp.getCallbackId_(key);
         assertNotEquals(
             'The success callback should have been removed',
-            goog.global[callbackId], successCallback);
+            globalThis[callbackId], successCallback);
       }
     }
 
@@ -280,6 +305,7 @@ testSuite({
     timeoutHandler();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testPayloadParameters() {
     const checkCleanup = newCleanupGuard();
 
@@ -295,6 +321,7 @@ testSuite({
     timeoutHandler();
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testNonce() {
     const checkCleanup = newCleanupGuard();
 
@@ -321,7 +348,7 @@ testSuite({
     const errorCallback = recordFunction();
 
     const stubs = new PropertyReplacer();
-    stubs.set(goog.global, 'setTimeout', (errorHandler) => {
+    stubs.set(globalThis, 'setTimeout', (errorHandler) => {
       errorHandler();
     });
 

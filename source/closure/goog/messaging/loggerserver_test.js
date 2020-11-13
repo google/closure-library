@@ -38,6 +38,7 @@ testSuite({
     stubs.reset();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testCommandWithoutChannelName() {
     const mockLogger = mockControl.createStrictMock(Logger);
     log.getLogger('test.object.Name').$returns(mockLogger);
@@ -55,6 +56,7 @@ testSuite({
     server.dispose();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testCommandWithChannelName() {
     const mockLogger = mockControl.createStrictMock(Logger);
     log.getLogger('test.object.Name').$returns(mockLogger);
@@ -72,6 +74,7 @@ testSuite({
     server.dispose();
   },
 
+  /** @suppress {missingProperties} suppression added to enable type checking */
   testCommandWithException() {
     const mockLogger = mockControl.createStrictMock(Logger);
     log.getLogger('test.object.Name').$returns(mockLogger);

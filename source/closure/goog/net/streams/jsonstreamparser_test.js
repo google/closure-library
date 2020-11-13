@@ -68,6 +68,10 @@ testSuite({
     });
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSingleMessage() {
     const parser = new JsonStreamParser();
     const result = parser.parse('[{"a" : "b"}]');
@@ -75,6 +79,10 @@ testSuite({
     assertEquals('b', result[0].a);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testEnclosingArray() {
     const parser = new JsonStreamParser();
     let result = parser.parse('[\n');
@@ -88,6 +96,10 @@ testSuite({
     assertNull(result);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testSingleMessageInChunks() {
     let parser = new JsonStreamParser();
     let result = parser.parse('[{"a" : ');
@@ -107,6 +119,10 @@ testSuite({
     assertNull(result);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testTwoMessages() {
     const parser = new JsonStreamParser();
     const result = parser.parse('[{"a" : "b"}, {"c" : "d"}]');
@@ -115,6 +131,10 @@ testSuite({
     assertEquals('d', result[1].c);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testTwoMessagesInChunks() {
     const parser = new JsonStreamParser();
     let result = parser.parse('[{"a" : "b"}, ');

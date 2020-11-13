@@ -48,6 +48,7 @@ testSuite({
   },
 
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetParserByResponseHeader() {
     xhrIo.getStreamingResponseHeader = function() {
       return null;

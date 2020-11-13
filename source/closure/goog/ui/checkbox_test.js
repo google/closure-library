@@ -44,6 +44,10 @@ class TestCheckboxRenderer extends CheckboxRenderer {
   }
 }
 
+/**
+ * @suppress {strictMissingProperties} suppression added to enable type
+ * checking
+ */
 function validateCheckBox(span, state, disabled = undefined) {
   const testCheckbox = decorate(span);
   assertNotNull('checkbox created', testCheckbox);
@@ -221,6 +225,7 @@ testSuite({
 
   testCheckboxAriaLabelledby() {
     const label = dom.createElement(TagName.DIV);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const label2 = dom.createElement(TagName.DIV, {id: checkbox.makeId('foo')});
     document.body.appendChild(label);
     document.body.appendChild(label2);
@@ -241,6 +246,7 @@ testSuite({
     }
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testLabel() {
     const label = dom.createElement(TagName.DIV);
     document.body.appendChild(label);
@@ -343,6 +349,7 @@ testSuite({
     const cssClass = 'my-custom-checkbox';
     const renderer =
         ControlRenderer.getCustomRenderer(CheckboxRenderer, cssClass);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     const customCheckbox = new Checkbox(undefined, undefined, renderer);
     customCheckbox.createDom();
     assertElementsEquals(

@@ -27,6 +27,10 @@ testSuite({
     empty = dom.getElement('empty');
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testElementOffset() {
     const nodeOffset = new NodeOffset(i, test1);
 

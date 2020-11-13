@@ -310,12 +310,12 @@ testingTestSuite(testSuite = {
      * @suppress {strictMissingProperties} suppression added to enable type
      * checking
      */
-    goog.global.testDummy1 = function() {};
+    globalThis.testDummy1 = function() {};
     /**
      * @suppress {strictMissingProperties} suppression added to enable type
      * checking
      */
-    goog.global.testDummy2 = function() {};
+    globalThis.testDummy2 = function() {};
     testCase.autoDiscoverTests();
 
     assertEquals(setUpPageFn, testCase.setUpPage);

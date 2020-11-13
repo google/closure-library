@@ -68,6 +68,10 @@ testSuite({
     registry.reset();
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testDecorate() {
     const dx = decorate(document.getElementById('x'));
     assertTrue(

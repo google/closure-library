@@ -179,7 +179,7 @@ function assertStoreCallsAndErrors(expectedTests, expectedErrors) {
  * A global test function used by `testInitializeTestCase`.
  * @suppress {strictMissingProperties} suppression added to enable type checking
  */
-goog.global.mockTestName = function() {
+globalThis.mockTestName = function() {
   return failGoogPromise();
 };
 
@@ -190,12 +190,12 @@ goog.global.mockTestName = function() {
  * within the array (as it never recurses into the content of the array).
  * @suppress {strictMissingProperties} suppression added to enable type checking
  */
-goog.global.mockTestNameValues = ['hello', 'world'];
+globalThis.mockTestNameValues = ['hello', 'world'];
 /**
  * @return {!GoogPromise<?>}
  * @suppress {strictMissingProperties} suppression added to enable type checking
  */
-goog.global.mockTestNameValues.mockTestNameTestShouldNotBeRun = function() {
+globalThis.mockTestNameValues.mockTestNameTestShouldNotBeRun = function() {
   return failGoogPromise();
 };
 
@@ -287,7 +287,7 @@ testSuite({
   },
 
   testTestCaseReturningPromise_PromiseResolve() {
-    if (!('Promise' in goog.global)) {
+    if (!('Promise' in globalThis)) {
       return;
     }
     const testCase = new TestCase();
@@ -332,7 +332,7 @@ testSuite({
     // Prevent the mock from the inner test from forcibly failing the outer
     // test.
     stubs.replace(
-        goog.global, 'G_testRunner', null, true /* opt_allowNullOrUndefined */);
+        globalThis, 'G_testRunner', null, true /* opt_allowNullOrUndefined */);
 
     let doneCount;
     let testCase;
@@ -464,7 +464,7 @@ testSuite({
   },
 
   testTestCaseReturningPromise_PromiseReject() {
-    if (!('Promise' in goog.global)) {
+    if (!('Promise' in globalThis)) {
       return;
     }
     const testCase = new TestCase();
@@ -481,7 +481,7 @@ testSuite({
   },
 
   testTestCaseReturningPromise_PromiseTimeout() {
-    if (!('Promise' in goog.global)) {
+    if (!('Promise' in globalThis)) {
       return;
     }
     const testCase = new TestCase();
@@ -561,7 +561,7 @@ testSuite({
   },
 
   testTestCaseReturningPromise_PromiseResolve_PromiseReject() {
-    if (!('Promise' in goog.global)) {
+    if (!('Promise' in globalThis)) {
       return;
     }
     const testCase = new TestCase();
@@ -578,7 +578,7 @@ testSuite({
   },
 
   testTestCaseReturningPromise_PromiseResolve_GoogPromiseReject() {
-    if (!('Promise' in goog.global)) {
+    if (!('Promise' in globalThis)) {
       return;
     }
     const testCase = new TestCase();
@@ -595,7 +595,7 @@ testSuite({
   },
 
   testTestCaseReturningPromise_GoogPromiseResolve_PromiseReject() {
-    if (!('Promise' in goog.global)) {
+    if (!('Promise' in globalThis)) {
       return;
     }
     const testCase = new TestCase();
@@ -612,7 +612,7 @@ testSuite({
   },
 
   testTestCaseReturningPromise_PromisesInSetUpAndTest() {
-    if (!('Promise' in goog.global)) {
+    if (!('Promise' in globalThis)) {
       return;
     }
     const testCase = new TestCase();
@@ -1323,10 +1323,10 @@ testSuite({
     const testCase = new TestCase('fooCase');
     testCase.getAutoDiscoveryPrefix = () => 'mockTestName';
     const outerTestCase = TestCase.getActiveTestCase();
-    goog.global['G_testRunner'].testCase = null;
+    globalThis['G_testRunner'].testCase = null;
     TestCase.initializeTestCase(testCase, storeCallsAndErrors);
     const checkAfterInitialize = TestCase.getActiveTestCase();
-    goog.global['G_testRunner'].testCase = outerTestCase;
+    globalThis['G_testRunner'].testCase = outerTestCase;
     // This asserts require G_testRunner to be set.
     assertEquals(checkAfterInitialize, testCase);
     assertEquals(TestCase.getActiveTestCase(), outerTestCase);

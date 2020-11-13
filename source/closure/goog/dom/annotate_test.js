@@ -30,6 +30,7 @@ testSuite({
 
     terms = [['pig', false]];
     html = annotate.annotateText(TEXT, terms, doAnnotation);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     html = SafeHtml.unwrap(html);
     assertEquals(
         'This little <span class="c0">pig</span>gy cried ' +
@@ -42,6 +43,7 @@ testSuite({
 
     terms = [[' piggy ', false]];
     html = annotate.annotateText(TEXT, terms, doAnnotation);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     html = SafeHtml.unwrap(html);
     assertEquals(
         'This little<span class="c0"> piggy </span>cried ' +
@@ -50,6 +52,7 @@ testSuite({
 
     terms = [['goose', true], ['piggy', true]];
     html = annotate.annotateText(TEXT, terms, doAnnotation);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     html = SafeHtml.unwrap(html);
     assertEquals(
         'This little <span class="c1">piggy</span> cried ' +
@@ -60,16 +63,19 @@ testSuite({
   testAnnotateTextHtmlEscaping() {
     let terms = [['a', false]];
     let html = annotate.annotateText('&a', terms, doAnnotation);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     html = SafeHtml.unwrap(html);
     assertEquals('&amp;<span class="c0">a</span>', html);
 
     terms = [['a', false]];
     html = annotate.annotateText('a&', terms, doAnnotation);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     html = SafeHtml.unwrap(html);
     assertEquals('<span class="c0">a</span>&amp;', html);
 
     terms = [['&', false]];
     html = annotate.annotateText('&', terms, doAnnotation);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     html = SafeHtml.unwrap(html);
     assertEquals('<span class="c0">&amp;</span>', html);
   },
@@ -77,6 +83,7 @@ testSuite({
   testAnnotateTextIgnoreCase() {
     let terms = [['wEe', true]];
     let html = annotate.annotateText(TEXT, terms, doAnnotation, true);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     html = SafeHtml.unwrap(html);
     assertEquals(
         'This little piggy cried &quot;<span class="c0">Wee</span>! ' +
@@ -86,6 +93,7 @@ testSuite({
 
     terms = [['WEE!', true], ['HE', false]];
     html = annotate.annotateText(TEXT, terms, doAnnotation, true);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     html = SafeHtml.unwrap(html);
     assertEquals(
         'This little piggy cried &quot;<span class="c0">Wee!</span> ' +
@@ -97,6 +105,7 @@ testSuite({
   testAnnotateTextOverlappingTerms() {
     const terms = [['tt', false], ['little', false]];
     let html = annotate.annotateText(TEXT, terms, doAnnotation);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     html = SafeHtml.unwrap(html);
     assertEquals(
         'This <span class="c1">little</span> piggy cried &quot;Wee! ' +
@@ -118,6 +127,10 @@ testSuite({
     assertEquals(' & Jerry', spans[0].nextSibling.nodeValue);
   },
 
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testAnnotateTermsInTable() {
     const terms = [['pig', false]];
     assertTrue(annotate.annotateTerms($('q'), terms, doAnnotation));

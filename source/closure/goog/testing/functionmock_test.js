@@ -332,11 +332,11 @@ testSuite({
   testMockedFunctionsAvailableInGlobalAndGoogGlobalAndWindowScope() {
     mockGlobal = testing.createGlobalFunctionMock('globalFoo');
 
-    // we expect this call 3 times through global, goog.global and window scope
+    // we expect this call 3 times through global, globalThis and window scope
     mockGlobal().$times(3);
 
     mockGlobal.$replay();
-    goog.global.globalFoo();
+    globalThis.globalFoo();
     window.globalFoo();
     globalFoo();
     mockGlobal.$verify();

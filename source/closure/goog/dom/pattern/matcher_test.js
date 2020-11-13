@@ -83,6 +83,7 @@ testSuite({
     const pattern2 = new StartTag('P');
 
     let count = 0;
+    /** @suppress {uselessCode} suppression added to enable type checking */
     const callback = (node, position) => {
       if (node.nodeName == TagName.SPAN) {
         throw StopIteration;

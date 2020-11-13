@@ -100,6 +100,7 @@ testSuite({
     assertEquals('me0me1mu0mu1me0me1mu0mu1', result);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCreateTask_recurse() {
     let stop = false;
     const recurse = animationFrame.createTask({
@@ -134,6 +135,7 @@ testSuite({
     assertFalse(animationFrame.requestedFrame_);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testCreateTask_recurseTwoMethodsWithState() {
     let stop = false;
     const recurse1 = animationFrame.createTask({
@@ -161,6 +163,7 @@ testSuite({
       },
     });
 
+    /** @suppress {visibility} suppression added to enable type checking */
     const taskLength = animationFrame.tasks_[0].length;
 
     recurse1();

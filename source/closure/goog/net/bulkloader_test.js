@@ -39,7 +39,9 @@ let errorStatus;
  */
 function getSuccessfulBulkLoader(uris) {
   const bulkLoader = new BulkLoader(uris);
+  /** @suppress {globalThis} suppression added to enable type checking */
   bulkLoader.load = function() {
+    /** @suppress {globalThis} suppression added to enable type checking */
     const uris = this.helper_.getUris();
     for (let i = 0; i < uris.length; i++) {
       // This clock tick simulates a delay for processing every URI.
@@ -53,6 +55,10 @@ function getSuccessfulBulkLoader(uris) {
     }
   };
 
+  /**
+   * @suppress {strictMissingProperties,globalThis} suppression added to enable
+   * type checking
+   */
   bulkLoader.onSuccess = function(id, uri) {
     const xhrIo = {
       getResponseText: function() {
@@ -87,7 +93,9 @@ function getSuccessfulBulkLoader(uris) {
  */
 function getNonSuccessfulBulkLoader(uris) {
   const bulkLoader = new BulkLoader(uris);
+  /** @suppress {globalThis} suppression added to enable type checking */
   bulkLoader.load = function() {
+    /** @suppress {globalThis} suppression added to enable type checking */
     const uris = this.helper_.getUris();
     for (let i = 0; i < uris.length; i++) {
       // This clock tick simulates a delay for processing every URI.
@@ -109,6 +117,10 @@ function getNonSuccessfulBulkLoader(uris) {
     }
   };
 
+  /**
+   * @suppress {strictMissingProperties,globalThis} suppression added to enable
+   * type checking
+   */
   bulkLoader.onSuccess = function(id, uri) {
     const xhrIo = {
       getResponseText: function() {
@@ -122,6 +134,10 @@ function getNonSuccessfulBulkLoader(uris) {
     this.handleEvent_(id, new GoogEvent(EventType.COMPLETE, xhrIo));
   };
 
+  /**
+   * @suppress {strictMissingProperties,globalThis} suppression added to enable
+   * type checking
+   */
   bulkLoader.onError = function(id) {
     const xhrIo = {
       getResponseText: function() {

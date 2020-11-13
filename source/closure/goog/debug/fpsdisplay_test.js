@@ -10,6 +10,7 @@ goog.setTestOnly();
 const FpsDisplay = goog.require('goog.debug.FpsDisplay');
 const TestCase = goog.require('goog.testing.TestCase');
 const Timer = goog.require('goog.Timer');
+const dispose = goog.require('goog.dispose');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let fpsDisplay;
@@ -30,7 +31,7 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(fpsDisplay);
+    dispose(fpsDisplay);
   },
 
   testRendering() {

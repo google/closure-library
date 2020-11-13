@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+
 goog.module('goog.ui.ContainerTest');
 goog.setTestOnly();
 
@@ -40,7 +45,11 @@ class ListContainer extends Container {
     Container.call(this);
   }
 
-  /** @override */
+  /**
+   * @override
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
   createDom() {
     ListContainer.superClass_.createDom.call(this);
     const ul = this.getDomHelper().createDom(TagName.UL);
@@ -226,6 +235,7 @@ testSuite({
         container.getChildAt(0).isHighlighted());
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
   testGetOwnerControl() {
     container.decorate(containerElement);
 
@@ -304,6 +314,7 @@ testSuite({
     const control = new Control('item');
     listContainer.addChild(control);
     listContainer.render();
+    /** @suppress {visibility} suppression added to enable type checking */
     const ownerControl = listContainer.getOwnerControl(control.getElement());
 
     assertEquals(
@@ -311,6 +322,7 @@ testSuite({
         ownerControl);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHandleKeyEvent_onlyHandlesWhenVisible() {
     keyContainer = new KeyHandlingContainer();
     keyContainer.decorate(containerElement);
@@ -326,6 +338,7 @@ testSuite({
         'One key event should be handled', 1, keyContainer.keyEventsHandled);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHandleKeyEvent_onlyHandlesWhenEnabled() {
     keyContainer = new KeyHandlingContainer();
     keyContainer.decorate(containerElement);
@@ -342,6 +355,7 @@ testSuite({
         'One key event should be handled', 1, keyContainer.keyEventsHandled);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHandleKeyEvent_childlessContainersIgnoreKeyEvents() {
     keyContainer = new KeyHandlingContainer();
     keyContainer.render();
@@ -357,6 +371,7 @@ testSuite({
         'One key event should be handled', 1, keyContainer.keyEventsHandled);
   },
 
+  /** @suppress {checkTypes} suppression added to enable type checking */
   testHandleKeyEvent_alwaysHandlesWithKeyEventTarget() {
     keyContainer = new KeyHandlingContainer();
     keyContainer.render();

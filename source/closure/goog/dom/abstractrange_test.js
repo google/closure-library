@@ -14,13 +14,26 @@ const dom = goog.require('goog.dom');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
+  /**
+     @suppress {strictMissingProperties} suppression added to enable type
+     checking
+   */
   testCorrectDocument() {
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     const a = dom.getElement('a').contentWindow;
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     const b = dom.getElement('b').contentWindow;
 
     a.document.body.focus();
     let selection = AbstractRange.getBrowserSelectionForWindow(a);
     assertNotNull('Selection must not be null', selection);
+    /** @suppress {checkTypes} suppression added to enable type checking */
     let range = Range.createFromBrowserSelection(selection);
     assertEquals(
         'getBrowserSelectionForWindow must return selection in the ' +
@@ -47,6 +60,10 @@ testSuite({
   },
 
   testSelectionIsControlRange() {
+    /**
+     * @suppress {strictMissingProperties} suppression added to enable type
+     * checking
+     */
     const c = dom.getElement('c').contentWindow;
     // Only IE supports control ranges
     if (c.document.body.createControlRange) {
