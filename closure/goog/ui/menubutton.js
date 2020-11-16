@@ -101,6 +101,14 @@ goog.ui.MenuButton = function(
     this.setFocusablePopupMenu(true);
   }
 
+  /**
+   * Whether the enter or space key should close the menu, if it is already
+   * open. This should be true for accessibility reasons, but is provided as an
+   * option for backward compatibility.
+   * @private {boolean}
+   */
+  this.closeOnEnterOrSpace_ = true;
+
   /** @private {!goog.ui.MenuRenderer} */
   this.menuRenderer_ = opt_menuRenderer || goog.ui.MenuRenderer.getInstance();
 };
@@ -363,7 +371,8 @@ goog.ui.MenuButton.prototype.handleKeyEventInternal = function(e) {
     const handledBySubMenu = handledByMenu && this.menu_ &&
         this.menu_.getOpenItem() instanceof goog.ui.SubMenu;
     if (!handledBySubMenu &&
-        (e.keyCode == goog.events.KeyCodes.ESC || isEnterOrSpace)) {
+        (e.keyCode == goog.events.KeyCodes.ESC ||
+         (isEnterOrSpace && this.closeOnEnterOrSpace_))) {
       // Dismiss the menu.
       this.setOpen(false);
       return true;
@@ -525,6 +534,15 @@ goog.ui.MenuButton.prototype.setMenuMargin = function(margin) {
   this.menuMargin_ = margin;
 };
 
+/**
+ * Sets whether the enter or space key should close the menu, if it is already
+ * open. By default, only the ESC key will close an open menu.
+ * @param {boolean} close Whether pressing Enter or Space when the button has
+ *     focus will close the menu if it is already open.
+ */
+goog.ui.MenuButton.prototype.setCloseOnEnterOrSpace = function(close) {
+  this.closeOnEnterOrSpace_ = close;
+};
 
 /**
  * Sets whether to select the first item in the menu when it is opened using

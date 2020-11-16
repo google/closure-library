@@ -330,6 +330,25 @@ testSuite({
     assertFalse('Menu should close after pressing Space', menuButton.isOpen());
   },
 
+  /**
+   * Tests the behavior of the enter and space keys when the menu is open and
+   * setCloseOnEnterOrSpace was called with false as its argument.
+   * @suppress {checkTypes} suppression added to enable type checking
+   */
+  testSpaceOrEnterLeavesMenuOpen_withCloseOnEnterOrSpaceDisabled() {
+    const node = dom.getElement('demoMenuButton');
+    menuButton.decorate(node);
+    menuButton.setCloseOnEnterOrSpace(false);
+
+    menuButton.setOpen(true);
+    menuButton.handleKeyEvent(new MyFakeEvent(KeyCodes.ENTER));
+    assertTrue(
+        'Menu should remain open after pressing Enter', menuButton.isOpen());
+    menuButton.handleKeyEvent(new MyFakeEvent(KeyCodes.SPACE, EventType.KEYUP));
+    assertTrue(
+        'Menu should remain open after pressing Space', menuButton.isOpen());
+  },
+
   // Tests the behavior of the enter key on a submenu.
   /** @suppress {checkTypes} suppression added to enable type checking */
   testEnterClosesSubMenu() {
