@@ -1,0 +1,25 @@
+name: Draft GitHub Release
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  draft-github-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # We need to fetch the full repository in order to write complete
+          # release notes.
+          fetch-depth: 0
+
+      - name: Run Release Draft Script
+        run: |
+          cd scripts/release
+          npm install
+          npm start
+        env:
+          # A GitHub API token is required to create a new GitHub release.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
