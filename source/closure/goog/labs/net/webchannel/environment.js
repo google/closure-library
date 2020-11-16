@@ -75,9 +75,11 @@ exports.getPollingInterval = function() {
  *
  * 1) google.com token
  *
- * AuTL0jxTc8nlKnzI+gSP2FT6+/0YaQ6Z0nh+TM0l6rrNNp0AXruEG61uZrjwuMBsOE1tNPET+vxEOynShb7B1QcAAABreyJvcmlnaW4iOiJodHRwczovL2dvb2dsZS5jb206NDQzIiwiZmVhdHVyZSI6IkZldGNoVXBsb2FkU3RyZWFtaW5nIiwiZXhwaXJ5IjoxNjA4MzE4Mzg1LCJpc1N1YmRvbWFpbiI6dHJ1ZX0=
+ * A329ozYiTjUmNz0Eh5wffNLiRjiVtFBptKBulP7UYXxKSuMVVhP3pVnlHnbrBg2ALEPd63boPZArHXg3+WlmagkAAAB/eyJvcmlnaW4iOiJodHRwczovL2dvb2dsZS5jb206NDQzIiwiZmVhdHVyZSI6IkZldGNoVXBsb2FkU3RyZWFtaW5nIiwiZXhwaXJ5IjoxNjA4OTIzMjA4LCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ==
  *
- * 2) googleapis.com token  (to be fixed)
+ * 2) googleapis.com token
+ *
+ * To be registered after 1) is deployed.
  *
  * https://developers.chrome.com/origintrials/#/trials
  *

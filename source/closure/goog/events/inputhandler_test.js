@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
- */
-
 goog.module('goog.events.InputHandlerTest');
 goog.setTestOnly();
 
@@ -17,6 +12,7 @@ const EventType = goog.require('goog.events.EventType');
 const GoogTestingEvent = goog.require('goog.testing.events.Event');
 const InputHandler = goog.require('goog.events.InputHandler');
 const KeyCodes = goog.require('goog.events.KeyCodes');
+const dispose = goog.require('goog.dispose');
 const dom = goog.require('goog.dom');
 const events = goog.require('goog.testing.events');
 const recordFunction = goog.require('goog.testing.recordFunction');
@@ -54,8 +50,8 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(inputHandler);
-    goog.dispose(eventHandler);
+    dispose(inputHandler);
+    dispose(eventHandler);
   },
 
   testInputWithPlaceholder() {

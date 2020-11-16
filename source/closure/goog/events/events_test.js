@@ -4,10 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
- */
 goog.module('goog.eventsTest');
 goog.setTestOnly();
 
@@ -22,6 +18,7 @@ const GoogEventTarget = goog.require('goog.events.EventTarget');
 const Listener = goog.require('goog.events.Listener');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const TagName = goog.require('goog.dom.TagName');
+const disposeAll = goog.require('goog.disposeAll');
 const dom = goog.require('goog.dom');
 const entryPointRegistry = goog.require('goog.debug.entryPointRegistry');
 const events = goog.require('goog.events');
@@ -156,7 +153,7 @@ testSuite({
     events['CAPTURE_SIMULATION_MODE'] = CaptureSimulationMode.ON;
     /** @suppress {visibility} suppression added to enable type checking */
     events.handleBrowserEvent_ = originalHandleBrowserEvent;
-    goog.disposeAll(et1, et2, et3);
+    disposeAll(et1, et2, et3);
     events.removeAll(document.body);
     propertyReplacer.reset();
   },

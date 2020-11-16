@@ -766,6 +766,33 @@ testSuite({
     assertEquals(Role.ALERTDIALOG, aria.getRole(dialog.getElement()));
   },
 
+  testIsAriaDescribedByContent_falseSetsNoLabelForAriaDescribedBy() {
+    dialog.dispose();
+
+    dialog = new Dialog();
+    dialog.setIsAriaDescribedByContent(false);
+    dialog.setTextContent('hello world');
+    dialog.createDom();
+    assertNotNull(dialog.getElement());
+    assertFalse(
+        aria.hasState(dialog.getElementStrict(), aria.State.DESCRIBEDBY));
+  },
+
+  testIsAriaDescribedByContent_trueSetsAriaDescribedByLabelToContentId() {
+    dialog.dispose();
+
+    dialog = new Dialog();
+    dialog.setIsAriaDescribedByContent(true);
+    dialog.setTextContent('hello world');
+    dialog.createDom();
+    assertNotNull(dialog.getElement());
+    assertTrue(
+        aria.hasState(dialog.getElementStrict(), aria.State.DESCRIBEDBY));
+    assertEquals(
+        dialog.getContentElement().id,
+        aria.getState(dialog.getElementStrict(), aria.State.DESCRIBEDBY));
+  },
+
   testDefaultOpacityIsAppliedOnRender() {
     dialog.dispose();
 
