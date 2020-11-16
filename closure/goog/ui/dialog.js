@@ -231,6 +231,15 @@ goog.ui.Dialog.prototype.buttonEl_ = null;
 goog.ui.Dialog.prototype.preferredAriaRole_ = goog.a11y.aria.Role.DIALOG;
 
 
+/**
+ * Whether the dialog sets the aria-describedby element to point to the content
+ * element.
+ * @type {boolean}
+ * @private
+ */
+goog.ui.Dialog.prototype.isAriaDescribedByContent_ = false;
+
+
 /** @override */
 goog.ui.Dialog.prototype.getCssClass = function() {
   'use strict';
@@ -332,6 +341,28 @@ goog.ui.Dialog.prototype.getPreferredAriaRole = function() {
 goog.ui.Dialog.prototype.setPreferredAriaRole = function(role) {
   'use strict';
   this.preferredAriaRole_ = role;
+};
+
+
+/**
+ * @return {boolean} Whether the dialog sets the aria-describedby element to
+ *     point to the content element.
+ */
+goog.ui.Dialog.prototype.isAriaDescribedByContent = function() {
+  'use strict';
+  return this.isAriaDescribedByContent_;
+};
+
+
+/**
+ * Sets whether the dialog sets the aria-describedby element to point to the
+ * content element. This must be set prior to `createDom`.
+ * @param {boolean} isAriaDescribedByContent
+ */
+goog.ui.Dialog.prototype.setIsAriaDescribedByContent = function(
+    isAriaDescribedByContent) {
+  'use strict';
+  this.isAriaDescribedByContent_ = isAriaDescribedByContent;
 };
 
 
@@ -615,20 +646,25 @@ goog.ui.Dialog.prototype.createDom = function() {
   goog.asserts.assert(element, 'getElement() returns null');
 
   var dom = this.getDomHelper();
+  // TODO(user): Fix this to use makeId instead of the dialog's id.
+  this.titleTextId_ = this.getId();
+  const contentElId = this.makeId('contentEl');
   this.titleEl_ = dom.createDom(
       goog.dom.TagName.DIV, goog.getCssName(this.class_, 'title'),
       this.titleTextEl_ = dom.createDom(
           goog.dom.TagName.SPAN, {
             'className': goog.getCssName(this.class_, 'title-text'),
-            'id': this.getId()
+            'id': this.titleTextId_
           },
           this.title_),
       this.titleCloseEl_ = dom.createDom(
           goog.dom.TagName.SPAN, goog.getCssName(this.class_, 'title-close'))),
   goog.dom.append(
       element, this.titleEl_,
-      this.contentEl_ = dom.createDom(
-          goog.dom.TagName.DIV, goog.getCssName(this.class_, 'content')),
+      this.contentEl_ = dom.createDom(goog.dom.TagName.DIV, {
+        'className': goog.getCssName(this.class_, 'content'),
+        'id': contentElId
+      }),
       this.buttonEl_ = dom.createDom(
           goog.dom.TagName.DIV, goog.getCssName(this.class_, 'buttons')));
 
@@ -641,7 +677,7 @@ goog.ui.Dialog.prototype.createDom = function() {
   goog.a11y.aria.setLabel(
       this.titleCloseEl_, goog.ui.Dialog.MSG_GOOG_UI_DIALOG_CLOSE_);
 
-  this.titleTextId_ = this.titleTextEl_.id;
+
   goog.a11y.aria.setRole(element, this.getPreferredAriaRole());
   goog.a11y.aria.setState(
       element, goog.a11y.aria.State.LABELLEDBY, this.titleTextId_ || '');
@@ -649,6 +685,10 @@ goog.ui.Dialog.prototype.createDom = function() {
   // the content element is initialized.
   if (this.content_) {
     goog.dom.safe.setInnerHtml(this.contentEl_, this.content_);
+    if (this.isAriaDescribedByContent_ && contentElId) {
+      goog.a11y.aria.setState(
+          element, goog.a11y.aria.State.DESCRIBEDBY, contentElId);
+    }
   }
   goog.style.setElementShown(this.titleCloseEl_, this.hasTitleCloseButton_);
 
@@ -873,10 +913,9 @@ goog.ui.Dialog.prototype.setDraggerLimits_ = function(e) {
   var dialogSize = goog.style.getSize(this.getElement());
   if (goog.style.getComputedPosition(this.getElement()) == 'fixed') {
     // Ensure position:fixed dialogs can't be dragged beyond the viewport.
-    this.dragger_.setLimits(
-        new goog.math.Rect(
-            0, 0, Math.max(0, viewSize.width - dialogSize.width),
-            Math.max(0, viewSize.height - dialogSize.height)));
+    this.dragger_.setLimits(new goog.math.Rect(
+        0, 0, Math.max(0, viewSize.width - dialogSize.width),
+        Math.max(0, viewSize.height - dialogSize.height)));
   } else {
     this.dragger_.setLimits(
         new goog.math.Rect(0, 0, w - dialogSize.width, h - dialogSize.height));
@@ -1091,10 +1130,9 @@ goog.ui.Dialog.prototype.onKey_ = function(e) {
         hasHandler = true;
 
         var caption = buttonSet.get(cancel);
-        close = this.dispatchEvent(
-            new goog.ui.Dialog.Event(
-                cancel,
-                /** @type {Element|null|string} */ (caption)));
+        close = this.dispatchEvent(new goog.ui.Dialog.Event(
+            cancel,
+            /** @type {Element|null|string} */ (caption)));
       } else if (!isSpecialFormElement) {
         close = true;
       }
