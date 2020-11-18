@@ -168,7 +168,10 @@ goog.editor.plugins.TableEditor.prototype.queryCommandValue = function(
 };
 
 
-/** @override */
+/**
+ * @override
+ * @suppress {missingProperties} "row" is not declared
+ */
 goog.editor.plugins.TableEditor.prototype.execCommandInternal = function(
     command, opt_arg) {
   'use strict';
@@ -328,6 +331,7 @@ goog.editor.plugins.TableEditor.prototype.addIsTableEditableFunction = function(
  *     finds the user-editable table from a given element.
  * @constructor
  * @private
+ * @suppress {missingProperties} "rows" not declared.
  */
 goog.editor.plugins.TableEditor.CellSelection_ = function(
     range, getParentTableFunction) {

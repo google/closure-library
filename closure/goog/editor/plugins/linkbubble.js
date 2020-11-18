@@ -372,7 +372,10 @@ goog.editor.plugins.LinkBubble.prototype.handleSelectionChangeInternal =
 };
 
 
-/** @override */
+/**
+ * @override
+ * @suppress {missingProperties} dom_ isn't declared
+ */
 goog.editor.plugins.LinkBubble.prototype.createBubbleContents = function(
     bubbleContainer) {
   'use strict';
@@ -557,6 +560,7 @@ goog.editor.plugins.LinkBubble.prototype.deleteLink_ = function(e) {
  * Sets the proper state for the action links.
  * @protected
  * @override
+ * @suppress {missingProperties} dom_ is not declared
  */
 goog.editor.plugins.LinkBubble.prototype.onShow = function() {
   'use strict';

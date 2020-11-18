@@ -19,6 +19,7 @@ goog.require('goog.soy.data.SanitizedContentKind');
 goog.require('goog.soy.data.SanitizedCss');
 goog.require('goog.soy.data.SanitizedTrustedResourceUri');
 goog.require('goog.string');
+goog.require('goog.testing.asserts');
 goog.require('goog.userAgent');
 
 

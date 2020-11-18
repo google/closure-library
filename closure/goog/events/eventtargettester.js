@@ -1027,6 +1027,7 @@ exports = {
       };
       goog.inherits(MockTarget, GoogEventsEventTarget);
 
+      /** @suppress {visibility} */
       MockTarget.prototype.disposeInternal = function() {
         dispatchEvent(this, EventType.A);
         MockTarget.base(this, 'disposeInternal');
