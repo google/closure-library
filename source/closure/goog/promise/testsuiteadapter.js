@@ -12,6 +12,7 @@
  * compiled with the Closure Compiler to pull in the required dependencies.
  *
  * @see https://npmjs.org/package/promises-aplus-tests
+ * @suppress {undefinedVars} Node.js's process and require
  */
 
 goog.provide('goog.promise.testSuiteAdapter');
