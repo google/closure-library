@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Error classes for the IndexedDB wrapper.
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 

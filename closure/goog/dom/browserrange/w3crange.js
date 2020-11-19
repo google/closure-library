@@ -8,6 +8,7 @@
  * @fileoverview Definition of the W3C spec following range wrapper.
  *
  * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 

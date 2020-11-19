@@ -1,4 +1,8 @@
 /**
+ * @fileoverview
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ */
+/**
  * @license
  * Copyright The Closure Library Authors.
  * SPDX-License-Identifier: Apache-2.0
