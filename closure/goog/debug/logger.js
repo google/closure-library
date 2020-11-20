@@ -30,6 +30,7 @@ goog.require('goog.log.Logger');
  * Functions are treated like callbacks, but are only called when the event's
  * log level is enabled. This is useful for logging messages that are expensive
  * to construct.
+ * @deprecated Use {@link goog.log.Loggable} instead.
  *
  * @typedef {string|function(): string}
  */
@@ -46,6 +47,7 @@ goog.debug.Loggable;
  * The Logger object is loosely based on the java class
  * java.util.logging.Logger. It supports different levels of filtering for
  * different loggers.
+ * @deprecated Use {@link goog.log} instead.
  *
  * @implements {goog.log.Logger}
  * @final
@@ -55,7 +57,7 @@ goog.debug.Logger = class {
    * Construct a new Logger.
    *
    * Users should not construct their own instances of goog.debug.Logger. They
-   * should always use the {@link goog.log.Logger.getLogger} function.
+   * should always use the {@link goog.log.getLogger} function.
    *
    * @param {string} name The name of the Logger.
    */
@@ -286,13 +288,17 @@ goog.debug.Logger = class {
 
 
 /**
+ * @deprecated Use {@link goog.log.Level} instead.
  * @constructor
  * @final
  */
 goog.debug.Logger.Level = goog.log.Level;
 
 
-/** @const */
+/**
+ * @deprecated Use {@link goog.log.ROOT_LOGGER_NAME} instead.
+ * @const
+ */
 goog.debug.Logger.ROOT_LOGGER_NAME = '';
 
 
@@ -325,7 +331,7 @@ goog.debug.Logger.ENABLE_PROFILER_LOGGING =
  * name and should normally be based on the package name or class name of the
  * subsystem, such as goog.net.BrowserChannel.
  * @return {!goog.debug.Logger} The named logger.
- * @deprecated use {@link goog.log} instead.
+ * @deprecated Use {@link goog.log.getLogger} instead.
  */
 goog.debug.Logger.getLogger = function(name) {
   'use strict';
@@ -390,6 +396,8 @@ goog.debug.LogManager.rootLogger_ = null;
 
 /**
  * Initializes the LogManager if not already initialized.
+ * @deprecated LogManager is automatically initialized when getRoot or getLogger
+ * is called, and both of those methods are deprecated.
  */
 goog.debug.LogManager.initialize = function() {
   'use strict';
@@ -405,6 +413,7 @@ goog.debug.LogManager.initialize = function() {
 
 /**
  * Returns all the loggers.
+ * @deprecated Use {@link goog.log.getAllLoggers} instead.
  * @return {!Object<string, !goog.debug.Logger>} Map of logger names to logger
  *     objects.
  */
@@ -417,7 +426,7 @@ goog.debug.LogManager.getLoggers = function() {
 /**
  * Returns the root of the logger tree namespace, the logger with the empty
  * string as its name.
- *
+ * @deprecated Use {@link goog.log.getRootLogger} instead.
  * @return {!goog.debug.Logger} The root logger.
  */
 goog.debug.LogManager.getRoot = function() {
@@ -433,6 +442,7 @@ goog.debug.LogManager.getRoot = function() {
  * @param {string} name A name for the logger. This should be a dot-separated
  * name and should normally be based on the package name or class name of the
  * subsystem, such as goog.net.BrowserChannel.
+ * @deprecated Use {@link goog.log.getLogger} instead.
  * @return {!goog.debug.Logger} The named logger.
  */
 goog.debug.LogManager.getLogger = function(name) {

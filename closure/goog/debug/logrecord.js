@@ -15,6 +15,7 @@ goog.provide('goog.debug.LogRecord');
 goog.require('goog.log.LogRecord');
 
 /**
+ * @deprecated Use {goog.log.LogRecord} instead.
  * @constructor
  * @final
  */
