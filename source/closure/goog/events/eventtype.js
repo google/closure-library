@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Event Types.
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 

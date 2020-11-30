@@ -772,7 +772,7 @@ goog.log.LogRegistry = class LogRegistry {
    */
   getAllLoggers() {
     return Object.keys(this.entries)
-        .map(loggerName => this.entries[loggerName]);
+        .map(loggerName => this.entries[loggerName].logger);
   }
 };
 

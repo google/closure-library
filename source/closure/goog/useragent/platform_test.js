@@ -75,6 +75,10 @@ testSuite({
     const ff = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US;' +
         'rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7 GTB6';
 
+    const chrome_osx_11 = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0)' +
+        'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66' +
+        'Safari/537.36';
+
     mockAgent.setNavigator({platform: 'IntelMac'});
 
     mockAgent.setUserAgentString(chrome);
@@ -84,6 +88,10 @@ testSuite({
     mockAgent.setUserAgentString(ff);
     updateUserAgentUtils();
     assertEquals('10.5', platform.VERSION);
+
+    mockAgent.setUserAgentString(chrome_osx_11);
+    updateUserAgentUtils();
+    assertEquals('11.1.0', platform.VERSION);
   },
 
   testChromeOnAndroid() {

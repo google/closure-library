@@ -6,8 +6,8 @@
 
 /**
  * @fileoverview A class for managing the editor toolbar.
- *
  * @see ../../demos/editor/editor.html
+ * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.editor.ToolbarController');
