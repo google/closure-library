@@ -55,11 +55,11 @@ function parseArgs(args) {
         description: 'One or more input files to calculate dependencies ' +
             'for. The namespaces in these files will be combined with ' +
             'those given with the --root flag to form the set of ' +
-            'namespaces to find dependencies for. If this is a file that' +
+            'namespaces to find dependencies for. If this is a file that ' +
             'contains repeated calls to goog.addDependency, then the calls ' +
             'will be used as forward declarations. e.g. if you include ' +
             'Closure Library\'s deps.js file, then there is no need to ' +
-            'include closure/goog/array/array.js as an input file as well.' +
+            'include closure/goog/array/array.js as an input file as well. ' +
             'If you wish to merge these deps files in the output, see the ' +
             '--merge-deps option.',
       })
@@ -70,14 +70,14 @@ function parseArgs(args) {
 
         description:
             'Directories to scan for JavaScript (.js) files to include as ' +
-            'inputs. These directories are scanned recursivley.',
+            'inputs. These directories are scanned recursively.',
       })
       .option('exclude', {
         alias: 'e',
         default: [],
         array: true,
         description:
-            'One or more path prefixes to ignore. Useful when  combined ' +
+            'One or more path prefixes to ignore. Useful when combined ' +
             'with the --root flag to ignore specific subfiles or ' +
             'subdirectories.'
       })
@@ -101,7 +101,7 @@ function parseArgs(args) {
         default: false,
         boolean: true,
         description: 'If true, then any deps files (files with calls to ' +
-            'goog.addDependency included in the input wll be also included ' +
+            'goog.addDependency) included in the input wll be also included ' +
             'in the output.'
       })
       .parse(args);
