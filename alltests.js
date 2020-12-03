@@ -282,7 +282,6 @@ var _allTests = [
   'closure/goog/labs/useragent/util_test.html',
   'closure/goog/labs/useragent/verifier_test.html',
   'closure/goog/locale/countrylanguagenames_test.html',
-  'closure/goog/locale/genericfontnames_test.html',
   'closure/goog/locale/timezonedetection_test.html',
   'closure/goog/locale/timezonelist_test.html',
   'closure/goog/log/logbuffer_test.html',

@@ -443,8 +443,6 @@ goog.addDependency('loader/abstractmodulemanager.js', ['goog.loader.AbstractModu
 goog.addDependency('loader/activemodulemanager.js', ['goog.loader.activeModuleManager'], ['goog.asserts', 'goog.loader.AbstractModuleManager'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('locale/countries.js', ['goog.locale.countries'], [], {});
 goog.addDependency('locale/defaultlocalenameconstants.js', ['goog.locale.defaultLocaleNameConstants'], [], {});
-goog.addDependency('locale/genericfontnames.js', ['goog.locale.genericFontNames'], [], {});
-goog.addDependency('locale/genericfontnamesdata.js', ['goog.locale.genericFontNamesData'], [], {});
 goog.addDependency('locale/locale.js', ['goog.locale'], ['goog.locale.nativeNameConstants'], {});
 goog.addDependency('locale/nativenameconstants.js', ['goog.locale.nativeNameConstants'], [], {});
 goog.addDependency('locale/scriptToLanguages.js', ['goog.locale.scriptToLanguages'], ['goog.locale'], {});
