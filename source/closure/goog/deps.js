@@ -677,7 +677,7 @@ goog.addDependency('style/transition.js', ['goog.style.transition', 'goog.style.
 goog.addDependency('test_module.js', ['goog.test_module'], ['goog.test_module_dep'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('test_module_dep.js', ['goog.test_module_dep'], [], {'module': 'goog'});
 goog.addDependency('testing/assertionfailure.js', ['goog.testing.safe.assertionFailure'], ['goog.asserts', 'goog.testing.asserts'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('testing/asserts.js', ['goog.testing.asserts'], ['goog.testing.JsUnitException'], {});
+goog.addDependency('testing/asserts.js', ['goog.testing.asserts'], ['goog.testing.JsUnitException'], {'lang': 'es6'});
 goog.addDependency('testing/async/mockcontrol.js', ['goog.testing.async.MockControl'], ['goog.asserts', 'goog.async.Deferred', 'goog.debug', 'goog.testing.MockControl', 'goog.testing.asserts', 'goog.testing.mockmatchers.IgnoreArgument'], {});
 goog.addDependency('testing/asynctestcase.js', ['goog.testing.AsyncTestCase', 'goog.testing.AsyncTestCase.ControlBreakingException'], ['goog.asserts', 'goog.testing.TestCase', 'goog.testing.asserts'], {});
 goog.addDependency('testing/benchmark.js', ['goog.testing.benchmark'], ['goog.dom', 'goog.dom.TagName', 'goog.testing.PerformanceTable', 'goog.testing.PerformanceTimer', 'goog.testing.TestCase'], {});

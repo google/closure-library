@@ -185,7 +185,7 @@ testSuite({
     worker.fetch = fetchMock;
     stubs = new PropertyReplacer();
     stubs.replace(globalThis, 'fetch', fetchMock);
-    factory = new FetchXmlHttpFactory(worker);
+    factory = new FetchXmlHttpFactory({worker: worker});
   },
 
   tearDown() {
@@ -289,7 +289,6 @@ testSuite({
    * @return {!Promise<void>}
    */
   testSend_includeCredentials() {
-    factory = new FetchXmlHttpFactory(worker);
     factory.setCredentialsMode(/** @type {RequestCredentials} */ ('include'));
     fetchMock(new Request('https://www.google.com', {
       headers: new Headers(),
@@ -306,7 +305,6 @@ testSuite({
    * @return {!Promise<void>}
    */
   testSend_setCacheMode() {
-    factory = new FetchXmlHttpFactory(worker);
     factory.setCacheMode(/** @type {RequestCache} */ ('no-cache'));
     fetchMock(new Request('https://www.google.com', {
       headers: new Headers(),

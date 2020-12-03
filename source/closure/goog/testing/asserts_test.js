@@ -573,6 +573,13 @@ testSuite({
         Uint16Array.of(1, 3, 5), Uint16Array.of(0, 1, 3, 5, 7).subarray(1, 4));
   },
 
+  testAssertObjectEqualsArrayBufferContents() {
+    if (!SUPPORTS_TYPED_ARRAY) return;  // not supported in IE<11
+    assertObjectEquals(
+        'Same ArrayBuffer contents should be equal',
+        Uint16Array.of(1, 2, 3).buffer, Uint16Array.of(1, 2, 3).buffer);
+  },
+
   testAssertObjectNotEqualsMutatedTypedArray() {
     if (!SUPPORTS_TYPED_ARRAY) return;  // not supported in IE<11
 
@@ -652,6 +659,16 @@ testSuite({
     assertThrowsJsUnitException(() => {
       assertObjectEquals(Uint8Array.of(1, 2), Uint8Array.of(3, 2));
     });
+  },
+
+  testAssertObjectNotEqualsArrayBufferContents() {
+    if (!SUPPORTS_TYPED_ARRAY) return;  // not supported in IE<11
+    assertObjectNotEquals(
+        'Different ArrayBuffer contents should not equal',
+        Uint16Array.of(1, 3, 2).buffer, Uint16Array.of(1, 2, 3).buffer);
+    assertObjectNotEquals(
+        'Different ArrayBuffer contents should not equal',
+        Uint16Array.of(1, 2, 3, 4).buffer, Uint16Array.of(1, 2, 3).buffer);
   },
 
   testAssertObjectNotEqualsTypedArrayOneExtra() {

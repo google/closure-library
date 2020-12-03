@@ -3161,7 +3161,10 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   goog.inherits(goog.Es6ModuleDependency, goog.Dependency);
 
 
-  /** @override */
+  /**
+   * @override
+   * @param {!goog.LoadController} controller
+   */
   goog.Es6ModuleDependency.prototype.load = function(controller) {
     if (goog.global.CLOSURE_IMPORT_SCRIPT) {
       if (goog.global.CLOSURE_IMPORT_SCRIPT(this.path)) {
@@ -3329,7 +3332,10 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   goog.inherits(goog.TransformedDependency, goog.Dependency);
 
 
-  /** @override */
+  /**
+   * @override
+   * @param {!goog.LoadController} controller
+   */
   goog.TransformedDependency.prototype.load = function(controller) {
     var dep = this;
 
@@ -3536,7 +3542,11 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   goog.inherits(goog.TranspiledDependency, goog.TransformedDependency);
 
 
-  /** @override */
+  /**
+   * @override
+   * @param {string} contents
+   * @return {string}
+   */
   goog.TranspiledDependency.prototype.transform = function(contents) {
     // Transpile with the pathname so that ES6 modules are domain agnostic.
     return this.transpiler.transpile(contents, this.getPathName());
@@ -3566,7 +3576,11 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       goog.PreTranspiledEs6ModuleDependency, goog.TransformedDependency);
 
 
-  /** @override */
+  /**
+   * @override
+   * @param {string} contents
+   * @return {string}
+   */
   goog.PreTranspiledEs6ModuleDependency.prototype.transform = function(
       contents) {
     return contents;
@@ -3603,7 +3617,11 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   goog.inherits(goog.GoogModuleDependency, goog.TransformedDependency);
 
 
-  /** @override */
+  /**
+   * @override
+   * @param {string} contents
+   * @return {string}
+   */
   goog.GoogModuleDependency.prototype.transform = function(contents) {
     if (this.needsTranspile_) {
       contents = this.transpiler_.transpile(contents, this.getPathName());

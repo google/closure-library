@@ -38,7 +38,7 @@ goog.net.FetchXmlHttpFactoryOptions = function() {
 /**
  * Factory for creating Xhr objects that uses the native fetch() method.
  * https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
- * @param {!goog.net.FetchXmlHttpFactoryOptions|!WorkerGlobalScope} opts
+ * @param {!goog.net.FetchXmlHttpFactoryOptions} opts
  * @extends {goog.net.XmlHttpFactory}
  * @struct
  * @constructor
@@ -46,9 +46,6 @@ goog.net.FetchXmlHttpFactoryOptions = function() {
 goog.net.FetchXmlHttpFactory = function(opts) {
   'use strict';
   goog.net.FetchXmlHttpFactory.base(this, 'constructor');
-  if (typeof opts.fetch === 'function') {
-    opts = {worker: /** @type {!WorkerGlobalScope} */ (opts)};
-  }
 
   /** @private @final {?WorkerGlobalScope} */
   this.worker_ = opts.worker || null;

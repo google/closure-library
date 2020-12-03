@@ -26,6 +26,19 @@ var PredicateFunctionType;
 
 
 /**
+ * An associative array of constructors corresponding to primitive and
+ * well-known JS types.
+ * @const {!Array<string>}
+ */
+const PRIMITIVE_TRUE_TYPES =
+    ['String', 'Boolean', 'Number', 'Array', 'RegExp', 'Date', 'Function'];
+
+if (typeof ArrayBuffer === 'function') {
+  PRIMITIVE_TRUE_TYPES.push('ArrayBuffer');
+}
+
+
+/**
  * @const {{
  *   String : PredicateFunctionType,
  *   Number : PredicateFunctionType,
@@ -76,7 +89,7 @@ goog.testing.asserts.primitiveRoughEqualityPredicates_ = {
 
 var _trueTypeOf = function(something) {
   'use strict';
-  var result = typeof something;
+  let result = typeof something;
   try {
     switch (result) {
       case 'string':
@@ -91,36 +104,21 @@ var _trueTypeOf = function(something) {
           break;
         }
       case 'function':
-        switch (something.constructor) {
-          case new String('').constructor:
-            result = 'String';
+        let foundConstructor = false;
+        for (const trueType of PRIMITIVE_TRUE_TYPES) {
+          if (something.constructor === goog.global[trueType]) {
+            result = trueType;
+            foundConstructor = true;
             break;
-          case new Boolean(true).constructor:
-            result = 'Boolean';
-            break;
-          case new Number(0).constructor:
-            result = 'Number';
-            break;
-          case new Array().constructor:
-            result = 'Array';
-            break;
-          case new RegExp().constructor:
-            result = 'RegExp';
-            break;
-          case new Date().constructor:
-            result = 'Date';
-            break;
-          case Function:
-            result = 'Function';
-            break;
-          default:
-            var m =
-                something.constructor.toString().match(/function\s*([^( ]+)\(/);
-            if (m) {
-              result = m[1];
-            } else {
-              break;
-            }
+          }
+        }
+        // Constructor doesn't match any of the known "primitive" constructors.
+        if (!foundConstructor) {
+          const m =
+              something.constructor.toString().match(/function\s*([^( ]+)\(/);
+          if (m) {
+            result = m[1];
+          }
         }
         break;
     }
@@ -846,8 +844,16 @@ goog.testing.asserts.findDifferences = function(
     var typeOfVar1 = _trueTypeOf(var1);
     var typeOfVar2 = _trueTypeOf(var2);
 
-    if (typeOfVar1 == typeOfVar2) {
-      var isArray = goog.testing.asserts.ARRAY_TYPES[typeOfVar1];
+    if (typeOfVar1 === typeOfVar2) {
+      const isArrayBuffer = typeOfVar1 === 'ArrayBuffer';
+      if (isArrayBuffer) {
+        // Since ArrayBuffer instances can't themselves be iterated through,
+        // compare 1-byte-per-element views of them.
+        var1 = new Uint8Array(/** @type {!ArrayBuffer} */ (var1));
+        var2 = new Uint8Array(/** @type {!ArrayBuffer} */ (var2));
+      }
+      const isArray =
+          isArrayBuffer || goog.testing.asserts.ARRAY_TYPES[typeOfVar1];
       var errorMessage = equalityPredicate(typeOfVar1, var1, var2);
       if (errorMessage !=
           goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS) {
