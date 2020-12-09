@@ -56,6 +56,7 @@ goog.tweak.activeBooleanGroup_ = null;
 /**
  * Returns/creates the registry singleton.
  * @return {!goog.tweak.Registry} The tweak registry.
+ * @deprecated
  */
 goog.tweak.getRegistry = function() {
   'use strict';
@@ -205,6 +206,7 @@ goog.tweak.endBooleanGroup = function() {
  * @param {boolean=} opt_defaultValue The default value for the setting.
  * @param {goog.tweak.ConfigParams=} opt_configParams Extra configuration
  *     parameters.
+ * @deprecated
  */
 goog.tweak.registerBoolean = function(
     id, description, opt_defaultValue, opt_configParams) {
@@ -228,6 +230,7 @@ goog.tweak.registerBoolean = function(
  * @param {string=} opt_defaultValue The default value for the setting.
  * @param {goog.tweak.ConfigParams=} opt_configParams Extra configuration
  *     parameters.
+ * @deprecated
  */
 goog.tweak.registerString = function(
     id, description, opt_defaultValue, opt_configParams) {
@@ -245,6 +248,7 @@ goog.tweak.registerString = function(
  * @param {number=} opt_defaultValue The default value for the setting.
  * @param {goog.tweak.ConfigParams=} opt_configParams Extra configuration
  *     parameters.
+ * @deprecated
  */
 goog.tweak.registerNumber = function(
     id, description, opt_defaultValue, opt_configParams) {
