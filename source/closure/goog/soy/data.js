@@ -282,6 +282,22 @@ goog.soy.data.SanitizedJs.isCompatibleWithStrict = function(value) {
 
 
 /**
+ * Converts sanitized content of kind JS into SafeScript without modification.
+ * @return {!goog.html.SafeScript}
+ */
+goog.soy.data.SanitizedJs.prototype.toSafeScript = function() {
+  'use strict';
+  return goog.html.uncheckedconversions
+      .safeScriptFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Soy SanitizedContent of kind JS produces ' +
+              'SafeScript-contract-compliant value.'),
+          this.toString());
+};
+
+
+
+/**
  * Content of type {@link goog.soy.data.SanitizedContentKind.URI}.
  *
  * The content is a URI chunk that the caller knows is safe to emit in a
