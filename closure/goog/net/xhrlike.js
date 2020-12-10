@@ -117,7 +117,7 @@ goog.net.XhrLike.prototype.setRequestHeader = function(header, value) {};
 
 /**
  * @param {string} header
- * @return {string}
+ * @return {?string}
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-getresponseheader()-method
  */
 goog.net.XhrLike.prototype.getResponseHeader = function(header) {};
