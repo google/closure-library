@@ -105,6 +105,13 @@ PbJsonStreamParser.prototype.getErrorMessage = function() {
   return this.errorMessage_;
 };
 
+/**
+ * @override
+ * @return {boolean}
+ */
+PbJsonStreamParser.prototype.acceptsBinaryInput = function() {
+  return false;
+};
 
 /** @override */
 PbJsonStreamParser.prototype.parse = function(input) {

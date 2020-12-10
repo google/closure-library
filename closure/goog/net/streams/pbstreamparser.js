@@ -173,6 +173,13 @@ goog.net.streams.PbStreamParser.prototype.error_ = function(
   throw new Error(this.errorMessage_);
 };
 
+/**
+ * @override
+ * @return {boolean}
+ */
+goog.net.streams.PbStreamParser.prototype.acceptsBinaryInput = function() {
+  return true;
+};
 
 /**
  * @throws {!Error} Throws an error message if the input is invalid.

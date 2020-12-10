@@ -32,8 +32,13 @@ goog.net.streams.StreamParser = function() {};
  *
  * @return {boolean} true if the input is still valid.
  */
-goog.net.streams.StreamParser.prototype.isInputValid = goog.abstractMethod;
+goog.net.streams.StreamParser.prototype.isInputValid = function() {};
 
+/**
+ * @return {boolean} True if this parser should parse binary(Array or
+ *     ArrayBuffer) input, otherwise only string input will be accepted.
+ */
+goog.net.streams.StreamParser.prototype.acceptsBinaryInput = function() {};
 
 /**
  * Checks the error message.
@@ -41,7 +46,7 @@ goog.net.streams.StreamParser.prototype.isInputValid = goog.abstractMethod;
  * @return {?string} any debug info on the first invalid input, or null if
  *    the input is still valid.
  */
-goog.net.streams.StreamParser.prototype.getErrorMessage = goog.abstractMethod;
+goog.net.streams.StreamParser.prototype.getErrorMessage = function() {};
 
 
 /**
@@ -55,4 +60,4 @@ goog.net.streams.StreamParser.prototype.getErrorMessage = goog.abstractMethod;
  * @return {?Array<string|!Object>} any parsed objects (atomic messages)
  *    in an array, or null if more data needs be read to parse any new object.
  */
-goog.net.streams.StreamParser.prototype.parse = goog.abstractMethod;
+goog.net.streams.StreamParser.prototype.parse = function(input) {};

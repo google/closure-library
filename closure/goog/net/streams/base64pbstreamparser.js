@@ -79,6 +79,13 @@ Base64PbStreamParser.prototype.error_ = function(input, errorMsg) {
   throw new Error(this.errorMessage_);
 };
 
+/**
+ * @override
+ * @return {boolean}
+ */
+Base64PbStreamParser.prototype.acceptsBinaryInput = function() {
+  return false;
+};
 
 /** @override */
 Base64PbStreamParser.prototype.parse = function(input) {
