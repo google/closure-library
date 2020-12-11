@@ -1594,7 +1594,7 @@ goog.now = function() {
  * Evals JavaScript in the global scope.
  *
  * Throws an exception if neither execScript or eval is defined.
- * @param {string} script JavaScript string.
+ * @param {string|!TrustedScript} script JavaScript string.
  */
 goog.globalEval = function(script) {
   (0, eval)(script);
