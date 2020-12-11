@@ -24,18 +24,6 @@ goog.require('goog.tweak.StringSetting');
 goog.requireType('goog.tweak.BaseEntry');
 
 
-/**
- * Calls to this function are overridden by the compiler by the processTweaks
- * pass. It returns the overrides to default values for tweaks set by compiler
- * options.
- * @return {!Object<number|string|boolean>} A map of tweakId -> defaultValue.
- * @private
- */
-goog.tweak.getCompilerOverrides_ = function() {
-  'use strict';
-  return {};
-};
-
 
 /**
  * The global reference to the registry, if it exists.
@@ -56,13 +44,13 @@ goog.tweak.activeBooleanGroup_ = null;
 /**
  * Returns/creates the registry singleton.
  * @return {!goog.tweak.Registry} The tweak registry.
+ * @deprecated
  */
 goog.tweak.getRegistry = function() {
   'use strict';
   if (!goog.tweak.registry_) {
     var queryString = window.location.search;
-    var overrides = goog.tweak.getCompilerOverrides_();
-    goog.tweak.registry_ = new goog.tweak.Registry(queryString, overrides);
+    goog.tweak.registry_ = new goog.tweak.Registry(queryString);
   }
   return goog.tweak.registry_;
 };
@@ -205,6 +193,7 @@ goog.tweak.endBooleanGroup = function() {
  * @param {boolean=} opt_defaultValue The default value for the setting.
  * @param {goog.tweak.ConfigParams=} opt_configParams Extra configuration
  *     parameters.
+ * @deprecated
  */
 goog.tweak.registerBoolean = function(
     id, description, opt_defaultValue, opt_configParams) {
@@ -228,6 +217,7 @@ goog.tweak.registerBoolean = function(
  * @param {string=} opt_defaultValue The default value for the setting.
  * @param {goog.tweak.ConfigParams=} opt_configParams Extra configuration
  *     parameters.
+ * @deprecated
  */
 goog.tweak.registerString = function(
     id, description, opt_defaultValue, opt_configParams) {
@@ -245,6 +235,7 @@ goog.tweak.registerString = function(
  * @param {number=} opt_defaultValue The default value for the setting.
  * @param {goog.tweak.ConfigParams=} opt_configParams Extra configuration
  *     parameters.
+ * @deprecated
  */
 goog.tweak.registerNumber = function(
     id, description, opt_defaultValue, opt_configParams) {
@@ -267,19 +258,6 @@ goog.tweak.registerButton = function(id, description, callback, opt_label) {
   var tweak = new goog.tweak.ButtonAction(id, description, callback);
   tweak.label = opt_label || tweak.label;
   goog.tweak.doRegister_(tweak);
-};
-
-
-/**
- * Sets a default value to use for the given tweak instead of the one passed
- * to the register* function. This function must be called before the tweak is
- * registered.
- * @param {string} id The unique string that identifies the entry.
- * @param {string|number|boolean} value The new default value for the tweak.
- */
-goog.tweak.overrideDefaultValue = function(id, value) {
-  'use strict';
-  goog.tweak.getRegistry().overrideDefaultValue(id, value);
 };
 
 

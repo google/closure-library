@@ -419,7 +419,7 @@ goog.html.SafeHtml.AttributeValue;
  * - For tags which can load code or set security relevant page metadata,
  *   more specific goog.html.SafeHtml.create*() functions must be used. Tags
  *   which are not supported by this function are applet, base, embed, iframe,
- *   link, math, object, script, style, svg, and template.
+ *   link, math, meta, object, script, style, svg, and template.
  *
  * @param {!goog.dom.TagName|string} tagName The name of the tag. Only tag names
  *     consisting of [a-zA-Z0-9-] are allowed. Tag names documented above are

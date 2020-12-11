@@ -31,12 +31,10 @@ goog.requireType('goog.tweak.BaseEntry');
  * Singleton that manages all tweaks. This should be instantiated only from
  * goog.tweak.getRegistry().
  * @param {string} queryParams Value of window.location.search.
- * @param {!Object<string|number|boolean>} compilerOverrides Default value
- *     overrides set by the compiler.
  * @constructor
  * @final
  */
-goog.tweak.Registry = function(queryParams, compilerOverrides) {
+goog.tweak.Registry = function(queryParams) {
   'use strict';
   /**
    * A map of entry id -> entry object
@@ -58,22 +56,6 @@ goog.tweak.Registry = function(queryParams, compilerOverrides) {
    * @private
    */
   this.onRegisterListeners_ = [];
-
-  /**
-   * A map of entry ID -> default value override for overrides set by the
-   * compiler.
-   * @type {!Object<string|number|boolean>}
-   * @private
-   */
-  this.compilerDefaultValueOverrides_ = compilerOverrides;
-
-  /**
-   * A map of entry ID -> default value override for overrides set by
-   * goog.tweak.overrideDefaultValue().
-   * @type {!Object<string|number|boolean>}
-   * @private
-   */
-  this.defaultValueOverrides_ = {};
 };
 
 
@@ -123,19 +105,6 @@ goog.tweak.Registry.prototype.register = function(entry) {
     }
     goog.asserts.fail(
         'Tweak entry registered twice and with different types: ' + id);
-  }
-
-  // Check for a default value override, either from compiler flags or from a
-  // call to overrideDefaultValue().
-  var defaultValueOverride = (id in this.compilerDefaultValueOverrides_) ?
-      this.compilerDefaultValueOverrides_[id] :
-      this.defaultValueOverrides_[id];
-  if (defaultValueOverride !== undefined) {
-    goog.asserts.assertInstanceof(
-        entry, goog.tweak.BasePrimitiveSetting,
-        'Cannot set the default value of non-primitive setting %s',
-        entry.label);
-    entry.setDefaultValue(defaultValueOverride);
   }
 
   // Set its value from the query params.
@@ -306,21 +275,3 @@ goog.tweak.Registry.prototype.makeUrlQuery = function(opt_existingSearchStr) {
                         '?' + tweakParams;
 };
 
-
-/**
- * Sets a default value to use for the given tweak instead of the one passed
- * to the register* function. This function must be called before the tweak is
- * registered.
- * @param {string} id The unique string that identifies the entry.
- * @param {string|number|boolean} value The replacement value to be used as the
- *     default value for the setting.
- */
-goog.tweak.Registry.prototype.overrideDefaultValue = function(id, value) {
-  'use strict';
-  goog.asserts.assert(
-      !this.hasEntry(id),
-      'goog.tweak.overrideDefaultValue must be called before the tweak is ' +
-          'registered. Tweak: %s',
-      id);
-  this.defaultValueOverrides_[id] = value;
-};

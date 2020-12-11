@@ -250,6 +250,13 @@ Parser.prototype.error_ = function(input, pos) {
   throw new Error(this.errorMessage_);
 };
 
+/**
+ * @override
+ * @return {boolean}
+ */
+Parser.prototype.acceptsBinaryInput = function() {
+  return false;
+};
 
 /**
  * @throws {Error} Throws an error message if the input is invalid.
