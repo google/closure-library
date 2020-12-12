@@ -27,7 +27,7 @@ goog.addDependency('async/nexttick.js', ['goog.async.nextTick', 'goog.async.thro
 goog.addDependency('async/promises.js', ['goog.async.promises'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/run.js', ['goog.async.run'], ['goog.async.WorkQueue', 'goog.async.nextTick', 'goog.async.throwException'], {});
 goog.addDependency('async/throttle.js', ['goog.async.Throttle'], ['goog.Disposable', 'goog.Timer'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('async/workqueue.js', ['goog.async.WorkItem', 'goog.async.WorkQueue'], ['goog.asserts', 'goog.async.FreeList'], {});
+goog.addDependency('async/workqueue.js', ['goog.async.WorkQueue'], ['goog.asserts', 'goog.async.FreeList'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base.js', ['goog'], [], {});
 goog.addDependency('base_module_test.js', ['goog.baseModuleTest'], ['goog.Timer', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base_test.js', ['goog.baseTest'], ['goog.dom', 'goog.dom.TagName', 'goog.object', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
