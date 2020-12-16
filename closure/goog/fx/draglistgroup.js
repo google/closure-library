@@ -197,8 +197,26 @@ goog.fx.DragListGroup = function() {
    * @private {boolean}
    */
   this.updateWhileDragging_ = true;
+
+  /**
+   * Whether to force attempt/prevent correcting the initial position of the
+   * currDragItem.  Defaults to DRAGLISTGROUP_CORRECT_POSITION_DRAG_START.
+   * @private {boolean}
+   */
+  this.correctDraggedElementInitialPos_ =
+      goog.fx.DragListGroup.DRAGLISTGROUP_CORRECT_POSITION_DRAG_START;
 };
 goog.inherits(goog.fx.DragListGroup, goog.events.EventTarget);
+
+
+/**
+ * @define {boolean} Whether to attempt correcting the initial position of the
+ * currDragItem to ensures that the mouse cursor is always over the dragged
+ * element. This is needed in cases where the dragged element dimensions are
+ * smaller than its source element dimensions.
+ */
+goog.fx.DragListGroup.DRAGLISTGROUP_CORRECT_POSITION_DRAG_START =
+    goog.define('DRAGLISTGROUP_CORRECT_POSITION_DRAG_START', false);
 
 
 /**
@@ -277,6 +295,20 @@ goog.fx.DragListGroup.prototype.setIsCurrDragItemAlwaysDisplayed = function() {
 goog.fx.DragListGroup.prototype.setNoUpdateWhileDragging = function() {
   'use strict';
   this.updateWhileDragging_ = false;
+};
+
+
+/**
+ * Sets the correctDraggedElementInitialPos_ private property. This override the
+ * DRAGLISTGROUP_CORRECT_POSITION_DRAG_START compile flag, to allow for a per
+ * component control within a project.
+ * @param {boolean} updateInitialPosition Whether to allow/forbid the correction
+ *     of the currDragEl initial position.
+ */
+goog.fx.DragListGroup.prototype.overrideCorrectDraggedElementInitialPos =
+    function(updateInitialPosition) {
+  'use strict';
+  this.correctDraggedElementInitialPos_ = updateInitialPosition;
 };
 
 
@@ -625,6 +657,7 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
       goog.fx.DragListGroup.EventType.DRAGGERCREATED, this, e,
       this.currDragItem_, this.draggerEl_, this.dragger_));
   this.dragger_.startDrag(e);
+  this.maybeUpdateDraggerDeltaToPlaceElUnderCursor_(e);
 };
 
 
@@ -696,6 +729,8 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
   this.draggerEl_.halfWidth = draggerElSize.width / 2;
   this.draggerEl_.halfHeight = draggerElSize.height / 2;
 
+  this.maybeUpdateDraggerDeltaToPlaceElUnderCursor_(e);
+
   this.draggerEl_.style.visibility = '';
 
   // Record the bounds of all the drag lists and all the other drag items. This
@@ -718,6 +753,30 @@ goog.fx.DragListGroup.prototype.handleDragStart_ = function(e) {
       new goog.fx.DragListGroupEvent(
           goog.fx.DragListGroup.EventType.DRAGSTART, this, e.browserEvent,
           this.currDragItem_, this.draggerEl_, this.dragger_));
+};
+
+
+/**
+ * Update the dragger_.delta[X&Y] properties to place the dragged element under
+ * the cursor mouse if that is not already the case.
+ * @param {!goog.fx.DragEvent|!goog.events.BrowserEvent} dragEvent MOUSEDOWN or
+ *     TOUCHSTART event.
+ * @private
+ */
+goog.fx.DragListGroup.prototype.maybeUpdateDraggerDeltaToPlaceElUnderCursor_ =
+    function(dragEvent) {
+  'use strict';
+  if (!this.correctDraggedElementInitialPos_) {
+    return;
+  }
+  const draggerElBoundingRect = this.draggerEl_.getBoundingClientRect();
+  const {clientX: cursorX, clientY: cursorY} = dragEvent;
+  if (cursorX > draggerElBoundingRect.right) {
+    this.dragger_.deltaX = cursorX - this.draggerEl_.halfWidth;
+  }
+  if (cursorY > draggerElBoundingRect.bottom) {
+    this.dragger_.deltaY = cursorY - this.draggerEl_.halfHeight;
+  }
 };
 
 
@@ -792,11 +851,10 @@ goog.fx.DragListGroup.prototype.handleDragMove_ = function(dragEvent) {
     this.recacheListAndItemBounds_(this.currDragItem_);
   }
 
-  this.dispatchEvent(
-      new goog.fx.DragListGroupEvent(
-          goog.fx.DragListGroup.EventType.DRAGMOVE, this, dragEvent,
-          /** @type {Element} */ (this.currDragItem_), this.draggerEl_,
-          this.dragger_, draggerElCenter, hoverList, hoverNextItem));
+  this.dispatchEvent(new goog.fx.DragListGroupEvent(
+      goog.fx.DragListGroup.EventType.DRAGMOVE, this, dragEvent,
+      /** @type {Element} */ (this.currDragItem_), this.draggerEl_,
+      this.dragger_, draggerElCenter, hoverList, hoverNextItem));
 
   // Return false to prevent selection due to mouse drag.
   return false;
