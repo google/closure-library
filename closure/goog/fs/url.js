@@ -89,11 +89,6 @@ goog.fs.url.findUrlObject_ = function() {
   if (goog.global.URL !== undefined &&
       goog.global.URL.createObjectURL !== undefined) {
     return /** @type {!goog.fs.url.UrlObject_} */ (goog.global.URL);
-    // This is what Chrome does (as of 10.0.648.6 dev)
-  } else if (
-      goog.global.webkitURL !== undefined &&
-      goog.global.webkitURL.createObjectURL !== undefined) {
-    return /** @type {!goog.fs.url.UrlObject_} */ (goog.global.webkitURL);
     // This is what the spec used to say to do
   } else if (goog.global.createObjectURL !== undefined) {
     return /** @type {!goog.fs.url.UrlObject_} */ (goog.global);
