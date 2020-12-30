@@ -32,7 +32,7 @@ testSuite({
     const extracted = SafeStyleSheet.unwrap(safeStyleSheet);
     assertEquals(styleSheet, extracted);
     assertEquals(styleSheet, safeStyleSheet.getTypedStringValue());
-    assertEquals(`SafeStyleSheet{${styleSheet}}`, String(safeStyleSheet));
+    assertEquals(`${styleSheet}`, String(safeStyleSheet));
 
     // Interface marker is present.
     assertTrue(safeStyleSheet.implementsGoogStringTypedString);
