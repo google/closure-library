@@ -16,8 +16,6 @@
 #
 # Compiles pertinent Closure library files.
 
-# TODO(joeltine): Make strictMissingRequire an error when
-#     @suppress {missingRequire} works for it.
 # TODO(sdh): Make strictCheckTypes an error, or at least only whitelist
 #     strictMissingProperties and fix the handful of strictPrimitiveOperator
 #     violations.
