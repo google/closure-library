@@ -63,7 +63,6 @@ var _allTests = [
   'closure/goog/debug/errorreporter_test.html',
   'closure/goog/debug/error_test.html',
   'closure/goog/debug/formatter_test.html',
-  'closure/goog/debug/fpsdisplay_test.html',
   'closure/goog/debug/logger_test.html',
   'closure/goog/debug/logrecordserializer_test.html',
   'closure/goog/debug/tracer_test.html',
