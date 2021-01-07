@@ -23,10 +23,11 @@ goog.addDependency('async/debouncer.js', ['goog.async.Debouncer'], ['goog.Dispos
 goog.addDependency('async/delay.js', ['goog.async.Delay'], ['goog.Disposable', 'goog.Timer'], {});
 goog.addDependency('async/freelist.js', ['goog.async.FreeList'], [], {'lang': 'es6'});
 goog.addDependency('async/legacy_throttle.js', ['goog.Throttle'], ['goog.async.Throttle'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('async/nexttick.js', ['goog.async.nextTick', 'goog.async.throwException'], ['goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.functions', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine'], {});
+goog.addDependency('async/nexttick.js', ['goog.async.nextTick'], ['goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.functions', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine'], {});
 goog.addDependency('async/promises.js', ['goog.async.promises'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/run.js', ['goog.async.run'], ['goog.async.WorkQueue', 'goog.async.nextTick', 'goog.async.throwException'], {});
 goog.addDependency('async/throttle.js', ['goog.async.Throttle'], ['goog.Disposable', 'goog.Timer'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('async/throwexception.js', ['goog.async.throwException'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/workqueue.js', ['goog.async.WorkQueue'], ['goog.asserts', 'goog.async.FreeList'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base.js', ['goog'], [], {});
 goog.addDependency('base_module_test.js', ['goog.baseModuleTest'], ['goog.Timer', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
