@@ -21,6 +21,7 @@ install:
   # otherwise there is no java at all.
   - jdk_switcher use oraclejdk8
   - ./scripts/ci/install_closure_deps.sh
+  - clang-format --version
 
 before_script:
   - ./scripts/http/simple_http_server.py 2> /dev/null & sleep 5
