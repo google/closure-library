@@ -651,11 +651,6 @@ goog.dom.safe.setNonceForScriptElement_ = function(script) {
  *     assigned to.
  * @param {string|!goog.html.SafeUrl} url The URL to assign.
  * @see goog.html.SafeUrl#sanitize
- * MOE:begin_strip
- * @deprecated Use
- *     google3.javascript.typescript.safevalues.safedom.safedom.location.setHref
- *     instead.
- * MOE:end_strip
 
  */
 goog.dom.safe.setLocationHref = function(loc, url) {
@@ -691,11 +686,6 @@ goog.dom.safe.setLocationHref = function(loc, url) {
  * @param {!Location} loc The Location object which is to be assigned.
  * @param {string|!goog.html.SafeUrl} url The URL to assign.
  * @see goog.html.SafeUrl#sanitize
- * MOE:begin_strip
- * @deprecated Use
- *     google3.javascript.typescript.safevalues.safedom.safedom.location.assign
- *     instead.
- * MOE:end_strip
  */
 goog.dom.safe.assignLocation = function(loc, url) {
   'use strict';
@@ -728,11 +718,6 @@ goog.dom.safe.assignLocation = function(loc, url) {
  * @param {!Location} loc The Location object which is to be replaced.
  * @param {string|!goog.html.SafeUrl} url The URL to assign.
  * @see goog.html.SafeUrl#sanitize
- * MOE:begin_strip
- * @deprecated Use
- *     google3.javascript.typescript.safevalues.safedom.safedom.location.replace
- *     instead.
- * MOE:end_strip
  */
 goog.dom.safe.replaceLocation = function(loc, url) {
   'use strict';
