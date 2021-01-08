@@ -6,9 +6,7 @@
 
 /**
  * @fileoverview Error classes for the IndexedDB wrapper.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
-
 
 
 // TODO(user): We're trying to migrate all ES5 subclasses of Closure
@@ -19,29 +17,18 @@
 // constructor at all. You can run the conversion tool yourself to see what it
 // does on this file: blaze run //javascript/refactoring/es6_classes:convert.
 
-goog.provide('goog.db.DomErrorLike');
 goog.provide('goog.db.Error');
-goog.provide('goog.db.Error.ErrorCode');
-goog.provide('goog.db.Error.ErrorName');
-goog.provide('goog.db.Error.VersionChangeBlockedError');
 
 goog.require('goog.asserts');
 goog.require('goog.debug.Error');
-
-
-/** @record */
-goog.db.DOMErrorLike = function() {};
-
-/** @type {string|undefined} */
-goog.db.DOMErrorLike.prototype.name;
 
 /**
  * A database error. Since the stack trace can be unhelpful in an asynchronous
  * context, the error provides a message about where it was produced.
  *
- * @param {number|!DOMError|!goog.db.DOMErrorLike} error The DOMError instance
- *     returned by the browser for Chrome22+, or an error code for previous
- *     versions.
+ * @param {number|!DOMError|!goog.db.Error.DOMErrorLike} error The DOMError
+ *     instance returned by the browser for Chrome22+, or an error code for
+ *     previous versions.
  * @param {string} context A description of where the error occurred.
  * @param {string=} opt_message Additional message.
  * @constructor
@@ -70,7 +57,7 @@ goog.db.Error = function(error, context, opt_message) {
   /**
    * The DOMException as returned by the browser.
    *
-   * @type {!goog.db.DOMErrorLike}
+   * @type {!goog.db.Error.DOMErrorLike}
    * @private
    */
   this.error_ = internalError;
@@ -239,6 +226,13 @@ goog.db.Error.getMessage = function(code) {
       return 'Unrecognized exception with code ' + code;
   }
 };
+
+
+/** @record */
+goog.db.Error.DOMErrorLike = function() {};
+
+/** @type {string|undefined} */
+goog.db.Error.DOMErrorLike.prototype.name;
 
 
 /**

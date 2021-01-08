@@ -30,7 +30,7 @@ testSuite({
     const extracted = SafeScript.unwrap(safeScript);
     assertEquals(script, extracted);
     assertEquals(script, safeScript.getTypedStringValue());
-    assertEquals(`SafeScript{${script}}`, String(safeScript));
+    assertEquals(`${script}`, String(safeScript));
 
     // Interface marker is present.
     assertTrue(safeScript.implementsGoogStringTypedString);

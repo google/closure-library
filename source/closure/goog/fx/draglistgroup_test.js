@@ -106,6 +106,51 @@ function setUpWithDragListPermission(dragListPermission) {
   });
 }
 
+/**
+ * Method that starts the dragging motion and wait in order for the
+ * event based DragListGroup internal logic to execute.
+ * @param {!DragListGroup|null} dlg The DragListGroup to examine
+ * @param {boolean} correctPosition Whethere to correct draggedEL position
+ * @return {!Coordinate} The mouse cursor position where the dragginig
+ *     started at
+ */
+function startDrag(dlg, correctPosition) {
+  dlg.overrideCorrectDraggedElementInitialPos(correctPosition);
+  const fistChildBoundingRect = list.firstChild.getBoundingClientRect();
+  const firstChildClickPositionX =
+      fistChildBoundingRect.left + fistChildBoundingRect.width / 2;
+  const firstChildClickPositionY =
+      fistChildBoundingRect.top + fistChildBoundingRect.height / 2;
+
+  const dragStartPosition =
+      new Coordinate(firstChildClickPositionX, firstChildClickPositionY);
+  testingEvents.fireMouseDownEvent(
+      list.firstChild, BrowserEvent.MouseButton.LEFT, dragStartPosition);
+
+  const newMousePosition = new Coordinate(
+      firstChildClickPositionX + 2, firstChildClickPositionY + 2);
+  testingEvents.fireMouseMoveEvent(list.firstChild, newMousePosition);
+
+  return dragStartPosition;
+}
+
+/**
+ * Whether the mouse is over the currently dragged element.
+ * @param {!DragListGroup|null} dlg The DragListGroup to examine
+ * @param {!Coordinate} newMousePosition The mouse cursor position
+ * @return {boolean} Whether the cursor is over the draggerEl or not
+ * @suppress {visibility} suppression added to enable type checking
+ */
+function isCursorOverDragger(dlg, newMousePosition) {
+  const draggedElRect = dlg.draggerEl_.getBoundingClientRect();
+  const isContainedInWidth = draggedElRect.left <= newMousePosition.x &&
+      draggedElRect.right >= newMousePosition.x;
+  const isContainedInHeight = draggedElRect.top <= newMousePosition.y &&
+      draggedElRect.bottom >= newMousePosition.y;
+
+  return isContainedInWidth && isContainedInHeight;
+}
+
 testSuite({
   /** @suppress {checkTypes} suppression added to enable type checking */
   setUp() {
@@ -120,7 +165,7 @@ testSuite({
     dlg.setDragItemHoverClass('opacity_40', 'cursor_move');
     dlg.setDragItemHandleHoverClass('opacity_40', 'cursor_pointer');
     dlg.setCurrDragItemClass('blue_bg', 'opacity_40');
-    dlg.setDraggerElClass('cursor_move', 'blue_bg');
+    dlg.setDraggerElClass('cursor_move blue_bg reduced-size');
     dlg.addDragList(list, DragListDirection.RIGHT);
     dlg.init();
 
@@ -137,6 +182,9 @@ testSuite({
   },
 
   tearDown() {
+    // Finish the potential on-going drag sequence to ensure no test state
+    // bleeding.
+    testingEvents.fireMouseUpEvent(list.firstChild);
     dlg.dispose();
     dom.removeChildren(dom.getElement('sandbox'));
   },
@@ -450,21 +498,22 @@ testSuite({
     assertIdle(dlg);
   },
 
-  /** @suppress {checkTypes} suppression added to enable type checking */
-  testRightClick() {
-    testingEvents.fireMouseDownEvent(
-        list.firstChild, BrowserEvent.MouseButton.RIGHT);
-    testingEvents.fireMouseUpEvent(
-        list.firstChild, BrowserEvent.MouseButton.RIGHT);
+  /**
+   * Tests that the dragged item initial position is untouched if the item would
+   * not be under the mouse cursor and the correction behavior is not enabled.
+   */
+  testPositionCorrectionOnDragItemNotApplied() {
+    const cursorPosition = startDrag(dlg, false);
+    assertFalse(isCursorOverDragger(dlg, cursorPosition));
+  },
 
-    assertArrayEquals(
-        'only clone events are fired on right click',
-        [
-          DragListGroup.EventType.DRAGGERCREATED.toString(),
-          DragListGroup.EventType.DRAGGERREMOVED.toString(),
-        ],
-        firedEventTypes);
-    assertIdle(dlg);
+  /**
+   * Tests that the dragged item initial position is corrected if the item would
+   * not be under the mouse cursor.
+   */
+  testPositionCorrectionOnDragItemApplied() {
+    const cursorPosition = startDrag(dlg, true);
+    assertTrue(isCursorOverDragger(dlg, cursorPosition));
   },
 
   /**

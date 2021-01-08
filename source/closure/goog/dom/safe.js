@@ -651,6 +651,7 @@ goog.dom.safe.setNonceForScriptElement_ = function(script) {
  *     assigned to.
  * @param {string|!goog.html.SafeUrl} url The URL to assign.
  * @see goog.html.SafeUrl#sanitize
+
  */
 goog.dom.safe.setLocationHref = function(loc, url) {
   'use strict';
@@ -806,7 +807,7 @@ goog.dom.safe.parseFromStringHtml = function(parser, html) {
  * Parses the string.
  * @param {!DOMParser} parser
  * @param {!goog.html.SafeHtml} content Note: We don't have a special type for
- *     XML od SVG supported by this function so we use SafeHtml.
+ *     XML or SVG supported by this function so we use SafeHtml.
  * @param {string} type
  * @return {?Document}
  */

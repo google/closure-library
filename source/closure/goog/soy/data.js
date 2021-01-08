@@ -11,6 +11,7 @@
  * as known to be "safe".
  */
 
+goog.provide('goog.soy.data');
 goog.provide('goog.soy.data.SanitizedContent');
 goog.provide('goog.soy.data.SanitizedContentKind');
 goog.provide('goog.soy.data.SanitizedCss');

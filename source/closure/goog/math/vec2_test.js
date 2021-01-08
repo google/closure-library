@@ -42,9 +42,17 @@ testSuite({
   testMagnitude() {
     const a = new Vec2(0, 10);
     const b = new Vec2(3, 4);
+    const c = new Vec2(0, 0);
 
     assertEquals(10, a.magnitude());
     assertEquals(5, b.magnitude());
+    assertEquals(0, c.magnitude());
+  },
+
+  testMagnitudeOverflow() {
+    const x = Number.MAX_VALUE / 2;
+    assertEquals(
+        (Number.MAX_VALUE / 2) * Math.sqrt(2), new Vec2(x, x).magnitude());
   },
 
   testSquaredMagnitude() {

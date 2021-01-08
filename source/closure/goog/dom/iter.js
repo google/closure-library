@@ -8,6 +8,7 @@
  * @fileoverview Iterators over DOM nodes.
  */
 
+goog.provide('goog.dom.iter');
 goog.provide('goog.dom.iter.AncestorIterator');
 goog.provide('goog.dom.iter.ChildIterator');
 goog.provide('goog.dom.iter.SiblingIterator');
