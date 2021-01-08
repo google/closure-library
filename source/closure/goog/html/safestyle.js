@@ -197,18 +197,18 @@ goog.html.SafeStyle.prototype.getTypedStringValue = function() {
 
 if (goog.DEBUG) {
   /**
-   * Returns a debug string-representation of this value.
+   * Returns a string-representation of this value.
    *
    * To obtain the actual string value wrapped in a SafeStyle, use
    * `goog.html.SafeStyle.unwrap`.
    *
+   * @return {string}
    * @see goog.html.SafeStyle#unwrap
    * @override
    */
   goog.html.SafeStyle.prototype.toString = function() {
     'use strict';
-    return 'SafeStyle{' + this.privateDoNotAccessOrElseSafeStyleWrappedValue_ +
-        '}';
+    return this.privateDoNotAccessOrElseSafeStyleWrappedValue_.toString();
   };
 }
 

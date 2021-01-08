@@ -131,7 +131,17 @@ testSuite({
   testMagnitude() {
     const v0 = Vec2.createFloat32FromArray([1, 2]);
     assertEquals(Math.sqrt(5), Vec2.magnitude(v0));
+    const v1 = Vec2.createFloat32FromArray([0, 0]);
+    assertEquals(0, Vec2.magnitude(v1));
   },
+
+  testMagnitudeOverflow() {
+    const x = Number.MAX_VALUE / 2;
+    assertEquals(
+        (Number.MAX_VALUE / 2) * Math.sqrt(2),
+        Vec2.magnitude(Vec2.createFloat64FromArray([x, x])));
+  },
+
 
   testNormalize() {
     const v0 = Vec2.createFloat32FromArray([2, 3]);

@@ -65,7 +65,7 @@ testSuite({
     const extracted = SafeUrl.unwrap(safeUrl);
     assertEquals('javascript:trusted();', extracted);
     assertEquals('javascript:trusted();', SafeUrl.unwrap(safeUrl));
-    assertEquals('SafeUrl{javascript:trusted();}', String(safeUrl));
+    assertEquals('javascript:trusted();', String(safeUrl));
 
     // URLs are always LTR.
     assertEquals(Dir.LTR, safeUrl.getDirection());

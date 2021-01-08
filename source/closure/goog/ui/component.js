@@ -80,8 +80,6 @@ goog.ui.Component = function(opt_domHelper) {
 
   /**
    * Event handler.
-   * TODO(user): rename it to handler_ after all component subclasses in
-   * inside Google have been cleaned up.
    * Code search: http://go/component_code_search
    * @private {goog.events.EventHandler|undefined}
    */

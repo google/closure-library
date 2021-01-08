@@ -566,7 +566,6 @@ goog.ui.ComboBox.prototype.getValue = function() {
  */
 goog.ui.ComboBox.prototype.getToken = function() {
   'use strict';
-  // TODO(user): Remove HTML escaping and fix the existing calls.
   return goog.string.htmlEscape(this.getTokenText_());
 };
 
