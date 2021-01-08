@@ -14,14 +14,14 @@
  */
 
 goog.provide('goog.editor.Table');
-goog.provide('goog.editor.TableCell');
-goog.provide('goog.editor.TableRow');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
+goog.require('goog.editor.TableCell');
+goog.require('goog.editor.TableRow');
 goog.require('goog.log');
 goog.require('goog.string.Unicode');
 goog.require('goog.style');
@@ -411,94 +411,6 @@ goog.editor.Table.prototype.createEmptyTd = function() {
   // TODO(user): more cross-browser testing to determine best
   // and least annoying filler content.
   return this.dom_.createDom(goog.dom.TagName.TD, {}, goog.string.Unicode.NBSP);
-};
-
-
-
-/**
- * Class representing a logical table row: a tr element and any cells
- * that appear in that row.
- * @param {Element} trElement This rows's underlying TR element.
- * @param {number} rowIndex This row's index in its parent table.
- * @constructor
- * @final
- */
-goog.editor.TableRow = function(trElement, rowIndex) {
-  'use strict';
-  this.index = rowIndex;
-  this.element = trElement;
-  this.columns = [];
-};
-
-
-
-/**
- * Class representing a table cell, which may span across multiple
- * rows and columns
- * @param {Element} td This cell's underlying TD or TH element.
- * @param {number} startRow Index of the row where this cell begins.
- * @param {number} startCol Index of the column where this cell begins.
- * @constructor
- * @final
- */
-goog.editor.TableCell = function(td, startRow, startCol) {
-  'use strict';
-  this.element = td;
-  this.colSpan = parseInt(td.colSpan, 10) || 1;
-  this.rowSpan = parseInt(td.rowSpan, 10) || 1;
-  this.startRow = startRow;
-  this.startCol = startCol;
-  this.updateCoordinates_();
-};
-
-
-/**
- * Calculates this cell's endRow/endCol coordinates based on rowSpan/colSpan
- * @private
- */
-goog.editor.TableCell.prototype.updateCoordinates_ = function() {
-  'use strict';
-  this.endCol = this.startCol + this.colSpan - 1;
-  this.endRow = this.startRow + this.rowSpan - 1;
-};
-
-
-/**
- * Set this cell's colSpan, updating both its colSpan property and the
- * underlying element's colSpan attribute.
- * @param {number} colSpan The new colSpan.
- */
-goog.editor.TableCell.prototype.setColSpan = function(colSpan) {
-  'use strict';
-  if (colSpan != this.colSpan) {
-    if (colSpan > 1) {
-      this.element.colSpan = colSpan;
-    } else {
-      this.element.colSpan = 1, this.element.removeAttribute('colSpan');
-    }
-    this.colSpan = colSpan;
-    this.updateCoordinates_();
-  }
-};
-
-
-/**
- * Set this cell's rowSpan, updating both its rowSpan property and the
- * underlying element's rowSpan attribute.
- * @param {number} rowSpan The new rowSpan.
- */
-goog.editor.TableCell.prototype.setRowSpan = function(rowSpan) {
-  'use strict';
-  if (rowSpan != this.rowSpan) {
-    if (rowSpan > 1) {
-      this.element.rowSpan = rowSpan.toString();
-    } else {
-      this.element.rowSpan = '1';
-      this.element.removeAttribute('rowSpan');
-    }
-    this.rowSpan = rowSpan;
-    this.updateCoordinates_();
-  }
 };
 
 
