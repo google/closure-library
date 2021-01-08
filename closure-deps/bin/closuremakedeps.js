@@ -24,6 +24,7 @@
 const depFile = require('../lib/depfile');
 const depGraph = require('../lib/depgraph');
 const fs = require('fs');
+const minimatch = require('minimatch');
 const parser = require('../lib/parser');
 const path = require('path');
 const process = require('process');
@@ -52,14 +53,15 @@ function parseArgs(args) {
         alias: 'f',
         default: [],
         array: true,
-        description: 'One or more input files to calculate dependencies ' +
-            'for. The namespaces in these files will be combined with ' +
-            'those given with the --root flag to form the set of ' +
-            'namespaces to find dependencies for. If this is a file that ' +
-            'contains repeated calls to goog.addDependency, then the calls ' +
-            'will be used as forward declarations. e.g. if you include ' +
-            'Closure Library\'s deps.js file, then there is no need to ' +
-            'include closure/goog/array/array.js as an input file as well. ' +
+        description:
+            'One or more input files to calculate dependencies for. The ' +
+            'namespaces in these files will be combined with those given ' +
+            'with the --root flag to form the set of namespaces to find ' +
+            'dependencies for. If this is a file that contains repeated ' +
+            'calls to goog.addDependency, then the calls will be used as ' +
+            'forward declarations. e.g. if you include Closure Library\'s ' +
+            'deps.js file, then there is no need to include ' +
+            'closure/goog/array/array.js as an input file as well. ' +
             'If you wish to merge these deps files in the output, see the ' +
             '--merge-deps option.',
       })
@@ -77,9 +79,8 @@ function parseArgs(args) {
         default: [],
         array: true,
         description:
-            'One or more path prefixes to ignore. Useful when combined ' +
-            'with the --root flag to ignore specific subfiles or ' +
-            'subdirectories.'
+            'One or more path globs to ignore. Useful when combined with the ' +
+            '--root flag to ignore specific subfiles or subdirectories.'
       })
       .option('closure-path', {
         default: undefined,
@@ -117,6 +118,16 @@ function resolve(p) {
 }
 
 /**
+ * Returns whether the given path matches at least one of the given globs.
+ * @param {!Array<string>} globs The globs against which to match.
+ * @param {string} path The path to match.
+ * @return {boolean} Whether the path matches at least one of the globs.
+ */
+function globMatch(globs, path) {
+  return globs.some(glob => minimatch(path, glob));
+}
+
+/**
  * @param {function(...?)} fn
  * @param {...?} args
  * @return {!Promise<?>}
@@ -129,11 +140,11 @@ function promisify(fn, ...args) {
 
 /**
  * @param {string} pathToScan
- * @param {!Set<string>} excluded
+ * @param {!Array<string>} excludedGlobs
  * @return {!Promise<!Array<string>>}
  */
-async function findAllJsFiles(pathToScan, excluded) {
-  if (excluded.has(pathToScan)) {
+async function findAllJsFiles(pathToScan, excludedGlobs) {
+  if (globMatch(excludedGlobs, pathToScan)) {
     return [];
   }
 
@@ -143,7 +154,7 @@ async function findAllJsFiles(pathToScan, excluded) {
     let allfiles = [];
     const files = await promisify(fs.readdir, pathToScan);
     const allFilePromises = files.map(
-        file => findAllJsFiles(path.join(pathToScan, file), excluded));
+        file => findAllJsFiles(path.join(pathToScan, file), excludedGlobs));
     for (const p of allFilePromises) {
       const subFiles = await p;
       allfiles = allfiles.concat(subFiles);
@@ -215,7 +226,7 @@ async function main(opt_args) {
 
   const sources = new Set((args.file || []).map(resolve));
   const roots = (args.root || []).map(resolve);
-  const excluded = new Set((args.exclude || []).map(resolve));
+  const excluded = [...new Set(args.exclude || [])].map(resolve);
 
   const allFiles =
       await Promise.all(roots.map(r => findAllJsFiles(r, excluded)));
