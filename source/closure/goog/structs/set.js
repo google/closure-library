@@ -270,6 +270,8 @@ goog.structs.Set.prototype.isSubsetOf = function(col) {
   if (this.getCount() > colCount) {
     return false;
   }
+  // TODO(user) Find the minimal collection size where the conversion makes
+  // the contains() method faster.
   if (!(col instanceof goog.structs.Set) && colCount > 5) {
     // Convert to a goog.structs.Set so that goog.structs.contains runs in
     // O(1) time instead of O(n) time.

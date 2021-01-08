@@ -282,7 +282,7 @@ goog.vec.Vec2.magnitudeSquared = function(vec0) {
 goog.vec.Vec2.magnitude = function(vec0) {
   'use strict';
   var x = vec0[0], y = vec0[1];
-  return Math.hypot(x, y);
+  return Math.sqrt(x * x + y * y);
 };
 
 
