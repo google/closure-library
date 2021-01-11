@@ -20,15 +20,17 @@
   },
   "homepage": "https://developers.google.com/closure/library/",
   "devDependencies": {
+    "generate_closure_unit_tests": "file:./closure/bin/generate_closure_unit_tests/",
+    "google-closure-deps": "file:./closure-deps/",
     "http-server": "^0.12.1",
     "promise": "^7.0.4",
     "promises-aplus-tests": "^2.1.2",
-    "protractor": "^2.1.0",
-    "generate_closure_unit_tests": "file:./closure/bin/generate_closure_unit_tests/"
+    "protractor": "^7.0.0"
   },
-  "dependencies": {},
   "scripts": {
+    "gen_deps_js": "node scripts/make_deps_js > ./closure/goog/deps.js",
     "gen_all_tests": "npx generate_closure_unit_tests --base=closure/goog/base.js --recursive ./closure/goog/ --overwrite",
+    "prepare": "npm run gen_deps_js",
     "preserve_tests": "npm run gen_all_tests",
     "serve_tests": "npx http-server -o allTests.html",
     "serve_demos": "npx http-server -o closure/goog/demos/index.html"

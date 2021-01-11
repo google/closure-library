@@ -30,8 +30,6 @@ goog.addDependency('async/throttle.js', ['goog.async.Throttle'], ['goog.Disposab
 goog.addDependency('async/throwexception.js', ['goog.async.throwException'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/workqueue.js', ['goog.async.WorkQueue'], ['goog.asserts', 'goog.async.FreeList'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base.js', ['goog'], [], {});
-goog.addDependency('base_module_test.js', ['goog.baseModuleTest'], ['goog.Timer', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('base_test.js', ['goog.baseTest'], ['goog.dom', 'goog.dom.TagName', 'goog.object', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('collections/iters.js', ['goog.collections.iters'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('collections/sets.js', ['goog.collections.sets'], ['goog.collections.iters'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color'], {});
@@ -106,7 +104,6 @@ goog.addDependency('debug/logrecord.js', ['goog.debug.LogRecord'], ['goog.log.Lo
 goog.addDependency('debug/logrecordserializer.js', ['goog.debug.logRecordSerializer'], ['goog.debug.LogRecord', 'goog.debug.Logger', 'goog.json', 'goog.object'], {});
 goog.addDependency('debug/relativetimeprovider.js', ['goog.debug.RelativeTimeProvider'], [], {});
 goog.addDependency('debug/tracer.js', ['goog.debug.StopTraceDetail', 'goog.debug.Trace'], ['goog.array', 'goog.asserts', 'goog.debug', 'goog.debug.Logger', 'goog.iter', 'goog.log', 'goog.structs.Map', 'goog.structs.SimplePool'], {});
-goog.addDependency('defineclass_test.js', ['goog.defineClassTest'], ['goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('delegate/delegateregistry.js', ['goog.delegate.DelegateRegistry'], ['goog.array', 'goog.asserts', 'goog.debug'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('delegate/delegates.js', ['goog.delegate.delegates'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('disposable/disposable.js', ['goog.Disposable', 'goog.dispose', 'goog.disposeAll'], ['goog.disposable.IDisposable'], {});
@@ -327,12 +324,10 @@ goog.addDependency('html/safescript.js', ['goog.html.SafeScript'], ['goog.assert
 goog.addDependency('html/safestyle.js', ['goog.html.SafeStyle'], ['goog.array', 'goog.asserts', 'goog.html.SafeUrl', 'goog.string.Const', 'goog.string.TypedString', 'goog.string.internal'], {'lang': 'es6'});
 goog.addDependency('html/safestylesheet.js', ['goog.html.SafeStyleSheet'], ['goog.array', 'goog.asserts', 'goog.html.SafeStyle', 'goog.object', 'goog.string.Const', 'goog.string.TypedString', 'goog.string.internal'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('html/safeurl.js', ['goog.html.SafeUrl'], ['goog.asserts', 'goog.fs.url', 'goog.html.TrustedResourceUrl', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.string.Const', 'goog.string.TypedString', 'goog.string.internal'], {'lang': 'es6'});
-goog.addDependency('html/safeurl_test_vectors.js', ['goog.html.safeUrlTestVectors'], [], {});
 goog.addDependency('html/sanitizer/attributewhitelist.js', ['goog.html.sanitizer.AttributeSanitizedWhitelist', 'goog.html.sanitizer.AttributeWhitelist'], [], {});
 goog.addDependency('html/sanitizer/csspropertysanitizer.js', ['goog.html.sanitizer.CssPropertySanitizer'], ['goog.asserts', 'goog.html.SafeUrl', 'goog.object', 'goog.string'], {'module': 'goog'});
 goog.addDependency('html/sanitizer/csssanitizer.js', ['goog.html.sanitizer.CssSanitizer'], ['goog.array', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.CssSpecificity', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.sanitizer.CssPropertySanitizer', 'goog.html.sanitizer.noclobber', 'goog.html.uncheckedconversions', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.userAgent', 'goog.userAgent.product'], {});
 goog.addDependency('html/sanitizer/elementweakmap.js', ['goog.html.sanitizer.ElementWeakMap'], ['goog.html.sanitizer.noclobber'], {'module': 'goog'});
-goog.addDependency('html/sanitizer/html_test_vectors.js', ['goog.html.htmlTestVectors'], [], {'lang': 'es5'});
 goog.addDependency('html/sanitizer/htmlsanitizer.js', ['goog.html.sanitizer.HtmlSanitizer', 'goog.html.sanitizer.HtmlSanitizer.Builder', 'goog.html.sanitizer.HtmlSanitizerAttributePolicy', 'goog.html.sanitizer.HtmlSanitizerPolicy', 'goog.html.sanitizer.HtmlSanitizerPolicyContext', 'goog.html.sanitizer.HtmlSanitizerPolicyHints', 'goog.html.sanitizer.HtmlSanitizerUrlPolicy'], ['goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.functions', 'goog.html.SafeHtml', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.sanitizer.AttributeSanitizedWhitelist', 'goog.html.sanitizer.AttributeWhitelist', 'goog.html.sanitizer.CssSanitizer', 'goog.html.sanitizer.SafeDomTreeProcessor', 'goog.html.sanitizer.TagBlacklist', 'goog.html.sanitizer.TagWhitelist', 'goog.html.sanitizer.noclobber', 'goog.html.uncheckedconversions', 'goog.object', 'goog.string', 'goog.string.Const'], {'lang': 'es5'});
 goog.addDependency('html/sanitizer/noclobber.js', ['goog.html.sanitizer.noclobber'], ['goog.asserts', 'goog.dom.NodeType', 'goog.userAgent.product'], {'lang': 'es5', 'module': 'goog'});
 goog.addDependency('html/sanitizer/safedomtreeprocessor.js', ['goog.html.sanitizer.SafeDomTreeProcessor'], ['goog.dom', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.sanitizer.ElementWeakMap', 'goog.html.sanitizer.noclobber', 'goog.html.uncheckedconversions', 'goog.log', 'goog.log.Logger', 'goog.string.Const', 'goog.userAgent'], {'module': 'goog'});
@@ -492,9 +487,6 @@ goog.addDependency('messaging/portchannel.js', ['goog.messaging.PortChannel'], [
 goog.addDependency('messaging/portnetwork.js', ['goog.messaging.PortNetwork'], [], {});
 goog.addDependency('messaging/portoperator.js', ['goog.messaging.PortOperator'], ['goog.Disposable', 'goog.asserts', 'goog.dispose', 'goog.log', 'goog.messaging.PortChannel', 'goog.messaging.PortNetwork', 'goog.object'], {});
 goog.addDependency('messaging/respondingchannel.js', ['goog.messaging.RespondingChannel'], ['goog.Disposable', 'goog.Promise', 'goog.dispose', 'goog.log', 'goog.messaging.MultiChannel'], {});
-goog.addDependency('messaging/testdata/portchannel_worker.js', ['goog.messaging.testdata.portchannel_worker'], ['goog.messaging.PortChannel'], {});
-goog.addDependency('messaging/testdata/portnetwork_worker1.js', ['goog.messaging.testdata.portnetwork_worker1'], ['goog.messaging.PortCaller', 'goog.messaging.PortChannel'], {});
-goog.addDependency('messaging/testdata/portnetwork_worker2.js', ['goog.messaging.testdata.portnetwork_worker2'], ['goog.messaging.PortCaller', 'goog.messaging.PortChannel'], {});
 goog.addDependency('module/abstractmoduleloader.js', ['goog.module.AbstractModuleLoader'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('module/basemodule.js', ['goog.module.BaseModule'], ['goog.Disposable', 'goog.module'], {});
 goog.addDependency('module/loader.js', ['goog.module.Loader'], ['goog.Timer', 'goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.legacyconversions', 'goog.module', 'goog.object'], {});
@@ -504,9 +496,6 @@ goog.addDependency('module/moduleloadcallback.js', ['goog.module.ModuleLoadCallb
 goog.addDependency('module/moduleloader.js', ['goog.module.ModuleLoader'], ['goog.Timer', 'goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.events', 'goog.events.Event', 'goog.events.EventHandler', 'goog.events.EventId', 'goog.events.EventTarget', 'goog.functions', 'goog.html.TrustedResourceUrl', 'goog.labs.userAgent.browser', 'goog.log', 'goog.module.AbstractModuleLoader', 'goog.net.BulkLoader', 'goog.net.EventType', 'goog.net.jsloader', 'goog.userAgent', 'goog.userAgent.product'], {'lang': 'es6'});
 goog.addDependency('module/moduleloadfailuretype.js', ['goog.module.ModuleLoadFailureType'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('module/modulemanager.js', ['goog.module.ModuleManager', 'goog.module.ModuleManager.CallbackType', 'goog.module.ModuleManager.FailureType'], ['goog.array', 'goog.asserts', 'goog.async.Deferred', 'goog.debug.Error', 'goog.debug.Trace', 'goog.disposable.IDisposable', 'goog.disposeAll', 'goog.loader.AbstractModuleManager', 'goog.loader.activeModuleManager', 'goog.log', 'goog.module', 'goog.module.ModuleInfo', 'goog.module.ModuleLoadCallback', 'goog.module.ModuleLoadFailureType', 'goog.object'], {'lang': 'es6'});
-goog.addDependency('module/testdata/modA_1.js', ['goog.module.testdata.modA_1'], [], {});
-goog.addDependency('module/testdata/modA_2.js', ['goog.module.testdata.modA_2'], ['goog.module.ModuleManager'], {});
-goog.addDependency('module/testdata/modB_1.js', ['goog.module.testdata.modB_1'], ['goog.module.ModuleManager'], {});
 goog.addDependency('net/browserchannel.js', ['goog.net.BrowserChannel', 'goog.net.BrowserChannel.Error', 'goog.net.BrowserChannel.Event', 'goog.net.BrowserChannel.Handler', 'goog.net.BrowserChannel.Hooks', 'goog.net.BrowserChannel.LogSaver', 'goog.net.BrowserChannel.QueuedMap', 'goog.net.BrowserChannel.ServerReachability', 'goog.net.BrowserChannel.ServerReachabilityEvent', 'goog.net.BrowserChannel.Stat', 'goog.net.BrowserChannel.StatEvent', 'goog.net.BrowserChannel.State', 'goog.net.BrowserChannel.TimingEvent'], ['goog.Uri', 'goog.array', 'goog.asserts', 'goog.debug.TextFormatter', 'goog.events.Event', 'goog.events.EventTarget', 'goog.json', 'goog.json.NativeJsonProcessor', 'goog.log', 'goog.net.BrowserTestChannel', 'goog.net.ChannelDebug', 'goog.net.ChannelRequest', 'goog.net.XhrIo', 'goog.net.browserchannelinternal.ServerReachability', 'goog.net.browserchannelinternal.hooks', 'goog.net.browserchannelinternal.stats', 'goog.net.tmpnetwork', 'goog.object', 'goog.string', 'goog.structs', 'goog.structs.CircularBuffer'], {'lang': 'es6'});
 goog.addDependency('net/browserchannelexecutionhooks.js', ['goog.net.browserchannelinternal.hooks'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('net/browserchannelserverreachability.js', ['goog.net.browserchannelinternal.ServerReachability'], [], {'lang': 'es6', 'module': 'goog'});
@@ -547,10 +536,6 @@ goog.addDependency('net/streams/streamparser.js', ['goog.net.streams.StreamParse
 goog.addDependency('net/streams/utils.js', ['goog.net.streams.utils'], [], {'module': 'goog'});
 goog.addDependency('net/streams/xhrnodereadablestream.js', ['goog.net.streams.XhrNodeReadableStream'], ['goog.array', 'goog.log', 'goog.net.streams.NodeReadableStream', 'goog.net.streams.XhrStreamReader'], {'lang': 'es6'});
 goog.addDependency('net/streams/xhrstreamreader.js', ['goog.net.streams.XhrStreamReader'], ['goog.events.EventHandler', 'goog.log', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.HttpStatus', 'goog.net.XhrIo', 'goog.net.XmlHttp', 'goog.net.streams.Base64PbStreamParser', 'goog.net.streams.JsonStreamParser', 'goog.net.streams.PbJsonStreamParser', 'goog.net.streams.PbStreamParser', 'goog.string', 'goog.userAgent'], {'lang': 'es6'});
-goog.addDependency('net/testdata/jsloader_test1.js', ['goog.net.testdata.jsloader_test1'], [], {});
-goog.addDependency('net/testdata/jsloader_test2.js', ['goog.net.testdata.jsloader_test2'], [], {});
-goog.addDependency('net/testdata/jsloader_test3.js', ['goog.net.testdata.jsloader_test3'], [], {});
-goog.addDependency('net/testdata/jsloader_test4.js', ['goog.net.testdata.jsloader_test4'], [], {});
 goog.addDependency('net/tmpnetwork.js', ['goog.net.tmpnetwork'], ['goog.Uri', 'goog.dom.safe', 'goog.net.ChannelDebug'], {'lang': 'es6'});
 goog.addDependency('net/websocket.js', ['goog.net.WebSocket', 'goog.net.WebSocket.ErrorEvent', 'goog.net.WebSocket.EventType', 'goog.net.WebSocket.MessageEvent'], ['goog.Timer', 'goog.asserts', 'goog.debug.entryPointRegistry', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.log'], {'lang': 'es6'});
 goog.addDependency('net/wrapperxmlhttpfactory.js', ['goog.net.WrapperXmlHttpFactory'], ['goog.net.XhrLike', 'goog.net.XmlHttpFactory'], {});
@@ -632,12 +617,10 @@ goog.addDependency('streams/defines.js', ['goog.streams.defines'], [], {'lang': 
 goog.addDependency('streams/full.js', ['goog.streams.full'], ['goog.streams.defines', 'goog.streams.fullImpl', 'goog.streams.fullNativeImpl', 'goog.streams.fullTypes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('streams/full_impl.js', ['goog.streams.fullImpl'], ['goog.asserts', 'goog.promise.NativeResolver', 'goog.streams.fullTypes', 'goog.streams.liteImpl'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('streams/full_native_impl.js', ['goog.streams.fullNativeImpl'], ['goog.streams.fullTypes', 'goog.streams.liteNativeImpl'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('streams/full_test_cases.js', ['goog.streams.fullTestCases'], ['goog.streams.fullTypes', 'goog.streams.liteTestCases', 'goog.testing.recordFunction'], {'lang': 'es9', 'module': 'goog'});
 goog.addDependency('streams/full_types.js', ['goog.streams.fullTypes'], ['goog.streams.liteTypes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('streams/lite.js', ['goog.streams.lite'], ['goog.streams.defines', 'goog.streams.liteImpl', 'goog.streams.liteNativeImpl', 'goog.streams.liteTypes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('streams/lite_impl.js', ['goog.streams.liteImpl'], ['goog.asserts', 'goog.promise.NativeResolver', 'goog.streams.liteTypes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('streams/lite_native_impl.js', ['goog.streams.liteNativeImpl'], ['goog.streams.liteTypes'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('streams/lite_test_cases.js', ['goog.streams.liteTestCases'], ['goog.streams.liteTypes', 'goog.testing.jsunit'], {'lang': 'es8', 'module': 'goog'});
 goog.addDependency('streams/lite_types.js', ['goog.streams.liteTypes'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('string/const.js', ['goog.string.Const'], ['goog.asserts', 'goog.string.TypedString'], {});
 goog.addDependency('string/internal.js', ['goog.string.internal'], [], {'lang': 'es6'});
@@ -729,7 +712,6 @@ goog.addDependency('testing/net/xhrio.js', ['goog.testing.net.XhrIo'], ['goog.Ur
 goog.addDependency('testing/net/xhriopool.js', ['goog.testing.net.XhrIoPool'], ['goog.net.XhrIoPool', 'goog.testing.net.XhrIo'], {});
 goog.addDependency('testing/objectpropertystring.js', ['goog.testing.ObjectPropertyString'], [], {});
 goog.addDependency('testing/objects.js', ['goog.testing.objects'], ['goog.testing.asserts'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('testing/parallel_closure_test_suite.js', ['goog.testing.parallelClosureTestSuite'], ['goog.Promise', 'goog.asserts', 'goog.events', 'goog.json', 'goog.testing.MultiTestRunner', 'goog.testing.TestCase', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('testing/performancetable.js', ['goog.testing.PerformanceTable'], ['goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.string.Const', 'goog.testing.PerformanceTimer'], {});
 goog.addDependency('testing/performancetimer.js', ['goog.testing.PerformanceTimer', 'goog.testing.PerformanceTimer.Task'], ['goog.array', 'goog.async.Deferred', 'goog.math'], {'lang': 'es6'});
 goog.addDependency('testing/propertyreplacer.js', ['goog.testing.PropertyReplacer'], ['goog.asserts', 'goog.userAgent'], {});
