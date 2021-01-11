@@ -26,7 +26,6 @@
     "protractor": "^2.1.0",
     "generate_closure_unit_tests": "file:./closure/bin/generate_closure_unit_tests/"
   },
-  "dependencies": {},
   "scripts": {
     "gen_all_tests": "npx generate_closure_unit_tests --base=closure/goog/base.js --recursive ./closure/goog/ --overwrite",
     "preserve_tests": "npm run gen_all_tests",
