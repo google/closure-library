@@ -109,7 +109,9 @@ goog.addDependency('debug/tracer.js', ['goog.debug.StopTraceDetail', 'goog.debug
 goog.addDependency('defineclass_test.js', ['goog.defineClassTest'], ['goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('delegate/delegateregistry.js', ['goog.delegate.DelegateRegistry'], ['goog.array', 'goog.asserts', 'goog.debug'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('delegate/delegates.js', ['goog.delegate.delegates'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('disposable/disposable.js', ['goog.Disposable', 'goog.dispose', 'goog.disposeAll'], ['goog.disposable.IDisposable'], {});
+goog.addDependency('disposable/disposable.js', ['goog.Disposable'], ['goog.disposable.IDisposable', 'goog.dispose', 'goog.disposeAll'], {});
+goog.addDependency('disposable/dispose.js', ['goog.dispose'], [], {'module': 'goog'});
+goog.addDependency('disposable/disposeall.js', ['goog.disposeAll'], ['goog.dispose'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('disposable/idisposable.js', ['goog.disposable.IDisposable'], [], {});
 goog.addDependency('dom/abstractmultirange.js', ['goog.dom.AbstractMultiRange'], ['goog.array', 'goog.dom', 'goog.dom.AbstractRange', 'goog.dom.TextRange'], {});
 goog.addDependency('dom/abstractrange.js', ['goog.dom.AbstractRange', 'goog.dom.RangeIterator', 'goog.dom.RangeType'], ['goog.dom', 'goog.dom.NodeType', 'goog.dom.TagIterator', 'goog.userAgent'], {});

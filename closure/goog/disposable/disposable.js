@@ -5,18 +5,18 @@
  */
 
 /**
- * @fileoverview Implements the disposable interface. The dispose method is used
- * to clean up references and resources.
+ * @fileoverview Implements the disposable interface.
  */
 
-
 goog.provide('goog.Disposable');
-goog.provide('goog.dispose');
-goog.provide('goog.disposeAll');
 
 goog.require('goog.disposable.IDisposable');
-
-
+goog.require('goog.dispose');
+/**
+ * TODO(user): Remove this require.
+ * @suppress {extraRequire}
+ */
+goog.require('goog.disposeAll');
 
 /**
  * Class that provides the basic implementation for disposable objects. If your
@@ -282,37 +282,4 @@ goog.Disposable.isDisposed = function(obj) {
     return obj.isDisposed();
   }
   return false;
-};
-
-
-/**
- * Calls `dispose` on the argument if it supports it. If obj is not an
- *     object with a dispose() method, this is a no-op.
- * @param {*} obj The object to dispose of.
- */
-goog.dispose = function(obj) {
-  'use strict';
-  if (obj && typeof obj.dispose == 'function') {
-    obj.dispose();
-  }
-};
-
-
-/**
- * Calls `dispose` on each member of the list that supports it. (If the
- * member is an ArrayLike, then `goog.disposeAll()` will be called
- * recursively on each of its members.) If the member is not an object with a
- * `dispose()` method, then it is ignored.
- * @param {...*} var_args The list.
- */
-goog.disposeAll = function(var_args) {
-  'use strict';
-  for (var i = 0, len = arguments.length; i < len; ++i) {
-    var disposable = arguments[i];
-    if (goog.isArrayLike(disposable)) {
-      goog.disposeAll.apply(null, disposable);
-    } else {
-      goog.dispose(disposable);
-    }
-  }
 };
