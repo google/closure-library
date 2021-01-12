@@ -159,7 +159,7 @@ goog.html.TrustedResourceUrl.prototype.cloneWithParams = function(
 
 if (goog.DEBUG) {
   /**
-   * Returns a debug string-representation of this value.
+   * Returns a string-representation of this value.
    *
    * To obtain the actual string value wrapped in a TrustedResourceUrl, use
    * `goog.html.TrustedResourceUrl.unwrap`.
@@ -170,8 +170,7 @@ if (goog.DEBUG) {
    */
   goog.html.TrustedResourceUrl.prototype.toString = function() {
     'use strict';
-    return 'TrustedResourceUrl{' +
-        this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ + '}';
+    return this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ + '';
   };
 }
 
