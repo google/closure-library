@@ -2136,6 +2136,22 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
 
   /**
+   * Tries to detect whether the current browser is Edge, based on the user
+   * agent. This matches only pre-Chromium Edge.
+   * @see https://docs.microsoft.com/en-us/microsoft-edge/web-platform/user-agent-string
+   * @return {boolean} True if the current browser is Edge.
+   * @private
+   */
+  goog.isEdge_ = function() {
+    var userAgent = goog.global.navigator && goog.global.navigator.userAgent ?
+        goog.global.navigator.userAgent :
+        '';
+    var edgeRe = /Edge\/(\d+)(\.\d)*/i;
+    return !!userAgent.match(edgeRe);
+  };
+
+
+  /**
    * Tries to detect whether is in the context of an HTML document.
    * @return {boolean} True if it looks like HTML document.
    * @private
@@ -2266,10 +2282,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       }
     }
 
-    var userAgent = goog.global.navigator && goog.global.navigator.userAgent ?
-        goog.global.navigator.userAgent :
-        '';
-
     // Identify ES3-only browsers by their incorrect treatment of commas.
     addNewerLanguageTranspilationCheck('es5', function() {
       return evalCheck('[1,].length==1');
@@ -2277,9 +2289,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     addNewerLanguageTranspilationCheck('es6', function() {
       // Edge has a non-deterministic (i.e., not reproducible) bug with ES6:
       // https://github.com/Microsoft/ChakraCore/issues/1496.
-      var re = /Edge\/(\d+)(\.\d)*/i;
-      var edgeUserAgent = userAgent.match(re);
-      if (edgeUserAgent) {
+      if (goog.isEdge_()) {
         // The Reflect.construct test below is flaky on Edge. It can sometimes
         // pass or fail on 40 15.15063, so just exit early for Edge and treat
         // it as ES5. Until we're on a more up to date version just always use
@@ -3472,17 +3482,18 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     /** @type {?} */
     var doc = goog.global.document;
 
-    var isInternetExplorer =
-        goog.inHtmlDocument_() && 'ActiveXObject' in goog.global;
+    var isInternetExplorerOrEdge = goog.inHtmlDocument_() &&
+        ('ActiveXObject' in goog.global || goog.isEdge_());
 
-    // Don't delay in any version of IE. There's bug around this that will
-    // cause out of order script execution. This means that on older IE ES6
-    // modules will load too early (while the document is still loading + the
-    // dom is not available). The other option is to load too late (when the
-    // document is complete and the onload even will never fire). This seems
-    // to be the lesser of two evils as scripts already act like the former.
+    // Don't delay in any version of IE or pre-Chromium Edge. There's a bug
+    // around this that will cause out of order script execution. This means
+    // that on older IE ES6 modules will load too early (while the document is
+    // still loading + the dom is not available). The other option is to load
+    // too late (when the document is complete and the onload even will never
+    // fire). This seems to be the lesser of two evils as scripts already act
+    // like the former.
     if (isEs6 && goog.inHtmlDocument_() && goog.isDocumentLoading_() &&
-        !isInternetExplorer) {
+        !isInternetExplorerOrEdge) {
       goog.Dependency.defer_ = true;
       // Transpiled ES6 modules still need to load like regular ES6 modules,
       // aka only after the document is interactive.
