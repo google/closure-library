@@ -238,7 +238,8 @@ goog.addDependency('events/keycodes.js', ['goog.events.KeyCodes'], ['goog.userAg
 goog.addDependency('events/keyhandler.js', ['goog.events.KeyEvent', 'goog.events.KeyHandler', 'goog.events.KeyHandler.EventType'], ['goog.events', 'goog.events.BrowserEvent', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.userAgent'], {});
 goog.addDependency('events/keynames.js', ['goog.events.KeyNames'], [], {});
 goog.addDependency('events/keys.js', ['goog.events.Keys'], [], {'lang': 'es5'});
-goog.addDependency('events/listenable.js', ['goog.events.Listenable', 'goog.events.ListenableKey'], ['goog.events.EventId'], {});
+goog.addDependency('events/listenable.js', ['goog.events.Listenable'], [], {});
+goog.addDependency('events/listenablekey.js', ['goog.events.ListenableKey'], [], {});
 goog.addDependency('events/listener.js', ['goog.events.Listener'], ['goog.events.ListenableKey'], {});
 goog.addDependency('events/listenermap.js', ['goog.events.ListenerMap'], ['goog.array', 'goog.events.Listener', 'goog.object'], {});
 goog.addDependency('events/mousewheelhandler.js', ['goog.events.MouseWheelEvent', 'goog.events.MouseWheelHandler', 'goog.events.MouseWheelHandler.EventType'], ['goog.dom', 'goog.events', 'goog.events.BrowserEvent', 'goog.events.EventTarget', 'goog.math', 'goog.style', 'goog.userAgent'], {});
