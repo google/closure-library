@@ -25,7 +25,7 @@ java -Xmx1G -jar ../closure-compiler-1.0-SNAPSHOT.jar \
   --warning_level VERBOSE \
   --jscomp_error='*' \
   --jscomp_off=strictCheckTypes \
-  --jscomp_off=stricterMissingRequire \
+  --jscomp_off=missingRequire \
   --jscomp_off=extraRequire \
   --jscomp_off=deprecated \
   --jscomp_off=lintChecks \
