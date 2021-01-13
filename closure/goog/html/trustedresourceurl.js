@@ -157,22 +157,20 @@ goog.html.TrustedResourceUrl.prototype.cloneWithParams = function(
 };
 
 
-if (goog.DEBUG) {
-  /**
-   * Returns a string-representation of this value.
-   *
-   * To obtain the actual string value wrapped in a TrustedResourceUrl, use
-   * `goog.html.TrustedResourceUrl.unwrap`.
-   *
-   * @return {string}
-   * @see goog.html.TrustedResourceUrl#unwrap
-   * @override
-   */
-  goog.html.TrustedResourceUrl.prototype.toString = function() {
-    'use strict';
-    return this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ + '';
-  };
-}
+/**
+ * Returns a string-representation of this value.
+ *
+ * To obtain the actual string value wrapped in a TrustedResourceUrl, use
+ * `goog.html.TrustedResourceUrl.unwrap`.
+ *
+ * @return {string}
+ * @see goog.html.TrustedResourceUrl#unwrap
+ * @override
+ */
+goog.html.TrustedResourceUrl.prototype.toString = function() {
+  'use strict';
+  return this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ + '';
+};
 
 
 /**
