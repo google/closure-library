@@ -17,7 +17,6 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.async.Deferred');
 goog.require('goog.debug.Error');
-goog.require('goog.debug.Trace');
 goog.require('goog.disposable.IDisposable');
 goog.require('goog.disposeAll');
 goog.require('goog.loader.AbstractModuleManager');
@@ -897,7 +896,6 @@ goog.module.ModuleManager.prototype.setLoaded = function() {
   this.dispatchActiveIdleChangeIfNeeded_();
 
   this.currentlyLoadingModule_ = null;
-  goog.debug.Trace.stopTracer(this.loadTracer_);
 };
 
 
@@ -996,8 +994,6 @@ goog.module.ModuleManager.prototype.addUserInitiatedLoadingModule_ = function(
 /** @override */
 goog.module.ModuleManager.prototype.beforeLoadModuleCode = function(id) {
   'use strict';
-  this.loadTracer_ =
-      goog.debug.Trace.startTracer('Module Load: ' + id, 'Module Load');
   if (this.currentlyLoadingModule_) {
     goog.log.error(
         this.logger_,
