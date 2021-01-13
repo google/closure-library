@@ -20,7 +20,7 @@
  *
  * @supported IE 10+, Chrome 26+, Firefox 22+, Safari 7.1+, Opera 15+
  */
-
+goog.provide('goog.html.sanitizer');
 goog.provide('goog.html.sanitizer.HtmlSanitizer');
 goog.provide('goog.html.sanitizer.HtmlSanitizer.Builder');
 goog.provide('goog.html.sanitizer.HtmlSanitizerAttributePolicy');
