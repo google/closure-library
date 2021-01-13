@@ -331,11 +331,25 @@ goog.editor.plugins.TableEditor.prototype.addIsTableEditableFunction = function(
  *     finds the user-editable table from a given element.
  * @constructor
  * @private
- * @suppress {missingProperties} "rows" not declared.
  */
 goog.editor.plugins.TableEditor.CellSelection_ = function(
     range, getParentTableFunction) {
   'use strict';
+  /** @private {number} */
+  this.firstRowIndex_;
+
+  /** @private {number} */
+  this.lastRowIndex_;
+
+  /** @private {number} */
+  this.firstColIndex_;
+
+  /** @private {number} */
+  this.lastColIndex_;
+
+  /** @private {number} */
+  this.lastColIndex_;
+
   this.cells_ = [];
 
   // Mozilla lets users select groups of cells, with each cell showing

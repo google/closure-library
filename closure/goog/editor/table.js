@@ -36,6 +36,11 @@ goog.require('goog.style');
  */
 goog.editor.Table = function(node) {
   'use strict';
+  /**
+   * @type {!Array<!goog.editor.TableRow>}
+   */
+  this.rows = [];
+
   this.element =
       goog.dom.getAncestorByTagNameAndClass(node, goog.dom.TagName.TABLE);
   if (!this.element) {
@@ -54,7 +59,6 @@ goog.editor.Table = function(node) {
  * @private
  */
 goog.editor.Table.prototype.logger_ = goog.log.getLogger('goog.editor.Table');
-
 
 /**
  * Walks the dom structure of this object's table element and populates
