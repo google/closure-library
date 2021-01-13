@@ -272,21 +272,19 @@ class SafeStyleSheet {
   }
 }
 
-if (goog.DEBUG) {
-  /**
-   * Returns a string-representation of this value.
-   *
-   * To obtain the actual string value wrapped in a SafeStyleSheet, use
-   * `SafeStyleSheet.unwrap`.
-   *
-   * @return {string}
-   * @see SafeStyleSheet#unwrap
-   * @override
-   */
-  SafeStyleSheet.prototype.toString = function() {
-    return this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_.toString();
-  };
-}
+/**
+ * Returns a string-representation of this value.
+ *
+ * To obtain the actual string value wrapped in a SafeStyleSheet, use
+ * `SafeStyleSheet.unwrap`.
+ *
+ * @return {string}
+ * @see SafeStyleSheet#unwrap
+ * @override
+ */
+SafeStyleSheet.prototype.toString = function() {
+  return this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_.toString();
+};
 
 
 /**
