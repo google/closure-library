@@ -9,8 +9,6 @@
  *
  * @see ../demos/keyboardshortcuts.html
  */
-
-goog.provide('goog.ui.KeyboardShortcutEvent');
 goog.provide('goog.ui.KeyboardShortcutHandler');
 goog.provide('goog.ui.KeyboardShortcutHandler.EventType');
 goog.provide('goog.ui.KeyboardShortcutHandler.Modifiers');
@@ -19,7 +17,6 @@ goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
-goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -27,6 +24,7 @@ goog.require('goog.events.KeyNames');
 goog.require('goog.events.Keys');
 goog.require('goog.object');
 goog.require('goog.ui.KeyboardEventData');
+goog.require('goog.ui.KeyboardShortcutEvent');
 goog.require('goog.ui.SyntheticKeyboardEvent');
 goog.require('goog.userAgent');
 goog.requireType('goog.events.BrowserEvent');
@@ -1298,27 +1296,3 @@ goog.ui.KeyboardShortcutHandler.prototype.setCurrentTree_ = function(tree) {
   this.currentTree_ = tree;
   this.lastStrokeTime_ = goog.now();
 };
-
-
-
-/**
- * Object representing a keyboard shortcut event.
- * @param {string} type Event type.
- * @param {string} identifier Task identifier for the triggered shortcut.
- * @param {Node|goog.events.EventTarget} target Target the original key press
- *     event originated from.
- * @extends {goog.events.Event}
- * @constructor
- * @final
- */
-goog.ui.KeyboardShortcutEvent = function(type, identifier, target) {
-  'use strict';
-  goog.events.Event.call(this, type, target);
-
-  /**
-   * Task identifier for the triggered shortcut
-   * @type {string}
-   */
-  this.identifier = identifier;
-};
-goog.inherits(goog.ui.KeyboardShortcutEvent, goog.events.Event);
