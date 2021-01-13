@@ -237,21 +237,19 @@ class SafeScript {
   }
 }
 
-if (goog.DEBUG) {
-  /**
-   * Returns a string-representation of this value.
-   *
-   * To obtain the actual string value wrapped in a SafeScript, use
-   * `SafeScript.unwrap`.
-   *
-   * @return {string}
-   * @see SafeScript#unwrap
-   * @override
-   */
-  SafeScript.prototype.toString = function() {
-    return this.privateDoNotAccessOrElseSafeScriptWrappedValue_.toString();
-  };
-}
+/**
+ * Returns a string-representation of this value.
+ *
+ * To obtain the actual string value wrapped in a SafeScript, use
+ * `SafeScript.unwrap`.
+ *
+ * @return {string}
+ * @see SafeScript#unwrap
+ * @override
+ */
+SafeScript.prototype.toString = function() {
+  return this.privateDoNotAccessOrElseSafeScriptWrappedValue_.toString();
+};
 
 
 /**
