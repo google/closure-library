@@ -9,7 +9,6 @@
 goog.module('goog.html.UnsafeTest');
 goog.setTestOnly();
 
-const AttributeWhitelist = goog.require('goog.html.sanitizer.AttributeWhitelist');
 const Const = goog.require('goog.string.Const');
 const HtmlSanitizer = goog.require('goog.html.sanitizer.HtmlSanitizer');
 const HtmlSanitizerAttributePolicy = goog.requireType('goog.html.sanitizer.HtmlSanitizerAttributePolicy');
@@ -20,6 +19,7 @@ const functions = goog.require('goog.functions');
 const testSuite = goog.require('goog.testing.testSuite');
 const unsafe = goog.require('goog.html.sanitizer.unsafe');
 const userAgent = goog.require('goog.userAgent');
+const {AllowedAttributes} = goog.require('goog.html.sanitizer.attributeallowlists');
 
 const isSupported = !userAgent.IE || userAgent.isVersionOrHigher(10);
 
@@ -142,9 +142,9 @@ testSuite({
     assertUndefined(TagWhitelist['QQQ']);
     assertUndefined(TagWhitelist['QqQ']);
     assertUndefined(TagWhitelist['qqq']);
-    assertUndefined(AttributeWhitelist['* QQQ']);
-    assertUndefined(AttributeWhitelist['* QqQ']);
-    assertUndefined(AttributeWhitelist['* qqq']);
+    assertUndefined(AllowedAttributes['* QQQ']);
+    assertUndefined(AllowedAttributes['* QqQ']);
+    assertUndefined(AllowedAttributes['* qqq']);
   },
 
   testAllowRelaxExistingAttributePolicyWildcard() {

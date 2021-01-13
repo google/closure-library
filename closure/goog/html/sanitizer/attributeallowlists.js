@@ -6,20 +6,19 @@
 
 
 /**
- * @fileoverview Contains the attribute whitelists for use in the Html
+ * @fileoverview Contains the attribute allowlists for use in the Html
  * sanitizer.
  */
 
-goog.provide('goog.html.sanitizer.AttributeSanitizedWhitelist');
-goog.provide('goog.html.sanitizer.AttributeWhitelist');
-
+goog.module('goog.html.sanitizer.attributeallowlists');
+goog.module.declareLegacyNamespace();
 
 /**
- * A whitelist for attributes that are always safe and allowed by default.
+ * An allowlist for attributes that are always safe and allowed by default.
  * The sanitizer only applies whitespace trimming to these.
  * @const @dict {boolean}
  */
-goog.html.sanitizer.AttributeWhitelist = {
+const AllowedAttributes = {
   '* ARIA-CHECKED': true,
   '* ARIA-COLCOUNT': true,
   '* ARIA-COLINDEX': true,
@@ -105,15 +104,16 @@ goog.html.sanitizer.AttributeWhitelist = {
   '* VSPACE': true,
   '* WIDTH': true
 };
+exports.AllowedAttributes = AllowedAttributes;
 
 /**
- * A whitelist for attributes that are not safe to allow unrestricted, but are
+ * An allowlist for attributes that are not safe to allow unrestricted, but are
  * made safe by default policies installed by the sanitizer in
  * goog.html.sanitizer.HtmlSanitizer.Builder.prototype.build, and thus allowed
  * by default under these policies.
  * @const @dict {boolean}
  */
-goog.html.sanitizer.AttributeSanitizedWhitelist = {
+const SanitizedAttributeAllowlist = {
 
   // Attributes which can contain URL fragments
   '* USEMAP': true,
@@ -139,3 +139,4 @@ goog.html.sanitizer.AttributeSanitizedWhitelist = {
   // CSS style can cause network requests and XSSs
   '* STYLE': true
 };
+exports.SanitizedAttributeAllowlist = SanitizedAttributeAllowlist;
