@@ -166,12 +166,17 @@ function doTestPlaceCursorAtStart(html = undefined, parentId = undefined) {
 
   // We check whether getAttribute exist because textNode may be an actual
   // TextNode, which does not have getAttribute.
-  if (textNode && textNode.getAttribute &&
-      textNode.getAttribute('_moz_editor_bogus_node')) {
+  const hasBogusNode = textNode &&
+      ((textNode.getAttribute &&
+        textNode.getAttribute('_moz_editor_bogus_node')) ||
+       (userAgent.GECKO && textNode.tagName === TagName.BR &&
+        textNode.parentNode.children.length === 1));
+  if (hasBogusNode) {
     // At least in FF >= 6, assigning '' to innerHTML of a contentEditable
     // element will results in textNode being modified into:
     // <br _moz_editor_bogus_node="TRUE" _moz_dirty=""> instead of nulling
     // it. So we should null it ourself.
+    // This was changed in FF >= 70 to simply be a single <br>.
     textNode = null;
   }
 
@@ -227,14 +232,17 @@ function doTestPlaceCursorAtEnd(
 
   // We check whether getAttribute exist because textNode may be an actual
   // TextNode, which does not have getAttribute.
-
-  const hasBogusNode = textNode && textNode.getAttribute &&
-      textNode.getAttribute('_moz_editor_bogus_node');
+  const hasBogusNode = textNode &&
+      ((textNode.getAttribute &&
+        textNode.getAttribute('_moz_editor_bogus_node')) ||
+       (userAgent.GECKO && textNode.tagName === TagName.BR &&
+        textNode.parentNode.children.length === 1));
   if (hasBogusNode) {
     // At least in FF >= 6, assigning '' to innerHTML of a contentEditable
     // element will results in textNode being modified into:
     // <br _moz_editor_bogus_node="TRUE" _moz_dirty=""> instead of nulling
     // it. So we should null it ourself.
+    // This was changed in FF >= 70 to simply be a single <br>.
     textNode = null;
   }
 
