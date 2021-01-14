@@ -657,7 +657,6 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
       goog.fx.DragListGroup.EventType.DRAGGERCREATED, this, e,
       this.currDragItem_, this.draggerEl_, this.dragger_));
   this.dragger_.startDrag(e);
-  this.maybeUpdateDraggerDeltaToPlaceElUnderCursor_(e);
 };
 
 

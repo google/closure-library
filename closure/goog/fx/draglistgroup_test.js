@@ -112,13 +112,16 @@ function setUpWithDragListPermission(dragListPermission) {
  * @param {!DragListGroup|null} dlg The DragListGroup to examine
  * @param {boolean} correctPosition Whethere to correct draggedEL position
  * @return {!Coordinate} The mouse cursor position where the dragginig
- *     started at
+ *     started at.
+ * @suppress {visibility,checkTypes} Suppression added to enable type checking
  */
 function startDrag(dlg, correctPosition) {
   dlg.overrideCorrectDraggedElementInitialPos(correctPosition);
   const fistChildBoundingRect = list.firstChild.getBoundingClientRect();
-  const firstChildClickPositionX =
-      fistChildBoundingRect.left + fistChildBoundingRect.width / 2;
+  // 450px is chosen so the click is always placed outside of the dragged
+  // element (which is only 50px wide), but still on an element of the dragged
+  // list group (which takes up the whole page width).
+  const firstChildClickPositionX = 450;
   const firstChildClickPositionY =
       fistChildBoundingRect.top + fistChildBoundingRect.height / 2;
 
@@ -127,11 +130,27 @@ function startDrag(dlg, correctPosition) {
   testingEvents.fireMouseDownEvent(
       list.firstChild, BrowserEvent.MouseButton.LEFT, dragStartPosition);
 
-  const newMousePosition = new Coordinate(
-      firstChildClickPositionX + 2, firstChildClickPositionY + 2);
-  testingEvents.fireMouseMoveEvent(list.firstChild, newMousePosition);
+  // Firing an additional DragStart event (on top of the one triggered by
+  // the mousedown above) is necessary as the test framework interrupts the
+  // event handling execution flow by executing the handler methods directly
+  // after the event fires, leading to overriding of the initial position
+  // computation. This duplication solves the issue.
+  const duplicateEvent = new BrowserEvent();
+  duplicateEvent.currentTarget = list.firstChild;
+  duplicateEvent.clientX = firstChildClickPositionX;
+  duplicateEvent.clientY = firstChildClickPositionY;
+  dlg.dragger_.fireDragStart_(duplicateEvent);
 
-  return dragStartPosition;
+  const draggedElement = dom.getElementByTagNameAndClass('div', 'cursor_move');
+  const firstMovedMousePosition = new Coordinate(
+      firstChildClickPositionX + 2, firstChildClickPositionY + 2);
+  testingEvents.fireMouseMoveEvent(draggedElement, firstMovedMousePosition);
+
+  const newMovedMousePosition = new Coordinate(
+      firstMovedMousePosition.x + 2, firstMovedMousePosition.y + 2);
+  testingEvents.fireMouseMoveEvent(draggedElement, newMovedMousePosition);
+
+  return newMovedMousePosition;
 }
 
 /**
