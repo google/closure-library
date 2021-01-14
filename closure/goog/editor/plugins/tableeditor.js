@@ -359,13 +359,8 @@ goog.editor.plugins.TableEditor.CellSelection_ = function(
   var selectionContainer = range.getContainerElement();
   var elementInSelection = function(node) {
     'use strict';
-    // TODO(user): revert to the more liberal containsNode(node, true),
-    // which will match partially-selected cells. We're using
-    // containsNode(node, false) at the moment because otherwise it's
-    // broken in WebKit due to a closure range bug.
     return selectionContainer == node ||
-        selectionContainer.parentNode == node ||
-        range.containsNode(node, false);
+        selectionContainer.parentNode == node || range.containsNode(node, true);
   };
 
   var parentTableElement =
