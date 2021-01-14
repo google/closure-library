@@ -10,7 +10,6 @@
 
 
 goog.provide('goog.net.Cookies');
-goog.provide('goog.net.cookies');
 
 goog.require('goog.string');
 
@@ -437,16 +436,13 @@ goog.net.Cookies.SameSite = {
   STRICT: 'strict',
 };
 
-
-// TODO(closure-team): This should be a singleton getter instead of a static
-// instance.
 /**
  * A static default instance.
  * @const {!goog.net.Cookies}
+ * @private
  */
-goog.net.cookies =
+goog.net.Cookies.instance_ =
     new goog.net.Cookies(typeof document == 'undefined' ? null : document);
-
 
 /**
  * Getter for the static instance of goog.net.Cookies.
@@ -454,5 +450,5 @@ goog.net.cookies =
  */
 goog.net.Cookies.getInstance = function() {
   'use strict';
-  return goog.net.cookies;
+  return goog.net.Cookies.instance_;
 };

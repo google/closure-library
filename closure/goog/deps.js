@@ -520,7 +520,8 @@ goog.addDependency('net/bulkloader.js', ['goog.net.BulkLoader'], ['goog.events.E
 goog.addDependency('net/bulkloaderhelper.js', ['goog.net.BulkLoaderHelper'], ['goog.Disposable'], {'lang': 'es6'});
 goog.addDependency('net/channeldebug.js', ['goog.net.ChannelDebug'], ['goog.json', 'goog.log', 'goog.log.Logger'], {'lang': 'es6'});
 goog.addDependency('net/channelrequest.js', ['goog.net.ChannelRequest', 'goog.net.ChannelRequest.Error'], ['goog.Timer', 'goog.async.Throttle', 'goog.dispose', 'goog.dom.TagName', 'goog.dom.safe', 'goog.events.Event', 'goog.events.EventHandler', 'goog.html.SafeUrl', 'goog.html.uncheckedconversions', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.XmlHttp', 'goog.net.browserchannelinternal.ServerReachability', 'goog.net.browserchannelinternal.hooks', 'goog.net.browserchannelinternal.stats', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.userAgent'], {'lang': 'es6'});
-goog.addDependency('net/cookies.js', ['goog.net.Cookies', 'goog.net.cookies'], ['goog.string'], {'lang': 'es6'});
+goog.addDependency('net/cookies.js', ['goog.net.Cookies'], ['goog.string'], {'lang': 'es6'});
+goog.addDependency('net/cookies_deprecated.js', ['goog.net.cookies'], ['goog.net.Cookies'], {});
 goog.addDependency('net/corsxmlhttpfactory.js', ['goog.net.CorsXmlHttpFactory', 'goog.net.IeCorsXhrAdapter'], ['goog.net.HttpStatus', 'goog.net.XhrLike', 'goog.net.XmlHttp', 'goog.net.XmlHttpFactory'], {'lang': 'es6'});
 goog.addDependency('net/crossdomainrpc.js', ['goog.net.CrossDomainRpc'], ['goog.Uri', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.html.SafeHtml', 'goog.log', 'goog.net.EventType', 'goog.net.HttpStatus', 'goog.string', 'goog.userAgent'], {'lang': 'es6'});
 goog.addDependency('net/errorcode.js', ['goog.net.ErrorCode'], [], {'lang': 'es5'});
