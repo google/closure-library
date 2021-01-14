@@ -15,16 +15,15 @@ const PbJsonStreamParser = goog.require('goog.net.streams.PbJsonStreamParser');
 const PbStreamParser = goog.require('goog.net.streams.PbStreamParser');
 const TestingNetXhrIo = goog.require('goog.testing.net.XhrIo');
 const XhrIo = goog.require('goog.net.XhrIo');
-const XhrStreamReader = goog.require('goog.net.streams.XhrStreamReader');
 const XmlHttp = goog.require('goog.net.XmlHttp');
 const googObject = goog.require('goog.object');
 const testSuite = goog.require('goog.testing.testSuite');
+const {XhrStreamReader, XhrStreamReaderStatus} = goog.require('goog.net.streams.xhrStreamReader');
 
 
 let xhrReader;
 let xhrIo;
 
-const Status = XhrStreamReader.Status;
 const ReadyState = XmlHttp.ReadyState;
 
 const CONTENT_TYPE_HEADER = XhrIo.CONTENT_TYPE_HEADER;
@@ -119,7 +118,7 @@ testSuite({
     xhrIo.send('/foo/bar');
     xhrIo.simulateResponse(HttpStatus.OK, '', headers);
 
-    assertElementsEquals([Status.NO_DATA], streamStatus);
+    assertElementsEquals([XhrStreamReaderStatus.NO_DATA], streamStatus);
     assertElementsEquals([HttpStatus.OK], httpStatus);
   },
 
@@ -146,7 +145,9 @@ testSuite({
     assertElementsEquals(['1'], googObject.getKeys(received[0][0]));
     assertElementsEquals('b', received[0][0][1]);
 
-    assertElementsEquals([Status.ACTIVE, Status.SUCCESS], streamStatus);
+    assertElementsEquals(
+        [XhrStreamReaderStatus.ACTIVE, XhrStreamReaderStatus.SUCCESS],
+        streamStatus);
     assertElementsEquals([HttpStatus.OK, HttpStatus.OK], httpStatus);
   },
 
@@ -224,7 +225,7 @@ testSuite({
     assertElementsEquals([0x6a, 0x6b, 0x6c], received[0][0][1]);
 
     xhrIo.simulateReadyStateChange(ReadyState.COMPLETE);
-    assertEquals(Status.SUCCESS, xhrReader.getStatus());
+    assertEquals(XhrStreamReaderStatus.SUCCESS, xhrReader.getStatus());
   },
 
 
@@ -238,7 +239,7 @@ testSuite({
     };
     xhrIo.simulateReadyStateChange(ReadyState.COMPLETE);
 
-    assertEquals(Status.TIMEOUT, xhrReader.getStatus());
+    assertEquals(XhrStreamReaderStatus.TIMEOUT, xhrReader.getStatus());
   },
 
 

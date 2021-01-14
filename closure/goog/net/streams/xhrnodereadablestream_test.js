@@ -9,16 +9,14 @@ goog.setTestOnly();
 
 const NodeReadableStream = goog.require('goog.net.streams.NodeReadableStream');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
-const XhrNodeReadableStream = goog.require('goog.net.streams.XhrNodeReadableStream');
-const XhrStreamReader = goog.require('goog.net.streams.XhrStreamReader');
-const asserts = goog.require('goog.testing.asserts');
 const testSuite = goog.require('goog.testing.testSuite');
+const {XhrNodeReadableStream} = goog.require('goog.net.streams.xhrNodeReadableStream');
+const {XhrStreamReaderStatus} = goog.require('goog.net.streams.xhrStreamReader');
 
 let xhrReader;
 let xhrStream;
 
 const EventType = NodeReadableStream.EventType;
-const Status = XhrStreamReader.Status;
 
 let propertyReplacer;
 
@@ -270,17 +268,18 @@ testSuite({
   },
 
   testOrderedStatusCallbacks() {
-    checkStatusMapping(Status.ACTIVE, EventType.READABLE);
+    checkStatusMapping(XhrStreamReaderStatus.ACTIVE, EventType.READABLE);
 
-    checkStatusMapping(Status.BAD_DATA, EventType.ERROR);
-    checkStatusMapping(Status.HANDLER_EXCEPTION, EventType.ERROR);
-    checkStatusMapping(Status.NO_DATA, EventType.ERROR);
-    checkStatusMapping(Status.TIMEOUT, EventType.ERROR);
-    checkStatusMapping(Status.XHR_ERROR, EventType.ERROR);
+    checkStatusMapping(XhrStreamReaderStatus.BAD_DATA, EventType.ERROR);
+    checkStatusMapping(
+        XhrStreamReaderStatus.HANDLER_EXCEPTION, EventType.ERROR);
+    checkStatusMapping(XhrStreamReaderStatus.NO_DATA, EventType.ERROR);
+    checkStatusMapping(XhrStreamReaderStatus.TIMEOUT, EventType.ERROR);
+    checkStatusMapping(XhrStreamReaderStatus.XHR_ERROR, EventType.ERROR);
 
-    checkStatusMapping(Status.CANCELLED, EventType.CLOSE);
+    checkStatusMapping(XhrStreamReaderStatus.CANCELLED, EventType.CLOSE);
 
-    checkStatusMapping(Status.SUCCESS, EventType.END);
+    checkStatusMapping(XhrStreamReaderStatus.SUCCESS, EventType.END);
 
     function checkStatusMapping(status, event) {
       let delivered = 0;
@@ -318,7 +317,7 @@ testSuite({
   },
 
   testOrderedStatusMultipleCallbacks() {
-    checkStatusMapping(Status.ACTIVE, EventType.READABLE);
+    checkStatusMapping(XhrStreamReaderStatus.ACTIVE, EventType.READABLE);
 
     function checkStatusMapping(status, event) {
       let delivered = 0;
