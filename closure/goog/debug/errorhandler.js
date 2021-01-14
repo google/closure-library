@@ -13,10 +13,8 @@ goog.provide('goog.debug.ErrorHandler.ProtectedFunctionError');
 
 goog.require('goog.Disposable');
 goog.require('goog.asserts');
-goog.require('goog.debug');
 goog.require('goog.debug.EntryPointMonitor');
 goog.require('goog.debug.Error');
-goog.require('goog.debug.Trace');
 
 
 
@@ -68,25 +66,6 @@ goog.debug.ErrorHandler = function(handler) {
 goog.inherits(goog.debug.ErrorHandler, goog.Disposable);
 
 
-/**
- * Whether to add tracers when instrumenting entry points.
- * @type {boolean}
- * @private
- */
-goog.debug.ErrorHandler.prototype.addTracersToProtectedFunctions_ = false;
-
-
-/**
- * Enable tracers when instrumenting entry points.
- * @param {boolean} newVal See above.
- */
-goog.debug.ErrorHandler.prototype.setAddTracersToProtectedFunctions = function(
-    newVal) {
-  'use strict';
-  this.addTracersToProtectedFunctions_ = newVal;
-};
-
-
 /** @override */
 goog.debug.ErrorHandler.prototype.wrap = function(fn) {
   'use strict';
@@ -99,24 +78,6 @@ goog.debug.ErrorHandler.prototype.unwrap = function(fn) {
   'use strict';
   goog.asserts.assertFunction(fn);
   return fn[this.getFunctionIndex_(false)] || fn;
-};
-
-
-/**
- * Private helper function to return a span that can be clicked on to display
- * an alert with the current stack trace. Newlines are replaced with a
- * placeholder so that they will not be html-escaped.
- * @param {string} stackTrace The stack trace to create a span for.
- * @return {string} A span which can be clicked on to show the stack trace.
- * @private
- */
-goog.debug.ErrorHandler.prototype.getStackTraceHolder_ = function(stackTrace) {
-  'use strict';
-  var buffer = [];
-  buffer.push('##PE_STACK_START##');
-  buffer.push(stackTrace.replace(/(\r\n|\r|\n)/g, '##STACK_BR##'));
-  buffer.push('##PE_STACK_END##');
-  return buffer.join('');
 };
 
 
@@ -165,10 +126,6 @@ goog.debug.ErrorHandler.prototype.protectEntryPoint = function(fn) {
 goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
   'use strict';
   var that = this;
-  var tracers = this.addTracersToProtectedFunctions_;
-  if (tracers) {
-    var stackTrace = goog.debug.getStacktraceSimple(15);
-  }
   var googDebugErrorHandlerProtectedFunction = function() {
     'use strict';
     var self = /** @type {?} */ (this);
@@ -176,18 +133,10 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
       return fn.apply(self, arguments);
     }
 
-    if (tracers) {
-      var tracer = goog.debug.Trace.startTracer(
-          'protectedEntryPoint: ' + that.getStackTraceHolder_(stackTrace));
-    }
     try {
       return fn.apply(self, arguments);
     } catch (e) {
       that.handleError_(e);
-    } finally {
-      if (tracers) {
-        goog.debug.Trace.stopTracer(tracer);
-      }
     }
   };
   googDebugErrorHandlerProtectedFunction[this.getFunctionIndex_(false)] = fn;
