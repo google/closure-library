@@ -165,22 +165,20 @@ goog.html.SafeHtml.prototype.getTypedStringValue = function() {
 };
 
 
-if (goog.DEBUG) {
-  /**
-   * Returns a string-representation of this value.
-   *
-   * To obtain the actual string value wrapped in a SafeHtml, use
-   * `goog.html.SafeHtml.unwrap`.
-   *
-   * @return {string}
-   * @see goog.html.SafeHtml.unwrap
-   * @override
-   */
-  goog.html.SafeHtml.prototype.toString = function() {
-    'use strict';
-    return this.privateDoNotAccessOrElseSafeHtmlWrappedValue_.toString();
-  };
-}
+/**
+ * Returns a string-representation of this value.
+ *
+ * To obtain the actual string value wrapped in a SafeHtml, use
+ * `goog.html.SafeHtml.unwrap`.
+ *
+ * @return {string}
+ * @see goog.html.SafeHtml.unwrap
+ * @override
+ */
+goog.html.SafeHtml.prototype.toString = function() {
+  'use strict';
+  return this.privateDoNotAccessOrElseSafeHtmlWrappedValue_.toString();
+};
 
 
 /**
