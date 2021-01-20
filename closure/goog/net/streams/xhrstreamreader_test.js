@@ -19,6 +19,7 @@ const XmlHttp = goog.require('goog.net.XmlHttp');
 const googObject = goog.require('goog.object');
 const testSuite = goog.require('goog.testing.testSuite');
 const {XhrStreamReader, XhrStreamReaderStatus} = goog.require('goog.net.streams.xhrStreamReader');
+const {getStreamParser} = goog.require('goog.net.streams.streamParsers');
 
 
 let xhrReader;
@@ -52,38 +53,41 @@ testSuite({
     xhrIo.getStreamingResponseHeader = function() {
       return null;
     };
-    assertNull(xhrReader.getParserByResponseHeader_());
+    assertNull(getStreamParser(/** @type {!XhrIo} */ (xhrIo)));
 
     xhrIo.getStreamingResponseHeader = function() {
       return '';
     };
-    assertNull(xhrReader.getParserByResponseHeader_());
+    assertNull(getStreamParser(/** @type {!XhrIo} */ (xhrIo)));
 
     xhrIo.getStreamingResponseHeader = function() {
       return 'xxxxx';
     };
-    assertNull(xhrReader.getParserByResponseHeader_());
+    assertNull(getStreamParser(/** @type {!XhrIo} */ (xhrIo)));
 
     xhrIo.getStreamingResponseHeader = function(key) {
       if (key == CONTENT_TYPE_HEADER) return 'application/json';
       return null;
     };
     assertTrue(
-        xhrReader.getParserByResponseHeader_() instanceof JsonStreamParser);
+        getStreamParser(/** @type {!XhrIo} */ (xhrIo)) instanceof
+        JsonStreamParser);
 
     xhrIo.getStreamingResponseHeader = function(key) {
       if (key == CONTENT_TYPE_HEADER) return 'application/json; charset=utf-8';
       return null;
     };
     assertTrue(
-        xhrReader.getParserByResponseHeader_() instanceof JsonStreamParser);
+        getStreamParser(/** @type {!XhrIo} */ (xhrIo)) instanceof
+        JsonStreamParser);
 
     xhrIo.getStreamingResponseHeader = function(key) {
       if (key == CONTENT_TYPE_HEADER) return 'application/x-protobuf';
       return null;
     };
     assertTrue(
-        xhrReader.getParserByResponseHeader_() instanceof PbStreamParser);
+        getStreamParser(/** @type {!XhrIo} */ (xhrIo)) instanceof
+        PbStreamParser);
 
     xhrIo.getStreamingResponseHeader = function(key) {
       if (key == CONTENT_TYPE_HEADER) return 'application/x-protobuf';
@@ -91,14 +95,16 @@ testSuite({
       return null;
     };
     assertTrue(
-        xhrReader.getParserByResponseHeader_() instanceof Base64PbStreamParser);
+        getStreamParser(/** @type {!XhrIo} */ (xhrIo)) instanceof
+        Base64PbStreamParser);
 
     xhrIo.getStreamingResponseHeader = function(key) {
       if (key == CONTENT_TYPE_HEADER) return 'application/json+protobuf';
       return null;
     };
     assertTrue(
-        xhrReader.getParserByResponseHeader_() instanceof PbJsonStreamParser);
+        getStreamParser(/** @type {!XhrIo} */ (xhrIo)) instanceof
+        PbJsonStreamParser);
   },
 
 

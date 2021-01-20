@@ -549,9 +549,10 @@ goog.addDependency('net/streams/pbjsonstreamparser.js', ['goog.net.streams.PbJso
 goog.addDependency('net/streams/pbstreamparser.js', ['goog.net.streams.PbStreamParser'], ['goog.asserts', 'goog.net.streams.StreamParser'], {'lang': 'es6'});
 goog.addDependency('net/streams/streamfactory.js', ['goog.net.streams.streamFactory'], ['goog.asserts', 'goog.net.streams.xhrNodeReadableStream', 'goog.net.streams.xhrStreamReader'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('net/streams/streamparser.js', ['goog.net.streams.StreamParser'], [], {});
+goog.addDependency('net/streams/streamparsers.js', ['goog.net.streams.streamParsers'], ['goog.log', 'goog.net.XhrIo', 'goog.net.streams.Base64PbStreamParser', 'goog.net.streams.JsonStreamParser', 'goog.net.streams.PbJsonStreamParser', 'goog.net.streams.PbStreamParser'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('net/streams/utils.js', ['goog.net.streams.utils'], [], {'module': 'goog'});
 goog.addDependency('net/streams/xhrnodereadablestream.js', ['goog.net.streams.xhrNodeReadableStream'], ['goog.array', 'goog.log', 'goog.net.streams.NodeReadableStream', 'goog.net.streams.xhrStreamReader'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('net/streams/xhrstreamreader.js', ['goog.net.streams.xhrStreamReader'], ['goog.events.EventHandler', 'goog.log', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.HttpStatus', 'goog.net.XhrIo', 'goog.net.XmlHttp', 'goog.net.streams.Base64PbStreamParser', 'goog.net.streams.JsonStreamParser', 'goog.net.streams.PbJsonStreamParser', 'goog.net.streams.PbStreamParser', 'goog.string', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('net/streams/xhrstreamreader.js', ['goog.net.streams.xhrStreamReader'], ['goog.events.EventHandler', 'goog.log', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.HttpStatus', 'goog.net.XhrIo', 'goog.net.XmlHttp', 'goog.net.streams.streamParsers', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('net/testdata/jsloader_test1.js', ['goog.net.testdata.jsloader_test1'], [], {});
 goog.addDependency('net/testdata/jsloader_test2.js', ['goog.net.testdata.jsloader_test2'], [], {});
 goog.addDependency('net/testdata/jsloader_test3.js', ['goog.net.testdata.jsloader_test3'], [], {});

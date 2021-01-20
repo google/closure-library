@@ -24,21 +24,17 @@ goog.module('goog.net.streams.xhrStreamReader');
 
 goog.module.declareLegacyNamespace();
 
-const Base64PbStreamParser = goog.require('goog.net.streams.Base64PbStreamParser');
 const ErrorCode = goog.require('goog.net.ErrorCode');
 const Event = goog.requireType('goog.events.Event');
 const EventHandler = goog.require('goog.events.EventHandler');
 const EventType = goog.require('goog.net.EventType');
 const HttpStatus = goog.require('goog.net.HttpStatus');
-const JsonStreamParser = goog.require('goog.net.streams.JsonStreamParser');
-const PbJsonStreamParser = goog.require('goog.net.streams.PbJsonStreamParser');
-const PbStreamParser = goog.require('goog.net.streams.PbStreamParser');
 const StreamParser = goog.requireType('goog.net.streams.StreamParser');
 const XhrIo = goog.require('goog.net.XhrIo');
 const XmlHttp = goog.require('goog.net.XmlHttp');
 const googLog = goog.require('goog.log');
-const googString = goog.require('goog.string');
 const googUserAgent = goog.require('goog.userAgent');
+const {getStreamParser} = goog.require('goog.net.streams.streamParsers');
 
 /**
  * The XhrStreamReader class.
@@ -185,7 +181,7 @@ class XhrStreamReader {
     }
 
     if (!this.parser_) {
-      this.parser_ = this.getParserByResponseHeader_();
+      this.parser_ = getStreamParser(this.xhr_);
       if (this.parser_ == null) {
         this.updateStatus_(XhrStreamReaderStatus.BAD_DATA);
       }
@@ -227,51 +223,6 @@ class XhrStreamReader {
     }
 
     this.updateStatus_(XhrStreamReaderStatus.ACTIVE);
-  }
-
-  /**
-   * Returns a parser that supports the given content-type (mime) and
-   * content-transfer-encoding.
-   *
-   * @return {?StreamParser} a parser or null if the content
-   *    type or transfer encoding is unsupported.
-   * @private
-   */
-  getParserByResponseHeader_() {
-    'use strict';
-    let contentType =
-        this.xhr_.getStreamingResponseHeader(XhrIo.CONTENT_TYPE_HEADER);
-    if (!contentType) {
-      googLog.warning(this.logger_, 'Content-Type unavailable: ' + contentType);
-      return null;
-    }
-    contentType = contentType.toLowerCase();
-
-    if (googString.startsWith(contentType, 'application/json')) {
-      if (googString.startsWith(contentType, 'application/json+protobuf')) {
-        return new PbJsonStreamParser();
-      }
-      return new JsonStreamParser();
-    }
-
-    if (googString.startsWith(contentType, 'application/x-protobuf')) {
-      const encoding =
-          this.xhr_.getStreamingResponseHeader(XhrIo.CONTENT_TRANSFER_ENCODING);
-      if (!encoding) {
-        return new PbStreamParser();
-      }
-      if (encoding.toLowerCase() == 'base64') {
-        return new Base64PbStreamParser();
-      }
-      googLog.warning(
-          this.logger_,
-          'Unsupported Content-Transfer-Encoding: ' + encoding +
-              '\nFor Content-Type: ' + contentType);
-      return null;
-    }
-
-    googLog.warning(this.logger_, 'Unsupported Content-Type: ' + contentType);
-    return null;
   }
 
   /**
