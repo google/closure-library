@@ -5,7 +5,7 @@
 
 language: node_js
 node_js:
-  - "8"
+  - "14"
 sudo: required
 
 # This is required for Java 8 in non-java image
