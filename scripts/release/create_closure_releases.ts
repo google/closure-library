@@ -194,16 +194,16 @@ function createReleaseNotes(changes: Change[]) {
  * Extracts and returns the major version from package.json in the repo managed
  * by `git` at commit `hash`.
  * @param git The GitClient instance to use.
- * @param hash The commit hash at which package.json should be read.
+ * @param commitish The commitish at which package.json should be read.
  * @return The major version string from package.json, prefixed with a 'v'.
  */
-async function getMajorVersionAtCommit(git: GitClient, hash: string) {
-  const pJsonRaw = await git.getFile(hash, 'package.json');
+async function getMajorVersionAtCommit(git: GitClient, commitish: string) {
+  const pJsonRaw = await git.getFile(commitish, 'package.json');
   const pJson = JSON.parse(pJsonRaw);
   const matchedPJsonVersion = /^v?(\d+)\.\d+\.\d+$/.exec(pJson.version);
   if (!matchedPJsonVersion) {
     throw new Error(
-        `Bad package.json version string '${pJson.version}' @ ${hash}`);
+        `Bad package.json version string '${pJson.version}' @ ${commitish}`);
   }
   return `v${matchedPJsonVersion[1]}`;
 }
@@ -224,8 +224,8 @@ export async function createClosureReleases(gitHubApiToken: string) {
     token: gitHubApiToken,
   });
 
-  // Get the commit SHA of the latest GitHub release.
-  const from = await github.getLatestRelease();
+  // Get the tag of the latest GitHub release.
+  const from = await github.getLatestReleaseTag();
   const versionAtLastRelease = await getMajorVersionAtCommit(git, from);
 
   // Get the list of commits since `from`.

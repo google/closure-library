@@ -82,15 +82,15 @@ export class GitHubClient {
   }
 
   /**
-   * Returns the hash of the commit tagged under the latest GitHub Release.
-   * @return The hash of the commit tagged under the latest GitHub Release.
+   * Returns the tag associated with the latest GitHub Release.
+   * @return The tag associated with the latest GitHub Release.
    */
-  async getLatestRelease() {
+  async getLatestReleaseTag() {
     const {data} = await this.octokit.repos.getLatestRelease({
       owner: this.owner,
       repo: this.repo,
     });
-    return data.target_commitish;
+    return data.tag_name;
   }
 
   /**

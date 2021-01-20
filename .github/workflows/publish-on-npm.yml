@@ -16,11 +16,11 @@ jobs:
       # Publish google-closure-library.
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_GOOGLE_CLOSURE_LIBRARY }}
       # Publish google-closure-deps. google-closure-library is a dependency of
       # this package, so this must happen strictly after the former is
       # published.
       - run: npm publish
         working-directory: ./closure-deps
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_GOOGLE_CLOSURE_DEPS }}
