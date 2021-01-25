@@ -13,6 +13,7 @@ goog.provide('goog.locale.TimeZoneList');
 goog.provide('goog.locale.getTimeZoneAllLongNames');
 goog.provide('goog.locale.getTimeZoneSelectedLongNames');
 goog.provide('goog.locale.getTimeZoneSelectedShortNames');
+goog.provide('goog.locale.timezonelist');
 
 goog.require('goog.locale');
 
@@ -34,7 +35,8 @@ goog.require('goog.locale');
  * @return {!Array<Object>} Localized and relevant list of timezone names
  *    and ids.
  */
-goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
+goog.locale.timezonelist.getTimeZoneSelectedShortNames = function(
+    opt_regionOrLang) {
   'use strict';
   return goog.locale.getTimeZoneNameList_(
       'TimeZoneSelectedShortNames', opt_regionOrLang);
@@ -58,7 +60,8 @@ goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
  * @return {!Array<Object>} Localized and relevant list of timezone names
  *    and ids.
  */
-goog.locale.getTimeZoneSelectedLongNames = function(opt_regionOrLang) {
+goog.locale.timezonelist.getTimeZoneSelectedLongNames = function(
+    opt_regionOrLang) {
   'use strict';
   return goog.locale.getTimeZoneNameList_(
       'TimeZoneSelectedLongNames', opt_regionOrLang);
@@ -76,7 +79,7 @@ goog.locale.getTimeZoneSelectedLongNames = function(opt_regionOrLang) {
  * @return {Array<Object>} localized and relevant list of timezone names
  *    and ids.
  */
-goog.locale.getTimeZoneAllLongNames = function() {
+goog.locale.timezonelist.getTimeZoneAllLongNames = function() {
   'use strict';
   var locale = goog.locale.getLocale();
   return /** @type {Array<Object>} */ (
@@ -126,3 +129,24 @@ goog.locale.getTimeZoneNameList_ = function(nameType, opt_resource) {
   }
   return result;
 };
+
+/**
+ * Alias for goog.locale.timezonelist.getTimeZoneAllLongNames.
+ * @const
+ */
+goog.locale.getTimeZoneAllLongNames =
+    goog.locale.timezonelist.getTimeZoneAllLongNames;
+
+/**
+ * Alias for goog.locale.timezonelist.getTimeZoneSelectedLongNames.
+ * @const
+ */
+goog.locale.getTimeZoneSelectedLongNames =
+    goog.locale.timezonelist.getTimeZoneSelectedLongNames;
+
+/**
+ * Alias for goog.locale.timezonelist.getTimeZoneSelectedShortNames.
+ * @const
+ */
+goog.locale.getTimeZoneSelectedShortNames =
+    goog.locale.timezonelist.getTimeZoneSelectedShortNames;
