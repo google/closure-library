@@ -165,13 +165,6 @@ goog.module.ModuleManager = function() {
    */
   this.concurrentLoadingEnabled_ = false;
 
-  // TODO(user): Remove tracer.
-  /**
-   * Tracer that measures how long it takes to load a module.
-   * @private {?number}
-   */
-  this.loadTracer_ = null;
-
   /**
    * The number of consecutive failures that have happened upon module load
    * requests.
