@@ -507,7 +507,7 @@ goog.functions.throttle = function(f, interval, opt_scope) {
   'use strict';
   let timeout = 0;
   let shouldFire = false;
-  let args = [];
+  let storedArgs = [];
 
   const handleTimeout = function() {
     'use strict';
@@ -521,12 +521,14 @@ goog.functions.throttle = function(f, interval, opt_scope) {
   const fire = function() {
     'use strict';
     timeout = goog.global.setTimeout(handleTimeout, interval);
+    let args = storedArgs;
+    storedArgs = [];  // Avoid a space leak by clearing stored arguments.
     f.apply(opt_scope, args);
   };
 
   return /** @type {function(...?)} */ (function(var_args) {
     'use strict';
-    args = arguments;
+    storedArgs = arguments;
     if (!timeout) {
       fire();
     } else {
