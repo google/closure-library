@@ -224,7 +224,7 @@ goog.inherits(goog.fx.DragListGroup, goog.events.EventTarget);
  * smaller than its source element dimensions.
  */
 goog.fx.DragListGroup.CORRECT_POSITION_DRAG_START =
-    goog.define('goog.fx.DragListGroup.CORRECT_POSITION_DRAG_START', false);
+    goog.define('goog.fx.DragListGroup.CORRECT_POSITION_DRAG_START', true);
 
 
 /**
