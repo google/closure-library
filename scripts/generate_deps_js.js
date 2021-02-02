@@ -39,19 +39,23 @@ const PREAMBLE = `
 
 /**
  * Prints the generated deps.js contents.
- * @return {!Promise<number>} the exit code
+ * @param {string[]} args Command-line arguments.
+ * @return {!Promise<number>} The exit code.
  */
-async function main() {
+async function main(args) {
   try {
+    const genDepsWithTests = args.indexOf('--with_tests') != -1;
     const {text, errors} = await closureMakeDeps.execute([
       '--root',    CLOSURE_PATH,
       '--root',    THIRD_PARTY_PATH,
-      '--exclude', '**/*_test.js',
-      '--exclude', '**/tester.js',
-      '--exclude', '**/*_test_vectors.js',
-      '--exclude', '**/*_test_suite.js',
-      '--exclude', '**/*_test_cases.js',
-      '--exclude', '**/testdata/**/*.js',
+      ...genDepsWithTests ? [] : [
+        '--exclude', '**/*_test.js',
+        '--exclude', '**/tester.js',
+        '--exclude', '**/*_test_vectors.js',
+        '--exclude', '**/*_test_suite.js',
+        '--exclude', '**/*_test_cases.js',
+        '--exclude', '**/testdata/**/*.js'
+      ],
       '--exclude', `${CLOSURE_PATH}/css`,
       '--exclude', `${CLOSURE_PATH}/demos`,
       '--exclude', `${CLOSURE_PATH}/deps.js`,
@@ -74,4 +78,4 @@ async function main() {
   }
 }
 
-main().then(code => process.exit(code));
+main(process.argv.slice(2)).then(code => process.exit(code));
