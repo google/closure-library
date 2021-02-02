@@ -234,6 +234,41 @@ testSuite({
     assertEquals(XhrStreamReaderStatus.SUCCESS, xhrReader.getStatus());
   },
 
+  testParsingBinaryChunksBase64Encoded() {
+    /**
+     * Pass the following protobuf messages
+     *    0x0a, 0x03, 0x61, 0x62, 0x63,
+     *    0x0a, 0x03, 0x64, 0x65, 0x66,
+     *    0x12, 0x03, 0x67, 0x68, 0x69,
+     *    0x0a, 0x03, 0x6a, 0x6b, 0x6c,
+     */
+    if (typeof TextEncoder === 'undefined') {
+      return;
+    }
+    const responseBase64 = 'CgNhYmMKA2RlZhIDZ2hpCgNqa2w=';
+    const response = (new TextEncoder()).encode(responseBase64);
+    const responseChunks = [response.slice(0, 5), response.slice(5)];
+    // Override the original XhrIo.send();
+    xhrIo.getResponse = () => responseChunks;
+
+    let received = [];
+    xhrReader.setDataHandler(function(messages) {
+      received.push(messages);
+    });
+
+    const headers = {
+      'Content-Type': 'application/x-protobuf',
+      'Content-Transfer-Encoding': 'BASE64',
+    };
+
+    xhrIo.send('/foo/bar');
+    xhrIo.simulateResponse(HttpStatus.OK, 'testing', headers);
+    assertElementsEquals([0x61, 0x62, 0x63], received[0][0][1]);
+    assertElementsEquals([0x64, 0x65, 0x66], received[0][1][1]);
+    assertElementsEquals([0x67, 0x68, 0x69], received[0][2][2]);
+    assertElementsEquals([0x6a, 0x6b, 0x6c], received[0][3][1]);
+  },
+
 
   testXhrTimeout() {
     xhrIo.send('/test', null, 'GET', null, null, 1000, false);

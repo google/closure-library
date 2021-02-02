@@ -83,6 +83,12 @@ class XhrStreamReader {
      */
     this.status_ = XhrStreamReaderStatus.INIT;
 
+    /** @private {boolean} */
+    this.hasStreamingResponseData_ = false;
+
+    /** @private {?TextDecoder} */
+    this.textDecoder_ = null;
+
     /**
      * The handler for any status change event.
      *
@@ -150,11 +156,24 @@ class XhrStreamReader {
     const statusCode = this.xhr_.getStatus();
     const responseText = this.xhr_.getResponseText();
 
+    // In FetchXmlHttp 'streamBinaryChunks' mode, response chunks are of the
+    // format !Array<!Uint8Array>.
+    let responseChunks = [];
+    if (this.xhr_.getResponse() instanceof Array) {
+      const responses = /** @type {!Array<?>} */ (this.xhr_.getResponse());
+      if (responses.length > 0 && responses[0] instanceof Uint8Array) {
+        this.hasStreamingResponseData_ = true;
+        responseChunks = /** @type {!Array<!Uint8Array>} */ (responses);
+      }
+    }
+
+
     // we get partial results in browsers that support ready state interactive.
     // We also make sure that getResponseText is not null in interactive mode
     // before we continue.
     if (readyState < XmlHttp.ReadyState.INTERACTIVE ||
-        readyState == XmlHttp.ReadyState.INTERACTIVE && !responseText) {
+        readyState == XmlHttp.ReadyState.INTERACTIVE && !responseText &&
+            responseChunks.length == 0) {
       return;
     }
 
@@ -173,7 +192,7 @@ class XhrStreamReader {
       }
     }
 
-    if (successful && !responseText) {
+    if (successful && !responseText && responseChunks.length == 0) {
       googLog.warning(
           this.logger_,
           'No response text for xhr ' + this.xhr_.getLastUri() + ' status ' +
@@ -193,7 +212,48 @@ class XhrStreamReader {
     }
 
     // Parses and delivers any new data, with error status.
-    if (responseText.length > this.pos_) {
+    if (responseChunks.length > this.pos_) {
+      const responseLength = responseChunks.length;
+      let messages = [];
+      try {
+        if (this.parser_.acceptsBinaryInput()) {
+          // PbStreamParser.
+          for (let i = 0; i < responseLength; i++) {
+            const newMessages =
+                this.parser_.parse(Array.from(responseChunks[i]));
+            if (newMessages) {
+              messages = messages.concat(newMessages);
+            }
+          }
+        } else {
+          // Base64PbStreamParser or PbJsonStreamParser.
+          let message = '';
+          if (!this.textDecoder_) {
+            if (typeof TextDecoder === 'undefined') {
+              throw new Error('TextDecoder is not supported by this browser.');
+            }
+            this.textDecoder_ = new TextDecoder();
+          }
+          for (let i = 0; i < responseLength; i++) {
+            const isLastChunk = readyState == XmlHttp.ReadyState.COMPLETE &&
+                i == responseLength - 1;
+            message += this.textDecoder_.decode(
+                responseChunks[i], {stream: isLastChunk});
+          }
+          messages = this.parser_.parse(message);
+        }
+        // Remove the unused chunks for memory usage control.
+        responseChunks.splice(0, responseLength);
+
+        if (messages) {
+          this.dataHandler_(messages);
+        }
+      } catch (ex) {
+        this.updateStatus_(XhrStreamReaderStatus.BAD_DATA);
+        this.clear_();
+        return;
+      }
+    } else if (responseText.length > this.pos_) {
       const newData = responseText.substr(this.pos_);
       this.pos_ = responseText.length;
       try {
@@ -213,7 +273,7 @@ class XhrStreamReader {
     }
 
     if (readyState == XmlHttp.ReadyState.COMPLETE) {
-      if (responseText.length == 0) {
+      if (responseText.length == 0 && !this.hasStreamingResponseData_) {
         this.updateStatus_(XhrStreamReaderStatus.NO_DATA);
       } else {
         this.updateStatus_(XhrStreamReaderStatus.SUCCESS);
