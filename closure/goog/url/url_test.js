@@ -535,8 +535,8 @@ testSuite({
     testWithPassword() {
       const urlStr =
           'http://:passwd@www.google.com:8080/path?q=query#fragmento';
-      if (userAgent.isFirefox() || userAgent.isIE() || userAgent.isEdge()) {
-        // This test should throw in FireFox as well (see next test).
+      if ((userAgent.isFirefox() && !userAgent.isVersionOrHigher('64')) ||
+          userAgent.isIE() || userAgent.isEdge()) {
         assertThrows(() => {
           resolveWithTestChecks(urlStr);
         });
