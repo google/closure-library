@@ -911,8 +911,9 @@ testSuite({
     const doc = googDom.getFrameContentDocument(frame);
     const rect = doc.getElementById('rect');
     const dims = googStyle.getSize(rect);
-    if (userAgent.GECKO && userAgent.isVersionOrHigher(53)) {
-      // Firefox >= 53 auto-scales iframe SVG content to fit the frame
+    if (userAgent.GECKO && userAgent.isVersionOrHigher(53) &&
+        !userAgent.isVersionOrHigher(68)) {
+      // Firefox >= 53 < 68 auto-scales iframe SVG content to fit the frame
       // b/38432885 | https://bugzilla.mozilla.org/show_bug.cgi?id=1366126
       assertEquals(75, dims.width);
       assertEquals(75, dims.height);
@@ -1381,7 +1382,8 @@ testSuite({
   testGetPaddingBoxUnattached() {
     const el = googDom.createElement(TagName.DIV);
     const box = googStyle.getPaddingBox(el);
-    if (userAgent.WEBKIT) {
+    if (userAgent.WEBKIT ||
+        (userAgent.GECKO && userAgent.isVersionOrHigher(64))) {
       assertTrue(isNaN(box.top));
       assertTrue(isNaN(box.right));
       assertTrue(isNaN(box.bottom));
