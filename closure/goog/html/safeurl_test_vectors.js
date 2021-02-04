@@ -84,6 +84,7 @@ goog.html.safeUrlTestVectors.BASE_VECTORS = [
       {input: 'data:video/mp4;base64,z\u003D', expected: 'data:video/mp4;base64,z\u003D', safe: true},
       {input: 'data:video/webm;base64,z\u003D', expected: 'data:video/webm;base64,z\u003D', safe: true},
       {input: 'data:video/x-matroska;base64,z\u003D', expected: 'data:video/x-matroska;base64,z\u003D', safe: true},
+      {input: 'data:video/quicktime;base64,z\u003D', expected: 'data:video/quicktime;base64,z\u003D', safe: true},
       {input: 'data:video/webm;base64   ,z\u003D', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'data:video/webm;foo\u003Dbar;base64,z\u003D', expected: 'data:video/webm;foo\u003Dbar;base64,z\u003D', safe: true},
       {input: 'data:video/webm;foo\u003D\"bar\";base64,z\u003D', expected: 'data:video/webm;foo\u003D\"bar\";base64,z\u003D', safe: true},
