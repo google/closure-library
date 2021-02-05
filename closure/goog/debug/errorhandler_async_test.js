@@ -40,7 +40,9 @@ testCase.setUpPage = function() {
 
   // Whether a rejection handler is available for testing.
   /** @suppress {globalThis} suppression added to enable type checking */
-  this.testingUnhandledRejection = 'onunhandledrejection' in window;
+  this.testingUnhandledRejection = 'onunhandledrejection' in window &&
+      // TODO(user): This test is very flaky in Firefox >= 71
+      !(userAgent.GECKO && userAgent.isVersionOrHigher(71));
 
   /** @suppress {globalThis} suppression added to enable type checking */
   this.handler = new ErrorHandler(goog.bind(this.onException, this));
