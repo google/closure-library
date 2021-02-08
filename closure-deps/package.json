@@ -33,7 +33,6 @@
   },
   "homepage": "https://developers.google.com/closure/library/",
   "devDependencies": {
-    "google-closure-library": "^20210106.0.0",
     "jasmine": "^2.9.0",
     "jasmine-diff": "^0.1.3"
   },
