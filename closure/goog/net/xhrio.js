@@ -218,6 +218,13 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
    * @private {boolean}
    */
   this.useXhr2Timeout_ = false;
+
+  /**
+   * Specification for Trust Token operations (issuance, signing, and
+   * redemption).
+   * @private {?TrustTokenAttributeType}
+   */
+  this.trustToken_ = null;
 };
 goog.inherits(goog.net.XhrIo, goog.events.EventTarget);
 
@@ -505,6 +512,15 @@ goog.net.XhrIo.prototype.getProgressEventsEnabled = function() {
   return this.progressEventsEnabled_;
 };
 
+/**
+ * Specify a Trust Tokens operation to execute alongside the request.
+ * @param {!TrustTokenAttributeType} trustToken a Trust Tokens operation to
+ *     execute.
+ */
+goog.net.XhrIo.prototype.setTrustToken = function(trustToken) {
+  'use strict';
+  this.trustToken_ = trustToken;
+};
 
 /**
  * Instance send that actually uses XMLHttpRequest to make a server call.
@@ -620,6 +636,14 @@ goog.net.XhrIo.prototype.send = function(
     this.xhr_.withCredentials = this.withCredentials_;
   }
 
+  if ('setTrustToken' in this.xhr_ && this.trustToken_) {
+    try {
+      this.xhr_.setTrustToken(this.trustToken_);
+    } catch (err) {
+      goog.log.fine(
+          this.logger_, this.formatMsg_('Error SetTrustToken: ' + err.message));
+    }
+  }
   /**
    * Try to send the request, or other wise report an error (404 not found).
    */

@@ -128,3 +128,9 @@ goog.net.XhrLike.prototype.getResponseHeader = function(header) {};
  * @see http://www.w3.org/TR/XMLHttpRequest/#the-getallresponseheaders()-method
  */
 goog.net.XhrLike.prototype.getAllResponseHeaders = function() {};
+
+/**
+ * @type {?function(!TrustTokenAttributeType): void | undefined}
+ * @see https://docs.google.com/document/d/1qUjtKgA7nMv9YGMhi0xWKEojkSITKzGLdIcZgoz6ZkI.
+ */
+goog.net.XhrLike.prototype.setTrustToken = function(trustTokenAttribute) {};
