@@ -449,18 +449,6 @@ goog.asserts.assertFinite = function(value, opt_message, var_args) {
 };
 
 /**
- * Checks that no enumerable keys are present in Object.prototype. Such keys
- * would break most code that use {@code for (var ... in ...)} loops.
- */
-goog.asserts.assertObjectPrototypeIsIntact = function() {
-  'use strict';
-  for (var key in Object.prototype) {
-    goog.asserts.fail(key + ' should not be enumerable in Object.prototype.');
-  }
-};
-
-
-/**
  * Returns the type of a value. If a constructor is passed, and a suitable
  * string cannot be found, 'unknown type name' will be returned.
  * @param {*} value A constructor, object, or primitive.
