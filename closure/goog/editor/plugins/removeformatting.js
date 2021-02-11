@@ -31,6 +31,7 @@ goog.requireType('goog.dom.SavedCaretRange');
  * A plugin to handle removing formatting from selected text.
  * @constructor
  * @extends {goog.editor.Plugin}
+ * @final
  */
 goog.editor.plugins.RemoveFormatting = function() {
   'use strict';
