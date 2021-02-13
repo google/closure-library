@@ -8,11 +8,9 @@ goog.module('goog.net.IpAddressTest');
 goog.setTestOnly();
 
 const Integer = goog.require('goog.math.Integer');
-const IpAddress = goog.require('goog.net.IpAddress');
-const Ipv4Address = goog.require('goog.net.Ipv4Address');
-const Ipv6Address = goog.require('goog.net.Ipv6Address');
 const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
+const {IpAddress, Ipv4Address, Ipv6Address} = goog.require('goog.net.ipaddress');
 
 testSuite({
   testInvalidStrings() {

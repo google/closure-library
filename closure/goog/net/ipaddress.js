@@ -19,9 +19,6 @@
 // constructor at all. You can run the conversion tool yourself to see what it
 // does on this file: blaze run //javascript/refactoring/es6_classes:convert.
 
-goog.provide('goog.net.IpAddress');
-goog.provide('goog.net.Ipv4Address');
-goog.provide('goog.net.Ipv6Address');
 goog.provide('goog.net.ipaddress');
 
 goog.require('goog.array');
@@ -596,21 +593,3 @@ goog.net.ipaddress.Ipv6Address.prototype.getMappedIpv4Address = function() {
   const newIpv4 = new goog.math.Integer([this.ip_.getBitsUnsigned(0)], 0);
   return new goog.net.ipaddress.Ipv4Address(newIpv4);
 };
-
-/**
- * Alias for goog.net.ipaddress.IpAddress.
- * @const
- */
-goog.net.IpAddress = goog.net.ipaddress.IpAddress;
-
-/**
- * Alias for goog.net.ipaddress.Ipv4Address.
- * @const
- */
-goog.net.Ipv4Address = goog.net.ipaddress.Ipv4Address;
-
-/**
- * Alias for goog.net.ipaddress.Ipv6Address.
- * @const
- */
-goog.net.Ipv6Address = goog.net.ipaddress.Ipv6Address;
