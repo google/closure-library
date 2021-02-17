@@ -312,14 +312,6 @@ goog.debug.Logger.ENABLE_HIERARCHY =
 
 
 /**
- * @define {boolean} Toggles whether active log statements are also recorded
- *     to the profiler.
- */
-goog.debug.Logger.ENABLE_PROFILER_LOGGING =
-    goog.define('goog.debug.Logger.ENABLE_PROFILER_LOGGING', false);
-
-
-/**
  * Finds or creates a logger for a named subsystem. If a logger has already been
  * created with the given name it is returned. Otherwise a new logger is
  * created. If a new logger is created its log level will be configured based
@@ -336,35 +328,6 @@ goog.debug.Logger.ENABLE_PROFILER_LOGGING =
 goog.debug.Logger.getLogger = function(name) {
   'use strict';
   return goog.debug.LogManager.getLogger(name);
-};
-
-
-/**
- * Logs a message to profiling tools, if available.
- * {@see https://developers.google.com/web-toolkit/speedtracer/logging-api}
- * {@see http://msdn.microsoft.com/en-us/library/dd433074(VS.85).aspx}
- * @param {string} msg The message to log.
- */
-goog.debug.Logger.logToProfilers = function(msg) {
-  'use strict';
-  // Some browsers also log timeStamp calls to the console, only log
-  // if actually asked.
-  if (goog.debug.Logger.ENABLE_PROFILER_LOGGING) {
-    var msWriteProfilerMark = goog.global['msWriteProfilerMark'];
-    if (msWriteProfilerMark) {
-      // Logs a message to the Microsoft profiler
-      // On IE, console['timeStamp'] may output to console
-      msWriteProfilerMark(msg);
-      return;
-    }
-
-    // Using goog.global, as loggers might be used in window-less contexts.
-    var console = goog.global['console'];
-    if (console && console['timeStamp']) {
-      // Logs a message to Firebug, Web Inspector, SpeedTracer, etc.
-      console['timeStamp'](msg);
-    }
-  }
 };
 
 

@@ -17,7 +17,6 @@ goog.provide('goog.debug.Trace');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug');
-goog.require('goog.debug.Logger');
 goog.require('goog.iter');
 goog.require('goog.log');
 goog.require('goog.structs.Map');
@@ -578,8 +577,6 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
     }
   }
 
-  goog.debug.Logger.logToProfilers('Start : ' + comment);
-
   /** @const */
   var event =
       /** @type {!goog.debug.Trace_.Event_} */ (this.eventPool_.getObject());
@@ -670,8 +667,6 @@ goog.debug.Trace_.prototype.stopTracer = function(id, opt_silenceThreshold) {
     stat.time += elapsed;
   }
   if (stopEvent) {
-    goog.debug.Logger.logToProfilers('Stop : ' + stopEvent.comment);
-
     stopEvent.totalVarAlloc = this.getTotalVarAlloc();
 
     if (stat) {
