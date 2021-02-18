@@ -13,13 +13,12 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           registry-url: https://wombat-dressing-room.appspot.com
+      - run: npm install
       # Publish google-closure-library.
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_GOOGLE_CLOSURE_LIBRARY }}
-      # Publish google-closure-deps. google-closure-library is a dependency of
-      # this package, so this must happen strictly after the former is
-      # published.
+      # Publish google-closure-deps.
       - run: npm publish
         working-directory: ./closure-deps
         env:
