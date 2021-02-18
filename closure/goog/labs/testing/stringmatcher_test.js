@@ -8,9 +8,9 @@ goog.module('goog.labs.testing.stringMatcherTest');
 goog.setTestOnly();
 
 const MatcherError = goog.require('goog.labs.testing.MatcherError');
-/** @suppress {extraRequire} */
-const StringContainsInOrderMatcher = goog.require('goog.labs.testing.StringContainsInOrderMatcher');
 const assertThat = goog.require('goog.labs.testing.assertThat');
+/** @suppress {extraRequire} */
+const matchers = goog.require('goog.labs.testing');
 const testSuite = goog.require('goog.testing.testSuite');
 
 function assertMatcherError(callable, errorString) {

@@ -7,12 +7,10 @@
 goog.module('goog.labs.testing.decoratorMatcherTest');
 goog.setTestOnly();
 
-/** @suppress {extraRequire} */
-const AnythingMatcher = goog.require('goog.labs.testing.AnythingMatcher');
-/** @suppress {extraRequire} */
-const GreaterThanMatcher = goog.require('goog.labs.testing.GreaterThanMatcher');
 const MatcherError = goog.require('goog.labs.testing.MatcherError');
 const assertThat = goog.require('goog.labs.testing.assertThat');
+/** @suppress {extraRequire} */
+const matchers = goog.require('goog.labs.testing');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
