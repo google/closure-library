@@ -81,33 +81,6 @@ testSuite({
     assertEquals('', SafeScript.unwrap(SafeScript.EMPTY));
   },
 
-  testFromConstantAndArgs() {
-    const script = SafeScript.fromConstantAndArgs(
-        Const.from(
-            'function(str, num, nul, json) { foo(str, num, nul, json); }'),
-        'hello world', 42, null, {'foo': 'bar'});
-    assertEquals(
-        '(function(str, num, nul, json) { foo(str, num, nul, json); })' +
-            '("hello world", 42, null, {"foo":"bar"});',
-        SafeScript.unwrap(script));
-  },
-
-  testFromConstantAndArgs_escaping() {
-    const script = SafeScript.fromConstantAndArgs(
-        Const.from('function(str) { alert(str); }'), '</script</script');
-    assertEquals(
-        '(function(str) { alert(str); })' +
-            '("\\x3c/script\\x3c/script");',
-        SafeScript.unwrap(script));
-  },
-
-  testFromConstantAndArgs_eval() {
-    const script = SafeScript.fromConstantAndArgs(
-        Const.from('function(arg1, arg2) { return arg1 * arg2; }'), 21, 2);
-    const result = eval(SafeScript.unwrap(script));
-    assertEquals(42, result);
-  },
-
   testFromJson() {
     const json = SafeScript.fromJson({'a': 1, 'b': this.testFromJson});
     assertEquals('{"a":1}', SafeScript.unwrap(json));
