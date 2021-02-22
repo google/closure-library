@@ -17,8 +17,6 @@ const fs = require('fs');
 const path = require('path');
 const process = require('process');
 
-const PATH = '';
-
 /**
  * @typedef {{
  *   basePath: string,
@@ -77,8 +75,7 @@ function showHelp(errorMessage = '') {
         --base
           Path to base.js file.
         --dep_file:
-          Path to a deps file to use for all tests. If not specified but a
-          *_test_deps.js file exists it will be automatically included.
+          Optional path to a deps file to use for all tests.
         --recursive
           generate _test.html for each _test.js in each directory recursively.
           Defaults to false.
@@ -224,11 +221,8 @@ function maybeGenerateHtmlForFile(filename, args) {
       path.basename(testBootstrapFilename) :
       '';
 
-  const testDepsFilename = args.depsFile || baseFileName + '_test_deps.js';
-  const pathToDeps =
-      fs.existsSync(testDepsFilename) ? path.basename(testDepsFilename) : '';
-
   const pathToBase = path.relative(path.dirname(htmlFilename), args.basePath);
+  const pathToDeps = args.depsFile ? path.relative(path.dirname(htmlFilename), args.depsFile) : '';
 
   const html = createHtml(
       title, pathToBootstrap, pathToDeps, newJS, testDom, pathToBase);
@@ -239,7 +233,7 @@ function maybeGenerateHtmlForFile(filename, args) {
  * @param {string} title Title of the test.
  * @param {string} pathToBootstrap Path to a bootstrap javascript file to run
  *     first, if any. Generally this file will contain closure defines.
- * @param {string} pathToDeps Bath to a custom deps file, if any.
+ * @param {string} pathToDeps Path to a custom deps file, if any.
  * @param {string} js Script content of the test.
  * @param {string} testDom Any test DOM related to the test or the empty string
  *     if none.

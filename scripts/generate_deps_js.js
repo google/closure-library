@@ -42,6 +42,8 @@ const TEST_EXCLUSION_FLAGS = [
   '**/*_test_cases.js',
   '--exclude',
   '**/testdata/**/*.js',
+  '--exclude',
+  `${CLOSURE_PATH}/demos/`,
 ];
 
 /**
@@ -59,11 +61,7 @@ async function main(args) {
       THIRD_PARTY_PATH,
       ...genDepsWithTests ? [] : TEST_EXCLUSION_FLAGS,
       '--exclude',
-      `${CLOSURE_PATH}/css`,
-      '--exclude',
-      `${CLOSURE_PATH}/demos`,
-      '--exclude',
-      `${CLOSURE_PATH}/deps.js`,
+      `${CLOSURE_PATH}/deps*.js`,
       '--exclude',
       `${CLOSURE_PATH}/transpile.js`,
     ]);
