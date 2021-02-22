@@ -10,14 +10,16 @@
 
 # python
 *.pyc
-
-# Generated deps.js
-closure/goog/deps.js
-
 node_modules/
 closure-deps/node_modules/
 package-lock.json
 
-# Closure Generated Unit Test
+# Closure Generated Unit Tests
 *_test.html
+
+# Generated alltests.js
+alltests.js
+
+# Generated deps.js
+closure/goog/deps.js
 

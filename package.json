@@ -20,19 +20,21 @@
   },
   "homepage": "https://developers.google.com/closure/library/",
   "devDependencies": {
-    "generate_closure_unit_tests": "file:./closure/bin/generate_closure_unit_tests/",
     "google-closure-deps": "file:./closure-deps/",
     "http-server": "^0.12.1",
+    "parse5": "^6.0.1",
     "promise": "^7.0.4",
     "promises-aplus-tests": "^2.1.2",
     "protractor": "^7.0.0"
   },
   "scripts": {
-    "gen_deps_js": "node scripts/gen_deps_js > ./closure/goog/deps.js",
-    "gen_all_tests": "npx generate_closure_unit_tests --base=closure/goog/base.js --recursive ./closure/goog/ --overwrite",
+    "gen_deps_js": "node scripts/generate_deps_js > ./closure/goog/deps.js",
+    "gen_deps_js_with_tests": "node scripts/generate_deps_js --with_tests > ./closure/goog/deps.js",
+    "gen_alltests_js": "node scripts/generate_alltests_js > ./alltests.js",
+    "gen_test_htmls": "node scripts/generate_closure_unit_tests --base=closure/goog/base.js --recursive ./closure/goog/ ./third_party/closure/goog/ --overwrite",
     "prepare": "npm run gen_deps_js",
-    "preserve_tests": "npm run gen_all_tests",
-    "serve_tests": "npx http-server -o allTests.html",
-    "serve_demos": "npx http-server -o closure/goog/demos/index.html"
+    "preserve_tests": "npm run gen_deps_js_with_tests && npm run gen_test_htmls && npm run gen_alltests_js",
+    "serve_tests": "http-server -o alltests.html",
+    "serve_demos": "http-server -o closure/goog/demos/index.html"
   }
 }

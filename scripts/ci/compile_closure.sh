@@ -45,7 +45,6 @@ java -Xmx1G -jar ../closure-compiler-1.0-SNAPSHOT.jar \
   --js='!**protractor_spec.js' \
   --js='!**protractor.conf.js' \
   --js='!**browser_capabilities.js' \
-  --js='!**generate_closure_unit_tests.js' \
   --js='!./doc/**.js' \
   --js='!**debug_loader_integration_tests/testdata/**' \
   --js_output_file="$(mktemp)"
