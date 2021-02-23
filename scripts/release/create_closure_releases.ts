@@ -42,7 +42,7 @@ const MATCH_ROLLBACK = /Automated rollback of commit ([a-f0-9]{40})./;
  * A regex to match indications that a commit message shouldn't be reflected in
  * a GitHub Release body.
  */
-const MATCH_INVALID_NOTE = /(none|n\/?a)\.?$/i;
+const MATCH_INVALID_NOTE = /(none|n\/?a)\.?$/im;
 
 /**
  * The allowed change types for release notes (NONE being implicit when no
@@ -99,13 +99,22 @@ function createReleaseNotes(changes: Change[]) {
   // Populate `releaseNotes` based on `changes`.
   // One entry in `releaseNotes` may correspond to several entries in `changes`.
   const releaseNotes: ReleaseNotesEntry[] = [];
-  for (const {hash, message} of changes) {
+  // Store identifiers for "invalid" release notes, since they can still get
+  // rolled back, in which case we don't want to inadvertently label a rollback
+  // as having an unknown original change.
+  const skippedChanges = new Set<string>();
+  for (const {body, hash, message} of changes) {
+    // simple_git splits a commit description on `\n\n`.
+    // Re-construct the original commit description, as RELNOTES could be in
+    // either the message or the body.
+    const desc = `${message}\n\n${body}`;
     // Don't include a message like "RELNOTES: n/a".
-    if (MATCH_INVALID_NOTE.test(message)) {
+    if (MATCH_INVALID_NOTE.test(desc)) {
+      skippedChanges.add(hash);
       continue;
     }
 
-    const rollback = MATCH_ROLLBACK.exec(message);
+    const rollback = MATCH_ROLLBACK.exec(desc);
     if (rollback) {
       // If we find a rollback commit, try to find the original change that got
       // rolled back by this one via commit hash.
@@ -124,23 +133,29 @@ function createReleaseNotes(changes: Change[]) {
         matchingChange.hashes =
             matchingChange.hashes.filter(hash => hash !== rolledbackHash);
       } else {
-        // The commit hash extracted from the rollback message doesn't match an
-        // entry in `changes`, which can be due to one of three reasons:
-        //   1) The hash is wrong (which may be a result of a rebase).
-        //   2) The rolled-back commit is out of the range represented by
-        //      `changes`.
-        //   3) The rolled-back commit is itself a rollback (making this a
-        //      roll-forward commit).
-        // Either way, write an entry in "Other Changes" to direct a draft
-        // reviewer to find the right commit.
-        releaseNotes.push({
-          changeType: 'NONE',
-          noteText: `__TODO(user):__ Rollback of ${rolledbackHash}`,
-          hashes: [hash]
-        });
+        // It's possible that this change rolls back one that was skipped in the
+        // release notes. If that's the case, do nothing.
+        const originalChangeSkipped = skippedChanges.has(rolledbackHash);
+        if (!originalChangeSkipped) {
+          // The commit hash extracted from the rollback message doesn't match
+          // an entry in `releaseNotes` or `skippedChanges`, which can be due to
+          // one of three reasons:
+          //   1) The hash is wrong (which may be a result of a rebase).
+          //   2) The rolled-back commit is out of the range represented by
+          //      `changes`.
+          //   3) The rolled-back commit is itself a rollback (making this a
+          //      roll-forward commit).
+          // Either way, write an entry in "Other Changes" to direct a draft
+          // reviewer to find the right commit.
+          releaseNotes.push({
+            changeType: 'NONE',
+            noteText: `__TODO(user):__ Rollback of ${rolledbackHash}`,
+            hashes: [hash]
+          });
+        }
       }
     } else {
-      const matchedRelnotes = MATCH_RELNOTES.exec(message);
+      const matchedRelnotes = MATCH_RELNOTES.exec(desc);
       if (matchedRelnotes) {
         const changeType = matchedRelnotes[1] || 'NONE';
         const noteText = escapeGitHubMarkdown(matchedRelnotes[2].trim());

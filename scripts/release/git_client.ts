@@ -40,6 +40,8 @@ export interface Change {
   hash: string;
   /** A commit message. */
   message: string;
+  /** A commit body. */
+  body: string;
 }
 
 /**

@@ -22,7 +22,7 @@
 import * as assert from 'assert';
 
 import {clientImplementationsForTesting, createClosureReleases} from './create_closure_releases';
-import {GitClient} from './git_client';
+import {Change, GitClient} from './git_client';
 import {GitHubClient} from './github_client';
 
 /** The fake GitHub API token to use in tests. */
@@ -40,6 +40,8 @@ interface FakeGitData {
   hash: string;
   /** A fake commit message. */
   message: string;
+  /** A fake commit body. Omit as a shorthand for setting it to ''. */
+  body?: string;
   /** The value of the 'version' property in package.json at a fake commit. */
   pJsonVersion: string;
 }
@@ -75,13 +77,17 @@ function spyOnClients(
       new Set([...fakeGitCommits.map(x => x.hash)]).size,
       fakeGitCommits.length);
 
+  // Add a `body` to objects that are missing it.
+  const gitCommits: Change[] =
+      fakeGitCommits.map(commit => Object.assign({body: ''}, commit));
   // Make GitClient#listCommits list commits in `fakeGitCommits`.
   spyOn(GitClient.prototype, 'listCommits').and.callFake(async ({from, to}) => {
     assert.strictEqual(to, 'HEAD');
     // + 1 because listCommits excludes `from`.
-    return fakeGitCommits.slice(
-        fakeGitCommits.findIndex(commit => commit.hash === from) + 1);
+    return gitCommits.slice(
+        gitCommits.findIndex(commit => commit.hash === from) + 1);
   });
+
   // Make GitClient#getFile return a minimal package.json with data from
   // `fakeGitCommits`.
   spyOn(GitClient.prototype, 'getFile')
@@ -92,8 +98,8 @@ function spyOnClients(
         return JSON.stringify({version: pJsonVersion});
       });
 
-  // Make GitHubClient#getLatestRelease return `fakeLatestReleaseHash`.
-  spyOn(GitHubClient.prototype, 'getLatestRelease')
+  // Make GitHubClient#getLatestReleaseTag return `fakeLatestReleaseHash`.
+  spyOn(GitHubClient.prototype, 'getLatestReleaseTag')
       .and.returnValue(Promise.resolve(fakeLatestReleaseHash));
   // Make GitHubClient#getLatestRelease return `FAKE_RELEASE_URL`.
   spyOn(GitHubClient.prototype, 'draftRelease')
@@ -103,7 +109,7 @@ function spyOnClients(
 describe('createClosureReleases', () => {
   beforeEach(() => {
     // For capturing logs and preventing logspam.
-    spyOn(console, 'log');
+    spyOn(console, 'error');
   });
 
   // This isn't a real tested behavior of createClosureReleases, but it ensures
@@ -157,7 +163,7 @@ describe('createClosureReleases', () => {
     ]);
     await createClosureReleases(FAKE_TOKEN);
     expect(GitHubClient.prototype.draftRelease).toHaveBeenCalledTimes(1);
-    expect(console.log)
+    expect(console.error)
         .toHaveBeenCalledOnceWith(
             `Drafted release for v20201010 at ${FAKE_RELEASE_URL}`);
   });
@@ -359,10 +365,34 @@ describe('createClosureReleases', () => {
          commit: '02',
          body: stripIndentForReleaseBody`
            **Other Changes**
-           * __TODO__ Rollback of ${FAKE_ROLLBACK_HASH} (01)
+           * __TODO(user):__ Rollback of ${FAKE_ROLLBACK_HASH} (01)
          `,
        });
      });
+
+  it(`omits a rollback commit for an originally omitted change`, async () => {
+    spyOnClients('00', [
+      {hash: '00', pJsonVersion: '20201009.0.0', message: ''},
+      {
+        hash: FAKE_ROLLBACK_HASH,
+        pJsonVersion: '20201009.0.0',
+        message: 'RELNOTES: n/a',
+      },
+      {
+        hash: '02',
+        pJsonVersion: '20201009.0.0',
+        message: `Automated rollback of commit ${FAKE_ROLLBACK_HASH}.`,
+      },
+      {hash: '03', pJsonVersion: '20201010.0.0', message: ''},
+    ]);
+    await createClosureReleases(FAKE_TOKEN);
+    expect(GitHubClient.prototype.draftRelease).toHaveBeenCalledOnceWith({
+      name: 'Closure Library v20201010',
+      tagName: 'v20201010',
+      commit: '03',
+      body: 'No release notes.',
+    });
+  });
 
   it('doesn\'t write headers for empty sections in release notes', async () => {
     spyOnClients('00', [
@@ -493,6 +523,28 @@ describe('createClosureReleases', () => {
         * \\*Stuff\\* \\#happened \\<div\\> (01)
         * \\[Stuff\\] \`@happened\` \\_surely\\_ (02)
         * \\(Stuff\\) \`happened\` (03)
+      `,
+    });
+  });
+
+  it('treats the commit body as part of the description', async () => {
+    spyOnClients('00', [
+      {hash: '00', pJsonVersion: '20201009.0.0', message: ''},
+      {
+        hash: '01',
+        pJsonVersion: '20201009.0.0',
+        message: 'commit 1',
+        body: 'RELNOTES: Stuff happened'
+      },
+      {hash: '02', pJsonVersion: '20201010.0.0', message: ''},
+    ]);
+    await createClosureReleases(FAKE_TOKEN);
+    expect(GitHubClient.prototype.draftRelease).toHaveBeenCalledOnceWith({
+      name: 'Closure Library v20201010',
+      tagName: 'v20201010',
+      commit: '02',
+      body: stripIndentForReleaseBody`**Other Changes**
+        * Stuff happened (01)
       `,
     });
   });
