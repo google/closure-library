@@ -58,7 +58,3 @@ npm install
 
 # Install Selenium.
 ./node_modules/protractor/bin/webdriver-manager update
-
-# Install closure-deps dependencies.
-cd closure-deps
-npm install

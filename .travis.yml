@@ -12,9 +12,7 @@ sudo: required
 dist: trusty
 
 cache:
-  directories:
-    - node_modules
-    - closure-deps/node_modules
+  npm: false
 
 install:
   # We need jdk8 for JsDossier; but this needs to come first because
