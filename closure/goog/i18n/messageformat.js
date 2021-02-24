@@ -197,10 +197,16 @@ goog.i18n.MessageFormat.REGEX_LITERAL_ = new RegExp("'([{}#].*?)'", 'g');
  */
 goog.i18n.MessageFormat.REGEX_DOUBLE_APOSTROPHE_ = new RegExp("''", 'g');
 
-/** @typedef {{ type: !goog.i18n.MessageFormat.Element_, value: ? }} */
+/**
+ * @typedef {{ type: !goog.i18n.MessageFormat.Element_, value: ? }}
+ * @private
+ */
 goog.i18n.MessageFormat.TypeVal_;
 
-/** @typedef {{ type: !goog.i18n.MessageFormat.BlockType_, value: ? }} */
+/**
+ * @typedef {{ type: !goog.i18n.MessageFormat.BlockType_, value: ? }}
+ * @private
+ */
 goog.i18n.MessageFormat.BlockTypeVal_;
 
 

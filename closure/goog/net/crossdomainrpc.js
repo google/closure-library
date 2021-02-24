@@ -115,7 +115,7 @@ goog.net.CrossDomainRpc.prototype.responseText;
 goog.net.CrossDomainRpc.prototype.status;
 
 
-/** @type {number} */
+/** @private {number} */
 goog.net.CrossDomainRpc.prototype.timeWaitedAfterResponseReady_;
 
 

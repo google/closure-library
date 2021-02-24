@@ -197,6 +197,7 @@ goog.log.Level.predefinedLevelsCache_ = null;
 
 /**
  * Creates the predefined levels cache and populates it.
+ * @private
  */
 goog.log.Level.createPredefinedLevelsCache_ = function() {
   goog.log.Level.predefinedLevelsCache_ = {};
