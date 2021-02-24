@@ -44,12 +44,64 @@ goog.net.Cookies.MAX_COOKIE_LENGTH = 3950;
 
 
 /**
+ * The name of the test cookie to set.
+ *
+ *
+ * @private @const {string}
+ */
+goog.net.Cookies.TEST_COOKIE_NAME_ = 'TESTCOOKIESENABLED';
+
+
+/**
+ * The value of the test cookie to set.
+ * @private @const {string}
+ */
+goog.net.Cookies.TEST_COOKIE_VALUE_ = '1';
+
+
+/**
+ * Max age of the test cookie in seconds.
+ * @private @const {number}
+ */
+goog.net.Cookies.TEST_COOKIE_MAX_AGE_ = 60;
+
+
+/**
  * Returns true if cookies are enabled.
+ *
+ * navigator.cookieEnabled is an unreliable API in some browsers such as
+ * Internet Explorer. It will return true even when cookies are actually
+ * blocked. To work around this, check for the presence of cookies, or attempt
+ * to manually set and retrieve a cookie, which is the ultimate test of whether
+ * or not a browser supports cookies.
+ *
  * @return {boolean} True if cookies are enabled.
  */
 goog.net.Cookies.prototype.isEnabled = function() {
   'use strict';
-  return navigator.cookieEnabled;
+  if (!goog.global.navigator.cookieEnabled) {
+    return false;
+  }
+
+  if (!this.isEmpty()) {
+    // There are some cookies already set for the current domain, so cookies
+    // can't be totally blocked.
+    return true;
+  }
+
+  // Try setting and reading back a cookie to see if cookies are enabled.
+  this.set(
+      goog.net.Cookies.TEST_COOKIE_NAME_, goog.net.Cookies.TEST_COOKIE_VALUE_,
+      {maxAge: goog.net.Cookies.TEST_COOKIE_MAX_AGE_});
+  if (this.get(goog.net.Cookies.TEST_COOKIE_NAME_) !==
+      goog.net.Cookies.TEST_COOKIE_VALUE_) {
+    return false;
+  }
+
+  // Clean up the test cookie.
+  this.remove(goog.net.Cookies.TEST_COOKIE_NAME_);
+
+  return true;
 };
 
 

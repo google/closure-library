@@ -85,8 +85,43 @@ testSuite({
     stubs.reset();
   },
 
-  testIsEnabled() {
-    assertEquals(navigator.cookieEnabled, cookies.isEnabled());
+  testIsEnabledWithNavigatorCookieEnabledFalse() {
+    // PropertyReplacer does not support overwriting read-only properties, which
+    // includes all of window.navigator:
+    // https://developer.mozilla.org/en-US/docs/Web/API/Navigator
+
+    // Save off original value and set navigator.cookieEnabled to false
+    const originalValue = goog.global.navigator;
+    Object.defineProperty(
+        goog.global, 'navigator', {value: {cookieEnabled: false}});
+
+    assertFalse(cookies.isEnabled());
+
+    // Restore window.navigator
+    Object.defineProperty(goog.global, 'navigator', {value: originalValue});
+  },
+
+  testIsEnabledWithExistingCookies() {
+    stubs.set(cookies, 'isEmpty', () => false);
+
+    assertTrue(cookies.isEnabled());
+  },
+
+  testIsEnabledWhenUnableToSetCookie() {
+    stubs.set(cookies, 'isEmpty', () => true);
+    stubs.set(cookies, 'set', () => {});
+    stubs.set(cookies, 'get', () => '');
+
+    assertFalse(cookies.isEnabled());
+  },
+
+  testIsEnabledWhenAbleToSetCookie() {
+    const initialCookieCount = cookies.getCount();
+    stubs.set(cookies, 'isEmpty', () => true);
+
+    assertTrue(cookies.isEnabled());
+    // Ensure the test cookie is cleaned up.
+    assertEquals(initialCookieCount, cookies.getCount());
   },
 
   testCount() {
