@@ -189,6 +189,7 @@ goog.dom.Attr = {
   TABINDEX: 'tabindex',
   TARGET: 'target',
   TITLE: 'title',
+  TRANSLATE: 'translate',
   TYPE: 'type',
   USEMAP: 'usemap',
   VALUE: 'value',
