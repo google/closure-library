@@ -18,4 +18,5 @@
 
 set -e
 cd closure-deps
+npm install
 npm test
