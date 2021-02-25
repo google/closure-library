@@ -9,11 +9,7 @@
  *     hasEntry, hasEntries, hasKey, hasValue, etc.
  */
 
-
-goog.provide('goog.labs.testing.HasEntriesMatcher');
-goog.provide('goog.labs.testing.HasEntryMatcher');
-goog.provide('goog.labs.testing.HasKeyMatcher');
-goog.provide('goog.labs.testing.HasValueMatcher');
+goog.provide('goog.labs.testing.dictionarymatcher');
 
 goog.require('goog.asserts');
 goog.require('goog.labs.testing.Matcher');
@@ -31,7 +27,7 @@ goog.require('goog.object');
  * @implements {goog.labs.testing.Matcher}
  * @final
  */
-goog.labs.testing.HasEntriesMatcher = function(entries) {
+goog.labs.testing.dictionarymatcher.HasEntriesMatcher = function(entries) {
   'use strict';
   /**
    * @type {Object}
@@ -46,7 +42,8 @@ goog.labs.testing.HasEntriesMatcher = function(entries) {
  *
  * @override
  */
-goog.labs.testing.HasEntriesMatcher.prototype.matches = function(actualObject) {
+goog.labs.testing.dictionarymatcher.HasEntriesMatcher.prototype.matches =
+    function(actualObject) {
   'use strict';
   goog.asserts.assertObject(actualObject, 'Expected an Object');
   var object = /** @type {!Object} */ (actualObject);
@@ -60,8 +57,8 @@ goog.labs.testing.HasEntriesMatcher.prototype.matches = function(actualObject) {
 /**
  * @override
  */
-goog.labs.testing.HasEntriesMatcher.prototype.describe = function(
-    actualObject) {
+goog.labs.testing.dictionarymatcher.HasEntriesMatcher.prototype.describe =
+    function(actualObject) {
   'use strict';
   goog.asserts.assertObject(actualObject, 'Expected an Object');
   var object = /** @type {!Object} */ (actualObject);
@@ -88,7 +85,7 @@ goog.labs.testing.HasEntriesMatcher.prototype.describe = function(
  * @implements {goog.labs.testing.Matcher}
  * @final
  */
-goog.labs.testing.HasEntryMatcher = function(key, value) {
+goog.labs.testing.dictionarymatcher.HasEntryMatcher = function(key, value) {
   'use strict';
   /**
    * @type {string}
@@ -108,7 +105,8 @@ goog.labs.testing.HasEntryMatcher = function(key, value) {
  *
  * @override
  */
-goog.labs.testing.HasEntryMatcher.prototype.matches = function(actualObject) {
+goog.labs.testing.dictionarymatcher.HasEntryMatcher.prototype.matches =
+    function(actualObject) {
   'use strict';
   goog.asserts.assertObject(actualObject);
   return goog.object.containsKey(actualObject, this.key_) &&
@@ -119,7 +117,8 @@ goog.labs.testing.HasEntryMatcher.prototype.matches = function(actualObject) {
 /**
  * @override
  */
-goog.labs.testing.HasEntryMatcher.prototype.describe = function(actualObject) {
+goog.labs.testing.dictionarymatcher.HasEntryMatcher.prototype.describe =
+    function(actualObject) {
   'use strict';
   goog.asserts.assertObject(actualObject);
   var errorMsg;
@@ -143,7 +142,7 @@ goog.labs.testing.HasEntryMatcher.prototype.describe = function(actualObject) {
  * @implements {goog.labs.testing.Matcher}
  * @final
  */
-goog.labs.testing.HasKeyMatcher = function(key) {
+goog.labs.testing.dictionarymatcher.HasKeyMatcher = function(key) {
   'use strict';
   /**
    * @type {string}
@@ -158,7 +157,8 @@ goog.labs.testing.HasKeyMatcher = function(key) {
  *
  * @override
  */
-goog.labs.testing.HasKeyMatcher.prototype.matches = function(actualObject) {
+goog.labs.testing.dictionarymatcher.HasKeyMatcher.prototype.matches = function(
+    actualObject) {
   'use strict';
   goog.asserts.assertObject(actualObject);
   return goog.object.containsKey(actualObject, this.key_);
@@ -168,7 +168,8 @@ goog.labs.testing.HasKeyMatcher.prototype.matches = function(actualObject) {
 /**
  * @override
  */
-goog.labs.testing.HasKeyMatcher.prototype.describe = function(actualObject) {
+goog.labs.testing.dictionarymatcher.HasKeyMatcher.prototype.describe = function(
+    actualObject) {
   'use strict';
   goog.asserts.assertObject(actualObject);
   return 'Input object did not contain the key: ' + this.key_;
@@ -186,7 +187,7 @@ goog.labs.testing.HasKeyMatcher.prototype.describe = function(actualObject) {
  * @implements {goog.labs.testing.Matcher}
  * @final
  */
-goog.labs.testing.HasValueMatcher = function(value) {
+goog.labs.testing.dictionarymatcher.HasValueMatcher = function(value) {
   'use strict';
   /**
    * @type {*}
@@ -201,7 +202,8 @@ goog.labs.testing.HasValueMatcher = function(value) {
  *
  * @override
  */
-goog.labs.testing.HasValueMatcher.prototype.matches = function(actualObject) {
+goog.labs.testing.dictionarymatcher.HasValueMatcher.prototype.matches =
+    function(actualObject) {
   'use strict';
   goog.asserts.assertObject(actualObject, 'Expected an Object');
   var object = /** @type {!Object} */ (actualObject);
@@ -212,7 +214,8 @@ goog.labs.testing.HasValueMatcher.prototype.matches = function(actualObject) {
 /**
  * @override
  */
-goog.labs.testing.HasValueMatcher.prototype.describe = function(actualObject) {
+goog.labs.testing.dictionarymatcher.HasValueMatcher.prototype.describe =
+    function(actualObject) {
   'use strict';
   return 'Input object did not contain the value: ' + this.value_;
 };
@@ -223,13 +226,14 @@ goog.labs.testing.HasValueMatcher.prototype.describe = function(actualObject) {
  * in the input object.
  *
  * @param {!Object} entries The entries to check for presence in the object.
- * @return {!goog.labs.testing.HasEntriesMatcher} A HasEntriesMatcher.
+ * @return {!goog.labs.testing.dictionarymatcher.HasEntriesMatcher} A
+ *     HasEntriesMatcher.
  */
-var hasEntries =
-    goog.labs.testing.HasEntriesMatcher.hasEntries = function(entries) {
-      'use strict';
-      return new goog.labs.testing.HasEntriesMatcher(entries);
-    };
+goog.labs.testing.dictionarymatcher.HasEntriesMatcher.hasEntries = function(
+    entries) {
+  'use strict';
+  return new goog.labs.testing.dictionarymatcher.HasEntriesMatcher(entries);
+};
 
 
 /**
@@ -237,24 +241,25 @@ var hasEntries =
  *
  * @param {string} key The key to check for presence in the object.
  * @param {*} value The value to check for presence in the object.
- * @return {!goog.labs.testing.HasEntryMatcher} A HasEntryMatcher.
+ * @return {!goog.labs.testing.dictionarymatcher.HasEntryMatcher} A
+ *     HasEntryMatcher.
  */
-var hasEntry =
-    goog.labs.testing.HasEntryMatcher.hasEntry = function(key, value) {
-      'use strict';
-      return new goog.labs.testing.HasEntryMatcher(key, value);
-    };
+goog.labs.testing.dictionarymatcher.HasEntryMatcher.hasEntry = function(
+    key, value) {
+  'use strict';
+  return new goog.labs.testing.dictionarymatcher.HasEntryMatcher(key, value);
+};
 
 
 /**
  * Gives a matcher that asserts an object contains the given key.
  *
  * @param {string} key The key to check for presence in the object.
- * @return {!goog.labs.testing.HasKeyMatcher} A HasKeyMatcher.
+ * @return {!goog.labs.testing.dictionarymatcher.HasKeyMatcher} A HasKeyMatcher.
  */
-var hasKey = goog.labs.testing.HasKeyMatcher.hasKey = function(key) {
+goog.labs.testing.dictionarymatcher.HasKeyMatcher.hasKey = function(key) {
   'use strict';
-  return new goog.labs.testing.HasKeyMatcher(key);
+  return new goog.labs.testing.dictionarymatcher.HasKeyMatcher(key);
 };
 
 
@@ -262,9 +267,10 @@ var hasKey = goog.labs.testing.HasKeyMatcher.hasKey = function(key) {
  * Gives a matcher that asserts an object contains the given value.
  *
  * @param {*} value The value to check for presence in the object.
- * @return {!goog.labs.testing.HasValueMatcher} A HasValueMatcher.
+ * @return {!goog.labs.testing.dictionarymatcher.HasValueMatcher} A
+ *     HasValueMatcher.
  */
-var hasValue = goog.labs.testing.HasValueMatcher.hasValue = function(value) {
+goog.labs.testing.dictionarymatcher.HasValueMatcher.hasValue = function(value) {
   'use strict';
-  return new goog.labs.testing.HasValueMatcher(value);
+  return new goog.labs.testing.dictionarymatcher.HasValueMatcher(value);
 };

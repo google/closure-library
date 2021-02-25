@@ -1002,4 +1002,67 @@ testSuite({
     assertEquals(0, object.getCount(headers));
   },
 
+  testSetTrustTokenHeaderTrustTokenNotSupported() {
+    const trustToken = {
+      type: 'send-redemption-record',
+      issuers: ['https://www.a.com', 'https://www.b.com'],
+      refreshPolicy: 'none',
+      signRequestData: 'include',
+      includeTimestampHeader: true,
+      additionalSignedHeaders: ['sec-time', 'Sec-Redemption-Record'],
+      additionalSigningData: 'ENCODED_URL',
+    };
+
+    MockXmlHttp.syncSend = true;
+
+    let x = new XhrIo;
+    events.listen(x, EventType.COMPLETE, function(e) {
+      assertTrue('Should be successful', e.target.isSuccess());
+      count++;
+    });
+
+    let count = 0;
+    // Test on XHR objects that don't have the setTrustToken function (browser
+    // doesn't support or disabled trust token).
+    x.setTrustToken(trustToken);
+    x.send('url');
+    clock.tick(1);  // callOnce(f, 0, ...)
+    assertEquals('Complete should have been called once', 1, count);
+  },
+
+  testSetTrustTokenHeaderTrustTokenSupported() {
+    const trustToken = {
+      type: 'send-redemption-record',
+      issuers: ['https://www.a.com', 'https://www.b.com'],
+      refreshPolicy: 'none',
+      signRequestData: 'include',
+      includeTimestampHeader: true,
+      additionalSignedHeaders: ['sec-time', 'Sec-Redemption-Record'],
+      additionalSigningData: 'ENCODED_URL',
+    };
+
+    MockXmlHttp.syncSend = true;
+
+    let x = new XhrIo;
+    events.listen(x, EventType.COMPLETE, function(e) {
+      assertTrue('Should be successful', e.target.isSuccess());
+      count++;
+    });
+
+    let count = 0;
+
+    // Test on XHR objects that have the setTrustToken function
+    MockXmlHttp.prototype.setTrustToken = () => {};
+    x = new XhrIo;
+    events.listen(x, EventType.COMPLETE, function(e) {
+      assertTrue('Should be successful', e.target.isSuccess());
+      count++;
+    });
+    x.setTrustToken(trustToken);
+    x.send('url');
+    clock.tick(1);  // callOnce(f, 0, ...)
+    assertEquals('Complete should have been called once', 1, count);
+    // Reset the prototype so it does not effect other tests.
+    delete MockXmlHttp.prototype.setTrustToken;
+  },
 });

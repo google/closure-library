@@ -8,7 +8,7 @@
  * @fileoverview Provides the built-in decorators: is, describedAs, anything.
  */
 
-goog.provide('goog.labs.testing.AnythingMatcher');
+goog.provide('goog.labs.testing.decoratormatcher');
 
 goog.require('goog.labs.testing.Matcher');
 
@@ -20,7 +20,7 @@ goog.require('goog.labs.testing.Matcher');
  * @implements {goog.labs.testing.Matcher}
  * @final
  */
-goog.labs.testing.AnythingMatcher = function() {};
+goog.labs.testing.decoratormatcher.AnythingMatcher = function() {};
 
 
 /**
@@ -28,7 +28,8 @@ goog.labs.testing.AnythingMatcher = function() {};
  *
  * @override
  */
-goog.labs.testing.AnythingMatcher.prototype.matches = function(actualObject) {
+goog.labs.testing.decoratormatcher.AnythingMatcher.prototype.matches = function(
+    actualObject) {
   'use strict';
   return true;
 };
@@ -40,7 +41,8 @@ goog.labs.testing.AnythingMatcher.prototype.matches = function(actualObject) {
  *
  * @override
  */
-goog.labs.testing.AnythingMatcher.prototype.describe = function(actualObject) {
+goog.labs.testing.decoratormatcher.AnythingMatcher.prototype.describe =
+    function(actualObject) {
   'use strict';
   throw new Error('AnythingMatcher should never fail!');
 };
@@ -49,11 +51,12 @@ goog.labs.testing.AnythingMatcher.prototype.describe = function(actualObject) {
 /**
  * Returns a matcher that matches anything.
  *
- * @return {!goog.labs.testing.AnythingMatcher} A AnythingMatcher.
+ * @return {!goog.labs.testing.decoratormatcher.AnythingMatcher} A
+ *     AnythingMatcher.
  */
-var anything = goog.labs.testing.AnythingMatcher.anything = function() {
+goog.labs.testing.decoratormatcher.AnythingMatcher.anything = function() {
   'use strict';
-  return new goog.labs.testing.AnythingMatcher();
+  return new goog.labs.testing.decoratormatcher.AnythingMatcher();
 };
 
 
@@ -63,7 +66,7 @@ var anything = goog.labs.testing.AnythingMatcher.anything = function() {
  * @param {!goog.labs.testing.Matcher} matcher A matcher.
  * @return {!goog.labs.testing.Matcher} The wrapped matcher.
  */
-var is = goog.labs.testing.AnythingMatcher.is = function(matcher) {
+goog.labs.testing.decoratormatcher.AnythingMatcher.is = function(matcher) {
   'use strict';
   return matcher;
 };
@@ -76,7 +79,7 @@ var is = goog.labs.testing.AnythingMatcher.is = function(matcher) {
  * @param {!goog.labs.testing.Matcher} matcher The matcher.
  * @return {!goog.labs.testing.Matcher} The matcher with custom description.
  */
-var describedAs = goog.labs.testing.AnythingMatcher.describedAs = function(
+goog.labs.testing.decoratormatcher.AnythingMatcher.describedAs = function(
     description, matcher) {
   'use strict';
   return /** @type {!goog.labs.testing.Matcher} */ ({

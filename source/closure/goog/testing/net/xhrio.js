@@ -398,6 +398,16 @@ goog.testing.net.XhrIo.prototype.getWithCredentials = function() {
   return this.withCredentials_;
 };
 
+/**
+ * Specify a Trust Tokens operation to execute alongside the request.
+ * @param {!TrustTokenAttributeType} trustToken a Trust Tokens operation to
+ *     execute.
+ * @override
+ */
+goog.testing.net.XhrIo.prototype.setTrustToken = function(trustToken) {
+  'use strict';
+  this.trustToken_ = trustToken;
+};
 
 /**
  * Sets whether progress events are enabled for this request. Note

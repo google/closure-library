@@ -1138,12 +1138,33 @@ testSuite({
   testKeyboardShortcut_space() {
     FIELDMOCK.$reset();
 
-    FIELDMOCK.execCommand(RemoveFormatting.REMOVE_FORMATTING_COMMAND);
+    if (!userAgent.MAC) {
+      FIELDMOCK.execCommand(RemoveFormatting.REMOVE_FORMATTING_COMMAND);
+    }
 
     FIELDMOCK.$replay();
 
     const e = {};
     const key = ' ';
+    const result = FORMATTER.handleKeyboardShortcut(e, key, true);
+    assertEquals(!userAgent.MAC, result);
+
+    FIELDMOCK.$verify();
+  },
+
+  /**
+     @suppress {missingProperties} suppression added to enable type
+     checking
+   */
+  testKeyboardShortcut_backslash() {
+    FIELDMOCK.$reset();
+
+    FIELDMOCK.execCommand(RemoveFormatting.REMOVE_FORMATTING_COMMAND);
+
+    FIELDMOCK.$replay();
+
+    const e = {};
+    const key = '\\';
     const result = FORMATTER.handleKeyboardShortcut(e, key, true);
     assertTrue(result);
 
@@ -1156,39 +1177,6 @@ testSuite({
 
     const e = {};
     const key = 'x';
-    const result = FORMATTER.handleKeyboardShortcut(e, key, true);
-    assertFalse(result);
-
-    FIELDMOCK.$verify();
-  },
-
-  /**
-     @suppress {missingProperties} suppression added to enable type
-     checking
-   */
-  testCustomKeyboardShortcut_custom() {
-    FIELDMOCK.$reset();
-
-    FIELDMOCK.execCommand(RemoveFormatting.REMOVE_FORMATTING_COMMAND);
-
-    FIELDMOCK.$replay();
-
-    const e = {};
-    const key = '\\';
-    FORMATTER.setKeyboardShortcutKey(key);
-    const result = FORMATTER.handleKeyboardShortcut(e, key, true);
-    assertTrue(result);
-
-    FIELDMOCK.$verify();
-  },
-
-  testCustomKeyboardShortcut_default() {
-    FIELDMOCK.$reset();
-    FIELDMOCK.$replay();
-
-    const e = {};
-    const key = ' ';
-    FORMATTER.setKeyboardShortcutKey('\\');
     const result = FORMATTER.handleKeyboardShortcut(e, key, true);
     assertFalse(result);
 

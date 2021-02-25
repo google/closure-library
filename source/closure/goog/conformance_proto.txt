@@ -1,8 +1,11 @@
+# proto-file: third_party/java_src/jscomp/java/com/google/javascript/jscomp/conformance.proto
+# proto-message: ConformanceConfig
+
 # Conformance users:
 #
 # DO NOT COPY PASTE THESE RULES. If you do, changes to Closure can break your
 # build and you also won't get new or improved rules. Instead use this file in
-# your project and extend the rules to disable them or to add their whitelists.
+# your project and extend the rules to disable them or to add their allowlists.
 
 
 ### Platform restrictions ###
@@ -14,9 +17,9 @@ requirement: {
 
   value: 'Arguments.prototype.callee'
 
-  whitelist_regexp: '.+/closure/goog/debug/'  # legacy stack trace support, etc
+  allowlist_regexp: '.+/closure/goog/debug/'  # legacy stack trace support, etc
   # TODO(mlourenco): Fix this? Not sure if possible or not.
-  whitelist_regexp: '.+/closure/goog/testing/stacktrace.js'
+  allowlist_regexp: '.+/closure/goog/testing/stacktrace.js'
 }
 
 requirement: {
@@ -32,8 +35,8 @@ requirement: {
   java_class: 'com.google.javascript.jscomp.ConformanceRules$BanThrowOfNonErrorTypes'
   error_message: 'Only Error or Error subclass objects may be thrown. See https://google.github.io/closure-library/develop/conformance_rules.html#throwOfNonErrorTypes'
 
-  whitelist_regexp: '.+/closure/goog/storage/'  # throws numbers as part of its api
-  whitelist_regexp: '.+/closure/goog/testing/mock.js'  # throws Object in $recordAndThrow
+  allowlist_regexp: '.+/closure/goog/storage/'  # throws numbers as part of its api
+  allowlist_regexp: '.+/closure/goog/testing/mock.js'  # throws Object in $recordAndThrow
 }
 
 requirement: {
@@ -41,12 +44,12 @@ requirement: {
   type: CUSTOM
   java_class: 'com.google.javascript.jscomp.ConformanceRules$BanGlobalVars'
   error_message: 'Global declarations are not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#globalVars'
-  whitelist_regexp: '.+/closure/goog/base.js' # global 'goog'
-  whitelist_regexp: '.+/closure/goog/labs/testing/' # global matchers, etc
-  whitelist_regexp: '.+/closure/goog/locale/locale.js' # dumb api
-  whitelist_regexp: '.+/closure/goog/testing/' # global assert methods, etc
-  whitelist_regexp: '.+/closure/goog/tweak/testhelpers.js' # global values
-  whitelist_regexp: '^Post-' # injected '_ModuleManager_initialize'
+  allowlist_regexp: '.+/closure/goog/base.js' # global 'goog'
+  allowlist_regexp: '.+/closure/goog/labs/testing/' # global matchers, etc
+  allowlist_regexp: '.+/closure/goog/locale/locale.js' # dumb api
+  allowlist_regexp: '.+/closure/goog/testing/' # global assert methods, etc
+  allowlist_regexp: '.+/closure/goog/tweak/testhelpers.js' # global values
+  allowlist_regexp: '^Post-' # injected '_ModuleManager_initialize'
 }
 
 requirement: {
@@ -55,16 +58,16 @@ requirement: {
   java_class: 'com.google.javascript.jscomp.ConformanceRules$BanUnknownThis'
   error_message: 'References to "this" that are typed as "unknown" are not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#unknownThis'
 
-  whitelist_regexp: '.+/closure/goog/base.js'
-  whitelist_regexp: '.+/closure/goog/debug/errorhandler.js'
-  whitelist_regexp: '.+/closure/goog/editor/plugins/linkbubble.js'
-  whitelist_regexp: '.+/closure/goog/editor/plugins/linkdialogplugin.js'
-  whitelist_regexp: '.+/closure/goog/functions/functions.js'
-  whitelist_regexp: '.+/closure/goog/memoize/memoize.js'
-  whitelist_regexp: '.+/closure/goog/pubsub/pubsub.js'
-  whitelist_regexp: '.+/closure/goog/testing/'
-  whitelist_regexp: '.+/closure/goog/ui/editor/bubble.js'
-  whitelist_regexp: '.+/closure/goog/ui/editor/toolbarcontroller.js'
+  allowlist_regexp: '.+/closure/goog/base.js'
+  allowlist_regexp: '.+/closure/goog/debug/errorhandler.js'
+  allowlist_regexp: '.+/closure/goog/editor/plugins/linkbubble.js'
+  allowlist_regexp: '.+/closure/goog/editor/plugins/linkdialogplugin.js'
+  allowlist_regexp: '.+/closure/goog/functions/functions.js'
+  allowlist_regexp: '.+/closure/goog/memoize/memoize.js'
+  allowlist_regexp: '.+/closure/goog/pubsub/pubsub.js'
+  allowlist_regexp: '.+/closure/goog/testing/'
+  allowlist_regexp: '.+/closure/goog/ui/editor/bubble.js'
+  allowlist_regexp: '.+/closure/goog/ui/editor/toolbarcontroller.js'
 }
 
 ### Browser tech requirements ###
@@ -80,10 +83,10 @@ requirement: {
   value: 'Window.prototype.postMessage'
 
   # Known-safe common infrastructure.
-  whitelist_regexp: '.+/closure/goog/async/nexttick.js'
-  whitelist_regexp: '.+/closure/goog/net/xpc/nativemessagingtransport.js'
+  allowlist_regexp: '.+/closure/goog/async/nexttick.js'
+  allowlist_regexp: '.+/closure/goog/net/xpc/nativemessagingtransport.js'
   # TODO(user): make sure this gets security reviewed (b/29333525).
-  whitelist_regexp: '.+/closure/goog/messaging/portchannel.js'
+  allowlist_regexp: '.+/closure/goog/messaging/portchannel.js'
 }
 
 ### Security: forbid DOM properties and functions which can cause XSS ###
@@ -104,12 +107,12 @@ requirement: {
   value: 'execScript'
   value: 'goog.globalEval'
 
-  whitelist_regexp: '.+/closure/goog/base.js' # goog.module loading in uncompiled code.
-  whitelist_regexp: '.+/closure/goog/goog.js' # Forwards goog.globalEval
-  whitelist_regexp: '.+/closure/goog/debug/errorhandler.js' # wraps setTimeout and similar functions
-  whitelist_regexp: '.+/closure/goog/json/json.js' # used in goog.json.parse
-  whitelist_regexp: '.+/closure/goog/module/loader.js'
-  whitelist_regexp: '.+/closure/goog/module/moduleloader.js'
+  allowlist_regexp: '.+/closure/goog/base.js' # goog.module loading in uncompiled code.
+  allowlist_regexp: '.+/closure/goog/goog.js' # Forwards goog.globalEval
+  allowlist_regexp: '.+/closure/goog/debug/errorhandler.js' # wraps setTimeout and similar functions
+  allowlist_regexp: '.+/closure/goog/json/json.js' # used in goog.json.parse
+  allowlist_regexp: '.+/closure/goog/module/loader.js'
+  allowlist_regexp: '.+/closure/goog/module/moduleloader.js'
 }
 
 requirement: {
@@ -120,9 +123,9 @@ requirement: {
   value: 'Window.prototype.eval'
   value: 'Window.prototype.execScript'
 
-  whitelist_regexp: '.+/closure/goog/base.js'
+  allowlist_regexp: '.+/closure/goog/base.js'
   # TODO(jakubvrana): To be investigated.
-  whitelist_regexp: '.+/closure/goog/net/xpc/nixtransport.js'
+  allowlist_regexp: '.+/closure/goog/net/xpc/nixtransport.js'
 }
 
 requirement: {
@@ -154,22 +157,22 @@ requirement: {
   value: 'Element.prototype.innerHTML'
 
   # Safe wrapper for this property.
-  whitelist_regexp: '.+/closure/goog/dom/safe.js'
+  allowlist_regexp: '.+/closure/goog/dom/safe.js'
 
   # Safe DOM Tree Processor and HTML sanitizer, which use it safely in order to
   # have the browser parse an HTML string using an inert DOM.
-  whitelist_regexp: '.+/closure/goog/html/sanitizer/htmlsanitizer.js'
-  whitelist_regexp: '.+/closure/goog/html/sanitizer/safedomtreeprocessor.js'
+  allowlist_regexp: '.+/closure/goog/html/sanitizer/htmlsanitizer.js'
+  allowlist_regexp: '.+/closure/goog/html/sanitizer/safedomtreeprocessor.js'
   # Safely used in goog.string.unescapeEntitiesUsingDom_; the string assigned to
   # innerHTML is a single HTML entity.
-  whitelist_regexp: '.+/closure/goog/string/string.js'
+  allowlist_regexp: '.+/closure/goog/string/string.js'
   # goog.soy.renderElement and renderAsElement.  Safe if used with Strict Soy
   # templates.
-  whitelist_regexp: '.+/closure/goog/soy/soy.js'
-  whitelist_regexp: '.+/closure/goog/dom/browserrange/ierange.js'
-  whitelist_regexp: '.+/closure/goog/editor/'
-  whitelist_regexp: '.+/closure/goog/style/style.js'
-  whitelist_regexp: '.+/closure/goog/testing/'
+  allowlist_regexp: '.+/closure/goog/soy/soy.js'
+  allowlist_regexp: '.+/closure/goog/dom/browserrange/ierange.js'
+  allowlist_regexp: '.+/closure/goog/editor/'
+  allowlist_regexp: '.+/closure/goog/style/style.js'
+  allowlist_regexp: '.+/closure/goog/testing/'
 }
 
 requirement: {
@@ -180,8 +183,8 @@ requirement: {
   value: 'Element.prototype.outerHTML'
 
   # Safe wrapper for this property.
-  whitelist_regexp: '.+/closure/goog/dom/safe.js'
-  whitelist_regexp: '.+/closure/goog/editor/'
+  allowlist_regexp: '.+/closure/goog/dom/safe.js'
+  allowlist_regexp: '.+/closure/goog/editor/'
 }
 
 requirement: {
@@ -193,12 +196,12 @@ requirement: {
   value: 'Document.prototype.writeln'
 
   # These are safe.
-  whitelist_regexp: '.+/closure/goog/async/nexttick.js'
-  whitelist_regexp: '.+/closure/goog/base.js'
-  whitelist_regexp: '.+/closure/goog/dom/safe.js'
+  allowlist_regexp: '.+/closure/goog/async/nexttick.js'
+  allowlist_regexp: '.+/closure/goog/base.js'
+  allowlist_regexp: '.+/closure/goog/dom/safe.js'
   # TODO(jakubvrana): These need to be refactored.
-  whitelist_regexp: '.+/closure/goog/editor/icontent.js'
-  whitelist_regexp: '.+/closure/goog/testing/'
+  allowlist_regexp: '.+/closure/goog/editor/icontent.js'
+  allowlist_regexp: '.+/closure/goog/testing/'
 }
 
 requirement: {
@@ -209,7 +212,7 @@ requirement: {
 
   value: 'script'
 
-  whitelist_regexp: '.+/closure/goog/base.js'
+  allowlist_regexp: '.+/closure/goog/base.js'
 }
 
 requirement: {
@@ -220,7 +223,7 @@ requirement: {
 
   value: 'iframe'
 
-  whitelist_regexp: '.+/closure/goog/async/nexttick.js'
+  allowlist_regexp: '.+/closure/goog/async/nexttick.js'
 }
 
 requirement: {
@@ -261,8 +264,8 @@ requirement: {
   value: 'HTMLScriptElement.prototype.text'
   value: 'HTMLScriptElement.prototype.textContent'
 
-  whitelist_regexp: '.+/closure/goog/base.js'
-  whitelist_regexp: '.+/closure/goog/dom/safe.js'
+  allowlist_regexp: '.+/closure/goog/base.js'
+  allowlist_regexp: '.+/closure/goog/dom/safe.js'
 }
 
 requirement: {
@@ -274,7 +277,7 @@ requirement: {
 
   value: 'HTMLScriptElement.prototype.appendChild'
 
-  whitelist_regexp: '.+/closure/goog/base.js'
+  allowlist_regexp: '.+/closure/goog/base.js'
 }
 
 #### DOM properties and functions which accept URLs ####
@@ -305,11 +308,11 @@ requirement: {
 
   value: 'Location.prototype.href'
 
-  whitelist_regexp: '.+/closure/goog/dom/safe.js'
+  allowlist_regexp: '.+/closure/goog/dom/safe.js'
 
-  # The following whitelist entries are due to usages of .href that still
+  # The following allowlist entries are due to usages of .href that still
   # need to be refactored or reviewed. See http://b/12014412.
-  whitelist_regexp: '.+/closure/goog/history/history.js'
+  allowlist_regexp: '.+/closure/goog/history/history.js'
 }
 
 # TODO(mlourenco): Rename to "locationProperty". Add Document.location to it.
@@ -334,16 +337,16 @@ requirement: {
   value: 'CSSImportRule.prototype.href'
 
   # Safe wrapper for this property.
-  whitelist_regexp: '.+/closure/goog/dom/safe.js'
-  # The following whitelist entries are due to usages of .href that still
+  allowlist_regexp: '.+/closure/goog/dom/safe.js'
+  # The following allowlist entries are due to usages of .href that still
   # need to be refactored or reviewed. See http://b/12014412.
-  whitelist_regexp: '.+/closure/goog/editor/plugins/linkdialogplugin.js'
-  whitelist_regexp: '.+/closure/goog/testing/testrunner.js'
+  allowlist_regexp: '.+/closure/goog/editor/plugins/linkdialogplugin.js'
+  allowlist_regexp: '.+/closure/goog/testing/testrunner.js'
   # This use has previously been refactored away, but had to be rolled
   # back due to breakages in gmail, see http://b/13727806.
   # This use may actually be safe because it only assigns to .href in
   # the context of a contenteditable. To be further reviewed.
-  whitelist_regexp: '.+/closure/goog/editor/link.js'
+  allowlist_regexp: '.+/closure/goog/editor/link.js'
 }
 
 # TODO(mlourenco): Move src to "srcProperty", others to "otherProperties". Ban
@@ -369,15 +372,15 @@ requirement: {
   # TODO(mlourenco): Ban other dangerous properties (archive, classid, etc).
 
   # Closure's debug loader.
-  whitelist_regexp: '.+/closure/goog/base.js'
+  allowlist_regexp: '.+/closure/goog/base.js'
   # Safe wrapper for this property.
-  whitelist_regexp: '.+/closure/goog/dom/safe.js'
-  # The following whitelist entries are due to assignments from string that
+  allowlist_regexp: '.+/closure/goog/dom/safe.js'
+  # The following allowlist entries are due to assignments from string that
   # still need to be refactored or reviewed. See http://b/12014412.
-  whitelist_regexp: '.+/closure/goog/net/crossdomainrpc.js'
-  whitelist_regexp: '.+/closure/goog/net/xpc/'
-  whitelist_regexp: '.+/closure/goog/testing/multitestrunner.js'
-  whitelist_regexp: '.+/closure/goog/ui/dragdropdetector.js'
+  allowlist_regexp: '.+/closure/goog/net/crossdomainrpc.js'
+  allowlist_regexp: '.+/closure/goog/net/xpc/'
+  allowlist_regexp: '.+/closure/goog/testing/multitestrunner.js'
+  allowlist_regexp: '.+/closure/goog/ui/dragdropdetector.js'
 }
 
 requirement: {
@@ -399,11 +402,11 @@ requirement: {
   value: '*.innerHTML'
   value: '*.outerHTML'
 
-  whitelist_regexp: '.+/closure/tweak/tweakui.js' # False positive - missing type on containerNodeName. MOE:strip_line
-  whitelist_regexp: '.+/closure/goog/tweak/tweakui.js' # False positive - missing type on containerNodeName.
+  allowlist_regexp: '.+/closure/tweak/tweakui.js' # False positive - missing type on containerNodeName. MOE:strip_line
+  allowlist_regexp: '.+/closure/goog/tweak/tweakui.js' # False positive - missing type on containerNodeName.
 
   # TODO(jakubvrana): Ban this.
-  whitelist_regexp: '.+/closure/goog/ui/abstractspellchecker.js'
+  allowlist_regexp: '.+/closure/goog/ui/abstractspellchecker.js'
 }
 
 requirement: {
@@ -477,7 +480,7 @@ requirement: {
 # are not XSS-safe.
 #
 # These rules allow projects to have compile-time errors for legacyconversions
-# functions and to progressively move away from them by using the whitelist.
+# functions and to progressively move away from them by using the allowlist.
 
 ### Closure library restrictions ###
 
@@ -488,8 +491,8 @@ requirement: {
 
   value: 'goog.debug.Logger.getLogger'
 
-  whitelist_regexp: '.+/closure/goog/debug/'
-  whitelist_regexp: '.+/closure/goog/log/'
+  allowlist_regexp: '.+/closure/goog/debug/'
+  allowlist_regexp: '.+/closure/goog/log/'
 }
 
 requirement: {
@@ -518,6 +521,6 @@ requirement: {
   value: 'goog.debug.Logger.prototype.isLoggable'
   value: 'goog.debug.Logger.prototype.getLogRecord'
 
-  whitelist_regexp: '.+/closure/goog/debug/'
-  whitelist_regexp: '.+/closure/goog/log/'
+  allowlist_regexp: '.+/closure/goog/debug/'
+  allowlist_regexp: '.+/closure/goog/log/'
 }

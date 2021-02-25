@@ -390,6 +390,7 @@ class TestingClientImageLoader extends GoogEventTarget {
    * dispatching the COMPLETE event. This allows verification that the state of
    * the ImageLoader is clean before the original event is dispatched to any
    * clients.
+   * @private
    */
   handleImageLoaderEvent_(e) {
     switch (e.type) {

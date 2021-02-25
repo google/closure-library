@@ -21,7 +21,7 @@ goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.net.xpc.CfgFields');
 goog.require('goog.net.xpc.CrossPageChannel');
-
+goog.requireType('goog.events.BrowserEvent');
 
 /**
  * Global function to kick off initialization in the containing document.

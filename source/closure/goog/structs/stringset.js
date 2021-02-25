@@ -45,7 +45,12 @@ goog.structs.StringSet = function(opt_elements) {
     }
   }
 
-  goog.asserts.assertObjectPrototypeIsIntact();
+  // Checks that no enumerable keys are present in Object.prototype. Such keys
+  // would break StringSet, which uses {@code for (var ... in ...)} loops in
+  // various functions.
+  for (var key in Object.prototype) {
+    goog.asserts.fail(key + ' should not be enumerable in Object.prototype.');
+  }
 };
 
 

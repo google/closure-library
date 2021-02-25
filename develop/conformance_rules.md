@@ -3,12 +3,9 @@ title: JavaScript Conformance Rules for Closure Library
 section: develop
 layout: article
 ---
-<!--* freshness: { owner: 'tsjs-libraries-eng', reviewed: '2020-10-01' } *-->
 
 <!-- Documentation licensed under CC BY 4.0 -->
 <!-- License available at https://creativecommons.org/licenses/by/4.0/ -->
-
-# JavaScript Conformance Rules for Closure Library
 
 The config file:
 [closure/goog/conformance\_proto.txt](https://github.com/google/closure-library/tree/master/closure/goog/conformance_proto.txt)

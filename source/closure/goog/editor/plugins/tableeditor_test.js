@@ -158,6 +158,40 @@ testSuite({
   },
 
   /** @suppress {visibility} suppression added to enable type checking */
+  testInsertRowAfterDeeplyNestedCell() {
+    fieldMock.$replay();
+    createTableAndSelectCell({width: 2, height: 1});
+
+    // Add two nested divs with text to the first cell.
+    /** @suppress {checkTypes} suppression added to enable type checking */
+    const firstCell = dom.getElementsByTagName(TagName.TD, field)[0];
+    const div1 = dom.createElement(TagName.DIV);
+    const div2 = dom.createElement(TagName.DIV);
+    const text = dom.createTextNode('Some text');
+    firstCell.appendChild(div1);
+    div1.appendChild(div2);
+    div2.appendChild(text);
+
+    // Change the selection to select the text in the cell.
+    Range.createCaret(text, 1).select();
+
+    /** @suppress {checkTypes} suppression added to enable type checking */
+    const selectedRow = dom.getElementsByTagName(TagName.TR, field)[0];
+
+    /** @suppress {visibility} suppression added to enable type checking */
+    const table = plugin.getCurrentTable_();
+    assertEquals('Table should have one row', 1, table.rows.length);
+    assertNull(
+        'Selected row shouldn\'t have a next sibling', selectedRow.nextSibling);
+    plugin.execCommandInternal(TableEditor.COMMAND.INSERT_ROW_AFTER);
+    assertEquals('A row should have been inserted', 2, table.rows.length);
+    // Assert that we inserted a row after the currently selected row.
+    assertNotNull(
+        'Selected row should have a next sibling', selectedRow.nextSibling);
+    fieldMock.$verify();
+  },
+
+  /** @suppress {visibility} suppression added to enable type checking */
   testInsertColumnBefore() {
     fieldMock.$replay();
     createTableAndSelectCell({width: 1, height: 1});

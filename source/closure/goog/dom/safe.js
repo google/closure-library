@@ -795,7 +795,7 @@ goog.dom.safe.openInWindow = function(
  * Parses the HTML as 'text/html'.
  * @param {!DOMParser} parser
  * @param {!goog.html.SafeHtml} html The HTML to be parsed.
- * @return {?Document}
+ * @return {!Document}
  */
 goog.dom.safe.parseFromStringHtml = function(parser, html) {
   'use strict';
@@ -809,7 +809,7 @@ goog.dom.safe.parseFromStringHtml = function(parser, html) {
  * @param {!goog.html.SafeHtml} content Note: We don't have a special type for
  *     XML or SVG supported by this function so we use SafeHtml.
  * @param {string} type
- * @return {?Document}
+ * @return {!Document}
  */
 goog.dom.safe.parseFromString = function(parser, content, type) {
   'use strict';

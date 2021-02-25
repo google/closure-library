@@ -31,7 +31,7 @@ goog.json.USE_NATIVE_JSON = goog.define('goog.json.USE_NATIVE_JSON', false);
  * be set by `goog.json.setErrorLogger`. If it is not set then the error
  * is ignored.
  */
-goog.json.TRY_NATIVE_JSON = goog.define('goog.json.TRY_NATIVE_JSON', false);
+goog.json.TRY_NATIVE_JSON = goog.define('goog.json.TRY_NATIVE_JSON', true);
 
 
 /**

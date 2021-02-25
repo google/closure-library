@@ -11,6 +11,7 @@ const BrowserEvent = goog.require('goog.events.BrowserEvent');
 const BrowserFeature = goog.require('goog.events.BrowserFeature');
 const Coordinate = goog.require('goog.math.Coordinate');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 
@@ -121,9 +122,11 @@ testSuite({
   testDefaultPrevented() {
     const event = {};
     event.defaultPrevented = true;
+    event.preventDefault = recordFunction();
     /** @suppress {checkTypes} suppression added to enable type checking */
     const bEvent = new BrowserEvent(event);
     assertTrue(bEvent.defaultPrevented);
+    assertEquals(0, event.preventDefault.getCallCount());
   },
 
   testIsButtonIe() {

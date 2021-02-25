@@ -331,7 +331,10 @@ goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
   this.maybeFireCompletionEvent_();
 };
 
-/** If there are no more images pending, raise a COMPLETE event. */
+/**
+ * If there are no more images pending, raise a COMPLETE event.
+ * @private
+ */
 goog.net.ImageLoader.prototype.maybeFireCompletionEvent_ = function() {
   'use strict';
   if (goog.object.isEmpty(this.imageIdToImageMap_) &&

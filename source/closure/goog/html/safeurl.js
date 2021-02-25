@@ -151,22 +151,21 @@ goog.html.SafeUrl.prototype.getDirection = function() {
 };
 
 
-if (goog.DEBUG) {
-  /**
-   * Returns a string-representation of this value.
-   *
-   * To obtain the actual string value wrapped in a SafeUrl, use
-   * `goog.html.SafeUrl.unwrap`.
-   *
-   * @return {string}
-   * @see goog.html.SafeUrl#unwrap
-   * @override
-   */
-  goog.html.SafeUrl.prototype.toString = function() {
-    'use strict';
-    return this.privateDoNotAccessOrElseSafeUrlWrappedValue_.toString();
-  };
-}
+/**
+ * Returns a string-representation of this value.
+ *
+ * To obtain the actual string value wrapped in a SafeUrl, use
+ * `goog.html.SafeUrl.unwrap`.
+ *
+ * @return {string}
+ * @see goog.html.SafeUrl#unwrap
+ * @override
+ */
+goog.html.SafeUrl.prototype.toString = function() {
+  'use strict';
+  return this.privateDoNotAccessOrElseSafeUrlWrappedValue_.toString();
+};
+
 
 
 /**

@@ -38,10 +38,10 @@ goog.events.ActionEventWrapper_ = function() {};
  */
 goog.events.ActionEventWrapper_.FunctionExtension_ = function() {};
 
-/** @type {!Object|undefined} */
+/** @private {!Object|undefined} */
 goog.events.ActionEventWrapper_.FunctionExtension_.prototype.scope_;
 
-/** @type {function(?):?|{handleEvent:function(?):?}|null} */
+/** @private {function(?):?|{handleEvent:function(?):?}|null} */
 goog.events.ActionEventWrapper_.FunctionExtension_.prototype.listener_;
 
 

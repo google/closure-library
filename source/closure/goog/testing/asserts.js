@@ -105,7 +105,10 @@ var _trueTypeOf = function(something) {
         }
       case 'function':
         let foundConstructor = false;
-        for (const trueType of PRIMITIVE_TRUE_TYPES) {
+        for (let i = 0; i < PRIMITIVE_TRUE_TYPES.length; i++) {
+          // NOTE: this cannot be a for-of loop because it's used from Rhino
+          // without the necessary Array.prototype[Symbol.iterator] polyfill.
+          const trueType = PRIMITIVE_TRUE_TYPES[i];
           if (something.constructor === goog.global[trueType]) {
             result = trueType;
             foundConstructor = true;

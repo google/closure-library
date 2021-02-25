@@ -2740,40 +2740,40 @@ goog.i18n.CompactNumberFormatSymbols_haw = {
 goog.i18n.CompactNumberFormatSymbols_he = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0K'
+      'other': '0K‏'
     },
     '10000': {
-      'other': '00K'
+      'other': '00K‏'
     },
     '100000': {
-      'other': '000K'
+      'other': '000K‏'
     },
     '1000000': {
-      'other': '0M'
+      'other': '0M‏'
     },
     '10000000': {
-      'other': '00M'
+      'other': '00M‏'
     },
     '100000000': {
-      'other': '000M'
+      'other': '000M‏'
     },
     '1000000000': {
-      'other': '0B'
+      'other': '0B‏'
     },
     '10000000000': {
-      'other': '00B'
+      'other': '00B‏'
     },
     '100000000000': {
-      'other': '000B'
+      'other': '000B‏'
     },
     '1000000000000': {
-      'other': '0T'
+      'other': '0T‏'
     },
     '10000000000000': {
-      'other': '00T'
+      'other': '00T‏'
     },
     '100000000000000': {
-      'other': '000T'
+      'other': '000T‏'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -3487,40 +3487,40 @@ goog.i18n.CompactNumberFormatSymbols_it = {
 goog.i18n.CompactNumberFormatSymbols_iw = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0K'
+      'other': '0K‏'
     },
     '10000': {
-      'other': '00K'
+      'other': '00K‏'
     },
     '100000': {
-      'other': '000K'
+      'other': '000K‏'
     },
     '1000000': {
-      'other': '0M'
+      'other': '0M‏'
     },
     '10000000': {
-      'other': '00M'
+      'other': '00M‏'
     },
     '100000000': {
-      'other': '000M'
+      'other': '000M‏'
     },
     '1000000000': {
-      'other': '0B'
+      'other': '0B‏'
     },
     '10000000000': {
-      'other': '00B'
+      'other': '00B‏'
     },
     '100000000000': {
-      'other': '000B'
+      'other': '000B‏'
     },
     '1000000000000': {
-      'other': '0T'
+      'other': '0T‏'
     },
     '10000000000000': {
-      'other': '00T'
+      'other': '00T‏'
     },
     '100000000000000': {
-      'other': '000T'
+      'other': '000T‏'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {

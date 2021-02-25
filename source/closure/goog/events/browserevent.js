@@ -347,7 +347,9 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   this.state = e.state;
   this.event_ = e;
   if (e.defaultPrevented) {
-    this.preventDefault();
+    // Sync native event state to internal state via super class, where default
+    // prevention is implemented and managed.
+    goog.events.BrowserEvent.superClass_.preventDefault.call(this);
   }
 };
 

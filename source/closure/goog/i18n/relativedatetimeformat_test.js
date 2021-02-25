@@ -598,32 +598,30 @@ testSuite({
   },
 
   testForcedNumeric: function() {
-    for (const val of testECMAScriptOptions) {
-      /**
-       * @suppress {constantProperty} suppression added to enable type checking
-       */
-      LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = val;
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
+    LocaleFeature.USE_ECMASCRIPT_I18N_RDTF = false;
 
+    /**
+     * @suppress {constantProperty} suppression added to enable type checking
+     */
+    goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
+    for (let i = 0; i < forcedNumericTestData.length; i++) {
+      const data = forcedNumericTestData[i];
+      const symbols = localeSymbols[data.locale];
+      // Use computed properties to avoid compiler checks of defines.
+      goog['LOCALE'] = data.locale;
       /**
-       * @suppress {constantProperty} suppression added to enable type checking
+       * @suppress {strictMissingProperties} suppression added to enable type
+       * checking
        */
-      goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
-      for (let i = 0; i < forcedNumericTestData.length; i++) {
-        const data = forcedNumericTestData[i];
-        const symbols = localeSymbols[data.locale];
-        // Use computed properties to avoid compiler checks of defines.
-        goog['LOCALE'] = data.locale;
-        /**
-         * @suppress {strictMissingProperties} suppression added to enable type
-         * checking
-         */
-        const fmt = new RelativeDateTimeFormat(
-            RelativeDateTimeFormat.NumericOption.AUTO, data.style,
-            symbols.RelativeDateTimeFormatSymbols);
+      const fmt = new RelativeDateTimeFormat(
+          RelativeDateTimeFormat.NumericOption.AUTO, data.style,
+          symbols.RelativeDateTimeFormatSymbols);
 
-        const result = fmt.format(data.direction, data.unit);
-        assertEquals(data.getErrorDescription(), data.expected, result);
-      }
+      const result = fmt.format(data.direction, data.unit);
+      assertEquals(data.getErrorDescription(), data.expected, result);
     }
   },
 

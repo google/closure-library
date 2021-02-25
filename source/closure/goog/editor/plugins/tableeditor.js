@@ -331,11 +331,25 @@ goog.editor.plugins.TableEditor.prototype.addIsTableEditableFunction = function(
  *     finds the user-editable table from a given element.
  * @constructor
  * @private
- * @suppress {missingProperties} "rows" not declared.
  */
 goog.editor.plugins.TableEditor.CellSelection_ = function(
     range, getParentTableFunction) {
   'use strict';
+  /** @private {number} */
+  this.firstRowIndex_;
+
+  /** @private {number} */
+  this.lastRowIndex_;
+
+  /** @private {number} */
+  this.firstColIndex_;
+
+  /** @private {number} */
+  this.lastColIndex_;
+
+  /** @private {number} */
+  this.lastColIndex_;
+
   this.cells_ = [];
 
   // Mozilla lets users select groups of cells, with each cell showing
@@ -345,13 +359,8 @@ goog.editor.plugins.TableEditor.CellSelection_ = function(
   var selectionContainer = range.getContainerElement();
   var elementInSelection = function(node) {
     'use strict';
-    // TODO(user): revert to the more liberal containsNode(node, true),
-    // which will match partially-selected cells. We're using
-    // containsNode(node, false) at the moment because otherwise it's
-    // broken in WebKit due to a closure range bug.
     return selectionContainer == node ||
-        selectionContainer.parentNode == node ||
-        range.containsNode(node, false);
+        selectionContainer.parentNode == node || range.containsNode(node, true);
   };
 
   var parentTableElement =

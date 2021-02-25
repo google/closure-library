@@ -204,7 +204,15 @@ goog.fx.DragListGroup = function() {
    * @private {boolean}
    */
   this.correctDraggedElementInitialPos_ =
-      goog.fx.DragListGroup.DRAGLISTGROUP_CORRECT_POSITION_DRAG_START;
+      goog.fx.DragListGroup.CORRECT_POSITION_DRAG_START;
+
+  /**
+   * Whether to reposition the center rather than to keep the same ratio of the
+   * currDragItem under the mouse cursor when correcting its initial position on
+   * the X axis. Defaults to false.
+   * @private {boolean}
+   */
+  this.correctInitialPosCenteredOnX_ = false;
 };
 goog.inherits(goog.fx.DragListGroup, goog.events.EventTarget);
 
@@ -215,8 +223,8 @@ goog.inherits(goog.fx.DragListGroup, goog.events.EventTarget);
  * element. This is needed in cases where the dragged element dimensions are
  * smaller than its source element dimensions.
  */
-goog.fx.DragListGroup.DRAGLISTGROUP_CORRECT_POSITION_DRAG_START =
-    goog.define('DRAGLISTGROUP_CORRECT_POSITION_DRAG_START', false);
+goog.fx.DragListGroup.CORRECT_POSITION_DRAG_START =
+    goog.define('goog.fx.DragListGroup.CORRECT_POSITION_DRAG_START', true);
 
 
 /**
@@ -310,7 +318,6 @@ goog.fx.DragListGroup.prototype.overrideCorrectDraggedElementInitialPos =
   'use strict';
   this.correctDraggedElementInitialPos_ = updateInitialPosition;
 };
-
 
 /**
  * Sets the distance the user has to drag the element before a drag operation
@@ -657,7 +664,6 @@ goog.fx.DragListGroup.prototype.handlePotentialDragStart_ = function(e) {
       goog.fx.DragListGroup.EventType.DRAGGERCREATED, this, e,
       this.currDragItem_, this.draggerEl_, this.dragger_));
   this.dragger_.startDrag(e);
-  this.maybeUpdateDraggerDeltaToPlaceElUnderCursor_(e);
 };
 
 
@@ -771,11 +777,26 @@ goog.fx.DragListGroup.prototype.maybeUpdateDraggerDeltaToPlaceElUnderCursor_ =
   }
   const draggerElBoundingRect = this.draggerEl_.getBoundingClientRect();
   const {clientX: cursorX, clientY: cursorY} = dragEvent;
-  if (cursorX > draggerElBoundingRect.right) {
-    this.dragger_.deltaX = cursorX - this.draggerEl_.halfWidth;
+  const maxCursorX = this.dragger_.limitX(cursorX);
+  if (maxCursorX > draggerElBoundingRect.right) {
+    // Ensure the cursor will be scaled identically over the X axis for both the
+    // dragged and the source element: e.g. if the mouse click happens at 70% of
+    // the width on the source element, then the dragged element is repositioned
+    // in the way that the cursor is at 70% of its width.
+    const sourceItemBoundingRect = this.currDragItem_.getBoundingClientRect();
+    const sourceCursorOffset = maxCursorX - sourceItemBoundingRect.left;
+    const cursorPosPercent = sourceCursorOffset / sourceItemBoundingRect.width;
+    const offset = draggerElBoundingRect.width * cursorPosPercent;
+
+    this.dragger_.deltaX = maxCursorX - offset;
   }
-  if (cursorY > draggerElBoundingRect.bottom) {
-    this.dragger_.deltaY = cursorY - this.draggerEl_.halfHeight;
+  const maxCursorY = this.dragger_.limitY(cursorY);
+  if (maxCursorY > draggerElBoundingRect.bottom) {
+    // The Y axis repositioning means that the dragged element will be moved in
+    // a way that the cursor will be placed on its bottom line. The scaling
+    // behavior which is apllied on the X axis cannot be safely replicated on
+    // the Y axis, leading to element bouncing out of the page/cursor reach.
+    this.dragger_.deltaY += maxCursorY - draggerElBoundingRect.bottom;
   }
 };
 

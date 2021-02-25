@@ -245,22 +245,6 @@ testSuite({
         `Assertion failed: Expected instanceof bar but got ${object}.`);
   },
 
-  testObjectPrototypeIsIntact() {
-    asserts.assertObjectPrototypeIsIntact();
-    const originalToString = Object.prototype.toString;
-    Object.prototype.toString = () => {};
-    try {
-      asserts.assertObjectPrototypeIsIntact();
-      Object.prototype.foo = 1;
-      doTestMessage(
-          asserts.assertObjectPrototypeIsIntact,
-          'Failure: foo should not be enumerable in Object.prototype.');
-    } finally {
-      Object.prototype.toString = originalToString;
-      delete Object.prototype.foo;
-    }
-  },
-
   testAssertionError() {
     const error = new AssertionError('foo %s %s', [1, 'two']);
     assertEquals('Wrong message', 'foo 1 two', error.message);

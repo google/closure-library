@@ -14,6 +14,7 @@ goog.setTestOnly('goog.testing.PerformanceTimer');
 goog.provide('goog.testing.PerformanceTimer');
 goog.provide('goog.testing.PerformanceTimer.Task');
 
+goog.require('goog.Thenable');
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.math');
@@ -211,11 +212,10 @@ goog.testing.PerformanceTimer.prototype.finishTask_ = function(samples) {
 
 /**
  * Executes the test function of the specified task asynchronously. The test
- * function is expected to take a callback as input and has to call it to signal
- * that it's done. In addition, if specified, the setUp and tearDown functions
- * of the task are invoked before and after each invocation of the test
- * function. Note that setUp/tearDown functions take a callback as input and
- * must call this callback when they are done.
+ * function may return a Thenable to allow for asynchronous execution. In
+ * addition, if specified, the setUp and tearDown functions of the task are
+ * invoked before and after each invocation of the test function. Note,
+ * setUp/tearDown too may return Thenables for asynchronous execution.
  * @see goog.testing.PerformanceTimer#run
  * @param {goog.testing.PerformanceTimer.Task} task A task describing the test
  *     function to invoke.
@@ -234,10 +234,8 @@ goog.testing.PerformanceTimer.prototype.runAsyncTask = function(task) {
   // Note that this uses a separate code path from runTask() because
   // implementing runTask() in terms of runAsyncTask() could easily cause
   // a stack overflow if there are many iterations.
-  var result = new goog.async.Deferred();
-  this.runAsyncTaskSample_(
-      testFn, setUpFn, tearDownFn, result, samples, testStart);
-  return result;
+  return goog.async.Deferred.fromPromise(this.runAsyncTaskSample_(
+      testFn, setUpFn, tearDownFn, samples, testStart));
 };
 
 
@@ -250,37 +248,52 @@ goog.testing.PerformanceTimer.prototype.runAsyncTask = function(task) {
  *     function that will be called once before the test function is run.
  * @param {goog.testing.PerformanceTimer.TestFunction} tearDownFn The set up
  *     function that will be called once after the test function completed.
- * @param {!goog.async.Deferred} result The deferred result, eventually an
- *     object containing performance stats.
  * @param {!Array<number>} samples The time samples from all runs of the test
  *     function so far.
  * @param {number} testStart The timestamp when the first sample was started.
+ * @return {!Promise} A promise that returns the completed performance stats.
  * @private
  */
 goog.testing.PerformanceTimer.prototype.runAsyncTaskSample_ = function(
-    testFn, setUpFn, tearDownFn, result, samples, testStart) {
+    testFn, setUpFn, tearDownFn, samples, testStart) {
   'use strict';
-  var timer = this;
-  timer.handleOptionalDeferred_(setUpFn, function() {
-    'use strict';
-    var sampleStart = goog.testing.PerformanceTimer.now_();
-    timer.handleOptionalDeferred_(testFn, function() {
-      'use strict';
-      var sampleEnd = goog.testing.PerformanceTimer.now_();
-      timer.handleOptionalDeferred_(tearDownFn, function() {
-        'use strict';
-        samples.push(sampleEnd - sampleStart);
-        var totalRunTime = sampleEnd - testStart;
-        if (samples.length < timer.numSamples_ &&
-            totalRunTime <= timer.timeoutInterval_) {
-          timer.runAsyncTaskSample_(
-              testFn, setUpFn, tearDownFn, result, samples, testStart);
-        } else {
-          result.callback(timer.finishTask_(samples));
+  const timer = this;
+  let promise = Promise.resolve();
+  let sampleStart;
+  let sampleEnd;
+  for (let i = 0; i < timer.numSamples_; i++) {
+    promise = promise.then(setUpFn)
+                  .then(() => {
+                    'use strict';
+                    sampleStart = goog.testing.PerformanceTimer.now_();
+                  })
+                  .then(testFn)
+                  .then(() => {
+                    'use strict';
+                    sampleEnd = goog.testing.PerformanceTimer.now_();
+                  })
+                  .then(tearDownFn)
+                  .then(() => {
+                    'use strict';
+                    samples.push(sampleEnd - sampleStart);
+                    const totalRunTime = sampleEnd - testStart;
+                    if (totalRunTime > timer.timeoutInterval_) {
+                      // If timeout is exceeded, bypass remaining samples via
+                      // errback.
+                      throw Error('PerformanceTimer.Timeout');
+                    }
+                  });
+  }
+  return promise
+      .catch((err) => {
+        // Convert timeout error to success.
+        if (err instanceof Error &&
+            err.message === 'PerformanceTimer.Timeout') {
+          return true;
         }
-      });
-    });
-  });
+        throw err;
+      })
+      .then(() => timer.finishTask_(samples));
 };
 
 
@@ -300,28 +313,6 @@ goog.testing.PerformanceTimer.median = function(samples) {
     return samples[half];
   } else {
     return (samples[half - 1] + samples[half]) / 2.0;
-  }
-};
-
-
-/**
- * Execute a function that optionally returns a deferred object and continue
- * with the given continuation function only once the deferred object has a
- * result.
- * @param {goog.testing.PerformanceTimer.TestFunction} deferredFactory The
- *     function that optionally returns a deferred object.
- * @param {function()} continuationFunction The function that should be called
- *     after the optional deferred has a result.
- * @private
- */
-goog.testing.PerformanceTimer.prototype.handleOptionalDeferred_ = function(
-    deferredFactory, continuationFunction) {
-  'use strict';
-  var deferred = deferredFactory();
-  if (deferred) {
-    deferred.addCallback(continuationFunction);
-  } else {
-    continuationFunction();
   }
 };
 
@@ -348,12 +339,10 @@ goog.testing.PerformanceTimer.createResults = function(samples) {
 
 /**
  * A test function whose performance should be measured or a setUp/tearDown
- * function. It may optionally return a deferred object. If it does so, the
- * test harness will assume the function is asynchronous and it must signal
- * that it's done by setting an (empty) result on the deferred object. If the
- * function doesn't return anything, the test harness will assume it's
- * synchronous.
- * @typedef {function():(goog.async.Deferred|undefined)}
+ * function. It may optionally return a Thenable (e.g. a promise) to
+ * for asynchronous execution using the runAsyncTask method.
+ * @see goog.testing.PerformanceTimer#runAsyncTask
+ * @typedef {function():(!goog.Thenable|undefined)}
  */
 goog.testing.PerformanceTimer.TestFunction;
 

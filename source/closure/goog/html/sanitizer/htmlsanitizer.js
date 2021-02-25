@@ -20,7 +20,7 @@
  *
  * @supported IE 10+, Chrome 26+, Firefox 22+, Safari 7.1+, Opera 15+
  */
-
+goog.provide('goog.html.sanitizer');
 goog.provide('goog.html.sanitizer.HtmlSanitizer');
 goog.provide('goog.html.sanitizer.HtmlSanitizer.Builder');
 goog.provide('goog.html.sanitizer.HtmlSanitizerAttributePolicy');
@@ -38,12 +38,11 @@ goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
-goog.require('goog.html.sanitizer.AttributeSanitizedWhitelist');
-goog.require('goog.html.sanitizer.AttributeWhitelist');
 goog.require('goog.html.sanitizer.CssSanitizer');
 goog.require('goog.html.sanitizer.SafeDomTreeProcessor');
 goog.require('goog.html.sanitizer.TagBlacklist');
 goog.require('goog.html.sanitizer.TagWhitelist');
+goog.require('goog.html.sanitizer.attributeallowlists');
 goog.require('goog.html.sanitizer.noclobber');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.object');
@@ -271,8 +270,8 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
   this.attributeWhitelist_ = {};
   goog.array.forEach(
       [
-        goog.html.sanitizer.AttributeWhitelist,
-        goog.html.sanitizer.AttributeSanitizedWhitelist
+        goog.html.sanitizer.attributeallowlists.AllowedAttributes,
+        goog.html.sanitizer.attributeallowlists.SanitizedAttributeAllowlist
       ],
       function(wl) {
         'use strict';

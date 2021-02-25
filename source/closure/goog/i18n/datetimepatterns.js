@@ -146,6 +146,8 @@ goog.provide('goog.i18n.DateTimePatterns_zh_HK');
 goog.provide('goog.i18n.DateTimePatterns_zh_TW');
 goog.provide('goog.i18n.DateTimePatterns_zu');
 
+goog.requireType('goog.i18n.DateTimePatternsType');
+
 
 /**
  * Extended set of localized date/time patterns for locale af.
@@ -2437,55 +2439,6 @@ goog.i18n.DateTimePatterns_zu = {
   DAY_ABBR: 'd',
   MONTH_DAY_TIME_ZONE_SHORT: 'MMM d HH:mm zzzz'
 };
-
-
-/**
- * @record
- * @struct
- */
-goog.i18n.DateTimePatternsType = function() {};
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.YEAR_FULL;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.YEAR_FULL_WITH_ERA;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.YEAR_MONTH_ABBR;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.YEAR_MONTH_FULL;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.YEAR_MONTH_SHORT;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.MONTH_DAY_ABBR;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.MONTH_DAY_FULL;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.MONTH_DAY_SHORT;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.MONTH_DAY_MEDIUM;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.MONTH_DAY_YEAR_MEDIUM;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.WEEKDAY_MONTH_DAY_MEDIUM;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.WEEKDAY_MONTH_DAY_YEAR_MEDIUM;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.DAY_ABBR;
-
-/** @type {string} */
-goog.i18n.DateTimePatternsType.prototype.MONTH_DAY_TIME_ZONE_SHORT;
 
 
 /**

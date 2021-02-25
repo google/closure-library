@@ -31,6 +31,7 @@ goog.requireType('goog.dom.SavedCaretRange');
  * A plugin to handle removing formatting from selected text.
  * @constructor
  * @extends {goog.editor.Plugin}
+ * @final
  */
 goog.editor.plugins.RemoveFormatting = function() {
   'use strict';
@@ -43,14 +44,6 @@ goog.editor.plugins.RemoveFormatting = function() {
    * @private
    */
   this.optRemoveFormattingFunc_ = null;
-
-  /**
-   * The key that this plugin triggers on when pressed with the platform
-   * modifier key. Can be set by calling {@link #setKeyboardShortcutKey}.
-   * @type {string}
-   * @private
-   */
-  this.keyboardShortcutKey_ = ' ';
 };
 goog.inherits(goog.editor.plugins.RemoveFormatting, goog.editor.Plugin);
 
@@ -151,23 +144,14 @@ goog.editor.plugins.RemoveFormatting.prototype.handleKeyboardShortcut =
     return false;
   }
 
-  if (key == this.keyboardShortcutKey_) {
+  // Cmd + Space does not work on Mac. Ctrl/Cmd + \ is platform agnostic.
+  if ((!goog.userAgent.MAC && key === ' ') || (key === '\\')) {
     this.getFieldObject().execCommand(
         goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND);
     return true;
   }
 
   return false;
-};
-
-
-/**
- * @param {string} key
- */
-goog.editor.plugins.RemoveFormatting.prototype.setKeyboardShortcutKey =
-    function(key) {
-  'use strict';
-  this.keyboardShortcutKey_ = key;
 };
 
 

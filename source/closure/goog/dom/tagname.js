@@ -26,14 +26,6 @@ goog.require('goog.dom.HtmlElement');
  * and that's not possible with literal or enum types. It is a record type so
  * that runtime type checks don't try to validate the lie.
  *
- * Closure Compiler unconditionally converts the following constants to their
- * string value (goog.dom.TagName.A -> 'A'). These are the consequences:
- * 1. Don't add any members or static members to goog.dom.TagName as they
- *    couldn't be accessed after this optimization.
- * 2. Keep the constant name and its string value the same:
- *    goog.dom.TagName.X = new goog.dom.TagName('Y');
- *    is converted to 'X', not 'Y'.
- *
  * @template T
  * @record
  */

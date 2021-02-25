@@ -96,6 +96,7 @@ goog.inherits(goog.testing.MockClock, goog.Disposable);
  * @typedef {{
  *    timeoutKey: number, millis: number,
  *    runAtMillis: number, funcToCall: !Function, recurring: boolean}}
+ * @private
  */
 goog.testing.MockClock.QueueObjType_;
 
@@ -169,7 +170,7 @@ goog.testing.MockClock.prototype.timeoutDelay_ = 0;
 goog.testing.MockClock.REAL_SETTIMEOUT_ = goog.global.setTimeout;
 
 
-/** @type {function():number} */
+/** @private {function():number} */
 goog.testing.MockClock.prototype.oldGoogNow_;
 
 /**

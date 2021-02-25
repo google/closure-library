@@ -8,13 +8,13 @@
  * @fileoverview the factory for creating stream objects.
  */
 
-goog.provide('goog.net.streams.createXhrNodeReadableStream');
+goog.module('goog.net.streams.streamFactory');
 
-goog.require('goog.asserts');
-goog.require('goog.net.streams.XhrNodeReadableStream');
-goog.require('goog.net.streams.XhrStreamReader');
-goog.requireType('goog.net.XhrIo');
-goog.requireType('goog.net.streams.NodeReadableStream');
+const NodeReadableStream = goog.requireType('goog.net.streams.NodeReadableStream');
+const XhrIo = goog.requireType('goog.net.XhrIo');
+const asserts = goog.require('goog.asserts');
+const {XhrNodeReadableStream} = goog.require('goog.net.streams.xhrNodeReadableStream');
+const {XhrStreamReader} = goog.require('goog.net.streams.xhrStreamReader');
 
 
 /**
@@ -42,19 +42,21 @@ goog.requireType('goog.net.streams.NodeReadableStream');
  *   "--define goog.net.XmlHttpDefines.ASSUME_NATIVE_XHR=true"
  *   disable asserts
  *
- * @param {!goog.net.XhrIo} xhr The XhrIo object with its response body to
+ * @param {!XhrIo} xhr The XhrIo object with its response body to
  * be handled by NodeReadableStream.
- * @return {goog.net.streams.NodeReadableStream} the newly created stream or
+ * @return {?NodeReadableStream} the newly created stream or
  * null if streaming response is not supported by the current User Agent.
  */
-goog.net.streams.createXhrNodeReadableStream = function(xhr) {
+function createXhrNodeReadableStream(xhr) {
   'use strict';
-  goog.asserts.assert(!xhr.isActive(), 'XHR is already sent.');
+  asserts.assert(!xhr.isActive(), 'XHR is already sent.');
 
-  if (!goog.net.streams.XhrStreamReader.isStreamingSupported()) {
+  if (!XhrStreamReader.isStreamingSupported()) {
     return null;
   }
 
-  const reader = new goog.net.streams.XhrStreamReader(xhr);
-  return new goog.net.streams.XhrNodeReadableStream(reader);
-};
+  const reader = new XhrStreamReader(xhr);
+  return new XhrNodeReadableStream(reader);
+}
+
+exports = {createXhrNodeReadableStream};

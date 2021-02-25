@@ -66,7 +66,7 @@ goog.html.sanitizer.CssSanitizer.SELECTOR_REGEX_ =
  * A whitelist of properties that can retain the prefix in Chrome.
  * @private @const {!Object<string,boolean>}
  */
-goog.html.sanitizer.CHROME_INCLUDE_VENDOR_PREFIX_WHITELIST_ =
+goog.html.sanitizer.CssSanitizer.CHROME_INCLUDE_VENDOR_PREFIX_WHITELIST_ =
     goog.object.createSet(
         '-webkit-border-horizontal-spacing', '-webkit-border-vertical-spacing');
 
@@ -86,7 +86,8 @@ goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_ = function(propName) {
   // the non-prefixed property be dropped silently is to allow the prefixed
   // property in the output.
   if (goog.userAgent.WEBKIT &&
-      propName in goog.html.sanitizer.CHROME_INCLUDE_VENDOR_PREFIX_WHITELIST_) {
+      propName in goog.html.sanitizer.CssSanitizer
+                      .CHROME_INCLUDE_VENDOR_PREFIX_WHITELIST_) {
     return propName;
   }
   // http://stackoverflow.com/a/5411098/20394 has a fairly extensive list
