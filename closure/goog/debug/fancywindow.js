@@ -30,7 +30,6 @@ goog.provide('goog.debug.FancyWindow');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug.DebugWindow');
-goog.require('goog.debug.LogManager');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
@@ -404,8 +403,7 @@ goog.debug.FancyWindow.getStoredKeys_ = function() {
  */
 goog.debug.FancyWindow.getLoggers_ = function() {
   'use strict';
-  const loggers = goog.object.getValues(goog.debug.LogManager.getLoggers())
-                      .concat(goog.log.getAllLoggers());
+  const loggers = goog.log.getAllLoggers();
 
   /**
    * @param {!goog.log.Logger} a

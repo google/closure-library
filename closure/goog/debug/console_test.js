@@ -8,10 +8,9 @@ goog.module('goog.debug.ConsoleTest');
 goog.setTestOnly();
 
 const DebugConsole = goog.require('goog.debug.Console');
-const LogRecord = goog.require('goog.debug.LogRecord');
-const Logger = goog.require('goog.debug.Logger');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
+const {Level, LogRecord} = goog.require('goog.log');
 
 let debugConsole;
 let mockConsole;
@@ -29,20 +28,20 @@ let logRecord3;
  * @param {string} message The message to log.
  */
 function logAtAllLevels(message) {
-  logAtLevel(Logger.Level.SHOUT, message);
-  logAtLevel(Logger.Level.SEVERE, message);
-  logAtLevel(Logger.Level.WARNING, message);
-  logAtLevel(Logger.Level.INFO, message);
-  logAtLevel(Logger.Level.CONFIG, message);
-  logAtLevel(Logger.Level.FINE, message);
-  logAtLevel(Logger.Level.FINER, message);
-  logAtLevel(Logger.Level.FINEST, message);
-  logAtLevel(Logger.Level.ALL, message);
+  logAtLevel(Level.SHOUT, message);
+  logAtLevel(Level.SEVERE, message);
+  logAtLevel(Level.WARNING, message);
+  logAtLevel(Level.INFO, message);
+  logAtLevel(Level.CONFIG, message);
+  logAtLevel(Level.FINE, message);
+  logAtLevel(Level.FINER, message);
+  logAtLevel(Level.FINEST, message);
+  logAtLevel(Level.ALL, message);
 }
 
 /**
  * Adds a log record to the debug console.
- * @param {!Logger.Level} level The level at which to log.
+ * @param {!Level} level The level at which to log.
  * @param {string} message The message to log.
  */
 function logAtLevel(level, message) {
@@ -58,24 +57,22 @@ testSuite({
     DebugConsole.console_ = mockConsole;
 
     loggerName0 = 'debug.logger';
-    logRecord0 = new LogRecord(
-        Logger.Level.FINE, 'blah blah blah no one cares', loggerName0);
+    logRecord0 =
+        new LogRecord(Level.FINE, 'blah blah blah no one cares', loggerName0);
 
     // Test logger 1.
     loggerName1 = 'this.is.a.logger';
-    logRecord1 =
-        new LogRecord(Logger.Level.INFO, 'this is a statement', loggerName1);
+    logRecord1 = new LogRecord(Level.INFO, 'this is a statement', loggerName1);
 
     // Test logger 2.
     loggerName2 = 'name.of.logger';
-    logRecord2 = new LogRecord(
-        Logger.Level.WARNING, 'hey, this is a warning', loggerName2);
+    logRecord2 =
+        new LogRecord(Level.WARNING, 'hey, this is a warning', loggerName2);
 
     // Test logger 3.
     loggerName3 = 'third.logger';
     logRecord3 = new LogRecord(
-        Logger.Level.SEVERE, 'seriously, this statement is serious',
-        loggerName3);
+        Level.SEVERE, 'seriously, this statement is serious', loggerName3);
   },
 
   testLoggingWithSimpleConsole() {
@@ -173,13 +170,13 @@ testSuite({
   testSetConsole() {
     const fakeConsole = {log: recordFunction()};
 
-    logAtLevel(Logger.Level.INFO, 'test message 1');
+    logAtLevel(Level.INFO, 'test message 1');
     logAtAllLevels('test message 1');
     assertEquals(0, fakeConsole.log.getCallCount());
 
     DebugConsole.setConsole(fakeConsole);
 
-    logAtLevel(Logger.Level.INFO, 'test message 2');
+    logAtLevel(Level.INFO, 'test message 2');
     assertEquals(1, fakeConsole.log.getCallCount());
   },
 });

@@ -7,12 +7,12 @@
 goog.module('goog.messaging.LoggerClientTest');
 goog.setTestOnly();
 
-const Logger = goog.require('goog.debug.Logger');
 const LoggerClient = goog.require('goog.messaging.LoggerClient');
 const MockControl = goog.require('goog.testing.MockControl');
 const MockMessageChannel = goog.require('goog.testing.messaging.MockMessageChannel');
 const debug = goog.require('goog.debug');
 const testSuite = goog.require('goog.testing.testSuite');
+const {Level, getLogger, warning} = goog.require('goog.log');
 
 let mockControl;
 let channel;
@@ -26,7 +26,7 @@ testSuite({
     mockControl = new MockControl();
     channel = new MockMessageChannel(mockControl);
     client = new LoggerClient(channel, 'log');
-    logger = Logger.getLogger('test.logging.Object');
+    logger = getLogger('test.logging.Object');
   },
 
   tearDown() {
@@ -37,12 +37,12 @@ testSuite({
   testCommand() {
     channel.send('log', {
       name: 'test.logging.Object',
-      level: Logger.Level.WARNING.value,
+      level: Level.WARNING.value,
       message: 'foo bar',
       exception: undefined,
     });
     mockControl.$replayAll();
-    logger.warning('foo bar');
+    warning(logger, 'foo bar');
     mockControl.$verifyAll();
   },
 
@@ -72,7 +72,7 @@ testSuite({
 
     channel.send('log', {
       name: 'test.logging.Object',
-      level: Logger.Level.WARNING.value,
+      level: Level.WARNING.value,
       message: 'foo bar',
       exception: {
         name: 'Error',
@@ -85,7 +85,7 @@ testSuite({
       },
     });
     mockControl.$replayAll();
-    logger.warning('foo bar', ex);
+    warning(logger, 'foo bar', ex);
     mockControl.$verifyAll();
   },
 });

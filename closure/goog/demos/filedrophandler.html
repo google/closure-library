@@ -57,7 +57,7 @@ See the COPYING file for details.
           }
         });
 
-    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.FINER);
+    goog.log.setLevel(goog.log.getRootLogger(), goog.log.Level.FINER);
     var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
   </script>

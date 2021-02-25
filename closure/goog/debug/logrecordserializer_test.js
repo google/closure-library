@@ -7,10 +7,9 @@
 goog.module('goog.debug.logRecordSerializerTest');
 goog.setTestOnly();
 
-const LogRecord = goog.require('goog.debug.LogRecord');
-const Logger = goog.require('goog.debug.Logger');
 const logRecordSerializer = goog.require('goog.debug.logRecordSerializer');
 const testSuite = goog.require('goog.testing.testSuite');
+const {Level, LogRecord} = goog.require('goog.log');
 
 const NOW = 1311484654000;
 const SEQ = 1231;
@@ -18,11 +17,11 @@ const SEQ = 1231;
 testSuite({
   testBasic() {
     const rec = new LogRecord(
-        Logger.Level.FINE, 'An awesome message', 'logger.name', NOW, SEQ);
+        Level.FINE, 'An awesome message', 'logger.name', NOW, SEQ);
     const thawed =
         logRecordSerializer.parse(logRecordSerializer.serialize(rec));
 
-    assertEquals(Logger.Level.FINE, thawed.getLevel());
+    assertEquals(Level.FINE, thawed.getLevel());
     assertEquals('An awesome message', thawed.getMessage());
     assertEquals('logger.name', thawed.getLoggerName());
     assertEquals(NOW, thawed.getMillis());
@@ -37,7 +36,7 @@ testSuite({
   testWithException() {
     const err = new Error('it broke!');
     const rec = new LogRecord(
-        Logger.Level.FINE, 'An awesome message', 'logger.name', NOW, SEQ);
+        Level.FINE, 'An awesome message', 'logger.name', NOW, SEQ);
     rec.setException(err);
     const thawed =
         logRecordSerializer.parse(logRecordSerializer.serialize(rec));
@@ -46,8 +45,7 @@ testSuite({
 
   testCustomLogLevel() {
     const rec = new LogRecord(
-        new Logger.Level('CUSTOM', -1), 'An awesome message', 'logger.name',
-        NOW, SEQ);
+        new Level('CUSTOM', -1), 'An awesome message', 'logger.name', NOW, SEQ);
     const thawed =
         logRecordSerializer.parse(logRecordSerializer.serialize(rec));
 
@@ -57,8 +55,7 @@ testSuite({
 
   testWeirdLogLevel() {
     const rec = new LogRecord(
-        new Logger.Level('FINE', -1), 'An awesome message', 'logger.name', NOW,
-        SEQ);
+        new Level('FINE', -1), 'An awesome message', 'logger.name', NOW, SEQ);
     const thawed =
         logRecordSerializer.parse(logRecordSerializer.serialize(rec));
 

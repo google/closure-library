@@ -8,10 +8,9 @@ goog.module('goog.debug.FormatterTest');
 goog.setTestOnly();
 
 const HtmlFormatter = goog.require('goog.debug.HtmlFormatter');
-const LogRecord = goog.require('goog.debug.LogRecord');
-const Logger = goog.require('goog.debug.Logger');
 const SafeHtml = goog.require('goog.html.SafeHtml');
 const testSuite = goog.require('goog.testing.testSuite');
+const {Level, LogRecord} = goog.require('goog.log');
 
 const EXPECTED_RECORD_HTML_RE =
     '^prefix \\[.*?\\] \\[ &#160;.*?s\\] \\[loggerName\\] ' +
@@ -21,7 +20,7 @@ let logRecord;
 testSuite({
   setUp() {
     logRecord =
-        new LogRecord(Logger.Level.CONFIG, 'mess\n  age', 'loggerName', 1, 100);
+        new LogRecord(Level.CONFIG, 'mess\n  age', 'loggerName', 1, 100);
     // Exception needs to be present for exception text to get printed
     // by HtmlFormatter.
     logRecord.setException(new Error('exc\n  eption'));

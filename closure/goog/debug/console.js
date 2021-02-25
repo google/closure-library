@@ -13,7 +13,6 @@
 
 goog.provide('goog.debug.Console');
 
-goog.require('goog.debug.Logger');
 goog.require('goog.debug.TextFormatter');
 goog.require('goog.log');
 goog.requireType('goog.log.LogRecord');
@@ -93,23 +92,23 @@ goog.debug.Console.prototype.addLogRecord = function(logRecord) {
   }
 
   /**
-   * @param {?goog.debug.Logger.Level} level
+   * @param {?goog.log.Level} level
    * @return {string}
    */
   function getConsoleMethodName_(level) {
     if (level) {
-      if (level.value >= goog.debug.Logger.Level.SEVERE.value) {
+      if (level.value >= goog.log.Level.SEVERE.value) {
         // SEVERE == 1000, SHOUT == 1200
         return 'error';
       }
-      if (level.value >= goog.debug.Logger.Level.WARNING.value) {
+      if (level.value >= goog.log.Level.WARNING.value) {
         return 'warn';
       }
-      // NOTE(martone): there's a goog.debug.Logger.Level.INFO - that we should
+      // NOTE(martone): there's a goog.log.Level.INFO - that we should
       // presumably map to console.info. However, the current mapping is INFO ->
       // console.log. Let's keep the status quo for now, but we should
       // reevaluate if we tweak the goog.log API.
-      if (level.value >= goog.debug.Logger.Level.CONFIG.value) {
+      if (level.value >= goog.log.Level.CONFIG.value) {
         return 'log';
       }
     }
