@@ -9,10 +9,6 @@
  * @suppress {deprecated} Use goog.i18n instead.
  */
 
-goog.provide('goog.locale.TimeZoneList');
-goog.provide('goog.locale.getTimeZoneAllLongNames');
-goog.provide('goog.locale.getTimeZoneSelectedLongNames');
-goog.provide('goog.locale.getTimeZoneSelectedShortNames');
 goog.provide('goog.locale.timezonelist');
 
 goog.require('goog.locale');
@@ -129,24 +125,3 @@ goog.locale.getTimeZoneNameList_ = function(nameType, opt_resource) {
   }
   return result;
 };
-
-/**
- * Alias for goog.locale.timezonelist.getTimeZoneAllLongNames.
- * @const
- */
-goog.locale.getTimeZoneAllLongNames =
-    goog.locale.timezonelist.getTimeZoneAllLongNames;
-
-/**
- * Alias for goog.locale.timezonelist.getTimeZoneSelectedLongNames.
- * @const
- */
-goog.locale.getTimeZoneSelectedLongNames =
-    goog.locale.timezonelist.getTimeZoneSelectedLongNames;
-
-/**
- * Alias for goog.locale.timezonelist.getTimeZoneSelectedShortNames.
- * @const
- */
-goog.locale.getTimeZoneSelectedShortNames =
-    goog.locale.timezonelist.getTimeZoneSelectedShortNames;
