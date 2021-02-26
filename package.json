@@ -21,9 +21,8 @@
   "homepage": "https://developers.google.com/closure/library/",
   "devDependencies": {
     "google-closure-deps": "file:./closure-deps/",
-    "http-server": "^0.12.1",
+    "http-server": "^0.12.3",
     "parse5": "^6.0.1",
-    "promise": "^7.0.4",
     "promises-aplus-tests": "^2.1.2",
     "protractor": "^7.0.0"
   },
@@ -35,6 +34,7 @@
     "prepare": "npm run gen_deps_js",
     "preserve_tests": "npm run gen_deps_js_with_tests && npm run gen_test_htmls && npm run gen_alltests_js",
     "serve_tests": "http-server -o alltests.html",
-    "serve_demos": "http-server -o closure/goog/demos/index.html"
+    "serve_demos": "http-server -o closure/goog/demos/index.html",
+    "clang-format": "clang-format -p1 -style=Google"
   }
 }
