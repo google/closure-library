@@ -267,13 +267,11 @@ goog.i18n.DateTimeParse.prototype.applyStandardPattern_ = function(formatType) {
  * not validate the input.
  * @param {string} text The string being parsed.
  * @param {goog.date.DateLike} date The Date object to hold the parsed date.
- * @param {number=} opt_start The position from where parse should begin.
  * @return {number} How many characters parser advanced.
  */
-goog.i18n.DateTimeParse.prototype.parse = function(text, date, opt_start) {
+goog.i18n.DateTimeParse.prototype.parse = function(text, date) {
   'use strict';
-  var start = opt_start || 0;
-  return this.internalParse_(text, date, start, false /*validation*/);
+  return this.internalParse_(text, date, false /*validation*/);
 };
 
 
@@ -282,14 +280,11 @@ goog.i18n.DateTimeParse.prototype.parse = function(text, date, opt_start) {
  * validate the input and make sure it is a valid date/time.
  * @param {string} text The string being parsed.
  * @param {goog.date.DateLike} date The Date object to hold the parsed date.
- * @param {number=} opt_start The position from where parse should begin.
  * @return {number} How many characters parser advanced.
  */
-goog.i18n.DateTimeParse.prototype.strictParse = function(
-    text, date, opt_start) {
+goog.i18n.DateTimeParse.prototype.strictParse = function(text, date) {
   'use strict';
-  var start = opt_start || 0;
-  return this.internalParse_(text, date, start, true /*validation*/);
+  return this.internalParse_(text, date, true /*validation*/);
 };
 
 
@@ -297,16 +292,16 @@ goog.i18n.DateTimeParse.prototype.strictParse = function(
  * Parse the given string and fill info into date object.
  * @param {string} text The string being parsed.
  * @param {goog.date.DateLike} date The Date object to hold the parsed date.
- * @param {number} start The position from where parse should begin.
  * @param {boolean} validation If true, input string need to be a valid
  *     date/time string.
  * @return {number} How many characters parser advanced.
  * @private
  */
 goog.i18n.DateTimeParse.prototype.internalParse_ = function(
-    text, date, start, validation) {
+    text, date, validation) {
   'use strict';
   var cal = new goog.i18n.DateTimeParse.MyDate_();
+  var start = 0;
   var parsePos = [start];
 
   // For parsing abutting numeric fields. 'abutPat' is the
