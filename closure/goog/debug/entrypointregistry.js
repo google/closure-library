@@ -21,11 +21,10 @@ goog.provide('goog.debug.entryPointRegistry');
 goog.require('goog.asserts');
 
 
-
 /**
  * @interface
  */
-goog.debug.EntryPointMonitor = function() {};
+goog.debug.entryPointRegistry.EntryPointMonitor = function() {};
 
 
 /**
@@ -34,7 +33,7 @@ goog.debug.EntryPointMonitor = function() {};
  * @param {!Function} fn A function to instrument.
  * @return {!Function} The instrumented function.
  */
-goog.debug.EntryPointMonitor.prototype.wrap;
+goog.debug.entryPointRegistry.EntryPointMonitor.prototype.wrap;
 
 
 /**
@@ -53,7 +52,14 @@ goog.debug.EntryPointMonitor.prototype.wrap;
  * @return {!Function} The unwrapped function, or `fn` if it was not
  *     a wrapped function created by this monitor.
  */
-goog.debug.EntryPointMonitor.prototype.unwrap;
+goog.debug.entryPointRegistry.EntryPointMonitor.prototype.unwrap;
+
+/**
+ * Alias for goog.debug.entryPointRegistry.EntryPointMonitor, for compatibility
+ * purposes.
+ * @const
+ */
+goog.debug.EntryPointMonitor = goog.debug.entryPointRegistry.EntryPointMonitor;
 
 
 /**
