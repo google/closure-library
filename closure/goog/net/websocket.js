@@ -27,6 +27,7 @@
  */
 
 goog.provide('goog.net.WebSocket');
+goog.provide('goog.net.WebSocket.ClosedEvent');
 goog.provide('goog.net.WebSocket.ErrorEvent');
 goog.provide('goog.net.WebSocket.EventType');
 goog.provide('goog.net.WebSocket.MessageEvent');
@@ -405,7 +406,7 @@ goog.net.WebSocket.prototype.onClose_ = function(event) {
   goog.log.info(this.logger_, 'The WebSocket on ' + this.url_ + ' closed.');
 
   // Firing this event allows handlers to query the URL.
-  this.dispatchEvent(goog.net.WebSocket.EventType.CLOSED);
+  this.dispatchEvent(new goog.net.WebSocket.ClosedEvent(event.code, event.reason, event.wasClean));
 
   // Always clear out the web socket on a close event.
   this.webSocket_ = null;
@@ -490,6 +491,38 @@ goog.net.WebSocket.prototype.disposeInternal = function() {
   goog.net.WebSocket.base(this, 'disposeInternal');
   this.close();
 };
+
+
+/**
+ * Object representing a closed event.
+ *
+ * @param {number} code
+ * @param {string} reason
+ * @param {boolean} wasClean
+ * @extends {goog.events.Event}
+ * @constructor
+ * @final
+ */
+goog.net.WebSocket.ClosedEvent = function(code, reason, wasClean) {
+  goog.net.WebSocket.ClosedEvent.base(
+      this, 'constructor', goog.net.WebSocket.EventType.CLOSED);
+
+  /**
+   * @type {number}
+   */
+  this.code = code;
+
+  /**
+   * @type {string}
+   */
+  this.reason = reason;
+
+  /**
+   * @type {boolean}
+   */
+  this.wasClean = wasClean;
+};
+goog.inherits(goog.net.WebSocket.ClosedEvent, goog.events.Event);
 
 
 /**
