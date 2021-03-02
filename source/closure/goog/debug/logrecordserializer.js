@@ -12,9 +12,8 @@
 
 goog.provide('goog.debug.logRecordSerializer');
 
-goog.require('goog.debug.LogRecord');
-goog.require('goog.debug.Logger');
 goog.require('goog.json');
+goog.require('goog.log');
 goog.require('goog.object');
 
 
@@ -37,7 +36,7 @@ goog.debug.logRecordSerializer.Param_ = {
 /**
  * Serializes a LogRecord to a JSON string.  Note that any associated
  * exception is likely to be lost.
- * @param {goog.debug.LogRecord} record The record to serialize.
+ * @param {goog.log.LogRecord} record The record to serialize.
  * @return {string} Serialized JSON string of the log message.
  * @suppress {strictMissingProperties} message is not defined on Object
  */
@@ -58,7 +57,7 @@ goog.debug.logRecordSerializer.serialize = function(record) {
 /**
  * Deserializes a JSON-serialized LogRecord.
  * @param {string} s The JSON serialized record.
- * @return {!goog.debug.LogRecord} The deserialized record.
+ * @return {!goog.log.LogRecord} The deserialized record.
  */
 goog.debug.logRecordSerializer.parse = function(s) {
   'use strict';
@@ -70,7 +69,7 @@ goog.debug.logRecordSerializer.parse = function(s) {
 /**
  * Reconstitutes LogRecord from the JSON object.
  * @param {Object} o The JSON object.
- * @return {!goog.debug.LogRecord} The reconstituted record.
+ * @return {!goog.log.LogRecord} The reconstituted record.
  * @private
  */
 goog.debug.logRecordSerializer.reconstitute_ = function(o) {
@@ -79,7 +78,7 @@ goog.debug.logRecordSerializer.reconstitute_ = function(o) {
   var level = goog.debug.logRecordSerializer.getLevel_(
       o[param.LEVEL_NAME], o[param.LEVEL_VALUE]);
 
-  var ret = new goog.debug.LogRecord(
+  var ret = new goog.log.LogRecord(
       level, o[param.MSG], o[param.LOGGER_NAME], o[param.TIME],
       o[param.SEQUENCE_NUMBER]);
   var exceptionMessage = o[param.EXCEPTION];
@@ -93,7 +92,7 @@ goog.debug.logRecordSerializer.reconstitute_ = function(o) {
 /**
  * @param {string} name The name of the log level to return.
  * @param {number} value The numeric value of the log level to return.
- * @return {!goog.debug.Logger.Level} Returns a goog.debug.Logger.Level with
+ * @return {!goog.log.Level} Returns a goog.log.Level with
  *     the specified name and value.  If the name and value match a predefined
  *     log level, that instance will be returned, otherwise a new one will be
  *     created.
@@ -101,7 +100,7 @@ goog.debug.logRecordSerializer.reconstitute_ = function(o) {
  */
 goog.debug.logRecordSerializer.getLevel_ = function(name, value) {
   'use strict';
-  var level = goog.debug.Logger.Level.getPredefinedLevel(name);
-  return level && level.value == value ? level : new goog.debug.Logger.Level(
-                                                     name, value);
+  var level = goog.log.Level.getPredefinedLevel(name);
+  return level && level.value == value ? level :
+                                         new goog.log.Level(name, value);
 };

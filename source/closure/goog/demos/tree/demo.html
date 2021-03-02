@@ -58,7 +58,7 @@ See the COPYING file for details.
     var divConsole = new goog.debug.DivConsole($('div-console'));
     divConsole.setCapturing(true);
 
-    var logger = goog.debug.LogManager.getRoot();
+    var logger = goog.log.getRootLogger();
 
     function makeTree() {
       goog.debug.Trace.initCurrentTrace();

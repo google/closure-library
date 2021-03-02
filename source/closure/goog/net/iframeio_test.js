@@ -12,7 +12,6 @@ const Event = goog.require('goog.testing.events.Event');
 const EventType = goog.require('goog.events.EventType');
 const IframeIo = goog.require('goog.net.IframeIo');
 const Level = goog.require('goog.log.Level');
-const LogManager = goog.require('goog.debug.LogManager');
 const TEST_ONLY = goog.require('goog.net.IframeIo.TEST_ONLY');
 const TagName = goog.require('goog.dom.TagName');
 const debug = goog.require('goog.debug');
@@ -27,7 +26,7 @@ const userAgent = goog.require('goog.userAgent');
 // Server
 
 // Set up a logger to track responses
-LogManager.getRoot().setLevel(Level.INFO);
+log.setLevel(log.getRootLogger(), Level.INFO);
 let logconsole;
 const testLogger = log.getLogger('test');
 

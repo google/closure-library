@@ -77,9 +77,9 @@ goog.addDependency('db/indexeddb.js', ['goog.db.IndexedDb'], ['goog.db.Error', '
 goog.addDependency('db/keyrange.js', ['goog.db.KeyRange'], [], {});
 goog.addDependency('db/objectstore.js', ['goog.db.ObjectStore'], ['goog.async.Deferred', 'goog.db.Cursor', 'goog.db.Error', 'goog.db.Index', 'goog.db.KeyRange', 'goog.debug'], {});
 goog.addDependency('db/transaction.js', ['goog.db.Transaction', 'goog.db.Transaction.TransactionMode'], ['goog.async.Deferred', 'goog.db.Error', 'goog.db.ObjectStore', 'goog.events', 'goog.events.EventHandler', 'goog.events.EventTarget'], {});
-goog.addDependency('debug/console.js', ['goog.debug.Console'], ['goog.debug.Logger', 'goog.debug.TextFormatter', 'goog.log'], {});
+goog.addDependency('debug/console.js', ['goog.debug.Console'], ['goog.debug.TextFormatter', 'goog.log'], {});
 goog.addDependency('debug/debug.js', ['goog.debug'], ['goog.array', 'goog.debug.errorcontext', 'goog.userAgent'], {});
-goog.addDependency('debug/debugwindow.js', ['goog.debug.DebugWindow'], ['goog.debug.HtmlFormatter', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.log', 'goog.log.Level', 'goog.string.Const', 'goog.structs.CircularBuffer', 'goog.userAgent'], {});
+goog.addDependency('debug/debugwindow.js', ['goog.debug.DebugWindow'], ['goog.debug.HtmlFormatter', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.log', 'goog.string.Const', 'goog.structs.CircularBuffer', 'goog.userAgent'], {});
 goog.addDependency('debug/deepfreeze.js', ['goog.debug.deepFreeze'], ['goog.debug'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('debug/devcss/devcss.js', ['goog.debug.DevCss', 'goog.debug.DevCss.UserAgent'], ['goog.asserts', 'goog.cssom', 'goog.dom.classlist', 'goog.events', 'goog.events.EventType', 'goog.string', 'goog.userAgent'], {});
 goog.addDependency('debug/devcss/devcssrunner.js', ['goog.debug.devCssRunner'], ['goog.debug.DevCss'], {});
@@ -90,12 +90,12 @@ goog.addDependency('debug/errorcontext.js', ['goog.debug.errorcontext'], [], {})
 goog.addDependency('debug/errorhandler.js', ['goog.debug.ErrorHandler', 'goog.debug.ErrorHandler.ProtectedFunctionError'], ['goog.Disposable', 'goog.asserts', 'goog.debug.EntryPointMonitor', 'goog.debug.Error'], {'lang': 'es6'});
 goog.addDependency('debug/errorhandlerweakdep.js', ['goog.debug.errorHandlerWeakDep'], [], {});
 goog.addDependency('debug/errorreporter.js', ['goog.debug.ErrorReporter', 'goog.debug.ErrorReporter.ExceptionEvent'], ['goog.asserts', 'goog.debug', 'goog.debug.Error', 'goog.debug.ErrorHandler', 'goog.debug.entryPointRegistry', 'goog.debug.errorcontext', 'goog.dispose', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.log', 'goog.net.XhrIo', 'goog.object', 'goog.uri.utils', 'goog.userAgent'], {});
-goog.addDependency('debug/fancywindow.js', ['goog.debug.FancyWindow'], ['goog.array', 'goog.asserts', 'goog.debug.DebugWindow', 'goog.debug.LogManager', 'goog.dom.DomHelper', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.log', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.userAgent'], {'lang': 'es6'});
-goog.addDependency('debug/formatter.js', ['goog.debug.Formatter', 'goog.debug.HtmlFormatter', 'goog.debug.TextFormatter', 'goog.debug.formatter'], ['goog.debug', 'goog.debug.Logger', 'goog.debug.RelativeTimeProvider', 'goog.html.SafeHtml', 'goog.html.SafeUrl', 'goog.html.uncheckedconversions', 'goog.string.Const'], {});
+goog.addDependency('debug/fancywindow.js', ['goog.debug.FancyWindow'], ['goog.array', 'goog.asserts', 'goog.debug.DebugWindow', 'goog.dom.DomHelper', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.log', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.userAgent'], {'lang': 'es6'});
+goog.addDependency('debug/formatter.js', ['goog.debug.Formatter', 'goog.debug.HtmlFormatter', 'goog.debug.TextFormatter', 'goog.debug.formatter'], ['goog.debug', 'goog.debug.RelativeTimeProvider', 'goog.html.SafeHtml', 'goog.html.SafeUrl', 'goog.html.uncheckedconversions', 'goog.log', 'goog.string.Const'], {});
 goog.addDependency('debug/logbuffer.js', ['goog.debug.LogBuffer'], ['goog.log.LogBuffer'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('debug/logger.js', ['goog.debug.LogManager', 'goog.debug.Loggable', 'goog.debug.Logger', 'goog.debug.Logger.Level'], ['goog.debug', 'goog.log', 'goog.log.Level', 'goog.log.LogRecord', 'goog.log.Logger'], {'lang': 'es6'});
 goog.addDependency('debug/logrecord.js', ['goog.debug.LogRecord'], ['goog.log.LogRecord'], {});
-goog.addDependency('debug/logrecordserializer.js', ['goog.debug.logRecordSerializer'], ['goog.debug.LogRecord', 'goog.debug.Logger', 'goog.json', 'goog.object'], {});
+goog.addDependency('debug/logrecordserializer.js', ['goog.debug.logRecordSerializer'], ['goog.json', 'goog.log', 'goog.object'], {});
 goog.addDependency('debug/relativetimeprovider.js', ['goog.debug.RelativeTimeProvider'], [], {});
 goog.addDependency('debug/tracer.js', ['goog.debug.StopTraceDetail', 'goog.debug.Trace'], ['goog.array', 'goog.asserts', 'goog.debug', 'goog.iter', 'goog.log', 'goog.structs.Map', 'goog.structs.SimplePool'], {});
 goog.addDependency('delegate/delegateregistry.js', ['goog.delegate.DelegateRegistry'], ['goog.array', 'goog.asserts', 'goog.debug'], {'lang': 'es6', 'module': 'goog'});
@@ -478,7 +478,7 @@ goog.addDependency('memoize/memoize.js', ['goog.memoize'], ['goog.reflect'], {'l
 goog.addDependency('messaging/abstractchannel.js', ['goog.messaging.AbstractChannel'], ['goog.Disposable', 'goog.json', 'goog.log', 'goog.messaging.MessageChannel'], {});
 goog.addDependency('messaging/bufferedchannel.js', ['goog.messaging.BufferedChannel'], ['goog.Disposable', 'goog.Timer', 'goog.dispose', 'goog.events', 'goog.log', 'goog.messaging.MessageChannel', 'goog.messaging.MultiChannel'], {});
 goog.addDependency('messaging/deferredchannel.js', ['goog.messaging.DeferredChannel'], ['goog.Disposable', 'goog.messaging.MessageChannel'], {});
-goog.addDependency('messaging/loggerclient.js', ['goog.messaging.LoggerClient'], ['goog.Disposable', 'goog.debug', 'goog.debug.LogManager', 'goog.debug.Logger'], {});
+goog.addDependency('messaging/loggerclient.js', ['goog.messaging.LoggerClient'], ['goog.Disposable', 'goog.debug', 'goog.log'], {});
 goog.addDependency('messaging/loggerserver.js', ['goog.messaging.LoggerServer'], ['goog.Disposable', 'goog.log', 'goog.log.Level'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('messaging/messagechannel.js', ['goog.messaging.MessageChannel'], [], {});
 goog.addDependency('messaging/messaging.js', ['goog.messaging'], [], {});

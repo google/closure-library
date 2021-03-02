@@ -11,7 +11,6 @@
 goog.module('goog.i18n.DateTimeParseTest');
 goog.setTestOnly();
 
-const DateDate = goog.require('goog.date.Date');
 const DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
 const DateTimeParse = goog.require('goog.i18n.DateTimeParse');
 /** @suppress {extraRequire} */
@@ -22,6 +21,7 @@ const DateTimeSymbols_fr = goog.require('goog.i18n.DateTimeSymbols_fr');
 const DateTimeSymbols_pl = goog.require('goog.i18n.DateTimeSymbols_pl');
 const DateTimeSymbols_zh = goog.require('goog.i18n.DateTimeSymbols_zh');
 const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
+const GoogDate = goog.require('goog.date.Date');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 
@@ -36,12 +36,24 @@ function assertDateEquals(expectYear, expectMonth, expectDate, date) {
   if (expectDate) assertEquals(expectDate, date.getDate());
 }
 
-// Helper equivalent of assertEquals for times, with seconds and milliseconds
+/**
+ * Asserts that `date` has the expected time field values, with seconds and
+ * milliseconds being optionally compared.
+ * @param {number} expectHour
+ * @param {number} expectMin
+ * @param {number|undefined} expectSec
+ * @param {number|undefined} expectMilli
+ * @param {!Date} date
+ */
 function assertTimeEquals(expectHour, expectMin, expectSec, expectMilli, date) {
   assertEquals(expectHour, date.getHours());
   assertEquals(expectMin, date.getMinutes());
-  if (expectSec) assertEquals(expectSec, date.getSeconds());
-  if (expectMilli) assertEquals(expectMilli, date.getTime() % 1000);
+  if (expectSec !== undefined) {
+    assertEquals(expectSec, date.getSeconds());
+  }
+  if (expectMilli !== undefined) {
+    assertEquals(expectMilli, date.getMilliseconds());
+  }
 }
 
 // Helper function, doing parse and assert on dates
@@ -51,12 +63,32 @@ function assertParsedDateEquals(
   assertDateEquals(expectYear, expectMonth, expectDate, date);
 }
 
-// Helper function, doing parse and assert on times
+/**
+ * Parses and asserts that the result equals the expected values.
+ * @param {number} expectHour
+ * @param {number} expectMin
+ * @param {number|undefined} expectSec
+ * @param {number|undefined} expectMilli
+ * @param {!DateTimeParse} parser
+ * @param {string} text
+ */
 function assertParsedTimeEquals(
-    expectHour, expectMin, expectSec, expectMilli, parser, stringToParse,
-    date) {
-  assertTrue(parser.parse(stringToParse, date) > 0);
+    expectHour, expectMin, expectSec, expectMilli, parser, text) {
+  const date = new Date(0);
+
+  assertTrue(parser.parse(text, date) > 0);
   assertTimeEquals(expectHour, expectMin, expectSec, expectMilli, date);
+}
+
+/**
+ * Asserts that parsing of `text` fails.
+ * @param {!DateTimeParse} parser
+ * @param {string} text
+ */
+function assertParseFails(parser, text) {
+  const date = new Date(0);
+
+  assertFalse(parser.parse(text, date) > 0);
 }
 
 testSuite({
@@ -89,15 +121,6 @@ testSuite({
     assertParsedDateEquals(-1998, 11 - 1, 22, parser, '11/22, 1999BC', date);
     assertParsedDateEquals(0, 11 - 1, 22, parser, '11/22, 1BC', date);
     assertParsedDateEquals(1999, 11 - 1, 22, parser, '11/22, 1999AD', date);
-  },
-
-  testFractionalSeconds() {
-    const date = new Date();
-    const parser = new DateTimeParse('hh:mm:ss.SSS');
-
-    assertParsedTimeEquals(11, 12, 13, 956, parser, '11:12:13.956', date);
-    assertParsedTimeEquals(11, 12, 13, 950, parser, '11:12:13.95', date);
-    assertParsedTimeEquals(11, 12, 13, 900, parser, '11:12:13.9', date);
   },
 
   testAmbiguousYear() {
@@ -160,22 +183,39 @@ testSuite({
     assertParsedDateEquals(2000, 2 - 1, 29, parser, '0229, 2000', date);
   },
 
-  testAbutField() {
+  testAbuttingNumberPatterns() {
     const date = new Date();
 
     const parser = new DateTimeParse('hhmm');
-    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122', date);
-    assertParsedTimeEquals(1, 22, undefined, undefined, parser, '122', date);
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122');
+    assertParsedTimeEquals(1, 22, undefined, undefined, parser, '122');
+    assertParseFails(parser, '22');
 
-    const parser2 = new DateTimeParse('hhmmss');
-    assertParsedTimeEquals(11, 22, 33, undefined, parser2, '112233', date);
-    assertParsedTimeEquals(1, 22, 33, undefined, parser2, '12233', date);
+    const parser2 = new DateTimeParse('HHmmss');
+    assertParsedTimeEquals(12, 34, 56, undefined, parser2, '123456');
+    assertParsedTimeEquals(1, 23, 45, undefined, parser2, '12345');
+    assertParseFails(parser2, '1234');
 
     const parser3 = new DateTimeParse('yyyyMMdd');
     assertParsedDateEquals(1999, 12 - 1, 2, parser3, '19991202', date);
     assertParsedDateEquals(999, 12 - 1, 2, parser3, '9991202', date);
     assertParsedDateEquals(99, 12 - 1, 2, parser3, '991202', date);
     assertParsedDateEquals(9, 12 - 1, 2, parser3, '91202', date);
+    assertParseFails(parser3, '1202');
+  },
+
+  testDelimitedNumberPatterns() {
+    const parser = new DateTimeParse('H:mm');
+
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0:22');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '00:22');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '000:22');
+    assertParsedTimeEquals(1, 22, undefined, undefined, parser, '001:22');
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '011:22');
+    assertParsedTimeEquals(11, 0, undefined, undefined, parser, '11:0');
+    assertParsedTimeEquals(11, 0, undefined, undefined, parser, '11:00');
+    assertParsedTimeEquals(11, 2, undefined, undefined, parser, '11:002');
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '11:0022');
   },
 
   testYearParsing() {
@@ -195,142 +235,149 @@ testSuite({
   },
 
   testGoogDateParsing() {
-    const date = new DateDate();
+    const date = new GoogDate();
 
     const parser = new DateTimeParse('yyMMdd');
     assertParsedDateEquals(1999, 12 - 1, 2, parser, '991202', date);
   },
 
-  testHourParsing_hh() {
-    const date = new Date();
-
+  testTimeParsing_hh() {
     const parser = new DateTimeParse('hhmm');
-    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022', date);
-    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122', date);
-    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '1222', date);
-    assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322', date);
-    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422', date);
+
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022');
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '1222');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422');
 
     const parser2 = new DateTimeParse('hhmma');
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '0022am', date);
-    assertParsedTimeEquals(
-        11, 22, undefined, undefined, parser2, '1122am', date);
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '1222am', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '2322am', date);
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '2422am', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '0022pm', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '1122pm', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '1222pm', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '2322pm', date);
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '2422pm', date);
+
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '0022am');
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser2, '1122am');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '1222am');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '2322am');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '2422am');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '0022pm');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '1122pm');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '1222pm');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '2322pm');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '2422pm');
   },
 
-  testHourParsing_KK() {
-    const date = new Date();
-
+  testTimeParsing_KK() {
     const parser = new DateTimeParse('KKmm');
-    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022', date);
-    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122', date);
-    assertParsedTimeEquals(12, 22, undefined, undefined, parser, '1222', date);
-    assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322', date);
-    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422', date);
+
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022');
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser, '1222');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422');
 
     const parser2 = new DateTimeParse('KKmma');
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '0022am', date);
-    assertParsedTimeEquals(
-        11, 22, undefined, undefined, parser2, '1122am', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '1222am', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '2322am', date);
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '2422am', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '0022pm', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '1122pm', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '1222pm', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '2322pm', date);
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '2422pm', date);
+
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '0022am');
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser2, '1122am');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '1222am');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '2322am');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '2422am');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '0022pm');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '1122pm');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '1222pm');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '2322pm');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '2422pm');
   },
 
-  testHourParsing_kk() {
-    const date = new Date();
-
+  testTimeParsing_kk() {
     const parser = new DateTimeParse('kkmm');
-    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022', date);
-    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122', date);
-    assertParsedTimeEquals(12, 22, undefined, undefined, parser, '1222', date);
-    assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322', date);
-    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422', date);
+
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022');
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser, '1222');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422');
 
     const parser2 = new DateTimeParse('kkmma');
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '0022am', date);
-    assertParsedTimeEquals(
-        11, 22, undefined, undefined, parser2, '1122am', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '1222am', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '2322am', date);
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '2422am', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '0022pm', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '1122pm', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '1222pm', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '2322pm', date);
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '2422pm', date);
+
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '0022am');
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser2, '1122am');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '1222am');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '2322am');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '2422am');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '0022pm');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '1122pm');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '1222pm');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '2322pm');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '2422pm');
   },
 
-  testHourParsing_HH() {
-    const date = new Date();
-
+  testTimeParsing_HH() {
     const parser = new DateTimeParse('HHmm');
-    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022', date);
-    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122', date);
-    assertParsedTimeEquals(12, 22, undefined, undefined, parser, '1222', date);
-    assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322', date);
-    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422', date);
+
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '0022');
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser, '1122');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser, '1222');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser, '2322');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser, '2422');
 
     const parser2 = new DateTimeParse('HHmma');
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '0022am', date);
-    assertParsedTimeEquals(
-        11, 22, undefined, undefined, parser2, '1122am', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '1222am', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '2322am', date);
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '2422am', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '0022pm', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '1122pm', date);
-    assertParsedTimeEquals(
-        12, 22, undefined, undefined, parser2, '1222pm', date);
-    assertParsedTimeEquals(
-        23, 22, undefined, undefined, parser2, '2322pm', date);
-    assertParsedTimeEquals(
-        0, 22, undefined, undefined, parser2, '2422pm', date);
+
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '0022am');
+    assertParsedTimeEquals(11, 22, undefined, undefined, parser2, '1122am');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '1222am');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '2322am');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '2422am');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '0022pm');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '1122pm');
+    assertParsedTimeEquals(12, 22, undefined, undefined, parser2, '1222pm');
+    assertParsedTimeEquals(23, 22, undefined, undefined, parser2, '2322pm');
+    assertParsedTimeEquals(0, 22, undefined, undefined, parser2, '2422pm');
+  },
+
+  testTimeParsing_milliseconds() {
+    const parser = new DateTimeParse('hh:mm:ss.SSS');
+
+    assertParsedTimeEquals(11, 12, 13, 956, parser, '11:12:13.956');
+    assertParsedTimeEquals(11, 12, 13, 950, parser, '11:12:13.95');
+    assertParsedTimeEquals(11, 12, 13, 900, parser, '11:12:13.9');
+  },
+
+  testTimeParsing_partial() {
+    const parser = new DateTimeParse('h:mma');
+
+    assertParseFails(parser, '5');
+    assertParsedTimeEquals(5, 0, undefined, undefined, parser, '5:');
+    assertParsedTimeEquals(5, 4, undefined, undefined, parser, '5:4');
+    assertParsedTimeEquals(5, 44, undefined, undefined, parser, '5:44');
+    assertParsedTimeEquals(5, 44, undefined, undefined, parser, '5:44p');
+    assertParsedTimeEquals(17, 44, undefined, undefined, parser, '5:44pm');
+    assertParsedTimeEquals(5, 44, undefined, undefined, parser, '5:44ym');
+
+    const parser2 = new DateTimeParse('h:mm a');
+
+    assertParseFails(parser2, '5');
+    assertParseFails(parser2, '5:');
+    assertParseFails(parser2, '5:4');
+    assertParseFails(parser2, '5:44');
+    assertParsedTimeEquals(5, 44, undefined, undefined, parser2, '5:44 ');
+    assertParsedTimeEquals(5, 44, undefined, undefined, parser2, '5:44 p');
+    assertParsedTimeEquals(17, 44, undefined, undefined, parser2, '5:44 pm');
+    assertParsedTimeEquals(5, 44, undefined, undefined, parser2, '5:44 ym');
+  },
+
+  testTimeParsing_clockWrapping() {
+    const parser = new DateTimeParse('H:mm');
+
+    assertParsedTimeEquals(0, 0, undefined, undefined, parser, '24:00');
+    assertParsedTimeEquals(0, 30, undefined, undefined, parser, '23:90');
+  },
+
+  testDurationParsing_partial() {
+    const date = new Date(0);
+    const parser = new DateTimeParse('mm:ss');
+
+    assertTrue(parser.parse('15:', date) > 0);
+    assertEquals(15, date.getMinutes());
+    assertEquals(0, date.getSeconds());
   },
 
   testEnglishDate() {
@@ -490,30 +537,6 @@ testSuite({
     assertTrue(parser.strictParse('01/02/29', date) == 0);
   },
 
-  testPartialParses() {
-    let date = new Date(0);
-    let parser = new DateTimeParse('h:mma');
-    assertTrue(parser.parse('5:', date) > 0);
-    assertEquals(5, date.getHours());
-    assertEquals(0, date.getMinutes());
-
-    date = new Date(0);
-    assertTrue(parser.parse('5:44pm', date) > 0);
-    assertEquals(17, date.getHours());
-    assertEquals(44, date.getMinutes());
-
-    date = new Date(0);
-    assertTrue(parser.parse('5:44ym', date) > 0);
-    assertEquals(5, date.getHours());
-    assertEquals(44, date.getMinutes());
-
-    parser = new DateTimeParse('mm:ss');
-    date = new Date(0);
-    assertTrue(parser.parse('15:', date) > 0);
-    assertEquals(15, date.getMinutes());
-    assertEquals(0, date.getSeconds());
-  },
-
   testEnglishQuarter() {
     const date = new Date();
     const parser = new DateTimeParse('QQQQ yyyy');
@@ -624,8 +647,8 @@ testSuite({
   /** @bug 9901750 */
   testStandaloneMonthPattern() {
     goog.i18n.DateTimeSymbols = DateTimeSymbols_pl;
-    const date1 = new DateDate(2006, 7 - 1);
-    const date2 = new DateDate();
+    const date1 = new GoogDate(2006, 7 - 1);
+    const date2 = new GoogDate();
     const formatter = new DateTimeFormat('LLLL yyyy');
     let parser = new DateTimeParse('LLLL yyyy');
     let dateStr = formatter.format(date1);
@@ -651,7 +674,7 @@ testSuite({
         const months = tests[format];
         for (let m = 0; m < months.length; m++) {
           const dateStr = months[m] + ' 2006';
-          const date = new DateDate();
+          const date = new GoogDate();
           assertParsedDateEquals(2006, m, undefined, parser, dateStr, date);
         }
       }

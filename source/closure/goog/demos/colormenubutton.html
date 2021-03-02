@@ -13,7 +13,6 @@ See the COPYING file for details.
     goog.require('goog.array');
     goog.require('goog.color');
     goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.LogManager');
     goog.require('goog.events');
     goog.require('goog.log');
     goog.require('goog.object');
@@ -140,7 +139,7 @@ See the COPYING file for details.
     var timer = goog.now();
 
     // Set up a logger.
-    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
+    goog.log.setLevel(goog.log.getRootLogger(), goog.log.Level.ALL);
     var logger = goog.log.getLogger('demo');
     var logConsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logConsole.setCapturing(true);

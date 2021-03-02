@@ -17,17 +17,14 @@ goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.log');
-goog.require('goog.log.Level');
 goog.require('goog.string.Const');
 goog.require('goog.structs.CircularBuffer');
 goog.require('goog.userAgent');
 goog.requireType('goog.debug.Formatter');
-goog.requireType('goog.log.LogRecord');
-
 
 
 /**
- * Provides a debug DebugWindow that is bound to the goog.debug.Logger.
+ * Provides a debug DebugWindow that is bound to the goog.log.Logger.
  * It handles log messages and writes them to the DebugWindow. This doesn't
  * provide a lot of functionality that the old Gmail logging infrastructure
  * provided like saving debug logs for exporting to the server. Now that we

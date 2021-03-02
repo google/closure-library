@@ -41,7 +41,7 @@ var $ = goog.dom.getElement;
 var logger = goog.log.getLogger('demo');
 var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
 
-goog.debug.LogManager.getRoot().setLevel(goog.log.Level.FINER);
+goog.log.setLevel(goog.log.getRootLogger(), goog.log.Level.FINER);
 logconsole.setCapturing(true);
 
 var DOM_EVENTS = ['keydown', 'keyup', 'keypress', 'change', 'cut', 'paste',

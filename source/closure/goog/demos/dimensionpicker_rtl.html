@@ -11,7 +11,6 @@ See the COPYING file for details.
   <script src="../base.js"></script>
   <script>
     goog.require('goog.debug.DivConsole');
-    goog.require('goog.debug.LogManager');
     goog.require('goog.dom');
     goog.require('goog.events');
     goog.require('goog.log');
@@ -64,7 +63,7 @@ See the COPYING file for details.
     var timer = goog.now();
 
     // Set up a logger.
-    goog.debug.LogManager.getRoot().setLevel(goog.log.Level.ALL);
+    goog.log.setLevel(goog.log.getRootLogger(), goog.log.Level.ALL);
     var logger = goog.log.getLogger('demo');
     var logconsole = new goog.debug.DivConsole(goog.dom.getElement('log'));
     logconsole.setCapturing(true);
