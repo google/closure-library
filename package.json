@@ -21,9 +21,8 @@
   "homepage": "https://developers.google.com/closure/library/",
   "devDependencies": {
     "google-closure-deps": "file:./closure-deps/",
-    "http-server": "^0.12.1",
+    "http-server": "^0.12.3",
     "parse5": "^6.0.1",
-    "promise": "^7.0.4",
     "promises-aplus-tests": "^2.1.2",
     "protractor": "^7.0.0"
   },
