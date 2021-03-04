@@ -16,8 +16,10 @@ goog.provide('goog.testing.fs');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
-/** @suppress {extraRequire} */
+/** @suppress {extraRequire} used in mocking */
 goog.require('goog.fs');
+/** @suppress {extraRequire} used in mocking */
+goog.require('goog.fs.url');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.fs.Blob');
 goog.require('goog.testing.fs.FileSystem');
@@ -161,11 +163,12 @@ goog.testing.fs.install = function(stubs) {
   // Prevent warnings that goog.fs may get optimized away. It's true this is
   // unsafe in compiled code, but it's only meant for tests.
   var fs = goog.getObjectByName('goog.fs');
+  var fsUrl = goog.getObjectByName('goog.fs.url');
   stubs.replace(fs, 'getTemporary', goog.testing.fs.getTemporary);
   stubs.replace(fs, 'getPersistent', goog.testing.fs.getPersistent);
-  stubs.replace(fs, 'createObjectUrl', goog.testing.fs.createObjectUrl);
-  stubs.replace(fs, 'revokeObjectUrl', goog.testing.fs.revokeObjectUrl);
-  stubs.replace(fs, 'browserSupportsObjectUrls', function() {
+  stubs.replace(fsUrl, 'createObjectUrl', goog.testing.fs.createObjectUrl);
+  stubs.replace(fsUrl, 'revokeObjectUrl', goog.testing.fs.revokeObjectUrl);
+  stubs.replace(fsUrl, 'browserSupportsObjectUrls', function() {
     'use strict';
     return true;
   });
