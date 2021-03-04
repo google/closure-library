@@ -170,15 +170,14 @@ async function findAllJsFiles(pathToScan, excludedGlobs) {
 }
 
 /**
- * Finds or creates a dependency for Closure's base.js (which provides the
- * `goog` symbol).
+ * Finds or creates a dependency for Closure's base.js.
  *
  * @param {!Array<!depGraph.Dependency>} deps
  * @param {!Arguments} args
  * @return {!depGraph.Dependency}
  */
 function getClosureDep(deps, args) {
-  let closureDep = deps.find(d => d.closureSymbols.indexOf('goog') >= 0);
+  let closureDep = deps.find(d => d.closureRelativePath == 'base.js');
 
   // We need the path to Closure Library to be able to write a dependency file.
   // Note that if we find base.js via a dependency file (like Closure's deps.js)
@@ -204,7 +203,7 @@ function getClosureDep(deps, args) {
   if (!closureDep) {
     closureDep = new depGraph.Dependency(
         depGraph.DependencyType.SCRIPT, path.join(args.closurePath, 'base.js'),
-        ['goog'], []);
+        [], []);
     deps.push(closureDep);
   }
 
