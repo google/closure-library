@@ -16,6 +16,7 @@ goog.provide('goog.labs.net.webChannel.WebChannelDebug');
 goog.require('goog.json');
 goog.require('goog.log');
 goog.requireType('goog.Uri');
+goog.requireType('goog.debug.Loggable');
 goog.requireType('goog.net.XmlHttp.ReadyState');
 
 
@@ -144,7 +145,7 @@ WebChannelDebug.prototype.timeoutResponse = function(uri) {
 
 /**
  * Logs a debug message.
- * @param {!goog.log.Loggable} text The message.
+ * @param {!goog.debug.Loggable} text The message.
  */
 WebChannelDebug.prototype.debug = function(text) {
   'use strict';
@@ -155,7 +156,7 @@ WebChannelDebug.prototype.debug = function(text) {
 /**
  * Logs an exception
  * @param {Error} e The error or error event.
- * @param {goog.log.Loggable=} opt_msg The optional message,
+ * @param {goog.debug.Loggable=} opt_msg The optional message,
  *     defaults to 'Exception'.
  */
 WebChannelDebug.prototype.dumpException = function(e, opt_msg) {
@@ -166,7 +167,7 @@ WebChannelDebug.prototype.dumpException = function(e, opt_msg) {
 
 /**
  * Logs an info message.
- * @param {!goog.log.Loggable} text The message.
+ * @param {!goog.debug.Loggable} text The message.
  */
 WebChannelDebug.prototype.info = function(text) {
   'use strict';
@@ -176,7 +177,7 @@ WebChannelDebug.prototype.info = function(text) {
 
 /**
  * Logs a warning message.
- * @param {!goog.log.Loggable} text The message.
+ * @param {!goog.debug.Loggable} text The message.
  */
 WebChannelDebug.prototype.warning = function(text) {
   'use strict';
@@ -186,7 +187,7 @@ WebChannelDebug.prototype.warning = function(text) {
 
 /**
  * Logs a severe message.
- * @param {!goog.log.Loggable} text The message.
+ * @param {!goog.debug.Loggable} text The message.
  */
 WebChannelDebug.prototype.severe = function(text) {
   'use strict';

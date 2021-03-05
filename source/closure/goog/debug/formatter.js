@@ -16,11 +16,11 @@ goog.provide('goog.debug.TextFormatter');
 goog.provide('goog.debug.formatter');
 
 goog.require('goog.debug');
+goog.require('goog.debug.Logger');
 goog.require('goog.debug.RelativeTimeProvider');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.uncheckedconversions');
-goog.require('goog.log');
 goog.require('goog.string.Const');
 goog.requireType('goog.log.LogRecord');
 
@@ -342,19 +342,19 @@ goog.debug.formatter.HtmlFormatter.prototype.formatRecordAsHtml = function(
 
   var className;
   switch (logRecord.getLevel().value) {
-    case goog.log.Level.SHOUT.value:
+    case goog.debug.Logger.Level.SHOUT.value:
       className = 'dbg-sh';
       break;
-    case goog.log.Level.SEVERE.value:
+    case goog.debug.Logger.Level.SEVERE.value:
       className = 'dbg-sev';
       break;
-    case goog.log.Level.WARNING.value:
+    case goog.debug.Logger.Level.WARNING.value:
       className = 'dbg-w';
       break;
-    case goog.log.Level.INFO.value:
+    case goog.debug.Logger.Level.INFO.value:
       className = 'dbg-i';
       break;
-    case goog.log.Level.FINE.value:
+    case goog.debug.Logger.Level.FINE.value:
     default:
       className = 'dbg-f';
       break;

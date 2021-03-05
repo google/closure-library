@@ -13,7 +13,9 @@ goog.provide('goog.messaging.LoggerClient');
 
 goog.require('goog.Disposable');
 goog.require('goog.debug');
-goog.require('goog.log');
+goog.require('goog.debug.LogManager');
+goog.require('goog.debug.Logger');
+goog.requireType('goog.debug.LogRecord');
 goog.requireType('goog.messaging.MessageChannel');
 
 
@@ -54,11 +56,11 @@ goog.messaging.LoggerClient = function(channel, serviceName) {
   /**
    * The bound handler function for handling log messages. This is kept in a
    * variable so that it can be deregistered when the logger client is disposed.
-   * @type {!Function}
+   * @type {Function}
    * @private
    */
   this.publishHandler_ = goog.bind(this.sendLog_, this);
-  goog.log.addHandler(goog.log.getRootLogger(), this.publishHandler_);
+  goog.debug.LogManager.getRoot().addHandler(this.publishHandler_);
 
   goog.messaging.LoggerClient.instance_ = this;
 };
@@ -75,7 +77,7 @@ goog.messaging.LoggerClient.instance_ = null;
 
 /**
  * Sends a log message through the channel.
- * @param {!goog.log.LogRecord} logRecord The log message.
+ * @param {!goog.debug.LogRecord} logRecord The log message.
  * @private
  */
 goog.messaging.LoggerClient.prototype.sendLog_ = function(logRecord) {
@@ -97,7 +99,8 @@ goog.messaging.LoggerClient.prototype.sendLog_ = function(logRecord) {
       // Normalized exceptions without a stack have 'stack' set to 'Not
       // available', so we check for the existence of 'stack' on the original
       // exception instead.
-      'stack': originalException.stack || goog.debug.getStacktrace(goog.log.log)
+      'stack': originalException.stack ||
+          goog.debug.getStacktrace(goog.debug.Logger.prototype.log)
     };
 
     if (goog.isObject(originalException)) {
@@ -121,7 +124,7 @@ goog.messaging.LoggerClient.prototype.sendLog_ = function(logRecord) {
 goog.messaging.LoggerClient.prototype.disposeInternal = function() {
   'use strict';
   goog.messaging.LoggerClient.base(this, 'disposeInternal');
-  goog.log.removeHandler(goog.log.getRootLogger(), this.publishHandler_);
+  goog.debug.LogManager.getRoot().removeHandler(this.publishHandler_);
   delete this.channel_;
   goog.messaging.LoggerClient.instance_ = null;
 };
