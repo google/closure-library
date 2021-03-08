@@ -18,7 +18,7 @@ let clock;
 testSuite({
   setUp() {
     clock = new MockClock(true);
-    goog.now = goog.bind(clock.getCurrentTime, clock);
+    Date.now = goog.bind(clock.getCurrentTime, clock);
   },
 
   tearDown() {

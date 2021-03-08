@@ -82,7 +82,7 @@ goog.ui.AttachableMenu.prototype.selectedItemClassName_ = 'menu-item-selected';
  * @type {number}
  * @private
  */
-goog.ui.AttachableMenu.prototype.lastKeyDown_ = goog.now();
+goog.ui.AttachableMenu.prototype.lastKeyDown_ = Date.now();
 
 
 /** @override */
@@ -288,7 +288,7 @@ goog.ui.AttachableMenu.prototype.onMouseOver = function(e) {
   }
 
   // Stop the keydown triggering a mouseover in FF.
-  if (goog.now() - this.lastKeyDown_ > goog.ui.PopupBase.DEBOUNCE_DELAY_MS) {
+  if (Date.now() - this.lastKeyDown_ > goog.ui.PopupBase.DEBOUNCE_DELAY_MS) {
     this.setSelectedItem(eltItem);
   }
 };
@@ -308,7 +308,7 @@ goog.ui.AttachableMenu.prototype.onMouseOut = function(e) {
   }
 
   // Stop the keydown triggering a mouseout in FF.
-  if (goog.now() - this.lastKeyDown_ > goog.ui.PopupBase.DEBOUNCE_DELAY_MS) {
+  if (Date.now() - this.lastKeyDown_ > goog.ui.PopupBase.DEBOUNCE_DELAY_MS) {
     this.setSelectedItem(null);
   }
 };
@@ -351,11 +351,11 @@ goog.ui.AttachableMenu.prototype.onKeyDown = function(e) {
   switch (e.keyCode) {
     case goog.events.KeyCodes.DOWN:
       this.setSelectedItem(this.getNextPrevItem(false));
-      this.lastKeyDown_ = goog.now();
+      this.lastKeyDown_ = Date.now();
       break;
     case goog.events.KeyCodes.UP:
       this.setSelectedItem(this.getNextPrevItem(true));
-      this.lastKeyDown_ = goog.now();
+      this.lastKeyDown_ = Date.now();
       break;
     case goog.events.KeyCodes.ENTER:
       if (this.selectedElement_) {

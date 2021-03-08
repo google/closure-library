@@ -90,7 +90,7 @@ goog.ui.ActivityMonitor = function(opt_domHelper, opt_useBubble) {
    * @type {number}
    * @private
    */
-  this.lastEventTime_ = goog.now();
+  this.lastEventTime_ = Date.now();
 };
 goog.inherits(goog.ui.ActivityMonitor, goog.events.EventTarget);
 
@@ -274,7 +274,7 @@ goog.ui.ActivityMonitor.prototype.handleEvent_ = function(e) {
 
   if (update) {
     var type = goog.asserts.assertString(e.type);
-    this.updateIdleTime(goog.now(), type);
+    this.updateIdleTime(Date.now(), type);
   }
 };
 
@@ -285,7 +285,7 @@ goog.ui.ActivityMonitor.prototype.handleEvent_ = function(e) {
  */
 goog.ui.ActivityMonitor.prototype.resetTimer = function() {
   'use strict';
-  this.updateIdleTime(goog.now(), 'manual');
+  this.updateIdleTime(Date.now(), 'manual');
 };
 
 
@@ -320,7 +320,7 @@ goog.ui.ActivityMonitor.prototype.updateIdleTime = function(
  */
 goog.ui.ActivityMonitor.prototype.getIdleTime = function(opt_now) {
   'use strict';
-  var now = opt_now || goog.now();
+  var now = opt_now || Date.now();
   return now - this.lastEventTime_;
 };
 

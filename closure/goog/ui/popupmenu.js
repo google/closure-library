@@ -561,7 +561,7 @@ goog.ui.PopupMenu.prototype.hide = function() {
   this.setVisible(false);
   if (!this.isVisible()) {
     // HIDE event wasn't canceled; the menu is now hidden.
-    this.lastHide_ = goog.now();
+    this.lastHide_ = Date.now();
     this.currentAnchor_ = null;
   }
 };
@@ -586,7 +586,7 @@ goog.ui.PopupMenu.prototype.isOrWasRecentlyVisible = function() {
  */
 goog.ui.PopupMenu.prototype.wasRecentlyHidden = function() {
   'use strict';
-  return goog.now() - this.lastHide_ < goog.ui.PopupBase.DEBOUNCE_DELAY_MS;
+  return Date.now() - this.lastHide_ < goog.ui.PopupBase.DEBOUNCE_DELAY_MS;
 };
 
 

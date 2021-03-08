@@ -665,7 +665,7 @@ goog.ui.SliderBase.prototype.handleMouseDownAndClick_ = function(e) {
   if (!goog.dom.contains(this.valueThumb, target) &&
       !goog.dom.contains(this.extentThumb, target)) {
     var isClick = e.type == goog.events.EventType.CLICK;
-    if (isClick && goog.now() < this.mouseDownTime_ + this.MOUSE_DOWN_DELAY_) {
+    if (isClick && Date.now() < this.mouseDownTime_ + this.MOUSE_DOWN_DELAY_) {
       // Ignore a click event that comes a short moment after a mousedown
       // event.  This happens for desktop.  For devices with both a touch
       // screen and a mouse pad we do not get a mousedown event from the mouse
@@ -673,7 +673,7 @@ goog.ui.SliderBase.prototype.handleMouseDownAndClick_ = function(e) {
       return;
     }
     if (!isClick) {
-      this.mouseDownTime_ = goog.now();
+      this.mouseDownTime_ = Date.now();
     }
 
     if (this.moveToPointEnabled_) {

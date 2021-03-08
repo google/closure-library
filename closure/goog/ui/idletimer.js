@@ -170,7 +170,7 @@ goog.ui.IdleTimer.prototype.maybeStillActive_ = function() {
   // See how long before the user would go idle. The user is considered idle
   // after the idle time has passed, not exactly when the idle time arrives.
   var remainingIdleThreshold = this.idleThreshold_ + 1 -
-      (goog.now() - this.activityMonitor_.getLastEventTime());
+      (Date.now() - this.activityMonitor_.getLastEventTime());
   if (remainingIdleThreshold > 0) {
     // The user is still active. Check again later.
     this.onActivityTimerId_ =

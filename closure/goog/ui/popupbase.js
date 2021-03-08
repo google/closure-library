@@ -490,7 +490,7 @@ goog.ui.PopupBase.prototype.isVisible = function() {
 goog.ui.PopupBase.prototype.isOrWasRecentlyVisible = function() {
   'use strict';
   return this.isVisible_ ||
-      (goog.now() - this.lastHideTime_ < goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
+      (Date.now() - this.lastHideTime_ < goog.ui.PopupBase.DEBOUNCE_DELAY_MS);
 };
 
 
@@ -622,7 +622,7 @@ goog.ui.PopupBase.prototype.show_ = function() {
   }
   this.isVisible_ = true;
 
-  this.lastShowTime_ = goog.now();
+  this.lastShowTime_ = Date.now();
   this.lastHideTime_ = -1;
 
   // If there is transition to play, we play it and fire SHOW event after
@@ -660,7 +660,7 @@ goog.ui.PopupBase.prototype.hide_ = function(opt_target) {
 
   // Set visibility to hidden even if there is a transition.
   this.isVisible_ = false;
-  this.lastHideTime_ = goog.now();
+  this.lastHideTime_ = Date.now();
 
   // If there is transition to play, we play it and only hide the element
   // (and fire HIDE event) after the transition is over.
@@ -914,7 +914,7 @@ goog.ui.PopupBase.prototype.isWithinAutoHideRegion_ = function(element) {
  */
 goog.ui.PopupBase.prototype.shouldDebounce_ = function() {
   'use strict';
-  return goog.now() - this.lastShowTime_ < goog.ui.PopupBase.DEBOUNCE_DELAY_MS;
+  return Date.now() - this.lastShowTime_ < goog.ui.PopupBase.DEBOUNCE_DELAY_MS;
 };
 
 
