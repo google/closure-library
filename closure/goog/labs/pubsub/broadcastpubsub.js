@@ -81,7 +81,7 @@ goog.labs.pubsub.BroadcastPubSub = function() {
   this.ie8LastEventTimes_ = null;
 
   /** @private {number} */
-  this.ie8StartupTimestamp_ = goog.now() - 1;
+  this.ie8StartupTimestamp_ = Date.now() - 1;
 
   if (this.mechanism_.isAvailable()) {
     this.storage_ = new goog.storage.Storage(this.mechanism_);
@@ -166,7 +166,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.publish = function(topic, var_args) {
   // Dispatch to localStorage.
   if (this.storage_) {
     // Update topics to use the optional prefix.
-    var now = goog.now();
+    var now = Date.now();
     var data = {'args': args, 'timestamp': now};
 
     if (!goog.labs.pubsub.BroadcastPubSub.IS_IE8_) {
