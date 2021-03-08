@@ -206,7 +206,7 @@ goog.net.Jsonp.prototype.send = function(
 
   const id = opt_callbackParamValue ||
       '_' + (goog.net.Jsonp.scriptCounter_++).toString(36) +
-          goog.now().toString(36);
+          Date.now().toString(36);
   const callbackId = goog.net.Jsonp.getCallbackId_(id);
 
   if (opt_replyCallback) {

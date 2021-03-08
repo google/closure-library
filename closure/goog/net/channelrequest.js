@@ -542,7 +542,7 @@ goog.net.ChannelRequest.prototype.xmlHttpGet = function(
  */
 goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
   'use strict';
-  this.requestStartTime_ = goog.now();
+  this.requestStartTime_ = Date.now();
   this.ensureWatchDogTimer_();
 
   // clone the base URI to create the request URI. The request uri has the
@@ -919,7 +919,7 @@ goog.net.ChannelRequest.prototype.tridentGet = function(
  */
 goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
   'use strict';
-  this.requestStartTime_ = goog.now();
+  this.requestStartTime_ = Date.now();
   this.ensureWatchDogTimer_();
 
   const hostname = usingSecondaryDomain ? window.location.hostname : '';
@@ -1108,7 +1108,7 @@ goog.net.ChannelRequest.prototype.sendUsingImgTag = function(uri) {
 goog.net.ChannelRequest.prototype.imgTagGet_ = function() {
   'use strict';
   goog.dom.safe.setImageSrc(new Image(), this.baseUri_.toString());
-  this.requestStartTime_ = goog.now();
+  this.requestStartTime_ = Date.now();
   this.ensureWatchDogTimer_();
 };
 
@@ -1131,7 +1131,7 @@ goog.net.ChannelRequest.prototype.cancel = function() {
  */
 goog.net.ChannelRequest.prototype.ensureWatchDogTimer_ = function() {
   'use strict';
-  this.watchDogTimeoutTime_ = goog.now() + this.timeout_;
+  this.watchDogTimeoutTime_ = Date.now() + this.timeout_;
   this.startWatchDogTimer_(this.timeout_);
 };
 
@@ -1177,7 +1177,7 @@ goog.net.ChannelRequest.prototype.cancelWatchDogTimer_ = function() {
 goog.net.ChannelRequest.prototype.onWatchDogTimeout_ = function() {
   'use strict';
   this.watchDogTimerId_ = null;
-  const now = goog.now();
+  const now = Date.now();
   if (now - this.watchDogTimeoutTime_ >= 0) {
     this.handleTimeout_();
   } else {
@@ -1337,7 +1337,7 @@ goog.net.ChannelRequest.prototype.getPostData = function() {
 /**
  * Returns the time that the request started, if it has started.
  *
- * @return {?number} The time the request started, as returned by goog.now().
+ * @return {?number} The time the request started, as returned by Date.now().
  */
 goog.net.ChannelRequest.prototype.getRequestStartTime = function() {
   'use strict';
