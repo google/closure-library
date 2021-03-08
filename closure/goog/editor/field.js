@@ -1852,7 +1852,7 @@ goog.editor.Field.prototype.startEvent = function(eventType) {
  */
 goog.editor.Field.prototype.debounceEvent = function(eventType) {
   'use strict';
-  this.debouncedEvents_[eventType] = goog.now();
+  this.debouncedEvents_[eventType] = Date.now();
 };
 
 
@@ -1866,7 +1866,7 @@ goog.editor.Field.prototype.isEventStopped = function(eventType) {
   'use strict';
   return !!this.stoppedEvents_[eventType] ||
       (this.debouncedEvents_[eventType] &&
-       (goog.now() - this.debouncedEvents_[eventType] <=
+       (Date.now() - this.debouncedEvents_[eventType] <=
         goog.editor.Field.DEBOUNCE_TIME_MS_));
 };
 
