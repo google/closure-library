@@ -382,7 +382,7 @@ testSuite({
     if (!fsExists) {
       return;
     }
-    const now = goog.now();
+    const now = Date.now();
     return loadFile('test', FsDirectoryEntry.Behavior.CREATE)
         .then((entry) => entry.getLastModified())
         .then((date) => {
