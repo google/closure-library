@@ -209,7 +209,7 @@ xpcdemo.log = function(msgString) {
 xpcdemo.ping = function() {
   'use strict';
   // send current time
-  xpcdemo.channel.send('ping', goog.now() + '');
+  xpcdemo.channel.send('ping', Date.now() + '');
 };
 
 
@@ -224,7 +224,7 @@ xpcdemo.pingHandler_ = function(payload) {
   // is the incoming message a response to a ping we sent?
   if (payload.charAt(0) == '#') {
     // calculate roundtrip time and log
-    var dt = goog.now() - parseInt(payload.substring(1), 10);
+    var dt = Date.now() - parseInt(payload.substring(1), 10);
     xpcdemo.log('roundtrip: ' + dt + 'ms');
   } else {
     // incoming message is a ping initiated from peer
@@ -259,7 +259,7 @@ xpcdemo.startMousemoveForwarding = function() {
   'use strict';
   goog.events.listen(
       document, goog.events.EventType.MOUSEMOVE, xpcdemo.mouseEventHandler_);
-  xpcdemo.mmLastRateOutput_ = goog.now();
+  xpcdemo.mmLastRateOutput_ = Date.now();
 };
 
 
@@ -281,7 +281,7 @@ xpcdemo.stopMousemoveForwarding = function() {
 xpcdemo.mouseEventHandler_ = function(e) {
   'use strict';
   xpcdemo.channel.send(
-      'events', [e.type, e.clientX, e.clientY, goog.now()].join(','));
+      'events', [e.type, e.clientX, e.clientY, Date.now()].join(','));
 };
 
 
@@ -292,7 +292,7 @@ xpcdemo.mouseEventHandler_ = function(e) {
  */
 xpcdemo.eventsMsgHandler_ = function(payload) {
   'use strict';
-  var now = goog.now();
+  var now = Date.now();
   var args = payload.split(',');
   var type = args[0];
   var pageX = args[1];
