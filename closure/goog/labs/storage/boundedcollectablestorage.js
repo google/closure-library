@@ -257,7 +257,7 @@ goog.labs.storage.BoundedCollectableStorage.prototype.collectOversize =
  * @param {string} key The key to set.
  * @param {*} value The value to serialize to a string and save.
  * @param {number=} opt_expiration The number of miliseconds since epoch
- *     (as in goog.now()) when the value is to expire. If the expiration
+ *     (as in Date.now()) when the value is to expire. If the expiration
  *     time is not provided, the value will persist as long as possible.
  * @override
  */
