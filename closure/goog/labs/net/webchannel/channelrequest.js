@@ -503,7 +503,7 @@ ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks, hostPrefix) {
  */
 ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
   'use strict';
-  this.requestStartTime_ = goog.now();
+  this.requestStartTime_ = Date.now();
   this.ensureWatchDogTimer_();
 
   // clone the base URI to create the request URI. The request uri has the
@@ -969,7 +969,7 @@ ChannelRequest.prototype.sendCloseRequest = function(uri) {
     this.xmlHttp_.send(this.baseUri_);
   }
 
-  this.requestStartTime_ = goog.now();
+  this.requestStartTime_ = Date.now();
   this.ensureWatchDogTimer_();
 };
 
@@ -1010,7 +1010,7 @@ ChannelRequest.prototype.resetTimeout = function(opt_timeout) {
  */
 ChannelRequest.prototype.ensureWatchDogTimer_ = function() {
   'use strict';
-  this.watchDogTimeoutTime_ = goog.now() + this.timeout_;
+  this.watchDogTimeoutTime_ = Date.now() + this.timeout_;
   this.startWatchDogTimer_(this.timeout_);
 };
 
@@ -1056,7 +1056,7 @@ ChannelRequest.prototype.cancelWatchDogTimer_ = function() {
 ChannelRequest.prototype.onWatchDogTimeout_ = function() {
   'use strict';
   this.watchDogTimerId_ = null;
-  var now = goog.now();
+  var now = Date.now();
   goog.asserts.assert(
       this.watchDogTimeoutTime_, 'WatchDog timeout time missing?');
   if (now - this.watchDogTimeoutTime_ >= 0) {
@@ -1227,7 +1227,7 @@ ChannelRequest.prototype.getXhr = function() {
 /**
  * Returns the time that the request started, if it has started.
  *
- * @return {?number} The time the request started, as returned by goog.now().
+ * @return {?number} The time the request started, as returned by Date.now().
  */
 ChannelRequest.prototype.getRequestStartTime = function() {
   'use strict';

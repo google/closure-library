@@ -2038,7 +2038,7 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
     if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
       var size = request.getPostData() ? request.getPostData().length : 0;
       requestStats.notifyTimingEvent(
-          size, goog.now() - request.getRequestStartTime(),
+          size, Date.now() - request.getRequestStartTime(),
           this.forwardChannelRetryCount_);
       this.ensureForwardChannel_();
       this.onSuccess_(request);
@@ -2216,7 +2216,7 @@ WebChannelBase.prototype.onInput_ = function(respArray, request) {
         }
 
         if (this.detectBufferingProxy_) {
-          this.handshakeRttMs_ = goog.now() - request.getRequestStartTime();
+          this.handshakeRttMs_ = Date.now() - request.getRequestStartTime();
           this.channelDebug_.info(
               'Handshake RTT: ' + this.handshakeRttMs_ + 'ms');
         }
