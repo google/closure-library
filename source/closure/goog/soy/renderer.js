@@ -8,20 +8,8 @@
  * @fileoverview Provides a soy renderer that allows registration of
  * injected data ("globals") that will be passed into the rendered
  * templates.
- *
- * There is also an interface {@link goog.soy.InjectedDataSupplier} that
- * user should implement to provide the injected data for a specific
- * application. The injected data format is a JavaScript object:
- * <pre>
- * {'dataKey': 'value', 'otherDataKey': 'otherValue'}
- * </pre>
- *
- * The injected data can then be referred to in any soy templates as
- * part of a magic "ij" parameter. For example, `$ij.dataKey`
- * will evaluate to 'value' with the above injected data.
  */
 
-goog.provide('goog.soy.InjectedDataSupplier');
 goog.provide('goog.soy.Renderer');
 
 goog.require('goog.asserts');
@@ -31,10 +19,10 @@ goog.require('goog.soy.data.SanitizedContent');
 goog.require('goog.soy.data.SanitizedContentKind');
 goog.requireType('goog.html.SafeHtml');
 goog.requireType('goog.html.SafeStyleSheet');
+goog.requireType('goog.soy.InjectedDataSupplier');
 goog.requireType('goog.soy.data.SanitizedCss');
 goog.requireType('goog.soy.data.SanitizedHtml');
 goog.requireType('goog.soy.data.SanitizedUri');
-
 
 
 /**
@@ -320,21 +308,3 @@ goog.soy.Renderer.prototype.getInjectedData_ = function() {
   'use strict';
   return this.supplier_ ? this.supplier_.getData() : {};
 };
-
-
-
-/**
- * An interface for a supplier that provides Soy injected data.
- * @interface
- */
-goog.soy.InjectedDataSupplier = function() {};
-
-
-/**
- * Gets the injected data. Implementation may assume that
- * `goog.soy.Renderer` will treat the returned data as
- * immutable.  The renderer will call this every time one of its
- * `render*` methods is called.
- * @return {?} A key-value pair representing the injected data.
- */
-goog.soy.InjectedDataSupplier.prototype.getData = function() {};

@@ -17,7 +17,7 @@ goog.require('goog.ui.ActivityMonitor');
 
 /**
  * A mock implementation of goog.ui.ActivityMonitor for unit testing. Clients
- * of this class should override goog.now to return a synthetic time from
+ * of this class should override Date.now to return a synthetic time from
  * the unit test.
  * @constructor
  * @extends {goog.ui.ActivityMonitor}
@@ -44,7 +44,7 @@ goog.inherits(goog.ui.MockActivityMonitor, goog.ui.ActivityMonitor);
  */
 goog.ui.MockActivityMonitor.prototype.simulateEvent = function(opt_type) {
   'use strict';
-  var eventTime = goog.now();
+  var eventTime = Date.now();
   var eventType = opt_type || goog.events.EventType.MOUSEMOVE;
 
   this.eventFired_ = false;

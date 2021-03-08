@@ -19,7 +19,6 @@ goog.provide('goog.fs');
 goog.require('goog.async.Deferred');
 goog.require('goog.fs.Error');
 goog.require('goog.fs.FileSystemImpl');
-goog.require('goog.fs.url');
 
 
 /**
@@ -99,52 +98,6 @@ goog.fs.getTemporary = function(size) {
 goog.fs.getPersistent = function(size) {
   'use strict';
   return goog.fs.get_(goog.fs.FileSystemType_.PERSISTENT, size);
-};
-
-
-/**
- * Creates a blob URL for a blob object.
- * Throws an error if the browser does not support Object Urls.
- *
- * TODO(user): Update references to this method to use
- * goog.fs.url.createObjectUrl instead.
- *
- * @param {!Blob} blob The object for which to create the URL.
- * @return {string} The URL for the object.
- */
-goog.fs.createObjectUrl = function(blob) {
-  'use strict';
-  return goog.fs.url.createObjectUrl(blob);
-};
-
-
-/**
- * Revokes a URL created by {@link goog.fs.createObjectUrl}.
- * Throws an error if the browser does not support Object Urls.
- *
- * TODO(user): Update references to this method to use
- * goog.fs.url.revokeObjectUrl instead.
- *
- * @param {string} url The URL to revoke.
- */
-goog.fs.revokeObjectUrl = function(url) {
-  'use strict';
-  goog.fs.url.revokeObjectUrl(url);
-};
-
-
-/**
- * Checks whether this browser supports Object Urls. If not, calls to
- * createObjectUrl and revokeObjectUrl will result in an error.
- *
- * TODO(user): Update references to this method to use
- * goog.fs.url.browserSupportsObjectUrls instead.
- *
- * @return {boolean} True if this browser supports Object Urls.
- */
-goog.fs.browserSupportsObjectUrls = function() {
-  'use strict';
-  return goog.fs.url.browserSupportsObjectUrls();
 };
 
 

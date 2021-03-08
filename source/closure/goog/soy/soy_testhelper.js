@@ -34,7 +34,6 @@ goog.require('goog.userAgent');
  * @param {string} content The text.
  * @param {goog.soy.data.SanitizedContentKind} kind The kind of safe content.
  * @extends {goog.soy.data.SanitizedContent}
- * @suppress {missingProvide}
  */
 function SanitizedContentSubclass(content, kind) {
   // IMPORTANT! No superclass chaining to avoid exception being thrown.
@@ -49,7 +48,6 @@ goog.inherits(SanitizedContentSubclass, goog.soy.data.SanitizedContent);
  * @param {string} content
  * @constructor
  * @extends {goog.soy.data.SanitizedCss}
- * @suppress {missingProvide}
  */
 function SanitizedCssSubclass(content) {
   // IMPORTANT! No superclass chaining to avoid exception being thrown.
@@ -82,7 +80,6 @@ function makeSanitizedContent(content, kind) {
  * @param {string} content The URI.
  * @constructor
  * @extends {goog.soy.data.SanitizedTrustedResourceUri}
- * @suppress {missingProvide}
  * @final
  */
 function SanitizedTrustedResourceUriSubclass(content) {

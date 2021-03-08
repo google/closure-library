@@ -32,12 +32,10 @@ goog.async.Throttle = class {
     this.numFires = 0;
   }
 
-  /** @suppress {missingProvide} */
   fire() {
     this.numFires++;
   }
 
-  /** @suppress {missingProvide} */
   permitOne() {
     if (this.numFires == 0) {
       return;

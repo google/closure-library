@@ -882,9 +882,9 @@ testSuite({
     const offsetXAtZero = offset.x;
 
     // Temporarily control time.
-    let theTime = goog.now();
-    const saveGoogNow = goog.now;
-    goog.now = () => theTime;
+    let theTime = Date.now();
+    const saveGoogNow = Date.now;
+    Date.now = () => theTime;
 
     // set coordinate for a particular value.
     const valueOne = 10;
@@ -907,7 +907,7 @@ testSuite({
     testingEvents.fireClickEvent(sliderElement, null, offset);
     assertEquals(valueTwo, oneThumbSlider.getValue());
 
-    goog.now = saveGoogNow;
+    Date.now = saveGoogNow;
   },
 
   /**

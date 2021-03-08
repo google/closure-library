@@ -1280,7 +1280,7 @@ goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(data) {
  */
 goog.ui.KeyboardShortcutHandler.prototype.hasSequenceTimedOut_ = function() {
   'use strict';
-  return goog.now() - this.lastStrokeTime_ >=
+  return Date.now() - this.lastStrokeTime_ >=
       goog.ui.KeyboardShortcutHandler.MAX_KEY_SEQUENCE_DELAY;
 };
 
@@ -1294,5 +1294,5 @@ goog.ui.KeyboardShortcutHandler.prototype.hasSequenceTimedOut_ = function() {
 goog.ui.KeyboardShortcutHandler.prototype.setCurrentTree_ = function(tree) {
   'use strict';
   this.currentTree_ = tree;
-  this.lastStrokeTime_ = goog.now();
+  this.lastStrokeTime_ = Date.now();
 };

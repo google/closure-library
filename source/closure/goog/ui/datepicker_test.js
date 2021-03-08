@@ -40,7 +40,7 @@ testSuite({
     sandbox = dom.getElement('sandbox');
 
     // Set the current date to a constant.
-    goog.now = () => +new Date(2017, 9, 17);
+    Date.now = () => +new Date(2017, 9, 17);
   },
 
   tearDown() {
