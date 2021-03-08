@@ -187,7 +187,7 @@ testSuite({
     /**
      * @suppress {checkTypes,const} suppression added to enable type checking
      */
-    location = '#' + goog.now();
+    location = '#' + Date.now();
 
     return Timer.promise(0)
         .then(/**
@@ -224,7 +224,7 @@ testSuite({
     /**
      * @suppress {checkTypes,const} suppression added to enable type checking
      */
-    location = '#' + goog.now();
+    location = '#' + Date.now();
 
     return Timer.promise(0)
         .then(/**
