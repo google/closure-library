@@ -269,9 +269,9 @@ testSuite({
     }
     for (let i = 0; i < 50000; i += 10000) {
       const str = makeString(i);
-      const start = goog.now();
+      const start = Date.now();
       const hash = hash32.encodeString(str);
-      const diff = goog.now() - start;
+      const diff = Date.now() - start;
       testCase.saveMessage(
           `testBenchmarking : hashing ${i} chars in ${diff}ms`);
     }
