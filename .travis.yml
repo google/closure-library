@@ -24,20 +24,8 @@ before_script:
   - ./scripts/http/simple_http_server.py 2> /dev/null & sleep 5
   # Unit tests are disabled (below)
   #- 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./scripts/ci/sauce_connect.sh; fi'
-  # Ensure we point to the version of clang-format that we installed in
-  # install_closure_deps.sh. Travis has an older version on the $PATH and
-  # clang-format-diff.py invokes "clang-format" with no option of specifying
-  # a binary path.
-  - export PATH=$PWD/../clang/bin/:$PATH
-  # Make a directory for gh-pages; will be used by both generate_latest_docs.sh
-  # and deploy_latest_docs.sh.
-  - export GH_PAGES=$(mktemp -d)
 
 script:
-  - ./scripts/ci/compile_closure.sh
-  - ./scripts/ci/lint_pull_request.sh
-  - ./scripts/ci/check_code_format.sh
-  - ./scripts/ci/test_closuredeps.sh
   # Disable unit tests
   # - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then travis_wait 30 ./scripts/ci/run_all_tests.sh; fi'
 
@@ -46,15 +34,3 @@ env:
     - SAUCE_USERNAME=closure-sauce
     - secure: "LhIlKzzLU9prwCg+p4Ay3bpyeb2drLqrzHHg+xPzNiTA2UUYPW0fYyBtHIjDUgaNRftnlRXhu678iL2U7PEB2ONk4m70TI8Ch0/yBImAklwszxOYgNTljeKV2poYrSBcUandA9kVavzLqdLg8HUlVurURI/dQy4WwwrKUftHudc="
     - secure: "aEv7CF6ZvD2Fa67yv6yYtgFGjafCkpSP2Y+Dk2AyJCFLF3+L5ZFXpFoCtgYgCWezVDbeGpoojFeCzLu0ycWwnIwJpUQ/C8NBDR/x2Lqz2I6M2PfkEy91UhSE5nXe1RJMnna1715zeBmustiFKjdETWFZrpvxkHixBHbLfY3cJZw="
-
-addons:
-  apt:
-    packages:
-      # Required for jdk_switcher use oraclejdk8
-      - oracle-java8-installer
-
-# Don't build the pending branch (it generates a ton of noise due to how our
-# tools push our changes, and we don't check the results anyway).
-branches:
-  except:
-    - pending
