@@ -101,7 +101,8 @@ goog.events.ActionEventWrapper_.prototype.listen = function(
         e.keyCode == goog.events.KeyCodes.SPACE &&
         e.type == goog.events.EventType.KEYUP &&
         (role == goog.a11y.aria.Role.BUTTON ||
-         role == goog.a11y.aria.Role.TAB)) {
+         role == goog.a11y.aria.Role.TAB ||
+         role == goog.a11y.aria.Role.RADIO)) {
       listenerFn.call(opt_scope, e);
       e.preventDefault();
     }
