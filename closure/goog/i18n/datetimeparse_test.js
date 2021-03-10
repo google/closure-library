@@ -70,12 +70,13 @@ function assertTimeEquals(expectHour, expectMin, expectSec, expectMilli, date) {
  * @param {number|undefined} expectDate
  * @param {!DateTimeParse} parser
  * @param {string} text
+ * @param {!DateTimeParse.ParseOptions=} options
  */
 function assertParsedDateEquals(
-    expectYear, expectMonth, expectDate, parser, text) {
+    expectYear, expectMonth, expectDate, parser, text, options) {
   const date = new Date(0);
 
-  assertTrue(parser.parse(text, date) > 0);
+  assertTrue(parser.parse(text, date, options) > 0);
   assertDateEquals(expectYear, expectMonth, expectDate, date);
 }
 
@@ -87,12 +88,13 @@ function assertParsedDateEquals(
  * @param {number|undefined} expectMilli
  * @param {!DateTimeParse} parser
  * @param {string} text
+ * @param {!DateTimeParse.ParseOptions=} options
  */
 function assertParsedTimeEquals(
-    expectHour, expectMin, expectSec, expectMilli, parser, text) {
+    expectHour, expectMin, expectSec, expectMilli, parser, text, options) {
   const date = new Date(0);
 
-  assertTrue(parser.parse(text, date) > 0);
+  assertTrue(parser.parse(text, date, options) > 0);
   assertTimeEquals(expectHour, expectMin, expectSec, expectMilli, date);
 }
 
@@ -100,11 +102,12 @@ function assertParsedTimeEquals(
  * Asserts that parsing of `text` fails.
  * @param {!DateTimeParse} parser
  * @param {string} text
+ * @param {!DateTimeParse.ParseOptions=} options
  */
-function assertParseFails(parser, text) {
+function assertParseFails(parser, text, options) {
   const date = new Date(0);
 
-  assertEquals(0, parser.parse(text, date));
+  assertEquals(0, parser.parse(text, date, options));
 }
 
 testSuite({
@@ -363,7 +366,7 @@ testSuite({
     assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 ym');
   },
 
-  testTimeParsing_clockWrapping() {
+  testTimeParsing_overflow() {
     const parser = new DateTimeParse('H:mm');
 
     assertParsedTimeEquals(0, 0, 0, 0, parser, '24:00');
@@ -464,7 +467,7 @@ testSuite({
     assertEquals(hourGmt08, date.getHours());
 
     // 'foo' is not a timezone
-    assertFalse(parser.parse('07/21/2003, 11:22:33 foo', date) > 0);
+    assertParseFails(parser, '07/21/2003, 11:22:33 foo');
   },
 
   testWeekDay() {
@@ -489,30 +492,30 @@ testSuite({
     assertParsedDateEquals(2006, 9 - 1, 25, parser, 'Mon, 09/2006');
   },
 
-  testStrictParse() {
-    const date = new Date();
+  testValidateOption() {
+    const opts = /** @type {!DateTimeParse.ParseOptions} */ ({validate: true});
 
     let parser = new DateTimeParse('yyyy/MM/dd');
-    assertTrue(parser.strictParse('2000/13/10', date) == 0);
-    assertTrue(parser.strictParse('2000/13/40', date) == 0);
-    assertParsedDateEquals(2000, 11 - 1, 10, parser, '2000/11/10');
+    assertParseFails(parser, '2000/13/10', opts);
+    assertParseFails(parser, '2000/13/40', opts);
+    assertParsedDateEquals(2000, 11 - 1, 10, parser, '2000/11/10', opts);
 
     parser = new DateTimeParse('yy/MM/dd');
-    assertTrue(parser.strictParse('00/11/10', date) > 0);
-    assertTrue(parser.strictParse('99/11/10', date) > 0);
-    assertTrue(parser.strictParse('00/13/10', date) == 0);
-    assertTrue(parser.strictParse('00/11/32', date) == 0);
-    assertTrue(parser.strictParse('1900/11/2', date) > 0);
+    assertParsedDateEquals(2000, 11 - 1, 10, parser, '00/11/10', opts);
+    assertParsedDateEquals(1999, 11 - 1, 10, parser, '99/11/10', opts);
+    assertParseFails(parser, '00/13/10', opts);
+    assertParseFails(parser, '00/11/32', opts);
+    assertParsedDateEquals(1900, 11 - 1, 2, parser, '1900/11/2', opts);
 
     parser = new DateTimeParse('hh:mm');
-    assertTrue(parser.strictParse('15:44', date) > 0);
-    assertTrue(parser.strictParse('25:44', date) == 0);
-    assertTrue(parser.strictParse('15:64', date) == 0);
+    assertParsedTimeEquals(15, 44, 0, 0, parser, '15:44', opts);
+    assertParseFails(parser, '25:44', opts);
+    assertParseFails(parser, '15:64', opts);
 
     // leap year
     parser = new DateTimeParse('yy/MM/dd');
-    assertTrue(parser.strictParse('00/02/29', date) > 0);
-    assertTrue(parser.strictParse('01/02/29', date) == 0);
+    assertParsedDateEquals(2000, 2 - 1, 29, parser, '00/02/29', opts);
+    assertParseFails(parser, '01/02/29', opts);
   },
 
   testEnglishQuarter() {

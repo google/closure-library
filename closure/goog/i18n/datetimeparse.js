@@ -268,39 +268,16 @@ goog.i18n.DateTimeParse.prototype.applyStandardPattern_ = function(formatType) {
  * This version does not validate that the result is a valid date/time.
  * @param {string} text The string being parsed.
  * @param {goog.date.DateLike} date The Date object to hold the parsed date.
+ * @param {!goog.i18n.DateTimeParse.ParseOptions=} options The options object.
  * @return {number} How many characters parser advanced.
  */
-goog.i18n.DateTimeParse.prototype.parse = function(text, date) {
+goog.i18n.DateTimeParse.prototype.parse = function(text, date, options) {
   'use strict';
-  return this.internalParse_(text, date, false /*validation*/);
-};
+  var validate = false;
+  if (options) {
+    validate = options.validate || false;
+  }
 
-
-/**
- * Parse the given string and fill info into date object. This version will
- * validate that the result is a valid date/time.
- * @param {string} text The string being parsed.
- * @param {goog.date.DateLike} date The Date object to hold the parsed date.
- * @return {number} How many characters parser advanced.
- */
-goog.i18n.DateTimeParse.prototype.strictParse = function(text, date) {
-  'use strict';
-  return this.internalParse_(text, date, true /*validation*/);
-};
-
-
-/**
- * Parse the given string and fill info into date object.
- * @param {string} text The string being parsed.
- * @param {goog.date.DateLike} date The Date object to hold the parsed date.
- * @param {boolean} validation If true, input string need to be a valid
- *     date/time string.
- * @return {number} How many characters parser advanced.
- * @private
- */
-goog.i18n.DateTimeParse.prototype.internalParse_ = function(
-    text, date, validation) {
-  'use strict';
   var cal = new goog.i18n.DateTimeParse.MyDate_();
   var start = 0;
   var parsePos = [start];
@@ -389,7 +366,22 @@ goog.i18n.DateTimeParse.prototype.internalParse_ = function(
   }
 
   // return progress
-  return cal.calcDate_(date, validation) ? parsePos[0] - start : 0;
+  return cal.calcDate_(date, validate) ? parsePos[0] - start : 0;
+};
+
+
+/**
+ * Parse the given string and fill info into date object. This version will
+ * validate that the result is a valid date/time.
+ * @param {string} text The string being parsed.
+ * @param {goog.date.DateLike} date The Date object to hold the parsed date.
+ * @return {number} How many characters parser advanced.
+ * @deprecated Use goog.i18n.DateTimeParse.parse with the validate option
+ *     instead.
+ */
+goog.i18n.DateTimeParse.prototype.strictParse = function(text, date) {
+  'use strict';
+  return this.parse(text, date, {validate: true});
 };
 
 
@@ -936,6 +928,21 @@ goog.i18n.DateTimeParse.prototype.matchString_ = function(text, pos, data) {
 };
 
 
+/**
+ * Options object for calls to DateTimeParse.prototype.parse.
+ * @record
+ */
+goog.i18n.DateTimeParse.ParseOptions = function() {
+  'use strict';
+  /**
+   * Whether the parsed date/time value should be validated. Setting this to
+   * true is the equivalent of calling the now-deprecated
+   * DateTimeParse.prototype.strictParse. default == false
+   * @type {boolean}
+   */
+  this.validate;
+};
+
 
 /**
  * This class hold the intermediate parsing result. After all fields are
@@ -1064,7 +1071,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.setTwoDigitYear_ = function(year) {
 goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
     date, validation) {
   'use strict';
-  // Throw exception if date if null.
+  // Throw exception if date is null.
   if (date == null) {
     throw new Error('Parameter \'date\' should not be null.');
   }
