@@ -42,13 +42,13 @@ goog.inherits(
 goog.ui.emoji.ProgressiveEmojiPaletteRenderer.prototype
     .buildElementFromSpriteMetadata = function(dom, spriteInfo, displayUrl) {
   'use strict';
-  var width = spriteInfo.getWidthCssValue();
-  var height = spriteInfo.getHeightCssValue();
-  var x = spriteInfo.getXOffsetCssValue();
-  var y = spriteInfo.getYOffsetCssValue();
+  const width = spriteInfo.getWidthCssValue();
+  const height = spriteInfo.getHeightCssValue();
+  const x = spriteInfo.getXOffsetCssValue();
+  const y = spriteInfo.getYOffsetCssValue();
   // Need this extra div for proper vertical centering.
-  var inner = dom.createDom(goog.dom.TagName.IMG, {'src': displayUrl});
-  var el = dom.createDom(
+  const inner = dom.createDom(goog.dom.TagName.IMG, {'src': displayUrl});
+  const el = dom.createDom(
       goog.dom.TagName.DIV, goog.getCssName('goog-palette-cell-extra'), inner);
   goog.style.setStyle(el, {
     'width': width,
@@ -69,8 +69,8 @@ goog.ui.emoji.ProgressiveEmojiPaletteRenderer.prototype
   // Just to be safe, we check for the existence of the img element within this
   // palette item before attempting to modify it.
   /** @type {!HTMLImageElement|undefined} */
-  var img;
-  var el = item.firstChild;
+  let img;
+  let el = item.firstChild;
   while (el) {
     if ('IMG' == /** @type {!Element} */ (el).tagName) {
       img = /** @type {!HTMLImageElement} */ (el);
