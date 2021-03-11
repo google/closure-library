@@ -257,8 +257,8 @@ goog.ui.editor.Bubble.prototype.hasPanelOfType = function(type) {
 goog.ui.editor.Bubble.prototype.addPanel = function(
     type, title, targetElement, contentFn, opt_preferTopPosition) {
   'use strict';
-  var id = goog.string.createUniqueString();
-  var panel = new goog.ui.editor.Bubble.Panel_(
+  const id = goog.string.createUniqueString();
+  const panel = new goog.ui.editor.Bubble.Panel_(
       this.dom_, id, type, title, targetElement, !opt_preferTopPosition);
   this.panels_[id] = panel;
 
@@ -268,11 +268,11 @@ goog.ui.editor.Bubble.prototype.addPanel = function(
   // to treat it as a panel element, and we also ensure it stays as the last
   // element.  The intention here is not to create any artificial order, but
   // just to ensure that it is always consistent.
-  var nextElement;
-  for (var i = 0, len = this.bubbleContents_.childNodes.length - 1; i < len;
+  let nextElement;
+  for (let i = 0, len = this.bubbleContents_.childNodes.length - 1; i < len;
        i++) {
-    var otherChild = this.bubbleContents_.childNodes[i];
-    var otherPanel = this.panels_[otherChild.id];
+    const otherChild = this.bubbleContents_.childNodes[i];
+    const otherPanel = this.panels_[otherChild.id];
     if (otherPanel.type > type) {
       nextElement = otherChild;
       break;
@@ -284,7 +284,7 @@ goog.ui.editor.Bubble.prototype.addPanel = function(
   contentFn(panel.getContentElement());
   goog.editor.style.makeUnselectable(panel.element, this.eventHandler_);
 
-  var numPanels = goog.object.getCount(this.panels_);
+  const numPanels = goog.object.getCount(this.panels_);
   if (numPanels == 1) {
     this.openBubble_();
   } else if (numPanels == 2) {
@@ -304,11 +304,11 @@ goog.ui.editor.Bubble.prototype.addPanel = function(
  */
 goog.ui.editor.Bubble.prototype.removePanel = function(id) {
   'use strict';
-  var panel = this.panels_[id];
+  const panel = this.panels_[id];
   goog.dom.removeNode(panel.element);
   delete this.panels_[id];
 
-  var numPanels = goog.object.getCount(this.panels_);
+  const numPanels = goog.object.getCount(this.panels_);
   if (numPanels <= 1) {
     goog.dom.classlist.remove(
         goog.asserts.assert(this.bubbleContainer_),
@@ -360,7 +360,7 @@ goog.ui.editor.Bubble.prototype.closeBubble_ = function() {
 goog.ui.editor.Bubble.prototype.handlePopupHide = function() {
   'use strict';
   // Remove the panel elements.
-  for (var panelId in this.panels_) {
+  for (let panelId in this.panels_) {
     goog.dom.removeNode(this.panels_[panelId].element);
   }
 
@@ -422,20 +422,20 @@ goog.ui.editor.Bubble.prototype.getMarginBox = function() {
  */
 goog.ui.editor.Bubble.prototype.reposition = function() {
   'use strict';
-  var targetElement = null;
-  var preferBottomPosition = true;
-  for (var panelId in this.panels_) {
-    var panel = this.panels_[panelId];
+  let targetElement = null;
+  let preferBottomPosition = true;
+  for (let panelId in this.panels_) {
+    const panel = this.panels_[panelId];
     // We don't care which targetElement we get, so we just take the last one.
     targetElement = panel.targetElement;
     preferBottomPosition = preferBottomPosition && panel.preferBottomPosition;
   }
-  var status = goog.positioning.OverflowStatus.FAILED;
+  let status = goog.positioning.OverflowStatus.FAILED;
 
   // Fix for bug when bubbleContainer and targetElement have
   // opposite directionality, the bubble should anchor to the END of
   // the targetElement instead of START.
-  var reverseLayout =
+  const reverseLayout =
       (goog.style.isRightToLeft(this.bubbleContainer_) !=
        goog.style.isRightToLeft(targetElement));
 
@@ -490,13 +490,13 @@ goog.ui.editor.Bubble.prototype.reposition = function() {
 goog.ui.editor.Bubble.prototype.positionAtAnchor_ = function(
     targetCorner, bubbleCorner, overflow) {
   'use strict';
-  var targetElement = null;
-  for (var panelId in this.panels_) {
+  let targetElement = null;
+  for (let panelId in this.panels_) {
     // For now, we use the outermost element.  This assumes the multiple
     // elements this panel is showing for contain each other - in the event
     // that is not generally the case this may need to be updated to pick
     // the lowest or highest element depending on targetCorner.
-    var candidate = this.panels_[panelId].targetElement;
+    const candidate = this.panels_[panelId].targetElement;
     if (!targetElement || goog.dom.contains(candidate, targetElement)) {
       targetElement = this.panels_[panelId].targetElement;
     }

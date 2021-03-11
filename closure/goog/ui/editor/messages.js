@@ -51,12 +51,12 @@ goog.ui.editor.messages.MSG_TEST_THIS_LINK = goog.getMsg('Test this link');
  */
 goog.ui.editor.messages.getTrLinkExplanationSafeHtml = function() {
   'use strict';
-  var formatter = new goog.html.SafeHtmlFormatter();
+  const formatter = new goog.html.SafeHtmlFormatter();
 
   /**
    * @desc Explanation for how to create a link with the link-editing dialog.
    */
-  var MSG_TR_LINK_EXPLANATION = goog.getMsg(
+  const MSG_TR_LINK_EXPLANATION = goog.getMsg(
       '{$startBold}Not sure what to put in the box?{$endBold} ' +
           'First, find the page on the web that you want to ' +
           'link to. (A {$searchEngineLink}search engine{$endLink} ' +
@@ -112,13 +112,13 @@ goog.ui.editor.messages.MSG_WHAT_EMAIL =
  */
 goog.ui.editor.messages.getEmailExplanationSafeHtml = function() {
   'use strict';
-  var formatter = new goog.html.SafeHtmlFormatter();
+  const formatter = new goog.html.SafeHtmlFormatter();
 
   /**
    * @desc Warning about the dangers of creating links with email
    *     addresses in them.
    */
-  var MSG_EMAIL_EXPLANATION = goog.getMsg(
+  const MSG_EMAIL_EXPLANATION = goog.getMsg(
       '{$preb}Be careful.{$postb} ' +
           'Remember that any time you include an email address on a web ' +
           'page, nasty spammers can find it too.',

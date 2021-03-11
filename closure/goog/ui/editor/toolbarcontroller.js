@@ -250,7 +250,7 @@ goog.ui.editor.ToolbarController.prototype.updateToolbar = function(e) {
     return;
   }
 
-  var state;
+  let state;
 
 
   try {
@@ -278,10 +278,10 @@ goog.ui.editor.ToolbarController.prototype.updateToolbar = function(e) {
 goog.ui.editor.ToolbarController.prototype.updateToolbarFromState = function(
     state) {
   'use strict';
-  for (var command in state) {
-    var button = this.toolbar_.getChild(this.getComponentId(command));
+  for (let command in state) {
+    const button = this.toolbar_.getChild(this.getComponentId(command));
     if (button) {
-      var value = state[command];
+      const value = state[command];
       if (button.updateFromValue) {
         button.updateFromValue(value);
       } else {
@@ -300,6 +300,6 @@ goog.ui.editor.ToolbarController.prototype.updateToolbarFromState = function(
  */
 goog.ui.editor.ToolbarController.prototype.handleAction = function(e) {
   'use strict';
-  var command = this.getCommand(e.target.getId());
+  const command = this.getCommand(e.target.getId());
   this.field_.execCommand(command, e.target.getValue());
 };
