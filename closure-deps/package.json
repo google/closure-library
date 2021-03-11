@@ -1,6 +1,6 @@
 {
   "name": "google-closure-deps",
-  "version": "20210202.0.0",
+  "version": "20210302.0.0",
   "description": "Library to parse dependencies for Closure Library. Also includes a CLI to generate deps.js files for Closure Library's debug loader.",
   "repository": {
     "type": "git",
@@ -33,7 +33,8 @@
   "homepage": "https://developers.google.com/closure/library/",
   "devDependencies": {
     "jasmine": "^3.6.4",
-    "jasmine-diff": "^0.1.3"
+    "jasmine-diff": "^0.1.3",
+    "google-closure-library": "^20210302.0.0"
   },
   "dependencies": {
     "minimatch": "^3.0.4",
