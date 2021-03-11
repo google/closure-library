@@ -49,7 +49,7 @@ goog.i18n.uChar.LocalNameFetcher.prototype.prefetch = function(character) {};
 goog.i18n.uChar.LocalNameFetcher.prototype.getName = function(
     character, callback) {
   'use strict';
-  var localName = goog.i18n.uCharNames.toName(character);
+  const localName = goog.i18n.uCharNames.toName(character);
   if (!localName) {
     goog.log.warning(
         goog.i18n.uChar.LocalNameFetcher.logger_,
