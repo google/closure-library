@@ -132,7 +132,7 @@ goog.ui.media.FlickrSet.flashUrl_ = goog.html.TrustedResourceUrl.fromConstant(
  */
 goog.ui.media.FlickrSet.newControl = function(dataModel, opt_domHelper) {
   'use strict';
-  var control = new goog.ui.media.Media(
+  const control = new goog.ui.media.Media(
       dataModel, goog.ui.media.FlickrSet.getInstance(), opt_domHelper);
   control.setSelected(true);
   return control;
@@ -162,15 +162,15 @@ goog.ui.media.FlickrSet.setFlashUrl = function(flashUrl) {
  */
 goog.ui.media.FlickrSet.prototype.createDom = function(c) {
   'use strict';
-  var control = /** @type {goog.ui.media.Media} */ (c);
-  var div = goog.ui.media.FlickrSet.superClass_.createDom.call(this, control);
+  const control = /** @type {goog.ui.media.Media} */ (c);
+  const div = goog.ui.media.FlickrSet.superClass_.createDom.call(this, control);
 
-  var model =
+  const model =
       /** @type {goog.ui.media.FlickrSetModel} */ (control.getDataModel());
 
   // TODO(goto): find out what is the policy about hosting this SWF. figure out
   // if it works over https.
-  var flash = new goog.ui.media.FlashObject(
+  const flash = new goog.ui.media.FlashObject(
       model.getPlayer().getTrustedResourceUrl(), control.getDomHelper());
   flash.addFlashVars(model.getPlayer().getVars());
   flash.render(div);
@@ -226,7 +226,7 @@ goog.ui.media.FlickrSetModel = function(
    */
   this.setId_ = setId;
 
-  var flashVars = {
+  const flashVars = {
     'offsite': 'true',
     'lang': 'en',
     'page_show_url': '/photos/' + userId + '/sets/' + setId + '/show/',
@@ -234,7 +234,7 @@ goog.ui.media.FlickrSetModel = function(
     'set_id': setId
   };
 
-  var player = new goog.ui.media.MediaModel.Player(
+  const player = new goog.ui.media.MediaModel.Player(
       goog.ui.media.FlickrSet.flashUrl_, flashVars);
 
   this.setPlayer(player);
@@ -270,7 +270,7 @@ goog.ui.media.FlickrSetModel.newInstance = function(
     flickrSetUrl, opt_caption, opt_description) {
   'use strict';
   if (goog.ui.media.FlickrSetModel.MATCHER_.test(flickrSetUrl)) {
-    var data = goog.ui.media.FlickrSetModel.MATCHER_.exec(flickrSetUrl);
+    const data = goog.ui.media.FlickrSetModel.MATCHER_.exec(flickrSetUrl);
     return new goog.ui.media.FlickrSetModel(
         data[1], data[2], opt_caption, opt_description);
   }

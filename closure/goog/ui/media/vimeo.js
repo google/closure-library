@@ -114,7 +114,7 @@ goog.ui.media.Vimeo.CSS_CLASS = goog.getCssName('goog-ui-media-vimeo');
  */
 goog.ui.media.Vimeo.newControl = function(dataModel, opt_domHelper) {
   'use strict';
-  var control = new goog.ui.media.Media(
+  const control = new goog.ui.media.Media(
       dataModel, goog.ui.media.Vimeo.getInstance(), opt_domHelper);
   // vimeo videos don't have any thumbnail for now, so we show the
   // "selected" version of the UI at the start, which is the
@@ -134,13 +134,13 @@ goog.ui.media.Vimeo.newControl = function(dataModel, opt_domHelper) {
  */
 goog.ui.media.Vimeo.prototype.createDom = function(c) {
   'use strict';
-  var control = /** @type {goog.ui.media.Media} */ (c);
-  var div = goog.ui.media.Vimeo.superClass_.createDom.call(this, control);
+  const control = /** @type {goog.ui.media.Media} */ (c);
+  const div = goog.ui.media.Vimeo.superClass_.createDom.call(this, control);
 
-  var dataModel =
+  const dataModel =
       /** @type {goog.ui.media.VimeoModel} */ (control.getDataModel());
 
-  var flash = new goog.ui.media.FlashObject(
+  const flash = new goog.ui.media.FlashObject(
       dataModel.getPlayer().getTrustedResourceUrl(), control.getDomHelper());
   flash.render(div);
 
@@ -225,7 +225,7 @@ goog.ui.media.VimeoModel.newInstance = function(
     vimeoUrl, opt_caption, opt_description, opt_autoplay) {
   'use strict';
   if (goog.ui.media.VimeoModel.MATCHER_.test(vimeoUrl)) {
-    var data = goog.ui.media.VimeoModel.MATCHER_.exec(vimeoUrl);
+    const data = goog.ui.media.VimeoModel.MATCHER_.exec(vimeoUrl);
     return new goog.ui.media.VimeoModel(
         data[1], opt_caption, opt_description, opt_autoplay);
   }

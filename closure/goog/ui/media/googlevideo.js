@@ -107,7 +107,7 @@ goog.addSingletonGetter(goog.ui.media.GoogleVideo);
  */
 goog.ui.media.GoogleVideo.newControl = function(dataModel, opt_domHelper) {
   'use strict';
-  var control = new goog.ui.media.Media(
+  const control = new goog.ui.media.Media(
       dataModel, goog.ui.media.GoogleVideo.getInstance(), opt_domHelper);
   // GoogleVideo videos don't have any thumbnail for now, so we show the
   // "selected" version of the UI at the start, which is the flash player.
@@ -136,13 +136,13 @@ goog.ui.media.GoogleVideo.CSS_CLASS =
  */
 goog.ui.media.GoogleVideo.prototype.createDom = function(c) {
   'use strict';
-  var control = /** @type {goog.ui.media.Media} */ (c);
-  var div = goog.ui.media.GoogleVideo.base(this, 'createDom', control);
+  const control = /** @type {goog.ui.media.Media} */ (c);
+  const div = goog.ui.media.GoogleVideo.base(this, 'createDom', control);
 
-  var dataModel =
+  const dataModel =
       /** @type {goog.ui.media.GoogleVideoModel} */ (control.getDataModel());
 
-  var flash = new goog.ui.media.FlashObject(
+  const flash = new goog.ui.media.FlashObject(
       dataModel.getPlayer().getTrustedResourceUrl(), control.getDomHelper());
   flash.render(div);
 
@@ -229,7 +229,7 @@ goog.ui.media.GoogleVideoModel.newInstance = function(
     googleVideoUrl, opt_caption, opt_description, opt_autoplay) {
   'use strict';
   if (goog.ui.media.GoogleVideoModel.MATCHER_.test(googleVideoUrl)) {
-    var data = goog.ui.media.GoogleVideoModel.MATCHER_.exec(googleVideoUrl);
+    const data = goog.ui.media.GoogleVideoModel.MATCHER_.exec(googleVideoUrl);
     return new goog.ui.media.GoogleVideoModel(
         data[1], opt_caption, opt_description, opt_autoplay);
   }

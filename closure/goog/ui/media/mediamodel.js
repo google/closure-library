@@ -433,7 +433,7 @@ goog.ui.media.MediaModel.prototype.findCategoryWithScheme = function(scheme) {
   if (!this.categories_) {
     return null;
   }
-  var category = goog.array.find(this.categories_, function(category) {
+  const category = goog.array.find(this.categories_, function(category) {
     'use strict';
     return category ? (scheme == category.getScheme()) : false;
   });
@@ -472,7 +472,7 @@ goog.ui.media.MediaModel.prototype.setCredits = function(credits) {
  */
 goog.ui.media.MediaModel.prototype.findCreditsWithRole = function(role) {
   'use strict';
-  var credits = goog.array.filter(this.credits_, function(credit) {
+  const credits = goog.array.filter(this.credits_, function(credit) {
     'use strict';
     return role == credit.getRole();
   });

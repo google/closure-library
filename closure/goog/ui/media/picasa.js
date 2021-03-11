@@ -124,7 +124,7 @@ goog.ui.media.PicasaAlbum.CSS_CLASS = goog.getCssName('goog-ui-media-picasa');
  */
 goog.ui.media.PicasaAlbum.newControl = function(dataModel, opt_domHelper) {
   'use strict';
-  var control = new goog.ui.media.Media(
+  const control = new goog.ui.media.Media(
       dataModel, goog.ui.media.PicasaAlbum.getInstance(), opt_domHelper);
   control.setSelected(true);
   return control;
@@ -141,12 +141,13 @@ goog.ui.media.PicasaAlbum.newControl = function(dataModel, opt_domHelper) {
  */
 goog.ui.media.PicasaAlbum.prototype.createDom = function(c) {
   'use strict';
-  var control = /** @type {goog.ui.media.Media} */ (c);
-  var div = goog.ui.media.PicasaAlbum.superClass_.createDom.call(this, control);
+  const control = /** @type {goog.ui.media.Media} */ (c);
+  const div =
+      goog.ui.media.PicasaAlbum.superClass_.createDom.call(this, control);
 
-  var picasaAlbum =
+  const picasaAlbum =
       /** @type {goog.ui.media.PicasaAlbumModel} */ (control.getDataModel());
-  var flash = new goog.ui.media.FlashObject(
+  const flash = new goog.ui.media.FlashObject(
       picasaAlbum.getPlayer().getTrustedResourceUrl(), control.getDomHelper());
   flash.addFlashVars(picasaAlbum.getPlayer().getVars());
   flash.render(div);
@@ -212,9 +213,9 @@ goog.ui.media.PicasaAlbumModel = function(
    */
   this.authKey_ = opt_authKey || null;
 
-  var authParam = opt_authKey ? ('&authkey=' + opt_authKey) : '';
+  const authParam = opt_authKey ? ('&authkey=' + opt_authKey) : '';
 
-  var flashVars = {
+  const flashVars = {
     'host': 'picasaweb.google.com',
     'RGB': '0x000000',
     'feed': 'http://picasaweb.google.com/data/feed/api/user/' + userId +
@@ -222,10 +223,10 @@ goog.ui.media.PicasaAlbumModel = function(
   };
   flashVars[opt_autoplay ? 'autoplay' : 'noautoplay'] = '1';
 
-  var flashUrl = goog.html.TrustedResourceUrl.fromConstant(
-      goog.string.Const.from(
+  const flashUrl =
+      goog.html.TrustedResourceUrl.fromConstant(goog.string.Const.from(
           'http://picasaweb.google.com/s/c/bin/slideshow.swf'));
-  var player = new goog.ui.media.MediaModel.Player(flashUrl, flashVars);
+  const player = new goog.ui.media.MediaModel.Player(flashUrl, flashVars);
 
   this.setPlayer(player);
 };
@@ -262,7 +263,7 @@ goog.ui.media.PicasaAlbumModel.newInstance = function(
     picasaUrl, opt_caption, opt_description, opt_autoplay) {
   'use strict';
   if (goog.ui.media.PicasaAlbumModel.MATCHER_.test(picasaUrl)) {
-    var data = goog.ui.media.PicasaAlbumModel.MATCHER_.exec(picasaUrl);
+    const data = goog.ui.media.PicasaAlbumModel.MATCHER_.exec(picasaUrl);
     return new goog.ui.media.PicasaAlbumModel(
         data[1], data[2], data[3], opt_caption, opt_description, opt_autoplay);
   }

@@ -515,7 +515,7 @@ goog.ui.media.FlashObject.prototype.createDom = function() {
     throw new Error(goog.ui.Component.Error.NOT_SUPPORTED);
   }
 
-  var element = this.getDomHelper().createElement(goog.dom.TagName.DIV);
+  const element = this.getDomHelper().createElement(goog.dom.TagName.DIV);
   element.className = goog.ui.media.FlashObject.CSS_CLASS;
   this.setElementInternal(element);
 };
@@ -530,15 +530,15 @@ goog.ui.media.FlashObject.prototype.createDom = function() {
  */
 goog.ui.media.FlashObject.prototype.createSwfTag_ = function() {
   'use strict';
-  var keys = this.flashVars_.getKeys();
-  var values = this.flashVars_.getValues();
-  var flashVars = [];
-  for (var i = 0; i < keys.length; i++) {
-    var key = goog.string.urlEncode(keys[i]);
-    var value = goog.string.urlEncode(values[i]);
+  const keys = this.flashVars_.getKeys();
+  const values = this.flashVars_.getValues();
+  const flashVars = [];
+  for (let i = 0; i < keys.length; i++) {
+    const key = goog.string.urlEncode(keys[i]);
+    const value = goog.string.urlEncode(values[i]);
     flashVars.push(key + '=' + value);
   }
-  var flashVarsString = flashVars.join('&');
+  const flashVarsString = flashVars.join('&');
   if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(11)) {
     return this.createSwfTagOldIe_(flashVarsString);
   } else {

@@ -148,7 +148,7 @@ goog.ui.media.Mp3.MATCHER =
  */
 goog.ui.media.Mp3.newControl = function(dataModel, opt_domHelper) {
   'use strict';
-  var control = new goog.ui.media.Media(
+  const control = new goog.ui.media.Media(
       dataModel, goog.ui.media.Mp3.getInstance(), opt_domHelper);
   // mp3 ui doesn't have a non selected view: it shows the mp3 player by
   // default.
@@ -179,7 +179,7 @@ goog.ui.media.Mp3.setFlashUrl = function(flashUrl) {
  */
 goog.ui.media.Mp3.buildFlashUrl = function(mp3Url) {
   'use strict';
-  var flashUrl = goog.ui.media.Mp3.flashUrl_ + '?' +
+  const flashUrl = goog.ui.media.Mp3.flashUrl_ + '?' +
       goog.string.subs(
           goog.ui.media.Mp3.PLAYER_ARGUMENTS_, goog.string.urlEncode(mp3Url));
   return flashUrl;
@@ -196,12 +196,12 @@ goog.ui.media.Mp3.buildFlashUrl = function(mp3Url) {
  */
 goog.ui.media.Mp3.prototype.createDom = function(c) {
   'use strict';
-  var control = /** @type {goog.ui.media.Media} */ (c);
-  var div = goog.ui.media.Mp3.superClass_.createDom.call(this, control);
+  const control = /** @type {goog.ui.media.Media} */ (c);
+  const div = goog.ui.media.Mp3.superClass_.createDom.call(this, control);
 
-  var dataModel =
+  const dataModel =
       /** @type {goog.ui.media.MediaModel} */ (control.getDataModel());
-  var flash = new goog.ui.media.FlashObject(
+  const flash = new goog.ui.media.FlashObject(
       dataModel.getPlayer().getTrustedResourceUrl(), control.getDomHelper());
   flash.setFlashVar('playerMode', 'embedded');
   flash.render(div);

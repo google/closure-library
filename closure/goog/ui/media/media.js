@@ -200,16 +200,16 @@ goog.inherits(goog.ui.media.MediaRenderer, goog.ui.ControlRenderer);
 goog.ui.media.MediaRenderer.prototype.createDom = function(control) {
   'use strict';
   goog.asserts.assertInstanceof(control, goog.ui.media.Media);
-  var domHelper = control.getDomHelper();
-  var div = domHelper.createElement(goog.dom.TagName.DIV);
+  const domHelper = control.getDomHelper();
+  const div = domHelper.createElement(goog.dom.TagName.DIV);
   div.className = this.getClassNames(control).join(' ');
 
-  var dataModel = control.getDataModel();
+  const dataModel = control.getDataModel();
 
   // Only creates DOMs if the data is available.
-  var dataCaption = dataModel.getCaption();
+  const dataCaption = dataModel.getCaption();
   if (dataCaption) {
-    var caption = domHelper.createElement(goog.dom.TagName.DIV);
+    const caption = domHelper.createElement(goog.dom.TagName.DIV);
     caption.className = goog.getCssName(this.getCssClass(), 'caption');
 
     caption.appendChild(domHelper.createDom(
@@ -218,9 +218,9 @@ goog.ui.media.MediaRenderer.prototype.createDom = function(control) {
     domHelper.appendChild(div, caption);
   }
 
-  var dataDescription = dataModel.getDescription();
+  const dataDescription = dataModel.getDescription();
   if (dataDescription) {
-    var description = domHelper.createElement(goog.dom.TagName.DIV);
+    const description = domHelper.createElement(goog.dom.TagName.DIV);
     description.className = goog.getCssName(this.getCssClass(), 'description');
     description.appendChild(domHelper.createDom(
         goog.dom.TagName.P,
@@ -230,17 +230,17 @@ goog.ui.media.MediaRenderer.prototype.createDom = function(control) {
   }
 
   // Creates thumbnails of the media.
-  var thumbnails = dataModel.getThumbnails() || [];
-  for (var index = 0; index < thumbnails.length; index++) {
-    var thumbnail = thumbnails[index];
-    var thumbnailElement = domHelper.createElement(goog.dom.TagName.IMG);
+  const thumbnails = dataModel.getThumbnails() || [];
+  for (let index = 0; index < thumbnails.length; index++) {
+    const thumbnail = thumbnails[index];
+    const thumbnailElement = domHelper.createElement(goog.dom.TagName.IMG);
     thumbnailElement.src = thumbnail.getUrl();
     thumbnailElement.className = this.getThumbnailCssName(index);
 
     // Check that the size is defined and that the size's height and width
     // are defined. Undefined height and width is deprecated but still
     // seems to exist in some cases.
-    var size = thumbnail.getSize();
+    const size = thumbnail.getSize();
 
     if (size && size.height != null && size.width != null) {
       goog.style.setSize(thumbnailElement, size);
@@ -250,7 +250,7 @@ goog.ui.media.MediaRenderer.prototype.createDom = function(control) {
 
   if (dataModel.getPlayer()) {
     // if medias have players, allow UI for a play button.
-    var playButton = domHelper.createElement(goog.dom.TagName.DIV);
+    const playButton = domHelper.createElement(goog.dom.TagName.DIV);
     playButton.className = goog.getCssName(this.getCssClass(), 'playbutton');
     domHelper.appendChild(div, playButton);
   }

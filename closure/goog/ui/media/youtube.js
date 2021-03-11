@@ -122,7 +122,7 @@ goog.addSingletonGetter(goog.ui.media.Youtube);
  */
 goog.ui.media.Youtube.newControl = function(youtubeModel, opt_domHelper) {
   'use strict';
-  var control = new goog.ui.media.Media(
+  const control = new goog.ui.media.Media(
       youtubeModel, goog.ui.media.Youtube.getInstance(), opt_domHelper);
   control.setStateInternal(goog.ui.Component.State.ACTIVE);
   return control;
@@ -150,7 +150,7 @@ goog.ui.media.Youtube.CSS_CLASS = goog.getCssName('goog-ui-media-youtube');
  */
 goog.ui.media.Youtube.prototype.setState = function(c, state, enable) {
   'use strict';
-  var control = /** @type {goog.ui.media.Media} */ (c);
+  const control = /** @type {goog.ui.media.Media} */ (c);
   goog.ui.media.Youtube.superClass_.setState.call(this, control, state, enable);
 
   // control.createDom has to be called before any state is set.
@@ -159,18 +159,18 @@ goog.ui.media.Youtube.prototype.setState = function(c, state, enable) {
     throw new Error(goog.ui.Component.Error.STATE_INVALID);
   }
 
-  var domHelper = control.getDomHelper();
-  var dataModel =
+  const domHelper = control.getDomHelper();
+  const dataModel =
       /** @type {goog.ui.media.YoutubeModel} */ (control.getDataModel());
 
   if (!!(state & goog.ui.Component.State.SELECTED) && enable) {
-    var flashEls = domHelper.getElementsByTagNameAndClass(
+    const flashEls = domHelper.getElementsByTagNameAndClass(
         goog.dom.TagName.DIV, goog.ui.media.FlashObject.CSS_CLASS,
         control.getElement());
     if (flashEls.length > 0) {
       return;
     }
-    var youtubeFlash = new goog.ui.media.FlashObject(
+    const youtubeFlash = new goog.ui.media.FlashObject(
         dataModel.getPlayer().getTrustedResourceUrl(), domHelper);
     control.addChild(youtubeFlash, true);
   }
@@ -290,9 +290,9 @@ goog.ui.media.YoutubeModel.MATCHER_ = new RegExp(
 goog.ui.media.YoutubeModel.newInstance = function(
     youtubeUrl, opt_caption, opt_description) {
   'use strict';
-  var extract = goog.ui.media.YoutubeModel.MATCHER_.exec(youtubeUrl);
+  const extract = goog.ui.media.YoutubeModel.MATCHER_.exec(youtubeUrl);
   if (extract) {
-    var videoId = extract[1] || extract[2] || extract[3];
+    const videoId = extract[1] || extract[2] || extract[3];
     return new goog.ui.media.YoutubeModel(
         videoId, opt_caption, opt_description);
   }
