@@ -151,11 +151,11 @@ goog.dom.animationFrame.running_ = false;
  */
 goog.dom.animationFrame.createTask = function(spec, opt_context) {
   'use strict';
-  var id = goog.dom.animationFrame.taskId_++;
-  var measureTask = {id: id, fn: spec.measure, context: opt_context};
-  var mutateTask = {id: id, fn: spec.mutate, context: opt_context};
+  const id = goog.dom.animationFrame.taskId_++;
+  const measureTask = {id: id, fn: spec.measure, context: opt_context};
+  const mutateTask = {id: id, fn: spec.mutate, context: opt_context};
 
-  var taskSet = {
+  const taskSet = {
     measureTask: measureTask,
     mutateTask: mutateTask,
     state: {},
@@ -185,8 +185,9 @@ goog.dom.animationFrame.createTask = function(spec, opt_context) {
     }
     if (!taskSet.isScheduled) {
       taskSet.isScheduled = true;
-      var tasksArray = goog.dom.animationFrame
-                           .tasks_[goog.dom.animationFrame.doubleBufferIndex_];
+      const tasksArray =
+          goog.dom.animationFrame
+              .tasks_[goog.dom.animationFrame.doubleBufferIndex_];
       tasksArray.push(
           /** @type {goog.dom.animationFrame.TaskSet_} */ (taskSet));
     }
@@ -203,21 +204,21 @@ goog.dom.animationFrame.runTasks_ = function() {
   'use strict';
   goog.dom.animationFrame.running_ = true;
   goog.dom.animationFrame.requestedFrame_ = false;
-  var tasksArray = goog.dom.animationFrame
-                       .tasks_[goog.dom.animationFrame.doubleBufferIndex_];
-  var taskLength = tasksArray.length;
+  const tasksArray = goog.dom.animationFrame
+                         .tasks_[goog.dom.animationFrame.doubleBufferIndex_];
+  const taskLength = tasksArray.length;
 
   // During the runTasks_, if there is a recursive call to queue up more
   // task(s) for the next frame, we use double-buffering for that.
   goog.dom.animationFrame.doubleBufferIndex_ =
       (goog.dom.animationFrame.doubleBufferIndex_ + 1) % 2;
 
-  var task;
+  let task;
 
   // Run all the measure tasks first.
-  for (var i = 0; i < taskLength; ++i) {
+  for (let i = 0; i < taskLength; ++i) {
     task = tasksArray[i];
-    var measureTask = task.measureTask;
+    const measureTask = task.measureTask;
     task.isScheduled = false;
     if (measureTask.fn) {
       // TODO (perumaal): Handle any exceptions thrown by the lambda.
@@ -226,9 +227,9 @@ goog.dom.animationFrame.runTasks_ = function() {
   }
 
   // Run the mutate tasks next.
-  for (var i = 0; i < taskLength; ++i) {
+  for (let i = 0; i < taskLength; ++i) {
     task = tasksArray[i];
-    var mutateTask = task.mutateTask;
+    const mutateTask = task.mutateTask;
     task.isScheduled = false;
     if (mutateTask.fn) {
       // TODO (perumaal): Handle any exceptions thrown by the lambda.
