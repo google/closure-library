@@ -52,7 +52,7 @@ goog.vec.vec3d.create = function() {
  */
 goog.vec.vec3d.createFromArray = function(vec) {
   'use strict';
-  var newVec = goog.vec.vec3d.create();
+  const newVec = goog.vec.vec3d.create();
   goog.vec.vec3d.setFromArray(newVec, vec);
   return newVec;
 };
@@ -68,7 +68,7 @@ goog.vec.vec3d.createFromArray = function(vec) {
  */
 goog.vec.vec3d.createFromValues = function(v0, v1, v2) {
   'use strict';
-  var vec = goog.vec.vec3d.create();
+  const vec = goog.vec.vec3d.create();
   goog.vec.vec3d.setFromValues(vec, v0, v1, v2);
   return vec;
 };
@@ -82,7 +82,7 @@ goog.vec.vec3d.createFromValues = function(v0, v1, v2) {
  */
 goog.vec.vec3d.clone = function(vec) {
   'use strict';
-  var newVec = goog.vec.vec3d.create();
+  const newVec = goog.vec.vec3d.create();
   goog.vec.vec3d.setFromVec3d(newVec, vec);
   return newVec;
 };
@@ -264,7 +264,10 @@ goog.vec.vec3d.scale = function(vec0, scalar, resultVec) {
  */
 goog.vec.vec3d.magnitudeSquared = function(vec0) {
   'use strict';
-  var x = vec0[0], y = vec0[1], z = vec0[2];
+  const x = vec0[0];
+  const y = vec0[1];
+  const z = vec0[2];
+
   return x * x + y * y + z * z;
 };
 
@@ -277,7 +280,10 @@ goog.vec.vec3d.magnitudeSquared = function(vec0) {
  */
 goog.vec.vec3d.magnitude = function(vec0) {
   'use strict';
-  var x = vec0[0], y = vec0[1], z = vec0[2];
+  const x = vec0[0];
+  const y = vec0[1];
+  const z = vec0[2];
+
   return Math.sqrt(x * x + y * y + z * z);
 };
 
@@ -293,8 +299,11 @@ goog.vec.vec3d.magnitude = function(vec0) {
  */
 goog.vec.vec3d.normalize = function(vec0, resultVec) {
   'use strict';
-  var x = vec0[0], y = vec0[1], z = vec0[2];
-  var ilen = 1 / Math.sqrt(x * x + y * y + z * z);
+  const x = vec0[0];
+  const y = vec0[1];
+  const z = vec0[2];
+
+  const ilen = 1 / Math.sqrt(x * x + y * y + z * z);
   resultVec[0] = x * ilen;
   resultVec[1] = y * ilen;
   resultVec[2] = z * ilen;
@@ -328,8 +337,14 @@ goog.vec.vec3d.dot = function(v0, v1) {
  */
 goog.vec.vec3d.cross = function(v0, v1, resultVec) {
   'use strict';
-  var x0 = v0[0], y0 = v0[1], z0 = v0[2];
-  var x1 = v1[0], y1 = v1[1], z1 = v1[2];
+  const x0 = v0[0];
+  const y0 = v0[1];
+  const z0 = v0[2];
+
+  const x1 = v1[0];
+  const y1 = v1[1];
+  const z1 = v1[2];
+
   resultVec[0] = y0 * z1 - z0 * y1;
   resultVec[1] = z0 * x1 - x0 * z1;
   resultVec[2] = x0 * y1 - y0 * x1;
@@ -346,9 +361,9 @@ goog.vec.vec3d.cross = function(v0, v1, resultVec) {
  */
 goog.vec.vec3d.distanceSquared = function(vec0, vec1) {
   'use strict';
-  var x = vec0[0] - vec1[0];
-  var y = vec0[1] - vec1[1];
-  var z = vec0[2] - vec1[2];
+  const x = vec0[0] - vec1[0];
+  const y = vec0[1] - vec1[1];
+  const z = vec0[2] - vec1[2];
   return x * x + y * y + z * z;
 };
 
@@ -379,10 +394,10 @@ goog.vec.vec3d.distance = function(vec0, vec1) {
  */
 goog.vec.vec3d.direction = function(vec0, vec1, resultVec) {
   'use strict';
-  var x = vec1[0] - vec0[0];
-  var y = vec1[1] - vec0[1];
-  var z = vec1[2] - vec0[2];
-  var d = Math.sqrt(x * x + y * y + z * z);
+  const x = vec1[0] - vec0[0];
+  const y = vec1[1] - vec0[1];
+  const z = vec1[2] - vec0[2];
+  let d = Math.sqrt(x * x + y * y + z * z);
   if (d) {
     d = 1 / d;
     resultVec[0] = x * d;
@@ -409,7 +424,10 @@ goog.vec.vec3d.direction = function(vec0, vec1, resultVec) {
  */
 goog.vec.vec3d.lerp = function(v0, v1, f, resultVec) {
   'use strict';
-  var x = v0[0], y = v0[1], z = v0[2];
+  const x = v0[0];
+  const y = v0[1];
+  const z = v0[2];
+
   resultVec[0] = (v1[0] - x) * f + x;
   resultVec[1] = (v1[1] - y) * f + y;
   resultVec[2] = (v1[2] - z) * f + z;
@@ -440,24 +458,24 @@ goog.vec.vec3d.lerp = function(v0, v1, f, resultVec) {
  */
 goog.vec.vec3d.slerp = function(v0, v1, f, resultVec) {
   'use strict';
-  var v0Magnitude = goog.vec.vec3d.magnitude(v0);
-  var v1Magnitude = goog.vec.vec3d.magnitude(v1);
+  const v0Magnitude = goog.vec.vec3d.magnitude(v0);
+  let v1Magnitude = goog.vec.vec3d.magnitude(v1);
 
-  var cosAngle = goog.vec.vec3d.dot(v0, v1) / (v0Magnitude * v1Magnitude);
+  let cosAngle = goog.vec.vec3d.dot(v0, v1) / (v0Magnitude * v1Magnitude);
 
   // If v0 and v1 are almost the same direction, fall back on a straight lerp.
   if (cosAngle > 1 - goog.vec.EPSILON) {
     return goog.vec.vec3d.lerp(v0, v1, f, resultVec);
   }
 
-  var angle = 0;
-  var sinAngle = 0;
+  let angle = 0;
+  let sinAngle = 0;
 
   // If v0 and v1 are opposite directions, pick an arbitrary 'mid' vector that
   // is perpendicular to both, and slerp from v0 -> mid -> v1.
   if (cosAngle < -1 + goog.vec.EPSILON) {
-    var mid = goog.vec.vec3d.create();
-    var magnitudeFactor = (v0Magnitude + v1Magnitude) / 2;
+    const mid = goog.vec.vec3d.create();
+    let magnitudeFactor = (v0Magnitude + v1Magnitude) / 2;
     if (v0[0]) {  // v0 not parallel to [0,0,1].
       magnitudeFactor /= Math.sqrt(v0[0] * v0[0] + v0[1] + v0[1]);
       mid[0] = -v0[1] * magnitudeFactor;
@@ -488,9 +506,9 @@ goog.vec.vec3d.slerp = function(v0, v1, f, resultVec) {
     sinAngle = Math.sqrt(1 - cosAngle * cosAngle);
   }
 
-  var coeff0 = (Math.sin((1 - f) * angle) / sinAngle) / v0Magnitude;
-  var coeff1 = (Math.sin(f * angle) / sinAngle) / v1Magnitude;
-  var magnitude = (1 - f) * v0Magnitude + f * v1Magnitude;
+  const coeff0 = (Math.sin((1 - f) * angle) / sinAngle) / v0Magnitude;
+  const coeff1 = (Math.sin(f * angle) / sinAngle) / v1Magnitude;
+  const magnitude = (1 - f) * v0Magnitude + f * v1Magnitude;
 
   resultVec[0] = (v0[0] * coeff0 + v1[0] * coeff1) * magnitude;
   resultVec[1] = (v0[1] * coeff0 + v1[1] * coeff1) * magnitude;

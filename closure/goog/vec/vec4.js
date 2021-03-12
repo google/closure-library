@@ -57,7 +57,7 @@ goog.vec.Vec4.createFloat64 = function() {
  */
 goog.vec.Vec4.createNumber = function() {
   'use strict';
-  var v = new Array(4);
+  const v = new Array(4);
   goog.vec.Vec4.setFromValues(v, 0, 0, 0, 0);
   return v;
 };
@@ -85,7 +85,7 @@ goog.vec.Vec4.create = function() {
  */
 goog.vec.Vec4.createFromArray = function(vec) {
   'use strict';
-  var newVec = goog.vec.Vec4.create();
+  const newVec = goog.vec.Vec4.create();
   goog.vec.Vec4.setFromArray(newVec, vec);
   return newVec;
 };
@@ -100,7 +100,7 @@ goog.vec.Vec4.createFromArray = function(vec) {
  */
 goog.vec.Vec4.createFloat32FromArray = function(vec) {
   'use strict';
-  var newVec = goog.vec.Vec4.createFloat32();
+  const newVec = goog.vec.Vec4.createFloat32();
   goog.vec.Vec4.setFromArray(newVec, vec);
   return newVec;
 };
@@ -117,7 +117,7 @@ goog.vec.Vec4.createFloat32FromArray = function(vec) {
  */
 goog.vec.Vec4.createFloat32FromValues = function(v0, v1, v2, v3) {
   'use strict';
-  var vec = goog.vec.Vec4.createFloat32();
+  const vec = goog.vec.Vec4.createFloat32();
   goog.vec.Vec4.setFromValues(vec, v0, v1, v2, v3);
   return vec;
 };
@@ -141,7 +141,7 @@ goog.vec.Vec4.cloneFloat32 = goog.vec.Vec4.createFloat32FromArray;
  */
 goog.vec.Vec4.createFloat64FromArray = function(vec) {
   'use strict';
-  var newVec = goog.vec.Vec4.createFloat64();
+  const newVec = goog.vec.Vec4.createFloat64();
   goog.vec.Vec4.setFromArray(newVec, vec);
   return newVec;
 };
@@ -158,7 +158,7 @@ goog.vec.Vec4.createFloat64FromArray = function(vec) {
 */
 goog.vec.Vec4.createFloat64FromValues = function(v0, v1, v2, v3) {
   'use strict';
-  var vec = goog.vec.Vec4.createFloat64();
+  const vec = goog.vec.Vec4.createFloat64();
   goog.vec.Vec4.setFromValues(vec, v0, v1, v2, v3);
   return vec;
 };
@@ -185,7 +185,7 @@ goog.vec.Vec4.cloneFloat64 = goog.vec.Vec4.createFloat64FromArray;
  */
 goog.vec.Vec4.createFromValues = function(v0, v1, v2, v3) {
   'use strict';
-  var vec = goog.vec.Vec4.create();
+  const vec = goog.vec.Vec4.create();
   goog.vec.Vec4.setFromValues(vec, v0, v1, v2, v3);
   return vec;
 };
@@ -351,7 +351,11 @@ goog.vec.Vec4.scale = function(vec0, scalar, resultVec) {
  */
 goog.vec.Vec4.magnitudeSquared = function(vec0) {
   'use strict';
-  var x = vec0[0], y = vec0[1], z = vec0[2], w = vec0[3];
+  const w = vec0[3];
+  const x = vec0[0];
+  const y = vec0[1];
+  const z = vec0[2];
+
   return x * x + y * y + z * z + w * w;
 };
 
@@ -364,7 +368,11 @@ goog.vec.Vec4.magnitudeSquared = function(vec0) {
  */
 goog.vec.Vec4.magnitude = function(vec0) {
   'use strict';
-  var x = vec0[0], y = vec0[1], z = vec0[2], w = vec0[3];
+  const w = vec0[3];
+  const x = vec0[0];
+  const y = vec0[1];
+  const z = vec0[2];
+
   return Math.sqrt(x * x + y * y + z * z + w * w);
 };
 
@@ -380,7 +388,7 @@ goog.vec.Vec4.magnitude = function(vec0) {
  */
 goog.vec.Vec4.normalize = function(vec0, resultVec) {
   'use strict';
-  var ilen = 1 / goog.vec.Vec4.magnitude(vec0);
+  const ilen = 1 / goog.vec.Vec4.magnitude(vec0);
   resultVec[0] = vec0[0] * ilen;
   resultVec[1] = vec0[1] * ilen;
   resultVec[2] = vec0[2] * ilen;
@@ -416,7 +424,11 @@ goog.vec.Vec4.dot = function(v0, v1) {
  */
 goog.vec.Vec4.lerp = function(v0, v1, f, resultVec) {
   'use strict';
-  var x = v0[0], y = v0[1], z = v0[2], w = v0[3];
+  const w = v0[3];
+  const x = v0[0];
+  const y = v0[1];
+  const z = v0[2];
+
   resultVec[0] = (v1[0] - x) * f + x;
   resultVec[1] = (v1[1] - y) * f + y;
   resultVec[2] = (v1[2] - z) * f + z;

@@ -54,7 +54,7 @@ goog.vec.vec2f.create = function() {
  */
 goog.vec.vec2f.createFromArray = function(vec) {
   'use strict';
-  var newVec = goog.vec.vec2f.create();
+  const newVec = goog.vec.vec2f.create();
   goog.vec.vec2f.setFromArray(newVec, vec);
   return newVec;
 };
@@ -69,7 +69,7 @@ goog.vec.vec2f.createFromArray = function(vec) {
  */
 goog.vec.vec2f.createFromValues = function(v0, v1) {
   'use strict';
-  var vec = goog.vec.vec2f.create();
+  const vec = goog.vec.vec2f.create();
   goog.vec.vec2f.setFromValues(vec, v0, v1);
   return vec;
 };
@@ -83,7 +83,7 @@ goog.vec.vec2f.createFromValues = function(v0, v1) {
  */
 goog.vec.vec2f.clone = function(vec) {
   'use strict';
-  var newVec = goog.vec.vec2f.create();
+  const newVec = goog.vec.vec2f.create();
   goog.vec.vec2f.setFromVec2f(newVec, vec);
   return newVec;
 };
@@ -293,7 +293,9 @@ goog.vec.vec2f.scale = function(vec0, scalar, resultVec) {
  */
 goog.vec.vec2f.magnitudeSquared = function(vec0) {
   'use strict';
-  var x = vec0[0], y = vec0[1];
+  const x = vec0[0];
+  const y = vec0[1];
+
   return x * x + y * y;
 };
 
@@ -306,7 +308,9 @@ goog.vec.vec2f.magnitudeSquared = function(vec0) {
  */
 goog.vec.vec2f.magnitude = function(vec0) {
   'use strict';
-  var x = vec0[0], y = vec0[1];
+  const x = vec0[0];
+  const y = vec0[1];
+
   return Math.sqrt(x * x + y * y);
 };
 
@@ -322,8 +326,10 @@ goog.vec.vec2f.magnitude = function(vec0) {
  */
 goog.vec.vec2f.normalize = function(vec0, resultVec) {
   'use strict';
-  var x = vec0[0], y = vec0[1];
-  var ilen = 1 / Math.sqrt(x * x + y * y);
+  const x = vec0[0];
+  const y = vec0[1];
+
+  const ilen = 1 / Math.sqrt(x * x + y * y);
   resultVec[0] = x * ilen;
   resultVec[1] = y * ilen;
   return resultVec;
@@ -352,8 +358,8 @@ goog.vec.vec2f.dot = function(vec0, vec1) {
  */
 goog.vec.vec2f.distanceSquared = function(vec0, vec1) {
   'use strict';
-  var x = vec0[0] - vec1[0];
-  var y = vec0[1] - vec1[1];
+  const x = vec0[0] - vec1[0];
+  const y = vec0[1] - vec1[1];
   return x * x + y * y;
 };
 
@@ -384,9 +390,9 @@ goog.vec.vec2f.distance = function(vec0, vec1) {
  */
 goog.vec.vec2f.direction = function(vec0, vec1, resultVec) {
   'use strict';
-  var x = vec1[0] - vec0[0];
-  var y = vec1[1] - vec0[1];
-  var d = Math.sqrt(x * x + y * y);
+  const x = vec1[0] - vec0[0];
+  const y = vec1[1] - vec0[1];
+  let d = Math.sqrt(x * x + y * y);
   if (d) {
     d = 1 / d;
     resultVec[0] = x * d;
@@ -412,7 +418,9 @@ goog.vec.vec2f.direction = function(vec0, vec1, resultVec) {
  */
 goog.vec.vec2f.lerp = function(vec0, vec1, f, resultVec) {
   'use strict';
-  var x = vec0[0], y = vec0[1];
+  const x = vec0[0];
+  const y = vec0[1];
+
   resultVec[0] = (vec1[0] - x) * f + x;
   resultVec[1] = (vec1[1] - y) * f + y;
   return resultVec;
