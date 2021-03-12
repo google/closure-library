@@ -80,7 +80,7 @@ goog.dom.pattern.Matcher.prototype.addPattern = function(pattern, callback) {
  */
 goog.dom.pattern.Matcher.prototype.reset_ = function() {
   'use strict';
-  for (var i = 0, len = this.patterns_.length; i < len; i++) {
+  for (let i = 0, len = this.patterns_.length; i < len; i++) {
     this.patterns_[i].reset();
   }
 };
@@ -97,12 +97,12 @@ goog.dom.pattern.Matcher.prototype.reset_ = function() {
  */
 goog.dom.pattern.Matcher.prototype.matchToken_ = function(position) {
   'use strict';
-  for (var i = 0, len = this.patterns_.length; i < len; i++) {
-    var pattern = this.patterns_[i];
+  for (let i = 0, len = this.patterns_.length; i < len; i++) {
+    const pattern = this.patterns_[i];
     switch (pattern.matchToken(position.node, position.tagType)) {
       case goog.dom.pattern.MatchType.MATCH:
       case goog.dom.pattern.MatchType.BACKTRACK_MATCH:
-        var callback = this.callbacks_[i];
+        const callback = this.callbacks_[i];
 
         // Callbacks are allowed to modify the current position, but must
         // return true if the do.
@@ -127,7 +127,7 @@ goog.dom.pattern.Matcher.prototype.matchToken_ = function(position) {
  */
 goog.dom.pattern.Matcher.prototype.match = function(node) {
   'use strict';
-  var position = new goog.dom.TagIterator(node);
+  const position = new goog.dom.TagIterator(node);
 
   this.reset_();
 
