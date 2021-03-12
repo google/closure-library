@@ -335,6 +335,13 @@ goog.labs.net.webChannel.WebChannelBase = function(
       (opt_options && opt_options.xmlHttpFactory) || undefined;
 
   /**
+   * Whether or not this channel uses WHATWG Fetch/streams.
+   * Placeholder for the upcoming implementations.
+   * @private {boolean}
+   */
+  this.usesFetchStreams_ = false;
+
+  /**
    * The timeout in milliseconds for a back channel request. Defaults to using
    * the timeout configured in ChannelRequest (45s). If server-side
    * keepaliveInterval is known to the client, set the backchannel request
@@ -2648,6 +2655,16 @@ WebChannelBase.Handler.prototype.getNetworkTestImageUri = function(channel) {
 WebChannelBase.Handler.prototype.isActive = function(channel) {
   'use strict';
   return true;
+};
+
+/**
+ * Whether or not this channel uses WHATWG Fetch/streams.
+ * @override
+ * @return {boolean}
+ */
+WebChannelBase.prototype.usesFetchStreams = function() {
+  'use strict';
+  return this.usesFetchStreams_;
 };
 
 
