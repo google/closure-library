@@ -94,7 +94,7 @@ const indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
       return Array.prototype.indexOf.call(arr, obj, opt_fromIndex);
     } :
     function(arr, obj, opt_fromIndex) {
-      var fromIndex = opt_fromIndex == null ?
+      const fromIndex = opt_fromIndex == null ?
           0 :
           (opt_fromIndex < 0 ? Math.max(0, arr.length + opt_fromIndex) :
                                opt_fromIndex);
@@ -107,7 +107,7 @@ const indexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
         return arr.indexOf(obj, fromIndex);
       }
 
-      for (var i = fromIndex; i < arr.length; i++) {
+      for (let i = fromIndex; i < arr.length; i++) {
         if (i in arr && arr[i] === obj) return i;
       }
       return -1;
@@ -135,11 +135,11 @@ const lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
 
       // Firefox treats undefined and null as 0 in the fromIndex argument which
       // leads it to always return -1
-      var fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
+      const fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
       return Array.prototype.lastIndexOf.call(arr, obj, fromIndex);
     } :
     function(arr, obj, opt_fromIndex) {
-      var fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
+      let fromIndex = opt_fromIndex == null ? arr.length - 1 : opt_fromIndex;
 
       if (fromIndex < 0) {
         fromIndex = Math.max(0, arr.length + fromIndex);
@@ -153,7 +153,7 @@ const lastIndexOf = goog.NATIVE_ARRAY_PROTOTYPES &&
         return arr.lastIndexOf(obj, fromIndex);
       }
 
-      for (var i = fromIndex; i >= 0; i--) {
+      for (let i = fromIndex; i >= 0; i--) {
         if (i in arr && arr[i] === obj) return i;
       }
       return -1;
@@ -181,9 +181,9 @@ const forEach = goog.NATIVE_ARRAY_PROTOTYPES &&
       Array.prototype.forEach.call(arr, f, opt_obj);
     } :
     function(arr, f, opt_obj) {
-      var l = arr.length;  // must be fixed during loop... see docs
-      var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
-      for (var i = 0; i < l; i++) {
+      const l = arr.length;  // must be fixed during loop... see docs
+      const arr2 = (typeof arr === 'string') ? arr.split('') : arr;
+      for (let i = 0; i < l; i++) {
         if (i in arr2) {
           f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
         }
@@ -207,9 +207,9 @@ exports.forEach = forEach;
  * @template T,S
  */
 function forEachRight(arr, f, opt_obj) {
-  var l = arr.length;  // must be fixed during loop... see docs
-  var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
-  for (var i = l - 1; i >= 0; --i) {
+  const l = arr.length;  // must be fixed during loop... see docs
+  const arr2 = (typeof arr === 'string') ? arr.split('') : arr;
+  for (let i = l - 1; i >= 0; --i) {
     if (i in arr2) {
       f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
     }
@@ -245,13 +245,13 @@ const filter = goog.NATIVE_ARRAY_PROTOTYPES &&
       return Array.prototype.filter.call(arr, f, opt_obj);
     } :
     function(arr, f, opt_obj) {
-      var l = arr.length;  // must be fixed during loop... see docs
-      var res = [];
-      var resLength = 0;
-      var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
-      for (var i = 0; i < l; i++) {
+      const l = arr.length;  // must be fixed during loop... see docs
+      const res = [];
+      let resLength = 0;
+      const arr2 = (typeof arr === 'string') ? arr.split('') : arr;
+      for (let i = 0; i < l; i++) {
         if (i in arr2) {
-          var val = arr2[i];  // in case f mutates arr2
+          const val = arr2[i];  // in case f mutates arr2
           if (f.call(/** @type {?} */ (opt_obj), val, i, arr)) {
             res[resLength++] = val;
           }
@@ -286,10 +286,10 @@ const map = goog.NATIVE_ARRAY_PROTOTYPES &&
       return Array.prototype.map.call(arr, f, opt_obj);
     } :
     function(arr, f, opt_obj) {
-      var l = arr.length;  // must be fixed during loop... see docs
-      var res = new Array(l);
-      var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
-      for (var i = 0; i < l; i++) {
+      const l = arr.length;  // must be fixed during loop... see docs
+      const res = new Array(l);
+      const arr2 = (typeof arr === 'string') ? arr.split('') : arr;
+      for (let i = 0; i < l; i++) {
         if (i in arr2) {
           res[i] = f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr);
         }
@@ -336,7 +336,7 @@ const reduce = goog.NATIVE_ARRAY_PROTOTYPES &&
       return Array.prototype.reduce.call(arr, f, val);
     } :
     function(arr, f, val, opt_obj) {
-      var rval = val;
+      let rval = val;
       forEach(arr, function(val, index) {
         rval = f.call(/** @type {?} */ (opt_obj), rval, val, index, arr);
       });
@@ -382,7 +382,7 @@ const reduceRight = goog.NATIVE_ARRAY_PROTOTYPES &&
       return Array.prototype.reduceRight.call(arr, f, val);
     } :
     function(arr, f, val, opt_obj) {
-      var rval = val;
+      let rval = val;
       forEachRight(arr, function(val, index) {
         rval = f.call(/** @type {?} */ (opt_obj), rval, val, index, arr);
       });
@@ -416,9 +416,9 @@ const some = goog.NATIVE_ARRAY_PROTOTYPES &&
       return Array.prototype.some.call(arr, f, opt_obj);
     } :
     function(arr, f, opt_obj) {
-      var l = arr.length;  // must be fixed during loop... see docs
-      var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
-      for (var i = 0; i < l; i++) {
+      const l = arr.length;  // must be fixed during loop... see docs
+      const arr2 = (typeof arr === 'string') ? arr.split('') : arr;
+      for (let i = 0; i < l; i++) {
         if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
           return true;
         }
@@ -453,9 +453,9 @@ const every = goog.NATIVE_ARRAY_PROTOTYPES &&
       return Array.prototype.every.call(arr, f, opt_obj);
     } :
     function(arr, f, opt_obj) {
-      var l = arr.length;  // must be fixed during loop... see docs
-      var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
-      for (var i = 0; i < l; i++) {
+      const l = arr.length;  // must be fixed during loop... see docs
+      const arr2 = (typeof arr === 'string') ? arr.split('') : arr;
+      for (let i = 0; i < l; i++) {
         if (i in arr2 && !f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
           return false;
         }
@@ -478,7 +478,7 @@ exports.every = every;
  * @template T,S
  */
 function count(arr, f, opt_obj) {
-  var count = 0;
+  let count = 0;
   forEach(arr, function(element, index, arr) {
     if (f.call(/** @type {?} */ (opt_obj), element, index, arr)) {
       ++count;
@@ -503,7 +503,7 @@ exports.count = count;
  * @template T,S
  */
 function find(arr, f, opt_obj) {
-  var i = findIndex(arr, f, opt_obj);
+  const i = findIndex(arr, f, opt_obj);
   return i < 0 ? null : typeof arr === 'string' ? arr.charAt(i) : arr[i];
 }
 exports.find = find;
@@ -524,9 +524,9 @@ exports.find = find;
  * @template T,S
  */
 function findIndex(arr, f, opt_obj) {
-  var l = arr.length;  // must be fixed during loop... see docs
-  var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
-  for (var i = 0; i < l; i++) {
+  const l = arr.length;  // must be fixed during loop... see docs
+  const arr2 = (typeof arr === 'string') ? arr.split('') : arr;
+  for (let i = 0; i < l; i++) {
     if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
       return i;
     }
@@ -551,7 +551,7 @@ exports.findIndex = findIndex;
  * @template T,S
  */
 function findRight(arr, f, opt_obj) {
-  var i = findIndexRight(arr, f, opt_obj);
+  const i = findIndexRight(arr, f, opt_obj);
   return i < 0 ? null : typeof arr === 'string' ? arr.charAt(i) : arr[i];
 }
 exports.findRight = findRight;
@@ -572,9 +572,9 @@ exports.findRight = findRight;
  * @template T,S
  */
 function findIndexRight(arr, f, opt_obj) {
-  var l = arr.length;  // must be fixed during loop... see docs
-  var arr2 = (typeof arr === 'string') ? arr.split('') : arr;
-  for (var i = l - 1; i >= 0; i--) {
+  const l = arr.length;  // must be fixed during loop... see docs
+  const arr2 = (typeof arr === 'string') ? arr.split('') : arr;
+  for (let i = l - 1; i >= 0; i--) {
     if (i in arr2 && f.call(/** @type {?} */ (opt_obj), arr2[i], i, arr)) {
       return i;
     }
@@ -616,7 +616,7 @@ function clear(arr) {
   // For non real arrays we don't have the magic length so we delete the
   // indices.
   if (!Array.isArray(arr)) {
-    for (var i = arr.length - 1; i >= 0; i--) {
+    for (let i = arr.length - 1; i >= 0; i--) {
       delete arr[i];
     }
   }
@@ -674,7 +674,7 @@ exports.insertArrayAt = insertArrayAt;
  * @template T
  */
 function insertBefore(arr, obj, opt_obj2) {
-  var i;
+  let i;
   if (arguments.length == 2 || (i = indexOf(arr, opt_obj2)) < 0) {
     arr.push(obj);
   } else {
@@ -693,8 +693,8 @@ exports.insertBefore = insertBefore;
  * @template T
  */
 function remove(arr, obj) {
-  var i = indexOf(arr, obj);
-  var rv;
+  const i = indexOf(arr, obj);
+  let rv;
   if ((rv = i >= 0)) {
     removeAt(arr, i);
   }
@@ -711,7 +711,7 @@ exports.remove = remove;
  * @template T
  */
 function removeLast(arr, obj) {
-  var i = lastIndexOf(arr, obj);
+  const i = lastIndexOf(arr, obj);
   if (i >= 0) {
     removeAt(arr, i);
     return true;
@@ -752,7 +752,7 @@ exports.removeAt = removeAt;
  * @template T,S
  */
 function removeIf(arr, f, opt_obj) {
-  var i = findIndex(arr, f, opt_obj);
+  const i = findIndex(arr, f, opt_obj);
   if (i >= 0) {
     removeAt(arr, i);
     return true;
@@ -775,7 +775,7 @@ exports.removeIf = removeIf;
  * @template T,S
  */
 function removeAllIf(arr, f, opt_obj) {
-  var removedCount = 0;
+  let removedCount = 0;
   forEachRight(arr, function(val, index) {
     if (f.call(/** @type {?} */ (opt_obj), val, index, arr)) {
       if (removeAt(arr, index)) {
@@ -844,14 +844,14 @@ exports.join = join;
  * @template T
  */
 function toArray(object) {
-  var length = object.length;
+  const length = object.length;
 
   // If length is not a number the following is false. This case is kept for
   // backwards compatibility since there are callers that pass objects that are
   // not array like.
   if (length > 0) {
-    var rv = new Array(length);
-    for (var i = 0; i < length; i++) {
+    const rv = new Array(length);
+    for (let i = 0; i < length; i++) {
       rv[i] = object[i];
     }
     return rv;
@@ -889,13 +889,13 @@ exports.clone = clone;
  * @template VALUE
  */
 function extend(arr1, var_args) {
-  for (var i = 1; i < arguments.length; i++) {
-    var arr2 = arguments[i];
+  for (let i = 1; i < arguments.length; i++) {
+    const arr2 = arguments[i];
     if (goog.isArrayLike(arr2)) {
-      var len1 = arr1.length || 0;
-      var len2 = arr2.length || 0;
+      const len1 = arr1.length || 0;
+      const len2 = arr2.length || 0;
       arr1.length = len1 + len2;
-      for (var j = 0; j < len2; j++) {
+      for (let j = 0; j < len2; j++) {
         arr1[len1 + j] = arr2[j];
       }
     } else {
@@ -984,19 +984,22 @@ exports.slice = slice;
  * @template T
  */
 function removeDuplicates(arr, opt_rv, opt_hashFn) {
-  var returnArray = opt_rv || arr;
-  var defaultHashFn = function(item) {
+  const returnArray = opt_rv || arr;
+  const defaultHashFn = function(item) {
     // Prefix each type with a single character representing the type to
     // prevent conflicting keys (e.g. true and 'true').
     return goog.isObject(item) ? 'o' + goog.getUid(item) :
                                  (typeof item).charAt(0) + item;
   };
-  var hashFn = opt_hashFn || defaultHashFn;
+  const hashFn = opt_hashFn || defaultHashFn;
 
-  var seen = {}, cursorInsert = 0, cursorRead = 0;
+  let cursorInsert = 0;
+  let cursorRead = 0;
+  const seen = {};
+
   while (cursorRead < arr.length) {
-    var current = arr[cursorRead++];
-    var key = hashFn(current);
+    const current = arr[cursorRead++];
+    const key = hashFn(current);
     if (!Object.prototype.hasOwnProperty.call(seen, key)) {
       seen[key] = true;
       returnArray[cursorInsert++] = current;
@@ -1101,12 +1104,12 @@ exports.binarySelect = binarySelect;
  * @private
  */
 function binarySearch_(arr, compareFn, isEvaluator, opt_target, opt_selfObj) {
-  var left = 0;            // inclusive
-  var right = arr.length;  // exclusive
-  var found;
+  let left = 0;            // inclusive
+  let right = arr.length;  // exclusive
+  let found;
   while (left < right) {
-    var middle = left + ((right - left) >>> 1);
-    var compareResult;
+    const middle = left + ((right - left) >>> 1);
+    let compareResult;
     if (isEvaluator) {
       compareResult = compareFn.call(opt_selfObj, arr[middle], middle, arr);
     } else {
@@ -1178,16 +1181,16 @@ exports.sort = sort;
  * @template T
  */
 function stableSort(arr, opt_compareFn) {
-  var compArr = new Array(arr.length);
-  for (var i = 0; i < arr.length; i++) {
+  const compArr = new Array(arr.length);
+  for (let i = 0; i < arr.length; i++) {
     compArr[i] = {index: i, value: arr[i]};
   }
-  var valueCompareFn = opt_compareFn || defaultCompare;
+  const valueCompareFn = opt_compareFn || defaultCompare;
   function stableCompareFn(obj1, obj2) {
     return valueCompareFn(obj1.value, obj2.value) || obj1.index - obj2.index;
   }
   sort(compArr, stableCompareFn);
-  for (var i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     arr[i] = compArr[i].value;
   }
 }
@@ -1214,7 +1217,7 @@ exports.stableSort = stableSort;
  * @template T,K
  */
 function sortByKey(arr, keyFn, opt_compareFn) {
-  var keyCompareFn = opt_compareFn || defaultCompare;
+  const keyCompareFn = opt_compareFn || defaultCompare;
   sort(arr, function(a, b) {
     return keyCompareFn(keyFn(a), keyFn(b));
   });
@@ -1254,9 +1257,9 @@ exports.sortObjectsByKey = sortObjectsByKey;
  * @template T
  */
 function isSorted(arr, opt_compareFn, opt_strict) {
-  var compare = opt_compareFn || defaultCompare;
-  for (var i = 1; i < arr.length; i++) {
-    var compareResult = compare(arr[i - 1], arr[i]);
+  const compare = opt_compareFn || defaultCompare;
+  for (let i = 1; i < arr.length; i++) {
+    const compareResult = compare(arr[i - 1], arr[i]);
     if (compareResult > 0 || compareResult == 0 && opt_strict) {
       return false;
     }
@@ -1286,9 +1289,9 @@ function equals(arr1, arr2, opt_equalsFn) {
       arr1.length != arr2.length) {
     return false;
   }
-  var l = arr1.length;
-  var equalsFn = opt_equalsFn || defaultCompareEquality;
-  for (var i = 0; i < l; i++) {
+  const l = arr1.length;
+  const equalsFn = opt_equalsFn || defaultCompareEquality;
+  for (let i = 0; i < l; i++) {
     if (!equalsFn(arr1[i], arr2[i])) {
       return false;
     }
@@ -1315,10 +1318,10 @@ exports.equals = equals;
  * @template VALUE
  */
 function compare3(arr1, arr2, opt_compareFn) {
-  var compare = opt_compareFn || defaultCompare;
-  var l = Math.min(arr1.length, arr2.length);
-  for (var i = 0; i < l; i++) {
-    var result = compare(arr1[i], arr2[i]);
+  const compare = opt_compareFn || defaultCompare;
+  const l = Math.min(arr1.length, arr2.length);
+  for (let i = 0; i < l; i++) {
+    const result = compare(arr1[i], arr2[i]);
     if (result != 0) {
       return result;
     }
@@ -1386,7 +1389,7 @@ exports.defaultCompareEquality = defaultCompareEquality;
  * @template VALUE
  */
 function binaryInsert(array, value, opt_compareFn) {
-  var index = binarySearch(array, value, opt_compareFn);
+  const index = binarySearch(array, value, opt_compareFn);
   if (index < 0) {
     insertAt(array, value, -(index + 1));
     return true;
@@ -1409,7 +1412,7 @@ exports.binaryInsert = binaryInsert;
  * @template VALUE
  */
 function binaryRemove(array, value, opt_compareFn) {
-  var index = binarySearch(array, value, opt_compareFn);
+  const index = binarySearch(array, value, opt_compareFn);
   return (index >= 0) ? removeAt(array, index) : false;
 }
 exports.binaryRemove = binaryRemove;
@@ -1430,14 +1433,14 @@ exports.binaryRemove = binaryRemove;
  * @template T,S
  */
 function bucket(array, sorter, opt_obj) {
-  var buckets = {};
+  const buckets = {};
 
-  for (var i = 0; i < array.length; i++) {
-    var value = array[i];
-    var key = sorter.call(/** @type {?} */ (opt_obj), value, i, array);
+  for (let i = 0; i < array.length; i++) {
+    const value = array[i];
+    const key = sorter.call(/** @type {?} */ (opt_obj), value, i, array);
     if (key !== undefined) {
       // Push the value to the right bucket, creating it if necessary.
-      var bucket = buckets[key] || (buckets[key] = []);
+      const bucket = buckets[key] || (buckets[key] = []);
       bucket.push(value);
     }
   }
@@ -1464,7 +1467,7 @@ exports.bucket = bucket;
  * @template T,S
  */
 function toObject(arr, keyFunc, opt_obj) {
-  var ret = {};
+  const ret = {};
   forEach(arr, function(element, index) {
     ret[keyFunc.call(/** @type {?} */ (opt_obj), element, index, arr)] =
         element;
@@ -1495,10 +1498,10 @@ exports.toObject = toObject;
  *     value.
  */
 function range(startOrEnd, opt_end, opt_step) {
-  var array = [];
-  var start = 0;
-  var end = startOrEnd;
-  var step = opt_step || 1;
+  const array = [];
+  let start = 0;
+  let end = startOrEnd;
+  const step = opt_step || 1;
   if (opt_end !== undefined) {
     start = startOrEnd;
     end = opt_end;
@@ -1510,11 +1513,11 @@ function range(startOrEnd, opt_end, opt_step) {
   }
 
   if (step > 0) {
-    for (var i = start; i < end; i += step) {
+    for (let i = start; i < end; i += step) {
       array.push(i);
     }
   } else {
-    for (var i = start; i > end; i += step) {
+    for (let i = start; i > end; i += step) {
       array.push(i);
     }
   }
@@ -1532,8 +1535,8 @@ exports.range = range;
  * @template VALUE
  */
 function repeat(value, n) {
-  var array = [];
-  for (var i = 0; i < n; i++) {
+  const array = [];
+  for (let i = 0; i < n; i++) {
     array[i] = value;
   }
   return array;
@@ -1549,16 +1552,16 @@ exports.repeat = repeat;
  * @return {!Array<?>} An array containing the flattened values.
  */
 function flatten(var_args) {
-  var CHUNK_SIZE = 8192;
+  const CHUNK_SIZE = 8192;
 
-  var result = [];
-  for (var i = 0; i < arguments.length; i++) {
-    var element = arguments[i];
+  const result = [];
+  for (let i = 0; i < arguments.length; i++) {
+    const element = arguments[i];
     if (Array.isArray(element)) {
-      for (var c = 0; c < element.length; c += CHUNK_SIZE) {
-        var chunk = slice(element, c, c + CHUNK_SIZE);
-        var recurseResult = flatten.apply(null, chunk);
-        for (var r = 0; r < recurseResult.length; r++) {
+      for (let c = 0; c < element.length; c += CHUNK_SIZE) {
+        const chunk = slice(element, c, c + CHUNK_SIZE);
+        const recurseResult = flatten.apply(null, chunk);
+        for (let r = 0; r < recurseResult.length; r++) {
           result.push(recurseResult[r]);
         }
       }
@@ -1615,7 +1618,7 @@ function moveItem(arr, fromIndex, toIndex) {
   asserts.assert(fromIndex >= 0 && fromIndex < arr.length);
   asserts.assert(toIndex >= 0 && toIndex < arr.length);
   // Remove 1 item at fromIndex.
-  var removedItems = Array.prototype.splice.call(arr, fromIndex, 1);
+  const removedItems = Array.prototype.splice.call(arr, fromIndex, 1);
   // Insert the removed item at toIndex.
   Array.prototype.splice.call(arr, toIndex, 0, removedItems[0]);
   // We don't use goog.array.insertAt and goog.array.removeAt, because they're
@@ -1641,16 +1644,16 @@ function zip(var_args) {
   if (!arguments.length) {
     return [];
   }
-  var result = [];
-  var minLen = arguments[0].length;
-  for (var i = 1; i < arguments.length; i++) {
+  const result = [];
+  let minLen = arguments[0].length;
+  for (let i = 1; i < arguments.length; i++) {
     if (arguments[i].length < minLen) {
       minLen = arguments[i].length;
     }
   }
-  for (var i = 0; i < minLen; i++) {
-    var value = [];
-    for (var j = 0; j < arguments.length; j++) {
+  for (let i = 0; i < minLen; i++) {
+    const value = [];
+    for (let j = 0; j < arguments.length; j++) {
       value.push(arguments[j][i]);
     }
     result.push(value);
@@ -1675,13 +1678,13 @@ exports.zip = zip;
  *     Defaults to Math.random() using JavaScript's built-in Math library.
  */
 function shuffle(arr, opt_randFn) {
-  var randFn = opt_randFn || Math.random;
+  const randFn = opt_randFn || Math.random;
 
-  for (var i = arr.length - 1; i > 0; i--) {
+  for (let i = arr.length - 1; i > 0; i--) {
     // Choose a random array index in [0, i] (inclusive with i).
-    var j = Math.floor(randFn() * (i + 1));
+    const j = Math.floor(randFn() * (i + 1));
 
-    var tmp = arr[i];
+    const tmp = arr[i];
     arr[i] = arr[j];
     arr[j] = tmp;
   }
@@ -1700,7 +1703,7 @@ exports.shuffle = shuffle;
  * @template T
  */
 function copyByIndex(arr, index_arr) {
-  var result = [];
+  const result = [];
   forEach(index_arr, function(index) {
     result.push(arr[index]);
   });
