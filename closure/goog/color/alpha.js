@@ -23,22 +23,22 @@ goog.require('goog.color');
  */
 goog.color.alpha.parse = function(str) {
   'use strict';
-  var result = {};
+  const result = {};
   str = String(str);
 
-  var maybeHex = goog.color.prependHashIfNecessaryHelper(str);
+  const maybeHex = goog.color.prependHashIfNecessaryHelper(str);
   if (goog.color.alpha.isValidAlphaHexColor_(maybeHex)) {
     result.hex = goog.color.alpha.normalizeAlphaHex_(maybeHex);
     result.type = 'hex';
     return result;
   } else {
-    var rgba = goog.color.alpha.isValidRgbaColor_(str);
+    const rgba = goog.color.alpha.isValidRgbaColor_(str);
     if (rgba.length) {
       result.hex = goog.color.alpha.rgbaArrayToHex(rgba);
       result.type = 'rgba';
       return result;
     } else {
-      var hsla = goog.color.alpha.isValidHslaColor_(str);
+      const hsla = goog.color.alpha.isValidHslaColor_(str);
       if (hsla.length) {
         result.hex = goog.color.alpha.hslaArrayToHex(hsla);
         result.type = 'hsla';
@@ -75,8 +75,8 @@ goog.color.alpha.hexToRgbaStyle = function(hexColor) {
 goog.color.alpha.extractColor_ = function(colorWithAlpha, startIdx, endIdx) {
   'use strict';
   if (goog.color.alpha.isValidAlphaHexColor_(colorWithAlpha)) {
-    var fullColor = goog.color.prependHashIfNecessaryHelper(colorWithAlpha);
-    var normalizedColor = goog.color.alpha.normalizeAlphaHex_(fullColor);
+    const fullColor = goog.color.prependHashIfNecessaryHelper(colorWithAlpha);
+    const normalizedColor = goog.color.alpha.normalizeAlphaHex_(fullColor);
     return normalizedColor.substring(startIdx, endIdx);
   } else {
     throw new Error(colorWithAlpha + ' is not a valid 8-hex color string');
@@ -148,10 +148,10 @@ goog.color.alpha.hexToRgba = function(hexColor) {
   // TODO(user): Enhance code sharing with goog.color, for example by
   //     adding a goog.color.genericHexToRgb method.
   hexColor = goog.color.alpha.normalizeAlphaHex_(hexColor);
-  var r = parseInt(hexColor.substr(1, 2), 16);
-  var g = parseInt(hexColor.substr(3, 2), 16);
-  var b = parseInt(hexColor.substr(5, 2), 16);
-  var a = parseInt(hexColor.substr(7, 2), 16);
+  const r = parseInt(hexColor.substr(1, 2), 16);
+  const g = parseInt(hexColor.substr(3, 2), 16);
+  const b = parseInt(hexColor.substr(5, 2), 16);
+  const a = parseInt(hexColor.substr(7, 2), 16);
 
   return [r, g, b, a / 255];
 };
@@ -167,14 +167,14 @@ goog.color.alpha.hexToRgba = function(hexColor) {
  */
 goog.color.alpha.rgbaToHex = function(r, g, b, a) {
   'use strict';
-  var intAlpha = Math.floor(a * 255);
+  const intAlpha = Math.floor(a * 255);
   if (isNaN(intAlpha) || intAlpha < 0 || intAlpha > 255) {
     // TODO(user): The CSS spec says the value should be clamped.
     throw new Error(
         '"(' + r + ',' + g + ',' + b + ',' + a +
         '") is not a valid RGBA color');
   }
-  var hexA = goog.color.prependZeroIfNecessaryHelper(intAlpha.toString(16));
+  const hexA = goog.color.prependZeroIfNecessaryHelper(intAlpha.toString(16));
   return goog.color.rgbToHex(r, g, b) + hexA;
 };
 
@@ -189,14 +189,14 @@ goog.color.alpha.rgbaToHex = function(r, g, b, a) {
  */
 goog.color.alpha.hslaToHex = function(h, s, l, a) {
   'use strict';
-  var intAlpha = Math.floor(a * 255);
+  const intAlpha = Math.floor(a * 255);
   if (isNaN(intAlpha) || intAlpha < 0 || intAlpha > 255) {
     // TODO(user): The CSS spec says the value should be clamped.
     throw new Error(
         '"(' + h + ',' + s + ',' + l + ',' + a +
         '") is not a valid HSLA color');
   }
-  var hexA = goog.color.prependZeroIfNecessaryHelper(intAlpha.toString(16));
+  const hexA = goog.color.prependZeroIfNecessaryHelper(intAlpha.toString(16));
   return goog.color.hslToHex(h, s / 100, l / 100) + hexA;
 };
 
@@ -429,12 +429,12 @@ goog.color.alpha.isValidRgbaColor_ = function(str) {
   // Each component is separate (rather than using a repeater) so we can
   // capture the match. Also, we explicitly set each component to be either 0,
   // or start with a non-zero, to prevent octal numbers from slipping through.
-  var regExpResultArray = str.match(goog.color.alpha.rgbaColorRe_);
+  const regExpResultArray = str.match(goog.color.alpha.rgbaColorRe_);
   if (regExpResultArray) {
-    var r = Number(regExpResultArray[1]);
-    var g = Number(regExpResultArray[2]);
-    var b = Number(regExpResultArray[3]);
-    var a = Number(regExpResultArray[4]);
+    const r = Number(regExpResultArray[1]);
+    const g = Number(regExpResultArray[2]);
+    const b = Number(regExpResultArray[3]);
+    const a = Number(regExpResultArray[4]);
     if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255 &&
         a >= 0 && a <= 1) {
       return [r, g, b, a];
@@ -458,12 +458,12 @@ goog.color.alpha.isValidHslaColor_ = function(str) {
   // Each component is separate (rather than using a repeater) so we can
   // capture the match. Also, we explicitly set each component to be either 0,
   // or start with a non-zero, to prevent octal numbers from slipping through.
-  var regExpResultArray = str.match(goog.color.alpha.hslaColorRe_);
+  const regExpResultArray = str.match(goog.color.alpha.hslaColorRe_);
   if (regExpResultArray) {
-    var h = Number(regExpResultArray[1]);
-    var s = Number(regExpResultArray[2]);
-    var l = Number(regExpResultArray[3]);
-    var a = Number(regExpResultArray[4]);
+    const h = Number(regExpResultArray[1]);
+    const s = Number(regExpResultArray[2]);
+    const l = Number(regExpResultArray[3]);
+    const a = Number(regExpResultArray[4]);
     if (h >= 0 && h <= 360 && s >= 0 && s <= 100 && l >= 0 && l <= 100 &&
         a >= 0 && a <= 1) {
       return [h, s, l, a];
@@ -484,7 +484,7 @@ goog.color.alpha.isValidHslaColor_ = function(str) {
  */
 goog.color.alpha.rgbaStyle_ = function(rgba) {
   'use strict';
-  var roundedRgba = rgba.slice(0);
+  const roundedRgba = rgba.slice(0);
   roundedRgba[3] = Math.round(rgba[3] * 1000) / 1000;
   return 'rgba(' + roundedRgba.join(',') + ')';
 };
@@ -500,7 +500,7 @@ goog.color.alpha.rgbaStyle_ = function(rgba) {
  */
 goog.color.alpha.hsvaToHex = function(h, s, v, a) {
   'use strict';
-  var alpha = Math.floor(a * 255);
+  const alpha = Math.floor(a * 255);
   return goog.color.hsvArrayToHex([h, s, v]) +
       goog.color.prependZeroIfNecessaryHelper(alpha.toString(16));
 };

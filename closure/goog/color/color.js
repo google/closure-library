@@ -55,22 +55,22 @@ goog.color.Hsl;
  */
 goog.color.parse = function(str) {
   'use strict';
-  var result = {};
+  const result = {};
   str = String(str);
 
-  var maybeHex = goog.color.prependHashIfNecessaryHelper(str);
+  const maybeHex = goog.color.prependHashIfNecessaryHelper(str);
   if (goog.color.isValidHexColor_(maybeHex)) {
     result.hex = goog.color.normalizeHex(maybeHex);
     result.type = 'hex';
     return result;
   } else {
-    var rgb = goog.color.isValidRgbColor_(str);
+    const rgb = goog.color.isValidRgbColor_(str);
     if (rgb.length) {
       result.hex = goog.color.rgbArrayToHex(rgb);
       result.type = 'rgb';
       return result;
     } else if (goog.color.names) {
-      var hex = goog.color.names[str.toLowerCase()];
+      const hex = goog.color.names[str.toLowerCase()];
       if (hex) {
         result.hex = hex;
         result.type = 'named';
@@ -90,7 +90,7 @@ goog.color.parse = function(str) {
  */
 goog.color.isValidColor = function(str) {
   'use strict';
-  var maybeHex = goog.color.prependHashIfNecessaryHelper(str);
+  const maybeHex = goog.color.prependHashIfNecessaryHelper(str);
   return !!(
       goog.color.isValidHexColor_(maybeHex) ||
       goog.color.isValidRgbColor_(str).length ||
@@ -107,7 +107,7 @@ goog.color.isValidColor = function(str) {
  */
 goog.color.parseRgb = function(str) {
   'use strict';
-  var rgb = goog.color.isValidRgbColor_(str);
+  const rgb = goog.color.isValidRgbColor_(str);
   if (!rgb.length) {
     throw Error(str + ' is not a valid RGB color');
   }
@@ -161,10 +161,10 @@ goog.color.normalizeHex = function(hexColor) {
 goog.color.hexToRgb = function(hexColor) {
   'use strict';
   hexColor = goog.color.normalizeHex(hexColor);
-  var rgb = parseInt(hexColor.substr(1), 16);
-  var r = rgb >> 16;
-  var g = (rgb >> 8) & 255;
-  var b = rgb & 255;
+  const rgb = parseInt(hexColor.substr(1), 16);
+  const r = rgb >> 16;
+  const g = (rgb >> 8) & 255;
+  const b = rgb & 255;
 
   return [r, g, b];
 };
@@ -185,7 +185,7 @@ goog.color.rgbToHex = function(r, g, b) {
   if (r != (r & 255) || g != (g & 255) || b != (b & 255)) {
     throw Error('"(' + r + ',' + g + ',' + b + '") is not a valid RGB color');
   }
-  var rgb = (r << 16) | (g << 8) | b;
+  const rgb = (r << 16) | (g << 8) | b;
   if (r < 0x10) {
     return '#' + (0x1000000 | rgb).toString(16).substr(1);
   }
@@ -215,16 +215,16 @@ goog.color.rgbArrayToHex = function(rgb) {
 goog.color.rgbToHsl = function(r, g, b) {
   'use strict';
   // First must normalize r, g, b to be between 0 and 1.
-  var normR = r / 255;
-  var normG = g / 255;
-  var normB = b / 255;
-  var max = Math.max(normR, normG, normB);
-  var min = Math.min(normR, normG, normB);
-  var h = 0;
-  var s = 0;
+  const normR = r / 255;
+  const normG = g / 255;
+  const normB = b / 255;
+  const max = Math.max(normR, normG, normB);
+  const min = Math.min(normR, normG, normB);
+  let h = 0;
+  let s = 0;
 
   // Luminosity is the average of the max and min rgb color intensities.
-  var l = 0.5 * (max + min);
+  const l = 0.5 * (max + min);
 
   // The hue and saturation are dependent on which color intensity is the max.
   // If max and min are equal, the color is gray and h and s should be 0.
@@ -296,16 +296,16 @@ goog.color.hueToRgb_ = function(v1, v2, vH) {
  */
 goog.color.hslToRgb = function(h, s, l) {
   'use strict';
-  var r = 0;
-  var g = 0;
-  var b = 0;
-  var normH = h / 360;  // normalize h to fall in [0, 1]
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  const normH = h / 360;  // normalize h to fall in [0, 1]
 
   if (s == 0) {
     r = g = b = l * 255;
   } else {
-    var temp1 = 0;
-    var temp2 = 0;
+    let temp1 = 0;
+    let temp2 = 0;
     if (l < 0.5) {
       temp2 = l * (1 + s);
     } else {
@@ -377,11 +377,11 @@ goog.color.isValidRgbColor_ = function(str) {
   // Each component is separate (rather than using a repeater) so we can
   // capture the match. Also, we explicitly set each component to be either 0,
   // or start with a non-zero, to prevent octal numbers from slipping through.
-  var regExpResultArray = str.match(goog.color.rgbColorRe_);
+  const regExpResultArray = str.match(goog.color.rgbColorRe_);
   if (regExpResultArray) {
-    var r = Number(regExpResultArray[1]);
-    var g = Number(regExpResultArray[2]);
-    var b = Number(regExpResultArray[3]);
+    const r = Number(regExpResultArray[1]);
+    const g = Number(regExpResultArray[2]);
+    const b = Number(regExpResultArray[3]);
     if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
       return [r, g, b];
     }
@@ -439,19 +439,19 @@ goog.color.rgbStyle_ = function(rgb) {
  */
 goog.color.hsvToRgb = function(h, s, brightness) {
   'use strict';
-  var red = 0;
-  var green = 0;
-  var blue = 0;
+  let red = 0;
+  let green = 0;
+  let blue = 0;
   if (s == 0) {
     red = brightness;
     green = brightness;
     blue = brightness;
   } else {
-    var sextant = Math.floor(h / 60);
-    var remainder = (h / 60) - sextant;
-    var val1 = brightness * (1 - s);
-    var val2 = brightness * (1 - (s * remainder));
-    var val3 = brightness * (1 - (s * (1 - remainder)));
+    const sextant = Math.floor(h / 60);
+    const remainder = (h / 60) - sextant;
+    const val1 = brightness * (1 - s);
+    const val2 = brightness * (1 - (s * remainder));
+    const val3 = brightness * (1 - (s * (1 - remainder)));
     switch (sextant) {
       case 1:
         red = val2;
@@ -500,16 +500,16 @@ goog.color.hsvToRgb = function(h, s, brightness) {
  */
 goog.color.rgbToHsv = function(red, green, blue) {
   'use strict';
-  var max = Math.max(Math.max(red, green), blue);
-  var min = Math.min(Math.min(red, green), blue);
-  var hue;
-  var saturation;
-  var value = max;
+  const max = Math.max(Math.max(red, green), blue);
+  const min = Math.min(Math.min(red, green), blue);
+  let hue;
+  let saturation;
+  const value = max;
   if (min == max) {
     hue = 0;
     saturation = 0;
   } else {
-    var delta = (max - min);
+    const delta = (max - min);
     saturation = delta / max;
 
     if (red == max) {
@@ -561,7 +561,7 @@ goog.color.hsvArrayToRgb = function(hsv) {
  */
 goog.color.hexToHsl = function(hex) {
   'use strict';
-  var rgb = goog.color.hexToRgb(hex);
+  const rgb = goog.color.hexToRgb(hex);
   return goog.color.rgbToHsl(rgb[0], rgb[1], rgb[2]);
 };
 
@@ -638,7 +638,9 @@ goog.color.hsvArrayToHex = function(hsv) {
  */
 goog.color.hslDistance = function(hsl1, hsl2) {
   'use strict';
-  var sl1, sl2;
+  let sl1;
+  let sl2;
+
   if (hsl1[2] <= 0.5) {
     sl1 = hsl1[1] * hsl1[2];
   } else {
@@ -651,9 +653,9 @@ goog.color.hslDistance = function(hsl1, hsl2) {
     sl2 = hsl2[1] * (1.0 - hsl2[2]);
   }
 
-  var h1 = hsl1[0] / 360.0;
-  var h2 = hsl2[0] / 360.0;
-  var dh = (h1 - h2) * 2.0 * Math.PI;
+  const h1 = hsl1[0] / 360.0;
+  const h2 = hsl2[0] / 360.0;
+  const dh = (h1 - h2) * 2.0 * Math.PI;
   return (hsl1[2] - hsl2[2]) * (hsl1[2] - hsl2[2]) + sl1 * sl1 + sl2 * sl2 -
       2 * sl1 * sl2 * Math.cos(dh);
 };
@@ -691,7 +693,7 @@ goog.color.blend = function(rgb1, rgb2, factor) {
  */
 goog.color.darken = function(rgb, factor) {
   'use strict';
-  var black = [0, 0, 0];
+  const black = [0, 0, 0];
   return goog.color.blend(black, rgb, factor);
 };
 
@@ -706,7 +708,7 @@ goog.color.darken = function(rgb, factor) {
  */
 goog.color.lighten = function(rgb, factor) {
   'use strict';
-  var white = [255, 255, 255];
+  const white = [255, 255, 255];
   return goog.color.blend(white, rgb, factor);
 };
 
@@ -722,8 +724,8 @@ goog.color.lighten = function(rgb, factor) {
  */
 goog.color.highContrast = function(prime, suggestions) {
   'use strict';
-  var suggestionsWithDiff = [];
-  for (var i = 0; i < suggestions.length; i++) {
+  const suggestionsWithDiff = [];
+  for (let i = 0; i < suggestions.length; i++) {
     suggestionsWithDiff.push({
       color: suggestions[i],
       diff: goog.color.yiqBrightnessDiff_(suggestions[i], prime) +
