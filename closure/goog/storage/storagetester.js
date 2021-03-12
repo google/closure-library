@@ -29,7 +29,7 @@ goog.storage.storageTester.runBasicTests = function(storage) {
   assertObjectEquals({'a': 97, 'b': 98}, storage.get('third'));
 
   // Some more complex fun with a Map.
-  var map = new goog.structs.Map();
+  const map = new goog.structs.Map();
   map.set('Alice', 'Hello world!');
   map.set('Bob', ['one', 'two', 'three']);
   map.set('Cecile', {'a': 97, 'b': 98});

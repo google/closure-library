@@ -81,8 +81,8 @@ goog.storage.ExpiringStorage.getExpirationTime = function(wrapper) {
  */
 goog.storage.ExpiringStorage.isExpired = function(wrapper) {
   'use strict';
-  var creation = goog.storage.ExpiringStorage.getCreationTime(wrapper);
-  var expiration = goog.storage.ExpiringStorage.getExpirationTime(wrapper);
+  const creation = goog.storage.ExpiringStorage.getCreationTime(wrapper);
+  const expiration = goog.storage.ExpiringStorage.getExpirationTime(wrapper);
   return !!expiration && expiration < goog.now() ||
       !!creation && creation > goog.now();
 };
@@ -101,7 +101,7 @@ goog.storage.ExpiringStorage.isExpired = function(wrapper) {
 goog.storage.ExpiringStorage.prototype.set = function(
     key, value, opt_expiration) {
   'use strict';
-  var wrapper = goog.storage.RichStorage.Wrapper.wrapIfNecessary(value);
+  const wrapper = goog.storage.RichStorage.Wrapper.wrapIfNecessary(value);
   if (wrapper) {
     if (opt_expiration) {
       if (opt_expiration < goog.now()) {
@@ -127,7 +127,7 @@ goog.storage.ExpiringStorage.prototype.set = function(
  */
 goog.storage.ExpiringStorage.prototype.getWrapper = function(key, opt_expired) {
   'use strict';
-  var wrapper = goog.storage.ExpiringStorage.base(this, 'getWrapper', key);
+  const wrapper = goog.storage.ExpiringStorage.base(this, 'getWrapper', key);
   if (!wrapper) {
     return undefined;
   }

@@ -60,7 +60,7 @@ goog.storage.Storage.prototype.set = function(key, value) {
  */
 goog.storage.Storage.prototype.get = function(key) {
   'use strict';
-  var json;
+  let json;
   try {
     json = this.mechanism.get(key);
   } catch (e) {

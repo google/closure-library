@@ -89,7 +89,7 @@ goog.storage.RichStorage.Wrapper.wrapIfNecessary = function(value) {
  */
 goog.storage.RichStorage.Wrapper.unwrap = function(wrapper) {
   'use strict';
-  var value = wrapper[goog.storage.RichStorage.DATA_KEY];
+  const value = wrapper[goog.storage.RichStorage.DATA_KEY];
   if (value === undefined) {
     throw goog.storage.ErrorCode.INVALID_VALUE;
   }
@@ -136,7 +136,7 @@ goog.storage.RichStorage.prototype.set = function(key, value) {
  */
 goog.storage.RichStorage.prototype.getWrapper = function(key) {
   'use strict';
-  var wrapper = goog.storage.RichStorage.superClass_.get.call(this, key);
+  const wrapper = goog.storage.RichStorage.superClass_.get.call(this, key);
   if (wrapper === undefined || wrapper instanceof Object) {
     return /** @type {(!Object|undefined)} */ (wrapper);
   }
