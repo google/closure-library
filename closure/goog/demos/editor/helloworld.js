@@ -49,10 +49,10 @@ goog.demos.editor.HelloWorld = class extends goog.editor.Plugin {
    * @protected
    */
   execCommandInternal(command) {
-    var domHelper = this.getFieldObject().getEditableDomHelper();
-    var range = this.getFieldObject().getRange();
+    const domHelper = this.getFieldObject().getEditableDomHelper();
+    const range = this.getFieldObject().getRange();
     range.removeContents();
-    var newNode =
+    const newNode =
         domHelper.createDom(goog.dom.TagName.SPAN, null, 'Hello World!');
     range.insertNode(newNode, false);
   }
