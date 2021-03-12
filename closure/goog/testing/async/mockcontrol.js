@@ -84,11 +84,11 @@ goog.testing.async.MockControl.prototype.createCallbackMock = function(
       typeof name === 'string',
       'name parameter ' + goog.debug.deepExpose(name) + ' should be a string');
 
-  var ignored = new goog.testing.mockmatchers.IgnoreArgument();
+  const ignored = new goog.testing.mockmatchers.IgnoreArgument();
 
   // Use everyone's favorite "double-cast" trick to subvert the type system.
-  var mock = this.mockControl_.createFunctionMock(name);
-  var mockAsFn = /** @type {Function} */ (/** @type {*} */ (mock));
+  const mock = this.mockControl_.createFunctionMock(name);
+  const mockAsFn = /** @type {Function} */ (/** @type {*} */ (mock));
 
   mockAsFn(ignored).$does(function(args) {
     'use strict';
@@ -114,7 +114,7 @@ goog.testing.async.MockControl.prototype.createCallbackMock = function(
 goog.testing.async.MockControl.prototype.asyncAssertEquals = function(
     message, var_args) {
   'use strict';
-  var expectedArgs = Array.prototype.slice.call(arguments, 1);
+  const expectedArgs = Array.prototype.slice.call(arguments, 1);
   return this.createCallbackMock('asyncAssertEquals', function() {
     'use strict';
     assertObjectEquals(
