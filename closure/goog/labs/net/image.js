@@ -42,7 +42,7 @@ goog.labs.net.image.load = function(uri, opt_image) {
                 */
                function(resolve, reject) {
                  'use strict';
-                 var image;
+                 let image;
                  if (opt_image === undefined) {
                    image = new Image();
                  } else if (typeof opt_image === 'function') {
@@ -60,12 +60,12 @@ goog.labs.net.image.load = function(uri, opt_image) {
                  // Starting with IE11, start using standard 'load' events.
                  // See:
                  // http://msdn.microsoft.com/en-us/library/ie/dn467845(v=vs.85).aspx
-                 var loadEvent =
+                 const loadEvent =
                      (goog.userAgent.IE && goog.userAgent.VERSION < 11) ?
                      goog.net.EventType.READY_STATE_CHANGE :
                      goog.events.EventType.LOAD;
 
-                 var handler = new goog.events.EventHandler();
+                 const handler = new goog.events.EventHandler();
                  handler.listen(
                      image,
                      [
