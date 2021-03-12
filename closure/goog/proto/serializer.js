@@ -42,11 +42,11 @@ goog.inherits(goog.proto.Serializer, goog.json.Serializer);
  */
 goog.proto.Serializer.prototype.serializeArray = function(arr, sb) {
   'use strict';
-  var l = arr.length;
+  const l = arr.length;
   sb.push('[');
-  var emptySlots = 0;
-  var sep = '';
-  for (var i = 0; i < l; i++) {
+  let emptySlots = 0;
+  let sep = '';
+  for (let i = 0; i < l; i++) {
     if (arr[i] == null) {  // catches undefined as well
       emptySlots++;
     } else {
