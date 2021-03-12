@@ -60,13 +60,13 @@ goog.math.interpolator.Linear1.prototype.setData = function(x, y) {
 /** @override */
 goog.math.interpolator.Linear1.prototype.interpolate = function(x) {
   'use strict';
-  var pos = goog.array.binarySearch(this.x_, x);
+  let pos = goog.array.binarySearch(this.x_, x);
   if (pos < 0) {
     pos = -pos - 2;
   }
   pos = goog.math.clamp(pos, 0, this.x_.length - 2);
 
-  var progress = (x - this.x_[pos]) / (this.x_[pos + 1] - this.x_[pos]);
+  const progress = (x - this.x_[pos]) / (this.x_[pos + 1] - this.x_[pos]);
   return goog.math.lerp(this.y_[pos], this.y_[pos + 1], progress);
 };
 
@@ -74,7 +74,7 @@ goog.math.interpolator.Linear1.prototype.interpolate = function(x) {
 /** @override */
 goog.math.interpolator.Linear1.prototype.getInverse = function() {
   'use strict';
-  var interpolator = new goog.math.interpolator.Linear1();
+  const interpolator = new goog.math.interpolator.Linear1();
   interpolator.setData(this.y_, this.x_);
   return interpolator;
 };
