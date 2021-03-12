@@ -181,7 +181,7 @@ goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
      */
     this.constructorStack_ = null;
     if (Error.captureStackTrace) {
-      var target = { stack: '' };
+      const target = {stack: ''};
       Error.captureStackTrace(target, goog.async.Deferred);
       // Check if Error.captureStackTrace worked. It fails in gjstest.
       if (typeof target.stack == 'string') {
@@ -233,7 +233,7 @@ goog.async.Deferred.prototype.cancel = function(opt_deepCancel) {
       // Get rid of the parent reference before potentially running the parent's
       // canceler function to ensure that this cancellation isn't
       // double-counted.
-      var parent = this.parent_;
+      const parent = this.parent_;
       delete this.parent_;
       if (opt_deepCancel) {
         parent.cancel(opt_deepCancel);
@@ -483,7 +483,7 @@ goog.async.Deferred.prototype.addFinally = function(f, opt_scope) {
   'use strict';
   return this.addCallbacks(f, function(err) {
     'use strict';
-    var result = f.call(/** @type {?} */ (this), err);
+    const result = f.call(/** @type {?} */ (this), err);
     if (result === undefined) {
       throw err;
     }
@@ -533,8 +533,10 @@ goog.async.Deferred.prototype.addCallbacks = function(cb, eb, opt_scope) {
 goog.async.Deferred.prototype.then = function(
     opt_onFulfilled, opt_onRejected, opt_context) {
   'use strict';
-  var resolve, reject;
-  var promise = new goog.Promise(function(res, rej) {
+  let reject;
+  let resolve;
+
+  const promise = new goog.Promise(function(res, rej) {
     'use strict';
     // Copying resolvers to outer scope, so that they are available when the
     // deferred callback fires (which may be synchronous).
@@ -612,7 +614,7 @@ goog.async.Deferred.prototype.awaitDeferred = function(otherDeferred) {
  */
 goog.async.Deferred.prototype.branch = function(opt_propagateCancel) {
   'use strict';
-  var d = new goog.async.Deferred();
+  const d = new goog.async.Deferred();
   this.chainDeferred(d);
   if (opt_propagateCancel) {
     d.parent_ = this;
@@ -694,22 +696,22 @@ goog.async.Deferred.prototype.fire_ = function() {
     delete this.parent_;
   }
 
-  var res = this.result_;
-  var unhandledException = false;
-  var isNewlyBlocked = false;
+  let res = this.result_;
+  let unhandledException = false;
+  let isNewlyBlocked = false;
 
   while (this.sequence_.length && !this.blocked_) {
-    var sequenceEntry = this.sequence_.shift();
+    const sequenceEntry = this.sequence_.shift();
 
-    var callback = sequenceEntry[0];
-    var errback = sequenceEntry[1];
-    var scope = sequenceEntry[2];
+    const callback = sequenceEntry[0];
+    const errback = sequenceEntry[1];
+    const scope = sequenceEntry[2];
 
-    var f = this.hadError_ ? errback : callback;
+    const f = this.hadError_ ? errback : callback;
     if (f) {
 
       try {
-        var ret = f.call(scope || this.defaultScope_, res);
+        const ret = f.call(scope || this.defaultScope_, res);
 
         // If no result, then use previous result.
         if (ret !== undefined) {
@@ -742,8 +744,8 @@ goog.async.Deferred.prototype.fire_ = function() {
   this.result_ = res;
 
   if (isNewlyBlocked) {
-    var onCallback = goog.bind(this.continue_, this, true /* isSuccess */);
-    var onErrback = goog.bind(this.continue_, this, false /* isSuccess */);
+    const onCallback = goog.bind(this.continue_, this, true /* isSuccess */);
+    const onErrback = goog.bind(this.continue_, this, false /* isSuccess */);
 
     if (res instanceof goog.async.Deferred) {
       res.addCallbacks(onCallback, onErrback);
@@ -775,7 +777,7 @@ goog.async.Deferred.prototype.fire_ = function() {
  */
 goog.async.Deferred.succeed = function(opt_result) {
   'use strict';
-  var d = new goog.async.Deferred();
+  const d = new goog.async.Deferred();
   d.callback(opt_result);
   return d;
 };
@@ -796,7 +798,7 @@ goog.async.Deferred.succeed = function(opt_result) {
  */
 goog.async.Deferred.fromPromise = function(promise) {
   'use strict';
-  var d = new goog.async.Deferred();
+  const d = new goog.async.Deferred();
   promise.then(
       function(value) {
         'use strict';
@@ -818,7 +820,7 @@ goog.async.Deferred.fromPromise = function(promise) {
  */
 goog.async.Deferred.fail = function(res) {
   'use strict';
-  var d = new goog.async.Deferred();
+  const d = new goog.async.Deferred();
   d.errback(res);
   return d;
 };
@@ -831,7 +833,7 @@ goog.async.Deferred.fail = function(res) {
  */
 goog.async.Deferred.canceled = function() {
   'use strict';
-  var d = new goog.async.Deferred();
+  const d = new goog.async.Deferred();
   d.cancel();
   return d;
 };
@@ -997,7 +999,7 @@ goog.async.Deferred.errorMap_ = {};
  */
 goog.async.Deferred.scheduleError_ = function(error) {
   'use strict';
-  var deferredError = new goog.async.Deferred.Error_(error);
+  const deferredError = new goog.async.Deferred.Error_(error);
   goog.async.Deferred.errorMap_[deferredError.id_] = deferredError;
   return deferredError.id_;
 };
@@ -1010,7 +1012,7 @@ goog.async.Deferred.scheduleError_ = function(error) {
  */
 goog.async.Deferred.unscheduleError_ = function(id) {
   'use strict';
-  var error = goog.async.Deferred.errorMap_[id];
+  const error = goog.async.Deferred.errorMap_[id];
   if (error) {
     error.resetTimer();
     delete goog.async.Deferred.errorMap_[id];
@@ -1024,9 +1026,9 @@ goog.async.Deferred.unscheduleError_ = function(id) {
  */
 goog.async.Deferred.assertNoErrors = function() {
   'use strict';
-  var map = goog.async.Deferred.errorMap_;
-  for (var key in map) {
-    var error = map[key];
+  const map = goog.async.Deferred.errorMap_;
+  for (let key in map) {
+    const error = map[key];
     error.resetTimer();
     error.throwError();
   }

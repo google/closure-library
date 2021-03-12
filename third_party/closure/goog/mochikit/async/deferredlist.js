@@ -120,8 +120,8 @@ goog.async.DeferredList = function(
    */
   this.numFinished_ = 0;
 
-  for (var i = 0; i < list.length; i++) {
-    var d = list[i];
+  for (let i = 0; i < list.length; i++) {
+    const d = list[i];
     d.addCallbacks(goog.bind(this.handleCallback_, this, i, true),
                    goog.bind(this.handleCallback_, this, i, false));
   }
@@ -176,7 +176,7 @@ goog.async.DeferredList.prototype.errback = function(res) {
   goog.async.DeferredList.base(this, 'errback', res);
 
   // On error, cancel any pending requests.
-  for (var i = 0; i < this.list_.length; i++) {
+  for (let i = 0; i < this.list_.length; i++) {
     this.list_[i].cancel();
   }
 };
@@ -199,8 +199,8 @@ goog.async.DeferredList.gatherResults = function(list) {
   return new goog.async.DeferredList(list, false, true)
       .addCallback(function(results) {
         'use strict';
-        var output = [];
-        for (var i = 0; i < results.length; i++) {
+        const output = [];
+        for (let i = 0; i < results.length; i++) {
           output[i] = results[i][1];
         }
         return output;

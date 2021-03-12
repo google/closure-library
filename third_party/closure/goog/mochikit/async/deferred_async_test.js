@@ -14,7 +14,7 @@ testSuite({
   },
 
   testErrorStack() {
-    var d;
+    let d;
     // Get the deferred from somewhere deep in the callstack.
     (function immediate() {
       (function immediate2() {
@@ -45,7 +45,7 @@ testSuite({
 
 
   testErrorStack_forErrback() {
-    var d = new Deferred();
+    const d = new Deferred();
 
     window.setTimeout(function willThrow() {
       d.errback(new Error('Foo'));
@@ -65,10 +65,10 @@ testSuite({
   },
 
   testErrorStack_nested() {
-    var d = new Deferred();
+    const d = new Deferred();
 
     window.setTimeout(function async1() {
-      var nested = new Deferred();
+      const nested = new Deferred();
       nested.addErrback(function nestedErrback(error) {
         d.errback(error);
       });
@@ -95,9 +95,9 @@ testSuite({
   },
 
   testErrorStack_doesNotTouchCustomStack() {
-    var d = new Deferred();
+    const d = new Deferred();
     d.addCallback(function actuallyThrows() {
-      var e = new Error('Foo');
+      const e = new Error('Foo');
       e.stack = 'STACK';
       throw e;
     });
@@ -119,9 +119,9 @@ testSuite({
   },
 
   testFromPromiseWithDeferred() {
-    var result;
-    var p = new Deferred();
-    var d = Deferred.fromPromise(p);
+    let result;
+    const p = new Deferred();
+    const d = Deferred.fromPromise(p);
     d.addCallback(function(value) {
       result = value;
     });
@@ -136,11 +136,11 @@ testSuite({
     if (!Promise) {
       return;
     }
-    var result;
-    var p = new Promise(function(resolve) {
+    let result;
+    const p = new Promise(function(resolve) {
       resolve('promise');
     });
-    var d = Deferred.fromPromise(p);
+    const d = Deferred.fromPromise(p);
     d.addCallback(function(value) {
       result = value;
     });
