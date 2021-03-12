@@ -27,7 +27,7 @@ goog.requireType('goog.graphics.ext.Group');
 goog.graphics.ext.Ellipse = function(group) {
   'use strict';
   // Initialize with some stock values.
-  var wrapper = group.getGraphicsImplementation().drawEllipse(
+  const wrapper = group.getGraphicsImplementation().drawEllipse(
       1, 1, 2, 2, null, null, group.getWrapper());
   goog.graphics.ext.StrokeAndFillElement.call(this, group, wrapper);
 };
@@ -46,9 +46,9 @@ goog.graphics.ext.Ellipse.prototype.redraw = function() {
 
   // Our position is already transformed in transform_, but because this is an
   // ellipse we need to position the center.
-  var xRadius = this.getWidth() / 2;
-  var yRadius = this.getHeight() / 2;
-  var wrapper = this.getWrapper();
+  const xRadius = this.getWidth() / 2;
+  const yRadius = this.getHeight() / 2;
+  const wrapper = this.getWrapper();
   wrapper.setCenter(xRadius, yRadius);
   wrapper.setRadius(xRadius, yRadius);
 };

@@ -57,7 +57,7 @@ goog.graphics.ext.Group.prototype.addChild = function(element, opt_chain) {
     this.children_.push(element);
   }
 
-  var transformed = this.growToFit_(element);
+  const transformed = this.growToFit_(element);
 
   if (element.isParentDependent()) {
     element.parentTransform();
@@ -175,15 +175,15 @@ goog.graphics.ext.Group.prototype.updateChildren = function() {
  */
 goog.graphics.ext.Group.prototype.growToFit_ = function(element) {
   'use strict';
-  var transformed = false;
+  let transformed = false;
 
-  var x = element.getMaxX();
+  const x = element.getMaxX();
   if (x > this.getWidth()) {
     this.setMinWidth(x);
     transformed = true;
   }
 
-  var y = element.getMaxY();
+  const y = element.getMaxY();
   if (y > this.getHeight()) {
     this.setMinHeight(y);
     transformed = true;

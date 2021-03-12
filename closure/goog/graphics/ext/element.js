@@ -764,7 +764,7 @@ goog.graphics.ext.Element.Position_.prototype.getCoordinateCache_ = function() {
  */
 goog.graphics.ext.Element.Position_.prototype.getParentSize_ = function() {
   'use strict';
-  var parent = this.element_.getParent();
+  const parent = this.element_.getParent();
   return this.horizontal_ ? parent.getCoordinateWidth() :
                             parent.getCoordinateHeight();
 };
@@ -830,16 +830,16 @@ goog.graphics.ext.Element.Position_.prototype.getValue_ = function(
     return parseFloat(String(v));
   }
 
-  var cache = this.getCoordinateCache_();
-  var scale = this.horizontal_ ? this.element_.getPixelScaleX() :
-                                 this.element_.getPixelScaleY();
+  const cache = this.getCoordinateCache_();
+  const scale = this.horizontal_ ? this.element_.getPixelScaleX() :
+                                   this.element_.getPixelScaleY();
 
-  var containerSize;
+  let containerSize;
   if (opt_forMaximum) {
     containerSize =
         goog.graphics.ext.coordinates.computeValue(this.size_ || 0, 0, scale);
   } else {
-    var parent = this.element_.getParent();
+    const parent = this.element_.getParent();
     containerSize = this.horizontal_ ? parent.getWidth() : parent.getHeight();
   }
 
@@ -856,7 +856,7 @@ goog.graphics.ext.Element.Position_.prototype.getValue_ = function(
 goog.graphics.ext.Element.Position_.prototype.getStart = function() {
   'use strict';
   if (this.cachedValue_ == null) {
-    var value = this.getValue_(this.distance_);
+    const value = this.getValue_(this.distance_);
     if (this.distanceType_ == goog.graphics.ext.Element.PositionType_.START) {
       this.cachedValue_ = value;
     } else if (

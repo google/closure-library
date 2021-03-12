@@ -27,7 +27,7 @@ goog.requireType('goog.graphics.ext.Group');
 goog.graphics.ext.Rectangle = function(group) {
   'use strict';
   // Initialize with some stock values.
-  var wrapper = group.getGraphicsImplementation().drawRect(
+  const wrapper = group.getGraphicsImplementation().drawRect(
       0, 0, 1, 1, null, null, group.getWrapper());
   goog.graphics.ext.StrokeAndFillElement.call(this, group, wrapper);
 };
