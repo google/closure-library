@@ -25,10 +25,10 @@ goog.require('goog.testing.style');
  * @param {Element|string} a The element or optionally the comment string.
  * @param {Element=} opt_b The element when a comment string is present.
  */
-var assertIsVisible = function(a, opt_b) {
+const assertIsVisible = function(a, opt_b) {
   'use strict';
   _validateArguments(1, arguments);
-  var element = nonCommentArg(1, 1, arguments);
+  const element = nonCommentArg(1, 1, arguments);
 
   _assert(
       commentArg(1, arguments), goog.testing.style.isVisible(element) &&
@@ -42,10 +42,10 @@ var assertIsVisible = function(a, opt_b) {
  * @param {Element|string} a The element or optionally the comment string.
  * @param {Element=} opt_b The element when a comment string is present.
  */
-var assertNotVisible = function(a, opt_b) {
+const assertNotVisible = function(a, opt_b) {
   'use strict';
   _validateArguments(1, arguments);
-  var element = nonCommentArg(1, 1, arguments);
+  const element = nonCommentArg(1, 1, arguments);
   if (!element) {
     return;
   }
@@ -64,11 +64,11 @@ var assertNotVisible = function(a, opt_b) {
  *     is present.
  * @param {Element=} opt_c The second element if comment string is present.
  */
-var assertIntersect = function(a, b, opt_c) {
+const assertIntersect = function(a, b, opt_c) {
   'use strict';
   _validateArguments(2, arguments);
-  var element = nonCommentArg(1, 2, arguments);
-  var otherElement = nonCommentArg(2, 2, arguments);
+  const element = nonCommentArg(1, 2, arguments);
+  const otherElement = nonCommentArg(2, 2, arguments);
 
   _assert(
       commentArg(1, arguments),
@@ -84,11 +84,11 @@ var assertIntersect = function(a, b, opt_c) {
  *     is present.
  * @param {Element=} opt_c The second element if comment string is present.
  */
-var assertNoIntersect = function(a, b, opt_c) {
+const assertNoIntersect = function(a, b, opt_c) {
   'use strict';
   _validateArguments(2, arguments);
-  var element = nonCommentArg(1, 2, arguments);
-  var otherElement = nonCommentArg(2, 2, arguments);
+  const element = nonCommentArg(1, 2, arguments);
+  const otherElement = nonCommentArg(2, 2, arguments);
 
   _assert(
       commentArg(1, arguments),
@@ -104,13 +104,13 @@ var assertNoIntersect = function(a, b, opt_c) {
  *     is present.
  * @param {(Element|number)=} opt_c The second element if comment string is present.
  */
-var assertWidth = function(a, b, opt_c) {
+const assertWidth = function(a, b, opt_c) {
   'use strict';
   _validateArguments(2, arguments);
-  var element = nonCommentArg(1, 2, arguments);
-  var width = nonCommentArg(2, 2, arguments);
-  var size = goog.style.getSize(element);
-  var elementWidth = size.width;
+  const element = nonCommentArg(1, 2, arguments);
+  const width = nonCommentArg(2, 2, arguments);
+  const size = goog.style.getSize(element);
+  const elementWidth = size.width;
 
   _assert(
       commentArg(1, arguments),
@@ -130,14 +130,14 @@ var assertWidth = function(a, b, opt_c) {
  *     present.
  * @param {number=} opt_d The tolerance if comment string is present.
  */
-var assertWidthWithinTolerance = function(a, b, c, opt_d) {
+const assertWidthWithinTolerance = function(a, b, c, opt_d) {
   'use strict';
   _validateArguments(3, arguments);
-  var element = nonCommentArg(1, 3, arguments);
-  var width = nonCommentArg(2, 3, arguments);
-  var tolerance = nonCommentArg(3, 3, arguments);
-  var size = goog.style.getSize(element);
-  var elementWidth = size.width;
+  const element = nonCommentArg(1, 3, arguments);
+  const width = nonCommentArg(2, 3, arguments);
+  const tolerance = nonCommentArg(3, 3, arguments);
+  const size = goog.style.getSize(element);
+  const elementWidth = size.width;
 
   _assert(
       commentArg(1, arguments),
@@ -155,13 +155,13 @@ var assertWidthWithinTolerance = function(a, b, c, opt_d) {
  *     is present.
  * @param {(Element|number)=} opt_c The second element if comment string is present.
  */
-var assertHeight = function(a, b, opt_c) {
+const assertHeight = function(a, b, opt_c) {
   'use strict';
   _validateArguments(2, arguments);
-  var element = nonCommentArg(1, 2, arguments);
-  var height = nonCommentArg(2, 2, arguments);
-  var size = goog.style.getSize(element);
-  var elementHeight = size.height;
+  const element = nonCommentArg(1, 2, arguments);
+  const height = nonCommentArg(2, 2, arguments);
+  const size = goog.style.getSize(element);
+  const elementHeight = size.height;
 
   _assert(
       commentArg(1, arguments),
@@ -181,14 +181,14 @@ var assertHeight = function(a, b, opt_c) {
  *     present.
  * @param {number=} opt_d The tolerance if comment string is present.
  */
-var assertHeightWithinTolerance = function(a, b, c, opt_d) {
+const assertHeightWithinTolerance = function(a, b, c, opt_d) {
   'use strict';
   _validateArguments(3, arguments);
-  var element = nonCommentArg(1, 3, arguments);
-  var height = nonCommentArg(2, 3, arguments);
-  var tolerance = nonCommentArg(3, 3, arguments);
-  var size = goog.style.getSize(element);
-  var elementHeight = size.height;
+  const element = nonCommentArg(1, 3, arguments);
+  const height = nonCommentArg(2, 3, arguments);
+  const tolerance = nonCommentArg(3, 3, arguments);
+  const size = goog.style.getSize(element);
+  const elementHeight = size.height;
 
   _assert(
       commentArg(1, arguments),
@@ -206,13 +206,13 @@ var assertHeightWithinTolerance = function(a, b, c, opt_d) {
  *     is present.
  * @param {Element=} opt_c The second element if comment string is present.
  */
-var assertIsLeftOf = function(a, b, opt_c) {
+const assertIsLeftOf = function(a, b, opt_c) {
   'use strict';
   _validateArguments(2, arguments);
-  var element = nonCommentArg(1, 2, arguments);
-  var otherElement = nonCommentArg(2, 2, arguments);
-  var elementRect = goog.style.getBounds(element);
-  var otherElementRect = goog.style.getBounds(otherElement);
+  const element = nonCommentArg(1, 2, arguments);
+  const otherElement = nonCommentArg(2, 2, arguments);
+  const elementRect = goog.style.getBounds(element);
+  const otherElementRect = goog.style.getBounds(otherElement);
 
   _assert(
       commentArg(1, arguments), elementRect.left < otherElementRect.left,
@@ -227,13 +227,13 @@ var assertIsLeftOf = function(a, b, opt_c) {
  *     is present.
  * @param {Element=} opt_c The second element if comment string is present.
  */
-var assertIsStrictlyLeftOf = function(a, b, opt_c) {
+const assertIsStrictlyLeftOf = function(a, b, opt_c) {
   'use strict';
   _validateArguments(2, arguments);
-  var element = nonCommentArg(1, 2, arguments);
-  var otherElement = nonCommentArg(2, 2, arguments);
-  var elementRect = goog.style.getBounds(element);
-  var otherElementRect = goog.style.getBounds(otherElement);
+  const element = nonCommentArg(1, 2, arguments);
+  const otherElement = nonCommentArg(2, 2, arguments);
+  const elementRect = goog.style.getBounds(element);
+  const otherElementRect = goog.style.getBounds(otherElement);
 
   _assert(
       commentArg(1, arguments),
@@ -249,13 +249,13 @@ var assertIsStrictlyLeftOf = function(a, b, opt_c) {
  *     is present.
  * @param {Element=} opt_c The second element if comment string is present.
  */
-var assertIsAbove = function(a, b, opt_c) {
+const assertIsAbove = function(a, b, opt_c) {
   'use strict';
   _validateArguments(2, arguments);
-  var element = nonCommentArg(1, 2, arguments);
-  var otherElement = nonCommentArg(2, 2, arguments);
-  var elementRect = goog.style.getBounds(element);
-  var otherElementRect = goog.style.getBounds(otherElement);
+  const element = nonCommentArg(1, 2, arguments);
+  const otherElement = nonCommentArg(2, 2, arguments);
+  const elementRect = goog.style.getBounds(element);
+  const otherElementRect = goog.style.getBounds(otherElement);
 
   _assert(
       commentArg(1, arguments), elementRect.top < otherElementRect.top,
@@ -270,13 +270,13 @@ var assertIsAbove = function(a, b, opt_c) {
  *     is present.
  * @param {Element=} opt_c The second element if comment string is present.
  */
-var assertIsStrictlyAbove = function(a, b, opt_c) {
+const assertIsStrictlyAbove = function(a, b, opt_c) {
   'use strict';
   _validateArguments(2, arguments);
-  var element = nonCommentArg(1, 2, arguments);
-  var otherElement = nonCommentArg(2, 2, arguments);
-  var elementRect = goog.style.getBounds(element);
-  var otherElementRect = goog.style.getBounds(otherElement);
+  const element = nonCommentArg(1, 2, arguments);
+  const otherElement = nonCommentArg(2, 2, arguments);
+  const elementRect = goog.style.getBounds(element);
+  const otherElementRect = goog.style.getBounds(otherElement);
 
   _assert(
       commentArg(1, arguments),
@@ -293,13 +293,13 @@ var assertIsStrictlyAbove = function(a, b, opt_c) {
  *     is present.
  * @param {Element=} opt_c The second element if comment string is present.
  */
-var assertContained = function(a, b, opt_c) {
+const assertContained = function(a, b, opt_c) {
   'use strict';
   _validateArguments(2, arguments);
-  var element = nonCommentArg(1, 2, arguments);
-  var otherElement = nonCommentArg(2, 2, arguments);
-  var elementRect = goog.style.getBounds(element);
-  var otherElementRect = goog.style.getBounds(otherElement);
+  const element = nonCommentArg(1, 2, arguments);
+  const otherElement = nonCommentArg(2, 2, arguments);
+  const elementRect = goog.style.getBounds(element);
+  const otherElementRect = goog.style.getBounds(otherElement);
 
   _assert(
       commentArg(1, arguments), elementRect.contains(otherElementRect),

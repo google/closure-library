@@ -27,8 +27,8 @@ goog.require('goog.style');
  */
 goog.testing.style.intersects = function(element, otherElement) {
   'use strict';
-  var elementRect = goog.style.getBounds(element);
-  var otherElementRect = goog.style.getBounds(otherElement);
+  const elementRect = goog.style.getBounds(element);
+  const otherElementRect = goog.style.getBounds(otherElement);
   return goog.math.Rect.intersects(elementRect, otherElementRect);
 };
 
@@ -40,8 +40,8 @@ goog.testing.style.intersects = function(element, otherElement) {
  */
 goog.testing.style.hasVisibleDimensions = function(element) {
   'use strict';
-  var elSize = goog.style.getSize(element);
-  var shortest = elSize.getShortest();
+  const elSize = goog.style.getSize(element);
+  const shortest = elSize.getShortest();
   if (shortest <= 0) {
     return false;
   }
@@ -61,7 +61,7 @@ goog.testing.style.isVisible = function(element) {
   if (!goog.dom.isInDocument(element)) {
     return false;
   }
-  var style = getComputedStyle(element);
+  const style = getComputedStyle(element);
   return style.visibility != 'hidden' && style.display != 'none';
 };
 
@@ -73,9 +73,9 @@ goog.testing.style.isVisible = function(element) {
  */
 goog.testing.style.isOnScreen = function(el) {
   'use strict';
-  var doc = goog.dom.getDomHelper(el).getDocument();
-  var viewport = goog.style.getVisibleRectForElement(doc.body);
-  var viewportRect = goog.math.Rect.createFromBox(viewport);
+  const doc = goog.dom.getDomHelper(el).getDocument();
+  const viewport = goog.style.getVisibleRectForElement(doc.body);
+  const viewportRect = goog.math.Rect.createFromBox(viewport);
   return goog.dom.contains(doc, el) &&
       goog.style.getBounds(el).intersects(viewportRect);
 };
