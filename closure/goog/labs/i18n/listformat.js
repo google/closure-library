@@ -120,7 +120,7 @@ goog.labs.i18n.ListFormat.prototype.patternBasedJoinTwoStrings_ = function(
  */
 goog.labs.i18n.ListFormat.prototype.format = function(items) {
   'use strict';
-  var count = items.length;
+  const count = items.length;
   switch (count) {
     case 0:
       return '';
@@ -131,10 +131,10 @@ goog.labs.i18n.ListFormat.prototype.format = function(items) {
           this.listTwoPattern_, String(items[0]), String(items[1]));
   }
 
-  var result = this.patternBasedJoinTwoStrings_(
+  let result = this.patternBasedJoinTwoStrings_(
       this.listStartPattern_, String(items[0]), String(items[1]));
 
-  for (var i = 2; i < count - 1; ++i) {
+  for (let i = 2; i < count - 1; ++i) {
     result = this.patternBasedJoinTwoStrings_(
         this.listMiddlePattern_, result, String(items[i]));
   }
@@ -207,9 +207,9 @@ goog.labs.i18n.GenderInfo.Gender = {
 */
 goog.labs.i18n.GenderInfo.prototype.getListGender = function(genders) {
   'use strict';
-  var Gender = goog.labs.i18n.GenderInfo.Gender;
+  const Gender = goog.labs.i18n.GenderInfo.Gender;
 
-  var count = genders.length;
+  const count = genders.length;
   if (count == 0) {
     return Gender.OTHER;  // degenerate case
   }
@@ -221,9 +221,9 @@ goog.labs.i18n.GenderInfo.prototype.getListGender = function(genders) {
     case goog.labs.i18n.GenderInfo.ListGenderStyle_.NEUTRAL:
       return Gender.OTHER;
     case goog.labs.i18n.GenderInfo.ListGenderStyle_.MIXED_NEUTRAL:
-      var hasFemale = false;
-      var hasMale = false;
-      for (var i = 0; i < count; ++i) {
+      let hasFemale = false;
+      let hasMale = false;
+      for (let i = 0; i < count; ++i) {
         switch (genders[i]) {
           case Gender.FEMALE:
             if (hasMale) {
@@ -247,7 +247,7 @@ goog.labs.i18n.GenderInfo.prototype.getListGender = function(genders) {
       }
       return hasMale ? Gender.MALE : Gender.FEMALE;
     case goog.labs.i18n.GenderInfo.ListGenderStyle_.MALE_TAINTS:
-      for (var i = 0; i < count; ++i) {
+      for (let i = 0; i < count; ++i) {
         if (genders[i] != Gender.FEMALE) {
           return Gender.MALE;
         }
