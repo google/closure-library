@@ -71,7 +71,7 @@ goog.testing.events.EventObserver.prototype.handleEvent = function(e) {
  */
 goog.testing.events.EventObserver.prototype.getEvents = function(opt_type) {
   'use strict';
-  var events = goog.array.clone(this.events_);
+  let events = goog.array.clone(this.events_);
 
   if (opt_type) {
     events = goog.array.filter(events, function(event) {

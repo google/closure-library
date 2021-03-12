@@ -194,7 +194,7 @@ goog.testing.events.fireDoubleClickSequence = function(
   'use strict';
   // Fire mousedown, mouseup, click, mousedown, mouseup, click, dblclick.
   // Then return the bitwise AND of the 7.
-  var btn = goog.events.BrowserEvent.MouseButton.LEFT;
+  const btn = goog.events.BrowserEvent.MouseButton.LEFT;
   return goog.testing.events.eagerAnd_(
       goog.testing.events.fireMouseDownEvent(
           target, btn, opt_coords, opt_eventProperties),
@@ -305,15 +305,15 @@ goog.testing.events.fireKeySequence = function(
 goog.testing.events.fireNonAsciiKeySequence = function(
     target, keyOrKeyCode, keyPressKeyOrKeyCode, opt_eventProperties) {
   'use strict';
-  var keydown =
+  const keydown =
       /** @type {!KeyboardEvent} */ (
           /** @type {!Event} */ (new goog.testing.events.Event(
               goog.events.EventType.KEYDOWN, target)));
-  var keyup =  //
+  const keyup =  //
       /** @type {!KeyboardEvent} */ (
           /** @type {!Event} */ (new goog.testing.events.Event(
               goog.events.EventType.KEYUP, target)));
-  var keypress =
+  const keypress =
       /** @type {!KeyboardEvent} */ (
           /** @type {!Event} */ (new goog.testing.events.Event(
               goog.events.EventType.KEYPRESS, target)));
@@ -325,7 +325,7 @@ goog.testing.events.fireNonAsciiKeySequence = function(
     // Try to fill the keyCode field for the key events if we have a known key.
     // This is to try and make these mock simulated event as close to real
     // browser events as possible.
-    var mappedKeyCode =
+    const mappedKeyCode =
         goog.testing.events
             .KEY_TO_KEYCODE_MAPPING_[/** @type {string} */ (keyOrKeyCode)
                                          .toLowerCase()];
@@ -333,7 +333,7 @@ goog.testing.events.fireNonAsciiKeySequence = function(
       keydown.keyCode = keyup.keyCode = mappedKeyCode;
     }
 
-    var mappedKeyPressKeyCode =
+    const mappedKeyPressKeyCode =
         goog.testing.events.KEY_TO_KEYCODE_MAPPING_[/** @type {string} */ (
                                                         keyPressKeyOrKeyCode)
                                                         .toLowerCase()];
@@ -353,7 +353,7 @@ goog.testing.events.fireNonAsciiKeySequence = function(
 
   // Fire keydown, keypress, and keyup. Note that if the keydown is
   // prevent-defaulted, then the keypress will not fire.
-  var result = goog.testing.events.fireBrowserEvent(keydown);
+  let result = goog.testing.events.fireBrowserEvent(keydown);
   if (typeof keyOrKeyCode === 'string') {
     if (/** @type {string} */ (keyPressKeyOrKeyCode) != '' && result) {
       result = goog.testing.events.eagerAnd_(
@@ -386,7 +386,7 @@ goog.testing.events.fireNonAsciiKeySequence = function(
 goog.testing.events.fireMouseEnterEvent = function(
     target, relatedTarget, opt_coords) {
   'use strict';
-  var mouseenter =
+  const mouseenter =
       new goog.testing.events.Event(goog.events.EventType.MOUSEENTER, target);
   mouseenter.relatedTarget = relatedTarget;
   goog.testing.events.setEventClientXY_(mouseenter, opt_coords);
@@ -407,7 +407,7 @@ goog.testing.events.fireMouseEnterEvent = function(
 goog.testing.events.fireMouseLeaveEvent = function(
     target, relatedTarget, opt_coords) {
   'use strict';
-  var mouseleave =
+  const mouseleave =
       new goog.testing.events.Event(goog.events.EventType.MOUSELEAVE, target);
   mouseleave.relatedTarget = relatedTarget;
   goog.testing.events.setEventClientXY_(mouseleave, opt_coords);
@@ -428,7 +428,7 @@ goog.testing.events.fireMouseLeaveEvent = function(
 goog.testing.events.fireMouseOverEvent = function(
     target, relatedTarget, opt_coords) {
   'use strict';
-  var mouseover =
+  const mouseover =
       new goog.testing.events.Event(goog.events.EventType.MOUSEOVER, target);
   mouseover.relatedTarget = relatedTarget;
   goog.testing.events.setEventClientXY_(mouseover, opt_coords);
@@ -446,7 +446,7 @@ goog.testing.events.fireMouseOverEvent = function(
  */
 goog.testing.events.fireMouseMoveEvent = function(target, opt_coords) {
   'use strict';
-  var mousemove =
+  const mousemove =
       new goog.testing.events.Event(goog.events.EventType.MOUSEMOVE, target);
 
   goog.testing.events.setEventClientXY_(mousemove, opt_coords);
@@ -467,7 +467,7 @@ goog.testing.events.fireMouseMoveEvent = function(target, opt_coords) {
 goog.testing.events.fireMouseOutEvent = function(
     target, relatedTarget, opt_coords) {
   'use strict';
-  var mouseout =
+  const mouseout =
       new goog.testing.events.Event(goog.events.EventType.MOUSEOUT, target);
   mouseout.relatedTarget = relatedTarget;
   goog.testing.events.setEventClientXY_(mouseout, opt_coords);
@@ -490,7 +490,7 @@ goog.testing.events.fireMouseOutEvent = function(
 goog.testing.events.fireMouseDownEvent = function(
     target, opt_button, opt_coords, opt_eventProperties) {
   'use strict';
-  var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
+  let button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
   button = !goog.events.BrowserFeature.HAS_W3C_BUTTON ?
       goog.events.BrowserEvent.IE_BUTTON_MAP[button] :
       button;
@@ -515,7 +515,7 @@ goog.testing.events.fireMouseDownEvent = function(
 goog.testing.events.fireMouseUpEvent = function(
     target, opt_button, opt_coords, opt_eventProperties) {
   'use strict';
-  var button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
+  let button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
   button = !goog.events.BrowserFeature.HAS_W3C_BUTTON ?
       goog.events.BrowserEvent.IE_BUTTON_MAP[button] :
       button;
@@ -588,7 +588,7 @@ goog.testing.events.fireDoubleClickEvent = function(
 goog.testing.events.fireMouseButtonEvent_ = function(
     type, target, opt_button, opt_coords, opt_eventProperties) {
   'use strict';
-  var e = new goog.testing.events.Event(type, target);
+  const e = new goog.testing.events.Event(type, target);
   e.button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
   goog.testing.events.setEventClientXY_(e, opt_coords);
   if (opt_eventProperties) {
@@ -608,10 +608,10 @@ goog.testing.events.fireMouseButtonEvent_ = function(
  */
 goog.testing.events.fireContextMenuEvent = function(target, opt_coords) {
   'use strict';
-  var button = (goog.userAgent.MAC && goog.userAgent.WEBKIT) ?
+  const button = (goog.userAgent.MAC && goog.userAgent.WEBKIT) ?
       goog.events.BrowserEvent.MouseButton.LEFT :
       goog.events.BrowserEvent.MouseButton.RIGHT;
-  var contextmenu =
+  const contextmenu =
       new goog.testing.events.Event(goog.events.EventType.CONTEXTMENU, target);
   contextmenu.button = !goog.events.BrowserFeature.HAS_W3C_BUTTON ?
       goog.events.BrowserEvent.IE_BUTTON_MAP[button] :
@@ -633,12 +633,12 @@ goog.testing.events.fireContextMenuEvent = function(target, opt_coords) {
  */
 goog.testing.events.fireContextMenuSequence = function(target, opt_coords) {
   'use strict';
-  var props = goog.userAgent.MAC ? {ctrlKey: true} : {};
-  var button = (goog.userAgent.MAC && goog.userAgent.WEBKIT) ?
+  const props = goog.userAgent.MAC ? {ctrlKey: true} : {};
+  const button = (goog.userAgent.MAC && goog.userAgent.WEBKIT) ?
       goog.events.BrowserEvent.MouseButton.LEFT :
       goog.events.BrowserEvent.MouseButton.RIGHT;
 
-  var result =
+  let result =
       goog.testing.events.fireMouseDownEvent(target, button, opt_coords, props);
   if (goog.userAgent.WINDOWS) {
     // All browsers are consistent on Windows.
@@ -685,7 +685,7 @@ goog.testing.events.fireContextMenuSequence = function(target, opt_coords) {
  */
 goog.testing.events.firePopStateEvent = function(target, state) {
   'use strict';
-  var e = /** @type {!PopStateEvent} */ (/** @type {!Event} */ (
+  const e = /** @type {!PopStateEvent} */ (/** @type {!Event} */ (
       new goog.testing.events.Event(goog.events.EventType.POPSTATE, target)));
   e.state = state;
   return goog.testing.events.fireBrowserEvent(e);
@@ -700,7 +700,7 @@ goog.testing.events.firePopStateEvent = function(target, state) {
  */
 goog.testing.events.fireBlurEvent = function(target) {
   'use strict';
-  var e = new goog.testing.events.Event(goog.events.EventType.BLUR, target);
+  const e = new goog.testing.events.Event(goog.events.EventType.BLUR, target);
   return goog.testing.events.fireBrowserEvent(e);
 };
 
@@ -713,7 +713,7 @@ goog.testing.events.fireBlurEvent = function(target) {
  */
 goog.testing.events.fireFocusEvent = function(target) {
   'use strict';
-  var e = new goog.testing.events.Event(goog.events.EventType.FOCUS, target);
+  const e = new goog.testing.events.Event(goog.events.EventType.FOCUS, target);
   return goog.testing.events.fireBrowserEvent(e);
 };
 
@@ -726,7 +726,8 @@ goog.testing.events.fireFocusEvent = function(target) {
  */
 goog.testing.events.fireFocusInEvent = function(target) {
   'use strict';
-  var e = new goog.testing.events.Event(goog.events.EventType.FOCUSIN, target);
+  const e =
+      new goog.testing.events.Event(goog.events.EventType.FOCUSIN, target);
   return goog.testing.events.fireBrowserEvent(e);
 };
 
@@ -746,13 +747,13 @@ goog.testing.events.fireBrowserEvent = function(event) {
   event.returnValue_ = true;
 
   // generate a list of ancestors
-  var ancestors = [];
-  for (var current = event.target; current; current = current.parentNode) {
+  const ancestors = [];
+  for (let current = event.target; current; current = current.parentNode) {
     ancestors.push(current);
   }
 
   // dispatch capturing listeners
-  for (var j = ancestors.length - 1; j >= 0 && !event.propagationStopped_;
+  for (let j = ancestors.length - 1; j >= 0 && !event.propagationStopped_;
        j--) {
     goog.events.fireListeners(
         ancestors[j], event.type, true,
@@ -760,7 +761,7 @@ goog.testing.events.fireBrowserEvent = function(event) {
   }
 
   // dispatch bubbling listeners
-  for (var j = 0; j < ancestors.length && !event.propagationStopped_; j++) {
+  for (let j = 0; j < ancestors.length && !event.propagationStopped_; j++) {
     goog.events.fireListeners(
         ancestors[j], event.type, false,
         new goog.events.BrowserEvent(event, ancestors[j]));
@@ -784,7 +785,7 @@ goog.testing.events.fireTouchStartEvent = function(
     target, opt_coords, opt_eventProperties) {
   'use strict';
   // TODO: Support multi-touch events with array of coordinates.
-  var touchstart =
+  const touchstart =
       new goog.testing.events.Event(goog.events.EventType.TOUCHSTART, target);
   goog.testing.events.setEventClientXY_(touchstart, opt_coords);
   if (opt_eventProperties) {
@@ -808,7 +809,7 @@ goog.testing.events.fireTouchMoveEvent = function(
     target, opt_coords, opt_eventProperties) {
   'use strict';
   // TODO: Support multi-touch events with array of coordinates.
-  var touchmove =
+  const touchmove =
       new goog.testing.events.Event(goog.events.EventType.TOUCHMOVE, target);
   goog.testing.events.setEventClientXY_(touchmove, opt_coords);
   if (opt_eventProperties) {
@@ -832,7 +833,7 @@ goog.testing.events.fireTouchEndEvent = function(
     target, opt_coords, opt_eventProperties) {
   'use strict';
   // TODO: Support multi-touch events with array of coordinates.
-  var touchend =
+  const touchend =
       new goog.testing.events.Event(goog.events.EventType.TOUCHEND, target);
   goog.testing.events.setEventClientXY_(touchend, opt_coords);
   if (opt_eventProperties) {
@@ -874,16 +875,16 @@ goog.testing.events.fireTouchSequence = function(
  */
 goog.testing.events.mixinListenable = function(obj) {
   'use strict';
-  var listenable = new goog.events.EventTarget();
+  const listenable = new goog.events.EventTarget();
 
   listenable.setTargetForTesting(obj);
 
-  var listenablePrototype = goog.events.EventTarget.prototype;
-  var disposablePrototype = goog.Disposable.prototype;
-  for (var key in listenablePrototype) {
+  const listenablePrototype = goog.events.EventTarget.prototype;
+  const disposablePrototype = goog.Disposable.prototype;
+  for (let key in listenablePrototype) {
     if (listenablePrototype.hasOwnProperty(key) ||
         disposablePrototype.hasOwnProperty(key)) {
-      var member = listenablePrototype[key];
+      const member = listenablePrototype[key];
       if (typeof member === 'function') {
         obj[key] = goog.bind(member, listenable);
       } else {
@@ -907,7 +908,7 @@ goog.testing.events.mixinListenable = function(obj) {
  */
 goog.testing.events.eagerAnd_ = function(first, rest) {
   'use strict';
-  for (var i = 1; i < arguments.length; i++) {
+  for (let i = 1; i < arguments.length; i++) {
     first = first && arguments[i];
   }
   return first;
