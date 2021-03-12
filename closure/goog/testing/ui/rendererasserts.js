@@ -24,7 +24,7 @@ goog.require('goog.ui.ControlRenderer');
 goog.testing.ui.rendererasserts.assertNoGetCssClassCallsInConstructor =
     function(rendererClassUnderTest) {
   'use strict';
-  var getCssClassCalls = 0;
+  let getCssClassCalls = 0;
 
   /**
    * @constructor

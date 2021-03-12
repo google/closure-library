@@ -56,11 +56,13 @@ goog.testing.ui.style.getReferenceNode = function(referenceId) {
  */
 goog.testing.ui.style.getElementChildren = function(element) {
   'use strict';
-  var first = goog.dom.getFirstElementChild(element);
+  const first = goog.dom.getFirstElementChild(element);
   if (!first) {
     return [];
   }
-  var children = [first], next;
+  const children = [first];
+  let next;
+
   while (next = goog.dom.getNextElementSibling(children[children.length - 1])) {
     children.push(next);
   }
@@ -117,9 +119,9 @@ goog.testing.ui.style.assertStructureMatchesReferenceInner_ = function(
   assertEquals(
       'Expected nodes to have the same nodeName.', element.nodeName,
       reference.nodeName);
-  var testElem = goog.asserts.assertElement(element);
-  var refElem = goog.asserts.assertElement(reference);
-  var elementClasses = goog.dom.classlist.get(testElem);
+  const testElem = goog.asserts.assertElement(element);
+  const refElem = goog.asserts.assertElement(reference);
+  const elementClasses = goog.dom.classlist.get(testElem);
   goog.array.forEach(goog.dom.classlist.get(refElem), function(referenceClass) {
     'use strict';
     assertContains(
@@ -128,15 +130,16 @@ goog.testing.ui.style.assertStructureMatchesReferenceInner_ = function(
   });
   // Call assertStructureMatchesReferenceInner_ on all element children
   // unless this is a content node
-  var elChildren = goog.testing.ui.style.getElementChildren(element),
-      refChildren = goog.testing.ui.style.getElementChildren(reference);
+  const elChildren = goog.testing.ui.style.getElementChildren(element);
+  const refChildren = goog.testing.ui.style.getElementChildren(reference);
+
   if (!goog.testing.ui.style.isContentNode(reference)) {
     if (elChildren.length != refChildren.length) {
       assertEquals(
           'Expected same number of children for a non-content node.',
           elChildren.length, refChildren.length);
     }
-    for (var i = 0; i < elChildren.length; i++) {
+    for (let i = 0; i < elChildren.length; i++) {
       goog.testing.ui.style.assertStructureMatchesReferenceInner_(
           elChildren[i], refChildren[i]);
     }

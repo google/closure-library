@@ -127,7 +127,7 @@ goog.testing.ui.RendererHarness.prototype.attachControlAndDecorate = function(
 
   control.setRenderer(this.renderer_);
 
-  var child = this.decorateParent_.firstChild;
+  const child = this.decorateParent_.firstChild;
   assertEquals(
       'The decorated node must be an element', goog.dom.NodeType.ELEMENT,
       child.nodeType);
