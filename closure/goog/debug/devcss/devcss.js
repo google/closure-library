@@ -115,12 +115,12 @@ goog.debug.DevCss = function(opt_userAgent, opt_userAgentVersion) {
 goog.debug.DevCss.prototype.activateBrowserSpecificCssRules = function(
     opt_enableIe6ReadyHandler) {
   'use strict';
-  var enableIe6EventHandler = (opt_enableIe6ReadyHandler !== undefined) ?
+  const enableIe6EventHandler = (opt_enableIe6ReadyHandler !== undefined) ?
       opt_enableIe6ReadyHandler :
       true;
-  var cssRules = goog.cssom.getAllCssStyleRules();
+  let cssRules = goog.cssom.getAllCssStyleRules();
 
-  for (var i = 0, cssRule; cssRule = cssRules[i]; i++) {
+  for (let i = 0, cssRule; cssRule = cssRules[i]; i++) {
     this.replaceBrowserSpecificClassNames_(cssRule);
   }
 
@@ -129,7 +129,7 @@ goog.debug.DevCss.prototype.activateBrowserSpecificCssRules = function(
   // matter for this tool.
   if (this.isIe6OrLess_) {
     cssRules = goog.cssom.getAllCssStyleRules();
-    for (var i = 0, cssRule; cssRule = cssRules[i]; i++) {
+    for (let i = 0, cssRule; cssRule = cssRules[i]; i++) {
       this.replaceIe6CombinedSelectors_(cssRule);
     }
   }
@@ -215,8 +215,8 @@ goog.debug.DevCss.prototype.generateUserAgentTokens_ = function() {
 goog.debug.DevCss.prototype.getVersionNumberFromSelectorText_ = function(
     selectorText, userAgentToken) {
   'use strict';
-  var regex = new RegExp(userAgentToken + '([\\d\\.]+)');
-  var matches = regex.exec(selectorText);
+  const regex = new RegExp(userAgentToken + '([\\d\\.]+)');
+  const matches = regex.exec(selectorText);
   if (matches && matches.length == 2) {
     return matches[1];
   }
@@ -239,13 +239,13 @@ goog.debug.DevCss.prototype.getRuleVersionAndCompare_ = function(
   if (!cssRule.selectorText || !cssRule.selectorText.match(token)) {
     return;
   }
-  var ruleVersion =
+  const ruleVersion =
       this.getVersionNumberFromSelectorText_(cssRule.selectorText, token);
   if (!ruleVersion) {
     return;
   }
 
-  var comparison =
+  const comparison =
       goog.string.compareVersions(this.userAgentVersion_, ruleVersion);
   return [comparison, ruleVersion];
 };
@@ -269,10 +269,10 @@ goog.debug.DevCss.prototype.replaceBrowserSpecificClassNames_ = function(
   }
 
   // We know it will begin as a classname.
-  var additionalRegexString;
+  let additionalRegexString;
 
   // Tests "Less than or equals".
-  var compared = this.getRuleVersionAndCompare_(
+  let compared = this.getRuleVersionAndCompare_(
       cssRule, this.userAgentTokens_.LESS_THAN_OR_EQUAL);
   if (compared && compared.length) {
     if (compared[0] > 0) {
@@ -332,13 +332,13 @@ goog.debug.DevCss.prototype.replaceBrowserSpecificClassNames_ = function(
 
   // We need to match at least a single whitespace character to know that
   // we are matching the entire useragent string token.
-  var regexString = '\\.' + additionalRegexString + '\\s+';
-  var re = new RegExp(regexString, 'g');
+  const regexString = '\\.' + additionalRegexString + '\\s+';
+  const re = new RegExp(regexString, 'g');
 
-  var currentCssText = goog.cssom.getCssTextFromCssRule(cssRule);
+  const currentCssText = goog.cssom.getCssTextFromCssRule(cssRule);
 
   // Replacing the token with '' activates the selector for this useragent.
-  var newCssText = currentCssText.replace(re, '');
+  const newCssText = currentCssText.replace(re, '');
 
   if (newCssText != currentCssText) {
     goog.cssom.replaceCssRule(cssRule, newCssText);
@@ -362,10 +362,11 @@ goog.debug.DevCss.prototype.replaceIe6CombinedSelectors_ = function(cssRule) {
   if (cssRule.style && cssRule.style.cssText &&
       cssRule.style.cssText.match(
           goog.debug.DevCss.CssToken_.IE6_SELECTOR_TEXT)) {
-    var cssText = goog.cssom.getCssTextFromCssRule(cssRule);
-    var combinedSelectorText = this.getIe6CombinedSelectorText_(cssText);
+    const cssText = goog.cssom.getCssTextFromCssRule(cssRule);
+    const combinedSelectorText = this.getIe6CombinedSelectorText_(cssText);
     if (combinedSelectorText) {
-      var newCssText = combinedSelectorText + '{' + cssRule.style.cssText + '}';
+      const newCssText =
+          combinedSelectorText + '{' + cssRule.style.cssText + '}';
       goog.cssom.replaceCssRule(cssRule, newCssText);
     }
   }
@@ -386,22 +387,22 @@ goog.debug.DevCss.prototype.replaceIe6CombinedSelectors_ = function(cssRule) {
  */
 goog.debug.DevCss.prototype.getIe6CombinedSelectorText_ = function(cssText) {
   'use strict';
-  var regex = new RegExp(
+  const regex = new RegExp(
       goog.debug.DevCss.CssToken_.IE6_SELECTOR_TEXT +
           '\\s*:\\s*\\"([^\\"]+)\\"',
       'gi');
-  var matches = regex.exec(cssText);
+  const matches = regex.exec(cssText);
   if (matches) {
-    var combinedSelectorText = matches[1];
+    const combinedSelectorText = matches[1];
     // To aid in later fixing the DOM, we need to split up the possible
     // selector groups by commas.
-    var groupedSelectors = combinedSelectorText.split(/\s*\,\s*/);
-    for (var i = 0, selector; selector = groupedSelectors[i]; i++) {
+    const groupedSelectors = combinedSelectorText.split(/\s*\,\s*/);
+    for (let i = 0, selector; selector = groupedSelectors[i]; i++) {
       // Strips off the leading ".".
-      var combinedClassName = selector.substr(1);
-      var classNames = combinedClassName.split(
+      const combinedClassName = selector.substr(1);
+      const classNames = combinedClassName.split(
           goog.debug.DevCss.CssToken_.IE6_COMBINED_GLUE);
-      var entry = {
+      const entry = {
         classNames: classNames,
         combinedClassName: combinedClassName,
         els: []
@@ -424,13 +425,13 @@ goog.debug.DevCss.prototype.addIe6CombinedClassNames_ = function() {
   if (!this.ie6CombinedMatches_.length) {
     return;
   }
-  var allEls = document.getElementsByTagName('*');
+  const allEls = document.getElementsByTagName('*');
   // Match nodes for all classNames.
-  for (var i = 0, classNameEntry; classNameEntry = this.ie6CombinedMatches_[i];
+  for (let i = 0, classNameEntry; classNameEntry = this.ie6CombinedMatches_[i];
        i++) {
-    for (var j = 0, el; el = allEls[j]; j++) {
-      var classNamesLength = classNameEntry.classNames.length;
-      for (var k = 0, className; className = classNameEntry.classNames[k];
+    for (let j = 0, el; el = allEls[j]; j++) {
+      const classNamesLength = classNameEntry.classNames.length;
+      for (let k = 0, className; className = classNameEntry.classNames[k];
            k++) {
         if (!goog.dom.classlist.contains(el, className)) {
           break;
@@ -442,7 +443,7 @@ goog.debug.DevCss.prototype.addIe6CombinedClassNames_ = function() {
     }
     // Walks over our matching nodes and fixes them.
     if (classNameEntry.els.length) {
-      for (var j = 0, el; el = classNameEntry.els[j]; j++) {
+      for (let j = 0, el; el = classNameEntry.els[j]; j++) {
         goog.asserts.assert(el);
         if (!goog.dom.classlist.contains(
                 el, classNameEntry.combinedClassName)) {
