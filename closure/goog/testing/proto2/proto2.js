@@ -27,10 +27,10 @@ goog.require('goog.testing.asserts');
  */
 goog.testing.proto2.findDifferences_ = function(expected, actual, path) {
   'use strict';
-  var fields = expected.getDescriptor().getFields();
-  for (var i = 0; i < fields.length; i++) {
-    var field = fields[i];
-    var newPath = (path ? path + '/' : '') + field.getName();
+  const fields = expected.getDescriptor().getFields();
+  for (let i = 0; i < fields.length; i++) {
+    const field = fields[i];
+    const newPath = (path ? path + '/' : '') + field.getName();
 
     if (expected.has(field) && !actual.has(field)) {
       return newPath + ' should be present';
@@ -40,21 +40,21 @@ goog.testing.proto2.findDifferences_ = function(expected, actual, path) {
     }
 
     if (expected.has(field)) {
-      var isComposite = field.isCompositeType();
+      const isComposite = field.isCompositeType();
 
       if (field.isRepeated()) {
-        var expectedCount = expected.countOf(field);
-        var actualCount = actual.countOf(field);
+        const expectedCount = expected.countOf(field);
+        const actualCount = actual.countOf(field);
         if (expectedCount != actualCount) {
           return newPath + ' should have ' + expectedCount + ' items, ' +
               'but has ' + actualCount;
         }
 
-        for (var j = 0; j < expectedCount; j++) {
-          var expectedItem = expected.get(field, j);
-          var actualItem = actual.get(field, j);
+        for (let j = 0; j < expectedCount; j++) {
+          const expectedItem = expected.get(field, j);
+          const actualItem = actual.get(field, j);
           if (isComposite) {
-            var itemDiff = goog.testing.proto2.findDifferences_(
+            const itemDiff = goog.testing.proto2.findDifferences_(
                 /** @type {!goog.proto2.Message} */ (expectedItem),
                 /** @type {!goog.proto2.Message} */ (actualItem),
                 newPath + '[' + j + ']');
@@ -69,10 +69,10 @@ goog.testing.proto2.findDifferences_ = function(expected, actual, path) {
           }
         }
       } else {
-        var expectedValue = expected.get(field);
-        var actualValue = actual.get(field);
+        const expectedValue = expected.get(field);
+        const actualValue = actual.get(field);
         if (isComposite) {
-          var diff = goog.testing.proto2.findDifferences_(
+          const diff = goog.testing.proto2.findDifferences_(
               /** @type {!goog.proto2.Message} */ (expectedValue),
               /** @type {!goog.proto2.Message} */ (actualValue), newPath);
           if (diff) {
@@ -103,7 +103,7 @@ goog.testing.proto2.findDifferences_ = function(expected, actual, path) {
 goog.testing.proto2.assertEquals = function(
     expected, actual, opt_failureMessage) {
   'use strict';
-  var failureSummary = opt_failureMessage || '';
+  const failureSummary = opt_failureMessage || '';
   if (!(expected instanceof goog.proto2.Message) ||
       !(actual instanceof goog.proto2.Message)) {
     goog.testing.asserts.raiseException(
@@ -116,7 +116,7 @@ goog.testing.proto2.assertEquals = function(
             expected.getDescriptor().getFullName() + ' != ' +
             actual.getDescriptor().getFullName());
   }
-  var diff = goog.testing.proto2.findDifferences_(expected, actual, '');
+  const diff = goog.testing.proto2.findDifferences_(expected, actual, '');
   if (diff) {
     goog.testing.asserts.raiseException(failureSummary, diff);
   }
@@ -133,9 +133,9 @@ goog.testing.proto2.assertEquals = function(
  */
 goog.testing.proto2.fromObject = function(messageCtor, json) {
   'use strict';
-  var serializer = new goog.proto2.ObjectSerializer(
+  const serializer = new goog.proto2.ObjectSerializer(
       goog.proto2.ObjectSerializer.KeyOption.NAME);
-  var message = new messageCtor;
+  const message = new messageCtor;
   serializer.deserializeTo(message, json);
   return message;
 };
