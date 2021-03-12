@@ -130,7 +130,7 @@ goog.testing.fs.FileWriter.prototype.getLength = function() {
 goog.testing.fs.FileWriter.prototype.abort = function() {
   'use strict';
   if (this.readyState_ != goog.fs.FileSaver.ReadyState.WRITING) {
-    var msg = 'aborting save of ' + this.fileEntry_.getFullPath();
+    const msg = 'aborting save of ' + this.fileEntry_.getFullPath();
     throw new goog.fs.Error({'name': 'InvalidStateError'}, msg);
   }
 
@@ -145,7 +145,7 @@ goog.testing.fs.FileWriter.prototype.abort = function() {
 goog.testing.fs.FileWriter.prototype.write = function(blob) {
   'use strict';
   if (this.readyState_ == goog.fs.FileSaver.ReadyState.WRITING) {
-    var msg = 'writing to ' + this.fileEntry_.getFullPath();
+    const msg = 'writing to ' + this.fileEntry_.getFullPath();
     throw new goog.fs.Error({'name': 'InvalidStateError'}, msg);
   }
 
@@ -158,7 +158,7 @@ goog.testing.fs.FileWriter.prototype.write = function(blob) {
     }
 
     this.progressEvent_(goog.fs.FileSaver.EventType.WRITE_START, 0, blob.size);
-    var fileString = this.file_.toString();
+    const fileString = this.file_.toString();
     this.file_.setDataInternal(
         fileString.substring(0, this.position_) + blob.toString() +
         fileString.substring(this.position_ + blob.size, fileString.length));
@@ -180,7 +180,7 @@ goog.testing.fs.FileWriter.prototype.write = function(blob) {
 goog.testing.fs.FileWriter.prototype.truncate = function(size) {
   'use strict';
   if (this.readyState_ == goog.fs.FileSaver.ReadyState.WRITING) {
-    var msg = 'truncating ' + this.fileEntry_.getFullPath();
+    const msg = 'truncating ' + this.fileEntry_.getFullPath();
     throw new goog.fs.Error({'name': 'InvalidStateError'}, msg);
   }
 
@@ -194,7 +194,7 @@ goog.testing.fs.FileWriter.prototype.truncate = function(size) {
 
     this.progressEvent_(goog.fs.FileSaver.EventType.WRITE_START, 0, size);
 
-    var fileString = this.file_.toString();
+    const fileString = this.file_.toString();
     if (size > fileString.length) {
       this.file_.setDataInternal(
           fileString + goog.string.repeat('\0', size - fileString.length));
@@ -217,7 +217,7 @@ goog.testing.fs.FileWriter.prototype.truncate = function(size) {
 goog.testing.fs.FileWriter.prototype.seek = function(offset) {
   'use strict';
   if (this.readyState_ == goog.fs.FileSaver.ReadyState.WRITING) {
-    var msg = 'truncating ' + this.fileEntry_.getFullPath();
+    const msg = 'truncating ' + this.fileEntry_.getFullPath();
     throw new goog.fs.Error({name: 'InvalidStateError'}, msg);
   }
 

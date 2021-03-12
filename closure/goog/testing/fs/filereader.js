@@ -126,7 +126,7 @@ goog.testing.fs.FileReader.prototype.getError = function() {
 goog.testing.fs.FileReader.prototype.abort = function() {
   'use strict';
   if (this.readyState_ != goog.fs.FileReader.ReadyState.LOADING) {
-    var msg = 'aborting read';
+    const msg = 'aborting read';
     throw new goog.fs.Error({'name': 'InvalidStateError'}, msg);
   }
 
@@ -172,7 +172,7 @@ goog.testing.fs.FileReader.prototype.read_ = function(blob) {
   'use strict';
   this.blob_ = blob;
   if (this.readyState_ == goog.fs.FileReader.ReadyState.LOADING) {
-    var msg = 'reading file';
+    const msg = 'reading file';
     throw new goog.fs.Error({'name': 'InvalidStateError'}, msg);
   }
 
