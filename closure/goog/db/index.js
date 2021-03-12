@@ -81,8 +81,8 @@ goog.db.Index.prototype.isUnique = function() {
  */
 goog.db.Index.prototype.get_ = function(fn, msg, key) {
   'use strict';
-  var d = new goog.async.Deferred();
-  var request;
+  const d = new goog.async.Deferred();
+  let request;
   try {
     request = this.index_[fn](key);
   } catch (err) {
@@ -186,7 +186,7 @@ goog.db.Index.prototype.getAllKeys = function(opt_key, opt_count) {
  */
 goog.db.Index.prototype.getAll_ = function(fn, msg, keyOrRange, count) {
   'use strict';
-  var nativeRange;
+  let nativeRange;
   if (keyOrRange === undefined) {
     nativeRange = undefined;
   } else if (keyOrRange instanceof goog.db.KeyRange) {
@@ -195,8 +195,8 @@ goog.db.Index.prototype.getAll_ = function(fn, msg, keyOrRange, count) {
     nativeRange = goog.db.KeyRange.only(keyOrRange).range();
   }
 
-  var d = new goog.async.Deferred();
-  var request;
+  const d = new goog.async.Deferred();
+  let request;
   try {
     request = this.index_[fn](nativeRange, count);
   } catch (err) {

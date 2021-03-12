@@ -74,9 +74,9 @@ goog.db.Cursor.prototype.next = function(opt_key) {
  */
 goog.db.Cursor.prototype.update = function(value) {
   'use strict';
-  var msg = 'updating via cursor with value ';
-  var d = new goog.async.Deferred();
-  var request;
+  let msg = 'updating via cursor with value ';
+  const d = new goog.async.Deferred();
+  let request;
 
   try {
     request = this.cursor_.update(value);
@@ -106,9 +106,9 @@ goog.db.Cursor.prototype.update = function(value) {
  */
 goog.db.Cursor.prototype.remove = function() {
   'use strict';
-  var msg = 'deleting via cursor';
-  var d = new goog.async.Deferred();
-  var request;
+  const msg = 'deleting via cursor';
+  const d = new goog.async.Deferred();
+  let request;
 
   try {
     request = this.cursor_['delete']();
@@ -161,11 +161,11 @@ goog.db.Cursor.prototype.getKey = function() {
  */
 goog.db.Cursor.openCursor = function(source, opt_range, opt_direction) {
   'use strict';
-  var cursor = new goog.db.Cursor();
-  var request;
+  const cursor = new goog.db.Cursor();
+  let request;
 
   try {
-    var range = opt_range ? opt_range.range() : null;
+    const range = opt_range ? opt_range.range() : null;
     if (opt_direction) {
       request = source.openCursor(range, opt_direction);
     } else {

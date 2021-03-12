@@ -217,8 +217,8 @@ goog.db.IndexedDb.prototype.createTransaction = function(storeNames, opt_mode) {
   try {
     // IndexedDB on Chrome 22+ requires that opt_mode not be passed rather than
     // be explicitly passed as undefined.
-    var transaction = opt_mode ? this.db_.transaction(storeNames, opt_mode) :
-                                 this.db_.transaction(storeNames);
+    const transaction = opt_mode ? this.db_.transaction(storeNames, opt_mode) :
+                                   this.db_.transaction(storeNames);
     return new goog.db.Transaction(transaction, this);
   } catch (ex) {
     throw goog.db.Error.fromException(ex, 'creating transaction');
