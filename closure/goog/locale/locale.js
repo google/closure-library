@@ -88,7 +88,7 @@ goog.locale.Resource = {
  */
 goog.locale.getLanguageSubTag = function(languageCode) {
   'use strict';
-  var result = languageCode.match(/^\w{2,3}([-_]|$)/);
+  const result = languageCode.match(/^\w{2,3}([-_]|$)/);
   return result ? result[0].replace(/[_-]/g, '') : '';
 };
 
@@ -101,7 +101,7 @@ goog.locale.getLanguageSubTag = function(languageCode) {
  */
 goog.locale.getRegionSubTag = function(languageCode) {
   'use strict';
-  var result = languageCode.match(/[-_]([a-zA-Z]{2}|\d{3})([-_]|$)/);
+  const result = languageCode.match(/[-_]([a-zA-Z]{2}|\d{3})([-_]|$)/);
   return result ? result[0].replace(/[_-]/g, '') : '';
 };
 
@@ -115,7 +115,7 @@ goog.locale.getRegionSubTag = function(languageCode) {
  */
 goog.locale.getScriptSubTag = function(languageCode) {
   'use strict';
-  var result = languageCode.split(/[-_]/g);
+  const result = languageCode.split(/[-_]/g);
   return result.length > 1 && result[1].match(/^[a-zA-Z]{4}$/) ? result[1] : '';
 };
 
@@ -128,7 +128,7 @@ goog.locale.getScriptSubTag = function(languageCode) {
  */
 goog.locale.getVariantSubTag = function(languageCode) {
   'use strict';
-  var result = languageCode.match(/[-_]([a-z]{2,})/);
+  const result = languageCode.match(/[-_]([a-z]{2,})/);
   return result ? result[1] : '';
 };
 
@@ -146,7 +146,7 @@ goog.locale.getVariantSubTag = function(languageCode) {
  */
 goog.locale.getNativeCountryName = function(countryCode) {
   'use strict';
-  var key = goog.locale.getLanguageSubTag(countryCode) + '_' +
+  const key = goog.locale.getLanguageSubTag(countryCode) + '_' +
       goog.locale.getRegionSubTag(countryCode);
   return key in goog.locale.nativeNameConstants['COUNTRY'] ?
       goog.locale.nativeNameConstants['COUNTRY'][key] :
@@ -171,8 +171,8 @@ goog.locale.getNativeCountryName = function(countryCode) {
 goog.locale.getLocalizedCountryName = function(
     languageCode, opt_localeSymbols) {
   'use strict';
-  var code = goog.locale.getRegionSubTag(languageCode);
-  var name =
+  const code = goog.locale.getRegionSubTag(languageCode);
+  const name =
       goog.locale.getLocalizedRegionNameFromRegionCode(code, opt_localeSymbols);
   return name == code ? languageCode : name;
 };
@@ -219,7 +219,7 @@ goog.locale.getNativeLanguageName = function(languageCode) {
   'use strict';
   if (languageCode in goog.locale.nativeNameConstants['LANGUAGE'])
     return goog.locale.nativeNameConstants['LANGUAGE'][languageCode];
-  var code = goog.locale.getLanguageSubTag(languageCode);
+  const code = goog.locale.getLanguageSubTag(languageCode);
   return code in goog.locale.nativeNameConstants['LANGUAGE'] ?
       goog.locale.nativeNameConstants['LANGUAGE'][code] :
       languageCode;
@@ -248,7 +248,7 @@ goog.locale.getLocalizedLanguageName = function(
   }
   if (languageCode in opt_localeSymbols['LANGUAGE'])
     return opt_localeSymbols['LANGUAGE'][languageCode];
-  var code = goog.locale.getLanguageSubTag(languageCode);
+  const code = goog.locale.getLanguageSubTag(languageCode);
   return code in opt_localeSymbols['LANGUAGE'] ?
       opt_localeSymbols['LANGUAGE'][code] :
       languageCode;
@@ -383,7 +383,7 @@ goog.locale.registerTimeZoneAllLongNames = function(dataObj, localeName) {
  */
 goog.locale.getResource = function(resourceName, opt_locale) {
   'use strict';
-  var locale = opt_locale ? opt_locale : goog.locale.getLocale();
+  const locale = opt_locale ? opt_locale : goog.locale.getLocale();
 
   if (!(resourceName in goog.locale.resourceRegistry_)) {
     return undefined;
@@ -405,7 +405,7 @@ goog.locale.getResource = function(resourceName, opt_locale) {
  */
 goog.locale.getResourceWithFallback = function(resourceName, opt_locale) {
   'use strict';
-  var locale = opt_locale ? opt_locale : goog.locale.getLocale();
+  const locale = opt_locale ? opt_locale : goog.locale.getLocale();
 
   if (!(resourceName in goog.locale.resourceRegistry_)) {
     return undefined;
@@ -416,7 +416,7 @@ goog.locale.getResourceWithFallback = function(resourceName, opt_locale) {
   }
 
   // if locale has multiple parts (2 atmost in reality), fallback to base part.
-  var locale_parts = locale.split('_');
+  const locale_parts = locale.split('_');
   if (locale_parts.length > 1 &&
       locale_parts[0] in goog.locale.resourceRegistry_[resourceName]) {
     return goog.locale.resourceRegistry_[resourceName][locale_parts[0]];
@@ -435,14 +435,14 @@ goog.locale.getResourceWithFallback = function(resourceName, opt_locale) {
  * @param {!Object} dataObj The resource object.
  * @param {string} localeName Locale ID.
  */
-var registerLocalNameConstants = goog.locale.registerLocaleNameConstants;
+const registerLocalNameConstants = goog.locale.registerLocaleNameConstants;
 
 /**
  * Registers the TimeZoneSelectedIds constants object for a given locale name.
  * @param {?Object} dataObj The resource object.
  * @param {string} localeName Locale ID.
  */
-var registerTimeZoneSelectedIds = goog.locale.registerTimeZoneSelectedIds;
+const registerTimeZoneSelectedIds = goog.locale.registerTimeZoneSelectedIds;
 
 /**
  * Registers the TimeZoneSelectedShortNames constants object for a given
@@ -450,7 +450,7 @@ var registerTimeZoneSelectedIds = goog.locale.registerTimeZoneSelectedIds;
  * @param {!Object} dataObj The resource object.
  * @param {string} localeName Locale ID.
  */
-var registerTimeZoneSelectedShortNames =
+const registerTimeZoneSelectedShortNames =
     goog.locale.registerTimeZoneSelectedShortNames;
 
 /**
@@ -459,7 +459,7 @@ var registerTimeZoneSelectedShortNames =
  * @param {!Object} dataObj The resource object.
  * @param {string} localeName Locale ID.
  */
-var registerTimeZoneSelectedLongNames =
+const registerTimeZoneSelectedLongNames =
     goog.locale.registerTimeZoneSelectedLongNames;
 
 /**
@@ -467,4 +467,4 @@ var registerTimeZoneSelectedLongNames =
  * @param {!Object} dataObj The resource object.
  * @param {string} localeName Locale ID.
  */
-var registerTimeZoneAllLongNames = goog.locale.registerTimeZoneAllLongNames;
+const registerTimeZoneAllLongNames = goog.locale.registerTimeZoneAllLongNames;
