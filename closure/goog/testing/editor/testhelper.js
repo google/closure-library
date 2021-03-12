@@ -102,7 +102,7 @@ goog.testing.editor.TestHelper.prototype.tearDownEditableElement = function() {
 
   if (goog.editor.plugins && goog.editor.plugins.AbstractBubblePlugin) {
     // Remove old bubbles.
-    for (var key in goog.editor.plugins.AbstractBubblePlugin.bubbleMap_) {
+    for (let key in goog.editor.plugins.AbstractBubblePlugin.bubbleMap_) {
       goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[key].dispose();
     }
     // Ensure we get a new bubble for each test.
@@ -156,17 +156,18 @@ goog.testing.editor.TestHelper.prototype.findTextNode = function(textOrRegexp) {
 goog.testing.editor.TestHelper.prototype.select = function(
     from, fromOffset, opt_to, opt_toOffset) {
   'use strict';
-  var end;
-  var start = end = (typeof from === 'string') ? this.findTextNode(from) : from;
-  var endOffset;
-  var startOffset = endOffset = fromOffset;
+  let end;
+  const start = end =
+      (typeof from === 'string') ? this.findTextNode(from) : from;
+  let endOffset;
+  const startOffset = endOffset = fromOffset;
 
   if (opt_to && typeof opt_toOffset === 'number') {
     end = (typeof opt_to === 'string') ? this.findTextNode(opt_to) : opt_to;
     endOffset = opt_toOffset;
   }
 
-  var range =
+  const range =
       goog.dom.Range.createFromNodes(start, startOffset, end, endOffset);
   range.select();
   return range;

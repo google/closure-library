@@ -43,7 +43,7 @@ goog.testing.editor.FieldMock = function(opt_window, opt_appWindow, opt_range) {
 
   // We want to pretend this is a Field even though it can't actaully be a
   // subclass.
-  var thisField = /** @type {!goog.editor.Field} */ (/** @type {*} */ (this));
+  const thisField = /** @type {!goog.editor.Field} */ (/** @type {*} */ (this));
 
   thisField.getAppWindow();
   this.$anyTimes();
@@ -80,7 +80,7 @@ goog.testing.editor.FieldMock = function(opt_window, opt_appWindow, opt_range) {
 
   // These methods cannot be set on the prototype, because the prototype
   // gets stepped on by the mock framework.
-  var inModalMode = false;
+  let inModalMode = false;
 
   /**
    * @return {boolean} Whether we're in modal interaction mode.
@@ -98,7 +98,7 @@ goog.testing.editor.FieldMock = function(opt_window, opt_appWindow, opt_range) {
     inModalMode = mode;
   };
 
-  var uneditable = false;
+  let uneditable = false;
 
   /**
    * @return {boolean} Whether the field is uneditable.
