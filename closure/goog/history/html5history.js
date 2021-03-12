@@ -84,7 +84,7 @@ goog.inherits(goog.history.Html5History, goog.events.EventTarget);
  */
 goog.history.Html5History.isSupported = function(opt_win) {
   'use strict';
-  var win = opt_win || window;
+  const win = opt_win || window;
   return !!(win.history && win.history.pushState);
 };
 
@@ -252,8 +252,8 @@ goog.history.Html5History.prototype.getPathPrefix = function() {
 goog.history.Html5History.prototype.getFragment_ = function() {
   'use strict';
   if (this.useFragment_) {
-    var loc = this.window_.location.href;
-    var index = loc.indexOf('#');
+    const loc = this.window_.location.href;
+    const index = loc.indexOf('#');
     return index < 0 ? '' : loc.substring(index + 1);
   } else {
     return null;
@@ -288,7 +288,7 @@ goog.history.Html5History.prototype.getUrl_ = function(token) {
 goog.history.Html5History.prototype.onHistoryEvent_ = function(e) {
   'use strict';
   if (this.enabled_) {
-    var fragment = this.getFragment_();
+    const fragment = this.getFragment_();
     // Only fire NAVIGATE event if it's POPSTATE or if the fragment has changed
     // without a POPSTATE event. The latter is an indication the browser doesn't
     // support POPSTATE, and the event is a HASHCHANGE instead.

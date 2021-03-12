@@ -232,12 +232,12 @@ goog.History = function(
         'Can\'t use invisible history without providing a blank page.');
   }
 
-  var input;
+  let input;
   if (opt_input) {
     input = opt_input;
   } else {
-    var inputId = 'history_state' + goog.History.historyCount_;
-    var inputHtml = goog.html.SafeHtml.create('input', {
+    const inputId = 'history_state' + goog.History.historyCount_;
+    const inputHtml = goog.html.SafeHtml.create('input', {
       type: goog.dom.InputType.TEXT,
       name: inputId,
       id: inputId,
@@ -308,19 +308,20 @@ goog.History = function(
   this.eventHandler_ = new goog.events.EventHandler(this);
 
   if (opt_invisible || goog.History.LEGACY_IE) {
-    var iframe;
+    let iframe;
     if (opt_iframe) {
       iframe = opt_iframe;
     } else {
-      var iframeId = 'history_iframe' + goog.History.historyCount_;
+      const iframeId = 'history_iframe' + goog.History.historyCount_;
       // Using a "sandbox" attribute on the iframe might be possible, but
       // this HTML didn't initially have it and when it was refactored
       // to SafeHtml it was kept without it.
-      var iframeHtml = goog.html.SafeHtml.createIframe(this.iframeSrc_, null, {
-        id: iframeId,
-        style: goog.string.Const.from('display:none'),
-        sandbox: undefined
-      });
+      const iframeHtml =
+          goog.html.SafeHtml.createIframe(this.iframeSrc_, null, {
+            id: iframeId,
+            style: goog.string.Const.from('display:none'),
+            sandbox: undefined
+          });
       goog.dom.safe.documentWrite(document, iframeHtml);
       iframe = goog.dom.getElement(iframeId);
     }
@@ -586,7 +587,7 @@ goog.History.prototype.onShow_ = function(e) {
  */
 goog.History.prototype.onHashChange_ = function(e) {
   'use strict';
-  var hash = this.getLocationFragment_(this.window_);
+  const hash = this.getLocationFragment_(this.window_);
   if (hash != this.lastToken_) {
     this.update_(hash, true);
   }
@@ -648,8 +649,8 @@ goog.History.prototype.replaceToken = function(token, opt_title) {
  */
 goog.History.prototype.getLocationFragment_ = function(win) {
   'use strict';
-  var href = win.location.href;
-  var index = href.indexOf('#');
+  const href = win.location.href;
+  const index = href.indexOf('#');
   return index < 0 ? '' : href.substring(index + 1);
 };
 
@@ -725,19 +726,19 @@ goog.History.prototype.setHash_ = function(token, opt_replace) {
   // navigate away from the current document. Also, the original URL path may
   // possibly change from HTML5 history pushState. To account for these, the
   // full path is always specified.
-  var loc = this.window_.location;
-  var url = loc.href.split('#')[0];
+  const loc = this.window_.location;
+  let url = loc.href.split('#')[0];
 
   // If a hash has already been set, then removing it programmatically will
   // reload the page. Once there is a hash, we won't remove it.
-  var hasHash = goog.string.contains(loc.href, '#');
+  const hasHash = goog.string.contains(loc.href, '#');
 
   if (goog.History.HASH_ALWAYS_REQUIRED || hasHash || token) {
     url += '#' + token;
   }
 
   if (url != loc.href) {
-    var safeUrl =
+    const safeUrl =
         goog.html.uncheckedconversions
             .safeUrlFromStringKnownToSatisfyTypeContract(
                 goog.string.Const.from('URL taken from location.href.'), url);
@@ -774,10 +775,10 @@ goog.History.prototype.setIframeToken_ = function(
     if (goog.userAgent.IE) {
       // Caching the iframe document results in document permission errors after
       // leaving the page and returning. Access it anew each time instead.
-      var doc = goog.dom.getFrameContentDocument(this.iframe_);
+      const doc = goog.dom.getFrameContentDocument(this.iframe_);
 
       doc.open('text/html', opt_replace ? 'replace' : undefined);
-      var iframeSourceHtml = goog.html.SafeHtml.concat(
+      const iframeSourceHtml = goog.html.SafeHtml.concat(
           goog.html.SafeHtml.create(
               'title', {}, (opt_title || this.window_.document.title)),
           goog.html.SafeHtml.create('body', {}, token));
@@ -787,14 +788,14 @@ goog.History.prototype.setIframeToken_ = function(
       goog.asserts.assertInstanceof(
           this.iframeSrc_, goog.html.TrustedResourceUrl,
           'this.iframeSrc_ must be set on calls to setIframeToken_');
-      var url =
+      const url =
           goog.html.TrustedResourceUrl.unwrap(
               /** @type {!goog.html.TrustedResourceUrl} */ (this.iframeSrc_)) +
           '#' + token;
 
       // In Safari, it is possible for the contentWindow of the iframe to not
       // be present when the page is loading after a reload.
-      var contentWindow = this.iframe_.contentWindow;
+      const contentWindow = this.iframe_.contentWindow;
       if (contentWindow) {
         if (opt_replace) {
           goog.dom.safe.replaceLocation(contentWindow.location, url);
@@ -822,14 +823,14 @@ goog.History.prototype.setIframeToken_ = function(
 goog.History.prototype.getIframeToken_ = function() {
   'use strict';
   if (goog.userAgent.IE) {
-    var doc = goog.dom.getFrameContentDocument(this.iframe_);
+    const doc = goog.dom.getFrameContentDocument(this.iframe_);
     return doc.body ? goog.string.urlDecode(doc.body.innerHTML) : null;
   } else {
     // In Safari, it is possible for the contentWindow of the iframe to not
     // be present when the page is loading after a reload.
-    var contentWindow = this.iframe_.contentWindow;
+    const contentWindow = this.iframe_.contentWindow;
     if (contentWindow) {
-      var hash;
+      let hash;
 
       try {
         // Iframe tokens are urlEncoded
@@ -879,7 +880,7 @@ goog.History.prototype.getIframeToken_ = function() {
 goog.History.prototype.check_ = function(isNavigation) {
   'use strict';
   if (this.userVisible_) {
-    var hash = this.getLocationFragment_(this.window_);
+    const hash = this.getLocationFragment_(this.window_);
     if (hash != this.lastToken_) {
       this.update_(hash, isNavigation);
     }
@@ -887,7 +888,7 @@ goog.History.prototype.check_ = function(isNavigation) {
 
   // Old IE uses the iframe for both visible and non-visible versions.
   if (!this.userVisible_ || goog.History.LEGACY_IE) {
-    var token = this.getIframeToken_() || '';
+    const token = this.getIframeToken_() || '';
     if (this.lockedToken_ == null || token == this.lockedToken_) {
       this.lockedToken_ = null;
       if (token != this.lastToken_) {
