@@ -91,7 +91,7 @@ goog.messaging.MultiChannel.prototype.createVirtualChannel = function(name) {
         'this multichannel.');
   }
 
-  var channel = new goog.messaging.MultiChannel.VirtualChannel(this, name);
+  const channel = new goog.messaging.MultiChannel.VirtualChannel(this, name);
   this.virtualChannels_[name] = channel;
   return channel;
 };
@@ -108,7 +108,7 @@ goog.messaging.MultiChannel.prototype.createVirtualChannel = function(name) {
 goog.messaging.MultiChannel.prototype.handleDefault_ = function(
     serviceName, payload) {
   'use strict';
-  var match = serviceName.match(/^([^:]*):(.*)/);
+  const match = serviceName.match(/^([^:]*):(.*)/);
   if (!match) {
     goog.log.warning(
         this.logger_, 'Invalid service name "' + serviceName + '": no ' +
@@ -116,7 +116,7 @@ goog.messaging.MultiChannel.prototype.handleDefault_ = function(
     return;
   }
 
-  var channelName = match[1];
+  const channelName = match[1];
   serviceName = match[2];
   if (!(channelName in this.virtualChannels_)) {
     goog.log.warning(
@@ -125,7 +125,7 @@ goog.messaging.MultiChannel.prototype.handleDefault_ = function(
     return;
   }
 
-  var virtualChannel = this.virtualChannels_[channelName];
+  const virtualChannel = this.virtualChannels_[channelName];
   if (!virtualChannel) {
     goog.log.warning(
         this.logger_, 'Virtual channel "' + channelName + ' has been ' +

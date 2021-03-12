@@ -121,18 +121,18 @@ goog.messaging.PortOperator.prototype.addPort = function(name, port) {
 goog.messaging.PortOperator.prototype.requestConnection_ = function(
     sourceName, message) {
   'use strict';
-  var requestedName = /** @type {string} */ (message);
+  const requestedName = /** @type {string} */ (message);
   if (requestedName == this.name_) {
     this.connectSelfToPort_(sourceName);
     return;
   }
 
-  var sourceChannel = this.switchboard_[sourceName];
-  var requestedChannel = this.switchboard_[requestedName];
+  const sourceChannel = this.switchboard_[sourceName];
+  const requestedChannel = this.switchboard_[requestedName];
 
   goog.asserts.assert(sourceChannel != null);
   if (!requestedChannel) {
-    var err = 'Port "' + sourceName + '" requested a connection to port "' +
+    const err = 'Port "' + sourceName + '" requested a connection to port "' +
         requestedName + '", which doesn\'t exist';
     goog.log.warning(this.logger_, err);
     sourceChannel.send(
@@ -141,7 +141,7 @@ goog.messaging.PortOperator.prototype.requestConnection_ = function(
     return;
   }
 
-  var messageChannel = new MessageChannel();
+  const messageChannel = new MessageChannel();
   sourceChannel.send(
       goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE,
       {'success': true, 'name': requestedName, 'port': messageChannel.port1});
@@ -167,12 +167,12 @@ goog.messaging.PortOperator.prototype.connectSelfToPort_ = function(
     return;
   }
 
-  var contextChannel = this.switchboard_[contextName];
+  const contextChannel = this.switchboard_[contextName];
   if (!contextChannel) {
     throw new Error('Port "' + contextName + '" doesn\'t exist');
   }
 
-  var messageChannel = new MessageChannel();
+  const messageChannel = new MessageChannel();
   contextChannel.send(
       goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE,
       {'success': true, 'name': this.name_, 'port': messageChannel.port1});

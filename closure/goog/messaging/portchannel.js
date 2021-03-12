@@ -105,10 +105,10 @@ goog.messaging.PortChannel.forEmbeddedWindow = function(
         goog.async.Deferred.fail(new Error('Invalid origin')));
   }
 
-  var timer = opt_timer || new goog.Timer(50);
+  const timer = opt_timer || new goog.Timer(50);
 
-  var disposeTimer = goog.partial(goog.dispose, timer);
-  var deferred = new goog.async.Deferred(disposeTimer);
+  const disposeTimer = goog.partial(goog.dispose, timer);
+  const deferred = new goog.async.Deferred(disposeTimer);
   deferred.addBoth(disposeTimer);
 
   timer.start();
@@ -122,8 +122,8 @@ goog.messaging.PortChannel.forEmbeddedWindow = function(
   // context hasn't seen them).
   goog.events.listen(timer, goog.Timer.TICK, function() {
     'use strict';
-    var channel = new MessageChannel();
-    var gotMessage = function(e) {
+    const channel = new MessageChannel();
+    const gotMessage = function(e) {
       'use strict';
       channel.port1.removeEventListener(
           goog.events.EventType.MESSAGE, gotMessage, true);
@@ -140,7 +140,7 @@ goog.messaging.PortChannel.forEmbeddedWindow = function(
     channel.port1.addEventListener(
         goog.events.EventType.MESSAGE, gotMessage, true);
 
-    var msg = {};
+    const msg = {};
     msg[goog.messaging.PortChannel.FLAG] = true;
     peerWindow.postMessage(msg, peerOrigin, [channel.port2]);
   });
@@ -171,15 +171,15 @@ goog.messaging.PortChannel.forGlobalWindow = function(peerOrigin) {
         goog.async.Deferred.fail(new Error('Invalid origin')));
   }
 
-  var deferred = new goog.async.Deferred();
+  const deferred = new goog.async.Deferred();
   // Wait for the external page to post a message containing the message port
   // which we'll use to set up the PortChannel. Ignore all other messages. Once
   // we receive the port, notify the other end and then set up the PortChannel.
-  var key =
+  const key =
       goog.events.listen(window, goog.events.EventType.MESSAGE, function(e) {
         'use strict';
-        var browserEvent = e.getBrowserEvent();
-        var data = browserEvent.data;
+        const browserEvent = e.getBrowserEvent();
+        const data = browserEvent.data;
         if (!goog.isObject(data) || !data[goog.messaging.PortChannel.FLAG]) {
           return;
         }
@@ -189,7 +189,7 @@ goog.messaging.PortChannel.forGlobalWindow = function(peerOrigin) {
           return;
         }
 
-        var port = browserEvent.ports[0];
+        const port = browserEvent.ports[0];
         // Notify the other end of the channel that we've received our port
         port.postMessage({});
 
@@ -252,9 +252,9 @@ goog.messaging.PortChannel.prototype.logger =
  */
 goog.messaging.PortChannel.prototype.send = function(serviceName, payload) {
   'use strict';
-  var ports = [];
+  const ports = [];
   payload = this.extractPorts_(ports, payload);
-  var message = {'serviceName': serviceName, 'payload': payload};
+  let message = {'serviceName': serviceName, 'payload': payload};
   message[goog.messaging.PortChannel.FLAG] = true;
 
   if (goog.messaging.PortChannel.REQUIRES_SERIALIZATION_) {
@@ -276,8 +276,8 @@ goog.messaging.PortChannel.prototype.send = function(serviceName, payload) {
  */
 goog.messaging.PortChannel.prototype.deliver_ = function(e) {
   'use strict';
-  var browserEvent = e.getBrowserEvent();
-  var data = browserEvent.data;
+  const browserEvent = e.getBrowserEvent();
+  let data = browserEvent.data;
 
   if (goog.messaging.PortChannel.REQUIRES_SERIALIZATION_) {
     try {
@@ -293,9 +293,9 @@ goog.messaging.PortChannel.prototype.deliver_ = function(e) {
   }
 
   if (this.validateMessage_(data)) {
-    var serviceName = data['serviceName'];
-    var payload = data['payload'];
-    var service = this.getService(serviceName, payload);
+    const serviceName = data['serviceName'];
+    let payload = data['payload'];
+    const service = this.getService(serviceName, payload);
     if (!service) {
       return;
     }
