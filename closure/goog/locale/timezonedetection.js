@@ -35,13 +35,13 @@ goog.locale.timeZoneDetection.TZ_POKE_POINTS_ = [
  */
 goog.locale.timeZoneDetection.getFingerprint = function(date) {
   'use strict';
-  let hash = 0;
-  let stdOffset;
-  let isComplex = false;
-  for (let i = 0; i < goog.locale.timeZoneDetection.TZ_POKE_POINTS_.length;
+  var hash = 0;
+  var stdOffset;
+  var isComplex = false;
+  for (var i = 0; i < goog.locale.timeZoneDetection.TZ_POKE_POINTS_.length;
        i++) {
     date.setTime(goog.locale.timeZoneDetection.TZ_POKE_POINTS_[i] * 1000);
-    const offset = date.getTimezoneOffset() / 30 + 48;
+    var offset = date.getTimezoneOffset() / 30 + 48;
     if (i == 0) {
       stdOffset = offset;
     } else if (stdOffset != offset) {
@@ -63,15 +63,15 @@ goog.locale.timeZoneDetection.getFingerprint = function(date) {
  */
 goog.locale.timeZoneDetection.detectTimeZone = function(opt_country, opt_date) {
   'use strict';
-  const date = opt_date || new Date();
-  const fingerprint = goog.locale.timeZoneDetection.getFingerprint(date);
-  const timeZoneList = goog.locale.TimeZoneFingerprint[fingerprint];
+  var date = opt_date || new Date();
+  var fingerprint = goog.locale.timeZoneDetection.getFingerprint(date);
+  var timeZoneList = goog.locale.TimeZoneFingerprint[fingerprint];
   // Timezones in goog.locale.TimeZoneDetection.TimeZoneMap are in the format
   // US-America/Los_Angeles. Country code needs to be stripped before a
   // timezone is returned.
   if (timeZoneList) {
     if (opt_country) {
-      for (let i = 0; i < timeZoneList.length; ++i) {
+      for (var i = 0; i < timeZoneList.length; ++i) {
         if (timeZoneList[i].indexOf(opt_country) == 0) {
           return timeZoneList[i].substring(3);
         }
@@ -96,14 +96,14 @@ goog.locale.timeZoneDetection.detectTimeZone = function(opt_country, opt_date) {
 goog.locale.timeZoneDetection.getTimeZoneList = function(
     opt_country, opt_date) {
   'use strict';
-  const date = opt_date || new Date();
-  const fingerprint = goog.locale.timeZoneDetection.getFingerprint(date);
-  const timeZoneList = goog.locale.TimeZoneFingerprint[fingerprint];
+  var date = opt_date || new Date();
+  var fingerprint = goog.locale.timeZoneDetection.getFingerprint(date);
+  var timeZoneList = goog.locale.TimeZoneFingerprint[fingerprint];
   if (!timeZoneList) {
     return [];
   }
-  const chosenList = [];
-  for (let i = 0; i < timeZoneList.length; i++) {
+  var chosenList = [];
+  for (var i = 0; i < timeZoneList.length; i++) {
     if (!opt_country || timeZoneList[i].indexOf(opt_country) == 0) {
       chosenList.push(timeZoneList[i].substring(3));
     }
