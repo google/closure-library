@@ -160,7 +160,7 @@ goog.format.HtmlPrettyPrinter.prototype.format = function(html) {
 
   // Keep track of how much time we've used.
   var timeOutMillis = this.timeOutMillis_;
-  var startMillis = timeOutMillis ? goog.now() : 0;
+  var startMillis = timeOutMillis ? Date.now() : 0;
 
   // Handles concatenation of the result and required line breaks.
   var buffer = new goog.format.HtmlPrettyPrinter.Buffer();
@@ -242,7 +242,7 @@ goog.format.HtmlPrettyPrinter.prototype.format = function(html) {
 
     // Out of time?
     if (timeOutMillis) {
-      if (goog.now() - startMillis > timeOutMillis) {
+      if (Date.now() - startMillis > timeOutMillis) {
         // Push unprocessed data as one big token and reset regex object.
         buffer.pushToken(false, html.substring(tokenRegex.lastIndex), false);
         tokenRegex.lastIndex = 0;
