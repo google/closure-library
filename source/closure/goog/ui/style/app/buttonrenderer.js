@@ -113,8 +113,8 @@ goog.ui.style.app.ButtonRenderer.prototype.getContentElement = function(
 goog.ui.style.app.ButtonRenderer.prototype.createButton = function(
     content, dom) {
   'use strict';
-  var baseClass = this.getStructuralCssClass();
-  var inlineBlock = goog.ui.INLINE_BLOCK_CLASSNAME + ' ';
+  const baseClass = this.getStructuralCssClass();
+  const inlineBlock = goog.ui.INLINE_BLOCK_CLASSNAME + ' ';
   return dom.createDom(
       goog.dom.TagName.DIV,
       inlineBlock + goog.getCssName(baseClass, 'outer-box'),
@@ -144,21 +144,21 @@ goog.ui.style.app.ButtonRenderer.prototype.createButton = function(
 goog.ui.style.app.ButtonRenderer.prototype.hasBoxStructure = function(
     button, element) {
   'use strict';
-  var baseClass = this.getStructuralCssClass();
-  var outer = button.getDomHelper().getFirstElementChild(element);
-  var outerClassName = goog.getCssName(baseClass, 'outer-box');
+  const baseClass = this.getStructuralCssClass();
+  const outer = button.getDomHelper().getFirstElementChild(element);
+  const outerClassName = goog.getCssName(baseClass, 'outer-box');
   if (outer && goog.dom.classlist.contains(outer, outerClassName)) {
-    var inner = button.getDomHelper().getFirstElementChild(outer);
-    var innerClassName = goog.getCssName(baseClass, 'inner-box');
+    const inner = button.getDomHelper().getFirstElementChild(outer);
+    const innerClassName = goog.getCssName(baseClass, 'inner-box');
     if (inner && goog.dom.classlist.contains(inner, innerClassName)) {
-      var pos = button.getDomHelper().getFirstElementChild(inner);
-      var posClassName = goog.getCssName(baseClass, 'pos');
+      const pos = button.getDomHelper().getFirstElementChild(inner);
+      const posClassName = goog.getCssName(baseClass, 'pos');
       if (pos && goog.dom.classlist.contains(pos, posClassName)) {
-        var shadow = button.getDomHelper().getFirstElementChild(pos);
-        var shadowClassName = goog.getCssName(baseClass, 'top-shadow');
+        const shadow = button.getDomHelper().getFirstElementChild(pos);
+        const shadowClassName = goog.getCssName(baseClass, 'top-shadow');
         if (shadow && goog.dom.classlist.contains(shadow, shadowClassName)) {
-          var content = button.getDomHelper().getNextElementSibling(shadow);
-          var contentClassName = goog.getCssName(baseClass, 'content');
+          const content = button.getDomHelper().getNextElementSibling(shadow);
+          const contentClassName = goog.getCssName(baseClass, 'content');
           if (content &&
               goog.dom.classlist.contains(content, contentClassName)) {
             // We have a proper box structure.

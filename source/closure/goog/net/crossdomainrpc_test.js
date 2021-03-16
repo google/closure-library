@@ -40,7 +40,7 @@ testSuite({
   },
 
   testNormalRequest() {
-    const start = goog.now();
+    const start = Date.now();
     return new GoogPromise((resolve, reject) => {
              CrossDomainRpc.send(
                  'crossdomainrpc_test_response.html', resolve, 'POST',
@@ -52,7 +52,7 @@ testSuite({
                */
               (e) => {
                 if (e.target.status < 300) {
-                  const elapsed = goog.now() - start;
+                  const elapsed = Date.now() - start;
                   const responseData = eval(e.target.responseText);
                   log.fine(
                       CrossDomainRpc.logger_,

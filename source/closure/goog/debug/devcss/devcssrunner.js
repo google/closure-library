@@ -14,6 +14,6 @@ goog.require('goog.debug.DevCss');
 
 (function() {
 'use strict';
-var devCssInstance = new goog.debug.DevCss();
+const devCssInstance = new goog.debug.DevCss();
 devCssInstance.activateBrowserSpecificCssRules();
 })();

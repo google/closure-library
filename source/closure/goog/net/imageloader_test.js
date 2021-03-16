@@ -90,7 +90,7 @@ testSuite({
   },
 
   setUp() {
-    startTime = goog.now();
+    startTime = Date.now();
 
     loader = new ImageLoader();
 

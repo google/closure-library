@@ -223,7 +223,7 @@ goog.ui.tree.TreeControl.prototype.getExpandIconSafeHtml = function() {
 /** @override */
 goog.ui.tree.TreeControl.prototype.getIconElement = function() {
   'use strict';
-  var el = this.getRowElement();
+  const el = this.getRowElement();
   return el ? /** @type {Element} */ (el.firstChild) : null;
 };
 
@@ -257,18 +257,18 @@ goog.ui.tree.TreeControl.prototype.getRowClassName = function() {
  */
 goog.ui.tree.TreeControl.prototype.getCalculatedIconClass = function() {
   'use strict';
-  var expanded = this.getExpanded();
-  var expandedIconClass = this.getExpandedIconClass();
+  const expanded = this.getExpanded();
+  const expandedIconClass = this.getExpandedIconClass();
   if (expanded && expandedIconClass) {
     return expandedIconClass;
   }
-  var iconClass = this.getIconClass();
+  const iconClass = this.getIconClass();
   if (!expanded && iconClass) {
     return iconClass;
   }
 
   // fall back on default icons
-  var config = this.getConfig();
+  const config = this.getConfig();
   if (expanded && config.cssExpandedRootIcon) {
     return config.cssTreeIcon + ' ' + config.cssExpandedRootIcon;
   } else if (!expanded && config.cssCollapsedRootIcon) {
@@ -288,7 +288,7 @@ goog.ui.tree.TreeControl.prototype.setSelectedItem = function(node) {
     return;
   }
 
-  var hadFocus = false;
+  let hadFocus = false;
   if (this.selectedItem_) {
     hadFocus = this.selectedItem_ == this.focusedNode_;
     this.selectedItem_.setSelectedInternal(false);
@@ -347,9 +347,9 @@ goog.ui.tree.TreeControl.prototype.getShowLines = function() {
  */
 goog.ui.tree.TreeControl.prototype.updateLinesAndExpandIcons_ = function() {
   'use strict';
-  var tree = this;
-  var showLines = tree.getShowLines();
-  var showRootLines = tree.getShowRootLines();
+  const tree = this;
+  const showLines = tree.getShowLines();
+  const showRootLines = tree.getShowRootLines();
 
   /**
    * Recursively walk through all nodes and update the class names of the
@@ -357,14 +357,15 @@ goog.ui.tree.TreeControl.prototype.updateLinesAndExpandIcons_ = function() {
    * @param {!goog.ui.tree.BaseNode} node
    */
   function updateShowLines(node) {
-    var childrenEl = node.getChildrenElement();
+    const childrenEl = node.getChildrenElement();
     if (childrenEl) {
-      var hideLines = !showLines || tree == node.getParent() && !showRootLines;
-      var childClass = hideLines ? node.getConfig().cssChildrenNoLines :
-                                   node.getConfig().cssChildren;
+      const hideLines =
+          !showLines || tree == node.getParent() && !showRootLines;
+      const childClass = hideLines ? node.getConfig().cssChildrenNoLines :
+                                     node.getConfig().cssChildren;
       childrenEl.className = childClass;
 
-      var expandIconEl = node.getExpandIconElement();
+      const expandIconEl = node.getExpandIconElement();
       if (expandIconEl) {
         expandIconEl.className = node.getExpandIconClass();
       }
@@ -432,7 +433,7 @@ goog.ui.tree.TreeControl.prototype.setShowRootNode = function(b) {
   if (this.showRootNode_ != b) {
     this.showRootNode_ = b;
     if (this.isInDocument()) {
-      var el = this.getRowElement();
+      const el = this.getRowElement();
       if (el) {
         el.className = this.getRowClassName();
       }
@@ -463,7 +464,7 @@ goog.ui.tree.TreeControl.prototype.initAccessibility = function() {
   'use strict';
   goog.ui.tree.TreeControl.superClass_.initAccessibility.call(this);
 
-  var elt = this.getElement();
+  const elt = this.getElement();
   goog.asserts.assert(elt, 'The DOM element for the tree cannot be null.');
   goog.a11y.aria.setRole(elt, 'tree');
   goog.a11y.aria.setState(elt, 'labelledby', this.getLabelElement().id);
@@ -474,7 +475,7 @@ goog.ui.tree.TreeControl.prototype.initAccessibility = function() {
 goog.ui.tree.TreeControl.prototype.enterDocument = function() {
   'use strict';
   goog.ui.tree.TreeControl.superClass_.enterDocument.call(this);
-  var el = this.getElement();
+  const el = this.getElement();
   el.className = this.getConfig().cssRoot;
   el.setAttribute('hideFocus', 'true');
   this.attachEvents_();
@@ -496,11 +497,11 @@ goog.ui.tree.TreeControl.prototype.exitDocument = function() {
  */
 goog.ui.tree.TreeControl.prototype.attachEvents_ = function() {
   'use strict';
-  var el = this.getElement();
+  const el = this.getElement();
   el.tabIndex = 0;
 
-  var kh = this.keyHandler_ = new goog.events.KeyHandler(el);
-  var fh = this.focusHandler_ = new goog.events.FocusHandler(el);
+  const kh = this.keyHandler_ = new goog.events.KeyHandler(el);
+  const fh = this.focusHandler_ = new goog.events.FocusHandler(el);
 
   this.getHandler()
       .listen(fh, goog.events.FocusHandler.EventType.FOCUSOUT, this.handleBlur_)
@@ -533,7 +534,7 @@ goog.ui.tree.TreeControl.prototype.detachEvents_ = function() {
 goog.ui.tree.TreeControl.prototype.handleMouseEvent_ = function(e) {
   'use strict';
   goog.log.fine(this.logger_, 'Received event ' + e.type);
-  var node = this.getNodeFromEvent_(e);
+  const node = this.getNodeFromEvent_(e);
   if (node) {
     switch (e.type) {
       case goog.events.EventType.MOUSEDOWN:
@@ -557,7 +558,7 @@ goog.ui.tree.TreeControl.prototype.handleMouseEvent_ = function(e) {
  */
 goog.ui.tree.TreeControl.prototype.handleKeyEvent = function(e) {
   'use strict';
-  var handled = false;
+  let handled = false;
 
   // Handle typeahead and navigation keystrokes.
   handled = this.typeAhead_.handleNavigation(e) ||
@@ -582,10 +583,10 @@ goog.ui.tree.TreeControl.prototype.handleKeyEvent = function(e) {
 goog.ui.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
   'use strict';
   // find the right node
-  var node = null;
-  var target = e.target;
+  let node = null;
+  let target = e.target;
   while (target != null) {
-    var id = target.id;
+    const id = target.id;
     node = goog.ui.tree.BaseNode.allNodes[id];
     if (node) {
       return node;

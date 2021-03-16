@@ -89,8 +89,8 @@ goog.messaging.PortCaller.prototype.dial = function(name) {
 
   this.operatorPort_.send(
       goog.messaging.PortNetwork.REQUEST_CONNECTION_SERVICE, name);
-  var deferred = new goog.async.Deferred();
-  var channel = new goog.messaging.DeferredChannel(deferred);
+  const deferred = new goog.async.Deferred();
+  const channel = new goog.messaging.DeferredChannel(deferred);
   this.connections_[name] = {deferred: deferred, channel: channel};
   return channel;
 };
@@ -114,9 +114,9 @@ goog.messaging.PortCaller.prototype.dial = function(name) {
  */
 goog.messaging.PortCaller.prototype.connectionGranted_ = function(message) {
   'use strict';
-  var args = /** @type {{name: string, port: MessagePort}} */ (message);
-  var port = args['port'];
-  var entry = this.connections_[args['name']];
+  const args = /** @type {{name: string, port: MessagePort}} */ (message);
+  const port = args['port'];
+  const entry = this.connections_[args['name']];
   if (entry && (!entry.deferred || entry.deferred.hasFired())) {
     // If two PortCallers request one another at the same time, the operator may
     // send out a channel for connecting them multiple times. Since both callers
@@ -127,7 +127,7 @@ goog.messaging.PortCaller.prototype.connectionGranted_ = function(message) {
     throw new Error(args['message']);
   } else {
     port.start();
-    var channel = new goog.messaging.PortChannel(port);
+    const channel = new goog.messaging.PortChannel(port);
     if (entry) {
       entry.deferred.callback(channel);
     } else {

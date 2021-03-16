@@ -271,8 +271,8 @@ goog.messaging.BufferedChannel.prototype.setPeerReady_ = function(
   this.peerReady_ = true;
   // Send one last ping so that the peer knows we know it's ready.
   this.sendReadyPing_();
-  for (var i = 0; i < this.buffer_.length; i++) {
-    var message = this.buffer_[i];
+  for (let i = 0; i < this.buffer_.length; i++) {
+    const message = this.buffer_[i];
     goog.log.fine(
         goog.messaging.BufferedChannel.prototype.logger_,
         'sending buffered message ' + message.serviceName);

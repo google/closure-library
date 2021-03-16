@@ -96,7 +96,7 @@ goog.soy.renderHtml = function(element, templateResult) {
 goog.soy.renderElement = function(
     element, template, opt_templateData, opt_injectedData) {
   'use strict';
-  var html = goog.soy.ensureTemplateOutputHtml_(template(
+  const html = goog.soy.ensureTemplateOutputHtml_(template(
       opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData));
   goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(
       goog.asserts.assert(element), html);
@@ -122,10 +122,10 @@ goog.soy.renderElement = function(
 goog.soy.renderAsFragment = function(
     template, opt_templateData, opt_injectedData, opt_domHelper) {
   'use strict';
-  var dom = opt_domHelper || goog.dom.getDomHelper();
-  var output = template(
+  const dom = opt_domHelper || goog.dom.getDomHelper();
+  const output = template(
       opt_templateData || goog.soy.defaultTemplateData_, opt_injectedData);
-  var html = goog.soy.ensureTemplateOutputHtml_(output);
+  const html = goog.soy.ensureTemplateOutputHtml_(output);
   goog.soy.assertFirstTagValid_(html.getTypedStringValue());
   return dom.safeHtmlToNode(html);
 };
@@ -185,15 +185,15 @@ goog.soy.convertToElement = function(templateResult, opt_domHelper) {
  */
 goog.soy.convertToElement_ = function(templateResult, opt_domHelper) {
   'use strict';
-  var dom = opt_domHelper || goog.dom.getDomHelper();
-  var wrapper = dom.createElement(goog.dom.TagName.DIV);
-  var html = goog.soy.ensureTemplateOutputHtml_(templateResult);
+  const dom = opt_domHelper || goog.dom.getDomHelper();
+  const wrapper = dom.createElement(goog.dom.TagName.DIV);
+  const html = goog.soy.ensureTemplateOutputHtml_(templateResult);
   goog.soy.assertFirstTagValid_(html.getTypedStringValue());
   goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse(wrapper, html);
 
   // If the template renders as a single element, return it.
   if (wrapper.childNodes.length == 1) {
-    var firstChild = wrapper.firstChild;
+    const firstChild = wrapper.firstChild;
     if (firstChild.nodeType == goog.dom.NodeType.ELEMENT) {
       return /** @type {!Element} */ (firstChild);
     }
@@ -249,7 +249,7 @@ goog.soy.ensureTemplateOutputHtml_ = function(templateResult) {
 goog.soy.assertFirstTagValid_ = function(html) {
   'use strict';
   if (goog.asserts.ENABLE_ASSERTS) {
-    var matches = html.match(goog.soy.INVALID_TAG_TO_RENDER_);
+    const matches = html.match(goog.soy.INVALID_TAG_TO_RENDER_);
     goog.asserts.assert(
         !matches, 'This template starts with a %s, which ' +
             'cannot be a child of a <div>, as required by soy internals. ' +

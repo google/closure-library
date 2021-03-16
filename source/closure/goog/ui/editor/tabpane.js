@@ -81,7 +81,8 @@ goog.ui.editor.TabPane = function(dom, opt_caption) {
 
   // Add the caption as the first element in the tab bar.
   if (opt_caption) {
-    var captionControl = new goog.ui.Control(opt_caption, undefined, this.dom_);
+    const captionControl =
+        new goog.ui.Control(opt_caption, undefined, this.dom_);
     captionControl.addClassName(goog.getCssName('tr-tabpane-caption'));
     captionControl.setEnabled(false);
     this.tabBar_.addChild(captionControl, true);
@@ -121,11 +122,11 @@ goog.ui.editor.TabPane.prototype.setSelectedTabId = function(id) {
 goog.ui.editor.TabPane.prototype.addTab = function(
     id, caption, tooltip, groupName, content) {
   'use strict';
-  var radio = this.dom_.createDom(
+  const radio = this.dom_.createDom(
       goog.dom.TagName.INPUT,
       {name: groupName, type: goog.dom.InputType.RADIO});
 
-  var tab = new goog.ui.Tab(
+  const tab = new goog.ui.Tab(
       [radio, this.dom_.createTextNode(caption)], undefined, this.dom_);
   tab.setId(id);
   tab.setTooltip(tooltip);
@@ -152,7 +153,7 @@ goog.ui.editor.TabPane.prototype.enterDocument = function() {
   goog.ui.editor.TabPane.base(this, 'enterDocument');
 
   // Get the root element and add a class name to it.
-  var root = this.getElement();
+  const root = this.getElement();
   goog.asserts.assert(root);
   goog.dom.classlist.add(root, goog.getCssName('tr-tabpane'));
 
@@ -179,7 +180,7 @@ goog.ui.editor.TabPane.prototype.enterDocument = function() {
  */
 goog.ui.editor.TabPane.prototype.handleTabSelect_ = function(e) {
   'use strict';
-  var tab = /** @type {goog.ui.Tab} */ (e.target);
+  const tab = /** @type {goog.ui.Tab} */ (e.target);
 
   // Show the tab content.
   if (this.visibleContent_) {

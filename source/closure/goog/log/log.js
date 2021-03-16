@@ -627,19 +627,18 @@ goog.log.LogRecordHandler;
 
 
 /**
- * A LogRegistryEntry contains data about a Logger.
- * @package
+ * A LogRegistryEntry_ contains data about a Logger.
  * @final
  */
-goog.log.LogRegistryEntry = class LogRegistryEntry {
+goog.log.LogRegistryEntry_ = class LogRegistryEntry_ {
   /**
    * @param {string} name
-   * @param {!goog.log.LogRegistryEntry|null=} parent
+   * @param {!goog.log.LogRegistryEntry_|null=} parent
    */
   constructor(name, parent = null) {
     /**
      * The minimum log level that a message must be for it to be logged by the
-     * Logger corresponding to this LogRegistryEntry. If null, the parent's
+     * Logger corresponding to this LogRegistryEntry_. If null, the parent's
      * log level is used instead.
      * @type {?goog.log.Level}
      */
@@ -647,24 +646,24 @@ goog.log.LogRegistryEntry = class LogRegistryEntry {
 
     /**
      * A list of functions that will be called when the Logger corresponding to
-     * this LogRegistryEntry is used to log a message.
+     * this LogRegistryEntry_ is used to log a message.
      * @type {!Array<!goog.log.LogRecordHandler>}
      */
     this.handlers = [];
 
     /**
-     * A reference to LogRegistryEntry objects that correspond to the direct
-     * ancestor of the Logger represented by this LogRegistryEntry object
+     * A reference to LogRegistryEntry_ objects that correspond to the direct
+     * ancestor of the Logger represented by this LogRegistryEntry_ object
      * (via name, treated as a dot-separated namespace).
-     * @type {!goog.log.LogRegistryEntry|null}
+     * @type {!goog.log.LogRegistryEntry_|null}
      */
     this.parent = parent || null;
 
     /**
-     * A list of references to LogRegistryEntry objects that correspond to the
-     * direct descendants of the Logger represented by this LogRegistryEntry
+     * A list of references to LogRegistryEntry_ objects that correspond to the
+     * direct descendants of the Logger represented by this LogRegistryEntry_
      * object (via name, treated as a dot-separated namespace).
-     * @type {!Array<!goog.log.LogRegistryEntry>}
+     * @type {!Array<!goog.log.LogRegistryEntry_>}
      */
     this.children = [];
 
@@ -709,34 +708,33 @@ goog.log.LogRegistryEntry = class LogRegistryEntry {
 
 
 /**
- * A LogRegistry owns references to all loggers, and is responsible for storing
+ * A LogRegistry_ owns references to all loggers, and is responsible for storing
  * all the internal state needed for loggers to operate correctly.
  *
- * @package
  * @final
  */
-goog.log.LogRegistry = class LogRegistry {
+goog.log.LogRegistry_ = class LogRegistry_ {
   constructor() {
     /**
-     * Per-log information retained by this LogRegistry.
-     * @type {!Object<string, !goog.log.LogRegistryEntry>}
+     * Per-log information retained by this LogRegistry_.
+     * @type {!Object<string, !goog.log.LogRegistryEntry_>}
      */
     this.entries = {};
 
     // The root logger.
     const rootLogRegistryEntry =
-        new goog.log.LogRegistryEntry(goog.log.ROOT_LOGGER_NAME);
+        new goog.log.LogRegistryEntry_(goog.log.ROOT_LOGGER_NAME);
     rootLogRegistryEntry.level = goog.log.Level.CONFIG;
     this.entries[goog.log.ROOT_LOGGER_NAME] = rootLogRegistryEntry;
   }
 
   /**
-   * Gets the LogRegistry entry under the given name, creating the entry if one
+   * Gets the LogRegistry_ entry under the given name, creating the entry if one
    * doesn't already exist.
    * @param {string} name The name to look up.
    * @param {?goog.log.Level=} level If provided, override the default logging
    *     level of the returned Logger with the provided level.
-   * @return {!goog.log.LogRegistryEntry}
+   * @return {!goog.log.LogRegistryEntry_}
    */
   getLogRegistryEntry(name, level) {
     const entry = this.entries[name];
@@ -755,7 +753,7 @@ goog.log.LogRegistry = class LogRegistry {
 
       // Now create the new entry, linking it with its parent.
       const logRegistryEntry =
-          new goog.log.LogRegistryEntry(name, parentLogRegistryEntry);
+          new goog.log.LogRegistryEntry_(name, parentLogRegistryEntry);
       this.entries[name] = logRegistryEntry;
       parentLogRegistryEntry.children.push(logRegistryEntry);
 
@@ -778,21 +776,22 @@ goog.log.LogRegistry = class LogRegistry {
 };
 
 /**
- * A static method that always returns the same instance of LogRegistry.
- * @return {!goog.log.LogRegistry} The LogRegistry singleton instance.
+ * A static method that always returns the same instance of LogRegistry_.
+ * @return {!goog.log.LogRegistry_} The LogRegistry_ singleton instance.
  */
-goog.log.LogRegistry.getInstance = function() {
-  if (!goog.log.LogRegistry.instance_) {
-    goog.log.LogRegistry.instance_ = new goog.log.LogRegistry();
+goog.log.LogRegistry_.getInstance = function() {
+  if (!goog.log.LogRegistry_.instance_) {
+    goog.log.LogRegistry_.instance_ = new goog.log.LogRegistry_();
   }
-  return /** @type {!goog.log.LogRegistry} */ (goog.log.LogRegistry.instance_);
+  return /** @type {!goog.log.LogRegistry_} */ (
+      goog.log.LogRegistry_.instance_);
 };
 
 /**
- * @type {!goog.log.LogRegistry|undefined}
+ * @type {!goog.log.LogRegistry_|undefined}
  * @private
  */
-goog.log.LogRegistry.instance_;
+goog.log.LogRegistry_.instance_;
 
 
 /**
@@ -814,7 +813,7 @@ goog.log.LogRegistry.instance_;
 goog.log.getLogger = function(name, level) {
   if (goog.log.ENABLED) {
     const loggerEntry =
-        goog.log.LogRegistry.getInstance().getLogRegistryEntry(name, level);
+        goog.log.LogRegistry_.getInstance().getLogRegistryEntry(name, level);
     return loggerEntry.logger;
   } else {
     return null;
@@ -830,7 +829,7 @@ goog.log.getLogger = function(name, level) {
  */
 goog.log.getRootLogger = function() {
   if (goog.log.ENABLED) {
-    const loggerEntry = goog.log.LogRegistry.getInstance().getLogRegistryEntry(
+    const loggerEntry = goog.log.LogRegistry_.getInstance().getLogRegistryEntry(
         goog.log.ROOT_LOGGER_NAME);
     return loggerEntry.logger;
   } else {
@@ -849,7 +848,7 @@ goog.log.getRootLogger = function() {
  */
 goog.log.addHandler = function(logger, handler) {
   if (goog.log.ENABLED && logger) {
-    const loggerEntry = goog.log.LogRegistry.getInstance().getLogRegistryEntry(
+    const loggerEntry = goog.log.LogRegistry_.getInstance().getLogRegistryEntry(
         logger.getName());
     loggerEntry.handlers.push(handler);
   }
@@ -866,7 +865,7 @@ goog.log.addHandler = function(logger, handler) {
  */
 goog.log.removeHandler = function(logger, handler) {
   if (goog.log.ENABLED && logger) {
-    const loggerEntry = goog.log.LogRegistry.getInstance().getLogRegistryEntry(
+    const loggerEntry = goog.log.LogRegistry_.getInstance().getLogRegistryEntry(
         logger.getName());
     const indexOfHandler = loggerEntry.handlers.indexOf(handler);
     if (indexOfHandler !== -1) {
@@ -890,7 +889,7 @@ goog.log.removeHandler = function(logger, handler) {
  */
 goog.log.setLevel = function(logger, level) {
   if (goog.log.ENABLED && logger) {
-    const loggerEntry = goog.log.LogRegistry.getInstance().getLogRegistryEntry(
+    const loggerEntry = goog.log.LogRegistry_.getInstance().getLogRegistryEntry(
         logger.getName());
     loggerEntry.level = level;
   }
@@ -909,7 +908,7 @@ goog.log.setLevel = function(logger, level) {
  */
 goog.log.getLevel = function(logger) {
   if (goog.log.ENABLED && logger) {
-    const loggerEntry = goog.log.LogRegistry.getInstance().getLogRegistryEntry(
+    const loggerEntry = goog.log.LogRegistry_.getInstance().getLogRegistryEntry(
         logger.getName());
     return loggerEntry.level;
   }
@@ -924,7 +923,7 @@ goog.log.getLevel = function(logger) {
  */
 goog.log.getEffectiveLevel = function(logger) {
   if (goog.log.ENABLED && logger) {
-    const loggerEntry = goog.log.LogRegistry.getInstance().getLogRegistryEntry(
+    const loggerEntry = goog.log.LogRegistry_.getInstance().getLogRegistryEntry(
         logger.getName());
     return loggerEntry.getEffectiveLevel();
   }
@@ -954,7 +953,7 @@ goog.log.isLoggable = function(logger, level) {
  */
 goog.log.getAllLoggers = function() {
   if (goog.log.ENABLED) {
-    return goog.log.LogRegistry.getInstance().getAllLoggers();
+    return goog.log.LogRegistry_.getInstance().getAllLoggers();
   }
   return [];
 };
@@ -993,7 +992,7 @@ goog.log.getLogRecord = function(logger, level, msg, exception) {
 goog.log.publishLogRecord = function(logger, logRecord) {
   if (goog.log.ENABLED && logger &&
       goog.log.isLoggable(logger, logRecord.getLevel())) {
-    const loggerEntry = goog.log.LogRegistry.getInstance().getLogRegistryEntry(
+    const loggerEntry = goog.log.LogRegistry_.getInstance().getLogRegistryEntry(
         logger.getName());
     loggerEntry.publish(logRecord);
   }
@@ -1014,7 +1013,7 @@ goog.log.publishLogRecord = function(logger, logRecord) {
 goog.log.log = function(logger, level, msg, exception) {
   if (goog.log.ENABLED && logger && goog.log.isLoggable(logger, level)) {
     level = level || goog.log.Level.OFF;
-    const loggerEntry = goog.log.LogRegistry.getInstance().getLogRegistryEntry(
+    const loggerEntry = goog.log.LogRegistry_.getInstance().getLogRegistryEntry(
         logger.getName());
     // Message callbacks can be useful when a log message is expensive to build.
     if (typeof msg === 'function') {

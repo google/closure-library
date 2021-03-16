@@ -284,7 +284,7 @@ testSuite({
     log.setLevel(broadcastPubSub.logger_, Level.OFF);
     const eventData = {
       'args': ['someTopic', 'x', 'y'],
-      'timestamp': goog.now()
+      'timestamp': Date.now()
     };
 
     broadcastPubSub.subscribe('someTopic', foo);
@@ -298,7 +298,7 @@ testSuite({
     assertArrayEquals(['x', 'y'], bar.getLastCall().getArguments());
 
     broadcastPubSub.unsubscribe('someTopic', foo);
-    eventData['timestamp'] = goog.now();
+    eventData['timestamp'] = Date.now();
     remoteStorageEvent(eventData);
     mockClock.tick();
 
@@ -308,7 +308,7 @@ testSuite({
 
     broadcastPubSub.subscribe('someTopic', foo);
     broadcastPubSub.unsubscribe('someTopic', bar, context);
-    eventData['timestamp'] = goog.now();
+    eventData['timestamp'] = Date.now();
     remoteStorageEvent(eventData);
     mockClock.tick();
 
@@ -336,7 +336,7 @@ testSuite({
         broadcastPubSub.getCount());
 
     remoteStorageEvent(
-        {'args': ['someTopic', 'x', 'y'], 'timestamp': goog.now()});
+        {'args': ['someTopic', 'x', 'y'], 'timestamp': Date.now()});
     mockClock.tick();
 
     assertEquals(
@@ -365,10 +365,10 @@ testSuite({
     broadcastPubSub.subscribe('fooTopic', foo);
     broadcastPubSub.subscribe('barTopic', bar);
 
-    let eventData = {'args': ['fooTopic', 'x', 'y'], 'timestamp': goog.now()};
+    let eventData = {'args': ['fooTopic', 'x', 'y'], 'timestamp': Date.now()};
     remoteStorageEvent(eventData);
 
-    eventData = {'args': ['barTopic', 'd', 'c'], 'timestamp': goog.now()};
+    eventData = {'args': ['barTopic', 'd', 'c'], 'timestamp': Date.now()};
     remoteStorageEvent(eventData);
     mockClock.tick();
 
@@ -400,11 +400,11 @@ testSuite({
     broadcastPubSub.subscribe('fooTopic', foo);
     broadcastPubSub.subscribe('barTopic', bar);
 
-    let eventData = {'args': ['fooTopic', 'x', 'y'], 'timestamp': goog.now()};
+    let eventData = {'args': ['fooTopic', 'x', 'y'], 'timestamp': Date.now()};
     remoteStorageEvent(eventData);
     mockClock.tick();
 
-    eventData = {'args': ['barTopic', 'd', 'c'], 'timestamp': goog.now()};
+    eventData = {'args': ['barTopic', 'd', 'c'], 'timestamp': Date.now()};
     remoteStorageEvent(eventData);
     mockClock.tick();
 
@@ -427,11 +427,11 @@ testSuite({
     log.setLevel(broadcastPubSub.logger_, Level.OFF);
     broadcastPubSub.subscribeOnce('someTopic', foo);
 
-    let eventData = {'args': ['someTopic', 'x', 'y'], 'timestamp': goog.now()};
+    let eventData = {'args': ['someTopic', 'x', 'y'], 'timestamp': Date.now()};
     remoteStorageEvent(eventData);
     mockClock.tick();
 
-    eventData = {'args': ['someTopic', 'x', 'y'], 'timestamp': goog.now()};
+    eventData = {'args': ['someTopic', 'x', 'y'], 'timestamp': Date.now()};
     remoteStorageEvent(eventData);
     mockClock.tick();
 
@@ -447,7 +447,7 @@ testSuite({
     mockHTML5LocalStorageCtor().$returns(mockHtml5LocalStorage);
     const foo1 = mockControl.createFunctionMock();
     foo1().$does(() => {
-      remoteStorageEvent({'args': ['bar'], 'timestamp': goog.now()});
+      remoteStorageEvent({'args': ['bar'], 'timestamp': Date.now()});
     });
     const foo2 = mockControl.createFunctionMock();
     foo2();
@@ -473,7 +473,7 @@ testSuite({
     broadcastPubSub.subscribe('baz', baz1);
     broadcastPubSub.subscribe('baz', baz2);
 
-    remoteStorageEvent({'args': ['foo'], 'timestamp': goog.now()});
+    remoteStorageEvent({'args': ['foo'], 'timestamp': Date.now()});
     mockClock.tick();
     broadcastPubSub.dispose();
     mockControl.$verifyAll();
@@ -547,7 +547,7 @@ testSuite({
   testLocalStorageData() {
     const topic = 'someTopic';
     const anotherTopic = 'anotherTopic';
-    const now = goog.now();
+    const now = Date.now();
 
     mockHTML5LocalStorageCtor().$returns(mockHtml5LocalStorage);
     const mockStorage = mockControl.createLooseMock(StorageStorage);

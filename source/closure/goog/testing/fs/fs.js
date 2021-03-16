@@ -35,7 +35,7 @@ goog.require('goog.testing.fs.FileSystem');
  */
 goog.testing.fs.getTemporary = function(size) {
   'use strict';
-  var d = new goog.async.Deferred();
+  const d = new goog.async.Deferred();
   goog.Timer.callOnce(
       goog.bind(d.callback, d, new goog.testing.fs.FileSystem()));
   return d;
@@ -73,7 +73,7 @@ goog.testing.fs.objectUrls_ = {};
  */
 goog.testing.fs.createObjectUrl = function(blob) {
   'use strict';
-  var url = blob.toDataUrl();
+  const url = blob.toDataUrl();
   goog.testing.fs.objectUrls_[url] = true;
   return url;
 };
@@ -162,8 +162,8 @@ goog.testing.fs.install = function(stubs) {
   'use strict';
   // Prevent warnings that goog.fs may get optimized away. It's true this is
   // unsafe in compiled code, but it's only meant for tests.
-  var fs = goog.getObjectByName('goog.fs');
-  var fsUrl = goog.getObjectByName('goog.fs.url');
+  const fs = goog.getObjectByName('goog.fs');
+  const fsUrl = goog.getObjectByName('goog.fs.url');
   stubs.replace(fs, 'getTemporary', goog.testing.fs.getTemporary);
   stubs.replace(fs, 'getPersistent', goog.testing.fs.getPersistent);
   stubs.replace(fsUrl, 'createObjectUrl', goog.testing.fs.createObjectUrl);
@@ -172,7 +172,7 @@ goog.testing.fs.install = function(stubs) {
     'use strict';
     return true;
   });
-  var fsBlob = goog.getObjectByName('goog.fs.blob');
+  const fsBlob = goog.getObjectByName('goog.fs.blob');
   stubs.replace(fsBlob, 'getBlob', goog.testing.fs.getBlob);
   stubs.replace(
       fsBlob, 'getBlobWithProperties', goog.testing.fs.getBlobWithProperties);

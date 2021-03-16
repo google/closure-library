@@ -38,7 +38,7 @@ goog.labs.structs.Multimap = class {
    *     the mapping this multimap has.
    */
   clone() {
-    var map = new goog.labs.structs.Multimap();
+    const map = new goog.labs.structs.Multimap();
     map.addAllFromMultimap(this);
     return map;
   }
@@ -50,7 +50,7 @@ goog.labs.structs.Multimap = class {
    * @param {V} value The value to add.
    */
   add(key, value) {
-    var values = this.map_.get(key);
+    let values = this.map_.get(key);
     if (!values) {
       this.map_.set(key, (values = []));
     }
@@ -103,7 +103,7 @@ goog.labs.structs.Multimap = class {
    *     guaranteed to be consistent.
    */
   get(key) {
-    var values = this.map_.get(key);
+    const values = this.map_.get(key);
     return values ? goog.array.clone(values) : [];
   }
 
@@ -114,12 +114,12 @@ goog.labs.structs.Multimap = class {
    * @return {boolean} Whether any matching (key, value) pair is removed.
    */
   remove(key, value) {
-    var values = this.map_.get(key);
+    const values = this.map_.get(key);
     if (!values) {
       return false;
     }
 
-    var removed = goog.array.removeIf(values, function(v) {
+    const removed = goog.array.removeIf(values, function(v) {
       'use strict';
       return Object.is(value, v);
     });
@@ -142,7 +142,7 @@ goog.labs.structs.Multimap = class {
     // We have to first retrieve the values from the backing map because
     // we need to keep track of count (and correctly calculates the
     // return value). values may be undefined.
-    var values = this.map_.get(key);
+    const values = this.map_.get(key);
     if (this.map_.delete(key)) {
       this.count_ -= values.length;
       return true;
@@ -171,12 +171,12 @@ goog.labs.structs.Multimap = class {
    * @return {boolean} Whether the (key, value) pair exists in the multimap.
    */
   containsEntry(key, value) {
-    var values = this.map_.get(key);
+    const values = this.map_.get(key);
     if (!values) {
       return false;
     }
 
-    var index = goog.array.findIndex(values, function(v) {
+    const index = goog.array.findIndex(values, function(v) {
       'use strict';
       return Object.is(v, value);
     });
@@ -220,12 +220,12 @@ goog.labs.structs.Multimap = class {
    *     form [key, value].
    */
   getEntries() {
-    var keys = this.getKeys();
-    var entries = [];
-    for (var i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      var values = this.get(key);
-      for (var j = 0; j < values.length; j++) {
+    const keys = this.getKeys();
+    const entries = [];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const values = this.get(key);
+      for (let j = 0; j < values.length; j++) {
         entries.push([key, values[j]]);
       }
     }

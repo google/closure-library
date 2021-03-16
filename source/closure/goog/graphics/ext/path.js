@@ -48,7 +48,7 @@ goog.graphics.ext.Path.prototype.bounds_ = null;
  */
 goog.graphics.ext.Path.prototype.clone = function() {
   'use strict';
-  var output = /** @type {goog.graphics.ext.Path} */
+  const output = /** @type {goog.graphics.ext.Path} */
       (goog.graphics.ext.Path.superClass_.clone.call(this));
   output.bounds_ = this.bounds_ && this.bounds_.clone();
   return output;
@@ -88,7 +88,7 @@ goog.graphics.ext.Path.prototype.modifyBounds = function(
     deltaX, deltaY, xFactor, yFactor) {
   'use strict';
   if (!this.isSimple()) {
-    var simple = goog.graphics.Path.createSimplifiedPath(this);
+    const simple = goog.graphics.Path.createSimplifiedPath(this);
     this.clear();
     this.appendPath(simple);
   }
@@ -117,16 +117,16 @@ goog.graphics.ext.Path.prototype.useBoundingBox = function(bounds) {
 goog.graphics.ext.Path.prototype.getBoundingBox = function() {
   'use strict';
   if (!this.bounds_ && !this.isEmpty()) {
-    var minY;
-    var minX = minY = Number.POSITIVE_INFINITY;
-    var maxY;
-    var maxX = maxY = Number.NEGATIVE_INFINITY;
+    let minY;
+    let minX = minY = Number.POSITIVE_INFINITY;
+    let maxY;
+    let maxX = maxY = Number.NEGATIVE_INFINITY;
 
-    var simplePath =
+    const simplePath =
         this.isSimple() ? this : goog.graphics.Path.createSimplifiedPath(this);
     simplePath.forEachSegment(function(type, points) {
       'use strict';
-      for (var i = 0, len = points.length; i < len; i += 2) {
+      for (let i = 0, len = points.length; i < len; i += 2) {
         minX = Math.min(minX, points[i]);
         maxX = Math.max(maxX, points[i]);
         minY = Math.min(minY, points[i + 1]);

@@ -136,7 +136,7 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.prefetch = function(characters) {
   }
 
   // Set up new listener
-  var preFetchCallback = goog.bind(this.prefetchCallback_, this);
+  const preFetchCallback = goog.bind(this.prefetchCallback_, this);
   this.prefetchLastListenerKey_ = goog.events.listenOnce(
       this.prefetchXhrIo_, goog.net.EventType.COMPLETE, preFetchCallback);
 
@@ -161,10 +161,10 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.prefetchCallback_ = function() {
 goog.i18n.uChar.RemoteNameFetcher.prototype.getName = function(
     character, callback) {
   'use strict';
-  var codepoint = goog.i18n.uChar.toCharCode(character).toString(16);
+  const codepoint = goog.i18n.uChar.toCharCode(character).toString(16);
 
   if (this.charNames_.has(codepoint)) {
-    var name = this.charNames_.get(codepoint);
+    const name = this.charNames_.get(codepoint);
     callback(name);
     return;
   }
@@ -181,7 +181,7 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.getName = function(
   }
 
   // Set up new listener
-  var getNameCallback =
+  const getNameCallback =
       goog.bind(this.getNameCallback_, this, codepoint, callback);
   this.getNameLastListenerKey_ = goog.events.listenOnce(
       this.getNameXhrIo_, goog.net.EventType.COMPLETE, getNameCallback);
@@ -206,7 +206,7 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.getNameCallback_ = function(
     codepoint, callback) {
   'use strict';
   this.processResponse_(this.getNameXhrIo_);
-  var name =
+  const name =
       this.charNames_.has(codepoint) ? this.charNames_.get(codepoint) : null;
   callback(name);
 };
@@ -226,8 +226,8 @@ goog.i18n.uChar.RemoteNameFetcher.prototype.processResponse_ = function(xhrIo) {
         'Problem with data source: ' + xhrIo.getLastError());
     return;
   }
-  var result = xhrIo.getResponseJson();
-  for (var codepoint in result) {
+  const result = xhrIo.getResponseJson();
+  for (let codepoint in result) {
     if (result[codepoint].hasOwnProperty('name')) {
       this.charNames_.set(codepoint, result[codepoint]['name']);
     }
@@ -271,7 +271,7 @@ goog.i18n.uChar.RemoteNameFetcher.RequestType_ = {
 goog.i18n.uChar.RemoteNameFetcher.prototype.fetch_ = function(
     requestType, requestInput, xhrIo) {
   'use strict';
-  var url = new goog.Uri(this.dataSourceUri_);
+  const url = new goog.Uri(this.dataSourceUri_);
   url.setParameterValue(requestType, requestInput);
   url.setParameterValue('p', 'name');
   goog.log.info(

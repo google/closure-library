@@ -164,7 +164,7 @@ function createFakeKeyEvent(
     ctrlKey: opt_ctrlKey || false,
     altKey: opt_altKey || false,
     shiftKey: opt_shiftKey || false,
-    timeStamp: goog.now(),
+    timeStamp: Date.now(),
   };
   return new BrowserEvent(event);
 }

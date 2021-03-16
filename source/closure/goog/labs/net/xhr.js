@@ -36,9 +36,9 @@ goog.requireType('goog.net.XmlHttpFactory');
 
 goog.scope(function() {
 'use strict';
-var userAgent = goog.userAgent;
-var xhr = goog.labs.net.xhr;
-var HttpStatus = goog.net.HttpStatus;
+const userAgent = goog.userAgent;
+const xhr = goog.labs.net.xhr;
+const HttpStatus = goog.net.HttpStatus;
 
 
 /**
@@ -178,7 +178,7 @@ xhr.getBlob = function(url, opt_options) {
   goog.asserts.assert(
       'Blob' in goog.global, 'getBlob is not supported in this browser.');
 
-  var options = opt_options ? goog.object.clone(opt_options) : {};
+  const options = opt_options ? goog.object.clone(opt_options) : {};
   options.responseType = xhr.ResponseType.BLOB;
 
   return xhr.send('GET', url, null, options).then(function(request) {
@@ -207,7 +207,7 @@ xhr.getBytes = function(url, opt_options) {
       !userAgent.IE || userAgent.isDocumentModeOrHigher(9),
       'getBytes is not supported in this browser.');
 
-  var options = opt_options ? goog.object.clone(opt_options) : {};
+  const options = opt_options ? goog.object.clone(opt_options) : {};
   options.responseType = xhr.ResponseType.ARRAYBUFFER;
 
   return xhr.send('GET', url, null, options).then(function(request) {
@@ -272,12 +272,12 @@ xhr.postJson = function(url, data, opt_options) {
  */
 xhr.send = function(method, url, data, opt_options) {
   'use strict';
-  var options = opt_options || {};
-  var request = options.xmlHttpFactory ?
+  const options = opt_options || {};
+  const request = options.xmlHttpFactory ?
       options.xmlHttpFactory.createInstance() :
       goog.net.XmlHttp();
 
-  var result =
+  const result =
       new goog
           .Promise(/**
                       @suppress {strictPrimitiveOperators} Part of the
@@ -285,7 +285,7 @@ xhr.send = function(method, url, data, opt_options) {
                     */
                    function(resolve, reject) {
                      'use strict';
-                     var timer;
+                     let timer;
 
                      try {
                        request.open(method, url, true);
@@ -322,10 +322,10 @@ xhr.send = function(method, url, data, opt_options) {
                      };
 
                      // Set the headers.
-                     var contentType;
+                     let contentType;
                      if (options.headers) {
-                       for (var key in options.headers) {
-                         var value = options.headers[key];
+                       for (let key in options.headers) {
+                         const value = options.headers[key];
                          if (value != null) {
                            request.setRequestHeader(key, value);
                          }
@@ -335,7 +335,7 @@ xhr.send = function(method, url, data, opt_options) {
 
                      // Browsers will automatically set the content type to
                      // multipart/form-data when passed a FormData object.
-                     var dataIsFormData =
+                     const dataIsFormData =
                          (goog.global['FormData'] &&
                           (data instanceof goog.global['FormData']));
                      // If a content type hasn't been set, it hasn't been
@@ -412,7 +412,7 @@ xhr.send = function(method, url, data, opt_options) {
  */
 xhr.isEffectiveSchemeHttp_ = function(url) {
   'use strict';
-  var scheme = goog.uri.utils.getEffectiveScheme(url);
+  const scheme = goog.uri.utils.getEffectiveScheme(url);
   // NOTE(user): Empty-string is for the case under FF3.5 when the location
   // is not defined inside a web worker.
   return scheme == 'http' || scheme == 'https' || scheme == '';
@@ -440,7 +440,7 @@ xhr.parseJson = function(responseText, opt_xssiPrefix) {
  */
 xhr.parseJson_ = function(responseText, options) {
   'use strict';
-  var prefixStrippedResult = responseText;
+  let prefixStrippedResult = responseText;
   if (options && options.xssiPrefix) {
     prefixStrippedResult =
         xhr.stripXssiPrefix_(options.xssiPrefix, prefixStrippedResult);

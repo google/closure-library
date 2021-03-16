@@ -237,10 +237,10 @@ goog.spell.SpellCheck.prototype.getLanguage = function() {
  */
 goog.spell.SpellCheck.prototype.checkBlock = function(text) {
   'use strict';
-  var words = text.split(goog.spell.SpellCheck.WORD_BOUNDARY_REGEX);
+  const words = text.split(goog.spell.SpellCheck.WORD_BOUNDARY_REGEX);
 
-  var len = words.length;
-  for (var word, i = 0; i < len; i++) {
+  const len = words.length;
+  for (let word, i = 0; i < len; i++) {
     word = words[i];
     this.checkWord_(word);
   }
@@ -265,7 +265,7 @@ goog.spell.SpellCheck.prototype.checkBlock = function(text) {
  */
 goog.spell.SpellCheck.prototype.checkWord = function(word) {
   'use strict';
-  var status = this.checkWord_(word);
+  const status = this.checkWord_(word);
 
   if (status == goog.spell.SpellCheck.WordStatus.UNKNOWN && !this.queueTimer_ &&
       !this.lookupInProgress_) {
@@ -292,7 +292,7 @@ goog.spell.SpellCheck.prototype.checkWord_ = function(word) {
     return goog.spell.SpellCheck.WordStatus.INVALID;
   }
 
-  var cacheEntry = this.cache_[word];
+  const cacheEntry = this.cache_[word];
   if (!cacheEntry) {
     this.unknownWords_.add(word);
     return goog.spell.SpellCheck.WordStatus.UNKNOWN;
@@ -334,7 +334,7 @@ goog.spell.SpellCheck.prototype.processPending_ = function() {
 
   if (this.unknownWords_.getCount()) {
     this.lookupInProgress_ = true;
-    var func = this.lookupFunction_;
+    const func = this.lookupFunction_;
     func(this.unknownWords_.getValues(), this, this.lookupCallback_);
   } else {
     this.dispatchEvent(goog.spell.SpellCheck.EventType.READY);
@@ -372,7 +372,7 @@ goog.spell.SpellCheck.prototype.lookupCallback_ = function(data) {
     return;
   }
 
-  for (var a, i = 0; a = data[i]; i++) {
+  for (let a, i = 0; a = data[i]; i++) {
     this.setWordStatus_(a[0], a[1], a[2]);
   }
   this.lookupInProgress_ = false;
@@ -418,7 +418,7 @@ goog.spell.SpellCheck.prototype.setWordStatus = function(
 goog.spell.SpellCheck.prototype.setWordStatus_ = function(
     word, status, opt_suggestions) {
   'use strict';
-  var suggestions = opt_suggestions || [];
+  const suggestions = opt_suggestions || [];
   this.cache_[word] = [status, suggestions];
   this.unknownWords_.remove(word);
 
@@ -435,7 +435,7 @@ goog.spell.SpellCheck.prototype.setWordStatus_ = function(
  */
 goog.spell.SpellCheck.prototype.getSuggestions = function(word) {
   'use strict';
-  var cacheEntry = this.cache_[word];
+  const cacheEntry = this.cache_[word];
 
   if (!cacheEntry) {
     this.checkWord(word);

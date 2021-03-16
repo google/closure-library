@@ -127,12 +127,12 @@ goog.messaging.AbstractChannel.prototype.send = goog.abstractMethod;
 goog.messaging.AbstractChannel.prototype.deliver = function(
     serviceName, payload) {
   'use strict';
-  var service = this.getService(serviceName, payload);
+  const service = this.getService(serviceName, payload);
   if (!service) {
     return;
   }
 
-  var decodedPayload =
+  const decodedPayload =
       this.decodePayload(serviceName, payload, service.objectPayload);
   if (decodedPayload != null) {
     service.callback(decodedPayload);
@@ -154,12 +154,12 @@ goog.messaging.AbstractChannel.prototype.deliver = function(
 goog.messaging.AbstractChannel.prototype.getService = function(
     serviceName, payload) {
   'use strict';
-  var service = this.services_[serviceName];
+  const service = this.services_[serviceName];
   if (service) {
     return service;
   } else if (this.defaultService_) {
-    var callback = goog.partial(this.defaultService_, serviceName);
-    var objectPayload = goog.isObject(payload);
+    const callback = goog.partial(this.defaultService_, serviceName);
+    const objectPayload = goog.isObject(payload);
     return {callback: callback, objectPayload: objectPayload};
   }
 

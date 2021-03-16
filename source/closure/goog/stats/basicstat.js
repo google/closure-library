@@ -25,7 +25,7 @@ goog.require('goog.structs.CircularBuffer');
  *
  * Most methods optionally allow passing in the current time, so that
  * higher level stats can synchronize operations on multiple child
- * objects.  Under normal usage, the default of goog.now() should be
+ * objects.  Under normal usage, the default of Date.now() should be
  * sufficient.
  *
  * @param {number} interval The stat interval, in milliseconds.
@@ -98,7 +98,7 @@ goog.stats.BasicStat.prototype.getInterval = function() {
  */
 goog.stats.BasicStat.prototype.incBy = function(amt, opt_now) {
   'use strict';
-  var now = opt_now ? opt_now : goog.now();
+  var now = opt_now ? opt_now : Date.now();
   this.checkForTimeTravel_(now);
   var slot = /** @type {goog.stats.BasicStat.Slot_} */ (this.slots_.getLast());
   if (!slot || now >= slot.end) {
@@ -176,7 +176,7 @@ goog.stats.BasicStat.prototype.getMin = function(opt_now) {
  */
 goog.stats.BasicStat.prototype.reduceSlots_ = function(now, func, val) {
   'use strict';
-  now = now || goog.now();
+  now = now || Date.now();
   this.checkForTimeTravel_(now);
   var rval = val;
   var start = this.getSlotBoundary_(now) - this.interval_;

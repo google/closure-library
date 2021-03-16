@@ -47,11 +47,11 @@ goog.inherits(goog.storage.CollectableStorage, goog.storage.ExpiringStorage);
 goog.storage.CollectableStorage.prototype.getExpiredKeys_ = function(
     keys, opt_strict) {
   'use strict';
-  var keysToRemove = [];
+  const keysToRemove = [];
   goog.iter.forEach(keys, function(key) {
     'use strict';
     // Get the wrapper.
-    var wrapper;
+    let wrapper;
 
     try {
       wrapper = goog.storage.CollectableStorage.prototype.getWrapper.call(
@@ -110,7 +110,7 @@ goog.storage.CollectableStorage.prototype.getExpiredKeys_ = function(
 goog.storage.CollectableStorage.prototype.collectInternal = function(
     keys, opt_strict) {
   'use strict';
-  var keysToRemove = this.getExpiredKeys_(keys, opt_strict);
+  const keysToRemove = this.getExpiredKeys_(keys, opt_strict);
   goog.array.forEach(keysToRemove, function(key) {
     'use strict';
     goog.storage.CollectableStorage.prototype.remove.call(this, key);

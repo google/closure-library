@@ -1061,6 +1061,14 @@ goog.TRANSPILER = goog.define('goog.TRANSPILER', 'transpile.js');
 
 
 /**
+ * @define {string} Trusted Types policy name. If non-empty then Closure will
+ * use Trusted Types.
+ */
+goog.TRUSTED_TYPES_POLICY_NAME =
+    goog.define('goog.TRUSTED_TYPES_POLICY_NAME', 'goog');
+
+
+/**
  * @package {?boolean}
  * Visible for testing.
  */
@@ -2128,6 +2136,48 @@ goog.defineClass.applyProperties_ = function(target, source) {
   }
 };
 
+/**
+ * Returns the parameter.
+ * @param {string} s
+ * @return {string}
+ * @private
+ */
+goog.identity_ = function(s) {
+  return s;
+};
+
+
+/**
+ * Creates Trusted Types policy if Trusted Types are supported by the browser.
+ * The policy just blesses any string as a Trusted Type. It is not visibility
+ * restricted because anyone can also call trustedTypes.createPolicy directly.
+ * However, the allowed names should be restricted by a HTTP header and the
+ * reference to the created policy should be visibility restricted.
+ * @param {string} name
+ * @return {?TrustedTypePolicy}
+ */
+goog.createTrustedTypesPolicy = function(name) {
+  var policy = null;
+  var policyFactory = goog.global.trustedTypes;
+  if (!policyFactory || !policyFactory.createPolicy) {
+    return policy;
+  }
+  // trustedTypes.createPolicy throws if called with a name that is already
+  // registered, even in report-only mode. Until the API changes, catch the
+  // error not to break the applications functionally. In such case, the code
+  // will fall back to using regular Safe Types.
+  // TODO(koto): Remove catching once createPolicy API stops throwing.
+  try {
+    policy = policyFactory.createPolicy(name, {
+      createHTML: goog.identity_,
+      createScript: goog.identity_,
+      createScriptURL: goog.identity_
+    });
+  } catch (e) {
+    goog.logToConsole_(e.message);
+  }
+  return policy;
+};
 
 // There's a bug in the compiler where without collapse properties the
 // Closure namespace defines do not guard code correctly. To help reduce code
@@ -2276,7 +2326,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
      */
     function /** boolean */ evalCheck(/** string */ code) {
       try {
-        return !!eval(code);
+        return !!eval(goog.CLOSURE_EVAL_PREFILTER_.createScript(code));
       } catch (ignored) {
         return false;
       }
@@ -3399,7 +3449,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       try {
         var contents = dep.contents_;
         dep.contents_ = null;
-        goog.globalEval(contents);
+        goog.globalEval(goog.CLOSURE_EVAL_PREFILTER_.createScript(contents));
         if (isEs6) {
           namespace = goog.moduleLoaderState_.moduleName;
         }
@@ -3808,57 +3858,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
   };
 }
 
-
-/**
- * @define {string} Trusted Types policy name. If non-empty then Closure will
- * use Trusted Types.
- */
-goog.TRUSTED_TYPES_POLICY_NAME =
-    goog.define('goog.TRUSTED_TYPES_POLICY_NAME', 'goog');
-
-
-/**
- * Returns the parameter.
- * @param {string} s
- * @return {string}
- * @private
- */
-goog.identity_ = function(s) {
-  return s;
-};
-
-
-/**
- * Creates Trusted Types policy if Trusted Types are supported by the browser.
- * The policy just blesses any string as a Trusted Type. It is not visibility
- * restricted because anyone can also call trustedTypes.createPolicy directly.
- * However, the allowed names should be restricted by a HTTP header and the
- * reference to the created policy should be visibility restricted.
- * @param {string} name
- * @return {?TrustedTypePolicy}
- */
-goog.createTrustedTypesPolicy = function(name) {
-  var policy = null;
-  var policyFactory = goog.global.trustedTypes;
-  if (!policyFactory || !policyFactory.createPolicy) {
-    return policy;
-  }
-  // trustedTypes.createPolicy throws if called with a name that is already
-  // registered, even in report-only mode. Until the API changes, catch the
-  // error not to break the applications functionally. In such case, the code
-  // will fall back to using regular Safe Types.
-  // TODO(koto): Remove catching once createPolicy API stops throwing.
-  try {
-    policy = policyFactory.createPolicy(name, {
-      createHTML: goog.identity_,
-      createScript: goog.identity_,
-      createScriptURL: goog.identity_
-    });
-  } catch (e) {
-    goog.logToConsole_(e.message);
-  }
-  return policy;
-};
 
 if (!COMPILED) {
   var isChrome87 = false;

@@ -31,7 +31,7 @@ function registerPing(channel) {
 }
 
 function startListening() {
-  var channel = new goog.messaging.PortChannel(self);
+  const channel = new goog.messaging.PortChannel(self);
   registerPing(channel);
 
   channel.registerService('addPort', function(port) {

@@ -34,14 +34,14 @@ goog.inherits(goog.math.interpolator.Pchip1, goog.math.interpolator.Spline1);
 goog.math.interpolator.Pchip1.prototype.computeDerivatives = function(
     dx, slope) {
   'use strict';
-  var len = dx.length;
-  var deriv = new Array(len + 1);
-  for (var i = 1; i < len; ++i) {
+  const len = dx.length;
+  const deriv = new Array(len + 1);
+  for (let i = 1; i < len; ++i) {
     if (goog.math.sign(slope[i - 1]) * goog.math.sign(slope[i]) <= 0) {
       deriv[i] = 0;
     } else {
-      var w1 = 2 * dx[i] + dx[i - 1];
-      var w2 = dx[i] + 2 * dx[i - 1];
+      const w1 = 2 * dx[i] + dx[i - 1];
+      const w2 = dx[i] + 2 * dx[i - 1];
       deriv[i] = (w1 + w2) / (w1 / slope[i - 1] + w2 / slope[i]);
     }
   }
@@ -65,7 +65,7 @@ goog.math.interpolator.Pchip1.prototype.computeDerivatives = function(
 goog.math.interpolator.Pchip1.prototype.computeDerivativeAtBoundary_ = function(
     dx0, dx1, slope0, slope1) {
   'use strict';
-  var deriv = ((2 * dx0 + dx1) * slope0 - dx0 * slope1) / (dx0 + dx1);
+  let deriv = ((2 * dx0 + dx1) * slope0 - dx0 * slope1) / (dx0 + dx1);
   if (goog.math.sign(deriv) != goog.math.sign(slope0)) {
     deriv = 0;
   } else if (

@@ -10,7 +10,6 @@
  * a simple event model, and animation status.
  */
 goog.provide('goog.fx.TransitionBase');
-goog.provide('goog.fx.TransitionBase.State');
 
 goog.require('goog.events.EventTarget');
 goog.require('goog.fx.Transition');  // Unreferenced: interface

@@ -132,19 +132,19 @@ goog.ui.emoji.EmojiPalette.prototype.imageLoader_;
 goog.ui.emoji.EmojiPalette.prototype.getEmojiArrayFromProperties_ = function(
     emojiGroup) {
   'use strict';
-  var emojiItems = [];
+  const emojiItems = [];
 
-  for (var i = 0; i < emojiGroup.length; i++) {
-    var url = emojiGroup[i][0];
-    var id = emojiGroup[i][1];
-    var spriteInfo = emojiGroup[i][2];
-    var displayUrl = spriteInfo ? spriteInfo.getUrl() : this.urlPrefix_ + url;
+  for (let i = 0; i < emojiGroup.length; i++) {
+    const url = emojiGroup[i][0];
+    const id = emojiGroup[i][1];
+    const spriteInfo = emojiGroup[i][2];
+    const displayUrl = spriteInfo ? spriteInfo.getUrl() : this.urlPrefix_ + url;
 
-    var item = this.getRenderer().createPaletteItem(
+    const item = this.getRenderer().createPaletteItem(
         this.getDomHelper(), id, spriteInfo, displayUrl);
     emojiItems.push(item);
 
-    var emoji = new goog.ui.emoji.Emoji(url, id);
+    const emoji = new goog.ui.emoji.Emoji(url, id);
     this.emojiCells_[id] = emoji;
     this.emojiMap_[id] = i;
 
@@ -172,10 +172,10 @@ goog.ui.emoji.EmojiPalette.prototype.getEmojiArrayFromProperties_ = function(
 goog.ui.emoji.EmojiPalette.prototype.loadAnimatedEmoji = function() {
   'use strict';
   if (this.animatedEmoji_.length > 0) {
-    for (var i = 0; i < this.animatedEmoji_.length; i++) {
-      var emoji =
+    for (let i = 0; i < this.animatedEmoji_.length; i++) {
+      const emoji =
           /** @type {goog.ui.emoji.Emoji} */ (this.animatedEmoji_[i][1]);
-      var url = this.urlPrefix_ + emoji.getUrl();
+      const url = this.urlPrefix_ + emoji.getUrl();
 
       this.imageLoader_.addImage(emoji.getId(), url);
     }
@@ -195,12 +195,12 @@ goog.ui.emoji.EmojiPalette.prototype.loadAnimatedEmoji = function() {
  */
 goog.ui.emoji.EmojiPalette.prototype.handleImageLoad_ = function(e) {
   'use strict';
-  var id = e.target.id;
-  var url = e.target.src;
+  const id = e.target.id;
+  const url = e.target.src;
   // Just to be safe, we check to make sure we have an id and src url from
   // the event target, which the ImageLoader sets to an Image object.
   if (id && url) {
-    var item = this.emoji_[this.emojiMap_[id]];
+    const item = this.emoji_[this.emojiMap_[id]];
     if (item) {
       this.getRenderer().updateAnimatedPaletteItem(item, e.target);
     }
@@ -250,7 +250,7 @@ goog.ui.emoji.EmojiPalette.prototype.getGoomojiIdFromElement_ = function(el) {
     return null;
   }
 
-  var item = this.getRenderer().getContainingItem(this, el);
+  const item = this.getRenderer().getContainingItem(this, el);
   if (item) {
     return item.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE) != '' ?
         item.getAttribute(goog.ui.emoji.Emoji.ATTRIBUTE) :
@@ -265,8 +265,8 @@ goog.ui.emoji.EmojiPalette.prototype.getGoomojiIdFromElement_ = function(el) {
  */
 goog.ui.emoji.EmojiPalette.prototype.getSelectedEmoji = function() {
   'use strict';
-  var elem = /** @type {Element} */ (this.getSelectedItem());
-  var goomojiId = this.getGoomojiIdFromElement_(elem);
+  const elem = /** @type {Element} */ (this.getSelectedItem());
+  const goomojiId = this.getGoomojiIdFromElement_(elem);
   return this.emojiCells_[goomojiId];
 };
 

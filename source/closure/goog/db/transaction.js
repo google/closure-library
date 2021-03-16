@@ -177,11 +177,11 @@ goog.db.Transaction.prototype.commit = function(allowNoopWhenUnsupported) {
  */
 goog.db.Transaction.prototype.wait = function() {
   'use strict';
-  var d = new goog.async.Deferred();
+  const d = new goog.async.Deferred();
   goog.events.listenOnce(
       this, goog.db.Transaction.EventTypes.COMPLETE, goog.bind(d.callback, d));
-  var errorKey;
-  var abortKey = goog.events.listenOnce(
+  let errorKey;
+  const abortKey = goog.events.listenOnce(
       this, goog.db.Transaction.EventTypes.ABORT, function() {
         'use strict';
         goog.events.unlistenByKey(errorKey);
@@ -197,7 +197,7 @@ goog.db.Transaction.prototype.wait = function() {
         d.errback(e.target);
       });
 
-  var db = this.getDatabase();
+  const db = this.getDatabase();
   return d.addCallback(function() {
     'use strict';
     return db;

@@ -161,7 +161,7 @@ goog.labs.style.PixelDensityMonitor.prototype.getDensity = function() {
 goog.labs.style.PixelDensityMonitor.prototype.handleMediaQueryChange_ =
     function(mql) {
   'use strict';
-  var newDensity = this.getDensity();
+  const newDensity = this.getDensity();
   if (this.lastDensity_ != newDensity) {
     this.lastDensity_ = newDensity;
     this.dispatchEvent(goog.labs.style.PixelDensityMonitor.EventType.CHANGE);

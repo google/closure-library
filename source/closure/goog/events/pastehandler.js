@@ -80,7 +80,7 @@ goog.events.PasteHandler = function(element) {
    * @type {number}
    * @private
    */
-  this.lastTime_ = goog.now();
+  this.lastTime_ = Date.now();
 
   if (goog.events.PasteHandler.SUPPORTS_NATIVE_PASTE_EVENT) {
     // Most modern browsers support the paste event.
@@ -348,7 +348,7 @@ goog.events.PasteHandler.prototype.handleEvent_ = function(e) {
       goog.log.error(this.logger_, 'invalid ' + this.state_ + ' state');
     }
   }
-  this.lastTime_ = goog.now();
+  this.lastTime_ = Date.now();
   this.oldValue_ = this.element_.value;
   goog.log.info(this.logger_, e.type + ' -> ' + this.state_);
   this.previousEvent_ = e.type;
@@ -433,7 +433,7 @@ goog.events.PasteHandler.prototype.handleUnderFocused_ = function(e) {
       var minimumMilisecondsBetweenInputEvents = this.lastTime_ +
           goog.events.PasteHandler
               .MANDATORY_MS_BETWEEN_INPUT_EVENTS_TIE_BREAKER;
-      if (goog.now() > minimumMilisecondsBetweenInputEvents ||
+      if (Date.now() > minimumMilisecondsBetweenInputEvents ||
           this.previousEvent_ == goog.events.EventType.FOCUS) {
         goog.log.info(this.logger_, 'paste by textchange while focused!');
         this.dispatch_(e);

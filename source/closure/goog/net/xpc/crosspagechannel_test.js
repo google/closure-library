@@ -36,14 +36,14 @@ goog.require('goog.testing.jsunit');
 // automated testing, as some browsers (eg IE8) choke on the large numbers of
 // iframes this test would otherwise leave active.
 /** @const */
-var CLEAN_UP_IFRAMES = true;
+const CLEAN_UP_IFRAMES = true;
 
 /** @const */
-var IFRAME_LOAD_WAIT_MS = 1000;
-var stubs = new PropertyReplacer();
-var uniqueId = 0;
-var driver;
-var accessCheckPromise = null;
+const IFRAME_LOAD_WAIT_MS = 1000;
+const stubs = new PropertyReplacer();
+let uniqueId = 0;
+let driver;
+let accessCheckPromise = null;
 
 testSuite({
 

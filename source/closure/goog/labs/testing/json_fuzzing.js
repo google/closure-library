@@ -85,13 +85,13 @@ goog.labs.testing.JsonFuzzing.Options;
  */
 goog.labs.testing.JsonFuzzing.prototype.newArray = function() {
   'use strict';
-  var result = [];
-  var depth = 0;
+  const result = [];
+  const depth = 0;
 
-  var maxSize = this.options_.jsonSize;
+  const maxSize = this.options_.jsonSize;
 
-  var size = this.nextInt(1, maxSize);
-  for (var i = 0; i < size; i++) {
+  const size = this.nextInt(1, maxSize);
+  for (let i = 0; i < size; i++) {
     result.push(this.nextElm_(depth));
   }
 
@@ -108,7 +108,7 @@ goog.labs.testing.JsonFuzzing.prototype.newArray = function() {
  */
 goog.labs.testing.JsonFuzzing.prototype.nextInt = function(min, max) {
   'use strict';
-  var random = this.random_.random();
+  const random = this.random_.random();
 
   return Math.floor(random * (max - min)) + min;
 };
@@ -122,7 +122,7 @@ goog.labs.testing.JsonFuzzing.prototype.nextInt = function(min, max) {
  */
 goog.labs.testing.JsonFuzzing.prototype.nextElmType_ = function() {
   'use strict';
-  var random = this.random_.random();
+  const random = this.random_.random();
 
   if (random < 0.5) {
     return 0;
@@ -178,9 +178,9 @@ goog.labs.testing.JsonFuzzing.FieldType_ = {
  */
 goog.labs.testing.JsonFuzzing.prototype.nextFieldType_ = function() {
   'use strict';
-  var FieldType = goog.labs.testing.JsonFuzzing.FieldType_;
+  const FieldType = goog.labs.testing.JsonFuzzing.FieldType_;
 
-  var random = this.random_.random();
+  const random = this.random_.random();
 
   if (random < 0.5) {
     return FieldType.MESSAGE;
@@ -231,13 +231,13 @@ goog.labs.testing.JsonFuzzing.prototype.nextMessage_ = function(depth) {
     return {};
   }
 
-  var numFields = this.options_.numFields;
+  const numFields = this.options_.numFields;
 
-  var random_num = this.nextInt(0, numFields);
-  var result = {};
+  const random_num = this.nextInt(0, numFields);
+  const result = {};
 
   // TODO(user): unicode and random keys
-  for (var i = 0; i < random_num; i++) {
+  for (let i = 0; i < random_num; i++) {
     switch (this.nextFieldType_()) {
       case 0:
         result['f' + i] = this.nextMessage_(depth++);
@@ -279,13 +279,13 @@ goog.labs.testing.JsonFuzzing.prototype.nextArray_ = function(depth) {
     return [];
   }
 
-  var size = this.options_.arraySize;
+  const size = this.options_.arraySize;
 
-  var random_size = this.nextInt(0, size);
-  var result = [];
+  const random_size = this.nextInt(0, size);
+  const result = [];
 
   // mixed content
-  for (var i = 0; i < random_size; i++) {
+  for (let i = 0; i < random_size; i++) {
     switch (this.nextFieldType_()) {
       case 0:
         result.push(this.nextMessage_(depth++));
@@ -322,7 +322,7 @@ goog.labs.testing.JsonFuzzing.prototype.nextArray_ = function(depth) {
  */
 goog.labs.testing.JsonFuzzing.prototype.nextBoolean_ = function() {
   'use strict';
-  var random = this.random_.random();
+  const random = this.random_.random();
 
   return random < 0.5;
 };
@@ -336,9 +336,9 @@ goog.labs.testing.JsonFuzzing.prototype.nextBoolean_ = function() {
  */
 goog.labs.testing.JsonFuzzing.prototype.nextNumber_ = function() {
   'use strict';
-  var result = this.random_.random();
+  let result = this.random_.random();
 
-  var random = this.random_.random();
+  let random = this.random_.random();
   if (random < 0.5) {
     result *= 1000;
   }

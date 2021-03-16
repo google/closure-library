@@ -71,7 +71,7 @@ goog.structs.PriorityPool.prototype.setDelay = function(delay) {
   goog.global.clearTimeout(this.delayTimeout_);
   this.delayTimeout_ = goog.global.setTimeout(
       goog.bind(this.handleQueueRequests_, this),
-      this.delay + this.lastAccess - goog.now());
+      this.delay + this.lastAccess - Date.now());
 
   // Handle all requests.
   this.handleQueueRequests_();

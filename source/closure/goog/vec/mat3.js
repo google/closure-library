@@ -63,7 +63,7 @@ goog.vec.Mat3.createFloat64 = function() {
  */
 goog.vec.Mat3.createNumber = function() {
   'use strict';
-  var a = new Array(9);
+  const a = new Array(9);
   goog.vec.Mat3.setFromValues(a, 0, 0, 0, 0, 0, 0, 0, 0, 0);
   return a;
 };
@@ -89,7 +89,7 @@ goog.vec.Mat3.create = function() {
  */
 goog.vec.Mat3.createFloat32Identity = function() {
   'use strict';
-  var mat = goog.vec.Mat3.createFloat32();
+  const mat = goog.vec.Mat3.createFloat32();
   mat[0] = mat[4] = mat[8] = 1;
   return mat;
 };
@@ -102,7 +102,7 @@ goog.vec.Mat3.createFloat32Identity = function() {
  */
 goog.vec.Mat3.createFloat64Identity = function() {
   'use strict';
-  var mat = goog.vec.Mat3.createFloat64();
+  const mat = goog.vec.Mat3.createFloat64();
   mat[0] = mat[4] = mat[8] = 1;
   return mat;
 };
@@ -116,7 +116,7 @@ goog.vec.Mat3.createFloat64Identity = function() {
  */
 goog.vec.Mat3.createNumberIdentity = function() {
   'use strict';
-  var a = new Array(9);
+  const a = new Array(9);
   goog.vec.Mat3.setFromValues(a, 1, 0, 0, 0, 1, 0, 0, 0, 1);
   return a;
 };
@@ -144,7 +144,7 @@ goog.vec.Mat3.createIdentity = function() {
  */
 goog.vec.Mat3.createFloat32FromArray = function(matrix) {
   'use strict';
-  var newMatrix = goog.vec.Mat3.createFloat32();
+  const newMatrix = goog.vec.Mat3.createFloat32();
   goog.vec.Mat3.setFromArray(newMatrix, matrix);
   return newMatrix;
 };
@@ -167,7 +167,7 @@ goog.vec.Mat3.createFloat32FromArray = function(matrix) {
 goog.vec.Mat3.createFloat32FromValues = function(
     v00, v10, v20, v01, v11, v21, v02, v12, v22) {
   'use strict';
-  var newMatrix = goog.vec.Mat3.createFloat32();
+  const newMatrix = goog.vec.Mat3.createFloat32();
   goog.vec.Mat3.setFromValues(
       newMatrix, v00, v10, v20, v01, v11, v21, v02, v12, v22);
   return newMatrix;
@@ -192,7 +192,7 @@ goog.vec.Mat3.cloneFloat32 = goog.vec.Mat3.createFloat32FromArray;
  */
 goog.vec.Mat3.createFloat64FromArray = function(matrix) {
   'use strict';
-  var newMatrix = goog.vec.Mat3.createFloat64();
+  const newMatrix = goog.vec.Mat3.createFloat64();
   goog.vec.Mat3.setFromArray(newMatrix, matrix);
   return newMatrix;
 };
@@ -215,7 +215,7 @@ goog.vec.Mat3.createFloat64FromArray = function(matrix) {
 goog.vec.Mat3.createFloat64FromValues = function(
     v00, v10, v20, v01, v11, v21, v02, v12, v22) {
   'use strict';
-  var newMatrix = goog.vec.Mat3.createFloat64();
+  const newMatrix = goog.vec.Mat3.createFloat64();
   goog.vec.Mat3.setFromValues(
       newMatrix, v00, v10, v20, v01, v11, v21, v02, v12, v22);
   return newMatrix;
@@ -241,7 +241,7 @@ goog.vec.Mat3.cloneFloat64 = goog.vec.Mat3.createFloat64FromArray;
  */
 goog.vec.Mat3.createFromArray = function(matrix) {
   'use strict';
-  var newMatrix = goog.vec.Mat3.createFloat32();
+  const newMatrix = goog.vec.Mat3.createFloat32();
   goog.vec.Mat3.setFromArray(newMatrix, matrix);
   return newMatrix;
 };
@@ -265,7 +265,7 @@ goog.vec.Mat3.createFromArray = function(matrix) {
 goog.vec.Mat3.createFromValues = function(
     v00, v10, v20, v01, v11, v21, v02, v12, v22) {
   'use strict';
-  var newMatrix = goog.vec.Mat3.create();
+  const newMatrix = goog.vec.Mat3.create();
   goog.vec.Mat3.setFromValues(
       newMatrix, v00, v10, v20, v01, v11, v21, v02, v12, v22);
   return newMatrix;
@@ -446,7 +446,7 @@ goog.vec.Mat3.setDiagonal = function(mat, vec) {
  */
 goog.vec.Mat3.setColumnValues = function(mat, column, v0, v1, v2) {
   'use strict';
-  var i = column * 3;
+  const i = column * 3;
   mat[i] = v0;
   mat[i + 1] = v1;
   mat[i + 2] = v2;
@@ -465,7 +465,7 @@ goog.vec.Mat3.setColumnValues = function(mat, column, v0, v1, v2) {
  */
 goog.vec.Mat3.setColumn = function(mat, column, vec) {
   'use strict';
-  var i = column * 3;
+  const i = column * 3;
   mat[i] = vec[0];
   mat[i + 1] = vec[1];
   mat[i + 2] = vec[2];
@@ -486,7 +486,7 @@ goog.vec.Mat3.setColumn = function(mat, column, vec) {
  */
 goog.vec.Mat3.getColumn = function(mat, column, vec) {
   'use strict';
-  var i = column * 3;
+  const i = column * 3;
   vec[0] = mat[i];
   vec[1] = mat[i + 1];
   vec[2] = mat[i + 2];
@@ -754,13 +754,31 @@ goog.vec.Mat3.multScalar = function(mat, scalar, resultMat) {
  */
 goog.vec.Mat3.multMat = function(mat0, mat1, resultMat) {
   'use strict';
-  var a00 = mat0[0], a10 = mat0[1], a20 = mat0[2];
-  var a01 = mat0[3], a11 = mat0[4], a21 = mat0[5];
-  var a02 = mat0[6], a12 = mat0[7], a22 = mat0[8];
+  const a00 = mat0[0];
+  const a10 = mat0[1];
+  const a20 = mat0[2];
 
-  var b00 = mat1[0], b10 = mat1[1], b20 = mat1[2];
-  var b01 = mat1[3], b11 = mat1[4], b21 = mat1[5];
-  var b02 = mat1[6], b12 = mat1[7], b22 = mat1[8];
+  const a01 = mat0[3];
+  const a11 = mat0[4];
+  const a21 = mat0[5];
+
+  const a02 = mat0[6];
+  const a12 = mat0[7];
+  const a22 = mat0[8];
+
+
+  const b00 = mat1[0];
+  const b10 = mat1[1];
+  const b20 = mat1[2];
+
+  const b01 = mat1[3];
+  const b11 = mat1[4];
+  const b21 = mat1[5];
+
+  const b02 = mat1[6];
+  const b12 = mat1[7];
+  const b22 = mat1[8];
+
 
   resultMat[0] = a00 * b00 + a01 * b10 + a02 * b20;
   resultMat[1] = a10 * b00 + a11 * b10 + a12 * b20;
@@ -787,7 +805,10 @@ goog.vec.Mat3.multMat = function(mat0, mat1, resultMat) {
 goog.vec.Mat3.transpose = function(mat, resultMat) {
   'use strict';
   if (resultMat == mat) {
-    var a10 = mat[1], a20 = mat[2], a21 = mat[5];
+    const a10 = mat[1];
+    const a20 = mat[2];
+    const a21 = mat[5];
+
     resultMat[1] = mat[3];
     resultMat[2] = mat[6];
     resultMat[3] = a10;
@@ -821,19 +842,28 @@ goog.vec.Mat3.transpose = function(mat, resultMat) {
  */
 goog.vec.Mat3.invert = function(mat0, resultMat) {
   'use strict';
-  var a00 = mat0[0], a10 = mat0[1], a20 = mat0[2];
-  var a01 = mat0[3], a11 = mat0[4], a21 = mat0[5];
-  var a02 = mat0[6], a12 = mat0[7], a22 = mat0[8];
+  const a00 = mat0[0];
+  const a10 = mat0[1];
+  const a20 = mat0[2];
 
-  var t00 = a11 * a22 - a12 * a21;
-  var t10 = a12 * a20 - a10 * a22;
-  var t20 = a10 * a21 - a11 * a20;
-  var det = a00 * t00 + a01 * t10 + a02 * t20;
+  const a01 = mat0[3];
+  const a11 = mat0[4];
+  const a21 = mat0[5];
+
+  const a02 = mat0[6];
+  const a12 = mat0[7];
+  const a22 = mat0[8];
+
+
+  const t00 = a11 * a22 - a12 * a21;
+  const t10 = a12 * a20 - a10 * a22;
+  const t20 = a10 * a21 - a11 * a20;
+  const det = a00 * t00 + a01 * t10 + a02 * t20;
   if (det == 0) {
     return false;
   }
 
-  var idet = 1 / det;
+  const idet = 1 / det;
   resultMat[0] = t00 * idet;
   resultMat[3] = (a02 * a21 - a01 * a22) * idet;
   resultMat[6] = (a01 * a12 - a02 * a11) * idet;
@@ -878,7 +908,10 @@ goog.vec.Mat3.equals = function(mat0, mat1) {
  */
 goog.vec.Mat3.multVec3 = function(mat, vec, resultVec) {
   'use strict';
-  var x = vec[0], y = vec[1], z = vec[2];
+  const x = vec[0];
+  const y = vec[1];
+  const z = vec[2];
+
   resultVec[0] = x * mat[0] + y * mat[3] + z * mat[6];
   resultVec[1] = x * mat[1] + y * mat[4] + z * mat[7];
   resultVec[2] = x * mat[2] + y * mat[5] + z * mat[8];
@@ -935,9 +968,9 @@ goog.vec.Mat3.makeScale = function(mat, x, y, z) {
  */
 goog.vec.Mat3.makeRotate = function(mat, angle, ax, ay, az) {
   'use strict';
-  var c = Math.cos(angle);
-  var d = 1 - c;
-  var s = Math.sin(angle);
+  const c = Math.cos(angle);
+  const d = 1 - c;
+  const s = Math.sin(angle);
 
   return goog.vec.Mat3.setFromValues(
       mat, ax * ax * d + c, ax * ay * d + az * s, ax * az * d - ay * s,
@@ -959,8 +992,8 @@ goog.vec.Mat3.makeRotate = function(mat, angle, ax, ay, az) {
  */
 goog.vec.Mat3.makeRotateX = function(mat, angle) {
   'use strict';
-  var c = Math.cos(angle);
-  var s = Math.sin(angle);
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
   return goog.vec.Mat3.setFromValues(mat, 1, 0, 0, 0, c, s, 0, -s, c);
 };
 
@@ -976,8 +1009,8 @@ goog.vec.Mat3.makeRotateX = function(mat, angle) {
  */
 goog.vec.Mat3.makeRotateY = function(mat, angle) {
   'use strict';
-  var c = Math.cos(angle);
-  var s = Math.sin(angle);
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
   return goog.vec.Mat3.setFromValues(mat, c, 0, -s, 0, 1, 0, s, 0, c);
 };
 
@@ -993,8 +1026,8 @@ goog.vec.Mat3.makeRotateY = function(mat, angle) {
  */
 goog.vec.Mat3.makeRotateZ = function(mat, angle) {
   'use strict';
-  var c = Math.cos(angle);
-  var s = Math.sin(angle);
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
   return goog.vec.Mat3.setFromValues(mat, c, s, 0, -s, c, 0, 0, 0, 1);
 };
 
@@ -1016,24 +1049,33 @@ goog.vec.Mat3.makeRotateZ = function(mat, angle) {
  */
 goog.vec.Mat3.rotate = function(mat, angle, x, y, z) {
   'use strict';
-  var m00 = mat[0], m10 = mat[1], m20 = mat[2];
-  var m01 = mat[3], m11 = mat[4], m21 = mat[5];
-  var m02 = mat[6], m12 = mat[7], m22 = mat[8];
+  const m00 = mat[0];
+  const m10 = mat[1];
+  const m20 = mat[2];
 
-  var cosAngle = Math.cos(angle);
-  var sinAngle = Math.sin(angle);
-  var diffCosAngle = 1 - cosAngle;
-  var r00 = x * x * diffCosAngle + cosAngle;
-  var r10 = x * y * diffCosAngle + z * sinAngle;
-  var r20 = x * z * diffCosAngle - y * sinAngle;
+  const m01 = mat[3];
+  const m11 = mat[4];
+  const m21 = mat[5];
 
-  var r01 = x * y * diffCosAngle - z * sinAngle;
-  var r11 = y * y * diffCosAngle + cosAngle;
-  var r21 = y * z * diffCosAngle + x * sinAngle;
+  const m02 = mat[6];
+  const m12 = mat[7];
+  const m22 = mat[8];
 
-  var r02 = x * z * diffCosAngle + y * sinAngle;
-  var r12 = y * z * diffCosAngle - x * sinAngle;
-  var r22 = z * z * diffCosAngle + cosAngle;
+
+  const cosAngle = Math.cos(angle);
+  const sinAngle = Math.sin(angle);
+  const diffCosAngle = 1 - cosAngle;
+  const r00 = x * x * diffCosAngle + cosAngle;
+  const r10 = x * y * diffCosAngle + z * sinAngle;
+  const r20 = x * z * diffCosAngle - y * sinAngle;
+
+  const r01 = x * y * diffCosAngle - z * sinAngle;
+  const r11 = y * y * diffCosAngle + cosAngle;
+  const r21 = y * z * diffCosAngle + x * sinAngle;
+
+  const r02 = x * z * diffCosAngle + y * sinAngle;
+  const r12 = y * z * diffCosAngle - x * sinAngle;
+  const r22 = z * z * diffCosAngle + cosAngle;
 
   return goog.vec.Mat3.setFromValues(
       mat, m00 * r00 + m01 * r10 + m02 * r20, m10 * r00 + m11 * r10 + m12 * r20,
@@ -1061,11 +1103,17 @@ goog.vec.Mat3.rotate = function(mat, angle, x, y, z) {
  */
 goog.vec.Mat3.rotateX = function(mat, angle) {
   'use strict';
-  var m01 = mat[3], m11 = mat[4], m21 = mat[5];
-  var m02 = mat[6], m12 = mat[7], m22 = mat[8];
+  const m01 = mat[3];
+  const m11 = mat[4];
+  const m21 = mat[5];
 
-  var c = Math.cos(angle);
-  var s = Math.sin(angle);
+  const m02 = mat[6];
+  const m12 = mat[7];
+  const m22 = mat[8];
+
+
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
 
   mat[3] = m01 * c + m02 * s;
   mat[4] = m11 * c + m12 * s;
@@ -1092,11 +1140,17 @@ goog.vec.Mat3.rotateX = function(mat, angle) {
  */
 goog.vec.Mat3.rotateY = function(mat, angle) {
   'use strict';
-  var m00 = mat[0], m10 = mat[1], m20 = mat[2];
-  var m02 = mat[6], m12 = mat[7], m22 = mat[8];
+  const m00 = mat[0];
+  const m10 = mat[1];
+  const m20 = mat[2];
 
-  var c = Math.cos(angle);
-  var s = Math.sin(angle);
+  const m02 = mat[6];
+  const m12 = mat[7];
+  const m22 = mat[8];
+
+
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
 
   mat[0] = m00 * c + m02 * -s;
   mat[1] = m10 * c + m12 * -s;
@@ -1123,11 +1177,17 @@ goog.vec.Mat3.rotateY = function(mat, angle) {
  */
 goog.vec.Mat3.rotateZ = function(mat, angle) {
   'use strict';
-  var m00 = mat[0], m10 = mat[1], m20 = mat[2];
-  var m01 = mat[3], m11 = mat[4], m21 = mat[5];
+  const m00 = mat[0];
+  const m10 = mat[1];
+  const m20 = mat[2];
 
-  var c = Math.cos(angle);
-  var s = Math.sin(angle);
+  const m01 = mat[3];
+  const m11 = mat[4];
+  const m21 = mat[5];
+
+
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
 
   mat[0] = m00 * c + m01 * s;
   mat[1] = m10 * c + m11 * s;
@@ -1157,14 +1217,14 @@ goog.vec.Mat3.rotateZ = function(mat, angle) {
  */
 goog.vec.Mat3.makeEulerZXZ = function(mat, theta1, theta2, theta3) {
   'use strict';
-  var c1 = Math.cos(theta1);
-  var s1 = Math.sin(theta1);
+  const c1 = Math.cos(theta1);
+  const s1 = Math.sin(theta1);
 
-  var c2 = Math.cos(theta2);
-  var s2 = Math.sin(theta2);
+  const c2 = Math.cos(theta2);
+  const s2 = Math.sin(theta2);
 
-  var c3 = Math.cos(theta3);
-  var s3 = Math.sin(theta3);
+  const c3 = Math.cos(theta3);
+  const s3 = Math.sin(theta3);
 
   mat[0] = c1 * c3 - c2 * s1 * s3;
   mat[1] = c2 * c1 * s3 + c3 * s1;
@@ -1199,12 +1259,12 @@ goog.vec.Mat3.makeEulerZXZ = function(mat, theta1, theta2, theta3) {
 goog.vec.Mat3.toEulerZXZ = function(mat, euler, opt_theta2IsNegative) {
   'use strict';
   // There is an ambiguity in the sign of sinTheta2 because of the sqrt.
-  var sinTheta2 = Math.sqrt(mat[2] * mat[2] + mat[5] * mat[5]);
+  const sinTheta2 = Math.sqrt(mat[2] * mat[2] + mat[5] * mat[5]);
 
   // By default we explicitely constrain theta2 to be in [0, pi],
   // so sinTheta2 is always positive. We can change the behavior and specify
   // theta2 to be negative in [-pi, 0] with opt_Theta2IsNegative.
-  var signTheta2 = opt_theta2IsNegative ? -1 : 1;
+  const signTheta2 = opt_theta2IsNegative ? -1 : 1;
 
   if (sinTheta2 > goog.vec.EPSILON) {
     euler[2] = Math.atan2(mat[2] * signTheta2, mat[5] * signTheta2);

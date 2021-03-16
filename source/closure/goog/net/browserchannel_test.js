@@ -99,23 +99,23 @@ class MockChannelRequest {
   xmlHttpPost(uri, postData, decodeChunks) {
     this.channelDebug_.debug(`---> POST: ${uri}, ${postData}, ${decodeChunks}`);
     this.postData_ = postData;
-    this.requestStartTime_ = goog.now();
+    this.requestStartTime_ = Date.now();
   }
 
   xmlHttpGet(uri, decodeChunks, noClose = undefined) {
     this.channelDebug_.debug(`<--- GET: ${uri}, ${decodeChunks}, ${noClose}`);
     this.requestUri_ = uri;
-    this.requestStartTime_ = goog.now();
+    this.requestStartTime_ = Date.now();
   }
 
   tridentGet(uri, usingSecondaryDomain) {
     this.channelDebug_.debug('<---GET (T): ' + uri);
     this.requestUri_ = uri;
-    this.requestStartTime_ = goog.now();
+    this.requestStartTime_ = Date.now();
   }
 
   sendUsingImgTag(uri) {
-    this.requestStartTime_ = goog.now();
+    this.requestStartTime_ = Date.now();
   }
 
   cancel() {

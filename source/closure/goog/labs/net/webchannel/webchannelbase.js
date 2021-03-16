@@ -335,6 +335,13 @@ goog.labs.net.webChannel.WebChannelBase = function(
       (opt_options && opt_options.xmlHttpFactory) || undefined;
 
   /**
+   * Whether or not this channel uses WHATWG Fetch/streams.
+   * Placeholder for the upcoming implementations.
+   * @private {boolean}
+   */
+  this.usesFetchStreams_ = false;
+
+  /**
    * The timeout in milliseconds for a back channel request. Defaults to using
    * the timeout configured in ChannelRequest (45s). If server-side
    * keepaliveInterval is known to the client, set the backchannel request
@@ -2038,7 +2045,7 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
     if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
       var size = request.getPostData() ? request.getPostData().length : 0;
       requestStats.notifyTimingEvent(
-          size, goog.now() - request.getRequestStartTime(),
+          size, Date.now() - request.getRequestStartTime(),
           this.forwardChannelRetryCount_);
       this.ensureForwardChannel_();
       this.onSuccess_(request);
@@ -2216,7 +2223,7 @@ WebChannelBase.prototype.onInput_ = function(respArray, request) {
         }
 
         if (this.detectBufferingProxy_) {
-          this.handshakeRttMs_ = goog.now() - request.getRequestStartTime();
+          this.handshakeRttMs_ = Date.now() - request.getRequestStartTime();
           this.channelDebug_.info(
               'Handshake RTT: ' + this.handshakeRttMs_ + 'ms');
         }
@@ -2648,6 +2655,16 @@ WebChannelBase.Handler.prototype.getNetworkTestImageUri = function(channel) {
 WebChannelBase.Handler.prototype.isActive = function(channel) {
   'use strict';
   return true;
+};
+
+/**
+ * Whether or not this channel uses WHATWG Fetch/streams.
+ * @override
+ * @return {boolean}
+ */
+WebChannelBase.prototype.usesFetchStreams = function() {
+  'use strict';
+  return this.usesFetchStreams_;
 };
 
 

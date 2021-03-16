@@ -65,7 +65,7 @@ goog.soy.Renderer = function(opt_injectedDataSupplier, opt_domHelper) {
 goog.soy.Renderer.prototype.renderAsFragment = function(
     template, opt_templateData) {
   'use strict';
-  var node = goog.soy.renderAsFragment(
+  const node = goog.soy.renderAsFragment(
       template, opt_templateData, this.getInjectedData_(), this.dom_);
   this.handleRender(node, goog.soy.data.SanitizedContentKind.HTML);
   return node;
@@ -88,7 +88,7 @@ goog.soy.Renderer.prototype.renderAsFragment = function(
 goog.soy.Renderer.prototype.renderAsElement = function(
     template, opt_templateData) {
   'use strict';
-  var element = goog.soy.renderAsElement(
+  const element = goog.soy.renderAsElement(
       template, opt_templateData, this.getInjectedData_(), this.dom_);
   this.handleRender(element, goog.soy.data.SanitizedContentKind.HTML);
   return element;
@@ -128,13 +128,13 @@ goog.soy.Renderer.prototype.renderElement = function(
  */
 goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
   'use strict';
-  var result = template(opt_templateData || {}, this.getInjectedData_());
+  const result = template(opt_templateData || {}, this.getInjectedData_());
   goog.asserts.assert(
       !(result instanceof goog.soy.data.SanitizedContent) ||
           result.contentKind === goog.soy.data.SanitizedContentKind.HTML,
       'render was called with a strict template of kind other than "html"' +
           ' (consider using renderText or renderStrict)');
-  var contentKind = result instanceof goog.soy.data.SanitizedContent ?
+  const contentKind = result instanceof goog.soy.data.SanitizedContent ?
       result.contentKind :
       null;
   this.handleRender(null /* node */, contentKind);
@@ -154,10 +154,10 @@ goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
  */
 goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
   'use strict';
-  var result = template(opt_templateData || {}, this.getInjectedData_());
+  const result = template(opt_templateData || {}, this.getInjectedData_());
   if (goog.asserts.ENABLE_ASSERTS) {
     /** @suppress {checkTypes} Runtime check for untyped code. */
-    var isSanitizedContent = result instanceof goog.soy.data.SanitizedContent;
+    const isSanitizedContent = result instanceof goog.soy.data.SanitizedContent;
     goog.asserts.assertString(
         result,
         isSanitizedContent ?
@@ -219,7 +219,7 @@ goog.soy.Renderer.prototype.renderStrictUri = function(
 goog.soy.Renderer.prototype.renderStrictOfKind = function(
     template, opt_templateData, opt_kind) {
   'use strict';
-  var result = template(opt_templateData || {}, this.getInjectedData_());
+  const result = template(opt_templateData || {}, this.getInjectedData_());
   goog.asserts.assertInstanceof(
       result, goog.soy.data.SanitizedContent,
       'renderStrict cannot be called on a text soy template');
@@ -248,7 +248,7 @@ goog.soy.Renderer.prototype.renderStrictOfKind = function(
 goog.soy.Renderer.prototype.renderSafeHtml = function(
     template, opt_templateData) {
   'use strict';
-  var result = this.renderStrict(template, opt_templateData);
+  const result = this.renderStrict(template, opt_templateData);
   // Convert from SanitizedHtml to SafeHtml.
   return result.toSafeHtml();
 };
@@ -270,7 +270,7 @@ goog.soy.Renderer.prototype.renderSafeHtml = function(
 goog.soy.Renderer.prototype.renderSafeStyleSheet = function(
     template, opt_templateData) {
   'use strict';
-  var result = this.renderStrictOfKind(
+  const result = this.renderStrictOfKind(
       template, opt_templateData, goog.soy.data.SanitizedContentKind.CSS);
   return result.toSafeStyleSheet();
 };

@@ -257,7 +257,7 @@ goog.net.BrowserTestChannel.prototype.connect = function(path) {
 
   goog.net.browserchannelinternal.stats.notifyStatEvent(
       goog.net.browserchannelinternal.stats.Stat.TEST_STAGE_ONE_START);
-  this.startTime_ = goog.now();
+  this.startTime_ = Date.now();
 
   // If the channel already has the result of the first test, then skip it.
   const firstTestResults = this.channel_.getFirstTestResults();
@@ -465,7 +465,7 @@ goog.net.BrowserTestChannel.prototype.onRequestData = function(
     if (this.receivedIntermediateResult_) {
       goog.net.browserchannelinternal.stats.notifyStatEvent(
           goog.net.browserchannelinternal.stats.Stat.TEST_STAGE_TWO_DATA_TWO);
-      this.lastTime_ = goog.now();
+      this.lastTime_ = Date.now();
     } else {
       // '11111' is used instead of '1' to prevent a small amount of buffering
       // by Safari.
@@ -473,7 +473,7 @@ goog.net.BrowserTestChannel.prototype.onRequestData = function(
         goog.net.browserchannelinternal.stats.notifyStatEvent(
             goog.net.browserchannelinternal.stats.Stat.TEST_STAGE_TWO_DATA_ONE);
         this.receivedIntermediateResult_ = true;
-        this.firstTime_ = goog.now();
+        this.firstTime_ = Date.now();
         if (this.checkForEarlyNonBuffered_()) {
           // If early chunk detection is on, and we passed the tests,
           // assume HTTP_OK, cancel the test and turn on noproxy mode.
@@ -489,7 +489,7 @@ goog.net.BrowserTestChannel.prototype.onRequestData = function(
         goog.net.browserchannelinternal.stats.notifyStatEvent(
             goog.net.browserchannelinternal.stats.Stat
                 .TEST_STAGE_TWO_DATA_BOTH);
-        this.firstTime_ = this.lastTime_ = goog.now();
+        this.firstTime_ = this.lastTime_ = Date.now();
         this.receivedIntermediateResult_ = false;
       }
     }

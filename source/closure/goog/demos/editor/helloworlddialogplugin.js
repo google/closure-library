@@ -44,7 +44,7 @@ goog.demos.editor.HelloWorldDialogPlugin =
    * @protected
    */
   createDialog(dialogDomHelper) {
-    var dialog = new goog.demos.editor.HelloWorldDialog(dialogDomHelper);
+    const dialog = new goog.demos.editor.HelloWorldDialog(dialogDomHelper);
     dialog.addEventListener(
         goog.ui.editor.AbstractDialog.EventType.OK, this.handleOk_, false,
         this);
@@ -66,10 +66,10 @@ goog.demos.editor.HelloWorldDialogPlugin =
     this.getFieldObject().dispatchBeforeChange();
 
     // Now we can clear out what was previously selected (if anything).
-    var range = this.getFieldObject().getRange();
+    const range = this.getFieldObject().getRange();
     range.removeContents();
     // And replace it with a span containing our hello world message.
-    var createdNode = this.getFieldDomHelper().createDom(
+    let createdNode = this.getFieldDomHelper().createDom(
         goog.dom.TagName.SPAN, null, e.message);
     createdNode = range.insertNode(createdNode, false);
     // Place the cursor at the end of the new text node (false == to the right).

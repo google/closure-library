@@ -154,10 +154,10 @@ goog.messaging.RespondingChannel.prototype.disposeInternal = function() {
 goog.messaging.RespondingChannel.prototype.send = function(
     serviceName, payload, callback) {
   'use strict';
-  var signature = this.getNextSignature_();
+  const signature = this.getNextSignature_();
   this.sigCallbackMap_[signature] = callback;
 
-  var message = {};
+  const message = {};
   message['signature'] = signature;
   message['data'] = payload;
 
@@ -174,11 +174,11 @@ goog.messaging.RespondingChannel.prototype.send = function(
 goog.messaging.RespondingChannel.prototype.callbackServiceHandler_ = function(
     message) {
   'use strict';
-  var signature = message['signature'];
-  var result = message['data'];
+  const signature = message['signature'];
+  const result = message['data'];
 
   if (signature in this.sigCallbackMap_) {
-    var callback =
+    const callback =
         /** @type {function(Object)} */ (this.sigCallbackMap_[signature]);
     callback(result);
     delete this.sigCallbackMap_[signature];
@@ -214,8 +214,8 @@ goog.messaging.RespondingChannel.prototype.registerService = function(
 goog.messaging.RespondingChannel.prototype.callbackProxy_ = function(
     callback, message) {
   'use strict';
-  var response = callback(message['data']);
-  var signature = message['signature'];
+  const response = callback(message['data']);
+  const signature = message['signature'];
   goog.Promise.resolve(response).then(goog.bind(function(result) {
     'use strict';
     this.sendResponse_(result, signature);
@@ -233,7 +233,7 @@ goog.messaging.RespondingChannel.prototype.callbackProxy_ = function(
 goog.messaging.RespondingChannel.prototype.sendResponse_ = function(
     result, signature) {
   'use strict';
-  var resultMessage = {};
+  const resultMessage = {};
   resultMessage['data'] = result;
   resultMessage['signature'] = signature;
   // The callback invoked above may have disposed the channel so check if it

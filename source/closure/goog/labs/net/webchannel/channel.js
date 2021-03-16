@@ -191,4 +191,11 @@ Channel.prototype.setHttpSessionId = goog.abstractMethod;
  * @return {?string} The http session id if there is one in effect.
  */
 Channel.prototype.getHttpSessionId = goog.abstractMethod;
+
+/**
+ * Whether or not this channel uses WHATWG Fetch/streams.
+ *
+ * @return {boolean} true if use Fetch streams.
+ */
+Channel.prototype.usesFetchStreams = goog.abstractMethod;
 });  // goog.scope

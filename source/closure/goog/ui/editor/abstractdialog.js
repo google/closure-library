@@ -94,7 +94,8 @@ goog.ui.editor.AbstractDialog.prototype.isOpen = function() {
 goog.ui.editor.AbstractDialog.prototype.processOkAndClose = function() {
   'use strict';
   // Fake an OK event from the wrapped dialog control.
-  var evt = new goog.ui.Dialog.Event(goog.ui.Dialog.DefaultButtonKeys.OK, null);
+  const evt =
+      new goog.ui.Dialog.Event(goog.ui.Dialog.DefaultButtonKeys.OK, null);
   if (this.handleOk(evt)) {
     // handleOk calls dispatchEvent, so if any listener calls preventDefault it
     // will return false and we won't hide the dialog.
@@ -164,9 +165,9 @@ goog.ui.editor.AbstractDialog.Builder.prototype.setTitle = function(title) {
 goog.ui.editor.AbstractDialog.Builder.prototype.addOkButton = function(
     opt_label) {
   'use strict';
-  var key = goog.ui.Dialog.DefaultButtonKeys.OK;
+  const key = goog.ui.Dialog.DefaultButtonKeys.OK;
   /** @desc Label for an OK button in an editor dialog. */
-  var MSG_TR_DIALOG_OK = goog.getMsg('OK');
+  const MSG_TR_DIALOG_OK = goog.getMsg('OK');
   // True means this is the default/OK button.
   this.buttonSet_.set(key, opt_label || MSG_TR_DIALOG_OK, true);
   this.buttonHandlers_[key] =
@@ -184,9 +185,9 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addOkButton = function(
 goog.ui.editor.AbstractDialog.Builder.prototype.addCancelButton = function(
     opt_label) {
   'use strict';
-  var key = goog.ui.Dialog.DefaultButtonKeys.CANCEL;
+  const key = goog.ui.Dialog.DefaultButtonKeys.CANCEL;
   /** @desc Label for a cancel button in an editor dialog. */
-  var MSG_TR_DIALOG_CANCEL = goog.getMsg('Cancel');
+  const MSG_TR_DIALOG_CANCEL = goog.getMsg('Cancel');
   // False means it's not the OK button, true means it's the Cancel button.
   this.buttonSet_.set(key, opt_label || MSG_TR_DIALOG_CANCEL, false, true);
   this.buttonHandlers_[key] =
@@ -211,7 +212,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.addButton = function(
   'use strict';
   // We don't care what the key is, just that we can match the button with the
   // handler function later.
-  var key = opt_buttonId || goog.string.createUniqueString();
+  const key = opt_buttonId || goog.string.createUniqueString();
   this.buttonSet_.set(key, label);
   this.buttonHandlers_[key] = handler;
   return this;
@@ -259,7 +260,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.build = function() {
   }
   this.wrappedDialog_.setButtonSet(this.buttonSet_);
 
-  var handlers = this.buttonHandlers_;
+  const handlers = this.buttonHandlers_;
   this.buttonHandlers_ = null;
   this.wrappedDialog_.listen(
       goog.ui.Dialog.EventType.SELECT,
@@ -275,7 +276,7 @@ goog.ui.editor.AbstractDialog.Builder.prototype.build = function() {
   // All editor dialogs are modal.
   this.wrappedDialog_.setModal(true);
 
-  var dialog = this.wrappedDialog_;
+  const dialog = this.wrappedDialog_;
   this.wrappedDialog_ = null;
   return dialog;
 };
@@ -397,7 +398,7 @@ goog.ui.editor.AbstractDialog.prototype.createOkEvent = goog.abstractMethod;
  */
 goog.ui.editor.AbstractDialog.prototype.handleOk = function(e) {
   'use strict';
-  var eventObj = this.createOkEvent(e);
+  const eventObj = this.createOkEvent(e);
   if (eventObj) {
     return this.dispatchEvent(eventObj);
   } else {

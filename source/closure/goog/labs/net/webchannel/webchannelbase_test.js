@@ -137,7 +137,7 @@ class MockChannelRequest {
   xmlHttpPost(uri, postData, decodeChunks) {
     this.channelDebug_.debug(`---> POST: ${uri}, ${postData}, ${decodeChunks}`);
     this.postData_ = postData;
-    this.requestStartTime_ = goog.now();
+    this.requestStartTime_ = Date.now();
   }
 
   /**
@@ -151,12 +151,12 @@ class MockChannelRequest {
   xmlHttpGet(uri, decodeChunks, hostPrefix) {
     this.channelDebug_.debug(
         `<--- GET: ${uri}, ${decodeChunks}, ${hostPrefix}`);
-    this.requestStartTime_ = goog.now();
+    this.requestStartTime_ = Date.now();
   }
 
   /** @param {?Uri} uri The uri to send a request to. */
   sendCloseRequest(uri) {
-    this.requestStartTime_ = goog.now();
+    this.requestStartTime_ = Date.now();
   }
 
   /** Cancel. */
@@ -195,7 +195,7 @@ class MockChannelRequest {
   }
 
   /**
-   * @return {?number} The time the request started, as returned by goog.now().
+   * @return {?number} The time the request started, as returned by Date.now().
    */
   getRequestStartTime() {
     return this.requestStartTime_;

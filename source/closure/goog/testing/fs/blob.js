@@ -68,22 +68,22 @@ goog.testing.fs.Blob = function(opt_data, opt_type) {
 goog.testing.fs.Blob.prototype.slice = function(
     opt_start, opt_end, opt_contentType) {
   'use strict';
-  var relativeStart;
+  let relativeStart;
   if (typeof opt_start === 'number') {
     relativeStart = (opt_start < 0) ? Math.max(this.size + opt_start, 0) :
                                       Math.min(opt_start, this.size);
   } else {
     relativeStart = 0;
   }
-  var relativeEnd;
+  let relativeEnd;
   if (typeof opt_end === 'number') {
     relativeEnd = (opt_end < 0) ? Math.max(this.size + opt_end, 0) :
                                   Math.min(opt_end, this.size);
   } else {
     relativeEnd = this.size;
   }
-  var span = Math.max(relativeEnd - relativeStart, 0);
-  var blob = new goog.testing.fs.Blob(
+  const span = Math.max(relativeEnd - relativeStart, 0);
+  const blob = new goog.testing.fs.Blob(
       this.data_.slice(relativeStart, relativeStart + span), opt_contentType);
   return blob;
 };
@@ -105,9 +105,9 @@ goog.testing.fs.Blob.prototype.toString = function() {
  */
 goog.testing.fs.Blob.prototype.toArrayBuffer = function() {
   'use strict';
-  var buf = new ArrayBuffer(this.data_.length);
-  var arr = new Uint8Array(buf);
-  for (var i = 0; i < this.data_.length; i++) {
+  const buf = new ArrayBuffer(this.data_.length);
+  const arr = new Uint8Array(buf);
+  for (let i = 0; i < this.data_.length; i++) {
     arr[i] = this.data_[i];
   }
   return buf;
@@ -138,8 +138,8 @@ goog.testing.fs.Blob.prototype.setDataInternal = function(data) {
   if (typeof data === 'string') {
     this.appendString_(data);
   } else if (data instanceof Array) {
-    for (var i = 0; i < data.length; i++) {
-      var value = data[i];
+    for (let i = 0; i < data.length; i++) {
+      const value = data[i];
       if (typeof value === 'string') {
         this.appendString_(value);
       } else if (typeof value === 'number') {  // Assume Bytes array.
@@ -185,7 +185,7 @@ goog.testing.fs.Blob.prototype.appendByte_ = function(data) {
  */
 goog.testing.fs.Blob.prototype.appendUint8_ = function(data) {
   'use strict';
-  for (var i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     this.data_.push(data[i]);
   }
 };

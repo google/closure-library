@@ -50,9 +50,9 @@ goog.ui.tree.TreeNode.prototype.getTree = function() {
   if (this.tree) {
     return this.tree;
   }
-  var parent = this.getParent();
+  const parent = this.getParent();
   if (parent) {
-    var tree = parent.getTree();
+    const tree = parent.getTree();
     if (tree) {
       this.setTreeInternal(tree);
       return tree;
@@ -69,18 +69,18 @@ goog.ui.tree.TreeNode.prototype.getTree = function() {
  */
 goog.ui.tree.TreeNode.prototype.getCalculatedIconClass = function() {
   'use strict';
-  var expanded = this.getExpanded();
-  var expandedIconClass = this.getExpandedIconClass();
+  const expanded = this.getExpanded();
+  const expandedIconClass = this.getExpandedIconClass();
   if (expanded && expandedIconClass) {
     return expandedIconClass;
   }
-  var iconClass = this.getIconClass();
+  const iconClass = this.getIconClass();
   if (!expanded && iconClass) {
     return iconClass;
   }
 
   // fall back on default icons
-  var config = this.getConfig();
+  const config = this.getConfig();
   if (this.hasChildren()) {
     if (expanded && config.cssExpandedFolderIcon) {
       return config.cssTreeIcon + ' ' + config.cssExpandedFolderIcon;

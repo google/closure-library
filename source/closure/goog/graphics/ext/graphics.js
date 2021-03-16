@@ -56,7 +56,7 @@ goog.graphics.ext.Graphics = function(
     width, height, opt_coordWidth, opt_coordHeight, opt_domHelper,
     opt_isSimple) {
   'use strict';
-  var surface = opt_isSimple ?
+  const surface = opt_isSimple ?
       goog.graphics.createSimpleGraphics(
           width, height, opt_coordWidth, opt_coordHeight, opt_domHelper) :
       goog.graphics.createGraphics(
@@ -141,7 +141,7 @@ goog.graphics.ext.Graphics.prototype.setPixelSize = function(
   'use strict';
   this.implementation_.setSize(pixelWidth, pixelHeight);
 
-  var coordSize = this.getCoordSize();
+  const coordSize = this.getCoordSize();
   goog.graphics.ext.Graphics.superClass_.setSize.call(
       this, coordSize.width, coordSize.height);
 };

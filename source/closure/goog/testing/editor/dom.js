@@ -96,13 +96,13 @@ goog.testing.editor.dom.getPreviousNextNonEmptyTextNodeHelper_ = function(
   // makes it stop only when it finishes iterating through all of that
   // node's children, even though we will start at a different node and exit
   // that starting node's subtree in the process.
-  var iter = new goog.dom.TagIterator(opt_stopAt, opt_isPrevious);
+  const iter = new goog.dom.TagIterator(opt_stopAt, opt_isPrevious);
 
   // TODO(user): Move this logic to a new method in TagIterator such as
   // skipToNode().
   // Then we set the iterator to start at the given start node, not opt_stopAt.
-  var walkType;  // Let TagIterator set the initial walk type by default.
-  var depth = goog.testing.editor.dom.getRelativeDepth_(node, opt_stopAt);
+  let walkType;  // Let TagIterator set the initial walk type by default.
+  let depth = goog.testing.editor.dom.getRelativeDepth_(node, opt_stopAt);
   if (depth == -1) {
     return null;  // Fail because opt_stopAt is not an ancestor of node.
   }
@@ -128,7 +128,7 @@ goog.testing.editor.dom.getPreviousNextNonEmptyTextNodeHelper_ = function(
     return null;  // It could have been a leaf node.
   }
   // Now just get the first non-empty text node the iterator finds.
-  var filter =
+  const filter =
       goog.iter.filter(iter, goog.testing.editor.dom.isNonEmptyTextNode_);
   try {
     return /** @type {Text} */ (filter.next());
@@ -170,7 +170,7 @@ goog.testing.editor.dom.isNonEmptyTextNode_ = function(node) {
  */
 goog.testing.editor.dom.getRelativeDepth_ = function(node, parentNode) {
   'use strict';
-  var depth = 0;
+  let depth = 0;
   while (node) {
     if (node == parentNode) {
       return depth;
@@ -201,7 +201,7 @@ goog.testing.editor.dom.getRelativeDepth_ = function(node, parentNode) {
 goog.testing.editor.dom.assertRangeBetweenText = function(
     before, after, range, opt_stopAt) {
   'use strict';
-  var previousText =
+  const previousText =
       goog.testing.editor.dom.getTextFollowingRange_(range, true, opt_stopAt);
   if (before == '') {
     assertNull(
@@ -217,7 +217,7 @@ goog.testing.editor.dom.assertRangeBetweenText = function(
         goog.string.endsWith(
             /** @type {string} */ (previousText), before));
   }
-  var nextText =
+  const nextText =
       goog.testing.editor.dom.getTextFollowingRange_(range, false, opt_stopAt);
   if (after == '') {
     assertNull(
@@ -250,16 +250,17 @@ goog.testing.editor.dom.assertRangeBetweenText = function(
 goog.testing.editor.dom.getTextFollowingRange_ = function(
     range, isBefore, opt_stopAt) {
   'use strict';
-  var followingTextNode;
-  var endpointNode = isBefore ? range.getStartNode() : range.getEndNode();
-  var endpointOffset = isBefore ? range.getStartOffset() : range.getEndOffset();
-  var getFollowingTextNode = isBefore ?
+  let followingTextNode;
+  const endpointNode = isBefore ? range.getStartNode() : range.getEndNode();
+  const endpointOffset =
+      isBefore ? range.getStartOffset() : range.getEndOffset();
+  const getFollowingTextNode = isBefore ?
       goog.testing.editor.dom.getPreviousNonEmptyTextNode :
       goog.testing.editor.dom.getNextNonEmptyTextNode;
 
   if (endpointNode.nodeType == goog.dom.NodeType.TEXT) {
     // Range endpoint is in a text node.
-    var endText = endpointNode.nodeValue;
+    const endText = endpointNode.nodeValue;
     if (isBefore ? endpointOffset > 0 : endpointOffset < endText.length) {
       // There is text in this node following the endpoint so return the portion
       // that follows the endpoint.
@@ -273,10 +274,10 @@ goog.testing.editor.dom.getTextFollowingRange_ = function(
     }
   } else {
     // Range endpoint is in an element node.
-    var numChildren = endpointNode.childNodes.length;
+    const numChildren = endpointNode.childNodes.length;
     if (isBefore ? endpointOffset > 0 : endpointOffset < numChildren) {
       // There is at least one child following the endpoint.
-      var followingChild =
+      const followingChild =
           endpointNode
               .childNodes[isBefore ? endpointOffset - 1 : endpointOffset];
       if (goog.testing.editor.dom.isNonEmptyTextNode_(followingChild)) {

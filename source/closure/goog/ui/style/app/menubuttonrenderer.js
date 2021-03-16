@@ -141,9 +141,9 @@ goog.ui.style.app.MenuButtonRenderer.prototype.getContentElement = function(
 goog.ui.style.app.MenuButtonRenderer.prototype.decorate = function(
     control, element) {
   'use strict';
-  var button = /** @type {goog.ui.MenuButton} */ (control);
+  const button = /** @type {goog.ui.MenuButton} */ (control);
   // TODO(attila):  Add more robust support for subclasses of goog.ui.Menu.
-  var menuElem = goog.dom.getElementsByTagNameAndClass(
+  const menuElem = goog.dom.getElementsByTagNameAndClass(
       '*', goog.ui.MenuRenderer.CSS_CLASS, element)[0];
   if (menuElem) {
     // Move the menu element directly under the body (but hide it first to
@@ -152,7 +152,7 @@ goog.ui.style.app.MenuButtonRenderer.prototype.decorate = function(
     goog.dom.appendChild(goog.dom.getOwnerDocument(menuElem).body, menuElem);
 
     // Decorate the menu and attach it to the button.
-    var menu = new goog.ui.Menu();
+    const menu = new goog.ui.Menu();
     menu.decorate(menuElem);
     button.setMenu(menu);
   }
@@ -189,7 +189,7 @@ goog.ui.style.app.MenuButtonRenderer.prototype.decorate = function(
 goog.ui.style.app.MenuButtonRenderer.prototype.createButton = function(
     content, dom) {
   'use strict';
-  var contentWithDropdown = this.createContentWithDropdown(content, dom);
+  const contentWithDropdown = this.createContentWithDropdown(content, dom);
   return goog.ui.style.app.MenuButtonRenderer.superClass_.createButton.call(
       this, contentWithDropdown, dom);
 };
@@ -199,7 +199,7 @@ goog.ui.style.app.MenuButtonRenderer.prototype.createButton = function(
 goog.ui.style.app.MenuButtonRenderer.prototype.setContent = function(
     element, content) {
   'use strict';
-  var dom = goog.dom.getDomHelper(this.getContentElement(element));
+  const dom = goog.dom.getDomHelper(this.getContentElement(element));
   goog.ui.style.app.MenuButtonRenderer.superClass_.setContent.call(
       this, element, this.createContentWithDropdown(content, dom));
 };
@@ -214,7 +214,7 @@ goog.ui.style.app.MenuButtonRenderer.prototype.setContent = function(
 goog.ui.style.app.MenuButtonRenderer.prototype.createContentWithDropdown =
     function(content, dom) {
   'use strict';
-  var caption = dom.createDom(
+  const caption = dom.createDom(
       goog.dom.TagName.DIV, null, content, this.createDropdown(dom));
   return goog.array.toArray(caption.childNodes);
 };

@@ -28,7 +28,7 @@ goog.requireType('goog.graphics.ext.Group');
 goog.graphics.ext.Image = function(group, src) {
   'use strict';
   // Initialize with some stock values.
-  var wrapper = group.getGraphicsImplementation().drawImage(
+  const wrapper = group.getGraphicsImplementation().drawImage(
       0, 0, 1, 1, src, group.getWrapper());
   goog.graphics.ext.Element.call(this, group, wrapper);
 };

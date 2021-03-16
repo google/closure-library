@@ -87,7 +87,7 @@ goog.ui.tree.TypeAhead.Offset = {
  */
 goog.ui.tree.TypeAhead.prototype.handleNavigation = function(e) {
   'use strict';
-  var handled = false;
+  let handled = false;
 
   switch (e.keyCode) {
     // Handle ctrl+down, ctrl+up to navigate within typeahead results.
@@ -104,7 +104,7 @@ goog.ui.tree.TypeAhead.prototype.handleNavigation = function(e) {
 
     // Remove the last typeahead char.
     case goog.events.KeyCodes.BACKSPACE:
-      var length = this.buffer_.length - 1;
+      const length = this.buffer_.length - 1;
       handled = true;
       if (length > 0) {
         this.buffer_ = this.buffer_.substring(0, length);
@@ -136,13 +136,13 @@ goog.ui.tree.TypeAhead.prototype.handleNavigation = function(e) {
  */
 goog.ui.tree.TypeAhead.prototype.handleTypeAheadChar = function(e) {
   'use strict';
-  var handled = false;
+  let handled = false;
 
   if (!e.ctrlKey && !e.altKey) {
     // Since goog.structs.Trie.getKeys compares characters during
     // lookup, we should use charCode instead of keyCode where possible.
     // Convert to lowercase, typeahead is case insensitive.
-    var ch = '';
+    let ch = '';
     if (!!e.charCode) {
       ch = String.fromCharCode(e.charCode).toLowerCase();
     } else if (goog.events.KeyCodes.isCharacterKey(e.keyCode)) {
@@ -167,19 +167,19 @@ goog.ui.tree.TypeAhead.prototype.handleTypeAheadChar = function(e) {
  */
 goog.ui.tree.TypeAhead.prototype.setNodeInMap = function(node) {
   'use strict';
-  var labelText = node.getText();
+  let labelText = node.getText();
   if (labelText &&
       !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(labelText))) {
     // Typeahead is case insensitive, convert to lowercase.
     labelText = labelText.toLowerCase();
 
-    var previousValue = this.nodeMap_.get(labelText);
+    const previousValue = this.nodeMap_.get(labelText);
     if (previousValue) {
       // Found a previously created array, add the given node.
       previousValue.push(node);
     } else {
       // Create a new array and set the array as value.
-      var nodeList = [node];
+      const nodeList = [node];
       this.nodeMap_.set(labelText, nodeList);
     }
   }
@@ -192,16 +192,16 @@ goog.ui.tree.TypeAhead.prototype.setNodeInMap = function(node) {
  */
 goog.ui.tree.TypeAhead.prototype.removeNodeFromMap = function(node) {
   'use strict';
-  var labelText = node.getText();
+  let labelText = node.getText();
   if (labelText &&
       !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(labelText))) {
     labelText = labelText.toLowerCase();
 
-    var nodeList = this.nodeMap_.get(labelText);
+    const nodeList = this.nodeMap_.get(labelText);
     if (nodeList) {
       // Remove the node's descendants from the nodemap.
-      var count = node.getChildCount();
-      for (var i = 0; i < count; i++) {
+      const count = node.getChildCount();
+      for (let i = 0; i < count; i++) {
         this.removeNodeFromMap(node.getChildAt(i));
       }
       // Remove the node from the array.
@@ -222,15 +222,15 @@ goog.ui.tree.TypeAhead.prototype.removeNodeFromMap = function(node) {
  */
 goog.ui.tree.TypeAhead.prototype.jumpToLabel_ = function(typeAhead) {
   'use strict';
-  var handled = false;
-  var labels = this.nodeMap_.getKeys(typeAhead);
+  let handled = false;
+  const labels = this.nodeMap_.getKeys(typeAhead);
 
   // Make sure we have at least one matching label.
   if (labels && labels.length) {
     this.matchingNodeIndex_ = 0;
     this.matchingLabelIndex_ = 0;
 
-    var nodes = this.nodeMap_.get(labels[0]);
+    const nodes = this.nodeMap_.get(labels[0]);
     if ((handled = this.selectMatchingNode_(nodes))) {
       this.matchingLabels_ = labels;
     }
@@ -249,16 +249,16 @@ goog.ui.tree.TypeAhead.prototype.jumpToLabel_ = function(typeAhead) {
  */
 goog.ui.tree.TypeAhead.prototype.jumpTo_ = function(offset) {
   'use strict';
-  var handled = false;
-  var labels = this.matchingLabels_;
+  let handled = false;
+  const labels = this.matchingLabels_;
 
   if (labels) {
-    var nodes = null;
-    var nodeIndexOutOfRange = false;
+    let nodes = null;
+    let nodeIndexOutOfRange = false;
 
     // Navigate within the nodes array.
     if (this.matchingNodes_) {
-      var newNodeIndex = this.matchingNodeIndex_ + offset;
+      const newNodeIndex = this.matchingNodeIndex_ + offset;
       if (newNodeIndex >= 0 && newNodeIndex < this.matchingNodes_.length) {
         this.matchingNodeIndex_ = newNodeIndex;
         nodes = this.matchingNodes_;
@@ -269,7 +269,7 @@ goog.ui.tree.TypeAhead.prototype.jumpTo_ = function(offset) {
 
     // Navigate to the next or previous label.
     if (!nodes) {
-      var newLabelIndex = this.matchingLabelIndex_ + offset;
+      const newLabelIndex = this.matchingLabelIndex_ + offset;
       if (newLabelIndex >= 0 && newLabelIndex < labels.length) {
         this.matchingLabelIndex_ = newLabelIndex;
       }
@@ -306,7 +306,7 @@ goog.ui.tree.TypeAhead.prototype.jumpTo_ = function(offset) {
  */
 goog.ui.tree.TypeAhead.prototype.selectMatchingNode_ = function(nodes) {
   'use strict';
-  var node;
+  let node;
 
   if (nodes) {
     // Find the matching node.

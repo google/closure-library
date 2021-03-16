@@ -1917,7 +1917,7 @@ goog.net.BrowserChannel.prototype.onRequestComplete = function(request) {
     if (type == goog.net.BrowserChannel.ChannelType_.FORWARD_CHANNEL) {
       const size = request.getPostData() ? request.getPostData().length : 0;
       goog.net.BrowserChannel.notifyTimingEvent(
-          size, goog.now() - request.getRequestStartTime(),
+          size, Date.now() - request.getRequestStartTime(),
           this.forwardChannelRetryCount_);
       this.ensureForwardChannel_();
       this.onSuccess_();

@@ -52,7 +52,7 @@ goog.vec.vec4d.create = function() {
  */
 goog.vec.vec4d.createFromArray = function(vec) {
   'use strict';
-  var newVec = goog.vec.vec4d.create();
+  const newVec = goog.vec.vec4d.create();
   goog.vec.vec4d.setFromArray(newVec, vec);
   return newVec;
 };
@@ -69,7 +69,7 @@ goog.vec.vec4d.createFromArray = function(vec) {
  */
 goog.vec.vec4d.createFromValues = function(v0, v1, v2, v3) {
   'use strict';
-  var vec = goog.vec.vec4d.create();
+  const vec = goog.vec.vec4d.create();
   goog.vec.vec4d.setFromValues(vec, v0, v1, v2, v3);
   return vec;
 };
@@ -83,7 +83,7 @@ goog.vec.vec4d.createFromValues = function(v0, v1, v2, v3) {
  */
 goog.vec.vec4d.clone = function(vec) {
   'use strict';
-  var newVec = goog.vec.vec4d.create();
+  const newVec = goog.vec.vec4d.create();
   goog.vec.vec4d.setFromVec4d(newVec, vec);
   return newVec;
 };
@@ -275,7 +275,11 @@ goog.vec.vec4d.scale = function(vec0, scalar, resultVec) {
  */
 goog.vec.vec4d.magnitudeSquared = function(vec0) {
   'use strict';
-  var x = vec0[0], y = vec0[1], z = vec0[2], w = vec0[3];
+  const w = vec0[3];
+  const x = vec0[0];
+  const y = vec0[1];
+  const z = vec0[2];
+
   return x * x + y * y + z * z + w * w;
 };
 
@@ -288,7 +292,11 @@ goog.vec.vec4d.magnitudeSquared = function(vec0) {
  */
 goog.vec.vec4d.magnitude = function(vec0) {
   'use strict';
-  var x = vec0[0], y = vec0[1], z = vec0[2], w = vec0[3];
+  const w = vec0[3];
+  const x = vec0[0];
+  const y = vec0[1];
+  const z = vec0[2];
+
   return Math.sqrt(x * x + y * y + z * z + w * w);
 };
 
@@ -304,8 +312,12 @@ goog.vec.vec4d.magnitude = function(vec0) {
  */
 goog.vec.vec4d.normalize = function(vec0, resultVec) {
   'use strict';
-  var x = vec0[0], y = vec0[1], z = vec0[2], w = vec0[3];
-  var ilen = 1 / Math.sqrt(x * x + y * y + z * z + w * w);
+  const w = vec0[3];
+  const x = vec0[0];
+  const y = vec0[1];
+  const z = vec0[2];
+
+  const ilen = 1 / Math.sqrt(x * x + y * y + z * z + w * w);
   resultVec[0] = x * ilen;
   resultVec[1] = y * ilen;
   resultVec[2] = z * ilen;
@@ -341,7 +353,11 @@ goog.vec.vec4d.dot = function(v0, v1) {
  */
 goog.vec.vec4d.lerp = function(v0, v1, f, resultVec) {
   'use strict';
-  var x = v0[0], y = v0[1], z = v0[2], w = v0[3];
+  const w = v0[3];
+  const x = v0[0];
+  const y = v0[1];
+  const z = v0[2];
+
   resultVec[0] = (v1[0] - x) * f + x;
   resultVec[1] = (v1[1] - y) * f + y;
   resultVec[2] = (v1[2] - z) * f + z;
