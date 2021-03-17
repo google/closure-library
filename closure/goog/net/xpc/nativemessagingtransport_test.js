@@ -40,7 +40,7 @@ function checkSignalConnected(
       oneSidedHandshake /* opt_oneSidedHandshake */, 2 /* protocolVerion */);
   let sentPayloads = [];
   transport.send = (service, payload) => {
-    assertEquals(netXpc.TRANSPORT_SERVICE_, service);
+    assertEquals(netXpc.TRANSPORT_SERVICE, service);
     sentPayloads.push(payload);
   };
   function assertSent(payloads) {
