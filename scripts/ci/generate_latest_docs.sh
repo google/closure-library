@@ -25,7 +25,6 @@ COMMIT=$(git rev-parse HEAD)
 
 export GIT_WORK_TREE="$GH_PAGES"
 export GIT_DIR="$GH_PAGES/.git"
-mkdir -p "$GIT_DIR"
 
 # Files to omit from documentation
 DENYLIST_FILES=(
