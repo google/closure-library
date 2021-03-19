@@ -98,9 +98,9 @@ goog.stats.BasicStat.prototype.getInterval = function() {
  */
 goog.stats.BasicStat.prototype.incBy = function(amt, opt_now) {
   'use strict';
-  var now = opt_now ? opt_now : Date.now();
+  const now = opt_now ? opt_now : Date.now();
   this.checkForTimeTravel_(now);
-  var slot = /** @type {goog.stats.BasicStat.Slot_} */ (this.slots_.getLast());
+  let slot = /** @type {goog.stats.BasicStat.Slot_} */ (this.slots_.getLast());
   if (!slot || now >= slot.end) {
     slot = new goog.stats.BasicStat.Slot_(this.getSlotBoundary_(now));
     this.slots_.add(slot);
@@ -178,10 +178,10 @@ goog.stats.BasicStat.prototype.reduceSlots_ = function(now, func, val) {
   'use strict';
   now = now || Date.now();
   this.checkForTimeTravel_(now);
-  var rval = val;
-  var start = this.getSlotBoundary_(now) - this.interval_;
-  for (var i = this.slots_.getCount() - 1; i >= 0; --i) {
-    var slot = /** @type {goog.stats.BasicStat.Slot_} */ (this.slots_.get(i));
+  let rval = val;
+  const start = this.getSlotBoundary_(now) - this.interval_;
+  for (let i = this.slots_.getCount() - 1; i >= 0; --i) {
+    const slot = /** @type {goog.stats.BasicStat.Slot_} */ (this.slots_.get(i));
     if (slot.end <= start) {
       break;
     }
@@ -213,9 +213,10 @@ goog.stats.BasicStat.prototype.getSlotBoundary_ = function(time) {
  */
 goog.stats.BasicStat.prototype.checkForTimeTravel_ = function(now) {
   'use strict';
-  var slot = /** @type {goog.stats.BasicStat.Slot_} */ (this.slots_.getLast());
+  const slot =
+      /** @type {goog.stats.BasicStat.Slot_} */ (this.slots_.getLast());
   if (slot) {
-    var slotStart = slot.end - this.slotInterval_;
+    const slotStart = slot.end - this.slotInterval_;
     if (now < slotStart) {
       goog.log.warning(
           this.logger_,
