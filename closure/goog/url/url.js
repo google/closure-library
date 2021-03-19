@@ -50,7 +50,8 @@ const {concat: iterableConcat, map: iterableMap} = goog.require('goog.collection
 const {createElement} = goog.require('goog.dom');
 
 // Capture the native URL constructor before users have a chance to clobber it.
-const NATIVE_URL = URL;
+/** @type {?typeof URL} */
+const NATIVE_URL = window['URL'];
 
 /** @define {boolean} */
 const ASSUME_COMPLIANT_URL_API = goog.define(
