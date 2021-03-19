@@ -14,10 +14,10 @@ goog.module('goog.labs.net.webChannel.ForwardChannelRequestPool');
 
 goog.module.declareLegacyNamespace();
 
-var ChannelRequest = goog.require('goog.labs.net.webChannel.ChannelRequest');
-var Wire = goog.require('goog.labs.net.webChannel.Wire');
-var array = goog.require('goog.array');
-var googString = goog.require('goog.string');
+const ChannelRequest = goog.require('goog.labs.net.webChannel.ChannelRequest');
+const Wire = goog.require('goog.labs.net.webChannel.Wire');
+const array = goog.require('goog.array');
+const googString = goog.require('goog.string');
 
 
 /**
@@ -27,7 +27,7 @@ var googString = goog.require('goog.string');
  *
  * @struct @constructor @final
  */
-var ForwardChannelRequestPool = function(opt_maxPoolSize) {
+const ForwardChannelRequestPool = function(opt_maxPoolSize) {
   /**
    * The max pool size as configured.
    *
@@ -92,7 +92,7 @@ ForwardChannelRequestPool.MAX_POOL_SIZE_ = 10;
  */
 ForwardChannelRequestPool.isSpdyOrHttp2Enabled_ = function() {
   if (goog.global.PerformanceNavigationTiming) {
-    var entrys = /** @type {!Array<!PerformanceNavigationTiming>} */ (
+    const entrys = /** @type {!Array<!PerformanceNavigationTiming>} */ (
         goog.global.performance.getEntriesByType('navigation'));
     return entrys.length > 0 &&
         (entrys[0].nextHopProtocol == 'hq' ||

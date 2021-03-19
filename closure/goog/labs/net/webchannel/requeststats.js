@@ -25,7 +25,7 @@ goog.require('goog.events.EventTarget');
 
 goog.scope(function() {
 'use strict';
-var requestStats = goog.labs.net.webChannel.requestStats;
+const requestStats = goog.labs.net.webChannel.requestStats;
 
 
 /**
@@ -106,7 +106,7 @@ goog.inherits(requestStats.ServerReachabilityEvent, goog.events.Event);
  */
 requestStats.notifyServerReachabilityEvent = function(reachabilityType) {
   'use strict';
-  var target = requestStats.getStatEventTarget_();
+  const target = requestStats.getStatEventTarget_();
   target.dispatchEvent(
       new requestStats.ServerReachabilityEvent(target, reachabilityType));
 };
@@ -249,7 +249,7 @@ requestStats.getStatEventTarget = function() {
  */
 requestStats.notifyStatEvent = function(stat) {
   'use strict';
-  var target = requestStats.getStatEventTarget_();
+  const target = requestStats.getStatEventTarget_();
   target.dispatchEvent(new requestStats.StatEvent(target, stat));
 };
 
@@ -304,7 +304,7 @@ goog.inherits(requestStats.TimingEvent, goog.events.Event);
  */
 requestStats.notifyTimingEvent = function(size, rtt, retries) {
   'use strict';
-  var target = requestStats.getStatEventTarget_();
+  const target = requestStats.getStatEventTarget_();
   target.dispatchEvent(
       new requestStats.TimingEvent(target, size, rtt, retries));
 };
