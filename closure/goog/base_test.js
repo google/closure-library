@@ -827,7 +827,7 @@ testSuite({
   testNow() {
     // We use bounds rather than a tolerance to eliminate non-determinsim.
     const start = new Date().getTime();
-    const underTest = goog.now();
+    const underTest = Date.now();
     const end = new Date().getTime();
 
     assertTrue(start <= underTest && underTest <= end);
