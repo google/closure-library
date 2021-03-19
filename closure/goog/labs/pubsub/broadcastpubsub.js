@@ -86,7 +86,7 @@ goog.labs.pubsub.BroadcastPubSub = function() {
   if (this.mechanism_.isAvailable()) {
     this.storage_ = new goog.storage.Storage(this.mechanism_);
 
-    var target = window;
+    let target = window;
     if (goog.labs.pubsub.BroadcastPubSub.IS_IE8_) {
       this.ie8LastEventTimes_ = {};
 
@@ -124,13 +124,13 @@ goog.labs.pubsub.BroadcastPubSub.prototype.handleStorageEvent_ = function(e) {
     return;
   }
 
-  var browserEvent = e.getBrowserEvent();
+  const browserEvent = e.getBrowserEvent();
   if (browserEvent.key != goog.labs.pubsub.BroadcastPubSub.STORAGE_KEY_) {
     return;
   }
 
-  var data = JSON.parse(browserEvent.newValue);
-  var args = goog.isObject(data) && data['args'];
+  const data = JSON.parse(browserEvent.newValue);
+  const args = goog.isObject(data) && data['args'];
   if (Array.isArray(args) &&
       goog.array.every(args, x => typeof x === 'string')) {
     this.dispatch_(args);
@@ -161,13 +161,13 @@ goog.labs.pubsub.BroadcastPubSub.prototype.dispatch_ = function(args) {
  */
 goog.labs.pubsub.BroadcastPubSub.prototype.publish = function(topic, var_args) {
   'use strict';
-  var args = goog.array.toArray(arguments);
+  const args = goog.array.toArray(arguments);
 
   // Dispatch to localStorage.
   if (this.storage_) {
     // Update topics to use the optional prefix.
-    var now = Date.now();
-    var data = {'args': args, 'timestamp': now};
+    let now = Date.now();
+    const data = {'args': args, 'timestamp': now};
 
     if (!goog.labs.pubsub.BroadcastPubSub.IS_IE8_) {
       // Generated events will contain all the data in modern browsers.
@@ -175,7 +175,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.publish = function(topic, var_args) {
       this.storage_.remove(goog.labs.pubsub.BroadcastPubSub.STORAGE_KEY_);
     } else {
       // With IE8 we need to manage our own events queue.
-      var events = null;
+      let events = null;
 
       try {
         events =
@@ -193,8 +193,8 @@ goog.labs.pubsub.BroadcastPubSub.prototype.publish = function(topic, var_args) {
       // processed. In short, we try go guarantee that whatever event
       // we put on the event queue has a timestamp that is older than
       // any other timestamp in the queue.
-      var lastEvent = events[events.length - 1];
-      var lastTimestamp =
+      const lastEvent = events[events.length - 1];
+      const lastTimestamp =
           lastEvent && lastEvent['timestamp'] || this.ie8StartupTimestamp_;
       if (lastTimestamp >= now) {
         now = lastTimestamp +
@@ -472,18 +472,18 @@ goog.labs.pubsub.BroadcastPubSub.prototype.maybeProcessIe8Events_ = function(
     return false;
   }
 
-  var validEvents =
+  let validEvents =
       goog.labs.pubsub.BroadcastPubSub.filterValidIe8Events_(events);
   if (validEvents.length == events.length) {
-    var lastTimestamp = goog.array.peek(validEvents)['timestamp'];
-    var previousTime =
+    const lastTimestamp = goog.array.peek(validEvents)['timestamp'];
+    const previousTime =
         this.ie8LastEventTimes_[key] || this.ie8StartupTimestamp_;
     if (lastTimestamp > previousTime -
             goog.labs.pubsub.BroadcastPubSub.IE8_QUEUE_LIFETIME_MS_) {
       this.ie8LastEventTimes_[key] = lastTimestamp;
       validEvents = goog.labs.pubsub.BroadcastPubSub.filterNewIe8Events_(
           previousTime, validEvents);
-      for (var i = 0, event; event = validEvents[i]; i++) {
+      for (let i = 0, event; event = validEvents[i]; i++) {
         this.dispatch_(event['args']);
       }
       return true;
@@ -503,9 +503,9 @@ goog.labs.pubsub.BroadcastPubSub.prototype.maybeProcessIe8Events_ = function(
  */
 goog.labs.pubsub.BroadcastPubSub.prototype.handleIe8StorageEvent_ = function() {
   'use strict';
-  var numKeys = this.mechanism_.getCount();
-  for (var idx = 0; idx < numKeys; idx++) {
-    var key = this.mechanism_.key(idx);
+  const numKeys = this.mechanism_.getCount();
+  for (let idx = 0; idx < numKeys; idx++) {
+    const key = this.mechanism_.key(idx);
     // Don't process events we generated. The W3C standard says that storage
     // events should be queued by the browser for each window whose document's
     // storage object is affected by a change in localStorage. Chrome, Firefox,
@@ -517,7 +517,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.handleIe8StorageEvent_ = function() {
       continue;
     }
 
-    var events = null;
+    let events = null;
 
     try {
       events = this.storage_.get(key);
@@ -542,7 +542,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.handleIe8StorageEvent_ = function() {
 goog.labs.pubsub.BroadcastPubSub.prototype.cleanupIe8StorageEvents_ = function(
     timestamp) {
   'use strict';
-  var events = null;
+  let events = null;
 
   try {
     events =
