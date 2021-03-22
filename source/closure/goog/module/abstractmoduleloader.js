@@ -14,10 +14,54 @@ goog.module.declareLegacyNamespace();
 const ModuleInfo = goog.requireType('goog.module.ModuleInfo');
 
 /**
+ * An interface that loads JavaScript modules.
+ * @interface
+ */
+class AbstractModuleLoader {
+  constructor() {
+    /**
+     * Whether or not the implementation supports extra edges.
+     * @type {boolean|undefined}
+     */
+    this.supportsExtraEdges;
+  }
+
+  /**
+   * Loads a list of JavaScript modules.
+   *
+   * @param {!Array<string>} ids The module ids in dependency order.
+   * @param {!Object<string, !ModuleInfo>} moduleInfoMap A mapping
+   *     from module id to ModuleInfo object.
+   * @param {!AbstractModuleLoader.LoadOptions=} loadOptions
+   */
+  loadModules(ids, moduleInfoMap, loadOptions) {};
+
+
+  /**
+   * Pre-fetches a JavaScript module.
+   *
+   * @param {string} id The module id.
+   * @param {!ModuleInfo} moduleInfo The module info.
+   */
+  prefetchModule(id, moduleInfo) {};
+}
+
+/**
+ * A map of extra runtime module dependencies.
+ * Since the polyfills for the ES6 Map/Set classes would cause a performance
+ * regression, we are using plain Javascript objects to mimic their
+ * functionality. The outer object will map a moduleId to another object, the
+ * keys of which are the moduleIds of the modules it depends on: that is, if
+ * `map['a']['b']` is true then module 'a' depends on module 'b'.
+ * @typedef {!Object<!Object<boolean>>}
+ */
+AbstractModuleLoader.ExtraEdgesMap;
+
+/**
  * Optional parameters for the loadModules method.
  * @record
  */
-class LoadOptions {
+AbstractModuleLoader.LoadOptions = class {
   constructor() {
     /**
      * A map of extra runtime module dependencies.
@@ -49,50 +93,6 @@ class LoadOptions {
      */
     this.onTimeout;
   }
-}
-
-/**
- * An interface that loads JavaScript modules.
- * @interface
- */
-class AbstractModuleLoader {
-  constructor() {
-    /**
-     * Whether or not the implementation supports extra edges.
-     * @type {boolean|undefined}
-     */
-    this.supportsExtraEdges;
-  }
-
-  /**
-   * Loads a list of JavaScript modules.
-   *
-   * @param {!Array<string>} ids The module ids in dependency order.
-   * @param {!Object<string, !ModuleInfo>} moduleInfoMap A mapping
-   *     from module id to ModuleInfo object.
-   * @param {!LoadOptions=} loadOptions
-   */
-  loadModules(ids, moduleInfoMap, loadOptions) {};
-
-
-  /**
-   * Pre-fetches a JavaScript module.
-   *
-   * @param {string} id The module id.
-   * @param {!ModuleInfo} moduleInfo The module info.
-   */
-  prefetchModule(id, moduleInfo) {};
-}
-
-/**
- * A map of extra runtime module dependencies.
- * Since the polyfills for the ES6 Map/Set classes would cause a performance
- * regression, we are using plain Javascript objects to mimic their
- * functionality. The outer object will map a moduleId to another object, the
- * keys of which are the moduleIds of the modules it depends on: that is, if
- * `map['a']['b']` is true then module 'a' depends on module 'b'.
- * @typedef {!Object<!Object<boolean>>}
- */
-AbstractModuleLoader.ExtraEdgesMap;
+};
 
 exports = AbstractModuleLoader;

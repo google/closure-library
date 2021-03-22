@@ -260,12 +260,12 @@ goog.labs.net.webChannel.ChannelRequest = function(
 
 goog.scope(function() {
 'use strict';
-var WebChannel = goog.net.WebChannel;
-var Channel = goog.labs.net.webChannel.Channel;
-var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
-var requestStats = goog.labs.net.webChannel.requestStats;
-var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
-var environment = goog.labs.net.webChannel.environment;
+const WebChannel = goog.net.WebChannel;
+const Channel = goog.labs.net.webChannel.Channel;
+const ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
+const requestStats = goog.labs.net.webChannel.requestStats;
+const WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
+const environment = goog.labs.net.webChannel.environment;
 
 
 /**
@@ -513,7 +513,7 @@ ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
 
   // send the request either as a POST or GET
   this.xmlHttpChunkStart_ = 0;
-  var useSecondaryDomains = this.channel_.shouldUseSecondaryDomains();
+  const useSecondaryDomains = this.channel_.shouldUseSecondaryDomains();
   this.xmlHttp_ =
       this.channel_.createXhrIo(useSecondaryDomains ? hostPrefix : null);
 
@@ -527,7 +527,8 @@ ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
       this.xmlHttp_, goog.net.EventType.READY_STATE_CHANGE,
       this.readyStateChangeHandler_);
 
-  var headers = this.extraHeaders_ ? goog.object.clone(this.extraHeaders_) : {};
+  const headers =
+      this.extraHeaders_ ? goog.object.clone(this.extraHeaders_) : {};
   if (this.postData_) {
     if (!this.verb_) {
       this.verb_ = 'POST';
@@ -552,8 +553,8 @@ ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
  */
 ChannelRequest.prototype.readyStateChangeHandler_ = function(evt) {
   'use strict';
-  var xhr = /** @type {goog.net.XhrIo} */ (evt.target);
-  var throttle = this.readyStateChangeThrottle_;
+  const xhr = /** @type {goog.net.XhrIo} */ (evt.target);
+  const throttle = this.readyStateChangeThrottle_;
   if (throttle &&
       xhr.getReadyState() == goog.net.XmlHttp.ReadyState.INTERACTIVE) {
     // Only throttle in the partial data case.
@@ -586,7 +587,7 @@ ChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
   } catch (ex) {
     this.channelDebug_.debug('Failed call to OnXmlHttpReadyStateChanged_');
     if (this.xmlHttp_ && this.xmlHttp_.getResponseText()) {
-      var channelRequest = this;
+      const channelRequest = this;
       this.channelDebug_.dumpException(ex, function() {
         'use strict';
         return 'ResponseText: ' + channelRequest.xmlHttp_.getResponseText();
@@ -607,9 +608,9 @@ ChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
  */
 ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   'use strict';
-  var readyState = this.xmlHttp_.getReadyState();
-  var errorCode = this.xmlHttp_.getLastErrorCode();
-  var statusCode = this.xmlHttp_.getStatus();
+  const readyState = this.xmlHttp_.getReadyState();
+  const errorCode = this.xmlHttp_.getLastErrorCode();
+  const statusCode = this.xmlHttp_.getStatus();
 
   // we get partial results in browsers that support ready state interactive.
   // We also make sure that getResponseText is not null in interactive mode
@@ -638,11 +639,11 @@ ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   // got some data so cancel the watchdog timer
   this.cancelWatchDogTimer_();
 
-  var status = this.xmlHttp_.getStatus();
+  const status = this.xmlHttp_.getStatus();
   this.lastStatusCode_ = status;
-  var responseText = this.xmlHttp_.getResponseText();
+  const responseText = this.xmlHttp_.getResponseText();
   if (!responseText) {
-    var channelRequest = this;
+    const channelRequest = this;
     this.channelDebug_.debug(function() {
       'use strict';
       return 'No response text for uri ' + channelRequest.requestUri_ +
@@ -677,7 +678,7 @@ ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   }
 
   if (this.shouldCheckInitialResponse_()) {
-    var initialResponse = this.getInitialResponse_();
+    const initialResponse = this.getInitialResponse_();
     if (initialResponse) {
       this.channelDebug_.xmlHttpChannelResponseText(
           this.rid_, initialResponse,
@@ -755,7 +756,7 @@ ChannelRequest.prototype.shouldCheckInitialResponse_ = function() {
 ChannelRequest.prototype.getInitialResponse_ = function() {
   'use strict';
   if (this.xmlHttp_) {
-    var value = this.xmlHttp_.getStreamingResponseHeader(
+    const value = this.xmlHttp_.getStreamingResponseHeader(
         WebChannel.X_HTTP_INITIAL_RESPONSE);
     if (value && !goog.string.isEmptyOrWhitespace(value)) {
       return value;
@@ -795,10 +796,10 @@ ChannelRequest.prototype.setDecodeInitialResponse = function() {
 ChannelRequest.prototype.decodeNextChunks_ = function(
     readyState, responseText) {
   'use strict';
-  var decodeNextChunksSuccessful = true;
+  let decodeNextChunksSuccessful = true;
 
   while (!this.cancelled_ && this.xmlHttpChunkStart_ < responseText.length) {
-    var chunkText = this.getNextChunk_(responseText);
+    const chunkText = this.getNextChunk_(responseText);
     if (chunkText == ChannelRequest.INCOMPLETE_CHUNK_) {
       if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
         // should have consumed entire response when the request is done
@@ -857,8 +858,8 @@ ChannelRequest.prototype.pollResponse_ = function() {
   if (!this.xmlHttp_) {
     return;  // already closed
   }
-  var readyState = this.xmlHttp_.getReadyState();
-  var responseText = this.xmlHttp_.getResponseText();
+  const readyState = this.xmlHttp_.getReadyState();
+  const responseText = this.xmlHttp_.getResponseText();
   if (this.xmlHttpChunkStart_ < responseText.length) {
     this.cancelWatchDogTimer_();
     this.decodeNextChunks_(readyState, responseText);
@@ -902,24 +903,24 @@ ChannelRequest.prototype.startPolling_ = function() {
  */
 ChannelRequest.prototype.getNextChunk_ = function(responseText) {
   'use strict';
-  var sizeStartIndex = this.xmlHttpChunkStart_;
-  var sizeEndIndex = responseText.indexOf('\n', sizeStartIndex);
+  const sizeStartIndex = this.xmlHttpChunkStart_;
+  const sizeEndIndex = responseText.indexOf('\n', sizeStartIndex);
   if (sizeEndIndex == -1) {
     return ChannelRequest.INCOMPLETE_CHUNK_;
   }
 
-  var sizeAsString = responseText.substring(sizeStartIndex, sizeEndIndex);
-  var size = Number(sizeAsString);
+  const sizeAsString = responseText.substring(sizeStartIndex, sizeEndIndex);
+  const size = Number(sizeAsString);
   if (isNaN(size)) {
     return ChannelRequest.INVALID_CHUNK_;
   }
 
-  var chunkStartIndex = sizeEndIndex + 1;
+  const chunkStartIndex = sizeEndIndex + 1;
   if (chunkStartIndex + size > responseText.length) {
     return ChannelRequest.INCOMPLETE_CHUNK_;
   }
 
-  var chunkText = responseText.substr(chunkStartIndex, size);
+  const chunkText = responseText.substr(chunkStartIndex, size);
   this.xmlHttpChunkStart_ = chunkStartIndex + size;
   return chunkText;
 };
@@ -949,7 +950,7 @@ ChannelRequest.prototype.sendCloseRequest = function(uri) {
   this.type_ = ChannelRequest.Type_.CLOSE_REQUEST;
   this.baseUri_ = uri.clone().makeUnique();
 
-  var requestSent = false;
+  let requestSent = false;
 
   if (goog.global.navigator && goog.global.navigator.sendBeacon) {
     // empty string body to avoid 413 error on chrome < 41
@@ -958,7 +959,7 @@ ChannelRequest.prototype.sendCloseRequest = function(uri) {
   }
 
   if (!requestSent && goog.global.Image) {
-    var eltImg = new Image();
+    const eltImg = new Image();
     eltImg.src = this.baseUri_;
     requestSent = true;
   }
@@ -1056,7 +1057,7 @@ ChannelRequest.prototype.cancelWatchDogTimer_ = function() {
 ChannelRequest.prototype.onWatchDogTimeout_ = function() {
   'use strict';
   this.watchDogTimerId_ = null;
-  var now = Date.now();
+  const now = Date.now();
   goog.asserts.assert(
       this.watchDogTimeoutTime_, 'WatchDog timeout time missing?');
   if (now - this.watchDogTimeoutTime_ >= 0) {
@@ -1138,7 +1139,7 @@ ChannelRequest.prototype.cleanup_ = function() {
   if (this.xmlHttp_) {
     // clear out this.xmlHttp_ before aborting so we handle getting reentered
     // inside abort
-    var xmlhttp = this.xmlHttp_;
+    const xmlhttp = this.xmlHttp_;
     this.xmlHttp_ = null;
     xmlhttp.abort();
     xmlhttp.dispose();
@@ -1245,7 +1246,7 @@ ChannelRequest.prototype.safeOnRequestData_ = function(data) {
   'use strict';
   try {
     this.channel_.onRequestData(this, data);
-    var stats = requestStats.ServerReachability;
+    const stats = requestStats.ServerReachability;
     requestStats.notifyServerReachabilityEvent(stats.BACK_CHANNEL_ACTIVITY);
   } catch (e) {
     // Dump debug info, but keep going without closing the channel.

@@ -136,7 +136,7 @@ goog.inherits(goog.net.xpc.CrossPageChannel, goog.messaging.AbstractChannel);
  * @private
  */
 goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_ESCAPE_RE_ =
-    new RegExp('^%*' + goog.net.xpc.TRANSPORT_SERVICE_ + '$');
+    new RegExp('^%*' + goog.net.xpc.TRANSPORT_SERVICE + '$');
 
 
 /**
@@ -145,7 +145,7 @@ goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_ESCAPE_RE_ =
  * @private
  */
 goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_UNESCAPE_RE_ =
-    new RegExp('^%+' + goog.net.xpc.TRANSPORT_SERVICE_ + '$');
+    new RegExp('^%+' + goog.net.xpc.TRANSPORT_SERVICE + '$');
 
 
 /**
@@ -736,7 +736,7 @@ goog.net.xpc.CrossPageChannel.prototype.xpcDeliver = function(
   if (this.isDisposed() || this.state_ == goog.net.xpc.ChannelStates.CLOSED) {
     goog.log.warning(
         goog.net.xpc.logger, 'CrossPageChannel::xpcDeliver(): Channel closed.');
-  } else if (!serviceName || serviceName == goog.net.xpc.TRANSPORT_SERVICE_) {
+  } else if (!serviceName || serviceName == goog.net.xpc.TRANSPORT_SERVICE) {
     this.transport_.transportServiceHandler(payload);
   } else {
     // only deliver messages if connected

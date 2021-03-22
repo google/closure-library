@@ -18,8 +18,8 @@ goog.require('goog.labs.net.webChannel.WebChannelDebug');
 
 goog.scope(function() {
 'use strict';
-var netUtils = goog.labs.net.webChannel.netUtils;
-var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
+const netUtils = goog.labs.net.webChannel.netUtils;
+const WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
 
 
 /**
@@ -42,7 +42,7 @@ netUtils.NETWORK_TIMEOUT = 10000;
  */
 netUtils.testNetwork = function(callback, opt_imageUri) {
   'use strict';
-  var uri = opt_imageUri;
+  let uri = opt_imageUri;
   if (!uri) {
     // default google.com image
     uri = new goog.Uri('//www.google.com/images/cleardot.gif');
@@ -77,7 +77,7 @@ netUtils.testLoadImageWithRetries = function(
     return;
   }
 
-  var pauseBetweenRetries = opt_pauseBetweenRetriesMS || 0;
+  const pauseBetweenRetries = opt_pauseBetweenRetriesMS || 0;
   retries--;
   netUtils.testLoadImage(url, timeout, function(succeeded) {
     'use strict';
@@ -104,10 +104,10 @@ netUtils.testLoadImageWithRetries = function(
  */
 netUtils.testLoadImage = function(url, timeout, callback) {
   'use strict';
-  var channelDebug = new WebChannelDebug();
+  const channelDebug = new WebChannelDebug();
   channelDebug.debug('TestLoadImage: loading ' + url);
   if (goog.global.Image) {
-    var img = new Image();
+    const img = new Image();
     img.onload = goog.partial(
         netUtils.imageCallback_, channelDebug, img, 'TestLoadImage: loaded',
         true, callback);

@@ -49,9 +49,10 @@ goog.labs.net.webChannel.WebChannelBaseTransport = function() {
 
 goog.scope(function() {
 'use strict';
-var WebChannelBaseTransport = goog.labs.net.webChannel.WebChannelBaseTransport;
-var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
-var Wire = goog.labs.net.webChannel.Wire;
+const WebChannelBaseTransport =
+    goog.labs.net.webChannel.WebChannelBaseTransport;
+const WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
+const Wire = goog.labs.net.webChannel.Wire;
 
 
 /**
@@ -105,7 +106,7 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
   this.messageUrlParams_ =
       (opt_options && opt_options.messageUrlParams) || null;
 
-  var messageHeaders = (opt_options && opt_options.messageHeaders) || null;
+  let messageHeaders = (opt_options && opt_options.messageHeaders) || null;
 
   // default is false
   if (opt_options && opt_options.clientProtocolHeaderRequired) {
@@ -122,7 +123,7 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
 
   this.channel_.setExtraHeaders(messageHeaders);
 
-  var initHeaders = (opt_options && opt_options.initMessageHeaders) || null;
+  let initHeaders = (opt_options && opt_options.initMessageHeaders) || null;
 
   if (opt_options && opt_options.messageContentType) {
     if (initHeaders) {
@@ -150,7 +151,7 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
 
   this.channel_.setInitHeaders(initHeaders);
 
-  var httpHeadersOverwriteParam =
+  const httpHeadersOverwriteParam =
       opt_options && opt_options.httpHeadersOverwriteParam;
   if (httpHeadersOverwriteParam &&
       !goog.string.isEmptyOrWhitespace(httpHeadersOverwriteParam)) {
@@ -170,7 +171,7 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
 
   // Note that httpSessionIdParam will be ignored if the same parameter name
   // has already been specified with messageUrlParams
-  var httpSessionIdParam = opt_options && opt_options.httpSessionIdParam;
+  const httpSessionIdParam = opt_options && opt_options.httpSessionIdParam;
   if (httpSessionIdParam &&
       !goog.string.isEmptyOrWhitespace(httpSessionIdParam)) {
     this.channel_.setHttpSessionIdParam(httpSessionIdParam);
@@ -238,11 +239,11 @@ WebChannelBaseTransport.Channel.prototype.send = function(message) {
       'only object type or raw string is supported');
 
   if (typeof message === 'string') {
-    var rawJson = {};
+    const rawJson = {};
     rawJson[Wire.RAW_DATA_KEY] = message;
     this.channel_.sendMap(rawJson);
   } else if (this.sendRawJson_) {
-    var rawJson = {};
+    const rawJson = {};
     rawJson[Wire.RAW_DATA_KEY] = goog.json.serialize(message);
     this.channel_.sendMap(rawJson);
   } else {
@@ -279,7 +280,7 @@ WebChannelBaseTransport.Channel.MessageEvent = function(array) {
   WebChannelBaseTransport.Channel.MessageEvent.base(this, 'constructor');
 
   // single-metadata only
-  var metadata = array['__sm__'];
+  const metadata = array['__sm__'];
   if (metadata) {
     this.metadataKey = goog.object.getAnyKey(metadata);
     if (this.metadataKey) {

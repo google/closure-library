@@ -1006,7 +1006,7 @@ const Driver = class extends Disposable {
     // correspondent in the other frame.  Ensure these messages don't cause
     // exceptions.
     try {
-      this.channel_.xpcDeliver(xpc.TRANSPORT_SERVICE_, 'payload');
+      this.channel_.xpcDeliver(xpc.TRANSPORT_SERVICE, 'payload');
     } catch (e) {
       fail('Should not throw exception');
     }

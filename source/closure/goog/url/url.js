@@ -39,6 +39,7 @@
  * [2]: https://url.spec.whatwg.org/
  */
 goog.module('goog.url');
+goog.module.declareLegacyNamespace();
 
 const ConstString = goog.require('goog.string.Const');
 const Tagname = goog.require('goog.dom.TagName');
@@ -47,6 +48,10 @@ const uncheckedConversions = goog.require('goog.html.uncheckedconversions');
 const {assert} = goog.require('goog.asserts');
 const {concat: iterableConcat, map: iterableMap} = goog.require('goog.collections.iters');
 const {createElement} = goog.require('goog.dom');
+
+// Capture the native URL constructor before users have a chance to clobber it.
+/** @type {?typeof URL} */
+const NATIVE_URL = window['URL'];
 
 /** @define {boolean} */
 const ASSUME_COMPLIANT_URL_API = goog.define(
@@ -87,7 +92,7 @@ const supportsNativeURLConstructor = {
       return true;
     }
     try {
-      new URL('http://example.com');
+      new NATIVE_URL('http://example.com');
       return true;
     } catch (e) {
       return false;
@@ -433,7 +438,7 @@ const assembleUserInfo = function(username, password) {
 const urlParseWithCommonChecks = function(urlStr) {
   let res;
   try {
-    res = new URL(urlStr);
+    res = new NATIVE_URL(urlStr);
   } catch (e) {
     throw new Error(`${urlStr} is not a valid URL.`);
   }
@@ -506,7 +511,7 @@ const resolveUrl = function(urlStr, baseStr) {
   if (ASSUME_COMPLIANT_URL_API) {
     // Safari throws a TypeError if you call the constructor with a second
     // argument that isn't defined, so we can't pass baseStr all the time.
-    return baseStr ? new URL(urlStr, baseStr) : new URL(urlStr);
+    return baseStr ? new NATIVE_URL(urlStr, baseStr) : new NATIVE_URL(urlStr);
   }
 
   // Ideally, this should effectively become
@@ -534,7 +539,7 @@ const resolveUrl = function(urlStr, baseStr) {
       // urlStr is not absolute. We shall give both pieces to the constructor
       // below and see what it thinks.
     }
-    return new URL(urlStr, baseUrl.href);
+    return new NATIVE_URL(urlStr, baseUrl.href);
   } else {
     if (!baseStr) {
       return createAnchorElementInIE(urlStr);

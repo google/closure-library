@@ -58,7 +58,7 @@ goog.dom.annotate.annotateTerms = function(
   if (opt_ignoreCase) {
     terms = goog.dom.annotate.lowercaseTerms_(terms);
   }
-  var stopTime = +opt_maxMs > 0 ? goog.now() + opt_maxMs : 0;
+  var stopTime = +opt_maxMs > 0 ? Date.now() + opt_maxMs : 0;
 
   return goog.dom.annotate.annotateTermsInNode_(
       node, terms, annotateFn, opt_ignoreCase, opt_classesToSkip || [],
@@ -107,7 +107,7 @@ goog.dom.annotate.annotateTermsInNode_ = function(
     node, terms, annotateFn, ignoreCase, classesToSkip, stopTime,
     recursionLevel) {
   'use strict';
-  if ((stopTime > 0 && goog.now() >= stopTime) ||
+  if ((stopTime > 0 && Date.now() >= stopTime) ||
       recursionLevel > goog.dom.annotate.MAX_RECURSION_) {
     return false;
   }

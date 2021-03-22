@@ -260,7 +260,7 @@ goog.testing.fs.FileWriter.prototype.progressEvent_ = function(
   'use strict';
   // On write, update the last modified date to the current (real or mock) time.
   if (type == goog.fs.FileSaver.EventType.WRITE) {
-    this.file_.lastModifiedDate = new Date(goog.now());
+    this.file_.lastModifiedDate = new Date(Date.now());
   }
 
   this.dispatchEvent(new goog.testing.fs.ProgressEvent(type, loaded, total));

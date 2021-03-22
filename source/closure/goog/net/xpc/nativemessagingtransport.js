@@ -332,7 +332,7 @@ goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
     const staleChannel = allChannels[staleChannelName];
     if (staleChannel.getRole() == goog.net.xpc.CrossPageChannelRole.INNER &&
         !staleChannel.isConnected() &&
-        service == goog.net.xpc.TRANSPORT_SERVICE_ &&
+        service == goog.net.xpc.TRANSPORT_SERVICE &&
         (transportMessageType == goog.net.xpc.SETUP ||
          transportMessageType == goog.net.xpc.SETUP_NTPV2) &&
         staleChannel.isMessageOriginAcceptable(
@@ -369,7 +369,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler =
   const transportMessageType = transportParts[0];
   const peerEndpointId = transportParts[1];
   switch (transportMessageType) {
-    case goog.net.xpc.SETUP_ACK_:
+    case goog.net.xpc.SETUP_ACK:
       this.setPeerProtocolVersion_(1);
       if (!this.setupAckReceived_.hasFired()) {
         this.setupAckReceived_.callback(true);
@@ -423,7 +423,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.sendSetupMessage_ = function() {
     let payload = goog.net.xpc.SETUP_NTPV2;
     payload += goog.net.xpc.NativeMessagingTransport.MESSAGE_DELIMITER_;
     payload += this.endpointId_;
-    this.send(goog.net.xpc.TRANSPORT_SERVICE_, payload);
+    this.send(goog.net.xpc.TRANSPORT_SERVICE, payload);
   }
 
   // For backward compatibility reasons, the V1 SETUP message can be sent by
@@ -431,7 +431,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.sendSetupMessage_ = function() {
   // transport it starts ignoring V1 messages, so the V2 message must be sent
   // first.
   if (this.couldPeerVersionBe_(1)) {
-    this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP);
+    this.send(goog.net.xpc.TRANSPORT_SERVICE, goog.net.xpc.SETUP);
   }
 };
 
@@ -451,9 +451,9 @@ goog.net.xpc.NativeMessagingTransport.prototype.sendSetupAckMessage_ = function(
       'Shouldn\'t try to send a v2 setup ack in v1 mode.');
   if (this.protocolVersion_ == 2 && this.couldPeerVersionBe_(2) &&
       protocolVersion == 2) {
-    this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_NTPV2);
+    this.send(goog.net.xpc.TRANSPORT_SERVICE, goog.net.xpc.SETUP_ACK_NTPV2);
   } else if (this.couldPeerVersionBe_(1) && protocolVersion == 1) {
-    this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
+    this.send(goog.net.xpc.TRANSPORT_SERVICE, goog.net.xpc.SETUP_ACK);
   } else {
     return;
   }

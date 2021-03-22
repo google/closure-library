@@ -188,4 +188,15 @@ testSuite({
     assertEquals('Unknown Error of type "Object": Error Message', err.message);
   },
 
+  testNormalizeErrorObject_enumerable() {
+    const err = debug.normalizeErrorObject(new Error());
+
+    let properties = 0;
+    for (let x in err) {
+      properties++;
+    }
+
+    assertEquals(5, properties);
+  },
+
 });

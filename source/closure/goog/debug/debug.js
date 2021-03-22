@@ -248,7 +248,7 @@ goog.debug.exposeArray = function(arr) {
  *    lineNumber: (?|undefined),
  *    fileName: (?|undefined),
  *    stack: (?|undefined)
- * }} Normalized error object.
+ * }} Representation of err as an Object. It will never return err.
  * @suppress {strictMissingProperties} properties not defined on err
  */
 goog.debug.normalizeErrorObject = function(err) {
@@ -333,7 +333,15 @@ goog.debug.normalizeErrorObject = function(err) {
   // Standards error object
   // Typed !Object. Should be a subtype of the return type, but it's not.
   err.stack = stack;
-  return /** @type {?} */ (err);
+
+  // Return non-standard error to allow for consistent result (eg. enumerable).
+  return {
+    'message': err.message,
+    'name': err.name,
+    'lineNumber': err.lineNumber,
+    'fileName': err.fileName,
+    'stack': err.stack
+  };
 };
 
 

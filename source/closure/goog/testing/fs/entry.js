@@ -163,7 +163,7 @@ goog.testing.fs.Entry.prototype.copyTo = function(parent, opt_newName) {
     const entry = self.clone();
     /** @type {!goog.testing.fs.DirectoryEntry} */ (parent).children[name] =
         entry;
-    parent.lastModifiedTimestamp_ = goog.now();
+    parent.lastModifiedTimestamp_ = Date.now();
     entry.name_ = name;
     entry.parent = /** @type {!goog.testing.fs.DirectoryEntry} */ (parent);
     return entry;
@@ -200,7 +200,7 @@ goog.testing.fs.Entry.prototype.remove = function() {
   return this.checkNotDeleted(msg).addCallback(function() {
     'use strict';
     delete this.parent.children[self.getName()];
-    self.parent.lastModifiedTimestamp_ = goog.now();
+    self.parent.lastModifiedTimestamp_ = Date.now();
     self.deleted = true;
     return;
   });
@@ -273,12 +273,12 @@ goog.testing.fs.DirectoryEntry = function(fs, parent, name, children) {
   this.children = children;
 
   /**
-   * The modification time of the directory. Measured using goog.now, which may
+   * The modification time of the directory. Measured using Date.now, which may
    * be overridden with mock time providers.
    * @type {number}
    * @private
    */
-  this.lastModifiedTimestamp_ = goog.now();
+  this.lastModifiedTimestamp_ = Date.now();
 };
 goog.inherits(goog.testing.fs.DirectoryEntry, goog.testing.fs.Entry);
 
@@ -521,7 +521,7 @@ goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
           behavior == goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE);
       entry = createFn(dir, basename);
       dir.children[basename] = entry;
-      this.lastModifiedTimestamp_ = goog.now();
+      this.lastModifiedTimestamp_ = Date.now();
       return entry;
     }
   } else if (behavior == goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE) {
@@ -534,7 +534,7 @@ goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
         'loading ' + path + ' from ' + this.getFullPath());
   } else {
     if (behavior == goog.fs.DirectoryEntry.Behavior.CREATE) {
-      this.lastModifiedTimestamp_ = goog.now();
+      this.lastModifiedTimestamp_ = Date.now();
     }
     return entry;
   }
@@ -616,7 +616,7 @@ goog.testing.fs.FileEntry = function(fs, parent, name, data, opt_type) {
    * @private
    */
   this.file_ =
-      new goog.testing.fs.File(name, new Date(goog.now()), data, opt_type);
+      new goog.testing.fs.File(name, new Date(Date.now()), data, opt_type);
 
   /**
    * The metadata for file.

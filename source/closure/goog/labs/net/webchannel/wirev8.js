@@ -43,8 +43,8 @@ goog.labs.net.webChannel.WireV8 = function() {
 
 goog.scope(function() {
 'use strict';
-var WireV8 = goog.labs.net.webChannel.WireV8;
-var Wire = goog.labs.net.webChannel.Wire;
+const WireV8 = goog.labs.net.webChannel.WireV8;
+const Wire = goog.labs.net.webChannel.Wire;
 
 
 /**
@@ -59,11 +59,11 @@ var Wire = goog.labs.net.webChannel.Wire;
  */
 WireV8.prototype.encodeMessage = function(message, buffer, opt_prefix) {
   'use strict';
-  var prefix = opt_prefix || '';
+  const prefix = opt_prefix || '';
   try {
     goog.structs.forEach(message, function(value, key) {
       'use strict';
-      var encodedValue = value;
+      let encodedValue = value;
       if (goog.isObject(value)) {
         encodedValue = goog.json.serialize(value);
       }  // keep the fast-path for primitive types
@@ -92,9 +92,9 @@ WireV8.prototype.encodeMessage = function(message, buffer, opt_prefix) {
 WireV8.prototype.encodeMessageQueue = function(
     messageQueue, count, badMapHandler) {
   'use strict';
-  var offset = -1;
+  let offset = -1;
   while (true) {
-    var sb = ['count=' + count];
+    const sb = ['count=' + count];
     // To save a bit of bandwidth, specify the base mapId and the rest as
     // offsets from it.
     if (offset == -1) {
@@ -107,10 +107,10 @@ WireV8.prototype.encodeMessageQueue = function(
     } else {
       sb.push('ofs=' + offset);
     }
-    var done = true;
-    for (var i = 0; i < count; i++) {
-      var mapId = messageQueue[i].mapId;
-      var map = messageQueue[i].map;
+    let done = true;
+    for (let i = 0; i < count; i++) {
+      let mapId = messageQueue[i].mapId;
+      const map = messageQueue[i].map;
       mapId -= offset;
       if (mapId < 0) {
         // redo the encoding in case of retry/reordering, plus extra space
@@ -147,7 +147,7 @@ WireV8.prototype.encodeMessageQueue = function(
  */
 WireV8.prototype.decodeMessage = function(messageText) {
   'use strict';
-  var response = this.parser_.parse(messageText);
+  const response = this.parser_.parse(messageText);
   goog.asserts.assert(Array.isArray(response));  // throw exception
   return response;
 };

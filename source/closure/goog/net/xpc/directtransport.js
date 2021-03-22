@@ -298,7 +298,7 @@ DirectTransport.messageReceivedHandler_ = function(literal) {
     const staleChannel = allChannels[staleChannelName];
     if (staleChannel.getRole() == CrossPageChannelRole.INNER &&
         !staleChannel.isConnected() &&
-        service == goog.net.xpc.TRANSPORT_SERVICE_ &&
+        service == goog.net.xpc.TRANSPORT_SERVICE &&
         transportMessageType == goog.net.xpc.SETUP) {
       // Inner peer received SETUP message but channel names did not match.
       // Start using the channel name sent from outer peer. The channel name
@@ -336,7 +336,7 @@ DirectTransport.prototype.transportServiceHandler = function(payload) {
   const transportMessageType = transportParts[0];
   const peerEndpointId = transportParts[1];
   switch (transportMessageType) {
-    case goog.net.xpc.SETUP_ACK_:
+    case goog.net.xpc.SETUP_ACK:
       if (!this.setupAckReceived_.hasFired()) {
         this.setupAckReceived_.callback(true);
       }
@@ -368,7 +368,7 @@ DirectTransport.prototype.sendSetupMessage_ = function() {
   let payload = goog.net.xpc.SETUP;
   payload += DirectTransport.MESSAGE_DELIMITER_;
   payload += this.endpointId_;
-  this.send(goog.net.xpc.TRANSPORT_SERVICE_, payload);
+  this.send(goog.net.xpc.TRANSPORT_SERVICE, payload);
 };
 
 
@@ -378,7 +378,7 @@ DirectTransport.prototype.sendSetupMessage_ = function() {
  */
 DirectTransport.prototype.sendSetupAckMessage_ = function() {
   'use strict';
-  this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
+  this.send(goog.net.xpc.TRANSPORT_SERVICE, goog.net.xpc.SETUP_ACK);
   if (!this.setupAckSent_.hasFired()) {
     this.setupAckSent_.callback(true);
   }
