@@ -195,6 +195,7 @@ testSuite({
     assertParseFails(parser, '22');
 
     parser = new DateTimeParse('HHmmss');
+    assertParsedTimeEquals(12, 34, 56, 0, parser, '123456789');
     assertParsedTimeEquals(12, 34, 56, 0, parser, '123456');
     assertParsedTimeEquals(1, 23, 45, 0, parser, '12345');
     assertParseFails(parser, '1234');

@@ -111,10 +111,12 @@ goog.labs.events.NonDisposableEventTarget.prototype.dispatchEvent = function(
     e) {
   'use strict';
   this.assertInitialized_();
-  var ancestorsTree, ancestor = this.getParentEventTarget();
+  let ancestor = this.getParentEventTarget();
+  let ancestorsTree;
+
   if (ancestor) {
     ancestorsTree = [];
-    var ancestorCount = 1;
+    let ancestorCount = 1;
     for (; ancestor; ancestor = ancestor.getParentEventTarget()) {
       ancestorsTree.push(ancestor);
       goog.asserts.assert(
@@ -183,19 +185,19 @@ goog.labs.events.NonDisposableEventTarget.prototype.fireListeners = function(
   // is no listener, so we do the same. If this optimization turns
   // out to be not required, we can replace this with
   // getListeners(type, capture) instead, which is simpler.
-  var listenerArray = this.eventTargetListeners_.listeners[String(type)];
+  let listenerArray = this.eventTargetListeners_.listeners[String(type)];
   if (!listenerArray) {
     return true;
   }
   listenerArray = goog.array.clone(listenerArray);
 
-  var rv = true;
-  for (var i = 0; i < listenerArray.length; ++i) {
-    var listener = listenerArray[i];
+  let rv = true;
+  for (let i = 0; i < listenerArray.length; ++i) {
+    const listener = listenerArray[i];
     // We might not have a listener if the listener was removed.
     if (listener && !listener.removed && listener.capture == capture) {
-      var listenerFn = listener.listener;
-      var listenerHandler = listener.handler || listener.src;
+      const listenerFn = listener.listener;
+      const listenerHandler = listener.handler || listener.src;
 
       if (listener.callOnce) {
         this.unlistenByKey(listener);
@@ -229,7 +231,7 @@ goog.labs.events.NonDisposableEventTarget.prototype.getListener = function(
 goog.labs.events.NonDisposableEventTarget.prototype.hasListener = function(
     opt_type, opt_capture) {
   'use strict';
-  var id = (opt_type !== undefined) ? String(opt_type) : undefined;
+  const id = (opt_type !== undefined) ? String(opt_type) : undefined;
   return this.eventTargetListeners_.hasListener(id, opt_capture);
 };
 
@@ -266,25 +268,27 @@ goog.labs.events.NonDisposableEventTarget.prototype.assertInitialized_ =
 goog.labs.events.NonDisposableEventTarget.dispatchEventInternal_ = function(
     target, e, opt_ancestorsTree) {
   'use strict';
-  var type = e.type || /** @type {string} */ (e);
+  const type = e.type || /** @type {string} */ (e);
 
   // If accepting a string or object, create a custom event object so that
   // preventDefault and stopPropagation work with the event.
   if (typeof e === 'string') {
     e = new goog.events.Event(e, target);
   } else if (!(e instanceof goog.events.Event)) {
-    var oldEvent = e;
+    const oldEvent = e;
     e = new goog.events.Event(type, target);
     goog.object.extend(e, oldEvent);
   } else {
     e.target = e.target || target;
   }
 
-  var rv = true, currentTarget;
+  let currentTarget;
+  let rv = true;
+
 
   // Executes all capture listeners on the ancestors, if any.
   if (opt_ancestorsTree) {
-    for (var i = opt_ancestorsTree.length - 1;
+    for (let i = opt_ancestorsTree.length - 1;
          !e.hasPropagationStopped() && i >= 0; i--) {
       currentTarget = e.currentTarget = opt_ancestorsTree[i];
       rv = currentTarget.fireListeners(type, true, e) && rv;
@@ -302,7 +306,7 @@ goog.labs.events.NonDisposableEventTarget.dispatchEventInternal_ = function(
 
   // Executes all bubble listeners on the ancestors, if any.
   if (opt_ancestorsTree) {
-    for (i = 0; !e.hasPropagationStopped() && i < opt_ancestorsTree.length;
+    for (let i = 0; !e.hasPropagationStopped() && i < opt_ancestorsTree.length;
          i++) {
       currentTarget = e.currentTarget = opt_ancestorsTree[i];
       rv = currentTarget.fireListeners(type, false, e) && rv;
