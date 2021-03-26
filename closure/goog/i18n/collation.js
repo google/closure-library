@@ -48,12 +48,12 @@ goog.i18n.collation.createComparator = function(opt_locale, opt_options) {
  * Returns true if a locale-sensitive comparator is available for a locale. If
  * a locale is not explicitly specified, the user's locale is used instead.
  *
- * @param {string=} opt_locale The locale to be checked.
  * @return {boolean} Whether there is a locale-sensitive comparator available
  *     for the locale.
  */
-goog.i18n.collation.hasNativeComparator = function(opt_locale) {
+goog.i18n.collation.hasNativeComparator = function() {
   'use strict';
+  if (goog.FEATURESET_YEAR >= 2019) return true;
   const intl = goog.global.Intl;
   return !!(intl && intl.Collator);
 };
