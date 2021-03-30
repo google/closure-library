@@ -910,4 +910,13 @@ testSuite({
     assertEquals('b', node.className);
     assertEquals('c', node.textContent);
   },
+
+  testGetStyleNonce() {
+    assertEquals('NONCE', safe.getStyleNonce());
+    const style = document.querySelector('style[nonce]');
+    style.parentNode.removeChild(style);
+    /** @suppress {visibility} */
+    safe.cspStyleNonce_ = null;
+    assertEquals('NONCE2', safe.getStyleNonce(window));
+  }
 });

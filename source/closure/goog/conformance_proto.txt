@@ -50,6 +50,9 @@ requirement: {
   allowlist_regexp: '.+/closure/goog/testing/' # global assert methods, etc
   allowlist_regexp: '.+/closure/goog/tweak/testhelpers.js' # global values
   allowlist_regexp: '^Post-' # injected '_ModuleManager_initialize'
+
+  # Allowlist for global names
+  value: 'CLOSURE_DEFINES' # Closure Compiler requires this to be a global var
 }
 
 requirement: {

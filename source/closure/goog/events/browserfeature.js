@@ -11,8 +11,6 @@
 goog.module('goog.events.BrowserFeature');
 goog.module.declareLegacyNamespace();
 
-const googUserAgent = goog.require('goog.userAgent');
-
 
 /**
  * Tricks Closure Compiler into believing that a function is pure.  The compiler
@@ -57,11 +55,7 @@ exports = {
   /**
    * Whether HTML5 network online/offline events are supported.
    */
-  HAS_HTML5_NETWORK_EVENT_SUPPORT:
-      googUserAgent.GECKO && googUserAgent.isVersionOrHigher('1.9b') ||
-      googUserAgent.IE && googUserAgent.isVersionOrHigher('8') ||
-      googUserAgent.OPERA && googUserAgent.isVersionOrHigher('9.5') ||
-      googUserAgent.WEBKIT && googUserAgent.isVersionOrHigher('528'),
+  HAS_HTML5_NETWORK_EVENT_SUPPORT: true,
 
   /**
    * Whether HTML5 network events fire on document.body, or otherwise the

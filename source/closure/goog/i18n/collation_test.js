@@ -49,23 +49,15 @@ testSuite({
     assertTrue(compare('côte', 'coté') < 0);
   },
 
-  testGetComparatorForSpecificLocale() {
-    propertyReplacer.replace(goog, 'LOCALE', 'en');
-    const compare = collation.createComparator('fr-CA');
-    if (!collation.hasNativeComparator('fr-CA')) return;
-    // 'côte' and 'coté' sort differently for en and fr-CA.
-    assertTrue(compare('côte', 'coté') < 0);
-  },
-
   testGetNumericComparator() {
     const compare = collation.createComparator('en', {numeric: true});
-    if (!collation.hasNativeComparator('en')) return;
+    if (!collation.hasNativeComparator()) return;
     assertTrue(compare('2', '10') < 0);
   },
 
   testGetNonNumericComparator() {
     const compare = collation.createComparator('en', {numeric: false});
-    if (!collation.hasNativeComparator('en')) return;
+    if (!collation.hasNativeComparator()) return;
     assertTrue(compare('2', '10') > 0);
   },
 });
