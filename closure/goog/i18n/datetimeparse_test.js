@@ -193,8 +193,6 @@ testSuite({
     assertParsedTimeEquals(11, 22, 0, 0, parser, '1122');
     assertParsedTimeEquals(1, 22, 0, 0, parser, '122');
     assertParseFails(parser, '22');
-    // Probable bug: non-digit can cause too-short abutting run to succeed
-    assertParsedTimeEquals(2, 2, 0, 0, parser, '22b');
 
     parser = new DateTimeParse('HHmmss');
     assertParsedTimeEquals(12, 34, 56, 0, parser, '123456789');
@@ -227,15 +225,12 @@ testSuite({
   testYearParsing() {
     let parser = new DateTimeParse('yyMMdd');
     assertParsedDateEquals(1999, 12 - 1, 2, parser, '991202');
-    assertParseFails(parser, '-91202');
-    assertParseFails(parser, '+91202');
 
     parser = new DateTimeParse('yyyyMMdd');
     assertParsedDateEquals(2005, 12 - 1, 2, parser, '20051202');
 
     parser = new DateTimeParse('MM/y');
     assertParsedDateEquals(1999, 12 - 1, undefined, parser, '12/1999');
-    assertParsedDateEquals(19999, 12 - 1, undefined, parser, '12/19999');
 
     parser = new DateTimeParse('MM-y');
     assertParsedDateEquals(1999, 12 - 1, undefined, parser, '12-1999');
@@ -351,6 +346,7 @@ testSuite({
 
   testTimeParsing_partial() {
     let parser = new DateTimeParse('h:mma');
+
     assertParseFails(parser, '5');
     assertParsedTimeEquals(5, 0, 0, 0, parser, '5:');
     assertParsedTimeEquals(5, 4, 0, 0, parser, '5:4');
@@ -360,6 +356,7 @@ testSuite({
     assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44ym');
 
     parser = new DateTimeParse('h:mm a');
+
     assertParseFails(parser, '5');
     assertParseFails(parser, '5:');
     assertParseFails(parser, '5:4');
@@ -368,12 +365,6 @@ testSuite({
     assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 p');
     assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44 pm');
     assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 ym');
-
-    parser = new DateTimeParse('mm:ss');
-    const date = new Date(0);
-    assertTrue(parser.parse('15:', date) > 0);
-    assertEquals(15, date.getMinutes());
-    assertEquals(0, date.getSeconds());
   },
 
   testTimeParsing_overflow() {
@@ -381,6 +372,15 @@ testSuite({
 
     assertParsedTimeEquals(0, 0, 0, 0, parser, '24:00');
     assertParsedTimeEquals(0, 30, 0, 0, parser, '23:90');
+  },
+
+  testDurationParsing_partial() {
+    const date = new Date(0);
+    const parser = new DateTimeParse('mm:ss');
+
+    assertTrue(parser.parse('15:', date) > 0);
+    assertEquals(15, date.getMinutes());
+    assertEquals(0, date.getSeconds());
   },
 
   testEnglishDate() {
@@ -464,9 +464,6 @@ testSuite({
     const hourGmt08 = date.getHours();
     assertEquals(16, (hourGmtMinus08 + 24 - hourGmt08) % 24);
 
-    assertTrue(parser.parse('07/21/2003, 11:22:33 GMT+08', date) > 0);
-    assertEquals(hourGmt08, date.getHours());
-
     assertTrue(parser.parse('07/21/2003, 11:22:33 GMT0800', date) > 0);
     assertEquals(hourGmt08, date.getHours());
 
@@ -539,15 +536,6 @@ testSuite({
     const parser = new DateTimeParse('yyyyQQ');
 
     assertParsedDateEquals(2009, 7 - 1, 1, parser, '2009T3');
-  },
-
-  testDate() {
-    const parser = new DateTimeParse('M/d/yy');
-
-    assertParsedDateEquals(1987, 5 - 1, 25, parser, '5/25/1987');
-    assertParsedDateEquals(1987, 5 - 1, 25, parser, '05/25/1987');
-    // Probable bug: numeric month parsing accepts text inputs
-    assertParsedDateEquals(1987, 5 - 1, 25, parser, 'May/25/1987');
   },
 
   testDateTime() {
