@@ -864,3 +864,61 @@ goog.dom.safe.createContextualFragment = function(range, html) {
   return range.createContextualFragment(
       goog.html.SafeHtml.unwrapTrustedHTML(html));
 };
+
+/**
+ * Returns CSP style nonce, if set for any <style> or <link rel="stylesheet">
+ * tag.
+ * @param {?Window=} opt_window The window context used to retrieve the nonce.
+ *     Defaults to global context.
+ * @return {string} CSP nonce or empty string if no nonce is present.
+ */
+goog.dom.safe.getStyleNonce = function(opt_window) {
+  if (opt_window && opt_window != goog.global) {
+    return goog.dom.safe.getNonce_(opt_window.document, 'style');
+  }
+  if (goog.dom.safe.cspStyleNonce_ === null) {
+    goog.dom.safe.cspStyleNonce_ =
+        goog.dom.safe.getNonce_(goog.global.document, 'style');
+  }
+  return goog.dom.safe.cspStyleNonce_;
+};
+
+/** @private {?string} */
+goog.dom.safe.cspStyleNonce_ = null;
+
+/**
+ * According to the CSP3 spec a nonce must be a valid base64 string.
+ * @see https://www.w3.org/TR/CSP3/#grammardef-base64-value
+ * @private @const
+ */
+goog.dom.safe.NONCE_PATTERN_ = /^[\w+/_-]+[=]{0,2}$/;
+
+/**
+ * Returns CSP nonce, if set for any tag of given type.
+ * @param {!Document} doc
+ * @param {string} tag 'script' or 'style'. For 'style', if no <style> tag with
+ *     nonce is found, <link rel="stylesheet"> is used.
+ * @return {string} CSP nonce or empty string if no nonce is present.
+ * @private
+ */
+goog.dom.safe.getNonce_ = function(doc, tag) {
+  if (!doc.querySelector) {
+    return '';
+  }
+  let el = doc.querySelector(tag + '[nonce]');
+  if (!el && tag == 'style') {
+    // Try to get style nonce from <link rel="stylesheet">.
+    el = doc.querySelector('link[rel="stylesheet"][nonce]');
+  }
+  if (el) {
+    // Try to get the nonce from the IDL property first, because browsers that
+    // implement additional nonce protection features (currently only Chrome) to
+    // prevent nonce stealing via CSS do not expose the nonce via attributes.
+    // See https://github.com/whatwg/html/issues/2369
+    const nonce = el['nonce'] || el.getAttribute('nonce');
+    if (nonce && goog.dom.safe.NONCE_PATTERN_.test(nonce)) {
+      return nonce;
+    }
+  }
+  return '';
+};
