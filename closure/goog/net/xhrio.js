@@ -275,6 +275,8 @@ goog.net.XhrIo.CONTENT_TRANSFER_ENCODING = 'Content-Transfer-Encoding';
  */
 goog.net.XhrIo.HTTP_SCHEME_PATTERN = /^https?$/i;
 
+const HTTP_SCHEME_PATTERN = goog.net.XhrIo.HTTP_SCHEME_PATTERN;
+
 
 /**
  * The methods that typically come along with form data.  We set different
@@ -1076,7 +1078,7 @@ goog.net.XhrIo.prototype.isSuccess = function() {
 goog.net.XhrIo.prototype.isLastUriEffectiveSchemeHttp_ = function() {
   'use strict';
   const scheme = goog.uri.utils.getEffectiveScheme(String(this.lastUri_));
-  return goog.net.XhrIo.HTTP_SCHEME_PATTERN.test(scheme);
+  return HTTP_SCHEME_PATTERN.test(scheme);
 };
 
 
