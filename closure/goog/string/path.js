@@ -24,7 +24,7 @@ goog.require('goog.string');
  */
 goog.string.path.baseName = function(path) {
   'use strict';
-  var i = path.lastIndexOf('/') + 1;
+  const i = path.lastIndexOf('/') + 1;
   return path.slice(i);
 };
 
@@ -47,8 +47,8 @@ goog.string.path.basename = goog.string.path.baseName;
  */
 goog.string.path.dirname = function(path) {
   'use strict';
-  var i = path.lastIndexOf('/') + 1;
-  var head = path.slice(0, i);
+  const i = path.lastIndexOf('/') + 1;
+  let head = path.slice(0, i);
   // If the path isn't all forward slashes, trim the trailing slashes.
   if (!/^\/+$/.test(head)) {
     head = head.replace(/\/+$/, '');
@@ -64,10 +64,10 @@ goog.string.path.dirname = function(path) {
  */
 goog.string.path.extension = function(path) {
   'use strict';
-  var separator = '.';
+  const separator = '.';
   // Combining all adjacent periods in the basename to a single period.
-  var baseName = goog.string.path.baseName(path).replace(/\.+/g, separator);
-  var separatorIndex = baseName.lastIndexOf(separator);
+  const baseName = goog.string.path.baseName(path).replace(/\.+/g, separator);
+  const separatorIndex = baseName.lastIndexOf(separator);
   return separatorIndex <= 0 ? '' : baseName.substr(separatorIndex + 1);
 };
 
@@ -82,10 +82,10 @@ goog.string.path.extension = function(path) {
  */
 goog.string.path.join = function(var_args) {
   'use strict';
-  var path = arguments[0];
+  let path = arguments[0];
 
-  for (var i = 1; i < arguments.length; i++) {
-    var arg = arguments[i];
+  for (let i = 1; i < arguments.length; i++) {
+    const arg = arguments[i];
     if (goog.string.startsWith(arg, '/')) {
       path = arg;
     } else if (path == '' || goog.string.endsWith(path, '/')) {
@@ -112,7 +112,7 @@ goog.string.path.normalizePath = function(path) {
     return '.';
   }
 
-  var initialSlashes = '';
+  let initialSlashes = '';
   // POSIX will keep two slashes, but three or more will be collapsed to one.
   if (goog.string.startsWith(path, '/')) {
     initialSlashes = '/';
@@ -122,11 +122,11 @@ goog.string.path.normalizePath = function(path) {
     }
   }
 
-  var parts = path.split('/');
-  var newParts = [];
+  const parts = path.split('/');
+  const newParts = [];
 
-  for (var i = 0; i < parts.length; i++) {
-    var part = parts[i];
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i];
 
     // '' and '.' don't change the directory, ignore.
     if (part == '' || part == '.') {
@@ -144,7 +144,7 @@ goog.string.path.normalizePath = function(path) {
     }
   }
 
-  var returnPath = initialSlashes + newParts.join('/');
+  const returnPath = initialSlashes + newParts.join('/');
   return returnPath || '.';
 };
 
@@ -158,8 +158,8 @@ goog.string.path.normalizePath = function(path) {
  */
 goog.string.path.split = function(path) {
   'use strict';
-  var head = goog.string.path.dirname(path);
-  var tail = goog.string.path.baseName(path);
+  const head = goog.string.path.dirname(path);
+  const tail = goog.string.path.baseName(path);
   return [head, tail];
 };
 
