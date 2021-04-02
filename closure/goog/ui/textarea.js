@@ -711,12 +711,11 @@ goog.ui.Textarea.prototype.shrink_ = function() {
       if (!(minHeight && currentHeight <= minHeight)) {
         // Nudge the padding by 1px.
         var paddingBox = this.paddingBox_;
-        textarea.style.paddingBottom = paddingBox.bottom + 1 + 'px';
+        textarea.style.paddingTop = paddingBox.top + 1 + 'px';
         var heightAfterNudge = this.getHeight_();
         // If the one px of padding had no effect, then we can shrink.
         if (heightAfterNudge == currentHeight) {
-          textarea.style.paddingBottom =
-              paddingBox.bottom + scrollHeight + 'px';
+          textarea.style.paddingTop = paddingBox.top + scrollHeight + 'px';
           textarea.scrollTop = 0;
           var shrinkToHeight = this.getHeight_() - scrollHeight;
           if (shrinkToHeight >= minHeight) {
@@ -725,7 +724,7 @@ goog.ui.Textarea.prototype.shrink_ = function() {
             this.setHeight_(minHeight);
           }
         }
-        textarea.style.paddingBottom = paddingBox.bottom + 'px';
+        textarea.style.paddingTop = paddingBox.top + 'px';
       }
     }
     this.isResizing_ = false;
