@@ -16,6 +16,7 @@ const DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
 const DateTimeParse = goog.require('goog.i18n.DateTimeParse');
 /** @suppress {extraRequire} */
 const DateTimeSymbols = goog.require('goog.i18n.DateTimeSymbols');
+const DateTimeSymbols_ca = goog.require('goog.i18n.DateTimeSymbols_ca');
 const DateTimeSymbols_en = goog.require('goog.i18n.DateTimeSymbols_en');
 const DateTimeSymbols_fa = goog.require('goog.i18n.DateTimeSymbols_fa');
 const DateTimeSymbols_fr = goog.require('goog.i18n.DateTimeSymbols_fr');
@@ -241,6 +242,17 @@ testSuite({
     assertParsedDateEquals(1999, 12 - 1, undefined, parser, '12-1999');
   },
 
+  testMonthParsing() {
+    let parser = new DateTimeParse('MMM d, y');
+    assertParsedDateEquals(2021, 3 - 1, 31, parser, 'Mar 31, 2021');
+
+    parser = new DateTimeParse('d MMM y', DateTimeSymbols_ca);
+    assertParsedDateEquals(2021, 2 - 1, 1, parser, '1 de febrer 2021');
+    assertParsedDateEquals(2021, 2 - 1, 1, parser, '1 febrer 2021');
+    assertParsedDateEquals(2021, 2 - 1, 1, parser, '1 de febr. 2021');
+    assertParsedDateEquals(2021, 2 - 1, 1, parser, '1 febr. 2021');
+  },
+
   testGoogDateParsing() {
     const parser = new DateTimeParse('yyMMdd');
     const date = new GoogDate();
@@ -251,7 +263,6 @@ testSuite({
 
   testTimeParsing_hh() {
     let parser = new DateTimeParse('hhmm');
-
     assertParsedTimeEquals(0, 22, 0, 0, parser, '0022');
     assertParsedTimeEquals(11, 22, 0, 0, parser, '1122');
     assertParsedTimeEquals(0, 22, 0, 0, parser, '1222');
@@ -259,7 +270,6 @@ testSuite({
     assertParsedTimeEquals(0, 22, 0, 0, parser, '2422');
 
     parser = new DateTimeParse('hhmma');
-
     assertParsedTimeEquals(0, 22, 0, 0, parser, '0022am');
     assertParsedTimeEquals(11, 22, 0, 0, parser, '1122am');
     assertParsedTimeEquals(0, 22, 0, 0, parser, '1222am');
@@ -274,7 +284,6 @@ testSuite({
 
   testTimeParsing_KK() {
     let parser = new DateTimeParse('KKmm');
-
     assertParsedTimeEquals(0, 22, 0, 0, parser, '0022');
     assertParsedTimeEquals(11, 22, 0, 0, parser, '1122');
     assertParsedTimeEquals(12, 22, 0, 0, parser, '1222');
@@ -282,7 +291,6 @@ testSuite({
     assertParsedTimeEquals(0, 22, 0, 0, parser, '2422');
 
     parser = new DateTimeParse('KKmma');
-
     assertParsedTimeEquals(0, 22, 0, 0, parser, '0022am');
     assertParsedTimeEquals(11, 22, 0, 0, parser, '1122am');
     assertParsedTimeEquals(12, 22, 0, 0, parser, '1222am');
@@ -297,7 +305,6 @@ testSuite({
 
   testTimeParsing_kk() {
     let parser = new DateTimeParse('kkmm');
-
     assertParsedTimeEquals(0, 22, 0, 0, parser, '0022');
     assertParsedTimeEquals(11, 22, 0, 0, parser, '1122');
     assertParsedTimeEquals(12, 22, 0, 0, parser, '1222');
@@ -305,7 +312,6 @@ testSuite({
     assertParsedTimeEquals(0, 22, 0, 0, parser, '2422');
 
     parser = new DateTimeParse('kkmma');
-
     assertParsedTimeEquals(0, 22, 0, 0, parser, '0022am');
     assertParsedTimeEquals(11, 22, 0, 0, parser, '1122am');
     assertParsedTimeEquals(12, 22, 0, 0, parser, '1222am');
@@ -320,7 +326,6 @@ testSuite({
 
   testTimeParsing_HH() {
     let parser = new DateTimeParse('HHmm');
-
     assertParsedTimeEquals(0, 22, 0, 0, parser, '0022');
     assertParsedTimeEquals(11, 22, 0, 0, parser, '1122');
     assertParsedTimeEquals(12, 22, 0, 0, parser, '1222');
@@ -328,7 +333,6 @@ testSuite({
     assertParsedTimeEquals(0, 22, 0, 0, parser, '2422');
 
     parser = new DateTimeParse('HHmma');
-
     assertParsedTimeEquals(0, 22, 0, 0, parser, '0022am');
     assertParsedTimeEquals(11, 22, 0, 0, parser, '1122am');
     assertParsedTimeEquals(12, 22, 0, 0, parser, '1222am');

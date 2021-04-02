@@ -500,26 +500,37 @@ goog.i18n.DateTimeParse.prototype.subParse_ = function(
 
   switch (part.text.charAt(0)) {
     case 'G':  // ERA
-      var value = this.matchString_(text, pos, this.dateTimeSymbols_.ERAS);
-      if (value >= 0) {
-        cal.era = value;
-      }
+      this.subParseString_(
+          text, pos, [this.dateTimeSymbols_.ERAS], function(value) {
+            cal.era = value;
+          });
       return true;
     case 'M':  // MONTH
     case 'L':  // STANDALONEMONTH
       return this.subParseMonth_(text, pos, digitCount, part, cal);
-    case 'E':
-      return this.subParseDayOfWeek_(text, pos, cal);
+    case 'E':  // DAY_OF_WEEK
+      // Handle both short and long forms. Try count == 4 first.
+      var weekdays =
+          [this.dateTimeSymbols_.WEEKDAYS, this.dateTimeSymbols_.SHORTWEEKDAYS];
+      return this.subParseString_(text, pos, weekdays, function(value) {
+        cal.dayOfWeek = value;
+      });
     case 'a':  // AM_PM
-      var value = this.matchString_(text, pos, this.dateTimeSymbols_.AMPMS);
-      if (value >= 0) {
-        cal.ampm = value;
-      }
+      this.subParseString_(
+          text, pos, [this.dateTimeSymbols_.AMPMS], function(value) {
+            cal.ampm = value;
+          });
       return true;
     case 'y':  // YEAR
       return this.subParseYear_(text, pos, part, digitCount, cal);
     case 'Q':  // QUARTER
-      return this.subParseQuarter_(text, pos, cal);
+      // Handle both short and long forms. Try count == 4 first.
+      var quarters =
+          [this.dateTimeSymbols_.QUARTERS, this.dateTimeSymbols_.SHORTQUARTERS];
+      return this.subParseString_(text, pos, quarters, function(value) {
+        cal.month = value * 3;  // First month of quarter.
+        cal.day = 1;
+      });
     case 'd':  // DATE
       this.subParseInt_(text, pos, digitCount, function(value) {
         cal.day = value;
@@ -585,10 +596,10 @@ goog.i18n.DateTimeParse.prototype.subParseYear_ = function(
   // This awkward implementation preserves an existing behavioral quirk.
   // digitCount (for abutting patterns) is ignored for signed years.
   var value = this.parseInt_(text, pos, digitCount);
-  if (value == null) {
+  if (value === null) {
     value = this.parseInt_(text, pos, 0, /* allowSigned= */ true);
   }
-  if (value == null) {
+  if (value === null) {
     return false;
   }
 
@@ -625,73 +636,15 @@ goog.i18n.DateTimeParse.prototype.subParseMonth_ = function(
   }
 
   // month is symbols, i.e., MMM, MMMM, LLL or LLLL
-  // Want to be able to parse both short and long forms.
-  // Try count == 4 first
-  var months = this.dateTimeSymbols_.MONTHS
-                   .concat(this.dateTimeSymbols_.STANDALONEMONTHS)
-                   .concat(this.dateTimeSymbols_.SHORTMONTHS)
-                   .concat(this.dateTimeSymbols_.STANDALONESHORTMONTHS);
-  var value = this.matchString_(text, pos, months);
-  if (value < 0) {
-    return false;
-  }
-  // The months variable is multiple of 12, so we have to get the actual
-  // month index by modulo 12.
-  cal.month = (value % 12);
-  return true;
-};
-
-
-/**
- * Parse Quarter field.
- *
- * @param {string} text the text to be parsed.
- * @param {Array<number>} pos Parse position.
- * @param {goog.i18n.DateTimeParse.MyDate_} cal object to hold parsed value.
- *
- * @return {boolean} True if parsing successful.
- * @private
- */
-goog.i18n.DateTimeParse.prototype.subParseQuarter_ = function(text, pos, cal) {
-  'use strict';
-  // Want to be able to parse both short and long forms.
-  // Try count == 4 first:
-  var value = this.matchString_(text, pos, this.dateTimeSymbols_.QUARTERS);
-  if (value < 0) {  // count == 4 failed, now try count == 3
-    value = this.matchString_(text, pos, this.dateTimeSymbols_.SHORTQUARTERS);
-  }
-  if (value < 0) {
-    return false;
-  }
-  cal.month = value * 3;  // First month of quarter.
-  cal.day = 1;
-  return true;
-};
-
-
-/**
- * Parse Day of week field.
- * @param {string} text the time text to be parsed.
- * @param {Array<number>} pos Parse position.
- * @param {goog.i18n.DateTimeParse.MyDate_} cal object to hold parsed value.
- *
- * @return {boolean} True if successful.
- * @private
- */
-goog.i18n.DateTimeParse.prototype.subParseDayOfWeek_ = function(
-    text, pos, cal) {
-  'use strict';
-  // Handle both short and long forms.
-  // Try count == 4 (DDDD) first:
-  var value = this.matchString_(text, pos, this.dateTimeSymbols_.WEEKDAYS);
-  if (value < 0) {
-    value = this.matchString_(text, pos, this.dateTimeSymbols_.SHORTWEEKDAYS);
-  }
-  if (value < 0) {
-    return false;
-  }
-  cal.dayOfWeek = value;
-  return true;
+  // Handle both short and long forms. Try count == 4 first.
+  var months = [
+    this.dateTimeSymbols_.MONTHS, this.dateTimeSymbols_.STANDALONEMONTHS,
+    this.dateTimeSymbols_.SHORTMONTHS,
+    this.dateTimeSymbols_.STANDALONESHORTMONTHS
+  ];
+  return this.subParseString_(text, pos, months, function(value) {
+    cal.month = value;
+  });
 };
 
 
@@ -711,7 +664,7 @@ goog.i18n.DateTimeParse.prototype.subParseFractionalSeconds_ = function(
   'use strict';
   var start = pos[0];
   var value = this.parseInt_(text, pos, digitCount);
-  if (value == null) {
+  if (value === null) {
     return false;
   }
   // Fractional seconds left-justify
@@ -768,7 +721,7 @@ goog.i18n.DateTimeParse.prototype.subParseTimeZoneInGMT_ = function(
   var start = pos[0];
   var value =
       this.parseInt_(text, pos, /* digitCount= */ 0, /* allowSigned= */ true);
-  if (value == null) {
+  if (value === null) {
     return false;
   }
 
@@ -778,7 +731,7 @@ goog.i18n.DateTimeParse.prototype.subParseTimeZoneInGMT_ = function(
     offset = value * 60;
     pos[0]++;
     value = this.parseInt_(text, pos, /* digitCount= */ 0);
-    if (value == null) {
+    if (value === null) {
       return false;
     }
     offset += value;
@@ -815,11 +768,40 @@ goog.i18n.DateTimeParse.prototype.subParseInt_ = function(
     text, pos, maxChars, callback) {
   'use strict';
   var value = this.parseInt_(text, pos, maxChars);
-  if (value == null) {
+  if (value === null) {
     return false;
   }
   callback(value);
   return true;
+};
+
+
+/**
+ * Parse string pattern characters. These are symbols matching a set of strings
+ * such as 'E' for day of week.
+ *
+ * @param {string} text the text to be parsed.
+ * @param {Array<number>} pos parse position
+ * @param {Array<Array<string>>} data Arrays of strings to match against,
+ *     sequentially.
+ * @param {function(number)} callback function to record the parsed value.
+ *
+ * @return {boolean} True iff the input matches any of the strings in the data
+ *     arrays.
+ * @private
+ */
+goog.i18n.DateTimeParse.prototype.subParseString_ = function(
+    text, pos, data, callback) {
+  'use strict';
+  var value = null;
+  for (var i = 0; i < data.length; i++) {
+    value = this.matchString_(text, pos, data[i]);
+    if (value !== null) {
+      callback(value);
+      return true;
+    }
+  }
+  return false;
 };
 
 
@@ -926,8 +908,8 @@ goog.i18n.DateTimeParse.prototype.parseInt_ = function(
  * @param {Array<number>} pos parsing position.
  * @param {Array<string>} data The string array of matching patterns.
  *
- * @return {number} the new start position if matching succeeded; a negative
- *     number indicating matching failure.
+ * @return {?number} the index of the best match in the data array, or null
+ *     indicating matching failure.
  * @private
  */
 goog.i18n.DateTimeParse.prototype.matchString_ = function(text, pos, data) {
@@ -937,7 +919,7 @@ goog.i18n.DateTimeParse.prototype.matchString_ = function(text, pos, data) {
   // We keep track of the longest match, and return that. Note that this
   // unfortunately requires us to test all array elements.
   var bestMatchLength = 0;
-  var bestMatch = -1;
+  var bestMatchIndex = null;
   var lower_text = text.substring(pos[0]).toLowerCase();
   for (var i = 0; i < data.length; i++) {
     var len = data[i].length;
@@ -945,14 +927,14 @@ goog.i18n.DateTimeParse.prototype.matchString_ = function(text, pos, data) {
     // against potentially better matches (longer strings).
     if (len > bestMatchLength &&
         lower_text.indexOf(data[i].toLowerCase()) == 0) {
-      bestMatch = i;
+      bestMatchIndex = i;
       bestMatchLength = len;
     }
   }
-  if (bestMatch >= 0) {
+  if (bestMatchIndex !== null) {
     pos[0] += bestMatchLength;
   }
-  return bestMatch;
+  return bestMatchIndex;
 };
 
 
@@ -1099,7 +1081,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.setTwoDigitYear_ = function(year) {
 goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
     date, validation) {
   'use strict';
-  // Throw exception if date is null.
+  // Throw exception if date is null or undefined.
   if (date == null) {
     throw new Error('Parameter \'date\' should not be null.');
   }
@@ -1118,7 +1100,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
   // day of month is smaller enough so that it won't cause a month switch when
   // setting month. For example, if data in date is Nov 30, when month is set
   // to Feb, because there is no Feb 30, JS adjust it to Mar 2. So Feb 12 will
-  // become  Mar 12.
+  // become Mar 12.
   var orgDate = date.getDate();
 
   // Every month has a 1st day, this can actually be anything less than 29.
