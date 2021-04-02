@@ -32,14 +32,14 @@ goog.require('goog.fs.FileSystemImpl');
  */
 goog.fs.get_ = function(type, size) {
   'use strict';
-  var requestFileSystem =
+  const requestFileSystem =
       goog.global.requestFileSystem || goog.global.webkitRequestFileSystem;
 
   if (typeof requestFileSystem !== 'function') {
     return goog.async.Deferred.fail(new Error('File API unsupported'));
   }
 
-  var d = new goog.async.Deferred();
+  const d = new goog.async.Deferred();
   requestFileSystem(
       type, size,
       function(fs) {

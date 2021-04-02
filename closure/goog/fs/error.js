@@ -66,7 +66,7 @@ goog.fs.Error = function(error, action) {
     /** @suppress {deprecated} */
     this.code = goog.fs.Error.getCodeFromName_(error.name);
   } else {
-    var code = /** @type {!goog.fs.Error.ErrorCode} */ (
+    const code = /** @type {!goog.fs.Error.ErrorCode} */ (
         goog.asserts.assertNumber(error.code));
     this.code = code;
     this.name = goog.fs.Error.getNameFromCode_(code);
@@ -132,7 +132,7 @@ goog.fs.Error.ErrorCode = {
  */
 goog.fs.Error.getNameFromCode_ = function(code) {
   'use strict';
-  var name = goog.object.findKey(goog.fs.Error.NameToCodeMap_, function(c) {
+  const name = goog.object.findKey(goog.fs.Error.NameToCodeMap_, function(c) {
     'use strict';
     return code == c;
   });
