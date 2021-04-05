@@ -1,4 +1,9 @@
 /**
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
  * @fileoverview Externs used by cspviolationobserver.js that are not available
  * in the open-source Closure compiler release. This file should be deleted
  * once w3c_reporting_observer.js is available in open-source externs.
