@@ -27,7 +27,7 @@ goog.require('goog.array');
  */
 goog.string.newlines.splitLines = function(str, opt_keepNewlines) {
   'use strict';
-  var lines = goog.string.newlines.getLines(str);
+  const lines = goog.string.newlines.getLines(str);
   return goog.array.map(lines, function(line) {
     'use strict';
     return opt_keepNewlines ? line.getFullLine() : line.getContent();
@@ -127,13 +127,13 @@ goog.string.newlines.getLines = function(str) {
   // We use the constructor because literals are evaluated only once in
   // < ES 3.1.
   // See http://www.mail-archive.com/es-discuss@mozilla.org/msg01796.html
-  var re = RegExp('\r\n|\r|\n', 'g');
-  var sliceIndex = 0;
-  var result;
-  var lines = [];
+  const re = RegExp('\r\n|\r|\n', 'g');
+  let sliceIndex = 0;
+  let result;
+  const lines = [];
 
   while (result = re.exec(str)) {
-    var line = new goog.string.newlines.Line(
+    const line = new goog.string.newlines.Line(
         str, sliceIndex, result.index, result.index + result[0].length);
     lines.push(line);
 
@@ -143,7 +143,7 @@ goog.string.newlines.getLines = function(str) {
 
   // If the string does not end with a newline, add the last line.
   if (sliceIndex < str.length) {
-    var line =
+    const line =
         new goog.string.newlines.Line(str, sliceIndex, str.length, str.length);
     lines.push(line);
   }

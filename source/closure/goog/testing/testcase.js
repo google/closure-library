@@ -31,6 +31,7 @@ goog.require('goog.debug');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.object');
+goog.require('goog.testing.CspViolationObserver');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.asserts');
 
@@ -214,6 +215,12 @@ goog.testing.TestCase = function(opt_name) {
 
   /** @private {number} */
   this.testsRanSoFar_ = 0;
+
+  /** @private {!goog.testing.CspViolationObserver} */
+  this.cspViolationObserver_ = new goog.testing.CspViolationObserver();
+
+  /** @private {boolean} */
+  this.ignoreStartupCspViolations_ = false;
 };
 
 
@@ -547,12 +554,14 @@ goog.testing.TestCase.prototype.prepareForRun_ = function() {
   this.startTime_ = this.now();
   this.running = true;
   this.result_.totalCount = this.getCount();
+  this.cspViolationObserver_.start();
   if (!this.shouldRunTests()) {
     this.log('shouldRunTests() returned false, skipping these tests.');
     this.result_.testSuppressed = true;
     this.finalize();
     return false;
   }
+  this.checkCspViolations_('shouldRunTests');
   return true;
 };
 
@@ -590,6 +599,7 @@ goog.testing.TestCase.prototype.finalize = function() {
   });
   this.onCompletedCallbacks_ = [];
   this.groupLogsEnd();
+  this.cspViolationObserver_.stop();
 };
 
 
@@ -831,11 +841,24 @@ goog.testing.TestCase.prototype.runTestsReturningPromise = function() {
  */
 goog.testing.TestCase.prototype.runSetUpPage_ = function(runTestsFn) {
   'use strict';
-  return this.invokeFunction_(this.setUpPage, runTestsFn, function(e) {
+  const reports = goog.testing.CspViolationObserver.getBufferedReports();
+
+  const ret = this.invokeFunction_(this.setUpPage, runTestsFn, function(e) {
     'use strict';
     this.exceptionBeforeTest = e;
     runTestsFn.call(this);
   }, 'setUpPage');
+
+  if (!this.ignoreStartupCspViolations_ && reports.length > 0) {
+    const msg =
+        'One or more Content Security Policy violations occurred on the page ' +
+        'before the first test was run: ' +
+        goog.testing.CspViolationObserver.formatReports(reports);
+    // This CSP violation takes precedence over any pre-existing exception.
+    this.exceptionBeforeTest = msg;
+  }
+
+  return ret;
 };
 
 
@@ -878,6 +901,7 @@ goog.testing.TestCase.prototype.runNextTest_ = function() {
         goog.bind(this.finishTestInvocation_, this));
   }
 
+  this.cspViolationObserver_.setEnabled(true);
   this.curTest_.started();
   this.result_.runCount++;
   this.log('Running test: ' + this.curTest_.name);
@@ -1053,6 +1077,7 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
   var self = this;
   this.thrownAssertionExceptions_ = [];
   try {
+    this.cspViolationObserver_.start();
     var retval = fn.call(this);
     if (goog.Thenable.isImplementedBy(retval) ||
         (retval && typeof retval['then'] === 'function')) {
@@ -1068,6 +1093,7 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
           function() {
             'use strict';
             self.resetBatchTimeAfterPromise_();
+            self.checkCspViolations_(fnName);
             if (self.thrownAssertionExceptions_.length == 0) {
               goog.testing.Continuation_.run(onSuccess.call(self));
             } else {
@@ -1079,10 +1105,12 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
             'use strict';
             self.reportUnpropagatedAssertionExceptions_(fnName, e);
             self.resetBatchTimeAfterPromise_();
+            self.checkCspViolations_(fnName);
             goog.testing.Continuation_.run(onFailure.call(self, e));
           });
       return null;
     } else {
+      this.checkCspViolations_(fnName);
       if (this.thrownAssertionExceptions_.length == 0) {
         return new goog.testing.Continuation_(goog.bind(onSuccess, this));
       } else {
@@ -1092,6 +1120,7 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
       }
     }
   } catch (e) {
+    this.checkCspViolations_(fnName);
     this.reportUnpropagatedAssertionExceptions_(fnName, e);
     return new goog.testing.Continuation_(goog.bind(onFailure, this, e));
   }
@@ -1188,6 +1217,32 @@ goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
     return null;
   } else {
     return new goog.testing.Continuation_(goog.bind(this.runNextTest_, this));
+  }
+};
+
+
+/**
+ * Checks if any CSP violations have been logged since
+ * this.cspViolationObserver_.start() was called and reports them as errors.
+ *
+ * @param {string} name
+ * @private
+ */
+goog.testing.TestCase.prototype.checkCspViolations_ = function(name) {
+  const reports = this.cspViolationObserver_.stop();
+  if (reports.length == 0) {
+    return;
+  }
+
+  const formattedReports =
+      goog.testing.CspViolationObserver.formatReports(reports);
+  const msg =
+      'One or more Content Security Policy violations occurred during ' +
+      'execution of this test: ' + formattedReports;
+  if (this.started) {
+    this.recordError(name, msg);
+  } else {
+    this.exceptionBeforeTest = msg;
   }
 };
 
@@ -1908,6 +1963,7 @@ goog.testing.TestCase.prototype.cleanStackTrace_ = function(stack, errMsg) {
   return stack;
 };
 
+
 /**
  * A class representing a single test function.
  * @param {string} name The test name.
@@ -2322,6 +2378,28 @@ goog.testing.TestCase.Error = function(source, message, opt_stack) {
 
 
 /**
+ * Call this from setUpPage() to prevent any Content Security Policy violations
+ * that may have occurred during page load from being reported as errors .
+ */
+goog.testing.TestCase.prototype.ignoreStartupCspViolations = function() {
+  this.ignoreStartupCspViolations_ = true;
+};
+
+
+/**
+ * Toggles recording of Content Security Policy violations. Call this with false
+ * during tests, setUpPage, setUp, and tearDown functions to prevent CSP
+ * violations occurring while the function is executing from being reported as
+ * errors. Reporting will be reset upon execution of the next test function.
+ *
+ * @param {boolean} enable
+ */
+goog.testing.TestCase.prototype.observeCspViolations = function(enable) {
+  this.cspViolationObserver_.setEnabled(enable);
+};
+
+
+/**
  * Returns a string representing the error object.
  * @return {string} A string representation of the error.
  * @override
@@ -2329,7 +2407,7 @@ goog.testing.TestCase.Error = function(source, message, opt_stack) {
 goog.testing.TestCase.Error.prototype.toString = function() {
   'use strict';
   return 'ERROR in ' + this.source + '\n' + this.message +
-      (this.stack ? '\n' + this.stack : '');
+      (this.stack && this.stack !== 'Not available' ? '\n' + this.stack : '');
 };
 
 /**

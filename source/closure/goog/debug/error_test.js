@@ -101,4 +101,12 @@ testSuite({
     }
     assertEquals('My custom error', message);
   },
+
+  testCause() {
+    const originalError = new DebugError('original error');
+    const error = new DebugError('error', originalError);
+
+    assertEquals(originalError, error.cause);
+    assertEquals(undefined, originalError.cause);
+  },
 });

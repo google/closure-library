@@ -187,8 +187,8 @@ goog.fs.FileReader.prototype.readAsBinaryString = function(blob) {
  */
 goog.fs.FileReader.readAsBinaryString = function(blob) {
   'use strict';
-  var reader = new goog.fs.FileReader();
-  var d = goog.fs.FileReader.createDeferred_(reader);
+  const reader = new goog.fs.FileReader();
+  const d = goog.fs.FileReader.createDeferred_(reader);
   reader.readAsBinaryString(blob);
   return d;
 };
@@ -212,8 +212,8 @@ goog.fs.FileReader.prototype.readAsArrayBuffer = function(blob) {
  */
 goog.fs.FileReader.readAsArrayBuffer = function(blob) {
   'use strict';
-  var reader = new goog.fs.FileReader();
-  var d = goog.fs.FileReader.createDeferred_(reader);
+  const reader = new goog.fs.FileReader();
+  const d = goog.fs.FileReader.createDeferred_(reader);
   reader.readAsArrayBuffer(blob);
   return d;
 };
@@ -239,8 +239,8 @@ goog.fs.FileReader.prototype.readAsText = function(blob, opt_encoding) {
  */
 goog.fs.FileReader.readAsText = function(blob, opt_encoding) {
   'use strict';
-  var reader = new goog.fs.FileReader();
-  var d = goog.fs.FileReader.createDeferred_(reader);
+  const reader = new goog.fs.FileReader();
+  const d = goog.fs.FileReader.createDeferred_(reader);
   reader.readAsText(blob, opt_encoding);
   return d;
 };
@@ -264,8 +264,8 @@ goog.fs.FileReader.prototype.readAsDataUrl = function(blob) {
  */
 goog.fs.FileReader.readAsDataUrl = function(blob) {
   'use strict';
-  var reader = new goog.fs.FileReader();
-  var d = goog.fs.FileReader.createDeferred_(reader);
+  const reader = new goog.fs.FileReader();
+  const d = goog.fs.FileReader.createDeferred_(reader);
   reader.readAsDataUrl(blob);
   return d;
 };
@@ -279,12 +279,12 @@ goog.fs.FileReader.readAsDataUrl = function(blob) {
  */
 goog.fs.FileReader.createDeferred_ = function(reader) {
   'use strict';
-  var deferred = new goog.async.Deferred();
+  const deferred = new goog.async.Deferred();
   reader.listen(
       goog.fs.FileReader.EventType.LOAD_END, goog.partial(function(d, r, e) {
         'use strict';
-        var result = r.getResult();
-        var error = r.getError();
+        const result = r.getResult();
+        const error = r.getError();
         if (result != null && !error) {
           d.callback(result);
         } else {

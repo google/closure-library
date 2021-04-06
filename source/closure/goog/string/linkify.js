@@ -43,8 +43,8 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
         goog.html.SafeHtml.htmlEscape(text);
   }
 
-  var attributesMap = {};
-  for (var key in opt_attributes) {
+  const attributesMap = {};
+  for (let key in opt_attributes) {
     if (!opt_attributes[key]) {
       // Our API allows '' to omit the attribute, SafeHtml requires null.
       attributesMap[key] = null;
@@ -60,7 +60,7 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
     attributesMap['target'] = '_blank';
   }
 
-  var output = [];
+  const output = [];
   // Return value is ignored.
   text.replace(
       goog.string.linkify.FIND_LINKS_RE_,
@@ -73,11 +73,11 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
         if (!original) {
           return '';
         }
-        var href = '';
+        let href = '';
         /** @type {string} */
-        var linkText;
+        let linkText;
         /** @type {string} */
-        var afterLink;
+        let afterLink;
         if (email) {
           href = 'mailto:';
           linkText = email;
@@ -87,7 +87,7 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
           if (!protocol) {
             href = 'http://';
           }
-          var splitEndingPunctuation =
+          const splitEndingPunctuation =
               original.match(goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_);
           // An open paren in the link will often be matched with a close paren
           // at the end, so skip cutting off ending punctuation if
@@ -140,7 +140,7 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
  */
 goog.string.linkify.findFirstUrl = function(text) {
   'use strict';
-  var link = text.match(goog.string.linkify.URL_RE_);
+  const link = text.match(goog.string.linkify.URL_RE_);
   return link != null ? link[0] : '';
 };
 
@@ -152,7 +152,7 @@ goog.string.linkify.findFirstUrl = function(text) {
  */
 goog.string.linkify.findFirstEmail = function(text) {
   'use strict';
-  var email = text.match(goog.string.linkify.EMAIL_RE_);
+  const email = text.match(goog.string.linkify.EMAIL_RE_);
   return email != null ? email[0] : '';
 };
 

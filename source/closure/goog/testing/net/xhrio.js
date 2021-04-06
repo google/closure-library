@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview Mock of XhrIo for unit testing.
- * @suppress {accessControls} Overriding private properties for test impl.
+ * @suppress {accessControls} Reassigning private properties for test impl.
  */
 
 goog.setTestOnly('goog.testing.net.XhrIo');
@@ -25,7 +25,6 @@ goog.require('goog.object');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.testing.TestQueue');
-goog.require('goog.uri.utils');
 goog.requireType('goog.net.XhrLike');
 
 /**
@@ -76,13 +75,6 @@ goog.testing.net.XhrIo.allowUnsafeAccessToXhrIoOutsideCallbacks = false;
  * @enum {string}
  */
 goog.testing.net.XhrIo.ResponseType = goog.net.XhrIo.ResponseType;
-
-
-/**
- * The pattern matching the 'http' and 'https' URI schemes.
- * @private {!RegExp}
- */
-goog.testing.net.XhrIo.HTTP_SCHEME_PATTERN_ = /^https?$/i;
 
 
 /**
@@ -184,30 +176,6 @@ goog.testing.net.XhrIo.prototype.responseHeaders_;
 
 
 /**
- * Whether MockXhrIo is active.
- * @private {boolean}
- * @override
- */
-goog.testing.net.XhrIo.prototype.active_ = false;
-
-
-/**
- * Last URI that was requested.
- * @private {?goog.Uri|string}
- * @override
- */
-goog.testing.net.XhrIo.prototype.lastUri_ = '';
-
-
-/**
- * Last HTTP method that was requested.
- * @private {string|undefined}
- * @override
- */
-goog.testing.net.XhrIo.prototype.lastMethod_;
-
-
-/**
  * Last POST content that was requested.
  * @private {
  *     ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string|undefined}
@@ -220,22 +188,6 @@ goog.testing.net.XhrIo.prototype.lastContent_;
  * @private {Object|goog.structs.Map|undefined}
  */
 goog.testing.net.XhrIo.prototype.lastHeaders_;
-
-
-/**
- * Last error code.
- * @private {!goog.net.ErrorCode}
- * @override
- */
-goog.testing.net.XhrIo.prototype.lastErrorCode_ = goog.net.ErrorCode.NO_ERROR;
-
-
-/**
- * Last error message.
- * @private {string}
- * @override
- */
-goog.testing.net.XhrIo.prototype.lastError_ = '';
 
 
 /**
@@ -258,48 +210,6 @@ goog.testing.net.XhrIo.prototype.statusCode_ = 0;
  */
 goog.testing.net.XhrIo.prototype.readyState_ =
     goog.net.XmlHttp.ReadyState.UNINITIALIZED;
-
-
-/**
- * Number of milliseconds after which an incomplete request will be aborted and
- * a {@link goog.net.EventType.TIMEOUT} event raised; 0 means no timeout is set.
- * @private {number}
- * @override
- */
-goog.testing.net.XhrIo.prototype.timeoutInterval_ = 0;
-
-
-/**
- * The requested type for the response. The empty string means use the default
- * XHR behavior.
- * @private {goog.net.XhrIo.ResponseType}
- * @override
- */
-goog.testing.net.XhrIo.prototype.responseType_ =
-    goog.net.XhrIo.ResponseType.DEFAULT;
-
-
-/**
- * Whether a "credentialed" request is to be sent (one that is aware of cookies
- * and authentication) . This is applicable only for cross-domain requests and
- * more recent browsers that support this part of the HTTP Access Control
- * standard.
- *
- * @see http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#withcredentials
- *
- * @private {boolean}
- * @override
- */
-goog.testing.net.XhrIo.prototype.withCredentials_ = false;
-
-
-/**
- * Whether progress events shall be sent for this request.
- *
- * @private {boolean}
- * @override
- */
-goog.testing.net.XhrIo.prototype.progressEventsEnabled_ = false;
 
 
 /**
@@ -678,19 +588,6 @@ goog.testing.net.XhrIo.prototype.isSuccess = function() {
 
 
 /**
- * @return {boolean} whether the effective scheme of the last URI that was
- *     fetched was 'http' or 'https'.
- * @private
- * @override
- */
-goog.testing.net.XhrIo.prototype.isLastUriEffectiveSchemeHttp_ = function() {
-  'use strict';
-  var scheme = goog.uri.utils.getEffectiveScheme(String(this.lastUri_));
-  return goog.testing.net.XhrIo.HTTP_SCHEME_PATTERN_.test(scheme);
-};
-
-
-/**
  * Returns the readystate.
  * @return {!goog.net.XmlHttp.ReadyState} goog.net.XmlHttp.ReadyState.*.
  * @override
@@ -733,17 +630,6 @@ goog.testing.net.XhrIo.prototype.getStatusText = function() {
 goog.testing.net.XhrIo.prototype.getLastErrorCode = function() {
   'use strict';
   return this.lastErrorCode_;
-};
-
-
-/**
- * Gets the last error message.
- * @return {string} Last error message.
- * @override
- */
-goog.testing.net.XhrIo.prototype.getLastError = function() {
-  'use strict';
-  return this.lastError_;
 };
 
 

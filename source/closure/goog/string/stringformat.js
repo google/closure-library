@@ -33,16 +33,16 @@ goog.require('goog.string');
 goog.string.format = function(formatString, var_args) {
   'use strict';
   // Convert the arguments to an array (MDC recommended way).
-  var args = Array.prototype.slice.call(arguments);
+  const args = Array.prototype.slice.call(arguments);
 
   // Try to get the template.
-  var template = args.shift();
+  const template = args.shift();
   if (typeof template == 'undefined') {
     throw new Error('[goog.string.format] Template required');
   }
 
   // This re is used for matching, it also defines what is supported.
-  var formatRe = /%([0\-\ \+]*)(\d+)?(\.(\d+))?([%sfdiu])/g;
+  const formatRe = /%([0\-\ \+]*)(\d+)?(\.(\d+))?([%sfdiu])/g;
 
   /**
    * Chooses which conversion function to call based on type conversion
@@ -65,7 +65,7 @@ goog.string.format = function(formatString, var_args) {
     }
 
     // Try to get the actual value from parent function.
-    var value = args.shift();
+    const value = args.shift();
 
     // If we didn't get any arguments, fail.
     if (typeof value == 'undefined') {
@@ -104,7 +104,7 @@ goog.string.format.demuxes_ = {};
 goog.string.format.demuxes_['s'] = function(
     value, flags, width, dotp, precision, type, offset, wholeString) {
   'use strict';
-  var replacement = value;
+  let replacement = value;
   // If no padding is necessary we're done.
   // The check for '' is necessary because Firefox incorrectly provides the
   // empty string instead of undefined for non-participating capture groups,
@@ -140,7 +140,7 @@ goog.string.format.demuxes_['s'] = function(
 goog.string.format.demuxes_['f'] = function(
     value, flags, width, dotp, precision, type, offset, wholeString) {
   'use strict';
-  var replacement = value.toString();
+  let replacement = value.toString();
 
   // The check for '' is necessary because Firefox incorrectly provides the
   // empty string instead of undefined for non-participating capture groups,
@@ -150,7 +150,7 @@ goog.string.format.demuxes_['f'] = function(
   }
 
   // Generates sign string that will be attached to the replacement.
-  var sign;
+  let sign;
   if (Number(value) < 0) {
     sign = '-';
   } else if (flags.indexOf('+') >= 0) {
@@ -174,7 +174,7 @@ goog.string.format.demuxes_['f'] = function(
   replacement = isNaN(precision) ? Math.abs(Number(value)).toString() :
                                    Math.abs(Number(value)).toFixed(precision);
 
-  var padCount = Number(width) - replacement.length - sign.length;
+  const padCount = Number(width) - replacement.length - sign.length;
 
   // Find out which side to pad, and if it's left side, then which character to
   // pad, and set the sign on the left and padding in the middle.
@@ -182,7 +182,7 @@ goog.string.format.demuxes_['f'] = function(
     replacement = sign + replacement + goog.string.repeat(' ', padCount);
   } else {
     // Decides which character to pad.
-    var paddingChar = (flags.indexOf('0', 0) >= 0) ? '0' : ' ';
+    const paddingChar = (flags.indexOf('0', 0) >= 0) ? '0' : ' ';
     replacement =
         sign + goog.string.repeat(paddingChar, padCount) + replacement;
   }
