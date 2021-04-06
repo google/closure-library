@@ -20,6 +20,7 @@ const DateTimeSymbols_ca = goog.require('goog.i18n.DateTimeSymbols_ca');
 const DateTimeSymbols_en = goog.require('goog.i18n.DateTimeSymbols_en');
 const DateTimeSymbols_fa = goog.require('goog.i18n.DateTimeSymbols_fa');
 const DateTimeSymbols_fr = goog.require('goog.i18n.DateTimeSymbols_fr');
+const DateTimeSymbols_ko = goog.require('goog.i18n.DateTimeSymbols_ko');
 const DateTimeSymbols_pl = goog.require('goog.i18n.DateTimeSymbols_pl');
 const DateTimeSymbols_zh = goog.require('goog.i18n.DateTimeSymbols_zh');
 const GoogDate = goog.require('goog.date.Date');
@@ -387,6 +388,58 @@ testSuite({
     assertParsedTimeEquals(0, 30, 0, 0, parser, '23:90');
   },
 
+  testTimeParsing_predictive() {
+    const opts =
+        /** @type {!DateTimeParse.ParseOptions} */ ({predictive: true});
+
+    let parser = new DateTimeParse('h:mm a');
+    assertParsedTimeEquals(5, 0, 0, 0, parser, '5', opts);
+    assertParsedTimeEquals(5, 0, 0, 0, parser, '5:', opts);
+    assertParsedTimeEquals(5, 40, 0, 0, parser, '5:4', opts);
+    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44', opts);
+    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 ', opts);
+    assertParseFails(parser, '5:44 x', opts);
+    assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44 p', opts);
+    assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44 pm', opts);
+    assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44 pmx', opts);
+
+    parser = new DateTimeParse('HH:mm');
+    assertParsedTimeEquals(0, 0, 0, 0, parser, '0', opts);
+    // 50 % 24 == 2
+    assertParsedTimeEquals(2, 0, 0, 0, parser, '5', opts);
+    assertParsedTimeEquals(2, 0, 0, 0, parser, '50', opts);
+    assertParseFails(parser, '5:', opts);
+    assertParsedTimeEquals(5, 0, 0, 0, parser, '05:', opts);
+    assertParsedTimeEquals(5, 40, 0, 0, parser, '05:4', opts);
+    assertParsedTimeEquals(5, 44, 0, 0, parser, '05:44', opts);
+    assertParsedTimeEquals(17, 44, 0, 0, parser, '17:44', opts);
+    // overflow
+    assertParsedTimeEquals(18, 1, 0, 0, parser, '17:061', opts);
+
+    parser = new DateTimeParse('a h시 m분', DateTimeSymbols_ko);
+    assertParsedTimeEquals(10, 0, 0, 0, parser, '오전 10', opts);
+    assertParsedTimeEquals(10, 2, 0, 0, parser, '오전 10시 2', opts);
+    assertParsedTimeEquals(10, 2, 0, 0, parser, '오전 10시 2분', opts);
+    assertParsedTimeEquals(16, 20, 0, 0, parser, '오후 4시 20', opts);
+    assertParsedTimeEquals(16, 20, 0, 0, parser, '오후 4시 20분', opts);
+  },
+
+  testTimeParsing_predictiveValidate() {
+    const opts =
+        /** @type {!DateTimeParse.ParseOptions} */ (
+            {predictive: true, validate: true});
+
+    const parser = new DateTimeParse('HH:mm');
+    assertParsedTimeEquals(5, 0, 0, 0, parser, '05', opts);
+    assertParsedTimeEquals(12, 34, 0, 0, parser, '12:34', opts);
+    assertParseFails(parser, '5', opts);
+    assertParseFails(parser, '50', opts);
+    assertParseFails(parser, '123', opts);
+    assertParseFails(parser, '123:45', opts);
+    assertParseFails(parser, '12:345', opts);
+    assertParseFails(parser, '5:', opts);
+  },
+
   testEnglishDate() {
     const parser = new DateTimeParse('yyyy MMM dd hh:mm');
     const date = new Date(0);
@@ -498,6 +551,16 @@ testSuite({
 
     date.setDate(30);
     assertParsedDateEquals(2006, 9 - 1, 25, parser, 'Mon, 09/2006');
+  },
+
+  testPredictiveOption() {
+    const opts =
+        /** @type {!DateTimeParse.ParseOptions} */ ({predictive: true});
+
+    const parser = new DateTimeParse('h \'text\' m');
+    assertParsedTimeEquals(9, 5, 0, 0, parser, '9 text 5', opts);
+    assertParsedTimeEquals(9, 0, 0, 0, parser, '9 te', opts);
+    assertParseFails(parser, '9 te 5', opts);
   },
 
   testValidateOption() {
@@ -718,5 +781,19 @@ testSuite({
     assertThrows(() => {
       parser.parse('11/22, 1999', null);
     });
+  },
+
+  testPredictiveParseWithUnsupportedPattern() {
+    const date = new Date();
+    const opts =
+        /** @type {!DateTimeParse.ParseOptions} */ ({predictive: true});
+
+    // Abutting runs of numbers are not supported for predictive parsing.
+    let parser = new DateTimeParse('hhmm');
+    assertThrows(() => parser.parse('1234', date, opts));
+
+    // The year field is not supported for predictive parsing.
+    parser = new DateTimeParse('yyyy');
+    assertThrows(() => parser.parse('1234', date, opts));
   },
 });
