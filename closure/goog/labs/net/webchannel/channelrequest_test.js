@@ -49,6 +49,7 @@ class MockWebChannelBase {
   constructor() {
     this.isClosed = () => false;
     this.isActive = () => true;
+    this.usesFetchStreams = () => false;
     this.shouldUseSecondaryDomains = () => false;
     this.completedRequests = [];
     this.onRequestComplete = function(request) {

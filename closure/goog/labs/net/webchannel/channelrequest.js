@@ -255,6 +255,39 @@ goog.labs.net.webChannel.ChannelRequest = function(
    * @private {boolean}
    */
   this.firstByteReceived_ = false;
+
+  /**
+   * The current state of fetch responses if webchannel is using WHATWG
+   * fetch/streams.
+   * @private {!goog.labs.net.webChannel.FetchResponseState}
+   */
+  this.fetchResponseState_ = new goog.labs.net.webChannel.FetchResponseState();
+};
+
+/**
+ * A collection of fetch/stream properties.
+ * @struct
+ * @constructor
+ */
+goog.labs.net.webChannel.FetchResponseState = function() {
+  'use strict';
+  /**
+   * The TextDecoder for decoding Uint8Array responses from fetch request.
+   * @type {?goog.global.TextDecoder}
+   */
+  this.textDecoder = null;
+
+  /**
+   * The unconsumed response text from the fetch requests.
+   * @type {string}
+   */
+  this.responseBuffer = '';
+
+  /**
+   * Whether or not the response body has arrived.
+   * @type {boolean}
+   */
+  this.responseArrivedForFetch = false;
 };
 
 
@@ -263,10 +296,10 @@ goog.scope(function() {
 const WebChannel = goog.net.WebChannel;
 const Channel = goog.labs.net.webChannel.Channel;
 const ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
+const FetchResponseState = goog.labs.net.webChannel.FetchResponseState;
 const requestStats = goog.labs.net.webChannel.requestStats;
 const WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
 const environment = goog.labs.net.webChannel.environment;
-
 
 /**
  * Default timeout in MS for a request. The server must return data within this
@@ -360,7 +393,7 @@ ChannelRequest.errorStringFromCode = function(errorCode, statusCode) {
 
 /**
  * Sentinel value used to indicate an invalid chunk in a multi-chunk response.
- * @private {Object}
+ * @private {!Object}
  */
 ChannelRequest.INVALID_CHUNK_ = {};
 
@@ -368,7 +401,7 @@ ChannelRequest.INVALID_CHUNK_ = {};
 /**
  * Sentinel value used to indicate an incomplete chunk in a multi-chunk
  * response.
- * @private {Object}
+ * @private {!Object}
  */
 ChannelRequest.INCOMPLETE_CHUNK_ = {};
 
@@ -514,8 +547,13 @@ ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
   // send the request either as a POST or GET
   this.xmlHttpChunkStart_ = 0;
   const useSecondaryDomains = this.channel_.shouldUseSecondaryDomains();
-  this.xmlHttp_ =
-      this.channel_.createXhrIo(useSecondaryDomains ? hostPrefix : null);
+  this.fetchResponseState_ = new FetchResponseState();
+  // If the request is a GET request, start a backchannel to transfer streaming
+  // data. Note that WebChannel GET request can also be used for closing the
+  // channel as in method ChannelRequest#sendCloseRequest.
+  // The second parameter of Channel#createXhrIo is JS only.
+  this.xmlHttp_ = this.channel_.createXhrIo(
+      useSecondaryDomains ? hostPrefix : null, !this.postData_);
 
   if (this.readyStateChangeThrottleMs_ > 0) {
     this.readyStateChangeThrottle_ = new goog.async.Throttle(
@@ -586,7 +624,7 @@ ChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
     }
   } catch (ex) {
     this.channelDebug_.debug('Failed call to OnXmlHttpReadyStateChanged_');
-    if (this.xmlHttp_ && this.xmlHttp_.getResponseText()) {
+    if (this.hasResponseBody_()) {
       const channelRequest = this;
       this.channelDebug_.dumpException(ex, function() {
         'use strict';
@@ -618,7 +656,7 @@ ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   if (readyState < goog.net.XmlHttp.ReadyState.INTERACTIVE ||
       (readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE &&
        !environment.isPollingRequired() &&  // otherwise, go on to startPolling
-       !this.xmlHttp_.getResponseText())) {
+       !this.hasResponseBody_())) {
     return;  // not yet ready
   }
 
@@ -641,8 +679,9 @@ ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
 
   const status = this.xmlHttp_.getStatus();
   this.lastStatusCode_ = status;
-  const responseText = this.xmlHttp_.getResponseText();
-  if (!responseText) {
+  const responseText = this.decodeXmlHttpResponse_();
+
+  if (!this.hasResponseBody_()) {
     const channelRequest = this;
     this.channelDebug_.debug(function() {
       'use strict';
@@ -787,6 +826,94 @@ ChannelRequest.prototype.setDecodeInitialResponse = function() {
 };
 
 
+
+/**
+ * Decodes the responses from XhrIo object.
+ * @returns {string} responseText
+ * @private
+ */
+ChannelRequest.prototype.decodeXmlHttpResponse_ = function() {
+  'use strict';
+  if (!this.useFetchStreamsForResponse_()) {
+    return this.xmlHttp_.getResponseText();
+  }
+  const responseChunks =
+      /** @type {!Array<!Uint8Array>} */ (this.xmlHttp_.getResponse());
+  let responseText = '';
+  const responseLength = responseChunks.length;
+  const requestCompleted =
+      this.xmlHttp_.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE;
+  if (!this.fetchResponseState_.textDecoder) {
+    if (typeof TextDecoder === 'undefined') {
+      this.channelDebug_.severe(
+          'TextDecoder is not supported by this browser.');
+      this.cleanup_();
+      this.dispatchFailure_();
+      return '';
+    }
+    this.fetchResponseState_.textDecoder = new goog.global.TextDecoder();
+  }
+  for (let i = 0; i < responseLength; i++) {
+    this.fetchResponseState_.responseArrivedForFetch = true;
+    const isLastChunk = requestCompleted && i == responseLength - 1;
+    responseText += this.fetchResponseState_.textDecoder.decode(
+        responseChunks[i], {stream: isLastChunk});
+  }
+  responseChunks.splice(0, responseLength);
+  this.fetchResponseState_.responseBuffer += responseText;
+  this.xmlHttpChunkStart_ = 0;
+  return this.fetchResponseState_.responseBuffer;
+};
+
+
+/**
+ * Whether or not the response has response body.
+ * @private
+ * @returns {boolean}
+ */
+ChannelRequest.prototype.hasResponseBody_ = function() {
+  'use strict';
+  if (!this.xmlHttp_) {
+    return false;
+  }
+  if (this.fetchResponseState_.responseArrivedForFetch) {
+    return true;
+  }
+  return !(!this.xmlHttp_.getResponseText() && !this.xmlHttp_.getResponse());
+};
+
+/**
+ * Whether or not the response body is streamed.
+ * @private
+ * @returns {boolean}
+ */
+ChannelRequest.prototype.useFetchStreamsForResponse_ = function() {
+  'use strict';
+  if (!this.xmlHttp_) {
+    return false;
+  }
+  return (
+      this.verb_ == 'GET' && this.type_ != ChannelRequest.Type_.CLOSE_REQUEST &&
+      this.channel_.usesFetchStreams());
+};
+
+
+/**
+ * Resets the response buffer if the saved chunk has been processed.
+ * @private
+ * @param {string|!Object|undefined} chunkText
+ */
+ChannelRequest.prototype.maybeResetBuffer_ = function(chunkText) {
+  'use strict';
+  if (this.useFetchStreamsForResponse_() &&
+      chunkText != ChannelRequest.INCOMPLETE_CHUNK_ &&
+      chunkText != ChannelRequest.INVALID_CHUNK_) {
+    this.fetchResponseState_.responseBuffer = '';
+    this.xmlHttpChunkStart_ = 0;
+  }
+};
+
+
 /**
  * Decodes the next set of available chunks in the response.
  * @param {number} readyState The value of readyState.
@@ -798,8 +925,9 @@ ChannelRequest.prototype.decodeNextChunks_ = function(
   'use strict';
   let decodeNextChunksSuccessful = true;
 
+  let chunkText;
   while (!this.cancelled_ && this.xmlHttpChunkStart_ < responseText.length) {
-    const chunkText = this.getNextChunk_(responseText);
+    chunkText = this.getNextChunk_(responseText);
     if (chunkText == ChannelRequest.INCOMPLETE_CHUNK_) {
       if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
         // should have consumed entire response when the request is done
@@ -824,8 +952,11 @@ ChannelRequest.prototype.decodeNextChunks_ = function(
     }
   }
 
+  this.maybeResetBuffer_(chunkText);
+
   if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE &&
-      responseText.length == 0) {
+      responseText.length == 0 &&
+      !this.fetchResponseState_.responseArrivedForFetch) {
     // also an error if we didn't get any response
     this.lastError_ = ChannelRequest.Error.NO_DATA;
     requestStats.notifyStatEvent(requestStats.Stat.REQUEST_NO_DATA);
@@ -897,7 +1028,7 @@ ChannelRequest.prototype.startPolling_ = function() {
  * by a newline followed by the data.
  *
  * @param {string} responseText The response text from the XMLHTTP response.
- * @return {string|Object} The next chunk string or a sentinel object
+ * @return {string|!Object} The next chunk string or a sentinel object
  *                         indicating a special condition.
  * @private
  */

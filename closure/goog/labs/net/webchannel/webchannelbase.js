@@ -26,6 +26,7 @@ goog.require('goog.labs.net.webChannel.WireV8');
 goog.require('goog.labs.net.webChannel.environment');
 goog.require('goog.labs.net.webChannel.netUtils');
 goog.require('goog.labs.net.webChannel.requestStats');
+goog.require('goog.net.FetchXmlHttpFactory');
 goog.require('goog.net.WebChannel');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.XmlHttpFactory');
@@ -336,10 +337,10 @@ goog.labs.net.webChannel.WebChannelBase = function(
 
   /**
    * Whether or not this channel uses WHATWG Fetch/streams.
-   * Placeholder for the upcoming implementations.
    * @private {boolean}
    */
-  this.usesFetchStreams_ = false;
+  this.usesFetchStreams_ =
+      (opt_options && opt_options.useFetchStreams) || false;
 
   /**
    * The timeout in milliseconds for a back channel request. Defaults to using
@@ -2497,16 +2498,26 @@ WebChannelBase.prototype.createDataUri = function(
   return uri;
 };
 
-
 /**
  * @override
+ * @param {?string} hostPrefix The host prefix, if we need an XhrIo object
+ *     capable of calling a secondary domain.
+ * @param {boolean=} isStreaming Whether or not fetch/streams are enabled for
+ *     the underlying HTTP request.
+ * @return {!goog.net.XhrIo} A new XhrIo object.
  */
-WebChannelBase.prototype.createXhrIo = function(hostPrefix) {
+WebChannelBase.prototype.createXhrIo = function(hostPrefix, isStreaming) {
   'use strict';
   if (hostPrefix && !this.supportsCrossDomainXhrs_) {
     throw new Error('Can\'t create secondary domain capable XhrIo object.');
   }
-  const xhr = new goog.net.XhrIo(this.xmlHttpFactory_);
+  let xhr;
+  if (isStreaming && this.usesFetchStreams_ && !this.xmlHttpFactory_) {
+    xhr = new goog.net.XhrIo(
+        new goog.net.FetchXmlHttpFactory({streamBinaryChunks: true}));
+  } else {
+    xhr = new goog.net.XhrIo(this.xmlHttpFactory_);
+  }
   xhr.setWithCredentials(this.supportsCrossDomainXhrs_);
   return xhr;
 };
