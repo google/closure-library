@@ -268,8 +268,9 @@ goog.net.WebChannel.Options.prototype.requestRefreshThresholds;
 
 /**
  * This is an experimental feature to use WHATWG Fetch/streams (when supported)
- * for the backchannel. This option defaults to false now and will eventually be
- * turned on by default.
+ * for the backchannel. If a custom 'xmlHttpFactory' is speficied, this option
+ * will not be effective. This option defaults to false now and will eventually
+ * be turned on by default.
  * @type {boolean|undefined}
  */
 goog.net.WebChannel.Options.prototype.useFetchStreams;

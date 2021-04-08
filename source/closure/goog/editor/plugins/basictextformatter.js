@@ -1695,17 +1695,25 @@ goog.editor.plugins.BasicTextFormatter.prototype.isJustification_ = function(
     alignment = 'justify';
   }
 
-  var bidiPlugin = this.getFieldObject().getPluginByClassId('Bidi');
-  if (bidiPlugin) {
+  var maybeBidiPlugin = this.getFieldObject().getPluginByClassId('Bidi');
+  if (maybeBidiPlugin) {
     // BiDi aware version
+
+    /**
+     * Cast through * first so that we don't get a mismatch between PluginImpl
+     * and IBidiPlugin. Otherwise none of the properties on PluginImpl can be
+     * disambiguated.
+     */
+    var bidiPlugin =
+        /** @type {!goog.editor.plugins.BasicTextFormatter.IBidiPlugin} */ (
+            /** @type {*} */ (maybeBidiPlugin));
 
     // TODO: Since getComputedStyle is not used here, this version may be even
     // faster. If profiling confirms that it would be good to use this approach
     // in both cases. Otherwise the bidi part should be moved into an
     // execCommand so this bidi plugin dependence isn't needed here.
-    return alignment ==
-        /** @type {!goog.editor.plugins.BasicTextFormatter.IBidiPlugin} */
-        (bidiPlugin).getSelectionAlignment();
+    return alignment == bidiPlugin.getSelectionAlignment();
+
   } else {
     // BiDi unaware version
     var range = this.getRange_();

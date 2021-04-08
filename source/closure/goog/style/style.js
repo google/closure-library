@@ -20,6 +20,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.dom.vendor');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.math.Box');
@@ -1331,7 +1332,7 @@ goog.style.installSafeStyleSheet = function(safeStyleSheet, opt_node) {
       body.parentNode.insertBefore(head, body);
     }
     var el = dh.createDom(goog.dom.TagName.STYLE);
-    var nonce = goog.getScriptNonce();
+    const nonce = goog.dom.safe.getStyleNonce();
     if (nonce) {
       el.setAttribute('nonce', nonce);
     }

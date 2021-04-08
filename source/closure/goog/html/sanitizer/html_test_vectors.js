@@ -62,11 +62,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
     {input: "<iframe srcdoc=\"&lt;img src&equals;x:x onerror&equals;alert&lpar;xss&rpar;&gt;\" />",
      acceptable: [
          "",
-         "<iframe srcdoc=\"&lt;img src=&#34;about:invalid#zGoSafez&#34;/&gt;\"></iframe>",
-         "<iframe srcdoc=\"&lt;img src=&quot;about:invalid#zCSafez&quot;&gt;\"></iframe>",
-         "<iframe srcdoc=\"<img src=&quot;about:invalid#zCSafez&quot;>\"></iframe>",
-         "<iframe srcdoc=\"&lt;img src=&quot;about:invalid#zCSafez&quot; /&gt;\"></iframe>",
-         "<iframe srcdoc=\"&lt;img src=&quot;about:invalid#zTSz&quot; /&gt;\"></iframe>",
+         "<iframe></iframe>",
      ],
      name: "iframe_srcdoc"},
     {input: "<img src=\"javascript:alert('xss');\">",
@@ -15190,6 +15186,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=alternate>",
          "<link href=x rel=\"alternate\">",
+         "<link href=\"x\" rel=\"alternate\" />",
          "<link rel=\"alternate\" href=\"x\">",
          "<link rel=\"alternate\" href=\"x\"/>",
          "<link rel=\"alternate\" href=\"x\" />",
@@ -15209,6 +15206,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=author>",
          "<link href=x rel=\"author\">",
+         "<link href=\"x\" rel=\"author\" />",
          "<link rel=\"author\" href=\"x\">",
          "<link rel=\"author\" href=\"x\"/>",
          "<link rel=\"author\" href=\"x\" />",
@@ -15228,6 +15226,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=bookmark>",
          "<link href=x rel=\"bookmark\">",
+         "<link href=\"x\" rel=\"bookmark\" />",
          "<link rel=\"bookmark\" href=\"x\">",
          "<link rel=\"bookmark\" href=\"x\"/>",
          "<link rel=\"bookmark\" href=\"x\" />",
@@ -15247,6 +15246,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=canonical>",
          "<link href=x rel=\"canonical\">",
+         "<link href=\"x\" rel=\"canonical\" />",
          "<link rel=\"canonical\" href=\"x\">",
          "<link rel=\"canonical\" href=\"x\"/>",
          "<link rel=\"canonical\" href=\"x\" />",
@@ -15266,6 +15266,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=cite>",
          "<link href=x rel=\"cite\">",
+         "<link href=\"x\" rel=\"cite\" />",
          "<link rel=\"cite\" href=\"x\">",
          "<link rel=\"cite\" href=\"x\"/>",
          "<link rel=\"cite\" href=\"x\" />",
@@ -15285,6 +15286,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=help>",
          "<link href=x rel=\"help\">",
+         "<link href=\"x\" rel=\"help\" />",
          "<link rel=\"help\" href=\"x\">",
          "<link rel=\"help\" href=\"x\"/>",
          "<link rel=\"help\" href=\"x\" />",
@@ -15304,6 +15306,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=icon>",
          "<link href=x rel=\"icon\">",
+         "<link href=\"x\" rel=\"icon\" />",
          "<link rel=\"icon\" href=\"x\">",
          "<link rel=\"icon\" href=\"x\"/>",
          "<link rel=\"icon\" href=\"x\" />",
@@ -15323,6 +15326,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=license>",
          "<link href=x rel=\"license\">",
+         "<link href=\"x\" rel=\"license\" />",
          "<link rel=\"license\" href=\"x\">",
          "<link rel=\"license\" href=\"x\"/>",
          "<link rel=\"license\" href=\"x\" />",
@@ -15342,6 +15346,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=next>",
          "<link href=x rel=\"next\">",
+         "<link href=\"x\" rel=\"next\" />",
          "<link rel=\"next\" href=\"x\">",
          "<link rel=\"next\" href=\"x\"/>",
          "<link rel=\"next\" href=\"x\" />",
@@ -15361,6 +15366,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=prefetch>",
          "<link href=x rel=\"prefetch\">",
+         "<link href=\"x\" rel=\"prefetch\" />",
          "<link rel=\"prefetch\" href=\"x\">",
          "<link rel=\"prefetch\" href=\"x\"/>",
          "<link rel=\"prefetch\" href=\"x\" />",
@@ -15380,6 +15386,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=dns-prefetch>",
          "<link href=x rel=\"dns-prefetch\">",
+         "<link href=\"x\" rel=\"dns-prefetch\" />",
          "<link rel=\"dns-prefetch\" href=\"x\">",
          "<link rel=\"dns-prefetch\" href=\"x\"/>",
          "<link rel=\"dns-prefetch\" href=\"x\" />",
@@ -15399,6 +15406,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=prerender>",
          "<link href=x rel=\"prerender\">",
+         "<link href=\"x\" rel=\"prerender\" />",
          "<link rel=\"prerender\" href=\"x\">",
          "<link rel=\"prerender\" href=\"x\"/>",
          "<link rel=\"prerender\" href=\"x\" />",
@@ -15418,6 +15426,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=preconnect>",
          "<link href=x rel=\"preconnect\">",
+         "<link href=\"x\" rel=\"preconnect\" />",
          "<link rel=\"preconnect\" href=\"x\">",
          "<link rel=\"preconnect\" href=\"x\"/>",
          "<link rel=\"preconnect\" href=\"x\" />",
@@ -15437,6 +15446,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=preload>",
          "<link href=x rel=\"preload\">",
+         "<link href=\"x\" rel=\"preload\" />",
          "<link rel=\"preload\" href=\"x\">",
          "<link rel=\"preload\" href=\"x\"/>",
          "<link rel=\"preload\" href=\"x\" />",
@@ -15456,6 +15466,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=prev>",
          "<link href=x rel=\"prev\">",
+         "<link href=\"x\" rel=\"prev\" />",
          "<link rel=\"prev\" href=\"x\">",
          "<link rel=\"prev\" href=\"x\"/>",
          "<link rel=\"prev\" href=\"x\" />",
@@ -15475,6 +15486,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=search>",
          "<link href=x rel=\"search\">",
+         "<link href=\"x\" rel=\"search\" />",
          "<link rel=\"search\" href=\"x\">",
          "<link rel=\"search\" href=\"x\"/>",
          "<link rel=\"search\" href=\"x\" />",
@@ -15494,6 +15506,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "<link href=x rel=subresource>",
          "<link href=x rel=\"subresource\">",
+         "<link href=\"x\" rel=\"subresource\" />",
          "<link rel=\"subresource\" href=\"x\">",
          "<link rel=\"subresource\" href=\"x\"/>",
          "<link rel=\"subresource\" href=\"x\" />",
@@ -16882,13 +16895,6 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "<table><td></td></table>",
      ],
      name: "contract_iframe_scriptinside"},
-    {input: "<iframe srcdoc=\"<script>alert()</script>\">",
-     acceptable: [
-         "<iframe srcdoc></iframe>",
-         "<iframe srcdoc=\"\"></iframe>",
-         "",
-     ],
-     name: "contract_iframe_srcdoc"},
     {input: "<iframe loading=\"x\"></iframe>",
      acceptable: [
          "<iframe></iframe>",
