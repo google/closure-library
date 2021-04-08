@@ -62,11 +62,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
     {input: "<iframe srcdoc=\"&lt;img src&equals;x:x onerror&equals;alert&lpar;xss&rpar;&gt;\" />",
      acceptable: [
          "",
-         "<iframe srcdoc=\"&lt;img src=&#34;about:invalid#zGoSafez&#34;/&gt;\"></iframe>",
-         "<iframe srcdoc=\"&lt;img src=&quot;about:invalid#zCSafez&quot;&gt;\"></iframe>",
-         "<iframe srcdoc=\"<img src=&quot;about:invalid#zCSafez&quot;>\"></iframe>",
-         "<iframe srcdoc=\"&lt;img src=&quot;about:invalid#zCSafez&quot; /&gt;\"></iframe>",
-         "<iframe srcdoc=\"&lt;img src=&quot;about:invalid#zTSz&quot; /&gt;\"></iframe>",
+         "<iframe></iframe>",
      ],
      name: "iframe_srcdoc"},
     {input: "<img src=\"javascript:alert('xss');\">",
@@ -16899,13 +16895,6 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "<table><td></td></table>",
      ],
      name: "contract_iframe_scriptinside"},
-    {input: "<iframe srcdoc=\"<script>alert()</script>\">",
-     acceptable: [
-         "<iframe srcdoc></iframe>",
-         "<iframe srcdoc=\"\"></iframe>",
-         "",
-     ],
-     name: "contract_iframe_srcdoc"},
     {input: "<iframe loading=\"x\"></iframe>",
      acceptable: [
          "<iframe></iframe>",
