@@ -26,6 +26,7 @@ const googDom = goog.require('goog.dom');
 const googObject = goog.require('goog.object');
 const googStyle = goog.require('goog.style');
 const jsunit = goog.require('goog.testing.jsunit');
+const safe = goog.require('goog.dom.safe');
 const testSuite = goog.require('goog.testing.testSuite');
 const testing = goog.require('goog.html.testing');
 const userAgent = goog.require('goog.userAgent');
@@ -118,9 +119,9 @@ testSuite({
     mockUserAgent = new MockUserAgent();
     mockUserAgent.install();
 
-    if (!goog.getScriptNonce()) {
+    if (!safe.getStyleNonce()) {
       /** @suppress {visibility} suppression added to enable type checking */
-      goog.cspNonce_ = 'thisIsANonce';
+      safe.cspStyleNonce_ = 'thisIsANonce';
     }
   },
 
@@ -1023,9 +1024,9 @@ testSuite({
         googStyle.installSafeStyleSheet(testing.newSafeStyleSheetForTest(''));
 
     const styles = document.head.querySelectorAll('style[nonce]');
-    assert(styles.length > 0);
+    assert(styles.length > 1);
     assertEquals(
-        goog.cspNonce_, styles[styles.length - 1].getAttribute('nonce'));
+        safe.cspStyleNonce_, styles[styles.length - 1].getAttribute('nonce'));
 
     googStyle.uninstallStyles(result);
   },

@@ -22,6 +22,7 @@ goog.provide('goog.cssom.CssRuleType');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 
 
 /**
@@ -373,7 +374,7 @@ goog.cssom.addCssText = function(cssText, opt_domHelper) {
   var cssNode = domHelper.createElement(goog.dom.TagName.STYLE);
 
   // If a CSP nonce is present, propagate it to style blocks
-  var nonce = goog.getScriptNonce();
+  const nonce = goog.dom.safe.getStyleNonce();
   if (nonce) {
     cssNode.setAttribute('nonce', nonce);
   }
