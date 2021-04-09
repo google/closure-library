@@ -64,7 +64,7 @@ function DebugError(msg = undefined, cause = undefined) {
 goog.inherits(DebugError, Error);
 
 
-/** @override */
+/** @override @type {string} */
 DebugError.prototype.name = 'CustomError';
 
 

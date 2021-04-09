@@ -33,6 +33,7 @@ goog.events.EventId = function(eventId) {
 
 /**
  * @override
+ * @return {string}
  */
 goog.events.EventId.prototype.toString = function() {
   'use strict';

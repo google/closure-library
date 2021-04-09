@@ -81,6 +81,7 @@ goog.events.Event.prototype.hasPropagationStopped = function() {
 
 /**
  * Stops event propagation.
+ * @return {void}
  */
 goog.events.Event.prototype.stopPropagation = function() {
   'use strict';
@@ -90,6 +91,7 @@ goog.events.Event.prototype.stopPropagation = function() {
 
 /**
  * Prevents the default action, for example a link redirecting to a url.
+ * @return {void}
  */
 goog.events.Event.prototype.preventDefault = function() {
   'use strict';
@@ -102,6 +104,7 @@ goog.events.Event.prototype.preventDefault = function() {
  * `e.stopPropagation()`, but can be used as the callback argument of
  * {@link goog.events.listen} without declaring another function.
  * @param {!goog.events.Event} e An event.
+ * @return {void}
  */
 goog.events.Event.stopPropagation = function(e) {
   'use strict';
@@ -114,6 +117,7 @@ goog.events.Event.stopPropagation = function(e) {
  * `e.preventDefault()`, but can be used as the callback argument of
  * {@link goog.events.listen} without declaring another function.
  * @param {!goog.events.Event} e An event.
+ * @return {void}
  */
 goog.events.Event.preventDefault = function(e) {
   'use strict';

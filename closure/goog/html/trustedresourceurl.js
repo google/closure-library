@@ -119,6 +119,7 @@ goog.html.TrustedResourceUrl.prototype.implementsGoogI18nBidiDirectionalString =
 /**
  * Returns this URLs directionality, which is always `LTR`.
  * @override
+ * @return {!goog.i18n.bidi.Dir}
  */
 goog.html.TrustedResourceUrl.prototype.getDirection = function() {
   'use strict';

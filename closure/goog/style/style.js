@@ -49,6 +49,7 @@ goog.requireType('goog.events.Event');
  *     of style names to style values.
  * @param {string|number|boolean=} opt_value If style was a string, then this
  *     should be the value.
+ * @return {void}
  */
 goog.style.setStyle = function(element, style, opt_value) {
   'use strict';
@@ -367,6 +368,7 @@ goog.style.getComputedTransform = function(element) {
  * @param {Element} el Element to move.
  * @param {string|number|goog.math.Coordinate} arg1 Left position or coordinate.
  * @param {string|number=} opt_arg2 Top position.
+ * @return {void}
  */
 goog.style.setPosition = function(el, arg1, opt_arg2) {
   'use strict';
@@ -875,6 +877,7 @@ goog.style.getClientPosition = function(el) {
  * @param {number|goog.math.Coordinate} x Left position of the element's margin
  *     box or a coordinate object.
  * @param {number=} opt_y Top position of the element's margin box.
+ * @return {void}
  */
 goog.style.setPageOffset = function(el, x, opt_y) {
   'use strict';
@@ -912,6 +915,7 @@ goog.style.setPageOffset = function(el, x, opt_y) {
  *     size object.
  * @param {string|number=} opt_h Height of the element. Required if w is not a
  *     size object.
+ * @return {void}
  */
 goog.style.setSize = function(element, w, opt_h) {
   'use strict';
@@ -1155,6 +1159,7 @@ goog.style.getOpacity = function(el) {
  * @param {Element} el Elements whose opacity has to be set.
  * @param {number|string} alpha Opacity between 0 and 1 or an empty string
  *     {@code ''} to clear the opacity.
+ * @return {void}
  */
 goog.style.setOpacity = function(el, alpha) {
   'use strict';
@@ -1186,6 +1191,7 @@ goog.style.setOpacity = function(el, alpha) {
  *
  * @param {Element} el The element to set background on.
  * @param {string} src The image source URL.
+ * @return {void}
  */
 goog.style.setTransparentBackgroundImage = function(el, src) {
   'use strict';
@@ -1243,6 +1249,7 @@ goog.style.clearTransparentBackgroundImage = function(el) {
  * @param {Element} el Element to show or hide.
  * @param {*} display True to render the element in its default style,
  *     false to disable rendering the element.
+ * @return {void}
  * @deprecated Use goog.style.setElementShown instead.
  */
 goog.style.showElement = function(el, display) {
@@ -1270,6 +1277,7 @@ goog.style.showElement = function(el, display) {
  * @param {Element} el Element to show or hide.
  * @param {*} isShown True to render the element in its default style,
  *     false to disable rendering the element.
+ * @return {void}
  */
 goog.style.setElementShown = function(el, isShown) {
   'use strict';
@@ -1369,6 +1377,7 @@ goog.style.uninstallStyles = function(styleSheet) {
  *     installSafeStyleSheet.
  * @param {!goog.html.SafeStyleSheet} safeStyleSheet The new content of the
  *     stylesheet.
+ * @return {void}
  */
 goog.style.setSafeStyleSheet = function(element, safeStyleSheet) {
   'use strict';
@@ -1419,6 +1428,7 @@ goog.style.setPreWrap = function(el) {
  * Sets 'display: inline-block' for an element (cross-browser).
  * @param {Element} el Element to which the inline-block display style is to be
  *    applied.
+ * @return {void}
  * @see ../demos/inline_block_quirks.html
  * @see ../demos/inline_block_standards.html
  */

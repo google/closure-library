@@ -126,7 +126,7 @@ goog.html.SafeStyle = class {
 
 /**
  * @override
- * @const
+ * @const {boolean}
  */
 goog.html.SafeStyle.prototype.implementsGoogStringTypedString = true;
 

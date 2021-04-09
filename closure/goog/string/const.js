@@ -80,6 +80,7 @@ goog.string.Const.prototype.implementsGoogStringTypedString = true;
  *
  * @see goog.string.Const#unwrap
  * @override
+ * @return {string}
  */
 goog.string.Const.prototype.getTypedStringValue = function() {
   'use strict';
@@ -96,6 +97,7 @@ if (goog.DEBUG) {
    *
    * @see goog.string.Const#unwrap
    * @override
+   * @return {string}
    */
   goog.string.Const.prototype.toString = function() {
     'use strict';

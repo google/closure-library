@@ -142,6 +142,7 @@ goog.structs.isEmpty = function(col) {
 /**
  * Removes all the elements from the collection.
  * @param {Object} col The collection-like object.
+ * @return {void}
  */
 goog.structs.clear = function(col) {
   'use strict';
@@ -167,6 +168,7 @@ goog.structs.clear = function(col) {
  *     notion of keys, and the collection) and the return value is irrelevant.
  * @param {T=} opt_obj The object to be used as the value of 'this'
  *     within `f`.
+ * @return {void}
  * @template T,S
  * @deprecated Use a more specific method, e.g. goog.array.forEach,
  *     goog.object.forEach, or for-of.

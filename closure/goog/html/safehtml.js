@@ -133,7 +133,7 @@ goog.html.SafeHtml.prototype.getDirection = function() {
 
 /**
  * @override
- * @const
+ * @const {boolean}
  */
 goog.html.SafeHtml.prototype.implementsGoogStringTypedString = true;
 
@@ -448,6 +448,7 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
  * E.g. STRONG is fine but SCRIPT throws because it changes context. See
  * goog.html.SafeHtml.create for an explanation of allowed tags.
  * @param {string} tagName
+ * @return {void}
  * @throws {!Error} If invalid tag name is provided.
  * @package
  */

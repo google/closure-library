@@ -19,6 +19,7 @@ goog.provide('goog.object');
  *     for every element. This function takes 3 arguments (the value, the
  *     key and the object) and the return value is ignored.
  * @param {T=} opt_obj This is used as the 'this' object within f.
+ * @return {void}
  * @template T,K,V
  */
 goog.object.forEach = function(obj, f, opt_obj) {
@@ -354,6 +355,7 @@ goog.object.isEmpty = function(obj) {
  * Removes all key value pairs from the object/map/hash.
  *
  * @param {Object} obj The object to clear.
+ * @return {void}
  */
 goog.object.clear = function(obj) {
   'use strict';
@@ -387,6 +389,7 @@ goog.object.remove = function(obj, key) {
  * @param {Object<K,V>} obj The object to which to add the key-value pair.
  * @param {string} key The key to add.
  * @param {V} val The value to add.
+ * @return {void}
  * @template K,V
  */
 goog.object.add = function(obj, key, val) {
@@ -424,6 +427,7 @@ goog.object.get = function(obj, key, opt_val) {
  * @param {string} key The key to add.
  * @param {V} value The value to add.
  * @template K,V
+ * @return {void}
  */
 goog.object.set = function(obj, key, value) {
   'use strict';
@@ -591,6 +595,7 @@ goog.object.PROTOTYPE_FIELDS_ = [
  *     `var_args`.
  * @param {...(Object|null|undefined)} var_args The objects from which values
  *     will be copied.
+ * @return {void}
  * @deprecated Prefer Object.assign
  */
 goog.object.extend = function(target, var_args) {
