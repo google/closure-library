@@ -48,6 +48,11 @@ goog.labs.userAgent.platform.isIphone = function() {
 
 
 /**
+ * Returns whether the platform is iPad.
+ * Note that iPadOS 13+ spoofs macOS Safari by default in its user agent, and in
+ * this scenario the platform will not be recognized as iPad. If you must have
+ * iPad-specific behavior, use
+ * {@link goog.labs.userAgent.extra.isSafariDesktopOnMobile}.
  * @return {boolean} Whether the platform is iPad.
  */
 goog.labs.userAgent.platform.isIpad = function() {
@@ -57,6 +62,11 @@ goog.labs.userAgent.platform.isIpad = function() {
 
 
 /**
+ * Returns whether the platform is iOS.
+ * Note that iPadOS 13+ spoofs macOS Safari by default in its user agent, and in
+ * this scenario the platform will not be recognized as iOS. If you must have
+ * iPad-specific behavior, use
+ * {@link goog.labs.userAgent.extra.isSafariDesktopOnMobile}.
  * @return {boolean} Whether the platform is iOS.
  */
 goog.labs.userAgent.platform.isIos = function() {
