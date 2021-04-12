@@ -553,6 +553,11 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
         url instanceof goog.html.TrustedResourceUrl,
         'URL must be TrustedResourceUrl because "rel" contains "stylesheet"');
     link.href = goog.html.TrustedResourceUrl.unwrap(url);
+    const win = link.ownerDocument && link.ownerDocument.defaultView;
+    const nonce = goog.dom.safe.getStyleNonce(win);
+    if (nonce) {
+      link.setAttribute('nonce', nonce);
+    }
   } else if (url instanceof goog.html.TrustedResourceUrl) {
     link.href = goog.html.TrustedResourceUrl.unwrap(url);
   } else if (url instanceof goog.html.SafeUrl) {
