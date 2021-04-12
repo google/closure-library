@@ -918,7 +918,9 @@ goog.ui.KeyboardShortcutHandler.setShortcut_ = function(
       // prefix (since the new strokes end at an existing node), or an existing
       // shortcut would be triggered by the prefix to this new shortcut (since
       // there is already a terminal node on the path we are trying to create).
-      throw new Error('Keyboard shortcut conflicts with existing shortcut');
+      throw new Error(
+          'Keyboard shortcut conflicts with existing shortcut: ' +
+          node.shortcut);
     }
   });
 
