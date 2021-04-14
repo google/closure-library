@@ -349,6 +349,7 @@ goog.constructNamespace_ = function(name, object, overwriteImplicit) {
  * @param {?Window=} opt_window The window context used to retrieve the nonce.
  *     Defaults to global context.
  * @return {string} CSP nonce or empty string if no nonce is present.
+ * @deprecated Use goog.dom.safe.getScriptNonce.
  */
 goog.getScriptNonce = function(opt_window) {
   if (opt_window && opt_window != goog.global) {
