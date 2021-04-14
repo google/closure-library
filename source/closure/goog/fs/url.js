@@ -31,6 +31,7 @@ goog.fs.url.createObjectUrl = function(obj) {
  * Throws an error if the browser does not support Object Urls.
  *
  * @param {string} url The URL to revoke.
+ * @return {void}
  */
 goog.fs.url.revokeObjectUrl = function(url) {
   'use strict';
@@ -52,6 +53,7 @@ goog.fs.url.UrlObject_.prototype.createObjectURL = function(arg) {};
 
 /**
  * @param {string} s
+ * @return {void}
  */
 goog.fs.url.UrlObject_.prototype.revokeObjectURL = function(s) {};
 

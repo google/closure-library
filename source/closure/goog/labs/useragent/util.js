@@ -61,6 +61,7 @@ goog.labs.userAgent.util.userAgent_ =
  * navigator.userAgent object by setting this string. Set to null to use the
  * browser object instead.
  * @param {?string=} opt_userAgent The User-Agent override.
+ * @return {void}
  */
 goog.labs.userAgent.util.setUserAgent = function(opt_userAgent) {
   'use strict';

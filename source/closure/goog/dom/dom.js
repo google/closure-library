@@ -1240,6 +1240,7 @@ goog.dom.append = function(parent, var_args) {
 /**
  * Removes all the child nodes on a DOM node.
  * @param {Node} node Node to remove children from.
+ * @return {void}
  */
 goog.dom.removeChildren = function(node) {
   'use strict';
@@ -1275,6 +1276,7 @@ goog.dom.insertSiblingBefore = function(newNode, refNode) {
  * sibling). If the reference node has no parent, then does nothing.
  * @param {Node} newNode Node to insert.
  * @param {Node} refNode Reference node to insert after.
+ * @return {void}
  */
 goog.dom.insertSiblingAfter = function(newNode, refNode) {
   'use strict';
@@ -1295,6 +1297,7 @@ goog.dom.insertSiblingAfter = function(newNode, refNode) {
  * @param {Node} child The element to insert.
  * @param {number} index The index at which to insert the new child node. Must
  *     not be negative.
+ * @return {void}
  */
 goog.dom.insertChildAt = function(parent, child, index) {
   'use strict';
@@ -1867,6 +1870,7 @@ goog.dom.getFrameContentWindow = function(frame) {
  * Sets the text content of a node, with cross-browser support.
  * @param {Node} node The node to change the text content of.
  * @param {string|number} text The value that should replace the node's content.
+ * @return {void}
  */
 goog.dom.setTextContent = function(node, text) {
   'use strict';
@@ -2106,6 +2110,7 @@ goog.dom.isFocusableTabIndex = function(element) {
  * @param {Element} element Element whose tab index is to be changed.
  * @param {boolean} enable Whether to set or remove a tab index on the element
  *     that supports keyboard focus.
+ * @return {void}
  */
 goog.dom.setFocusableTabIndex = function(element, enable) {
   'use strict';

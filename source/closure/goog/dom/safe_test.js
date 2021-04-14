@@ -176,7 +176,8 @@ testSuite({
 
   testsetLinkHrefAndRel_trustedResourceUrl() {
     const mockLink =
-        /** @type {!HTMLLinkElement} */ ({'href': null, 'rel': null});
+        /** @type {!HTMLLinkElement} */ (
+            {'href': null, 'rel': null, setAttribute: () => {}});
 
     const url =
         TrustedResourceUrl.fromConstant(Const.from('javascript:trusted();'));
@@ -190,7 +191,8 @@ testSuite({
 
   testsetLinkHrefAndRel_safeUrl() {
     const mockLink =
-        /** @type {!HTMLLinkElement} */ ({'href': null, 'rel': null});
+        /** @type {!HTMLLinkElement} */ (
+            {'href': null, 'rel': null, setAttribute: () => {}});
 
     const url = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
     assertThrows(() => {
@@ -203,7 +205,8 @@ testSuite({
 
   testsetLinkHrefAndRel_string() {
     const mockLink =
-        /** @type {!HTMLLinkElement} */ ({'href': null, 'rel': null});
+        /** @type {!HTMLLinkElement} */ (
+            {'href': null, 'rel': null, setAttribute: () => {}});
 
     assertThrows(() => {
       safe.setLinkHrefAndRel(

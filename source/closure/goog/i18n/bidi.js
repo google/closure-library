@@ -869,6 +869,7 @@ goog.i18n.bidi.detectRtlDirectionality = function(str, opt_isHtml) {
  *     2. A number (positive = LRT, negative = RTL, 0 = neutral).
  *     3. A boolean (true = RTL, false = LTR).
  *     4. A null for unknown directionality.
+ * @return {void}
  */
 goog.i18n.bidi.setElementDirAndAlign = function(element, dir) {
   'use strict';
@@ -889,6 +890,7 @@ goog.i18n.bidi.setElementDirAndAlign = function(element, dir) {
  * Sets element dir based on estimated directionality of the given text.
  * @param {!Element} element
  * @param {string} text
+ * @return {void}
  */
 goog.i18n.bidi.setElementDirByTextDirectionality = function(element, text) {
   'use strict';

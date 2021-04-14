@@ -76,6 +76,13 @@ goog.testing.net.XhrIo.allowUnsafeAccessToXhrIoOutsideCallbacks = false;
  */
 goog.testing.net.XhrIo.ResponseType = goog.net.XhrIo.ResponseType;
 
+/**
+ * Alias this array here to make mocking of goog.net.XhrIo easier.
+ * @type {!Array<string>}
+ */
+goog.testing.net.XhrIo.METHODS_WITH_FORM_DATA =
+    goog.net.XhrIo.METHODS_WITH_FORM_DATA;
+
 
 /**
  * All non-disposed instances of goog.testing.net.XhrIo created

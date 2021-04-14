@@ -501,6 +501,23 @@ testSuite({
     assertFalse(handler.isShortcutRegistered('a b c'));
   },
 
+  testRegisterShortcutThrowsIfShortcutsConflict() {
+    handler.registerShortcut('ab', 'a b');
+    assertThrows(
+        'Registering a shortcut that triggers a pre-existing shortcut when' +
+            'its sequence is typed out should throw',
+        () => handler.registerShortcut('abc', 'a b c'));
+    assertTrue(handler.isShortcutRegistered('a b'));
+    assertFalse(handler.isShortcutRegistered('a b c'));
+    // Check that the error message displays the name of the existing shortcut.
+    try {
+      handler.registerShortcut('abc', 'a b c');
+    } catch (e) {
+      assertEquals(
+          'Keyboard shortcut conflicts with existing shortcut: ab', e.message);
+    }
+  },
+
   testUnregister_subsequence() {
     // Unregistering a partial sequence should not orphan shortcuts further in
     // the sequence.
