@@ -679,10 +679,10 @@ testSuite({
         this[attr] = value;
       },
     });
-    let nonce = safe.getScriptNonce();
+    let nonce = goog.getScriptNonce();
     if (!nonce) {
       // clear nonce cache for test.
-      /** @type {?} */ (safe).cspNonce_ = null;
+      /** @type {?} */ (goog).cspNonce_ = null;
 
       // Place a nonced script in the page.
       nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
@@ -715,9 +715,9 @@ testSuite({
     const url =
         TrustedResourceUrl.fromConstant(Const.from('javascript:trusted();'));
     // clear nonce cache for test.
-    /** @type {?} */ (safe).cspNonce_ = null;
+    /** @type {?} */ (goog).cspNonce_ = null;
     // create the iframe and set up a script inside the iframe.
-    let nonce = safe.getScriptNonce();
+    let nonce = goog.getScriptNonce();
     if (!nonce) {
       nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
     }
@@ -756,15 +756,15 @@ testSuite({
       },
     });
     // clear nonce cache for test.
-    /** @type {?} */ (safe).cspNonce_ = null;
+    /** @type {?} */ (goog).cspNonce_ = null;
 
     // Place a nonced script in the page.
-    let nonce = safe.getScriptNonce();
+    let nonce = goog.getScriptNonce();
     if (!nonce) {
       nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
     }
 
-    /** @type {?} */ (safe).cspNonce_ = null;
+    /** @type {?} */ (goog).cspNonce_ = null;
 
     const noncedScript = dom.createElement(TagName.SCRIPT);
     noncedScript.setAttribute('nonce', nonce);
@@ -912,10 +912,6 @@ testSuite({
     assertEquals('A', node.tagName);
     assertEquals('b', node.className);
     assertEquals('c', node.textContent);
-  },
-
-  testGetScriptNonce() {
-    assertEquals('CSP+Nonce+For+Tests+Only', safe.getScriptNonce());
   },
 
   testGetStyleNonce() {
