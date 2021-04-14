@@ -3861,12 +3861,23 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
 
 if (!COMPILED) {
+  var isChrome87 = false;
+  // Cannot run check for Chrome <87 bug in case of strict CSP environments.
+  // TODO(user): Remove once Chrome <87 bug is no longer a problem.
+  try {
+    isChrome87 = eval(goog.global.trustedTypes.emptyScript) !==
+        goog.global.trustedTypes.emptyScript;
+  } catch (err) {
+  }
+
   /**
    * Trusted Types for running dev servers.
    *
    * @private @const
    */
-  goog.CLOSURE_EVAL_PREFILTER_ = goog.global.trustedTypes &&
+  goog.CLOSURE_EVAL_PREFILTER_ =
+      // Detect Chrome <87 bug with TT and eval.
+      goog.global.trustedTypes && isChrome87 &&
           goog.createTrustedTypesPolicy('goog#base#devonly#eval') ||
       {createScript: goog.identity_};
 }
