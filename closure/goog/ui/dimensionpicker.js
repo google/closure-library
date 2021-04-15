@@ -45,7 +45,6 @@ goog.requireType('goog.events.KeyEvent');
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Control}
- * @final
  */
 goog.ui.DimensionPicker = function(opt_renderer, opt_domHelper) {
   'use strict';
