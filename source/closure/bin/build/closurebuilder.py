@@ -23,6 +23,8 @@ Paths to files can be expressed as individual arguments to the tool (intended
 for use with find and xargs).  As a convenience, --root can be used to specify
 all JS files below a directory.
 
+DEPRECATED: Use the Closure Compiler directly instead.
+
 usage: %prog [options] [file1.js file2.js ...]
 """
 
@@ -204,6 +206,11 @@ def main():
   logging.basicConfig(format=(sys.argv[0] + ': %(message)s'),
                       level=logging.INFO)
   options, args = _GetOptionsParser().parse_args()
+
+  logging.warning(
+      'This utility is deprecated! See '
+      'https://github.com/google/closure-library/wiki/Migrating-off-Closure-Python-Scripts'
+      ' for more details.')
 
   # Make our output pipe.
   if options.output_file:

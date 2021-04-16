@@ -27,7 +27,6 @@ goog.require('goog.net.XhrIo');
 goog.require('goog.object');
 goog.require('goog.uri.utils');
 goog.require('goog.userAgent');
-goog.requireType('goog.structs.Map');
 
 
 
@@ -80,8 +79,7 @@ goog.debug.ErrorReporter = function(
 
   /**
    * XHR sender.
-   * @type {function(string, string, string,
-   *     (Object|goog.structs.Map|!Map<string, string>)=)}
+   * @type {function(string, string, string, (Object|!Map<string, string>)=)}
    * @private
    */
   this.xhrSender_ = goog.debug.ErrorReporter.defaultXhrSender;
@@ -165,7 +163,7 @@ goog.debug.ErrorReporter.ExceptionEvent.TYPE =
 
 /**
  * Extra headers for the error-reporting XHR.
- * @type {Object|goog.structs.Map|!Map<string, string>|undefined}
+ * @type {Object|!Map<string, string>|undefined}
  * @private
  */
 goog.debug.ErrorReporter.prototype.extraHeaders_;
@@ -211,8 +209,8 @@ goog.debug.ErrorReporter.install = function(
  * @param {string} uri URI to make request to.
  * @param {string} method Send method.
  * @param {string} content Post data.
- * @param {Object|goog.structs.Map|!Map<string, string>=} opt_headers Map of
- *     headers to add to the request.
+ * @param {Object|!Map<string, string>=} opt_headers Map of headers to add to
+ *     the request.
  */
 goog.debug.ErrorReporter.defaultXhrSender = function(
     uri, method, content, opt_headers) {
@@ -287,8 +285,8 @@ if (goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT) {
 
 /**
  * Add headers to the logging url.
- * @param {Object|goog.structs.Map|!Map<string, string>} loggingHeaders Extra
- *     headers to send to the logging URL.
+ * @param {Object|!Map<string, string>} loggingHeaders Extra headers to send
+ *     to the logging URL.
  */
 goog.debug.ErrorReporter.prototype.setLoggingHeaders = function(
     loggingHeaders) {
@@ -299,11 +297,11 @@ goog.debug.ErrorReporter.prototype.setLoggingHeaders = function(
 
 /**
  * Set the function used to send error reports to the server.
- * @param {function(string, string, string,
- *     (Object|goog.structs.Map|!Map<string, string>)=)} xhrSender If provided,
- *     this will be used to send a report to the server instead of the default
- *     method. The function will be given the URI, HTTP method request content,
- *     and (optionally) request headers to be added.
+ * @param {function(string, string, string, (Object|!Map<string, string>)=)}
+ *     xhrSender If provided, this will be used to send a report to the
+ *     server instead of the default method. The function will be given the URI,
+ *     HTTP method request content, and (optionally) request headers to be
+ *     added.
  */
 goog.debug.ErrorReporter.prototype.setXhrSender = function(xhrSender) {
   'use strict';

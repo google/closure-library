@@ -18,6 +18,7 @@ goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.debug.Error');
 goog.require('goog.dom');
+goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.TrustedResourceUrl');
@@ -156,7 +157,8 @@ goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
   const doc = options.document || document;
   const uri = goog.html.TrustedResourceUrl.unwrap(trustedUri);
 
-  const script = goog.dom.createElement(goog.dom.TagName.SCRIPT);
+  const script =
+      new goog.dom.DomHelper(doc).createElement(goog.dom.TagName.SCRIPT);
   const request = {script_: script, timeout_: undefined};
   const deferred = new goog.async.Deferred(goog.net.jsloader.cancel_, request);
 
