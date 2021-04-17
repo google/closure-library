@@ -169,16 +169,6 @@ testSuite({
     assertUndefined(structs.getKeys(aSet));
   },
 
-  testGetKeysMap() {
-    const map = new Map([[2, 'two'], [1, 'one']]);
-    assertEquals('2,1', structs.getKeys(map).join(','));
-  },
-
-  testGetValuesMap() {
-    const map = new Map([[2, 'two'], [1, 'one']]);
-    assertEquals('two,one', structs.getValues(map).join(','));
-  },
-
   /** @suppress {checkTypes} suppression added to enable type checking */
   testContains() {
     const arr = ['a', 'b', 'c', 'd'];
