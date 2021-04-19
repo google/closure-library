@@ -721,6 +721,26 @@ testSuite({
     assertEquals(`Got 22 minutes from ${iso}`, 22, date.getUTCMinutes());
     assertEquals(`Got 33 seconds from ${iso}`, 33, date.getUTCSeconds());
 
+    // Before a leap day in year 1 BC
+    iso = '0000-01-02T11:22:33Z';
+    date = DateTime.fromIsoString(iso);
+    assertEquals(`Got 0 from ${iso}`, 0, date.getUTCFullYear());
+    assertEquals(`Got January from ${iso}`, 0, date.getUTCMonth());
+    assertEquals(`Got 2nd from ${iso}`, 2, date.getUTCDate());
+    assertEquals(`Got 11 hours from ${iso}`, 11, date.getUTCHours());
+    assertEquals(`Got 22 minutes from ${iso}`, 22, date.getUTCMinutes());
+    assertEquals(`Got 33 seconds from ${iso}`, 33, date.getUTCSeconds());
+
+    // After a leap day in year 4 AD
+    iso = '0004-03-04T11:22:33Z';
+    date = DateTime.fromIsoString(iso);
+    assertEquals(`Got 4 from ${iso}`, 4, date.getUTCFullYear());
+    assertEquals(`Got March from ${iso}`, 2, date.getUTCMonth());
+    assertEquals(`Got 4th from ${iso}`, 4, date.getUTCDate());
+    assertEquals(`Got 11 hours from ${iso}`, 11, date.getUTCHours());
+    assertEquals(`Got 22 minutes from ${iso}`, 22, date.getUTCMinutes());
+    assertEquals(`Got 33 seconds from ${iso}`, 33, date.getUTCSeconds());
+
     // Parsing ISO string in local time zone.
     iso = '2019-04-01T01:00:00';
     date = DateTime.fromIsoString(iso);
