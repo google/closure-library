@@ -132,6 +132,17 @@ goog.date.splitDurationRegex_ = new RegExp(
  */
 goog.date.MS_PER_DAY = 24 * 60 * 60 * 1000;
 
+/**
+ * Number of milliseconds in an ordinary 400-year Gregorian calendar cycle.
+ * It can be derived by running
+ * `new Date(800, 0, 0).getTime() - new Date(400, 0, 0).getTime()`.
+ * Since this number includes leap seconds, it is not evenly dividable by
+ * the number of years (importantly, 146097 = 365.2425 * 400).
+ * It should be used only for computing dates in the years 0-99 in UTC.
+ * @type {number}
+ * @private
+ */
+goog.date.MS_PER_GREGORIAN_CYCLE_ = 146097 * 24 * 60 * 60 * 1000;
 
 /**
  * Returns whether the given year is a leap year.
@@ -509,8 +520,21 @@ goog.date.setIso8601TimeOnly_ = function(d, formatted) {
     var minute = Number(timeParts[2]) || 0;
     var second = Number(timeParts[3]) || 0;
     var millisecond = timeParts[4] ? Number(timeParts[4]) * 1000 : 0;
-    var utc = Date.UTC(year, month, day, hour, minute, second, millisecond);
 
+    // Date.UTC treats one- and two-digit years as if they were four-digit years
+    // beginning in 1900 (for example, a year specified as 84 becomes 1984).
+    // Since we use it in this code path, we need to account for this by
+    // incrementing the input year by 400 (in order to bypass the two-digit year
+    // behavior), and then compensate by deducting the number of milliseconds in
+    // the 400-year Gregorian calendar cycle.
+    const twoDigitYear = year >= 0 && year < 100;
+    if (twoDigitYear) {
+      year += 400;
+    }
+    let utc = Date.UTC(year, month, day, hour, minute, second, millisecond);
+    if (twoDigitYear) {
+      utc -= goog.date.MS_PER_GREGORIAN_CYCLE_;
+    }
     d.setTime(utc + offsetMinutes * 60000);
   } else {
     d.setHours(Number(timeParts[1]));

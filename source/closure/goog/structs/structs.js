@@ -52,9 +52,6 @@ goog.structs.getValues = function(col) {
   if (col.getValues && typeof col.getValues == 'function') {
     return col.getValues();
   }
-  if (col.values && typeof col.values == 'function') {
-    return [...col.values()];
-  }
   if (typeof col === 'string') {
     return col.split('');
   }
@@ -80,9 +77,6 @@ goog.structs.getKeys = function(col) {
   'use strict';
   if (col.getKeys && typeof col.getKeys == 'function') {
     return col.getKeys();
-  }
-  if (col.keys && typeof col.keys == 'function') {
-    return [...col.keys()];
   }
   // if we have getValues but no getKeys we know this is a key-less collection
   if (col.getValues && typeof col.getValues == 'function') {
