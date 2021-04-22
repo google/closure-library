@@ -27,6 +27,7 @@
     "protractor": "^7.0.0"
   },
   "scripts": {
+    "check_closure_oss": "node scripts/check_closure_oss",
     "gen_deps_js": "node scripts/generate_deps_js > ./closure/goog/deps.js",
     "gen_deps_js_with_tests": "node scripts/generate_deps_js --with_tests > ./closure/goog/deps_with_tests.js",
     "gen_alltests_js": "node scripts/generate_alltests_js > ./alltests.js",
