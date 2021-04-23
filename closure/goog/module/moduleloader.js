@@ -172,7 +172,7 @@ ModuleLoader.createPreloadScriptElement_ = function(url) {
 
   // If CSP nonces are used, propagate them to dynamically created scripts.
   // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
-  const nonce = goog.getScriptNonce();
+  const nonce = safe.getScriptNonce();
   if (nonce) {
     link.setAttribute('nonce', nonce);
   }
