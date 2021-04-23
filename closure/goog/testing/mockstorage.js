@@ -14,10 +14,6 @@ goog.setTestOnly('goog.testing.MockStorage');
 goog.provide('goog.testing.MockStorage');
 
 
-goog.require('goog.structs.Map');
-
-
-
 /**
  * A JS storage instance, implementing the HTML5 Storage interface.
  * See http://www.w3.org/TR/webstorage/ for details.
@@ -30,10 +26,10 @@ goog.testing.MockStorage = function() {
   'use strict';
   /**
    * The underlying storage object.
-   * @type {goog.structs.Map}
+   * @type {!Map}
    * @private
    */
-  this.store_ = new goog.structs.Map();
+  this.store_ = new Map();
 
   /**
    * The number of elements in the storage.
@@ -52,7 +48,7 @@ goog.testing.MockStorage = function() {
 goog.testing.MockStorage.prototype.setItem = function(key, value) {
   'use strict';
   this.store_.set(key, String(value));
-  this.length = this.store_.getCount();
+  this.length = this.store_.size;
 };
 
 
@@ -79,8 +75,8 @@ goog.testing.MockStorage.prototype.getItem = function(key) {
  */
 goog.testing.MockStorage.prototype.removeItem = function(key) {
   'use strict';
-  this.store_.remove(key);
-  this.length = this.store_.getCount();
+  this.store_.delete(key);
+  this.length = this.store_.size;
 };
 
 
@@ -103,5 +99,10 @@ goog.testing.MockStorage.prototype.clear = function() {
  */
 goog.testing.MockStorage.prototype.key = function(index) {
   'use strict';
-  return this.store_.getKeys()[index] || null;
+  let i = 0;
+  for (const key of this.store_.keys()) {
+    if (i == index) return key;
+    i++;
+  }
+  return null;
 };

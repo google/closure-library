@@ -13,7 +13,6 @@ goog.provide('goog.testing.StrictMock');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
-goog.require('goog.structs.Set');
 goog.require('goog.testing.Mock');
 goog.requireType('goog.testing.MockExpectation');
 
@@ -48,8 +47,8 @@ goog.testing.StrictMock = function(
    */
   this.$expectations_ = [];
 
-  /** @private {!goog.structs.Set<!goog.testing.MockExpectation>} */
-  this.awaitingExpectations_ = new goog.structs.Set();
+  /** @private {!Set<!goog.testing.MockExpectation>} */
+  this.awaitingExpectations_ = new Set();
 };
 goog.inherits(goog.testing.StrictMock, goog.testing.Mock);
 
@@ -82,7 +81,7 @@ goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
     }
 
     this.$expectations_.shift();
-    this.awaitingExpectations_.remove(currentExpectation);
+    this.awaitingExpectations_.delete(currentExpectation);
     this.maybeFinishedWithExpectations_();
     if (this.$expectations_.length < 1) {
       // Nothing left, but this may be a failed attempt to call the previous
@@ -103,7 +102,7 @@ goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
     this.$expectations_.shift();
   }
   if (currentExpectation.actualCalls >= currentExpectation.minCalls) {
-    this.awaitingExpectations_.remove(currentExpectation);
+    this.awaitingExpectations_.delete(currentExpectation);
     this.maybeFinishedWithExpectations_();
   }
 
