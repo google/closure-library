@@ -647,7 +647,7 @@ goog.dom.safe.setScriptContent = function(script, content) {
 goog.dom.safe.setNonceForScriptElement_ = function(script) {
   'use strict';
   var win = script.ownerDocument && script.ownerDocument.defaultView;
-  var nonce = goog.getScriptNonce(win);
+  const nonce = goog.dom.safe.getScriptNonce(win);
   if (nonce) {
     script.setAttribute('nonce', nonce);
   }
@@ -888,6 +888,26 @@ goog.dom.safe.createContextualFragment = function(range, html) {
   return range.createContextualFragment(
       goog.html.SafeHtml.unwrapTrustedHTML(html));
 };
+
+/**
+ * Returns CSP script nonce, if set for any <script> tag.
+ * @param {?Window=} opt_window The window context used to retrieve the nonce.
+ *     Defaults to global context.
+ * @return {string} CSP nonce or empty string if no nonce is present.
+ */
+goog.dom.safe.getScriptNonce = function(opt_window) {
+  if (opt_window && opt_window != goog.global) {
+    return goog.dom.safe.getNonce_(opt_window.document, 'script');
+  }
+  if (goog.dom.safe.cspNonce_ === null) {
+    goog.dom.safe.cspNonce_ =
+        goog.dom.safe.getNonce_(goog.global.document, 'script');
+  }
+  return goog.dom.safe.cspNonce_;
+};
+
+/** @private {?string} */
+goog.dom.safe.cspNonce_ = null;
 
 /**
  * Returns CSP style nonce, if set for any <style> or <link rel="stylesheet">

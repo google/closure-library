@@ -57,12 +57,14 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
      acceptable: [
          "",
          "<iframe></iframe>",
+         "<iframe />",
      ],
      name: "iframe_src"},
     {input: "<iframe srcdoc=\"&lt;img src&equals;x:x onerror&equals;alert&lpar;xss&rpar;&gt;\" />",
      acceptable: [
          "",
          "<iframe></iframe>",
+         "<iframe />",
      ],
      name: "iframe_srcdoc"},
     {input: "<img src=\"javascript:alert('xss');\">",
@@ -158,6 +160,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "<a><span>a&gt;</span></a><a><span>a&gt;</span></a><a></a>",
          "<a><span>a&gt;</span></a><a><span>a&gt;</span></a><a />",
          "<a>a&gt;</a><a>a&gt;</a><a></a>",
+         "<a /><a /><a />",
      ],
      name: "mess_of_anchors"},
     {input: "\"><noscript><p title=\"</noscript><img src=x onerror=alert(1)>\">",
@@ -27515,6 +27518,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
     {input: "<p async=\"async\"></p>",
      acceptable: [
          "<p async=\"async\"></p>",
+         "<p async=\"async\" />",
          "<p async=async></p>",
          "<p></p>",
          "<p />",
@@ -27567,6 +27571,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
     {input: "<p target=\"_self\"></p>",
      acceptable: [
          "<p target=\"_self\"></p>",
+         "<p target=\"_self\" />",
          "<p target=_self></p>",
          "<p></p>",
          "<p />",
@@ -27576,6 +27581,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
     {input: "<p target=\"_blank\"></p>",
      acceptable: [
          "<p target=\"_blank\"></p>",
+         "<p target=\"_blank\" />",
          "<p target=_blank></p>",
          "<p></p>",
          "<p />",
