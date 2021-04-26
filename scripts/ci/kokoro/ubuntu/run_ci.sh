@@ -32,6 +32,7 @@ nvm install v14
 # Ensure that all generated files are generate without error.
 
 npm install
+npm run check_closure_oss
 npm run gen_deps_js
 npm run gen_deps_js_with_tests
 npm run gen_test_htmls
