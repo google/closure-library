@@ -10,13 +10,13 @@ goog.setTestOnly();
 const ErrorHandler = goog.require('goog.debug.ErrorHandler');
 const GoogPromise = goog.require('goog.Promise');
 const Resolver = goog.require('goog.promise.Resolver');
+const SafeScript = goog.require('goog.html.SafeScript');
 const TagName = goog.require('goog.dom.TagName');
 // const TestCase = goog.require('goog.testing.TestCase');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 const {getDomHelper} = goog.require('goog.dom');
 const {newSafeScriptForTest} = goog.require('goog.html.testing');
-const {setScriptContent} = goog.require('goog.dom.safe');
 
 /** @type {!Resolver} */
 let resolver;
@@ -107,12 +107,12 @@ testCase.setUpIframe = function() {
 
   const iframeDom = getDomHelper(iframe.contentDocument.head);
   const scriptEl = iframeDom.createElement(TagName.SCRIPT);
-  setScriptContent(scriptEl, newSafeScriptForTest(`
-      async function iframeAsync() {
-        const p = Promise.resolve();
-        await p;
-        throw iframeAsync;
-      }`));
+  scriptEl.textContent = SafeScript.unwrapTrustedScript(newSafeScriptForTest(`
+    async function iframeAsync() {
+      const p = Promise.resolve();
+      await p;
+      throw iframeAsync;
+    }`));
   iframeDom.appendChild(iframe.contentDocument.head, scriptEl);
 
   /** @suppress {globalThis} suppression added to enable type checking */

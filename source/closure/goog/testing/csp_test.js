@@ -18,7 +18,7 @@ meta.content = 'object-src \'none\'; ' +
 document.head.appendChild(meta);
 
 function shouldRunTests() {
-  return window.ReportingObserver != null;
+  return !!window.ReportingObserver;
 }
 
 function testCspViolationCausesTestCaseToFail() {

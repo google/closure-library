@@ -8,6 +8,7 @@ goog.module('goog.storage.mechanism.HTML5SessionStorageTest');
 goog.setTestOnly();
 
 const HTML5SessionStorage = goog.require('goog.storage.mechanism.HTML5SessionStorage');
+const iterableMechanismTester = goog.require('goog.storage.mechanism.iterableMechanismTester');
 /** @suppress {extraRequire} */
 const mechanismSeparationTester = goog.require('goog.storage.mechanism.mechanismSeparationTester');
 /** @suppress {extraRequire} */
@@ -70,5 +71,31 @@ testSuite({
       assertNotNull(mechanism_shared);
       assertTrue(mechanism_shared.isAvailable());
     }
+  },
+
+  testCount() {
+    assertNotNull(mechanism);
+    iterableMechanismTester.testCount(
+        /** @type {!HTML5SessionStorage} */ (mechanism));
+  },
+  testIteratorBasics() {
+    assertNotNull(mechanism);
+    iterableMechanismTester.testIteratorBasics(
+        /** @type {!HTML5SessionStorage} */ (mechanism));
+  },
+  testIteratorWithTwoValues() {
+    assertNotNull(mechanism);
+    iterableMechanismTester.testIteratorWithTwoValues(
+        /** @type {!HTML5SessionStorage} */ (mechanism));
+  },
+  testClear() {
+    assertNotNull(mechanism);
+    iterableMechanismTester.testClear(
+        /** @type {!HTML5SessionStorage} */ (mechanism));
+  },
+  testClearClear() {
+    assertNotNull(mechanism);
+    iterableMechanismTester.testClearClear(
+        /** @type {!HTML5SessionStorage} */ (mechanism));
   },
 });

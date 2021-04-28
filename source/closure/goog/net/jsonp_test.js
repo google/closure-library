@@ -12,6 +12,7 @@ const Jsonp = goog.require('goog.net.Jsonp');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
 const recordFunction = goog.require('goog.testing.recordFunction');
+const safe = goog.require('goog.dom.safe');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 
@@ -326,7 +327,7 @@ testSuite({
     const checkCleanup = newCleanupGuard();
 
     const jsonp = new Jsonp(fakeTrustedUrl);
-    let nonce = goog.getScriptNonce();
+    let nonce = safe.getScriptNonce();
     if (!nonce) {
       nonce = 'foo';
     }

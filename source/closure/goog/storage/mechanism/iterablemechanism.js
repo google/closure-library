@@ -5,16 +5,17 @@
  */
 
 /**
- * @fileoverview Interface for storing, retieving and scanning data using some
+ * @fileoverview Interface for storing, retrieving and scanning data using some
  * persistence mechanism.
  */
 
-goog.provide('goog.storage.mechanism.IterableMechanism');
+goog.module('goog.storage.mechanism.IterableMechanism');
+goog.module.declareLegacyNamespace();
 
-goog.require('goog.array');
-goog.require('goog.asserts');
-goog.require('goog.iter');
-goog.require('goog.storage.mechanism.Mechanism');
+const Mechanism = goog.require('goog.storage.mechanism.Mechanism');
+const {Iterator: GoogIterator} = goog.require('goog.iter');
+const {ShimIterable} = goog.require('goog.iter.es6');
+const {assertString} = goog.require('goog.asserts');
 
 
 
@@ -23,15 +24,15 @@ goog.require('goog.storage.mechanism.Mechanism');
  *
  * @constructor
  * @struct
- * @extends {goog.storage.mechanism.Mechanism}
+ * @extends {Mechanism}
+ * @implements {Iterable<!Array<string>>}
  * @abstract
  */
-goog.storage.mechanism.IterableMechanism = function() {
+const IterableMechanism = function() {
   'use strict';
-  goog.storage.mechanism.IterableMechanism.base(this, 'constructor');
+  IterableMechanism.base(this, 'constructor');
 };
-goog.inherits(
-    goog.storage.mechanism.IterableMechanism, goog.storage.mechanism.Mechanism);
+goog.inherits(IterableMechanism, Mechanism);
 
 
 /**
@@ -42,14 +43,13 @@ goog.inherits(
  *
  * @return {number} Number of stored elements.
  */
-goog.storage.mechanism.IterableMechanism.prototype.getCount = function() {
+IterableMechanism.prototype.getCount = function() {
   'use strict';
-  var count = 0;
-  goog.iter.forEach(this.__iterator__(true), function(key) {
-    'use strict';
-    goog.asserts.assertString(key);
+  let count = 0;
+  for (const key of this) {
+    assertString(key);
     count++;
-  });
+  }
   return count;
 };
 
@@ -60,27 +60,37 @@ goog.storage.mechanism.IterableMechanism.prototype.getCount = function() {
  *
  * @param {boolean=} opt_keys True to iterate over the keys. False to iterate
  *     over the values.  The default value is false.
- * @return {!goog.iter.Iterator} The iterator.
+ * @return {!GoogIterator} The iterator.
+ * @deprecated Use ES6 iteration protocols instead.
  */
-goog.storage.mechanism.IterableMechanism.prototype.__iterator__ =
-    goog.abstractMethod;
+IterableMechanism.prototype.__iterator__ = goog.abstractMethod;
+
+
+/**
+ * Returns an interator that iterates over all the keys for elements in storage.
+ *
+ * @return {!IteratorIterable<string>}
+ */
+IterableMechanism.prototype[Symbol.iterator] = function() {
+  return ShimIterable.of(this.__iterator__(true)).toEs6();
+};
 
 
 /**
  * Remove all key-value pairs.
  *
- * Could be overridden in a subclass, as the default implementation is not very
- * efficient - it iterates over all keys.
+ * Could be overridden in a subclass, as the default implementation is not
+ * very efficient - it iterates over all keys.
  */
-goog.storage.mechanism.IterableMechanism.prototype.clear = function() {
+IterableMechanism.prototype.clear = function() {
   'use strict';
   // This converts the keys to an array first because otherwise
   // removing while iterating results in unstable ordering of keys and
   // can skip keys or terminate early.
-  var keys = goog.iter.toArray(this.__iterator__(true));
-  var selfObj = this;
-  goog.array.forEach(keys, function(key) {
-    'use strict';
-    selfObj.remove(key);
-  });
+  const keys = Array.from(this);
+  for (const key of keys) {
+    this.remove(key);
+  }
 };
+
+exports = IterableMechanism;
