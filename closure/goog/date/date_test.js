@@ -10,54 +10,15 @@ goog.setTestOnly();
 const DateDate = goog.require('goog.date.Date');
 const DateTime = goog.require('goog.date.DateTime');
 const DateTimeSymbols = goog.require('goog.i18n.DateTimeSymbols');
-const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
 const Interval = goog.require('goog.date.Interval');
 const googArray = goog.require('goog.array');
 const googRequiredGoogDate = goog.require('goog.date');
-const isVersion = goog.require('goog.userAgent.product.isVersion');
 const month = goog.require('goog.date.month');
-const platform = goog.require('goog.userAgent.platform');
-const product = goog.require('goog.userAgent.product');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 const weekDay = goog.require('goog.date.weekDay');
 
-let expectedFailures;
-
-function shouldRunTests() {
-  // Test disabled in Chrome-vista due to flakiness. See b/2753939.
-  if (product.CHROME && userAgent.WINDOWS && platform.VERSION == '6.0') {
-    return false;
-  }
-
-  return true;
-}
-
-//=== tests for goog.date.Date ===
-
-// test private function used by goog.date.Date.toIsoString()
-
-//=== tests for goog.date.Interval.equals() ===
-
-//=== tests for adding two goog.date.Interval intervals ===
-
-//=== tests conversion to and from ISO 8601 duration string ===
-
-function isWinxpSafari4() {
-  return product.SAFARI && isVersion('4') && !isVersion('5') &&
-      userAgent.WINDOWS && platform.isVersion('5.0') &&
-      !platform.isVersion('6.0');
-}
 
 testSuite({
-  setUpPage() {
-    expectedFailures = new ExpectedFailures();
-  },
-
-  tearDown() {
-    expectedFailures.handleTearDown();
-  },
-
   /** Unit test for Closure's 'googRequiredGoogDate'. */
   testIsLeapYear() {
     const f = googRequiredGoogDate.isLeapYear;
@@ -794,12 +755,6 @@ testSuite({
 
   /** @suppress {visibility} suppression added to enable type checking */
   test_setIso8601TimeOnly_() {
-    if (product.SAFARI) {
-      // TODO(user): Disabled so we can get the rest of the Closure test
-      // suite running in a continuous build. Will investigate later.
-      return;
-    }
-
     // 23:59:59
     let d = new DateTime(0, 0);
     let iso = '18:46:39';
@@ -855,40 +810,17 @@ testSuite({
     assertEquals(`Got 46 minutes from ${iso}`, 46, d.getMinutes());
     assertEquals(`Got 39 seconds from ${iso}`, 39, d.getSeconds());
 
-    // Fails in Safari4 Winxp, temporarily disabled
-    expectedFailures.expectFailureFor(isWinxpSafari4());
-    try {
-      if (userAgent.WEBKIT && userAgent.MAC) {
-        // Both Safari 3.1 and WebKit (on Mac) return floating-point values.
-        assertRoughlyEquals(
-            `Got roughly 994.2 milliseconds from ${iso}`, 994.2,
-            d.getMilliseconds(), 0.01);
-      } else {
-        // Other browsers, including WebKit on Windows, return integers.
-        assertEquals(
-            `Got 994 milliseconds from ${iso}`, 994, d.getMilliseconds());
-      }
+    assertEquals(`Got 994 milliseconds from ${iso}`, 994, d.getMilliseconds());
 
-      d = new DateTime(0, 0);
-      iso = '184639.9942';
-      assertTrue(
-          `parsed ${iso}`, googRequiredGoogDate.setIso8601TimeOnly_(d, iso));
-      assertEquals(`Got 18 hours from ${iso}`, 18, d.getHours());
-      assertEquals(`Got 46 minutes from ${iso}`, 46, d.getMinutes());
-      assertEquals(`Got 39 seconds from ${iso}`, 39, d.getSeconds());
-      if (userAgent.WEBKIT && userAgent.MAC) {
-        // Both Safari 3.1 and WebKit (on Mac) return floating-point values.
-        assertRoughlyEquals(
-            `Got roughly 994.2 milliseconds from ${iso}`, 994.2,
-            d.getMilliseconds(), 0.01);
-      } else {
-        // Other browsers, including WebKit on Windows, return integers.
-        assertEquals(
-            `Got 994 milliseconds from ${iso}`, 994, d.getMilliseconds());
-      }
-    } catch (e) {
-      expectedFailures.handleException(e);
-    }
+    d = new DateTime(0, 0);
+    iso = '184639.9942';
+    assertTrue(
+        `parsed ${iso}`, googRequiredGoogDate.setIso8601TimeOnly_(d, iso));
+    assertEquals(`Got 18 hours from ${iso}`, 18, d.getHours());
+    assertEquals(`Got 46 minutes from ${iso}`, 46, d.getMinutes());
+    assertEquals(`Got 39 seconds from ${iso}`, 39, d.getSeconds());
+    // Other browsers, including WebKit on Windows, return integers.
+    assertEquals(`Got 994 milliseconds from ${iso}`, 994, d.getMilliseconds());
 
     // 1995-02-04 24:00 = 1995-02-05 00:00
     // timezone tests
