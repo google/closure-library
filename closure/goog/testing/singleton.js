@@ -27,10 +27,15 @@ goog.require('goog.singleton');
  */
 goog.testing.singleton.resetAll = function() {
   'use strict';
-  const singletons = goog.getObjectByName('goog.instantiatedSingletons_')
-                         .concat(goog.singleton.instantiatedSingletons);
+  // Avoid concatenating arrays here - causes tests to perform poorly when there
+  // are very large numbers of singletons to reset.
+  const singletons1 = goog.getObjectByName('goog.instantiatedSingletons_');
+  const singletons2 = goog.singleton.instantiatedSingletons;
   let ctor;
-  while (ctor = singletons.pop()) {
+  while (ctor = singletons1.pop()) {
+    goog.testing.singleton.reset(ctor);
+  }
+  while (ctor = singletons2.pop()) {
     goog.testing.singleton.reset(ctor);
   }
 };
