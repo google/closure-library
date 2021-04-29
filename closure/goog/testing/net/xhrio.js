@@ -872,6 +872,9 @@ goog.testing.net.XhrIo.prototype.getStreamingResponseHeader = function(key) {
   if (!this.checkXhr_()) {
     return null;
   }
+  if (!this.responseHeaders_) {
+    return null;
+  }
   return key in this.responseHeaders_ ? this.responseHeaders_[key] : null;
 };
 
