@@ -165,6 +165,46 @@ testSuite({
     },
   },
 
+  testTimeWarp: {
+    async testSetsTime() {
+      const clock = new MockClock(true);
+
+      const newDate = new Date(2121, 12, 12);
+
+      // Schedule an callback in the interval and make sure it sees the new date
+      setTimeout(() => assertEquals(+newDate, Date.now()), 999999);
+
+      await clock.doTimeWarpAsync(newDate);
+      assertEquals(+newDate, Date.now());
+    },
+
+    async testSkipsSetIntervals() {
+      const clock = new MockClock(true);
+
+      const fn = recordFunction();
+      setInterval(fn, 7);
+      await clock.doTimeWarpAsync(new Date(2121, 12, 12));
+
+      assertEquals(1, fn.getCallCount());
+      // Expect the interval to continue in future ticks.
+      clock.tick(7);
+      assertEquals(2, fn.getCallCount());
+    },
+
+    async testSkipsRecursiveSetTimeouts() {
+      const clock = new MockClock(true);
+
+      const fn = recordFunction(() => setTimeout(fn, 7));
+      setTimeout(fn, 7);
+      await clock.doTimeWarpAsync(new Date(2121, 12, 12));
+
+      assertEquals(1, fn.getCallCount());
+      // Expect the timeout to continue in future ticks.
+      clock.tick(7);
+      assertEquals(2, fn.getCallCount());
+    },
+  },
+
   /** @suppress {visibility} suppression added to enable type checking */
   testMockClockWasInstalled() {
     const clock = new MockClock();

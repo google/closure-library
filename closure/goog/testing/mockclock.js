@@ -366,6 +366,7 @@ goog.testing.MockClock.prototype.tick = function(opt_millis) {
   }
   var endTime = this.nowMillis_ + opt_millis;
   this.runFunctionsWithinRange_(endTime);
+  // If a scheduled callback called tick() reentrantly, don't rewind time.
   this.nowMillis_ = Math.max(this.nowMillis_, endTime);
   return endTime;
 };
@@ -495,8 +496,43 @@ goog.testing.MockClock.prototype.tickAsync = async function(millis = 1) {
   }
   const endTime = this.nowMillis_ + millis;
   await this.runFunctionsWithinRangeAsync_(endTime);
+  // If a scheduled callback called tick() reentrantly, don't rewind time.
   this.nowMillis_ = Math.max(this.nowMillis_, endTime);
   return endTime;
+};
+
+
+/**
+ * Instantly adjusts the clock's current time to a new timestamp. Unlike tick(),
+ * this method skips over the intervening time, so that `setInterval()` calls or
+ * recurring `setTimeout()`s will only run once.
+ *
+ * This mimics the behavior of setting the system clock, rather than waiting for
+ * time to pass.
+ *
+ * CAUTION: This is an advanced feature.  Use this method to set the clock to be
+ * a specific date, which is much faster than calling tick() with a large value.
+ * This lets you test code against arbitrary dates.
+ *
+ * MOE:begin_strip
+ * See go/mockclock-time-travel for how & why to use this method.
+ * MOE:end_strip
+ *
+ * @param {!Date} newDate The new timestamp to set the clock to.
+ * @return {!Promise}
+ */
+goog.testing.MockClock.prototype.doTimeWarpAsync = async function(newDate) {
+  goog.asserts.assertInstanceof(
+      newDate, Date,
+      'doTimeWarpAsync() only accepts dates.  Use tickAsync() instead.');
+  if (+newDate < this.nowMillis_) {
+    throw new Error(`Time cannot go backwards (cannot time warp from ${
+        new Date(this.nowMillis_)} to ${newDate})`);
+  }
+  // Adjust the clock before calling the functions, so that they schedule future
+  // callbacks from the new time.
+  this.nowMillis_ = +newDate;
+  await this.runFunctionsWithinRangeAsync_(this.nowMillis_);
 };
 
 
@@ -504,6 +540,7 @@ goog.testing.MockClock.prototype.tickAsync = async function(millis = 1) {
  * Like runFunctionsWithinRange, but pauses to allow native promise callbacks to
  * run correctly.
  * @param {number} endTime The latest time in the range, in milliseconds.
+ * @return {!Promise}
  * @private
  */
 goog.testing.MockClock.prototype.runFunctionsWithinRangeAsync_ =
