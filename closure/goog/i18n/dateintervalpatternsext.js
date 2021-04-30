@@ -6,7 +6,7 @@
 /**
  * @fileoverview Date interval formatting patterns for all locales.
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  *
  * This file covers those locales that are not covered in
  * "dateintervalpatterns.js".

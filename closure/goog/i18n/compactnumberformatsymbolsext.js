@@ -6,7 +6,7 @@
 /**
  * @fileoverview Compact number formatting symbols.
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  *
  * This file covers those locales that are not covered in
  * "compactnumberformatsymbols.js".
@@ -8103,52 +8103,43 @@ goog.i18n.CompactNumberFormatSymbols_nmg_CM = goog.i18n.CompactNumberFormatSymbo
 goog.i18n.CompactNumberFormatSymbols_nn = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0K'
+      'other': '0k'
     },
     '10000': {
-      'other': '00K'
+      'other': '00k'
     },
     '100000': {
-      'other': '000K'
+      'other': '000k'
     },
     '1000000': {
-      'other': '0M'
+      'other': '0 mill.'
     },
     '10000000': {
-      'other': '00M'
+      'other': '00 mill.'
     },
     '100000000': {
-      'other': '000M'
+      'other': '000 mill.'
     },
     '1000000000': {
-      'other': '0G'
+      'other': '0 mrd.'
     },
     '10000000000': {
-      'other': '00G'
+      'other': '00 mrd.'
     },
     '100000000000': {
-      'other': '000G'
+      'other': '000 mrd.'
     },
     '1000000000000': {
-      'other': '0T'
+      'other': '0 bill.'
     },
     '10000000000000': {
-      'other': '00T'
+      'other': '00 bill.'
     },
     '100000000000000': {
-      'other': '000T'
+      'other': '000 bill.'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
-    '1000': {
-      'other': '0 tusen'
-    },
-    '10000': {
-      'other': '00 tusen'
-    },
-    '100000': {
-      'other': '000 tusen'
-    },
     '1000000': {
       'other': '0 millionar'
     },

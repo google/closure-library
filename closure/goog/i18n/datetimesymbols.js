@@ -6,7 +6,7 @@
 /**
  * @fileoverview Date/time formatting symbols for all locales.
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -1105,7 +1105,7 @@ goog.i18n.DateTimeSymbols_es_419 = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 6
@@ -1145,7 +1145,7 @@ goog.i18n.DateTimeSymbols_es_MX = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'dd/MM/yy'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -1177,7 +1177,7 @@ goog.i18n.DateTimeSymbols_es_US = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/y'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -3469,7 +3469,7 @@ goog.i18n.DateTimeSymbols_zh = {
   AMPMS: ['上午', '下午'],
   DATEFORMATS: ['y年M月d日EEEE', 'y年M月d日', 'y年M月d日', 'y/M/d'],
   TIMEFORMATS: ['zzzz ah:mm:ss', 'z ah:mm:ss', 'ah:mm:ss', 'ah:mm'],
-  DATETIMEFORMATS: ['{1}{0}', '{1} {0}', '{1}{0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5

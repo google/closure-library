@@ -6,7 +6,7 @@
 /**
  * @fileoverview Relative date time formatting symbols.
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  *
  * This file covers those locales that are not covered in
  * "relativedatetimesymbols.js".
@@ -18590,12 +18590,12 @@ exports.RelativeDateTimeSymbols_nn =  {
       F:'one{om # døgn}other{om # døgn}',
     },
     SHORT:{
-      R:{'-1':'i går','-2':'i førgår','0':'i dag','1':'i morgon','2':'i overmorgon'},
+      R:{'-1':'i går','-2':'i forgårs','0':'i dag','1':'i morgen','2':'i overmorgen'},
       P:'one{for # d. sidan}other{for # d. sidan}',
       F:'one{om # d.}other{om # d.}',
     },
     NARROW:{
-      R:{'-1':'i går','-2':'i førgår','0':'i dag','1':'i morgon','2':'i overmorgon'},
+      R:{'-1':'i går','-2':'-2 d.','0':'i dag','1':'i morgen','2':'+2 d.'},
       P:'one{–# d.}other{–# d.}',
       F:'one{+# d.}other{+# d.}',
     },
@@ -18641,12 +18641,12 @@ exports.RelativeDateTimeSymbols_nn =  {
       F:'one{om # månad}other{om # månadar}',
     },
     SHORT:{
-      R:{'-1':'førre månad','0':'denne månaden','1':'neste månad'},
+      R:{'-1':'forrige md.','0':'denne md.','1':'neste md.'},
       P:'one{for # md. sidan}other{for # md. sidan}',
       F:'one{om # md.}other{om # md.}',
     },
     NARROW:{
-      R:{'-1':'førre månad','0':'denne månaden','1':'neste månad'},
+      R:{'-1':'forrige md.','0':'denne md.','1':'neste md.'},
       P:'one{–# md.}other{–# md.}',
       F:'one{+# md.}other{+# md.}',
     },
@@ -18658,12 +18658,12 @@ exports.RelativeDateTimeSymbols_nn =  {
       F:'one{om # kvartal}other{om # kvartal}',
     },
     SHORT:{
-      R:{'-1':'førre kvartal','0':'dette kvartalet','1':'neste kvartal'},
+      R:{'-1':'forrige kv.','0':'dette kv.','1':'neste kv.'},
       P:'one{for # kv. sidan}other{for # kv. sidan}',
       F:'one{om # kv.}other{om # kv.}',
     },
     NARROW:{
-      R:{'-1':'førre kvartal','0':'dette kvartalet','1':'neste kvartal'},
+      R:{'-1':'forrige kv.','0':'dette kv.','1':'neste kv.'},
       P:'one{–# kv.}other{–# kv.}',
       F:'one{+# kv.}other{+# kv.}',
     },
@@ -18675,12 +18675,12 @@ exports.RelativeDateTimeSymbols_nn =  {
       F:'one{om # sekund}other{om # sekund}',
     },
     SHORT:{
-      R:{'0':'no'},
+      R:{'0':'nå'},
       P:'one{for # sek sidan}other{for # sek sidan}',
       F:'one{om # sek}other{om # sek}',
     },
     NARROW:{
-      R:{'0':'no'},
+      R:{'0':'nå'},
       P:'one{–# s}other{–# s}',
       F:'one{+# s}other{+# s}',
     },
@@ -18692,12 +18692,12 @@ exports.RelativeDateTimeSymbols_nn =  {
       F:'one{om # veke}other{om # veker}',
     },
     SHORT:{
-      R:{'-1':'førre veke','0':'denne veka','1':'neste veke'},
+      R:{'-1':'forrige uke','0':'denne uken','1':'neste uke'},
       P:'one{for # v. sidan}other{for # v. sidan}',
       F:'one{om # v.}other{om # v.}',
     },
     NARROW:{
-      R:{'-1':'førre veke','0':'denne veka','1':'neste veke'},
+      R:{'-1':'forrige uke','0':'denne uken','1':'neste uke'},
       P:'one{–# v.}other{–# v.}',
       F:'one{+# v.}other{+# v.}',
     },

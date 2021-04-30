@@ -6,7 +6,7 @@
 /**
  * @fileoverview Default list of locale specific country and language names.
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  */
 
 // clang-format off
@@ -22,7 +22,7 @@ goog.provide('goog.locale.defaultLocaleNameConstants');
  */
 goog.locale.defaultLocaleNameConstants = {
   'COUNTRY': {
-    '001': 'World',
+    '001': 'world',
     '002': 'Africa',
     '003': 'North America',
     '005': 'South America',
@@ -336,7 +336,7 @@ goog.locale.defaultLocaleNameConstants = {
     'ang': 'Old English',
     'anp': 'Angika',
     'ar': 'Arabic',
-    'ar_001': 'Arabic (World)',
+    'ar_001': 'Arabic (world)',
     'arc': 'Aramaic',
     'arn': 'Mapuche',
     'arp': 'Arapaho',

@@ -8,7 +8,7 @@
  * @fileoverview Plural rules.
  *
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  */
 
 // clang-format off

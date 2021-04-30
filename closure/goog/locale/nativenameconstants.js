@@ -6,7 +6,7 @@
 /**
  * @fileoverview List of native country and language names.
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  */
 
 // clang-format off
@@ -368,7 +368,7 @@ goog.locale.nativeNameConstants = {
     'ee_TG': 'Togo nutome',
     'el_CY': 'Κύπρος',
     'el_GR': 'Ελλάδα',
-    'en_001': 'World',
+    'en_001': 'world',
     'en_150': 'Europe',
     'en_AE': 'United Arab Emirates',
     'en_AG': 'Antigua & Barbuda',

@@ -6,7 +6,7 @@
 /**
  * @fileoverview Date interval formatting patterns for all locales.
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -5125,7 +5125,7 @@ exports.DateIntervalPatterns_my = {
     '_': 'y MMMM'
   },
   YEAR_MONTH_SHORT: {
-    'G': 'GGGGG y-MM – GGGGG y-MM   ',
+    'G': 'GGGGG y-MM – GGGGG y-MM',
     'My': 'M/y – M/y',
     '_': 'MM/y'
   },
@@ -5151,7 +5151,7 @@ exports.DateIntervalPatterns_my = {
     '_': 'MMMM d'
   },
   MONTH_DAY_YEAR_MEDIUM: {
-    'G': 'G y MMM d – G y MMM d   ',
+    'G': 'G y MMM d – G y MMM d',
     'M': 'y၊ MMM d – MMM d',
     'd': 'y၊ MMM d – d',
     '_': 'y၊ MMM d'
