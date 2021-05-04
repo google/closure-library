@@ -678,13 +678,15 @@ testSuite({
 
   /** @suppress {visibility} suppression added to enable type checking */
   testParseRunTests() {
-    assertNull(TestCase.parseRunTests_(''));
-    assertNull(TestCase.parseRunTests_('?runTests='));
+    assertNull(TestCase.parseRunTests_('file://hello.html'));
+    assertNull(TestCase.parseRunTests_('https://example.com?runTests='));
     assertObjectEquals(
-        {'testOne': true}, TestCase.parseRunTests_('?runTests=testOne'));
+        {'testOne': true},
+        TestCase.parseRunTests_('https://example.com?runTests=testOne'));
     assertObjectEquals(
         {'testOne': true, 'testTwo': true},
-        TestCase.parseRunTests_('?foo=bar&runTests=testOne,testTwo'));
+        TestCase.parseRunTests_(
+            'https://example.com?foo=bar&runTests=testOne,testTwo'));
     assertObjectEquals(
         {
           '1': true,
@@ -693,7 +695,8 @@ testSuite({
           'testShouting': true,
           'TESTSHOUTING': true,
         },
-        TestCase.parseRunTests_('?RUNTESTS=testShouting,TESTSHOUTING,1,2,3'));
+        TestCase.parseRunTests_(
+            'https://example.com?RUNTESTS=testShouting,TESTSHOUTING,1,2,3'));
   },
 
   /**
