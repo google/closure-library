@@ -6,7 +6,7 @@
 /**
  * @fileoverview Extended date/time patterns.
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  *
  * This file covers those locales that are not covered in
  * "datetimepatterns.js".
@@ -9552,7 +9552,7 @@ goog.i18n.DateTimePatterns_zh_Hans_HK = {
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
   DAY_ABBR: 'd日',
-  MONTH_DAY_TIME_ZONE_SHORT: 'M月d日zzzz ah:mm'
+  MONTH_DAY_TIME_ZONE_SHORT: 'M月d日 zzzz ah:mm'
 };
 
 
@@ -9573,7 +9573,7 @@ goog.i18n.DateTimePatterns_zh_Hans_MO = {
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
   DAY_ABBR: 'd日',
-  MONTH_DAY_TIME_ZONE_SHORT: 'M月d日zzzz ah:mm'
+  MONTH_DAY_TIME_ZONE_SHORT: 'M月d日 zzzz ah:mm'
 };
 
 
@@ -9594,7 +9594,7 @@ goog.i18n.DateTimePatterns_zh_Hans_SG = {
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
   DAY_ABBR: 'd日',
-  MONTH_DAY_TIME_ZONE_SHORT: 'M月d日zzzz ah:mm'
+  MONTH_DAY_TIME_ZONE_SHORT: 'M月d日 zzzz ah:mm'
 };
 
 

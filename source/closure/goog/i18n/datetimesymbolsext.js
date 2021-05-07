@@ -6,7 +6,7 @@
 /**
  * @fileoverview Date/time formatting symbols for all locales.
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  *
  * This file covers those locales that are not covered in
  * "datetimesymbols.js".
@@ -6360,7 +6360,7 @@ goog.i18n.DateTimeSymbols_es_AR = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 6
@@ -6392,7 +6392,7 @@ goog.i18n.DateTimeSymbols_es_BO = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM \'de\' y', 'd/M/yy'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 6
@@ -6424,7 +6424,7 @@ goog.i18n.DateTimeSymbols_es_BR = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['H:mm:ss zzzz', 'H:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -6456,7 +6456,7 @@ goog.i18n.DateTimeSymbols_es_BZ = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['H:mm:ss zzzz', 'H:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -6488,7 +6488,7 @@ goog.i18n.DateTimeSymbols_es_CL = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'dd-MM-y', 'dd-MM-yy'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 6
@@ -6520,7 +6520,7 @@ goog.i18n.DateTimeSymbols_es_CO = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd/MM/y', 'd/MM/yy'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1}, {0}', '{1}, {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1}, {0}', '{1}, {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -6552,7 +6552,7 @@ goog.i18n.DateTimeSymbols_es_CR = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['H:mm:ss zzzz', 'H:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 6
@@ -6584,7 +6584,7 @@ goog.i18n.DateTimeSymbols_es_CU = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['H:mm:ss zzzz', 'H:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 6
@@ -6616,7 +6616,7 @@ goog.i18n.DateTimeSymbols_es_DO = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -6680,7 +6680,7 @@ goog.i18n.DateTimeSymbols_es_EC = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['H:mm:ss zzzz', 'H:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 6
@@ -6744,7 +6744,7 @@ goog.i18n.DateTimeSymbols_es_GT = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd/MM/y', 'd/MM/yy'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -6776,7 +6776,7 @@ goog.i18n.DateTimeSymbols_es_HN = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE dd \'de\' MMMM \'de\' y', 'dd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -6840,7 +6840,7 @@ goog.i18n.DateTimeSymbols_es_NI = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['H:mm:ss zzzz', 'H:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -6872,7 +6872,7 @@ goog.i18n.DateTimeSymbols_es_PA = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'MM/dd/y', 'MM/dd/yy'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -6904,7 +6904,7 @@ goog.i18n.DateTimeSymbols_es_PE = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/MM/yy'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -6968,7 +6968,7 @@ goog.i18n.DateTimeSymbols_es_PR = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'MM/dd/y', 'MM/dd/yy'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -7000,7 +7000,7 @@ goog.i18n.DateTimeSymbols_es_PY = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['H:mm:ss zzzz', 'H:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -7032,7 +7032,7 @@ goog.i18n.DateTimeSymbols_es_SV = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['H:mm:ss zzzz', 'H:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -7064,7 +7064,7 @@ goog.i18n.DateTimeSymbols_es_UY = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['H:mm:ss zzzz', 'H:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 6
@@ -7096,7 +7096,7 @@ goog.i18n.DateTimeSymbols_es_VE = {
   AMPMS: ['a. m.', 'p. m.'],
   DATEFORMATS: ['EEEE, d \'de\' MMMM \'de\' y', 'd \'de\' MMMM \'de\' y', 'd MMM y', 'd/M/yy'],
   TIMEFORMATS: ['h:mm:ss a zzzz', 'h:mm:ss a z', 'h:mm:ss a', 'h:mm a'],
-  DATETIMEFORMATS: ['{1} \'a\' \'las\' {0}', '{1} \'a\' \'las\' {0}', '{1} {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1}, {0}', '{1}, {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -16289,7 +16289,7 @@ goog.i18n.DateTimeSymbols_zh_Hans_HK = {
   AMPMS: ['上午', '下午'],
   DATEFORMATS: ['y年M月d日EEEE', 'y年M月d日', 'y年M月d日', 'd/M/yy'],
   TIMEFORMATS: ['zzzz ah:mm:ss', 'z ah:mm:ss', 'ah:mm:ss', 'ah:mm'],
-  DATETIMEFORMATS: ['{1}{0}', '{1} {0}', '{1}{0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -16321,7 +16321,7 @@ goog.i18n.DateTimeSymbols_zh_Hans_MO = {
   AMPMS: ['上午', '下午'],
   DATEFORMATS: ['y年M月d日EEEE', 'y年M月d日', 'y年M月d日', 'd/M/yy'],
   TIMEFORMATS: ['zzzz ah:mm:ss', 'z ah:mm:ss', 'ah:mm:ss', 'ah:mm'],
-  DATETIMEFORMATS: ['{1}{0}', '{1} {0}', '{1}{0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5
@@ -16353,7 +16353,7 @@ goog.i18n.DateTimeSymbols_zh_Hans_SG = {
   AMPMS: ['上午', '下午'],
   DATEFORMATS: ['y年M月d日EEEE', 'y年M月d日', 'y年M月d日', 'dd/MM/yy'],
   TIMEFORMATS: ['zzzz ah:mm:ss', 'z ah:mm:ss', 'ah:mm:ss', 'ah:mm'],
-  DATETIMEFORMATS: ['{1}{0}', '{1} {0}', '{1}{0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1} {0}', '{1} {0}', '{1} {0}', '{1} {0}'],
   FIRSTDAYOFWEEK: 6,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 5

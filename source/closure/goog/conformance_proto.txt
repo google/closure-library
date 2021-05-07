@@ -372,7 +372,6 @@ requirement: {
   # there are a bunch of dangerous properties.
   value: 'HTMLObjectElement.prototype.data'
   value: 'HTMLScriptElement.prototype.src'
-  value: 'HTMLTrackElement.prototype.src'
   # TODO(mlourenco): Ban other dangerous properties (archive, classid, etc).
 
   # Closure's debug loader.

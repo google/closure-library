@@ -37,7 +37,7 @@ class Singleton {
  *   }
  * }
  * ```
- * @param {function(new: T): T} ctor
+ * @param {function(new: T)} ctor
  * @return {T}
  * @template T
  * @deprecated Singleton patterns are discouraged. Use dependency injection

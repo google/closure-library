@@ -6,7 +6,7 @@
 /**
  * @fileoverview Extended date/time patterns.
  *
- * File generated from CLDR ver. 38
+ * File generated from CLDR ver. 39
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -2364,7 +2364,7 @@ goog.i18n.DateTimePatterns_zh = {
   WEEKDAY_MONTH_DAY_MEDIUM: 'M月d日EEE',
   WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'y年M月d日EEE',
   DAY_ABBR: 'd日',
-  MONTH_DAY_TIME_ZONE_SHORT: 'M月d日zzzz ah:mm'
+  MONTH_DAY_TIME_ZONE_SHORT: 'M月d日 zzzz ah:mm'
 };
 
 

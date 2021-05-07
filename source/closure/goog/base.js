@@ -349,14 +349,14 @@ goog.constructNamespace_ = function(name, object, overwriteImplicit) {
  * @param {?Window=} opt_window The window context used to retrieve the nonce.
  *     Defaults to global context.
  * @return {string} CSP nonce or empty string if no nonce is present.
- * @deprecated Use goog.dom.safe.getScriptNonce.
+ * @private
  */
-goog.getScriptNonce = function(opt_window) {
+goog.getScriptNonce_ = function(opt_window) {
   if (opt_window && opt_window != goog.global) {
-    return goog.getScriptNonce_(opt_window.document);
+    return goog.getScriptNonceFromDocument_(opt_window.document);
   }
   if (goog.cspNonce_ === null) {
-    goog.cspNonce_ = goog.getScriptNonce_(goog.global.document);
+    goog.cspNonce_ = goog.getScriptNonceFromDocument_(goog.global.document);
   }
   return goog.cspNonce_;
 };
@@ -382,7 +382,7 @@ goog.cspNonce_ = null;
  * @return {string} CSP nonce or empty string if no nonce is present.
  * @private
  */
-goog.getScriptNonce_ = function(doc) {
+goog.getScriptNonceFromDocument_ = function(doc) {
   var script = doc.querySelector && doc.querySelector('script[nonce]');
   if (script) {
     // Try to get the nonce from the IDL property first, because browsers that
@@ -3127,7 +3127,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       }
     }
 
-    var nonce = goog.getScriptNonce();
+    var nonce = goog.getScriptNonce_();
     if (!goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING &&
         goog.isDocumentLoading_()) {
       var key;
@@ -3253,7 +3253,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     // appending?
     function write(src, contents) {
       var nonceAttr = '';
-      var nonce = goog.getScriptNonce();
+      var nonce = goog.getScriptNonce_();
       if (nonce) {
         nonceAttr = ' nonce="' + nonce + '"';
       }
@@ -3287,7 +3287,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
       // If CSP nonces are used, propagate them to dynamically created scripts.
       // This is necessary to allow nonce-based CSPs without 'strict-dynamic'.
-      var nonce = goog.getScriptNonce();
+      var nonce = goog.getScriptNonce_();
       if (nonce) {
         scriptEl.nonce = nonce;
       }
@@ -3488,7 +3488,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
         load();
       });
 
-      var nonce = goog.getScriptNonce();
+      var nonce = goog.getScriptNonce_();
       var nonceAttr = nonce ? ' nonce="' + nonce + '"' : '';
       var script = '<script' + nonceAttr + '>' +
           goog.protectScriptTag_('goog.Dependency.callback_("' + key + '");') +

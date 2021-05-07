@@ -434,13 +434,18 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
       div.appendChild(document.createTextNode(line));
     }
 
-    var testNameMatch = /(\S+) (\[[^\]]*] )?: (FAILED|ERROR|PASSED)/.exec(line);
+    // Example line we are parsing the test name from:
+    // 16:07:49.317  testSomething : PASSED
+    var testNameMatch = /\S+\s+(test.*)\s+: (FAILED|ERROR|PASSED)/.exec(line);
     if (testNameMatch) {
       // Build a URL to run the test individually.  If this test was already
       // part of another subset test, we need to overwrite the old runTests
       // query parameter.  We also need to do this without bringing in any
       // extra dependencies, otherwise we could mask missing dependency bugs.
-      var newSearch = 'runTests=' + testNameMatch[1];
+      // We manually encode commas because they are also used to separate test
+      // names.
+      var newSearch = 'runTests=' +
+          encodeURIComponent(testNameMatch[1].replace(/,/g, '%2C'));
       var search = window.location.search;
       if (search) {
         var oldTests = /runTests=([^&]*)/.exec(search);

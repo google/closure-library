@@ -34,6 +34,7 @@ goog.require('goog.object');
 goog.require('goog.testing.CspViolationObserver');
 goog.require('goog.testing.JsUnitException');
 goog.require('goog.testing.asserts');
+goog.require('goog.url');
 
 
 
@@ -2249,8 +2250,8 @@ goog.testing.TestCase.initializeTestCase = function(testCase, opt_testDone) {
   }
 
   if (goog.global.location) {
-    var search = goog.global.location.search;
-    testCase.setTestsToRun(goog.testing.TestCase.parseRunTests_(search));
+    var href = goog.global.location.href;
+    testCase.setTestsToRun(goog.testing.TestCase.parseRunTests_(href));
   }
   goog.testing.TestCase.activeTestCase_ = testCase;
 };
@@ -2279,22 +2280,47 @@ goog.testing.TestCase.initializeTestRunner = function(testCase, opt_testDone) {
 
 /**
  * Parses URL query parameters for the 'runTests' parameter.
- * @param {string} search The URL query string.
+ * @param {string} href The current URL.
  * @return {Object<string, boolean>} A set of test names or test indices to be
  *     run by the test runner.
  * @private
  */
-goog.testing.TestCase.parseRunTests_ = function(search) {
+goog.testing.TestCase.parseRunTests_ = function(href) {
   'use strict';
-  var testsToRun = null;
-  var runTestsMatch = search.match(/(?:\?|&)runTests=([^?&]+)/i);
-  if (runTestsMatch) {
-    testsToRun = {};
-    var arr = runTestsMatch[1].split(',');
-    for (var i = 0, len = arr.length; i < len; i++) {
-      testsToRun[arr[i]] = true;
+  const queryParamIndex = href.indexOf('?');
+  if (queryParamIndex < 0) {
+    return null;
+  }
+
+  const nonOriginParts = href.substr(queryParamIndex);
+
+  // Use a "fake" origin because tests may load using protocols that goog.url
+  // doesn't support
+  const searchParams = goog.url.getSearchParams(
+      goog.url.resolveUrl('https://google.com' + nonOriginParts));
+
+  let runTestsString = null;
+  for (const [key, value] of searchParams) {
+    if (key.toLowerCase() === 'runtests') {
+      runTestsString = value;
     }
   }
+
+  if (!runTestsString) {
+    return null;
+  }
+
+  const testsToRun = {};
+  const arr = runTestsString.split(',');
+  for (let i = 0, len = arr.length; i < len; i++) {
+    try {
+      // `TestRunner` double encodes commas in test names so we decode back here
+      testsToRun[arr[i].replace(/%2C/g, ',')] = true;
+    } catch (e) {
+      return null;
+    }
+  }
+
   return testsToRun;
 };
 

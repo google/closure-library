@@ -1451,6 +1451,40 @@ exports.bucket = bucket;
 
 
 /**
+ * Splits an array into disjoint buckets according to a splitting function.
+ * @param {!IArrayLike<V>} array The array.
+ * @param {function(V, number, !IArrayLike<V>):(K|undefined)} sorter Function to
+ *     call for every element.  This takes 3 arguments (the element, the index,
+ *     and the array) and must return a value to use as a key, or undefined, if
+ *     that object should not be placed in a bucket.
+ * @return {!Map<K, !Array<V>>} A map, with keys being all of the unique
+ *     return values of sorter, and values being arrays containing the items for
+ *     which the splitter returned that key.
+ * @template K,V
+ */
+function bucketToMap(array, sorter) {
+  const /** !Map<K, !Array<V>> */ buckets = new Map();
+
+  for (let i = 0; i < array.length; i++) {
+    const value = array[i];
+    const key = sorter(value, i, array);
+    if (key !== undefined) {
+      // Push the value to the right bucket, creating it if necessary.
+      let bucket = buckets.get(key);
+      if (!bucket) {
+        bucket = [];
+        buckets.set(key, bucket);
+      }
+      bucket.push(value);
+    }
+  }
+
+  return buckets;
+}
+exports.bucketToMap = bucketToMap;
+
+
+/**
  * Creates a new object built from the provided array and the key-generation
  * function.
  * @param {IArrayLike<T>} arr Array or array like object over
@@ -1475,6 +1509,32 @@ function toObject(arr, keyFunc, opt_obj) {
   return ret;
 }
 exports.toObject = toObject;
+
+
+/**
+ * Creates a new ES6 Map built from the provided array and the key-generation
+ * function.
+ * @param {!IArrayLike<V>} arr Array or array like object over which to iterate
+ *     whose elements will be the values in the new object.
+ * @param {?function(V, number, ?) : K} keyFunc The function to call for every
+ *     element. This function takes 3 arguments (the element, the index, and the
+ *     array) and should return a value that will be used as the key for the
+ *     element in the new object. If the function returns the same key for more
+ *     than one element, the value for that key is implementation-defined.
+ * @return {!Map<K, V>} The new map.
+ * @template K,V
+ */
+function toMap(arr, keyFunc) {
+  const /** !Map<K, V> */ map = new Map();
+
+  for (let i = 0; i < arr.length; i++) {
+    const element = arr[i];
+    map.set(keyFunc(element, i, arr), element);
+  }
+
+  return map;
+}
+exports.toMap = toMap;
 
 
 /**
