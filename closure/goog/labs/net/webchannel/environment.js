@@ -14,9 +14,8 @@ goog.module('goog.labs.net.webChannel.environment');
 
 goog.module.declareLegacyNamespace();
 
-const googURL = goog.require('goog.url');
-const labsUABrowser = goog.require('goog.labs.userAgent.browser');
 var userAgent = goog.require('goog.userAgent');
+
 
 /**
  * The default polling interval in millis for Edge.
@@ -67,44 +66,22 @@ exports.getPollingInterval = function() {
   return undefined;
 };
 
-/**
- * Origin trial token for google.com
- *
- * https://developers.chrome.com/origintrials/#/trials
- *
- * http://googlechrome.github.io/OriginTrials/check-token.html
- * Origin: https://google.com:443
- * Matches Subdomains? Yes
- * Matches Third-party? Yes
- * Feature: FetchUploadStreaming
- * Expires: 7/14/2021, 8:59:59 AM
- *
- * Token for googleapis.com will be registered after google.com's is deployed.
- *
- */
-const OT_TOKEN_GOOGLE_COM =
-    "A70X6iKIlnS3U/OFBWYlZCJ6rRlXum75MZ6pvi68FKsnyeL+XPCA7KWBMeW75d2+xNHMEeFOWjfqMS+34jdvrw4AAAB/eyJvcmlnaW4iOiJodHRwczovL2dvb2dsZS5jb206NDQzIiwiZmVhdHVyZSI6IkZldGNoVXBsb2FkU3RyZWFtaW5nIiwiZXhwaXJ5IjoxNjI2MjIwNzk5LCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ==";
-/**
- * Creates ReadableStream to upload
- * @return {!ReadableStream} ReadableStream to upload
- */
-function createStream() {
-  const encoder = new goog.global.TextEncoder();
-  return new goog.global.ReadableStream({
-    start: controller => {
-      for (const obj of ['test\r\n', 'test\r\n']) {
-        controller.enqueue(encoder.encode(obj));
-      }
-      controller.close();
-    }
-  });
-}
 
 /**
  * For Fetch/upload OT, make three requests against the server endpoint.
  * POST requests contain only dummy payload.
  *
  * https://developers.chrome.com/origintrials/#/view_trial/3524066708417413121
+ *
+ * 1) google.com token
+ *
+ * A329ozYiTjUmNz0Eh5wffNLiRjiVtFBptKBulP7UYXxKSuMVVhP3pVnlHnbrBg2ALEPd63boPZArHXg3+WlmagkAAAB/eyJvcmlnaW4iOiJodHRwczovL2dvb2dsZS5jb206NDQzIiwiZmVhdHVyZSI6IkZldGNoVXBsb2FkU3RyZWFtaW5nIiwiZXhwaXJ5IjoxNjA4OTIzMjA4LCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ==
+ *
+ * 2) googleapis.com token
+ *
+ * To be registered after 1) is deployed.
+ *
+ * https://developers.chrome.com/origintrials/#/trials
  *
  * This function is expected to be called from background during the handshake.
  * Exceptions will be logged by the caller.
@@ -117,67 +94,14 @@ function createStream() {
 exports.startOriginTrials = function(path) {
   // NE: may need check if path has already contains query params?
 
-  // Accept only Chrome.
-  if (!labsUABrowser.isChrome()) {
-    return;
-  }
-  // Accept M90 or later due to service worker support.
-  if (!labsUABrowser.isVersionOrHigher(90)) {
-    return;
-  }
-  // Accept only only google.com and subdoamins.
-  const pathOrigin = googURL.resolveUrl(path).origin;
-  if(!pathOrigin.endsWith("google.com")) {
-    return;
-  }
-  // Since 3P OT is not supported yet, we should check the current page matches
-  // the path (absolute one?) to disable this OT for cross-origin calls
-  const urlOrigin = googURL.resolveUrl(window.document.URL).origin;
-  if(!urlOrigin.endsWith("google.com")) {
-    return;
-  }
-
-  // Enable origin trial by injecting OT <meta> tag
-  const tokenElement =
-    /** @type {! HTMLMetaElement} */ (document.createElement('meta'));
-  tokenElement.httpEquiv = 'origin-trial';
-  tokenElement.content = OT_TOKEN_GOOGLE_COM;
-  // appendChild() synchronously enables OT.
-  document.head.appendChild(tokenElement);
-
-  // Check if fetch upload stream is actually enabled.
-  // By the spec, Streaming request doesn't has the Content-Type header:
-  // https://fetch.spec.whatwg.org/#concept-bodyinit-extract
-  // If Chrome doesn't support Streaming, the body stream is converted to a
-  // string "[object ReadableStream]" for fallback then it has "Content-Type:
-  // text/plain;charset=UTF-8".
-  const supportsRequestStreams = !new Request('', {
-    body: new ReadableStream(),
-    method: 'POST',
-  }).headers.has('Content-Type');
-  if (!supportsRequestStreams) {
-    return;
-  }
-
   // 1st req:  path?ot=1
   // non-streaming upload request
-  goog.global.fetch(`${path}?ot=1`, {method: 'POST', body: 'test\r\n'});
 
   // 2nd req:  path?ot=2
   // h2-only streaming upload request
-  goog.global.fetch(`${path}?ot=2`, {
-    method: 'POST',
-    body: createStream(),
-    allowHTTP1ForStreamingUpload: false,
-  });
 
   // 3rd req:  path?ot=3
   // h1-allowed streaming upload request
-  goog.global.fetch(`${path}?ot=3`, {
-    method: 'POST',
-    body: createStream(),
-    allowHTTP1ForStreamingUpload: true,
-  });
 
   // Example calling a Chrome API:
   // goog.global.chrome.loadTimes().wasFetchedViaSpdy
