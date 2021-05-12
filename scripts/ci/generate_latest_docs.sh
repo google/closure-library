@@ -56,7 +56,7 @@ done
 
 # Regenerate deps.js as the demos page relies on the debugloader
 npm install
-npm run gen_deps_js
+npm run gen_deps_js_with_tests
 
 # Rearrange files from the repo.
 cp -r doc/* "$GH_PAGES/"
