@@ -8,17 +8,6 @@
 set -ex
 cd "${KOKORO_ARTIFACTS_DIR}/git/closure-library-staging"
 
-./scripts/ci/install_closure_deps.sh
-./scripts/ci/compile_closure.sh
-
-# Generate docs (without pushing them anywhere).
-
-export GH_PAGES
-GH_PAGES=$(mktemp -d)
-
-git clone --depth=1 https://github.com/google/closure-library "$GH_PAGES"
-./scripts/ci/generate_latest_docs.sh
-
 # Install Node 14.
 # TODO: Use an image that contains it instead.
 
@@ -28,6 +17,17 @@ export NVM_DIR
 NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 nvm install v14
+
+# Generate docs (without pushing them anywhere).
+
+export GH_PAGES
+GH_PAGES=$(mktemp -d)
+
+git clone --depth=1 https://github.com/google/closure-library "$GH_PAGES"
+./scripts/ci/generate_latest_docs.sh
+
+./scripts/ci/install_closure_deps.sh
+./scripts/ci/compile_closure.sh
 
 # Ensure that all generated files are generate without error.
 

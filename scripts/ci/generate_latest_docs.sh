@@ -54,6 +54,10 @@ for file in "${DENYLIST_FILES[@]}"; do
    DENYLIST["$file"]=true
 done
 
+# Regenerate deps.js as the demos page relies on the debugloader
+npm install
+npm run gen_deps_js
+
 # Rearrange files from the repo.
 cp -r doc/* "$GH_PAGES/"
 mkdir -p "$GH_PAGES/source/closure"
