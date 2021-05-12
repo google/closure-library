@@ -56,9 +56,20 @@ goog.iter.Iterator = function() {};
  * Returns the next value of the iteration.  This will throw the object
  * {@see goog.iter.StopIteration} when the iteration passes the end.
  * @return {VALUE} Any object or value.
+ * @deprecated To ease migration to the ES6 Iteration Protocol, this method is
+ *     now called `nextValueOrThrow`.
  */
 goog.iter.Iterator.prototype.next = function() {
   'use strict';
+  return this.nextValueOrThrow();
+};
+
+/**
+ * Returns the next value of the iteration.  This will throw the object
+ * {@see goog.iter.StopIteration} when the iteration passes the end.
+ * @return {VALUE} Any object or value
+ */
+goog.iter.Iterator.prototype.nextValueOrThrow = function() {
   throw goog.iter.StopIteration;
 };
 

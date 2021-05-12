@@ -928,7 +928,7 @@ goog.testing.TestCase.prototype.shouldRunTestsHelper_ = function() {
     var obj = objChain[i];
 
     if (typeof obj.shouldRunTests !== 'function') {
-      return true;
+      continue;
     }
 
     if (typeof obj.shouldRunTests['$cachedResult'] === 'function') {
