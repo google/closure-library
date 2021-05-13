@@ -277,11 +277,6 @@ Raw `postMessage()` does not restrict target and sender origins by default. This
 can cause security vulnerabilities.
 
 
-{: #expose}
-### @expose 
-
-@expose has non-obvious global side-effects that can cause errors.
-
 {: #globalVars}
 ### Global declarations 
 
