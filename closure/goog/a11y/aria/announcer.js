@@ -92,6 +92,14 @@ goog.a11y.aria.Announcer.prototype.say = function(message, opt_priority) {
   goog.dom.setTextContent(liveRegion, announceMessage);
 };
 
+/**
+ * Returns the id value for an aria-live region for a given priority.
+ * @param {!goog.a11y.aria.LivePriority} priority The required priority.
+ * @return {string} The generated id on the liveRegion.
+ */
+goog.a11y.aria.Announcer.prototype.getLiveRegionId = function(priority) {
+  return this.getLiveRegion_(priority).getAttribute('id');
+};
 
 /**
  * Returns an aria-live region that can be used to communicate announcements.
@@ -109,6 +117,8 @@ goog.a11y.aria.Announcer.prototype.getLiveRegion_ = function(priority) {
   }
 
   liveRegion = this.domHelper_.createElement(goog.dom.TagName.DIV);
+  // Generate a unique id for the live region.
+  liveRegion.id = `goog-lr-${goog.getUid(liveRegion)}`;
   // Note that IE has a habit of declaring things that aren't display:none as
   // invisible to third-party tools like JAWs, so we can't just use height:0.
   liveRegion.style.position = 'absolute';
