@@ -896,18 +896,8 @@ goog.dom.safe.createContextualFragment = function(range, html) {
  * @return {string} CSP nonce or empty string if no nonce is present.
  */
 goog.dom.safe.getScriptNonce = function(opt_window) {
-  if (opt_window && opt_window != goog.global) {
-    return goog.dom.safe.getNonce_(opt_window.document, 'script');
-  }
-  if (goog.dom.safe.cspNonce_ === null) {
-    goog.dom.safe.cspNonce_ =
-        goog.dom.safe.getNonce_(goog.global.document, 'script');
-  }
-  return goog.dom.safe.cspNonce_;
+  return goog.dom.safe.getNonce_('script[nonce]', opt_window);
 };
-
-/** @private {?string} */
-goog.dom.safe.cspNonce_ = null;
 
 /**
  * Returns CSP style nonce, if set for any <style> or <link rel="stylesheet">
@@ -917,18 +907,9 @@ goog.dom.safe.cspNonce_ = null;
  * @return {string} CSP nonce or empty string if no nonce is present.
  */
 goog.dom.safe.getStyleNonce = function(opt_window) {
-  if (opt_window && opt_window != goog.global) {
-    return goog.dom.safe.getNonce_(opt_window.document, 'style');
-  }
-  if (goog.dom.safe.cspStyleNonce_ === null) {
-    goog.dom.safe.cspStyleNonce_ =
-        goog.dom.safe.getNonce_(goog.global.document, 'style');
-  }
-  return goog.dom.safe.cspStyleNonce_;
+  return goog.dom.safe.getNonce_(
+      'style[nonce],link[rel="stylesheet"][nonce]', opt_window);
 };
-
-/** @private {?string} */
-goog.dom.safe.cspStyleNonce_ = null;
 
 /**
  * According to the CSP3 spec a nonce must be a valid base64 string.
@@ -939,21 +920,17 @@ goog.dom.safe.NONCE_PATTERN_ = /^[\w+/_-]+[=]{0,2}$/;
 
 /**
  * Returns CSP nonce, if set for any tag of given type.
- * @param {!Document} doc
- * @param {string} tag 'script' or 'style'. For 'style', if no <style> tag with
- *     nonce is found, <link rel="stylesheet"> is used.
+ * @param {string} selector Selector for locating the element with nonce.
+ * @param {?Window=} win The window context used to retrieve the nonce.
  * @return {string} CSP nonce or empty string if no nonce is present.
  * @private
  */
-goog.dom.safe.getNonce_ = function(doc, tag) {
+goog.dom.safe.getNonce_ = function(selector, win) {
+  const doc = (win || goog.global).document;
   if (!doc.querySelector) {
     return '';
   }
-  let el = doc.querySelector(tag + '[nonce]');
-  if (!el && tag == 'style') {
-    // Try to get style nonce from <link rel="stylesheet">.
-    el = doc.querySelector('link[rel="stylesheet"][nonce]');
-  }
+  let el = doc.querySelector(selector);
   if (el) {
     // Try to get the nonce from the IDL property first, because browsers that
     // implement additional nonce protection features (currently only Chrome) to
