@@ -10,7 +10,6 @@
 
 goog.provide('goog.math');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 
 
@@ -324,7 +323,7 @@ goog.math.longestCommonSubsequence = function(
 goog.math.sum = function(var_args) {
   'use strict';
   return /** @type {number} */ (
-      goog.array.reduce(arguments, function(sum, value) {
+      Array.prototype.reduce.call(arguments, function(sum, value) {
         'use strict';
         return sum + value;
       }, 0));
@@ -359,11 +358,15 @@ goog.math.sampleVariance = function(var_args) {
   }
 
   var mean = goog.math.average.apply(null, arguments);
-  var variance =
-      goog.math.sum.apply(null, goog.array.map(arguments, function(val) {
-        'use strict';
-        return Math.pow(val - mean, 2);
-      })) / (sampleSize - 1);
+  var variance = goog.math.sum.apply(
+                     null,
+                     Array.prototype.map.call(
+                         arguments,
+                         function(val) {
+                           'use strict';
+                           return Math.pow(val - mean, 2);
+                         })) /
+      (sampleSize - 1);
 
   return variance;
 };

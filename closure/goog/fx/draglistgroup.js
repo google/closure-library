@@ -18,7 +18,6 @@ goog.provide('goog.fx.DragListGroup.EventType');
 goog.provide('goog.fx.DragListGroupEvent');
 goog.provide('goog.fx.DragListPermission');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dispose');
 goog.require('goog.dom');
@@ -409,7 +408,7 @@ goog.fx.DragListGroup.prototype.setFunctionToGetHandleForDragItem = function(
 goog.fx.DragListGroup.prototype.setDragItemHoverClass = function(var_args) {
   'use strict';
   goog.asserts.assert(!this.isInitialized_);
-  this.dragItemHoverClasses_ = goog.array.slice(arguments, 0);
+  this.dragItemHoverClasses_ = Array.prototype.slice.call(arguments, 0);
 };
 
 
@@ -422,7 +421,7 @@ goog.fx.DragListGroup.prototype.setDragItemHandleHoverClass = function(
     var_args) {
   'use strict';
   goog.asserts.assert(!this.isInitialized_);
-  this.dragItemHandleHoverClasses_ = goog.array.slice(arguments, 0);
+  this.dragItemHandleHoverClasses_ = Array.prototype.slice.call(arguments, 0);
 };
 
 
@@ -440,7 +439,7 @@ goog.fx.DragListGroup.prototype.setDragItemHandleHoverClass = function(
 goog.fx.DragListGroup.prototype.setCurrDragItemClass = function(var_args) {
   'use strict';
   goog.asserts.assert(!this.isInitialized_);
-  this.currDragItemClasses_ = goog.array.slice(arguments, 0);
+  this.currDragItemClasses_ = Array.prototype.slice.call(arguments, 0);
 };
 
 

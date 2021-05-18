@@ -1051,7 +1051,8 @@ goog.dom.createTable_ = function(doc, rows, columns, fillWithNbsp) {
  */
 goog.dom.constHtmlToNode = function(var_args) {
   'use strict';
-  var stringArray = goog.array.map(arguments, goog.string.Const.unwrap);
+  var stringArray =
+      Array.prototype.map.call(arguments, goog.string.Const.unwrap);
   var safeHtml =
       goog.html.uncheckedconversions
           .safeHtmlFromStringKnownToSatisfyTypeContract(

@@ -88,8 +88,8 @@ function assertEqualsCaseAndLeadingWhitespaceInsensitive(value1, value2) {
  */
 function assertConstHtmlToNodeStringifiesToOneOf(
     potentialStringifications, var_args) {
-  const node =
-      googDom.constHtmlToNode.apply(undefined, googArray.slice(arguments, 1));
+  const node = googDom.constHtmlToNode.apply(
+      undefined, Array.prototype.slice.call(arguments, 1));
   /** @suppress {checkTypes} suppression added to enable type checking */
   const stringified = googDom.getOuterHtml(node);
   if (googArray.find(
@@ -97,7 +97,8 @@ function assertConstHtmlToNodeStringifiesToOneOf(
       null) {
     fail(
         'Unexpected stringification for a node built from "' +
-        googArray.map(googArray.slice(arguments, 1), Const.unwrap).join('') +
+        googArray.map(Array.prototype.slice.call(arguments, 1), Const.unwrap)
+            .join('') +
         '": "' + stringified + '"');
   }
 }

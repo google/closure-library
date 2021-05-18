@@ -31,7 +31,6 @@ goog.provide('goog.testing.Mock');
 goog.provide('goog.testing.MockExpectation');
 
 goog.require('goog.Promise');
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.object');
 goog.require('goog.promise.Resolver');
@@ -389,7 +388,7 @@ goog.testing.Mock.prototype.$mockMethod = function(name) {
   try {
     // Shift off the name argument so that args contains the arguments to
     // the mocked method.
-    var args = goog.array.slice(arguments, 1);
+    var args = Array.prototype.slice.call(arguments, 1);
     if (this.$recording_) {
       this.$pendingExpectation = new goog.testing.MockExpectation(name);
       this.$pendingExpectation.argumentList = args;

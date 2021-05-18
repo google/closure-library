@@ -638,7 +638,7 @@ goog.iter.nextOrValue = function(iterable, defaultValue) {
  */
 goog.iter.product = function(var_args) {
   'use strict';
-  var someArrayEmpty = goog.array.some(arguments, function(arr) {
+  var someArrayEmpty = Array.prototype.some.call(arguments, function(arr) {
     'use strict';
     return !arr.length;
   });
@@ -873,7 +873,7 @@ goog.iter.zip = function(var_args) {
  */
 goog.iter.zipLongest = function(fillValue, var_args) {
   'use strict';
-  var args = goog.array.slice(arguments, 1);
+  var args = Array.prototype.slice.call(arguments, 1);
   var iter = new goog.iter.Iterator();
 
   if (args.length > 0) {

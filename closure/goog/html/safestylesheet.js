@@ -175,7 +175,7 @@ class SafeStyleSheet {
       }
     };
 
-    googArray.forEach(arguments, addArgument);
+    Array.prototype.forEach.call(arguments, addArgument);
     return SafeStyleSheet.createSafeStyleSheetSecurityPrivateDoNotAccessOrElse(
         result);
   }

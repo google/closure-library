@@ -16,7 +16,7 @@
 
 goog.provide('goog.fs.blob');
 
-goog.require('goog.array');
+
 
 /**
  * Concatenates one or more values together and converts them to a Blob.
@@ -36,7 +36,8 @@ goog.fs.blob.getBlob = function(var_args) {
     }
     return bb.getBlob();
   } else {
-    return goog.fs.blob.getBlobWithProperties(goog.array.toArray(arguments));
+    return goog.fs.blob.getBlobWithProperties(
+        Array.prototype.slice.call(arguments));
   }
 };
 

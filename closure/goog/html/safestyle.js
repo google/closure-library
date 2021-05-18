@@ -601,7 +601,7 @@ goog.html.SafeStyle.concat = function(var_args) {
     }
   };
 
-  goog.array.forEach(arguments, addArgument);
+  Array.prototype.forEach.call(arguments, addArgument);
   if (!style) {
     return goog.html.SafeStyle.EMPTY;
   }

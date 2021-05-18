@@ -919,7 +919,8 @@ goog.html.SafeHtml.concat = function(var_args) {
  */
 goog.html.SafeHtml.concatWithDir = function(dir, var_args) {
   'use strict';
-  var html = goog.html.SafeHtml.concat(goog.array.slice(arguments, 1));
+  var html =
+      goog.html.SafeHtml.concat(Array.prototype.slice.call(arguments, 1));
   html.dir_ = dir;
   return html;
 };

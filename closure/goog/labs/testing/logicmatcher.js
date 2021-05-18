@@ -184,7 +184,7 @@ goog.labs.testing.logicmatcher.IsNotMatcher.prototype.describe = function(
  */
 goog.labs.testing.logicmatcher.AllOfMatcher.allOf = function(var_args) {
   'use strict';
-  var matchers = goog.array.toArray(arguments);
+  var matchers = Array.prototype.slice.call(arguments);
   return new goog.labs.testing.logicmatcher.AllOfMatcher(matchers);
 };
 
@@ -200,7 +200,7 @@ goog.labs.testing.logicmatcher.AllOfMatcher.allOf = function(var_args) {
  */
 goog.labs.testing.logicmatcher.AnyOfMatcher.anyOf = function(var_args) {
   'use strict';
-  var matchers = goog.array.toArray(arguments);
+  var matchers = Array.prototype.slice.call(arguments);
   return new goog.labs.testing.logicmatcher.AnyOfMatcher(matchers);
 };
 

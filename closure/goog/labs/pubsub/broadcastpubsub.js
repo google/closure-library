@@ -161,7 +161,7 @@ goog.labs.pubsub.BroadcastPubSub.prototype.dispatch_ = function(args) {
  */
 goog.labs.pubsub.BroadcastPubSub.prototype.publish = function(topic, var_args) {
   'use strict';
-  const args = goog.array.toArray(arguments);
+  const args = Array.prototype.slice.call(arguments);
 
   // Dispatch to localStorage.
   if (this.storage_) {
