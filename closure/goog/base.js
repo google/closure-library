@@ -1409,6 +1409,11 @@ goog.cloneObject = function(obj) {
     if (typeof obj.clone === 'function') {
       return obj.clone();
     }
+    if (typeof Map !== 'undefined' && obj instanceof Map) {
+      return new Map(obj);
+    } else if (typeof Set !== 'undefined' && obj instanceof Set) {
+      return new Set(obj);
+    }
     var clone = type == 'array' ? [] : {};
     for (var key in obj) {
       clone[key] = goog.cloneObject(obj[key]);

@@ -450,6 +450,11 @@ function clone(obj) {
 function unsafeClone(obj) {
   if (!obj || typeof obj !== 'object') return obj;
   if (typeof obj.clone === 'function') return obj.clone();
+  if (typeof Map !== 'undefined' && obj instanceof Map) {
+    return new Map(obj);
+  } else if (typeof Set !== 'undefined' && obj instanceof Set) {
+    return new Set(obj);
+  }
   const clone = Array.isArray(obj) ? [] :
       typeof ArrayBuffer === 'function' &&
           typeof ArrayBuffer.isView === 'function' && ArrayBuffer.isView(obj) &&
