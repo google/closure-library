@@ -60,7 +60,7 @@ goog.dom.classes.get = function(element) {
 goog.dom.classes.add = function(element, var_args) {
   'use strict';
   var classes = goog.dom.classes.get(element);
-  var args = goog.array.slice(arguments, 1);
+  var args = Array.prototype.slice.call(arguments, 1);
   var expectedCount = classes.length + args.length;
   goog.dom.classes.add_(classes, args);
   goog.dom.classes.set(element, classes.join(' '));
@@ -80,7 +80,7 @@ goog.dom.classes.add = function(element, var_args) {
 goog.dom.classes.remove = function(element, var_args) {
   'use strict';
   var classes = goog.dom.classes.get(element);
-  var args = goog.array.slice(arguments, 1);
+  var args = Array.prototype.slice.call(arguments, 1);
   var newClasses = goog.dom.classes.getDifference_(classes, args);
   goog.dom.classes.set(element, newClasses.join(' '));
   return newClasses.length == classes.length - args.length;

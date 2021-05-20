@@ -111,7 +111,8 @@ goog.testing.fs.isObjectUrlGranted = function(blob) {
  */
 goog.testing.fs.getBlob = function(var_args) {
   'use strict';
-  return new goog.testing.fs.Blob(goog.array.map(arguments, String).join(''));
+  return new goog.testing.fs.Blob(
+      Array.prototype.map.call(arguments, String).join(''));
 };
 
 

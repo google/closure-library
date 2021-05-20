@@ -13,7 +13,6 @@
 goog.provide('goog.ui.ac.AutoComplete');
 goog.provide('goog.ui.ac.AutoComplete.EventType');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
@@ -922,7 +921,7 @@ goog.ui.ac.AutoComplete.prototype.detachInputs = function(var_args) {
   inputHandler.detachInputs.apply(inputHandler, arguments);
 
   // Remove mapping from input to anchor if one exists.
-  goog.array.forEach(arguments, function(input) {
+  Array.prototype.forEach.call(arguments, function(input) {
     'use strict';
     goog.object.remove(this.inputToAnchorMap_, goog.getUid(input));
   }, this);

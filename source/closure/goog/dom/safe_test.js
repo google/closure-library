@@ -681,9 +681,6 @@ testSuite({
     });
     let nonce = safe.getScriptNonce();
     if (!nonce) {
-      // clear nonce cache for test.
-      /** @type {?} */ (safe).cspNonce_ = null;
-
       // Place a nonced script in the page.
       nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
     }
@@ -714,8 +711,6 @@ testSuite({
   testSetScriptSrc_withIframe() {
     const url =
         TrustedResourceUrl.fromConstant(Const.from('javascript:trusted();'));
-    // clear nonce cache for test.
-    /** @type {?} */ (safe).cspNonce_ = null;
     // create the iframe and set up a script inside the iframe.
     let nonce = safe.getScriptNonce();
     if (!nonce) {
@@ -755,16 +750,11 @@ testSuite({
         this[attr] = value;
       },
     });
-    // clear nonce cache for test.
-    /** @type {?} */ (safe).cspNonce_ = null;
-
     // Place a nonced script in the page.
     let nonce = safe.getScriptNonce();
     if (!nonce) {
       nonce = 'ThisIsANonceThisIsANonceThisIsANonce';
     }
-
-    /** @type {?} */ (safe).cspNonce_ = null;
 
     const noncedScript = dom.createElement(TagName.SCRIPT);
     noncedScript.setAttribute('nonce', nonce);
@@ -922,8 +912,6 @@ testSuite({
     assertEquals('NONCE', safe.getStyleNonce());
     const style = document.querySelector('style[nonce]');
     style.parentNode.removeChild(style);
-    /** @suppress {visibility} */
-    safe.cspStyleNonce_ = null;
     assertEquals('NONCE2', safe.getStyleNonce(window));
   }
 });

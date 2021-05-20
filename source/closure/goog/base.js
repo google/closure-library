@@ -345,24 +345,6 @@ goog.constructNamespace_ = function(name, object, overwriteImplicit) {
 
 
 /**
- * Returns CSP nonce, if set for any script tag.
- * @param {?Window=} opt_window The window context used to retrieve the nonce.
- *     Defaults to global context.
- * @return {string} CSP nonce or empty string if no nonce is present.
- * @private
- */
-goog.getScriptNonce_ = function(opt_window) {
-  if (opt_window && opt_window != goog.global) {
-    return goog.getScriptNonceFromDocument_(opt_window.document);
-  }
-  if (goog.cspNonce_ === null) {
-    goog.cspNonce_ = goog.getScriptNonceFromDocument_(goog.global.document);
-  }
-  return goog.cspNonce_;
-};
-
-
-/**
  * According to the CSP3 spec a nonce must be a valid base64 string.
  * @see https://www.w3.org/TR/CSP3/#grammardef-base64-value
  * @private @const
@@ -371,18 +353,14 @@ goog.NONCE_PATTERN_ = /^[\w+/_-]+[=]{0,2}$/;
 
 
 /**
- * @private {?string}
- */
-goog.cspNonce_ = null;
-
-
-/**
  * Returns CSP nonce, if set for any script tag.
- * @param {!Document} doc
+ * @param {?Window=} opt_window The window context used to retrieve the nonce.
+ *     Defaults to global context.
  * @return {string} CSP nonce or empty string if no nonce is present.
  * @private
  */
-goog.getScriptNonceFromDocument_ = function(doc) {
+goog.getScriptNonce_ = function(opt_window) {
+  var doc = (opt_window || goog.global).document;
   var script = doc.querySelector && doc.querySelector('script[nonce]');
   if (script) {
     // Try to get the nonce from the IDL property first, because browsers that
@@ -1430,6 +1408,11 @@ goog.cloneObject = function(obj) {
   if (type == 'object' || type == 'array') {
     if (typeof obj.clone === 'function') {
       return obj.clone();
+    }
+    if (typeof Map !== 'undefined' && obj instanceof Map) {
+      return new Map(obj);
+    } else if (typeof Set !== 'undefined' && obj instanceof Set) {
+      return new Set(obj);
     }
     var clone = type == 'array' ? [] : {};
     for (var key in obj) {

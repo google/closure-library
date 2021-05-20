@@ -1244,7 +1244,7 @@ goog.editor.Field.POTENTIAL_SHORTCUT_KEYCODES_ = {
 goog.editor.Field.prototype.invokeShortCircuitingOp_ = function(op, var_args) {
   'use strict';
   var plugins = this.indexedPlugins_[op];
-  var argList = goog.array.slice(arguments, 1);
+  var argList = Array.prototype.slice.call(arguments, 1);
   for (var i = 0; i < plugins.length; ++i) {
     // If the plugin returns true, that means it handled the event and
     // we shouldn't propagate to the other plugins.
@@ -1272,7 +1272,7 @@ goog.editor.Field.prototype.invokeShortCircuitingOp_ = function(op, var_args) {
 goog.editor.Field.prototype.invokeOp_ = function(op, var_args) {
   'use strict';
   var plugins = this.indexedPlugins_[op];
-  var argList = goog.array.slice(arguments, 1);
+  var argList = Array.prototype.slice.call(arguments, 1);
   for (var i = 0; i < plugins.length; ++i) {
     var plugin = plugins[i];
     if (plugin.isEnabled(this) ||
@@ -1298,7 +1298,7 @@ goog.editor.Field.prototype.invokeOp_ = function(op, var_args) {
 goog.editor.Field.prototype.reduceOp_ = function(op, arg, var_args) {
   'use strict';
   var plugins = this.indexedPlugins_[op];
-  var argList = goog.array.slice(arguments, 1);
+  var argList = Array.prototype.slice.call(arguments, 1);
   for (var i = 0; i < plugins.length; ++i) {
     var plugin = plugins[i];
     if (plugin.isEnabled(this) ||

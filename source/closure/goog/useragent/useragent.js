@@ -563,16 +563,6 @@ goog.userAgent.isVersionOrHigher = function(version) {
 
 
 /**
- * Deprecated alias to `goog.userAgent.isVersionOrHigher`.
- * @param {string|number} version The version to check.
- * @return {boolean} Whether the user agent version is higher or the same as
- *     the given version.
- * @deprecated Use goog.userAgent.isVersionOrHigher().
- */
-goog.userAgent.isVersion = goog.userAgent.isVersionOrHigher;
-
-
-/**
  * Whether the IE effective document mode is higher or the same as the given
  * document mode version.
  * NOTE: Only for IE, return false for another browser.

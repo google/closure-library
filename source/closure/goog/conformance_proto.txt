@@ -23,13 +23,6 @@ requirement: {
 }
 
 requirement: {
-  rule_id: 'closure:expose'
-  type: CUSTOM
-  java_class: 'com.google.javascript.jscomp.ConformanceRules$BanExpose'
-  error_message: '@expose is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#expose'
-}
-
-requirement: {
   rule_id: 'closure:throwOfNonErrorTypes'
   type: CUSTOM
   java_class: 'com.google.javascript.jscomp.ConformanceRules$BanThrowOfNonErrorTypes'
@@ -360,6 +353,7 @@ requirement: {
   rule_id: 'closure:trustedResourceUrlProperties'
   type: BANNED_PROPERTY_NON_CONSTANT_WRITE
   error_message: 'Assignment to property requires a TrustedResourceUrl via goog.dom.safe. See https://google.github.io/closure-library/develop/conformance_rules.html#trustedResourceUrl'
+  report_loose_type_violations: false
 
   # Properties which can only be assigned to from a TrustedResourceUrl.
   value: 'HTMLElement.prototype.manifest'

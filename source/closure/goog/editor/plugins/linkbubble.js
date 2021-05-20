@@ -44,7 +44,7 @@ goog.editor.plugins.LinkBubble = function(var_args) {
    * @type {Array<!goog.editor.plugins.LinkBubble.Action>}
    * @private
    */
-  this.extraActions_ = goog.array.toArray(arguments);
+  this.extraActions_ = Array.prototype.slice.call(arguments);
 
   /**
    * List of spans corresponding to the extra actions.

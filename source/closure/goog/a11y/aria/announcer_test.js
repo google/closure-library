@@ -129,4 +129,16 @@ testSuite({
     assertEquals('', aria.getState(liveRegion, State.HIDDEN));
     googDispose(announcer);
   },
+
+  testAnnouncerSetsAndReturnsId() {
+    const announcer = new Announcer(googDom.getDomHelper());
+    announcer.say('test');
+
+    // Read the dom to find the id
+    const domLiveRegionId = getLiveRegion('polite').getAttribute('id');
+
+    assertEquals(
+        announcer.getLiveRegionId(LivePriority.POLITE), domLiveRegionId);
+    googDispose(announcer);
+  },
 });
