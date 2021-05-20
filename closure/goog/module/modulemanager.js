@@ -454,7 +454,9 @@ goog.module.ModuleManager.prototype.dispatchActiveIdleChangeIfNeeded_ =
 goog.module.ModuleManager.prototype.preloadModule = function(id, opt_timeout) {
   'use strict';
   var d = new goog.async.Deferred();
-  window.setTimeout(
+  // Call setTimeout on global object so that it can be called from within
+  // webworkers.
+  goog.global.setTimeout(
       goog.bind(this.addLoadModule_, this, id, d), opt_timeout || 0);
   return d;
 };
@@ -721,7 +723,9 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
 
   var delay = this.getBackOff_();
   if (delay) {
-    window.setTimeout(loadFn, delay);
+    // Call setTimeout on global object so that it can be called from within
+    // webworkers.
+    goog.global.setTimeout(loadFn, delay);
   } else {
     loadFn();
   }
@@ -923,7 +927,10 @@ goog.module.ModuleManager.prototype.execOnLoad = function(
     if (opt_preferSynchronous) {
       callbackWrapper.execute(this.getModuleContext());
     } else {
-      window.setTimeout(goog.bind(callbackWrapper.execute, callbackWrapper), 0);
+      // Call setTimeout on global object so that it can be called from within
+      // webworkers.
+      goog.global.setTimeout(
+          goog.bind(callbackWrapper.execute, callbackWrapper), 0);
     }
   } else if (this.isModuleLoading(moduleId)) {
     goog.log.fine(this.logger_, moduleId + ' module already loading');
