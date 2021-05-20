@@ -18,7 +18,6 @@
 
 /**
  * @fileoverview Native browser textarea renderer for {@link goog.ui.Textarea}s.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.TextareaRenderer');

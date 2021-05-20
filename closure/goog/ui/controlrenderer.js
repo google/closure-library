@@ -7,7 +7,6 @@
 /**
  * @fileoverview Base class for control renderers.
  * TODO(attila):  If the renderer framework works well, pull it into Component.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.ControlRenderer');

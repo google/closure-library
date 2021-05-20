@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Renderer for {@link goog.ui.Palette}s.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.PaletteRenderer');

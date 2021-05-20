@@ -8,7 +8,6 @@
  * @fileoverview A class for representing items in menus.
  * @see goog.ui.Menu
  * @see ../demos/menuitem.html
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.MenuItem');
