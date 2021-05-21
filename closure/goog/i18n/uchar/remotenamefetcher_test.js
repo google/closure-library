@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ * @suppress {missingRequire} Swapping XhrIo
  */
 goog.module('goog.i18n.uChar.RemoteNameFetcherTest');
 goog.setTestOnly();

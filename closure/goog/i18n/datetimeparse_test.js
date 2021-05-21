@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview
- * @suppress {missingRequire}
+ * @suppress {missingRequire} Swapping using fully qualified name
  */
 goog.module('goog.i18n.DateTimeParseTest');
 goog.setTestOnly();
