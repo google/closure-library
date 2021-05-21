@@ -171,6 +171,8 @@ goog.structs.Map.prototype.containsValue = function(val) {
  *     to test equality of values. If not specified, this will test whether
  *     the values contained in each map are identical objects.
  * @return {boolean} Whether the maps are equal.
+ * @deprecated Use goog.collections.maps.equals(thisMap, otherMap,
+ *     opt_equalityFn) instead, for alignment with ES6 Map.
  */
 goog.structs.Map.prototype.equals = function(otherMap, opt_equalityFn) {
   'use strict';
@@ -352,6 +354,9 @@ goog.structs.Map.prototype.set = function(key, value) {
 /**
  * Adds multiple key-value pairs from another goog.structs.Map or Object.
  * @param {?Object} map Object containing the data to add.
+ * @deprecated Use goog.collections.maps.setAll(thisMap, map.entries()) if map
+ *     is an ES6 or goog.structs Map, or
+ *     goog.collections.maps.setAll(thisMap, Object.entries(map)) otherwise.
  */
 goog.structs.Map.prototype.addAll = function(map) {
   'use strict';
@@ -406,6 +411,8 @@ goog.structs.Map.prototype.clone = function() {
  * It acts very similarly to {goog.object.transpose(Object)}.
  *
  * @return {!goog.structs.Map} The transposed map.
+ * @deprecated Use goog.collections.maps.transpose instead, for alignment with
+ *     ES6 Maps.
  */
 goog.structs.Map.prototype.transpose = function() {
   'use strict';
@@ -422,6 +429,8 @@ goog.structs.Map.prototype.transpose = function() {
 
 /**
  * @return {!Object} Object representation of the map.
+ * @deprecated Use goog.collections.maps.toObject(thisMap) instead, for aligment
+ *     with ES6 Maps.
  */
 goog.structs.Map.prototype.toObject = function() {
   'use strict';
