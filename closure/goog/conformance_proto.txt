@@ -406,29 +406,6 @@ requirement: {
   allowlist_regexp: '.+/closure/goog/ui/abstractspellchecker.js'
 }
 
-requirement: {
-  rule_id: 'closure:setAttribute'
-  type: BANNED_CODE_PATTERN
-  error_message: 'Assigning a value to a dangerous property via setAttribute is forbidden. See https://google.github.io/closure-library/develop/conformance_rules.html#createDom'
-
-  value:
-      '/**\n'
-      ' * @param {!HTMLEmbedElement|!HTMLFrameElement|!HTMLIFrameElement|!HTMLScriptElement|!HTMLTrackElement} element\n'
-      ' * @param {?} value\n'
-      ' */\n'
-      'function template(element, value) {'
-      '  element.setAttribute(\'src\', value);'
-      '}'
-  value:
-      '/**\n'
-      ' * @param {!HTMLObjectElement} element\n'
-      ' * @param {?} value\n'
-      ' */\n'
-      'function template(element, value) {\n'
-      '  element.setAttribute(\'data\', value);\n'
-      '}'
-}
-
 #### Closure functions which use goog.html.legacyconversions ####
 
 # These are functions which accept a string and then use
