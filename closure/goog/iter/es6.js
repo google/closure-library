@@ -9,6 +9,7 @@
  */
 
 goog.module('goog.iter.es6');
+goog.module.declareLegacyNamespace();
 
 const GoogIterable = goog.require('goog.iter.Iterable');
 const GoogIterator = goog.require('goog.iter.Iterator');
