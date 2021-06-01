@@ -52,6 +52,13 @@ goog.structs.getValues = function(col) {
   if (col.getValues && typeof col.getValues == 'function') {
     return col.getValues();
   }
+  // ES6 Map and Set both define a values function that returns an iterator.
+  // The typeof check allows the compiler to remove the Map and Set polyfills
+  // if they are otherwise unused throughout the entire binary.
+  if ((typeof Map !== 'undefined' && col instanceof Map) ||
+      (typeof Set !== 'undefined' && col instanceof Set)) {
+    return Array.from(col.values());
+  }
   if (typeof col === 'string') {
     return col.split('');
   }
@@ -80,6 +87,17 @@ goog.structs.getKeys = function(col) {
   }
   // if we have getValues but no getKeys we know this is a key-less collection
   if (col.getValues && typeof col.getValues == 'function') {
+    return undefined;
+  }
+  // ES6 Map and Set both define a keys function that returns an iterator. For
+  // Sets this iterates over the same values as the values iterator.
+  // The typeof check allows the compiler to remove the Map and Set polyfills
+  // if they are otherwise unused throughout the entire binary.
+  if (typeof Map !== 'undefined' && col instanceof Map) {
+    return Array.from(col.keys());
+  }
+  // Unlike the native Set, goog.structs.Set does not expose keys as the values.
+  if (typeof Set !== 'undefined' && col instanceof Set) {
     return undefined;
   }
   if (goog.isArrayLike(col) || typeof col === 'string') {
