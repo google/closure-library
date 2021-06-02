@@ -216,7 +216,7 @@ goog.ui.InputDatePicker.prototype.getInputValueAsDate_ = function() {
     var date = new goog.date.DateTime();
     // DateTime needed as parse assumes it can call getHours(), getMinutes(),
     // etc, on the date if hours and minutes aren't defined.
-    if (this.dateTimeParser_.strictParse(value, date) > 0) {
+    if (this.dateTimeParser_.parse(value, date, {validate: true}) > 0) {
       // Parser with YYYY format string will interpret 1 as year 1 A.D.
       // However, datepicker.setDate() method will change it into 1901.
       // Same is true for any other pattern when number entered by user is
@@ -397,17 +397,6 @@ goog.ui.InputDatePicker.DateFormatter.prototype.format = function(date) {};
  * @record
  */
 goog.ui.InputDatePicker.DateParser = function() {};
-
-/**
- * @param {string} text The string being parsed.
- * @param {!goog.date.DateLike} date The Date object to hold the parsed date.
- * @return {number} How many characters parser advanced.
- * @deprecated See the deprecation warning on
- *     goog.i18n.DateTimeParse#strictParse - this will be deprecated in favour
- *     of only using the `parse` signature with options.
- */
-goog.ui.InputDatePicker.DateParser.prototype.strictParse = function(
-    text, date) {};
 
 /**
  * @param {string} text The string being parsed.
