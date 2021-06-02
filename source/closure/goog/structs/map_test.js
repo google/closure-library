@@ -38,10 +38,24 @@ testSuite({
     assertEquals('count, should be 3', m.getCount(), 3);
   },
 
+  testSize() {
+    const m = getMap();
+    assertEquals('size, should be 4', m.size, 4);
+    m.delete('d');
+    assertEquals('size, should be 3', m.size, 3);
+  },
+
   testKeys() {
     const m = getMap();
     assertEquals(
         'getKeys, The keys should be a,b,c', m.getKeys().join(','), 'a,b,c,d');
+  },
+
+  testKeysIterator() {
+    const m = getMap();
+    assertEquals(
+        'keys, The keys should be a,b,c', Array.from(m.keys()).join(','),
+        'a,b,c,d');
   },
 
   testValues() {
@@ -51,11 +65,31 @@ testSuite({
         '0,1,2,3');
   },
 
+  testValuesIterator() {
+    const m = getMap();
+    assertEquals(
+        'values, The values should be 0,1,2', Array.from(m.values()).join(','),
+        '0,1,2,3');
+  },
+
+  testEntriesIterator() {
+    const m = getMap();
+    assertElementsEquals(
+        'entries, The values should be 0,1,2', Array.from(m.entries()).flat(),
+        [['a', 0], ['b', 1], ['c', 2], ['d', 3]].flat());
+  },
+
   testContainsKey() {
     const m = getMap();
     assertTrue('containsKey, Should contain the \'a\' key', m.containsKey('a'));
     assertFalse(
         'containsKey, Should not contain the \'e\' key', m.containsKey('e'));
+  },
+
+  testHas() {
+    const m = getMap();
+    assertTrue('has, Should contain the \'a\' key', m.has('a'));
+    assertFalse('has, Should not contain the \'e\' key', m.has('e'));
   },
 
   testClear() {
@@ -123,6 +157,24 @@ testSuite({
     }
     assertTrue(m.isEmpty());
     assertEquals('', m.getKeys().join(''));
+  },
+
+  /**
+   * @suppress {visibility} checking private keys_ array shrinks as elements
+   * are removed from the map.
+   */
+  testDelete() {
+    const m = new StructsMap();
+    for (let i = 0; i < 1000; i++) {
+      m.set(i, 'foo');
+    }
+
+    for (let i = 0; i < 1000; i++) {
+      assertTrue(m.keys_.length <= 2 * m.size);
+      m.delete(i);
+    }
+    assertEquals(0, m.size);
+    assertEquals('', Array.from(m.keys()).join(''));
   },
 
   testForEach() {
@@ -360,7 +412,11 @@ testSuite({
 
     const transposed = m.transpose();
     assertEquals(
-        'Should contain the keys', 'abcde', googIter.join(transposed, ''));
+        'Should contain the keys from the original map as values', 'abcde',
+        googIter.join(transposed, ''));
+    assertEquals(
+        'Should contain the values from the original map as keys', '12345',
+        Array.from(transposed.keys()).join(''));
   },
 
   testToObject() {

@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview
- * @suppress {missingRequire}
+ * @suppress {missingRequire} swapping implementation using fully qualified name
  */
 goog.module('goog.i18n.DateTimeFormatTest');
 goog.setTestOnly();

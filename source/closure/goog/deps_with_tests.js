@@ -58,6 +58,8 @@ goog.addDependency('bootstrap/nodejs.js', [], []);
 goog.addDependency('bootstrap/webworkers.js', [], []);
 goog.addDependency('collections/iters.js', ['goog.collections.iters'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('collections/iters_test.js', ['goog.collections.iters.iterableTest'], ['goog.collections.iters', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('collections/maps.js', ['goog.collections.maps'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('collections/maps_test.js', ['goog.collections.mapsTest'], ['goog.collections.maps', 'goog.iter', 'goog.structs.Map', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('collections/sets.js', ['goog.collections.sets'], ['goog.collections.iters'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('collections/sets_test.js', ['goog.collections.setsTest'], ['goog.collections.sets', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color'], {'lang': 'es6'});
@@ -1074,7 +1076,7 @@ goog.addDependency('structs/inversionmap.js', ['goog.structs.InversionMap'], ['g
 goog.addDependency('structs/inversionmap_test.js', ['goog.structs.InversionMapTest'], ['goog.structs.InversionMap', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('structs/linkedmap.js', ['goog.structs.LinkedMap'], ['goog.structs.Map']);
 goog.addDependency('structs/linkedmap_test.js', ['goog.structs.LinkedMapTest'], ['goog.structs.LinkedMap', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('structs/map.js', ['goog.structs.Map'], ['goog.iter.Iterator', 'goog.iter.StopIteration']);
+goog.addDependency('structs/map.js', ['goog.structs.Map'], ['goog.collections.iters', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.iter.es6'], {'lang': 'es6'});
 goog.addDependency('structs/map_test.js', ['goog.structs.MapTest'], ['goog.iter', 'goog.structs', 'goog.structs.Map', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('structs/node.js', ['goog.structs.Node'], []);
 goog.addDependency('structs/pool.js', ['goog.structs.Pool'], ['goog.Disposable', 'goog.structs.Queue', 'goog.structs.Set']);

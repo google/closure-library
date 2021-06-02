@@ -14,7 +14,7 @@
  */
 
 goog.module('goog.collections.iters');
-
+goog.module.declareLegacyNamespace();
 
 /**
  * Get the iterator for an iterable.

@@ -61,7 +61,9 @@ goog.iter.Iterator = function() {};
  */
 goog.iter.Iterator.prototype.next = function() {
   'use strict';
-  return this.nextValueOrThrow();
+  // Explicitly do not call nextValueOrThrow via `this`, as with some subclass
+  // trees this can lead to incorrect results or infinite recursion.
+  return goog.iter.Iterator.prototype.nextValueOrThrow.call(this);
 };
 
 /**

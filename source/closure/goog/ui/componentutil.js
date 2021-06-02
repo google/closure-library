@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Static utility methods for UI components.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.ComponentUtil');

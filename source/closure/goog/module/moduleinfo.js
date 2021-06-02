@@ -310,7 +310,10 @@ goog.module.ModuleInfo.prototype.onError = function(cause) {
   if (result) {
     // Throw an exception asynchronously. Do not let the exception leak
     // up to the caller, or it will blow up the module loading framework.
-    window.setTimeout(
+
+    // Call setTimeout on global object so that it can be called from within
+    // webworkers.
+    goog.global.setTimeout(
         goog.functions.error('Module errback failures: ' + result), 0);
   }
   this.earlyOnloadCallbacks_.length = 0;

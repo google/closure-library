@@ -1,6 +1,6 @@
 /**
  * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ * @suppress {missingRequire} Swapping implementation using namespace
  */
 /**
  * @license

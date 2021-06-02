@@ -7,7 +7,6 @@
 /**
  * @fileoverview A custom button renderer that uses CSS voodoo to render a
  * button-like object with fake rounded corners.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.CustomButtonRenderer');

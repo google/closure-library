@@ -249,6 +249,22 @@ goog.LOCALE = goog.define('goog.LOCALE', 'en');  // default to en
 
 
 /**
+ * This method is intended to be used for bookkeeping purposes.  We would
+ * like to distinguish uses of goog.LOCALE used for code stripping purposes
+ * and uses of goog.LOCALE for other uses (such as URL parameters).
+ *
+ * This allows us to ban direct uses of goog.LOCALE and to ensure that all
+ * code has been transformed to our new localization build scheme.
+ *
+ * @return {string}
+ *
+ */
+goog.getLocale = function() {
+  return goog.LOCALE;
+};
+
+
+/**
  * @define {boolean} Whether this code is running on trusted sites.
  *
  * On untrusted sites, several native functions can be defined or overridden by

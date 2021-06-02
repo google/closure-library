@@ -137,9 +137,13 @@ testSuite({
 
     const aMap = new StructsMap({a: 1, b: 2, c: 3});
     assertEquals('123', structs.getValues(aMap).join(''));
+    const nativeMap = new Map([['a', 1], ['b', 2], ['c', 3]]);
+    assertEquals('123', structs.getValues(nativeMap).join(''));
 
     const aSet = new StructsSet([1, 2, 3]);
-    assertEquals('123', structs.getValues(aMap).join(''));
+    assertEquals('123', structs.getValues(aSet).join(''));
+    const nativeSet = new Set([1, 2, 3]);
+    assertEquals('123', structs.getValues(nativeSet).join(''));
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */
@@ -164,9 +168,13 @@ testSuite({
 
     const aMap = new StructsMap({a: 1, b: 2, c: 3});
     assertEquals('abc', structs.getKeys(aMap).join(''));
+    const nativeMap = new Map([['a', 1], ['b', 2], ['c', 3]]);
+    assertEquals('abc', structs.getKeys(nativeMap).join(''));
 
     const aSet = new StructsSet([1, 2, 3]);
     assertUndefined(structs.getKeys(aSet));
+    const nativeSet = new Set([1, 2, 3]);
+    assertUndefined(structs.getKeys(nativeSet));
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */

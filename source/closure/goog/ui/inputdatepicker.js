@@ -27,8 +27,8 @@ goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.PopupBase');
 goog.require('goog.ui.PopupDatePicker');
 goog.requireType('goog.date.Date');
+goog.requireType('goog.date.DateLike');
 goog.requireType('goog.events.Event');
-goog.requireType('goog.i18n.DateTimeFormat');
 goog.requireType('goog.ui.DatePickerEvent');
 
 
@@ -36,10 +36,11 @@ goog.requireType('goog.ui.DatePickerEvent');
 /**
  * Input date picker widget.
  *
- * @param {goog.i18n.DateTimeFormat} dateTimeFormatter A formatter instance
- *     used to format the date picker's date for display in the input element.
- * @param {goog.i18n.DateTimeParse} dateTimeParser A parser instance used to
- *     parse the input element's string as a date to set the picker.
+ * @param {!goog.ui.InputDatePicker.DateFormatter} dateTimeFormatter A formatter
+ *     instance used to format the date picker's date for display in the input
+ *     element.
+ * @param {!goog.ui.InputDatePicker.DateParser} dateTimeParser A parser instance
+ *     used to parse the input element's string as a date to set the picker.
  * @param {goog.ui.DatePicker=} opt_datePicker Optional DatePicker.  This
  *     enables the use of a custom date-picker instance.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
@@ -64,7 +65,7 @@ goog.inherits(goog.ui.InputDatePicker, goog.ui.Component);
 
 /**
  * Used to format the date picker's date for display in the input element.
- * @type {?goog.i18n.DateTimeFormat}
+ * @type {?goog.ui.InputDatePicker.DateFormatter}
  * @private
  */
 goog.ui.InputDatePicker.prototype.dateTimeFormatter_ = null;
@@ -72,7 +73,7 @@ goog.ui.InputDatePicker.prototype.dateTimeFormatter_ = null;
 
 /**
  * Used to parse the input element's string as a date to set the picker.
- * @type {?goog.i18n.DateTimeParse}
+ * @type {?goog.ui.InputDatePicker.DateParser}
  * @private
  */
 goog.ui.InputDatePicker.prototype.dateTimeParser_ = null;
@@ -215,7 +216,7 @@ goog.ui.InputDatePicker.prototype.getInputValueAsDate_ = function() {
     var date = new goog.date.DateTime();
     // DateTime needed as parse assumes it can call getHours(), getMinutes(),
     // etc, on the date if hours and minutes aren't defined.
-    if (this.dateTimeParser_.strictParse(value, date) > 0) {
+    if (this.dateTimeParser_.parse(value, date, {validate: true}) > 0) {
       // Parser with YYYY format string will interpret 1 as year 1 A.D.
       // However, datepicker.setDate() method will change it into 1901.
       // Same is true for any other pattern when number entered by user is
@@ -372,3 +373,36 @@ goog.ui.InputDatePicker.prototype.onDateChanged_ = function(e) {
   'use strict';
   this.setInputValueAsDate_(e.date);
 };
+
+/**
+ * A DateFormatter implements functionality to convert a Date into
+ * human-readable text. text into a Date. This interface is expected to accept
+ * an instance of goog.i18n.DateTimeFormat directly, and as such the method
+ * signatures directly match those found on that class.
+ * @record
+ */
+goog.ui.InputDatePicker.DateFormatter = function() {};
+
+/**
+ * @param {!goog.date.DateLike} date The Date object that is being formatted.
+ * @return {string} The formatted date value.
+ */
+goog.ui.InputDatePicker.DateFormatter.prototype.format = function(date) {};
+
+/**
+ * A DateParser implements functionality to parse text into a Date. This
+ * interface is expected to accept an instance of goog.i18n.DateTimeParse
+ * directly, and as such the method signatures directly match those found on
+ * that class.
+ * @record
+ */
+goog.ui.InputDatePicker.DateParser = function() {};
+
+/**
+ * @param {string} text The string being parsed.
+ * @param {!goog.date.DateLike} date The Date object to hold the parsed date.
+ * @param {!goog.i18n.DateTimeParse.ParseOptions=} options The options object.
+ * @return {number} How many characters parser advanced.
+ */
+goog.ui.InputDatePicker.DateParser.prototype.parse = function(
+    text, date, options) {};
