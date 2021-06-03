@@ -164,36 +164,47 @@ goog.crypt.base64.encodeByteArray = function(input, alphabet) {
   if (alphabet === undefined) {
     alphabet = goog.crypt.base64.Alphabet.DEFAULT;
   }
-
   goog.crypt.base64.init_();
 
-  var byteToCharMap = goog.crypt.base64.byteToCharMaps_[alphabet];
+  const byteToCharMap = goog.crypt.base64.byteToCharMaps_[alphabet];
+  const output = new Array(Math.floor(input.length / 3));
+  const paddingChar = byteToCharMap[64] || '';
 
-  var output = [];
+  // Add all blocks for which we have four output bytes.
+  let inputIdx = 0;
+  let outputIdx = 0;
+  for (; inputIdx < input.length - 2; inputIdx += 3) {
+    const byte1 = input[inputIdx];
+    const byte2 = input[inputIdx + 1];
+    const byte3 = input[inputIdx + 2];
 
-  for (var i = 0; i < input.length; i += 3) {
-    var byte1 = input[i];
-    var haveByte2 = i + 1 < input.length;
-    var byte2 = haveByte2 ? input[i + 1] : 0;
-    var haveByte3 = i + 2 < input.length;
-    var byte3 = haveByte3 ? input[i + 2] : 0;
+    const outChar1 = byteToCharMap[byte1 >> 2];
+    const outChar2 = byteToCharMap[((byte1 & 0x03) << 4) | (byte2 >> 4)];
+    const outChar3 = byteToCharMap[((byte2 & 0x0F) << 2) | (byte3 >> 6)];
+    const outChar4 = byteToCharMap[byte3 & 0x3F];
 
-    var outByte1 = byte1 >> 2;
-    var outByte2 = ((byte1 & 0x03) << 4) | (byte2 >> 4);
-    var outByte3 = ((byte2 & 0x0F) << 2) | (byte3 >> 6);
-    var outByte4 = byte3 & 0x3F;
+    output[outputIdx++] = ((('' + outChar1) + outChar2) + outChar3) + outChar4;
+  }
 
-    if (!haveByte3) {
-      outByte4 = 64;
+  // Add our trailing block, in which case we can skip computations relating to
+  // byte3/outByte4.
+  let byte2 = 0;
+  let outChar3 = paddingChar;
+  switch (input.length - inputIdx) {
+    case 2:
+      byte2 = input[inputIdx + 1];
+      outChar3 = byteToCharMap[(byte2 & 0x0F) << 2] || paddingChar;
+      // fall through.
+    case 1:
+      const byte1 = input[inputIdx];
+      const outChar1 = byteToCharMap[byte1 >> 2];
+      const outChar2 = byteToCharMap[((byte1 & 0x03) << 4) | (byte2 >> 4)];
 
-      if (!haveByte2) {
-        outByte3 = 64;
-      }
-    }
-
-    output.push(
-        byteToCharMap[outByte1], byteToCharMap[outByte2],
-        byteToCharMap[outByte3] || '', byteToCharMap[outByte4] || '');
+      output[outputIdx] =
+          ((('' + outChar1) + outChar2) + outChar3) + paddingChar;
+      // fall through.
+    default:
+      // We've ended on a block, so we have no more bytes to encode.
   }
 
   return output.join('');
