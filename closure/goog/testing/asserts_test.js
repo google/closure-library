@@ -874,11 +874,18 @@ testSuite({
     }, 'Expected 2 elements: [0,1], got 1 elements: [0]');
   },
 
+  testAssertSameElementsOnStructsSet() {
+    assertSameElements({0: 0, 1: 1, length: 2}, new StructsSet([0, 1]));
+    assertThrowsJsUnitException(() => {
+      assertSameElements({0: 0, 1: 1, length: 2}, new StructsSet([0]));
+    }, 'Expected 2 elements: [0,1], got 1 elements: [0]');
+  },
+
   testAssertSameElementsWithBadArguments() {
     const ex = assertThrowsJsUnitException(
         /** @suppress {checkTypes} */
         () => {
-          assertSameElements([], new StructsSet());
+          assertSameElements([], new StructsMap());
         });
     assertContains('actual', ex.toString());
     assertContains('array-like or iterable', ex.toString());

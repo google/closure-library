@@ -86,7 +86,7 @@ goog.structs.Map = function(opt_map, var_args) {
 
 /**
  * @return {number} The number of key-value pairs in the map.
- * @deprecated Use the `size` property instead.
+ * @deprecated Use the `size` property instead, for alignment with ES6 Map.
  */
 goog.structs.Map.prototype.getCount = function() {
   'use strict';
