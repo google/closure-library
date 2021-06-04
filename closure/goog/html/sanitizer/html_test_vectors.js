@@ -16898,6 +16898,15 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "<table><td></td></table>",
      ],
      name: "contract_iframe_scriptinside"},
+    {input: "<iframe srcdoc=\"x\"></iframe>",
+     acceptable: [
+         "<iframe></iframe>",
+         "<iframe>",
+         "<iframe />",
+         "<iframe/>",
+         "",
+     ],
+     name: "contract_iframe_srcdoc"},
     {input: "<iframe loading=\"x\"></iframe>",
      acceptable: [
          "<iframe></iframe>",
