@@ -255,9 +255,6 @@ testSuite({
     assertEquals(
         'Palette element must have expected aria-label', 'My Palette',
         element.getAttribute('aria-label'));
-    assertEquals(
-        'Palette element must have expected aria role', 'grid',
-        element.getAttribute('role'));
     palette.setAriaLabel('My new Palette');
     assertEquals(
         'Palette element must have updated aria-label', 'My new Palette',

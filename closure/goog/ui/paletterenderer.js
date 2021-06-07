@@ -100,7 +100,6 @@ goog.ui.PaletteRenderer.prototype.createDom = function(palette) {
       this.createGrid(
           /** @type {Array<Node>} */ (palette.getContent()), palette.getSize(),
           palette.getDomHelper()));
-  goog.a11y.aria.setRole(element, goog.a11y.aria.Role.GRID);
   // It's safe to store grid width here since `goog.ui.Palette#setSize` cannot
   // be called after createDom.
   goog.dom.dataset.set(
@@ -150,6 +149,7 @@ goog.ui.PaletteRenderer.prototype.createTable = function(rows, dom) {
       dom.createDom(
           goog.dom.TagName.TBODY, goog.getCssName(this.getCssClass(), 'body'),
           rows));
+  goog.a11y.aria.setRole(table, goog.a11y.aria.Role.GRID);
   table.cellSpacing = '0';
   table.cellPadding = '0';
   return table;
