@@ -179,7 +179,7 @@ class SafeScript {
   }
 
   /**
-   * Converts the given value to a embeddabel JSON string and returns it. The
+   * Converts the given value to an embeddable JSON string and returns it. The
    * resulting string can be embedded in HTML because the '<' character is
    * encoded.
    *
