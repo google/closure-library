@@ -410,7 +410,7 @@ goog.inherits(goog.date.DateRange.Iterator, goog.iter.Iterator);
 
 
 /** @override */
-goog.date.DateRange.Iterator.prototype.next = function() {
+goog.date.DateRange.Iterator.prototype.nextValueOrThrow = function() {
   'use strict';
   if (Number(this.nextDate_.toIsoString()) > this.endDate_) {
     throw goog.iter.StopIteration;
@@ -420,3 +420,9 @@ goog.date.DateRange.Iterator.prototype.next = function() {
   this.nextDate_.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
   return rv;
 };
+/**
+ * TODO(user): Please do not remove - this will be cleaned up centrally.
+ * @override @see {!goog.iter.Iterator}
+ */
+goog.date.DateRange.Iterator.prototype.next =
+    goog.date.DateRange.Iterator.prototype.nextValueOrThrow;

@@ -52,7 +52,7 @@ goog.inherits(goog.dom.iter.SiblingIterator, goog.iter.Iterator);
 
 
 /** @override */
-goog.dom.iter.SiblingIterator.prototype.next = function() {
+goog.dom.iter.SiblingIterator.prototype.nextValueOrThrow = function() {
   'use strict';
   var node = this.node_;
   if (!node) {
@@ -61,6 +61,12 @@ goog.dom.iter.SiblingIterator.prototype.next = function() {
   this.node_ = this.reverse_ ? node.previousSibling : node.nextSibling;
   return node;
 };
+/**
+ * TODO(user): Please do not remove - this will be cleaned up centrally.
+ * @override @see {!goog.iter.Iterator}
+ */
+goog.dom.iter.SiblingIterator.prototype.next =
+    goog.dom.iter.SiblingIterator.prototype.nextValueOrThrow;
 
 
 
@@ -114,7 +120,7 @@ goog.inherits(goog.dom.iter.AncestorIterator, goog.iter.Iterator);
 
 
 /** @override */
-goog.dom.iter.AncestorIterator.prototype.next = function() {
+goog.dom.iter.AncestorIterator.prototype.nextValueOrThrow = function() {
   'use strict';
   var node = this.node_;
   if (!node) {
@@ -123,3 +129,9 @@ goog.dom.iter.AncestorIterator.prototype.next = function() {
   this.node_ = node.parentNode;
   return node;
 };
+/**
+ * TODO(user): Please do not remove - this will be cleaned up centrally.
+ * @override @see {!goog.iter.Iterator}
+ */
+goog.dom.iter.AncestorIterator.prototype.next =
+    goog.dom.iter.AncestorIterator.prototype.nextValueOrThrow;

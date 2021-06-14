@@ -716,13 +716,20 @@ testSuite({
        * type checking
        */
       iter.thing = this;
-      iter.next = function() {
+      iter.nextValueOrThrow = function() {
         if (this.index < this.thing.what.length) {
           return this.thing.what[this.index++].split('@')[0];
         } else {
           throw StopIteration;
         }
       };
+      /**
+       * TODO(user): Please do not remove - this will be cleaned up
+       * centrally.
+       * @override @see {!goog.iter.Iterator}
+       */
+      iter.next = iter.nextValueOrThrow.bind(iter);
+
       return iter;
     };
 

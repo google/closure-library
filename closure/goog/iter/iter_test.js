@@ -19,11 +19,21 @@ class ArrayIterator extends IterIterator {
     this.current_ = 0;
   }
 
-  next() {
+  /** @override */
+  nextValueOrThrow() {
     if (this.current_ >= this.array_.length) {
       throw StopIteration;
     }
     return this.array_[this.current_++];
+  }
+
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  next() {
+    return ArrayIterator.prototype.nextValueOrThrow.call(this);
   }
 }
 
@@ -374,6 +384,9 @@ testSuite({
 
     const iterLikeObject = {
       next: function() {
+        throw StopIteration;
+      },
+      nextValueOrThrow() {
         throw StopIteration;
       }
     };
