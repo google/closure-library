@@ -86,7 +86,7 @@ goog.structs.Map = function(opt_map, var_args) {
 
 /**
  * @return {number} The number of key-value pairs in the map.
- * @deprecated Use the `size` property instead.
+ * @deprecated Use the `size` property instead, for alignment with ES6 Map.
  */
 goog.structs.Map.prototype.getCount = function() {
   'use strict';
@@ -519,7 +519,7 @@ goog.structs.Map.prototype.__iterator__ = function(opt_keys) {
   var selfObj = this;
 
   var newIter = new goog.iter.Iterator;
-  newIter.next = function() {
+  newIter.nextValueOrThrow = function() {
     'use strict';
     if (version != selfObj.version_) {
       throw new Error('The map has changed since the iterator was created');
@@ -530,6 +530,13 @@ goog.structs.Map.prototype.__iterator__ = function(opt_keys) {
     var key = selfObj.keys_[i++];
     return opt_keys ? key : selfObj.map_[key];
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  newIter.next = newIter.nextValueOrThrow.bind(newIter);
+
   return newIter;
 };
 

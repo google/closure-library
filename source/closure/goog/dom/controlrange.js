@@ -506,7 +506,7 @@ goog.dom.ControlRangeIterator.prototype.isLast = function() {
  * @return {Node} The node at the next position.
  * @override
  */
-goog.dom.ControlRangeIterator.prototype.next = function() {
+goog.dom.ControlRangeIterator.prototype.nextValueOrThrow = function() {
   'use strict';
   // Iterate over each element in the range, and all of its children.
   if (this.isLast()) {
@@ -521,6 +521,13 @@ goog.dom.ControlRangeIterator.prototype.next = function() {
   // Call the super function.
   return goog.dom.ControlRangeIterator.superClass_.next.call(this);
 };
+/**
+ * TODO(user): Please do not remove - this will be cleaned up centrally.
+ * @override @see {!goog.iter.Iterator}
+ */
+goog.dom.ControlRangeIterator.prototype.next =
+    goog.dom.ControlRangeIterator.prototype.nextValueOrThrow;
+
 
 
 /** @override */

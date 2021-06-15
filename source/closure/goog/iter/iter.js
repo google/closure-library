@@ -116,7 +116,7 @@ goog.iter.toIterator = function(iterable) {
     var like = /** @type {!IArrayLike<number|string>} */ (iterable);
     var i = 0;
     var newIter = new goog.iter.Iterator;
-    newIter.next = function() {
+    newIter.nextValueOrThrow = function() {
       'use strict';
       while (true) {
         if (i >= like.length) {
@@ -130,6 +130,13 @@ goog.iter.toIterator = function(iterable) {
         return like[i++];
       }
     };
+    /**
+     * TODO(user): Please do not remove - this will be cleaned up
+     * centrally.
+     * @override @see {!goog.iter.Iterator}
+     */
+    newIter.next = newIter.nextValueOrThrow.bind(newIter);
+
     return newIter;
   }
 
@@ -208,7 +215,7 @@ goog.iter.filter = function(iterable, f, opt_obj) {
   'use strict';
   var iterator = goog.iter.toIterator(iterable);
   var newIter = new goog.iter.Iterator;
-  newIter.next = function() {
+  newIter.nextValueOrThrow = function() {
     'use strict';
     while (true) {
       var val = iterator.next();
@@ -217,6 +224,13 @@ goog.iter.filter = function(iterable, f, opt_obj) {
       }
     }
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  newIter.next = newIter.nextValueOrThrow.bind(newIter);
+
   return newIter;
 };
 
@@ -277,7 +291,7 @@ goog.iter.range = function(startOrStop, opt_stop, opt_step) {
   }
 
   var newIter = new goog.iter.Iterator;
-  newIter.next = function() {
+  newIter.nextValueOrThrow = function() {
     'use strict';
     if (step > 0 && start >= stop || step < 0 && start <= stop) {
       throw goog.iter.StopIteration;
@@ -286,6 +300,13 @@ goog.iter.range = function(startOrStop, opt_stop, opt_step) {
     start += step;
     return rv;
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  newIter.next = newIter.nextValueOrThrow.bind(newIter);
+
   return newIter;
 };
 
@@ -325,11 +346,18 @@ goog.iter.map = function(iterable, f, opt_obj) {
   'use strict';
   var iterator = goog.iter.toIterator(iterable);
   var newIter = new goog.iter.Iterator;
-  newIter.next = function() {
+  newIter.nextValueOrThrow = function() {
     'use strict';
     var val = iterator.next();
     return f.call(opt_obj, val, undefined, iterator);
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  newIter.next = newIter.nextValueOrThrow.bind(newIter);
+
   return newIter;
 };
 
@@ -465,7 +493,7 @@ goog.iter.chainFromIterable = function(iterable) {
   var iter = new goog.iter.Iterator();
   var current = null;
 
-  iter.next = function() {
+  iter.nextValueOrThrow = function() {
     'use strict';
     while (true) {
       if (current == null) {
@@ -482,6 +510,13 @@ goog.iter.chainFromIterable = function(iterable) {
       }
     }
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
 
   return iter;
 };
@@ -507,7 +542,7 @@ goog.iter.dropWhile = function(iterable, f, opt_obj) {
   var iterator = goog.iter.toIterator(iterable);
   var newIter = new goog.iter.Iterator;
   var dropping = true;
-  newIter.next = function() {
+  newIter.nextValueOrThrow = function() {
     'use strict';
     while (true) {
       var val = iterator.next();
@@ -519,6 +554,13 @@ goog.iter.dropWhile = function(iterable, f, opt_obj) {
       return val;
     }
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  newIter.next = newIter.nextValueOrThrow.bind(newIter);
+
   return newIter;
 };
 
@@ -541,7 +583,7 @@ goog.iter.takeWhile = function(iterable, f, opt_obj) {
   'use strict';
   var iterator = goog.iter.toIterator(iterable);
   var iter = new goog.iter.Iterator();
-  iter.next = function() {
+  iter.nextValueOrThrow = function() {
     'use strict';
     var val = iterator.next();
     if (f.call(opt_obj, val, undefined, iterator)) {
@@ -549,6 +591,13 @@ goog.iter.takeWhile = function(iterable, f, opt_obj) {
     }
     throw goog.iter.StopIteration;
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
   return iter;
 };
 
@@ -657,7 +706,7 @@ goog.iter.product = function(var_args) {
   /** @type {?Array<number>} */
   var indicies = goog.array.repeat(0, arrays.length);
 
-  iter.next = function() {
+  iter.nextValueOrThrow = function() {
     'use strict';
     if (indicies) {
       var retVal = goog.array.map(indicies, function(valueIndex, arrayIndex) {
@@ -691,6 +740,13 @@ goog.iter.product = function(var_args) {
 
     throw goog.iter.StopIteration;
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
 
   return iter;
 };
@@ -721,7 +777,7 @@ goog.iter.cycle = function(iterable) {
   // This flag is set after the iterable is iterated over once
   var useCache = false;
 
-  iter.next = function() {
+  iter.nextValueOrThrow = function() {
     'use strict';
     var returnElement = null;
 
@@ -751,6 +807,13 @@ goog.iter.cycle = function(iterable) {
 
     return returnElement;
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
 
   return iter;
 };
@@ -771,12 +834,19 @@ goog.iter.count = function(opt_start, opt_step) {
   var step = (opt_step !== undefined) ? opt_step : 1;
   var iter = new goog.iter.Iterator();
 
-  iter.next = function() {
+  iter.nextValueOrThrow = function() {
     'use strict';
     var returnValue = counter;
     counter += step;
     return returnValue;
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
 
   return iter;
 };
@@ -793,7 +863,14 @@ goog.iter.repeat = function(value) {
   'use strict';
   var iter = new goog.iter.Iterator();
 
-  iter.next = goog.functions.constant(value);
+  iter.nextValueOrThrow = goog.functions.constant(value);
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
 
   return iter;
 };
@@ -815,11 +892,18 @@ goog.iter.accumulate = function(iterable) {
   var total = 0;
   var iter = new goog.iter.Iterator();
 
-  iter.next = function() {
+  iter.nextValueOrThrow = function() {
     'use strict';
     total += iterator.next();
     return total;
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
 
   return iter;
 };
@@ -845,7 +929,7 @@ goog.iter.zip = function(var_args) {
 
   if (args.length > 0) {
     var iterators = goog.array.map(args, goog.iter.toIterator);
-    iter.next = function() {
+    iter.nextValueOrThrow = function() {
       'use strict';
       var arr = goog.array.map(iterators, function(it) {
         'use strict';
@@ -853,6 +937,12 @@ goog.iter.zip = function(var_args) {
       });
       return arr;
     };
+    /**
+     * TODO(user): Please do not remove - this will be cleaned up
+     * centrally.
+     * @override @see {!goog.iter.Iterator}
+     */
+    iter.next = iter.nextValueOrThrow.bind(iter);
   }
 
   return iter;
@@ -881,7 +971,7 @@ goog.iter.zipLongest = function(fillValue, var_args) {
   if (args.length > 0) {
     var iterators = goog.array.map(args, goog.iter.toIterator);
 
-    iter.next = function() {
+    iter.nextValueOrThrow = function() {
       'use strict';
       var iteratorsHaveValues = false;  // false when all iterators are empty.
       var arr = goog.array.map(iterators, function(it) {
@@ -906,6 +996,12 @@ goog.iter.zipLongest = function(fillValue, var_args) {
       }
       return arr;
     };
+    /**
+     * TODO(user): Please do not remove - this will be cleaned up
+     * centrally.
+     * @override @see {!goog.iter.Iterator}
+     */
+    iter.next = iter.nextValueOrThrow.bind(iter);
   }
 
   return iter;
@@ -993,7 +1089,7 @@ goog.inherits(goog.iter.GroupByIterator_, goog.iter.Iterator);
 
 
 /** @override */
-goog.iter.GroupByIterator_.prototype.next = function() {
+goog.iter.GroupByIterator_.prototype.nextValueOrThrow = function() {
   'use strict';
   while (this.currentKey == this.targetKey) {
     this.currentValue = this.iterator.next();  // Exits on StopIteration
@@ -1002,6 +1098,13 @@ goog.iter.GroupByIterator_.prototype.next = function() {
   this.targetKey = this.currentKey;
   return [this.currentKey, this.groupItems_(this.targetKey)];
 };
+/**
+ * TODO(user): Please do not remove - this will be cleaned up centrally.
+ * @override @see {!goog.iter.Iterator}
+ */
+goog.iter.GroupByIterator_.prototype.next =
+    goog.iter.GroupByIterator_.prototype.nextValueOrThrow;
+
 
 
 /**
@@ -1079,11 +1182,18 @@ goog.iter.starMap = function(iterable, f, opt_obj) {
   var iterator = goog.iter.toIterator(iterable);
   var iter = new goog.iter.Iterator();
 
-  iter.next = function() {
+  iter.nextValueOrThrow = function() {
     'use strict';
     var args = goog.iter.toArray(iterator.next());
     return f.apply(opt_obj, goog.array.concat(args, undefined, iterator));
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
 
   return iter;
 };
@@ -1126,7 +1236,7 @@ goog.iter.tee = function(iterable, opt_num) {
     // iterator to be advanced independently.
     var iter = new goog.iter.Iterator();
 
-    iter.next = function() {
+    iter.nextValueOrThrow = function() {
       'use strict';
       if (goog.array.isEmpty(buffer)) {
         addNextIteratorValueToBuffers();
@@ -1134,6 +1244,13 @@ goog.iter.tee = function(iterable, opt_num) {
       goog.asserts.assert(!goog.array.isEmpty(buffer));
       return buffer.shift();
     };
+    /**
+     * TODO(user): Please do not remove - this will be cleaned up
+     * centrally.
+     * @override @see {!goog.iter.Iterator}
+     */
+    iter.next = iter.nextValueOrThrow.bind(iter);
+
 
     return iter;
   };
@@ -1180,13 +1297,20 @@ goog.iter.limit = function(iterable, limitSize) {
   var iter = new goog.iter.Iterator();
   var remaining = limitSize;
 
-  iter.next = function() {
+  iter.nextValueOrThrow = function() {
     'use strict';
     if (remaining-- > 0) {
       return iterator.next();
     }
     throw goog.iter.StopIteration;
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
 
   return iter;
 };
@@ -1328,10 +1452,17 @@ goog.iter.combinations = function(iterable, length) {
     return elements[index];
   }
 
-  iter.next = function() {
+  iter.nextValueOrThrow = function() {
     'use strict';
     return goog.array.map(sortedIndexIterator.next(), getIndexFromElements);
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
 
   return iter;
 };
@@ -1373,12 +1504,19 @@ goog.iter.combinationsWithReplacement = function(iterable, length) {
     return elements[index];
   }
 
-  iter.next = function() {
+  iter.nextValueOrThrow = function() {
     'use strict';
     return goog.array.map(
         /** @type {!Array<number>} */
         (sortedIndexIterator.next()), getIndexFromElements);
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  iter.next = iter.nextValueOrThrow.bind(iter);
+
 
   return iter;
 };

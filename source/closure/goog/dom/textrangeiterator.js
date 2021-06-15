@@ -227,7 +227,7 @@ goog.dom.TextRangeIterator.prototype.isLastTag_ = function() {
  * @return {Node} The node at the next position.
  * @override
  */
-goog.dom.TextRangeIterator.prototype.next = function() {
+goog.dom.TextRangeIterator.prototype.nextValueOrThrow = function() {
   'use strict';
   if (this.isLast()) {
     throw goog.iter.StopIteration;
@@ -236,6 +236,13 @@ goog.dom.TextRangeIterator.prototype.next = function() {
   // Call the super function.
   return goog.dom.TextRangeIterator.superClass_.next.call(this);
 };
+/**
+ * TODO(user): Please do not remove - this will be cleaned up centrally.
+ * @override @see {!goog.iter.Iterator}
+ */
+goog.dom.TextRangeIterator.prototype.next =
+    goog.dom.TextRangeIterator.prototype.nextValueOrThrow;
+
 
 /**
  * Get the last node the iterator will hit.

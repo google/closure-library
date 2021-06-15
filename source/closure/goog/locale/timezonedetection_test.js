@@ -56,7 +56,14 @@ class MockDate {
 }
 
 testSuite({
+  testResult() {
+    const result = timeZoneDetection.detectTimeZone();
+    assertNotEquals('', result);
+  },
+
   testGetFingerprint() {
+    timeZoneDetection.useNativeTimezoneDetectionForTesting(false);
+
     let mockDate = new MockDate();
     mockDate.setTimezoneOffset([-480]);
     /** @suppress {checkTypes} suppression added to enable type checking */
@@ -72,6 +79,8 @@ testSuite({
   },
 
   testDetectTimeZone() {
+    timeZoneDetection.useNativeTimezoneDetectionForTesting(false);
+
     let mockDate = new MockDate();
     mockDate.setTimezoneOffset([-480]);
     /** @suppress {checkTypes} suppression added to enable type checking */
@@ -94,6 +103,8 @@ testSuite({
   },
 
   testGetTimeZoneList() {
+    timeZoneDetection.useNativeTimezoneDetectionForTesting(false);
+
     let mockDate = new MockDate();
     mockDate.setTimezoneOffset(
         [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);

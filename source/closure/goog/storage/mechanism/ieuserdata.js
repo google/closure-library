@@ -219,7 +219,7 @@ goog.storage.mechanism.IEUserData.prototype.__iterator__ = function(opt_keys) {
   var i = 0;
   var attributes = this.getNode_().attributes;
   var newIter = new goog.iter.Iterator();
-  newIter.next = function() {
+  newIter.nextValueOrThrow = function() {
     'use strict';
     if (i >= attributes.length) {
       throw goog.iter.StopIteration;
@@ -235,6 +235,13 @@ goog.storage.mechanism.IEUserData.prototype.__iterator__ = function(opt_keys) {
     }
     return value;
   };
+  /**
+   * TODO(user): Please do not remove - this will be cleaned up
+   * centrally.
+   * @override @see {!goog.iter.Iterator}
+   */
+  newIter.next = newIter.nextValueOrThrow.bind(newIter);
+
   return newIter;
 };
 

@@ -38,6 +38,11 @@ function assertRemoveAll(msg, elements1, elements2, expectedResult) {
   assertEquals(
       `${msg}: set2 count changed after removeAll`, elements2.length,
       set2.getCount());
+  assertTrue(
+      `${msg}: set1 size increased after removeAll`,
+      elements1.length >= set1.size);
+  assertEquals(
+      `${msg}: set2 size changed after removeAll`, elements2.length, set2.size);
   assertTrue(`${msg}: wrong set1 after removeAll`, set1.equals(expectedResult));
   assertIntersection(
       `${msg}: non-empty intersection after removeAll`, set1, set2, []);
@@ -132,6 +137,19 @@ testSuite({
     assertEquals('count, should be 3', s.getCount(), 3);
   },
 
+
+  testSize() {
+    const s = new StructsSet();
+    s.add('a');
+    s.add('b');
+    s.add('c');
+    assertEquals('size, should be 3', s.size, 3);
+    s.add('d');
+    assertEquals('size, should be 4', s.size, 4);
+    s.delete('d');
+    assertEquals('size, should be 3', s.size, 3);
+  },
+
   testGetValues() {
     const s = new StructsSet;
     const a = new String('a');
@@ -152,7 +170,17 @@ testSuite({
     assertEquals(s2.getValues().join(''), 'abcd');
   },
 
-  testContains() {
+
+  testValuesIterator() {
+    const s = new StructsSet();
+    s.add('a');
+    s.add('b');
+    s.add('c');
+    s.add('d');
+    assertEquals(Array.from(s.values()).join(''), 'abcd');
+  },
+
+  testContainsHas() {
     let s = new StructsSet;
     const a = new String('a');
     s.add(a);
@@ -164,8 +192,14 @@ testSuite({
     s.add(d);
     const e = new String('e');
 
-    assertTrue('contains, Should contain \'a\'', s.contains(a));
+    assertTrue('contains, Should contain String(\'a\')', s.contains(a));
+    assertTrue('has, Should contain String(\'a\')', s.has(a));
+    // Explicitly test that the implementation doesn't treat `new String('a')`
+    // and `'a'` the same (e.g. uses === equality for values, not ==).
+    assertFalse('contains, Should not contain literal \'a\'', s.contains('a'));
+    assertFalse('has, Should not contain literal \'a\'', s.has('a'));
     assertFalse('contains, Should not contain \'e\'', s.contains(e));
+    assertFalse('has, Should not contain \'e\'', s.has(e));
 
     s = new StructsSet;
     s.add('a');
@@ -174,7 +208,9 @@ testSuite({
     s.add('d');
 
     assertTrue('contains, Should contain \'a\'', s.contains('a'));
+    assertTrue('has, Should contain \'a\'', s.has('a'));
     assertFalse('contains, Should not contain \'e\'', s.contains('e'));
+    assertFalse('has, Should not contain \'e\'', s.has('e'));
   },
 
   testContainsFunctionValue() {
@@ -183,16 +219,21 @@ testSuite({
     const fn1 = () => {};
 
     assertFalse(s.contains(fn1));
+    assertFalse(s.has(fn1));
     s.add(fn1);
     assertTrue(s.contains(fn1));
+    assertTrue(s.has(fn1));
 
     const fn2 = () => {};
 
     assertFalse(s.contains(fn2));
+    assertFalse(s.has(fn2));
     s.add(fn2);
     assertTrue(s.contains(fn2));
+    assertTrue(s.has(fn2));
 
     assertEquals(s.getCount(), 2);
+    assertEquals(s.size, 2);
   },
 
   testContainsAll() {
@@ -337,7 +378,9 @@ testSuite({
     s.add(d);
     s.clear();
     assertTrue('cleared so it should be empty', s.isEmpty());
+    assertEquals('cleared so it should be empty', s.size, 0);
     assertTrue('cleared so it should not contain \'a\' key', !s.contains(a));
+    assertTrue('cleared so it should not have \'a\' key', !s.has(a));
 
     s = new StructsSet;
     s.add('a');
@@ -346,7 +389,9 @@ testSuite({
     s.add('d');
     s.clear();
     assertTrue('cleared so it should be empty', s.isEmpty());
+    assertEquals('cleared so it should be empty', s.size, 0);
     assertTrue('cleared so it should not contain \'a\' key', !s.contains('a'));
+    assertTrue('cleared so it should not have \'a\' key', !s.has('a'));
   },
 
   testAddAll() {
@@ -357,22 +402,30 @@ testSuite({
     const d = new String('d');
     s.addAll([a, b, c, d]);
     assertTrue('addAll so it should not be empty', !s.isEmpty());
+    assertTrue('addAll so it should not be empty', s.size > 0);
     assertTrue('addAll so it should contain \'c\' key', s.contains(c));
+    assertTrue('addAll so it should have \'c\' key', s.has(c));
 
     let s2 = new StructsSet;
     s2.addAll(s);
     assertTrue('addAll so it should not be empty', !s2.isEmpty());
+    assertTrue('addAll so it should not be empty', s2.size > 0);
     assertTrue('addAll so it should contain \'c\' key', s2.contains(c));
+    assertTrue('addAll so it should has \'c\' key', s2.has(c));
 
     s = new StructsSet;
     s.addAll(['a', 'b', 'c', 'd']);
     assertTrue('addAll so it should not be empty', !s.isEmpty());
+    assertTrue('addAll so it should not be empty', s.size > 0);
     assertTrue('addAll so it should contain \'c\' key', s.contains('c'));
+    assertTrue('addAll so it should have \'c\' key', s.has('c'));
 
     s2 = new StructsSet;
     s2.addAll(s);
     assertTrue('addAll so it should not be empty', !s2.isEmpty());
+    assertTrue('addAll so it should not be empty', s2.size > 0);
     assertTrue('addAll so it should contain \'c\' key', s2.contains('c'));
+    assertTrue('addAll so it should have \'c\' key', s2.has('c'));
   },
 
   testConstructor() {
@@ -387,7 +440,9 @@ testSuite({
     s.add(d);
     let s2 = new StructsSet(s);
     assertFalse('constr with Set so it should not be empty', s2.isEmpty());
+    assertTrue('constr with Set so it should not be empty', s2.size > 0);
     assertTrue('constr with Set so it should contain c', s2.contains(c));
+    assertTrue('constr with Set so it should have c', s2.has(c));
 
     s = new StructsSet;
     s.add('a');
@@ -396,7 +451,9 @@ testSuite({
     s.add('d');
     s2 = new StructsSet(s);
     assertFalse('constr with Set so it should not be empty', s2.isEmpty());
+    assertTrue('constr with Set so it should not be empty', s2.size > 0);
     assertTrue('constr with Set so it should contain c', s2.contains('c'));
+    assertTrue('constr with Set so it should have c', s2.has('c'));
   },
 
   testClone() {
@@ -412,7 +469,9 @@ testSuite({
 
     let s2 = s.clone();
     assertFalse('clone so it should not be empty', s2.isEmpty());
+    assertTrue('clone so it should not be empty', s2.size > 0);
     assertTrue('clone so it should contain \'c\' key', s2.contains(c));
+    assertTrue('clone so it should have \'c\' key', s2.has(c));
 
     s = new StructsSet;
     s.add('a');
@@ -422,7 +481,9 @@ testSuite({
 
     s2 = s.clone();
     assertFalse('clone so it should not be empty', s2.isEmpty());
+    assertTrue('clone so it should not be empty', s2.size > 0);
     assertTrue('clone so it should contain \'c\' key', s2.contains('c'));
+    assertTrue('clone so it should have \'c\' key', s2.has('c'));
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */

@@ -155,7 +155,7 @@ And visit http://localhost:8080/path/to/myapp/hello.html.
 
 Use Closure Compiler to compile your application when your app is ready for
 production. Closure Compiler (also known as JSCompiler) creates a single-file
-version of the application library. This file includes all the dependencies your
+bundle of your application. This file includes all the dependencies your
 application needs, but shortens identifier names where possible to minimize the
 size of the code and the time it takes to transmit over the network. In
 addition, Closure Compiler performs type checking, removes dead code, and

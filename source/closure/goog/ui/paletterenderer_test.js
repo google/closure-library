@@ -50,8 +50,8 @@ testSuite({
   testGridA11yRoles() {
     createPalette(items);
     const grid = renderer.createDom(palette);
-    assertEquals(Role.GRID, aria.getRole(grid));
     const table = dom.getElementsByTagName(TagName.TABLE, grid)[0];
+    assertEquals(Role.GRID, aria.getRole(table));
     const row = dom.getElementsByTagName(TagName.TR, table)[0];
     assertEquals(Role.ROW, aria.getRole(row));
     const cell = dom.getElementsByTagName(TagName.TD, row)[0];

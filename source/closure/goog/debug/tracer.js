@@ -200,12 +200,6 @@ goog.debug.Trace_.Stat_ = function() {
    * @type {number}
    */
   this.time = 0;
-
-  /**
-   * Total number of allocations for this tracer type
-   * @type {number}
-   */
-  this.varAlloc = 0;
 };
 
 
@@ -225,9 +219,6 @@ goog.debug.Trace_.Stat_.prototype.toString = function() {
   sb.push(
       this.type, ' ', this.count, ' (', Math.round(this.time * 10) / 10,
       ' ms)');
-  if (this.varAlloc) {
-    sb.push(' [VarAlloc = ', this.varAlloc, ']');
-  }
   return sb.join('');
 };
 
@@ -282,11 +273,6 @@ goog.debug.Trace_.Event_.prototype.startTime;
  */
 goog.debug.Trace_.Event_.prototype.stopTime;
 
-/**
- * @type {number|undefined}
- */
-goog.debug.Trace_.Event_.prototype.totalVarAlloc;
-
 
 /**
  * Returns a formatted string for the event.
@@ -304,8 +290,6 @@ goog.debug.Trace_.Event_.prototype.toTraceString = function(
 
   goog.asserts.assertNumber(
       this.eventTime, 'eventTime missing - call startTracer?');
-  goog.asserts.assertNumber(
-      this.totalVarAlloc, 'totalVarAlloc missing - call startTracer?');
   if (prevTime == -1) {
     sb.push('    ');
   } else {
@@ -328,9 +312,6 @@ goog.debug.Trace_.Event_.prototype.toTraceString = function(
   }
 
   sb.push(indent, this);
-  if (this.totalVarAlloc > 0) {
-    sb.push('[VarAlloc ', this.totalVarAlloc, '] ');
-  }
   return sb.join('');
 };
 
@@ -510,7 +491,6 @@ goog.debug.Trace_.prototype.reset = function(defaultThreshold) {
     var stat = this.stats_.get(key);
     stat.count = 0;
     stat.time = 0;
-    stat.varAlloc = 0;
     this.statPool_.releaseObject(/** @type {Object} */ (stat));
   }
   this.stats_.clear();
@@ -556,7 +536,6 @@ goog.debug.Trace_.prototype.releaseEvents_ = function() {
 goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
   'use strict';
   var tracerStartTime = goog.debug.Trace_.now();
-  var varAlloc = this.getTotalVarAlloc();
   var outstandingEventCount = this.outstandingEvents_.getCount();
   if (this.events_.length + outstandingEventCount > this.MAX_TRACE_SIZE) {
     // This is less likely and probably indicates that a lot of traces
@@ -581,7 +560,6 @@ goog.debug.Trace_.prototype.startTracer = function(comment, opt_type) {
   var event =
       /** @type {!goog.debug.Trace_.Event_} */ (this.eventPool_.getObject());
   event.stopTime = undefined;
-  event.totalVarAlloc = varAlloc;
   event.eventType = goog.debug.Trace_.EventType.START;
   event.id = this.idPool_.getObject();
   event.comment = comment;
@@ -666,42 +644,9 @@ goog.debug.Trace_.prototype.stopTracer = function(id, opt_silenceThreshold) {
     stat.count++;
     stat.time += elapsed;
   }
-  if (stopEvent) {
-    stopEvent.totalVarAlloc = this.getTotalVarAlloc();
-
-    if (stat) {
-      stat.varAlloc += (stopEvent.totalVarAlloc - startEvent.totalVarAlloc);
-    }
-  }
   var tracerFinishTime = goog.debug.Trace_.now();
   this.tracerOverheadEnd_ += tracerFinishTime - now;
   return elapsed;
-};
-
-
-/**
- * Sets the ActiveX object that can be used to get GC tracing in IE6.
- * @param {Object} gcTracer GCTracer ActiveX object.
- */
-goog.debug.Trace_.prototype.setGcTracer = function(gcTracer) {
-  'use strict';
-  this.gcTracer_ = gcTracer;
-};
-
-
-/**
- * Returns the total number of allocations since the GC stats were reset. Only
- * works in IE.
- * @return {number} The number of allocaitons or -1 if not supported.
- */
-goog.debug.Trace_.prototype.getTotalVarAlloc = function() {
-  'use strict';
-  var gcTracer = this.gcTracer_;
-  // isTracing is defined on the ActiveX object.
-  if (gcTracer && gcTracer['isTracing']()) {
-    return gcTracer['totalVarAlloc'];
-  }
-  return -1;
 };
 
 
@@ -730,7 +675,6 @@ goog.debug.Trace_.prototype.addComment = function(
   eventComment.eventTime = timeStamp;
   eventComment.type = opt_type;
   eventComment.comment = comment;
-  eventComment.totalVarAlloc = this.getTotalVarAlloc();
   this.commentCount_++;
 
   if (opt_timeStamp) {

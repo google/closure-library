@@ -61,7 +61,7 @@ goog.addDependency('collections/iters_test.js', ['goog.collections.iters.iterabl
 goog.addDependency('collections/maps.js', ['goog.collections.maps'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('collections/maps_test.js', ['goog.collections.mapsTest'], ['goog.collections.maps', 'goog.iter', 'goog.structs.Map', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('collections/sets.js', ['goog.collections.sets'], ['goog.collections.iters'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('collections/sets_test.js', ['goog.collections.setsTest'], ['goog.collections.sets', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('collections/sets_test.js', ['goog.collections.setsTest'], ['goog.collections.sets', 'goog.iter', 'goog.structs.Set', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('color/alpha.js', ['goog.color.alpha'], ['goog.color'], {'lang': 'es6'});
 goog.addDependency('color/alpha_test.js', ['goog.color.alphaTest'], ['goog.array', 'goog.color.alpha', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('color/color.js', ['goog.color', 'goog.color.Hsl', 'goog.color.Hsv', 'goog.color.Rgb'], ['goog.color.names', 'goog.math'], {'lang': 'es6'});
@@ -71,7 +71,7 @@ goog.addDependency('crypt/aes.js', ['goog.crypt.Aes'], ['goog.asserts', 'goog.cr
 goog.addDependency('crypt/aes_test.js', ['goog.crypt.AesTest'], ['goog.crypt', 'goog.crypt.Aes', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('crypt/arc4.js', ['goog.crypt.Arc4'], ['goog.asserts']);
 goog.addDependency('crypt/arc4_test.js', ['goog.crypt.Arc4Test'], ['goog.array', 'goog.crypt.Arc4', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('crypt/base64.js', ['goog.crypt.base64'], ['goog.asserts', 'goog.crypt', 'goog.string', 'goog.userAgent', 'goog.userAgent.product'], {'lang': 'es5'});
+goog.addDependency('crypt/base64.js', ['goog.crypt.base64'], ['goog.asserts', 'goog.crypt', 'goog.string', 'goog.userAgent', 'goog.userAgent.product'], {'lang': 'es6'});
 goog.addDependency('crypt/base64_test.js', ['goog.crypt.base64Test'], ['goog.crypt', 'goog.crypt.base64', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('crypt/basen.js', ['goog.crypt.baseN'], [], {'lang': 'es6'});
 goog.addDependency('crypt/basen_test.js', ['goog.crypt.baseNTest'], ['goog.crypt.baseN', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
@@ -663,7 +663,7 @@ goog.addDependency('labs/net/webchannel/channel.js', ['goog.labs.net.webChannel.
 goog.addDependency('labs/net/webchannel/channelrequest.js', ['goog.labs.net.webChannel.ChannelRequest'], ['goog.Timer', 'goog.asserts', 'goog.async.Throttle', 'goog.dispose', 'goog.events.EventHandler', 'goog.labs.net.webChannel.Channel', 'goog.labs.net.webChannel.WebChannelDebug', 'goog.labs.net.webChannel.environment', 'goog.labs.net.webChannel.requestStats', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.WebChannel', 'goog.net.XmlHttp', 'goog.object', 'goog.string', 'goog.userAgent'], {'lang': 'es6'});
 goog.addDependency('labs/net/webchannel/channelrequest_test.js', ['goog.labs.net.webChannel.channelRequestTest'], ['goog.Uri', 'goog.functions', 'goog.labs.net.webChannel.ChannelRequest', 'goog.labs.net.webChannel.WebChannelDebug', 'goog.labs.net.webChannel.requestStats', 'goog.labs.net.webChannel.requestStats.ServerReachability', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.net.XhrIo', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/net/webchannel/connectionstate.js', ['goog.labs.net.webChannel.ConnectionState'], []);
-goog.addDependency('labs/net/webchannel/environment.js', ['goog.labs.net.webChannel.environment'], ['goog.userAgent'], {'module': 'goog'});
+goog.addDependency('labs/net/webchannel/environment.js', ['goog.labs.net.webChannel.environment'], ['goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/net/webchannel/environment_test.js', ['goog.labs.net.webChannel.EnvironmentTest'], ['goog.labs.net.webChannel.environment', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/net/webchannel/forwardchannelrequestpool.js', ['goog.labs.net.webChannel.ForwardChannelRequestPool'], ['goog.array', 'goog.labs.net.webChannel.ChannelRequest', 'goog.labs.net.webChannel.Wire', 'goog.string'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/net/webchannel/forwardchannelrequestpool_test.js', ['goog.labs.net.webChannel.ForwardChannelRequestPoolTest'], ['goog.labs.net.webChannel.ChannelRequest', 'goog.labs.net.webChannel.ForwardChannelRequestPool', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
@@ -735,7 +735,7 @@ goog.addDependency('locale/defaultlocalenameconstants.js', ['goog.locale.default
 goog.addDependency('locale/locale.js', ['goog.locale'], ['goog.locale.nativeNameConstants']);
 goog.addDependency('locale/nativenameconstants.js', ['goog.locale.nativeNameConstants'], []);
 goog.addDependency('locale/scriptToLanguages.js', ['goog.locale.scriptToLanguages'], ['goog.locale']);
-goog.addDependency('locale/timezonedetection.js', ['goog.locale.timeZoneDetection'], ['goog.locale.TimeZoneFingerprint']);
+goog.addDependency('locale/timezonedetection.js', ['goog.locale.timeZoneDetection'], ['goog.asserts', 'goog.locale.TimeZoneFingerprint'], {'lang': 'es6'});
 goog.addDependency('locale/timezonedetection_test.js', ['goog.locale.timeZoneDetectionTest'], ['goog.locale.timeZoneDetection', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('locale/timezonefingerprint.js', ['goog.locale.TimeZoneFingerprint'], []);
 goog.addDependency('locale/timezonelist.js', ['goog.locale.timezonelist'], ['goog.locale']);
@@ -1089,7 +1089,7 @@ goog.addDependency('structs/quadtree.js', ['goog.structs.QuadTree', 'goog.struct
 goog.addDependency('structs/quadtree_test.js', ['goog.structs.QuadTreeTest'], ['goog.structs', 'goog.structs.QuadTree', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('structs/queue.js', ['goog.structs.Queue'], ['goog.array']);
 goog.addDependency('structs/queue_test.js', ['goog.structs.QueueTest'], ['goog.structs.Queue', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('structs/set.js', ['goog.structs.Set'], ['goog.structs', 'goog.structs.Collection', 'goog.structs.Map']);
+goog.addDependency('structs/set.js', ['goog.structs.Set'], ['goog.structs', 'goog.structs.Collection', 'goog.structs.Map'], {'lang': 'es6'});
 goog.addDependency('structs/set_test.js', ['goog.structs.SetTest'], ['goog.iter', 'goog.structs', 'goog.structs.Set', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('structs/simplepool.js', ['goog.structs.SimplePool'], ['goog.Disposable']);
 goog.addDependency('structs/stringset.js', ['goog.structs.StringSet'], ['goog.asserts', 'goog.iter']);

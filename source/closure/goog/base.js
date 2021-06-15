@@ -2372,7 +2372,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     });
     // optional catch binding, unescaped unicode paragraph separator in strings
     addNewerLanguageTranspilationCheck('es_2019', function() {
-      return evalCheck('let r;try{throw 0}catch{r="\u2029"};r');
+      return evalCheck('let r;try{r="\u2029"}catch{};r');
     });
     // optional chaining, nullish coalescing
     // untested/unsupported: bigint, import meta

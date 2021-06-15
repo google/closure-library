@@ -235,7 +235,7 @@ goog.dom.TagIterator.prototype.restartTag = function() {
  *     exception if the end of the iterator's range has been reached.
  * @override
  */
-goog.dom.TagIterator.prototype.next = function() {
+goog.dom.TagIterator.prototype.nextValueOrThrow = function() {
   'use strict';
   var node;
 
@@ -284,6 +284,13 @@ goog.dom.TagIterator.prototype.next = function() {
   }
   return node;
 };
+/**
+ * TODO(user): Please do not remove - this will be cleaned up centrally.
+ * @override @see {!goog.iter.Iterator}
+ */
+goog.dom.TagIterator.prototype.next =
+    goog.dom.TagIterator.prototype.nextValueOrThrow;
+
 
 
 /**

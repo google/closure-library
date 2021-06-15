@@ -42,7 +42,7 @@ goog.addDependency('color/color.js', ['goog.color', 'goog.color.Hsl', 'goog.colo
 goog.addDependency('color/names.js', ['goog.color.names'], []);
 goog.addDependency('crypt/aes.js', ['goog.crypt.Aes'], ['goog.asserts', 'goog.crypt.BlockCipher']);
 goog.addDependency('crypt/arc4.js', ['goog.crypt.Arc4'], ['goog.asserts']);
-goog.addDependency('crypt/base64.js', ['goog.crypt.base64'], ['goog.asserts', 'goog.crypt', 'goog.string', 'goog.userAgent', 'goog.userAgent.product'], {'lang': 'es5'});
+goog.addDependency('crypt/base64.js', ['goog.crypt.base64'], ['goog.asserts', 'goog.crypt', 'goog.string', 'goog.userAgent', 'goog.userAgent.product'], {'lang': 'es6'});
 goog.addDependency('crypt/basen.js', ['goog.crypt.baseN'], [], {'lang': 'es6'});
 goog.addDependency('crypt/blobhasher.js', ['goog.crypt.BlobHasher', 'goog.crypt.BlobHasher.EventType'], ['goog.asserts', 'goog.events.EventTarget', 'goog.fs', 'goog.log']);
 goog.addDependency('crypt/blockcipher.js', ['goog.crypt.BlockCipher'], []);
@@ -400,7 +400,7 @@ goog.addDependency('labs/net/webchannel.js', ['goog.net.WebChannel', 'goog.net.W
 goog.addDependency('labs/net/webchannel/channel.js', ['goog.labs.net.webChannel.Channel'], [], {'lang': 'es6'});
 goog.addDependency('labs/net/webchannel/channelrequest.js', ['goog.labs.net.webChannel.ChannelRequest'], ['goog.Timer', 'goog.asserts', 'goog.async.Throttle', 'goog.dispose', 'goog.events.EventHandler', 'goog.labs.net.webChannel.Channel', 'goog.labs.net.webChannel.WebChannelDebug', 'goog.labs.net.webChannel.environment', 'goog.labs.net.webChannel.requestStats', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.WebChannel', 'goog.net.XmlHttp', 'goog.object', 'goog.string', 'goog.userAgent'], {'lang': 'es6'});
 goog.addDependency('labs/net/webchannel/connectionstate.js', ['goog.labs.net.webChannel.ConnectionState'], []);
-goog.addDependency('labs/net/webchannel/environment.js', ['goog.labs.net.webChannel.environment'], ['goog.userAgent'], {'module': 'goog'});
+goog.addDependency('labs/net/webchannel/environment.js', ['goog.labs.net.webChannel.environment'], ['goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/net/webchannel/forwardchannelrequestpool.js', ['goog.labs.net.webChannel.ForwardChannelRequestPool'], ['goog.array', 'goog.labs.net.webChannel.ChannelRequest', 'goog.labs.net.webChannel.Wire', 'goog.string'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/net/webchannel/netutils.js', ['goog.labs.net.webChannel.netUtils'], ['goog.Uri', 'goog.labs.net.webChannel.WebChannelDebug'], {'lang': 'es6'});
 goog.addDependency('labs/net/webchannel/requeststats.js', ['goog.labs.net.webChannel.requestStats', 'goog.labs.net.webChannel.requestStats.Event', 'goog.labs.net.webChannel.requestStats.ServerReachability', 'goog.labs.net.webChannel.requestStats.ServerReachabilityEvent', 'goog.labs.net.webChannel.requestStats.Stat', 'goog.labs.net.webChannel.requestStats.StatEvent', 'goog.labs.net.webChannel.requestStats.TimingEvent'], ['goog.events.Event', 'goog.events.EventTarget'], {'lang': 'es6'});
@@ -444,7 +444,7 @@ goog.addDependency('locale/defaultlocalenameconstants.js', ['goog.locale.default
 goog.addDependency('locale/locale.js', ['goog.locale'], ['goog.locale.nativeNameConstants']);
 goog.addDependency('locale/nativenameconstants.js', ['goog.locale.nativeNameConstants'], []);
 goog.addDependency('locale/scriptToLanguages.js', ['goog.locale.scriptToLanguages'], ['goog.locale']);
-goog.addDependency('locale/timezonedetection.js', ['goog.locale.timeZoneDetection'], ['goog.locale.TimeZoneFingerprint']);
+goog.addDependency('locale/timezonedetection.js', ['goog.locale.timeZoneDetection'], ['goog.asserts', 'goog.locale.TimeZoneFingerprint'], {'lang': 'es6'});
 goog.addDependency('locale/timezonefingerprint.js', ['goog.locale.TimeZoneFingerprint'], []);
 goog.addDependency('locale/timezonelist.js', ['goog.locale.timezonelist'], ['goog.locale']);
 goog.addDependency('log/log.js', ['goog.log', 'goog.log.Level', 'goog.log.LogBuffer', 'goog.log.LogRecord', 'goog.log.Logger'], ['goog.asserts', 'goog.debug'], {'lang': 'es6'});
@@ -650,7 +650,7 @@ goog.addDependency('structs/prioritypool.js', ['goog.structs.PriorityPool'], ['g
 goog.addDependency('structs/priorityqueue.js', ['goog.structs.PriorityQueue'], ['goog.structs.Heap']);
 goog.addDependency('structs/quadtree.js', ['goog.structs.QuadTree', 'goog.structs.QuadTree.Node', 'goog.structs.QuadTree.Point'], ['goog.math.Coordinate']);
 goog.addDependency('structs/queue.js', ['goog.structs.Queue'], ['goog.array']);
-goog.addDependency('structs/set.js', ['goog.structs.Set'], ['goog.structs', 'goog.structs.Collection', 'goog.structs.Map']);
+goog.addDependency('structs/set.js', ['goog.structs.Set'], ['goog.structs', 'goog.structs.Collection', 'goog.structs.Map'], {'lang': 'es6'});
 goog.addDependency('structs/simplepool.js', ['goog.structs.SimplePool'], ['goog.Disposable']);
 goog.addDependency('structs/stringset.js', ['goog.structs.StringSet'], ['goog.asserts', 'goog.iter']);
 goog.addDependency('structs/structs.js', ['goog.structs'], ['goog.array', 'goog.object']);
