@@ -679,11 +679,18 @@ goog.i18n.NumberFormat.prototype.format = function(number) {
       // Compact form includes the negative sign
       parts.push(unit.negative_suffix);
     } else {
-      parts.push(unit.suffix);
+      if (isFinite(number)) {
+        // Add scientific or compact suffix only for finite values.
+        // Infinity does not have a scientific or compact suffix in ECMA-402.
+        parts.push(unit.suffix);
+      }
       parts.push(this.negativeSuffix_);
     }
   } else {
-    parts.push(unit.suffix);
+    if (isFinite(number)) {
+      // Add scientific or compact suffix only for finite values.
+      parts.push(unit.suffix);
+    }
     parts.push(this.positiveSuffix_);
   }
   return parts.join('');
