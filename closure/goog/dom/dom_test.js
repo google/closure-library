@@ -92,13 +92,11 @@ function assertConstHtmlToNodeStringifiesToOneOf(
       undefined, Array.prototype.slice.call(arguments, 1));
   /** @suppress {checkTypes} suppression added to enable type checking */
   const stringified = googDom.getOuterHtml(node);
-  if (googArray.find(
-          potentialStringifications, (element) => element == stringified) ===
+  if (potentialStringifications.find(element => element == stringified) ===
       null) {
     fail(
         'Unexpected stringification for a node built from "' +
-        googArray.map(Array.prototype.slice.call(arguments, 1), Const.unwrap)
-            .join('') +
+        Array.prototype.slice.call(arguments, 1).map(Const.unwrap).join('') +
         '": "' + stringified + '"');
   }
 }

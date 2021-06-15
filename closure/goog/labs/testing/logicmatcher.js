@@ -44,7 +44,7 @@ goog.labs.testing.logicmatcher.AllOfMatcher = function(matchers) {
 goog.labs.testing.logicmatcher.AllOfMatcher.prototype.matches = function(
     actualValue) {
   'use strict';
-  return goog.array.every(this.matchers_, function(matcher) {
+  return this.matchers_.every(function(matcher) {
     'use strict';
     return matcher.matches(actualValue);
   });
@@ -62,7 +62,7 @@ goog.labs.testing.logicmatcher.AllOfMatcher.prototype.describe = function(
   'use strict';
   // TODO(vbhasin) : Optimize this to remove duplication with matches ?
   var errorString = '';
-  goog.array.forEach(this.matchers_, function(matcher) {
+  this.matchers_.forEach(function(matcher) {
     'use strict';
     if (!matcher.matches(actualValue)) {
       errorString += matcher.describe(actualValue) + '\n';
@@ -118,7 +118,7 @@ goog.labs.testing.logicmatcher.AnyOfMatcher.prototype.describe = function(
   'use strict';
   // TODO(vbhasin) : Optimize this to remove duplication with matches ?
   var errorString = '';
-  goog.array.forEach(this.matchers_, function(matcher) {
+  this.matchers_.forEach(function(matcher) {
     'use strict';
     if (!matcher.matches(actualValue)) {
       errorString += matcher.describe(actualValue) + '\n';

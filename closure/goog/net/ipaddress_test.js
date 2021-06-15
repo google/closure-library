@@ -8,7 +8,6 @@ goog.module('goog.net.IpAddressTest');
 goog.setTestOnly();
 
 const Integer = goog.require('goog.math.Integer');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 const {IpAddress, Ipv4Address, Ipv6Address} = goog.require('goog.net.ipaddress');
 
@@ -206,7 +205,7 @@ testSuite({
       'fd00::',
       'fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
     ];
-    googArray.forEach(siteLocalAddresses, (siteLocalAddress) => {
+    siteLocalAddresses.forEach(siteLocalAddress => {
       assertTrue(IpAddress.fromString(siteLocalAddress).isSiteLocal());
     });
 
@@ -220,7 +219,7 @@ testSuite({
       'fcff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
       'fe00::',
     ];
-    googArray.forEach(nonSiteLocalAddresses, (nonSiteLocalAddress) => {
+    nonSiteLocalAddresses.forEach(nonSiteLocalAddress => {
       assertFalse(IpAddress.fromString(nonSiteLocalAddress).isSiteLocal());
     });
   },
@@ -232,7 +231,7 @@ testSuite({
       'fe80::',
       'febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
     ];
-    googArray.forEach(linkLocalAddresses, (linkLocalAddress) => {
+    linkLocalAddresses.forEach(linkLocalAddress => {
       assertTrue(IpAddress.fromString(linkLocalAddress).isLinkLocal());
     });
 
@@ -242,7 +241,7 @@ testSuite({
       'fe7f:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
       'fec0::',
     ];
-    googArray.forEach(nonLinkLocalAddresses, (nonLinkLocalAddress) => {
+    nonLinkLocalAddresses.forEach(nonLinkLocalAddress => {
       assertFalse(IpAddress.fromString(nonLinkLocalAddress).isLinkLocal());
     });
   },

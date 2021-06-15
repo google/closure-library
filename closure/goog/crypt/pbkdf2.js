@@ -19,7 +19,6 @@
 
 goog.provide('goog.crypt.pbkdf2');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.crypt');
 goog.require('goog.crypt.Hmac');
@@ -52,7 +51,7 @@ goog.crypt.pbkdf2.deriveKeySha1 = function(
     'use strict';
     // Initialize the result to be array of 0 such that its xor with the first
     // block would be the first block.
-    var result = goog.array.repeat(0, HASH_LENGTH / 8);
+    var result = (new Array(HASH_LENGTH / 8)).fill(0);
     // Initialize the salt of the first iteration to initialSalt || i.
     var salt = initialSalt.concat(index);
     var hmac = new goog.crypt.Hmac(new goog.crypt.Sha1(), password, 64);

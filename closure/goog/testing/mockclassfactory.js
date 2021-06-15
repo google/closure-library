@@ -31,7 +31,6 @@ goog.setTestOnly('goog.testing.MockClassFactory');
 goog.provide('goog.testing.MockClassFactory');
 goog.provide('goog.testing.MockClassRecord');
 
-goog.require('goog.array');
 goog.require('goog.object');
 goog.require('goog.testing.LooseMock');
 goog.require('goog.testing.StrictMock');
@@ -390,13 +389,12 @@ goog.testing.MockClassFactory.prototype.createProxy_ = function(
   // extend anything except Object).
   // TODO (arv): Implement goog.object.getIterator and replace this loop.
 
-  goog.array.forEach(
-      goog.testing.MockClassFactory.PROTOTYPE_FIELDS_, function(field) {
-        'use strict';
-        if (Object.prototype.hasOwnProperty.call(protoToProxy, field)) {
-          proxy.prototype[field] = this.getProxyFunction_(field);
-        }
-      }, this);
+  goog.testing.MockClassFactory.PROTOTYPE_FIELDS_.forEach(function(field) {
+    'use strict';
+    if (Object.prototype.hasOwnProperty.call(protoToProxy, field)) {
+      proxy.prototype[field] = this.getProxyFunction_(field);
+    }
+  }, this);
 
   this.mockClassRecords_[className] = new goog.testing.MockClassRecord(
       namespace, className, classToMock, proxy);
@@ -424,7 +422,7 @@ goog.testing.MockClassFactory.prototype.getMockClass_ = function(
 
   // The namespace and classToMock variables should be removed from the
   // passed in argument stack.
-  ctorArgs = goog.array.slice(ctorArgs, 2);
+  ctorArgs = Array.prototype.slice.call(ctorArgs, 2);
 
   if (typeof classToMock === 'function') {
     var mock = isStrict ? new goog.testing.StrictMock(classToMock) :

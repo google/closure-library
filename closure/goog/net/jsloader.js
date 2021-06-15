@@ -308,7 +308,7 @@ goog.net.jsloader.getScriptParentElement_ = function(doc) {
   'use strict';
   const headElements =
       goog.dom.getElementsByTagName(goog.dom.TagName.HEAD, doc);
-  if (!headElements || goog.array.isEmpty(headElements)) {
+  if (!headElements || headElements.length === 0) {
     return doc.documentElement;
   } else {
     return headElements[0];

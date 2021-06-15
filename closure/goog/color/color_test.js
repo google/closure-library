@@ -6,7 +6,6 @@
 goog.module('goog.colorTest');
 goog.setTestOnly();
 
-const googArray = goog.require('goog.array');
 const googColor = goog.require('goog.color');
 const names = goog.require('goog.color.names');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -150,7 +149,7 @@ testSuite({
   testParse() {
     const colors =
         ['rgb(15, 250, 77)', '(127, 127, 127)', '#ffeedd', '123456', 'magenta'];
-    const parsed = googArray.map(colors, googColor.parse);
+    const parsed = colors.map(googColor.parse);
     assertEquals('rgb', parsed[0].type);
     assertEquals(googColor.rgbToHex(15, 250, 77), parsed[0].hex);
     assertEquals('rgb', parsed[1].type);

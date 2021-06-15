@@ -40,21 +40,18 @@ function assertIsBrowser(currentBrowser) {
       product[currentBrowser]);
 
   // Make sure we don't have any false positives for other browsers.
-  googArray.forEach(DETECTED_BROWSER_KEYS, (browserKey) => {
+  DETECTED_BROWSER_KEYS.forEach(browserKey => {
     // Ignore the iPad/Safari case, as the new code correctly
     // identifies the test useragent as both iPad and Safari.
     if (currentBrowser == 'IPAD' && browserKey == 'SAFARI') {
       return;
     }
-
     if (currentBrowser == 'IPHONE' && browserKey == 'SAFARI') {
       return;
     }
-
     if (currentBrowser == 'CHROME' && browserKey == 'IPHONE') {
       return;
     }
-
     if (currentBrowser != browserKey) {
       assertFalse(
           `Current browser key is ${currentBrowser}` +
@@ -88,7 +85,7 @@ function checkEachUserAgentDetected(userAgents, browser) {
     assertIsBrowser(browser);
 
     // Check versions
-    googArray.forEach(ua.versions, (v) => {
+    ua.versions.forEach(v => {
       mockAgent.setUserAgentString(ua.ua);
       updateUserAgentUtils();
       assertEquals(

@@ -74,7 +74,7 @@ goog.testing.events.EventObserver.prototype.getEvents = function(opt_type) {
   let events = goog.array.clone(this.events_);
 
   if (opt_type) {
-    events = goog.array.filter(events, function(event) {
+    events = events.filter(function(event) {
       'use strict';
       return event.type == String(opt_type);
     });

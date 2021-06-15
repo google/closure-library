@@ -16,7 +16,6 @@ const GoogPromise = goog.require('goog.Promise');
 const TestingFsFileReader = goog.require('goog.testing.fs.FileReader');
 const dispose = goog.require('goog.dispose');
 const events = goog.require('goog.events');
-const googArray = goog.require('goog.array');
 const googObject = goog.require('goog.object');
 const testSuite = goog.require('goog.testing.testSuite');
 
@@ -77,7 +76,7 @@ testSuite({
                 EventType.LOAD,
                 EventType.LOAD_END,
               ],
-              googArray.map(observer.getEvents(), (e) => e.type));
+              observer.getEvents().map(e => e.type));
         });
   },
 
@@ -108,7 +107,7 @@ testSuite({
                       EventType.LOAD,
                       EventType.LOAD_END,
                     ],
-                    googArray.map(observer.getEvents(), (e) => e.type));
+                    observer.getEvents().map(e => e.type));
               });
   },
 
@@ -130,7 +129,7 @@ testSuite({
                 EventType.LOAD,
                 EventType.LOAD_END,
               ],
-              googArray.map(observer.getEvents(), (e) => e.type));
+              observer.getEvents().map(e => e.type));
         });
   },
 
@@ -147,7 +146,7 @@ testSuite({
           assertEquals(ReadyState.DONE, reader.getReadyState());
           assertArrayEquals(
               [EventType.ERROR, EventType.ABORT, EventType.LOAD_END],
-              googArray.map(observer.getEvents(), (e) => e.type));
+              observer.getEvents().map(e => e.type));
         });
   },
 

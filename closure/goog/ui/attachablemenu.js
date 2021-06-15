@@ -12,7 +12,6 @@ goog.provide('goog.ui.AttachableMenu');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
@@ -407,7 +406,8 @@ goog.ui.AttachableMenu.prototype.selectByName_ = function(
   }
 
   if (!this.selectedElement_ ||
-      (index = goog.array.indexOf(elements, this.selectedElement_)) == -1) {
+      (index = Array.prototype.indexOf.call(elements, this.selectedElement_)) ==
+          -1) {
     // no selection or selection isn't known => start at the beginning
     index = 0;
   }

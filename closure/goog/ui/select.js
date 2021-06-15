@@ -17,7 +17,6 @@ goog.provide('goog.ui.Select');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
-goog.require('goog.array');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.IdGenerator');
@@ -510,9 +509,8 @@ goog.ui.Select.prototype.updateAriaActiveDescendant_ = function() {
         // Set a human-readable selection index, excluding menu separators.
         var index = this.selectionModel_.getSelectedIndex();
         goog.a11y.aria.setState(
-            contentElement, goog.a11y.aria.State.POSINSET, index >= 0 ?
-                this.getNumMenuItems_(goog.array.slice(items, 0, index + 1)) :
-                0);
+            contentElement, goog.a11y.aria.State.POSINSET,
+            index >= 0 ? this.getNumMenuItems_(items.slice(0, index + 1)) : 0);
       }
     }
   }
@@ -527,10 +525,12 @@ goog.ui.Select.prototype.updateAriaActiveDescendant_ = function() {
  */
 goog.ui.Select.prototype.getNumMenuItems_ = function(items) {
   'use strict';
-  return goog.array.count(items, function(item) {
-    'use strict';
-    return item instanceof goog.ui.MenuItem;
-  });
+  return items
+      .filter(function(item) {
+        'use strict';
+        return item instanceof goog.ui.MenuItem;
+      })
+      .length;
 };
 
 

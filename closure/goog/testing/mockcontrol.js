@@ -22,7 +22,6 @@ goog.setTestOnly('goog.testing.MockControl');
 goog.provide('goog.testing.MockControl');
 
 goog.require('goog.Promise');
-goog.require('goog.array');
 goog.require('goog.testing');
 goog.require('goog.testing.LooseMock');
 goog.require('goog.testing.StrictMock');
@@ -64,7 +63,7 @@ goog.testing.MockControl.prototype.addMock = function(mock) {
  */
 goog.testing.MockControl.prototype.$replayAll = function() {
   'use strict';
-  goog.array.forEach(this.mocks_, function(m) {
+  this.mocks_.forEach(function(m) {
     'use strict';
     m.$replay();
   });
@@ -76,7 +75,7 @@ goog.testing.MockControl.prototype.$replayAll = function() {
  */
 goog.testing.MockControl.prototype.$resetAll = function() {
   'use strict';
-  goog.array.forEach(this.mocks_, function(m) {
+  this.mocks_.forEach(function(m) {
     'use strict';
     m.$reset();
   });
@@ -90,7 +89,7 @@ goog.testing.MockControl.prototype.$resetAll = function() {
  */
 goog.testing.MockControl.prototype.$waitAndVerifyAll = function() {
   'use strict';
-  return goog.Promise.all(goog.array.map(this.mocks_, function(m) {
+  return goog.Promise.all(this.mocks_.map(function(m) {
     'use strict';
     return m.$waitAndVerify();
   }));
@@ -102,7 +101,7 @@ goog.testing.MockControl.prototype.$waitAndVerifyAll = function() {
  */
 goog.testing.MockControl.prototype.$verifyAll = function() {
   'use strict';
-  goog.array.forEach(this.mocks_, function(m) {
+  this.mocks_.forEach(function(m) {
     'use strict';
     m.$verify();
   });
@@ -114,19 +113,16 @@ goog.testing.MockControl.prototype.$verifyAll = function() {
  */
 goog.testing.MockControl.prototype.$tearDown = function() {
   'use strict';
-  goog.array.forEach(this.mocks_, function(m) {
+  this.mocks_.forEach(function(m) {
     'use strict';
     if (!m) {
       return;
     }
-
     m = /** @type {?} */ (m);
     // $tearDown if defined.
     if (m.$tearDown) {
       m.$tearDown();
     }
-    // TODO(user): Somehow determine if verifyAll should have been called
-    // but was not.
   });
 };
 

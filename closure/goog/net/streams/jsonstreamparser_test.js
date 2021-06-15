@@ -10,7 +10,6 @@ goog.setTestOnly();
 const JsonFuzzing = goog.require('goog.labs.testing.JsonFuzzing');
 const JsonStreamParser = goog.require('goog.net.streams.JsonStreamParser');
 const asserts = goog.require('goog.testing.asserts');
-const googArray = goog.require('goog.array');
 const googJson = goog.require('goog.json');
 const testSuite = goog.require('goog.testing.testSuite');
 const utils = goog.require('goog.uri.utils');
@@ -162,7 +161,7 @@ testSuite({
       const result = parser.parse(dataString);
 
       assertEquals(data.length, result.length);
-      googArray.forEach(data, (elm, index) => {
+      data.forEach((elm, index) => {
         assertNotNull(elm);
         assertObjectEquals(dataString, elm, result[index]);
       });
@@ -191,18 +190,18 @@ testSuite({
 
       let parsed = parser.parse(string1);
       if (parsed) {
-        result = googArray.concat(result, parsed);
+        result = result.concat(parsed);
       }
 
       const string2 = dataString.substring(j);
 
       parsed = parser.parse(string2);
       if (parsed) {
-        result = googArray.concat(result, parsed);
+        result = result.concat(parsed);
       }
 
       assertEquals(data.length, result.length);
-      googArray.forEach(data, (elm, index) => {
+      data.forEach((elm, index) => {
         assertObjectEquals(dataString, elm, result[index]);
       });
     }
@@ -233,12 +232,12 @@ testSuite({
       pos = next;
       const parsed = parser.parse(subString);
       if (parsed) {
-        result = googArray.concat(result, parsed);
+        result = result.concat(parsed);
       }
     }
 
     assertEquals(data.length, result.length);
-    googArray.forEach(data, (elm, index) => {
+    data.forEach((elm, index) => {
       assertObjectEquals(
           `${dataString}
 @${index}`,

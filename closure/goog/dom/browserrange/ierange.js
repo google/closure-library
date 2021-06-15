@@ -15,7 +15,6 @@
 
 goog.provide('goog.dom.browserrange.IeRange');
 
-goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.RangeEndpoint');
@@ -235,7 +234,8 @@ goog.dom.browserrange.IeRange.createFromNodeContents = function(node) {
 
   if (!goog.dom.browserrange.canContainRangeEndpoint(node)) {
     range.startNode_ = range.endNode_ = range.parentNode_ = node.parentNode;
-    range.startOffset_ = goog.array.indexOf(range.parentNode_.childNodes, node);
+    range.startOffset_ =
+        Array.prototype.indexOf.call(range.parentNode_.childNodes, node);
     range.endOffset_ = range.startOffset_ + 1;
   } else {
     // Note(user) : Emulate the behavior of W3CRange - Go to deepest possible

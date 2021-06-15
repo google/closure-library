@@ -142,10 +142,12 @@ goog.testing.StrictMock.prototype.$waitAndVerify = function() {
 goog.testing.StrictMock.prototype.maybeFinishedWithExpectations_ = function() {
   'use strict';
   var unresolvedExpectations =
-      goog.array.count(this.$expectations_, function(expectation) {
-        'use strict';
-        return expectation.actualCalls < expectation.minCalls;
-      });
+      this.$expectations_
+          .filter(function(expectation) {
+            'use strict';
+            return expectation.actualCalls < expectation.minCalls;
+          })
+          .length;
   if (this.waitingForExpectations && !unresolvedExpectations) {
     this.waitingForExpectations.resolve();
   }

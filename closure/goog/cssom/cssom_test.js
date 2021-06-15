@@ -9,7 +9,6 @@ goog.setTestOnly();
 
 const CssRuleType = goog.require('goog.cssom.CssRuleType');
 const cssom = goog.require('goog.cssom');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 
@@ -177,8 +176,8 @@ testSuite({
     // references to anything but CSSStyleRules.
     let pos = 0;
     if (styleSheet.cssRules) {
-      pos =
-          googArray.findIndex(rules, (rule) => rule.type == CssRuleType.STYLE);
+      pos = Array.prototype.findIndex.call(
+          rules, rule => rule.type == CssRuleType.STYLE);
     }
     cssom.addCssRule(styleSheet, newCssRule, pos);
 

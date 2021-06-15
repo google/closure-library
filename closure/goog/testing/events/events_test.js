@@ -15,7 +15,6 @@ const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const TagName = goog.require('goog.dom.TagName');
 const dom = goog.require('goog.dom');
 const events = goog.require('goog.events');
-const googArray = goog.require('goog.array');
 const googString = goog.require('goog.string');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const style = goog.require('goog.style');
@@ -51,7 +50,7 @@ const DBLCLICK_SEQ =
       'dblclick',
     ]);
 
-const DBLCLICK_SEQ_COORDS = googArray.repeat(coordinate, DBLCLICK_SEQ.length);
+const DBLCLICK_SEQ_COORDS = (new Array(DBLCLICK_SEQ.length)).fill(coordinate);
 
 const CONTEXTMENU_SEQ = userAgent.WINDOWS ?
     ['mousedown', 'mouseup', 'contextmenu'] :
@@ -490,7 +489,7 @@ testSuite({
   testContextMenuSequenceWithCoordinate() {
     assertTrue(testingEvents.fireContextMenuSequence(root, coordinate));
     assertEventTypes(CONTEXTMENU_SEQ);
-    assertCoordinates(googArray.repeat(coordinate, CONTEXTMENU_SEQ.length));
+    assertCoordinates((new Array(CONTEXTMENU_SEQ.length)).fill(coordinate));
   },
 
   testContextMenuSequenceCancellingMousedown() {

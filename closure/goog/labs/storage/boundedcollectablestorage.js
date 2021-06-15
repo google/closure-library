@@ -103,12 +103,12 @@ goog.labs.storage.BoundedCollectableStorage.prototype.rebuildIndex_ =
       },
       this);
 
-  goog.array.sort(keys, function(a, b) {
+  keys.sort(function(a, b) {
     'use strict';
     return a.created - b.created;
   });
 
-  return goog.array.map(keys, function(v) {
+  return keys.map(function(v) {
     'use strict';
     return v.key;
   });
@@ -185,7 +185,7 @@ goog.labs.storage.BoundedCollectableStorage.removeSubsequence_ = function(
 
   goog.asserts.assert(keysToRemoveIdx == keysToRemove.length);
   goog.asserts.assert(keysIdx < keys.length);
-  return goog.array.concat(keysToKeep, goog.array.slice(keys, keysIdx + 1));
+  return goog.array.concat(keysToKeep, keys.slice(keysIdx + 1));
 };
 
 
@@ -204,8 +204,8 @@ goog.labs.storage.BoundedCollectableStorage.prototype.collectOversize_ =
   if (keys.length <= maxSize) {
     return goog.array.clone(keys);
   }
-  const keysToRemove = goog.array.slice(keys, 0, keys.length - maxSize);
-  goog.array.forEach(keysToRemove, function(key) {
+  const keysToRemove = keys.slice(0, keys.length - maxSize);
+  keysToRemove.forEach(function(key) {
     'use strict';
     goog.labs.storage.BoundedCollectableStorage.superClass_.remove.call(
         this, key);

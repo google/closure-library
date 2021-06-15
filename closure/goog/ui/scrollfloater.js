@@ -29,7 +29,6 @@
 goog.provide('goog.ui.ScrollFloater');
 goog.provide('goog.ui.ScrollFloater.EventType');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
@@ -613,21 +612,19 @@ goog.ui.ScrollFloater.prototype.storeOriginalStyles_ = function() {
 
   // Store styles while not floating so we can restore them when the
   // element stops floating.
-  goog.array.forEach(
-      goog.ui.ScrollFloater.STORED_STYLE_PROPS_, function(property) {
-        'use strict';
-        this.originalStyles_[property] = elem.style[property];
-      }, this);
+  goog.ui.ScrollFloater.STORED_STYLE_PROPS_.forEach(function(property) {
+    'use strict';
+    this.originalStyles_[property] = elem.style[property];
+  }, this);
 
   // Copy relevant styles to placeholder so it will be laid out the same
   // as the element that's about to be floated.
-  goog.array.forEach(
-      goog.ui.ScrollFloater.PLACEHOLDER_STYLE_PROPS_, function(property) {
-        'use strict';
-        this.placeholder_.style[property] = elem.style[property] ||
-            goog.style.getCascadedStyle(elem, property) ||
-            goog.style.getComputedStyle(elem, property);
-      }, this);
+  goog.ui.ScrollFloater.PLACEHOLDER_STYLE_PROPS_.forEach(function(property) {
+    'use strict';
+    this.placeholder_.style[property] = elem.style[property] ||
+        goog.style.getCascadedStyle(elem, property) ||
+        goog.style.getComputedStyle(elem, property);
+  }, this);
 };
 
 

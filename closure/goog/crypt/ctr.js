@@ -63,14 +63,13 @@ goog.crypt.Ctr.prototype.encrypt = function(plainText, initialVector) {
     keyStreamBlock = this.cipher_.encrypt(counter);
     goog.crypt.Ctr.incrementBigEndianCounter_(counter);
 
-    plainTextBlock = goog.array.slice(
+    plainTextBlock = Array.prototype.slice.call(
         plainText, encryptedArray.length,
         encryptedArray.length + this.cipher_.BLOCK_SIZE);
     goog.array.extend(
         encryptedArray,
         goog.crypt.xorByteArray(
-            plainTextBlock,
-            goog.array.slice(keyStreamBlock, 0, plainTextBlock.length)));
+            plainTextBlock, keyStreamBlock.slice(0, plainTextBlock.length)));
   }
 
   return encryptedArray;

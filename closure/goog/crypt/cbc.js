@@ -69,7 +69,7 @@ goog.crypt.Cbc.prototype.encrypt = function(plainText, initialVector) {
   for (var blockStartIndex = 0; blockStartIndex < plainText.length;
        blockStartIndex += this.cipher_.BLOCK_SIZE) {
     // Takes one block from the input message.
-    var plainTextBlock = goog.array.slice(
+    var plainTextBlock = Array.prototype.slice.call(
         plainText, blockStartIndex, blockStartIndex + this.cipher_.BLOCK_SIZE);
 
     var input = goog.crypt.xorByteArray(plainTextBlock, vector);
@@ -112,7 +112,7 @@ goog.crypt.Cbc.prototype.decrypt = function(cipherText, initialVector) {
   // Generate each block of the decrypted plain text.
   while (blockStartIndex < cipherText.length) {
     // Takes one block.
-    var cipherTextBlock = goog.array.slice(
+    var cipherTextBlock = Array.prototype.slice.call(
         cipherText, blockStartIndex, blockStartIndex + this.cipher_.BLOCK_SIZE);
 
     var resultBlock = this.cipher_.decrypt(cipherTextBlock);

@@ -117,7 +117,7 @@ goog.html.sanitizer.CssSanitizer.sanitizeStyleSheet_ = function(
   var sanitizedRules = [];
   var cssRules = goog.html.sanitizer.CssSanitizer.getOnlyStyleRules_(
       goog.array.toArray(cssStyleSheet.cssRules));
-  goog.array.forEach(cssRules, function(cssRule) {
+  cssRules.forEach(function(cssRule) {
     'use strict';
     if (containerId && !/[a-zA-Z][\w-:\.]*/.test(containerId)) {
       // Sanity check on the element ID that will confine the new CSS rules.
@@ -158,7 +158,7 @@ goog.html.sanitizer.CssSanitizer.sanitizeStyleSheet_ = function(
 goog.html.sanitizer.CssSanitizer.getOnlyStyleRules_ = function(cssRules) {
   'use strict';
   return /** @type {!Array<!CSSStyleRule>} */ (
-      goog.array.filter(cssRules, function(cssRule) {
+      cssRules.filter(function(cssRule) {
         'use strict';
         return cssRule instanceof CSSStyleRule ||
             cssRule.type == CSSRule.STYLE_RULE;
@@ -242,7 +242,7 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
   var cssPropNames =
       goog.html.sanitizer.CssSanitizer.getCssPropNames_(cssStyle);
 
-  goog.array.forEach(cssPropNames, function(propName) {
+  cssPropNames.forEach(function(propName) {
     'use strict';
     var propNameWithoutPrefix =
         goog.html.sanitizer.CssSanitizer.withoutVendorPrefix_(propName);
@@ -250,7 +250,6 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle = function(
             propNameWithoutPrefix)) {
       var propValue = goog.html.sanitizer.noclobber.getCssPropertyValue(
           /** @type {!CSSStyleDeclaration} */ (cssStyle), propName);
-
       var sanitizedValue =
           goog.html.sanitizer.CssPropertySanitizer.sanitizeProperty(
               propNameWithoutPrefix, propValue, opt_uriRewriter);
@@ -336,7 +335,7 @@ goog.html.sanitizer.CssSanitizer.inlineStyleRules = function(element) {
       false /* entityReferenceExpansion */);
   var currentElement;
   while (currentElement = /** @type {!Element} */ (subTreeWalker.nextNode())) {
-    goog.array.forEach(cssRules, function(rule) {
+    cssRules.forEach(function(rule) {
       'use strict';
       if (!goog.html.sanitizer.noclobber.elementMatches(
               currentElement, rule.selectorText)) {
@@ -350,7 +349,7 @@ goog.html.sanitizer.CssSanitizer.inlineStyleRules = function(element) {
     });
   }
   // Delete the STYLE tags.
-  goog.array.forEach(styleTags, goog.dom.removeNode);
+  styleTags.forEach(goog.dom.removeNode);
 };
 
 
@@ -369,7 +368,7 @@ goog.html.sanitizer.CssSanitizer.mergeStyleDeclarations_ = function(
   var newPropNames =
       goog.html.sanitizer.CssSanitizer.getCssPropNames_(styleDeclaration);
 
-  goog.array.forEach(newPropNames, function(propName) {
+  newPropNames.forEach(function(propName) {
     'use strict';
     if (existingPropNames.indexOf(propName) >= 0) {
       // This was either a property set by the style attribute or a stylesheet

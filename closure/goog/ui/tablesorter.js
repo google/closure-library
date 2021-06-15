@@ -256,7 +256,7 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
       return [goog.dom.getTextContent(row.cells[column]), rowIndex, row];
     });
 
-    goog.array.sort(values, cmpFn);
+    values.sort(cmpFn);
 
     // Remove the tBody temporarily since this speeds up the sort on some
     // browsers.
@@ -264,7 +264,7 @@ goog.ui.TableSorter.prototype.sort = function(column, opt_reverse) {
     table.removeChild(tBody);
 
     // Sort the rows, using the resulting array.
-    goog.array.forEach(values, function(row) {
+    values.forEach(function(row) {
       'use strict';
       tBody.appendChild(row[2]);
     });

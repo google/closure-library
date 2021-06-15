@@ -606,8 +606,9 @@ goog.net.XhrIo.prototype.send = function(
   // Find whether a content type header is set, ignoring case.
   // HTTP header names are case-insensitive.  See:
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
-  const contentTypeKey =
-      goog.array.find(headers.getKeys(), goog.net.XhrIo.isContentTypeHeader_);
+  const contentTypeKey = headers.getKeys().find(
+      header => goog.string.caseInsensitiveEquals(
+          goog.net.XhrIo.CONTENT_TYPE_HEADER, header));
 
   const contentIsFormData =
       (goog.global['FormData'] && (content instanceof goog.global['FormData']));
@@ -654,9 +655,10 @@ goog.net.XhrIo.prototype.send = function(
     if (this.timeoutInterval_ > 0) {
       this.useXhr2Timeout_ = goog.net.XhrIo.shouldUseXhr2Timeout_(this.xhr_);
       goog.log.fine(
-          this.logger_, this.formatMsg_(
-                            'Will abort after ' + this.timeoutInterval_ +
-                            'ms if incomplete, xhr2 ' + this.useXhr2Timeout_));
+          this.logger_,
+          this.formatMsg_(
+              'Will abort after ' + this.timeoutInterval_ +
+              'ms if incomplete, xhr2 ' + this.useXhr2Timeout_));
       if (this.useXhr2Timeout_) {
         this.xhr_[goog.net.XhrIo.XHR2_TIMEOUT_] = this.timeoutInterval_;
         this.xhr_[goog.net.XhrIo.XHR2_ON_TIMEOUT_] =
@@ -698,19 +700,6 @@ goog.net.XhrIo.shouldUseXhr2Timeout_ = function(xhr) {
   return goog.userAgent.IE && goog.userAgent.isVersionOrHigher(9) &&
       typeof xhr[goog.net.XhrIo.XHR2_TIMEOUT_] === 'number' &&
       xhr[goog.net.XhrIo.XHR2_ON_TIMEOUT_] !== undefined;
-};
-
-
-/**
- * @param {string} header An HTTP header key.
- * @return {boolean} Whether the key is a content type header (ignoring
- *     case.
- * @private
- */
-goog.net.XhrIo.isContentTypeHeader_ = function(header) {
-  'use strict';
-  return goog.string.caseInsensitiveEquals(
-      goog.net.XhrIo.CONTENT_TYPE_HEADER, header);
 };
 
 
@@ -952,10 +941,10 @@ goog.net.XhrIo.prototype.onProgressHandler_ = function(e, opt_isDownload) {
       'goog.net.EventType.PROGRESS is of the same type as raw XHR progress.');
   this.dispatchEvent(
       goog.net.XhrIo.buildProgressEvent_(e, goog.net.EventType.PROGRESS));
-  this.dispatchEvent(
-      goog.net.XhrIo.buildProgressEvent_(
-          e, opt_isDownload ? goog.net.EventType.DOWNLOAD_PROGRESS :
-                              goog.net.EventType.UPLOAD_PROGRESS));
+  this.dispatchEvent(goog.net.XhrIo.buildProgressEvent_(
+      e,
+      opt_isDownload ? goog.net.EventType.DOWNLOAD_PROGRESS :
+                       goog.net.EventType.UPLOAD_PROGRESS));
 };
 
 
@@ -1292,7 +1281,8 @@ goog.net.XhrIo.prototype.getResponse = function() {
     }
     // Fell through to a response type that is not supported on this browser.
     goog.log.error(
-        this.logger_, 'Response type ' + this.responseType_ + ' is not ' +
+        this.logger_,
+        'Response type ' + this.responseType_ + ' is not ' +
             'supported on this browser');
     return null;
   } catch (e) {

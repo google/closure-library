@@ -9,7 +9,6 @@ goog.setTestOnly();
 
 const StringSet = goog.require('goog.structs.StringSet');
 const asserts = goog.require('goog.testing.asserts');
-const googArray = goog.require('goog.array');
 const iter = goog.require('goog.iter');
 const testSuite = goog.require('goog.testing.testSuite');
 
@@ -79,7 +78,7 @@ testSuite({
 
   testAdd() {
     const s = new StringSet;
-    googArray.forEach(TEST_VALUES_WITH_DUPLICATES, s.add, s);
+    TEST_VALUES_WITH_DUPLICATES.forEach(s.add, s);
     assertSameElements(TEST_VALUES, s.getValues());
   },
 
@@ -115,12 +114,12 @@ testSuite({
 
   testContains() {
     const e = new StringSet;
-    googArray.forEach(TEST_VALUES, (element) => {
+    TEST_VALUES.forEach(element => {
       assertFalse(`empty set does not contain ${element}`, e.contains(element));
     });
 
     const s = new StringSet(TEST_VALUES);
-    googArray.forEach(TEST_VALUES_WITH_DUPLICATES, (element) => {
+    TEST_VALUES_WITH_DUPLICATES.forEach(element => {
       assertTrue(`s contains ${element}`, s.contains(element));
     });
     assertFalse('s does not contain 42', s.contains(42));
@@ -247,7 +246,7 @@ testSuite({
     assertSameElements('set == {}', [], n.getValues());
 
     const s = new StringSet(TEST_VALUES);
-    googArray.forEach(TEST_VALUES, s.remove, s);
+    TEST_VALUES.forEach(s.remove, s);
     assertSameElements(
         'all special values have been removed', [], s.getValues());
   },

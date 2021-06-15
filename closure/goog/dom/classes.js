@@ -117,7 +117,7 @@ goog.dom.classes.add_ = function(classes, args) {
  */
 goog.dom.classes.getDifference_ = function(arr1, arr2) {
   'use strict';
-  return goog.array.filter(arr1, function(item) {
+  return arr1.filter(function(item) {
     'use strict';
     return !goog.array.contains(arr2, item);
   });
@@ -140,7 +140,7 @@ goog.dom.classes.swap = function(element, fromClass, toClass) {
   var removed = false;
   for (var i = 0; i < classes.length; i++) {
     if (classes[i] == fromClass) {
-      goog.array.splice(classes, i--, 1);
+      classes.splice(i--, 1);
       removed = true;
     }
   }

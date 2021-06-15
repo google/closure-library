@@ -553,7 +553,7 @@ if (goog.DEBUG) {
     goog.array.forEach(this.array_, function(row, x) {
       'use strict';
       sb.push('[ ');
-      goog.array.forEach(row, function(val, y) {
+      row.forEach(function(val, y) {
         'use strict';
         var strval = String(val);
         sb.push(goog.string.repeat(' ', maxLen - strval.length) + strval + ' ');

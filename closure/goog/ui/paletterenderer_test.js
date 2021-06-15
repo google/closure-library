@@ -14,7 +14,6 @@ const State = goog.require('goog.a11y.aria.State');
 const TagName = goog.require('goog.dom.TagName');
 const aria = goog.require('goog.a11y.aria');
 const dom = goog.require('goog.dom');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 const testing = goog.require('goog.html.testing');
 
@@ -32,8 +31,7 @@ let palette;
 /** @param {!Array<string>} items */
 function createPalette(items) {
   sandbox = dom.getElement('sandbox');
-  itemEls = googArray.map(
-      items,
+  itemEls = items.map(
       (item, index, a) => dom.safeHtmlToNode(testing.newSafeHtmlForTest(item)));
   renderer = new PaletteRenderer();
   palette = new Palette(itemEls, renderer);
@@ -98,9 +96,9 @@ testSuite({
   },
 
   testSetContentIncremental() {
-    const items = googArray.repeat('<div class="item">item</div>', 6);
-    const itemEls = googArray.map(
-        items, (item) => dom.safeHtmlToNode(testing.newSafeHtmlForTest(item)));
+    const items = (new Array(6)).fill('<div class="item">item</div>');
+    const itemEls =
+        items.map(item => dom.safeHtmlToNode(testing.newSafeHtmlForTest(item)));
 
     createPalette([]);
     palette.render();
@@ -128,8 +126,7 @@ testSuite({
   },
 
   testA11yLabelsSetContentIncremental() {
-    const itemEls = googArray.map(
-        items,
+    const itemEls = items.map(
         (item, index, a) =>
             dom.safeHtmlToNode(testing.newSafeHtmlForTest(item)));
 
@@ -169,8 +166,7 @@ testSuite({
       '<div aria-label="newlabel-2" title="title-2"></div>',
       '<div><span></span></div>',
     ];
-    const newItemEls = googArray.map(
-        newItems,
+    const newItemEls = newItems.map(
         (item, index, a) =>
             dom.safeHtmlToNode(testing.newSafeHtmlForTest(item)));
 

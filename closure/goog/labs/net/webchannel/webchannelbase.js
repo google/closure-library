@@ -2240,7 +2240,7 @@ WebChannelBase.prototype.onInput_ = function(respArray, request) {
       }
     } else if (this.state_ == WebChannelBase.State.OPENED) {
       if (nextArray[0] == 'stop' || nextArray[0] == 'close') {
-        if (batch && !goog.array.isEmpty(batch)) {
+        if (batch && !(batch.length === 0)) {
           this.handler_.channelHandleMultipleArrays(this, batch);
           batch.length = 0;
         }
@@ -2267,7 +2267,7 @@ WebChannelBase.prototype.onInput_ = function(respArray, request) {
       this.backChannelRetryCount_ = 0;
     }
   }
-  if (batch && !goog.array.isEmpty(batch)) {
+  if (batch && !(batch.length === 0)) {
     this.handler_.channelHandleMultipleArrays(this, batch);
   }
 };

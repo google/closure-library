@@ -185,7 +185,7 @@ goog.dom.ControlRange.prototype.getEndNode = function() {
   'use strict';
   var sorted = this.getSortedElements();
   var startsLast = /** @type {Node} */ (goog.array.peek(sorted));
-  return /** @type {Node} */ (goog.array.find(sorted, function(el) {
+  return /** @type {Node} */ (sorted.find(function(el) {
     'use strict';
     return goog.dom.contains(el, startsLast);
   }));
@@ -242,7 +242,7 @@ goog.dom.ControlRange.prototype.isRangeInDocument = function() {
   var returnValue = false;
 
   try {
-    returnValue = goog.array.every(this.getElements(), function(element) {
+    returnValue = this.getElements().every(function(element) {
       'use strict';
       // On IE, this throws an exception when the range is detached.
       return goog.userAgent.IE ?
@@ -277,8 +277,7 @@ goog.dom.ControlRange.prototype.getText = function() {
 /** @override */
 goog.dom.ControlRange.prototype.getHtmlFragment = function() {
   'use strict';
-  return goog.array.map(this.getSortedElements(), goog.dom.getOuterHtml)
-      .join('');
+  return this.getSortedElements().map(goog.dom.getOuterHtml).join('');
 };
 
 
@@ -322,7 +321,7 @@ goog.dom.ControlRange.prototype.removeContents = function() {
     for (var i = 0, len = this.range_.length; i < len; i++) {
       nodes.push(this.range_.item(i));
     }
-    goog.array.forEach(nodes, goog.dom.removeNode);
+    nodes.forEach(goog.dom.removeNode);
 
     this.collapse(false);
   }

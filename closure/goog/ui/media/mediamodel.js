@@ -20,7 +20,6 @@ goog.provide('goog.ui.media.MediaModel.Player');
 goog.provide('goog.ui.media.MediaModel.SubTitle');
 goog.provide('goog.ui.media.MediaModel.Thumbnail');
 
-goog.require('goog.array');
 goog.require('goog.html.TrustedResourceUrl');
 goog.requireType('goog.math.Size');
 
@@ -425,7 +424,7 @@ goog.ui.media.MediaModel.prototype.setCategories = function(categories) {
 /**
  * Finds the first category with the given scheme.
  * @param {string} scheme The scheme to search for.
- * @return {goog.ui.media.MediaModel.Category} The category that has the
+ * @return {?goog.ui.media.MediaModel.Category} The category that has the
  *     given scheme. May be null.
  */
 goog.ui.media.MediaModel.prototype.findCategoryWithScheme = function(scheme) {
@@ -433,11 +432,12 @@ goog.ui.media.MediaModel.prototype.findCategoryWithScheme = function(scheme) {
   if (!this.categories_) {
     return null;
   }
-  const category = goog.array.find(this.categories_, function(category) {
+  const category = this.categories_.find(function(category) {
     'use strict';
-    return category ? (scheme == category.getScheme()) : false;
-  });
-  return /** @type {goog.ui.media.MediaModel.Category} */ (category);
+    return category ? scheme == category.getScheme() : false;
+  }) ||
+      null;
+  return /** @type {?goog.ui.media.MediaModel.Category} */ (category);
 };
 
 
@@ -472,7 +472,7 @@ goog.ui.media.MediaModel.prototype.setCredits = function(credits) {
  */
 goog.ui.media.MediaModel.prototype.findCreditsWithRole = function(role) {
   'use strict';
-  const credits = goog.array.filter(this.credits_, function(credit) {
+  const credits = this.credits_.filter(function(credit) {
     'use strict';
     return role == credit.getRole();
   });

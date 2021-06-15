@@ -11,7 +11,6 @@
 
 goog.provide('goog.net.ImageLoader');
 
-goog.require('goog.array');
 goog.require('goog.dispose');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
@@ -215,7 +214,7 @@ goog.net.ImageLoader.prototype.start = function() {
   // the initial queued images in case any event handlers decide to add more
   // images before this loop has finished executing.
   const imageIdToRequestMap = this.imageIdToRequestMap_;
-  goog.array.forEach(goog.object.getKeys(imageIdToRequestMap), function(id) {
+  goog.object.getKeys(imageIdToRequestMap).forEach(function(id) {
     'use strict';
     const imageRequest = imageIdToRequestMap[id];
     if (imageRequest) {

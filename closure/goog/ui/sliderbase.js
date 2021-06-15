@@ -37,7 +37,6 @@ goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.disposeAll');
 goog.require('goog.dom');
@@ -1223,7 +1222,7 @@ goog.ui.SliderBase.prototype.animatedSetValue = function(v) {
   if (this.additionalAnimations_) {
     var additionalAnimations = this.additionalAnimations_.createAnimations(
         previousValue, v, goog.ui.SliderBase.ANIMATION_INTERVAL_);
-    goog.array.forEach(additionalAnimations, function(animation) {
+    additionalAnimations.forEach(function(animation) {
       'use strict';
       animations.add(animation);
     });

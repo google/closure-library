@@ -231,7 +231,7 @@ goog.module.Loader.prototype.init = function(baseUrl, opt_urlFunction) {
     this.getModuleUrl_ = opt_urlFunction;
   }
 
-  goog.array.forEach(this.pendingBeforeInit_, function(module) {
+  this.pendingBeforeInit_.forEach(function(module) {
     'use strict';
     this.load_(module);
   }, this);

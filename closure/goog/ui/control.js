@@ -753,7 +753,7 @@ goog.ui.Control.prototype.getCaption = function() {
   var caption = (typeof content === 'string') ?
       content :
       Array.isArray(content) ?
-      goog.array.map(content, goog.dom.getRawTextContent).join('') :
+      content.map(goog.dom.getRawTextContent).join('') :
       goog.dom.getTextContent(/** @type {!Node} */ (content));
   return goog.string.collapseBreakingSpaces(caption);
 };

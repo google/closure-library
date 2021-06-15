@@ -32,7 +32,6 @@ goog.provide('goog.ui.ServerChart.UriParam');
 goog.provide('goog.ui.ServerChart.UriTooLongEvent');
 
 goog.require('goog.Uri');
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
@@ -640,7 +639,7 @@ goog.ui.ServerChart.UriParam = {
 goog.ui.ServerChart.prototype.setBackgroundFill = function(fill) {
   'use strict';
   var value = [];
-  goog.array.forEach(fill, function(spec) {
+  fill.forEach(function(spec) {
     'use strict';
     spec.area = spec.area || 'bg';
     spec.effect = spec.effect || 's';
@@ -666,7 +665,7 @@ goog.ui.ServerChart.prototype.getBackgroundFill = function() {
   if (value != null) {
     var fillSpecifications = value.split('|');
     var valid = true;
-    goog.array.forEach(fillSpecifications, function(spec) {
+    fillSpecifications.forEach(function(spec) {
       'use strict';
       var parts = spec.split(',');
       if (valid && parts[1] == 's') {
@@ -1153,7 +1152,7 @@ goog.ui.ServerChart.prototype.setVennSeries = function(
     this.maxValue_ = dataMax;
   }
   if (opt_legendText !== undefined) {
-    goog.array.forEach(opt_legendText, goog.bind(function(legend) {
+    opt_legendText.forEach(goog.bind(function(legend) {
       'use strict';
       this.setLegendTexts_.push(legend);
     }, this));
@@ -1170,7 +1169,7 @@ goog.ui.ServerChart.prototype.setVennSeries = function(
   }
   this.dataSets_.push(weights);
   if (opt_colors !== undefined) {
-    goog.array.forEach(opt_colors, goog.bind(function(color) {
+    opt_colors.forEach(goog.bind(function(color) {
       'use strict';
       this.setColors_.push(color);
     }, this));

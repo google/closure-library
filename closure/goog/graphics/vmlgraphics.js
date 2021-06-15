@@ -13,7 +13,6 @@
 goog.provide('goog.graphics.VmlGraphics');
 
 
-goog.require('goog.array');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.events');
@@ -456,12 +455,12 @@ goog.graphics.VmlGraphics.prototype.setElementAffineTransform = function(
  */
 goog.graphics.VmlGraphics.removeSkew_ = function(element) {
   'use strict';
-  goog.array.forEach(
-      element
-          .childNodes, /**
-                          @suppress {strictMissingProperties} Part of the
-                          go/strict_warnings_migration
-                        */
+  Array.prototype.forEach.call(
+      element.childNodes,
+      /**
+        @suppress {strictMissingProperties} Part of the
+        go/strict_warnings_migration
+      */
       function(child) {
         'use strict';
         if (child.tagName == 'skew') {
@@ -479,12 +478,12 @@ goog.graphics.VmlGraphics.removeSkew_ = function(element) {
 goog.graphics.VmlGraphics.removeFill_ = function(element) {
   'use strict';
   element.fillcolor = '';
-  goog.array.forEach(
-      element
-          .childNodes, /**
-                          @suppress {strictMissingProperties} Part of the
-                          go/strict_warnings_migration
-                        */
+  Array.prototype.forEach.call(
+      element.childNodes,
+      /**
+         @suppress {strictMissingProperties} Part of the
+         go/strict_warnings_migration
+       */
       function(child) {
         'use strict';
         if (child.tagName == 'fill') {
@@ -925,17 +924,17 @@ goog.graphics.VmlGraphics.getVmlPath = function(path) {
       case goog.graphics.Path.Segment.MOVETO:
         list.push('m');
         Array.prototype.push.apply(
-            list, goog.array.map(args, goog.graphics.VmlGraphics.toSizeCoord));
+            list, args.map(goog.graphics.VmlGraphics.toSizeCoord));
         break;
       case goog.graphics.Path.Segment.LINETO:
         list.push('l');
         Array.prototype.push.apply(
-            list, goog.array.map(args, goog.graphics.VmlGraphics.toSizeCoord));
+            list, args.map(goog.graphics.VmlGraphics.toSizeCoord));
         break;
       case goog.graphics.Path.Segment.CURVETO:
         list.push('c');
         Array.prototype.push.apply(
-            list, goog.array.map(args, goog.graphics.VmlGraphics.toSizeCoord));
+            list, args.map(goog.graphics.VmlGraphics.toSizeCoord));
         break;
       case goog.graphics.Path.Segment.CLOSE:
         list.push('x');

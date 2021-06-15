@@ -16,7 +16,6 @@ goog.module.declareLegacyNamespace();
 const Const = goog.require('goog.string.Const');
 const SafeStyle = goog.require('goog.html.SafeStyle');
 const TypedString = goog.require('goog.string.TypedString');
-const googArray = goog.require('goog.array');
 const googObject = goog.require('goog.object');
 const {assert, fail} = goog.require('goog.asserts');
 const {contains} = goog.require('goog.string.internal');
@@ -169,7 +168,7 @@ class SafeStyleSheet {
      */
     const addArgument = argument => {
       if (Array.isArray(argument)) {
-        googArray.forEach(argument, addArgument);
+        argument.forEach(addArgument);
       } else {
         result += SafeStyleSheet.unwrap(argument);
       }

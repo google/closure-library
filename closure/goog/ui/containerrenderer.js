@@ -14,7 +14,6 @@ goog.provide('goog.ui.ContainerRenderer');
 goog.forwardDeclare('goog.ui.Container');
 goog.forwardDeclare('goog.ui.Container.Orientation');
 goog.require('goog.a11y.aria');
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
@@ -185,12 +184,14 @@ goog.ui.ContainerRenderer.prototype.decorate = function(container, element) {
   var hasBaseClass = false;
   var classNames = goog.dom.classlist.get(element);
   if (classNames) {
-    goog.array.forEach(classNames, function(className) {
+    Array.prototype.forEach.call(classNames, function(className) {
       'use strict';
       if (className == baseClass) {
         hasBaseClass = true;
-      } else if (className) {
-        this.setStateFromClassName(container, className, baseClass);
+      } else {
+        if (className) {
+          this.setStateFromClassName(container, className, baseClass);
+        }
       }
     }, this);
   }

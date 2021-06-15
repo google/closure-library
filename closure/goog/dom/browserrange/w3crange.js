@@ -14,7 +14,6 @@
 
 goog.provide('goog.dom.browserrange.W3cRange');
 
-goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.RangeEndpoint');
@@ -56,7 +55,8 @@ goog.dom.browserrange.W3cRange.getBrowserRangeForNode = function(node) {
     /** @suppress {missingRequire} */
     if (!goog.dom.browserrange.canContainRangeEndpoint(node)) {
       var rangeParent = node.parentNode;
-      var rangeStartOffset = goog.array.indexOf(rangeParent.childNodes, node);
+      var rangeStartOffset =
+          Array.prototype.indexOf.call(rangeParent.childNodes, node);
       nodeRange.setStart(rangeParent, rangeStartOffset);
       nodeRange.setEnd(rangeParent, rangeStartOffset + 1);
     } else {

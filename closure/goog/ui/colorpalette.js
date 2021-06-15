@@ -11,7 +11,6 @@
 
 goog.provide('goog.ui.ColorPalette');
 
-goog.require('goog.array');
 goog.require('goog.color');
 goog.require('goog.dom.TagName');
 goog.require('goog.style');
@@ -124,13 +123,13 @@ goog.ui.ColorPalette.prototype.setSelectedColor = function(color) {
   'use strict';
   var hexColor = goog.ui.ColorPalette.parseColor_(color);
   if (!this.normalizedColors_) {
-    this.normalizedColors_ = goog.array.map(this.colors_, function(color) {
+    this.normalizedColors_ = this.colors_.map(function(color) {
       'use strict';
       return goog.ui.ColorPalette.parseColor_(color);
     });
   }
   this.setSelectedIndex(
-      hexColor ? goog.array.indexOf(this.normalizedColors_, hexColor) : -1);
+      hexColor ? this.normalizedColors_.indexOf(hexColor) : -1);
 };
 
 
@@ -140,7 +139,7 @@ goog.ui.ColorPalette.prototype.setSelectedColor = function(color) {
  */
 goog.ui.ColorPalette.prototype.createColorNodes = function() {
   'use strict';
-  return goog.array.map(this.colors_, function(color, index) {
+  return this.colors_.map(function(color, index) {
     'use strict';
     var swatch = this.getDomHelper().createDom(goog.dom.TagName.DIV, {
       'class': goog.getCssName(this.getRenderer().getCssClass(), 'colorswatch'),

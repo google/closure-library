@@ -11,7 +11,6 @@
 
 goog.provide('goog.ui.ColorMenuButton');
 
-goog.require('goog.array');
 goog.require('goog.object');
 goog.require('goog.ui.ColorMenuButtonRenderer');
 goog.require('goog.ui.ColorPalette');
@@ -103,7 +102,7 @@ goog.ui.ColorMenuButton.newColorMenu = function(opt_extraItems, opt_domHelper) {
   var menu = new goog.ui.Menu(opt_domHelper);
 
   if (opt_extraItems) {
-    goog.array.forEach(opt_extraItems, function(item) {
+    opt_extraItems.forEach(function(item) {
       'use strict';
       menu.addChild(item, true);
     });

@@ -502,7 +502,7 @@ goog.net.ipaddress.Ipv6Address.explode_ = function(address) {
     return [];
   }
 
-  return goog.array.join(basePart, goog.array.repeat('0', gap), secondPart);
+  return goog.array.join(basePart, (new Array(gap)).fill('0'), secondPart);
 };
 
 

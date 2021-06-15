@@ -106,7 +106,7 @@ goog.ui.SelectionModel.prototype.getItemCount = function() {
  */
 goog.ui.SelectionModel.prototype.indexOfItem = function(item) {
   'use strict';
-  return item ? goog.array.indexOf(this.items_, item) : -1;
+  return item ? this.items_.indexOf(item) : -1;
 };
 
 
@@ -150,7 +150,7 @@ goog.ui.SelectionModel.prototype.addItems = function(items) {
   'use strict';
   if (items) {
     // New items shouldn't be selected.
-    goog.array.forEach(items, function(item) {
+    items.forEach(function(item) {
       'use strict';
       this.selectItem_(item, false);
     }, this);

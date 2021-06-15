@@ -15,7 +15,6 @@ goog.provide('goog.ui.HoverCard');
 goog.provide('goog.ui.HoverCard.EventType');
 goog.provide('goog.ui.HoverCard.TriggerEvent');
 
-goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.Event');
@@ -270,7 +269,7 @@ goog.ui.HoverCard.prototype.setCurrentAnchor_ = function(anchor) {
 goog.ui.HoverCard.prototype.detachTempAnchor_ = function(anchor) {
   'use strict';
   if (anchor) {
-    var pos = goog.array.indexOf(this.tempAttachedAnchors_, anchor);
+    var pos = this.tempAttachedAnchors_.indexOf(anchor);
     if (pos != -1) {
       this.detach(anchor);
       this.tempAttachedAnchors_.splice(pos, 1);

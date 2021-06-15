@@ -187,7 +187,7 @@ goog.pubsub.PubSub.prototype.unsubscribe = function(topic, fn, opt_context) {
     // Find the subscription key for the given combination of topic, function,
     // and context object.
     var subscriptions = this.subscriptions_;
-    var key = goog.array.find(keys, function(k) {
+    var key = keys.find(function(k) {
       'use strict';
       return subscriptions[k + 1] == fn && subscriptions[k + 2] == opt_context;
     });
@@ -334,7 +334,7 @@ goog.pubsub.PubSub.prototype.clear = function(opt_topic) {
   if (opt_topic) {
     var keys = this.topics_[opt_topic];
     if (keys) {
-      goog.array.forEach(keys, this.unsubscribeByKey, this);
+      keys.forEach(this.unsubscribeByKey, this);
       delete this.topics_[opt_topic];
     }
   } else {

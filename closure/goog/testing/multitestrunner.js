@@ -560,7 +560,7 @@ goog.testing.MultiTestRunner.prototype.getAllTests = function() {
  */
 goog.testing.MultiTestRunner.prototype.getTestsToRun = function() {
   'use strict';
-  return goog.array.filter(this.allTests_, this.filterFn_);
+  return this.allTests_.filter(this.filterFn_);
 };
 
 

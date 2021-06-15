@@ -594,7 +594,7 @@ goog.testing.TestCase.prototype.finalize = function() {
   } else {
     this.log('Tests Failed');
   }
-  goog.array.forEach(this.onCompletedCallbacks_, function(cb) {
+  this.onCompletedCallbacks_.forEach(function(cb) {
     'use strict';
     cb();
   });
@@ -1198,8 +1198,7 @@ goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
   // If no errors have been recorded for the test, it is a success.
   if (!(this.curTest_.name in this.result_.resultsByName) ||
       !this.result_.resultsByName[this.curTest_.name].length) {
-    if (goog.array.indexOf(this.result_.suppressedTests, this.curTest_.name) >=
-        0) {
+    if (this.result_.suppressedTests.indexOf(this.curTest_.name) >= 0) {
       this.doSkipped(this.curTest_);
     } else {
       this.doSuccess(this.curTest_);

@@ -151,7 +151,7 @@ goog.structs.isEmpty = function(col) {
   // collection and as such even whitespace matters
 
   if (goog.isArrayLike(col) || typeof col === 'string') {
-    return goog.array.isEmpty(/** @type {!Array<?>} */ (col));
+    return /** @type {!Array<?>} */ (col).length === 0;
   }
   return goog.object.isEmpty(col);
 };
@@ -188,15 +188,15 @@ goog.structs.clear = function(col) {
  *     within `f`.
  * @return {void}
  * @template T,S
- * @deprecated Use a more specific method, e.g. goog.array.forEach,
- *     goog.object.forEach, or for-of.
+ * @deprecated Use a more specific method, e.g. native Array.prototype.forEach,
+ *     or for-of.
  */
 goog.structs.forEach = function(col, f, opt_obj) {
   'use strict';
   if (col.forEach && typeof col.forEach == 'function') {
     col.forEach(f, opt_obj);
   } else if (goog.isArrayLike(col) || typeof col === 'string') {
-    goog.array.forEach(/** @type {!Array<?>} */ (col), f, opt_obj);
+    Array.prototype.forEach.call(/** @type {!Array<?>} */ (col), f, opt_obj);
   } else {
     var keys = goog.structs.getKeys(col);
     var values = goog.structs.getValues(col);
@@ -232,7 +232,8 @@ goog.structs.filter = function(col, f, opt_obj) {
     return col.filter(f, opt_obj);
   }
   if (goog.isArrayLike(col) || typeof col === 'string') {
-    return goog.array.filter(/** @type {!Array<?>} */ (col), f, opt_obj);
+    return Array.prototype.filter.call(
+        /** @type {!Array<?>} */ (col), f, opt_obj);
   }
 
   var rv;
@@ -247,7 +248,7 @@ goog.structs.filter = function(col, f, opt_obj) {
       }
     }
   } else {
-    // We should not use goog.array.filter here since we want to make sure that
+    // We should not use Array#filter here since we want to make sure that
     // the index is undefined as well as make sure that col is passed to the
     // function.
     rv = [];
@@ -283,7 +284,7 @@ goog.structs.map = function(col, f, opt_obj) {
     return col.map(f, opt_obj);
   }
   if (goog.isArrayLike(col) || typeof col === 'string') {
-    return goog.array.map(/** @type {!Array<?>} */ (col), f, opt_obj);
+    return Array.prototype.map.call(/** @type {!Array<?>} */ (col), f, opt_obj);
   }
 
   var rv;
@@ -296,7 +297,7 @@ goog.structs.map = function(col, f, opt_obj) {
       rv[keys[i]] = f.call(/** @type {?} */ (opt_obj), values[i], keys[i], col);
     }
   } else {
-    // We should not use goog.array.map here since we want to make sure that
+    // We should not use Array#map here since we want to make sure that
     // the index is undefined as well as make sure that col is passed to the
     // function.
     rv = [];
@@ -328,7 +329,8 @@ goog.structs.some = function(col, f, opt_obj) {
     return col.some(f, opt_obj);
   }
   if (goog.isArrayLike(col) || typeof col === 'string') {
-    return goog.array.some(/** @type {!Array<?>} */ (col), f, opt_obj);
+    return Array.prototype.some.call(
+        /** @type {!Array<?>} */ (col), f, opt_obj);
   }
   var keys = goog.structs.getKeys(col);
   var values = goog.structs.getValues(col);
@@ -363,7 +365,8 @@ goog.structs.every = function(col, f, opt_obj) {
     return col.every(f, opt_obj);
   }
   if (goog.isArrayLike(col) || typeof col === 'string') {
-    return goog.array.every(/** @type {!Array<?>} */ (col), f, opt_obj);
+    return Array.prototype.every.call(
+        /** @type {!Array<?>} */ (col), f, opt_obj);
   }
   var keys = goog.structs.getKeys(col);
   var values = goog.structs.getValues(col);

@@ -414,6 +414,6 @@ goog.debug.FancyWindow.getLoggers_ = function() {
     'use strict';
     return goog.array.defaultCompare(a.getName(), b.getName());
   };
-  goog.array.sort(loggers, loggerSort);
+  loggers.sort(loggerSort);
   return loggers;
 };

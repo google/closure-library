@@ -30,7 +30,6 @@ const classlist = goog.require('goog.dom.classlist');
 const editorRange = goog.require('goog.editor.range');
 const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
-const googArray = goog.require('goog.array');
 const googDom = goog.require('goog.dom');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -1450,7 +1449,9 @@ testSuite({
     assertTrue(classlist.contains(element, 'editable'));
     assertEquals(
         1,
-        googArray.count(classlist.get(element), functions.equalTo('editable')));
+        Array.prototype.filter
+            .call(classlist.get(element), functions.equalTo('editable'))
+            .length);
 
     // Skip restore won't reset the original element's CSS classes.
     editableField.makeUneditable(true /* opt_skipRestore */);
@@ -1459,6 +1460,8 @@ testSuite({
     assertTrue(classlist.contains(element, 'editable'));
     assertEquals(
         1,
-        googArray.count(classlist.get(element), functions.equalTo('editable')));
+        Array.prototype.filter
+            .call(classlist.get(element), functions.equalTo('editable'))
+            .length);
   },
 });

@@ -876,7 +876,7 @@ goog.html.SafeHtml.join = function(separator, parts) {
   var addArgument = function(argument) {
     'use strict';
     if (Array.isArray(argument)) {
-      goog.array.forEach(argument, addArgument);
+      argument.forEach(addArgument);
     } else {
       var html = goog.html.SafeHtml.htmlEscape(argument);
       content.push(goog.html.SafeHtml.unwrap(html));
@@ -889,7 +889,7 @@ goog.html.SafeHtml.join = function(separator, parts) {
     }
   };
 
-  goog.array.forEach(parts, addArgument);
+  parts.forEach(addArgument);
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       content.join(goog.html.SafeHtml.unwrap(separatorHtml)), dir);
 };

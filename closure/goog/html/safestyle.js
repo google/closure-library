@@ -12,7 +12,6 @@
 
 goog.provide('goog.html.SafeStyle');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.string.Const');
@@ -332,9 +331,7 @@ goog.html.SafeStyle.create = function(map) {
         continue;
       }
       if (Array.isArray(value)) {
-        value =
-            goog.array.map(value, goog.html.SafeStyle.sanitizePropertyValue_)
-                .join(' ');
+        value = value.map(goog.html.SafeStyle.sanitizePropertyValue_).join(' ');
       } else {
         value = goog.html.SafeStyle.sanitizePropertyValue_(value);
       }
@@ -595,7 +592,7 @@ goog.html.SafeStyle.concat = function(var_args) {
   var addArgument = function(argument) {
     'use strict';
     if (Array.isArray(argument)) {
-      goog.array.forEach(argument, addArgument);
+      argument.forEach(addArgument);
     } else {
       style += goog.html.SafeStyle.unwrap(argument);
     }

@@ -118,7 +118,7 @@ goog.dom.MultiRange.createFromTextRanges = function(textRanges) {
   'use strict';
   var range = new goog.dom.MultiRange();
   range.ranges_ = textRanges;
-  range.browserRanges_ = goog.array.map(textRanges, function(range) {
+  range.browserRanges_ = textRanges.map(function(range) {
     'use strict';
     return range.getBrowserRangeObject();
   });
@@ -277,7 +277,7 @@ goog.dom.MultiRange.prototype.getEndOffset = function() {
 /** @override */
 goog.dom.MultiRange.prototype.isRangeInDocument = function() {
   'use strict';
-  return goog.array.every(this.getTextRanges(), function(range) {
+  return this.getTextRanges().every(function(range) {
     'use strict';
     return range.isRangeInDocument();
   });
@@ -295,13 +295,11 @@ goog.dom.MultiRange.prototype.isCollapsed = function() {
 /** @override */
 goog.dom.MultiRange.prototype.getText = function() {
   'use strict';
-  return goog.array
-      .map(
-          this.getTextRanges(),
-          function(range) {
-            'use strict';
-            return range.getText();
-          })
+  return this.getTextRanges()
+      .map(function(range) {
+        'use strict';
+        return range.getText();
+      })
       .join('');
 };
 
@@ -317,13 +315,11 @@ goog.dom.MultiRange.prototype.getHtmlFragment = function() {
 goog.dom.MultiRange.prototype.getValidHtml = function() {
   'use strict';
   // NOTE(robbyw): This does not behave well if the sub-ranges overlap.
-  return goog.array
-      .map(
-          this.getTextRanges(),
-          function(range) {
-            'use strict';
-            return range.getValidHtml();
-          })
+  return this.getTextRanges()
+      .map(function(range) {
+        'use strict';
+        return range.getValidHtml();
+      })
       .join('');
 };
 
@@ -362,7 +358,7 @@ goog.dom.MultiRange.prototype.select = function() {
 /** @override */
 goog.dom.MultiRange.prototype.removeContents = function() {
   'use strict';
-  goog.array.forEach(this.getTextRanges(), function(range) {
+  this.getTextRanges().forEach(function(range) {
     'use strict';
     range.removeContents();
   });
@@ -429,7 +425,7 @@ goog.dom.DomSavedMultiRange_ = function(range) {
    * @type {Array<goog.dom.SavedRange>}
    * @private
    */
-  this.savedRanges_ = goog.array.map(range.getTextRanges(), function(range) {
+  this.savedRanges_ = range.getTextRanges().map(function(range) {
     'use strict';
     return range.saveUsingDom();
   });
@@ -443,7 +439,7 @@ goog.inherits(goog.dom.DomSavedMultiRange_, goog.dom.SavedRange);
  */
 goog.dom.DomSavedMultiRange_.prototype.restoreInternal = function() {
   'use strict';
-  var ranges = goog.array.map(this.savedRanges_, function(savedRange) {
+  var ranges = this.savedRanges_.map(function(savedRange) {
     'use strict';
     return savedRange.restore();
   });
@@ -456,7 +452,7 @@ goog.dom.DomSavedMultiRange_.prototype.disposeInternal = function() {
   'use strict';
   goog.dom.DomSavedMultiRange_.superClass_.disposeInternal.call(this);
 
-  goog.array.forEach(this.savedRanges_, function(savedRange) {
+  this.savedRanges_.forEach(function(savedRange) {
     'use strict';
     savedRange.dispose();
   });
@@ -492,7 +488,7 @@ goog.dom.MultiRangeIterator = function(range) {
   this.currentIdx_ = 0;
 
   if (range) {
-    this.iterators_ = goog.array.map(range.getSortedRanges(), function(r) {
+    this.iterators_ = range.getSortedRanges().map(function(r) {
       'use strict';
       return goog.iter.toIterator(r);
     });

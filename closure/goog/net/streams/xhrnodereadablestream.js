@@ -177,7 +177,7 @@ class XhrNodeReadableStream {
     for (let i = 0; i < messages.length; i++) {
       const message = messages[i];
 
-      googArray.forEach(callbacks, function(callback) {
+      callbacks.forEach(function(callback) {
         'use strict';
         try {
           callback(message);
@@ -234,7 +234,7 @@ class XhrNodeReadableStream {
     const callbacks = this.callbackMap_[eventType];
     const self = this;
     if (callbacks) {
-      googArray.forEach(callbacks, function(callback) {
+      callbacks.forEach(function(callback) {
         'use strict';
         try {
           callback();
@@ -246,7 +246,7 @@ class XhrNodeReadableStream {
 
     const onceCallbacks = this.callbackOnceMap_[eventType];
     if (onceCallbacks) {
-      googArray.forEach(onceCallbacks, function(callback) {
+      onceCallbacks.forEach(function(callback) {
         'use strict';
         callback();
       });

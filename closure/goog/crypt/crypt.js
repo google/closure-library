@@ -10,7 +10,6 @@
 
 goog.provide('goog.crypt');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 
 
@@ -59,7 +58,7 @@ goog.crypt.byteArrayToString = function(bytes) {
 
   var str = '';
   for (var i = 0; i < bytes.length; i += CHUNK_SIZE) {
-    var chunk = goog.array.slice(bytes, i, i + CHUNK_SIZE);
+    var chunk = Array.prototype.slice.call(bytes, i, i + CHUNK_SIZE);
     str += String.fromCharCode.apply(null, chunk);
   }
   return str;
@@ -76,8 +75,8 @@ goog.crypt.byteArrayToString = function(bytes) {
  */
 goog.crypt.byteArrayToHex = function(array, opt_separator) {
   'use strict';
-  return goog.array
-      .map(
+  return Array.prototype.map
+      .call(
           array,
           function(numByte) {
             'use strict';

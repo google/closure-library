@@ -2048,7 +2048,7 @@ goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
       }
     } else if (this.state_ == goog.net.BrowserChannel.State.OPENED) {
       if (nextArray[0] == 'stop') {
-        if (batch && !goog.array.isEmpty(batch)) {
+        if (batch && !(batch.length === 0)) {
           this.handler_.channelHandleMultipleArrays(this, batch);
           batch.length = 0;
         }
@@ -2071,7 +2071,7 @@ goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
       this.backChannelRetryCount_ = 0;
     }
   }
-  if (batch && !goog.array.isEmpty(batch)) {
+  if (batch && !(batch.length === 0)) {
     this.handler_.channelHandleMultipleArrays(this, batch);
   }
 };

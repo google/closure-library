@@ -11,7 +11,6 @@ const DateDate = goog.require('goog.date.Date');
 const DateTime = goog.require('goog.date.DateTime');
 const DateTimeSymbols = goog.require('goog.i18n.DateTimeSymbols');
 const Interval = goog.require('goog.date.Interval');
-const googArray = goog.require('goog.array');
 const googRequiredGoogDate = goog.require('goog.date');
 const month = goog.require('goog.date.month');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -1522,7 +1521,7 @@ testSuite({
     assertEquals(1, DateDate.compare(date2, date1));
 
     const dates = [date2, date3, date1];
-    googArray.sort(dates, DateDate.compare);
+    dates.sort(DateDate.compare);
     assertArrayEquals(
         'Dates should be sorted in time.', [date1, date2, date3], dates);
 

@@ -100,7 +100,7 @@ goog.fx.AnimationQueue.prototype.onAnimationFinish = goog.abstractMethod;
  */
 goog.fx.AnimationQueue.prototype.disposeInternal = function() {
   'use strict';
-  goog.array.forEach(this.queue, function(animation) {
+  this.queue.forEach(function(animation) {
     'use strict';
     animation.dispose();
   });
@@ -155,7 +155,7 @@ goog.fx.AnimationParallelQueue.prototype.play = function(opt_restart) {
   this.endTime = null;
   this.setStatePlaying();
 
-  goog.array.forEach(this.queue, function(anim) {
+  this.queue.forEach(function(anim) {
     'use strict';
     if (!resuming || anim.isPaused()) {
       anim.play(opt_restart);
@@ -170,7 +170,7 @@ goog.fx.AnimationParallelQueue.prototype.play = function(opt_restart) {
 goog.fx.AnimationParallelQueue.prototype.pause = function() {
   'use strict';
   if (this.isPlaying()) {
-    goog.array.forEach(this.queue, function(anim) {
+    this.queue.forEach(function(anim) {
       'use strict';
       if (anim.isPlaying()) {
         anim.pause();
@@ -186,7 +186,7 @@ goog.fx.AnimationParallelQueue.prototype.pause = function() {
 /** @override */
 goog.fx.AnimationParallelQueue.prototype.stop = function(opt_gotoEnd) {
   'use strict';
-  goog.array.forEach(this.queue, function(anim) {
+  this.queue.forEach(function(anim) {
     'use strict';
     if (!anim.isStopped()) {
       anim.stop(opt_gotoEnd);

@@ -9,7 +9,6 @@ goog.setTestOnly();
 
 const TopicId = goog.require('goog.pubsub.TopicId');
 const TypedPubSub = goog.require('goog.pubsub.TypedPubSub');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let pubsub;
@@ -343,7 +342,7 @@ testSuite({
     assertEquals(
         'Topic "Z" must not have any subscribers', 0, pubsub.getCount(TOPIC_Z));
 
-    googArray.forEach([TOPIC_X, TOPIC_Y, TOPIC_Z], (topic) => {
+    [TOPIC_X, TOPIC_Y, TOPIC_Z].forEach(topic => {
       pubsub.subscribe(topic, foo);
     });
     assertEquals(
@@ -353,7 +352,7 @@ testSuite({
     assertEquals(
         'Topic "Z" must have 1 subscriber', 1, pubsub.getCount(TOPIC_Z));
 
-    googArray.forEach([TOPIC_X, TOPIC_Y, TOPIC_Z], (topic) => {
+    [TOPIC_X, TOPIC_Y, TOPIC_Z].forEach(topic => {
       pubsub.subscribe(topic, bar, context);
     });
     assertEquals(
@@ -367,7 +366,7 @@ testSuite({
         'Pubsub channel must have a total of 6 subscribers', 6,
         pubsub.getCount());
 
-    googArray.forEach([TOPIC_X, TOPIC_Y, TOPIC_Z], (topic) => {
+    [TOPIC_X, TOPIC_Y, TOPIC_Z].forEach(topic => {
       pubsub.unsubscribe(topic, foo);
     });
     assertEquals(
@@ -377,7 +376,7 @@ testSuite({
     assertEquals(
         'Topic "Z" must have 1 subscriber', 1, pubsub.getCount(TOPIC_Z));
 
-    googArray.forEach([TOPIC_X, TOPIC_Y, TOPIC_Z], (topic) => {
+    [TOPIC_X, TOPIC_Y, TOPIC_Z].forEach(topic => {
       pubsub.unsubscribe(topic, bar, context);
     });
     assertEquals(
@@ -641,7 +640,7 @@ testSuite({
       new TopicId('Z'),
     ];
 
-    googArray.forEach(topics, (topic) => {
+    topics.forEach(topic => {
       pubsub.subscribe(topic, fn);
     });
     assertEquals(

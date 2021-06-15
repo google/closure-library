@@ -303,7 +303,7 @@ goog.editor.plugins.TableEditor.prototype.isUserEditableTable_ = function(
   }
 
   // Check for extra user-editable filters.
-  return goog.array.every(this.isTableEditableFunctions_, function(func) {
+  return this.isTableEditableFunctions_.every(function(func) {
     'use strict';
     return func(/** @type {Element} */ (element));
   });
