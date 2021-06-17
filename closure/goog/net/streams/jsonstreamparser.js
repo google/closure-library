@@ -30,7 +30,6 @@
  */
 
 goog.provide('goog.net.streams.JsonStreamParser');
-goog.provide('goog.net.streams.JsonStreamParser.Options');
 
 goog.require('goog.asserts');
 goog.require('goog.net.streams.StreamParser');
