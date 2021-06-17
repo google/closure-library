@@ -711,7 +711,7 @@ testSuite({
     mockClock.tick();
 
     assertEquals(3, bar.getCallCount());
-    googArray.forEach(bar.getCalls(), (call) => {
+    bar.getCalls().forEach(call => {
       assertArrayEquals(['x', 'y'], call.getArguments());
       assertEquals(context, call.getThis());
     });
@@ -1134,13 +1134,11 @@ testSuite({
     broadcastPubSub = new BroadcastPubSub();
     log.setLevel(broadcastPubSub.logger_, Level.OFF);
 
-    googArray.forEach(
-        [
-          'V', 'W', 'X', 'Y', 'Z'
-        ], /**
-              @suppress {checkTypes} suppression added to enable type checking
-            */
-        (topic) => {
+    ['V', 'W', 'X', 'Y', 'Z'].forEach(
+        /**
+           @suppress {checkTypes} suppression added to enable type checking
+         */
+        topic => {
           broadcastPubSub.subscribe(topic, fn);
         });
     assertEquals(
@@ -1152,7 +1150,7 @@ testSuite({
         'BroadcastChannel must have 4 subscribers', 4,
         broadcastPubSub.getCount());
 
-    googArray.forEach(['X', 'Y'], (topic) => {
+    ['X', 'Y'].forEach(topic => {
       broadcastPubSub.clear(topic);
     });
     assertEquals(

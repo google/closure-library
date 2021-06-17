@@ -68,7 +68,7 @@ goog.structs.Queue = function() {
  */
 goog.structs.Queue.prototype.maybeFlip_ = function() {
   'use strict';
-  if (goog.array.isEmpty(this.front_)) {
+  if (this.front_.length === 0) {
     this.front_ = this.back_;
     this.front_.reverse();
     this.back_ = [];
@@ -126,7 +126,7 @@ goog.structs.Queue.prototype.getCount = function() {
  */
 goog.structs.Queue.prototype.isEmpty = function() {
   'use strict';
-  return goog.array.isEmpty(this.front_) && goog.array.isEmpty(this.back_);
+  return this.front_.length === 0 && this.back_.length === 0;
 };
 
 

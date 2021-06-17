@@ -1068,7 +1068,7 @@ testSuite({
     assertFalse(googStyle.isUnselectable(el));
 
     function assertDescendantsUnselectable(unselectable) {
-      googArray.forEach(el.getElementsByTagName('*'), (descendant) => {
+      Array.prototype.forEach.call(el.getElementsByTagName('*'), descendant => {
         // Skip MathML or any other elements that do not have a style property.
         if (descendant.style) {
           assertEquals(unselectable, googStyle.isUnselectable(descendant));

@@ -15,7 +15,6 @@
 goog.provide('goog.string.newlines');
 goog.provide('goog.string.newlines.Line');
 
-goog.require('goog.array');
 
 
 /**
@@ -28,7 +27,7 @@ goog.require('goog.array');
 goog.string.newlines.splitLines = function(str, opt_keepNewlines) {
   'use strict';
   const lines = goog.string.newlines.getLines(str);
-  return goog.array.map(lines, function(line) {
+  return lines.map(function(line) {
     'use strict';
     return opt_keepNewlines ? line.getFullLine() : line.getContent();
   });

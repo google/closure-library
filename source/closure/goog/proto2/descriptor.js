@@ -11,7 +11,6 @@
 goog.provide('goog.proto2.Descriptor');
 goog.provide('goog.proto2.Metadata');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -138,7 +137,7 @@ goog.proto2.Descriptor.prototype.getFields = function() {
   }
 
   var fields = goog.object.getValues(this.fields_);
-  goog.array.sort(fields, tagComparator);
+  fields.sort(tagComparator);
 
   return fields;
 };

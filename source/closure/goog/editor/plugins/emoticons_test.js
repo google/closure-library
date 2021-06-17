@@ -13,7 +13,6 @@ const Field = goog.require('goog.editor.Field');
 const TagName = goog.require('goog.dom.TagName');
 const Uri = goog.require('goog.Uri');
 const dom = goog.require('goog.dom');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 
@@ -65,7 +64,7 @@ testSuite({
       const webkitValid = (2 == range.getStartOffset());
       const otherValid =
           (2 ==
-           googArray.indexOf(
+           Array.prototype.indexOf.call(
                range.getContainerElement().childNodes, range.getStartNode()));
 
       assertTrue('range starts after image', webkitValid || otherValid);

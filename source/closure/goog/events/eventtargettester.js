@@ -12,7 +12,6 @@ const GoogEventsEventTarget = goog.require('goog.events.EventTarget');
 const GoogEventsListenable = goog.require('goog.events.Listenable');
 const dispose = goog.require('goog.dispose');
 const events = goog.require('goog.events');
-const googArray = goog.require('goog.array');
 const recordFunction = goog.require('goog.testing.recordFunction');
 /** @suppress {extraRequire} */
 goog.require('goog.testing.asserts');
@@ -83,7 +82,7 @@ function assertListenerIsCalled(listener, numCount) {
  * resetListeners().
  */
 function assertNoOtherListenerIsCalled() {
-  googArray.forEach(listeners, function(l, index) {
+  listeners.forEach(function(l, index) {
     if (!l[exports.ALREADY_CHECKED_PROP]) {
       assertEquals(
           'Listeners ' + index + ' is unexpectedly called.', 0,
@@ -101,7 +100,7 @@ function assertNoOtherListenerIsCalled() {
  * Resets all listeners call count to 0.
  */
 function resetListeners() {
-  googArray.forEach(listeners, function(l) {
+  listeners.forEach(function(l) {
     l.reset();
     l[exports.ALREADY_CHECKED_PROP] = false;
   });

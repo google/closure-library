@@ -12,7 +12,6 @@ goog.provide('goog.fs.DirectoryEntryImpl');
 goog.provide('goog.fs.EntryImpl');
 goog.provide('goog.fs.FileEntryImpl');
 
-goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.fs.DirectoryEntry');
 goog.require('goog.fs.Entry');
@@ -282,7 +281,7 @@ goog.fs.DirectoryEntryImpl.prototype.createPath = function(path) {
   }
 
   // Filter out any empty path components caused by '//' or a leading slash.
-  const parts = goog.array.filter(path.split('/'), goog.functions.identity);
+  const parts = path.split('/').filter(goog.functions.identity);
 
   /**
    * @param {goog.fs.DirectoryEntryImpl} dir

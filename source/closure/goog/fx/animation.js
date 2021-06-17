@@ -16,7 +16,6 @@ goog.provide('goog.fx.Animation.EventType');
 goog.provide('goog.fx.Animation.State');
 goog.provide('goog.fx.AnimationEvent');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.events.Event');
 goog.require('goog.fx.Transition');
@@ -550,5 +549,5 @@ goog.inherits(goog.fx.AnimationEvent, goog.events.Event);
  */
 goog.fx.AnimationEvent.prototype.coordsAsInts = function() {
   'use strict';
-  return goog.array.map(this.coords, Math.round);
+  return this.coords.map(Math.round);
 };

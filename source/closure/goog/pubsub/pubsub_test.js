@@ -9,7 +9,6 @@ goog.setTestOnly();
 
 const MockClock = goog.require('goog.testing.MockClock');
 const PubSub = goog.require('goog.pubsub.PubSub');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let pubsub;
@@ -385,14 +384,14 @@ testSuite({
     assertEquals(
         'Topic "Z" must not have any subscribers', 0, pubsub.getCount('Z'));
 
-    googArray.forEach(['X', 'Y', 'Z'], (topic) => {
+    ['X', 'Y', 'Z'].forEach(topic => {
       pubsub.subscribe(topic, foo);
     });
     assertEquals('Topic "X" must have 1 subscriber', 1, pubsub.getCount('X'));
     assertEquals('Topic "Y" must have 1 subscriber', 1, pubsub.getCount('Y'));
     assertEquals('Topic "Z" must have 1 subscriber', 1, pubsub.getCount('Z'));
 
-    googArray.forEach(['X', 'Y', 'Z'], (topic) => {
+    ['X', 'Y', 'Z'].forEach(topic => {
       pubsub.subscribe(topic, bar, context);
     });
     assertEquals('Topic "X" must have 2 subscribers', 2, pubsub.getCount('X'));
@@ -403,14 +402,14 @@ testSuite({
         'Pubsub channel must have a total of 6 subscribers', 6,
         pubsub.getCount());
 
-    googArray.forEach(['X', 'Y', 'Z'], (topic) => {
+    ['X', 'Y', 'Z'].forEach(topic => {
       pubsub.unsubscribe(topic, foo);
     });
     assertEquals('Topic "X" must have 1 subscriber', 1, pubsub.getCount('X'));
     assertEquals('Topic "Y" must have 1 subscriber', 1, pubsub.getCount('Y'));
     assertEquals('Topic "Z" must have 1 subscriber', 1, pubsub.getCount('Z'));
 
-    googArray.forEach(['X', 'Y', 'Z'], (topic) => {
+    ['X', 'Y', 'Z'].forEach(topic => {
       pubsub.unsubscribe(topic, bar, context);
     });
     assertEquals(
@@ -659,6 +658,28 @@ testSuite({
         pubsub.pendingKeys_.length);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
+  testDisposeWhilePublishing() {
+    let callDispose = function() {
+      pubsub.dispose();
+    };
+    let afterDisposeCalled = false;
+    let afterDispose = function() {
+      afterDisposeCalled = true;
+    };
+    pubsub.subscribe('someTopic', callDispose);
+    pubsub.subscribe('someTopic', afterDispose);
+    let exceptionThrown = false;
+    try {
+      pubsub.publish('someTopic');
+    } catch (e) {
+      exceptionThrown = true;
+    }
+    assertFalse('publishing did not throw an error', exceptionThrown);
+    assertTrue('pubsub is disposed', pubsub.isDisposed());
+    assertFalse('afterDispose must not have been called', afterDisposeCalled);
+  },
+
   testPublishReturnValue() {
     const fn = function() {
       pubsub.unsubscribe('X', fn);
@@ -708,7 +729,7 @@ testSuite({
   testClear() {
     function fn() {}
 
-    googArray.forEach(['W', 'X', 'Y', 'Z'], (topic) => {
+    ['W', 'X', 'Y', 'Z'].forEach(topic => {
       pubsub.subscribe(topic, fn);
     });
     assertEquals(
@@ -718,7 +739,7 @@ testSuite({
     assertEquals(
         'Pubsub channel must have 3 subscribers', 3, pubsub.getCount());
 
-    googArray.forEach(['X', 'Y'], (topic) => {
+    ['X', 'Y'].forEach(topic => {
       pubsub.clear(topic);
     });
     assertEquals('Pubsub channel must have 1 subscriber', 1, pubsub.getCount());

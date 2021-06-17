@@ -1257,7 +1257,7 @@ goog.ui.Component.prototype.getChildAt = function(index) {
 goog.ui.Component.prototype.forEachChild = function(f, opt_obj) {
   'use strict';
   if (this.children_) {
-    goog.array.forEach(this.children_, f, opt_obj);
+    this.children_.forEach(f, opt_obj);
   }
 };
 
@@ -1270,8 +1270,7 @@ goog.ui.Component.prototype.forEachChild = function(f, opt_obj) {
  */
 goog.ui.Component.prototype.indexOfChild = function(child) {
   'use strict';
-  return (this.children_ && child) ? goog.array.indexOf(this.children_, child) :
-                                     -1;
+  return (this.children_ && child) ? this.children_.indexOf(child) : -1;
 };
 
 

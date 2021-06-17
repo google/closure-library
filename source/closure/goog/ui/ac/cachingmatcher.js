@@ -12,7 +12,6 @@
 
 goog.provide('goog.ui.ac.CachingMatcher');
 
-goog.require('goog.array');
 goog.require('goog.async.Throttle');
 goog.require('goog.ui.ac.ArrayMatcher');
 goog.require('goog.ui.ac.RenderOptions');
@@ -197,7 +196,7 @@ goog.ui.ac.CachingMatcher.prototype.clearCache = function() {
  */
 goog.ui.ac.CachingMatcher.prototype.addRows_ = function(rows) {
   'use strict';
-  goog.array.forEach(rows, function(row) {
+  rows.forEach(function(row) {
     'use strict';
     // The ' ' prefix is to avoid colliding with builtins like toString.
     if (!this.rowStrings_[' ' + row]) {
@@ -258,16 +257,16 @@ goog.ui.ac.CachingMatcher.prototype.onBaseMatch_ = function(token, matches) {
   this.addRows_(matches);
 
   var oldMatchesSet = {};
-  goog.array.forEach(this.mostRecentMatches_, function(match) {
+  this.mostRecentMatches_.forEach(function(match) {
     'use strict';
     // The ' ' prefix is to avoid colliding with builtins like toString.
     oldMatchesSet[' ' + match] = true;
   });
   var newMatches = this.getMatchesForRows_(
       this.mostRecentToken_, this.mostRecentMaxMatches_, this.rows_);
-  newMatches = goog.array.filter(newMatches, function(match) {
+  newMatches = newMatches.filter(function(match) {
     'use strict';
-    return !(oldMatchesSet[' ' + match]);
+    return !oldMatchesSet[' ' + match];
   });
   newMatches = this.mostRecentMatches_.concat(newMatches)
                    .slice(0, this.mostRecentMaxMatches_);

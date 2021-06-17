@@ -681,13 +681,11 @@ goog.graphics.CanvasTextElement.prototype.updateText_ = function() {
   'use strict';
   if (this.x1_ == this.x2_) {
     // Special case vertical text
-    var html = goog.array
-                   .map(
-                       this.text_.split(''),
-                       function(entry) {
-                         'use strict';
-                         return goog.string.htmlEscape(entry);
-                       })
+    var html = this.text_.split('')
+                   .map(function(entry) {
+                     'use strict';
+                     return goog.string.htmlEscape(entry);
+                   })
                    .join('<br>');
     // Creating a SafeHtml for each character would be quite expensive, and it's
     // obvious that this is safe, so an unchecked conversion is appropriate.

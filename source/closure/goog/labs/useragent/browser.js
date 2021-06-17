@@ -271,7 +271,7 @@ goog.labs.userAgent.browser.getVersion = function() {
 
   // Construct a map for easy lookup.
   var versionMap = {};
-  goog.array.forEach(versionTuples, function(tuple) {
+  versionTuples.forEach(function(tuple) {
     'use strict';
     // Note that the tuple is of length three, but we only care about the
     // first two.

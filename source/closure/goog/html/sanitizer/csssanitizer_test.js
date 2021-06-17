@@ -53,7 +53,7 @@ function assertCSSTextEquals(expectedCssText, actualCssText) {
     const ie8StyleString = 'WIDTH: 0px; BOTTOM: 0px; HEIGHT: 0px; TOP: 0px; ' +
         'RIGHT: 0px; TEXT-DECORATION: none underline overline line-through; ' +
         'LEFT: 0px; TEXT-DECORATION: underline line-through;';
-    googArray.forEach(ie8StyleString.split(/\s*;\s*/), (ie8Css) => {
+    ie8StyleString.split(/\s*;\s*/).forEach(ie8Css => {
       googArray.remove(actualCssArray, ie8Css);
     });
     actualCssText = actualCssArray.join('; ');

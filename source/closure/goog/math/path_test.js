@@ -9,7 +9,6 @@ goog.setTestOnly();
 
 const AffineTransform = goog.require('goog.math.AffineTransform');
 const Path = goog.require('goog.math.Path');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 
 /**
@@ -58,17 +57,10 @@ testSuite({
   },
 
   testGetSegmentCount() {
-    assertArrayEquals(
-        [2, 2, 6, 6, 0],
-        googArray.map(
-            [
-              Path.Segment.MOVETO,
-              Path.Segment.LINETO,
-              Path.Segment.CURVETO,
-              Path.Segment.ARCTO,
-              Path.Segment.CLOSE,
-            ],
-            Path.getSegmentCount));
+    assertArrayEquals([2, 2, 6, 6, 0], [
+      Path.Segment.MOVETO, Path.Segment.LINETO, Path.Segment.CURVETO,
+      Path.Segment.ARCTO, Path.Segment.CLOSE
+    ].map(Path.getSegmentCount));
   },
 
   testSimpleMoveTo() {

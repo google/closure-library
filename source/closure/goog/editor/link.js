@@ -10,7 +10,6 @@
 
 goog.provide('goog.editor.Link');
 
-goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
@@ -339,7 +338,7 @@ goog.editor.Link.isLikelyUrl = function(str) {
 
   // Relax the rules for special schemes.
   var scheme = parts[goog.uri.utils.ComponentIndex.SCHEME];
-  if (goog.array.indexOf(['mailto', 'aim'], scheme) != -1) {
+  if (['mailto', 'aim'].indexOf(scheme) != -1) {
     return true;
   }
 

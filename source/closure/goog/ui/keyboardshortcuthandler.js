@@ -13,7 +13,6 @@ goog.provide('goog.ui.KeyboardShortcutHandler');
 goog.provide('goog.ui.KeyboardShortcutHandler.EventType');
 goog.provide('goog.ui.KeyboardShortcutHandler.Modifiers');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
@@ -555,15 +554,16 @@ goog.ui.KeyboardShortcutHandler.prototype.interpretStrokes_ = function(
 
   // Build strokes array from string.
   if (typeof (args[initialIndex]) === 'string') {
-    strokes = goog.array.map(
-        goog.ui.KeyboardShortcutHandler.parseStringShortcut(args[initialIndex]),
-        function(stroke) {
-          'use strict';
-          goog.asserts.assertNumber(
-              stroke.keyCode, 'A non-modifier key is needed in each stroke.');
-          return goog.ui.KeyboardShortcutHandler.makeStroke_(
-              stroke.key || '', stroke.keyCode, stroke.modifiers);
-        });
+    strokes =
+        goog.ui.KeyboardShortcutHandler.parseStringShortcut(args[initialIndex])
+            .map(function(stroke) {
+              'use strict';
+              goog.asserts.assertNumber(
+                  stroke.keyCode,
+                  'A non-modifier key is needed in each stroke.');
+              return goog.ui.KeyboardShortcutHandler.makeStroke_(
+                  stroke.key || '', stroke.keyCode, stroke.modifiers);
+            });
 
     // Build strokes array from arguments list or from array.
   } else {
@@ -910,7 +910,7 @@ goog.ui.KeyboardShortcutHandler.setShortcut_ = function(
     tree, strokes, identifier) {
   'use strict';
   var stroke = strokes.shift();
-  goog.array.forEach(stroke, function(s) {
+  stroke.forEach(function(s) {
     'use strict';
     var node = tree[s];
     if (node && (strokes.length == 0 || node.shortcut)) {
@@ -925,7 +925,7 @@ goog.ui.KeyboardShortcutHandler.setShortcut_ = function(
   });
 
   if (strokes.length) {
-    goog.array.forEach(stroke, function(s) {
+    stroke.forEach(function(s) {
       'use strict';
       var node = goog.object.setIfUndefined(
           tree, s.toString(),
@@ -938,7 +938,7 @@ goog.ui.KeyboardShortcutHandler.setShortcut_ = function(
           strokesCopy, identifier);
     });
   } else {
-    goog.array.forEach(stroke, function(s) {
+    stroke.forEach(function(s) {
       'use strict';
       // Add a terminal node.
       tree[s] = goog.ui.KeyboardShortcutHandler.createTerminalNode_(identifier);
@@ -959,10 +959,9 @@ goog.ui.KeyboardShortcutHandler.setShortcut_ = function(
 goog.ui.KeyboardShortcutHandler.unsetShortcut_ = function(tree, strokes) {
   'use strict';
   var stroke = strokes.shift();
-  goog.array.forEach(stroke, function(s) {
+  stroke.forEach(function(s) {
     'use strict';
     var node = tree[s];
-
     if (!node) {
       // The given stroke sequence is not in the tree.
       return;

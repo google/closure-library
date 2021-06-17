@@ -187,7 +187,7 @@ goog.pubsub.PubSub.prototype.unsubscribe = function(topic, fn, opt_context) {
     // Find the subscription key for the given combination of topic, function,
     // and context object.
     var subscriptions = this.subscriptions_;
-    var key = goog.array.find(keys, function(k) {
+    var key = keys.find(function(k) {
       'use strict';
       return subscriptions[k + 1] == fn && subscriptions[k + 2] == opt_context;
     });
@@ -280,7 +280,7 @@ goog.pubsub.PubSub.prototype.publish = function(topic, var_args) {
         // the function to the arguments in the appropriate context.  The length
         // of the array must be fixed during the iteration, since subscribers
         // may add new subscribers during publishing.
-        for (i = 0, len = keys.length; i < len; i++) {
+        for (i = 0, len = keys.length; i < len && !this.isDisposed(); i++) {
           var key = keys[i];
           this.subscriptions_[key + 1].apply(
               this.subscriptions_[key + 2], args);
@@ -334,7 +334,7 @@ goog.pubsub.PubSub.prototype.clear = function(opt_topic) {
   if (opt_topic) {
     var keys = this.topics_[opt_topic];
     if (keys) {
-      goog.array.forEach(keys, this.unsubscribeByKey, this);
+      keys.forEach(this.unsubscribeByKey, this);
       delete this.topics_[opt_topic];
     }
   } else {

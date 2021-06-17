@@ -21,7 +21,6 @@
 
 goog.provide('goog.editor.style');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
@@ -165,7 +164,7 @@ goog.editor.style.makeUnselectable = function(element, eventHandler) {
       goog.editor.style.makeSelectable(input);
     }
   }
-  goog.array.forEach(
+  Array.prototype.forEach.call(
       goog.dom.getElementsByTagName(
           goog.dom.TagName.TEXTAREA, goog.asserts.assert(element)),
       goog.editor.style.makeSelectable);

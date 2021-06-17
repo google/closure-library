@@ -8,7 +8,6 @@ goog.module('goog.format.InternationalizedEmailAddressTest');
 goog.setTestOnly();
 
 const InternationalizedEmailAddress = goog.require('goog.format.InternationalizedEmailAddress');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 
 /**
@@ -21,10 +20,10 @@ const testSuite = goog.require('goog.testing.testSuite');
  * @private
  */
 function doIsValidTest(testFunc, valid, invalid) {
-  googArray.forEach(valid, (str) => {
+  valid.forEach(str => {
     assertTrue(`"${str}" should be valid.`, testFunc(str));
   });
-  googArray.forEach(invalid, (str) => {
+  invalid.forEach(str => {
     assertFalse(`"${str}" should be invalid.`, testFunc(str));
   });
 }

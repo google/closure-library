@@ -11,7 +11,6 @@
 goog.provide('goog.editor.range');
 goog.provide('goog.editor.range.Point');
 
-goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
@@ -100,7 +99,8 @@ goog.editor.range.expand = function(range, opt_stopNode) {
            endOffset == goog.editor.node.getLength(endNode)) {
       // Select the parent instead.
       var parentNode = endNode.parentNode;
-      startOffset = goog.array.indexOf(parentNode.childNodes, endNode);
+      startOffset =
+          Array.prototype.indexOf.call(parentNode.childNodes, endNode);
       endOffset = startOffset + 1;
       endNode = parentNode;
     }
@@ -142,7 +142,7 @@ goog.editor.range.expandEndPointToContainer_ = function(
     }
 
     var parentNode = node.parentNode;
-    var index = goog.array.indexOf(parentNode.childNodes, node);
+    var index = Array.prototype.indexOf.call(parentNode.childNodes, node);
     offset = expandStart ? index : index + 1;
     node = parentNode;
   }
@@ -181,7 +181,8 @@ goog.editor.range.selectNodeStart = function(node) {
 goog.editor.range.placeCursorNextTo = function(node, toLeft) {
   'use strict';
   var parent = node.parentNode;
-  var offset = goog.array.indexOf(parent.childNodes, node) + (toLeft ? 0 : 1);
+  var offset =
+      Array.prototype.indexOf.call(parent.childNodes, node) + (toLeft ? 0 : 1);
   var point =
       goog.editor.range.Point.createDeepestPoint(parent, offset, toLeft, true);
   var range = goog.dom.Range.createCaret(point.node, point.offset);
@@ -498,7 +499,7 @@ goog.editor.range.Point.prototype.getParentPoint = function() {
   'use strict';
   var parent = this.node.parentNode;
   return new goog.editor.range.Point(
-      parent, goog.array.indexOf(parent.childNodes, this.node));
+      parent, Array.prototype.indexOf.call(parent.childNodes, this.node));
 };
 
 

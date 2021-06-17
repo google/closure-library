@@ -12,7 +12,6 @@ const TagName = goog.require('goog.dom.TagName');
 const classlist = goog.require('goog.dom.classlist');
 const dom = goog.require('goog.dom');
 const events = goog.require('goog.testing.events');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let oldHtml;
@@ -25,12 +24,13 @@ let tableSorter;
 function assertOrder(arr, opt_table) {
   const tbl = opt_table || table;
   const actual = [];
-  googArray.forEach(dom.getElementsByTagName(TagName.TD, tbl), (td, idx) => {
-    const txt = dom.getTextContent(td);
-    if (txt) {
-      actual.push(txt);
-    }
-  });
+  Array.prototype.forEach.call(
+      dom.getElementsByTagName(TagName.TD, tbl), (td, idx) => {
+        const txt = dom.getTextContent(td);
+        if (txt) {
+          actual.push(txt);
+        }
+      });
   assertArrayEquals(arr, actual);
 }
 testSuite({

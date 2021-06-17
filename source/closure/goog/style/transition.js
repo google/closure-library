@@ -12,7 +12,6 @@
 goog.provide('goog.style.transition');
 goog.provide('goog.style.transition.Css3Property');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
@@ -58,7 +57,7 @@ goog.style.transition.set = function(element, properties) {
   goog.asserts.assert(
       properties.length > 0, 'At least one Css3Property should be specified.');
 
-  var values = goog.array.map(properties, function(p) {
+  var values = properties.map(function(p) {
     'use strict';
     if (typeof p === 'string') {
       return p;

@@ -12,7 +12,6 @@ goog.setTestOnly();
 const MockClock = goog.require('goog.testing.MockClock');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const functions = goog.require('goog.functions');
-const googArray = goog.require('goog.array');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
 
@@ -81,10 +80,10 @@ function assertAsyncDecoratorCommandSequenceCalls(
     assertEquals(
         `Expected ${expectedCalls} calls for command sequence "` +
             commandSequence + '" (' +
-            googArray
-                .map(
+            Array.prototype.map
+                .call(
                     commandSequence,
-                    (command) => {
+                    command => {
                       switch (command) {
                         case 'f':
                           return 'fire';

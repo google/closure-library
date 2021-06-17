@@ -13,7 +13,6 @@
 
 goog.provide('goog.ui.Palette');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -504,8 +503,7 @@ goog.ui.Palette.prototype.setHighlightedIndexInternal_ = function(
 goog.ui.Palette.prototype.setHighlightedItem = function(item) {
   'use strict';
   var items = /** @type {Array<Node>} */ (this.getContent());
-  this.setHighlightedIndex(
-      (items && item) ? goog.array.indexOf(items, item) : -1);
+  this.setHighlightedIndex((items && item) ? items.indexOf(item) : -1);
 };
 
 

@@ -108,7 +108,7 @@ testSuite({
   },
 
   testGetItemAt() {
-    googArray.forEach(items, (item, i) => {
+    items.forEach((item, i) => {
       assertEquals(item, selectionModel.getItemAt(i));
     });
   },
@@ -146,7 +146,7 @@ testSuite({
     assertEquals(
         items.length + addedItems.length, selectionModel.getItemCount());
 
-    const resultArray = googArray.concat(items, addedItems);
+    const resultArray = items.concat(addedItems);
     assertArrayEquals(resultArray, selectionModel.getItems());
   },
 
@@ -163,7 +163,7 @@ testSuite({
   },
 
   testIndexOfItem() {
-    googArray.forEach(items, (item, i) => {
+    items.forEach((item, i) => {
       assertEquals(i, selectionModel.indexOfItem(item));
     });
   },

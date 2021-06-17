@@ -1404,7 +1404,7 @@ goog.dom.getChildren = function(element) {
     return element.children;
   }
   // Fall back to manually filtering the element's child nodes.
-  return goog.array.filter(element.childNodes, function(node) {
+  return Array.prototype.filter.call(element.childNodes, function(node) {
     'use strict';
     return node.nodeType == goog.dom.NodeType.ELEMENT;
   });

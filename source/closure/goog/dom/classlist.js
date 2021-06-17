@@ -128,7 +128,7 @@ goog.dom.classlist.add = function(element, className) {
 goog.dom.classlist.addAll = function(element, classesToAdd) {
   'use strict';
   if (goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST || element.classList) {
-    goog.array.forEach(classesToAdd, function(className) {
+    Array.prototype.forEach.call(classesToAdd, function(className) {
       'use strict';
       goog.dom.classlist.add(element, className);
     });
@@ -138,13 +138,14 @@ goog.dom.classlist.addAll = function(element, classesToAdd) {
   var classMap = {};
 
   // Get all current class names into a map.
-  goog.array.forEach(goog.dom.classlist.get(element), function(className) {
-    'use strict';
-    classMap[className] = true;
-  });
+  Array.prototype.forEach.call(
+      goog.dom.classlist.get(element), function(className) {
+        'use strict';
+        classMap[className] = true;
+      });
 
   // Add new class names to the map.
-  goog.array.forEach(classesToAdd, function(className) {
+  Array.prototype.forEach.call(classesToAdd, function(className) {
     'use strict';
     classMap[className] = true;
   });
@@ -175,8 +176,8 @@ goog.dom.classlist.remove = function(element, className) {
     // Filter out the class name.
     goog.dom.classlist.set(
         element,
-        goog.array
-            .filter(
+        Array.prototype.filter
+            .call(
                 goog.dom.classlist.get(element),
                 function(c) {
                   'use strict';
@@ -200,7 +201,7 @@ goog.dom.classlist.remove = function(element, className) {
 goog.dom.classlist.removeAll = function(element, classesToRemove) {
   'use strict';
   if (goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST || element.classList) {
-    goog.array.forEach(classesToRemove, function(className) {
+    Array.prototype.forEach.call(classesToRemove, function(className) {
       'use strict';
       goog.dom.classlist.remove(element, className);
     });
@@ -210,8 +211,8 @@ goog.dom.classlist.removeAll = function(element, classesToRemove) {
   // Filter out those classes in classesToRemove.
   goog.dom.classlist.set(
       element,
-      goog.array
-          .filter(
+      Array.prototype.filter
+          .call(
               goog.dom.classlist.get(element),
               function(className) {
                 'use strict';

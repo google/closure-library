@@ -7,7 +7,6 @@ goog.module('goog.color.alphaTest');
 goog.setTestOnly();
 
 const alpha = goog.require('goog.color.alpha');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
@@ -120,7 +119,7 @@ testSuite({
       '12345678',
       'hsla(160, 50%, 90%, 0.2)',
     ];
-    const parsed = googArray.map(colors, alpha.parse);
+    const parsed = colors.map(alpha.parse);
     assertEquals('rgba', parsed[0].type);
     assertEquals(alpha.rgbaToHex(15, 250, 77, 0.5), parsed[0].hex);
     assertEquals('rgba', parsed[1].type);

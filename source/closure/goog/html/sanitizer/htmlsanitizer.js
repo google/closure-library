@@ -170,7 +170,7 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
   // Add whitelist data-* attributes from the builder to the attributeHandlers
   // with a default cleanUpAttribute function. data-* attributes are inert as
   // per HTML5 specs, so not much sanitization needed.
-  goog.array.forEach(builder.dataAttributeWhitelist_, function(dataAttr) {
+  builder.dataAttributeWhitelist_.forEach(function(dataAttr) {
     'use strict';
     if (!goog.string.startsWith(dataAttr, 'data-')) {
       throw new goog.asserts.AssertionError(
@@ -182,7 +182,6 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
           'Attributes with "%s" prefix are not allowed, got: %s.',
           [goog.html.sanitizer.HTML_SANITIZER_BOOKKEEPING_PREFIX_, dataAttr]);
     }
-
     this.attributeHandlers_['* ' + dataAttr.toUpperCase()] =
         /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
             goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
@@ -190,16 +189,14 @@ goog.html.sanitizer.HtmlSanitizer = function(opt_builder) {
 
   // Add whitelist custom element tags, ensures that they contains at least one
   // '-' and that they are not part of the reserved names.
-  goog.array.forEach(builder.customElementTagWhitelist_, function(customTag) {
+  builder.customElementTagWhitelist_.forEach(function(customTag) {
     'use strict';
     customTag = customTag.toUpperCase();
-
     if (!goog.string.contains(customTag, '-') ||
         goog.html.sanitizer.HTML_SANITIZER_INVALID_CUSTOM_TAGS_[customTag]) {
       throw new goog.asserts.AssertionError(
           'Only valid custom element tag names allowed, got: %s.', [customTag]);
     }
-
     this.tagWhitelist_[customTag] = true;
   }, this);
 
@@ -275,11 +272,11 @@ goog.html.sanitizer.HtmlSanitizer.Builder = function() {
       ],
       function(wl) {
         'use strict';
-        goog.array.forEach(goog.object.getKeys(wl), function(attr) {
+        goog.object.getKeys(wl).forEach(function(attr) {
           'use strict';
           this.attributeWhitelist_[attr] =
-              /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
-              (goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
+              /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
+                  goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
         }, this);
       },
       this);
@@ -406,7 +403,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowDataAttributes =
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCustomElementTags =
     function(customElementTagWhitelist) {
   'use strict';
-  goog.array.forEach(customElementTagWhitelist, function(tag) {
+  customElementTagWhitelist.forEach(function(tag) {
     'use strict';
     this.allowCustomElementTag(tag);
   }, this);
@@ -424,13 +421,13 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCustomElementTag =
   'use strict';
   this.customElementTagWhitelist_.push(customElementTagName);
   if (customElementAttributes) {
-    goog.array.forEach(customElementAttributes, function(attr) {
+    customElementAttributes.forEach(function(attr) {
       'use strict';
       var handlerName = goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(
           customElementTagName, attr);
       this.attributeWhitelist_[handlerName] =
-          /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
-          (goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
+          /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
+              goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
       this.attributeOverrideList_[handlerName] = true;
     }, this);
   }
@@ -547,7 +544,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.allowCssStyles =
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype
     .alsoAllowTagsPrivateDoNotAccessOrElse = function(tags) {
   'use strict';
-  goog.array.forEach(tags, function(tag) {
+  tags.forEach(function(tag) {
     'use strict';
     this.tagWhitelist_[tag.toUpperCase()] = true;
     delete this.tagBlacklist_[tag.toUpperCase()];
@@ -566,7 +563,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype
     .alsoAllowAttributesPrivateDoNotAccessOrElse = function(attrs) {
   'use strict';
-  goog.array.forEach(attrs, function(attr) {
+  attrs.forEach(function(attr) {
     'use strict';
     if (typeof attr === 'string') {
       attr = {tagName: '*', attributeName: attr, policy: null};
@@ -575,8 +572,8 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype
         attr.tagName, attr.attributeName);
     this.attributeWhitelist_[handlerName] = attr.policy ?
         attr.policy :
-        /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
-            goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
+        /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
+        (goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
     this.attributeOverrideList_[handlerName] = true;
   }, this);
   return this;
@@ -598,7 +595,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowTags = function(
     tagWhitelist) {
   'use strict';
   this.tagWhitelist_ = {'SPAN': true};
-  goog.array.forEach(tagWhitelist, function(tag) {
+  tagWhitelist.forEach(function(tag) {
     'use strict';
     tag = tag.toUpperCase();
     if (goog.html.sanitizer.TagWhitelist[tag]) {
@@ -647,7 +644,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowAttributes =
   'use strict';
   var oldWhitelist = this.attributeWhitelist_;
   this.attributeWhitelist_ = {};
-  goog.array.forEach(attrWhitelist, function(attr) {
+  attrWhitelist.forEach(function(attr) {
     'use strict';
     if (typeof attr === 'string') {
       attr = {tagName: '*', attributeName: attr.toUpperCase(), policy: null};
@@ -659,8 +656,8 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowAttributes =
     }
     this.attributeWhitelist_[handlerName] = attr.policy ?
         attr.policy :
-        /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */ (
-            goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
+        /** @type {goog.html.sanitizer.HtmlSanitizerPolicy} */
+        (goog.html.sanitizer.HtmlSanitizer.cleanUpAttribute_);
   }, this);
   return this;
 };
@@ -810,7 +807,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
   var urlAttributes = ['* ACTION', '* CITE', '* HREF'];
   var urlPolicy =
       goog.html.sanitizer.HtmlSanitizer.wrapUrlPolicy_(this.urlPolicy_);
-  goog.array.forEach(urlAttributes, function(attribute) {
+  urlAttributes.forEach(function(attribute) {
     'use strict';
     installPolicy(
         this.attributeWhitelist_, this.attributeOverrideList_, attribute,
@@ -824,7 +821,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
   var networkRequestUrlPolicy =
       goog.html.sanitizer.HtmlSanitizer.wrapUrlPolicy_(
           this.networkRequestUrlPolicy_);
-  goog.array.forEach(networkUrlAttributes, function(attribute) {
+  networkUrlAttributes.forEach(function(attribute) {
     'use strict';
     installPolicy(
         this.attributeWhitelist_, this.attributeOverrideList_, attribute,
@@ -832,7 +829,7 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
   }, this);
 
   var nameAttributes = ['* FOR', '* HEADERS', '* NAME'];
-  goog.array.forEach(nameAttributes, function(attribute) {
+  nameAttributes.forEach(function(attribute) {
     'use strict';
     installPolicy(
         this.attributeWhitelist_, this.attributeOverrideList_, attribute,

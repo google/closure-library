@@ -222,11 +222,10 @@ goog.labs.pubsub.BroadcastPubSub.prototype.publish = function(topic, var_args) {
     // before any future publishes are processed. The effect is that
     // subscriptions in the same window are dispatched as if they are the result
     // of a publish from another tab.
-    goog.array.forEach(
-        goog.labs.pubsub.BroadcastPubSub.instances_, function(instance) {
-          'use strict';
-          goog.async.run(goog.bind(instance.dispatch_, instance, args));
-        });
+    goog.labs.pubsub.BroadcastPubSub.instances_.forEach(function(instance) {
+      'use strict';
+      goog.async.run(goog.bind(instance.dispatch_, instance, args));
+    });
   }
 };
 
@@ -431,8 +430,7 @@ goog.labs.pubsub.BroadcastPubSub.validateIe8Event_ = function(obj) {
 goog.labs.pubsub.BroadcastPubSub.filterValidIe8Events_ = function(events) {
   'use strict';
   return goog.array.filter(
-      goog.array.map(
-          events, goog.labs.pubsub.BroadcastPubSub.validateIe8Event_),
+      events.map(goog.labs.pubsub.BroadcastPubSub.validateIe8Event_),
       x => x != null);
 };
 
@@ -450,7 +448,7 @@ goog.labs.pubsub.BroadcastPubSub.filterValidIe8Events_ = function(events) {
 goog.labs.pubsub.BroadcastPubSub.filterNewIe8Events_ = function(
     timestamp, events) {
   'use strict';
-  return goog.array.filter(events, function(event) {
+  return events.filter(function(event) {
     'use strict';
     return event['timestamp'] > timestamp;
   });

@@ -11,7 +11,6 @@
 
 goog.provide('goog.storage.CollectableStorage');
 
-goog.require('goog.array');
 goog.require('goog.iter');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.ExpiringStorage');
@@ -111,7 +110,7 @@ goog.storage.CollectableStorage.prototype.collectInternal = function(
     keys, opt_strict) {
   'use strict';
   const keysToRemove = this.getExpiredKeys_(keys, opt_strict);
-  goog.array.forEach(keysToRemove, function(key) {
+  keysToRemove.forEach(function(key) {
     'use strict';
     goog.storage.CollectableStorage.prototype.remove.call(this, key);
   }, this);

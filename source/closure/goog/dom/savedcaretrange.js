@@ -11,7 +11,6 @@
 
 goog.provide('goog.dom.SavedCaretRange');
 
-goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.AbstractSavedCaretRange');
 goog.require('goog.dom.TagName');
@@ -145,9 +144,11 @@ goog.dom.SavedCaretRange.prototype.restoreInternal = function() {
   var focusCaret = this.getCaret(this.reversed_);
   if (anchorCaret && focusCaret) {
     var anchorNode = anchorCaret.parentNode;
-    var anchorOffset = goog.array.indexOf(anchorNode.childNodes, anchorCaret);
+    var anchorOffset =
+        Array.prototype.indexOf.call(anchorNode.childNodes, anchorCaret);
     var focusNode = focusCaret.parentNode;
-    var focusOffset = goog.array.indexOf(focusNode.childNodes, focusCaret);
+    var focusOffset =
+        Array.prototype.indexOf.call(focusNode.childNodes, focusCaret);
     if (focusNode == anchorNode) {
       // Compensate for the start caret being removed.
       if (this.reversed_) {

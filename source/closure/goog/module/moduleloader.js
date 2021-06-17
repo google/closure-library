@@ -673,8 +673,7 @@ ModuleLoader.LoadStatus = function(trustedRequestUris) {
    * The request uris.
    * @final {!Array<string>}
    */
-  this.requestUris =
-      googArray.map(trustedRequestUris, TrustedResourceUrl.unwrap);
+  this.requestUris = trustedRequestUris.map(TrustedResourceUrl.unwrap);
 
   /**
    * A TrustedResourceUrl version of `this.requestUris`

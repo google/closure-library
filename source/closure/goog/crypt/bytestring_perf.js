@@ -40,7 +40,7 @@ function copyAndSpliceByteArray(bytes) {
 
   // Convert each chunk to a string.
   while (remainingBytes.length) {
-    var chunk = goog.array.splice(remainingBytes, 0, CHUNK_SIZE);
+    var chunk = remainingBytes.splice(0, CHUNK_SIZE);
     strings.push(String.fromCharCode.apply(null, chunk));
   }
   return strings.join('');

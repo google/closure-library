@@ -12,7 +12,6 @@
 goog.setTestOnly('goog.testing.ui.style');
 goog.provide('goog.testing.ui.style');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
@@ -122,12 +121,13 @@ goog.testing.ui.style.assertStructureMatchesReferenceInner_ = function(
   const testElem = goog.asserts.assertElement(element);
   const refElem = goog.asserts.assertElement(reference);
   const elementClasses = goog.dom.classlist.get(testElem);
-  goog.array.forEach(goog.dom.classlist.get(refElem), function(referenceClass) {
-    'use strict';
-    assertContains(
-        'Expected test node to have all reference classes.', referenceClass,
-        elementClasses);
-  });
+  Array.prototype.forEach.call(
+      goog.dom.classlist.get(refElem), function(referenceClass) {
+        'use strict';
+        assertContains(
+            'Expected test node to have all reference classes.', referenceClass,
+            elementClasses);
+      });
   // Call assertStructureMatchesReferenceInner_ on all element children
   // unless this is a content node
   const elChildren = goog.testing.ui.style.getElementChildren(element);

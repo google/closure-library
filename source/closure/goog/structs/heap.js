@@ -335,7 +335,7 @@ goog.structs.Heap.prototype.getCount = function() {
  */
 goog.structs.Heap.prototype.isEmpty = function() {
   'use strict';
-  return goog.array.isEmpty(this.nodes_);
+  return this.nodes_.length === 0;
 };
 
 

@@ -15,7 +15,6 @@ goog.provide('goog.ui.ac.Renderer.CustomRenderer');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dispose');
 goog.require('goog.dom');
@@ -700,7 +699,7 @@ goog.ui.ac.Renderer.prototype.redraw = function() {
     this.customRenderer_.render(this, this.element_, this.rows_, this.token_);
   } else {
     var curRow = null;
-    goog.array.forEach(this.rows_, function(row) {
+    this.rows_.forEach(function(row) {
       'use strict';
       row = this.renderRowHtml(row, this.token_);
       if (this.topAlign_) {
@@ -896,7 +895,7 @@ goog.ui.ac.Renderer.prototype.hiliteMatchingText_ = function(
     var rest = null;
     if (Array.isArray(tokenOrArray) && tokenOrArray.length > 1 &&
         !this.highlightAllTokens_) {
-      rest = goog.array.slice(tokenOrArray, 1);
+      rest = tokenOrArray.slice(1);
     }
 
     var token = this.getTokenRegExp_(tokenOrArray);
@@ -959,7 +958,7 @@ goog.ui.ac.Renderer.prototype.hiliteMatchingText_ = function(
       }
 
       // Append the remaining text nodes to the end.
-      var remainingTextNodes = goog.array.slice(textNodes, maxNumToBold * 2);
+      var remainingTextNodes = textNodes.slice(maxNumToBold * 2);
       node.nodeValue = remainingTextNodes.join('');
 
       this.wasHighlightedAtLeastOnce_ = true;
@@ -995,7 +994,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
 
   if (Array.isArray(tokenOrArray)) {
     // Remove invalid tokens from the array, which may leave us with nothing.
-    tokenOrArray = goog.array.filter(tokenOrArray, function(str) {
+    tokenOrArray = tokenOrArray.filter(function(str) {
       'use strict';
       return !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(str));
     });
@@ -1005,7 +1004,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
   // will match on any of them.
   if (this.highlightAllTokens_) {
     if (Array.isArray(tokenOrArray)) {
-      var tokenArray = goog.array.map(tokenOrArray, goog.string.regExpEscape);
+      var tokenArray = tokenOrArray.map(goog.string.regExpEscape);
       token = tokenArray.join('|');
     } else {
       // Remove excess whitespace from the string so bars will separate valid
@@ -1087,7 +1086,7 @@ goog.ui.ac.Renderer.prototype.getRowFromEventTarget_ = function(et) {
          !goog.dom.classlist.contains(et, this.rowClassName)) {
     et = /** @type {Element} */ (et.parentNode);
   }
-  return et ? goog.array.indexOf(this.rowDivs_, et) : -1;
+  return et ? this.rowDivs_.indexOf(et) : -1;
 };
 
 

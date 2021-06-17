@@ -12,7 +12,6 @@
 
 goog.provide('goog.html.textExtractor');
 
-goog.require('goog.array');
 goog.require('goog.dom.TagName');
 goog.require('goog.html.sanitizer.HtmlSanitizer');
 goog.require('goog.object');
@@ -65,8 +64,8 @@ goog.html.textExtractor.extractTextContentFromNode_ = function(node) {
       if (element.tagName == goog.dom.TagName.BR) {
         return '\n';
       }
-      var result = goog.array
-                       .map(
+      var result = Array.prototype.map
+                       .call(
                            node.childNodes,
                            goog.html.textExtractor.extractTextContentFromNode_)
                        .join('');

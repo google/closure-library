@@ -1321,7 +1321,7 @@ goog.Uri.QueryData.prototype.forEach = function(f, opt_scope) {
   this.ensureKeyMapInitialized_();
   this.keyMap_.forEach(function(values, key) {
     'use strict';
-    goog.array.forEach(values, function(value) {
+    values.forEach(function(value) {
       'use strict';
       f.call(opt_scope, value, key, this);
     }, this);
@@ -1364,13 +1364,13 @@ goog.Uri.QueryData.prototype.getValues = function(opt_key) {
   var rv = [];
   if (typeof opt_key === 'string') {
     if (this.containsKey(opt_key)) {
-      rv = goog.array.concat(rv, this.keyMap_.get(this.getKeyName_(opt_key)));
+      rv = rv.concat(this.keyMap_.get(this.getKeyName_(opt_key)));
     }
   } else {
     // Return all values.
     var values = this.keyMap_.getValues();
     for (var i = 0; i < values.length; i++) {
-      rv = goog.array.concat(rv, values[i]);
+      rv = rv.concat(values[i]);
     }
   }
   return rv;

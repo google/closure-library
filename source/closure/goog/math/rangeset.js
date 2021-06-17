@@ -341,11 +341,10 @@ goog.math.RangeSet.prototype.inverse = function(range) {
  */
 goog.math.RangeSet.prototype.coveredLength = function() {
   'use strict';
-  return /** @type {number} */ (
-      goog.array.reduce(this.ranges_, function(res, range) {
-        'use strict';
-        return res + range.end - range.start;
-      }, 0));
+  return /** @type {number} */ (this.ranges_.reduce(function(res, range) {
+    'use strict';
+    return res + range.end - range.start;
+  }, 0));
 };
 
 

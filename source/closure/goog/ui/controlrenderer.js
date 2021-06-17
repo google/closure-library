@@ -311,7 +311,7 @@ goog.ui.ControlRenderer.prototype.decorate = function(control, element) {
   var hasStructuralClassName = false;
   var hasCombinedClassName = false;
   var classNames = goog.array.toArray(goog.dom.classlist.get(element));
-  goog.array.forEach(classNames, function(className) {
+  classNames.forEach(function(className) {
     'use strict';
     if (!hasRendererClassName && className == rendererClassName) {
       hasRendererClassName = true;
@@ -687,14 +687,13 @@ goog.ui.ControlRenderer.prototype.setContent = function(element, content) {
         };
         if (Array.isArray(content)) {
           // Array of nodes.
-          goog.array.forEach(content, childHandler);
+          content.forEach(childHandler);
         } else if (goog.isArrayLike(content) && !('nodeType' in content)) {
           // NodeList. The second condition filters out TextNode which also has
           // length attribute but is not array like. The nodes have to be cloned
           // because childHandler removes them from the list during iteration.
-          goog.array.forEach(
-              goog.array.clone(/** @type {!NodeList<?>} */ (content)),
-              childHandler);
+          goog.array.clone(/** @type {!NodeList<?>} */ (content))
+              .forEach(childHandler);
         } else {
           // Node or string.
           childHandler(content);
@@ -848,7 +847,7 @@ goog.ui.ControlRenderer.prototype.getAppliedCombinedClassNames_ = function(
   if (opt_includedClass) {
     classes = goog.array.concat(classes, [opt_includedClass]);
   }
-  goog.array.forEach(this.getIe6ClassCombinations(), function(combo) {
+  this.getIe6ClassCombinations().forEach(function(combo) {
     'use strict';
     if (goog.array.every(combo, goog.partial(goog.array.contains, classes)) &&
         (!opt_includedClass || goog.array.contains(combo, opt_includedClass))) {

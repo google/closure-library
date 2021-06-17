@@ -132,9 +132,9 @@ testSuite({
 
     fmt = new NumberFormat(NumberFormat.Format.COMPACT_SHORT);
     str = fmt.format(Infinity);
-    assertEquals('\u221eT', str);
+    assertEquals('\u221e', str);
     str = fmt.format(-Infinity);
-    assertEquals('-\u221eT', str);
+    assertEquals('-\u221e', str);
   },
 
   testStandardFormat() {

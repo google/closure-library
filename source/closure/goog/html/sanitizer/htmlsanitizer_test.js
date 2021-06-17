@@ -1324,18 +1324,11 @@ testSuite({
     if (!isSupported) {
       return;
     }
-    googArray.forEach(googObject.getKeys(TagWhitelist), (tag) => {
+    googObject.getKeys(TagWhitelist).forEach(tag => {
       if (googArray.contains(
               [
-                'BR',
-                'IMG',
-                'AREA',
-                'COL',
-                'COLGROUP',
-                'HR',
-                'INPUT',
-                'SOURCE',
-                'WBR',
+                'BR', 'IMG', 'AREA', 'COL', 'COLGROUP', 'HR', 'INPUT', 'SOURCE',
+                'WBR'
               ],
               tag)) {
         return;  // empty elements, ok
@@ -1372,26 +1365,20 @@ testSuite({
     if (!isSupported) {
       return;
     }
-    googArray.forEach(googObject.getKeys(TagWhitelist), (tag) => {
+    googObject.getKeys(TagWhitelist).forEach(tag => {
       if (googArray.contains(
               [
-                'CAPTION',
-                'STYLE',
-                'TABLE',
-                'TBODY',
-                'TD',
-                'TR',
-                'TEXTAREA',
-                'TFOOT',
-                'THEAD',
-                'TH',
+                'CAPTION', 'STYLE', 'TABLE', 'TBODY', 'TD', 'TR', 'TEXTAREA',
+                'TFOOT', 'THEAD', 'TH'
               ],
               tag)) {
-        return;  // consistent in whitelist, ok
+        return;
       }
+      // consistent in whitelist, ok
       if (googArray.contains(['COL', 'COLGROUP'], tag)) {
-        return;  // potential problems
+        return;
       }
+      // potential problems
       // TODO(pelizzi): Skip testing for FORM tags on Chrome until b/32550695
       // is fixed.
       if (tag == 'FORM' && userAgent.WEBKIT) {
@@ -1401,8 +1388,9 @@ testSuite({
       if (googArray.contains(
               [
                 'BR', 'IMG', 'AREA', 'COL', 'COLGROUP', 'HR', 'INPUT', 'SOURCE',
-                'WBR'  // empty elements, ok
-              ],
+                'WBR'
+              ]  // empty elements, ok
+              ,
               tag)) {
         input = '<span>a<' + tag.toLowerCase() + '>a</span>';
       } else {

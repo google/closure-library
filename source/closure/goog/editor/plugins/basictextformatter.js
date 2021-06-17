@@ -1048,7 +1048,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(
       }
     };
 
-    goog.array.forEach(
+    Array.prototype.forEach.call(
         goog.dom.getElementsByTagName(
             goog.dom.TagName.A,
             /** @type {!Element} */ (this.getFieldObject().getElement())),
@@ -1060,7 +1060,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(
       'use strict';
       return goog.editor.Link.isLikelyUrl(goog.dom.getRawTextContent(a));
     };
-    if (anchors.length && goog.array.every(anchors, isLikelyUrl)) {
+    if (anchors.length && anchors.every(isLikelyUrl)) {
       for (var i = 0, a; a = anchors[i]; i++) {
         goog.editor.Link.createNewLinkFromText(a, opt_target);
       }
@@ -1434,14 +1434,13 @@ goog.editor.plugins.BasicTextFormatter.prototype.fixIELists_ = function() {
       goog.array.toArray(goog.dom.getElementsByTagName(
           goog.dom.TagName.OL, /** @type {!Element} */ (container))));
   // Fix the lists
-  goog.array.forEach(lists, function(node) {
+  lists.forEach(function(node) {
     'use strict';
     var type = node.type;
     if (type) {
-      var saneTypes =
-          (node.tagName == goog.dom.TagName.UL ?
-               goog.editor.plugins.BasicTextFormatter.unorderedListTypes_ :
-               goog.editor.plugins.BasicTextFormatter.orderedListTypes_);
+      var saneTypes = node.tagName == goog.dom.TagName.UL ?
+          goog.editor.plugins.BasicTextFormatter.unorderedListTypes_ :
+          goog.editor.plugins.BasicTextFormatter.orderedListTypes_;
       if (!saneTypes[type]) {
         node.type = '';
       }
@@ -1724,7 +1723,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.isJustification_ = function(
     }
 
     var parent = range.getContainerElement();
-    var nodes = goog.array.filter(parent.childNodes, function(node) {
+    var nodes = Array.prototype.filter.call(parent.childNodes, function(node) {
       'use strict';
       return goog.editor.node.isImportant(node) &&
           range.containsNode(node, true);

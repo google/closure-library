@@ -99,7 +99,7 @@ goog.graphics.ext.Group.prototype.removeChild = function(element) {
 goog.graphics.ext.Group.prototype.forEachChild = function(f, opt_obj) {
   'use strict';
   if (this.children_) {
-    goog.array.forEach(this.children_, f, opt_obj);
+    this.children_.forEach(f, opt_obj);
   }
 };
 

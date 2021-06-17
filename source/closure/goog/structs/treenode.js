@@ -313,7 +313,7 @@ goog.structs.TreeNode.prototype.getNodeByKey = function(key) {
  */
 goog.structs.TreeNode.prototype.forEachChild = function(f, opt_this) {
   'use strict';
-  goog.array.forEach(this.getChildren(), f, opt_this);
+  this.getChildren().forEach(f, opt_this);
 };
 
 
@@ -428,8 +428,7 @@ goog.structs.TreeNode.prototype.replaceChildAt = function(newChild, index) {
  */
 goog.structs.TreeNode.prototype.replaceChild = function(newChild, oldChild) {
   'use strict';
-  return this.replaceChildAt(
-      newChild, goog.array.indexOf(this.getChildren(), oldChild));
+  return this.replaceChildAt(newChild, this.getChildren().indexOf(oldChild));
 };
 
 
@@ -460,8 +459,7 @@ goog.structs.TreeNode.prototype.removeChildAt = function(index) {
  */
 goog.structs.TreeNode.prototype.removeChild = function(child) {
   'use strict';
-  return child &&
-      this.removeChildAt(goog.array.indexOf(this.getChildren(), child));
+  return child && this.removeChildAt(this.getChildren().indexOf(child));
 };
 
 

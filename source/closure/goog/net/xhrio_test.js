@@ -653,15 +653,6 @@ testSuite({
         {'content-type': 'testing'}, lastMockXmlHttp.requestHeaders);
   },
 
-  /** @suppress {visibility} suppression added to enable type checking */
-  testIsContentTypeHeader_() {
-    assertTrue(XhrIo.isContentTypeHeader_('content-type'));
-    assertTrue(XhrIo.isContentTypeHeader_('Content-type'));
-    assertTrue(XhrIo.isContentTypeHeader_('CONTENT-TYPE'));
-    assertTrue(XhrIo.isContentTypeHeader_('Content-Type'));
-    assertFalse(XhrIo.isContentTypeHeader_('Content Type'));
-  },
-
   /** @suppress {checkTypes} suppression added to enable type checking */
   testPostFormDataDoesNotSetContentTypeHeader() {
     function FakeFormData() {}

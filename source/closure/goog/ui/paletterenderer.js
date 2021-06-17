@@ -274,7 +274,7 @@ goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
         element)[0];
     if (tbody) {
       var index = 0;
-      goog.array.forEach(tbody.rows, function(row) {
+      Array.prototype.forEach.call(tbody.rows, function(row) {
         'use strict';
         goog.array.forEach(row.cells, function(cell) {
           'use strict';

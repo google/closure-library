@@ -25,7 +25,6 @@ goog.provide('goog.labs.format.csv');
 goog.provide('goog.labs.format.csv.ParseError');
 goog.provide('goog.labs.format.csv.Token');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug.Error');
 goog.require('goog.object');
@@ -102,7 +101,7 @@ goog.labs.format.csv.ParseError.prototype.name = 'ParseError';
 goog.labs.format.csv.ParseError.findLineInfo_ = function(str, index) {
   'use strict';
   const lines = goog.string.newlines.getLines(str);
-  const lineIndex = goog.array.findIndex(lines, function(line) {
+  const lineIndex = lines.findIndex(function(line) {
     'use strict';
     return line.startLineIndex <= index && line.endLineIndex > index;
   });

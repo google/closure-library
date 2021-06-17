@@ -255,7 +255,7 @@ goog.testing.ContinuationTestCase.prototype.runNextStep_ = function() {
   }
 
   // Find the next step that is not in a wait state.
-  var stepIndex = goog.array.findIndex(phase, function(step) {
+  var stepIndex = phase.findIndex(function(step) {
     'use strict';
     return !step.waiting;
   });

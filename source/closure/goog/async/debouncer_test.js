@@ -9,7 +9,6 @@ goog.setTestOnly();
 
 const Debouncer = goog.require('goog.async.Debouncer');
 const MockClock = goog.require('goog.testing.MockClock');
-const googArray = goog.require('goog.array');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
 
@@ -78,10 +77,10 @@ testSuite({
       assertEquals(
           `Expected ${expectedCalls} calls for command sequence "` +
               commandSequence + '" (' +
-              googArray
-                  .map(
+              Array.prototype.map
+                  .call(
                       commandSequence,
-                      (command) => {
+                      command => {
                         switch (command) {
                           case 'f':
                             return 'fire';

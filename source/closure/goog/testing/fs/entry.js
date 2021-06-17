@@ -488,14 +488,13 @@ goog.testing.fs.DirectoryEntry.prototype.getEntry_ = function(
     path, behavior, isFile, createFn) {
   'use strict';
   // Filter out leading, trailing, and duplicate slashes.
-  const components =
-      goog.array.filter(path.split('/'), goog.functions.identity);
+  const components = path.split('/').filter(goog.functions.identity);
 
   const basename = /** @type {string} */ (goog.array.peek(components)) || '';
   let dir =
       goog.string.startsWith(path, '/') ? this.getFileSystem().getRoot() : this;
 
-  goog.array.forEach(components.slice(0, -1), function(p) {
+  components.slice(0, -1).forEach(function(p) {
     'use strict';
     const subdir = dir.children[p];
     if (!subdir) {

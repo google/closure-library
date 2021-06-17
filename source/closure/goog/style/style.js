@@ -15,7 +15,6 @@
 goog.provide('goog.style');
 
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
@@ -1995,9 +1994,9 @@ goog.style.getFontSize = function(el) {
 goog.style.parseStyleAttribute = function(value) {
   'use strict';
   var result = {};
-  goog.array.forEach(value.split(/\s*;\s*/), function(pair) {
+  value.split(/\s*;\s*/).forEach(function(pair) {
     'use strict';
-    var keyValue = pair.match(/\s*([\w-]+)\s*\:(.+)/);
+    var keyValue = pair.match(/\s*([\w-]+)\s*:(.+)/);
     if (keyValue) {
       var styleName = keyValue[1];
       var styleValue = goog.string.trim(keyValue[2]);

@@ -11,7 +11,6 @@
 
 goog.provide('goog.crypt.hashTester');
 
-goog.require('goog.array');
 goog.require('goog.crypt');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
@@ -246,7 +245,7 @@ goog.crypt.hashTester.createRandomByteArray_ = function(length) {
 goog.crypt.hashTester.createByteString_ = function(bytes) {
   'use strict';
   var str = '';
-  goog.array.forEach(bytes, function(b) {
+  bytes.forEach(function(b) {
     'use strict';
     str += String.fromCharCode(b);
   });

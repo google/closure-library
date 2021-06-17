@@ -15,7 +15,6 @@
 
 goog.provide('goog.proto2.TextFormatSerializer');
 
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.math');
 goog.require('goog.object');
@@ -109,7 +108,7 @@ goog.proto2.TextFormatSerializer.prototype.serializeMessage_ = function(
   var fields = descriptor.getFields();
 
   // Add the defined fields, recursively.
-  goog.array.forEach(fields, function(field) {
+  fields.forEach(function(field) {
     'use strict';
     this.printField_(message, field, printer);
   }, this);
@@ -142,7 +141,7 @@ goog.proto2.TextFormatSerializer.prototype.serializeUnknown_ = function(
   }
 
   if (Array.isArray(value)) {
-    goog.array.forEach(value, function(val) {
+    value.forEach(function(val) {
       'use strict';
       this.serializeUnknown_(tag, val, printer);
     }, this);

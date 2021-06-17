@@ -10,7 +10,6 @@ goog.setTestOnly();
 const BasicStat = goog.require('goog.stats.BasicStat');
 const PseudoRandom = goog.require('goog.testing.PseudoRandom');
 const format = goog.require('goog.string.format');
-const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 
@@ -35,13 +34,13 @@ class PerfectlySlowStat {
     const end =
         Math.floor(now / this.slotSize_) * this.slotSize_ + this.slotSize_;
     const start = end - this.interval_;
-    const events = googArray.filter(this.events_, (e) => e.time >= start);
+    const events = this.events_.filter(e => e.time >= start);
     return {
-      'count': googArray.reduce(events, (sum, e) => sum + e.count, 0),
-      'min': googArray.reduce(
-          events, (min, e) => Math.min(min, e.count), Number.MAX_VALUE),
-      'max': googArray.reduce(
-          events, (max, e) => Math.max(max, e.count), Number.MIN_VALUE),
+      'count': events.reduce((sum, e) => sum + e.count, 0),
+      'min':
+          events.reduce((min, e) => Math.min(min, e.count), Number.MAX_VALUE),
+      'max':
+          events.reduce((max, e) => Math.max(max, e.count), Number.MIN_VALUE),
     };
   }
 }

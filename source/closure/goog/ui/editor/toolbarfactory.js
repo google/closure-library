@@ -11,7 +11,6 @@
 
 goog.provide('goog.ui.editor.ToolbarFactory');
 
-goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.string');
@@ -69,7 +68,7 @@ goog.ui.editor.ToolbarFactory.getPrimaryFont = function(fontSpec) {
  */
 goog.ui.editor.ToolbarFactory.addFonts = function(button, fonts) {
   'use strict';
-  goog.array.forEach(fonts, function(font) {
+  fonts.forEach(function(font) {
     'use strict';
     goog.ui.editor.ToolbarFactory.addFont(button, font.caption, font.value);
   });
@@ -114,7 +113,7 @@ goog.ui.editor.ToolbarFactory.addFont = function(button, caption, value) {
  */
 goog.ui.editor.ToolbarFactory.addFontSizes = function(button, sizes) {
   'use strict';
-  goog.array.forEach(sizes, function(size) {
+  sizes.forEach(function(size) {
     'use strict';
     goog.ui.editor.ToolbarFactory.addFontSize(button, size.caption, size.value);
   });
@@ -170,8 +169,7 @@ goog.ui.editor.ToolbarFactory.getLegacySizeFromPx = function(px) {
   'use strict';
   // Use lastIndexOf to get the largest legacy size matching the pixel size
   // (most notably returning 1 instead of 0 for 10px).
-  return goog.array.lastIndexOf(
-      goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_, px);
+  return goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_.lastIndexOf(px);
 };
 
 
@@ -199,7 +197,7 @@ goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_ =
  */
 goog.ui.editor.ToolbarFactory.addFormatOptions = function(button, formats) {
   'use strict';
-  goog.array.forEach(formats, function(format) {
+  formats.forEach(function(format) {
     'use strict';
     goog.ui.editor.ToolbarFactory.addFormatOption(
         button, format.caption, format.command);
@@ -387,8 +385,7 @@ goog.ui.editor.ToolbarFactory.makeSelectButton = function(
     // Unlike the other button types, for goog.ui.Select buttons we apply the
     // extra class names to the root element, because for select buttons the
     // caption isn't stable (as it changes each time the selection changes).
-    goog.array.forEach(
-        opt_classNames.split(/\s+/), button.addClassName, button);
+    opt_classNames.split(/\s+/).forEach(button.addClassName, button);
   }
   button.addClassName(goog.getCssName('goog-toolbar-select'));
   button.setDefaultCaption(caption);
