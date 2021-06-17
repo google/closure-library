@@ -658,6 +658,28 @@ testSuite({
         pubsub.pendingKeys_.length);
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
+  testDisposeWhilePublishing() {
+    let callDispose = function() {
+      pubsub.dispose();
+    };
+    let afterDisposeCalled = false;
+    let afterDispose = function() {
+      afterDisposeCalled = true;
+    };
+    pubsub.subscribe('someTopic', callDispose);
+    pubsub.subscribe('someTopic', afterDispose);
+    let exceptionThrown = false;
+    try {
+      pubsub.publish('someTopic');
+    } catch (e) {
+      exceptionThrown = true;
+    }
+    assertFalse('publishing did not throw an error', exceptionThrown);
+    assertTrue('pubsub is disposed', pubsub.isDisposed());
+    assertFalse('afterDispose must not have been called', afterDisposeCalled);
+  },
+
   testPublishReturnValue() {
     const fn = function() {
       pubsub.unsubscribe('X', fn);

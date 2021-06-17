@@ -280,7 +280,7 @@ goog.pubsub.PubSub.prototype.publish = function(topic, var_args) {
         // the function to the arguments in the appropriate context.  The length
         // of the array must be fixed during the iteration, since subscribers
         // may add new subscribers during publishing.
-        for (i = 0, len = keys.length; i < len; i++) {
+        for (i = 0, len = keys.length; i < len && !this.isDisposed(); i++) {
           var key = keys[i];
           this.subscriptions_[key + 1].apply(
               this.subscriptions_[key + 2], args);
