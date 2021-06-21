@@ -86,4 +86,30 @@ testSuite({
     testingSingleton.resetAll();
     assertNotEquals(foo, Foo.getInstance());
   },
+
+  testGetInstance_superclass() {
+    class Foo {
+      constructor() {
+        this.test = 'test';
+      }
+
+      static getInstance() {
+        return singleton.getInstance(Foo);
+      }
+    }
+
+    class Bar extends Foo {
+      constructor() {
+        super();
+
+        this.test = 'test-2';
+      }
+
+      static getInstance() {
+        return singleton.getInstance(Bar);
+      }
+    }
+
+    assertNotEquals(Foo.getInstance(), Bar.getInstance());
+  }
 });
