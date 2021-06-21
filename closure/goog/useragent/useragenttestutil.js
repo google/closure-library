@@ -51,7 +51,6 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.MAC = goog.labs.userAgent.platform.isMacintosh();
   goog.userAgent.WINDOWS = goog.labs.userAgent.platform.isWindows();
   goog.userAgent.LINUX = goog.userAgent.isLegacyLinux_();
-  goog.userAgent.X11 = goog.userAgent.isX11_();
   goog.userAgent.ANDROID = goog.labs.userAgent.platform.isAndroid();
   goog.userAgent.IPAD = goog.labs.userAgent.platform.isIpad();
   goog.userAgent.IPHONE = goog.labs.userAgent.platform.isIphone();

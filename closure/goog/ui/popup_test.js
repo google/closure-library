@@ -12,20 +12,13 @@ const Corner = goog.require('goog.positioning.Corner');
 const Popup = goog.require('goog.ui.Popup');
 const style = goog.require('goog.style');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
-/** This is used to round pixel values on FF3 Mac. */
+/** This is used to round pixel values. */
 function assertRoundedEquals(a, b, c) {
-  function round(x) {
-    return userAgent.GECKO && (userAgent.MAC || userAgent.X11) &&
-            userAgent.isVersionOrHigher('1.9') ?
-        Math.round(x) :
-        x;
-  }
   if (arguments.length == 3) {
-    assertEquals(a, round(b), round(c));
+    assertEquals(a, Math.round(b), Math.round(c));
   } else {
-    assertEquals(round(a), round(b));
+    assertEquals(Math.round(a), Math.round(b));
   }
 }
 
