@@ -43,12 +43,18 @@ const corner = Corner;
 const overflow = Overflow;
 let testArea;
 
-/** This is used to round pixel values. */
+/** This is used to round pixel values on FF3 Mac. */
 function assertRoundedEquals(a, b, c) {
+  function round(x) {
+    return userAgent.GECKO && (userAgent.MAC || userAgent.X11) &&
+            userAgent.isVersionOrHigher('1.9') ?
+        Math.round(x) :
+        x;
+  }
   if (arguments.length == 3) {
-    assertRoughlyEquals(a, Math.round(b), Math.round(c), ALLOWED_OFFSET);
+    assertRoughlyEquals(a, round(b), round(c), ALLOWED_OFFSET);
   } else {
-    assertRoughlyEquals(Math.round(a), Math.round(b), ALLOWED_OFFSET);
+    assertRoughlyEquals(round(a), round(b), ALLOWED_OFFSET);
   }
 }
 
