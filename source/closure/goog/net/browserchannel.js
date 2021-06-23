@@ -663,6 +663,7 @@ goog.inherits(goog.net.BrowserChannel.TimingEvent, goog.events.Event);
 /**
  * The type of event that occurs every time some information about how reachable
  * the server is is discovered.
+ * @const {string}
  */
 goog.net.BrowserChannel.Event.SERVER_REACHABILITY_EVENT = 'serverreachability';
 

@@ -400,7 +400,7 @@ goog.addDependency('labs/net/webchannel.js', ['goog.net.WebChannel', 'goog.net.W
 goog.addDependency('labs/net/webchannel/channel.js', ['goog.labs.net.webChannel.Channel'], [], {'lang': 'es6'});
 goog.addDependency('labs/net/webchannel/channelrequest.js', ['goog.labs.net.webChannel.ChannelRequest'], ['goog.Timer', 'goog.asserts', 'goog.async.Throttle', 'goog.dispose', 'goog.events.EventHandler', 'goog.labs.net.webChannel.Channel', 'goog.labs.net.webChannel.WebChannelDebug', 'goog.labs.net.webChannel.environment', 'goog.labs.net.webChannel.requestStats', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.WebChannel', 'goog.net.XmlHttp', 'goog.object', 'goog.string', 'goog.userAgent'], {'lang': 'es6'});
 goog.addDependency('labs/net/webchannel/connectionstate.js', ['goog.labs.net.webChannel.ConnectionState'], []);
-goog.addDependency('labs/net/webchannel/environment.js', ['goog.labs.net.webChannel.environment'], ['goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('labs/net/webchannel/environment.js', ['goog.labs.net.webChannel.environment'], ['goog.userAgent'], {'module': 'goog'});
 goog.addDependency('labs/net/webchannel/forwardchannelrequestpool.js', ['goog.labs.net.webChannel.ForwardChannelRequestPool'], ['goog.array', 'goog.labs.net.webChannel.ChannelRequest', 'goog.labs.net.webChannel.Wire', 'goog.string'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/net/webchannel/netutils.js', ['goog.labs.net.webChannel.netUtils'], ['goog.Uri', 'goog.labs.net.webChannel.WebChannelDebug'], {'lang': 'es6'});
 goog.addDependency('labs/net/webchannel/requeststats.js', ['goog.labs.net.webChannel.requestStats', 'goog.labs.net.webChannel.requestStats.Event', 'goog.labs.net.webChannel.requestStats.ServerReachability', 'goog.labs.net.webChannel.requestStats.ServerReachabilityEvent', 'goog.labs.net.webChannel.requestStats.Stat', 'goog.labs.net.webChannel.requestStats.StatEvent', 'goog.labs.net.webChannel.requestStats.TimingEvent'], ['goog.events.Event', 'goog.events.EventTarget'], {'lang': 'es6'});
@@ -528,7 +528,7 @@ goog.addDependency('net/networktester.js', ['goog.net.NetworkTester'], ['goog.Ti
 goog.addDependency('net/rpc/httpcors.js', ['goog.net.rpc.HttpCors'], ['goog.Uri', 'goog.object', 'goog.string', 'goog.uri.utils'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('net/streams/base64pbstreamparser.js', ['goog.net.streams.Base64PbStreamParser'], ['goog.asserts', 'goog.net.streams.Base64StreamDecoder', 'goog.net.streams.PbStreamParser', 'goog.net.streams.StreamParser'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('net/streams/base64streamdecoder.js', ['goog.net.streams.Base64StreamDecoder'], ['goog.asserts', 'goog.crypt.base64'], {'lang': 'es6'});
-goog.addDependency('net/streams/jsonstreamparser.js', ['goog.net.streams.JsonStreamParser', 'goog.net.streams.JsonStreamParser.Options'], ['goog.asserts', 'goog.net.streams.StreamParser', 'goog.net.streams.utils'], {'lang': 'es6'});
+goog.addDependency('net/streams/jsonstreamparser.js', ['goog.net.streams.JsonStreamParser'], ['goog.asserts', 'goog.net.streams.StreamParser', 'goog.net.streams.utils'], {'lang': 'es6'});
 goog.addDependency('net/streams/nodereadablestream.js', ['goog.net.streams.NodeReadableStream'], [], {'lang': 'es5'});
 goog.addDependency('net/streams/pbjsonstreamparser.js', ['goog.net.streams.PbJsonStreamParser'], ['goog.asserts', 'goog.net.streams.JsonStreamParser', 'goog.net.streams.StreamParser', 'goog.net.streams.utils'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('net/streams/pbstreamparser.js', ['goog.net.streams.PbStreamParser'], ['goog.asserts', 'goog.net.streams.StreamParser'], {'lang': 'es6'});
@@ -586,7 +586,7 @@ goog.addDependency('pubsub/pubsub.js', ['goog.pubsub.PubSub'], ['goog.Disposable
 goog.addDependency('pubsub/topicid.js', ['goog.pubsub.TopicId'], []);
 goog.addDependency('pubsub/typedpubsub.js', ['goog.pubsub.TypedPubSub'], ['goog.Disposable', 'goog.pubsub.PubSub']);
 goog.addDependency('reflect/reflect.js', ['goog.reflect'], [], {'lang': 'es6'});
-goog.addDependency('singleton/singleton.js', ['goog.singleton'], ['goog.asserts'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('singleton/singleton.js', ['goog.singleton'], ['goog.asserts', 'goog.reflect'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('soy/data.js', ['goog.soy.data', 'goog.soy.data.SanitizedContent', 'goog.soy.data.SanitizedContentKind', 'goog.soy.data.SanitizedCss', 'goog.soy.data.SanitizedHtml', 'goog.soy.data.SanitizedHtmlAttribute', 'goog.soy.data.SanitizedJs', 'goog.soy.data.SanitizedTrustedResourceUri', 'goog.soy.data.SanitizedUri'], ['goog.Uri', 'goog.asserts', 'goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.uncheckedconversions', 'goog.i18n.bidi.Dir', 'goog.string.Const']);
 goog.addDependency('soy/injecteddatasupplier.js', ['goog.soy.InjectedDataSupplier'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('soy/renderer.js', ['goog.soy.Renderer'], ['goog.asserts', 'goog.dom', 'goog.soy', 'goog.soy.data.SanitizedContent', 'goog.soy.data.SanitizedContentKind'], {'lang': 'es6'});
