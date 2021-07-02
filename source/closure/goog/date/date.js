@@ -58,27 +58,6 @@ goog.date.month = {
 
 
 /**
- * Formats a month/year string.
- * Example: "January 2008"
- *
- * @param {string} monthName The month name to use in the result.
- * @param {number} yearNum The numeric year to use in the result.
- * @return {string} A formatted month/year string.
- * @deprecated Use goog.i18n.DateTimeFormat with
- *     goog.i18n.DateTimeFormat.Format.YEAR_MONTH_ABBR or
- *     goog.i18n.DateTimeFormat.Format.YEAR_MONTH_FULL.
- */
-goog.date.formatMonthAndYear = function(monthName, yearNum) {
-  'use strict';
-  /** @desc Month/year format given the month name and the numeric year. */
-  var MSG_MONTH_AND_YEAR = goog.getMsg(
-      '{$monthName} {$yearNum}',
-      {'monthName': monthName, 'yearNum': String(yearNum)});
-  return MSG_MONTH_AND_YEAR;
-};
-
-
-/**
  * Regular expression for splitting date parts from ISO 8601 styled string.
  * Examples: '20060210' or '2005-02-22' or '20050222' or '2005-08'
  * or '2005-W22' or '2005W22' or '2005-W22-4', etc.

@@ -9,7 +9,6 @@ goog.setTestOnly();
 
 const DateDate = goog.require('goog.date.Date');
 const DateTime = goog.require('goog.date.DateTime');
-const DateTimeSymbols = goog.require('goog.i18n.DateTimeSymbols');
 const Interval = goog.require('goog.date.Interval');
 const googRequiredGoogDate = goog.require('goog.date');
 const month = goog.require('goog.date.month');
@@ -311,12 +310,6 @@ testSuite({
     assertEquals(
         '2015-01-01 is in the previous year of week (cutoff=Monday)', 2014,
         f(2015, month.JAN, 1, weekDay.MON));
-  },
-
-  testFormatMonthAndYear() {
-    const f = googRequiredGoogDate.formatMonthAndYear;
-    assertEquals('January 2008', f(DateTimeSymbols.MONTHS[month.JAN], 2008));
-    assertEquals('Jun 2007', f(DateTimeSymbols.SHORTMONTHS[month.JUN], 2007));
   },
 
   testIsDateLikeWithGoogDate() {
