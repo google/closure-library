@@ -112,7 +112,7 @@ function setUpPage() {
 }
 
 
-/** @suppress {visibility} */
+/** @suppress {visibility,const} */
 function setUp() {
   autoLoadDep = true;
   testDependencies = [];
