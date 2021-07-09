@@ -31,6 +31,7 @@ testSuite({
     vh = new PageVisibilityMonitor();
   },
 
+  /** @suppress {const} See go/const-js-library-faq */
   testNoVisibilitySupport() {
     stubs.set(
         PageVisibilityMonitor.prototype, 'getBrowserEventType_',

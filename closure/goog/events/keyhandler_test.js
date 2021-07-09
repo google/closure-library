@@ -178,7 +178,10 @@ testSuite({
     userAgent.isDocumentMode = (mode) => mode <= userAgent.DOCUMENT_MODE;
   },
 
-  /** Tests the key handler for the IE 8 and lower behavior. */
+  /**
+   * Tests the key handler for the IE 8 and lower behavior.
+   * @suppress {const}
+   */
   testIe8StyleKeyHandling() {
     userAgent.OPERA = false;
     userAgent.IE = true;

@@ -23,6 +23,7 @@ const ListFormatSymbols_zu = goog.require('goog.labs.i18n.ListFormatSymbols_zu')
 const testSuite = goog.require('goog.testing.testSuite');
 
 testSuite({
+  /** @suppress {const} See go/const-js-library-faq */
   setUp() {
     // Always switch back to English on before the next test.
     goog.labs.i18n.ListFormatSymbols = ListFormatSymbols_en;
