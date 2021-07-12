@@ -147,7 +147,9 @@ testSuite({
     try {
       // This regex matches \B, an index between 2 word characters, so the regex
       // index does not advance when matching this.
-      /** @suppress {visibility} suppression added to enable type checking */
+      /**
+       * @suppress {visibility,const} suppression added to enable type checking
+       */
       HtmlPrettyPrinter.TOKEN_REGEX_ =
           /(?:\B|<!--.*?-->|<!.*?>|<(\/?)(\w+)[^>]*>|[^<]+|<)/g;
 

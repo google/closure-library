@@ -48,7 +48,8 @@ function DebugError(msg = undefined, cause = undefined) {
     this.message = String(msg);
   }
 
-  if (cause) {
+  if (cause !== undefined) {
+    /** @type {?} */
     this.cause = cause;
   }
 

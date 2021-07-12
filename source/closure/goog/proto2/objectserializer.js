@@ -36,8 +36,11 @@ goog.requireType('goog.proto2.Message');
 goog.proto2.ObjectSerializer = function(
     opt_keyOption, opt_serializeBooleanAsNumber, opt_ignoreUnknownFields) {
   'use strict';
+  /** @const */
   this.keyOption_ = opt_keyOption;
+  /** @const */
   this.serializeBooleanAsNumber_ = opt_serializeBooleanAsNumber;
+  /** @const */
   this.ignoreUnknownFields_ = opt_ignoreUnknownFields;
 };
 goog.inherits(goog.proto2.ObjectSerializer, goog.proto2.Serializer);

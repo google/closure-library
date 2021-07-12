@@ -81,6 +81,7 @@ testSuite({
     expectedFailures = new ExpectedFailures();
   },
 
+  /** @suppress {const} See go/const-js-library-faq */
   setUp() {
     // Always switch back to English on startup.
     goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;

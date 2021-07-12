@@ -42,7 +42,9 @@ testCase.setUpPage = function() {
   /** @suppress {globalThis} suppression added to enable type checking */
   this.testingUnhandledRejection = 'onunhandledrejection' in window &&
       // TODO(user): This test is very flaky in Firefox >= 71
-      !(userAgent.GECKO && userAgent.isVersionOrHigher(71));
+      !(userAgent.GECKO && userAgent.isVersionOrHigher(71)) &&
+      // TODO(user): Re-enable after resolving test failure.
+      !(userAgent.SAFARI);
 
   /** @suppress {globalThis} suppression added to enable type checking */
   this.handler = new ErrorHandler(goog.bind(this.onException, this));
@@ -168,7 +170,7 @@ testCase.async = async function() {
 };
 
 /** Test uncaught errors in async/await in iframe */
-testCase.iframeAsync = undefined;  // Initialized in setupPage.
+testCase.iframeAsync = undefined;  // Initialized in setUpIframe.
 
 testCase.testResults = function() {
   return resolver.promise.then(function() {

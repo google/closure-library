@@ -345,13 +345,7 @@ goog.debug.ErrorHandler.ProtectedFunctionError = function(cause) {
   var message = goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
       (cause && cause.message ? String(cause.message) : String(cause));
   goog.debug.ErrorHandler.ProtectedFunctionError.base(
-      this, 'constructor', message);
-
-  /**
-   * The error thrown by the entry point.
-   * @type {*}
-   */
-  this.cause = cause;
+      this, 'constructor', message, /** @type {?} */ (cause));
 
   /** @suppress {missingProperties} stack may not be defined. */
   var stack = cause && cause.stack;
