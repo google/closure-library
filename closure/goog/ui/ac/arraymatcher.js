@@ -25,6 +25,7 @@ goog.require('goog.string');
  */
 goog.ui.ac.ArrayMatcher = function(rows, opt_noSimilar) {
   'use strict';
+  /** @type {!Array<?>} */
   this.rows_ = rows || [];
   this.useSimilar_ = !opt_noSimilar;
 };
