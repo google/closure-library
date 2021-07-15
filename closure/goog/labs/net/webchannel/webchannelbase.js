@@ -777,7 +777,12 @@ WebChannelBase.prototype.runOriginTrials_ = function(channelPath) {
   'use strict';
 
   try {
-    environment.startOriginTrials(channelPath);
+    // Since startOriginTrials might throw exceptions asynchronously, we should
+    // capture it in promise-catch.
+    environment.startOriginTrials(channelPath, e => {
+      this.channelDebug_.dumpException(
+          /** @type {?Error} */ (e), 'Error in running origin trials');
+    });
     this.channelDebug_.info('Origin Trials invoked: ' + channelPath);
   } catch (e) {
     this.channelDebug_.dumpException(e, 'Error in running origin trials');
