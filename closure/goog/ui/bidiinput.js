@@ -64,6 +64,16 @@ goog.ui.BidiInput.prototype.decorateInternal = function(element) {
 
 
 /**
+ * @return {?HTMLInputElement}
+ * @override
+ */
+goog.ui.BidiInput.prototype.getElement = function() {
+  return /** @type {?HTMLInputElement} */ (
+      goog.ui.BidiInput.superClass_.getElement.call(this));
+};
+
+
+/**
  * Creates the element for the text input.
  * @protected
  * @override
