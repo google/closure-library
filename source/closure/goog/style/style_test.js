@@ -2302,11 +2302,6 @@ testSuite({
   },
 
   testGetViewportPageOffset() {
-    expectedFailures.expectFailureFor(
-        userAgent.IE && !userAgent.isVersionOrHigher(10),
-        'Test has been flaky for ie9-win7 and ie8-winxp image. Disabling. ' +
-            'See b/22873770.');
-
     try {
       const testViewport = googDom.getElement('test-viewport');
       testViewport.style.height = '5000px';
