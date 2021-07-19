@@ -176,6 +176,15 @@ testSuite({
         {'transform': 'translateX(5px)'});
   },
 
+  testCreate_allowsVar() {
+    assertCreateEquals(
+        'color:var(--xyz);',  // expected
+        {'color': 'var(--xyz)'});
+    assertCreateEquals(
+        'color:var(--xyz, black);',  // expected
+        {'color': 'var(--xyz, black)'});
+  },
+
   testCreate_allowsSafeUrl() {
     assertCreateEquals('background:url("http://example.com");', {
       'background': SafeUrl.fromConstant(Const.from('http://example.com')),
