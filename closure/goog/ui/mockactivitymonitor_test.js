@@ -4,17 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Tests for goog.ui.MockActivityMonitorTest.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
- */
-
-/** @suppress {extraProvide} */
 goog.module('goog.ui.MockActivityMonitorTest');
 goog.setTestOnly();
 
 const ActivityMonitor = goog.require('goog.ui.ActivityMonitor');
 const MockActivityMonitor = goog.require('goog.ui.MockActivityMonitor');
+const dispose = goog.require('goog.dispose');
 const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
 const recordFunction = goog.require('goog.testing.recordFunction');
@@ -34,7 +29,7 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(monitor);
+    dispose(monitor);
     Date.now = googNow;
   },
 

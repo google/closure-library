@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
- */
-
 goog.module('goog.ui.ContainerTest');
 goog.setTestOnly();
 
@@ -24,6 +19,7 @@ const PointerFallbackEventType = goog.require('goog.events.PointerFallbackEventT
 const TagName = goog.require('goog.dom.TagName');
 const aria = goog.require('goog.a11y.aria');
 const classlist = goog.require('goog.dom.classlist');
+const dispose = goog.require('goog.dispose');
 const dom = goog.require('goog.dom');
 const googEvents = goog.require('goog.events');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -118,8 +114,8 @@ testSuite({
   tearDown() {
     dom.removeChildren(sandbox);
     container.dispose();
-    goog.dispose(keyContainer);
-    goog.dispose(listContainer);
+    dispose(keyContainer);
+    dispose(listContainer);
   },
 
   testDecorateHidden() {

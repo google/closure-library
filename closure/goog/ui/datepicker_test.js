@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ * @suppress {missingRequire} Overriding goog.i18n.DateTimeSymbols
  */
 
 goog.module('goog.ui.DatePickerTest');

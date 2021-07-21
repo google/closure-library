@@ -4,23 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
- */
-
 goog.module('goog.ui.TwoThumbSliderTest');
 goog.setTestOnly();
 
 const SliderBase = goog.require('goog.ui.SliderBase');
 const TwoThumbSlider = goog.require('goog.ui.TwoThumbSlider');
+const dispose = goog.require('goog.dispose');
 const testSuite = goog.require('goog.testing.testSuite');
 
 let slider;
 
 testSuite({
   tearDown() {
-    goog.dispose(slider);
+    dispose(slider);
   },
 
   /** @suppress {visibility} suppression added to enable type checking */

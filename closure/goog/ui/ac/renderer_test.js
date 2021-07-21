@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
- */
-
 goog.module('goog.ui.ac.RendererTest');
 goog.setTestOnly();
 
@@ -21,6 +16,7 @@ const State = goog.require('goog.a11y.aria.State');
 const TagName = goog.require('goog.dom.TagName');
 const aria = goog.require('goog.a11y.aria');
 const classlist = goog.require('goog.dom.classlist');
+const dispose = goog.require('goog.dispose');
 const dom = goog.require('goog.dom');
 const events = goog.require('goog.events');
 const googString = goog.require('goog.string');
@@ -598,7 +594,7 @@ testSuite({
 
   /** @suppress {visibility} suppression added to enable type checking */
   testHiliteRowWithCustomRenderer() {
-    goog.dispose(renderer);
+    dispose(renderer);
 
     // Use a custom renderer that doesn't put the result divs as direct children
     // of this.element_.
