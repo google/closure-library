@@ -391,6 +391,19 @@ testSuite({
     assertThrowsJsUnitException(() => {
       assertObjectEquals(obj5, obj4);
     });
+
+    // Check with identical Trusted Types instances.
+    if (typeof window.trustedTypes !== 'undefined') {
+      const policy = trustedTypes.createPolicy('testAssertObjectEquals', {
+        createHTML: (s) => {
+          return s;
+        }
+      });
+
+      const tt1 = policy.createHTML('hello');
+      const tt2 = policy.createHTML('hello');
+      assertObjectEquals(tt1, tt2);
+    }
   },
 
   testAssertObjectNotEquals() {
@@ -430,6 +443,19 @@ testSuite({
     if (SUPPORTS_TYPED_ARRAY) {
       assertObjectNotEquals(
           new Uint32Array([1, 2, 3]), new Uint32Array([1, 4, 3]));
+    }
+
+    // Check with different Trusted Types instances.
+    if (typeof window.trustedTypes !== 'undefined') {
+      const policy = trustedTypes.createPolicy('testAssertObjectNotEquals', {
+        createHTML: (s) => {
+          return s;
+        }
+      });
+
+      const tt1 = policy.createHTML('hello');
+      const tt2 = policy.createHTML('world');
+      assertObjectNotEquals(tt1, tt2);
     }
   },
 
