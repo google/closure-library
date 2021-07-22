@@ -194,7 +194,7 @@ const assertHeightWithinTolerance = function(a, b, c, opt_d) {
       commentArg(1, arguments),
       goog.testing.style.layoutasserts.isWithinThreshold_(
           height, elementHeight, tolerance),
-      'Element width(' + elementHeight + ') should be within given width(' +
+      'Element width(' + elementHeight + ') should be within given height(' +
           height + ') with tolerance value of ' + tolerance + '.');
 };
 
