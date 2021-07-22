@@ -11,7 +11,6 @@
  * standard schema http://www.w3.org/TR/wai-aria/.
  *
  * This is auto-generated code. Do not manually edit!
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.a11y.aria.datatables');

@@ -8,7 +8,6 @@
  * @fileoverview Definition of the W3C spec following range wrapper.
  *
  * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 
@@ -43,6 +42,7 @@ goog.inherits(
  * @param {Node} node The node to select.
  * @return {!Range} A browser range spanning the node's contents.
  * @protected
+ * @suppress {missingProperties} circular definitions
  */
 goog.dom.browserrange.W3cRange.getBrowserRangeForNode = function(node) {
   'use strict';
@@ -341,12 +341,15 @@ goog.dom.browserrange.W3cRange.prototype.insertNode = function(node, before) {
 };
 
 
-/** @override */
+/**
+ * @override
+ * @suppress {missingProperties} circular definitions
+ */
 goog.dom.browserrange.W3cRange.prototype.surroundWithNodes = function(
     startNode, endNode) {
   'use strict';
   var win = goog.dom.getWindow(goog.dom.getOwnerDocument(this.getStartNode()));
-  /** @suppress {missingRequire} */
+  /** @suppress {missingRequire,missingProperties} */
   var selectionRange = goog.dom.Range.createFromWindow(win);
   if (selectionRange) {
     var sNode = selectionRange.getStartNode();

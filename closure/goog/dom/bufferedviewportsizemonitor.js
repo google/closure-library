@@ -15,7 +15,6 @@
  *   the last buffered dispatch.
  * You likely only need to listen to one of the three events.  But if you need
  * more, just be cautious of duplicating effort.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.dom.BufferedViewportSizeMonitor');

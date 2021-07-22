@@ -9,7 +9,6 @@
  *
  * Provides functionality for implementing drag and drop classes. Also provides
  * support classes and events.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.fx.AbstractDragDrop');
