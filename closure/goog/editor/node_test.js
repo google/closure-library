@@ -108,7 +108,6 @@ testSuite({
     // that we care about quirks mode documents we should investigate
     // this failure.
     expectedFailures.expectFailureFor(
-        (userAgent.WEBKIT && !userAgent.isVersionOrHigher('530')) ||
         (userAgent.IE && userAgent.isVersionOrHigher('10') &&
          !userAgent.isVersionOrHigher('11')));
     expectedFailures.run(() => {
@@ -515,8 +514,7 @@ testSuite({
 
     const tagsToIgnore = googArray.flatten(structuralTags, ambiguousTags);
 
-    if ((userAgent.IE && !userAgent.isDocumentModeOrHigher(9)) ||
-        (userAgent.GECKO && !userAgent.isVersionOrHigher('2'))) {
+    if (userAgent.IE && !userAgent.isDocumentModeOrHigher(9)) {
       googArray.extend(tagsToIgnore, legacyAmbiguousTags);
     }
 

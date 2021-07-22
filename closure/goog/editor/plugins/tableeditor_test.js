@@ -332,8 +332,7 @@ testSuite({
         dom.getElementsByTagName(TagName.TR, table)[0]);
     range.select();
     plugin.execCommandInternal(TableEditor.COMMAND.MERGE_CELLS);
-    expectedFailures.expectFailureFor(
-        userAgent.IE && userAgent.isVersionOrHigher('8'));
+    expectedFailures.expectFailureFor(userAgent.IE);
     try {
       // In IE8, even after explicitly setting the range to span
       // multiple cells, the browser selection only contains the first TD

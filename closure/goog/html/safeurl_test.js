@@ -18,14 +18,8 @@ const fsUrl = goog.require('goog.fs.url');
 const googObject = goog.require('goog.object');
 const safeUrlTestVectors = goog.require('goog.html.safeUrlTestVectors');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 const {assertExists} = goog.require('goog.asserts');
 
-
-/** @return {boolean} True if running on IE9 or lower. */
-function isIE9OrLower() {
-  return userAgent.IE && !userAgent.isVersionOrHigher('10');
-}
 
 /**
  * Tests creating a SafeUrl from a blob with the given MIME type, asserting
@@ -104,9 +98,6 @@ testSuite({
   },
 
   testSafeUrlFromBlob_withSafeType() {
-    if (isIE9OrLower()) {
-      return;
-    }
     assertBlobTypeIsSafe('audio/ogg', true);
     assertBlobTypeIsSafe('image/png', true);
     assertBlobTypeIsSafe('iMage/pNg', true);
@@ -124,9 +115,6 @@ testSuite({
   },
 
   testSafeUrlFromBlob_withUnsafeType() {
-    if (isIE9OrLower()) {
-      return;
-    }
     assertBlobTypeIsSafe('', false);
     assertBlobTypeIsSafe('ximage/png', false);
     assertBlobTypeIsSafe('image/pngx', false);
@@ -144,9 +132,6 @@ testSuite({
   },
 
   testSafeUrlFromBlob_revocation() {
-    if (isIE9OrLower()) {
-      return;
-    }
     let timesCalled = 0;
     stubs.replace(fsUrl, 'revokeObjectUrl', function(arg) {
       timesCalled++;

@@ -62,10 +62,9 @@ testSuite({
      checking
    */
   testAvailability() {
-    if (userAgent.WEBKIT && userAgent.isVersionOrHigher('532.5') ||
-        userAgent.GECKO && userAgent.isVersionOrHigher('1.9.1') &&
-            window.location.protocol != 'file:' ||
-        userAgent.IE && userAgent.isVersionOrHigher('8')) {
+    if (userAgent.WEBKIT ||
+        userAgent.GECKO && window.location.protocol != 'file:' ||
+        userAgent.IE) {
       assertNotNull(mechanism);
       assertTrue(mechanism.isAvailable());
       assertNotNull(mechanism_shared);

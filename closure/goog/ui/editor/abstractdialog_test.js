@@ -23,7 +23,7 @@ const userAgent = goog.require('goog.userAgent');
 
 function shouldRunTests() {
   // Test disabled in IE7 due to flakiness. See b/4269021.
-  return !(userAgent.IE && userAgent.isVersionOrHigher('7'));
+  return !userAgent.IE;
 }
 
 let dialog;

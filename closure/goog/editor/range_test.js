@@ -764,18 +764,9 @@ testSuite({
 
     editorRange.selectNodeStart(div);
     const range = Range.createFromWindow(window);
-    // Gotta love browsers and their inconsistencies with selection
-    // representations.  What we are trying to achieve is that when we type
-    // the text will go into the P node.  In Gecko, the selection is at the
-    // start of the text node, as you'd expect, but in pre-530 Webkit, it has
-    // been normalized to the visible position of P:0.
-    if (userAgent.GECKO || userAgent.IE || userAgent.EDGE ||
-        (userAgent.WEBKIT && userAgent.isVersionOrHigher('530'))) {
-      testingDom.assertRangeEquals(
-          div.firstChild.firstChild, 0, div.firstChild.firstChild, 0, range);
-    } else {
-      testingDom.assertRangeEquals(div.firstChild, 0, div.firstChild, 0, range);
-    }
+
+    testingDom.assertRangeEquals(
+        div.firstChild.firstChild, 0, div.firstChild.firstChild, 0, range);
   },
 
   testSelectNodeStartBr() {

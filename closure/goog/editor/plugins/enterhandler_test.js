@@ -99,12 +99,7 @@ function waitForChangeEvents() {
 }
 
 function getNbsp() {
-  // On WebKit (pre-528) and Opera, &nbsp; shows up as its unicode character in
-  // innerHTML under some circumstances.
-  return (userAgent.WEBKIT && !userAgent.isVersionOrHigher('528')) ||
-          userAgent.OPERA ?
-      '\u00a0' :
-      '&nbsp;';
+  return '&nbsp;';
 }
 
 /**

@@ -1332,52 +1332,44 @@ testSuite({
         'isFocusableTabIndex() must be false for tab index -1',
         googDom.isFocusableTabIndex(googDom.getElement('tabIndexNegative1')));
 
-    // WebKit on Mac doesn't support focusable DIVs until version 526 and later.
-    if (!userAgent.WEBKIT || !userAgent.MAC ||
-        userAgent.isVersionOrHigher('526')) {
-      assertTrue(
-          'isFocusableTabIndex() must be true for tab index 0',
-          googDom.isFocusableTabIndex(googDom.getElement('tabIndex0')));
-      assertTrue(
-          'isFocusableTabIndex() must be true for tab index 1',
-          googDom.isFocusableTabIndex(googDom.getElement('tabIndex1')));
-      assertTrue(
-          'isFocusableTabIndex() must be true for tab index 2',
-          googDom.isFocusableTabIndex(googDom.getElement('tabIndex2')));
-    }
+    assertTrue(
+        'isFocusableTabIndex() must be true for tab index 0',
+        googDom.isFocusableTabIndex(googDom.getElement('tabIndex0')));
+    assertTrue(
+        'isFocusableTabIndex() must be true for tab index 1',
+        googDom.isFocusableTabIndex(googDom.getElement('tabIndex1')));
+    assertTrue(
+        'isFocusableTabIndex() must be true for tab index 2',
+        googDom.isFocusableTabIndex(googDom.getElement('tabIndex2')));
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */
   testSetFocusableTabIndex() {
-    // WebKit on Mac doesn't support focusable DIVs until version 526 and later.
-    if (!userAgent.WEBKIT || !userAgent.MAC ||
-        userAgent.isVersionOrHigher('526')) {
-      // Test enabling focusable tab index.
-      googDom.setFocusableTabIndex(googDom.getElement('noTabIndex'), true);
-      assertTrue(
-          'isFocusableTabIndex() must be true after enabling tab index',
-          googDom.isFocusableTabIndex(googDom.getElement('noTabIndex')));
+    // Test enabling focusable tab index.
+    googDom.setFocusableTabIndex(googDom.getElement('noTabIndex'), true);
+    assertTrue(
+        'isFocusableTabIndex() must be true after enabling tab index',
+        googDom.isFocusableTabIndex(googDom.getElement('noTabIndex')));
 
-      // Test disabling focusable tab index that was added programmatically.
-      googDom.setFocusableTabIndex(googDom.getElement('noTabIndex'), false);
-      assertFalse(
-          'isFocusableTabIndex() must be false after disabling tab ' +
-              'index that was programmatically added',
-          googDom.isFocusableTabIndex(googDom.getElement('noTabIndex')));
+    // Test disabling focusable tab index that was added programmatically.
+    googDom.setFocusableTabIndex(googDom.getElement('noTabIndex'), false);
+    assertFalse(
+        'isFocusableTabIndex() must be false after disabling tab ' +
+            'index that was programmatically added',
+        googDom.isFocusableTabIndex(googDom.getElement('noTabIndex')));
 
-      // Test disabling focusable tab index that was specified in markup.
-      googDom.setFocusableTabIndex(googDom.getElement('tabIndex0'), false);
-      assertFalse(
-          'isFocusableTabIndex() must be false after disabling tab ' +
-              'index that was specified in markup',
-          googDom.isFocusableTabIndex(googDom.getElement('tabIndex0')));
+    // Test disabling focusable tab index that was specified in markup.
+    googDom.setFocusableTabIndex(googDom.getElement('tabIndex0'), false);
+    assertFalse(
+        'isFocusableTabIndex() must be false after disabling tab ' +
+            'index that was specified in markup',
+        googDom.isFocusableTabIndex(googDom.getElement('tabIndex0')));
 
-      // Test re-enabling focusable tab index.
-      googDom.setFocusableTabIndex(googDom.getElement('tabIndex0'), true);
-      assertTrue(
-          'isFocusableTabIndex() must be true after reenabling tabindex',
-          googDom.isFocusableTabIndex(googDom.getElement('tabIndex0')));
-    }
+    // Test re-enabling focusable tab index.
+    googDom.setFocusableTabIndex(googDom.getElement('tabIndex0'), true);
+    assertTrue(
+        'isFocusableTabIndex() must be true after reenabling tabindex',
+        googDom.isFocusableTabIndex(googDom.getElement('tabIndex0')));
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */
@@ -2000,7 +1992,7 @@ testSuite({
     const g = $('testG');
     assertNotNull(g);
 
-    if (userAgent.IE && userAgent.isVersionOrHigher('9')) {
+    if (userAgent.IE) {
       // test to make sure IE9 is returning undefined for .parentElement
       assertUndefined(g.parentElement);
       assertUndefined(rect.parentElement);

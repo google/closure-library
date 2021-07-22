@@ -21,12 +21,12 @@ testSuite({
   testRoundedPanelCreate() {
     const rcp = RoundedPanel.create(
         15, 5, '#cccccc', '#cccccc', RoundedPanel.Corner.ALL);
-    if (userAgent.GECKO && userAgent.isVersionOrHigher('1.9a')) {
+    if (userAgent.GECKO) {
       assertTrue(
           'For Firefox 3.0+ (uses Gecko 1.9+), an instance of ' +
               'goog.ui.CssRoundedPanel should be returned.',
           rcp instanceof CssRoundedPanel);
-    } else if (userAgent.WEBKIT && userAgent.isVersionOrHigher('500')) {
+    } else if (userAgent.WEBKIT) {
       assertTrue(
           'For Safari 3.0+, an instance of goog.ui.CssRoundedPanel ' +
               'should be returned.',
@@ -36,9 +36,7 @@ testSuite({
           'For MS Edge, an instance of goog.ui.CssRoundedPanel ' +
               'should be returned.',
           rcp instanceof CssRoundedPanel);
-    } else if (
-        userAgent.GECKO || userAgent.IE || userAgent.OPERA ||
-        userAgent.WEBKIT) {
+    } else if (userAgent.IE) {
       assertTrue(
           'For Gecko 1.8- (ex. Firefox 2.0-, Camino 1.5-, etc.), ' +
               'IE, Opera, and Safari 2.0-, an instance of ' +

@@ -17,7 +17,7 @@ testSuite({
     // PBKDF2 test vectors from:
     // http://tools.ietf.org/html/rfc6070
 
-    if (userAgent.IE && userAgent.isVersionOrHigher('7')) {
+    if (userAgent.IE) {
       return;
     }
 

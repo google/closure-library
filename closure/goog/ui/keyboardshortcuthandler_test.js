@@ -642,7 +642,7 @@ testSuite({
   testIgnoreNonGlobalShortcutsInContentEditable() {
     // Don't set design mode in later IE as javascripts don't run when in
     // that mode.
-    const setDesignMode = !userAgent.IE || !userAgent.isVersionOrHigher('9');
+    const setDesignMode = !userAgent.IE;
     try {
       if (setDesignMode) {
         document.designMode = 'on';

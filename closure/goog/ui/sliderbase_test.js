@@ -1016,12 +1016,8 @@ testSuite({
     oneThumbSlider.setMaximum(300);
     oneThumbSlider.setValue(100);
 
-    // Need to set to (0, 0) in IE8 due to a browser bug where the
-    // offsetWidth/height is incorrectly calculated as 0 in test files.
     /** @suppress {visibility} suppression added to enable type checking */
-    const offset = (userAgent.IE && !userAgent.isVersionOrHigher('9')) ?
-        new Coordinate() :
-        style.getPageOffset(oneThumbSlider.valueThumb);
+    const offset = style.getPageOffset(oneThumbSlider.valueThumb);
     const offsetXAtZero = offset.x;
 
     const sliderElement = oneThumbSlider.getElementStrict();

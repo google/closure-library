@@ -77,13 +77,12 @@ TestRenderer.IE6_CLASS_COMBINATIONS = [
 
 /** @return {boolean} Whether we're on Mac Safari 3.x. */
 function isMacSafari3() {
-  return userAgent.WEBKIT && userAgent.MAC &&
-      !userAgent.isVersionOrHigher('527');
+  return false;
 }
 
 /** @return {boolean} Whether we're on IE6 or lower. */
 function isIe6() {
-  return userAgent.IE && !userAgent.isVersionOrHigher('7');
+  return false;
 }
 
 testSuite({
@@ -290,17 +289,10 @@ testSuite({
     control.setRenderer(renderer);
     control.render(sandbox);
 
-    // When a control in the default state (enabled, visible, focusable)
-    // enters the document, it must get a tab index.
-    // Expected to fail on Mac Safari 3, because it doesn't support tab index.
-    expectedFailures.expectFailureFor(isMacSafari3());
-    try {
-      assertTrue(
-          'Enabled, visible, focusable control must have tab index',
-          dom.isFocusableTabIndex(control.getElement()));
-    } catch (e) {
-      expectedFailures.handleException(e);
-    }
+
+    assertTrue(
+        'Enabled, visible, focusable control must have tab index',
+        dom.isFocusableTabIndex(control.getElement()));
   },
 
   testInitializeDomDecorated() {
@@ -318,17 +310,10 @@ testSuite({
     control.setRenderer(renderer);
     control.decorate(dom.getElement('foo'));
 
-    // When a control in the default state (enabled, visible, focusable)
-    // enters the document, it must get a tab index.
-    // Expected to fail on Mac Safari 3, because it doesn't support tab index.
-    expectedFailures.expectFailureFor(isMacSafari3());
-    try {
-      assertTrue(
-          'Enabled, visible, focusable control must have tab index',
-          dom.isFocusableTabIndex(control.getElement()));
-    } catch (e) {
-      expectedFailures.handleException(e);
-    }
+    assertTrue(
+        'Enabled, visible, focusable control must have tab index',
+        dom.isFocusableTabIndex(control.getElement()));
+
   },
 
   testInitializeDomDisabledBiDi() {
@@ -550,15 +535,10 @@ testSuite({
 
   testIsFocusable() {
     control.render(sandbox);
-    // Expected to fail on Mac Safari 3, because it doesn't support tab index.
-    expectedFailures.expectFailureFor(isMacSafari3());
-    try {
-      assertTrue(
-          'Control\'s key event target must be focusable',
-          controlRenderer.isFocusable(control));
-    } catch (e) {
-      expectedFailures.handleException(e);
-    }
+    assertTrue(
+        'Control\'s key event target must be focusable',
+        controlRenderer.isFocusable(control));
+
   },
 
   testIsFocusableForNonFocusableControl() {
@@ -587,15 +567,9 @@ testSuite({
         'Control\'s key event target must not have tab index',
         dom.isFocusableTabIndex(control.getKeyEventTarget()));
     controlRenderer.setFocusable(control, true);
-    // Expected to fail on Mac Safari 3, because it doesn't support tab index.
-    expectedFailures.expectFailureFor(isMacSafari3());
-    try {
-      assertTrue(
-          'Control\'s key event target must have focusable tab index',
-          dom.isFocusableTabIndex(control.getKeyEventTarget()));
-    } catch (e) {
-      expectedFailures.handleException(e);
-    }
+    assertTrue(
+        'Control\'s key event target must have focusable tab index',
+        dom.isFocusableTabIndex(control.getKeyEventTarget()));
   },
 
   testSetFocusableForNonFocusableControl() {
@@ -1225,16 +1199,9 @@ testSuite({
     testRenderer.setState(control, Component.State.DISABLED, true);
     let expectedClasses =
         ['combined', 'goog-base', 'goog-base-disabled', 'goog-button'];
-    if (isIe6()) {
-      assertSameElements(
-          'IE6 and lower should have one combined class',
-          expectedClasses.concat(['combined_goog-base-disabled_goog-button']),
-          classlist.get(element));
-    } else {
-      assertSameElements(
-          'Non IE6 browsers should not have a combined class', expectedClasses,
-          classlist.get(element));
-    }
+    assertSameElements(
+        'Non IE6 browsers should not have a combined class', expectedClasses,
+        classlist.get(element));
 
     testRenderer.setState(control, Component.State.DISABLED, false);
     testRenderer.setState(control, Component.State.HOVER, true);

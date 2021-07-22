@@ -17,7 +17,6 @@ const mechanismSharingTester = goog.require('goog.storage.mechanism.mechanismSha
 const mechanismTestDefinition = goog.require('goog.storage.mechanism.mechanismTestDefinition');
 const product = goog.require('goog.userAgent.product');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
 testSuite({
   shouldRunTests() {
@@ -62,14 +61,10 @@ testSuite({
      checking
    */
   testAvailability() {
-    if (userAgent.WEBKIT && userAgent.isVersionOrHigher('532.5') ||
-        userAgent.GECKO && userAgent.isVersionOrHigher('1.9.1') ||
-        userAgent.IE && userAgent.isVersionOrHigher('8')) {
-      assertNotNull(mechanism);
-      assertTrue(mechanism.isAvailable());
-      assertNotNull(mechanism_shared);
-      assertTrue(mechanism_shared.isAvailable());
-    }
+    assertNotNull(mechanism);
+    assertTrue(mechanism.isAvailable());
+    assertNotNull(mechanism_shared);
+    assertTrue(mechanism_shared.isAvailable());
   },
 
   testCount() {

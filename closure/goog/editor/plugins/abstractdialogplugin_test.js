@@ -322,11 +322,6 @@ testSuite({
 
   /** Tests execCommand twice while reusing the dialog. */
   testExecTwiceReuse() {
-    // Test is failing with an out-of-memory error in IE7.
-    if (userAgent.IE && !userAgent.isVersionOrHigher('8')) {
-      return;
-    }
-
     this.testExecTwice(true);
   },
 

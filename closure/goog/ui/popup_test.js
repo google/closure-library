@@ -17,10 +17,8 @@ const userAgent = goog.require('goog.userAgent');
 /** This is used to round pixel values on FF3 Mac. */
 function assertRoundedEquals(a, b, c) {
   function round(x) {
-    return userAgent.GECKO && (userAgent.MAC || userAgent.X11) &&
-            userAgent.isVersionOrHigher('1.9') ?
-        Math.round(x) :
-        x;
+    return userAgent.GECKO && (userAgent.MAC || userAgent.X11) ? Math.round(x) :
+                                                                 x;
   }
   if (arguments.length == 3) {
     assertEquals(a, round(b), round(c));

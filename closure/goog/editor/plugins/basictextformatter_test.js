@@ -404,18 +404,10 @@ testSuite({
     FORMATTER;
     ROOT = dom.getElement('root');
     HELPER;
-    OPEN_SUB = userAgent.WEBKIT && !userAgent.isVersionOrHigher('530') ?
-        '<span class="Apple-style-span" style="vertical-align: sub;">' :
-        '<sub>';
-    CLOSE_SUB = userAgent.WEBKIT && !userAgent.isVersionOrHigher('530') ?
-        '</span>' :
-        '</sub>';
-    OPEN_SUPER = userAgent.WEBKIT && !userAgent.isVersionOrHigher('530') ?
-        '<span class="Apple-style-span" style="vertical-align: super;">' :
-        '<sup>';
-    CLOSE_SUPER = userAgent.WEBKIT && !userAgent.isVersionOrHigher('530') ?
-        '</span>' :
-        '</sup>';
+    OPEN_SUB = '<sub>';
+    CLOSE_SUB = '</sub>';
+    OPEN_SUPER = '<sup>';
+    CLOSE_SUPER = '</sup>';
     expectedFailures = new ExpectedFailures();
   },
 
@@ -1331,7 +1323,7 @@ testSuite({
 
   /** @suppress {visibility} suppression added to enable type checking */
   testGeckoSelectionChange() {
-    if (!userAgent.GECKO || !userAgent.isVersionOrHigher('1.9')) {
+    if (!userAgent.GECKO) {
       return;
     }
 
@@ -1375,14 +1367,8 @@ testSuite({
 
     /** @suppress {visibility} suppression added to enable type checking */
     const nodes = REAL_PLUGIN.applyExecCommandIEFixes_('insertOrderedList');
-    if (userAgent.isVersionOrHigher('9')) {
-      assertHTMLEquals(
-          '<blockquote>hi<div style="height:0px"></div></blockquote>',
-          REAL_FIELD.getCleanContents());
-    } else {
-      assertHTMLEquals(
-          '<blockquote>hi <div style="height:0px"></div></blockquote>',
-          REAL_FIELD.getCleanContents());
-    }
+    assertHTMLEquals(
+        '<blockquote>hi<div style="height:0px"></div></blockquote>',
+        REAL_FIELD.getCleanContents());
   },
 });

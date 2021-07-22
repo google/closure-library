@@ -208,11 +208,7 @@ testSuite({
 
   testObjectSerializeWithHasOwnProperty() {
     const object = {'hasOwnProperty': null};
-    if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
-      assertEquals('{}', googJson.serialize(object));
-    } else {
-      assertEquals('{"hasOwnProperty":null}', googJson.serialize(object));
-    }
+    assertEquals('{"hasOwnProperty":null}', googJson.serialize(object));
   },
 
   testWrappedObjects() {

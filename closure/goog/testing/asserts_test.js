@@ -20,7 +20,6 @@ const googArray = goog.require('goog.array');
 const product = goog.require('goog.userAgent.product');
 const testSuite = goog.require('goog.testing.testSuite');
 const throwException = goog.require('goog.async.throwException');
-const userAgent = goog.require('goog.userAgent');
 
 const SUPPORTS_TYPED_ARRAY =
     typeof Uint8Array === 'function' && typeof Uint8Array.of === 'function';
@@ -1617,21 +1616,6 @@ testSuite({
     //    createBinTree(5, null), createBinTree(5, null)));
     assertNotNull(asserts.findDifferences(
         createBinTree(4, null), createBinTree(5, null)));
-  },
-
-  /**
-     @suppress {strictMissingProperties} suppression added to enable type
-     checking
-   */
-  testStringForWindowIE() {
-    if (userAgent.IE && !userAgent.isVersionOrHigher('8')) {
-      // NOTE(user): This test sees of we are being affected by a JScript
-      // bug in try/finally handling. This bug only affects the lowest
-      // try/finally block in the stack. Calling this function via VBScript
-      // allows us to run the test synchronously in an empty JS stack.
-      window.execScript('stringForWindowIEHelper()', 'vbscript');
-      assertEquals('<[object]> (Object)', window.stringForWindowIEResult);
-    }
   },
 
   testStringSamePrefix() {
