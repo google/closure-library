@@ -835,12 +835,6 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandHelper_ = function(
     doc.execCommand('styleWithCSS', false, false);
   }
 
-  if (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('526') &&
-      command.toLowerCase() == 'formatblock' && opt_value &&
-      /^[<]?h\d[>]?$/i.test(opt_value)) {
-    this.cleanUpSafariHeadings_();
-  }
-
   if (/insert(un)?orderedlist/i.test(command)) {
     // NOTE(user): This doesn't check queryCommandState because it seems to
     // lie. Also, this runs for insertunorderedlist so that the list isn't made
@@ -1520,11 +1514,9 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandSafariFixes_ =
 goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandGeckoFixes_ =
     function(command) {
   'use strict';
-  if (goog.userAgent.isVersionOrHigher('1.9') &&
-      command.toLowerCase() == 'formatblock') {
-    // Firefox 3 and above throw a JS error for formatblock if the range is
-    // a child of the body node. Changing the selection to the BR fixes the
-    // problem.
+  if (command.toLowerCase() == 'formatblock') {
+    // Firefox throws a JS error for formatblock if the range is a child of the
+    // body node. Changing the selection to the BR fixes the problem.
     // See https://bugzilla.mozilla.org/show_bug.cgi?id=481696
     var range = this.getRange_();
     var startNode = range.getStartNode();
