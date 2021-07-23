@@ -20,11 +20,25 @@ const testSuite = goog.require('goog.testing.testSuite');
 const stubs = new PropertyReplacer();
 
 /**
+ * Waits using native promises.
+ *
  * @param {number} ms
  * @return {!Promise<void>} Resolves after ms
  */
 function waitFor(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Waits using GoogPromise.
+ *
+ * @param {number} ms
+ * @return {!GoogPromise<void>} Resolves after ms
+ */
+function googWaitFor(ms) {
+  return new GoogPromise(resolve => {
+    setTimeout(resolve, ms);
+  });
 }
 
 testSuite({
@@ -163,6 +177,121 @@ testSuite({
 
       assertArrayEquals(array.range(30), result);
     },
+  },
+
+  testAsyncMockClock: {
+    setUp() {
+      this.clock = new MockClock({autoInstall: true});
+    },
+
+    tearDown() {
+      this.clock.dispose();
+    },
+
+    async testInteroperability() {
+      // This test ensures that a mix of async and synchronous MockClocks work
+      // as expected with Promises and GoogPromises.
+      const out = [];
+      await this.clock.tickAndResolve(
+          100, waitFor(100).then(() => out.push(1)));
+      assertArrayEquals(out, [1]);
+
+      await this.clock.tickAndResolve(
+          100, googWaitFor(100).then(() => out.push(2)));
+      assertArrayEquals(out, [1, 2]);
+      this.clock.uninstall();
+
+      // Verify that Synchronous MockClock changes GoogPromise behavior when
+      // installed after async MockClock.
+      const syncClock = new MockClock(true);
+      // Synchronous MockClock executes googPromise.then synchronously. The
+      // googWaitFor executor and chained promise should execute when syncClock
+      // is ticked.
+      const promise3 = googWaitFor(100).then(() => out.push(3));
+
+      assertArrayEquals(out, [1, 2]);
+      syncClock.tick(100);
+      assertArrayEquals(out, [1, 2, 3]);
+
+      // Synchronous MockClock does not synchronously resolve native Promises.
+      // Although the waitFor executor will run when syncClock is ticked, the
+      // chained promise will not execute until the next await.
+      waitFor(0).then(() => out.push(4));
+      syncClock.tick();
+
+      // The chained `then` is never executed because synchronous MockClock
+      // resets the work queue when uninstalled.
+      promise3.then(() => out.push(-1));
+      syncClock.uninstall();
+
+      // Chained promise callback is executed after next await.
+      await Promise.resolve();
+      assertArrayEquals(out, [1, 2, 3, 4]);
+
+      // Verify that async MockClock still works as expected after the
+      // synchronous MockClock was uninstalled.
+      this.clock.install();
+      await this.clock.tickAndResolve(
+          100, waitFor(100).then(() => out.push(5)));
+      assertArrayEquals(out, [1, 2, 3, 4, 5]);
+
+      // Async MockClock executes GoogPromise asynchronously. It should not
+      // resolve until awaited.
+      const promise6 =
+          this.clock.tickAndResolve(100, googWaitFor(100).then(() => {
+            out.push(6);
+          }));
+      assertArrayEquals(out, [1, 2, 3, 4, 5]);
+      await promise6;
+      assertArrayEquals(out, [1, 2, 3, 4, 5, 6]);
+    },
+
+    async testTickAndResolveGoogPromiseRejectsValue() {
+      const promise = googWaitFor(100).then(() => {throw new Error('reject')});
+      const error =
+          await assertRejects(this.clock.tickAndResolve(101, promise));
+      assertEquals(error.message, 'reject');
+    },
+
+    async testTickAndResolveGoogPromiseReturnsValue() {
+      const promise = googWaitFor(100).then(() => 'value');
+      const result = await this.clock.tickAndResolve(100, promise);
+      assertEquals(result, 'value');
+    },
+
+    async testTickAndResolvePromiseRejectsValue() {
+      const promise = waitFor(100).then(() => {throw new Error('reject')});
+      const error =
+          await assertRejects(this.clock.tickAndResolve(100, promise));
+      assertEquals(error.message, 'reject');
+    },
+
+    async testTickAndResolvePromiseReturnsValue() {
+      const promise = waitFor(100).then(() => 'value');
+      const result = await this.clock.tickAndResolve(100, promise);
+      assertEquals(result, 'value');
+    },
+
+    async testTickAndResolveThrowsIfUnresolved() {
+      const error =
+          await assertRejects(this.clock.tickAndResolve(50, waitFor(100)));
+      assertEquals(
+          'Promise was expected to be resolved after mock clock tick.',
+          error.message);
+    },
+
+    async testTickThrows() {
+      assertThrows(
+          'Async MockClock does not support tick. Use tickAsync() instead.',
+          () => this.clock.tick());
+    },
+
+    async testTickPromiseThrows() {
+      assertThrows(
+          'Async MockClock does not support tickPromise. ' +
+              'Use tickAndResolve(millis, promise) instead.',
+          () => this.clock.tickPromise(waitFor(100), 100));
+    }
   },
 
   testTimeWarp: {
@@ -876,5 +1005,37 @@ testSuite({
     assertEquals('delayed', clock.tickPromise(delayed, 500));
 
     clock.dispose();
+  },
+
+  testMockClockInvalidConstructor() {
+    assertThrows(
+        'Async MockClock cannot be configured with {resetScheduler: false}.',
+        () => {
+          new MockClock({resetScheduler: false});
+        });
+  },
+
+  testUninstallWithResetScheduler() {
+    goog.async.run.resetScheduler();
+    const originalSchedule = goog.async.run.schedule_;
+    const clock = new MockClock({
+      autoInstall: true,
+      resetScheduler: true,
+      synchronous: true,
+    });
+    const mockClockScheduler = goog.async.run.schedule_;
+    // Verify synchronous MockClock replaces schedule_.
+    assertNotEquals(mockClockScheduler, originalSchedule);
+    clock.uninstall();
+    // Verify schedule_ is restored after MockClock is uninstalled.
+    assertNotEquals(goog.async.run.schedule_, mockClockScheduler);
+  },
+
+  testSynchronousMockClockTickAndResolveThrows() {
+    const clock = new MockClock(true);
+    assertThrows(
+        'Synchronous MockClock does not support tickAndResolve.',
+        () => this.clock.tick());
+    clock.uninstall();
   },
 });
