@@ -39,66 +39,6 @@ testSuite({
     assertTrue(/(<\?xml version="1.0"\?>)?<root ?\/>/.test(serializedDoc));
   },
 
-  /**
-     @suppress {strictMissingProperties} suppression added to enable type
-     checking
-   */
-  testBelowMaxDepthInIE() {
-    if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
-      // This value is only effective in IE8 and below
-      domXml.MAX_ELEMENT_DEPTH = 5;
-      const junk = '<a><b><c><d><e>Hello</e></d></c></b></a>';
-      const doc = domXml.loadXml(junk);
-      assertEquals(
-          'Should not have caused a parse error', 0, Number(doc.parseError));
-    }
-  },
-
-  /**
-     @suppress {strictMissingProperties} suppression added to enable type
-     checking
-   */
-  testAboveMaxDepthInIE() {
-    if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
-      // This value is only effective in IE8 and below
-      domXml.MAX_ELEMENT_DEPTH = 4;
-      const junk = '<a><b><c><d><e>Hello</e></d></c></b></a>';
-      const doc = domXml.loadXml(junk);
-      assertNotEquals(
-          'Should have caused a parse error', 0, Number(doc.parseError));
-    }
-  },
-
-  /**
-     @suppress {strictMissingProperties} suppression added to enable type
-     checking
-   */
-  testBelowMaxSizeInIE() {
-    if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
-      // This value is only effective in IE8 and below
-      domXml.MAX_XML_SIZE_KB = 1;
-      const junk = '<a>' + new Array(50).join('<b>junk</b>') + '</a>';
-      const doc = domXml.loadXml(junk);
-      assertEquals(
-          'Should not have caused a parse error', 0, Number(doc.parseError));
-    }
-  },
-
-  /**
-     @suppress {strictMissingProperties} suppression added to enable type
-     checking
-   */
-  testMaxSizeInIE() {
-    if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
-      // This value is only effective in IE8 and below
-      domXml.MAX_XML_SIZE_KB = 1;
-      const junk = '<a>' + new Array(1000).join('<b>junk</b>') + '</a>';
-      const doc = domXml.loadXml(junk);
-      assertNotEquals(
-          'Should have caused a parse error', 0, Number(doc.parseError));
-    }
-  },
-
   testSelectSingleNodeNoActiveX() {
     if (userAgent.IE) {
       return;

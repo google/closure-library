@@ -116,8 +116,7 @@ testSuite({
   /** @suppress {visibility} suppression added to enable type checking */
   testRegisterAndUnregisterAnimationWithRequestAnimationFrameGecko() {
     // Only FF4 onwards support requestAnimationFrame.
-    if (!userAgent.GECKO || !userAgent.isVersionOrHigher('2.0') ||
-        userAgent.isVersionOrHigher('17')) {
+    if (!userAgent.GECKO || userAgent.isVersionOrHigher('17')) {
       return;
     }
 

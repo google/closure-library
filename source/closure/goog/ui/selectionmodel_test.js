@@ -4,15 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
- */
-
 goog.module('goog.ui.SelectionModelTest');
 goog.setTestOnly();
 
 const SelectionModel = goog.require('goog.ui.SelectionModel');
+const dispose = goog.require('goog.dispose');
 const googArray = goog.require('goog.array');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -92,7 +88,7 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(selectionModel);
+    dispose(selectionModel);
   },
 
   testGetItemCount() {

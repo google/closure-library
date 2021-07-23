@@ -58,7 +58,7 @@ testSuite({
     try {
       assertNotNull(stack);
 
-      if (product.FIREFOX && userAgent.isVersionOrHigher('2.0')) {
+      if (product.FIREFOX) {
         // Firefox 4 and greater does not have the first line that says
         // 'Error'. So we insert a dummy line to simplify the test.
         stack.splice(0, 0, 'Error');

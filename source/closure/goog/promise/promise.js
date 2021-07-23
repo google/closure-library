@@ -559,6 +559,7 @@ goog.Promise.firstFulfilled = function(promises) {
  *     resolve / reject functions. Resolving or rejecting the resolver
  *     resolves or rejects the promise.
  * @template TYPE
+ * @see {@link goog.promise.NativeResolver} for native Promises
  */
 goog.Promise.withResolver = function() {
   'use strict';

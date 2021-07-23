@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ * @suppress {missingRequire} Stubbing goog.dom
  */
 
 goog.module('goog.ui.HsvaPaletteTest');
@@ -21,10 +21,8 @@ const classlist = goog.require('goog.dom.classlist');
 const colorAlpha = goog.require('goog.color.alpha');
 const style = goog.require('goog.style');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
 let samplePalette;
-const eventWasFired = false;
 const stubs = new PropertyReplacer();
 
 testSuite({
@@ -79,16 +77,9 @@ testSuite({
     assertNotNull(elem);
     assertEquals(String(TagName.DIV), elem.tagName);
 
-    if (userAgent.IE && !userAgent.isVersionOrHigher('7')) {
-      assertSameElements(
-          'On IE6, the noalpha class must be present',
-          ['goog-hsva-palette', 'goog-hsva-palette-noalpha'],
-          classlist.get(elem));
-    } else {
-      assertEquals(
-          'The noalpha class must not be present', 'goog-hsva-palette',
-          elem.className);
-    }
+    assertEquals(
+        'The noalpha class must not be present', 'goog-hsva-palette',
+        elem.className);
   },
 
   /** @suppress {visibility} suppression added to enable type checking */

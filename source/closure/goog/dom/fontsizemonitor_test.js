@@ -17,10 +17,6 @@ const testSuite = goog.require('goog.testing.testSuite');
 const testingEvents = goog.require('goog.testing.events');
 const userAgent = goog.require('goog.userAgent');
 
-function isBuggyGecko() {
-  return userAgent.GECKO && !userAgent.isVersionOrHigher('1.9');
-}
-
 let monitor;
 
 /** @suppress {visibility} suppression added to enable type checking */
@@ -91,11 +87,10 @@ testSuite({
     const newDivElementCount = dom.getElementsByTagName(TagName.DIV).length;
 
     assertEquals(
-        'There should be no trailing frames', frameCount + isBuggyGecko(),
-        newFrameCount);
+        'There should be no trailing frames', frameCount, newFrameCount);
     assertEquals(
-        'There should be no trailing iframe elements',
-        iframeElementCount + isBuggyGecko(), newIframeElementCount);
+        'There should be no trailing iframe elements', iframeElementCount,
+        newIframeElementCount);
     assertEquals(
         'There should be no trailing div elements', divElementCount,
         newDivElementCount);

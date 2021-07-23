@@ -1195,11 +1195,6 @@ testSuite({
    * namespace.
    */
   testModuleExportSealed() {
-    if (userAgent.IE && !userAgent.isVersionOrHigher('9')) {
-      // IE before 9 don't support sealing objects
-      return;
-    }
-
     goog.loadModule('goog.module("a.b.supplied"); exports.foo = {};');
     const exports0 = goog.module.get('a.b.supplied');
     assertTrue(Object.isSealed(exports0));

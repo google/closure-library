@@ -192,8 +192,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormatting_ = function() {
       // breaking spaces.
       // Old versions of WebKit (Safari 3, Chrome 1) incorrectly match /u00A0
       // and newer versions properly match &nbsp;.
-      var nbspRegExp =
-          goog.userAgent.isVersionOrHigher('528') ? /&nbsp;/g : /\u00A0/g;
+      var nbspRegExp = /&nbsp;/g;
       return text.replace(nbspRegExp, ' ');
     });
   }

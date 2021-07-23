@@ -396,8 +396,7 @@ testSuite({
 
   testKeySequenceWithEscapeKey() {
     assertTrue(testingEvents.fireKeySequence(root, KeyCodes.ESC));
-    if (userAgent.EDGE || userAgent.GECKO ||
-        (userAgent.WEBKIT && userAgent.isVersionOrHigher('525'))) {
+    if (userAgent.EDGE || userAgent.GECKO || userAgent.WEBKIT) {
       assertEventTypes(['keydown', 'keyup']);
     } else {
       assertEventTypes(['keydown', 'keypress', 'keyup']);

@@ -8,7 +8,6 @@
 /**
  * @fileoverview Defines a class for parsing JSON using the browser's built in
  * JSON library.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.json.NativeJsonProcessor');

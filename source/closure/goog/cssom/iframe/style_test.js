@@ -191,12 +191,8 @@ testSuite({
     const color = standardizeCSSValue('color', 'red');
     const NORMAL_RULE = `a{color:${color}`;
     const FF_2_RULE = `a{color:${color}!important`;
-    if (userAgent.GECKO && !userAgent.isVersionOrHigher('1.9a')) {
-      assertContains(FF_2_RULE, cssText);
-    } else {
-      assertContains(NORMAL_RULE, cssText);
-      assertNotContains(FF_2_RULE, cssText);
-    }
+    assertContains(NORMAL_RULE, cssText);
+    assertNotContains(FF_2_RULE, cssText);
   },
 
   testCopyBackgroundContext() {
@@ -219,19 +215,15 @@ testSuite({
     assertTrue(
         'Background image should be copied from ancestor element',
         /body{[^{]*background-image:url\(/.test(normalizedCssText));
-    // Background-position can't be calculated in FF2, due to this bug:
-    // http://bugzilla.mozilla.org/show_bug.cgi?id=316981
-    if (!(userAgent.GECKO && !userAgent.isVersionOrHigher('1.9'))) {
-      // Expected x position is:
-      // originalBackgroundPositionX - elementOffsetLeft
-      // 40px - (1px + 8px) == 31px
-      // Expected y position is:
-      // originalBackgroundPositionY - elementOffsetLeft
-      // 70px - (1px + 10px + 5px) == 54px;
-      assertTrue(
-          'Background image position should be adjusted correctly',
-          /body{[^{]*background-position:31px54px/.test(normalizedCssText));
-    }
+    // Expected x position is:
+    // originalBackgroundPositionX - elementOffsetLeft
+    // 40px - (1px + 8px) == 31px
+    // Expected y position is:
+    // originalBackgroundPositionY - elementOffsetLeft
+    // 70px - (1px + 10px + 5px) == 54px;
+    assertTrue(
+        'Background image position should be adjusted correctly',
+        /body{[^{]*background-position:31px54px/.test(normalizedCssText));
   },
 
   testCopyBackgroundContextFromIframe() {
@@ -260,27 +252,23 @@ testSuite({
     assertTrue(
         'Background image should be copied from ancestor element',
         /body{[^{]*background-image:url\(/.test(normalizedCssText));
-    // Background-position can't be calculated in FF2, due to this bug:
-    // http://bugzilla.mozilla.org/show_bug.cgi?id=316981
-    if (!(userAgent.GECKO && !userAgent.isVersionOrHigher('1.9'))) {
-      // Image offset should have been calculated to be the same as the
-      // above example, but adding iframe offset and borderWidth.
-      // Expected x position is:
-      // originalBackgroundPositionX - elementOffsetLeft
-      // 40px - (1px + 8px + 5px + 2px) == 24px
-      // Expected y position is:
-      // originalBackgroundPositionY - elementOffsetLeft
-      // 70px - (1px + 10px + 5px + 5px + 2px) == 47px;
-      assertTrue(
-          'Background image position should be adjusted correctly',
-          !!/body{[^{]*background-position:24px47px/.exec(normalizedCssText));
-    }
+    // Image offset should have been calculated to be the same as the
+    // above example, but adding iframe offset and borderWidth.
+    // Expected x position is:
+    // originalBackgroundPositionX - elementOffsetLeft
+    // 40px - (1px + 8px + 5px + 2px) == 24px
+    // Expected y position is:
+    // originalBackgroundPositionY - elementOffsetLeft
+    // 70px - (1px + 10px + 5px + 5px + 2px) == 47px;
+    assertTrue(
+        'Background image position should be adjusted correctly',
+        !!/body{[^{]*background-position:24px47px/.exec(normalizedCssText));
+
     iframe.parentNode.removeChild(iframe);
   },
 
   testCopyFontFaceRules() {
-    const isFontFaceCssomSupported = userAgent.WEBKIT || userAgent.OPERA ||
-        (userAgent.GECKO && userAgent.isVersionOrHigher('1.9.1'));
+    const isFontFaceCssomSupported = userAgent.WEBKIT || userAgent.GECKO;
     // We cannot use goog.testing.ExpectedFailures since it dynamically
     // brings in CSS which causes the background context tests to fail
     // in IE6.

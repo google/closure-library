@@ -12,7 +12,6 @@ const TestHelper = goog.require('goog.testing.editor.TestHelper');
 const ToolbarFactory = goog.require('goog.ui.editor.ToolbarFactory');
 const dom = goog.require('goog.dom');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
 let helper;
 let expectedFailures;
@@ -44,9 +43,7 @@ testSuite({
    */
   testGetLegacySizeFromPx() {
     // We will be warned if other browsers start behaving like webkit pre-534.7.
-    expectedFailures.expectFailureFor(
-        !userAgent.WEBKIT ||
-        (userAgent.WEBKIT && userAgent.isVersionOrHigher('534.7')));
+    expectedFailures.expectFailureFor(true);
     try {
       const fieldElem = dom.getElement('myField');
       // Start from 1 because size 0 is bogus (becomes 16px, legacy size 3).

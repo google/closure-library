@@ -77,7 +77,6 @@
  * If you need to change this algorithm, please note the OS, browser, language,
  * and behavior above so that we can avoid regressions. Contact mpd or yuzo
  * if you have questions or concerns.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 
@@ -97,7 +96,6 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.string');
 goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
 goog.requireType('goog.events.BrowserEvent');
 goog.requireType('goog.events.Event');
 goog.requireType('goog.events.EventTarget');
@@ -212,10 +210,7 @@ goog.inherits(goog.ui.ac.InputHandler, goog.Disposable);
  * @type {boolean}
  * @private
  */
-goog.ui.ac.InputHandler.REQUIRES_ASYNC_BLUR_ =
-    (goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &&
-    // Check the webkit version against the version for iOS 4.2.1.
-    !goog.userAgent.isVersionOrHigher('533.17.9');
+goog.ui.ac.InputHandler.REQUIRES_ASYNC_BLUR_ = false;
 
 
 /**
@@ -602,8 +597,7 @@ goog.ui.ac.InputHandler.prototype.setTokenText = function(
       // to detect. Since text editing is finicky we restrict this
       // workaround to Firefox and IE 9 where it's necessary.
       // (Note: this has been fixed in Edge and since FF 41)
-      if (goog.userAgent.GECKO ||
-          (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9'))) {
+      if (goog.userAgent.GECKO || goog.userAgent.IE) {
         el.blur();
       }
       // Join the array and replace the contents of the input.

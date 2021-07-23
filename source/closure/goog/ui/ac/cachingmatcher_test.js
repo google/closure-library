@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ * @suppress {missingRequire} Stubbing goog.async.Throttle
  */
 
 goog.module('goog.ui.ac.CachingMatcherTest');

@@ -8,10 +8,8 @@ goog.module('goog.ui.CharCounterTest');
 goog.setTestOnly();
 
 const CharCounter = goog.require('goog.ui.CharCounter');
-const asserts = goog.require('goog.testing.asserts');
 const dom = goog.require('goog.dom');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
 let charCounter;
 let countElement;
@@ -164,43 +162,22 @@ testSuite({
     const newLineContentLength = newLineContent.length;
     const remainingNewLineContentLength = maxLength - newLineContentLength;
 
-    const carriageReturnContent = 'New\r\nline';
-    const carriageReturnContentLength = carriageReturnContent.length;
-    const remainingCarriageReturnContentLength =
-        maxLength - carriageReturnContentLength;
-
     // Set some content with new line characters and test the characters
     // remaining in DOM
     setupCheckLength(newLineContent, remaining);
 
-    // Test for IE 7,8 which appends \r to \n
-    if (userAgent.IE && !userAgent.isVersionOrHigher('9.0')) {
-      assertEquals(carriageReturnContent, inputElement.value);
-      assertEquals(
-          remainingCarriageReturnContentLength.toString(),
-          dom.getTextContent(countElement));
-    } else {
-      assertEquals(newLineContent, inputElement.value);
-      assertEquals(
-          remainingNewLineContentLength.toString(),
-          dom.getTextContent(countElement));
-    }
+    assertEquals(newLineContent, inputElement.value);
+    assertEquals(
+        remainingNewLineContentLength.toString(),
+        dom.getTextContent(countElement));
 
     // Set some content with new line characters and test the characters
     // incremental in DOM
     setupCheckLength(newLineContent, incremental);
 
-    // Test for IE 7,8 which appends \r to \n
-    if (userAgent.IE && !userAgent.isVersionOrHigher('9.0')) {
-      assertEquals(carriageReturnContent, inputElement.value);
-      assertEquals(
-          carriageReturnContentLength.toString(),
-          dom.getTextContent(countElement));
-    } else {
-      assertEquals(newLineContent, inputElement.value);
-      assertEquals(
-          newLineContentLength.toString(), dom.getTextContent(countElement));
-    }
+    assertEquals(newLineContent, inputElement.value);
+    assertEquals(
+        newLineContentLength.toString(), dom.getTextContent(countElement));
   },
 
   /**
@@ -213,43 +190,24 @@ testSuite({
     const remainingNewLineContentLength = maxLength - newLineContentLength;
 
     const carriageReturnContent = 'New\r\nline';
-    const carriageReturnContentLength = carriageReturnContent.length;
-    const remainingCarriageReturnContentLength =
-        maxLength - carriageReturnContentLength;
 
     // Set some content with carriage return characters and test the
     // characters remaining in DOM
     setupCheckLength(carriageReturnContent, remaining);
 
-    // Test for IE 7,8
-    if (userAgent.IE && !userAgent.isVersionOrHigher('9.0')) {
-      assertEquals(carriageReturnContent, inputElement.value);
-      assertEquals(
-          remainingCarriageReturnContentLength.toString(),
-          dom.getTextContent(countElement));
-    } else {
-      // Others replace \r\n with \n
-      assertEquals(newLineContent, inputElement.value);
-      assertEquals(
-          remainingNewLineContentLength.toString(),
-          dom.getTextContent(countElement));
-    }
+    // Others replace \r\n with \n
+    assertEquals(newLineContent, inputElement.value);
+    assertEquals(
+        remainingNewLineContentLength.toString(),
+        dom.getTextContent(countElement));
 
     // Set some content with carriage return characters and test the
     // characters incremental in DOM
     setupCheckLength(carriageReturnContent, incremental);
 
-    // Test for IE 7,8
-    if (userAgent.IE && !userAgent.isVersionOrHigher('9.0')) {
-      assertEquals(carriageReturnContent, inputElement.value);
-      assertEquals(
-          carriageReturnContentLength.toString(),
-          dom.getTextContent(countElement));
-    } else {
-      // Others replace \r\n with \n
-      assertEquals(newLineContent, inputElement.value);
-      assertEquals(
-          newLineContentLength.toString(), dom.getTextContent(countElement));
-    }
+    // Others replace \r\n with \n
+    assertEquals(newLineContent, inputElement.value);
+    assertEquals(
+        newLineContentLength.toString(), dom.getTextContent(countElement));
   },
 });

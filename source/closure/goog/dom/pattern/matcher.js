@@ -7,7 +7,6 @@
 /**
  * @fileoverview DOM pattern matcher.  Allows for simple searching of DOM
  * using patterns descended from {@link goog.dom.pattern.AbstractPattern}.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.dom.pattern.Matcher');

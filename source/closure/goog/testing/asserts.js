@@ -40,15 +40,18 @@ if (typeof ArrayBuffer === 'function') {
 
 /**
  * @const {{
- *   String : PredicateFunctionType,
- *   Number : PredicateFunctionType,
- *   Boolean : PredicateFunctionType,
- *   Date : PredicateFunctionType,
- *   RegExp : PredicateFunctionType,
- *   Function : PredicateFunctionType
+ *   String : !PredicateFunctionType,
+ *   Number : !PredicateFunctionType,
+ *   Boolean : !PredicateFunctionType,
+ *   Date : !PredicateFunctionType,
+ *   RegExp : !PredicateFunctionType,
+ *   Function : !PredicateFunctionType,
+ *   TrustedHTML : !PredicateFunctionType,
+ *   TrustedScript : !PredicateFunctionType,
+ *   TrustedScriptURL : !PredicateFunctionType
  * }}
  */
-var PRIMITIVE_EQUALITY_PREDICATES = {
+const EQUALITY_PREDICATES = {
   'String': DOUBLE_EQUALITY_PREDICATE,
   'Number': DOUBLE_EQUALITY_PREDICATE,
   'Bigint': DOUBLE_EQUALITY_PREDICATE,
@@ -58,7 +61,10 @@ var PRIMITIVE_EQUALITY_PREDICATES = {
     return date1.getTime() == date2.getTime();
   },
   'RegExp': TO_STRING_EQUALITY_PREDICATE,
-  'Function': TO_STRING_EQUALITY_PREDICATE
+  'Function': TO_STRING_EQUALITY_PREDICATE,
+  'TrustedHTML': TO_STRING_EQUALITY_PREDICATE,
+  'TrustedScript': TO_STRING_EQUALITY_PREDICATE,
+  'TrustedScriptURL': TO_STRING_EQUALITY_PREDICATE
 };
 
 
@@ -821,16 +827,17 @@ goog.testing.asserts.findDifferences = function(
     seen2.pop();
   }
 
-  var equalityPredicate = opt_equalityPredicate || function(type, var1, var2) {
-    'use strict';
-    var typedPredicate = PRIMITIVE_EQUALITY_PREDICATES[type];
-    if (!typedPredicate) {
-      return goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS;
-    }
-    var equal = typedPredicate(var1, var2);
-    return equal ? goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL :
-                   goog.testing.asserts.getDefaultErrorMsg_(var1, var2);
-  };
+  const equalityPredicate =
+      opt_equalityPredicate || function(type, var1, var2) {
+        'use strict';
+        const typedPredicate = EQUALITY_PREDICATES[type];
+        if (!typedPredicate) {
+          return goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS;
+        }
+        const equal = typedPredicate(var1, var2);
+        return equal ? goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL :
+                       goog.testing.asserts.getDefaultErrorMsg_(var1, var2);
+      };
 
   /**
    * @param {*} var1 An item in the expected object.

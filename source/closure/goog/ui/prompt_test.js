@@ -4,11 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
- */
-
 goog.module('goog.ui.PromptTest');
 goog.setTestOnly();
 
@@ -17,6 +12,7 @@ const Dialog = goog.require('goog.ui.Dialog');
 const InputHandler = goog.require('goog.events.InputHandler');
 const KeyCodes = goog.require('goog.events.KeyCodes');
 const Prompt = goog.require('goog.ui.Prompt');
+const dispose = goog.require('goog.dispose');
 const events = goog.require('goog.testing.events');
 const functions = goog.require('goog.functions');
 const googString = goog.require('goog.string');
@@ -31,7 +27,7 @@ let prompt;
 function newPrompt() {
   prompt = new Prompt('title', 'Prompt:', (result) => {
     alert(`Result: ${result}`);
-    goog.dispose(prompt);
+    dispose(prompt);
   }, 'defaultValue');
   prompt.setVisible(true);
 }
@@ -41,7 +37,7 @@ testSuite({
   },
 
   tearDown() {
-    goog.dispose(prompt);
+    dispose(prompt);
   },
 
   /** @suppress {visibility} suppression added to enable type checking */
@@ -116,7 +112,7 @@ testSuite({
     events.fireBrowserEvent({'target': prompt.userInputEl_, 'type': 'input'});
     bidiInput.inputHandler_.dispatchEvent(InputHandler.EventType.INPUT);
     assertEquals('ltr', prompt.userInputEl_.dir);
-    goog.dispose(bidiInput);
+    dispose(bidiInput);
   },
 
   /**

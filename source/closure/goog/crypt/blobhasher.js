@@ -16,7 +16,6 @@
  * This implementation currently uses upcoming Chrome and Firefox prefixes,
  * plus the original Blob.slice specification, as implemented on Chrome 10
  * and Firefox 4.0.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.crypt.BlobHasher');

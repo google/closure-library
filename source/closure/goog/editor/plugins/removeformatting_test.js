@@ -25,8 +25,7 @@ let SAVED_HTML;
 let FIELDMOCK;
 let FORMATTER;
 let testHelper;
-let WEBKIT_BEFORE_CHROME_8;
-let WEBKIT_AFTER_CHROME_16;
+
 let WEBKIT_AFTER_CHROME_21;
 let insertImageBoldGarbage = '';
 let insertImageFontGarbage = '';
@@ -78,18 +77,11 @@ testSuite({
   shouldRunTests() {
     // This test has not yet been updated to run on IE8 and up. See
     // b/2997691.
-    return !userAgent.IE || !userAgent.isVersionOrHigher(8);
+    return !userAgent.IE;
   },
 
   setUpPage() {
-    WEBKIT_BEFORE_CHROME_8 =
-        userAgent.WEBKIT && !userAgent.isVersionOrHigher('534.10');
-
-    WEBKIT_AFTER_CHROME_16 =
-        userAgent.WEBKIT && userAgent.isVersionOrHigher('535.7');
-
-    WEBKIT_AFTER_CHROME_21 =
-        userAgent.WEBKIT && userAgent.isVersionOrHigher('537.1');
+    WEBKIT_AFTER_CHROME_21 = userAgent.WEBKIT;
     // On Chrome 16, execCommand('insertImage') inserts a garbage BR
     // after the image that we insert. We use this command to paste HTML
     // in-place, because it has better paragraph-preserving semantics.
@@ -99,9 +91,7 @@ testSuite({
     if (WEBKIT_AFTER_CHROME_21) {
       insertImageBoldGarbage = '<br>';
       insertImageFontGarbage = '<br>';
-    } else if (WEBKIT_AFTER_CHROME_16) {
-      insertImageBoldGarbage = '<b><br/></b>';
-      insertImageFontGarbage = '<font size="1"><br/></font>';
+
     } else if (userAgent.EDGE) {
       if (product.isVersion(14)) {
         insertImageFontGarbage = '<fontsize="-1"></fontsize="-1">';
@@ -241,10 +231,6 @@ testSuite({
   },
 
   testLinksAreNotRemoved() {
-    expectedFailures.expectFailureFor(
-        WEBKIT_BEFORE_CHROME_8,
-        'WebKit\'s removeFormatting command removes links.');
-
     let anchor;
     const div = document.getElementById('html');
     div.innerHTML = 'Foo<span id="link">Pre<a href="http://www.google.com">' +
@@ -279,15 +265,10 @@ testSuite({
     FORMATTER.removeFormatting_();
     // Webkit will change all tags to non-formatted ones anyway.
     // Make sure 'Foo' was changed to 'Bar'
-    if (WEBKIT_BEFORE_CHROME_8) {
-      assertHTMLEquals(
-          'regular cleaner should not have run', 'StartBar<br>Bar<br>Baz',
-          div.innerHTML);
-    } else {
-      assertHTMLEquals(
-          'regular cleaner should not have run', 'StartBar<pre>Bar</pre>Baz',
-          div.innerHTML);
-    }
+
+    assertHTMLEquals(
+        'regular cleaner should not have run', 'StartBar<pre>Bar</pre>Baz',
+        div.innerHTML);
   },
 
   testGetValueForNode() {
@@ -542,10 +523,6 @@ testSuite({
             3)
         .select();
 
-    expectedFailures.expectFailureFor(
-        WEBKIT_BEFORE_CHROME_8,
-        'WebKit just gets this all wrong.  Everything stays bold and ' +
-            '"lditalic" gets italicised.');
 
     expectedFailures.run(/**
                             @suppress {visibility} suppression added to enable
@@ -655,10 +632,6 @@ testSuite({
     Range.createFromNodeContents(div).select();
     FORMATTER.removeFormatting_();
 
-    expectedFailures.expectFailureFor(
-        WEBKIT_BEFORE_CHROME_8,
-        'WebKit removes the image entirely, see ' +
-            'https://bugs.webkit.org/show_bug.cgi?id=13125 .');
 
     expectedFailures.run(() => {
       assertHTMLEquals(
@@ -731,13 +704,7 @@ testSuite({
 
     Range.createFromNodeContents(dom.getElement('b')).select();
 
-    // Webkit adds some apple style span crap during
-    // execCommand("removeFormat") Our workaround for the nbsp bug removes
-    // these, but causes worse problems. See
-    // bugs.webkit.org/show_bug.cgi?id=29164 for more details.
-    expectedFailures.expectFailureFor(
-        WEBKIT_BEFORE_CHROME_8 && !BrowserFeature.ADDS_NBSPS_IN_REMOVE_FORMAT,
-        'Extra apple-style-spans');
+
 
     expectedFailures.run(/**
                             @suppress {visibility} suppression added to enable
@@ -1009,10 +976,6 @@ testSuite({
         'all 950 news articles&nbsp;�</b></nobr></a></font>';
     // Select it all.
     Range.createFromNodeContents(div).select();
-
-    expectedFailures.expectFailureFor(
-        WEBKIT_BEFORE_CHROME_8,
-        'WebKit barfs apple-style-spans all over the place, and removes links.');
 
     expectedFailures
         .run(/**

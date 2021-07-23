@@ -13,7 +13,7 @@ const Range = goog.require('goog.dom.Range');
 const TagName = goog.require('goog.dom.TagName');
 const dom = goog.require('goog.dom');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
+
 
 let anchor;
 
@@ -169,23 +169,17 @@ testSuite({
     assertTrue('Range should be collapsed', range.isCollapsed());
     const startNode = range.getStartNode();
 
-    if (userAgent.WEBKIT && !userAgent.isVersionOrHigher('528')) {
-      assertEquals(
-          'Selection should be to the right of the anchor', anchor,
-          startNode.previousSibling);
-    } else {
-      // Check that the selection is the "right" place.
-      //
-      // If you query the selection, it is actually still inside the anchor,
-      // but if you type, it types outside the anchor.
-      //
-      // Best we can do is test that it is at the end of the anchor text.
-      assertEquals(
-          'Selection should be in anchor text', anchor.firstChild, startNode);
-      assertEquals(
-          'Selection should be at the end of the text',
-          anchor.firstChild.length, range.getStartOffset());
-    }
+    // Check that the selection is the "right" place.
+    //
+    // If you query the selection, it is actually still inside the anchor,
+    // but if you type, it types outside the anchor.
+    //
+    // Best we can do is test that it is at the end of the anchor text.
+    assertEquals(
+        'Selection should be in anchor text', anchor.firstChild, startNode);
+    assertEquals(
+        'Selection should be at the end of the text', anchor.firstChild.length,
+        range.getStartOffset());
 
     if (ed) {
       dom.removeNode(ed);

@@ -26,18 +26,12 @@ let expectedFailures;
 
 /** @return {boolean} Whether we're on Mac Safari 3.x. */
 function isMacSafari3() {
-  return userAgent.WEBKIT && userAgent.MAC &&
-      !userAgent.isVersionOrHigher('527');
+  return false;
 }
 
 /** @return {boolean} Whether we're on Linux Firefox 3.6.3. */
 function isLinuxFirefox() {
   return product.FIREFOX && userAgent.LINUX;
-}
-
-/** @return {boolean} Whether we're on Firefox 3.0. */
-function isFirefox3() {
-  return userAgent.GECKO && !userAgent.isVersionOrHigher('1.9.1');
 }
 
 testSuite({
@@ -195,16 +189,11 @@ testSuite({
             'the minHeight.',
         50, textarea.getElement().offsetHeight);
 
-    expectedFailures.expectFailureFor(isMacSafari3());
-    try {
-      textarea.setMinHeight(0);
-      assertTrue(
-          'After setting minHeight to 0, offsetHeight should ' +
-              'now be < 50, but it is ' + textarea.getElement().offsetHeight,
-          textarea.getElement().offsetHeight < 50);
-    } catch (e) {
-      expectedFailures.handleException(e);
-    }
+    textarea.setMinHeight(0);
+    assertTrue(
+        'After setting minHeight to 0, offsetHeight should ' +
+            'now be < 50, but it is ' + textarea.getElement().offsetHeight,
+        textarea.getElement().offsetHeight < 50);
   },
 
   /** @suppress {visibility} suppression added to enable type checking */

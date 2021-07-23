@@ -7,7 +7,6 @@
 /**
  * @fileoverview Default renderer for {@link goog.ui.Tab}s.  Based on the
  * original `TabPane` code.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.TabRenderer');

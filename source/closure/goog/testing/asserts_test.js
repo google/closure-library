@@ -20,7 +20,6 @@ const googArray = goog.require('goog.array');
 const product = goog.require('goog.userAgent.product');
 const testSuite = goog.require('goog.testing.testSuite');
 const throwException = goog.require('goog.async.throwException');
-const userAgent = goog.require('goog.userAgent');
 
 const SUPPORTS_TYPED_ARRAY =
     typeof Uint8Array === 'function' && typeof Uint8Array.of === 'function';
@@ -392,6 +391,19 @@ testSuite({
     assertThrowsJsUnitException(() => {
       assertObjectEquals(obj5, obj4);
     });
+
+    // Check with identical Trusted Types instances.
+    if (typeof window.trustedTypes !== 'undefined') {
+      const policy = trustedTypes.createPolicy('testAssertObjectEquals', {
+        createHTML: (s) => {
+          return s;
+        }
+      });
+
+      const tt1 = policy.createHTML('hello');
+      const tt2 = policy.createHTML('hello');
+      assertObjectEquals(tt1, tt2);
+    }
   },
 
   testAssertObjectNotEquals() {
@@ -431,6 +443,19 @@ testSuite({
     if (SUPPORTS_TYPED_ARRAY) {
       assertObjectNotEquals(
           new Uint32Array([1, 2, 3]), new Uint32Array([1, 4, 3]));
+    }
+
+    // Check with different Trusted Types instances.
+    if (typeof window.trustedTypes !== 'undefined') {
+      const policy = trustedTypes.createPolicy('testAssertObjectNotEquals', {
+        createHTML: (s) => {
+          return s;
+        }
+      });
+
+      const tt1 = policy.createHTML('hello');
+      const tt2 = policy.createHTML('world');
+      assertObjectNotEquals(tt1, tt2);
     }
   },
 
@@ -1617,21 +1642,6 @@ testSuite({
     //    createBinTree(5, null), createBinTree(5, null)));
     assertNotNull(asserts.findDifferences(
         createBinTree(4, null), createBinTree(5, null)));
-  },
-
-  /**
-     @suppress {strictMissingProperties} suppression added to enable type
-     checking
-   */
-  testStringForWindowIE() {
-    if (userAgent.IE && !userAgent.isVersionOrHigher('8')) {
-      // NOTE(user): This test sees of we are being affected by a JScript
-      // bug in try/finally handling. This bug only affects the lowest
-      // try/finally block in the stack. Calling this function via VBScript
-      // allows us to run the test synchronously in an empty JS stack.
-      window.execScript('stringForWindowIEHelper()', 'vbscript');
-      assertEquals('<[object]> (Object)', window.stringForWindowIEResult);
-    }
   },
 
   testStringSamePrefix() {

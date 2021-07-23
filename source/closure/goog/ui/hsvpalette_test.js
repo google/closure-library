@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
+ * @suppress {missingRequire} Stubbing goog.dom
  */
 
 goog.module('goog.ui.HsvPaletteTest');
@@ -23,7 +23,6 @@ const events = goog.require('goog.events');
 const googColor = goog.require('goog.color');
 const style = goog.require('goog.style');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
 let samplePalette;
 let eventWasFired;
@@ -136,16 +135,9 @@ testSuite({
     assertNotNull(elem);
     assertEquals(String(TagName.DIV), elem.tagName);
 
-    if (userAgent.IE && !userAgent.isVersionOrHigher('7')) {
-      assertSameElements(
-          'On IE6, the noalpha class must be present',
-          ['goog-hsv-palette', 'goog-hsv-palette-noalpha'],
-          classlist.get(elem));
-    } else {
-      assertEquals(
-          'The noalpha class must not be present', 'goog-hsv-palette',
-          elem.className);
-    }
+    assertEquals(
+        'The noalpha class must not be present', 'goog-hsv-palette',
+        elem.className);
   },
 
   testRenderWithEnableBrowserSpellcheckOnInputFalse() {

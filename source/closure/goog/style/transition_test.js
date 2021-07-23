@@ -90,12 +90,12 @@ testSuite({
 
     // IE support starts at IE10.
     if (userAgent.IE) {
-      assertEquals(userAgent.isVersionOrHigher('10.0'), support);
+      assertEquals(true, support);
     }
 
     // FF support start at FF4 (Gecko 2.0)
     if (userAgent.GECKO) {
-      assertEquals(userAgent.isVersionOrHigher('2.0'), support);
+      assertEquals(true, support);
     }
 
     // Webkit support has existed for a long time, we assume support on

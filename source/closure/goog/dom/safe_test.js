@@ -851,10 +851,6 @@ testSuite({
   },
 
   testCreateImageFromBlob() {
-    // Skip unsupported test if IE9 or lower.
-    if (userAgent.IE && !userAgent.isVersionOrHigher('10')) {
-      return;
-    }
     const blob = new Blob(['data'], {type: 'image/svg+xml'});
     const fakeObjectUrl = 'blob:http://fakeurl.com';
     const mockCreateObject = /** @type {?} */ (

@@ -10,7 +10,6 @@
  *
  * This is a based on the webfx tree control. See file comment in
  * treecontrol.js.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.tree.TreeNode');

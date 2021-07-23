@@ -46,10 +46,8 @@ let testArea;
 /** This is used to round pixel values on FF3 Mac. */
 function assertRoundedEquals(a, b, c) {
   function round(x) {
-    return userAgent.GECKO && (userAgent.MAC || userAgent.X11) &&
-            userAgent.isVersionOrHigher('1.9') ?
-        Math.round(x) :
-        x;
+    return userAgent.GECKO && (userAgent.MAC || userAgent.X11) ? Math.round(x) :
+                                                                 x;
   }
   if (arguments.length == 3) {
     assertRoughlyEquals(a, round(b), round(c), ALLOWED_OFFSET);
@@ -344,7 +342,7 @@ testSuite({
   },
 
   testPositionAtAnchorRightToLeft() {
-    if (userAgent.IE && userAgent.isVersionOrHigher('6')) {
+    if (userAgent.IE) {
       // These tests fails with IE6.
       // TODO(user): Investigate the reason.
       return;
@@ -387,7 +385,7 @@ testSuite({
   },
 
   testPositionAtAnchorRightToLeftWithScroll() {
-    if (userAgent.IE && userAgent.isVersionOrHigher('6')) {
+    if (userAgent.IE) {
       // These tests fails with IE6.
       // TODO(user): Investigate the reason.
       return;

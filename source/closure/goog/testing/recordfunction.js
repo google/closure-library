@@ -30,7 +30,6 @@
  *   assertEquals('confirm', lastDialogInstance.getTitle());
  * }
  * </pre>
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.setTestOnly('goog.testing.FunctionCall');

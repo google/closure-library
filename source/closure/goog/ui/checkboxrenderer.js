@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Default renderer for {@link goog.ui.Checkbox}s.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.ui.CheckboxRenderer');

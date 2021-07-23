@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Unit tests for the abstract cryptographic hash interface.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.provide('goog.crypt.hashTester');

@@ -511,17 +511,9 @@ testSuite({
 
     const newRange = Range.createFromWindow(window);
 
-    // In Chrome 14 and below (<= Webkit 535.1), newRange will be null.
-    // In Chrome 16 and above (>= Webkit 535.7), newRange will be collapsed
-    // like on other browsers.
-    // We didn't bother testing in between.
-    if (userAgent.WEBKIT && !userAgent.isVersionOrHigher('535.7')) {
-      assertNull('Webkit supports rangeCount == 0', newRange);
-    } else {
-      assertTrue(
-          'The other browsers will just have an empty range.',
-          newRange.isCollapsed());
-    }
+    assertTrue(
+        'The other browsers will just have an empty range.',
+        newRange.isCollapsed());
   },
 
   testReversedRange() {
@@ -675,7 +667,7 @@ testSuite({
 
     const range = Range.createFromWindow();
     assertFalse('Should not contain whole <br>', range.containsNode(br, false));
-    const isSafari3 = userAgent.WEBKIT && !userAgent.isVersionOrHigher('528');
+    const isSafari3 = false;
 
     if (userAgent.IE && !userAgent.isDocumentModeOrHigher(9) || isSafari3) {
       assertTrue(

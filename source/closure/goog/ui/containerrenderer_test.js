@@ -79,11 +79,6 @@ testSuite({
         'Container must not have any tab index',
         dom.isFocusableTabIndex(container));
 
-    // WebKit on Mac doesn't support tabIndex for arbitrary DOM elements
-    // until version 527 or later.
-    expectedFailures.expectFailureFor(
-        userAgent.WEBKIT && userAgent.MAC &&
-        !userAgent.isVersionOrHigher('527'));
     try {
       renderer.enableTabIndex(container, true);
       assertTrue(

@@ -12,7 +12,6 @@
  *
  * This file does not compile correctly with --collapse_properties. Use
  * --property_renaming=ALL_UNQUOTED instead.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 
 goog.setTestOnly('goog.testing.TestCase');

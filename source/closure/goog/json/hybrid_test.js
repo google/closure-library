@@ -14,7 +14,6 @@ const googJson = goog.require('goog.json');
 const hybrid = goog.require('goog.json.hybrid');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
 const propertyReplacer = new PropertyReplacer();
 
@@ -22,10 +21,6 @@ let jsonParse;
 let jsonStringify;
 let googJsonParse;
 let googJsonSerialize;
-
-function isIe7() {
-  return userAgent.IE && !userAgent.isVersionOrHigher('8');
-}
 
 function parseJson() {
   const obj = hybrid.parse('{"a": 2}');
@@ -60,22 +55,12 @@ testSuite({
   },
 
   testParseNativeJsonPresent() {
-    // No native JSON in IE7
-    if (isIe7()) {
-      return;
-    }
-
     parseJson();
     assertEquals(1, jsonParse.getCallCount());
     assertEquals(0, googJsonParse.getCallCount());
   },
 
   testStringifyNativeJsonPresent() {
-    // No native JSON in IE7
-    if (isIe7()) {
-      return;
-    }
-
     serializeJson();
 
     assertEquals(1, jsonStringify.getCallCount());
@@ -103,13 +88,13 @@ testSuite({
 
   testParseCurrentBrowserParse() {
     parseJson();
-    assertEquals(isIe7() ? 0 : 1, jsonParse.getCallCount());
-    assertEquals(isIe7() ? 1 : 0, googJsonParse.getCallCount());
+    assertEquals(1, jsonParse.getCallCount());
+    assertEquals(0, googJsonParse.getCallCount());
   },
 
   testParseCurrentBrowserStringify() {
     serializeJson();
-    assertEquals(isIe7() ? 0 : 1, jsonStringify.getCallCount());
-    assertEquals(isIe7() ? 1 : 0, googJsonSerialize.getCallCount());
+    assertEquals(1, jsonStringify.getCallCount());
+    assertEquals(0, googJsonSerialize.getCallCount());
   },
 });

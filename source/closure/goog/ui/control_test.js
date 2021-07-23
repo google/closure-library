@@ -122,12 +122,6 @@ function fireMouseDownAndFocus(element, button = undefined) {
   return result;
 }
 
-/** @return {boolean} Whether we're on Mac Safari 3.x. */
-function isMacSafari3() {
-  return userAgent.WEBKIT && userAgent.MAC &&
-      !userAgent.isVersionOrHigher('527');
-}
-
 function assertClickSequenceFires(msg) {
   const actionCount = getEventCount(control, Component.EventType.ACTION);
   testingEvents.fireClickSequence(control.getKeyEventTarget());
@@ -624,15 +618,9 @@ testSuite({
         'Control\'s key event handler must be attached to its ' +
             'key event target',
         control.getKeyEventTarget(), control.getKeyHandler().element_);
-    // Expected to fail on Mac Safari prior to version 527.
-    expectedFailures.expectFailureFor(isMacSafari3());
-    try {
-      assertTrue(
-          'Control\'s element must support keyboard focus',
-          dom.isFocusableTabIndex(control.getKeyEventTarget()));
-    } catch (e) {
-      expectedFailures.handleException(e);
-    }
+    assertTrue(
+        'Control\'s element must support keyboard focus',
+        dom.isFocusableTabIndex(control.getKeyEventTarget()));
 
     control.exitDocument();
     assertFalse(
@@ -1092,17 +1080,11 @@ testSuite({
     assertTrue('Control must be visible', control.isVisible());
 
     if (testFocus) {
-      // Expected to fail on Mac Safari prior to version 527.
-      expectedFailures.expectFailureFor(isMacSafari3());
-      try {
-        // Mac Safari currently doesn't support tabIndex on arbitrary
-        // elements.
-        assertTrue(
-            'Control must have a tab index',
-            dom.isFocusableTabIndex(control.getKeyEventTarget()));
-      } catch (e) {
-        expectedFailures.handleException(e);
-      }
+      // Mac Safari currently doesn't support tabIndex on arbitrary
+      // elements.
+      assertTrue(
+          'Control must have a tab index',
+          dom.isFocusableTabIndex(control.getKeyEventTarget()));
 
       // Visible, enabled, focusable control becoming hidden.
       control.getKeyEventTarget().focus();
@@ -1174,12 +1156,7 @@ testSuite({
       // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
       // asynchronously, and Mac Safari 3 doesn't support keyboard focus.
       expectedFailures.expectFailureFor(userAgent.IE);
-      expectedFailures.expectFailureFor(isMacSafari3());
-      try {
-        assertTrue('Control must be focused', control.isFocused());
-      } catch (e) {
-        expectedFailures.handleException(e);
-      }
+      assertTrue('Control must be focused', control.isFocused());
     }
 
     resetEventCount();
@@ -1252,7 +1229,6 @@ testSuite({
       // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
       // asynchronously, and Mac Safari 3 doesn't support keyboard focus.
       expectedFailures.expectFailureFor(userAgent.IE);
-      expectedFailures.expectFailureFor(isMacSafari3());
       try {
         assertTrue('Control must be focused', control.isFocused());
       } catch (e) {
@@ -2273,7 +2249,6 @@ testSuite({
       // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
       // asynchronously, and Mac Safari 3 doesn't support keyboard focus.
       expectedFailures.expectFailureFor(userAgent.IE);
-      expectedFailures.expectFailureFor(isMacSafari3());
       try {
         assertTrue('Control must be focused', control.isFocused());
       } catch (e) {
@@ -2310,7 +2285,6 @@ testSuite({
       // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
       // asynchronously, and Mac Safari 3 doesn't support keyboard focus.
       expectedFailures.expectFailureFor(userAgent.IE);
-      expectedFailures.expectFailureFor(isMacSafari3());
       try {
         assertTrue('Control must be focused', control.isFocused());
       } catch (e) {
@@ -2333,7 +2307,6 @@ testSuite({
       // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
       // asynchronously, and Mac Safari 3 doesn't support keyboard focus.
       expectedFailures.expectFailureFor(userAgent.IE);
-      expectedFailures.expectFailureFor(isMacSafari3());
       try {
         assertTrue('Control must be focused', control.isFocused());
       } catch (e) {
@@ -2356,7 +2329,6 @@ testSuite({
       // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
       // asynchronously, and Mac Safari 3 doesn't support keyboard focus.
       expectedFailures.expectFailureFor(userAgent.IE);
-      expectedFailures.expectFailureFor(isMacSafari3());
       try {
         assertTrue('Control must be focused', control.isFocused());
       } catch (e) {
@@ -2389,7 +2361,6 @@ testSuite({
   //  // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
   //  // asynchronously, and Mac Safari 3 doesn't support keyboard focus.
   //  expectedFailures.expectFailureFor(goog.userAgent.IE);
-  //  expectedFailures.expectFailureFor(isMacSafari3());
   //  try {
   //    assertTrue('Control must be focused', control.isFocused());
   //  } catch (e) {

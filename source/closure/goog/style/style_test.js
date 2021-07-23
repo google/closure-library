@@ -38,8 +38,6 @@ const util = goog.require('goog.labs.userAgent.util');
 jsunit.AUTO_RUN_DELAY_IN_MS = 500;
 
 const isBorderBox = !googDom.isCss1CompatMode();
-// IE9 and below throw an error if provided a unit other than 'px'.
-const crashesOnBadUnits = userAgent.IE && !userAgent.isVersionOrHigher('10');
 const EPSILON = 2;
 let expectedFailures;
 const $ = googDom.getElement;
@@ -386,9 +384,7 @@ testSuite({
 
     // ignores bad units
     googStyle.setPosition(el, 0, 0);
-    if (!crashesOnBadUnits) {
-      googStyle.setPosition(el, '10rainbows', '25rainbows');
-    }
+    googStyle.setPosition(el, '10rainbows', '25rainbows');
     assertEquals('0px', el.style.left);
     assertEquals('0px', el.style.top);
 
@@ -439,10 +435,9 @@ testSuite({
       assertEquals(2000, pos.x);
       assertEquals(2000, pos.y);
 
-      // The following tests do not work in Gecko 1.8 and below, due to an
-      // obscure off-by-one bug in goog.style.getPageOffset.  Same for IE.
-      if (!userAgent.IE &&
-          !(userAgent.GECKO && !userAgent.isVersionOrHigher('1.9'))) {
+      // The following tests do not work in IE, due to an
+      // obscure off-by-one bug in goog.style.getPageOffset.
+      if (!userAgent.IE) {
         window.scroll(1, 1);
         let pos = googStyle.getClientPosition(div);
         assertEquals(1999, pos.x);
@@ -591,15 +586,8 @@ testSuite({
       div.style.borderWidth = '3px';
       document.body.appendChild(div);
       const pos = googStyle.getPageOffset(div);
-      // FF3 (but not beyond) gets confused by document margins.
-      if (userAgent.GECKO && userAgent.isVersionOrHigher('1.9') &&
-          !userAgent.isVersionOrHigher('1.9.1')) {
-        assertEquals(141, pos.x);
-        assertEquals(241, pos.y);
-      } else {
-        assertRoughlyEquals(101, pos.x, 0.1);
-        assertRoughlyEquals(201, pos.y, 0.1);
-      }
+      assertRoughlyEquals(101, pos.x, 0.1);
+      assertRoughlyEquals(201, pos.y, 0.1);
     } finally {
       document.body.removeChild(div);
       document.documentElement.style.margin = '';
@@ -620,10 +608,9 @@ testSuite({
       assertEquals(10000, pos.x);
       assertEquals(20000, pos.y);
 
-      // The following tests do not work in Gecko 1.8 and below, due to an
-      // obscure off-by-one bug in goog.style.getPageOffset.  Same for IE.
-      if (!(userAgent.IE) &&
-          !(userAgent.GECKO && !userAgent.isVersionOrHigher('1.9'))) {
+      // The following tests do not work in IE, due to an
+      // obscure off-by-one bug in goog.style.getPageOffset.
+      if (!userAgent.IE) {
         window.scroll(1, 1);
         pos = googStyle.getPageOffset(div);
         assertEquals(10000, pos.x);
@@ -650,7 +637,7 @@ testSuite({
   testGetPageOffsetFixedPositionElements() {
     // Skip these tests in certain browsers.
     // position:fixed is not supported in IE before version 7
-    if (!userAgent.IE || !userAgent.isVersionOrHigher('6')) {
+    if (!userAgent.IE) {
       // Test with a position fixed element
       let div = googDom.createDom(TagName.DIV);
       div.style.position = 'fixed';
@@ -729,9 +716,7 @@ testSuite({
 
     // ignores bad units
     googStyle.setSize(el, 0, 0);
-    if (!crashesOnBadUnits) {
-      googStyle.setSize(el, '10rainbows', '25rainbows');
-    }
+    googStyle.setSize(el, '10rainbows', '25rainbows');
     assertEquals('0px', el.style.width);
     assertEquals('0px', el.style.height);
 

@@ -13,7 +13,6 @@
  * vectors as follows: resultVec = matrix * vec.
  *
  * The matrices are stored in column-major order.
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
  */
 goog.provide('goog.vec.Mat3');
 

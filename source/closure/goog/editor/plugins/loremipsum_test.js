@@ -14,7 +14,6 @@ const SafeHtml = goog.require('goog.html.SafeHtml');
 const Unicode = goog.require('goog.string.Unicode');
 const dom = goog.require('goog.dom');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
 let FIELD;
 let PLUGIN;
@@ -22,12 +21,7 @@ let HTML;
 const UPPERCASE_CONTENTS = '<P>THE OWLS ARE NOT WHAT THEY SEEM.</P>';
 
 function getNbsp() {
-  // On WebKit (pre-528) and Opera, &nbsp; shows up as its unicode character in
-  // innerHTML under some circumstances.
-  return (userAgent.WEBKIT && !userAgent.isVersionOrHigher('528')) ||
-          userAgent.OPERA ?
-      '\u00a0' :
-      '&nbsp;';
+  return '&nbsp;';
 }
 testSuite({
   setUp() {

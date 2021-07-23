@@ -182,14 +182,6 @@ function doTestPlaceCursorAtStart(html = undefined, parentId = undefined) {
   let startNode = parentId ?
       editableField.getEditableDomHelper().getElement(parentId).firstChild :
       textNode ? textNode : editableField.getElement();
-  if (userAgent.WEBKIT && !userAgent.isVersionOrHigher('528')) {
-    // Safari 3 seems to normalize the selection to the shallowest endpoint (in
-    // this case the editable element) in all cases tested below. This is OK
-    // because when you start typing it magically inserts the text at the
-    // deepest endpoint, and even behaves as desired in the case tested by
-    // testPlaceCursorAtStartNonImportantTextNode.
-    startNode = editableField.getElement();
-  }
   assertEquals(
       'The range should start at the specified expected node', startNode,
       range.getStartNode());

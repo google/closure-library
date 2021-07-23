@@ -4,14 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview
- * @suppress {missingRequire} TODO(user): this shouldn't be needed
- */
-
 goog.module('goog.ui.MenuButtonRendererTest');
 goog.setTestOnly();
 
+const Button = goog.require('goog.ui.Button');
 const MenuButton = goog.require('goog.ui.MenuButton');
 const MenuButtonRenderer = goog.require('goog.ui.MenuButtonRenderer');
 const State = goog.require('goog.a11y.aria.State');
@@ -36,7 +32,7 @@ function assertButtonsEqual() {
 
 /**
  * Render the given button as a child of 'parent'.
- * @param {goog.ui.Button} button A button with content 'Foo'.
+ * @param {?Button} button A button with content 'Foo'.
  */
 function renderOnParent(button) {
   button.render(dom.getElement('parent'));
@@ -44,7 +40,7 @@ function renderOnParent(button) {
 
 /**
  * Decaorate the button with id 'button'.
- * @param {goog.ui.Button} button A button with no content.
+ * @param {?Button} button A button with no content.
  */
 function decorateDemoButton(button) {
   button.decorate(dom.getElement('decoratedButton'));
@@ -53,7 +49,7 @@ function decorateDemoButton(button) {
 /**
  * Verify that the button's caption is never the direct
  * child of an inline-block element.
- * @param {goog.ui.Button} button A button.
+ * @param {?Button} button A button.
  */
 function checkButtonCaption(button) {
   let contentElement = button.getContentElement();
@@ -70,7 +66,7 @@ function checkButtonCaption(button) {
 
 /**
  * Verify that the menu button has the correct ARIA attributes
- * @param {goog.ui.Button} button A button.
+ * @param {?Button} button A button.
  * @suppress {checkTypes} suppression added to enable type checking
  */
 function checkAriaState(button) {

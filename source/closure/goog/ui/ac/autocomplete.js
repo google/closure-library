@@ -537,6 +537,7 @@ goog.ui.ac.AutoComplete.prototype.setTarget = function(target) {
 
 /**
  * @return {boolean} Whether the autocomplete's renderer is open.
+ * @suppress {missingProperties}
  */
 goog.ui.ac.AutoComplete.prototype.isOpen = function() {
   'use strict';
@@ -820,6 +821,7 @@ goog.ui.ac.AutoComplete.prototype.matchListener_ = function(
  * @param {(boolean|goog.ui.ac.RenderOptions)=} opt_options If true,
  *     keeps the currently hilited (by index) element hilited. If false not.
  *     Otherwise a RenderOptions object.
+ * @suppress {missingProperties}
  */
 goog.ui.ac.AutoComplete.prototype.renderRows = function(rows, opt_options) {
   'use strict';
