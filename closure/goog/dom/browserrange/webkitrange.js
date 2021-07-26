@@ -14,9 +14,7 @@
 
 goog.provide('goog.dom.browserrange.WebKitRange');
 
-goog.require('goog.dom.RangeEndpoint');
 goog.require('goog.dom.browserrange.W3cRange');
-goog.require('goog.userAgent');
 
 
 
@@ -68,25 +66,9 @@ goog.dom.browserrange.WebKitRange.createFromNodes = function(
 goog.dom.browserrange.WebKitRange.prototype.compareBrowserRangeEndpoints =
     function(range, thisEndpoint, otherEndpoint) {
   'use strict';
-  // Webkit pre-528 has some bugs where compareBoundaryPoints() doesn't work the
-  // way it is supposed to, but if we reverse the sense of two comparisons,
-  // it works fine.
-  // https://bugs.webkit.org/show_bug.cgi?id=20738
-  if (goog.userAgent.isVersionOrHigher('528')) {
-    return (
-        goog.dom.browserrange.WebKitRange.superClass_
-            .compareBrowserRangeEndpoints.call(
-                this, range, thisEndpoint, otherEndpoint));
-  }
-  return this.range_.compareBoundaryPoints(
-      otherEndpoint == goog.dom.RangeEndpoint.START ?
-          (thisEndpoint == goog.dom.RangeEndpoint.START ?
-               goog.global['Range'].START_TO_START :
-               goog.global['Range'].END_TO_START) :  // Sense reversed
-          (thisEndpoint == goog.dom.RangeEndpoint.START ?
-               goog.global['Range'].START_TO_END :  // Sense reversed
-               goog.global['Range'].END_TO_END),
-      /** @type {Range} */ (range));
+  return (
+      goog.dom.browserrange.WebKitRange.superClass_.compareBrowserRangeEndpoints
+          .call(this, range, thisEndpoint, otherEndpoint));
 };
 
 
