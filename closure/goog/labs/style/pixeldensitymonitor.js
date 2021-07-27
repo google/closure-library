@@ -73,6 +73,16 @@ goog.labs.style.PixelDensityMonitor = function(opt_domHelper) {
       this.window_.matchMedia(
           goog.labs.style.PixelDensityMonitor.HIGH_DENSITY_QUERY_) :
       null;
+
+  /**
+   * TODO(user): Migrate pixeldensitymonitor to support addEventListener
+   * The Cobalt browser (https://cobalt.dev/) doesn't implement the deprecated
+   * `addListener` method and requires additional handling.
+   */
+  if (this.mediaQueryList_ &&
+      typeof this.mediaQueryList_.addListener !== 'function') {
+    this.mediaQueryList_ = null;
+  }
 };
 goog.inherits(goog.labs.style.PixelDensityMonitor, goog.events.EventTarget);
 
