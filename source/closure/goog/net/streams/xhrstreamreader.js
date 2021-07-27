@@ -128,18 +128,6 @@ class XhrStreamReader {
       return false;
     }
 
-    if (googUserAgent.WEBKIT && !googUserAgent.isVersionOrHigher('420+')) {
-      // Safari 3+
-      // Older versions of Safari always receive null response in INTERACTIVE.
-      return false;
-    }
-
-    if (googUserAgent.OPERA && !googUserAgent.WEBKIT) {
-      // Old Opera fires readyState == INTERACTIVE once.
-      // TODO(user): polling the buffer and check the exact Opera version
-      return false;
-    }
-
     return true;
   }
 
