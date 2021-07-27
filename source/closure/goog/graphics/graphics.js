@@ -57,9 +57,7 @@ goog.graphics.createGraphics = function(
                                  .createElementNS)) {
     graphics = new goog.graphics.VmlGraphics(
         width, height, opt_coordWidth, opt_coordHeight, opt_domHelper);
-  } else if (
-      goog.userAgent.WEBKIT &&
-      (!goog.userAgent.isVersionOrHigher('420') || goog.userAgent.MOBILE)) {
+  } else if (goog.userAgent.WEBKIT && goog.userAgent.MOBILE) {
     graphics = new goog.graphics.CanvasGraphics(
         width, height, opt_coordWidth, opt_coordHeight, opt_domHelper);
   } else {
@@ -96,15 +94,6 @@ goog.graphics.createGraphics = function(
 goog.graphics.createSimpleGraphics = function(
     width, height, opt_coordWidth, opt_coordHeight, opt_domHelper) {
   'use strict';
-  if (goog.userAgent.MAC && goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('1.9a')) {
-    // Canvas is 6x faster than SVG on Mac FF 2.0
-    var graphics = new goog.graphics.CanvasGraphics(
-        width, height, opt_coordWidth, opt_coordHeight, opt_domHelper);
-    graphics.createDom();
-    return graphics;
-  }
-
   // Otherwise, defer to normal graphics object creation.
   return goog.graphics.createGraphics(
       width, height, opt_coordWidth, opt_coordHeight, opt_domHelper);
@@ -120,17 +109,5 @@ goog.graphics.createSimpleGraphics = function(
  */
 goog.graphics.isBrowserSupported = function() {
   'use strict';
-  if (goog.userAgent.IE) {
-    return goog.userAgent.isVersionOrHigher('5.5');
-  }
-  if (goog.userAgent.GECKO) {
-    return goog.userAgent.isVersionOrHigher('1.8');
-  }
-  if (goog.userAgent.OPERA) {
-    return goog.userAgent.isVersionOrHigher('9.0');
-  }
-  if (goog.userAgent.WEBKIT) {
-    return goog.userAgent.isVersionOrHigher('412');
-  }
-  return false;
+  return true;
 };
