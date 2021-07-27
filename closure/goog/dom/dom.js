@@ -2164,14 +2164,7 @@ goog.dom.isFocusable = function(element) {
  */
 goog.dom.hasSpecifiedTabIndex_ = function(element) {
   'use strict';
-  // IE8 and below don't support hasAttribute(), instead check whether the
-  // 'tabindex' attributeNode is specified. Otherwise check hasAttribute().
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
-    var attrNode = element.getAttributeNode('tabindex');  // Must be lowercase!
-    return attrNode != null && attrNode.specified;
-  } else {
-    return element.hasAttribute('tabindex');
-  }
+  return element.hasAttribute('tabindex');
 };
 
 
