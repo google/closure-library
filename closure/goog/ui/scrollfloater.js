@@ -648,9 +648,7 @@ goog.ui.ScrollFloater.prototype.restoreOriginalStyles_ = function() {
  */
 goog.ui.ScrollFloater.prototype.needsIePositionHack_ = function() {
   'use strict';
-  return goog.userAgent.IE &&
-      !(goog.userAgent.isVersionOrHigher('7') &&
-        this.getDomHelper().isCss1CompatMode());
+  return goog.userAgent.IE && !this.getDomHelper().isCss1CompatMode();
 };
 
 

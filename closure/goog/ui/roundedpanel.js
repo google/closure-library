@@ -56,9 +56,7 @@ goog.ui.RoundedPanel.create = function(
   // This variable checks for the presence of Safari 3.0+ or Gecko 1.9+,
   // which can leverage special CSS styles to create rounded corners.
   var isCssReady =
-      (goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('500')) ||
-      (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9a')) ||
-      goog.userAgent.EDGE;
+      goog.userAgent.WEBKIT || goog.userAgent.GECKO || goog.userAgent.EDGE;
 
   if (isCssReady) {
     // Safari 3.0+ and Firefox 3.0+ support this instance.
