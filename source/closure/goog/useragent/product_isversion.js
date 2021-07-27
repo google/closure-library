@@ -45,9 +45,16 @@ goog.userAgent.product.determineVersion_ = function() {
   }
 
   if (goog.userAgent.product.CHROME) {
-    if (goog.labs.userAgent.platform.isIos()) {
+    // CriOS is Chrome on iOS, but iPadOS 13+ spoofs macOS by default.
+    // So it's possible that CriOS appears to be running on macOS.
+    if (goog.labs.userAgent.platform.isIos() ||
+        goog.labs.userAgent.platform.isMacintosh()) {
       // CriOS/56.0.2924.79
-      return goog.userAgent.product.getFirstRegExpGroup_(/CriOS\/([0-9.]+)/);
+      const chromeIosVersion =
+          goog.userAgent.product.getFirstRegExpGroup_(/CriOS\/([0-9.]+)/);
+      if (chromeIosVersion) {
+        return chromeIosVersion;
+      }
     }
     // Chrome/4.0.223.1
     return goog.userAgent.product.getFirstRegExpGroup_(/Chrome\/([0-9.]+)/);

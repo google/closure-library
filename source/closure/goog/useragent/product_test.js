@@ -238,6 +238,24 @@ testSuite({
         ],
       },
       {
+        ua: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
+        versions: [
+          {num: 91, truth: true},
+          {num: '91.0.4472.114', truth: true},
+          {num: '0.4472.114', truth: true},
+          {num: '91.1.4472.114', truth: false},
+        ]
+      },
+      {
+        ua: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) CriOS/91.0.4472.114 Safari/537.36',
+        versions: [
+          {num: 91, truth: true},
+          {num: '91.0.4472.114', truth: true},
+          {num: '0.4472.114', truth: true},
+          {num: '91.1.4472.114', truth: false},
+        ]
+      },
+      {
         ua: 'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B)' +
             'AppleWebKit/535.19 (KHTML, like Gecko) ' +
             'Chrome/18.0.1025.133 Mobile' +
