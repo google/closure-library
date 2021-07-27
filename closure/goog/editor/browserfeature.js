@@ -12,7 +12,6 @@
 goog.provide('goog.editor.BrowserFeature');
 
 goog.require('goog.editor.defines');
-goog.require('goog.labs.userAgent.browser');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 goog.require('goog.userAgent.product.isVersion');
@@ -50,7 +49,7 @@ goog.editor.BrowserFeature = {
   HAS_CONTENT_EDITABLE: goog.userAgent.IE || goog.userAgent.WEBKIT ||
       goog.userAgent.OPERA || goog.userAgent.EDGE ||
       (goog.editor.defines.USE_CONTENTEDITABLE_IN_FIREFOX_3 &&
-       goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9')),
+       goog.userAgent.GECKO),
 
   // Whether to use mutation event types to detect changes
   // in the field contents.
@@ -62,7 +61,7 @@ goog.editor.BrowserFeature = {
   // we have no other choice in that case but to use this event.
   HAS_DOM_SUBTREE_MODIFIED_EVENT: goog.userAgent.WEBKIT ||
       (goog.editor.defines.USE_CONTENTEDITABLE_IN_FIREFOX_3 &&
-       goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9')),
+       goog.userAgent.GECKO),
 
   // Whether nodes can be copied from one document to another
   HAS_DOCUMENT_INDEPENDENT_NODES: goog.userAgent.GECKO,
@@ -85,10 +84,8 @@ goog.editor.BrowserFeature = {
       goog.userAgent.GECKO || goog.userAgent.WEBKIT || goog.userAgent.OPERA,
 
   // Whether this browser's "FormatBlock" command may create multiple
-  // blockquotes.
-  CREATES_MULTIPLE_BLOCKQUOTES:
-      (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('534.16')) ||
-      goog.userAgent.OPERA,
+  // blockquotes. This will not occur on currently-supported browsers.
+  CREATES_MULTIPLE_BLOCKQUOTES: false,
 
   // Whether this browser's "FormatBlock" command will wrap blockquotes
   // inside of divs, instead of replacing divs with blockquotes.
@@ -133,31 +130,26 @@ goog.editor.BrowserFeature = {
   TABS_THROUGH_IMAGES: goog.userAgent.IE,
 
   // Whether this browser unescapes urls when you extract it from the href tag.
-  UNESCAPES_URLS_WITHOUT_ASKING:
-      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7.0'),
+  UNESCAPES_URLS_WITHOUT_ASKING: false,
 
   // Whether this browser supports execCommand("styleWithCSS") to toggle between
   // inserting html tags or inline styling for things like bold, italic, etc.
   HAS_STYLE_WITH_CSS:
-      goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.8') ||
-      goog.userAgent.WEBKIT || goog.userAgent.OPERA,
+      goog.userAgent.GECKO || goog.userAgent.WEBKIT || goog.userAgent.OPERA,
 
   // Whether clicking on an editable link will take you to that site.
-  FOLLOWS_EDITABLE_LINKS: goog.userAgent.WEBKIT ||
-      goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9'),
+  FOLLOWS_EDITABLE_LINKS: goog.userAgent.WEBKIT || goog.userAgent.IE,
 
   // Whether this browser has document.activeElement available.
   HAS_ACTIVE_ELEMENT: goog.userAgent.IE || goog.userAgent.EDGE ||
-      goog.userAgent.OPERA ||
-      goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9'),
+      goog.userAgent.OPERA || goog.userAgent.GECKO,
 
   // Whether this browser supports the setCapture method on DOM elements.
   HAS_SET_CAPTURE: goog.userAgent.IE,
 
   // Whether this browser can't set background color when the selection
   // is collapsed.
-  EATS_EMPTY_BACKGROUND_COLOR: goog.userAgent.GECKO ||
-      goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('527'),
+  EATS_EMPTY_BACKGROUND_COLOR: goog.userAgent.GECKO,
 
   // Whether this browser supports the "focusin" or "DOMFocusIn" event
   // consistently.
@@ -193,27 +185,21 @@ goog.editor.BrowserFeature = {
 
   // Whether to use keydown for key listening (uses keypress otherwise). Taken
   // from goog.events.KeyHandler.
-  USES_KEYDOWN:
-      !goog.userAgent.WEBKIT || goog.userAgent.isVersionOrHigher('525'),
+  USES_KEYDOWN: true,
 
   // Whether this browser converts spaces to non-breaking spaces when calling
   // execCommand's RemoveFormat.
   // See: https://bugs.webkit.org/show_bug.cgi?id=14062
-  ADDS_NBSPS_IN_REMOVE_FORMAT:
-      goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('531'),
+  ADDS_NBSPS_IN_REMOVE_FORMAT: false,
 
   // Whether the browser will get stuck inside a link.  That is, if your cursor
   // is after a link and you type, does your text go inside the link tag.
   // Bug: http://bugs.webkit.org/show_bug.cgi?id=17697
-  GETS_STUCK_IN_LINKS:
-      goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('528'),
+  GETS_STUCK_IN_LINKS: false,
 
   // Whether the browser corrupts empty text nodes in Node#normalize,
   // removing them from the Document instead of merging them.
-  NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES:
-      goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9') ||
-      goog.userAgent.IE || goog.userAgent.EDGE || goog.userAgent.OPERA ||
-      goog.userAgent.WEBKIT && goog.userAgent.isVersionOrHigher('531'),
+  NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES: true,
 
   // Whether the browser corrupts all text nodes in Node#normalize,
   // removing them from the Document instead of merging them.
@@ -228,8 +214,7 @@ goog.editor.BrowserFeature = {
   // Whether this browser can place a cursor in an empty element natively.
   CAN_SELECT_EMPTY_ELEMENT: !goog.userAgent.IE && !goog.userAgent.WEBKIT,
 
-  FORGETS_FORMATTING_WHEN_LISTIFYING: goog.userAgent.GECKO ||
-      goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('526'),
+  FORGETS_FORMATTING_WHEN_LISTIFYING: goog.userAgent.GECKO,
 
   LEAVES_P_WHEN_REMOVING_LISTS: goog.userAgent.IE || goog.userAgent.OPERA,
 
@@ -245,24 +230,14 @@ goog.editor.BrowserFeature = {
 
   // Implements this spec about dragging files from the filesystem to the
   // browser: http://www.whatwg/org/specs/web-apps/current-work/#dnd
-  SUPPORTS_HTML5_FILE_DRAGGING: (goog.userAgent.product.CHROME &&
-                                 goog.userAgent.product.isVersion('4')) ||
-      (goog.userAgent.product.SAFARI &&
-       goog.userAgent.isVersionOrHigher('533')) ||
-      (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('2.0')) ||
+  SUPPORTS_HTML5_FILE_DRAGGING: goog.userAgent.product.CHROME ||
+      goog.userAgent.product.SAFARI || goog.userAgent.GECKO ||
       (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10')) ||
-      // TODO(user): Remove when b/27923889 is fixed.
-      (goog.userAgent.OPERA &&
-       goog.labs.userAgent.browser.isVersionOrHigher('15')) ||
       goog.userAgent.EDGE,
 
-  // Version of Opera that supports the opera-defaultBlock execCommand to change
-  // the default block inserted when [return] is pressed. Note that this only is
-  // used if the caret is not already in a block that can be repeated.
-  // TODO(user): Link to public documentation of this feature if Opera puts
-  // something up about it.
-  SUPPORTS_OPERA_DEFAULTBLOCK_COMMAND:
-      goog.userAgent.OPERA && goog.userAgent.isVersionOrHigher('11.10'),
+  // Historically, some versions of Opera supported the opera-defaultBlock
+  // execCommand to change the default block inserted when [return] is pressed.
+  SUPPORTS_OPERA_DEFAULTBLOCK_COMMAND: false,
 
   SUPPORTS_FILE_PASTING:
       goog.userAgent.product.CHROME && goog.userAgent.product.isVersion('12')
