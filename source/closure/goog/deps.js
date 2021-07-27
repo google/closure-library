@@ -81,7 +81,7 @@ goog.addDependency('db/keyrange.js', ['goog.db.KeyRange'], []);
 goog.addDependency('db/objectstore.js', ['goog.db.ObjectStore'], ['goog.async.Deferred', 'goog.db.Cursor', 'goog.db.Error', 'goog.db.Index', 'goog.db.KeyRange', 'goog.debug'], {'lang': 'es6'});
 goog.addDependency('db/transaction.js', ['goog.db.Transaction', 'goog.db.Transaction.TransactionMode'], ['goog.async.Deferred', 'goog.db.Error', 'goog.db.ObjectStore', 'goog.events', 'goog.events.EventHandler', 'goog.events.EventTarget'], {'lang': 'es6'});
 goog.addDependency('debug/console.js', ['goog.debug.Console'], ['goog.debug.TextFormatter', 'goog.log']);
-goog.addDependency('debug/debug.js', ['goog.debug'], ['goog.array', 'goog.debug.errorcontext', 'goog.userAgent']);
+goog.addDependency('debug/debug.js', ['goog.debug'], ['goog.array', 'goog.debug.errorcontext']);
 goog.addDependency('debug/debugwindow.js', ['goog.debug.DebugWindow'], ['goog.debug.HtmlFormatter', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.log', 'goog.string.Const', 'goog.structs.CircularBuffer', 'goog.userAgent']);
 goog.addDependency('debug/deepfreeze.js', ['goog.debug.deepFreeze'], ['goog.debug'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('debug/devcss/devcss.js', ['goog.debug.DevCss', 'goog.debug.DevCss.UserAgent'], ['goog.asserts', 'goog.cssom', 'goog.dom.classlist', 'goog.events', 'goog.events.EventType', 'goog.string', 'goog.userAgent'], {'lang': 'es6'});

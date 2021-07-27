@@ -133,7 +133,7 @@ goog.addDependency('db/objectstore.js', ['goog.db.ObjectStore'], ['goog.async.De
 goog.addDependency('db/transaction.js', ['goog.db.Transaction', 'goog.db.Transaction.TransactionMode'], ['goog.async.Deferred', 'goog.db.Error', 'goog.db.ObjectStore', 'goog.events', 'goog.events.EventHandler', 'goog.events.EventTarget'], {'lang': 'es6'});
 goog.addDependency('debug/console.js', ['goog.debug.Console'], ['goog.debug.TextFormatter', 'goog.log']);
 goog.addDependency('debug/console_test.js', ['goog.debug.ConsoleTest'], ['goog.debug.Console', 'goog.log', 'goog.testing.recordFunction', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('debug/debug.js', ['goog.debug'], ['goog.array', 'goog.debug.errorcontext', 'goog.userAgent']);
+goog.addDependency('debug/debug.js', ['goog.debug'], ['goog.array', 'goog.debug.errorcontext']);
 goog.addDependency('debug/debug_test.js', ['goog.debugTest'], ['goog.debug', 'goog.debug.errorcontext', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('debug/debugwindow.js', ['goog.debug.DebugWindow'], ['goog.debug.HtmlFormatter', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.SafeStyleSheet', 'goog.log', 'goog.string.Const', 'goog.structs.CircularBuffer', 'goog.userAgent']);
 goog.addDependency('debug/debugwindow_test.js', ['goog.debug.DebugWindowTest'], ['goog.debug.DebugWindow', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
