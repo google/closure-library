@@ -37,8 +37,6 @@ goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.SubMenu');
 goog.require('goog.ui.registry');
-goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
 goog.requireType('goog.events.BrowserEvent');
 goog.requireType('goog.events.Event');
 goog.requireType('goog.events.EventTarget');
@@ -90,16 +88,6 @@ goog.ui.MenuButton = function(
   }
   this.menuMargin_ = null;
   this.timer_ = new goog.Timer(500);  // 0.5 sec
-
-  // Phones running iOS prior to version 4.2.
-  if ((goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &&
-      // Check the webkit version against the version for iOS 4.2.1.
-      !goog.userAgent.isVersionOrHigher('533.17.9')) {
-    // @bug 4322060 This is required so that the menu works correctly on
-    // iOS prior to version 4.2. Otherwise, the blur action closes the menu
-    // before the menu button click can be processed.
-    this.setFocusablePopupMenu(true);
-  }
 
   /**
    * Whether the enter or space key should close the menu, if it is already
