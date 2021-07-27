@@ -230,43 +230,4 @@ testSuite({
     }
   },
 
-  testFirefox2WorkAroundFirefox2() {
-    const pr = new PropertyReplacer();
-    pr.set(userAgent, 'GECKO', true);
-    pr.set(userAgent, 'IE', false);
-
-    try {
-      // 1.8 should NOT clear iframes
-      pr.set(userAgent, 'VERSION', '1.8');
-      /**
-       * @suppress {visibility,checkTypes,constantProperty} suppression added
-       * to enable type checking
-       */
-      userAgent.isVersionOrHigherCache_ = {};
-
-      const frameCount = window.frames.length;
-      const iframeElementCount =
-          dom.getElementsByTagName(TagName.IFRAME).length;
-      const divElementCount = dom.getElementsByTagName(TagName.DIV).length;
-
-      const monitor = new FontSizeMonitor();
-      monitor.dispose();
-
-      const newFrameCount = window.frames.length;
-      const newIframeElementCount =
-          dom.getElementsByTagName(TagName.IFRAME).length;
-      const newDivElementCount = dom.getElementsByTagName(TagName.DIV).length;
-
-      assertEquals(
-          'There should be no trailing frames', frameCount + 1, newFrameCount);
-      assertEquals(
-          'There should be no trailing iframe elements', iframeElementCount + 1,
-          newIframeElementCount);
-      assertEquals(
-          'There should be no trailing div elements', divElementCount,
-          newDivElementCount);
-    } finally {
-      pr.reset();
-    }
-  },
 });

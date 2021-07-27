@@ -16,7 +16,6 @@ goog.provide('goog.dom.selection');
 
 goog.require('goog.dom.InputType');
 goog.require('goog.string');
-goog.require('goog.userAgent');
 
 
 /**
@@ -29,19 +28,6 @@ goog.dom.selection.setStart = function(textfield, pos) {
   'use strict';
   if (goog.dom.selection.useSelectionProperties_(textfield)) {
     textfield.selectionStart = pos;
-  } else if (goog.dom.selection.isLegacyIe_()) {
-    // destructuring assignment would have been sweet
-    var tmp = goog.dom.selection.getRangeIe_(textfield);
-    var range = tmp[0];
-    var selectionRange = tmp[1];
-
-    if (range.inRange(selectionRange)) {
-      pos = goog.dom.selection.canonicalizePositionIe_(textfield, pos);
-
-      range.collapse(true);
-      range.move('character', pos);
-      range.select();
-    }
   }
 };
 
@@ -201,24 +187,6 @@ goog.dom.selection.getEndPoints_ = function(textfield, getOnlyStart) {
   if (goog.dom.selection.useSelectionProperties_(textfield)) {
     startPos = textfield.selectionStart;
     endPos = getOnlyStart ? -1 : textfield.selectionEnd;
-  } else if (goog.dom.selection.isLegacyIe_()) {
-    var tmp = goog.dom.selection.getRangeIe_(textfield);
-    var range = tmp[0];
-    var selectionRange = tmp[1];
-
-    if (range.inRange(selectionRange)) {
-      range.setEndPoint('EndToStart', selectionRange);
-      if (textfield.type == goog.dom.InputType.TEXTAREA) {
-        return goog.dom.selection.getEndPointsTextareaIe_(
-            range, selectionRange, getOnlyStart);
-      }
-      startPos = range.text.length;
-      if (!getOnlyStart) {
-        endPos = range.text.length + selectionRange.text.length;
-      } else {
-        endPos = -1;  // caller did not ask for end position
-      }
-    }
   }
   return [startPos, endPos];
 };
@@ -234,22 +202,6 @@ goog.dom.selection.setEnd = function(textfield, pos) {
   'use strict';
   if (goog.dom.selection.useSelectionProperties_(textfield)) {
     textfield.selectionEnd = pos;
-  } else if (goog.dom.selection.isLegacyIe_()) {
-    var tmp = goog.dom.selection.getRangeIe_(textfield);
-    var range = tmp[0];
-    var selectionRange = tmp[1];
-
-    if (range.inRange(selectionRange)) {
-      // Both the current position and the start cursor position need
-      // to be canonicalized to take care of possible \r\n miscounts.
-      pos = goog.dom.selection.canonicalizePositionIe_(textfield, pos);
-      var startCursorPos = goog.dom.selection.canonicalizePositionIe_(
-          textfield, goog.dom.selection.getStart(textfield));
-
-      selectionRange.collapse(true);
-      selectionRange.moveEnd('character', pos - startCursorPos);
-      selectionRange.select();
-    }
   }
 };
 
@@ -278,16 +230,6 @@ goog.dom.selection.setCursorPosition = function(textfield, pos) {
     textfield.selectionStart = pos;
     textfield.selectionEnd = pos;
 
-  } else if (goog.dom.selection.isLegacyIe_()) {
-    pos = goog.dom.selection.canonicalizePositionIe_(textfield, pos);
-
-    // IE has textranges. A textfield's textrange encompasses the
-    // entire textfield's text by default
-    var sel = textfield.createTextRange();
-
-    sel.collapse(true);
-    sel.move('character', pos);
-    sel.select();
   }
 };
 
@@ -308,22 +250,6 @@ goog.dom.selection.setText = function(textfield, text) {
     textfield.value = before + text + after;
     textfield.selectionStart = oldSelectionStart;
     textfield.selectionEnd = oldSelectionStart + text.length;
-  } else if (goog.dom.selection.isLegacyIe_()) {
-    var tmp = goog.dom.selection.getRangeIe_(textfield);
-    var range = tmp[0];
-    var selectionRange = tmp[1];
-
-    if (!range.inRange(selectionRange)) {
-      return;
-    }
-    // When we set the selection text the selection range is collapsed to the
-    // end. We therefore duplicate the current selection so we know where it
-    // started. Once we've set the selection text we move the start of the
-    // selection range to the old start
-    var range2 = selectionRange.duplicate();
-    selectionRange.text = text;
-    selectionRange.setEndPoint('StartToStart', range2);
-    selectionRange.select();
   } else {
     throw new Error('Cannot set the selection end');
   }
@@ -341,19 +267,6 @@ goog.dom.selection.getText = function(textfield) {
   if (goog.dom.selection.useSelectionProperties_(textfield)) {
     var s = textfield.value;
     return s.substring(textfield.selectionStart, textfield.selectionEnd);
-  }
-
-  if (goog.dom.selection.isLegacyIe_()) {
-    var tmp = goog.dom.selection.getRangeIe_(textfield);
-    var range = tmp[0];
-    var selectionRange = tmp[1];
-
-    if (!range.inRange(selectionRange)) {
-      return '';
-    } else if (textfield.type == goog.dom.InputType.TEXTAREA) {
-      return goog.dom.selection.getSelectionRangeText_(selectionRange);
-    }
-    return selectionRange.text;
   }
 
   throw new Error('Cannot get the selection text');
@@ -479,19 +392,4 @@ goog.dom.selection.useSelectionProperties_ = function(el) {
     // on an element with display: none.
     return false;
   }
-};
-
-
-/**
- * Whether the client is legacy IE which does not support
- * selectionStart/selectionEnd properties of a text input element.
- *
- * @see https://msdn.microsoft.com/en-us/library/ff974768(v=vs.85).aspx
- *
- * @return {boolean} Whether the client is a legacy version of IE.
- * @private
- */
-goog.dom.selection.isLegacyIe_ = function() {
-  'use strict';
-  return goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9');
 };

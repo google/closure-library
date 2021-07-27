@@ -156,7 +156,7 @@ goog.addDependency('dom/rangeendpoint.js', ['goog.dom.RangeEndpoint'], []);
 goog.addDependency('dom/safe.js', ['goog.dom.safe', 'goog.dom.safe.InsertAdjacentHtmlPosition'], ['goog.asserts', 'goog.dom.asserts', 'goog.functions', 'goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.uncheckedconversions', 'goog.string.Const', 'goog.string.internal'], {'lang': 'es6'});
 goog.addDependency('dom/savedcaretrange.js', ['goog.dom.SavedCaretRange'], ['goog.dom', 'goog.dom.AbstractSavedCaretRange', 'goog.dom.TagName', 'goog.string'], {'lang': 'es6'});
 goog.addDependency('dom/savedrange.js', ['goog.dom.AbstractSavedCaretRange', 'goog.dom.SavedRange'], ['goog.Disposable', 'goog.log']);
-goog.addDependency('dom/selection.js', ['goog.dom.selection'], ['goog.dom.InputType', 'goog.string', 'goog.userAgent']);
+goog.addDependency('dom/selection.js', ['goog.dom.selection'], ['goog.dom.InputType', 'goog.string']);
 goog.addDependency('dom/tagiterator.js', ['goog.dom.TagIterator', 'goog.dom.TagWalkType'], ['goog.dom', 'goog.dom.NodeType', 'goog.iter.Iterator', 'goog.iter.StopIteration']);
 goog.addDependency('dom/tagname.js', ['goog.dom.TagName'], ['goog.dom.HtmlElement'], {'lang': 'es6'});
 goog.addDependency('dom/tags.js', ['goog.dom.tags'], ['goog.object']);

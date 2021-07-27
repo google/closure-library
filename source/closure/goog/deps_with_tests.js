@@ -264,7 +264,7 @@ goog.addDependency('dom/savedcaretrange.js', ['goog.dom.SavedCaretRange'], ['goo
 goog.addDependency('dom/savedcaretrange_test.js', ['goog.dom.SavedCaretRangeTest'], ['goog.dom', 'goog.dom.Range', 'goog.dom.SavedCaretRange', 'goog.testing.dom', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('dom/savedrange.js', ['goog.dom.AbstractSavedCaretRange', 'goog.dom.SavedRange'], ['goog.Disposable', 'goog.log']);
 goog.addDependency('dom/savedrange_test.js', ['goog.dom.SavedRangeTest'], ['goog.dom', 'goog.dom.Range', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('dom/selection.js', ['goog.dom.selection'], ['goog.dom.InputType', 'goog.string', 'goog.userAgent']);
+goog.addDependency('dom/selection.js', ['goog.dom.selection'], ['goog.dom.InputType', 'goog.string']);
 goog.addDependency('dom/selection_test.js', ['goog.dom.selectionTest'], ['goog.dom', 'goog.dom.InputType', 'goog.dom.TagName', 'goog.dom.selection', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('dom/tagiterator.js', ['goog.dom.TagIterator', 'goog.dom.TagWalkType'], ['goog.dom', 'goog.dom.NodeType', 'goog.iter.Iterator', 'goog.iter.StopIteration']);
 goog.addDependency('dom/tagiterator_test.js', ['goog.dom.TagIteratorTest'], ['goog.dom', 'goog.dom.TagIterator', 'goog.dom.TagName', 'goog.dom.TagWalkType', 'goog.iter', 'goog.iter.StopIteration', 'goog.testing.dom', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});

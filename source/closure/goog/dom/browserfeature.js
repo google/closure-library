@@ -72,15 +72,14 @@ goog.dom.BrowserFeature.CAN_ADD_NAME_OR_TYPE_ATTRIBUTES =
 goog.dom.BrowserFeature.CAN_USE_CHILDREN_ATTRIBUTE =
     !goog.userAgent.GECKO && !goog.userAgent.IE ||
     goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9) ||
-    goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.1');
+    goog.userAgent.GECKO;
 
 /**
  * Opera, Safari 3, and Internet Explorer 9 all support innerText but they
  * include text nodes in script and style tags. Not document-mode-dependent.
  * @const {boolean}
  */
-goog.dom.BrowserFeature.CAN_USE_INNER_TEXT =
-    (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9'));
+goog.dom.BrowserFeature.CAN_USE_INNER_TEXT = false;
 
 /**
  * MSIE, Opera, and Safari>=4 support element.parentElement to access an
