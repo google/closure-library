@@ -60,14 +60,7 @@ goog.net.IframeLoadMonitor = function(iframe, opt_hasContent) {
   this.isLoaded_ = this.isLoadedHelper_();
 
   if (!this.isLoaded_) {
-    // IE 6 (and lower?) does not reliably fire load events, so listen to
-    // readystatechange.
-    // IE 7 does not reliably fire readystatechange events but listening on load
-    // seems to work just fine.
-    const isIe6OrLess =
-        goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('7');
-    const loadEvtType = isIe6OrLess ? goog.events.EventType.READYSTATECHANGE :
-                                      goog.events.EventType.LOAD;
+    const loadEvtType = goog.events.EventType.LOAD;
     this.onloadListenerKey_ = goog.events.listen(
         this.iframe_, loadEvtType, this.handleLoad_, false, this);
 
