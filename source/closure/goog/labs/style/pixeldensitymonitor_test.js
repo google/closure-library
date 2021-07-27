@@ -24,7 +24,35 @@ let monitor;
 let mockControl;
 let mediaQueryLists;
 
-function setUpMonitor(initialRatio, hasMatchMedia) {
+/**
+ * Options for setUpMonitor.
+ * @record
+ */
+class MonitorOpts {
+  constructor() {
+    /**
+     * Whether to mock a matchMedia object on fakeWindow.
+     * @type {boolean|undefined}
+     */
+    this.hasMatchMedia;
+    /**
+     * Whether to delete the deprecated addListener method that isn't
+     * implemented in all browsers.  Requires hasMatchMedia to be true.
+     * @type {boolean|undefined}
+     */
+    this.deprecatedAddListener;
+  }
+}
+
+/**
+ * Helper to create `matchMedia` mock and assign to `fakeWindow`. Used to mock
+ * different browser compatibilities.
+ *
+ * @param {number|undefined} initialRatio
+ * @param {!MonitorOpts=} options
+ */
+function setUpMonitor(
+    initialRatio, {hasMatchMedia = false, deprecatedAddListener = false} = {}) {
   fakeWindow = {devicePixelRatio: initialRatio};
 
   if (hasMatchMedia) {
@@ -48,6 +76,12 @@ function setUpMonitor(initialRatio, hasMatchMedia) {
           return listeners.length;
         },
       };
+      // Regression testing Cobalt browser compatibility (https://cobalt.dev/).
+      // Cobalt browser has `matchMedia` but doesn't implement the deprecated
+      // addListener method.
+      if (deprecatedAddListener) {
+        newList.addListener = undefined;
+      }
       mediaQueryLists.push(newList);
       return newList;
     };
@@ -82,22 +116,22 @@ testSuite({
   },
 
   testNormalDensity() {
-    setUpMonitor(1, false);
+    setUpMonitor(1);
     assertEquals(PixelDensityMonitor.Density.NORMAL, monitor.getDensity());
   },
 
   testHighDensity() {
-    setUpMonitor(1.5, false);
+    setUpMonitor(1.5);
     assertEquals(PixelDensityMonitor.Density.HIGH, monitor.getDensity());
   },
 
   testNormalDensityIfUndefined() {
-    setUpMonitor(undefined, false);
+    setUpMonitor(undefined);
     assertEquals(PixelDensityMonitor.Density.NORMAL, monitor.getDensity());
   },
 
   testChangeEvent() {
-    setUpMonitor(1, true);
+    setUpMonitor(1, {hasMatchMedia: true});
     assertEquals(PixelDensityMonitor.Density.NORMAL, monitor.getDensity());
     monitor.start();
 
@@ -117,7 +151,7 @@ testSuite({
   },
 
   testListenerIsDisposed() {
-    setUpMonitor(1, true);
+    setUpMonitor(1, {hasMatchMedia: true});
     monitor.start();
 
     assertEquals(1, mediaQueryLists.length);
@@ -128,4 +162,11 @@ testSuite({
     assertEquals(1, mediaQueryLists.length);
     assertEquals(0, mediaQueryLists[0].getListenerCount());
   },
+
+  testAddListenerMethodNotImplemented() {
+    setUpMonitor(1, {hasMatchMedia: true, deprecatedAddListener: true});
+    assertNotThrows(() => monitor.start());
+
+    assertEquals(PixelDensityMonitor.Density.NORMAL, monitor.getDensity());
+  }
 });
