@@ -30,31 +30,29 @@ goog.soy.IjData = function() {};
 
 /**
  * Helper typedef for ij parameters.  This is what soy generates.
- * @private
  * @typedef {!goog.soy.IjData|!Object<string, *>}
  */
-goog.soy.CompatibleIj_;
+goog.soy.CompatibleIj;
 
 /**
  * Type definition for strict Soy templates. Very useful when passing a template
  * as an argument.
  * @typedef {function(?=,
- * ?goog.soy.CompatibleIj_=):(string|!goog.soy.data.SanitizedContent)}
+ * ?goog.soy.CompatibleIj=):(string|!goog.soy.data.SanitizedContent)}
  */
 goog.soy.StrictTemplate;
 
 /**
  * Type definition for strict Soy HTML templates. Very useful when passing
  * a template as an argument.
- * @typedef {function(?=,
- * ?goog.soy.CompatibleIj_=):!goog.soy.data.SanitizedHtml}
+ * @typedef {function(?=, ?goog.soy.CompatibleIj=):!goog.soy.data.SanitizedHtml}
  */
 goog.soy.StrictHtmlTemplate;
 
 
 /**
  * Type definition for text templates.
- * @typedef {function(?=, ?goog.soy.CompatibleIj_=):string}
+ * @typedef {function(?=, ?goog.soy.CompatibleIj=):string}
  */
 goog.soy.TextTemplate;
 
@@ -87,7 +85,7 @@ goog.soy.renderHtml = function(element, templateResult) {
  *
  * @param {?Element|?ShadowRoot} element The element whose content we are
  *     rendering into.
- * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj_=): *} template The Soy
+ * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj=): *} template The Soy
  *     template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
@@ -109,7 +107,7 @@ goog.soy.renderElement = function(
  * method). Otherwise a document fragment is returned containing the rendered
  * nodes.
  *
- * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj_=): *} template The Soy
+ * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj=): *} template The Soy
  *     template defining the element's content. The kind of the template must be
  *     "html" or "text".
  * @param {ARG_TYPES=} opt_templateData The data for the template.
@@ -135,7 +133,7 @@ goog.soy.renderAsFragment = function(
  * HTML string represents a single node, then that node is returned. Otherwise,
  * a DIV element is returned containing the rendered nodes.
  *
- * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj_=): *} template
+ * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj=): *} template
  *     The Soy template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
