@@ -316,17 +316,6 @@ goog.testing.dom.assertHtmlContentsMatch = function(
     }
   };
 
-  // HACK(brenneman): IE has unique ideas about whitespace handling when setting
-  // innerHTML. This results in elision of leading whitespace in the expected
-  // nodes where doing so doesn't affect visible rendering. As a workaround, we
-  // remove the leading whitespace in the actual nodes where necessary.
-  //
-  // The collapsible variable tracks whether we should collapse the whitespace
-  // in the next Text node we encounter.
-  var IE_TEXT_COLLAPSE =
-      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9');
-
-  var collapsible = true;
 
   var number = 0;
   goog.iter.forEach(expectedIt, function(expectedNode) {
@@ -366,12 +355,6 @@ goog.testing.dom.assertHtmlContentsMatch = function(
       goog.testing.dom.assertAttributesEqual_(
           errorSuffix, expectedElem, actualElem, !!opt_strictAttributes);
 
-      if (IE_TEXT_COLLAPSE &&
-          goog.style.getCascadedStyle(actualElem, 'display') != 'inline') {
-        // Text may be collapsed after any non-inline element.
-        collapsible = true;
-      }
-
       // Contents of template tags belong to a separate document and are not
       // iterated on by the current iterator, unless the browser is too old to
       // treat template tags differently. We recursively assert equality of the
@@ -392,17 +375,6 @@ goog.testing.dom.assertHtmlContentsMatch = function(
       while ((actualNode = goog.iter.nextOrValue(actualIt, null)) &&
              actualNode.nodeType == goog.dom.NodeType.TEXT) {
         actualText += actualNode.nodeValue;
-      }
-
-      if (IE_TEXT_COLLAPSE) {
-        // Collapse the leading whitespace, unless the string consists entirely
-        // of whitespace.
-        if (collapsible && !goog.string.isEmptyOrWhitespace(actualText)) {
-          actualText = goog.string.trimLeft(actualText);
-        }
-        // Prepare to collapse whitespace in the next Text node if this one does
-        // not end in a whitespace character.
-        collapsible = /\s$/.test(actualText);
       }
 
       var expectedText = goog.testing.dom.getExpectedText_(expectedNode);
