@@ -193,8 +193,6 @@ testSuite({
     /** @suppress {checkTypes} suppression added to enable type checking */
     userAgent.VERSION = 8;
     userAgent.DOCUMENT_MODE = 8;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = true;
 
     assertIe8StyleKeyHandling();
   },
@@ -214,8 +212,6 @@ testSuite({
      * @suppress {constantProperty} suppression added to enable type checking
      */
     userAgent.DOCUMENT_MODE = 8;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = true;
 
     assertIe8StyleKeyHandling();
   },
@@ -235,8 +231,6 @@ testSuite({
      * @suppress {constantProperty} suppression added to enable type checking
      */
     userAgent.DOCUMENT_MODE = 9;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = true;
 
     let keyEvent;
     const keyHandler = new KeyHandler();
@@ -271,8 +265,6 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = true;
 
     let eventsFired = 0;
     let keyEvent;
@@ -387,8 +379,6 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = true;
 
     let eventsFired = 0;
     let keyEvent;
@@ -502,8 +492,6 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = true;
 
     let eventsFired = 0;
     let keyEvent;
@@ -609,8 +597,6 @@ testSuite({
     userAgent.MAC = true;
     userAgent.WINDOWS = false;
     userAgent.LINUX = false;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = true;
     /** @suppress {checkTypes} suppression added to enable type checking */
     userAgent.VERSION = 525.3;
 
@@ -733,100 +719,6 @@ testSuite({
         1092, keyEvent.charCode);
   },
 
-  /** Tests the key handler for the Opera behavior. */
-  testOperaStyleKeyHandling() {
-    userAgent.OPERA = true;
-    userAgent.IE = false;
-    userAgent.GECKO = false;
-    userAgent.WEBKIT = false;
-    userAgent.MAC = false;
-    userAgent.WINDOWS = true;
-    userAgent.LINUX = false;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = false;
-
-    let keyEvent;
-    const keyHandler = new KeyHandler();
-
-    events.listen(keyHandler, KeyHandler.EventType.KEY, (e) => {
-      keyEvent = e;
-    });
-
-    fireKeyDown(keyHandler, KeyCodes.ENTER);
-    fireKeyPress(keyHandler, KeyCodes.ENTER);
-    assertEquals(
-        'Enter should fire a key event with the keycode 13', KeyCodes.ENTER,
-        keyEvent.keyCode);
-    assertEquals(
-        'Enter should fire a key event with the charcode 0', 0,
-        keyEvent.charCode);
-
-    fireKeyDown(keyHandler, KeyCodes.ESC);
-    fireKeyPress(keyHandler, KeyCodes.ESC);
-    assertEquals(
-        'Esc should fire a key event with the keycode 27', KeyCodes.ESC,
-        keyEvent.keyCode);
-    assertEquals(
-        'Esc should fire a key event with the charcode 0', 0,
-        keyEvent.charCode);
-
-    fireKeyDown(keyHandler, KeyCodes.UP);
-    fireKeyPress(keyHandler, KeyCodes.UP);
-    assertEquals(
-        'Up should fire a key event with the keycode 38', KeyCodes.UP,
-        keyEvent.keyCode);
-    assertEquals(
-        'Up should fire a key event with the charcode 0', 0, keyEvent.charCode);
-
-    fireKeyDown(
-        keyHandler, KeyCodes.SEVEN, undefined, undefined, undefined, undefined,
-        true);
-    fireKeyPress(
-        keyHandler, 38, undefined, undefined, undefined, undefined, true);
-    assertEquals(
-        'Shift+7 should fire a key event with the keycode 55', KeyCodes.SEVEN,
-        keyEvent.keyCode);
-    assertEquals(
-        'Shift+7 should fire a key event with the charcode 38', 38,
-        keyEvent.charCode);
-
-    fireKeyDown(keyHandler, KeyCodes.A);
-    fireKeyPress(keyHandler, 97);
-    assertEquals(
-        'Lower case a should fire a key event with the keycode 65', KeyCodes.A,
-        keyEvent.keyCode);
-    assertEquals(
-        'Lower case a should fire a key event with the charcode 97', 97,
-        keyEvent.charCode);
-
-    fireKeyDown(keyHandler, KeyCodes.A);
-    fireKeyPress(keyHandler, 65);
-    assertEquals(
-        'Upper case A should fire a key event with the keycode 65', KeyCodes.A,
-        keyEvent.keyCode);
-    assertEquals(
-        'Upper case A should fire a key event with the charcode 65', 65,
-        keyEvent.charCode);
-
-    fireKeyDown(keyHandler, KeyCodes.DELETE);
-    fireKeyPress(keyHandler, KeyCodes.DELETE);
-    assertEquals(
-        'Delete should fire a key event with the keycode 46', KeyCodes.DELETE,
-        keyEvent.keyCode);
-    assertEquals(
-        'Delete should fire a key event with the charcode 0', 0,
-        keyEvent.charCode);
-
-    fireKeyDown(keyHandler, KeyCodes.PERIOD);
-    fireKeyPress(keyHandler, 46);
-    assertEquals(
-        'Period should fire a key event with the keycode 190', KeyCodes.PERIOD,
-        keyEvent.keyCode);
-    assertEquals(
-        'Period should fire a key event with the charcode 46', 46,
-        keyEvent.charCode);
-  },
-
   testGeckoOnMacAltHandling() {
     userAgent.OPERA = false;
     userAgent.IE = false;
@@ -874,8 +766,6 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = true;
 
     let keyEvent;
     const keyHandler = new KeyHandler();
@@ -902,8 +792,6 @@ testSuite({
     userAgent.MAC = false;
     userAgent.WINDOWS = true;
     userAgent.LINUX = false;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = true;
 
     const keyEvents = [];
     const keyHandler = new KeyHandler();
@@ -931,8 +819,6 @@ testSuite({
     userAgent.MAC = true;
     userAgent.WINDOWS = false;
     userAgent.LINUX = false;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = true;
 
     let keyEvent;
     const keyHandler = new KeyHandler();

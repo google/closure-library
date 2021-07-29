@@ -137,7 +137,6 @@ let oldIe;
 let oldFf;
 let oldWebkit;
 let oldVersion;
-let oldUsesKeyDown;
 let mockElement;
 let mockClock;
 
@@ -152,8 +151,6 @@ function simulateWinFirefox() {
   userAgent.EDGE_OR_IE = false;
   userAgent.GECKO = true;
   userAgent.WEBKIT = false;
-  /** @suppress {visibility} suppression added to enable type checking */
-  KeyHandler.USES_KEYDOWN_ = true;
 }
 
 /** Used to simulate behavior of Windows/InternetExplorer7 */
@@ -167,8 +164,6 @@ function simulateWinIe7() {
   userAgent.DOCUMENT_MODE = 7;
   userAgent.GECKO = false;
   userAgent.WEBKIT = false;
-  /** @suppress {visibility} suppression added to enable type checking */
-  KeyHandler.USES_KEYDOWN_ = true;
 }
 
 /** Used to simulate behavior of Windows/Chrome */
@@ -182,8 +177,6 @@ function simulateWinChrome() {
   userAgent.GECKO = false;
   userAgent.WEBKIT = true;
   userAgent.VERSION = '525';
-  /** @suppress {visibility} suppression added to enable type checking */
-  KeyHandler.USES_KEYDOWN_ = true;
 }
 
 /** Used to simulate behavior of Mac/Firefox */
@@ -196,8 +189,6 @@ function simulateMacFirefox() {
   userAgent.EDGE_OR_IE = false;
   userAgent.GECKO = true;
   userAgent.WEBKIT = false;
-  /** @suppress {visibility} suppression added to enable type checking */
-  KeyHandler.USES_KEYDOWN_ = true;
 }
 
 /** Used to simulate behavior of Mac/Safari3 */
@@ -211,8 +202,6 @@ function simulateMacSafari3() {
   userAgent.GECKO = false;
   userAgent.WEBKIT = true;
   userAgent.VERSION = '525';
-  /** @suppress {visibility} suppression added to enable type checking */
-  KeyHandler.USES_KEYDOWN_ = true;
 }
 
 /** Used to simulate behavior of Linux/Firefox */
@@ -225,8 +214,6 @@ function simulateLinuxFirefox() {
   userAgent.EDGE_OR_IE = false;
   userAgent.GECKO = true;
   userAgent.WEBKIT = false;
-  /** @suppress {visibility} suppression added to enable type checking */
-  KeyHandler.USES_KEYDOWN_ = true;
 }
 
 testSuite({
@@ -238,8 +225,6 @@ testSuite({
     oldFf = userAgent.GECKO;
     oldWebkit = userAgent.WEBKIT;
     oldVersion = userAgent.VERSION;
-    /** @suppress {visibility} suppression added to enable type checking */
-    oldUsesKeyDown = KeyHandler.USES_KEYDOWN_;
     mockClock = new MockClock(true);
     mockElement = new MockElement;
     mh = new MockInputHandler;
@@ -253,8 +238,6 @@ testSuite({
     userAgent.GECKO = oldFf;
     userAgent.WEBKIT = oldWebkit;
     userAgent.VERSION = oldVersion;
-    /** @suppress {visibility} suppression added to enable type checking */
-    KeyHandler.USES_KEYDOWN_ = oldUsesKeyDown;
     mockClock.dispose();
     mockElement.dispose();
   },
