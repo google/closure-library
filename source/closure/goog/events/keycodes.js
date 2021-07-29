@@ -264,10 +264,6 @@ goog.events.KeyCodes.firesKeyPressEvent = function(
     keyCode, opt_heldKeyCode, opt_shiftKey, opt_ctrlKey, opt_altKey,
     opt_metaKey) {
   'use strict';
-  if (goog.userAgent.WEBKIT && !goog.userAgent.isVersionOrHigher('525')) {
-    return true;
-  }
-
   if (goog.userAgent.MAC && opt_altKey) {
     return goog.events.KeyCodes.isCharacterKey(keyCode);
   }

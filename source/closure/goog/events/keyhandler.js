@@ -264,14 +264,6 @@ goog.events.KeyHandler.keyIdentifier_ = {
 };
 
 
-/**
- * If true, the KeyEvent fires on keydown. Otherwise, it fires on keypress.
- *
- * @type {boolean}
- * @private
- */
-goog.events.KeyHandler.USES_KEYDOWN_ =
-    !goog.userAgent.WEBKIT || goog.userAgent.isVersionOrHigher('525');
 
 
 /**
@@ -316,8 +308,7 @@ goog.events.KeyHandler.prototype.handleKeyDown_ = function(e) {
     }
   }
 
-  if (goog.events.KeyHandler.USES_KEYDOWN_ &&
-      !goog.events.KeyCodes.firesKeyPressEvent(
+  if (!goog.events.KeyCodes.firesKeyPressEvent(
           e.keyCode, this.lastKey_, e.shiftKey, e.ctrlKey, e.altKey,
           e.metaKey)) {
     this.handleEvent(e);
@@ -464,8 +455,7 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
   // in the process of removing keypress events for non-printable characters
   // (https://bugzilla.mozilla.org/show_bug.cgi?id=968056) so we simulate this
   // logic here for older Gecko versions which still fire the events.
-  if (goog.userAgent.GECKO && goog.events.KeyHandler.USES_KEYDOWN_ &&
-      e.type == goog.events.EventType.KEYPRESS &&
+  if (goog.userAgent.GECKO && e.type == goog.events.EventType.KEYPRESS &&
       !goog.events.KeyCodes.firesKeyPressEvent(
           key, this.lastKey_, e.shiftKey, e.ctrlKey, altKey, e.metaKey)) {
     return;

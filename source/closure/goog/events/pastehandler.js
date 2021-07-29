@@ -141,9 +141,7 @@ goog.events.PasteHandler.MANDATORY_MS_BETWEEN_INPUT_EVENTS_TIE_BREAKER = 400;
  * Whether current UA supoprts the native "paste" event type.
  * @const {boolean}
  */
-goog.events.PasteHandler.SUPPORTS_NATIVE_PASTE_EVENT = goog.userAgent.WEBKIT ||
-    goog.userAgent.IE || goog.userAgent.EDGE ||
-    (goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9'));
+goog.events.PasteHandler.SUPPORTS_NATIVE_PASTE_EVENT = true;
 
 
 /**
