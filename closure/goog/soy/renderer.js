@@ -56,7 +56,7 @@ goog.soy.Renderer = function(opt_injectedDataSupplier, opt_domHelper) {
  * Renders a Soy template into a single node or a document fragment.
  * Delegates to `goog.soy.renderAsFragment`.
  *
- * @param {function(ARG_TYPES, ?Object<string, *>=): *} template The Soy
+ * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj=): *} template The Soy
  *     template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @return {!Node} The resulting node or document fragment.
@@ -78,7 +78,7 @@ goog.soy.Renderer.prototype.renderAsFragment = function(
  * Otherwise, a DIV element is returned containing the rendered nodes.
  * Delegates to `goog.soy.renderAsElement`.
  *
- * @param {function(ARG_TYPES, ?Object<string, *>=): *} template The Soy
+ * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj=): *} template The Soy
  *     template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @return {!Element} Rendered template contents, wrapped in a parent DIV
@@ -100,7 +100,7 @@ goog.soy.Renderer.prototype.renderAsElement = function(
  * innerHTML of the given element. Delegates to `goog.soy.renderElement`.
  *
  * @param {?Element} element The element whose content we are rendering.
- * @param {function(ARG_TYPES, ?Object<string, *>=): *} template The Soy
+ * @param {function(ARG_TYPES, ?goog.soy.CompatibleIj=): *} template The Soy
  *     template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @template ARG_TYPES
