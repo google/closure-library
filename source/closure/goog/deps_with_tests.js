@@ -51,7 +51,7 @@ goog.addDependency('async/throwexception.js', ['goog.async.throwException'], [],
 goog.addDependency('async/workqueue.js', ['goog.async.WorkQueue'], ['goog.asserts', 'goog.async.FreeList'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('async/workqueue_test.js', ['goog.async.WorkQueueTest'], ['goog.async.WorkQueue', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base.js', [], []);
-goog.addDependency('base_debug_loader_test.js', ['goog.baseDebugLoaderTest'], ['goog.Promise', 'goog.Timer', 'goog.Uri', 'goog.dom', 'goog.functions', 'goog.object', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {'lang': 'es8'});
+goog.addDependency('base_debug_loader_test.js', ['goog.baseDebugLoaderTest'], ['goog.Timer', 'goog.dom', 'goog.functions', 'goog.object', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], {'lang': 'es8'});
 goog.addDependency('base_module_test.js', ['goog.baseModuleTest'], ['goog.Timer', 'goog.test_module', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base_test.js', ['goog.baseTest'], ['goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.object', 'goog.testing.PropertyReplacer', 'goog.testing.recordFunction', 'goog.testing.testSuite', 'goog.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('bootstrap/nodejs.js', [], []);

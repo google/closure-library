@@ -23,9 +23,7 @@ goog.provide('goog.baseDebugLoaderTest');
 goog.setTestOnly('goog.baseDebugLoaderTest');
 
 // Used to test dynamic loading works, see testRequire*
-goog.require('goog.Promise');
 goog.require('goog.Timer');
-goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.functions');
 goog.require('goog.object');
@@ -503,36 +501,6 @@ function testRequireClosure() {
   assertNotUndefined(
       'goog.events.EventTarget should be available', goog.events.EventTarget);
 }
-
-/**
- * @return {?}
- */
-function disabled_testCspSafeGoogRequire() {
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
-    return;
-  }
-
-  stubs.set(goog, 'ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING', true);
-
-  // Aliased so that build tools do not mistake this for an actual call.
-  const require = goog.require;
-
-  require('goog.Uri');
-
-  // Set a timeout to allow the user agent to finish parsing this script block,
-  // thus allowing the appended script (via goog.require) to execute.
-  const ASYNC_TIMEOUT_MS = 1000;
-
-  const resolver = goog.Promise.withResolver();
-  window.setTimeout(function() {
-    assertNotUndefined(goog.Uri);
-    resolver.resolve();
-    stubs.reset();
-  }, ASYNC_TIMEOUT_MS);
-
-  return resolver.promise;
-}
-
 
 function testRequireWithExternalDuplicate() {
   // alias to avoid the being picked up by the deps scanner.
