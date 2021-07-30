@@ -30,9 +30,7 @@ goog.style.bidi.getScrollLeft = function(element) {
   var isRtl = goog.style.isRightToLeft(element);
   if (isRtl && goog.style.bidi.usesNegativeScrollLeftInRtl_()) {
     return -element.scrollLeft;
-  } else if (
-      isRtl &&
-      !(goog.userAgent.EDGE_OR_IE && goog.userAgent.isVersionOrHigher('8'))) {
+  } else if (isRtl && !goog.userAgent.EDGE_OR_IE) {
     // ScrollLeft starts at the maximum positive value and decreases towards
     // 0 as the element is scrolled towards the left. However, for overflow
     // visible, there is no scrollLeft and the value always stays correctly at 0
@@ -148,8 +146,7 @@ goog.style.bidi.setScrollOffset = function(element, offsetStart) {
     element.scrollLeft = offsetStart;
   } else if (goog.style.bidi.usesNegativeScrollLeftInRtl_()) {
     element.scrollLeft = -offsetStart;
-  } else if (
-      !(goog.userAgent.EDGE_OR_IE && goog.userAgent.isVersionOrHigher('8'))) {
+  } else if (!goog.userAgent.EDGE_OR_IE) {
     // Take the current scrollLeft value and move to the right by the
     // offsetStart to get to the left edge of the element, and then by
     // the clientWidth of the element to get to the right edge.
