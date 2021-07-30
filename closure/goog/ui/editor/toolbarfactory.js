@@ -14,7 +14,6 @@ goog.provide('goog.ui.editor.ToolbarFactory');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.string');
-goog.require('goog.string.Unicode');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Container');
@@ -25,7 +24,6 @@ goog.require('goog.ui.ToolbarColorMenuButton');
 goog.require('goog.ui.ToolbarMenuButton');
 goog.require('goog.ui.ToolbarRenderer');
 goog.require('goog.ui.ToolbarSelect');
-goog.require('goog.userAgent');
 goog.requireType('goog.ui.Button');
 goog.requireType('goog.ui.ButtonRenderer');
 goog.requireType('goog.ui.ColorMenuButton');
@@ -440,11 +438,6 @@ goog.ui.editor.ToolbarFactory.makeColorMenuButton = function(
 goog.ui.editor.ToolbarFactory.createContent_ = function(
     caption, opt_classNames, opt_domHelper) {
   'use strict';
-  // FF2 doesn't like empty DIVs, especially when rendered right-to-left.
-  if ((!caption || caption == '') && goog.userAgent.GECKO &&
-      !goog.userAgent.isVersionOrHigher('1.9a')) {
-    caption = goog.string.Unicode.NBSP;
-  }
   return (opt_domHelper || goog.dom.getDomHelper())
       .createDom(goog.dom.TagName.DIV, opt_classNames, caption);
 };
