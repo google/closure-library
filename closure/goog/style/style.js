@@ -1198,17 +1198,12 @@ goog.style.setTransparentBackgroundImage = function(el, src) {
   // It is safe to use the style.filter in IE only. In Safari 'filter' is in
   // style object but access to style.filter causes it to throw an exception.
   // Note: IE8 supports images with an alpha channel.
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
-    // See TODO in setOpacity.
-    style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(' +
-        'src="' + src + '", sizingMethod="crop")';
-  } else {
-    // Set style properties individually instead of using background shorthand
-    // to prevent overwriting a pre-existing background color.
-    style.backgroundImage = 'url(' + src + ')';
-    style.backgroundPosition = 'top left';
-    style.backgroundRepeat = 'no-repeat';
-  }
+
+  // Set style properties individually instead of using background shorthand
+  // to prevent overwriting a pre-existing background color.
+  style.backgroundImage = 'url(' + src + ')';
+  style.backgroundPosition = 'top left';
+  style.backgroundRepeat = 'no-repeat';
 };
 
 
@@ -1412,10 +1407,7 @@ goog.style.setSafeStyleSheet = function(element, safeStyleSheet) {
 goog.style.setPreWrap = function(el) {
   'use strict';
   var style = el.style;
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
-    style.whiteSpace = 'pre';
-    style.wordWrap = 'break-word';
-  } else if (goog.userAgent.GECKO) {
+  if (goog.userAgent.GECKO) {
     style.whiteSpace = '-moz-pre-wrap';
   } else {
     style.whiteSpace = 'pre-wrap';
@@ -1436,17 +1428,7 @@ goog.style.setInlineBlock = function(el) {
   var style = el.style;
   // Without position:relative, weirdness ensues.  Just accept it and move on.
   style.position = 'relative';
-
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('8')) {
-    // IE8 supports inline-block so fall through to the else
-    // Zoom:1 forces hasLayout, display:inline gives inline behavior.
-    style.zoom = '1';
-    style.display = 'inline';
-  } else {
-    // Opera, Webkit, and Safari seem to do OK with the standard inline-block
-    // style.
-    style.display = 'inline-block';
-  }
+  style.display = 'inline-block';
 };
 
 
@@ -1562,7 +1544,7 @@ goog.style.setBorderBoxSize = function(element, size) {
   var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
 
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10') &&
-      (!isCss1CompatMode || !goog.userAgent.isVersionOrHigher('8'))) {
+      !isCss1CompatMode) {
     var style = element.style;
     if (isCss1CompatMode) {
       var paddingBox = goog.style.getPaddingBox(element);
@@ -1627,7 +1609,7 @@ goog.style.setContentBoxSize = function(element, size) {
   var doc = goog.dom.getOwnerDocument(element);
   var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
   if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10') &&
-      (!isCss1CompatMode || !goog.userAgent.isVersionOrHigher('8'))) {
+      !isCss1CompatMode) {
     var style = element.style;
     if (isCss1CompatMode) {
       style.pixelWidth = size.width;
