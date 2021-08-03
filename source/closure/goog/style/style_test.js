@@ -1036,9 +1036,7 @@ testSuite({
   testIsUnselectable() {
     assertEquals(
         userAgent.GECKO, googStyle.isUnselectable($('unselectable-gecko')));
-    assertEquals(
-        userAgent.IE || userAgent.OPERA,
-        googStyle.isUnselectable($('unselectable-ie')));
+    assertEquals(userAgent.IE, googStyle.isUnselectable($('unselectable-ie')));
     // Note: Firefox can go either way here - newer versions see -webkit-*
     // properties and automatically add Moz* to the style object.
     if (!userAgent.GECKO) {
@@ -1229,7 +1227,6 @@ testSuite({
     } else if (userAgent.WEBKIT) {
       assertEquals('border-box', el.style.WebkitBoxSizing);
     } else if (
-        userAgent.OPERA ||
         userAgent.IE && userAgent.isDocumentModeOrHigher(8)) {
       assertEquals('border-box', el.style.boxSizing);
     }
@@ -1290,7 +1287,6 @@ testSuite({
     } else if (userAgent.WEBKIT) {
       assertEquals('content-box', el.style.WebkitBoxSizing);
     } else if (
-        userAgent.OPERA ||
         userAgent.IE && userAgent.isDocumentModeOrHigher(8)) {
       assertEquals('content-box', el.style.boxSizing);
     }
@@ -2424,35 +2420,6 @@ testSuite({
         googStyle.getVendorStyleName_(mockElement, 'transform-origin'));
   },
 
-  /**
-   * Test for the proper vendor style name for a CSS property
-   * with a vendor prefix for Opera.
-   * @suppress {visibility,checkTypes} suppression added to enable type checking
-   */
-  testGetVendorStyleNameOpera() {
-    const mockElement = {'style': {'OTransformOrigin': ''}};
-
-    assertUserAgent([UserAgents.OPERA], 'Opera');
-    assertEquals(
-        '-o-transform-origin',
-        googStyle.getVendorStyleName_(mockElement, 'transform-origin'));
-  },
-
-  /**
-   * Test for the proper vendor style name for a CSS property
-   * when it exists without a vendor prefix for Opera.
-   * @suppress {visibility,checkTypes} suppression added to enable type checking
-   */
-  testGetVendorStyleNameOperaNoPrefix() {
-    const mockElement = {
-      'style': {'OTransformOrigin': '', 'transformOrigin': ''},
-    };
-
-    assertUserAgent([UserAgents.OPERA], 'Opera');
-    assertEquals(
-        'transform-origin',
-        googStyle.getVendorStyleName_(mockElement, 'transform-origin'));
-  },
 
   /**
    * Test for the proper vendor style name for a CSS property
@@ -2544,49 +2511,7 @@ testSuite({
         googStyle.getVendorJsStyleName_(mockElement, 'transform-origin'));
   },
 
-  /**
-   * Test for the proper vendor style name for a CSS property
-   * with a vendor prefix for Opera.
-   * @suppress {visibility,checkTypes} suppression added to enable type checking
-   */
-  testGetVendorJsStyleNameOpera() {
-    const mockElement = {'style': {'OTransformOrigin': ''}};
 
-    assertUserAgent([UserAgents.OPERA], 'Opera');
-    assertEquals(
-        'OTransformOrigin',
-        googStyle.getVendorJsStyleName_(mockElement, 'transform-origin'));
-  },
-
-  /**
-   * Test for the proper vendor style name for a CSS property
-   * when it exists without a vendor prefix for Opera.
-   * @suppress {visibility,checkTypes} suppression added to enable type checking
-   */
-  testGetVendorJsStyleNameOperaNoPrefix() {
-    const mockElement = {
-      'style': {'OTransformOrigin': '', 'transformOrigin': ''},
-    };
-
-    assertUserAgent([UserAgents.OPERA], 'Opera');
-    assertEquals(
-        'transformOrigin',
-        googStyle.getVendorJsStyleName_(mockElement, 'transform-origin'));
-  },
-
-  /**
-   * Test for the setting a style name for a CSS property
-   * with a vendor prefix for Webkit.
-   * @suppress {checkTypes} suppression added to enable type checking
-   */
-  testSetVendorStyleWebkit() {
-    const mockElement = {'style': {'WebkitTransform': ''}};
-    const styleValue = 'translate3d(0,0,0)';
-
-    assertUserAgent([UserAgents.WEBKIT], 'WebKit');
-    googStyle.setStyle(mockElement, 'transform', styleValue);
-    assertEquals(styleValue, mockElement.style.WebkitTransform);
-  },
 
   /**
    * Test for the setting a style name for a CSS property
@@ -2616,19 +2541,6 @@ testSuite({
     assertEquals(styleValue, mockElement.style.msTransform);
   },
 
-  /**
-   * Test for the setting a style name for a CSS property
-   * with a vendor prefix for Opera.
-   * @suppress {checkTypes} suppression added to enable type checking
-   */
-  testSetVendorStyleOpera() {
-    const mockElement = {'style': {'OTransform': ''}};
-    const styleValue = 'translate3d(0,0,0)';
-
-    assertUserAgent([UserAgents.OPERA], 'Opera');
-    googStyle.setStyle(mockElement, 'transform', styleValue);
-    assertEquals(styleValue, mockElement.style.OTransform);
-  },
 
   /**
    * Test for the getting a style name for a CSS property
@@ -2672,19 +2584,6 @@ testSuite({
     assertEquals(styleValue, googStyle.getStyle(mockElement, 'transform'));
   },
 
-  /**
-   * Test for the getting a style name for a CSS property
-   * with a vendor prefix for Opera.
-   * @suppress {checkTypes} suppression added to enable type checking
-   */
-  testGetVendorStyleOpera() {
-    const mockElement = {'style': {'OTransform': ''}};
-    const styleValue = 'translate3d(0,0,0)';
-
-    assertUserAgent([UserAgents.OPERA], 'Opera');
-    googStyle.setStyle(mockElement, 'transform', styleValue);
-    assertEquals(styleValue, googStyle.getStyle(mockElement, 'transform'));
-  },
 
   /**
      @suppress {strictMissingProperties} suppression added to enable type

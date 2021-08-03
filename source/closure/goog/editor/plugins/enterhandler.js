@@ -145,7 +145,7 @@ goog.editor.plugins.EnterHandler.prototype.processParagraphTagsInternal =
   // it into a DIV, the node IE creates in response to ENTER will also be
   // a DIV.  If we don't, it will be a P.  We handle that case
   // in handleKeyUpIE_
-  if (goog.userAgent.IE || goog.userAgent.OPERA) {
+  if (goog.userAgent.IE) {
     this.ensureBlockIeOpera(goog.dom.TagName.DIV);
   } else if (!split && goog.userAgent.WEBKIT) {
     // WebKit duplicates a blockquote when the user hits enter. Let's cancel
@@ -357,8 +357,7 @@ goog.editor.plugins.EnterHandler.prototype.handleKeyUp = function(e) {
  */
 goog.editor.plugins.EnterHandler.prototype.handleKeyUpInternal = function(e) {
   'use strict';
-  if ((goog.userAgent.IE || goog.userAgent.OPERA) &&
-      e.keyCode == goog.events.KeyCodes.ENTER) {
+  if ((goog.userAgent.IE) && e.keyCode == goog.events.KeyCodes.ENTER) {
     this.ensureBlockIeOpera(goog.dom.TagName.DIV, true);
   }
 };
@@ -471,8 +470,6 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(
   var container = range.getContainer();
   var field = this.getFieldObject().getElement();
 
-  /** @type {!Node|undefined} */
-  var paragraph = undefined;
   while (container && container != field) {
     // We don't need to ensure a block if we are already in the same block, or
     // in another block level node that we don't want to change the format of
@@ -486,21 +483,8 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(
              .DO_NOT_ENSURE_BLOCK_NODES_[nodeName] &&
          !(opt_keyUp &&
            goog.editor.plugins.EnterHandler.isBrElem(container)))) {
-      // Opera can create a <p> inside of a <div> in some situations,
-      // such as when breaking out of a list that is contained in a <div>.
-      if (goog.userAgent.OPERA && paragraph) {
-        if (nodeName == tag && paragraph == container.lastChild &&
-            goog.editor.node.isEmpty(paragraph)) {
-          goog.dom.insertSiblingAfter(paragraph, container);
-          goog.dom.Range.createFromNodeContents(paragraph).select();
-        }
-        break;
-      }
+
       return;
-    }
-    if (goog.userAgent.OPERA && opt_keyUp && nodeName == goog.dom.TagName.P &&
-        nodeName != tag) {
-      paragraph = container;
     }
 
     container = container.parentNode;
@@ -625,21 +609,6 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionW3C_ =
     // TODO(user): Move this into goog.dom.Range. It should detect this state
     // when creating a range from the window selection and fix it in the created
     // range.
-    if (goog.userAgent.OPERA) {
-      var startNode = range.getStartNode();
-      var startOffset = range.getStartOffset();
-      if (startNode == range.getEndNode() &&
-          // This weeds out cases where startNode is a text node.
-          startNode.lastChild &&
-          /** @type {!Element} */ (startNode.lastChild).tagName ==
-              goog.dom.TagName.BR &&
-          // If this check is true, then endOffset is implied to be
-          // startOffset + 1, because the selection is not collapsed and
-          // it starts and ends within the same element.
-          startOffset == startNode.childNodes.length - 1) {
-        shouldDelete = false;
-      }
-    }
     if (shouldDelete) {
       goog.editor.plugins.EnterHandler.deleteW3cRange_(range);
     }
@@ -719,10 +688,6 @@ goog.editor.plugins.EnterHandler.deleteW3cRange_ = function(range) {
       var container = goog.editor.style.getContainer(range.getStartNode());
       if (goog.editor.node.isEmpty(container, true)) {
         var html = '&nbsp;';
-        if (goog.userAgent.OPERA && container.tagName == goog.dom.TagName.LI) {
-          // Don't break Opera's native break-out-of-lists behavior.
-          html = '<br>';
-        }
         goog.editor.node.replaceInnerHtml(container, html);
         goog.editor.range.selectNodeStart(container.firstChild);
         reselect = false;

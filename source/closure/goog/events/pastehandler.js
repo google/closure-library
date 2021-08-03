@@ -33,7 +33,6 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.log');
-goog.require('goog.userAgent');
 
 
 
@@ -444,12 +443,6 @@ goog.events.PasteHandler.prototype.handleUnderFocused_ = function(e) {
     }
     case goog.events.EventType.KEYDOWN: {
       goog.log.info(this.logger_, 'key down ... looking for ctrl+v');
-      // Opera + MAC does not set e.ctrlKey. Instead, it gives me e.keyCode = 0.
-      // http://www.quirksmode.org/js/keys.html
-      if (goog.userAgent.MAC && goog.userAgent.OPERA && e.keyCode == 0 ||
-          goog.userAgent.MAC && goog.userAgent.OPERA && e.keyCode == 17) {
-        break;
-      }
       this.state_ = goog.events.PasteHandler.State.TYPING;
       break;
     }

@@ -26,7 +26,6 @@ let getDocumentMode = () => documentMode;
 const UserAgents = {
   GECKO: 'GECKO',
   IE: 'IE',
-  OPERA: 'OPERA',
   WEBKIT: 'WEBKIT'
 };
 
@@ -42,8 +41,6 @@ function getUserAgentDetected(agent) {
       return userAgent.GECKO;
     case UserAgents.IE:
       return userAgent.IE;
-    case UserAgents.OPERA:
-      return userAgent.OPERA;
     case UserAgents.WEBKIT:
       return userAgent.WEBKIT;
   }
@@ -116,12 +113,6 @@ testSuite({
     assertEquals('-moz', vendor.getVendorPrefix());
   },
 
-  /** Tests for the vendor prefix for Opera. */
-  testVendorPrefixOpera() {
-    assertUserAgent([UserAgents.OPERA], 'Opera');
-    assertEquals('-o', vendor.getVendorPrefix());
-  },
-
   /** Tests for the vendor prefix for IE. */
   testVendorPrefixIE() {
     assertUserAgent([UserAgents.IE], 'MSIE');
@@ -138,12 +129,6 @@ testSuite({
   testVendorJsPrefixGecko() {
     assertUserAgent([UserAgents.GECKO], 'Gecko', 'Gecko');
     assertEquals('Moz', vendor.getVendorJsPrefix());
-  },
-
-  /** Tests for the vendor Js prefix for Opera. */
-  testVendorJsPrefixOpera() {
-    assertUserAgent([UserAgents.OPERA], 'Opera');
-    assertEquals('O', vendor.getVendorJsPrefix());
   },
 
   /** Tests for the vendor Js prefix for IE. */

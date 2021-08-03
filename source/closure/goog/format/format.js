@@ -477,8 +477,7 @@ goog.format.insertWordBreaksBasic = function(str, opt_maxlen) {
  * @type {boolean}
  * @private
  */
-goog.format.IS_IE8_OR_ABOVE_ =
-    goog.userAgent.IE && goog.userAgent.isVersionOrHigher(8);
+goog.format.IS_IE8_OR_ABOVE_ = goog.userAgent.IE;
 
 
 /**
@@ -489,7 +488,6 @@ goog.format.IS_IE8_OR_ABOVE_ =
  * @type {string}
  */
 goog.format.WORD_BREAK_HTML = goog.userAgent.WEBKIT ? '<wbr></wbr>' :
-    goog.userAgent.OPERA                            ? '&shy;' :
     goog.format.IS_IE8_OR_ABOVE_                    ? '&#8203;' :
                                                       '<wbr>';
 

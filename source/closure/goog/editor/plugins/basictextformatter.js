@@ -189,10 +189,6 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
       if (opt_arg !== null) {
         if (goog.editor.BrowserFeature.EATS_EMPTY_BACKGROUND_COLOR) {
           this.applyBgColorManually_(opt_arg);
-        } else if (goog.userAgent.OPERA) {
-          // backColor will color the block level element instead of
-          // the selected span of text in Opera.
-          this.execCommandHelper_('hiliteColor', opt_arg);
         } else {
           this.execCommandHelper_(command, opt_arg);
         }
@@ -240,26 +236,6 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
           if (goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS) {
             if (goog.userAgent.GECKO) {
               styleWithCss = true;
-            }
-            if (goog.userAgent.OPERA) {
-              if (command ==
-                  goog.editor.plugins.BasicTextFormatter.COMMAND.OUTDENT) {
-                // styleWithCSS actually sets negative margins on <blockquote>
-                // to outdent them. If the command is enabled without
-                // styleWithCSS flipped on, then the caret is in a blockquote so
-                // styleWithCSS must not be used. But if the command is not
-                // enabled, styleWithCSS should be used so that elements such as
-                // a <div> with a margin-left style can still be outdented.
-                // (Opera bug: CORE-21118)
-                styleWithCss =
-                    !this.getDocument_().queryCommandEnabled('outdent');
-              } else {
-                // Always use styleWithCSS for indenting. Otherwise, Opera will
-                // make separate <blockquote>s around *each* indented line,
-                // which adds big default <blockquote> margins between each
-                // indented line.
-                styleWithCss = true;
-              }
             }
           }
           // Fall through.
@@ -592,7 +568,7 @@ goog.editor.plugins.BasicTextFormatter.BR_REGEXP_ = goog.userAgent.IE ?
 goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
     function() {
   'use strict';
-  if (!goog.userAgent.IE && !goog.userAgent.OPERA) {
+  if (!goog.userAgent.IE) {
     // This function is only supported on IE and Opera.
     return false;
   }
@@ -674,7 +650,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
 goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_ = function(
     paragraph, opt_convertBrs) {
   'use strict';
-  if (!goog.userAgent.IE && !goog.userAgent.OPERA) {
+  if (!goog.userAgent.IE) {
     // This function is only supported on IE and Opera.
     return;
   }
@@ -683,10 +659,6 @@ goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_ = function(
     // IE fills in the closing div tag if it's missing!
     outerHTML = outerHTML.replace(
         goog.editor.plugins.BasicTextFormatter.BR_REGEXP_, '</div><div$1>');
-  }
-  if (goog.userAgent.OPERA && !/<\/div>$/i.test(outerHTML)) {
-    // Opera doesn't automatically add the closing tag, so add it if needed.
-    outerHTML += '</div>';
   }
   paragraph.outerHTML = outerHTML;
 };
@@ -824,9 +796,6 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandHelper_ = function(
   var doc = this.getDocument_();
   if (opt_styleWithCss && goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS) {
     doc.execCommand('styleWithCSS', false, true);
-    if (goog.userAgent.OPERA) {
-      this.invalidateInlineCss_();
-    }
   }
 
   doc.execCommand(command, false, opt_value);

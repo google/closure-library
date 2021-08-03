@@ -119,9 +119,8 @@ goog.crypt.base64.charToByteMap_ = null;
  * removal in per-browser compilations.
  * @private {boolean}
  */
-goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ = goog.userAgent.GECKO ||
-    (goog.userAgent.WEBKIT && !goog.userAgent.product.SAFARI) ||
-    goog.userAgent.OPERA;
+goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ =
+    goog.userAgent.GECKO || goog.userAgent.WEBKIT;
 
 
 /**

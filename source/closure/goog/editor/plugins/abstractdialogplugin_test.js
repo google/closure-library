@@ -342,7 +342,7 @@ testSuite({
         'Incorrect text selected before dialog is opened', '234',
         fieldObj.getRange().getText());
     plugin.execCommand(COMMAND);
-    if (!userAgent.IE && !userAgent.OPERA) {
+    if (!userAgent.IE) {
       // IE returns some bogus range when field doesn't have selection.
       // Opera can't remove the selection from a whitebox field.
       assertNull(

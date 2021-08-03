@@ -36,7 +36,6 @@ goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.MenuSeparator');
 goog.require('goog.ui.registry');
-goog.require('goog.userAgent');
 goog.requireType('goog.events.BrowserEvent');
 goog.requireType('goog.events.Event');
 goog.requireType('goog.events.KeyEvent');
@@ -702,10 +701,6 @@ goog.ui.ComboBox.prototype.onComboMouseDown_ = function(e) {
     } else {
       goog.log.fine(this.logger_, 'Opening dropdown');
       this.maybeShowMenu_(true);
-      if (goog.userAgent.OPERA) {
-        // select() doesn't focus <input> elements in Opera.
-        this.input_.focus();
-      }
       this.input_.select();
       this.menu_.setMouseButtonPressed(true);
       // Stop the click event from stealing focus

@@ -23,7 +23,6 @@ goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Dialog');
-goog.require('goog.userAgent');
 
 
 
@@ -365,10 +364,6 @@ goog.ui.Prompt.prototype.focus = function() {
   'use strict';
   goog.ui.Prompt.base(this, 'focus');
 
-  if (goog.userAgent.OPERA) {
-    // select() doesn't focus <input> elements in Opera.
-    this.userInputEl_.focus();
-  }
   this.userInputEl_.select();
 };
 

@@ -194,11 +194,6 @@ goog.editor.icontent.getInitialIframeContent_ = function(
     }
   }
 
-  // Hide the native focus rect in Opera.
-  if (goog.userAgent.OPERA) {
-    html.push(';outline:hidden');
-  }
-
   for (var key in info.extraStyles_) {
     html.push(';' + key + ':' + info.extraStyles_[key]);
   }

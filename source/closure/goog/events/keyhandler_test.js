@@ -183,7 +183,6 @@ testSuite({
    * @suppress {const}
    */
   testIe8StyleKeyHandling() {
-    userAgent.OPERA = false;
     userAgent.IE = true;
     userAgent.GECKO = false;
     userAgent.WEBKIT = false;
@@ -199,7 +198,6 @@ testSuite({
 
   /** Tests the key handler for the IE 8 and lower behavior. */
   testIe8StyleKeyHandlingInIe9DocumentMode() {
-    userAgent.OPERA = false;
     userAgent.IE = true;
     userAgent.GECKO = false;
     userAgent.WEBKIT = false;
@@ -218,7 +216,6 @@ testSuite({
 
   /** Tests special cases for IE9. */
   testIe9StyleKeyHandling() {
-    userAgent.OPERA = false;
     userAgent.IE = true;
     userAgent.GECKO = false;
     userAgent.WEBKIT = false;
@@ -258,7 +255,6 @@ testSuite({
    *    See: https://github.com/google/closure-library/issues/932
    */
   testGeckoStyleKeyHandling_legacyBehavior() {
-    userAgent.OPERA = false;
     userAgent.IE = false;
     userAgent.GECKO = true;
     userAgent.WEBKIT = false;
@@ -372,7 +368,6 @@ testSuite({
    *    See: https://github.com/google/closure-library/issues/883
    */
   testGeckoStyleKeyHandling_noKeyPressEventsOnNonPrintable() {
-    userAgent.OPERA = false;
     userAgent.IE = false;
     userAgent.GECKO = true;
     userAgent.WEBKIT = false;
@@ -485,7 +480,6 @@ testSuite({
    *    See: https://github.com/google/closure-library/issues/932
    */
   testGeckoStyleKeyHandling_includeBothExperiments() {
-    userAgent.OPERA = false;
     userAgent.IE = false;
     userAgent.GECKO = true;
     userAgent.WEBKIT = false;
@@ -590,7 +584,6 @@ testSuite({
 
   /** Tests the key handler for the Safari 3 behavior. */
   testSafari3StyleKeyHandling() {
-    userAgent.OPERA = false;
     userAgent.IE = false;
     userAgent.GECKO = false;
     userAgent.WEBKIT = true;
@@ -720,7 +713,6 @@ testSuite({
   },
 
   testGeckoOnMacAltHandling() {
-    userAgent.OPERA = false;
     userAgent.IE = false;
     userAgent.GECKO = true;
     userAgent.WEBKIT = false;
@@ -759,7 +751,6 @@ testSuite({
   },
 
   testGeckoEqualSign() {
-    userAgent.OPERA = false;
     userAgent.IE = false;
     userAgent.GECKO = true;
     userAgent.WEBKIT = false;
@@ -785,7 +776,6 @@ testSuite({
   },
 
   testGeckoDash() {
-    userAgent.OPERA = false;
     userAgent.IE = false;
     userAgent.GECKO = true;
     userAgent.WEBKIT = false;
@@ -812,7 +802,6 @@ testSuite({
   },
 
   testMacGeckoSlash() {
-    userAgent.OPERA = false;
     userAgent.IE = false;
     userAgent.GECKO = true;
     userAgent.WEBKIT = false;

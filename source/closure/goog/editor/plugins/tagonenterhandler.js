@@ -109,8 +109,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.handleBackspaceInternal =
 goog.editor.plugins.TagOnEnterHandler.prototype.processParagraphTagsInternal =
     function(e, split) {
   'use strict';
-  if ((goog.userAgent.OPERA || goog.userAgent.IE) &&
-      this.tag != goog.dom.TagName.P) {
+  if (goog.userAgent.IE && this.tag != goog.dom.TagName.P) {
     this.ensureBlockIeOpera(this.tag);
   }
 };
@@ -151,9 +150,7 @@ goog.editor.plugins.TagOnEnterHandler.prototype.handleKeyUpInternal = function(
     } else if (e.keyCode == goog.events.KeyCodes.BACKSPACE) {
       this.removeBrIfNecessary_(true);
     }
-  } else if (
-      (goog.userAgent.IE || goog.userAgent.OPERA) &&
-      e.keyCode == goog.events.KeyCodes.ENTER) {
+  } else if ((goog.userAgent.IE) && e.keyCode == goog.events.KeyCodes.ENTER) {
     this.ensureBlockIeOpera(this.tag, true);
   }
   // Safari uses DIVs by default.

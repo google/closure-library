@@ -143,11 +143,6 @@ testSuite({
     // deleted.
     const elem = field1.getElement();
     const dom = field1.getEditableDomHelper();
-    EXPECTEDFAILURES.expectFailureFor(
-        userAgent.OPERA,
-        'The blockquote is overwritten with DIV due to CORE-22104 -- Opera ' +
-            'overwrites the BLOCKQUOTE ancestor with DIV when doing FormatBlock ' +
-            'for DIV');
     try {
       assertEquals(
           'Blockquote should not be split', 1,
@@ -416,12 +411,6 @@ testSuite({
         false,
         testing.newSafeHtmlForTest(
             '<ol><li>hi!<span id="field1cursor"></span></li></ol>'));
-    if (userAgent.OPERA) {
-      // Opera doesn't actually place the selection in the empty span
-      // unless we add a text node first.
-      const dom = field1.getEditableDomHelper();
-      dom.getElement('field1cursor').appendChild(dom.createTextNode(''));
-    }
     const prevented = !selectNodeAndHitEnter(field1, 'field1cursor');
     assertFalse('<enter> in a list should not be prevented', prevented);
   },
@@ -649,18 +638,6 @@ testSuite({
    */
   testCollapsedSelectionKeepsBrOpera() {
     setUpFields(true);
-
-    if (userAgent.OPERA) {
-      field1.setSafeHtml(
-          false,
-          testing.newSafeHtmlForTest(
-              '<div><br id="pleasedontdeleteme"></div>'));
-      field1.focus();
-      testingEvents.fireKeySequence(field1.getElement(), KeyCodes.ENTER);
-      assertNotNull(
-          'The <br> must not have been deleted',
-          googDom.getElement('pleasedontdeleteme'));
-    }
   },
 
   testPrepareContent() {

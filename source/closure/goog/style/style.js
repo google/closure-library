@@ -1468,7 +1468,7 @@ goog.style.isUnselectable = function(el) {
   'use strict';
   if (goog.style.unselectableStyle_) {
     return el.style[goog.style.unselectableStyle_].toLowerCase() == 'none';
-  } else if (goog.userAgent.IE || goog.userAgent.OPERA) {
+  } else if (goog.userAgent.IE) {
     return el.getAttribute('unselectable') == 'on';
   }
   return false;
@@ -1506,7 +1506,7 @@ goog.style.setUnselectable = function(el, unselectable, opt_noRecurse) {
         }
       }
     }
-  } else if (goog.userAgent.IE || goog.userAgent.OPERA) {
+  } else if (goog.userAgent.IE) {
     // Toggle the 'unselectable' attribute on the element and its descendants.
     var value = unselectable ? 'on' : '';
     el.setAttribute('unselectable', value);

@@ -491,7 +491,7 @@ testSuite({
     assertTrue(
         'Parent element must be unselectable on all browsers',
         style.isUnselectable(foo));
-    if (userAgent.IE || userAgent.OPERA) {
+    if (userAgent.IE) {
       assertTrue(
           'On IE and Opera, child element must also be unselectable',
           style.isUnselectable(foo.firstChild));

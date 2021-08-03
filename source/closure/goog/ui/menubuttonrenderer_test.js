@@ -123,7 +123,7 @@ testSuite({
     renderOnParent(renderedButton);
 
     const contentEl = renderedButton.getContentElement();
-    if (userAgent.IE || userAgent.OPERA) {
+    if (userAgent.IE) {
       assertHTMLEquals('<div unselectable="on">Foo</div>', contentEl.innerHTML);
     } else {
       assertHTMLEquals('<div>Foo</div>', contentEl.innerHTML);
