@@ -184,8 +184,6 @@ goog.editor.plugins.LoremIpsum.prototype.clearLorem_ = function(
       if (goog.userAgent.WEBKIT) {
         goog.dom.getOwnerDocument(fieldObj.getElement()).body.focus();
         fieldObj.focusAndPlaceCursorAtStart();
-      } else if (goog.userAgent.OPERA) {
-        fieldObj.placeCursorAtStart();
       }
     }
   }

@@ -459,8 +459,7 @@ goog.ui.ControlRenderer.prototype.setAllowTextSelection = function(
   'use strict';
   // On all browsers other than IE and Opera, it isn't necessary to recursively
   // apply unselectable styling to the element's children.
-  goog.style.setUnselectable(
-      element, !allow, !goog.userAgent.IE && !goog.userAgent.OPERA);
+  goog.style.setUnselectable(element, !allow, !goog.userAgent.IE);
 };
 
 

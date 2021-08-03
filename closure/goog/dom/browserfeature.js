@@ -87,7 +87,7 @@ goog.dom.BrowserFeature.CAN_USE_INNER_TEXT = false;
  * @const {boolean}
  */
 goog.dom.BrowserFeature.CAN_USE_PARENT_ELEMENT_PROPERTY =
-    goog.userAgent.IE || goog.userAgent.OPERA || goog.userAgent.WEBKIT;
+    goog.userAgent.IE || goog.userAgent.WEBKIT;
 
 /**
  * Whether NoScope elements need a scoped element written before them in

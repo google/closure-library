@@ -29,10 +29,7 @@ goog.require('goog.userAgent');
  */
 goog.events.getVendorPrefixedName_ = function(eventName) {
   'use strict';
-  return goog.userAgent.WEBKIT ?
-      'webkit' + eventName :
-      (goog.userAgent.OPERA ? 'o' + eventName.toLowerCase() :
-                              eventName.toLowerCase());
+  return goog.userAgent.WEBKIT ? 'webkit' + eventName : eventName.toLowerCase();
 };
 
 

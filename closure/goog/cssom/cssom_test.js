@@ -23,9 +23,6 @@ let cssText = '.css-link-1 { display: block; } ' +
 
 const replacementCssText = '.css-repl-1 { display: block; }';
 
-const isIe7 =
-    userAgent.IE && (userAgent.compare(userAgent.VERSION, '7.0') == 0);
-
 // We're going to toLowerCase cssText before testing, because IE returns
 // CSS property names in UPPERCASE, and the function shouldn't
 // "fix" the text as it would be expensive and rarely of use.
@@ -85,14 +82,7 @@ testSuite({
 
   testGetAllCssText() {
     const allCssText = cssom.getAllCssText();
-    // In IE7, a CSSRule object gets included twice and replaces another
-    // existing CSSRule object. We aren't using
-    // goog.testing.ExpectedFailures since it brings in additional CSS
-    // which breaks a lot of our expectations about the number of rules
-    // present in a style sheet.
-    if (!isIe7) {
-      assertEquals(cssText, fixCssTextForIe(allCssText));
-    }
+    assertEquals(cssText, fixCssTextForIe(allCssText));
   },
 
   testGetAllCssStyleRules() {
@@ -108,20 +98,7 @@ testSuite({
 
     const allCssText = cssom.getAllCssText();
 
-    // In IE7, a CSSRule object gets included twice and replaces another
-    // existing CSSRule object. We aren't using
-    // goog.testing.ExpectedFailures since it brings in additional CSS
-    // which breaks a lot of our expectations about the number of rules
-    // present in a style sheet.
-    if (!isIe7) {
-      // Opera inserts the CSSRule to the first position. And fixCssText
-      // is also needed to clean up whitespace.
-      if (userAgent.OPERA) {
-        assertEquals(`${newCssText} ${cssText}`, fixCssTextForIe(allCssText));
-      } else {
-        assertEquals(`${cssText} ${newCssText}`, fixCssTextForIe(allCssText));
-      }
-    }
+    assertEquals(`${cssText} ${newCssText}`, fixCssTextForIe(allCssText));
 
     let cssRules = cssom.getAllCssStyleRules();
     assertEquals(7, cssRules.length);

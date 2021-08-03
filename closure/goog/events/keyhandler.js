@@ -379,11 +379,6 @@ goog.events.KeyHandler.prototype.handleEvent = function(e) {
         0;
 
     // Opera reports the keycode or the character code in the keyCode field.
-  } else if (goog.userAgent.OPERA && !goog.userAgent.WEBKIT) {
-    keyCode = this.keyCode_;
-    charCode = goog.events.KeyCodes.isCharacterKey(keyCode) ? be.keyCode : 0;
-
-    // Mozilla reports the character code in the charCode field.
   } else {
     if (e.type == goog.events.EventType.KEYPRESS) {
       if (goog.events.KeyHandler.SAVE_ALT_FOR_KEYPRESS_) {

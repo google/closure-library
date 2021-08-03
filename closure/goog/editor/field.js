@@ -829,31 +829,17 @@ goog.editor.Field.prototype.tearDownFieldObject_ = function() {
 goog.editor.Field.prototype.setupChangeListeners_ = function() {
   'use strict';
 
-  if (goog.userAgent.OPERA && this.usesIframe()) {
-    // We can't use addListener here because we need to listen on the window,
-    // and removing listeners on window objects from the event register throws
-    // an exception if the window is closed.
-    this.boundFocusListenerOpera_ =
-        goog.bind(this.dispatchFocusAndBeforeFocus_, this);
-    this.boundBlurListenerOpera_ = goog.bind(this.dispatchBlur, this);
-    var editWindow = this.getEditableDomHelper().getWindow();
-    editWindow.addEventListener(
-        goog.events.EventType.FOCUS, this.boundFocusListenerOpera_, false);
-    editWindow.addEventListener(
-        goog.events.EventType.BLUR, this.boundBlurListenerOpera_, false);
+
+  if (goog.editor.BrowserFeature.SUPPORTS_FOCUSIN) {
+    this.addListener(goog.events.EventType.FOCUS, this.dispatchFocus_);
+    this.addListener(goog.events.EventType.FOCUSIN, this.dispatchBeforeFocus_);
   } else {
-    if (goog.editor.BrowserFeature.SUPPORTS_FOCUSIN) {
-      this.addListener(goog.events.EventType.FOCUS, this.dispatchFocus_);
-      this.addListener(
-          goog.events.EventType.FOCUSIN, this.dispatchBeforeFocus_);
-    } else {
-      this.addListener(
-          goog.events.EventType.FOCUS, this.dispatchFocusAndBeforeFocus_);
-    }
     this.addListener(
-        goog.events.EventType.BLUR, this.dispatchBlur,
-        goog.editor.BrowserFeature.USE_MUTATION_EVENTS);
+        goog.events.EventType.FOCUS, this.dispatchFocusAndBeforeFocus_);
   }
+  this.addListener(
+      goog.events.EventType.BLUR, this.dispatchBlur,
+      goog.editor.BrowserFeature.USE_MUTATION_EVENTS);
 
   if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
     // Ways to detect changes in Mozilla:
@@ -948,21 +934,6 @@ goog.editor.Field.prototype.clearListeners = function() {
     this.eventRegister.removeAll();
   }
 
-  if (goog.userAgent.OPERA && this.usesIframe()) {
-    try {
-      var editWindow = this.getEditableDomHelper().getWindow();
-      editWindow.removeEventListener(
-          goog.events.EventType.FOCUS, this.boundFocusListenerOpera_, false);
-      editWindow.removeEventListener(
-          goog.events.EventType.BLUR, this.boundBlurListenerOpera_, false);
-    } catch (e) {
-      // The editWindow no longer exists, or has been navigated to a different-
-      // origin URL. Either way, the event listeners have already been removed
-      // for us.
-    }
-    delete this.boundFocusListenerOpera_;
-    delete this.boundBlurListenerOpera_;
-  }
 
   if (this.changeTimerGecko_) {
     this.changeTimerGecko_.stop();
@@ -2387,20 +2358,7 @@ goog.editor.Field.prototype.focus = function() {
     // In designMode, only the window itself can be focused; not the element.
     this.getEditableDomHelper().getWindow().focus();
   } else {
-    if (goog.userAgent.OPERA) {
-      // Opera will scroll to the bottom of the focused document, even
-      // if it is contained in an iframe that is scrolled to the top and
-      // the bottom flows past the end of it. To prevent this,
-      // save the scroll position of the document containing the editor
-      // iframe, then restore it after the focus.
-      var scrollX = this.appWindow_.pageXOffset;
-      var scrollY = this.appWindow_.pageYOffset;
-    }
     this.getElement().focus();
-    if (goog.userAgent.OPERA) {
-      this.appWindow_.scrollTo(
-          /** @type {number} */ (scrollX), /** @type {number} */ (scrollY));
-    }
   }
 };
 

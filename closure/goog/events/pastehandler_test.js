@@ -16,7 +16,6 @@ const PasteHandler = goog.require('goog.events.PasteHandler');
 const dom = goog.require('goog.dom');
 const events = goog.require('goog.events');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
 /** @suppress {checkTypes} suppression added to enable type checking */
 function newBrowserEvent(type) {
@@ -321,46 +320,6 @@ testSuite({
     // if the textarea is NOT selected, and then we use the middle button,
     // FF2+linux pastes what was last highlighted, causing a paste action.
     textarea.dispatchEvent(EventType.FOCUS);
-    textarea.dispatchEvent(newBrowserEvent('input'));
-    assertTrue(pasted);
-  },
-
-  testMacRightClickPasteRequiresCtrlBecauseItHasOneButton() {
-    if (!userAgent.OPERA || !userAgent.MAC) {
-      return;
-    }
-    /** @suppress {checkTypes} suppression added to enable type checking */
-    const handler = new PasteHandler(textarea);
-    // user clicks on the textarea and give it focus
-    events.listen(handler, PasteHandler.EventType.PASTE, () => {
-      pasted = true;
-    });
-    textarea.dispatchEvent(EventType.FOCUS);
-    assertFalse(pasted);
-    textarea.dispatchEvent({type: EventType.KEYDOWN, keyCode: 0});
-    assertFalse(pasted);
-    clock.tick(PasteHandler.MANDATORY_MS_BETWEEN_INPUT_EVENTS_TIE_BREAKER + 1);
-    textarea.dispatchEvent(newBrowserEvent('input'));
-    assertTrue(pasted);
-  },
-
-  testOperaMacFiresKeyCode17WhenAppleKeyPressedButDoesNotFireKeyDown() {
-    if (!userAgent.OPERA || !userAgent.MAC) {
-      return;
-    }
-    /** @suppress {checkTypes} suppression added to enable type checking */
-    const handler = new PasteHandler(textarea);
-    // user clicks on the textarea and give it focus
-    events.listen(handler, PasteHandler.EventType.PASTE, () => {
-      pasted = true;
-    });
-    textarea.dispatchEvent(EventType.FOCUS);
-    assertFalse(pasted);
-    // apple key is pressed, generating a keydown event
-    textarea.dispatchEvent({type: EventType.KEYDOWN, keyCode: 17});
-    assertFalse(pasted);
-    clock.tick(PasteHandler.MANDATORY_MS_BETWEEN_INPUT_EVENTS_TIE_BREAKER + 1);
-    // and then text is added magically without any extra keydown events.
     textarea.dispatchEvent(newBrowserEvent('input'));
     assertTrue(pasted);
   },

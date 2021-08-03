@@ -20,7 +20,6 @@ goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.browserrange.GeckoRange');
 goog.require('goog.dom.browserrange.IeRange');
-goog.require('goog.dom.browserrange.OperaRange');
 goog.require('goog.dom.browserrange.W3cRange');
 goog.require('goog.dom.browserrange.WebKitRange');
 goog.require('goog.userAgent');
@@ -58,9 +57,6 @@ goog.dom.browserrange.createRange = function(range) {
   } else if (goog.userAgent.GECKO) {
     return new goog.dom.browserrange.GeckoRange(
         /** @type {Range} */ (range));
-  } else if (goog.userAgent.OPERA) {
-    return new goog.dom.browserrange.OperaRange(
-        /** @type {Range} */ (range));
   } else {
     // Default other browsers, including Opera, to W3c ranges.
     return new goog.dom.browserrange.W3cRange(
@@ -82,8 +78,6 @@ goog.dom.browserrange.createRangeFromNodeContents = function(node) {
     return goog.dom.browserrange.WebKitRange.createFromNodeContents(node);
   } else if (goog.userAgent.GECKO) {
     return goog.dom.browserrange.GeckoRange.createFromNodeContents(node);
-  } else if (goog.userAgent.OPERA) {
-    return goog.dom.browserrange.OperaRange.createFromNodeContents(node);
   } else {
     // Default other browsers to W3c ranges.
     return goog.dom.browserrange.W3cRange.createFromNodeContents(node);
@@ -114,9 +108,6 @@ goog.dom.browserrange.createRangeFromNodes = function(
         startNode, startOffset, endNode, endOffset);
   } else if (goog.userAgent.GECKO) {
     return goog.dom.browserrange.GeckoRange.createFromNodes(
-        startNode, startOffset, endNode, endOffset);
-  } else if (goog.userAgent.OPERA) {
-    return goog.dom.browserrange.OperaRange.createFromNodes(
         startNode, startOffset, endNode, endOffset);
   } else {
     // Default other browsers to W3c ranges.

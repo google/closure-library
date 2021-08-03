@@ -486,13 +486,7 @@ goog.History.prototype.setEnabled = function(enable) {
   }
 
   if (enable) {
-    if (goog.userAgent.OPERA) {
-      // Capture events for common user input so we can restart the timer in
-      // Opera if it fails. Yes, this is distasteful. See operaDefibrillator_.
-      this.eventHandler_.listen(
-          this.window_.document, goog.History.INPUT_EVENTS_,
-          this.operaDefibrillator_);
-    } else if (goog.userAgent.GECKO) {
+    if (goog.userAgent.GECKO) {
       // Firefox will not restore the correct state after navigating away from
       // and then back to the page with the history object. This can be fixed
       // by restarting the history object on the pageshow event.

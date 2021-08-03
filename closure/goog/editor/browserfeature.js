@@ -29,7 +29,7 @@ goog.editor.BrowserFeature = {
   // Whether this browser uses the W3C standard Range object.
   // Assumes IE higher versions will be compliance with W3C standard.
   HAS_W3C_RANGES: goog.userAgent.GECKO || goog.userAgent.WEBKIT ||
-      goog.userAgent.OPERA || goog.userAgent.EDGE ||
+      goog.userAgent.EDGE ||
       (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9)),
 
   // Has the contentEditable attribute, which makes nodes editable.
@@ -47,7 +47,7 @@ goog.editor.BrowserFeature = {
   // If we ever hope to support FF3/contentEditable, all 3 of these issues
   // will need answers. Most just involve refactoring at our end.
   HAS_CONTENT_EDITABLE: goog.userAgent.IE || goog.userAgent.WEBKIT ||
-      goog.userAgent.OPERA || goog.userAgent.EDGE ||
+      goog.userAgent.EDGE ||
       (goog.editor.defines.USE_CONTENTEDITABLE_IN_FIREFOX_3 &&
        goog.userAgent.GECKO),
 
@@ -74,14 +74,14 @@ goog.editor.BrowserFeature = {
   // Whether the selection of one frame is cleared when another frame
   // is focused.
   CLEARS_SELECTION_WHEN_FOCUS_LEAVES:
-      goog.userAgent.IE || goog.userAgent.WEBKIT || goog.userAgent.OPERA,
+      goog.userAgent.IE || goog.userAgent.WEBKIT,
 
   // Whether "unselectable" is supported as an element style.
   HAS_UNSELECTABLE_STYLE: goog.userAgent.GECKO || goog.userAgent.WEBKIT,
 
   // Whether this browser's "FormatBlock" command does not suck.
   FORMAT_BLOCK_WORKS_FOR_BLOCKQUOTES:
-      goog.userAgent.GECKO || goog.userAgent.WEBKIT || goog.userAgent.OPERA,
+      goog.userAgent.GECKO || goog.userAgent.WEBKIT,
 
   // Whether this browser's "FormatBlock" command may create multiple
   // blockquotes. This will not occur on currently-supported browsers.
@@ -89,7 +89,7 @@ goog.editor.BrowserFeature = {
 
   // Whether this browser's "FormatBlock" command will wrap blockquotes
   // inside of divs, instead of replacing divs with blockquotes.
-  WRAPS_BLOCKQUOTE_IN_DIVS: goog.userAgent.OPERA,
+  WRAPS_BLOCKQUOTE_IN_DIVS: false,
 
   // Whether the readystatechange event is more reliable than load.
   PREFERS_READY_STATE_CHANGE_EVENT: goog.userAgent.IE,
@@ -119,11 +119,10 @@ goog.editor.BrowserFeature = {
   // Whether this browser shrinks empty nodes away to nothing.
   // (If so, we need to insert some space characters into nodes that
   //  shouldn't be collapsed)
-  COLLAPSES_EMPTY_NODES:
-      goog.userAgent.GECKO || goog.userAgent.WEBKIT || goog.userAgent.OPERA,
+  COLLAPSES_EMPTY_NODES: goog.userAgent.GECKO || goog.userAgent.WEBKIT,
 
   // Whether we must convert <strong> and <em> tags to <b>, <i>.
-  CONVERT_TO_B_AND_I_TAGS: goog.userAgent.GECKO || goog.userAgent.OPERA,
+  CONVERT_TO_B_AND_I_TAGS: goog.userAgent.GECKO,
 
   // Whether this browser likes to tab through images in contentEditable mode,
   // and we like to disable this feature.
@@ -134,15 +133,14 @@ goog.editor.BrowserFeature = {
 
   // Whether this browser supports execCommand("styleWithCSS") to toggle between
   // inserting html tags or inline styling for things like bold, italic, etc.
-  HAS_STYLE_WITH_CSS:
-      goog.userAgent.GECKO || goog.userAgent.WEBKIT || goog.userAgent.OPERA,
+  HAS_STYLE_WITH_CSS: goog.userAgent.GECKO || goog.userAgent.WEBKIT,
 
   // Whether clicking on an editable link will take you to that site.
   FOLLOWS_EDITABLE_LINKS: goog.userAgent.WEBKIT || goog.userAgent.IE,
 
   // Whether this browser has document.activeElement available.
-  HAS_ACTIVE_ELEMENT: goog.userAgent.IE || goog.userAgent.EDGE ||
-      goog.userAgent.OPERA || goog.userAgent.GECKO,
+  HAS_ACTIVE_ELEMENT:
+      goog.userAgent.IE || goog.userAgent.EDGE || goog.userAgent.GECKO,
 
   // Whether this browser supports the setCapture method on DOM elements.
   HAS_SET_CAPTURE: goog.userAgent.IE,
@@ -155,7 +153,7 @@ goog.editor.BrowserFeature = {
   // consistently.
   // NOTE(nicksantos): FF supports DOMFocusIn, but doesn't seem to do so
   // consistently.
-  SUPPORTS_FOCUSIN: goog.userAgent.IE || goog.userAgent.OPERA,
+  SUPPORTS_FOCUSIN: goog.userAgent.IE,
 
   // Whether clicking on an image will cause the selection to move to the image.
   // Note: Gecko moves the selection, but it won't always go to the image.
@@ -163,7 +161,7 @@ goog.editor.BrowserFeature = {
   // anchorNode = focusNode = div, anchorOffset = 0, focusOffset = 1, so this
   // is another way of "selecting" the image, but there are too many special
   // cases like this so we will do the work manually.
-  SELECTS_IMAGES_ON_CLICK: goog.userAgent.IE || goog.userAgent.OPERA,
+  SELECTS_IMAGES_ON_CLICK: goog.userAgent.IE,
 
   // Whether this browser moves <style> tags into new <head> elements.
   MOVES_STYLE_TO_HEAD: goog.userAgent.WEBKIT,
@@ -176,7 +174,7 @@ goog.editor.BrowserFeature = {
 
   // Whether the user can actually create a selection in this browser with the
   // caret in the MIDDLE of the selection by double-clicking.
-  CARET_INSIDE_SELECTION: goog.userAgent.OPERA,
+  CARET_INSIDE_SELECTION: false,
 
   // Whether the browser focuses <body contenteditable> automatically when
   // the user clicks on <html>. This field is deprecated and unused -- only old
@@ -208,17 +206,17 @@ goog.editor.BrowserFeature = {
   // Browsers where executing subscript then superscript (or vv) will cause both
   // to be applied in a nested fashion instead of the first being overwritten by
   // the second.
-  NESTS_SUBSCRIPT_SUPERSCRIPT: goog.userAgent.IE || goog.userAgent.EDGE ||
-      goog.userAgent.GECKO || goog.userAgent.OPERA,
+  NESTS_SUBSCRIPT_SUPERSCRIPT:
+      goog.userAgent.IE || goog.userAgent.EDGE || goog.userAgent.GECKO,
 
   // Whether this browser can place a cursor in an empty element natively.
   CAN_SELECT_EMPTY_ELEMENT: !goog.userAgent.IE && !goog.userAgent.WEBKIT,
 
   FORGETS_FORMATTING_WHEN_LISTIFYING: goog.userAgent.GECKO,
 
-  LEAVES_P_WHEN_REMOVING_LISTS: goog.userAgent.IE || goog.userAgent.OPERA,
+  LEAVES_P_WHEN_REMOVING_LISTS: goog.userAgent.IE,
 
-  CAN_LISTIFY_BR: !goog.userAgent.IE && !goog.userAgent.OPERA,
+  CAN_LISTIFY_BR: !goog.userAgent.IE,
 
   // See bug 1286408. When somewhere inside your selection there is an element
   // with a style attribute that sets the font size, if you change the font

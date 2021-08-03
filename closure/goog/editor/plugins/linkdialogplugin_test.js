@@ -546,7 +546,7 @@ testSuite({
         'Incorrect text selected before dialog is opened', '234',
         fieldObj.getRange().getText());
     plugin.execCommand(Command.MODAL_LINK_EDITOR, linkObj);
-    if (!userAgent.IE && !userAgent.OPERA) {
+    if (!userAgent.IE) {
       // IE returns some bogus range when field doesn't have selection.
       // You can't remove the selection from a whitebox field in Opera.
       assertNull(
@@ -588,7 +588,7 @@ testSuite({
         'Incorrect text selected before dialog is opened', '234',
         fieldObj.getRange().getText());
     plugin.execCommand(Command.MODAL_LINK_EDITOR, linkObj);
-    if (!userAgent.IE && !userAgent.OPERA) {
+    if (!userAgent.IE) {
       // IE returns some bogus range when field doesn't have selection.
       // You can't remove the selection from a whitebox field in Opera.
       assertNull(

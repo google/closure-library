@@ -673,7 +673,7 @@ goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
     // fire readyState == INTERACTIVE once.  We need the following code to poll
     if (readyState < goog.net.XmlHttp.ReadyState.INTERACTIVE ||
         readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE &&
-            !goog.userAgent.OPERA && !this.xmlHttp_.getResponseText()) {
+            !this.xmlHttp_.getResponseText()) {
       // not yet ready
       return;
     }
@@ -738,10 +738,6 @@ goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
 
   if (this.decodeChunks_) {
     this.decodeNextChunks_(readyState, responseText);
-    if (goog.userAgent.OPERA && this.successful_ &&
-        readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE) {
-      this.startPolling_();
-    }
   } else {
     this.channelDebug_.xmlHttpChannelResponseText(
         this.rid_, responseText, null);

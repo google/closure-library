@@ -48,14 +48,11 @@ goog.debug.DevCss = function(opt_userAgent, opt_userAgentVersion) {
       opt_userAgent = goog.debug.DevCss.UserAgent.WEBKIT;
     } else if (goog.userAgent.MOBILE) {
       opt_userAgent = goog.debug.DevCss.UserAgent.MOBILE;
-    } else if (goog.userAgent.OPERA) {
-      opt_userAgent = goog.debug.DevCss.UserAgent.OPERA;
     } else if (goog.userAgent.EDGE) {
       opt_userAgent = goog.debug.DevCss.UserAgent.EDGE;
     }
   }
   switch (opt_userAgent) {
-    case goog.debug.DevCss.UserAgent.OPERA:
     case goog.debug.DevCss.UserAgent.IE:
     case goog.debug.DevCss.UserAgent.GECKO:
     case goog.debug.DevCss.UserAgent.FIREFOX:

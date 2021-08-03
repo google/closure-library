@@ -28,8 +28,6 @@ goog.dom.vendor.getVendorJsPrefix = function() {
     return 'Moz';
   } else if (goog.userAgent.IE) {
     return 'ms';
-  } else if (goog.userAgent.OPERA) {
-    return 'O';
   }
 
   return null;
@@ -49,8 +47,6 @@ goog.dom.vendor.getVendorPrefix = function() {
     return '-moz';
   } else if (goog.userAgent.IE) {
     return '-ms';
-  } else if (goog.userAgent.OPERA) {
-    return '-o';
   }
 
   return null;

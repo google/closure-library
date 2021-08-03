@@ -12,7 +12,6 @@ goog.setTestOnly('goog.testing.PropertyReplacer');
 goog.provide('goog.testing.PropertyReplacer');
 
 goog.require('goog.asserts');
-goog.require('goog.userAgent');
 
 
 
@@ -101,9 +100,7 @@ goog.testing.PropertyReplacer.hasKey_ = function(obj, key) {
   // In all browsers except Opera obj.constructor never equals to Object if
   // obj is an instance of a native class. In Opera we have to fall back on
   // examining obj.toString().
-  if (obj.constructor == Object &&
-      (!goog.userAgent.OPERA ||
-       Object.prototype.toString.call(obj) == '[object Object]')) {
+  if (obj.constructor == Object) {
     return false;
   }
   try {

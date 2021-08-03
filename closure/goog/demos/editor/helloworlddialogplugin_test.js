@@ -146,7 +146,7 @@ testSuite({
     // NOTE(user): You can't remove the selection from a field in Opera without
     // blurring it.
     elem.parentNode.blur();
-    expectedFailures.expectFailureFor(googUserAgent.IE || googUserAgent.OPERA);
+    expectedFailures.expectFailureFor(googUserAgent.IE);
     try {
       assertNull(
           'There should be no selection while dialog is open',
