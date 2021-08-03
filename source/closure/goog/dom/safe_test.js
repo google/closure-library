@@ -798,12 +798,12 @@ testSuite({
         /** @type {?} */ (googTesting.createMethodMock(window, 'open'));
     const fakeWindow = {};
 
-    mockWindowOpen('about:invalid#zClosurez', 'name', 'specs', true)
+    mockWindowOpen('about:invalid#zClosurez', 'name', 'specs')
         .$returns(fakeWindow);
     mockWindowOpen.$replay();
     let retVal = withAssertionFailure(
         () => safe.openInWindow(
-            'javascript:evil();', window, Const.from('name'), 'specs', true));
+            'javascript:evil();', window, Const.from('name'), 'specs'));
     mockWindowOpen.$verify();
     assertEquals(
         'openInWindow should return the created window', fakeWindow, retVal);
@@ -812,11 +812,10 @@ testSuite({
     retVal = null;
 
     const safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
-    mockWindowOpen('javascript:trusted();', 'name', 'specs', true)
+    mockWindowOpen('javascript:trusted();', 'name', 'specs')
         .$returns(fakeWindow);
     mockWindowOpen.$replay();
-    retVal =
-        safe.openInWindow(safeUrl, window, Const.from('name'), 'specs', true);
+    retVal = safe.openInWindow(safeUrl, window, Const.from('name'), 'specs');
     mockWindowOpen.$verify();
     assertEquals(
         'openInWindow should return the created window', fakeWindow, retVal);

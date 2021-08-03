@@ -781,12 +781,9 @@ goog.dom.safe.replaceLocation = function(loc, url) {
  *     legacy reasons. Pass goog.string.Const if possible.
  * @param {string=} opt_specs Comma-separated list of specifications, same as
  *     in window.open().
- * @param {boolean=} opt_replace Whether to replace the current entry in browser
- *     history, same as in window.open().
  * @return {Window} Window the url was opened in.
  */
-goog.dom.safe.openInWindow = function(
-    url, opt_openerWin, opt_name, opt_specs, opt_replace) {
+goog.dom.safe.openInWindow = function(url, opt_openerWin, opt_name, opt_specs) {
   'use strict';
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
@@ -803,12 +800,11 @@ goog.dom.safe.openInWindow = function(
   var name = opt_name instanceof goog.string.Const ?
       goog.string.Const.unwrap(opt_name) :
       opt_name || '';
-  // Do not pass opt_specs and opt_replace to window.open unless they were
-  // provided by the caller. IE11 will use it as a signal to open a new window
-  // rather than a new tab (even if they're undefined).
-  if (opt_specs !== undefined || opt_replace !== undefined) {
-    return win.open(
-        goog.html.SafeUrl.unwrap(safeUrl), name, opt_specs, opt_replace);
+  // Do not pass opt_specs to window.open unless it was provided by the caller.
+  // IE11 will use it as a signal to open a new window rather than a new tab
+  // (even if it is undefined).
+  if (opt_specs !== undefined) {
+    return win.open(goog.html.SafeUrl.unwrap(safeUrl), name, opt_specs);
   } else {
     return win.open(goog.html.SafeUrl.unwrap(safeUrl), name);
   }
