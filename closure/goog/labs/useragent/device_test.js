@@ -9,24 +9,13 @@
 goog.module('goog.labs.userAgent.deviceTest');
 goog.setTestOnly();
 
-const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const device = goog.require('goog.labs.userAgent.device');
-const functions = goog.require('goog.functions');
 const testAgents = goog.require('goog.labs.userAgent.testAgents');
 const testSuite = goog.require('goog.testing.testSuite');
 const util = goog.require('goog.labs.userAgent.util');
 
-const stubs = new PropertyReplacer();
-
-/**
- * @param {string|?NavigatorUAData} userAgent
- */
-function assertIsMobile(userAgent) {
-  if (typeof userAgent === 'string') {
-    util.setUserAgent(userAgent);
-  } else {
-    stubs.set(util, 'getUserAgentData', functions.constant(userAgent));
-  }
+function assertIsMobile(uaString) {
+  util.setUserAgent(uaString);
   assertTrue(device.isMobile());
   assertFalse(device.isTablet());
   assertFalse(device.isDesktop());
@@ -45,15 +34,9 @@ function assertIsDesktop(uaString) {
   assertFalse(device.isMobile());
   assertFalse(device.isTablet());
 }
-
 testSuite({
   setUp() {
     util.setUserAgent(null);
-    stubs.set(util, 'getUserAgentData', functions.constant(null));
-  },
-
-  tearDown() {
-    stubs.reset();
   },
 
   testMobile() {
@@ -61,7 +44,6 @@ testSuite({
     assertIsMobile(testAgents.CHROME_ANDROID);
     assertIsMobile(testAgents.SAFARI_IPHONE_6);
     assertIsMobile(testAgents.IE_10_MOBILE);
-    assertIsMobile(testAgents.CHROME_USERAGENT_DATA_MOBILE);
   },
 
   testTablet() {
