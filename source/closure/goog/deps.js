@@ -435,7 +435,7 @@ goog.addDependency('labs/useragent/engine.js', ['goog.labs.userAgent.engine'], [
 goog.addDependency('labs/useragent/extra.js', ['goog.labs.userAgent.extra'], ['goog.labs.userAgent.platform'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/useragent/platform.js', ['goog.labs.userAgent.platform'], ['goog.labs.userAgent.util', 'goog.string']);
 goog.addDependency('labs/useragent/test_agents.js', ['goog.labs.userAgent.testAgents'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('labs/useragent/util.js', ['goog.labs.userAgent.util'], ['goog.string.internal']);
+goog.addDependency('labs/useragent/util.js', ['goog.labs.userAgent.util'], ['goog.string.internal'], {'lang': 'es6'});
 goog.addDependency('labs/useragent/verifier.js', ['goog.labs.useragent.verifier'], [], {'lang': 'es6'});
 goog.addDependency('loader/abstractmodulemanager.js', ['goog.loader.AbstractModuleManager', 'goog.loader.AbstractModuleManager.CallbackType', 'goog.loader.AbstractModuleManager.FailureType'], ['goog.module.AbstractModuleLoader', 'goog.module.ModuleInfo', 'goog.module.ModuleLoadCallback', 'goog.module.ModuleLoadFailureType']);
 goog.addDependency('loader/activemodulemanager.js', ['goog.loader.activeModuleManager'], ['goog.asserts', 'goog.loader.AbstractModuleManager'], {'lang': 'es6', 'module': 'goog'});
