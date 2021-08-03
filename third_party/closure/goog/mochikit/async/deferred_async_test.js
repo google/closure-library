@@ -1,6 +1,7 @@
 /**
- * Copyright 2013 The Closure Library Authors. All Rights Reserved.
- * Author: malteubl@google.com (Malte Ubl)
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 goog.module('goog.async.deferredAsyncTest');

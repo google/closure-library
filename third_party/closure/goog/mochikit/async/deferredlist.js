@@ -1,12 +1,13 @@
-// Copyright 2005 Bob Ippolito. All Rights Reserved.
-// Modifications Copyright 2009 The Closure Library Authors.
-// All Rights Reserved.
-
 /**
- * Portions of this code are from MochiKit, received by The Closure
- * Library Authors under the MIT license. All other code is Copyright
- * 2005-2009 The Closure Library Authors. All Rights Reserved.
+ * @license
+ * Copyright 2005, 2007 Bob Ippolito. All Rights Reserved.
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: MIT
  */
+
+// Portions of this code are from MochiKit, received by The Closure
+// Library Authors under the MIT license. All other code is Copyright
+// The Closure Library Authors.
 
 /**
  * @fileoverview Class for tracking multiple asynchronous operations and

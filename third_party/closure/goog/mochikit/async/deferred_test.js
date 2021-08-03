@@ -1,6 +1,7 @@
 /**
- * Copyright 2009 The Closure Library Authors. All Rights Reserved.
- * Author: arv@google.com (Erik Arvidsson)
+ * @license
+ * Copyright The Closure Library Authors.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 goog.module('goog.async.deferredTest');
