@@ -713,9 +713,9 @@ goog.addDependency('labs/testing/objectmatcher_test.js', ['goog.labs.testing.obj
 goog.addDependency('labs/testing/stringmatcher.js', ['goog.labs.testing.stringmatcher'], ['goog.asserts', 'goog.labs.testing.Matcher', 'goog.string']);
 goog.addDependency('labs/testing/stringmatcher_test.js', ['goog.labs.testing.stringMatcherTest'], ['goog.labs.testing', 'goog.labs.testing.MatcherError', 'goog.labs.testing.assertThat', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/useragent/browser.js', ['goog.labs.userAgent.browser'], ['goog.array', 'goog.labs.userAgent.util', 'goog.object', 'goog.string.internal']);
-goog.addDependency('labs/useragent/browser_test.js', ['goog.labs.userAgent.browserTest'], ['goog.functions', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.object', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('labs/useragent/browser_test.js', ['goog.labs.userAgent.browserTest'], ['goog.labs.userAgent.browser', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.object', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/useragent/device.js', ['goog.labs.userAgent.device'], ['goog.labs.userAgent.util']);
-goog.addDependency('labs/useragent/device_test.js', ['goog.labs.userAgent.deviceTest'], ['goog.functions', 'goog.labs.userAgent.device', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('labs/useragent/device_test.js', ['goog.labs.userAgent.deviceTest'], ['goog.labs.userAgent.device', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/useragent/engine.js', ['goog.labs.userAgent.engine'], ['goog.array', 'goog.labs.userAgent.util', 'goog.string']);
 goog.addDependency('labs/useragent/engine_test.js', ['goog.labs.userAgent.engineTest'], ['goog.labs.userAgent.engine', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/useragent/extra.js', ['goog.labs.userAgent.extra'], ['goog.labs.userAgent.platform'], {'lang': 'es6', 'module': 'goog'});
@@ -723,7 +723,7 @@ goog.addDependency('labs/useragent/extra_test.js', ['goog.labs.userAgent.extraTe
 goog.addDependency('labs/useragent/platform.js', ['goog.labs.userAgent.platform'], ['goog.labs.userAgent.util', 'goog.string']);
 goog.addDependency('labs/useragent/platform_test.js', ['goog.labs.userAgent.platformTest'], ['goog.labs.userAgent.platform', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/useragent/test_agents.js', ['goog.labs.userAgent.testAgents'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('labs/useragent/util.js', ['goog.labs.userAgent.util'], ['goog.string.internal'], {'lang': 'es6'});
+goog.addDependency('labs/useragent/util.js', ['goog.labs.userAgent.util'], ['goog.string.internal']);
 goog.addDependency('labs/useragent/util_test.js', ['goog.labs.userAgent.utilTest'], ['goog.functions', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.PropertyReplacer', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('labs/useragent/verifier.js', ['goog.labs.useragent.verifier'], [], {'lang': 'es6'});
 goog.addDependency('labs/useragent/verifier_test.js', ['goog.labs.useragent.verifierTest'], ['goog.labs.userAgent.browser', 'goog.labs.useragent.verifier', 'goog.testing.testSuite'], {'lang': 'es6', 'module': 'goog'});
