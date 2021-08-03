@@ -9,8 +9,6 @@
 goog.module('goog.labs.userAgent.browserTest');
 goog.setTestOnly();
 
-const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
-const functions = goog.require('goog.functions');
 const googObject = goog.require('goog.object');
 const testAgents = goog.require('goog.labs.userAgent.testAgents');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -90,17 +88,9 @@ function assertVersionBetween(lowVersion, highVersion) {
   assertTrue(userAgentBrowser.isVersionOrHigher(lowVersion));
   assertFalse(userAgentBrowser.isVersionOrHigher(highVersion));
 }
-
-const stubs = new PropertyReplacer();
-
 testSuite({
   setUp() {
     util.setUserAgent(null);
-    stubs.set(util, 'getUserAgentData', functions.constant(null));
-  },
-
-  tearDown() {
-    stubs.reset();
   },
 
   testOpera10() {
@@ -138,15 +128,6 @@ testSuite({
     assertBrowser(Browser.OPERA);
     assertVersion('11.10');
     assertVersionBetween('11.00', '12.00');
-  },
-
-  testOperaChromiumUserAgentData() {
-    stubs.set(
-        util, 'getUserAgentData',
-        functions.constant(testAgents.OPERACHROMIUM_USERAGENT_DATA));
-    assertBrowser(Browser.CHROME);
-    assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.OPERA_CHROMIUM);
-    assertFalse(userAgentBrowser.isOpera());
   },
 
   testIE6() {
@@ -248,15 +229,6 @@ testSuite({
     assertVersionBetween('74.1', '74.2');
   },
 
-  testEdgeChromiumUserAgentData() {
-    stubs.set(
-        util, 'getUserAgentData',
-        functions.constant(testAgents.EDGECHROMIUM_USERAGENT_DATA));
-    assertBrowser(Browser.CHROME);
-    assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.EDGE_CHROMIUM);
-    assertFalse(userAgentBrowser.isEdge());
-  },
-
   testFirefox19() {
     util.setUserAgent(testAgents.FIREFOX_19);
     assertBrowser(Browser.FIREFOX);
@@ -329,14 +301,6 @@ testSuite({
     assertVersion('24.0.1309.0');
     assertVersionBetween('24.0', '25.0');
     assertVersionBetween('24.0', '24.10');
-  },
-
-  testChromeUserAgentData() {
-    stubs.set(
-        util, 'getUserAgentData',
-        functions.constant(testAgents.CHROME_USERAGENT_DATA));
-    assertBrowser(Browser.CHROME);
-    assertTrue(userAgentBrowser.isChrome());
   },
 
   testSafariIpad() {
