@@ -7,63 +7,62 @@
 # build and you also won't get new or improved rules. Instead use this file in
 # your project and extend the rules to disable them or to add their allowlists.
 
-
 ### Platform restrictions ###
 
 requirement: {
-  rule_id: 'closure:callee'
+  rule_id: "closure:callee"
   type: BANNED_PROPERTY
-  error_message: 'Arguments.prototype.callee is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#callee'
+  error_message: "Arguments.prototype.callee is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#callee"
 
-  value: 'Arguments.prototype.callee'
+  value: "Arguments.prototype.callee"
 
-  allowlist_regexp: '.+/closure/goog/debug/'  # legacy stack trace support, etc
+  allowlist_regexp: ".+/closure/goog/debug/"  # legacy stack trace support, etc
   # TODO(mlourenco): Fix this? Not sure if possible or not.
-  allowlist_regexp: '.+/closure/goog/testing/stacktrace.js'
+  allowlist_regexp: ".+/closure/goog/testing/stacktrace.js"
 }
 
 requirement: {
-  rule_id: 'closure:throwOfNonErrorTypes'
+  rule_id: "closure:throwOfNonErrorTypes"
   type: CUSTOM
-  java_class: 'com.google.javascript.jscomp.ConformanceRules$BanThrowOfNonErrorTypes'
-  error_message: 'Only Error or Error subclass objects may be thrown. See https://google.github.io/closure-library/develop/conformance_rules.html#throwOfNonErrorTypes'
+  java_class: "com.google.javascript.jscomp.ConformanceRules$BanThrowOfNonErrorTypes"
+  error_message: "Only Error or Error subclass objects may be thrown. See https://google.github.io/closure-library/develop/conformance_rules.html#throwOfNonErrorTypes"
 
-  allowlist_regexp: '.+/closure/goog/storage/'  # throws numbers as part of its api
-  allowlist_regexp: '.+/closure/goog/testing/mock.js'  # throws Object in $recordAndThrow
+  allowlist_regexp: ".+/closure/goog/storage/"  # throws numbers as part of its api
+  allowlist_regexp: ".+/closure/goog/testing/mock.js"  # throws Object in $recordAndThrow
 }
 
 requirement: {
-  rule_id: 'closure:globalVars'
+  rule_id: "closure:globalVars"
   type: CUSTOM
-  java_class: 'com.google.javascript.jscomp.ConformanceRules$BanGlobalVars'
-  error_message: 'Global declarations are not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#globalVars'
-  allowlist_regexp: '.+/closure/goog/base.js' # global 'goog'
-  allowlist_regexp: '.+/closure/goog/labs/testing/' # global matchers, etc
-  allowlist_regexp: '.+/closure/goog/locale/locale.js' # dumb api
-  allowlist_regexp: '.+/closure/goog/testing/' # global assert methods, etc
-  allowlist_regexp: '.+/closure/goog/tweak/testhelpers.js' # global values
-  allowlist_regexp: '^Post-' # injected '_ModuleManager_initialize'
+  java_class: "com.google.javascript.jscomp.ConformanceRules$BanGlobalVars"
+  error_message: "Global declarations are not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#globalVars"
+  allowlist_regexp: ".+/closure/goog/base.js"  # global 'goog'
+  allowlist_regexp: ".+/closure/goog/labs/testing/"  # global matchers, etc
+  allowlist_regexp: ".+/closure/goog/locale/locale.js"  # dumb api
+  allowlist_regexp: ".+/closure/goog/testing/"  # global assert methods, etc
+  allowlist_regexp: ".+/closure/goog/tweak/testhelpers.js"  # global values
+  allowlist_regexp: "^Post-"  # injected '_ModuleManager_initialize'
 
   # Allowlist for global names
-  value: 'CLOSURE_DEFINES' # Closure Compiler requires this to be a global var
+  value: "CLOSURE_DEFINES"  # Closure Compiler requires this to be a global var
 }
 
 requirement: {
-  rule_id: 'closure:unknownThis'
+  rule_id: "closure:unknownThis"
   type: CUSTOM
-  java_class: 'com.google.javascript.jscomp.ConformanceRules$BanUnknownThis'
-  error_message: 'References to "this" that are typed as "unknown" are not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#unknownThis'
+  java_class: "com.google.javascript.jscomp.ConformanceRules$BanUnknownThis"
+  error_message: "References to \"this\" that are typed as \"unknown\" are not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#unknownThis"
 
-  allowlist_regexp: '.+/closure/goog/base.js'
-  allowlist_regexp: '.+/closure/goog/debug/errorhandler.js'
-  allowlist_regexp: '.+/closure/goog/editor/plugins/linkbubble.js'
-  allowlist_regexp: '.+/closure/goog/editor/plugins/linkdialogplugin.js'
-  allowlist_regexp: '.+/closure/goog/functions/functions.js'
-  allowlist_regexp: '.+/closure/goog/memoize/memoize.js'
-  allowlist_regexp: '.+/closure/goog/pubsub/pubsub.js'
-  allowlist_regexp: '.+/closure/goog/testing/'
-  allowlist_regexp: '.+/closure/goog/ui/editor/bubble.js'
-  allowlist_regexp: '.+/closure/goog/ui/editor/toolbarcontroller.js'
+  allowlist_regexp: ".+/closure/goog/base.js"
+  allowlist_regexp: ".+/closure/goog/debug/errorhandler.js"
+  allowlist_regexp: ".+/closure/goog/editor/plugins/linkbubble.js"
+  allowlist_regexp: ".+/closure/goog/editor/plugins/linkdialogplugin.js"
+  allowlist_regexp: ".+/closure/goog/functions/functions.js"
+  allowlist_regexp: ".+/closure/goog/memoize/memoize.js"
+  allowlist_regexp: ".+/closure/goog/pubsub/pubsub.js"
+  allowlist_regexp: ".+/closure/goog/testing/"
+  allowlist_regexp: ".+/closure/goog/ui/editor/bubble.js"
+  allowlist_regexp: ".+/closure/goog/ui/editor/toolbarcontroller.js"
 }
 
 ### Browser tech requirements ###
@@ -72,17 +71,17 @@ requirement: {
 # don't use GAPI could reasonably ignore it depending on how they do messaging
 # in their app.
 requirement: {
-  rule_id: 'closure:postMessage'
+  rule_id: "closure:postMessage"
   type: BANNED_PROPERTY_CALL
-  error_message: 'Window.prototype.postMessage is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#postMessage'
+  error_message: "Window.prototype.postMessage is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#postMessage"
 
-  value: 'Window.prototype.postMessage'
+  value: "Window.prototype.postMessage"
 
   # Known-safe common infrastructure.
-  allowlist_regexp: '.+/closure/goog/async/nexttick.js'
-  allowlist_regexp: '.+/closure/goog/net/xpc/nativemessagingtransport.js'
+  allowlist_regexp: ".+/closure/goog/async/nexttick.js"
+  allowlist_regexp: ".+/closure/goog/net/xpc/nativemessagingtransport.js"
   # TODO(user): make sure this gets security reviewed (b/29333525).
-  allowlist_regexp: '.+/closure/goog/messaging/portchannel.js'
+  allowlist_regexp: ".+/closure/goog/messaging/portchannel.js"
 }
 
 ### Security: forbid DOM properties and functions which can cause XSS ###
@@ -201,53 +200,53 @@ requirement: {
 }
 
 requirement: {
-  rule_id: 'closure:untypedScript'
+  rule_id: "closure:untypedScript"
   type: CUSTOM
-  java_class: 'com.google.javascript.jscomp.ConformanceRules$BanCreateElement'
-  error_message: 'Use goog.dom functions with goog.dom.TagName.SCRIPT to create <script> elements. See https://google.github.io/closure-library/develop/conformance_rules.html#untypedElements'
+  java_class: "com.google.javascript.jscomp.ConformanceRules$BanCreateElement"
+  error_message: "Use goog.dom functions with goog.dom.TagName.SCRIPT to create <script> elements. See https://google.github.io/closure-library/develop/conformance_rules.html#untypedElements"
 
-  value: 'script'
+  value: "script"
 
-  allowlist_regexp: '.+/closure/goog/base.js'
+  allowlist_regexp: ".+/closure/goog/base.js"
 
 }
 
 requirement: {
-  rule_id: 'closure:untypedIframe'
+  rule_id: "closure:untypedIframe"
   type: CUSTOM
-  java_class: 'com.google.javascript.jscomp.ConformanceRules$BanCreateElement'
-  error_message: 'Use goog.dom functions with goog.dom.TagName.IFRAME to create <iframe> elements. See https://google.github.io/closure-library/develop/conformance_rules.html#untypedElements'
+  java_class: "com.google.javascript.jscomp.ConformanceRules$BanCreateElement"
+  error_message: "Use goog.dom functions with goog.dom.TagName.IFRAME to create <iframe> elements. See https://google.github.io/closure-library/develop/conformance_rules.html#untypedElements"
 
-  value: 'iframe'
+  value: "iframe"
 
-  allowlist_regexp: '.+/closure/goog/async/nexttick.js'
+  allowlist_regexp: ".+/closure/goog/async/nexttick.js"
 }
 
 requirement: {
-  rule_id: 'closure:untypedFrame'
+  rule_id: "closure:untypedFrame"
   type: CUSTOM
-  java_class: 'com.google.javascript.jscomp.ConformanceRules$BanCreateElement'
-  error_message: 'Use goog.dom functions with goog.dom.TagName.FRAME to create <frame> elements. See https://google.github.io/closure-library/develop/conformance_rules.html#untypedElements'
+  java_class: "com.google.javascript.jscomp.ConformanceRules$BanCreateElement"
+  error_message: "Use goog.dom functions with goog.dom.TagName.FRAME to create <frame> elements. See https://google.github.io/closure-library/develop/conformance_rules.html#untypedElements"
 
-  value: 'frame'
+  value: "frame"
 }
 
 requirement: {
-  rule_id: 'closure:untypedObject'
+  rule_id: "closure:untypedObject"
   type: CUSTOM
-  java_class: 'com.google.javascript.jscomp.ConformanceRules$BanCreateElement'
-  error_message: 'Use goog.dom functions with goog.dom.TagName.OBJECT to create <object> elements. See https://google.github.io/closure-library/develop/conformance_rules.html#untypedElements'
+  java_class: "com.google.javascript.jscomp.ConformanceRules$BanCreateElement"
+  error_message: "Use goog.dom functions with goog.dom.TagName.OBJECT to create <object> elements. See https://google.github.io/closure-library/develop/conformance_rules.html#untypedElements"
 
-  value: 'object'
+  value: "object"
 }
 
 requirement: {
-  rule_id: 'closure:untypedEmbed'
+  rule_id: "closure:untypedEmbed"
   type: CUSTOM
-  java_class: 'com.google.javascript.jscomp.ConformanceRules$BanCreateElement'
-  error_message: 'Use goog.dom functions with goog.dom.TagName.EMBED to create <embed> elements. See https://google.github.io/closure-library/develop/conformance_rules.html#untypedElements'
+  java_class: "com.google.javascript.jscomp.ConformanceRules$BanCreateElement"
+  error_message: "Use goog.dom functions with goog.dom.TagName.EMBED to create <embed> elements. See https://google.github.io/closure-library/develop/conformance_rules.html#untypedElements"
 
-  value: 'embed'
+  value: "embed"
 }
 
 requirement: {
@@ -350,28 +349,28 @@ requirement: {
 # "src" and other properties at "Element", so that elements returned by
 # document.createElement() are captured.
 requirement: {
-  rule_id: 'closure:trustedResourceUrlProperties'
+  rule_id: "closure:trustedResourceUrlProperties"
   type: BANNED_PROPERTY_NON_CONSTANT_WRITE
-  error_message: 'Assignment to property requires a TrustedResourceUrl via goog.dom.safe. See https://google.github.io/closure-library/develop/conformance_rules.html#trustedResourceUrl'
+  error_message: "Assignment to property requires a TrustedResourceUrl via goog.dom.safe. See https://google.github.io/closure-library/develop/conformance_rules.html#trustedResourceUrl"
   report_loose_type_violations: false
 
   # Properties which can only be assigned to from a TrustedResourceUrl.
-  value: 'HTMLElement.prototype.manifest'
+  value: "HTMLElement.prototype.manifest"
   value: 'HTMLEmbedElement.prototype.src'
   value: 'HTMLFrameElement.prototype.src'
   value: 'HTMLIFrameElement.prototype.src'
   # For HTMLLinkElement both href and rel have to be assigned at the same time.
-  value: 'HTMLLinkElement.prototype.rel'
+  value: "HTMLLinkElement.prototype.rel"
   # TODO(mlourenco): We probably want an "objectType" rule instead since
   # there are a bunch of dangerous properties.
-  value: 'HTMLObjectElement.prototype.data'
+  value: "HTMLObjectElement.prototype.data"
   value: 'HTMLScriptElement.prototype.src'
   # TODO(mlourenco): Ban other dangerous properties (archive, classid, etc).
 
   # Closure's debug loader.
   allowlist_regexp: '.+/closure/goog/base.js'
   # Safe wrapper for this property.
-  allowlist_regexp: '.+/closure/goog/dom/safe.js'
+  allowlist_regexp: ".+/closure/goog/dom/safe.js"
   # The following allowlist entries are due to assignments from string that
   # still need to be refactored or reviewed. See http://b/12014412.
   allowlist_regexp: '.+/closure/goog/net/crossdomainrpc.js'
@@ -381,25 +380,25 @@ requirement: {
 }
 
 requirement: {
-  rule_id: 'closure:createDom'
+  rule_id: "closure:createDom"
   type: CUSTOM
-  java_class: 'com.google.javascript.jscomp.ConformanceRules$BanCreateDom'
-  error_message: 'Assigning a string to a dangerous property via createDom is forbidden. See https://google.github.io/closure-library/develop/conformance_rules.html#createDom'
+  java_class: "com.google.javascript.jscomp.ConformanceRules$BanCreateDom"
+  error_message: "Assigning a string to a dangerous property via createDom is forbidden. See https://google.github.io/closure-library/develop/conformance_rules.html#createDom"
 
-  value: 'embed.src'
-  value: 'frame.src'
-  value: 'html.manifest'
-  value: 'iframe.src'
-  value: 'object.data'
-  value: 'script.src'
-  value: 'script.text'
-  value: 'script.textContent'
-  value: 'track.src'
+  value: "embed.src"
+  value: "frame.src"
+  value: "html.manifest"
+  value: "iframe.src"
+  value: "object.data"
+  value: "script.src"
+  value: "script.text"
+  value: "script.textContent"
+  value: "track.src"
   value: '*.href'
   value: '*.innerHTML'
   value: '*.outerHTML'
 
-  allowlist_regexp: '.+/closure/tweak/tweakui.js' # False positive - missing type on containerNodeName. MOE:strip_line
+  allowlist_regexp: ".+/closure/tweak/tweakui.js"  # False positive - missing type on containerNodeName. MOE:strip_line
   allowlist_regexp: '.+/closure/goog/tweak/tweakui.js' # False positive - missing type on containerNodeName.
 
   # TODO(jakubvrana): Ban this.
@@ -418,42 +417,42 @@ requirement: {
 ### Closure library restrictions ###
 
 requirement: {
-  rule_id: 'closure:getLogger'
+  rule_id: "closure:getLogger"
   type: BANNED_NAME
-  error_message: 'Use of goog.debug.Logger.getLogger is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#logger'
+  error_message: "Use of goog.debug.Logger.getLogger is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#logger"
 
-  value: 'goog.debug.Logger.getLogger'
+  value: "goog.debug.Logger.getLogger"
 
-  allowlist_regexp: '.+/closure/goog/debug/'
-  allowlist_regexp: '.+/closure/goog/log/'
+  allowlist_regexp: ".+/closure/goog/debug/"
+  allowlist_regexp: ".+/closure/goog/log/"
 }
 
 requirement: {
-  rule_id: 'closure:logger'
+  rule_id: "closure:logger"
   type: BANNED_PROPERTY_CALL
-  error_message: 'Direct use of goog.debug.Logger is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#logger'
+  error_message: "Direct use of goog.debug.Logger is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#logger"
 
-  value: 'goog.debug.Logger.prototype.log'
-  value: 'goog.debug.Logger.prototype.shout'
-  value: 'goog.debug.Logger.prototype.severe'
-  value: 'goog.debug.Logger.prototype.warning'
-  value: 'goog.debug.Logger.prototype.info'
-  value: 'goog.debug.Logger.prototype.config'
-  value: 'goog.debug.Logger.prototype.fine'
-  value: 'goog.debug.Logger.prototype.finer'
-  value: 'goog.debug.Logger.prototype.finest'
-  value: 'goog.debug.Logger.prototype.logRecord'
-  value: 'goog.debug.Logger.prototype.getName'
-  value: 'goog.debug.Logger.prototype.addHandler'
-  value: 'goog.debug.Logger.prototype.removeHandler'
-  value: 'goog.debug.Logger.prototype.getParent'
-  value: 'goog.debug.Logger.prototype.getChildren'
-  value: 'goog.debug.Logger.prototype.getLevel'
-  value: 'goog.debug.Logger.prototype.setLevel'
-  value: 'goog.debug.Logger.prototype.getEffectiveLevel'
-  value: 'goog.debug.Logger.prototype.isLoggable'
-  value: 'goog.debug.Logger.prototype.getLogRecord'
+  value: "goog.debug.Logger.prototype.log"
+  value: "goog.debug.Logger.prototype.shout"
+  value: "goog.debug.Logger.prototype.severe"
+  value: "goog.debug.Logger.prototype.warning"
+  value: "goog.debug.Logger.prototype.info"
+  value: "goog.debug.Logger.prototype.config"
+  value: "goog.debug.Logger.prototype.fine"
+  value: "goog.debug.Logger.prototype.finer"
+  value: "goog.debug.Logger.prototype.finest"
+  value: "goog.debug.Logger.prototype.logRecord"
+  value: "goog.debug.Logger.prototype.getName"
+  value: "goog.debug.Logger.prototype.addHandler"
+  value: "goog.debug.Logger.prototype.removeHandler"
+  value: "goog.debug.Logger.prototype.getParent"
+  value: "goog.debug.Logger.prototype.getChildren"
+  value: "goog.debug.Logger.prototype.getLevel"
+  value: "goog.debug.Logger.prototype.setLevel"
+  value: "goog.debug.Logger.prototype.getEffectiveLevel"
+  value: "goog.debug.Logger.prototype.isLoggable"
+  value: "goog.debug.Logger.prototype.getLogRecord"
 
-  allowlist_regexp: '.+/closure/goog/debug/'
-  allowlist_regexp: '.+/closure/goog/log/'
+  allowlist_regexp: ".+/closure/goog/debug/"
+  allowlist_regexp: ".+/closure/goog/log/"
 }
