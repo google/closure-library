@@ -335,7 +335,6 @@ goog.structs.Map.prototype.get = function(key, opt_val) {
  * Adds a key-value pair to the map.
  * @param {*} key The key.
  * @param {V} value The value to add.
- * @return {*} Some subclasses return a value.
  */
 goog.structs.Map.prototype.set = function(key, value) {
   'use strict';
