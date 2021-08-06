@@ -92,6 +92,11 @@ testSuite({
     element = createElement('matches');
     assertTrue(noclobber.elementMatches(element, '#foo'));
     assertFalse(noclobber.elementMatches(element, '#bar'));
+
+    element = createElement('namespaceURI');
+    assertEquals(
+        'http://www.w3.org/1999/xhtml',
+        noclobber.getElementNamespaceURI(element));
   },
 
   /**

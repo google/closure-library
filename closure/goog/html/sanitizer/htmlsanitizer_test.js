@@ -1589,4 +1589,22 @@ testSuite({
         input, input,
         new Builder().allowCssStyles().inlineStyleRules().build());
   },
+
+  testMathStyleXSS() {
+    const input = '<math><style><a>{} *{background: red url(https://wherever)}';
+    const output = '';
+    assertSanitizedHtml(
+        input, output,
+        new Builder().allowStyleTag().withStyleContainer().build());
+  },
+
+  testMathStyleXSS_withoutMath() {
+    // Just checking that there are no issues without the use of MATH.
+    const input = '<span><style><a>{} *{background-url: url(https://wherever)}';
+    const output = '<span><style>*{}</style></span>';
+    assertSanitizedHtml(
+        input, output,
+        new Builder().allowStyleTag().withStyleContainer().build());
+  },
+
 });
