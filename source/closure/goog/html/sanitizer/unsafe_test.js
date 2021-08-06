@@ -173,14 +173,11 @@ testSuite({
   },
 
   testAlsoAllowTagsInBlacklist() {
-    // Simplified use case taken from KaTex output HTML. The real configuration
-    // would allow more attributes and apply a stricter policy on their values
-    // to reduce the attack surface.
-    const input = '<svg width="1px"><line x1="3" /><path d="M 10 30" /></svg>';
-    assertSanitizedHtml(input, input, ['svg', 'line', 'path'], [
-      {tagName: 'svg', attributeName: 'width', policy: functions.identity},
-      {tagName: 'line', attributeName: 'x1', policy: functions.identity},
-      {tagName: 'path', attributeName: 'd', policy: functions.identity},
+    const input = '<video controls><source src="video.mp4" type="video/mp4">';
+    assertSanitizedHtml(input, input, ['video', 'source'], [
+      {tagName: 'video', attributeName: 'controls', policy: functions.identity},
+      {tagName: 'source', attributeName: 'src', policy: functions.identity},
+      {tagName: 'source', attributeName: 'type', policy: functions.identity},
     ]);
   },
 });

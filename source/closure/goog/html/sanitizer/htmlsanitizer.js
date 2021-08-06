@@ -138,6 +138,12 @@ goog.html.sanitizer.HTML_SANITIZER_INVALID_CUSTOM_TAGS_ = {
 goog.html.sanitizer.RANDOM_CONTAINER_ = '*';
 
 
+/**
+ * The only supported namespace. We drop tags outside of this namespace.
+ * @private @const {string}
+ */
+goog.html.sanitizer.XHTML_NAMESPACE_URI_ = 'http://www.w3.org/1999/xhtml';
+
 
 /**
  * Creates an HTML sanitizer.
@@ -1220,10 +1226,19 @@ goog.html.sanitizer.HtmlSanitizer.prototype.createTextNode = function(
 goog.html.sanitizer.HtmlSanitizer.prototype.createElementWithoutAttributes =
     function(dirtyElement) {
   'use strict';
-  var dirtyName =
+  const dirtyName =
       goog.html.sanitizer.noclobber.getNodeName(dirtyElement).toUpperCase();
   if (dirtyName in this.tagBlacklist_) {
     // If it's blacklisted, completely remove the tag and its descendants.
+    return null;
+  }
+  const dirtyNamespaceURI =
+      goog.html.sanitizer.noclobber.getElementNamespaceURI(dirtyElement);
+  if (dirtyNamespaceURI != goog.html.sanitizer.XHTML_NAMESPACE_URI_) {
+    // We explicitly drop tags (and their descendants) in non-html
+    // namespaces because these can be exploited during their conversion to the
+    // html namespace (e.g. <MATH><STYLE><A> -> <SPAN><STYLE><A>, where STYLE
+    // and A were MathML tags before sanitization and HTML tags afterwards.
     return null;
   }
   if (this.tagWhitelist_[dirtyName]) {
@@ -1233,7 +1248,7 @@ goog.html.sanitizer.HtmlSanitizer.prototype.createElementWithoutAttributes =
   // If it's neither blacklisted nor whitelisted, replace with span. If the
   // relevant builder option is enabled, the tag will bear the original tag
   // name in a data attribute.
-  var spanElement = goog.dom.createElement(goog.dom.TagName.SPAN);
+  const spanElement = goog.dom.createElement(goog.dom.TagName.SPAN);
   if (this.shouldAddOriginalTagNames_) {
     goog.html.sanitizer.noclobber.setElementAttribute(
         spanElement, goog.html.sanitizer.HTML_SANITIZER_SANITIZED_ATTR_NAME_,

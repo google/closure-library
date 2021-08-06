@@ -98,7 +98,11 @@ var Methods = {
   SHEET_GETTER: getterOrNull('HTMLStyleElement', 'sheet'),
   GET_PROPERTY_VALUE:
       prototypeMethodOrNull('CSSStyleDeclaration', 'getPropertyValue'),
-  SET_PROPERTY: prototypeMethodOrNull('CSSStyleDeclaration', 'setProperty')
+  SET_PROPERTY: prototypeMethodOrNull('CSSStyleDeclaration', 'setProperty'),
+  NAMESPACE_URI_GETTER: getterOrNull('Element', 'namespaceURI') ||
+      // Edge and IE10 define this Element property on Node instead of
+      // Element.
+      getterOrNull('Node', 'namespaceURI'),
 };
 
 /**
@@ -433,6 +437,20 @@ function setCssProperty(cssStyle, propName, sanitizedValue) {
       [propName, sanitizedValue]);
 }
 
+/**
+ * Returns an element's namespace URI without falling prey to things like
+ * <form><input name="namespaceURI"></form>.
+ * @param {!Element} element
+ * @return {string}
+ */
+function getElementNamespaceURI(element) {
+  return genericPropertyGet(
+      Methods.NAMESPACE_URI_GETTER, element, 'namespaceURI',
+      function(namespaceURI) {
+        return typeof namespaceURI == 'string';
+      });
+}
+
 exports = {
   getElementAttributes: getElementAttributes,
   hasElementAttribute: hasElementAttribute,
@@ -453,6 +471,7 @@ exports = {
   appendNodeChild: appendNodeChild,
   getCssPropertyValue: getCssPropertyValue,
   setCssProperty: setCssProperty,
+  getElementNamespaceURI: getElementNamespaceURI,
   /** @package */
   Methods: Methods,
 };
