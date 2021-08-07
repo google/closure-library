@@ -96,10 +96,3 @@ goog.dom.BrowserFeature.CAN_USE_PARENT_ELEMENT_PROPERTY =
  * @const {boolean}
  */
 goog.dom.BrowserFeature.INNER_HTML_NEEDS_SCOPED_ELEMENT = goog.userAgent.IE;
-
-/**
- * Whether we use legacy IE range API.
- * @const {boolean}
- */
-goog.dom.BrowserFeature.LEGACY_IE_RANGES =
-    goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9);

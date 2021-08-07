@@ -411,14 +411,10 @@ goog.dom.TextRange.isAttachedNode = function(node) {
 /** @override */
 goog.dom.TextRange.prototype.isRangeInDocument = function() {
   'use strict';
-  // Ensure any cached nodes are in the document.  IE also allows ranges to
-  // become detached, so we check if the range is still in the document as
-  // well for IE.
+  // Ensure any cached nodes are in the document.
   return (!this.startNode_ ||
           goog.dom.TextRange.isAttachedNode(this.startNode_)) &&
-      (!this.endNode_ || goog.dom.TextRange.isAttachedNode(this.endNode_)) &&
-      (!(goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) ||
-       this.getBrowserRangeWrapper_().isRangeInDocument());
+      (!this.endNode_ || goog.dom.TextRange.isAttachedNode(this.endNode_));
 };
 
 

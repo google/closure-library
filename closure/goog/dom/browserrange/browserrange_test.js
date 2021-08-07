@@ -36,10 +36,6 @@ function normalizeHtml(str) {
 // createRangeFromNodes in the following cases:
 // * BR boundary (before + after)
 
-// Following testcase is special for IE. The comparison of ranges created in
-// testcases with a range over empty span using native inRange fails. So the
-// fallback mechanism is needed.
-
 testSuite({
   setUpPage() {
     test1 = dom.getElement('test1');
@@ -67,7 +63,7 @@ testSuite({
     const startOffset = selRange.getStartOffset();
     const endOffset = selRange.getEndOffset();
     if (startNode.nodeType == NodeType.TEXT) {
-      // Special case for Webkit (up to Chrome 57) and IE8.
+      // Special case for Safari.
       assertEquals(
           'Start node should have text: abc', 'abc', startNode.nodeValue);
       assertEquals('End node should have text: abc', 'abc', endNode.nodeValue);
@@ -362,14 +358,9 @@ testSuite({
         dynamic.firstChild, 0, dynamic.lastChild, 1);
 
     // Difference in special character handling is ok.
-    assertContains(
-        'Should have correct html fragment',
-        normalizeHtml(range.getHtmlFragment()),
-        [
-          '1<div id=<>></div>2',       // IE
-          '1<div id=&lt;>></div>2',    // WebKit
-          '1<div id=&lt;&gt;></div>2'  // Others
-        ]);
+    assertEquals(
+        'Should have correct html fragment', '1<div id=<>></div>2',
+        normalizeHtml(range.getHtmlFragment()));
   },
 
   testEndOfChildren() {
@@ -408,7 +399,7 @@ testSuite({
     const selRange = Range.createFromWindow();
     const startNode = selRange.getStartNode();
     if (startNode.nodeType == NodeType.TEXT) {
-      // Special case for Webkit (up to Chrome 57) and IE8.
+      // Special case for Safari.
       assertEquals(
           'Startnode should have text:123', '123', startNode.nodeValue);
     } else {
@@ -434,7 +425,7 @@ testSuite({
     const startNode = selRange.getStartNode();
     const endNode = selRange.getEndNode();
     if (startNode.nodeType == NodeType.TEXT) {
-      // Special case for Webkit (up to Chrome 57) and IE8.
+      // Special case for Safari.
       assertEquals(
           'Start node should have text:123', '123', startNode.nodeValue);
     } else {
@@ -442,7 +433,7 @@ testSuite({
     }
     assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
     if (endNode.nodeType == NodeType.TEXT) {
-      // Special case for Webkit (up to Chrome 57) and IE8.
+      // Special case for Safari.
       assertEquals('Endnode should have text', '123', endNode.nodeValue);
       assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
     } else {
@@ -463,7 +454,7 @@ testSuite({
     const selRange = Range.createFromWindow();
     const startNode = selRange.getStartNode();
     if (startNode.nodeType == NodeType.TEXT) {
-      // Special case for Webkit (up to Chrome 57) and IE8.
+      // Special case for Safari.
       assertEquals(
           'Startnode should have text:123', '123', startNode.nodeValue);
     } else {
@@ -472,7 +463,7 @@ testSuite({
     assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
     const endNode = selRange.getEndNode();
     if (endNode.nodeType == NodeType.TEXT) {
-      // Special case for Webkit (up to Chrome 57) and IE8.
+      // Special case for Safari.
       assertEquals('Endnode should have text:123', '123', endNode.nodeValue);
       assertEquals('Endoffset should be 3', 3, selRange.getEndOffset());
     } else {
@@ -495,7 +486,7 @@ testSuite({
     const startNode = selRange.getStartNode();
     const endNode = selRange.getEndNode();
     if (startNode.nodeType == NodeType.TEXT) {
-      // Special case for Webkit (up to Chrome 57) and IE8.
+      // Special case for Safari.
       assertEquals('Start node should be text:123', '123', startNode.nodeValue);
       assertEquals('Startoffset should be 1', 1, selRange.getStartOffset());
     } else {
@@ -524,7 +515,7 @@ testSuite({
     const selRange = Range.createFromWindow();
     const startNode = selRange.getStartNode();
     if (startNode.nodeType == NodeType.TEXT) {
-      // Special case for Webkit (up to Chrome 57) and IE8.
+      // Special case for Safari.
       assertEquals(
           'Startnode should have text:4567', '4567', startNode.nodeValue);
       assertEquals('Startoffset should be 0', 0, selRange.getStartOffset());
@@ -534,7 +525,7 @@ testSuite({
     }
     const endNode = selRange.getEndNode();
     if (startNode.nodeType == NodeType.TEXT) {
-      // Special case for Webkit (up to Chrome 57) and IE8.
+      // Special case for Safari.
       assertEquals('Endnode should have text:4567', '4567', endNode.nodeValue);
       assertEquals('Endoffset should be 4', 4, selRange.getEndOffset());
     } else {
@@ -591,28 +582,6 @@ testSuite({
         range_inner.compareBrowserRangeEndpoints(
             range_outer.getBrowserRange(), RangeEndpoint.END,
             RangeEndpoint.END));
-  },
-
-  /**
-   * Regression test for a bug in IeRange.insertNode_ where if the node to be
-   * inserted was not an element (e.g. a text node), it would clone the node
-   * in the inserting process but return the original node instead of the newly
-   * created and inserted node.
-   */
-  testInsertNodeNonElement() {
-    dom.setTextContent(dynamic, 'beforeafter');
-    const range = browserrange.createRangeFromNodes(
-        dynamic.firstChild, 6, dynamic.firstChild, 6);
-    const newNode = dom.createTextNode('INSERTED');
-    const inserted = range.insertNode(newNode, false);
-
-    assertEquals(
-        'Text should be inserted between "before" and "after"',
-        'beforeINSERTEDafter', dom.getRawTextContent(dynamic));
-    assertEquals(
-        'Node returned by insertNode() should be a child of the div' +
-            ' containing the text',
-        dynamic, inserted.parentNode);
   },
 
   testSelectOverwritesOldSelection() {
