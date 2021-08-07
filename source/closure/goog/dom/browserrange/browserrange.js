@@ -16,10 +16,8 @@ goog.provide('goog.dom.browserrange');
 goog.provide('goog.dom.browserrange.Error');
 
 goog.require('goog.dom');
-goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.browserrange.GeckoRange');
-goog.require('goog.dom.browserrange.IeRange');
 goog.require('goog.dom.browserrange.W3cRange');
 goog.require('goog.dom.browserrange.WebKitRange');
 goog.require('goog.userAgent');
@@ -47,11 +45,7 @@ goog.dom.browserrange.Error = {
  */
 goog.dom.browserrange.createRange = function(range) {
   'use strict';
-  if (goog.dom.BrowserFeature.LEGACY_IE_RANGES) {
-    return new goog.dom.browserrange.IeRange(
-        /** @type {TextRange} */ (range),
-        goog.dom.getOwnerDocument(range.parentElement()));
-  } else if (goog.userAgent.WEBKIT) {
+  if (goog.userAgent.WEBKIT) {
     return new goog.dom.browserrange.WebKitRange(
         /** @type {Range} */ (range));
   } else if (goog.userAgent.GECKO) {
@@ -72,9 +66,7 @@ goog.dom.browserrange.createRange = function(range) {
  */
 goog.dom.browserrange.createRangeFromNodeContents = function(node) {
   'use strict';
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
-    return goog.dom.browserrange.IeRange.createFromNodeContents(node);
-  } else if (goog.userAgent.WEBKIT) {
+  if (goog.userAgent.WEBKIT) {
     return goog.dom.browserrange.WebKitRange.createFromNodeContents(node);
   } else if (goog.userAgent.GECKO) {
     return goog.dom.browserrange.GeckoRange.createFromNodeContents(node);
@@ -100,10 +92,7 @@ goog.dom.browserrange.createRangeFromNodeContents = function(node) {
 goog.dom.browserrange.createRangeFromNodes = function(
     startNode, startOffset, endNode, endOffset) {
   'use strict';
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
-    return goog.dom.browserrange.IeRange.createFromNodes(
-        startNode, startOffset, endNode, endOffset);
-  } else if (goog.userAgent.WEBKIT) {
+  if (goog.userAgent.WEBKIT) {
     return goog.dom.browserrange.WebKitRange.createFromNodes(
         startNode, startOffset, endNode, endOffset);
   } else if (goog.userAgent.GECKO) {

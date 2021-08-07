@@ -14,7 +14,6 @@ goog.provide('goog.dom.Range');
 
 goog.require('goog.dom');
 goog.require('goog.dom.AbstractRange');
-goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.ControlRange');
 goog.require('goog.dom.MultiRange');
 goog.require('goog.dom.NodeType');
@@ -179,9 +178,7 @@ goog.dom.Range.hasSelection = function(opt_win) {
   'use strict';
   var sel =
       goog.dom.AbstractRange.getBrowserSelectionForWindow(opt_win || window);
-  return !!sel &&
-      (goog.dom.BrowserFeature.LEGACY_IE_RANGES ? sel.type != 'None' :
-                                                  !!sel.rangeCount);
+  return !!(sel && sel.rangeCount);
 };
 
 
