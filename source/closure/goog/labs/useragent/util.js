@@ -14,13 +14,6 @@ goog.provide('goog.labs.userAgent.util');
 
 goog.require('goog.string.internal');
 
-/**
- * @define {boolean} If true, use navigator.userAgentData without check.
- * TODO(user) FEATURESET_YEAR >= 2022 if it supports mobile and all the
- * brands we need.
- */
-goog.labs.userAgent.ASSUME_CLIENT_HINTS =
-    goog.define('goog.labs.userAgent.ASSUME_CLIENT_HINTS', false);
 
 /**
  * Gets the native userAgent string from navigator if it exists.
@@ -39,22 +32,6 @@ goog.labs.userAgent.util.getNativeUserAgentString_ = function() {
     }
   }
   return '';
-};
-
-/**
- * Gets the native userAgentData object from navigator if it exists.
- * If navigator or navigator.userAgentData object is missing, returns null
- * @return {?NavigatorUAData}
- * @private
- */
-goog.labs.userAgent.util.getNativeUserAgentData_ = function() {
-  'use strict';
-  const navigator = goog.labs.userAgent.util.getNavigator_();
-  // TODO(user): Use navigator?.userAgent ?? null once it's supported.
-  if (navigator) {
-    return navigator.userAgentData || null;
-  }
-  return null;
 };
 
 
@@ -101,28 +78,6 @@ goog.labs.userAgent.util.getUserAgent = function() {
   return goog.labs.userAgent.util.userAgent_;
 };
 
-/**
- * @return {?NavigatorUAData} Navigator.userAgentData if exist
- */
-goog.labs.userAgent.util.getUserAgentData = function() {
-  'use strict';
-  return goog.labs.userAgent.util.getNativeUserAgentData_();
-};
-
-/**
- * Checks if any string in userAgentData.brands matches str.
- * Returns false if userAgentData is not supported.
- * @param {string} str
- * @return {boolean} Whether any brand string from userAgentData contains the
- *     given string.
- */
-goog.labs.userAgent.util.matchUserAgentDataBrand = function(str) {
-  'use strict';
-  const data = goog.labs.userAgent.util.getUserAgentData();
-  if (!data) return false;
-  return data.brands.some(
-      ({brand}) => brand && goog.string.internal.contains(brand, str));
-};
 
 /**
  * @param {string} str
