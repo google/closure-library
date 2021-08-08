@@ -72,7 +72,7 @@ goog.inherits(goog.dom.NodeIterator, goog.dom.TagIterator);
 goog.dom.NodeIterator.prototype.nextValueOrThrow = function() {
   'use strict';
   do {
-    goog.dom.NodeIterator.superClass_.next.call(this);
+    goog.dom.NodeIterator.superClass_.nextValueOrThrow.call(this);
   } while (this.isEndTag());
 
   return this.node;

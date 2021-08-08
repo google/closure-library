@@ -518,7 +518,7 @@ goog.dom.ControlRangeIterator.prototype.nextValueOrThrow = function() {
   }
 
   // Call the super function.
-  return goog.dom.ControlRangeIterator.superClass_.next.call(this);
+  return goog.dom.ControlRangeIterator.superClass_.nextValueOrThrow.call(this);
 };
 /**
  * TODO(user): Please do not remove - this will be cleaned up centrally.

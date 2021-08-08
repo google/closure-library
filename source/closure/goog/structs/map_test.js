@@ -372,7 +372,7 @@ testSuite({
     m.set('e', 5);
     let ex =
         assertThrows('Expected an exception since the map has changed', () => {
-          iter.next();
+          iter.nextValueOrThrow();
         });
     assertEquals(message, ex.message);
 
@@ -385,7 +385,7 @@ testSuite({
     iter = m.getValueIterator();
     m.remove('d');
     ex = assertThrows('Expected an exception since the map has changed', () => {
-      iter.next();
+      iter.nextValueOrThrow();
     });
     assertEquals(message, ex.message);
 
@@ -397,9 +397,9 @@ testSuite({
 
     iter = m.getValueIterator();
     m.set('d', 5);
-    iter.next();
+    iter.nextValueOrThrow();
     // Changing an existing value is OK.
-    iter.next();
+    iter.nextValueOrThrow();
   },
 
   testTranspose() {

@@ -44,13 +44,13 @@ exports.testIteratorBasics = function(mechanism) {
     fail('Mechanism undefined for testIteratorBasics');
   }
   mechanism.set('first', 'one');
-  assertEquals('first', mechanism.__iterator__(true).next());
-  assertEquals('one', mechanism.__iterator__(false).next());
+  assertEquals('first', mechanism.__iterator__(true).nextValueOrThrow());
+  assertEquals('one', mechanism.__iterator__(false).nextValueOrThrow());
   // ES6 Iteration should only return keys
   assertSameElements(['first'], Array.from(mechanism));
   const iterator = mechanism.__iterator__();
-  assertEquals('one', iterator.next());
-  assertEquals(StopIteration, assertThrows(iterator.next));
+  assertEquals('one', iterator.nextValueOrThrow());
+  assertEquals(StopIteration, assertThrows(iterator.nextValueOrThrow));
 
   const es6Iterator = mechanism[Symbol.iterator]();
   assertObjectEquals({value: 'first', done: false}, es6Iterator.next());
@@ -88,8 +88,12 @@ exports.testClear = function(mechanism) {
   assertNull(mechanism.get('first'));
   assertNull(mechanism.get('second'));
   assertEquals(0, mechanism.getCount());
-  assertEquals(StopIteration, assertThrows(mechanism.__iterator__(true).next));
-  assertEquals(StopIteration, assertThrows(mechanism.__iterator__(false).next));
+  assertEquals(
+      StopIteration,
+      assertThrows(mechanism.__iterator__(true).nextValueOrThrow));
+  assertEquals(
+      StopIteration,
+      assertThrows(mechanism.__iterator__(false).nextValueOrThrow));
 };
 
 

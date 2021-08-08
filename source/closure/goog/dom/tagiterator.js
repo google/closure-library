@@ -360,7 +360,7 @@ goog.dom.TagIterator.prototype.splice = function(var_args) {
   var node = this.node;
   this.restartTag();
   this.reversed = !this.reversed;
-  goog.dom.TagIterator.prototype.next.call(this);
+  goog.dom.TagIterator.prototype.nextValueOrThrow.call(this);
   this.reversed = !this.reversed;
 
   // Replace the node with the arguments.

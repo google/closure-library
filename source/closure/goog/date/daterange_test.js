@@ -220,16 +220,16 @@ testSuite({
     const s = new DateDate(2008, 9, 1);
     const e = new DateDate(2008, 9, 10);
     const i = new DateRange(s, e).iterator();
-    assertTrue('day 0', new DateDate(2008, 9, 1).equals(i.next()));
-    assertTrue('day 1', new DateDate(2008, 9, 2).equals(i.next()));
-    assertTrue('day 2', new DateDate(2008, 9, 3).equals(i.next()));
-    assertTrue('day 3', new DateDate(2008, 9, 4).equals(i.next()));
-    assertTrue('day 4', new DateDate(2008, 9, 5).equals(i.next()));
-    assertTrue('day 5', new DateDate(2008, 9, 6).equals(i.next()));
-    assertTrue('day 6', new DateDate(2008, 9, 7).equals(i.next()));
-    assertTrue('day 7', new DateDate(2008, 9, 8).equals(i.next()));
-    assertTrue('day 8', new DateDate(2008, 9, 9).equals(i.next()));
-    assertTrue('day 9', new DateDate(2008, 9, 10).equals(i.next()));
+    assertTrue('day 0', new DateDate(2008, 9, 1).equals(i.nextValueOrThrow()));
+    assertTrue('day 1', new DateDate(2008, 9, 2).equals(i.nextValueOrThrow()));
+    assertTrue('day 2', new DateDate(2008, 9, 3).equals(i.nextValueOrThrow()));
+    assertTrue('day 3', new DateDate(2008, 9, 4).equals(i.nextValueOrThrow()));
+    assertTrue('day 4', new DateDate(2008, 9, 5).equals(i.nextValueOrThrow()));
+    assertTrue('day 5', new DateDate(2008, 9, 6).equals(i.nextValueOrThrow()));
+    assertTrue('day 6', new DateDate(2008, 9, 7).equals(i.nextValueOrThrow()));
+    assertTrue('day 7', new DateDate(2008, 9, 8).equals(i.nextValueOrThrow()));
+    assertTrue('day 8', new DateDate(2008, 9, 9).equals(i.nextValueOrThrow()));
+    assertTrue('day 9', new DateDate(2008, 9, 10).equals(i.nextValueOrThrow()));
     assertThrows('day 10', goog.bind(i.next, i));
   },
 

@@ -121,7 +121,7 @@ goog.dom.TextRangeIterator = function(
 
   if (goNext) {
     try {
-      this.next();
+      this.nextValueOrThrow();
     } catch (e) {
       if (e != goog.iter.StopIteration) {
         throw e;
@@ -234,7 +234,7 @@ goog.dom.TextRangeIterator.prototype.nextValueOrThrow = function() {
   }
 
   // Call the super function.
-  return goog.dom.TextRangeIterator.superClass_.next.call(this);
+  return goog.dom.TextRangeIterator.superClass_.nextValueOrThrow.call(this);
 };
 /**
  * TODO(user): Please do not remove - this will be cleaned up centrally.
