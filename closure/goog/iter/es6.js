@@ -86,7 +86,7 @@ const wrapGoog = (iter) => {
       let value;
       while (!done) {
         try {
-          value = iter.next();
+          value = iter.nextValueOrThrow();
           break;
         } catch (err) {
           if (err !== StopIteration) throw err;

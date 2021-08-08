@@ -123,7 +123,7 @@ goog.testing.editor.dom.getPreviousNextNonEmptyTextNodeHelper_ = function(
 
   // Advance the iterator so it skips the start node.
   try {
-    iter.next();
+    iter.nextValueOrThrow();
   } catch (e) {
     return null;  // It could have been a leaf node.
   }
@@ -131,7 +131,7 @@ goog.testing.editor.dom.getPreviousNextNonEmptyTextNodeHelper_ = function(
   const filter =
       goog.iter.filter(iter, goog.testing.editor.dom.isNonEmptyTextNode_);
   try {
-    return /** @type {Text} */ (filter.next());
+    return /** @type {Text} */ (filter.nextValueOrThrow());
   } catch (e) {  // No next item is available so return null.
     return null;
   }

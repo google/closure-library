@@ -540,7 +540,7 @@ goog.dom.MultiRangeIterator.prototype.nextValueOrThrow = function() {
   'use strict';
   try {
     var it = this.iterators_[this.currentIdx_];
-    var next = it.next();
+    var next = it.nextValueOrThrow();
     this.setPosition(it.node, it.tagType, it.depth);
     return next;
   } catch (ex) {
@@ -550,7 +550,7 @@ goog.dom.MultiRangeIterator.prototype.nextValueOrThrow = function() {
     } else {
       // In case we got a StopIteration, increment counter and try again.
       this.currentIdx_++;
-      return this.next();
+      return this.nextValueOrThrow();
     }
   }
 };

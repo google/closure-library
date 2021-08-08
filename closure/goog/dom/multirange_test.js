@@ -42,8 +42,8 @@ testSuite({
     assertEquals(dom.getElement('test2').firstChild, it.getEndNode());
     assertEquals(3, it.getEndTextOffset());
 
-    it.next();
-    it.next();
+    it.nextValueOrThrow();
+    it.nextValueOrThrow();
     assertEquals(6, it.getEndTextOffset());
   },
 

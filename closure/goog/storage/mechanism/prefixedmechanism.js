@@ -79,9 +79,9 @@ goog.storage.mechanism.PrefixedMechanism.prototype.__iterator__ = function(
   var newIter = new goog.iter.Iterator();
   newIter.nextValueOrThrow = function() {
     'use strict';
-    var key = /** @type {string} */ (subIter.next());
+    var key = /** @type {string} */ (subIter.nextValueOrThrow());
     while (key.substr(0, selfObj.prefix_.length) != selfObj.prefix_) {
-      key = /** @type {string} */ (subIter.next());
+      key = /** @type {string} */ (subIter.nextValueOrThrow());
     }
     return opt_keys ? key.substr(selfObj.prefix_.length) :
                       selfObj.mechanism_.get(key);
