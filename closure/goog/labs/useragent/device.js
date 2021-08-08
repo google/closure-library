@@ -15,6 +15,7 @@ goog.provide('goog.labs.userAgent.device');
 
 goog.require('goog.labs.userAgent.util');
 
+
 /**
  * Currently we detect the iPhone, iPod and Android mobiles (devices that have
  * both Android and Mobile in the user agent string).
@@ -23,8 +24,6 @@ goog.require('goog.labs.userAgent.util');
  */
 goog.labs.userAgent.device.isMobile = function() {
   'use strict';
-  // TODO(user): Use userAgentData.mobile to detect after fixing tablet
-  // related tests.
   return !goog.labs.userAgent.device.isTablet() &&
       (goog.labs.userAgent.util.matchUserAgent('iPod') ||
        goog.labs.userAgent.util.matchUserAgent('iPhone') ||
