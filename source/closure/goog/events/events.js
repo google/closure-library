@@ -217,17 +217,6 @@ goog.events.listen_ = function(
 
   var capture =
       goog.isObject(opt_options) ? !!opt_options.capture : !!opt_options;
-  if (capture && !goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
-    if (goog.events.CAPTURE_SIMULATION_MODE ==
-        goog.events.CaptureSimulationMode.OFF_AND_FAIL) {
-      goog.asserts.fail('Can not register capture listener in IE8-.');
-      return null;
-    } else if (
-        goog.events.CAPTURE_SIMULATION_MODE ==
-        goog.events.CaptureSimulationMode.OFF_AND_SILENT) {
-      return null;
-    }
-  }
 
   var listenerMap = goog.events.getListenerMap_(src);
   if (!listenerMap) {

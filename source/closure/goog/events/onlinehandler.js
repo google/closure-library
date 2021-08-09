@@ -26,7 +26,6 @@ goog.provide('goog.events.OnlineHandler');
 goog.provide('goog.events.OnlineHandler.EventType');
 
 goog.require('goog.Timer');
-goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
@@ -49,25 +48,9 @@ goog.events.OnlineHandler = function() {
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
 
-  // Some browsers do not support navigator.onLine and therefore we don't
-  // bother setting up events or timers.
-  if (!goog.events.BrowserFeature.HAS_NAVIGATOR_ONLINE_PROPERTY) {
-    return;
-  }
-
-  if (goog.events.BrowserFeature.HAS_HTML5_NETWORK_EVENT_SUPPORT) {
-    var target = goog.events.BrowserFeature.HTML5_NETWORK_EVENTS_FIRE_ON_BODY ?
-        document.body :
-        window;
-    this.eventHandler_.listen(
-        target, [goog.events.EventType.ONLINE, goog.events.EventType.OFFLINE],
-        this.handleChange_);
-  } else {
-    this.online_ = this.isOnline();
-    this.timer_ = new goog.Timer(goog.events.OnlineHandler.POLL_INTERVAL_);
-    this.eventHandler_.listen(this.timer_, goog.Timer.TICK, this.handleTick_);
-    this.timer_.start();
-  }
+  this.eventHandler_.listen(
+      window, [goog.events.EventType.ONLINE, goog.events.EventType.OFFLINE],
+      this.handleChange_);
 };
 goog.inherits(goog.events.OnlineHandler, goog.events.EventTarget);
 
@@ -108,9 +91,7 @@ goog.events.OnlineHandler.prototype.timer_;
 /** @override */
 goog.events.OnlineHandler.prototype.isOnline = function() {
   'use strict';
-  return goog.events.BrowserFeature.HAS_NAVIGATOR_ONLINE_PROPERTY ?
-      navigator.onLine :
-      true;
+  return navigator.onLine;
 };
 
 

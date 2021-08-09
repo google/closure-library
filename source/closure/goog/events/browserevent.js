@@ -40,7 +40,6 @@ goog.provide('goog.events.BrowserEvent.MouseButton');
 goog.provide('goog.events.BrowserEvent.PointerType');
 
 goog.require('goog.debug');
-goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.reflect');
@@ -371,16 +370,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
  */
 goog.events.BrowserEvent.prototype.isButton = function(button) {
   'use strict';
-  if (!goog.events.BrowserFeature.HAS_W3C_BUTTON) {
-    if (this.type == 'click') {
-      return button == goog.events.BrowserEvent.MouseButton.LEFT;
-    } else {
-      return !!(
-          this.event_.button & goog.events.BrowserEvent.IE_BUTTON_MAP[button]);
-    }
-  } else {
-    return this.event_.button == button;
-  }
+  return this.event_.button == button;
 };
 
 
@@ -425,32 +415,6 @@ goog.events.BrowserEvent.prototype.preventDefault = function() {
   var be = this.event_;
   if (!be.preventDefault) {
     be.returnValue = false;
-    if (goog.events.BrowserFeature.SET_KEY_CODE_TO_PREVENT_DEFAULT) {
-
-      try {
-        // Most keys can be prevented using returnValue. Some special keys
-        // require setting the keyCode to -1 as well:
-        //
-        // In IE7:
-        // F3, F5, F10, F11, Ctrl+P, Crtl+O, Ctrl+F (these are taken from IE6)
-        //
-        // In IE8:
-        // Ctrl+P, Crtl+O, Ctrl+F (F1-F12 cannot be stopped through the event)
-        //
-        // We therefore do this for all function keys as well as when Ctrl key
-        // is pressed.
-        var VK_F1 = 112;
-        var VK_F12 = 123;
-        if (be.ctrlKey || be.keyCode >= VK_F1 && be.keyCode <= VK_F12) {
-          be.keyCode = -1;
-        }
-      } catch (ex) {
-        // IE throws an 'access denied' exception when trying to change
-        // keyCode in some situations (e.g. srcElement is input[type=file],
-        // or srcElement is an anchor tag rewritten by parent's innerHTML).
-        // Do nothing in this case.
-      }
-    }
   } else {
     be.preventDefault();
   }
