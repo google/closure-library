@@ -35,7 +35,6 @@ goog.require('goog.asserts');
 goog.require('goog.dom.NodeType');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
-goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -495,9 +494,6 @@ goog.testing.events.fireMouseDownEvent = function(
     target, opt_button, opt_coords, opt_eventProperties) {
   'use strict';
   let button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
-  button = !goog.events.BrowserFeature.HAS_W3C_BUTTON ?
-      goog.events.BrowserEvent.IE_BUTTON_MAP[button] :
-      button;
   return goog.testing.events.fireMouseButtonEvent_(
       goog.events.EventType.MOUSEDOWN, target, button, opt_coords,
       opt_eventProperties);
@@ -520,9 +516,6 @@ goog.testing.events.fireMouseUpEvent = function(
     target, opt_button, opt_coords, opt_eventProperties) {
   'use strict';
   let button = opt_button || goog.events.BrowserEvent.MouseButton.LEFT;
-  button = !goog.events.BrowserFeature.HAS_W3C_BUTTON ?
-      goog.events.BrowserEvent.IE_BUTTON_MAP[button] :
-      button;
   return goog.testing.events.fireMouseButtonEvent_(
       goog.events.EventType.MOUSEUP, target, button, opt_coords,
       opt_eventProperties);
@@ -617,9 +610,7 @@ goog.testing.events.fireContextMenuEvent = function(target, opt_coords) {
       goog.events.BrowserEvent.MouseButton.RIGHT;
   const contextmenu =
       new goog.testing.events.Event(goog.events.EventType.CONTEXTMENU, target);
-  contextmenu.button = !goog.events.BrowserFeature.HAS_W3C_BUTTON ?
-      goog.events.BrowserEvent.IE_BUTTON_MAP[button] :
-      button;
+  contextmenu.button = button;
   contextmenu.ctrlKey = goog.userAgent.MAC;
   goog.testing.events.setEventClientXY_(contextmenu, opt_coords);
   return goog.testing.events.fireBrowserEvent(contextmenu);

@@ -129,14 +129,6 @@ testSuite({
     assertEquals(0, event.preventDefault.getCallCount());
   },
 
-  testIsButtonIe() {
-    stubs.set(BrowserFeature, 'HAS_W3C_BUTTON', false);
-    assertIsButton(createMouseEvent('mousedown', 1), Button.LEFT, true);
-    assertIsButton(createMouseEvent('click', 0), Button.LEFT, true);
-    assertIsButton(createMouseEvent('mousedown', 2), Button.RIGHT, false);
-    assertIsButton(createMouseEvent('mousedown', 4), Button.MIDDLE, false);
-  },
-
   testIsButtonWebkitMac() {
     stubs.set(BrowserFeature, 'HAS_W3C_BUTTON', true);
     stubs.set(userAgent, 'WEBKIT', true);
