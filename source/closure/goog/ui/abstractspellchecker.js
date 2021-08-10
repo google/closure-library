@@ -598,7 +598,7 @@ goog.ui.AbstractSpellChecker.prototype.showSuggestionsMenu = function(
   // 'Ignore' option for corrected words.
   if (this.markCorrected) {
     var corrected =
-        this.correctedWords_ && this.correctedWords_.contains(this.activeWord_);
+        this.correctedWords_ && this.correctedWords_.has(this.activeWord_);
     this.menuIgnore_.setVisible(!corrected);
     this.menuEdit_.setVisible(true);
   } else {
@@ -739,7 +739,7 @@ goog.ui.AbstractSpellChecker.prototype.updateElement = function(
     el, word, status) {
   'use strict';
   if (this.markCorrected && this.correctedWords_ &&
-      this.correctedWords_.contains(word)) {
+      this.correctedWords_.has(word)) {
     status = goog.spell.SpellCheck.WordStatus.CORRECTED;
   }
   if (status == goog.spell.SpellCheck.WordStatus.VALID) {

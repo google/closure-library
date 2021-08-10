@@ -153,7 +153,7 @@ goog.ui.IdleTimer.prototype.maybeDisposeDefaultActivityMonitor_ = function() {
   'use strict';
   goog.ui.IdleTimer.defaultActivityMonitorReferences_.remove(this);
   if (goog.ui.IdleTimer.defaultActivityMonitor_ != null &&
-      goog.ui.IdleTimer.defaultActivityMonitorReferences_.isEmpty()) {
+      goog.ui.IdleTimer.defaultActivityMonitorReferences_.size === 0) {
     goog.ui.IdleTimer.defaultActivityMonitor_.dispose();
     goog.ui.IdleTimer.defaultActivityMonitor_ = null;
   }
