@@ -335,7 +335,7 @@ goog.spell.SpellCheck.prototype.processPending_ = function() {
   if (this.unknownWords_.getCount()) {
     this.lookupInProgress_ = true;
     const func = this.lookupFunction_;
-    func(this.unknownWords_.getValues(), this, this.lookupCallback_);
+    func(Array.from(this.unknownWords_.values()), this, this.lookupCallback_);
   } else {
     this.dispatchEvent(goog.spell.SpellCheck.EventType.READY);
   }
