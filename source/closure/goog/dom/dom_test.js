@@ -12,7 +12,6 @@
 goog.module('goog.dom.dom_test');
 goog.setTestOnly();
 
-const BrowserFeature = goog.require('goog.dom.BrowserFeature');
 const Const = goog.require('goog.string.Const');
 const DomHelper = goog.require('goog.dom.DomHelper');
 const InputType = goog.require('goog.dom.InputType');
@@ -29,6 +28,7 @@ const googObject = goog.require('goog.object');
 const isVersion = goog.require('goog.userAgent.product.isVersion');
 const testSuite = goog.require('goog.testing.testSuite');
 const testing = goog.require('goog.html.testing');
+/** @suppress {extraRequire} */
 const testingAsserts = goog.require('goog.testing.asserts');
 const userAgent = goog.require('goog.userAgent');
 
@@ -1450,8 +1450,7 @@ testSuite({
     t(' \n&shy;<b>abcde &shy; </b>   \n\n\n&shy;', 'abcde ');
     t(' \n&shy;\n\n&shy;\na   ', 'a ');
     t(' \n<wbr></wbr><b>abcde <wbr></wbr> </b>   \n\n\n<wbr></wbr>', 'abcde ');
-    t('a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b',
-      BrowserFeature.CAN_USE_INNER_TEXT ? 'a     b' : 'a\xA0\xA0\xA0\xA0\xA0b');
+    t('a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b', 'a\xA0\xA0\xA0\xA0\xA0b');
   },
 
   testGetNodeTextLength() {
