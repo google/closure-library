@@ -155,15 +155,9 @@ goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
 goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
   'use strict';
   const result = template(opt_templateData || {}, this.getInjectedData_());
-  if (goog.asserts.ENABLE_ASSERTS) {
-    /** @suppress {checkTypes} Runtime check for untyped code. */
-    const isSanitizedContent = result instanceof goog.soy.data.SanitizedContent;
-    goog.asserts.assertString(
-        result,
-        isSanitizedContent ?
-            'renderText was called with a template of kind other than "text"' :
-            'renderText was called with a non-template');
-  }
+  goog.asserts.assertString(
+      result,
+      'renderText was called with a template of kind other than "text"');
   return String(result);
 };
 
