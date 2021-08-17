@@ -8,7 +8,6 @@ goog.module('goog.eventsTest');
 goog.setTestOnly();
 
 const AssertionError = goog.require('goog.asserts.AssertionError');
-const BrowserFeature = goog.require('goog.events.BrowserFeature');
 const CaptureSimulationMode = goog.require('goog.events.CaptureSimulationMode');
 const EntryPointMonitor = goog.require('goog.debug.EntryPointMonitor');
 const ErrorHandler = goog.require('goog.debug.ErrorHandler');
@@ -377,9 +376,6 @@ testSuite({
     events.removeAll(et1);
     events.removeAll(et2);
     events.removeAll(et3);
-
-    // Try again with the new API and without capture simulation:
-    if (!BrowserFeature.HAS_W3C_EVENT_SUPPORT) return;
 
     /** Use computed properties to avoid compiler checks of defines */
     events['CAPTURE_SIMULATION_MODE'] = CaptureSimulationMode.OFF_AND_FAIL;
@@ -776,20 +772,9 @@ testSuite({
     events['CAPTURE_SIMULATION_MODE'] = CaptureSimulationMode.OFF_AND_FAIL;
     const captureHandler = recordFunction();
 
-    if (!BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
-      const err = assertThrows(() => {
-        events.listen(document.body, 'click', captureHandler, true);
-      });
-      assertTrue(err instanceof AssertionError);
-
-      // Sanity tests.
-      dispatchClick(document.body);
-      assertEquals(0, captureHandler.getCallCount());
-    } else {
-      events.listen(document.body, 'click', captureHandler, true);
-      dispatchClick(document.body);
-      assertEquals(1, captureHandler.getCallCount());
-    }
+    events.listen(document.body, 'click', captureHandler, true);
+    dispatchClick(document.body);
+    assertEquals(1, captureHandler.getCallCount());
   },
 
   testCaptureSimulationModeOffAndSilent() {
@@ -798,12 +783,7 @@ testSuite({
     const captureHandler = recordFunction();
 
     events.listen(document.body, 'click', captureHandler, true);
-    if (!BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
-      dispatchClick(document.body);
-      assertEquals(0, captureHandler.getCallCount());
-    } else {
-      dispatchClick(document.body);
-      assertEquals(1, captureHandler.getCallCount());
-    }
+    dispatchClick(document.body);
+    assertEquals(1, captureHandler.getCallCount());
   },
 });

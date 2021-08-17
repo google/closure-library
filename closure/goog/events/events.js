@@ -277,23 +277,10 @@ goog.events.listen_ = function(
  */
 goog.events.getProxy = function() {
   'use strict';
-  var proxyCallbackFunction = goog.events.handleBrowserEvent_;
-  // Use a local var f to prevent one allocation.
-  var f =
-      goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT ? function(eventObject) {
-        'use strict';
-        return proxyCallbackFunction.call(f.src, f.listener, eventObject);
-      } : function(eventObject) {
-        'use strict';
-        var v = proxyCallbackFunction.call(f.src, f.listener, eventObject);
-        // NOTE(chrishenry): In IE, we hack in a capture phase. However, if
-        // there is inline event handler which tries to prevent default (for
-        // example <a href="..." onclick="return false">...</a>) in a
-        // descendant element, the prevent default will be overridden
-        // by this listener if this listener were to return true. Hence, we
-        // return undefined.
-        if (!v) return v;
-      };
+  const proxyCallbackFunction = goog.events.handleBrowserEvent_;
+  const f = function(eventObject) {
+    return proxyCallbackFunction.call(f.src, f.listener, eventObject);
+  };
   return f;
 };
 
@@ -827,61 +814,6 @@ goog.events.handleBrowserEvent_ = function(listener, opt_evt) {
   'use strict';
   if (listener.removed) {
     return true;
-  }
-
-  // Synthesize event propagation if the browser does not support W3C
-  // event model.
-  if (!goog.events.BrowserFeature.HAS_W3C_EVENT_SUPPORT) {
-    var ieEvent = opt_evt ||
-        /** @type {Event} */ (goog.getObjectByName('window.event'));
-    var evt = new goog.events.BrowserEvent(ieEvent, this);
-    /** @type {*} */
-    var retval = true;
-
-    if (goog.events.CAPTURE_SIMULATION_MODE ==
-        goog.events.CaptureSimulationMode.ON) {
-      // If we have not marked this event yet, we should perform capture
-      // simulation.
-      if (!goog.events.isMarkedIeEvent_(ieEvent)) {
-        goog.events.markIeEvent_(ieEvent);
-
-        var ancestors = [];
-        for (var parent = evt.currentTarget; parent;
-             parent = parent.parentNode) {
-          ancestors.push(parent);
-        }
-
-        // Fire capture listeners.
-        var type = listener.type;
-        for (var i = ancestors.length - 1;
-             !evt.hasPropagationStopped() && i >= 0; i--) {
-          evt.currentTarget = ancestors[i];
-          var result =
-              goog.events.fireListeners_(ancestors[i], type, true, evt);
-          retval = retval && result;
-        }
-
-        // Fire bubble listeners.
-        //
-        // We can technically rely on IE to perform bubble event
-        // propagation. However, it turns out that IE fires events in
-        // opposite order of attachEvent registration, which broke
-        // some code and tests that rely on the order. (While W3C DOM
-        // Level 2 Events TR leaves the event ordering unspecified,
-        // modern browsers and W3C DOM Level 3 Events Working Draft
-        // actually specify the order as the registration order.)
-        for (var i = 0; !evt.hasPropagationStopped() && i < ancestors.length;
-             i++) {
-          evt.currentTarget = ancestors[i];
-          var result =
-              goog.events.fireListeners_(ancestors[i], type, false, evt);
-          retval = retval && result;
-        }
-      }
-    } else {
-      retval = goog.events.fireListener(listener, evt);
-    }
-    return retval;
   }
 
   // Otherwise, simply fire the listener.
