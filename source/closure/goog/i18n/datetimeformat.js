@@ -133,7 +133,8 @@ goog.i18n.DateTimeFormat = function(pattern, opt_dateTimeSymbols) {
 
 
 /**
- * Enum to identify predefined Date/Time format pattern.
+ * Enum to identify predefined Date/Time format pattern. The format pattern to
+ * output mapping can be found at go/closure-localization#fconst.
  * @enum {number}
  */
 goog.i18n.DateTimeFormat.Format = {
