@@ -394,8 +394,9 @@ goog.editor.plugins.BasicTextFormatter.prototype.queryCommandValue = function(
       // color/fontface/fontsize is applied, we want to know WHICH one it is.
       return this.queryCommandValueInternal_(
           this.getDocument_(), command,
-          goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &&
-              goog.userAgent.GECKO);
+          (goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &&
+           goog.userAgent.GECKO) ??
+              undefined);
 
     case goog.editor.plugins.BasicTextFormatter.COMMAND.UNDERLINE:
     case goog.editor.plugins.BasicTextFormatter.COMMAND.BOLD:
@@ -416,7 +417,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.queryCommandValue = function(
        */
       // This only works for commands that use the default execCommand
       return this.queryCommandStateInternal_(
-          this.getDocument_(), command, styleWithCss);
+          this.getDocument_(), command, styleWithCss ?? undefined);
   }
 };
 
