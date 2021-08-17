@@ -23,8 +23,9 @@ nvm install v14
 export GH_PAGES
 GH_PAGES=$(mktemp -d)
 
-git clone --depth=1 https://github.com/google/closure-library "$GH_PAGES"
-./scripts/ci/generate_latest_docs.sh
+# TODO(user): Doc generation temporarily disabled due to Dossier issues.
+# git clone --depth=1 https://github.com/google/closure-library "$GH_PAGES"
+# ./scripts/ci/generate_latest_docs.sh
 
 ./scripts/ci/install_closure_deps.sh
 ./scripts/ci/compile_closure.sh
