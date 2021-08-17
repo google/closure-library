@@ -28,6 +28,7 @@ const EventTarget = goog.require('goog.events.EventTarget');
 const EventType = goog.require('goog.net.EventType');
 const GoogEvent = goog.require('goog.events.Event');
 const ModuleInfo = goog.requireType('goog.module.ModuleInfo');
+const SafeScript = goog.require('goog.html.SafeScript');
 const TagName = goog.require('goog.dom.TagName');
 const Timer = goog.require('goog.Timer');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
@@ -38,6 +39,7 @@ const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
 const googArray = goog.require('goog.array');
 const jsloader = goog.require('goog.net.jsloader');
+const legacyconversions = goog.require('goog.html.legacyconversions');
 const log = goog.require('goog.log');
 const product = goog.require('goog.userAgent.product');
 const safe = goog.require('goog.dom.safe');
@@ -303,11 +305,13 @@ ModuleLoader.prototype.evaluateCode_ = function(moduleIds) {
   try {
     if (this.usingSourceUrlInjection_()) {
       for (let i = 0; i < uris.length; i++) {
-        const uri = uris[i];
-        goog.globalEval(texts[i] + ' //# sourceURL=' + uri);
+        const script = legacyconversions.safeScriptFromString(
+            texts[i] + ' //# sourceURL=' + uris[i]);
+        goog.globalEval(SafeScript.unwrapTrustedScript(script));
       }
     } else {
-      goog.globalEval(texts.join('\n'));
+      const script = legacyconversions.safeScriptFromString(texts.join('\n'));
+      goog.globalEval(SafeScript.unwrapTrustedScript(script));
     }
   } catch (e) {
     error = e;
