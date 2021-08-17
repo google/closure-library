@@ -19,6 +19,7 @@ goog.provide('goog.i18n.NumberFormat.Format');
 goog.require('goog.asserts');
 goog.require('goog.i18n.CompactNumberFormatSymbols');
 goog.require('goog.i18n.NumberFormatSymbols');
+goog.require('goog.i18n.NumberFormatSymbolsType');
 goog.require('goog.i18n.NumberFormatSymbols_u_nu_latn');
 goog.require('goog.i18n.currency');
 goog.require('goog.math');
@@ -36,10 +37,10 @@ goog.require('goog.string');
  * @param {number=} opt_currencyStyle currency style, value defined in
  *     goog.i18n.NumberFormat.CurrencyStyle. If not given, the currency style
  *     for the current locale will be used.
- * @param {!Object<string, string>=} opt_symbols Optional number format symbols
- *     map, analogous to goog.i18n.NumberFormatSymbols. If present, this
- *     overrides the symbols from the current locale, such as the percent sign
- *     and minus sign.
+ * @param {!goog.i18n.NumberFormatSymbolsType.Type=} opt_symbols Optional number
+ *     format symbols map, analogous to goog.i18n.NumberFormatSymbols. If
+ *     present, this overrides the symbols from the current locale, such as the
+ *     percent sign and minus sign.
  * @constructor
  */
 goog.i18n.NumberFormat = function(
