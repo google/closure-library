@@ -285,6 +285,39 @@ function createModuleLoaderWithExtraEdgesSupport(loaderCalls) {
   };
 }
 
+/**
+ * Creates an AbstractModuleLoader implementation that registers one
+ * initialization callback for a synthetic module, then simulates loading the
+ * given modules.
+ * @param {!ModuleManager} moduleMgr
+ * @param {!Array} modulesToMarkAsLoaded
+ * @return {{loadModules: function(), syntheticModuleCallbackCalled: boolean}}
+ * @suppress {checkTypes} suppression added to enable type checking
+ */
+function createExcludingSyntheticModuleOverheadLoader(
+    moduleMgr, modulesToMarkAsLoaded) {
+  return {
+    syntheticModuleCallbackCalled: false,
+    loadModules: function(ids, moduleInfoMap, {onError, onSuccess, onTimeout}) {
+      const cb = () => {
+        this.syntheticModuleCallbackCalled = true;
+      };
+      requestCount++;
+      setTimeout(() => {
+        // Simulate a synthetic module loading first, and registering a cb.
+        moduleMgr.registerInitializationCallback(cb);
+        for (const id of modulesToMarkAsLoaded) {
+          moduleMgr.beforeLoadModuleCode(id);
+          moduleMgr.setLoaded();
+        }
+        if (onSuccess) {
+          onSuccess();
+        }
+      }, 5);
+    },
+  };
+}
+
 testSuite({
   tearDown() {
     clock.dispose();
@@ -807,6 +840,83 @@ testSuite({
 
     assertTrue(calledBack);
     assertNull(error);
+  },
+
+  /**
+   * Test loading modules that include synthetic modules that omit their
+   * calls to beforeLoadModuleCode() and setLoaded().
+   */
+  testLoadWithoutSyntheticModuleOverhead() {
+    const mm = getModuleManager({'a': []});
+    const loader = createExcludingSyntheticModuleOverheadLoader(
+        mm, /* modulesToMarkAsLoaded= */['a']);
+    mm.setLoader(loader);
+
+    let calledBack = false;
+    let error = null;
+
+    const d = mm.load('a');
+    d.then(
+        (ctx) => {
+          calledBack = true;
+        },
+        (err) => {
+          error = err;
+        });
+
+    assertFalse(calledBack);
+    assertNull(error);
+    assertFalse(mm.isUserActive());
+    assertFalse(loader.syntheticModuleCallbackCalled);
+    assertFalse(mm.getModuleInfo('a').isLoaded());
+
+    clock.tick(5);
+
+    assertTrue(calledBack);
+    assertNull(error);
+    assertTrue(loader.syntheticModuleCallbackCalled);
+    assertTrue(mm.getModuleInfo('a').isLoaded());
+  },
+
+  /**
+   * Same as testLoadWithoutSyntheticModuleOverhead, but this time we load
+   * module info to simulate positive module loading, where the manager is aware
+   * of synthetic modules.
+   */
+  testLoadWithoutSyntheticModuleOverhead_MarksSyntheticModulesAsLoaded() {
+    const mm = getModuleManager({'sy0': [], 'a': [], 'b': ['sy0', 'a']});
+    const loader = createExcludingSyntheticModuleOverheadLoader(
+        mm, /* modulesToMarkAsLoaded= */['a', 'b']);
+    mm.setLoader(loader);
+
+    let calledBack = false;
+    let error = null;
+
+    const d = mm.load('a');
+    d.then(
+        (ctx) => {
+          calledBack = true;
+        },
+        (err) => {
+          error = err;
+        });
+
+    assertFalse(calledBack);
+    assertNull(error);
+    assertFalse(mm.isUserActive());
+    assertFalse(loader.syntheticModuleCallbackCalled);
+    assertFalse(mm.getModuleInfo('sy0').isLoaded());
+    assertFalse(mm.getModuleInfo('a').isLoaded());
+    assertFalse(mm.getModuleInfo('b').isLoaded());
+
+    clock.tick(5);
+
+    assertTrue(calledBack);
+    assertNull(error);
+    assertTrue(loader.syntheticModuleCallbackCalled);
+    assertTrue(mm.getModuleInfo('sy0').isLoaded());
+    assertTrue(mm.getModuleInfo('a').isLoaded());
+    assertTrue(mm.getModuleInfo('b').isLoaded());
   },
 
   testExtraEdges() {
