@@ -958,6 +958,64 @@ testSuite({
     d = new DateDate(2008, month.FEB, 17);
     d.add(new Interval(Interval.DAYS, 1));
     assertEquals('2008-02-17 + 1d = 2008-02-18', '20080218', d.toIsoString());
+
+    // Javascript Date objects have special behavior for years 0-99
+    d = new DateDate(0, month.MAR, 3);
+    d.add(new Interval(Interval.DAYS, -1));
+    // Note that ISO strings allow dropping leading zeros on the year.
+    assertEquals('0000-3-3 - 1d = 0000-03-02', '00302', d.toIsoString());
+
+    // Javascript Date objects have special behavior for years 0-99
+    d = new DateDate(99, month.OCT, 31);
+    d.add(new Interval(Interval.DAYS, -1));
+    // Note that ISO strings allow dropping leading zeros on the year.
+    assertEquals('0099-10-31 - 1d = 0099-10-30', '991030', d.toIsoString());
+
+    // Javascript Date objects have special behavior for years 0-99; -1 is just
+    // outside that range.
+    d = new DateDate(-1, month.JUN, 10);
+    d.add(new Interval(Interval.DAYS, 1));
+    // Note that ISO strings allow dropping leading zeros on the year.
+    assertEquals('-0001-06-10 + 1d = -0001-06-11', '-10611', d.toIsoString());
+
+    // Javascript Date objects have special behavior for years 0-99; 100 is just
+    // outside that range.
+    d = new DateDate(100, month.JUN, 10);
+    d.add(new Interval(Interval.DAYS, 1));
+    // Note that ISO strings allow dropping leading zeros on the year.
+    assertEquals('0100-06-10 + 1d = 0100-06-11', '1000611', d.toIsoString());
+
+    // Javascript Date objects have special behavior for years 0-99; add an
+    // interval that pushes the original date into the range from across the
+    // bottom boundary.
+    d = new DateDate(-1, month.DEC, 20);
+    d.add(new Interval(Interval.DAYS, 12));
+    // Note that ISO strings allow dropping leading zeros on the year.
+    assertEquals('-0001-12-20 + 12d = 0000-01-01', '00101', d.toIsoString());
+
+    // Javascript Date objects have special behavior for years 0-99; add an
+    // interval that pushes the original date into the range from across the top
+    // boundary.
+    d = new DateDate(100, month.JAN, 3);
+    d.add(new Interval(Interval.DAYS, -3));
+    // Note that ISO strings allow dropping leading zeros on the year.
+    assertEquals('0100-01-03 - 3d = 0099-12-31', '991231', d.toIsoString());
+
+    // Javascript Date objects have special behavior for years 0-99; add an
+    // interval that pushes the original, special date outside the range across
+    // the bottom boundary.
+    d = new DateDate(0, month.JAN, 2);
+    d.add(new Interval(Interval.DAYS, -2));
+    // Note that ISO strings allow dropping leading zeros on the year.
+    assertEquals('0000-01-02 - 2d = -0001-12-31', '-11231', d.toIsoString());
+
+    // Javascript Date objects have special behavior for years 0-99; add an
+    // interval that pushes the original, special date outside the range across
+    // the top boundary.
+    d = new DateDate(99, month.DEC, 30);
+    d.add(new Interval(Interval.DAYS, 2));
+    // Note that ISO strings allow dropping leading zeros on the year.
+    assertEquals('0099-12-30 + 2d = 0100-01-01', '1000101', d.toIsoString());
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */
