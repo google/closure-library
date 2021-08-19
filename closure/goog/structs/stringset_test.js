@@ -116,13 +116,16 @@ testSuite({
     const e = new StringSet;
     TEST_VALUES.forEach(element => {
       assertFalse(`empty set does not contain ${element}`, e.contains(element));
+      assertFalse(`empty set does not contain ${element}`, e.has(element));
     });
 
     const s = new StringSet(TEST_VALUES);
     TEST_VALUES_WITH_DUPLICATES.forEach(element => {
       assertTrue(`s contains ${element}`, s.contains(element));
+      assertTrue(`s contains ${element}`, s.has(element));
     });
     assertFalse('s does not contain 42', s.contains(42));
+    assertFalse('s does not contain 42', s.has(42));
   },
 
   testContainsArray() {
@@ -249,6 +252,20 @@ testSuite({
     TEST_VALUES.forEach(s.remove, s);
     assertSameElements(
         'all special values have been removed', [], s.getValues());
+  },
+
+  testDelete() {
+    const n = new StringSet([1, 2]);
+    assertFalse('3 not deleted from {1, 2}', n.delete(3));
+    assertSameElements('set == {1, 2}', ['1', '2'], n.values());
+    assertTrue('2 deleted from {1, 2}', n.delete(2));
+    assertSameElements('set == {1}', ['1'], n.values());
+    assertTrue('"1" deleted from {1}', n.delete('1'));
+    assertSameElements('set == {}', [], n.values());
+
+    const s = new StringSet(TEST_VALUES);
+    TEST_VALUES.forEach(s.delete, s);
+    assertSameElements('all special values have been removed', [], s.values());
   },
 
   testRemoveArray() {
