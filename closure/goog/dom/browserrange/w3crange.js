@@ -264,11 +264,15 @@ goog.dom.browserrange.W3cRange.prototype.select = function(reverse) {
 goog.dom.browserrange.W3cRange.prototype.selectInternal = function(
     selection, reverse) {
   'use strict';
-  // Browser-specific tricks are needed to create reversed selections
-  // programatically. For this generic W3C codepath, ignore the reverse
-  // parameter.
-  selection.removeAllRanges();
-  selection.addRange(this.range_);
+  if (reverse && !this.isCollapsed() &&
+      typeof selection.setBaseAndExtent === 'function') {
+    selection.setBaseAndExtent(
+        this.getEndNode(), this.getEndOffset(), this.getStartNode(),
+        this.getStartOffset());
+  } else {
+    selection.removeAllRanges();
+    selection.addRange(this.range_);
+  }
 };
 
 

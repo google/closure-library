@@ -17,10 +17,7 @@ goog.provide('goog.dom.browserrange.Error');
 
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.browserrange.GeckoRange');
 goog.require('goog.dom.browserrange.W3cRange');
-goog.require('goog.dom.browserrange.WebKitRange');
-goog.require('goog.userAgent');
 goog.requireType('goog.dom.browserrange.AbstractRange');
 
 
@@ -45,17 +42,7 @@ goog.dom.browserrange.Error = {
  */
 goog.dom.browserrange.createRange = function(range) {
   'use strict';
-  if (goog.userAgent.WEBKIT) {
-    return new goog.dom.browserrange.WebKitRange(
-        /** @type {Range} */ (range));
-  } else if (goog.userAgent.GECKO) {
-    return new goog.dom.browserrange.GeckoRange(
-        /** @type {Range} */ (range));
-  } else {
-    // Default other browsers, including Opera, to W3c ranges.
-    return new goog.dom.browserrange.W3cRange(
-        /** @type {Range} */ (range));
-  }
+  return new goog.dom.browserrange.W3cRange(/** @type {?Range} */ (range));
 };
 
 
@@ -66,14 +53,7 @@ goog.dom.browserrange.createRange = function(range) {
  */
 goog.dom.browserrange.createRangeFromNodeContents = function(node) {
   'use strict';
-  if (goog.userAgent.WEBKIT) {
-    return goog.dom.browserrange.WebKitRange.createFromNodeContents(node);
-  } else if (goog.userAgent.GECKO) {
-    return goog.dom.browserrange.GeckoRange.createFromNodeContents(node);
-  } else {
-    // Default other browsers to W3c ranges.
-    return goog.dom.browserrange.W3cRange.createFromNodeContents(node);
-  }
+  return goog.dom.browserrange.W3cRange.createFromNodeContents(node);
 };
 
 
@@ -92,17 +72,8 @@ goog.dom.browserrange.createRangeFromNodeContents = function(node) {
 goog.dom.browserrange.createRangeFromNodes = function(
     startNode, startOffset, endNode, endOffset) {
   'use strict';
-  if (goog.userAgent.WEBKIT) {
-    return goog.dom.browserrange.WebKitRange.createFromNodes(
-        startNode, startOffset, endNode, endOffset);
-  } else if (goog.userAgent.GECKO) {
-    return goog.dom.browserrange.GeckoRange.createFromNodes(
-        startNode, startOffset, endNode, endOffset);
-  } else {
-    // Default other browsers to W3c ranges.
-    return goog.dom.browserrange.W3cRange.createFromNodes(
-        startNode, startOffset, endNode, endOffset);
-  }
+  return goog.dom.browserrange.W3cRange.createFromNodes(
+      startNode, startOffset, endNode, endOffset);
 };
 
 
