@@ -13,6 +13,7 @@
 goog.module('goog.labs.userAgent.testAgents');
 goog.setTestOnly();
 
+const {deepFreeze} = goog.require('goog.debug.deepFreeze');
 const testAgents = {};
 
 
@@ -158,6 +159,17 @@ testAgents.EDGE_CHROMIUM =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
     '(KHTML, like Gecko) Chrome/74.0.3729.48 Safari/537.36 Edg/74.1.96.24';
 
+/** @const {!NavigatorUAData} */
+testAgents.EDGECHROMIUM_USERAGENT_DATA = Object.freeze({
+  brands: deepFreeze([
+    {brand: 'Chromium', version: '91'},
+    {brand: 'Microsoft Edge', version: '91'},
+    {brand: 'GREASE', version: '99'},
+  ]),
+  mobile: false,
+  getHighEntropyValues: getHighEntropyValuesMock,
+});
+
 /** @const {string} */
 testAgents.FIREFOX_19 =
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:19.0) ' +
@@ -292,6 +304,17 @@ testAgents.OPERA_15 =
     'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 ' +
     '(KHTML, like Gecko) Chrome/28.0.1500.52 Safari/537.36 OPR/15.0.1147.100';
 
+/** @const {!NavigatorUAData} */
+testAgents.OPERACHROMIUM_USERAGENT_DATA = Object.freeze({
+  brands: deepFreeze([
+    {brand: 'Opera', version: '77'},
+    {brand: 'Chromium', version: '91'},
+    {brand: ';Not A Brand', version: '99'},
+  ]),
+  mobile: false,
+  getHighEntropyValues: getHighEntropyValuesMock,
+});
+
 
 /** @const {string} */
 testAgents.IPAD_4 = 'Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us)' +
@@ -397,6 +420,35 @@ testAgents.CHROME_OS_910 =
     'Mozilla/5.0 (X11; U; CrOS i686 9.10.0; en-US) AppleWebKit/532.5' +
     ' (KHTML, like Gecko) Chrome/4.0.253.0 Safari/532.5';
 
+/** @const {!NavigatorUAData} */
+testAgents.CHROME_USERAGENT_DATA = Object.freeze({
+  brands: Object.freeze([
+    Object.freeze({brand: 'Not; A Brand', version: '0'}),
+    Object.freeze({brand: 'Google Chrome', version: '91'}),
+    Object.freeze({brand: 'Chromium', version: '91'}),
+  ]),
+  mobile: false,
+  getHighEntropyValues: getHighEntropyValuesMock,
+});
+
+/** @const {!NavigatorUAData} */
+testAgents.INCOMPLETE_USERAGENT_DATA = Object.freeze({
+  brands: Object.freeze([]),
+  mobile: false,
+  getHighEntropyValues: getHighEntropyValuesMock,
+});
+
+/** @const {!NavigatorUAData} */
+testAgents.CHROME_USERAGENT_DATA_MOBILE = Object.freeze({
+  brands: deepFreeze([
+    {brand: 'Not; A Brand', version: '99'},
+    {brand: 'Google Chrome', version: '91'},
+    {brand: 'Chromium', version: '91'},
+  ]),
+  mobile: true,
+  getHighEntropyValues: getHighEntropyValuesMock,
+});
+
 /** @const {string} */
 testAgents.CHROMECAST =
     'Mozilla/5.0 (CrKey armv7l 1.5.16041) AppleWebKit/537.36' +
@@ -417,5 +469,20 @@ testAgents.FIREFOX_ANDROID_TABLET =
 testAgents.KAIOS =
     'Mozilla/5.0 (Mobile; LYF/F90M/LYF_F90M_000-03-19-240319; Android; ' +
     'rv:48.0) Gecko/48.0 Firefox/48.0 KAIOS/2.5';
+
+/**
+ * @param {!Array<string>} hints
+ * @return {!Promise<!UADataValues>}
+ */
+function getHighEntropyValuesMock(hints) {
+  return Promise.resolve(Object.freeze({
+    'platform': 'unusedValue',
+    'architecture': 'unusedValue',
+    'bitness': 'unusedValue',
+    'model': 'unusedValue',
+    'platformVersion': 'unusedValue',
+    'uaFullVersion': 'unusedValue',
+  }));
+}
 
 exports = testAgents;

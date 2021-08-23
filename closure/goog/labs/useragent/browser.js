@@ -25,6 +25,17 @@ goog.require('goog.string.internal');
 
 
 /**
+ * @return {boolean} Whether to use navigator.userAgentData to determine
+ * browser's brand.
+ * @private
+ */
+goog.labs.userAgent.browser.useUserAgentBrand_ = function() {
+  'use strict';
+  const userAgentData = goog.labs.userAgent.util.getUserAgentData();
+  return !!userAgentData && userAgentData.brands.length > 0;
+};
+
+/**
  * @return {boolean} Whether the user's browser is Opera.  Note: Chromium
  *     based Opera (Opera 15+) is detected as Chrome to avoid unnecessary
  *     special casing.
@@ -32,6 +43,11 @@ goog.require('goog.string.internal');
  */
 goog.labs.userAgent.browser.matchOpera_ = function() {
   'use strict';
+  if (goog.labs.userAgent.ASSUME_CLIENT_HINTS_SUPPORT ||
+      goog.labs.userAgent.util.getUserAgentData()) {
+    // This will remain false for non Chromium based Opera.
+    return false;
+  }
   return goog.labs.userAgent.util.matchUserAgent('Opera');
 };
 
@@ -42,6 +58,11 @@ goog.labs.userAgent.browser.matchOpera_ = function() {
  */
 goog.labs.userAgent.browser.matchIE_ = function() {
   'use strict';
+  if (goog.labs.userAgent.ASSUME_CLIENT_HINTS_SUPPORT ||
+      goog.labs.userAgent.util.getUserAgentData()) {
+    // This will remain false for IE.
+    return false;
+  }
   return goog.labs.userAgent.util.matchUserAgent('Trident') ||
       goog.labs.userAgent.util.matchUserAgent('MSIE');
 };
@@ -54,6 +75,11 @@ goog.labs.userAgent.browser.matchIE_ = function() {
  */
 goog.labs.userAgent.browser.matchEdgeHtml_ = function() {
   'use strict';
+  if (goog.labs.userAgent.ASSUME_CLIENT_HINTS_SUPPORT ||
+      goog.labs.userAgent.util.getUserAgentData()) {
+    // This will remain false for non chromium based Edge.
+    return false;
+  }
   return goog.labs.userAgent.util.matchUserAgent('Edge');
 };
 
@@ -64,6 +90,9 @@ goog.labs.userAgent.browser.matchEdgeHtml_ = function() {
  */
 goog.labs.userAgent.browser.matchEdgeChromium_ = function() {
   'use strict';
+  if (goog.labs.userAgent.browser.useUserAgentBrand_()) {
+    return goog.labs.userAgent.util.matchUserAgentDataBrand('Edge');
+  }
   return goog.labs.userAgent.util.matchUserAgent('Edg/');
 };
 
@@ -74,6 +103,9 @@ goog.labs.userAgent.browser.matchEdgeChromium_ = function() {
  */
 goog.labs.userAgent.browser.matchOperaChromium_ = function() {
   'use strict';
+  if (goog.labs.userAgent.browser.useUserAgentBrand_()) {
+    return goog.labs.userAgent.util.matchUserAgentDataBrand('Opera');
+  }
   return goog.labs.userAgent.util.matchUserAgent('OPR');
 };
 
@@ -84,6 +116,9 @@ goog.labs.userAgent.browser.matchOperaChromium_ = function() {
  */
 goog.labs.userAgent.browser.matchFirefox_ = function() {
   'use strict';
+  if (goog.labs.userAgent.browser.useUserAgentBrand_()) {
+    return goog.labs.userAgent.util.matchUserAgentDataBrand('Firefox');
+  }
   return goog.labs.userAgent.util.matchUserAgent('Firefox') ||
       goog.labs.userAgent.util.matchUserAgent('FxiOS');
 };
@@ -95,6 +130,10 @@ goog.labs.userAgent.browser.matchFirefox_ = function() {
  */
 goog.labs.userAgent.browser.matchSafari_ = function() {
   'use strict';
+  if (goog.labs.userAgent.browser.useUserAgentBrand_()) {
+    // This will always be false before Safari adopt the Client Hint support.
+    return goog.labs.userAgent.util.matchUserAgentDataBrand('Safari');
+  }
   return goog.labs.userAgent.util.matchUserAgent('Safari') &&
       !(goog.labs.userAgent.browser.matchChrome_() ||
         goog.labs.userAgent.browser.matchCoast_() ||
@@ -115,6 +154,11 @@ goog.labs.userAgent.browser.matchSafari_ = function() {
  */
 goog.labs.userAgent.browser.matchCoast_ = function() {
   'use strict';
+  if (goog.labs.userAgent.ASSUME_CLIENT_HINTS_SUPPORT ||
+      goog.labs.userAgent.util.getUserAgentData()) {
+    // This will remain false for Coast.
+    return false;
+  }
   return goog.labs.userAgent.util.matchUserAgent('Coast');
 };
 
@@ -144,6 +188,9 @@ goog.labs.userAgent.browser.matchIosWebview_ = function() {
  */
 goog.labs.userAgent.browser.matchChrome_ = function() {
   'use strict';
+  if (goog.labs.userAgent.browser.useUserAgentBrand_()) {
+    return goog.labs.userAgent.util.matchUserAgentDataBrand('Chromium');
+  }
   return (goog.labs.userAgent.util.matchUserAgent('Chrome') ||
           goog.labs.userAgent.util.matchUserAgent('CriOS')) &&
       !goog.labs.userAgent.browser.matchEdgeHtml_();
@@ -244,6 +291,9 @@ goog.labs.userAgent.browser.isAndroidBrowser =
  */
 goog.labs.userAgent.browser.isSilk = function() {
   'use strict';
+  if (goog.labs.userAgent.browser.useUserAgentBrand_()) {
+    return goog.labs.userAgent.util.matchUserAgentDataBrand('Silk');
+  }
   return goog.labs.userAgent.util.matchUserAgent('Silk');
 };
 
