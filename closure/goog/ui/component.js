@@ -468,7 +468,7 @@ goog.ui.Component.prototype.setId = function(id) {
 
 /**
  * Gets the component's element.
- * @return {Element} The element for the component.
+ * @return {?Element} The element for the component.
  */
 goog.ui.Component.prototype.getElement = function() {
   'use strict';
