@@ -1618,6 +1618,15 @@ testSuite({
         Long.fromBits(1, 0x40000000).toString(2));
   },
 
+  testHashCode() {
+    assertEquals(0, Long.fromString('0').hashCode());
+    assertEquals(1, Long.fromString('1').hashCode());
+    assertEquals(0, Long.fromString('-1').hashCode());
+    assertEquals(2147483647, Long.fromString('2147483647').hashCode());
+    assertEquals(-2147483648, Long.getMinValue().hashCode());
+    assertEquals(-2147483648, Long.getMaxValue().hashCode());
+  },
+
   testSafeInteger() {
     assertTrue(Long.fromNumber(1).isSafeInteger());
     assertTrue(Long.fromNumber(0).isSafeInteger());

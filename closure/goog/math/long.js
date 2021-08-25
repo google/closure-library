@@ -186,6 +186,15 @@ class Long {
   }
 
   /**
+   * Returns a hash code for this long object that similar java.lang.Long one.
+   *
+   * @return {number} 32 bit hash code for this object.
+   */
+  hashCode() {
+    return this.getLowBits() ^ this.getHighBits();
+  }
+
+  /**
    * @param {?Long} other Long to compare against.
    * @return {boolean} Whether this Long equals the other.
    */
