@@ -46,7 +46,7 @@ testSuite({
       csv.parse('a,b,c\r\nd,e,f\r\ng,h,i\r\n', undefined, '\n');
     });
     assertEquals(
-        'Assertion failed: Cannot use newline or carriage return has delimiter.',
+        'Assertion failed: Cannot use newline or carriage return as delimiter.',
         e.message);
   },
 
@@ -55,7 +55,7 @@ testSuite({
       csv.parse('a,b,c\r\nd,e,f\r\ng,h,i\r\n', undefined, '\r');
     });
     assertEquals(
-        'Assertion failed: Cannot use newline or carriage return has delimiter.',
+        'Assertion failed: Cannot use newline or carriage return as delimiter.',
         e.message);
   },
 
