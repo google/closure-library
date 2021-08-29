@@ -17,10 +17,17 @@ const {promisify} = require('util');
 const IGNORED_EXTENSIONS =
     ['.gif', '.jpg', '.png', '.txt', '.data', '.json', '.enc', '.exe', '.yml'];
 const IGNORED_FILES = [
-  'AUTHORS', 'CONTRIBUTING', 'LICENSE', 'README.md', '.npmignore',
-  'closure-deps/AUTHORS', 'closure-deps/CONTRIBUTING', 'closure-deps/LICENSE',
+  'AUTHORS',
+  'CONTRIBUTING',
+  'LICENSE',
+  'README.md',
+  '.npmignore',
+  'closure-deps/AUTHORS',
+  'closure-deps/CONTRIBUTING',
+  'closure-deps/LICENSE',
   'closure-deps/README.md',
-  'closure/known_issues/testdata/closure_library_warnings.txt'
+  'closure/known_issues/testdata/closure_library_warnings.txt',
+  'closure/goog/BUILD.bazel',
 ];
 
 const APACHE_LICENSE_REGEXES =
@@ -49,7 +56,7 @@ async function* yieldClosureFiles() {
   for (const filePath of files) {
     const ext = path.extname(filePath);
     if (IGNORED_EXTENSIONS.includes(ext) || IGNORED_FILES.includes(filePath) ||
-        filePath.startsWith('third_party'))
+        filePath.startsWith('third_party') || filePath.endsWith('/BUILD'))
       continue;
     yield {
       filePath,
