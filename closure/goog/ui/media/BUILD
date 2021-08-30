@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "mediamodel",
     srcs = ["mediamodel.js"],
-    lenient = True,
     deps = [
         "//closure/goog/array",
         "//closure/goog/html:trustedresourceurl",
@@ -18,7 +17,6 @@ closure_js_library(
 closure_js_library(
     name = "youtube",
     srcs = ["youtube.js"],
-    lenient = True,
     deps = [
         ":mediamodel",
         "//closure/goog/dom",

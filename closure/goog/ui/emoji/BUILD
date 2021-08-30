@@ -7,13 +7,11 @@ licenses(["notice"])
 closure_js_library(
     name = "emoji",
     srcs = ["emoji.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "emojipalette",
     srcs = ["emojipalette.js"],
-    lenient = True,
     deps = [
         ":emoji",
         ":emojipaletterenderer",
@@ -29,7 +27,6 @@ closure_js_library(
 closure_js_library(
     name = "emojipaletterenderer",
     srcs = ["emojipaletterenderer.js"],
-    lenient = True,
     deps = [
         ":emoji",
         ":spriteinfo",
@@ -48,7 +45,6 @@ closure_js_library(
 closure_js_library(
     name = "emojipicker",
     srcs = ["emojipicker.js"],
-    lenient = True,
     deps = [
         ":emoji",
         ":emojipalette",
@@ -65,7 +61,6 @@ closure_js_library(
 closure_js_library(
     name = "popupemojipicker",
     srcs = ["popupemojipicker.js"],
-    lenient = True,
     deps = [
         ":emoji",
         ":emojipicker",
@@ -85,7 +80,6 @@ closure_js_library(
 closure_js_library(
     name = "progressiveemojipaletterenderer",
     srcs = ["progressiveemojipaletterenderer.js"],
-    lenient = True,
     deps = [
         ":emojipaletterenderer",
         "//closure/goog/dom:tagname",
@@ -96,5 +90,4 @@ closure_js_library(
 closure_js_library(
     name = "spriteinfo",
     srcs = ["spriteinfo.js"],
-    lenient = True,
 )

@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "callback",
     srcs = ["callback.js"],
-    lenient = True,
     deps = [
         "//closure/goog/dom",
         "//closure/goog/dom:tagiterator",
@@ -18,12 +17,10 @@ closure_js_library(
 closure_js_library(
     name = "counter",
     srcs = ["counter.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "test",
     srcs = ["test.js"],
-    lenient = True,
     deps = ["//closure/goog/iter"],
 )

@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "bidi",
     srcs = ["bidi.js"],
-    lenient = True,
     deps = [
         ":style",
         "//closure/goog/dom",
@@ -21,14 +20,12 @@ closure_js_library(
 closure_js_library(
     name = "cursor",
     srcs = ["cursor.js"],
-    lenient = True,
     deps = ["//closure/goog/useragent"],
 )
 
 closure_js_library(
     name = "style",
     srcs = ["style.js"],
-    lenient = True,
     deps = [
         "//closure/goog/array",
         "//closure/goog/asserts",
@@ -54,7 +51,6 @@ closure_js_library(
     name = "stylescrollbartester",
     testonly = 1,
     srcs = ["stylescrollbartester.js"],
-    lenient = True,
     deps = [
         ":style",
         "//closure/goog/dom",
@@ -66,7 +62,6 @@ closure_js_library(
 closure_js_library(
     name = "transform",
     srcs = ["transform.js"],
-    lenient = True,
     deps = [
         ":style",
         "//closure/goog/functions",
@@ -80,7 +75,6 @@ closure_js_library(
 closure_js_library(
     name = "transition",
     srcs = ["transition.js"],
-    lenient = True,
     deps = [
         ":style",
         "//closure/goog/array",

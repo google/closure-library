@@ -21,6 +21,7 @@ const IGNORED_FILES = [
   'CONTRIBUTING',
   'LICENSE',
   'README.md',
+  'WORKSPACE',
   '.npmignore',
   'closure-deps/AUTHORS',
   'closure-deps/CONTRIBUTING',

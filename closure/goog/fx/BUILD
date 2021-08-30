@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "abstractdragdrop",
     srcs = ["abstractdragdrop.js"],
-    lenient = True,
     deps = [
         ":dragger",
         "//closure/goog/array",
@@ -29,7 +28,6 @@ closure_js_library(
 closure_js_library(
     name = "animation",
     srcs = ["animation.js"],
-    lenient = True,
     deps = [
         ":transition",
         ":transitionbase",
@@ -43,7 +41,6 @@ closure_js_library(
 closure_js_library(
     name = "animationqueue",
     srcs = ["animationqueue.js"],
-    lenient = True,
     deps = [
         ":animation",
         ":transition",
@@ -58,7 +55,6 @@ closure_js_library(
 closure_js_library(
     name = "cssspriteanimation",
     srcs = ["cssspriteanimation.js"],
-    lenient = True,
     deps = [
         ":animation",
         "//closure/goog/math:box",
@@ -69,7 +65,6 @@ closure_js_library(
 closure_js_library(
     name = "dom",
     srcs = ["dom.js"],
-    lenient = True,
     deps = [
         ":animation",
         ":transition",
@@ -84,14 +79,12 @@ closure_js_library(
 closure_js_library(
     name = "dragdrop",
     srcs = ["dragdrop.js"],
-    lenient = True,
     deps = [":abstractdragdrop"],
 )
 
 closure_js_library(
     name = "dragdropgroup",
     srcs = ["dragdropgroup.js"],
-    lenient = True,
     deps = [
         ":abstractdragdrop",
         "//closure/goog/dom",
@@ -101,7 +94,6 @@ closure_js_library(
 closure_js_library(
     name = "dragger",
     srcs = ["dragger.js"],
-    lenient = True,
     deps = [
         "//closure/goog/dom",
         "//closure/goog/dom:tagname",
@@ -122,7 +114,6 @@ closure_js_library(
 closure_js_library(
     name = "draglistgroup",
     srcs = ["draglistgroup.js"],
-    lenient = True,
     deps = [
         ":dragger",
         "//closure/goog/asserts",
@@ -146,7 +137,6 @@ closure_js_library(
 closure_js_library(
     name = "dragscrollsupport",
     srcs = ["dragscrollsupport.js"],
-    lenient = True,
     deps = [
         "//closure/goog/disposable",
         "//closure/goog/dom",
@@ -163,13 +153,11 @@ closure_js_library(
 closure_js_library(
     name = "easing",
     srcs = ["easing.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "fx",
     srcs = ["fx.js"],
-    lenient = True,
     deps = [
         ":animation",
         ":easing",
@@ -181,13 +169,11 @@ closure_js_library(
 closure_js_library(
     name = "transition",
     srcs = ["transition.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "transitionbase",
     srcs = ["transitionbase.js"],
-    lenient = True,
     deps = [
         ":transition",
         "//closure/goog/events:eventtarget",

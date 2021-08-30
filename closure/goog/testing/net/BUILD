@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "mockiframeio",
     srcs = ["mockiframeio.js"],
-    lenient = True,
     deps = [
         "//closure/goog/events:eventtarget",
         "//closure/goog/net:errorcode",
@@ -22,7 +21,6 @@ closure_js_library(
 closure_js_library(
     name = "xhrio",
     srcs = ["xhrio.js"],
-    lenient = True,
     deps = [
         "//closure/goog/array",
         "//closure/goog/dom:xml",
@@ -45,7 +43,6 @@ closure_js_library(
 closure_js_library(
     name = "xhriopool",
     srcs = ["xhriopool.js"],
-    lenient = True,
     deps = [
         ":xhrio",
         "//closure/goog/net:xhrio",

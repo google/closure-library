@@ -7,13 +7,11 @@ licenses(["notice"])
 closure_js_library(
     name = "defines",
     srcs = ["defines.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "full",
     srcs = ["full.js"],
-    lenient = True,
     deps = [
         ":defines",
         ":full_impl",
@@ -25,7 +23,6 @@ closure_js_library(
 closure_js_library(
     name = "full_impl",
     srcs = ["full_impl.js"],
-    lenient = True,
     deps = [
         ":full_types",
         ":lite_impl",
@@ -37,7 +34,6 @@ closure_js_library(
 closure_js_library(
     name = "full_native_impl",
     srcs = ["full_native_impl.js"],
-    lenient = True,
     deps = [
         ":full_types",
         ":lite_native_impl",
@@ -48,7 +44,6 @@ closure_js_library(
     name = "full_test_cases",
     testonly = 1,
     srcs = ["full_test_cases.js"],
-    lenient = True,
     deps = [
         ":full_types",
         ":lite_test_cases",
@@ -59,14 +54,12 @@ closure_js_library(
 closure_js_library(
     name = "full_types",
     srcs = ["full_types.js"],
-    lenient = True,
     deps = [":lite_types"],
 )
 
 closure_js_library(
     name = "lite",
     srcs = ["lite.js"],
-    lenient = True,
     deps = [
         ":defines",
         ":lite_impl",
@@ -78,7 +71,6 @@ closure_js_library(
 closure_js_library(
     name = "lite_impl",
     srcs = ["lite_impl.js"],
-    lenient = True,
     deps = [
         ":lite_types",
         "//closure/goog/asserts",
@@ -89,7 +81,6 @@ closure_js_library(
 closure_js_library(
     name = "lite_native_impl",
     srcs = ["lite_native_impl.js"],
-    lenient = True,
     deps = [":lite_types"],
 )
 
@@ -97,7 +88,6 @@ closure_js_library(
     name = "lite_test_cases",
     testonly = 1,
     srcs = ["lite_test_cases.js"],
-    lenient = True,
     deps = [
         ":lite_types",
         "//closure/goog/testing:jsunit",
@@ -107,5 +97,4 @@ closure_js_library(
 closure_js_library(
     name = "lite_types",
     srcs = ["lite_types.js"],
-    lenient = True,
 )

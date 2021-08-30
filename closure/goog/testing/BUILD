@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "assertionfailure",
     srcs = ["assertionfailure.js"],
-    lenient = True,
     deps = [
         ":asserts",
         "//closure/goog/asserts",
@@ -17,14 +16,12 @@ closure_js_library(
 closure_js_library(
     name = "asserts",
     srcs = ["asserts.js"],
-    lenient = True,
     deps = [":jsunitexception"],
 )
 
 closure_js_library(
     name = "asynctestcase",
     srcs = ["asynctestcase.js"],
-    lenient = True,
     deps = [
         ":asserts",
         ":testcase",
@@ -36,7 +33,6 @@ closure_js_library(
     name = "benchmark",
     testonly = 1,
     srcs = ["benchmark.js"],
-    lenient = True,
     deps = [
         ":performancetable",
         ":performancetimer",
@@ -49,7 +45,6 @@ closure_js_library(
 closure_js_library(
     name = "continuationtestcase",
     srcs = ["continuationtestcase.js"],
-    lenient = True,
     deps = [
         ":asserts",
         ":testcase",
@@ -62,7 +57,6 @@ closure_js_library(
 closure_js_library(
     name = "deferredtestcase",
     srcs = ["deferredtestcase.js"],
-    lenient = True,
     deps = [
         ":asynctestcase",
         ":testcase",
@@ -73,7 +67,6 @@ closure_js_library(
 closure_js_library(
     name = "dom",
     srcs = ["dom.js"],
-    lenient = True,
     deps = [
         ":asserts",
         "//closure/goog/array",
@@ -97,7 +90,6 @@ closure_js_library(
 closure_js_library(
     name = "expectedfailures",
     srcs = ["expectedfailures.js"],
-    lenient = True,
     deps = [
         ":asserts",
         ":jsunitexception",
@@ -116,7 +108,6 @@ closure_js_library(
 closure_js_library(
     name = "functionmock",
     srcs = ["functionmock.js"],
-    lenient = True,
     deps = [
         ":loosemock",
         ":mock",
@@ -130,7 +121,6 @@ closure_js_library(
 closure_js_library(
     name = "graphics",
     srcs = ["graphics.js"],
-    lenient = True,
     deps = [
         ":asserts",
         "//closure/goog/graphics:path",
@@ -140,14 +130,12 @@ closure_js_library(
 closure_js_library(
     name = "jstdasyncwrapper",
     srcs = ["jstdasyncwrapper.js"],
-    lenient = True,
     deps = ["//closure/goog/promise"],
 )
 
 closure_js_library(
     name = "jstdtestcaseadapter",
     srcs = ["jstdtestcaseadapter.js"],
-    lenient = True,
     deps = [
         ":jstdasyncwrapper",
         ":jsunit",
@@ -160,7 +148,6 @@ closure_js_library(
 closure_js_library(
     name = "jsunit",
     srcs = ["jsunit.js"],
-    lenient = True,
     deps = [
         ":testcase",
         ":testrunner",
@@ -172,14 +159,12 @@ closure_js_library(
 closure_js_library(
     name = "jsunitexception",
     srcs = ["jsunitexception.js"],
-    lenient = True,
     deps = [":stacktrace"],
 )
 
 closure_js_library(
     name = "loosemock",
     srcs = ["loosemock.js"],
-    lenient = True,
     deps = [
         ":mock",
         "//closure/goog/array",
@@ -193,7 +178,6 @@ closure_js_library(
         "mock.js",
         "mockmatchers.js",
     ],
-    lenient = True,
     deps = [
         ":asserts",
         ":jsunitexception",
@@ -210,7 +194,6 @@ closure_js_library(
 closure_js_library(
     name = "mockclassfactory",
     srcs = ["mockclassfactory.js"],
-    lenient = True,
     deps = [
         ":loosemock",
         ":mockmatchers",
@@ -224,7 +207,6 @@ closure_js_library(
 closure_js_library(
     name = "mockclock",
     srcs = ["mockclock.js"],
-    lenient = True,
     deps = [
         ":propertyreplacer",
         "//closure/goog/asserts",
@@ -239,7 +221,6 @@ closure_js_library(
 closure_js_library(
     name = "mockcontrol",
     srcs = ["mockcontrol.js"],
-    lenient = True,
     deps = [
         ":functionmock",
         ":loosemock",
@@ -253,27 +234,23 @@ closure_js_library(
 closure_js_library(
     name = "mockinterface",
     srcs = ["mockinterface.js"],
-    lenient = True,
     deps = ["//closure/goog/promise"],
 )
 
 closure_js_library(
     name = "mockmatchers",
-    lenient = True,
     exports = [":mock"],
 )
 
 closure_js_library(
     name = "mockrandom",
     srcs = ["mockrandom.js"],
-    lenient = True,
     deps = ["//closure/goog/disposable"],
 )
 
 closure_js_library(
     name = "mockrange",
     srcs = ["mockrange.js"],
-    lenient = True,
     deps = [
         ":loosemock",
         "//closure/goog/dom:abstractrange",
@@ -284,13 +261,11 @@ closure_js_library(
 closure_js_library(
     name = "mockstorage",
     srcs = ["mockstorage.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "mockuseragent",
     srcs = ["mockuseragent.js"],
-    lenient = True,
     deps = [
         ":propertyreplacer",
         "//closure/goog/disposable",
@@ -302,7 +277,6 @@ closure_js_library(
 closure_js_library(
     name = "multitestrunner",
     srcs = ["multitestrunner.js"],
-    lenient = True,
     deps = [
         ":testcase",
         "//closure/goog/array",
@@ -325,13 +299,11 @@ closure_js_library(
 closure_js_library(
     name = "objectpropertystring",
     srcs = ["objectpropertystring.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "objects",
     srcs = ["objects.js"],
-    lenient = True,
     deps = [":asserts"],
 )
 
@@ -339,7 +311,6 @@ closure_js_library(
     name = "parallel_closure_test_suite",
     testonly = 1,
     srcs = ["parallel_closure_test_suite.js"],
-    lenient = True,
     deps = [
         ":multitestrunner",
         ":testcase",
@@ -354,7 +325,6 @@ closure_js_library(
 closure_js_library(
     name = "performancetable",
     srcs = ["performancetable.js"],
-    lenient = True,
     deps = [
         ":performancetimer",
         "//closure/goog/asserts",
@@ -368,7 +338,6 @@ closure_js_library(
 closure_js_library(
     name = "performancetimer",
     srcs = ["performancetimer.js"],
-    lenient = True,
     deps = [
         "//closure/goog/array",
         "//closure/goog/math",
@@ -380,7 +349,6 @@ closure_js_library(
 closure_js_library(
     name = "propertyreplacer",
     srcs = ["propertyreplacer.js"],
-    lenient = True,
     deps = [
         "//closure/goog/asserts",
         "//closure/goog/useragent",
@@ -390,14 +358,12 @@ closure_js_library(
 closure_js_library(
     name = "pseudorandom",
     srcs = ["pseudorandom.js"],
-    lenient = True,
     deps = ["//closure/goog/disposable"],
 )
 
 closure_js_library(
     name = "recordfunction",
     srcs = ["recordfunction.js"],
-    lenient = True,
     deps = [
         ":asserts",
         "//closure/goog/promise",
@@ -408,7 +374,6 @@ closure_js_library(
 closure_js_library(
     name = "shardingtestcase",
     srcs = ["shardingtestcase.js"],
-    lenient = True,
     deps = [
         ":testcase",
         "//closure/goog/asserts",
@@ -418,20 +383,17 @@ closure_js_library(
 closure_js_library(
     name = "singleton",
     srcs = ["singleton.js"],
-    lenient = True,
     deps = ["//closure/goog/singleton"],
 )
 
 closure_js_library(
     name = "stacktrace",
     srcs = ["stacktrace.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "strictmock",
     srcs = ["strictmock.js"],
-    lenient = True,
     deps = [
         ":mock",
         "//closure/goog/array",
@@ -442,7 +404,6 @@ closure_js_library(
 closure_js_library(
     name = "testcase",
     srcs = ["testcase.js"],
-    lenient = True,
     deps = [
         ":asserts",
         ":cspviolationobserver",
@@ -461,26 +422,22 @@ closure_js_library(
 closure_js_library(
     name = "cspviolationobserver",
     srcs = ["cspviolationobserver.js"],
-    lenient = True,
     deps = [":cspviolationobserver_externs"],
 )
 
 closure_js_library(
     name = "cspviolationobserver_externs",
     srcs = ["cspviolationobserver_externs.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "testqueue",
     srcs = ["testqueue.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "testrunner",
     srcs = ["testrunner.js"],
-    lenient = True,
     deps = [
         ":cspviolationobserver",
         ":testcase",
@@ -495,7 +452,6 @@ closure_js_library(
 closure_js_library(
     name = "testsuite",
     srcs = ["testsuite.js"],
-    lenient = True,
     deps = [
         ":testcase",
         "//closure/goog/labs/testing:environment",

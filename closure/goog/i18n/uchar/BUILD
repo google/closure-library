@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "localnamefetcher",
     srcs = ["localnamefetcher.js"],
-    lenient = True,
     deps = [
         ":namefetcher",
         "//closure/goog/i18n:ucharnames",
@@ -18,13 +17,11 @@ closure_js_library(
 closure_js_library(
     name = "namefetcher",
     srcs = ["namefetcher.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "remotenamefetcher",
     srcs = ["remotenamefetcher.js"],
-    lenient = True,
     deps = [
         ":namefetcher",
         "//closure/goog/disposable",

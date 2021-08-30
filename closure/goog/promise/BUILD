@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "nativeresolver",
     srcs = ["nativeresolver.js"],
-    lenient = True,
 )
 
 closure_js_library(
@@ -17,7 +16,6 @@ closure_js_library(
         "resolver.js",
         "thenable.js",
     ],
-    lenient = True,
     deps = [
         "//closure/goog/asserts",
         "//closure/goog/async:freelist",
@@ -36,7 +34,6 @@ closure_js_library(
     name = "testsuiteadapter",
     testonly = 1,
     srcs = ["testsuiteadapter.js"],
-    lenient = True,
     deps = [":promise"],
 )
 

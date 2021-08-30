@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "cursor",
     srcs = ["cursor.js"],
-    lenient = True,
     deps = [
         ":error",
         ":keyrange",
@@ -20,7 +19,6 @@ closure_js_library(
 closure_js_library(
     name = "db",
     srcs = ["db.js"],
-    lenient = True,
     deps = [
         ":error",
         ":indexeddb",
@@ -33,7 +31,6 @@ closure_js_library(
 closure_js_library(
     name = "error",
     srcs = ["error.js"],
-    lenient = True,
     deps = [
         "//closure/goog/asserts",
         "//closure/goog/debug:error",
@@ -43,7 +40,6 @@ closure_js_library(
 closure_js_library(
     name = "index",
     srcs = ["index.js"],
-    lenient = True,
     deps = [
         ":cursor",
         ":error",
@@ -56,7 +52,6 @@ closure_js_library(
 closure_js_library(
     name = "indexeddb",
     srcs = ["indexeddb.js"],
-    lenient = True,
     deps = [
         ":error",
         ":objectstore",
@@ -70,13 +65,11 @@ closure_js_library(
 closure_js_library(
     name = "keyrange",
     srcs = ["keyrange.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "objectstore",
     srcs = ["objectstore.js"],
-    lenient = True,
     deps = [
         ":cursor",
         ":error",
@@ -90,7 +83,6 @@ closure_js_library(
 closure_js_library(
     name = "transaction",
     srcs = ["transaction.js"],
-    lenient = True,
     deps = [
         ":error",
         ":objectstore",

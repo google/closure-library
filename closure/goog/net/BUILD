@@ -14,7 +14,6 @@ closure_js_library(
         "browsertestchannel.js",
         "channelrequest.js",
     ],
-    lenient = True,
     deps = [
         ":channeldebug",
         ":errorcode",
@@ -58,7 +57,6 @@ alias(
 closure_js_library(
     name = "bulkloader",
     srcs = ["bulkloader.js"],
-    lenient = True,
     deps = [
         ":bulkloaderhelper",
         ":eventtype",
@@ -74,7 +72,6 @@ closure_js_library(
 closure_js_library(
     name = "bulkloaderhelper",
     srcs = ["bulkloaderhelper.js"],
-    lenient = True,
     deps = [
         "//closure/goog/disposable",
         "//closure/goog/uri",
@@ -84,7 +81,6 @@ closure_js_library(
 closure_js_library(
     name = "channeldebug",
     srcs = ["channeldebug.js"],
-    lenient = True,
     deps = [
         ":xmlhttp",
         "//closure/goog/json",
@@ -104,14 +100,12 @@ closure_js_library(
         "cookies.js",
         "cookies_deprecated.js",
     ],
-    lenient = True,
     deps = ["//closure/goog/string"],
 )
 
 closure_js_library(
     name = "corsxmlhttpfactory",
     srcs = ["corsxmlhttpfactory.js"],
-    lenient = True,
     deps = [
         ":httpstatus",
         ":xhrlike",
@@ -123,7 +117,6 @@ closure_js_library(
 closure_js_library(
     name = "crossdomainrpc",
     srcs = ["crossdomainrpc.js"],
-    lenient = True,
     deps = [
         ":eventtype",
         ":httpstatus",
@@ -144,19 +137,16 @@ closure_js_library(
 closure_js_library(
     name = "errorcode",
     srcs = ["errorcode.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "eventtype",
     srcs = ["eventtype.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "fetchxmlhttpfactory",
     srcs = ["fetchxmlhttpfactory.js"],
-    lenient = True,
     deps = [
         ":xhrlike",
         ":xmlhttpfactory",
@@ -170,7 +160,6 @@ closure_js_library(
 closure_js_library(
     name = "filedownloader",
     srcs = ["filedownloader.js"],
-    lenient = True,
     deps = [
         ":errorcode",
         ":eventtype",
@@ -196,19 +185,16 @@ closure_js_library(
 closure_js_library(
     name = "httpstatus",
     srcs = ["httpstatus.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "httpstatusname",
     srcs = ["httpstatusname.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "iframeio",
     srcs = ["iframeio.js"],
-    lenient = True,
     deps = [
         ":errorcode",
         ":eventtype",
@@ -244,7 +230,6 @@ closure_js_library(
 closure_js_library(
     name = "iframeloadmonitor",
     srcs = ["iframeloadmonitor.js"],
-    lenient = True,
     deps = [
         "//closure/goog/dom",
         "//closure/goog/events",
@@ -257,7 +242,6 @@ closure_js_library(
 closure_js_library(
     name = "imageloader",
     srcs = ["imageloader.js"],
-    lenient = True,
     deps = [
         ":eventtype",
         "//closure/goog/array",
@@ -276,7 +260,6 @@ closure_js_library(
 closure_js_library(
     name = "ipaddress",
     srcs = ["ipaddress.js"],
-    lenient = True,
     deps = [
         "//closure/goog/array",
         "//closure/goog/math:integer",
@@ -288,7 +271,6 @@ closure_js_library(
 closure_js_library(
     name = "jsloader",
     srcs = ["jsloader.js"],
-    lenient = True,
     deps = [
         "//closure/goog/array",
         "//closure/goog/debug:error",
@@ -304,7 +286,6 @@ closure_js_library(
 closure_js_library(
     name = "jsonp",
     srcs = ["jsonp.js"],
-    lenient = True,
     deps = [
         ":jsloader",
         "//closure/goog/html:trustedresourceurl",
@@ -315,7 +296,6 @@ closure_js_library(
 closure_js_library(
     name = "mockiframeio",
     srcs = ["mockiframeio.js"],
-    lenient = True,
     deps = [
         ":errorcode",
         ":eventtype",
@@ -330,7 +310,6 @@ closure_js_library(
 closure_js_library(
     name = "multiiframeloadmonitor",
     srcs = ["multiiframeloadmonitor.js"],
-    lenient = True,
     deps = [
         ":iframeloadmonitor",
         "//closure/goog/events",
@@ -341,14 +320,12 @@ closure_js_library(
 closure_js_library(
     name = "networkstatusmonitor",
     srcs = ["networkstatusmonitor.js"],
-    lenient = True,
     deps = ["//closure/goog/events:listenable"],
 )
 
 closure_js_library(
     name = "networktester",
     srcs = ["networktester.js"],
-    lenient = True,
     deps = [
         "//closure/goog/dom:safe",
         "//closure/goog/log",
@@ -360,7 +337,6 @@ closure_js_library(
 closure_js_library(
     name = "tmpnetwork",
     srcs = ["tmpnetwork.js"],
-    lenient = True,
     deps = [
         ":channeldebug",
         "//closure/goog/dom:safe",
@@ -371,7 +347,6 @@ closure_js_library(
 closure_js_library(
     name = "websocket",
     srcs = ["websocket.js"],
-    lenient = True,
     deps = [
         "//closure/goog/asserts",
         "//closure/goog/debug:entrypointregistry",
@@ -387,7 +362,6 @@ closure_js_library(
 closure_js_library(
     name = "wrapperxmlhttpfactory",
     srcs = ["wrapperxmlhttpfactory.js"],
-    lenient = True,
     deps = [
         ":xhrlike",
         ":xmlhttpfactory",
@@ -397,7 +371,6 @@ closure_js_library(
 closure_js_library(
     name = "xhrio",
     srcs = ["xhrio.js"],
-    lenient = True,
     deps = [
         ":errorcode",
         ":eventtype",
@@ -426,7 +399,6 @@ closure_js_library(
 closure_js_library(
     name = "xhriopool",
     srcs = ["xhriopool.js"],
-    lenient = True,
     deps = [
         ":xhrio",
         "//closure/goog/structs:map",
@@ -437,13 +409,11 @@ closure_js_library(
 closure_js_library(
     name = "xhrlike",
     srcs = ["xhrlike.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "xhrmanager",
     srcs = ["xhrmanager.js"],
-    lenient = True,
     deps = [
         ":errorcode",
         ":eventtype",
@@ -460,7 +430,6 @@ closure_js_library(
 closure_js_library(
     name = "xmlhttp",
     srcs = ["xmlhttp.js"],
-    lenient = True,
     deps = [
         ":wrapperxmlhttpfactory",
         ":xhrlike",
@@ -472,6 +441,5 @@ closure_js_library(
 closure_js_library(
     name = "xmlhttpfactory",
     srcs = ["xmlhttpfactory.js"],
-    lenient = True,
     deps = [":xhrlike"],
 )

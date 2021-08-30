@@ -11,7 +11,6 @@ closure_js_library(
         "pagevisibilitymonitor.js",
         "pagevisibilitystate.js",
     ],
-    lenient = True,
     deps = [
         "//closure/goog/dom",
         "//closure/goog/dom:vendor",

@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "abstractchannel",
     srcs = ["abstractchannel.js"],
-    lenient = True,
     deps = [
         ":messagechannel",
         "//closure/goog/disposable",
@@ -19,7 +18,6 @@ closure_js_library(
 closure_js_library(
     name = "bufferedchannel",
     srcs = ["bufferedchannel.js"],
-    lenient = True,
     deps = [
         ":messagechannel",
         ":multichannel",
@@ -33,7 +31,6 @@ closure_js_library(
 closure_js_library(
     name = "deferredchannel",
     srcs = ["deferredchannel.js"],
-    lenient = True,
     deps = [
         ":messagechannel",
         "//closure/goog/disposable",
@@ -44,7 +41,6 @@ closure_js_library(
 closure_js_library(
     name = "loggerclient",
     srcs = ["loggerclient.js"],
-    lenient = True,
     deps = [
         ":messagechannel",
         "//closure/goog/debug",
@@ -56,7 +52,6 @@ closure_js_library(
 closure_js_library(
     name = "loggerserver",
     srcs = ["loggerserver.js"],
-    lenient = True,
     deps = [
         ":messagechannel",
         "//closure/goog/disposable",
@@ -67,20 +62,17 @@ closure_js_library(
 closure_js_library(
     name = "messagechannel",
     srcs = ["messagechannel.js"],
-    lenient = True,
 )
 
 closure_js_library(
     name = "messaging",
     srcs = ["messaging.js"],
-    lenient = True,
     deps = [":messagechannel"],
 )
 
 closure_js_library(
     name = "multichannel",
     srcs = ["multichannel.js"],
-    lenient = True,
     deps = [
         ":messagechannel",
         "//closure/goog/disposable",
@@ -92,7 +84,6 @@ closure_js_library(
 closure_js_library(
     name = "portcaller",
     srcs = ["portcaller.js"],
-    lenient = True,
     deps = [
         ":deferredchannel",
         ":messagechannel",
@@ -107,7 +98,6 @@ closure_js_library(
 closure_js_library(
     name = "portchannel",
     srcs = ["portchannel.js"],
-    lenient = True,
     deps = [
         ":abstractchannel",
         ":deferredchannel",
@@ -131,14 +121,12 @@ closure_js_library(
 closure_js_library(
     name = "portnetwork",
     srcs = ["portnetwork.js"],
-    lenient = True,
     deps = [":messagechannel"],
 )
 
 closure_js_library(
     name = "portoperator",
     srcs = ["portoperator.js"],
-    lenient = True,
     deps = [
         ":messagechannel",
         ":portchannel",
@@ -153,7 +141,6 @@ closure_js_library(
 closure_js_library(
     name = "respondingchannel",
     srcs = ["respondingchannel.js"],
-    lenient = True,
     deps = [
         ":messagechannel",
         ":multichannel",

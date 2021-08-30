@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "date",
     srcs = ["date.js"],
-    lenient = True,
     deps = [
         "//closure/goog/asserts",
         "//closure/goog/i18n:datetimesymbols",
@@ -23,7 +22,6 @@ alias(
 closure_js_library(
     name = "daterange",
     srcs = ["daterange.js"],
-    lenient = True,
     deps = [
         ":date",
         "//closure/goog/iter",
@@ -33,7 +31,6 @@ closure_js_library(
 closure_js_library(
     name = "duration",
     srcs = ["duration.js"],
-    lenient = True,
     deps = [
         "//closure/goog/i18n:datetimeformat",
         "//closure/goog/i18n:messageformat",
@@ -43,7 +40,6 @@ closure_js_library(
 closure_js_library(
     name = "relative",
     srcs = ["relative.js"],
-    lenient = True,
     deps = [
         ":date",
         "//closure/goog/i18n:datetimeformat",
@@ -56,7 +52,6 @@ closure_js_library(
     name = "relativecommontests",
     testonly = 1,
     srcs = ["relativecommontests.js"],
-    lenient = True,
     deps = [
         ":date",
         ":relative",
@@ -73,6 +68,5 @@ closure_js_library(
 closure_js_library(
     name = "utcdatetime",
     srcs = ["utcdatetime.js"],
-    lenient = True,
     deps = [":date"],
 )

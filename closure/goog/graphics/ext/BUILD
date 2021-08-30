@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "coordinates",
     srcs = ["coordinates.js"],
-    lenient = True,
     deps = ["//closure/goog/string"],
 )
 
@@ -19,7 +18,6 @@ alias(
 closure_js_library(
     name = "ellipse",
     srcs = ["ellipse.js"],
-    lenient = True,
     deps = [
         ":group",
         ":strokeandfillelement",
@@ -29,7 +27,6 @@ closure_js_library(
 closure_js_library(
     name = "ext",
     srcs = ["ext.js"],
-    lenient = True,
     deps = [
         ":coordinates",
         ":ellipse",
@@ -47,7 +44,6 @@ closure_js_library(
         "graphics.js",
         "group.js",
     ],
-    lenient = True,
     deps = [
         ":coordinates",
         "//closure/goog/array",
@@ -71,14 +67,12 @@ alias(
 closure_js_library(
     name = "image",
     srcs = ["image.js"],
-    lenient = True,
     deps = [":element"],
 )
 
 closure_js_library(
     name = "path",
     srcs = ["path.js"],
-    lenient = True,
     deps = [
         "//closure/goog/graphics:affinetransform",
         "//closure/goog/graphics:path",
@@ -89,7 +83,6 @@ closure_js_library(
 closure_js_library(
     name = "rectangle",
     srcs = ["rectangle.js"],
-    lenient = True,
     deps = [
         ":group",
         ":strokeandfillelement",
@@ -99,7 +92,6 @@ closure_js_library(
 closure_js_library(
     name = "shape",
     srcs = ["shape.js"],
-    lenient = True,
     deps = [
         ":group",
         ":path",
@@ -112,7 +104,6 @@ closure_js_library(
 closure_js_library(
     name = "strokeandfillelement",
     srcs = ["strokeandfillelement.js"],
-    lenient = True,
     deps = [
         ":element",
         ":group",
