@@ -7,67 +7,92 @@
 goog.module('goog.debug.ErrorHandlerTest');
 goog.setTestOnly();
 
-const DebugError = goog.require('goog.debug.Error');
 const ErrorHandler = goog.require('goog.debug.ErrorHandler');
 const MockControl = goog.require('goog.testing.MockControl');
+const NativeResolver = goog.require('goog.promise.NativeResolver');
+const TestCase = goog.require('goog.testing.TestCase');
 const dispose = goog.require('goog.dispose');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
+
+const PROTECTED_FUNCTION_ERROR_PREFIX =
+    ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX;
+const ERROR_HANDLER_TEST_ERROR = 'ERROR_HANDLER_TEST_ERROR';
 
 let errorHandler;
 let mockControl;
 
 let state = {};
 
+const JSUnitOnError = window.onerror;
+// Here we set up an `onerror` handler to be able to catch the re-thrown errors
+// at the end of the implementation of
+// `goog.debug.ErrorHandler.prototype.handleError_`.
 /**
- * A function that throws errors.
+ * A function that will record expected caught errors in the state object.
+ * Unexpected errors will be relayed to the previously installed handler and
+ * re-thrown.
+ * @param {string} error the error
  */
-function errorThrower() {
-  throw 'die die die';
+window.onerror = (error) => {
+  if (!error.includes(ERROR_HANDLER_TEST_ERROR)) {
+    JSUnitOnError(error);
+    fail(`An unexpected error reached the \`onerror\` handler: ${error}`);
+    throw error;
+  }
+  state.lastUncaughtError = error;
+};
+
+/**
+ * A function that constructs functions that throw errors and call resolvers.
+ * @param {!Function} resolve the resolver to call when.
+ * @returns {Function!} the error thrower.
+ */
+function errorThrowerFactory(resolve) {
+  return function() {
+    resolve && resolve();
+    throw ERROR_HANDLER_TEST_ERROR;
+  };
 }
 
 /**
  * @suppress {strictMissingProperties} suppression added to enable type
  * checking
  */
-function assertMethodCalledHelper(method, caught) {
-  assertTrue('exception not thrown', Boolean(caught));
+function assertMethodCalledHelper(method) {
+  assertTrue('An error was not re-thrown', Boolean(state.lastUncaughtError));
   assertTrue(
-      'the re-thrown exception must be a DebugError',
-      caught instanceof DebugError);
+      'The re-thrown error does not include the "Protected Function" prefix',
+      state.lastUncaughtError.includes(PROTECTED_FUNCTION_ERROR_PREFIX));
+  const errorSansPrefix = state.lastUncaughtError.replace(
+      new RegExp(`.*${PROTECTED_FUNCTION_ERROR_PREFIX}`), '');
   assertEquals(
-      'exception not caught by error handler', caught.cause, errorHandler.ex);
+      'The Error Handler did not catch the error', errorSansPrefix,
+      errorHandler.ex);
   assertTrue(
-      `fake ${method} not called`, state.fake[method].getCallCount() >= 1);
+      `The protected function "${method}" was not called`,
+      state.fake[method].getCallCount() >= 1);
   assertTrue(
       `"this" not passed to original ${method}`,
-      state.fake[method].getLastCall().getThis() === state.real.window);
-}
-
-/**
- * @param {!Function} callback
- * @param {number} ignoredTime
- * @param {...*} args
- */
-function callImmediately(callback, ignoredTime, ...args) {
-  callback(...args);
+      state.fake[method].getLastCall().getThis() === window);
 }
 
 testSuite({
   setUpPage() {
-    state.real = {window, setTimeout, setInterval};
+    state.real = {setTimeout, setInterval, requestAnimationFrame};
   },
   setUp() {
-    state.fake = {};
+    state.fake = {
+      setTimeout: recordFunction(state.real.setTimeout.bind(null)),
+      // Here we mock `setInterval` with `setTimeout` as we only want it to
+      // run once.
+      setInterval: recordFunction(state.real.setTimeout.bind(null)),
+      requestAnimationFrame: recordFunction(state.real.setTimeout.bind(null)),
+    };
 
-    state.fake.setTimeout = recordFunction(callImmediately);
-    state.real.window.setTimeout = state.fake.setTimeout;
-
-    state.fake.setInterval = recordFunction(callImmediately);
-    state.real.window.setInterval = state.fake.setInterval;
-
-    state.fake.requestAnimationFrame = recordFunction(callImmediately);
-    state.real.window.requestAnimationFrame = state.fake.requestAnimationFrame;
+    window.setTimeout = state.fake.setTimeout;
+    window.setInterval = state.fake.setInterval;
+    window.requestAnimationFrame = state.fake.requestAnimationFrame;
 
     mockControl = new MockControl();
 
@@ -83,104 +108,114 @@ testSuite({
   },
 
   tearDown() {
+    // Clean our state.
+    delete state.lastUncaughtError;
+    state.fake = {};
+
+    // Clean our window.
+    window.setTimeout = state.real.setTimeout;
+    window.setInterval = state.real.setInterval;
+    window.requestAnimationFrame = state.real.requestAnimationFrame;
+
+    // Tear down and dispose.
     mockControl.$tearDown();
     dispose(errorHandler);
     errorHandler = null;
   },
 
-  testWrapSetTimeout() {
+  async testWrapSetTimeout() {
+    TestCase.getActiveTestCase().promiseTimeout = 10000;
+
     errorHandler.protectWindowSetTimeout();
 
-    let caught;
+    const resolver = new NativeResolver();
+    window.setTimeout(errorThrowerFactory(resolver.resolve), 30);
+    await resolver.promise;
 
-    try {
-      state.real.window.setTimeout(errorThrower, 3);
-    } catch (ex) {
-      caught = ex;
-    }
-    assertMethodCalledHelper('setTimeout', caught);
+    assertMethodCalledHelper('setTimeout');
   },
 
   testWrapSetTimeoutWithoutException() {
     errorHandler.protectWindowSetTimeout();
 
-    state.real.window.setTimeout((x, y) => {
+    window.setTimeout((x, y) => {
       assertEquals('test', x);
       assertEquals(7, y);
     }, 3, 'test', 7);
   },
 
-  testWrapSetTimeoutWithString() {
+  async testWrapSetTimeoutWithString() {
     errorHandler.protectWindowSetTimeout();
 
-    let caught;
+    const resolver = new NativeResolver();
+    const errorThrower = errorThrowerFactory(resolver.resolve);
+    /** @suppress {strictMissingProperties} */  // We want the `errorThrower` to
+                                                // be readable by the `eval`ed
+                                                // string below.
+    window.errorThrower = errorThrower;
+    window.setTimeout('window.errorThrower()', 3);
+    await resolver.promise;
+    delete window.errorThrower;
 
-    try {
-      state.real.window.setTimeout('badTimer()', 3);
-    } catch (ex) {
-      caught = ex;
-    }
-    assertMethodCalledHelper('setTimeout', caught);
+    assertMethodCalledHelper('setTimeout');
   },
 
-  testWrapSetInterval() {
+  async testWrapSetInterval() {
     errorHandler.protectWindowSetInterval();
 
-    let caught;
+    const resolver = new NativeResolver();
+    window.setInterval(errorThrowerFactory(resolver.resolve), 30);
+    await resolver.promise;
 
-    try {
-      state.real.window.setInterval(errorThrower, 3);
-    } catch (ex) {
-      caught = ex;
-    }
-    assertMethodCalledHelper('setInterval', caught);
+    assertMethodCalledHelper('setInterval');
   },
 
   testWrapSetIntervalWithoutException() {
     errorHandler.protectWindowSetInterval();
 
-    state.real.window.setInterval((x, y) => {
+    window.setInterval((x, y) => {
       assertEquals('test', x);
       assertEquals(7, y);
     }, 3, 'test', 7);
   },
 
-  testWrapSetIntervalWithString() {
+  async testWrapSetIntervalWithString() {
     errorHandler.protectWindowSetInterval();
 
-    let caught;
+    const resolver = new NativeResolver();
+    const errorThrower = errorThrowerFactory(resolver.resolve);
+    /** @suppress {strictMissingProperties} */  // We want the `errorThrower` to
+                                                // be readable by the `eval`ed
+                                                // string below.
+    window.errorThrower = errorThrower;
+    window.setInterval('window.errorThrower()', 3);
+    await resolver.promise;
+    delete window.errorThrower;
 
-    try {
-      state.real.window.setInterval('badTimer()', 3);
-    } catch (ex) {
-      caught = ex;
-    }
-    assertMethodCalledHelper('setInterval', caught);
+    assertMethodCalledHelper('setInterval');
   },
 
-  testWrapRequestAnimationFrame() {
+  async testWrapRequestAnimationFrame() {
     errorHandler.protectWindowRequestAnimationFrame();
 
-    let caught;
-    try {
-      state.real.window.requestAnimationFrame(errorThrower);
-    } catch (ex) {
-      caught = ex;
-    }
-    assertMethodCalledHelper('requestAnimationFrame', caught);
+    const resolver = new NativeResolver();
+    window.requestAnimationFrame(errorThrowerFactory(resolver.resolve));
+    await resolver.promise;
+
+    assertMethodCalledHelper('requestAnimationFrame');
   },
 
   testDisposal() {
     errorHandler.protectWindowSetTimeout();
     errorHandler.protectWindowSetInterval();
 
-    assertNotEquals(state.real.window.setTimeout, state.fake.setTimeout);
-    assertNotEquals(state.real.window.setInterval, state.fake.setInterval);
+    assertNotEquals(window.setTimeout, state.fake.setTimeout);
+    assertNotEquals(window.setInterval, state.fake.setInterval);
 
     errorHandler.dispose();
 
-    assertEquals(state.real.window.setTimeout, state.fake.setTimeout);
-    assertEquals(state.real.window.setInterval, state.fake.setInterval);
+    assertEquals(window.setTimeout, state.fake.setTimeout);
+    assertEquals(window.setInterval, state.fake.setInterval);
   },
 
   testUnwrap() {
@@ -290,16 +325,19 @@ testSuite({
         ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX + 'String', e);
   },
 
-  testProtectedFunction_infiniteLoop() {
+  async testProtectedFunction_infiniteLoop() {
     let numErrors = 0;
     const errorHandler = new ErrorHandler((ex) => {
       numErrors++;
     });
     errorHandler.protectWindowSetTimeout();
 
-    state.real.window.setTimeout(() => {
-      state.real.window.setTimeout(errorThrower, 3);
+    const resolver = new NativeResolver();
+    window.setTimeout(() => {
+      window.setTimeout(errorThrowerFactory(resolver.resolve), 3);
     }, 3);
+    await resolver.promise;
+
     assertEquals(
         'Error handler should only have been executed once.', 1, numErrors);
   },
