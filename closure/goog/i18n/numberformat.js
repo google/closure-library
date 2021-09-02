@@ -204,6 +204,23 @@ goog.i18n.NumberFormat.enforceAsciiDigits_ = false;
 
 
 /**
+ * Native digit codes in EMACScript Intl objects for locales
+ * where native digits are prescribed and Intl data is
+ * generally available.
+ * @private
+ */
+goog.i18n.NumberFormat.NativeLocaleDigits = {
+  'ar': 'latn',
+  'ar-EG': 'arab',
+  'bn': 'beng',
+  'fa': 'arabext',
+  'mr': 'deva',
+  'my': 'mymr',
+  'ne': 'deva'
+};
+
+
+/**
  * Set if the usage of Ascii digits in formatting should be enforced.
  * NOTE: This function must be called before constructing NumberFormat.
  *
@@ -774,6 +791,11 @@ goog.i18n.NumberFormat.prototype.SetUpIntlFormatter_ = function(inputPattern) {
     let locale;
     if (goog.LOCALE) {
       locale = goog.LOCALE.replace('_', '-');
+    }
+    if (locale in goog.i18n.NumberFormat.NativeLocaleDigits &&
+        !goog.i18n.NumberFormat.enforceAsciiDigits_) {
+      options.numberingSystem =
+          goog.i18n.NumberFormat.NativeLocaleDigits[locale];
     }
     // This works with undefined locale or empty string.
     this.intlFormatter_ = new Intl.NumberFormat(locale, options);
