@@ -193,7 +193,6 @@ closure_js_library(
     deps = [
         ":compactnumberformatsymbols",
         ":currency",
-        ":localefeature",
         ":numberformatsymbols",
         "//closure/goog/asserts",
         "//closure/goog/math",
