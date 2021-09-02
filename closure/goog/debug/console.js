@@ -208,15 +208,15 @@ goog.debug.Console.show = function() {
  * @param {{log:!Function}} console The console object.
  * @param {string} fnName The name of the function to use.
  * @param {string} record The record to log.
- * @param {?Object} exception An additional Error to log.
+ * @param {*} exception An additional exception to log.
  * @private
  */
 goog.debug.Console.logToConsole_ = function(
     console, fnName, record, exception) {
   'use strict';
   if (console[fnName]) {
-    console[fnName](record, exception || '');
+    console[fnName](record, exception === undefined ? '' : exception);
   } else {
-    console.log(record, exception || '');
+    console.log(record, exception === undefined ? '' : exception);
   }
 };
