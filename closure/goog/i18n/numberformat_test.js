@@ -48,27 +48,19 @@ const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
 const NumberFormat = goog.require('goog.i18n.NumberFormat');
 /** @suppress {extraRequire} */
 const NumberFormatSymbols = goog.require('goog.i18n.NumberFormatSymbols');
-const NumberFormatSymbols_ar = goog.require('goog.i18n.NumberFormatSymbols_ar');
 const NumberFormatSymbols_ar_EG = goog.require('goog.i18n.NumberFormatSymbols_ar_EG');
 const NumberFormatSymbols_ar_EG_u_nu_latn = goog.require('goog.i18n.NumberFormatSymbols_ar_EG_u_nu_latn');
-const NumberFormatSymbols_bn = goog.require('goog.i18n.NumberFormatSymbols_bn');
 const NumberFormatSymbols_de = goog.require('goog.i18n.NumberFormatSymbols_de');
 const NumberFormatSymbols_en = goog.require('goog.i18n.NumberFormatSymbols_en');
 const NumberFormatSymbols_en_AU = goog.require('goog.i18n.NumberFormatSymbols_en_AU');
 const NumberFormatSymbols_en_US = goog.require('goog.i18n.NumberFormatSymbols_en_US');
-const NumberFormatSymbols_fa = goog.require('goog.i18n.NumberFormatSymbols_fa');
 const NumberFormatSymbols_ff_Adlm = goog.require('goog.i18n.NumberFormatSymbols_ff_Adlm');
 const NumberFormatSymbols_fi = goog.require('goog.i18n.NumberFormatSymbols_fi');
 const NumberFormatSymbols_fr = goog.require('goog.i18n.NumberFormatSymbols_fr');
-const NumberFormatSymbols_ml = goog.require('goog.i18n.NumberFormatSymbols_ml');
-const NumberFormatSymbols_mr = goog.require('goog.i18n.NumberFormatSymbols_mr');
-const NumberFormatSymbols_my = goog.require('goog.i18n.NumberFormatSymbols_my');
-const NumberFormatSymbols_ne = goog.require('goog.i18n.NumberFormatSymbols_ne');
 const NumberFormatSymbols_pl = goog.require('goog.i18n.NumberFormatSymbols_pl');
 const NumberFormatSymbols_ro = goog.require('goog.i18n.NumberFormatSymbols_ro');
 const NumberFormatSymbols_sw = goog.require('goog.i18n.NumberFormatSymbols_sw');
 const NumberFormatSymbols_sw_KE = goog.require('goog.i18n.NumberFormatSymbols_sw_KE');
-
 /** @suppress {extraRequire} */
 const NumberFormatSymbols_u_nu_latn = goog.require('goog.i18n.NumberFormatSymbols_u_nu_latn');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
@@ -2150,74 +2142,4 @@ testSuite({
           str === '123,45');
     }
   },
-
-  testNonAsciiDigitsNative() {
-    for (let nativeMode of testECMAScriptOptions) {
-      stubs.replace(NumberFormat, 'USE_ECMASCRIPT_I18N_NUMFORMAT', nativeMode);
-
-      // Arabic with ASCII
-      stubs.replace(goog, 'LOCALE', 'ar');
-      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_ar);
-      let ar = new NumberFormat(NumberFormat.Format.DECIMAL);
-      let expected = '123';
-      let result = ar.format(123);
-      assertEquals(expected, result);
-
-      // Egyptian Arabic
-      stubs.replace(goog, 'LOCALE', 'ar-EG');
-      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_ar_EG);
-      let ar_EG = new NumberFormat(NumberFormat.Format.DECIMAL);
-      expected = '١٢٣';
-      result = ar_EG.format(123);
-      assertEquals(expected, result);
-
-      // Bengali
-      stubs.replace(goog, 'LOCALE', 'bn');
-      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_bn);
-      let bn = new NumberFormat(NumberFormat.Format.DECIMAL);
-      expected = '১২৩';
-      result = bn.format(123);
-      assertEquals(expected, result);
-
-      // Persian / Farsi
-      stubs.replace(goog, 'LOCALE', 'fa');
-      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_fa);
-      let fa = new NumberFormat(NumberFormat.Format.DECIMAL);
-      expected = '۱۲۳';  // Different from Arabic digits
-      result = fa.format(123);
-      assertEquals(expected, result);
-
-      // Malayalam
-      stubs.replace(goog, 'LOCALE', 'ml');
-      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_ml);
-      let ml = new NumberFormat(NumberFormat.Format.DECIMAL);
-      expected = '123';
-      result = ml.format(123);
-      assertEquals(expected, result);
-
-      // Marathi
-      stubs.replace(goog, 'LOCALE', 'mr');
-      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_mr);
-      let mr = new NumberFormat(NumberFormat.Format.DECIMAL);
-      expected = '१२३';
-      result = mr.format(123);
-      assertEquals(expected, result);
-
-      // Myanmar
-      stubs.replace(goog, 'LOCALE', 'my');
-      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_my);
-      let my = new NumberFormat(NumberFormat.Format.DECIMAL);
-      result = my.format(123);
-      expected = '၁၂၃';
-      assertEquals(expected, result);
-
-      // Nepali
-      stubs.replace(goog, 'LOCALE', 'ne');
-      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_ne);
-      let ne = new NumberFormat(NumberFormat.Format.DECIMAL);
-      result = ne.format(123);
-      expected = '१२३';
-      assertEquals(expected, result);
-    }
-  }
 });
