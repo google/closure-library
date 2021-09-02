@@ -1362,4 +1362,28 @@ testSuite({
       assertArrayEquals(['setUp1', 'setUp2', 'tearDown2', 'tearDown1'], events);
     });
   },
+
+  testShouldRunTests_inconsistentResult() {
+    const testCase = new TestCase('fooTest');
+    let timesShouldRunTestsCalled = 0;
+    testCase.setTestObj({
+      shouldRunTests() {
+        return (++timesShouldRunTestsCalled) <= 2;
+      },
+
+      testFoo() {},
+      testBar() {},
+      testBuzz() {},
+    });
+
+    testCase.runTests();
+
+    assertTrue(testCase.isSuccess());
+    const result = testCase.getResult();
+    assertEquals(3, result.totalCount);
+    assertEquals(3, result.runCount);
+    assertEquals(3, result.successCount);
+    assertEquals(0, result.errors.length);
+    assertEquals(2, timesShouldRunTestsCalled);
+  },
 });

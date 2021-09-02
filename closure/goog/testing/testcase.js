@@ -933,6 +933,8 @@ goog.testing.TestCase.prototype.shouldRunTestsHelper_ = function() {
     if (typeof obj.shouldRunTests['$cachedResult'] === 'function') {
       if (!obj.shouldRunTests['$cachedResult']()) {
         return false;
+      } else {
+        continue;
       }
     }
 
