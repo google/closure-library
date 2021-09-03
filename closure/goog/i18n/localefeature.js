@@ -50,14 +50,25 @@ exports.USE_ECMASCRIPT_I18N =
     (goog.FEATURESET_YEAR >= 2019 && exports.ECMASCRIPT_COMMON_LOCALES_2019);
 
 /**
- * @define {boolean} USE_ECMASCRIPT_I18N_RDTF is evaluted to enable
+ * @define {boolean} USE_ECMASCRIPT_I18N_RDTF is evaluated to enable
  * ECMAScript support for Intl.RelativeTimeFormat support in
  * browsers based on the locale. Browsers that are considered include:
  * Chrome, Firefox, Edge, and Safari.
  * As of January 2021, RelativeTimeFormat is supported in Chrome,
- * Edge, Safari.
+ * Edge, Firefox, and Safari.
  *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat
  */
 exports.USE_ECMASCRIPT_I18N_RDTF =
+    (goog.FEATURESET_YEAR >= 2021 && exports.ECMASCRIPT_COMMON_LOCALES_2019);
+
+/**
+ * @define {boolean} USE_ECMASCRIPT_I18N_NUMFORMAT is evaluted to enable
+ * ECMAScript support for Intl.NumberFormat support in
+ * browsers based on the locale. As of January 2021, NumberFormat is
+ * supported in Chrome, Edge, Firefox, and Safari.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
+ */
+exports.USE_ECMASCRIPT_I18N_NUMFORMAT =
     (goog.FEATURESET_YEAR >= 2021 && exports.ECMASCRIPT_COMMON_LOCALES_2019);
