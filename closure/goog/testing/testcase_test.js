@@ -1386,4 +1386,29 @@ testSuite({
     assertEquals(0, result.errors.length);
     assertEquals(2, timesShouldRunTestsCalled);
   },
+
+  testShouldRunTests_marksTestsAsSkipped() {
+    const testCase = new TestCase('fooCase');
+    let timesShouldSkipTestsCalled = 0;
+    testCase.setTestObj({
+      shouldRunTests() {
+        // Let it pass once so that we don't exit early before processing any of
+        // the test cases.
+        return ++timesShouldSkipTestsCalled <= 1;
+      },
+      testFoo() {},
+      testBar() {},
+      testBuzz() {},
+    });
+
+    testCase.runTests();
+
+    assertTrue(testCase.isSuccess());
+    const result = testCase.getResult();
+    assertEquals(3, result.totalCount);
+    assertEquals(3, result.skipCount);
+    assertEquals(0, result.runCount);
+    assertEquals(0, result.successCount);
+    assertEquals(0, result.errors.length);
+  }
 });

@@ -932,6 +932,7 @@ goog.testing.TestCase.prototype.shouldRunTestsHelper_ = function() {
 
     if (typeof obj.shouldRunTests['$cachedResult'] === 'function') {
       if (!obj.shouldRunTests['$cachedResult']()) {
+        this.result_.suppressedTests.push(this.curTest_.name);
         return false;
       } else {
         continue;
