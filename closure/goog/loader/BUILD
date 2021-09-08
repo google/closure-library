@@ -10,6 +10,7 @@ closure_js_library(
     deps = [
         "//closure/goog/html:trustedresourceurl",
         "//closure/goog/module:abstractmoduleloader",
+        "//closure/goog/module:basemodule",
         "//closure/goog/module:moduleinfo",
         "//closure/goog/module:moduleloadcallback",
     ],
