@@ -14,7 +14,6 @@ const googArray = goog.require('goog.array');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 const userAgentTestUtil = goog.require('goog.userAgentTestUtil');
-const util = goog.require('goog.labs.userAgent.util');
 const vendor = goog.require('goog.dom.vendor');
 
 let documentMode;
@@ -65,8 +64,6 @@ function assertUserAgent(
   mockUserAgent.setNavigator(mockNavigator);
   mockUserAgent.setUserAgentString(uaString);
 
-  // Force reread of navigator.userAgent;
-  util.setUserAgent(null);
   userAgentTestUtil.reinitializeUserAgent();
   for (let ua in UserAgents) {
     const isExpected = googArray.contains(expectedAgents, UserAgents[ua]);

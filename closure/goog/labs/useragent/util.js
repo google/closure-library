@@ -10,113 +10,118 @@
  *
  */
 
-goog.provide('goog.labs.userAgent.util');
+goog.module('goog.labs.userAgent.util');
+goog.module.declareLegacyNamespace();
 
-goog.require('goog.string.internal');
+const {USE_CLIENT_HINTS} = goog.require('goog.labs.userAgent');
+const {caseInsensitiveContains, contains} = goog.require('goog.string.internal');
 
 /**
  * @const {boolean} If true, use navigator.userAgentData without check.
  * TODO(user) FEATURESET_YEAR >= 2022 if it supports mobile and all the
  * brands we need.
  */
-goog.labs.userAgent.ASSUME_CLIENT_HINTS_SUPPORT = false;
-
-/**
- * @define {boolean} If true, use navigator.userAgentData
- * TODO(user) Flip flag in 2021/12.
- */
-goog.labs.userAgent.USE_CLIENT_HINTS =
-    goog.define('goog.labs.userAgent.USE_CLIENT_HINTS', false);
+const ASSUME_CLIENT_HINTS_SUPPORT = false;
 
 /**
  * Gets the native userAgent string from navigator if it exists.
  * If navigator or navigator.userAgent string is missing, returns an empty
  * string.
  * @return {string}
- * @private
  */
-goog.labs.userAgent.util.getNativeUserAgentString_ = function() {
-  'use strict';
-  var navigator = goog.labs.userAgent.util.getNavigator_();
+function getNativeUserAgentString() {
+  const navigator = getNavigator();
   if (navigator) {
-    var userAgent = navigator.userAgent;
+    const userAgent = navigator.userAgent;
     if (userAgent) {
       return userAgent;
     }
   }
   return '';
-};
+}
 
 /**
  * Gets the native userAgentData object from navigator if it exists.
- * If navigator or navigator.userAgentData object is missing, returns null
+ * If navigator.userAgentData object is missing or USE_CLIENT_HINTS is set to
+ * false, returns null.
  * @return {?NavigatorUAData}
- * @private
  */
-goog.labs.userAgent.util.getNativeUserAgentData_ = function() {
-  'use strict';
-  const navigator = goog.labs.userAgent.util.getNavigator_();
+function getNativeUserAgentData() {
+  if (!USE_CLIENT_HINTS) {
+    return null;
+  }
+  const navigator = getNavigator();
   // TODO(user): Use navigator?.userAgent ?? null once it's supported.
   if (navigator) {
     return navigator.userAgentData || null;
   }
   return null;
-};
-
+}
 
 /**
  * Getter for the native navigator.
- * This is a separate function so it can be stubbed out in testing.
  * @return {!Navigator}
- * @private
  */
-goog.labs.userAgent.util.getNavigator_ = function() {
-  'use strict';
+function getNavigator() {
   return goog.global.navigator;
-};
-
+}
 
 /**
  * A possible override for applications which wish to not check
  * navigator.userAgent but use a specified value for detection instead.
- * @private {string}
+ * @type {string}
  */
-goog.labs.userAgent.util.userAgent_ =
-    goog.labs.userAgent.util.getNativeUserAgentString_();
-
+let userAgentInternal = getNativeUserAgentString();
 
 /**
- * Applications may override browser detection on the built in
- * navigator.userAgent object by setting this string. Set to null to use the
- * browser object instead.
- * @param {?string=} opt_userAgent The User-Agent override.
+ * A possible override for applications which wish to not check
+ * navigator.userAgentData but use a specified value for detection instead.
+ * @type {?NavigatorUAData}
+ */
+let userAgentDataInternal = getNativeUserAgentData();
+
+/**
+ * Override the user agent string with the given value.
+ * This should only be used for testing within the goog.labs.userAgent
+ * namespace.
+ * Pass `null` to use the native browser object instead.
+ * @param {?string=} userAgent The userAgent override.
  * @return {void}
  */
-goog.labs.userAgent.util.setUserAgent = function(opt_userAgent) {
-  'use strict';
-  goog.labs.userAgent.util.userAgent_ =
-      opt_userAgent || goog.labs.userAgent.util.getNativeUserAgentString_();
-};
+function setUserAgent(userAgent = undefined) {
+  userAgentInternal =
+      typeof userAgent === 'string' ? userAgent : getNativeUserAgentString();
+}
 
-
-/**
- * @return {string} The user agent string.
- */
-goog.labs.userAgent.util.getUserAgent = function() {
-  'use strict';
-  return goog.labs.userAgent.util.userAgent_;
-};
+/** @return {string} The user agent string. */
+function getUserAgent() {
+  return userAgentInternal;
+}
 
 /**
- * @return {?NavigatorUAData} Navigator.userAgentData if exist
+ * Override the user agent data object with the given value.
+ * This should only be used for testing within the goog.labs.userAgent
+ * namespace.
+ * Pass `null` to specify the absence of userAgentData. Note that this behavior
+ * is different from setUserAgent.
+ * @param {?NavigatorUAData} userAgentData The userAgentData override.
  */
-goog.labs.userAgent.util.getUserAgentData = function() {
-  'use strict';
-  if (!goog.labs.userAgent.USE_CLIENT_HINTS) {
-    return null;
-  }
-  return goog.labs.userAgent.util.getNativeUserAgentData_();
-};
+function setUserAgentData(userAgentData) {
+  userAgentDataInternal = userAgentData;
+}
+
+/**
+ * If the user agent data object was overridden using setUserAgentData,
+ * reset it so that it uses the native browser object instead, if it exists.
+ */
+function resetUserAgentData() {
+  userAgentDataInternal = getNativeUserAgentData();
+}
+
+/** @return {?NavigatorUAData} Navigator.userAgentData if exist */
+function getUserAgentData() {
+  return userAgentDataInternal;
+}
 
 /**
  * Checks if any string in userAgentData.brands matches str.
@@ -125,52 +130,45 @@ goog.labs.userAgent.util.getUserAgentData = function() {
  * @return {boolean} Whether any brand string from userAgentData contains the
  *     given string.
  */
-goog.labs.userAgent.util.matchUserAgentDataBrand = function(str) {
-  'use strict';
-  const data = goog.labs.userAgent.util.getUserAgentData();
+function matchUserAgentDataBrand(str) {
+  const data = getUserAgentData();
   if (!data) return false;
-  return data.brands.some(
-      ({brand}) => brand && goog.string.internal.contains(brand, str));
-};
+  return data.brands.some(({brand}) => brand && contains(brand, str));
+}
 
 /**
  * @param {string} str
  * @return {boolean} Whether the user agent contains the given string.
  */
-goog.labs.userAgent.util.matchUserAgent = function(str) {
-  'use strict';
-  var userAgent = goog.labs.userAgent.util.getUserAgent();
-  return goog.string.internal.contains(userAgent, str);
-};
-
+function matchUserAgent(str) {
+  const userAgent = getUserAgent();
+  return contains(userAgent, str);
+}
 
 /**
  * @param {string} str
  * @return {boolean} Whether the user agent contains the given string, ignoring
  *     case.
  */
-goog.labs.userAgent.util.matchUserAgentIgnoreCase = function(str) {
-  'use strict';
-  var userAgent = goog.labs.userAgent.util.getUserAgent();
-  return goog.string.internal.caseInsensitiveContains(userAgent, str);
-};
-
+function matchUserAgentIgnoreCase(str) {
+  const userAgent = getUserAgent();
+  return caseInsensitiveContains(userAgent, str);
+}
 
 /**
  * Parses the user agent into tuples for each section.
  * @param {string} userAgent
- * @return {!Array<!Array<string>>} Tuples of key, version, and the contents
- *     of the parenthetical.
+ * @return {!Array<!Array<string>>} Tuples of key, version, and the contents of
+ *     the parenthetical.
  */
-goog.labs.userAgent.util.extractVersionTuples = function(userAgent) {
-  'use strict';
+function extractVersionTuples(userAgent) {
   // Matches each section of a user agent string.
   // Example UA:
   // Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us)
   // AppleWebKit/531.21.10 (KHTML, like Gecko) Mobile/7B405
   // This has three version tuples: Mozilla, AppleWebKit, and Mobile.
 
-  var versionRegExp = new RegExp(
+  const versionRegExp = new RegExp(
       // Key. Note that a key may have a space.
       // (i.e. 'Mobile Safari' in 'Mobile Safari/5.0')
       '(\\w[\\w ]+)' +
@@ -181,8 +179,8 @@ goog.labs.userAgent.util.extractVersionTuples = function(userAgent) {
           '(?:\\((.*?)\\))?',  // parenthetical info. parentheses not matched.
       'g');
 
-  var data = [];
-  var match;
+  const data = [];
+  let match;
 
   // Iterate and collect the version tuples.  Each iteration will be the
   // next regex match.
@@ -196,4 +194,18 @@ goog.labs.userAgent.util.extractVersionTuples = function(userAgent) {
   }
 
   return data;
+}
+
+exports = {
+  ASSUME_CLIENT_HINTS_SUPPORT,
+  extractVersionTuples,
+  getNativeUserAgentString,
+  getUserAgent,
+  getUserAgentData,
+  matchUserAgent,
+  matchUserAgentDataBrand,
+  matchUserAgentIgnoreCase,
+  resetUserAgentData,
+  setUserAgent,
+  setUserAgentData,
 };

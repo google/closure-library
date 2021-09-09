@@ -80,10 +80,6 @@ goog.testing.MockUserAgent.prototype.install = function() {
         goog.userAgent, 'getUserAgentString',
         goog.bind(this.getUserAgentString, this));
 
-    this.propertyReplacer_.replace(
-        goog.labs.userAgent.util, 'getUserAgent',
-        goog.bind(this.getUserAgentString, this));
-
     // Stub out navigator functions.
     this.propertyReplacer_.replace(
         goog.userAgent, 'getNavigator', goog.bind(this.getNavigator, this));
@@ -121,6 +117,9 @@ goog.testing.MockUserAgent.prototype.getUserAgentString = function() {
 goog.testing.MockUserAgent.prototype.setUserAgentString = function(userAgent) {
   'use strict';
   this.userAgent_ = userAgent;
+  // goog.labs.userAgent.util is a goog.module, so its properties can't be
+  // stubbed. Use setUserAgent instead.
+  goog.labs.userAgent.util.setUserAgent(userAgent);
 };
 
 
@@ -173,6 +172,7 @@ goog.testing.MockUserAgent.prototype.uninstall = function() {
   'use strict';
   if (this.installed_) {
     this.propertyReplacer_.reset();
+    goog.labs.userAgent.util.setUserAgent(null);
     this.installed_ = false;
   }
 };

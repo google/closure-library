@@ -16,13 +16,11 @@ const product = goog.require('goog.userAgent.product');
 const testAgents = goog.require('goog.labs.userAgent.testAgents');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgentTestUtil = goog.require('goog.userAgentTestUtil');
-const util = goog.require('goog.labs.userAgent.util');
 
 let mockAgent;
 let replacer;
 
 function updateUserAgentUtils() {
-  util.setUserAgent(null);
   userAgentTestUtil.reinitializeUserAgent();
 }
 
