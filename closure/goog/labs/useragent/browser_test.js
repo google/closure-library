@@ -9,6 +9,8 @@
 goog.module('goog.labs.userAgent.browserTest');
 goog.setTestOnly();
 
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const functions = goog.require('goog.functions');
 const googObject = goog.require('goog.object');
 const testAgents = goog.require('goog.labs.userAgent.testAgents');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -89,10 +91,16 @@ function assertVersionBetween(lowVersion, highVersion) {
   assertFalse(userAgentBrowser.isVersionOrHigher(highVersion));
 }
 
+const stubs = new PropertyReplacer();
+
 testSuite({
   setUp() {
     util.setUserAgent(null);
-    util.setUserAgentData(null);
+    stubs.set(util, 'getUserAgentData', functions.constant(null));
+  },
+
+  tearDown() {
+    stubs.reset();
   },
 
   testOpera10() {
@@ -133,7 +141,9 @@ testSuite({
   },
 
   testOperaChromiumUserAgentData() {
-    util.setUserAgentData(testAgents.OPERACHROMIUM_USERAGENT_DATA);
+    stubs.set(
+        util, 'getUserAgentData',
+        functions.constant(testAgents.OPERACHROMIUM_USERAGENT_DATA));
     assertBrowser(Browser.CHROME);
     assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.OPERA_CHROMIUM);
     assertFalse(userAgentBrowser.isOpera());
@@ -239,7 +249,9 @@ testSuite({
   },
 
   testEdgeChromiumUserAgentData() {
-    util.setUserAgentData(testAgents.EDGECHROMIUM_USERAGENT_DATA);
+    stubs.set(
+        util, 'getUserAgentData',
+        functions.constant(testAgents.EDGECHROMIUM_USERAGENT_DATA));
     assertBrowser(Browser.CHROME);
     assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.EDGE_CHROMIUM);
     assertFalse(userAgentBrowser.isEdge());
@@ -320,7 +332,9 @@ testSuite({
   },
 
   testChromeUserAgentData() {
-    util.setUserAgentData(testAgents.CHROME_USERAGENT_DATA);
+    stubs.set(
+        util, 'getUserAgentData',
+        functions.constant(testAgents.CHROME_USERAGENT_DATA));
     assertBrowser(Browser.CHROME);
     assertTrue(userAgentBrowser.isChrome());
   },
@@ -410,7 +424,9 @@ testSuite({
   },
 
   testIncompleteUserAgentData() {
-    util.setUserAgentData(testAgents.INCOMPLETE_USERAGENT_DATA);
+    stubs.set(
+        util, 'getUserAgentData',
+        functions.constant(testAgents.INCOMPLETE_USERAGENT_DATA));
     util.setUserAgent(testAgents.CHROME_HEADLESS);
     assertBrowser(Browser.CHROME);
     assertTrue(userAgentBrowser.isChrome());

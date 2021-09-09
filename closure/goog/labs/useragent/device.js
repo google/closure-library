@@ -23,7 +23,7 @@ goog.require('goog.labs.userAgent.util');
  */
 goog.labs.userAgent.device.isMobile = function() {
   'use strict';
-  if (goog.labs.userAgent.util.ASSUME_CLIENT_HINTS_SUPPORT ||
+  if (goog.labs.userAgent.ASSUME_CLIENT_HINTS_SUPPORT ||
       goog.labs.userAgent.util.getUserAgentData()) {
     return goog.labs.userAgent.util.getUserAgentData().mobile;
   }
@@ -43,7 +43,7 @@ goog.labs.userAgent.device.isMobile = function() {
  */
 goog.labs.userAgent.device.isTablet = function() {
   'use strict';
-  if (goog.labs.userAgent.util.ASSUME_CLIENT_HINTS_SUPPORT ||
+  if (goog.labs.userAgent.ASSUME_CLIENT_HINTS_SUPPORT ||
       goog.labs.userAgent.util.getUserAgentData()) {
     return !goog.labs.userAgent.util.getUserAgentData().mobile &&
         (goog.labs.userAgent.util.matchUserAgent('iPad') ||

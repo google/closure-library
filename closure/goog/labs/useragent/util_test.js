@@ -9,13 +9,17 @@
 goog.module('goog.labs.userAgent.utilTest');
 goog.setTestOnly();
 
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const functions = goog.require('goog.functions');
 const testAgents = goog.require('goog.labs.userAgent.testAgents');
 const testSuite = goog.require('goog.testing.testSuite');
 const util = goog.require('goog.labs.userAgent.util');
 
+const stubs = new PropertyReplacer();
+
 testSuite({
   tearDown() {
-    util.resetUserAgentData();
+    stubs.reset();
   },
 
   /** Tests parsing a few example UA strings. */
@@ -68,5 +72,24 @@ testSuite({
     assertTrue(util.matchUserAgentIgnoreCase('Punch'));
     assertTrue(util.matchUserAgentIgnoreCase('punch'));
     assertFalse(util.matchUserAgentIgnoreCase('Mozilla'));
+  },
+
+  /** @suppress {visibility} suppression added to enable type checking */
+  testNoNavigator() {
+    stubs.set(util, 'getNavigator_', functions.constant(undefined));
+    assertEquals('', util.getNativeUserAgentString_());
+  },
+
+  /** @suppress {visibility} suppression added to enable type checking */
+  testNavigatorWithNoUserAgent() {
+    stubs.set(util, 'getNavigator_', functions.constant(undefined));
+    assertEquals('', util.getNativeUserAgentString_());
+  },
+
+  /** @suppress {visibility} suppression added to enable type checking */
+  testNavigatorWithUserAgent() {
+    stubs.set(
+        util, 'getNavigator_', functions.constant({'userAgent': 'moose'}));
+    assertEquals('moose', util.getNativeUserAgentString_());
   },
 });

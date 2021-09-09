@@ -71,10 +71,7 @@ closure_js_library(
 
 closure_js_library(
     name = "util",
-    srcs = [
-        "useragent.js",
-        "util.js",
-    ],
+    srcs = ["util.js"],
     deps = ["//closure/goog/string:internal"],
 )
 
