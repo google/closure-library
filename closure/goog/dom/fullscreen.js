@@ -73,7 +73,7 @@ goog.dom.fullscreen.isSupported = function(opt_domHelper) {
   var doc = goog.dom.fullscreen.getDocument_(opt_domHelper);
   var body = doc.body;
   return !!(
-      body.webkitRequestFullscreen ||
+      (body.webkitRequestFullscreen && doc.webkitFullscreenEnabled) ||
       (body.mozRequestFullScreen && doc.mozFullScreenEnabled) ||
       (body.msRequestFullscreen && doc.msFullscreenEnabled) ||
       (body.requestFullscreen && doc.fullscreenEnabled));
