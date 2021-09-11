@@ -165,15 +165,21 @@ goog.net.WebChannel.Options.prototype.httpSessionIdParam;
 /**
  * The URL parameter name to allow custom HTTP
  * headers to be overwritten as a URL param to bypass CORS preflight.
- * goog.net.rpc.HttpCors is used to encode the HTTP headers.
+ *
  * @type {string|undefined}
  */
 goog.net.WebChannel.Options.prototype.httpHeadersOverwriteParam;
 
 /**
+ * Whether to encode #initMessageHeaders in the HTTP request body.
+ * This option defaults to false. If true, #httpHeadersOverwriteParam will be
+ * ignored.
+ *
+ * This option should not be set if #fastHandshake is enabled.
+ *
  * @type {boolean|undefined}
  */
-goog.net.WebChannel.Options.prototype.backgroundChannelTest;
+goog.net.WebChannel.Options.prototype.encodeInitMessageHeaders;
 
 /**
  * Whether to force long-polling from client to server.
