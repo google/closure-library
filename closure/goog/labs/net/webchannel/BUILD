@@ -105,6 +105,7 @@ closure_js_library(
         "//closure/goog/array",
         "//closure/goog/asserts",
         "//closure/goog/async:run",
+        "//closure/goog/collections:maps",
         "//closure/goog/json",
         "//closure/goog/labs/net:webchannel",
         "//closure/goog/net:fetchxmlhttpfactory",
@@ -114,7 +115,6 @@ closure_js_library(
         "//closure/goog/object",
         "//closure/goog/string",
         "//closure/goog/structs",
-        "//closure/goog/structs:map",
         "//closure/goog/uri",
     ],
 )
@@ -152,7 +152,7 @@ closure_js_library(
 closure_js_library(
     name = "wire",
     srcs = ["wire.js"],
-    deps = ["//closure/goog/structs:map"],
+    deps = ["//closure/goog/collections:maps"],
 )
 
 closure_js_library(
@@ -161,10 +161,10 @@ closure_js_library(
     deps = [
         ":wire",
         "//closure/goog/asserts",
+        "//closure/goog/collections:maps",
         "//closure/goog/json",
         "//closure/goog/json:nativejsonprocessor",
         "//closure/goog/string:parser",
         "//closure/goog/structs",
-        "//closure/goog/structs:map",
     ],
 )

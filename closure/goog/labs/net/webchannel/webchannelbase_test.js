@@ -244,11 +244,23 @@ function formatArrayOfMaps(arrayOfMaps) {
   const result = [];
   for (let i = 0; i < arrayOfMaps.length; i++) {
     const map = arrayOfMaps[i];
-    const keys = map.map.getKeys();
-    for (let j = 0; j < keys.length; j++) {
-      const tmp = keys[j] + ':' + map.map.get(keys[j]) +
-          (map.context ? ':' + map.context : '');
-      result.push(tmp);
+
+    if (Object.getPrototypeOf(map.map) === Object.prototype) {  // Object map
+      for (const key in map.map) {
+        const tmp =
+            key + ':' + map.map[key] + (map.context ? ':' + map.context : '');
+        result.push(tmp);
+      }
+    } else if (
+        typeof map.map.keys === 'function' &&
+        typeof map.map.get === 'function') {  // MapLike
+      for (const key of map.map.keys()) {
+        const tmp = key + ':' + map.map.get(key) +
+            (map.context ? ':' + map.context : '');
+        result.push(tmp);
+      }
+    } else {
+      throw new Error('Unknown input type for map: ' + String(map));
     }
   }
   return result.join(', ');
@@ -368,13 +380,37 @@ function responseUnknownSessionId() {
 }
 
 /**
+ * Enum for map types to test.
+ * @enum {number}
+ */
+const MapTypes = {
+  OBJECT_MAP: 0,
+  STRUCTS_MAP: 1,
+  ES6_MAP: 2,
+};
+
+/**
  * @param {string} key
  * @param {string} value
  * @param {string=} context
+ * @param {!MapTypes=} mapType
  */
-function sendMap(key, value, context = undefined) {
-  const map = new StructsMap();
-  map.set(key, value);
+function sendMap(
+    key, value, context = undefined, mapType = MapTypes.OBJECT_MAP) {
+  let map;
+  if (mapType == MapTypes.OBJECT_MAP) {
+    map = {};
+    map[key] = value;
+  } else if (mapType == MapTypes.STRUCTS_MAP) {
+    map = new StructsMap();
+    map.set(key, value);
+  } else if (mapType == MapTypes.ES6_MAP) {
+    map = new Map();
+    map.set(key, value);
+  } else {
+    throw new Error('Unsupported map type :)');
+  }
+
   channel.sendMap(map, context);
   mockClock.tick(0);
 }
@@ -401,9 +437,12 @@ function assertHasBackChannel() {
   assertTrue('Back channel missing.', hasBackChannel());
 }
 
-function sendMapOnce() {
+/**
+ * @param {!MapTypes=} mapType
+ */
+function sendMapOnce(mapType = MapTypes.OBJECT_MAP) {
   assertEquals(1, numTimingEvents);
-  sendMap('foo', 'bar');
+  sendMap('foo', 'bar', /* context= */ undefined, mapType);
   responseDone();
   assertEquals(2, numTimingEvents);
   assertEquals('foo:bar', formatArrayOfMaps(deliveredMaps));
@@ -650,12 +689,12 @@ testSuite({
   testFormatArrayOfMaps() {
     // This function is used in a non-trivial test, so let's verify that it
     // works.
-    const map1 = new StructsMap();
+    const map1 = new Map();
     map1.set('k1', 'v1');
     map1.set('k2', 'v2');
-    const map2 = new StructsMap();
+    const map2 = new Map();
     map2.set('k3', 'v3');
-    const map3 = new StructsMap();
+    const map3 = new Map();
     map3.set('k4', 'v4');
     map3.set('k5', 'v5');
     map3.set('k6', 'v6');
@@ -734,9 +773,19 @@ testSuite({
     assertEquals(WebChannelBase.State.CLOSED, channel.getState());
   },
 
-  testSendMap() {
+  testSendMap_withObjectMap() {
     connect();
-    sendMapOnce();
+    sendMapOnce(MapTypes.OBJECT_MAP);
+  },
+
+  testSendMap_withStructsMap() {
+    connect();
+    sendMapOnce(MapTypes.STRUCTS_MAP);
+  },
+
+  testSendMap_withEs6Map() {
+    connect();
+    sendMapOnce(MapTypes.ES6_MAP);
   },
 
   testSendMapWithSpdyEnabled() {

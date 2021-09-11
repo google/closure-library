@@ -15,6 +15,7 @@ goog.require('goog.Uri');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.async.run');
+goog.require('goog.collections.maps');
 goog.require('goog.json');
 goog.require('goog.labs.net.webChannel.Channel');
 goog.require('goog.labs.net.webChannel.ChannelRequest');
@@ -34,7 +35,6 @@ goog.require('goog.net.rpc.HttpCors');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.structs');
-goog.requireType('goog.structs.Map');
 
 goog.scope(function() {
 'use strict';
@@ -1052,7 +1052,7 @@ WebChannelBase.prototype.setAllowStreamingMode = function(allowStreamingMode) {
  * structure of key/value pairs. These maps are then encoded in a format
  * suitable for the wire and then reconstituted as a Map data structure that
  * the server can process.
- * @param {!Object|!goog.structs.Map} map The map to send.
+ * @param {!Object|!goog.collections.maps.MapLike} map The map to send.
  * @param {!Object=} opt_context The context associated with the map.
  */
 WebChannelBase.prototype.sendMap = function(map, opt_context) {
