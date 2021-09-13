@@ -7,6 +7,10 @@
 goog.provide('goog.testing.asserts');
 goog.setTestOnly();
 
+goog.require('goog.dom.safe');
+goog.require('goog.html.uncheckedconversions');
+goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.testing.JsUnitException');
 
 var DOUBLE_EQUALITY_PREDICATE = function(var1, var2) {
@@ -1598,7 +1602,12 @@ goog.testing.asserts.contains_ = function(container, contained) {
 var standardizeHTML = function(html) {
   'use strict';
   var translator = document.createElement('div');
-  translator.innerHTML = html;
+
+  goog.dom.safe.setInnerHtml(
+      translator,
+      goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from('HTML is never attached to DOM'), html));
 
   // Trim whitespace from result (without relying on goog.string)
   return translator.innerHTML.replace(/^\s+|\s+$/g, '');

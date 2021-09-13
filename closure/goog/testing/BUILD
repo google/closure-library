@@ -16,7 +16,13 @@ closure_js_library(
 closure_js_library(
     name = "asserts",
     srcs = ["asserts.js"],
-    deps = [":jsunitexception"],
+    deps = [
+        ":jsunitexception",
+        "//closure/goog/dom:safe",
+        "//closure/goog/html:uncheckedconversions",
+        "//closure/goog/string",
+        "//closure/goog/string:const",
+    ],
 )
 
 closure_js_library(
