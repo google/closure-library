@@ -10,6 +10,19 @@ goog.module('goog.i18n.LocaleFeature');
  * native JavaScript Closure implementations for I18N purposes.
  */
 
+/**
+ * @define {boolean} ECMASCRIPT_INTL_OPT_OUT
+ * A global flag that an application can set to avoid using native
+ * ECMAScript Intl implementation in any browser or Android implementations.
+ * This may be necessary for applications that cannot use the regular
+ * setting of goog.LOCALE or that must provide the Javascript data and
+ * to create formatted output exactly the same on both client and server.
+ *
+ * Default value is false. Applications can set this to true so
+ * compilation will opt out of the native mode.
+ */
+exports.ECMASCRIPT_INTL_OPT_OUT =
+    goog.define('goog.i18n.ECMASCRIPT_INTL_OPT_OUT', false);
 
 /**
  * @define {boolean} ECMASCRIPT_COMMON_LOCALES
@@ -47,7 +60,8 @@ exports.ECMASCRIPT_COMMON_LOCALES_2019 =
  * browsers and Android implementations available in 2019.
  */
 exports.USE_ECMASCRIPT_I18N =
-    (goog.FEATURESET_YEAR >= 2019 && exports.ECMASCRIPT_COMMON_LOCALES_2019);
+    (goog.FEATURESET_YEAR >= 2019 && exports.ECMASCRIPT_COMMON_LOCALES_2019 &&
+     !exports.ECMASCRIPT_INTL_OPT_OUT);
 
 /**
  * @define {boolean} USE_ECMASCRIPT_I18N_RDTF is evaluated to enable
@@ -71,4 +85,5 @@ exports.USE_ECMASCRIPT_I18N_RDTF =
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
  */
 exports.USE_ECMASCRIPT_I18N_NUMFORMAT =
-    (goog.FEATURESET_YEAR >= 2021 && exports.ECMASCRIPT_COMMON_LOCALES_2019);
+    (goog.FEATURESET_YEAR >= 2021 && exports.ECMASCRIPT_COMMON_LOCALES_2019 &&
+     !exports.ECMASCRIPT_INTL_OPT_OUT);
