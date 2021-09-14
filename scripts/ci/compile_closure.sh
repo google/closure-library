@@ -20,7 +20,9 @@
 #     strictMissingProperties and fix the handful of strictPrimitiveOperator
 #     violations.
 
-java -Xmx1G -jar ../closure-compiler-1.0-SNAPSHOT.jar \
+JAR_FILE=$1
+
+java -Xmx1G -jar "${JAR_FILE}" \
   -O ADVANCED \
   --warning_level VERBOSE \
   --jscomp_error='*' \

@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 set -ex
+
 cd "${KOKORO_ARTIFACTS_DIR}/git/closure-library-staging"
 
 # Install Node 14.
@@ -25,12 +26,16 @@ GH_PAGES=$(mktemp -d)
 # git clone --depth=1 https://github.com/google/closure-library "$GH_PAGES"
 # ./scripts/ci/generate_latest_docs.sh
 
-# Compile Closure Library with the external compiler.
+# Compile Closure Library with the current latest compiler release.
+
+./scripts/ci/compile_closure.sh "${KOKORO_ARTIFACTS_DIR}/${LATEST_COMPILER_JAR_PATH}"
+
+# Compile Closure Library with the nightly external compiler.
 
 ./scripts/ci/install_closure_deps.sh
-./scripts/ci/compile_closure.sh
+./scripts/ci/compile_closure.sh ../closure-compiler-1.0-SNAPSHOT.jar
 
-# Ensure that all generated files are generate without error.
+# Ensure that all generated files are generated without error.
 
 npm install
 npm run check_closure_oss
