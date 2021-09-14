@@ -8,14 +8,10 @@ set -ex
 cd "${KOKORO_ARTIFACTS_DIR}/git/closure-library-staging"
 
 # Install Node 14.
-# TODO: Use an image that contains it instead.
 
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-# Provided by nvm at https://github.com/nvm-sh/nvm.
-export NVM_DIR
-NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-nvm install v14
+tar xf "${KOKORO_GFILE_DIR}/node-${NODE_VERSION}-linux-x64.tar.xz"
+export PATH
+PATH="$(pwd)/node-${NODE_VERSION}-linux-x64/bin:${PATH}"
 
 # Generate docs (without pushing them anywhere).
 
