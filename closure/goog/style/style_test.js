@@ -30,7 +30,6 @@ const testSuite = goog.require('goog.testing.testSuite');
 const testing = goog.require('goog.html.testing');
 const userAgent = goog.require('goog.userAgent');
 const userAgentTestUtil = goog.require('goog.userAgentTestUtil');
-const util = goog.require('goog.labs.userAgent.util');
 
 // Delay running the tests after page load. This test has some asynchronous
 // behavior that interacts with page load detection.
@@ -81,9 +80,6 @@ function assertUserAgent(
 
   mockUserAgent.setNavigator(mockNavigator);
   mockUserAgent.setUserAgentString(uaString);
-
-  // Force User-Agent lib to reread the global userAgent.
-  util.setUserAgent(null);
 
   userAgentTestUtil.reinitializeUserAgent();
   for (const ua in UserAgents) {
