@@ -20,11 +20,9 @@ testSuite({
     const xhrIoPool = new XhrIoPool(headers, 0);
     const xhrIo = xhrIoPool.getObject();
 
-    assertEquals(
-        'Request should contain 1 header', 1, xhrIo.headers.getCount());
+    assertEquals('Request should contain 1 header', 1, xhrIo.headers.size);
     assertTrue(
-        'Request should contain right header key',
-        xhrIo.headers.containsKey('X-Foo'));
+        'Request should contain right header key', xhrIo.headers.has('X-Foo'));
     assertEquals(
         'Request should contain right header value', xhrIo.headers.get('X-Foo'),
         'Bar');
@@ -37,11 +35,9 @@ testSuite({
     const xhrIoPool = new XhrIoPool(headers, 1, 1);
     const xhrIo = xhrIoPool.getObject();
 
-    assertEquals(
-        'Request should contain 1 header', 1, xhrIo.headers.getCount());
+    assertEquals('Request should contain 1 header', 1, xhrIo.headers.size);
     assertTrue(
-        'Request should contain right header key',
-        xhrIo.headers.containsKey('X-Foo'));
+        'Request should contain right header key', xhrIo.headers.has('X-Foo'));
     assertEquals(
         'Request should contain right header value', 'Bar',
         xhrIo.headers.get('X-Foo'));

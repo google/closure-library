@@ -23,6 +23,7 @@ closure_js_library(
     srcs = ["xhrio.js"],
     deps = [
         "//closure/goog/array",
+        "//closure/goog/collections:maps",
         "//closure/goog/dom:xml",
         "//closure/goog/events",
         "//closure/goog/net:errorcode",
