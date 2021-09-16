@@ -115,15 +115,6 @@ if (goog.DEBUG) {
     goog.async.run.workQueueScheduled_ = false;
     goog.async.run.workQueue_ = new goog.async.WorkQueue();
   };
-
-
-  /**
-   * Resets the scheduler. Only available for tests in debug mode.
-   */
-  goog.async.run.resetSchedulerForTest = function() {
-    goog.setTestOnly();
-    goog.async.run.initializeRunner_();
-  };
 }
 
 
