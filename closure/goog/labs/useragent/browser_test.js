@@ -349,6 +349,46 @@ testSuite({
     assertVersionBetween('5.0', '7.0');
   },
 
+  testSafariOnIphoneIos14() {
+    util.setUserAgent(testAgents.SAFARI_IPHONE_IOS_14);
+    assertBrowser(Browser.SAFARI);
+    assertTrue(userAgentBrowser.isSafari());
+    assertVersion('14.1.1');
+    assertVersionBetween('14.0', '15.0');
+  },
+
+  testSafariOnIphoneIos15() {
+    util.setUserAgent(testAgents.SAFARI_IPHONE_IOS_15);
+    assertBrowser(Browser.SAFARI);
+    assertTrue(userAgentBrowser.isSafari());
+    assertVersion('15.0');
+    assertVersionBetween('15.0', '16.0');
+  },
+
+  testSafariDesktopOnIpadIos15() {
+    util.setUserAgent(testAgents.SAFARI_DESKTOP_IPAD_IOS_15);
+    assertBrowser(Browser.SAFARI);
+    assertTrue(userAgentBrowser.isSafari());
+    assertVersion('15.0');
+    assertVersionBetween('15.0', '16.0');
+  },
+
+  testSafariMobileOnIpadIos15() {
+    util.setUserAgent(testAgents.SAFARI_MOBILE_IPAD_IOS_15);
+    assertBrowser(Browser.SAFARI);
+    assertTrue(userAgentBrowser.isSafari());
+    assertVersion('15.0');
+    assertVersionBetween('15.0', '16.0');
+  },
+
+  testSafariOnMacOsBigSur() {
+    util.setUserAgent(testAgents.SAFARI_MAC_OS_BIG_SUR);
+    assertBrowser(Browser.SAFARI);
+    assertTrue(userAgentBrowser.isSafari());
+    assertVersion('14.1.2');
+    assertVersionBetween('14.1', '14.2');
+  },
+
   testCoast() {
     util.setUserAgent(testAgents.COAST);
     assertBrowser(Browser.COAST);

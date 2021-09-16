@@ -88,6 +88,20 @@ testSuite({
     assertVersion('6.0');
     assertVersionBetween('5', '7');
 
+    uaString = testAgents.SAFARI_IPHONE_IOS_14;
+    util.setUserAgent(uaString);
+    assertTrue(userAgentPlatform.isIphone());
+    assertTrue(userAgentPlatform.isIos());
+    assertVersion('14.6');
+    assertVersionBetween('14', '15');
+
+    uaString = testAgents.SAFARI_IPHONE_IOS_15;
+    util.setUserAgent(uaString);
+    assertTrue(userAgentPlatform.isIphone());
+    assertTrue(userAgentPlatform.isIos());
+    assertVersion('15.0');
+    assertVersionBetween('15', '16');
+
     uaString = testAgents.SAFARI_IPHONE_32;
     util.setUserAgent(uaString);
     assertTrue(userAgentPlatform.isIphone());
@@ -137,6 +151,31 @@ testSuite({
     assertTrue(userAgentPlatform.isIos());
     assertVersion('6.0');
     assertVersionBetween('5', '7');
+
+    uaString = testAgents.SAFARI_DESKTOP_IPAD_IOS_15;
+    util.setUserAgent(uaString);
+    assertFalse(userAgentPlatform.isIpad());
+    assertFalse(userAgentPlatform.isIos());
+    assertTrue(userAgentPlatform.isMacintosh());
+    // In Safari desktop mode, the OS version reported is Mac OS version.
+    assertVersion('10.15.6');
+    assertVersionBetween('10.15.6', '10.15.7');
+
+    uaString = testAgents.SAFARI_MOBILE_IPAD_IOS_15;
+    util.setUserAgent(uaString);
+    assertTrue(userAgentPlatform.isIpad());
+    assertTrue(userAgentPlatform.isIos());
+    assertFalse(userAgentPlatform.isMacintosh());
+    assertVersion('15.0');
+    assertVersionBetween('15.0', '15.1');
+
+    uaString = testAgents.CHROME_IPAD_IOS_15;
+    util.setUserAgent(uaString);
+    assertTrue(userAgentPlatform.isIpad());
+    assertTrue(userAgentPlatform.isIos());
+    assertFalse(userAgentPlatform.isMacintosh());
+    assertVersion('15.0');
+    assertVersionBetween('15.0', '15.1');
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */
@@ -172,6 +211,14 @@ testSuite({
     assertVersionBetween('11', '12');
     assertVersionBetween('11.7', '11.8');
     assertVersionBetween('11.7.9', '11.8.0');
+
+    uaString = testAgents.SAFARI_MAC_OS_BIG_SUR;
+    util.setUserAgent(uaString);
+    assertFalse(userAgentPlatform.isIpad());
+    assertFalse(userAgentPlatform.isIos());
+    assertTrue(userAgentPlatform.isMacintosh());
+    assertVersion('10.15.7');
+    assertVersionBetween('10.15.7', '10.15.8');
   },
 
   testLinux() {
