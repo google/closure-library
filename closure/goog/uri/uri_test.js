@@ -382,7 +382,7 @@ testSuite({
             .toString());
 
     assertEquals(
-        '/path?a=b&key=1&key=2&key=3&c=d&keywithsuffix=v3',
+        '/path?a=b&c=d&keywithsuffix=v3&key=1&key=2&key=3',
         Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3')
             .setParameterValues('key', ['1', '2', '3'])
             .toString());
@@ -401,7 +401,7 @@ testSuite({
             .toString());
 
     assertEquals(
-        '/path?a=b&key=1&key=2&key=3&c=d&keywithsuffix=v3',
+        '/path?a=b&c=d&keywithsuffix=v3&key=1&key=2&key=3',
         Uri.parse('/path?a=b&key=v1&c=d&key=v2&keywithsuffix=v3', true)
             .setParameterValues('kEY', ['1', '2', '3'])
             .toString());
@@ -906,11 +906,11 @@ testSuite({
     const qd = new Uri.QueryData('a=A&b=B&a=A2&b=B2&c=C');
 
     qd.setValues('a', ['A3', 'A4', 'A5']);
-    assertEquals('a=A3&a=A4&a=A5&b=B&b=B2&c=C', String(qd));
+    assertEquals('b=B&b=B2&c=C&a=A3&a=A4&a=A5', String(qd));
     qd.setValues('d', ['D']);
-    assertEquals('a=A3&a=A4&a=A5&b=B&b=B2&c=C&d=D', String(qd));
+    assertEquals('b=B&b=B2&c=C&a=A3&a=A4&a=A5&d=D', String(qd));
     qd.setValues('e', []);
-    assertEquals('a=A3&a=A4&a=A5&b=B&b=B2&c=C&d=D', String(qd));
+    assertEquals('b=B&b=B2&c=C&a=A3&a=A4&a=A5&d=D', String(qd));
   },
 
   testQueryDataSetIgnoreCase() {

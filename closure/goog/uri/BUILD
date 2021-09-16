@@ -11,6 +11,7 @@ closure_js_library(
         ":utils",
         "//closure/goog/array",
         "//closure/goog/asserts",
+        "//closure/goog/collections:maps",
         "//closure/goog/string",
         "//closure/goog/structs",
         "//closure/goog/structs:map",
