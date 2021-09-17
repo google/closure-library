@@ -14,12 +14,15 @@ const Timer = goog.require('goog.Timer');
 const array = goog.require('goog.array');
 const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
+const googAsyncRun = goog.require('goog.async.run');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
 
 const stubs = new PropertyReplacer();
 
 /**
+ * Waits using native promises.
+ *
  * @param {number} ms
  * @return {!Promise<void>} Resolves after ms
  */
@@ -163,6 +166,98 @@ testSuite({
 
       assertArrayEquals(array.range(30), result);
     },
+
+    async testTickAsyncInterval() {
+      let counter = 0;
+      const intervalId = setInterval(() => {
+        counter++;
+      }, 100);
+      await this.clock.tickAsync(99);
+      assertEquals(counter, 0);
+      await this.clock.tickAsync(1);
+      assertEquals(counter, 1);
+      await this.clock.tickAsync(200);
+      assertEquals(counter, 3);
+      clearInterval(intervalId);
+      await this.clock.tickAsync(100);
+      assertEquals(counter, 3);
+    },
+
+    async testTickAsyncMustSettlePromiseThrows() {
+      const error = /** @type {!Error} */ (await assertRejects(
+          this.clock.tickAsyncMustSettlePromise(0, Promise.resolve())));
+      assertEquals(
+          error.message,
+          'Assertion failed: Synchronous MockClock does not support ' +
+              'tickAsyncMustSettlePromise.');
+    },
+  },
+
+  testAsyncMockClock: {
+    setUp() {
+      this.clock = MockClock.createAsyncMockClock();
+      this.clock.install();
+    },
+
+    tearDown() {
+      this.clock.dispose();
+    },
+
+    async testTickAsyncResolvesGoogPromise() {
+      const promise = Timer.promise(100).then(() => 'value');
+      await this.clock.tickAsync(100);
+      assertEquals(await promise, 'value');
+    },
+
+    async testTickAsyncResolvesPromise() {
+      const promise = waitFor(100).then(() => 'value');
+      await this.clock.tickAsync(100);
+      assertEquals(await promise, 'value');
+    },
+
+    async testTickAsyncMustSettlePromiseRejectsGoogPromise() {
+      const promise = Timer.promise(100).then(() => {
+        throw new Error('reject');
+      });
+      const error = /** @type {!Error} */ (await assertRejects(
+          this.clock.tickAsyncMustSettlePromise(100, promise)));
+      assertEquals(error.message, 'reject');
+    },
+
+    async testTickAsyncMustSettlePromiseRejectsPromise() {
+      const promise = waitFor(100).then(() => {
+        throw new Error('reject');
+      });
+
+      const error =
+          /** @type {!Error} */ (await this.clock.tickAsyncMustSettlePromise(
+              100, assertRejects(promise)));
+      assertEquals(error.message, 'reject');
+    },
+
+    async testTickAsyncMustSettlePromiseResolvesGoogPromise() {
+      const promise = Timer.promise(100).then(() => 'value');
+      assertEquals(
+          await this.clock.tickAsyncMustSettlePromise(100, promise), 'value');
+    },
+
+    async testTickAsyncMustSettlePromiseResolvesPromise() {
+      const promise = waitFor(100).then(() => 'value');
+      assertEquals(
+          await this.clock.tickAsyncMustSettlePromise(100, promise), 'value');
+    },
+
+    async testTickThrows() {
+      assertThrows(
+          'Async MockClock does not support tick. Use tickAsync() instead.',
+          () => this.clock.tick());
+    },
+
+    async testTickPromiseThrows() {
+      assertThrows(
+          'Async MockClock does not support tickPromise.',
+          () => this.clock.tickPromise(waitFor(100), 100));
+    }
   },
 
   testTimeWarp: {
@@ -837,6 +932,45 @@ testSuite({
     assertTrue(m10);
 
     clock.uninstall();
+  },
+
+  async testUninstallWithoutResetScheduler() {
+    googAsyncRun.resetSchedulerForTest();
+    const promise = GoogPromise.resolve();
+    const clock = new MockClock(true);
+    clock.tick(1);
+    // Queue up a GoogPromise callback to execute. This will never execute
+    // when the async queue is reset, leaving GoogPromise.executing_ set
+    // forever.
+    promise.then(() => {});
+    clock.uninstall();
+
+    let executorRan = false;
+    promise.then(() => new Promise(() => {
+                   executorRan = true;
+                 }));
+    // GoogPromise.then will be stuck waiting for executeCallbacks_ to run.
+    await Promise.resolve();
+    assertFalse(executorRan);
+  },
+
+  async testUninstallWithResetScheduler() {
+    googAsyncRun.resetSchedulerForTest();
+    const clock = new MockClock(true);
+    const promise = GoogPromise.resolve();
+    clock.tick(1);
+    // Queue up a GoogPromise callback to execute. This will be executed the
+    // next time the browser returns to the event queue.
+    promise.then(() => {});
+    clock.uninstall(true);
+
+    let executorRan = false;
+    promise.then(() => new Promise(() => {
+                   executorRan = true;
+                 }));
+    // goog.async.run queue is flushed when returning to the event queue.
+    await Promise.resolve();
+    assertTrue(executorRan);
   },
 
   testUnspecifiedInterval() {
