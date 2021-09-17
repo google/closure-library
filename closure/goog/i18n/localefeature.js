@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 goog.module('goog.i18n.LocaleFeature');
+goog.module.declareLegacyNamespace();
 
 /**
  * @fileoverview Provides flag for using ECMAScript 402 features vs.
@@ -87,3 +88,16 @@ exports.USE_ECMASCRIPT_I18N_RDTF =
 exports.USE_ECMASCRIPT_I18N_NUMFORMAT =
     (goog.FEATURESET_YEAR >= 2021 && exports.ECMASCRIPT_COMMON_LOCALES_2019 &&
      !exports.ECMASCRIPT_INTL_OPT_OUT);
+
+/**
+ * @define {boolean} USE_ECMASCRIPT_I18N_PLURALRULES is evaluated to enable
+ * ECMAScript support for Intl.PluralRules support in
+ * browsers based on the locale. Browsers that are considered include:
+ * Chrome, Firefox, Edge, and Safari.
+ * PluralRules are supported in Chrome, Edge, Firefox, and Safari.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/
+ */
+exports.USE_ECMASCRIPT_I18N_PLURALRULES =
+    (!exports.ECMASCRIPT_INTL_OPT_OUT && goog.FEATURESET_YEAR >= 2021 &&
+     exports.ECMASCRIPT_COMMON_LOCALES_2019);

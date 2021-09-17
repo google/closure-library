@@ -28,7 +28,11 @@ testSuite({
   },
 
   testRdtfOptOutFlag: function() {
-    assertTrue(
-        (typeof (LocaleFeature.ECMASCRIPT_INTL_OPT_OUT) !== 'undefined'));
+    assertFalse(
+        (typeof (LocaleFeature.ECMASCRIPT_INTL_OPT_OUT) === 'undefined'));
+  },
+
+  testRdtfOptOutFlagSet: function() {
+    assertFalse(LocaleFeature.ECMASCRIPT_INTL_OPT_OUT);
   },
 });

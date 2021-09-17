@@ -218,11 +218,13 @@ closure_js_library(
 closure_js_library(
     name = "ordinalrules",
     srcs = ["ordinalrules.js"],
+    deps = [":localefeature"],
 )
 
 closure_js_library(
     name = "pluralrules",
     srcs = ["pluralrules.js"],
+    deps = [":localefeature"],
 )
 
 closure_js_library(
