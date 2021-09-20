@@ -19,6 +19,7 @@ closure_js_library(
         "//closure/goog/i18n:bidi",
         "//closure/goog/string:const",
         "//closure/goog/uri",
+        "//javascript/typescript/safevalues:safevalues_js",
     ],
 )
 
