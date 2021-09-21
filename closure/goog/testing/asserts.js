@@ -221,7 +221,7 @@ var _getCurrentTestCase = function() {
       goog.global.console.error(
           'Missing goog.testing.TestCase, ' +
           'add /* @suppress {extraRequire} */' +
-          'goog.require(\'goog.testing.TestCase\'');
+          'goog.require(\'goog.testing.TestCase\')');
     }
     return null;
   }
