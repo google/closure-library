@@ -11,14 +11,6 @@
 goog.module('goog.i18n.DateTimeFormatTest');
 goog.setTestOnly();
 
-
-const LocaleFeature = goog.require('goog.i18n.LocaleFeature');
-const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
-
-// Note that exact formatted output equivalence between Closure and
-// ECMAScript implementations is not required in all cases.
-const replacer = new PropertyReplacer();
-
 const DateDate = goog.require('goog.date.Date');
 const DateTime = goog.require('goog.date.DateTime');
 const DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
@@ -37,12 +29,9 @@ const DateTimePatterns_zh_HK = goog.require('goog.i18n.DateTimePatterns_zh_HK');
 const DateTimePatterns_zh_Hant_TW = goog.require('goog.i18n.DateTimePatterns_zh_Hant_TW');
 /** @suppress {extraRequire} */
 const DateTimeSymbols = goog.require('goog.i18n.DateTimeSymbols');
-const DateTimeSymbols_ar = goog.require('goog.i18n.DateTimeSymbols_ar');
 const DateTimeSymbols_ar_AE = goog.require('goog.i18n.DateTimeSymbols_ar_AE');
 const DateTimeSymbols_ar_EG = goog.require('goog.i18n.DateTimeSymbols_ar_EG');
 const DateTimeSymbols_ar_SA = goog.require('goog.i18n.DateTimeSymbols_ar_SA');
-const DateTimeSymbols_bg = goog.require('goog.i18n.DateTimeSymbols_bg');
-const DateTimeSymbols_bn = goog.require('goog.i18n.DateTimeSymbols_bn');
 const DateTimeSymbols_bn_BD = goog.require('goog.i18n.DateTimeSymbols_bn_BD');
 const DateTimeSymbols_de = goog.require('goog.i18n.DateTimeSymbols_de');
 const DateTimeSymbols_en = goog.require('goog.i18n.DateTimeSymbols_en');
@@ -50,74 +39,19 @@ const DateTimeSymbols_en_GB = goog.require('goog.i18n.DateTimeSymbols_en_GB');
 const DateTimeSymbols_en_IE = goog.require('goog.i18n.DateTimeSymbols_en_IE');
 const DateTimeSymbols_en_IN = goog.require('goog.i18n.DateTimeSymbols_en_IN');
 const DateTimeSymbols_en_US = goog.require('goog.i18n.DateTimeSymbols_en_US');
-const DateTimeSymbols_en_XA = goog.require('goog.i18n.DateTimeSymbols_en_XA');
 const DateTimeSymbols_fa = goog.require('goog.i18n.DateTimeSymbols_fa');
 const DateTimeSymbols_fr = goog.require('goog.i18n.DateTimeSymbols_fr');
 const DateTimeSymbols_fr_DJ = goog.require('goog.i18n.DateTimeSymbols_fr_DJ');
 const DateTimeSymbols_he_IL = goog.require('goog.i18n.DateTimeSymbols_he_IL');
 const DateTimeSymbols_ja = goog.require('goog.i18n.DateTimeSymbols_ja');
-const DateTimeSymbols_ml = goog.require('goog.i18n.DateTimeSymbols_ml');
-const DateTimeSymbols_mr = goog.require('goog.i18n.DateTimeSymbols_mr');
-const DateTimeSymbols_my = goog.require('goog.i18n.DateTimeSymbols_my');
-const DateTimeSymbols_ne = goog.require('goog.i18n.DateTimeSymbols_ne');
 const DateTimeSymbols_ro_RO = goog.require('goog.i18n.DateTimeSymbols_ro_RO');
 const DateTimeSymbols_sv = goog.require('goog.i18n.DateTimeSymbols_sv');
-const DateTimeSymbols_zh_HK = goog.require('goog.i18n.DateTimeSymbols_zh_HK');
-const DateTimeSymbols_zh_Hant_TW = goog.require('goog.i18n.DateTimeSymbols_zh_Hant_TW');
 const TimeZone = goog.require('goog.i18n.TimeZone');
-
-const UtcDateTime = goog.require('goog.date.UtcDateTime');
-
 const testSuite = goog.require('goog.testing.testSuite');
 
 // Initial values
-replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en);
-replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
-
-// Helpers for native mode
-/**
- * Changes status of ECMASCRIPT mode
- * @param {boolean} new_setting
- */
-function setNativeMode(new_setting) {
-  replacer.set(LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', new_setting);
-}
-
-// Sets up goog.USE_ECMASCRIPT_I18N_DATETIMEF flag in each function.
-let testECMAScriptOptions = [false];
-// Don't test native ECMASCript on IE11.
-if (Intl.DateTimeFormat) {
-  // Add test if the browser environment supports ECMAScript implementation.
-  if (!goog.labs.userAgent.browser.isIE()) {
-    testECMAScriptOptions.push(true);
-  }
-}
-
-/**
- * Gets current setting for native ECMAScript mode
- * @return {boolean}
- */
-function getNativeMode() {
-  return LocaleFeature.USE_ECMASCRIPT_I18N_DATETIMEF;
-}
-
-/**
- * Returns string without RTL or LTR markers.
- * @param {string} input
- * @return {string}
- */
-function removeDirectionMarkers(input) {
-  return input.replace(/[\u200e\u200f]/g, '');
-}
-
-/**
- * Returns string without LTR markers.
- * @param {string} input
- * @return {string}
- */
-function removeLtrMarkers(input) {
-  return input.replace(/[\u200e]/g, '');
-}
+goog.i18n.DateTimePatterns = DateTimePatterns_en;
+goog.i18n.DateTimeSymbols = DateTimeSymbols_en;
 
 /**
  * Helpers to make tests work regardless of the timeZone we're in.
@@ -234,6 +168,8 @@ const europeBerlinData = {
   'std_offset': 60,
 };
 
+let date;
+
 /**
  * Creates a string by concatenating the week number for 7 successive days
  * @return {string}
@@ -250,714 +186,488 @@ function weekInYearFor7Days() {
 }
 
 testSuite({
-  getTestName: function() {
-    return 'DateTimeFormat Tests';
-  },
-
-  setUpPage() {},
-
-  setUp() {
-    replacer.set(LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', false);
-    setNativeMode(false);
-    replacer.replace(goog, 'LOCALE', 'en');
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
-  },
-
   tearDown() {
     // We always revert to a known state
-    replacer.replace(goog, 'LOCALE', 'en');
+    goog.i18n.DateTimePatterns = DateTimePatterns_en;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_en;
     DateTimeFormat.setEnforceAsciiDigits(false);
-
-    replacer.reset();
-
-    // Reset to non-native
-    setNativeMode(false);
   },
 
   testHHmmss() {
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-    const date = new Date(2006, 6, 27, 13, 10, 10, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-
-      const fmt = new DateTimeFormat('HH:mm:ss');
-      assertEquals('13:10:10', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat('HH:mm:ss');
+    assertEquals('13:10:10', fmt.format(date));
   },
 
   testhhmmssa() {
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-    const date = new Date(2006, 6, 27, 13, 10, 10, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      setNativeMode(nativeMode);
-      const fmt = new DateTimeFormat('h:mm:ss a');
-      assertEquals('1:10:10 PM', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat('h:mm:ss a');
+    assertEquals('1:10:10 PM', fmt.format(date));
   },
 
   testEEEMMMddyy() {
-    const date = new Date(2006, 6, 27, 13, 10, 10, 250);
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      const fmt = new DateTimeFormat('EEE, MMM d, yy');
-      assertEquals('Do., Juli 27, 06', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat('EEE, MMM d, yy');
+    assertEquals('Do., Juli 27, 06', fmt.format(date));
   },
 
   testEEEEMMMddyy() {
-    const date = new Date(2006, 6, 27, 13, 10, 10, 250);
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      const fmt = new DateTimeFormat('EEEE,MMMM dd, yyyy');
-      assertEquals('Donnerstag,Juli 27, 2006', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat('EEEE,MMMM dd, yyyy');
+    assertEquals('Donnerstag,Juli 27, 2006', fmt.format(date));
   },
 
   testyyyyMMddG() {
-    const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10, 250));
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      /** @suppress {checkTypes} suppression added to enable type checking */
-      const timeZone = TimeZone.createTimeZone(420, DateTimeSymbols_de);
-      const fmt = new DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
-      assertEquals(
-          '2006.07.27 n. Chr. at 06:10:10 Etc/GMT+7',
-          fmt.format(date, timeZone));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10, 250));
+    /** @suppress {checkTypes} suppression added to enable type checking */
+    const timeZone = TimeZone.createTimeZone(420, DateTimeSymbols_de);
+    const fmt = new DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
+    assertEquals(
+        '2006.07.27 n. Chr. at 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
   },
 
   testyyyyyMMMMM() {
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      let date = new Date(2006, 6, 27, 13, 10, 10, 250);
-      let fmt = new DateTimeFormat('yyyyy.MMMMM.dd GGG hh:mm aaa');
-      assertEquals('02006.J.27 n. Chr. 01:10 PM', fmt.format(date));
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    let fmt = new DateTimeFormat('yyyyy.MMMMM.dd GGG hh:mm aaa');
+    assertEquals('02006.J.27 n. Chr. 01:10 PM', fmt.format(date));
 
-      date = new Date(972, 11, 25, 13, 10, 10, 250);
-      fmt = new DateTimeFormat('yyyyy.MMMMM.dd');
-      assertEquals('00972.D.25', fmt.format(date));
-    }
+    date = new Date(972, 11, 25, 13, 10, 10, 250);
+    fmt = new DateTimeFormat('yyyyy.MMMMM.dd');
+    assertEquals('00972.D.25', fmt.format(date));
   },
 
   testQQQQyy() {
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-
-      let date = new Date(2006, 0, 27, 13, 10, 10, 250);
-      const fmt = new DateTimeFormat('QQQQ yy');
-      assertEquals('1. Quartal 06', fmt.format(date));
-      date = new Date(2006, 1, 27, 13, 10, 10, 250);
-      assertEquals('1. Quartal 06', fmt.format(date));
-      date = new Date(2006, 2, 27, 13, 10, 10, 250);
-      assertEquals('1. Quartal 06', fmt.format(date));
-      date = new Date(2006, 3, 27, 13, 10, 10, 250);
-      assertEquals('2. Quartal 06', fmt.format(date));
-      date = new Date(2006, 4, 27, 13, 10, 10, 250);
-      assertEquals('2. Quartal 06', fmt.format(date));
-      date = new Date(2006, 5, 27, 13, 10, 10, 250);
-      assertEquals('2. Quartal 06', fmt.format(date));
-      date = new Date(2006, 6, 27, 13, 10, 10, 250);
-      assertEquals('3. Quartal 06', fmt.format(date));
-      date = new Date(2006, 7, 27, 13, 10, 10, 250);
-      assertEquals('3. Quartal 06', fmt.format(date));
-      date = new Date(2006, 8, 27, 13, 10, 10, 250);
-      assertEquals('3. Quartal 06', fmt.format(date));
-      date = new Date(2006, 9, 27, 13, 10, 10, 250);
-      assertEquals('4. Quartal 06', fmt.format(date));
-      date = new Date(2006, 10, 27, 13, 10, 10, 250);
-      assertEquals('4. Quartal 06', fmt.format(date));
-      date = new Date(2006, 11, 27, 13, 10, 10, 250);
-      assertEquals('4. Quartal 06', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 0, 27, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat('QQQQ yy');
+    assertEquals('1. Quartal 06', fmt.format(date));
+    date = new Date(2006, 1, 27, 13, 10, 10, 250);
+    assertEquals('1. Quartal 06', fmt.format(date));
+    date = new Date(2006, 2, 27, 13, 10, 10, 250);
+    assertEquals('1. Quartal 06', fmt.format(date));
+    date = new Date(2006, 3, 27, 13, 10, 10, 250);
+    assertEquals('2. Quartal 06', fmt.format(date));
+    date = new Date(2006, 4, 27, 13, 10, 10, 250);
+    assertEquals('2. Quartal 06', fmt.format(date));
+    date = new Date(2006, 5, 27, 13, 10, 10, 250);
+    assertEquals('2. Quartal 06', fmt.format(date));
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    assertEquals('3. Quartal 06', fmt.format(date));
+    date = new Date(2006, 7, 27, 13, 10, 10, 250);
+    assertEquals('3. Quartal 06', fmt.format(date));
+    date = new Date(2006, 8, 27, 13, 10, 10, 250);
+    assertEquals('3. Quartal 06', fmt.format(date));
+    date = new Date(2006, 9, 27, 13, 10, 10, 250);
+    assertEquals('4. Quartal 06', fmt.format(date));
+    date = new Date(2006, 10, 27, 13, 10, 10, 250);
+    assertEquals('4. Quartal 06', fmt.format(date));
+    date = new Date(2006, 11, 27, 13, 10, 10, 250);
+    assertEquals('4. Quartal 06', fmt.format(date));
   },
 
   testQQyyyy() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-      let date = new Date(2006, 0, 27, 13, 10, 10, 250);
-      const fmt = new DateTimeFormat('QQ yyyy');
-      assertEquals('Q1 2006', fmt.format(date));
-      date = new Date(2006, 1, 27, 13, 10, 10, 250);
-      assertEquals('Q1 2006', fmt.format(date));
-      date = new Date(2006, 2, 27, 13, 10, 10, 250);
-      assertEquals('Q1 2006', fmt.format(date));
-      date = new Date(2006, 3, 27, 13, 10, 10, 250);
-      assertEquals('Q2 2006', fmt.format(date));
-      date = new Date(2006, 4, 27, 13, 10, 10, 250);
-      assertEquals('Q2 2006', fmt.format(date));
-      date = new Date(2006, 5, 27, 13, 10, 10, 250);
-      assertEquals('Q2 2006', fmt.format(date));
-      date = new Date(2006, 6, 27, 13, 10, 10, 250);
-      assertEquals('Q3 2006', fmt.format(date));
-      date = new Date(2006, 7, 27, 13, 10, 10, 250);
-      assertEquals('Q3 2006', fmt.format(date));
-      date = new Date(2006, 8, 27, 13, 10, 10, 250);
-      assertEquals('Q3 2006', fmt.format(date));
-      date = new Date(2006, 9, 27, 13, 10, 10, 250);
-      assertEquals('Q4 2006', fmt.format(date));
-      date = new Date(2006, 10, 27, 13, 10, 10, 250);
-      assertEquals('Q4 2006', fmt.format(date));
-      date = new Date(2006, 11, 27, 13, 10, 10, 250);
-      assertEquals('Q4 2006', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 0, 27, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat('QQ yyyy');
+    assertEquals('Q1 2006', fmt.format(date));
+    date = new Date(2006, 1, 27, 13, 10, 10, 250);
+    assertEquals('Q1 2006', fmt.format(date));
+    date = new Date(2006, 2, 27, 13, 10, 10, 250);
+    assertEquals('Q1 2006', fmt.format(date));
+    date = new Date(2006, 3, 27, 13, 10, 10, 250);
+    assertEquals('Q2 2006', fmt.format(date));
+    date = new Date(2006, 4, 27, 13, 10, 10, 250);
+    assertEquals('Q2 2006', fmt.format(date));
+    date = new Date(2006, 5, 27, 13, 10, 10, 250);
+    assertEquals('Q2 2006', fmt.format(date));
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    assertEquals('Q3 2006', fmt.format(date));
+    date = new Date(2006, 7, 27, 13, 10, 10, 250);
+    assertEquals('Q3 2006', fmt.format(date));
+    date = new Date(2006, 8, 27, 13, 10, 10, 250);
+    assertEquals('Q3 2006', fmt.format(date));
+    date = new Date(2006, 9, 27, 13, 10, 10, 250);
+    assertEquals('Q4 2006', fmt.format(date));
+    date = new Date(2006, 10, 27, 13, 10, 10, 250);
+    assertEquals('Q4 2006', fmt.format(date));
+    date = new Date(2006, 11, 27, 13, 10, 10, 250);
+    assertEquals('Q4 2006', fmt.format(date));
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */
   testMMddyyyyHHmmsszzz() {
-    const date = new Date(2006, 6, 27, 13, 10, 10, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-      const fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
-      assertEquals(
-          '07/27/2006 13:10:10 ' + timezoneString(date), fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
+    assertEquals(
+        '07/27/2006 13:10:10 ' + timezoneString(date), fmt.format(date));
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */
   testMMddyyyyHHmmssZ() {
-    const date = new Date(2006, 6, 27, 13, 10, 10, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-      const fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-
-      assertEquals(
-          '07/27/2006 13:10:10 ' + timezoneStringRFC(date), fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
+    assertEquals(
+        '07/27/2006 13:10:10 ' + timezoneStringRFC(date), fmt.format(date));
   },
 
   testPatternMonthDayMedium() {
-    const date = new Date(2006, 6, 27, 13, 10, 10, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-
-      const fmt = new DateTimeFormat(DateTimePatterns_de.MONTH_DAY_MEDIUM);
-      assertEquals('27. Juli', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat(goog.i18n.DateTimePatterns.MONTH_DAY_MEDIUM);
+    assertEquals('27. Juli', fmt.format(date));
   },
 
   testPatternYearMonthNarrow() {
-    replacer.replace(goog, 'LOCALE', 'de');
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-    const date = new Date(2006, 6, 27, 13, 10, 10, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-
-      let fmt = new DateTimeFormat(DateTimePatterns_de.YEAR_MONTH_SHORT);
-      assertEquals('07.2006', fmt.format(date));
-      fmt = new DateTimeFormat(DateTimePatterns_de.YEAR_MONTH_ABBR);
-      assertEquals('Juli 2006', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat(goog.i18n.DateTimePatterns.YEAR_MONTH_SHORT);
+    assertEquals('07.2006', fmt.format(date));
   },
 
   testPatternDayOfWeekMonthDayMedium() {
-    const date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
 
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+    let fmt =
+        new DateTimeFormat(goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_MEDIUM);
+    assertEquals('Thu, Jul 27', fmt.format(date));
 
-      replacer.replace(goog, 'LOCALE', 'en');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
-      let fmt = new DateTimeFormat(DateTimePatterns.WEEKDAY_MONTH_DAY_MEDIUM);
-      assertEquals('Thu, Jul 27', fmt.format(date));
-
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-      replacer.replace(goog, 'LOCALE', 'de');
-      fmt = new DateTimeFormat(DateTimePatterns_de.WEEKDAY_MONTH_DAY_MEDIUM);
-      assertEquals('Do., 27. Juli', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    fmt =
+        new DateTimeFormat(goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_MEDIUM);
+    assertEquals('Do., 27. Juli', fmt.format(date));
   },
 
   testPatternDayOfWeekMonthDayYearMedium() {
-    const date = new Date(2012, 5, 28, 13, 10, 10, 250);
+    date = new Date(2012, 5, 28, 13, 10, 10, 250);
 
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+    let fmt = new DateTimeFormat(
+        goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_YEAR_MEDIUM);
+    assertEquals('Thu, Jun 28, 2012', fmt.format(date));
+    fmt = new DateTimeFormat(goog.i18n.DateTimePatterns.MONTH_DAY_YEAR_MEDIUM);
+    assertEquals('Jun 28, 2012', fmt.format(date));
 
-      replacer.replace(goog, 'LOCALE', 'en');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
-      let fmt =
-          new DateTimeFormat(DateTimePatterns_en.WEEKDAY_MONTH_DAY_YEAR_MEDIUM);
-      assertEquals('Thu, Jun 28, 2012', fmt.format(date));
-      fmt = new DateTimeFormat(DateTimePatterns_en.MONTH_DAY_YEAR_MEDIUM);
-      assertEquals('Jun 28, 2012', fmt.format(date));
-
-      replacer.replace(goog, 'LOCALE', 'sv');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_sv);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_sv);
-      fmt = new DateTimeFormat(DateTimePatterns.WEEKDAY_MONTH_DAY_YEAR_MEDIUM);
-      assertEquals('tors, juni 28, 2012', fmt.format(date));
-      fmt = new DateTimeFormat(DateTimePatterns.MONTH_DAY_YEAR_MEDIUM);
-      assertEquals('juni 28, 2012', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_sv;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_sv;
+    fmt = new DateTimeFormat(
+        goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_YEAR_MEDIUM);
+    assertEquals('tors 28 juni 2012', fmt.format(date));
+    fmt = new DateTimeFormat(goog.i18n.DateTimePatterns.MONTH_DAY_YEAR_MEDIUM);
+    assertEquals('28 juni 2012', fmt.format(date));
   },
 
   testMonthDayHourMinuteTimezone() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+    // Include various locales.
+    const date = new Date(2012, 5, 28, 13, 10, 10, 250);
+    const fmt = new DateTimeFormat(
+        goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+    assertEquals('Jun 28, 1:10 PM UTC-7', fmt.format(date));
 
-      // Include various locales.
-      replacer.replace(goog, 'LOCALE', 'en-US');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
-      const date = new Date(2012, 5, 28, 13, 10, 10, 250);
-      const fmt =
-          new DateTimeFormat(DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals('Jun 28, 1:10 PM UTC-7', fmt.format(date));
+    goog.i18n.DateTimePatterns = DateTimePatterns_sv;
+    const fmtSv = new DateTimeFormat(
+        goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+    assertEquals('28 Jun 13:10 UTC-7', fmtSv.format(date));
 
-      replacer.replace(goog, 'LOCALE', 'sv');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_sv);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_sv);
-      const fmtSv =
-          new DateTimeFormat(DateTimePatterns_sv.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals('28 juni 13:10 UTC-7', fmtSv.format(date));
+    goog.i18n.DateTimePatterns = DateTimePatterns_bg;
+    const fmtBg = new DateTimeFormat(
+        goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+    assertEquals('28.06, 13:10 ч. UTC-7', fmtBg.format(date));
 
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_bg);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_bg);
-      replacer.replace(goog, 'LOCALE', 'bg');
-      const fmtBg =
-          new DateTimeFormat(DateTimePatterns_bg.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals('28.06, 13:10 ч. UTC-7', fmtBg.format(date));
+    goog.i18n.DateTimePatterns = DateTimePatterns_zh_HK;
+    const fmtZhHk = new DateTimeFormat(
+        goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+    assertEquals('6月28日 PM1:10 [UTC-7]', fmtZhHk.format(date));
 
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_zh_HK);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_HK);
-      replacer.replace(goog, 'LOCALE', 'zh_HK');
-      const fmtZhHk =
-          new DateTimeFormat(DateTimePatterns_zh_HK.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals('6月28日 下午1:10 [UTC-7]', fmtZhHk.format(date));
+    // And with explicit timezone.
+    const timeZone = TimeZone.createTimeZone(-600);
+    assertEquals('6月29日 AM6:10 [UTC+10]', fmtZhHk.format(date, timeZone));
 
-      // And with explicit timezone.
-      const timeZone = TimeZone.createTimeZone(-600);
-      assertEquals('6月29日 上午6:10 [UTC+10]', fmtZhHk.format(date, timeZone));
+    // And some from the extended patterns.
+    /** @suppress {checkTypes} suppression added to enable type checking */
+    goog.i18n.DateTimePatterns = DateTimePatterns_en_XA;
+    const fmtEnXa = new DateTimeFormat(
+        goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+    assertEquals(
+        '[[Jun 28 one], [13:10 UTC-7 one two] one two]', fmtEnXa.format(date));
 
-      // And some from the extended patterns.
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en_XA);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_XA);
-      replacer.replace(goog, 'LOCALE', 'en_XA');
-      const fmtEnXa = new DateTimeFormat(
-          goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals(
-          '[[[Ĵûñ one] 28 one], [13:10 UTC-7 one two] one two]',
-          fmtEnXa.format(date));
-
-      replacer.replace(
-          goog.i18n, 'DateTimePatterns', DateTimePatterns_zh_Hant_TW);
-      replacer.replace(
-          goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_Hant_TW);
-      replacer.replace(goog, 'LOCALE', 'zh_Hant_TW');
-      const fmtZhHantTw = new DateTimeFormat(
-          goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals('6月28日 下午1:10 [UTC-7]', fmtZhHantTw.format(date));
-    }
+    /** @suppress {checkTypes} suppression added to enable type checking */
+    goog.i18n.DateTimePatterns = DateTimePatterns_zh_Hant_TW;
+    const fmtZhHantTw = new DateTimeFormat(
+        goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+    assertEquals('6月28日 PM1:10 [UTC-7]', fmtZhHantTw.format(date));
   },
 
   testQuote() {
-    const date = new Date(2006, 6, 27, 13, 10, 10, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-
-      let fmt = new DateTimeFormat('HH \'o\'\'clock\'');
-      assertEquals('13 o\'clock', fmt.format(date));
-      fmt = new DateTimeFormat('HH \'oclock\'');
-      assertEquals('13 oclock', fmt.format(date));
-      fmt = new DateTimeFormat('HH \'\'');
-      assertEquals('13 \'', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 250);
+    let fmt = new DateTimeFormat('HH \'o\'\'clock\'');
+    assertEquals('13 o\'clock', fmt.format(date));
+    fmt = new DateTimeFormat('HH \'oclock\'');
+    assertEquals('13 oclock', fmt.format(date));
+    fmt = new DateTimeFormat('HH \'\'');
+    assertEquals('13 \'', fmt.format(date));
   },
 
   testFractionalSeconds() {
-    for (let nativeMode of testECMAScriptOptions) {
-      let date = new Date(2006, 6, 27, 13, 10, 10, 256);
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 6, 27, 13, 10, 10, 256);
+    let fmt = new DateTimeFormat('s:S');
+    assertEquals('10:3', fmt.format(date));
+    fmt = new DateTimeFormat('s:SS');
+    assertEquals('10:26', fmt.format(date));
+    fmt = new DateTimeFormat('s:SSS');
+    assertEquals('10:256', fmt.format(date));
+    fmt = new DateTimeFormat('s:SSSS');
+    assertEquals('10:2560', fmt.format(date));
+    fmt = new DateTimeFormat('s:SSSSS');
+    assertEquals('10:25600', fmt.format(date));
 
-      let fmt = new DateTimeFormat('s:S');
-      assertEquals('10:3', fmt.format(date));
-      fmt = new DateTimeFormat('s:SS');
-      assertEquals('10:26', fmt.format(date));
-      fmt = new DateTimeFormat('s:SSS');
-      assertEquals('10:256', fmt.format(date));
-      fmt = new DateTimeFormat('s:SSSS');
-      assertEquals('10:2560', fmt.format(date));
-      fmt = new DateTimeFormat('s:SSSSS');
-      assertEquals('10:25600', fmt.format(date));
-
-      date = new Date(1960, 6, 27, 13, 10, 10, 256);
-      fmt = new DateTimeFormat('s:S');
-      assertEquals('10:3', fmt.format(date));
-      fmt = new DateTimeFormat('s:SS');
-      assertEquals('10:26', fmt.format(date));
-      fmt = new DateTimeFormat('s:SSS');
-      assertEquals('10:256', fmt.format(date));
-      fmt = new DateTimeFormat('s:SSSS');
-      assertEquals('10:2560', fmt.format(date));
-      fmt = new DateTimeFormat('s:SSSSS');
-      assertEquals('10:25600', fmt.format(date));
-    }
+    date = new Date(1960, 6, 27, 13, 10, 10, 256);
+    fmt = new DateTimeFormat('s:S');
+    assertEquals('10:3', fmt.format(date));
+    fmt = new DateTimeFormat('s:SS');
+    assertEquals('10:26', fmt.format(date));
+    fmt = new DateTimeFormat('s:SSS');
+    assertEquals('10:256', fmt.format(date));
+    fmt = new DateTimeFormat('s:SSSS');
+    assertEquals('10:2560', fmt.format(date));
+    fmt = new DateTimeFormat('s:SSSSS');
+    assertEquals('10:25600', fmt.format(date));
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */
   testPredefinedFormatter() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-      const date = new Date(2006, 7, 4, 13, 49, 24, 0);
-
-      let fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_DATE);
-      let result = removeLtrMarkers(fmt.format(date));
-      assertEquals('Freitag, 4. August 2006', result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_DATE);
-      result = removeLtrMarkers(fmt.format(date));
-      assertEquals('4. August 2006', result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATE);
-      result = removeLtrMarkers(fmt.format(date));
-      assertEquals('04.08.2006', result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
-      result = removeLtrMarkers(fmt.format(date));
-      let expected = '04.08.06';
-      assertEquals(expected, result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_TIME);
-      result = fmt.format(date);
-      let timezoneResult = timezoneString(date);
-      let theTime = '13:49:24';
-      expected = theTime + ' ' + timezoneResult;
-      let expected2 = theTime;
-      assertTrue(
-          'line 698 + result = ' + result,
-          expected === result || expected2 === result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_TIME);
-      result = fmt.format(date);
-      assertEquals('line 705', expected, result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_TIME);
-      result = removeLtrMarkers(fmt.format(date));
-      assertEquals('lines 707', theTime, result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_TIME);
-      result = removeLtrMarkers(fmt.format(date));
-      assertEquals('13:49', result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_DATETIME);
-      result = removeDirectionMarkers(fmt.format(date));
-      expected = nativeMode ? 'Freitag, 4. August 2006, 13:49:24 UTC-7' :
-                              'Freitag, 4. August 2006 um 13:49:24 UTC-7';
-      // TODO(user): Resolve timezone full name
-      assertEquals('line 719', expected, result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_DATETIME);
-      expected = (nativeMode ? '4. August 2006, 13:49:24 ' :
-                               '4. August 2006 um 13:49:24 ') +
-          timezoneResult;
-      result = removeDirectionMarkers(fmt.format(date));
-      assertEquals('line 725', expected, result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
-      // TODO(user): Why this difference?
-      expected = nativeMode ? '4. Aug. 2006, 13:49:24' : '04.08.2006, 13:49:24';
-      assertEquals(expected, fmt.format(date));
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME);
-      expected = nativeMode ? '4.8.06, 13:49' : '04.08.06, 13:49';
-      assertEquals(expected, fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    date = new Date(2006, 7, 4, 13, 49, 24, 0);
+    let fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_DATE);
+    assertEquals('Freitag, 4. August 2006', fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_DATE);
+    assertEquals('4. August 2006', fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATE);
+    assertEquals('04.08.2006', fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
+    assertEquals('04.08.06', fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_TIME);
+    assertEquals('13:49:24 ' + timezoneString(date), fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_TIME);
+    assertEquals('13:49:24 ' + timezoneString(date), fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_TIME);
+    assertEquals('13:49:24', fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_TIME);
+    assertEquals('13:49', fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_DATETIME);
+    assertEquals(
+        'Freitag, 4. August 2006 um 13:49:24 ' + timezoneString(date),
+        fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_DATETIME);
+    assertEquals(
+        '4. August 2006 um 13:49:24 ' + timezoneString(date), fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
+    assertEquals('04.08.2006, 13:49:24', fmt.format(date));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME);
+    assertEquals('04.08.06, 13:49', fmt.format(date));
   },
 
   testMMddyyyyHHmmssZSimpleTimeZone() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-
-      const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
-      const timeZone = TimeZone.createTimeZone(480);
-      let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-      assertEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZ');
-      assertEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZ');
-      assertEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZZ');
-      assertEquals('07/27/2006 05:10:10 GMT-08:00', fmt.format(date, timeZone));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
+    const timeZone = TimeZone.createTimeZone(480);
+    let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
+    assertEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZ');
+    assertEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZ');
+    assertEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZZ');
+    assertEquals('07/27/2006 05:10:10 GMT-08:00', fmt.format(date, timeZone));
   },
 
   testMMddyyyyHHmmssZCommonTimeZone() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-
-      let date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
-      const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
-      let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-      assertEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZ');
-      assertEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZ');
-      assertEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZZ');
-      assertEquals('07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
-
-      date = new Date(Date.UTC(2006, 1, 27, 13, 10, 10));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-      assertEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZ');
-      assertEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZ');
-      assertEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZZ');
-      assertEquals('02/27/2006 05:10:10 GMT-08:00', fmt.format(date, timeZone));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    let date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
+    const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
+    let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
+    assertEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZ');
+    assertEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZ');
+    assertEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZZ');
+    assertEquals('07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
+    date = new Date(Date.UTC(2006, 1, 27, 13, 10, 10));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
+    assertEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZ');
+    assertEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZ');
+    assertEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZZ');
+    assertEquals('02/27/2006 05:10:10 GMT-08:00', fmt.format(date, timeZone));
   },
 
   testMMddyyyyHHmmsszSimpleTimeZone() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-
-      const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
-      const timeZone = TimeZone.createTimeZone(420);
-      let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-      assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zz');
-      assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
-      assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-      assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
+    const timeZone = TimeZone.createTimeZone(420);
+    let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
+    assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zz');
+    assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
+    assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
+    assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
   },
 
   testMMddyyyyHHmmsszCommonTimeZone() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    let date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
+    let timeZone = TimeZone.createTimeZone(americaLosAngelesData);
+    let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
+    assertEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zz');
+    assertEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
+    assertEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
+    assertEquals(
+        '07/27/2006 06:10:10 Pacific Daylight Time',
+        fmt.format(date, timeZone));
+    date = new Date(Date.UTC(2006, 1, 27, 13, 10, 10));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
+    assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zz');
+    assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
+    assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
+    assertEquals(
+        '02/27/2006 05:10:10 Pacific Standard Time',
+        fmt.format(date, timeZone));
 
-      let date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
-      let timeZone = TimeZone.createTimeZone(americaLosAngelesData);
-      let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-      assertEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zz');
-      assertEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
-      assertEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-      assertEquals(
-          '07/27/2006 06:10:10 Pacific Daylight Time',
-          fmt.format(date, timeZone));
-      date = new Date(Date.UTC(2006, 1, 27, 13, 10, 10));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-      assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zz');
-      assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
-      assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-      assertEquals(
-          '02/27/2006 05:10:10 Pacific Standard Time',
-          fmt.format(date, timeZone));
-
-      timeZone = TimeZone.createTimeZone(europeBerlinData);
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-      assertEquals('02/27/2006 14:10:10 MEZ', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-      assertEquals(
-          '02/27/2006 14:10:10 Mitteleurop\u00e4ische Zeit',
-          fmt.format(date, timeZone));
-    }
+    timeZone = TimeZone.createTimeZone(europeBerlinData);
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
+    assertEquals('02/27/2006 14:10:10 MEZ', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
+    assertEquals(
+        '02/27/2006 14:10:10 Mitteleurop\u00e4ische Zeit',
+        fmt.format(date, timeZone));
   },
 
   testMMddyyyyHHmmssvCommonTimeZone() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-
-      const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
-      const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
-      let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss v');
-      assertEquals(
-          '07/27/2006 06:10:10 America/Los_Angeles',
-          fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vv');
-      assertEquals(
-          '07/27/2006 06:10:10 America/Los_Angeles',
-          fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvv');
-      assertEquals(
-          '07/27/2006 06:10:10 America/Los_Angeles',
-          fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvvv');
-      assertEquals(
-          '07/27/2006 06:10:10 America/Los_Angeles',
-          fmt.format(date, timeZone));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
+    const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
+    let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss v');
+    assertEquals(
+        '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vv');
+    assertEquals(
+        '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvv');
+    assertEquals(
+        '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvvv');
+    assertEquals(
+        '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
   },
 
   testMMddyyyyHHmmssvSimpleTimeZone() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-
-      const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
-      const timeZone = TimeZone.createTimeZone(420);
-      let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss v');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vv');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvv');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvvv');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
+    const timeZone = TimeZone.createTimeZone(420);
+    let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss v');
+    assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vv');
+    assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvv');
+    assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvvv');
+    assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
   },
 
   testMMddyyyyHHmmssVCommonTimeZone() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-
-      const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
-      const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
-      let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss V');
-      assertEquals(
-          '07/27/2006 06:10:10 America/Los_Angeles',
-          fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VV');
-      assertEquals(
-          '07/27/2006 06:10:10 America/Los_Angeles',
-          fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVV');
-      assertEquals(
-          '07/27/2006 06:10:10 Los Angeles Time', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVVV');
-      assertEquals(
-          '07/27/2006 06:10:10 Los Angeles Time', fmt.format(date, timeZone));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
+    const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
+    let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss V');
+    assertEquals(
+        '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VV');
+    assertEquals(
+        '07/27/2006 06:10:10 America/Los_Angeles', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVV');
+    assertEquals(
+        '07/27/2006 06:10:10 Los Angeles Time', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVVV');
+    assertEquals(
+        '07/27/2006 06:10:10 Los Angeles Time', fmt.format(date, timeZone));
   },
 
   testMMddyyyyHHmmssVSimpleTimeZone() {
-    replacer.replace(goog, 'LOCALE', 'de');
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
-      const timeZone = TimeZone.createTimeZone(420);
-      let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss V');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VV');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVV');
-      assertEquals('07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVVV');
-      assertEquals('07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
+    const timeZone = TimeZone.createTimeZone(420);
+    let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss V');
+    assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VV');
+    assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVV');
+    assertEquals('07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVVV');
+    assertEquals('07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
   },
 
   test_yyyyMMddG() {
-    replacer.replace(goog, 'LOCALE', 'de');
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
     const date = new Date(Date.UTC(2006, 6, 27, 20, 10, 10));
+    let timeZone = TimeZone.createTimeZone(420);
+    let fmt = new DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
+    assertEquals(
+        '2006.07.27 n. Chr. at 13:10:10 Etc/GMT+7', fmt.format(date, timeZone));
 
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      let timeZone = TimeZone.createTimeZone(420);
-      let fmt = new DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
-      assertEquals(
-          '2006.07.27 n. Chr. at 13:10:10 Etc/GMT+7',
-          fmt.format(date, timeZone));
-
-      timeZone = TimeZone.createTimeZone(americaLosAngelesData);
-      fmt = new DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
-      assertEquals(
-          '2006.07.27 n. Chr. at 13:10:10 America/Los_Angeles',
-          fmt.format(date, timeZone));
-    }
+    timeZone = TimeZone.createTimeZone(americaLosAngelesData);
+    fmt = new DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
+    assertEquals(
+        '2006.07.27 n. Chr. at 13:10:10 America/Los_Angeles',
+        fmt.format(date, timeZone));
   },
 
   test_daylightTimeTransition() {
-    replacer.replace(goog, 'LOCALE', 'de');
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
 
     // US PST transition to PDT on 2006/4/2/ 2:00am, jump to 2006/4/2 3:00am,
     // That's UTC time 2006/4/2 10:00am
@@ -974,459 +684,283 @@ testSuite({
   },
 
   test_timeDisplayOnDaylighTimeTransition() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
 
-      // US PST transition to PDT on 2006/4/2/ 2:00am, jump to 2006/4/2 3:00am,
-      let date = new Date(Date.UTC(2006, 4 - 1, 2, 2, 30, 0));
-      const timeZone = TimeZone.createTimeZone(0);
-      let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-      assertEquals('04/02/2006 02:30:00 +0000', fmt.format(date, timeZone));
+    // US PST transition to PDT on 2006/4/2/ 2:00am, jump to 2006/4/2 3:00am,
+    let date = new Date(Date.UTC(2006, 4 - 1, 2, 2, 30, 0));
+    const timeZone = TimeZone.createTimeZone(0);
+    let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
+    assertEquals('04/02/2006 02:30:00 +0000', fmt.format(date, timeZone));
 
-      // US PDT transition to PST on 2006/10/29/ 2:00am, jump back to PDT
-      // 2006/4/2 1:00am,
-      date = new Date(Date.UTC(2006, 10 - 1, 29, 1, 30, 0));
-      fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-      assertEquals('10/29/2006 01:30:00 +0000', fmt.format(date, timeZone));
-    }
+    // US PDT transition to PST on 2006/10/29/ 2:00am, jump back to PDT
+    // 2006/4/2 1:00am,
+    date = new Date(Date.UTC(2006, 10 - 1, 29, 1, 30, 0));
+    fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
+    assertEquals('10/29/2006 01:30:00 +0000', fmt.format(date, timeZone));
   },
 
   testTimeDisplayOnDaylightTimeTransitionDayChange() {
     // NOTE: this test is a regression test only if the test browser has an OS
     // timezone of PST. While the test should still work in other timezones, it
     // does not serve as a regression test in them.
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
 
-      replacer.replace(goog, 'LOCALE', 'de');
-
-      // Time is 2015/11/01 3:00:01am after US PDT -> PST. 11:00:01am UTC.
-      const date = new Date(Date.UTC(2015, 11 - 1, 1, 11, 0, 1));
-      // Convert to GMT-12, across DST transition.
-      // The date should also change, but does not change when subtracting 4
-      // hours from PST/PDT due to the extra hour from switching DST.
-      const timeZone = TimeZone.createTimeZone(12 * 60);
-      const fmt = new DateTimeFormat('yyyy/MM/dd HH:mm:ss Z');
-      // Regression test: this once returned 2015/11/01 instead.
-      assertEquals('2015/10/31 23:00:01 -1200', fmt.format(date, timeZone));
-    }
+    // Time is 2015/11/01 3:00:01am after US PDT -> PST. 11:00:01am UTC.
+    const date = new Date(Date.UTC(2015, 11 - 1, 1, 11, 0, 1));
+    // Convert to GMT-12, across DST transition.
+    // The date should also change, but does not change when subtracting 4 hours
+    // from PST/PDT due to the extra hour from switching DST.
+    const timeZone = TimeZone.createTimeZone(12 * 60);
+    const fmt = new DateTimeFormat('yyyy/MM/dd HH:mm:ss Z');
+    // Regression test: this once returned 2015/11/01 instead.
+    assertEquals('2015/10/31 23:00:01 -1200', fmt.format(date, timeZone));
   },
 
   test_nativeDigits_fa() {
-    const date = new Date(2006, 7 - 1, 27, 13, 10, 10, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'fa');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_fa);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fa);
+    goog.i18n.DateTimePatterns = DateTimePatterns_fa;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_fa;
 
-      const timeZone = TimeZone.createTimeZone(420);
-      let fmt = new DateTimeFormat('y/MM/dd H:mm:ss٫SS');
-      assertEquals('۲۰۰۶/۰۷/۲۷ ۱۳:۱۰:۱۰٫۲۵', fmt.format(date));
+    date = new Date(2006, 7 - 1, 27, 13, 10, 10, 250);
+    const timeZone = TimeZone.createTimeZone(420);
+    let fmt = new DateTimeFormat('y/MM/dd H:mm:ss٫SS');
+    assertEquals('۲۰۰۶/۰۷/۲۷ ۱۳:۱۰:۱۰٫۲۵', fmt.format(date));
 
-      // Make sure standardized timezone formats don't use native digits
-      fmt = new DateTimeFormat('Z');
-      assertEquals('-0700', fmt.format(date, timeZone));
-    }
+    // Make sure standardized timezone formats don't use native digits
+    fmt = new DateTimeFormat('Z');
+    assertEquals('-0700', fmt.format(date, timeZone));
   },
 
   test_nativeDigits_ar() {
-    const date = new Date(2006, 7 - 1, 27, 13, 10, 10, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'ar_EG');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_ar_EG);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ar_EG);
+    goog.i18n.DateTimePatterns = DateTimePatterns_ar_EG;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_ar_EG;
 
-      const timeZone = TimeZone.createTimeZone(420);
-      let fmt = new DateTimeFormat('y/MM/dd H:mm:ss٫SS');
-      assertEquals('٢٠٠٦/٠٧/٢٧ ١٣:١٠:١٠٫٢٥', fmt.format(date));
+    date = new Date(2006, 7 - 1, 27, 13, 10, 10, 250);
+    const timeZone = TimeZone.createTimeZone(420);
+    let fmt = new DateTimeFormat('y/MM/dd H:mm:ss٫SS');
+    assertEquals('٢٠٠٦/٠٧/٢٧ ١٣:١٠:١٠٫٢٥', fmt.format(date));
 
-      fmt = new DateTimeFormat(11);
-      let result = fmt.format(date);
-      const hasAsciiDigit = /[0-9]/.test(result);
-      assertFalse('No ASCII digits = ' + result, hasAsciiDigit);
+    fmt = new DateTimeFormat(11);
+    assertEquals('٢٧\u200f/٧\u200f/٢٠٠٦, ١:١٠ م', fmt.format(date));
 
-      // Make sure standardized timezone formats don't use native digits
-      fmt = new DateTimeFormat('Z');
-      assertEquals('-0700', fmt.format(date, timeZone));
-    }
+    // Make sure standardized timezone formats don't use native digits
+    fmt = new DateTimeFormat('Z');
+    assertEquals('-0700', fmt.format(date, timeZone));
   },
 
   test_enforceAsciiDigits_ar() {
-    const date = new Date(2006, 7 - 1, 27, 13, 10, 10, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      replacer.replace(goog, 'LOCALE', 'ar_EG');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_ar_EG);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ar_EG);
+    goog.i18n.DateTimePatterns = DateTimePatterns_ar_EG;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_ar_EG;
 
-      DateTimeFormat.setEnforceAsciiDigits(true);
-      const timeZone = TimeZone.createTimeZone(420);
-      let fmt = new DateTimeFormat('y/MM/dd H:mm:ss٫SS');
-      assertEquals('2006/07/27 13:10:10٫25', fmt.format(date));
+    DateTimeFormat.setEnforceAsciiDigits(true);
+    date = new Date(2006, 7 - 1, 27, 13, 10, 10, 250);
+    const timeZone = TimeZone.createTimeZone(420);
+    let fmt = new DateTimeFormat('y/MM/dd H:mm:ss٫SS');
+    assertEquals('2006/07/27 13:10:10٫25', fmt.format(date));
 
-      fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME);
-      let result = fmt.format(date);
-      const hasArabicDigit = /[\u0660-\u0669]/.test(result);
-      assertFalse('Expect only ASCII = ' + result, hasArabicDigit);
+    fmt = new DateTimeFormat(11);
+    assertEquals('27/7/2006, 1:10 م', fmt.format(date));
 
-      // Remove LTR, RTL markers
-      result = result.replace(/\u200e/g, '').replace(/\u200f/g, '');
-
-      // Make sure standardized timezone formats don't use native digits
-      fmt = new DateTimeFormat('Z');
-      assertEquals('-0700', fmt.format(date, timeZone));
-
-      // Check with another locale.
-      replacer.replace(goog, 'LOCALE', 'my');
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_my);
-      fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME);
-      result = fmt.format(date);
-      const hasMyanmarDigit = /[\u1040-\u1049]/.test(result);
-      assertFalse('No Myamnar digit = ' + result, hasMyanmarDigit);
-    }
+    // Make sure standardized timezone formats don't use native digits
+    fmt = new DateTimeFormat('Z');
+    assertEquals('-0700', fmt.format(date, timeZone));
   },
 
   // Making sure that the date-time combination is not a simple concatenation
   test_dateTimeConcatenation() {
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
-    replacer.replace(goog, 'LOCALE', 'en');
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-
-      const date = new Date(Date.UTC(2006, 4 - 1, 2, 2, 30, 0));
-      const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
-
-      let fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_DATETIME);
-
-      let result = fmt.format(date, timeZone);
-      let expect =
-          'Saturday, April 1, 2006 at 6:30:00 PM Pacific Standard Time';
-
-      if (nativeMode) {
-        // Browsers vary in actual format details.
-        expect = expect.replace(' at', ',');
-      }
-      assertEquals(expect, result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_DATETIME);
-      result = fmt.format(date, timeZone);
-      expect = 'April 1, 2006 at 6:30:00 PM PST';
-      if (nativeMode) {
-        expect = expect.replace(' at', ',');
-      }
-      assertEquals(expect, result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
-      expect = 'Apr 1, 2006, 6:30:00 PM';
-      result = removeLtrMarkers(fmt.format(date, timeZone));
-      assertEquals('MEDIUME_DATETIME = ' + result, expect, result);
-
-      fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME);
-      expect = '4/1/06, 6:30 PM';
-      assertEquals(
-          'SHORT_DATETIME = ' + result, expect, fmt.format(date, timeZone));
-    }
+    const date = new Date(Date.UTC(2006, 4 - 1, 2, 2, 30, 0));
+    const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
+    let fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_DATETIME);
+    // {1} 'at' {0}
+    assertEquals(
+        'Saturday, April 1, 2006 at 6:30:00 PM Pacific Standard Time',
+        fmt.format(date, timeZone));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_DATETIME);
+    assertEquals('April 1, 2006 at 6:30:00 PM PST', fmt.format(date, timeZone));
+    // {1}, {0}
+    fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
+    assertEquals('Apr 1, 2006, 6:30:00 PM', fmt.format(date, timeZone));
+    fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME);
+    assertEquals('4/1/06, 6:30 PM', fmt.format(date, timeZone));
   },
 
   testNotUsingGlobalSymbols() {
-    const date = new Date(2013, 10, 15);
+    date = new Date(2013, 10, 15);
 
+    goog.i18n.DateTimePatterns = DateTimePatterns_fr;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_fr;
+    const fmtFr = new DateTimeFormat(DateTimeFormat.Format.FULL_DATE);
 
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    const fmtDe = new DateTimeFormat(DateTimeFormat.Format.FULL_DATE);
 
-      replacer.replace(goog, 'LOCALE', 'fr');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_fr);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fr);
-      const fmtFr = new DateTimeFormat(DateTimeFormat.Format.FULL_DATE);
-
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-      const fmtDe = new DateTimeFormat(DateTimeFormat.Format.FULL_DATE);
-
-      // The two formatters should return different results (French & German)
-      // Remove LTR marks if present.
-      const frResult = fmtFr.format(date).replace(/\u200c/g, '');
-      assertEquals('vendredi 15 novembre 2013', frResult);
-      const deResult = fmtDe.format(date).replace(/\u200c/g, '');
-      assertEquals('Freitag, 15. November 2013', deResult);
-    }
+    // The two formatters should return different results (French & German)
+    assertEquals('vendredi 15 novembre 2013', fmtFr.format(date));
+    assertEquals('Freitag, 15. November 2013', fmtDe.format(date));
   },
 
   testConstructorSymbols() {
-    const date = new Date(2013, 10, 15);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+    date = new Date(2013, 10, 15);
 
-      replacer.replace(goog, 'LOCALE', 'fr');
-      const fmtFr = new DateTimeFormat(
-          DateTimeFormat.Format.FULL_DATE, DateTimeSymbols_fr);
+    const fmtFr =
+        new DateTimeFormat(DateTimeFormat.Format.FULL_DATE, DateTimeSymbols_fr);
 
-      replacer.replace(goog, 'LOCALE', 'de');
-      const fmtDe = new DateTimeFormat(
-          DateTimeFormat.Format.FULL_DATE, DateTimeSymbols_de);
+    const fmtDe =
+        new DateTimeFormat(DateTimeFormat.Format.FULL_DATE, DateTimeSymbols_de);
 
-      // The two formatters should return different results (French & German)
-      // Remove LTR marks if present.
-      let expected = '‎vendredi 15 novembre 2013'.replace(/\u200e/g, '');
-      const frResult =
-          fmtFr.format(date).replace(/\u200c/g, '').replace(/\u200e/g, '');
-      assertEquals(expected, frResult);
-      expected = 'Freitag, 15. November 2013'.replace(/\u200e/g, '');
-      const deResult =
-          fmtDe.format(date).replace(/\u200c/g, '').replace(/\u200e/g, '');
-      assertEquals(expected, deResult);
-    }
+    // The two formatters should return different results (French & German)
+    assertEquals('vendredi 15 novembre 2013', fmtFr.format(date));
+    assertEquals('Freitag, 15. November 2013', fmtDe.format(date));
   },
 
   testQuotedPattern() {
     // Regression test for b/29990921.
-    const date = new Date(2013, 10, 15);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_en;
+    date = new Date(2013, 10, 15);
 
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
-
-      // Literal apostrophe
-      let fmt = new DateTimeFormat('MMM \'\'yy');
-      assertEquals('Nov \'13', fmt.format(date));
-      // Quoted text
-      fmt = new DateTimeFormat('MMM dd\'th\' yyyy');
-      assertEquals('Nov 15th 2013', fmt.format(date));
-      // Quoted text (only opening apostrophe)
-      fmt = new DateTimeFormat('MMM dd\'th yyyy');
-      assertEquals('Nov 15th yyyy', fmt.format(date));
-      // Quoted text with literal apostrophe
-      fmt = new DateTimeFormat('MMM dd\'th\'\'\'');
-      assertEquals('Nov 15th\'', fmt.format(date));
-      // Quoted text with literal apostrophe (only opening apostrophe)
-      fmt = new DateTimeFormat('MMM dd\'th\'\'');
-      assertEquals('Nov 15th\'', fmt.format(date));
-    }
+    // Literal apostrophe
+    let fmt = new DateTimeFormat('MMM \'\'yy');
+    assertEquals('Nov \'13', fmt.format(date));
+    // Quoted text
+    fmt = new DateTimeFormat('MMM dd\'th\' yyyy');
+    assertEquals('Nov 15th 2013', fmt.format(date));
+    // Quoted text (only opening apostrophe)
+    fmt = new DateTimeFormat('MMM dd\'th yyyy');
+    assertEquals('Nov 15th yyyy', fmt.format(date));
+    // Quoted text with literal apostrophe
+    fmt = new DateTimeFormat('MMM dd\'th\'\'\'');
+    assertEquals('Nov 15th\'', fmt.format(date));
+    // Quoted text with literal apostrophe (only opening apostrophe)
+    fmt = new DateTimeFormat('MMM dd\'th\'\'');
+    assertEquals('Nov 15th\'', fmt.format(date));
   },
 
   testSupportForWeekInYear() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      const date = new Date(2013, 1, 25);
+    const date = new Date(2013, 1, 25);
 
-      replacer.replace(goog, 'LOCALE', 'fr');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_fr);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fr);
-      let fmt = new DateTimeFormat('\'week\' w');
-      assertEquals('week 9', fmt.format(date));
-      fmt = new DateTimeFormat('\'week\' ww');
-      assertEquals('week 09', fmt.format(date));
+    goog.i18n.DateTimePatterns = DateTimePatterns_fr;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_fr;
+    let fmt = new DateTimeFormat('\'week\' w');
+    assertEquals('week 9', fmt.format(date));
+    fmt = new DateTimeFormat('\'week\' ww');
+    assertEquals('week 09', fmt.format(date));
 
-      // Make sure it uses native digits when needed
-      replacer.replace(goog, 'LOCALE', 'fa');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_fa);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fa);
-      fmt = new DateTimeFormat('\'week\' w');
-      assertEquals('week ۹', fmt.format(date));
-      fmt = new DateTimeFormat('\'week\' ww');
-      assertEquals('week ۰۹', fmt.format(date));
-    }
+    // Make sure it uses native digits when needed
+    goog.i18n.DateTimePatterns = DateTimePatterns_fa;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_fa;
+    fmt = new DateTimeFormat('\'week\' w');
+    assertEquals('week ۹', fmt.format(date));
+    fmt = new DateTimeFormat('\'week\' ww');
+    assertEquals('week ۰۹', fmt.format(date));
   },
 
   testSupportYearOfWeek() {
-    replacer.replace(goog, 'LOCALE', 'fr');
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-      const date = new Date(2005, 0, 2);
+    const date = new Date(2005, 0, 2);
 
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_fr);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fr);
-      let fmt = new DateTimeFormat('YYYY');
-      assertEquals('2004', fmt.format(date));
-      fmt = new DateTimeFormat('YY');
-      assertEquals('04', fmt.format(date));
-    }
+    goog.i18n.DateTimePatterns = DateTimePatterns_fr;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_fr;
+    let fmt = new DateTimeFormat('YYYY');
+    assertEquals('2004', fmt.format(date));
+    fmt = new DateTimeFormat('YY');
+    assertEquals('04', fmt.format(date));
   },
 
   testSupportForYearAndEra() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+    const date = new Date(2013, 1, 25);
+    let fmt = new DateTimeFormat(goog.i18n.DateTimePatterns.YEAR_FULL_WITH_ERA);
 
-      replacer.replace(goog, 'LOCALE', 'en');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
-      const date = new Date(2013, 1, 25);
-      let fmt = new DateTimeFormat(DateTimePatterns.YEAR_FULL_WITH_ERA);
+    assertEquals('2013 AD', fmt.format(date));
 
-      assertEquals('2013 AD', fmt.format(date));
+    date.setFullYear(213);
+    assertEquals('213 AD', fmt.format(date));
 
-      date.setFullYear(213);
-      assertEquals('213 AD', fmt.format(date));
+    date.setFullYear(11);
+    assertEquals('11 AD', fmt.format(date));
 
-      date.setFullYear(11);
-      assertEquals('11 AD', fmt.format(date));
+    date.setFullYear(-213);
+    assertEquals('213 BC', fmt.format(date));
 
-      date.setFullYear(-213);
-      assertEquals('213 BC', fmt.format(date));
+    goog.i18n.DateTimePatterns = DateTimePatterns_de;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_de;
+    fmt = new DateTimeFormat(goog.i18n.DateTimePatterns.YEAR_FULL_WITH_ERA);
 
-      replacer.replace(goog, 'LOCALE', 'de');
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
-      fmt = new DateTimeFormat(DateTimePatterns_de.YEAR_FULL_WITH_ERA);
+    date.setFullYear(2013);
+    assertEquals('2013 n. Chr.', fmt.format(date));
 
-      date.setFullYear(2013);
-      assertEquals('2013 n. Chr.', fmt.format(date));
+    date.setFullYear(213);
+    assertEquals('213 n. Chr.', fmt.format(date));
 
-      date.setFullYear(213);
-      assertEquals('213 n. Chr.', fmt.format(date));
+    date.setFullYear(11);
+    assertEquals('11 n. Chr.', fmt.format(date));
 
-      date.setFullYear(11);
-      assertEquals('11 n. Chr.', fmt.format(date));
+    date.setFullYear(-213);
+    assertEquals('213 v. Chr.', fmt.format(date));
 
-      date.setFullYear(-213);
-      assertEquals('213 v. Chr.', fmt.format(date));
+    goog.i18n.DateTimePatterns = DateTimePatterns_ja;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_ja;
+    fmt = new DateTimeFormat(goog.i18n.DateTimePatterns.YEAR_FULL_WITH_ERA);
 
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_ja);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ja);
-      fmt = new DateTimeFormat(DateTimePatterns_ja.YEAR_FULL_WITH_ERA);
+    date.setFullYear(2013);
+    assertEquals('西暦2013年', fmt.format(date));
 
-      date.setFullYear(2013);
-      assertEquals('西暦2013年', fmt.format(date));
+    date.setFullYear(213);
+    assertEquals('西暦213年', fmt.format(date));
 
-      date.setFullYear(213);
-      assertEquals('西暦213年', fmt.format(date));
+    date.setFullYear(11);
+    assertEquals('西暦11年', fmt.format(date));
 
-      date.setFullYear(11);
-      assertEquals('西暦11年', fmt.format(date));
-
-      date.setFullYear(-213);
-      assertEquals('紀元前213年', fmt.format(date));
-    }
+    date.setFullYear(-213);
+    assertEquals('紀元前213年', fmt.format(date));
   },
 
   // Expected results from ICU4J v51. One entry will change in v52.
   // These cover all combinations of FIRSTDAYOFWEEK / FIRSTWEEKCUTOFFDAY in use.
   testWeekInYearI18n() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_bn_BD);
-      assertEquals('bn_BD', '১১১১১২২', weekInYearFor7Days());
-
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_IE);
-      assertEquals('en_IE', '1111112', weekInYearFor7Days());
-
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fr_DJ);
-      assertEquals('fr_DJ', '1111222', weekInYearFor7Days());
-
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_he_IL);
-      assertEquals('he_IL', '1111122', weekInYearFor7Days());
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ar_SA);
-      assertEquals('ar_SA', '١١١١١٢٢', weekInYearFor7Days());
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ar_AE);
-      assertEquals('ar_AE', '١١١١٢٢٢', weekInYearFor7Days());
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_IN);
-      assertEquals('en_IN', '1111122', weekInYearFor7Days());
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_GB);
-      assertEquals('en_GB', '1111112', weekInYearFor7Days());
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_US);
-      assertEquals('en_US', '1111122', weekInYearFor7Days());
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ro_RO);
-      assertEquals('ro_RO', '1111112', weekInYearFor7Days());
-    }
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_bn_BD;
+    assertEquals('bn_BD', '১১১১১২২', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_en_IE;
+    assertEquals('en_IE', '1111112', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_fr_DJ;
+    assertEquals('fr_DJ', '1111222', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_he_IL;
+    assertEquals('he_IL', '1111122', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_ar_SA;
+    assertEquals('ar_SA', '١١١١١٢٢', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_ar_AE;
+    assertEquals('ar_AE', '١١١١٢٢٢', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_en_IN;
+    assertEquals('en_IN', '1111122', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_en_GB;
+    assertEquals('en_GB', '1111112', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_en_US;
+    assertEquals('en_US', '1111122', weekInYearFor7Days());
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_ro_RO;
+    assertEquals('ro_RO', '1111112', weekInYearFor7Days());
   },
 
   // Regression for b/11567443 (no method 'getHours' when formatting a
   // goog.date.Date)
   test_variousDateTypes() {
-    replacer.replace(goog, 'LOCALE', 'fr');
-    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_fr);
-    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fr);
+    goog.i18n.DateTimePatterns = DateTimePatterns_fr;
+    goog.i18n.DateTimeSymbols = DateTimeSymbols_fr;
 
+    const fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
 
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+    const date = new Date(2006, 6, 27, 13, 10, 42, 250);
+    assertEquals('27 juil. 2006, 13:10:42', fmt.format(date));
 
-      const fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
+    const gdatetime = new DateTime(2006, 6, 27, 13, 10, 42, 250);
+    assertEquals('27 juil. 2006, 13:10:42', fmt.format(gdatetime));
 
-      const date = new Date(2006, 6, 27, 13, 10, 42, 250);
-      let expected = '27 juil. 2006, 13:10:42';
-      let alternate = '27 juil. 2006 à 13:10:42';
-      let result = removeLtrMarkers(fmt.format(date));
-
-      // Some browsers use the alternate form.
-      if (nativeMode) {
-        assertTrue(
-            'Native 27 juil = ' + result,
-            expected === result || alternate === result);
-      } else {
-        // Polyfill mode
-        assertEquals(expected, result);
-      }
-
-      const gdatetime = new DateTime(2006, 6, 27, 13, 10, 42, 250);
-      expected = '27 juil. 2006, 13:10:42';
-      alternate = '27 juil. 2006 à 13:10:42';
-      result = removeLtrMarkers(fmt.format(gdatetime));
-
-      if (nativeMode) {
-        assertTrue(
-            'gdatetime MEDIUM_DATETIME juil. result = ' + result,
-            expected === result || alternate === result);
-      } else {
-        assertEquals(expected, result);
-      }
-
-      const gdate = new DateDate(2006, 6, 27);
-      const fmtDate = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATE);
-
-      expected = '27 juil. 2006';
-      alternate = removeDirectionMarkers('27/07/2006');
-      result = removeDirectionMarkers(fmtDate.format(gdatetime));
-
-      assertTrue(
-          'gdate MEDIUM_DATE = ' + result,
-          result === expected || result === alternate);
-
-      if (!nativeMode) {
-        try {
-          fmt.format(gdate);
-          fail('Should have thrown exception.');
-        } catch (e) {
-        }
-      } else {
-        // Native mode returns midnight without explicit time set.
-        // Make better match to remove commas.
-        const result = removeDirectionMarkers(fmt.format(gdate))
-                           .replace(/[\u002c\u060c]/g, '');
-        expected = '27 juil. 2006 0:00:00';
-        const alternate = '27 juil. 2006 à 00:00:00';
-        const alternate2 = '27 juil. 2006 à 0:00:00';
-        const alternate3 = '27 juil. 2006 00:00:00';
-        assertTrue(
-            'Midnight result = ' + result,
-            result === expected || result === alternate ||
-                result === alternate2 || result === alternate3);
-      }
+    const gdate = new DateDate(2006, 6, 27);
+    const fmtDate = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATE);
+    assertEquals('27 juil. 2006', fmtDate.format(gdatetime));
+    try {
+      fmt.format(gdate);
+      fail('Should have thrown exception.');
+    } catch (e) {
     }
   },
 
@@ -1438,241 +972,4 @@ testSuite({
     } catch (e) {
     }
   },
-
-  testNativeModeEnglishStdPatterns() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(goog, 'LOCALE', 'en-US');
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-
-      const fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
-
-      assertEquals(10, DateTimeFormat.Format.MEDIUM_DATETIME);
-
-      const date = new Date(2006, 6, 27, 13, 10, 42, 250);
-      let result = fmt.format(date);
-      let expected = 'Jul 27, 2006, 1:10:42 PM';
-      result = removeLtrMarkers(result);
-      let matched =
-          /Jul 27, 2006(,)? 1:10:42 PM/.test(result);  // Optional comma
-      assertTrue('Expected match = ' + result, matched);
-
-      const gdatetime = new DateTime(2006, 6, 27, 13, 10, 42, 250);
-
-      result = removeLtrMarkers(fmt.format(gdatetime));
-      matched = /Jul 27, 2006(,)? 1:10:42 PM/.test(result);  // Optional comma
-      if (matched) {
-        assertTrue(matched);
-      } else {
-        assertEquals('Jul 27, 2006, 1:10:42 PM', result);
-      }
-
-      const fmtDate = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATE);
-      result = removeDirectionMarkers(fmtDate.format(gdatetime));
-      expected = 'Jul 27, 2006';
-      assertEquals(expected, result);
-
-      const fmt0 = new DateTimeFormat(DateTimeFormat.Format.FULL_DATE);
-      result = removeDirectionMarkers(fmt0.format(gdatetime));
-      assertEquals('Thursday, July 27, 2006', result);
-
-      const fmt1 = new DateTimeFormat(DateTimeFormat.Format.SHORT_TIME);
-      result = removeDirectionMarkers(fmt1.format(gdatetime));
-      assertEquals('1:10 PM', result);
-
-      const fmt2 = new DateTimeFormat(DateTimeFormat.Format.FULL_DATETIME);
-      result = removeDirectionMarkers(fmt2.format(gdatetime));
-
-      if (nativeMode) {
-        expected = 'Thursday, July 27, 2006, 1:10:42 PM PDT';
-        let expected2 = 'Thursday, July 27, 2006 1:10:42 PM';
-        assert(expected == result || expected2 == result);
-      } else {
-        expected = 'Thursday, July 27, 2006 at 1:10:42 PM UTC-7';
-        assertEquals(expected, result);
-      }
-
-      const fmt3 = new DateTimeFormat(DateTimeFormat.Format.LONG_DATE);
-      result = removeDirectionMarkers(fmt3.format(gdatetime));
-      assertEquals('July 27, 2006', result);
-    }
-  },
-
-  test_FrenchPatternStrings() {
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_fr);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fr);
-      replacer.replace(goog, 'LOCALE', 'fr');
-
-      const fmt = new DateTimeFormat(DateTimePatterns_fr.YEAR_FULL);
-
-      const date = new Date(2006, 6, 27, 13, 10, 42, 250);
-      let result = fmt.format(date);
-      assertEquals('2006', result);
-
-      const fmt1 = new DateTimeFormat(DateTimePatterns_fr.YEAR_FULL_WITH_ERA);
-      result = fmt1.format(date);
-      assertEquals('2006 ap. J.-C.', result);
-
-      const fmt2 = new DateTimeFormat(DateTimePatterns_fr.MONTH_DAY_SHORT);
-      result = fmt2.format(date);
-      assertEquals('27/07', result);
-
-      const fmt3 =
-          new DateTimeFormat(DateTimePatterns_fr.MONTH_DAY_TIME_ZONE_SHORT);
-      result = fmt3.format(date);
-      assertEquals('27 juil., 13:10 UTC-7', result);
-    }
-  },
-
-  test_NativeModeWithUnsupportedLocale() {
-    setNativeMode(true);
-    if (goog.global.Intl == undefined ||
-        goog.global.Intl.DateTimeFormat == undefined) {
-      return;
-    }
-
-    // Sumerian will default to English.
-    replacer.replace(goog, 'LOCALE', 'sux');
-
-    const nativeSetting = getNativeMode();
-    assert(nativeSetting);
-
-    const fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
-
-    const date = new Date(2006, 6, 27, 13, 10, 42, 250);
-    let result = removeLtrMarkers(fmt.format(date)).replace(/2006,/g, '2006');
-    assertEquals('Jul 27, 2006 1:10:42 PM', result);
-
-    const fmt1 = new DateTimeFormat(DateTimePatterns.YEAR_FULL);
-
-    result = fmt1.format(date);
-    assertEquals('2006', result);
-  },
-
-  testNonAsciiDigitsNative() {
-    const date = new Date(2006, 6, 27, 13, 10, 42, 250);
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-
-      // Arabic with ASCII
-      replacer.replace(goog, 'LOCALE', 'ar');
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ar);
-      const ar = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
-      let expected = removeDirectionMarkers('27‏/7‏/2006');
-      let result = removeDirectionMarkers(ar.format(date));
-      assertEquals('ar', expected, result);
-
-      // Egyptian Arabic
-      replacer.replace(goog, 'LOCALE', 'ar-EG');
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ar_EG);
-      const ar_EG = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
-      expected = '٢٧‏/٧‏/٢٠٠٦';
-      let expected2 = '٢٧‏/٠٧‏/٢٠٠٦';  // Zero digit in month
-      result = ar_EG.format(date);
-      result = removeDirectionMarkers(result);
-      assertTrue(
-          'ar-EG',
-          removeDirectionMarkers(expected) == removeDirectionMarkers(result) ||
-              removeDirectionMarkers(expected2) ==
-                  removeDirectionMarkers(result));
-
-      // Bengali
-      replacer.replace(goog, 'LOCALE', 'bn');
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_bn);
-      const bn = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
-      expected = '২৭/৭/০৬';
-      result = bn.format(date);
-      assertEquals('bn', expected, result);
-
-      replacer.replace(goog, 'LOCALE', 'bn_BD');
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_bn);
-      const bn_BD = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
-      result = bn_BD.format(date);
-      assertEquals('bn_BD', expected, result);
-
-      // Persian / Farsi
-      replacer.replace(goog, 'LOCALE', 'fa');
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fa);
-      const fa = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
-      expected =
-          removeDirectionMarkers('۲۰۰۶/۷/۲۷');  // Different from Arabic digits
-      result = removeDirectionMarkers(fa.format(date));
-      assertEquals('Farsi digits result = ' + result, expected, result);
-
-      // Malayalam
-      replacer.replace(goog, 'LOCALE', 'ml');
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ml);
-      const ml = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
-      expected = '27/7/06';
-      result = ml.format(date);
-      assertEquals('Malayalam digits result = ' + result, expected, result);
-
-      // Marathi
-      replacer.replace(goog, 'LOCALE', 'mr');
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_mr);
-      const mr = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
-      expected = '२७/७/०६';
-      result = mr.format(date);
-      assertEquals('Marathi digits result = ' + result, expected, result);
-
-      // Myanmar
-      replacer.replace(goog, 'LOCALE', 'my');
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_my);
-      const my = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
-      result = my.format(date);
-      expected = '၂၇-၀၇-၀၆';
-      let alternate = '၇/၂၇/၀၆';  // Chrome native gregorian
-      assertTrue(
-          'Myanmar digits = ' + result,
-          expected === result || alternate === result);
-
-      // Nepali
-      replacer.replace(goog, 'LOCALE', 'ne');
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ne);
-      const ne = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
-      result = ne.format(date);
-      expected = '०६/७/२७';
-      alternate = '७/२७/०६';  // Chrome native gregorian
-      assertTrue(
-          'Nepali digits = ' + result,
-          expected === result || alternate == result);
-    }
-  },
-
-  /** @suppress {checkTypes} suppression added to enable type checking */
-  testWebMapsDirectionsCase() {
-    // Verify that UTC and locale times are formatted for the correct timezone.
-
-    replacer.replace(goog, 'LOCALE', 'en');
-
-    const utcTime = UtcDateTime.fromIsoString('2010-01-01');
-    const localeTime = new Date('2010-01-01');
-    for (let nativeMode of testECMAScriptOptions) {
-      replacer.replace(
-          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
-
-      let fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_TIME);
-      let result = fmt.format(utcTime);
-      assertEquals('12:00 AM', result);
-
-      // Formatter needs to have its timzone changed.
-      // Change to non-UTC time
-      result = fmt.format(localeTime);
-      assertEquals('4:00 PM', result);
-
-      // Change back to UTC time
-      result = fmt.format(utcTime);
-      assertEquals('12:00 AM', result);
-
-      // Another change to non-UTC time
-      result = fmt.format(localeTime);
-      assertEquals('4:00 PM', result);
-    }
-  },
-
 });

@@ -101,12 +101,3 @@ exports.USE_ECMASCRIPT_I18N_NUMFORMAT =
 exports.USE_ECMASCRIPT_I18N_PLURALRULES =
     (!exports.ECMASCRIPT_INTL_OPT_OUT && goog.FEATURESET_YEAR >= 2021 &&
      exports.ECMASCRIPT_COMMON_LOCALES_2019);
-
-/**
- * @define {boolean} USE_ECMASCRIPT_I18N_DATETIMEF is evaluted to enable
- * ECMAScript support for Intl.DateTimeFormat support in
- * browsers based on the locale. Browsers that are considered include:
- * Chrome, Firefox, Edge, and Safari.
- */
-exports.USE_ECMASCRIPT_I18N_DATETIMEF =
-    (exports.USE_ECMASCRIPT_I18N && !exports.ECMASCRIPT_INTL_OPT_OUT);
