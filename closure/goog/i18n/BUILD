@@ -102,10 +102,14 @@ closure_js_library(
     name = "datetimeformat",
     srcs = ["datetimeformat.js"],
     deps = [
+        ":datetimepatterns",
         ":datetimesymbols",
+        ":localefeature",
+        ":nativelocaledigits",
         ":timezone",
         "//closure/goog/asserts",
         "//closure/goog/date",
+        "//closure/goog/date:utcdatetime",
         "//closure/goog/string",
     ],
 )
@@ -188,12 +192,18 @@ closure_js_library(
 )
 
 closure_js_library(
+    name = "nativelocaledigits",
+    srcs = ["nativelocaledigits.js"],
+)
+
+closure_js_library(
     name = "numberformat",
     srcs = ["numberformat.js"],
     deps = [
         ":compactnumberformatsymbols",
         ":currency",
         ":localefeature",
+        ":nativelocaledigits",
         ":numberformatsymbols",
         "//closure/goog/asserts",
         "//closure/goog/math",

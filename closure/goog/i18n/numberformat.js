@@ -18,6 +18,9 @@ goog.provide('goog.i18n.NumberFormat.Format');
 goog.require('goog.asserts');
 goog.require('goog.i18n.CompactNumberFormatSymbols');
 
+goog.require('goog.i18n.LocaleFeature');
+goog.require('goog.i18n.NativeLocaleDigits');
+
 goog.require('goog.i18n.NumberFormatSymbols');
 goog.require('goog.i18n.NumberFormatSymbolsType');
 goog.require('goog.i18n.NumberFormatSymbols_u_nu_latn');
@@ -25,6 +28,12 @@ goog.require('goog.i18n.currency');
 goog.require('goog.i18n.currency.CurrencyInfo');
 goog.require('goog.math');
 goog.require('goog.string');
+
+goog.scope(function() {
+
+// For referencing modules
+const LocaleFeature = goog.module.get('goog.i18n.LocaleFeature');
+const NativeLocaleDigits = goog.module.get('goog.i18n.NativeLocaleDigits');
 
 /**
  * Constructor of NumberFormat.
@@ -116,6 +125,7 @@ goog.i18n.NumberFormat = function(
    * goog.i18n.NumberFormat('#,##,###') should have [3,2] where 2 is the
    * repeated number group following a fixed number grouping of size 3.
    * @private {!Array<number>}
+   * @const
    */
   this.groupingArray_ = [];
 
@@ -135,7 +145,7 @@ goog.i18n.NumberFormat = function(
   this.baseFormattingNumber_ = null;
 
   // Original numeric pattern. Needed because JS modifies this.pattern_*/
-  /** @private {number} */
+  /** @const @private {number} */
   this.inputPattern_ = (typeof pattern === 'number') ? pattern : -1;
 
   /** @private {string} */
@@ -202,22 +212,6 @@ goog.i18n.NumberFormat.CompactStyle = {
  */
 goog.i18n.NumberFormat.enforceAsciiDigits_ = false;
 
-
-/**
- * Native digit codes in EMACScript Intl objects for locales
- * where native digits are prescribed and Intl data is
- * generally available.
- * @private
- */
-goog.i18n.NumberFormat.NativeLocaleDigits_ = {
-  'ar': 'latn',
-  'ar-EG': 'arab',
-  'bn': 'beng',
-  'fa': 'arabext',
-  'mr': 'deva',
-  'my': 'mymr',
-  'ne': 'deva'
-};
 /**
  * Set if the usage of Ascii digits in formatting should be enforced.
  * NOTE: This function must be called before constructing NumberFormat.
@@ -790,11 +784,11 @@ goog.i18n.NumberFormat.prototype.SetUpIntlFormatter_ = function(inputPattern) {
     if (goog.LOCALE) {
       locale = goog.LOCALE.replace('_', '-');
     }
-    if (!goog.i18n.NumberFormat.enforceAsciiDigits_ &&
-        locale in goog.i18n.NumberFormat.NativeLocaleDigits_) {
+    if (locale && !goog.i18n.NumberFormat.enforceAsciiDigits_ &&
+        (locale in NativeLocaleDigits.FormatWithLocaleDigits)) {
       // Sets native digits for same locales as polyfill.
       options.numberingSystem =
-          goog.i18n.NumberFormat.NativeLocaleDigits_[locale];
+          NativeLocaleDigits.FormatWithLocaleDigits[locale];
     }
     // This works with undefined locale or empty string.
     this.intlFormatter_ = new Intl.NumberFormat(locale, options);
@@ -1467,6 +1461,7 @@ goog.i18n.NumberFormat.prototype.getDigit_ = function(ch) {
  * A zero digit character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.PATTERN_ZERO_DIGIT_ = '0';
 
@@ -1475,6 +1470,7 @@ goog.i18n.NumberFormat.PATTERN_ZERO_DIGIT_ = '0';
  * A grouping separator character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.PATTERN_GROUPING_SEPARATOR_ = ',';
 
@@ -1483,6 +1479,7 @@ goog.i18n.NumberFormat.PATTERN_GROUPING_SEPARATOR_ = ',';
  * A decimal separator character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.PATTERN_DECIMAL_SEPARATOR_ = '.';
 
@@ -1491,6 +1488,7 @@ goog.i18n.NumberFormat.PATTERN_DECIMAL_SEPARATOR_ = '.';
  * A per mille character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.PATTERN_PER_MILLE_ = '\u2030';
 
@@ -1499,6 +1497,7 @@ goog.i18n.NumberFormat.PATTERN_PER_MILLE_ = '\u2030';
  * A percent character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.PATTERN_PERCENT_ = '%';
 
@@ -1507,6 +1506,7 @@ goog.i18n.NumberFormat.PATTERN_PERCENT_ = '%';
  * A digit character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.PATTERN_DIGIT_ = '#';
 
@@ -1515,6 +1515,7 @@ goog.i18n.NumberFormat.PATTERN_DIGIT_ = '#';
  * A separator character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.PATTERN_SEPARATOR_ = ';';
 
@@ -1523,6 +1524,7 @@ goog.i18n.NumberFormat.PATTERN_SEPARATOR_ = ';';
  * An exponent character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.PATTERN_EXPONENT_ = 'E';
 
@@ -1531,6 +1533,7 @@ goog.i18n.NumberFormat.PATTERN_EXPONENT_ = 'E';
  * A plus character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.PATTERN_PLUS_ = '+';
 
@@ -1539,6 +1542,7 @@ goog.i18n.NumberFormat.PATTERN_PLUS_ = '+';
  * A generic currency sign character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.PATTERN_CURRENCY_SIGN_ = '\u00A4';
 
@@ -1547,6 +1551,7 @@ goog.i18n.NumberFormat.PATTERN_CURRENCY_SIGN_ = '\u00A4';
  * A quote character.
  * @type {string}
  * @private
+ * @const
  */
 goog.i18n.NumberFormat.QUOTE_ = '\'';
 
@@ -1833,6 +1838,7 @@ goog.i18n.NumberFormat.FormattedPart;
 /**
  * The empty unit, corresponding to a base of 0.
  * @private {!goog.i18n.NumberFormat.CompactNumberUnit}
+ * @const
  */
 goog.i18n.NumberFormat.NULL_UNIT_ = {
   divisorBase: 0,
@@ -2138,3 +2144,4 @@ goog.i18n.NumberFormat.prototype.isCurrencyCodeBeforeValue = function() {
   // If not, we have bigger problems than this.
   return posCurrSymbol < posCurrValue;
 };
+});  // End of scope for module data
