@@ -25,7 +25,7 @@ closure_js_library(
     deps = [
         ":crypt",
         "//closure/goog/asserts",
-        "//closure/goog/string",
+        "//closure/goog/string:internal",
         "//closure/goog/useragent",
         "//closure/goog/useragent:product",
     ],

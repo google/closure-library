@@ -15,7 +15,7 @@
 goog.module('goog.labs.userAgent.platform');
 goog.module.declareLegacyNamespace();
 
-const googString = goog.require('goog.string');
+const googString = goog.require('goog.string.internal');
 const util = goog.require('goog.labs.userAgent.util');
 
 /**

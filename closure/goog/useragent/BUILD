@@ -73,7 +73,7 @@ closure_js_library(
         "//closure/goog/labs/useragent:platform",
         "//closure/goog/labs/useragent:util",
         "//closure/goog/reflect",
-        "//closure/goog/string",
+        "//closure/goog/string:internal",
     ],
 )
 

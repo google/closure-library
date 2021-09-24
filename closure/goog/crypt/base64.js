@@ -14,7 +14,7 @@ goog.provide('goog.crypt.base64');
 
 goog.require('goog.asserts');
 goog.require('goog.crypt');
-goog.require('goog.string');
+goog.require('goog.string.internal');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
@@ -84,7 +84,7 @@ goog.crypt.base64.paddingChars_ = '=.';
  */
 goog.crypt.base64.isPadding_ = function(char) {
   'use strict';
-  return goog.string.contains(goog.crypt.base64.paddingChars_, char);
+  return goog.string.internal.contains(goog.crypt.base64.paddingChars_, char);
 };
 
 
@@ -384,7 +384,7 @@ goog.crypt.base64.decodeStringInternal_ = function(input, pushByte) {
       if (b != null) {
         return b;  // Common case: decoded the char.
       }
-      if (!goog.string.isEmptyOrWhitespace(ch)) {
+      if (!goog.string.internal.isEmptyOrWhitespace(ch)) {
         throw new Error('Unknown base64 encoding at char: ' + ch);
       }
       // We encountered whitespace: loop around to the next input char.

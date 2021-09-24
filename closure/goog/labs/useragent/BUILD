@@ -40,7 +40,7 @@ closure_js_library(
     deps = [
         ":util",
         "//closure/goog/array",
-        "//closure/goog/string",
+        "//closure/goog/string:internal",
     ],
 )
 
@@ -58,7 +58,7 @@ closure_js_library(
     srcs = ["platform.js"],
     deps = [
         ":util",
-        "//closure/goog/string",
+        "//closure/goog/string:internal",
     ],
 )
 
