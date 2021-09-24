@@ -236,12 +236,6 @@ goog.dom.TextRangeIterator.prototype.nextValueOrThrow = function() {
   // Call the super function.
   return goog.dom.TextRangeIterator.superClass_.nextValueOrThrow.call(this);
 };
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- */
-goog.dom.TextRangeIterator.prototype.next =
-    goog.dom.TextRangeIterator.prototype.nextValueOrThrow;
 
 
 /**

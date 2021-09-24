@@ -284,13 +284,6 @@ goog.dom.TagIterator.prototype.nextValueOrThrow = function() {
   }
   return node;
 };
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- */
-goog.dom.TagIterator.prototype.next =
-    goog.dom.TagIterator.prototype.nextValueOrThrow;
-
 
 
 /**

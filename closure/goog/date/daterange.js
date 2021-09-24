@@ -420,9 +420,3 @@ goog.date.DateRange.Iterator.prototype.nextValueOrThrow = function() {
   this.nextDate_.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
   return rv;
 };
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- */
-goog.date.DateRange.Iterator.prototype.next =
-    goog.date.DateRange.Iterator.prototype.nextValueOrThrow;

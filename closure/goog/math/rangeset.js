@@ -400,12 +400,6 @@ goog.math.RangeSet.prototype.__iterator__ = function(opt_keys) {
     }
     return list[i++].clone();
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iterator.next = iterator.nextValueOrThrow.bind(iterator);
 
 
   return iterator;

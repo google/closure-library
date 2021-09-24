@@ -235,12 +235,6 @@ goog.storage.mechanism.IEUserData.prototype.__iterator__ = function(opt_keys) {
     }
     return value;
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  newIter.next = newIter.nextValueOrThrow.bind(newIter);
 
   return newIter;
 };

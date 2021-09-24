@@ -61,13 +61,6 @@ goog.dom.iter.SiblingIterator.prototype.nextValueOrThrow = function() {
   this.node_ = this.reverse_ ? node.previousSibling : node.nextSibling;
   return node;
 };
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- */
-goog.dom.iter.SiblingIterator.prototype.next =
-    goog.dom.iter.SiblingIterator.prototype.nextValueOrThrow;
-
 
 
 /**
@@ -129,9 +122,3 @@ goog.dom.iter.AncestorIterator.prototype.nextValueOrThrow = function() {
   this.node_ = node.parentNode;
   return node;
 };
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- */
-goog.dom.iter.AncestorIterator.prototype.next =
-    goog.dom.iter.AncestorIterator.prototype.nextValueOrThrow;

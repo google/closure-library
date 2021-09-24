@@ -554,12 +554,6 @@ goog.dom.MultiRangeIterator.prototype.nextValueOrThrow = function() {
     }
   }
 };
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- */
-goog.dom.MultiRangeIterator.prototype.next =
-    goog.dom.MultiRangeIterator.prototype.nextValueOrThrow;
 
 
 

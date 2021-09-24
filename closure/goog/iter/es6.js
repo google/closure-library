@@ -57,7 +57,7 @@ class ShimIterable {
     if (iter instanceof ShimIterableImpl || iter instanceof ShimGoogIterator ||
         iter instanceof ShimEs6Iterator) {
       return iter;
-    } else if (typeof iter.next == 'function') {
+    } else if (typeof iter.nextValueOrThrow == 'function') {
       return new ShimIterableImpl(
           () => wrapGoog(/** @type {!Iterator|!GoogIterator} */ (iter)));
     } else if (typeof iter[Symbol.iterator] == 'function') {
@@ -153,14 +153,6 @@ class ShimGoogIterator extends GoogIterator {
     const result = this.iter_.next();
     if (result.done) throw StopIteration;
     return result.value;
-  }
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  next() {
-    return ShimGoogIterator.prototype.nextValueOrThrow.call(this);
   }
 
 

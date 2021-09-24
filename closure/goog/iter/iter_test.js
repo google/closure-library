@@ -26,15 +26,6 @@ class ArrayIterator extends IterIterator {
     }
     return this.array_[this.current_++];
   }
-
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  next() {
-    throw new Error('Called next instead of nextValueOrThrow()!');
-  }
 }
 
 // Return the product of several arrays as an array
@@ -949,7 +940,7 @@ testSuite({
        * @return {VALUE} Any object or value
        */
       nextValueOrThrow() {
-        return super.next();
+        return super.nextValueOrThrow();
       }
 
       /**

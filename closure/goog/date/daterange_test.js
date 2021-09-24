@@ -230,7 +230,7 @@ testSuite({
     assertTrue('day 7', new DateDate(2008, 9, 8).equals(i.nextValueOrThrow()));
     assertTrue('day 8', new DateDate(2008, 9, 9).equals(i.nextValueOrThrow()));
     assertTrue('day 9', new DateDate(2008, 9, 10).equals(i.nextValueOrThrow()));
-    assertThrows('day 10', goog.bind(i.next, i));
+    assertThrows('day 10', goog.bind(i.nextValueOrThrow, i));
   },
 
   testContains() {

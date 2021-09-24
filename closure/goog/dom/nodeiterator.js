@@ -77,9 +77,3 @@ goog.dom.NodeIterator.prototype.nextValueOrThrow = function() {
 
   return this.node;
 };
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- */
-goog.dom.NodeIterator.prototype.next =
-    goog.dom.NodeIterator.prototype.nextValueOrThrow;

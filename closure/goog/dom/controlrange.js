@@ -520,12 +520,6 @@ goog.dom.ControlRangeIterator.prototype.nextValueOrThrow = function() {
   // Call the super function.
   return goog.dom.ControlRangeIterator.superClass_.nextValueOrThrow.call(this);
 };
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- */
-goog.dom.ControlRangeIterator.prototype.next =
-    goog.dom.ControlRangeIterator.prototype.nextValueOrThrow;
 
 
 

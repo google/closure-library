@@ -86,12 +86,6 @@ goog.storage.mechanism.PrefixedMechanism.prototype.__iterator__ = function(
     return opt_keys ? key.substr(selfObj.prefix_.length) :
                       selfObj.mechanism_.get(key);
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  newIter.next = newIter.nextValueOrThrow.bind(newIter);
 
   return newIter;
 };

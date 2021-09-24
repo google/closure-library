@@ -55,20 +55,6 @@ goog.iter.Iterator = function() {};
 /**
  * Returns the next value of the iteration.  This will throw the object
  * {@see goog.iter.StopIteration} when the iteration passes the end.
- * @return {VALUE} Any object or value.
- * @deprecated To ease migration to the ES6 Iteration Protocol, this method is
- *     now called `nextValueOrThrow`.
- */
-goog.iter.Iterator.prototype.next = function() {
-  'use strict';
-  // Explicitly do not call nextValueOrThrow via `this`, as with some subclass
-  // trees this can lead to incorrect results or infinite recursion.
-  return goog.iter.Iterator.prototype.nextValueOrThrow.call(this);
-};
-
-/**
- * Returns the next value of the iteration.  This will throw the object
- * {@see goog.iter.StopIteration} when the iteration passes the end.
  * @return {VALUE} Any object or value
  */
 goog.iter.Iterator.prototype.nextValueOrThrow = function() {
@@ -130,12 +116,6 @@ goog.iter.toIterator = function(iterable) {
         return like[i++];
       }
     };
-    /**
-     * TODO(user): Please do not remove - this will be cleaned up
-     * centrally.
-     * @override @see {!goog.iter.Iterator}
-     */
-    newIter.next = newIter.nextValueOrThrow.bind(newIter);
 
     return newIter;
   }
@@ -224,12 +204,6 @@ goog.iter.filter = function(iterable, f, opt_obj) {
       }
     }
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  newIter.next = newIter.nextValueOrThrow.bind(newIter);
 
   return newIter;
 };
@@ -300,12 +274,6 @@ goog.iter.range = function(startOrStop, opt_stop, opt_step) {
     start += step;
     return rv;
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  newIter.next = newIter.nextValueOrThrow.bind(newIter);
 
   return newIter;
 };
@@ -351,12 +319,6 @@ goog.iter.map = function(iterable, f, opt_obj) {
     var val = iterator.nextValueOrThrow();
     return f.call(opt_obj, val, undefined, iterator);
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  newIter.next = newIter.nextValueOrThrow.bind(newIter);
 
   return newIter;
 };
@@ -510,12 +472,6 @@ goog.iter.chainFromIterable = function(iterable) {
       }
     }
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
 
   return iter;
@@ -554,12 +510,6 @@ goog.iter.dropWhile = function(iterable, f, opt_obj) {
       return val;
     }
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  newIter.next = newIter.nextValueOrThrow.bind(newIter);
 
   return newIter;
 };
@@ -591,12 +541,6 @@ goog.iter.takeWhile = function(iterable, f, opt_obj) {
     }
     throw goog.iter.StopIteration;
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
   return iter;
 };
@@ -740,12 +684,6 @@ goog.iter.product = function(var_args) {
 
     throw goog.iter.StopIteration;
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
 
   return iter;
@@ -807,12 +745,6 @@ goog.iter.cycle = function(iterable) {
 
     return returnElement;
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
 
   return iter;
@@ -840,12 +772,6 @@ goog.iter.count = function(opt_start, opt_step) {
     counter += step;
     return returnValue;
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
 
   return iter;
@@ -864,12 +790,6 @@ goog.iter.repeat = function(value) {
   var iter = new goog.iter.Iterator();
 
   iter.nextValueOrThrow = goog.functions.constant(value);
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
 
   return iter;
@@ -897,12 +817,6 @@ goog.iter.accumulate = function(iterable) {
     total += iterator.nextValueOrThrow();
     return total;
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
 
   return iter;
@@ -937,12 +851,6 @@ goog.iter.zip = function(var_args) {
       });
       return arr;
     };
-    /**
-     * TODO(user): Please do not remove - this will be cleaned up
-     * centrally.
-     * @override @see {!goog.iter.Iterator}
-     */
-    iter.next = iter.nextValueOrThrow.bind(iter);
   }
 
   return iter;
@@ -996,12 +904,6 @@ goog.iter.zipLongest = function(fillValue, var_args) {
       }
       return arr;
     };
-    /**
-     * TODO(user): Please do not remove - this will be cleaned up
-     * centrally.
-     * @override @see {!goog.iter.Iterator}
-     */
-    iter.next = iter.nextValueOrThrow.bind(iter);
   }
 
   return iter;
@@ -1099,12 +1001,6 @@ goog.iter.GroupByIterator_.prototype.nextValueOrThrow = function() {
   this.targetKey = this.currentKey;
   return [this.currentKey, this.groupItems_(this.targetKey)];
 };
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- */
-goog.iter.GroupByIterator_.prototype.next =
-    goog.iter.GroupByIterator_.prototype.nextValueOrThrow;
 
 
 
@@ -1188,12 +1084,6 @@ goog.iter.starMap = function(iterable, f, opt_obj) {
     var args = goog.iter.toArray(iterator.nextValueOrThrow());
     return f.apply(opt_obj, goog.array.concat(args, undefined, iterator));
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
 
   return iter;
@@ -1245,12 +1135,6 @@ goog.iter.tee = function(iterable, opt_num) {
       goog.asserts.assert(!goog.array.isEmpty(buffer));
       return buffer.shift();
     };
-    /**
-     * TODO(user): Please do not remove - this will be cleaned up
-     * centrally.
-     * @override @see {!goog.iter.Iterator}
-     */
-    iter.next = iter.nextValueOrThrow.bind(iter);
 
 
     return iter;
@@ -1305,12 +1189,6 @@ goog.iter.limit = function(iterable, limitSize) {
     }
     throw goog.iter.StopIteration;
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
 
   return iter;
@@ -1458,12 +1336,6 @@ goog.iter.combinations = function(iterable, length) {
     return goog.array.map(
         sortedIndexIterator.nextValueOrThrow(), getIndexFromElements);
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
 
   return iter;
@@ -1512,12 +1384,6 @@ goog.iter.combinationsWithReplacement = function(iterable, length) {
         /** @type {!Array<number>} */
         (sortedIndexIterator.nextValueOrThrow()), getIndexFromElements);
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.next = iter.nextValueOrThrow.bind(iter);
 
 
   return iter;

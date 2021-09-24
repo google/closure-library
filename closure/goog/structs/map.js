@@ -529,12 +529,6 @@ goog.structs.Map.prototype.__iterator__ = function(opt_keys) {
     var key = selfObj.keys_[i++];
     return opt_keys ? key : selfObj.map_[key];
   };
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   */
-  newIter.next = newIter.nextValueOrThrow.bind(newIter);
 
   return newIter;
 };
