@@ -66,7 +66,16 @@ closure_js_library(
     name = "test_agents",
     testonly = 1,
     srcs = ["test_agents.js"],
-    deps = ["//closure/goog/debug:deepfreeze"],
+)
+
+closure_js_library(
+    name = "test_agentdata",
+    testonly = 1,
+    srcs = ["test_agentdata.js"],
+    deps = [
+        "//closure/goog/array",
+        "//closure/goog/debug:deepfreeze",
+    ],
 )
 
 closure_js_library(

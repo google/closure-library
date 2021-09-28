@@ -10,6 +10,7 @@ goog.module('goog.labs.userAgent.browserTest');
 goog.setTestOnly();
 
 const googObject = goog.require('goog.object');
+const testAgentData = goog.require('goog.labs.userAgent.testAgentData');
 const testAgents = goog.require('goog.labs.userAgent.testAgents');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgentBrowser = goog.require('goog.labs.userAgent.browser');
@@ -133,7 +134,7 @@ testSuite({
   },
 
   testOperaChromiumUserAgentData() {
-    util.setUserAgentData(testAgents.OPERACHROMIUM_USERAGENT_DATA);
+    util.setUserAgentData(testAgentData.OPERACHROMIUM_USERAGENT_DATA);
     assertBrowser(Browser.CHROME);
     assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.OPERA_CHROMIUM);
     assertFalse(userAgentBrowser.isOpera());
@@ -239,7 +240,7 @@ testSuite({
   },
 
   testEdgeChromiumUserAgentData() {
-    util.setUserAgentData(testAgents.EDGECHROMIUM_USERAGENT_DATA);
+    util.setUserAgentData(testAgentData.EDGECHROMIUM_USERAGENT_DATA);
     assertBrowser(Browser.CHROME);
     assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.EDGE_CHROMIUM);
     assertFalse(userAgentBrowser.isEdge());
@@ -320,7 +321,7 @@ testSuite({
   },
 
   testChromeUserAgentData() {
-    util.setUserAgentData(testAgents.CHROME_USERAGENT_DATA);
+    util.setUserAgentData(testAgentData.CHROME_USERAGENT_DATA);
     assertBrowser(Browser.CHROME);
     assertTrue(userAgentBrowser.isChrome());
   },
@@ -450,7 +451,7 @@ testSuite({
   },
 
   testIncompleteUserAgentData() {
-    util.setUserAgentData(testAgents.INCOMPLETE_USERAGENT_DATA);
+    util.setUserAgentData(testAgentData.INCOMPLETE_USERAGENT_DATA);
     util.setUserAgent(testAgents.CHROME_HEADLESS);
     assertBrowser(Browser.CHROME);
     assertTrue(userAgentBrowser.isChrome());
