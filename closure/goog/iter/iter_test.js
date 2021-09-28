@@ -942,17 +942,6 @@ testSuite({
       nextValueOrThrow() {
         return super.nextValueOrThrow();
       }
-
-      /**
-       * Returns the next value of the iteration.  This will throw the object
-       * {@see goog.iter.StopIteration} when the iteration passes the end.
-       * @return {VALUE} Any object or value.
-       * @deprecated To ease migration to the ES6 Iteration Protocol, this
-       *     method is now called `nextValueOrThrow`.
-       */
-      next() {
-        return ExtendedIterator.prototype.nextValueOrThrow.call(this);
-      }
     }
 
     // Without fixing base GoogIterator's next method to explicitly call the
