@@ -55,6 +55,7 @@ const NumberFormatSymbols_bn = goog.require('goog.i18n.NumberFormatSymbols_bn');
 const NumberFormatSymbols_de = goog.require('goog.i18n.NumberFormatSymbols_de');
 const NumberFormatSymbols_en = goog.require('goog.i18n.NumberFormatSymbols_en');
 const NumberFormatSymbols_en_AU = goog.require('goog.i18n.NumberFormatSymbols_en_AU');
+const NumberFormatSymbols_en_CA = goog.require('goog.i18n.NumberFormatSymbols_en_CA');
 const NumberFormatSymbols_en_US = goog.require('goog.i18n.NumberFormatSymbols_en_US');
 const NumberFormatSymbols_fa = goog.require('goog.i18n.NumberFormatSymbols_fa');
 const NumberFormatSymbols_ff_Adlm = goog.require('goog.i18n.NumberFormatSymbols_ff_Adlm');
@@ -673,18 +674,20 @@ testSuite({
 
   testCurrency() {
     for (let nativeMode of testECMAScriptOptions) {
-      stubs.replace(goog, 'LOCALE', 'en-CA');
       stubs.replace(NumberFormat, 'USE_ECMASCRIPT_I18N_NUMFORMAT', nativeMode);
+
+      stubs.replace(goog, 'LOCALE', 'en-CA');  // Canadian English
+      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_en_CA);
       let str;
       let matched;
 
+      // Native mode does not yet support string patterns.
       let fmt = new NumberFormat('\u00a4#,##0.00;-\u00a4#,##0.00');
       str = fmt.format(1234.56);
       assertEquals('$1,234.56', str);
       str = fmt.format(-1234.56);
       assertEquals('-$1,234.56', str);
 
-      // These with string patterns do not use native mode.
       fmt = new NumberFormat(
           '\u00a4#,##0.00;-\u00a4#,##0.00', 'USD',
           NumberFormat.CurrencyStyle.LOCAL);
@@ -692,6 +695,7 @@ testSuite({
       assertEquals('$1,234.56', str);
       str = fmt.format(-1234.56);
       assertEquals('-$1,234.56', str);
+
       fmt = new NumberFormat(
           '\u00a4#,##0.00;-\u00a4#,##0.00', 'USD',
           NumberFormat.CurrencyStyle.PORTABLE);
@@ -699,83 +703,30 @@ testSuite({
       assertEquals('US$1,234.56', str);
       str = fmt.format(-1234.56);
       assertEquals('-US$1,234.56', str);
+
       fmt = new NumberFormat(
           '\u00a4#,##0.00;-\u00a4#,##0.00', 'USD',
           NumberFormat.CurrencyStyle.GLOBAL);
       str = fmt.format(1234.56);
       assertEquals('USD $1,234.56', str);
+
       str = fmt.format(-1234.56);
       assertEquals('-USD $1,234.56', str);
-
-      // Try LOCAL, PORTABLE, GLOBAL CurrencyStyle options with standard
-      // patterns that excercise native mode.
-      fmt = new NumberFormat(
-          NumberFormat.Format.CURRENCY, 'USD',
-          NumberFormat.CurrencyStyle.LOCAL);
-      str = fmt.format(1234.56);
-      assertEquals('$1,234.56', str);
-
-      str = fmt.format(-1234.56);
-      assertEquals('-$1,234.56', str);
-
-      fmt = new NumberFormat(
-          NumberFormat.Format.CURRENCY, 'CAD',
-          NumberFormat.CurrencyStyle.LOCAL);
-      str = fmt.format(1234.56);
-      assertEquals('$1,234.56', str);
-
-      // Check for US English locale.
-      stubs.replace(goog, 'LOCALE', 'en-US');
-      // PORTABLE behaves differently between JavaScript and native
-      fmt = new NumberFormat(
-          NumberFormat.Format.CURRENCY, 'USD',
-          NumberFormat.CurrencyStyle.PORTABLE);
-      str = fmt.format(1234.56);
-      // Matches '(US)?$1,234.56' in locale en-US.
-      matched = /^(US)?\$1,234\.56$/.test(str);
-      assertTrue(matched);
-
-      fmt = new NumberFormat(
-          NumberFormat.Format.CURRENCY, 'CAD',
-          NumberFormat.CurrencyStyle.PORTABLE);
-      str = fmt.format(1234.56);
-      // Matches 'C(A)?$1,234.56' in locale en-US.
-      matched = /^C(A)?\$1,234\.56$/.test(str);
-      assertTrue(matched);
-
-      // Back to formatting for Canada.
-      stubs.replace(goog, 'LOCALE', 'en-CA');
-      fmt = new NumberFormat(
-          NumberFormat.Format.CURRENCY, 'USD',
-          NumberFormat.CurrencyStyle.PORTABLE);
-      str = fmt.format(1234.56);
-      // Matches 'US$1,234.56' as long as not in locale en-US.
-      matched = /^US\$1,234\.56$/.test(str);
-      assertTrue(matched);
-
-      str = fmt.format(-1234.56);
-      assertEquals('-US$1,234.56', str);
-
-      fmt = new NumberFormat(
-          NumberFormat.Format.CURRENCY, 'USD',
-          NumberFormat.CurrencyStyle.GLOBAL);
-      str = fmt.format(1234.56);
-
-      // ECMAScript result not same as Closure
-      // Expect 'USD 1,234.56' or 'USD $1,234.56'.
-      matched = /^USD\s\$?1,234\.56$/.test(str);
-      assertTrue(matched);
 
       str = fmt.format(-1234.56);
       // Expect '-USD 1,234.56' or '-USD $1,234.56'.
       matched = /^-USD\s(\$)?1,234\.56$/.test(str);
       assertTrue(matched);
 
-      // Note that custom patterns use JavaScript, not native ECMAScript
-      fmt = new NumberFormat('\u00a4\u00a4 #,##0.00;-\u00a4\u00a4 #,##0.00');
+      // Note that custom patterns use JavaScript, not native ECMAScript.
+      // Make
+      fmt = new NumberFormat(
+          '\u00a4\u00a4 #,##0.00;-\u00a4\u00a4 #,##0.00', 'USD');
       str = fmt.format(1234.56);
-      assertEquals('USD 1,234.56', str);
-      fmt = new NumberFormat('\u00a4\u00a4 #,##0.00;\u00a4\u00a4 -#,##0.00');
+
+      assertEquals('NativeMode = ' + nativeMode, 'USD 1,234.56', str);
+      fmt = new NumberFormat(
+          '\u00a4\u00a4 #,##0.00;\u00a4\u00a4 -#,##0.00', 'USD');
       str = fmt.format(-1234.56);
       assertEquals('USD -1,234.56', str);
 
@@ -805,6 +756,207 @@ testSuite({
       assertEquals('€1,234.56', str);
       str = fmt.format(-1234.56);
       assertEquals('-€1,234.56', str);
+    }
+  },
+
+  testLocaleCurrenciesLocal() {
+    for (let nativeMode of testECMAScriptOptions) {
+      stubs.replace(NumberFormat, 'USE_ECMASCRIPT_I18N_NUMFORMAT', nativeMode);
+
+      stubs.replace(goog, 'LOCALE', 'en-CA');  // Canadian English
+      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_en_CA);
+      let fmt = new NumberFormat('\u00a4#,##0.00;-\u00a4#,##0.00');
+      let str = fmt.format(1234.56);
+      assertEquals('$1,234.56', str);
+
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'CAD',
+          NumberFormat.CurrencyStyle.LOCAL);
+      str = fmt.format(1234.56);
+      assertEquals('$1,234.56', str);
+
+      // Other currency
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'USD',
+          NumberFormat.CurrencyStyle.LOCAL);
+      str = fmt.format(1234.56);
+      assertEquals('Native=' + nativeMode, '$1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'CAD',
+          NumberFormat.CurrencyStyle.LOCAL);
+      assertEquals('Native=' + nativeMode, '$1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'USD',
+          NumberFormat.CurrencyStyle.LOCAL);
+      assertEquals('Native=' + nativeMode, '$1,234.56', str);
+
+      // US Locale
+      stubs.replace(goog, 'LOCALE', 'en-US');  // American English
+      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_en_US);
+
+      fmt = new NumberFormat('\u00a4#,##0.00;-\u00a4#,##0.00');
+      str = fmt.format(1234.56);
+      assertEquals('$1,234.56', str);
+
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'CAD',
+          NumberFormat.CurrencyStyle.LOCAL);
+      str = fmt.format(1234.56);
+      assertEquals('$1,234.56', str);
+
+      // Other currency
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'CAD',
+          NumberFormat.CurrencyStyle.LOCAL);
+      str = fmt.format(1234.56);
+      assertEquals('$1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'CAD',
+          NumberFormat.CurrencyStyle.LOCAL);
+      assertEquals('Native=' + nativeMode, '$1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'USD',
+          NumberFormat.CurrencyStyle.LOCAL);
+      assertEquals('Native=' + nativeMode, '$1,234.56', str);
+    }
+  },
+
+  testLocaleCurrenciesPortable() {
+    for (let nativeMode of testECMAScriptOptions) {
+      stubs.replace(NumberFormat, 'USE_ECMASCRIPT_I18N_NUMFORMAT', nativeMode);
+
+      stubs.replace(goog, 'LOCALE', 'en-CA');  // Canadian English
+      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_en_CA);
+      let fmt = new NumberFormat('\u00a4#,##0.00;-\u00a4#,##0.00');
+      let str = fmt.format(1234.56);
+      assertEquals('$1,234.56', str);
+
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'CAD',
+          NumberFormat.CurrencyStyle.PORTABLE);
+      // Is this smart enough to match properly?
+      str = fmt.format(1234.56);
+      assertEquals('Native=' + nativeMode, 'C$1,234.56', str);
+
+      // Other currency - pattern mode does not understand how to handle this
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'USD',
+          NumberFormat.CurrencyStyle.PORTABLE);
+      str = fmt.format(1234.56);
+      assertEquals('Native=' + nativeMode, 'US$1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'CAD',
+          NumberFormat.CurrencyStyle.PORTABLE);
+      assertEquals('Native=' + nativeMode, 'US$1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'USD',
+          NumberFormat.CurrencyStyle.PORTABLE);
+      assertEquals('Native=' + nativeMode, 'US$1,234.56', str);
+
+      // US Locale
+      stubs.replace(goog, 'LOCALE', 'en-US');  // American English
+      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_en_US);
+
+      fmt = new NumberFormat('\u00a4#,##0.00;-\u00a4#,##0.00');
+      str = fmt.format(1234.56);
+      assertEquals('$1,234.56', str);
+
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'CAD',
+          NumberFormat.CurrencyStyle.PORTABLE);
+      // Is this smart enough to match properly?
+      str = fmt.format(1234.56);
+      assertEquals('C$1,234.56', str);
+
+      // Other currency
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'CAD',
+          NumberFormat.CurrencyStyle.PORTABLE);
+      str = fmt.format(1234.56);
+      assertEquals('C$1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'CAD',
+          NumberFormat.CurrencyStyle.PORTABLE);
+      assertEquals('Native=' + nativeMode, 'C$1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'USD',
+          NumberFormat.CurrencyStyle.PORTABLE);
+      assertEquals('Native=' + nativeMode, 'C$1,234.56', str);
+    }
+  },
+
+  testLocaleCurrenciesGlobal() {
+    for (let nativeMode of testECMAScriptOptions) {
+      stubs.replace(NumberFormat, 'USE_ECMASCRIPT_I18N_NUMFORMAT', nativeMode);
+
+      stubs.replace(goog, 'LOCALE', 'en-CA');  // Canadian English
+      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_en_CA);
+
+      let fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'CAD',
+          NumberFormat.CurrencyStyle.GLOBAL);
+      // Is this smart enough to match properly?
+      let str = fmt.format(1234.56);
+      assertEquals('Native=' + nativeMode, 'CAD $1,234.56', str);
+
+      // Other currency - pattern mode does not understand how to handle this
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'USD',
+          NumberFormat.CurrencyStyle.GLOBAL);
+      str = fmt.format(1234.56);
+      assertEquals('Native=' + nativeMode, 'USD $1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'CAD',
+          NumberFormat.CurrencyStyle.GLOBAL);
+      assertEquals('Native=' + nativeMode, 'USD $1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'USD',
+          NumberFormat.CurrencyStyle.GLOBAL);
+      assertEquals('Native=' + nativeMode, 'USD $1,234.56', str);
+
+      // US Locale
+      stubs.replace(goog, 'LOCALE', 'en-US');  // American English
+      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_en_US);
+
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'USD',
+          NumberFormat.CurrencyStyle.GLOBAL);
+      str = fmt.format(1234.56);
+      assertEquals('USD $1,234.56', str);
+
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'CAD',
+          NumberFormat.CurrencyStyle.GLOBAL);
+      // Is this smart enough to match properly?
+      str = fmt.format(1234.56);
+      assertEquals('CAD $1,234.56', str);
+
+      // Other currency
+      fmt = new NumberFormat(
+          '\u00a4#,##0.00;-\u00a4#,##0.00', 'CAD',
+          NumberFormat.CurrencyStyle.GLOBAL);
+      str = fmt.format(1234.56);
+      assertEquals('CAD $1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'CAD',
+          NumberFormat.CurrencyStyle.GLOBAL);
+      assertEquals('Native=' + nativeMode, 'CAD $1,234.56', str);
+
+      fmt = new NumberFormat(
+          NumberFormat.Format.CURRENCY, 'USD',
+          NumberFormat.CurrencyStyle.GLOBAL);
+      assertEquals('Native=' + nativeMode, 'CAD $1,234.56', str);
     }
   },
 
@@ -1629,6 +1781,7 @@ testSuite({
           goog.i18n, 'CompactNumberFormatSymbols',
           CompactNumberFormatSymbols_fr);
       stubs.replace(goog, 'LOCALE', 'fr');
+      stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_fr);
 
       let fmt = new NumberFormat(NumberFormat.Format.CURRENCY);
       assertFalse(fmt.isCurrencyCodeBeforeValue());
@@ -1775,25 +1928,21 @@ testSuite({
     for (let nativeMode of testECMAScriptOptions) {
       stubs.replace(NumberFormat, 'USE_ECMASCRIPT_I18N_NUMFORMAT', nativeMode);
 
+      stubs.replace(goog, 'LOCALE', 'pl');
       stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_pl);
 
       // Native mode formats LOCAL currencies differently from JavaScript.
       const fmPl = new NumberFormat(NumberFormat.Format.CURRENCY);
       let str = fmPl.format(100);
-      if (nativeMode) {
-        assertEquals('zł 100.00', str);  // local symbol before number
-      } else {
-        assertEquals('100,00\u00A0z\u0142', str);  // 100.00 zł
-      }
+      assertEquals(
+          'NativeMode = ' + nativeMode, '100,00\u00A0z\u0142',
+          str);  // 100.00 zł
 
+      stubs.replace(goog, 'LOCALE', 'ro');
       stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_ro);
       const fmRo = new NumberFormat(NumberFormat.Format.CURRENCY);
       str = fmRo.format(100);
-      if (nativeMode) {
-        assertEquals('lei 100.00', str);  // local symbol before number
-      } else {
-        assertEquals('100,00\u00A0RON', str);
-      }
+      assertEquals('100,00\u00A0RON', str);  // Same in native and polyfill
     }
   },
 

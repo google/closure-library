@@ -765,7 +765,7 @@ goog.i18n.NumberFormat.prototype.SetUpIntlFormatter_ = function(inputPattern) {
           options.currencyDisplay = 'code';
           break;
         case goog.i18n.NumberFormat.CurrencyStyle.LOCAL:
-          options.currencyDisplay = 'narrowSymbol';
+          options.currencyDisplay = 'symbol';
       }
       break;
     case goog.i18n.NumberFormat.Format.COMPACT_SHORT:
