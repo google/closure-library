@@ -13,6 +13,11 @@ tar xf "${KOKORO_GFILE_DIR}/node-${NODE_VERSION}-linux-x64.tar.xz"
 export PATH
 PATH="$(pwd)/node-${NODE_VERSION}-linux-x64/bin:${PATH}"
 
+# Install clang-format.
+
+tar xf "${KOKORO_GFILE_DIR}/clang+llvm-${CLANG_VERSION}-x86_64-linux-gnu-ubuntu-14.04.tar.xz"
+mv "clang+llvm-${CLANG_VERSION}-x86_64-linux-gnu-ubuntu-14.04" ../clang
+
 # Generate docs (without pushing them anywhere).
 
 export GH_PAGES
