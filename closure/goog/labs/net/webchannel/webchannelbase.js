@@ -53,6 +53,12 @@ const requestStats = goog.labs.net.webChannel.requestStats;
 const httpCors = goog.module.get('goog.net.rpc.HttpCors');
 
 /**
+ * @define {boolean} If WebChannel should compile with Origin Trial features.
+ */
+const ALLOW_ORIGIN_TRIAL_FEATURES =
+    goog.define('goog.net.webChannel.ALLOW_ORIGIN_TRIAL_FEATURES', true);
+
+/**
  * Gets an internal channel parameter in a type-safe way.
  *
  * @param {string} paramName the key of the parameter to fetch.
@@ -466,10 +472,10 @@ goog.labs.net.webChannel.WebChannelBase = function(
 
   /***
    * Whether to attempt Chrome Origin Trials as part of the handshake.
-   * @private {boolean}
+   * @private @const {boolean}
    */
-  this.enableOriginTrials_ =
-      !opt_options || opt_options.enableOriginTrials !== false;
+  this.enableOriginTrials_ = ALLOW_ORIGIN_TRIAL_FEATURES &&
+      (!opt_options || opt_options.enableOriginTrials !== false);
 };
 
 const WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
