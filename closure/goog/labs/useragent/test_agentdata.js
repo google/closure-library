@@ -95,6 +95,7 @@ exports.INCOMPLETE_USERAGENT_DATA = Object.freeze({
   brands: Object.freeze([]),
   mobile: false,
   getHighEntropyValues: getHighEntropyValuesMock,
+  platform: 'Unknown',
 });
 
 /** @const {!NavigatorUAData} */
@@ -106,6 +107,7 @@ exports.CHROME_USERAGENT_DATA_MOBILE = Object.freeze({
   ])),
   mobile: true,
   getHighEntropyValues: getHighEntropyValuesMock,
+  platform: 'Android',
 });
 
 /** @const {!NavigatorUAData} */
@@ -117,6 +119,7 @@ exports.CHROME_USERAGENT_DATA = Object.freeze({
   ])),
   mobile: false,
   getHighEntropyValues: getHighEntropyValuesMock,
+  platform: 'macOS',
 });
 
 /** @const {!NavigatorUAData} */
@@ -128,6 +131,7 @@ exports.OPERACHROMIUM_USERAGENT_DATA = Object.freeze({
   ])),
   mobile: false,
   getHighEntropyValues: getHighEntropyValuesMock,
+  platform: 'macOS',
 });
 
 /** @const {!NavigatorUAData} */
@@ -139,4 +143,5 @@ exports.EDGECHROMIUM_USERAGENT_DATA = Object.freeze({
   ])),
   mobile: false,
   getHighEntropyValues: getHighEntropyValuesMock,
+  platform: 'Windows',
 });
