@@ -1385,7 +1385,8 @@ goog.date.Date.prototype.toIsoString = function(opt_verbose, opt_tz) {
 goog.date.Date.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
   'use strict';
   var str = [
-    this.getUTCFullYear(), goog.string.padNumber(this.getUTCMonth() + 1, 2),
+    goog.string.padNumber(this.getUTCFullYear(), 4),
+    goog.string.padNumber(this.getUTCMonth() + 1, 2),
     goog.string.padNumber(this.getUTCDate(), 2)
   ];
 
