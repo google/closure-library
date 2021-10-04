@@ -119,6 +119,37 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     safeLinkRef = goog.html.SafeUrl.sanitize(url);
   }
 
+  /** @suppress {strictMissingProperties} */
+  const browserSupportsCoop = self.crossOriginIsolation !== undefined;
+  let referrerPolicy = 'strict-origin-when-cross-origin';
+  if (window.Request) {
+    /** @suppress {missingProperties} */
+    referrerPolicy = new Request('/').referrerPolicy;
+  }
+  const pageSetsUnsafeReferrerPolicy = referrerPolicy === 'unsafe-url';
+
+  // Opening popups with `noreferrer` and a COOP policy of
+  // `same-origin-allow-popups` doesn't work. The below is a workaround
+  // for this browser limitation.
+  if (browserSupportsCoop && opt_options['noreferrer']) {
+    if (pageSetsUnsafeReferrerPolicy) {
+      // If the browser supports COOP, and the page explicitly sets a
+      // referrer-policy of `unsafe-url`, and the caller requests that the
+      // referrer is hidden, then things may break. We can't support the
+      // noreferrer option in this case, but ignoring it is potentially unsafe
+      // since the page is configured to expose the full URL. We just throw in
+      // this case so that callers can make a decision as to what they want to
+      // do here.
+      throw new Error(
+          'Cannot use the noreferrer option on a page that sets a referrer-policy of `unsafe-url` in modern browsers!');
+    }
+    // Any browser that supports COOP defaults to a referrer policy that hides
+    // the full URL. So we don't need to explicitly hide the referrer ourselves
+    // and can instead rely on the browser's default referrer policy to hide the
+    // referrer.
+    opt_options['noreferrer'] = false;
+  }
+
   /** @suppress {missingProperties} loose references to 'target' */
   /** @suppress {strictMissingProperties} */
   var target = opt_options.target || linkRef.target;
@@ -208,7 +239,8 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
         // do the wrong thing in only rare cases.
         // ugh.
         if (goog.string.contains(sanitizedLinkRef, ';')) {
-          sanitizedLinkRef = "'" + sanitizedLinkRef.replace(/'/g, '%27') + "'";
+          sanitizedLinkRef =
+              '\'' + sanitizedLinkRef.replace(/'/g, '%27') + '\'';
         }
       }
       newWin.opener = null;
@@ -314,10 +346,11 @@ goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
  *
  * (If your project is using GXPs, consider using {@link PopUpLink.gxp}.)
  *
-* @param {?goog.html.SafeUrl|string|?Object} linkRef If an Object with an 'href'
- *     attribute (such as HTMLAnchorElement) is passed then the value of 'href'
- *     is used, otherwise  otherwise its toString method is called. Note that
- *     if a string|Object is used, it will be sanitized with SafeUrl.sanitize().
+ * @param {?goog.html.SafeUrl|string|?Object} linkRef If an Object with an
+ *     'href' attribute (such as HTMLAnchorElement) is passed then the value of
+ *     'href' is used, otherwise  otherwise its toString method is called. Note
+ *     that if a string|Object is used, it will be sanitized with
+ *     SafeUrl.sanitize().
  *
  * @param {?Object=} opt_options Options to open window with.
  *     {@see goog.window.open for exact option semantics}
