@@ -16,6 +16,7 @@ goog.provide('goog.iter.StopIteration');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.debug');
 goog.require('goog.functions');
 goog.require('goog.math');
 
@@ -59,6 +60,66 @@ goog.iter.Iterator = function() {};
  */
 goog.iter.Iterator.prototype.nextValueOrThrow = function() {
   throw goog.iter.StopIteration;
+};
+
+
+/**
+ * An ES6 Iteration protocol result indicating iteration has completed for an
+ *     iterator.
+ * @const {!IIterableResult<?>}
+ */
+goog.iter.ES6_ITERATOR_DONE = goog.debug.freeze({done: true, value: undefined});
+
+
+/**
+ * Wraps a VALUE in the ES6 Iterator protocol's IIterableResult container,
+ * including the compiler-mandated 'done' key, set to false.
+ * @param {VALUE} value
+ * @return {!IIterableResult<VALUE>} An ES6 Iteration Protocol compatible result
+ *     object, indicating iteration is not done.
+ * @template VALUE
+ */
+goog.iter.createEs6IteratorYield = function(value) {
+  return {value, done: false};
+};
+
+
+/**
+ * Converts an ES6 IIterableResult into ES4 iteration semantics. If the result
+ * indicates it is finished iterating, will throw `goog.iter.StopIteration`.
+ * Otherwise, will unwrap the IIterableResult's value and return that.
+ * @param {!IIterableResult<VALUE>} es6NextValue
+ * @return {VALUE}
+ * @template VALUE
+ */
+goog.iter.toEs4IteratorNext = function(es6NextValue) {
+  if (es6NextValue.done) {
+    throw goog.iter.StopIteration;
+  }
+  return es6NextValue.value;
+};
+
+
+/**
+ * Checks whether an error is the `goog.iter.StopIteration` error, and if so
+ * throws a different error that warns that using goog.iter.StopIteration is
+ * problematic. ES4 iteration allows `StopIteration` to propagate up the
+ * callstack and terminate iteration far from where it started, but ES6
+ * iteration requires explicit passing and handling of termination signals.
+ * @param {!Error} ex The error to check.
+ */
+goog.iter.checkNoImplicitStopIterationInEs6 = function(ex) {
+  // ONLY use this where StopIteration is thrown from callback functions -
+  // places where there is no way for the ES6 Iteration protocol to use the done
+  // value to signal iterator exhaustion / early termination of iteration.
+  if (ex === goog.iter.StopIteration) {
+    throw new Error(
+        'ES6 Iteration protocol does NOT adjust control flow when ' +
+        'StopIteration is thrown from callback helper functions. If your code' +
+        ' relies on this behavior, consider throwing a different error and ' +
+        'catching it to terminate iteration.');
+  }
+  throw ex;
 };
 
 

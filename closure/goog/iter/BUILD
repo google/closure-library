@@ -16,6 +16,7 @@ closure_js_library(
     deps = [
         "//closure/goog/array",
         "//closure/goog/asserts",
+        "//closure/goog/debug",
         "//closure/goog/functions",
         "//closure/goog/math",
     ],
