@@ -91,7 +91,14 @@ goog.global.CLOSURE_UNCOMPILED_DEFINES;
  *   var CLOSURE_DEFINES = {'goog.DEBUG': false} ;
  * </pre>
  *
- * @type {Object<string, (string|number|boolean)>|undefined}
+ * Currently the Closure Compiler will only recognize very simple definitions of
+ * this value when looking for values to apply to compiled code and ignore all
+ * other references.  Specifically, it looks the value defined at the variable
+ * declaration, as with the example above.
+ *
+ * TODO(user): Improve the recognized definitions.
+ *
+ * @type {!Object<string, (string|number|boolean)>|null|undefined}
  */
 goog.global.CLOSURE_DEFINES;
 
