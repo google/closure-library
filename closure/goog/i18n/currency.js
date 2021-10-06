@@ -144,7 +144,7 @@ goog.i18n.currency.getGlobalCurrencySign = function(currencyCode) {
  */
 goog.i18n.currency.getGlobalCurrencySignWithFallback = function(currencyCode) {
   'use strict';
-  var info = goog.i18n.currency.CurrencyInfo[currencyCode];
+  const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   if (!info) {
     return currencyCode;
   }
