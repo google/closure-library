@@ -1341,10 +1341,9 @@ goog.module.ModuleManager.prototype.visitDependencies_ = function(
       continue;
     }
     visited[id] = true;
-    const extraEdgeDeps =
-        this.extraEdges_[id] ? Object.keys(this.extraEdges_[id]) : [];
-    const deps = moduleInfo.getDependencies().concat(extraEdgeDeps);
-    this.visitDependencies_(deps, visitorFn, visitConditionFn, visited);
+    this.visitDependencies_(
+        moduleInfo.getDependencies() || [], visitorFn, visitConditionFn,
+        visited);
     visitorFn(moduleInfo);
   }
 };
