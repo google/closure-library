@@ -35,6 +35,14 @@ function productAsArray(var_args) {
 }
 
 testSuite({
+
+  testEs6Next() {
+    const iter = new IterIterator();
+    const nextVal = iter.next();
+    assertEquals(nextVal.done, true);
+    assertEquals(nextVal.value, undefined);
+  },
+
   testForEach() {
     let s = '';
     const iter = new ArrayIterator(['a', 'b', 'c', 'd']);
