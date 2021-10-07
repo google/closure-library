@@ -1093,13 +1093,17 @@ goog.string.repeat = (String.prototype.repeat) ? function(string, length) {
  */
 goog.string.padNumber = function(num, length, opt_precision) {
   'use strict';
-  const s =
+  let s =
       (opt_precision !== undefined) ? num.toFixed(opt_precision) : String(num);
   let index = s.indexOf('.');
-  if (index == -1) {
+  if (index === -1) {
     index = s.length;
   }
-  return goog.string.repeat('0', Math.max(0, length - index)) + s;
+  const sign = s[0] === '-' ? '-' : '';
+  if (sign) {
+    s = s.substring(1);
+  }
+  return sign + goog.string.repeat('0', Math.max(0, length - index)) + s;
 };
 
 

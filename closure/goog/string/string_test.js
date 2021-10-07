@@ -25,44 +25,6 @@ const testSuite = goog.require('goog.testing.testSuite');
 let stubs;
 let mockControl;
 
-//=== tests for goog.string.collapseWhitespace ===
-
-//=== tests for goog.string.isAlpha ===
-
-//=== tests for goog.string.isNumeric ===
-
-//=== tests for tests for goog.string.isAlphaNumeric ===
-
-//== tests for goog.string.isBreakingWhitespace ===
-
-//=== tests for goog.string.isSpace ===
-
-// === tests for goog.string.stripNewlines ===
-
-// === tests for goog.string.canonicalizeNewlines ===
-
-// === tests for goog.string.normalizeWhitespace ===
-
-// === tests for goog.string.normalizeSpaces ===
-
-/// === tests for goog.string.trim ===
-
-/// === tests for goog.string.trimLeft ===
-
-/// === tests for goog.string.trimRight ===
-
-// === tests for goog.string.startsWith ===
-
-// === tests for goog.string.caseInsensitiveStartsWith ===
-
-// === tests for goog.string.caseInsensitiveEndsWith ===
-
-// === tests for goog.string.caseInsensitiveEquals ===
-
-// === tests for goog.string.subs ===
-
-// === tests for goog.string.caseInsensitiveCompare ===
-
 /**
  * Test cases for googString.floatAwareCompare and googString.intAwareCompare.
  * Each comparison in this list is tested to assure that terms[0] < terms[1],
@@ -81,28 +43,7 @@ const NUMERIC_COMPARISON_TEST_CASES = [
   ['album 7 photo 20', 'album 7 photo 100'],
 ];
 
-// === tests for goog.string.urlEncode && .urlDecode ===
-// NOTE: When test was written it was simply an alias for the built in
-// 'encodeURICompoent', therefore this test is simply used to make sure that in
-// the future it doesn't get broken.
-
-// === tests for goog.string.newLineToBr ===
-
-// === tests for goog.string.htmlEscape and .unescapeEntities ===
-
 const globalXssVar = 0;
-
-// === tests for goog.string.whitespaceEscape ===
-
-// === tests for goog.string.preserveSpaces ===
-
-// === tests for goog.string.stripQuotes ===
-
-// === tests for goog.string.truncate ===
-
-// === tests for goog.string.truncateMiddle ===
-
-// === goog.string.quote ===
 
 function allChars(start = undefined, end = undefined) {
   start = start || 0;
@@ -540,6 +481,9 @@ testSuite({
   },
 
   testUrlEncodeAndDecode() {
+    // NOTE: When test was written it was simply an alias for the built in
+    // 'encodeURICompoent', therefore this test is simply used to make sure that
+    // in the future it doesn't get broken.
     const input = '<p>"hello there," she said, "what is going on here?</p>';
     const output =
         '%3Cp%3E%22hello%20there%2C%22%20she%20said%2C%20%22what%20is' +
@@ -1055,6 +999,12 @@ testSuite({
     assertEquals('7', googString.padNumber(7, 0));
     assertEquals('7', googString.padNumber(7, 1));
     assertEquals('07', googString.padNumber(7, 2));
+    assertEquals('-12', googString.padNumber(-12, 2));
+    assertEquals('-12', googString.padNumber(-12, 3));
+    assertEquals('-012', googString.padNumber(-12, 4));
+    assertEquals('-0012', googString.padNumber(-12, 5));
+    assertEquals('-2.350', googString.padNumber(-2.35, 2, 3));
+    assertEquals('-02.350', googString.padNumber(-2.35, 3, 3));
   },
 
   testAsString() {
