@@ -79,6 +79,14 @@ closure_js_library(
 )
 
 closure_js_library(
+    name = "testutil",
+    srcs = [
+        "testutil.js",
+    ],
+    deps = [":util"],
+)
+
+closure_js_library(
     name = "util",
     srcs = [
         "useragent.js",
