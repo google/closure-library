@@ -169,6 +169,22 @@ testSuite({
     assertEquals('Should be able to get id', el.id, 'testEl');
   },
 
+  testGetHTMLElement() {
+    const el = googDom.getHTMLElement('testEl');
+    assertEquals('Should be able to get id', el.id, 'testEl');
+    assertNull(googDom.getHTMLElement('nonexistent'));
+    assertThrows(() => googDom.getHTMLElement('testSvg'));
+  },
+
+  testGetRequiredHTMLElement() {
+    const el = googDom.getRequiredHTMLElement('testEl');
+    assertTrue(el != null);
+    assertEquals('testEl', el.id);
+    assertThrows(() => googDom.getRequiredHTMLElement('does_not_exist'));
+    assertNotNull(googDom.getElement('testSvg'));
+    assertThrows(() => googDom.getRequiredHTMLElement('testSvg'));
+  },
+
   testGetRequiredElement() {
     const el = googDom.getRequiredElement('testEl');
     assertTrue(el != null);
@@ -297,6 +313,30 @@ testSuite({
 
     const container = googDom.getElement('span-container');
     assertNotNull(googDom.getElementByClass('test1', container));
+  },
+
+  testGetHTMLElementByClass() {
+    assertNotNull(googDom.getHTMLElementByClass('test1'));
+    assertNotNull(googDom.getHTMLElementByClass('test2'));
+
+    const container = googDom.getRequiredElement('span-container');
+    assertNotNull(googDom.getHTMLElementByClass('test1', container));
+
+    assertNotNull(googDom.getElementByClass('svg-test'));
+    assertThrows(() => googDom.getHTMLElementByClass('svg-test'));
+    assertNull(googDom.getHTMLElementByClass('nonexistent'));
+  },
+
+  testGetRequiredHTMLElementByClass() {
+    assertNotNull(googDom.getHTMLElementByClass('test1'));
+    assertNotNull(googDom.getHTMLElementByClass('test2'));
+
+    const container = googDom.getRequiredElement('span-container');
+    assertNotNull(googDom.getHTMLElementByClass('test1', container));
+
+    assertNotNull(googDom.getElementByClass('svg-test'));
+    assertThrows(() => googDom.getRequiredHTMLElementByClass('svg-test'));
+    assertThrows(() => googDom.getRequiredHTMLElementByClass('nonexistent'));
   },
 
   testGetElementByTagNameAndClass() {

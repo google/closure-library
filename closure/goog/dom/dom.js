@@ -114,6 +114,23 @@ goog.dom.getElement = function(element) {
 
 
 /**
+ * Gets an HTML element from the current document by element id.
+ *
+ * @param {string} id
+ * @return {?HTMLElement} The element with the given ID or null if no such
+ *     element exists.
+ */
+goog.dom.getHTMLElement = function(id) {
+  'use strict'
+  const element = goog.dom.getElement(id);
+  if (!element) {
+    return null;
+  }
+  return goog.asserts.assertInstanceof(element, HTMLElement);
+};
+
+
+/**
  * Gets an element by id from the given document (if present).
  * If an element is given, it is returned.
  * @param {!Document} doc
@@ -139,6 +156,22 @@ goog.dom.getElementHelper_ = function(doc, element) {
 goog.dom.getRequiredElement = function(id) {
   'use strict';
   return goog.dom.getRequiredElementHelper_(document, id);
+};
+
+
+/**
+ * Gets an HTML element by id, asserting that the element is found.
+ *
+ * This is used when an element is expected to exist, and should fail with
+ * an assertion error if it does not (if assertions are enabled).
+ *
+ * @param {string} id Element ID.
+ * @return {!HTMLElement} The element with the given ID, if it exists.
+ */
+goog.dom.getRequiredHTMLElement = function(id) {
+  'use strict'
+  return goog.asserts.assertInstanceof(
+      goog.dom.getRequiredElementHelper_(document, id), HTMLElement);
 };
 
 
@@ -284,6 +317,24 @@ goog.dom.getElementByClass = function(className, opt_el) {
 
 
 /**
+ * Returns the first element with the provided className and asserts that it is
+ * an HTML element.
+ *
+ * @param {string} className the name of the class to look for.
+ * @param {!Element|!Document=} opt_parent Optional element to look in.
+ * @return {?HTMLElement} The first item with the class name provided.
+ */
+goog.dom.getHTMLElementByClass = function(className, opt_parent) {
+  'use strict'
+  const element = goog.dom.getElementByClass(className, opt_parent);
+  if (!element) {
+    return null;
+  }
+  return goog.asserts.assertInstanceof(element, HTMLElement);
+};
+
+
+/**
  * Ensures an element with the given className exists, and then returns the
  * first element with the provided className.
  *
@@ -298,6 +349,25 @@ goog.dom.getRequiredElementByClass = function(className, opt_root) {
   var retValue = goog.dom.getElementByClass(className, opt_root);
   return goog.asserts.assert(
       retValue, 'No element found with className: ' + className);
+};
+
+
+/**
+ * Ensures an element with the given className exists, and then returns the
+ * first element with the provided className after asserting that it is an
+ * HTML element.
+ *
+ * @param {string} className the name of the class to look for.
+ * @param {!Element|!Document=} opt_parent Optional element or document to look
+ *     in.
+ * @return {!HTMLElement} The first item with the class name provided.
+ */
+goog.dom.getRequiredHTMLElementByClass = function(className, opt_parent) {
+  'use strict'
+  const retValue = goog.dom.getElementByClass(className, opt_parent);
+  return goog.asserts.assertInstanceof(
+      retValue, HTMLElement,
+      'No HTMLElement found with className: ' + className);
 };
 
 
@@ -1798,8 +1868,9 @@ goog.dom.getOwnerDocument = function(node) {
   // TODO(nnaze): Update param signature to be non-nullable.
   goog.asserts.assert(node, 'Node cannot be null or undefined.');
   return /** @type {!Document} */ (
-      node.nodeType == goog.dom.NodeType.DOCUMENT ? node : node.ownerDocument ||
-              node.document);
+      node.nodeType == goog.dom.NodeType.DOCUMENT ?
+          node :
+          node.ownerDocument || node.document);
 };
 
 
@@ -2510,8 +2581,8 @@ goog.dom.getPixelRatio = function() {
     // Should be for IE10 and FF6-17 (this basically clamps to lower)
     // Note that the order of these statements is important
     return goog.dom.matchesPixelRatio_(3) || goog.dom.matchesPixelRatio_(2) ||
-           goog.dom.matchesPixelRatio_(1.5) || goog.dom.matchesPixelRatio_(1) ||
-           .75;
+        goog.dom.matchesPixelRatio_(1.5) || goog.dom.matchesPixelRatio_(1) ||
+        .75;
   }
   return 1;
 };
