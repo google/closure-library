@@ -171,11 +171,14 @@ goog.net.WebChannel.Options.prototype.httpSessionIdParam;
 goog.net.WebChannel.Options.prototype.httpHeadersOverwriteParam;
 
 /**
- * Whether to encode #initMessageHeaders in the HTTP request body.
- * This option defaults to false. If true, #httpHeadersOverwriteParam will be
- * ignored.
+ * Whether to encode Options.initMessageHeaders in the HTTP request body.
+ * This option defaults to false. If true, Options.httpHeadersOverwriteParam
+ * will be ignored.
  *
- * This option should not be set if #fastHandshake is enabled.
+ * This option should not be set if Options.fastHandshake is set (which
+ * uses GET for handshake).
+ *
+ * Web-only feature.
  *
  * @type {boolean|undefined}
  */

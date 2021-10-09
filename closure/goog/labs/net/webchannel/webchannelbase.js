@@ -409,6 +409,20 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.fastHandshake_ = (opt_options && opt_options.fastHandshake) || false;
 
   /**
+   * Whether to encode initMessageHeaders in the body.
+   *
+   * @private {boolean}
+   */
+  this.encodeInitMessageHeaders_ =
+      (opt_options && opt_options.encodeInitMessageHeaders) || false;
+
+  if (this.fastHandshake_ && this.encodeInitMessageHeaders_) {
+    this.channelDebug_.warning(
+        'Ignore encodeInitMessageHeaders because fastHandshake is set.');
+    this.encodeInitMessageHeaders_ = false;
+  }
+
+  /**
    * Whether to signal to the server to enable blocking handshake.
    *
    * @private {boolean}
@@ -1380,11 +1394,13 @@ WebChannelBase.prototype.open_ = function() {
     }
   }
 
-  if (this.httpHeadersOverwriteParam_ === null) {
+  if (this.httpHeadersOverwriteParam_ === null &&
+      !this.encodeInitMessageHeaders_) {
     request.setExtraHeaders(extraHeaders);
+    extraHeaders = null;
   }
 
-  const requestText = this.dequeueOutgoingMaps_(
+  let requestText = this.dequeueOutgoingMaps_(
       request,
       this.fastHandshake_ ? this.getMaxNumMessagesForFastHandshake_() :
                             WebChannelBase.MAX_MAPS_PER_REQUEST_);
@@ -1405,9 +1421,15 @@ WebChannelBase.prototype.open_ = function() {
   // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
 
-  if (this.httpHeadersOverwriteParam_ && extraHeaders) {
-    httpCors.setHttpHeadersWithOverwriteParam(
-        uri, this.httpHeadersOverwriteParam_, extraHeaders);
+  if (extraHeaders) {
+    if (this.encodeInitMessageHeaders_) {
+      let encodedHeaders =
+          httpCors.generateEncodedHttpHeadersOverwriteParam(extraHeaders);
+      requestText = 'headers=' + encodedHeaders + '&' + requestText;
+    } else if (this.httpHeadersOverwriteParam_) {
+      httpCors.setHttpHeadersWithOverwriteParam(
+          uri, this.httpHeadersOverwriteParam_, extraHeaders);
+    }  // else - should not happen
   }
 
   this.forwardChannelRequestPool_.addRequest(request);
