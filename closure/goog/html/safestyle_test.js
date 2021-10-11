@@ -185,6 +185,18 @@ testSuite({
         {'color': 'var(--xyz, black)'});
   },
 
+  testCreate_allowsLinearGradient() {
+    assertCreateEquals(
+        'background:linear-gradient(red, blue);',
+        {'background': 'linear-gradient(red, blue)'});
+    assertCreateEquals(
+        'background:linear-gradient(rgb(10,0,0), rgb(0,0,30));',
+        {'background': 'linear-gradient(rgb(10,0,0), rgb(0,0,30))'});
+    assertCreateEquals(
+        'background:linear-gradient(#333, #eee);',
+        {'background': 'linear-gradient(#333, #eee)'});
+  },
+
   testCreate_allowsSafeUrl() {
     assertCreateEquals('background:url("http://example.com");', {
       'background': SafeUrl.fromConstant(Const.from('http://example.com')),

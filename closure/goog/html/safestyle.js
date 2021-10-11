@@ -544,7 +544,7 @@ const ALLOWED_FUNCTIONS = [
  */
 const FUNCTIONS_RE = new RegExp(
     '\\b(' + ALLOWED_FUNCTIONS.join('|') + ')' +
-        '\\([-+*/0-9a-z.%\\[\\], ]+\\)',
+        '\\([-+*/0-9a-z.%#\\[\\], ]+\\)',
     'g');
 
 
