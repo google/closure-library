@@ -193,9 +193,9 @@ const isAndroidBrowser = matchAndroidBrowser;
  * @return {boolean} Whether the user's browser is Silk.
  */
 function isSilk() {
-  if (useUserAgentBrand()) {
-    return util.matchUserAgentDataBrand('Silk');
-  }
+  // As of Silk 93, Silk does not identify itself in userAgentData.brands.
+  // When Silk changes this behavior, update this method to call
+  // matchUserAgentDataBrand (akin to isChrome, etc.)
   return util.matchUserAgent('Silk');
 }
 
