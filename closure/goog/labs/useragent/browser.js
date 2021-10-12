@@ -39,7 +39,7 @@ function useUserAgentBrand() {
  */
 function matchOpera() {
   if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
-    // This will remain false for non Chromium based Opera.
+    // Pre-Chromium Edge doesn't support navigator.userAgentData.
     return false;
   }
   return util.matchUserAgent('Opera');
@@ -48,7 +48,7 @@ function matchOpera() {
 /** @return {boolean} Whether the user's browser is IE. */
 function matchIE() {
   if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
-    // This will remain false for IE.
+    // IE doesn't support navigator.userAgentData.
     return false;
   }
   return util.matchUserAgent('Trident') || util.matchUserAgent('MSIE');
@@ -60,7 +60,7 @@ function matchIE() {
  */
 function matchEdgeHtml() {
   if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
-    // This will remain false for non chromium based Edge.
+    // Pre-Chromium Edge doesn't support navigator.userAgentData.
     return false;
   }
   return util.matchUserAgent('Edge');
@@ -84,8 +84,9 @@ function matchOperaChromium() {
 
 /** @return {boolean} Whether the user's browser is Firefox. */
 function matchFirefox() {
-  if (useUserAgentBrand()) {
-    return util.matchUserAgentDataBrand('Firefox');
+  if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
+    // Firefox doesn't support navigator.userAgentData yet.
+    return false;
   }
   return util.matchUserAgent('Firefox') || util.matchUserAgent('FxiOS');
 }
@@ -93,8 +94,8 @@ function matchFirefox() {
 /** @return {boolean} Whether the user's browser is Safari. */
 function matchSafari() {
   if (useUserAgentBrand()) {
-    // This will always be false before Safari adopt the Client Hint support.
-    return util.matchUserAgentDataBrand('Safari');
+    // Safari doesn't support navigator.userAgentData yet.
+    return false;
   }
   return util.matchUserAgent('Safari') &&
       !(matchChrome() || matchCoast() || matchOpera() || matchEdgeHtml() ||
@@ -108,7 +109,7 @@ function matchSafari() {
  */
 function matchCoast() {
   if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
-    // This will remain false for Coast.
+    // Coast doesn't support navigator.userAgentData.
     return false;
   }
   return util.matchUserAgent('Coast');
@@ -116,6 +117,10 @@ function matchCoast() {
 
 /** @return {boolean} Whether the user's browser is iOS Webview. */
 function matchIosWebview() {
+  if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
+    // iOS Webview doesn't support navigator.userAgentData.
+    return false;
+  }
   // iOS Webview does not show up as Chrome or Safari. Also check for Opera's
   // WebKit-based iOS browser, Coast.
   return (util.matchUserAgent('iPad') || util.matchUserAgent('iPhone')) &&
