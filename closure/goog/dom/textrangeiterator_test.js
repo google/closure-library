@@ -138,8 +138,9 @@ testSuite({
     node = iterator.nextValueOrThrow();
     assertEquals(String(TagName.B), node.tagName);
 
+    iterator.skipTag();
     const ex = assertThrows('Should stop iteration when skipping B', () => {
-      iterator.skipTag();
+      iterator.nextValueOrThrow();
     });
     assertEquals(StopIteration, ex);
   },

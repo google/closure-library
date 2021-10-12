@@ -131,6 +131,8 @@ goog.dom.TextRangeIterator = function(
 };
 goog.inherits(goog.dom.TextRangeIterator, goog.dom.RangeIterator);
 
+/** @private {boolean} */
+goog.dom.TextRangeIterator.prototype.hasSkippedPastLast_ = false;
 
 /** @override */
 goog.dom.TextRangeIterator.prototype.getStartTextOffset = function() {
@@ -233,6 +235,11 @@ goog.dom.TextRangeIterator.prototype.nextValueOrThrow = function() {
     throw goog.iter.StopIteration;
   }
 
+  // If the last node has been skipped over, stop iterating.
+  if (this.hasSkippedPastLast_) {
+    throw goog.iter.StopIteration;
+  }
+
   // Call the super function.
   return goog.dom.TextRangeIterator.superClass_.nextValueOrThrow.call(this);
 };
@@ -256,7 +263,7 @@ goog.dom.TextRangeIterator.prototype.skipTag = function() {
   // If the node we are skipping contains the end node, we just skipped past
   // the end, so we stop the iteration.
   if (goog.dom.contains(this.node, this.lastNode_())) {
-    throw goog.iter.StopIteration;
+    this.hasSkippedPastLast_ = true;
   }
 };
 
