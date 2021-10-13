@@ -1093,7 +1093,6 @@ goog.string.repeat = (String.prototype.repeat) ? function(string, length) {
  */
 goog.string.padNumber = function(num, length, opt_precision) {
   'use strict';
-  if (!Number.isFinite(num)) return String(num);
   let s =
       (opt_precision !== undefined) ? num.toFixed(opt_precision) : String(num);
   let index = s.indexOf('.');
