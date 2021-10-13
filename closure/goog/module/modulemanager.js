@@ -382,9 +382,6 @@ goog.module.ModuleManager.prototype.getModuleInfo = function(id) {
 goog.module.ModuleManager.prototype.addExtraEdge = function(
     fromModule, toModule) {
   'use strict';
-  if (!this.getLoader().supportsExtraEdges) {
-    throw new Error('Extra edges are not supported by the module loader.');
-  }
   if (!this.extraEdges_[fromModule]) {
     this.extraEdges_[fromModule] = {};
   }
@@ -727,6 +724,10 @@ goog.module.ModuleManager.prototype.loadModules_ = function(
   this.requestedModuleIds_.push.apply(
       this.requestedModuleIds_, idsToLoadImmediately);
 
+  if (Object.keys(this.extraEdges_).length > 0 &&
+      !this.getLoader().supportsExtraEdges) {
+    throw new Error('Extra edges are not supported by the module loader.');
+  }
   var loadFn = goog.bind(
       this.getLoader().loadModules, goog.asserts.assert(this.getLoader()),
       goog.array.clone(idsToLoadImmediately),

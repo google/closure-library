@@ -944,7 +944,8 @@ testSuite({
     mm.setLoader({
       loadModules(ids, moduleInfoMap, loadOptions) {},
     });
-    assertThrows(() => mm.addExtraEdge('modA', 'modB'));
+    mm.addExtraEdge('modA', 'modB');
+    assertThrows(() => mm.load('modA'));
   },
 
   testRemoveExtraEdge() {
