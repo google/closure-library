@@ -199,7 +199,8 @@ goog.structs.Heap.prototype.moveUp_ = function(index) {
 
   // While the node being moved up is not at the root.
   while (index > 0) {
-    // If the parent is less than the node being moved up, move the parent down.
+    // If the parent is greater than the node being moved up, move the parent
+    // down.
     var parentIndex = this.getParentIndex_(index);
     if (nodes[parentIndex].getKey() > node.getKey()) {
       nodes[index] = nodes[parentIndex];
