@@ -1638,60 +1638,6 @@ testSuite({
         createBinTree(4, null), createBinTree(5, null)));
   },
 
-  testFindDifferences_customEquality() {
-    const A = class {};
-    const B = class extends A {};
-    const C = class extends A {};
-    const D = class extends C {};
-
-    // Asserts that the result of findDifferences on a and b results in the
-    // given failure. Because findDifferences will not output the actual failure
-    // message for root types, we have to parse the failure message for types
-    // with paths.
-    const assertFindDifferencesFailure = (a, b, failure) => assertEquals(
-        failure,
-        asserts.findDifferences([a], [b])
-            .split('\n')[1]  // There will be one failure, on the 0th element.
-            .split(':')[1]   // We want the message on the RHS of the index.
-            .substring(1)    // Skip the leading space.
-    );
-
-    // Test registration of one comparator. All subtypes of A should use this
-    // comparator.
-    const aDifferences = 'hello';
-    asserts.registerComparator(A.prototype, (a, b, cmp) => aDifferences);
-    assertFindDifferencesFailure(new A(), new A(), aDifferences);
-    assertFindDifferencesFailure(new B(), new C(), aDifferences);
-    assertFindDifferencesFailure(new C(), new B(), aDifferences);
-    assertFindDifferencesFailure(new C(), new A(), aDifferences);
-
-    // Test registration of two comparators on subtypes. We should only use
-    // the comparator for B if _both_ arguments are B.
-    const bDifferences = 'goodbye';
-    asserts.registerComparator(B.prototype, (a, b, cmp) => bDifferences);
-    assertFindDifferencesFailure(new A(), new A(), aDifferences);
-    assertFindDifferencesFailure(new B(), new C(), aDifferences);
-    assertFindDifferencesFailure(new C(), new B(), aDifferences);
-    assertFindDifferencesFailure(new B(), new B(), bDifferences);
-
-    // Test registration of comparators on disjoint types. We should use the
-    // comparator for C on its subclass D, and use A otherwise.
-    const cDifferences = 'hello again';
-    asserts.registerComparator(C.prototype, (a, b, cmp) => cDifferences);
-    assertFindDifferencesFailure(new C(), new D(), cDifferences);
-    assertFindDifferencesFailure(new B(), new D(), aDifferences);
-    assertFindDifferencesFailure(new A(), new D(), aDifferences);
-
-    // Test that we can clear out these comparators correctly. Note that if
-    // a test above fails, we can end up with some prototypes still in our
-    // global registration list, but because the classes are anonymous, they
-    // cannot break other code.
-    asserts.clearCustomComparator(B.prototype);
-    asserts.clearCustomComparator(C.prototype);
-    assertFindDifferencesFailure(new C(), new D(), aDifferences);
-    asserts.clearCustomComparator(A.prototype);
-  },
-
   testStringSamePrefix() {
     assertThrowsJsUnitException(
         () => {
