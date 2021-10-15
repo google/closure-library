@@ -15,13 +15,73 @@
 goog.module('goog.labs.userAgent.browser');
 goog.module.declareLegacyNamespace();
 
-const googArray = goog.require('goog.array');
-const googObject = goog.require('goog.object');
+const googAsserts = goog.require('goog.asserts');
 const util = goog.require('goog.labs.userAgent.util');
+const {AsyncValue, Version} = goog.require('goog.labs.userAgent.highEntropy.highEntropyValue');
 const {compareVersions} = goog.require('goog.string.internal');
+const {fullVersionList} = goog.require('goog.labs.userAgent.highEntropy.highEntropyData');
 
 // TODO(nnaze): Refactor to remove excessive exclusion logic in matching
 // functions.
+
+/**
+ * A browser brand represents an opaque string that is used for making
+ * brand-specific version checks in userAgentData.
+ * @enum {string}
+ */
+const Brand = {
+  /**
+   * The browser brand for Android Browser.
+   * Do not depend on the value of this string. Because Android Browser has not
+   * implemented userAgentData yet, the value of this string is not guaranteed
+   * to stay the same in future revisions.
+   */
+  ANDROID_BROWSER: 'Android Browser',
+  /**
+   * The browser brand for Chromium, including Chromium-based Edge and Opera.
+   */
+  CHROMIUM: 'Chromium',
+  /**
+   * The browser brand for Edge.
+   * This brand can be used to get the version of both EdgeHTML and
+   * Chromium-based Edge.
+   */
+  EDGE: 'Microsoft Edge',
+  /**
+   * The browser brand for Firefox.
+   * Do not depend on the value of this string. Because Firefox has not
+   * implemented userAgentData yet, the value of this string is not guaranteed
+   * to stay the same in future revisions.
+   */
+  FIREFOX: 'Firefox',
+  /**
+   * The browser brand for Internet Explorer.
+   * Do not depend on the value of this string. Because IE will never support
+   * userAgentData, the value of this string should be treated as opaque (it's
+   * used internally for legacy-userAgent fallback).
+   */
+  IE: 'Internet Explorer',
+  /**
+   * The browser brand for Opera.
+   * This brand can be used to get the version of both Presto- and
+   * Chromium-based Edge.
+   */
+  OPERA: 'Opera',
+  /**
+   * The browser brand for Safari.
+   * Do not depend on the value of this string. Because Firefox has not
+   * implemented userAgentData yet, the value of this string is not guaranteed
+   * to stay the same in future revisions.
+   */
+  SAFARI: 'Safari',
+  /**
+   * The browser brand for Silk.
+   * See
+   * https://docs.aws.amazon.com/silk/latest/developerguide/what-is-silk.html
+   */
+  SILK: 'Silk',
+};
+exports.Brand = Brand;
 
 /**
  * @return {boolean} Whether to use navigator.userAgentData to determine
@@ -69,7 +129,7 @@ function matchEdgeHtml() {
 /** @return {boolean} Whether the user's browser is Chromium based Edge. */
 function matchEdgeChromium() {
   if (useUserAgentBrand()) {
-    return util.matchUserAgentDataBrand('Edge');
+    return util.matchUserAgentDataBrand(Brand.EDGE);
   }
   return util.matchUserAgent('Edg/');
 }
@@ -77,7 +137,7 @@ function matchEdgeChromium() {
 /** @return {boolean} Whether the user's browser is Chromium based Opera. */
 function matchOperaChromium() {
   if (useUserAgentBrand()) {
-    return util.matchUserAgentDataBrand('Opera');
+    return util.matchUserAgentDataBrand(Brand.OPERA);
   }
   return util.matchUserAgent('OPR');
 }
@@ -134,7 +194,7 @@ function matchIosWebview() {
  */
 function matchChrome() {
   if (useUserAgentBrand()) {
-    return util.matchUserAgentDataBrand('Chromium');
+    return util.matchUserAgentDataBrand(Brand.CHROMIUM);
   }
   return (util.matchUserAgent('Chrome') || util.matchUserAgent('CriOS')) &&
       !matchEdgeHtml();
@@ -150,42 +210,53 @@ function matchAndroidBrowser() {
 
 /** @return {boolean} Whether the user's browser is Opera. */
 const isOpera = matchOpera;
+exports.isOpera = isOpera;
 
 /** @return {boolean} Whether the user's browser is IE. */
 const isIE = matchIE;
+exports.isIE = isIE;
 
 /** @return {boolean} Whether the user's browser is EdgeHTML based Edge. */
 const isEdge = matchEdgeHtml;
+exports.isEdge = isEdge;
 
 /** @return {boolean} Whether the user's browser is Chromium based Edge. */
 const isEdgeChromium = matchEdgeChromium;
+exports.isEdgeChromium = isEdgeChromium;
 
 /** @return {boolean} Whether the user's browser is Chromium based Opera. */
 const isOperaChromium = matchOperaChromium;
+exports.isOperaChromium = isOperaChromium;
 
 /** @return {boolean} Whether the user's browser is Firefox. */
 const isFirefox = matchFirefox;
+exports.isFirefox = isFirefox;
 
 /** @return {boolean} Whether the user's browser is Safari. */
 const isSafari = matchSafari;
+exports.isSafari = isSafari;
 
 /**
  * @return {boolean} Whether the user's browser is Coast (Opera's Webkit-based
  *     iOS browser).
  */
 const isCoast = matchCoast;
+exports.isCoast = isCoast;
 
 /** @return {boolean} Whether the user's browser is iOS Webview. */
 const isIosWebview = matchIosWebview;
+exports.isIosWebview = isIosWebview;
 
 /**
  * @return {boolean} Whether the user's browser is any Chromium based browser (
  *     Chrome, Blink-based Opera (15+) and Edge Chromium).
  */
 const isChrome = matchChrome;
+exports.isChrome = isChrome;
 
 /** @return {boolean} Whether the user's browser is the Android browser. */
 const isAndroidBrowser = matchAndroidBrowser;
+exports.isAndroidBrowser = isAndroidBrowser;
 
 /**
  * For more information, see:
@@ -198,26 +269,25 @@ function isSilk() {
   // matchUserAgentDataBrand (akin to isChrome, etc.)
   return util.matchUserAgent('Silk');
 }
+exports.isSilk = isSilk;
 
 /**
- * @return {string} The browser version or empty string if version cannot be
- *     determined. Note that for Internet Explorer, this returns the version of
- *     the browser, not the version of the rendering engine. (IE 8 in
- *     compatibility mode will return 8.0 rather than 7.0. To determine the
- *     rendering engine version, look at document.documentMode instead. See
- *     http://msdn.microsoft.com/en-us/library/cc196988(v=vs.85).aspx for more
- *     details.)
+ * A helper function that returns a function mapping a list of candidate
+ * version tuple keys to the first version string present under a key.
+ * Ex:
+ * <code>
+ * // Arg extracted from "Foo/1.2.3 Bar/0.2021"
+ * const mapVersion = createVersionMap([["Foo", "1.2.3"], ["Bar", "0.2021"]]);
+ * mapVersion(["Bar", "Foo"]); // returns "0.2021"
+ * mapVersion(["Baz", "Foo"]); // returns "1.2.3"
+ * mapVersion(["Baz", "???"]); // returns ""
+ * </code>
+ * @param {!Array<!Array<string>>} versionTuples Version tuples pre-extracted
+ *     from a user agent string.
+ * @return {function(!Array<string>): string} The version string, or empty
+ * string if it doesn't exist under the given key.
  */
-function getVersion() {
-  const userAgentString = util.getUserAgent();
-  // Special case IE since IE's version is inside the parenthesis and
-  // without the '/'.
-  if (isIE()) {
-    return getIEVersion(userAgentString);
-  }
-
-  const versionTuples = util.extractVersionTuples(userAgentString);
-
+function createVersionMap(versionTuples) {
   // Construct a map for easy lookup.
   const versionMap = {};
   versionTuples.forEach((tuple) => {
@@ -228,13 +298,43 @@ function getVersion() {
     versionMap[key] = value;
   });
 
-  const versionMapHasKey = goog.partial(googObject.containsKey, versionMap);
-
   // Gives the value with the first key it finds, otherwise empty string.
-  function lookUpValueWithKeys(keys) {
-    const key = googArray.find(keys, versionMapHasKey);
-    return versionMap[key] || '';
+  return (keys) => versionMap[keys.find((key) => key in versionMap)] || '';
+}
+
+/**
+ * Returns the browser version.
+ *
+ * Note that for browsers with multiple brands, this function assumes a primary
+ * brand and returns the version for that brand.
+ *
+ * Additionally, this function is not userAgentData-aware and will return
+ * incorrect values when the User Agent string is frozen. The current status of
+ * User Agent string freezing is available here:
+ * https://www.chromestatus.com/feature/5704553745874944
+ *
+ * To mitigate both of these potential issues, use versionOf() or
+ *
+ * fullVersionOf() instead.
+ * @return {string} The browser version or empty string if version cannot be
+ *     determined. Note that for Internet Explorer, this returns the version of
+ *     the browser, not the version of the rendering engine. (IE 8 in
+ *     compatibility mode will return 8.0 rather than 7.0. To determine the
+ *     rendering engine version, look at document.documentMode instead. See
+ *     http://msdn.microsoft.com/en-us/library/cc196988(v=vs.85).aspx for more
+ *     details.)
+ */
+function getVersion() {
+  const userAgentString = util.getUserAgent();
+
+  // Special case IE since IE's version is inside the parenthesis and
+  // without the '/'.
+  if (isIE()) {
+    return getIEVersion(userAgentString);
   }
+
+  const versionTuples = util.extractVersionTuples(userAgentString);
+  const lookUpValueWithKeys = createVersionMap(versionTuples);
 
   // Check Opera before Chrome since Opera 15+ has "Chrome" in the string.
   // See
@@ -264,18 +364,35 @@ function getVersion() {
   const tuple = versionTuples[2];
   return tuple && tuple[1] || '';
 }
+exports.getVersion = getVersion;
 
 /**
+ * Returns whether the current browser's version is at least as high as the
+ * given one.
+ *
+ * Note that for browsers with multiple brands, this function assumes a primary
+ * brand and checks the version for that brand.
+ *
+ * Additionally, this function is not userAgentData-aware and will return
+ * incorrect values when the User Agent string is frozen. The current status of
+ * User Agent string freezing is available here:
+ * https://www.chromestatus.com/feature/5704553745874944
+ *
+ * To mitigate both of these potential issues, use versionOf() (with a
+ * comparison operator), or fullVersionOf() instead.
  * @param {string|number} version The version to check.
  * @return {boolean} Whether the browser version is higher or the same as the
  *     given version.
+ * @deprecated Use versionOf(browserBrand) and do a direct comparison
+ *     instead.
  */
 function isVersionOrHigher(version) {
   return compareVersions(getVersion(), version) >= 0;
 }
+exports.isVersionOrHigher = isVersionOrHigher;
 
 /**
- * Determines IE version. More information:
+ * A helper function to determine IE version. More information:
  * http://msdn.microsoft.com/en-us/library/ie/bg182625(v=vs.85).aspx#uaString
  * http://msdn.microsoft.com/en-us/library/hh869301(v=vs.85).aspx
  * http://blogs.msdn.com/b/ie/archive/2010/03/23/introducing-ie9-s-user-agent-string.aspx
@@ -327,19 +444,243 @@ function getIEVersion(userAgent) {
   return version;
 }
 
-exports = {
-  getVersion,
-  isAndroidBrowser,
-  isChrome,
-  isCoast,
-  isEdge,
-  isEdgeChromium,
-  isFirefox,
-  isIE,
-  isIosWebview,
-  isOpera,
-  isOperaChromium,
-  isSafari,
-  isSilk,
-  isVersionOrHigher,
-};
+/**
+ * A helper function to return the navigator.userAgent-supplied full version
+ * number of the current browser or an empty string, based on whether the
+ * current browser is the one specified.
+ * @param {string} browser The brand whose version should be returned.
+ * @return {string}
+ */
+function getFullVersionFromUserAgentString(browser) {
+  const userAgentString = util.getUserAgent();
+  // Special case IE since IE's version is inside the parenthesis and
+  // without the '/'.
+  if (browser === Brand.IE) {
+    return isIE() ? getIEVersion(userAgentString) : '';
+  }
+
+  const versionTuples = util.extractVersionTuples(userAgentString);
+  const lookUpValueWithKeys = createVersionMap(versionTuples);
+  switch (browser) {
+    case Brand.OPERA:
+      // Opera 10 has Version/10.0 but Opera/9.8, so look for "Version"
+      // first. Opera uses 'OPR' for more recent UAs.
+      if (isOpera()) {
+        return lookUpValueWithKeys(['Version', 'Opera']);
+      } else if (isOperaChromium()) {
+        return lookUpValueWithKeys(['OPR']);
+      }
+      break;
+    case Brand.EDGE:
+      if (isEdge()) {
+        return lookUpValueWithKeys(['Edge']);
+      } else if (isEdgeChromium()) {
+        return lookUpValueWithKeys(['Edg']);
+      }
+      break;
+    case Brand.CHROMIUM:
+      if (isChrome()) {
+        return lookUpValueWithKeys(['Chrome', 'CriOS', 'HeadlessChrome']);
+      }
+      break;
+  }
+
+  // For the following browsers, the browser version is in the third tuple after
+  // "Mozilla" and the engine.
+  if ((browser === Brand.FIREFOX && isFirefox()) ||
+      (browser === Brand.SAFARI && isSafari()) ||
+      (browser === Brand.ANDROID_BROWSER && isAndroidBrowser())) {
+    const tuple = versionTuples[2];
+    return tuple && tuple[1] || '';
+  }
+
+  return '';
+}
+
+/**
+ * Returns the major version of the given browser brand, or NaN if the current
+ * browser is not the given brand.
+ * Note that the major version number may be different depending on which
+ * browser is specified. The returned value can be used to make browser version
+ * comparisons using comparison operators.
+ * @param {!Brand} browser The brand whose version should be returned.
+ * @return {number} The major version number associated with the current
+ * browser under the given brand, or NaN if the current browser doesn't match
+ * the given brand.
+ */
+function versionOf(browser) {
+  let versionParts;
+  if (useUserAgentBrand()) {
+    const data = util.getUserAgentData();
+    const matchingBrand = data.brands.find(({brand}) => brand === browser);
+    if (!matchingBrand || !matchingBrand.version) {
+      return NaN;
+    }
+    versionParts = matchingBrand.version.split('.');
+  } else {
+    const fullVersion = getFullVersionFromUserAgentString(browser);
+    if (fullVersion === '') {
+      return NaN;
+    }
+    versionParts = fullVersion.split('.');
+  }
+  if (versionParts.length === 0) {
+    return NaN;
+  }
+  const majorVersion = versionParts[0];
+  return Number(majorVersion);  // Returns NaN if it is not parseable.
+}
+exports.versionOf = versionOf;
+
+/**
+ * Loads the high-entropy browser brand/version data and wraps the correct
+ * version string in a Version object.
+ * @implements {AsyncValue<!Version>}
+ */
+class HighEntropyBrandVersion {
+  /**
+   * @param {string} brand The brand whose version is retrieved in this
+   *     container.
+   */
+  constructor(brand) {
+    /**
+     * @const {string}
+     * @private
+     */
+    this.brand_ = brand;
+  }
+
+  /**
+   * @return {!Version|undefined}
+   * @override
+   */
+  getIfLoaded() {
+    const loadedVersionList = fullVersionList.getIfLoaded();
+    if (loadedVersionList !== undefined) {
+      const matchingBrand =
+          loadedVersionList.find(({brand}) => this.brand_ === brand);
+      googAsserts.assertExists(matchingBrand);
+      return new Version(matchingBrand.version);
+    }
+    return;
+  }
+
+  /**
+   * @return {!Promise<!Version>}
+   * @override
+   */
+  async load() {
+    const loadedVersionList = await fullVersionList.load();
+    const matchingBrand =
+        loadedVersionList.find(({brand}) => this.brand_ === brand);
+    googAsserts.assertExists(matchingBrand);
+    return new Version(matchingBrand.version);
+  }
+}
+
+/**
+ * Wraps a version string in a Version object.
+ * @implements {AsyncValue<!Version>}
+ */
+class UserAgentStringFallbackBrandVersion {
+  /**
+   * @param {string} versionString
+   */
+  constructor(versionString) {
+    /**
+     * @const {!Version}
+     * @private
+     */
+    this.version_ = new Version(versionString);
+  }
+
+  /**
+   * @return {!Version|undefined}
+   * @override
+   */
+  getIfLoaded() {
+    return this.version_;
+  }
+
+  /**
+   * @return {!Promise<!Version>}
+   * @override
+   */
+  async load() {
+    return this.version_;
+  }
+}
+
+/**
+ * Returns an object that provides access to the full version string of the
+ * current browser -- or undefined, based on whether the current browser matches
+ * the requested browser brand. Note that the full version string is a
+ * high-entropy value, and must be asynchronously loaded before it can be
+ * accessed synchronously.
+ * @param {!Brand} browser The brand whose version should be returned.
+ * @return {!AsyncValue<!Version>|undefined} An object that can be used
+ *     to get or load the full version string as a high-entropy value, or
+ * undefined if the current browser doesn't match the given brand.
+ */
+function fullVersionOf(browser) {
+  // fullVersionList is currently not implemented in Chromium. Therefore, don't
+  // check fullVersionList until Chromium 101. We choose 101 as a reasonable
+  // upper bound for when fullVersionList is estimated to have been implemented.
+  // TODO(user): If fullVersionList is implemented in an earlier version
+  // of Chromium, lower this value to compare against that major version.
+  if (useUserAgentBrand() && !(versionOf(Brand.CHROMIUM) < 101)) {
+    const data = util.getUserAgentData();
+    // Operate under the assumption that the low-entropy and high-entropy lists
+    // of brand/version pairs contain an identical set of brands. Therefore, if
+    // the low-entropy list doesn't contain the given brand, return undefined.
+    if (!data.brands.find(({brand}) => brand === browser)) {
+      return undefined;
+    }
+    return new HighEntropyBrandVersion(browser);
+  } else {
+    const fullVersionFromUserAgentString =
+        getFullVersionFromUserAgentString(browser);
+    if (fullVersionFromUserAgentString === '') {
+      return undefined;
+    }
+    return new UserAgentStringFallbackBrandVersion(
+        fullVersionFromUserAgentString);
+  }
+}
+exports.fullVersionOf = fullVersionOf;
+
+/**
+ * Returns a version string for the current browser or undefined, based on
+ * whether the current browser is the one specified.
+ * This value should ONLY be used for logging/debugging purposes. Do not use it
+ * to branch code paths. For comparing versions, use versionOf or fullVersionOf
+ * instead.
+ * @param {!Brand} browser The brand whose version should be returned.
+ * @return {string} The version as a string.
+ */
+function getVersionStringForLogging(browser) {
+  if (useUserAgentBrand()) {
+    const fullVersionObj = fullVersionOf(browser);
+    if (fullVersionObj) {
+      const fullVersion = fullVersionObj.getIfLoaded();
+      if (fullVersion) {
+        return fullVersion.toVersionStringForLogging();
+      }
+      // No full version, return the major version instead.
+      const data = util.getUserAgentData();
+      const matchingBrand = data.brands.find(({brand}) => brand === browser);
+      // Checking for the existence of matchingBrand is not necessary because
+      // the existence of fullVersionObj implies that there is already a
+      // matching brand.
+      googAsserts.assertExists(matchingBrand);
+      return matchingBrand.version;
+    }
+    // If fullVersionObj is undefined, this doesn't mean that the full version
+    // is unavailable, but rather that the current browser doesn't match the
+    // input `browser` argument.
+    return '';
+  } else {
+    return getFullVersionFromUserAgentString(browser);
+  }
+}
+exports.getVersionStringForLogging = getVersionStringForLogging;

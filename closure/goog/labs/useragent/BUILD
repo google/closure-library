@@ -22,7 +22,9 @@ closure_js_library(
     srcs = ["browser.js"],
     deps = [
         ":util",
-        "//closure/goog/array",
+        "//closure/goog/asserts",
+        "//closure/goog/labs/useragent/highentropy:highentropydata",
+        "//closure/goog/labs/useragent/highentropy:highentropyvalue",
         "//closure/goog/object",
         "//closure/goog/string:internal",
     ],
@@ -58,6 +60,8 @@ closure_js_library(
     srcs = ["platform.js"],
     deps = [
         ":util",
+        "//closure/goog/labs/useragent/highentropy:highentropydata",
+        "//closure/goog/labs/useragent/highentropy:highentropyvalue",
         "//closure/goog/string:internal",
     ],
 )

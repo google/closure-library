@@ -17,6 +17,8 @@ goog.module.declareLegacyNamespace();
 
 const googString = goog.require('goog.string.internal');
 const util = goog.require('goog.labs.userAgent.util');
+const {AsyncValue, Version} = goog.require('goog.labs.userAgent.highEntropy.highEntropyValue');
+const {platformVersion} = goog.require('goog.labs.userAgent.highEntropy.highEntropyData');
 
 /**
  * @return {boolean} Whether the platform is Android.
@@ -164,6 +166,46 @@ function isVersionOrHigher(version) {
   return googString.compareVersions(getVersion(), version) >= 0;
 }
 
+/**
+ * Represents a high-entropy version string.
+ * @implements {AsyncValue<!Version>}
+ */
+class PlatformVersion {
+  /**
+   * @return {!Version|undefined}
+   * @override
+   */
+  getIfLoaded() {
+    if (util.getUserAgentData()) {
+      const loadedPlatformVersion = platformVersion.getIfLoaded();
+      if (loadedPlatformVersion !== undefined) {
+        return new Version(loadedPlatformVersion);
+      }
+    } else {
+      return new Version(getVersion());
+    }
+    return undefined;
+  }
+
+  /**
+   * @return {!Promise<!Version>}
+   * @override
+   */
+  async load() {
+    if (util.getUserAgentData()) {
+      return new Version(await platformVersion.load());
+    } else {
+      return new Version(getVersion());
+    }
+  }
+}
+
+/**
+ * The platform version, a high-entropy value.
+ * @type {!AsyncValue<!Version>}
+ */
+const version = new PlatformVersion();
+
 exports = {
   getVersion,
   isAndroid,
@@ -178,4 +220,5 @@ exports = {
   isMacintosh,
   isVersionOrHigher,
   isWindows,
+  version,
 };

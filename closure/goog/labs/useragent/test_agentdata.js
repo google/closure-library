@@ -86,8 +86,8 @@ exports.withHighEntropyData = withHighEntropyData;
  * @param {!Array<string>} hints
  * @return {!Promise<!UADataValues>}
  */
-function getHighEntropyValuesMock(hints) {
-  return Promise.reject(new Error('High-entropy values not available.'));
+async function getHighEntropyValuesMock(hints) {
+  throw new Error('High-entropy values not available.');
 }
 
 /** @const {!NavigatorUAData} */
@@ -102,8 +102,8 @@ exports.INCOMPLETE_USERAGENT_DATA = Object.freeze({
 exports.CHROME_USERAGENT_DATA_MOBILE = Object.freeze({
   brands: deepFreeze(shuffle([
     {brand: 'Not; A Brand', version: '99'},
-    {brand: 'Google Chrome', version: '91'},
-    {brand: 'Chromium', version: '91'},
+    {brand: 'Google Chrome', version: '101'},
+    {brand: 'Chromium', version: '101'},
   ])),
   mobile: true,
   getHighEntropyValues: getHighEntropyValuesMock,
@@ -114,8 +114,8 @@ exports.CHROME_USERAGENT_DATA_MOBILE = Object.freeze({
 exports.CHROME_USERAGENT_DATA = Object.freeze({
   brands: deepFreeze(shuffle([
     {brand: 'Not; A Brand', version: '0'},
-    {brand: 'Google Chrome', version: '91'},
-    {brand: 'Chromium', version: '91'},
+    {brand: 'Google Chrome', version: '101'},
+    {brand: 'Chromium', version: '101'},
   ])),
   mobile: false,
   getHighEntropyValues: getHighEntropyValuesMock,
@@ -123,10 +123,30 @@ exports.CHROME_USERAGENT_DATA = Object.freeze({
 });
 
 /** @const {!NavigatorUAData} */
+exports.CHROME_NO_FULLVERSIONLIST_USERAGENT_DATA = Object.freeze({
+  brands: deepFreeze(shuffle([
+    {brand: 'Not; A Brand', version: '0'},
+    {brand: 'Google Chrome', version: '91'},
+    {brand: 'Chromium', version: '91'},
+  ])),
+  mobile: false,
+  getHighEntropyValues: async (fields) => {
+    // Simulate an environment where fullVersionList is not yet implemented,
+    // which is true as of Chrome 91.
+    if (fields.length !== 1 && fields[0] !== 'fullVersionList') {
+      throw new Error('High-entropy values not available.');
+    } else {
+      return {};
+    }
+  },
+  platform: 'macOS',
+});
+
+/** @const {!NavigatorUAData} */
 exports.OPERACHROMIUM_USERAGENT_DATA = Object.freeze({
   brands: deepFreeze(shuffle([
-    {brand: 'Opera', version: '77'},
-    {brand: 'Chromium', version: '91'},
+    {brand: 'Opera', version: '87'},
+    {brand: 'Chromium', version: '101'},
     {brand: ';Not A Brand', version: '99'},
   ])),
   mobile: false,
@@ -137,8 +157,8 @@ exports.OPERACHROMIUM_USERAGENT_DATA = Object.freeze({
 /** @const {!NavigatorUAData} */
 exports.EDGECHROMIUM_USERAGENT_DATA = Object.freeze({
   brands: deepFreeze(shuffle([
-    {brand: 'Chromium', version: '91'},
-    {brand: 'Microsoft Edge', version: '91'},
+    {brand: 'Chromium', version: '101'},
+    {brand: 'Microsoft Edge', version: '101'},
     {brand: 'GREASE', version: '99'},
   ])),
   mobile: false,

@@ -427,6 +427,10 @@ testAgents.CHROME_LINUX =
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko)' +
     ' Chrome/26.0.1410.33 Safari/537.31';
 
+/** @const {string} */
+testAgents.CHROME_LINUX_91 =
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)' +
+    ' Chrome/91.0.4472.77 Safari/537.36';
 
 /**
  * We traditionally use Appversion to detect X11
