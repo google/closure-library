@@ -772,6 +772,162 @@ goog.testing.asserts.ARRAY_TYPES = {
 };
 
 /**
+ * The result of a comparison performed by an EqualityFunction: if undefined,
+ * the inputs are equal; otherwise, a human-readable description of their
+ * inequality.
+ *
+ * @typedef {string|undefined}
+ */
+goog.testing.asserts.ComparisonResult;
+
+/**
+ * A equality predicate.
+ *
+ * The first two arguments are the values to be compared. The third is an
+ * equality function which can be used to recursively apply findDifferences.
+ *
+ * An example comparison implementation for Array could be:
+ *
+ * function arrayEq(a, b, eq) {
+ *   if (a.length !== b.length) {
+ *     return "lengths unequal";
+ *   }
+ *
+ *   const differences = [];
+ *   for (let i = 0; i < a.length; i++) {
+ *     // Use the findDifferences implementation to perform recursive
+ *     // comparisons.
+ *     const diff = eq(a[i], b[i], eq);
+ *     if (diff) {
+ *       differences[i] = diff;
+ *     }
+ *   }
+ *
+ *   if (differences) {
+ *     return `found array differences: ${differences}`;
+ *   }
+ *
+ *   // Otherwise return undefined, indicating no differences.
+ *   return undefined;
+ * }
+ *
+ * @typedef {function(?, ?, !goog.testing.asserts.EqualityFunction):
+ * ?goog.testing.asserts.ComparisonResult}
+ */
+goog.testing.asserts.EqualityFunction;
+
+/**
+ * A map from prototype to custom equality matcher.
+ *
+ * @type {!Map<!Object, !goog.testing.asserts.EqualityFunction>}
+ * @private
+ */
+goog.testing.asserts.CUSTOM_EQUALITY_MATCHERS = new Map();
+
+/**
+ * Returns the custom equality predicate for a given prototype, or else
+ * undefined.
+ *
+ * @param {?Object} prototype
+ * @return {!goog.testing.asserts.EqualityFunction|undefined}
+ * @private
+ */
+goog.testing.asserts.getCustomEquality = function(prototype) {
+  for (; (prototype != null) && (typeof prototype === 'object') &&
+       (prototype !== Object.prototype);
+       prototype = Object.getPrototypeOf(prototype)) {
+    const matcher = goog.testing.asserts.CUSTOM_EQUALITY_MATCHERS.get(
+        /** @type {!Object} */ (prototype));
+    if (matcher) {
+      return matcher;
+    }
+  }
+  return undefined;
+};
+
+/**
+ * Returns the most specific custom equality predicate which can be applied to
+ * both arguments, or else undefined.
+ *
+ * @param {!Object} obj1
+ * @param {!Object} obj2
+ * @return {!goog.testing.asserts.EqualityFunction|undefined}
+ * @private
+ */
+goog.testing.asserts.getMostSpecificCustomEquality = function(obj1, obj2) {
+  for (let prototype = Object.getPrototypeOf(obj1); (prototype != null) &&
+       (typeof prototype === 'object') && (prototype !== Object.prototype);
+       prototype = Object.getPrototypeOf(prototype)) {
+    if (prototype.isPrototypeOf(obj2)) {
+      return goog.testing.asserts.getCustomEquality(prototype);
+    }
+  }
+
+  // Otherwise, obj1 and obj2 did not share a common ancestor other than
+  // Object.prototype so we cannot have a comparator.
+  return undefined;
+};
+
+/**
+ * Executes a custom equality function
+ *
+ * @param {!goog.testing.asserts.EqualityFunction} comparator
+ * @param {!Object} obj1
+ * @param {!Object} obj2
+ * @param {string} path of the current field being checked.
+ * @return {?goog.testing.asserts.ComparisonResult}
+ * @private
+ */
+goog.testing.asserts.applyCustomEqualityFunction = function(
+    comparator, obj1, obj2, path) {
+  const /* !goog.testing.asserts.EqualityFunction */ callback =
+      (left, right, unusedEq) => {
+        const result = goog.testing.asserts.findDifferences(left, right);
+        return result ? (path ? path + ': ' : '') + result : undefined;
+      };
+  return comparator(obj1, obj2, callback);
+};
+
+/**
+ * Marks the given prototype as having equality semantics provided by the given
+ * custom equality function.
+ *
+ * This will cause findDifferences and assertObjectEquals to use the given
+ * function when comparing objects with this prototype. When comparing two
+ * objects with different prototypes, the equality (if any) attached to their
+ * lowest common ancestor in the prototype hierarchy will be used.
+ *
+ * @param {!Object} prototype
+ * @param {!goog.testing.asserts.EqualityFunction} fn
+ */
+goog.testing.asserts.registerComparator = function(prototype, fn) {
+  // First check that there is no comparator currently defined for this
+  // prototype.
+  if (goog.testing.asserts.CUSTOM_EQUALITY_MATCHERS.has(prototype)) {
+    throw new Error('duplicate comparator installation for ' + prototype);
+  }
+
+  // We cannot install custom equality matchers on Object.prototype, as it
+  // would replace all other comparisons.
+  if (prototype === Object.prototype) {
+    throw new Error('cannot customize root object comparator');
+  }
+
+  goog.testing.asserts.CUSTOM_EQUALITY_MATCHERS.set(prototype, fn);
+};
+
+/**
+ * Clears the custom equality function currently applied to the given prototype.
+ * Returns true if a function was removed.
+ *
+ * @param {!Object} prototype
+ * @return {boolean} whether a comparator was removed.
+ */
+goog.testing.asserts.clearCustomComparator = function(prototype) {
+  return goog.testing.asserts.CUSTOM_EQUALITY_MATCHERS.delete(prototype);
+};
+
+/**
  * Determines if two items of any type match, and formulates an error message
  * if not.
  * @param {*} expected Expected argument to match.
@@ -859,6 +1015,37 @@ goog.testing.asserts.findDifferences = function(
     var typeOfVar2 = _trueTypeOf(var2);
 
     if (typeOfVar1 === typeOfVar2) {
+      // For two objects of the same type, if one is a prototype of another, use
+      // the custom equality function for the more generic of the two
+      // prototypes, if available.
+      if (var1 && typeof var1 === 'object') {
+        try {
+          const o1 = /** @type {!Object} */ (var1);
+          const o2 = /** @type {!Object} */ (var2);
+          const comparator =
+              goog.testing.asserts.getMostSpecificCustomEquality(o1, o2);
+          if (comparator) {
+            const result = goog.testing.asserts.applyCustomEqualityFunction(
+                comparator, o1, o2, path);
+            if (result != null) {
+              failures.push((path ? path + ': ' : '') + result);
+              if (!path) {
+                rootFailed = true;
+              }
+            }
+            return;
+          }
+        } catch (e) {
+          // Catch and log errors from custom comparators but fall back onto
+          // ordinary comparisons. Such errors can occur, e.g. with proxies or
+          // when the prototypes of a polyfill are not traversable.
+          //
+          // If you see a failure due to this line, please do not use
+          // findDifferences or assertObjectEquals on these argument types.
+          goog.global.console.error('Error in custom comparator: ' + e);
+        }
+      }
+
       const isArrayBuffer = typeOfVar1 === 'ArrayBuffer';
       if (isArrayBuffer) {
         // Since ArrayBuffer instances can't themselves be iterated through,
