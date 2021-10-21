@@ -315,6 +315,8 @@ testSuite({
       '\'Times New Roman\'',
       '"Bold \'nuff"',
       '"O\'Connor\'s Revenge"',
+      '20% / 50%',
+      '20px/1',
     ];
     for (let i = 0; i < valids.length; i++) {
       const value = valids[i];

@@ -483,7 +483,7 @@ function hasBalancedSquareBrackets(value) {
  * Characters allowed in VALUE_RE.
  * @type {string}
  */
-const VALUE_ALLOWED_CHARS = '[-,."\'%_!# a-zA-Z0-9\\[\\]]';
+const VALUE_ALLOWED_CHARS = '[-,."\'%_!#/ a-zA-Z0-9\\[\\]]';
 
 
 /**
