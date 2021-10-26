@@ -195,6 +195,9 @@ testSuite({
     assertCreateEquals(
         'background:linear-gradient(#333, #eee);',
         {'background': 'linear-gradient(#333, #eee)'});
+    assertCreateEquals(
+        'background:linear-gradient(#C0C0C0, #FF0000);',
+        {'background': 'linear-gradient(#C0C0C0, #FF0000)'});
   },
 
   testCreate_allowsSafeUrl() {
