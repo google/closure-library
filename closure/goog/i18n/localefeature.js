@@ -55,13 +55,21 @@ exports.ECMASCRIPT_COMMON_LOCALES_2019 =
      goog.LOCALE == 'zh_TW' || goog.LOCALE == 'zh-TW');
 
 /**
- * @define {boolean} USE_ECMASCRIPT_I18N Evaluated at compile to select
+ * @define {boolean} USE_ECMASCRIPT_I18N_2020 Evaluated to select
  * ECMAScript Intl object (when true) or JavaScript implementation (false) for
- * I18N purposes.  This set of locales is common across all of the modern
- * browsers and Android implementations available in 2019.
+ * I18N purposes. It depends on browser implementation in January 2020.
  */
-exports.USE_ECMASCRIPT_I18N =
-    (goog.FEATURESET_YEAR >= 2019 && exports.ECMASCRIPT_COMMON_LOCALES_2019 &&
+exports.USE_ECMASCRIPT_I18N_2020 =
+    (goog.FEATURESET_YEAR >= 2020 && exports.ECMASCRIPT_COMMON_LOCALES_2019 &&
+     !exports.ECMASCRIPT_INTL_OPT_OUT);
+
+/**
+ * @define {boolean} USE_ECMASCRIPT_I18N_2021 Evaluated to select
+ * ECMAScript Intl object (when true) or JavaScript implementation (false) for
+ * I18N purposes. It depends on browser implementation in January 2021.
+ */
+exports.USE_ECMASCRIPT_I18N_2021 =
+    (goog.FEATURESET_YEAR >= 2021 && exports.ECMASCRIPT_COMMON_LOCALES_2019 &&
      !exports.ECMASCRIPT_INTL_OPT_OUT);
 
 /**
@@ -74,8 +82,7 @@ exports.USE_ECMASCRIPT_I18N =
  *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat
  */
-exports.USE_ECMASCRIPT_I18N_RDTF =
-    (goog.FEATURESET_YEAR >= 2021 && exports.ECMASCRIPT_COMMON_LOCALES_2019);
+exports.USE_ECMASCRIPT_I18N_RDTF = exports.USE_ECMASCRIPT_I18N_2021;
 
 /**
  * @define {boolean} USE_ECMASCRIPT_I18N_NUMFORMAT is evaluted to enable
@@ -85,9 +92,7 @@ exports.USE_ECMASCRIPT_I18N_RDTF =
  *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
  */
-exports.USE_ECMASCRIPT_I18N_NUMFORMAT =
-    (goog.FEATURESET_YEAR >= 2021 && exports.ECMASCRIPT_COMMON_LOCALES_2019 &&
-     !exports.ECMASCRIPT_INTL_OPT_OUT);
+exports.USE_ECMASCRIPT_I18N_NUMFORMAT = exports.USE_ECMASCRIPT_I18N_2021;
 
 /**
  * @define {boolean} USE_ECMASCRIPT_I18N_PLURALRULES is evaluated to enable
@@ -98,6 +103,12 @@ exports.USE_ECMASCRIPT_I18N_NUMFORMAT =
  *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/
  */
-exports.USE_ECMASCRIPT_I18N_PLURALRULES =
-    (!exports.ECMASCRIPT_INTL_OPT_OUT && goog.FEATURESET_YEAR >= 2021 &&
-     exports.ECMASCRIPT_COMMON_LOCALES_2019);
+exports.USE_ECMASCRIPT_I18N_PLURALRULES = exports.USE_ECMASCRIPT_I18N_2020;
+
+/**
+ * @define {boolean} USE_ECMASCRIPT_I18N_DATETIMEF is evaluted to enable
+ * ECMAScript support for Intl.DateTimeFormat support in
+ * browsers based on the locale. Browsers that are considered include:
+ * Chrome, Firefox 85 and above, Edge, and Safari.
+ */
+exports.USE_ECMASCRIPT_I18N_DATETIMEF = exports.USE_ECMASCRIPT_I18N_2021;
