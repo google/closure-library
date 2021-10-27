@@ -402,6 +402,54 @@ testSuite({
     iter.nextValueOrThrow();
   },
 
+  testMutatedIteratorSetChangeEs6() {
+    const message = 'The map has changed since the iterator was created';
+
+    const map = new StructsMap();
+    map.set('a', 1);
+    map.set('b', 2);
+    map.set('c', 3);
+    map.set('d', 4);
+    const iter = map.getValueIterator();
+    map.set('e', 5);
+    const ex =
+        assertThrows('Expected an exception since the map has changed', () => {
+          iter.next();
+        });
+    assertEquals(message, ex.message);
+  },
+
+  testMutatedIteratorRemovalChangeEs6() {
+    const message = 'The map has changed since the iterator was created';
+    const map = new StructsMap();
+    map.set('a', 1);
+    map.set('b', 2);
+    map.set('c', 3);
+    map.set('d', 4);
+
+    const iter = map.getValueIterator();
+    map.remove('d');
+    const ex =
+        assertThrows('Expected an exception since the map has changed', () => {
+          iter.next();
+        });
+    assertEquals(message, ex.message);
+  },
+
+  testMutatedIteratorChangeExistingKeyOkEs6() {
+    const map = new StructsMap();
+    map.set('a', 1);
+    map.set('b', 2);
+    map.set('c', 3);
+    map.set('d', 4);
+
+    const iter = map.getValueIterator();
+    map.set('d', 5);
+    iter.next();
+    // Changing an existing value is OK.
+    iter.next();
+  },
+
   testTranspose() {
     const m = new StructsMap;
     m.set('a', 1);

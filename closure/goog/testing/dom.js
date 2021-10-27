@@ -53,26 +53,28 @@ goog.testing.dom.END_TAG_MARKER_ = goog.testing.dom.createEndTagMarker_();
 /**
  * Tests if the given iterator over nodes matches the given Array of node
  * descriptors.  Throws an error if any match fails.
- * @param {goog.iter.Iterator} it  An iterator over nodes.
- * @param {Array<Node|number|string>} array Array of node descriptors to match
+ * @param {!goog.iter.Iterator} it  An iterator over nodes.
+ * @param {!Array<!Node|number|string>} array Array of node descriptors to match
  *     against.  Node descriptors can be any of the following:
  *         Node: Test if the two nodes are equal.
  *         number: Test node.nodeType == number.
  *         string starting with '#': Match the node's id with the text
  *             after "#".
  *         other string: Match the text node's contents.
+ * @param {boolean=} useEs6Iteration Whether or not to iterate through this
+ *     iterator using ES6 iteration. Iff falsy, uses ES4 iteration.
  */
-goog.testing.dom.assertNodesMatch = function(it, array) {
-  'use strict';
-  var i = 0;
-  goog.iter.forEach(it, function(node) {
+goog.testing.dom.assertNodesMatch = function(
+    it, array, useEs6Iteration = true) {
+  let i = 0;
+  function checkNode(node) {
     'use strict';
     if (array.length <= i) {
       fail(
           'Got more nodes than expected: ' +
           goog.testing.dom.describeNode_(node));
     }
-    var expected = array[i];
+    const expected = array[i];
 
     if (goog.dom.isNodeLike(expected)) {
       assertEquals('Nodes should match at position ' + i, expected, node);
@@ -83,7 +85,7 @@ goog.testing.dom.assertNodesMatch = function(it, array) {
       assertEquals(
           'Expected element at position ' + i, goog.dom.NodeType.ELEMENT,
           node.nodeType);
-      var expectedId = expected.substr(1);
+      const expectedId = expected.substr(1);
       assertEquals('IDs should match at position ' + i, expectedId, node.id);
 
     } else {
@@ -96,8 +98,21 @@ goog.testing.dom.assertNodesMatch = function(it, array) {
     }
 
     i++;
-  });
-
+  }
+  if (useEs6Iteration) {
+    const iterator = goog.iter.toIterator(it);
+    const iterable = /** @type {!Iterable<?>} */ ({
+      [Symbol.iterator]: () => iterator,
+    });
+    for (const node of iterable) {
+      checkNode(node);
+    }
+  } else {
+    // Check with ES4 Iteration
+    goog.iter.forEach(it, function(node) {
+      checkNode(node);
+    });
+  }
   assertEquals('Used entire match array', array.length, i);
 };
 

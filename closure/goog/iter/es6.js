@@ -154,6 +154,13 @@ class ShimGoogIterator extends GoogIterator {
     if (result.done) throw StopIteration;
     return result.value;
   }
+  /**
+   * @override @see {!goog.iter.Iterator}
+   * @return {!IIterableResult<VALUE>}
+   */
+  next() {
+    return this.iter_.next();
+  }
 
 
   /** @override */

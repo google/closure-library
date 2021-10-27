@@ -535,14 +535,17 @@ goog.dom.MultiRangeIterator.prototype.isLast = function() {
 };
 
 
-/** @override */
-goog.dom.MultiRangeIterator.prototype.nextValueOrThrow = function() {
+/**
+ * @return {!IIterableResult<!Node>}
+ * @override
+ */
+goog.dom.MultiRangeIterator.prototype.next = function() {
   'use strict';
   try {
     var it = this.iterators_[this.currentIdx_];
     var next = it.nextValueOrThrow();
     this.setPosition(it.node, it.tagType, it.depth);
-    return next;
+    return goog.iter.createEs6IteratorYield(next);
   } catch (ex) {
     if (ex !== goog.iter.StopIteration ||
         this.iterators_.length - 1 == this.currentIdx_) {
@@ -550,9 +553,20 @@ goog.dom.MultiRangeIterator.prototype.nextValueOrThrow = function() {
     } else {
       // In case we got a StopIteration, increment counter and try again.
       this.currentIdx_++;
-      return this.nextValueOrThrow();
+      return this.next();
     }
   }
+};
+
+
+/**
+ * TODO(user): Please do not remove - this will be cleaned up centrally.
+ * @override @see {!goog.iter.Iterator}
+ * @return {!Node}
+ */
+goog.dom.MultiRangeIterator.prototype.nextValueOrThrow = function() {
+  return goog.iter.toEs4IteratorNext(
+      goog.dom.MultiRangeIterator.prototype.next.call(this));
 };
 
 

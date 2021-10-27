@@ -11,6 +11,7 @@
 goog.provide('goog.dom.NodeIterator');
 
 goog.require('goog.dom.TagIterator');
+goog.require('goog.iter');
 
 
 
@@ -65,15 +66,30 @@ goog.inherits(goog.dom.NodeIterator, goog.dom.TagIterator);
 
 /**
  * Moves to the next position in the DOM tree.
- * @return {Node} Returns the next node, or throws a goog.iter.StopIteration
- *     exception if the end of the iterator's range has been reached.
+ * @return {!IIterableResult<!Node>}
  * @override
  */
-goog.dom.NodeIterator.prototype.nextValueOrThrow = function() {
+goog.dom.NodeIterator.prototype.next = function() {
   'use strict';
   do {
-    goog.dom.NodeIterator.superClass_.nextValueOrThrow.call(this);
+    try {
+      goog.dom.NodeIterator.superClass_.nextValueOrThrow.call(this);
+    } catch (ex) {
+      if (ex === goog.iter.StopIteration) return goog.iter.ES6_ITERATOR_DONE;
+      throw ex;
+    }
   } while (this.isEndTag());
 
-  return this.node;
+  return goog.iter.createEs6IteratorYield(/** @type {!Node} */ (this.node));
+};
+
+
+/**
+ * TODO(user): Please do not remove - this will be cleaned up centrally.
+ * @override @see {!goog.iter.Iterator}
+ * @return {!Node}
+ */
+goog.dom.NodeIterator.prototype.nextValueOrThrow = function() {
+  return goog.iter.toEs4IteratorNext(
+      goog.dom.NodeIterator.prototype.next.call(this));
 };

@@ -53,8 +53,7 @@ testSuite({
   testBasicHTML() {
     it = new TagIterator(dom.getElement('test'));
     pos = 0;
-
-    iter.forEach(it, () => {
+    function doCheck() {
       pos++;
       switch (pos) {
         case 1:
@@ -104,7 +103,20 @@ testSuite({
         default:
           throw StopIteration;
       }
+    }
+    iter.forEach(it, () => {
+      doCheck();
     });
+
+    // Reset, and do the same thing using ES6 Iteration
+    it = new TagIterator(dom.getElement('test'));
+    pos = 0;
+    const iterable = /** @type {!Iterable<?>} */ ({
+      [Symbol.iterator]: () => it,
+    });
+    for (const unused of iterable) {
+      doCheck();
+    }
   },
 
   testSkipTag() {

@@ -200,7 +200,10 @@ alias(
 closure_js_library(
     name = "nodeiterator",
     srcs = ["nodeiterator.js"],
-    deps = [":tagiterator"],
+    deps = [
+        ":tagiterator",
+        "//closure/goog/iter",
+    ],
 )
 
 closure_js_library(

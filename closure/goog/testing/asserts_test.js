@@ -10,13 +10,13 @@ goog.setTestOnly();
 const Deferred = goog.require('goog.async.Deferred');
 const GoogPromise = goog.require('goog.Promise');
 const IterIterator = goog.require('goog.iter.Iterator');
-const StopIteration = goog.require('goog.iter.StopIteration');
 const StructsMap = goog.require('goog.structs.Map');
 const StructsSet = goog.require('goog.structs.Set');
 const TestCase = goog.require('goog.testing.TestCase');
 const asserts = goog.require('goog.testing.asserts');
 const dom = goog.require('goog.dom');
 const googArray = goog.require('goog.array');
+const googIter = goog.require('goog.iter');
 const product = goog.require('goog.userAgent.product');
 const testSuite = goog.require('goog.testing.testSuite');
 const throwException = goog.require('goog.async.throwException');
@@ -741,12 +741,27 @@ testSuite({
        * type checking
        */
       iter.thing = this;
-      iter.nextValueOrThrow = function() {
+      /**
+       * @return {!IIterableResult<string>}
+       * @override
+       */
+      iter.next = function() {
         if (this.index < this.thing.what.length) {
-          return this.thing.what[this.index++].split('@')[0];
+          return googIter.createEs6IteratorYield(
+              this.thing.what[this.index++].split('@')[0]);
         } else {
-          throw StopIteration;
+          return googIter.ES6_ITERATOR_DONE;
         }
+      };
+      const iterNext = iter.next;
+      /**
+       * TODO(user): Please do not remove - this will be cleaned up
+       * centrally.
+       * @override @see {!googIter.Iterator}
+       * @return {string}
+       */
+      iter.nextValueOrThrow = function() {
+        return googIter.toEs4IteratorNext(iterNext.call(iter));
       };
 
       return iter;

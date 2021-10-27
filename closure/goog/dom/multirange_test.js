@@ -32,8 +32,8 @@ testSuite({
   },
 
   /**
-     @suppress {strictMissingProperties} suppression added to enable type
-     checking
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
    */
   testStartAndEndIterator() {
     const it = iter.toIterator(range);
@@ -44,6 +44,22 @@ testSuite({
 
     it.nextValueOrThrow();
     it.nextValueOrThrow();
+    assertEquals(6, it.getEndTextOffset());
+  },
+
+  /**
+   * @suppress {strictMissingProperties} suppression added to enable type
+   * checking
+   */
+  testStartAndEndIteratorEs6() {
+    const it = iter.toIterator(range);
+    assertEquals(dom.getElement('test1').firstChild, it.getStartNode());
+    assertEquals(0, it.getStartTextOffset());
+    assertEquals(dom.getElement('test2').firstChild, it.getEndNode());
+    assertEquals(3, it.getEndTextOffset());
+
+    it.next();
+    it.next();
     assertEquals(6, it.getEndTextOffset());
   },
 

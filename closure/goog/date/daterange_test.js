@@ -233,6 +233,56 @@ testSuite({
     assertThrows('day 10', goog.bind(i.nextValueOrThrow, i));
   },
 
+  testIteratorEs6() {
+    const start = new DateDate(2008, 9, 1);
+    const end = new DateDate(2008, 9, 10);
+    const iter = new DateRange(start, end).iterator();
+    let es6Val;
+    es6Val = iter.next();
+    assertFalse(es6Val.done);
+    assertTrue('day 0', new DateDate(2008, 9, 1).equals(es6Val.value));
+
+    es6Val = iter.next();
+    assertFalse(es6Val.done);
+    assertTrue('day 1', new DateDate(2008, 9, 2).equals(es6Val.value));
+
+    es6Val = iter.next();
+    assertFalse(es6Val.done);
+    assertTrue('day 2', new DateDate(2008, 9, 3).equals(es6Val.value));
+
+    es6Val = iter.next();
+    assertFalse(es6Val.done);
+    assertTrue('day 3', new DateDate(2008, 9, 4).equals(es6Val.value));
+
+    es6Val = iter.next();
+    assertFalse(es6Val.done);
+    assertTrue('day 4', new DateDate(2008, 9, 5).equals(es6Val.value));
+
+    es6Val = iter.next();
+    assertFalse(es6Val.done);
+    assertTrue('day 5', new DateDate(2008, 9, 6).equals(es6Val.value));
+
+    es6Val = iter.next();
+    assertFalse(es6Val.done);
+    assertTrue('day 6', new DateDate(2008, 9, 7).equals(es6Val.value));
+
+    es6Val = iter.next();
+    assertFalse(es6Val.done);
+    assertTrue('day 7', new DateDate(2008, 9, 8).equals(es6Val.value));
+
+    es6Val = iter.next();
+    assertFalse(es6Val.done);
+    assertTrue('day 8', new DateDate(2008, 9, 9).equals(es6Val.value));
+
+    es6Val = iter.next();
+    assertFalse(es6Val.done);
+    assertTrue('day 9', new DateDate(2008, 9, 10).equals(es6Val.value));
+
+    es6Val = iter.next();
+    assertTrue(es6Val.done);
+    assertEquals(undefined, es6Val.value);
+  },
+
   testContains() {
     const r =
         new DateRange(new DateDate(2008, 9, 10), new DateDate(2008, 9, 12));

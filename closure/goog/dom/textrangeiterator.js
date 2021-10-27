@@ -24,6 +24,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.RangeIterator');
 goog.require('goog.dom.TagName');
+goog.require('goog.iter');
 goog.require('goog.iter.StopIteration');
 
 
@@ -126,6 +127,7 @@ goog.dom.TextRangeIterator = function(
       if (e != goog.iter.StopIteration) {
         throw e;
       }
+      // Silently drop end-of-iteration error
     }
   }
 };
@@ -226,22 +228,34 @@ goog.dom.TextRangeIterator.prototype.isLastTag_ = function() {
 /**
  * Move to the next position in the selection.
  * Throws `goog.iter.StopIteration` when it passes the end of the range.
- * @return {Node} The node at the next position.
+ * @return {!IIterableResult<!Node>} The node at the next position.
  * @override
  */
-goog.dom.TextRangeIterator.prototype.nextValueOrThrow = function() {
+goog.dom.TextRangeIterator.prototype.next = function() {
   'use strict';
-  if (this.isLast()) {
-    throw goog.iter.StopIteration;
-  }
-
-  // If the last node has been skipped over, stop iterating.
-  if (this.hasSkippedPastLast_) {
-    throw goog.iter.StopIteration;
+  if (this.isLast() || this.hasSkippedPastLast_) {
+    return goog.iter.ES6_ITERATOR_DONE;
   }
 
   // Call the super function.
-  return goog.dom.TextRangeIterator.superClass_.nextValueOrThrow.call(this);
+  try {
+    return goog.iter.createEs6IteratorYield(
+        goog.dom.TextRangeIterator.superClass_.nextValueOrThrow.call(this));
+  } catch (ex) {
+    if (ex === goog.iter.StopIteration) return goog.iter.ES6_ITERATOR_DONE;
+    throw ex;
+  }
+};
+
+
+/**
+ * TODO(user): Please do not remove - this will be cleaned up centrally.
+ * @override @see {!goog.iter.Iterator}
+ * @return {!Node}
+ */
+goog.dom.TextRangeIterator.prototype.nextValueOrThrow = function() {
+  return goog.iter.toEs4IteratorNext(
+      goog.dom.TextRangeIterator.prototype.next.call(this));
 };
 
 

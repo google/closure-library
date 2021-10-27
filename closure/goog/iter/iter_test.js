@@ -21,10 +21,14 @@ class ArrayIterator extends IterIterator {
 
   /** @override */
   nextValueOrThrow() {
+    return googIter.toEs4IteratorNext(ArrayIterator.prototype.next.call(this));
+  }
+
+  next() {
     if (this.current_ >= this.array_.length) {
-      throw StopIteration;
+      return googIter.ES6_ITERATOR_DONE;
     }
-    return this.array_[this.current_++];
+    return googIter.createEs6IteratorYield(this.array_[this.current_++]);
   }
 }
 
@@ -52,6 +56,18 @@ testSuite({
       s += val;
     });
     assertEquals('abcd', s);
+  },
+
+  testForEachEs6() {
+    let result = '';
+    const iterable = /** @type {!Iterable<string>} */ ({
+      [Symbol.iterator]: () => new ArrayIterator(['a', 'b', 'c', 'd']),
+    });
+    for (const val of iterable) {
+      // Unlike forEach, ES6 for-of iteration only provides value references.
+      result += val;
+    }
+    assertEquals('abcd', result);
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */
@@ -503,6 +519,49 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+
+  testProductIterationEs6() {
+    let iter = googIter.product([1, 2], [3, 4]);
+    let nextVal;
+
+    nextVal = iter.next();
+    assertFalse(nextVal.done);
+    assertArrayEquals([1, 3], nextVal.value);
+
+    nextVal = iter.next();
+    assertFalse(nextVal.done);
+    assertArrayEquals([1, 4], nextVal.value);
+
+    nextVal = iter.next();
+    assertFalse(nextVal.done);
+    assertArrayEquals([2, 3], nextVal.value);
+
+    nextVal = iter.next();
+    assertFalse(nextVal.done);
+    assertArrayEquals([2, 4], nextVal.value);
+
+    nextVal = iter.next();
+    assertTrue(nextVal.done);
+    assertEquals(undefined, nextVal.value);
+
+    // Ensure the iterator forever throws StopIteration.
+    for (let i = 0; i < 5; i++) {
+      nextVal = iter.next();
+      assertTrue(nextVal.done);
+      assertEquals(undefined, nextVal.value);
+    }
+
+    iter = googIter.product();
+    nextVal = iter.next();
+    assertTrue(nextVal.done);
+    assertEquals(undefined, nextVal.value);
+
+    iter = googIter.product([]);
+    nextVal = iter.next();
+    assertTrue(nextVal.done);
+    assertEquals(undefined, nextVal.value);
+  },
+
   testCycle() {
     const regularArray = [1, 2, 3];
     const iter = googIter.cycle(regularArray);
@@ -511,6 +570,19 @@ testSuite({
     const values = [];
     for (let i = 0; i < 9; i++) {
       values.push(iter.nextValueOrThrow());
+    }
+
+    assertArrayEquals([1, 2, 3, 1, 2, 3, 1, 2, 3], values);
+  },
+
+  testCycleEs6() {
+    const regularArray = [1, 2, 3];
+    const iter = googIter.cycle(regularArray);
+
+    // Test 3 cycles to ensure proper cache behavior
+    const values = [];
+    for (let i = 0; i < 9; i++) {
+      values.push(iter.next().value);
     }
 
     assertArrayEquals([1, 2, 3, 1, 2, 3, 1, 2, 3], values);
@@ -529,6 +601,19 @@ testSuite({
     assertArrayEquals([1, 1, 1, 1, 1], values);
   },
 
+  testCycleSingleItemIterableEs6() {
+    const singleItemArray = [1];
+
+    const iter = googIter.cycle(singleItemArray);
+    const values = [];
+
+    for (let i = 0; i < 5; i++) {
+      values.push(iter.next().value);
+    }
+
+    assertArrayEquals([1, 1, 1, 1, 1], values);
+  },
+
   testCycleEmptyIterable() {
     const emptyArray = [];
 
@@ -537,6 +622,15 @@ testSuite({
       iter.nextValueOrThrow();
     });
     assertEquals(StopIteration, ex);
+  },
+
+  testCycleEmptyIterableEs6() {
+    const emptyArray = [];
+
+    const iter = googIter.cycle(emptyArray);
+    const nextVal = iter.next();
+    assertTrue(nextVal.done);
+    assertEquals(undefined, nextVal.value);
   },
 
   testCountNoArgs() {
@@ -570,6 +664,13 @@ testSuite({
     assertEquals(42, iter.nextValueOrThrow());
   },
 
+  testCountZeroStepEs6() {
+    const iter = googIter.count(42, 0);
+    assertEquals(42, iter.next().value);
+    assertEquals(42, iter.next().value);
+    assertEquals(42, iter.next().value);
+  },
+
   testCountFloat() {
     const iter = googIter.count(1.5, 0.5);
     const values = googIter.limit(iter, 5);
@@ -582,6 +683,14 @@ testSuite({
     assertEquals(obj, iter.nextValueOrThrow());
     assertEquals(obj, iter.nextValueOrThrow());
     assertEquals(obj, iter.nextValueOrThrow());
+  },
+
+  testRepeatEs6() {
+    const obj = {foo: 'bar'};
+    const iter = googIter.repeat(obj);
+    assertEquals(obj, iter.next().value);
+    assertEquals(obj, iter.next().value);
+    assertEquals(obj, iter.next().value);
   },
 
   testAccumulateArray() {
@@ -610,6 +719,16 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testZipArraysEs6() {
+    const iter = googIter.zip([1, 2, 3], [4, 5, 6], [7, 8, 9]);
+    assertArrayEquals([1, 4, 7], iter.next().value);
+    assertArrayEquals([2, 5, 8], iter.next().value);
+    assertArrayEquals([3, 6, 9], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testZipSingleArg() {
     const iter = googIter.zip([1, 2, 3]);
     assertArrayEquals([1], iter.nextValueOrThrow());
@@ -621,6 +740,16 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testZipSingleArgEs6() {
+    const iter = googIter.zip([1, 2, 3]);
+    assertArrayEquals([1], iter.next().value);
+    assertArrayEquals([2], iter.next().value);
+    assertArrayEquals([3], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testZipUnevenArgs() {
     const iter = googIter.zip([1, 2, 3], [4, 5], [7]);
     assertArrayEquals([1, 4, 7], iter.nextValueOrThrow());
@@ -628,6 +757,14 @@ testSuite({
       iter.nextValueOrThrow();
     });
     assertEquals(StopIteration, ex);
+  },
+
+  testZipUnevenArgsEs6() {
+    const iter = googIter.zip([1, 2, 3], [4, 5], [7]);
+    assertArrayEquals([1, 4, 7], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
   },
 
   testZipNoArgs() {
@@ -638,12 +775,27 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testZipNoArgsEs6() {
+    const iter = googIter.zip();
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testZipIterators() {
     const iter = googIter.zip(googIter.count(), googIter.repeat('foo'));
     assertArrayEquals([0, 'foo'], iter.nextValueOrThrow());
     assertArrayEquals([1, 'foo'], iter.nextValueOrThrow());
     assertArrayEquals([2, 'foo'], iter.nextValueOrThrow());
     assertArrayEquals([3, 'foo'], iter.nextValueOrThrow());
+  },
+
+  testZipIteratorsEs6() {
+    const iter = googIter.zip(googIter.count(), googIter.repeat('foo'));
+    assertArrayEquals([0, 'foo'], iter.next().value);
+    assertArrayEquals([1, 'foo'], iter.next().value);
+    assertArrayEquals([2, 'foo'], iter.next().value);
+    assertArrayEquals([3, 'foo'], iter.next().value);
   },
 
   testZipLongestArrays() {
@@ -658,6 +810,17 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testZipLongestArraysEs6() {
+    const iter = googIter.zipLongest('-', 'ABCD'.split(''), 'xy'.split(''));
+    assertArrayEquals(['A', 'x'], iter.next().value);
+    assertArrayEquals(['B', 'y'], iter.next().value);
+    assertArrayEquals(['C', '-'], iter.next().value);
+    assertArrayEquals(['D', '-'], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testZipLongestSingleArg() {
     const iter = googIter.zipLongest('-', 'ABCD'.split(''));
     assertArrayEquals(['A'], iter.nextValueOrThrow());
@@ -668,6 +831,17 @@ testSuite({
       iter.nextValueOrThrow();
     });
     assertEquals(StopIteration, ex);
+  },
+
+  testZipLongestSingleArgEs6() {
+    const iter = googIter.zipLongest('-', 'ABCD'.split(''));
+    assertArrayEquals(['A'], iter.next().value);
+    assertArrayEquals(['B'], iter.next().value);
+    assertArrayEquals(['C'], iter.next().value);
+    assertArrayEquals(['D'], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
   },
 
   testZipLongestNoArgs() {
@@ -690,6 +864,19 @@ testSuite({
       iter.nextValueOrThrow();
     });
     assertEquals(StopIteration, ex);
+  },
+
+  testZipLongestIteratorsEs6() {
+    const iter =
+        googIter.zipLongest(null, googIter.range(3), googIter.range(5));
+    assertArrayEquals([0, 0], iter.next().value);
+    assertArrayEquals([1, 1], iter.next().value);
+    assertArrayEquals([2, 2], iter.next().value);
+    assertArrayEquals([null, 3], iter.next().value);
+    assertArrayEquals([null, 4], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
   },
 
   testCompressArray() {
@@ -719,6 +906,17 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testGroupByNoKeyFuncEs6() {
+    const iter = googIter.groupBy('AAABBBBCDD'.split(''));
+    assertArrayEquals(['A', ['A', 'A', 'A']], iter.next().value);
+    assertArrayEquals(['B', ['B', 'B', 'B', 'B']], iter.next().value);
+    assertArrayEquals(['C', ['C']], iter.next().value);
+    assertArrayEquals(['D', ['D', 'D']], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testGroupByKeyFunc() {
     const keyFunc = (x) => x.toLowerCase();
     const iter = googIter.groupBy('AaAABBbbBCccddDD'.split(''), keyFunc);
@@ -733,6 +931,18 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testGroupByKeyFuncEs6() {
+    const keyFunc = (x) => x.toLowerCase();
+    const iter = googIter.groupBy('AaAABBbbBCccddDD'.split(''), keyFunc);
+    assertArrayEquals(['a', ['A', 'a', 'A', 'A']], iter.next().value);
+    assertArrayEquals(['b', ['B', 'B', 'b', 'b', 'B']], iter.next().value);
+    assertArrayEquals(['c', ['C', 'c', 'c']], iter.next().value);
+    assertArrayEquals(['d', ['d', 'd', 'D', 'D']], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testStarMap() {
     /** @suppress {checkTypes} suppression added to enable type checking */
     const iter = googIter.starMap([[2, 5], [3, 2], [10, 3]], Math.pow);
@@ -743,6 +953,17 @@ testSuite({
       iter.nextValueOrThrow();
     });
     assertEquals(StopIteration, ex);
+  },
+
+  testStarMapEs6() {
+    /** @suppress {checkTypes} suppression added to enable type checking */
+    const iter = googIter.starMap([[2, 5], [3, 2], [10, 3]], Math.pow);
+    assertEquals(32, iter.next().value);
+    assertEquals(9, iter.next().value);
+    assertEquals(1000, iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
   },
 
   testStarMapExtraArgs() {
@@ -760,6 +981,22 @@ testSuite({
       iter.nextValueOrThrow();
     });
     assertEquals(StopIteration, ex);
+  },
+
+  testStarMapExtraArgsEs6() {
+    const func = (string, radix, undef, iterator) => {
+      assertEquals('undef should be undefined', 'undefined', typeof undef);
+      assertTrue(iterator instanceof IterIterator);
+      return parseInt(string, radix);
+    };
+    /** @suppress {checkTypes} suppression added to enable type checking */
+    const iter = googIter.starMap([['42', 10], ['0xFF', 16], ['101', 2]], func);
+    assertEquals(42, iter.next().value);
+    assertEquals(255, iter.next().value);
+    assertEquals(5, iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
   },
 
   testTeeArray() {
@@ -784,6 +1021,28 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testTeeArrayEs6() {
+    const iters = googIter.tee('ABC'.split(''));
+    assertEquals(2, iters.length);
+    const it0 = iters[0];
+    const it1 = iters[1];
+
+    assertEquals('A', it0.next().value);
+    assertEquals('A', it1.next().value);
+    assertEquals('B', it0.next().value);
+    assertEquals('B', it1.next().value);
+    assertEquals('C', it0.next().value);
+    assertEquals('C', it1.next().value);
+
+    const done0Val = it0.next();
+    assertTrue(done0Val.done);
+    assertEquals(undefined, done0Val.value);
+
+    const done1Val = it1.next();
+    assertTrue(done1Val.done);
+    assertEquals(undefined, done1Val.value);
+  },
+
   testTeeIterator() {
     const iters = googIter.tee(googIter.count(), 3);
     assertEquals(3, iters.length);
@@ -805,6 +1064,27 @@ testSuite({
     assertEquals(3, it2.nextValueOrThrow());
   },
 
+  testTeeIteratorEs6() {
+    const iters = googIter.tee(googIter.count(), 3);
+    assertEquals(3, iters.length);
+    const it0 = iters[0];
+    const it1 = iters[1];
+    const it2 = iters[2];
+
+    assertEquals(0, it0.next().value);
+    assertEquals(1, it0.next().value);
+    assertEquals(0, it1.next().value);
+    assertEquals(1, it1.next().value);
+    assertEquals(2, it1.next().value);
+    assertEquals(2, it0.next().value);
+    assertEquals(0, it2.next().value);
+    assertEquals(1, it2.next().value);
+    assertEquals(2, it2.next().value);
+    assertEquals(3, it0.next().value);
+    assertEquals(3, it1.next().value);
+    assertEquals(3, it2.next().value);
+  },
+
   testEnumerateNoStart() {
     const iter = googIter.enumerate('ABC'.split(''));
     assertArrayEquals([0, 'A'], iter.nextValueOrThrow());
@@ -816,6 +1096,16 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testEnumerateNoStartEs6() {
+    const iter = googIter.enumerate('ABC'.split(''));
+    assertArrayEquals([0, 'A'], iter.next().value);
+    assertArrayEquals([1, 'B'], iter.next().value);
+    assertArrayEquals([2, 'C'], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testEnumerateStart() {
     const iter = googIter.enumerate('DEF'.split(''), 3);
     assertArrayEquals([3, 'D'], iter.nextValueOrThrow());
@@ -825,6 +1115,16 @@ testSuite({
       iter.nextValueOrThrow();
     });
     assertEquals(StopIteration, ex);
+  },
+
+  testEnumerateStartEs6() {
+    const iter = googIter.enumerate('DEF'.split(''), 3);
+    assertArrayEquals([3, 'D'], iter.next().value);
+    assertArrayEquals([4, 'E'], iter.next().value);
+    assertArrayEquals([5, 'F'], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
   },
 
   testLimitLess() {
@@ -850,6 +1150,13 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testConsumeGreaterEs6() {
+    const iter = googIter.consume('ABCDEFG'.split(''), 10);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testSliceStart() {
     const iter = googIter.slice('ABCDEFG'.split(''), 2);
     assertEquals('CDEFG', googIter.join(iter, ''));
@@ -868,6 +1175,13 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testSliceStartStopEqualEs6() {
+    const iter = googIter.slice('ABCDEFG'.split(''), 1, 1);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testSliceIterator() {
     const iter = googIter.slice(googIter.count(20), 0, 5);
     assertArrayEquals([20, 21, 22, 23, 24], googIter.toArray(iter));
@@ -879,6 +1193,13 @@ testSuite({
       iter.nextValueOrThrow();
     });
     assertEquals(StopIteration, ex);
+  },
+
+  testSliceStartGreaterEs6() {
+    const iter = googIter.slice('ABCDEFG'.split(''), 10);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
   },
 
   testPermutationsNoLength() {
@@ -895,6 +1216,19 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testPermutationsNoLengthEs6() {
+    const iter = googIter.permutations(googIter.range(3));
+    assertArrayEquals([0, 1, 2], iter.next().value);
+    assertArrayEquals([0, 2, 1], iter.next().value);
+    assertArrayEquals([1, 0, 2], iter.next().value);
+    assertArrayEquals([1, 2, 0], iter.next().value);
+    assertArrayEquals([2, 0, 1], iter.next().value);
+    assertArrayEquals([2, 1, 0], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testPermutationsLength() {
     const iter = googIter.permutations('ABC'.split(''), 2);
     assertArrayEquals(['A', 'B'], iter.nextValueOrThrow());
@@ -903,6 +1237,16 @@ testSuite({
     assertArrayEquals(['B', 'C'], iter.nextValueOrThrow());
     assertArrayEquals(['C', 'A'], iter.nextValueOrThrow());
     assertArrayEquals(['C', 'B'], iter.nextValueOrThrow());
+  },
+
+  testPermutationsLengthEs6() {
+    const iter = googIter.permutations('ABC'.split(''), 2);
+    assertArrayEquals(['A', 'B'], iter.next().value);
+    assertArrayEquals(['A', 'C'], iter.next().value);
+    assertArrayEquals(['B', 'A'], iter.next().value);
+    assertArrayEquals(['B', 'C'], iter.next().value);
+    assertArrayEquals(['C', 'A'], iter.next().value);
+    assertArrayEquals(['C', 'B'], iter.next().value);
   },
 
   testCombinations() {
@@ -917,6 +1261,17 @@ testSuite({
     assertEquals(StopIteration, ex);
   },
 
+  testCombinationsEs6() {
+    const iter = googIter.combinations(googIter.range(4), 3);
+    assertArrayEquals([0, 1, 2], iter.next().value);
+    assertArrayEquals([0, 1, 3], iter.next().value);
+    assertArrayEquals([0, 2, 3], iter.next().value);
+    assertArrayEquals([1, 2, 3], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
+  },
+
   testCombinationsWithReplacement() {
     const iter = googIter.combinationsWithReplacement('ABC'.split(''), 2);
     assertArrayEquals(['A', 'A'], iter.nextValueOrThrow());
@@ -929,6 +1284,19 @@ testSuite({
       iter.nextValueOrThrow();
     });
     assertEquals(StopIteration, ex);
+  },
+
+  testCombinationsWithReplacementEs6() {
+    const iter = googIter.combinationsWithReplacement('ABC'.split(''), 2);
+    assertArrayEquals(['A', 'A'], iter.next().value);
+    assertArrayEquals(['A', 'B'], iter.next().value);
+    assertArrayEquals(['A', 'C'], iter.next().value);
+    assertArrayEquals(['B', 'B'], iter.next().value);
+    assertArrayEquals(['B', 'C'], iter.next().value);
+    assertArrayEquals(['C', 'C'], iter.next().value);
+    const doneVal = iter.next();
+    assertTrue(doneVal.done);
+    assertEquals(undefined, doneVal.value);
   },
 
   testNoInfiniteRecursionWhenMigratingToNextValueOrThrow() {
