@@ -1005,6 +1005,9 @@ testSuite({
     assertEquals('-0012', googString.padNumber(-12, 5));
     assertEquals('-2.350', googString.padNumber(-2.35, 2, 3));
     assertEquals('-02.350', googString.padNumber(-2.35, 3, 3));
+    assertEquals('NaN', googString.padNumber(NaN, 10, 10));
+    assertEquals('Infinity', googString.padNumber(Infinity, 10, 10));
+    assertEquals('-Infinity', googString.padNumber(-Infinity, 10, 10));
   },
 
   testAsString() {
