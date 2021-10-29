@@ -64,12 +64,12 @@ const Brand = {
   /**
    * The browser brand for Opera.
    * This brand can be used to get the version of both Presto- and
-   * Chromium-based Edge.
+   * Chromium-based Opera.
    */
   OPERA: 'Opera',
   /**
    * The browser brand for Safari.
-   * Do not depend on the value of this string. Because Firefox has not
+   * Do not depend on the value of this string. Because Safari has not
    * implemented userAgentData yet, the value of this string is not guaranteed
    * to stay the same in future revisions.
    */
@@ -78,6 +78,9 @@ const Brand = {
    * The browser brand for Silk.
    * See
    * https://docs.aws.amazon.com/silk/latest/developerguide/what-is-silk.html
+   * Do not depend on the value of this string. Because Silk does not
+   * identify itself in userAgentData yet, the value of this string is not
+   * guaranteed to stay the same in future revisions.
    */
   SILK: 'Silk',
 };
