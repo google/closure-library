@@ -1031,7 +1031,11 @@ goog.module.ModuleManager.prototype.beforeLoadModuleCode = function(id) {
   if (this.moduleInfoMap[id]) {
     this.visitDependencies_(
         this.moduleInfoMap[id].getDependencies() || [],
-        /* visitFn= */ (moduleInfo) => moduleInfo.setLoaded(),
+        /* visitFn= */
+        (moduleInfo) => {
+          moduleInfo.setLoaded();
+          goog.array.remove(this.loadingModuleIds_, moduleInfo.getId());
+        },
         /* visitConditionFn= */ (moduleInfo) => !moduleInfo.isLoaded());
   }
 

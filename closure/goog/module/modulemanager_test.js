@@ -919,6 +919,29 @@ testSuite({
     assertTrue(mm.getModuleInfo('b').isLoaded());
   },
 
+  /**
+   * Test loading modules that include synthetic modules that omit their
+   * calls to beforeLoadModuleCode() and setLoaded().
+   */
+  testLoadWithoutSyntheticModuleOverheadSetsSyntheticModuleDepsAsLoaded() {
+    const mm =
+        getModuleManager({'sy0': [], 'sy1': [], 'a': [], 'b': ['sy0', 'a']});
+    mm.setAllModuleInfoString('', ['sy0', 'a']);
+    const loader = createExcludingSyntheticModuleOverheadLoader(
+        mm, /* modulesToMarkAsLoaded= */[]);
+    mm.setLoader(loader);
+    mm.beforeLoadModuleCode('b');
+
+    // Since b has a dep on sy0 and a, both of them should be marked as loaded
+    // and removed from this.loadingModuleIds_. This should make mm.isActive()
+    // return false as this.loadingModuleIds_ will be empty. However, b should
+    // still remain unloaded (isLoaded() == false).
+    assertTrue(mm.getModuleInfo('a').isLoaded());
+    assertTrue(mm.getModuleInfo('sy0').isLoaded());
+    assertFalse(mm.isActive());
+    assertFalse(mm.getModuleInfo('b').isLoaded());
+  },
+
   testExtraEdges() {
     const mm =
         getModuleManager({'modA': [], 'modB': [], 'modC': [], 'modD': []});
