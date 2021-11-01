@@ -52,8 +52,13 @@ goog.a11y.aria.Announcer = function(opt_domHelper) {
    * @private
    */
   this.liveRegions_ = {};
-  /** @private {string} */
-  this.lastMessageAnnounced_ = '';
+
+  /**
+   * Map of live region to the last message inserted in that region.
+   * @type {?Object<!goog.a11y.aria.LivePriority, string>}
+   * @private
+   */
+  this.lastMessageAnnouncedPerPriority_ = {};
 };
 goog.inherits(goog.a11y.aria.Announcer, goog.Disposable);
 
@@ -65,6 +70,7 @@ goog.a11y.aria.Announcer.prototype.disposeInternal = function() {
       this.liveRegions_, this.domHelper_.removeNode, this.domHelper_);
   this.liveRegions_ = null;
   this.domHelper_ = null;
+  this.lastMessageAnnouncedPerPriority_ = null;
   goog.a11y.aria.Announcer.base(this, 'disposeInternal');
 };
 
@@ -83,11 +89,13 @@ goog.a11y.aria.Announcer.prototype.say = function(message, opt_priority) {
   // TODO(user): Remove the code once Chrome fix the bug on their
   // end. Add nonbreaking space such that there's a change to aria live region
   // to verbalize repeated character or text.
-  const announceMessage = this.lastMessageAnnounced_ === message ?
+  const lastMessageAnnounced = this.lastMessageAnnouncedPerPriority_[priority];
+  const announceMessage =
+      lastMessageAnnounced && lastMessageAnnounced === message ?
       message + goog.string.Unicode.NBSP :
       message;
   if (message) {
-    this.lastMessageAnnounced_ = announceMessage;
+    this.lastMessageAnnouncedPerPriority_[priority] = announceMessage;
   }
   goog.dom.setTextContent(liveRegion, announceMessage);
 };
