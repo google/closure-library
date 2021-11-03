@@ -22,8 +22,10 @@ closure_js_library(
     name = "linkify",
     srcs = ["linkify.js"],
     deps = [
+        ":const",
         ":string",
         "//closure/goog/html:safehtml",
+        "//closure/goog/html:uncheckedconversions",
     ],
 )
 

@@ -11,7 +11,9 @@
 goog.provide('goog.string.linkify');
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 
 
 /**
@@ -26,21 +28,53 @@ goog.require('goog.string');
  *     target=''.
  * @param {boolean=} opt_preserveNewlines Whether to preserve newlines with
  *     &lt;br&gt;.
+ * @param {boolean=} opt_preserveSpacesAndTabs Whether to preserve spaces with
+ *     non-breaking spaces and tabs with <span style="white-space:pre">
  * @return {!goog.html.SafeHtml} Linkified HTML. Any text that is not part of a
  *      link will be HTML-escaped.
  */
 goog.string.linkify.linkifyPlainTextAsHtml = function(
-    text, opt_attributes, opt_preserveNewlines) {
+    text, opt_attributes, opt_preserveNewlines, opt_preserveSpacesAndTabs) {
   'use strict';
+
+  /**
+   * @param {string} plainText
+   * @return {!goog.html.SafeHtml} html
+   */
+  const htmlEscape = function(plainText) {
+    if (opt_preserveSpacesAndTabs) {
+      const html = goog.html.SafeHtml.htmlEscape(plainText);
+      let modifiedHtml =
+          goog.html.SafeHtml
+              .unwrap(html)
+              // Leading space is converted into a non-breaking space, and
+              // spaces following whitespace are converted into non-breaking
+              // spaces. This must happen first, to ensure we preserve spaces
+              // after newlines.
+              .replace(/(^|[\n\r\t\ ])\ /g, '$1&#160;')
+              // Preserve tabs by using style="white-space:pre"
+              .replace(/(\t+)/g, '<span style="white-space:pre">$1</span>');
+      if (opt_preserveNewlines) {
+        modifiedHtml = goog.string.newLineToBr(modifiedHtml);
+      }
+      return goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from('Escaped plain text'), modifiedHtml,
+              html.getDirection());
+    } else if (opt_preserveNewlines) {
+      return goog.html.SafeHtml.htmlEscapePreservingNewlines(plainText);
+    } else {
+      return goog.html.SafeHtml.htmlEscape(plainText);
+    }
+  };
+
   // This shortcut makes linkifyPlainText ~10x faster if text doesn't contain
   // URLs or email addresses and adds insignificant performance penalty if it
   // does.
   if (text.indexOf('@') == -1 && text.indexOf('://') == -1 &&
       text.indexOf('www.') == -1 && text.indexOf('Www.') == -1 &&
       text.indexOf('WWW.') == -1) {
-    return opt_preserveNewlines ?
-        goog.html.SafeHtml.htmlEscapePreservingNewlines(text) :
-        goog.html.SafeHtml.htmlEscape(text);
+    return htmlEscape(text);
   }
 
   const attributesMap = {};
@@ -66,10 +100,7 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
       goog.string.linkify.FIND_LINKS_RE_,
       function(part, before, original, email, protocol) {
         'use strict';
-        output.push(
-            opt_preserveNewlines ?
-                goog.html.SafeHtml.htmlEscapePreservingNewlines(before) :
-                before);
+        output.push(htmlEscape(before));
         if (!original) {
           return '';
         }
@@ -123,10 +154,7 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
         }
         attributesMap['href'] = href + linkText;
         output.push(goog.html.SafeHtml.create('a', attributesMap, linkText));
-        output.push(
-            opt_preserveNewlines ?
-                goog.html.SafeHtml.htmlEscapePreservingNewlines(afterLink) :
-                afterLink);
+        output.push(htmlEscape(afterLink));
         return '';
       });
   return goog.html.SafeHtml.concat(output);
@@ -225,9 +253,10 @@ goog.string.linkify.WWW_START_ = 'www\\.';
  * @const
  * @private
  */
-goog.string.linkify.URL_RE_STRING_ = '(?:' +
-    goog.string.linkify.PROTOCOL_START_ + '|' + goog.string.linkify.WWW_START_ +
-    ')[' + goog.string.linkify.ACCEPTABLE_URL_CHARS_ + ']+';
+goog.string.linkify.URL_RE_STRING_ =
+    '(?:' + goog.string.linkify.PROTOCOL_START_ + '|' +
+    goog.string.linkify.WWW_START_ + ')[' +
+    goog.string.linkify.ACCEPTABLE_URL_CHARS_ + ']+';
 
 
 /**
