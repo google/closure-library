@@ -22,18 +22,6 @@ goog.require('goog.userAgent');
 
 
 /**
- * Returns a prefixed event name for the current browser.
- * @param {string} eventName The name of the event.
- * @return {string} The prefixed event name.
- * @private
- */
-goog.events.getVendorPrefixedName_ = function(eventName) {
-  'use strict';
-  return goog.userAgent.WEBKIT ? 'webkit' + eventName : eventName.toLowerCase();
-};
-
-
-/**
  * Constants for event names.
  * @enum {string}
  */
@@ -194,13 +182,12 @@ goog.events.EventType = {
   CONTROLLERCHANGE: 'controllerchange',
 
   // CSS animation events.
-  ANIMATIONSTART: goog.events.getVendorPrefixedName_('AnimationStart'),
-  ANIMATIONEND: goog.events.getVendorPrefixedName_('AnimationEnd'),
-  ANIMATIONITERATION: goog.events.getVendorPrefixedName_('AnimationIteration'),
+  ANIMATIONSTART: 'animationstart',
+  ANIMATIONEND: 'animationend',
+  ANIMATIONITERATION: 'animationiteration',
 
-  // CSS transition events. Based on the browser support described at:
-  // https://developer.mozilla.org/en/css/css_transitions#Browser_compatibility
-  TRANSITIONEND: goog.events.getVendorPrefixedName_('TransitionEnd'),
+  // CSS transition events.
+  TRANSITIONEND: 'transitionend',
 
   // W3C Pointer Events
   // http://www.w3.org/TR/pointerevents/
