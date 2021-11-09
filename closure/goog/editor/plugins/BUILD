@@ -7,6 +7,7 @@ licenses(["notice"])
 closure_js_library(
     name = "abstractbubbleplugin",
     srcs = ["abstractbubbleplugin.js"],
+    lenient = True,
     deps = [
         "//closure/goog/array",
         "//closure/goog/dom",
@@ -33,6 +34,7 @@ closure_js_library(
 closure_js_library(
     name = "abstractdialogplugin",
     srcs = ["abstractdialogplugin.js"],
+    lenient = True,
     deps = [
         "//closure/goog/dom",
         "//closure/goog/dom:abstractrange",
@@ -49,6 +51,7 @@ closure_js_library(
 closure_js_library(
     name = "abstracttabhandler",
     srcs = ["abstracttabhandler.js"],
+    lenient = True,
     deps = [
         "//closure/goog/editor:plugin",
         "//closure/goog/events:event",
@@ -60,6 +63,7 @@ closure_js_library(
 closure_js_library(
     name = "basictextformatter",
     srcs = ["basictextformatter.js"],
+    lenient = True,
     deps = [
         "//closure/goog/array",
         "//closure/goog/dom",
@@ -87,6 +91,7 @@ closure_js_library(
 closure_js_library(
     name = "blockquote",
     srcs = ["blockquote.js"],
+    lenient = True,
     deps = [
         "//closure/goog/dom",
         "//closure/goog/dom:classlist",
@@ -104,6 +109,7 @@ closure_js_library(
 closure_js_library(
     name = "emoticons",
     srcs = ["emoticons.js"],
+    lenient = True,
     deps = [
         "//closure/goog/dom:tagname",
         "//closure/goog/editor:plugin",
@@ -117,6 +123,7 @@ closure_js_library(
 closure_js_library(
     name = "enterhandler",
     srcs = ["enterhandler.js"],
+    lenient = True,
     deps = [
         ":blockquote",
         "//closure/goog/dom",
@@ -143,6 +150,7 @@ closure_js_library(
 closure_js_library(
     name = "firststrong",
     srcs = ["firststrong.js"],
+    lenient = True,
     deps = [
         "//closure/goog/dom:nodetype",
         "//closure/goog/dom:tagiterator",
@@ -162,6 +170,7 @@ closure_js_library(
 closure_js_library(
     name = "headerformatter",
     srcs = ["headerformatter.js"],
+    lenient = True,
     deps = [
         "//closure/goog/editor:command",
         "//closure/goog/editor:plugin",
@@ -172,6 +181,7 @@ closure_js_library(
 closure_js_library(
     name = "linkbubble",
     srcs = ["linkbubble.js"],
+    lenient = True,
     deps = [
         ":abstractbubbleplugin",
         "//closure/goog/array",
@@ -193,6 +203,7 @@ closure_js_library(
 closure_js_library(
     name = "linkdialogplugin",
     srcs = ["linkdialogplugin.js"],
+    lenient = True,
     deps = [
         ":abstractdialogplugin",
         "//closure/goog/array",
@@ -212,6 +223,7 @@ closure_js_library(
 closure_js_library(
     name = "linkshortcutplugin",
     srcs = ["linkshortcutplugin.js"],
+    lenient = True,
     deps = [
         "//closure/goog/editor:command",
         "//closure/goog/editor:link",
@@ -222,6 +234,7 @@ closure_js_library(
 closure_js_library(
     name = "listtabhandler",
     srcs = ["listtabhandler.js"],
+    lenient = True,
     deps = [
         ":abstracttabhandler",
         "//closure/goog/dom",
@@ -234,6 +247,7 @@ closure_js_library(
 closure_js_library(
     name = "loremipsum",
     srcs = ["loremipsum.js"],
+    lenient = True,
     deps = [
         "//closure/goog/asserts",
         "//closure/goog/dom",
@@ -250,6 +264,7 @@ closure_js_library(
 closure_js_library(
     name = "removeformatting",
     srcs = ["removeformatting.js"],
+    lenient = True,
     deps = [
         "//closure/goog/dom",
         "//closure/goog/dom:abstractrange",
@@ -270,6 +285,7 @@ closure_js_library(
 closure_js_library(
     name = "spacestabhandler",
     srcs = ["spacestabhandler.js"],
+    lenient = True,
     deps = [
         ":abstracttabhandler",
         "//closure/goog/dom:tagname",
@@ -280,6 +296,7 @@ closure_js_library(
 closure_js_library(
     name = "tableeditor",
     srcs = ["tableeditor.js"],
+    lenient = True,
     deps = [
         "//closure/goog/array",
         "//closure/goog/dom",
@@ -298,6 +315,7 @@ closure_js_library(
 closure_js_library(
     name = "tagonenterhandler",
     srcs = ["tagonenterhandler.js"],
+    lenient = True,
     deps = [
         ":enterhandler",
         "//closure/goog/dom",
@@ -320,6 +338,7 @@ closure_js_library(
 closure_js_library(
     name = "undoredo",
     srcs = ["undoredo.js"],
+    lenient = True,
     deps = [
         ":undoredomanager",
         ":undoredostate",
@@ -343,6 +362,7 @@ closure_js_library(
 closure_js_library(
     name = "undoredomanager",
     srcs = ["undoredomanager.js"],
+    lenient = True,
     deps = [
         ":undoredostate",
         "//closure/goog/events",
@@ -353,5 +373,6 @@ closure_js_library(
 closure_js_library(
     name = "undoredostate",
     srcs = ["undoredostate.js"],
+    lenient = True,
     deps = ["//closure/goog/events:eventtarget"],
 )

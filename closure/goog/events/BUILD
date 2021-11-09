@@ -7,6 +7,7 @@ licenses(["notice"])
 closure_js_library(
     name = "actioneventwrapper",
     srcs = ["actioneventwrapper.js"],
+    lenient = True,
     deps = [
         ":eventhandler",
         ":events",
@@ -22,6 +23,7 @@ closure_js_library(
 closure_js_library(
     name = "actionhandler",
     srcs = ["actionhandler.js"],
+    lenient = True,
     deps = [
         ":browserevent",
         ":events",
@@ -35,6 +37,7 @@ closure_js_library(
 closure_js_library(
     name = "browserevent",
     srcs = ["browserevent.js"],
+    lenient = True,
     deps = [
         ":browserfeature",
         ":event",
@@ -48,6 +51,7 @@ closure_js_library(
 closure_js_library(
     name = "browserfeature",
     srcs = ["browserfeature.js"],
+    lenient = True,
     deps = ["//closure/goog/useragent"],
 )
 
@@ -57,6 +61,7 @@ closure_js_library(
         "event.js",
         "eventlike.js",
     ],
+    lenient = True,
     deps = [
         ":eventid",
         "//closure/goog/disposable",
@@ -71,6 +76,7 @@ alias(
 closure_js_library(
     name = "eventid",
     srcs = ["eventid.js"],
+    lenient = True,
 )
 
 closure_js_library(
@@ -81,6 +87,7 @@ closure_js_library(
         "eventtarget.js",
         "eventwrapper.js",
     ],
+    lenient = True,
     deps = [
         ":browserevent",
         ":browserfeature",
@@ -106,6 +113,7 @@ closure_js_library(
     name = "eventtargettester",
     testonly = 1,
     srcs = ["eventtargettester.js"],
+    lenient = True,
     deps = [
         ":event",
         ":eventtarget",
@@ -120,6 +128,7 @@ closure_js_library(
 closure_js_library(
     name = "eventtype",
     srcs = ["eventtype.js"],
+    lenient = True,
     deps = [
         ":browserfeature",
         "//closure/goog/useragent",
@@ -134,6 +143,7 @@ alias(
 closure_js_library(
     name = "filedrophandler",
     srcs = ["filedrophandler.js"],
+    lenient = True,
     deps = [
         ":browserevent",
         ":eventhandler",
@@ -148,6 +158,7 @@ closure_js_library(
 closure_js_library(
     name = "focushandler",
     srcs = ["focushandler.js"],
+    lenient = True,
     deps = [
         ":browserevent",
         ":events",
@@ -159,6 +170,7 @@ closure_js_library(
 closure_js_library(
     name = "imehandler",
     srcs = ["imehandler.js"],
+    lenient = True,
     deps = [
         ":browserevent",
         ":event",
@@ -173,6 +185,7 @@ closure_js_library(
 closure_js_library(
     name = "inputhandler",
     srcs = ["inputhandler.js"],
+    lenient = True,
     deps = [
         ":browserevent",
         ":eventhandler",
@@ -187,6 +200,7 @@ closure_js_library(
 closure_js_library(
     name = "keycodes",
     srcs = ["keycodes.js"],
+    lenient = True,
     deps = [
         ":browserevent",
         "//closure/goog/useragent",
@@ -199,6 +213,7 @@ closure_js_library(
         "keyevent.js",
         "keyhandler.js",
     ],
+    lenient = True,
     deps = [
         ":browserevent",
         ":events",
@@ -212,11 +227,13 @@ closure_js_library(
 closure_js_library(
     name = "keynames",
     srcs = ["keynames.js"],
+    lenient = True,
 )
 
 closure_js_library(
     name = "keys",
     srcs = ["keys.js"],
+    lenient = True,
 )
 
 closure_js_library(
@@ -225,6 +242,7 @@ closure_js_library(
         "listenable.js",
         "listenablekey.js",
     ],
+    lenient = True,
     deps = [
         ":event",
         ":eventid",
@@ -234,12 +252,14 @@ closure_js_library(
 closure_js_library(
     name = "listener",
     srcs = ["listener.js"],
+    lenient = True,
     deps = [":listenable"],
 )
 
 closure_js_library(
     name = "listenermap",
     srcs = ["listenermap.js"],
+    lenient = True,
     deps = [
         ":eventid",
         ":listenable",
@@ -252,6 +272,7 @@ closure_js_library(
 closure_js_library(
     name = "mousewheelhandler",
     srcs = ["mousewheelhandler.js"],
+    lenient = True,
     deps = [
         ":browserevent",
         ":events",
@@ -266,6 +287,7 @@ closure_js_library(
 closure_js_library(
     name = "onlinehandler",
     srcs = ["onlinehandler.js"],
+    lenient = True,
     deps = [
         ":eventhandler",
         ":eventtarget",
@@ -277,6 +299,7 @@ closure_js_library(
 closure_js_library(
     name = "pastehandler",
     srcs = ["pastehandler.js"],
+    lenient = True,
     deps = [
         ":browserevent",
         ":eventhandler",
@@ -293,6 +316,7 @@ closure_js_library(
 closure_js_library(
     name = "wheelevent",
     srcs = ["wheelevent.js"],
+    lenient = True,
     deps = [
         ":browserevent",
         "//closure/goog/asserts",
@@ -302,6 +326,7 @@ closure_js_library(
 closure_js_library(
     name = "wheelhandler",
     srcs = ["wheelhandler.js"],
+    lenient = True,
     deps = [
         ":browserevent",
         ":events",

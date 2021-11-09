@@ -7,6 +7,7 @@ licenses(["notice"])
 closure_js_library(
     name = "abstractmoduleloader",
     srcs = ["abstractmoduleloader.js"],
+    lenient = True,
     deps = [
         ":module",
         ":moduleinfo",
@@ -16,6 +17,7 @@ closure_js_library(
 closure_js_library(
     name = "basemodule",
     srcs = ["basemodule.js"],
+    lenient = True,
     deps = [
         ":module",
         "//closure/goog/disposable",
@@ -25,6 +27,7 @@ closure_js_library(
 closure_js_library(
     name = "loader",
     srcs = ["loader.js"],
+    lenient = True,
     deps = [
         ":module",
         "//closure/goog/array",
@@ -41,6 +44,7 @@ closure_js_library(
 closure_js_library(
     name = "module",
     srcs = ["module.js"],
+    lenient = True,
 )
 
 closure_js_library(
@@ -49,6 +53,7 @@ closure_js_library(
         "moduleinfo.js",
         "moduleloadfailuretype.js",
     ],
+    lenient = True,
     deps = [
         ":basemodule",
         ":module",
@@ -63,6 +68,7 @@ closure_js_library(
 closure_js_library(
     name = "moduleloadcallback",
     srcs = ["moduleloadcallback.js"],
+    lenient = True,
     deps = [
         ":module",
         "//closure/goog/debug:entrypointregistry",
@@ -72,6 +78,7 @@ closure_js_library(
 closure_js_library(
     name = "moduleloader",
     srcs = ["moduleloader.js"],
+    lenient = True,
     deps = [
         ":abstractmoduleloader",
         ":moduleinfo",
@@ -103,6 +110,7 @@ closure_js_library(
 closure_js_library(
     name = "modulemanager",
     srcs = ["modulemanager.js"],
+    lenient = True,
     deps = [
         ":abstractmoduleloader",
         ":module",

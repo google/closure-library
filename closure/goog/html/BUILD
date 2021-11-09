@@ -7,6 +7,7 @@ licenses(["notice"])
 closure_js_library(
     name = "cssspecificity",
     srcs = ["cssspecificity.js"],
+    lenient = True,
     deps = [
         "//closure/goog/useragent",
         "//closure/goog/useragent:product",
@@ -16,6 +17,7 @@ closure_js_library(
 closure_js_library(
     name = "legacyconversions",
     srcs = ["legacyconversions.js"],
+    lenient = True,
     deps = [
         ":safehtml",
         ":safescript",
@@ -29,6 +31,7 @@ closure_js_library(
 closure_js_library(
     name = "safehtml",
     srcs = ["safehtml.js"],
+    lenient = True,
     deps = [
         ":safescript",
         ":safestyle",
@@ -52,6 +55,7 @@ closure_js_library(
 closure_js_library(
     name = "safehtmlformatter",
     srcs = ["safehtmlformatter.js"],
+    lenient = True,
     deps = [
         ":safehtml",
         "//closure/goog/asserts",
@@ -63,6 +67,7 @@ closure_js_library(
 closure_js_library(
     name = "safescript",
     srcs = ["safescript.js"],
+    lenient = True,
     deps = [
         ":trustedtypes",
         "//closure/goog/asserts",
@@ -74,6 +79,7 @@ closure_js_library(
 closure_js_library(
     name = "safestyle",
     srcs = ["safestyle.js"],
+    lenient = True,
     deps = [
         ":safeurl",
         "//closure/goog/array",
@@ -87,6 +93,7 @@ closure_js_library(
 closure_js_library(
     name = "safestylesheet",
     srcs = ["safestylesheet.js"],
+    lenient = True,
     deps = [
         ":safestyle",
         "//closure/goog/array",
@@ -101,6 +108,7 @@ closure_js_library(
 closure_js_library(
     name = "safeurl",
     srcs = ["safeurl.js"],
+    lenient = True,
     deps = [
         ":trustedresourceurl",
         "//closure/goog/asserts",
@@ -116,12 +124,14 @@ closure_js_library(
     name = "safeurl_test_vectors",
     testonly = 1,
     srcs = ["safeurl_test_vectors.js"],
+    lenient = True,
 )
 
 closure_js_library(
     name = "testing",
-    testonly = False,
+    testonly = True,
     srcs = ["testing.js"],
+    lenient = True,
     deps = [
         ":safehtml",
         ":safescript",
@@ -137,6 +147,7 @@ closure_js_library(
 closure_js_library(
     name = "textextractor",
     srcs = ["textextractor.js"],
+    lenient = True,
     deps = [
         "//closure/goog/array",
         "//closure/goog/dom:tagname",
@@ -149,6 +160,7 @@ closure_js_library(
 closure_js_library(
     name = "trustedresourceurl",
     srcs = ["trustedresourceurl.js"],
+    lenient = True,
     deps = [
         ":safescript",
         ":trustedtypes",
@@ -164,12 +176,14 @@ closure_js_library(
 closure_js_library(
     name = "trustedtypes",
     srcs = ["trustedtypes.js"],
+    lenient = True,
     deps = ["//closure/goog/memoize"],
 )
 
 closure_js_library(
     name = "uncheckedconversions",
     srcs = ["uncheckedconversions.js"],
+    lenient = True,
     deps = [
         ":safehtml",
         ":safescript",
@@ -187,5 +201,6 @@ closure_js_library(
 closure_js_library(
     name = "utils",
     srcs = ["utils.js"],
+    lenient = True,
     deps = ["//closure/goog/string"],
 )
