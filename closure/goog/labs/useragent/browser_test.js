@@ -30,7 +30,6 @@ const Browser = {
   IE: userAgentBrowser.isIE,
   IOS_WEBVIEW: userAgentBrowser.isIosWebview,
   SAFARI: userAgentBrowser.isSafari,
-  SILK: userAgentBrowser.isSilk,
   EDGE: userAgentBrowser.isEdge
 };
 
@@ -40,7 +39,8 @@ const Browser = {
  */
 const NonChromeChromiumBrowser = {
   EDGE_CHROMIUM: userAgentBrowser.isEdgeChromium,
-  OPERA_CHROMIUM: userAgentBrowser.isOperaChromium
+  OPERA_CHROMIUM: userAgentBrowser.isOperaChromium,
+  SILK: userAgentBrowser.isSilk
 };
 
 /*
@@ -911,8 +911,13 @@ testSuite({
 
   async testSilk() {
     util.setUserAgent(testAgents.KINDLE_FIRE);
-    assertBrowser(Browser.SILK);
+    assertBrowser(Browser.CHROME);
+    assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.SILK);
     assertPreUACHVersion('2.1');
+
+    assertVersionOf([{brand: userAgentBrowser.Brand.SILK, version: 2}]);
+    await assertFullVersionOf(
+        [{brand: userAgentBrowser.Brand.SILK, version: '2.1'}], true);
   },
 
   async testFirefoxOnAndroidTablet() {
@@ -1002,6 +1007,44 @@ testSuite({
         userAgentBrowser.Brand.CHROMIUM, '101', '101.0.4472.77');
     await assertGetVersionStringForLogging(
         userAgentBrowser.Brand.EDGE, '101', '101.0.864.37');
+    await assertGetVersionStringForLogging(DEFINITELY_NOT_A_BROWSER, '', '');
+  },
+
+  async testSilkUserAgentData() {
+    const userAgentDataWithVersion =
+        testAgentData.withHighEntropyData(testAgentData.SILK_USERAGENT_DATA, {
+          fullVersionList: [
+            {brand: 'Chromium', version: '93.0.4577.82'},
+            // No Silk brand yet.
+          ]
+        });
+    util.setUserAgent(testAgents.KINDLE_FIRE_SILK_93);
+    util.setUserAgentData(userAgentDataWithVersion);
+
+    assertBrowser(Browser.CHROME);
+    assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.SILK);
+
+    assertPreUACHVersion('93.2.7');
+    assertVersionOf([
+      {brand: userAgentBrowser.Brand.CHROMIUM, version: 93},
+      {brand: userAgentBrowser.Brand.SILK, version: 93}
+    ]);
+
+    await assertFullVersionOf(
+        [
+          {brand: userAgentBrowser.Brand.CHROMIUM, version: '93.0.4577.82'},
+          {brand: userAgentBrowser.Brand.SILK, version: '93.2.7'}
+        ],
+        true);
+    await assertFullVersionOfBetween(
+        userAgentBrowser.Brand.CHROMIUM, '93.0', '93.1');
+    await assertFullVersionOfBetween(
+        userAgentBrowser.Brand.SILK, '93.2.6', '93.2.8');
+
+    await assertGetVersionStringForLogging(
+        userAgentBrowser.Brand.CHROMIUM, '93.0.4577.82');
+    await assertGetVersionStringForLogging(
+        userAgentBrowser.Brand.SILK, '93.2.7');
     await assertGetVersionStringForLogging(DEFINITELY_NOT_A_BROWSER, '', '');
   },
 

@@ -469,6 +469,10 @@ testAgents.KINDLE_FIRE =
     ' AppleWebKit/535.19 (KHTML, like Gecko) Silk/2.1 Mobile Safari/535.19' +
     ' Silk-Accelerated=true';
 
+/** @const {string} */
+testAgents.KINDLE_FIRE_SILK_93 =
+    'Mozilla/5.0 (Linux; Android 5.1.1; KFARWI) AppleWebKit/537.36' +
+    ' (KHTML, like Gecko) Silk/93.2.7 like Chrome/93.0.4577.82 Safari/537.36';
 
 /** @const {string} */
 testAgents.FIREFOX_ANDROID_TABLET =

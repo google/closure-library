@@ -199,8 +199,9 @@ function matchChrome() {
   if (useUserAgentBrand()) {
     return util.matchUserAgentDataBrand(Brand.CHROMIUM);
   }
-  return (util.matchUserAgent('Chrome') || util.matchUserAgent('CriOS')) &&
-      !matchEdgeHtml();
+  return ((util.matchUserAgent('Chrome') || util.matchUserAgent('CriOS')) &&
+          !matchEdgeHtml()) ||
+      isSilk();
 }
 
 /** @return {boolean} Whether the user's browser is the Android browser. */
@@ -358,6 +359,12 @@ function getVersion() {
     return lookUpValueWithKeys(['Edg']);
   }
 
+  // Check Silk before Chrome since it may have Chrome in its string and be
+  // treated as Chrome.
+  if (isSilk()) {
+    return lookUpValueWithKeys(['Silk']);
+  }
+
   if (isChrome()) {
     return lookUpValueWithKeys(['Chrome', 'CriOS', 'HeadlessChrome']);
   }
@@ -492,7 +499,8 @@ function getFullVersionFromUserAgentString(browser) {
   // "Mozilla" and the engine.
   if ((browser === Brand.FIREFOX && isFirefox()) ||
       (browser === Brand.SAFARI && isSafari()) ||
-      (browser === Brand.ANDROID_BROWSER && isAndroidBrowser())) {
+      (browser === Brand.ANDROID_BROWSER && isAndroidBrowser()) ||
+      (browser === Brand.SILK && isSilk())) {
     const tuple = versionTuples[2];
     return tuple && tuple[1] || '';
   }
@@ -513,7 +521,9 @@ function getFullVersionFromUserAgentString(browser) {
  */
 function versionOf(browser) {
   let versionParts;
-  if (useUserAgentBrand()) {
+  // Silk currently does not identify itself in its userAgentData.brands array,
+  // so if checking its version, always fall back to the user agent string.
+  if (useUserAgentBrand() && browser !== Brand.SILK) {
     const data = util.getUserAgentData();
     const matchingBrand = data.brands.find(({brand}) => brand === browser);
     if (!matchingBrand || !matchingBrand.version) {
@@ -631,6 +641,9 @@ function fullVersionOf(browser) {
   // upper bound for when fullVersionList is estimated to have been implemented.
   // TODO(user): If fullVersionList is implemented in an earlier version
   // of Chromium, lower this value to compare against that major version.
+  // Additionally, Silk currently does not identify itself in its
+  // userAgentData.brands array, so if checking its version, always fall back to
+  // the user agent string.
   if (useUserAgentBrand() && !(versionOf(Brand.CHROMIUM) < 101)) {
     const data = util.getUserAgentData();
     // Operate under the assumption that the low-entropy and high-entropy lists

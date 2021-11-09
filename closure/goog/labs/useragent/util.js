@@ -171,7 +171,7 @@ function extractVersionTuples(userAgent) {
   const versionRegExp = new RegExp(
       // Key. Note that a key may have a space.
       // (i.e. 'Mobile Safari' in 'Mobile Safari/5.0')
-      '(\\w[\\w ]+)' +
+      '([A-Z][\\w ]+)' +
 
           '/' +                // slash
           '([^\\s]+)' +        // version (i.e. '5.0b')

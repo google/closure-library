@@ -165,3 +165,14 @@ exports.EDGECHROMIUM_USERAGENT_DATA = Object.freeze({
   getHighEntropyValues: getHighEntropyValuesMock,
   platform: 'Windows',
 });
+
+/** @const {!NavigatorUAData} */
+exports.SILK_USERAGENT_DATA = Object.freeze({
+  brands: deepFreeze(shuffle([
+    {brand: 'Not;A Brand', version: '99'},
+    {brand: 'Chromium', version: '93'},
+  ])),
+  mobile: false,
+  getHighEntropyValues: getHighEntropyValuesMock,
+  platform: 'Android',
+});
