@@ -273,6 +273,7 @@ testSuite({
     util.setUserAgent('');
     util.setUserAgentData(null);
     highEntropyData.resetAllForTesting();
+    highEntropyData.setHasFullVersionListForTesting(false);
   },
 
   async testOpera10() {
@@ -947,6 +948,7 @@ testSuite({
           ]
         });
     util.setUserAgentData(userAgentDataWithVersion);
+    highEntropyData.setHasFullVersionListForTesting(true);
 
     assertBrowser(Browser.CHROME);
     assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.OPERA_CHROMIUM);
@@ -984,6 +986,7 @@ testSuite({
           ]
         });
     util.setUserAgentData(userAgentDataWithVersion);
+    highEntropyData.setHasFullVersionListForTesting(true);
 
     assertBrowser(Browser.CHROME);
     assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.EDGE_CHROMIUM);
@@ -1055,6 +1058,7 @@ testSuite({
         testAgentData.CHROME_USERAGENT_DATA,
         {fullVersionList: [{brand: 'Chromium', version: '101.0.4472.77'}]});
     util.setUserAgentData(userAgentDataWithVersion);
+    highEntropyData.setHasFullVersionListForTesting(true);
 
     assertBrowser(Browser.CHROME);
     assertTrue(userAgentBrowser.isChrome());
@@ -1105,6 +1109,7 @@ testSuite({
 
   async testChromeUserAgentDataWithRejectedHighEntropyValues() {
     util.setUserAgentData(testAgentData.CHROME_USERAGENT_DATA);
+    highEntropyData.setHasFullVersionListForTesting(true);
 
     const fullChromeVersion =
         userAgentBrowser.fullVersionOf(userAgentBrowser.Brand.CHROMIUM);
@@ -1117,5 +1122,46 @@ testSuite({
     await assertGetVersionStringForLogging(
         userAgentBrowser.Brand.CHROMIUM, '101', '101');
     await assertGetVersionStringForLogging(DEFINITELY_NOT_A_BROWSER, '', '');
+  },
+
+  async testChromeUserAgentDataPreloadedFullVersion() {
+    // Note: The full versions listed here are fictional, made up by bumping
+    // a legitimate version's major version number by 10 (e.g. 91.* -> 101.*).
+    const userAgentDataWithVersion = testAgentData.withHighEntropyData(
+        testAgentData.CHROME_USERAGENT_DATA,
+        {fullVersionList: [{brand: 'Chromium', version: '101.0.4472.77'}]});
+    util.setUserAgentData(userAgentDataWithVersion);
+    highEntropyData.setHasFullVersionListForTesting(true);
+
+    const fullChromeVersion =
+        userAgentBrowser.fullVersionOf(userAgentBrowser.Brand.CHROMIUM);
+    assertNotNullNorUndefined(fullChromeVersion);
+    assertEquals(undefined, fullChromeVersion.getIfLoaded());
+
+    // Preload the full version list.
+    await userAgentBrowser.loadFullVersions();
+    assertEquals(
+        '101.0.4472.77',
+        fullChromeVersion.getIfLoaded().toVersionStringForLogging());
+  },
+
+  async testChromeNoFullVersionUserAgentDataPreloadedFullVersion() {
+    util.setUserAgent(testAgents.CHROME_LINUX_91);
+    util.setUserAgentData(
+        testAgentData.CHROME_NO_FULLVERSIONLIST_USERAGENT_DATA);
+
+    const fullChromeVersion =
+        userAgentBrowser.fullVersionOf(userAgentBrowser.Brand.CHROMIUM);
+    assertNotNullNorUndefined(fullChromeVersion);
+    assertEquals(
+        '91.0.4472.77',
+        fullChromeVersion.getIfLoaded().toVersionStringForLogging());
+
+    // Preload the full version list.
+    await userAgentBrowser.loadFullVersions();
+    // This should have no effect.
+    assertEquals(
+        '91.0.4472.77',
+        fullChromeVersion.getIfLoaded().toVersionStringForLogging());
   },
 });

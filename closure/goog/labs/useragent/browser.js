@@ -19,7 +19,7 @@ const googAsserts = goog.require('goog.asserts');
 const util = goog.require('goog.labs.userAgent.util');
 const {AsyncValue, Version} = goog.require('goog.labs.userAgent.highEntropy.highEntropyValue');
 const {compareVersions} = goog.require('goog.string.internal');
-const {fullVersionList} = goog.require('goog.labs.userAgent.highEntropy.highEntropyData');
+const {fullVersionList, hasFullVersionList} = goog.require('goog.labs.userAgent.highEntropy.highEntropyData');
 
 // TODO(nnaze): Refactor to remove excessive exclusion logic in matching
 // functions.
@@ -625,6 +625,23 @@ class UserAgentStringFallbackBrandVersion {
 }
 
 /**
+ * Requests all full browser versions to be cached.  When the returned promise
+ * resolves, subsequent calls to `fullVersionOf(...).getIfLoaded()` will return
+ * a value.
+ *
+ * This method should be avoided in favor of directly awaiting
+ * `fullVersionOf(...).load()` where it is used.
+ *
+ * @return {!Promise<void>}
+ */
+async function loadFullVersions() {
+  if (useUserAgentBrand() && hasFullVersionList()) {
+    await fullVersionList.load();
+  }
+}
+exports.loadFullVersions = loadFullVersions;
+
+/**
  * Returns an object that provides access to the full version string of the
  * current browser -- or undefined, based on whether the current browser matches
  * the requested browser brand. Note that the full version string is a
@@ -636,15 +653,9 @@ class UserAgentStringFallbackBrandVersion {
  * undefined if the current browser doesn't match the given brand.
  */
 function fullVersionOf(browser) {
-  // fullVersionList is currently not implemented in Chromium. Therefore, don't
-  // check fullVersionList until Chromium 101. We choose 101 as a reasonable
-  // upper bound for when fullVersionList is estimated to have been implemented.
-  // TODO(user): If fullVersionList is implemented in an earlier version
-  // of Chromium, lower this value to compare against that major version.
-  // Additionally, Silk currently does not identify itself in its
-  // userAgentData.brands array, so if checking its version, always fall back to
-  // the user agent string.
-  if (useUserAgentBrand() && !(versionOf(Brand.CHROMIUM) < 101)) {
+  // Silk currently does not identify itself in its userAgentData.brands array,
+  // so if checking its version, always fall back to the user agent string.
+  if (useUserAgentBrand() && hasFullVersionList()) {
     const data = util.getUserAgentData();
     // Operate under the assumption that the low-entropy and high-entropy lists
     // of brand/version pairs contain an identical set of brands. Therefore, if
