@@ -318,6 +318,42 @@ function createExcludingSyntheticModuleOverheadLoader(
   };
 }
 
+/**
+ * Creates an AbstractModuleLoader implementation that registers one
+ * initialization callback for a synthetic module, then attempts to set a
+ * module constructor
+ * @param {!ModuleManager} moduleMgr
+ * @param {!Array} modulesToMarkAsLoaded
+ * @return {{loadModules: function(), constructorSet: boolean}}
+ */
+function createExcludingSyntheticModuleOverheadLoaderWithConstructor(
+    moduleMgr, modulesToMarkAsLoaded) {
+  return {
+    constructorSet: false,
+    loadModules: function(ids, moduleInfoMap, {onError, onSuccess, onTimeout}) {
+      requestCount++;
+      setTimeout(() => {
+        // Simulate a synthetic module loading first, and registering a cb.
+        moduleMgr.registerInitializationCallback(() => {});
+        class ModuleCtor extends BaseModule {
+          constructor() {
+            super();
+            this.constructorSet = true;
+          }
+        }
+        moduleMgr.setModuleConstructor(ModuleCtor);
+        for (const id of modulesToMarkAsLoaded) {
+          moduleMgr.beforeLoadModuleCode(id);
+          moduleMgr.setLoaded();
+        }
+        if (onSuccess) {
+          onSuccess();
+        }
+      }, 5);
+    },
+  };
+}
+
 testSuite({
   tearDown() {
     clock.dispose();
@@ -875,6 +911,23 @@ testSuite({
     assertTrue(calledBack);
     assertNull(error);
     assertTrue(loader.syntheticModuleCallbackCalled);
+    assertTrue(mm.getModuleInfo('a').isLoaded());
+  },
+
+  /**
+   * Testing setModuleConstructor fails for synthetic modules
+   */
+  testSetModuleConstructorFailsForSyntheticModules() {
+    const mm = getModuleManager({'a': []});
+    const loader = createExcludingSyntheticModuleOverheadLoaderWithConstructor(
+        mm, /* modulesToMarkAsLoaded= */['a']);
+    mm.setLoader(loader);
+    mm.load('a');
+    assertFalse(mm.getModuleInfo('a').isLoaded());
+
+    clock.tick(5);
+
+    assertFalse(loader.constructorSet);
     assertTrue(mm.getModuleInfo('a').isLoaded());
   },
 

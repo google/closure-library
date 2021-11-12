@@ -1083,6 +1083,11 @@ goog.module.ModuleManager.prototype.setModuleConstructor = function(fn) {
   if (!this.currentlyLoadingModule_) {
     goog.log.error(this.logger_, 'No module is currently loading');
     return;
+  } else if (
+      this.currentlyLoadingModule_.getId() === SYNTHETIC_MODULE_OVERHEAD_ID) {
+    goog.log.error(
+        this.logger_, 'Cannot set module constructor for synthetic module');
+    return;
   }
   this.currentlyLoadingModule_.setModuleConstructor(fn);
 };
