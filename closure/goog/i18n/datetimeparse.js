@@ -458,22 +458,6 @@ goog.i18n.DateTimeParse.prototype.parse = function(text, date, options) {
   return cal.calcDate_(date, validate) ? parsePos[0] : 0;
 };
 
-
-/**
- * Parse the given string and fill info into date object. This version will
- * validate that the result is a valid date/time.
- * @param {string} text The string being parsed.
- * @param {?goog.date.DateLike} date The Date object to hold the parsed date.
- * @return {number} How many characters parser advanced.
- * @deprecated Use goog.i18n.DateTimeParse.parse with the validate option
- *     instead.
- */
-goog.i18n.DateTimeParse.prototype.strictParse = function(text, date) {
-  'use strict';
-  return this.parse(text, date, {validate: true});
-};
-
-
 /**
  * Parse a run of abutting numeric pattern parts. Take the pattern "HHmmss" as
  * an example. We will try to parse 2/2/2 characters of the input text, then if
