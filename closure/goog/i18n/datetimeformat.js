@@ -225,9 +225,8 @@ goog.i18n.DateTimeFormat.TOKENS_ = [
   // quote string
   /^\'(?:[^\']|\'\')*(\'|$)/,
   // pattern chars
-  /^(?:G+|y+|Y+|M+|k+|S+|E+|a+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|V+|w+|z+|Z+)/,
-  // and all the other chars
-  /^[^\'GyYMkSEahKHcLQdmsvVwzZ]+/  // and all the other chars
+  /^(?:G+|y+|Y+|M+|k+|S+|E+|a+|b+|B+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|V+|w+|z+|Z+)/,
+  /^[^\'GyYMkSEabBhKHcLQdmsvVwzZ]+/  // and all the other chars
 ];
 
 
@@ -856,9 +855,50 @@ goog.i18n.DateTimeFormat.prototype.formatAmPm_ = function(count, date) {
   'use strict';
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
   const hours = goog.i18n.DateTimeFormat.getHours_(date);
+  // Must implement this with fallback if no data is found.
   return this.dateTimeSymbols_.AMPMS[hours >= 12 && hours < 24 ? 1 : 0];
 };
 
+/**
+ * Formats am/pm/noon/midnight field according to pattern specified with 'b'
+ * TODO: b/206042104  Handle noon and midnight when data is added.
+ * Currently falls back to "a".
+ *
+ * @param {number} count Number of time pattern char repeats, it controls
+ *     how a field should be formatted.
+ * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+ * @return {string} Formatted string that represent this field.
+ * @private
+ */
+goog.i18n.DateTimeFormat.prototype.formatAmPmNoonMidnight_ = function(
+    count, date) {
+  'use strict';
+  goog.i18n.DateTimeFormat.validateDateHasTime_(date);
+  const hours = goog.i18n.DateTimeFormat.getHours_(date);
+  // Must implement this with fallback if no data is found.
+  return this.dateTimeSymbols_.AMPMS[hours >= 12 && hours < 24 ? 1 : 0];
+};
+
+
+/**
+ * Formats flexible day periods according to pattern specified with 'B'.
+ * TODO: b/206042104  Handle flexible day periods when data is added.
+ * Currently falls back to "a".
+ *
+ * @param {number} count Number of time pattern char repeats, it controls
+ *     how a field should be formatted.
+ * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+ * @return {string} Formatted string that represent this field.
+ * @private
+ */
+goog.i18n.DateTimeFormat.prototype.formatFlexibleDayPeriods_ = function(
+    count, date) {
+  'use strict';
+  goog.i18n.DateTimeFormat.validateDateHasTime_(date);
+  const hours = goog.i18n.DateTimeFormat.getHours_(date);
+  // Must implement this with fallback if no data is found.
+  return this.dateTimeSymbols_.AMPMS[hours >= 12 && hours < 24 ? 1 : 0];
+};
 
 /**
  * Formats (1..12) Hours field according to pattern specified
@@ -1159,6 +1199,10 @@ goog.i18n.DateTimeFormat.prototype.formatField_ = function(
       return this.formatDayOfWeek_(count, dateForDate);
     case 'a':
       return this.formatAmPm_(count, dateForTime);
+    case 'b':
+      return this.formatAmPmNoonMidnight_(count, dateForTime);
+    case 'B':
+      return this.formatFlexibleDayPeriods_(count, dateForTime);
     case 'h':
       return this.format1To12Hours_(count, dateForTime);
     case 'K':
