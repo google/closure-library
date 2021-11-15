@@ -72,8 +72,10 @@ testSuite({
     assertIsTablet(testAgents.KINDLE_FIRE);
     assertIsTablet(testAgents.IPAD_6);
     assertIsTablet(
-        testAgents.CHROME_ANDROID_TABLET, testAgentData.CHROME_USERAGENT_DATA);
-    assertIsTablet(testAgents.KINDLE_FIRE, testAgentData.CHROME_USERAGENT_DATA);
+        testAgents.CHROME_ANDROID_TABLET,
+        testAgentData.CHROME_USERAGENT_DATA_LINUX);
+    assertIsTablet(
+        testAgents.KINDLE_FIRE, testAgentData.CHROME_USERAGENT_DATA_LINUX);
   },
 
   testDesktop() {
@@ -83,6 +85,7 @@ testSuite({
     assertIsDesktop(testAgents.IE_9);
     assertIsDesktop(testAgents.IE_10);
     assertIsDesktop(testAgents.IE_11);
-    assertIsDesktop(testAgents.CHROME_25, testAgentData.CHROME_USERAGENT_DATA);
+    assertIsDesktop(
+        testAgents.CHROME_25, testAgentData.CHROME_USERAGENT_DATA_LINUX);
   },
 });

@@ -1055,7 +1055,7 @@ testSuite({
     // Note: The full versions listed here are fictional, made up by bumping
     // a legitimate version's major version number by 10 (e.g. 91.* -> 101.*).
     const userAgentDataWithVersion = testAgentData.withHighEntropyData(
-        testAgentData.CHROME_USERAGENT_DATA,
+        testAgentData.CHROME_USERAGENT_DATA_LINUX,
         {fullVersionList: [{brand: 'Chromium', version: '101.0.4472.77'}]});
     util.setUserAgentData(userAgentDataWithVersion);
     highEntropyData.setHasFullVersionListForTesting(true);
@@ -1108,7 +1108,7 @@ testSuite({
   },
 
   async testChromeUserAgentDataWithRejectedHighEntropyValues() {
-    util.setUserAgentData(testAgentData.CHROME_USERAGENT_DATA);
+    util.setUserAgentData(testAgentData.CHROME_USERAGENT_DATA_LINUX);
     highEntropyData.setHasFullVersionListForTesting(true);
 
     const fullChromeVersion =
@@ -1128,7 +1128,7 @@ testSuite({
     // Note: The full versions listed here are fictional, made up by bumping
     // a legitimate version's major version number by 10 (e.g. 91.* -> 101.*).
     const userAgentDataWithVersion = testAgentData.withHighEntropyData(
-        testAgentData.CHROME_USERAGENT_DATA,
+        testAgentData.CHROME_USERAGENT_DATA_LINUX,
         {fullVersionList: [{brand: 'Chromium', version: '101.0.4472.77'}]});
     util.setUserAgentData(userAgentDataWithVersion);
     highEntropyData.setHasFullVersionListForTesting(true);

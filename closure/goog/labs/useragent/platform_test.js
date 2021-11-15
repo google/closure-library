@@ -113,24 +113,6 @@ testSuite({
     await assertVersionBetween('4', '5');
   },
 
-  async testAndroidUserAgentData() {
-    const uaData = testAgentData.withHighEntropyData(
-        testAgentData.CHROME_USERAGENT_DATA_MOBILE, {
-          platformVersion: '11.0.0',
-        });
-    util.setUserAgentData(uaData);
-    await assertVersion('11.0.0');
-  },
-
-  async testAndroidUserAgentDataWithRejectedHighEntropyValues() {
-    const uaData = testAgentData.CHROME_USERAGENT_DATA_MOBILE;
-    util.setUserAgentData(uaData);
-    assertEquals(undefined, userAgentPlatform.version.getIfLoaded());
-
-    await assertRejects(userAgentPlatform.version.load());
-    assertEquals(undefined, userAgentPlatform.version.getIfLoaded());
-  },
-
   async testKindleFire() {
     const uaString = testAgents.KINDLE_FIRE;
     util.setUserAgent(uaString);
@@ -350,15 +332,6 @@ testSuite({
     await assertVersionBetween('10.15.7', '10.15.8');
   },
 
-  async testMacOSUserAgentData() {
-    const uaData =
-        testAgentData.withHighEntropyData(testAgentData.CHROME_USERAGENT_DATA, {
-          platformVersion: '11.6.0',
-        });
-    util.setUserAgentData(uaData);
-    await assertVersion('11.6.0');
-  },
-
   async testLinux() {
     let uaString = testAgents.FIREFOX_LINUX;
     util.setUserAgent(uaString);
@@ -466,5 +439,65 @@ testSuite({
     assertTrue(userAgentPlatform.isKaiOS());
     assertPreUACHVersion('2.5');
     await assertVersion('2.5', true);
+  },
+
+  async testAndroidUserAgentData() {
+    const uaData = testAgentData.withHighEntropyData(
+        testAgentData.CHROME_USERAGENT_DATA_MOBILE, {
+          platformVersion: '11.0.0',
+        });
+    util.setUserAgentData(uaData);
+    await assertVersion('11.0.0');
+  },
+
+  async testAndroidUserAgentDataWithRejectedHighEntropyValues() {
+    const uaData = testAgentData.CHROME_USERAGENT_DATA_MOBILE;
+    util.setUserAgentData(uaData);
+    assertEquals(undefined, userAgentPlatform.version.getIfLoaded());
+
+    await assertRejects(userAgentPlatform.version.load());
+    assertEquals(undefined, userAgentPlatform.version.getIfLoaded());
+  },
+
+  async testChromeOSUserAgentData() {
+    const uaData = testAgentData.withHighEntropyData(
+        testAgentData.CHROME_USERAGENT_DATA_CROS, {
+          platformVersion: '14150.74.0',
+        });
+    util.setUserAgentData(uaData);
+    assertTrue(userAgentPlatform.isChromeOS());
+    await assertVersion('14150.74.0');
+  },
+
+  async testLinuxUserAgentData() {
+    // Linux version should be an empty string.
+    // See https://wicg.github.io/ua-client-hints/#sec-ch-ua-platform-version
+    const uaData = testAgentData.withHighEntropyData(
+        testAgentData.CHROME_USERAGENT_DATA_LINUX, {
+          platformVersion: '',
+        });
+    util.setUserAgentData(uaData);
+    assertTrue(userAgentPlatform.isLinux());
+    await assertVersion('');
+  },
+
+  async testMacOSUserAgentData() {
+    const uaData = testAgentData.withHighEntropyData(
+        testAgentData.CHROME_USERAGENT_DATA_MACOS, {
+          platformVersion: '11.6.0',
+        });
+    util.setUserAgentData(uaData);
+    assertTrue(userAgentPlatform.isMacintosh());
+    await assertVersion('11.6.0');
+  },
+
+  async testWindowsUserAgentData() {
+    const uaData = testAgentData.withHighEntropyData(
+        testAgentData.CHROME_USERAGENT_DATA_WINDOWS, {
+          platformVersion: '10.0.0',
+        });
+    util.setUserAgentData(uaData);
+    assertTrue(userAgentPlatform.isWindows());
+    await assertVersion('10.0.0');
   },
 });
