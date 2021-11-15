@@ -485,19 +485,19 @@ goog.iter.map = function(iterable, f, opt_obj) {
  * Passes every element of an iterator into a function and accumulates the
  * result.
  *
- * @param {goog.iter.Iterator<VALUE>|goog.iter.Iterable} iterable The iterator
- *     to iterate over.
- * @param {function(this:THIS,VALUE,VALUE):VALUE} f The function to call for
+ * @param {!goog.iter.Iterator<VALUE>|!goog.iter.Iterable<VALUE>} iterable The
+ *     iterator to iterate over.
+ * @param {function(this:THIS,RVALUE,VALUE):RVALUE} f The function to call for
  *     every element. This function takes 2 arguments (the function's previous
  *     result or the initial value, and the value of the current element).
  *     function(previousValue, currentElement) : newValue.
- * @param {VALUE} val The initial value to pass into the function on the first
+ * @param {RVALUE} val The initial value to pass into the function on the first
  *     call.
  * @param {THIS=} opt_obj  The object to be used as the value of 'this' within
  *     f.
- * @return {VALUE} Result of evaluating f repeatedly across the values of
+ * @return {RVALUE} Result of evaluating f repeatedly across the values of
  *     the iterator.
- * @template THIS, VALUE
+ * @template THIS, VALUE, RVALUE
  */
 goog.iter.reduce = function(iterable, f, val, opt_obj) {
   'use strict';
