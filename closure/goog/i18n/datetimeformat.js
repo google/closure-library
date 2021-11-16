@@ -89,6 +89,8 @@ const NativeLocaleDigits = goog.module.get('goog.i18n.NativeLocaleDigits');
  * w        week in year               (Number)           27
  * W*       week in month              (Number)           2
  * a        am/pm marker               (Text)             PM
+ * b        am/pm/noon/midnight        (Text)             Noon
+ * B        flexible day periods        (Text)             de l’après-midi'
  * k        hour in day (1~24)         (Number)           24
  * K        hour in am/pm (0~11)       (Number)           0
  * z        time zone                  (Text)             Pacific Standard Time
