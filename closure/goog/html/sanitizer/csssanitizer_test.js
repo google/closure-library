@@ -692,10 +692,32 @@ testSuite({
   },
 
   testInlineStyleRules_specificity() {
+    // Assert that the #foo style is applied over the <a> style (ID selectors
+    // have a higher specificity).
     const input = '<style>a{color: red; border: 1px}' +
         '#foo{color: white; border: 2px}</style>' +
         '<a id="foo" style="color: black">foo</a>';
     const expected = '<a id="foo" style="color: black; border: 2px">foo</a>';
+    assertInlinedStyles(expected, input);
+  },
+
+  testInlineStyleRules_specificity_reverse() {
+    // Assert that the style rule with greater specificity (#foo) wins
+    // regardless of the order of appearance.
+    const input = '<style>#foo{color: white; border: 2px}' +
+        'a{color: red; border: 1px}</style>' +
+        '<a id="foo" style="color: black">foo</a>';
+    const expected = '<a id="foo" style="color: black; border: 2px">foo</a>';
+    assertInlinedStyles(expected, input);
+  },
+
+  testInlineStyleRules_specificityTie_lastRuleWins() {
+    // In case of a specificity tie, assert that the last style rule defined
+    // wins.
+    const input =
+        '<style>.zoo{color: blue} .foo.bar{color: red} .bar.zoo{color: white}' +
+        '</style><a class="foo bar zoo">foo</a>';
+    const expected = '<a class="foo bar zoo" style="color: white">foo</a>';
     assertInlinedStyles(expected, input);
   },
 
