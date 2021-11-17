@@ -8,7 +8,7 @@
  * @fileoverview Plural rules.
  *
  *
- * File generated from CLDR ver. 39
+ * File generated from CLDR ver. 40
  */
 
 // clang-format off
@@ -210,6 +210,28 @@ goog.i18n.pluralRules.hiSelect_ = function(n, precision) {
 };
 
 /**
+ * Plural select rules for es locale
+ *
+ * @param {number} n  The count of items.
+ * @param {number=} precision Precision for number formatting, if not default.
+ * @return {!goog.i18n.pluralRules.Keyword} Locale-specific plural value.
+ * @private
+ */
+goog.i18n.pluralRules.esSelect_ = function(n, precision) {
+  "use strict";
+  const i = n | 0;
+  const e = goog.i18n.pluralRules.get_e_(n);
+  const vf = goog.i18n.pluralRules.get_vf_(n, precision);
+  if (n == 1) {
+    return goog.i18n.pluralRules.Keyword.ONE;
+  }
+  if (e == 0 && i != 0 && i % 1000000 == 0 && vf.v == 0 || (e < 0 || e > 5)) {
+    return goog.i18n.pluralRules.Keyword.MANY;
+  }
+  return goog.i18n.pluralRules.Keyword.OTHER;
+};
+
+/**
  * Plural select rules for hy locale
  *
  * @param {number} n  The count of items.
@@ -237,8 +259,13 @@ goog.i18n.pluralRules.hySelect_ = function(n, precision) {
 goog.i18n.pluralRules.ptSelect_ = function(n, precision) {
   "use strict";
   const i = n | 0;
+  const e = goog.i18n.pluralRules.get_e_(n);
+  const vf = goog.i18n.pluralRules.get_vf_(n, precision);
   if (i >= 0 && i <= 1) {
     return goog.i18n.pluralRules.Keyword.ONE;
+  }
+  if (e == 0 && i != 0 && i % 1000000 == 0 && vf.v == 0 || (e < 0 || e > 5)) {
+    return goog.i18n.pluralRules.Keyword.MANY;
   }
   return goog.i18n.pluralRules.Keyword.OTHER;
 };
@@ -286,6 +313,28 @@ goog.i18n.pluralRules.plSelect_ = function(n, precision) {
     return goog.i18n.pluralRules.Keyword.FEW;
   }
   if (vf.v == 0 && i != 1 && i % 10 >= 0 && i % 10 <= 1 || vf.v == 0 && i % 10 >= 5 && i % 10 <= 9 || vf.v == 0 && i % 100 >= 12 && i % 100 <= 14) {
+    return goog.i18n.pluralRules.Keyword.MANY;
+  }
+  return goog.i18n.pluralRules.Keyword.OTHER;
+};
+
+/**
+ * Plural select rules for it locale
+ *
+ * @param {number} n  The count of items.
+ * @param {number=} precision Precision for number formatting, if not default.
+ * @return {!goog.i18n.pluralRules.Keyword} Locale-specific plural value.
+ * @private
+ */
+goog.i18n.pluralRules.itSelect_ = function(n, precision) {
+  "use strict";
+  const i = n | 0;
+  const e = goog.i18n.pluralRules.get_e_(n);
+  const vf = goog.i18n.pluralRules.get_vf_(n, precision);
+  if (i == 1 && vf.v == 0) {
+    return goog.i18n.pluralRules.Keyword.ONE;
+  }
+  if (e == 0 && i != 0 && i % 1000000 == 0 && vf.v == 0 || (e < 0 || e > 5)) {
     return goog.i18n.pluralRules.Keyword.MANY;
   }
   return goog.i18n.pluralRules.Keyword.OTHER;
@@ -516,14 +565,14 @@ goog.i18n.pluralRules.gaSelect_ = function(n, precision) {
 };
 
 /**
- * Plural select rules for es locale
+ * Plural select rules for af locale
  *
  * @param {number} n  The count of items.
  * @param {number=} precision Precision for number formatting, if not default.
  * @return {!goog.i18n.pluralRules.Keyword} Locale-specific plural value.
  * @private
  */
-goog.i18n.pluralRules.esSelect_ = function(n, precision) {
+goog.i18n.pluralRules.afSelect_ = function(n, precision) {
   "use strict";
   if (n == 1) {
     return goog.i18n.pluralRules.Keyword.ONE;
@@ -769,7 +818,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
    goog.i18n.pluralRules.select = goog.i18n.pluralRules.mapToNativeSelect_();
 } else {
   if (goog.LOCALE === 'af') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'am') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.hiSelect_;
@@ -784,13 +833,13 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.arSelect_;
   }
   if (goog.LOCALE === 'az') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'be') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.beSelect_;
   }
   if (goog.LOCALE === 'bg') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'bn') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.hiSelect_;
@@ -805,7 +854,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
   }
   if (goog.LOCALE === 'chr') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'cs') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.csSelect_;
@@ -826,7 +875,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
   }
   if (goog.LOCALE === 'el') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'en') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
@@ -874,7 +923,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
   }
   if (goog.LOCALE === 'eu') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'fa') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.hiSelect_;
@@ -898,13 +947,13 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
   }
   if (goog.LOCALE === 'gsw') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'gu') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.hiSelect_;
   }
   if (goog.LOCALE === 'haw') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'he') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.heSelect_;
@@ -916,7 +965,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.srSelect_;
   }
   if (goog.LOCALE === 'hu') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'hy') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.hySelect_;
@@ -931,7 +980,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.isSelect_;
   }
   if (goog.LOCALE === 'it') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.itSelect_;
   }
   if (goog.LOCALE === 'iw') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.heSelect_;
@@ -940,10 +989,10 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
   }
   if (goog.LOCALE === 'ka') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'kk') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'km') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
@@ -955,7 +1004,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
   }
   if (goog.LOCALE === 'ky') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'ln') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.lnSelect_;
@@ -973,16 +1022,16 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.mkSelect_;
   }
   if (goog.LOCALE === 'ml') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'mn') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'mo') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.roSelect_;
   }
   if (goog.LOCALE === 'mr') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'ms') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
@@ -994,22 +1043,22 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
   }
   if (goog.LOCALE === 'nb') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'ne') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'nl') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
   }
   if (goog.LOCALE === 'no') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'no_NO' || goog.LOCALE === 'no-NO') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'or') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'pa') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.lnSelect_;
@@ -1024,7 +1073,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.ptSelect_;
   }
   if (goog.LOCALE === 'pt_PT' || goog.LOCALE === 'pt-PT') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.itSelect_;
   }
   if (goog.LOCALE === 'ro') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.roSelect_;
@@ -1045,7 +1094,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.slSelect_;
   }
   if (goog.LOCALE === 'sq') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'sr') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.srSelect_;
@@ -1060,10 +1109,10 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
   }
   if (goog.LOCALE === 'ta') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'te') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'th') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;
@@ -1072,7 +1121,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.filSelect_;
   }
   if (goog.LOCALE === 'tr') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'uk') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.ruSelect_;
@@ -1081,7 +1130,7 @@ if (goog.i18n.LocaleFeature.USE_ECMASCRIPT_I18N_PLURALRULES) {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.enSelect_;
   }
   if (goog.LOCALE === 'uz') {
-    goog.i18n.pluralRules.select = goog.i18n.pluralRules.esSelect_;
+    goog.i18n.pluralRules.select = goog.i18n.pluralRules.afSelect_;
   }
   if (goog.LOCALE === 'vi') {
     goog.i18n.pluralRules.select = goog.i18n.pluralRules.defaultSelect_;

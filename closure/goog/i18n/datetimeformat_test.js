@@ -573,6 +573,7 @@ testSuite({
       replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en_XA);
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_XA);
       replacer.replace(goog, 'LOCALE', 'en_XA');
+
       const fmtEnXa = new DateTimeFormat(
           goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
       assertEquals(
@@ -584,6 +585,7 @@ testSuite({
       replacer.replace(
           goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_Hant_TW);
       replacer.replace(goog, 'LOCALE', 'zh_Hant_TW');
+
       const fmtZhHantTw = new DateTimeFormat(
           goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
       assertEquals('6月28日 下午1:10 [UTC-7]', fmtZhHantTw.format(date));
@@ -1343,7 +1345,7 @@ testSuite({
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ar_SA);
       assertEquals('ar_SA', '١١١١١٢٢', weekInYearFor7Days());
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ar_AE);
-      assertEquals('ar_AE', '١١١١٢٢٢', weekInYearFor7Days());
+      assertEquals('ar_AE', '1111222', weekInYearFor7Days());
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_IN);
       assertEquals('en_IN', '1111122', weekInYearFor7Days());
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_GB);

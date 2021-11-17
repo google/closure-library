@@ -51,10 +51,12 @@ goog.requireType('goog.i18n.DateTimeSymbolsType');
  * E        day of week             (Text)              Tuesday
  * D        day in year             (Number)            189
  * a        am/pm marker            (Text)              PM
+ * b        am/pm/noon/midnight     (Text)              Noon
+ * B        flexible day periods     (Text)              de l’après-midi'
  * k        hour in day (1~24)      (Number)            24
  * K        hour in am/pm (0~11)    (Number)            0
  * z        time zone               (Text)              Pacific Standard Time
- * Z        time zone (RFC 822)     (Number)            -0800
+ * Z        time zone (RFC 822)     (Number) -0800
  * v        time zone (generic)     (Text)              Pacific Time
  * '        escape for text         (Delimiter)         'Date='
  * ''       single quote            (Literal)           'o''clock'
@@ -171,13 +173,15 @@ goog.i18n.DateTimeParse.ambiguousYearCenturyStart = 80;
 /**
  * All acceptable pattern characters.
  * @private
+ * @const
  */
-goog.i18n.DateTimeParse.PATTERN_CHARS_ = 'GyMdkHmsSEDahKzZvQL';
+goog.i18n.DateTimeParse.PATTERN_CHARS_ = 'GyMdkHmsSEDabBhKzZvQL';
 
 
 /**
  * Pattern characters that specify numerical field.
  * @private
+ * @const
  */
 goog.i18n.DateTimeParse.NUMERIC_FORMAT_CHARS_ = 'MydhHmsSDkK';
 
@@ -185,6 +189,7 @@ goog.i18n.DateTimeParse.NUMERIC_FORMAT_CHARS_ = 'MydhHmsSDkK';
 /**
  * Pattern characters supported by predictive parsing.
  * @private
+ * @const
  */
 goog.i18n.DateTimeParse.PREDICTIVE_FORMAT_CHARS_ = 'ahHkKm';
 
@@ -559,7 +564,11 @@ goog.i18n.DateTimeParse.prototype.subParse_ = function(
       return this.subParseString_(text, pos, weekdays, function(value) {
         cal.dayOfWeek = value;
       });
+
+    case 'B':
+    case 'b':
     case 'a':  // AM_PM
+      // TODO b/206042104: update to handle parsing day periods with 'b' and 'B'
       const success = this.subParseString_(
           text, pos, [this.dateTimeSymbols_.AMPMS], function(value) {
             cal.ampm = value;

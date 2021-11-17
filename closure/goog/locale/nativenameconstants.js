@@ -6,7 +6,7 @@
 /**
  * @fileoverview List of native country and language names.
  *
- * File generated from CLDR ver. 39
+ * File generated from CLDR ver. 40
  */
 
 // clang-format off
@@ -744,6 +744,7 @@ goog.locale.nativeNameConstants = {
     'saq_KE': 'Kenya',
     'sat_Olck_IN': 'ᱤᱱᱰᱤᱭᱟ',
     'sbp_TZ': 'Tansaniya',
+    'sc_IT': 'Itàlia',
     'sd_Arab_PK': 'پاڪستان',
     'sd_Deva_IN': 'भारत',
     'se_FI': 'Suopma',
@@ -882,6 +883,7 @@ goog.locale.nativeNameConstants = {
     'bez': 'Hibena',
     'bfd': 'Bafut',
     'bg': 'български',
+    'bh': 'Bhojpuri',
     'bho': 'Bhojpuri',
     'bi': 'Bislama',
     'bik': 'Bikol',
@@ -1152,6 +1154,7 @@ goog.locale.nativeNameConstants = {
     'mnc': 'Manchu',
     'mni': 'মৈতৈলোন্',
     'mni_Beng': 'মৈতৈলোন্ (বাংলা)',
+    'mo': 'română',
     'moh': 'Mohawk',
     'mos': 'Mossi',
     'mr': 'मराठी',
@@ -1247,7 +1250,7 @@ goog.locale.nativeNameConstants = {
     'sat_Olck': 'ᱥᱟᱱᱛᱟᱲᱤ (ᱚᱞ ᱪᱤᱠᱤ)',
     'sba': 'Ngambay',
     'sbp': 'Ishisangu',
-    'sc': 'Sardinian',
+    'sc': 'sardu',
     'scn': 'Sicilian',
     'sco': 'Scots',
     'sd': 'سنڌي',
@@ -1297,6 +1300,7 @@ goog.locale.nativeNameConstants = {
     'sw': 'Kiswahili',
     'sw_CD': 'Kiswahili (Jamhuri ya Kidemokrasia ya Kongo)',
     'swb': 'Comorian',
+    'swc': 'Congo Swahili',
     'syc': 'Classical Syriac',
     'syr': 'Syriac',
     'ta': 'தமிழ்',
@@ -1307,7 +1311,7 @@ goog.locale.nativeNameConstants = {
     'tet': 'Tetum',
     'tg': 'тоҷикӣ',
     'th': 'ไทย',
-    'ti': 'ትግር',
+    'ti': 'ትግርኛ',
     'tig': 'Tigre',
     'tiv': 'Tiv',
     'tk': 'türkmen dili',

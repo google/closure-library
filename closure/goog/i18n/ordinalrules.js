@@ -8,7 +8,7 @@
  * @fileoverview Ordinal rules.
  *
  *
- * File generated from CLDR ver. 39
+ * File generated from CLDR ver. 40
  */
 
 // clang-format off

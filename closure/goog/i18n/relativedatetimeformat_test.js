@@ -24,11 +24,11 @@ const relativeDateTimeSymbolsExt = goog.require('goog.i18n.relativeDateTimeSymbo
 const testSuite = goog.require('goog.testing.testSuite');
 
 /** @suppress {visibility} suppression added to enable type checking */
-var Plurals_en = goog.i18n.pluralRules.enSelect_;
+const Plurals_en = goog.i18n.pluralRules.enSelect_;
 /** @suppress {visibility} suppression added to enable type checking */
-var Plurals_he = goog.i18n.pluralRules.heSelect_;
+const Plurals_he = goog.i18n.pluralRules.heSelect_;
 /** @suppress {visibility} suppression added to enable type checking */
-var Plurals_ar = goog.i18n.pluralRules.arSelect_;
+const Plurals_ar = goog.i18n.pluralRules.arSelect_;
 
 // For changing values in test
 let propertyReplacer;
@@ -261,9 +261,8 @@ const formatArEgData = [
 /** @suppress {checkTypes} suppression added to enable type checking */
 const formatNumericSpanishData = [
   new DirectionData('es', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.DAY, 'hace 1 día'),
-  new DirectionData('es', RelativeDateTimeFormat.Style.SHORT, -2, RelativeDateTimeFormat.Unit.DAY, 'hace 2 días'),
-
-  new DirectionData('es', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.DAY, 'dentro de 3 días'),
+  new DirectionData('es', RelativeDateTimeFormat.Style.SHORT, -2, RelativeDateTimeFormat.Unit.DAY, ['hace 2 d', 'hace 2 días']),  // CLDR 40 added new short form
+  new DirectionData('es', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.DAY, ['dentro de 3 d', 'dentro de 3 días']),  // CLDR 40 added new short form
 ];
 
 
@@ -296,7 +295,7 @@ const formatNumericRtlData = [
 ];
 
 /** @suppress {checkTypes} suppression added to enable type checking */
-var formatAutoRtlData = [
+const formatAutoRtlData = [
   new DirectionData('he', RelativeDateTimeFormat.Style.LONG, -2,
                     RelativeDateTimeFormat.Unit.DAY, 'שלשום', Plurals_he),
   new DirectionData('he', RelativeDateTimeFormat.Style.LONG, -3,
@@ -311,8 +310,8 @@ var formatAutoRtlData = [
 
 // Tests both JavaScript and ECMAScript on supporting browsers.
 // Sets up goog.USE_ECMASCRIPT_I18N_RDTF flag in each function.
-var testECMAScriptOptions = [false];
-var rdtf = new RelativeDateTimeFormat();
+let testECMAScriptOptions = [false];
+const rdtf = new RelativeDateTimeFormat();
 if (rdtf.hasNativeRdtf()) {
   // Add test if the browser environment supports ECMAScript implementation.
   testECMAScriptOptions.push(true);
@@ -482,7 +481,14 @@ testSuite({
             symbols.RelativeDateTimeFormatSymbols);
 
         const result = fmt.format(data.direction, data.unit);
-        assertEquals(data.getErrorDescription(), data.expected, result);
+        if (Array.isArray(data.expected)) {
+          // Expected data is one of the array elements. Needed for
+          // browsers out of sync with CLDR updates.
+          assertTrue(
+              data.getErrorDescription(), data.expected.includes(result));
+        } else {
+          assertEquals(data.getErrorDescription(), data.expected, result);
+        }
       }
     }
   },
@@ -614,9 +620,9 @@ testSuite({
        * @suppress {constantProperty} suppression added to enable type checking
        */
       goog.i18n.NumberFormatSymbols = NumberFormatSymbols_en;
-      for (var i = 0; i < formatNumericRtlData.length; i++) {
-        var data = formatNumericRtlData[i];
-        var symbols = localeSymbols[data.locale];
+      for (let i = 0; i < formatNumericRtlData.length; i++) {
+        const data = formatNumericRtlData[i];
+        const symbols = localeSymbols[data.locale];
         // Use computed properties to avoid compiler checks of defines.
         goog['LOCALE'] = data.locale;
 
@@ -631,7 +637,7 @@ testSuite({
             RelativeDateTimeFormat.NumericOption.ALWAYS, data.style,
             symbols.RelativeDateTimeFormatSymbols);
 
-        var result = fmt.format(data.direction, data.unit);
+        let result = fmt.format(data.direction, data.unit);
         assertEquals(data.getErrorDescription(), data.expected, result);
       }
     }
@@ -700,7 +706,7 @@ testSuite({
 
       if (!fmt.isNativeMode()) {
         // These are only applicable for JavaScript implementation.
-        var result =
+        let result =
             fmt.isOffsetDefinedForUnit(RelativeDateTimeFormat.Unit.DAY, -7);
         assertUndefined(result);  // Expect undefined for Day -7
 
@@ -747,17 +753,17 @@ testSuite({
       let fmt = new RelativeDateTimeFormat(
           RelativeDateTimeFormat.NumericOption.ALWAYS,
           RelativeDateTimeFormat.Style.SHORT);
-      var result = fmt.format(2, RelativeDateTimeFormat.Unit.HOUR);
+      let result = fmt.format(2, RelativeDateTimeFormat.Unit.HOUR);
       assertEquals('in 2 hr.', result);
 
       result = fmt.format(1, RelativeDateTimeFormat.Unit.QUARTER);
       assertEquals('in 1 qtr.', result);
 
-      var fmtAuto = new RelativeDateTimeFormat(
+      const fmtAuto = new RelativeDateTimeFormat(
           RelativeDateTimeFormat.NumericOption.AUTO,
           RelativeDateTimeFormat.Style.SHORT);
       /** @suppress {checkVars} suppression added to enable type checking */
-      var result = fmtAuto.format(2, RelativeDateTimeFormat.Unit.HOUR);
+      result = fmtAuto.format(2, RelativeDateTimeFormat.Unit.HOUR);
       assertEquals('in 2 hr.', result);
 
       result = fmtAuto.format(1, RelativeDateTimeFormat.Unit.QUARTER);

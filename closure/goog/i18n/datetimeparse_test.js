@@ -11,6 +11,9 @@
 goog.module('goog.i18n.DateTimeParseTest');
 goog.setTestOnly();
 
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
+const replacer = new PropertyReplacer();
+
 const DateLike = goog.require('goog.date.DateLike');
 const DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
 const DateTimeParse = goog.require('goog.i18n.DateTimeParse');
@@ -23,11 +26,11 @@ const DateTimeSymbols_fr = goog.require('goog.i18n.DateTimeSymbols_fr');
 const DateTimeSymbols_ko = goog.require('goog.i18n.DateTimeSymbols_ko');
 const DateTimeSymbols_pl = goog.require('goog.i18n.DateTimeSymbols_pl');
 const DateTimeSymbols_zh = goog.require('goog.i18n.DateTimeSymbols_zh');
+const DateTimeSymbols_zh_TW = goog.require('goog.i18n.DateTimeSymbols_zh_TW');
 const GoogDate = goog.require('goog.date.Date');
 const testSuite = goog.require('goog.testing.testSuite');
 
-goog.i18n.DateTimeSymbols = DateTimeSymbols_en;
-
+replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
 
 /**
  * Asserts that `date` has the expected date field values.
@@ -113,8 +116,19 @@ function assertParseFails(parser, text, options) {
 }
 
 testSuite({
+  getTestName: function() {
+    return 'DateTimeFormat Tests';
+  },
+
+  setUpPage() {},
+
+  setUp() {
+    replacer.replace(goog, 'LOCALE', 'en');
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
+  },
+
   tearDown() {
-    goog.i18n.DateTimeSymbols = DateTimeSymbols_en;
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
   },
 
   testNegativeYear() {
@@ -450,7 +464,7 @@ testSuite({
   },
 
   testChineseDate() {
-    goog.i18n.DateTimeSymbols = DateTimeSymbols_zh;
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh);
 
     // JavaScript month start from 0, July is 7 - 1
     const date = new Date(2006, 7 - 1, 24, 12, 12, 12, 0);
@@ -465,12 +479,47 @@ testSuite({
         2006, 7 - 1, 24, parser, '2006\u5E747\u670824\u65E5');
 
     parser = new DateTimeParse(DateTimeFormat.Format.FULL_TIME);
-    assertTrue(parser.parse('GMT-07:00 \u4E0B\u534803:26:28', date) > 0);
+    let gmtDateStringPm = 'GMT-07:00 \u4E0B\u534803:26:28';
 
-    assertEquals(
-        22, (24 + date.getHours() + date.getTimezoneOffset() / 60) % 24);
+    // CLDR 40 data does not expect AM/PM for locale zh
+    assertFalse(parser.parse(gmtDateStringPm, date) > 0);
+
+    // Two digit hour with no am/pm
+    const gmtDateStringHH = 'GMT-07:00 03:26:28';
+    assertTrue(parser.parse(gmtDateStringHH, date) > 0);
+
+    // This is now 10:00, not 10PM
+    const normalizedHour =
+        (24 + date.getHours() + date.getTimezoneOffset() / 60) % 24;
+    assertEquals(10, normalizedHour);
     assertEquals(26, date.getMinutes());
     assertEquals(28, date.getSeconds());
+
+    // Two digit 24-hour time with no am/pm
+    const gmtDateString13 = 'GMT-07:00 13:26:28';
+    assertTrue(parser.parse(gmtDateString13, date) > 0);
+
+    // This is now 20:00, based in 24 hour time.
+    const normalizedHour13 =
+        (24 + date.getHours() + date.getTimezoneOffset() / 60) % 24;
+    assertEquals(20, normalizedHour13);
+  },
+
+  testZhTwBFormat() {
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_TW);
+
+    // Test for AM/PM with B for zh_TW
+    let parser = new DateTimeParse(DateTimeFormat.Format.FULL_TIME);
+
+    let gmtDateStringPm = '\u4E0B\u534803:26:28 [GMT-07:00]';
+    let date = new Date(2006, 7 - 1, 24, 12, 12, 12, 0);
+
+    let parsedDate = parser.parse(gmtDateStringPm, date);
+    assertTrue(parsedDate > 0);
+    // This should be give 10PM == 22:00.
+    const normalizedHourPm =
+        (24 + date.getHours() + date.getTimezoneOffset() / 60) % 24;
+    assertEquals(22, normalizedHourPm);
   },
 
   // For languages with goog.i18n.DateTimeSymbols.ZERODIGIT defined, the int
@@ -478,8 +527,7 @@ testSuite({
   // for parsing dates with such native digits.
   testDatesWithNativeDigits() {
     // Language Arabic is one example with
-    // goog.i18n.DateTimeSymbols.ZERODIGIT defined.
-    goog.i18n.DateTimeSymbols = DateTimeSymbols_fa;
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fa);
 
     let formatter = new DateTimeFormat(DateTimeFormat.Format.FULL_DATE);
     let parser = new DateTimeParse(DateTimeFormat.Format.FULL_DATE);
@@ -602,7 +650,7 @@ testSuite({
   },
 
   testFrenchShortQuarter() {
-    goog.i18n.DateTimeSymbols = DateTimeSymbols_fr;
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fr);
     const parser = new DateTimeParse('yyyyQQ');
 
     assertParsedDateEquals(2009, 7 - 1, 1, parser, '2009T3');
@@ -692,7 +740,7 @@ testSuite({
 
   /** @bug 9901750 */
   testStandaloneMonthPattern() {
-    goog.i18n.DateTimeSymbols = DateTimeSymbols_pl;
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_pl);
     const date1 = new GoogDate(2006, 7 - 1);
     const date2 = new GoogDate();
     const formatter = new DateTimeFormat('LLLL yyyy');
@@ -707,12 +755,13 @@ testSuite({
     const symbols = [DateTimeSymbols_en, DateTimeSymbols_pl];
 
     for (let i = 0; i < symbols.length; i++) {
-      goog.i18n.DateTimeSymbols = symbols[i];
+      replacer.replace(goog.i18n, 'DateTimeSymbols', symbols[i]);
+      const dateTimeSymbols = symbols[i];
       const tests = {
-        'MMMM yyyy': goog.i18n.DateTimeSymbols.MONTHS,
-        'LLLL yyyy': goog.i18n.DateTimeSymbols.STANDALONEMONTHS,
-        'MMM yyyy': goog.i18n.DateTimeSymbols.SHORTMONTHS,
-        'LLL yyyy': goog.i18n.DateTimeSymbols.STANDALONESHORTMONTHS,
+        'MMMM yyyy': dateTimeSymbols.MONTHS,
+        'LLLL yyyy': dateTimeSymbols.STANDALONEMONTHS,
+        'MMM yyyy': dateTimeSymbols.SHORTMONTHS,
+        'LLL yyyy': dateTimeSymbols.STANDALONESHORTMONTHS,
       };
 
       for (const format in tests) {
@@ -749,7 +798,7 @@ testSuite({
 
   testQuotedPattern() {
     // Regression test for b/29990921.
-    goog.i18n.DateTimeSymbols = DateTimeSymbols_en;
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
 
     // Literal apostrophe
     let parser = new DateTimeParse('MMM \'\'yy');
