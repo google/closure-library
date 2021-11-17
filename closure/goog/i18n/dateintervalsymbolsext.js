@@ -16,10 +16,10 @@
 
 goog.module('goog.i18n.dateIntervalSymbolsExt');
 
-var dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
+const dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
 
 /** @type {!dateIntervalSymbols.DateIntervalSymbols} */
-var defaultSymbols;
+let defaultSymbols;
 
 /** @const {!dateIntervalSymbols.DateIntervalSymbols} */
 exports.DateIntervalSymbols_af_NA = {

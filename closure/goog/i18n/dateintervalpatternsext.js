@@ -16,10 +16,10 @@
 
 goog.module('goog.i18n.dateIntervalPatternsExt');
 
-var dateIntervalPatterns = goog.require('goog.i18n.dateIntervalPatterns');
+const dateIntervalPatterns = goog.require('goog.i18n.dateIntervalPatterns');
 
 /** @type {!dateIntervalPatterns.DateIntervalPatterns} */
-var defaultPatterns;
+let defaultPatterns;
 
 /** @const {!dateIntervalPatterns.DateIntervalPatterns} */
 exports.DateIntervalPatterns_af_NA = dateIntervalPatterns.DateIntervalPatterns_af;

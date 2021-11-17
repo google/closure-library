@@ -16,9 +16,9 @@
 
 goog.module('goog.i18n.relativeDateTimeSymbolsExt');
 
-var relativeDateTimeSymbols = goog.require('goog.i18n.relativeDateTimeSymbols');
+const relativeDateTimeSymbols = goog.require('goog.i18n.relativeDateTimeSymbols');
 /** @type {!relativeDateTimeSymbols.RelativeDateTimeSymbols} */
-var defaultSymbols;
+let defaultSymbols;
 
 
 /** @const {!relativeDateTimeSymbols.RelativeDateTimeSymbols} */

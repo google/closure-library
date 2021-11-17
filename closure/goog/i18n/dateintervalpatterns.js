@@ -21,7 +21,7 @@
 
 goog.module('goog.i18n.dateIntervalPatterns');
 
-var dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
+const dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
 
 /**
  * Collection of date interval patterns.
@@ -41,14 +41,14 @@ var dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
  *   DAY_ABBR: !dateIntervalSymbols.DateIntervalPatternMap
  * }}
  */
-var DateIntervalPatterns;
+let DateIntervalPatterns;
 
 /** @typedef {!DateIntervalPatterns} */
 exports.DateIntervalPatterns;
 
 /** @type {!DateIntervalPatterns} */
-var defaultPatterns;
-
+let defaultPatterns;
+    
 /**
  * Returns the default DateIntervalPatterns.
  * @return {!DateIntervalPatterns}
