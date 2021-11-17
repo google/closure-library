@@ -90,7 +90,8 @@ exports.Brand = Brand;
  * @return {boolean} Whether to use navigator.userAgentData to determine
  * browser's brand.
  */
-function useUserAgentBrand() {
+function useUserAgentDataBrand() {
+  if (util.ASSUME_CLIENT_HINTS_SUPPORT) return true;
   const userAgentData = util.getUserAgentData();
   return !!userAgentData && userAgentData.brands.length > 0;
 }
@@ -101,7 +102,7 @@ function useUserAgentBrand() {
  *     casing.
  */
 function matchOpera() {
-  if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
+  if (useUserAgentDataBrand()) {
     // Pre-Chromium Edge doesn't support navigator.userAgentData.
     return false;
   }
@@ -110,7 +111,7 @@ function matchOpera() {
 
 /** @return {boolean} Whether the user's browser is IE. */
 function matchIE() {
-  if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
+  if (useUserAgentDataBrand()) {
     // IE doesn't support navigator.userAgentData.
     return false;
   }
@@ -122,7 +123,7 @@ function matchIE() {
  *     EdgeHTML based Edge.
  */
 function matchEdgeHtml() {
-  if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
+  if (useUserAgentDataBrand()) {
     // Pre-Chromium Edge doesn't support navigator.userAgentData.
     return false;
   }
@@ -131,7 +132,7 @@ function matchEdgeHtml() {
 
 /** @return {boolean} Whether the user's browser is Chromium based Edge. */
 function matchEdgeChromium() {
-  if (useUserAgentBrand()) {
+  if (useUserAgentDataBrand()) {
     return util.matchUserAgentDataBrand(Brand.EDGE);
   }
   return util.matchUserAgent('Edg/');
@@ -139,7 +140,7 @@ function matchEdgeChromium() {
 
 /** @return {boolean} Whether the user's browser is Chromium based Opera. */
 function matchOperaChromium() {
-  if (useUserAgentBrand()) {
+  if (useUserAgentDataBrand()) {
     return util.matchUserAgentDataBrand(Brand.OPERA);
   }
   return util.matchUserAgent('OPR');
@@ -147,19 +148,15 @@ function matchOperaChromium() {
 
 /** @return {boolean} Whether the user's browser is Firefox. */
 function matchFirefox() {
-  if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
-    // Firefox doesn't support navigator.userAgentData yet.
-    return false;
-  }
+  // Firefox doesn't support navigator.userAgentData yet, so use
+  // navigator.userAgent.
   return util.matchUserAgent('Firefox') || util.matchUserAgent('FxiOS');
 }
 
 /** @return {boolean} Whether the user's browser is Safari. */
 function matchSafari() {
-  if (useUserAgentBrand()) {
-    // Safari doesn't support navigator.userAgentData yet.
-    return false;
-  }
+  // Apple-based browsers don't support navigator.userAgentData yet, so use
+  // navigator.userAgent.
   return util.matchUserAgent('Safari') &&
       !(matchChrome() || matchCoast() || matchOpera() || matchEdgeHtml() ||
         matchEdgeChromium() || matchOperaChromium() || matchFirefox() ||
@@ -171,7 +168,7 @@ function matchSafari() {
  *     iOS browser).
  */
 function matchCoast() {
-  if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
+  if (useUserAgentDataBrand()) {
     // Coast doesn't support navigator.userAgentData.
     return false;
   }
@@ -180,12 +177,9 @@ function matchCoast() {
 
 /** @return {boolean} Whether the user's browser is iOS Webview. */
 function matchIosWebview() {
-  if (util.ASSUME_CLIENT_HINTS_SUPPORT || util.getUserAgentData()) {
-    // iOS Webview doesn't support navigator.userAgentData.
-    return false;
-  }
-  // iOS Webview does not show up as Chrome or Safari. Also check for Opera's
-  // WebKit-based iOS browser, Coast.
+  // Apple-based browsers don't support navigator.userAgentData yet, so use
+  // navigator.userAgent.
+  // iOS Webview does not show up as Chrome or Safari.
   return (util.matchUserAgent('iPad') || util.matchUserAgent('iPhone')) &&
       !matchSafari() && !matchChrome() && !matchCoast() && !matchFirefox() &&
       util.matchUserAgent('AppleWebKit');
@@ -196,7 +190,7 @@ function matchIosWebview() {
  *     returns true for Chrome, Opera 15+, and Edge Chromium.
  */
 function matchChrome() {
-  if (useUserAgentBrand()) {
+  if (useUserAgentDataBrand()) {
     return util.matchUserAgentDataBrand(Brand.CHROMIUM);
   }
   return ((util.matchUserAgent('Chrome') || util.matchUserAgent('CriOS')) &&
@@ -523,7 +517,7 @@ function versionOf(browser) {
   let versionParts;
   // Silk currently does not identify itself in its userAgentData.brands array,
   // so if checking its version, always fall back to the user agent string.
-  if (useUserAgentBrand() && browser !== Brand.SILK) {
+  if (useUserAgentDataBrand() && browser !== Brand.SILK) {
     const data = util.getUserAgentData();
     const matchingBrand = data.brands.find(({brand}) => brand === browser);
     if (!matchingBrand || !matchingBrand.version) {
@@ -635,7 +629,7 @@ class UserAgentStringFallbackBrandVersion {
  * @return {!Promise<void>}
  */
 async function loadFullVersions() {
-  if (useUserAgentBrand() && hasFullVersionList()) {
+  if (useUserAgentDataBrand() && hasFullVersionList()) {
     await fullVersionList.load();
   }
 }
@@ -655,7 +649,7 @@ exports.loadFullVersions = loadFullVersions;
 function fullVersionOf(browser) {
   // Silk currently does not identify itself in its userAgentData.brands array,
   // so if checking its version, always fall back to the user agent string.
-  if (useUserAgentBrand() && hasFullVersionList()) {
+  if (useUserAgentDataBrand() && hasFullVersionList()) {
     const data = util.getUserAgentData();
     // Operate under the assumption that the low-entropy and high-entropy lists
     // of brand/version pairs contain an identical set of brands. Therefore, if
@@ -686,7 +680,7 @@ exports.fullVersionOf = fullVersionOf;
  * @return {string} The version as a string.
  */
 function getVersionStringForLogging(browser) {
-  if (useUserAgentBrand()) {
+  if (useUserAgentDataBrand()) {
     const fullVersionObj = fullVersionOf(browser);
     if (fullVersionObj) {
       const fullVersion = fullVersionObj.getIfLoaded();
