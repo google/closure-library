@@ -69,9 +69,9 @@ function getNavigator() {
 /**
  * A possible override for applications which wish to not check
  * navigator.userAgent but use a specified value for detection instead.
- * @type {string}
+ * @type {?string}
  */
-let userAgentInternal = getNativeUserAgentString();
+let userAgentInternal = null;
 
 /**
  * A possible override for applications which wish to not check
@@ -95,7 +95,8 @@ function setUserAgent(userAgent = undefined) {
 
 /** @return {string} The user agent string. */
 function getUserAgent() {
-  return userAgentInternal;
+  return userAgentInternal == null ? getNativeUserAgentString() :
+                                     userAgentInternal;
 }
 
 /**
