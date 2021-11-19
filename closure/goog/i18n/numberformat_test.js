@@ -1687,11 +1687,11 @@ testSuite({
       fmt.setMinimumFractionDigits(2);
       fmt.setMaximumFractionDigits(2);
 
-      assertEquals('1.23K', fmt.format(1234));
-      assertEquals('1.00K', fmt.format(1000));
-      assertEquals('123.46K', fmt.format(123456.7));
-      assertEquals('999.99K', fmt.format(999994));
-      assertEquals('1.00M', fmt.format(999995));
+      assertEquals('Native=' + nativeMode, '1.23K', fmt.format(1234));
+      assertEquals('Native=' + nativeMode, '1.00K', fmt.format(1000));
+      assertEquals('Native=' + nativeMode, '123.46K', fmt.format(123456.7));
+      assertEquals('Native=' + nativeMode, '999.99K', fmt.format(999994));
+      assertEquals('Native=' + nativeMode, '1.00M', fmt.format(999995));
     }
   },
 
@@ -1703,11 +1703,11 @@ testSuite({
       fmt.setMinimumFractionDigits(0);
       fmt.setMaximumFractionDigits(2);
 
-      assertEquals('1.23K', fmt.format(1234));
-      assertEquals('1K', fmt.format(1000));
-      assertEquals('123.46K', fmt.format(123456.7));
-      assertEquals('999.99K', fmt.format(999994));
-      assertEquals('1M', fmt.format(999995));
+      assertEquals('Native=' + nativeMode, '1.23K', fmt.format(1234));
+      assertEquals('Native=' + nativeMode, '1K', fmt.format(1000));
+      assertEquals('Native=' + nativeMode, '123.46K', fmt.format(123456.7));
+      assertEquals('Native=' + nativeMode, '999.99K', fmt.format(999994));
+      assertEquals('Native=' + nativeMode, '1M', fmt.format(999995));
     }
   },
 
@@ -1765,11 +1765,11 @@ testSuite({
       fmt.setShowTrailingZeros(true);
 
       let result = fmt.format(2);
-      assertEquals('2.0', result);
+      assertEquals('Native=' + nativeMode, '2.0', result);
       result = fmt.format(2000);
-      assertEquals('2.0K', result);
+      assertEquals('Native=' + nativeMode, '2.0K', result);
       result = fmt.format(20);
-      assertEquals('20', result);
+      assertEquals('Native=' + nativeMode, '20', result);
     }
   },
 
@@ -1871,23 +1871,23 @@ testSuite({
       // because base formatting is not implementive natively.
       fmt.setBaseFormatting(1000);
       let result = fmt.format(800);
-      assertEquals('0.8K', result);
+      assertEquals('Native=' + nativeMode, '0.8K', result);
 
       fmt.setBaseFormatting(null);
       result = fmt.format(800);
-      assertEquals('800', result);
+      assertEquals('Native=' + nativeMode, '800', result);
 
       fmt.setBaseFormatting(1000);
       result = fmt.format(1200000);
-      assertEquals('1,200K', result);
+      assertEquals('Native=' + nativeMode, '1,200K', result);
 
       result = fmt.format(10);
-      assertEquals('0.01K', result);
+      assertEquals('Native=' + nativeMode, '0.01K', result);
 
       fmt.setSignificantDigits(0);
       fmt.setMinimumFractionDigits(2);
       result = fmt.format(1);
-      assertEquals('0.00K', result);
+      assertEquals('Native=' + nativeMode, '0.00K', result);
     }
   },
 
