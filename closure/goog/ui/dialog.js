@@ -847,10 +847,9 @@ goog.ui.Dialog.prototype.exitDocument = function() {
 
 
 /**
- * Sets the visibility of the dialog box and moves focus to the
- * default button. Lazily renders the component if needed. After this
- * method returns, isVisible() will always return the new state, even
- * if there is a transition.
+ * Sets the visibility of the dialog box. Lazily renders the component if
+ * needed. After this method returns, isVisible() will always return the new
+ * state, even if there is a transition.
  * @param {boolean} visible Whether the dialog should be visible.
  * @override
  */
