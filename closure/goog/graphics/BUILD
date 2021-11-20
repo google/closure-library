@@ -103,7 +103,6 @@ closure_js_library(
         ":abstractgraphics",
         ":canvasgraphics",
         ":svggraphics",
-        ":vmlgraphics",
         "//closure/goog/dom",
         "//closure/goog/useragent",
     ],
@@ -198,38 +197,4 @@ closure_js_library(
 alias(
     name = "textelement",
     actual = ":graphics",
-)
-
-alias(
-    name = "vmlelement",
-    actual = ":graphics",
-)
-
-closure_js_library(
-    name = "vmlgraphics",
-    srcs = [
-        "vmlelement.js",
-        "vmlgraphics.js",
-    ],
-    lenient = True,
-    deps = [
-        ":abstractgraphics",
-        ":lineargradient",
-        "//closure/goog/array",
-        "//closure/goog/dom",
-        "//closure/goog/dom:safe",
-        "//closure/goog/dom:tagname",
-        "//closure/goog/events",
-        "//closure/goog/events:browserevent",
-        "//closure/goog/events:eventhandler",
-        "//closure/goog/events:eventtype",
-        "//closure/goog/html:uncheckedconversions",
-        "//closure/goog/math",
-        "//closure/goog/math:size",
-        "//closure/goog/reflect",
-        "//closure/goog/string",
-        "//closure/goog/string:const",
-        "//closure/goog/style",
-        "//closure/goog/useragent",
-    ],
 )
