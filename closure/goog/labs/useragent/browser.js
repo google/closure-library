@@ -311,9 +311,9 @@ function createVersionMap(versionTuples) {
  * User Agent string freezing is available here:
  * https://www.chromestatus.com/feature/5704553745874944
  *
- * To mitigate both of these potential issues, use versionOf() or
+ * To mitigate both of these potential issues, use
+ * getVersionStringForLogging() or fullVersionOf() instead.
  *
- * fullVersionOf() instead.
  * @return {string} The browser version or empty string if version cannot be
  *     determined. Note that for Internet Explorer, this returns the version of
  *     the browser, not the version of the rendering engine. (IE 8 in
@@ -382,13 +382,13 @@ exports.getVersion = getVersion;
  * User Agent string freezing is available here:
  * https://www.chromestatus.com/feature/5704553745874944
  *
- * To mitigate both of these potential issues, use versionOf() (with a
- * comparison operator), or fullVersionOf() instead.
+ * To mitigate both of these potential issues, use isAtLeast()/isAtMost() or
+ * fullVersionOf() instead.
+ *
  * @param {string|number} version The version to check.
  * @return {boolean} Whether the browser version is higher or the same as the
  *     given version.
- * @deprecated Use versionOf(browserBrand) and do a direct comparison
- *     instead.
+ * @deprecated Use isAtLeast()/isAtMost() instead.
  */
 function isVersionOrHigher(version) {
   return compareVersions(getVersion(), version) >= 0;
@@ -508,6 +508,7 @@ function getFullVersionFromUserAgentString(browser) {
  * Note that the major version number may be different depending on which
  * browser is specified. The returned value can be used to make browser version
  * comparisons using comparison operators.
+ * @deprecated Use isAtLeast or isAtMost instead.
  * @param {!Brand} browser The brand whose version should be returned.
  * @return {number} The major version number associated with the current
  * browser under the given brand, or NaN if the current browser doesn't match
@@ -538,6 +539,42 @@ function versionOf(browser) {
   return Number(majorVersion);  // Returns NaN if it is not parseable.
 }
 exports.versionOf = versionOf;
+
+/**
+ * Returns true if the current browser matches the given brand and is at least
+ * the given major version. The major version must be a whole number (i.e.
+ * decimals should not be used to represent a minor version).
+ * @param {!Brand} brand The brand whose version should be returned.
+ * @param {number} majorVersion The major version number to compare against.
+ *     This must be a whole number.
+ * @return {boolean} Whether the current browser both matches the given brand
+ *     and is at least the given version.
+ */
+function isAtLeast(brand, majorVersion) {
+  googAsserts.assert(
+      Math.floor(majorVersion) === majorVersion,
+      'Major version must be an integer');
+  return versionOf(brand) >= majorVersion;
+}
+exports.isAtLeast = isAtLeast;
+
+/**
+ * Returns true if the current browser matches the given brand and is at most
+ * the given version. The major version must be a whole number (i.e. decimals
+ * should not be used to represent a minor version).
+ * @param {!Brand} brand The brand whose version should be returned.
+ * @param {number} majorVersion The major version number to compare against.
+ *     This must be a whole number.
+ * @return {boolean} Whether the current browser both matches the given brand
+ *     and is at most the given version.
+ */
+function isAtMost(brand, majorVersion) {
+  googAsserts.assert(
+      Math.floor(majorVersion) === majorVersion,
+      'Major version must be an integer');
+  return versionOf(brand) <= majorVersion;
+}
+exports.isAtMost = isAtMost;
 
 /**
  * Loads the high-entropy browser brand/version data and wraps the correct
@@ -674,8 +711,8 @@ exports.fullVersionOf = fullVersionOf;
  * Returns a version string for the current browser or undefined, based on
  * whether the current browser is the one specified.
  * This value should ONLY be used for logging/debugging purposes. Do not use it
- * to branch code paths. For comparing versions, use versionOf or fullVersionOf
- * instead.
+ * to branch code paths. For comparing versions, use isAtLeast()/isAtMost() or
+ * fullVersionOf() instead.
  * @param {!Brand} browser The brand whose version should be returned.
  * @return {string} The version as a string.
  */

@@ -149,21 +149,63 @@ class BrandFullVersion {
 }
 
 /**
- * Assert that versionOf returns the correct version for each given brand, and
- * correctly returns NaN for brands not in the list.
+ * Assert that isAtLeast and isAtMost, when given a compatible majorVersion
+ * argument, return true for each of the given brands, and that they return
+ * false otherwise.
  * @param {!Array<!BrandMajorVersion>} brandVersions
  */
 function assertVersionOf(brandVersions) {
+  // Examples for [{brand: MyBrowser, version: 10}]:
+
   for (const {brand, version} of brandVersions) {
-    assertEquals(
-        `versionOf(${brand}) returns non-NaN for a browser that is ${brand}`,
-        version, userAgentBrowser.versionOf(brand));
+    // Ex. isAtLeast(MyBrowser, 9) should be TRUE
+    assertTrue(
+        `isAtLeast(${brand}, ${version - 1}) returns false for ${brand} ${
+            version}`,
+        userAgentBrowser.isAtLeast(brand, version - 1));
+    // Ex. isAtLeast(MyBrowser, 10) should be TRUE
+    assertTrue(
+        `isAtLeast(${brand}, ${version}) returns false for ${brand} ${version}`,
+        userAgentBrowser.isAtLeast(brand, version));
+    // Ex. isAtLeast(MyBrowser, 11) should be FALSE
+    assertFalse(
+        `isAtLeast(${brand}, ${version + 1}) returns true for ${brand} ${
+            version}`,
+        userAgentBrowser.isAtLeast(brand, version + 1));
+
+    // Ex. isAtMost(MyBrowser, 9) should be FALSE
+    assertFalse(
+        `isAtMost(${brand}, ${version - 1}) returns true for ${brand} ${
+            version}`,
+        userAgentBrowser.isAtMost(brand, version - 1));
+    // Ex. isAtMost(MyBrowser, 10) should be TRUE
+    assertTrue(
+        `isAtMost(${brand}, ${version}) returns false for ${brand} ${version}`,
+        userAgentBrowser.isAtMost(brand, version));
+    // Ex. isAtMost(MyBrowser, 11) should be TRUE
+    assertTrue(
+        `isAtMost(${brand}, ${version + 1}) returns false for ${brand} ${
+            version}`,
+        userAgentBrowser.isAtMost(brand, version + 1));
   }
+
   for (const brand of brands) {
     if (!brandVersions.find(brandVersion => brandVersion.brand === brand)) {
-      assertTrue(
-          `versionOf(${brand}) returns NaN for a browser that is not ${brand}`,
-          isNaN(userAgentBrowser.versionOf(brand)));
+      // Ex. isAtLeast(TheirBrowser, any) should be FALSE
+      assertFalse(
+          `isAtLeast(${
+              brand}, X) returns true for a browser that is not one of [${
+              brandVersions.map(brandVersion => brandVersion.brand)
+                  .join(', ')}]`,
+          userAgentBrowser.isAtLeast(brand, -Infinity));
+
+      // Ex. isAtLeast(TheirBrowser, any) should be FALSE
+      assertFalse(
+          `isAtMost(${
+              brand}, X) returns true for a browser that is not one of [${
+              brandVersions.map(brandVersion => brandVersion.brand)
+                  .join(', ')}]`,
+          userAgentBrowser.isAtMost(brand, Infinity));
     }
   }
 }
@@ -224,8 +266,8 @@ async function assertFullVersionOf(brandVersions, alreadyLoaded = false) {
  *     version should be checked.
  * @param {string} lowVersion A version that is lower or equal to the browser's
  *     version for this brand.
- * @param {string} highVersion A version that is high than the browser's version
- *     for this brand.
+ * @param {string} highVersion A version that is higher than the browser's
+ *     version for this brand.
  */
 async function assertFullVersionOfBetween(brand, lowVersion, highVersion) {
   highEntropyData.resetAllForTesting();
