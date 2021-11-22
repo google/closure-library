@@ -12,26 +12,9 @@
 goog.provide('goog.i18n.TimeZone');
 
 goog.require('goog.array');
-/**
- * @suppress {extraRequire} goog.date.DateLike represents a Date or a
- * goog.Date object. It is a parameter in the following methods:
- * - getDaylightAdjustment
- * - getGMTString
- * - getLongName
- * - getOffset
- * - getRFCTimeZoneString
- * - getShortName
- * - getUTCString
- * - isDaylightTime
- * - getLongNameGMT
- * - getGenericLocation
- * Lint warns that this require is unnecessary but the closure compiler needs
- * it in order to accept a Date or a goog.Date object as a goog.date.DateLike
- * parameter in any of these methods.
- */
-goog.require('goog.date.DateLike');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.requireType('goog.date.DateLike');
 
 
 
