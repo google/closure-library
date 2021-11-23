@@ -23,7 +23,7 @@
  */
 
 import {Change, GitClient} from './git_client';
-import {GitHubClient} from './github_client';
+import {DraftReleaseOptions, GitHubClient} from './github_client';
 
 /**
  * Used for testing only, so that a client class constructor can be spied on
@@ -120,7 +120,7 @@ function createReleaseNotes(changes: Change[]) {
       // rolled back by this one via commit hash.
       const rolledbackHash = rollback[1];
       const matchingChange = releaseNotes.find(
-          change => change.hashes.some(hash => hash === rolledbackHash));
+          (change) => change.hashes.some((hash) => hash === rolledbackHash));
       if (matchingChange) {
         // We found the change that got rolled back. Changes with the same
         // release notes are stored together under the same `ReleaseNotesEntry`
@@ -131,7 +131,7 @@ function createReleaseNotes(changes: Change[]) {
         // notes will be dropped entirely.
         // See [*], where the dropping occurs.
         matchingChange.hashes =
-            matchingChange.hashes.filter(hash => hash !== rolledbackHash);
+            matchingChange.hashes.filter((hash) => hash !== rolledbackHash);
       } else {
         // It's possible that this change rolls back one that was skipped in the
         // release notes. If that's the case, do nothing.
@@ -150,7 +150,7 @@ function createReleaseNotes(changes: Change[]) {
           releaseNotes.push({
             changeType: 'NONE',
             noteText: `__TODO(user):__ Rollback of ${rolledbackHash}`,
-            hashes: [hash]
+            hashes: [hash],
           });
         }
       }
@@ -161,7 +161,7 @@ function createReleaseNotes(changes: Change[]) {
         const noteText = escapeGitHubMarkdown(matchedRelnotes[2].trim());
         if (noteText) {
           const matchingChange = releaseNotes.find(
-              change => change.noteText === noteText &&
+              (change) => change.noteText === noteText &&
                   change.changeType === changeType);
           if (matchingChange) {
             // Merge entries with the same release notes, for the sake of
@@ -184,7 +184,7 @@ function createReleaseNotes(changes: Change[]) {
   for (const {changeType, heading} of RELEASE_HEADINGS) {
     const formattedChangesForHeading =
         releaseNotes
-            .filter(changeNote => changeNote.changeType === changeType)
+            .filter((changeNote) => changeNote.changeType === changeType)
             // [*] It's possible to have an empty hashes list if a change was
             // rolled back.
             .filter(({hashes}) => hashes.length)
@@ -247,7 +247,7 @@ export async function createClosureReleases(gitHubApiToken: string) {
   const commits = await git.listCommits({from, to: 'HEAD'});
 
   // Identify the commits in which the package.json major version changed.
-  const pJsonVersions: Array<{version: string, changes: Change[]}> = [];
+  const pJsonVersions: Array<{version: string; changes: Change[]}> = [];
   // We need to push a placeholder object for the last release. This helps us
   // figure out whether the immediate next commit has a version bump or not.
   pJsonVersions.push({version: versionAtLastRelease, changes: []});
@@ -255,7 +255,7 @@ export async function createClosureReleases(gitHubApiToken: string) {
   for (const commit of commits) {
     const version = await getMajorVersionAtCommit(git, commit.hash);
     seenCommits.push(commit);
-    if (!pJsonVersions.some(entry => entry.version === version)) {
+    if (!pJsonVersions.some((entry) => entry.version === version)) {
       pJsonVersions.push({
         version,
         changes: seenCommits,
@@ -266,14 +266,36 @@ export async function createClosureReleases(gitHubApiToken: string) {
   // Remove the placeholder object mentioned above.
   pJsonVersions.shift();
 
+  // Get a list of recent release drafts. Doing so allows us to
+  // reuse an existing draft rather than creating a duplicate of it.
+  const existingDrafts = await github.getRecentDrafts();
+
   // Draft a new GitHub release for each package.json version change seen.
   for (const {version, changes} of pJsonVersions) {
     const name = `Closure Library ${version}`;
     const tagName = version;
     const commit = changes[changes.length - 1].hash;
     const body = createReleaseNotes(changes);
-    // Create the release
-    const url = await github.draftRelease({tagName, commit, name, body});
+
+    const draftReleaseOptions: DraftReleaseOptions = {
+      tagName,
+      commit,
+      name,
+      body,
+    };
+
+    // Find an existing draft with this name. If it exists, update it
+    // instead of creating a new one.
+    // Even though existingDrafts is not an exhaustive list of drafts,
+    // it's highly unlikely that a matching draft is not sufficiently
+    // recent to be in existingDrafts.
+    const existingDraftForTag =
+        existingDrafts.find((draft) => draft.tagName === tagName);
+    if (existingDraftForTag) {
+      draftReleaseOptions.id = existingDraftForTag.id;
+    }
+    // Create the release and print its URL.
+    const url = await github.draftRelease(draftReleaseOptions);
     console.error(`Drafted release for ${version} at ${url}`);
   }
 }
@@ -284,7 +306,7 @@ if (require.main === module) {
     console.error('Need GITHUB_TOKEN env var to create releases.');
     process.exit(1);
   }
-  createClosureReleases(process.env.GITHUB_TOKEN).catch(err => {
+  createClosureReleases(process.env.GITHUB_TOKEN).catch((err) => {
     console.error(err);
     process.exit(1);
   });
