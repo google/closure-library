@@ -1024,26 +1024,6 @@ testSuite({
     assertThrows(() => mm.load('modA'));
   },
 
-  testAddExtraEdge_fromModuleAlreadyLoaded() {
-    const mm = getModuleManager({'modA': [], 'modC': []});
-
-    const loaderCalls = [];
-    mm.setLoader(createModuleLoaderWithExtraEdgesSupport(loaderCalls));
-
-    // Set modA as loaded.
-    mm.beforeLoadModuleCode('modA');
-    mm.setLoaded('modA');
-
-    // Assert error is thrown since modA has already loaded.
-    const e = assertThrows(() => mm.addExtraEdge('modA', 'modB'));
-    assertEquals(
-        'The extra edge modA -> modB cannot be added since modA has already been loaded.',
-        e.message);
-
-    // Assert no error is thrown since modC has not been loaded yet.
-    assertNotThrows(() => mm.addExtraEdge('modC', 'modB'));
-  },
-
   testRemoveExtraEdge() {
     const mm =
         getModuleManager({'modA': [], 'modB': [], 'modC': [], 'modD': []});
