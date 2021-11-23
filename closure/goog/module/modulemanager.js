@@ -378,10 +378,19 @@ goog.module.ModuleManager.prototype.getModuleInfo = function(id) {
 };
 
 
-/** @override */
+/**
+ * @param {string} fromModule
+ * @param {string} toModule
+ * @override
+ */
 goog.module.ModuleManager.prototype.addExtraEdge = function(
     fromModule, toModule) {
   'use strict';
+  if (this.getModuleInfo(fromModule).isLoaded()) {
+    throw new Error(
+        `The extra edge ${fromModule} -> ${toModule} cannot be added since ${
+            fromModule} has already been loaded.`);
+  }
   if (!this.extraEdges_[fromModule]) {
     this.extraEdges_[fromModule] = {};
   }
