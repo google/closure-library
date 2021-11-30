@@ -1036,6 +1036,18 @@ testSuite({
     assertEquals('foofoofoofoofoofoo', googString.repeat('foo', 6));
   },
 
+  testBuildString() {
+    assertEquals('', googString.buildString());
+    assertEquals('a', googString.buildString('a'));
+    assertEquals('ab', googString.buildString('ab'));
+    assertEquals('ab', googString.buildString('a', 'b'));
+    assertEquals('abcd', googString.buildString('a', 'b', 'c', 'd'));
+    assertEquals('0', googString.buildString(0));
+    assertEquals('0123', googString.buildString(0, 1, 2, 3));
+    assertEquals('ab01', googString.buildString('a', 'b', 0, 1));
+    assertEquals('', googString.buildString(null, undefined));
+  },
+
   testCompareVersions() {
     const f = googString.compareVersions;
     assertTrue('numeric equality broken', f(1, 1) == 0);
