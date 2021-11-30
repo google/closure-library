@@ -1120,27 +1120,6 @@ goog.string.makeSafe = function(obj) {
   return obj == null ? '' : String(obj);
 };
 
-
-/**
- * Concatenates string expressions. This is useful
- * since some browsers are very inefficient when it comes to using plus to
- * concat strings. Be careful when using null and undefined here since
- * these will not be included in the result. If you need to represent these
- * be sure to cast the argument to a String first.
- * For example:
- * <pre>buildString('a', 'b', 'c', 'd') -> 'abcd'
- * buildString(null, undefined) -> ''
- * </pre>
- * @param {...*} var_args A list of strings to concatenate. If not a string,
- *     it will be casted to one.
- * @return {string} The concatenation of `var_args`.
- */
-goog.string.buildString = function(var_args) {
-  'use strict';
-  return Array.prototype.join.call(arguments, '');
-};
-
-
 /**
  * Returns a string with at least 64-bits of randomness.
  *
