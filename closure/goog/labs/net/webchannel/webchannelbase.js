@@ -734,7 +734,6 @@ WebChannelBase.prototype.disconnect = function() {
     uri.setParameterValue('RID', rid);
     uri.setParameterValue('TYPE', 'terminate');
 
-    // Add the reconnect parameters.
     this.addAdditionalParams_(uri);
 
     const request = ChannelRequest.createChannelRequest(
@@ -1418,7 +1417,6 @@ WebChannelBase.prototype.open_ = function() {
         WebChannel.X_HTTP_SESSION_ID, this.getHttpSessionIdParam());
   }
 
-  // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
 
   if (extraHeaders) {
@@ -1504,7 +1502,7 @@ WebChannelBase.prototype.makeForwardChannelRequest_ = function(
   uri.setParameterValue('SID', this.sid_);
   uri.setParameterValue('RID', rid);
   uri.setParameterValue('AID', this.lastArrayId_);
-  // Add the additional reconnect parameters.
+
   this.addAdditionalParams_(uri);
 
   if (this.httpHeadersOverwriteParam_ && this.extraHeaders_) {
@@ -1538,13 +1536,20 @@ WebChannelBase.prototype.makeForwardChannelRequest_ = function(
 
 
 /**
- * Adds the additional parameters from the handler to the given URI.
+ * Adds additional query parameters from `extraParams_` and `handler_` to the
+ * given URI.
  * @param {!goog.Uri} uri The URI to add the parameters to.
  * @private
  */
 WebChannelBase.prototype.addAdditionalParams_ = function(uri) {
   'use strict';
-  // Add the additional reconnect parameters as needed.
+  if (this.extraParams_) {
+    goog.object.forEach(this.extraParams_, function(value, key) {
+      'use strict';
+      uri.setParameterValue(key, value);
+    });
+  }
+
   if (this.handler_) {
     const params = this.handler_.getAdditionalParams(this);
     if (params) {
@@ -1764,11 +1769,9 @@ WebChannelBase.prototype.startBackChannel_ = function() {
   uri.setParameterValue('SID', this.sid_);
   uri.setParameterValue('CI', this.enableStreaming_ ? '0' : '1');
   uri.setParameterValue('AID', this.lastArrayId_);
-
-  // Add the reconnect parameters.
-  this.addAdditionalParams_(uri);
-
   uri.setParameterValue('TYPE', 'xmlhttp');
+
+  this.addAdditionalParams_(uri);
 
   if (this.httpHeadersOverwriteParam_ && this.extraHeaders_) {
     httpCors.setHttpHeadersWithOverwriteParam(
@@ -2509,13 +2512,6 @@ WebChannelBase.prototype.createDataUri = function(
     uri = goog.Uri.create(locationPage.protocol, null, hostName, port, path);
   }
 
-  if (this.extraParams_) {
-    goog.object.forEach(this.extraParams_, function(value, key) {
-      'use strict';
-      uri.setParameterValue(key, value);
-    });
-  }
-
   const param = this.getHttpSessionIdParam();
   const value = this.getHttpSessionId();
   if (param && value) {
@@ -2525,7 +2521,6 @@ WebChannelBase.prototype.createDataUri = function(
   // Add the protocol version to the URI.
   uri.setParameterValue('VER', this.channelVersion_);
 
-  // Add the reconnect parameters.
   this.addAdditionalParams_(uri);
 
   return uri;
