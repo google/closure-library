@@ -15,6 +15,7 @@ goog.setTestOnly();
 const asserts = goog.require('goog.asserts');
 const classlist = goog.require('goog.dom.classlist');
 const dom = goog.require('goog.dom');
+const testingAsserts = goog.require('goog.testing.asserts');
 
 /**
  * Uses document.write to add an iFrame to the page with the reference path in
@@ -97,15 +98,15 @@ function assertStructureMatchesReferenceInner(element, reference) {
   if (!element && !reference) {
     return;
   }
-  assertTrue('Expected two elements.', !!element && !!reference);
-  assertEquals(
+  testingAsserts.assertTrue('Expected two elements.', !!element && !!reference);
+  testingAsserts.assertEquals(
       'Expected nodes to have the same nodeName.', element.nodeName,
       reference.nodeName);
   const testElem = asserts.assertElement(element);
   const refElem = asserts.assertElement(reference);
   const elementClasses = classlist.get(testElem);
   Array.prototype.forEach.call(classlist.get(refElem), (referenceClass) => {
-    assertContains(
+    testingAsserts.assertContains(
         'Expected test node to have all reference classes.', referenceClass,
         elementClasses);
   });

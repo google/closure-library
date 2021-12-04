@@ -12,6 +12,7 @@ goog.module.declareLegacyNamespace();
 goog.setTestOnly();
 
 const ControlRenderer = goog.require('goog.ui.ControlRenderer');
+const asserts = goog.require('goog.testing.asserts');
 
 /**
  * Assert that a control renderer constructor doesn't call getCssClass.
@@ -43,7 +44,7 @@ function assertNoGetCssClassCallsInConstructor(rendererClassUnderTest) {
   // Looking for the side-effects caused by the construction here:
   new TestControlRenderer();
 
-  assertEquals(
+  asserts.assertEquals(
       'Constructors should not call getCssClass, ' +
           'getCustomRenderer must be able to override it post construction.',
       0, getCssClassCalls);

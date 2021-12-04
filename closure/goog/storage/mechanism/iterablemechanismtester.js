@@ -17,6 +17,8 @@ goog.setTestOnly('goog.storage.mechanism.iterableMechanismTester');
 const IterableMechanism = goog.require('goog.storage.mechanism.IterableMechanism');
 const StopIteration = goog.require('goog.iter.StopIteration');
 const googIter = goog.require('goog.iter');
+/** @suppress {extraRequire} for assertEquals and friends */
+const testingAsserts = goog.require('goog.testing.asserts');
 
 
 /**
