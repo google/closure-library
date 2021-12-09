@@ -120,7 +120,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   }
 
   /** @suppress {strictMissingProperties} */
-  const browserSupportsCoop = self.crossOriginIsolation !== undefined;
+  const browserSupportsCoop = self.crossOriginIsolated !== undefined;
   let referrerPolicy = 'strict-origin-when-cross-origin';
   if (window.Request) {
     /** @suppress {missingProperties} */

@@ -112,7 +112,7 @@ function doTestOpenWindow(noreferrer, urlParam, encodeUrlParam_opt) {
  * @param {string} urlParam Url param appended to the url being opened.
  */
 function verifyWindow(win, noreferrer, urlParam) {
-  if (noreferrer) {
+  if (noreferrer && self.crossOriginIsolated === undefined) {
     assertEquals(
         'Referrer should have been stripped', '', win.document.referrer);
   }
@@ -363,7 +363,9 @@ testSuite({
     // with element.setAttribute.
     assertEquals('http://google.com', element.href);
     assertEquals('_blank', attrs['target']);
-    assertEquals('noreferrer', attrs['rel']);
+    const expectedRel =
+        self.crossOriginIsolated === undefined ? 'noreferrer' : undefined;
+    assertEquals(expectedRel, attrs['rel']);
 
     // Click event.
     assertNotNull(dispatchedEvent);
@@ -372,6 +374,7 @@ testSuite({
 
   testOpenNoReferrerEscapesUrl() {
     let documentWriteHtml;
+    let openedUrl;
     const mockNewWin = {};
     mockNewWin.document = {
       write: function(html) {
@@ -380,14 +383,21 @@ testSuite({
       close: function() {},
     };
     const /** ? */ mockWin = {
-      open: function() {
+      open: function(url) {
+        openedUrl = url;
         return mockNewWin;
       },
     };
     googWindow.open('https://hello&world', {noreferrer: true}, mockWin);
-    assertRegExp(
-        `Does not contain expected HTML-escaped string: ${documentWriteHtml}`,
-        /hello&amp;world/, documentWriteHtml);
+    if (self.crossOriginIsolated !== undefined) {
+      assertEquals(undefined, documentWriteHtml);
+      assertEquals('https://hello&world', openedUrl);
+    } else {
+      assertEquals('', openedUrl);
+      assertRegExp(
+          `Does not contain expected HTML-escaped string: ${documentWriteHtml}`,
+          /hello&amp;world/, documentWriteHtml);
+    }
   },
 
   testOpenNewWindowNoopener() {
