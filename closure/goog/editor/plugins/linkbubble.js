@@ -159,6 +159,11 @@ goog.editor.plugins.LinkBubble.MSG_INVALID_URL_LINK_BUBBLE =
     goog.getMsg('invalid url');
 
 
+/** @desc Screen reader announcement that a link has been removed. */
+goog.editor.plugins.LinkBubble.MSG_LINK_BUBBLE_REMOVE_ANNOUNCEMENT =
+    goog.getMsg('Removed link.');
+
+
 /**
  * @param {!Element} targetElement
  * @return {boolean}
