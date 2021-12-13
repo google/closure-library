@@ -171,6 +171,7 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "\"&gt;<noscript>&lt;p title=\"</noscript><img />\"&gt;",
          "\"&gt;<noscript><p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\" /></noscript>",
          "&#34;&gt;<img src=\"x\"/>&#34;&gt;",
+         "\"&gt;<img src=\"x\" />\"&gt;",
          "\"&gt;<p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\">",
          "&quot;&gt;<p title=\"&lt;/noscript&gt;&lt;img src=x onerror=alert(1)&gt;\"></p>",
          "\"&gt;<noscript><p></p></noscript>",
