@@ -357,9 +357,14 @@ goog.crypt.base64.decodeStringToUint8Array = function(input) {
 
   goog.crypt.base64.decodeStringInternal_(input, pushByte);
 
-  // Return a subarray to handle the case that input included extra whitespace
-  // or extra padding and approxByteLength was incorrect.
-  return output.subarray(0, outLen);
+  // Trim unused trailing bytes if necessary, this only happens if the input
+  // included extra whitespace or extra padding that caused our estimate to be
+  // too large (this is uncommon).
+  //
+  // It would be correct to simply always call subarray, but we avoid doing so
+  // to avoid potential poor performance from chrome.
+  // See https://bugs.chromium.org/p/v8/issues/detail?id=7161
+  return outLen !== approxByteLength ? output.subarray(0, outLen) : output;
 };
 
 
