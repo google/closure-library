@@ -184,6 +184,8 @@ closure_js_library(
     lenient = True,
     deps = [
         ":abstractbubbleplugin",
+        "//closure/goog/a11y/aria:announcer",
+        "//closure/goog/a11y/aria:attributes",
         "//closure/goog/array",
         "//closure/goog/dom",
         "//closure/goog/dom:range",
