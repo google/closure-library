@@ -987,17 +987,25 @@ goog.testing.asserts.findDifferences = function(
     seen2.pop();
   }
 
-  const equalityPredicate =
-      opt_equalityPredicate || function(type, var1, var2) {
-        'use strict';
-        const typedPredicate = EQUALITY_PREDICATES[type];
-        if (!typedPredicate) {
-          return goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS;
-        }
-        const equal = typedPredicate(var1, var2);
-        return equal ? goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL :
-                       goog.testing.asserts.getDefaultErrorMsg_(var1, var2);
-      };
+  const equalityPredicate = function(type, var1, var2) {
+    'use strict';
+    // use the custom predicate if supplied.
+    const customPredicateResult = opt_equalityPredicate ?
+        opt_equalityPredicate(type, var1, var2) :
+        goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS;
+    if (customPredicateResult !==
+        goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS) {
+      return customPredicateResult;
+    }
+    // otherwise use the default behavior.
+    const typedPredicate = EQUALITY_PREDICATES[type];
+    if (!typedPredicate) {
+      return goog.testing.asserts.EQUALITY_PREDICATE_CANT_PROCESS;
+    }
+    const equal = typedPredicate(var1, var2);
+    return equal ? goog.testing.asserts.EQUALITY_PREDICATE_VARS_ARE_EQUAL :
+                   goog.testing.asserts.getDefaultErrorMsg_(var1, var2);
+  };
 
   /**
    * @param {*} var1 An item in the expected object.
