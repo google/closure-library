@@ -12,13 +12,13 @@
  * a remote origin.
  *
  * WebChannels are created via <code>WebChannel</code>. Multiple WebChannels
- * may be multiplexed over the same WebChannelTransport, which represents
+ * may be multiplexed over the same WebChannelTransport, which encapsulates
  * the underlying physical connectivity over standard wire protocols
  * such as HTTP.
  *
  * A WebChannel in turn represents a logical communication channel between
- * the client and server end point. A WebChannel remains open for as long
- * as the client or server end-point allows.
+ * the client and server endpoint. A WebChannel remains open for as long
+ * as the client or server endpoint allows.
  *
  * Messages are delivered in-order and reliably over the same WebChannel,
  * and the choice of the underlying wire protocols is completely transparent
@@ -85,19 +85,24 @@ goog.net.WebChannel.FailureRecovery = function() {};
 goog.net.WebChannel.Options = function() {};
 
 /**
- * Custom headers to be added to every message sent to the
+ * Transport-metadata support.
+ *
+ * Custom HTTP headers to be added to every message sent to the
  * server. This object is mutable, and custom headers may be changed, removed,
- * or added during the runtime after a channel has been
- * opened
+ * or added during the runtime after a channel has been opened.
+ *
+ * Custom headers may trigger CORS preflight. See other related options.
  * @type {!Object<string, string>|undefined}
  */
 goog.net.WebChannel.Options.prototype.messageHeaders;
 
 /**
- * Similar to messageHeaders, but any custom headers will
- * be sent only once when the channel is opened. Typical usage is to send
- * an auth header to the server, which only checks the auth header at the time
- * when the channel is opened.
+ * Transport-metadata support.
+ *
+ * Similar to messageHeaders, but any custom HTTP headers will
+ * be sent only once when the channel is opened as part of the handshae request.
+ * Typical usage is to send an auth header to the server, which only checks
+ * the auth header at the time during the handshake when the channel is opened.
  * @type {!Object<string, string>|undefined}
  */
 goog.net.WebChannel.Options.prototype.initMessageHeaders;
@@ -110,9 +115,17 @@ goog.net.WebChannel.Options.prototype.initMessageHeaders;
 goog.net.WebChannel.Options.prototype.messageContentType;
 
 /**
+ * Transport-metadata support.
+ *
  * Custom url query parameters to be added to every message
  * sent to the server. This object is mutable, and custom parameters may be
  * changed, removed or added during the runtime after a channel has been opened.
+ *
+ * TODO: initMessageUrlParams
+ * TODO: closeMessageUrlParams  (custom url query params to be added to the
+ * channel-close message. Custom headers are not supported due to the use of
+ * SendBeacon)
+ *
  * @type {!Object<string, string>|undefined}
  */
 goog.net.WebChannel.Options.prototype.messageUrlParams;
@@ -361,7 +374,7 @@ goog.net.WebChannel.prototype.halfClose = goog.abstractMethod;
 
 
 /**
- * Sends a message to the server that maintains the other end point of
+ * Sends a message to the server that maintains the other endpoint of
  * the WebChannel.
  *
  * O-RTT behavior:
@@ -593,7 +606,7 @@ goog.net.WebChannel.RuntimeProperties.prototype.getHttpSessionId =
  *
  * This is currently implemented only in the client layer and the commit
  * callback will be invoked after all the pending client-sent messages have been
- * delivered by the server-side webchannel end-point. This semantics is
+ * delivered by the server-side webchannel endpoint. This semantics is
  * different and weaker than what's required for end-to-end ack which requires
  * the server application to ack the in-order delivery of messages that are sent
  * before the commit request is issued.
@@ -679,6 +692,16 @@ goog.net.WebChannel.RuntimeProperties.prototype.ackCommit = goog.abstractMethod;
 
 
 /**
+ * Transport-metadata support.
+ *
+ * TODO: getLastResponseHeaders
+ * TODO: getInitStatusCode   (handshake)
+ * TODO: getInitResponseHeaders  (handshake)
+ *
+ * Responses from the channel-close (abort) message are not available.
+ *
+ * In future when client-side half-close is supported, its response status
+ * will be available via this API too.
  * @return {number} The last HTTP status code received by the channel.
  */
 goog.net.WebChannel.RuntimeProperties.prototype.getLastStatusCode =
