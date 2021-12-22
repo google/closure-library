@@ -71,7 +71,7 @@ img.src = src;
 const img = goog.dom.getElement('avatar');
 img.src = src;
 // Clean.
-const img = goog.dom.asserts.assertIsHtmlImageElement(goog.dom.getElement('avatar'));
+const img = goog.asserts.dom.assertIsHtmlImageElement(goog.dom.getElement('avatar'));
 img.src = src;
 // No violation but unsafe - see below.
 const img = /** @type {!HTMLImageElement} */ (goog.dom.getElement('avatar'));
