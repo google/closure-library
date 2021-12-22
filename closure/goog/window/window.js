@@ -24,6 +24,17 @@ goog.requireType('goog.string.TypedString');
 
 
 /**
+ * Whether we should enforce COOP by avoiding document.write in certain
+ * situations (see https://github.com/google/closure-library/issues/1137).
+ * This is a temporary flag because some products rely on the legacy noreferrer
+ * behavior for CSP reasons, but it will be removed in the near future.  Please
+ * do not rely on setting this to false.
+ * @define {boolean}
+ */
+goog.window.ENFORCE_COOP = goog.define('goog.window.ENFORCE_COOP', true);
+
+
+/**
  * Default height for popup windows
  * @type {number}
  */
@@ -120,7 +131,8 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   }
 
   /** @suppress {strictMissingProperties} */
-  const browserSupportsCoop = self.crossOriginIsolated !== undefined;
+  const browserSupportsCoop =
+      goog.window.ENFORCE_COOP && self.crossOriginIsolated !== undefined;
   let referrerPolicy = 'strict-origin-when-cross-origin';
   if (window.Request) {
     /** @suppress {missingProperties} */
