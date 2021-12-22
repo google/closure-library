@@ -336,18 +336,16 @@ goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
   // Note: There are other ways the same result could be achieved but the
   // current behavior was preserved when this code was refactored to use
   // SafeUrl, in order to avoid breakage.
-  var loadingMessage;
-  if (!opt_message) {
-    loadingMessage = '';
-  } else {
-    loadingMessage =
+  let url = '';
+  if (opt_message) {
+    const loadingMessage =
         goog.string.escapeString(goog.string.htmlEscape(opt_message));
+    url = goog.html.uncheckedconversions
+              .safeUrlFromStringKnownToSatisfyTypeContract(
+                  goog.string.Const.from(
+                      'b/12014412, encoded string in javascript: URL'),
+                  'javascript:"' + encodeURI(loadingMessage) + '"');
   }
-  var url = goog.html.uncheckedconversions
-                .safeUrlFromStringKnownToSatisfyTypeContract(
-                    goog.string.Const.from(
-                        'b/12014412, encoded string in javascript: URL'),
-                    'javascript:"' + encodeURI(loadingMessage) + '"');
   return /** @type {?Window} */ (
       goog.window.open(url, opt_options, opt_parentWin));
 };

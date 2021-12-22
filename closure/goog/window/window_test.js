@@ -241,6 +241,15 @@ testSuite({
   },
 
   testOpenBlank() {
+    newWin = googWindow.openBlank();
+    const urlParam = 'bogus~';
+    newWin.location.href = REDIRECT_URL_PREFIX + urlParam;
+    return waitForTestWindow(newWin).then(() => {
+      verifyWindow(newWin, false, urlParam);
+    });
+  },
+
+  testOpenBlankWithMessage() {
     newWin = googWindow.openBlank('Loading...');
     const urlParam = 'bogus~';
     newWin.location.href = REDIRECT_URL_PREFIX + urlParam;
