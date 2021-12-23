@@ -143,7 +143,8 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   // Opening popups with `noreferrer` and a COOP policy of
   // `same-origin-allow-popups` doesn't work. The below is a workaround
   // for this browser limitation.
-  if (browserSupportsCoop && opt_options['noreferrer']) {
+  let noReferrerOption = opt_options['noreferrer'];
+  if (browserSupportsCoop && noReferrerOption) {
     if (pageSetsUnsafeReferrerPolicy) {
       // If the browser supports COOP, and the page explicitly sets a
       // referrer-policy of `unsafe-url`, and the caller requests that the
@@ -159,7 +160,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // the full URL. So we don't need to explicitly hide the referrer ourselves
     // and can instead rely on the browser's default referrer policy to hide the
     // referrer.
-    opt_options['noreferrer'] = false;
+    noReferrerOption = false;
   }
 
   /** @suppress {missingProperties} loose references to 'target' */
@@ -197,7 +198,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     goog.dom.safe.setAnchorHref(a, safeLinkRef);
 
     a.setAttribute('target', target);
-    if (opt_options['noreferrer']) {
+    if (noReferrerOption) {
       a.setAttribute('rel', 'noreferrer');
     }
 
@@ -215,7 +216,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // origin. Since iOS standalone web apps are run in their own sandbox, this
     // is the most appropriate return value.
     newWin = goog.window.createFakeWindow_();
-  } else if (opt_options['noreferrer']) {
+  } else if (noReferrerOption) {
     // This code used to use meta-refresh to stop the referrer from being
     // included in the request headers. This was the only cross-browser way
     // to remove the referrer circa 2009. However, this never worked in Chrome,

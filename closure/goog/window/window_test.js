@@ -397,7 +397,8 @@ testSuite({
         return mockNewWin;
       },
     };
-    googWindow.open('https://hello&world', {noreferrer: true}, mockWin);
+    const options = {noreferrer: true};
+    googWindow.open('https://hello&world', options, mockWin);
     if (self.crossOriginIsolated !== undefined) {
       assertEquals(undefined, documentWriteHtml);
       assertEquals('https://hello&world', openedUrl);
@@ -407,6 +408,7 @@ testSuite({
           `Does not contain expected HTML-escaped string: ${documentWriteHtml}`,
           /hello&amp;world/, documentWriteHtml);
     }
+    assertEquals(true, options.noreferrer);
   },
 
   testOpenNewWindowNoopener() {
