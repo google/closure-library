@@ -74,12 +74,10 @@ function timestamp(str) {
 }
 
 testSuite({
-  setUpPage() {
+  setUp() {
     // Ensure goog.now returns a constant timestamp.
     goog.now = () => baseTime;
-  },
 
-  setUp() {
     stubs.replace(goog, 'LOCALE', 'en-US');
     /** @suppress {missingRequire} */
     stubs.set(goog.i18n, 'NumberFormatSymbols', NumberFormatSymbols_en);
@@ -207,6 +205,21 @@ testSuite({
 
     expected = format(gdatetime(timestamp('1 January 2010 01:22:11')));
     assertEquals(expected, fn(timestamp('1 January 2010 01:22:11'), format));
+  },
+
+  testFormatDay_daylightSavingTime() {
+    // November 7th 2021, 11:57:16 pm PST-08:00 (the day daylight saving time
+    // ended that year, at a time after it ended that day)
+    const daylightSavingEndMs = 1636358236277;
+    goog.now = () => daylightSavingEndMs;
+    assertEquals('today', relative.formatDay(daylightSavingEndMs));
+
+    // March 14, 2021 11:12:34 pm PDT-07:00 (end of the day DST began)
+    const daylightSavingStartMs = 1615788754000;
+    // March 15, 2021 00:12:34 am PDT-07:00 (the day _after_ DST began)
+    const nextDayMs = daylightSavingStartMs + 3600000;
+    goog.now = () => daylightSavingStartMs;
+    assertEquals('tomorrow', relative.formatDay(nextDayMs));
   },
 
   testGetDateString() {
