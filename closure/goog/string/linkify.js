@@ -17,12 +17,42 @@ goog.require('goog.string.Const');
 
 
 /**
+ * Options bag for linkifyPlainTextAsHtml's second parameter.
+ * @private
+ * @record
+ */
+goog.string.linkify.LinkifyOptions_ = class {
+  constructor() {
+    /**
+     * HTML attributes to add to all links created.  Default are `rel=nofollow`
+     * and `target=_blank`. To clear these defaults attributes, set them
+     * explicitly to '', i.e. `{rel: '', target: ''}`.
+     * @const {!Object<string, ?goog.html.SafeHtml.AttributeValue>|undefined}
+     */
+    this.attributes;
+    /**
+     * Whether to preserve newlines with &lt;br&gt;.
+     * @const {boolean|undefined}
+     */
+    this.preserveNewlines;
+    /**
+     * Whether to preserve spaces with non-breaking spaces and tabs with
+     * &lt;span style="white-space:pre"&gt;
+     * @const {boolean|undefined}
+     */
+    this.preserveSpacesAndTabs;
+  }
+};
+
+
+/**
  * Takes a string of plain text and linkifies URLs and email addresses. For a
  * URL (unless opt_attributes is specified), the target of the link will be
  * _blank and it will have a rel=nofollow attribute applied to it so that links
  * created by linkify will not be of interest to search engines.
  * @param {string} text Plain text.
- * @param {!Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
+ * @param {!goog.string.linkify.LinkifyOptions_|
+ *         !Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
  *     Attributes to add to all links created. Default are rel=nofollow and
  *     target=_blank. To clear those default attributes set rel='' and
  *     target=''.
@@ -36,6 +66,15 @@ goog.require('goog.string.Const');
 goog.string.linkify.linkifyPlainTextAsHtml = function(
     text, opt_attributes, opt_preserveNewlines, opt_preserveSpacesAndTabs) {
   'use strict';
+  if (opt_attributes &&
+      (opt_attributes.attributes || opt_attributes.preserveNewlines ||
+       opt_attributes.preserveSpacesAndTabs)) {
+    opt_preserveNewlines = opt_attributes.preserveNewlines;
+    opt_preserveSpacesAndTabs = opt_attributes.preserveSpacesAndTabs;
+    opt_attributes = opt_attributes.attributes;
+  }
+  const /** !Object<?goog.html.SafeHtml.AttributeValue> */ attributes =
+      opt_attributes || {};
 
   /**
    * @param {string} plainText
@@ -78,12 +117,12 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
   }
 
   const attributesMap = {};
-  for (let key in opt_attributes) {
-    if (!opt_attributes[key]) {
+  for (let key in attributes) {
+    if (!attributes[key]) {
       // Our API allows '' to omit the attribute, SafeHtml requires null.
       attributesMap[key] = null;
     } else {
-      attributesMap[key] = opt_attributes[key];
+      attributesMap[key] = attributes[key];
     }
   }
   // Set default options if they haven't been explicitly set.

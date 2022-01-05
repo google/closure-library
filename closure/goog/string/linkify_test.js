@@ -26,10 +26,11 @@ function assertLinkify(
     comment, input, expected, preserveNewlines = undefined,
     preserveSpacesAndTabs = undefined) {
   assertEquals(
-      comment, expected,
-      SafeHtml.unwrap(linkify.linkifyPlainTextAsHtml(
-          input, {rel: '', target: ''}, preserveNewlines,
-          preserveSpacesAndTabs)));
+      comment, expected, SafeHtml.unwrap(linkify.linkifyPlainTextAsHtml(input, {
+        attributes: {rel: '', target: ''},
+        preserveNewlines,
+        preserveSpacesAndTabs,
+      })));
 }
 
 testSuite({
@@ -334,7 +335,7 @@ testSuite({
         linkify.linkifyPlainTextAsHtml(
             'The link for www.google.com is located somewhere in ' +
                 'https://www.google.fr/?hl=en, you should find it easily.',
-            {rel: '', target: ''}));
+            {attributes: {rel: '', target: ''}}));
     testingDom.assertHtmlContentsMatch(
         'The link for <a href="http://www.google.com">www.google.com<\/a> is ' +
             'located somewhere in ' +
@@ -348,7 +349,7 @@ testSuite({
         div,
         linkify.linkifyPlainTextAsHtml(
             'Attribute with <class> name www.w3c.org.',
-            {'class': 'link-added'}));
+            {attributes: {'class': 'link-added'}}));
     testingDom.assertHtmlContentsMatch(
         'Attribute with &lt;class&gt; name <a href="http://www.w3c.org" ' +
             'target="_blank" rel="nofollow" class="link-added">www.w3c.org<\/a>.',
