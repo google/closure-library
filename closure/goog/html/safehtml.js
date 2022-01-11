@@ -523,7 +523,6 @@ class SafeHtml {
         'script', combinedAttrs);
   }
 
-
   /**
    * Creates a SafeHtml representing a script tag. Does not allow the language,
    * src, text or type attributes to be set.
@@ -537,7 +536,7 @@ class SafeHtml {
    * @return {!SafeHtml} The SafeHtml content with the tag.
    * @throws {!Error} If invalid attribute name or attribute value is provided.
    *     If attributes  contains the
-   *     language, src, text or type attribute.
+   *     language, src or text attribute.
    */
   static createScript(script, attributes = undefined) {
     for (let attr in attributes) {
@@ -545,7 +544,7 @@ class SafeHtml {
       if (Object.prototype.hasOwnProperty.call(attributes, attr)) {
         const attrLower = attr.toLowerCase();
         if (attrLower == 'language' || attrLower == 'src' ||
-            attrLower == 'text' || attrLower == 'type') {
+            attrLower == 'text') {
           throw new Error(
               SafeHtml.ENABLE_ERROR_MESSAGES ?
                   `Cannot set "${attrLower}" attribute` :

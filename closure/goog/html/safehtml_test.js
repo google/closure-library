@@ -419,17 +419,27 @@ testSuite({
     scriptHtml = SafeHtml.createScript(SafeScript.EMPTY, {'id': null});
     assertSameHtml('<script></script>', scriptHtml);
 
+    // Can create JSON scripts by setting the type attribute
+    const jsonScript = SafeScript.fromJson({
+      '@context': 'https://schema.org/',
+      '@type': 'Test',
+      'name': 'JSON Script',
+    });
+    scriptHtml =
+        SafeHtml.createScript(jsonScript, {type: 'application/ld+json'});
+    assertSameHtml(
+        [
+          '<script type="application/ld+json">',
+          '{"@context":"https://schema.org/","@type":"Test","name":"JSON Script"}',
+          '</script>',
+        ].join(''),
+        scriptHtml);
+
     // Set attribute to invalid value.
     let exception = assertThrows(() => {
       SafeHtml.createScript(SafeScript.EMPTY, {'invalid.': 'cantdothis'});
     });
     assertContains('Invalid attribute name', exception.message);
-
-    // Cannot override type attribute.
-    exception = assertThrows(() => {
-      SafeHtml.createScript(SafeScript.EMPTY, {'Type': 'cantdothis'});
-    });
-    assertContains('Cannot set "type"', exception.message);
 
     // Cannot set src attribute.
     exception = assertThrows(() => {
