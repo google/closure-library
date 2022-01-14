@@ -18,10 +18,9 @@ goog.require('goog.string.Const');
 
 /**
  * Options bag for linkifyPlainTextAsHtml's second parameter.
- * @private
  * @record
  */
-goog.string.linkify.LinkifyOptions_ = class {
+goog.string.linkify.LinkifyOptions = class {
   constructor() {
     /**
      * HTML attributes to add to all links created.  Default are `rel=nofollow`
@@ -51,7 +50,7 @@ goog.string.linkify.LinkifyOptions_ = class {
  * _blank and it will have a rel=nofollow attribute applied to it so that links
  * created by linkify will not be of interest to search engines.
  * @param {string} text Plain text.
- * @param {!goog.string.linkify.LinkifyOptions_|
+ * @param {!goog.string.linkify.LinkifyOptions|
  *         !Object<string, ?goog.html.SafeHtml.AttributeValue>=} opt_attributes
  *     Attributes to add to all links created. Default are rel=nofollow and
  *     target=_blank. To clear those default attributes set rel='' and
