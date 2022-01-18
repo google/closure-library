@@ -43,7 +43,7 @@ function stubChannelRequest() {
 /**
  * Simulates the WebChannelBase firing the open event for the given channel.
  * @param {!WebChannelBase} channel The WebChannelBase.
- * @suppress {checkTypes} suppression added to enable type checking
+ * @suppress {checkTypes} suppression Accessing private property.
  */
 function simulateOpenEvent(channel) {
   assertNotNull(channel.getHandler());
@@ -53,7 +53,7 @@ function simulateOpenEvent(channel) {
 /**
  * Simulates the WebChannelBase firing the close event for the given channel.
  * @param {!WebChannelBase} channel The WebChannelBase.
- * @suppress {checkTypes} suppression added to enable type checking
+ * @suppress {checkTypes} suppression Accessing private property.
  */
 function simulateCloseEvent(channel) {
   assertNotNull(channel.getHandler());
@@ -63,7 +63,7 @@ function simulateCloseEvent(channel) {
 /**
  * Simulates the WebChannelBase firing the error event for the given channel.
  * @param {!WebChannelBase} channel The WebChannelBase.
- * @suppress {checkTypes} suppression added to enable type checking
+ * @suppress {checkTypes} suppression Accessing private property.
  */
 function simulateErrorEvent(channel) {
   assertNotNull(channel.getHandler());
@@ -74,7 +74,7 @@ function simulateErrorEvent(channel) {
  * Simulates the WebChannelBase firing the message event for the given channel.
  * @param {!WebChannelBase} channel The WebChannelBase.
  * @param {string} data The message data.
- * @suppress {checkTypes} suppression added to enable type checking
+ * @suppress {checkTypes} suppression Accessing private property.
  */
 function simulateMessageEvent(channel, data) {
   assertNotNull(channel.getHandler());
@@ -113,10 +113,7 @@ testSuite({
     webChannel.open();
     assertFalse(eventFired);
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const channel = webChannel.channel_;
     assertNotNull(channel);
 
@@ -130,10 +127,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const extraHeaders_ = webChannel.channel_.extraHeaders_;
     assertNotNullNorUndefined(extraHeaders_);
     assertEquals('foo-value', extraHeaders_['foo-key']);
@@ -146,10 +140,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const initHeaders_ = webChannel.channel_.initHeaders_;
     assertNotNullNorUndefined(initHeaders_);
     assertEquals('foo-value', initHeaders_['foo-key']);
@@ -161,10 +152,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const initHeaders_ = webChannel.channel_.initHeaders_;
     assertNotNullNorUndefined(initHeaders_);
     assertEquals(
@@ -180,10 +168,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const initHeaders_ = webChannel.channel_.initHeaders_;
     assertNotNullNorUndefined(initHeaders_);
     assertEquals(
@@ -197,10 +182,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const extraHeaders_ = webChannel.channel_.extraHeaders_;
     assertNotNullNorUndefined(extraHeaders_);
     assertEquals('webchannel', extraHeaders_['X-Client-Protocol']);
@@ -211,10 +193,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const extraHeaders_ = webChannel.channel_.extraHeaders_;
     assertNull(extraHeaders_);
   },
@@ -228,10 +207,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const extraHeaders_ = webChannel.channel_.extraHeaders_;
     assertNotNullNorUndefined(extraHeaders_);
     assertEquals('foo-value', extraHeaders_['foo-key']);
@@ -242,10 +218,7 @@ testSuite({
     const webChannelTransport = new WebChannelBaseTransport();
     const options = {'messageUrlParams': {'foo-key': 'foo-value'}};
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const channel = webChannel.channel_;
     assertNotNull(channel);
 
@@ -271,10 +244,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const httpSessionIdParam = webChannel.channel_.getHttpSessionIdParam();
     assertEquals('xsessionid', httpSessionIdParam);
   },
@@ -288,25 +258,16 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const httpSessionIdParam = webChannel.channel_.getHttpSessionIdParam();
     assertEquals('xsessionid', httpSessionIdParam);
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const extraParams = webChannel.channel_.extraParams_;
     assertUndefined(extraParams['xsessionid']);
   },
 
-  /**
-     @suppress {strictMissingProperties} suppression added to enable type
-     checking
-   */
+  /** @suppress {strictMissingProperties} Accessing private property. */
   testOpenWithCorsEnabled() {
     const webChannelTransport = new WebChannelBaseTransport();
     const options = {'supportsCrossDomainXhr': true};
@@ -395,10 +356,7 @@ testSuite({
     webChannel.open();
     assertFalse(eventFired);
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const channel = webChannel.channel_;
     assertNotNull(channel);
 
@@ -411,10 +369,7 @@ testSuite({
     let messageUrlParams = {'foo-key': 'foo-value'};
     const options = {'messageUrlParams': messageUrlParams};
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const channel = webChannel.channel_;
     assertNotNull(channel);
 
@@ -467,10 +422,7 @@ testSuite({
     webChannel.open();
     assertFalse(eventFired);
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const channel = webChannel.channel_;
     assertNotNull(channel);
 
@@ -478,7 +430,7 @@ testSuite({
     assertTrue(eventFired);
   },
 
-  /** @suppress {checkTypes} suppression added to enable type checking */
+  /** @suppress {checkTypes} suppression Accessing private property. */
   testChannelMessage() {
     const webChannelTransport = new WebChannelBaseTransport();
     webChannel = webChannelTransport.createWebChannel(channelUrl);
@@ -493,10 +445,7 @@ testSuite({
     webChannel.open();
     assertFalse(eventFired);
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     const channel = webChannel.channel_;
     assertNotNull(channel);
 
@@ -512,10 +461,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     let enabled = webChannel.channel_.enableOriginTrials_;
     assertTrue(enabled);
 
@@ -525,10 +471,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     enabled = webChannel.channel_.enableOriginTrials_;
     assertFalse(enabled);
 
@@ -536,10 +479,7 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     enabled = webChannel.channel_.enableOriginTrials_;
     assertTrue(enabled);
 
@@ -547,11 +487,71 @@ testSuite({
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
     webChannel.open();
 
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
+    /** @suppress {strictMissingProperties} Accessing private property. */
     enabled = webChannel.channel_.enableOriginTrials_;
     assertTrue(enabled);
+  },
+
+  testGetNonAckedMessages_withJsObjectReturnsExactMessage() {
+    const webChannelTransport = new WebChannelBaseTransport();
+    webChannel = webChannelTransport.createWebChannel(channelUrl);
+    const messageToSend = {foo: 'bar'};
+    const messageToSend2 = {foo2: 'bar2'};
+
+    webChannel.open();
+    webChannel.send(messageToSend);
+    webChannel.send(messageToSend2);
+
+    assertElementsEquals(
+        [messageToSend, messageToSend2],
+        webChannel.getRuntimeProperties().getNonAckedMessages());
+  },
+
+  testGetNonAckedMessages_withStringReturnsExactMessage() {
+    const webChannelTransport = new WebChannelBaseTransport();
+    webChannel = webChannelTransport.createWebChannel(channelUrl);
+    const messageToSend = 'foo';
+    const messageToSend2 = 'foo2';
+
+    webChannel.open();
+    webChannel.send(messageToSend);
+    webChannel.send(messageToSend2);
+
+    assertElementsEquals(
+        [messageToSend, messageToSend2],
+        webChannel.getRuntimeProperties().getNonAckedMessages());
+  },
+
+  testGetNonAckedMessages_withRawJsonReturnsEqualObject() {
+    const webChannelTransport = new WebChannelBaseTransport();
+    const options = {'sendRawJson': true};
+    webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+    const messageToSend = {foo: 'bar'};
+
+    webChannel.open();
+    webChannel.send(messageToSend);
+
+    const nonAckedMessages =
+        webChannel.getRuntimeProperties().getNonAckedMessages();
+    assertEquals(1, nonAckedMessages.length);
+    // JSON objects went through serialization and deserialization so an equal
+    // (but not the same) object is returned.
+    assertObjectEquals(messageToSend, nonAckedMessages[0]);
+  },
+
+  testGetNonAckedMessagesAfterChannelClose() {
+    const webChannelTransport = new WebChannelBaseTransport();
+    webChannel = webChannelTransport.createWebChannel(channelUrl);
+    const messageToSend = {foo: 'bar'};
+    const messageToSend2 = {foo2: 'bar2'};
+
+    webChannel.open();
+    webChannel.send(messageToSend);
+    webChannel.send(messageToSend2);
+    webChannel.close();
+
+    assertElementsEquals(
+        [messageToSend, messageToSend2],
+        webChannel.getRuntimeProperties().getNonAckedMessages());
   },
 });

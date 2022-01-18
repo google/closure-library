@@ -490,6 +490,15 @@ goog.labs.net.webChannel.WebChannelBase = function(
    */
   this.enableOriginTrials_ = ALLOW_ORIGIN_TRIAL_FEATURES &&
       (!opt_options || opt_options.enableOriginTrials !== false);
+
+  /**
+   * The array of non-acked maps at the time of channel close. Refer to
+   * `getNonAckedMessagesWithClosedChannel()` API for definitions of non-acked
+   * messages.
+   *
+   * @private {?Array<!Wire.QueuedMap>}
+   */
+  this.nonAckedMapsAtChannelClose_ = null;
 };
 
 const WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
@@ -2426,6 +2435,7 @@ WebChannelBase.prototype.onClose_ = function() {
   'use strict';
   this.state_ = WebChannelBase.State.CLOSED;
   this.lastStatusCode_ = -1;
+  this.nonAckedMapsAtChannelClose_ = [];
   if (this.handler_) {
     const pendingMessages =
         this.forwardChannelRequestPool_.getPendingMessages();
@@ -2433,13 +2443,13 @@ WebChannelBase.prototype.onClose_ = function() {
     if (pendingMessages.length == 0 && this.outgoingMaps_.length == 0) {
       this.handler_.channelClosed(this);
     } else {
-      const self = this;
-      this.channelDebug_.debug(function() {
-        'use strict';
-        return 'Number of undelivered maps' +
-            ', pending: ' + pendingMessages.length +
-            ', outgoing: ' + self.outgoingMaps_.length;
-      });
+      this.channelDebug_.debug(
+          () => 'Number of undelivered maps' +
+              ', pending: ' + pendingMessages.length +
+              ', outgoing: ' + this.outgoingMaps_.length);
+
+      goog.array.extend(this.nonAckedMapsAtChannelClose_, pendingMessages);
+      goog.array.extend(this.nonAckedMapsAtChannelClose_, this.outgoingMaps_);
 
       this.forwardChannelRequestPool_.clearPendingMessages();
 
@@ -2449,6 +2459,30 @@ WebChannelBase.prototype.onClose_ = function() {
       this.handler_.channelClosed(this, pendingMessages, copyOfUndeliveredMaps);
     }
   }
+};
+
+/**
+ * @return {!Array<!Wire.QueuedMap>} Returns the list of non-acked maps, both
+ * during an active channel or after the channel is closed. Refer to the
+ * `getNonAckedMessages()` API for definitions of non-acked messages.
+ */
+WebChannelBase.prototype.getNonAckedMaps = function() {
+  if (this.state_ == WebChannelBase.State.CLOSED) {
+    goog.asserts.assert(
+        this.nonAckedMapsAtChannelClose_ != null,
+        'nonAckedMapsAtChannelClose_ is not set after channel close.');
+    return this.nonAckedMapsAtChannelClose_;
+  }
+
+  // The underlying message objects are not cloned and thus exposes a mutability
+  // risk, but is chosen to make strict equality (i.e. ===) checks possible for
+  // callers.
+  let unAckedMaps = [];
+  goog.array.extend(
+      unAckedMaps, this.forwardChannelRequestPool_.getPendingMessages());
+  goog.array.extend(unAckedMaps, this.outgoingMaps_);
+
+  return unAckedMaps;
 };
 
 

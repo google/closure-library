@@ -627,13 +627,14 @@ goog.net.WebChannel.RuntimeProperties.prototype.commit = goog.abstractMethod;
  *
  * Detail spec: https://github.com/bidiweb/webchannel/blob/master/commit.md
  *
- * This is not yet implemented.
+ * Note that the caller should NOT modify the list of returned messages.
  *
- * @return {number} The total number of messages that have not received
- * commit-ack from the server; or if no commit has been issued, the number
- * of messages that have not been delivered to the server application.
+ * @return {!Array<!goog.net.WebChannel.MessageData>} The list of messages that
+ * have not received commit-ack from the server; or if no commit has been
+ * issued, the list of messages that have not been delivered to the server
+ * application.
  */
-goog.net.WebChannel.RuntimeProperties.prototype.getNonAckedMessageCount =
+goog.net.WebChannel.RuntimeProperties.prototype.getNonAckedMessages =
     goog.abstractMethod;
 
 

@@ -136,6 +136,7 @@ closure_js_library(
         ":webchannelbase",
         ":wire",
         "//closure/goog/asserts",
+        "//closure/goog/collections:maps",
         "//closure/goog/events:eventtarget",
         "//closure/goog/json",
         "//closure/goog/labs/net:webchannel",
