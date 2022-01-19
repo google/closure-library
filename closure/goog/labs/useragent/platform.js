@@ -26,7 +26,7 @@ const {platformVersion} = goog.require('goog.labs.userAgent.highEntropy.highEntr
  * userAgentData.platform was enabled by default in Chrome 93:
  * https://www.chromestatus.com/feature/5733498725859328
  * TODO(user): Skip this check with FEATURESET_YEAR once userAgentData is
- * present in all major browsers (probably won't be until 2023).
+ * present in all major browsers (may not be until 2023).
  * See https://caniuse.com/mdn-api_navigator_useragentdata.
  */
 function useUserAgentDataPlatform() {
