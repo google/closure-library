@@ -251,7 +251,8 @@ goog.i18n.DateTimeFormat.PartTypes_ = {
  */
 goog.i18n.DateTimeFormat.getHours_ = function(date) {
   'use strict';
-  return date.getHours ? date.getHours() : 0;
+  return /** @type {?} */ (date).getHours ? /** @type {?} */ (date).getHours() :
+                                            0;
 };
 
 
@@ -780,7 +781,11 @@ goog.i18n.DateTimeFormat.prototype.formatMonth_ = function(count, date) {
  */
 goog.i18n.DateTimeFormat.validateDateHasTime_ = function(date) {
   'use strict';
-  if (date.getHours && date.getSeconds && date.getMinutes) return;
+  let maybeHasTime = /** @type {?} */ (date);
+  if (maybeHasTime.getHours && maybeHasTime.getSeconds &&
+      maybeHasTime.getMinutes) {
+    return;
+  }
   // if (date instanceof Date || date instanceof goog.date.DateTime)
   throw new Error(
       'The date to format has no time (probably a goog.date.Date). ' +
@@ -820,7 +825,8 @@ goog.i18n.DateTimeFormat.prototype.formatFractionalSeconds_ = function(
     count, date) {
   'use strict';
   // Fractional seconds left-justify, append 0 for precision beyond 3
-  const value = date.getMilliseconds() / 1000;
+  const value =
+      /** @type {!Date|!goog.date.DateTime} */ (date).getMilliseconds() / 1000;
   return this.localizeNumbers_(
       value.toFixed(Math.min(3, count)).substr(2) +
       (count > 3 ? goog.string.padNumber(0, count - 3) : ''));
