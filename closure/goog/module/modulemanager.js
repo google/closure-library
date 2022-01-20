@@ -378,10 +378,19 @@ goog.module.ModuleManager.prototype.getModuleInfo = function(id) {
 };
 
 
-/** @override */
+/**
+ * @param {string} fromModule
+ * @param {string} toModule
+ * @override
+ */
 goog.module.ModuleManager.prototype.addExtraEdge = function(
     fromModule, toModule) {
   'use strict';
+  const moduleInfo = this.getModuleInfo(fromModule);
+  if (moduleInfo && moduleInfo.isLoaded()) {
+    this.load(toModule);
+    return;
+  }
   if (!this.extraEdges_[fromModule]) {
     this.extraEdges_[fromModule] = {};
   }
@@ -873,7 +882,24 @@ goog.module.ModuleManager.prototype.setLoaded = function() {
     return;
   }
 
-  var id = this.currentlyLoadingModule_.getId();
+  const id = this.currentlyLoadingModule_.getId();
+
+  const modulesToLoad = [];
+  if (this.extraEdges_[id]) {
+    for (const dest of Object.keys(this.extraEdges_[id])) {
+      // Ensure that the dependencies of this module, specified through extra
+      // edges, have already been loaded. If any dependency has not yet been
+      // loaded, it indicates that the extra edge wasn't added until after this
+      // module was requested. In this case, we will load the missing module
+      // immediately.
+      const moduleInfo = this.getModuleInfo(dest);
+      if (moduleInfo && !moduleInfo.isLoaded()) {
+        this.removeExtraEdge(id, dest);
+        modulesToLoad.push(dest);
+      }
+    }
+    this.loadMultiple(modulesToLoad);
+  }
 
   if (this.isDisposed()) {
     goog.log.warning(
@@ -883,7 +909,7 @@ goog.module.ModuleManager.prototype.setLoaded = function() {
 
   goog.log.fine(this.logger_, 'Module loaded: ' + id);
 
-  var error =
+  const error =
       this.moduleInfoMap[id].onLoad(goog.bind(this.getModuleContext, this));
   if (error) {
     this.dispatchModuleLoadFailed_(
