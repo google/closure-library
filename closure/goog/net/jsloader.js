@@ -153,7 +153,7 @@ goog.net.jsloader.safeLoadMany = function(trustedUris, opt_options) {
  */
 goog.net.jsloader.safeLoad = function(trustedUri, opt_options) {
   'use strict';
-  const options = opt_options || {};
+  const options = opt_options || /** @type {!goog.net.jsloader.Options} */ ({});
   const doc = options.document || document;
   const uri = goog.html.TrustedResourceUrl.unwrap(trustedUri);
 
