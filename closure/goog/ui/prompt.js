@@ -228,7 +228,7 @@ goog.ui.Prompt.prototype.setRows = function(rows) {
       if (rows <= 1) {
         throw new Error(goog.ui.Component.Error.ALREADY_RENDERED);
       }
-      /** @type {!HTMLTextAreaElement} */ (this.userInputEl_).rows = rows;
+      this.userInputEl_.rows = rows;
     }
   }
   this.rows_ = rows;
@@ -253,9 +253,9 @@ goog.ui.Prompt.prototype.setCols = function(cols) {
   this.cols_ = cols;
   if (this.userInputEl_) {
     if (this.userInputEl_.tagName == goog.dom.TagName.INPUT) {
-      /** @type {!HTMLInputElement} */ (this.userInputEl_).size = cols;
+      this.userInputEl_.size = cols;
     } else {
-      /** @type {!HTMLTextAreaElement} */ (this.userInputEl_).cols = cols;
+      this.userInputEl_.cols = cols;
     }
   }
 };

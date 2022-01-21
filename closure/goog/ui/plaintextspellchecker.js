@@ -320,13 +320,12 @@ goog.ui.PlainTextSpellChecker.prototype.initTextArray_ = function(text) {
     return;
   }
 
-  let exludeRegExp = /** @type {!RegExp} */ (this.excludeMarker);
   this.textArray_ = [];
   this.textArrayProcess_ = [];
-  exludeRegExp.lastIndex = 0;
+  this.excludeMarker.lastIndex = 0;
   var stringSegmentStart = 0;
   var result;
-  while (result = exludeRegExp.exec(text)) {
+  while (result = this.excludeMarker.exec(text)) {
     if (result[0].length == 0) {
       break;
     }
@@ -339,7 +338,7 @@ goog.ui.PlainTextSpellChecker.prototype.initTextArray_ = function(text) {
     }
     this.textArray_.push(excludedRange);
     this.textArrayProcess_.push(false);
-    stringSegmentStart = exludeRegExp.lastIndex;
+    stringSegmentStart = this.excludeMarker.lastIndex;
   }
 
   var leftoverText = text.substr(stringSegmentStart);

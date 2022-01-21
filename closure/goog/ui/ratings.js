@@ -243,8 +243,7 @@ goog.ui.Ratings.prototype.setSelectedIndex = function(index) {
     this.highlightIndex_(this.selectedIndex_);
     if (this.attachedFormField_) {
       if (this.attachedFormField_.tagName == goog.dom.TagName.SELECT) {
-        /** @type {!HTMLSelectElement} */ (this.attachedFormField_)
-            .selectedIndex = index;
+        this.attachedFormField_.selectedIndex = index;
       } else {
         this.attachedFormField_.value =
             /** @type {string} */ (this.getValue());

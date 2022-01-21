@@ -66,9 +66,8 @@ goog.fs.Error = function(error, action) {
     /** @suppress {deprecated} */
     this.code = goog.fs.Error.getCodeFromName_(error.name);
   } else {
-    const code =
-        /** @type {!goog.fs.Error.ErrorCode} */ (goog.asserts.assertNumber(
-            /** @type {!goog.fs.DOMErrorLike} */ (error).code));
+    const code = /** @type {!goog.fs.Error.ErrorCode} */ (
+        goog.asserts.assertNumber(error.code));
     this.code = code;
     this.name = goog.fs.Error.getNameFromCode_(code);
   }

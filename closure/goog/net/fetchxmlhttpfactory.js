@@ -383,9 +383,7 @@ goog.net.FetchXmlHttp.prototype.handleDataFromStream_ = function(result) {
   }
 
   if (this.streamBinaryChunks_ && result.value) {
-    // When streamBinaryChunks_ is enabled, "response" is an array
-    /** @type {!Array} */ (this.response)
-        .push(/** @type {!Uint8Array} */ (result.value));
+    this.response.push(/** @type {!Uint8Array} */ (result.value));
   } else if (!this.streamBinaryChunks_) {
     const dataPacket = result.value ?
         /** @type {!Uint8Array} */ (result.value) :

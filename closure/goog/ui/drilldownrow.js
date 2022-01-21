@@ -77,8 +77,7 @@ goog.require('goog.ui.Component');
 goog.ui.DrilldownRow = function(opt_properties, opt_domHelper) {
   'use strict';
   goog.ui.Component.call(this, opt_domHelper);
-  var properties = opt_properties ||
-      /** @type {!goog.ui.DrilldownRow.DrilldownRowProperties} */ ({});
+  var properties = opt_properties || {};
 
   // Initialize instance variables.
 
@@ -89,7 +88,6 @@ goog.ui.DrilldownRow = function(opt_properties, opt_domHelper) {
     goog.asserts.assert(properties.html instanceof goog.html.SafeHtml);
     html = properties.html;
   }
-
   /**
    * String of HTML to initialize the DOM structure for the table row.
    * Should have the form '<tr attr="etc">Row contents here</tr>'.
@@ -234,7 +232,7 @@ goog.ui.DrilldownRow.prototype.addChildAt = function(child, index, opt_render) {
 /** @override */
 goog.ui.DrilldownRow.prototype.removeChild = function(child) {
   'use strict';
-  goog.dom.removeNode(/** @type {!goog.ui.Component} */ (child).getElement());
+  goog.dom.removeNode(child.getElement());
   return goog.ui.DrilldownRow.superClass_.removeChild.call(this, child);
 };
 

@@ -816,8 +816,7 @@ goog.testing.AsyncTestCase.prototype.pump_ = function(opt_doFirst) {
   if (!this.returnWillPump_) {
     this.setBatchTime(this.now());
     this.returnWillPump_ = true;
-    var topFuncResult =
-        /** @type {!goog.testing.AsyncTestCase.TopStackFuncResult_} */ ({});
+    var topFuncResult = {};
 
     if (opt_doFirst) {
       topFuncResult = this.callTopOfStackFunc_(opt_doFirst);

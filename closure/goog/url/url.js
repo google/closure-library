@@ -614,9 +614,8 @@ const canonicalPortForProtocols = new Map([
  */
 const getSearchParams = function(url) {
   if (goog.FEATURESET_YEAR >= 2020 ||
-      (supportsNativeURLConstructor &&
-       typeof url.searchParams == 'undefined')) {
-    return /** @type {!URL} */ (url).searchParams;
+      (supportsNativeURLConstructor && url.searchParams)) {
+    return url.searchParams;
   }
   return new SearchParamsImpl(url.search);
 };

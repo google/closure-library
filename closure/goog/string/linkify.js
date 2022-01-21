@@ -66,14 +66,11 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(
     text, opt_attributes, opt_preserveNewlines, opt_preserveSpacesAndTabs) {
   'use strict';
   if (opt_attributes &&
-      (typeof opt_attributes.attributes != 'undefined' ||
-       typeof opt_attributes.preserveNewlines != 'undefined' ||
-       typeof opt_attributes.preserveSpacesAndTabs != 'undefined')) {
-    let attributes =
-        /** @type {!goog.string.linkify.LinkifyOptions} */ (opt_attributes);
-    opt_preserveNewlines = attributes.preserveNewlines;
-    opt_preserveSpacesAndTabs = attributes.preserveSpacesAndTabs;
-    opt_attributes = attributes.attributes;
+      (opt_attributes.attributes || opt_attributes.preserveNewlines ||
+       opt_attributes.preserveSpacesAndTabs)) {
+    opt_preserveNewlines = opt_attributes.preserveNewlines;
+    opt_preserveSpacesAndTabs = opt_attributes.preserveSpacesAndTabs;
+    opt_attributes = opt_attributes.attributes;
   }
   const /** !Object<?goog.html.SafeHtml.AttributeValue> */ attributes =
       opt_attributes || {};
