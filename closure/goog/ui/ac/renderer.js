@@ -695,8 +695,10 @@ goog.ui.ac.Renderer.prototype.redraw = function() {
 
   // Generate the new rows (use forEach so we can change rows_ from an
   // array to a different datastructure if required)
-  if (this.customRenderer_ && this.customRenderer_.render) {
-    this.customRenderer_.render(this, this.element_, this.rows_, this.token_);
+  if (this.customRenderer_ &&
+      typeof this.customRenderer_.render != 'undefined') {
+    /** @type {{render:?}} */ (this.customRenderer_)
+        .render(this, this.element_, this.rows_, this.token_);
   } else {
     var curRow = null;
     this.rows_.forEach(function(row) {
@@ -1056,8 +1058,10 @@ goog.ui.ac.Renderer.prototype.renderRowHtml = function(row, token) {
     id: goog.ui.IdGenerator.getInstance().getNextUniqueId()
   });
   goog.a11y.aria.setRole(elem, goog.a11y.aria.Role.OPTION);
-  if (this.customRenderer_ && this.customRenderer_.renderRow) {
-    this.customRenderer_.renderRow(row, token, elem);
+  if (this.customRenderer_ &&
+      typeof this.customRenderer_.renderRow != 'undefined') {
+    /** @type {{renderRow:?}} */ (this.customRenderer_)
+        .renderRow(row, token, elem);
   } else {
     this.renderRowContents_(row, token, elem);
   }

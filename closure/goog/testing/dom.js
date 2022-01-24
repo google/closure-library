@@ -81,7 +81,7 @@ goog.testing.dom.assertNodesMatch = function(
     } else if (typeof expected === 'number') {
       assertEquals(
           'Node types should match at position ' + i, expected, node.nodeType);
-    } else if (expected.charAt(0) == '#') {
+    } else if (typeof expected === 'string' && expected.charAt(0) === '#') {
       assertEquals(
           'Expected element at position ' + i, goog.dom.NodeType.ELEMENT,
           node.nodeType);
