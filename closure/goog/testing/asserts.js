@@ -1717,7 +1717,7 @@ goog.testing.asserts.toArray_ = function(obj) {
     }
   }
 
-  for (var i = 0; i < obj.length; i++) {
+  for (var i = 0; i < /** @type {!IArrayLike} */ (obj).length; i++) {
     ret[i] = obj[i];
   }
   return ret;
@@ -1764,10 +1764,11 @@ goog.testing.asserts.getIterator_ = function(iterable) {
 goog.testing.asserts.indexOf_ = function(container, contained) {
   'use strict';
   if (typeof container.indexOf == 'function') {
-    return container.indexOf(contained);
+    return /** @type {{indexOf: function(*): number}} */ (container).indexOf(
+        contained);
   } else {
     // IE6/7 do not have indexOf so do a search.
-    for (var i = 0; i < container.length; i++) {
+    for (var i = 0; i < /** @type {!IArrayLike<?>} */ (container).length; i++) {
       if (container[i] === contained) {
         return i;
       }
