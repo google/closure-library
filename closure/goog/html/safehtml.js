@@ -225,11 +225,13 @@ class SafeHtml {
     }
     const textIsObject = typeof textOrHtml == 'object';
     let dir = null;
-    if (textIsObject && textOrHtml.implementsGoogI18nBidiDirectionalString) {
+    if (textIsObject &&
+        /** @type {?} */ (textOrHtml).implementsGoogI18nBidiDirectionalString) {
       dir = /** @type {!DirectionalString} */ (textOrHtml).getDirection();
     }
     let textAsString;
-    if (textIsObject && textOrHtml.implementsGoogStringTypedString) {
+    if (textIsObject &&
+        /** @type {?} */ (textOrHtml).implementsGoogStringTypedString) {
       textAsString =
           /** @type {!TypedString} */ (textOrHtml).getTypedStringValue();
     } else {
@@ -1005,7 +1007,7 @@ function getAttrNameAndValue(tagName, name, value) {
 
   // Accept SafeUrl, TrustedResourceUrl, etc. for attributes which only require
   // HTML-escaping.
-  if (value.implementsGoogStringTypedString) {
+  if (/** @type {?} */ (value).implementsGoogStringTypedString) {
     // Ok to call getTypedStringValue() since there's no reliance on the type
     // contract for security here.
     value =

@@ -152,12 +152,12 @@ goog.dom.safe.unsafeSetInnerHtmlDoNotUseOrElse = function(elem, html) {
  */
 goog.dom.safe.setInnerHtml = function(elem, html) {
   'use strict';
-  if (goog.asserts.ENABLE_ASSERTS && elem.tagName) {
-    var tagName = elem.tagName.toUpperCase();
+  if (goog.asserts.ENABLE_ASSERTS && /** @type {?} */ (elem).tagName) {
+    var tagName = /** @type {!Element} */ (elem).tagName.toUpperCase();
     if (goog.dom.safe.SET_INNER_HTML_DISALLOWED_TAGS_[tagName]) {
       throw new Error(
           'goog.dom.safe.setInnerHtml cannot be used to set content of ' +
-          elem.tagName + '.');
+          /** @type {!Element} */ (elem).tagName + '.');
     }
   }
 
