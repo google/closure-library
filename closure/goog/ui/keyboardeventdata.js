@@ -152,8 +152,7 @@ goog.ui.KeyboardEventData.fromBrowserEvent = function(event) {
   var hasComposedPath = e && 'composedPath' in e;
   // EventTarget is updated, when browser supports shadow dom and event is
   // triggered inside `open` shadow root.
-  var path = (hasComposed && hasComposedPath && e.composed) ? e.composedPath() :
-                                                              undefined;
+  var path = hasComposed && hasComposedPath && e.composed && e.composedPath();
   var rootTarget = (path && path.length > 0) ? path[0] : event.target;
 
   return new goog.ui.KeyboardEventData.Builder()
