@@ -63,6 +63,7 @@ goog.testing.dom.END_TAG_MARKER_ = goog.testing.dom.createEndTagMarker_();
  *         other string: Match the text node's contents.
  * @param {boolean=} useEs6Iteration Whether or not to iterate through this
  *     iterator using ES6 iteration. Iff falsy, uses ES4 iteration.
+ * @suppress {strictMissingProperties} charAt on union type
  */
 goog.testing.dom.assertNodesMatch = function(
     it, array, useEs6Iteration = true) {

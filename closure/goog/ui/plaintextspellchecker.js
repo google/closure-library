@@ -311,6 +311,7 @@ goog.ui.PlainTextSpellChecker.prototype.spellCheckLoop_ = function() {
  *
  * @param {string} text text to process.
  * @private
+ * @suppress {strictMissingProperties} this.excludeMarker is a union type
  */
 goog.ui.PlainTextSpellChecker.prototype.initTextArray_ = function(text) {
   'use strict';

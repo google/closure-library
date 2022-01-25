@@ -61,6 +61,7 @@ goog.string.linkify.LinkifyOptions = class {
  *     non-breaking spaces and tabs with <span style="white-space:pre">
  * @return {!goog.html.SafeHtml} Linkified HTML. Any text that is not part of a
  *      link will be HTML-escaped.
+ * @suppress {strictMissingProperties} opt_attributes type is a union
  */
 goog.string.linkify.linkifyPlainTextAsHtml = function(
     text, opt_attributes, opt_preserveNewlines, opt_preserveSpacesAndTabs) {
