@@ -22,7 +22,7 @@ const ERROR_HANDLER_TEST_ERROR = 'ERROR_HANDLER_TEST_ERROR';
 let errorHandler;
 let mockControl;
 
-let state = {};
+let /** ? */ state = {};
 
 const JSUnitOnError = window.onerror;
 // Here we set up an `onerror` handler to be able to catch the re-thrown errors

@@ -56,6 +56,7 @@ function assertDateEquals(expectYear, expectMonth, expectDate, date) {
  * @param {number|undefined} expectSec
  * @param {number|undefined} expectMilli
  * @param {!DateLike} date
+ * @suppress {missingProperties} loose subclass property checks
  */
 function assertTimeEquals(expectHour, expectMin, expectSec, expectMilli, date) {
   assertEquals(expectHour, date.getHours());

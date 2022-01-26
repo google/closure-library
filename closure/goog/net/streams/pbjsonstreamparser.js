@@ -236,7 +236,8 @@ PbJsonStreamParser.prototype.parse = function(input) {
    * @return {boolean} return false if no more non-whitespace input character
    */
   function readMore() {
-    while (pos < input.length) {
+    // Only Array and string have length
+    while (pos < /** @type {?} */ (input).length) {
       if (!utils.isJsonWhitespace(input[pos])) {
         return true;
       }

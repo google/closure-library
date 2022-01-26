@@ -178,7 +178,8 @@ xhr.getBlob = function(url, opt_options) {
   goog.asserts.assert(
       'Blob' in goog.global, 'getBlob is not supported in this browser.');
 
-  const options = opt_options ? goog.object.clone(opt_options) : {};
+  const options = /** @type {!xhr.Options} */ (
+      opt_options ? goog.object.clone(opt_options) : {});
   options.responseType = xhr.ResponseType.BLOB;
 
   return xhr.send('GET', url, null, options).then(function(request) {
@@ -207,7 +208,8 @@ xhr.getBytes = function(url, opt_options) {
       !userAgent.IE || userAgent.isDocumentModeOrHigher(9),
       'getBytes is not supported in this browser.');
 
-  const options = opt_options ? goog.object.clone(opt_options) : {};
+  const options = /** @type {!xhr.Options} */ (
+      opt_options ? goog.object.clone(opt_options) : {});
   options.responseType = xhr.ResponseType.ARRAYBUFFER;
 
   return xhr.send('GET', url, null, options).then(function(request) {
@@ -269,10 +271,11 @@ xhr.postJson = function(url, data, opt_options) {
  * @param {xhr.Options=} opt_options Configuration options for the request.
  * @return {!goog.Promise<!goog.net.XhrLike.OrNative>} A promise that will be
  *     resolved with the XHR object once the request completes.
+ * @suppress {missingProperties} request is loosely typed
  */
 xhr.send = function(method, url, data, opt_options) {
   'use strict';
-  const options = opt_options || {};
+  const options = opt_options || /** @type {!xhr.Options} */ ({});
   const request = options.xmlHttpFactory ?
       options.xmlHttpFactory.createInstance() :
       goog.net.XmlHttp();
