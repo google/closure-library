@@ -268,7 +268,19 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
         }
       }
       newWin.opener = null;
-
+      // Using a blank value for the URL causes the new window to load
+      // this window's location. Instead, using this javascript URL causes an
+      // error to be thrown in the blank document and abort the loading of the
+      // page location. The window's location does update, but the content is
+      // never requested/loaded.
+      // Other values tried here include:
+      // - an empty string or no value at all (page load succeeds)
+      // - 'about:blank' (causes security exceptions if users
+      //   later try and assign to the window's location, as about:blank is now
+      //   cross-origin from this window).
+      if (sanitizedLinkRef === '') {
+        sanitizedLinkRef = 'javascript:\'\'';
+      }
       // TODO(rjamet): Building proper SafeHtml with SafeHtml.createMetaRefresh
       // pulls in a lot of compiled code, which is composed of various unneeded
       // goog.html parts such as SafeStyle.create among others. So, for now,

@@ -249,6 +249,74 @@ testSuite({
     });
   },
 
+  async testOpenBlankNoReferrer() {
+    let newBlankWin;
+    try {
+      newBlankWin = googWindow.openBlank('', {'noreferrer': true});
+      if (!newBlankWin)
+        throw new Error('Unable to open blank window - check popup blockers?');
+      const urlParam = 'bogus~';
+      newBlankWin.location.href = REDIRECT_URL_PREFIX + urlParam;
+      await waitForTestWindow(newBlankWin);
+      // IE11 never stripped the referrer even when using meta-refresh.
+      verifyWindow(newBlankWin, !browser.isIE(), urlParam);
+    } finally {
+      if (newBlankWin) {
+        newBlankWin.close();
+      }
+    }
+  },
+
+  async testOpenBlankNoReferrerAsyncSetLocation() {
+    // As per the jsdoc on openBlank, the primary use-case is avoiding issues
+    // with popup blocking as a result of trying to open a window outside of a
+    // click handler. This test is to exercise that flow.
+    let newBlankWin;
+    try {
+      newBlankWin = await new Promise((resolve, reject) => {
+        const b = document.createElement('button');
+        b.onclick = () => {
+          const w = googWindow.openBlank('', {'noreferrer': true});
+          w.onerror = (e) => {
+            reject(e);
+          };
+          resolve(w);
+        };
+        document.body.appendChild(b);
+        b.click();
+        b.remove();
+      });
+      if (!newBlankWin) {
+        throw new Error(
+            'unable to create blank window - check popup blockers?');
+      }
+      await new Promise((resolve) => {
+        setTimeout(resolve, 10000);
+      });
+      // When using meta-refresh, the href indicates the page might
+      // load the test window, but in practice it is not loaded and
+      // the page is blank. Check here to see if the contents are
+      // actually loaded.
+      if (/** @type {?} */ (newBlankWin).newWinLoaded) {
+        fail('new window loaded the test window JS!');
+        return;
+      }
+      if (newBlankWin.document.querySelector('.goog-like-link') != null) {
+        fail('new window loaded the test window HTML!');
+        return;
+      }
+      const urlParam = 'bogus~';
+      newBlankWin.location.href = REDIRECT_URL_PREFIX + urlParam;
+      await waitForTestWindow(newBlankWin);
+      // IE11 never stripped the referrer even when using meta-refresh.
+      verifyWindow(newBlankWin, !browser.isIE(), urlParam);
+    } finally {
+      if (newBlankWin) {
+        newBlankWin.close();
+      }
+    }
+  },
+
   testOpenBlankWithMessage() {
     newWin = googWindow.openBlank('Loading...');
     const urlParam = 'bogus~';
