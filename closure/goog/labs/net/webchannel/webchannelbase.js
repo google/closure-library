@@ -274,7 +274,7 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.lastPostResponseArrayId_ = -1;
 
   /**
-   * The last status code received.
+   * The last status code received (until `State.CLOSED` is reached).
    * @private {number}
    */
   this.lastStatusCode_ = -1;
@@ -1205,8 +1205,8 @@ WebChannelBase.prototype.getState = function() {
 
 
 /**
- * Return the last status code received for a request.
- * @return {number} The last status code received for a request.
+ * @return {number} The last status code received (until `State.CLOSED` is
+ * reached).
  */
 WebChannelBase.prototype.getLastStatusCode = function() {
   'use strict';
@@ -1851,7 +1851,6 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
     // either CLOSED or a request we don't know about (perhaps an old request)
     return;
   }
-  this.lastStatusCode_ = request.getLastStatusCode();
 
   // first to check if request has been upgraded to backchannel
   if (!request.isInitialResponseDecoded() &&
@@ -2048,14 +2047,13 @@ WebChannelBase.prototype.clearDeadBackchannelTimer_ = function() {
  * failed request.
  * @param {?ChannelRequest.Error} error The error code for the
  * failed request.
- * @param {number} statusCode The last HTTP status code.
  * @return {boolean} Whether or not the error is fatal.
  * @private
  */
-WebChannelBase.isFatalError_ = function(error, statusCode) {
+WebChannelBase.isFatalError_ = function(error) {
   'use strict';
   return error == ChannelRequest.Error.UNKNOWN_SESSION_ID ||
-      (error == ChannelRequest.Error.STATUS && statusCode > 0);
+      error == ChannelRequest.Error.STATUS;
 };
 
 
@@ -2081,11 +2079,11 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
     return;
   }
 
-  this.lastStatusCode_ = request.getLastStatusCode();
-
   if (this.state_ == WebChannelBase.State.CLOSED) {
     return;
   }
+
+  this.lastStatusCode_ = request.getLastStatusCode();
 
   if (request.getSuccess()) {
     if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
@@ -2103,7 +2101,7 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
   // Else unsuccessful. Fall through.
 
   const lastError = request.getLastError();
-  if (!WebChannelBase.isFatalError_(lastError, this.lastStatusCode_)) {
+  if (!WebChannelBase.isFatalError_(lastError)) {
     // Maybe retry.
     const self = this;
     this.channelDebug_.debug(function() {
@@ -2434,7 +2432,6 @@ WebChannelBase.prototype.onError_ = function(error) {
 WebChannelBase.prototype.onClose_ = function() {
   'use strict';
   this.state_ = WebChannelBase.State.CLOSED;
-  this.lastStatusCode_ = -1;
   this.nonAckedMapsAtChannelClose_ = [];
   if (this.handler_) {
     const pendingMessages =

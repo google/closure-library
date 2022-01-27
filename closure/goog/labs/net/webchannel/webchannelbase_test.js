@@ -40,6 +40,8 @@ const RETRY_TIME = 1000;
 /** A really long time - used to make sure no more timeouts will fire. */
 const ALL_DAY_MS = 1000 * 60 * 60 * 24;
 
+const DEFAULT_ERROR_HTTP_STATUS_CODE = 503;
+
 const stubs = new PropertyReplacer();
 
 let channel;
@@ -364,10 +366,10 @@ function responseTimeout() {
   mockClock.tick(0);
 }
 
-/** @param {number=} statusCode */
-function responseRequestFailed(statusCode = undefined) {
+/** Fails the first forward request. */
+function responseRequestFailed() {
   getSingleForwardRequest().lastError_ = ChannelRequest.Error.STATUS;
-  getSingleForwardRequest().lastStatusCode_ = statusCode || 503;
+  getSingleForwardRequest().lastStatusCode_ = DEFAULT_ERROR_HTTP_STATUS_CODE;
   getSingleForwardRequest().successful_ = false;
   channel.onRequestComplete(getSingleForwardRequest());
   mockClock.tick(0);
@@ -575,6 +577,7 @@ function requestFailedClosesChannel() {
       'Should remain closed after the ping timeout.',
       WebChannelBase.State.CLOSED, channel.getState());
   assertEquals(1, numTimingEvents);
+  assertEquals(DEFAULT_ERROR_HTTP_STATUS_CODE, channel.getLastStatusCode());
 }
 
 /** @suppress {visibility} Accessing private properties. */
