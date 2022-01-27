@@ -55,9 +55,9 @@ closure_js_library(
     name = "nexttick",
     srcs = [
         "nexttick.js",
-        "throwexception.js",
     ],
     lenient = True,
+    exports = [":throwexception"],
     deps = [
         "//closure/goog/debug:entrypointregistry",
         "//closure/goog/dom",
@@ -66,6 +66,14 @@ closure_js_library(
         "//closure/goog/labs/useragent:browser",
         "//closure/goog/labs/useragent:engine",
     ],
+)
+
+closure_js_library(
+    name = "throwexception",
+    srcs = [
+        "throwexception.js",
+    ],
+    lenient = True,
 )
 
 closure_js_library(
@@ -81,6 +89,7 @@ closure_js_library(
     lenient = True,
     deps = [
         ":nexttick",
+        ":throwexception",
         ":workqueue",
     ],
 )
