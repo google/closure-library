@@ -7,6 +7,7 @@
 goog.module('goog.ui.DialogTest');
 goog.setTestOnly();
 
+const Coordinate = goog.require('goog.math.Coordinate');
 const Dialog = goog.require('goog.ui.Dialog');
 const EventType = goog.require('goog.events.EventType');
 const KeyCodes = goog.require('goog.events.KeyCodes');
@@ -846,6 +847,51 @@ testSuite({
 
     dialog.exitDocument();
     assertNull('dragger is cleaned up in exitDocument', dialog.dragger_);
+  },
+
+  testGetSurroundingSpace_toggling() {
+    dialog.dispose();
+
+    dialog = new Dialog();
+    dialog.createDom();
+    dialog.setVisible(true);
+    const element = dialog.getElement();
+    element.style.position = 'absolute';
+
+    assertNull(dialog.getSurroundingSpace());
+
+    dialog.setTrackSurroundingSpace(true);
+    assertNotNull(dialog.getSurroundingSpace());
+
+    dialog.setTrackSurroundingSpace(false);
+    assertNull(dialog.getSurroundingSpace());
+  },
+
+  /**
+     @suppress {visibility,missingProperties} suppression added to enable type
+     checking
+   */
+  testGetSurroundingSpace_dragging() {
+    dialog.dispose();
+
+    dialog = new Dialog();
+    dialog.createDom();
+    dialog.setVisible(true);
+    const element = dialog.getElement();
+    element.style.position = 'absolute';
+
+    dialog.setTrackSurroundingSpace(true);
+    const initialSurroudingSpace = dialog.getSurroundingSpace();
+    testingEvents.fireMouseDownEvent(
+        dialog.titleEl_, /* opt_button= */ undefined, new Coordinate(40, 70));
+    testingEvents.fireMouseMoveEvent(dialog.titleEl_, new Coordinate(50, 90));
+    const finalSurroudingSpace = dialog.getSurroundingSpace();
+
+    assertEquals(initialSurroudingSpace.left + 10, finalSurroudingSpace.left);
+    assertEquals(initialSurroudingSpace.right - 10, finalSurroudingSpace.right);
+    assertEquals(initialSurroudingSpace.top + 20, finalSurroudingSpace.top);
+    assertEquals(
+        initialSurroudingSpace.bottom - 20, finalSurroudingSpace.bottom);
   },
 
   testDisposingVisibleDialogWithTransitionsDoesNotThrowException() {
