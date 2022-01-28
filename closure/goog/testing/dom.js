@@ -21,9 +21,12 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagIterator');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
+goog.require('goog.dom.safe');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.iter');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.style');
 goog.require('goog.testing.asserts');
 goog.require('goog.userAgent');
@@ -303,7 +306,13 @@ goog.testing.dom.assertHtmlContentsMatch = function(
     htmlPattern, actual, opt_strictAttributes) {
   'use strict';
   var div = goog.dom.createDom(goog.dom.TagName.DIV);
-  div.innerHTML = htmlPattern;
+
+  goog.dom.safe.setInnerHtml(
+      div,
+      goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from('HTML is never attached to DOM'),
+              htmlPattern));
 
   var errorSuffix =
       '\nExpected\n' + div.innerHTML + '\nActual\n' + actual.innerHTML;
@@ -433,7 +442,12 @@ goog.testing.dom.assertHtmlMatches = function(
     htmlPattern, actual, opt_strictAttributes) {
   'use strict';
   var div = goog.dom.createDom(goog.dom.TagName.DIV);
-  div.innerHTML = actual;
+
+  goog.dom.safe.setInnerHtml(
+      div,
+      goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from('HTML is never attached to DOM'), actual));
 
   goog.testing.dom.assertHtmlContentsMatch(
       htmlPattern, div, opt_strictAttributes);
