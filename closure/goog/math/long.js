@@ -129,6 +129,34 @@ class Long {
     return (radix == 10 ? val : val.toString(radix)) + digits;
   }
 
+  /**
+   * @param {number=} opt_radix The radix in which the text should be written.
+   * @return {string} The unsigned textual representation of this value.
+   */
+  toUnsignedString(opt_radix) {
+    // If the sign bit isn't even set just use the normal flow
+    if (this.high_ >= 0) {
+      return this.toString(opt_radix);
+    }
+
+    var radix = opt_radix || 10;
+    if (radix < 2 || 36 < radix) {
+      throw new Error('radix out of range: ' + radix);
+    }
+    // Use fromInt() to get the 64-bit representation of the radix as the entire
+    // radix range should be cached.
+    var longRadix = Long.fromInt(radix);
+    // Divide as unsigned 64-bit numbers.
+    var quotient = this.shiftRightUnsigned(1).div(longRadix).shiftLeft(1);
+    var remainder = this.subtract(quotient.multiply(longRadix));
+    // Check if we need to sign adjust the quotient.
+    if (remainder.greaterThanOrEqual(longRadix)) {
+      quotient = quotient.add(Long.getOne());
+      remainder = this.subtract(quotient.multiply(longRadix));
+    }
+    return quotient.toString(radix) + remainder.toString(radix);
+  }
+
   /** @return {number} The high 32-bits as a signed value. */
   getHighBits() {
     return this.high_;

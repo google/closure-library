@@ -1294,6 +1294,44 @@ const TEST_STRINGS = [
   '9223372036854775807',
 ];
 
+const TEST_UNSIGNED_STRINGS = [
+  '9223372036854775808',
+  '13219989005882680027',
+  '18442240474082181119',
+  '18442240474082181120',
+  '18446462598732840959',
+  '18446462598732840960',
+  '18446744069414584319',
+  '18446744069414584320',
+  '18446744073692774399',
+  '18446744073692774400',
+  '18446744073709486079',
+  '18446744073709486080',
+  '18446744073709518847',
+  '18446744073709518848',
+  '18446744073709551614',
+  '18446744073709551615',
+  '0',
+  '1',
+  '2',
+  '32767',
+  '32768',
+  '65535',
+  '65536',
+  '16777215',
+  '16777216',
+  '1446306523',
+  '3078018549',
+  '4294967295',
+  '4294967296',
+  '281474976710655',
+  '281474976710656',
+  '4503599627370495',
+  '4503599627370496',
+  '6211839219354490357',
+  '9223372036854775807',
+];
+
 testSuite({
   setUp() {
     if (Object.seal) {
@@ -1459,6 +1497,31 @@ testSuite({
           const result = vi.toString(radix);
           assertEquals(
               TEST_BITS[i], Long.fromString(result, radix).getHighBits());
+          assertEquals(
+              TEST_BITS[i + 1], Long.fromString(result, radix).getLowBits());
+        }
+      };
+    }
+
+    return testCases;
+  },
+
+  /** Nested test suite for unsigned string conversions. */
+  get testToFromUnsignedString() {
+    const /** !Object<string, function()> */ testCases = {};
+
+    for (let i = 0; i < TEST_BITS.length; i += 2) {
+      testCases[`test${i}`] = () => {
+        const vi = Long.fromBits(TEST_BITS[i + 1], TEST_BITS[i]);
+        const str = vi.toUnsignedString(10);
+        assertEquals(TEST_UNSIGNED_STRINGS[i / 2], str);
+        assertEquals(TEST_BITS[i], Long.fromString(str, 10).getHighBits());
+        assertEquals(TEST_BITS[i + 1], Long.fromString(str, 10).getLowBits());
+
+        for (let radix = 2; radix <= 36; ++radix) {
+          const result = vi.toUnsignedString(radix);
+          assertEquals(
+            TEST_BITS[i], Long.fromString(result, radix).getHighBits());
           assertEquals(
               TEST_BITS[i + 1], Long.fromString(result, radix).getLowBits());
         }
