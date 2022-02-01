@@ -7,7 +7,6 @@
 goog.module('goog.eventsTest');
 goog.setTestOnly();
 
-const AssertionError = goog.require('goog.asserts.AssertionError');
 const CaptureSimulationMode = goog.require('goog.events.CaptureSimulationMode');
 const EntryPointMonitor = goog.require('goog.debug.EntryPointMonitor');
 const ErrorHandler = goog.require('goog.debug.ErrorHandler');
@@ -24,6 +23,7 @@ const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
+const {AssertionError} = goog.require('goog.asserts');
 
 /** @suppress {visibility} suppression added to enable type checking */
 const originalHandleBrowserEvent = events.handleBrowserEvent_;
