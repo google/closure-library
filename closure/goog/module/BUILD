@@ -58,7 +58,7 @@ closure_js_library(
         ":basemodule",
         ":module",
         ":moduleloadcallback",
-        "//closure/goog/async:nexttick",
+        "//closure/goog/async:throwexception",
         "//closure/goog/disposable",
         "//closure/goog/functions",
         "//closure/goog/html:trustedresourceurl",

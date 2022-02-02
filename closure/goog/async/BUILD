@@ -57,7 +57,6 @@ closure_js_library(
         "nexttick.js",
     ],
     lenient = True,
-    exports = [":throwexception"],
     deps = [
         "//closure/goog/debug:entrypointregistry",
         "//closure/goog/dom",
