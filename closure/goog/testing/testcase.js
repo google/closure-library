@@ -374,6 +374,14 @@ goog.testing.TestCase.prototype.currentTestPointer_ = 0;
 
 
 /**
+ * Whether to use Native Promises or goog.Promise.
+ * @type {boolean}
+ * @private
+ */
+goog.testing.TestCase.prototype.useNativePromise_ = false;
+
+
+/**
  * Adds a new test to the test case.
  * @param {!goog.testing.TestCase.Test} test The test to add.
  */
@@ -803,6 +811,22 @@ goog.testing.TestCase.prototype.runTests = function() {
   goog.testing.TestCase.Continuation_.run(this.runSetUpPage_(this.execute));
 };
 
+/**
+ * Configures the TestCase to use native Promises when waiting for methods that
+ * return Thenables.
+ */
+goog.testing.TestCase.prototype.useNativePromise = function() {
+  this.useNativePromise_ = true;
+};
+
+/**
+ * Configures the TestCase to use goog.Promise when waiting for methods that
+ * return Thenables.
+ */
+goog.testing.TestCase.prototype.useGoogPromise = function() {
+  this.useNativePromise_ = false;
+};
+
 
 /**
  * Executes each of the tests, returning a promise that resolves with the
@@ -813,9 +837,12 @@ goog.testing.TestCase.prototype.runTests = function() {
  */
 goog.testing.TestCase.prototype.runTestsReturningPromise = function() {
   'use strict';
-  return new goog.Promise(function(resolve) {
+  /**
+   * @param {function(!goog.testing.TestCase.Result)} resolve
+   */
+  const resolver = (resolve) => {
     'use strict';
-    goog.testing.TestCase.Continuation_.run(this.runSetUpPage_(function() {
+    goog.testing.TestCase.Continuation_.run(this.runSetUpPage_(() => {
       'use strict';
       if (!this.prepareForRun_()) {
         resolve(this.result_);
@@ -828,7 +855,11 @@ goog.testing.TestCase.prototype.runTestsReturningPromise = function() {
       this.runNextTestCallback_ = resolve;
       goog.testing.TestCase.Continuation_.run(this.runNextTest_());
     }));
-  }, this);
+  };
+  if (this.useNativePromise_) {
+    return new Promise(resolver);
+  }
+  return new goog.Promise(resolver);
 };
 
 
@@ -1086,7 +1117,12 @@ goog.testing.TestCase.prototype.invokeFunction_ = function(
         (retval && typeof retval['then'] === 'function')) {
       // Resolve Thenable into a proper Promise to avoid hard to debug
       // problems.
-      var promise = goog.Promise.resolve(retval);
+      let promise;
+      if (this.useNativePromise_) {
+        promise = Promise.resolve(retval);
+      } else {
+        promise = goog.Promise.resolve(retval);
+      }
       promise = this.rejectIfPromiseTimesOut_(
           promise, self.promiseTimeout,
           'Timed out while waiting for a promise returned from ' + fnName +
@@ -2332,11 +2368,11 @@ goog.testing.TestCase.parseRunTests_ = function(href) {
 /**
  * Wraps provided promise and returns a new promise which will be rejected
  * if the original promise does not settle within the given timeout.
- * @param {!goog.Promise<T>} promise
+ * @param {!IThenable<T>} promise
  * @param {number} timeoutInMs Number of milliseconds to wait for the promise to
  *     settle before failing it with a timeout error.
  * @param {string} errorMsg Error message to use if the promise times out.
- * @return {!goog.Promise<T>} A promise that will settle with the original
+ * @return {!IThenable<T>} A promise that will settle with the original
        promise unless the timeout is exceeded.
  *     error.
  * @template T
@@ -2345,19 +2381,28 @@ goog.testing.TestCase.parseRunTests_ = function(href) {
 goog.testing.TestCase.prototype.rejectIfPromiseTimesOut_ = function(
     promise, timeoutInMs, errorMsg) {
   'use strict';
-  var self = this;
-  var start = this.now();
-  return new goog.Promise(function(resolve, reject) {
+  const start = this.now();
+  /**
+   * @param {function(?)} resolve
+   * @param {function(*)} reject
+   */
+  const resolver = (resolve, reject) => {
     'use strict';
-    var timeoutId = self.timeout(function() {
+    const timeoutId = this.timeout(() => {
       'use strict';
-      var elapsed = self.now() - start;
-      reject(new Error(errorMsg + '\nElapsed time: ' + elapsed + ' ms.'));
+      const elapsed = this.now() - start;
+      reject(new Error(`${errorMsg}\nElapsed time: ${elapsed} ms.`));
     }, timeoutInMs);
-    promise.then(resolve, reject);
-    var clearTimeout = goog.bind(self.clearTimeout, self, timeoutId);
+    const clearTimeout = () => {
+      this.clearTimeout(timeoutId);
+    };
     promise.then(clearTimeout, clearTimeout);
-  });
+    promise.then(resolve, reject);
+  };
+  if (this.useNativePromise_) {
+    return new Promise(resolver);
+  }
+  return new goog.Promise(resolver);
 };
 
 
