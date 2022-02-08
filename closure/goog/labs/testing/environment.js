@@ -53,9 +53,6 @@ class Environment {
     /** @private {boolean} */
     this.shouldMakeMockControl_ = false;
 
-    /** @protected {boolean} */
-    this.mockClockOn = false;
-
     /** @const {!DebugConsole} */
     this.console = Environment.console_;
 
@@ -68,11 +65,7 @@ class Environment {
    * @return {!IThenable<*>|undefined} An optional Promise which must be
    *     resolved before the test is executed.
    */
-  setUpPage() {
-    if (this.mockClockOn && !this.hasMockClock()) {
-      this.mockClock = new MockClock(true);
-    }
-  }
+  setUpPage() {}
 
   /** Runs immediately after the tearDownPage phase of JsUnit tests. */
   tearDownPage() {
@@ -156,12 +149,13 @@ class Environment {
    * installed (override i.e. setTimeout) by default. It can be accessed
    * using `env.mockClock`. If your test has more than one testing
    * environment, don't call this on more than one of them.
+   * @param {{install: (boolean|undefined)}=} options Options about the
+   *     mockClock.
    * @return {!Environment} For chaining.
    */
-  withMockClock() {
+  withMockClock({install = true} = {}) {
     if (!this.hasMockClock()) {
-      this.mockClockOn = true;
-      this.mockClock = new MockClock(true);
+      this.mockClock = new MockClock(install);
     }
     return this;
   }
@@ -171,7 +165,7 @@ class Environment {
    * @protected
    */
   hasMockClock() {
-    return this.mockClockOn && !!this.mockClock && !this.mockClock.isDisposed();
+    return !!this.mockClock && !this.mockClock.isDisposed();
   }
 
   /**
