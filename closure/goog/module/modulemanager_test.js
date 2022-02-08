@@ -1063,6 +1063,24 @@ testSuite({
     assertObjectEquals(expectedExtraEdges, loaderCalls[0].extraEdges);
   },
 
+  testRemoveEdge_allEdgesRemoved() {
+    const mm =
+        getModuleManager({'modA': [], 'modB': [], 'modC': [], 'modD': []});
+    const loaderCalls = [];
+    mm.setLoader(createModuleLoaderWithExtraEdgesSupport(loaderCalls));
+    mm.addExtraEdge('modA', 'modC');
+    mm.addExtraEdge('modC', 'modD');
+    mm.removeExtraEdge('modA', 'modC');
+
+    const expectedExtraEdges = {
+      'modC': {'modD': true},
+    };
+
+    mm.load('modA');
+    assertEquals(1, loaderCalls.length);
+    assertObjectEquals(expectedExtraEdges, loaderCalls[0].extraEdges);
+  },
+
   /** Tests that preloading a module calls back the deferred object. */
   testPreloadDeferredWhenNotLoaded() {
     const mm = getModuleManager({'a': []});

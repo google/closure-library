@@ -378,7 +378,11 @@ goog.module.ModuleManager.prototype.getModuleInfo = function(id) {
 };
 
 
-/** @override */
+/**
+ * @param {string} fromModule
+ * @param {string} toModule
+ * @override
+ */
 goog.module.ModuleManager.prototype.addExtraEdge = function(
     fromModule, toModule) {
   'use strict';
@@ -388,7 +392,11 @@ goog.module.ModuleManager.prototype.addExtraEdge = function(
   this.extraEdges_[fromModule][toModule] = true;
 };
 
-/** @override */
+/**
+ * @param {string} fromModule
+ * @param {string} toModule
+ * @override
+ */
 goog.module.ModuleManager.prototype.removeExtraEdge = function(
     fromModule, toModule) {
   'use strict';
@@ -396,6 +404,10 @@ goog.module.ModuleManager.prototype.removeExtraEdge = function(
     return;
   }
   delete this.extraEdges_[fromModule][toModule];
+  for (const toModules in this.extraEdges_[fromModule]) {
+    return;
+  }
+  delete this.extraEdges_[fromModule];
 };
 
 
@@ -852,7 +864,7 @@ goog.module.ModuleManager.prototype.maybeFinishBaseLoad_ = function() {
   'use strict';
   if (this.currentlyLoadingModule_ == this.baseModuleInfo_) {
     this.currentlyLoadingModule_ = null;
-    var error =
+    const error =
         this.baseModuleInfo_.onLoad(goog.bind(this.getModuleContext, this));
     if (error) {
       this.dispatchModuleLoadFailed_(
@@ -873,7 +885,7 @@ goog.module.ModuleManager.prototype.setLoaded = function() {
     return;
   }
 
-  var id = this.currentlyLoadingModule_.getId();
+  const id = this.currentlyLoadingModule_.getId();
 
   if (this.isDisposed()) {
     goog.log.warning(
@@ -883,7 +895,7 @@ goog.module.ModuleManager.prototype.setLoaded = function() {
 
   goog.log.fine(this.logger_, 'Module loaded: ' + id);
 
-  var error =
+  const error =
       this.moduleInfoMap[id].onLoad(goog.bind(this.getModuleContext, this));
   if (error) {
     this.dispatchModuleLoadFailed_(
