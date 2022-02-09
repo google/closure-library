@@ -404,7 +404,7 @@ goog.module.ModuleManager.prototype.removeExtraEdge = function(
     return;
   }
   delete this.extraEdges_[fromModule][toModule];
-  for (const toModules in this.extraEdges_[fromModule]) {
+  for (const nonEmptyEdge in this.extraEdges_[fromModule]) {
     return;
   }
   delete this.extraEdges_[fromModule];
