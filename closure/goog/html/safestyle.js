@@ -530,6 +530,7 @@ const ALLOWED_FUNCTIONS = [
   'linear-gradient',
   'matrix',
   'minmax',
+  'radial-gradient',
   'repeat',
   'rgb',
   'rgba',

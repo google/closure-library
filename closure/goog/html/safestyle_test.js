@@ -200,6 +200,21 @@ testSuite({
         {'background': 'linear-gradient(#C0C0C0, #FF0000)'});
   },
 
+  testCreate_allowsRadialGradient() {
+    assertCreateEquals(
+        'background:radial-gradient(red, blue);',
+        {'background': 'radial-gradient(red, blue)'});
+    assertCreateEquals(
+        'background:radial-gradient(rgb(10,0,0), rgb(0,0,30));',
+        {'background': 'radial-gradient(rgb(10,0,0), rgb(0,0,30))'});
+    assertCreateEquals(
+        'background:radial-gradient(#333, #eee);',
+        {'background': 'radial-gradient(#333, #eee)'});
+    assertCreateEquals(
+        'background:radial-gradient(#C0C0C0, #FF0000);',
+        {'background': 'radial-gradient(#C0C0C0, #FF0000)'});
+  },
+
   testCreate_allowsSafeUrl() {
     assertCreateEquals('background:url("http://example.com");', {
       'background': SafeUrl.fromConstant(Const.from('http://example.com')),
