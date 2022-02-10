@@ -31,6 +31,7 @@ goog.require('goog.iter.es6');
  * @param {...*} var_args If 2 or more arguments are present then they
  *     will be used as key-value pairs.
  * @constructor
+ * @final
  * @template K, V
  * @deprecated This type is misleading: use ES6 Map instead.
  */
