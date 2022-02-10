@@ -6,11 +6,12 @@
 
 /**
  * @fileoverview Default renderer for {@link goog.ui.Checkbox}s.
+ * @suppress {missingRequire} goog.ui.Checkbox.State
  */
 
 goog.provide('goog.ui.CheckboxRenderer');
 
-goog.forwardDeclare('goog.ui.Checkbox.State');
+goog.forwardDeclare('goog.ui.Checkbox.State');  // TODO(user): remove this
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');

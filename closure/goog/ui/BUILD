@@ -145,36 +145,35 @@ closure_js_library(
 
 closure_js_library(
     name = "button",
-    srcs = ["button.js"],
+    srcs = [
+        "button.js",
+        "buttonrenderer.js",
+        "nativebuttonrenderer.js",
+    ],
     lenient = True,
     deps = [
-        ":buttonrenderer",
         ":buttonside",
         ":component",
         ":control",
         ":controlcontent",
-        ":nativebuttonrenderer",
         ":registry",
+        "//closure/goog/a11y/aria",
+        "//closure/goog/a11y/aria:attributes",
+        "//closure/goog/a11y/aria:roles",
+        "//closure/goog/asserts",
         "//closure/goog/dom",
+        "//closure/goog/dom:classlist",
+        "//closure/goog/dom:inputtype",
+        "//closure/goog/dom:tagname",
         "//closure/goog/events:eventtype",
         "//closure/goog/events:keycodes",
         "//closure/goog/events:keyhandler",
     ],
 )
 
-closure_js_library(
+alias(
     name = "buttonrenderer",
-    srcs = ["buttonrenderer.js"],
-    lenient = True,
-    deps = [
-        ":buttonside",
-        ":component",
-        ":controlrenderer",
-        "//closure/goog/a11y/aria",
-        "//closure/goog/a11y/aria:attributes",
-        "//closure/goog/a11y/aria:roles",
-        "//closure/goog/asserts",
-    ],
+    actual = ":button",
 )
 
 closure_js_library(
@@ -237,19 +236,27 @@ closure_js_library(
 
 closure_js_library(
     name = "checkbox",
-    srcs = ["checkbox.js"],
+    srcs = [
+        "checkbox.js",
+        "checkboxrenderer.js",
+    ],
     lenient = True,
     deps = [
-        ":checkboxrenderer",
         ":component",
         ":control",
         ":registry",
         "//closure/goog/a11y/aria",
         "//closure/goog/a11y/aria:attributes",
+        "//closure/goog/a11y/aria:roles",
+        "//closure/goog/array",
+        "//closure/goog/asserts",
         "//closure/goog/dom",
+        "//closure/goog/dom:classlist",
+        "//closure/goog/dom:tagname",
         "//closure/goog/events:browserevent",
         "//closure/goog/events:eventtype",
         "//closure/goog/events:keycodes",
+        "//closure/goog/object",
         "//closure/goog/string",
     ],
 )
@@ -266,59 +273,40 @@ closure_js_library(
     ],
 )
 
-closure_js_library(
+alias(
     name = "checkboxrenderer",
-    srcs = ["checkboxrenderer.js"],
-    lenient = True,
-    deps = [
-        ":control",
-        ":controlrenderer",
-        "//closure/goog/a11y/aria",
-        "//closure/goog/a11y/aria:attributes",
-        "//closure/goog/a11y/aria:roles",
-        "//closure/goog/array",
-        "//closure/goog/asserts",
-        "//closure/goog/dom:classlist",
-        "//closure/goog/dom:tagname",
-        "//closure/goog/object",
-    ],
+    actual = ":checkbox",
 )
 
 closure_js_library(
     name = "colormenubutton",
-    srcs = ["colormenubutton.js"],
+    srcs = [
+        "colormenubutton.js",
+        "colormenubuttonrenderer.js",
+    ],
     lenient = True,
     deps = [
-        ":colormenubuttonrenderer",
         ":colorpalette",
         ":component",
         ":control",
         ":controlcontent",
         ":menu",
         ":menubutton",
-        ":menubuttonrenderer",
         ":registry",
         "//closure/goog/array",
-        "//closure/goog/dom",
-        "//closure/goog/events:event",
-        "//closure/goog/object",
-    ],
-)
-
-closure_js_library(
-    name = "colormenubuttonrenderer",
-    srcs = ["colormenubuttonrenderer.js"],
-    lenient = True,
-    deps = [
-        ":control",
-        ":controlcontent",
-        ":menubuttonrenderer",
         "//closure/goog/asserts",
         "//closure/goog/color",
         "//closure/goog/dom",
         "//closure/goog/dom:classlist",
         "//closure/goog/dom:tagname",
+        "//closure/goog/events:event",
+        "//closure/goog/object",
     ],
+)
+
+alias(
+    name = "colormenubuttonrenderer",
+    actual = ":colormenubutton",
 )
 
 closure_js_library(
@@ -327,7 +315,6 @@ closure_js_library(
     lenient = True,
     deps = [
         ":palette",
-        ":paletterenderer",
         "//closure/goog/array",
         "//closure/goog/color",
         "//closure/goog/dom",
@@ -360,7 +347,6 @@ closure_js_library(
         ":labelinput",
         ":menu",
         ":menuitem",
-        ":menuitemrenderer",
         ":menuseparator",
         ":registry",
         "//closure/goog/asserts",
@@ -386,7 +372,10 @@ closure_js_library(
 
 closure_js_library(
     name = "component",
-    srcs = ["component.js"],
+    srcs = [
+        "component.js",
+        "componentutil.js",
+    ],
     lenient = True,
     deps = [
         ":idgenerator",
@@ -397,58 +386,52 @@ closure_js_library(
         "//closure/goog/dom:tagname",
         "//closure/goog/events:eventhandler",
         "//closure/goog/events:eventtarget",
+        "//closure/goog/events:eventtype",
         "//closure/goog/object",
         "//closure/goog/style",
     ],
 )
 
-closure_js_library(
+alias(
     name = "componentutil",
-    srcs = ["componentutil.js"],
-    lenient = True,
-    deps = ["//closure/goog/events:eventtype"],
+    actual = ":component",
 )
 
 closure_js_library(
     name = "container",
-    srcs = ["container.js"],
+    srcs = [
+        "container.js",
+        "containerrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":component",
         ":componentutil",
-        ":containerrenderer",
         ":control",
+        ":registry",
         "//closure/goog/a11y/aria",
         "//closure/goog/a11y/aria:attributes",
+        "//closure/goog/array",
         "//closure/goog/asserts",
         "//closure/goog/dom",
+        "//closure/goog/dom:classlist",
+        "//closure/goog/dom:nodetype",
+        "//closure/goog/dom:tagname",
         "//closure/goog/events:browserevent",
         "//closure/goog/events:event",
         "//closure/goog/events:eventtype",
         "//closure/goog/events:keycodes",
         "//closure/goog/events:keyhandler",
         "//closure/goog/object",
-        "//closure/goog/style",
-    ],
-)
-
-closure_js_library(
-    name = "containerrenderer",
-    srcs = ["containerrenderer.js"],
-    lenient = True,
-    deps = [
-        ":control",
-        ":registry",
-        "//closure/goog/a11y/aria",
-        "//closure/goog/array",
-        "//closure/goog/asserts",
-        "//closure/goog/dom:classlist",
-        "//closure/goog/dom:nodetype",
-        "//closure/goog/dom:tagname",
         "//closure/goog/string",
         "//closure/goog/style",
         "//closure/goog/useragent",
     ],
+)
+
+alias(
+    name = "containerrenderer",
+    actual = ":container",
 )
 
 closure_js_library(
@@ -466,29 +449,9 @@ closure_js_library(
     ],
 )
 
-closure_js_library(
+alias(
     name = "control",
-    srcs = ["control.js"],
-    lenient = True,
-    deps = [
-        ":component",
-        ":componentutil",
-        ":controlcontent",
-        ":controlrenderer",
-        ":registry",
-        "//closure/goog/a11y/aria:roles",
-        "//closure/goog/array",
-        "//closure/goog/disposable",
-        "//closure/goog/dom",
-        "//closure/goog/events:browserevent",
-        "//closure/goog/events:event",
-        "//closure/goog/events:eventhandler",
-        "//closure/goog/events:eventtype",
-        "//closure/goog/events:keycodes",
-        "//closure/goog/events:keyhandler",
-        "//closure/goog/string",
-        "//closure/goog/useragent",
-    ],
+    actual = ":registry",
 )
 
 closure_js_library(
@@ -497,26 +460,9 @@ closure_js_library(
     lenient = True,
 )
 
-closure_js_library(
+alias(
     name = "controlrenderer",
-    srcs = ["controlrenderer.js"],
-    lenient = True,
-    deps = [
-        ":component",
-        ":controlcontent",
-        "//closure/goog/a11y/aria",
-        "//closure/goog/a11y/aria:attributes",
-        "//closure/goog/a11y/aria:roles",
-        "//closure/goog/array",
-        "//closure/goog/asserts",
-        "//closure/goog/dom",
-        "//closure/goog/dom:classlist",
-        "//closure/goog/dom:tagname",
-        "//closure/goog/object",
-        "//closure/goog/string",
-        "//closure/goog/style",
-        "//closure/goog/useragent",
-    ],
+    actual = ":registry",
 )
 
 closure_js_library(
@@ -542,7 +488,6 @@ closure_js_library(
     lenient = True,
     deps = [
         ":button",
-        ":buttonrenderer",
         ":component",
         ":control",
         ":cssnames",
@@ -561,7 +506,6 @@ closure_js_library(
         ":controlcontent",
         ":cssnames",
         ":menubutton",
-        ":menubuttonrenderer",
         ":registry",
         "//closure/goog/dom",
         "//closure/goog/dom:tagname",
@@ -576,27 +520,17 @@ closure_js_library(
 
 closure_js_library(
     name = "custombutton",
-    srcs = ["custombutton.js"],
+    srcs = [
+        "custombutton.js",
+        "custombuttonrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":button",
-        ":buttonrenderer",
-        ":controlcontent",
-        ":custombuttonrenderer",
-        ":registry",
-        "//closure/goog/dom",
-    ],
-)
-
-closure_js_library(
-    name = "custombuttonrenderer",
-    srcs = ["custombuttonrenderer.js"],
-    lenient = True,
-    deps = [
-        ":buttonrenderer",
         ":control",
         ":controlcontent",
         ":cssnames",
+        ":registry",
         "//closure/goog/a11y/aria:roles",
         "//closure/goog/asserts",
         "//closure/goog/dom",
@@ -607,6 +541,11 @@ closure_js_library(
     ],
 )
 
+alias(
+    name = "custombuttonrenderer",
+    actual = ":custombutton",
+)
+
 closure_js_library(
     name = "customcolorpalette",
     srcs = ["customcolorpalette.js"],
@@ -614,7 +553,7 @@ closure_js_library(
     deps = [
         ":colorpalette",
         ":component",
-        ":paletterenderer",
+        ":palette",
         "//closure/goog/color",
         "//closure/goog/dom",
         "//closure/goog/dom:classlist",
@@ -625,12 +564,14 @@ closure_js_library(
 
 closure_js_library(
     name = "datepicker",
-    srcs = ["datepicker.js"],
+    srcs = [
+        "datepicker.js",
+        "datepickerrenderer.js",
+        "defaultdatepickerrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":component",
-        ":datepickerrenderer",
-        ":defaultdatepickerrenderer",
         ":idgenerator",
         "//closure/goog/a11y/aria",
         "//closure/goog/a11y/aria:attributes",
@@ -652,10 +593,9 @@ closure_js_library(
     ],
 )
 
-closure_js_library(
+alias(
     name = "datepickerrenderer",
-    srcs = ["datepickerrenderer.js"],
-    lenient = True,
+    actual = ":datepicker",
 )
 
 closure_js_library(
@@ -668,15 +608,9 @@ closure_js_library(
     ],
 )
 
-closure_js_library(
+alias(
     name = "defaultdatepickerrenderer",
-    srcs = ["defaultdatepickerrenderer.js"],
-    lenient = True,
-    deps = [
-        ":datepickerrenderer",
-        "//closure/goog/dom",
-        "//closure/goog/dom:tagname",
-    ],
+    actual = ":datepicker",
 )
 
 closure_js_library(
@@ -711,38 +645,35 @@ closure_js_library(
 
 closure_js_library(
     name = "dimensionpicker",
-    srcs = ["dimensionpicker.js"],
+    srcs = [
+        "dimensionpicker.js",
+        "dimensionpickerrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":component",
         ":componentutil",
         ":control",
-        ":dimensionpickerrenderer",
         ":registry",
+        "//closure/goog/a11y/aria:announcer",
+        "//closure/goog/a11y/aria:attributes",
         "//closure/goog/dom",
+        "//closure/goog/dom:tagname",
         "//closure/goog/events:browserevent",
         "//closure/goog/events:event",
         "//closure/goog/events:eventtype",
         "//closure/goog/events:keycodes",
         "//closure/goog/events:keyhandler",
-        "//closure/goog/math:size",
-    ],
-)
-
-closure_js_library(
-    name = "dimensionpickerrenderer",
-    srcs = ["dimensionpickerrenderer.js"],
-    lenient = True,
-    deps = [
-        ":controlrenderer",
-        "//closure/goog/a11y/aria:announcer",
-        "//closure/goog/a11y/aria:attributes",
-        "//closure/goog/dom",
-        "//closure/goog/dom:tagname",
         "//closure/goog/i18n:bidi",
+        "//closure/goog/math:size",
         "//closure/goog/style",
         "//closure/goog/useragent",
     ],
+)
+
+alias(
+    name = "dimensionpickerrenderer",
+    actual = ":dimensionpicker",
 )
 
 closure_js_library(
@@ -791,7 +722,6 @@ closure_js_library(
         ":filterobservingmenuitem",
         ":menu",
         ":menuitem",
-        ":menurenderer",
         "//closure/goog/a11y/aria",
         "//closure/goog/a11y/aria:attributes",
         "//closure/goog/dom",
@@ -811,23 +741,22 @@ closure_js_library(
 
 closure_js_library(
     name = "filterobservingmenuitem",
-    srcs = ["filterobservingmenuitem.js"],
+    srcs = [
+        "filterobservingmenuitem.js",
+        "filterobservingmenuitemrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":controlcontent",
-        ":filterobservingmenuitemrenderer",
         ":menuitem",
-        ":menuitemrenderer",
         ":registry",
         "//closure/goog/dom",
     ],
 )
 
-closure_js_library(
+alias(
     name = "filterobservingmenuitemrenderer",
-    srcs = ["filterobservingmenuitemrenderer.js"],
-    lenient = True,
-    deps = [":menuitemrenderer"],
+    actual = ":filterobservingmenuitem",
 )
 
 closure_js_library(
@@ -836,7 +765,6 @@ closure_js_library(
     lenient = True,
     deps = [
         ":button",
-        ":buttonrenderer",
         ":control",
         ":cssnames",
         ":registry",
@@ -859,7 +787,6 @@ closure_js_library(
         ":flatbuttonrenderer",
         ":menu",
         ":menubutton",
-        ":menurenderer",
         ":registry",
         "//closure/goog/dom",
         "//closure/goog/dom:tagname",
@@ -1036,7 +963,6 @@ closure_js_library(
         ":controlcontent",
         ":cssnames",
         ":menubutton",
-        ":menubuttonrenderer",
         ":registry",
         "//closure/goog/dom",
         "//closure/goog/dom:classlist",
@@ -1149,18 +1075,32 @@ closure_js_library(
 
 closure_js_library(
     name = "menu",
-    srcs = ["menu.js"],
+    srcs = [
+        "menu.js",
+        "menuitem.js",
+        "menuitemrenderer.js",
+        "menurenderer.js",
+    ],
     lenient = True,
     deps = [
         ":component",
         ":container",
+        ":control",
+        ":controlcontent",
         ":menuheader",
-        ":menuitem",
-        ":menurenderer",
         ":menuseparator",
+        ":registry",
+        ":separator",
+        "//closure/goog/a11y/aria",
+        "//closure/goog/a11y/aria:attributes",
+        "//closure/goog/a11y/aria:roles",
+        "//closure/goog/array",
+        "//closure/goog/asserts",
         "//closure/goog/dom",
+        "//closure/goog/dom:classlist",
         "//closure/goog/dom:tagname",
         "//closure/goog/events:event",
+        "//closure/goog/events:keycodes",
         "//closure/goog/math:coordinate",
         "//closure/goog/string",
         "//closure/goog/style",
@@ -1169,12 +1109,14 @@ closure_js_library(
 
 closure_js_library(
     name = "menubar",
-    srcs = ["menubar.js"],
+    srcs = [
+        "menubar.js",
+        "menubarrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":container",
-        ":containerrenderer",
-        ":menubarrenderer",
+        "//closure/goog/a11y/aria:roles",
         "//closure/goog/dom",
     ],
 )
@@ -1185,20 +1127,13 @@ closure_js_library(
     lenient = True,
     deps = [
         ":menubar",
-        ":menubarrenderer",
         ":registry",
     ],
 )
 
-closure_js_library(
+alias(
     name = "menubarrenderer",
-    srcs = ["menubarrenderer.js"],
-    lenient = True,
-    deps = [
-        ":container",
-        ":containerrenderer",
-        "//closure/goog/a11y/aria:roles",
-    ],
+    actual = ":menubar",
 )
 
 closure_js_library(
@@ -1216,19 +1151,21 @@ closure_js_library(
 
 closure_js_library(
     name = "menubutton",
-    srcs = ["menubutton.js"],
+    srcs = [
+        "menubutton.js",
+        "menubuttonrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":button",
-        ":buttonrenderer",
         ":component",
         ":control",
         ":controlcontent",
+        ":cssnames",
+        ":custombutton",
         ":idgenerator",
         ":menu",
-        ":menubuttonrenderer",
         ":menuitem",
-        ":menurenderer",
         ":menuseparator",
         ":registry",
         ":submenu",
@@ -1236,6 +1173,7 @@ closure_js_library(
         "//closure/goog/a11y/aria:attributes",
         "//closure/goog/asserts",
         "//closure/goog/dom",
+        "//closure/goog/dom:tagname",
         "//closure/goog/events",
         "//closure/goog/events:browserevent",
         "//closure/goog/events:event",
@@ -1256,120 +1194,55 @@ closure_js_library(
     ],
 )
 
-closure_js_library(
+alias(
     name = "menubuttonrenderer",
-    srcs = ["menubuttonrenderer.js"],
-    lenient = True,
-    deps = [
-        ":control",
-        ":controlcontent",
-        ":cssnames",
-        ":custombuttonrenderer",
-        ":menu",
-        ":menurenderer",
-        "//closure/goog/dom",
-        "//closure/goog/dom:tagname",
-        "//closure/goog/style",
-    ],
+    actual = ":menubutton",
 )
 
 closure_js_library(
     name = "menuheader",
-    srcs = ["menuheader.js"],
+    srcs = [
+        "menuheader.js",
+        "menuheaderrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":component",
         ":control",
         ":controlcontent",
-        ":menuheaderrenderer",
         ":registry",
         "//closure/goog/dom",
     ],
 )
 
-closure_js_library(
+alias(
     name = "menuheaderrenderer",
-    srcs = ["menuheaderrenderer.js"],
-    lenient = True,
-    deps = [":controlrenderer"],
+    actual = ":menuheader",
 )
 
-closure_js_library(
+alias(
     name = "menuitem",
-    srcs = ["menuitem.js"],
-    lenient = True,
-    deps = [
-        ":component",
-        ":control",
-        ":controlcontent",
-        ":menuitemrenderer",
-        ":registry",
-        "//closure/goog/a11y/aria:roles",
-        "//closure/goog/array",
-        "//closure/goog/dom",
-        "//closure/goog/dom:classlist",
-        "//closure/goog/events:keycodes",
-        "//closure/goog/math:coordinate",
-        "//closure/goog/string",
-    ],
+    actual = ":menu",
 )
 
-closure_js_library(
+alias(
     name = "menuitemrenderer",
-    srcs = ["menuitemrenderer.js"],
-    lenient = True,
-    deps = [
-        ":component",
-        ":controlcontent",
-        ":controlrenderer",
-        "//closure/goog/a11y/aria:roles",
-        "//closure/goog/asserts",
-        "//closure/goog/dom",
-        "//closure/goog/dom:classlist",
-        "//closure/goog/dom:tagname",
-    ],
+    actual = ":menu",
 )
 
-closure_js_library(
+alias(
     name = "menurenderer",
-    srcs = ["menurenderer.js"],
-    lenient = True,
-    deps = [
-        ":containerrenderer",
-        ":control",
-        ":separator",
-        "//closure/goog/a11y/aria",
-        "//closure/goog/a11y/aria:attributes",
-        "//closure/goog/a11y/aria:roles",
-        "//closure/goog/asserts",
-        "//closure/goog/dom",
-        "//closure/goog/dom:tagname",
-    ],
+    actual = ":menu",
 )
 
-closure_js_library(
+alias(
     name = "menuseparator",
-    srcs = ["menuseparator.js"],
-    lenient = True,
-    deps = [
-        ":menuseparatorrenderer",
-        ":registry",
-        ":separator",
-        "//closure/goog/dom",
-    ],
+    actual = ":separator",
 )
 
-closure_js_library(
+alias(
     name = "menuseparatorrenderer",
-    srcs = ["menuseparatorrenderer.js"],
-    lenient = True,
-    deps = [
-        ":controlcontent",
-        ":controlrenderer",
-        "//closure/goog/dom",
-        "//closure/goog/dom:classlist",
-        "//closure/goog/dom:tagname",
-    ],
+    actual = ":separator",
 )
 
 closure_js_library(
@@ -1420,19 +1293,9 @@ closure_js_library(
     ],
 )
 
-closure_js_library(
+alias(
     name = "nativebuttonrenderer",
-    srcs = ["nativebuttonrenderer.js"],
-    lenient = True,
-    deps = [
-        ":buttonrenderer",
-        ":component",
-        "//closure/goog/asserts",
-        "//closure/goog/dom:classlist",
-        "//closure/goog/dom:inputtype",
-        "//closure/goog/dom:tagname",
-        "//closure/goog/events:eventtype",
-    ],
+    actual = ":button",
 )
 
 closure_js_library(
@@ -1451,35 +1314,16 @@ closure_js_library(
 
 closure_js_library(
     name = "palette",
-    srcs = ["palette.js"],
+    srcs = [
+        "palette.js",
+        "paletterenderer.js",
+    ],
     lenient = True,
     deps = [
         ":component",
         ":control",
         ":controlcontent",
-        ":paletterenderer",
         ":selectionmodel",
-        "//closure/goog/array",
-        "//closure/goog/asserts",
-        "//closure/goog/dom",
-        "//closure/goog/events",
-        "//closure/goog/events:browserevent",
-        "//closure/goog/events:event",
-        "//closure/goog/events:eventtype",
-        "//closure/goog/events:keycodes",
-        "//closure/goog/events:keyhandler",
-        "//closure/goog/math:size",
-        "//closure/goog/style",
-    ],
-)
-
-closure_js_library(
-    name = "paletterenderer",
-    srcs = ["paletterenderer.js"],
-    lenient = True,
-    deps = [
-        ":controlcontent",
-        ":controlrenderer",
         "//closure/goog/a11y/aria",
         "//closure/goog/a11y/aria:attributes",
         "//closure/goog/a11y/aria:roles",
@@ -1491,11 +1335,22 @@ closure_js_library(
         "//closure/goog/dom:nodeiterator",
         "//closure/goog/dom:nodetype",
         "//closure/goog/dom:tagname",
+        "//closure/goog/events",
+        "//closure/goog/events:browserevent",
+        "//closure/goog/events:event",
+        "//closure/goog/events:eventtype",
+        "//closure/goog/events:keycodes",
+        "//closure/goog/events:keyhandler",
         "//closure/goog/iter",
         "//closure/goog/math:size",
         "//closure/goog/style",
         "//closure/goog/useragent",
     ],
+)
+
+alias(
+    name = "paletterenderer",
+    actual = ":palette",
 )
 
 closure_js_library(
@@ -1605,7 +1460,6 @@ closure_js_library(
     deps = [
         ":component",
         ":menu",
-        ":menurenderer",
         ":popupbase",
         "//closure/goog/dom",
         "//closure/goog/events",
@@ -1692,14 +1546,35 @@ closure_js_library(
 
 closure_js_library(
     name = "registry",
-    srcs = ["registry.js"],
+    srcs = [
+        "control.js",
+        "controlrenderer.js",
+        "registry.js",
+    ],
     lenient = True,
     deps = [
         ":component",
-        ":controlrenderer",
+        ":componentutil",
+        ":controlcontent",
+        "//closure/goog/a11y/aria",
+        "//closure/goog/a11y/aria:attributes",
+        "//closure/goog/a11y/aria:roles",
+        "//closure/goog/array",
         "//closure/goog/asserts",
+        "//closure/goog/disposable",
+        "//closure/goog/dom",
         "//closure/goog/dom:classlist",
+        "//closure/goog/dom:tagname",
+        "//closure/goog/events:browserevent",
+        "//closure/goog/events:event",
+        "//closure/goog/events:eventhandler",
+        "//closure/goog/events:eventtype",
+        "//closure/goog/events:keycodes",
+        "//closure/goog/events:keyhandler",
         "//closure/goog/object",
+        "//closure/goog/string",
+        "//closure/goog/style",
+        "//closure/goog/useragent",
     ],
 )
 
@@ -1761,7 +1636,6 @@ closure_js_library(
         ":registry",
         ":tab",
         ":tabbar",
-        ":tabrenderer",
         "//closure/goog/dom",
         "//closure/goog/dom:tagname",
     ],
@@ -1791,7 +1665,7 @@ closure_js_library(
     srcs = ["select.js"],
     lenient = True,
     deps = [
-        ":buttonrenderer",
+        ":button",
         ":component",
         ":control",
         ":controlcontent",
@@ -1799,7 +1673,6 @@ closure_js_library(
         ":menu",
         ":menubutton",
         ":menuitem",
-        ":menurenderer",
         ":menuseparator",
         ":registry",
         ":selectionmodel",
@@ -1818,11 +1691,10 @@ closure_js_library(
     srcs = ["selectionmenubutton.js"],
     lenient = True,
     deps = [
-        ":buttonrenderer",
+        ":button",
         ":component",
         ":menubutton",
         ":menuitem",
-        ":menuitemrenderer",
         ":registry",
         "//closure/goog/dom",
         "//closure/goog/dom:inputtype",
@@ -1847,16 +1719,22 @@ closure_js_library(
 
 closure_js_library(
     name = "separator",
-    srcs = ["separator.js"],
+    srcs = [
+        "menuseparator.js",
+        "menuseparatorrenderer.js",
+        "separator.js",
+    ],
     lenient = True,
     deps = [
         ":component",
         ":control",
-        ":menuseparatorrenderer",
+        ":controlcontent",
         ":registry",
         "//closure/goog/a11y/aria",
         "//closure/goog/asserts",
         "//closure/goog/dom",
+        "//closure/goog/dom:classlist",
+        "//closure/goog/dom:tagname",
     ],
 )
 
@@ -1950,21 +1828,26 @@ closure_js_library(
 
 closure_js_library(
     name = "submenu",
-    srcs = ["submenu.js"],
+    srcs = [
+        "submenu.js",
+        "submenurenderer.js",
+    ],
     lenient = True,
     deps = [
         ":component",
+        ":control",
         ":controlcontent",
         ":menu",
         ":menuheader",
         ":menuitem",
-        ":menuitemrenderer",
         ":menuseparator",
         ":registry",
-        ":submenurenderer",
+        "//closure/goog/a11y/aria",
+        "//closure/goog/a11y/aria:attributes",
         "//closure/goog/asserts",
         "//closure/goog/dom",
         "//closure/goog/dom:classlist",
+        "//closure/goog/dom:tagname",
         "//closure/goog/events:browserevent",
         "//closure/goog/events:event",
         "//closure/goog/events:keycodes",
@@ -1976,23 +1859,9 @@ closure_js_library(
     ],
 )
 
-closure_js_library(
+alias(
     name = "submenurenderer",
-    srcs = ["submenurenderer.js"],
-    lenient = True,
-    deps = [
-        ":control",
-        ":controlcontent",
-        ":menu",
-        ":menuitemrenderer",
-        "//closure/goog/a11y/aria",
-        "//closure/goog/a11y/aria:attributes",
-        "//closure/goog/asserts",
-        "//closure/goog/dom",
-        "//closure/goog/dom:classlist",
-        "//closure/goog/dom:tagname",
-        "//closure/goog/style",
-    ],
+    actual = ":submenu",
 )
 
 closure_js_library(
@@ -2007,21 +1876,27 @@ closure_js_library(
 
 closure_js_library(
     name = "tab",
-    srcs = ["tab.js"],
+    srcs = [
+        "tab.js",
+        "tabrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":component",
         ":control",
         ":controlcontent",
         ":registry",
-        ":tabrenderer",
+        "//closure/goog/a11y/aria:roles",
         "//closure/goog/dom",
     ],
 )
 
 closure_js_library(
     name = "tabbar",
-    srcs = ["tabbar.js"],
+    srcs = [
+        "tabbar.js",
+        "tabbarrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":component",
@@ -2029,22 +1904,16 @@ closure_js_library(
         ":control",
         ":registry",
         ":tab",
-        ":tabbarrenderer",
+        "//closure/goog/a11y/aria:roles",
         "//closure/goog/dom",
         "//closure/goog/events:event",
+        "//closure/goog/object",
     ],
 )
 
-closure_js_library(
+alias(
     name = "tabbarrenderer",
-    srcs = ["tabbarrenderer.js"],
-    lenient = True,
-    deps = [
-        ":container",
-        ":containerrenderer",
-        "//closure/goog/a11y/aria:roles",
-        "//closure/goog/object",
-    ],
+    actual = ":tabbar",
 )
 
 closure_js_library(
@@ -2083,27 +1952,25 @@ closure_js_library(
     ],
 )
 
-closure_js_library(
+alias(
     name = "tabrenderer",
-    srcs = ["tabrenderer.js"],
-    lenient = True,
-    deps = [
-        ":component",
-        ":controlrenderer",
-        "//closure/goog/a11y/aria:roles",
-    ],
+    actual = ":tab",
 )
 
 closure_js_library(
     name = "textarea",
-    srcs = ["textarea.js"],
+    srcs = [
+        "textarea.js",
+        "textarearenderer.js",
+    ],
     lenient = True,
     deps = [
+        ":component",
         ":control",
-        ":textarearenderer",
         "//closure/goog/asserts",
         "//closure/goog/dom",
         "//closure/goog/dom:classlist",
+        "//closure/goog/dom:tagname",
         "//closure/goog/events:browserevent",
         "//closure/goog/events:event",
         "//closure/goog/events:eventtype",
@@ -2113,15 +1980,9 @@ closure_js_library(
     ],
 )
 
-closure_js_library(
+alias(
     name = "textarearenderer",
-    srcs = ["textarearenderer.js"],
-    lenient = True,
-    deps = [
-        ":component",
-        ":controlrenderer",
-        "//closure/goog/dom:tagname",
-    ],
+    actual = ":textarea",
 )
 
 closure_js_library(
@@ -2130,7 +1991,6 @@ closure_js_library(
     lenient = True,
     deps = [
         ":button",
-        ":buttonrenderer",
         ":component",
         ":controlcontent",
         ":custombuttonrenderer",
@@ -2141,102 +2001,95 @@ closure_js_library(
 
 closure_js_library(
     name = "toolbar",
-    srcs = ["toolbar.js"],
+    srcs = [
+        "toolbar.js",
+        "toolbarrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":container",
-        ":toolbarrenderer",
+        ":control",
+        ":separator",
+        ":toolbarseparator",
+        "//closure/goog/a11y/aria:roles",
         "//closure/goog/dom",
+        "//closure/goog/dom:tagname",
     ],
 )
 
 closure_js_library(
     name = "toolbarbutton",
-    srcs = ["toolbarbutton.js"],
+    srcs = [
+        "toolbarbutton.js",
+        "toolbarbuttonrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":button",
-        ":buttonrenderer",
         ":controlcontent",
+        ":custombutton",
         ":registry",
-        ":toolbarbuttonrenderer",
+        ":toolbarseparator",
         "//closure/goog/dom",
     ],
 )
 
-closure_js_library(
+alias(
     name = "toolbarbuttonrenderer",
-    srcs = ["toolbarbuttonrenderer.js"],
-    lenient = True,
-    deps = [":custombuttonrenderer"],
+    actual = ":toolbarbutton",
 )
 
 closure_js_library(
     name = "toolbarcolormenubutton",
-    srcs = ["toolbarcolormenubutton.js"],
+    srcs = [
+        "toolbarcolormenubutton.js",
+        "toolbarcolormenubuttonrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":colormenubutton",
-        ":colormenubuttonrenderer",
-        ":controlcontent",
-        ":menu",
-        ":registry",
-        ":toolbarcolormenubuttonrenderer",
-        "//closure/goog/dom",
-    ],
-)
-
-closure_js_library(
-    name = "toolbarcolormenubuttonrenderer",
-    srcs = ["toolbarcolormenubuttonrenderer.js"],
-    lenient = True,
-    deps = [
-        ":colormenubuttonrenderer",
         ":control",
         ":controlcontent",
-        ":menubuttonrenderer",
-        ":toolbarmenubuttonrenderer",
+        ":menu",
+        ":menubutton",
+        ":registry",
+        ":toolbarmenubutton",
         "//closure/goog/asserts",
         "//closure/goog/dom",
         "//closure/goog/dom:classlist",
     ],
 )
 
+alias(
+    name = "toolbarcolormenubuttonrenderer",
+    actual = ":toolbarcolormenubutton",
+)
+
 closure_js_library(
     name = "toolbarmenubutton",
-    srcs = ["toolbarmenubutton.js"],
+    srcs = [
+        "toolbarmenubutton.js",
+        "toolbarmenubuttonrenderer.js",
+    ],
     lenient = True,
     deps = [
-        ":buttonrenderer",
+        ":button",
         ":controlcontent",
         ":menu",
         ":menubutton",
         ":registry",
-        ":toolbarmenubuttonrenderer",
         "//closure/goog/dom",
     ],
 )
 
-closure_js_library(
+alias(
     name = "toolbarmenubuttonrenderer",
-    srcs = ["toolbarmenubuttonrenderer.js"],
-    lenient = True,
-    deps = [":menubuttonrenderer"],
+    actual = ":toolbarmenubutton",
 )
 
-closure_js_library(
+alias(
     name = "toolbarrenderer",
-    srcs = ["toolbarrenderer.js"],
-    lenient = True,
-    deps = [
-        ":container",
-        ":containerrenderer",
-        ":control",
-        ":separator",
-        ":toolbarseparatorrenderer",
-        "//closure/goog/a11y/aria:roles",
-        "//closure/goog/dom:tagname",
-    ],
+    actual = ":toolbar",
 )
 
 closure_js_library(
@@ -2246,37 +2099,36 @@ closure_js_library(
     deps = [
         ":controlcontent",
         ":menu",
-        ":menubuttonrenderer",
+        ":menubutton",
         ":registry",
         ":select",
-        ":toolbarmenubuttonrenderer",
+        ":toolbarmenubutton",
         "//closure/goog/dom",
     ],
 )
 
 closure_js_library(
     name = "toolbarseparator",
-    srcs = ["toolbarseparator.js"],
+    srcs = [
+        "toolbarseparator.js",
+        "toolbarseparatorrenderer.js",
+    ],
     lenient = True,
     deps = [
+        ":control",
+        ":cssnames",
         ":registry",
         ":separator",
-        ":toolbarseparatorrenderer",
-        "//closure/goog/dom",
-    ],
-)
-
-closure_js_library(
-    name = "toolbarseparatorrenderer",
-    srcs = ["toolbarseparatorrenderer.js"],
-    lenient = True,
-    deps = [
-        ":cssnames",
-        ":menuseparatorrenderer",
         "//closure/goog/asserts",
+        "//closure/goog/dom",
         "//closure/goog/dom:classlist",
         "//closure/goog/dom:tagname",
     ],
+)
+
+alias(
+    name = "toolbarseparatorrenderer",
+    actual = ":toolbarseparator",
 )
 
 closure_js_library(
@@ -2287,7 +2139,7 @@ closure_js_library(
         ":controlcontent",
         ":registry",
         ":togglebutton",
-        ":toolbarbuttonrenderer",
+        ":toolbarbutton",
         "//closure/goog/dom",
     ],
 )
@@ -2324,29 +2176,25 @@ closure_js_library(
 
 closure_js_library(
     name = "tristatemenuitem",
-    srcs = ["tristatemenuitem.js"],
+    srcs = [
+        "tristatemenuitem.js",
+        "tristatemenuitemrenderer.js",
+    ],
     lenient = True,
     deps = [
         ":component",
         ":controlcontent",
         ":menuitem",
-        ":menuitemrenderer",
         ":registry",
-        ":tristatemenuitemrenderer",
+        "//closure/goog/asserts",
         "//closure/goog/dom",
         "//closure/goog/dom:classlist",
     ],
 )
 
-closure_js_library(
+alias(
     name = "tristatemenuitemrenderer",
-    srcs = ["tristatemenuitemrenderer.js"],
-    lenient = True,
-    deps = [
-        ":menuitemrenderer",
-        "//closure/goog/asserts",
-        "//closure/goog/dom:classlist",
-    ],
+    actual = ":tristatemenuitem",
 )
 
 closure_js_library(
