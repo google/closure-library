@@ -2047,13 +2047,14 @@ WebChannelBase.prototype.clearDeadBackchannelTimer_ = function() {
  * failed request.
  * @param {?ChannelRequest.Error} error The error code for the
  * failed request.
+ * @param {number} statusCode The last HTTP status code.
  * @return {boolean} Whether or not the error is fatal.
  * @private
  */
-WebChannelBase.isFatalError_ = function(error) {
+WebChannelBase.isFatalError_ = function(error, statusCode) {
   'use strict';
   return error == ChannelRequest.Error.UNKNOWN_SESSION_ID ||
-      error == ChannelRequest.Error.STATUS;
+      (error == ChannelRequest.Error.STATUS && statusCode > 0);
 };
 
 
@@ -2101,7 +2102,7 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
   // Else unsuccessful. Fall through.
 
   const lastError = request.getLastError();
-  if (!WebChannelBase.isFatalError_(lastError)) {
+  if (!WebChannelBase.isFatalError_(lastError, this.lastStatusCode_)) {
     // Maybe retry.
     const self = this;
     this.channelDebug_.debug(function() {
