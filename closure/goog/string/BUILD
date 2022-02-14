@@ -27,6 +27,7 @@ closure_js_library(
     deps = [
         ":const",
         ":string",
+        "//closure/goog/asserts",
         "//closure/goog/html:safehtml",
         "//closure/goog/html:uncheckedconversions",
     ],
