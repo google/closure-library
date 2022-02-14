@@ -24,28 +24,6 @@ goog.requireType('goog.string.TypedString');
 
 
 /**
- * Whether we should enforce COOP by avoiding document.write in certain
- * situations (see https://github.com/google/closure-library/issues/1137).
- * This is a temporary flag because some products rely on the legacy noreferrer
- * behavior for CSP reasons, but it will be removed in the near future.  Please
- * do not rely on setting this to false.
- * @define {boolean}
- */
-goog.window.ENFORCE_COOP = goog.define('goog.window.ENFORCE_COOP', true);
-
-
-/**
- * Whether to use an empty string as the URL value when opening a new blank page
- * in `goog.window.openBlank`. This is a temporary flag because some projects
- * ran into issues when using an empty string as a URL within a meta tag.
- * Please do not rely on setting this to false. This flag will be removed at the
- * same time as `goog.window.ENFORCE_COOP`.
- * @define {boolean}
- */
-goog.window.USE_EMPTY_STRING_FOR_BLANK_URL =
-    goog.define('goog.window.USE_EMPTY_STRING_FOR_BLANK_URL', true);
-
-/**
  * Default height for popup windows
  * @type {number}
  */
@@ -142,8 +120,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
   }
 
   /** @suppress {strictMissingProperties} */
-  const browserSupportsCoop =
-      goog.window.ENFORCE_COOP && self.crossOriginIsolated !== undefined;
+  const browserSupportsCoop = self.crossOriginIsolated !== undefined;
   let referrerPolicy = 'strict-origin-when-cross-origin';
   if (window.Request) {
     /** @suppress {missingProperties} */
@@ -361,10 +338,9 @@ goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
   // current behavior was preserved when this code was refactored to use
   // SafeUrl, in order to avoid breakage.
   let url = '';
-  if (opt_message || !goog.window.USE_EMPTY_STRING_FOR_BLANK_URL) {
-    // Only use the `javascript:` URL if
-    // - there is a message
-    // - there is no message, but USE_EMPTY_STRING_FOR_BLANK_URL is false
+  if (opt_message) {
+    // Only use the `javascript:` URL if there is a message to display, as
+    // opening a 'javascript:'' URL can cause CSP errors.
     const loadingMessage =
         goog.string.escapeString(goog.string.htmlEscape(opt_message || ''));
     url = goog.html.uncheckedconversions
