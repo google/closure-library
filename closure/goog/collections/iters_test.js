@@ -166,14 +166,6 @@ testSuite({
     assertObjectEquals({value: undefined, done: true}, iter.next());
   },
 
-  testMap_index() {
-    // Use something besides consecutive integers to make sure we're actually
-    // being passed the index here.
-    const someNumbers = [5, 5, 5, 5, 5];
-    assertArrayEquals(
-        [0, 2, 4, 6, 8], [...iters.map(someNumbers, (n, index) => index * 2)]);
-  },
-
   testFilter() {
     function isEven(val) {
       return val % 2 == 0;

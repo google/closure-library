@@ -55,17 +55,14 @@ exports.forEach = function(iterable, f) {
 class MapIterator {
   /**
    * @param {!Iterable<FROM>} childIter
-   * @param {function(FROM, number): TO} mapFn
+   * @param {function(FROM): TO} mapFn
    */
   constructor(childIter, mapFn) {
     /** @private @const {!Iterator<FROM>} */
     this.childIterator_ = getIterator(childIter);
 
-    /** @private @const {function(FROM, number): TO} */
+    /** @private @const {function(FROM): TO} */
     this.mapFn_ = mapFn;
-
-    /** @private {number} */
-    this.nextIndex_ = 0;
   }
 
   [Symbol.iterator]() {
@@ -79,9 +76,8 @@ class MapIterator {
     // so that we don't accidentally preserve generator return values, which
     // are unlikely to be meaningful in the context of this MapIterator.
     return {
-      value: childResult.done ?
-          undefined :
-          this.mapFn_.call(undefined, childResult.value, this.nextIndex_++),
+      value: childResult.done ? undefined :
+                                this.mapFn_.call(undefined, childResult.value),
       done: childResult.done,
     };
   }
@@ -96,7 +92,7 @@ class MapIterator {
  * `iterable` until the given iterable is exhausted.
  *
  * @param {!Iterable<VALUE>} iterable
- * @param {function(VALUE, number): RESULT} f
+ * @param {function(VALUE): RESULT} f
  * @return {!IteratorIterable<RESULT>} The created iterable that gives the
  *     mapped values.
  * @template VALUE, RESULT
