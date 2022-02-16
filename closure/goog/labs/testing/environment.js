@@ -91,14 +91,13 @@ class Environment {
     // Make sure promises and other stuff that may still be scheduled,
     // get a
     // chance to run (and throw errors).
-    if (this.mockClock) {
-      for (let i = 0; i < 100; i++) {
-        this.mockClock.tick(1000);
+    if (this.hasMockClock()) {
+      if (this.mockClock.isSynchronous()) {
+        for (let i = 0; i < 100; i++) {
+          this.mockClock.tick(1000);
+        }
       }
-      // If we created the mockClock, we'll also reset it.
-      if (this.hasMockClock()) {
-        this.mockClock.reset();
-      }
+      this.mockClock.reset();
     }
     // Reset all changes made by the PropertyReplacer.
     this.replacer.reset();
@@ -149,13 +148,17 @@ class Environment {
    * installed (override i.e. setTimeout) by default. It can be accessed
    * using `env.mockClock`. If your test has more than one testing
    * environment, don't call this on more than one of them.
-   * @param {{install: (boolean|undefined)}=} options Options about the
-   *     mockClock.
+   * @param {{install: (boolean|undefined), async: (boolean|undefined)}=}
+   *     options Options about the mockClock.
    * @return {!Environment} For chaining.
    */
-  withMockClock({install = true} = {}) {
-    if (!this.hasMockClock()) {
-      this.mockClock = new MockClock(install);
+  withMockClock({install = true, async = false} = {}) {
+    if (!this.hasMockClock() || this.mockClock.isSynchronous() === async) {
+      this.mockClock =
+          async ? MockClock.createAsyncMockClock() : new MockClock();
+      if (install) {
+        this.mockClock.install();
+      }
     }
     return this;
   }

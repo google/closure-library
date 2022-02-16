@@ -411,6 +411,39 @@ testingTestSuite(testSuite = {
     testing = false;
   },
 
+  async testAsyncMockClock() {
+    testing = true;
+
+    const env = new Environment().withMockClock({async: true});
+
+    testCase.setUp = () => {
+      env.mockClock.install();
+    };
+    testCase.addNewTest('testThatThrowsEventuallyAsync', () => {
+      setTimeout(() => {
+        throw new Error('LateErrorMessage');
+      }, 200);
+    });
+    testCase.tearDown = async () => {
+      await env.mockClock.tickAsync(Infinity);
+    };
+
+    await runTestsReturningPromise(testCase);
+    assertTestFailure(
+        testCase, 'testThatThrowsEventuallyAsync', 'LateErrorMessage');
+
+    testing = false;
+  },
+
+  async testMockClockOverwrites() {
+    const env = new Environment().withMockClock();
+    assertTrue(env.mockClock.isSynchronous());
+    env.withMockClock({async: true});
+    assertFalse(env.mockClock.isSynchronous());
+    env.withMockClock();
+    assertTrue(env.mockClock.isSynchronous());
+  },
+
   async testMockControl() {
     testing = true;
 
