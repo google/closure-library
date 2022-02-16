@@ -116,17 +116,14 @@ exports.map = function(iterable, f) {
 class FilterIterator {
   /**
    * @param {!Iterable<T>} childIter
-   * @param {function(T, number): boolean} filterFn
+   * @param {function(T): boolean} filterFn
    */
   constructor(childIter, filterFn) {
     /** @private @const {!Iterator<T>} */
     this.childIter_ = getIterator(childIter);
 
-    /** @private @const {function(T, number): boolean} */
+    /** @private @const {function(T): boolean} */
     this.filterFn_ = filterFn;
-
-    /** @private {number} */
-    this.nextIndex_ = 0;
   }
 
   [Symbol.iterator]() {
@@ -142,8 +139,7 @@ class FilterIterator {
         // generator return values, and we want to ignore them.
         return {done: true, value: undefined};
       }
-      const passesFilter =
-          this.filterFn_.call(undefined, childResult.value, this.nextIndex_++);
+      const passesFilter = this.filterFn_.call(undefined, childResult.value);
       if (passesFilter) {
         return childResult;
       }
@@ -160,7 +156,7 @@ class FilterIterator {
  * is returned or the given iterator is exhausted.
  *
  * @param {!Iterable<VALUE>} iterable
- * @param {function(VALUE, number): boolean} f
+ * @param {function(VALUE): boolean} f
  * @return {!IteratorIterable<VALUE>} The created iterable that gives the mapped
  *     values.
  * @template VALUE
