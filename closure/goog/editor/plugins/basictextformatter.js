@@ -930,6 +930,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.toggleLink_ = function(
       goog.dom.getAncestorByTagNameAndClass(parent, goog.dom.TagName.A));
   if (link && goog.editor.node.isEditable(link)) {
     goog.dom.flattenElement(link);
+    this.getFieldObject().dispatchSelectionChangeEvent();
   } else {
     var editableLink = this.createLink_(range, '/', opt_target);
     if (editableLink) {

@@ -729,6 +729,7 @@ testSuite({
         dom.getDomHelper(window.document));
     setUpLinkTests('12345', undefined, false);
     FIELDMOCK.getRange().$anyTimes().$returns(null);
+    FIELDMOCK.dispatchSelectionChangeEvent().$anyTimes().$returns(null);
     FIELDMOCK.$replay();
 
     FORMATTER.execCommandInternal(Command.LINK);
