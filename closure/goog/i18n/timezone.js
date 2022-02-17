@@ -330,7 +330,13 @@ goog.i18n.TimeZone.prototype.getLongName = function(date) {
  */
 goog.i18n.TimeZone.prototype.getOffset = function(date) {
   'use strict';
-  return this.standardOffset_ - this.getDaylightAdjustment(date);
+  const offset = this.standardOffset_ - this.getDaylightAdjustment(date);
+  // Handle an edge case where the offset is -1440 minutes, which is -24hrs.
+  // -24hrs and 0 hours are the same in this situation.
+  if (offset === -1440) {
+    return 0;
+  }
+  return offset;
 };
 
 
