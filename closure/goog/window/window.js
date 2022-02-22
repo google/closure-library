@@ -323,34 +323,17 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
  */
 goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
   'use strict';
-  // Open up a window with the loading message and nothing else.
-  // This will be interpreted as HTML content type with a missing doctype
-  // and html/body tags, but is otherwise acceptable.
-  //
-  // IMPORTANT: The order of escaping is crucial here in order to avoid XSS.
-  // First, HTML-escaping is needed because the result of the JS expression
-  // is evaluated as HTML. Second, JS-string escaping is needed; this avoids
-  // \u escaping from inserting HTML tags and \ from escaping the final ".
-  // Finally, URL percent-encoding is done with encodeURI(); this
-  // avoids percent-encoding from bypassing HTML and JS escaping.
-  //
-  // Note: There are other ways the same result could be achieved but the
-  // current behavior was preserved when this code was refactored to use
-  // SafeUrl, in order to avoid breakage.
-  let url = '';
-  if (opt_message) {
-    // Only use the `javascript:` URL if there is a message to display, as
-    // opening a 'javascript:'' URL can cause CSP errors.
-    const loadingMessage =
-        goog.string.escapeString(goog.string.htmlEscape(opt_message || ''));
-    url = goog.html.uncheckedconversions
-              .safeUrlFromStringKnownToSatisfyTypeContract(
-                  goog.string.Const.from(
-                      'b/12014412, encoded string in javascript: URL'),
-                  'javascript:"' + encodeURI(loadingMessage) + '"');
+  const win =
+      /** @type {?Window} */ (goog.window.open('', opt_options, opt_parentWin));
+  if (win && opt_message) {
+    const body = win.document.body;
+    if (body) {
+      // The body can be undefined in IE, where for some reason the created
+      // document doesn't have a body.
+      body.textContent = opt_message;
+    }
   }
-  return /** @type {?Window} */ (
-      goog.window.open(url, opt_options, opt_parentWin));
+  return win;
 };
 
 

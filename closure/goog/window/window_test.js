@@ -317,13 +317,17 @@ testSuite({
     }
   },
 
-  testOpenBlankWithMessage() {
+  async testOpenBlankWithMessage() {
     newWin = googWindow.openBlank('Loading...');
+    await new Promise((resolve) => {
+      setTimeout(resolve, 5000);
+    });
+    assertEquals(
+        newWin.document.body.textContent, !browser.isIE() ? 'Loading...' : '');
     const urlParam = 'bogus~';
     newWin.location.href = REDIRECT_URL_PREFIX + urlParam;
-    return waitForTestWindow(newWin).then(() => {
-      verifyWindow(newWin, false, urlParam);
-    });
+    await waitForTestWindow(newWin);
+    verifyWindow(newWin, false, urlParam);
   },
 
   testOpenBlankReturnsNullPopupBlocker() {
@@ -335,29 +339,6 @@ testSuite({
     };
     const win = googWindow.openBlank('', {noreferrer: true}, mockWin);
     assertNull(win);
-  },
-
-  testOpenBlankEscapesSafely() {
-    // Opening a window with javascript: and then reading from its document.body
-    // is problematic because in some browsers the document.body won't have been
-    // updated yet, and in some IE versions the parent window does not have
-    // access to document.body in new blank window.
-    let navigatedUrl;
-    const /** ? */ mockWin = {
-      open: function(url) {
-        navigatedUrl = url;
-      },
-    };
-
-    // Test string determines that all necessary escaping transformations
-    // happen, and that they happen in the right order (HTML->JS->URI).
-    // - " which would be escaped by HTML escaping and JS string escaping. It
-    //     should be HTML escaped.
-    // - \ which would be escaped by JS string escaping and percent-encoded
-    //     by encodeURI(). It gets JS string escaped first (to two '\') and then
-    //     percent-encoded.
-    const win = googWindow.openBlank('"\\', {}, mockWin);
-    assertEquals('javascript:"&quot;%5C%5C"', navigatedUrl);
   },
 
   testOpenIosBlank() {
