@@ -11,54 +11,79 @@
  * goog.storage.mechanism.Mechanism.
  */
 
-goog.provide('goog.storage.mechanism.mechanismTester');
+goog.module('goog.storage.mechanism.mechanismTests');
 goog.setTestOnly();
 
-goog.require('goog.storage.mechanism.ErrorCode');
-goog.require('goog.testing.asserts');
-goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
-goog.require('goog.userAgent.product.isVersion');
+const ErrorCode = goog.require('goog.storage.mechanism.ErrorCode');
+const Mechanism = goog.require('goog.storage.mechanism.Mechanism');
+const userAgent = goog.require('goog.userAgent');
+const {assertEquals, assertNull, assertTrue} = goog.require('goog.testing.asserts');
+const {bindTests} = goog.require('goog.storage.mechanism.testhelpers');
+
+/**
+ * @param {{
+ *  getMechanism: function(): !Mechanism,
+ *  getMinimumQuota: function(): number,
+ * }} state
+ * @return {!Object}
+ */
+exports.register = function(state) {
+  return {...bindTests(
+      [
+        testSetGet,
+        testChange,
+        testRemove,
+        testSetRemoveSet,
+        testRemoveRemove,
+        testSetTwo,
+        testChangeTwo,
+        testSetRemoveThree,
+        testEmptyValue,
+        testWeirdKeys,
+      ],
+      (testCase) => {
+        testCase(state.getMechanism());
+      }),
+      ...bindTests([testQuota], (testCase) => {
+        testCase(state.getMechanism(), state.getMinimumQuota());
+      }),
+  };
+};
 
 
-
-var mechanism = null;
-var minimumQuota = 0;
-
-
-function testSetGet() {
-  if (!mechanism) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ */
+function testSetGet(mechanism) {
   mechanism.set('first', 'one');
   assertEquals('one', mechanism.get('first'));
 }
 
 
-function testChange() {
-  if (!mechanism) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ */
+function testChange(mechanism) {
   mechanism.set('first', 'one');
   mechanism.set('first', 'two');
   assertEquals('two', mechanism.get('first'));
 }
 
 
-function testRemove() {
-  if (!mechanism) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ */
+function testRemove(mechanism) {
   mechanism.set('first', 'one');
   mechanism.remove('first');
   assertNull(mechanism.get('first'));
 }
 
 
-function testSetRemoveSet() {
-  if (!mechanism) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ */
+function testSetRemoveSet(mechanism) {
   mechanism.set('first', 'one');
   mechanism.remove('first');
   mechanism.set('first', 'one');
@@ -66,20 +91,20 @@ function testSetRemoveSet() {
 }
 
 
-function testRemoveRemove() {
-  if (!mechanism) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ */
+function testRemoveRemove(mechanism) {
   mechanism.remove('first');
   mechanism.remove('first');
   assertNull(mechanism.get('first'));
 }
 
 
-function testSetTwo() {
-  if (!mechanism) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ */
+function testSetTwo(mechanism) {
   mechanism.set('first', 'one');
   mechanism.set('second', 'two');
   assertEquals('one', mechanism.get('first'));
@@ -87,10 +112,10 @@ function testSetTwo() {
 }
 
 
-function testChangeTwo() {
-  if (!mechanism) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ */
+function testChangeTwo(mechanism) {
   mechanism.set('first', 'one');
   mechanism.set('second', 'two');
   mechanism.set('second', 'three');
@@ -100,10 +125,10 @@ function testChangeTwo() {
 }
 
 
-function testSetRemoveThree() {
-  if (!mechanism) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ */
+function testSetRemoveThree(mechanism) {
   mechanism.set('first', 'one');
   mechanism.set('second', 'two');
   mechanism.set('third', 'three');
@@ -119,19 +144,19 @@ function testSetRemoveThree() {
 }
 
 
-function testEmptyValue() {
-  if (!mechanism) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ */
+function testEmptyValue(mechanism) {
   mechanism.set('third', '');
   assertEquals('', mechanism.get('third'));
 }
 
 
-function testWeirdKeys() {
-  if (!mechanism) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ */
+function testWeirdKeys(mechanism) {
   // Some weird keys. We leave out some tests for some browsers where they
   // trigger browser bugs, and where the keys are too obscure to prepare a
   // workaround.
@@ -149,14 +174,14 @@ function testWeirdKeys() {
       'ten',
       mechanism.get(
           '\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341'));
-  if (!goog.userAgent.IE) {
+  if (!userAgent.IE) {
     // IE does not properly handle nulls in HTML5 localStorage keys (IE8, IE9).
     // https://connect.microsoft.com/IE/feedback/details/667799/
     assertEquals('null', mechanism.get('\0'));
     assertEquals('double null', mechanism.get('\0\0'));
     assertEquals('null A', mechanism.get('\0A'));
   }
-  if (!goog.userAgent.GECKO) {
+  if (!userAgent.GECKO) {
     // Firefox does not properly handle the empty key (FF 3.5, 3.6, 4.0).
     // https://bugzilla.mozilla.org/show_bug.cgi?id=510849
     assertEquals('zero', mechanism.get(''));
@@ -164,16 +189,11 @@ function testWeirdKeys() {
 }
 
 
-function testQuota() {
-  if (!mechanism) {
-    return;
-  }
-  // This test might crash Safari 4, so it is disabled for this version.
-  // It works fine on Safari 3 and Safari 5.
-  if (goog.userAgent.product.SAFARI && goog.userAgent.product.isVersion(4) &&
-      !goog.userAgent.product.isVersion(5)) {
-    return;
-  }
+/**
+ * @param {!Mechanism} mechanism
+ * @param {number} minimumQuota
+ */
+function testQuota(mechanism, minimumQuota) {
   var buffer = '\u03ff';  // 2 bytes
   var savedBytes = 0;
   try {
@@ -183,7 +203,7 @@ function testQuota() {
       savedBytes = buffer.length;
     }
   } catch (ex) {
-    if (ex != goog.storage.mechanism.ErrorCode.QUOTA_EXCEEDED) {
+    if (ex != ErrorCode.QUOTA_EXCEEDED) {
       throw ex;
     }
   }

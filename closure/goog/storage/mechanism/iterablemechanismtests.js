@@ -11,20 +11,20 @@
  * goog.storage.mechanism.IterableMechanism.
  */
 
-goog.module('goog.storage.mechanism.iterableMechanismTester');
-goog.setTestOnly('goog.storage.mechanism.iterableMechanismTester');
+goog.module('goog.storage.mechanism.iterableMechanismTests');
+goog.setTestOnly('goog.storage.mechanism.iterableMechanismTests');
 
 const IterableMechanism = goog.require('goog.storage.mechanism.IterableMechanism');
 const StopIteration = goog.require('goog.iter.StopIteration');
 const googIter = goog.require('goog.iter');
-/** @suppress {extraRequire} for assertEquals and friends */
-const testingAsserts = goog.require('goog.testing.asserts');
+const {assertEquals, assertNull, assertObjectEquals, assertSameElements, fail} = goog.require('goog.testing.asserts');
+const {bindTests} = goog.require('goog.storage.mechanism.testhelpers');
 
 
 /**
  * @param {?IterableMechanism} mechanism
  */
-exports.testCount = function(mechanism) {
+function testCount(mechanism) {
   if (!mechanism) {
     fail('Mechanism undefined for testCount');
   }
@@ -35,13 +35,13 @@ exports.testCount = function(mechanism) {
   assertEquals(2, mechanism.getCount());
   mechanism.set('first', 'three');
   assertEquals(2, mechanism.getCount());
-};
+}
 
 
 /**
  * @param {?IterableMechanism} mechanism
  */
-exports.testIteratorBasics = function(mechanism) {
+function testIteratorBasics(mechanism) {
   if (!mechanism) {
     fail('Mechanism undefined for testIteratorBasics');
   }
@@ -57,13 +57,13 @@ exports.testIteratorBasics = function(mechanism) {
   const es6Iterator = mechanism[Symbol.iterator]();
   assertObjectEquals({value: 'first', done: false}, es6Iterator.next());
   assertObjectEquals({value: undefined, done: true}, es6Iterator.next());
-};
+}
 
 
 /**
  * @param {?IterableMechanism} mechanism
  */
-exports.testIteratorWithTwoValues = function(mechanism) {
+function testIteratorWithTwoValues(mechanism) {
   if (!mechanism) {
     fail('Mechanism undefined for testIteratorWithTwoValues');
   }
@@ -74,13 +74,13 @@ exports.testIteratorWithTwoValues = function(mechanism) {
   assertSameElements(['first', 'second'], Array.from(mechanism));
   assertSameElements(
       ['first', 'second'], googIter.toArray(mechanism.__iterator__(true)));
-};
+}
 
 
 /**
  * @param {?IterableMechanism} mechanism
  */
-exports.testClear = function(mechanism) {
+function testClear(mechanism) {
   if (!mechanism) {
     fail('Mechanism undefined for testClear');
   }
@@ -96,26 +96,26 @@ exports.testClear = function(mechanism) {
   assertEquals(
       StopIteration,
       assertThrows(mechanism.__iterator__(false).nextValueOrThrow));
-};
+}
 
 
 /**
  * @param {?IterableMechanism} mechanism
  */
-exports.testClearClear = function(mechanism) {
+function testClearClear(mechanism) {
   if (!mechanism) {
     fail('Mechanism undefined for testClearClear');
   }
   mechanism.clear();
   mechanism.clear();
   assertEquals(0, mechanism.getCount());
-};
+}
 
 
 /**
  * @param {?IterableMechanism} mechanism
  */
-exports.testIteratorWithWeirdKeys = function(mechanism) {
+function testIteratorWithWeirdKeys(mechanism) {
   if (!mechanism) {
     fail('Mechanism undefined for testIteratorWithWeirdKeys');
   }
@@ -132,4 +132,21 @@ exports.testIteratorWithWeirdKeys = function(mechanism) {
       googIter.toArray(mechanism.__iterator__(true)));
   mechanism.clear();
   assertEquals(0, mechanism.getCount());
+}
+
+/**
+ * @param {{
+ *    getMechanism: function(): !IterableMechanism
+ * }} state
+ * @return {!Object}
+ */
+exports.register = function(state) {
+  return bindTests(
+      [
+        testCount, testIteratorBasics, testIteratorWithTwoValues, testClear,
+        testClearClear, testIteratorWithWeirdKeys
+      ],
+      (testCase) => {
+        testCase(state.getMechanism());
+      });
 };
