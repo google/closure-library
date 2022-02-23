@@ -448,6 +448,24 @@ goog.net.WebChannel.MessageEvent.prototype.metadataKey;
 
 
 /**
+ * Metadata as HTTP status code. Typically sent before the channel is
+ * half-closed by the server. To be implemented.
+ *
+ * @type {number|undefined}
+ */
+goog.net.WebChannel.MessageEvent.prototype.statusCode;
+
+
+/**
+ * Metadata as HTTP headers. Typically sent before the channel is
+ * half-closed by the server. To be implemented.
+ *
+ * @type {!Object<string, string>|undefined}
+ */
+goog.net.WebChannel.MessageEvent.prototype.responseHeaders;
+
+
+/**
  * WebChannel level error conditions.
  *
  * Summary of error debugging and reporting in WebChannel:
@@ -699,11 +717,13 @@ goog.net.WebChannel.RuntimeProperties.prototype.ackCommit = goog.abstractMethod;
  * TODO: getInitStatusCode   (handshake)
  * TODO: getInitResponseHeaders  (handshake)
  *
- * Responses from the channel-close (abort) message are not available.
+ * Note that response headers from client-initiated close (abort) are not
+ * available due to the use of sendbeacon.
  *
- * In future when client-side half-close is supported, its response status
- * will be available via this API too.
- * @return {number} The last HTTP status code received by the channel.
+ * In future when client-initiated half-close is supported, its response status
+ * will be available via this API.
+ *
+ * @return {number} The last HTTP status code received for debugging purposes.
  */
 goog.net.WebChannel.RuntimeProperties.prototype.getLastStatusCode =
     goog.abstractMethod;
