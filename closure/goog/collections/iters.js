@@ -10,6 +10,11 @@
  * The goal is that this should be a replacement for goog.iter which uses
  * a now non-standard approach to iterables.
  *
+ * This module's API should track the TC39 proposal as closely as possible to
+ * allow for eventual deprecation and migrations.
+ * https://github.com/tc39/proposal-iterator-helpers
+ *
+ * @see go/closure-iters-labs
  * @see https://goo.gl/Rok5YQ
  */
 
