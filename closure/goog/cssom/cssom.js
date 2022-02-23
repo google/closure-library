@@ -374,7 +374,7 @@ goog.cssom.addCssText = function(cssText, opt_domHelper) {
   var cssNode = domHelper.createElement(goog.dom.TagName.STYLE);
 
   // If a CSP nonce is present, propagate it to style blocks
-  const nonce = goog.dom.safe.getStyleNonce();
+  const nonce = goog.dom.safe.getStyleNonce(goog.dom.getWindow(document));
   if (nonce) {
     cssNode.setAttribute('nonce', nonce);
   }
