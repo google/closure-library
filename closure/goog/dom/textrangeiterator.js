@@ -25,7 +25,6 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.RangeIterator');
 goog.require('goog.dom.TagName');
 goog.require('goog.iter');
-goog.require('goog.iter.StopIteration');
 
 
 
@@ -121,14 +120,7 @@ goog.dom.TextRangeIterator = function(
       this.isReversed_);
 
   if (goNext) {
-    try {
-      this.nextValueOrThrow();
-    } catch (e) {
-      if (e != goog.iter.StopIteration) {
-        throw e;
-      }
-      // Silently drop end-of-iteration error
-    }
+    this.next();
   }
 };
 goog.inherits(goog.dom.TextRangeIterator, goog.dom.RangeIterator);
@@ -238,13 +230,7 @@ goog.dom.TextRangeIterator.prototype.next = function() {
   }
 
   // Call the super function.
-  try {
-    return goog.iter.createEs6IteratorYield(
-        goog.dom.TextRangeIterator.superClass_.nextValueOrThrow.call(this));
-  } catch (ex) {
-    if (ex === goog.iter.StopIteration) return goog.iter.ES6_ITERATOR_DONE;
-    throw ex;
-  }
+  return goog.dom.TextRangeIterator.superClass_.next.call(this);
 };
 
 

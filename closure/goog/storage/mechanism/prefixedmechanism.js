@@ -75,9 +75,9 @@ goog.storage.mechanism.PrefixedMechanism.prototype.remove = function(key) {
 goog.storage.mechanism.PrefixedMechanism.prototype.__iterator__ = function(
     opt_keys) {
   'use strict';
-  var subIter = this.mechanism_.__iterator__(true);
-  var selfObj = this;
-  var newIter = new goog.iter.Iterator();
+  const subIter = this.mechanism_[Symbol.iterator]();
+  const selfObj = this;
+  const newIter = new goog.iter.Iterator();
   /**
    * @return {!IIterableResult<string>}
    * @override
@@ -85,19 +85,13 @@ goog.storage.mechanism.PrefixedMechanism.prototype.__iterator__ = function(
   newIter.next = function() {
     'use strict';
     let key;
-    try {
-      key = /** @type {string} */ (subIter.nextValueOrThrow());
-    } catch (ex) {
-      if (ex === goog.iter.StopIteration) return goog.iter.ES6_ITERATOR_DONE;
-      throw ex;
-    }
+    let it = subIter.next();
+    if (it.done) return it;
+    key = it.value;
     while (key.substr(0, selfObj.prefix_.length) != selfObj.prefix_) {
-      try {
-        key = /** @type {string} */ (subIter.nextValueOrThrow());
-      } catch (ex) {
-        if (ex === goog.iter.StopIteration) return goog.iter.ES6_ITERATOR_DONE;
-        throw ex;
-      }
+      it = subIter.next();
+      if (it.done) return it;
+      key = it.value;
     }
     return goog.iter.createEs6IteratorYield(
         /** @type {string} */ (
