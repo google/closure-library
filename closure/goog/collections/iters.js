@@ -39,13 +39,14 @@ exports.getIterator = getIterator;
  * Warning: this function will never halt if given an iterable that
  * is never exhausted.
  *
- * @param {!Iterable<VALUE>} iterable
+ * @param {!Iterator<VALUE>} iterator
  * @param {function(VALUE) : *} f
  * @template VALUE
  */
-exports.forEach = function(iterable, f) {
-  for (const elem of iterable) {
-    f(elem);
+exports.forEach = function(iterator, f) {
+  let result;
+  while (!(result = iterator.next()).done) {
+    f(result.value);
   }
 };
 

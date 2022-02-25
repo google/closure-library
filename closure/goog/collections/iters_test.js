@@ -95,7 +95,7 @@ testSuite({
       return;
     }
 
-    const range = createRangeIterable(0, 3);
+    const range = createRangeIterator(0, 3);
 
     const callback = recordFunction();
     iters.forEach(range, callback);
