@@ -189,16 +189,10 @@ testSuite({
     goog.exportSymbol('clashingname.symbolname', symbolObject);
 
     // The symbol has been added...
-    assertEquals(symbolObject, window.clashingname.symbolname);
+    assertEquals(window.clashingname.symbolname, symbolObject);
 
-    // ...and has replaced the div (in non-IE browsers, anyway)
-    if (!userAgent.IE) {
-      assertNotEquals(divElement, window.clashingname);
-    }
-
-    // Ensure that the namespace remains even if the div disappears
-    divElement.id = 'not-clashing-anymore';
-    assertEquals(symbolObject, window.clashingname.symbolname);
+    // ...and has not affected the original div
+    assertEquals(window.clashingname, divElement);
   },
 
   /** @suppress {undefinedVars, checkTypes} ns is created indirectly */
