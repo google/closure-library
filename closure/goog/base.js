@@ -137,7 +137,7 @@ goog.exportPath_ = function(name, object, overwriteImplicit, objectToExportTo) {
         // implicitly defined namespace, so as to not clobber previously
         // defined child namespaces.
         for (var prop in object) {
-          if (object.hasOwnProperty(prop)) {
+          if (Object.prototype.hasOwnProperty.call(object, prop)) {
             cur[part][prop] = object[prop];
           }
         }
@@ -147,8 +147,16 @@ goog.exportPath_ = function(name, object, overwriteImplicit, objectToExportTo) {
         // the namespace.
         cur[part] = object;
       }
-    } else if (cur[part] && cur[part] !== Object.prototype[part]) {
-      cur = cur[part];
+    } else if (Object.prototype.hasOwnProperty.call(cur, part) && cur[part]) {
+      // NOTE: This will shadow elements implicitly accessible from window
+      // via their ID.  Accessing elements this way is problematic and we do
+      // not support this use case.  Call `document.getElementById` instead.
+      // NOTE: The reassignment may seem pointless, since we already verified
+      // hasOwnProperty.  Unfortunately, IE11 actually treats implicit element
+      // properties as "own" properties: they return `true` for hasOwnProperty
+      // but will still disappear when the element is removed, unless we do this
+      // explicit reassignment.
+      cur = cur[part] = cur[part];
     } else {
       cur = cur[part] = {};
     }
