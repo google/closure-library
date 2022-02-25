@@ -300,4 +300,9 @@ testSuite({
 
     assertArrayEquals([...array1, ...array2], [...concatIter]);
   },
+
+  testToArray() {
+    assertArrayEquals(
+        [0, 1, 2, 3, 4], iters.toArray(createRangeIterator(0, 5)));
+  }
 });

@@ -43,13 +43,13 @@ exports.getIterator = getIterator;
  * @param {function(VALUE) : *} f
  * @template VALUE
  */
-exports.forEach = function(iterator, f) {
+function forEach(iterator, f) {
   let result;
   while (!(result = iterator.next()).done) {
     f(result.value);
   }
-};
-
+}
+exports.forEach = forEach;
 
 /**
  * An Iterable that wraps a child iterable, and maps every element of the child
@@ -217,4 +217,16 @@ class ConcatIterator {
  */
 exports.concat = function(...iterables) {
   return new ConcatIterator(iterables.map(getIterator));
+};
+
+/**
+ * Creates an array containing the values from the given iterator.
+ * @param {!Iterator<VALUE>} iterator
+ * @return {!Array<VALUE>}
+ * @template VALUE
+ */
+exports.toArray = function(iterator) {
+  const arr = [];
+  forEach(iterator, e => arr.push(e));
+  return arr;
 };
