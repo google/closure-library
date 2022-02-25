@@ -34,7 +34,6 @@ closure_js_library(
     srcs = ["environment.js"],
     lenient = True,
     deps = [
-        "//closure/goog/array",
         "//closure/goog/asserts",
         "//closure/goog/debug:console",
         "//closure/goog/promise:thenable",

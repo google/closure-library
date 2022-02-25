@@ -65,13 +65,17 @@ class Environment {
    * @return {!IThenable<*>|undefined} An optional Promise which must be
    *     resolved before the test is executed.
    */
-  setUpPage() {}
+  setUpPage() {
+    if (this.hasMockClock()) {
+      this.mockClock.install();
+    }
+  }
 
   /** Runs immediately after the tearDownPage phase of JsUnit tests. */
   tearDownPage() {
     // If we created the mockClock, we'll also dispose it.
     if (this.hasMockClock()) {
-      this.mockClock.dispose();
+      this.mockClock.uninstall();
     }
   }
 
