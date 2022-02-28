@@ -281,7 +281,10 @@ goog.net.FetchXmlHttp.prototype.abort = function() {
   this.status = 0;
 
   if (!!this.currentReader_) {
-    this.currentReader_.cancel('Request was aborted.');
+    this.currentReader_.cancel('Request was aborted.')
+        .catch(
+            e => goog.log.warning(
+                this.logger_, 'Fetch reader cancellation error.', e));
   }
 
   if (((this.readyState >= goog.net.FetchXmlHttp.RequestState.OPENED) &&
