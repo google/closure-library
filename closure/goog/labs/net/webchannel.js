@@ -713,17 +713,18 @@ goog.net.WebChannel.RuntimeProperties.prototype.ackCommit = goog.abstractMethod;
 /**
  * Transport-metadata support.
  *
- * TODO: getLastResponseHeaders
+ * TODO: getLastResponseHeaders (only for non-200 status)
  * TODO: getInitStatusCode   (handshake)
  * TODO: getInitResponseHeaders  (handshake)
  *
  * Note that response headers from client-initiated close (abort) are not
- * available due to the use of sendbeacon.
+ * available.
  *
  * In future when client-initiated half-close is supported, its response status
  * will be available via this API.
  *
- * @return {number} The last HTTP status code received for debugging purposes.
+ * @return {number} The non-200 HTTP status code received that causes the
+ * channel to be aborted.
  */
 goog.net.WebChannel.RuntimeProperties.prototype.getLastStatusCode =
     goog.abstractMethod;
