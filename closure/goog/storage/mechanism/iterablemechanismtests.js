@@ -15,7 +15,6 @@ goog.module('goog.storage.mechanism.iterableMechanismTests');
 goog.setTestOnly('goog.storage.mechanism.iterableMechanismTests');
 
 const IterableMechanism = goog.require('goog.storage.mechanism.IterableMechanism');
-const StopIteration = goog.require('goog.iter.StopIteration');
 const googIter = goog.require('goog.iter');
 const {assertEquals, assertNull, assertObjectEquals, assertSameElements, fail} = goog.require('goog.testing.asserts');
 const {bindTests} = goog.require('goog.storage.mechanism.testhelpers');
@@ -46,16 +45,13 @@ function testIteratorBasics(mechanism) {
     fail('Mechanism undefined for testIteratorBasics');
   }
   mechanism.set('first', 'one');
-  assertEquals('first', mechanism.__iterator__(true).nextValueOrThrow());
-  assertEquals('one', mechanism.__iterator__(false).nextValueOrThrow());
   // ES6 Iteration should only return keys
   assertSameElements(['first'], Array.from(mechanism));
-  const iterator = mechanism.__iterator__();
-  assertEquals('one', iterator.nextValueOrThrow());
-  assertEquals(StopIteration, assertThrows(iterator.nextValueOrThrow));
 
   const es6Iterator = mechanism[Symbol.iterator]();
-  assertObjectEquals({value: 'first', done: false}, es6Iterator.next());
+  const it = es6Iterator.next();
+  assertObjectEquals({value: 'first', done: false}, it);
+  assertEquals(mechanism.get(it.value), 'one');
   assertObjectEquals({value: undefined, done: true}, es6Iterator.next());
 }
 
@@ -90,12 +86,12 @@ function testClear(mechanism) {
   assertNull(mechanism.get('first'));
   assertNull(mechanism.get('second'));
   assertEquals(0, mechanism.getCount());
-  assertEquals(
-      StopIteration,
-      assertThrows(mechanism.__iterator__(true).nextValueOrThrow));
-  assertEquals(
-      StopIteration,
-      assertThrows(mechanism.__iterator__(false).nextValueOrThrow));
+  const keyIt = mechanism[Symbol.iterator]().next();
+  assertTrue(keyIt.done);
+  assertEquals(keyIt.value, undefined);
+  const valIt = mechanism[Symbol.iterator]().next();
+  assertTrue(valIt.done);
+  assertEquals(valIt.value, undefined);
 }
 
 

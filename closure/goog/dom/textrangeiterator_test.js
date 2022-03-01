@@ -7,7 +7,6 @@
 goog.module('goog.dom.TextRangeIteratorTest');
 goog.setTestOnly();
 
-const StopIteration = goog.require('goog.iter.StopIteration');
 const TagName = goog.require('goog.dom.TagName');
 const TextRangeIterator = goog.require('goog.dom.TextRangeIterator');
 const dom = goog.require('goog.dom');
@@ -24,26 +23,12 @@ testSuite({
   },
 
   testBasic() {
-    testingDom.assertNodesMatch(
-        new TextRangeIterator(test, 0, test, 2),
-        ['#a1', 'T', '#b1', 'e', '#b1', 'xt', '#a1', '#span1', '#span1', '#p1'],
-        false);
-  },
-
-  testBasicEs6() {
     testingDom.assertNodesMatch(new TextRangeIterator(test, 0, test, 2), [
       '#a1', 'T', '#b1', 'e', '#b1', 'xt', '#a1', '#span1', '#span1', '#p1'
     ]);
   },
 
   testAdjustStart() {
-    const iterator = new TextRangeIterator(test, 0, test, 2);
-    iterator.setStartNode(dom.getElement('span1'));
-
-    testingDom.assertNodesMatch(iterator, ['#span1', '#span1', '#p1'], false);
-  },
-
-  testAdjustStartEs6() {
     const iterator = new TextRangeIterator(test, 0, test, 2);
     iterator.setStartNode(dom.getElement('span1'));
 
@@ -55,60 +40,10 @@ testSuite({
     iterator.setEndNode(dom.getElement('span1'));
 
     testingDom.assertNodesMatch(
-        iterator, ['#a1', 'T', '#b1', 'e', '#b1', 'xt', '#a1', '#span1'],
-        false);
-  },
-
-  testAdjustEndEs6() {
-    const iterator = new TextRangeIterator(test, 0, test, 2);
-    iterator.setEndNode(dom.getElement('span1'));
-
-    testingDom.assertNodesMatch(
         iterator, ['#a1', 'T', '#b1', 'e', '#b1', 'xt', '#a1', '#span1']);
   },
 
   testOffsets() {
-    const iterator =
-        new TextRangeIterator(test2.firstChild, 1, test2.lastChild, 2);
-
-    // foo
-    let node = iterator.nextValueOrThrow();
-    assertEquals(
-        'Should have start offset at iteration step 1', 1,
-        iterator.getStartTextOffset());
-    assertEquals(
-        'Should not have end offset at iteration step 1', node.nodeValue.length,
-        iterator.getEndTextOffset());
-
-    // <br>
-    node = iterator.nextValueOrThrow();
-    assertEquals(
-        'Should not have start offset at iteration step 2', -1,
-        iterator.getStartTextOffset());
-    assertEquals(
-        'Should not have end offset at iteration step 2', -1,
-        iterator.getEndTextOffset());
-
-    // </br>
-    node = iterator.nextValueOrThrow();
-    assertEquals(
-        'Should not have start offset at iteration step 3', -1,
-        iterator.getStartTextOffset());
-    assertEquals(
-        'Should not have end offset at iteration step 3', -1,
-        iterator.getEndTextOffset());
-
-    // bar
-    node = iterator.nextValueOrThrow();
-    assertEquals(
-        'Should not have start offset at iteration step 4', 0,
-        iterator.getStartTextOffset());
-    assertEquals(
-        'Should have end offset at iteration step 4', 2,
-        iterator.getEndTextOffset());
-  },
-
-  testOffsetsEs6() {
     const iterator =
         new TextRangeIterator(test2.firstChild, 1, test2.lastChild, 2);
 
@@ -153,27 +88,12 @@ testSuite({
     const iterator =
         new TextRangeIterator(test2.firstChild, 1, test2.firstChild, 2);
 
-    iterator.nextValueOrThrow();
-    assertEquals('Should have start offset', 1, iterator.getStartTextOffset());
-    assertEquals('Should have end offset', 2, iterator.getEndTextOffset());
-  },
-
-  testSingleNodeOffsetsEs6() {
-    const iterator =
-        new TextRangeIterator(test2.firstChild, 1, test2.firstChild, 2);
-
     iterator.next();
     assertEquals('Should have start offset', 1, iterator.getStartTextOffset());
     assertEquals('Should have end offset', 2, iterator.getEndTextOffset());
   },
 
   testEndNodeOffsetAtEnd() {
-    const iterator = new TextRangeIterator(
-        dom.getElement('b1').firstChild, 0, dom.getElement('b1'), 1);
-    testingDom.assertNodesMatch(iterator, ['e', '#b1'], false);
-  },
-
-  testEndNodeOffsetAtEndEs6() {
     const iterator = new TextRangeIterator(
         dom.getElement('b1').firstChild, 0, dom.getElement('b1'), 1);
     testingDom.assertNodesMatch(iterator, ['e', '#b1']);
@@ -184,27 +104,6 @@ testSuite({
    * checking
    */
   testSkipTagDoesNotSkipEnd() {
-    // Iterate over 'Tex'.
-    const iterator = new TextRangeIterator(
-        test.firstChild.firstChild, 0, test.firstChild.lastChild, 1);
-
-    let node = iterator.nextValueOrThrow();
-    assertEquals('T', node.nodeValue);
-
-    node = iterator.nextValueOrThrow();
-    assertEquals(String(TagName.B), node.tagName);
-
-    iterator.skipTag();
-
-    node = iterator.nextValueOrThrow();
-    assertEquals('xt', node.nodeValue);
-  },
-
-  /**
-   * @suppress {strictMissingProperties} suppression added to enable type
-   * checking
-   */
-  testSkipTagDoesNotSkipEndEs6() {
     // Iterate over 'Tex'.
     const iterator = new TextRangeIterator(
         test.firstChild.firstChild, 0, test.firstChild.lastChild, 1);
@@ -232,30 +131,6 @@ testSuite({
         test.firstChild.firstChild, 0,
         dom.getElementsByTagName(TagName.B, test)[0].firstChild, 1);
 
-    let node = iterator.nextValueOrThrow();
-    assertEquals('T', node.nodeValue);
-
-    node = iterator.nextValueOrThrow();
-    assertEquals(String(TagName.B), node.tagName);
-
-    iterator.skipTag();
-    const ex = assertThrows('Should stop iteration when skipping B', () => {
-      iterator.nextValueOrThrow();
-    });
-    assertEquals(StopIteration, ex);
-  },
-
-  /**
-   * @suppress {strictMissingProperties} suppression added to enable type
-   * checking
-   */
-  testSkipTagSkipsEndEs6() {
-    // Iterate over 'Te'. (ES6)
-    /** @suppress {checkTypes} suppression added to enable type checking */
-    const iterator = new TextRangeIterator(
-        test.firstChild.firstChild, 0,
-        dom.getElementsByTagName(TagName.B, test)[0].firstChild, 1);
-
     let node = iterator.next().value;
     assertEquals('T', node.nodeValue);
 
@@ -270,26 +145,6 @@ testSuite({
   },
 
   testReverseIteration() {
-    testingDom.assertNodesMatch(
-        new TextRangeIterator(test, 0, test, 2, true),
-        [
-          '#p1',
-          'Text',
-          '#p1',
-          '#span1',
-          '#span1',
-          '#a1',
-          'xt',
-          '#b1',
-          'e',
-          '#b1',
-          'T',
-          '#a1',
-        ],
-        false);
-  },
-
-  testReverseIterationEs6() {
     testingDom.assertNodesMatch(new TextRangeIterator(test, 0, test, 2, true), [
       '#p1',
       'Text',
@@ -307,47 +162,6 @@ testSuite({
   },
 
   testReverseIterationWithOffsets() {
-    const iterator =
-        new TextRangeIterator(test2.firstChild, 1, test2.lastChild, 2, true);
-
-    // bar
-    let node = iterator.nextValueOrThrow();
-    assertEquals(
-        'Should have start offset at iteration step 1', 0,
-        iterator.getStartTextOffset());
-    assertEquals(
-        'Should not have end offset at iteration step 1', 2,
-        iterator.getEndTextOffset());
-
-    // </br>
-    node = iterator.nextValueOrThrow();
-    assertEquals(
-        'Should not have start offset at iteration step 2', -1,
-        iterator.getStartTextOffset());
-    assertEquals(
-        'Should not have end offset at iteration step 2', -1,
-        iterator.getEndTextOffset());
-
-    // <br>
-    node = iterator.nextValueOrThrow();
-    assertEquals(
-        'Should not have start offset at iteration step 3', -1,
-        iterator.getStartTextOffset());
-    assertEquals(
-        'Should not have end offset at iteration step 3', -1,
-        iterator.getEndTextOffset());
-
-    // foo
-    node = iterator.nextValueOrThrow();
-    assertEquals(
-        'Should not have start offset at iteration step 4', 1,
-        iterator.getStartTextOffset());
-    assertEquals(
-        'Should have end offset at iteration step 4', node.nodeValue.length,
-        iterator.getEndTextOffset());
-  },
-
-  testReverseIterationWithOffsetsEs6() {
     const iterator =
         new TextRangeIterator(test2.firstChild, 1, test2.lastChild, 2, true);
 
