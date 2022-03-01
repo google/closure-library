@@ -1024,6 +1024,38 @@ testSuite({
     assertThrows(() => mm.load('modA'));
   },
 
+  testAddExtraEdge_loadedFromModuleLoadsToModule() {
+    const mm = getModuleManager({'modA': [], 'modB': []});
+
+    const loaderCalls = [];
+    mm.setLoader(createModuleLoaderWithExtraEdgesSupport(loaderCalls));
+
+    // Set modA as loaded.
+    mm.beforeLoadModuleCode('modA');
+    mm.setLoaded('modA');
+
+    mm.addExtraEdge('modA', 'modB');
+    assertEquals(1, loaderCalls.length);
+    assertObjectEquals(['modB'], loaderCalls[0].ids);
+  },
+
+  testSetLoaded_extraEdgeFromAlreadyRequestedModuleLoadsMissingModule() {
+    const mm = getModuleManager({'modA': [], 'modB': [], 'modC': []});
+
+    const loaderCalls = [];
+    mm.setLoader(createModuleLoaderWithExtraEdgesSupport(loaderCalls));
+
+    mm.beforeLoadModuleCode('modA');
+    mm.addExtraEdge('modB', 'modC');
+    mm.setLoaded('modA');
+
+    mm.beforeLoadModuleCode('modB');
+    mm.setLoaded('modB');
+
+    assertEquals(1, loaderCalls.length);
+    assertObjectEquals(['modC'], loaderCalls[0].ids);
+  },
+
   testRemoveExtraEdge() {
     const mm =
         getModuleManager({'modA': [], 'modB': [], 'modC': [], 'modD': []});
