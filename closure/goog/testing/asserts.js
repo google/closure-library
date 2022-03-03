@@ -208,7 +208,7 @@ var _validateArguments = function(expectedNumberOfNonCommentArgs, args) {
  * @return {?} goog.testing.TestCase or null
  * We suppress the lint error and we explicitly do not goog.require()
  * goog.testing.TestCase to avoid a build time dependency cycle.
- * @suppress {missingRequire|undefinedNames|undefinedVars|missingProperties}
+ * @suppress {missingRequire|undefinedVars|missingProperties}
  * @private
  */
 var _getCurrentTestCase = function() {
