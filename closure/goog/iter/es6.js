@@ -57,46 +57,19 @@ class ShimIterable {
     if (iter instanceof ShimIterableImpl || iter instanceof ShimGoogIterator ||
         iter instanceof ShimEs6Iterator) {
       return iter;
-    } else if (typeof iter.nextValueOrThrow == 'function') {
+    } else if (typeof iter.next == 'function') {
       return new ShimIterableImpl(
-          () => wrapGoog(/** @type {!Iterator|!GoogIterator} */ (iter)));
+          () => /** @type {!Iterator|!GoogIterator} */ (iter));
     } else if (typeof iter[Symbol.iterator] == 'function') {
       return new ShimIterableImpl(() => iter[Symbol.iterator]());
     } else if (typeof iter.__iterator__ == 'function') {
       return new ShimIterableImpl(
-          () => wrapGoog(
-              /** @type {{__iterator__:function(this:?, boolean=)}} */ (iter)
-                  .__iterator__()));
+          () => /** @type {{__iterator__:function(this:?, boolean=)}} */ (iter)
+                    .__iterator__());
     }
     throw new Error('Not an iterator or iterable.');
   }
 }
-
-
-/**
- * @param {!GoogIterator<VALUE>|!Iterator<VALUE>} iter
- * @return {!Iterator<VALUE>}
- * @template VALUE
- */
-const wrapGoog = (iter) => {
-  if (!(iter instanceof GoogIterator)) return iter;
-  let done = false;
-  return /** @type {?} */ ({
-    next() {
-      let value;
-      while (!done) {
-        try {
-          value = /** @type {!GoogIterator<VALUE>} */ (iter).nextValueOrThrow();
-          break;
-        } catch (err) {
-          if (err !== StopIteration) throw err;
-          done = true;
-        }
-      }
-      return {value, done};
-    },
-  });
-};
 
 
 /**
