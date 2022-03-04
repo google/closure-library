@@ -102,7 +102,6 @@ closure_js_library(
     name = "cookies",
     srcs = [
         "cookies.js",
-        "cookies_deprecated.js",
     ],
     lenient = True,
     deps = ["//closure/goog/string"],
