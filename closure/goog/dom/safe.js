@@ -610,8 +610,8 @@ goog.dom.safe.setObjectData = function(object, url) {
 goog.dom.safe.setScriptSrc = function(script, url) {
   'use strict';
   goog.dom.asserts.assertIsHTMLScriptElement(script);
-  script.src = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
   goog.dom.safe.setNonceForScriptElement_(script);
+  script.src = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
 };
 
 
@@ -633,8 +633,8 @@ goog.dom.safe.setScriptSrc = function(script, url) {
 goog.dom.safe.setScriptContent = function(script, content) {
   'use strict';
   goog.dom.asserts.assertIsHTMLScriptElement(script);
-  script.textContent = goog.html.SafeScript.unwrapTrustedScript(content);
   goog.dom.safe.setNonceForScriptElement_(script);
+  script.textContent = goog.html.SafeScript.unwrapTrustedScript(content);
 };
 
 

@@ -639,13 +639,4 @@ testSuite({
     const result = forms.getValue(el);
     assertEquals('reset', result);
   },
-
-  /**
-     @suppress {visibility,checkTypes} suppression added to enable type
-     checking
-   */
-  testGetFormDataHelperAndNonInputElements() {
-    const el = dom.getElement('testform4');
-    forms.getFormDataHelper_(el, {}, goog.nullFunction);
-  },
 });
