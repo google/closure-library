@@ -449,7 +449,7 @@ goog.net.WebChannel.MessageEvent.prototype.metadataKey;
 
 /**
  * Metadata as HTTP status code. Typically sent before the channel is
- * half-closed by the server. To be implemented.
+ * half-closed by the server.
  *
  * @type {number|undefined}
  */
@@ -458,7 +458,7 @@ goog.net.WebChannel.MessageEvent.prototype.statusCode;
 
 /**
  * Metadata as HTTP headers. Typically sent before the channel is
- * half-closed by the server. To be implemented.
+ * half-closed by the server.
  *
  * @type {!Object<string, string>|undefined}
  */

@@ -2655,7 +2655,7 @@ WebChannelBase.Handler.prototype.channelOpened = function(channel) {};
  * New input is available for the application to process.
  *
  * @param {WebChannelBase} channel The channel.
- * @param {Array<?>} array The data array.
+ * @param {!Array<?>|!Object} array The data array.
  */
 WebChannelBase.Handler.prototype.channelHandleArray = function(
     channel, array) {};

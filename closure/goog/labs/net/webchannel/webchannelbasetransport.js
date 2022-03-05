@@ -323,6 +323,14 @@ WebChannelBaseTransport.Channel.MessageEvent = function(array) {
   'use strict';
   WebChannelBaseTransport.Channel.MessageEvent.base(this, 'constructor');
 
+  // Metadata as HTTP headers and status code (always come in a pair).
+  if ('__headers__' in array) {
+    this.responseHeaders = array['__headers__'];
+    this.statusCode = array['__status__'];
+    delete array['__headers__'];
+    delete array['__status__'];
+  }
+
   // single-metadata only
   const metadata = array['__sm__'];
   if (metadata) {
