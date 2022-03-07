@@ -451,6 +451,32 @@ testSuite({
     assertTrue(eventFired);
   },
 
+  /**
+   * @suppress {checkTypes} Allow sending a string as data, although not
+   * supported by the method API, since it is done by clients.
+   */
+  testChannelMessage_stringDataSupported() {
+    const webChannelTransport = new WebChannelBaseTransport();
+    webChannel = webChannelTransport.createWebChannel(channelUrl);
+
+    let eventFired = false;
+    const data = 'foo';
+    events.listen(webChannel, WebChannel.EventType.MESSAGE, (e) => {
+      eventFired = true;
+      assertEquals(data, e.data);
+    });
+
+    webChannel.open();
+    assertFalse(eventFired);
+
+    /** @suppress {strictMissingProperties} Accessing private property. */
+    const channel = webChannel.channel_;
+    assertNotNull(channel);
+
+    simulateMessageEvent(channel, data);
+    assertTrue(eventFired);
+  },
+
   testChannelMessage_WithMetadata() {
     const webChannelTransport = new WebChannelBaseTransport();
     webChannel = webChannelTransport.createWebChannel(channelUrl);

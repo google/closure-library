@@ -324,7 +324,7 @@ WebChannelBaseTransport.Channel.MessageEvent = function(array) {
   WebChannelBaseTransport.Channel.MessageEvent.base(this, 'constructor');
 
   // Metadata as HTTP headers and status code (always come in a pair).
-  if ('__headers__' in array) {
+  if (array['__headers__']) {
     this.responseHeaders = array['__headers__'];
     this.statusCode = array['__status__'];
     delete array['__headers__'];
