@@ -171,10 +171,8 @@ goog.tweak.TweakUi.createCollapsible = function(opt_domHelper) {
 
     // The following strings are for internal debugging only.  No translation
     // necessary.  Do NOT wrap goog.getMsg() around these strings.
-    var showLink =
-        dh.createDom(goog.dom.TagName.A, {href: 'javascript:;'}, 'Show Tweaks');
-    var hideLink =
-        dh.createDom(goog.dom.TagName.A, {href: 'javascript:;'}, 'Hide Tweaks');
+    var showLink = dh.createDom(goog.dom.TagName.A, {href: '#'}, 'Show Tweaks');
+    var hideLink = dh.createDom(goog.dom.TagName.A, {href: '#'}, 'Hide Tweaks');
     var ret = dh.createDom(goog.dom.TagName.DIV, null, showLink);
 
     var lazyCreate = function() {
@@ -494,10 +492,8 @@ goog.tweak.EntriesPanel.prototype.render = function(opt_endElement) {
   var ret = dh.createDom(goog.dom.TagName.DIV);
 
   var showAllDescriptionsLink = dh.createDom(
-      goog.dom.TagName.A, {
-        href: 'javascript:;',
-        onclick: goog.bind(this.toggleAllDescriptions, this)
-      },
+      goog.dom.TagName.A,
+      {href: '#', onclick: goog.bind(this.toggleAllDescriptions, this)},
       'Toggle all Descriptions');
   ret.appendChild(showAllDescriptionsLink);
 
@@ -734,9 +730,9 @@ goog.tweak.EntriesPanel.prototype.createSubPanelDom_ = function(
   'use strict';
   var dh = this.domHelper_;
   var toggleLink =
-      dh.createDom(goog.dom.TagName.A, {href: 'javascript:;'}, label + ' \xBB');
+      dh.createDom(goog.dom.TagName.A, {href: '#'}, label + ' \xBB');
   var toggleLink2 =
-      dh.createDom(goog.dom.TagName.A, {href: 'javascript:;'}, '\xAB ' + label);
+      dh.createDom(goog.dom.TagName.A, {href: '#'}, '\xAB ' + label);
   toggleLink2.style.marginRight = '10px';
 
   var innerUi = new goog.tweak.EntriesPanel(childEntries, dh);
