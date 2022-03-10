@@ -125,7 +125,6 @@ closure_js_library(
         "//closure/goog/asserts",
         "//closure/goog/date",
         "//closure/goog/date:utcdatetime",
-        "//closure/goog/labs/useragent:browser",
         "//closure/goog/string",
     ],
 )
@@ -184,6 +183,34 @@ closure_js_library(
         "//closure/goog/asserts",
         "//closure/goog/structs:inversionmap",
     ],
+)
+
+closure_js_library(
+    name = "listformat",
+    srcs = ["listformat.js"],
+    lenient = True,
+    deps = [
+        ":listsymbols",
+        ":listsymbolsext",
+        ":localefeature",
+        "//closure/goog/asserts",
+        "//closure/goog/string",
+    ],
+)
+
+closure_js_library(
+    name = "listsymbols",
+    srcs = [
+        "listsymbols.js",
+    ],
+    lenient = True,
+)
+
+closure_js_library(
+    name = "listsymbolsext",
+    srcs = ["listsymbolsext.js"],
+    lenient = True,
+    deps = [":listsymbols"],
 )
 
 closure_js_library(
