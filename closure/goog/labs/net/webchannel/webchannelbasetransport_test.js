@@ -488,7 +488,7 @@ testSuite({
     events.listen(webChannel, WebChannel.EventType.MESSAGE, (e) => {
       eventFired = true;
       assertObjectEquals({}, e.data);
-      assertObjectEquals(headers, e.responseHeaders);
+      assertObjectEquals(headers, e.headers);
       assertEquals(statusCode, e.statusCode);
     });
 

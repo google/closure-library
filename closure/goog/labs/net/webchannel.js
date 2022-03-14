@@ -462,7 +462,7 @@ goog.net.WebChannel.MessageEvent.prototype.statusCode;
  *
  * @type {!Object<string, string>|undefined}
  */
-goog.net.WebChannel.MessageEvent.prototype.responseHeaders;
+goog.net.WebChannel.MessageEvent.prototype.headers;
 
 
 /**
