@@ -11,7 +11,6 @@
 
 goog.provide('goog.module.ModuleManager');
 goog.provide('goog.module.ModuleManager.CallbackType');
-goog.provide('goog.module.ModuleManager.FailureType');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -217,7 +216,7 @@ goog.inherits(goog.module.ModuleManager, goog.loader.AbstractModuleManager);
  * Error used to indicate a module has failed.
  *
  * @param {string} moduleID The id of the module that didn't load.
- * @param {?goog.loader.AbstractModuleManager.FailureType} failureType
+ * @param {?goog.module.ModuleLoadFailureType} failureType
  * @constructor
  * @extends {goog.debug.Error}
  * @final
@@ -230,7 +229,7 @@ goog.module.ModuleManager.ModuleFailureError = function(moduleID, failureType) {
 
   goog.module.ModuleManager.ModuleFailureError.base(this, 'constructor', msg);
 
-  /** @type {?goog.loader.AbstractModuleManager.FailureType} */
+  /** @type {?goog.module.ModuleLoadFailureType} */
   this.failureType = failureType;
 };
 goog.inherits(goog.module.ModuleManager.ModuleFailureError, goog.debug.Error);
@@ -242,13 +241,6 @@ goog.inherits(goog.module.ModuleManager.ModuleFailureError, goog.debug.Error);
  */
 goog.module.ModuleManager.CallbackType =
     goog.loader.AbstractModuleManager.CallbackType;
-
-
-/**
- * The possible reasons for a module load failure callback being fired.
- * @enum {number}
- */
-goog.module.ModuleManager.FailureType = goog.module.ModuleLoadFailureType;
 
 
 /**
@@ -873,7 +865,7 @@ goog.module.ModuleManager.prototype.maybeFinishBaseLoad_ = function() {
         this.baseModuleInfo_.onLoad(goog.bind(this.getModuleContext, this));
     if (error) {
       this.dispatchModuleLoadFailed_(
-          goog.loader.AbstractModuleManager.FailureType.INIT_ERROR);
+          goog.module.ModuleLoadFailureType.INIT_ERROR);
     }
 
     this.dispatchActiveIdleChangeIfNeeded_();
@@ -921,7 +913,7 @@ goog.module.ModuleManager.prototype.setLoaded = function() {
       this.moduleInfoMap[id].onLoad(goog.bind(this.getModuleContext, this));
   if (error) {
     this.dispatchModuleLoadFailed_(
-        goog.loader.AbstractModuleManager.FailureType.INIT_ERROR);
+        goog.module.ModuleLoadFailureType.INIT_ERROR);
   }
 
   // Remove the module id from the user initiated set if it existed there.
@@ -1154,20 +1146,20 @@ goog.module.ModuleManager.prototype.handleLoadError_ = function(
     // from another window.
     goog.log.info(this.logger_, 'Module loading unauthorized');
     this.dispatchModuleLoadFailed_(
-        goog.loader.AbstractModuleManager.FailureType.UNAUTHORIZED);
+        goog.module.ModuleLoadFailureType.UNAUTHORIZED);
     // Drop any additional module requests.
     this.requestedModuleIdsQueue_.length = 0;
   } else if (status == 410) {
     // The requested module js is old and not available.
     this.requeueBatchOrDispatchFailure_(
-        goog.loader.AbstractModuleManager.FailureType.OLD_CODE_GONE);
+        goog.module.ModuleLoadFailureType.OLD_CODE_GONE);
     this.loadNextModules_();
   } else if (this.consecutiveFailures_ >= 3) {
     goog.log.info(
         this.logger_,
         'Aborting after failure to load: ' + this.loadingModuleIds_);
     this.requeueBatchOrDispatchFailure_(
-        goog.loader.AbstractModuleManager.FailureType.CONSECUTIVE_FAILURES);
+        goog.module.ModuleLoadFailureType.CONSECUTIVE_FAILURES);
     this.loadNextModules_();
   } else {
     goog.log.info(
@@ -1189,7 +1181,7 @@ goog.module.ModuleManager.prototype.handleLoadTimeout_ = function() {
   goog.log.info(
       this.logger_, 'Aborting after timeout: ' + this.loadingModuleIds_);
   this.requeueBatchOrDispatchFailure_(
-      goog.loader.AbstractModuleManager.FailureType.TIMEOUT);
+      goog.module.ModuleLoadFailureType.TIMEOUT);
   this.loadNextModules_();
 };
 
@@ -1199,7 +1191,7 @@ goog.module.ModuleManager.prototype.handleLoadTimeout_ = function() {
  * (i.e. modules that were not included as dependencies) as separate loads or
  * if there was only one requested module, fails that module with the received
  * cause.
- * @param {!goog.loader.AbstractModuleManager.FailureType} cause The reason for
+ * @param {!goog.module.ModuleLoadFailureType} cause The reason for
  *     the failure.
  * @private
  */
@@ -1224,7 +1216,7 @@ goog.module.ModuleManager.prototype.requeueBatchOrDispatchFailure_ = function(
 
 /**
  * Handles when a module load failed.
- * @param {!goog.loader.AbstractModuleManager.FailureType} cause The reason for
+ * @param {!goog.module.ModuleLoadFailureType} cause The reason for
  *     the failure.
  * @private
  */
