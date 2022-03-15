@@ -256,15 +256,15 @@ goog.LOCALE = goog.define('goog.LOCALE', 'en');  // default to en
 
 
 /**
- * This method is intended to be used for bookkeeping purposes.  We would
- * like to distinguish uses of goog.LOCALE used for code stripping purposes
- * and uses of goog.LOCALE for other uses (such as URL parameters).
+ * Same as `goog.LOCALE`, which should be used instead.
  *
- * This allows us to ban direct uses of goog.LOCALE and to ensure that all
- * code has been transformed to our new localization build scheme.
+ * Using this method just makes it harder for closure-compiler to optimize
+ * your locale-specific code, since it has to take the extra step of inlining
+ * this function to discover and remove code that is not used for the target
+ * locale.
  *
  * @return {string}
- *
+ * @deprecated use `goog.LOCALE`
  */
 goog.getLocale = function() {
   return goog.LOCALE;
