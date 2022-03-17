@@ -157,7 +157,7 @@ class ListFormat {
   /**
    * Replaces the {0} and {1} placeholders in a pattern with the first and
    * the second parameter respectively, and returns the result.
-   * It is a helper function for goog.labs.i18n.ListFormat.format.
+   * It is a helper function for goog.i18n.listFormat.format.
    *
    * @param {string} pattern used for formatting.
    * @param {string} first object to add to list.
