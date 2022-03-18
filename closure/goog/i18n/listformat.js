@@ -12,6 +12,7 @@
  */
 
 goog.module('goog.i18n.listFormat');
+// goog.module.declareLegacyNamespace();
 
 const ListSymbols = goog.require('goog.i18n.ListFormatSymbols');
 const LocaleFeature = goog.require('goog.i18n.LocaleFeature');
