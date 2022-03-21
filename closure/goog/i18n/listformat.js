@@ -12,7 +12,7 @@
  */
 
 goog.module('goog.i18n.listFormat');
-// goog.module.declareLegacyNamespace();
+goog.module.declareLegacyNamespace();
 
 const ListSymbols = goog.require('goog.i18n.ListFormatSymbols');
 const LocaleFeature = goog.require('goog.i18n.LocaleFeature');
@@ -21,10 +21,11 @@ const LocaleFeature = goog.require('goog.i18n.LocaleFeature');
  * Choices for options bag 'type' in ListFormat's constructor.
  * @enum {string} ListFormatType
  */
-exports.ListFormatType = {
+const ListFormatType = {
   AND: 'conjunction',
   OR: 'disjunction'
 };
+exports.ListFormatType = ListFormatType;
 
 
 class ListFormat {
@@ -36,7 +37,7 @@ class ListFormat {
    * or OR ('disjunction'). These gives locale-specific lists formatted
    * using AND / OR respectively.
    *
-   * @param {?{type: !exports.ListFormatType}=} listOptions
+   * @param {?{type: !ListFormatType}=} listOptions
    * @final
    */
   constructor(listOptions) {
@@ -48,8 +49,7 @@ class ListFormat {
     this.intlFormatter_ = null;
 
     /** @const @private @type {string} */
-    this.listType_ =
-        listOptions ? listOptions.type : exports.ListFormatType.AND;
+    this.listType_ = listOptions ? listOptions.type : ListFormatType.AND;
 
     if (LocaleFeature.USE_ECMASCRIPT_I18N_LISTFORMAT) {
       // Implement using ECMAScript Intl object.
@@ -76,7 +76,7 @@ class ListFormat {
        * Note that the TWO version is usually the same as END.
        */
       this.listTwoPattern_;
-      if (this.listType_ === exports.ListFormatType.AND) {
+      if (this.listType_ === ListFormatType.AND) {
         this.listTwoPattern_ = this.ListSymbols_.LIST_TWO ?
             this.ListSymbols_.LIST_TWO :
             this.ListSymbols_.LIST_END;
@@ -93,7 +93,7 @@ class ListFormat {
        * @private @type {string}
        */
       this.listStartPattern_;
-      if (this.listType_ === exports.ListFormatType.AND) {
+      if (this.listType_ === ListFormatType.AND) {
         this.listStartPattern_ = this.ListSymbols_.LIST_START;
       } else {
         // Get the defined value from either OR_START or LIST_START.
@@ -110,7 +110,7 @@ class ListFormat {
        * @private @type {string}
        */
       this.listMiddlePattern_;
-      if (this.listType_ === exports.ListFormatType.AND) {
+      if (this.listType_ === ListFormatType.AND) {
         this.listMiddlePattern_ = this.ListSymbols_.LIST_MIDDLE ?
             this.ListSymbols_.LIST_MIDDLE :
             this.ListSymbols_.LIST_START;
@@ -134,7 +134,7 @@ class ListFormat {
        *
        * @const @private {string}
        */
-      this.listEndPattern_ = (this.listType_ === exports.ListFormatType.AND) ?
+      this.listEndPattern_ = (this.listType_ === ListFormatType.AND) ?
           this.ListSymbols_.LIST_END :
           this.ListSymbols_.OR_END;
     }
