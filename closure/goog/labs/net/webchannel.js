@@ -87,9 +87,9 @@ goog.net.WebChannel.Options = function() {};
 /**
  * Transport-metadata support.
  *
- * Custom HTTP headers to be added to every message sent to the
- * server. This object is mutable, and custom headers may be changed, removed,
- * or added during the runtime after a channel has been opened.
+ * Custom HTTP headers to be added to every message sent to the server. This
+ * object is mutable, and custom headers may be changed, removed, or added
+ * during the runtime after a channel has been opened.
  *
  * Custom headers may trigger CORS preflight. See other related options.
  * @type {!Object<string, string>|undefined}
@@ -99,10 +99,10 @@ goog.net.WebChannel.Options.prototype.messageHeaders;
 /**
  * Transport-metadata support.
  *
- * Similar to messageHeaders, but any custom HTTP headers will
- * be sent only once when the channel is opened as part of the handshae request.
- * Typical usage is to send an auth header to the server, which only checks
- * the auth header at the time during the handshake when the channel is opened.
+ * Similar to messageHeaders, but any custom HTTP headers will be sent only once
+ * when the channel is opened as part of the handshake request. Typical usage is
+ * to send an auth header to the server, which only checks the auth header at
+ * the time during the handshake when the channel is opened.
  * @type {!Object<string, string>|undefined}
  */
 goog.net.WebChannel.Options.prototype.initMessageHeaders;
@@ -117,9 +117,9 @@ goog.net.WebChannel.Options.prototype.messageContentType;
 /**
  * Transport-metadata support.
  *
- * Custom url query parameters to be added to every message
- * sent to the server. This object is mutable, and custom parameters may be
- * changed, removed or added during the runtime after a channel has been opened.
+ * Custom url query parameters to be added to every message sent to the server.
+ * This object is mutable, and custom parameters may be changed, removed or
+ * added during the runtime after a channel has been opened.
  *
  * TODO: initMessageUrlParams
  * TODO: closeMessageUrlParams  (custom url query params to be added to the
