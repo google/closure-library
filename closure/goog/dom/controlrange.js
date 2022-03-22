@@ -522,18 +522,6 @@ goog.dom.ControlRangeIterator.prototype.next = function() {
 };
 
 
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- * @return {!Node}
- */
-goog.dom.ControlRangeIterator.prototype.nextValueOrThrow = function() {
-  return goog.iter.toEs4IteratorNext(
-      goog.dom.ControlRangeIterator.prototype.next.call(this));
-};
-
-
-
 /** @override */
 goog.dom.ControlRangeIterator.prototype.copyFrom = function(other) {
   'use strict';

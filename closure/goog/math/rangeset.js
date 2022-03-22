@@ -405,17 +405,6 @@ goog.math.RangeSet.prototype.__iterator__ = function(opt_keys) {
     }
     return goog.iter.createEs6IteratorYield(list[i++].clone());
   };
-  const iterNext = iterator.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   * @return {!goog.math.Range}
-   */
-  iterator.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iterator));
-  };
-
 
   return iterator;
 };

@@ -555,18 +555,6 @@ goog.dom.MultiRangeIterator.prototype.next = function() {
 };
 
 
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- * @return {!Node}
- */
-goog.dom.MultiRangeIterator.prototype.nextValueOrThrow = function() {
-  return goog.iter.toEs4IteratorNext(
-      goog.dom.MultiRangeIterator.prototype.next.call(this));
-};
-
-
-
 /** @override */
 goog.dom.MultiRangeIterator.prototype.copyFrom = function(other) {
   'use strict';

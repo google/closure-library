@@ -196,8 +196,8 @@ goog.dom.TextRangeIterator.prototype.isLast = function() {
 };
 
 /**
- * Returns true if the iterator is on the last step before StopIteration is
- * thrown, otherwise false.
+ * Returns true if the iterator is on the last step before iteration finishes,
+ * false otherwise.
  * @return {boolean}
  * @private
  */
@@ -218,8 +218,8 @@ goog.dom.TextRangeIterator.prototype.isLastTag_ = function() {
 };
 
 /**
- * Move to the next position in the selection.
- * Throws `goog.iter.StopIteration` when it passes the end of the range.
+ * Move to the next position in the selection. Returns `{done: true}` when it
+ * passes the end of the range.
  * @return {!IIterableResult<!Node>} The node at the next position.
  * @override
  */
@@ -231,17 +231,6 @@ goog.dom.TextRangeIterator.prototype.next = function() {
 
   // Call the super function.
   return goog.dom.TextRangeIterator.superClass_.next.call(this);
-};
-
-
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- * @return {!Node}
- */
-goog.dom.TextRangeIterator.prototype.nextValueOrThrow = function() {
-  return goog.iter.toEs4IteratorNext(
-      goog.dom.TextRangeIterator.prototype.next.call(this));
 };
 
 

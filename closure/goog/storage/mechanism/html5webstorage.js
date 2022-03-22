@@ -153,16 +153,6 @@ goog.storage.mechanism.HTML5WebStorage.prototype.__iterator__ = function(
     }
     return goog.iter.createEs6IteratorYield(value);
   };
-  const iterNext = newIter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   * @return {string}
-   */
-  newIter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(newIter));
-  };
 
   return newIter;
 };

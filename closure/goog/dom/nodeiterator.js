@@ -79,14 +79,3 @@ goog.dom.NodeIterator.prototype.next = function() {
 
   return goog.iter.createEs6IteratorYield(/** @type {!Node} */ (this.node));
 };
-
-
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- * @return {!Node}
- */
-goog.dom.NodeIterator.prototype.nextValueOrThrow = function() {
-  return goog.iter.toEs4IteratorNext(
-      goog.dom.NodeIterator.prototype.next.call(this));
-};

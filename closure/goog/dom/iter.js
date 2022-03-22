@@ -67,18 +67,6 @@ goog.dom.iter.SiblingIterator.prototype.next = function() {
 
 
 /**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- * @return {!Node}
- */
-goog.dom.iter.SiblingIterator.prototype.nextValueOrThrow = function() {
-  return goog.iter.toEs4IteratorNext(
-      goog.dom.iter.SiblingIterator.prototype.next.call(this));
-};
-
-
-
-/**
  * Iterator over an Element's children.
  * @param {Element} element The element to iterate over.
  * @param {boolean=} opt_reverse Optionally traverse children from last to
@@ -139,15 +127,4 @@ goog.dom.iter.AncestorIterator.prototype.next = function() {
   }
   this.node_ = node.parentNode;
   return goog.iter.createEs6IteratorYield(node);
-};
-
-
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- * @return {!Node}
- */
-goog.dom.iter.AncestorIterator.prototype.nextValueOrThrow = function() {
-  return goog.iter.toEs4IteratorNext(
-      goog.dom.iter.AncestorIterator.prototype.next.call(this));
 };

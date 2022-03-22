@@ -12,7 +12,6 @@
 goog.provide('goog.iter');
 goog.provide('goog.iter.Iterable');
 goog.provide('goog.iter.Iterator');
-goog.provide('goog.iter.StopIteration');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -28,22 +27,7 @@ goog.iter.Iterable;
 
 
 /**
- * Singleton Error object that is used to terminate iterations.
- * @const {!Error}
- */
-goog.iter.StopIteration = ('StopIteration' in goog.global) ?
-    // For script engines that support legacy iterators.
-    goog.global['StopIteration'] :
-    {message: 'StopIteration', stack: ''};
-
-
-
-/**
- * Class/interface for iterators.  An iterator needs to implement a `next`
- * method and it needs to throw a `goog.iter.StopIteration` when the
- * iteration passes beyond the end.  Iterators have no `hasNext` method.
- * It is recommended to always use the helper functions to iterate over the
- * iterator or in case you are only targeting JavaScript 1.7 for in loops.
+ * Class/interface for iterators.
  * @constructor
  * @template VALUE
  * @implements {Iterator<VALUE>}
@@ -52,16 +36,6 @@ goog.iter.StopIteration = ('StopIteration' in goog.global) ?
  *     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
 goog.iter.Iterator = function() {};
-
-
-/**
- * Returns the next value of the iteration.  This will throw the object
- * {@see goog.iter.StopIteration} when the iteration passes the end.
- * @return {VALUE} Any object or value
- */
-goog.iter.Iterator.prototype.nextValueOrThrow = function() {
-  throw goog.iter.StopIteration;
-};
 
 
 /**
@@ -93,45 +67,6 @@ goog.iter.ES6_ITERATOR_DONE = goog.debug.freeze({done: true, value: undefined});
  */
 goog.iter.createEs6IteratorYield = function(value) {
   return {value, done: false};
-};
-
-
-/**
- * Converts an ES6 IIterableResult into ES4 iteration semantics. If the result
- * indicates it is finished iterating, will throw `goog.iter.StopIteration`.
- * Otherwise, will unwrap the IIterableResult's value and return that.
- * @param {!IIterableResult<VALUE>} es6NextValue
- * @return {VALUE}
- * @template VALUE
- */
-goog.iter.toEs4IteratorNext = function(es6NextValue) {
-  if (es6NextValue.done) {
-    throw goog.iter.StopIteration;
-  }
-  return es6NextValue.value;
-};
-
-
-/**
- * Checks whether an error is the `goog.iter.StopIteration` error, and if so
- * throws a different error that warns that using goog.iter.StopIteration is
- * problematic. ES4 iteration allows `StopIteration` to propagate up the
- * callstack and terminate iteration far from where it started, but ES6
- * iteration requires explicit passing and handling of termination signals.
- * @param {!Error} ex The error to check.
- */
-goog.iter.checkNoImplicitStopIterationInEs6 = function(ex) {
-  // ONLY use this where StopIteration is thrown from callback functions -
-  // places where there is no way for the ES6 Iteration protocol to use the done
-  // value to signal iterator exhaustion / early termination of iteration.
-  if (ex === goog.iter.StopIteration) {
-    throw new Error(
-        'ES6 Iteration protocol does NOT adjust control flow when ' +
-        'StopIteration is thrown from callback helper functions. If your code' +
-        ' relies on this behavior, consider throwing a different error and ' +
-        'catching it to terminate iteration.');
-  }
-  throw ex;
 };
 
 
@@ -194,16 +129,6 @@ goog.iter.toIterator = function(iterable) {
         return goog.iter.createEs6IteratorYield(like[i++]);
       }
     };
-    const iterNext = newIter.next;
-    /**
-     * TODO(user): Please do not remove - this will be cleaned up
-     * centrally.
-     * @override @see {!goog.iter.Iterator}
-     * @return {VALUE}
-     */
-    newIter.nextValueOrThrow = function() {
-      return goog.iter.toEs4IteratorNext(iterNext.call(newIter));
-    };
 
     return newIter;
   }
@@ -235,24 +160,16 @@ goog.iter.toIterator = function(iterable) {
 goog.iter.forEach = function(iterable, f, opt_obj) {
   'use strict';
   if (goog.isArrayLike(iterable)) {
-    try {
-      // NOTES: this passes the index number to the second parameter
-      // of the callback contrary to the documentation above.
-      goog.array.forEach(
-          /** @type {IArrayLike<?>} */ (iterable), f, opt_obj);
-    } catch (ex) {
-      goog.iter.checkNoImplicitStopIterationInEs6(ex);
-    }
+    // NOTES: this passes the index number to the second parameter
+    // of the callback contrary to the documentation above.
+    goog.array.forEach(
+        /** @type {IArrayLike<?>} */ (iterable), f, opt_obj);
   } else {
     const iterator = goog.iter.toIterator(iterable);
     while (true) {
       const {done, value} = iterator.next();
       if (done) return;
-      try {
-        f.call(opt_obj, value, undefined, iterator);
-      } catch (ex) {
-        goog.iter.checkNoImplicitStopIterationInEs6(ex);
-      }
+      f.call(opt_obj, value, undefined, iterator);
     }
   }
 };
@@ -290,24 +207,10 @@ goog.iter.filter = function(iterable, f, opt_obj) {
     while (true) {
       const {done, value} = iterator.next();
       if (done) return goog.iter.ES6_ITERATOR_DONE;
-      try {
-        if (f.call(opt_obj, value, undefined, iterator)) {
-          return goog.iter.createEs6IteratorYield(value);
-        }
-      } catch (ex) {
-        goog.iter.checkNoImplicitStopIterationInEs6(ex);
+      if (f.call(opt_obj, value, undefined, iterator)) {
+        return goog.iter.createEs6IteratorYield(value);
       }
     }
-  };
-  const iterNext = newIter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
-   * @return {VALUE}
-   */
-  newIter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(newIter));
   };
 
   return newIter;
@@ -384,16 +287,6 @@ goog.iter.range = function(startOrStop, opt_stop, opt_step) {
     start += step;
     return goog.iter.createEs6IteratorYield(rv);
   };
-  const iterNext = newIter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {number}
-   * @override @see {!goog.iter.Iterator}
-   */
-  newIter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(newIter));
-  };
 
   return newIter;
 };
@@ -443,22 +336,8 @@ goog.iter.map = function(iterable, f, opt_obj) {
     'use strict';
     const {done, value} = iterator.next();
     if (done) return goog.iter.ES6_ITERATOR_DONE;
-    try {
-      const mappedVal = f.call(opt_obj, value, undefined, iterator);
-      return goog.iter.createEs6IteratorYield(mappedVal);
-    } catch (ex) {
-      goog.iter.checkNoImplicitStopIterationInEs6(ex);
-    }
-  };
-  const iterNext = newIter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {RESULT}
-   * @override @see {!goog.iter.Iterator}
-   */
-  newIter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(newIter));
+    const mappedVal = f.call(opt_obj, value, undefined, iterator);
+    return goog.iter.createEs6IteratorYield(mappedVal);
   };
 
   return newIter;
@@ -517,12 +396,8 @@ goog.iter.some = function(iterable, f, opt_obj) {
   while (true) {
     const {done, value} = iterator.next();
     if (done) return false;
-    try {
-      if (f.call(opt_obj, value, undefined, iterator)) {
-        return true;
-      }
-    } catch (ex) {
-      goog.iter.checkNoImplicitStopIterationInEs6(ex);
+    if (f.call(opt_obj, value, undefined, iterator)) {
+      return true;
     }
   }
 };
@@ -551,12 +426,8 @@ goog.iter.every = function(iterable, f, opt_obj) {
   while (true) {
     const {done, value} = iterator.next();
     if (done) return true;
-    try {
-      if (!f.call(opt_obj, value, undefined, iterator)) {
-        return false;
-      }
-    } catch (ex) {
-      goog.iter.checkNoImplicitStopIterationInEs6(ex);
+    if (!f.call(opt_obj, value, undefined, iterator)) {
+      return false;
     }
   }
 };
@@ -619,16 +490,6 @@ goog.iter.chainFromIterable = function(iterable) {
       return goog.iter.createEs6IteratorYield(value);
     }
   };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {VALUE}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
-  };
 
   return iter;
 };
@@ -674,16 +535,6 @@ goog.iter.dropWhile = function(iterable, f, opt_obj) {
       return goog.iter.createEs6IteratorYield(value);
     }
   };
-  const iterNext = newIter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {VALUE}
-   * @override @see {!goog.iter.Iterator}
-   */
-  newIter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(newIter));
-  };
 
   return newIter;
 };
@@ -717,24 +568,10 @@ goog.iter.takeWhile = function(iterable, f, opt_obj) {
     'use strict';
     const {done, value} = iterator.next();
     if (done) return goog.iter.ES6_ITERATOR_DONE;
-    try {
-      if (f.call(opt_obj, value, undefined, iterator)) {
-        return goog.iter.createEs6IteratorYield(value);
-      }
-      return goog.iter.ES6_ITERATOR_DONE;
-    } catch (ex) {
-      goog.iter.checkNoImplicitStopIterationInEs6(ex);
+    if (f.call(opt_obj, value, undefined, iterator)) {
+      return goog.iter.createEs6IteratorYield(value);
     }
-  };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {VALUE}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
+    return goog.iter.ES6_ITERATOR_DONE;
   };
 
   return iter;
@@ -882,16 +719,6 @@ goog.iter.product = function(var_args) {
 
     return goog.iter.ES6_ITERATOR_DONE;
   };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {VALUE}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
-  };
 
 
   return iter;
@@ -955,16 +782,6 @@ goog.iter.cycle = function(iterable) {
 
     return goog.iter.createEs6IteratorYield(returnElement);
   };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {VALUE}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
-  };
 
   return iter;
 };
@@ -996,16 +813,6 @@ goog.iter.count = function(opt_start, opt_step) {
     counter += step;
     return goog.iter.createEs6IteratorYield(returnValue);
   };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {number}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
-  };
 
   return iter;
 };
@@ -1029,16 +836,6 @@ goog.iter.repeat = function(value) {
    */
   iter.next = function() {
     return goog.iter.createEs6IteratorYield(value);
-  };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {VALUE}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
   };
 
   return iter;
@@ -1072,16 +869,6 @@ goog.iter.accumulate = function(iterable) {
     if (done) return goog.iter.ES6_ITERATOR_DONE;
     total += value;
     return goog.iter.createEs6IteratorYield(total);
-  };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {number}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
   };
 
   return iter;
@@ -1130,16 +917,6 @@ goog.iter.zip = function(var_args) {
         arr.push(it.value);
       }
       return goog.iter.createEs6IteratorYield(arr);
-    };
-    const iterNext = iter.next;
-    /**
-     * TODO(user): Please do not remove - this will be cleaned up
-     * centrally.
-     * @return {VALUE}
-     * @override @see {!goog.iter.Iterator}
-     */
-    iter.nextValueOrThrow = function() {
-      return goog.iter.toEs4IteratorNext(iterNext.call(iter));
     };
   }
 
@@ -1198,16 +975,6 @@ goog.iter.zipLongest = function(fillValue, var_args) {
         return goog.iter.ES6_ITERATOR_DONE;
       }
       return goog.iter.createEs6IteratorYield(arr);
-    };
-    const iterNext = iter.next;
-    /**
-     * TODO(user): Please do not remove - this will be cleaned up
-     * centrally.
-     * @return {VALUE}
-     * @override @see {!goog.iter.Iterator}
-     */
-    iter.nextValueOrThrow = function() {
-      return goog.iter.toEs4IteratorNext(iterNext.call(iter));
     };
   }
 
@@ -1268,14 +1035,6 @@ goog.iter.compress = function(iterable, selectors) {
       const selectorVal = selectorIt.value;
       if (selectorVal) return goog.iter.createEs6IteratorYield(val);
     }
-  };
-  const iterNext = iter.next;
-  /**
-   * @return {VALUE}
-   * @override
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
   };
 
   return iter;
@@ -1348,18 +1107,6 @@ goog.iter.GroupByIterator_.prototype.next = function() {
   return goog.iter.createEs6IteratorYield(
       [this.currentKey, this.groupItems_(this.targetKey)]);
 };
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @return {!Array<?>}
- * @override @see {!goog.iter.Iterator}
- */
-goog.iter.GroupByIterator_.prototype.nextValueOrThrow = function() {
-  // Explicitly do not call next via `this`, as with some subclass
-  // trees this can lead to incorrect results or infinite recursion.
-  return goog.iter.toEs4IteratorNext(
-      goog.iter.GroupByIterator_.prototype.next.call(this));
-};
-
 
 
 /**
@@ -1447,16 +1194,6 @@ goog.iter.starMap = function(iterable, f, opt_obj) {
         f.apply(opt_obj, goog.array.concat(args, undefined, iterator));
     return goog.iter.createEs6IteratorYield(value);
   };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {RESULT}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
-  };
 
 
   return iter;
@@ -1524,17 +1261,6 @@ goog.iter.tee = function(iterable, opt_num) {
       goog.asserts.assert(!goog.array.isEmpty(buffer));
       return goog.iter.createEs6IteratorYield(buffer.shift());
     };
-    const iterNext = iter.next;
-    /**
-     * TODO(user): Please do not remove - this will be cleaned up
-     * centrally.
-     * @return {VALUE}
-     * @override @see {!goog.iter.Iterator}
-     */
-    iter.nextValueOrThrow = function() {
-      return goog.iter.toEs4IteratorNext(iterNext.call(iter));
-    };
-
 
     return iter;
   }
@@ -1593,17 +1319,6 @@ goog.iter.limit = function(iterable, limitSize) {
     }
     return goog.iter.ES6_ITERATOR_DONE;
   };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {VALUE}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
-  };
-
 
   return iter;
 };
@@ -1757,17 +1472,6 @@ goog.iter.combinations = function(iterable, length) {
     return goog.iter.createEs6IteratorYield(
         goog.array.map(value, getIndexFromElements));
   };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {!Array<VALUE>}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
-  };
-
 
   return iter;
 };
@@ -1821,17 +1525,6 @@ goog.iter.combinationsWithReplacement = function(iterable, length) {
     return goog.iter.createEs6IteratorYield(goog.array.map(
         /** @type {!Array<number>} */ (value), getIndexFromElements));
   };
-  const iterNext = iter.next;
-  /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @return {!Array<VALUE>}
-   * @override @see {!goog.iter.Iterator}
-   */
-  iter.nextValueOrThrow = function() {
-    return goog.iter.toEs4IteratorNext(iterNext.call(iter));
-  };
-
 
   return iter;
 };

@@ -13,7 +13,6 @@ goog.module.declareLegacyNamespace();
 
 const GoogIterable = goog.require('goog.iter.Iterable');
 const GoogIterator = goog.require('goog.iter.Iterator');
-const StopIteration = goog.require('goog.iter.StopIteration');
 
 
 /**
@@ -121,12 +120,6 @@ class ShimGoogIterator extends GoogIterator {
     this.iter_ = iter;
   }
 
-  /** @override */
-  nextValueOrThrow() {
-    const result = this.iter_.next();
-    if (result.done) throw StopIteration;
-    return result.value;
-  }
   /**
    * @override @see {!goog.iter.Iterator}
    * @return {!IIterableResult<VALUE>}

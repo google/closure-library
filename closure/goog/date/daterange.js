@@ -423,14 +423,3 @@ goog.date.DateRange.Iterator.prototype.next = function() {
   this.nextDate_.add(new goog.date.Interval(goog.date.Interval.DAYS, 1));
   return goog.iter.createEs6IteratorYield(rv);
 };
-
-
-/**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
- * @return {!goog.date.Date}
- */
-goog.date.DateRange.Iterator.prototype.nextValueOrThrow = function() {
-  return goog.iter.toEs4IteratorNext(
-      goog.date.DateRange.Iterator.prototype.next.call(this));
-};

@@ -753,16 +753,6 @@ testSuite({
           return googIter.ES6_ITERATOR_DONE;
         }
       };
-      const iterNext = iter.next;
-      /**
-       * TODO(user): Please do not remove - this will be cleaned up
-       * centrally.
-       * @override @see {!googIter.Iterator}
-       * @return {string}
-       */
-      iter.nextValueOrThrow = function() {
-        return googIter.toEs4IteratorNext(iterNext.call(iter));
-      };
 
       return iter;
     };
