@@ -72,7 +72,12 @@ function escapeGitHubMarkdown(note: string) {
   // "Escape" GitHub mentions (i.e., "@user") by surrounding in backticks.
   note = note.replace(/(@\w+)/g, '`$1`');
   // Escape known markdown characters with a leading backslash.
-  note = note.replace(/([*_(){}#!.<>[\]])/g, '\\$1');
+  // NOTE: period has been removed from this list, since its only use is for
+  // autolinks, which are rare in practice, resulting in far more incorrect
+  // escapes (i.e. within a `...` block) than correct escapes. Better to just
+  // manually fix it when it misfires. We may want to consider backing off in
+  // other cases, too, or otherwise improving this process.
+  note = note.replace(/([*_(){}#!<>[\]])/g, '\\$1');
   return note;
 }
 
