@@ -26,11 +26,13 @@ const Plugin = goog.require('goog.editor.Plugin');
 const Range = goog.require('goog.dom.Range');
 const SafeHtml = goog.require('goog.html.SafeHtml');
 const TagName = goog.require('goog.dom.TagName');
+const TestEvent = goog.require('goog.testing.events.Event');
 const classlist = goog.require('goog.dom.classlist');
 const editorRange = goog.require('goog.editor.range');
 const events = goog.require('goog.events');
 const functions = goog.require('goog.functions');
 const googDom = goog.require('goog.dom');
+const platform = goog.require('goog.labs.userAgent.platform');
 const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
 const testingDom = goog.require('goog.testing.dom');
@@ -181,7 +183,8 @@ function doTestPlaceCursorAtStart(html = undefined, parentId = undefined) {
 
   let startNode = parentId ?
       editableField.getEditableDomHelper().getElement(parentId).firstChild :
-      textNode ? textNode : editableField.getElement();
+      textNode ? textNode :
+                 editableField.getElement();
   assertEquals(
       'The range should start at the specified expected node', startNode,
       range.getStartNode());
@@ -239,13 +242,14 @@ function doTestPlaceCursorAtEnd(
 
   const endNode = parentId ?
       editableField.getEditableDomHelper().getElement(parentId).lastChild :
-      textNode ? textNode : editableField.getElement();
+      textNode ? textNode :
+                 editableField.getElement();
   assertEquals(
       'The range should end at the specified expected node', endNode,
       range.getEndNode());
-  const offset = (opt_offset != null) ?
-      opt_offset :
-      textNode ? endNode.nodeValue.length : endNode.childNodes.length - 1;
+  const offset = (opt_offset != null) ? opt_offset :
+      textNode                        ? endNode.nodeValue.length :
+                                        endNode.childNodes.length - 1;
   if (hasBogusNode) {
     assertEquals(
         'The range should end at the ending of the bogus node ' +
@@ -1425,11 +1429,99 @@ testSuite({
 
     assertTrue(Field.isGeneratingKey_(regularKeyEvent, true));
     assertFalse(Field.isGeneratingKey_(ctrlKeyEvent, true));
-    if (userAgent.WINDOWS && !userAgent.GECKO) {
+    if ((userAgent.WINDOWS || platform.isAndroid()) && !userAgent.GECKO) {
       assertTrue(Field.isGeneratingKey_(imeKeyEvent, false));
     } else {
       assertFalse(Field.isGeneratingKey_(imeKeyEvent, false));
     }
+  },
+
+  testRegularKeyDispatchesDelayedChange() {
+    if (userAgent.GECKO) {
+      // Gecko based browsers handle changes via mutation events
+      return;
+    }
+    if (userAgent.WINDOWS || platform.isAndroid()) {
+      // Windows and Android platforms do not emit events with 'regular' key
+      // codes.
+      return;
+    }
+    const editableField = new FieldConstructor('testField');
+    const clock = new MockClock(true);
+    const delayedChanges = recordFunction();
+
+    editableField.makeEditable();
+    events.listen(editableField, Field.EventType.DELAYEDCHANGE, delayedChanges);
+
+    testingEvents.fireKeySequence(editableField.getElement(), KeyCodes.A);
+    clock.tick(1000);
+
+    if (!(userAgent.WINDOWS || platform.isAndroid()) || userAgent.GECKO) {
+      assertEquals(
+          'Delayed change event should\'ve been dispatched', 1,
+          delayedChanges.getCallCount());
+    }
+
+    clock.dispose();
+    editableField.dispose();
+  },
+
+  testImeKeyDispatchesDelayedChange() {
+    if (BrowserFeature.USE_MUTATION_EVENTS) {
+      // Gecko based browsers handle changes via mutation events
+      return;
+    }
+    if (!(userAgent.WINDOWS || platform.isAndroid())) {
+      // Only Windows and Android platforms emit these IME-specific events.
+      return;
+    }
+    const editableField = new FieldConstructor('testField');
+    const clock = new MockClock(true);
+    const delayedChanges = recordFunction();
+
+    editableField.makeEditable();
+    events.listen(editableField, Field.EventType.DELAYEDCHANGE, delayedChanges);
+
+    testingEvents.fireKeySequence(editableField.getElement(), KeyCodes.WIN_IME);
+    clock.tick(1000);
+
+    assertEquals(
+        'Delayed change event should\'ve been dispatched', 1,
+        delayedChanges.getCallCount());
+
+
+    clock.dispose();
+    editableField.dispose();
+  },
+
+  testInputEventDispatchesDelayedChange() {
+    if (BrowserFeature.USE_MUTATION_EVENTS) {
+      // Gecko based browsers handle changes via mutation events
+      return;
+    }
+    const editableField = new FieldConstructor('testField');
+    const clock = new MockClock(true);
+    const delayedChanges = recordFunction();
+
+    editableField.makeEditable();
+    events.listen(editableField, Field.EventType.DELAYEDCHANGE, delayedChanges);
+
+    // Non-typing changes on some devices rely on emitting an INPUT event, such
+    // as:
+    // - swipe-typing a word (on iOS)
+    // - accepting a word prediction (on iOS)
+    // - using speech to text (on iOS)
+    // - accepting a spellcheck suggestion (on iOS, Android or Desktop)
+    testingEvents.fireBrowserEvent(
+        new TestEvent(EventType.INPUT, editableField.getElement()));
+    clock.tick(1000);
+
+    assertEquals(
+        'Delayed change event should\'ve been dispatched', 1,
+        delayedChanges.getCallCount());
+
+    clock.dispose();
+    editableField.dispose();
   },
 
   testSetEditableClassName() {

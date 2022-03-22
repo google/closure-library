@@ -96,6 +96,7 @@ closure_js_library(
         "//closure/goog/html:safehtml",
         "//closure/goog/html:safestylesheet",
         "//closure/goog/html:trustedresourceurl",
+        "//closure/goog/labs/useragent:platform",
         "//closure/goog/log",
         "//closure/goog/object",
         "//closure/goog/reflect",
