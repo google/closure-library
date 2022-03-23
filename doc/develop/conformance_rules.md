@@ -277,6 +277,9 @@ Raw `postMessage()` does not restrict target and sender origins by default. This
 can cause security vulnerabilities.
 
 
+For Search PA developers, see http://go/gws-js-conformance#postMessage for
+exemption instructions. <!-- MOE:end_strip -->
+
 {: #globalVars}
 ### Global declarations 
 
