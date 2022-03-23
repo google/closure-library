@@ -418,6 +418,7 @@ requirement: {
 
 ### Closure library restrictions ###
 
+# obsolete
 requirement: {
   rule_id: "closure:getLogger"
   type: BANNED_NAME
@@ -425,36 +426,16 @@ requirement: {
 
   value: "goog.debug.Logger.getLogger"
 
-  allowlist_regexp: ".+/closure/goog/debug/"
-  allowlist_regexp: ".+/closure/goog/log/"
+  allowlist_regexp: "^.*"
 }
 
+# obsolete
 requirement: {
   rule_id: "closure:logger"
   type: BANNED_PROPERTY_CALL
   error_message: "Direct use of goog.debug.Logger is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#logger"
 
   value: "goog.debug.Logger.prototype.log"
-  value: "goog.debug.Logger.prototype.shout"
-  value: "goog.debug.Logger.prototype.severe"
-  value: "goog.debug.Logger.prototype.warning"
-  value: "goog.debug.Logger.prototype.info"
-  value: "goog.debug.Logger.prototype.config"
-  value: "goog.debug.Logger.prototype.fine"
-  value: "goog.debug.Logger.prototype.finer"
-  value: "goog.debug.Logger.prototype.finest"
-  value: "goog.debug.Logger.prototype.logRecord"
-  value: "goog.debug.Logger.prototype.getName"
-  value: "goog.debug.Logger.prototype.addHandler"
-  value: "goog.debug.Logger.prototype.removeHandler"
-  value: "goog.debug.Logger.prototype.getParent"
-  value: "goog.debug.Logger.prototype.getChildren"
-  value: "goog.debug.Logger.prototype.getLevel"
-  value: "goog.debug.Logger.prototype.setLevel"
-  value: "goog.debug.Logger.prototype.getEffectiveLevel"
-  value: "goog.debug.Logger.prototype.isLoggable"
-  value: "goog.debug.Logger.prototype.getLogRecord"
 
-  allowlist_regexp: ".+/closure/goog/debug/"
-  allowlist_regexp: ".+/closure/goog/log/"
+  allowlist_regexp: "^.*"
 }
