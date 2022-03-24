@@ -56,7 +56,6 @@ export const isObject = goog.isObject;
 export const getUid = goog.getUid;
 export const hasUid = goog.hasUid;
 export const removeUid = goog.removeUid;
-export const mixin = goog.mixin;
 export const now = Date.now;
 export const globalEval = goog.globalEval;
 export const getCssName = goog.getCssName;
