@@ -89,19 +89,6 @@ Summing it up:
 
 ## Explanation of conformance rules
 
-{: #logger}
-### goog.debug.Logger 
-
-`goog.debug.Logger` should not be used directly. Use the `goog.log` static
-wrappers instead, as `goog.log` is safely strippable from production code. On
-the other hand, `goog.debug.Logger` is only stripped from code if the `logger_`
-suffix is used in the name.
-
-
-Note:  You may see "possible violations" for code that is not a logger if the
-code is badly typed. Verify that you have a dependency on the type you are
-expecting.
-
 ### eval
 
 `eval` is a security risk and is not allowed to be used. Since values passed to
