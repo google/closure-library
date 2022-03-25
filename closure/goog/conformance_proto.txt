@@ -416,26 +416,3 @@ requirement: {
 # These rules allow projects to have compile-time errors for legacyconversions
 # functions and to progressively move away from them by using the allowlist.
 
-### Closure library restrictions ###
-
-# obsolete
-requirement: {
-  rule_id: "closure:getLogger"
-  type: BANNED_NAME
-  error_message: "Use of goog.debug.Logger.getLogger is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#logger"
-
-  value: "goog.debug.Logger.getLogger"
-
-  allowlist_regexp: "^.*"
-}
-
-# obsolete
-requirement: {
-  rule_id: "closure:logger"
-  type: BANNED_PROPERTY_CALL
-  error_message: "Direct use of goog.debug.Logger is not allowed. See https://google.github.io/closure-library/develop/conformance_rules.html#logger"
-
-  value: "goog.debug.Logger.prototype.log"
-
-  allowlist_regexp: "^.*"
-}
