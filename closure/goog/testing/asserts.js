@@ -137,7 +137,7 @@ var _trueTypeOf = function(something) {
     }
   } catch (e) {
   } finally {
-    result = result.substr(0, 1).toUpperCase() + result.substr(1);
+    result = result.slice(0, 1).toUpperCase() + result.slice(1);
   }
   return result;
 };
@@ -383,7 +383,7 @@ goog.testing.asserts.removeOperaStacktrace_ = function(e) {
       typeof e['message'] === 'string') {
     var startIndex = e['message'].length - e['stacktrace'].length;
     if (e['message'].indexOf(e['stacktrace'], startIndex) == startIndex) {
-      e['message'] = e['message'].substr(0, startIndex - 14);
+      e['message'] = e['message'].slice(0, -e['stacktrace'].length - 14);
     }
   }
 };

@@ -180,7 +180,7 @@ testSuite({
       fmt = new NumberFormat(NumberFormat.Format.DECIMAL);
       str = fmt.format(-1.234567890123456e306);
       assertEquals(1 + 1 + 306 + 306 / 3, str.length);
-      assertEquals('-1,234,567,890,123,45', str.substr(0, 21));
+      assertEquals('-1,234,567,890,123,45', str.slice(0, 21));
 
       str = fmt.format(Infinity);
       assertEquals('\u221e', str);

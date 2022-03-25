@@ -320,7 +320,7 @@ goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
     // caching the result improves performance by a factor 2-3
     let rv = goog.json.Serializer.charToJsonCharCache_[c];
     if (!rv) {
-      rv = '\\u' + (c.charCodeAt(0) | 0x10000).toString(16).substr(1);
+      rv = '\\u' + (c.charCodeAt(0) | 0x10000).toString(16).slice(1);
       goog.json.Serializer.charToJsonCharCache_[c] = rv;
     }
     return rv;

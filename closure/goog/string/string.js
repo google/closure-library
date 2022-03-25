@@ -653,7 +653,7 @@ goog.string.unescapeEntitiesUsingDom_ = function(str, opt_document) {
     // Check for numeric entity.
     if (entity.charAt(0) == '#') {
       // Prefix with 0 so that hex entities (e.g. &#x10) parse as hex numbers.
-      const n = Number('0' + entity.substr(1));
+      const n = Number('0' + entity.slice(1));
       if (!isNaN(n)) {
         value = String.fromCharCode(n);
       }
@@ -698,7 +698,7 @@ goog.string.unescapePureXmlEntities_ = function(str) {
       default:
         if (entity.charAt(0) == '#') {
           // Prefix with 0 so that hex entities (e.g. &#x10) parse as hex.
-          const n = Number('0' + entity.substr(1));
+          const n = Number('0' + entity.slice(1));
           if (!isNaN(n)) {
             return String.fromCharCode(n);
           }
@@ -998,8 +998,7 @@ goog.string.removeAt = function(s, index, stringLength) {
   let resultStr = s;
   // If the index is greater or equal to 0 then remove substring
   if (index >= 0 && index < s.length && stringLength > 0) {
-    resultStr = s.substr(0, index) +
-        s.substr(index + stringLength, s.length - index - stringLength);
+    resultStr = s.slice(0, index) + s.slice(index + stringLength);
   }
   return resultStr;
 };
@@ -1336,7 +1335,7 @@ goog.string.toTitleCase = function(str, opt_delimiters) {
 goog.string.capitalize = function(str) {
   'use strict';
   return String(str.charAt(0)).toUpperCase() +
-      String(str.substr(1)).toLowerCase();
+      String(str.slice(1)).toLowerCase();
 };
 
 

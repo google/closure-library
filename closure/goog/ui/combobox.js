@@ -1021,10 +1021,10 @@ goog.ui.ComboBoxItem.prototype.setFormatFromToken = function(token) {
     if (index >= 0) {
       var domHelper = this.getDomHelper();
       this.setContent([
-        domHelper.createTextNode(caption.substr(0, index)),
+        domHelper.createTextNode(caption.slice(0, index)),
         domHelper.createDom(
-            goog.dom.TagName.B, null, caption.substr(index, token.length)),
-        domHelper.createTextNode(caption.substr(index + token.length))
+            goog.dom.TagName.B, null, caption.slice(index, index + token.length)),
+        domHelper.createTextNode(caption.slice(index + token.length))
       ]);
     }
   }

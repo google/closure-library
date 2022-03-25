@@ -257,7 +257,7 @@ goog.dom.browserrange.AbstractRange.prototype.getHtmlFragment = function() {
           output.append(html);
         } else {
           var index = html.lastIndexOf('<');
-          output.append(index ? html.substr(0, index) : html);
+          output.append(index !== -1 ? html.slice(0, index) : html);
         }
       }
     }

@@ -1767,7 +1767,7 @@ goog.testing.TestCase.prototype.getTimeStamp_ = function() {
 
   // Ensure millis are always 3-digits
   var millis = '00' + d.getMilliseconds();
-  millis = millis.substr(millis.length - 3);
+  millis = millis.slice(-3);
 
   return this.pad_(d.getHours()) + ':' + this.pad_(d.getMinutes()) + ':' +
       this.pad_(d.getSeconds()) + '.' + millis;
@@ -2332,7 +2332,7 @@ goog.testing.TestCase.parseRunTests_ = function(href) {
     return null;
   }
 
-  const nonOriginParts = href.substr(queryParamIndex);
+  const nonOriginParts = href.slice(queryParamIndex);
 
   // Use a "fake" origin because tests may load using protocols that goog.url
   // doesn't support

@@ -269,7 +269,7 @@ goog.tweak.TweakUi.getNamespacedLabel_ = function(entry) {
   'use strict';
   var label = entry.label;
   if (label == entry.getId()) {
-    label = label.substr(label.lastIndexOf('.') + 1);
+    label = label.slice(label.lastIndexOf('.') + 1);
   }
   return label;
 };
