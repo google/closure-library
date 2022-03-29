@@ -306,6 +306,7 @@ closure_js_library(
     lenient = True,
     deps = [
         ":jsloader",
+        "//closure/goog/functions",
         "//closure/goog/html:trustedresourceurl",
         "//closure/goog/object",
     ],

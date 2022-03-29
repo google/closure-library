@@ -22,6 +22,7 @@ See the COPYING file for details.
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.functions');
 goog.require('goog.net.xpc.CrossPageChannel');
 </script>
 <script type="text/javascript">
@@ -47,7 +48,7 @@ function instantiateChannel(cfg) {
 }
 
 function connectChannel(opt_callback) {
-  window.channel.connect(opt_callback || goog.nullFunction);
+  window.channel.connect(opt_callback || goog.functions.UNDEFINED);
 }
 
 function sendEcho(payload) {

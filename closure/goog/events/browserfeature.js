@@ -75,8 +75,8 @@ exports = {
       }
     });
     try {
-      goog.global.addEventListener('test', goog.nullFunction, options);
-      goog.global.removeEventListener('test', goog.nullFunction, options);
+      goog.global.addEventListener('test', () => {}, options);
+      goog.global.removeEventListener('test', () => {}, options);
     } catch (e) {
     }
 

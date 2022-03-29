@@ -23,6 +23,7 @@ goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
+goog.require('goog.functions');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.json');
 goog.require('goog.log');
@@ -550,7 +551,7 @@ goog.net.xpc.CrossPageChannel.prototype.getPeerUri = function(opt_addCfgParam) {
  */
 goog.net.xpc.CrossPageChannel.prototype.connect = function(opt_connectCb) {
   'use strict';
-  this.connectCb_ = opt_connectCb || goog.nullFunction;
+  this.connectCb_ = opt_connectCb || goog.functions.UNDEFINED;
 
   // If this channel was previously closed, transition back to the NOT_CONNECTED
   // state to ensure that the connection can proceed (xpcDeliver blocks

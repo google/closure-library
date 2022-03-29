@@ -24,6 +24,7 @@ closure_js_library(
         "//closure/goog/async:run",
         "//closure/goog/async:throwexception",
         "//closure/goog/debug:error",
+        "//closure/goog/functions",
     ],
 )
 

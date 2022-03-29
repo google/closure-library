@@ -211,7 +211,7 @@ testSuite({
         dom.getDomHelper(document));
     fieldMock.getBaseZindex().$returns(2);
     /** @suppress {visibility} suppression added to enable type checking */
-    bubblePlugin.createBubbleContents = goog.nullFunction;
+    bubblePlugin.createBubbleContents = functions.UNDEFINED;
     fieldMock.$replay();
 
     bubblePlugin.createBubble(link);
@@ -236,7 +236,7 @@ testSuite({
     };
     bubblePlugin.getBubbleTargetFromSelection = functions.identity;
     /** @suppress {visibility} suppression added to enable type checking */
-    bubblePlugin.createBubbleContents = goog.nullFunction;
+    bubblePlugin.createBubbleContents = functions.UNDEFINED;
 
     bubblePlugin.handleSelectionChangeInternal(link);
     assertEquals(0, numTimesCloseCalled);
@@ -256,7 +256,7 @@ testSuite({
     const fakeEvent = new BrowserEvent({type: 'mouseup', target: link});
     bubblePlugin.getBubbleTargetFromSelection = functions.identity;
     /** @suppress {visibility} suppression added to enable type checking */
-    bubblePlugin.createBubbleContents = goog.nullFunction;
+    bubblePlugin.createBubbleContents = functions.UNDEFINED;
     bubblePlugin.handleSelectionChange(fakeEvent);
     assertTrue('Bubble should have been opened', bubblePlugin.isVisible());
     assertEquals(
@@ -269,7 +269,7 @@ testSuite({
     fieldMock.$replay();
     bubblePlugin.getBubbleTargetFromSelection = functions.identity;
     /** @suppress {visibility} suppression added to enable type checking */
-    bubblePlugin.createBubbleContents = goog.nullFunction;
+    bubblePlugin.createBubbleContents = functions.UNDEFINED;
     bubblePlugin.handleSelectionChange(undefined, link2);
     assertTrue('Bubble should have been opened', bubblePlugin.isVisible());
     assertEquals(
@@ -282,7 +282,7 @@ testSuite({
     fieldMock.$replay();
     bubblePlugin.getBubbleTargetFromSelection = functions.identity;
     /** @suppress {visibility} suppression added to enable type checking */
-    bubblePlugin.createBubbleContents = goog.nullFunction;
+    bubblePlugin.createBubbleContents = functions.UNDEFINED;
     // Select first char of first link's text node.
     testHelper.select(link.firstChild, 0, link.firstChild, 1);
     // This should execute without js errors.

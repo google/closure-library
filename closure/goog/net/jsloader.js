@@ -348,9 +348,9 @@ goog.net.jsloader.cleanup_ = function(
     goog.global.clearTimeout(opt_timeout);
   }
 
-  scriptNode.onload = goog.nullFunction;
-  scriptNode.onerror = goog.nullFunction;
-  scriptNode.onreadystatechange = goog.nullFunction;
+  scriptNode.onload = () => {};
+  scriptNode.onerror = () => {};
+  scriptNode.onreadystatechange = () => {};
 
   // Do this after a delay (removing the script node of a running script can
   // confuse older IEs).

@@ -26,6 +26,7 @@ closure_js_library(
         "//closure/goog/events:browserevent",
         "//closure/goog/events:eventhandler",
         "//closure/goog/events:eventtype",
+        "//closure/goog/functions",
         "//closure/goog/html:legacyconversions",
         "//closure/goog/json",
         "//closure/goog/log",

@@ -130,7 +130,7 @@ testSuite({
     outerXpc = new CrossPageChannel(
         getConfiguration(CrossPageChannelRole.OUTER, PEER_IFRAME_ID));
     // Outgoing service.
-    outerXpc.registerService(ECHO_SERVICE_NAME, goog.nullFunction);
+    outerXpc.registerService(ECHO_SERVICE_NAME, () => {});
     // Incoming service.
     const resolver = GoogPromise.withResolver();
     outerXpc.registerService(RESPONSE_SERVICE_NAME, (message) => {
@@ -168,7 +168,7 @@ testSuite({
     outerXpc.setPeerWindowObject(self);
 
     // Outgoing service.
-    outerXpc.registerService(ECHO_SERVICE_NAME, goog.nullFunction);
+    outerXpc.registerService(ECHO_SERVICE_NAME, () => {});
 
     const resolver = GoogPromise.withResolver();
     // Incoming service.
@@ -193,7 +193,7 @@ testSuite({
       innerXpc.send(RESPONSE_SERVICE_NAME, message);
     });
     // Outgoing service.
-    innerXpc.registerService(RESPONSE_SERVICE_NAME, goog.nullFunction);
+    innerXpc.registerService(RESPONSE_SERVICE_NAME, () => {});
     innerXpc.connect();
     return resolver.promise;
   },
@@ -219,7 +219,7 @@ testSuite({
 
     outerXpc = new CrossPageChannel(cfg);
     // Outgoing service.
-    outerXpc.registerService(ECHO_SERVICE_NAME, goog.nullFunction);
+    outerXpc.registerService(ECHO_SERVICE_NAME, () => {});
     const resolver = GoogPromise.withResolver();
     // Incoming service.
     outerXpc.registerService(RESPONSE_SERVICE_NAME, (message) => {

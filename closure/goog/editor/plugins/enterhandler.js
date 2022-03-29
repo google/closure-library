@@ -395,8 +395,8 @@ goog.editor.plugins.EnterHandler.prototype.handleEnterGecko_ = function(e) {
  * @param {goog.events.BrowserEvent} e The key press event.
  * @protected
  */
-goog.editor.plugins.EnterHandler.prototype.handleEnterWebkitInternal =
-    goog.nullFunction;
+goog.editor.plugins.EnterHandler.prototype.handleEnterWebkitInternal = function(
+    e) {};
 
 
 /**
@@ -411,7 +411,7 @@ goog.editor.plugins.EnterHandler.prototype.handleEnterWebkitInternal =
  * @protected
  */
 goog.editor.plugins.EnterHandler.prototype.handleEnterAtCursorGeckoInternal =
-    goog.nullFunction;
+    function(e, wasCollapsed, range) {};
 
 
 /**

@@ -519,7 +519,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.closeBubble = function() {
  * Override it to provide your own one.
  * @protected
  */
-goog.editor.plugins.AbstractBubblePlugin.prototype.onShow = goog.nullFunction;
+goog.editor.plugins.AbstractBubblePlugin.prototype.onShow = function() {};
 
 
 /**
@@ -528,7 +528,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.onShow = goog.nullFunction;
  * @protected
  */
 goog.editor.plugins.AbstractBubblePlugin.prototype.cleanOnBubbleClose =
-    goog.nullFunction;
+    function() {};
 
 
 /**

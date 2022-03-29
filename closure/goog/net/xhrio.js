@@ -996,7 +996,7 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
     const xhr = this.xhr_;
     const clearedOnReadyStateChange =
         this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ?
-        goog.nullFunction :
+        () => {} :
         null;
     this.xhr_ = null;
     this.xhrOptions_ = null;
