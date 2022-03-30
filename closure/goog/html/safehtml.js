@@ -655,6 +655,7 @@ class SafeHtml {
    * @param {!SafeHtml.TextOrHtml_|
    *     !Array<!SafeHtml.TextOrHtml_>=} content
    * @return {!SafeHtml} The SafeHtml content with the tag.
+   * @package
    */
   static createWithDir(
       dir, tagName, attributes = undefined, content = undefined) {
