@@ -64,12 +64,9 @@ goog.testing.dom.END_TAG_MARKER_ = goog.testing.dom.createEndTagMarker_();
  *         string starting with '#': Match the node's id with the text
  *             after "#".
  *         other string: Match the text node's contents.
- * @param {boolean=} useEs6Iteration Whether or not to iterate through this
- *     iterator using ES6 iteration. Iff falsy, uses ES4 iteration.
  * @suppress {strictMissingProperties} charAt on union type
  */
-goog.testing.dom.assertNodesMatch = function(
-    it, array, useEs6Iteration = true) {
+goog.testing.dom.assertNodesMatch = function(it, array) {
   let i = 0;
   function checkNode(node) {
     'use strict';
@@ -103,19 +100,12 @@ goog.testing.dom.assertNodesMatch = function(
 
     i++;
   }
-  if (useEs6Iteration) {
-    const iterator = goog.iter.toIterator(it);
-    const iterable = /** @type {!Iterable<?>} */ ({
-      [Symbol.iterator]: () => iterator,
-    });
-    for (const node of iterable) {
-      checkNode(node);
-    }
-  } else {
-    // Check with ES4 Iteration
-    goog.iter.forEach(it, function(node) {
-      checkNode(node);
-    });
+  const iterator = goog.iter.toIterator(it);
+  const iterable = /** @type {!Iterable<?>} */ ({
+    [Symbol.iterator]: () => iterator,
+  });
+  for (const node of iterable) {
+    checkNode(node);
   }
   assertEquals('Used entire match array', array.length, i);
 };

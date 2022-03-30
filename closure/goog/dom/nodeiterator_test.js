@@ -18,16 +18,12 @@ testSuite({
         ['#test', '#a1', 'T', '#b1', 'e', 'xt', '#span1', '#p1', 'Text'];
     testingDom.assertNodesMatch(
         new DomNodeIterator(dom.getElement('test')), expectedContent);
-    testingDom.assertNodesMatch(
-        new DomNodeIterator(dom.getElement('test')), expectedContent, false);
   },
 
   testUnclosed() {
     const expectedContent = ['#test2', '#li1', 'Not', '#li2', 'Closed'];
     testingDom.assertNodesMatch(
         new DomNodeIterator(dom.getElement('test2')), expectedContent);
-    testingDom.assertNodesMatch(
-        new DomNodeIterator(dom.getElement('test2')), expectedContent, false);
   },
 
   testReverse() {
@@ -35,8 +31,5 @@ testSuite({
         ['Text', '#p1', '#span1', 'xt', 'e', '#b1', 'T', '#a1', '#test'];
     testingDom.assertNodesMatch(
         new DomNodeIterator(dom.getElement('test'), true), expectedContent);
-    testingDom.assertNodesMatch(
-        new DomNodeIterator(dom.getElement('test'), true), expectedContent,
-        false);
   },
 });
