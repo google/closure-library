@@ -346,16 +346,14 @@ testSuite({
       // Don't even try this on IE8!
       return;
     }
-    const attrs = {};
     let dispatchedEvent = null;
     const element = {
-      setAttribute: function(name, value) {
-        attrs[name] = value;
-      },
       dispatchEvent: function(event) {
         dispatchedEvent = event;
       },
       href: undefined,
+      target: undefined,
+      rel: undefined,
     };
     stubs.replace(window.document, 'createElement', (name) => {
       if (name == TagName.A) {
@@ -376,8 +374,8 @@ testSuite({
     // element.href is directly set through goog.dom.safe.setAnchorHref, not
     // with element.setAttribute.
     assertEquals('http://google.com', element.href);
-    assertEquals('_blank', attrs['target']);
-    assertEquals('', attrs['rel'] || '');
+    assertEquals('_blank', element.target);
+    assertEquals('', element.rel || '');
 
     // Click event.
     assertNotNull(dispatchedEvent);
@@ -389,16 +387,14 @@ testSuite({
       // Don't even try this on IE8!
       return;
     }
-    const attrs = {};
     let dispatchedEvent = null;
     const element = {
-      setAttribute: function(name, value) {
-        attrs[name] = value;
-      },
       dispatchEvent: function(event) {
         dispatchedEvent = event;
       },
       href: undefined,
+      target: undefined,
+      rel: undefined,
     };
     stubs.replace(window.document, 'createElement', (name) => {
       if (name == TagName.A) {
@@ -420,10 +416,10 @@ testSuite({
     // element.href is directly set through goog.dom.safe.setAnchorHref, not
     // with element.setAttribute.
     assertEquals('http://google.com', element.href);
-    assertEquals('_blank', attrs['target']);
+    assertEquals('_blank', element.target);
     const expectedRel =
         self.crossOriginIsolated === undefined ? 'noreferrer' : undefined;
-    assertEquals(expectedRel, attrs['rel']);
+    assertEquals(expectedRel, element.rel);
 
     // Click event.
     assertNotNull(dispatchedEvent);

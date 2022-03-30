@@ -185,9 +185,9 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     var a = goog.dom.createElement(goog.dom.TagName.A);
     goog.dom.safe.setAnchorHref(a, safeLinkRef);
 
-    a.setAttribute('target', target);
+    a.target = target;
     if (noReferrerOption) {
-      a.setAttribute('rel', 'noreferrer');
+      a.rel = 'noreferrer';
     }
 
     var click = /** @type {!MouseEvent} */ (document.createEvent('MouseEvent'));
