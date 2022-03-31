@@ -581,7 +581,7 @@ testSuite({
     d.addCallback(function() {
       throw Error('foo');
     });
-    d.addCallback(goog.nullFunction);
+    d.addCallback(() => {});
 
     function assertCallback() {
       d.callback(1);
@@ -1299,7 +1299,7 @@ testSuite({
   testAddBothPropagatesToErrback() {
     const log = [];
     const deferred = new Deferred();
-    deferred.addBoth(goog.nullFunction);
+    deferred.addBoth(() => {});
     deferred.addErrback(function() {
       log.push('errback');
     });
@@ -1311,7 +1311,7 @@ testSuite({
 
   testAddBothDoesNotPropagateUncaughtExceptions() {
     const deferred = new Deferred();
-    deferred.addBoth(goog.nullFunction);
+    deferred.addBoth(() => {});
     deferred.errback(new Error('my error'));
     mockClock.tick(1);
   },

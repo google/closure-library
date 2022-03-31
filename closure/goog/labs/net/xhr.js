@@ -379,7 +379,7 @@ xhr.send = function(method, url, data, opt_options) {
                          'use strict';
                          // Clear event listener before aborting so the errback
                          // will not be called twice.
-                         request.onreadystatechange = goog.nullFunction;
+                         request.onreadystatechange = () => {};
                          request.abort();
                          reject(new xhr.TimeoutError(url, request));
                        }, options.timeoutMs);
@@ -392,7 +392,7 @@ xhr.send = function(method, url, data, opt_options) {
                        // XMLHttpRequest.send is known to throw on some versions
                        // of FF, for example if a cross-origin request is
                        // disallowed.
-                       request.onreadystatechange = goog.nullFunction;
+                       request.onreadystatechange = () => {};
                        goog.global.clearTimeout(timer);
                        reject(new xhr.Error(
                            'Error sending XHR: ' + e.message, url, request));

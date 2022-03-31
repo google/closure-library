@@ -67,7 +67,7 @@ testSuite({
   },
 
   testStartIfActive: function() {
-    const delay = new AnimationDelay(goog.nullFunction);
+    const delay = new AnimationDelay(() => {});
     delay.start();
 
     let startWasCalled = false;

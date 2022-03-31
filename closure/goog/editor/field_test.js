@@ -54,21 +54,21 @@ class TestPlugin extends Plugin {
     this.getTrogClassId = () => 'TestPlugin';
 
     /** @suppress {checkTypes} suppression added to enable type checking */
-    this.handleKeyDown = goog.nullFunction;
+    this.handleKeyDown = () => {};
     /** @suppress {checkTypes} suppression added to enable type checking */
-    this.handleKeyPress = goog.nullFunction;
+    this.handleKeyPress = () => {};
     /** @suppress {checkTypes} suppression added to enable type checking */
-    this.handleKeyUp = goog.nullFunction;
+    this.handleKeyUp = () => {};
     /** @suppress {checkTypes} suppression added to enable type checking */
-    this.handleKeyboardShortcut = goog.nullFunction;
+    this.handleKeyboardShortcut = () => {};
     /** @suppress {checkTypes} suppression added to enable type checking */
-    this.isSupportedCommand = goog.nullFunction;
-    this.execCommandInternal = goog.nullFunction;
-    this.queryCommandValue = goog.nullFunction;
+    this.isSupportedCommand = () => {};
+    this.execCommandInternal = () => {};
+    this.queryCommandValue = () => {};
     /** @suppress {checkTypes} suppression added to enable type checking */
-    this.activeOnUneditableFields = goog.nullFunction;
+    this.activeOnUneditableFields = () => {};
     /** @suppress {checkTypes} suppression added to enable type checking */
-    this.handleSelectionChange = goog.nullFunction;
+    this.handleSelectionChange = () => {};
   }
 }
 

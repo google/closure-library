@@ -575,7 +575,7 @@ goog.graphics.ext.Element.prototype.reset = function() {
  * Overridable function for subclass specific reset.
  * @protected
  */
-goog.graphics.ext.Element.prototype.redraw = goog.nullFunction;
+goog.graphics.ext.Element.prototype.redraw = function() {};
 
 
 // PARENT DEPENDENCY

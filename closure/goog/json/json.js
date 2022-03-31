@@ -90,7 +90,7 @@ goog.json.isValid = function(s) {
  * @private {function(string, !Error)} The first parameter is the error message,
  *     the second is the exception thrown by `JSON.parse`.
  */
-goog.json.errorLogger_ = goog.nullFunction;
+goog.json.errorLogger_ = () => {};
 
 
 /**

@@ -114,7 +114,7 @@ testSuite({
     /** @suppress {undefinedVars} suppression added to enable type checking */
     modB1Loaded = false;
 
-    goog.provide = goog.nullFunction;
+    goog.provide = () => {};
     moduleManager = ModuleManager.getInstance();
     stubs.replace(moduleManager, 'getBackOff_', functions.constant(0));
 
@@ -316,7 +316,7 @@ testSuite({
     // functionality.
     const oldXmlHttp = goog.net.XmlHttp;
     stubs.set(goog.net, 'XmlHttp', function() {
-      return {open: functions.error('mock error'), abort: goog.nullFunction};
+      return {open: functions.error('mock error'), abort: () => {}};
     });
     googObject.extend(goog.net.XmlHttp, oldXmlHttp);
 
@@ -543,7 +543,7 @@ testSuite({
     // functionality.
     const oldXmlHttp = goog.net.XmlHttp;
     stubs.set(goog.net, 'XmlHttp', function() {
-      return {open: functions.error('mock error'), abort: goog.nullFunction};
+      return {open: functions.error('mock error'), abort: () => {}};
     });
     googObject.extend(goog.net.XmlHttp, oldXmlHttp);
 

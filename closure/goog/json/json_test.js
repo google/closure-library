@@ -477,6 +477,6 @@ testSuite({
 
     // bypass the compiler @define check
     googJson['TRY_NATIVE_JSON'] = false;
-    googJson.setErrorLogger(goog.nullFunction);
+    googJson.setErrorLogger(() => {});
   },
 });
