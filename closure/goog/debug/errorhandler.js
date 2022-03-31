@@ -98,7 +98,7 @@ goog.debug.ErrorHandler.prototype.getFunctionIndex_ = function(wrapper) {
  * Installs exception protection for an entry point function. When an exception
  * is thrown from a protected function, a handler will be invoked to handle it.
  *
- * @param {Function} fn An entry point function to be protected.
+ * @param {!Function} fn An entry point function to be protected.
  * @return {!Function} A protected wrapper function that calls the entry point
  *     function.
  */

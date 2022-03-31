@@ -235,7 +235,7 @@ goog.debug.ErrorReporter.defaultXhrSender = function(
  * exceptions in that case.
  *
  * @this {goog.debug.ErrorReporter}
- * @param {Function} fn An entry point function to be protected.
+ * @param {!Function} fn An entry point function to be protected.
  * @return {Function} A protected wrapper function that calls the entry point
  *     function or null if the entry point could not be protected.
  */
