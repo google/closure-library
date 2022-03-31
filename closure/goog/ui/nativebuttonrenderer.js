@@ -121,15 +121,14 @@ goog.ui.NativeButtonRenderer.prototype.initializeDom = function(button) {
  * @override
  * Native buttons don't support text selection.
  */
-goog.ui.NativeButtonRenderer.prototype.setAllowTextSelection =
-    goog.nullFunction;
+goog.ui.NativeButtonRenderer.prototype.setAllowTextSelection = function() {};
 
 
 /**
  * @override
  * Native buttons natively support right-to-left rendering.
  */
-goog.ui.NativeButtonRenderer.prototype.setRightToLeft = goog.nullFunction;
+goog.ui.NativeButtonRenderer.prototype.setRightToLeft = function() {};
 
 
 /**
@@ -146,7 +145,7 @@ goog.ui.NativeButtonRenderer.prototype.isFocusable = function(button) {
  * @override
  * Native buttons natively support keyboard focus.
  */
-goog.ui.NativeButtonRenderer.prototype.setFocusable = goog.nullFunction;
+goog.ui.NativeButtonRenderer.prototype.setFocusable = function() {};
 
 
 /**
@@ -201,7 +200,7 @@ goog.ui.NativeButtonRenderer.prototype.setValue = function(element, value) {
  * Native buttons don't need ARIA states to support accessibility, so this is
  * a no-op.
  */
-goog.ui.NativeButtonRenderer.prototype.updateAriaState = goog.nullFunction;
+goog.ui.NativeButtonRenderer.prototype.updateAriaState = function() {};
 
 
 /**

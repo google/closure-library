@@ -1571,6 +1571,7 @@ closure_js_library(
         "//closure/goog/events:eventtype",
         "//closure/goog/events:keycodes",
         "//closure/goog/events:keyhandler",
+        "//closure/goog/functions",
         "//closure/goog/object",
         "//closure/goog/string",
         "//closure/goog/style",

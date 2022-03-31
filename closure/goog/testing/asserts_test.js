@@ -40,7 +40,7 @@ async function internalTestAssertRejects(swallowUnhandledRejections, factory) {
     // TODO(user): Stop the unhandled rejection handler from firing
     // rather than swallowing the errors.
     if (swallowUnhandledRejections) {
-      GoogPromise.setUnhandledRejectionHandler(goog.nullFunction);
+      GoogPromise.setUnhandledRejectionHandler(() => {});
     }
 
     let e;
@@ -1223,7 +1223,7 @@ testSuite({
         error.message);
 
     error = assertThrowsJsUnitException(() => {
-      assertThrowsJsUnitException(goog.nullFunction);
+      assertThrowsJsUnitException(() => {});
     });
     assertEquals('Expected a failure', error.message);
   },

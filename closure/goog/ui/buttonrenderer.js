@@ -143,7 +143,7 @@ goog.ui.ButtonRenderer.prototype.decorate = function(button, element) {
  * @param {Element} element The button's root element.
  * @return {string|undefined} The button's value (undefined if none).
  */
-goog.ui.ButtonRenderer.prototype.getValue = goog.nullFunction;
+goog.ui.ButtonRenderer.prototype.getValue = function(element) {};
 
 
 /**
@@ -152,7 +152,7 @@ goog.ui.ButtonRenderer.prototype.getValue = goog.nullFunction;
  * @param {Element} element The button's root element.
  * @param {string} value New value.
  */
-goog.ui.ButtonRenderer.prototype.setValue = goog.nullFunction;
+goog.ui.ButtonRenderer.prototype.setValue = function(element, value) {};
 
 
 /**

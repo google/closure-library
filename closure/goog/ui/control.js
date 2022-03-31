@@ -26,6 +26,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
+goog.require('goog.functions');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ComponentUtil');
@@ -612,7 +613,7 @@ goog.ui.Control.prototype.enableMouseEventHandling_ = function(enable) {
           element, goog.events.EventType.GOTPOINTERCAPTURE,
           this.preventPointerCapture_);
     }
-    if (this.handleContextMenu != goog.nullFunction) {
+    if (this.handleContextMenu != goog.functions.UNDEFINED) {
       handler.listen(
           element, goog.events.EventType.CONTEXTMENU, this.handleContextMenu);
     }
@@ -643,7 +644,7 @@ goog.ui.Control.prototype.enableMouseEventHandling_ = function(enable) {
           element, goog.events.EventType.GOTPOINTERCAPTURE,
           this.preventPointerCapture_);
     }
-    if (this.handleContextMenu != goog.nullFunction) {
+    if (this.handleContextMenu != goog.functions.UNDEFINED) {
       handler.unlisten(
           element, goog.events.EventType.CONTEXTMENU, this.handleContextMenu);
     }
@@ -1309,7 +1310,7 @@ goog.ui.Control.prototype.preventPointerCapture_ = function(e) {
  * Handles contextmenu events.
  * @param {goog.events.BrowserEvent} e Event to handle.
  */
-goog.ui.Control.prototype.handleContextMenu = goog.nullFunction;
+goog.ui.Control.prototype.handleContextMenu = goog.functions.UNDEFINED;
 
 
 /**

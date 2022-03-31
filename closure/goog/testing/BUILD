@@ -441,6 +441,7 @@ closure_js_library(
     lenient = True,
     deps = [
         ":asserts",
+        "//closure/goog/functions",
         "//closure/goog/promise",
         "//closure/goog/promise:resolver",
     ],

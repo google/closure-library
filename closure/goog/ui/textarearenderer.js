@@ -110,7 +110,7 @@ goog.ui.TextareaRenderer.prototype.canDecorate = function(element) {
  * Textareas natively support right-to-left rendering.
  * @override
  */
-goog.ui.TextareaRenderer.prototype.setRightToLeft = goog.nullFunction;
+goog.ui.TextareaRenderer.prototype.setRightToLeft = function() {};
 
 
 /**
@@ -127,7 +127,7 @@ goog.ui.TextareaRenderer.prototype.isFocusable = function(textarea) {
  * Textareas natively support keyboard focus.
  * @override
  */
-goog.ui.TextareaRenderer.prototype.setFocusable = goog.nullFunction;
+goog.ui.TextareaRenderer.prototype.setFocusable = function() {};
 
 
 /**
@@ -152,7 +152,7 @@ goog.ui.TextareaRenderer.prototype.setState = function(
  * a no-op.
  * @override
  */
-goog.ui.TextareaRenderer.prototype.updateAriaState = goog.nullFunction;
+goog.ui.TextareaRenderer.prototype.updateAriaState = function() {};
 
 
 /**

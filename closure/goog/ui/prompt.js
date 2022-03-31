@@ -92,7 +92,7 @@ goog.inherits(goog.ui.Prompt, goog.ui.Dialog);
  * @type {Function}
  * @private
  */
-goog.ui.Prompt.prototype.callback_ = goog.nullFunction;
+goog.ui.Prompt.prototype.callback_ = goog.functions.UNDEFINED;
 
 
 /**

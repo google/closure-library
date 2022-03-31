@@ -807,10 +807,10 @@ testSuite({
     // IE6.  Explicitly reading the property makes it work.
     const setTimeout = window.setTimeout;
     assertThrows('Timeouts > MAX_INT should fail', () => {
-      setTimeout(goog.nullFunction, 2147483648);
+      setTimeout(() => {}, 2147483648);
     });
     assertThrows('Timeouts much greater than MAX_INT should fail', () => {
-      setTimeout(goog.nullFunction, 2147483648 * 10);
+      setTimeout(() => {}, 2147483648 * 10);
     });
     clock.uninstall();
   },
@@ -830,7 +830,7 @@ testSuite({
 
   testMozRequestAnimationFrame() {
     // Setting this function will indirectly tell the mock clock to mock it out.
-    stubs.set(window, 'mozRequestAnimationFrame', goog.nullFunction);
+    stubs.set(window, 'mozRequestAnimationFrame', () => {});
 
     const clock = new MockClock(true);
 

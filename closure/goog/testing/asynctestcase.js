@@ -457,8 +457,7 @@ goog.testing.AsyncTestCase.prototype.doAsyncError = function(opt_e) {
 
   // doError() uses test.name. Here, we create a dummy test and give it a more
   // helpful name based on the step we're currently on.
-  var fakeTestObj =
-      new goog.testing.TestCase.Test(this.curStepName_, goog.nullFunction);
+  var fakeTestObj = new goog.testing.TestCase.Test(this.curStepName_, () => {});
   if (this.activeTest) {
     fakeTestObj.name = this.activeTest.name + ' [' + fakeTestObj.name + ']';
   }

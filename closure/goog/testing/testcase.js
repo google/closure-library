@@ -175,7 +175,7 @@ goog.testing.TestCase = function(opt_name) {
   this.order = goog.testing.TestCase.Order.SORTED;
 
   /** @private {function(!goog.testing.TestCase.Result)} */
-  this.runNextTestCallback_ = goog.nullFunction;
+  this.runNextTestCallback_ = () => {};
 
   /**
    * The currently executing test case or null.
@@ -1670,7 +1670,7 @@ goog.testing.TestCase.prototype.cycleTests = function() {
   this.saveMessage('Start');
   this.batchTime_ = this.now();
   if (this.running) {
-    this.runNextTestCallback_ = goog.nullFunction;
+    this.runNextTestCallback_ = () => {};
     // Kick off the tests. runNextTest_ will schedule all of the tests,
     // using a mixture of synchronous and asynchronous strategies.
     goog.testing.TestCase.Continuation_.run(this.runNextTest_());
