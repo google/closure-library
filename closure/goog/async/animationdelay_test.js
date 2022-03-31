@@ -54,7 +54,7 @@ testSuite({
   testAlwaysUseGoogNowForHandlerTimestamp: function() {
     const resolver = Promise.withResolver();
     const expectedValue = 12345.1;
-    stubs.set(goog, 'now', function() { return expectedValue; });
+    stubs.set(Date, 'now', function() { return expectedValue; });
 
     const delay = new AnimationDelay(function(timestamp) {
       assertEquals(expectedValue, timestamp);
