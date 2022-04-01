@@ -1138,7 +1138,7 @@ testSuite({
   },
 
   testGetRandomString() {
-    stubs.set(goog, 'now', functions.constant(1295726605874));
+    stubs.set(Date, 'now', functions.constant(1295726605874));
     stubs.set(Math, 'random', functions.constant(0.6679361383522245));
     assertTrue(
         'String must be alphanumeric',
