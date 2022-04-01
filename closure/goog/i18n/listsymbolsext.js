@@ -26,7 +26,7 @@ const ListSymbols = goog.require('goog.i18n.ListFormatSymbols');
 /**
  * @type {!ListSymbols.ListFormatSymbols}
  */
-let defaultSymbols;
+let defaultSymbols = ListSymbols.ListFormatSymbols_en;
 
 
 

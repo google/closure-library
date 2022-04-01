@@ -1216,7 +1216,7 @@ exports.ListFormatSymbols_zu = {
  * Default value, in case nothing else matches
  * @type  {!ListFormatSymbols}
  */
-let defaultSymbols;
+let defaultSymbols = exports.ListFormatSymbols_en;
 
 
 /**
@@ -1597,4 +1597,3 @@ switch (goog.LOCALE) {
     defaultSymbols = exports.ListFormatSymbols_zu;
     break;
 }
-
