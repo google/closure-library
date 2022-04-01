@@ -23,7 +23,7 @@ testSuite({
 
   testStart: function() {
     let resolver = Promise.withResolver();
-    const start = goog.now();
+    const start = Date.now();
     const delay = new AnimationDelay(function(end) {
       assertNotNull(resolver);  // fail if called multiple times
       resolver.resolve();
@@ -37,7 +37,7 @@ testSuite({
 
   testStop: function() {
     const resolver = Promise.withResolver();
-    const start = goog.now();
+    const start = Date.now();
     const delay = new AnimationDelay(function(end) {
       resolver.reject();
     });
