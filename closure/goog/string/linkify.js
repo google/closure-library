@@ -90,8 +90,7 @@ goog.string.linkify.linkifyPlainTextAsHtml = function(text, opt_options) {
       }
       return goog.html.uncheckedconversions
           .safeHtmlFromStringKnownToSatisfyTypeContract(
-              goog.string.Const.from('Escaped plain text'), modifiedHtml,
-              html.getDirection());
+              goog.string.Const.from('Escaped plain text'), modifiedHtml);
     } else if (preserveNewlines) {
       return goog.html.SafeHtml.htmlEscapePreservingNewlines(plainText);
     } else {
