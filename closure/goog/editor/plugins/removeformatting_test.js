@@ -644,6 +644,24 @@ testSuite({
     });
   },
 
+  /**
+   * @suppress {visibility} suppression added to enable type checking
+   */
+  testPreservesLinkFormatting() {
+    const testHtml = '<a href="http://www.google.com/">abc123</a>';
+    const div = document.getElementById('html');
+    div.innerHTML = testHtml + controlHtml;
+    Range.createFromNodeContents(div.firstChild).select();
+
+    expectedFailures.run(() => {
+      FORMATTER.removeFormatting_();
+      assertHTMLEquals(
+          'Anchor formatting should be preserved', testHtml + controlHtml,
+          div.innerHTML);
+      FIELDMOCK.$verify();
+    });
+  },
+
   testFullTableRemoveFormatting() {
     // Something goes horrible wrong in case 1 below.  It was crashing all
     // WebKit browsers, and now seems to be giving errors as it is trying
