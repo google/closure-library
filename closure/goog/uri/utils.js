@@ -986,8 +986,8 @@ goog.uri.utils.getParamValues = function(uri, keyEncoded) {
 
     // Progress forth to the end of the "key=" or "key&" substring.
     foundIndex += keyEncoded.length + 1;
-    result.push(goog.string.urlDecode(
-        uri.slice(foundIndex, Math.max(position,0))));
+    result.push(
+        goog.string.urlDecode(uri.slice(foundIndex, Math.max(position, 0))));
   }
 
   return result;

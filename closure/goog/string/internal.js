@@ -67,7 +67,8 @@ goog.string.internal.caseInsensitiveStartsWith = function(str, prefix) {
  */
 goog.string.internal.caseInsensitiveEndsWith = function(str, suffix) {
   'use strict';
-  return (goog.string.internal.caseInsensitiveCompare(
+  return (
+      goog.string.internal.caseInsensitiveCompare(
           suffix, str.slice(str.length - suffix.length)) == 0);
 };
 
