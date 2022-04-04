@@ -1745,6 +1745,71 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
   goog.cssNameMapping_ = goog.global.CLOSURE_CSS_NAME_MAPPING;
 }
 
+/**
+ * Options bag type for `goog.getMsg()` third argument.
+ *
+ * It is important to note that these options need to be known at compile time,
+ * so they must always be provided to `goog.getMsg()` as an actual object
+ * literal in the function call. Otherwise, closure-compiler will report an
+ * error.
+ * @record
+ */
+goog.GetMsgOptions = function() {};
+
+/**
+ * If `true`, escape '<' in the message string to '&lt;'.
+ *
+ * Used by Closure Templates where the generated code size and performance is
+ * critical which is why {@link goog.html.SafeHtmlFormatter} is not used.
+ * The value must be literal `true` or `false`.
+ * @type {boolean|undefined}
+ */
+goog.GetMsgOptions.prototype.html;
+
+/**
+ * If `true`, unescape common html entities: &gt;, &lt;, &apos;, &quot; and
+ * &amp;.
+ *
+ * Used for messages not in HTML context, such as with the `textContent`
+ * property.
+ * The value must be literal `true` or `false`.
+ * @type {boolean|undefined}
+ */
+goog.GetMsgOptions.prototype.unescapeHtmlEntities;
+
+/**
+ * Associates placeholder names with strings showing how their values are
+ * obtained.
+ *
+ * This field is intended for use in automatically generated JS code.
+ * Human-written code should use meaningful placeholder names instead.
+ *
+ * closure-compiler uses this as the contents of the `<ph>` tag in the
+ * XMB file it generates or defaults to `-` for historical reasons.
+ *
+ * Must be an object literal.
+ * Ignored at runtime.
+ * Keys are placeholder names.
+ * Values are string literals indicating how the value is obtained.
+ * Typically this is a snippet of source code.
+ * @type {!Object<string, string>|undefined}
+ */
+goog.GetMsgOptions.prototype.original_code;
+
+/**
+ * Associates placeholder names with example values.
+ *
+ * closure-compiler uses this as the contents of the `<ex>` tag in the
+ * XMB file it generates or defaults to `-` for historical reasons.
+ *
+ * Must be an object literal.
+ * Ignored at runtime.
+ * Keys are placeholder names.
+ * Values are string literals containing example placeholder values.
+ * (e.g. "George McFly" for a name placeholder)
+ * @type {!Object<string, string>|undefined}
+ */
+goog.GetMsgOptions.prototype.example;
 
 /**
  * Gets a localized message.
@@ -1763,16 +1828,8 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
  * produce SafeHtml.
  *
  * @param {string} str Translatable string, places holders in the form {$foo}.
- * @param {Object<string, string>=} opt_values Maps place holder name to value.
- * @param {{html: (boolean|undefined),
- *         unescapeHtmlEntities: (boolean|undefined)}=} opt_options Options:
- *     html: Escape '<' in str to '&lt;'. Used by Closure Templates where the
- *     generated code size and performance is critical which is why {@link
- *     goog.html.SafeHtmlFormatter} is not used. The value must be literal true
- *     or false.
- *     unescapeHtmlEntities: Unescape common html entities: &gt;, &lt;, &apos;,
- *     &quot; and &amp;. Used for messages not in HTML context, such as with
- *     `textContent` property.
+ * @param {!Object<string, string>=} opt_values Maps place holder name to value.
+ * @param {!goog.GetMsgOptions=} opt_options see `goog.GetMsgOptions`
  * @return {string} message with placeholders filled.
  */
 goog.getMsg = function(str, opt_values, opt_options) {
