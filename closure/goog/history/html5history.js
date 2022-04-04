@@ -148,7 +148,7 @@ goog.history.Html5History.prototype.getToken = function() {
     return this.transformer_ ?
         this.transformer_.retrieveToken(
             this.pathPrefix_, this.window_.location) :
-        this.window_.location.pathname.substr(this.pathPrefix_.length);
+        this.window_.location.pathname.slice(this.pathPrefix_.length);
   }
 };
 

@@ -86,7 +86,7 @@ goog.testing.dom.assertNodesMatch = function(it, array) {
       assertEquals(
           'Expected element at position ' + i, goog.dom.NodeType.ELEMENT,
           node.nodeType);
-      const expectedId = expected.substr(1);
+      const expectedId = expected.slice(1);
       assertEquals('IDs should match at position ' + i, expectedId, node.id);
 
     } else {
@@ -165,7 +165,7 @@ goog.testing.dom.checkUserAgents_ = function(userAgents) {
     if (goog.string.contains(userAgents, ' ')) {
       throw new Error('Only a single negative user agent may be specified');
     }
-    return !goog.userAgent[userAgents.substr(1)];
+    return !goog.userAgent[userAgents.slice(1)];
   }
 
   var agents = userAgents.split(' ');

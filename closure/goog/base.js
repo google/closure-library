@@ -2295,8 +2295,8 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       var src = script.src;
       var qmark = src.lastIndexOf('?');
       var l = qmark == -1 ? src.length : qmark;
-      if (src.substr(l - 7, 7) == 'base.js') {
-        goog.basePath = src.substr(0, l - 7);
+      if (src.slice(l - 7, l) == 'base.js') {
+        goog.basePath = src.slice(0, l - 7);
         return;
       }
     }

@@ -122,7 +122,7 @@ class Long {
     if (digits.length < safeDigits) {
       // Up to 13 leading 0s we might need to insert as the greatest safeDigits
       // value is 14 (for radix 2).
-      digits = '0000000000000'.substr(digits.length - safeDigits) + digits;
+      digits = '0000000000000'.slice(digits.length - safeDigits) + digits;
     }
 
     val = remDiv.toNumber();

@@ -88,14 +88,14 @@ goog.storage.mechanism.PrefixedMechanism.prototype.__iterator__ = function(
     let it = subIter.next();
     if (it.done) return it;
     key = it.value;
-    while (key.substr(0, selfObj.prefix_.length) != selfObj.prefix_) {
+    while (key.slice(0, selfObj.prefix_.length) != selfObj.prefix_) {
       it = subIter.next();
       if (it.done) return it;
       key = it.value;
     }
     return goog.iter.createEs6IteratorYield(
         /** @type {string} */ (
-            opt_keys ? key.substr(selfObj.prefix_.length) :
+            opt_keys ? key.slice(selfObj.prefix_.length) :
                        selfObj.mechanism_.get(key)));
   };
 

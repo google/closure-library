@@ -331,8 +331,7 @@ goog.ui.PlainTextSpellChecker.prototype.initTextArray_ = function(text) {
       break;
     }
     var excludedRange = result[0];
-    var includedRange =
-        text.substr(stringSegmentStart, result.index - stringSegmentStart);
+    var includedRange = text.slice(stringSegmentStart, result.index);
     if (includedRange) {
       this.textArray_.push(includedRange);
       this.textArrayProcess_.push(true);
@@ -342,7 +341,7 @@ goog.ui.PlainTextSpellChecker.prototype.initTextArray_ = function(text) {
     stringSegmentStart = this.excludeMarker.lastIndex;
   }
 
-  var leftoverText = text.substr(stringSegmentStart);
+  var leftoverText = text.slice(stringSegmentStart);
   if (leftoverText) {
     this.textArray_.push(leftoverText);
     this.textArrayProcess_.push(true);

@@ -828,7 +828,7 @@ goog.i18n.DateTimeFormat.prototype.formatFractionalSeconds_ = function(
   const value =
       /** @type {!Date|!goog.date.DateTime} */ (date).getMilliseconds() / 1000;
   return this.localizeNumbers_(
-      value.toFixed(Math.min(3, count)).substr(2) +
+      value.toFixed(Math.min(3, count)).slice(2) +
       (count > 3 ? goog.string.padNumber(0, count - 3) : ''));
 };
 

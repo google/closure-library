@@ -156,7 +156,7 @@ goog.storage.mechanism.IEUserData.encodeKey_ = function(key) {
  */
 goog.storage.mechanism.IEUserData.decodeKey_ = function(key) {
   'use strict';
-  return decodeURIComponent(key.replace(/\./g, '%')).substr(1);
+  return decodeURIComponent(key.replace(/\./g, '%')).slice(1);
 };
 
 
