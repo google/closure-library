@@ -30,9 +30,9 @@ testSuite({
     if (clock) {
       clock.uninstall();
     }
-    // Unset the cached nextTickImpl behavior so it's re-evaluated for each
+    // Unset the cached setImmediate_ behavior so it's re-evaluated for each
     // test.
-    nextTick.nextTickImpl = /** @type {?} */ (undefined);
+    nextTick.setImmediate_ = /** @type {?} */ (undefined);
     propertyReplacer.reset();
   },
 
@@ -152,7 +152,7 @@ testSuite({
 
       // This is only testing wrapping the callback with the protected entry
       // point, so it's okay to replace this function with a fake.
-      propertyReplacer.set(nextTick, 'nextTickImpl', (cb) => {
+      propertyReplacer.set(nextTick, 'setImmediate_', (cb) => {
         try {
           cb();
           fail('The callback should have thrown an error.');

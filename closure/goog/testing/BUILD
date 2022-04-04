@@ -254,7 +254,6 @@ closure_js_library(
     deps = [
         ":propertyreplacer",
         "//closure/goog/asserts",
-        "//closure/goog/async:nexttick",
         "//closure/goog/async:run",
         "//closure/goog/disposable",
         "//closure/goog/promise",
