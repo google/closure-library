@@ -16,7 +16,7 @@ const weekDay = goog.require('goog.date.weekDay');
 testSuite({
   /** @suppress {checkTypes} suppression added to enable type checking */
   testConstructor() {
-    goog.now = () => new Date(2001, 2, 3, 4).getTime();
+    Date.now = () => new Date(2001, 2, 3, 4).getTime();
 
     let d = new UtcDateTime();
     assertTrue('default constructor', d.equals(new Date(goog.now())));
