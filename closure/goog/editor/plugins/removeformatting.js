@@ -735,7 +735,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
         case String(goog.dom.TagName.A):
           if (node.href && node.href != '') {
             sb.push("<a href='");
-            sb.push(node.href);
+            sb.push(node.getAttribute('href'));
             sb.push("'>");
             sb.push(this.removeFormattingWorker_(node.innerHTML));
             sb.push('</a>');

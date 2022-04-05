@@ -249,7 +249,31 @@ testSuite({
                FORMATTER.removeFormatting_();
                assertHTMLEquals(
                    'link should not be removed',
-                   'FooPre<a href="http://www.google.com/">Outside SpanInside Span</a>',
+                   'FooPre<a href="http://www.google.com">Outside SpanInside Span</a>',
+                   div.innerHTML);
+             });
+  },
+
+  testRelativeLinksAreNotAbsolutified() {
+    let anchor;
+    const div = document.getElementById('html');
+    div.innerHTML = 'Foo<span id="link">Pre<a href="/hello.html">' +
+        'Outside Span<span style="font-size:15pt">Inside Span' +
+        '</span></a></span>';
+
+    anchor = document.getElementById('link');
+    Range.createFromNodeContents(anchor).select();
+
+    expectedFailures
+        .run(/**
+                @suppress {visibility} suppression added to enable type
+                checking
+              */
+             () => {
+               FORMATTER.removeFormatting_();
+               assertHTMLEquals(
+                   'link should not be absolutified',
+                   'FooPre<a href="/hello.html">Outside SpanInside Span</a>',
                    div.innerHTML);
              });
   },
