@@ -346,7 +346,7 @@ testSuite({
     assertEquals(3, date.getDate());
     assertEquals(new Date(2001, 2, 3).getTime(), date.getTime());
 
-    goog.now = () => new Date(2001, 2, 3, 4).getTime();
+    Date.now = () => new Date(2001, 2, 3, 4).getTime();
     date = new DateDate();
     assertEquals(2001, date.getFullYear());
     assertEquals(2, date.getMonth());
@@ -1129,7 +1129,7 @@ testSuite({
     assertEquals(7, date.getMilliseconds());
     assertEquals(new Date(2001, 2, 3, 4, 5, 6, 7).getTime(), date.getTime());
 
-    goog.now = () => new Date(2001, 2, 3, 4).getTime();
+    Date.now = () => new Date(2001, 2, 3, 4).getTime();
     date = new DateTime();
     assertEquals(2001, date.getFullYear());
     assertEquals(2, date.getMonth());
