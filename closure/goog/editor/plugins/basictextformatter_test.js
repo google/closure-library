@@ -536,6 +536,43 @@ testSuite({
     }
   },
 
+  /**
+   * @suppress {missingProperties, visibility} suppression added to enable type
+   * checking
+   */
+  testCursorPreservedOnListCreation() {
+    setUpListAndBlockquoteTests();
+    FIELDMOCK.getPluginByClassId('Bidi').$anyTimes().$returns(null);
+    FIELDMOCK.queryCommandValue(Command.DEFAULT_TAG)
+        .$anyTimes()
+        .$returns(TagName.P);
+
+    FIELDMOCK.$replay();
+    let cursorPlaceholder = dom.getElement('cursorRoot');
+    Range.createCaret(cursorPlaceholder.firstChild, 3).select();
+
+    FORMATTER.execCommandInternal(BasicTextFormatter.COMMAND.UNORDERED_LIST);
+    const selection = window.getSelection();
+    assertTrue(selection.isCollapsed);
+    assertEquals(selection.rangeCount, 1);
+
+
+    // When inserting the list, IE puts the LI outside the div/p in the DOM,
+    // and the rest of the browsers put it immediately surrounding the text
+    // node.
+    if (userAgent.IE) {
+      cursorPlaceholder = dom.getElement('cursorRoot');
+      assertEquals(selection.anchorNode, cursorPlaceholder.firstChild);
+    } else {
+      const li = dom.getElementByTagNameAndClass(
+          TagName.LI, null, dom.getElement('cursorTest'));
+      assertEquals(selection.anchorNode, li.firstChild);
+    }
+    assertEquals(selection.anchorOffset, 3);
+
+    tearDownListAndBlockquoteTests();
+  },
+
   /** @suppress {visibility} suppression added to enable type checking */
   testSwitchListType() {
     if (!userAgent.WEBKIT) {
