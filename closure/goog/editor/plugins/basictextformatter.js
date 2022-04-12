@@ -181,7 +181,6 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
   var preserveDir, styleWithCss, needsFormatBlockDiv, hasDummySelection;
   var result;
   var opt_arg = arguments[1];
-  let savedRange;
 
   switch (command) {
     case goog.editor.plugins.BasicTextFormatter.COMMAND.BACKGROUND_COLOR:
@@ -262,15 +261,6 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
               !this.queryCommandValue(command)) {
             hasDummySelection |= this.beforeInsertListGecko_();
           }
-          // If the selection is collapsed, save it so we can restore it after
-          // we have added the list, so we don't lose cursor position.
-          const selection =
-              this.getFieldDomHelper().getDocument().getSelection();
-          if (selection.rangeCount === 1 && selection.isCollapsed) {
-            savedRange = goog.editor.range.saveUsingNormalizedCarets(
-                goog.dom.Range.createFromBrowserRange(selection.getRangeAt(0)));
-          }
-
           // Fall through to preserveDir block
 
         case goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK:
@@ -334,10 +324,6 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
 
       if (hasDummySelection) {
         this.getDocument_().execCommand('Delete', false, true);
-      }
-
-      if (savedRange) {
-        savedRange.restore();
       }
 
       if (needsFormatBlockDiv) {
