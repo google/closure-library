@@ -271,6 +271,7 @@ goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ = function(
     if (typeof fn === 'string') {
       fn = goog.partial(goog.globalEval, fn);
     }
+    if (!fn) throw new Error(fnName + ' not on global?');
     arguments[0] = fn = that.protectEntryPoint(fn);
 
     // IE doesn't support .call for setInterval/setTimeout, but it
