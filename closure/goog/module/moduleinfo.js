@@ -19,7 +19,7 @@ goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.module');
 goog.require('goog.module.BaseModule');
 goog.require('goog.module.ModuleLoadCallback');
-goog.require('goog.module.ModuleLoadFailureType');
+goog.requireType('goog.module.ModuleLoadFailure');
 
 
 
@@ -301,7 +301,7 @@ goog.module.ModuleInfo.prototype.onLoad = function(contextProvider) {
 
 /**
  * Calls the error callbacks for the module.
- * @param {goog.module.ModuleLoadFailureType} cause What caused the
+ * @param {!goog.module.ModuleLoadFailure} cause What caused the
  *     error.
  */
 goog.module.ModuleInfo.prototype.onError = function(cause) {

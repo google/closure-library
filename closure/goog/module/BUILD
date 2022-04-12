@@ -51,18 +51,29 @@ closure_js_library(
     name = "moduleinfo",
     srcs = [
         "moduleinfo.js",
-        "moduleloadfailuretype.js",
     ],
     lenient = True,
+    exports = [
+        ":moduleloadfailure",
+    ],
     deps = [
         ":basemodule",
         ":module",
         ":moduleloadcallback",
+        ":moduleloadfailure",
         "//closure/goog/async:throwexception",
         "//closure/goog/disposable",
         "//closure/goog/functions",
         "//closure/goog/html:trustedresourceurl",
     ],
+)
+
+closure_js_library(
+    name = "moduleloadfailure",
+    srcs = [
+        "moduleloadfailure.js",
+    ],
+    lenient = True,
 )
 
 closure_js_library(
