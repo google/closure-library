@@ -1322,15 +1322,16 @@ goog.net.XhrIo.prototype.getResponseHeader = function(key) {
 
 /**
  * Gets the text of all the headers in the response.
- * Will only return correct result when called from the context of a callback
- * and the request has completed.
+ * Will only return correct result after ready state reaches `LOADED` (i.e.
+ * `HEADERS_RECEIVED` as per MDN).
  * @return {string} The value of the response headers or empty string.
  */
 goog.net.XhrIo.prototype.getAllResponseHeaders = function() {
   'use strict';
   // getAllResponseHeaders can return null if no response has been received,
   // ensure we always return an empty string.
-  return this.xhr_ && this.isComplete() ?
+  return this.xhr_ &&
+          this.getReadyState() >= goog.net.XmlHttp.ReadyState.LOADED ?
       (this.xhr_.getAllResponseHeaders() || '') :
       '';
 };
