@@ -764,6 +764,34 @@ testSuite({
     tearDownLinkTests();
   },
 
+  /**
+     @suppress {missingProperties, visibility} suppression added to enable type
+     checking
+   */
+  testRemoveLink() {
+    setUpLinkTests('12345', 'http://www.x.com/', true);
+
+    FIELDMOCK.dispatchChange().$atLeastOnce();
+    FIELDMOCK.dispatchSelectionChangeEvent().$anyTimes();
+
+    FIELDMOCK.$replay();
+    HELPER.select('12345', 1, '12345', 4);
+    // To create the link.
+    FORMATTER.execCommandInternal(Command.LINK);
+    HELPER.assertHtmlMatches(
+        BrowserFeature.GETS_STUCK_IN_LINKS ?
+            '1<a href="http://www.x.com/">234</a>&nbsp;5' :
+            '1<a href="http://www.x.com/">234</a>5');
+
+    // To remove the link.
+    HELPER.select('234', 2);
+    FORMATTER.execCommandInternal(Command.LINK);
+    HELPER.assertHtmlMatches('12345');
+
+    FIELDMOCK.$verify();
+    tearDownLinkTests();
+  },
+
   /** @suppress {visibility} suppression added to enable type checking */
   testJustify() {
     setUpJustifyTests('<div>abc</div><p>def</p><div>ghi</div>');
