@@ -8,7 +8,6 @@ closure_js_library(
     name = "crosspagechannel",
     srcs = [
         "crosspagechannel.js",
-        "directtransport.js",
         "nativemessagingtransport.js",
     ],
     lenient = True,
@@ -45,11 +44,6 @@ closure_js_library(
     name = "crosspagechannelrole",
     srcs = ["crosspagechannelrole.js"],
     lenient = True,
-)
-
-alias(
-    name = "directtransport",
-    actual = ":crosspagechannel",
 )
 
 alias(

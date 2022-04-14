@@ -1052,7 +1052,6 @@ const Driver = class extends Disposable {
     const transportType = this.channel_.determineTransportType_();
     switch (transportType) {
       case TransportTypes.NATIVE_MESSAGING:
-      case TransportTypes.DIRECT:
         testable = true;
         break;
     }

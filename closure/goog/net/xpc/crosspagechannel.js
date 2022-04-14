@@ -32,7 +32,6 @@ goog.require('goog.net.xpc');
 goog.require('goog.net.xpc.CfgFields');
 goog.require('goog.net.xpc.ChannelStates');
 goog.require('goog.net.xpc.CrossPageChannelRole');
-goog.require('goog.net.xpc.DirectTransport');
 goog.require('goog.net.xpc.NativeMessagingTransport');
 goog.require('goog.net.xpc.TransportTypes');
 goog.require('goog.net.xpc.UriCfgFields');
@@ -339,19 +338,6 @@ goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
         this.transport_ = new goog.net.xpc.NativeMessagingTransport(
             this, this.cfg_[CfgFields.PEER_HOSTNAME], this.domHelper_,
             !!this.cfg_[CfgFields.ONE_SIDED_HANDSHAKE], protocolVersion);
-        break;
-      case goog.net.xpc.TransportTypes.DIRECT:
-        if (this.peerWindowObject_ &&
-            goog.net.xpc.DirectTransport.isSupported(
-                /** @type {!Window} */ (this.peerWindowObject_))) {
-          this.transport_ =
-              new goog.net.xpc.DirectTransport(this, this.domHelper_);
-        } else {
-          goog.log.info(
-              goog.net.xpc.logger,
-              'DirectTransport not supported for this window, peer window in' +
-                  ' different security context or not set yet.');
-        }
         break;
     }
   }
