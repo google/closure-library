@@ -53,9 +53,6 @@ closure_js_library(
         "moduleinfo.js",
     ],
     lenient = True,
-    exports = [
-        ":moduleloadfailure",
-    ],
     deps = [
         ":basemodule",
         ":module",
@@ -127,6 +124,7 @@ closure_js_library(
         ":module",
         ":moduleinfo",
         ":moduleloadcallback",
+        ":moduleloadfailure",
         "//closure/goog/array",
         "//closure/goog/asserts",
         "//closure/goog/debug:error",
