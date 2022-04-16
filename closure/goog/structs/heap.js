@@ -45,8 +45,16 @@ goog.structs.Heap = function(opt_heap) {
   'use strict';
   /**
    * The nodes of the heap.
-   * @private
-   * @type {Array<goog.structs.Node>}
+   *
+   * This is a densely packed array containing all nodes of the heap, using the
+   * standard flat representation of a tree as an array (i.e. element [0] at the
+   * top, with [1] and [2] as the second row, [3] through [6] as the third,
+   * etc). Thus, the children of element `i` are `2i+1` and `2i+2`, and the
+   * parent of element `i` is `⌊(i-1)/2⌋`.
+   *
+   * The only invariant is that children's keys must be greater than parents'.
+   *
+   * @private @const {!Array<!goog.structs.Node>}
    */
   this.nodes_ = [];
 
