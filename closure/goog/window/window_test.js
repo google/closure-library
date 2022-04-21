@@ -318,12 +318,22 @@ testSuite({
   },
 
   async testOpenBlankWithMessage() {
-    newWin = googWindow.openBlank('Loading...');
+    const expectedLoadingMessage = 'Loading...';
+    newWin = googWindow.openBlank(expectedLoadingMessage);
     await new Promise((resolve) => {
       setTimeout(resolve, 5000);
     });
-    assertEquals(
-        newWin.document.body.textContent, !browser.isIE() ? 'Loading...' : '');
+    if (!browser.isIE()) {
+      assertEquals(expectedLoadingMessage, newWin.document.body.textContent);
+    } else {
+      const messageContent = newWin.document.body.textContent;
+      // This is flaky on IE - sometimes the message value updates and sometimes
+      // it will fail (and textContent returns an empty string). This is ok as
+      // the message is best-effort on IE.
+      if (messageContent) {
+        assertEquals(expectedLoadingMessage, messageContent);
+      }
+    }
     const urlParam = 'bogus~';
     newWin.location.href = REDIRECT_URL_PREFIX + urlParam;
     await waitForTestWindow(newWin);
