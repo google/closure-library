@@ -119,6 +119,7 @@ goog.dom.browserrange.AbstractRange.prototype.getEndPosition = function() {
  * @param {boolean} start Whether to get the position of the start or end.
  * @return {goog.math.Coordinate} The coordinate of the selection point.
  * @private
+ * @suppress {missingProperties} circular definitions
  */
 goog.dom.browserrange.AbstractRange.prototype.getPosition_ = function(start) {
   'use strict';
@@ -201,8 +202,8 @@ goog.dom.browserrange.AbstractRange.prototype.containsRange = function(
  * @param {boolean=} opt_allowPartial If not set or false, the node must be
  *     entirely contained in the selection for this function to return true.
  * @return {boolean} Whether this range contains the given node.
- * @suppress {missingRequire} Cannot depend on goog.dom.browserrange because it
- *     creates a circular dependency.
+ * @suppress {missingRequire,missingProperties} Cannot depend on
+ *     goog.dom.browserrange because it creates a circular dependency.
  */
 goog.dom.browserrange.AbstractRange.prototype.containsNode = function(
     node, opt_allowPartial) {
@@ -256,7 +257,13 @@ goog.dom.browserrange.AbstractRange.prototype.getHtmlFragment = function() {
           output.append(html);
         } else {
           var index = html.lastIndexOf('<');
-          output.append(index ? html.substr(0, index) : html);
+          // if index is -1, then this appends nothing.
+          // if index is 0, then the entire HTML content should be added.
+          // if the index is > 0, then only the portion of the html before the
+          // last open tag is appended.
+          if (index !== -1) {
+            output.append(index > 0 ? html.slice(0, index) : html);
+          }
         }
       }
     }

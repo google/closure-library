@@ -12,40 +12,59 @@
  * respectively).
  */
 
-goog.provide('goog.labs.userAgent.platform');
+goog.module('goog.labs.userAgent.platform');
+goog.module.declareLegacyNamespace();
 
-goog.require('goog.labs.userAgent.util');
-goog.require('goog.string');
+const googString = goog.require('goog.string.internal');
+const util = goog.require('goog.labs.userAgent.util');
+const {AsyncValue, Version} = goog.require('goog.labs.userAgent.highEntropy.highEntropyValue');
+const {platformVersion} = goog.require('goog.labs.userAgent.highEntropy.highEntropyData');
 
+/**
+ * @return {boolean} Whether to use navigator.userAgentData to determine
+ * the current platform.
+ * userAgentData.platform was enabled by default in Chrome 93:
+ * https://www.chromestatus.com/feature/5733498725859328
+ * TODO(user): Skip this check with FEATURESET_YEAR once userAgentData is
+ * present in all major browsers (may not be until 2023).
+ * See https://caniuse.com/mdn-api_navigator_useragentdata.
+ */
+function useUserAgentDataPlatform() {
+  if (util.ASSUME_CLIENT_HINTS_SUPPORT) return true;
+  const userAgentData = util.getUserAgentData();
+  return !!userAgentData && !!userAgentData.platform;
+}
 
 /**
  * @return {boolean} Whether the platform is Android.
  */
-goog.labs.userAgent.platform.isAndroid = function() {
-  'use strict';
-  return goog.labs.userAgent.util.matchUserAgent('Android');
-};
-
+function isAndroid() {
+  if (useUserAgentDataPlatform()) {
+    return util.getUserAgentData().platform === 'Android';
+  }
+  return util.matchUserAgent('Android');
+}
 
 /**
  * @return {boolean} Whether the platform is iPod.
+ * TODO(user): Combine iPod/iPhone detection since they may become
+ * indistinguishable if we begin relying on userAgentdata in iOS.
  */
-goog.labs.userAgent.platform.isIpod = function() {
-  'use strict';
-  return goog.labs.userAgent.util.matchUserAgent('iPod');
-};
-
+function isIpod() {
+  // navigator.userAgentData is currently not supported on any iOS browser, so
+  // rely only on navigator.userAgent.
+  return util.matchUserAgent('iPod');
+}
 
 /**
  * @return {boolean} Whether the platform is iPhone.
  */
-goog.labs.userAgent.platform.isIphone = function() {
-  'use strict';
-  return goog.labs.userAgent.util.matchUserAgent('iPhone') &&
-      !goog.labs.userAgent.util.matchUserAgent('iPod') &&
-      !goog.labs.userAgent.util.matchUserAgent('iPad');
-};
-
+function isIphone() {
+  // navigator.userAgentData is currently not supported on any iOS browser, so
+  // rely only on navigator.userAgent.
+  return util.matchUserAgent('iPhone') && !util.matchUserAgent('iPod') &&
+      !util.matchUserAgent('iPad');
+}
 
 /**
  * Returns whether the platform is iPad.
@@ -55,11 +74,11 @@ goog.labs.userAgent.platform.isIphone = function() {
  * {@link goog.labs.userAgent.extra.isSafariDesktopOnMobile}.
  * @return {boolean} Whether the platform is iPad.
  */
-goog.labs.userAgent.platform.isIpad = function() {
-  'use strict';
-  return goog.labs.userAgent.util.matchUserAgent('iPad');
-};
-
+function isIpad() {
+  // navigator.userAgentData is currently not supported on any iOS browser, so
+  // rely only on navigator.userAgent.
+  return util.matchUserAgent('iPad');
+}
 
 /**
  * Returns whether the platform is iOS.
@@ -69,66 +88,69 @@ goog.labs.userAgent.platform.isIpad = function() {
  * {@link goog.labs.userAgent.extra.isSafariDesktopOnMobile}.
  * @return {boolean} Whether the platform is iOS.
  */
-goog.labs.userAgent.platform.isIos = function() {
-  'use strict';
-  return goog.labs.userAgent.platform.isIphone() ||
-      goog.labs.userAgent.platform.isIpad() ||
-      goog.labs.userAgent.platform.isIpod();
-};
-
+function isIos() {
+  return isIphone() || isIpad() || isIpod();
+}
 
 /**
  * @return {boolean} Whether the platform is Mac.
  */
-goog.labs.userAgent.platform.isMacintosh = function() {
-  'use strict';
-  return goog.labs.userAgent.util.matchUserAgent('Macintosh');
-};
-
+function isMacintosh() {
+  if (useUserAgentDataPlatform()) {
+    return util.getUserAgentData().platform === 'macOS';
+  }
+  return util.matchUserAgent('Macintosh');
+}
 
 /**
  * Note: ChromeOS is not considered to be Linux as it does not report itself
  * as Linux in the user agent string.
  * @return {boolean} Whether the platform is Linux.
  */
-goog.labs.userAgent.platform.isLinux = function() {
-  'use strict';
-  return goog.labs.userAgent.util.matchUserAgent('Linux');
-};
-
+function isLinux() {
+  if (useUserAgentDataPlatform()) {
+    return util.getUserAgentData().platform === 'Linux';
+  }
+  return util.matchUserAgent('Linux');
+}
 
 /**
  * @return {boolean} Whether the platform is Windows.
  */
-goog.labs.userAgent.platform.isWindows = function() {
-  'use strict';
-  return goog.labs.userAgent.util.matchUserAgent('Windows');
-};
-
+function isWindows() {
+  if (useUserAgentDataPlatform()) {
+    return util.getUserAgentData().platform === 'Windows';
+  }
+  return util.matchUserAgent('Windows');
+}
 
 /**
  * @return {boolean} Whether the platform is ChromeOS.
  */
-goog.labs.userAgent.platform.isChromeOS = function() {
-  'use strict';
-  return goog.labs.userAgent.util.matchUserAgent('CrOS');
-};
+function isChromeOS() {
+  if (useUserAgentDataPlatform()) {
+    return util.getUserAgentData().platform === 'Chrome OS';
+  }
+  return util.matchUserAgent('CrOS');
+}
 
 /**
  * @return {boolean} Whether the platform is Chromecast.
  */
-goog.labs.userAgent.platform.isChromecast = function() {
-  'use strict';
-  return goog.labs.userAgent.util.matchUserAgent('CrKey');
-};
+function isChromecast() {
+  // TODO(user): Check against util.getUserAgentData().platform once the
+  // OS string for Chromecast is known.
+  return util.matchUserAgent('CrKey');
+}
 
 /**
  * @return {boolean} Whether the platform is KaiOS.
  */
-goog.labs.userAgent.platform.isKaiOS = function() {
-  'use strict';
-  return goog.labs.userAgent.util.matchUserAgentIgnoreCase('KaiOS');
-};
+function isKaiOS() {
+  // navigator.userAgentData is currently not supported on any KaiOS browser, so
+  // rely only on navigator.userAgent.
+  return util.matchUserAgentIgnoreCase('KaiOS');
+}
 
 /**
  * The version of the platform. We only determine the version for Windows,
@@ -139,53 +161,106 @@ goog.labs.userAgent.platform.isKaiOS = function() {
  * @return {string} The platform version or empty string if version cannot be
  *     determined.
  */
-goog.labs.userAgent.platform.getVersion = function() {
-  'use strict';
-  var userAgentString = goog.labs.userAgent.util.getUserAgent();
-  var version = '', re;
-  if (goog.labs.userAgent.platform.isWindows()) {
+function getVersion() {
+  const userAgentString = util.getUserAgent();
+  let version = '', re;
+  if (isWindows()) {
     re = /Windows (?:NT|Phone) ([0-9.]+)/;
-    var match = re.exec(userAgentString);
+    const match = re.exec(userAgentString);
     if (match) {
       version = match[1];
     } else {
       version = '0.0';
     }
-  } else if (goog.labs.userAgent.platform.isIos()) {
+  } else if (isIos()) {
     re = /(?:iPhone|iPod|iPad|CPU)\s+OS\s+(\S+)/;
-    var match = re.exec(userAgentString);
+    const match = re.exec(userAgentString);
     // Report the version as x.y.z and not x_y_z
     version = match && match[1].replace(/_/g, '.');
-  } else if (goog.labs.userAgent.platform.isMacintosh()) {
+  } else if (isMacintosh()) {
     re = /Mac OS X ([0-9_.]+)/;
-    var match = re.exec(userAgentString);
+    const match = re.exec(userAgentString);
     // Note: some old versions of Camino do not report an OSX version.
     // Default to 10.
     version = match ? match[1].replace(/_/g, '.') : '10';
-  } else if (goog.labs.userAgent.platform.isKaiOS()) {
+  } else if (isKaiOS()) {
     re = /(?:KaiOS)\/(\S+)/i;
-    var match = re.exec(userAgentString);
+    const match = re.exec(userAgentString);
     version = match && match[1];
-  } else if (goog.labs.userAgent.platform.isAndroid()) {
+  } else if (isAndroid()) {
     re = /Android\s+([^\);]+)(\)|;)/;
-    var match = re.exec(userAgentString);
+    const match = re.exec(userAgentString);
     version = match && match[1];
-  } else if (goog.labs.userAgent.platform.isChromeOS()) {
+  } else if (isChromeOS()) {
     re = /(?:CrOS\s+(?:i686|x86_64)\s+([0-9.]+))/;
-    var match = re.exec(userAgentString);
+    const match = re.exec(userAgentString);
     version = match && match[1];
   }
   return version || '';
-};
-
+}
 
 /**
  * @param {string|number} version The version to check.
  * @return {boolean} Whether the browser version is higher or the same as the
  *     given version.
  */
-goog.labs.userAgent.platform.isVersionOrHigher = function(version) {
-  'use strict';
-  return goog.string.compareVersions(
-             goog.labs.userAgent.platform.getVersion(), version) >= 0;
+function isVersionOrHigher(version) {
+  return googString.compareVersions(getVersion(), version) >= 0;
+}
+
+/**
+ * Represents a high-entropy version string.
+ * @implements {AsyncValue<!Version>}
+ */
+class PlatformVersion {
+  /**
+   * @return {!Version|undefined}
+   * @override
+   */
+  getIfLoaded() {
+    if (util.getUserAgentData()) {
+      const loadedPlatformVersion = platformVersion.getIfLoaded();
+      if (loadedPlatformVersion !== undefined) {
+        return new Version(loadedPlatformVersion);
+      }
+    } else {
+      return new Version(getVersion());
+    }
+    return undefined;
+  }
+
+  /**
+   * @return {!Promise<!Version>}
+   * @override
+   */
+  async load() {
+    if (util.getUserAgentData()) {
+      return new Version(await platformVersion.load());
+    } else {
+      return new Version(getVersion());
+    }
+  }
+}
+
+/**
+ * The platform version, a high-entropy value.
+ * @type {!AsyncValue<!Version>}
+ */
+const version = new PlatformVersion();
+
+exports = {
+  getVersion,
+  isAndroid,
+  isChromeOS,
+  isChromecast,
+  isIos,
+  isIpad,
+  isIphone,
+  isIpod,
+  isKaiOS,
+  isLinux,
+  isMacintosh,
+  isVersionOrHigher,
+  isWindows,
+  version,
 };

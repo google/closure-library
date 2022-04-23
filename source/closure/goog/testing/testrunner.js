@@ -427,7 +427,7 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
     if (line == '') {
       line = '\n';
     }
-    if (line.substr(0, 2) == '> ') {
+    if (line.slice(0, 2) == '> ') {
       // The stack trace may contain links so it has to be interpreted as HTML.
       div.innerHTML = line;
     } else {
@@ -450,8 +450,8 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
       if (search) {
         var oldTests = /runTests=([^&]*)/.exec(search);
         if (oldTests) {
-          newSearch = search.substr(0, oldTests.index) + newSearch +
-              search.substr(oldTests.index + oldTests[0].length);
+          newSearch = search.slice(0, oldTests.index) + newSearch +
+              search.slice(oldTests.index + oldTests[0].length);
         } else {
           newSearch = search + '&' + newSearch;
         }

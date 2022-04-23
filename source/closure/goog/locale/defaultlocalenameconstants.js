@@ -6,7 +6,7 @@
 /**
  * @fileoverview Default list of locale specific country and language names.
  *
- * File generated from CLDR ver. 39
+ * File generated from CLDR ver. 40
  */
 
 // clang-format off
@@ -363,6 +363,7 @@ goog.locale.defaultLocaleNameConstants = {
     'bez': 'Bena',
     'bfd': 'Bafut',
     'bg': 'Bulgarian',
+    'bh': 'Bhojpuri',
     'bho': 'Bhojpuri',
     'bi': 'Bislama',
     'bik': 'Bikol',
@@ -624,7 +625,7 @@ goog.locale.defaultLocaleNameConstants = {
     'mgh': 'Makhuwa-Meetto',
     'mgo': 'Metaʼ',
     'mh': 'Marshallese',
-    'mi': 'Maori',
+    'mi': 'Māori',
     'mic': 'Mi\'kmaq',
     'min': 'Minangkabau',
     'mk': 'Macedonian',
@@ -633,7 +634,7 @@ goog.locale.defaultLocaleNameConstants = {
     'mnc': 'Manchu',
     'mni': 'Manipuri',
     'mni_Beng': 'Manipuri (Bangla)',
-    'mo': 'Romanian (Moldova)',
+    'mo': 'Romanian',
     'moh': 'Mohawk',
     'mos': 'Mossi',
     'mr': 'Marathi',
@@ -779,6 +780,7 @@ goog.locale.defaultLocaleNameConstants = {
     'sw': 'Swahili',
     'sw_CD': 'Swahili (Congo - Kinshasa)',
     'swb': 'Comorian',
+    'swc': 'Congo Swahili',
     'syc': 'Classical Syriac',
     'syr': 'Syriac',
     'ta': 'Tamil',

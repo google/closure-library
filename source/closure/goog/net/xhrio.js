@@ -40,6 +40,7 @@ goog.provide('goog.net.XhrIo.ResponseType');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.collections.maps');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.events.EventTarget');
 goog.require('goog.json.hybrid');
@@ -50,8 +51,6 @@ goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
 goog.require('goog.string');
-goog.require('goog.structs');
-goog.require('goog.structs.Map');
 goog.require('goog.uri.utils');
 goog.require('goog.userAgent');
 goog.requireType('goog.Uri');
@@ -76,9 +75,9 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
   /**
    * Map of default headers to add to every request, use:
    * XhrIo.headers.set(name, value)
-   * @type {!goog.structs.Map}
+   * @type {!Map<string,string>}
    */
-  this.headers = new goog.structs.Map();
+  this.headers = new Map();
 
   /**
    * Optional XmlHttpFactory
@@ -335,8 +334,8 @@ goog.net.XhrIo.sendInstances_ = [];
  * @param {string=} opt_method Send method, default: GET.
  * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=}
  *     opt_content Body data.
- * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
- *     request.
+ * @param {(?Object|?goog.collections.maps.MapLike<string, string>)=}
+ *     opt_headers Map of headers to add to the request.
  * @param {number=} opt_timeoutInterval Number of milliseconds after which an
  *     incomplete request will be aborted; 0 means no timeout is set.
  * @param {boolean=} opt_withCredentials Whether to send credentials with the
@@ -530,8 +529,8 @@ goog.net.XhrIo.prototype.setTrustToken = function(trustToken) {
  * @param {string=} opt_method Send method, default: GET.
  * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=}
  *     opt_content Body data.
- * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
- *     request.
+ * @param {(?Object|?goog.collections.maps.MapLike<string, string>)=}
+ *     opt_headers Map of headers to add to the request.
  * @suppress {deprecated} Use deprecated goog.structs.forEach to allow different
  * types of parameters for opt_headers.
  */
@@ -593,22 +592,34 @@ goog.net.XhrIo.prototype.send = function(
   // error.
   const content = opt_content || '';
 
-  const headers = this.headers.clone();
+  const headers = new Map(this.headers);
 
   // Add headers specific to this request
   if (opt_headers) {
-    goog.structs.forEach(opt_headers, function(value, key) {
-      'use strict';
-      headers.set(key, value);
-    });
+    if (Object.getPrototypeOf(opt_headers) === Object.prototype) {
+      for (let key in opt_headers) {
+        headers.set(key, opt_headers[key]);
+      }
+    } else if (
+        typeof opt_headers.keys === 'function' &&
+        typeof opt_headers.get === 'function') {
+      for (const key of opt_headers.keys()) {
+        headers.set(key, opt_headers.get(key));
+      }
+    } else {
+      throw new Error(
+          'Unknown input type for opt_headers: ' + String(opt_headers));
+    }
   }
 
   // Find whether a content type header is set, ignoring case.
   // HTTP header names are case-insensitive.  See:
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
-  const contentTypeKey = headers.getKeys().find(
-      header => goog.string.caseInsensitiveEquals(
-          goog.net.XhrIo.CONTENT_TYPE_HEADER, header));
+  const contentTypeKey =
+      Array.from(headers.keys())
+          .find(
+              header => goog.string.caseInsensitiveEquals(
+                  goog.net.XhrIo.CONTENT_TYPE_HEADER, header));
 
   const contentIsFormData =
       (goog.global['FormData'] && (content instanceof goog.global['FormData']));
@@ -623,10 +634,9 @@ goog.net.XhrIo.prototype.send = function(
   }
 
   // Add the headers to the Xhr object
-  headers.forEach(function(value, key) {
-    'use strict';
+  for (const [key, value] of headers) {
     this.xhr_.setRequestHeader(key, value);
-  }, this);
+  }
 
   if (this.responseType_) {
     this.xhr_.responseType = this.responseType_;
@@ -986,7 +996,7 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
     const xhr = this.xhr_;
     const clearedOnReadyStateChange =
         this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ?
-        goog.nullFunction :
+        () => {} :
         null;
     this.xhr_ = null;
     this.xhrOptions_ = null;
@@ -1312,15 +1322,16 @@ goog.net.XhrIo.prototype.getResponseHeader = function(key) {
 
 /**
  * Gets the text of all the headers in the response.
- * Will only return correct result when called from the context of a callback
- * and the request has completed.
+ * Will only return correct result after ready state reaches `LOADED` (i.e.
+ * `HEADERS_RECEIVED` as per MDN).
  * @return {string} The value of the response headers or empty string.
  */
 goog.net.XhrIo.prototype.getAllResponseHeaders = function() {
   'use strict';
   // getAllResponseHeaders can return null if no response has been received,
   // ensure we always return an empty string.
-  return this.xhr_ && this.isComplete() ?
+  return this.xhr_ &&
+          this.getReadyState() >= goog.net.XmlHttp.ReadyState.LOADED ?
       (this.xhr_.getAllResponseHeaders() || '') :
       '';
 };

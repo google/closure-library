@@ -611,6 +611,7 @@ const canonicalPortForProtocols = new Map([
  * Closure Compiler to code-strip the polyfill if searchParams are never used.
  * @param {!UrlLike|!URL} url The URL object to derive SearchParams for.
  * @return {!ReadonlySearchParams} The URLSearchParams-like object for the URL.
+ * @suppress {strictMissingProperties} url.searchParams on union
  */
 const getSearchParams = function(url) {
   if (goog.FEATURESET_YEAR >= 2020 ||

@@ -68,7 +68,7 @@ goog.date.month = {
  * @private
  */
 goog.date.splitDateStringRegex_ = new RegExp(
-    '^(\\d{4})(?:(?:-?(\\d{2})(?:-?(\\d{2}))?)|' +
+    '^((?:[-+]\\d*)?\\d{4})(?:(?:-?(\\d{2})(?:-?(\\d{2}))?)|' +
     '(?:-?(\\d{3}))|(?:-?W(\\d{2})(?:-?([1-7]))?))?$');
 
 
@@ -525,6 +525,16 @@ goog.date.setIso8601TimeOnly_ = function(d, formatted) {
   return true;
 };
 
+
+/**
+ * Pads the year to 4 unsigned digits, or 6 digits with a sign.
+ * @param {number} year
+ * @return {string}
+ */
+goog.date.padYear_ = function(year) {
+  const sign = year < 0 ? '-' : year >= 10000 ? '+' : '';
+  return sign + goog.string.padNumber(Math.abs(year), sign ? 6 : 4);
+};
 
 
 /**
@@ -1322,14 +1332,27 @@ goog.date.Date.prototype.add = function(interval) {
   }
 
   if (interval.days) {
+    // Because Javascript Date objects are being used and the 'year' argument
+    // to the constructor has special behavior for values 0-99 (inclusive),
+    // enable correcting for those special values being interpreted as relative
+    // to the year 1900 (rather than absolute year numbers as with all other
+    // integer values for that argument).
+    //
+    // Since only the constructor taking a separate field for the 'year' of
+    // a date behaves this way, the adjustment value depends only on the initial
+    // date. This is because the interval-adjusted date value uses a Date
+    // constructor that avoids the problematic, special behavior for years 0-99.
+    const initialYear = this.getYear();
+    const yearAdjustment = initialYear >= 0 && initialYear <= 99 ? -1900 : 0;
+
     // Convert the days to milliseconds and add it to the UNIX timestamp.
     // Taking noon helps to avoid 1 day error due to the daylight saving.
-    var noon = new Date(this.getYear(), this.getMonth(), this.getDate(), 12);
-    var result = new Date(noon.getTime() + interval.days * 86400000);
+    const noon = new Date(initialYear, this.getMonth(), this.getDate(), 12);
+    const result = new Date(noon.getTime() + interval.days * 86400000);
 
     // Set date to 1 to prevent rollover caused by setting the year or month.
     this.setDate(1);
-    this.setFullYear(result.getFullYear());
+    this.setFullYear(result.getFullYear() + yearAdjustment);
     this.setMonth(result.getMonth());
     this.setDate(result.getDate());
 
@@ -1339,18 +1362,23 @@ goog.date.Date.prototype.add = function(interval) {
 
 
 /**
- * Returns ISO 8601 string representation of date.
+ * Returns ISO 8601 string representation of date. Consistent with the
+ * standard built-in Date#toISOString method, the year is either four digits
+ * (YYYY) or six with a sign prefix (±YYYYYY), since ISO 8601 requires the
+ * number of digits in the year to be agreed upon in advance.
  *
  * @param {boolean=} opt_verbose Whether the verbose format should be used
  *     instead of the default compact one.
  * @param {boolean=} opt_tz Whether the timezone offset should be included
  *     in the string.
  * @return {string} ISO 8601 string representation of date.
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
  */
 goog.date.Date.prototype.toIsoString = function(opt_verbose, opt_tz) {
   'use strict';
   var str = [
-    this.getFullYear(), goog.string.padNumber(this.getMonth() + 1, 2),
+    goog.date.padYear_(this.getFullYear()),
+    goog.string.padNumber(this.getMonth() + 1, 2),
     goog.string.padNumber(this.getDate(), 2)
   ];
 
@@ -1372,7 +1400,8 @@ goog.date.Date.prototype.toIsoString = function(opt_verbose, opt_tz) {
 goog.date.Date.prototype.toUTCIsoString = function(opt_verbose, opt_tz) {
   'use strict';
   var str = [
-    this.getUTCFullYear(), goog.string.padNumber(this.getUTCMonth() + 1, 2),
+    goog.date.padYear_(this.getUTCFullYear()),
+    goog.string.padNumber(this.getUTCMonth() + 1, 2),
     goog.string.padNumber(this.getUTCDate(), 2)
   ];
 
@@ -1744,7 +1773,10 @@ goog.date.DateTime.prototype.add = function(interval) {
 
 
 /**
- * Returns ISO 8601 string representation of date/time.
+ * Returns ISO 8601 string representation of date/time. Consistent with the
+ * standard built-in Date#toISOString method, the year is either four digits
+ * (YYYY) or six with a sign prefix (±YYYYYY), since ISO 8601 requires the
+ * number of digits in the year to be agreed upon in advance.
  *
  * @param {boolean=} opt_verbose Whether the verbose format should be used
  *     instead of the default compact one.
@@ -1752,6 +1784,7 @@ goog.date.DateTime.prototype.add = function(interval) {
  *     in the string.
  * @return {string} ISO 8601 string representation of date/time.
  * @override
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
  */
 goog.date.DateTime.prototype.toIsoString = function(opt_verbose, opt_tz) {
   'use strict';

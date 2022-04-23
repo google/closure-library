@@ -144,7 +144,7 @@ goog.i18n.currency.getGlobalCurrencySign = function(currencyCode) {
  */
 goog.i18n.currency.getGlobalCurrencySignWithFallback = function(currencyCode) {
   'use strict';
-  var info = goog.i18n.currency.CurrencyInfo[currencyCode];
+  const info = goog.i18n.currency.CurrencyInfo[currencyCode];
   if (!info) {
     return currencyCode;
   }
@@ -446,7 +446,7 @@ goog.i18n.currency.CurrencyInfo = {
   'RON': [2, 'RON', 'RON'],
   'RSD': [0, 'din', 'RSD'],
   'RUB': [50, '\u20bd', 'RUB'],
-  'SAR': [2, 'Rial', 'Rial'],
+  'SAR': [2, 'SAR', 'SAR'],
   'SEK': [50, 'kr', 'kr'],
   'SGD': [2, '$', 'S$'],
   'THB': [2, '\u0e3f', 'THB'],

@@ -49,9 +49,8 @@ exports.getInstance = (ctor) => {
       !Object.isSealed(ctor),
       'Cannot use getInstance() with a sealed constructor.');
   const ctorWithInstance = /** @type {!Singleton} */ (ctor);
-  if (ctorWithInstance.instance_ &&
-      ctorWithInstance.hasOwnProperty(
-          reflect.objectProperty('instance_', ctorWithInstance))) {
+  const prop = reflect.objectProperty('instance_', ctorWithInstance);
+  if (ctorWithInstance.instance_ && ctorWithInstance.hasOwnProperty(prop)) {
     return ctorWithInstance.instance_;
   }
   if (goog.DEBUG) {
@@ -60,6 +59,9 @@ exports.getInstance = (ctor) => {
   }
   const instance = new ctor();
   ctorWithInstance.instance_ = instance;
+  assert(
+      ctorWithInstance.hasOwnProperty(prop),
+      'Could not instantiate singleton.');
   return instance;
 };
 

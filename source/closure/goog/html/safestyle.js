@@ -483,7 +483,7 @@ function hasBalancedSquareBrackets(value) {
  * Characters allowed in VALUE_RE.
  * @type {string}
  */
-const VALUE_ALLOWED_CHARS = '[-,."\'%_!# a-zA-Z0-9\\[\\]]';
+const VALUE_ALLOWED_CHARS = '[-,."\'%_!#/ a-zA-Z0-9\\[\\]]';
 
 
 /**
@@ -530,6 +530,7 @@ const ALLOWED_FUNCTIONS = [
   'linear-gradient',
   'matrix',
   'minmax',
+  'radial-gradient',
   'repeat',
   'rgb',
   'rgba',
@@ -544,7 +545,7 @@ const ALLOWED_FUNCTIONS = [
  */
 const FUNCTIONS_RE = new RegExp(
     '\\b(' + ALLOWED_FUNCTIONS.join('|') + ')' +
-        '\\([-+*/0-9a-z.%\\[\\], ]+\\)',
+        '\\([-+*/0-9a-zA-Z.%#\\[\\], ]+\\)',
     'g');
 
 

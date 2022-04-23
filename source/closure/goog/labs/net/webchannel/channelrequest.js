@@ -1051,7 +1051,7 @@ ChannelRequest.prototype.getNextChunk_ = function(responseText) {
     return ChannelRequest.INCOMPLETE_CHUNK_;
   }
 
-  const chunkText = responseText.substr(chunkStartIndex, size);
+  const chunkText = responseText.slice(chunkStartIndex, chunkStartIndex + size);
   this.xmlHttpChunkStart_ = chunkStartIndex + size;
   return chunkText;
 };

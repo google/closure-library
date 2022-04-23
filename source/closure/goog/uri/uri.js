@@ -32,9 +32,9 @@ goog.provide('goog.Uri.QueryData');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.collections.maps');
 goog.require('goog.string');
 goog.require('goog.structs');
-goog.require('goog.structs.Map');
 goog.require('goog.uri.utils');
 goog.require('goog.uri.utils.ComponentIndex');
 goog.require('goog.uri.utils.StandardQueryParam');
@@ -291,7 +291,7 @@ goog.Uri.prototype.resolve = function(relativeUri) {
           // RFC 3986, section 5.2.3, case 2
           var lastSlashIndex = absoluteUri.getPath().lastIndexOf('/');
           if (lastSlashIndex != -1) {
-            path = absoluteUri.getPath().substr(0, lastSlashIndex + 1) + path;
+            path = absoluteUri.getPath().slice(0, lastSlashIndex + 1) + path;
           }
         }
       }
@@ -1102,7 +1102,7 @@ goog.Uri.QueryData = function(opt_query, opt_ignoreCase) {
    * We need to use a Map because we cannot guarantee that the key names will
    * not be problematic for IE.
    *
-   * @private {?goog.structs.Map<string, !Array<*>>}
+   * @private {?Map<string, !Array<*>>}
    */
   this.keyMap_ = null;
 
@@ -1134,7 +1134,7 @@ goog.Uri.QueryData = function(opt_query, opt_ignoreCase) {
 goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
   'use strict';
   if (!this.keyMap_) {
-    this.keyMap_ = new goog.structs.Map();
+    this.keyMap_ = /** @type {!Map<string, !Array<*>>} */ (new Map());
     this.count_ = 0;
     if (this.encodedQuery_) {
       var self = this;
@@ -1150,8 +1150,8 @@ goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
 /**
  * Creates a new query data instance from a map of names and values.
  *
- * @param {!goog.structs.Map<string, ?>|!Object} map Map of string parameter
- *     names to parameter value. If parameter value is an array, it is
+ * @param {!goog.collections.maps.MapLike<string, ?>|!Object} map Map of string
+ *     parameter names to parameter value. If parameter value is an array, it is
  *     treated as if the key maps to each individual value in the
  *     array.
  * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
@@ -1247,13 +1247,13 @@ goog.Uri.QueryData.prototype.remove = function(key) {
   this.ensureKeyMapInitialized_();
 
   key = this.getKeyName_(key);
-  if (this.keyMap_.containsKey(key)) {
+  if (this.keyMap_.has(key)) {
     this.invalidateCache_();
 
     // Decrement parameter count.
     this.count_ =
         goog.asserts.assertNumber(this.count_) - this.keyMap_.get(key).length;
-    return this.keyMap_.remove(key);
+    return this.keyMap_.delete(key);
   }
   return false;
 };
@@ -1289,7 +1289,7 @@ goog.Uri.QueryData.prototype.containsKey = function(key) {
   'use strict';
   this.ensureKeyMapInitialized_();
   key = this.getKeyName_(key);
-  return this.keyMap_.containsKey(key);
+  return this.keyMap_.has(key);
 };
 
 
@@ -1338,12 +1338,12 @@ goog.Uri.QueryData.prototype.getKeys = function() {
   'use strict';
   this.ensureKeyMapInitialized_();
   // We need to get the values to know how many keys to add.
-  var vals = this.keyMap_.getValues();
-  var keys = this.keyMap_.getKeys();
-  var rv = [];
-  for (var i = 0; i < keys.length; i++) {
-    var val = vals[i];
-    for (var j = 0; j < val.length; j++) {
+  const vals = Array.from(this.keyMap_.values());
+  const keys = Array.from(this.keyMap_.keys());
+  const rv = [];
+  for (let i = 0; i < keys.length; i++) {
+    const val = vals[i];
+    for (let j = 0; j < val.length; j++) {
       rv.push(keys[i]);
     }
   }
@@ -1361,15 +1361,15 @@ goog.Uri.QueryData.prototype.getKeys = function() {
 goog.Uri.QueryData.prototype.getValues = function(opt_key) {
   'use strict';
   this.ensureKeyMapInitialized_();
-  var rv = [];
+  let rv = [];
   if (typeof opt_key === 'string') {
     if (this.containsKey(opt_key)) {
       rv = rv.concat(this.keyMap_.get(this.getKeyName_(opt_key)));
     }
   } else {
     // Return all values.
-    var values = this.keyMap_.getValues();
-    for (var i = 0; i < values.length; i++) {
+    const values = Array.from(this.keyMap_.values());
+    for (let i = 0; i < values.length; i++) {
       rv = rv.concat(values[i]);
     }
   }
@@ -1456,16 +1456,16 @@ goog.Uri.QueryData.prototype.toString = function() {
     return '';
   }
 
-  var sb = [];
+  const sb = [];
 
   // In the past, we use this.getKeys() and this.getVals(), but that
   // generates a lot of allocations as compared to simply iterating
   // over the keys.
-  var keys = this.keyMap_.getKeys();
+  const keys = Array.from(this.keyMap_.keys());
   for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-    var encodedKey = goog.string.urlEncode(key);
-    var val = this.getValues(key);
+    const key = keys[i];
+    const encodedKey = goog.string.urlEncode(key);
+    const val = this.getValues(key);
     for (var j = 0; j < val.length; j++) {
       var param = encodedKey;
       // Ensure that null and undefined are encoded into the url as
@@ -1529,7 +1529,7 @@ goog.Uri.QueryData.prototype.clone = function() {
   var rv = new goog.Uri.QueryData();
   rv.encodedQuery_ = this.encodedQuery_;
   if (this.keyMap_) {
-    rv.keyMap_ = this.keyMap_.clone();
+    rv.keyMap_ = /** @type {!Map<string, !Array<*>>} */ (new Map(this.keyMap_));
     rv.count_ = this.count_;
   }
   return rv;
@@ -1582,9 +1582,9 @@ goog.Uri.QueryData.prototype.setIgnoreCase = function(ignoreCase) {
  * Extends a query data object with another query data or map like object. This
  * operates 'in-place', it does not create a new QueryData object.
  *
- * @param {...(?goog.Uri.QueryData|?goog.structs.Map<?, ?>|?Object)} var_args
- *     The object from which key value pairs will be copied. Note: does not
- *     accept null.
+ * @param {...(?goog.Uri.QueryData|?goog.collections.maps.MapLike<?,
+ *     ?>|?Object)} var_args The object from which key value pairs will be
+ *     copied. Note: does not accept null.
  * @suppress {deprecated} Use deprecated goog.structs.forEach to allow different
  * types of parameters.
  */

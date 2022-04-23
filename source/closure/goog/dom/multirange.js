@@ -31,7 +31,6 @@ goog.require('goog.dom.SavedCaretRange');
 goog.require('goog.dom.SavedRange');
 goog.require('goog.dom.TextRange');
 goog.require('goog.iter');
-goog.require('goog.iter.StopIteration');
 goog.require('goog.log');
 
 
@@ -535,32 +534,25 @@ goog.dom.MultiRangeIterator.prototype.isLast = function() {
 };
 
 
-/** @override */
-goog.dom.MultiRangeIterator.prototype.nextValueOrThrow = function() {
-  'use strict';
-  try {
-    var it = this.iterators_[this.currentIdx_];
-    var next = it.nextValueOrThrow();
-    this.setPosition(it.node, it.tagType, it.depth);
-    return next;
-  } catch (ex) {
-    if (ex !== goog.iter.StopIteration ||
-        this.iterators_.length - 1 == this.currentIdx_) {
-      throw ex;
-    } else {
-      // In case we got a StopIteration, increment counter and try again.
-      this.currentIdx_++;
-      return this.nextValueOrThrow();
-    }
-  }
-};
 /**
- * TODO(user): Please do not remove - this will be cleaned up centrally.
- * @override @see {!goog.iter.Iterator}
+ * @return {!IIterableResult<!Node>}
+ * @override
  */
-goog.dom.MultiRangeIterator.prototype.next =
-    goog.dom.MultiRangeIterator.prototype.nextValueOrThrow;
-
+goog.dom.MultiRangeIterator.prototype.next = function() {
+  'use strict';
+  while (this.currentIdx_ < this.iterators_.length) {
+    const iterator = this.iterators_[this.currentIdx_];
+    const it = iterator.next();
+    if (it.done) {
+      this.currentIdx_++;
+      // Try again from the top, will move to return 'done' if no more iterators
+      continue;
+    }
+    this.setPosition(iterator.node, iterator.tagType, iterator.depth);
+    return it;
+  }
+  return goog.iter.ES6_ITERATOR_DONE;
+};
 
 
 /** @override */

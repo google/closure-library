@@ -19,7 +19,7 @@ goog.require('goog.labs.userAgent.engine');
 goog.require('goog.labs.userAgent.platform');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.reflect');
-goog.require('goog.string');
+goog.require('goog.string.internal');
 
 
 /**
@@ -356,7 +356,7 @@ goog.userAgent.isX11_ = function() {
   'use strict';
   var navigator = goog.userAgent.getNavigatorTyped();
   return !!navigator &&
-      goog.string.contains(navigator['appVersion'] || '', 'X11');
+      goog.string.internal.contains(navigator['appVersion'] || '', 'X11');
 };
 
 
@@ -522,7 +522,7 @@ goog.userAgent.VERSION = goog.userAgent.determineVersion_();
  */
 goog.userAgent.compare = function(v1, v2) {
   'use strict';
-  return goog.string.compareVersions(v1, v2);
+  return goog.string.internal.compareVersions(v1, v2);
 };
 
 
@@ -556,7 +556,7 @@ goog.userAgent.isVersionOrHigher = function(version) {
       goog.reflect.cache(
           goog.userAgent.isVersionOrHigherCache_, version, function() {
             'use strict';
-            return goog.string.compareVersions(
+            return goog.string.internal.compareVersions(
                        goog.userAgent.VERSION, version) >= 0;
           });
 };

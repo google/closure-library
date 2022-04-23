@@ -19,6 +19,7 @@ goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.string');
 goog.require('goog.userAgent');
@@ -277,11 +278,30 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
       goog.dom.removeNode(dummySpan);
     }
   } else if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
+    let parent = this.getFieldObject().getRange().getContainerElement();
+
+    // When insertImage is used at the start or end of an anchor tag, some
+    // browsers either remove the enclosing anchor tag or insert the image tag
+    // outside of the anchor tag. If the parent element is an anchor tag, we add
+    // dummy content to avoid that scenario, and remove it once we've finished
+    // pasting.
+    const placeholderAnchorContent = goog.string.createUniqueString();
+    if (parent.tagName == goog.dom.TagName.A) {
+      const safePlaceholderAnchorContent =
+          goog.html.SafeHtml.htmlEscape(placeholderAnchorContent);
+      goog.dom.safe.insertAdjacentHtml(
+          parent, goog.dom.safe.InsertAdjacentHtmlPosition.AFTERBEGIN,
+          safePlaceholderAnchorContent);
+      goog.dom.safe.insertAdjacentHtml(
+          parent, goog.dom.safe.InsertAdjacentHtmlPosition.BEFOREEND,
+          safePlaceholderAnchorContent);
+    }
+
     // insertHtml and range.insertNode don't merge blocks correctly.
     // (e.g. if your selection spans two paragraphs)
     dh.getDocument().execCommand('insertImage', false, dummyNodeId);
     var dummyImageNodePattern = new RegExp('<[^<]*' + dummyNodeId + '[^>]*>');
-    var parent = this.getFieldObject().getRange().getContainerElement();
+    parent = this.getFieldObject().getRange().getContainerElement();
     if (parent.nodeType == goog.dom.NodeType.TEXT) {
       // Opera sometimes returns a text node here.
       // TODO(user): perhaps we should modify getParentContainer?
@@ -338,6 +358,8 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
           parent.innerHTML.replace(
               new RegExp(dummySpanText, 'i'), html.replace(/\$/g, '$$$$')));
     }
+    goog.editor.node.replaceInnerHtml(
+        parent, parent.innerHTML.replaceAll(placeholderAnchorContent, ''));
   }
 
   var startSpan = dh.getElement(startSpanId);
@@ -713,7 +735,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
         case String(goog.dom.TagName.A):
           if (node.href && node.href != '') {
             sb.push("<a href='");
-            sb.push(node.href);
+            sb.push(node.getAttribute('href'));
             sb.push("'>");
             sb.push(this.removeFormattingWorker_(node.innerHTML));
             sb.push('</a>');

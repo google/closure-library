@@ -11,7 +11,6 @@
 
 goog.provide('goog.ui.ControlRenderer');
 
-goog.forwardDeclare('goog.ui.Control');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
@@ -26,6 +25,7 @@ goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ControlContent');
 goog.require('goog.userAgent');  // circular
+goog.requireType('goog.ui.Control');
 
 
 

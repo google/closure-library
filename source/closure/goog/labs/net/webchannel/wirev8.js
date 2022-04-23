@@ -16,12 +16,12 @@
 goog.provide('goog.labs.net.webChannel.WireV8');
 
 goog.require('goog.asserts');
+goog.require('goog.collections.maps');
 goog.require('goog.json');
 goog.require('goog.json.NativeJsonProcessor');
 goog.require('goog.labs.net.webChannel.Wire');
 goog.require('goog.structs');
 goog.requireType('goog.string.Parser');
-goog.requireType('goog.structs.Map');
 
 
 
@@ -52,7 +52,7 @@ const Wire = goog.labs.net.webChannel.Wire;
  *
  * May throw exception if the message object contains any invalid elements.
  *
- * @param {!Object|!goog.structs.Map} message The message data.
+ * @param {!Object|!goog.collections.maps.MapLike} message The message data.
  *     V8 only support JS objects (or Map).
  * @param {!Array<string>} buffer The text buffer to write the message to.
  * @param {string=} opt_prefix The prefix for each field of the object.

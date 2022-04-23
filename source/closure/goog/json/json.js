@@ -90,7 +90,7 @@ goog.json.isValid = function(s) {
  * @private {function(string, !Error)} The first parameter is the error message,
  *     the second is the exception thrown by `JSON.parse`.
  */
-goog.json.errorLogger_ = goog.nullFunction;
+goog.json.errorLogger_ = () => {};
 
 
 /**
@@ -320,7 +320,7 @@ goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
     // caching the result improves performance by a factor 2-3
     let rv = goog.json.Serializer.charToJsonCharCache_[c];
     if (!rv) {
-      rv = '\\u' + (c.charCodeAt(0) | 0x10000).toString(16).substr(1);
+      rv = '\\u' + (c.charCodeAt(0) | 0x10000).toString(16).slice(1);
       goog.json.Serializer.charToJsonCharCache_[c] = rv;
     }
     return rv;

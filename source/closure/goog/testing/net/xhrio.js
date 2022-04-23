@@ -14,6 +14,7 @@ goog.provide('goog.testing.net.XhrIo');
 
 goog.require('goog.Uri');
 goog.require('goog.array');
+goog.require('goog.collections.maps');
 goog.require('goog.dom.xml');
 goog.require('goog.events');
 goog.require('goog.net.ErrorCode');
@@ -22,8 +23,6 @@ goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XhrIo');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
-goog.require('goog.structs');
-goog.require('goog.structs.Map');
 goog.require('goog.testing.TestQueue');
 goog.requireType('goog.net.XhrLike');
 
@@ -42,9 +41,9 @@ goog.testing.net.XhrIo = function(opt_testQueue) {
   /**
    * Map of default headers to add to every request, use:
    * XhrIo.headers.set(name, value)
-   * @type {!goog.structs.Map}
+   * @type {!Map<string, string>}
    */
-  this.headers = new goog.structs.Map();
+  this.headers = new Map();
 
   /**
    * Queue of events write to.
@@ -128,8 +127,8 @@ goog.testing.net.XhrIo.cleanup = function() {
  * @param {string=} opt_method Send method, default: GET.
  * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=}
  *     opt_content Body data.
- * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
- *     request.
+ * @param {?Object|?goog.collections.maps.MapLike<string,string>=} opt_headers
+ *     Map of headers to add to the request.
  * @param {number=} opt_timeoutInterval Number of milliseconds after which an
  *     incomplete request will be aborted; 0 means no timeout is set.
  * @param {boolean=} opt_withCredentials Whether to send credentials with the
@@ -192,14 +191,14 @@ goog.testing.net.XhrIo.prototype.lastContent_;
 
 /**
  * Additional headers that were requested in the last query.
- * @private {Object|goog.structs.Map|undefined}
+ * @private {?Object|?goog.collections.maps.MapLike<string,string>|undefined}
  */
 goog.testing.net.XhrIo.prototype.lastHeaders_;
 
 
 /**
  * The response object.
- * @private {string|Document|ArrayBuffer}
+ * @private {string|!Document|!ArrayBuffer|!Blob|null}
  */
 goog.testing.net.XhrIo.prototype.response_ = '';
 
@@ -380,8 +379,8 @@ goog.testing.net.XhrIo.prototype.abort = function(opt_failureCode) {
  * @param {string=} opt_method Send method, default: GET.
  * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=}
  *     opt_content Body data.
- * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
- *     request.
+ * @param {?Object|?goog.collections.maps.MapLike<string, string>=} opt_headers
+ *     Map of headers to add to the request.
  * @override
  */
 goog.testing.net.XhrIo.prototype.send = function(
@@ -394,14 +393,24 @@ goog.testing.net.XhrIo.prototype.send = function(
   this.lastUri_ = url;
   this.lastMethod_ = opt_method || 'GET';
   this.lastContent_ = opt_content;
-  if (!this.headers.isEmpty()) {
-    this.lastHeaders_ = this.headers.toObject();
+  if (this.headers.size > 0) {
+    this.lastHeaders_ = goog.collections.maps.toObject(this.headers);
     // Add headers specific to this request
     if (opt_headers) {
-      goog.structs.forEach(opt_headers, goog.bind(function(value, key) {
-        'use strict';
-        this.lastHeaders_[key] = value;
-      }, this));
+      if (Object.getPrototypeOf(opt_headers) === Object.prototype) {
+        for (let key in opt_headers) {
+          this.lastHeaders_[key] = opt_headers[key];
+        }
+      } else if (
+          typeof opt_headers.keys === 'function' &&
+          typeof opt_headers.get === 'function') {
+        for (const key of opt_headers.keys()) {
+          this.lastHeaders_[key] = opt_headers.get(key);
+        }
+      } else {
+        throw new Error(
+            'Unknown input type for opt_headers: ' + String(opt_headers));
+      }
     }
   } else {
     this.lastHeaders_ = opt_headers;
@@ -477,7 +486,8 @@ goog.testing.net.XhrIo.prototype.simulatePartialResponse = function(
 /**
  * Simulates receiving a response.
  * @param {number} statusCode Simulated status code.
- * @param {string|Document|ArrayBuffer|null} response Simulated response.
+ * @param {string|!Document|!ArrayBuffer|!Blob|null} response Simulated
+ *     response.
  * @param {Object=} opt_headers Simulated response headers.
  */
 goog.testing.net.XhrIo.prototype.simulateResponse = function(
@@ -678,7 +688,8 @@ goog.testing.net.XhrIo.prototype.getLastContent = function() {
 
 /**
  * Gets the headers of the last request.
- * @return {Object|goog.structs.Map|undefined} Last headers manually set in send
+ * @return {?Object|?goog.collections.maps.MapLike<string,string>|undefined}
+ *     Last headers manually set in send
  *      call or undefined if no additional headers were specified.
  */
 goog.testing.net.XhrIo.prototype.getLastRequestHeaders = function() {

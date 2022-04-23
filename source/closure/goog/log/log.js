@@ -473,10 +473,10 @@ goog.log.LogRecord = class LogRecord {
 
     /**
      * Exception associated with the record
-     * @type {?Object}
+     * @type {*}
      * @private
      */
-    this.exception_ = null;
+    this.exception_ = undefined;
 
     this.reset(
         level || goog.log.Level.OFF, msg, loggerName, time, sequenceNumber);
@@ -498,7 +498,7 @@ goog.log.LogRecord = class LogRecord {
     this.level_ = level;
     this.msg_ = msg;
     this.loggerName_ = loggerName;
-    this.exception_ = null;
+    this.exception_ = undefined;
     this.sequenceNumber_ = typeof sequenceNumber === 'number' ?
         sequenceNumber :
         goog.log.LogRecord.nextSequenceNumber_;
@@ -528,7 +528,7 @@ goog.log.LogRecord = class LogRecord {
   /**
    * Gets the exception that is part of the log record.
    *
-   * @return {?Object} the exception.
+   * @return {*} the exception.
    */
   getException() {
     return this.exception_;
@@ -537,7 +537,7 @@ goog.log.LogRecord = class LogRecord {
 
   /**
    * Sets the exception that is part of the log record.
-   * @param {?Object} exception the exception.
+   * @param {*} exception the exception.
    */
   setException(exception) {
     this.exception_ = exception;
@@ -748,7 +748,7 @@ goog.log.LogRegistry_ = class LogRegistry_ {
 
       // Get its parent first.
       const lastDotIndex = name.lastIndexOf('.');
-      const parentName = name.substr(0, lastDotIndex);
+      const parentName = name.slice(0, Math.max(lastDotIndex, 0));
       const parentLogRegistryEntry = this.getLogRegistryEntry(parentName);
 
       // Now create the new entry, linking it with its parent.
@@ -967,16 +967,13 @@ goog.log.getAllLoggers = function() {
  * @param {?goog.log.Logger} logger
  * @param {?goog.log.Level} level One of the level identifiers.
  * @param {string} msg The message to log.
- * @param {?Error|?Object=} exception An exception associated with the
- *     message.
+ * @param {*=} exception An exception associated with the message.
  * @return {!goog.log.LogRecord}
  */
-goog.log.getLogRecord = function(logger, level, msg, exception) {
+goog.log.getLogRecord = function(logger, level, msg, exception = undefined) {
   const logRecord = goog.log.LogBuffer.getInstance().addRecord(
       level || goog.log.Level.OFF, msg, logger.getName());
-  if (exception) {
-    logRecord.setException(exception);
-  }
+  logRecord.setException(exception);
   return logRecord;
 };
 
@@ -1007,10 +1004,9 @@ goog.log.publishLogRecord = function(logger, logRecord) {
  * @param {?goog.log.Logger} logger
  * @param {?goog.log.Level} level One of the level identifiers.
  * @param {!goog.log.Loggable} msg The message to log.
- * @param {?Error|?Object=} exception An exception associated with the
- *     message.
+ * @param {*=} exception An exception associated with the message.
  */
-goog.log.log = function(logger, level, msg, exception) {
+goog.log.log = function(logger, level, msg, exception = undefined) {
   if (goog.log.ENABLED && logger && goog.log.isLoggable(logger, level)) {
     level = level || goog.log.Level.OFF;
     const loggerEntry = goog.log.LogRegistry_.getInstance().getLogRegistryEntry(
@@ -1021,9 +1017,7 @@ goog.log.log = function(logger, level, msg, exception) {
     }
     const logRecord = goog.log.LogBuffer.getInstance().addRecord(
         level, msg, logger.getName());
-    if (exception) {
-      logRecord.setException(exception);
-    }
+    logRecord.setException(exception);
     // Publish logs.
     loggerEntry.publish(logRecord);
   }
@@ -1036,10 +1030,9 @@ goog.log.log = function(logger, level, msg, exception) {
  * given message is forwarded to all the registered output Handler objects.
  * @param {?goog.log.Logger} logger
  * @param {!goog.log.Loggable} msg The message to log.
- * @param {?Error|?Object=} exception An exception associated with the
- *     message.
+ * @param {*=} exception An exception associated with the message.
  */
-goog.log.error = function(logger, msg, exception) {
+goog.log.error = function(logger, msg, exception = undefined) {
   if (goog.log.ENABLED && logger) {
     goog.log.log(logger, goog.log.Level.SEVERE, msg, exception);
   }
@@ -1052,10 +1045,9 @@ goog.log.error = function(logger, msg, exception) {
  * given message is forwarded to all the registered output Handler objects.
  * @param {?goog.log.Logger} logger
  * @param {!goog.log.Loggable} msg The message to log.
- * @param {?Error|?Object=} exception An exception associated with the
- *     message.
+ * @param {*=} exception An exception associated with the message.
  */
-goog.log.warning = function(logger, msg, exception) {
+goog.log.warning = function(logger, msg, exception = undefined) {
   if (goog.log.ENABLED && logger) {
     goog.log.log(logger, goog.log.Level.WARNING, msg, exception);
   }
@@ -1068,10 +1060,9 @@ goog.log.warning = function(logger, msg, exception) {
  * given message is forwarded to all the registered output Handler objects.
  * @param {?goog.log.Logger} logger
  * @param {!goog.log.Loggable} msg The message to log.
- * @param {?Error|?Object=} exception An exception associated with the
- *     message.
+ * @param {*=} exception An exception associated with the message.
  */
-goog.log.info = function(logger, msg, exception) {
+goog.log.info = function(logger, msg, exception = undefined) {
   if (goog.log.ENABLED && logger) {
     goog.log.log(logger, goog.log.Level.INFO, msg, exception);
   }
@@ -1084,10 +1075,9 @@ goog.log.info = function(logger, msg, exception) {
  * given message is forwarded to all the registered output Handler objects.
  * @param {?goog.log.Logger} logger
  * @param {!goog.log.Loggable} msg The message to log.
- * @param {?Error|?Object=} exception An exception associated with the
- *     message.
+ * @param {*=} exception An exception associated with the message.
  */
-goog.log.fine = function(logger, msg, exception) {
+goog.log.fine = function(logger, msg, exception = undefined) {
   if (goog.log.ENABLED && logger) {
     goog.log.log(logger, goog.log.Level.FINE, msg, exception);
   }

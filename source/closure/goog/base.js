@@ -91,7 +91,14 @@ goog.global.CLOSURE_UNCOMPILED_DEFINES;
  *   var CLOSURE_DEFINES = {'goog.DEBUG': false} ;
  * </pre>
  *
- * @type {Object<string, (string|number|boolean)>|undefined}
+ * Currently the Closure Compiler will only recognize very simple definitions of
+ * this value when looking for values to apply to compiled code and ignore all
+ * other references.  Specifically, it looks the value defined at the variable
+ * declaration, as with the example above.
+ *
+ * TODO(user): Improve the recognized definitions.
+ *
+ * @type {!Object<string, (string|number|boolean)>|null|undefined}
  */
 goog.global.CLOSURE_DEFINES;
 
@@ -249,15 +256,15 @@ goog.LOCALE = goog.define('goog.LOCALE', 'en');  // default to en
 
 
 /**
- * This method is intended to be used for bookkeeping purposes.  We would
- * like to distinguish uses of goog.LOCALE used for code stripping purposes
- * and uses of goog.LOCALE for other uses (such as URL parameters).
+ * Same as `goog.LOCALE`, which should be used instead.
  *
- * This allows us to ban direct uses of goog.LOCALE and to ensure that all
- * code has been transformed to our new localization build scheme.
+ * Using this method just makes it harder for closure-compiler to optimize
+ * your locale-specific code, since it has to take the extra step of inlining
+ * this function to discover and remove code that is not used for the target
+ * locale.
  *
  * @return {string}
- *
+ * @deprecated use `goog.LOCALE`
  */
 goog.getLocale = function() {
   return goog.LOCALE;
@@ -1561,34 +1568,6 @@ goog.partial = function(fn, var_args) {
 
 
 /**
- * Copies all the members of a source object to a target object. This method
- * does not work on all browsers for all objects that contain keys such as
- * toString or hasOwnProperty. Use goog.object.extend for this purpose.
- *
- * NOTE: Some have advocated for the use of goog.mixin to setup classes
- * with multiple inheritence (traits, mixins, etc).  However, as it simply
- * uses "for in", this is not compatible with ES6 classes whose methods are
- * non-enumerable.  Changing this, would break cases where non-enumerable
- * properties are not expected.
- *
- * @param {Object} target Target.
- * @param {Object} source Source.
- * @deprecated Prefer Object.assign
- */
-goog.mixin = function(target, source) {
-  for (var x in source) {
-    target[x] = source[x];
-  }
-
-  // For IE7 or lower, the for-in-loop does not contain any properties that are
-  // not enumerable on the prototype object (for example, isPrototypeOf from
-  // Object.prototype) but also it will not include 'replace' on objects that
-  // extend String and change 'replace' (not that it is common for anyone to
-  // extend anything except Object).
-};
-
-
-/**
  * @return {number} An integer value representing the number of milliseconds
  *     between midnight, January 1, 1970 and the current time.
  * @deprecated Use Date.now
@@ -1766,6 +1745,71 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
   goog.cssNameMapping_ = goog.global.CLOSURE_CSS_NAME_MAPPING;
 }
 
+/**
+ * Options bag type for `goog.getMsg()` third argument.
+ *
+ * It is important to note that these options need to be known at compile time,
+ * so they must always be provided to `goog.getMsg()` as an actual object
+ * literal in the function call. Otherwise, closure-compiler will report an
+ * error.
+ * @record
+ */
+goog.GetMsgOptions = function() {};
+
+/**
+ * If `true`, escape '<' in the message string to '&lt;'.
+ *
+ * Used by Closure Templates where the generated code size and performance is
+ * critical which is why {@link goog.html.SafeHtmlFormatter} is not used.
+ * The value must be literal `true` or `false`.
+ * @type {boolean|undefined}
+ */
+goog.GetMsgOptions.prototype.html;
+
+/**
+ * If `true`, unescape common html entities: &gt;, &lt;, &apos;, &quot; and
+ * &amp;.
+ *
+ * Used for messages not in HTML context, such as with the `textContent`
+ * property.
+ * The value must be literal `true` or `false`.
+ * @type {boolean|undefined}
+ */
+goog.GetMsgOptions.prototype.unescapeHtmlEntities;
+
+/**
+ * Associates placeholder names with strings showing how their values are
+ * obtained.
+ *
+ * This field is intended for use in automatically generated JS code.
+ * Human-written code should use meaningful placeholder names instead.
+ *
+ * closure-compiler uses this as the contents of the `<ph>` tag in the
+ * XMB file it generates or defaults to `-` for historical reasons.
+ *
+ * Must be an object literal.
+ * Ignored at runtime.
+ * Keys are placeholder names.
+ * Values are string literals indicating how the value is obtained.
+ * Typically this is a snippet of source code.
+ * @type {!Object<string, string>|undefined}
+ */
+goog.GetMsgOptions.prototype.original_code;
+
+/**
+ * Associates placeholder names with example values.
+ *
+ * closure-compiler uses this as the contents of the `<ex>` tag in the
+ * XMB file it generates or defaults to `-` for historical reasons.
+ *
+ * Must be an object literal.
+ * Ignored at runtime.
+ * Keys are placeholder names.
+ * Values are string literals containing example placeholder values.
+ * (e.g. "George McFly" for a name placeholder)
+ * @type {!Object<string, string>|undefined}
+ */
+goog.GetMsgOptions.prototype.example;
 
 /**
  * Gets a localized message.
@@ -1784,16 +1828,8 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
  * produce SafeHtml.
  *
  * @param {string} str Translatable string, places holders in the form {$foo}.
- * @param {Object<string, string>=} opt_values Maps place holder name to value.
- * @param {{html: (boolean|undefined),
- *         unescapeHtmlEntities: (boolean|undefined)}=} opt_options Options:
- *     html: Escape '<' in str to '&lt;'. Used by Closure Templates where the
- *     generated code size and performance is critical which is why {@link
- *     goog.html.SafeHtmlFormatter} is not used. The value must be literal true
- *     or false.
- *     unescapeHtmlEntities: Unescape common html entities: &gt;, &lt;, &apos;,
- *     &quot; and &amp;. Used for messages not in HTML context, such as with
- *     `textContent` property.
+ * @param {!Object<string, string>=} opt_values Maps place holder name to value.
+ * @param {!goog.GetMsgOptions=} opt_options see `goog.GetMsgOptions`
  * @return {string} message with placeholders filled.
  */
 goog.getMsg = function(str, opt_values, opt_options) {
@@ -2259,8 +2295,8 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       var src = script.src;
       var qmark = src.lastIndexOf('?');
       var l = qmark == -1 ? src.length : qmark;
-      if (src.substr(l - 7, 7) == 'base.js') {
-        goog.basePath = src.substr(0, l - 7);
+      if (src.slice(l - 7, l) == 'base.js') {
+        goog.basePath = src.slice(0, l - 7);
         return;
       }
     }
@@ -3175,23 +3211,10 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
         scriptEl.nonce = nonce;
       }
 
-      if (goog.DebugLoader_.IS_OLD_IE_) {
-        // Execution order is not guaranteed on old IE, halt loading and write
-        // these scripts one at a time, after each loads.
-        controller.pause();
-        scriptEl.onreadystatechange = function() {
-          if (scriptEl.readyState == 'loaded' ||
-              scriptEl.readyState == 'complete') {
-            controller.loaded();
-            controller.resume();
-          }
-        };
-      } else {
-        scriptEl.onload = function() {
-          scriptEl.onload = null;
-          controller.loaded();
-        };
-      }
+      scriptEl.onload = function() {
+        scriptEl.onload = null;
+        controller.loaded();
+      };
 
       scriptEl.src = goog.TRUSTED_TYPES_POLICY_ ?
           goog.TRUSTED_TYPES_POLICY_.createScriptURL(this.path) :
@@ -3502,13 +3525,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     // If one thing is pending it is this.
     var anythingElsePending = controller.pending().length > 1;
 
-    // If anything else is loading we need to lazy load due to bugs in old IE.
-    // Specifically script tags with src and script tags with contents could
-    // execute out of order if document.write is used, so we cannot use
-    // document.write. Do not pause here; it breaks old IE as well.
-    var useOldIeWorkAround =
-        anythingElsePending && goog.DebugLoader_.IS_OLD_IE_;
-
     // Additionally if we are meant to defer scripts but the page is still
     // loading (e.g. an ES6 module is loading) then also defer. Or if we are
     // meant to defer and anything else is pending then defer (those may be
@@ -3517,7 +3533,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     var needsAsyncLoading = goog.Dependency.defer_ &&
         (anythingElsePending || goog.isDocumentLoading_());
 
-    if (useOldIeWorkAround || needsAsyncLoading) {
+    if (needsAsyncLoading) {
       // Note that we only defer when we have to rather than 100% of the time.
       // Always defering would work, but then in theory the order of
       // goog.require calls would then matter. We want to enforce that most of
@@ -3561,8 +3577,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       };
     } else {
       // Always eval on old IE.
-      if (goog.DebugLoader_.IS_OLD_IE_ || !goog.inHtmlDocument_() ||
-          !goog.isDocumentLoading_()) {
+      if (!goog.inHtmlDocument_() || !goog.isDocumentLoading_()) {
         load();
       } else {
         fetchInOwnScriptThenLoad();
@@ -3704,15 +3719,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
           ');';
     }
   };
-
-
-  /**
-   * Whether the browser is IE9 or earlier, which needs special handling
-   * for deferred modules.
-   * @const @private {boolean}
-   */
-  goog.DebugLoader_.IS_OLD_IE_ = !!(
-      !goog.global.atob && goog.global.document && goog.global.document['all']);
 
 
   /**

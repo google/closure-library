@@ -454,8 +454,7 @@ goog.ui.FilteredMenu.prototype.filterItems_ = function(str) {
 
     // If the number of comma separated items has changes recreate the
     // entered items array and fire a change event.
-    if (str.substr(str.length - 1, 1) == ',' ||
-        items.length != this.enteredItems_.length) {
+    if (str.slice(-1) == ',' || items.length != this.enteredItems_.length) {
       var lastItem = items[items.length - 1] || '';
 
       // Auto complete text in input box based on the highlighted item.
@@ -525,9 +524,9 @@ goog.ui.FilteredMenu.prototype.boldContent = function(child, start, len) {
   if (len == 0) {
     boldedCaption = this.getDomHelper().createTextNode(caption);
   } else {
-    var preMatch = caption.substr(0, start);
-    var match = caption.substr(start, len);
-    var postMatch = caption.substr(start + len);
+    var preMatch = caption.slice(0, start);
+    var match = caption.slice(start, start + len);
+    var postMatch = caption.slice(start + len);
     boldedCaption = this.getDomHelper().createDom(
         goog.dom.TagName.SPAN, null, preMatch,
         this.getDomHelper().createDom(goog.dom.TagName.B, null, match),

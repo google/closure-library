@@ -198,8 +198,9 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
       safeUrl.constructor === goog.html.SafeUrl) {
     return safeUrl.privateDoNotAccessOrElseSafeUrlWrappedValue_;
   } else {
-    goog.asserts.fail('expected object of type SafeUrl, got \'' +
-        safeUrl + '\' of type ' + goog.typeOf(safeUrl));
+    goog.asserts.fail(
+        'expected object of type SafeUrl, got \'' + safeUrl + '\' of type ' +
+        goog.typeOf(safeUrl));
     return 'type_error:SafeUrl';
   }
 };
@@ -348,8 +349,7 @@ goog.html.SafeUrl.tryFromDataUrl = function(dataUrl) {
   // origins. Only Firefox for versions prior to v57 behaves differently:
   // https://blog.mozilla.org/security/2017/10/04/treating-data-urls-unique-origins-firefox-57/
   // Older versions of IE don't understand `data:` urls, so it is not an issue.
-  var valid = match && goog.html.SafeUrl.isSafeMimeType(match[1]);
-  if (valid) {
+  if (match) {
     return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
         filteredDataUrl);
   }

@@ -482,7 +482,7 @@ goog.ui.Palette.prototype.setHighlightedIndexInternal_ = function(
     this.lastHighlightedIndex_ = this.highlightedIndex_;
     this.highlightedIndex_ = index;
     this.highlightIndex_(index, true);
-    if (scrollIntoView) {
+    if (scrollIntoView && this.getParent()) {
       var highlightedElement = goog.asserts.assert(
           this.getHighlightedCellElement_(),
           'Highlighted item must exist to scroll to make it visible in ' +

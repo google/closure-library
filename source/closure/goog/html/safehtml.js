@@ -225,11 +225,13 @@ class SafeHtml {
     }
     const textIsObject = typeof textOrHtml == 'object';
     let dir = null;
-    if (textIsObject && textOrHtml.implementsGoogI18nBidiDirectionalString) {
+    if (textIsObject &&
+        /** @type {?} */ (textOrHtml).implementsGoogI18nBidiDirectionalString) {
       dir = /** @type {!DirectionalString} */ (textOrHtml).getDirection();
     }
     let textAsString;
-    if (textIsObject && textOrHtml.implementsGoogStringTypedString) {
+    if (textIsObject &&
+        /** @type {?} */ (textOrHtml).implementsGoogStringTypedString) {
       textAsString =
           /** @type {!TypedString} */ (textOrHtml).getTypedStringValue();
     } else {
@@ -523,7 +525,6 @@ class SafeHtml {
         'script', combinedAttrs);
   }
 
-
   /**
    * Creates a SafeHtml representing a script tag. Does not allow the language,
    * src, text or type attributes to be set.
@@ -537,7 +538,7 @@ class SafeHtml {
    * @return {!SafeHtml} The SafeHtml content with the tag.
    * @throws {!Error} If invalid attribute name or attribute value is provided.
    *     If attributes  contains the
-   *     language, src, text or type attribute.
+   *     language, src or text attribute.
    */
   static createScript(script, attributes = undefined) {
     for (let attr in attributes) {
@@ -545,7 +546,7 @@ class SafeHtml {
       if (Object.prototype.hasOwnProperty.call(attributes, attr)) {
         const attrLower = attr.toLowerCase();
         if (attrLower == 'language' || attrLower == 'src' ||
-            attrLower == 'text' || attrLower == 'type') {
+            attrLower == 'text') {
           throw new Error(
               SafeHtml.ENABLE_ERROR_MESSAGES ?
                   `Cannot set "${attrLower}" attribute` :
@@ -654,6 +655,7 @@ class SafeHtml {
    * @param {!SafeHtml.TextOrHtml_|
    *     !Array<!SafeHtml.TextOrHtml_>=} content
    * @return {!SafeHtml} The SafeHtml content with the tag.
+   * @package
    */
   static createWithDir(
       dir, tagName, attributes = undefined, content = undefined) {
@@ -1006,7 +1008,7 @@ function getAttrNameAndValue(tagName, name, value) {
 
   // Accept SafeUrl, TrustedResourceUrl, etc. for attributes which only require
   // HTML-escaping.
-  if (value.implementsGoogStringTypedString) {
+  if (/** @type {?} */ (value).implementsGoogStringTypedString) {
     // Ok to call getTypedStringValue() since there's no reliance on the type
     // contract for security here.
     value =

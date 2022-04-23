@@ -24,7 +24,6 @@ goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.editor.style');
 goog.require('goog.iter');
-goog.require('goog.iter.StopIteration');
 goog.require('goog.log');
 goog.require('goog.object');
 goog.require('goog.string');
@@ -394,8 +393,9 @@ goog.editor.plugins.BasicTextFormatter.prototype.queryCommandValue = function(
       // color/fontface/fontsize is applied, we want to know WHICH one it is.
       return this.queryCommandValueInternal_(
           this.getDocument_(), command,
-          goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &&
-              goog.userAgent.GECKO);
+          (goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &&
+           goog.userAgent.GECKO) ??
+              undefined);
 
     case goog.editor.plugins.BasicTextFormatter.COMMAND.UNDERLINE:
     case goog.editor.plugins.BasicTextFormatter.COMMAND.BOLD:
@@ -416,7 +416,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.queryCommandValue = function(
        */
       // This only works for commands that use the default execCommand
       return this.queryCommandStateInternal_(
-          this.getDocument_(), command, styleWithCss);
+          this.getDocument_(), command, styleWithCss ?? undefined);
   }
 };
 
@@ -930,6 +930,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.toggleLink_ = function(
       goog.dom.getAncestorByTagNameAndClass(parent, goog.dom.TagName.A));
   if (link && goog.editor.node.isEditable(link)) {
     goog.dom.flattenElement(link);
+    this.getFieldObject().dispatchChange();
+    this.getFieldObject().dispatchSelectionChangeEvent();
   } else {
     var editableLink = this.createLink_(range, '/', opt_target);
     if (editableLink) {
@@ -1589,25 +1591,36 @@ goog.editor.plugins.BasicTextFormatter.getSelectionBlockState_ = function(
     range) {
   'use strict';
   var tagName = null;
-  goog.iter.forEach(range, function(node, ignore, it) {
-    'use strict';
-    if (!it.isEndTag()) {
-      // Iterate over all containers in the range, checking if they all have the
-      // same tagName.
-      var container = goog.editor.style.getContainer(node);
-      var thisTagName = container.tagName;
-      tagName = tagName || thisTagName;
+  // TODO(user): use for-of and normal control flow once
+  // goog.iter.Iterator supports ES6 iteration.
+  const stopIterationEarlyError = new Error();
+  try {
+    goog.iter.forEach(range, function(node, ignore, it) {
+      'use strict';
+      if (!it.isEndTag()) {
+        // Iterate over all containers in the range, checking if they all have
+        // the same tagName.
+        var container = goog.editor.style.getContainer(node);
+        var thisTagName = container.tagName;
+        tagName = tagName || thisTagName;
 
-      if (tagName != thisTagName) {
-        // If we find a container tag that doesn't match, exit right away.
-        tagName = null;
-        throw goog.iter.StopIteration;
+        if (tagName != thisTagName) {
+          // If we find a container tag that doesn't match, exit right away.
+          tagName = null;
+          throw stopIterationEarlyError;
+        }
+
+        // Skip the tag.
+        it.skipTag();
       }
-
-      // Skip the tag.
-      it.skipTag();
+    });
+  } catch (ex) {
+    if (ex !== stopIterationEarlyError) {
+      throw ex;
     }
-  });
+    // Silently drop the error used to terminate iteration early, similar to
+    // how goog.iter.StopIteration used to work.
+  }
 
   return tagName;
 };

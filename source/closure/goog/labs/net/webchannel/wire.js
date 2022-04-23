@@ -11,7 +11,9 @@
 goog.provide('goog.labs.net.webChannel.Wire');
 goog.provide('goog.labs.net.webChannel.Wire.QueuedMap');
 
-goog.requireType('goog.structs.Map');
+
+
+goog.require('goog.collections.maps');
 
 
 
@@ -47,7 +49,7 @@ goog.labs.net.webChannel.Wire.RAW_DATA_KEY = '__data__';
 goog.labs.net.webChannel.Wire.QueuedMap = class {
   /**
    * @param {number} mapId The id for this map.
-   * @param {!Object|!goog.structs.Map} map The map itself.
+   * @param {!Object|!goog.collections.maps.MapLike} map The map itself.
    * @param {!Object=} opt_context The context associated with the map.
    */
   constructor(mapId, map, opt_context) {
@@ -60,7 +62,7 @@ goog.labs.net.webChannel.Wire.QueuedMap = class {
 
     /**
      * The map itself.
-     * @type {!Object|!goog.structs.Map}
+     * @type {!Object|!goog.collections.maps.MapLike}
      */
     this.map = map;
 

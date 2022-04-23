@@ -11,6 +11,7 @@
 
 goog.provide('goog.storage.mechanism.PrefixedMechanism');
 
+goog.require('goog.iter');
 goog.require('goog.iter.Iterator');
 goog.require('goog.storage.mechanism.IterableMechanism');
 
@@ -74,24 +75,29 @@ goog.storage.mechanism.PrefixedMechanism.prototype.remove = function(key) {
 goog.storage.mechanism.PrefixedMechanism.prototype.__iterator__ = function(
     opt_keys) {
   'use strict';
-  var subIter = this.mechanism_.__iterator__(true);
-  var selfObj = this;
-  var newIter = new goog.iter.Iterator();
-  newIter.nextValueOrThrow = function() {
-    'use strict';
-    var key = /** @type {string} */ (subIter.nextValueOrThrow());
-    while (key.substr(0, selfObj.prefix_.length) != selfObj.prefix_) {
-      key = /** @type {string} */ (subIter.nextValueOrThrow());
-    }
-    return opt_keys ? key.substr(selfObj.prefix_.length) :
-                      selfObj.mechanism_.get(key);
-  };
+  const subIter = this.mechanism_[Symbol.iterator]();
+  const selfObj = this;
+  const newIter = new goog.iter.Iterator();
   /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
-   * @override @see {!goog.iter.Iterator}
+   * @return {!IIterableResult<string>}
+   * @override
    */
-  newIter.next = newIter.nextValueOrThrow.bind(newIter);
+  newIter.next = function() {
+    'use strict';
+    let key;
+    let it = subIter.next();
+    if (it.done) return it;
+    key = it.value;
+    while (key.slice(0, selfObj.prefix_.length) != selfObj.prefix_) {
+      it = subIter.next();
+      if (it.done) return it;
+      key = it.value;
+    }
+    return goog.iter.createEs6IteratorYield(
+        /** @type {string} */ (
+            opt_keys ? key.slice(selfObj.prefix_.length) :
+                       selfObj.mechanism_.get(key)));
+  };
 
   return newIter;
 };

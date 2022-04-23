@@ -459,9 +459,9 @@ goog.debug.formatter.TextFormatter.prototype.formatRecord = function(
   sb.push(logRecord.getMessage());
   if (this.showExceptionText) {
     var exception = logRecord.getException();
-    if (exception) {
+    if (exception !== undefined) {
       var exceptionText =
-          exception instanceof Error ? exception.message : exception.toString();
+          exception instanceof Error ? exception.message : String(exception);
       sb.push('\n', exceptionText);
     }
   }

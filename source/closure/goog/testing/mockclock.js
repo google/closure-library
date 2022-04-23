@@ -20,6 +20,7 @@ goog.require('goog.Disposable');
 goog.require('goog.Promise');
 goog.require('goog.Thenable');
 goog.require('goog.asserts');
+goog.require('goog.async.nextTick');
 goog.require('goog.async.run');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.events');
@@ -54,7 +55,6 @@ goog.require('goog.testing.events.Event');
 goog.testing.MockClock = function(opt_autoInstall) {
   'use strict';
   goog.Disposable.call(this);
-
   /**
    * Reverse-order queue of timers to fire.
    *
@@ -164,6 +164,36 @@ goog.testing.MockClock.prototype.timeoutDelay_ = 0;
 
 
 /**
+ * Whether the MockClock is allowed to use synchronous ticks.
+ *
+ * When this is true, MockClock will patch goog.async.run upon installation so
+ * that GoogPromises can be resolved synchronously.
+ * @type {boolean}
+ * @private
+ */
+goog.testing.MockClock.prototype.isSynchronous_ = true;
+
+
+/**
+ * Creates an async-only MockClock that can only be ticked asynchronously.
+ *
+ * Async-only MockClocks rely on native Promise resolution instead of
+ * patching async run behavior to force GoogPromise to resolve synchronously.
+ * As a result, async MockClocks must be ticked with tickAsync() instead of
+ * tick().
+ *
+ * Async-only MockClocks will always use the default async scheduler and will
+ * never reset the async queue when uninstalled.
+ *
+ * @return {!goog.testing.MockClock}
+ */
+goog.testing.MockClock.createAsyncMockClock = function() {
+  const clock = new goog.testing.MockClock();
+  clock.isSynchronous_ = false;
+  return clock;
+};
+
+/**
  * The real set timeout for reference.
  * @const @private {!Function}
  */
@@ -193,20 +223,44 @@ goog.testing.MockClock.prototype.install = function() {
     var r = this.replacer_ = new goog.testing.PropertyReplacer();
     r.set(goog.global, 'setTimeout', goog.bind(this.setTimeout_, this));
     r.set(goog.global, 'setInterval', goog.bind(this.setInterval_, this));
-    r.set(goog.global, 'setImmediate', goog.bind(this.setImmediate_, this));
     r.set(goog.global, 'clearTimeout', goog.bind(this.clearTimeout_, this));
     r.set(goog.global, 'clearInterval', goog.bind(this.clearInterval_, this));
     if (!this.unmockDateNow_) {
       r.set(Date, 'now', goog.bind(this.getCurrentTime, this));
     }
-    // goog.Promise uses goog.async.run. In order to be able to test
-    // Promise-based code, we need to make sure that goog.async.run uses
-    // nextTick instead of native browser Promises. This means that it will
-    // default to setImmediate, which is replaced above. Note that we test for
-    // the presence of goog.async.run.forceNextTick to be resilient to the case
-    // where tests replace goog.async.run directly.
-    goog.async.run.forceNextTick &&
-        goog.async.run.forceNextTick(goog.testing.MockClock.REAL_SETTIMEOUT_);
+    // goog.async.nextTick depends on various internal browser APIs
+    // (setImmediate, MessageChannel, and setTimeout), but it's internal
+    // implementation uses local caching which makes stubbing the browser
+    // natives not feasible. Stub it directly instead.
+    r.set(
+        goog.async.nextTick, 'nextTickImpl',
+        goog.bind(this.setImmediate_, this));
+    // setImmediate is a deprecated API that does not exist in most browsers.
+    // Set it in the browser supports it.
+    // Preserve existing behavior of synchronous mock clocks to unconditionally
+    // stub setImmediate.
+    if (goog.global['setImmediate'] || this.isSynchronous_) {
+      r.set(goog.global, 'setImmediate', goog.bind(this.setImmediate_, this));
+    }
+
+    if (this.isSynchronous_) {
+      // goog.Promise uses goog.async.run. In order to be able to test
+      // Promise-based code synchronously, we need to make sure that
+      // goog.async.run uses nextTick instead of native browser Promises. Since
+      // nextTick calls setImmediate, it will be synchronously executed the
+      // next time the MockClock is ticked. Note that we test for the presence
+      // of goog.async.run.forceNextTick to be resilient to the case where
+      // tests replace goog.async.run directly.
+      goog.async.run.forceNextTick &&
+          goog.async.run.forceNextTick(goog.testing.MockClock.REAL_SETTIMEOUT_);
+    } else {
+      // Reset the scheduler in case a synchronous MockClock was previously
+      // installed. Otherwise goog.Promise resolution and other work scheduled
+      // with goog.async.run would be executed synchronously when ticking the
+      // clock.
+      goog.async.run.resetSchedulerForTest &&
+          goog.async.run.resetSchedulerForTest();
+    }
 
     // Replace the requestAnimationFrame functions.
     this.replaceRequestAnimationFrame_();
@@ -276,8 +330,15 @@ goog.testing.MockClock.prototype.replaceRequestAnimationFrame_ = function() {
 /**
  * Removes the MockClock's hooks into the global object's functions and revert
  * to their original values.
+ *
+ * @param {boolean=} resetScheduler By default, a synchronous MockClock
+ *     will not restore default goog.async behavior upon uninstallation and
+ *     clear any pending async work. This can leave goog.Promises in a state
+ *     where callbacks can never be executed. Set this flag to restore original
+ *     scheduling behavior and retain the async queue. This argument is ignored
+ *     for an async-only MockClock.
  */
-goog.testing.MockClock.prototype.uninstall = function() {
+goog.testing.MockClock.prototype.uninstall = function(resetScheduler) {
   'use strict';
   if (this.replacer_) {
     this.replacer_.reset();
@@ -285,7 +346,21 @@ goog.testing.MockClock.prototype.uninstall = function() {
     goog.now = this.oldGoogNow_;
   }
 
-  this.resetAsyncQueue_();
+  if (this.isSynchronous_) {
+    // Since async-only MockClock instances are always reset on installation,
+    // they don't need to be reset when uninstalled.
+    if (resetScheduler) {
+      // Check for presence of resetScheduler in case users have replaced
+      // goog.async.run.
+      goog.async.run.resetSchedulerForTest &&
+          goog.async.run.resetSchedulerForTest();
+    } else {
+      // If the overridden scheduler is not reset, then clear the work queue.
+      // This prevents any pending goog.Promise resolution or other work
+      // scheduled with goog.async.run from executing after uninstallation.
+      this.resetAsyncQueue_();
+    }
+  }
 };
 
 
@@ -302,8 +377,13 @@ goog.testing.MockClock.prototype.disposeInternal = function() {
 /**
  * Resets the MockClock, removing all timeouts that are scheduled and resets
  * the fake timer count.
+ * @param {boolean=} retainAsyncQueue By default, a synchronous MockClock
+ *     will clear any pending async work when reset. This can leave
+ *     goog.Promises in a state where callbacks can never be executed. Set this
+ *     flag to restore original scheduling behavior and retain the async queue.
+ *     This argument is ignored for an async-only MockClock.
  */
-goog.testing.MockClock.prototype.reset = function() {
+goog.testing.MockClock.prototype.reset = function(retainAsyncQueue) {
   'use strict';
   this.queue_ = [];
   this.deletedKeys_ = {};
@@ -312,16 +392,27 @@ goog.testing.MockClock.prototype.reset = function() {
   this.callbacksTriggered_ = 0;
   this.timeoutDelay_ = 0;
 
-  this.resetAsyncQueue_();
+  if (this.isSynchronous_ && !retainAsyncQueue) {
+    // If the overridden scheduler is not intended to be reset, then clear the
+    // work queue. This prevents any pending async work queue items from
+    // executing after uninstallation.
+    this.resetAsyncQueue_();
+  }
 };
 
 
 /**
- * Resets the async queue when this clock resets.
+ * Resets the async queue when a synchronous MockClock resets.
  * @private
  */
 goog.testing.MockClock.prototype.resetAsyncQueue_ = function() {
   'use strict';
+  // Synchronous MockClock should reset the async queue so that pending tasks
+  // are not executed the next time the call stack is emptied.
+  goog.asserts.assert(
+      this.isSynchronous_,
+      'Async queue cannot be reset on async-only async MockClock.');
+
   goog.async.run.resetQueue();
 };
 
@@ -357,6 +448,9 @@ goog.testing.MockClock.prototype.getTimeoutDelay = function() {
  */
 goog.testing.MockClock.prototype.tick = function(opt_millis) {
   'use strict';
+  goog.asserts.assert(
+      this.isSynchronous_,
+      'Async MockClock does not support tick. Use tickAsync() instead.');
   if (typeof opt_millis != 'number') {
     opt_millis = 1;
   }
@@ -396,9 +490,12 @@ goog.testing.MockClock.prototype.tick = function(opt_millis) {
  */
 goog.testing.MockClock.prototype.tickPromise = function(promise, opt_millis) {
   'use strict';
-  var value;
-  var error;
-  var resolved = false;
+  goog.asserts.assert(
+      this.isSynchronous_, 'Async MockClock does not support tickPromise.');
+
+  let value;
+  let error;
+  let resolved = false;
   promise.then(
       function(v) {
         'use strict';
@@ -469,6 +566,18 @@ goog.testing.MockClock.prototype.isTimeoutSet = function(timeoutKey) {
 
 
 /**
+ * Whether the MockClock is configured to run synchronously.
+ *
+ * This allows MockClock consumers to decide whether to tick synchronously or
+ * asynchronously.
+ * @return {boolean}
+ */
+goog.testing.MockClock.prototype.isSynchronous = function() {
+  return this.isSynchronous_;
+};
+
+
+/**
  * Runs any function that is scheduled before a certain time.  Timeouts can
  * be made to fire early or late if timeoutDelay_ is non-0.
  * @param {number} endTime The latest time in the range, in milliseconds.
@@ -499,6 +608,46 @@ goog.testing.MockClock.prototype.tickAsync = async function(millis = 1) {
   // If a scheduled callback called tick() reentrantly, don't rewind time.
   this.nowMillis_ = Math.max(this.nowMillis_, endTime);
   return endTime;
+};
+
+
+/**
+ * Asynchronously increments the MockClock's time by a given number of
+ * milliseconds, returning the settled promise value.
+ * @param {number} millis Number of milliseconds to increment the counter.
+ * @param {!goog.Thenable<T>} promise A promise that should be resolved after
+ *     the mockClock is ticked for the given opt_millis.
+ * @return {!Promise<T>} Resolved promise value.
+ * @throws {!goog.asserts.AssertionError} when the promise is not resolved after
+ *     ticking.
+ * @throws {*} when the promise is rejected.
+ * @template T
+ */
+goog.testing.MockClock.prototype.tickAsyncMustSettlePromise =
+    async function(millis, promise) {
+  goog.asserts.assert(
+      !this.isSynchronous_,
+      'Synchronous MockClock does not support tickAsyncMustSettlePromise.');
+
+  let settled = false;
+  let value;
+  let error;
+  promise.then(
+      (v) => {
+        settled = true;
+        value = v;
+      },
+      (e) => {
+        settled = true;
+        error = e;
+      });
+  await this.tickAsync(millis);
+  goog.asserts.assert(
+      settled, 'Promise was expected to be resolved after mock clock tick.');
+  if (error !== undefined) {
+    throw error;
+  }
+  return value;
 };
 
 

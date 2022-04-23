@@ -247,6 +247,63 @@ testAgents.SAFARI_13 =
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15' +
     ' (KHTML, like Gecko) Version/13.0 Safari/605.1.15';
 
+
+/**
+ * The user-agent for Safari on iPhone with iOS 14.1.1.
+ * @const {string}
+ */
+testAgents.SAFARI_IPHONE_IOS_14 =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X)' +
+    ' AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1' +
+    ' Mobile/15E148 Safari/604.1';
+
+/**
+ * The user-agent for Safari on iPhone with iOS 15.0.
+ * @const {string}
+ */
+testAgents.SAFARI_IPHONE_IOS_15 =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)' +
+    ' AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148' +
+    ' Safari/604.1';
+
+
+/**
+ * The user-agent for Safari Desktop on iOS 15.0 (which is enabled by default on
+ * non-mini iPads running at >=2/3 of the screen, unless the user requests for
+ * mobile site.
+ * @const {string}
+ */
+testAgents.SAFARI_DESKTOP_IPAD_IOS_15 =
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15' +
+    ' (KHTML, like Gecko) Version/15.0 Safari/605.1.15';
+
+/**
+ * The user-agent for Safari mobile on iOS 15.0 (which is enabled by default on
+ * iPad mini and can be enabled on other iPads by requesting a mobile site).
+ * @const {string}
+ */
+testAgents.SAFARI_MOBILE_IPAD_IOS_15 =
+    'Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X) AppleWebKit/605.1.15' +
+    ' (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1';
+
+/**
+ * The user-agent for Chrome browser on iPad running on iOS 15.0.
+ * @const {string}
+ */
+testAgents.CHROME_IPAD_IOS_15 =
+    'Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X) AppleWebKit/605.1.15' +
+    ' (KHTML, like Gecko) CriOS/87.0.4280.77 Mobile/15E148 Safari/604.1';
+
+/**
+ * The user-agent for Safari on MacOS Big Sur 11.5.2. Safari caps the Mac OS
+ * version number in the user-agent string.
+ * See: https://bugs.webkit.org/show_bug.cgi?id=216593.
+ * @const {string}
+ */
+testAgents.SAFARI_MAC_OS_BIG_SUR =
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15' +
+    ' (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15';
+
 /** @const {string} */
 testAgents.COAST =
     'Mozilla/5.0 (iPad; CPU OS 7_0_2 like Mac OS X) AppleWebKit/537.51.1' +
@@ -370,6 +427,10 @@ testAgents.CHROME_LINUX =
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko)' +
     ' Chrome/26.0.1410.33 Safari/537.31';
 
+/** @const {string} */
+testAgents.CHROME_LINUX_91 =
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)' +
+    ' Chrome/91.0.4472.77 Safari/537.36';
 
 /**
  * We traditionally use Appversion to detect X11
@@ -408,6 +469,10 @@ testAgents.KINDLE_FIRE =
     ' AppleWebKit/535.19 (KHTML, like Gecko) Silk/2.1 Mobile Safari/535.19' +
     ' Silk-Accelerated=true';
 
+/** @const {string} */
+testAgents.KINDLE_FIRE_SILK_93 =
+    'Mozilla/5.0 (Linux; Android 5.1.1; KFARWI) AppleWebKit/537.36' +
+    ' (KHTML, like Gecko) Silk/93.2.7 like Chrome/93.0.4577.82 Safari/537.36';
 
 /** @const {string} */
 testAgents.FIREFOX_ANDROID_TABLET =

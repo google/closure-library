@@ -46,15 +46,6 @@ goog.require('goog.reflect');
 goog.require('goog.userAgent');
 
 /**
- * @define {boolean} If true, use the layerX and layerY properties of a native
- * browser event over the offsetX and offsetY properties, which cause expensive
- * reflow. If layerX or layerY is not defined, offsetX and offsetY will be used
- * as usual.
- */
-goog.events.USE_LAYER_XY_AS_OFFSET_XY =
-    goog.define('goog.events.USE_LAYER_XY_AS_OFFSET_XY', false);
-
-/**
  * Accepts a browser event object and creates a patched, cross browser event
  * object.
  * The content of this object will not be initialized if no event object is
@@ -208,6 +199,15 @@ goog.events.BrowserEvent = function(opt_e, opt_currentTarget) {
 };
 goog.inherits(goog.events.BrowserEvent, goog.events.Event);
 
+/**
+ * @define {boolean} If true, use the layerX and layerY properties of a native
+ * browser event over the offsetX and offsetY properties, which cause expensive
+ * reflow. If layerX or layerY is not defined, offsetX and offsetY will be used
+ * as usual.
+ */
+goog.events.BrowserEvent.USE_LAYER_XY_AS_OFFSET_XY =
+    goog.define('goog.events.BrowserEvent.USE_LAYER_XY_AS_OFFSET_XY', false);
+
 
 /**
  * Normalized button constants for the mouse.
@@ -311,7 +311,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
     this.screenX = relevantTouch.screenX || 0;
     this.screenY = relevantTouch.screenY || 0;
   } else {
-    if (goog.events.USE_LAYER_XY_AS_OFFSET_XY) {
+    if (goog.events.BrowserEvent.USE_LAYER_XY_AS_OFFSET_XY) {
       this.offsetX = (e.layerX !== undefined) ? e.layerX : e.offsetX;
       this.offsetY = (e.layerY !== undefined) ? e.layerY : e.offsetY;
     } else {

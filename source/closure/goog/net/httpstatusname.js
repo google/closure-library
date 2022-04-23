@@ -67,6 +67,7 @@ goog.net.HttpStatusName = {
   428: 'Precondition Required',
   429: 'Too Many Requests',
   431: 'Request Header Fields Too Large',
+  499: 'Client Closed Request',  // Nonstandard, used by GRPC
 
   // Server Error 5xx
   500: 'Internal Server Error',

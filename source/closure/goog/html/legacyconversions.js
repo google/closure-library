@@ -15,7 +15,6 @@
  * should construct goog.html types via their APIs, template systems or
  * sanitizers. If that’s not possible it should use
  * goog.html.uncheckedconversions and undergo security review.
-
  *
  * The semantics of the conversions in goog.html.legacyconversions are very
  * different from the ones provided by goog.html.uncheckedconversions. The
@@ -175,7 +174,7 @@ goog.html.legacyconversions.trustedResourceUrlFromString = function(url) {
 /**
  * @private {function(): undefined}
  */
-goog.html.legacyconversions.reportCallback_ = goog.nullFunction;
+goog.html.legacyconversions.reportCallback_ = function() {};
 
 
 /**

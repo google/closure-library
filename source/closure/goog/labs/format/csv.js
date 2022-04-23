@@ -158,7 +158,7 @@ goog.labs.format.csv.parse = function(text, opt_ignoreErrors, opt_delimiter) {
       delimiter.length == 1, 'Delimiter must be a single character.');
   goog.asserts.assert(
       delimiter != '\r' && opt_delimiter != '\n',
-      'Cannot use newline or carriage return has delimiter.');
+      'Cannot use newline or carriage return as delimiter.');
 
   const EOF = goog.labs.format.csv.Sentinels_.EOF;
   const EOR = goog.labs.format.csv.Sentinels_.EOR;

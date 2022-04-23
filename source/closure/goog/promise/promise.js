@@ -12,6 +12,7 @@ goog.require('goog.async.FreeList');
 goog.require('goog.async.run');
 goog.require('goog.async.throwException');
 goog.require('goog.debug.Error');
+goog.require('goog.functions');
 goog.require('goog.promise.Resolver');
 
 
@@ -156,10 +157,10 @@ goog.Promise = function(resolver, opt_context) {
     this.currentStep_ = 0;
   }
 
-  // As an optimization, we can skip this if resolver is goog.nullFunction.
-  // This value is passed internally when creating a promise which will be
-  // resolved through a more optimized path.
-  if (resolver != goog.nullFunction) {
+  // As an optimization, we can skip this if resolver is
+  // goog.functions.UNDEFINED. This value is passed internally when creating a
+  // promise which will be resolved through a more optimized path.
+  if (resolver != goog.functions.UNDEFINED) {
     try {
       var self = this;
       resolver.call(
@@ -355,9 +356,9 @@ goog.Promise.resolve = function(opt_value) {
     return opt_value;
   }
 
-  // Passing goog.nullFunction will cause the constructor to take an optimized
-  // path that skips calling the resolver function.
-  var promise = new goog.Promise(goog.nullFunction);
+  // Passing goog.functions.UNDEFINED will cause the constructor to take an
+  // optimized path that skips calling the resolver function.
+  var promise = new goog.Promise(goog.functions.UNDEFINED);
   promise.resolve_(goog.Promise.State_.FULFILLED, opt_value);
   return promise;
 };
@@ -681,10 +682,9 @@ goog.Promise.prototype.thenVoid = function(
 
   // Note: no default rejection handler is provided here as we need to
   // distinguish unhandled rejections.
-  this.addCallbackEntry_(
-      goog.Promise.getCallbackEntry_(
-          opt_onFulfilled || goog.nullFunction, opt_onRejected || null,
-          opt_context));
+  this.addCallbackEntry_(goog.Promise.getCallbackEntry_(
+      opt_onFulfilled || (goog.functions.UNDEFINED), opt_onRejected || null,
+      opt_context));
 };
 
 
@@ -723,10 +723,12 @@ goog.Promise.prototype.thenAlways = function(onSettled, opt_context) {
   return this;
 };
 
-
 /**
  * Adds a callback that will be invoked only if the Promise is rejected. This
  * is equivalent to `then(null, onRejected)`.
+ *
+ * Note: Prefer using `catch` which is interoperable with native browser
+ * Promises.
  *
  * @param {function(this:THIS, *): *} onRejected A function that will be
  *     invoked with the rejection reason if this Promise is rejected.
@@ -745,6 +747,22 @@ goog.Promise.prototype.thenCatch = function(onRejected, opt_context) {
   }
   return this.addChildPromise_(null, onRejected, opt_context);
 };
+
+/**
+ * Adds a callback that will be invoked only if the Promise is rejected. This
+ * is equivalent to `then(null, onRejected)`.
+ *
+ * @param {function(this:THIS, *): *} onRejected A function that will be
+ *     invoked with the rejection reason if this Promise is rejected.
+ * @param {THIS=} opt_context An optional context object that will be the
+ *     execution context for the callbacks. By default, functions are executed
+ *     in the global scope.
+ * @return {!goog.Promise} A new Promise that will resolve either to the
+ *     value of this promise, or if this promise is rejected, the result of
+ *     `onRejected`. The returned Promise will reject if `onRejected` throws.
+ * @template THIS
+ */
+goog.Promise.prototype.catch = goog.Promise.prototype.thenCatch;
 
 
 /**

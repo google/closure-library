@@ -26,7 +26,8 @@ class TestCases {
    * @return {{stream: !ReadableStream<string>, controller:
    *     !ReadableStreamDefaultController<string>}}
    */
-  newReadableStreamWithController(underlyingSource = {}) {
+  newReadableStreamWithController(
+      underlyingSource = /** @type {!ReadableStreamUnderlyingSource} */ ({})) {
     let controller;
     const start = underlyingSource.start;
     underlyingSource = Object.assign({}, underlyingSource, {

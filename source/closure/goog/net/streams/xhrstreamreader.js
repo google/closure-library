@@ -242,7 +242,7 @@ class XhrStreamReader {
         return;
       }
     } else if (responseText.length > this.pos_) {
-      const newData = responseText.substr(this.pos_);
+      const newData = responseText.slice(this.pos_);
       this.pos_ = responseText.length;
       try {
         const messages = this.parser_.parse(newData);

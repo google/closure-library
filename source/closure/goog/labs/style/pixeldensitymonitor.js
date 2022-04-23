@@ -44,23 +44,32 @@ goog.labs.style.PixelDensityMonitor = function(opt_domHelper) {
   goog.labs.style.PixelDensityMonitor.base(this, 'constructor');
 
   /**
-   * @type {Window}
+   * @type {!Window}
    * @private
+   * @const
    */
   this.window_ = opt_domHelper ? opt_domHelper.getWindow() : window;
 
   /**
    * The last density that was reported so that changes can be detected.
-   * @type {goog.labs.style.PixelDensityMonitor.Density}
+   * @type {!goog.labs.style.PixelDensityMonitor.Density}
    * @private
    */
   this.lastDensity_ = this.getDensity();
 
   /**
-   * @type {function (MediaQueryList)}
+   * @type {function ()}
    * @private
+   * @const
    */
   this.listener_ = goog.bind(this.handleMediaQueryChange_, this);
+
+  /**
+   * Remove the internal event listener on mediaQueryList.
+   * @type {?function ()}
+   * @private
+   */
+  this.removeListener_ = null;
 
   /**
    * The media query list for a query that detects high density, if supported
@@ -75,12 +84,12 @@ goog.labs.style.PixelDensityMonitor = function(opt_domHelper) {
       null;
 
   /**
-   * TODO(user): Migrate pixeldensitymonitor to support addEventListener
-   * The Cobalt browser (https://cobalt.dev/) doesn't implement the deprecated
-   * `addListener` method and requires additional handling.
+   * The Cobalt browser (https://cobalt.dev/) doesn't implement `addListener` or
+   * `addEventListener`.
    */
   if (this.mediaQueryList_ &&
-      typeof this.mediaQueryList_.addListener !== 'function') {
+      typeof this.mediaQueryList_.addListener !== 'function' &&
+      typeof this.mediaQueryList_.addEventListener !== 'function') {
     this.mediaQueryList_ = null;
   }
 };
@@ -110,6 +119,7 @@ goog.labs.style.PixelDensityMonitor.Density = {
 /**
  * The events fired by the PixelDensityMonitor.
  * @enum {string}
+ * @const
  */
 goog.labs.style.PixelDensityMonitor.EventType = {
   /**
@@ -123,6 +133,7 @@ goog.labs.style.PixelDensityMonitor.EventType = {
  * Minimum ratio between device and screen pixel needed for high density mode.
  * @type {number}
  * @private
+ * @const
  */
 goog.labs.style.PixelDensityMonitor.HIGH_DENSITY_RATIO_ = 1.5;
 
@@ -131,6 +142,7 @@ goog.labs.style.PixelDensityMonitor.HIGH_DENSITY_RATIO_ = 1.5;
  * Media query that matches for high density.
  * @type {string}
  * @private
+ * @const
  */
 goog.labs.style.PixelDensityMonitor.HIGH_DENSITY_QUERY_ =
     '(min-resolution: 1.5dppx), (-webkit-min-device-pixel-ratio: 1.5)';
@@ -142,13 +154,23 @@ goog.labs.style.PixelDensityMonitor.HIGH_DENSITY_QUERY_ =
 goog.labs.style.PixelDensityMonitor.prototype.start = function() {
   'use strict';
   if (this.mediaQueryList_) {
-    this.mediaQueryList_.addListener(this.listener_);
+    if (typeof this.mediaQueryList_.addEventListener === 'function') {
+      this.mediaQueryList_.addEventListener('change', this.listener_);
+      this.removeListener_ = () => {
+        this.mediaQueryList_.removeEventListener('change', this.listener_);
+      };
+    } else {
+      this.mediaQueryList_.addListener(this.listener_);
+      this.removeListener_ = () => {
+        this.mediaQueryList_.removeListener(this.listener_);
+      };
+    }
   }
 };
 
 
 /**
- * @return {goog.labs.style.PixelDensityMonitor.Density} The density for the
+ * @return {!goog.labs.style.PixelDensityMonitor.Density} The density for the
  *     window.
  */
 goog.labs.style.PixelDensityMonitor.prototype.getDensity = function() {
@@ -165,11 +187,10 @@ goog.labs.style.PixelDensityMonitor.prototype.getDensity = function() {
 /**
  * Handles a change to the media query and checks whether the density has
  * changed since the last call.
- * @param {MediaQueryList} mql The list of changed media queries.
  * @private
  */
 goog.labs.style.PixelDensityMonitor.prototype.handleMediaQueryChange_ =
-    function(mql) {
+    function() {
   'use strict';
   const newDensity = this.getDensity();
   if (this.lastDensity_ != newDensity) {
@@ -182,8 +203,8 @@ goog.labs.style.PixelDensityMonitor.prototype.handleMediaQueryChange_ =
 /** @override */
 goog.labs.style.PixelDensityMonitor.prototype.disposeInternal = function() {
   'use strict';
-  if (this.mediaQueryList_) {
-    this.mediaQueryList_.removeListener(this.listener_);
+  if (this.removeListener_) {
+    this.removeListener_();
   }
   goog.labs.style.PixelDensityMonitor.base(this, 'disposeInternal');
 };

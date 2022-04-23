@@ -396,7 +396,7 @@ goog.debug.DevCss.prototype.getIe6CombinedSelectorText_ = function(cssText) {
     const groupedSelectors = combinedSelectorText.split(/\s*\,\s*/);
     for (let i = 0, selector; selector = groupedSelectors[i]; i++) {
       // Strips off the leading ".".
-      const combinedClassName = selector.substr(1);
+      const combinedClassName = selector.slice(1);
       const classNames = combinedClassName.split(
           goog.debug.DevCss.CssToken_.IE6_COMBINED_GLUE);
       const entry = {

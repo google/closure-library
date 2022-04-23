@@ -43,6 +43,7 @@ goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.legacyconversions');
+goog.require('goog.labs.userAgent.platform');
 goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.string');
@@ -686,12 +687,18 @@ goog.editor.Field.CTRL_KEYS_CAUSING_CHANGES_ = {
   88: true   // X
 };
 
-if (goog.userAgent.WINDOWS && !goog.userAgent.GECKO) {
+if ((goog.userAgent.WINDOWS || goog.labs.userAgent.platform.isAndroid()) &&
+    !goog.userAgent.GECKO) {
   // In IE and Webkit, input from IME (Input Method Editor) does not generate a
   // keypress event so we have to rely on the keydown event. This way we have
   // false positives while the user is using keyboard to select the
   // character to input, but it is still better than the false negatives
   // that ignores user's final input at all.
+  // The same phenomina happen on android devices - no KeyPress events are
+  // emitted, and all KeyDown events have no useful charCode or other
+  // identifying information (see
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=118639 for
+  // background, but it's considered WAI by various Input Method experts).
   goog.editor.Field.KEYS_CAUSING_CHANGES_[229] = true;  // from IME;
 }
 
@@ -894,6 +901,10 @@ goog.editor.Field.prototype.setupChangeListeners_ = function() {
   this.addListener(goog.events.EventType.KEYPRESS, this.handleKeyPress_);
   this.addListener(goog.events.EventType.KEYUP, this.handleKeyUp_);
 
+  // Handles changes from non-keyboard forms of input. Such as choosing a
+  // spellcheck suggestion.
+  this.addListener(goog.events.EventType.INPUT, this.handleChange);
+
   this.selectionChangeTimer_ = new goog.async.Delay(
       this.handleSelectionChangeTimer_,
       goog.editor.Field.SELECTION_CHANGE_FREQUENCY_, this);
@@ -1092,7 +1103,7 @@ goog.editor.Field.prototype.handleBeforeChangeKeyEvent_ = function(e) {
 
     // TODO(arv): Del at end of field or backspace at beginning should be
     // ignored.
-    this.gotGeneratingKey_ = e.charCode ||
+    this.gotGeneratingKey_ = !!e.charCode ||
         goog.editor.Field.isGeneratingKey_(e, goog.userAgent.GECKO);
     if (this.gotGeneratingKey_) {
       this.dispatchBeforeChange();
@@ -2125,7 +2136,7 @@ goog.editor.Field.prototype.handleMouseUp_ = function(e) {
  *
  * Do NOT just get the innerHTML of a field directly--there's a lot of
  * processing that needs to happen.
-  * @return {string} The scrubbed contents of the field.
+ * @return {string} The scrubbed contents of the field.
  */
 goog.editor.Field.prototype.getCleanContents = function() {
   'use strict';
@@ -2139,7 +2150,7 @@ goog.editor.Field.prototype.getCleanContents = function() {
     if (!elem) {
       goog.log.log(
           this.logger, goog.log.Level.SHOUT,
-          "Couldn't get the field element to read the contents");
+          'Couldn\'t get the field element to read the contents');
     }
     return elem.innerHTML;
   }
@@ -2192,7 +2203,7 @@ goog.editor.Field.prototype.setSafeHtml = function(
     addParas, html, opt_dontFireDelayedChange, opt_applyLorem) {
   'use strict';
   if (this.isLoading()) {
-    goog.log.error(this.logger, "Can't set html while loading Trogedit");
+    goog.log.error(this.logger, 'Can\'t set html while loading Trogedit');
     return;
   }
 

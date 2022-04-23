@@ -652,7 +652,7 @@ goog.labs.mock.MockManager_.prototype.executeStub = function(
 goog.labs.mock.MockManager_.prototype.recordCall_ = function(methodName, args) {
   'use strict';
   const callRecord =
-      new goog.labs.mock.MethodBinding_(methodName, args, goog.nullFunction);
+      new goog.labs.mock.MethodBinding_(methodName, args, () => {});
 
   this.callRecords_.push(callRecord);
   return callRecord;

@@ -11,13 +11,12 @@
 
 goog.provide('goog.loader.AbstractModuleManager');
 goog.provide('goog.loader.AbstractModuleManager.CallbackType');
-goog.provide('goog.loader.AbstractModuleManager.FailureType');
 
 goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.module.ModuleInfo');
 goog.require('goog.module.ModuleLoadCallback');
-goog.require('goog.module.ModuleLoadFailureType');
 goog.requireType('goog.html.TrustedResourceUrl');
+goog.requireType('goog.module.BaseModule');
 
 
 
@@ -77,14 +76,6 @@ goog.loader.AbstractModuleManager.CallbackType = {
    */
   USER_ACTIVE: 'userActive'
 };
-
-
-/**
- * The possible reasons for a module load failure callback being fired.
- * @enum {number}
- */
-goog.loader.AbstractModuleManager.FailureType =
-    goog.module.ModuleLoadFailureType;
 
 
 /**
@@ -397,7 +388,7 @@ goog.loader.AbstractModuleManager.prototype.registerLateInitializationCallback =
  * Sets the constructor to use for the module object for the currently
  * loading module. The constructor should derive from
  * {@see goog.module.BaseModule}.
- * @param {!Function} fn The constructor function.
+ * @param {function(new:goog.module.BaseModule)} fn The constructor function.
  */
 goog.loader.AbstractModuleManager.prototype.setModuleConstructor = function(
     fn) {};

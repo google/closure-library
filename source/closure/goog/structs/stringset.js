@@ -92,7 +92,7 @@ goog.structs.StringSet.encode_ = function(element) {
  */
 goog.structs.StringSet.decode_ = function(key) {
   'use strict';
-  return key.charCodeAt(0) == 32 ? key.substr(1) : key;
+  return key.charCodeAt(0) == 32 ? key.slice(1) : key;
 };
 
 
@@ -171,10 +171,21 @@ goog.structs.StringSet.prototype.clone = function() {
  * Tells if the set contains the given element.
  * @param {*} element The element to check.
  * @return {boolean} Whether it is in the set.
+ * @deprecated Use `has`, for alignment with ES6 Set.
  */
 goog.structs.StringSet.prototype.contains = function(element) {
   'use strict';
   return goog.structs.StringSet.encode_(element) in this.elements_;
+};
+
+/**
+ * Tells if the set contains the given element.
+ * @param {*} element The element to check.
+ * @return {boolean} Whether it is in the set.
+ */
+goog.structs.StringSet.prototype.has = function(element) {
+  'use strict';
+  return this.contains(element);
 };
 
 
@@ -318,12 +329,12 @@ goog.structs.StringSet.prototype.getUnion = function(stringSet) {
 /**
  * @return {!Array<string>} The elements of the set.
  */
-goog.structs.StringSet.prototype.getValues = Object.keys ?
-     /**
-      * @this {!goog.structs.StringSet}
-      * @return {!Array<string>}
-      */
-     function() {
+goog.structs.StringSet.prototype.values = Object.keys ?
+    /**
+     * @this {!goog.structs.StringSet}
+     * @return {!Array<string>}
+     */
+    function() {
       'use strict';
       // Object.keys was introduced in JavaScript 1.8.5, Array#map in 1.6.
       return Object.keys(this.elements_)
@@ -342,6 +353,13 @@ goog.structs.StringSet.prototype.getValues = Object.keys ?
       return ret;
     };
 
+/**
+ * @return {!Array<string>} The elements of the set.
+ * @deprecated Use `values()`, for alignment with ES6 Set.
+ */
+goog.structs.StringSet.prototype.getValues = function() {
+  return this.values();
+};
 
 /**
  * Tells if this set and the given set are disjoint.
@@ -403,7 +421,7 @@ goog.structs.StringSet.prototype.isSupersetOf = function(stringSet) {
  * @param {*} element The element to remove.
  * @return {boolean} Whether the element was in the set.
  */
-goog.structs.StringSet.prototype.remove = function(element) {
+goog.structs.StringSet.prototype.delete = function(element) {
   'use strict';
   var key = goog.structs.StringSet.encode_(element);
   if (key in this.elements_) {
@@ -411,6 +429,16 @@ goog.structs.StringSet.prototype.remove = function(element) {
     return true;
   }
   return false;
+};
+
+/**
+ * Removes a single element from the set.
+ * @param {*} element The element to remove.
+ * @return {boolean} Whether the element was in the set.
+ * @deprecated Use `delete`, for alignment with ES6 Set.
+ */
+goog.structs.StringSet.prototype.remove = function(element) {
+  return this.delete(element);
 };
 
 

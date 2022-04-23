@@ -160,7 +160,7 @@ goog.soy.data.SanitizedContent.prototype.toSafeHtml = function() {
           goog.string.Const.from(
               'Soy SanitizedContent of kind HTML produces ' +
               'SafeHtml-contract-compliant value.'),
-          this.toString(), this.contentDir);
+          this.toString());
 };
 
 

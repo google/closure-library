@@ -14,7 +14,7 @@ goog.provide('goog.crypt.base64');
 
 goog.require('goog.asserts');
 goog.require('goog.crypt');
-goog.require('goog.string');
+goog.require('goog.string.internal');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
@@ -84,7 +84,7 @@ goog.crypt.base64.paddingChars_ = '=.';
  */
 goog.crypt.base64.isPadding_ = function(char) {
   'use strict';
-  return goog.string.contains(goog.crypt.base64.paddingChars_, char);
+  return goog.string.internal.contains(goog.crypt.base64.paddingChars_, char);
 };
 
 
@@ -357,9 +357,14 @@ goog.crypt.base64.decodeStringToUint8Array = function(input) {
 
   goog.crypt.base64.decodeStringInternal_(input, pushByte);
 
-  // Return a subarray to handle the case that input included extra whitespace
-  // or extra padding and approxByteLength was incorrect.
-  return output.subarray(0, outLen);
+  // Trim unused trailing bytes if necessary, this only happens if the input
+  // included extra whitespace or extra padding that caused our estimate to be
+  // too large (this is uncommon).
+  //
+  // It would be correct to simply always call subarray, but we avoid doing so
+  // to avoid potential poor performance from chrome.
+  // See https://bugs.chromium.org/p/v8/issues/detail?id=7161
+  return outLen !== approxByteLength ? output.subarray(0, outLen) : output;
 };
 
 
@@ -384,7 +389,7 @@ goog.crypt.base64.decodeStringInternal_ = function(input, pushByte) {
       if (b != null) {
         return b;  // Common case: decoded the char.
       }
-      if (!goog.string.isEmptyOrWhitespace(ch)) {
+      if (!goog.string.internal.isEmptyOrWhitespace(ch)) {
         throw new Error('Unknown base64 encoding at char: ' + ch);
       }
       // We encountered whitespace: loop around to the next input char.

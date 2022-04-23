@@ -36,7 +36,6 @@ goog.require('goog.asserts');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.events.Event');
-goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.requireType('goog.dom.DomHelper');
 
@@ -1666,10 +1665,9 @@ goog.ui.ServerChart.prototype.computeDataStringForEncoding_ = function(
   dataStrings = dataStrings.join(delimiter);
   var data;
   if (this.numVisibleDataSets_ == null) {
-    data = goog.string.buildString(encoding, ':', dataStrings);
+    data = encoding + ':' + dataStrings;
   } else {
-    data = goog.string.buildString(
-        encoding, this.numVisibleDataSets_, ':', dataStrings);
+    data = encoding + this.numVisibleDataSets_ + ':' + dataStrings;
   }
   this.uri_.setParameterValue(goog.ui.ServerChart.UriParam.DATA, data);
   return this.uri_.toString().length < this.uriLengthLimit_;

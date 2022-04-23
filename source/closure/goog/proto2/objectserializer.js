@@ -147,7 +147,11 @@ goog.proto2.ObjectSerializer.prototype.serialize = function(message) {
   // Add the unknown fields, if any.
   message.forEachUnknown(function(tag, value) {
     'use strict';
-    objectValue[tag] = value;
+    // Do not set null values. This is possible when using pbliteserializer to
+    // convert jsbp to closure object and then passed to this method.
+    if (value !== null) {
+      objectValue[tag] = value;
+    }
   });
 
   return objectValue;

@@ -13,7 +13,6 @@ goog.module.declareLegacyNamespace();
 
 const GoogIterable = goog.require('goog.iter.Iterable');
 const GoogIterator = goog.require('goog.iter.Iterator');
-const StopIteration = goog.require('goog.iter.StopIteration');
 
 
 /**
@@ -59,44 +58,17 @@ class ShimIterable {
       return iter;
     } else if (typeof iter.next == 'function') {
       return new ShimIterableImpl(
-          () => wrapGoog(/** @type {!Iterator|!GoogIterator} */ (iter)));
+          () => /** @type {!Iterator|!GoogIterator} */ (iter));
     } else if (typeof iter[Symbol.iterator] == 'function') {
       return new ShimIterableImpl(() => iter[Symbol.iterator]());
     } else if (typeof iter.__iterator__ == 'function') {
       return new ShimIterableImpl(
-          () => wrapGoog(
-              /** @type {{__iterator__:function(this:?, boolean=)}} */ (iter)
-                  .__iterator__()));
+          () => /** @type {{__iterator__:function(this:?, boolean=)}} */ (iter)
+                    .__iterator__());
     }
     throw new Error('Not an iterator or iterable.');
   }
 }
-
-
-/**
- * @param {!GoogIterator<VALUE>|!Iterator<VALUE>} iter
- * @return {!Iterator<VALUE>}
- * @template VALUE
- */
-const wrapGoog = (iter) => {
-  if (!(iter instanceof GoogIterator)) return iter;
-  let done = false;
-  return /** @type {?} */ ({
-    next() {
-      let value;
-      while (!done) {
-        try {
-          value = iter.nextValueOrThrow();
-          break;
-        } catch (err) {
-          if (err !== StopIteration) throw err;
-          done = true;
-        }
-      }
-      return {value, done};
-    },
-  });
-};
 
 
 /**
@@ -148,19 +120,12 @@ class ShimGoogIterator extends GoogIterator {
     this.iter_ = iter;
   }
 
-  /** @override */
-  nextValueOrThrow() {
-    const result = this.iter_.next();
-    if (result.done) throw StopIteration;
-    return result.value;
-  }
   /**
-   * TODO(user): Please do not remove - this will be cleaned up
-   * centrally.
    * @override @see {!goog.iter.Iterator}
+   * @return {!IIterableResult<VALUE>}
    */
   next() {
-    return ShimGoogIterator.prototype.nextValueOrThrow.call(this);
+    return this.iter_.next();
   }
 
 

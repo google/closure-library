@@ -12,47 +12,47 @@
  *  http://icu-project.org/apiref/icu4j/com/ibm/icu/text/DateIntervalFormat.html
  *
  * Example usage:
- * var DateIntervalFormat = goog.require('goog.i18n.DateIntervalFormat');
- * var DateRange = goog.require('goog.date.DateRange');
- * var DateTime = goog.require('goog.date.DateTime');
- * var DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
- * var GDate = goog.require('goog.date.Date');
- * var Interval = goog.require('goog.date.Interval');
+ * const DateIntervalFormat = goog.require('goog.i18n.DateIntervalFormat');
+ * const DateRange = goog.require('goog.date.DateRange');
+ * const DateTime = goog.require('goog.date.DateTime');
+ * const DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
+ * const GDate = goog.require('goog.date.Date');
+ * const Interval = goog.require('goog.date.Interval');
  *
  * // Formatter.
- * var dtIntFmt = new DateIntervalFormat(DateTimeFormat.Format.MEDIUM_DATE);
+ * const dtIntFmt = new DateIntervalFormat(DateTimeFormat.Format.MEDIUM_DATE);
  *
  * // Format a date range.
- * var dt1 = new GDate(2016, 8, 23);
- * var dt2 = new GDate(2016, 8, 24);
- * var dtRng = new DateRange(dt1, dt2);
+ * const dt1 = new GDate(2016, 8, 23);
+ * const dt2 = new GDate(2016, 8, 24);
+ * const dtRng = new DateRange(dt1, dt2);
  * dtIntFmt.formatRange(dtRng); // --> 'Sep 23 – 24, 2016'
  *
  * // Format two dates.
- * var dt3 = new DateTime(2016, 8, 23, 14, 53, 0);
- * var dt4 = new DateTime(2016, 8, 23, 14, 54, 0);
+ * const dt3 = new DateTime(2016, 8, 23, 14, 53, 0);
+ * const dt4 = new DateTime(2016, 8, 23, 14, 54, 0);
  * dtIntFmt.format(dt3, dt4); // --> 'Sep 23, 2016'
  *
  * // Format a date and an interval.
- * var dt5 = new DateTime(2016, 8, 23, 14, 53, 0);
- * var itv = new Interval(0, 1); // One month.
+ * const dt5 = new DateTime(2016, 8, 23, 14, 53, 0);
+ * const itv = new Interval(0, 1); // One month.
  * dtIntFmt.format(dt5, itv); // --> 'Sep 23 – Oct 23, 2016'
  */
 
 goog.module('goog.i18n.DateIntervalFormat');
 
-var DateLike = goog.require('goog.date.DateLike');
-var DateRange = goog.require('goog.date.DateRange');
-var DateTime = goog.require('goog.date.DateTime');
-var DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
-var DateTimeSymbols = goog.require('goog.i18n.DateTimeSymbols');
-var DateTimeSymbolsType = goog.require('goog.i18n.DateTimeSymbolsType');
-var Interval = goog.require('goog.date.Interval');
-var TimeZone = goog.require('goog.i18n.TimeZone');
-var array = goog.require('goog.array');
-var asserts = goog.require('goog.asserts');
-var dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
-var object = goog.require('goog.object');
+const DateLike = goog.require('goog.date.DateLike');
+const DateRange = goog.require('goog.date.DateRange');
+const DateTime = goog.require('goog.date.DateTime');
+const DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
+const DateTimeSymbols = goog.require('goog.i18n.DateTimeSymbols');
+const DateTimeSymbolsType = goog.require('goog.i18n.DateTimeSymbolsType');
+const Interval = goog.require('goog.date.Interval');
+const TimeZone = goog.require('goog.i18n.TimeZone');
+const array = goog.require('goog.array');
+const asserts = goog.require('goog.asserts');
+const dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
+const object = goog.require('goog.object');
 
 /**
  * Constructs a DateIntervalFormat object based on the current locale.
@@ -68,7 +68,7 @@ var object = goog.require('goog.object');
  * @struct
  * @final
  */
-var DateIntervalFormat = function(
+let DateIntervalFormat = function(
     pattern, opt_dateIntervalSymbols, opt_dateTimeSymbols) {
   asserts.assert(pattern !== undefined, 'Pattern must be defined.');
   asserts.assert(
@@ -121,8 +121,9 @@ var DateIntervalFormat = function(
 
   // Determine which date should be used with each part of the interval
   // pattern.
-  var indexOfFirstDate = this.fallbackPattern_.indexOf(FIRST_DATE_PLACEHOLDER_);
-  var indexOfSecondDate =
+  const indexOfFirstDate =
+      this.fallbackPattern_.indexOf(FIRST_DATE_PLACEHOLDER_);
+  const indexOfSecondDate =
       this.fallbackPattern_.indexOf(SECOND_DATE_PLACEHOLDER_);
   if (indexOfFirstDate < 0 || indexOfSecondDate < 0) {
     throw new Error('Malformed fallback interval pattern');
@@ -147,50 +148,58 @@ var DateIntervalFormat = function(
  * Default fallback interval pattern.
  * @private @const {string}
  */
-var DEFAULT_FALLBACK_PATTERN_ = '{0} – {1}';
+const DEFAULT_FALLBACK_PATTERN_ = '{0} – {1}';
 
 /**
  * Interval pattern placeholder for the first date.
  * @private @const {string}
  */
-var FIRST_DATE_PLACEHOLDER_ = '{0}';
+const FIRST_DATE_PLACEHOLDER_ = '{0}';
 
 /**
  * Interval pattern placeholder for the second date.
  * @private @const {string}
  */
-var SECOND_DATE_PLACEHOLDER_ = '{1}';
+const SECOND_DATE_PLACEHOLDER_ = '{1}';
 
 /**
  * Key used by the default datetime pattern.
  * @private @const {string}
  */
-var DEFAULT_PATTERN_KEY_ = '_';
+const DEFAULT_PATTERN_KEY_ = '_';
 
 /**
  * Gregorian calendar Eras.
  * @private @enum {number}
+ * @const
  */
-var Era_ = {BC: 0, AD: 1};
+const Era_ = {
+  BC: 0,
+  AD: 1
+};
 
 /**
  * Am Pm markers.
  * @private @enum {number}
+ * @const
  */
-var AmPm_ = {AM: 0, PM: 1};
+const AmPm_ = {
+  AM: 0,
+  PM: 1
+};
 
 /**
  * String of all pattern letters representing the relevant calendar fields.
  * Sorted according to the length of the datetime unit they represent.
  * @private @const {string}
  */
-var RELEVANT_CALENDAR_FIELDS_ = 'GyMdahms';
+const RELEVANT_CALENDAR_FIELDS_ = 'GyMdahms';
 
 /**
  * Regex that matches all possible pattern letters.
  * @private @const {!RegExp}
  */
-var ALL_PATTERN_LETTERS_ = /[a-zA-Z]/;
+const ALL_PATTERN_LETTERS_ = /[a-zA-Z]/;
 
 /**
  * Returns the interval pattern from a pattern specification or from the pattern
@@ -259,7 +268,7 @@ DateIntervalFormat.prototype.format = function(
       endDate != null, 'The endDate parameter should be defined and not-null.');
 
   // Convert input to DateLike.
-  var endDt;
+  let endDt;
   if (goog.isDateLike(endDate)) {
     endDt = /** @type {!DateLike} */ (endDate);
   } else {
@@ -272,13 +281,13 @@ DateIntervalFormat.prototype.format = function(
   }
 
   // Obtain the largest different calendar field between the two dates.
-  var largestDifferentCalendarField =
+  const largestDifferentCalendarField =
       DateIntervalFormat.getLargestDifferentCalendarField_(
           startDate, endDt, opt_timeZone);
 
   // Get the Formatter_ required to format the specified calendar field and use
   // it to format the dates.
-  var formatter =
+  const formatter =
       this.getFormatterForCalendarField_(largestDifferentCalendarField);
   return formatter.format(
       startDate, endDt, largestDifferentCalendarField, opt_timeZone);
@@ -297,8 +306,8 @@ DateIntervalFormat.prototype.formatRange = function(dateRange, opt_timeZone) {
   asserts.assert(
       dateRange != null,
       'The dateRange parameter should be defined and non-null.');
-  var startDate = dateRange.getStartDate();
-  var endDate = dateRange.getEndDate();
+  const startDate = dateRange.getStartDate();
+  const endDate = dateRange.getEndDate();
   if (startDate == null) {
     throw new Error(
         'The dateRange\'s startDate should be defined and non-null.');
@@ -319,7 +328,7 @@ DateIntervalFormat.prototype.formatRange = function(dateRange, opt_timeZone) {
 DateIntervalFormat.prototype.getFormatterForCalendarField_ = function(
     calendarField) {
   if (calendarField != '') {
-    for (var i = 0; i < this.intervalPatternKeys_.length; i++) {
+    for (let i = 0; i < this.intervalPatternKeys_.length; i++) {
       if (this.intervalPatternKeys_[i].indexOf(calendarField) >= 0) {
         return this.getOrCreateFormatterForKey_(this.intervalPatternKeys_[i]);
       }
@@ -335,9 +344,9 @@ DateIntervalFormat.prototype.getFormatterForCalendarField_ = function(
  * @private
  */
 DateIntervalFormat.prototype.getOrCreateFormatterForKey_ = function(key) {
-  var fmt = this;
+  const fmt = this;
   return object.setWithReturnValueIfNotSet(this.formatterMap_, key, function() {
-    var patternParts =
+    const patternParts =
         DateIntervalFormat.divideIntervalPattern_(fmt.intervalPattern_[key]);
     if (patternParts === null) {
       return new DateTimeFormatter_(
@@ -359,8 +368,8 @@ DateIntervalFormat.prototype.getOrCreateFormatterForKey_ = function(key) {
  * @private
  */
 DateIntervalFormat.divideIntervalPattern_ = function(intervalPattern) {
-  var foundKeys = {};
-  var patternParts = null;
+  let foundKeys = {};
+  let patternParts = null;
   // Iterate over the pattern until a repeated calendar field is found.
   DateIntervalFormat.executeForEveryCalendarField_(
       intervalPattern, function(char, index) {
@@ -395,10 +404,10 @@ DateIntervalFormat.divideIntervalPattern_ = function(intervalPattern) {
  * @private
  */
 DateIntervalFormat.executeForEveryCalendarField_ = function(pattern, func) {
-  var inQuote = false;
-  var previousChar = '';
-  for (var i = 0; i < pattern.length; i++) {
-    var char = pattern.charAt(i);
+  let inQuote = false;
+  let previousChar = '';
+  for (let i = 0; i < pattern.length; i++) {
+    const char = pattern.charAt(i);
     if (inQuote) {
       if (char == '\'') {
         if (i + 1 < pattern.length && pattern.charAt(i + 1) == '\'') {
@@ -436,8 +445,8 @@ DateIntervalFormat.getLargestDifferentCalendarField_ = function(
     startDate, endDate, opt_timeZone) {
   // Before comparing them, dates have to be adjusted by the target timezone's
   // offset.
-  var startDiff = 0;
-  var endDiff = 0;
+  let startDiff = 0;
+  let endDiff = 0;
   if (opt_timeZone != null) {
     startDiff =
         (startDate.getTimezoneOffset() - opt_timeZone.getOffset(startDate)) *
@@ -445,8 +454,8 @@ DateIntervalFormat.getLargestDifferentCalendarField_ = function(
     endDiff =
         (endDate.getTimezoneOffset() - opt_timeZone.getOffset(endDate)) * 60000;
   }
-  var startDt = new Date(startDate.getTime() + startDiff);
-  var endDt = new Date(endDate.getTime() + endDiff);
+  const startDt = new Date(startDate.getTime() + startDiff);
+  const endDt = new Date(endDate.getTime() + endDiff);
 
   if (DateIntervalFormat.getEra_(startDt) !=
       DateIntervalFormat.getEra_(endDt)) {
@@ -488,7 +497,7 @@ DateIntervalFormat.getEra_ = function(date) {
  * @private
  */
 DateIntervalFormat.getAmPm_ = function(date) {
-  var hours = date.getHours();
+  const hours = date.getHours();
   return (12 <= hours && hours < 24) ? AmPm_.PM : AmPm_.AM;
 };
 
@@ -512,7 +521,7 @@ DateIntervalFormat.isCalendarFieldLargerOrEqualThan_ = function(
  * @interface
  * @private
  */
-var Formatter_ = function() {};
+let Formatter_ = function() {};
 
 /**
  * Formats two dates with the two parts of the date interval and returns the
@@ -545,7 +554,7 @@ Formatter_.prototype.format = function(
  * @implements {Formatter_}
  * @private
  */
-var IntervalFormatter_ = function(
+let IntervalFormatter_ = function(
     firstPattern, secondPattern, dateTimeSymbols, useFirstDateOnFirstPattern) {
   /**
    * Formatter_ to format the first part of the date interval.
@@ -597,7 +606,7 @@ IntervalFormatter_.prototype.format = function(
  * @implements {Formatter_}
  * @private
  */
-var DateTimeFormatter_ = function(
+let DateTimeFormatter_ = function(
     dateTimePattern, fallbackPattern, dateTimeSymbols) {
   /**
    * Date time pattern used to format the dates.
@@ -626,7 +635,7 @@ DateTimeFormatter_.prototype.format = function(
   // larger or equal than any calendar field in the datetime pattern. If true,
   // format the string using the datetime pattern and the fallback interval
   // pattern.
-  var shouldFormatWithFallbackPattern = false;
+  let shouldFormatWithFallbackPattern = false;
   if (largestDifferentCalendarField != '') {
     DateIntervalFormat.executeForEveryCalendarField_(
         this.dateTimePattern_, function(char, index) {

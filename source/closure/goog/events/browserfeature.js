@@ -31,39 +31,6 @@ const purify = (fn) => {
  */
 exports = {
   /**
-   * Whether the button attribute of the event is W3C compliant.  False in
-   * Internet Explorer prior to version 9; document-version dependent.
-   */
-  HAS_W3C_BUTTON: true,
-
-  /**
-   * Whether the browser supports full W3C event model.
-   */
-  HAS_W3C_EVENT_SUPPORT: true,
-
-  /**
-   * To prevent default in IE7-8 for certain keydown events we need set the
-   * keyCode to -1.
-   */
-  SET_KEY_CODE_TO_PREVENT_DEFAULT: false,
-
-  /**
-   * Whether the `navigator.onLine` property is supported.
-   */
-  HAS_NAVIGATOR_ONLINE_PROPERTY: true,
-
-  /**
-   * Whether HTML5 network online/offline events are supported.
-   */
-  HAS_HTML5_NETWORK_EVENT_SUPPORT: true,
-
-  /**
-   * Whether HTML5 network events fire on document.body, or otherwise the
-   * window.
-   */
-  HTML5_NETWORK_EVENTS_FIRE_ON_BODY: false,
-
-  /**
    * Whether touch is enabled in the browser.
    */
   TOUCH_ENABLED:
@@ -108,8 +75,8 @@ exports = {
       }
     });
     try {
-      goog.global.addEventListener('test', goog.nullFunction, options);
-      goog.global.removeEventListener('test', goog.nullFunction, options);
+      goog.global.addEventListener('test', () => {}, options);
+      goog.global.removeEventListener('test', () => {}, options);
     } catch (e) {
     }
 
