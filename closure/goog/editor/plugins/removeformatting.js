@@ -766,7 +766,8 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
           break;
 
         case String(goog.dom.TagName.TR):
-          // Don't add a newline for the first TR.
+        case String(goog.dom.TagName.LI):
+          // Don't add a newline for the first TR or LI.
           if (node.previousSibling) {
             goog.editor.plugins.RemoveFormatting.appendNewline_(sb);
           }

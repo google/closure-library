@@ -441,7 +441,7 @@ testSuite({
                FORMATTER.removeFormatting_();
                // Test that we split the list.
                assertHTMLEquals(
-                   '<ul><li>one</li></ul><br>two<ul><li>three</li></ul>',
+                   '<ul><li>one</li></ul>two<ul><li>three</li></ul>',
                    div.innerHTML);
                FIELDMOCK.$verify();
              });
@@ -468,7 +468,7 @@ testSuite({
                            FORMATTER.removeFormatting_();
                            // Test that we completely remove the list.
                            assertHTMLEquals(
-                               '<br>one<br>two<br>threeafter', div.innerHTML);
+                               'one<br>two<br>threeafter', div.innerHTML);
                            FIELDMOCK.$verify();
                          });
   },
@@ -502,7 +502,7 @@ testSuite({
                            FORMATTER.removeFormatting_();
                            // Test that we leave the list start alone.
                            assertHTMLEquals(
-                               '<ul><li>one</li></ul><br>two<br>threeafter',
+                               '<ul><li>one</li></ul>two<br>threeafter',
                                div.innerHTML);
                            FIELDMOCK.$verify();
                          });
