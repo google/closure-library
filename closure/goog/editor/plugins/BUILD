@@ -70,7 +70,6 @@ closure_js_library(
         "//closure/goog/dom:abstractrange",
         "//closure/goog/dom:nodetype",
         "//closure/goog/dom:range",
-        "//closure/goog/dom:safe",
         "//closure/goog/dom:tagname",
         "//closure/goog/editor:browserfeature",
         "//closure/goog/editor:command",
@@ -79,7 +78,6 @@ closure_js_library(
         "//closure/goog/editor:plugin",
         "//closure/goog/editor:range",
         "//closure/goog/editor:style",
-        "//closure/goog/html:safehtml",
         "//closure/goog/iter",
         "//closure/goog/log",
         "//closure/goog/object",
@@ -87,7 +85,6 @@ closure_js_library(
         "//closure/goog/style",
         "//closure/goog/ui/editor:messages",
         "//closure/goog/useragent",
-        "//javascript/typescript/safevalues:safevalues_js",
     ],
 )
 

@@ -536,51 +536,6 @@ testSuite({
     }
   },
 
-  /**
-   * @suppress {missingProperties, visibility} suppression added to enable type
-   * checking
-   */
-  testCursorPreservedOnListCreation() {
-    setUpListAndBlockquoteTests();
-    FIELDMOCK.getPluginByClassId('Bidi').$anyTimes().$returns(null);
-    FIELDMOCK.queryCommandValue(Command.DEFAULT_TAG)
-        .$anyTimes()
-        .$returns(TagName.P);
-
-    FIELDMOCK.$replay();
-    let cursorPlaceholder = dom.getElement('cursorRoot');
-    Range.createCaret(cursorPlaceholder.firstChild, 3).select();
-
-    FORMATTER.execCommandInternal(BasicTextFormatter.COMMAND.UNORDERED_LIST);
-    const selection = window.getSelection();
-    assertTrue(selection.isCollapsed);
-    assertEquals(selection.rangeCount, 1);
-
-    const li = dom.getElementByTagNameAndClass(
-        TagName.LI, null, dom.getElement('cursorTest'));
-    if (userAgent.IE || userAgent.GECKO) {
-      // IE adds extra div inside LI and uses it as the anchorNode
-      assertEquals(selection.anchorNode, userAgent.IE ? li.firstChild : li);
-      assertEquals(selection.anchorNode.innerText, 'abc123');
-      assertEquals(selection.anchorNode.childNodes.length, 2);
-      assertEquals(selection.anchorOffset, 1);
-    } else if (userAgent.WEBKIT) {
-      if (selection.anchorNode.innerText) {
-        // On Safari, a newline is added to the end of the content, and the
-        // anchor node is the LI itself.
-        assertEquals(selection.anchorNode, li);
-        assertEquals(selection.anchorNode.innerText, 'abc123\n');
-        assertEquals(selection.anchorNode.childNodes.length, 3);
-        assertEquals(selection.anchorOffset, 1);
-      } else {
-        // On Chrome, the Anchor node is the first child text node of the LI.
-        assertEquals(selection.anchorNode, li.firstChild);
-        assertEquals(selection.anchorOffset, 3);
-      }
-    }
-    tearDownListAndBlockquoteTests();
-  },
-
   /** @suppress {visibility} suppression added to enable type checking */
   testSwitchListType() {
     if (!userAgent.WEBKIT) {

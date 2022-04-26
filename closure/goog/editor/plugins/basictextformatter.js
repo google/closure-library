@@ -16,7 +16,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.safe');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Link');
@@ -24,7 +23,6 @@ goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.editor.style');
-goog.require('goog.html.SafeHtml');
 goog.require('goog.iter');
 goog.require('goog.log');
 goog.require('goog.object');
@@ -183,7 +181,6 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
   var preserveDir, styleWithCss, needsFormatBlockDiv, hasDummySelection;
   var result;
   var opt_arg = arguments[1];
-  let placeholderId;
 
   switch (command) {
     case goog.editor.plugins.BasicTextFormatter.COMMAND.BACKGROUND_COLOR:
@@ -264,25 +261,6 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
               !this.queryCommandValue(command)) {
             hasDummySelection |= this.beforeInsertListGecko_();
           }
-          // If the selection is collapsed, insert placeholder content keep
-          // the selection as we add the list, so we don't lose cursor position.
-          const selection =
-              this.getFieldDomHelper().getDocument().getSelection();
-          if (selection.rangeCount === 1 && selection.isCollapsed) {
-            placeholderId = goog.string.createUniqueString();
-            // Use placeholder id as both the id (for easy removal) and content
-            // of the span, so that the selection is maintained.
-            const placeholderNode = goog.dom.createDom(
-                goog.dom.TagName.SPAN, {'id': placeholderId});
-            const safePlaceholderAnchorContent =
-                goog.html.SafeHtml.htmlEscape(placeholderId);
-            goog.dom.safe.setInnerHtml(
-                placeholderNode, safePlaceholderAnchorContent);
-            goog.dom.Range.createFromBrowserRange(selection.getRangeAt(0))
-                .replaceContentsWithNode(placeholderNode);
-            goog.dom.Range.createFromNodeContents(placeholderNode).select();
-          }
-
           // Fall through to preserveDir block
 
         case goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK:
@@ -346,10 +324,6 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
 
       if (hasDummySelection) {
         this.getDocument_().execCommand('Delete', false, true);
-      }
-
-      if (placeholderId) {
-        goog.dom.removeNode(this.getDocument_().getElementById(placeholderId));
       }
 
       if (needsFormatBlockDiv) {
