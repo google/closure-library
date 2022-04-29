@@ -6,7 +6,7 @@
 /**
  * @fileoverview Relative date time formatting symbols.
  *
- * File generated from CLDR ver. 40
+ * File generated from CLDR ver. 41
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales

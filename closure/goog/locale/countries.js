@@ -8,7 +8,7 @@
  * CLDR data using ICU. The algorithm is to list only country codes (not
  * containments representing a groups of countries).
  *
- * File generated from CLDR ver. 40
+ * File generated from CLDR ver. 41
  */
 
 // clang-format off
