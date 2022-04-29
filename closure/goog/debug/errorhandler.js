@@ -263,6 +263,7 @@ goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ = function(
   'use strict';
   var win = goog.global['window'];
   var originalFn = win[fnName];
+  if (!originalFn) throw new Error(fnName + ' not on global?');
   var that = this;
   win[fnName] = function(fn, time) {
     'use strict';
