@@ -918,14 +918,6 @@ goog.global.CLOSURE_IMPORT_SCRIPT;
 
 
 /**
- * Null function used for default values of callbacks, etc.
- * @return {void} Nothing.
- * @deprecated use '()=>{}' or 'function(){}' instead.
- */
-goog.nullFunction = function() {};
-
-
-/**
  * When defining a class Foo with an abstract method bar(), you can do:
  * Foo.prototype.bar = goog.abstractMethod
  *
