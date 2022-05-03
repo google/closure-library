@@ -169,7 +169,7 @@ function testLoadBaseWithQueryParamOk() {
   try {
     goog.global = {};
     goog.global.document = {
-      write: goog.nullFunction,
+      write: () => {},
       getElementsByTagName:
           goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
     };
@@ -188,7 +188,7 @@ function testLoadBaseFromGlobalVariableOk() {
   try {
     goog.global = {};
     goog.global.document = {
-      write: goog.nullFunction,
+      write: () => {},
       getElementsByTagName:
           goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
     };
@@ -207,7 +207,7 @@ function testLoadBaseFromGlobalVariableDOMClobbered() {
   try {
     goog.global = {};
     goog.global.document = {
-      write: goog.nullFunction,
+      write: () => {},
       getElementsByTagName:
           goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
     };
@@ -231,7 +231,7 @@ function testLoadBaseFromCurrentScriptIgnoringOthers() {
   try {
     goog.global = {};
     goog.global.document = {
-      write: goog.nullFunction,
+      write: () => {},
       currentScript: {src: '/currentScript/base.js?zx=5'},
       getElementsByTagName:
           goog.functions.constant([{src: '/path/to/base.js?zx=5'}])
