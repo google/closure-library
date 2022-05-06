@@ -50,3 +50,8 @@ fetch () {
 # Install closure compiler and linter.
 fetch closure-compiler
 fetch closure-compiler-linter
+
+# Also install OpenJDK 11 as this is required to run Closure Compiler.
+sudo apt-get install -y openjdk-11-jdk
+sudo update-java-alternatives --set java-1.11.0-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
