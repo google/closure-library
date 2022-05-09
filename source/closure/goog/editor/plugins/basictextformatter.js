@@ -16,6 +16,7 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Link');
@@ -23,6 +24,7 @@ goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.editor.style');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.iter');
 goog.require('goog.log');
 goog.require('goog.object');
@@ -261,6 +263,24 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
               !this.queryCommandValue(command)) {
             hasDummySelection |= this.beforeInsertListGecko_();
           }
+          // If the selection is collapsed, insert placeholder content keep
+          // the selection as we add the list, so we don't lose cursor position.
+          const selection =
+              this.getFieldDomHelper().getDocument().getSelection();
+          if (selection.rangeCount === 1 && selection.isCollapsed) {
+            // Mark that we need to delete the placeholder selection later.
+            hasDummySelection = true;
+            const placeholderValue = goog.string.createUniqueString();
+            const placeholderNode = goog.dom.createDom(goog.dom.TagName.SPAN);
+            const safePlaceholderAnchorContent =
+                goog.html.SafeHtml.htmlEscape(placeholderValue);
+            goog.dom.safe.setInnerHtml(
+                placeholderNode, safePlaceholderAnchorContent);
+            goog.dom.Range.createFromBrowserRange(selection.getRangeAt(0))
+                .replaceContentsWithNode(placeholderNode);
+            goog.dom.Range.createFromNodeContents(placeholderNode).select();
+          }
+
           // Fall through to preserveDir block
 
         case goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK:
