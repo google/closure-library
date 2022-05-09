@@ -12,7 +12,8 @@ const ListSymbolsExt = goog.require('goog.i18n.ListFormatSymbolsExt');
 const LocaleFeature = goog.require('goog.i18n.LocaleFeature');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const testSuite = goog.require('goog.testing.testSuite');
-const {ListFormat, ListFormatType} = goog.require('goog.i18n.listFormat');
+const {ListFormat, ListFormatStyle, ListFormatType} = goog.require('goog.i18n.listFormat');
+
 
 let propertyReplacer;
 
@@ -50,6 +51,13 @@ function driveTests(locale, symbols, testCallbackFn) {
   }
 }
 
+const vehiclesEn = ['Motorcycle', 'bus', 'car', 'submarine'];
+
+const vehicles3 = ['Motorcycle', 'Bus', 'Car'];
+const vehiclesUk = ['Мотоцикл', 'Автобус', 'Автомобіль', 'Літак'];
+const vehiclesZh = ['摩托车', '公共汽车', '车'];
+
+
 testSuite({
   setUpPage() {
     propertyReplacer = new PropertyReplacer();
@@ -57,13 +65,12 @@ testSuite({
 
   tearDown() {},
 
-  testEnNew() {
+  testEnOrAnd() {
+    // Check AND / OR types for style LONG
     driveTests(
         'en', ListSymbols.ListFormatSymbols_en,
         /** @param {boolean} nativeMode */
         (nativeMode) => {
-          const vehicles = ['Motorcycle', 'bus', 'car', 'submarine'];
-
           const andExpected = [
             '', 'Motorcycle', 'Motorcycle and bus', 'Motorcycle, bus, and car',
             'Motorcycle, bus, car, and submarine'
@@ -71,27 +78,121 @@ testSuite({
 
           // Check both types together
           const listConj = new ListFormat();
+          const listConjLong = new ListFormat({style: ListFormatStyle.LONG});
           const listDisj = new ListFormat({type: ListFormatType.OR});
+          const listDisjLong = new ListFormat(
+              {type: ListFormatType.OR, style: ListFormatStyle.LONG});
+          const listDisjShort = new ListFormat(
+              {type: ListFormatType.OR, style: ListFormatStyle.SHORT});
+          const listDisjNarrow = new ListFormat(
+              {type: ListFormatType.OR, style: ListFormatStyle.NARROW});
           for (let i = 0; i <= 4; i++) {
-            let result = listConj.format(vehicles.slice(0, i));
+            let result = listConj.format(vehiclesEn.slice(0, i));
+            assertEquals('Native=' + nativeMode, andExpected[i], result);
+
+            result = listConjLong.format(vehiclesEn.slice(0, i));
             assertEquals('Native=' + nativeMode, andExpected[i], result);
 
             // 'or' vs 'and'
-            result = listDisj.format(vehicles.slice(0, i));
+            result = listDisj.format(vehiclesEn.slice(0, i));
             let expected = andExpected[i].replace(' and ', ' or ');
+
+            // All OR Styles are the same
+            result = listDisjLong.format(vehiclesEn.slice(0, i));
+            assertEquals('Native=' + nativeMode, expected, result);
+
+
+            result = listDisjShort.format(vehiclesEn.slice(0, i));
+            assertEquals('Native=' + nativeMode, expected, result);
+
+            result = listDisjNarrow.format(vehiclesEn.slice(0, i));
             assertEquals('Native=' + nativeMode, expected, result);
           }
         });
   },
 
-  testUkNew() {
+  testEnAndStyles() {
+    // Test short and narrow styles for AND
+    driveTests(
+        'en', ListSymbols.ListFormatSymbols_en,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          const listConjShort = new ListFormat({style: ListFormatStyle.SHORT});
+          const listConjNarrow = new ListFormat(
+              {type: ListFormatType.AND, style: ListFormatStyle.NARROW});
+          let result = listConjShort.format(vehiclesEn);
+          let expected = 'Motorcycle, bus, car, & submarine';
+          assertEquals('Native=' + nativeMode, expected, result);
+          result = listConjNarrow.format(vehiclesEn);
+          expected = 'Motorcycle, bus, car, submarine';
+          assertEquals('Native=' + nativeMode, expected, result);
+        });
+  },
+
+  testEnUnit() {
+    driveTests(
+        'en', ListSymbols.ListFormatSymbols_en,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          // Test UNIT type and style options
+          const listUnitDefault = new ListFormat({type: ListFormatType.UNIT});
+          const listUnitLong = new ListFormat(
+              {type: ListFormatType.UNIT, style: ListFormatStyle.LONG});
+          const listUnitShort = new ListFormat(
+              {type: ListFormatType.UNIT, style: ListFormatStyle.SHORT});
+          const listUnitNarrow = new ListFormat(
+              {type: ListFormatType.UNIT, style: ListFormatStyle.NARROW});
+
+          const unitExpected = new Map();
+          unitExpected.set('Default', {
+            'formatter': listUnitDefault,  // Same as LONG
+            'expected': [
+              'Motorcycle', 'Motorcycle, bus', 'Motorcycle, bus, car',
+              'Motorcycle, bus, car, submarine'
+            ]
+          });
+          unitExpected.set(ListFormatStyle.LONG, {
+            'formatter': listUnitLong,
+            'expected': [
+              'Motorcycle', 'Motorcycle, bus', 'Motorcycle, bus, car',
+              'Motorcycle, bus, car, submarine'
+            ]
+          });
+          unitExpected.set(ListFormatStyle.SHORT, {
+            'formatter': listUnitShort,
+            'expected': [
+              'Motorcycle', 'Motorcycle, bus', 'Motorcycle, bus, car',
+              'Motorcycle, bus, car, submarine'
+            ]
+          });
+          unitExpected.set(ListFormatStyle.NARROW, {
+            'formatter': listUnitNarrow,
+            'expected': [
+              'Motorcycle', 'Motorcycle bus', 'Motorcycle bus car',
+              'Motorcycle bus car submarine'
+            ]
+          });
+
+          for (let [style, data] of unitExpected) {
+            const fmt = data['formatter'];
+            const expected = data['expected'];
+            for (let index = 0; index < 4; index++) {
+              const inlist = vehiclesEn.slice(0, index + 1);
+              const result = fmt.format(inlist);
+              assertEquals(
+                  'Native=' + nativeMode + 'style=' + style, expected[index],
+                  result);
+            }
+          }
+        });
+  },
+
+  testUk() {
+    // Ukranian language
     driveTests(
         'uk-UA', ListSymbolsExt.ListFormatSymbols_uk_UA,
         /** @param {boolean} nativeMode */
         (nativeMode) => {
-          // Ukranian language
-          const vehicles = ['Мотоцикл', 'Автобус', 'Автомобіль', 'Літак'];
-
           const andExpected = [
             '', 'Мотоцикл', 'Мотоцикл і Автобус',
             'Мотоцикл, Автобус і Автомобіль',
@@ -102,31 +203,30 @@ testSuite({
           const listConj = new ListFormat();
           const listDisj = new ListFormat({type: ListFormatType.OR});
           for (let i = 0; i <= 4; i++) {
-            let result = listConj.format(vehicles.slice(0, i));
+            let result = listConj.format(vehiclesUk.slice(0, i));
             assertEquals('Native=' + nativeMode, andExpected[i], result);
 
-            result = listDisj.format(vehicles.slice(0, i));
+            result = listDisj.format(vehiclesUk.slice(0, i));
             let expected = andExpected[i].replace(' і ', ' або ');
             assertEquals('Native=' + nativeMode, expected, result);
           }
         });
   },
 
-  testZhHansNew() {
+  testZhHans() {
     driveTests(
         'zh-Hans', ListSymbolsExt.ListFormatSymbols_zh_Hans,
         /** @param {boolean} nativeMode */
         (nativeMode) => {
           // Chinese, simplified script
-          const vehicles = ['摩托车', '公共汽车', '车'];
           const listConj = new ListFormat();
 
           const expected1 = '摩托车、公共汽车和车';
-          let result1 = listConj.format(vehicles);
+          let result1 = listConj.format(vehiclesZh);
           assertEquals('Native=' + nativeMode, expected1, result1);
 
           const listDisj = new ListFormat({type: ListFormatType.OR});
-          let result2 = listDisj.format(vehicles);
+          let result2 = listDisj.format(vehiclesZh);
           const expected2 = '摩托车、公共汽车或车';
           assertEquals('Native=' + nativeMode, expected2, result2);
         });
@@ -138,52 +238,80 @@ testSuite({
         /** @param {boolean} nativeMode */
         (nativeMode) => {
           // Standard Arabic
-          const vehicles = ['Motorcycle', 'Bus', 'Car'];
-
           const listConj = new ListFormat();
-          let result3 = listConj.format(vehicles);
+          let result3 = listConj.format(vehicles3);
           assertEquals('Native=' + nativeMode, 'Motorcycle وBus وCar', result3);
 
-          let result2 = listConj.format(vehicles.slice(0, 2));
+          let result2 = listConj.format(vehicles3.slice(0, 2));
           assertEquals('Native=' + nativeMode, 'Motorcycle وBus', result2);
+        });
+  },
 
+  testArabicOr() {
+    driveTests(
+        'ar', ListSymbols.ListFormatSymbols_ar,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
           const listDisj = new ListFormat({type: ListFormatType.OR});
-          result3 = listDisj.format(vehicles);
+          const result3 = listDisj.format(vehicles3);
           let expectOr = 'Motorcycle أو Bus أو Car';
           assertEquals('Native=' + nativeMode, expectOr, result3);
 
-          result2 = listDisj.format(vehicles.slice(0, 2));
+          const result2 = listDisj.format(vehicles3.slice(0, 2));
           expectOr = 'Motorcycle أو Bus';
           assertEquals('Native=' + nativeMode, expectOr, result2);
         });
   },
 
-  testMyanmar() {
+  testMyanmarAnd() {
     driveTests(
         'my', ListSymbols.ListFormatSymbols_my,
         /** @param {boolean} nativeMode */
         (nativeMode) => {
           // Test Burmese language
-          const vehicles = ['Motorcycle', 'Bus', 'Car'];
-
           const listConj = new ListFormat();
 
-          let result1 = listConj.format(vehicles);
+          const result1 = listConj.format(vehicles3);
 
           // Note that Myanmar results differ somewhat between browsers.
-          let matched = (result1 === 'Motorcycle Busနှင့် Car') ||
+          const matched = (result1 === 'Motorcycle Busနှင့် Car') ||
               (result1 === 'Motorcycle - Busနှင့် Car') ||
               (result1 === 'Motorcycle၊ Busနှင့် Car');
           assertTrue('Native=' + nativeMode + ': actual = ' + result1, matched);
+        });
+  },
 
+  testMyanmarOr() {
+    driveTests(
+        'my', ListSymbols.ListFormatSymbols_my,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          // Test Burmese language
           const listDisj = new ListFormat({type: ListFormatType.OR});
-          let result2 = listDisj.format(vehicles);
-          matched = (result2 == 'Motorcycle၊ Bus သို့မဟုတ် Car') ||
-              (result2 == 'Motorcycle Bus သို့မဟုတ် Car') ||
-              (result2 == 'Motorcycle - Busသို့မဟုတ် Car') ||
-              (result2 == 'Motorcycle - Bus သို့မဟုတ် Car');
+          const result = listDisj.format(vehicles3);
+          const matched = (result == 'Motorcycle၊ Bus သို့မဟုတ် Car') ||
+              (result == 'Motorcycle Bus သို့မဟုတ် Car') ||
+              (result == 'Motorcycle - Busသို့မဟုတ် Car') ||
+              (result == 'Motorcycle - Bus သို့မဟုတ် Car');
 
-          assertTrue('Native=' + nativeMode + ': actual = ' + result2, matched);
+          assertTrue('Native=' + nativeMode + ': actual = ' + result, matched);
+        });
+  },
+
+  testMyanmarUnit() {
+    driveTests(
+        'my', ListSymbols.ListFormatSymbols_my,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          // Test Burmese language
+          const listUnit = new ListFormat({type: ListFormatType.UNIT});
+          const result = listUnit.format(vehicles3);
+          const matched = (result == 'Motorcycle၊ Bus နှင့် Car') ||
+              (result == 'Motorcycle Bus နှင့် Car') ||
+              (result == 'Motorcycle- Busနှင့် Car') ||
+              (result == 'Motorcycle - Bus နှင့် Car');
+
+          assertTrue('Native=' + nativeMode + ': actual = ' + result, matched);
         });
   },
 });
