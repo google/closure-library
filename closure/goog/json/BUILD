@@ -31,17 +31,15 @@ closure_js_library(
     srcs = ["nativejsonprocessor.js"],
     lenient = True,
     deps = [
-        ":processor",
+        ":types",
         "//closure/goog/asserts",
+        "//closure/goog/string:parser",
+        "//closure/goog/string:stringifier",
     ],
 )
 
 closure_js_library(
-    name = "processor",
-    srcs = ["processor.js"],
+    name = "types",
+    srcs = ["types.js"],
     lenient = True,
-    deps = [
-        "//closure/goog/string:parser",
-        "//closure/goog/string:stringifier",
-    ],
 )
