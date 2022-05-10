@@ -164,13 +164,6 @@ goog.net.xpc.CfgFields = {
    * All other initial startup and reconnection scenarios are supported.
    */
   NATIVE_TRANSPORT_PROTOCOL_VERSION: 'nativeProtocolVersion',
-  /**
-   * Whether the direct transport runs in synchronous mode. The default is to
-   * emulate the other transports and run asyncronously but there are some
-   * circumstances where syncronous calls are required. If this property is
-   * set to true, the transport will send the messages synchronously.
-   */
-  DIRECT_TRANSPORT_SYNC_MODE: 'directSyncMode',
 };
 
 
