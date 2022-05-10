@@ -33,6 +33,19 @@ const testSuite = goog.require('goog.testing.testSuite');
 replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
 
 /**
+ * @record
+ * @extends {DateTimeParse.ParseOptions}
+ */
+function AssertParseOptions() {
+  /**
+   * Expect only a partial parse (i.e. `parse` must return this value instead
+   * of the full length of the input string).
+   * @type {number|undefined}
+   */
+  this.partial;
+}
+
+/**
  * Asserts that `date` has the expected date field values.
  * @param {number|undefined} expectYear
  * @param {number} expectMonth
@@ -76,13 +89,14 @@ function assertTimeEquals(expectHour, expectMin, expectSec, expectMilli, date) {
  * @param {number|undefined} expectDate
  * @param {!DateTimeParse} parser
  * @param {string} text
- * @param {!DateTimeParse.ParseOptions=} options
+ * @param {!AssertParseOptions=} options
  */
 function assertParsedDateEquals(
     expectYear, expectMonth, expectDate, parser, text, options) {
   const date = new Date(0);
 
-  assertTrue(parser.parse(text, date, options) > 0);
+  assertEquals(
+      options?.partial ?? text.length, parser.parse(text, date, options));
   assertDateEquals(expectYear, expectMonth, expectDate, date);
 }
 
@@ -94,13 +108,14 @@ function assertParsedDateEquals(
  * @param {number|undefined} expectMilli
  * @param {!DateTimeParse} parser
  * @param {string} text
- * @param {!DateTimeParse.ParseOptions=} options
+ * @param {!AssertParseOptions=} options
  */
 function assertParsedTimeEquals(
     expectHour, expectMin, expectSec, expectMilli, parser, text, options) {
   const date = new Date(0);
 
-  assertTrue(parser.parse(text, date, options) > 0);
+  assertEquals(
+      options?.partial ?? text.length, parser.parse(text, date, options));
   assertTimeEquals(expectHour, expectMin, expectSec, expectMilli, date);
 }
 
@@ -211,10 +226,10 @@ testSuite({
     assertParsedTimeEquals(1, 22, 0, 0, parser, '122');
     assertParseFails(parser, '22');
     // Probable bug: non-digit can cause too-short abutting run to succeed
-    assertParsedTimeEquals(2, 2, 0, 0, parser, '22b');
+    assertParsedTimeEquals(2, 2, 0, 0, parser, '22b', {partial: 2});
 
     parser = new DateTimeParse('HHmmss');
-    assertParsedTimeEquals(12, 34, 56, 0, parser, '123456789');
+    assertParsedTimeEquals(12, 34, 56, 0, parser, '123456789', {partial: 6});
     assertParsedTimeEquals(12, 34, 56, 0, parser, '123456');
     assertParsedTimeEquals(1, 23, 45, 0, parser, '12345');
     assertParseFails(parser, '1234');
@@ -375,9 +390,9 @@ testSuite({
     assertParsedTimeEquals(5, 0, 0, 0, parser, '5:');
     assertParsedTimeEquals(5, 4, 0, 0, parser, '5:4');
     assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44');
-    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44p');
+    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44p', {partial: 4});
     assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44pm');
-    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44ym');
+    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44ym', {partial: 4});
 
     parser = new DateTimeParse('h:mm a');
     assertParseFails(parser, '5');
@@ -385,9 +400,9 @@ testSuite({
     assertParseFails(parser, '5:4');
     assertParseFails(parser, '5:44');
     assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 ');
-    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 p');
+    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 p', {partial: 5});
     assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44 pm');
-    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 ym');
+    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 ym', {partial: 5});
 
     parser = new DateTimeParse('mm:ss');
     const date = new Date(0);
@@ -416,7 +431,8 @@ testSuite({
     assertParseFails(parser, '5:44 x', opts);
     assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44 p', opts);
     assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44 pm', opts);
-    assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44 pmx', opts);
+    assertParsedTimeEquals(
+        17, 44, 0, 0, parser, '5:44 pmx', {...opts, partial: 7});
 
     parser = new DateTimeParse('HH:mm');
     assertParsedTimeEquals(0, 0, 0, 0, parser, '0', opts);
