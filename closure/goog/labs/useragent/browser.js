@@ -508,13 +508,13 @@ function getFullVersionFromUserAgentString(browser) {
  * Note that the major version number may be different depending on which
  * browser is specified. The returned value can be used to make browser version
  * comparisons using comparison operators.
- * @deprecated Use isAtLeast or isAtMost instead.
+ * @private
  * @param {!Brand} browser The brand whose version should be returned.
  * @return {number} The major version number associated with the current
  * browser under the given brand, or NaN if the current browser doesn't match
  * the given brand.
  */
-function versionOf(browser) {
+function versionOf_(browser) {
   let versionParts;
   // Silk currently does not identify itself in its userAgentData.brands array,
   // so if checking its version, always fall back to the user agent string.
@@ -538,7 +538,6 @@ function versionOf(browser) {
   const majorVersion = versionParts[0];
   return Number(majorVersion);  // Returns NaN if it is not parseable.
 }
-exports.versionOf = versionOf;
 
 /**
  * Returns true if the current browser matches the given brand and is at least
@@ -554,7 +553,7 @@ function isAtLeast(brand, majorVersion) {
   googAsserts.assert(
       Math.floor(majorVersion) === majorVersion,
       'Major version must be an integer');
-  return versionOf(brand) >= majorVersion;
+  return versionOf_(brand) >= majorVersion;
 }
 exports.isAtLeast = isAtLeast;
 
@@ -572,7 +571,7 @@ function isAtMost(brand, majorVersion) {
   googAsserts.assert(
       Math.floor(majorVersion) === majorVersion,
       'Major version must be an integer');
-  return versionOf(brand) <= majorVersion;
+  return versionOf_(brand) <= majorVersion;
 }
 exports.isAtMost = isAtMost;
 

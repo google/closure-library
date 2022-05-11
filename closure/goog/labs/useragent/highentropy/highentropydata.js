@@ -24,7 +24,7 @@ let fullVersionListAvailable = false;
  * TODO(user): When fullVersionList is added, move hasFullVersionList()
  * to browser.js, and inline the browser version check. For example, if it is
  * implemented in Chromium 101, have hasFullVersionList simply return
- * `browser.versionOf(CHROMIUM) >= 101`.
+ * `browser.isAtLeast(browser.Brand.CHROMIUM, 101)`.
  * @return {boolean}
  */
 function hasFullVersionList() {
