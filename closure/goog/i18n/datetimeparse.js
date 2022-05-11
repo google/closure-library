@@ -528,7 +528,8 @@ goog.i18n.DateTimeParse.prototype.subParseAbut_ = function(
  *
  * @param {string} text the text to be parsed.
  * @param {!Array<number>} pos Parse position.
- * @param {!goog.i18n.DateTimeParse.PatternPart} part the pattern part for this field.
+ * @param {!goog.i18n.DateTimeParse.PatternPart} part the pattern part for this
+ *     field.
  * @param {number} digitCount when > 0, numeric parsing must obey the count.
  * @param {!goog.i18n.DateTimeParse.MyDate_} cal object that holds parsed value.
  * @param {boolean} predictive whether to apply predictive parsing rules.
@@ -595,22 +596,22 @@ goog.i18n.DateTimeParse.prototype.subParse_ = function(
     case 'K':  // HOUR (0..11)
     case 'H':  // HOUR_OF_DAY (0..23)
     case 'k':  // HOUR_OF_DAY (1..24)
-      {
-        const success =
-              this.subParseInt_(text, pos, part, digitCount, function(value) {
-                cal.hours =
-                    (part.text.charAt(0) === 'h' && value === 12) ? 0 : value;
-              }, predictive);
-        return predictive ? success : true;
-      }
+    {
+      const success =
+          this.subParseInt_(text, pos, part, digitCount, function(value) {
+            cal.hours =
+                (part.text.charAt(0) === 'h' && value === 12) ? 0 : value;
+          }, predictive);
+      return predictive ? success : true;
+    }
     case 'm':  // MINUTE
-      {
-        const success =
-              this.subParseInt_(text, pos, part, digitCount, function(value) {
-                cal.minutes = value;
-              }, predictive);
-        return predictive ? success : true;
-      }
+    {
+      const success =
+          this.subParseInt_(text, pos, part, digitCount, function(value) {
+            cal.minutes = value;
+          }, predictive);
+      return predictive ? success : true;
+    }
     case 's':  // SECOND
       this.subParseInt_(text, pos, part, digitCount, function(value) {
         cal.seconds = value;
@@ -634,7 +635,8 @@ goog.i18n.DateTimeParse.prototype.subParse_ = function(
  *
  * @param {string} text the text to be parsed.
  * @param {!Array<number>} pos Parse position.
- * @param {!goog.i18n.DateTimeParse.PatternPart} part the pattern part for this field.
+ * @param {!goog.i18n.DateTimeParse.PatternPart} part the pattern part for this
+ *     field.
  * @param {number} digitCount when > 0, numeric parsing must obey the count.
  * @param {!goog.i18n.DateTimeParse.MyDate_} cal object to hold parsed value.
  *
@@ -810,7 +812,8 @@ goog.i18n.DateTimeParse.prototype.subParseTimeZoneInGMT_ = function(
  *
  * @param {string} text the text to be parsed.
  * @param {!Array<number>} pos parse position
- * @param {!goog.i18n.DateTimeParse.PatternPart} part the pattern part for this field.
+ * @param {!goog.i18n.DateTimeParse.PatternPart} part the pattern part for this
+ *     field.
  * @param {number} maxChars when > 0, at most this many characters are parsed.
  * @param {function(number)} callback function to record the parsed value.
  * @param {boolean=} predictive whether to apply predictive parsing rules.
@@ -1042,20 +1045,23 @@ goog.i18n.DateTimeParse.ParseOptions = function() {
    * using the predictive option with unsupported patterns will result in an
    * error being thrown.
    *
-   * defaults to false
+   * Defaults to false.
+   *
    * @type {boolean|undefined}
    */
   this.predictive;
   /**
    * Whether the parsed date/time value should be validated.
    *
-   * Setting this to true is the equivalent of calling the now-deprecated
-   * DateTimeParse.prototype.strictParse.
-   *
    * When true, parsing will fail if any of the parsed fields overflow, e.g.
    * minutes > 60.
    *
-   * defaults to false
+   * Note that setting `validate` to `false` does _not_ mean that parsing will
+   * not fail: if the parser encounters an unknown month or day-of-week name
+   * (for instance) then parsing will still fail. This only checks for overflow.
+   *
+   * Defaults to false.
+   *
    * @type {boolean|undefined}
    */
   this.validate;
@@ -1269,8 +1275,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
       (this.year && this.year != date.getFullYear() ||
        this.month && this.month != date.getMonth() ||
        this.day && this.day != date.getDate() ||
-       this.hours && this.hours >= 24 ||
-       this.minutes && this.minutes >= 60 ||
+       this.hours && this.hours >= 24 || this.minutes && this.minutes >= 60 ||
        this.seconds && this.seconds >= 60 ||
        this.milliseconds && this.milliseconds >= 1000)) {
     return false;
