@@ -33,50 +33,61 @@ goog.requireType('goog.i18n.DateTimeSymbolsType');
  * This implementation could parse partial date/time.
  *
  * Time Format Syntax: To specify the time format use a time pattern string.
- * In this pattern, following letters are reserved as pattern letters, which
- * are defined as the following:
+ * In this pattern, the following letters are reserved as pattern letters, which
+ * are defined as follows:
  *
- * <pre>
+ * ```
  * Symbol   Meaning                 Presentation        Example
  * ------   -------                 ------------        -------
- * G        era designator          (Text)              AD
+ * G?       era designator          (Text)              AD
  * y#       year                    (Number)            1996
  * M        month in year           (Text & Number)     July & 07
- * d        day in month            (Number)            10
- * h        hour in am/pm (1~12)    (Number)            12
- * H        hour in day (0~23)      (Number)            0
- * m        minute in hour          (Number)            30
- * s        second in minute        (Number)            55
- * S        fractional second       (Number)            978
+ * L        standalone month in year (Text & Number)    July & 07
+ * d?       day in month            (Number)            10
+ * h?       hour in am/pm (1~12)    (Number)            12
+ * H?       hour in day (0~23)      (Number)            0
+ * m?       minute in hour          (Number)            30
+ * s?       second in minute        (Number)            55
+ * S?       fractional second       (Number)            978
  * E        day of week             (Text)              Tuesday
- * D        day in year             (Number)            189
- * a        am/pm marker            (Text)              PM
- * b        am/pm/noon/midnight     (Text)              Noon
- * B        flexible day periods     (Text)              de l’après-midi'
+ * D*       day in year             (Number)            189
+ * a?       am/pm marker            (Text)              PM
+ * b?#      am/pm/noon/midnight     (Text)              Noon
+ * B?#      flexible day periods    (Text)              de l’après-midi'
  * k        hour in day (1~24)      (Number)            24
  * K        hour in am/pm (0~11)    (Number)            0
- * z        time zone               (Text)              Pacific Standard Time
- * Z        time zone (RFC 822)     (Number) -0800
- * v        time zone (generic)     (Text)              Pacific Time
+ * z?#      time zone               (Text)              Pacific Standard Time
+ * Z?       time zone (RFC 822)     (Number) -0800
+ * v?#      time zone (generic)     (Text)              Pacific Time
  * '        escape for text         (Delimiter)         'Date='
  * ''       single quote            (Literal)           'o''clock'
- * </pre>
+ * ```
  *
- * The count of pattern letters determine the format. <p>
- * (Text): 4 or more pattern letters--use full form,
- *         less than 4--use short or abbreviated form if one exists.
- *         In parsing, we will always try long format, then short. <p>
- * (Number): the minimum number of digits. <p>
- * (Text & Number): 3 or over, use text, otherwise use number. <p>
- * Any characters that not in the pattern will be treated as quoted text. For
- * instance, characters like ':', '.', ' ', '#' and '@' will appear in the
- * resulting time text even they are not embraced within single quotes. In our
- * current pattern usage, we didn't use up all letters. But those unused
- * letters are strongly discouraged to be used as quoted text without quote.
- * That's because we may use other letter for pattern in future. <p>
+ * - Items marked with '*' are not supported yet.
+ * - Items marked with '#' work different from java (i.e. may not support
+ *   parsing more verbose formats/examples, such as "Noon" or "Pacific Time").
+ * - Items marked with '?' can be omitted when at the end of a non-empty format
+ *   string. Optional text items can also be omitted when abutting immediately
+ *   before or after a numeric item (i.e. "Gy" and "yG" will both accept "1").
+ *
+ * The letter count and presentation together determine the accepted formats:
+ * - **Text**: both full and abbreviated forms are allowed, with the long form
+ *   being preferred.
+ * - **Number**: the count indicates the maximum number of characters parsed in
+ *   case of abutting numbers (the count is otherwise ignored, except for the
+ *   special case of 'yy', discussed below).
+ * - **Text & Number**: count of 3 or more requires the text form, otherwise
+ *   allows either number or text.
+ *
+ * Any letters not in the above table should be treated as _reserved_: any
+ * alphanumeric characters that must be matched literally should be wrapped in
+ * single quotes to ensure any newly added format characters don't change the
+ * meaning.  Punctuation (such as ':', '.', ' ', '#' and '@') may be left
+ * unquoted and will still be treated as literals.
  *
  * Examples Using the US Locale:
  *
+ * ```
  * Format Pattern                         Result
  * --------------                         -------
  * "yyyy.MM.dd G 'at' HH:mm:ss vvvv" ->>  1996.07.10 AD at 15:08:56 Pacific Time
@@ -85,6 +96,7 @@ goog.requireType('goog.i18n.DateTimeSymbolsType');
  * "hh 'o''clock' a, zzzz"           ->>  12 o'clock PM, Pacific Daylight Time
  * "K:mm a, vvv"                     ->>  0:00 PM, PT
  * "yyyyy.MMMMM.dd GGG hh:mm aaa"    ->>  01996.July.10 AD 12:08 PM
+ * ```
  *
  * <p> When parsing a date string using the abbreviated year pattern ("yy"),
  * DateTimeParse must interpret the abbreviated year relative to some
@@ -99,19 +111,19 @@ goog.requireType('goog.i18n.DateTimeSymbolsType');
  * more digit string will be interpreted as its face value.
  *
  * <p> If the year pattern does not have exactly two 'y' characters, the year is
- * interpreted literally, regardless of the number of digits. So using the
- * pattern "MM/dd/yyyy", "01/11/12" parses to Jan 11, 12 A.D.
+ * interpreted literally, regardless of the number of digits. So when using the
+ * patterns "MM/dd/yyyy" or "M/D/y", "01/11/12" parses to Jan 11, 12 A.D.
  *
  * <p> When numeric fields abut one another directly, with no intervening
  * delimiter characters, they constitute a run of abutting numeric fields. Such
  * runs are parsed specially. For example, the format "HHmmss" parses the input
  * text "123456" to 12:34:56, parses the input text "12345" to 1:23:45, and
  * fails to parse "1234". In other words, the leftmost field of the run is
- * flexible, while the others keep a fixed width. If the parse fails anywhere in
- * the run, then the leftmost field is shortened by one character, and the
- * entire run is parsed again. This is repeated until either the parse succeeds
- * or the leftmost field is one character in length. If the parse still fails at
- * that point, the parse of the run fails.
+ * flexible (i.e. it may be shorter), while the others keep a fixed width. If
+ * the parse fails anywhere in the run, then the leftmost field is shortened by
+ * one character, and the entire run is parsed again. This is repeated until
+ * either the parse succeeds or the leftmost field is one character in length.
+ * If the parse still fails at that point, the parse of the run fails.
  *
  * <p> Now timezone parsing only support GMT:hhmm, GMT:+hhmm, GMT:-hhmm
  */
