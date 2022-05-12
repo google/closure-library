@@ -26,10 +26,6 @@ goog.module('goog.i18n.ListFormatSymbols');
  * Collection of List formatting symbols symbols for each locale
  *   Each is an array for styles LONG, SHORT, NARROW.
  * @typedef{{
- *   LIST_START: string,
- *   LIST_TWO: (string|undefined),
- *   LIST_MIDDLE: (string|undefined),
- *   LIST_END: (string|undefined),
  *   AND_START: !Array<string>,
  *   AND_TWO: (!Array<string>|undefined),
  *   AND_MIDDLE: (!Array<string>|undefined),
@@ -56,8 +52,6 @@ exports.ListFormatSymbols;
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_af = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} en {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} en {1}', '{0} en {1}', '{0} en {1}'],
   AND_END: ['{0} en {1}', '{0} en {1}', '{0}, {1}'],
@@ -71,9 +65,6 @@ exports.ListFormatSymbols_af = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_am = {
-  LIST_START: '{0}፣ {1}',
-  LIST_TWO: '{0} እና {1}',
-  LIST_END: '{0}, እና {1}',
   AND_START: ['{0}፣ {1}', '{0}፣ {1}', '{0}, {1}'],
   AND_TWO: ['{0} እና {1}', '{0} እና {1}', '{0} እና {1}'],
   AND_MIDDLE: ['{0}፣ {1}', '{0}፣ {1}', '{0}፣ {1}'],
@@ -92,8 +83,6 @@ exports.ListFormatSymbols_am = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ar = {
-  LIST_START: '{0} و{1}',
-  LIST_END: '{0} و{1}',
   AND_START: ['{0} و{1}', '{0} و{1}', '{0} و{1}'],
   AND_END: ['{0} و{1}', '{0} و{1}', '{0} و{1}'],
   OR_START: ['{0} أو {1}', '{0} أو {1}', '{0} أو {1}'],
@@ -110,8 +99,6 @@ exports.ListFormatSymbols_ar = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ar_DZ = {
-  LIST_START: '{0} و{1}',
-  LIST_END: '{0} و{1}',
   AND_START: ['{0} و{1}', '{0} و{1}', '{0} و{1}'],
   AND_END: ['{0} و{1}', '{0} و{1}', '{0} و{1}'],
   OR_START: ['{0} أو {1}', '{0} أو {1}', '{0} أو {1}'],
@@ -128,8 +115,6 @@ exports.ListFormatSymbols_ar_DZ = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ar_EG = {
-  LIST_START: '{0} و{1}',
-  LIST_END: '{0} و{1}',
   AND_START: ['{0} و{1}', '{0} و{1}', '{0} و{1}'],
   AND_END: ['{0} و{1}', '{0} و{1}', '{0} و{1}'],
   OR_START: ['{0} أو {1}', '{0} أو {1}', '{0} أو {1}'],
@@ -146,8 +131,6 @@ exports.ListFormatSymbols_ar_EG = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_az = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} və {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} və {1}', '{0} və {1}', '{0}, {1}'],
   OR_END: ['{0}, yaxud {1}', '{0}, yaxud {1}', '{0}, yaxud {1}'],
@@ -159,8 +142,6 @@ exports.ListFormatSymbols_az = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_be = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} і {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} і {1}', '{0} і {1}', '{0}, {1}'],
   OR_END: ['{0} ці {1}', '{0} ці {1}', '{0} ці {1}'],
@@ -174,8 +155,6 @@ exports.ListFormatSymbols_be = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_bg = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} и {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} и {1}', '{0} и {1}', '{0}, {1}'],
   AND_END: ['{0} и {1}', '{0} и {1}', '{0} и {1}'],
@@ -190,8 +169,6 @@ exports.ListFormatSymbols_bg = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_bn = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} এবং {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} এবং {1}', '{0} এবং {1}', '{0}, {1}'],
   OR_END: ['{0}, বা {1}', '{0}, বা {1}', '{0}, বা {1}'],
@@ -203,8 +180,6 @@ exports.ListFormatSymbols_bn = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_br = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} ha {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} ha {1}', '{0} & {1}', '{0}, {1}'],
   OR_END: ['{0} pe {1}', '{0} pe {1}', '{0} pe {1}'],
@@ -216,8 +191,6 @@ exports.ListFormatSymbols_br = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_bs = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} i {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} i {1}', '{0} i {1}', '{0}, {1}'],
   OR_END: ['{0} ili {1}', '{0} ili {1}', '{0} ili {1}'],
@@ -229,8 +202,6 @@ exports.ListFormatSymbols_bs = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ca = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} i {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} i {1}', '{0} i {1}', '{0}, {1}'],
   OR_END: ['{0} o {1}', '{0} o {1}', '{0} o {1}'],
@@ -242,9 +213,6 @@ exports.ListFormatSymbols_ca = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_chr = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} ᎠᎴ {1}',
-  LIST_END: '{0}, ᎠᎴ {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} ᎠᎴ {1}', '{0} & {1}', '{0}, {1}'],
   AND_END: ['{0}, ᎠᎴ {1}', '{0}, & {1}', '{0}, & {1}'],
@@ -260,8 +228,6 @@ exports.ListFormatSymbols_chr = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_cs = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} a {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} a {1}', '{0} a {1}', '{0}, {1}'],
   OR_END: ['{0} nebo {1}', '{0} nebo {1}', '{0} nebo {1}'],
@@ -276,9 +242,6 @@ exports.ListFormatSymbols_cs = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_cy = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} a(c) {1}',
-  LIST_END: '{0}, a(c) {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} a(c) {1}', '{0} a(c) {1}', '{0}, {1}'],
   AND_END: ['{0}, a(c) {1}', '{0}, a(c) {1}', '{0}, {1}'],
@@ -292,8 +255,6 @@ exports.ListFormatSymbols_cy = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_da = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} og {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} og {1}', '{0} og {1}', '{0}, {1}'],
   OR_END: ['{0} eller {1}', '{0} eller {1}', '{0} eller {1}'],
@@ -305,8 +266,6 @@ exports.ListFormatSymbols_da = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_de = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} und {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} und {1}', '{0} und {1}', '{0}, {1}'],
   OR_END: ['{0} oder {1}', '{0} oder {1}', '{0} oder {1}'],
@@ -319,8 +278,6 @@ exports.ListFormatSymbols_de = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_de_AT = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} und {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} und {1}', '{0} und {1}', '{0}, {1}'],
   OR_END: ['{0} oder {1}', '{0} oder {1}', '{0} oder {1}'],
@@ -333,8 +290,6 @@ exports.ListFormatSymbols_de_AT = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_de_CH = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} und {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} und {1}', '{0} und {1}', '{0}, {1}'],
   OR_END: ['{0} oder {1}', '{0} oder {1}', '{0} oder {1}'],
@@ -347,8 +302,6 @@ exports.ListFormatSymbols_de_CH = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_el = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} και {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} και {1}', '{0} και {1}', '{0}, {1}'],
   OR_END: ['{0} ή {1}', '{0} ή {1}', '{0} ή {1}'],
@@ -362,9 +315,6 @@ exports.ListFormatSymbols_el = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_en = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} and {1}',
-  LIST_END: '{0}, and {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} and {1}', '{0} & {1}', '{0}, {1}'],
   AND_END: ['{0}, and {1}', '{0}, & {1}', '{0}, {1}'],
@@ -380,8 +330,6 @@ exports.ListFormatSymbols_en = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_en_AU = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} and {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} and {1}', '{0} and {1}', '{0}, {1}'],
   OR_END: ['{0} or {1}', '{0} or {1}', '{0} or {1}'],
@@ -395,8 +343,6 @@ exports.ListFormatSymbols_en_AU = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_en_CA = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} and {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} and {1}', '{0} and {1}', '{0}, {1}'],
   OR_END: ['{0} or {1}', '{0} or {1}', '{0} or {1}'],
@@ -410,8 +356,6 @@ exports.ListFormatSymbols_en_CA = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_en_GB = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} and {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} and {1}', '{0} and {1}', '{0}, {1}'],
   OR_END: ['{0} or {1}', '{0} or {1}', '{0} or {1}'],
@@ -425,8 +369,6 @@ exports.ListFormatSymbols_en_GB = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_en_IE = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} and {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} and {1}', '{0} and {1}', '{0}, {1}'],
   OR_END: ['{0} or {1}', '{0} or {1}', '{0} or {1}'],
@@ -440,8 +382,6 @@ exports.ListFormatSymbols_en_IE = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_en_IN = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} and {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} and {1}', '{0} and {1}', '{0}, {1}'],
   AND_END: ['{0} and {1}', '{0} and {1}', '{0}, and {1}'],
@@ -457,8 +397,6 @@ exports.ListFormatSymbols_en_IN = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_en_SG = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} and {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} and {1}', '{0} and {1}', '{0}, {1}'],
   OR_END: ['{0} or {1}', '{0} or {1}', '{0} or {1}'],
@@ -472,9 +410,6 @@ exports.ListFormatSymbols_en_SG = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_en_US = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} and {1}',
-  LIST_END: '{0}, and {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} and {1}', '{0} & {1}', '{0}, {1}'],
   AND_END: ['{0}, and {1}', '{0}, & {1}', '{0}, {1}'],
@@ -490,8 +425,6 @@ exports.ListFormatSymbols_en_US = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_en_ZA = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} and {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} and {1}', '{0} and {1}', '{0}, {1}'],
   OR_END: ['{0} or {1}', '{0} or {1}', '{0} or {1}'],
@@ -505,8 +438,6 @@ exports.ListFormatSymbols_en_ZA = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_es = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} y {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} y {1}', '{0} y {1}', '{0}, {1}'],
   OR_END: ['{0} o {1}', '{0} o {1}', '{0} o {1}'],
@@ -521,8 +452,6 @@ exports.ListFormatSymbols_es = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_es_419 = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} y {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} y {1}', '{0} y {1}', '{0}, {1}'],
   OR_END: ['{0} o {1}', '{0} o {1}', '{0} o {1}'],
@@ -537,8 +466,6 @@ exports.ListFormatSymbols_es_419 = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_es_ES = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} y {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} y {1}', '{0} y {1}', '{0}, {1}'],
   OR_END: ['{0} o {1}', '{0} o {1}', '{0} o {1}'],
@@ -553,8 +480,6 @@ exports.ListFormatSymbols_es_ES = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_es_MX = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} y {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} y {1}', '{0} y {1}', '{0}, {1}'],
   OR_END: ['{0} o {1}', '{0} o {1}', '{0} o {1}'],
@@ -569,8 +494,6 @@ exports.ListFormatSymbols_es_MX = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_es_US = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} y {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} y {1}', '{0} y {1}', '{0}, {1}'],
   OR_END: ['{0} o {1}', '{0} o {1}', '{0} o {1}'],
@@ -584,8 +507,6 @@ exports.ListFormatSymbols_es_US = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_et = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} ja {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} ja {1}', '{0} ja {1}', '{0}, {1}'],
   OR_END: ['{0} või {1}', '{0} või {1}', '{0} või {1}'],
@@ -599,8 +520,6 @@ exports.ListFormatSymbols_et = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_eu = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} eta {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} eta {1}', '{0}, {1}', '{0}, {1}'],
   OR_END: ['{0} edo {1}', '{0} edo {1}', '{0} edo {1}'],
@@ -612,9 +531,6 @@ exports.ListFormatSymbols_eu = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_fa = {
-  LIST_START: '{0}،‏ {1}',
-  LIST_TWO: '{0} و {1}',
-  LIST_END: '{0}، و {1}',
   AND_START: ['{0}،‏ {1}', '{0}،‏ {1}', '{0}،‏ {1}'],
   AND_TWO: ['{0} و {1}', '{0} و {1}', '{0}،‏ {1}'],
   AND_END: ['{0}، و {1}', '{0}، و {1}', '{0}،‏ {1}'],
@@ -631,8 +547,6 @@ exports.ListFormatSymbols_fa = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_fi = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} ja {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} ja {1}', '{0} ja {1}', '{0}, {1}'],
   OR_END: ['{0} tai {1}', '{0} tai {1}', '{0} tai {1}'],
@@ -646,9 +560,6 @@ exports.ListFormatSymbols_fi = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_fil = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} at {1}',
-  LIST_END: '{0}, at {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} at {1}', '{0} at {1}', '{0}, {1}'],
   AND_END: ['{0}, at {1}', '{0}, at {1}', '{0}, {1}'],
@@ -664,8 +575,6 @@ exports.ListFormatSymbols_fil = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_fr = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} et {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} et {1}', '{0} et {1}', '{0}, {1}'],
   OR_END: ['{0} ou {1}', '{0} ou {1}', '{0} ou {1}'],
@@ -679,8 +588,6 @@ exports.ListFormatSymbols_fr = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_fr_CA = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} et {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} et {1}', '{0} et {1}', '{0}, {1}'],
   OR_END: ['{0} ou {1}', '{0} ou {1}', '{0} ou {1}'],
@@ -694,8 +601,6 @@ exports.ListFormatSymbols_fr_CA = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ga = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} agus {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} agus {1}', '{0} agus {1}', '{0}, {1}'],
   OR_END: ['{0}, nó {1}', '{0}, nó {1}', '{0}, nó {1}'],
@@ -709,8 +614,6 @@ exports.ListFormatSymbols_ga = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_gl = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} e {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} e {1}', '{0} e {1}', '{0} e {1}'],
   OR_END: ['{0} ou {1}', '{0} ou {1}', '{0} ou {1}'],
@@ -722,8 +625,6 @@ exports.ListFormatSymbols_gl = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_gsw = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} und {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} und {1}', '{0}, {1}', '{0}, {1}'],
   OR_END: ['{0}, or {1}', '{0}, or {1}', '{0}, or {1}'],
@@ -735,8 +636,6 @@ exports.ListFormatSymbols_gsw = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_gu = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} અને {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} અને {1}', '{0} અને {1}', '{0}, {1}'],
   OR_END: ['{0}, અથવા {1}', '{0}, અથવા {1}', '{0}, અથવા {1}'],
@@ -749,8 +648,6 @@ exports.ListFormatSymbols_gu = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_haw = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0}, {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   OR_END: ['{0}, or {1}', '{0}, or {1}', '{0}, or {1}'],
@@ -762,8 +659,6 @@ exports.ListFormatSymbols_haw = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_he = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} ו{1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} ו{1}', '{0} ו{1}', '{0}, {1}'],
   OR_END: ['{0}, או {1}', '{0}, או {1}', '{0}, או {1}'],
@@ -778,9 +673,6 @@ exports.ListFormatSymbols_he = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_hi = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} और {1}',
-  LIST_END: '{0}, और {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} और {1}', '{0} और {1}', '{0}, {1}'],
   AND_END: ['{0}, और {1}', '{0} और {1}', '{0}, {1}'],
@@ -795,8 +687,6 @@ exports.ListFormatSymbols_hi = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_hr = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} i {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} i {1}', '{0} i {1}', '{0}, {1}'],
   OR_END: ['{0} ili {1}', '{0} ili {1}', '{0} ili {1}'],
@@ -810,8 +700,6 @@ exports.ListFormatSymbols_hr = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_hu = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} és {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} és {1}', '{0} és {1}', '{0}, {1}'],
   OR_END: ['{0} vagy {1}', '{0} vagy {1}', '{0} vagy {1}'],
@@ -823,8 +711,6 @@ exports.ListFormatSymbols_hu = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_hy = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} և {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} և {1}', '{0} և {1}', '{0}, {1}'],
   OR_END: ['{0} կամ {1}', '{0} կամ {1}', '{0} կամ {1}'],
@@ -838,9 +724,6 @@ exports.ListFormatSymbols_hy = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_id = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} dan {1}',
-  LIST_END: '{0}, dan {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} dan {1}', '{0} dan {1}', '{0}, {1}'],
   AND_END: ['{0}, dan {1}', '{0}, dan {1}', '{0}, {1}'],
@@ -854,9 +737,6 @@ exports.ListFormatSymbols_id = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_in = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} dan {1}',
-  LIST_END: '{0}, dan {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} dan {1}', '{0} dan {1}', '{0}, {1}'],
   AND_END: ['{0}, dan {1}', '{0}, dan {1}', '{0}, {1}'],
@@ -870,8 +750,6 @@ exports.ListFormatSymbols_in = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_is = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} og {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} og {1}', '{0} og {1}', '{0}, {1}'],
   OR_END: ['{0} eða {1}', '{0} eða {1}', '{0} eða {1}'],
@@ -885,8 +763,6 @@ exports.ListFormatSymbols_is = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_it = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} e {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} e {1}', '{0} e {1}', '{0}, {1}'],
   OR_END: ['{0} o {1}', '{0} o {1}', '{0} o {1}'],
@@ -900,8 +776,6 @@ exports.ListFormatSymbols_it = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_iw = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} ו{1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} ו{1}', '{0} ו{1}', '{0}, {1}'],
   OR_END: ['{0}, או {1}', '{0}, או {1}', '{0}, או {1}'],
@@ -916,8 +790,6 @@ exports.ListFormatSymbols_iw = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ja = {
-  LIST_START: '{0}、{1}',
-  LIST_END: '{0}、{1}',
   AND_START: ['{0}、{1}', '{0}、{1}', '{0}, {1}'],
   AND_END: ['{0}、{1}', '{0}、{1}', '{0}, {1}'],
   OR_START: ['{0}、{1}', '{0}、{1}', '{0}、{1}'],
@@ -933,8 +805,6 @@ exports.ListFormatSymbols_ja = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ka = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} და {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} და {1}', '{0} და {1}', '{0}, {1}'],
   OR_END: ['{0} ან {1}', '{0} ან {1}', '{0} ან {1}'],
@@ -946,9 +816,6 @@ exports.ListFormatSymbols_ka = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_kk = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} және {1}',
-  LIST_END: '{0}, {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} және {1}', '{0} және {1}', '{0}, {1}'],
   AND_END: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
@@ -964,9 +831,6 @@ exports.ListFormatSymbols_kk = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_km = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} និង​{1}',
-  LIST_END: '{0} និង {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} និង​{1}', '{0} និង {1}', '{0}, {1}'],
   AND_END: ['{0} និង {1}', '{0} និង {1}', '{0}, {1}'],
@@ -982,9 +846,6 @@ exports.ListFormatSymbols_km = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_kn = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} ಮತ್ತು {1}',
-  LIST_END: '{0}, ಮತ್ತು {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} ಮತ್ತು {1}', '{0} ಮತ್ತು {1}', '{0}, {1}'],
   AND_END: ['{0}, ಮತ್ತು {1}', '{0}, ಮತ್ತು {1}', '{0}, {1}'],
@@ -999,8 +860,6 @@ exports.ListFormatSymbols_kn = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ko = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} 및 {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} 및 {1}', '{0} 및 {1}', '{0}, {1}'],
   OR_END: ['{0} 또는 {1}', '{0} 또는 {1}', '{0} 또는 {1}'],
@@ -1014,8 +873,6 @@ exports.ListFormatSymbols_ko = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ky = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} жана {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} жана {1}', '{0} жана {1}', '{0}, {1}'],
   OR_END: ['{0} же {1}', '{0} же {1}', '{0} же {1}'],
@@ -1029,8 +886,6 @@ exports.ListFormatSymbols_ky = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ln = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0}, {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   OR_END: ['{0}, or {1}', '{0}, or {1}', '{0}, or {1}'],
@@ -1042,9 +897,6 @@ exports.ListFormatSymbols_ln = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_lo = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} ແລະ {1}',
-  LIST_END: '{0}, {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} ແລະ {1}', '{0} ແລະ {1}', '{0} ແລະ {1}'],
   AND_END: ['{0}, {1}', '{0} ແລະ {1}', '{0}, {1}'],
@@ -1060,8 +912,6 @@ exports.ListFormatSymbols_lo = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_lt = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} ir {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} ir {1}', '{0} ir {1}', '{0}, {1}'],
   OR_END: ['{0} ar {1}', '{0} ar {1}', '{0} ar {1}'],
@@ -1075,8 +925,6 @@ exports.ListFormatSymbols_lt = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_lv = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} un {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} un {1}', '{0} un {1}', '{0}, {1}'],
   OR_END: ['{0} vai {1}', '{0} vai {1}', '{0} vai {1}'],
@@ -1090,8 +938,6 @@ exports.ListFormatSymbols_lv = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_mk = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} и {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} и {1}', '{0} и {1}', '{0} и {1}'],
   OR_END: ['{0} или {1}', '{0} или {1}', '{0} или {1}'],
@@ -1103,9 +949,6 @@ exports.ListFormatSymbols_mk = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ml = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} കൂടാതെ {1}',
-  LIST_END: '{0}, {1} എന്നിവ',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} കൂടാതെ {1}', '{0} കൂടാതെ {1}', '{0}, {1} എന്നിവ'],
   AND_END: ['{0}, {1} എന്നിവ', '{0}, {1} എന്നിവ', '{0}, {1} എന്നിവ'],
@@ -1122,8 +965,6 @@ exports.ListFormatSymbols_ml = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_mn = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0}, {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   OR_END: ['{0}, {1} зэргийн аль нэг', '{0}, {1} зэргийн аль нэг', '{0}, {1} зэргийн аль нэг'],
@@ -1137,8 +978,6 @@ exports.ListFormatSymbols_mn = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_mo = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} și {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} și {1}', '{0} și {1}', '{0}, {1}'],
   OR_END: ['{0} sau {1}', '{0} sau {1}', '{0} sau {1}'],
@@ -1151,8 +990,6 @@ exports.ListFormatSymbols_mo = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_mr = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} आणि {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} आणि {1}', '{0} आणि {1}', '{0}, {1}'],
   OR_END: ['{0}, किंवा {1}', '{0}, किंवा {1}', '{0}, किंवा {1}'],
@@ -1166,8 +1003,6 @@ exports.ListFormatSymbols_mr = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ms = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} dan {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} dan {1}', '{0} dan {1}', '{0}, {1}'],
   OR_END: ['{0}, atau {1}', '{0}, atau {1}', '{0}, atau {1}'],
@@ -1181,9 +1016,6 @@ exports.ListFormatSymbols_ms = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_mt = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} u {1}',
-  LIST_END: '{0}, u {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} u {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0}, u {1}', '{0}, {1}', '{0}, {1}'],
@@ -1198,8 +1030,6 @@ exports.ListFormatSymbols_mt = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_my = {
-  LIST_START: '{0} - {1}',
-  LIST_END: '{0}နှင့် {1}',
   AND_START: ['{0} - {1}', '{0} - {1}', '{0} - {1}'],
   AND_END: ['{0}နှင့် {1}', '{0}နှင့် {1}', '{0}နှင့် {1}'],
   OR_END: ['{0} သို့မဟုတ် {1}', '{0} သို့မဟုတ် {1}', '{0} သို့မဟုတ် {1}'],
@@ -1214,8 +1044,6 @@ exports.ListFormatSymbols_my = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_nb = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} og {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} og {1}', '{0} og {1}', '{0}, {1}'],
   OR_END: ['{0} eller {1}', '{0} eller {1}', '{0} eller {1}'],
@@ -1227,9 +1055,6 @@ exports.ListFormatSymbols_nb = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ne = {
-  LIST_START: '{0},{1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0} र {1}',
   AND_START: ['{0},{1}', '{0},{1}', '{0},{1}'],
   AND_MIDDLE: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} र {1}', '{0} र {1}', '{0}, {1}'],
@@ -1247,8 +1072,6 @@ exports.ListFormatSymbols_ne = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_nl = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} en {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} en {1}', '{0} en {1}', '{0}, {1}'],
   OR_END: ['{0} of {1}', '{0} of {1}', '{0} of {1}'],
@@ -1260,8 +1083,6 @@ exports.ListFormatSymbols_nl = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_no = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} og {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} og {1}', '{0} og {1}', '{0}, {1}'],
   OR_END: ['{0} eller {1}', '{0} eller {1}', '{0} eller {1}'],
@@ -1273,8 +1094,6 @@ exports.ListFormatSymbols_no = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_no_NO = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} og {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} og {1}', '{0} og {1}', '{0}, {1}'],
   OR_END: ['{0} eller {1}', '{0} eller {1}', '{0} eller {1}'],
@@ -1286,9 +1105,6 @@ exports.ListFormatSymbols_no_NO = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_or = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} ଓ {1}',
-  LIST_END: '{0}, ଓ {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} ଓ {1}', '{0} ଓ {1}', '{0}, {1}'],
   AND_END: ['{0}, ଓ {1}', '{0}, ଓ {1}', '{0}, {1}'],
@@ -1304,8 +1120,6 @@ exports.ListFormatSymbols_or = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_pa = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} ਅਤੇ {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} ਅਤੇ {1}', '{0} ਅਤੇ {1}', '{0}, {1}'],
   OR_END: ['{0} ਜਾਂ {1}', '{0} ਜਾਂ {1}', '{0} ਜਾਂ {1}'],
@@ -1319,8 +1133,6 @@ exports.ListFormatSymbols_pa = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_pl = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} i {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} i {1}', '{0} i {1}', '{0} i {1}'],
   OR_END: ['{0} lub {1}', '{0} lub {1}', '{0} lub {1}'],
@@ -1332,8 +1144,6 @@ exports.ListFormatSymbols_pl = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_pt = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} e {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} e {1}', '{0} e {1}', '{0}, {1}'],
   OR_END: ['{0} ou {1}', '{0} ou {1}', '{0} ou {1}'],
@@ -1347,8 +1157,6 @@ exports.ListFormatSymbols_pt = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_pt_BR = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} e {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} e {1}', '{0} e {1}', '{0}, {1}'],
   OR_END: ['{0} ou {1}', '{0} ou {1}', '{0} ou {1}'],
@@ -1362,8 +1170,6 @@ exports.ListFormatSymbols_pt_BR = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_pt_PT = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} e {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} e {1}', '{0} e {1}', '{0}, {1}'],
   OR_END: ['{0} ou {1}', '{0} ou {1}', '{0} ou {1}'],
@@ -1375,8 +1181,6 @@ exports.ListFormatSymbols_pt_PT = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ro = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} și {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} și {1}', '{0} și {1}', '{0}, {1}'],
   OR_END: ['{0} sau {1}', '{0} sau {1}', '{0} sau {1}'],
@@ -1389,8 +1193,6 @@ exports.ListFormatSymbols_ro = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ru = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} и {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} и {1}', '{0} и {1}', '{0}, {1}'],
   OR_END: ['{0} или {1}', '{0} или {1}', '{0} или {1}'],
@@ -1404,8 +1206,6 @@ exports.ListFormatSymbols_ru = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_sh = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} i {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} i {1}', '{0} i {1}', '{0}, {1}'],
   OR_END: ['{0} ili {1}', '{0} ili {1}', '{0} ili {1}'],
@@ -1417,9 +1217,6 @@ exports.ListFormatSymbols_sh = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_si = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} සහ {1}',
-  LIST_END: '{0}, සහ {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} සහ {1}', '{0} සහ {1}', '{0}, {1}'],
   AND_END: ['{0}, සහ {1}', '{0}, සහ {1}', '{0}, {1}'],
@@ -1434,9 +1231,6 @@ exports.ListFormatSymbols_si = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_sk = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} a {1}',
-  LIST_END: '{0} a {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} a {1}', '{0} a {1}', '{0}, {1}'],
   AND_END: ['{0} a {1}', '{0} a {1}', '{0}, {1}'],
@@ -1450,8 +1244,6 @@ exports.ListFormatSymbols_sk = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_sl = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} in {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} in {1}', '{0} in {1}', '{0}, {1}'],
   OR_END: ['{0} ali {1}', '{0} ali {1}', '{0} ali {1}'],
@@ -1463,8 +1255,6 @@ exports.ListFormatSymbols_sl = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_sq = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} dhe {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} dhe {1}', '{0} dhe {1}', '{0}, {1}'],
   OR_END: ['{0} ose {1}', '{0} ose {1}', '{0} ose {1}'],
@@ -1476,8 +1266,6 @@ exports.ListFormatSymbols_sq = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_sr = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} и {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} и {1}', '{0} и {1}', '{0}, {1}'],
   OR_END: ['{0} или {1}', '{0} или {1}', '{0} или {1}'],
@@ -1489,8 +1277,6 @@ exports.ListFormatSymbols_sr = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_sr_Latn = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} i {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} i {1}', '{0} i {1}', '{0}, {1}'],
   OR_END: ['{0} ili {1}', '{0} ili {1}', '{0} ili {1}'],
@@ -1502,8 +1288,6 @@ exports.ListFormatSymbols_sr_Latn = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_sv = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} och {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} och {1}', '{0} och {1}', '{0}, {1}'],
   OR_END: ['{0} eller {1}', '{0} eller {1}', '{0} eller {1}'],
@@ -1517,8 +1301,6 @@ exports.ListFormatSymbols_sv = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_sw = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} na {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} na {1}', '{0} na {1}', '{0}, {1}'],
   AND_END: ['{0} na {1}', '{0} na {1}', '{0} na {1}'],
@@ -1532,8 +1314,6 @@ exports.ListFormatSymbols_sw = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ta = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} மற்றும் {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} மற்றும் {1}', '{0} மற்றும் {1}', '{0} மற்றும் {1}'],
   OR_END: ['{0} அல்லது {1}', '{0} அல்லது {1}', '{0} அல்லது {1}'],
@@ -1547,8 +1327,6 @@ exports.ListFormatSymbols_ta = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_te = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} మరియు {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} మరియు {1}', '{0} మరియు {1}', '{0}, {1}'],
   OR_END: ['{0} లేదా {1}', '{0} లేదా {1}', '{0} లేదా {1}'],
@@ -1560,9 +1338,6 @@ exports.ListFormatSymbols_te = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_th = {
-  LIST_START: '{0} {1}',
-  LIST_TWO: '{0}และ{1}',
-  LIST_END: '{0} และ{1}',
   AND_START: ['{0} {1}', '{0} {1}', '{0} {1}'],
   AND_TWO: ['{0}และ{1}', '{0}และ{1}', '{0}และ{1}'],
   AND_END: ['{0} และ{1}', '{0} และ{1}', '{0} และ{1}'],
@@ -1579,9 +1354,6 @@ exports.ListFormatSymbols_th = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_tl = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} at {1}',
-  LIST_END: '{0}, at {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} at {1}', '{0} at {1}', '{0}, {1}'],
   AND_END: ['{0}, at {1}', '{0}, at {1}', '{0}, {1}'],
@@ -1597,8 +1369,6 @@ exports.ListFormatSymbols_tl = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_tr = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} ve {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} ve {1}', '{0} ve {1}', '{0}, {1}'],
   OR_END: ['{0} veya {1}', '{0} veya {1}', '{0} veya {1}'],
@@ -1612,8 +1382,6 @@ exports.ListFormatSymbols_tr = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_uk = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} і {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} і {1}', '{0} і {1}', '{0}, {1}'],
   OR_END: ['{0} або {1}', '{0} або {1}', '{0} або {1}'],
@@ -1625,9 +1393,6 @@ exports.ListFormatSymbols_uk = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_ur = {
-  LIST_START: '{0}، {1}',
-  LIST_TWO: '{0} اور {1}',
-  LIST_END: '{0}، اور {1}',
   AND_START: ['{0}، {1}', '{0}، {1}', '{0}، {1}'],
   AND_TWO: ['{0} اور {1}', '{0} اور {1}', '{0}، {1}'],
   AND_END: ['{0}، اور {1}', '{0}، اور {1}', '{0}، {1}'],
@@ -1644,8 +1409,6 @@ exports.ListFormatSymbols_ur = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_uz = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} va {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} va {1}', '{0} va {1}', '{0}, {1}'],
   OR_END: ['{0} yoki {1}', '{0} yoki {1}', '{0} yoki {1}'],
@@ -1659,8 +1422,6 @@ exports.ListFormatSymbols_uz = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_vi = {
-  LIST_START: '{0}, {1}',
-  LIST_END: '{0} và {1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_END: ['{0} và {1}', '{0} và {1}', '{0}, {1}'],
   OR_END: ['{0} hoặc {1}', '{0} hoặc {1}', '{0} hoặc {1}'],
@@ -1674,8 +1435,6 @@ exports.ListFormatSymbols_vi = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_zh = {
-  LIST_START: '{0}、{1}',
-  LIST_END: '{0}和{1}',
   AND_START: ['{0}、{1}', '{0}、{1}', '{0}, {1}'],
   AND_END: ['{0}和{1}', '{0}和{1}', '{0}, {1}'],
   OR_START: ['{0}、{1}', '{0}、{1}', '{0}、{1}'],
@@ -1691,8 +1450,6 @@ exports.ListFormatSymbols_zh = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_zh_CN = {
-  LIST_START: '{0}、{1}',
-  LIST_END: '{0}和{1}',
   AND_START: ['{0}、{1}', '{0}、{1}', '{0}, {1}'],
   AND_END: ['{0}和{1}', '{0}和{1}', '{0}, {1}'],
   OR_START: ['{0}、{1}', '{0}、{1}', '{0}、{1}'],
@@ -1708,8 +1465,6 @@ exports.ListFormatSymbols_zh_CN = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_zh_HK = {
-  LIST_START: '{0}、{1}',
-  LIST_END: '{0}及{1}',
   AND_START: ['{0}、{1}', '{0}、{1}', '{0}, {1}'],
   AND_END: ['{0}及{1}', '{0}及{1}', '{0}, {1}'],
   OR_START: ['{0}、{1}', '{0}、{1}', '{0}、{1}'],
@@ -1725,8 +1480,6 @@ exports.ListFormatSymbols_zh_HK = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_zh_TW = {
-  LIST_START: '{0}、{1}',
-  LIST_END: '{0}和{1}',
   AND_START: ['{0}、{1}', '{0}、{1}', '{0}, {1}'],
   AND_END: ['{0}和{1}', '{0}和{1}', '{0}, {1}'],
   OR_START: ['{0}、{1}', '{0}、{1}', '{0}、{1}'],
@@ -1742,9 +1495,6 @@ exports.ListFormatSymbols_zh_TW = {
  * @const ListFormatSymbols
  */
 exports.ListFormatSymbols_zu = {
-  LIST_START: '{0}, {1}',
-  LIST_TWO: '{0} ne-{1}',
-  LIST_END: '{0}, ne-{1}',
   AND_START: ['{0}, {1}', '{0}, {1}', '{0}, {1}'],
   AND_TWO: ['{0} ne-{1}', '{0} ne-{1}', '{0}, {1}'],
   AND_END: ['{0}, ne-{1}', '{0}, ne-{1}', '{0}, {1}'],
@@ -2139,4 +1889,3 @@ switch (goog.LOCALE) {
     defaultSymbols = exports.ListFormatSymbols_zu;
     break;
 }
-
