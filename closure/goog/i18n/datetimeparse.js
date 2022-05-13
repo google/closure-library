@@ -499,7 +499,9 @@ goog.i18n.DateTimeParse.prototype.subParseAbut_ = function(
 
   let i;
   for (i = abutStart; i < this.patternParts_.length; i++) {
-    if (this.patternParts_[i].count == 0) {
+    const part = this.patternParts_[i];
+    let count = part.count;
+    if (count === 0) {
       // Literal pattern parts end abutting runs of numeric fields. Non-numeric
       // fields do not (possibly a bug or undocumented constraint).
       break;
@@ -508,7 +510,6 @@ goog.i18n.DateTimeParse.prototype.subParseAbut_ = function(
     // shorten this field in each pass. If we can't shorten
     // this field any more, then the parse of this set of
     // abutting numeric fields has failed.
-    let count = this.patternParts_[i].count;
     if (i == abutStart) {
       count -= abutPass;
       abutPass++;
@@ -518,10 +519,14 @@ goog.i18n.DateTimeParse.prototype.subParseAbut_ = function(
       }
     }
 
-    // Predictive parsing is not supported for abutting runs of numbers.
-    if (!this.subParse_(
-            text, pos, this.patternParts_[i], count, cal,
-            /* predictive= */ false)) {
+    // Predictive parsing is not supported for abutting runs of numbers.  We
+    // also enforce that subsequent parts must parse the full number of chars.
+    const requireLength = i > abutStart && part.numeric;
+    const partStart = pos[0];
+    const subParsed = this.subParse_(
+        text, pos, part, count, cal,
+        /* predictive= */ false);
+    if (!subParsed || (requireLength && pos[0] - partStart < count)) {
       // If the parse fails anywhere in the run, back up to the
       // start of the run and retry.
       i = abutStart - 1;

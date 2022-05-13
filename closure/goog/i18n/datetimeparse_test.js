@@ -225,8 +225,14 @@ testSuite({
     assertParsedTimeEquals(11, 22, 0, 0, parser, '1122');
     assertParsedTimeEquals(1, 22, 0, 0, parser, '122');
     assertParseFails(parser, '22');
-    // Probable bug: non-digit can cause too-short abutting run to succeed
-    assertParsedTimeEquals(2, 2, 0, 0, parser, '22b', {partial: 2});
+    assertParseFails(parser, '22b');
+    assertParsedTimeEquals(1, 23, 0, 0, parser, '123b', {partial: 3});
+
+    parser = new DateTimeParse('hhmma');
+    assertParsedTimeEquals(1, 23, 0, 0, parser, '123');
+    assertParsedTimeEquals(13, 23, 0, 0, parser, '123pm');
+    assertParseFails(parser, '12');
+    assertParseFails(parser, '12am');
 
     parser = new DateTimeParse('HHmmss');
     assertParsedTimeEquals(12, 34, 56, 0, parser, '123456789', {partial: 6});
