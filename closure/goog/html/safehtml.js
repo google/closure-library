@@ -740,8 +740,10 @@ class SafeHtml {
    * @package
    */
   static createSafeHtmlSecurityPrivateDoNotAccessOrElse(html, dir) {
+    /** @noinline */
+    const noinlineHtml = html;
     const policy = trustedtypes.getPolicyPrivateDoNotAccessOrElse();
-    const trustedHtml = policy ? policy.createHTML(html) : html;
+    const trustedHtml = policy ? policy.createHTML(noinlineHtml) : noinlineHtml;
     return new SafeHtml(trustedHtml, dir, CONSTRUCTOR_TOKEN_PRIVATE);
   }
 

@@ -200,8 +200,11 @@ class SafeScript {
    * @package
    */
   static createSafeScriptSecurityPrivateDoNotAccessOrElse(script) {
+    /** @noinline */
+    const noinlineScript = script;
     const policy = trustedtypes.getPolicyPrivateDoNotAccessOrElse();
-    const trustedScript = policy ? policy.createScript(script) : script;
+    const trustedScript =
+        policy ? policy.createScript(noinlineScript) : noinlineScript;
     return new SafeScript(trustedScript, CONSTRUCTOR_TOKEN_PRIVATE);
   }
 }

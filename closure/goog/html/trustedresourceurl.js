@@ -459,8 +459,10 @@ goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_ = {};
 goog.html.TrustedResourceUrl
     .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse = function(url) {
   'use strict';
+  /** @noinline */
+  const noinlineUrl = url;
   const policy = goog.html.trustedtypes.getPolicyPrivateDoNotAccessOrElse();
-  var value = policy ? policy.createScriptURL(url) : url;
+  const value = policy ? policy.createScriptURL(noinlineUrl) : noinlineUrl;
   return new goog.html.TrustedResourceUrl(
       value, goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_);
 };
