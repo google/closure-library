@@ -75,7 +75,21 @@ goog.html.SafeUrl = class {
      */
     this.privateDoNotAccessOrElseSafeUrlWrappedValue_ =
         (token === goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_) ? value : '';
-  };
+  }
+
+  /**
+   * Returns a string-representation of this value.
+   *
+   * To obtain the actual string value wrapped in a SafeUrl, use
+   * `goog.html.SafeUrl.unwrap`.
+   *
+   * @return {string}
+   * @see goog.html.SafeUrl#unwrap
+   * @override
+   */
+  toString() {
+    return this.privateDoNotAccessOrElseSafeUrlWrappedValue_.toString();
+  }
 };
 
 
@@ -150,24 +164,6 @@ goog.html.SafeUrl.prototype.getDirection = function() {
   'use strict';
   return goog.i18n.bidi.Dir.LTR;
 };
-
-
-/**
- * Returns a string-representation of this value.
- *
- * To obtain the actual string value wrapped in a SafeUrl, use
- * `goog.html.SafeUrl.unwrap`.
- *
- * @return {string}
- * @see goog.html.SafeUrl#unwrap
- * @override
- */
-goog.html.SafeUrl.prototype.toString = function() {
-  'use strict';
-  return this.privateDoNotAccessOrElseSafeUrlWrappedValue_.toString();
-};
-
-
 
 /**
  * Performs a runtime check that the provided object is indeed a SafeUrl

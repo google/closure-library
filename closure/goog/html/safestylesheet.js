@@ -90,6 +90,20 @@ class SafeStyleSheet {
   }
 
   /**
+   * Returns a string-representation of this value.
+   *
+   * To obtain the actual string value wrapped in a SafeStyleSheet, use
+   * `SafeStyleSheet.unwrap`.
+   *
+   * @return {string}
+   * @see SafeStyleSheet#unwrap
+   * @override
+   */
+  toString() {
+    return this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_.toString();
+  }
+
+  /**
    * Creates a style sheet consisting of one selector and one style definition.
    * Use {@link SafeStyleSheet.concat} to create longer style sheets.
    * This function doesn't support @import, @media and similar constructs.
@@ -270,21 +284,6 @@ class SafeStyleSheet {
     return new SafeStyleSheet(styleSheet, CONSTRUCTOR_TOKEN_PRIVATE);
   }
 }
-
-/**
- * Returns a string-representation of this value.
- *
- * To obtain the actual string value wrapped in a SafeStyleSheet, use
- * `SafeStyleSheet.unwrap`.
- *
- * @return {string}
- * @see SafeStyleSheet#unwrap
- * @override
- */
-SafeStyleSheet.prototype.toString = function() {
-  return this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_.toString();
-};
-
 
 /**
  * A SafeStyleSheet instance corresponding to the empty string.

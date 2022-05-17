@@ -211,7 +211,6 @@ class SafeStyle {
    * @override
    */
   toString() {
-    'use strict';
     return this.privateDoNotAccessOrElseSafeStyleWrappedValue_.toString();
   }
 

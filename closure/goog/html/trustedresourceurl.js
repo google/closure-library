@@ -69,6 +69,20 @@ goog.html.TrustedResourceUrl = class {
         value :
         '';
   }
+
+  /**
+   * Returns a string-representation of this value.
+   *
+   * To obtain the actual string value wrapped in a TrustedResourceUrl, use
+   * `goog.html.TrustedResourceUrl.unwrap`.
+   *
+   * @return {string}
+   * @see goog.html.TrustedResourceUrl#unwrap
+   * @override
+   */
+  toString() {
+    return this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ + '';
+  }
 };
 
 
@@ -156,23 +170,6 @@ goog.html.TrustedResourceUrl.prototype.cloneWithParams = function(
           goog.html.TrustedResourceUrl.stringifyParams_(
               '#', urlHash, opt_hashParams));
 };
-
-
-/**
- * Returns a string-representation of this value.
- *
- * To obtain the actual string value wrapped in a TrustedResourceUrl, use
- * `goog.html.TrustedResourceUrl.unwrap`.
- *
- * @return {string}
- * @see goog.html.TrustedResourceUrl#unwrap
- * @override
- */
-goog.html.TrustedResourceUrl.prototype.toString = function() {
-  'use strict';
-  return this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ + '';
-};
-
 
 /**
  * Performs a runtime check that the provided object is indeed a
