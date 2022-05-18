@@ -85,6 +85,9 @@ testSuite({
     // Allow comma-separated, quoted MIME parameters with and without spaces.
     assertTrue(SafeUrl.isSafeMimeType('video/webm;codecs="vp8,opus"'));
     assertTrue(SafeUrl.isSafeMimeType('video/webm;codecs="vp8, opus"'));
+    // HEIC & HEIF image types
+    assertTrue(SafeUrl.isSafeMimeType('image/heic'));
+    assertTrue(SafeUrl.isSafeMimeType('image/heif'));
   },
 
   testSafeUrlIsSafeMimeType_withUnsafeType() {

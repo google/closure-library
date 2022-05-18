@@ -240,7 +240,7 @@ goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
     // media formats.
     '^(?:audio/(?:3gpp2|3gpp|aac|L16|midi|mp3|mp4|mpeg|oga|ogg|opus|x-m4a|x-matroska|x-wav|wav|webm)|' +
         'font/\\w+|' +
-        'image/(?:bmp|gif|jpeg|jpg|png|tiff|webp|x-icon)|' +
+        'image/(?:bmp|gif|jpeg|jpg|png|tiff|webp|x-icon|heic|heif)|' +
         'video/(?:mpeg|mp4|ogg|webm|quicktime|x-matroska))' +
         '(?:;\\w+=(?:\\w+|"[\\w;,= ]+"))*$',  // MIME type parameters
     'i');
