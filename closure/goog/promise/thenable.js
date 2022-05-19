@@ -84,7 +84,6 @@ Thenable.IMPLEMENTED_BY_PROP = '$goog_Thenable';
  * other Promise implementations.
  * @param {function(new:Thenable,...?)} ctor The class constructor. The
  *     corresponding class must have already implemented the interface.
- * @nocollapse
  */
 Thenable.addImplementation = function(ctor) {
   if (COMPILED) {
