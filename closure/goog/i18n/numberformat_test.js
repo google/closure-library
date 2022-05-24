@@ -32,7 +32,7 @@ if (Intl.NumberFormat) {
     const fmt = new Intl.NumberFormat('en', probeOptions);
     let result = fmt.formatToParts(999999);
     if (result && result[0].value == '1' && result[1].value == 'M') {
-      testECMAScriptOptions.push(true);
+      testECMAScriptOptions.unshift(true);
     }
   } catch (error) {
     // How to indicate failure?
@@ -1501,7 +1501,7 @@ testSuite({
       // than the precision of numbers, rounding errors can occur.
       fmt.setSignificantDigits(12);
       fmt.setMaximumFractionDigits(12);
-      assertEquals('60,000', fmt.format(60000));
+      assertEquals('NativeMode = ' + nativeMode, '60,000', fmt.format(60000));
     }
   },
 
@@ -1543,13 +1543,13 @@ testSuite({
       fmt.setMaximumFractionDigits(2);
       fmt.setSignificantDigits(3);
 
-      assertEquals('123', fmt.format(123.4));
-      assertEquals('12.3', fmt.format(12.34));
-      assertEquals('1.23', fmt.format(1.234));
-      assertEquals('0.12', fmt.format(0.1234));
-      assertEquals('0.13', fmt.format(0.1284));
-      assertEquals('-0.12', fmt.format(-0.1234));
-      assertEquals('-0.13', fmt.format(-0.1284));
+      assertEquals('NativeMode = ' + nativeMode, '123', fmt.format(123.4));
+      assertEquals('NativeMode = ' + nativeMode, '12.3', fmt.format(12.34));
+      assertEquals('NativeMode = ' + nativeMode, '1.23', fmt.format(1.234));
+      assertEquals('NativeMode = ' + nativeMode, '0.12', fmt.format(0.1234));
+      assertEquals('NativeMode = ' + nativeMode, '0.13', fmt.format(0.1284));
+      assertEquals('NativeMode = ' + nativeMode, '-0.12', fmt.format(-0.1234));
+      assertEquals('NativeMode = ' + nativeMode, '-0.13', fmt.format(-0.1284));
     }
   },
 
@@ -1608,11 +1608,8 @@ testSuite({
       // (The number itself will still be formatted with the '.', but no
       // rounding)
       const str = fmt.format(1234);
-      if (!nativeMode) {
-        assertEquals('1.234', str);
-      } else {
-        assertEquals('1234', str);
-      }
+      assertEquals('1.234', str);
+
       const str2 = fmt.format(12345);
       assertEquals('12.345', str2);
     }
@@ -1703,11 +1700,11 @@ testSuite({
       fmt.setMinimumFractionDigits(0);
       fmt.setMaximumFractionDigits(2);
 
-      assertEquals('Native=' + nativeMode, '1.23K', fmt.format(1234));
-      assertEquals('Native=' + nativeMode, '1K', fmt.format(1000));
-      assertEquals('Native=' + nativeMode, '123.46K', fmt.format(123456.7));
-      assertEquals('Native=' + nativeMode, '999.99K', fmt.format(999994));
       assertEquals('Native=' + nativeMode, '1M', fmt.format(999995));
+      assertEquals('Native=' + nativeMode, '999.99K', fmt.format(999994));
+      assertEquals('Native=' + nativeMode, '123.46K', fmt.format(123456.7));
+      assertEquals('Native=' + nativeMode, '1K', fmt.format(1000));
+      assertEquals('Native=' + nativeMode, '1.23K', fmt.format(1234));
     }
   },
 
@@ -1721,15 +1718,10 @@ testSuite({
       stubs.set(goog.i18n, 'CompactNumberFormatSymbols', cdfSymbols);
       const fmt = new NumberFormat(NumberFormat.Format.COMPACT_LONG);
       const str = fmt.format(220000000000000);
-      if (!nativeMode) {
-        assertEquals('220,000,000,000K', str);
-      } else {
-        // Resetting cdfSymbols will not change native results
-        assertEquals('220 trillion', str);
-      }
+      // b/209630094. COMPACT formats are not used in ECMASCript mode.
+      assertEquals('220,000,000,000K', str);
     }
   },
-
   testShowTrailingZerosWithSignificantDigits() {
     for (let nativeMode of testECMAScriptOptions) {
       stubs.replace(NumberFormat, 'USE_ECMASCRIPT_I18N_NUMFORMAT', nativeMode);
@@ -1739,21 +1731,21 @@ testSuite({
       fmt.setShowTrailingZeros(true);
 
       let result = fmt.format(2);
-      assertEquals('2.0', result);
+      assertEquals('NativeMode = ' + nativeMode, '2.0', result);
       result = fmt.format(2000);
-      assertEquals('2,000', result);
+      assertEquals('NativeMode = ' + nativeMode, '2,000', result);
       result = fmt.format(0.2);
-      assertEquals('0.20', result);
+      assertEquals('NativeMode = ' + nativeMode, '0.20', result);
       result = fmt.format(0.02);
-      assertEquals('0.02', result);
+      assertEquals('NativeMode = ' + nativeMode, '0.02', result);
       result = fmt.format(0.002);
-      assertEquals('0.002', result);
+      assertEquals('NativeMode = ' + nativeMode, '0.002', result);
       result = fmt.format(0);
-      assertEquals('0.00', result);
+      assertEquals('NativeMode = ' + nativeMode, '0.00', result);
 
       fmt.setShowTrailingZeros(false);
-      assertEquals('2', fmt.format(2));
-      assertEquals('0.2', fmt.format(0.2));
+      assertEquals('NativeMode = ' + nativeMode, '2', fmt.format(2));
+      assertEquals('NativeMode = ' + nativeMode, '0.2', fmt.format(0.2));
     }
   },
 
@@ -2026,7 +2018,7 @@ testSuite({
       f.setMaximumFractionDigits(2);
 
       const result = f.format(0.12345);
-      assertEquals('0.12', result);
+      assertEquals('NativeMode = ' + nativeMode, '0.12', result);
     }
   },
 
