@@ -267,13 +267,17 @@ goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ = function(
   var that = this;
   win[fnName] = function(fn, time) {
     'use strict';
-    // Don't try to protect strings. In theory, we could try to globalEval
-    // the string, but this seems to lead to permission errors on IE6.
     if (typeof fn === 'string') {
       fn = goog.partial(goog.globalEval, fn);
     }
-    if (!fn) throw new Error(fnName + ' not on global?');
-    arguments[0] = fn = that.protectEntryPoint(fn);
+    // The first arg (function to call) might be undefined or null, and
+    // protectEntryPoint doesn't like this.
+    // If the fn was a string, the call to goog.partial above always returns a
+    // function, so they will always be called protected.
+    // (e.g. setTimeout(undefined, 1000))
+    if (fn) {
+      arguments[0] = fn = that.protectEntryPoint(fn);
+    }
 
     // IE doesn't support .call for setInterval/setTimeout, but it
     // also doesn't care what "this" is, so we can just call the

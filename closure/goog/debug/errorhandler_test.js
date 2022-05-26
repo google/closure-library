@@ -160,6 +160,22 @@ testSuite({
     assertMethodCalledHelper('setTimeout');
   },
 
+  async testSetTimeoutWithNull() {
+    let numErrors = 0;
+    const errorHandler = new ErrorHandler((ex) => {
+      numErrors++;
+    });
+    errorHandler.protectWindowSetTimeout();
+    // This shouldn't cause an error to be thrown (which would be caught by the
+    // ErrorHandler above).
+    window.setTimeout(null, 2);
+    await new Promise((resolve) => {
+      window.setTimeout(resolve, 3);
+    });
+
+    assertEquals('Error handler should not have been executed.', 0, numErrors);
+  },
+
   async testWrapSetInterval() {
     errorHandler.protectWindowSetInterval();
 
