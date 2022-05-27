@@ -64,7 +64,8 @@ const NativeLocaleDigits = goog.module.get('goog.i18n.NativeLocaleDigits');
  * in JDK, ICU and CLDR, with minor modification for typical usage in JS.
  *
  * Pattern specification:
- * {@link http://userguide.icu-project.org/formatparse/datetime}
+ * {@link
+ * https://unicode-org.github.io/icu/userguide/format_parse/datetime/#date-field-symbol-table}
  * <pre>
  * Symbol   Meaning                    Presentation       Example
  * ------   -------                    ------------       -------
