@@ -89,7 +89,7 @@ let testECMAScriptOptions = [false];
 if (Intl.DateTimeFormat) {
   // Add test if the browser environment supports ECMAScript implementation.
   if (!goog.labs.userAgent.browser.isIE()) {
-    testECMAScriptOptions.push(true);
+    testECMAScriptOptions.unshift(true);  // Test native before Javascript
   }
 }
 
@@ -1689,7 +1689,7 @@ testSuite({
 
       const fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE,
                                    DateTimeSymbols);
-       let result = fmt.format(date);
+      let result = fmt.format(date);
       assertEquals('5/8/12', result);
 
       const fmt2 = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME,
@@ -1712,4 +1712,34 @@ testSuite({
     }
   },
 
+  testWeekdayMonthDay_en() {
+    const date = new Date(2022, 4, 9);
+    replacer.replace(goog, 'LOCALE', '');
+    for (let nativeMode of testECMAScriptOptions) {
+      replacer.replace(
+          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+      const fmt =
+          new DateTimeFormat(DateTimeFormat.Format.WEEKDAY_MONTH_DAY_FULL);
+      assertTrue(fmt !== null);
+      const result = fmt.format(date);
+      const expected = 'Monday, May 9';
+      assertEquals('Native=' + nativeMode, expected, result);
+    }
+  },
+
+  testWeekdayMonthDay_zhHantTw() {
+    const date = new Date(2022, 4, 9);
+    replacer.replace(goog, 'LOCALE', 'zh_Hant_TW');
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_Hant_TW);
+    for (let nativeMode of testECMAScriptOptions) {
+      replacer.replace(
+          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+      const fmt =
+          new DateTimeFormat(DateTimeFormat.Format.WEEKDAY_MONTH_DAY_FULL);
+      assertTrue(fmt !== null);
+      const result = fmt.format(date);
+      const expected = '5月9日 星期一';
+      assertEquals('Native=' + nativeMode, expected, result);
+    }
+  },
 });

@@ -216,7 +216,8 @@ goog.i18n.DateTimeFormat.Format = {
   FULL_DATETIME: 8,
   LONG_DATETIME: 9,
   MEDIUM_DATETIME: 10,
-  SHORT_DATETIME: 11
+  SHORT_DATETIME: 11,
+  WEEKDAY_MONTH_DAY_FULL: 12  // From FULL_DATE by removing year pattern
 };
 
 /**
@@ -503,6 +504,11 @@ goog.i18n.DateTimeFormat.prototype.applyStandardEnumNative_ = function(
       options.dateStyle = 'short';
       options.timeStyle = 'short';
       break;
+    case goog.i18n.DateTimeFormat.Format.WEEKDAY_MONTH_DAY_FULL:
+      options.weekday = 'long';
+      options.month = 'long';
+      options.day = 'numeric';
+      break;
   }
 
 
@@ -549,7 +555,13 @@ goog.i18n.DateTimeFormat.prototype.applyStandardPattern_ = function(
         '{1}', this.dateTimeSymbols_.DATEFORMATS[formatType - 8]);
     pattern = pattern.replace(
         '{0}', this.dateTimeSymbols_.TIMEFORMATS[formatType - 8]);
+  } else if (
+      formatType === goog.i18n.DateTimeFormat.Format.WEEKDAY_MONTH_DAY_FULL) {
+    // WEEKDAY_MONTH_DAY_FULL is derived from FULL_DATE removing year patterns
+    pattern =
+        this.removeYearFormatFromPattern_(this.dateTimeSymbols_.DATEFORMATS[0]);
   } else {
+    // Default
     this.applyStandardPattern_(goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
     return;
   }
@@ -1243,6 +1255,20 @@ goog.i18n.DateTimeFormat.prototype.formatField_ = function(
     default:
       return '';
   }
+};
 
+/**
+ * Removes year formatting from full date pattern for implementing
+ * special case for WEEKDAY_MONTH_DAY_FULL, deriving from
+ * FULL date pattern.
+ * @param {string} patternStr The pattern string for the field being formatted.
+ * @return {string} Modified pattern string without year field.
+ * @private
+ */
+goog.i18n.DateTimeFormat.prototype.removeYearFormatFromPattern_ = function(
+    patternStr) {
+  // Remove all around the year except E*, d*, M*, e.g., space, punctuation
+  const yearPattern = /[^EMd]*yy*[^EMd]*/;
+  return patternStr.replace(yearPattern, '');
 };
 });  // End of scope for module data
