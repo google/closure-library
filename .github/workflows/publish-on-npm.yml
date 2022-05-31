@@ -4,6 +4,9 @@ on:
   release:
     types: [ published ]
 
+permissions:
+  contents: read
+
 jobs:
   publish-on-npm:
     runs-on: ubuntu-latest
