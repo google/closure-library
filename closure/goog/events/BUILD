@@ -127,7 +127,25 @@ closure_js_library(
 
 closure_js_library(
     name = "eventtype",
-    srcs = ["eventtype.js"],
+    srcs = [
+        "eventtype.js",
+        "mouseasmouseeventtype.js",
+        "mouseevents.js",
+        "pointerasmouseeventtype.js",
+        "pointerastoucheventtype.js",
+        "pointerfallbackeventtype.js",
+        "pointertouchfallbackeventtype.js",
+    ],
+    lenient = True,
+    deps = [
+        ":eventtypehelpers",
+        "//closure/goog/useragent",
+    ],
+)
+
+closure_js_library(
+    name = "eventtypehelpers",
+    srcs = ["eventtypehelpers.js"],
     lenient = True,
     deps = [
         ":browserfeature",
