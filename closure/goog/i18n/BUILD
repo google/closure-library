@@ -119,6 +119,7 @@ closure_js_library(
     deps = [
         ":datetimepatterns",
         ":datetimesymbols",
+        ":dayperiodsymbols",
         ":localefeature",
         ":nativelocaledigits",
         ":timezone",
@@ -164,6 +165,12 @@ closure_js_library(
 closure_js_library(
     name = "datetimesymbols",
     srcs = ["datetimesymbols.js"],
+    lenient = True,
+)
+
+closure_js_library(
+    name = "dayperiodsymbols",
+    srcs = ["dayperiodsymbols.js"],
     lenient = True,
 )
 

@@ -66,6 +66,8 @@ const DateTimeSymbols_zh_HK = goog.require('goog.i18n.DateTimeSymbols_zh_HK');
 const DateTimeSymbols_zh_Hant_TW = goog.require('goog.i18n.DateTimeSymbols_zh_Hant_TW');
 const TimeZone = goog.require('goog.i18n.TimeZone');
 
+const {DayPeriods_zh_Hant, setDayPeriods} = goog.require('goog.i18n.DayPeriods');
+
 const UtcDateTime = goog.require('goog.date.UtcDateTime');
 
 const testSuite = goog.require('goog.testing.testSuite');
@@ -586,9 +588,128 @@ testSuite({
           goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_Hant_TW);
       replacer.replace(goog, 'LOCALE', 'zh_Hant_TW');
 
+      // Set up for parts of the day in Chinese.
+      setDayPeriods(DayPeriods_zh_Hant);
+
       const fmtZhHantTw = new DateTimeFormat(
           goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals('6月28日 下午1:10 [UTC-7]', fmtZhHantTw.format(date));
+      assertEquals(
+          'nativeMode = ' + nativeMode, '6月28日 下午1:10 [UTC-7]',
+          fmtZhHantTw.format(date));
+      const midnight = new Date(2012, 5, 28, 0, 0, 0);
+      let result = fmtZhHantTw.format(midnight);
+      assertEquals(
+          'nativeMode = ' + nativeMode, '6月28日 午夜12:00 [UTC-7]', result);
+
+      const tooEarly = new Date(2012, 5, 28, 3, 48, 0);
+      result = fmtZhHantTw.format(tooEarly);
+      assertEquals(
+          'nativeMode = ' + nativeMode, '6月28日 凌晨3:48 [UTC-7]', result);
+    }
+  },
+
+  testNightPeriodOverMidnight() {
+    // Set up a variation on en with day periods including noon, midnight, and
+    // "sleeping" time over midnight.
+    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en);
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
+    replacer.replace(goog, 'LOCALE', 'en');
+
+    /**
+     * Set up artificial 'night1' extending from 23:00 to 05:00 to test
+     * handling of day periods including midnight.
+     * {goog.i18n.DayPeriods}
+     */
+    const fakeDayPeriods_en = {
+      midnight: {at: '00:00', formatNames: ['midnight']},
+      morning1:
+          {from: '05:00', before: '08:00', formatNames: ['before breakfast']},
+      morning2: {from: '08:00', before: '12:00', formatNames: ['morning']},
+      noon: {at: '12:00', formatNames: ['noon']},
+      afternoon1:
+          {from: '12:00', before: '16:00', formatNames: ['early afternoon']},
+      afternoon2:
+          {from: '16:00', before: '18:00', formatNames: ['dinner time']},
+      evening1: {from: '18:00', before: '23:00', formatNames: ['evening']},
+      night1: {from: '23:00', before: '05:00', formatNames: ['sleeping']},
+    };
+    setDayPeriods(fakeDayPeriods_en);
+
+    const dateArray = [
+      new Date(2022, 4, 24, 0, 0, 0), new Date(2022, 4, 24, 6, 30, 0),
+      new Date(2022, 4, 24, 10, 30, 0), new Date(2022, 4, 24, 12, 0, 0),
+      new Date(2022, 4, 24, 12, 1, 0), new Date(2022, 4, 24, 17, 0, 0),
+      new Date(2022, 4, 24, 18, 37, 0), new Date(2022, 4, 24, 23, 17, 32),
+      new Date(2022, 4, 24, 3, 17, 32)
+    ];
+
+    const expectedFlexPeriods = [
+      'midnight', 'before breakfast', 'morning', 'noon', 'early afternoon',
+      'dinner time', 'evening', 'sleeping', 'sleeping'
+    ];
+    for (let nativeMode of testECMAScriptOptions) {
+      replacer.replace(
+          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+      const periodFormatter = new DateTimeFormat('B');
+
+      for (let index = 0; index < dateArray.length; index++) {
+        const result = periodFormatter.format(dateArray[index]);
+        assertEquals(
+            'nativeMode =' + nativeMode + ' index=' + index,
+            expectedFlexPeriods[index], result);
+      }
+
+      // Try with 'b' pattern
+      const expectedBPeriods =
+          ['midnight', 'AM', 'AM', 'noon', 'PM', 'PM', 'PM', 'PM', 'AM'];
+      const bFormatter = new DateTimeFormat('b');
+
+      for (let index = 0; index < dateArray.length; index++) {
+        const result = bFormatter.format(dateArray[index]);
+        assertEquals('index=' + index, expectedBPeriods[index], result);
+      }
+    }
+  },
+
+  testNoFlexibleDayPeriodData() {
+    // Check that fallback with no dayPeriod for 'b' and 'B' results in
+    // AM/PM format.
+    // The string pattern will force JavaScript mode only, not ECMAScript.
+    // Note that this will fail if a de locale pattern adds 'B' or 'b'
+    // as a format symbol.
+    const midnight = new Date(2022, 4, 25, 0, 0, 0);
+    const noon = new Date(2022, 4, 25, 12, 0, 0);
+    const morning = new Date(2022, 4, 25, 9, 7, 17);
+    const evening = new Date(2022, 4, 25, 18, 29, 0);
+
+    replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
+    setDayPeriods(null);
+
+    for (let nativeMode of testECMAScriptOptions) {
+      replacer.replace(
+          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+      const fmtFlexible = new DateTimeFormat('HH B');
+      const fmtNoonMidnight = new DateTimeFormat('HH b');
+
+      let result;
+      result = fmtFlexible.format(midnight);
+      assertEquals(result, '00 AM');
+      result = fmtFlexible.format(noon);
+      assertEquals(result, '12 PM');
+      result = fmtFlexible.format(morning);
+      assertEquals(result, '09 AM');
+      result = fmtFlexible.format(evening);
+      assertEquals(result, '18 PM');
+
+      result = fmtNoonMidnight.format(midnight);
+      assertEquals(result, '00 AM');
+      result = fmtNoonMidnight.format(noon);
+      assertEquals(result, '12 PM');
+      result = fmtNoonMidnight.format(morning);
+      assertEquals(result, '09 AM');
+      result = fmtNoonMidnight.format(evening);
+      assertEquals(result, '18 PM');
     }
   },
 
