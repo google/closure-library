@@ -105,13 +105,6 @@ testSuite({
     assertEquals(
         'Hello &lt;em&gt;&quot;&#39;&amp;World&lt;/em&gt;', String(safeHtml));
 
-    // Creating from a SafeUrl escapes and retains the known direction (which is
-    // fixed to RTL for URLs).
-    const safeUrl =
-        SafeUrl.fromConstant(Const.from('http://example.com/?foo&bar'));
-    const escapedUrl = SafeHtml.htmlEscape(safeUrl);
-    assertSameHtml('http://example.com/?foo&amp;bar', escapedUrl);
-
     // Creating SafeHtml from a goog.string.Const escapes as well (i.e., the
     // value is treated like any other string). To create HTML markup from
     // program literals, SafeHtmlBuilder should be used.

@@ -44,7 +44,7 @@ goog.requireType('goog.i18n.bidi.Dir');
 goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
   'use strict';
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
-      html, (opt_dir == undefined ? null : opt_dir));
+      html);
 };
 
 
