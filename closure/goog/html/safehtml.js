@@ -103,7 +103,7 @@ class SafeHtml {
      * This SafeHtml's directionality, or null if unknown.
      * @private {?Dir}
      */
-    this.dir_ = dir;
+    this.dir_ = null;
 
     /**
      * @override
@@ -120,6 +120,7 @@ class SafeHtml {
 
   /**
    * @return {?Dir}
+   * @deprecated
    * @override
    */
   getDirection() {
@@ -654,6 +655,7 @@ class SafeHtml {
    * @param {?Object<string, ?SafeHtml.AttributeValue>=} attributes
    * @param {!SafeHtml.TextOrHtml_|
    *     !Array<!SafeHtml.TextOrHtml_>=} content
+   * @deprecated The directionality support is going away. Use create instead.
    * @return {!SafeHtml} The SafeHtml content with the tag.
    * @package
    */
@@ -722,6 +724,7 @@ class SafeHtml {
    * @param {...(!SafeHtml.TextOrHtml_|
    *     !Array<!SafeHtml.TextOrHtml_>)} var_args Elements of array
    *     arguments would be processed recursively.
+   * @deprecated The directionality support is going away. Use concat instead.
    * @return {!SafeHtml}
    */
   static concatWithDir(dir, var_args) {
