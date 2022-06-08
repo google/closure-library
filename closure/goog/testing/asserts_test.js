@@ -782,6 +782,22 @@ testSuite({
         goog.partial(assertObjectEquals, date, dateWithMilliseconds));
   },
 
+
+  testAssertObjectEqualsWithCustomComparatorErrorMessage() {
+    class A {}
+
+    asserts.registerComparator(
+        A.prototype, (a, b, cmp) => 'pretty error message');
+    let exception = assertThrowsJsUnitException(() => {
+      assertObjectEquals(new A(), new A());
+    });
+    assertEquals('pretty error message', exception.message);
+    exception = assertThrowsJsUnitException(() => {
+      assertObjectEquals({a: new A()}, {a: new A()});
+    });
+    assertContains('a: pretty error message', exception.message);
+  },
+
   testAssertObjectEqualsSparseArrays() {
     const arr1 = [, 2, , 4];
     const arr2 = [1, 2, 3, 4, 5];

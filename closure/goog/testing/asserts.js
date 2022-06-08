@@ -950,10 +950,10 @@ goog.testing.asserts.findDifferences = function(
     expected, actual, opt_equalityPredicate) {
   'use strict';
   var failures = [];
-  // True if there a generic error at the root (with no path).  If so, we should
+  // Non-null if there an error at the root (with no path).  If so, we should
   // fail, but not add to the failures array (because it will be included at the
   // top anyway).
-  var rootFailed = false;
+  let /** ?string*/ rootFailure = null;
   var seen1 = [];
   var seen2 = [];
 
@@ -1039,9 +1039,10 @@ goog.testing.asserts.findDifferences = function(
             const result = goog.testing.asserts.applyCustomEqualityFunction(
                 comparator, o1, o2, path);
             if (result != null) {
-              failures.push((path ? path + ': ' : '') + result);
-              if (!path) {
-                rootFailed = true;
+              if (path) {
+                failures.push(path + ': ' + result);
+              } else {
+                rootFailure = result;
               }
             }
             return;
@@ -1074,7 +1075,7 @@ goog.testing.asserts.findDifferences = function(
           if (path) {
             failures.push(path + ': ' + errorMessage);
           } else {
-            rootFailed = true;
+            rootFailure = errorMessage;
           }
         }
       } else if (isArray && var1.length != var2.length) {
@@ -1085,12 +1086,11 @@ goog.testing.asserts.findDifferences = function(
       } else if (typeOfVar1 == 'String') {
         // If the comparer cannot process strings (eg, roughlyEquals).
         if (var1 != var2) {
+          const error = goog.testing.asserts.getDefaultErrorMsg_(var1, var2);
           if (path) {
-            failures.push(
-                path + ': ' +
-                goog.testing.asserts.getDefaultErrorMsg_(var1, var2));
+            failures.push(path + ': ' + error);
           } else {
-            rootFailed = true;
+            rootFailure = error;
           }
         }
       } else {
@@ -1206,14 +1206,14 @@ goog.testing.asserts.findDifferences = function(
       failures.push(
           path + ': ' + goog.testing.asserts.getDefaultErrorMsg_(var1, var2));
     } else {
-      rootFailed = true;
+      rootFailure = goog.testing.asserts.getDefaultErrorMsg_(var1, var2);
     }
   }
 
   innerAssertWithCycleCheck(expected, actual, '');
 
-  if (rootFailed) {
-    return goog.testing.asserts.getDefaultErrorMsg_(expected, actual);
+  if (rootFailure) {
+    return rootFailure;
   }
   return failures.length == 0 ? null : goog.testing.asserts.getDefaultErrorMsg_(
                                            expected, actual) +
