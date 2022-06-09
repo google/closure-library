@@ -61,7 +61,7 @@ goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract =
           goog.string.Const.unwrap(justification)),
       'must provide non-empty justification');
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
-      html, null);
+      html);
 };
 
 

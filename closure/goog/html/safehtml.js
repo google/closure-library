@@ -15,8 +15,6 @@ goog.module('goog.html.SafeHtml');
 goog.module.declareLegacyNamespace();
 
 const Const = goog.require('goog.string.Const');
-const Dir = goog.require('goog.i18n.bidi.Dir');
-const DirectionalString = goog.require('goog.i18n.bidi.DirectionalString');
 const SafeScript = goog.require('goog.html.SafeScript');
 const SafeStyle = goog.require('goog.html.SafeStyle');
 const SafeStyleSheet = goog.require('goog.html.SafeStyleSheet');
@@ -80,16 +78,14 @@ const CONSTRUCTOR_TOKEN_PRIVATE = {};
  * @see SafeHtml.htmlEscape
  * @final
  * @struct
- * @implements {DirectionalString}
  * @implements {TypedString}
  */
 class SafeHtml {
   /**
    * @param {!TrustedHTML|string} value
-   * @param {?Dir} dir
    * @param {!Object} token package-internal implementation detail.
    */
-  constructor(value, dir, token) {
+  constructor(value, token) {
     /**
      * The contained value of this SafeHtml.  The field has a purposely ugly
      * name to make (non-compiled) code that attempts to directly access this
@@ -100,31 +96,10 @@ class SafeHtml {
         (token === CONSTRUCTOR_TOKEN_PRIVATE) ? value : '';
 
     /**
-     * This SafeHtml's directionality, or null if unknown.
-     * @private {?Dir}
-     */
-    this.dir_ = null;
-
-    /**
-     * @override
-     * @const
-     */
-    this.implementsGoogI18nBidiDirectionalString = true;
-
-    /**
      * @override
      * @const {boolean}
      */
     this.implementsGoogStringTypedString = true;
-  }
-
-  /**
-   * @return {?Dir}
-   * @deprecated
-   * @override
-   */
-  getDirection() {
-    return this.dir_;
   }
 
 
@@ -208,12 +183,6 @@ class SafeHtml {
 
   /**
    * Returns HTML-escaped text as a SafeHtml object.
-   *
-   * If text is of a type that implements
-   * `DirectionalString`, the directionality of the new
-   * `SafeHtml` object is set to `text`'s directionality, if known.
-   * Otherwise, the directionality of the resulting SafeHtml is unknown (i.e.,
-   * `null`).
    *
    * @param {!SafeHtml.TextOrHtml_} textOrHtml The text to escape. If
    *     the parameter is of type SafeHtml it is returned directly (no escaping
@@ -643,26 +612,6 @@ class SafeHtml {
   }
 
   /**
-   * Creates a SafeHtml content with known directionality consisting of a tag
-   * with optional attributes and optional content.
-   * @param {!Dir} dir Directionality.
-   * @param {string} tagName
-   * @param {?Object<string, ?SafeHtml.AttributeValue>=} attributes
-   * @param {!SafeHtml.TextOrHtml_|
-   *     !Array<!SafeHtml.TextOrHtml_>=} content
-   * @deprecated The directionality support is going away. Use create instead.
-   * @return {!SafeHtml} The SafeHtml content with the tag.
-   * @package
-   */
-  static createWithDir(
-      dir, tagName, attributes = undefined, content = undefined) {
-    const html = SafeHtml.create(tagName, attributes, content);
-    html.dir_ = null;
-    return html;
-  }
-
-
-  /**
    * Creates a new SafeHtml object by joining the parts with separator.
    * @param {!SafeHtml.TextOrHtml_} separator
    * @param {!Array<!SafeHtml.TextOrHtml_|
@@ -704,39 +653,19 @@ class SafeHtml {
     return SafeHtml.join(SafeHtml.EMPTY, Array.prototype.slice.call(arguments));
   }
 
-
-  /**
-   * Creates a new SafeHtml object with known directionality by concatenating
-   * the values.
-   * @param {!Dir} dir Directionality.
-   * @param {...(!SafeHtml.TextOrHtml_|
-   *     !Array<!SafeHtml.TextOrHtml_>)} var_args Elements of array
-   *     arguments would be processed recursively.
-   * @deprecated The directionality support is going away. Use concat instead.
-   * @return {!SafeHtml}
-   */
-  static concatWithDir(dir, var_args) {
-    const html = SafeHtml.concat(Array.prototype.slice.call(arguments, 1));
-    html.dir_ = null;
-    return html;
-  }
-
   /**
    * Package-internal utility method to create SafeHtml instances.
    *
    * @param {string} html The string to initialize the SafeHtml object with.
-   * @param {?Dir=} dir The directionality of the SafeHtml to be
-   *     constructed, or null if unknown. This parameter is deprecated and
-   *     ignored.
    * @return {!SafeHtml} The initialized SafeHtml object.
    * @package
    */
-  static createSafeHtmlSecurityPrivateDoNotAccessOrElse(html, dir) {
+  static createSafeHtmlSecurityPrivateDoNotAccessOrElse(html) {
     /** @noinline */
     const noinlineHtml = html;
     const policy = trustedtypes.getPolicyPrivateDoNotAccessOrElse();
     const trustedHtml = policy ? policy.createHTML(noinlineHtml) : noinlineHtml;
-    return new SafeHtml(trustedHtml, null, CONSTRUCTOR_TOKEN_PRIVATE);
+    return new SafeHtml(trustedHtml, CONSTRUCTOR_TOKEN_PRIVATE);
   }
 
 
@@ -1045,7 +974,7 @@ SafeHtml.DOCTYPE_HTML = /** @type {!SafeHtml} */ ({
  */
 SafeHtml.EMPTY = new SafeHtml(
     (goog.global.trustedTypes && goog.global.trustedTypes.emptyHTML) || '',
-    null, CONSTRUCTOR_TOKEN_PRIVATE);
+    CONSTRUCTOR_TOKEN_PRIVATE);
 
 /**
  * A SafeHtml instance corresponding to the <br> tag.

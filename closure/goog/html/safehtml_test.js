@@ -41,16 +41,14 @@ testSuite({
     assertSameHtml('Hello <em>World</em>', safeHtml);
     assertEquals('Hello <em>World</em>', SafeHtml.unwrap(safeHtml));
     assertEquals('Hello <em>World</em>', String(safeHtml));
-    assertNull(safeHtml.getDirection());
 
-    safeHtml = testing.newSafeHtmlForTest('World <em>Hello</em>', null);
+    safeHtml = testing.newSafeHtmlForTest('World <em>Hello</em>');
     assertSameHtml('World <em>Hello</em>', safeHtml);
     assertEquals('World <em>Hello</em>', SafeHtml.unwrap(safeHtml));
     assertEquals('World <em>Hello</em>', String(safeHtml));
 
     // Interface markers are present.
     assertTrue(safeHtml.implementsGoogStringTypedString);
-    assertTrue(safeHtml.implementsGoogI18nBidiDirectionalString);
 
     // Pre-defined constant.
     assertSameHtml('', SafeHtml.EMPTY);
@@ -150,8 +148,6 @@ testSuite({
     assertSameHtml(
         '<hr style="border: /* &quot; */ 0;">',
         SafeHtml.create('hr', {'style': style}));
-
-    assertNull(SafeHtml.create('span', {'dir': 'x'}).getDirection());
 
     assertThrows(() => {
       SafeHtml.create('script');

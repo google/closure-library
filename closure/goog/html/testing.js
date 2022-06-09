@@ -26,7 +26,6 @@ goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.testing.mockmatchers.ArgumentMatcher');
-goog.requireType('goog.i18n.bidi.Dir');
 
 
 /**
@@ -36,12 +35,9 @@ goog.requireType('goog.i18n.bidi.Dir');
  * code.
  *
  * @param {string} html The string to wrap into a SafeHtml.
- * @param {?goog.i18n.bidi.Dir=} opt_dir The optional directionality of the
- *     SafeHtml to be constructed. A null or undefined value signifies an
- *     unknown directionality.
  * @return {!goog.html.SafeHtml}
  */
-goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
+goog.html.testing.newSafeHtmlForTest = function(html) {
   'use strict';
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       html);
