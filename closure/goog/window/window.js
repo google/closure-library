@@ -55,6 +55,27 @@ goog.window.createFakeWindow_ = function() {
 };
 
 /**
+ * @define {boolean} Whether setting 'noreferrer' implies 'noopener'. Ultimately
+ *     we aim to make this true by default.
+ */
+goog.window.NOREFERRER_IMPLIES_NOOPENER =
+    goog.define('goog.window.NOREFERRER_IMPLIES_NOOPENER', goog.DEBUG);
+
+/**
+ * @const forTesting contains a map used for overriding goog.defines for
+ * testing purposes.
+ */
+goog.window.forTesting = {};
+
+/**
+ * @type {boolean} An overridable copy of
+ *     goog.window.NOREFERRER_IMPLIES_NOOPENER.
+ */
+goog.window.forTesting.noreferrerImpliesNoopener =
+    goog.window.NOREFERRER_IMPLIES_NOOPENER;
+
+
+/**
  * Opens a new window.
  *
  * @param {!goog.html.SafeUrl|string|!Object|null} linkRef If an Object with an
@@ -288,6 +309,14 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // will yield a feature-deprived browser. This is an known issue, tracked
     // here: https://github.com/whatwg/html/issues/1902
     if (newWin && opt_options['noopener']) {
+      newWin.opener = null;
+    }
+    // If the caller specified noreferrer and we hit this branch, it means that
+    // we're already running on a modern enough browser that the referrer is
+    // hidden by default. But setting noreferrer implies noopener too, so we
+    // also have to clear the opener here.
+    if (goog.window.forTesting.noreferrerImpliesNoopener && newWin &&
+        opt_options['noreferrer']) {
       newWin.opener = null;
     }
   }

@@ -144,6 +144,7 @@ testSuite({
 
   setUp() {
     newWin = null;
+    googWindow.forTesting.noreferrerImpliesNoopener = true;
   },
 
   tearDown() {
@@ -260,6 +261,7 @@ testSuite({
       await waitForTestWindow(newBlankWin);
       // IE11 never stripped the referrer even when using meta-refresh.
       verifyWindow(newBlankWin, !browser.isIE(), urlParam);
+      assertNull(newBlankWin.opener);
     } finally {
       if (newBlankWin) {
         newBlankWin.close();
@@ -310,6 +312,7 @@ testSuite({
       await waitForTestWindow(newBlankWin);
       // IE11 never stripped the referrer even when using meta-refresh.
       verifyWindow(newBlankWin, !browser.isIE(), urlParam);
+      assertNull(newBlankWin.opener);
     } finally {
       if (newBlankWin) {
         newBlankWin.close();
@@ -452,8 +455,10 @@ testSuite({
         return mockNewWin;
       },
     };
+    mockNewWin.opener = mockWin;
     const options = {noreferrer: true};
-    googWindow.open('https://hello&world', options, mockWin);
+    const win = googWindow.open('https://hello&world', options, mockWin);
+    assertNull(win.opener);
     if (self.crossOriginIsolated !== undefined) {
       assertEquals(undefined, documentWriteHtml);
       assertEquals('https://hello&world', openedUrl);
@@ -479,5 +484,71 @@ testSuite({
     return waitForTestWindow(newWin).then((win) => {
       verifyWindow(win, false, 'theBest');
     });
+  },
+
+  testOpenNewWindowNoreferrerImpliesNoopener() {
+    let documentWriteHtml;
+    let openedUrl;
+    const mockNewWin = {};
+    mockNewWin.document = {
+      write: function(html) {
+        documentWriteHtml = html;
+      },
+      close: function() {},
+    };
+    const /** ? */ mockWin = {
+      open: function(url) {
+        openedUrl = url;
+        return mockNewWin;
+      },
+    };
+    mockNewWin.opener = mockWin;
+    const options = {noreferrer: true};
+    const win = googWindow.open('https://example.com', options, mockWin);
+    assertNull(win.opener);
+    if (self.crossOriginIsolated !== undefined) {
+      assertEquals(undefined, documentWriteHtml);
+      assertEquals('https://example.com', openedUrl);
+    } else {
+      assertEquals(
+          '<meta name="referrer" content="no-referrer"><meta http-equiv="refresh" content="0; url=https://example.com">',
+          documentWriteHtml);
+      assertEquals('', openedUrl);
+    }
+  },
+
+
+  testOpenNewWindowNoreferrerImpliesNoopenerDisabled() {
+    googWindow.forTesting.noreferrerImpliesNoopener = false;
+
+    let documentWriteHtml;
+    let openedUrl;
+    const mockNewWin = {};
+    mockNewWin.document = {
+      write: function(html) {
+        documentWriteHtml = html;
+      },
+      close: function() {},
+    };
+    const /** ? */ mockWin = {
+      open: function(url) {
+        openedUrl = url;
+        return mockNewWin;
+      },
+    };
+    mockNewWin.opener = mockWin;
+    const options = {noreferrer: true};
+    const win = googWindow.open('https://example.com', options, mockWin);
+    if (self.crossOriginIsolated !== undefined) {
+      assertEquals(undefined, documentWriteHtml);
+      assertEquals('https://example.com', openedUrl);
+      assertNotNull(win.opener);
+    } else {
+      assertEquals(
+          '<meta name="referrer" content="no-referrer"><meta http-equiv="refresh" content="0; url=https://example.com">',
+          documentWriteHtml);
+      assertEquals('', openedUrl);
+      assertNull(win.opener);
+    }
   },
 });
