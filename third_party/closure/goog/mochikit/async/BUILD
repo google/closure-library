@@ -23,7 +23,6 @@ closure_js_library(
         "//closure/goog/asserts",
         "//closure/goog/debug:error",
         "//closure/goog/promise",
-        "//closure/goog/promise:thenable",
     ],
 )
 
