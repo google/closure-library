@@ -1506,7 +1506,7 @@ testSuite({
   testOnlyAllowAttributeSpecificPolicyThrows() {
     assertThrows(() => {
       new Builder().onlyAllowAttributes([
-        {tagName: 'img', attributeName: 'src', policy: functions.identity},
+        {tagName: 'img', attributeName: 'target', policy: functions.identity},
       ]);
     });
   },
