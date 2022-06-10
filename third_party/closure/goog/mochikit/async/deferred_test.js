@@ -510,6 +510,23 @@ testSuite({
     });
   },
 
+  testStrictHandledErrorsViaPromise() {
+    stubs.replace(Deferred, 'STRICT_ERRORS', true);
+
+    // The registered errback returns a non-error value.
+    const d = Deferred.succeed();
+    d.addCallback(function(res) {
+      throw Error('eventually handled');
+    });
+
+    d.then().catch(() => {});
+
+    assertNotThrows(
+        'The error was handled and should not be rethrown', function() {
+          mockClock.tick();
+        });
+  },
+
   testStrictBlockedErrors() {
     stubs.replace(Deferred, 'STRICT_ERRORS', true);
 

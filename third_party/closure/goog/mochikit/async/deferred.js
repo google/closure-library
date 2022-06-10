@@ -388,8 +388,8 @@ goog.async.Deferred.prototype.makeStackTraceLong_ = function(error) {
       // Stack looks like it was system generated. See
       // https://code.google.com/p/v8/wiki/JavaScriptStackTraceApi
       (/^[^\n]+(\n   [^\n]+)+/).test(error.stack)) {
-    error.stack = error.stack + '\nDEFERRED OPERATION:\n' +
-        this.constructorStack_;
+    error.stack =
+        error.stack + '\nDEFERRED OPERATION:\n' + this.constructorStack_;
   }
 };
 
@@ -551,7 +551,8 @@ goog.async.Deferred.prototype.then = function(
     } else {
       reject(reason);
     }
-  });
+    return goog.async.Deferred.CONVERTED_TO_PROMISE_;
+  }, this);
   return promise.then(opt_onFulfilled, opt_onRejected, opt_context);
 };
 goog.Thenable.addImplementation(goog.async.Deferred);
@@ -674,6 +675,8 @@ goog.async.Deferred.prototype.getLastValueForMigration = function() {
   return (this.hasFired() && !this.hadError_) ? this.result_ : undefined;
 };
 
+/** @private @const Marker object returned from `.then()` to `.fire_()`. */
+goog.async.Deferred.CONVERTED_TO_PROMISE_ = {};
 
 /**
  * Exhausts the execution sequence while a result is available. The result may
@@ -700,8 +703,10 @@ goog.async.Deferred.prototype.fire_ = function() {
   let res = this.result_;
   let unhandledException = false;
   let isNewlyBlocked = false;
+  let wasConvertedToPromise = false;
 
   while (this.sequence_.length && !this.blocked_) {
+    wasConvertedToPromise = false;
     const sequenceEntry = this.sequence_.shift();
 
     const callback = sequenceEntry[0];
@@ -710,9 +715,13 @@ goog.async.Deferred.prototype.fire_ = function() {
 
     const f = this.hadError_ ? errback : callback;
     if (f) {
-
       try {
-        const ret = f.call(scope || this.defaultScope_, res);
+        let ret = f.call(scope || this.defaultScope_, res);
+
+        if (ret === goog.async.Deferred.CONVERTED_TO_PROMISE_) {
+          wasConvertedToPromise = true;
+          ret = undefined;
+        }
 
         // If no result, then use previous result.
         if (ret !== undefined) {
@@ -754,7 +763,9 @@ goog.async.Deferred.prototype.fire_ = function() {
     } else {
       /** @type {!IThenable} */ (res).then(onCallback, onErrback);
     }
-  } else if (goog.async.Deferred.STRICT_ERRORS && this.isError(res) &&
+  } else if (
+      goog.async.Deferred.STRICT_ERRORS && !wasConvertedToPromise &&
+      this.isError(res) &&
       !(res instanceof goog.async.Deferred.CanceledError)) {
     this.hadError_ = true;
     unhandledException = true;
