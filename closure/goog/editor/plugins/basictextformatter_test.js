@@ -82,6 +82,10 @@ function setUpListAndBlockquoteTests() {
   FIELDMOCK.getElement();
   FIELDMOCK.$anyTimes();
   FIELDMOCK.$returns(htmlDiv);
+
+  FIELDMOCK.getPluginByClassId('Bidi');
+  FIELDMOCK.$anyTimes();
+  FIELDMOCK.$returns(null);
 }
 
 function tearDownHelper() {
@@ -599,6 +603,37 @@ testSuite({
     assertEquals(
         3, dom.getElementsByTagNameAndClass(TagName.LI, null, list).length);
 
+    tearDownListAndBlockquoteTests();
+  },
+
+  /** @suppress {visibility} suppression added to enable type checking */
+  testSwitchListType_withFormatting() {
+    if (!userAgent.WEBKIT) {
+      return;
+    }
+    setUpListAndBlockquoteTests();
+
+    FIELDMOCK.$replay();
+    const selectionStart =
+        dom.getElement('switchListSelectionStart').firstChild.firstChild;
+    const selectionEnd = dom.getElement('switchListSelectionEnd').firstChild;
+
+    window.getSelection().removeAllRanges();
+    Range.createFromNodes(selectionStart, 0, selectionEnd, 3).select();
+
+    FORMATTER.execCommandInternal(BasicTextFormatter.COMMAND.ORDERED_LIST);
+    const root =
+        /** @type {!Element} */ (dom.getElement('switchFormattedList'));
+    assert(root !== null);
+
+    const orderedList = dom.getElementByTagNameAndClass(TagName.OL, null, root);
+    assertEquals(
+        2,
+        dom.getElementsByTagNameAndClass(TagName.LI, null, orderedList).length);
+
+    const bold = dom.getElementsByTagNameAndClass(TagName.B, null, root);
+    assertEquals(1, bold.length);
+    assertEquals('l', bold[0].textContent);
     tearDownListAndBlockquoteTests();
   },
 

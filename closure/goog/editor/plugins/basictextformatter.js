@@ -180,9 +180,11 @@ goog.editor.plugins.BasicTextFormatter.prototype.getDocument_ = function() {
 goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
     command, var_args) {
   'use strict';
-  var preserveDir, styleWithCss, needsFormatBlockDiv, hasDummySelection;
+  let preserveDir, styleWithCss, needsFormatBlockDiv, hasPlaceholderSelection;
   var result;
   var opt_arg = arguments[1];
+  let hasPlaceholderContent = false;
+  let placeholderValue;
 
   switch (command) {
     case goog.editor.plugins.BasicTextFormatter.COMMAND.BACKGROUND_COLOR:
@@ -261,24 +263,39 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
           if (goog.userAgent.GECKO &&
               goog.editor.BrowserFeature.FORGETS_FORMATTING_WHEN_LISTIFYING &&
               !this.queryCommandValue(command)) {
-            hasDummySelection |= this.beforeInsertListGecko_();
+            hasPlaceholderSelection |= this.beforeInsertListGecko_();
           }
-          // If the selection is collapsed, insert placeholder content keep
-          // the selection as we add the list, so we don't lose cursor position.
+
           const selection =
               this.getFieldDomHelper().getDocument().getSelection();
-          if (selection.rangeCount === 1 && selection.isCollapsed) {
-            // Mark that we need to delete the placeholder selection later.
-            hasDummySelection = true;
-            const placeholderValue = goog.string.createUniqueString();
+          if (selection.rangeCount === 1) {
+            placeholderValue = goog.string.createUniqueString();
             const placeholderNode = goog.dom.createDom(goog.dom.TagName.SPAN);
             const safePlaceholderAnchorContent =
                 goog.html.SafeHtml.htmlEscape(placeholderValue);
             goog.dom.safe.setInnerHtml(
                 placeholderNode, safePlaceholderAnchorContent);
-            goog.dom.Range.createFromBrowserRange(selection.getRangeAt(0))
-                .replaceContentsWithNode(placeholderNode);
-            goog.dom.Range.createFromNodeContents(placeholderNode).select();
+            if (selection.isCollapsed) {
+              // If the selection is collapsed, insert placeholder content to
+              // keep the selection as we add the list, so we don't lose cursor
+              // position.
+              // Mark that we need to delete the placeholder selection later.
+              hasPlaceholderSelection = true;
+
+              goog.dom.Range.createFromBrowserRange(selection.getRangeAt(0))
+                  .replaceContentsWithNode(placeholderNode);
+              goog.dom.Range.createFromNodeContents(placeholderNode).select();
+            } else if (goog.userAgent.WEBKIT) {
+              // For webkit, we need insert unselected, unformatted content
+              // at the start of the LI to prevent the list being split into 2
+              // lists, and delete the placeholder content after.
+              const parentListItem = goog.dom.getAncestorByTagNameAndClass(
+                  selection.anchorNode, goog.dom.TagName.LI);
+              if (parentListItem) {
+                goog.dom.insertChildAt(parentListItem, placeholderNode, 0);
+                hasPlaceholderContent = true;
+              }
+            }
           }
 
           // Fall through to preserveDir block
@@ -342,8 +359,22 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
        */
       this.execCommandHelper_(command, opt_arg, preserveDir, !!styleWithCss);
 
-      if (hasDummySelection) {
+      if (hasPlaceholderSelection) {
         this.getDocument_().execCommand('Delete', false, true);
+      }
+
+      if (hasPlaceholderContent && placeholderValue) {
+        // Unfortunately, the browser sometimes removes the element we added and
+        // creates a new element with the same content, so we can't add an
+        // id/class to the placeholder node and rely on that to find/delete the
+        // content, and instead have to manually search for the content.
+        const placeholderEl = goog.dom.findNode(
+            this.getFieldObject().getElement(),
+            el => el.nodeName == goog.dom.TagName.SPAN &&
+                el.textContent === placeholderValue);
+        if (placeholderEl) {
+          goog.dom.removeNode(placeholderEl);
+        }
       }
 
       if (needsFormatBlockDiv) {
