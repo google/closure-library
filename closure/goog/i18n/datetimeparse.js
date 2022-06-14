@@ -16,10 +16,15 @@ goog.provide('goog.i18n.DateTimeParse');
 
 goog.require('goog.asserts');
 goog.require('goog.date');
-goog.require('goog.i18n.DateTimeFormat');
+goog.require('goog.i18n.DateTimeFormat.Format');
 goog.require('goog.i18n.DateTimeSymbols');
+goog.require('goog.i18n.DayPeriods');
+goog.require('goog.object');
 goog.requireType('goog.i18n.DateTimeSymbolsType');
 
+goog.scope(function() {
+// For referencing modules
+const DayPeriods = goog.module.get('goog.i18n.DayPeriods');
 
 /**
  * DateTimeParse is for parsing date in a locale-sensitive manner. It allows
@@ -439,6 +444,7 @@ goog.i18n.DateTimeParse.prototype.parse = function(text, date, options) {
 
   const cal = new goog.i18n.DateTimeParse.MyDate_();
   const parsePos = [0];
+  cal.dayPeriodIndex = null;
 
   for (let i = 0; i < this.patternParts_.length; i++) {
     if (predictive && parsePos[0] >= text.length) {
@@ -568,9 +574,7 @@ goog.i18n.DateTimeParse.prototype.subParse_ = function(
   switch (part.text.charAt(0)) {
     case 'G':  // ERA
       this.subParseString_(
-          text, pos, [this.dateTimeSymbols_.ERAS], function(value) {
-            cal.era = value;
-          });
+          text, pos, [this.dateTimeSymbols_.ERAS], value => cal.era = value);
       return true;
     case 'M':  // MONTH
     case 'L':  // STANDALONEMONTH
@@ -579,18 +583,46 @@ goog.i18n.DateTimeParse.prototype.subParse_ = function(
       // Handle both short and long forms. Try count == 4 first.
       const weekdays =
           [this.dateTimeSymbols_.WEEKDAYS, this.dateTimeSymbols_.SHORTWEEKDAYS];
-      return this.subParseString_(text, pos, weekdays, function(value) {
-        cal.dayOfWeek = value;
-      });
-
-    case 'B':
-    case 'b':
-    case 'a':  // AM_PM
+      return this.subParseString_(
+          text, pos, weekdays, value => cal.dayOfWeek = value);
+    case 'B':  // Flexible day peridos
+    case 'b':  // Day periods of 'noon', 'midnight', 'am', or 'pm'
       // TODO b/206042104: update to handle parsing day periods with 'b' and 'B'
+      // Get the strings for the day periods for adjusting the time to AM/PM.
+      // Also includes AM/PM data for fallback.
+      /** {?goog.i18n.DayPeriods} */
+      const localePeriods = DayPeriods.getDayPeriods();
+      // Standard names such as 'noon', 'morning1', 'night2', etc.
+      let periodNames;
+      // The localized terms for the period names.
+      let expectedValues = [];
+      if (localePeriods) {
+        periodNames = goog.object.getKeys(localePeriods);
+        // Get the formatNames values to check
+        for (const name of periodNames) {
+          expectedValues.push(localePeriods[name].formatNames[0]);
+        }
+      }
+      // Add strings for AM & PM, in addition to flexible periods
+      const periodsData = [expectedValues.concat(this.dateTimeSymbols_.AMPMS)];
+      // Include possible outputs of am/pm as day periods.
+      if (periodNames) {
+        periodNames.push('isAm');
+        periodNames.push('isPm');
+      }
+      // Record string matching this day period
+      const foundPeriod = this.subParseString_(
+          text, pos, periodsData, value => cal.dayPeriodIndex = value,
+          predictive);
+      cal.dayPeriodName = null;
+      if (cal.dayPeriodIndex && periodNames) {
+        cal.dayPeriodName = periodNames[cal.dayPeriodIndex];
+      }
+      return predictive ? foundPeriod : true;
+    case 'a':  // AM_PM
       const success = this.subParseString_(
-          text, pos, [this.dateTimeSymbols_.AMPMS], function(value) {
-            cal.ampm = value;
-          }, predictive);
+          text, pos, [this.dateTimeSymbols_.AMPMS], value => cal.ampm = value,
+          predictive);
       return predictive ? success : true;
     case 'y':  // YEAR
       return this.subParseYear_(text, pos, part, digitCount, cal);
@@ -1135,6 +1167,17 @@ goog.i18n.DateTimeParse.MyDate_.prototype.hours;
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.ampm;
 
+/**
+ * Index of the time's flexible day period in data object.
+ * @type {?number}
+ */
+goog.i18n.DateTimeParse.MyDate_.prototype.dayPeriodIndex;
+
+/**
+ * The name for flexible time of day.
+ * @type {?string}
+ */
+goog.i18n.DateTimeParse.MyDate_.prototype.dayPeriodName;
 
 /**
  * The date's minutes.
@@ -1262,9 +1305,30 @@ goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
     if (this.hours == undefined) {
       this.hours = date.getHours();
     }
-    // adjust ampm
-    if (this.ampm != undefined && this.ampm > 0 && this.hours < 12) {
-      this.hours += 12;
+    // adjust with am/pm to 24-hour time.
+    if (this.hours < 12) {
+      if (this.ampm != undefined && this.ampm > 0) {
+        // AM or PM explictly set.
+        this.hours += 12;
+      } else {
+        // Handle flexible time of day for PM times from parsed day period.
+        // Noon, afternoons, evenings, are always PM.
+        // Night could be AM or PM, depending on the hour value.
+        //    6 in the evening --> 18:00
+        //   10 at night --> 22:00
+        //    3 at night --> 3:00
+        if (this.dayPeriodName !== undefined) {
+          const pmPeriods = [
+            'isPm', 'noon', 'afternoon1', 'afternoon2', 'evening1', 'evening2'
+          ];
+          if (pmPeriods.includes(this.dayPeriodName) ||
+              (['night1', 'night2'].includes(this.dayPeriodName) &&
+               this.hours >= 6)) {
+            // Adjust to be PM for this day period.
+            this.hours += 12;
+          }
+        }
+      }
     }
     date.setHours(this.hours);
   }
@@ -1336,3 +1400,4 @@ goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
   }
   return true;
 };
+});  // End of scope for module data

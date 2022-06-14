@@ -137,8 +137,10 @@ closure_js_library(
     deps = [
         ":datetimeformat",
         ":datetimesymbols",
+        ":dayperiodsymbols",
         "//closure/goog/asserts",
         "//closure/goog/date",
+        "//closure/goog/object",
     ],
 )
 

@@ -30,6 +30,8 @@ const DateTimeSymbols_zh_TW = goog.require('goog.i18n.DateTimeSymbols_zh_TW');
 const GoogDate = goog.require('goog.date.Date');
 const testSuite = goog.require('goog.testing.testSuite');
 
+const {DayPeriods_zh_Hant, setDayPeriods} = goog.require('goog.i18n.DayPeriods');
+
 replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
 
 /**
@@ -133,7 +135,7 @@ function assertParseFails(parser, text, options) {
 
 testSuite({
   getTestName: function() {
-    return 'DateTimeFormat Tests';
+    return 'DateTimeParse Tests';
   },
 
   setUpPage() {},
@@ -531,14 +533,18 @@ testSuite({
   testZhTwBFormat() {
     replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_TW);
 
+    // Make sure we have the day period info.
+    setDayPeriods(DayPeriods_zh_Hant);
+
     // Test for AM/PM with B for zh_TW
     let parser = new DateTimeParse(DateTimeFormat.Format.FULL_TIME);
 
+    // 3:26 下午 (afternoon1)
     let gmtDateStringPm = '\u4E0B\u534803:26:28 [GMT-07:00]';
     let date = new Date(2006, 7 - 1, 24, 12, 12, 12, 0);
 
     let parsedDate = parser.parse(gmtDateStringPm, date);
-    assertTrue(parsedDate > 0);
+    assertTrue('parsedDate=' + parsedDate, parsedDate > 0);
     // This should be give 10PM == 22:00.
     const normalizedHourPm =
         (24 + date.getHours() + date.getTimezoneOffset() / 60) % 24;
@@ -867,5 +873,70 @@ testSuite({
     // The year field is not supported for predictive parsing.
     parser = new DateTimeParse('yyyy');
     assertThrows(() => parser.parse('1234', date, opts));
+  },
+
+
+  testZhHantTwDayPeriods() {
+    // b/208532468, 3-Dec-2021
+
+    replacer.replace(goog, 'LOCALE', 'zh_TW');
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_TW);
+    // Set up for parts of the day in Chinese.
+    setDayPeriods(DayPeriods_zh_Hant);
+
+    // These cover the time periods for this locale. Note that this set
+    // is generated with flexible time periods, producing several different
+    // day period names.
+    const testStringsZhHantTw = [
+      '午夜12:00:00',
+      '清晨5:30:00',
+      '上午8:58:00',
+      '中午12:00:00',
+      '中午12:58:59',
+      '下午2:17:00',
+      '晚上7:00:00',
+      '凌晨3:37:17',
+    ];
+
+    // These use AM/PM formats.
+    const testStringsZhHantMo = [
+      '上午12:00:00',
+      '上午5:30:00',
+      '上午8:58:00',
+      '下午12:00:00',
+      '下午12:58:59',
+      '下午2:17:00',
+      '下午7:00:00',
+      '上午3:37:17',
+    ];
+
+    // Expected date time values
+    const parseInfoZhHantTw = [
+      [2022, 4, 20, 0, 0, 0], [2022, 4, 20, 5, 30, 0], [2022, 4, 20, 8, 58, 0],
+      [2022, 4, 20, 12, 0, 0], [2022, 4, 20, 12, 58, 59],
+      [2022, 4, 20, 14, 17, 0], [2022, 4, 20, 19, 0, 0],
+      [2022, 4, 20, 3, 37, 17]
+    ];
+
+    let date = new Date(0);
+    const parser = new DateTimeParse(DateTimeFormat.Format.MEDIUM_TIME);
+    // Check the results make sense with both B and AM/PM formatting
+    for (let index = 0; index < testStringsZhHantTw.length; index++) {
+      const dVals = parseInfoZhHantTw[index];
+
+      parser.parse(testStringsZhHantTw[index], date);
+      assertTimeEquals(dVals[3], dVals[4], dVals[5], 0, date);
+    }
+
+    let date2 = new Date(0);
+    const shortParser = new DateTimeParse(DateTimeFormat.Format.SHORT_TIME);
+    // Check strings with only AM/PM data in Hant_MO.
+    for (let index = 0; index < testStringsZhHantMo.length; index++) {
+      const dVals = parseInfoZhHantTw[index];
+
+      let parsedOK = shortParser.parse(testStringsZhHantMo[index], date2);
+      assertTrue('index=' + index, parsedOK > 0);
+      assertTimeEquals(dVals[3], dVals[4], 0, 0, date2);
+    }
   },
 });
