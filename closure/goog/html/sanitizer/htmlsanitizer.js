@@ -648,19 +648,16 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowTags = function(
 goog.html.sanitizer.HtmlSanitizer.Builder.prototype.onlyAllowAttributes =
     function(attrWhitelist) {
   'use strict';
-  const oldWhitelist = this.attributeWhitelist_;
+  var oldWhitelist = this.attributeWhitelist_;
   this.attributeWhitelist_ = {};
   attrWhitelist.forEach(function(attr) {
     'use strict';
     if (typeof attr === 'string') {
       attr = {tagName: '*', attributeName: attr.toUpperCase(), policy: null};
     }
-    const handlerName = goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(
+    var handlerName = goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(
         attr.tagName, attr.attributeName);
-    const genericHandlerName =
-        goog.html.sanitizer.HtmlSanitizer.attrIdentifier_(
-            null, attr.attributeName);
-    if (!oldWhitelist[handlerName] && !oldWhitelist[genericHandlerName]) {
+    if (!oldWhitelist[handlerName]) {
       throw new Error('Only whitelisted attributes can be allowed.');
     }
     this.attributeWhitelist_[handlerName] = attr.policy ?
@@ -810,8 +807,8 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
   // potentially customizable, handling functions at build().
   installPolicy(
       this.attributeWhitelist_, this.attributeOverrideList_, '* USEMAP',
-      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
-      (goog.html.sanitizer.HtmlSanitizer.sanitizeUrlFragment_));
+      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (
+          goog.html.sanitizer.HtmlSanitizer.sanitizeUrlFragment_));
 
   var urlAttributes = ['* ACTION', '* CITE', '* HREF'];
   var urlPolicy =
@@ -850,22 +847,19 @@ goog.html.sanitizer.HtmlSanitizer.Builder.prototype.installPolicies_ =
 
   installPolicy(
       this.attributeWhitelist_, this.attributeOverrideList_, 'A TARGET',
-      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
-      (goog.partial(
+      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
           goog.html.sanitizer.HtmlSanitizer.allowedAttributeValues_,
           ['_blank', '_self'])));
 
   installPolicy(
       this.attributeWhitelist_, this.attributeOverrideList_, '* CLASS',
-      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
-      (goog.partial(
+      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
           goog.html.sanitizer.HtmlSanitizer.sanitizeClasses_,
           this.tokenPolicy_)));
 
   installPolicy(
       this.attributeWhitelist_, this.attributeOverrideList_, '* ID',
-      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */
-      (goog.partial(
+      /** @type {!goog.html.sanitizer.HtmlSanitizerPolicy} */ (goog.partial(
           goog.html.sanitizer.HtmlSanitizer.sanitizeId_, this.tokenPolicy_)));
 
   installPolicy(
