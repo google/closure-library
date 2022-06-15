@@ -265,5 +265,11 @@ goog.events.EventType = {
 
   // Web app manifest events.
   BEFOREINSTALLPROMPT: 'beforeinstallprompt',
-  APPINSTALLED: 'appinstalled'
+  APPINSTALLED: 'appinstalled',
+
+  // Web Animation API (WAAPI) playback events
+  // https://www.w3.org/TR/web-animations-1/#animation-playback-event-types
+  CANCEL: 'cancel',
+  FINISH: 'finish',
+  REMOVE: 'remove'
 };
