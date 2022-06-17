@@ -879,7 +879,7 @@ testSuite({
   testZhHantTwDayPeriods() {
     // b/208532468, 3-Dec-2021
 
-    replacer.replace(goog, 'LOCALE', 'zh_TW');
+    replacer.replace(goog, 'LOCALE', 'zh-TW');
     replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_TW);
     // Set up for parts of the day in Chinese.
     setDayPeriods(DayPeriods_zh_Hant);
@@ -938,5 +938,31 @@ testSuite({
       assertTrue('index=' + index, parsedOK > 0);
       assertTimeEquals(dVals[3], dVals[4], 0, 0, date2);
     }
+  },
+
+  testRoundTripZhTw() {
+    // Test for b/208532468 round trip with zh_TW with flexible time periods
+    const date = new Date(0, 0, 0, 17);
+    replacer.replace(goog, 'LOCALE', 'zh-TW');
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_TW);
+
+    setDayPeriods(DayPeriods_zh_Hant);
+
+    // !!! TODO: check other mode
+    let nativeMode = false;
+    // replacer.replace(
+    //     LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+    const fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_TIME);
+    assertTrue(fmt !== null);
+    const result = fmt.format(date);
+    const expected = '下午5:00';
+    assertEquals('Native=' + nativeMode, expected, result);
+
+    // Now parse this
+    let parser = new DateTimeParse(DateTimeFormat.Format.SHORT_TIME);
+    let newDate = new Date(0);
+    let parsedOK = parser.parse(result, newDate);
+    assertTrue(parsedOK > 0);
+    assertTimeEquals(17, 0, 0, 0, newDate);
   },
 });

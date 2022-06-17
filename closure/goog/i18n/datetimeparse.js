@@ -208,7 +208,7 @@ goog.i18n.DateTimeParse.NUMERIC_FORMAT_CHARS_ = 'MydhHmsSDkK';
  * @private
  * @const
  */
-goog.i18n.DateTimeParse.PREDICTIVE_FORMAT_CHARS_ = 'ahHkKm';
+goog.i18n.DateTimeParse.PREDICTIVE_FORMAT_CHARS_ = 'abBhHkKm';
 
 
 /**

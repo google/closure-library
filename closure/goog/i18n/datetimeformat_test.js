@@ -64,6 +64,7 @@ const DateTimeSymbols_ro_RO = goog.require('goog.i18n.DateTimeSymbols_ro_RO');
 const DateTimeSymbols_sv = goog.require('goog.i18n.DateTimeSymbols_sv');
 const DateTimeSymbols_zh_HK = goog.require('goog.i18n.DateTimeSymbols_zh_HK');
 const DateTimeSymbols_zh_Hant_TW = goog.require('goog.i18n.DateTimeSymbols_zh_Hant_TW');
+const DateTimeSymbols_zh_TW = goog.require('goog.i18n.DateTimeSymbols_zh_TW');
 const TimeZone = goog.require('goog.i18n.TimeZone');
 
 const {DayPeriods_zh_Hant, setDayPeriods} = goog.require('goog.i18n.DayPeriods');
@@ -1860,6 +1861,22 @@ testSuite({
       assertTrue(fmt !== null);
       const result = fmt.format(date);
       const expected = '5月9日 星期一';
+      assertEquals('Native=' + nativeMode, expected, result);
+    }
+  },
+
+  testZhTwLocale() {
+    // Test for b/208532468 round trip with zh_TW with flexible time periods
+    const date = new Date(0, 0, 0, 17);
+    replacer.replace(goog, 'LOCALE', 'zh_TW');
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_TW);
+    for (let nativeMode of testECMAScriptOptions) {
+      replacer.replace(
+          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+      const fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_TIME);
+      assertTrue(fmt !== null);
+      const result = fmt.format(date);
+      const expected = '下午5:00';
       assertEquals('Native=' + nativeMode, expected, result);
     }
   },

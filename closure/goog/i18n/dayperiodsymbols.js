@@ -91,8 +91,11 @@ exports.setDayPeriods = function(newDayPeriods) {
  */
 switch (goog.LOCALE) {
   case 'zh-Hant':
+  case 'zh_Hant':
   case 'zh-Hant-TW':
+  case 'zh_Hant_TW':
   case 'zh-TW':
+  case 'zh_TW':
     defaultDayPeriods = exports.DayPeriods_zh_Hant;
     break;
   default:
