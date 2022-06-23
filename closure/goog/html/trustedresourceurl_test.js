@@ -10,7 +10,6 @@ goog.module('goog.html.trustedResourceUrlTest');
 goog.setTestOnly();
 
 const Const = goog.require('goog.string.Const');
-const Dir = goog.require('goog.i18n.bidi.Dir');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const SafeScript = goog.require('goog.html.SafeScript');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
@@ -56,12 +55,8 @@ testSuite({
     assertEquals(url, trustedResourceUrl.getTypedStringValue());
     assertEquals('javascript:trusted();', String(trustedResourceUrl));
 
-    // URLs are always LTR.
-    assertEquals(Dir.LTR, trustedResourceUrl.getDirection());
-
     // Interface markers are present.
     assertTrue(trustedResourceUrl.implementsGoogStringTypedString);
-    assertTrue(trustedResourceUrl.implementsGoogI18nBidiDirectionalString);
   },
 
   testFormat_validFormatString() {

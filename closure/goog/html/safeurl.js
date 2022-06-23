@@ -15,8 +15,6 @@ goog.provide('goog.html.SafeUrl');
 goog.require('goog.asserts');
 goog.require('goog.fs.url');
 goog.require('goog.html.TrustedResourceUrl');
-goog.require('goog.i18n.bidi.Dir');
-goog.require('goog.i18n.bidi.DirectionalString');
 goog.require('goog.string.Const');
 goog.require('goog.string.TypedString');
 goog.require('goog.string.internal');
@@ -58,7 +56,6 @@ goog.require('goog.string.internal');
  * @see goog.html.SafeUrl#sanitize
  * @final
  * @struct
- * @implements {goog.i18n.bidi.DirectionalString}
  * @implements {goog.string.TypedString}
  */
 goog.html.SafeUrl = class {
@@ -145,24 +142,6 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
 goog.html.SafeUrl.prototype.getTypedStringValue = function() {
   'use strict';
   return this.privateDoNotAccessOrElseSafeUrlWrappedValue_.toString();
-};
-
-
-/**
- * @override
- * @const {boolean}
- */
-goog.html.SafeUrl.prototype.implementsGoogI18nBidiDirectionalString = true;
-
-
-/**
- * Returns this URLs directionality, which is always `LTR`.
- * @override
- * @return {!goog.i18n.bidi.Dir}
- */
-goog.html.SafeUrl.prototype.getDirection = function() {
-  'use strict';
-  return goog.i18n.bidi.Dir.LTR;
 };
 
 /**

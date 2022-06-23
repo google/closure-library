@@ -10,7 +10,6 @@ goog.module('goog.html.safeUrlTest');
 goog.setTestOnly();
 
 const Const = goog.require('goog.string.Const');
-const Dir = goog.require('goog.i18n.bidi.Dir');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const SafeUrl = goog.require('goog.html.SafeUrl');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
@@ -61,12 +60,8 @@ testSuite({
     assertEquals('javascript:trusted();', SafeUrl.unwrap(safeUrl));
     assertEquals('javascript:trusted();', String(safeUrl));
 
-    // URLs are always LTR.
-    assertEquals(Dir.LTR, safeUrl.getDirection());
-
     // Interface markers are present.
     assertTrue(safeUrl.implementsGoogStringTypedString);
-    assertTrue(safeUrl.implementsGoogI18nBidiDirectionalString);
   },
 
   testSafeUrlIsSafeMimeType_withSafeType() {

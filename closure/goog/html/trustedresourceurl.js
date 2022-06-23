@@ -17,8 +17,6 @@ goog.require('goog.fs.blob');
 goog.require('goog.fs.url');
 goog.require('goog.html.SafeScript');
 goog.require('goog.html.trustedtypes');
-goog.require('goog.i18n.bidi.Dir');
-goog.require('goog.i18n.bidi.DirectionalString');
 goog.require('goog.string.Const');
 goog.require('goog.string.TypedString');
 
@@ -48,7 +46,6 @@ goog.require('goog.string.TypedString');
  * @see goog.html.TrustedResourceUrl#fromConstant
  * @final
  * @struct
- * @implements {goog.i18n.bidi.DirectionalString}
  * @implements {goog.string.TypedString}
  */
 goog.html.TrustedResourceUrl = class {
@@ -119,25 +116,6 @@ goog.html.TrustedResourceUrl.prototype.getTypedStringValue = function() {
   'use strict';
   return this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_
       .toString();
-};
-
-
-/**
- * @override
- * @const
- */
-goog.html.TrustedResourceUrl.prototype.implementsGoogI18nBidiDirectionalString =
-    true;
-
-
-/**
- * Returns this URLs directionality, which is always `LTR`.
- * @override
- * @return {!goog.i18n.bidi.Dir}
- */
-goog.html.TrustedResourceUrl.prototype.getDirection = function() {
-  'use strict';
-  return goog.i18n.bidi.Dir.LTR;
 };
 
 
