@@ -1880,4 +1880,52 @@ testSuite({
       assertEquals('Native=' + nativeMode, expected, result);
     }
   },
+
+  testZhTwFlexPeriodswithTimeStyleLong() {
+    // Test for b/208532468 round trip with zh_TW with flexible time periods
+    replacer.replace(goog, 'LOCALE', 'zh_Hant_TW');
+    replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_Hant_TW);
+    setDayPeriods(DayPeriods_zh_Hant);
+
+    const dateArray = [
+      new Date(2022, 4, 24, 3, 4, 5),
+      new Date(2022, 4, 24, 7, 30, 0),
+      new Date(2022, 4, 24, 9, 17),
+      new Date(2022, 4, 24, 12, 0, 0),
+      new Date(2022, 4, 24, 13, 59, 0),
+      new Date(2022, 4, 24, 17, 17, 0),
+      new Date(2022, 4, 24, 21, 57),
+      new Date(2022, 4, 24, 23, 1, 0),
+      new Date(2022, 4, 24, 0, 0, 0),
+    ];
+    // Variations expected in brower versions
+    const expectedLongTime = [
+      ['凌晨3:04:05', '上午3:04:05'],
+      ['清晨7:30:00', '上午7:30:00'],
+      ['上午9:17:00'],
+      ['中午12:00:00', '下午12:00:00'],
+      ['下午1:59:00'],
+      ['下午5:17:00'],
+      ['晚上9:57:00', '下午9:57:00'],
+      ['晚上11:01:00', '下午11:01:00'],
+      ['午夜12:00:00', '上午12:00:00', '凌晨12:00:00'],
+    ];
+
+    for (let nativeMode of testECMAScriptOptions) {
+      replacer.replace(
+          LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
+      const fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_TIME);
+      assertNotNullNorUndefined(fmt);
+
+      for (let index = 0; index < expectedLongTime.length; index++) {
+        const result = fmt.format(dateArray[index]);
+        const expected = expectedLongTime[index];
+        const timesMatch = expected.includes(result);
+        assertTrue(
+            'Native=' + nativeMode + ' For time ' + dateArray[index] +
+                ' expected ' + expectedLongTime[index] + ' got ' + result,
+            timesMatch);
+      }
+    }
+  },
 });

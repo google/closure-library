@@ -240,11 +240,19 @@ testSuite({
           // Standard Arabic
           const listConj = new ListFormat();
           let result3 = listConj.format(vehicles3);
-          assertEquals('Native=' + nativeMode, 'Motorcycle وBus وCar', result3);
+          /* remove directional isolate U_2068 & U+2069 */
+          result3 = result3.replaceAll('\u2068', '');
+          result3 = result3.replaceAll('\u2069', '');
+          assertEquals(
+              'result3 Native=' + nativeMode, 'Motorcycle وBus وCar', result3);
 
           let result2 = listConj.format(vehicles3.slice(0, 2));
-          assertEquals('Native=' + nativeMode, 'Motorcycle وBus', result2);
+          result2 = result2.replaceAll('\u2068', '');
+          result2 = result2.replaceAll('\u2069', '');
+          assertEquals(
+              'result2: Native=' + nativeMode, 'Motorcycle وBus', result2);
         });
+
   },
 
   testArabicOr() {
@@ -253,11 +261,17 @@ testSuite({
         /** @param {boolean} nativeMode */
         (nativeMode) => {
           const listDisj = new ListFormat({type: ListFormatType.OR});
-          const result3 = listDisj.format(vehicles3);
+          let result3 = listDisj.format(vehicles3);
           let expectOr = 'Motorcycle أو Bus أو Car';
+          // Remove Unicode directional isolates. Needed for
+          // non-Arabic test in some browsers.
+          result3 = result3.replaceAll('\u2068', '');
+          result3 = result3.replaceAll('\u2069', '');
           assertEquals('Native=' + nativeMode, expectOr, result3);
 
-          const result2 = listDisj.format(vehicles3.slice(0, 2));
+          let result2 = listDisj.format(vehicles3.slice(0, 2));
+          result2 = result2.replaceAll('\u2068', '');
+          result2 = result2.replaceAll('\u2069', '');
           expectOr = 'Motorcycle أو Bus';
           assertEquals('Native=' + nativeMode, expectOr, result2);
         });
