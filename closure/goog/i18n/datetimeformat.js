@@ -258,6 +258,18 @@ goog.i18n.DateTimeFormat.getHours_ = function(date) {
                                             0;
 };
 
+/**
+ * @param {!goog.date.DateLike} date
+ * @return {number}
+ * @private
+ */
+goog.i18n.DateTimeFormat.getMinutes_ = function(date) {
+  'use strict';
+  return /** @type {?} */ (date).getMinutes ?
+      /** @type {?} */ (date).getMinutes() :
+      0;
+};
+
 
 /**
  * Apply specified pattern to this formatter object.
@@ -897,7 +909,7 @@ goog.i18n.DateTimeFormat.prototype.formatAmPmNoonMidnight_ = function(
   'use strict';
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
   const hours = goog.i18n.DateTimeFormat.getHours_(date);
-  const minutes = (date).getMinutes();
+  const minutes = goog.i18n.DateTimeFormat.getMinutes_(date);
 
   /** {?goog.i18n.DayPeriods} */
   const dayPeriods = goog.i18n.DayPeriods.getDayPeriods();
@@ -926,8 +938,9 @@ goog.i18n.DateTimeFormat.prototype.formatAmPmNoonMidnight_ = function(
 goog.i18n.DateTimeFormat.prototype.formatFlexibleDayPeriods_ = function(
     count, date) {
   'use strict';
+  goog.i18n.DateTimeFormat.validateDateHasTime_(date);
   const hours = goog.i18n.DateTimeFormat.getHours_(date);
-  const minutes = (date).getMinutes();
+  const minutes = goog.i18n.DateTimeFormat.getMinutes_(date);
   // String in HH:MM format for comparing.
   const fmtTime = hours.toString(10).padStart(2, '0') + ':' +
       minutes.toString().padStart(2, '0');
@@ -1117,8 +1130,8 @@ goog.i18n.DateTimeFormat.prototype.formatDate_ = function(count, date) {
 goog.i18n.DateTimeFormat.prototype.formatMinutes_ = function(count, date) {
   'use strict';
   goog.i18n.DateTimeFormat.validateDateHasTime_(date);
-  return this.localizeNumbers_(goog.string.padNumber(
-      /** @type {!goog.date.DateTime} */ (date).getMinutes(), count));
+  return this.localizeNumbers_(
+      goog.string.padNumber(goog.i18n.DateTimeFormat.getMinutes_(date), count));
 };
 
 
