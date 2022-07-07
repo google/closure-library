@@ -1708,9 +1708,11 @@ goog.editor.Field.prototype.dispatchBeforeTab_ = function(e) {
  * @param {boolean=} opt_stopChange Whether to ignore base change events.
  * @param {boolean=} opt_stopDelayedChange Whether to ignore delayed change
  *     events.
+ * @param {boolean=} opt_cancelPendingDelayedChange Whether to prevent any
+ *     pending delayed change events from firing when we disable the event.
  */
 goog.editor.Field.prototype.stopChangeEvents = function(
-    opt_stopChange, opt_stopDelayedChange) {
+    opt_stopChange, opt_stopDelayedChange, opt_cancelPendingDelayedChange) {
   'use strict';
   if (opt_stopChange) {
     if (this.changeTimerGecko_) {
@@ -1720,7 +1722,13 @@ goog.editor.Field.prototype.stopChangeEvents = function(
     this.stopEvent(goog.editor.Field.EventType.CHANGE);
   }
   if (opt_stopDelayedChange) {
-    this.clearDelayedChange();
+    if (opt_cancelPendingDelayedChange) {
+      // Stop the delayed change timer without emitting pending events.
+      this.stopDelayedChange_();
+    } else {
+      // Immediately emit pending delayed change events, which stops the timer.
+      this.clearDelayedChange();
+    }
     this.stopEvent(goog.editor.Field.EventType.DELAYEDCHANGE);
   }
 };
@@ -1947,6 +1955,20 @@ goog.editor.Field.prototype.clearDelayedChange = function() {
   this.delayedChangeTimer_.fireIfActive();
 };
 
+/**
+ * Stop the timer, effectively canceling any pending delayed changes.
+ *
+ * @private
+ */
+goog.editor.Field.prototype.stopDelayedChange_ = function() {
+  'use strict';
+  // The changeTimerGecko_ will queue up a delayed change so to fully stop
+  // delayed change we must also stop this timer.
+  if (this.changeTimerGecko_) {
+    this.changeTimerGecko_.stop();
+  }
+  this.delayedChangeTimer_.stop();
+};
 
 /**
  * Dispatch beforefocus and focus for FF. Note that both of these actually
@@ -2219,7 +2241,7 @@ goog.editor.Field.prototype.setSafeHtml = function(
   // If we don't want change events to fire, we have to turn off change events
   // before setting the field contents, since that causes mutation events.
   if (opt_dontFireDelayedChange) {
-    this.stopChangeEvents(false, true);
+    this.stopChangeEvents(false, true, true);
   }
 
   this.setInnerHtml_(html);

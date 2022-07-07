@@ -1255,6 +1255,45 @@ testSuite({
     }
   },
 
+  testSetSafeHtml_withPendingDelayedChangeEvent() {
+    const editableField = new FieldConstructor('testField', document);
+    const clock = new MockClock(true);
+
+    try {
+      let delayedChangeCalled = false;
+      events.listen(editableField, Field.EventType.DELAYEDCHANGE, () => {
+        delayedChangeCalled = true;
+      });
+
+      editableField.makeEditable();
+      clock.tick(1000);
+      assertFalse(
+          'Make editable must not fire delayed change.', delayedChangeCalled);
+
+      let shouldWrapInParagraphTag = false;
+      editableField.setSafeHtml(
+          shouldWrapInParagraphTag, SafeHtml.htmlEscape('foo'),
+          false /* Fire delayed change */);
+      testingDom.assertHtmlContentsMatch('foo', editableField.getElement());
+      clock.tick(100);
+      assertFalse(
+          'delayedChange should not fire after only 100ms.',
+          delayedChangeCalled);
+
+      editableField.setSafeHtml(
+          shouldWrapInParagraphTag, SafeHtml.htmlEscape('bar'),
+          true /* Don't fire delayed change */);
+      testingDom.assertHtmlContentsMatch('bar', editableField.getElement());
+      clock.tick(1000);
+      assertFalse(
+          'setSafeHtml must not fire pending delayed change if so configured.',
+          delayedChangeCalled);
+    } finally {
+      clock.dispose();
+      editableField.dispose();
+    }
+  },
+
   /**
      Verify that restoreSavedRange() restores the range and sets the focus.
    */
