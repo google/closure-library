@@ -19,7 +19,6 @@ const dom = goog.require('goog.dom');
 const functions = goog.require('goog.functions');
 const googArray = goog.require('goog.array');
 const googObject = goog.require('goog.object');
-const product = goog.require('goog.userAgent.product');
 const testSuite = goog.require('goog.testing.testSuite');
 const testing = goog.require('goog.html.testing');
 const testingDom = goog.require('goog.testing.dom');
@@ -1212,9 +1211,7 @@ testSuite({
 
   testStyleTag_networkUrlPolicy() {
     const input = '<style>a{background-image: url("http://foo.com");}</style>';
-    // Safari will strip quotes if they are not needed and add a slash.
-    const expected = product.SAFARI ?
-        '<style>a{background-image: url("http://foo.com/");}</style>' :
+    const expected =
         '<style>a{background-image: url("http://foo.com");}</style>';
     assertSanitizedHtml(
         input, expected,

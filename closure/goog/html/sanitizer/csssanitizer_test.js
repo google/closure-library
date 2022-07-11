@@ -528,11 +528,9 @@ testSuite({
 
     let input = 'a {background-image: url("http://bar.com")}';
     const quoted = '#foo a{background-image: url("http://bar.com");}';
-    // Safari will add a slash.
-    const slash = '#foo a{background-image: url("http://bar.com/");}';
     assertBrowserSanitizedCssEquals(
-        {safari: slash, chrome: quoted}, input, undefined /* opt_containerId */,
-        urlRewriter);
+        {safari: quoted, chrome: quoted}, input,
+        undefined /* opt_containerId */, urlRewriter);
 
     input = 'a {background-image: url("http://nope.com")}';
     let expected = '#foo a{}';
