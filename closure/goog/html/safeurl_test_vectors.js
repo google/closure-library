@@ -33,7 +33,6 @@ goog.html.safeUrlTestVectors.BASE_VECTORS = [
       {input: 'javascript:evil();', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'javascript:evil();//\u000Ahttp://good.com/', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'not-data:image/png;base64,z\u003D', expected: 'about:invalid#zClosurez', safe: false},
-      {input: ' data:image/png;base64,z\u003D', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'tel:+1234567890', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'sms:+1234567890', expected: 'about:invalid#zClosurez', safe: false},
       {input: 'callto:+1234567890', expected: 'about:invalid#zClosurez', safe: false},
