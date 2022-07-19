@@ -216,7 +216,9 @@ goog.events.BrowserEvent.USE_LAYER_XY_AS_OFFSET_XY =
 goog.events.BrowserEvent.MouseButton = {
   LEFT: 0,
   MIDDLE: 1,
-  RIGHT: 2
+  RIGHT: 2,
+  BACK: 3,
+  FORWARD: 4,
 };
 
 
