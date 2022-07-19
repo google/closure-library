@@ -59,7 +59,7 @@ goog.window.createFakeWindow_ = function() {
  *     we aim to make this true by default.
  */
 goog.window.NOREFERRER_IMPLIES_NOOPENER =
-    goog.define('goog.window.NOREFERRER_IMPLIES_NOOPENER', goog.DEBUG);
+    goog.define('goog.window.NOREFERRER_IMPLIES_NOOPENER', true);
 
 /**
  * @const forTesting contains a map used for overriding goog.defines for
