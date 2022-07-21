@@ -18,7 +18,7 @@ jobs:
       - name: Run Release Draft Script
         run: |
           cd scripts/release
-          npm install
+          npm ci
           npm start
         env:
           # A GitHub API token is required to create a new GitHub release.
