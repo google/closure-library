@@ -1201,67 +1201,6 @@ goog.loadFileSync_ = function(src) {
   }
 };
 
-
-/**
- * Lazily retrieves the transpiler and applies it to the source.
- * @param {string} code JS code.
- * @param {string} path Path to the code.
- * @param {string} target Language level output.
- * @return {string} The transpiled code.
- * @private
- */
-goog.transpile_ = function(code, path, target) {
-  var jscomp = goog.global['$jscomp'];
-  if (!jscomp) {
-    goog.global['$jscomp'] = jscomp = {};
-  }
-  var transpile = jscomp.transpile;
-  if (!transpile) {
-    var transpilerPath = goog.basePath + goog.TRANSPILER;
-    var transpilerCode = goog.loadFileSync_(transpilerPath);
-    if (transpilerCode) {
-      // This must be executed synchronously, since by the time we know we
-      // need it, we're about to load and write the ES6 code synchronously,
-      // so a normal script-tag load will be too slow. Wrapped in a function
-      // so that code is eval'd in the global scope.
-      (function() {
-        (0, eval)(transpilerCode + '\n//# sourceURL=' + transpilerPath);
-      }).call(goog.global);
-      // Even though the transpiler is optional, if $gwtExport is found, it's
-      // a sign the transpiler was loaded and the $jscomp.transpile *should*
-      // be there.
-      if (goog.global['$gwtExport'] && goog.global['$gwtExport']['$jscomp'] &&
-          !goog.global['$gwtExport']['$jscomp']['transpile']) {
-        throw new Error(
-            'The transpiler did not properly export the "transpile" ' +
-            'method. $gwtExport: ' + JSON.stringify(goog.global['$gwtExport']));
-      }
-      // transpile.js only exports a single $jscomp function, transpile. We
-      // grab just that and add it to the existing definition of $jscomp which
-      // contains the polyfills.
-      goog.global['$jscomp'].transpile =
-          goog.global['$gwtExport']['$jscomp']['transpile'];
-      jscomp = goog.global['$jscomp'];
-      transpile = jscomp.transpile;
-    }
-  }
-  if (!transpile) {
-    // The transpiler is an optional component.  If it's not available then
-    // replace it with a pass-through function that simply logs.
-    var suffix = ' requires transpilation but no transpiler was found.';
-    transpile = jscomp.transpile = function(code, path) {
-      // TODO(sdh): figure out some way to get this error to show up
-      // in test results, noting that the failure may occur in many
-      // different ways, including in loadModule() before the test
-      // runner even comes up.
-      goog.logToConsole_(path + suffix);
-      return code;
-    };
-  }
-  // Note: any transpilation errors/warnings will be logged to the console.
-  return transpile(code, path, target);
-};
-
 //==============================================================================
 // Language Enhancements
 //==============================================================================
@@ -2296,173 +2235,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
   goog.findBasePath_();
 
-  /** @struct @constructor @final */
-  goog.Transpiler = function() {
-    /** @private {?Object<string, boolean>} */
-    this.requiresTranspilation_ = null;
-    /** @private {string} */
-    this.transpilationTarget_ = goog.TRANSPILE_TO_LANGUAGE;
-  };
-  /**
-   * Returns a newly created map from language mode string to a boolean
-   * indicating whether transpilation should be done for that mode as well as
-   * the highest level language that this environment supports.
-   *
-   * Guaranteed invariant:
-   * For any two modes, l1 and l2 where l2 is a newer mode than l1,
-   * `map[l1] == true` implies that `map[l2] == true`.
-   *
-   * Note this method is extracted and used elsewhere, so it cannot rely on
-   * anything external (it should easily be able to be transformed into a
-   * standalone, top level function).
-   *
-   * @private
-   * @return {{
-   *   target: string,
-   *   map: !Object<string, boolean>
-   * }}
-   */
-  goog.Transpiler.prototype.createRequiresTranspilation_ = function() {
-    var transpilationTarget = 'es3';
-    var /** !Object<string, boolean> */ requiresTranspilation = {'es3': false};
-    var transpilationRequiredForAllLaterModes = false;
-
-    /**
-     * Adds an entry to requiresTranspliation for the given language mode.
-     *
-     * IMPORTANT: Calls must be made in order from oldest to newest language
-     * mode.
-     * @param {string} modeName
-     * @param {function(): boolean} isSupported Returns true if the JS engine
-     *     supports the given mode.
-     */
-    function addNewerLanguageTranspilationCheck(modeName, isSupported) {
-      if (transpilationRequiredForAllLaterModes) {
-        requiresTranspilation[modeName] = true;
-      } else if (isSupported()) {
-        transpilationTarget = modeName;
-        requiresTranspilation[modeName] = false;
-      } else {
-        requiresTranspilation[modeName] = true;
-        transpilationRequiredForAllLaterModes = true;
-      }
-    }
-
-    /**
-     * Does the given code evaluate without syntax errors and return a truthy
-     * result?
-     */
-    function /** boolean */ evalCheck(/** string */ code) {
-      try {
-        return !!eval(goog.CLOSURE_EVAL_PREFILTER_.createScript(code));
-      } catch (ignored) {
-        return false;
-      }
-    }
-
-    // Identify ES3-only browsers by their incorrect treatment of commas.
-    addNewerLanguageTranspilationCheck('es5', function() {
-      return evalCheck('[1,].length==1');
-    });
-    addNewerLanguageTranspilationCheck('es6', function() {
-      // Edge has a non-deterministic (i.e., not reproducible) bug with ES6:
-      // https://github.com/Microsoft/ChakraCore/issues/1496.
-      if (goog.isEdge_()) {
-        // The Reflect.construct test below is flaky on Edge. It can sometimes
-        // pass or fail on 40 15.15063, so just exit early for Edge and treat
-        // it as ES5. Until we're on a more up to date version just always use
-        // ES5. See https://github.com/Microsoft/ChakraCore/issues/3217.
-        return false;
-      }
-      // Test es6: [FF50 (?), Edge 14 (?), Chrome 50]
-      //   (a) default params (specifically shadowing locals),
-      //   (b) destructuring, (c) block-scoped functions,
-      //   (d) for-of (const), (e) new.target/Reflect.construct
-      var es6fullTest =
-          'class X{constructor(){if(new.target!=String)throw 1;this.x=42}}' +
-          'let q=Reflect.construct(X,[],String);if(q.x!=42||!(q instanceof ' +
-          'String))throw 1;for(const a of[2,3]){if(a==2)continue;function ' +
-          'f(z={a}){let a=0;return z.a}{function f(){return 0;}}return f()' +
-          '==3}';
-
-      return evalCheck('(()=>{"use strict";' + es6fullTest + '})()');
-    });
-    // ** and **= are the only new features in 'es7'
-    addNewerLanguageTranspilationCheck('es7', function() {
-      return evalCheck('2**3==8');
-    });
-    // async functions are the only new features in 'es8'
-    addNewerLanguageTranspilationCheck('es8', function() {
-      return evalCheck('async()=>1,1');
-    });
-    addNewerLanguageTranspilationCheck('es9', function() {
-      return evalCheck('({...rest}={}),1');
-    });
-    // optional catch binding, unescaped unicode paragraph separator in strings
-    addNewerLanguageTranspilationCheck('es_2019', function() {
-      return evalCheck('let r;try{r="\u2029"}catch{};r');
-    });
-    // optional chaining, nullish coalescing
-    // untested/unsupported: bigint, import meta
-    addNewerLanguageTranspilationCheck('es_2020', function() {
-      return evalCheck('null?.x??1');
-    });
-    addNewerLanguageTranspilationCheck('es_next', function() {
-      return false;  // assume it always need to transpile
-    });
-    return {target: transpilationTarget, map: requiresTranspilation};
-  };
-
-
-  /**
-   * Determines whether the given language needs to be transpiled.
-   * @param {string} lang
-   * @param {string|undefined} module
-   * @return {boolean}
-   */
-  goog.Transpiler.prototype.needsTranspile = function(lang, module) {
-    if (goog.TRANSPILE == 'always') {
-      return true;
-    } else if (goog.TRANSPILE == 'never') {
-      return false;
-    } else if (!this.requiresTranspilation_) {
-      var obj = this.createRequiresTranspilation_();
-      this.requiresTranspilation_ = obj.map;
-      this.transpilationTarget_ = this.transpilationTarget_ || obj.target;
-    }
-    if (lang in this.requiresTranspilation_) {
-      if (this.requiresTranspilation_[lang]) {
-        return true;
-      } else if (
-          goog.inHtmlDocument_() && module == 'es6' &&
-          !('noModule' in goog.global.document.createElement('script'))) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      throw new Error('Unknown language mode: ' + lang);
-    }
-  };
-
-
-  /**
-   * Lazily retrieves the transpiler and applies it to the source.
-   * @param {string} code JS code.
-   * @param {string} path Path to the code.
-   * @return {string} The transpiled code.
-   */
-  goog.Transpiler.prototype.transpile = function(code, path) {
-    // TODO(johnplaisted): We should delete goog.transpile_ and just have this
-    // function. But there's some compile error atm where goog.global is being
-    // stripped incorrectly without this.
-    return goog.transpile_(code, path, this.transpilationTarget_);
-  };
-
-
-  /** @private @final {!goog.Transpiler} */
-  goog.transpiler_ = new goog.Transpiler();
-
   /**
    * Rewrites closing script tags in input to avoid ending an enclosing script
    * tag.
@@ -2499,7 +2271,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     /** @private {boolean} */
     this.paused_ = false;
     /** @private {!goog.DependencyFactory} */
-    this.factory_ = new goog.DependencyFactory(goog.transpiler_);
+    this.factory_ = new goog.DependencyFactory();
     /** @private @const {!Object<string, !Function>} */
     this.deferredCallbacks_ = {};
     /** @private @const {!Array<string>} */
@@ -2559,8 +2331,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     // transpile is set to always.
     var relPath = 'deps.js';
     this.depsToLoad_.push(this.factory_.createDependency(
-        goog.normalizePath_(goog.basePath + relPath), relPath, [], [], {},
-        false));
+        goog.normalizePath_(goog.basePath + relPath), relPath, [], [], {}));
     this.loadDeps_();
   };
 
@@ -2956,7 +2727,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * This default implementation is designed to load untranspiled, non-module
    * scripts in a web broswer.
    *
-   * For transpiled non-goog.module files {@see goog.TranspiledDependency}.
    * For goog.modules see {@see goog.GoogModuleDependency}.
    * For untranspiled ES6 modules {@see goog.Es6ModuleDependency}.
    *
@@ -3587,41 +3357,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
 
 
   /**
-   * Any non-goog.module dependency which needs to be transpiled before eval.
-   *
-   * @param {string} path Absolute path of this script.
-   * @param {string} relativePath Path of this script relative to goog.basePath.
-   * @param {!Array<string>} provides goog.provided or goog.module symbols
-   *     in this file.
-   * @param {!Array<string>} requires goog symbols or relative paths to Closure
-   *     this depends on.
-   * @param {!Object<string, string>} loadFlags
-   * @param {!goog.Transpiler} transpiler
-   * @struct @constructor
-   * @extends {goog.TransformedDependency}
-   */
-  goog.TranspiledDependency = function(
-      path, relativePath, provides, requires, loadFlags, transpiler) {
-    goog.TranspiledDependency.base(
-        this, 'constructor', path, relativePath, provides, requires, loadFlags);
-    /** @protected @const*/
-    this.transpiler = transpiler;
-  };
-  goog.inherits(goog.TranspiledDependency, goog.TransformedDependency);
-
-
-  /**
-   * @override
-   * @param {string} contents
-   * @return {string}
-   */
-  goog.TranspiledDependency.prototype.transform = function(contents) {
-    // Transpile with the pathname so that ES6 modules are domain agnostic.
-    return this.transpiler.transpile(contents, this.getPathName());
-  };
-
-
-  /**
    * An ES6 module dependency that was transpiled to a jscomp module outside
    * of the debug loader, e.g. server side.
    *
@@ -3667,20 +3402,13 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * @param {!Array<string>} requires goog symbols or relative paths to Closure
    *     this depends on.
    * @param {!Object<string, string>} loadFlags
-   * @param {boolean} needsTranspile
-   * @param {!goog.Transpiler} transpiler
    * @struct @constructor
    * @extends {goog.TransformedDependency}
    */
   goog.GoogModuleDependency = function(
-      path, relativePath, provides, requires, loadFlags, needsTranspile,
-      transpiler) {
+      path, relativePath, provides, requires, loadFlags) {
     goog.GoogModuleDependency.base(
         this, 'constructor', path, relativePath, provides, requires, loadFlags);
-    /** @private @const */
-    this.needsTranspile_ = needsTranspile;
-    /** @private @const */
-    this.transpiler_ = transpiler;
   };
   goog.inherits(goog.GoogModuleDependency, goog.TransformedDependency);
 
@@ -3691,10 +3419,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * @return {string}
    */
   goog.GoogModuleDependency.prototype.transform = function(contents) {
-    if (this.needsTranspile_) {
-      contents = this.transpiler_.transpile(contents, this.getPathName());
-    }
-
     if (!goog.LOAD_MODULE_USING_EVAL || goog.global.JSON === undefined) {
       return '' +
           'goog.loadModule(function(exports) {' +
@@ -3729,9 +3453,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       opt_loadFlags = opt_loadFlags ? {'module': goog.ModuleType.GOOG} : {};
     }
     var dep = this.factory_.createDependency(
-        path, relPath, provides, requires, opt_loadFlags,
-        goog.transpiler_.needsTranspile(
-            opt_loadFlags['lang'] || 'es3', opt_loadFlags['module']));
+        path, relPath, provides, requires, opt_loadFlags);
     this.dependencies_[path] = dep;
     for (var i = 0; i < provides.length; i++) {
       this.idToPath_[provides[i]] = path;
@@ -3746,13 +3468,9 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * Should be overridden to have the debug loader use custom subclasses of
    * goog.Dependency.
    *
-   * @param {!goog.Transpiler} transpiler
    * @struct @constructor
    */
-  goog.DependencyFactory = function(transpiler) {
-    /** @protected @const */
-    this.transpiler = transpiler;
-  };
+  goog.DependencyFactory = function() {};
 
 
   /**
@@ -3762,23 +3480,17 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
    * @param {!Array<string>} requires Array of required goog.provide/module /
    *     relative ES6 module paths.
    * @param {!Object<string, string>} loadFlags
-   * @param {boolean} needsTranspile True if the file needs to be transpiled
-   *     per the goog.Transpiler.
    * @return {!goog.Dependency}
    */
   goog.DependencyFactory.prototype.createDependency = function(
-      path, relativePath, provides, requires, loadFlags, needsTranspile) {
+      path, relativePath, provides, requires, loadFlags) {
 
     if (loadFlags['module'] == goog.ModuleType.GOOG) {
       return new goog.GoogModuleDependency(
-          path, relativePath, provides, requires, loadFlags, needsTranspile,
-          this.transpiler);
-    } else if (needsTranspile) {
-      return new goog.TranspiledDependency(
-          path, relativePath, provides, requires, loadFlags, this.transpiler);
+          path, relativePath, provides, requires, loadFlags);
     } else {
       if (loadFlags['module'] == goog.ModuleType.ES6) {
-        if (goog.TRANSPILE == 'never' && goog.ASSUME_ES_MODULES_TRANSPILED) {
+        if (goog.ASSUME_ES_MODULES_TRANSPILED) {
           return new goog.PreTranspiledEs6ModuleDependency(
               path, relativePath, provides, requires, loadFlags);
         } else {
