@@ -64,6 +64,7 @@ goog.editor.plugins.LinkBubble = function(var_args) {
 
   /** @private @const {!goog.a11y.aria.Announcer} */
   this.announcer_ = new goog.a11y.aria.Announcer();
+  this.registerDisposable(this.announcer_);
 };
 goog.inherits(
     goog.editor.plugins.LinkBubble, goog.editor.plugins.AbstractBubblePlugin);
