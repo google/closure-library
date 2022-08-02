@@ -33,8 +33,8 @@ goog.provide('goog.ui.ServerChart.UriTooLongEvent');
 
 goog.require('goog.Uri');
 goog.require('goog.asserts');
+goog.require('goog.asserts.dom');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.safe');
 goog.require('goog.events.Event');
 goog.require('goog.ui.Component');
 goog.requireType('goog.dom.DomHelper');
@@ -330,8 +330,7 @@ goog.ui.ServerChart.prototype.createDom = function() {
  */
 goog.ui.ServerChart.prototype.decorateInternal = function(img) {
   'use strict';
-  goog.dom.safe.setImageSrc(
-      /** @type {!HTMLImageElement} */ (img), this.getUri().toString());
+  goog.asserts.dom.assertIsHtmlImageElement(img).src = this.getUri().toString();
   this.setElementInternal(img);
 };
 
@@ -342,9 +341,8 @@ goog.ui.ServerChart.prototype.decorateInternal = function(img) {
 goog.ui.ServerChart.prototype.updateChart = function() {
   'use strict';
   if (this.getElement()) {
-    goog.dom.safe.setImageSrc(
-        /** @type {!HTMLImageElement} */ (this.getElement()),
-        this.getUri().toString());
+    goog.asserts.dom.assertIsHtmlImageElement(this.getElement()).src =
+        this.getUri().toString();
   }
 };
 

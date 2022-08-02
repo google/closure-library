@@ -24,7 +24,6 @@ closure_js_library(
     lenient = True,
     deps = [
         "//closure/goog/disposable",
-        "//closure/goog/dom:safe",
         "//closure/goog/events:eventhandler",
         "//closure/goog/events:eventtype",
         "//closure/goog/html:safeurl",

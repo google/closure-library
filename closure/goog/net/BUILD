@@ -350,7 +350,6 @@ closure_js_library(
     srcs = ["networktester.js"],
     lenient = True,
     deps = [
-        "//closure/goog/dom:safe",
         "//closure/goog/log",
         "//closure/goog/timer",
         "//closure/goog/uri",
@@ -363,7 +362,6 @@ closure_js_library(
     lenient = True,
     deps = [
         ":channeldebug",
-        "//closure/goog/dom:safe",
         "//closure/goog/uri",
     ],
 )
