@@ -11,10 +11,15 @@ jobs:
     steps:
       # This action checks out at the commit of the tagged release.
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
+          node-version: 'latest'
+      - run: npm ci
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 'latest'
           registry-url: https://wombat-dressing-room.appspot.com
-      # Publish google-closure-library.
-      - run: npm install
+      - run: npm publish --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_GOOGLE_CLOSURE_LIBRARY }}
+
