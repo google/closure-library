@@ -1,0 +1,20 @@
+name: (test) Install deps using NPM
+
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  publish-on-npm:
+    runs-on: ubuntu-latest
+    steps:
+      # This action checks out at the commit of the tagged release.
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          registry-url: https://wombat-dressing-room.appspot.com
+      # Publish google-closure-library.
+      - run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_GOOGLE_CLOSURE_LIBRARY }}
