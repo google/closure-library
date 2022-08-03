@@ -14,9 +14,10 @@ dist/
 
 # python
 *.pyc
+
+# Npm
 node_modules/
 closure-deps/node_modules/
-package-lock.json
 
 # Closure Generated Unit Tests
 *_test.html
