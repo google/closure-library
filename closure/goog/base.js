@@ -1029,32 +1029,6 @@ goog.ASSUME_ES_MODULES_TRANSPILED =
 
 
 /**
- * @define {string} If a file needs to be transpiled what the output language
- * should be. By default this is the highest language level this file detects
- * the current environment supports. Generally this flag should not be set, but
- * it could be useful to override. Example: If the current environment supports
- * ES6 then by default ES7+ files will be transpiled to ES6, unless this is
- * overridden.
- *
- * Valid values include: es3, es5, es6, es7, and es8. Anything not recognized
- * is treated as es3.
- *
- * Note that setting this value does not force transpilation. Just if
- * transpilation occurs this will be the output. So this is most useful when
- * goog.TRANSPILE is set to 'always' and then forcing the language level to be
- * something lower than what the environment detects.
- */
-goog.TRANSPILE_TO_LANGUAGE = goog.define('goog.TRANSPILE_TO_LANGUAGE', '');
-
-
-/**
- * @define {string} Path to the transpiler.  Executing the script at this
- * path (relative to base.js) should define a function $jscomp.transpile.
- */
-goog.TRANSPILER = goog.define('goog.TRANSPILER', 'transpile.js');
-
-
-/**
  * @define {string} Trusted Types policy name. If non-empty then Closure will
  * use Trusted Types.
  */

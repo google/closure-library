@@ -87,11 +87,8 @@ export const module = {
 // goog.module.declareLegacyNamespace - ES6 modules cannot declare namespaces.
 // goog.addDependency - meant to only be used by dependency files.
 // goog.DEPENDENCIES_ENABLED - constant only used in base.
-// goog.TRANSPILE - define only used in base.
-// goog.TRANSPILER - define only used in base.
 // goog.loadModule - should not be called by any ES6 module; exists for
 //   generated bundles.
 // goog.LOAD_MODULE_USING_EVAL - define only used in base.
 // goog.SEAL_MODULE_EXPORTS - define only used in base.
 // goog.DebugLoader - used rarely, only outside of compiled code.
-// goog.Transpiler - used rarely, only outside of compiled code.
