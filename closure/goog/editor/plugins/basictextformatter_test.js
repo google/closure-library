@@ -602,7 +602,31 @@ testSuite({
     assertEquals(String(TagName.OL), list.tagName);
     assertEquals(
         3, dom.getElementsByTagNameAndClass(TagName.LI, null, list).length);
+    tearDownListAndBlockquoteTests();
+  },
 
+  /** @suppress {visibility} suppression added to enable type checking */
+  testAddAndRemoveList_placeholderRemoved() {
+    if (!userAgent.WEBKIT) {
+      return;
+    }
+    // Test that we're not seeing https://bugs.webkit.org/show_bug.cgi?id=19539,
+    // the type of multi-item lists.
+    setUpListAndBlockquoteTests();
+
+    FIELDMOCK.$replay();
+    let parent = dom.getElement('addAndRemoveList');
+
+    Range.createFromNodeContents(parent).select();
+    // Add the ordered list
+    FORMATTER.execCommandInternal(BasicTextFormatter.COMMAND.ORDERED_LIST);
+    assertEquals(
+        3, dom.getElementsByTagNameAndClass(TagName.LI, null, parent).length);
+    FORMATTER.execCommandInternal(BasicTextFormatter.COMMAND.ORDERED_LIST);
+    assertEquals(
+        0, dom.getElementsByTagNameAndClass(TagName.LI, null, parent).length);
+    // Assert that no placeholder is left behind
+    assertFalse(parent.textContent.includes('goog'));
     tearDownListAndBlockquoteTests();
   },
 

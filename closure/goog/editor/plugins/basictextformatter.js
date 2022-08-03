@@ -365,15 +365,31 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
 
       if (hasPlaceholderContent && placeholderValue) {
         // Unfortunately, the browser sometimes removes the element we added and
-        // creates a new element with the same content, so we can't add an
+        // creates a new element with the same content or appends the text to
+        // an existing text node, so we can't add an
         // id/class to the placeholder node and rely on that to find/delete the
         // content, and instead have to manually search for the content.
-        const placeholderEl = goog.dom.findNode(
+        // Example:
+        //<ol>
+        //   <li><span>goog_12345</span>abc</li>
+        //   <li>def</li>
+        // </ol>
+        // can become
+        // goog_12345abc<br>
+        // def<br>
+        // after execCommand is called
+        const POTENTIAL_PLACEHOLDER_TAGS = [goog.dom.TagName.SPAN, '#text'];
+        const placeholderNode = goog.dom.findNode(
             this.getFieldObject().getElement(),
-            el => el.nodeName == goog.dom.TagName.SPAN &&
-                el.textContent === placeholderValue);
-        if (placeholderEl) {
-          goog.dom.removeNode(placeholderEl);
+            node => POTENTIAL_PLACEHOLDER_TAGS.includes(node.nodeName) &&
+                node.textContent.includes(placeholderValue));
+        if (placeholderNode) {
+          if (placeholderNode.textContent === placeholderValue) {
+            goog.dom.removeNode(placeholderNode);
+          } else {
+            placeholderNode.textContent =
+                placeholderNode.textContent.replaceAll(placeholderValue, '');
+          }
         }
       }
 
