@@ -10,7 +10,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        uses: actions/setup-node@v3
         with:
+          node-version: current
           # We need to fetch the full repository in order to write complete
           # release notes.
           fetch-depth: 0

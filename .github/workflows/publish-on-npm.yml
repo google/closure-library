@@ -3,6 +3,10 @@ name: Publish on NPM
 on:
   release:
     types: [ published ]
+  # Allow this workflow to be manually dispatched from the GitHub Actions UI or CLI
+  # in order to manually create or retry releases. This should not be necessary most of the time, as
+  # the 'on: release' trigger above should suffice.
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,11 +17,23 @@ jobs:
     steps:
       # This action checks out at the commit of the tagged release.
       - uses: actions/checkout@v2
+      # Install all deps in preparation for creating a release.
+      # Unlike publishing, this is done using the normal NPM registry
+      # to download deps.
       - uses: actions/setup-node@v3
         with:
+          node-version: current
+      # TODO: We should check in a lockfile and use npm ci here instead.
+      - run: npm install
+
+      # Re-setup node using Wombat Dressing Room as the registry
+      # The actual NodeJS binaries and such are cached, so doing this
+      # twice isn't particularly expensive.
+      - uses: actions/setup-node@v3
+        with:
+          node-version: current
           registry-url: https://wombat-dressing-room.appspot.com
       # Publish google-closure-library.
-      - run: npm install
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_GOOGLE_CLOSURE_LIBRARY }}
