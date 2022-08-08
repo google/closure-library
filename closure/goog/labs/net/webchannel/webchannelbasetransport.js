@@ -572,6 +572,16 @@ WebChannelBaseTransport.ChannelProperties.prototype.ackCommit =
     goog.abstractMethod;
 
 
+/**
+ * @override
+ * @return {!Object<string, string>|undefined}
+ */
+WebChannelBaseTransport.ChannelProperties.prototype.getLastResponseHeaders =
+    function() {
+  'use strict';
+  return this.channel_.getLastResponseHeaders();
+};
+
 /** @override */
 WebChannelBaseTransport.ChannelProperties.prototype.getLastStatusCode =
     function() {

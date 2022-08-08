@@ -107,6 +107,7 @@ class MockChannelRequest {
     this.successful_ = true;
     this.lastError_ = null;
     this.lastStatusCode_ = 200;
+    this.errorResponseHeaders_ = undefined;
 
     // For debugging, keep track of whether this is a back or forward channel.
     this.isBack = !!(requestId == 'rpc');
@@ -174,6 +175,11 @@ class MockChannelRequest {
   /** @return {?ChannelRequest.Error} The last error. */
   getLastError() {
     return this.lastError_;
+  }
+
+  /** @return {!Object<string, string>|undefined} Error response headers. */
+  getErrorResponseHeaders() {
+    return this.errorResponseHeaders_;
   }
 
   /** @return {number} The status code of the last request. */

@@ -274,10 +274,16 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.lastPostResponseArrayId_ = -1;
 
   /**
-   * The last status code received (until `State.CLOSED` is reached).
+   * The non-200 status code received that causes the channel to be aborted.
    * @private {number}
    */
-  this.lastStatusCode_ = -1;
+  this.errorResponseStatusCode_ = -1;
+
+  /**
+   * The response headers received along with the non-200 status.
+   * @private {!Object<string, string>|undefined}
+   */
+  this.errorResponseHeaders_ = undefined;
 
   /**
    * Number of times we have retried the current forward channel request.
@@ -1205,12 +1211,22 @@ WebChannelBase.prototype.getState = function() {
 
 
 /**
- * @return {number} The last status code received (until `State.CLOSED` is
- * reached).
+ * @return {!Object<string, string>|undefined} The response headers received
+ * along with the non-200 status.
+ */
+WebChannelBase.prototype.getLastResponseHeaders = function() {
+  'use strict';
+  return this.errorResponseHeaders_;
+};
+
+
+/**
+ * @return {number} The non-200 status code received that causes the channel to
+ * be aborted.
  */
 WebChannelBase.prototype.getLastStatusCode = function() {
   'use strict';
-  return this.lastStatusCode_;
+  return this.errorResponseStatusCode_;
 };
 
 
@@ -2084,8 +2100,6 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
     return;
   }
 
-  this.lastStatusCode_ = request.getLastStatusCode();
-
   if (request.getSuccess()) {
     if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
       const size = request.getPostData() ? request.getPostData().length : 0;
@@ -2101,14 +2115,16 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
   }
   // Else unsuccessful. Fall through.
 
+  const lastStatusCode = request.getLastStatusCode();
   const lastError = request.getLastError();
-  if (!WebChannelBase.isFatalError_(lastError, this.lastStatusCode_)) {
+  if (!WebChannelBase.isFatalError_(lastError, lastStatusCode)) {
     // Maybe retry.
     const self = this;
     this.channelDebug_.debug(function() {
       'use strict';
       return 'Maybe retrying, last error: ' +
-          ChannelRequest.errorStringFromCode(lastError, self.lastStatusCode_);
+          ChannelRequest.errorStringFromCode(
+              lastError, self.errorResponseStatusCode_);
     });
     if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
       if (this.maybeRetryForwardChannel_(request)) {
@@ -2125,8 +2141,12 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
   } else {
     // Else fatal error. Fall through and mark the pending maps as failed.
     this.channelDebug_.debug('Not retrying due to error type');
-  }
 
+    if (lastStatusCode > 200) {
+      this.errorResponseStatusCode_ = request.getLastStatusCode();
+      this.errorResponseHeaders_ = request.getErrorResponseHeaders();
+    }
+  }
 
   // Abort the channel now
 
