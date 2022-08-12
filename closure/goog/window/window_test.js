@@ -144,7 +144,6 @@ testSuite({
 
   setUp() {
     newWin = null;
-    googWindow.forTesting.noreferrerImpliesNoopener = true;
   },
 
   tearDown() {
@@ -514,41 +513,6 @@ testSuite({
           '<meta name="referrer" content="no-referrer"><meta http-equiv="refresh" content="0; url=https://example.com">',
           documentWriteHtml);
       assertEquals('', openedUrl);
-    }
-  },
-
-
-  testOpenNewWindowNoreferrerImpliesNoopenerDisabled() {
-    googWindow.forTesting.noreferrerImpliesNoopener = false;
-
-    let documentWriteHtml;
-    let openedUrl;
-    const mockNewWin = {};
-    mockNewWin.document = {
-      write: function(html) {
-        documentWriteHtml = html;
-      },
-      close: function() {},
-    };
-    const /** ? */ mockWin = {
-      open: function(url) {
-        openedUrl = url;
-        return mockNewWin;
-      },
-    };
-    mockNewWin.opener = mockWin;
-    const options = {noreferrer: true};
-    const win = googWindow.open('https://example.com', options, mockWin);
-    if (self.crossOriginIsolated !== undefined) {
-      assertEquals(undefined, documentWriteHtml);
-      assertEquals('https://example.com', openedUrl);
-      assertNotNull(win.opener);
-    } else {
-      assertEquals(
-          '<meta name="referrer" content="no-referrer"><meta http-equiv="refresh" content="0; url=https://example.com">',
-          documentWriteHtml);
-      assertEquals('', openedUrl);
-      assertNull(win.opener);
     }
   },
 });

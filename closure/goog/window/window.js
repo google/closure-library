@@ -55,27 +55,6 @@ goog.window.createFakeWindow_ = function() {
 };
 
 /**
- * @define {boolean} Whether setting 'noreferrer' implies 'noopener'. Ultimately
- *     we aim to make this true by default.
- */
-goog.window.NOREFERRER_IMPLIES_NOOPENER =
-    goog.define('goog.window.NOREFERRER_IMPLIES_NOOPENER', true);
-
-/**
- * @const forTesting contains a map used for overriding goog.defines for
- * testing purposes.
- */
-goog.window.forTesting = {};
-
-/**
- * @type {boolean} An overridable copy of
- *     goog.window.NOREFERRER_IMPLIES_NOOPENER.
- */
-goog.window.forTesting.noreferrerImpliesNoopener =
-    goog.window.NOREFERRER_IMPLIES_NOOPENER;
-
-
-/**
  * Opens a new window.
  *
  * @param {!goog.html.SafeUrl|string|!Object|null} linkRef If an Object with an
@@ -315,8 +294,7 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     // we're already running on a modern enough browser that the referrer is
     // hidden by default. But setting noreferrer implies noopener too, so we
     // also have to clear the opener here.
-    if (goog.window.forTesting.noreferrerImpliesNoopener && newWin &&
-        opt_options['noreferrer']) {
+    if (newWin && opt_options['noreferrer']) {
       newWin.opener = null;
     }
   }
