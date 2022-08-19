@@ -444,7 +444,7 @@ goog.i18n.DateTimeParse.prototype.parse = function(text, date, options) {
 
   const cal = new goog.i18n.DateTimeParse.MyDate_();
   const parsePos = [0];
-  cal.dayPeriodIndex = null;
+  cal.dayPeriodIndex = -1;
 
   for (let i = 0; i < this.patternParts_.length; i++) {
     if (predictive && parsePos[0] >= text.length) {
@@ -593,31 +593,28 @@ goog.i18n.DateTimeParse.prototype.subParse_ = function(
       /** {?goog.i18n.DayPeriods} */
       const localePeriods = DayPeriods.getDayPeriods();
       // Standard names such as 'noon', 'morning1', 'night2', etc.
-      let periodNames;
+      let periodNames = [];
       // The localized terms for the period names.
       let expectedValues = [];
       if (localePeriods) {
-        periodNames = goog.object.getKeys(localePeriods);
         // Get the formatNames values to check
-        for (const name of periodNames) {
+        for (const name of goog.object.getKeys(localePeriods)) {
+          periodNames.push(localePeriods[name].periodName);
           expectedValues.push(localePeriods[name].formatNames[0]);
         }
       }
       // Add strings for AM & PM, in addition to flexible periods
       const periodsData = [expectedValues.concat(this.dateTimeSymbols_.AMPMS)];
       // Include possible outputs of am/pm as day periods.
-      if (periodNames) {
-        periodNames.push('isAm');
-        periodNames.push('isPm');
-      }
+      periodNames.push('isAm');
+      periodNames.push('isPm');
+
       // Record string matching this day period
       const foundPeriod = this.subParseString_(
           text, pos, periodsData, value => cal.dayPeriodIndex = value,
           predictive);
-      cal.dayPeriodName = null;
-      if (cal.dayPeriodIndex && periodNames) {
-        cal.dayPeriodName = periodNames[cal.dayPeriodIndex];
-      }
+      cal.dayPeriodName = periodNames[cal.dayPeriodIndex];
+
       return predictive ? foundPeriod : true;
     case 'a':  // AM_PM
       const success = this.subParseString_(
@@ -1169,7 +1166,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.ampm;
 
 /**
  * Index of the time's flexible day period in data object.
- * @type {?number}
+ * @type {number}
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.dayPeriodIndex;
 

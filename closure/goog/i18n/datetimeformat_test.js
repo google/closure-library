@@ -622,17 +622,45 @@ testSuite({
      * {goog.i18n.DayPeriods}
      */
     const fakeDayPeriods_en = {
-      midnight: {at: '00:00', formatNames: ['midnight']},
-      morning1:
-          {from: '05:00', before: '08:00', formatNames: ['before breakfast']},
-      morning2: {from: '08:00', before: '12:00', formatNames: ['morning']},
-      noon: {at: '12:00', formatNames: ['noon']},
-      afternoon1:
-          {from: '12:00', before: '16:00', formatNames: ['early afternoon']},
-      afternoon2:
-          {from: '16:00', before: '18:00', formatNames: ['dinner time']},
-      evening1: {from: '18:00', before: '23:00', formatNames: ['evening']},
-      night1: {from: '23:00', before: '05:00', formatNames: ['sleeping']},
+      midnight:
+          {at: '00:00', formatNames: ['midnight'], periodName: 'midnight'},
+      morning1: {
+        from: '05:00',
+        before: '08:00',
+        formatNames: ['before breakfast'],
+        periodName: 'morning1'
+      },
+      morning2: {
+        from: '08:00',
+        before: '12:00',
+        formatNames: ['morning'],
+        periodName: 'morning2'
+      },
+      noon: {at: '12:00', formatNames: ['noon'], periodName: 'noon'},
+      afternoon1: {
+        from: '12:00',
+        before: '16:00',
+        formatNames: ['early afternoon'],
+        periodName: 'afternoon1'
+      },
+      afternoon2: {
+        from: '16:00',
+        before: '18:00',
+        formatNames: ['dinner time'],
+        periodName: 'afternoon2'
+      },
+      evening1: {
+        from: '18:00',
+        before: '23:00',
+        formatNames: ['evening'],
+        periodName: 'evening1'
+      },
+      night1: {
+        from: '23:00',
+        before: '05:00',
+        formatNames: ['sleeping'],
+        periodName: 'night1'
+      },
     };
     setDayPeriods(fakeDayPeriods_en);
 
