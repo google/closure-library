@@ -123,6 +123,19 @@ function removeLtrMarkers(input) {
 }
 
 /**
+ * Check result to deal with variants in formatting innative mode.
+ * param {boolean} nativeMode
+ * param {string} actual
+ */
+function checkNativeResult(nativeMode, expected, actual) {
+  if (nativeMode) {
+    // Normalize for timezone names
+    expected = expected.replaceAll('UTC', 'GMT');
+  }
+  assertEquals('nativeMode=' + nativeMode, expected, actual);
+}
+
+/**
  * Helpers to make tests work regardless of the timeZone we're in.
  * Gets timezone string of the date.
  * @param {!DateDate} date
@@ -572,16 +585,19 @@ testSuite({
       const timeZone = TimeZone.createTimeZone(-600);
       assertEquals('6月29日 上午6:10 [UTC+10]', fmtZhHk.format(date, timeZone));
 
-      // And some from the extended patterns.
-      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en_XA);
-      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_XA);
-      replacer.replace(goog, 'LOCALE', 'en_XA');
+      if (!nativeMode) {
+        // And some from the extended patterns. Not applicable in native mode.
+        replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en_XA);
+        replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_XA);
+        replacer.replace(goog, 'LOCALE', 'en_XA');
 
-      const fmtEnXa = new DateTimeFormat(
-          goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals(
-          '[[[Ĵûñ one] 28 one], [13:10 UTC-7 one two] one two]',
-          fmtEnXa.format(date));
+        const fmtEnXa = new DateTimeFormat(
+            goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+        assertEquals(
+            'nativeMode=' + nativeMode,
+            '[[[Ĵûñ one] 28 one], [13:10 UTC-7 one two] one two]',
+            fmtEnXa.format(date));
+      }
 
       replacer.replace(
           goog.i18n, 'DateTimePatterns', DateTimePatterns_zh_Hant_TW);
@@ -839,8 +855,7 @@ testSuite({
       }
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_TIME);
-      result = fmt.format(date);
-      assertEquals('nativeMode = ' + nativeMode, expected, result);
+      checkNativeResult(nativeMode, expected, fmt.format(date));
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_TIME);
       result = removeLtrMarkers(fmt.format(date));
@@ -848,23 +863,21 @@ testSuite({
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_TIME);
       result = removeLtrMarkers(fmt.format(date));
-      assertEquals('13:49', result);
+      assertEquals('nativeMode=' + nativeMode, '13:49', result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_DATETIME);
       result = removeDirectionMarkers(fmt.format(date));
       expected = nativeMode ?
           'Freitag, 4. August 2006 um 13:49:24 Nordamerikanische Westküsten-Sommerzeit' :
           'Freitag, 4. August 2006 um 13:49:24 UTC-7';
-      // TODO(user): Resolve timezone full name
-      assertEquals('nativeMode=' + nativeMode, expected, result);
+      checkNativeResult(nativeMode, expected, result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_DATETIME);
       expected = '4. August 2006 um 13:49:24 ' + timezoneResult;
       result = removeDirectionMarkers(fmt.format(date));
-      assertEquals('nativeMode=' + nativeMode, expected, result);
+      checkNativeResult(nativeMode, expected, result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
-      // TODO(user): Why this difference?
       expected = '04.08.2006, 13:49:24';
       assertEquals('nativeMode=' + nativeMode, expected, fmt.format(date));
 
@@ -891,7 +904,10 @@ testSuite({
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZ');
       assertEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZZ');
-      assertEquals('07/27/2006 05:10:10 GMT-08:00', fmt.format(date, timeZone));
+
+      const result = fmt.format(date, timeZone);
+      let expected = '07/27/2006 05:10:10 GMT-08:00';
+      assertEquals('nativeMode=' + nativeMode, expected, result);
     }
   },
 

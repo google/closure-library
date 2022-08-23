@@ -7,10 +7,13 @@
 goog.module('goog.i18n.DateIntervalFormatTest');
 goog.setTestOnly('goog.i18n.DateIntervalFormatTest');
 
+let propertyReplacer;
+
 const DateIntervalFormat = goog.require('goog.i18n.DateIntervalFormat');
 const DateRange = goog.require('goog.date.DateRange');
 const DateTime = goog.require('goog.date.DateTime');
 const DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
+const DateTimeSymbolsType = goog.require('goog.i18n.DateTimeSymbolsType');
 const DateTimeSymbols_ar_EG = goog.require('goog.i18n.DateTimeSymbols_ar_EG');
 const DateTimeSymbols_en = goog.require('goog.i18n.DateTimeSymbols_en');
 const DateTimeSymbols_fr_CA = goog.require('goog.i18n.DateTimeSymbols_fr_CA');
@@ -19,11 +22,58 @@ const DateTimeSymbols_hi = goog.require('goog.i18n.DateTimeSymbols_hi');
 const DateTimeSymbols_zh = goog.require('goog.i18n.DateTimeSymbols_zh');
 const GoogDate = goog.require('goog.date.Date');
 const Interval = goog.require('goog.date.Interval');
+const LocaleFeature = goog.require('goog.i18n.LocaleFeature');
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const TimeZone = goog.require('goog.i18n.TimeZone');
+const browser = goog.require('goog.labs.userAgent.browser');
 const dateIntervalPatterns = goog.require('goog.i18n.dateIntervalPatterns');
 const dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
 const object = goog.require('goog.object');
 const testSuite = goog.require('goog.testing.testSuite');
+
+
+/**
+ * List of locales where native ECMAScript mode works.
+ * Note that these all work with datetime.Range.
+ * @type {!Array<string>} ECMASCRIPT_LISTFORMAT_LOCALES
+ */
+const nativeLocales = LocaleFeature.ECMASCRIPT_LISTFORMAT_LOCALES;
+
+// Use same set of locales as ListFormat
+let testECMAScriptOptions = [false];
+if (!browser.isIE()) {
+  if (Intl && Intl.DateTimeFormat &&
+      Intl.ListFormat.supportedLocalesOf(['en'])) {
+    testECMAScriptOptions.unshift(true);  // Test native before Javascript
+  }
+}
+// For testing with Javascript data.
+testECMAScriptOptions.push(false);
+
+/**
+ * driveTests sets up each test with local, symbols, and native mode.
+ * @param {string} locale
+ * @param {!DateTimeSymbolsType} symbols
+ * @param {!Function} testCallbackFn
+ */
+function driveTests(locale, symbols, testCallbackFn) {
+  propertyReplacer.replace(goog, 'LOCALE', locale);
+  assertTrue(goog.LOCALE == locale);
+
+  const isSupportedNativeLocale = nativeLocales.includes(goog.LOCALE);
+
+  for (let nativeMode of testECMAScriptOptions) {
+    if (nativeMode && !isSupportedNativeLocale) {
+      continue;
+    }
+    if (browser.isSafari() && !browser.isAtLeast(browser.Brand.SAFARI, 14)) {
+      continue;
+    }
+    propertyReplacer.replace(
+        LocaleFeature, 'USE_ECMASCRIPT_I18N_DATEINTERVALFORMAT', nativeMode);
+    testCallbackFn(nativeMode);
+  }
+}
 
 /** @const {!Object<string, !Object>} */
 const localeSymbols = {
@@ -79,7 +129,19 @@ const Data = class {
   }
 };
 
+// For normalizing results
+const THIN_SPACE = '\u2009';
+const ASCII_SPACE = '\u0020';
 
+/**
+ * Change space variants to ASCII spaces for comparing results.
+ * @param {string} inString
+ * @return {string} normalized result
+ * @private
+ */
+function normalizeSpaces_(inString) {
+  return inString.replaceAll(THIN_SPACE, ASCII_SPACE);
+}
 
 // clang-format off
 const formatTestData = [
@@ -170,120 +232,256 @@ const formatTestData = [
 // clang-format on
 
 testSuite({
-  testFormat: function() {
-    for (let i = 0; i < formatTestData.length; i++) {
-      const data = formatTestData[i];
-      const symbols = localeSymbols[data.locale];
-      const dt1 = new Date(Date.UTC.apply(null, data.firstDate));
-      const dt2 = new Date(Date.UTC.apply(null, data.secondDate));
-      /**
-       * @suppress {strictMissingProperties} suppression added to enable
-       * type checking
-       */
-      const fmt = new DateIntervalFormat(
-          data.pattern, symbols.DateIntervalSymbols, symbols.DateTimeSymbols);
-      const tz = TimeZone.createTimeZone(0);
-      assertEquals(
-          data.getErrorDescription(), data.expected, fmt.format(dt1, dt2, tz));
-    }
+  setUpPage() {
+    propertyReplacer = new PropertyReplacer();
   },
 
-  testRangeFormat: function() {
-    const dt1 = new GoogDate(2007, 1, 10);
-    const dt2 = new GoogDate(2007, 6, 3);
-    const dtRng = new DateRange(dt1, dt2);
-    const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE);
-    assertEquals('February 10 – July 3, 2007', fmt.formatRange(dtRng));
+  tearDown() {},
+
+  testFormat: function() {
+    driveTests(
+        'en', DateTimeSymbols_en,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          for (let i = 0; i < formatTestData.length; i++) {
+            const data = formatTestData[i];
+            const symbols = localeSymbols[data.locale];
+            const dt1 = new Date(Date.UTC.apply(null, data.firstDate));
+            const dt2 = new Date(Date.UTC.apply(null, data.secondDate));
+            /**
+             * @suppress {strictMissingProperties} suppression added to enable
+             * type checking
+             */
+            const fmt = new DateIntervalFormat(
+                data.pattern, symbols.DateIntervalSymbols,
+                symbols.DateTimeSymbols);
+            const tz = TimeZone.createTimeZone(0);
+            // Some browsers use a thin space instead of regular space.
+            const result = normalizeSpaces_(fmt.format(dt1, dt2, tz));
+            assertEquals(
+                'nativeMode=' + nativeMode + ' version=' +
+                    browser.getVersion() + data.getErrorDescription(),
+                data.expected, result);
+          }
+        });
+  },
+
+  testRangeFormat() {
+    driveTests(
+        'en', DateTimeSymbols_en,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          const dt1 = new GoogDate(2007, 1, 10);
+          const dt2 = new GoogDate(2007, 6, 3);
+          const dtRng = new DateRange(dt1, dt2);
+          const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE);
+          const result = normalizeSpaces_(fmt.formatRange(dtRng));
+          assertEquals('February 10 – July 3, 2007', result);
+        });
   },
 
   testDateAndIntervalFormat: function() {
-    const dt = new GoogDate(2007, 1, 10);
-    const itv = new Interval(0, 4, 23);
-    const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE);
-    assertEquals('February 10 – July 3, 2007', fmt.format(dt, itv));
+    driveTests(
+        'en', DateTimeSymbols_en,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          const dt = new GoogDate(2007, 1, 10);
+          const itv = new Interval(0, 4, 23);
+          const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE);
+          const result = normalizeSpaces_(fmt.format(dt, itv));
+          assertEquals(
+              'nativeMode=' + nativeMode + ' version=' + browser.getVersion(),
+              'February 10 – July 3, 2007', result);
+        });
   },
 
   testNewYearFormat: function() {
-    const dt1 = new Date(Date.UTC(2007, 0, 1, 3, 0, 23));
-    const dt2 = new Date(Date.UTC(2007, 0, 1, 3, 40, 23));
-    const fmt = new DateIntervalFormat(DateTimeFormat.Format.FULL_DATETIME);
-    const tz = TimeZone.createTimeZone(210);
-    assertEquals(
-        'Sunday, December 31, 2006 at 11:30:23 PM UTC-3:30 – ' +
-            'Monday, January 1, 2007 at 12:10:23 AM UTC-3:30',
-        fmt.format(dt1, dt2, tz));
+    driveTests(
+        'en', DateTimeSymbols_en,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          // Check for crossing the year.
+          const dt1 = new Date(Date.UTC(2007, 0, 1, 3, 0, 23));
+          const dt2 = new Date(Date.UTC(2007, 0, 1, 3, 40, 23));
+          const dt3 = new Date(Date.UTC(2007, 0, 1, 5, 17, 59));
+          const fmt =
+              new DateIntervalFormat(DateTimeFormat.Format.FULL_DATETIME);
+          // Result expected for GMT-3:30 (210 offset west)
+          const expected210 =
+              'Sunday, December 31, 2006 at 11:30:23 PM UTC-3:30 – ' +
+              'Monday, January 1, 2007 at 12:10:23 AM UTC-3:30';
+          const expected210var2 =
+              'Sunday, December 31, 2006, 11:30:23 PM UTC-3:30 – ' +
+              'Monday, January 1, 2007, 12:10:23 AM UTC-3:30';
+
+          // Note: For native mode, GMT-3:30 is not a real timezone
+          let tzMinuteOffset = 210;  // GMT-3:30
+          let tz = TimeZone.createTimeZone(tzMinuteOffset);
+          let result = normalizeSpaces_(fmt.format(dt1, dt2, tz));
+          // 4:30 hours crosses midnight
+          // Handle some variations in formatting
+          assertTrue(
+              'nativeMode=' + nativeMode + ', result = ' + result,
+              result === expected210 || result === expected210var2);
+
+          // Format another range with the same TZ,
+          const result2 = normalizeSpaces_(fmt.format(dt1, dt3, tz));
+          const expected2 =
+              'Sunday, December 31, 2006 at 11:30:23 PM UTC-3:30 – ' +
+              'Monday, January 1, 2007 at 1:47:59 AM UTC-3:30';
+          const expected2var =
+              'Sunday, December 31, 2006, 11:30:23 PM UTC-3:30 – ' +
+              'Monday, January 1, 2007, 1:47:59 AM UTC-3:30';
+          assertTrue(
+              'nativeMode=' + nativeMode + ', result = ' + result,
+              result2 == expected2 || result2 == expected2var);
+
+          // Check for GMT +3.5 hours (Iran)
+          tzMinuteOffset = -210;
+          // Check that formatter is reset.
+          const tz2 = TimeZone.createTimeZone(tzMinuteOffset);
+          let result3 = normalizeSpaces_(fmt.format(dt1, dt2, tz2));
+          const expected3 =
+              'Monday, January 1, 2007, 6:30:23 AM UTC+3:30 – 7:10:23 AM UTC+3:30';
+
+
+          // Handle variation with "at 6:30..." in both parts
+          const expected3var2 =
+              'Monday, January 1, 2007 at 6:30:23 AM UTC+3:30 – Monday, January 1, 2007 at 7:10:23 AM UTC+3:30';
+
+          assertTrue(
+              'nativeMode=' + nativeMode + ' version=' + browser.getVersion(),
+              result3 === expected3 || result3 === expected3var2);
+        });
   },
 
   testTimeZone: function() {
-    const dt1 = new Date(Date.UTC(2007, 0, 10, 6, 0, 23));
-    const dt2 = new Date(Date.UTC(2007, 0, 10, 6, 20, 23));
-    const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_TIME);
-    const tz = TimeZone.createTimeZone(240);
-    assertEquals(
-        '2:00:23 AM UTC-4 – 2:20:23 AM UTC-4', fmt.format(dt1, dt2, tz));
+    driveTests(
+        'en', DateTimeSymbols_en,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          const dt1 = new Date(Date.UTC(2007, 0, 10, 6, 0, 23));
+          const dt2 = new Date(Date.UTC(2007, 0, 10, 6, 20, 23));
+          const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_TIME);
+          const tz = TimeZone.createTimeZone(240);
+          let result = normalizeSpaces_(fmt.format(dt1, dt2, tz));
+          // Standardize the result to "UTC" rather than "GMT"
+          result = result.replaceAll('GMT', 'UTC');
+          assertEquals(
+              'nativeMode=' + nativeMode + ' version=' + browser.getVersion(),
+              '2:00:23 AM UTC-4 – 2:20:23 AM UTC-4', result);
+        });
   },
 
   testFormatSecondDateWithFirstPattern: function() {
-    // Set the new fallback pattern.
-    const symbols = object.clone(dateIntervalSymbols.getDateIntervalSymbols());
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
-    symbols.FALLBACK = '{1} – {0}';
-    // Format the dates.
-    const dt1 = new GoogDate(2007, 1, 10);
-    const dt2 = new GoogDate(2007, 6, 3);
-    /** @suppress {checkTypes} suppression added to enable type checking */
-    const fmt =
-        new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE, symbols);
-    assertEquals('July 3 – February 10, 2007', fmt.format(dt1, dt2));
+    driveTests(
+        'en', DateTimeSymbols_en,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          // Set the new fallback pattern.
+          const symbols =
+              object.clone(dateIntervalSymbols.getDateIntervalSymbols());
+          /**
+           * @suppress {strictMissingProperties} suppression added to enable
+           * type checking
+           */
+          symbols.FALLBACK = '{1} – {0}';
+          // Format the dates.
+          const dt1 = new GoogDate(2007, 1, 10);
+          const dt2 = new GoogDate(2007, 6, 3);
+          /**
+           * @suppress {checkTypes} suppression added to enable type checking
+           */
+          const fmt =
+              new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE, symbols);
+          const result = normalizeSpaces_(fmt.format(dt1, dt2));
+          if (nativeMode) {
+            // EXCEPTION: Native mode doesn't support custom fallback.
+            assertEquals(
+                'nativeMode=' + nativeMode + ' version=' + browser.getVersion(),
+                'February 10 – July 3, 2007', result);
+          } else {
+            // JavaScript mode supports custom fallback.
+            assertEquals(
+                'nativeMode=' + nativeMode + ' version=' + browser.getVersion(),
+                'July 3 – February 10, 2007', result);
+          }
+        });
   },
 
   testGetLargestDifferentCalendarField: function() {
-    // Era
-    let dt1 = new DateTime(-1, 1, 10);
-    let dt2 = new DateTime(2007, 6, 3);
-    /** @suppress {visibility} suppression added to enable type checking */
-    let calField =
-        DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
-    assertEquals('G', calField);
-    // Month
-    dt1 = new DateTime(2007, 1, 10);
-    dt2 = new DateTime(2007, 6, 3);
-    /** @suppress {visibility} suppression added to enable type checking */
-    calField = DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
-    assertEquals('M', calField);
-    // AmPm
-    dt1 = new DateTime(2007, 1, 10, 10);
-    dt2 = new DateTime(2007, 1, 10, 14);
-    /** @suppress {visibility} suppression added to enable type checking */
-    calField = DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
-    assertEquals('a', calField);
-    // AmPm + Timezone
-    dt1 = new Date(Date.UTC(2007, 1, 10, 8, 25));
-    dt2 = new Date(Date.UTC(2007, 1, 10, 8, 35));
-    /** @suppress {checkTypes} suppression added to enable type checking */
-    const tz = new TimeZone.createTimeZone(-210);
-    /** @suppress {visibility} suppression added to enable type checking */
-    calField =
-        DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2, tz);
-    assertEquals('a', calField);
-    // Seconds
-    dt1 = new DateTime(2007, 1, 10, 10, 0, 1);
-    dt2 = new DateTime(2007, 1, 10, 10, 0, 10);
-    /** @suppress {visibility} suppression added to enable type checking */
-    calField = DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
-    assertEquals('s', calField);
+    driveTests(
+        'en', DateTimeSymbols_en,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          // Era
+          let dt1 = new DateTime(-1, 1, 10);
+          let dt2 = new DateTime(2007, 6, 3);
+          /**
+           * @suppress {visibility} suppression added to enable type checking
+           */
+          let calField =
+              DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
+          assertEquals('G', calField);
+          // Month
+          dt1 = new DateTime(2007, 1, 10);
+          dt2 = new DateTime(2007, 6, 3);
+          /**
+           * @suppress {visibility} suppression added to enable type checking
+           */
+          calField =
+              DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
+          assertEquals('M', calField);
+          // AmPm
+          dt1 = new DateTime(2007, 1, 10, 10);
+          dt2 = new DateTime(2007, 1, 10, 14);
+          /**
+           * @suppress {visibility} suppression added to enable type checking
+           */
+          calField =
+              DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
+          assertEquals('a', calField);
+          // AmPm + Timezone
+          dt1 = new Date(Date.UTC(2007, 1, 10, 8, 25));
+          dt2 = new Date(Date.UTC(2007, 1, 10, 8, 35));
+          /**
+           * @suppress {checkTypes} suppression added to enable type checking
+           */
+          const tz = new TimeZone.createTimeZone(-210);
+          /**
+           * @suppress {visibility} suppression added to enable type checking
+           */
+          calField = DateIntervalFormat.getLargestDifferentCalendarField_(
+              dt1, dt2, tz);
+          assertEquals('a', calField);
+          // Seconds
+          dt1 = new DateTime(2007, 1, 10, 10, 0, 1);
+          dt2 = new DateTime(2007, 1, 10, 10, 0, 10);
+          /**
+           * @suppress {visibility} suppression added to enable type checking
+           */
+          calField =
+              DateIntervalFormat.getLargestDifferentCalendarField_(dt1, dt2);
+          assertEquals('s', calField);
+        });
   },
 
   testDivideIntervalPattern: function() {
-    /** @suppress {visibility} suppression added to enable type checking */
-    let pttn = DateIntervalFormat.divideIntervalPattern_('MMM d – d, y');
-    assertObjectEquals({firstPart: 'MMM d – ', secondPart: 'd, y'}, pttn);
-    /** @suppress {visibility} suppression added to enable type checking */
-    pttn = DateIntervalFormat.divideIntervalPattern_('MMM d, y');
-    assertNull(pttn);
+    driveTests(
+        'en', DateTimeSymbols_en,
+        /** @param {boolean} nativeMode */
+        (nativeMode) => {
+          /**
+           * @suppress {visibility} suppression added to enable type checking
+           */
+          let pttn = DateIntervalFormat.divideIntervalPattern_('MMM d – d, y');
+          assertObjectEquals({firstPart: 'MMM d – ', secondPart: 'd, y'}, pttn);
+          /**
+           * @suppress {visibility} suppression added to enable type checking
+           */
+          pttn = DateIntervalFormat.divideIntervalPattern_('MMM d, y');
+          assertNull(pttn);
+        });
   },
 
   testIsCalendarFieldLargerOrEqualThan: /**
@@ -300,5 +498,6 @@ testSuite({
             DateIntervalFormat.isCalendarFieldLargerOrEqualThan_('a', 'y'));
         assertFalse(
             DateIntervalFormat.isCalendarFieldLargerOrEqualThan_('a', '-'));
-      }
+      },
+
 });

@@ -132,6 +132,7 @@ closure_js_library(
         ":dateintervalsymbols",
         ":datetimeformat",
         ":datetimesymbols",
+        ":localefeature",
         ":timezone",
         "//closure/goog/array",
         "//closure/goog/asserts",

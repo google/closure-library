@@ -370,11 +370,7 @@ goog.i18n.DateTimeFormat.prototype.format = function(date, opt_timeZone) {
      * @type {!Date|number|undefined} realdate type match for Closure
      */
     const realdate = date ? new Date(date.valueOf()) : undefined;
-
-    // To be consistent with polyfill results, use "UTC" instead of "GMT".
-    // return this.intlFormatter_.format(realdate).replace(/GMT-/, 'UTC-');
-    let result = this.intlFormatter_.format(realdate).replace(/GMT-/, 'UTC-');
-    return result;
+    return this.intlFormatter_.format(realdate);
   } else {
     // Format using polyfill.
     let diff = opt_timeZone ?
