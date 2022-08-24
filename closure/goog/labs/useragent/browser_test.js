@@ -315,7 +315,6 @@ testSuite({
     util.setUserAgent('');
     util.setUserAgentData(null);
     highEntropyData.resetAllForTesting();
-    highEntropyData.setHasFullVersionListForTesting(false);
   },
 
   async testOpera10() {
@@ -990,7 +989,6 @@ testSuite({
           ]
         });
     util.setUserAgentData(userAgentDataWithVersion);
-    highEntropyData.setHasFullVersionListForTesting(true);
 
     assertBrowser(Browser.CHROME);
     assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.OPERA_CHROMIUM);
@@ -1028,7 +1026,6 @@ testSuite({
           ]
         });
     util.setUserAgentData(userAgentDataWithVersion);
-    highEntropyData.setHasFullVersionListForTesting(true);
 
     assertBrowser(Browser.CHROME);
     assertNonChromeChromiumBrowser(NonChromeChromiumBrowser.EDGE_CHROMIUM);
@@ -1100,7 +1097,6 @@ testSuite({
         testAgentData.CHROME_USERAGENT_DATA_LINUX,
         {fullVersionList: [{brand: 'Chromium', version: '101.0.4472.77'}]});
     util.setUserAgentData(userAgentDataWithVersion);
-    highEntropyData.setHasFullVersionListForTesting(true);
 
     assertBrowser(Browser.CHROME);
     assertTrue(userAgentBrowser.isChrome());
@@ -1151,7 +1147,6 @@ testSuite({
 
   async testChromeUserAgentDataWithRejectedHighEntropyValues() {
     util.setUserAgentData(testAgentData.CHROME_USERAGENT_DATA_LINUX);
-    highEntropyData.setHasFullVersionListForTesting(true);
 
     const fullChromeVersion =
         userAgentBrowser.fullVersionOf(userAgentBrowser.Brand.CHROMIUM);
@@ -1173,7 +1168,6 @@ testSuite({
         testAgentData.CHROME_USERAGENT_DATA_LINUX,
         {fullVersionList: [{brand: 'Chromium', version: '101.0.4472.77'}]});
     util.setUserAgentData(userAgentDataWithVersion);
-    highEntropyData.setHasFullVersionListForTesting(true);
 
     const fullChromeVersion =
         userAgentBrowser.fullVersionOf(userAgentBrowser.Brand.CHROMIUM);

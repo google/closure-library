@@ -19,7 +19,7 @@ const googAsserts = goog.require('goog.asserts');
 const util = goog.require('goog.labs.userAgent.util');
 const {AsyncValue, Version} = goog.require('goog.labs.userAgent.highEntropy.highEntropyValue');
 const {compareVersions} = goog.require('goog.string.internal');
-const {fullVersionList, hasFullVersionList} = goog.require('goog.labs.userAgent.highEntropy.highEntropyData');
+const {fullVersionList} = goog.require('goog.labs.userAgent.highEntropy.highEntropyData');
 
 // TODO(nnaze): Refactor to remove excessive exclusion logic in matching
 // functions.
@@ -94,6 +94,18 @@ function useUserAgentDataBrand() {
   if (util.ASSUME_CLIENT_HINTS_SUPPORT) return true;
   const userAgentData = util.getUserAgentData();
   return !!userAgentData && userAgentData.brands.length > 0;
+}
+
+/**
+ * @return {boolean} Whether this browser is likely to have the fullVersionList
+ * high-entropy Client Hint.
+ */
+function hasFullVersionList() {
+  // https://chromiumdash.appspot.com/commits?commit=1eb643c3057e64ff4d22468432ad16c4cab12879&platform=Linux
+  // indicates that for all platforms Chromium 98 shipped this feature.
+  // See also
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-CH-UA-Full-Version-List#browser_compatibility
+  return isAtLeast(Brand.CHROMIUM, 98);
 }
 
 /**
