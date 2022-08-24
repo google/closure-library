@@ -211,9 +211,10 @@ goog.crypt.base64.encodeByteArray = function(input, alphabet) {
 
 
 /**
- * Base64-encode a string.
+ * Base64-encode a binary string.
  *
- * @param {string} input A string to encode.
+ * @param {string} input A string to encode.  Must not contain characters
+ *     outside of the Latin-1 range (i.e. charCode > 255).
  * @param {!goog.crypt.base64.Alphabet=} alphabet Base 64 alphabet to
  *     use in encoding. Alphabet.DEFAULT is used by default.
  * @return {string} The base64 encoded string.
@@ -231,7 +232,28 @@ goog.crypt.base64.encodeString = function(input, alphabet) {
 
 
 /**
- * Base64-decode a string.
+ * Base64-encode a text string.  Non-ASCII characters (charCode > 127) will be
+ * encoded as UTF-8.
+ *
+ * @param {string} input A string to encode.
+ * @param {!goog.crypt.base64.Alphabet=} alphabet Base 64 alphabet to
+ *     use in encoding. Alphabet.DEFAULT is used by default.
+ * @return {string} The base64 encoded string.
+ */
+goog.crypt.base64.encodeStringUtf8 = function(input, alphabet) {
+  'use strict';
+  // Shortcut for browsers that implement
+  // a native base64 encoder in the form of "btoa/atob"
+  if (goog.crypt.base64.HAS_NATIVE_ENCODE_ && !alphabet) {
+    return goog.global.btoa(unescape(encodeURIComponent(input)));
+  }
+  return goog.crypt.base64.encodeByteArray(
+      goog.crypt.stringToUtf8ByteArray(input), alphabet);
+};
+
+
+/**
+ * Base64-decode a string into a binary bytestring.
  *
  * @param {string} input Input to decode. Any whitespace is ignored, and the
  *     input maybe encoded with either supported alphabet (or a mix thereof).
@@ -255,6 +277,25 @@ goog.crypt.base64.decodeString = function(input, useCustomDecoder) {
   goog.crypt.base64.decodeStringInternal_(input, pushByte);
 
   return output;
+};
+
+
+/**
+ * Base64-decode a string.  The input should be the result of a double-encoding
+ * a unicode string: first the unicode characters (>127) are encoded as UTF-8
+ * bytes, and then the resulting bytes are base64-encoded.
+ *
+ * @param {string} input Input to decode. Any whitespace is ignored, and the
+ *     input maybe encoded with either supported alphabet (or a mix thereof).
+ * @param {boolean=} useCustomDecoder True indicates the custom decoder is used,
+ *     which supports alternative alphabets. Note that passing false may still
+ *     use the custom decoder on browsers without native support.
+ * @return {string} string representing the decoded value.
+ */
+goog.crypt.base64.decodeStringUtf8 = function(input, useCustomDecoder) {
+  'use strict';
+  return decodeURIComponent(
+      escape(goog.crypt.base64.decodeString(input, useCustomDecoder)));
 };
 
 
