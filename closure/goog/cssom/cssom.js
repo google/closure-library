@@ -380,8 +380,6 @@ goog.cssom.addCssText = function(cssText, opt_domHelper) {
   }
 
   cssNode.type = 'text/css';
-  var head = domHelper.getElementsByTagName(goog.dom.TagName.HEAD)[0];
-  head.appendChild(cssNode);
   if (cssNode.styleSheet) {
     // IE.
     cssNode.styleSheet.cssText = cssText;
@@ -390,6 +388,10 @@ goog.cssom.addCssText = function(cssText, opt_domHelper) {
     var cssTextNode = document.createTextNode(cssText);
     cssNode.appendChild(cssTextNode);
   }
+
+  var head = domHelper.getElementsByTagName(goog.dom.TagName.HEAD)[0];
+  head.appendChild(cssNode);
+
   return cssNode;
 };
 
