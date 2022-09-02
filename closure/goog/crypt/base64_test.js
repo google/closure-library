@@ -73,14 +73,18 @@ function assertEncodings(input, expectedOutputs) {
     const alphabet = base64.Alphabet[name];
     assertEquals(
         expectedOutputs[alphabet], base64.encodeStringUtf8(text, alphabet));
+    assertEquals(expectedOutputs[alphabet], base64.encodeText(text, alphabet));
     assertEquals(
         expectedOutputs[alphabet], base64.encodeString(binary, alphabet));
+    assertEquals(
+        expectedOutputs[alphabet], base64.encodeBinaryString(binary, alphabet));
   }
   // default case
   assertEquals(
-      expectedOutputs[base64.Alphabet.DEFAULT], base64.encodeStringUtf8(text));
+      expectedOutputs[base64.Alphabet.DEFAULT], base64.encodeText(text));
   assertEquals(
-      expectedOutputs[base64.Alphabet.DEFAULT], base64.encodeString(binary));
+      expectedOutputs[base64.Alphabet.DEFAULT],
+      base64.encodeBinaryString(binary));
 
   // encodeByteArray with Array<number>
   for (const name in base64.Alphabet) {
@@ -132,11 +136,15 @@ function assertDecodings(inputs, expectedOutput) {
     // decodeString
     assertEquals(textOutput, base64.decodeStringUtf8(input, true));
     assertEquals(binaryOutput, base64.decodeString(input, true));
+    assertEquals(textOutput, base64.decodeToText(input, true));
+    assertEquals(binaryOutput, base64.decodeToBinaryString(input, true));
 
     if (i === 0) {
       // For Alphabet.DEFAULT, test with native decoder too
       assertEquals(textOutput, base64.decodeStringUtf8(input));
       assertEquals(binaryOutput, base64.decodeString(input));
+      assertEquals(textOutput, base64.decodeToText(input));
+      assertEquals(binaryOutput, base64.decodeToBinaryString(input));
     }
 
     // decodeStringToByteArray
@@ -192,10 +200,13 @@ testSuite({
     for (const [encoded, decoded] of spaceTests) {
       const decodedArr = crypt.stringToByteArray(decoded);
 
-      assertEquals(base64.decodeString(encoded), decoded);        // native
-      assertEquals(base64.decodeStringUtf8(encoded), decoded);
-      assertEquals(base64.decodeString(encoded, true), decoded);  // custom
-      assertEquals(base64.decodeStringUtf8(encoded, true), decoded);
+      // native
+      assertEquals(base64.decodeToBinaryString(encoded), decoded);
+      assertEquals(base64.decodeToText(encoded), decoded);
+      // custom
+      assertEquals(base64.decodeToBinaryString(encoded, true), decoded);
+      assertEquals(base64.decodeToText(encoded, true), decoded);
+
       assertArrayEquals(base64.decodeStringToByteArray(encoded), decodedArr);
 
       if (SUPPORT_TYPED_ARRAY) {
