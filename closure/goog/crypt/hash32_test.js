@@ -191,11 +191,6 @@ testSuite({
     assertEquals(62382810, hash32.encodeString('Sch\xF6n'));
   },
 
-  testEncodeBinaryString() {
-    assertEquals(-937588052, hash32.encodeBinaryString('Hello, world'));
-    assertEquals(62382810, hash32.encodeBinaryString('Sch\xF6n'));
-  },
-
   testEncodeStringUtf8() {
     assertEquals(-937588052, hash32.encodeStringUtf8('Hello, world'));
     assertEquals(-833263351, hash32.encodeStringUtf8('Sch\xF6n'));
@@ -203,26 +198,19 @@ testSuite({
     assertEquals(-1771620293, hash32.encodeStringUtf8('\u043A\u0440'));
   },
 
-  testEncodeText() {
-    assertEquals(-937588052, hash32.encodeText('Hello, world'));
-    assertEquals(-833263351, hash32.encodeText('Sch\xF6n'));
-
-    assertEquals(-1771620293, hash32.encodeText('\u043A\u0440'));
-  },
-
   testEncodeString_ascii() {
     assertEquals(
         'For ascii characters UTF8 should be the same',
-        hash32.encodeText('abc123'), hash32.encodeBinaryString('abc123'));
+        hash32.encodeStringUtf8('abc123'), hash32.encodeString('abc123'));
 
     assertEquals(
         'For ascii characters UTF8 should be the same',
-        hash32.encodeText('The,quick.brown-fox'),
-        hash32.encodeBinaryString('The,quick.brown-fox'));
+        hash32.encodeStringUtf8('The,quick.brown-fox'),
+        hash32.encodeString('The,quick.brown-fox'));
 
     assertNotEquals(
         'For non-ascii characters UTF-8 encoding is different',
-        hash32.encodeText('Sch\xF6n'), hash32.encodeBinaryString('Sch\xF6n'));
+        hash32.encodeStringUtf8('Sch\xF6n'), hash32.encodeString('Sch\xF6n'));
   },
 
   testEncodeString_poe() {
@@ -265,48 +253,27 @@ testSuite({
         'Let my heart be still a moment and this mystery explore; -' +
         '\'Tis the wind and nothing more!\'';
 
-    assertEquals(147608747, hash32.encodeBinaryString(poe));
-    assertEquals(147608747, hash32.encodeText(poe));
+    assertEquals(147608747, hash32.encodeString(poe));
+    assertEquals(147608747, hash32.encodeStringUtf8(poe));
   },
 
-  testBenchmarking_binary() {
+  testBenchmarking() {
     if (!testCase) return;
     // Not a real test, just outputs some timing
-    for (let i = 0; i < 50000; i += 10000) {
-      const str = makeString(i, 256);
-      const start = Date.now();
-      const hash = hash32.encodeBinaryString(str);
-
-      const diff = Date.now() - start;
-      testCase.saveMessage(
-          `testBenchmarking_binary: hashing ${i} chars in ${diff}ms (${hash})`);
+    function makeString(n) {
+      const str = [];
+      for (let i = 0; i < n; i++) {
+        str.push(String.fromCharCode(Math.round(Math.random() * 500)));
+      }
+      return str.join('');
     }
-  },
-
-  testBenchmarking_text() {
-    if (!testCase) return;
-    // Not a real test, just outputs some timing
     for (let i = 0; i < 50000; i += 10000) {
-      const str = makeString(i, 0xd000);  // avoid unpaired surrogates
+      const str = makeString(i);
       const start = Date.now();
-      const hash = hash32.encodeText(str);
+      const hash = hash32.encodeString(str);
       const diff = Date.now() - start;
       testCase.saveMessage(
-          `testBenchmarking_text: hashing ${i} chars in ${diff}ms (${hash})`);
+          `testBenchmarking : hashing ${i} chars in ${diff}ms`);
     }
   },
 });
-
-/**
- * Build a random string of the given length and range of characters.
- * @param {number} n Length of string
- * @param {number=} max Maximum charcode for each character
- * @return {string}
- */
-function makeString(n, max = 256) {
-  const str = [];
-  for (let i = 0; i < n; i++) {
-    str.push(String.fromCharCode(Math.floor(Math.random() * max)));
-  }
-  return str.join('');
-}

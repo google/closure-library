@@ -87,8 +87,8 @@ closure_js_library(
     srcs = ["crypt.js"],
     lenient = True,
     deps = [
+        "//closure/goog/array",
         "//closure/goog/asserts",
-        "//closure/goog/async:throwexception",
     ],
 )
 
