@@ -55,13 +55,34 @@ const testSuite = goog.require('goog.testing.testSuite');
  *
  * When a new key is added to externs/intl.js, the entries here should be
  * removed.
+ *
+ * Details are in #browser_compatibility in each specific Intl class here:
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl
  */
 const newlySupportedKeys = new Map();
 newlySupportedKeys.set(Intl.NumberFormat, [
+  // Safari numberFormat
   {key: 'roundingMode', browser: browser.isSafari(), minVersion: '15.6'},
   {key: 'roundingIncrement', browser: browser.isSafari(), minVersion: '15.6'},
   {key: 'trailingZeroDisplay', browser: browser.isSafari(), minVersion: '15.6'},
   {key: 'roundingPriority', browser: browser.isSafari(), minVersion: '15.6'},
+  // Chrome numberFormat
+  {key: 'roundingMode', browser: browser.isChrome(), minVersion: '106.0.0.0'},
+  {
+    key: 'roundingIncrement',
+    browser: browser.isChrome(),
+    minVersion: '106.0.0.0'
+  },
+  {
+    key: 'trailingZeroDisplay',
+    browser: browser.isChrome(),
+    minVersion: '106.0.0.0'
+  },
+  {
+    key: 'roundingPriority',
+    browser: browser.isChrome(),
+    minVersion: '106.0.0.0'
+  },
 ]);
 
 newlySupportedKeys.set(
