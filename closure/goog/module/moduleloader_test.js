@@ -524,9 +524,10 @@ testSuite({
           assertEquals(
               'REQUEST_ERROR', 0,
               observer.getEvents(EventType.REQUEST_ERROR).length);
-          assertThrows('Module load already requested: modB', () => {
-            moduleManager.prefetchModule('modA');
+          stubs.set(BulkLoader.prototype, 'load', () => {
+            fail('modA should not be downloaded again.');
           });
+          moduleManager.prefetchModule('modA');
         });
   },
 
