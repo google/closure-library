@@ -576,8 +576,6 @@ testSuite({
   },
 
   testImmutableViewStrict() {
-    'use strict';
-
     // IE9 supports isFrozen, but does not support strict mode. Exit early if we
     // are not actually running in strict mode.
     const isStrict = (function() {

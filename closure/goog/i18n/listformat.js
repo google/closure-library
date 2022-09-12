@@ -213,7 +213,6 @@ class ListFormat {
    * @private
    */
   patternBasedJoinTwoStrings_(pattern, first, second) {
-    'use strict';
     asserts.assert(pattern, 'List pattern must be defined');
     return pattern.replace('{0}', first).replace('{1}', second);
   }
@@ -228,7 +227,6 @@ class ListFormat {
    * @private
    */
   formatJavaScript(items) {
-    'use strict';
     const count = items.length;
     switch (count) {
       case 0:
