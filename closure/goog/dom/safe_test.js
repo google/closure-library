@@ -448,53 +448,6 @@ testSuite({
     assertEquals('javascript:trusted();', element.action);
   },
 
-  testSetImageSrc_withSafeUrlObject() {
-    let mockImageElement = /** @type {!HTMLImageElement} */ ({'src': 'blarg'});
-    withAssertionFailure(() => {
-      safe.setImageSrc(mockImageElement, 'javascript:evil();');
-    });
-    assertEquals('about:invalid#zClosurez', mockImageElement.src);
-
-    mockImageElement = /** @type {!HTMLImageElement} */ ({'src': 'blarg'});
-    const safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
-    safe.setImageSrc(mockImageElement, safeUrl);
-    assertEquals('javascript:trusted();', mockImageElement.src);
-
-    // Asserts correct runtime type.
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('SCRIPT');
-      const ex = assertThrows(() => {
-        safe.setImageSrc(
-            /** @type {!HTMLImageElement} */ (otherElement), safeUrl);
-      });
-      assert(googString.contains(
-          ex.message, 'Argument is not a HTMLImageElement'));
-    }
-  },
-
-  testSetImageSrc_withHttpsUrl() {
-    const mockImageElement =
-        /** @type {!HTMLImageElement} */ ({'src': 'blarg'});
-
-    const safeUrl = 'https://trusted_url';
-    safe.setImageSrc(mockImageElement, safeUrl);
-    assertEquals(safeUrl, mockImageElement.src);
-  },
-
-  testSetImageSrc_withDataUrl() {
-    const mockImageElement =
-        /** @type {!HTMLImageElement} */ ({'src': 'blarg'});
-    const safeUrl = 'data:image/gif;base64,a';
-    safe.setImageSrc(mockImageElement, safeUrl);
-    assertEquals(safeUrl, mockImageElement.src);
-    assertThrows(() => {
-      safe.setImageSrc(mockImageElement, 'data:text/plain;base64,a');
-    });
-    assertThrows(() => {
-      safe.setImageSrc(mockImageElement, 'data:image/gif;bad');
-    });
-  },
-
   testSetAudioSrc() {
     let mockAudioElement = /** @type {!HTMLAudioElement} */ ({'src': 'blarg'});
     let safeUrl = 'https://trusted_url';

@@ -352,33 +352,6 @@ goog.dom.safe.setAnchorHref = function(anchor, url) {
 
 
 /**
- * Safely assigns a URL to an image element's src property.
- *
- * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
- * image's src property.  If url is of type string however, it is first
- * sanitized using goog.html.SafeUrl.sanitize.
- *
- * @param {!HTMLImageElement} imageElement The image element whose src property
- *     is to be assigned to.
- * @param {string|!goog.html.SafeUrl} url The URL to assign.
- * @return {void}
- * @see goog.html.SafeUrl#sanitize
- */
-goog.dom.safe.setImageSrc = function(imageElement, url) {
-  'use strict';
-  goog.dom.asserts.assertIsHTMLImageElement(imageElement);
-  /** @type {!goog.html.SafeUrl} */
-  var safeUrl;
-  if (url instanceof goog.html.SafeUrl) {
-    safeUrl = url;
-  } else {
-    var allowDataUrl = /^data:image\//i.test(url);
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url, allowDataUrl);
-  }
-  imageElement.src = goog.html.SafeUrl.unwrap(safeUrl);
-};
-
-/**
  * Safely assigns a URL to a audio element's src property.
  *
  * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
@@ -864,11 +837,7 @@ goog.dom.safe.createImageFromBlob = function(blob) {
     'use strict';
     goog.global.URL.revokeObjectURL(objectUrl);
   };
-  goog.dom.safe.setImageSrc(
-      image,
-      goog.html.uncheckedconversions
-          .safeUrlFromStringKnownToSatisfyTypeContract(
-              goog.string.Const.from('Image blob URL.'), objectUrl));
+  image.src = objectUrl;
   return image;
 };
 
