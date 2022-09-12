@@ -13,5 +13,6 @@ closure_js_library(
         "//closure/goog/dom",
         "//closure/goog/dom:safe",
         "//closure/goog/dom:tagname",
+        "//closure/goog/labs/useragent:browser",
     ],
 )
