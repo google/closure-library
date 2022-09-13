@@ -268,6 +268,16 @@ testSuite({
     assertEquals(original.f, clone.f);
   },
 
+  testUnsafeCloneDates() {
+    const original = {d: new Date(5000)};
+    const clone = googObject.unsafeClone(original);
+
+    assertNotEquals(original, clone);
+    assertNotEquals(original.d, clone.d);
+    assertTrue(clone.d instanceof Date);
+    assertEquals(5000, clone.d.getTime());
+  },
+
   testForEach() {
     const m = getObject();
     let s = '';
