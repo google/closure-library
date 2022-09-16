@@ -503,7 +503,6 @@ testSuite({
     assertTrue(eventFired);
   },
 
-  // ALLOW_ORIGIN_TRIAL_FEATURES = false
   testEnableOriginTrials() {
     const webChannelTransport = new WebChannelBaseTransport();
     let options = {
@@ -514,7 +513,7 @@ testSuite({
 
     /** @suppress {strictMissingProperties} Accessing private property. */
     let enabled = webChannel.channel_.enableOriginTrials_;
-    assertFalse(enabled);
+    assertTrue(enabled);
 
     options = {
       'enableOriginTrials': false,
@@ -532,7 +531,7 @@ testSuite({
 
     /** @suppress {strictMissingProperties} Accessing private property. */
     enabled = webChannel.channel_.enableOriginTrials_;
-    assertFalse(enabled);
+    assertTrue(enabled);
 
     options = undefined;
     webChannel = webChannelTransport.createWebChannel(channelUrl, options);
@@ -540,7 +539,7 @@ testSuite({
 
     /** @suppress {strictMissingProperties} Accessing private property. */
     enabled = webChannel.channel_.enableOriginTrials_;
-    assertFalse(enabled);
+    assertTrue(enabled);
   },
 
   testGetNonAckedMessages_withJsObjectReturnsExactMessage() {
