@@ -56,7 +56,7 @@ const httpCors = goog.module.get('goog.net.rpc.HttpCors');
  * @define {boolean} If WebChannel should compile with Origin Trial features.
  */
 const ALLOW_ORIGIN_TRIAL_FEATURES =
-    goog.define('goog.net.webChannel.ALLOW_ORIGIN_TRIAL_FEATURES', true);
+    goog.define('goog.net.webChannel.ALLOW_ORIGIN_TRIAL_FEATURES', false);
 
 /**
  * Gets an internal channel parameter in a type-safe way.
