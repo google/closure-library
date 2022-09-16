@@ -247,6 +247,7 @@ goog.html.testing.matchTrustedResourceUrl = function(expected) {
  * @param {*} expected Handles goog.string.TypedString or string.
  * @return {boolean|undefined} Undefined if not called with
  *     goog.string.TypedString, true if typed strings equal, false if not.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.html.testing.checkTypedStringEquality = function(actual, expected) {
   'use strict';
@@ -255,6 +256,9 @@ goog.html.testing.checkTypedStringEquality = function(actual, expected) {
       if (!(actual instanceof expected.constructor)) {
         return false;
       }
+      /**
+       * @suppress {strictMissingProperties} Added to tighten compiler checks
+       */
       expected = expected.getTypedStringValue();
     }
     return actual.getTypedStringValue() == expected;

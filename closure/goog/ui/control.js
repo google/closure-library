@@ -1337,6 +1337,7 @@ goog.ui.Control.isMouseEventWithinElement_ = function(e, elem) {
  * prevents it from receiving keyboard focus.  Considered protected; should
  * only be used within this package and by subclasses.
  * @param {goog.events.Event} e Mouse event to handle.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.ui.Control.prototype.handleMouseDown = function(e) {
   'use strict';
@@ -1431,10 +1432,15 @@ goog.ui.Control.prototype.performActionInternal = function(e) {
   var actionEvent =
       new goog.events.Event(goog.ui.Component.EventType.ACTION, this);
   if (e) {
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     actionEvent.altKey = e.altKey;
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     actionEvent.ctrlKey = e.ctrlKey;
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     actionEvent.metaKey = e.metaKey;
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     actionEvent.shiftKey = e.shiftKey;
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     actionEvent.platformModifierKey = e.platformModifierKey;
   }
   return this.dispatchEvent(actionEvent);

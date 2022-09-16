@@ -233,13 +233,16 @@ goog.fx.DragScrollSupport.prototype.onTick_ = function(event) {
 /**
  * Handler for mouse moves events.
  * @param {goog.events.Event} event Mouse move event.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.fx.DragScrollSupport.prototype.onMouseMove = function(event) {
   'use strict';
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   var deltaX = this.horizontalScrolling_ ?
       this.calculateScrollDelta(
           event.clientX, this.scrollBounds_.left, this.scrollBounds_.width) :
       0;
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   var deltaY = this.calculateScrollDelta(
       event.clientY, this.scrollBounds_.top, this.scrollBounds_.height);
   this.scrollDelta_.x = deltaX;

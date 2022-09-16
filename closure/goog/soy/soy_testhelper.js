@@ -149,6 +149,7 @@ example.multiRootTemplate = function(data, opt_injectedData) {
  * @param {{name: string}} data
  * @param {?Object<string, *>=} opt_injectedData
  * @return {!goog.soy.data.SanitizedContent}
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 example.injectedDataTemplate = function(data, opt_injectedData) {
   'use strict';

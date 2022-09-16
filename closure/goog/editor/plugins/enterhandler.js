@@ -214,6 +214,7 @@ goog.editor.plugins.EnterHandler.prototype.handleDeleteGecko = function(e) {
  *
  * @param {goog.events.Event} e The DELETE keypress event.
  * @protected
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.EnterHandler.prototype.deleteBrGecko = function(e) {
   'use strict';
@@ -354,6 +355,7 @@ goog.editor.plugins.EnterHandler.prototype.handleKeyUp = function(e) {
  * Internal handler for keyup events.
  * @param {goog.events.Event} e The key event.
  * @protected
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.EnterHandler.prototype.handleKeyUpInternal = function(e) {
   'use strict';
@@ -462,6 +464,7 @@ goog.editor.plugins.EnterHandler.isBrElem = function(node) {
  *     semantics for when to change it to a block are different.  Specifically,
  *     if the resulting node contains only a BR, it is converted to `<tag>`.
  * @protected
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(
     tag, opt_keyUp) {
@@ -505,6 +508,7 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(
     // weeds out some cases where the elements are siblings instead of cousins.
     var needsHelp = false;
     range = range.getBrowserRangeObject();
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     var range2 = range.duplicate();
     range2.moveEnd('character', 1);
     // In whitebox mode, when the cursor is at the end of the field, trying to
@@ -571,6 +575,7 @@ goog.editor.plugins.EnterHandler.prototype.releasePositionObject_ = function(
  * @return {!Node} A temporary node marking the current cursor position. This
  *     node should eventually be removed from the DOM.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionIE_ =
     function() {

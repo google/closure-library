@@ -721,12 +721,14 @@ goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_ = function(
     // This function is only supported on IE and Opera.
     return;
   }
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   var outerHTML = paragraph.outerHTML.replace(/<(\/?)p/gi, '<$1div');
   if (opt_convertBrs) {
     // IE fills in the closing div tag if it's missing!
     outerHTML = outerHTML.replace(
         goog.editor.plugins.BasicTextFormatter.BR_REGEXP_, '</div><div$1>');
   }
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   paragraph.outerHTML = outerHTML;
 };
 
@@ -790,6 +792,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.justify_ = function(command) {
  * instead of the align property.
  * @param {Node} node The node to convert the container of.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.BasicTextFormatter.convertContainerToTextAlign_ = function(
     node) {
@@ -913,6 +916,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandHelper_ = function(
  *
  * @param {string} bgColor backgroundColor from .formatText to .execCommand.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.BasicTextFormatter.prototype.applyBgColorManually_ =
     function(bgColor) {
@@ -944,6 +948,9 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyBgColorManually_ =
     if (parentTag.innerHTML == '') {
       // There's an Element to work with
       // make the space character invisible using a CSS indent hack
+      /**
+       * @suppress {strictMissingProperties} Added to tighten compiler checks
+       */
       parentTag.style.textIndent = '-10000px';
       parentTag.appendChild(textNode);
     } else {
@@ -966,6 +973,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyBgColorManually_ =
     }
 
     // eliminate the hack.
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     parentTag.style.textIndent = '';
     // execCommand modified our span so we leave it in place.
   }
@@ -1034,6 +1042,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.toggleLink_ = function(
  * @return {goog.editor.Link?} The newly created link, or null if the link
  *     couldn't be created.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(
     range, url, opt_target) {
@@ -1229,6 +1238,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.removeFontSizeFromStyleAttrs_ =
  * @return {!Array<Node>} Array of nodes to be removed after the execCommand.
  *     Will never be longer than 2 elements.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandIEFixes_ =
     function(command) {
@@ -1310,6 +1320,9 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandIEFixes_ =
           !goog.dom.getFirstElementChild(field)) {
         // The problem only occurs if the selection is at the end of the field.
         var selection = range.getTextRange(0).getBrowserRangeObject();
+        /**
+         * @suppress {strictMissingProperties} Added to tighten compiler checks
+         */
         var testRange = selection.duplicate();
         testRange.moveToElementText(field);
         testRange.collapse(false);
@@ -1548,6 +1561,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandSafariFixes_ =
  * Apply pre-execCommand fixes for Gecko.
  * @param {string} command The command to execute.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandGeckoFixes_ =
     function(command) {
@@ -1596,8 +1610,11 @@ goog.editor.plugins.BasicTextFormatter.prototype.invalidateInlineCss_ =
       goog.iter.filter(nodesInSelection, goog.editor.style.isContainer);
   goog.iter.forEach(containersInSelection, function(element) {
     'use strict';
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     var oldOutline = element.style.outline;
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     element.style.outline = '0px solid red';
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     element.style.outline = oldOutline;
   });
 };
@@ -1810,6 +1827,7 @@ goog.editor.plugins.BasicTextFormatter.getNodeJustification_ = function(
   // TODO: for rtl languages we probably need to assume right.
   if (!goog.editor.plugins.BasicTextFormatter
            .SUPPORTED_JUSTIFICATIONS_[value]) {
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     value = element.align || 'left';
   }
   return /** @type {string} */ (value);
@@ -1892,6 +1910,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.queryCommandHelper_ = function(
     // every toolbar update.
     doc.execCommand('styleWithCSS', false, true);
   }
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   var ret = isGetQueryCommandState ? queryObject.queryCommandState(command) :
                                      queryObject.queryCommandValue(command);
   if (opt_styleWithCss) {

@@ -293,6 +293,7 @@ goog.editor.plugins.TableEditor.prototype.execCommandInternal = function(
  * @param {Node} element The element in question.
  * @return {boolean} Whether the element is a table editable by the user.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.TableEditor.prototype.isUserEditableTable_ = function(
     element) {
@@ -331,6 +332,7 @@ goog.editor.plugins.TableEditor.prototype.addIsTableEditableFunction = function(
  *     finds the user-editable table from a given element.
  * @constructor
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.TableEditor.CellSelection_ = function(
     range, getParentTableFunction) {

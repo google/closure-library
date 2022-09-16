@@ -578,6 +578,7 @@ goog.editor.Field.prototype.unregisterPlugin = function(plugin) {
  */
 goog.editor.Field.prototype.setInitialStyle = function(cssText) {
   'use strict';
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   this.cssText = cssText;
 };
 
@@ -599,8 +600,10 @@ goog.editor.Field.prototype.resetOriginalElemProperties = function() {
     field.id = this.id;
   }
 
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   field.className = this.savedClassName_ || '';
 
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   var cssText = this.cssText;
   if (!cssText) {
     field.removeAttribute('style');
@@ -610,6 +613,7 @@ goog.editor.Field.prototype.resetOriginalElemProperties = function() {
 
   if (typeof (this.originalFieldLineHeight_) === 'string') {
     goog.style.setStyle(field, 'lineHeight', this.originalFieldLineHeight_);
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.originalFieldLineHeight_ = null;
   }
 };
@@ -773,6 +777,7 @@ goog.editor.Field.prototype.getAppWindow = function() {
  */
 goog.editor.Field.prototype.setBaseZindex = function(zindex) {
   'use strict';
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   this.baseZindex_ = zindex;
 };
 
@@ -781,6 +786,7 @@ goog.editor.Field.prototype.setBaseZindex = function(zindex) {
  * Returns the zindex of the base level of the field.
  *
  * @return {number} The base zindex of the editor.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.Field.prototype.getBaseZindex = function() {
   'use strict';
@@ -1103,6 +1109,7 @@ goog.editor.Field.prototype.handleBeforeChangeKeyEvent_ = function(e) {
 
     // TODO(arv): Del at end of field or backspace at beginning should be
     // ignored.
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.gotGeneratingKey_ = !!e.charCode ||
         goog.editor.Field.isGeneratingKey_(e, goog.userAgent.GECKO);
     if (this.gotGeneratingKey_) {
@@ -1321,6 +1328,7 @@ goog.editor.Field.prototype.handleKeyPress_ = function(e) {
   } else {
     // In IE only keys that generate output trigger keypress
     // In Mozilla charCode is set for keys generating content.
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.gotGeneratingKey_ = true;
     this.dispatchBeforeChange();
   }
@@ -1336,6 +1344,7 @@ goog.editor.Field.prototype.handleKeyPress_ = function(e) {
  * Handles keyup on the field.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.Field.prototype.handleKeyUp_ = function(e) {
   'use strict';
@@ -1382,6 +1391,7 @@ goog.editor.Field.prototype.maybeStartSelectionChangeTimer_ = function(e) {
  * event system every time.
  * @param {goog.events.BrowserEvent} e The browser event.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
   'use strict';
@@ -1510,6 +1520,7 @@ goog.editor.Field.prototype.queryCommandValueInternal_ = function(
  *     browser event.
  * @param {goog.events.BrowserEvent} browserEvent The browser event.
  * @protected
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.Field.prototype.handleDomAttrChange = function(
     handler, browserEvent) {
@@ -1545,6 +1556,7 @@ goog.editor.Field.prototype.handleDomAttrChange = function(
  * Handle a mutation event.
  * @param {goog.events.BrowserEvent|Event} e The browser event.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.Field.prototype.handleMutationEventGecko_ = function(e) {
   'use strict';
@@ -1552,6 +1564,7 @@ goog.editor.Field.prototype.handleMutationEventGecko_ = function(e) {
     return;
   }
 
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   e = e.getBrowserEvent ? e.getBrowserEvent() : e;
   // For people with firebug, firebug sets this property on elements it is
   // inserting into the dom.
@@ -2091,6 +2104,7 @@ goog.editor.Field.cancelLinkClick_ = function(e) {
  * Handle mouse down inside the editable field.
  * @param {goog.events.BrowserEvent} e The event.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.Field.prototype.handleMouseDown_ = function(e) {
   'use strict';
@@ -2490,7 +2504,9 @@ goog.editor.Field.prototype.makeEditable = function(opt_iframeSrc) {
   // TODO: In the fieldObj, save the field's id, className, cssText
   // in order to reset it on closeField. That way, we can muck with the field's
   // css, id, class and restore to how it was at the end.
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   this.nodeName = field.nodeName;
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   this.savedClassName_ = field.className;
   this.setInitialStyle(field.style.cssText);
 
@@ -2635,10 +2651,12 @@ goog.editor.Field.prototype.restoreDom = function() {
  * Returns true if the field needs to be loaded asynchrnously.
  * @return {boolean} True if loads are async.
  * @protected
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.Field.prototype.shouldLoadAsynchronously = function() {
   'use strict';
   if (this.isHttps_ === undefined) {
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.isHttps_ = false;
 
     if (goog.userAgent.IE && this.usesIframe()) {
@@ -2659,6 +2677,9 @@ goog.editor.Field.prototype.shouldLoadAsynchronously = function() {
         }
       }
       var loc = win.location;
+      /**
+       * @suppress {strictMissingProperties} Added to tighten compiler checks
+       */
       this.isHttps_ =
           loc.protocol == 'https:' && loc.search.indexOf('nocheckhttps') == -1;
     }
@@ -2707,6 +2728,9 @@ goog.editor.Field.prototype.makeIframeField_ = function(opt_iframeSrc) {
       var onLoad =
           goog.bind(this.iframeFieldLoadHandler, this, iframe, html, styles);
 
+      /**
+       * @suppress {strictMissingProperties} Added to tighten compiler checks
+       */
       this.fieldLoadListenerKey_ =
           goog.events.listen(iframe, goog.events.EventType.LOAD, onLoad, true);
 
@@ -2819,11 +2843,13 @@ goog.editor.Field.prototype.iframeFieldLoadHandler = function(
  * Clears fieldLoadListener for a field. Must be called even (especially?) if
  * the field is not yet loaded and therefore not in this.fieldMap_
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.Field.prototype.clearFieldLoadListener_ = function() {
   'use strict';
   if (this.fieldLoadListenerKey_) {
     goog.events.unlistenByKey(this.fieldLoadListenerKey_);
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.fieldLoadListenerKey_ = null;
   }
 };

@@ -568,6 +568,7 @@ goog.tweak.EntriesPanel.prototype.createEntryElem_ = function(entry) {
  * Click handler for the help link.
  * @param {Node} entryDiv The div that contains the tweak.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.tweak.EntriesPanel.prototype.onHelpClick_ = function(entryDiv) {
   'use strict';
@@ -585,6 +586,7 @@ goog.tweak.EntriesPanel.prototype.showDescription_ = function(entryDiv, show) {
   'use strict';
   var descriptionElem = entryDiv.lastChild.lastChild;
   goog.style.setElementShown(/** @type {Element} */ (descriptionElem), show);
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   entryDiv.style.display = show ? 'block' : '';
 };
 
@@ -818,7 +820,10 @@ goog.tweak.EntriesPanel.prototype.createTweakEntryDom_ = function(entry) {
     var childEntries = goog.tweak.TweakUi.extractBooleanGroupEntries_(entry);
     return this.createSubPanelDom_(entry, label, childEntries);
   } else if (entry instanceof goog.tweak.StringSetting) {
-    /** @this {Element} */
+    /**
+     * @this {Element}
+     * @suppress {strictMissingProperties} Added to tighten compiler checks
+     */
     var setValueFunc = function() {
       'use strict';
       entry.setValue(this.value);
@@ -827,11 +832,17 @@ goog.tweak.EntriesPanel.prototype.createTweakEntryDom_ = function(entry) {
         this.createComboBoxDom_(entry, label, setValueFunc) :
         this.createTextBoxDom_(entry, label, setValueFunc);
   } else if (entry instanceof goog.tweak.NumericSetting) {
-    /** @this {Element} */
+    /**
+     * @this {Element}
+     * @suppress {strictMissingProperties} Added to tighten compiler checks
+     */
     setValueFunc = function() {
       'use strict';
       // Reset the value if it's not a number.
       if (isNaN(this.value)) {
+        /**
+         * @suppress {strictMissingProperties} Added to tighten compiler checks
+         */
         this.value = entry.getNewValue();
       } else {
         entry.setValue(+this.value);

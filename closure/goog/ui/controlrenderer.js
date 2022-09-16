@@ -227,6 +227,7 @@ goog.ui.ControlRenderer.prototype.getContentElement = function(element) {
 goog.ui.ControlRenderer.prototype.enableClassName = function(
     control, className, enable) {
   'use strict';
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   var element = /** @type {Element} */ (
       control.getElement ? control.getElement() : control);
   if (element) {

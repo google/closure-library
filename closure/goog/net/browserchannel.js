@@ -803,6 +803,7 @@ goog.net.BrowserChannel.prototype.connect = function(
 
 /**
  * Disconnects and closes the channel.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.net.BrowserChannel.prototype.disconnect = function() {
   'use strict';
@@ -820,6 +821,7 @@ goog.net.BrowserChannel.prototype.disconnect = function() {
     // Add the reconnect parameters.
     this.addAdditionalParams_(uri);
 
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     const request = goog.net.ChannelRequest.createChannelRequest(
         this, this.channelDebug_, this.sid_, rid);
     request.sendUsingImgTag(uri);
@@ -833,6 +835,7 @@ goog.net.BrowserChannel.prototype.disconnect = function() {
  * Returns the session id of the channel. Only available after the
  * channel has been opened.
  * @return {string} Session ID.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.net.BrowserChannel.prototype.getSessionId = function() {
   'use strict';
@@ -1056,6 +1059,7 @@ goog.net.BrowserChannel.prototype.setAllowChunkedMode = function(
  * the server can process.
  * @param {Object} map  The map to send.
  * @param {?Object=} opt_context The context associated with the map.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.net.BrowserChannel.prototype.sendMap = function(map, opt_context) {
   'use strict';
@@ -1381,6 +1385,7 @@ goog.net.BrowserChannel.prototype.open_ = function() {
  * Makes a forward channel request using XMLHTTP.
  * @param {goog.net.ChannelRequest=} opt_retryRequest A failed request to retry.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.net.BrowserChannel.prototype.makeForwardChannelRequest_ = function(
     opt_retryRequest) {
@@ -1411,6 +1416,7 @@ goog.net.BrowserChannel.prototype.makeForwardChannelRequest_ = function(
   // Add the additional reconnect parameters.
   this.addAdditionalParams_(uri);
 
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   const request = goog.net.ChannelRequest.createChannelRequest(
       this, this.channelDebug_, this.sid_, rid,
       this.forwardChannelRetryCount_ + 1);
@@ -1575,6 +1581,7 @@ goog.net.BrowserChannel.prototype.onStartBackChannelTimer_ = function() {
 /**
  * Begins a new back channel operation to the server.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
   'use strict';
@@ -1584,6 +1591,7 @@ goog.net.BrowserChannel.prototype.startBackChannel_ = function() {
   }
 
   this.channelDebug_.debug('Creating new HttpRequest');
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   this.backChannelRequest_ = goog.net.ChannelRequest.createChannelRequest(
       this, this.channelDebug_, this.sid_, 'rpc', this.backChannelAttemptId_);
   this.backChannelRequest_.setExtraHeaders(this.extraHeaders_);
@@ -2027,6 +2035,9 @@ goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
     nextArray = nextArray[1];
     if (this.state_ == goog.net.BrowserChannel.State.OPENING) {
       if (nextArray[0] == 'c') {
+        /**
+         * @suppress {strictMissingProperties} Added to tighten compiler checks
+         */
         this.sid_ = nextArray[1];
         this.hostPrefix_ = this.correctHostPrefix(nextArray[2]);
         const negotiatedVersion = nextArray[3];

@@ -36,6 +36,7 @@ goog.requireType('goog.events.Event');
  * @param {!goog.ui.Toolbar} toolbar Toolbar to control the editable field.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.ui.editor.ToolbarController = function(field, toolbar) {
   'use strict';
@@ -241,6 +242,7 @@ goog.ui.editor.ToolbarController.prototype.disposeInternal = function() {
  * effective formatting of the selection.
  * @param {goog.events.Event} e Editor event to handle.
  * @protected
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.ui.editor.ToolbarController.prototype.updateToolbar = function(e) {
   'use strict';
@@ -299,6 +301,7 @@ goog.ui.editor.ToolbarController.prototype.updateToolbarFromState = function(
  */
 goog.ui.editor.ToolbarController.prototype.handleAction = function(e) {
   'use strict';
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   const command = this.getCommand(e.target.getId());
   this.field_.execCommand(command, e.target.getValue());
 };

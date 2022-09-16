@@ -78,6 +78,7 @@ goog.ui.TabRenderer.prototype.createDom = function(tab) {
   'use strict';
   var element = goog.ui.TabRenderer.superClass_.createDom.call(this, tab);
 
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   var tooltip = tab.getTooltip();
   if (tooltip) {
     // Only update the element if the tab has a tooltip.
@@ -96,6 +97,7 @@ goog.ui.TabRenderer.prototype.createDom = function(tab) {
  * @param {Element} element Element to decorate.
  * @return {Element} Decorated element.
  * @override
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.ui.TabRenderer.prototype.decorate = function(tab, element) {
   'use strict';
@@ -129,6 +131,7 @@ goog.ui.TabRenderer.prototype.decorate = function(tab, element) {
  * string if the element has no tooltip.
  * @param {Element} element The tab's root element.
  * @return {string} The tooltip text (empty string if none).
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.ui.TabRenderer.prototype.getTooltip = function(element) {
   'use strict';
@@ -146,6 +149,7 @@ goog.ui.TabRenderer.prototype.getTooltip = function(element) {
 goog.ui.TabRenderer.prototype.setTooltip = function(element, tooltip) {
   'use strict';
   if (element) {
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     element.title = tooltip || '';
   }
 };

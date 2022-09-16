@@ -632,13 +632,16 @@ goog.ui.ServerChart.UriParam = {
  *     {string} color (required) The color of the background fill.
  *     // TODO(user): Add support for gradient/stripes, which requires
  *     // a different object structure.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.ui.ServerChart.prototype.setBackgroundFill = function(fill) {
   'use strict';
   var value = [];
   fill.forEach(function(spec) {
     'use strict';
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     spec.area = spec.area || 'bg';
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     spec.effect = spec.effect || 's';
     value.push([spec.area, spec.effect, spec.color].join(','));
   });

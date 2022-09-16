@@ -185,6 +185,7 @@ goog.ui.AnimatedZippy.prototype.onAnimate_ = function(e) {
   'use strict';
   var contentElement = this.getContentElement();
   var h = contentElement.offsetHeight;
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   contentElement.style.marginTop = (e.y - h) + 'px';
 };
 

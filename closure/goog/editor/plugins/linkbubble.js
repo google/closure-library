@@ -287,7 +287,10 @@ goog.editor.plugins.LinkBubble.prototype.updateLink_ = function() {
 };
 
 
-/** @override */
+/**
+ * @override
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
+ */
 goog.editor.plugins.LinkBubble.prototype.getBubbleTargetFromSelection =
     function(selectedElement) {
   'use strict';
@@ -323,6 +326,7 @@ goog.editor.plugins.LinkBubble.prototype.getBubbleTargetFromSelection =
  */
 goog.editor.plugins.LinkBubble.prototype.setTestLinkUrlFn = function(func) {
   'use strict';
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   this.testLinkUrlFn_ = func;
 };
 
@@ -606,6 +610,7 @@ goog.editor.plugins.LinkBubble.prototype.onShow = function() {
  * bubble the user can click on to make sure the link they entered is correct.
  * @return {string} The url for the bubble link href.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.LinkBubble.prototype.getTestLinkAction_ = function() {
   'use strict';

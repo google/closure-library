@@ -208,6 +208,7 @@ goog.ui.FilteredMenu.prototype.initFilterInput_ = function() {
   }
 
   if (this.maxLength_) {
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.filterInput_.maxLength = this.maxLength_;
   }
 };
@@ -313,6 +314,7 @@ goog.ui.FilteredMenu.prototype.getFilterLabel = function() {
 goog.ui.FilteredMenu.prototype.setFilter = function(str) {
   'use strict';
   if (this.filterInput_) {
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.filterInput_.value = str;
     this.filterItems_(str);
   }
@@ -413,6 +415,7 @@ goog.ui.FilteredMenu.prototype.hasPersistentVisibility = function(child) {
 /**
  * Handles filter input events.
  * @param {goog.events.BrowserEvent} e The event object.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.ui.FilteredMenu.prototype.handleFilterEvent = function(e) {
   'use strict';
@@ -462,6 +465,10 @@ goog.ui.FilteredMenu.prototype.filterItems_ = function(str) {
         var caption = this.getHighlighted().getCaption();
         if (caption.toLowerCase().indexOf(lastItem.toLowerCase()) == 0) {
           items[items.length - 1] = caption;
+          /**
+           * @suppress {strictMissingProperties} Added to tighten compiler
+           * checks
+           */
           this.filterInput_.value = items.join(',') + ',';
         }
       }
@@ -532,6 +539,7 @@ goog.ui.FilteredMenu.prototype.boldContent = function(child, start, len) {
         this.getDomHelper().createDom(goog.dom.TagName.B, null, match),
         postMatch);
   }
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   var accelerator = child.getAccelerator && child.getAccelerator();
   if (accelerator) {
     child.setContent([

@@ -1257,6 +1257,7 @@ goog.i18n.DateTimeParse.MyDate_.prototype.setTwoDigitYear_ = function(year) {
  *
  * @return {boolean} false if fields specify a invalid date.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
     date, validation) {
@@ -1300,6 +1301,9 @@ goog.i18n.DateTimeParse.MyDate_.prototype.calcDate_ = function(
 
   if (typeof date.setHours === 'function') {
     if (this.hours == undefined) {
+      /**
+       * @suppress {strictMissingProperties} Added to tighten compiler checks
+       */
       this.hours = date.getHours();
     }
     // adjust with am/pm to 24-hour time.
