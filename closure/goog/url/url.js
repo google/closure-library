@@ -382,8 +382,9 @@ const createAnchorElementInIE = function(urlStr) {
   if (!aTag.hostname) {
     throw new Error(`${urlStr} is not a valid URL.`);
   }
+  const href = aTag.href;
   const urlLike = {
-    href: aTag.href,
+    href,
     protocol: aTag.protocol,
     username: '',
     password: '',
@@ -392,6 +393,7 @@ const createAnchorElementInIE = function(urlStr) {
     pathname: '/' + aTag.pathname,
     search: aTag.search,
     hash: aTag.hash,
+    toString: () => href,
   };
   // Canonicalize the port out from the URL if it matches
   const canonicalPort = canonicalPortForProtocols.get(aTag.protocol);
