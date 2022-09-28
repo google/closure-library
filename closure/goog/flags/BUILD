@@ -7,9 +7,3 @@ closure_js_library(
     srcs = ["flags.js"],
     lenient = True,
 )
-
-closure_js_library(
-    name = "flags_oss",
-    srcs = ["flags_oss.js"],
-    lenient = True,
-)

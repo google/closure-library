@@ -299,6 +299,8 @@ goog.DISALLOW_TEST_ONLY_CODE =
  */
 goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING =
     goog.define('goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING', false);
+
+
 /**
  * Defines a namespace in Closure.
  *
