@@ -13,7 +13,7 @@ goog.module('goog.labs.userAgent.highEntropy.highEntropyData');
 const {HighEntropyValue} = goog.require('goog.labs.userAgent.highEntropy.highEntropyValue');
 
 /**
- * @type {!HighEntropyValue<!Array<!NavigatorUABrandVersion>>}
+ * @type {!HighEntropyValue<!Array<!NavigatorUABrandVersion>|undefined>}
  */
 const fullVersionList = new HighEntropyValue('fullVersionList');
 exports.fullVersionList = fullVersionList;
@@ -23,12 +23,3 @@ exports.fullVersionList = fullVersionList;
  */
 const platformVersion = new HighEntropyValue('platformVersion');
 exports.platformVersion = platformVersion;
-
-/**
- * Reset all high-entropy values to their initial state.
- */
-function resetAllForTesting() {
-  fullVersionList.resetForTesting();
-  platformVersion.resetForTesting();
-}
-exports.resetAllForTesting = resetAllForTesting;

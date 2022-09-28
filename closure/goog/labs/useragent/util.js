@@ -13,8 +13,8 @@
 goog.module('goog.labs.userAgent.util');
 goog.module.declareLegacyNamespace();
 
-const {USE_CLIENT_HINTS} = goog.require('goog.labs.userAgent');
 const {caseInsensitiveContains, contains} = goog.require('goog.string.internal');
+const {useClientHints} = goog.require('goog.labs.userAgent');
 
 /**
  * @const {boolean} If true, use navigator.userAgentData without check.
@@ -42,14 +42,10 @@ function getNativeUserAgentString() {
 
 /**
  * Gets the native userAgentData object from navigator if it exists.
- * If navigator.userAgentData object is missing or USE_CLIENT_HINTS is set to
- * false, returns null.
+ * If navigator.userAgentData object is missing returns null.
  * @return {?NavigatorUAData}
  */
 function getNativeUserAgentData() {
-  if (!USE_CLIENT_HINTS) {
-    return null;
-  }
   const navigator = getNavigator();
   // TODO(user): Use navigator?.userAgent ?? null once it's supported.
   if (navigator) {
@@ -132,6 +128,7 @@ function getUserAgentData() {
  *     given string.
  */
 function matchUserAgentDataBrand(str) {
+  if (!useClientHints()) return false;
   const data = getUserAgentData();
   if (!data) return false;
   return data.brands.some(({brand}) => brand && contains(brand, str));

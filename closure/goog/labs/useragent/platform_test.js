@@ -9,18 +9,18 @@
 goog.module('goog.labs.userAgent.platformTest');
 goog.setTestOnly();
 
-const highEntropyData = goog.require('goog.labs.userAgent.highEntropy.highEntropyData');
 const testAgentData = goog.require('goog.labs.userAgent.testAgentData');
 const testAgents = goog.require('goog.labs.userAgent.testAgents');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgentPlatform = goog.require('goog.labs.userAgent.platform');
 const util = goog.require('goog.labs.userAgent.util');
+const {setUseClientHintsForTesting} = goog.require('goog.labs.userAgent');
 
 /**
  * Asserts that getVersion correctly returns the given version.
  * @param {string} version
  */
-function assertPreUACHVersion(version) {
+function assertPreUachVersion(version) {
   assertEquals(version, userAgentPlatform.getVersion());
 }
 
@@ -30,23 +30,26 @@ function assertPreUACHVersion(version) {
  * @param {string} lowVersion
  * @param {string} highVersion
  */
-function assertPreUACHVersionBetween(lowVersion, highVersion) {
+function assertPreUachVersionBetween(lowVersion, highVersion) {
   assertTrue(userAgentPlatform.isVersionOrHigher(lowVersion));
   assertFalse(userAgentPlatform.isVersionOrHigher(highVersion));
 }
 
 /**
- * Asserts that userAgentPlatform.version correctly matches the given version.
- * @param {string} version
- * @param {boolean=} alreadyLoaded Whether getIfLoaded() should be expected to
- * return a defined value before load() is ever called.
+ * Asserts that userAgentPlatform.version has not cached a value yet.
  */
-async function assertVersion(version, alreadyLoaded = false) {
+function assertHighEntroyVersionIsntCached() {
   const platformVersion = userAgentPlatform.version;
-  if (alreadyLoaded) {
-    assertEquals(
-        version, platformVersion.getIfLoaded()?.toVersionStringForLogging());
-  }
+  assertEquals(
+      undefined, platformVersion.getIfLoaded()?.toVersionStringForLogging());
+}
+
+/**
+ * Asserts that userAgentPlatform.version correctly matches the given version.
+ * @param {string=} version
+ */
+async function assertHighEntropyVersion(version) {
+  const platformVersion = userAgentPlatform.version;
   assertEquals(
       version, (await platformVersion.load()).toVersionStringForLogging());
   assertEquals(
@@ -59,7 +62,7 @@ async function assertVersion(version, alreadyLoaded = false) {
  * @param {string} lowVersion
  * @param {string} highVersion
  */
-async function assertVersionBetween(lowVersion, highVersion) {
+async function assertHighEntropyVersionBetween(lowVersion, highVersion) {
   const loadedPlatformVersion = await userAgentPlatform.version.load();
   assertNotNullNorUndefined(loadedPlatformVersion);
   assertTrue(loadedPlatformVersion.isAtLeast(lowVersion));
@@ -72,373 +75,523 @@ testSuite({
     // passed to it, so pass an empty string instead.
     util.setUserAgent('');
     util.setUserAgentData(null);
-    highEntropyData.resetAllForTesting();
+    setUseClientHintsForTesting(false);
+    userAgentPlatform.version.resetForTesting();
   },
 
-  async testAndroid() {
-    let uaString = testAgents.ANDROID_BROWSER_233;
+  async testAndroid233() {
+    util.setUserAgent(testAgents.ANDROID_BROWSER_233);
+    assertNull(util.getUserAgentData());
 
-    util.setUserAgent(uaString);
     assertTrue(userAgentPlatform.isAndroid());
 
-    assertPreUACHVersion('2.3.3');
-    assertPreUACHVersionBetween('2.3.0', '2.3.5');
-    await assertVersion('2.3.3', true);
-    await assertVersionBetween('2.3.0', '2.3.5');
-    await assertVersionBetween('2.3', '2.4');
-    await assertVersionBetween('2', '3');
+    assertPreUachVersion('2.3.3');
+    assertPreUachVersionBetween('2.3.0', '2.3.5');
+    // Using the High-entropy APIs in UACH-fallback mode, 'load' must be called
+    // at least once for it to return a version, even if the fallback could be
+    // synchronously accessed.
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('2.3.3');
+    await assertHighEntropyVersionBetween('2.3.0', '2.3.5');
+    await assertHighEntropyVersionBetween('2.3', '2.4');
+    await assertHighEntropyVersionBetween('2', '3');
+  },
 
-    uaString = testAgents.ANDROID_BROWSER_221;
-
-    util.setUserAgent(uaString);
+  async testAndroid221() {
+    util.setUserAgent(testAgents.ANDROID_BROWSER_221);
+    assertNull(util.getUserAgentData());
     assertTrue(userAgentPlatform.isAndroid());
 
-    assertPreUACHVersion('2.2.1');
-    assertPreUACHVersionBetween('2.2.0', '2.2.5');
-    await assertVersion('2.2.1', true);
-    await assertVersionBetween('2.2.0', '2.2.5');
-    await assertVersionBetween('2.2', '2.3');
-    await assertVersionBetween('2', '3');
+    assertPreUachVersion('2.2.1');
+    assertPreUachVersionBetween('2.2.0', '2.2.5');
 
-    uaString = testAgents.CHROME_ANDROID;
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('2.2.1');
+    await assertHighEntropyVersionBetween('2.2.0', '2.2.5');
+    await assertHighEntropyVersionBetween('2.2', '2.3');
+    await assertHighEntropyVersionBetween('2', '3');
+  },
 
-    util.setUserAgent(uaString);
+  async testChromeAndroid() {
+    util.setUserAgent(testAgents.CHROME_ANDROID);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isAndroid());
 
-    assertPreUACHVersion('4.0.2');
-    assertPreUACHVersionBetween('4.0.0', '4.1.0');
-    await assertVersion('4.0.2', true);
-    await assertVersionBetween('4.0.0', '4.1.0');
-    await assertVersionBetween('4.0', '4.1');
-    await assertVersionBetween('4', '5');
+    assertPreUachVersion('4.0.2');
+    assertPreUachVersionBetween('4.0.0', '4.1.0');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('4.0.2');
+    await assertHighEntropyVersionBetween('4.0.0', '4.1.0');
+    await assertHighEntropyVersionBetween('4.0', '4.1');
+    await assertHighEntropyVersionBetween('4', '5');
   },
 
   async testKindleFire() {
-    const uaString = testAgents.KINDLE_FIRE;
-    util.setUserAgent(uaString);
+    util.setUserAgent(testAgents.KINDLE_FIRE);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isAndroid());
-    assertPreUACHVersion('4.0.3');
-    await assertVersion('4.0.3', true);
+
+    assertPreUachVersion('4.0.3');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('4.0.3');
   },
 
   async testIpod() {
-    const uaString = testAgents.SAFARI_IPOD;
+    util.setUserAgent(testAgents.SAFARI_IPOD);
+    assertNull(util.getUserAgentData());
 
-    util.setUserAgent(uaString);
     assertTrue(userAgentPlatform.isIpod());
     assertTrue(userAgentPlatform.isIos());
-    await assertVersion('', true);
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('');
   },
 
-  async testIphone() {
-    let uaString = testAgents.SAFARI_IPHONE_421;
-    util.setUserAgent(uaString);
+  async testIphone421() {
+    util.setUserAgent(testAgents.SAFARI_IPHONE_421);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isIphone());
     assertTrue(userAgentPlatform.isIos());
 
-    assertPreUACHVersion('4.2.1');
-    assertPreUACHVersionBetween('4', '5');
-    await assertVersion('4.2.1', true);
-    await assertVersionBetween('4', '5');
-    await assertVersionBetween('4.2', '4.3');
+    assertPreUachVersion('4.2.1');
+    assertPreUachVersionBetween('4', '5');
 
-    uaString = testAgents.SAFARI_IPHONE_6;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('4.2.1');
+    await assertHighEntropyVersionBetween('4', '5');
+    await assertHighEntropyVersionBetween('4.2', '4.3');
+  },
+
+  async testIphone6() {
+    util.setUserAgent(testAgents.SAFARI_IPHONE_6);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isIphone());
     assertTrue(userAgentPlatform.isIos());
 
-    assertPreUACHVersion('6.0');
-    assertPreUACHVersionBetween('5', '7');
-    await assertVersion('6.0', true);
-    await assertVersionBetween('5', '7');
+    assertPreUachVersion('6.0');
+    assertPreUachVersionBetween('5', '7');
 
-    uaString = testAgents.SAFARI_IPHONE_IOS_14;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('6.0');
+    await assertHighEntropyVersionBetween('5', '7');
+  },
+
+  async testIphoneIos14() {
+    util.setUserAgent(testAgents.SAFARI_IPHONE_IOS_14);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isIphone());
     assertTrue(userAgentPlatform.isIos());
 
-    assertPreUACHVersion('14.6');
-    assertPreUACHVersionBetween('14', '15');
-    await assertVersion('14.6', true);
-    await assertVersionBetween('14', '15');
+    assertPreUachVersion('14.6');
+    assertPreUachVersionBetween('14', '15');
 
-    uaString = testAgents.SAFARI_IPHONE_IOS_15;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('14.6');
+    await assertHighEntropyVersionBetween('14', '15');
+  },
+
+  async testIphoneIos15() {
+    util.setUserAgent(testAgents.SAFARI_IPHONE_IOS_15);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isIphone());
     assertTrue(userAgentPlatform.isIos());
 
-    assertPreUACHVersion('15.0');
-    assertPreUACHVersionBetween('15', '16');
-    await assertVersion('15.0', true);
-    await assertVersionBetween('15', '16');
+    assertPreUachVersion('15.0');
+    assertPreUachVersionBetween('15', '16');
 
-    uaString = testAgents.SAFARI_IPHONE_32;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('15.0');
+    await assertHighEntropyVersionBetween('15', '16');
+  },
+
+  async testIphone32() {
+    util.setUserAgent(testAgents.SAFARI_IPHONE_32);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isIphone());
     assertTrue(userAgentPlatform.isIos());
 
-    assertPreUACHVersion('3.2');
-    assertPreUACHVersionBetween('3', '4');
-    await assertVersion('3.2', true);
-    await assertVersionBetween('3', '4');
+    assertPreUachVersion('3.2');
+    assertPreUachVersionBetween('3', '4');
 
-    uaString = testAgents.WEBVIEW_IPAD;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('3.2');
+    await assertHighEntropyVersionBetween('3', '4');
+  },
+
+  async testWebviewIpad() {
+    util.setUserAgent(testAgents.WEBVIEW_IPAD);
+    assertNull(util.getUserAgentData());
+
     assertFalse(userAgentPlatform.isIphone());
     assertTrue(userAgentPlatform.isIpad());
     assertTrue(userAgentPlatform.isIos());
 
-    assertPreUACHVersion('6.0');
-    assertPreUACHVersionBetween('5', '7');
-    await assertVersion('6.0', true);
-    await assertVersionBetween('5', '7');
+    assertPreUachVersion('6.0');
+    assertPreUachVersionBetween('5', '7');
 
-    uaString = testAgents.FIREFOX_IPHONE;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('6.0');
+    await assertHighEntropyVersionBetween('5', '7');
+  },
+
+  async testFirefoxIphone() {
+    util.setUserAgent(testAgents.FIREFOX_IPHONE);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isIphone());
     assertFalse(userAgentPlatform.isIpad());
     assertTrue(userAgentPlatform.isIos());
 
-    assertPreUACHVersion('5.1.1');
-    assertPreUACHVersionBetween('4', '6');
-    await assertVersion('5.1.1', true);
-    await assertVersionBetween('4', '6');
+    assertPreUachVersion('5.1.1');
+    assertPreUachVersionBetween('4', '6');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('5.1.1');
+    await assertHighEntropyVersionBetween('4', '6');
   },
 
   async testIpad() {
-    let uaString = testAgents.IPAD_4;
+    util.setUserAgent(testAgents.IPAD_4);
+    assertNull(util.getUserAgentData());
 
-    util.setUserAgent(uaString);
     assertTrue(userAgentPlatform.isIpad());
     assertTrue(userAgentPlatform.isIos());
 
-    assertPreUACHVersion('3.2');
-    assertPreUACHVersionBetween('3', '4');
-    await assertVersion('3.2', true);
-    await assertVersionBetween('3', '4');
-    await assertVersionBetween('3.1', '4');
+    assertPreUachVersion('3.2');
+    assertPreUachVersionBetween('3', '4');
 
-    uaString = testAgents.IPAD_5;
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('3.2');
+    await assertHighEntropyVersionBetween('3', '4');
+    await assertHighEntropyVersionBetween('3.1', '4');
+  },
 
-    util.setUserAgent(uaString);
+  async testIpad5() {
+    util.setUserAgent(testAgents.IPAD_5);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isIpad());
     assertTrue(userAgentPlatform.isIos());
 
-    assertPreUACHVersion('5.1');
-    assertPreUACHVersionBetween('5', '6');
-    await assertVersion('5.1', true);
-    await assertVersionBetween('5', '6');
+    assertPreUachVersion('5.1');
+    assertPreUachVersionBetween('5', '6');
 
-    uaString = testAgents.IPAD_6;
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('5.1');
+    await assertHighEntropyVersionBetween('5', '6');
+  },
 
-    util.setUserAgent(uaString);
+  async testIpad6() {
+    util.setUserAgent(testAgents.IPAD_6);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isIpad());
     assertTrue(userAgentPlatform.isIos());
 
-    assertPreUACHVersion('6.0');
-    assertPreUACHVersionBetween('5', '7');
-    await assertVersion('6.0', true);
-    await assertVersionBetween('5', '7');
+    assertPreUachVersion('6.0');
+    assertPreUachVersionBetween('5', '7');
 
-    uaString = testAgents.SAFARI_DESKTOP_IPAD_IOS_15;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('6.0');
+    await assertHighEntropyVersionBetween('5', '7');
+  },
+
+  async testSafariDesktopIpadIos15() {
+    util.setUserAgent(testAgents.SAFARI_DESKTOP_IPAD_IOS_15);
+    assertNull(util.getUserAgentData());
+
     assertFalse(userAgentPlatform.isIpad());
     assertFalse(userAgentPlatform.isIos());
     assertTrue(userAgentPlatform.isMacintosh());
     // In Safari desktop mode, the OS version reported is Mac OS version.
 
-    assertPreUACHVersion('10.15.6');
-    assertPreUACHVersionBetween('10.15.6', '10.15.7');
-    await assertVersion('10.15.6', true);
-    await assertVersionBetween('10.15.6', '10.15.7');
+    assertPreUachVersion('10.15.6');
+    assertPreUachVersionBetween('10.15.6', '10.15.7');
 
-    uaString = testAgents.SAFARI_MOBILE_IPAD_IOS_15;
-    util.setUserAgent(uaString);
-    assertTrue(userAgentPlatform.isIpad());
-    assertTrue(userAgentPlatform.isIos());
-    assertFalse(userAgentPlatform.isMacintosh());
-
-    assertPreUACHVersion('15.0');
-    assertPreUACHVersionBetween('15.0', '15.1');
-    await assertVersion('15.0', true);
-    await assertVersionBetween('15.0', '15.1');
-
-    uaString = testAgents.CHROME_IPAD_IOS_15;
-    util.setUserAgent(uaString);
-    assertTrue(userAgentPlatform.isIpad());
-    assertTrue(userAgentPlatform.isIos());
-    assertFalse(userAgentPlatform.isMacintosh());
-
-    assertPreUACHVersion('15.0');
-    assertPreUACHVersionBetween('15.0', '15.1');
-    await assertVersion('15.0', true);
-    await assertVersionBetween('15.0', '15.1');
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('10.15.6');
+    await assertHighEntropyVersionBetween('10.15.6', '10.15.7');
   },
 
-  /** @suppress {checkTypes} suppression added to enable type checking */
-  async testMac() {
-    let uaString = testAgents.CHROME_MAC;
-    const platform = 'IntelMac';
-    util.setUserAgent(uaString, platform);
+  async testSafariMobileIpadIos15() {
+    util.setUserAgent(testAgents.SAFARI_MOBILE_IPAD_IOS_15);
+    assertNull(util.getUserAgentData());
+
+    assertTrue(userAgentPlatform.isIpad());
+    assertTrue(userAgentPlatform.isIos());
+    assertFalse(userAgentPlatform.isMacintosh());
+
+    assertPreUachVersion('15.0');
+    assertPreUachVersionBetween('15.0', '15.1');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('15.0');
+    await assertHighEntropyVersionBetween('15.0', '15.1');
+  },
+
+  async testChromeIpadIos15() {
+    util.setUserAgent(testAgents.CHROME_IPAD_IOS_15);
+    assertNull(util.getUserAgentData());
+
+    assertTrue(userAgentPlatform.isIpad());
+    assertTrue(userAgentPlatform.isIos());
+    assertFalse(userAgentPlatform.isMacintosh());
+
+    assertPreUachVersion('15.0');
+    assertPreUachVersionBetween('15.0', '15.1');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('15.0');
+    await assertHighEntropyVersionBetween('15.0', '15.1');
+  },
+
+  async testChromeMac() {
+    util.setUserAgent(testAgents.CHROME_MAC);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isMacintosh());
 
-    assertPreUACHVersion('10.8.2');
-    assertPreUACHVersionBetween('10', '11');
-    await assertVersion('10.8.2', true);
-    await assertVersionBetween('10', '11');
-    await assertVersionBetween('10.8', '10.9');
-    await assertVersionBetween('10.8.1', '10.8.3');
+    assertPreUachVersion('10.8.2');
+    assertPreUachVersionBetween('10', '11');
 
-    uaString = testAgents.OPERA_MAC;
-    util.setUserAgent(uaString, platform);
-    assertTrue(userAgentPlatform.isMacintosh());
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('10.8.2');
+    await assertHighEntropyVersionBetween('10', '11');
+    await assertHighEntropyVersionBetween('10.8', '10.9');
+    await assertHighEntropyVersionBetween('10.8.1', '10.8.3');
+  },
 
-    assertPreUACHVersion('10.6.8');
-    assertPreUACHVersionBetween('10', '11');
-    await assertVersion('10.6.8', true);
-    await assertVersionBetween('10', '11');
-    await assertVersionBetween('10.6', '10.7');
-    await assertVersionBetween('10.6.5', '10.7.0');
-
-    uaString = testAgents.SAFARI_MAC;
-    util.setUserAgent(uaString, platform);
+  async testOperaMac() {
+    util.setUserAgent(testAgents.OPERA_MAC);
+    assertNull(util.getUserAgentData());
 
     assertTrue(userAgentPlatform.isMacintosh());
-    assertPreUACHVersionBetween('10', '11');
-    await assertVersionBetween('10', '11');
-    await assertVersionBetween('10.6', '10.7');
-    await assertVersionBetween('10.6.5', '10.7.0');
 
-    uaString = testAgents.FIREFOX_MAC;
-    util.setUserAgent(uaString, platform);
+    assertPreUachVersion('10.6.8');
+    assertPreUachVersionBetween('10', '11');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('10.6.8');
+    await assertHighEntropyVersionBetween('10', '11');
+    await assertHighEntropyVersionBetween('10.6', '10.7');
+    await assertHighEntropyVersionBetween('10.6.5', '10.7.0');
+  },
+
+  async testSafariMac() {
+    util.setUserAgent(testAgents.SAFARI_MAC);
+    assertNull(util.getUserAgentData());
+
+    assertTrue(userAgentPlatform.isMacintosh());
+    assertPreUachVersionBetween('10', '11');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('10.6.8');
+    await assertHighEntropyVersionBetween('10', '11');
+    await assertHighEntropyVersionBetween('10.6', '10.7');
+    await assertHighEntropyVersionBetween('10.6.5', '10.7.0');
+  },
+
+  async testFirefoxMac() {
+    util.setUserAgent(testAgents.FIREFOX_MAC);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isMacintosh());
 
-    assertPreUACHVersion('11.7.9');
-    assertPreUACHVersionBetween('11', '12');
-    await assertVersion('11.7.9', true);
-    await assertVersionBetween('11', '12');
-    await assertVersionBetween('11.7', '11.8');
-    await assertVersionBetween('11.7.9', '11.8.0');
+    assertPreUachVersion('11.7.9');
+    assertPreUachVersionBetween('11', '12');
 
-    uaString = testAgents.SAFARI_MAC_OS_BIG_SUR;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('11.7.9');
+    await assertHighEntropyVersionBetween('11', '12');
+    await assertHighEntropyVersionBetween('11.7', '11.8');
+    await assertHighEntropyVersionBetween('11.7.9', '11.8.0');
+  },
+
+  async testSafariMacOsBigSur() {
+    util.setUserAgent(testAgents.SAFARI_MAC_OS_BIG_SUR);
+    assertNull(util.getUserAgentData());
+
     assertFalse(userAgentPlatform.isIpad());
     assertFalse(userAgentPlatform.isIos());
     assertTrue(userAgentPlatform.isMacintosh());
 
-    assertPreUACHVersion('10.15.7');
-    assertPreUACHVersionBetween('10.15.7', '10.15.8');
-    await assertVersion('10.15.7', true);
-    await assertVersionBetween('10.15.7', '10.15.8');
+    assertPreUachVersion('10.15.7');
+    assertPreUachVersionBetween('10.15.7', '10.15.8');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('10.15.7');
+    await assertHighEntropyVersionBetween('10.15.7', '10.15.8');
   },
 
-  async testLinux() {
-    let uaString = testAgents.FIREFOX_LINUX;
-    util.setUserAgent(uaString);
-    assertTrue(userAgentPlatform.isLinux());
-    await assertVersion('', true);
+  async testFirefoxLinux() {
+    util.setUserAgent(testAgents.FIREFOX_LINUX);
+    assertNull(util.getUserAgentData());
 
-    uaString = testAgents.CHROME_LINUX;
-    util.setUserAgent(uaString);
     assertTrue(userAgentPlatform.isLinux());
-    await assertVersion('', true);
 
-    uaString = testAgents.OPERA_LINUX;
-    util.setUserAgent(uaString);
-    assertTrue(userAgentPlatform.isLinux());
-    await assertVersion('', true);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('');
   },
 
-  async testWindows() {
-    let uaString = testAgents.SAFARI_WINDOWS;
-    util.setUserAgent(uaString);
+  async testChromeLinux() {
+    util.setUserAgent(testAgents.CHROME_LINUX);
+    assertNull(util.getUserAgentData());
+
+    assertTrue(userAgentPlatform.isLinux());
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('');
+  },
+
+  async testOperaLinux() {
+    util.setUserAgent(testAgents.OPERA_LINUX);
+    assertNull(util.getUserAgentData());
+
+    assertTrue(userAgentPlatform.isLinux());
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('');
+  },
+
+  async testSafariWindows() {
+    util.setUserAgent(testAgents.SAFARI_WINDOWS);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isWindows());
 
-    assertPreUACHVersion('6.1');
-    assertPreUACHVersionBetween('6', '7');
-    await assertVersion('6.1', true);
-    await assertVersionBetween('6', '7');
+    assertPreUachVersion('6.1');
+    assertPreUachVersionBetween('6', '7');
 
-    uaString = testAgents.IE_10;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('6.1');
+    await assertHighEntropyVersionBetween('6', '7');
+  },
+
+  async testIE10Windows() {
+    util.setUserAgent(testAgents.IE_10);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isWindows());
 
-    assertPreUACHVersion('6.2');
-    assertPreUACHVersionBetween('6', '6.5');
-    await assertVersion('6.2', true);
-    await assertVersionBetween('6', '6.5');
+    assertPreUachVersion('6.2');
+    assertPreUachVersionBetween('6', '6.5');
 
-    uaString = testAgents.CHROME_25;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('6.2');
+    await assertHighEntropyVersionBetween('6', '6.5');
+  },
+
+  async testChrome25Windows() {
+    util.setUserAgent(testAgents.CHROME_25);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isWindows());
 
-    assertPreUACHVersion('5.1');
-    assertPreUACHVersionBetween('5', '6');
-    await assertVersion('5.1', true);
-    await assertVersionBetween('5', '6');
+    assertPreUachVersion('5.1');
+    assertPreUachVersionBetween('5', '6');
 
-    uaString = testAgents.FIREFOX_WINDOWS;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('5.1');
+    await assertHighEntropyVersionBetween('5', '6');
+  },
+
+  async testFirefoxWindows() {
+    util.setUserAgent(testAgents.FIREFOX_WINDOWS);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isWindows());
 
-    assertPreUACHVersion('6.1');
-    assertPreUACHVersionBetween('6', '7');
-    await assertVersion('6.1', true);
-    await assertVersionBetween('6', '7');
+    assertPreUachVersion('6.1');
+    assertPreUachVersionBetween('6', '7');
 
-    uaString = testAgents.IE_11;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('6.1');
+    await assertHighEntropyVersionBetween('6', '7');
+  },
+
+  async testIE11Windows() {
+    util.setUserAgent(testAgents.IE_11);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isWindows());
 
-    assertPreUACHVersion('6.3');
-    assertPreUACHVersionBetween('6', '6.5');
-    await assertVersion('6.3', true);
-    await assertVersionBetween('6', '6.5');
+    assertPreUachVersion('6.3');
+    assertPreUachVersionBetween('6', '6.5');
 
-    uaString = testAgents.IE_10_MOBILE;
-    util.setUserAgent(uaString);
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('6.3');
+    await assertHighEntropyVersionBetween('6', '6.5');
+  },
+
+  async testIE10WindowsMobile() {
+    util.setUserAgent(testAgents.IE_10_MOBILE);
+    assertNull(util.getUserAgentData());
+
     assertTrue(userAgentPlatform.isWindows());
-    await assertVersion('8.0', true);
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('8.0');
+  },
+
+  async testChromeOS910() {
+    util.setUserAgent(testAgents.CHROME_OS_910);
+    assertNull(util.getUserAgentData());
+
+    assertTrue(userAgentPlatform.isChromeOS());
+
+    assertPreUachVersion('9.10.0');
+    assertPreUachVersionBetween('9', '10');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('9.10.0');
+    await assertHighEntropyVersionBetween('9', '10');
   },
 
   async testChromeOS() {
-    let uaString = testAgents.CHROME_OS_910;
+    util.setUserAgent(testAgents.CHROME_OS);
+    assertNull(util.getUserAgentData());
 
-    util.setUserAgent(uaString);
     assertTrue(userAgentPlatform.isChromeOS());
 
-    assertPreUACHVersion('9.10.0');
-    assertPreUACHVersionBetween('9', '10');
-    await assertVersion('9.10.0', true);
-    await assertVersionBetween('9', '10');
+    assertPreUachVersion('3701.62.0');
+    assertPreUachVersionBetween('3701', '3702');
 
-    uaString = testAgents.CHROME_OS;
-
-    util.setUserAgent(uaString);
-    assertTrue(userAgentPlatform.isChromeOS());
-
-    assertPreUACHVersion('3701.62.0');
-    assertPreUACHVersionBetween('3701', '3702');
-    await assertVersion('3701.62.0', true);
-    await assertVersionBetween('3701', '3702');
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('3701.62.0');
+    await assertHighEntropyVersionBetween('3701', '3702');
   },
 
   async testChromecast() {
-    const uaString = testAgents.CHROMECAST;
+    util.setUserAgent(testAgents.CHROMECAST);
+    assertNull(util.getUserAgentData());
 
-    util.setUserAgent(uaString);
     assertTrue(userAgentPlatform.isChromecast());
-    assertPreUACHVersion('');
-    await assertVersion('', true);
+
+    assertPreUachVersion('');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('');
   },
 
   async testKaiOS() {
-    const uaString = testAgents.KAIOS;
+    util.setUserAgent(testAgents.KAIOS);
+    assertNull(util.getUserAgentData());
 
-    util.setUserAgent(uaString);
     assertTrue(userAgentPlatform.isKaiOS());
-    assertPreUACHVersion('2.5');
-    await assertVersion('2.5', true);
+
+    assertPreUachVersion('2.5');
+
+    assertHighEntroyVersionIsntCached();
+    await assertHighEntropyVersion('2.5');
   },
 
   async testAndroidUserAgentData() {
@@ -447,11 +600,11 @@ testSuite({
           platformVersion: '11.0.0',
         });
     util.setUserAgentData(uaData);
-    await assertVersion('11.0.0');
+    await assertHighEntropyVersion('11.0.0');
   },
 
   async testAndroidUserAgentDataWithRejectedHighEntropyValues() {
-    const uaData = testAgentData.CHROME_USERAGENT_DATA_MOBILE;
+    let uaData = testAgentData.CHROME_USERAGENT_DATA_MOBILE;
     util.setUserAgentData(uaData);
     assertEquals(undefined, userAgentPlatform.version.getIfLoaded());
 
@@ -465,8 +618,16 @@ testSuite({
           platformVersion: '14150.74.0',
         });
     util.setUserAgentData(uaData);
+
+    setUseClientHintsForTesting(false);
+    // No data, and the mocked UA string is wrong.
+    assertFalse(userAgentPlatform.isChromeOS());
+
+    setUseClientHintsForTesting(true);
     assertTrue(userAgentPlatform.isChromeOS());
-    await assertVersion('14150.74.0');
+
+    setUseClientHintsForTesting(false);
+    await assertHighEntropyVersion('14150.74.0');
   },
 
   async testLinuxUserAgentData() {
@@ -477,8 +638,16 @@ testSuite({
           platformVersion: '',
         });
     util.setUserAgentData(uaData);
+
+    setUseClientHintsForTesting(false);
+    // No data, and the mocked UA string is wrong.
+    assertFalse(userAgentPlatform.isLinux());
+
+    setUseClientHintsForTesting(true);
     assertTrue(userAgentPlatform.isLinux());
-    await assertVersion('');
+
+    setUseClientHintsForTesting(false);
+    await assertHighEntropyVersion('');
   },
 
   async testMacOSUserAgentData() {
@@ -487,8 +656,16 @@ testSuite({
           platformVersion: '11.6.0',
         });
     util.setUserAgentData(uaData);
+
+    setUseClientHintsForTesting(false);
+    // No data, and the mocked UA string is wrong.
+    assertFalse(userAgentPlatform.isMacintosh());
+
+    setUseClientHintsForTesting(true);
     assertTrue(userAgentPlatform.isMacintosh());
-    await assertVersion('11.6.0');
+
+    setUseClientHintsForTesting(false);
+    await assertHighEntropyVersion('11.6.0');
   },
 
   async testWindowsUserAgentData() {
@@ -497,7 +674,14 @@ testSuite({
           platformVersion: '10.0.0',
         });
     util.setUserAgentData(uaData);
+
+    setUseClientHintsForTesting(false);
+    assertFalse(userAgentPlatform.isWindows());
+
+    setUseClientHintsForTesting(true);
     assertTrue(userAgentPlatform.isWindows());
-    await assertVersion('10.0.0');
+
+    setUseClientHintsForTesting(false);
+    await assertHighEntropyVersion('10.0.0');
   },
 });

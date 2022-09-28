@@ -27,7 +27,6 @@ closure_js_library(
         "//closure/goog/asserts",
         "//closure/goog/labs/useragent/highentropy:highentropydata",
         "//closure/goog/labs/useragent/highentropy:highentropyvalue",
-        "//closure/goog/object",
         "//closure/goog/string:internal",
     ],
 )
@@ -66,6 +65,7 @@ closure_js_library(
     lenient = True,
     deps = [
         ":util",
+        "//closure/goog/asserts",
         "//closure/goog/labs/useragent/highentropy:highentropydata",
         "//closure/goog/labs/useragent/highentropy:highentropyvalue",
         "//closure/goog/string:internal",
@@ -96,7 +96,11 @@ closure_js_library(
         "testutil.js",
     ],
     lenient = True,
-    deps = [":util"],
+    deps = [
+        ":browser",
+        ":platform",
+        ":util",
+    ],
 )
 
 closure_js_library(

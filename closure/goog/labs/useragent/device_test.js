@@ -9,15 +9,12 @@
 goog.module('goog.labs.userAgent.deviceTest');
 goog.setTestOnly();
 
-const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const device = goog.require('goog.labs.userAgent.device');
-const functions = goog.require('goog.functions');
 const testAgentData = goog.require('goog.labs.userAgent.testAgentData');
 const testAgents = goog.require('goog.labs.userAgent.testAgents');
 const testSuite = goog.require('goog.testing.testSuite');
 const util = goog.require('goog.labs.userAgent.util');
-
-const stubs = new PropertyReplacer();
+const {setUseClientHintsForTesting} = goog.require('goog.labs.userAgent');
 
 /**
  * @param {?string} uaString
@@ -25,7 +22,8 @@ const stubs = new PropertyReplacer();
  */
 function assertIsMobile(uaString, uaData) {
   util.setUserAgent(uaString);
-  stubs.set(util, 'getUserAgentData', functions.constant(uaData || null));
+  util.setUserAgentData(uaData || null);
+  setUseClientHintsForTesting(!!uaData);
   assertTrue(device.isMobile());
   assertFalse(device.isTablet());
   assertFalse(device.isDesktop());
@@ -37,7 +35,8 @@ function assertIsMobile(uaString, uaData) {
  */
 function assertIsTablet(uaString, uaData) {
   util.setUserAgent(uaString);
-  stubs.set(util, 'getUserAgentData', functions.constant(uaData || null));
+  util.setUserAgentData(uaData || null);
+  setUseClientHintsForTesting(!!uaData);
   assertTrue(device.isTablet());
   assertFalse(device.isMobile());
   assertFalse(device.isDesktop());
@@ -49,7 +48,8 @@ function assertIsTablet(uaString, uaData) {
  */
 function assertIsDesktop(uaString, uaData) {
   util.setUserAgent(uaString);
-  stubs.set(util, 'getUserAgentData', functions.constant(uaData || null));
+  util.setUserAgentData(uaData || null);
+  setUseClientHintsForTesting(!!uaData);
   assertTrue(device.isDesktop());
   assertFalse(device.isMobile());
   assertFalse(device.isTablet());
