@@ -9893,14 +9893,14 @@ exports.RelativeDateTimeSymbols_zh =  {
   },
   HOUR: {
     LONG:{
-      R:{'0':'这一时间 / 此时'},
+      R:{'0':'本小时'},
       P:'other{#小时前}',
       F:'other{#小时后}',
     },
   },
   MINUTE: {
     LONG:{
-      R:{'0':'此刻'},
+      R:{'0':'刚刚'},
       P:'other{#分钟前}',
       F:'other{#分钟后}',
     },
