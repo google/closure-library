@@ -11,6 +11,28 @@
 goog.provide('goog.crypt');
 
 goog.require('goog.asserts');
+goog.require('goog.async.throwException');
+
+
+/**
+ * Whether to async-throw on unicode input to the legacy versions of
+ * `goog.crypt.stringToByteArray` (i.e. when `throwSync` is false).
+ * NOTE: The default will change to `true` soon, after notifying users.
+ * @define {boolean}
+ */
+goog.crypt.ASYNC_THROW_ON_UNICODE_TO_BYTE =
+    goog.define('goog.crypt.ASYNC_THROW_ON_UNICODE_TO_BYTE', goog.DEBUG);
+
+
+/**
+ * Test-only stub to make our use of async.throwException more testable.
+ * @const
+ */
+goog.crypt.TEST_ONLY = {};
+
+
+/** Remappable alias. */
+goog.crypt.TEST_ONLY.throwException = goog.async.throwException;
 
 
 /**
@@ -43,6 +65,8 @@ goog.crypt.stringToByteArray = function(str, throwSync) {
       var err = new Error('go/unicode-to-byte-error');
       if (throwSync) {
         throw err;
+      } else if (goog.crypt.ASYNC_THROW_ON_UNICODE_TO_BYTE) {
+        goog.crypt.TEST_ONLY.throwException(err);
       }
       output[p++] = c & 0xff;
       c >>= 8;

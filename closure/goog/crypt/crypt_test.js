@@ -7,8 +7,10 @@
 goog.module('goog.cryptTest');
 goog.setTestOnly();
 
+const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const crypt = goog.require('goog.crypt');
 const googString = goog.require('goog.string');
+const recordFunction = goog.require('goog.testing.recordFunction');
 const testSuite = goog.require('goog.testing.testSuite');
 
 const UTF8_RANGES_BYTE_ARRAY =
@@ -194,13 +196,24 @@ testSuite({
   },
 
   testStringToByteArray() {
-    assertArrayEquals([], crypt.stringToByteArray(''));
-    assertArrayEquals([97, 98, 99], crypt.stringToByteArray('abc'));
-    assertArrayEquals(
-        [0xa0, 0x12, 0xa1], crypt.stringToByteArray('\xa0\x12\xa1'));
+    const stubs = new PropertyReplacer();
+    const stubThrowException = recordFunction();
+    stubs.replace(crypt.TEST_ONLY, 'throwException', stubThrowException);
+    try {
+      assertArrayEquals([], crypt.stringToByteArray(''));
+      assertArrayEquals([97, 98, 99], crypt.stringToByteArray('abc'));
+      assertArrayEquals(
+          [0xa0, 0x12, 0xa1], crypt.stringToByteArray('\xa0\x12\xa1'));
+      if (stubThrowException.getCallCount() > 0) {
+        throw stubThrowException.getLastCall().getArgument(0);
+      }
 
-    // NOTE: Currently allowed, but will become an async throw soon.
-    assertArrayEquals([2, 1], crypt.stringToByteArray('\u0102'));
+      // Test async throwing behavior.
+      assertArrayEquals([2, 1], crypt.stringToByteArray('\u0102'));
+      assertEquals(1, stubThrowException.getCallCount());
+    } finally {
+      stubs.reset();
+    }
   },
 
   testBinaryStringToByteArray() {
