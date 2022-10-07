@@ -196,9 +196,18 @@ testSuite({
   },
 
   testStringToByteArray() {
+    assertArrayEquals([], crypt.stringToByteArray(''));
+    assertArrayEquals([97, 98, 99], crypt.stringToByteArray('abc'));
+    assertArrayEquals(
+        [0xa0, 0x12, 0xa1], crypt.stringToByteArray('\xa0\x12\xa1'));
+    assertThrows(() => crypt.stringToByteArray('\u0102'));
+  },
+
+  testStringToByteArray_asyncThrow() {
     const stubs = new PropertyReplacer();
     const stubThrowException = recordFunction();
     stubs.replace(crypt.TEST_ONLY, 'throwException', stubThrowException);
+    stubs.replace(crypt.TEST_ONLY, 'alwaysThrowSynchronously', false);
     try {
       assertArrayEquals([], crypt.stringToByteArray(''));
       assertArrayEquals([97, 98, 99], crypt.stringToByteArray('abc'));

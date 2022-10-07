@@ -35,6 +35,10 @@ goog.crypt.TEST_ONLY = {};
 goog.crypt.TEST_ONLY.throwException = goog.async.throwException;
 
 
+/** Configurable so that we can test the async-throw behavior. */
+goog.crypt.TEST_ONLY.alwaysThrowSynchronously = goog.DEBUG;
+
+
 /**
  * Turns a string into an array of bytes; a "byte" being a JS number in the
  * range 0-255. Multi-byte characters will throw.
@@ -63,7 +67,8 @@ goog.crypt.stringToByteArray = function(str, throwSync) {
     // NOTE: c <= 0xffff since JavaScript strings are UTF-16.
     if (c > 0xff) {
       var err = new Error('go/unicode-to-byte-error');
-      if (throwSync) {
+      // NOTE: fail faster in debug to catch errors reliably in tests.
+      if (goog.crypt.TEST_ONLY.alwaysThrowSynchronously || throwSync) {
         throw err;
       } else if (goog.crypt.ASYNC_THROW_ON_UNICODE_TO_BYTE) {
         goog.crypt.TEST_ONLY.throwException(err);
