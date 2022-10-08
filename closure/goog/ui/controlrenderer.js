@@ -820,7 +820,7 @@ goog.ui.ControlRenderer.prototype.getAppliedCombinedClassNames_ = function(
   'use strict';
   var toAdd = [];
   if (opt_includedClass) {
-    classes = goog.array.concat(classes, [opt_includedClass]);
+    classes = [].concat(classes, [opt_includedClass]);
   }
   this.getIe6ClassCombinations().forEach(function(combo) {
     'use strict';
