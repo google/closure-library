@@ -309,6 +309,8 @@ class SafeHtml {
    * @throws {!Error} If invalid tag name, attribute name, or attribute value is
    *     provided.
    * @throws {!asserts.AssertionError} If content for void tag is provided.
+   * @deprecated Use a recommended templating system like Lit instead.
+   *     More information: go/goog.html-readme // LINE-INTERNAL
    */
   static create(tagName, attributes = undefined, content = undefined) {
     SafeHtml.verifyTagName(String(tagName));
