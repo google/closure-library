@@ -69,6 +69,7 @@ closure_js_library(
     lenient = True,
     deps = [
         ":dom",
+        ":viewportsizemonitor",
         "//closure/goog/asserts",
         "//closure/goog/async:delay",
         "//closure/goog/events",
