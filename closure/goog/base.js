@@ -504,7 +504,6 @@ goog.module.getInternal_ = function(name) {
   return null;
 };
 
-
 /**
  * Types of modules the debug loader can load.
  * @enum {string}
