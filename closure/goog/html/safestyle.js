@@ -523,6 +523,7 @@ const ALLOWED_FUNCTIONS = [
   'rgb',
   'rgba',
   '(rotate|scale|translate)(X|Y|Z|3d)?',
+  'steps',
   'var',
 ];
 

@@ -137,6 +137,12 @@ testSuite({
         {'grid-template-columns': 'repeat(3, [start] 100px [end])'});
   },
 
+  testCreate_allowsSteps() {
+    assertCreateEquals(
+        'animation-timing-function:steps(2, start);',
+        {'animation-timing-function': 'steps(2, start)'});
+  },
+
   testCreate_allowsCubicBezier() {
     assertCreateEquals(
         'transition-timing-function:cubic-bezier(0.26, 0.86, 0.44, 0.95);',
