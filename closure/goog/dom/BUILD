@@ -120,6 +120,7 @@ closure_js_library(
         ":tagname",
         "//closure/goog/array",
         "//closure/goog/asserts",
+        "//closure/goog/asserts:dom",
         "//closure/goog/html:safehtml",
         "//closure/goog/html:uncheckedconversions",
         "//closure/goog/math:coordinate",

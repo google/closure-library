@@ -37,6 +37,7 @@ const $ = googDom.getElement;
 let divForTestingScrolling;
 let myIframe;
 let myIframeDoc;
+let crossDocumentElement;
 let stubs;
 
 function createTestDom(txt) {
@@ -138,12 +139,17 @@ testSuite({
         '<div style="height:42px;font-size:1px;line-height:0;">' +
         'hello world</div>' +
         '<div style="height:23px;font-size:1px;line-height:0;">' +
-        'hello world</div>');
+        'hello world</div>' +
+        '<div id="xdoc" class="xdoc"></div>');
     myIframeDoc.close();
+
+    crossDocumentElement = myIframeDoc.getElementById('xdoc').cloneNode(true);
+    document.body.appendChild(crossDocumentElement);
   },
 
   tearDownPage() {
     document.body.removeChild(divForTestingScrolling);
+    document.body.removeChild(crossDocumentElement);
   },
 
   tearDown() {
@@ -174,6 +180,7 @@ testSuite({
     assertEquals('Should be able to get id', el.id, 'testEl');
     assertNull(googDom.getHTMLElement('nonexistent'));
     assertThrows(() => googDom.getHTMLElement('testSvg'));
+    assertNotNull(googDom.getHTMLElement('xdoc'));
   },
 
   testGetRequiredHTMLElement() {
@@ -183,6 +190,7 @@ testSuite({
     assertThrows(() => googDom.getRequiredHTMLElement('does_not_exist'));
     assertNotNull(googDom.getElement('testSvg'));
     assertThrows(() => googDom.getRequiredHTMLElement('testSvg'));
+    assertNotNull(googDom.getRequiredHTMLElement('xdoc'));
   },
 
   testGetRequiredElement() {
@@ -325,6 +333,7 @@ testSuite({
     assertNotNull(googDom.getElementByClass('svg-test'));
     assertThrows(() => googDom.getHTMLElementByClass('svg-test'));
     assertNull(googDom.getHTMLElementByClass('nonexistent'));
+    assertNotNull(googDom.getElementByClass('xdoc'));
   },
 
   testGetRequiredHTMLElementByClass() {
@@ -337,6 +346,7 @@ testSuite({
     assertNotNull(googDom.getElementByClass('svg-test'));
     assertThrows(() => googDom.getRequiredHTMLElementByClass('svg-test'));
     assertThrows(() => googDom.getRequiredHTMLElementByClass('nonexistent'));
+    assertNotNull(googDom.getRequiredHTMLElementByClass('xdoc'));
   },
 
   testGetElementByTagNameAndClass() {
