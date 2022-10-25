@@ -25,7 +25,7 @@ const {assertString} = goog.require('goog.asserts');
  * @constructor
  * @struct
  * @extends {Mechanism}
- * @implements {Iterable<!Array<string>>}
+ * @implements {Iterable<!string>}
  * @abstract
  */
 const IterableMechanism = function() {

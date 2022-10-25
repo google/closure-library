@@ -53,6 +53,14 @@ function testIteratorBasics(mechanism) {
   assertObjectEquals({value: 'first', done: false}, it);
   assertEquals(mechanism.get(it.value), 'one');
   assertObjectEquals({value: undefined, done: true}, es6Iterator.next());
+
+  for (const key of mechanism) {
+    // Cast the key to the expected type to ensure that the types on
+    // IterableMechanism are correct.
+    const keyRedefined = /** @type {string} */ (key);
+    // There's only one key
+    assertEquals('first', keyRedefined);
+  }
 }
 
 
