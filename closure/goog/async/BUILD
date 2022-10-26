@@ -90,6 +90,7 @@ closure_js_library(
         ":nexttick",
         ":throwexception",
         ":workqueue",
+        "//closure/goog/asserts",
     ],
 )
 
