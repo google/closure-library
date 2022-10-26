@@ -45,6 +45,7 @@ closure_js_library(
     srcs = ["blobhasher.js"],
     lenient = True,
     deps = [
+        ":hash",
         "//closure/goog/asserts",
         "//closure/goog/events:eventtarget",
         "//closure/goog/fs",
