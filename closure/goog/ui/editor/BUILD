@@ -151,6 +151,7 @@ closure_js_library(
         "//closure/goog/events:eventhandler",
         "//closure/goog/events:eventtarget",
         "//closure/goog/ui:component",
+        "//closure/goog/ui:toolbar",
     ],
 )
 
