@@ -25,16 +25,31 @@ closure_js_library(
 
 closure_js_library(
     name = "autocomplete",
-    srcs = ["autocomplete.js"],
+    srcs = [
+        "autocomplete.js",
+        "inputhandler.js",
+    ],
     lenient = True,
     deps = [
-        ":inputhandler",
         ":renderoptions",
+        "//closure/goog/a11y/aria",
+        "//closure/goog/a11y/aria:attributes",
+        "//closure/goog/a11y/aria:roles",
         "//closure/goog/asserts",
+        "//closure/goog/disposable",
+        "//closure/goog/dom",
+        "//closure/goog/dom:selection",
         "//closure/goog/events",
+        "//closure/goog/events:browserevent",
         "//closure/goog/events:event",
         "//closure/goog/events:eventtarget",
+        "//closure/goog/events:eventtype",
+        "//closure/goog/events:keycodes",
+        "//closure/goog/events:keyhandler",
         "//closure/goog/object",
+        "//closure/goog/string",
+        "//closure/goog/timer",
+        "//closure/goog/useragent",
     ],
 )
 
@@ -50,28 +65,9 @@ closure_js_library(
     ],
 )
 
-closure_js_library(
+alias(
     name = "inputhandler",
-    srcs = ["inputhandler.js"],
-    lenient = True,
-    deps = [
-        "//closure/goog/a11y/aria",
-        "//closure/goog/a11y/aria:attributes",
-        "//closure/goog/a11y/aria:roles",
-        "//closure/goog/disposable",
-        "//closure/goog/dom",
-        "//closure/goog/dom:selection",
-        "//closure/goog/events:browserevent",
-        "//closure/goog/events:event",
-        "//closure/goog/events:eventhandler",
-        "//closure/goog/events:eventtype",
-        "//closure/goog/events:keycodes",
-        "//closure/goog/events:keyhandler",
-        "//closure/goog/string",
-        "//closure/goog/timer",
-        "//closure/goog/useragent",
-        "//closure/goog/useragent:product",
-    ],
+    actual = ":autocomplete",
 )
 
 closure_js_library(

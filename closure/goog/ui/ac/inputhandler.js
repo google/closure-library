@@ -99,6 +99,7 @@ goog.require('goog.userAgent');
 goog.requireType('goog.events.BrowserEvent');
 goog.requireType('goog.events.Event');
 goog.requireType('goog.events.EventTarget');
+goog.requireType('goog.ui.ac.AutoComplete');
 
 
 
