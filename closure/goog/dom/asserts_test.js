@@ -11,7 +11,6 @@ const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const StrictMock = goog.require('goog.testing.StrictMock');
 const asserts = goog.require('goog.dom.asserts');
 const testSuite = goog.require('goog.testing.testSuite');
-const userAgent = goog.require('goog.userAgent');
 
 let stubs;
 
@@ -41,13 +40,11 @@ testSuite({
       asserts.assertIsLocation(mock);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const linkElement = document.createElement('LINK');
-      const ex = assertThrows(() => {
-        asserts.assertIsLocation(linkElement);
-      });
-      assertContains('Argument is not a Location', ex.message);
-    }
+    const linkElement = document.createElement('LINK');
+    const ex = assertThrows(() => {
+      asserts.assertIsLocation(linkElement);
+    });
+    assertContains('Argument is not a Location', ex.message);
   },
 
   testAssertIsHtmlAnchorElement() {
@@ -67,13 +64,11 @@ testSuite({
       asserts.assertIsHTMLAnchorElement(mock);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('LINK');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLAnchorElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLAnchorElement', ex.message);
-    }
+    const otherElement = document.createElement('LINK');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLAnchorElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLAnchorElement', ex.message);
   },
 
   testAssertIsHtmlButtonElement() {
@@ -93,13 +88,11 @@ testSuite({
       asserts.assertIsHTMLButtonElement(mock);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('LINK');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLButtonElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLButtonElement', ex.message);
-    }
+    const otherElement = document.createElement('LINK');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLButtonElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLButtonElement', ex.message);
   },
 
   testAssertIsHtmlLinkElement() {
@@ -120,13 +113,11 @@ testSuite({
       asserts.assertIsHTMLLinkElement(mock);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('A');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLLinkElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLLinkElement', ex.message);
-    }
+    const otherElement = document.createElement('A');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLLinkElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLLinkElement', ex.message);
   },
 
   testAssertIsHtmlImageElement() {
@@ -147,13 +138,11 @@ testSuite({
       asserts.assertIsHTMLImageElement(mock);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('SCRIPT');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLImageElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLImageElement', ex.message);
-    }
+    const otherElement = document.createElement('SCRIPT');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLImageElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLImageElement', ex.message);
   },
 
   testAssertIsHtmlInputElement() {
@@ -173,13 +162,11 @@ testSuite({
       asserts.assertIsHTMLInputElement(mock);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('LINK');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLInputElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLInputElement', ex.message);
-    }
+    const otherElement = document.createElement('LINK');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLInputElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLInputElement', ex.message);
   },
 
   testAssertIsHtmlFormElement() {
@@ -199,13 +186,11 @@ testSuite({
       asserts.assertIsHTMLFormElement(mock);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('LINK');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLFormElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLFormElement', ex.message);
-    }
+    const otherElement = document.createElement('LINK');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLFormElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLFormElement', ex.message);
   },
 
   testAssertIsHtmlEmbedElement() {
@@ -214,13 +199,11 @@ testSuite({
       asserts.assertIsHTMLEmbedElement(el);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('SCRIPT');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLEmbedElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLEmbedElement', ex.message);
-    }
+    const otherElement = document.createElement('SCRIPT');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLEmbedElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLEmbedElement', ex.message);
   },
 
   testAssertIsHtmlFrameElement() {
@@ -229,13 +212,11 @@ testSuite({
       asserts.assertIsHTMLFrameElement(el);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('SCRIPT');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLFrameElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLFrameElement', ex.message);
-    }
+    const otherElement = document.createElement('SCRIPT');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLFrameElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLFrameElement', ex.message);
   },
 
   testAssertIsHtmlIFrameElement() {
@@ -244,13 +225,11 @@ testSuite({
       asserts.assertIsHTMLIFrameElement(el);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('SCRIPT');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLIFrameElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLIFrameElement', ex.message);
-    }
+    const otherElement = document.createElement('SCRIPT');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLIFrameElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLIFrameElement', ex.message);
   },
 
   testAssertIsHtmlObjectElement() {
@@ -259,13 +238,11 @@ testSuite({
       asserts.assertIsHTMLObjectElement(el);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('SCRIPT');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLObjectElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLObjectElement', ex.message);
-    }
+    const otherElement = document.createElement('SCRIPT');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLObjectElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLObjectElement', ex.message);
   },
 
   testAssertIsHtmlScriptElement() {
@@ -274,13 +251,11 @@ testSuite({
       asserts.assertIsHTMLScriptElement(el);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const otherElement = document.createElement('IMG');
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLScriptElement(otherElement);
-      });
-      assertContains('Argument is not a HTMLScriptElement', ex.message);
-    }
+    const otherElement = document.createElement('IMG');
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLScriptElement(otherElement);
+    });
+    assertContains('Argument is not a HTMLScriptElement', ex.message);
   },
 
   testInOtherWindow() {
@@ -295,12 +270,11 @@ testSuite({
       asserts.assertIsHTMLScriptElement(el);
     });
 
-    if (!userAgent.IE || userAgent.isVersionOrHigher(10)) {
-      const ex = assertThrows(() => {
-        asserts.assertIsHTMLImageElement(el);
-      });
-      assertContains('Argument is not a HTMLImageElement', ex.message);
-    }
+    const ex = assertThrows(() => {
+      asserts.assertIsHTMLImageElement(el);
+    });
+    assertContains('Argument is not a HTMLImageElement', ex.message);
+
 
     document.body.removeChild(iframe);
   },

@@ -209,10 +209,6 @@ goog.html.sanitizer.CssSanitizer.sanitizeStyleSheetString = function(
 goog.html.sanitizer.CssSanitizer.safeParseHtmlAndGetInertElement = function(
     html) {
   'use strict';
-  if ((goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(10)) ||
-      typeof goog.global.DOMParser != 'function') {
-    return null;
-  }
   var safeHtml = goog.html.uncheckedconversions
                      .safeHtmlFromStringKnownToSatisfyTypeContract(
                          goog.string.Const.from('Never attached to DOM.'),

@@ -421,9 +421,6 @@ goog.crypt.base64.decodeStringToByteArray = function(input, opt_ignored) {
  */
 goog.crypt.base64.decodeStringToUint8Array = function(input) {
   'use strict';
-  goog.asserts.assert(
-      !goog.userAgent.IE || goog.userAgent.isVersionOrHigher('10'),
-      'Browser does not support typed arrays');
   var len = input.length;
   // Approximate the length of the array needed for output.
   // Our method varies according to the format of the input, which we can

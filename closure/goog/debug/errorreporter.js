@@ -26,7 +26,6 @@ goog.require('goog.log');
 goog.require('goog.net.XhrIo');
 goog.require('goog.object');
 goog.require('goog.uri.utils');
-goog.require('goog.userAgent');
 
 
 
@@ -264,21 +263,14 @@ if (goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT) {
    */
   goog.debug.ErrorReporter.prototype.setup_ = function() {
     'use strict';
-    if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10')) {
-      // Use "onerror" because caught exceptions in IE don't provide line
-      // number.
-      goog.debug.catchErrors(
-          goog.bind(this.handleException, this), false, null);
-    } else {
-      // "onerror" doesn't work with FF2 or Chrome
-      this.errorHandler_ =
-          new goog.debug.ErrorHandler(goog.bind(this.handleException, this));
+    // "onerror" doesn't work with FF2 or Chrome
+    this.errorHandler_ =
+        new goog.debug.ErrorHandler(goog.bind(this.handleException, this));
 
-      this.errorHandler_.protectWindowSetTimeout();
-      this.errorHandler_.protectWindowSetInterval();
-      this.errorHandler_.protectWindowRequestAnimationFrame();
-      goog.debug.entryPointRegistry.monitorAll(this.errorHandler_);
-    }
+    this.errorHandler_.protectWindowSetTimeout();
+    this.errorHandler_.protectWindowSetInterval();
+    this.errorHandler_.protectWindowRequestAnimationFrame();
+    goog.debug.entryPointRegistry.monitorAll(this.errorHandler_);
   };
 }
 

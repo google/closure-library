@@ -105,7 +105,6 @@ closure_js_library(
         "//closure/goog/ui:component",
         "//closure/goog/ui:linkbuttonrenderer",
         "//closure/goog/ui:tab",
-        "//closure/goog/useragent",
         "//closure/goog/window",
     ],
 )

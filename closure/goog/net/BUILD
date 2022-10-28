@@ -221,7 +221,6 @@ closure_js_library(
         "//closure/goog/events",
         "//closure/goog/events:browserevent",
         "//closure/goog/events:event",
-        "//closure/goog/events:eventtarget",
         "//closure/goog/events:eventtype",
         "//closure/goog/html:legacyconversions",
         "//closure/goog/html:safehtml",
@@ -247,9 +246,7 @@ closure_js_library(
     deps = [
         "//closure/goog/dom",
         "//closure/goog/events",
-        "//closure/goog/events:eventtarget",
         "//closure/goog/events:eventtype",
-        "//closure/goog/useragent",
     ],
 )
 
@@ -259,16 +256,13 @@ closure_js_library(
     lenient = True,
     deps = [
         ":eventtype",
-        "//closure/goog/array",
         "//closure/goog/disposable",
         "//closure/goog/dom",
         "//closure/goog/dom:tagname",
         "//closure/goog/events:event",
         "//closure/goog/events:eventhandler",
-        "//closure/goog/events:eventtarget",
         "//closure/goog/events:eventtype",
         "//closure/goog/object",
-        "//closure/goog/useragent",
     ],
 )
 

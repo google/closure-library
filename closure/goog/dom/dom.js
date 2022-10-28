@@ -798,8 +798,7 @@ goog.dom.getDocumentScroll_ = function(doc) {
   'use strict';
   var el = goog.dom.getDocumentScrollElement_(doc);
   var win = goog.dom.getWindow_(doc);
-  if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10') &&
-      win.pageYOffset != el.scrollTop) {
+  if (goog.userAgent.IE && win.pageYOffset != el.scrollTop) {
     // The keyboard on IE10 touch devices shifts the page using the pageYOffset
     // without modifying scrollTop. For this case, we want the body scroll
     // offsets.
@@ -1617,16 +1616,9 @@ goog.dom.getParentElement = function(element) {
   'use strict';
   var parent;
   if (goog.dom.BrowserFeature.CAN_USE_PARENT_ELEMENT_PROPERTY) {
-    var isIe9 = goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9') &&
-        !goog.userAgent.isVersionOrHigher('10');
-    // SVG elements in IE9 can't use the parentElement property.
-    // goog.global['SVGElement'] is not defined in IE9 quirks mode.
-    if (!(isIe9 && goog.global['SVGElement'] &&
-          element instanceof goog.global['SVGElement'])) {
-      parent = element.parentElement;
-      if (parent) {
-        return parent;
-      }
+    parent = element.parentElement;
+    if (parent) {
+      return parent;
     }
   }
   parent = element.parentNode;

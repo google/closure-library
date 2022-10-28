@@ -120,11 +120,6 @@ function simulateKeyDownOnBubble(keyCode, isCtrl) {
 }
 
 function assertFocused(element) {
-  // The activeElement assertion below doesn't work in IE7. At this time IE7 is
-  // no longer supported by any client product, so we don't care.
-  if (userAgent.IE && !userAgent.isVersionOrHigher(8)) {
-    return;
-  }
   assertEquals('unexpected focus', element, document.activeElement);
 }
 

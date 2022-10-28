@@ -110,12 +110,10 @@ closure_js_library(
         "//closure/goog/disposable",
         "//closure/goog/events",
         "//closure/goog/events:event",
-        "//closure/goog/events:eventtarget",
         "//closure/goog/log",
         "//closure/goog/net:xhrio",
         "//closure/goog/object",
         "//closure/goog/uri:utils",
-        "//closure/goog/useragent",
     ],
 )
 

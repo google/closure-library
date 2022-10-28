@@ -713,7 +713,7 @@ goog.net.XhrIo.prototype.send = function(
  */
 goog.net.XhrIo.shouldUseXhr2Timeout_ = function(xhr) {
   'use strict';
-  return goog.userAgent.IE && goog.userAgent.isVersionOrHigher(9) &&
+  return goog.userAgent.IE &&
       typeof xhr[goog.net.XhrIo.XHR2_TIMEOUT_] === 'number' &&
       xhr[goog.net.XhrIo.XHR2_ON_TIMEOUT_] !== undefined;
 };

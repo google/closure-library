@@ -14,7 +14,6 @@ goog.provide('goog.editor.BrowserFeature');
 goog.require('goog.editor.defines');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
-goog.require('goog.userAgent.product.isVersion');
 
 
 /**
@@ -226,15 +225,11 @@ goog.editor.BrowserFeature = {
 
   // Implements this spec about dragging files from the filesystem to the
   // browser: http://www.whatwg/org/specs/web-apps/current-work/#dnd
-  SUPPORTS_HTML5_FILE_DRAGGING: goog.userAgent.product.CHROME ||
-      goog.userAgent.product.SAFARI || goog.userAgent.GECKO ||
-      (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10')) ||
-      goog.userAgent.EDGE,
+  SUPPORTS_HTML5_FILE_DRAGGING: true,
 
   // Historically, some versions of Opera supported the opera-defaultBlock
   // execCommand to change the default block inserted when [return] is pressed.
   SUPPORTS_OPERA_DEFAULTBLOCK_COMMAND: false,
 
-  SUPPORTS_FILE_PASTING:
-      goog.userAgent.product.CHROME && goog.userAgent.product.isVersion('12')
+  SUPPORTS_FILE_PASTING: goog.userAgent.product.CHROME,
 };

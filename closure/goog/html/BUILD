@@ -8,10 +8,6 @@ closure_js_library(
     name = "cssspecificity",
     srcs = ["cssspecificity.js"],
     lenient = True,
-    deps = [
-        "//closure/goog/useragent",
-        "//closure/goog/useragent:product",
-    ],
 )
 
 closure_js_library(
@@ -146,11 +142,9 @@ closure_js_library(
     srcs = ["textextractor.js"],
     lenient = True,
     deps = [
-        "//closure/goog/array",
         "//closure/goog/dom:tagname",
         "//closure/goog/html/sanitizer:htmlsanitizer",
         "//closure/goog/object",
-        "//closure/goog/useragent",
     ],
 )
 

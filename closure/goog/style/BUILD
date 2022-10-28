@@ -30,7 +30,6 @@ closure_js_library(
     srcs = ["style.js"],
     lenient = True,
     deps = [
-        "//closure/goog/array",
         "//closure/goog/asserts",
         "//closure/goog/dom",
         "//closure/goog/dom:nodetype",
@@ -73,7 +72,6 @@ closure_js_library(
         "//closure/goog/math:coordinate",
         "//closure/goog/math:coordinate3",
         "//closure/goog/useragent",
-        "//closure/goog/useragent:product_isversion",
     ],
 )
 
@@ -83,7 +81,6 @@ closure_js_library(
     lenient = True,
     deps = [
         ":style",
-        "//closure/goog/array",
         "//closure/goog/asserts",
         "//closure/goog/dom",
         "//closure/goog/dom:safe",

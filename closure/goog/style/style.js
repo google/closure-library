@@ -1559,26 +1559,7 @@ goog.style.getBorderBoxSize = function(element) {
  */
 goog.style.setBorderBoxSize = function(element, size) {
   'use strict';
-  var doc = goog.dom.getOwnerDocument(element);
-  var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
-
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10') &&
-      !isCss1CompatMode) {
-    var style = element.style;
-    if (isCss1CompatMode) {
-      var paddingBox = goog.style.getPaddingBox(element);
-      var borderBox = goog.style.getBorderBox(element);
-      style.pixelWidth = size.width - borderBox.left - paddingBox.left -
-          paddingBox.right - borderBox.right;
-      style.pixelHeight = size.height - borderBox.top - paddingBox.top -
-          paddingBox.bottom - borderBox.bottom;
-    } else {
-      style.pixelWidth = size.width;
-      style.pixelHeight = size.height;
-    }
-  } else {
-    goog.style.setBoxSizingSize_(element, size, 'border-box');
-  }
+  goog.style.setBoxSizingSize_(element, size, 'border-box');
 };
 
 
@@ -1628,25 +1609,7 @@ goog.style.getContentBoxSize = function(element) {
  */
 goog.style.setContentBoxSize = function(element, size) {
   'use strict';
-  var doc = goog.dom.getOwnerDocument(element);
-  var isCss1CompatMode = goog.dom.getDomHelper(doc).isCss1CompatMode();
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('10') &&
-      !isCss1CompatMode) {
-    var style = element.style;
-    if (isCss1CompatMode) {
-      style.pixelWidth = size.width;
-      style.pixelHeight = size.height;
-    } else {
-      var paddingBox = goog.style.getPaddingBox(element);
-      var borderBox = goog.style.getBorderBox(element);
-      style.pixelWidth = size.width + borderBox.left + paddingBox.left +
-          paddingBox.right + borderBox.right;
-      style.pixelHeight = size.height + borderBox.top + paddingBox.top +
-          paddingBox.bottom + borderBox.bottom;
-    }
-  } else {
-    goog.style.setBoxSizingSize_(element, size, 'content-box');
-  }
+  goog.style.setBoxSizingSize_(element, size, 'content-box');
 };
 
 

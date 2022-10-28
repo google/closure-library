@@ -52,25 +52,6 @@ testSuite({
         DomControlRange.createFromBrowserRange(range));
   },
 
-  /** @suppress {missingProperties} suppression added to enable type checking */
-  testSelect() {
-    if (!userAgent.IE || userAgent.isVersionOrHigher('11')) {
-      return;
-    }
-
-    const range = DomControlRange.createFromElements(table);
-    range.select();
-
-    assertEquals(
-        'Control range should be selected', 'Control', document.selection.type);
-    assertEquals(
-        'Control range should have length 1', 1,
-        document.selection.createRange().length);
-    assertEquals(
-        'Control range should select table', table,
-        document.selection.createRange().item(0));
-  },
-
   /** @suppress {checkTypes} suppression added to enable type checking */
   testControlRangeIterator() {
     if (!userAgent.IE) {

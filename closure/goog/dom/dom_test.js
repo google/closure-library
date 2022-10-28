@@ -25,7 +25,6 @@ const functions = goog.require('goog.functions');
 const googArray = goog.require('goog.array');
 const googDom = goog.require('goog.dom');
 const googObject = goog.require('goog.object');
-const isVersion = goog.require('goog.userAgent.product.isVersion');
 const testSuite = goog.require('goog.testing.testSuite');
 const testing = goog.require('goog.html.testing');
 /** @suppress {extraRequire} */
@@ -103,8 +102,8 @@ function assertConstHtmlToNodeStringifiesToOneOf(
 }
 
 /** @return {boolean} Returns true if the userAgent is IE8 or higher. */
-function isIE8OrHigher() {
-  return userAgent.IE && isVersion('8');
+function isIE() {
+  return userAgent.IE;
 }
 
 /**
@@ -491,7 +490,7 @@ testSuite({
     // Broken in webkit/edge quirks mode and in IE8+
     if ((googDom.isCss1CompatMode_(doc) ||
          !userAgent.WEBKIT && !userAgent.EDGE) &&
-        !isIE8OrHigher()) {
+        !isIE()) {
       assertEquals('height should be 65', 42 + 23, height);
     }
   },
@@ -1941,7 +1940,7 @@ testSuite({
     };
     const dh = googDom.getDomHelper(document);
     dh.setDocument(fakeDocument);
-    if (userAgent.IE && userAgent.isVersionOrHigher(10)) {
+    if (userAgent.IE) {
       assertEquals(0, dh.getDocumentScroll().x);
       assertEquals(0, dh.getDocumentScroll().y);
     } else {

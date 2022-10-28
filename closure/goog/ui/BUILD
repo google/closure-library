@@ -1554,7 +1554,6 @@ closure_js_library(
     lenient = True,
     deps = [
         ":component",
-        ":componentutil",
         ":controlcontent",
         "//closure/goog/a11y/aria",
         "//closure/goog/a11y/aria:attributes",
@@ -1823,7 +1822,6 @@ closure_js_library(
         "//closure/goog/math:rect",
         "//closure/goog/math:size",
         "//closure/goog/style",
-        "//closure/goog/useragent",
     ],
 )
 

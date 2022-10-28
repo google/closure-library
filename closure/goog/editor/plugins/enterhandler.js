@@ -493,50 +493,8 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(
     container = container.parentNode;
   }
 
-
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
-    // IE (before IE9) has a bug where if the cursor is directly before a block
-    // node (e.g., the content is "foo[cursor]<blockquote>bar</blockquote>"),
-    // the FormatBlock command actually formats the "bar" instead of the "foo".
-    // This is just wrong. To work-around this, we want to move the
-    // selection back one character, and then restore it to its prior position.
-    // NOTE: We use the following "range math" to detect this situation because
-    // using Closure ranges here triggers a bug in IE that causes a crash.
-    // parent2 != parent3 ensures moving the cursor forward one character
-    // crosses at least 1 element boundary, and therefore tests if the cursor is
-    // at such a boundary.  The second check, parent3 != range.parentElement()
-    // weeds out some cases where the elements are siblings instead of cousins.
-    var needsHelp = false;
-    range = range.getBrowserRangeObject();
-    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
-    var range2 = range.duplicate();
-    range2.moveEnd('character', 1);
-    // In whitebox mode, when the cursor is at the end of the field, trying to
-    // move the end of the range will do nothing, and hence the range's text
-    // will be empty.  In this case, the cursor clearly isn't sitting just
-    // before a block node, since it isn't before anything.
-    if (range2.text.length) {
-      var parent2 = range2.parentElement();
-
-      var range3 = range2.duplicate();
-      range3.collapse(false);
-      var parent3 = range3.parentElement();
-
-      if ((needsHelp =
-               parent2 != parent3 && parent3 != range.parentElement())) {
-        range.move('character', -1);
-        range.select();
-      }
-    }
-  }
-
   this.getFieldObject().getEditableDomHelper().getDocument().execCommand(
       'FormatBlock', false, '<' + tag + '>');
-
-  if (needsHelp) {
-    range.move('character', 1);
-    range.select();
-  }
 };
 
 

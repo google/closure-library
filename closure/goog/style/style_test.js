@@ -20,7 +20,6 @@ const Size = goog.require('goog.math.Size');
 const TagName = goog.require('goog.dom.TagName');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
 const UserAgents = goog.require('goog.userAgentTestUtil.UserAgents');
-const asserts = goog.require('goog.testing.asserts');
 const color = goog.require('goog.color');
 const dispose = goog.require('goog.dispose');
 const googArray = goog.require('goog.array');
@@ -246,7 +245,6 @@ testSuite({
 
   /** @suppress {checkTypes} suppression added to enable type checking */
   testGetComputedBoxSizing() {
-    if (!userAgent.IE || userAgent.isVersionOrHigher(8)) {
       const defaultBoxSizing =
           googDom.isCss1CompatMode() ? 'content-box' : 'border-box';
       let el = googDom.getElement('box-sizing-unset');
@@ -254,11 +252,6 @@ testSuite({
 
       el = googDom.getElement('box-sizing-border-box');
       assertEquals('border-box', googStyle.getComputedBoxSizing(el));
-    } else {
-      // IE7 and below don't support box-sizing.
-      assertNull(googStyle.getComputedBoxSizing(
-          googDom.getElement('box-sizing-border-box')));
-    }
   },
 
   testGetComputedPosition() {
@@ -268,16 +261,9 @@ testSuite({
     assertEquals(
         'position:relative in style attribute', 'relative',
         googStyle.getComputedPosition($('style-position-relative')));
-    if (userAgent.IE && !googDom.isCss1CompatMode() &&
-        !userAgent.isVersionOrHigher(10)) {
-      assertEquals(
-          'position:fixed in style attribute', 'static',
-          googStyle.getComputedPosition($('style-position-fixed')));
-    } else {
-      assertEquals(
-          'position:fixed in style attribute', 'fixed',
-          googStyle.getComputedPosition($('style-position-fixed')));
-    }
+    assertEquals(
+        'position:fixed in style attribute', 'fixed',
+        googStyle.getComputedPosition($('style-position-fixed')));
     assertEquals(
         'position:absolute in css', 'absolute',
         googStyle.getComputedPosition($('css-position-absolute')));
@@ -674,10 +660,7 @@ testSuite({
       document.body.appendChild(div);
 
       // Test all major positioning methods.
-      // Disabled for IE9 and below - IE8 returns dimensions multiplied by 100.
-      // IE9 is flaky. See b/22873770.
-      expectedFailures.expectFailureFor(
-          userAgent.IE && !userAgent.isVersionOrHigher(10));
+
       try {
         // Test all major positioning methods.
         const pos = googStyle.getClientPosition(div);
@@ -988,10 +971,6 @@ testSuite({
 
   /** @suppress {visibility} suppression added to enable type checking */
   testInstallSafeStyleSheetWithNonce() {
-    // IE < 11 doesn't support nonce-based CSP
-    if (userAgent.IE && !userAgent.isVersionOrHigher(11)) {
-      return;
-    }
     const result =
         googStyle.installSafeStyleSheet(testing.newSafeStyleSheetForTest(''));
 

@@ -382,11 +382,6 @@ testSuite({
   },
 
   testEventError() {
-    // Don't run this test on older IE, because the way the test runner catches
-    // errors on IE plays badly with the simulated errors in the test.
-    if (userAgent.IE && !userAgent.isVersionOrHigher(11)) {
-      return;
-    }
 
     // Modules will throw an exception if this boolean is set to true.
     modA1Loaded = true;

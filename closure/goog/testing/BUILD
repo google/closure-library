@@ -186,7 +186,6 @@ closure_js_library(
         ":testcase",
         ":testrunner",
         "//closure/goog/dom:tagname",
-        "//closure/goog/useragent",
     ],
 )
 
@@ -540,7 +539,6 @@ closure_js_library(
         "//closure/goog/dom:safe",
         "//closure/goog/dom:tagname",
         "//closure/goog/json",
-        "//closure/goog/useragent",
     ],
 )
 

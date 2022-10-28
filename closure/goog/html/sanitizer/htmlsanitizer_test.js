@@ -24,8 +24,6 @@ const testing = goog.require('goog.html.testing');
 const testingDom = goog.require('goog.testing.dom');
 const userAgent = goog.require('goog.userAgent');
 
-const isSupported = !userAgent.IE || userAgent.isVersionOrHigher(10);
-
 const justification = Const.from('test');
 
 /**
@@ -39,10 +37,6 @@ const justification = Const.from('test');
 function assertSanitizedHtml(originalHtml, expectedHtml, opt_sanitizer) {
   const sanitizer = opt_sanitizer || new Builder().build();
   const sanitized = SafeHtml.unwrap(sanitizer.sanitize(originalHtml));
-  if (!isSupported) {
-    assertEquals('', sanitized);
-    return;
-  }
   if (typeof expectedHtml == 'string') {
     testingDom.assertHtmlMatches(
         expectedHtml, sanitized, true /* opt_strictAttributes */);
@@ -1318,9 +1312,6 @@ testSuite({
   },
 
   testSpanNotCorrectedByBrowsersOuter() {
-    if (!isSupported) {
-      return;
-    }
     googObject.getKeys(TagWhitelist).forEach(tag => {
       if (googArray.contains(
               [
@@ -1359,9 +1350,6 @@ testSuite({
   },
 
   testSpanNotCorrectedByBrowsersInner() {
-    if (!isSupported) {
-      return;
-    }
     googObject.getKeys(TagWhitelist).forEach(tag => {
       if (googArray.contains(
               [
