@@ -1878,11 +1878,19 @@ goog.i18n.NumberFormat.NULL_UNIT_ = {
  */
 goog.i18n.NumberFormat.prototype.getUnitFor_ = function(base, plurality) {
   'use strict';
+  /**
+   * @suppress {missingProperties} Auto-added to unblock check_level=STRICT
+   * migration
+   */
   let table = this.compactStyle_ == goog.i18n.NumberFormat.CompactStyle.SHORT ?
       goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN :
       goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_LONG_PATTERN;
 
   if (table == null) {
+    /**
+     * @suppress {missingProperties} Auto-added to unblock check_level=STRICT
+     * migration
+     */
     table = goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN;
   }
 
