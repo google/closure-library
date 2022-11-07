@@ -98,6 +98,7 @@ closure_js_library(
     srcs = ["ctr.js"],
     lenient = True,
     deps = [
+        ":blockcipher",
         ":crypt",
         "//closure/goog/array",
         "//closure/goog/asserts",
