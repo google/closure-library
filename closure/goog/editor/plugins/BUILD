@@ -54,7 +54,7 @@ closure_js_library(
     lenient = True,
     deps = [
         "//closure/goog/editor:plugin",
-        "//closure/goog/events:event",
+        "//closure/goog/events:browserevent",
         "//closure/goog/events:keycodes",
         "//closure/goog/useragent",
     ],
