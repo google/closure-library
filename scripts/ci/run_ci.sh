@@ -18,6 +18,14 @@ PATH="$(pwd)/node-${NODE_VERSION}-linux-x64/bin:${PATH}"
 tar xf "${KOKORO_GFILE_DIR}/clang+llvm-${CLANG_VERSION}-x86_64-linux-gnu-ubuntu-14.04.tar.xz"
 mv "clang+llvm-${CLANG_VERSION}-x86_64-linux-gnu-ubuntu-14.04" ../clang
 
+# Install and use OpenJDK 11 as this is required to run Closure Compiler.
+sudo apt-get install -y openjdk-11-jdk
+sudo update-java-alternatives --jre-headless --set java-1.11.0-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
+export PATH=$JAVA_HOME/jre/bin:$JAVA_HOME/bin:$PATH
+which java
+java --version
+
 # Generate docs (without pushing them anywhere).
 
 export GH_PAGES
