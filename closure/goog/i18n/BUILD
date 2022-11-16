@@ -31,6 +31,7 @@ closure_js_library(
         ":listsymbolsext",
         ":localefeature",
         ":messageformat",
+        ":messages",
         ":mime",
         ":numberformat",
         ":numberformatsymbols",
@@ -299,6 +300,13 @@ closure_js_library(
         "//closure/goog/array",
         "//closure/goog/asserts",
     ],
+)
+
+closure_js_library(
+    name = "messages",
+    srcs = ["messages.js"],
+    lenient = True,
+    deps = ["//closure/goog/asserts"],
 )
 
 closure_js_library(
