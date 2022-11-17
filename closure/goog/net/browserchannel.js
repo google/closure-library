@@ -1778,6 +1778,7 @@ goog.net.BrowserChannel.prototype.handlePostResponse_ = function(
  * Handles a POST response from the server telling us that it has detected that
  * we have no hanging GET connection.
  * @private
+ * @suppress {strictPrimitiveOperators}
  */
 goog.net.BrowserChannel.prototype.handleBackchannelMissing_ = function() {
   'use strict';
@@ -1898,6 +1899,7 @@ goog.net.BrowserChannel.isFatalError_ = function(error, statusCode) {
 /**
  * Callback from ChannelRequest that indicates a request has completed.
  * @param {goog.net.ChannelRequest} request  The request object.
+ * @suppress {strictPrimitiveOperators}
  */
 goog.net.BrowserChannel.prototype.onRequestComplete = function(request) {
   'use strict';

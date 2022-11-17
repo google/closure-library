@@ -1188,7 +1188,8 @@ goog.fx.DragListGroup.prototype.insertCurrHoverItem = function() {
  *     after the current position of the dragger element. If all items in the
  *     list should come before the current drag item, then returns null.
  * @private
- * @suppress {strictMissingProperties} Added to tighten compiler checks
+ * @suppress {strictMissingProperties, strictPrimitiveOperators} Added to
+ * tighten compiler checks
  */
 goog.fx.DragListGroup.prototype.getHoverNextItem_ = function(
     hoverList, draggerElCenter) {

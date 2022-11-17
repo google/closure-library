@@ -50,6 +50,7 @@ goog.editor.BrowserFeature = {
 
   // Whether to use mutation event types to detect changes
   // in the field contents.
+  /** @const {boolean} */
   USE_MUTATION_EVENTS: goog.userAgent.GECKO,
 
   // Whether the browser has a functional DOMSubtreeModified event.
@@ -130,9 +131,11 @@ goog.editor.BrowserFeature = {
 
   // Whether this browser supports execCommand("styleWithCSS") to toggle between
   // inserting html tags or inline styling for things like bold, italic, etc.
+  /** @const {boolean} */
   HAS_STYLE_WITH_CSS: goog.userAgent.GECKO || goog.userAgent.WEBKIT,
 
   // Whether clicking on an editable link will take you to that site.
+  /** @const {boolean} */
   FOLLOWS_EDITABLE_LINKS: goog.userAgent.WEBKIT || goog.userAgent.IE,
 
   // Whether this browser has document.activeElement available.

@@ -470,6 +470,7 @@ goog.editor.plugins.TableEditor.CellSelection_.prototype.getCells = function() {
  * Returns a boolean value indicating whether or not the cells in this
  * selection form a rectangle.
  * @return {boolean} Whether the selection forms a rectangle.
+ * @suppress {missingProperties} missing endRow, endCol prop definitions
  */
 goog.editor.plugins.TableEditor.CellSelection_.prototype.isRectangle =
     function() {

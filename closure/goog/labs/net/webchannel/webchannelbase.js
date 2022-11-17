@@ -1963,6 +1963,7 @@ WebChannelBase.prototype.handlePostResponse_ = function(
  * @param {!ChannelRequest} forwardReq The forward channel request that
  * triggers this function call.
  * @private
+ * @suppress {strictPrimitiveOperators}
  */
 WebChannelBase.prototype.handleBackchannelMissing_ = function(forwardReq) {
   'use strict';
@@ -2076,6 +2077,7 @@ WebChannelBase.isFatalError_ = function(error, statusCode) {
 
 /**
  * @override
+ * @suppress {strictPrimitiveOperators}
  */
 WebChannelBase.prototype.onRequestComplete = function(request) {
   'use strict';
@@ -2245,6 +2247,7 @@ WebChannelBase.prototype.applyControlHeaders_ = function(request) {
  *     by the server.
  * @param {!ChannelRequest} request The underlying request object
  * @private
+ * @suppress {strictPrimitiveOperators}
  */
 WebChannelBase.prototype.onInput_ = function(respArray, request) {
   'use strict';

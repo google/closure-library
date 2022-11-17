@@ -1177,6 +1177,7 @@ goog.net.ChannelRequest.prototype.cancelWatchDogTimer_ = function() {
  * (not sure why)
  *
  * @private
+ * @suppress {strictPrimitiveOperators}
  */
 goog.net.ChannelRequest.prototype.onWatchDogTimeout_ = function() {
   'use strict';

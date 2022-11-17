@@ -270,6 +270,7 @@ goog.ui.PaletteRenderer.prototype.decorate = function(palette, element) {
  * @param {goog.ui.ControlContent} content Array of items to replace existing
  *     palette items.
  * @override
+ * @suppress {strictPrimitiveOperators}
  */
 goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
   'use strict';

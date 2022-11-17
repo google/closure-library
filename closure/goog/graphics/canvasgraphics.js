@@ -370,7 +370,7 @@ goog.graphics.CanvasGraphics.prototype.clear = function() {
 
 /**
  * Redraw the entire canvas.
- * @suppress {strictMissingProperties} Added to tighten compiler checks
+ * @suppress {strictCheckTypes} Added to tighten compiler checks
  */
 goog.graphics.CanvasGraphics.prototype.redraw = function() {
   'use strict';

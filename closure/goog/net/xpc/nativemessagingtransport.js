@@ -471,6 +471,7 @@ goog.net.xpc.NativeMessagingTransport.prototype.sendSetupAckMessage_ = function(
  * permitted.
  * @param {number} version The new protocol number.
  * @private
+ * @suppress {strictPrimitiveOperators}
  */
 goog.net.xpc.NativeMessagingTransport.prototype.setPeerProtocolVersion_ =
     function(version) {

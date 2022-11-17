@@ -125,6 +125,7 @@ closure_js_library(
     lenient = True,
     deps = [
         ":crypt",
+        ":hash",
         "//closure/goog/array",
         "//closure/goog/dom",
         "//closure/goog/dom:tagname",

@@ -263,6 +263,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
           if (goog.userAgent.GECKO &&
               goog.editor.BrowserFeature.FORGETS_FORMATTING_WHEN_LISTIFYING &&
               !this.queryCommandValue(command)) {
+            /** @suppress {strictPrimitiveOperators} */
             hasPlaceholderSelection |= this.beforeInsertListGecko_();
           }
 
