@@ -131,8 +131,9 @@ goog.module.ModuleManager = function() {
    * manager code), which we set as the loading module so one can
    * register initialization callbacks in the base module.
    *
-   * The base module is considered loaded when #setAllModuleInfo is called or
-   * #setModuleContext is called, whichever comes first.
+   * The base module is considered loaded when #setAllModuleInfo,
+   * #setAllModuleInfoString, or #setModuleContext is called, whichever comes
+   * first.
    *
    * @type {!goog.module.ModuleInfo}
    * @private
