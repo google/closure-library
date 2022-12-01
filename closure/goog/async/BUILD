@@ -91,6 +91,7 @@ closure_js_library(
         ":throwexception",
         ":workqueue",
         "//closure/goog/asserts",
+        "//closure/goog/debug:asyncstacktag",
     ],
 )
 

@@ -168,20 +168,4 @@ testSuite({
       });
     });
   },
-
-  async testConsoleTask() {
-    if (!('createTask' in console)) {
-      return;
-    }
-
-    const task = console.createTask('test');
-    const runRecorded = recordFunction(task.run);
-    stubs.replace(task, 'run', runRecorded);
-
-    futureCallback1['consoleTask'] = task;
-
-    run(futureCallback1, undefined);
-
-    await runRecorded.waitForCalls(1);
-  }
 });

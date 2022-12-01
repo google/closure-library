@@ -7,9 +7,9 @@ goog.module('goog.async.run');
 goog.module.declareLegacyNamespace();
 
 const WorkQueue = goog.require('goog.async.WorkQueue');
+const asyncStackTag = goog.require('goog.debug.asyncStackTag');
 const nextTick = goog.require('goog.async.nextTick');
 const throwException = goog.require('goog.async.throwException');
-const {assertExists} = goog.require('goog.asserts');
 
 /**
  * @define {boolean} If true, use the global Promise to implement run
@@ -47,12 +47,7 @@ let run = (callback, context = undefined) => {
     schedule();
     workQueueScheduled = true;
   }
-  // Support for console.createTask for better debugging of scheduled code.
-  // If callback is already wrapping a console task, then skip it, which
-  // lets parent contexts provide a task closer to the origination.
-  if (goog.DEBUG && 'createTask' in console && !callback['consoleTask']) {
-    callback['consoleTask'] = console.createTask(callback.name || 'anonymous');
-  }
+  callback = asyncStackTag.wrap(callback, 'goog.async.run');
 
   workQueue.add(callback, context);
 };
@@ -118,12 +113,7 @@ run.processWorkQueue = () => {
   let item = null;
   while (item = workQueue.remove()) {
     try {
-      if (goog.DEBUG && item.fn['consoleTask']) {
-        item.fn['consoleTask']['run'](
-            () => assertExists(item).fn.call(item.scope));
-      } else {
-        item.fn.call(item.scope);
-      }
+      item.fn.call(item.scope);
     } catch (e) {
       throwException(e);
     }

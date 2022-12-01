@@ -23,6 +23,7 @@ closure_js_library(
         "//closure/goog/async:freelist",
         "//closure/goog/async:run",
         "//closure/goog/async:throwexception",
+        "//closure/goog/debug:asyncstacktag",
         "//closure/goog/debug:error",
         "//closure/goog/functions",
     ],
