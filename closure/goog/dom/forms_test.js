@@ -24,7 +24,11 @@ function mockWindowOpen(mockForm) {
     document: {
       createElement: function(name) {
         if (name == 'form') {
-          return mockForm;
+          return Object.assign(mockForm, {
+            tagName: 'FORM',
+            namespaceURI: 'http://www.w3.org/1999/xhtml',
+            nodeType: Node.ELEMENT_NODE,
+          });
         }
         return {};
       },

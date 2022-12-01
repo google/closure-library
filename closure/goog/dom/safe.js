@@ -33,6 +33,7 @@ goog.provide('goog.dom.safe');
 goog.provide('goog.dom.safe.InsertAdjacentHtmlPosition');
 
 goog.require('goog.asserts');
+goog.require('goog.asserts.dom');
 goog.require('goog.dom.asserts');
 goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
@@ -223,7 +224,7 @@ goog.dom.safe.setFormElementAction = function(form, url) {
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  goog.dom.asserts.assertIsHTMLFormElement(form).action =
+  goog.asserts.dom.assertIsHtmlFormElement(form).action =
       goog.html.SafeUrl.unwrap(safeUrl);
 };
 
@@ -256,7 +257,7 @@ goog.dom.safe.setButtonFormAction = function(button, url) {
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  goog.dom.asserts.assertIsHTMLButtonElement(button).formAction =
+  goog.asserts.dom.assertIsHtmlButtonElement(button).formAction =
       goog.html.SafeUrl.unwrap(safeUrl);
 };
 /**
@@ -288,7 +289,7 @@ goog.dom.safe.setInputFormAction = function(input, url) {
   } else {
     safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
   }
-  goog.dom.asserts.assertIsHTMLInputElement(input).formAction =
+  goog.asserts.dom.assertIsHtmlInputElement(input).formAction =
       goog.html.SafeUrl.unwrap(safeUrl);
 };
 
@@ -339,7 +340,7 @@ goog.dom.safe.documentWrite = function(doc, html) {
  */
 goog.dom.safe.setAnchorHref = function(anchor, url) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLAnchorElement(anchor);
+  goog.asserts.dom.assertIsHtmlAnchorElement(anchor);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
@@ -366,7 +367,7 @@ goog.dom.safe.setAnchorHref = function(anchor, url) {
  */
 goog.dom.safe.setAudioSrc = function(audioElement, url) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLAudioElement(audioElement);
+  goog.asserts.dom.assertIsHtmlAudioElement(audioElement);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
@@ -393,7 +394,7 @@ goog.dom.safe.setAudioSrc = function(audioElement, url) {
  */
 goog.dom.safe.setVideoSrc = function(videoElement, url) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLVideoElement(videoElement);
+  goog.asserts.dom.assertIsHtmlVideoElement(videoElement);
   /** @type {!goog.html.SafeUrl} */
   var safeUrl;
   if (url instanceof goog.html.SafeUrl) {
@@ -421,7 +422,7 @@ goog.dom.safe.setVideoSrc = function(videoElement, url) {
  */
 goog.dom.safe.setEmbedSrc = function(embed, url) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLEmbedElement(embed);
+  goog.asserts.dom.assertIsHtmlEmbedElement(embed);
   embed.src = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
 };
 
@@ -443,7 +444,7 @@ goog.dom.safe.setEmbedSrc = function(embed, url) {
  */
 goog.dom.safe.setFrameSrc = function(frame, url) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLFrameElement(frame);
+  goog.asserts.dom.assertIsHtmlFrameElement(frame);
   frame.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
@@ -465,7 +466,7 @@ goog.dom.safe.setFrameSrc = function(frame, url) {
  */
 goog.dom.safe.setIframeSrc = function(iframe, url) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLIFrameElement(iframe);
+  goog.asserts.dom.assertIsHtmlIFrameElement(iframe);
   iframe.src = goog.html.TrustedResourceUrl.unwrap(url);
 };
 
@@ -486,7 +487,7 @@ goog.dom.safe.setIframeSrc = function(iframe, url) {
  */
 goog.dom.safe.setIframeSrcdoc = function(iframe, html) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLIFrameElement(iframe);
+  goog.asserts.dom.assertIsHtmlIFrameElement(iframe);
   iframe.srcdoc = goog.html.SafeHtml.unwrapTrustedHTML(html);
 };
 
@@ -519,7 +520,7 @@ goog.dom.safe.setIframeSrcdoc = function(iframe, html) {
  */
 goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLLinkElement(link);
+  goog.asserts.dom.assertIsHtmlLinkElement(link);
   link.rel = rel;
   if (goog.string.internal.caseInsensitiveContains(rel, 'stylesheet')) {
     goog.asserts.assert(
@@ -560,7 +561,7 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
  */
 goog.dom.safe.setObjectData = function(object, url) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLObjectElement(object);
+  goog.asserts.dom.assertIsHtmlObjectElement(object);
   object.data = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
 };
 
@@ -582,7 +583,7 @@ goog.dom.safe.setObjectData = function(object, url) {
  */
 goog.dom.safe.setScriptSrc = function(script, url) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLScriptElement(script);
+  goog.asserts.dom.assertIsHtmlScriptElement(script);
   goog.dom.safe.setNonceForScriptElement_(script);
   script.src = goog.html.TrustedResourceUrl.unwrapTrustedScriptURL(url);
 };
@@ -605,7 +606,7 @@ goog.dom.safe.setScriptSrc = function(script, url) {
  */
 goog.dom.safe.setScriptContent = function(script, content) {
   'use strict';
-  goog.dom.asserts.assertIsHTMLScriptElement(script);
+  goog.asserts.dom.assertIsHtmlScriptElement(script);
   goog.dom.safe.setNonceForScriptElement_(script);
   script.textContent = goog.html.SafeScript.unwrapTrustedScript(content);
 };

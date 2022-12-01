@@ -366,6 +366,9 @@ testSuite({
       href: undefined,
       target: undefined,
       rel: undefined,
+      tagName: TagName.A,
+      namespaceURI: 'http://www.w3.org/1999/xhtml',
+      nodeType: Node.ELEMENT_NODE,
     };
     stubs.replace(window.document, 'createElement', (name) => {
       if (name == TagName.A) {
@@ -407,6 +410,9 @@ testSuite({
       href: undefined,
       target: undefined,
       rel: undefined,
+      tagName: TagName.A,
+      namespaceURI: 'http://www.w3.org/1999/xhtml',
+      nodeType: Node.ELEMENT_NODE,
     };
     stubs.replace(window.document, 'createElement', (name) => {
       if (name == TagName.A) {

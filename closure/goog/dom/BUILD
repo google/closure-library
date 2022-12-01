@@ -285,6 +285,7 @@ closure_js_library(
     deps = [
         ":asserts",
         "//closure/goog/asserts",
+        "//closure/goog/asserts:dom",
         "//closure/goog/functions",
         "//closure/goog/html:safehtml",
         "//closure/goog/html:safescript",
