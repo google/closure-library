@@ -210,6 +210,7 @@ requirement: {
   value: "script"
 
   allowlist_regexp: ".+/closure/goog/base.js"
+
 }
 
 requirement: {
