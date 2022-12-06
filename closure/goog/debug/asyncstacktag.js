@@ -15,9 +15,18 @@ goog.module.declareLegacyNamespace();
 
 const {assertExists} = goog.require('goog.asserts');
 
+/**
+ * Store a local variable with the createTask function. This prevents tests that
+ * overwrite console from failing.
+ * @const {(function(string): ?)|undefined}
+ */
+const createTask =
+    goog.DEBUG && goog.global.console && goog.global.console.createTask ?
+    goog.global.console.createTask.bind(goog.global.console) :
+    undefined;
+
 /** @const {symbol|undefined} */
-const CONSOLE_TASK_SYMBOL =
-    'createTask' in console ? Symbol('consoleTask') : undefined;
+const CONSOLE_TASK_SYMBOL = createTask ? Symbol('consoleTask') : undefined;
 
 /**
  * Utility to wrap the function to tag its stack at this point. If the function
@@ -28,11 +37,12 @@ const CONSOLE_TASK_SYMBOL =
  * @template T
  */
 function wrap(fn, name = 'anonymous') {
-  if (!goog.DEBUG || !('createTask' in console)) return fn;
+  if (!goog.DEBUG || !createTask) return fn;
+
   if (fn[assertExists(CONSOLE_TASK_SYMBOL)]) {
     return fn;
   }
-  const consoleTask = console.createTask(fn.name || name);
+  const consoleTask = createTask(fn.name || name);
   function wrappedFn(...args) {
     return consoleTask['run'](() => fn.call(/** @type {?} */ (this), ...args));
   }
