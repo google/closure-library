@@ -48,26 +48,71 @@ goog.testing.i18n.asserts.EXPECTED_VALUE_MAP_ = {
     // NOTE: Add mappings for each test file using addI18nMapping.
 };
 
+/**
+ * A regular expression for identifying all horizontal white space
+ * characters. Same as \h in a Java regex Pattern.
+ * @const {!RegExp}
+ * @private
+ */
+goog.testing.i18n.asserts.HORIZONTAL_WHITE_SPACE_REGEX =
+    new RegExp('[ \t\xA0\u1680\u180e\u2000-\u200a\u202f\u205f\u3000]', 'g');
 
 /**
  * Asserts that the two values are "almost equal" from i18n perspective.
+ * All horizontal white space is stripped before comparison.
  * I18n-equivalent strings are set with addI18nMapping.
  *
- * @param {string} expected The expected value.
- * @param {string} actual The actual value.
+ * @param {string} a The expected value or comment.
+ * @param {string} b The actual or expected.
+ * @param {string=} opt_c Null or the actual value.
  */
-goog.testing.i18n.asserts.assertI18nEquals = function(expected, actual) {
+goog.testing.i18n.asserts.assertI18nEquals = function(a, b, opt_c) {
   'use strict';
+  let expected;
+  let actual;
+  let msg;  // The comment to be added, if any
+  // If there are 3 arguments, the first is a comment.
+  if (opt_c) {
+    msg = a;
+    expected = b;
+    actual = opt_c;
+  } else {
+    expected = a;
+    actual = b;
+  }
+
   if (expected === actual) {
     return;
   }
 
-  const newExpected = goog.testing.i18n.asserts.EXPECTED_VALUE_MAP_[expected];
-  if (newExpected === actual) {
+  // Compare with all horizontal white space characters removed, making
+  // this less brittle.
+  let wsFixedActual = actual.replace(
+      goog.testing.i18n.asserts.HORIZONTAL_WHITE_SPACE_REGEX, '');
+
+  // Now, check if the expected string and the actual result differ only
+  // in whitespace by stripping white space characters from each.
+  if (expected &&
+      (expected.replace(
+           goog.testing.i18n.asserts.HORIZONTAL_WHITE_SPACE_REGEX, '') ===
+       wsFixedActual)) {
     return;
   }
 
-  assertEquals(expected, actual);
+  // Also handle an alternate string, ignoring whitespace.
+  // Note that expected can be null!
+  const newExpected =
+      goog.testing.i18n.asserts.EXPECTED_VALUE_MAP_[expected] || expected;
+  const wsFixedExpected = (!newExpected) ?
+      newExpected :
+      newExpected.replace(
+          goog.testing.i18n.asserts.HORIZONTAL_WHITE_SPACE_REGEX, '');
+
+  if (msg) {
+    assertEquals(msg, wsFixedExpected, wsFixedActual);
+  } else {
+    assertEquals(wsFixedExpected, wsFixedActual);
+  }
 };
 
 
