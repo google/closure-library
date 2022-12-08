@@ -67,6 +67,7 @@ closure_js_library(
         "//closure/goog/i18n:relativedatetimesymbols",
         "//closure/goog/testing:propertyreplacer",
         "//closure/goog/testing:testsuite",
+        "//closure/goog/testing/i18n:asserts",
     ],
 )
 
