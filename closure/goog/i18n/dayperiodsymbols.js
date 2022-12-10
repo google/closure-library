@@ -84,7 +84,7 @@ exports.DayPeriods_zh_Hant = {
     from: '13:00',
     before: '19:00',
     formatNames: ['下午'],
-    periodName: 'afternoon1'
+    periodName: 'afternoon2'
   },
   evening1: {
     from: '19:00',
