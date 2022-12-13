@@ -11,7 +11,6 @@
 goog.module('goog.testing.i18n.assertsTest');
 goog.setTestOnly();
 
-const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
 const asserts = goog.require('goog.testing.i18n.asserts');
 const testSuite = goog.require('goog.testing.testSuite');
 
@@ -19,17 +18,7 @@ const testSuite = goog.require('goog.testing.testSuite');
 asserts.addI18nMapping('mappedValue', 'newValue');
 asserts.addI18nMapping('X\u0020Y', 'AB');
 
-let expectedFailures;
-
 testSuite({
-  setUpPage() {
-    expectedFailures = new ExpectedFailures();
-  },
-
-  tearDown() {
-    expectedFailures.handleTearDown();
-  },
-
   /** @suppress {checkTypes} suppression added to enable type checking */
   testEdgeCases() {
     // Pass
@@ -37,17 +26,57 @@ testSuite({
     asserts.assertI18nEquals('', '');
 
     // Fail
-    expectedFailures.expectFailureFor(true);
-    try {
+    assertThrowsJsUnitException(() => {
       asserts.assertI18nEquals(null, '');
+    });
+    assertThrowsJsUnitException(() => {
       asserts.assertI18nEquals(null, 'test');
+    });
+    assertThrowsJsUnitException(() => {
       asserts.assertI18nEquals('', null);
+    });
+    assertThrowsJsUnitException(() => {
       asserts.assertI18nEquals('', 'test');
+    });
+    assertThrowsJsUnitException(() => {
       asserts.assertI18nEquals('test', null);
+    });
+    assertThrowsJsUnitException(() => {
       asserts.assertI18nEquals('test', '');
-    } catch (e) {
-      expectedFailures.handleException(e);
-    }
+    });
+  },
+
+  /** @suppress {checkTypes} suppression added to enable type checking */
+  testEdgeCases_withComments() {
+    // Pass
+    asserts.assertI18nEquals('Expect null values to match.', null, null);
+    asserts.assertI18nEquals('Expect empty values to match.', '', '');
+
+    // Fail
+    assertThrowsJsUnitException(() => {
+      asserts.assertI18nEquals(
+          'Expect null and empty values to not match.', null, '');
+    });
+    assertThrowsJsUnitException(() => {
+      asserts.assertI18nEquals(
+          'Expect null and non-empty values to not match.', null, 'test');
+    });
+    assertThrowsJsUnitException(() => {
+      asserts.assertI18nEquals(
+          'Expect empty and null values to not match.', '', null);
+    });
+    assertThrowsJsUnitException(() => {
+      asserts.assertI18nEquals(
+          'Expect empty and non-empty values to not match.', '', 'test');
+    });
+    assertThrowsJsUnitException(() => {
+      asserts.assertI18nEquals(
+          'Expect non-empty and null values to not match.', 'test', null);
+    });
+    assertThrowsJsUnitException(() => {
+      asserts.assertI18nEquals(
+          'Expect non-empty and empty values to not match.', 'test', '');
+    });
   },
 
   testContains() {
@@ -57,12 +86,9 @@ testSuite({
     asserts.assertI18nContains('mappedValue', '** newValue');
 
     // Negative testing
-    expectedFailures.expectFailureFor(true);
-    try {
-      asserts.assertI18nContains('mappedValue', '** dummy');
-    } catch (e) {
-      expectedFailures.handleException(e);
-    }
+    assertThrowsJsUnitException(() => {
+      asserts.assertI18nEquals('mappedValue', '** dummy');
+    });
   },
 
   testMappingWorks() {
@@ -72,12 +98,9 @@ testSuite({
     asserts.assertI18nEquals('mappedValue', 'newValue');
 
     // Negative testing
-    expectedFailures.expectFailureFor(true);
-    try {
+    assertThrowsJsUnitException(() => {
       asserts.assertI18nEquals('unmappedValue', 'newValue');
-    } catch (e) {
-      expectedFailures.handleException(e);
-    }
+    });
   },
 
   testWhiteSpaceStringWorks() {

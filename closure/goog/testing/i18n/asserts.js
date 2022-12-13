@@ -72,7 +72,7 @@ goog.testing.i18n.asserts.assertI18nEquals = function(a, b, opt_c) {
   let actual;
   let msg;  // The comment to be added, if any
   // If there are 3 arguments, the first is a comment.
-  if (opt_c) {
+  if (arguments.length === 3) {
     msg = a;
     expected = b;
     actual = opt_c;
@@ -87,8 +87,10 @@ goog.testing.i18n.asserts.assertI18nEquals = function(a, b, opt_c) {
 
   // Compare with all horizontal white space characters removed, making
   // this less brittle.
-  let wsFixedActual = actual.replace(
-      goog.testing.i18n.asserts.HORIZONTAL_WHITE_SPACE_REGEX, '');
+  let wsFixedActual = actual ?
+      actual.replace(
+          goog.testing.i18n.asserts.HORIZONTAL_WHITE_SPACE_REGEX, '') :
+      actual;
 
   // Now, check if the expected string and the actual result differ only
   // in whitespace by stripping white space characters from each.
