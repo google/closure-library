@@ -97,6 +97,9 @@ testSuite({
     // i18n mapped equality
     asserts.assertI18nEquals('mappedValue', 'newValue');
 
+    // i18n-mapped equality with extra whitespace being removed before lookup
+    asserts.assertI18nEquals('  mapped Value ', 'newValue');
+
     // Negative testing
     assertThrowsJsUnitException(() => {
       asserts.assertI18nEquals('unmappedValue', 'newValue');
@@ -118,6 +121,8 @@ testSuite({
     asserts.assertI18nEquals(expectedValue, 'X\u202fY');
     asserts.assertI18nEquals(expectedValue, 'X\t\u00a0Y');
 
+    // Check that the given expected value is also mapped to a different value
+    // and that is compared with the same whitespace removal rules.
     asserts.assertI18nEquals(expectedValue, 'AB');
     asserts.assertI18nEquals(expectedValue, ' A B ');
     asserts.assertI18nEquals(expectedValue, 'A\tB');
