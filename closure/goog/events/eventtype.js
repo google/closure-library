@@ -231,6 +231,13 @@ goog.events.EventType = {
   // implementation tracking.
   BEFOREINPUT: 'beforeinput',
 
+  // Fullscreen API events. See https://fullscreen.spec.whatwg.org/.
+  FULLSCREENCHANGE: 'fullscreenchange',
+  // iOS-only fullscreen events. See
+  // https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/Using_HTML5_Audio_Video/ControllingMediaWithJavaScript/ControllingMediaWithJavaScript.html
+  WEBKITBEGINFULLSCREEN: 'webkitbeginfullscreen',
+  WEBKITENDFULLSCREEN: 'webkitendfullscreen',
+
   // Webview tag events
   // See https://developer.chrome.com/apps/tags/webview
   EXIT: 'exit',
