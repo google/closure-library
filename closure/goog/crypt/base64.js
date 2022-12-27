@@ -59,10 +59,15 @@ goog.crypt.base64.ENCODED_VALS_WEBSAFE =
  * @enum {number}
  */
 goog.crypt.base64.Alphabet = {
+  /** Section 4 "base64". */
   DEFAULT: 0,
+  /** Section 4 "base64", omitting padding per Section 3.2. */
   NO_PADDING: 1,
+  /** Section 5 "base64url". */
   WEBSAFE: 2,
+  /** Like WEBSAFE, but with non-standard '.' padding character. */
   WEBSAFE_DOT_PADDING: 3,
+  /** Section 5 "base64url", omitting padding per Section 3.2. */
   WEBSAFE_NO_PADDING: 4,
 };
 
@@ -129,7 +134,7 @@ goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ =
  */
 goog.crypt.base64.HAS_NATIVE_ENCODE_ =
     goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ ||
-    typeof(goog.global.btoa) == 'function';
+    typeof (goog.global.btoa) == 'function';
 
 
 /**
@@ -141,7 +146,7 @@ goog.crypt.base64.HAS_NATIVE_ENCODE_ =
 goog.crypt.base64.HAS_NATIVE_DECODE_ =
     goog.crypt.base64.ASSUME_NATIVE_SUPPORT_ ||
     (!goog.userAgent.product.SAFARI && !goog.userAgent.IE &&
-     typeof(goog.global.atob) == 'function');
+     typeof (goog.global.atob) == 'function');
 
 
 /**
