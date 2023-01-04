@@ -86,10 +86,9 @@ goog.testing.i18n.asserts.assertI18nEquals = function(a, b, opt_c) {
 
   // Compare with all horizontal white space characters removed, making
   // this less brittle.
-  const wsFixedActual =
-      goog.testing.i18n.whitespace.normalizeWhitespace(actual);
+  const wsFixedActual = goog.testing.i18n.whitespace.removeWhitespace(actual);
   const wsFixedExpected =
-      goog.testing.i18n.whitespace.normalizeWhitespace(expected);
+      goog.testing.i18n.whitespace.removeWhitespace(expected);
 
   // Now, check if the expected string and the actual result differ only
   // in whitespace by stripping white space characters from each.
@@ -104,8 +103,7 @@ goog.testing.i18n.asserts.assertI18nEquals = function(a, b, opt_c) {
       goog.testing.i18n.asserts.EXPECTED_VALUE_MAP_[wsFixedExpected];
   if (alternativeExpected &&
       wsFixedActual ===
-          goog.testing.i18n.whitespace.normalizeWhitespace(
-              alternativeExpected)) {
+          goog.testing.i18n.whitespace.removeWhitespace(alternativeExpected)) {
     return;
   }
 

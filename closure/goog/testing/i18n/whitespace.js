@@ -52,15 +52,13 @@ exports.HORIZONTAL_WHITE_SPACE_REGEX = new RegExp(
     'g');
 
 /**
- * Normalizes whitespace characters within the input,
- * removing various whitespace characters used for presentational purposes that
- * make testing difficult. Regular unicode spaces (\u0020) are left untouched
- * so developers can use them to indicate important structural boundaries in
- * comparisons (e.g. words in a sentence).
+ * Normalizes whitespace characters within the input, removing various
+ * whitespace characters used for presentational purposes that make testing
+ * difficult.
  *
  * @param {string} input
  * @return {string}
  */
-exports.normalizeWhitespace = (input) => {
+exports.removeWhitespace = (input) => {
   return input.replace(exports.HORIZONTAL_WHITE_SPACE_REGEX, '');
 };
