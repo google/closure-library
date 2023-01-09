@@ -25,10 +25,12 @@ goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.editor.style');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.iter');
 goog.require('goog.log');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.string.Unicode');
 goog.require('goog.style');
 goog.require('goog.ui.editor.messages');
@@ -729,8 +731,13 @@ goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_ = function(
     outerHTML = outerHTML.replace(
         goog.editor.plugins.BasicTextFormatter.BR_REGEXP_, '</div><div$1>');
   }
-  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
-  paragraph.outerHTML = outerHTML;
+  goog.dom.safe.setOuterHtml(
+      /** @type {!Element} */ (paragraph),
+      goog.html.uncheckedconversions
+          .safeHtmlFromStringKnownToSatisfyTypeContract(
+              goog.string.Const.from(
+                  'Safe mutation of HTML that is already present in the DOM'),
+              outerHTML));
 };
 
 
