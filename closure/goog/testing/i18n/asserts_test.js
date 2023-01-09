@@ -89,6 +89,15 @@ testSuite({
     assertThrowsJsUnitException(() => {
       asserts.assertI18nEquals('mappedValue', '** dummy');
     });
+
+    // Check for containing with horizontal space matching
+
+    asserts.assertI18nContains('abc', ' abc\u1680');
+    asserts.assertI18nContains('abc', '\u202fabc \u3000');
+    asserts.assertI18nContains('abc', '\u202fabc \u3000');
+    asserts.assertI18nContains('a b c', '\u202fabc \u3000');
+    asserts.assertI18nContains('a\u202fb\t\xA0c', '\u202fabc \u3000');
+
   },
 
   testMappingWorks() {

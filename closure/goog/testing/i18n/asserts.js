@@ -121,6 +121,7 @@ goog.testing.i18n.asserts.assertI18nEquals = function(a, b, opt_c) {
 /**
  * Asserts that needle, or a string i18n-equivalent to needle, is a substring of
  * haystack. I18n-equivalent strings are set with addI18nMapping.
+ * Horizontal white space is removed before comparison.
  *
  * @param {string} needle The substring to search for.
  * @param {string} haystack The string to search within.
@@ -136,7 +137,11 @@ goog.testing.i18n.asserts.assertI18nContains = function(needle, haystack) {
     return;
   }
 
-  assertContains(needle, haystack);
+  const wsFixedNeedle = goog.testing.i18n.whitespace.removeWhitespace(needle);
+  const wsFixedHaystack =
+      goog.testing.i18n.whitespace.removeWhitespace(haystack);
+
+  assertContains(wsFixedNeedle, wsFixedHaystack);
 };
 
 
