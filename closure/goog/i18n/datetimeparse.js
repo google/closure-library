@@ -144,6 +144,14 @@ const DayPeriods = goog.module.get('goog.i18n.DayPeriods');
  */
 goog.i18n.DateTimeParse.PatternPart;
 
+// To match one white horizontal space character at start of string, including
+// non-ASCII.
+const horizontalWhiteSpacePrefixRegex =
+    /^[ \t\xA0\u1680\u180e\u2000-\u200a\u202f\u205f\u3000]/;
+// Match one or more white space, including those covered by JavaScript's \s
+// match.
+const skipWhiteSpacePrefixRegex =
+    /^[\s\xA0\u1680\u180e\u2000-\u200a\u202f\u205f\u3000]+/;
 
 /**
  * Construct a DateTimeParse based on current locale.
@@ -937,8 +945,8 @@ goog.i18n.DateTimeParse.prototype.subParseLiteral_ = function(
   'use strict';
   // A run of white space in the pattern matches a run
   // of white space in the input text.
-  if (part.text.charAt(0) == ' ') {
-    // Advance over run in input text
+  const white_space_match = part.text.match(horizontalWhiteSpacePrefixRegex);
+  if (white_space_match != null) {
     const start = pos[0];
     this.skipSpace_(text, pos);
 
@@ -970,7 +978,8 @@ goog.i18n.DateTimeParse.prototype.subParseLiteral_ = function(
  */
 goog.i18n.DateTimeParse.prototype.skipSpace_ = function(text, pos) {
   'use strict';
-  const m = text.substring(pos[0]).match(/^\s+/);
+  // Skips Unicode spaces in addition to ASCII space.
+  const m = text.substring(pos[0]).match(skipWhiteSpacePrefixRegex);
   if (m) {
     pos[0] += m[0].length;
   }

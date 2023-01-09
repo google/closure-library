@@ -412,9 +412,15 @@ testSuite({
     assertParseFails(parser, '5:4');
     assertParseFails(parser, '5:44');
     assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 ');
+    assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44   ');
     assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 p', {partial: 5});
+    assertParsedTimeEquals(
+        5, 44, 0, 0, parser, '5:44\u202f\u202fp', {partial: 6});
     assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44 pm');
+    assertParsedTimeEquals(17, 44, 0, 0, parser, '5:44\u202fpm');
     assertParsedTimeEquals(5, 44, 0, 0, parser, '5:44 ym', {partial: 5});
+    assertParsedTimeEquals(
+        5, 44, 0, 0, parser, '5:44\u1680\u00a0\t\u0020 ym', {partial: 9});
 
     parser = new DateTimeParse('mm:ss');
     const date = new Date(0);
@@ -973,4 +979,75 @@ testSuite({
     assertTrue(parsedOK > 0);
     assertTimeEquals(17, 0, 0, 0, newDate);
   },
+
+  testNonAsciiSpaces() {
+    const time_part = '3:26';
+    const white_spaces = [
+      ' ',
+      '\t',
+      '\xA0',
+      '\u1680',
+      '\u180e',
+      '\u2000',
+      '\u2001',
+      '\u2002',
+      '\u2003',
+      '\u2004',
+      '\u2005',
+      '\u2006',
+      '\u2007',
+      '\u2008',
+      '\u2009',
+      '\u200a',
+      '\u202f',
+      '\u205f',
+      '\u3000',
+      '   ',                 // Multiple spaces
+      '\u202f\u00a0\u200a',  // Multiple non-ASCII spaces
+    ];
+
+    let parser = new DateTimeParse(DateTimeFormat.Format.SHORT_TIME);
+    let newDate = new Date(0);
+    for (let index = 0; index < white_spaces.length; index++) {
+      let input_string = time_part + white_spaces[index] + 'AM';
+      let parsedOK = parser.parse(input_string, newDate);
+      assertTrue(
+          'Fails on index ' + index + ' >' + input_string + '<: ' + parsedOK,
+          parsedOK > 0);
+      assertTimeEquals(3, 26, 0, 0, newDate);
+    }
+  },
+
+  testNonAsciiWithPatterns() {
+    // Cloned from
+    // google3/alkali/apps/twitteralerts/client/app/new_alert/parse_twitter.ts
+    const dateFormats = [
+      'h:mm a - d MMM yyyy',
+      'h:mm a · d MMM yyyy',
+      'h:mm a · d MMM, yyyy',
+      'h:mm a · MMM d, yyyy',
+    ];
+
+    const twitter_dates = [
+      '4:44\u202fAM  19 Jan 2018',
+      '4:44 AM - 19 Jan 2018',
+      '4:44 AM · 19 Jan 2018',
+      '4:44 AM · 19 Jan, 2018',
+    ];
+    const date = new Date();
+    for (let i = 0; i < dateFormats.length; i++) {
+      for (let j = 0; j < twitter_dates.length; j++) {
+        let text = twitter_dates[j];
+        const parser = new DateTimeParse(dateFormats[i]);
+        const parseDate = parser.parse(text, date, {validate: true});
+        if (parseDate !== 0) {
+          // DateTimeParse uses current seconds since they are not provided in
+          // the input string. We prefer to have stable output, so we set
+          // seconds to 0.
+          assertParsedDateEquals(2018, 0, 19, parser, text);
+        }
+      }
+    }
+  },
+
 });
