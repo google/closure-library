@@ -95,6 +95,12 @@ closure_js_library(
 )
 
 closure_js_library(
+    name = "cldrversion",
+    srcs = ["cldrversion.js"],
+    lenient = True,
+)
+
+closure_js_library(
     name = "collation",
     srcs = ["collation.js"],
     lenient = True,
@@ -213,20 +219,38 @@ closure_js_library(
     name = "datetimepatterns",
     srcs = ["datetimepatterns.js"],
     lenient = True,
-    deps = [":datetimepatternstype"],
+    deps = [
+        ":cldrversion",
+        ":datetimepatternstype",
+        "//closure/goog/i18n/cldr41:datetimepatterns",
+        "//closure/goog/i18n/cldr42:datetimepatterns",
+    ],
 )
 
 closure_js_library(
     name = "datetimepatternsext",
     srcs = ["datetimepatternsext.js"],
     lenient = True,
-    deps = [":datetimepatterns"],
+    deps = [
+        ":cldrversion",
+        ":datetimepatterns",
+        ":datetimepatternstype",
+        "//closure/goog/i18n/cldr41:datetimepatterns",
+        "//closure/goog/i18n/cldr41:datetimepatternsext",
+        "//closure/goog/i18n/cldr42:datetimepatterns",
+        "//closure/goog/i18n/cldr42:datetimepatternsext",
+    ],
 )
 
 closure_js_library(
     name = "datetimesymbols",
     srcs = ["datetimesymbols.js"],
     lenient = True,
+    deps = [
+        ":cldrversion",
+        "//closure/goog/i18n/cldr41:datetimesymbols",
+        "//closure/goog/i18n/cldr42:datetimesymbols",
+    ],
 )
 
 closure_js_library(
@@ -239,7 +263,14 @@ closure_js_library(
     name = "datetimesymbolsext",
     srcs = ["datetimesymbolsext.js"],
     lenient = True,
-    deps = [":datetimesymbols"],
+    deps = [
+        ":cldrversion",
+        ":datetimesymbols",
+        "//closure/goog/i18n/cldr41:datetimesymbols",
+        "//closure/goog/i18n/cldr41:datetimesymbolsext",
+        "//closure/goog/i18n/cldr42:datetimesymbols",
+        "//closure/goog/i18n/cldr42:datetimesymbolsext",
+    ],
 )
 
 closure_js_library(
