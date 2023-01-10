@@ -216,9 +216,13 @@ function ensureTemplateOutputHtml(templateResult) {
     return SafeHtml.htmlEscape(String(templateResult));
   }
 
-  // Allow SanitizedContent of kind HTML.
-  if (templateResult instanceof SanitizedContent) {
-    return templateResult.toSafeHtml();
+  // Allow SafeHtml from SanitizedContent and the result of
+  // javascript.template.soy.makeHtml
+  if (templateResult.toSafeHtml) {
+    const result = templateResult.toSafeHtml();
+    if (result instanceof SafeHtml) {
+      return result;
+    }
   }
 
   asserts.fail(
