@@ -117,7 +117,10 @@ closure_js_library(
 closure_js_library(
     name = "safeurl_test_vectors",
     testonly = 1,
-    srcs = ["safeurl_test_vectors.js"],
+    srcs = [
+        "javascript_url_test_vectors.js",
+        "safeurl_test_vectors.js",
+    ],
     lenient = True,
 )
 

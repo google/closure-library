@@ -742,6 +742,58 @@ goog.html.SafeUrl.sanitizeAssertUnchanged = function(url, opt_allowDataUrl) {
 };
 
 /**
+ * Extracts the scheme from the given URL. If the URL is relative, https: is
+ * assumed.
+ * @param {string} url The URL to extract the scheme from.
+ * @return {string|undefined} the URL scheme.
+ */
+goog.html.SafeUrl.extractScheme = function(url) {
+  let parsedUrl;
+  try {
+    parsedUrl = new URL(url);
+  } catch (e) {
+    // According to https://url.spec.whatwg.org/#constructors, the URL
+    // constructor with one parameter throws if `url` is not absolute. In this
+    // case, we are sure that no explicit scheme (javascript: ) is set.
+    // This can also be a URL parsing error, but in this case the URL won't be
+    // run anyway.
+    return 'https:';
+  }
+  return parsedUrl.protocol;
+};
+
+/**
+ * Creates a SafeUrl object from `url`. If `url` is a
+ * `goog.html.SafeUrl` then it is simply returned. Otherwise javascript: URLs
+ * are rejected.
+ *
+ * This function asserts (using goog.asserts) that the URL scheme is not
+ * javascript. If it is, in addition to failing the assert, an innocuous URL
+ * will be returned.
+ *
+ * @see http://url.spec.whatwg.org/#concept-relative-url
+ * @param {string|!goog.string.TypedString} url The URL to validate.
+ * @return {!goog.html.SafeUrl} The validated URL, wrapped as a SafeUrl.
+ */
+goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged = function(url) {
+  'use strict';
+  if (url instanceof goog.html.SafeUrl) {
+    return url;
+  } else if (typeof url == 'object' && url.implementsGoogStringTypedString) {
+    url = /** @type {!goog.string.TypedString} */ (url).getTypedStringValue();
+  } else {
+    url = String(url);
+  }
+  // We don't rely on goog.url here to prevent a dependency cycle.
+  const parsedScheme = goog.html.SafeUrl.extractScheme(url);
+  if (!goog.asserts.assert(
+          parsedScheme !== 'javascript:', '%s is a javascript: URL', url)) {
+    url = goog.html.SafeUrl.INNOCUOUS_STRING;
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
+};
+
+/**
  * Token used to ensure that object is created only from this file. No code
  * outside of this file can access this token.
  * @private {!Object}

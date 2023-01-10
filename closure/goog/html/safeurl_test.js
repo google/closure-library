@@ -15,6 +15,7 @@ const SafeUrl = goog.require('goog.html.SafeUrl');
 const TrustedResourceUrl = goog.require('goog.html.TrustedResourceUrl');
 const fsUrl = goog.require('goog.fs.url');
 const googObject = goog.require('goog.object');
+const javascriptUrlTestVectors = goog.require('goog.html.javascriptUrlTestVectors');
 const safeUrlTestVectors = goog.require('goog.html.safeUrlTestVectors');
 const testSuite = goog.require('goog.testing.testSuite');
 const {assertExists} = goog.require('goog.asserts');
@@ -377,6 +378,23 @@ testSuite({
       } else {
         assertThrows(() => {
           SafeUrl.sanitizeAssertUnchanged(v.input, isDataUrl);
+        });
+      }
+    }
+  },
+
+  /**
+     @suppress {missingProperties,checkTypes} suppression added to enable type
+     checking
+   */
+  testSafeUrlSanitize_sanitizeJavascriptUrlAssertUnchanged() {
+    for (const v of javascriptUrlTestVectors.BASE_VECTORS) {
+      if (v.safe) {
+        const asserted = SafeUrl.sanitizeJavascriptUrlAssertUnchanged(v.input);
+        assertEquals(v.expected, SafeUrl.unwrap(asserted));
+      } else {
+        assertThrows(() => {
+          SafeUrl.sanitizeJavascriptUrlAssertUnchanged(v.input);
         });
       }
     }
