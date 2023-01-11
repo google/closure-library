@@ -6,6 +6,7 @@ licenses(["notice"])
 
 closure_js_library(
     name = "jstests_deps",
+    testonly = 1,
     lenient = True,
     exports = [
         ":bidi",
@@ -55,6 +56,7 @@ closure_js_library(
         "//closure/goog/testing:expectedfailures",
         "//closure/goog/testing:propertyreplacer",
         "//closure/goog/testing:testsuite",
+        "//closure/goog/testing/i18n:asserts",
         "//closure/goog/useragent",
         "//closure/goog/useragent:product",
         "//closure/goog/useragent:product_isversion",

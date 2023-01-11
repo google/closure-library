@@ -6,7 +6,7 @@
 /**
  * @fileoverview Compact number formatting symbols.
  *
- * File generated from CLDR ver. 41
+ * File generated from CLDR ver. 42
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -900,13 +900,13 @@ goog.i18n.CompactNumberFormatSymbols_bs = {
 goog.i18n.CompactNumberFormatSymbols_ca = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0m'
+      'other': '0 k'
     },
     '10000': {
-      'other': '00m'
+      'other': '00 k'
     },
     '100000': {
-      'other': '000m'
+      'other': '000 k'
     },
     '1000000': {
       'other': '0 M'
@@ -921,10 +921,10 @@ goog.i18n.CompactNumberFormatSymbols_ca = {
       'other': '0000 M'
     },
     '10000000000': {
-      'other': '00mM'
+      'other': '00 kM'
     },
     '100000000000': {
-      'other': '000mM'
+      'other': '000 kM'
     },
     '1000000000000': {
       'other': '0 B'
@@ -3861,6 +3861,21 @@ goog.i18n.CompactNumberFormatSymbols_ja = {
     },
     '100000000000000': {
       'other': '000兆'
+    },
+    '1000000000000000': {
+      'other': '0000兆'
+    },
+    '10000000000000000': {
+      'other': '0京'
+    },
+    '100000000000000000': {
+      'other': '00京'
+    },
+    '1000000000000000000': {
+      'other': '000京'
+    },
+    '10000000000000000000': {
+      'other': '0000京'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
@@ -3899,6 +3914,21 @@ goog.i18n.CompactNumberFormatSymbols_ja = {
     },
     '100000000000000': {
       'other': '000兆'
+    },
+    '1000000000000000': {
+      'other': '0000兆'
+    },
+    '10000000000000000': {
+      'other': '0京'
+    },
+    '100000000000000000': {
+      'other': '00京'
+    },
+    '1000000000000000000': {
+      'other': '000京'
+    },
+    '10000000000000000000': {
+      'other': '0000京'
     }
   }
 };
@@ -5245,78 +5275,78 @@ goog.i18n.CompactNumberFormatSymbols_mt = {
 goog.i18n.CompactNumberFormatSymbols_my = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0ထောင်'
+      'other': '0 ထောင်'
     },
     '10000': {
-      'other': '0သောင်း'
+      'other': '0 သောင်း'
     },
     '100000': {
-      'other': '0သိန်း'
+      'other': '0 သိန်း'
     },
     '1000000': {
-      'other': '0သန်း'
+      'other': '0 သန်း'
     },
     '10000000': {
-      'other': '0ကုဋေ'
+      'other': '0 ကုဋေ'
     },
     '100000000': {
-      'other': '00ကုဋေ'
+      'other': '00 ကုဋေ'
     },
     '1000000000': {
-      'other': 'ကုဋေ000'
+      'other': '000 ကုဋေ'
     },
     '10000000000': {
-      'other': 'ကုဋေ0ထ'
+      'other': 'ကုဋေ 0 ထ'
     },
     '100000000000': {
-      'other': 'ကုဋေ0သ'
+      'other': 'ကုဋေ 0 သ'
     },
     '1000000000000': {
-      'other': 'ဋေ0သိန်း'
+      'other': 'ဋေ 0 သိန်း'
     },
     '10000000000000': {
-      'other': 'ဋေ0သန်း'
+      'other': 'ဋေ 0 သန်း'
     },
     '100000000000000': {
-      'other': '0ကောဋိ'
+      'other': '0 ကောဋိ'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
     '1000': {
-      'other': '0ထောင်'
+      'other': '0 ထောင်'
     },
     '10000': {
-      'other': '0သောင်း'
+      'other': '0 သောင်း'
     },
     '100000': {
-      'other': '0သိန်း'
+      'other': '0 သိန်း'
     },
     '1000000': {
-      'other': '0သန်း'
+      'other': '0 သန်း'
     },
     '10000000': {
-      'other': '0ကုဋေ'
+      'other': '0 ကုဋေ'
     },
     '100000000': {
-      'other': '00ကုဋေ'
+      'other': '00 ကုဋေ'
     },
     '1000000000': {
-      'other': 'ကုဋေ000'
+      'other': '000 ကုဋေ'
     },
     '10000000000': {
-      'other': 'ကုဋေ0000'
+      'other': '0000 ကုဋေ'
     },
     '100000000000': {
-      'other': 'ကုဋေ0သောင်း'
+      'other': 'ကုဋေ 0 သောင်း'
     },
     '1000000000000': {
-      'other': 'ကုဋေ0သိန်း'
+      'other': 'ကုဋေ 0 သိန်း'
     },
     '10000000000000': {
-      'other': 'ကုဋေ0သန်း'
+      'other': 'ကုဋေ 0 သန်း'
     },
     '100000000000000': {
-      'other': '0ကောဋိ'
+      'other': '0 ကောဋိ'
     }
   }
 };
