@@ -363,7 +363,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
       this.execCommandHelper_(command, opt_arg, preserveDir, !!styleWithCss);
 
       if (hasPlaceholderSelection) {
-        this.getDocument_().execCommand('Delete', false, true);
+        this.safeExecCommand_('Delete', true);
       }
 
       if (hasPlaceholderContent && placeholderValue) {
@@ -397,7 +397,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
       }
 
       if (needsFormatBlockDiv) {
-        this.getDocument_().execCommand('FormatBlock', false, '<div>');
+        this.safeExecCommand_('FormatBlock', '<div>');
       }
   }
   // FF loses focus, so we have to set the focus back to the document or the
@@ -814,6 +814,23 @@ goog.editor.plugins.BasicTextFormatter.convertContainerToTextAlign_ = function(
   }
 };
 
+/**
+ * Safely perform an execCommand on the active document.
+ * @param {string} command The command to execute. 'insertHTML' is not
+ * supported.
+ * @param {string|number|boolean|null=} opt_valueArgument For commands that
+ * require an input argument, this provides that value.
+ * @private
+ */
+goog.editor.plugins.BasicTextFormatter.prototype.safeExecCommand_ = function(
+    command, opt_valueArgument) {
+  'use strict';
+  if (command.toLowerCase() === 'inserthtml') {
+    throw new Error('Unsafe command not supported');
+  }
+  this.getDocument_().execCommand(command, false, opt_valueArgument);
+};
+
 
 /**
  * Perform an execCommand on the active document.
@@ -871,15 +888,14 @@ goog.editor.plugins.BasicTextFormatter.prototype.execCommandHelper_ = function(
     this.removeFontSizeFromStyleAttrs_();
   }
 
-  var doc = this.getDocument_();
   if (opt_styleWithCss && goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS) {
-    doc.execCommand('styleWithCSS', false, true);
+    this.safeExecCommand_('styleWithCSS', true);
   }
 
-  doc.execCommand(command, false, opt_value);
+  this.safeExecCommand_(command, opt_value);
   if (opt_styleWithCss && goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS) {
     // If we enabled styleWithCSS, turn it back off.
-    doc.execCommand('styleWithCSS', false, false);
+    this.safeExecCommand_('styleWithCSS', false);
   }
 
   if (/insert(un)?orderedlist/i.test(command)) {
@@ -1200,11 +1216,11 @@ goog.editor.plugins.BasicTextFormatter.prototype
       // calling execCommandHelper_(). However this is a potential for
       // bugs if the implementation of execCommandHelper_() is changed
       // to do something more int eh case of subscript and superscript.
-      this.getDocument_().execCommand(oppositeExecCommand, false, null);
+      this.safeExecCommand_(oppositeExecCommand, null);
     }
     // Now that we know the whole selection has the opposite command
     // applied, we exec it a second time to properly remove it.
-    this.getDocument_().execCommand(oppositeExecCommand, false, null);
+    this.safeExecCommand_(oppositeExecCommand, null);
   }
 };
 
@@ -1911,18 +1927,17 @@ goog.editor.plugins.BasicTextFormatter.prototype.queryCommandHelper_ = function(
   command =
       goog.editor.plugins.BasicTextFormatter.convertToRealExecCommand_(command);
   if (opt_styleWithCss) {
-    var doc = this.getDocument_();
     // Don't use this.execCommandHelper_ here, as it is more heavyweight
     // and inserts a dummy div to protect against comamnds that could step
     // outside the editable region, which would cause change event on
     // every toolbar update.
-    doc.execCommand('styleWithCSS', false, true);
+    this.safeExecCommand_('styleWithCSS', true);
   }
   /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   var ret = isGetQueryCommandState ? queryObject.queryCommandState(command) :
                                      queryObject.queryCommandValue(command);
   if (opt_styleWithCss) {
-    doc.execCommand('styleWithCSS', false, false);
+    this.safeExecCommand_('styleWithCSS', false);
   }
   return ret;
 };
