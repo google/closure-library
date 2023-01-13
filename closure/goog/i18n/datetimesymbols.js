@@ -444,7 +444,7 @@ goog.require('goog.i18n.cldrversion');
 
 /**
  * Date/time formatting symbols for locale en_ISO.
- * @const
+ * @const {!goog.i18n.DateTimeSymbolsType}
  */
 goog.i18n.DateTimeSymbols_en_ISO = {
   ERAS: ['BC', 'AD'],
