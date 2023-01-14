@@ -19,6 +19,7 @@ const NumberFormatSymbols_es = goog.require('goog.i18n.NumberFormatSymbols_es');
 const NumberFormatSymbols_fa = goog.require('goog.i18n.NumberFormatSymbols_fa');
 const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const RelativeDateTimeFormat = goog.require('goog.i18n.RelativeDateTimeFormat');
+const assertI18n = goog.require('goog.testing.i18n.asserts');
 const relativeDateTimeSymbols = goog.require('goog.i18n.relativeDateTimeSymbols');
 const relativeDateTimeSymbolsExt = goog.require('goog.i18n.relativeDateTimeSymbolsExt');
 const testSuite = goog.require('goog.testing.testSuite');
@@ -59,6 +60,16 @@ const DirectionData = class {
         ' pluralrules = ' + this.pluralrules + '\'';
   }
 };
+
+// Add alternative results for assertI18nEquals.
+// These come from ICU72 / CLDR42 updates.
+assertI18n.addI18nMapping('۳روزدیگر', '۳روزبعد');
+assertI18n.addI18nMapping('in 0 wk.', 'in 0w');
+assertI18n.addI18nMapping('0 wk. ago', '0w ago');
+assertI18n.addI18nMapping('2d ago', '2 days ago');
+assertI18n.addI18nMapping('in 5 wk.', 'in 5w');
+assertI18n.addI18nMapping('5 wk. ago', '5 w ago');
+assertI18n.addI18nMapping('in 2w', 'in 2wk.');
 
 
 /** @const {!Object<string, !Object>} */
@@ -118,7 +129,7 @@ const formatDirectionTestData = [
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 2, RelativeDateTimeFormat.Unit.DAY, 'in 2 days'),
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.DAY, '2 days ago'),
   new DirectionData('en', RelativeDateTimeFormat.Style.SHORT, -2, RelativeDateTimeFormat.Unit.DAY, '2 days ago'),
-  new DirectionData('en', RelativeDateTimeFormat.Style.NARROW, -2, RelativeDateTimeFormat.Unit.DAY, '2 days ago'),
+  new DirectionData('en', RelativeDateTimeFormat.Style.NARROW, -2, RelativeDateTimeFormat.Unit.DAY, '2d ago'),
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.WEEK, '2 weeks ago'),
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -2, RelativeDateTimeFormat.Unit.WEEK, '2 weeks ago'),
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -1, RelativeDateTimeFormat.Unit.WEEK, 'last week'),
@@ -197,7 +208,7 @@ const formatNumericTestData = [
 
     new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 0, RelativeDateTimeFormat.Unit.SECOND, 'in 0 seconds'),
 
-    new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -0, RelativeDateTimeFormat.Unit.SECOND, '0 seconds ago'),
+  new DirectionData('en', RelativeDateTimeFormat.Style.LONG, -0, RelativeDateTimeFormat.Unit.SECOND, '0 seconds ago'),
 
   new DirectionData('en', RelativeDateTimeFormat.Style.LONG, 2, RelativeDateTimeFormat.Unit.DAY, 'in 2 days'),
 
@@ -213,7 +224,7 @@ const formatNumericTestData = [
 
   new DirectionData('en', RelativeDateTimeFormat.Style.SHORT, 1, RelativeDateTimeFormat.Unit.WEEK, 'in 1 wk.'),
   new DirectionData('en', RelativeDateTimeFormat.Style.SHORT, 6, RelativeDateTimeFormat.Unit.WEEK, 'in 6 wk.'),
-  new DirectionData('en', RelativeDateTimeFormat.Style.NARROW, 2, RelativeDateTimeFormat.Unit.WEEK, 'in 2 wk.'),
+  new DirectionData('en', RelativeDateTimeFormat.Style.NARROW, 2, RelativeDateTimeFormat.Unit.WEEK, 'in 2w'),
   // TODO: Lots more needed.
 
   new DirectionData('fr', RelativeDateTimeFormat.Style.NARROW, 2, RelativeDateTimeFormat.Unit.SECOND, '+2 s'),
@@ -238,7 +249,8 @@ const formatNumericTestData = [
 /** @suppress {checkTypes} suppression added to enable type checking */
 const formatFarsiData = [
   // Other locales, too!
-  new DirectionData('fa', RelativeDateTimeFormat.Style.SHORT, 3, RelativeDateTimeFormat.Unit.DAY, '۳ روز بعد'),
+  new DirectionData('fa', RelativeDateTimeFormat.Style.NARROW, 3, RelativeDateTimeFormat.Unit.DAY, '۳ روز بعد'),
+  new DirectionData('fa', RelativeDateTimeFormat.Style.LONG, 3, RelativeDateTimeFormat.Unit.DAY, '۳ روز دیگر'),
   new DirectionData('fa', RelativeDateTimeFormat.Style.SHORT, -3, RelativeDateTimeFormat.Unit.MONTH, '۳ ماه پیش'),
   new DirectionData('fa', RelativeDateTimeFormat.Style.SHORT, -17, RelativeDateTimeFormat.Unit.HOUR, '۱۷ ساعت پیش'),
   new DirectionData('fa', RelativeDateTimeFormat.Style.SHORT, 9, RelativeDateTimeFormat.Unit.SECOND, '۹ ثانیه بعد'),
@@ -367,7 +379,9 @@ testSuite({
             symbols.RelativeDateTimeFormatSymbols);
 
         const result = fmt.format(data.direction, data.unit);
-        assertEquals(data.getErrorDescription(), data.expected, result);
+        assertI18n.assertI18nEquals(
+            'TestFormatStyle index ' + i + ': ' + data.getErrorDescription(),
+            data.expected, result);
       }
     }
   },
@@ -394,7 +408,8 @@ testSuite({
             symbols.RelativeDateTimeFormatSymbols);
 
         const result = fmtAlways.format(data.direction, data.unit);
-        assertEquals(data.getErrorDescription(), data.expected, result);
+        assertI18n.assertI18nEquals(
+            data.getErrorDescription(), data.expected, result);
 
         /**
          * @suppress {strictMissingProperties} suppression added to enable type
@@ -402,7 +417,7 @@ testSuite({
          */
         const fmtUndefined = new RelativeDateTimeFormat(
             undefined, data.style, symbols.RelativeDateTimeFormatSymbols);
-        assertEquals(
+        assertI18n.assertI18nEquals(
             data.getErrorDescription(), data.expected,
             fmtUndefined.format(data.direction, data.unit));
       }
@@ -518,7 +533,8 @@ testSuite({
             symbols.RelativeDateTimeFormatSymbols);
 
         const result = fmt.format(data.direction, data.unit);
-        assertEquals(data.getErrorDescription(), data.expected, result);
+        assertI18n.assertI18nEquals(
+            data.getErrorDescription(), data.expected, result);
       }
     }
   },
@@ -548,7 +564,8 @@ testSuite({
             symbols.RelativeDateTimeFormatSymbols);
 
         const result = fmt.format(data.direction, data.unit);
-        assertEquals(data.getErrorDescription(), data.expected, result);
+        assertI18n.assertI18nEquals(
+            data.getErrorDescription(), data.expected, result);
       }
     }
   },
@@ -579,7 +596,8 @@ testSuite({
         /* Only test ECMAScript mode if locale data is expected */
         if (!fmt.isNativeMode()) {
           const result = fmt.format(data.direction, data.unit);
-          assertEquals(data.getErrorDescription(), data.expected, result);
+          assertI18n.assertI18nEquals(
+              data.getErrorDescription(), data.expected, result);
         }
       }
     }
@@ -607,7 +625,8 @@ testSuite({
             symbols.RelativeDateTimeFormatSymbols);
 
         const result = fmt.format(data.direction, data.unit);
-        assertEquals(data.getErrorDescription(), data.expected, result);
+        assertI18n.assertI18nEquals(
+            data.getErrorDescription(), data.expected, result);
       }
     }
   },
@@ -638,7 +657,8 @@ testSuite({
             symbols.RelativeDateTimeFormatSymbols);
 
         let result = fmt.format(data.direction, data.unit);
-        assertEquals(data.getErrorDescription(), data.expected, result);
+        assertI18n.assertI18nEquals(
+            data.getErrorDescription(), data.expected, result);
       }
     }
   },
@@ -662,7 +682,8 @@ testSuite({
             symbols.RelativeDateTimeFormatSymbols);
 
         const result = fmt.format(data.direction, data.unit);
-        assertEquals(data.getErrorDescription(), data.expected, result);
+        assertI18n.assertI18nEquals(
+            data.getErrorDescription(), data.expected, result);
       }
     }
   },

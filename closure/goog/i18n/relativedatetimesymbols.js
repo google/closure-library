@@ -6,7 +6,7 @@
 /**
  * @fileoverview Relative date time formatting symbols.
  *
- * File generated from CLDR ver. 41
+ * File generated from CLDR ver. 42
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -1728,6 +1728,11 @@ exports.RelativeDateTimeSymbols_en =  {
       P:'one{# day ago}other{# days ago}',
       F:'one{in # day}other{in # days}',
     },
+    NARROW:{
+      R:{'-1':'yesterday','0':'today','1':'tomorrow'},
+      P:'one{#d ago}other{#d ago}',
+      F:'one{in #d}other{in #d}',
+    },
   },
   HOUR: {
     LONG:{
@@ -1739,6 +1744,11 @@ exports.RelativeDateTimeSymbols_en =  {
       R:{'0':'this hour'},
       P:'one{# hr. ago}other{# hr. ago}',
       F:'one{in # hr.}other{in # hr.}',
+    },
+    NARROW:{
+      R:{'0':'this hour'},
+      P:'one{#h ago}other{#h ago}',
+      F:'one{in #h}other{in #h}',
     },
   },
   MINUTE: {
@@ -1752,6 +1762,11 @@ exports.RelativeDateTimeSymbols_en =  {
       P:'one{# min. ago}other{# min. ago}',
       F:'one{in # min.}other{in # min.}',
     },
+    NARROW:{
+      R:{'0':'this minute'},
+      P:'one{#m ago}other{#m ago}',
+      F:'one{in #m}other{in #m}',
+    },
   },
   MONTH: {
     LONG:{
@@ -1763,6 +1778,11 @@ exports.RelativeDateTimeSymbols_en =  {
       R:{'-1':'last mo.','0':'this mo.','1':'next mo.'},
       P:'one{# mo. ago}other{# mo. ago}',
       F:'one{in # mo.}other{in # mo.}',
+    },
+    NARROW:{
+      R:{'-1':'last mo.','0':'this mo.','1':'next mo.'},
+      P:'one{#mo ago}other{#mo ago}',
+      F:'one{in #mo}other{in #mo}',
     },
   },
   QUARTER: {
@@ -1776,6 +1796,11 @@ exports.RelativeDateTimeSymbols_en =  {
       P:'one{# qtr. ago}other{# qtrs. ago}',
       F:'one{in # qtr.}other{in # qtrs.}',
     },
+    NARROW:{
+      R:{'-1':'last qtr.','0':'this qtr.','1':'next qtr.'},
+      P:'one{#q ago}other{#q ago}',
+      F:'one{in #q}other{in #q}',
+    },
   },
   SECOND: {
     LONG:{
@@ -1787,6 +1812,11 @@ exports.RelativeDateTimeSymbols_en =  {
       R:{'0':'now'},
       P:'one{# sec. ago}other{# sec. ago}',
       F:'one{in # sec.}other{in # sec.}',
+    },
+    NARROW:{
+      R:{'0':'now'},
+      P:'one{#s ago}other{#s ago}',
+      F:'one{in #s}other{in #s}',
     },
   },
   WEEK: {
@@ -1800,6 +1830,11 @@ exports.RelativeDateTimeSymbols_en =  {
       P:'one{# wk. ago}other{# wk. ago}',
       F:'one{in # wk.}other{in # wk.}',
     },
+    NARROW:{
+      R:{'-1':'last wk.','0':'this wk.','1':'next wk.'},
+      P:'one{#w ago}other{#w ago}',
+      F:'one{in #w}other{in #w}',
+    },
   },
   YEAR: {
     LONG:{
@@ -1811,6 +1846,11 @@ exports.RelativeDateTimeSymbols_en =  {
       R:{'-1':'last yr.','0':'this yr.','1':'next yr.'},
       P:'one{# yr. ago}other{# yr. ago}',
       F:'one{in # yr.}other{in # yr.}',
+    },
+    NARROW:{
+      R:{'-1':'last yr.','0':'this yr.','1':'next yr.'},
+      P:'one{#y ago}other{#y ago}',
+      F:'one{in #y}other{in #y}',
     },
   },
 };
@@ -1871,11 +1911,6 @@ exports.RelativeDateTimeSymbols_en_AU =  {
       P:'one{# qtr ago}other{# qtrs ago}',
       F:'one{in # qtr}other{in # qtrs}',
     },
-    NARROW:{
-      R:{'-1':'last qtr.','0':'this qtr.','1':'next qtr.'},
-      P:'one{in # qtr ago}other{# qtrs ago}',
-      F:'one{in # qtr}other{in # qtrs}',
-    },
   },
   SECOND: {
     LONG:{
@@ -1922,6 +1957,11 @@ exports.RelativeDateTimeSymbols_en_CA =  {
       R:{'-1':'yesterday','0':'today','1':'tomorrow'},
       P:'one{# day ago}other{# days ago}',
       F:'one{in # day}other{in # days}',
+    },
+    NARROW:{
+      R:{'-1':'yesterday','0':'today','1':'tomorrow'},
+      P:'one{#d ago}other{#d ago}',
+      F:'one{in #d}other{in #d}',
     },
   },
   HOUR: {
@@ -3117,6 +3157,11 @@ exports.RelativeDateTimeSymbols_fa =  {
     LONG:{
       R:{'-1':'دیروز','-2':'پریروز','0':'امروز','1':'فردا','2':'پس‌فردا'},
       P:'one{# روز پیش}other{# روز پیش}',
+      F:'one{# روز دیگر}other{# روز دیگر}',
+    },
+    NARROW:{
+      R:{'-1':'دیروز','-2':'پریروز','0':'امروز','1':'فردا','2':'پس‌فردا'},
+      P:'one{# روز پیش}other{# روز پیش}',
       F:'one{# روز بعد}other{# روز بعد}',
     },
   },
@@ -3281,97 +3326,97 @@ exports.RelativeDateTimeSymbols_fil =  {
   DAY: {
     LONG:{
       R:{'-1':'kahapon','-2':'Araw bago ang kahapon','0':'ngayong araw','1':'bukas','2':'Samakalawa'},
-      P:'one{# araw ang nakalipas}other{# (na) araw ang nakalipas}',
-      F:'one{sa # araw}other{sa # (na) araw}',
+      P:'one{# araw ang nakalipas}other{# araw ang nakalipas}',
+      F:'one{sa # araw}other{sa # araw}',
     },
     SHORT:{
       R:{'-1':'kahapon','-2':'Araw bago ang kahapon','0':'ngayong araw','1':'bukas','2':'Samakalawa'},
-      P:'one{# (na) araw ang nakalipas}other{# (na) araw ang nakalipas}',
-      F:'one{sa # (na) araw}other{sa # (na) araw}',
+      P:'one{# araw ang nakalipas}other{# (na) araw ang nakalipas}',
+      F:'one{sa # (na) araw}other{sa # araw}',
     },
     NARROW:{
       R:{'-1':'kahapon','-2':'Araw bago ang kahapon','0':'ngayong araw','1':'bukas','2':'Samakalawa'},
-      P:'one{# araw ang nakalipas}other{# (na) araw ang nakalipas}',
-      F:'one{sa # araw}other{sa # (na) araw}',
+      P:'one{# araw ang nakalipas}other{# araw ang nakalipas}',
+      F:'one{sa # araw}other{sa # araw}',
     },
   },
   HOUR: {
     LONG:{
       R:{'0':'ngayong oras'},
-      P:'one{# oras ang nakalipas}other{# (na) oras ang nakalipas}',
+      P:'one{# oras ang nakalipas}other{# oras ang nakalipas}',
+      F:'one{sa # oras}other{sa # oras}',
+    },
+    SHORT:{
+      R:{'0':'ngayong oras'},
+      P:'one{# oras ang nakalipas}other{# oras ang nakalipas}',
       F:'one{sa # oras}other{sa # (na) oras}',
     },
     NARROW:{
       R:{'0':'ngayong oras'},
-      P:'one{# oras ang nakalipas}other{# (na) oras nakalipas}',
-      F:'one{sa # oras}other{sa # (na) oras}',
+      P:'one{# oras ang nakalipas}other{# oras ang nakalipas}',
+      F:'one{sa # oras}other{sa # oras}',
     },
   },
   MINUTE: {
     LONG:{
       R:{'0':'sa minutong ito'},
-      P:'one{# minuto ang nakalipas}other{# (na) minuto ang nakalipas}',
-      F:'one{sa # minuto}other{sa # (na) minuto}',
+      P:'one{# minuto ang nakalipas}other{# minuto ang nakalipas}',
+      F:'one{sa # minuto}other{sa # minuto}',
     },
     SHORT:{
       R:{'0':'sa minutong ito'},
-      P:'one{# min. ang nakalipas}other{# (na) min. ang nakalipas}',
-      F:'one{sa # min.}other{sa # (na) min.}',
+      P:'one{# min. ang nakalipas}other{# min. ang nakalipas}',
+      F:'one{sa # min.}other{sa # min.}',
     },
   },
   MONTH: {
     LONG:{
       R:{'-1':'nakaraang buwan','0':'ngayong buwan','1':'susunod na buwan'},
-      P:'one{# buwan ang nakalipas}other{# (na) buwan ang nakalipas}',
-      F:'one{sa # buwan}other{sa # (na) buwan}',
+      P:'one{# buwan ang nakalipas}other{# buwan ang nakalipas}',
+      F:'one{sa # buwan}other{sa # buwan}',
     },
   },
   QUARTER: {
     LONG:{
       R:{'-1':'nakaraang quarter','0':'ngayong quarter','1':'susunod na quarter'},
-      P:'one{# quarter ang nakalipas}other{# (na) quarter ang nakalipas}',
-      F:'one{sa # quarter}other{sa # (na) quarter}',
-    },
-    SHORT:{
-      R:{'-1':'nakaraang quarter','0':'ngayong quarter','1':'susunod na quarter'},
-      P:'one{# quarter ang nakalipas}other{# (na) quarter ang nakalipas}',
-      F:'one{sa # (na) quarter}other{sa # (na) quarter}',
-    },
-    NARROW:{
-      R:{'-1':'nakaraang quarter','0':'ngayong quarter','1':'susunod na quarter'},
-      P:'one{# quarter ang nakalipas}other{# (na) quarter ang nakalipas}',
-      F:'one{sa # quarter}other{sa # (na) quarter}',
+      P:'one{# quarter ang nakalipas}other{# quarter ang nakalipas}',
+      F:'one{sa # quarter}other{sa # quarter}',
     },
   },
   SECOND: {
     LONG:{
       R:{'0':'ngayon'},
-      P:'one{# segundo ang nakalipas}other{# (na) segundo ang nakalipas}',
-      F:'one{sa # segundo}other{sa # (na) segundo}',
+      P:'one{# segundo ang nakalipas}other{# segundo ang nakalipas}',
+      F:'one{sa # segundo}other{sa # segundo}',
     },
     SHORT:{
       R:{'0':'ngayon'},
-      P:'one{# seg. ang nakalipas}other{# (na) seg. nakalipas}',
-      F:'one{sa # seg.}other{sa # (na) seg.}',
+      P:'one{# seg. ang nakalipas}other{# seg. ang nakalipas}',
+      F:'one{sa # seg.}other{sa # seg.}',
     },
   },
   WEEK: {
     LONG:{
       R:{'-1':'nakalipas na linggo','0':'sa linggong ito','1':'susunod na linggo'},
-      P:'one{# linggo ang nakalipas}other{# (na) linggo ang nakalipas}',
-      F:'one{sa # linggo}other{sa # (na) linggo}',
+      P:'one{# linggo ang nakalipas}other{# linggo ang nakalipas}',
+      F:'one{sa # linggo}other{sa # linggo}',
     },
     SHORT:{
       R:{'-1':'nakaraang linggo','0':'ngayong linggo','1':'susunod na linggo'},
       P:'one{# linggo ang nakalipas}other{# (na) linggo ang nakalipas}',
-      F:'one{sa # linggo}other{sa # (na) linggo}',
+      F:'one{sa # linggo}other{sa # linggo}',
+    },
+    NARROW:{
+      R:{'-1':'nakaraang linggo','0':'ngayong linggo','1':'susunod na linggo'},
+      P:'one{# linggo ang nakalipas}other{# linggo ang nakalipas}',
+      F:'one{sa # linggo}other{sa # linggo}',
     },
   },
   YEAR: {
     LONG:{
       R:{'-1':'nakaraang taon','0':'ngayong taon','1':'susunod na taon'},
-      P:'one{# taon ang nakalipas}other{# (na) taon ang nakalipas}',
-      F:'one{sa # taon}other{sa # (na) taon}',
+      P:'one{# taon ang nakalipas}other{# taon ang nakalipas}',
+      F:'one{sa # taon}other{sa # taon}',
     },
   },
 };
@@ -3673,8 +3718,8 @@ exports.RelativeDateTimeSymbols_ga =  {
   HOUR: {
     LONG:{
       R:{'0':'an uair seo'},
-      P:'few{# uair an chloig ó shin}many{# n-uaire an chloig ó shin}one{# uair an chloig ó shin}other{# uair an chloig ó shin}two{# uair an chloig ó shin}',
-      F:'few{i gceann # uair an chloig}many{i gceann # n-uaire an chloig}one{i gceann # uair an chloig}other{i gceann # uair an chloig}two{i gceann # uair an chloig}',
+      P:'few{# uair an chloig ó shin}many{# n-uair an chloig ó shin}one{# uair an chloig ó shin}other{# uair an chloig ó shin}two{# uair an chloig ó shin}',
+      F:'few{i gceann # uair an chloig}many{i gceann # n-uair an chloig}one{i gceann # uair an chloig}other{i gceann # uair an chloig}two{i gceann # uair an chloig}',
     },
     SHORT:{
       R:{'0':'an uair seo'},
@@ -3709,6 +3754,11 @@ exports.RelativeDateTimeSymbols_ga =  {
       R:{'-1':'an mhí seo caite','0':'an mhí seo','1':'an mhí seo chugainn'},
       P:'few{# mhí ó shin}many{# mí ó shin}one{# mhí ó shin}other{# mí ó shin}two{# mhí ó shin}',
       F:'few{i gceann # mhí}many{i gceann # mí}one{i gceann # mhí}other{i gceann # mí}two{i gceann # mhí}',
+    },
+    SHORT:{
+      R:{'-1':'an mhí seo caite','0':'an mhí seo','1':'an mhí seo chugainn'},
+      P:'few{# mhí ó shin}many{# mí ó shin}one{# mhí ó shin}other{# mí ó shin}two{# mhí ó shin}',
+      F:'few{i gceann # mhí}many{i gceann # mí}one{i gceann # míosa}other{i gceann # mí}two{i gceann # mhí}',
     },
     NARROW:{
       R:{'-1':'an mhí seo caite','0':'an mhí seo','1':'an mhí seo chugainn'},
@@ -3749,24 +3799,24 @@ exports.RelativeDateTimeSymbols_ga =  {
     LONG:{
       R:{'-1':'an tseachtain seo caite','0':'an tseachtain seo','1':'an tseachtain seo chugainn'},
       P:'few{# seachtaine ó shin}many{# seachtaine ó shin}one{# seachtain ó shin}other{# seachtain ó shin}two{# sheachtain ó shin}',
-      F:'few{i gceann # seachtaine}many{i gceann # seachtaine}one{i gceann # seachtain}other{i gceann # seachtain}two{i gceann # sheachtain}',
+      F:'few{i gceann # seachtaine}many{i gceann # seachtaine}one{i gceann # seachtaine}other{i gceann # seachtain}two{i gceann # sheachtain}',
     },
     SHORT:{
       R:{'-1':'an tscht. seo caite','0':'an tscht. seo','1':'an tscht. seo chugainn'},
-      P:'few{# scht. ó shin}many{# scht. ó shin}one{# scht. ó shin}other{# scht. ó shin}two{# scht. ó shin}',
-      F:'few{i gceann # scht.}many{i gceann # scht.}one{i gceann # scht.}other{i gceann # scht.}two{i gceann # shcht.}',
+      P:'few{# shcht. ó shin}many{# scht. ó shin}one{# scht. ó shin}other{# scht. ó shin}two{# shcht. ó shin}',
+      F:'few{i gceann # shcht.}many{i gceann # scht.}one{i gceann # scht.}other{i gceann # scht.}two{i gceann # shcht.}',
     },
     NARROW:{
       R:{'-1':'an tscht. seo caite','0':'an tscht. seo','1':'an tscht. seo chugainn'},
-      P:'few{-# scht.}many{-# scht.}one{-# scht.}other{-# scht.}two{-# scht.}',
-      F:'few{+# scht.}many{+# scht.}one{+# scht.}other{+# scht.}two{+# scht.}',
+      P:'few{# shcht. ó shin}many{-# scht.}one{-# scht.}other{-# scht.}two{# shcht. ó shin}',
+      F:'few{i gceann # shcht.}many{+# scht.}one{+# scht.}other{+# scht.}two{i gceann # shcht.}',
     },
   },
   YEAR: {
     LONG:{
       R:{'-1':'anuraidh','0':'i mbliana','1':'an bhliain seo chugainn'},
       P:'few{# bliana ó shin}many{# mbliana ó shin}one{# bhliain ó shin}other{# bliain ó shin}two{# bhliain ó shin}',
-      F:'few{i gceann # bliana}many{i gceann # mbliana}one{i gceann # bhliain}other{i gceann # bliain}two{i gceann # bhliain}',
+      F:'few{i gceann # bliana}many{i gceann # mbliana}one{i gceann # bliana}other{i gceann # bliain}two{i gceann # bhliain}',
     },
     SHORT:{
       R:{'-1':'anuraidh','0':'i mbl.','1':'an bhl. seo chugainn'},
@@ -4396,6 +4446,11 @@ exports.RelativeDateTimeSymbols_hu =  {
       P:'one{# órával ezelőtt}other{# órával ezelőtt}',
       F:'one{# óra múlva}other{# óra múlva}',
     },
+    NARROW:{
+      R:{'0':'ebben az órában'},
+      P:'one{# órája}other{# órája}',
+      F:'one{# óra múlva}other{# óra múlva}',
+    },
   },
   MINUTE: {
     LONG:{
@@ -4403,11 +4458,21 @@ exports.RelativeDateTimeSymbols_hu =  {
       P:'one{# perccel ezelőtt}other{# perccel ezelőtt}',
       F:'one{# perc múlva}other{# perc múlva}',
     },
+    NARROW:{
+      R:{'0':'ebben a percben'},
+      P:'one{# perce}other{# perce}',
+      F:'one{# perc múlva}other{# perc múlva}',
+    },
   },
   MONTH: {
     LONG:{
       R:{'-1':'előző hónap','0':'ez a hónap','1':'következő hónap'},
       P:'one{# hónappal ezelőtt}other{# hónappal ezelőtt}',
+      F:'one{# hónap múlva}other{# hónap múlva}',
+    },
+    NARROW:{
+      R:{'-1':'előző hónap','0':'ez a hónap','1':'következő hónap'},
+      P:'one{# hónapja}other{# hónapja}',
       F:'one{# hónap múlva}other{# hónap múlva}',
     },
   },
@@ -4429,6 +4494,11 @@ exports.RelativeDateTimeSymbols_hu =  {
       P:'one{# másodperccel ezelőtt}other{# másodperccel ezelőtt}',
       F:'one{# másodperc múlva}other{# másodperc múlva}',
     },
+    NARROW:{
+      R:{'0':'most'},
+      P:'one{# m.perce}other{# m.perce}',
+      F:'one{# másodperc múlva}other{# másodperc múlva}',
+    },
   },
   WEEK: {
     LONG:{
@@ -4436,11 +4506,21 @@ exports.RelativeDateTimeSymbols_hu =  {
       P:'one{# héttel ezelőtt}other{# héttel ezelőtt}',
       F:'one{# hét múlva}other{# hét múlva}',
     },
+    NARROW:{
+      R:{'-1':'előző hét','0':'ez a hét','1':'következő hét'},
+      P:'one{# hete}other{# hete}',
+      F:'one{# hét múlva}other{# hét múlva}',
+    },
   },
   YEAR: {
     LONG:{
       R:{'-1':'előző év','0':'ez az év','1':'következő év'},
       P:'one{# évvel ezelőtt}other{# évvel ezelőtt}',
+      F:'one{# év múlva}other{# év múlva}',
+    },
+    NARROW:{
+      R:{'-1':'előző év','0':'ez az év','1':'következő év'},
+      P:'one{# éve}other{# éve}',
       F:'one{# év múlva}other{# év múlva}',
     },
   },
@@ -6144,7 +6224,7 @@ exports.RelativeDateTimeSymbols_mk =  {
   },
   YEAR: {
     LONG:{
-      R:{'-1':'минатата година','0':'оваа година','1':'следната година'},
+      R:{'-1':'лани','0':'оваа година','1':'догодина'},
       P:'one{пред # година}other{пред # години}',
       F:'one{за # година}other{за # години}',
     },
@@ -6666,127 +6746,107 @@ exports.RelativeDateTimeSymbols_mt =  {
   DAY: {
     LONG:{
       R:{'-1':'lbieraħ','0':'illum','1':'għada'},
-      P:'few{# ġranet ilu}many{#-il ġurnata ilu}one{ġurnata ilu}other{#-il ġurnata ilu}',
-      F:'few{fi żmien # ġurnata oħra}many{fi żmien # ġurnata oħra}one{fi żmien ġurnata}other{fi żmien # ġurnata oħra}',
+      P:'few{# ġranet ilu}many{#-il ġurnata ilu}one{ġurnata ilu}other{# ġurnata ilu}two{jumejn ilu}',
+      F:'few{fi żmien # ġranet oħra}many{fi żmien #-il ġurnata oħra}one{fi żmien ġurnata}other{fi żmien # ġurnata oħra}two{fi żmien jumejn oħra}',
+    },
+    NARROW:{
+      R:{'-1':'lbieraħ','0':'illum','1':'għada'},
+      P:'few{# ġranet ilu}many{#-il ġurnata ilu}one{ġurnata ilu}other{# ġurnata ilu}two{jumejn ilu}',
+      F:'few{fi żmien # ġurnata oħra}many{fi żmien #-il ġurnata oħra}one{fi żmien ġurnata}other{fi żmien # ġurnata oħra}two{fi żmien jumejn oħra}',
     },
   },
   HOUR: {
     LONG:{
       R:{'0':'din is-siegħa'},
-      P:'few{# sigħat ilu}many{# sigħat ilu}one{siegħa ilu}other{# sigħat ilu}',
-      F:'few{fi żmien # sigħat}many{fi żmien# sigħat}one{fi żmien siegħa oħra}other{fi żmien # sigħat}',
-    },
-    SHORT:{
-      R:{'0':'din is-siegħa'},
-      P:'few{# sigħat ilu}many{# sigħat ilu}one{siegħa ilu}other{# sigħat ilu}',
-      F:'few{fi żmien # sigħat}many{+# h}one{fi żmien siegħa oħra}other{fi żmien # sigħat}',
-    },
-    NARROW:{
-      R:{'0':'din is-siegħa'},
-      P:'few{# sigħat ilu}many{# sigħat ilu}one{siegħa ilu}other{# sigħat ilu}',
-      F:'few{fi żmien # sigħat}many{fi żmien # sigħat}one{fi żmien siegħa oħra}other{fi żmien # sigħat}',
+      P:'few{# sigħat ilu}many{#-il siegħa ilu}one{siegħa ilu}other{# siegħa ilu}two{sagħtejn ilu}',
+      F:'few{fi żmien # sigħat}many{fi żmien #-il siegħa}one{fi żmien siegħa oħra}other{fi żmien # siegħa}two{fi żmien sagħtejn}',
     },
   },
   MINUTE: {
     LONG:{
       R:{'0':'din il-minuta'},
-      P:'few{# minuti ilu}many{# minuti ilu}one{minuta ilu}other{# minuti ilu}',
-      F:'few{sa # minuti oħra}many{sa # minuti oħra}one{sa minuta oħra}other{sa # minuti oħra}',
+      P:'few{# minuti ilu}many{#-il minuta ilu}one{minuta ilu}other{# minuta ilu}two{# minuti ilu}',
+      F:'few{sa # minuti oħra}many{sa #-il minuta oħra}one{sa minuta oħra}other{sa # minuta oħra}two{sa # minuti oħra}',
     },
     SHORT:{
       R:{'0':'din il-minuta'},
-      P:'few{# min. ilu}many{# minuti ilu}one{min. ilu}other{# min. ilu}',
-      F:'few{sa # min. oħra}many{sa # min. oħra}one{sa min. oħra}other{sa # min. oħra}',
+      P:'few{# min. ilu}many{#-il min. ilu}one{min. ilu}other{# min. ilu}two{# min. ilu}',
+      F:'few{sa # min. oħra}many{sa #-il min. oħra}one{sa min. oħra}other{sa # min. oħra}two{sa # min. oħra}',
     },
     NARROW:{
       R:{'0':'din il-minuta'},
-      P:'few{# min. ilu}many{# min. ilu}one{min. ilu}other{# min. ilu}',
-      F:'few{sa # min. oħra}many{+# min}one{sa min. oħra}other{sa # min. oħra}',
+      P:'few{# min. ilu}many{#-il min. ilu}one{min. ilu}other{# min. ilu}two{# min. ilu}',
+      F:'few{sa # min. oħra}many{sa #-il min}one{sa min. oħra}other{sa # min. oħra}two{sa # min. oħra}',
     },
   },
   MONTH: {
     LONG:{
-      R:{'-1':'Ix-xahar li għadda','0':'Dan ix-xahar','1':'Ix-xahar id-dieħel'},
-      P:'few{# xhur ilu}many{# xhur ilu}one{xahar ilu}other{# xhur ilu}',
-      F:'few{fi # xhur oħra}many{fi # xhur oħra}one{sa xahar ieħor}other{fi # xhur oħra}',
+      R:{'-1':'ix-xahar li għadda','0':'dan ix-xahar','1':'ix-xahar id-dieħel'},
+      P:'few{# xhur ilu}many{#-il xahar ilu}one{xahar ilu}other{# xahar ilu}two{xahrejn ilu}',
+      F:'few{fi # xhur oħra}many{fi #-xahar oħra}one{sa xahar ieħor}other{fi # xahar oħra}two{fi xahrejn oħra}',
     },
     SHORT:{
-      R:{'-1':'Ix-xahar li għadda','0':'Dan ix-xahar','1':'Ix-xahar id-dieħel'},
-      P:'few{# xhur ilu}many{# xhur ilu}one{# xahar ilu}other{# xhur ilu}',
-      F:'few{sa # xhur oħra}many{sa # xhur oħra}one{sa xahar ieħor}other{sa # xhur oħra}',
+      R:{'-1':'ix-xahar li għadda','0':'dan ix-xahar','1':'ix-xahar id-dieħel'},
+      P:'few{# xhur ilu}many{#-il xahar ilu}one{# xahar ilu}other{# xahar ilu}two{xahrejn ilu}',
+      F:'few{sa # xhur oħra}many{sa #-il xahar oħra}one{sa xahar ieħor}other{sa # xahar oħra}two{sa xahrejn oħra}',
     },
     NARROW:{
-      R:{'-1':'Ix-xahar li għadda','0':'Dan ix-xahar','1':'Ix-xahar id-dieħel'},
-      P:'few{# xhur ilu}many{# xhur ilu}one{xahar ilu}other{# xhur ilu}',
-      F:'few{sa # xhur oħra}many{sa # xhur oħra}one{sa xahar ieħor}other{sa # xhur oħra}',
+      R:{'-1':'ix-xahar li għadda','0':'dan ix-xahar','1':'ix-xahar id-dieħel'},
+      P:'few{# xhur ilu}many{#-il xahar ilu}one{xahar ilu}other{# xahar ilu}two{xahrejn ilu}',
+      F:'few{sa # xhur oħra}many{sa #-il xahar oħra}one{sa xahar ieħor}other{sa # xahar oħra}two{sa xahrejn oħra}',
     },
   },
   QUARTER: {
     LONG:{
       R:{'-1':'il-kwart ta’ sena li għadda','0':'il-kwart ta’ sena li qegħdin fih','1':'il-kwart li jmiss tas-sena'},
-      P:'few{# kwarti ta’ sena li għaddew}many{# kwarti ta’ sena li għaddew}one{il-kwart ta’ sena li għadda}other{# kwarti ta’ sena li għaddew}',
-      F:'few{f’# kwarti ta’ sena oħrajn}many{f’# kwarti ta’ sena oħrajn}one{f’# kwarti ta’ sena oħrajn}other{f’# kwarti ta’ sena oħrajn}',
+      P:'few{# kwarti ta’ sena li għaddew}many{#-il kwart ta’ sena li għaddew}one{il-kwart ta’ sena li għadda}other{# kwart ta’ sena li għaddew}two{# kwarti ta’ sena li għaddew}',
+      F:'few{f’# kwarti ta’ sena oħrajn}many{f’#-il kwart ta’ sena oħrajn}one{f’# kwart ta’ sena oħrajn}other{f’# kwart ta’ sena oħrajn}two{f’# kwarti ta’ sena oħrajn}',
     },
     SHORT:{
       R:{'-1':'il-kwart ta’ sena li għadda','0':'il-kwart ta’ sena li qegħdin fih','1':'il-kwart li jmiss tas-sena'},
-      P:'few{# kwarti ta’ sena ilu}many{# kwarti ta’ sena ilu}one{fil-kwart tas-sena li għadda}other{# kwarti ta’ sena ilu}',
-      F:'few{f’# kwarti ta’ sena oħrajn}many{f’# kwarti ta’ sena oħrajn}one{fil-kwart tas-sena li ġej}other{f’# kwarti ta’ sena oħrajn}',
+      P:'few{# kwarti ta’ sena ilu}many{#-il kwart ta’ sena ilu}one{fil-kwart tas-sena li għadda}other{# kwart ta’ sena ilu}two{# kwarti ta’ sena ilu}',
+      F:'few{f’# kwarti ta’ sena oħrajn}many{f’#-il kwart ta’ sena oħrajn}one{fil-kwart tas-sena li ġej}other{f’# kwart ta’ sena oħrajn}two{f’# kwarti ta’ sena oħrajn}',
     },
     NARROW:{
       R:{'-1':'il-kwart ta’ sena li għadda','0':'il-kwart ta’ sena li qegħdin fih','1':'il-kwart li jmiss tas-sena'},
-      P:'few{# kwarti ta’ sena ilu}many{# kwarti ta’ sena ilu}one{fil-kwart tas-sena li għadda}other{# kwarti ta’ sena ilu}',
-      F:'few{f’# kwarti ta’ sena oħrajn}many{f’# kwarti ta’ sena oħrajn}one{fi kwart ta’ sena ieħor}other{f’# kwarti ta’ sena oħrajn}',
+      P:'few{# kwarti ta’ sena ilu}many{#-il kwart ta’ sena ilu}one{fil-kwart tas-sena li għadda}other{# kwart ta’ sena ilu}two{# kwarti ta’ sena ilu}',
+      F:'few{f’# kwarti ta’ sena oħrajn}many{f’#-il kwart ta’ sena oħrajn}one{fi kwart ta’ sena ieħor}other{f’# kwart ta’ sena oħrajn}two{f’# kwarti ta’ sena oħrajn}',
     },
   },
   SECOND: {
     LONG:{
       R:{'0':'issa'},
-      P:'few{# sekondi ilu}many{# sekondi ilu}one{sekonda ilu}other{# sekondi ilu}',
-      F:'few{sa # sekondi oħra}many{sa # sekondi oħra}one{sa # sekondi oħra}other{sa # sekondi oħra}',
+      P:'few{# sekondi ilu}many{#-il sekonda ilu}one{sekonda ilu}other{# sekonda ilu}two{# sekondi ilu}',
+      F:'few{sa # sekondi oħra}many{sa #-il sekonda oħra}one{sa sekonda oħra}other{sa # sekonda oħra}two{sa # sekondi oħra}',
     },
     SHORT:{
       R:{'0':'issa'},
-      P:'few{# sek. ilu}many{# sek. ilu}one{sek. ilu}other{# sek. ilu}',
-      F:'few{sa # sek. oħra}many{sa # sek. oħra}one{sa # sekondi oħra}other{sa # sekondi oħra}',
-    },
-    NARROW:{
-      R:{'0':'issa'},
-      P:'few{# sek. ilu}many{# sek. ilu}one{sek. ilu}other{# sek. ilu}',
-      F:'few{sa # sek. oħra}many{sa # sek. oħra}one{sa sek. oħra}other{sa # sek. oħra}',
+      P:'few{# sek. ilu}many{#-il sek. ilu}one{sek. ilu}other{# sek. ilu}two{# sek. ilu}',
+      F:'few{sa # sek. oħra}many{sa #-il sek. oħra}one{sa sek. oħra}other{sa # sek. oħra}two{sa # sek. oħra}',
     },
   },
   WEEK: {
     LONG:{
       R:{'-1':'il-ġimgħa li għaddiet','0':'din il-ġimgħa','1':'il-ġimgħa d-dieħla'},
-      P:'few{# ġimgħat ilu}many{# ġimgħat ilu}one{ġimgħa ilu}other{# ġimgħat ilu}',
-      F:'few{sa # ġimgħat oħra}many{sa # ġimgħat oħra}one{sa ġimgħa oħra}other{sa # ġimgħat oħra}',
-    },
-    SHORT:{
-      R:{'-1':'il-ġimgħa li għaddiet','0':'din il-ġimgħa','1':'il-ġimgħa d-dieħla'},
-      P:'few{# ġimgħat ilu}many{# ġimgħat ilu}one{ġimgħa ilu}other{# ġimgħat ilu}',
-      F:'few{sa # ġimgħat oħra}many{sa # ġimgħat oħra}one{sa ġimgħa oħra}other{+# w}',
-    },
-    NARROW:{
-      R:{'-1':'il-ġimgħa li għaddiet','0':'din il-ġimgħa','1':'il-ġimgħa d-dieħla'},
-      P:'few{# ġimgħat ilu}many{# ġimgħat ilu}one{ġimgħa ilu}other{# ġimgħat ilu}',
-      F:'few{sa # ġimgħat oħra}many{sa # ġimgħat oħra}one{sa ġimgħa oħra}other{sa # ġimgħat oħra}',
+      P:'few{# ġimgħat ilu}many{#-il ġimgħa ilu}one{ġimgħa ilu}other{# ġimgħa ilu}two{ġimagħtejn ilu}',
+      F:'few{sa # ġimgħat oħra}many{sa #-il ġimgħa oħra}one{sa ġimgħa oħra}other{sa # ġimgħa oħra}two{sa ġimagħtejn oħra}',
     },
   },
   YEAR: {
     LONG:{
       R:{'-1':'is-sena l-oħra','0':'din is-sena','1':'is-sena d-dieħla'},
-      P:'few{# snin ilu}many{# snin ilu}one{sena ilu}other{# snin ilu}',
-      F:'few{fi żmien # snin oħra}many{fi żmien # snin oħra}one{fi żmien sena}other{fi żmien # snin oħra}',
+      P:'few{# snin ilu}many{#-il sena ilu}one{sena ilu}other{# sena ilu}two{sentejn ilu}',
+      F:'few{fi żmien # snin oħra}many{fi żmien #-il sena oħra}one{fi żmien sena}other{fi żmien # sena oħra}two{fi żmien sentejn oħra}',
     },
     SHORT:{
       R:{'-1':'is-sena l-oħra','0':'din is-sena','1':'is-sena d-dieħla'},
-      P:'few{# snin ilu}many{# snin ilu}one{sa sena ilu}other{# snin ilu}',
-      F:'few{fi żmien # snin oħra}many{fi żmien # snin oħra}one{fi żmien sena}other{fi żmien # snin oħra}',
+      P:'few{# snin ilu}many{#-il sena ilu}one{sa sena ilu}other{# sena ilu}two{sentejn ilu}',
+      F:'few{fi żmien # snin oħra}many{fi żmien #-il sena oħra}one{fi żmien sena}other{fi żmien # sena oħra}two{fi żmien sentejn oħra}',
     },
     NARROW:{
       R:{'-1':'is-sena l-oħra','0':'din is-sena','1':'is-sena d-dieħla'},
-      P:'few{# snin ilu}many{# snin ilu}one{sena ilu}other{# snin ilu}',
-      F:'few{fi żmien # snin oħra}many{fi żmien # snin oħra}one{fi żmien sena}other{fi żmien # snin oħra}',
+      P:'few{# snin ilu}many{#-il sena ilu}one{sena ilu}other{# sena ilu}two{sentejn ilu}',
+      F:'few{fi żmien # snin oħra}many{fi żmien #-il sena oħra}one{fi żmien sena}other{fi żmien # sena oħra}two{fi żmien sentejn oħra}',
     },
   },
 };
@@ -7112,10 +7172,15 @@ exports.RelativeDateTimeSymbols_nl =  {
       P:'one{# kwartaal geleden}other{# kwartalen geleden}',
       F:'one{over # kwartaal}other{over # kwartalen}',
     },
+    SHORT:{
+      R:{'-1':'vorig kwartaal','0':'dit kwartaal','1':'volgend kwartaal'},
+      P:'one{# kwart. geleden}other{# kwart. geleden}',
+      F:'one{over # kwart.}other{over # kwart.}',
+    },
     NARROW:{
       R:{'-1':'vorig kwartaal','0':'dit kwartaal','1':'volgend kwartaal'},
-      P:'one{# kwartaal geleden}other{# kwartalen geleden}',
-      F:'one{over # kw.}other{over # kwartalen}',
+      P:'one{# kw. geleden}other{# kw. geleden}',
+      F:'one{over # kw.}other{over # kw.}',
     },
   },
   SECOND: {
@@ -7361,7 +7426,7 @@ exports.RelativeDateTimeSymbols_or =  {
   WEEK: {
     LONG:{
       R:{'-1':'ଗତ ସପ୍ତାହ','0':'ଏହି ସପ୍ତାହ','1':'ଆଗାମୀ ସପ୍ତାହ'},
-      P:'one{# ସପ୍ତାହରେ}other{# ସପ୍ତାହ ପୂର୍ବେ}',
+      P:'one{# ସପ୍ତାହ ପୂର୍ବେ}other{# ସପ୍ତାହ ପୂର୍ବେ}',
       F:'one{# ସପ୍ତାହରେ}other{# ସପ୍ତାହରେ}',
     },
     SHORT:{
@@ -9307,97 +9372,97 @@ exports.RelativeDateTimeSymbols_tl =  {
   DAY: {
     LONG:{
       R:{'-1':'kahapon','-2':'Araw bago ang kahapon','0':'ngayong araw','1':'bukas','2':'Samakalawa'},
-      P:'one{# araw ang nakalipas}other{# (na) araw ang nakalipas}',
-      F:'one{sa # araw}other{sa # (na) araw}',
+      P:'one{# araw ang nakalipas}other{# araw ang nakalipas}',
+      F:'one{sa # araw}other{sa # araw}',
     },
     SHORT:{
       R:{'-1':'kahapon','-2':'Araw bago ang kahapon','0':'ngayong araw','1':'bukas','2':'Samakalawa'},
-      P:'one{# (na) araw ang nakalipas}other{# (na) araw ang nakalipas}',
-      F:'one{sa # (na) araw}other{sa # (na) araw}',
+      P:'one{# araw ang nakalipas}other{# (na) araw ang nakalipas}',
+      F:'one{sa # (na) araw}other{sa # araw}',
     },
     NARROW:{
       R:{'-1':'kahapon','-2':'Araw bago ang kahapon','0':'ngayong araw','1':'bukas','2':'Samakalawa'},
-      P:'one{# araw ang nakalipas}other{# (na) araw ang nakalipas}',
-      F:'one{sa # araw}other{sa # (na) araw}',
+      P:'one{# araw ang nakalipas}other{# araw ang nakalipas}',
+      F:'one{sa # araw}other{sa # araw}',
     },
   },
   HOUR: {
     LONG:{
       R:{'0':'ngayong oras'},
-      P:'one{# oras ang nakalipas}other{# (na) oras ang nakalipas}',
+      P:'one{# oras ang nakalipas}other{# oras ang nakalipas}',
+      F:'one{sa # oras}other{sa # oras}',
+    },
+    SHORT:{
+      R:{'0':'ngayong oras'},
+      P:'one{# oras ang nakalipas}other{# oras ang nakalipas}',
       F:'one{sa # oras}other{sa # (na) oras}',
     },
     NARROW:{
       R:{'0':'ngayong oras'},
-      P:'one{# oras ang nakalipas}other{# (na) oras nakalipas}',
-      F:'one{sa # oras}other{sa # (na) oras}',
+      P:'one{# oras ang nakalipas}other{# oras ang nakalipas}',
+      F:'one{sa # oras}other{sa # oras}',
     },
   },
   MINUTE: {
     LONG:{
       R:{'0':'sa minutong ito'},
-      P:'one{# minuto ang nakalipas}other{# (na) minuto ang nakalipas}',
-      F:'one{sa # minuto}other{sa # (na) minuto}',
+      P:'one{# minuto ang nakalipas}other{# minuto ang nakalipas}',
+      F:'one{sa # minuto}other{sa # minuto}',
     },
     SHORT:{
       R:{'0':'sa minutong ito'},
-      P:'one{# min. ang nakalipas}other{# (na) min. ang nakalipas}',
-      F:'one{sa # min.}other{sa # (na) min.}',
+      P:'one{# min. ang nakalipas}other{# min. ang nakalipas}',
+      F:'one{sa # min.}other{sa # min.}',
     },
   },
   MONTH: {
     LONG:{
       R:{'-1':'nakaraang buwan','0':'ngayong buwan','1':'susunod na buwan'},
-      P:'one{# buwan ang nakalipas}other{# (na) buwan ang nakalipas}',
-      F:'one{sa # buwan}other{sa # (na) buwan}',
+      P:'one{# buwan ang nakalipas}other{# buwan ang nakalipas}',
+      F:'one{sa # buwan}other{sa # buwan}',
     },
   },
   QUARTER: {
     LONG:{
       R:{'-1':'nakaraang quarter','0':'ngayong quarter','1':'susunod na quarter'},
-      P:'one{# quarter ang nakalipas}other{# (na) quarter ang nakalipas}',
-      F:'one{sa # quarter}other{sa # (na) quarter}',
-    },
-    SHORT:{
-      R:{'-1':'nakaraang quarter','0':'ngayong quarter','1':'susunod na quarter'},
-      P:'one{# quarter ang nakalipas}other{# (na) quarter ang nakalipas}',
-      F:'one{sa # (na) quarter}other{sa # (na) quarter}',
-    },
-    NARROW:{
-      R:{'-1':'nakaraang quarter','0':'ngayong quarter','1':'susunod na quarter'},
-      P:'one{# quarter ang nakalipas}other{# (na) quarter ang nakalipas}',
-      F:'one{sa # quarter}other{sa # (na) quarter}',
+      P:'one{# quarter ang nakalipas}other{# quarter ang nakalipas}',
+      F:'one{sa # quarter}other{sa # quarter}',
     },
   },
   SECOND: {
     LONG:{
       R:{'0':'ngayon'},
-      P:'one{# segundo ang nakalipas}other{# (na) segundo ang nakalipas}',
-      F:'one{sa # segundo}other{sa # (na) segundo}',
+      P:'one{# segundo ang nakalipas}other{# segundo ang nakalipas}',
+      F:'one{sa # segundo}other{sa # segundo}',
     },
     SHORT:{
       R:{'0':'ngayon'},
-      P:'one{# seg. ang nakalipas}other{# (na) seg. nakalipas}',
-      F:'one{sa # seg.}other{sa # (na) seg.}',
+      P:'one{# seg. ang nakalipas}other{# seg. ang nakalipas}',
+      F:'one{sa # seg.}other{sa # seg.}',
     },
   },
   WEEK: {
     LONG:{
       R:{'-1':'nakalipas na linggo','0':'sa linggong ito','1':'susunod na linggo'},
-      P:'one{# linggo ang nakalipas}other{# (na) linggo ang nakalipas}',
-      F:'one{sa # linggo}other{sa # (na) linggo}',
+      P:'one{# linggo ang nakalipas}other{# linggo ang nakalipas}',
+      F:'one{sa # linggo}other{sa # linggo}',
     },
     SHORT:{
       R:{'-1':'nakaraang linggo','0':'ngayong linggo','1':'susunod na linggo'},
       P:'one{# linggo ang nakalipas}other{# (na) linggo ang nakalipas}',
-      F:'one{sa # linggo}other{sa # (na) linggo}',
+      F:'one{sa # linggo}other{sa # linggo}',
+    },
+    NARROW:{
+      R:{'-1':'nakaraang linggo','0':'ngayong linggo','1':'susunod na linggo'},
+      P:'one{# linggo ang nakalipas}other{# linggo ang nakalipas}',
+      F:'one{sa # linggo}other{sa # linggo}',
     },
   },
   YEAR: {
     LONG:{
       R:{'-1':'nakaraang taon','0':'ngayong taon','1':'susunod na taon'},
-      P:'one{# taon ang nakalipas}other{# (na) taon ang nakalipas}',
-      F:'one{sa # taon}other{sa # (na) taon}',
+      P:'one{# taon ang nakalipas}other{# taon ang nakalipas}',
+      F:'one{sa # taon}other{sa # taon}',
     },
   },
 };
@@ -9502,7 +9567,7 @@ exports.RelativeDateTimeSymbols_uk =  {
     },
     NARROW:{
       R:{'-1':'учора','-2':'позавчора','0':'сьогодні','1':'завтра','2':'післязавтра'},
-      P:'few{-# дн.}many{-# дн.}one{# д. тому}other{-# дн.}',
+      P:'few{# дн. тому}many{# дн. тому}one{# дн. тому}other{# дн. тому}',
       F:'few{за # д.}many{за # д.}one{за # д.}other{за # д.}',
     },
   },
