@@ -156,27 +156,49 @@ closure_js_library(
     name = "dateintervalpatterns",
     srcs = ["dateintervalpatterns.js"],
     lenient = True,
-    deps = [":dateintervalsymbols"],
+    deps = [
+        ":cldrversion",
+        ":dateintervalsymbols",
+        "//closure/goog/i18n/cldr41:dateintervalpatterns",
+        "//closure/goog/i18n/cldr42:dateintervalpatterns",
+    ],
 )
 
 closure_js_library(
     name = "dateintervalpatternsext",
     srcs = ["dateintervalpatternsext.js"],
     lenient = True,
-    deps = [":dateintervalpatterns"],
+    deps = [
+        ":cldrversion",
+        ":dateintervalpatterns",
+        "//closure/goog/i18n/cldr41:dateintervalpatterns",
+        "//closure/goog/i18n/cldr41:dateintervalpatternsext",
+        "//closure/goog/i18n/cldr42:dateintervalpatternsext",
+    ],
 )
 
 closure_js_library(
     name = "dateintervalsymbols",
     srcs = ["dateintervalsymbols.js"],
     lenient = True,
+    deps = [
+        ":cldrversion",
+        "//closure/goog/i18n/cldr41:dateintervalsymbols",
+        "//closure/goog/i18n/cldr42:dateintervalsymbols",
+    ],
 )
 
 closure_js_library(
     name = "dateintervalsymbolsext",
     srcs = ["dateintervalsymbolsext.js"],
     lenient = True,
-    deps = [":dateintervalsymbols"],
+    deps = [
+        ":cldrversion",
+        ":dateintervalsymbols",
+        "//closure/goog/i18n/cldr41:dateintervalsymbols",
+        "//closure/goog/i18n/cldr41:dateintervalsymbolsext",
+        "//closure/goog/i18n/cldr42:dateintervalsymbolsext",
+    ],
 )
 
 closure_js_library(

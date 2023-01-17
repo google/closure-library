@@ -28,3 +28,33 @@ closure_js_library(
     lenient = True,
     deps = ["//closure/goog/i18n:datetimepatternstype"],
 )
+
+closure_js_library(
+    name = "dateintervalpatterns",
+    srcs = ["dateintervalpatterns.js"],
+    lenient = True,
+    deps = [":dateintervalsymbols"],
+)
+
+closure_js_library(
+    name = "dateintervalpatternsext",
+    srcs = ["dateintervalpatternsext.js"],
+    lenient = True,
+    deps = [
+        ":dateintervalpatterns",
+        ":dateintervalsymbols",
+    ],
+)
+
+closure_js_library(
+    name = "dateintervalsymbols",
+    srcs = ["dateintervalsymbols.js"],
+    lenient = True,
+)
+
+closure_js_library(
+    name = "dateintervalsymbolsext",
+    srcs = ["dateintervalsymbolsext.js"],
+    lenient = True,
+    deps = [":dateintervalsymbols"],
+)
