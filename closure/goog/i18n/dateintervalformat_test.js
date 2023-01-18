@@ -31,6 +31,8 @@ const dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
 const object = goog.require('goog.object');
 const testSuite = goog.require('goog.testing.testSuite');
 
+const {addI18nMapping, assertI18nEquals} = goog.require('goog.testing.i18n.asserts');
+const {removeWhitespace} = goog.require('goog.testing.i18n.whitespace');
 
 /**
  * List of locales where native ECMAScript mode works.
@@ -38,6 +40,10 @@ const testSuite = goog.require('goog.testing.testSuite');
  * @type {!Array<string>} ECMASCRIPT_LISTFORMAT_LOCALES
  */
 const nativeLocales = LocaleFeature.ECMASCRIPT_LISTFORMAT_LOCALES;
+
+// Add alternative results for assertI18nEquals.
+// These come from ICU72 / CLDR42 updates.
+addI18nMapping('10 नवंबर–20', '10 – 20 नवंबर');
 
 // Use same set of locales as ListFormat
 let testECMAScriptOptions = [false];
@@ -128,20 +134,6 @@ const Data = class {
         this.firstDate + '\' secondDate:\'' + this.secondDate + '\'';
   }
 };
-
-// For normalizing results
-const THIN_SPACE = '\u2009';
-const ASCII_SPACE = '\u0020';
-
-/**
- * Change space variants to ASCII spaces for comparing results.
- * @param {string} inString
- * @return {string} normalized result
- * @private
- */
-function normalizeSpaces_(inString) {
-  return inString.replaceAll(THIN_SPACE, ASCII_SPACE);
-}
 
 // clang-format off
 const formatTestData = [
@@ -257,8 +249,8 @@ testSuite({
                 symbols.DateTimeSymbols);
             const tz = TimeZone.createTimeZone(0);
             // Some browsers use a thin space instead of regular space.
-            const result = normalizeSpaces_(fmt.format(dt1, dt2, tz));
-            assertEquals(
+            const result = removeWhitespace(fmt.format(dt1, dt2, tz));
+            assertI18nEquals(
                 'nativeMode=' + nativeMode + ' version=' +
                     browser.getVersion() + data.getErrorDescription(),
                 data.expected, result);
@@ -275,8 +267,8 @@ testSuite({
           const dt2 = new GoogDate(2007, 6, 3);
           const dtRng = new DateRange(dt1, dt2);
           const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE);
-          const result = normalizeSpaces_(fmt.formatRange(dtRng));
-          assertEquals('February 10 – July 3, 2007', result);
+          const result = removeWhitespace(fmt.formatRange(dtRng));
+          assertI18nEquals('February 10 – July 3, 2007', result);
         });
   },
 
@@ -288,8 +280,8 @@ testSuite({
           const dt = new GoogDate(2007, 1, 10);
           const itv = new Interval(0, 4, 23);
           const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE);
-          const result = normalizeSpaces_(fmt.format(dt, itv));
-          assertEquals(
+          const result = removeWhitespace(fmt.format(dt, itv));
+          assertI18nEquals(
               'nativeMode=' + nativeMode + ' version=' + browser.getVersion(),
               'February 10 – July 3, 2007', result);
         });
@@ -307,17 +299,17 @@ testSuite({
           const fmt =
               new DateIntervalFormat(DateTimeFormat.Format.FULL_DATETIME);
           // Result expected for GMT-3:30 (210 offset west)
-          const expected210 =
+          const expected210 = removeWhitespace(
               'Sunday, December 31, 2006 at 11:30:23 PM UTC-3:30 – ' +
-              'Monday, January 1, 2007 at 12:10:23 AM UTC-3:30';
-          const expected210var2 =
+              'Monday, January 1, 2007 at 12:10:23 AM UTC-3:30');
+          const expected210var2 = removeWhitespace(
               'Sunday, December 31, 2006, 11:30:23 PM UTC-3:30 – ' +
-              'Monday, January 1, 2007, 12:10:23 AM UTC-3:30';
+              'Monday, January 1, 2007, 12:10:23 AM UTC-3:30');
 
           // Note: For native mode, GMT-3:30 is not a real timezone
           let tzMinuteOffset = 210;  // GMT-3:30
           let tz = TimeZone.createTimeZone(tzMinuteOffset);
-          let result = normalizeSpaces_(fmt.format(dt1, dt2, tz));
+          let result = removeWhitespace(fmt.format(dt1, dt2, tz));
           // 4:30 hours crosses midnight
           // Handle some variations in formatting
           assertTrue(
@@ -325,13 +317,13 @@ testSuite({
               result === expected210 || result === expected210var2);
 
           // Format another range with the same TZ,
-          const result2 = normalizeSpaces_(fmt.format(dt1, dt3, tz));
-          const expected2 =
+          const result2 = removeWhitespace(fmt.format(dt1, dt3, tz));
+          const expected2 = removeWhitespace(
               'Sunday, December 31, 2006 at 11:30:23 PM UTC-3:30 – ' +
-              'Monday, January 1, 2007 at 1:47:59 AM UTC-3:30';
-          const expected2var =
+              'Monday, January 1, 2007 at 1:47:59 AM UTC-3:30');
+          const expected2var = removeWhitespace(
               'Sunday, December 31, 2006, 11:30:23 PM UTC-3:30 – ' +
-              'Monday, January 1, 2007, 1:47:59 AM UTC-3:30';
+              'Monday, January 1, 2007, 1:47:59 AM UTC-3:30');
           assertTrue(
               'nativeMode=' + nativeMode + ', result = ' + result,
               result2 == expected2 || result2 == expected2var);
@@ -340,14 +332,14 @@ testSuite({
           tzMinuteOffset = -210;
           // Check that formatter is reset.
           const tz2 = TimeZone.createTimeZone(tzMinuteOffset);
-          let result3 = normalizeSpaces_(fmt.format(dt1, dt2, tz2));
-          const expected3 =
-              'Monday, January 1, 2007, 6:30:23 AM UTC+3:30 – 7:10:23 AM UTC+3:30';
+          let result3 = removeWhitespace(fmt.format(dt1, dt2, tz2));
+          const expected3 = removeWhitespace(
+              'Monday, January 1, 2007, 6:30:23 AM UTC+3:30 – 7:10:23 AM UTC+3:30');
 
 
           // Handle variation with "at 6:30..." in both parts
-          const expected3var2 =
-              'Monday, January 1, 2007 at 6:30:23 AM UTC+3:30 – Monday, January 1, 2007 at 7:10:23 AM UTC+3:30';
+          const expected3var2 = removeWhitespace(
+              'Monday, January 1, 2007 at 6:30:23 AM UTC+3:30 – Monday, January 1, 2007 at 7:10:23 AM UTC+3:30');
 
           assertTrue(
               'nativeMode=' + nativeMode + ' version=' + browser.getVersion(),
@@ -364,10 +356,10 @@ testSuite({
           const dt2 = new Date(Date.UTC(2007, 0, 10, 6, 20, 23));
           const fmt = new DateIntervalFormat(DateTimeFormat.Format.LONG_TIME);
           const tz = TimeZone.createTimeZone(240);
-          let result = normalizeSpaces_(fmt.format(dt1, dt2, tz));
+          let result = removeWhitespace(fmt.format(dt1, dt2, tz));
           // Standardize the result to "UTC" rather than "GMT"
           result = result.replaceAll('GMT', 'UTC');
-          assertEquals(
+          assertI18nEquals(
               'nativeMode=' + nativeMode + ' version=' + browser.getVersion(),
               '2:00:23 AM UTC-4 – 2:20:23 AM UTC-4', result);
         });
@@ -394,15 +386,15 @@ testSuite({
            */
           const fmt =
               new DateIntervalFormat(DateTimeFormat.Format.LONG_DATE, symbols);
-          const result = normalizeSpaces_(fmt.format(dt1, dt2));
+          const result = removeWhitespace(fmt.format(dt1, dt2));
           if (nativeMode) {
             // EXCEPTION: Native mode doesn't support custom fallback.
-            assertEquals(
+            assertI18nEquals(
                 'nativeMode=' + nativeMode + ' version=' + browser.getVersion(),
                 'February 10 – July 3, 2007', result);
           } else {
             // JavaScript mode supports custom fallback.
-            assertEquals(
+            assertI18nEquals(
                 'nativeMode=' + nativeMode + ' version=' + browser.getVersion(),
                 'July 3 – February 10, 2007', result);
           }

@@ -67,6 +67,9 @@ const DateTimeSymbols_zh_Hant_TW = goog.require('goog.i18n.DateTimeSymbols_zh_Ha
 const DateTimeSymbols_zh_TW = goog.require('goog.i18n.DateTimeSymbols_zh_TW');
 const TimeZone = goog.require('goog.i18n.TimeZone');
 
+const {addI18nMapping, assertI18nEquals} = goog.require('goog.testing.i18n.asserts');
+const {removeWhitespace} = goog.require('goog.testing.i18n.whitespace');
+
 const {DayPeriods_zh_Hant, setDayPeriods} = goog.require('goog.i18n.DayPeriods');
 
 const UtcDateTime = goog.require('goog.date.UtcDateTime');
@@ -547,6 +550,15 @@ testSuite({
   },
 
   testMonthDayHourMinuteTimezone() {
+    // For new data in CLDR 42.
+    addI18nMapping(
+        '[[Ĵûñ one] 28 one], [13:10 UTC-7 one two]',
+        '[Ĵûñone]28,1:10[ÞṀone]UTC-7');
+
+    addI18nMapping('6月28日下午1:10[UTC-7]', '6月28,1:10下午UTC-7');
+    addI18nMapping('6月28日午夜12:00[UTC-7]', '6月28,12:00上午UTC-7');
+    addI18nMapping('6月28日凌晨3:48[UTC-7]', '6月28,3:48上午UTC-7');
+
     for (let nativeMode of testECMAScriptOptions) {
       replacer.replace(
           LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
@@ -558,32 +570,33 @@ testSuite({
       const date = new Date(2012, 5, 28, 13, 10, 10, 250);
       const fmt =
           new DateTimeFormat(DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals('Jun 28, 1:10 PM UTC-7', fmt.format(date));
+      assertI18nEquals('Jun 28, 1:10 PM UTC-7', fmt.format(date));
 
       replacer.replace(goog, 'LOCALE', 'sv');
       replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_sv);
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_sv);
       const fmtSv =
           new DateTimeFormat(DateTimePatterns_sv.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals('28 juni 13:10 UTC-7', fmtSv.format(date));
+      assertI18nEquals('28 juni 13:10 UTC-7', fmtSv.format(date));
 
       replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_bg);
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_bg);
       replacer.replace(goog, 'LOCALE', 'bg');
       const fmtBg =
           new DateTimeFormat(DateTimePatterns_bg.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals('28.06, 13:10 ч. UTC-7', fmtBg.format(date));
+      assertI18nEquals('28.06, 13:10 ч. UTC-7', fmtBg.format(date));
 
       replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_zh_HK);
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_HK);
       replacer.replace(goog, 'LOCALE', 'zh_HK');
       const fmtZhHk =
           new DateTimeFormat(DateTimePatterns_zh_HK.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals('6月28日 下午1:10 [UTC-7]', fmtZhHk.format(date));
+      assertI18nEquals('6月28日 下午1:10 [UTC-7]', fmtZhHk.format(date));
 
       // And with explicit timezone.
       const timeZone = TimeZone.createTimeZone(-600);
-      assertEquals('6月29日 上午6:10 [UTC+10]', fmtZhHk.format(date, timeZone));
+      assertI18nEquals(
+          '6月29日 上午6:10 [UTC+10]', fmtZhHk.format(date, timeZone));
 
       if (!nativeMode) {
         // And some from the extended patterns. Not applicable in native mode.
@@ -591,12 +604,11 @@ testSuite({
         replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_XA);
         replacer.replace(goog, 'LOCALE', 'en_XA');
 
-        const fmtEnXa = new DateTimeFormat(
-            goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-        assertEquals(
+        const fmtEnXa =
+            new DateTimeFormat(DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+        assertI18nEquals(
             'nativeMode=' + nativeMode,
-            '[[[Ĵûñ one] 28 one], [13:10 UTC-7 one two] one two]',
-            fmtEnXa.format(date));
+            '[[Ĵûñ one] 28 one], [13:10 UTC-7 one two]', fmtEnXa.format(date));
       }
 
       replacer.replace(
@@ -608,19 +620,19 @@ testSuite({
       // Set up for parts of the day in Chinese.
       setDayPeriods(DayPeriods_zh_Hant);
 
-      const fmtZhHantTw = new DateTimeFormat(
-          goog.i18n.DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
-      assertEquals(
+      const fmtZhHantTw =
+          new DateTimeFormat(DateTimePatterns.MONTH_DAY_TIME_ZONE_SHORT);
+      assertI18nEquals(
           'nativeMode = ' + nativeMode, '6月28日 下午1:10 [UTC-7]',
           fmtZhHantTw.format(date));
       const midnight = new Date(2012, 5, 28, 0, 0, 0);
       let result = fmtZhHantTw.format(midnight);
-      assertEquals(
+      assertI18nEquals(
           'nativeMode = ' + nativeMode, '6月28日 午夜12:00 [UTC-7]', result);
 
       const tooEarly = new Date(2012, 5, 28, 3, 48, 0);
       result = fmtZhHantTw.format(tooEarly);
-      assertEquals(
+      assertI18nEquals(
           'nativeMode = ' + nativeMode, '6月28日 凌晨3:48 [UTC-7]', result);
     }
   },
@@ -699,7 +711,7 @@ testSuite({
 
       for (let index = 0; index < dateArray.length; index++) {
         const result = periodFormatter.format(dateArray[index]);
-        assertEquals(
+        assertI18nEquals(
             'nativeMode =' + nativeMode + ' index=' + index,
             expectedFlexPeriods[index], result);
       }
@@ -711,7 +723,7 @@ testSuite({
 
       for (let index = 0; index < dateArray.length; index++) {
         const result = bFormatter.format(dateArray[index]);
-        assertEquals('index=' + index, expectedBPeriods[index], result);
+        assertI18nEquals('index=' + index, expectedBPeriods[index], result);
       }
     }
   },
@@ -739,22 +751,22 @@ testSuite({
 
       let result;
       result = fmtFlexible.format(midnight);
-      assertEquals(result, '00 AM');
+      assertI18nEquals(result, '00 AM');
       result = fmtFlexible.format(noon);
-      assertEquals(result, '12 PM');
+      assertI18nEquals(result, '12 PM');
       result = fmtFlexible.format(morning);
-      assertEquals(result, '09 AM');
+      assertI18nEquals(result, '09 AM');
       result = fmtFlexible.format(evening);
-      assertEquals(result, '18 PM');
+      assertI18nEquals(result, '18 PM');
 
       result = fmtNoonMidnight.format(midnight);
-      assertEquals(result, '00 AM');
+      assertI18nEquals(result, '00 AM');
       result = fmtNoonMidnight.format(noon);
-      assertEquals(result, '12 PM');
+      assertI18nEquals(result, '12 PM');
       result = fmtNoonMidnight.format(morning);
-      assertEquals(result, '09 AM');
+      assertI18nEquals(result, '09 AM');
       result = fmtNoonMidnight.format(evening);
-      assertEquals(result, '18 PM');
+      assertI18nEquals(result, '18 PM');
     }
   },
 
@@ -768,11 +780,11 @@ testSuite({
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
 
       let fmt = new DateTimeFormat('HH \'o\'\'clock\'');
-      assertEquals('13 o\'clock', fmt.format(date));
+      assertI18nEquals('13 o\'clock', fmt.format(date));
       fmt = new DateTimeFormat('HH \'oclock\'');
-      assertEquals('13 oclock', fmt.format(date));
+      assertI18nEquals('13 oclock', fmt.format(date));
       fmt = new DateTimeFormat('HH \'\'');
-      assertEquals('13 \'', fmt.format(date));
+      assertI18nEquals('13 \'', fmt.format(date));
     }
   },
 
@@ -786,27 +798,27 @@ testSuite({
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
 
       let fmt = new DateTimeFormat('s:S');
-      assertEquals('10:3', fmt.format(date));
+      assertI18nEquals('10:3', fmt.format(date));
       fmt = new DateTimeFormat('s:SS');
-      assertEquals('10:26', fmt.format(date));
+      assertI18nEquals('10:26', fmt.format(date));
       fmt = new DateTimeFormat('s:SSS');
-      assertEquals('10:256', fmt.format(date));
+      assertI18nEquals('10:256', fmt.format(date));
       fmt = new DateTimeFormat('s:SSSS');
-      assertEquals('10:2560', fmt.format(date));
+      assertI18nEquals('10:2560', fmt.format(date));
       fmt = new DateTimeFormat('s:SSSSS');
-      assertEquals('10:25600', fmt.format(date));
+      assertI18nEquals('10:25600', fmt.format(date));
 
       date = new Date(1960, 6, 27, 13, 10, 10, 256);
       fmt = new DateTimeFormat('s:S');
-      assertEquals('10:3', fmt.format(date));
+      assertI18nEquals('10:3', fmt.format(date));
       fmt = new DateTimeFormat('s:SS');
-      assertEquals('10:26', fmt.format(date));
+      assertI18nEquals('10:26', fmt.format(date));
       fmt = new DateTimeFormat('s:SSS');
-      assertEquals('10:256', fmt.format(date));
+      assertI18nEquals('10:256', fmt.format(date));
       fmt = new DateTimeFormat('s:SSSS');
-      assertEquals('10:2560', fmt.format(date));
+      assertI18nEquals('10:2560', fmt.format(date));
       fmt = new DateTimeFormat('s:SSSSS');
-      assertEquals('10:25600', fmt.format(date));
+      assertI18nEquals('10:25600', fmt.format(date));
     }
   },
 
@@ -823,20 +835,20 @@ testSuite({
 
       let fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_DATE);
       let result = removeLtrMarkers(fmt.format(date));
-      assertEquals('Freitag, 4. August 2006', result);
+      assertI18nEquals('Freitag, 4. August 2006', result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_DATE);
       result = removeLtrMarkers(fmt.format(date));
-      assertEquals('4. August 2006', result);
+      assertI18nEquals('4. August 2006', result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATE);
       result = removeLtrMarkers(fmt.format(date));
-      assertEquals('nativeMode = ' + nativeMode, '04.08.2006', result);
+      assertI18nEquals('nativeMode = ' + nativeMode, '04.08.2006', result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
       result = removeLtrMarkers(fmt.format(date));
       let expected = '04.08.06';
-      assertEquals(expected, result);
+      assertI18nEquals(expected, result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_TIME);
       result = fmt.format(date);
@@ -848,10 +860,9 @@ testSuite({
 
       if (nativeMode) {
         const expected2 = theTime + ' Nordamerikanische Westküsten-Sommerzeit';
-        assertEquals('nativeMode = ' + nativeMode,
-                     expected2, result);
+        assertI18nEquals('nativeMode = ' + nativeMode, expected2, result);
       } else {
-        assertEquals(expected, result);
+        assertI18nEquals(expected, result);
       }
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_TIME);
@@ -859,11 +870,11 @@ testSuite({
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_TIME);
       result = removeLtrMarkers(fmt.format(date));
-      assertEquals('nativeMode = ' + nativeMode, theTime, result);
+      assertI18nEquals('nativeMode = ' + nativeMode, theTime, result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_TIME);
       result = removeLtrMarkers(fmt.format(date));
-      assertEquals('nativeMode=' + nativeMode, '13:49', result);
+      assertI18nEquals('nativeMode=' + nativeMode, '13:49', result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.FULL_DATETIME);
       result = removeDirectionMarkers(fmt.format(date));
@@ -879,11 +890,11 @@ testSuite({
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
       expected = '04.08.2006, 13:49:24';
-      assertEquals('nativeMode=' + nativeMode, expected, fmt.format(date));
+      assertI18nEquals('nativeMode=' + nativeMode, expected, fmt.format(date));
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME);
       expected = '04.08.06, 13:49';
-      assertEquals('nativeMode=' + nativeMode, expected, fmt.format(date));
+      assertI18nEquals('nativeMode=' + nativeMode, expected, fmt.format(date));
     }
   },
 
@@ -898,16 +909,16 @@ testSuite({
       const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
       const timeZone = TimeZone.createTimeZone(480);
       let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-      assertEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZ');
-      assertEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZ');
-      assertEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZZ');
 
       const result = fmt.format(date, timeZone);
       let expected = '07/27/2006 05:10:10 GMT-08:00';
-      assertEquals('nativeMode=' + nativeMode, expected, result);
+      assertI18nEquals('nativeMode=' + nativeMode, expected, result);
     }
   },
 
@@ -922,23 +933,25 @@ testSuite({
       let date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
       const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
       let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-      assertEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZ');
-      assertEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZ');
-      assertEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 06:10:10 -0700', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZZ');
-      assertEquals('07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
+      assertI18nEquals(
+          '07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
 
       date = new Date(Date.UTC(2006, 1, 27, 13, 10, 10));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-      assertEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+      assertI18nEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZ');
-      assertEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+      assertI18nEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZ');
-      assertEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
+      assertI18nEquals('02/27/2006 05:10:10 -0800', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss ZZZZ');
-      assertEquals('02/27/2006 05:10:10 GMT-08:00', fmt.format(date, timeZone));
+      assertI18nEquals(
+          '02/27/2006 05:10:10 GMT-08:00', fmt.format(date, timeZone));
     }
   },
 
@@ -953,13 +966,13 @@ testSuite({
       const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
       const timeZone = TimeZone.createTimeZone(420);
       let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-      assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zz');
-      assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
-      assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-      assertEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 06:10:10 UTC-7', fmt.format(date, timeZone));
     }
   },
 
@@ -974,32 +987,32 @@ testSuite({
       let date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
       let timeZone = TimeZone.createTimeZone(americaLosAngelesData);
       let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-      assertEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zz');
-      assertEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
-      assertEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
+      assertI18nEquals('07/27/2006 06:10:10 PDT', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-      assertEquals(
+      assertI18nEquals(
           '07/27/2006 06:10:10 Pacific Daylight Time',
           fmt.format(date, timeZone));
       date = new Date(Date.UTC(2006, 1, 27, 13, 10, 10));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-      assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
+      assertI18nEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zz');
-      assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
+      assertI18nEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzz');
-      assertEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
+      assertI18nEquals('02/27/2006 05:10:10 PST', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-      assertEquals(
+      assertI18nEquals(
           '02/27/2006 05:10:10 Pacific Standard Time',
           fmt.format(date, timeZone));
 
       timeZone = TimeZone.createTimeZone(europeBerlinData);
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-      assertEquals('02/27/2006 14:10:10 MEZ', fmt.format(date, timeZone));
+      assertI18nEquals('02/27/2006 14:10:10 MEZ', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss zzzz');
-      assertEquals(
+      assertI18nEquals(
           '02/27/2006 14:10:10 Mitteleurop\u00e4ische Zeit',
           fmt.format(date, timeZone));
     }
@@ -1016,19 +1029,19 @@ testSuite({
       const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
       const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
       let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss v');
-      assertEquals(
+      assertI18nEquals(
           '07/27/2006 06:10:10 America/Los_Angeles',
           fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vv');
-      assertEquals(
+      assertI18nEquals(
           '07/27/2006 06:10:10 America/Los_Angeles',
           fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvv');
-      assertEquals(
+      assertI18nEquals(
           '07/27/2006 06:10:10 America/Los_Angeles',
           fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvvv');
-      assertEquals(
+      assertI18nEquals(
           '07/27/2006 06:10:10 America/Los_Angeles',
           fmt.format(date, timeZone));
     }
@@ -1045,13 +1058,17 @@ testSuite({
       const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
       const timeZone = TimeZone.createTimeZone(420);
       let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss v');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+      assertI18nEquals(
+          '07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vv');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+      assertI18nEquals(
+          '07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvv');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+      assertI18nEquals(
+          '07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss vvvv');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+      assertI18nEquals(
+          '07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
     }
   },
 
@@ -1066,18 +1083,18 @@ testSuite({
       const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
       const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
       let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss V');
-      assertEquals(
+      assertI18nEquals(
           '07/27/2006 06:10:10 America/Los_Angeles',
           fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VV');
-      assertEquals(
+      assertI18nEquals(
           '07/27/2006 06:10:10 America/Los_Angeles',
           fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVV');
-      assertEquals(
+      assertI18nEquals(
           '07/27/2006 06:10:10 Los Angeles Time', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVVV');
-      assertEquals(
+      assertI18nEquals(
           '07/27/2006 06:10:10 Los Angeles Time', fmt.format(date, timeZone));
     }
   },
@@ -1093,13 +1110,17 @@ testSuite({
       const date = new Date(Date.UTC(2006, 6, 27, 13, 10, 10));
       const timeZone = TimeZone.createTimeZone(420);
       let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss V');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+      assertI18nEquals(
+          '07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VV');
-      assertEquals('07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
+      assertI18nEquals(
+          '07/27/2006 06:10:10 Etc/GMT+7', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVV');
-      assertEquals('07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
+      assertI18nEquals(
+          '07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss VVVV');
-      assertEquals('07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
+      assertI18nEquals(
+          '07/27/2006 06:10:10 GMT-07:00', fmt.format(date, timeZone));
     }
   },
 
@@ -1115,13 +1136,13 @@ testSuite({
           LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
       let timeZone = TimeZone.createTimeZone(420);
       let fmt = new DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
-      assertEquals(
+      assertI18nEquals(
           '2006.07.27 n. Chr. at 13:10:10 Etc/GMT+7',
           fmt.format(date, timeZone));
 
       timeZone = TimeZone.createTimeZone(americaLosAngelesData);
       fmt = new DateTimeFormat('yyyy.MM.dd G \'at\' HH:mm:ss vvvv');
-      assertEquals(
+      assertI18nEquals(
           '2006.07.27 n. Chr. at 13:10:10 America/Los_Angeles',
           fmt.format(date, timeZone));
     }
@@ -1137,13 +1158,13 @@ testSuite({
     const timeZone = TimeZone.createTimeZone(americaLosAngelesData);
     let date = new Date(Date.UTC(2006, 4 - 1, 2, 9, 59, 0));
     let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-    assertEquals('04/02/2006 01:59:00 PST', fmt.format(date, timeZone));
+    assertI18nEquals('04/02/2006 01:59:00 PST', fmt.format(date, timeZone));
     date = new Date(Date.UTC(2006, 4 - 1, 2, 10, 1, 0));
     fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-    assertEquals('04/02/2006 03:01:00 PDT', fmt.format(date, timeZone));
+    assertI18nEquals('04/02/2006 03:01:00 PDT', fmt.format(date, timeZone));
     date = new Date(Date.UTC(2006, 4 - 1, 2, 10, 0, 0));
     fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss z');
-    assertEquals('04/02/2006 03:00:00 PDT', fmt.format(date, timeZone));
+    assertI18nEquals('04/02/2006 03:00:00 PDT', fmt.format(date, timeZone));
   },
 
   test_timeDisplayOnDaylighTimeTransition() {
@@ -1158,13 +1179,13 @@ testSuite({
       let date = new Date(Date.UTC(2006, 4 - 1, 2, 2, 30, 0));
       const timeZone = TimeZone.createTimeZone(0);
       let fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-      assertEquals('04/02/2006 02:30:00 +0000', fmt.format(date, timeZone));
+      assertI18nEquals('04/02/2006 02:30:00 +0000', fmt.format(date, timeZone));
 
       // US PDT transition to PST on 2006/10/29/ 2:00am, jump back to PDT
       // 2006/4/2 1:00am,
       date = new Date(Date.UTC(2006, 10 - 1, 29, 1, 30, 0));
       fmt = new DateTimeFormat('MM/dd/yyyy HH:mm:ss Z');
-      assertEquals('10/29/2006 01:30:00 +0000', fmt.format(date, timeZone));
+      assertI18nEquals('10/29/2006 01:30:00 +0000', fmt.format(date, timeZone));
     }
   },
 
@@ -1188,7 +1209,7 @@ testSuite({
       const timeZone = TimeZone.createTimeZone(12 * 60);
       const fmt = new DateTimeFormat('yyyy/MM/dd HH:mm:ss Z');
       // Regression test: this once returned 2015/11/01 instead.
-      assertEquals('2015/10/31 23:00:01 -1200', fmt.format(date, timeZone));
+      assertI18nEquals('2015/10/31 23:00:01 -1200', fmt.format(date, timeZone));
     }
   },
 
@@ -1203,11 +1224,11 @@ testSuite({
 
       const timeZone = TimeZone.createTimeZone(420);
       let fmt = new DateTimeFormat('y/MM/dd H:mm:ss٫SS');
-      assertEquals('۲۰۰۶/۰۷/۲۷ ۱۳:۱۰:۱۰٫۲۵', fmt.format(date));
+      assertI18nEquals('۲۰۰۶/۰۷/۲۷ ۱۳:۱۰:۱۰٫۲۵', fmt.format(date));
 
       // Make sure standardized timezone formats don't use native digits
       fmt = new DateTimeFormat('Z');
-      assertEquals('-0700', fmt.format(date, timeZone));
+      assertI18nEquals('-0700', fmt.format(date, timeZone));
     }
   },
 
@@ -1222,7 +1243,7 @@ testSuite({
 
       const timeZone = TimeZone.createTimeZone(420);
       let fmt = new DateTimeFormat('y/MM/dd H:mm:ss٫SS');
-      assertEquals('٢٠٠٦/٠٧/٢٧ ١٣:١٠:١٠٫٢٥', fmt.format(date));
+      assertI18nEquals('٢٠٠٦/٠٧/٢٧ ١٣:١٠:١٠٫٢٥', fmt.format(date));
 
       fmt = new DateTimeFormat(11);
       let result = fmt.format(date);
@@ -1231,7 +1252,7 @@ testSuite({
 
       // Make sure standardized timezone formats don't use native digits
       fmt = new DateTimeFormat('Z');
-      assertEquals('-0700', fmt.format(date, timeZone));
+      assertI18nEquals('-0700', fmt.format(date, timeZone));
     }
   },
 
@@ -1247,7 +1268,7 @@ testSuite({
       DateTimeFormat.setEnforceAsciiDigits(true);
       const timeZone = TimeZone.createTimeZone(420);
       let fmt = new DateTimeFormat('y/MM/dd H:mm:ss٫SS');
-      assertEquals('2006/07/27 13:10:10٫25', fmt.format(date));
+      assertI18nEquals('2006/07/27 13:10:10٫25', fmt.format(date));
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME);
       let result = fmt.format(date);
@@ -1259,7 +1280,7 @@ testSuite({
 
       // Make sure standardized timezone formats don't use native digits
       fmt = new DateTimeFormat('Z');
-      assertEquals('-0700', fmt.format(date, timeZone));
+      assertI18nEquals('-0700', fmt.format(date, timeZone));
 
       // Check with another locale.
       replacer.replace(goog, 'LOCALE', 'my');
@@ -1289,24 +1310,29 @@ testSuite({
       let expect =
           'Saturday, April 1, 2006 at 6:30:00 PM Pacific Standard Time';
 
-      assertEquals('nativeMode=' + nativeMode, expect, result);
+      assertI18nEquals('nativeMode=' + nativeMode, expect, result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.LONG_DATETIME);
       result = fmt.format(date, timeZone);
       expect = 'April 1, 2006 at 6:30:00 PM PST';
-      assertEquals(expect, result);
+      assertI18nEquals(expect, result);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATETIME);
-      expect = 'Apr 1, 2006, 6:30:00 PM';
-      result = removeLtrMarkers(fmt.format(date, timeZone));
-      let matched =
-          /Apr 1, 2006(,| at)? 6:30:00 PM/.test(result);  // Optional comma
-      assertTrue('MEDIUM_DATETIME result = ' + result,
-                 matched);
+      const expect1 = removeWhitespace('Apr 1, 2006, 6:30:00 PM');
+      const expect2 = removeWhitespace('Apr 1, 2006 at 6:30:00 PM');
+      result = removeWhitespace(removeLtrMarkers(fmt.format(date, timeZone)));
+
+      assertTrue(
+          'MEDIUM_DATETIME result = ' + result,
+          (expect1 === result) || (expect2 === result));
+      // let matched =
+      //     /Apr 1, 2006(,| at)? 6:30:00\sPM/.test(result);  // Optional comma
+      // assertTrue('MEDIUM_DATETIME result = ' + result,
+      //            matched);
 
       fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME);
       expect = '4/1/06, 6:30 PM';
-      assertEquals(
+      assertI18nEquals(
           'SHORT_DATETIME = ' + result, expect, fmt.format(date, timeZone));
     }
   },
@@ -1332,9 +1358,9 @@ testSuite({
       // The two formatters should return different results (French & German)
       // Remove LTR marks if present.
       const frResult = fmtFr.format(date).replace(/\u200c/g, '');
-      assertEquals('vendredi 15 novembre 2013', frResult);
+      assertI18nEquals('vendredi 15 novembre 2013', frResult);
       const deResult = fmtDe.format(date).replace(/\u200c/g, '');
-      assertEquals('Freitag, 15. November 2013', deResult);
+      assertI18nEquals('Freitag, 15. November 2013', deResult);
     }
   },
 
@@ -1357,11 +1383,11 @@ testSuite({
       let expected = '‎vendredi 15 novembre 2013'.replace(/\u200e/g, '');
       const frResult =
           fmtFr.format(date).replace(/\u200c/g, '').replace(/\u200e/g, '');
-      assertEquals(expected, frResult);
+      assertI18nEquals(expected, frResult);
       expected = 'Freitag, 15. November 2013'.replace(/\u200e/g, '');
       const deResult =
           fmtDe.format(date).replace(/\u200c/g, '').replace(/\u200e/g, '');
-      assertEquals(expected, deResult);
+      assertI18nEquals(expected, deResult);
     }
   },
 
@@ -1376,19 +1402,19 @@ testSuite({
 
       // Literal apostrophe
       let fmt = new DateTimeFormat('MMM \'\'yy');
-      assertEquals('Nov \'13', fmt.format(date));
+      assertI18nEquals('Nov \'13', fmt.format(date));
       // Quoted text
       fmt = new DateTimeFormat('MMM dd\'th\' yyyy');
-      assertEquals('Nov 15th 2013', fmt.format(date));
+      assertI18nEquals('Nov 15th 2013', fmt.format(date));
       // Quoted text (only opening apostrophe)
       fmt = new DateTimeFormat('MMM dd\'th yyyy');
-      assertEquals('Nov 15th yyyy', fmt.format(date));
+      assertI18nEquals('Nov 15th yyyy', fmt.format(date));
       // Quoted text with literal apostrophe
       fmt = new DateTimeFormat('MMM dd\'th\'\'\'');
-      assertEquals('Nov 15th\'', fmt.format(date));
+      assertI18nEquals('Nov 15th\'', fmt.format(date));
       // Quoted text with literal apostrophe (only opening apostrophe)
       fmt = new DateTimeFormat('MMM dd\'th\'\'');
-      assertEquals('Nov 15th\'', fmt.format(date));
+      assertI18nEquals('Nov 15th\'', fmt.format(date));
     }
   },
 
@@ -1402,18 +1428,18 @@ testSuite({
       replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_fr);
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fr);
       let fmt = new DateTimeFormat('\'week\' w');
-      assertEquals('week 9', fmt.format(date));
+      assertI18nEquals('week 9', fmt.format(date));
       fmt = new DateTimeFormat('\'week\' ww');
-      assertEquals('week 09', fmt.format(date));
+      assertI18nEquals('week 09', fmt.format(date));
 
       // Make sure it uses native digits when needed
       replacer.replace(goog, 'LOCALE', 'fa');
       replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_fa);
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fa);
       fmt = new DateTimeFormat('\'week\' w');
-      assertEquals('week ۹', fmt.format(date));
+      assertI18nEquals('week ۹', fmt.format(date));
       fmt = new DateTimeFormat('\'week\' ww');
-      assertEquals('week ۰۹', fmt.format(date));
+      assertI18nEquals('week ۰۹', fmt.format(date));
     }
   },
 
@@ -1427,9 +1453,9 @@ testSuite({
       replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_fr);
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fr);
       let fmt = new DateTimeFormat('YYYY');
-      assertEquals('2004', fmt.format(date));
+      assertI18nEquals('2004', fmt.format(date));
       fmt = new DateTimeFormat('YY');
-      assertEquals('04', fmt.format(date));
+      assertI18nEquals('04', fmt.format(date));
     }
   },
 
@@ -1444,16 +1470,16 @@ testSuite({
       const date = new Date(2013, 1, 25);
       let fmt = new DateTimeFormat(DateTimePatterns.YEAR_FULL_WITH_ERA);
 
-      assertEquals('2013 AD', fmt.format(date));
+      assertI18nEquals('2013 AD', fmt.format(date));
 
       date.setFullYear(213);
-      assertEquals('213 AD', fmt.format(date));
+      assertI18nEquals('213 AD', fmt.format(date));
 
       date.setFullYear(11);
-      assertEquals('11 AD', fmt.format(date));
+      assertI18nEquals('11 AD', fmt.format(date));
 
       date.setFullYear(-213);
-      assertEquals('213 BC', fmt.format(date));
+      assertI18nEquals('213 BC', fmt.format(date));
 
       replacer.replace(goog, 'LOCALE', 'de');
       replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
@@ -1461,32 +1487,32 @@ testSuite({
       fmt = new DateTimeFormat(DateTimePatterns_de.YEAR_FULL_WITH_ERA);
 
       date.setFullYear(2013);
-      assertEquals('2013 n. Chr.', fmt.format(date));
+      assertI18nEquals('2013 n. Chr.', fmt.format(date));
 
       date.setFullYear(213);
-      assertEquals('213 n. Chr.', fmt.format(date));
+      assertI18nEquals('213 n. Chr.', fmt.format(date));
 
       date.setFullYear(11);
-      assertEquals('11 n. Chr.', fmt.format(date));
+      assertI18nEquals('11 n. Chr.', fmt.format(date));
 
       date.setFullYear(-213);
-      assertEquals('213 v. Chr.', fmt.format(date));
+      assertI18nEquals('213 v. Chr.', fmt.format(date));
 
       replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_ja);
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ja);
       fmt = new DateTimeFormat(DateTimePatterns_ja.YEAR_FULL_WITH_ERA);
 
       date.setFullYear(2013);
-      assertEquals('西暦2013年', fmt.format(date));
+      assertI18nEquals('西暦2013年', fmt.format(date));
 
       date.setFullYear(213);
-      assertEquals('西暦213年', fmt.format(date));
+      assertI18nEquals('西暦213年', fmt.format(date));
 
       date.setFullYear(11);
-      assertEquals('西暦11年', fmt.format(date));
+      assertI18nEquals('西暦11年', fmt.format(date));
 
       date.setFullYear(-213);
-      assertEquals('紀元前213年', fmt.format(date));
+      assertI18nEquals('紀元前213年', fmt.format(date));
     }
   },
 
@@ -1498,28 +1524,28 @@ testSuite({
           LocaleFeature, 'USE_ECMASCRIPT_I18N_DATETIMEF', nativeMode);
 
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_bn_BD);
-      assertEquals('bn_BD', '১১১১১২২', weekInYearFor7Days());
+      assertI18nEquals('bn_BD', '১১১১১২২', weekInYearFor7Days());
 
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_IE);
-      assertEquals('en_IE', '1111112', weekInYearFor7Days());
+      assertI18nEquals('en_IE', '1111112', weekInYearFor7Days());
 
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_fr_DJ);
-      assertEquals('fr_DJ', '1111222', weekInYearFor7Days());
+      assertI18nEquals('fr_DJ', '1111222', weekInYearFor7Days());
 
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_he_IL);
-      assertEquals('he_IL', '1111122', weekInYearFor7Days());
+      assertI18nEquals('he_IL', '1111122', weekInYearFor7Days());
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ar_SA);
-      assertEquals('ar_SA', '١١١١١٢٢', weekInYearFor7Days());
+      assertI18nEquals('ar_SA', '١١١١١٢٢', weekInYearFor7Days());
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ar_AE);
-      assertEquals('ar_AE', '1111222', weekInYearFor7Days());
+      assertI18nEquals('ar_AE', '1111222', weekInYearFor7Days());
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_IN);
-      assertEquals('en_IN', '1111122', weekInYearFor7Days());
+      assertI18nEquals('en_IN', '1111122', weekInYearFor7Days());
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_GB);
-      assertEquals('en_GB', '1111112', weekInYearFor7Days());
+      assertI18nEquals('en_GB', '1111112', weekInYearFor7Days());
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_US);
-      assertEquals('en_US', '1111122', weekInYearFor7Days());
+      assertI18nEquals('en_US', '1111122', weekInYearFor7Days());
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_ro_RO);
-      assertEquals('ro_RO', '1111112', weekInYearFor7Days());
+      assertI18nEquals('ro_RO', '1111112', weekInYearFor7Days());
     }
   },
 
@@ -1549,7 +1575,7 @@ testSuite({
             expected === result || alternate === result);
       } else {
         // Polyfill mode
-        assertEquals(expected, result);
+        assertI18nEquals(expected, result);
       }
 
       const gdatetime = new DateTime(2006, 6, 27, 13, 10, 42, 250);
@@ -1562,7 +1588,7 @@ testSuite({
             'gdatetime MEDIUM_DATETIME juil. result = ' + result,
             expected === result || alternate === result);
       } else {
-        assertEquals(expected, result);
+        assertI18nEquals(expected, result);
       }
 
       const gdate = new DateDate(2006, 6, 27);
@@ -1622,8 +1648,9 @@ testSuite({
       let result = fmt.format(date);
       let expected = 'Jul 27, 2006, 1:10:42 PM';
       result = removeLtrMarkers(result);
+      // TODO: Fix whitespace match
       let matched =
-          /Jul 27, 2006(,| at)? 1:10:42 PM/.test(result);  // Optional comma
+          /Jul 27, 2006(,| at)? 1:10:42\sPM/.test(result);  // Optional comma
       assertTrue('Expected match = ' + result, matched);
 
       const gdatetime = new DateTime(2006, 6, 27, 13, 10, 42, 250);
@@ -1633,21 +1660,21 @@ testSuite({
       if (matched) {
         assertTrue(matched);
       } else {
-        assertEquals('Jul 27, 2006, 1:10:42 PM', result);
+        assertI18nEquals('Jul 27, 2006, 1:10:42 PM', result);
       }
 
       const fmtDate = new DateTimeFormat(DateTimeFormat.Format.MEDIUM_DATE);
       result = removeDirectionMarkers(fmtDate.format(gdatetime));
       expected = 'Jul 27, 2006';
-      assertEquals(expected, result);
+      assertI18nEquals(expected, result);
 
       const fmt0 = new DateTimeFormat(DateTimeFormat.Format.FULL_DATE);
       result = removeDirectionMarkers(fmt0.format(gdatetime));
-      assertEquals('Thursday, July 27, 2006', result);
+      assertI18nEquals('Thursday, July 27, 2006', result);
 
       const fmt1 = new DateTimeFormat(DateTimeFormat.Format.SHORT_TIME);
       result = removeDirectionMarkers(fmt1.format(gdatetime));
-      assertEquals('1:10 PM', result);
+      assertI18nEquals('1:10 PM', result);
 
       const fmt2 = new DateTimeFormat(DateTimeFormat.Format.FULL_DATETIME);
       result = removeDirectionMarkers(fmt2.format(gdatetime));
@@ -1657,11 +1684,11 @@ testSuite({
       } else {
         expected = 'Thursday, July 27, 2006 at 1:10:42 PM UTC-7';
       }
-      assertEquals('nativeMode=' + nativeMode, expected, result);
+      assertI18nEquals('nativeMode=' + nativeMode, expected, result);
 
       const fmt3 = new DateTimeFormat(DateTimeFormat.Format.LONG_DATE);
       result = removeDirectionMarkers(fmt3.format(gdatetime));
-      assertEquals('July 27, 2006', result);
+      assertI18nEquals('July 27, 2006', result);
     }
   },
 
@@ -1678,20 +1705,20 @@ testSuite({
 
       const date = new Date(2006, 6, 27, 13, 10, 42, 250);
       let result = fmt.format(date);
-      assertEquals('2006', result);
+      assertI18nEquals('2006', result);
 
       const fmt1 = new DateTimeFormat(DateTimePatterns_fr.YEAR_FULL_WITH_ERA);
       result = fmt1.format(date);
-      assertEquals('2006 ap. J.-C.', result);
+      assertI18nEquals('2006 ap. J.-C.', result);
 
       const fmt2 = new DateTimeFormat(DateTimePatterns_fr.MONTH_DAY_SHORT);
       result = fmt2.format(date);
-      assertEquals('27/07', result);
+      assertI18nEquals('27/07', result);
 
       const fmt3 =
           new DateTimeFormat(DateTimePatterns_fr.MONTH_DAY_TIME_ZONE_SHORT);
       result = fmt3.format(date);
-      assertEquals('27 juil., 13:10 UTC-7', result);
+      assertI18nEquals('27 juil., 13:10 UTC-7', result);
     }
   },
 
@@ -1720,7 +1747,7 @@ testSuite({
     const fmt1 = new DateTimeFormat(DateTimePatterns.YEAR_FULL);
 
     result = fmt1.format(date);
-    assertEquals('2006', result);
+    assertI18nEquals('2006', result);
   },
 
   testNonAsciiDigitsNative() {
@@ -1735,7 +1762,7 @@ testSuite({
       const ar = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
       let expected = removeDirectionMarkers('27‏/7‏/2006');
       let result = removeDirectionMarkers(ar.format(date));
-      assertEquals('ar', expected, result);
+      assertI18nEquals('ar', expected, result);
 
       // Egyptian Arabic
       replacer.replace(goog, 'LOCALE', 'ar-EG');
@@ -1757,13 +1784,13 @@ testSuite({
       const bn = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
       expected = '২৭/৭/০৬';
       result = bn.format(date);
-      assertEquals('bn', expected, result);
+      assertI18nEquals('bn', expected, result);
 
       replacer.replace(goog, 'LOCALE', 'bn_BD');
       replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_bn);
       const bn_BD = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
       result = bn_BD.format(date);
-      assertEquals('bn_BD', expected, result);
+      assertI18nEquals('bn_BD', expected, result);
 
       // Persian / Farsi
       replacer.replace(goog, 'LOCALE', 'fa');
@@ -1772,7 +1799,7 @@ testSuite({
       expected =
           removeDirectionMarkers('۲۰۰۶/۷/۲۷');  // Different from Arabic digits
       result = removeDirectionMarkers(fa.format(date));
-      assertEquals('Farsi digits result = ' + result, expected, result);
+      assertI18nEquals('Farsi digits result = ' + result, expected, result);
 
       // Malayalam
       replacer.replace(goog, 'LOCALE', 'ml');
@@ -1780,7 +1807,7 @@ testSuite({
       const ml = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
       expected = '27/7/06';
       result = ml.format(date);
-      assertEquals('Malayalam digits result = ' + result, expected, result);
+      assertI18nEquals('Malayalam digits result = ' + result, expected, result);
 
       // Marathi
       replacer.replace(goog, 'LOCALE', 'mr');
@@ -1788,7 +1815,7 @@ testSuite({
       const mr = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
       expected = '२७/७/०६';
       result = mr.format(date);
-      assertEquals('Marathi digits result = ' + result, expected, result);
+      assertI18nEquals('Marathi digits result = ' + result, expected, result);
 
       // Myanmar
       replacer.replace(goog, 'LOCALE', 'my');
@@ -1797,9 +1824,10 @@ testSuite({
       result = my.format(date);
       expected = '၂၇-၀၇-၀၆';
       let alternate = '၇/၂၇/၀၆';  // Chrome native gregorian
+      let alternate2 = '၂၇/၇/၀၆';  // Chrome native gregorian
       assertTrue(
           'Myanmar digits = ' + result,
-          expected === result || alternate === result);
+          expected === result || alternate === result || alternate2 == result);
 
       // Nepali
       replacer.replace(goog, 'LOCALE', 'ne');
@@ -1828,20 +1856,20 @@ testSuite({
 
       let fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_TIME);
       let result = fmt.format(utcTime);
-      assertEquals('12:00 AM', result);
+      assertI18nEquals('12:00 AM', result);
 
       // Formatter needs to have its timzone changed.
       // Change to non-UTC time
       result = fmt.format(localeTime);
-      assertEquals('4:00 PM', result);
+      assertI18nEquals('4:00 PM', result);
 
       // Change back to UTC time
       result = fmt.format(utcTime);
-      assertEquals('12:00 AM', result);
+      assertI18nEquals('12:00 AM', result);
 
       // Another change to non-UTC time
       result = fmt.format(localeTime);
-      assertEquals('4:00 PM', result);
+      assertI18nEquals('4:00 PM', result);
     }
   },
 
@@ -1856,12 +1884,12 @@ testSuite({
       const fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE,
                                    DateTimeSymbols);
       let result = fmt.format(date);
-      assertEquals('5/8/12', result);
+      assertI18nEquals('5/8/12', result);
 
       const fmt2 = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATETIME,
                                    DateTimeSymbols);
       result = fmt2.format(date);
-      assertEquals('5/8/12, 12:00 AM', result);
+      assertI18nEquals('5/8/12, 12:00 AM', result);
     }
   },
 
@@ -1874,7 +1902,7 @@ testSuite({
       const fmt = new DateTimeFormat(DateTimeFormat.Format.SHORT_DATE);
       assertTrue(fmt !== null);
       const result = fmt.format(date);
-      assertEquals('5/8/12', result);
+      assertI18nEquals('5/8/12', result);
     }
   },
 
@@ -1889,7 +1917,7 @@ testSuite({
       assertTrue(fmt !== null);
       const result = fmt.format(date);
       const expected = 'Monday, May 9';
-      assertEquals('Native=' + nativeMode, expected, result);
+      assertI18nEquals('Native=' + nativeMode, expected, result);
     }
   },
 
@@ -1905,7 +1933,7 @@ testSuite({
       assertTrue(fmt !== null);
       const result = fmt.format(date);
       const expected = '5月9日 星期一';
-      assertEquals('Native=' + nativeMode, expected, result);
+      assertI18nEquals('Native=' + nativeMode, expected, result);
     }
   },
 
@@ -1921,7 +1949,7 @@ testSuite({
       assertTrue(fmt !== null);
       const result = fmt.format(date);
       const expected = '下午5:00';
-      assertEquals('Native=' + nativeMode, expected, result);
+      assertI18nEquals('Native=' + nativeMode, expected, result);
     }
   },
 

@@ -57,6 +57,7 @@ closure_js_library(
         "//closure/goog/testing:propertyreplacer",
         "//closure/goog/testing:testsuite",
         "//closure/goog/testing/i18n:asserts",
+        "//closure/goog/testing/i18n:whitespace",
         "//closure/goog/useragent",
         "//closure/goog/useragent:product",
         "//closure/goog/useragent:product_isversion",
