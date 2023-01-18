@@ -286,7 +286,7 @@ goog.locale.defaultLocaleNameConstants = {
     'TM': 'Turkmenistan',
     'TN': 'Tunisia',
     'TO': 'Tonga',
-    'TR': 'Turkey',
+    'TR': 'Türkiye',
     'TT': 'Trinidad & Tobago',
     'TV': 'Tuvalu',
     'TW': 'Taiwan',
