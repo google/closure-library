@@ -222,7 +222,7 @@ goog.dom.safe.setFormElementAction = function(form, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    safeUrl = goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url);
   }
   goog.asserts.dom.assertIsHtmlFormElement(form).action =
       goog.html.SafeUrl.unwrap(safeUrl);
@@ -255,7 +255,7 @@ goog.dom.safe.setButtonFormAction = function(button, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    safeUrl = goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url);
   }
   goog.asserts.dom.assertIsHtmlButtonElement(button).formAction =
       goog.html.SafeUrl.unwrap(safeUrl);
@@ -287,7 +287,7 @@ goog.dom.safe.setInputFormAction = function(input, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    safeUrl = goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url);
   }
   goog.asserts.dom.assertIsHtmlInputElement(input).formAction =
       goog.html.SafeUrl.unwrap(safeUrl);
@@ -346,7 +346,7 @@ goog.dom.safe.setAnchorHref = function(anchor, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    safeUrl = goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url);
   }
   anchor.href = goog.html.SafeUrl.unwrap(safeUrl);
 };
@@ -373,8 +373,7 @@ goog.dom.safe.setAudioSrc = function(audioElement, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    var allowDataUrl = /^data:audio\//i.test(url);
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url, allowDataUrl);
+    safeUrl = goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url);
   }
   audioElement.src = goog.html.SafeUrl.unwrap(safeUrl);
 };
@@ -400,8 +399,7 @@ goog.dom.safe.setVideoSrc = function(videoElement, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    var allowDataUrl = /^data:video\//i.test(url);
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url, allowDataUrl);
+    safeUrl = goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url);
   }
   videoElement.src = goog.html.SafeUrl.unwrap(safeUrl);
 };
@@ -539,7 +537,7 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
   } else {  // string
     // SafeUrl.sanitize must return legitimate SafeUrl when passed a string.
     link.href = goog.html.SafeUrl.unwrap(
-        goog.html.SafeUrl.sanitizeAssertUnchanged(url));
+        goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url));
   }
 };
 
@@ -657,7 +655,7 @@ goog.dom.safe.setLocationHref = function(loc, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    safeUrl = goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url);
   }
   loc.href = goog.html.SafeUrl.unwrap(safeUrl);
 };
@@ -692,7 +690,7 @@ goog.dom.safe.assignLocation = function(loc, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    safeUrl = goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url);
   }
   loc.assign(goog.html.SafeUrl.unwrap(safeUrl));
 };
@@ -724,7 +722,7 @@ goog.dom.safe.replaceLocation = function(loc, url) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    safeUrl = goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url);
   }
   loc.replace(goog.html.SafeUrl.unwrap(safeUrl));
 };
@@ -764,7 +762,7 @@ goog.dom.safe.openInWindow = function(url, opt_openerWin, opt_name, opt_specs) {
   if (url instanceof goog.html.SafeUrl) {
     safeUrl = url;
   } else {
-    safeUrl = goog.html.SafeUrl.sanitizeAssertUnchanged(url);
+    safeUrl = goog.html.SafeUrl.sanitizeJavascriptUrlAssertUnchanged(url);
   }
   var win = opt_openerWin || goog.global;
   // If opt_name is undefined, simply passing that in to open() causes IE to

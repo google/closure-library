@@ -496,9 +496,6 @@ testSuite({
     const safeUrl = 'data:audio/mp3;base64,a';
     safe.setAudioSrc(mockAudioElement, safeUrl);
     assertEquals(safeUrl, mockAudioElement.src);
-    assertThrows(() => {
-      safe.setAudioSrc(mockAudioElement, 'data:image/gif;base64,a');
-    });
   },
 
   testSetVideoSrc() {
@@ -538,9 +535,6 @@ testSuite({
     const safeUrl = 'data:video/mp4;base64,a';
     safe.setVideoSrc(mockVideoElement, safeUrl);
     assertEquals(safeUrl, mockVideoElement.src);
-    assertThrows(() => {
-      safe.setVideoSrc(mockVideoElement, 'data:image/gif;base64,a');
-    });
   },
 
   testSetEmbedSrc() {
