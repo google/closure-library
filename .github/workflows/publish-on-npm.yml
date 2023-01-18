@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # This action checks out at the commit of the tagged release.
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.3.0
       # Install all deps in preparation for creating a release.
       # Unlike publishing, this is done using the normal NPM registry
       # to download deps.
