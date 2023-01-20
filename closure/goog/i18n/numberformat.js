@@ -25,7 +25,6 @@ goog.require('goog.i18n.NumberFormatSymbols');
 goog.require('goog.i18n.NumberFormatSymbolsType');
 goog.require('goog.i18n.NumberFormatSymbols_u_nu_latn');
 goog.require('goog.i18n.currency');
-goog.require('goog.i18n.currency.CurrencyInfo');
 goog.require('goog.math');
 goog.require('goog.string');
 
