@@ -14,6 +14,7 @@
  * Avoid including base.js more than once. This is strictly discouraged and not
  * supported. goog.require(...) won't work properly in that case.
  *
+ * @suppress {deprecated} Users cannot remove deprecated uses here.
  * @provideGoog
  */
 
