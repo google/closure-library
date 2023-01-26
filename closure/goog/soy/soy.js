@@ -81,10 +81,6 @@ exports.TextTemplate = TextTemplate;
  * @template ARG_TYPES
  */
 function renderHtml(element, templateResult) {
-  if (templateResult.renderElement) {
-    templateResult.renderElement(asserts.assert(element));
-    return;
-  }
   safe.unsafeSetInnerHtmlDoNotUseOrElse(
       asserts.assert(element), ensureTemplateOutputHtml(templateResult));
 }
@@ -105,13 +101,8 @@ exports.renderHtml = renderHtml;
  */
 function renderElement(
     element, template, templateData = undefined, injectedData = undefined) {
-  const output = /** @type {!SanitizedContent} */ (
+  const html = ensureTemplateOutputHtml(
       template(templateData || defaultTemplateData, injectedData));
-  if (output.renderElement && element) {
-    output.renderElement(element);
-    return;
-  }
-  const html = ensureTemplateOutputHtml(output);
   safe.unsafeSetInnerHtmlDoNotUseOrElse(asserts.assert(element), html);
 }
 exports.renderElement = renderElement;
@@ -136,11 +127,7 @@ function renderAsFragment(
     template, templateData = undefined, injectedData = undefined,
     domHelper = undefined) {
   const dom = domHelper || googDom.getDomHelper();
-  const output = /** @type {!SanitizedContent} */ (
-      template(templateData || defaultTemplateData, injectedData));
-  if (output.renderAsElement) {
-    return output.renderAsElement();
-  }
+  const output = template(templateData || defaultTemplateData, injectedData);
   const html = ensureTemplateOutputHtml(output);
   assertFirstTagValid(html.getTypedStringValue());
   return dom.safeHtmlToNode(html);
@@ -195,17 +182,10 @@ exports.convertToElement = convertToElement;
  */
 function convertToElementInternal(templateResult, domHelper = undefined) {
   const dom = domHelper || googDom.getDomHelper();
-  let wrapper;
-  if (templateResult &&
-      (/** @type {!SanitizedContent} */ (templateResult)).renderAsElement) {
-    wrapper =
-        (/** @type {!SanitizedContent} */ (templateResult)).renderAsElement();
-  } else {
-    wrapper = dom.createElement(TagName.DIV);
-    const html = ensureTemplateOutputHtml(templateResult);
-    assertFirstTagValid(html.getTypedStringValue());
-    safe.unsafeSetInnerHtmlDoNotUseOrElse(wrapper, html);
-  }
+  const wrapper = dom.createElement(TagName.DIV);
+  const html = ensureTemplateOutputHtml(templateResult);
+  assertFirstTagValid(html.getTypedStringValue());
+  safe.unsafeSetInnerHtmlDoNotUseOrElse(wrapper, html);
 
   // If the template renders as a single element, return it.
   if (wrapper.childNodes.length == 1) {
