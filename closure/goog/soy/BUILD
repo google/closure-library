@@ -10,6 +10,7 @@ closure_js_library(
     lenient = True,
     deps = [
         "//closure/goog/asserts",
+        "//closure/goog/dom:safe",
         "//closure/goog/html:safehtml",
         "//closure/goog/html:safescript",
         "//closure/goog/html:safestyle",
