@@ -23,6 +23,7 @@ goog.provide('goog.soy.data.SanitizedUri');
 
 goog.require('goog.Uri');
 goog.require('goog.asserts');
+goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeScript');
 goog.require('goog.html.SafeStyle');
@@ -33,6 +34,10 @@ goog.require('goog.html.uncheckedconversions');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.string.Const');
 
+goog.scope(() => {
+
+const SafeHtml = goog.html.SafeHtml;
+const safe = goog.dom.safe;
 
 /**
  * A type of textual content.
@@ -163,6 +168,11 @@ goog.soy.data.SanitizedContent.prototype.toSafeHtml = function() {
           this.toString());
 };
 
+/** @type {(function((!Element|!ShadowRoot)): void)|undefined} */
+goog.soy.data.SanitizedContent.prototype.renderElement;
+
+/** @type {(function(): !Element)|undefined} */
+goog.soy.data.SanitizedContent.prototype.renderAsElement;
 
 /**
  * Converts sanitized content of kind URI into SafeUrl without modification.
@@ -544,3 +554,4 @@ goog.soy.data.SanitizedCss.prototype.toSafeStyleSheet = function() {
               'value.'),
           value);
 };
+});
