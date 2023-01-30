@@ -257,22 +257,6 @@ goog.LOCALE = goog.define('goog.LOCALE', 'en');  // default to en
 
 
 /**
- * Same as `goog.LOCALE`, which should be used instead.
- *
- * Using this method just makes it harder for closure-compiler to optimize
- * your locale-specific code, since it has to take the extra step of inlining
- * this function to discover and remove code that is not used for the target
- * locale.
- *
- * @return {string}
- * @deprecated use `goog.LOCALE`
- */
-goog.getLocale = function() {
-  return goog.LOCALE;
-};
-
-
-/**
  * @define {boolean} Whether this code is running on trusted sites.
  *
  * On untrusted sites, several native functions can be defined or overridden by
