@@ -18,7 +18,7 @@ const {useClientHints} = goog.require('goog.labs.userAgent');
 
 /**
  * @const {boolean} If true, use navigator.userAgentData without check.
- * TODO(user): FEATURESET_YEAR >= 2023 if it supports mobile and all the
+ * TODO(user): FEATURESET_YEAR >= 2024 if it supports mobile and all the
  * brands we need.  See https://caniuse.com/mdn-api_navigator_useragentdata.
  */
 const ASSUME_CLIENT_HINTS_SUPPORT = false;
