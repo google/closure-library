@@ -26,6 +26,10 @@ closure_js_library(
         ":datetimesymbols",
         ":datetimesymbolsext",
         ":dayperiodsymbols",
+        ":durationformat",
+        ":durationsymbols",
+        ":durationsymbolsext",
+        ":durationsymboltypes",
         ":graphemebreak",
         ":listformat",
         ":listsymbols",
@@ -296,6 +300,43 @@ closure_js_library(
         "//closure/goog/i18n/cldr42:datetimesymbols",
         "//closure/goog/i18n/cldr42:datetimesymbolsext",
     ],
+)
+
+closure_js_library(
+    name = "durationformat",
+    srcs = ["durationformat.js"],
+    lenient = True,
+    deps = [
+        ":durationsymbols",
+        ":durationsymboltypes",
+        ":listformat",
+        ":localefeature",
+        ":messageformat",
+        "//closure/goog/asserts",
+    ],
+)
+
+closure_js_library(
+    name = "durationsymbols",
+    srcs = ["durationsymbols.js"],
+    lenient = True,
+    deps = [":durationsymboltypes"],
+)
+
+closure_js_library(
+    name = "durationsymbolsext",
+    srcs = ["durationsymbolsext.js"],
+    lenient = True,
+    deps = [
+        ":durationsymbols",
+        ":durationsymboltypes",
+    ],
+)
+
+closure_js_library(
+    name = "durationsymboltypes",
+    srcs = ["durationsymboltypes.js"],
+    lenient = True,
 )
 
 closure_js_library(
