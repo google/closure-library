@@ -218,6 +218,15 @@ goog.net.WebChannel.Options.prototype.forceLongPolling;
 goog.net.WebChannel.Options.prototype.detectBufferingProxy;
 
 /**
+ * This option informs the server the desired maximum interval (in seconds) to
+ * terminate a long-polling GET response, e.g. to accommodate the timeout limit
+ * configured by a proxy. The WebChannel server may adjust the limit or may
+ * ignore this client-configured limit.
+ * @type {number|undefined}
+ */
+goog.net.WebChannel.Options.prototype.longPollingInterval;
+
+/**
  * Enable true 0-RTT message delivery, including
  * leveraging QUIC 0-RTT (which requires GET to be used). This option
  * defaults to false. Note it is allowed to send messages before Open event is
