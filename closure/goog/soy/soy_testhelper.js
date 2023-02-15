@@ -243,13 +243,24 @@ example.sanitizedTrustedResourceUriTemplate = function(data, opt_injectedData) {
 
 
 /**
- * @param {{name: string}} data
+ * @param {!Object<string, *>} data
  * @param {Object<string, *>=} opt_injectedData
  * @return {!goog.soy.data.SanitizedCss}
  */
 example.sanitizedCssTemplate = function(data, opt_injectedData) {
   'use strict';
   return new SanitizedCssSubclass('html{display:none}');
+};
+
+
+/**
+ * @param {!Object<string, *>} data
+ * @param {!Object<string, *>=} opt_injectedData
+ * @return {!goog.soy.data.SanitizedCss}
+ */
+example.sanitizedStyleTemplate = function(data, opt_injectedData) {
+  'use strict';
+  return new SanitizedCssSubclass('display:none;');
 };
 
 

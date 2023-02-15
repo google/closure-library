@@ -554,4 +554,22 @@ goog.soy.data.SanitizedCss.prototype.toSafeStyleSheet = function() {
               'value.'),
           value);
 };
+
+
+/**
+ * Converts SanitizedCss into SafeStyle.
+ * @return {!goog.html.SafeStyle}
+ */
+goog.soy.data.SanitizedCss.prototype.toSafeStyle = function() {
+  'use strict';
+  const value = this.toString();
+  goog.asserts.assert(
+      !/{/.test(value), 'value doesn\'t look like style: ' + value);
+  return goog.html.uncheckedconversions
+      .safeStyleFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Soy SanitizedCss produces SafeStyle-contract-compliant value.'),
+          value);
+};
+
 });
