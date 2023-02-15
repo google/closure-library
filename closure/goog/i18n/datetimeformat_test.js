@@ -1740,9 +1740,12 @@ testSuite({
 
     const date = new Date(2006, 6, 27, 13, 10, 42, 250);
     let result = removeLtrMarkers(fmt.format(date)).replace(/2006,/g, '2006');
-    let matched = /Jul 27, 2006 (at )?1:10:42 PM/.test(result);
-    assertTrue('MEDIUM_DATETIME result = ' + result,
-               matched);
+    // Safari includes 'at ' as part of the formatted result
+    if (goog.labs.userAgent.browser.isSafari()) {
+      addI18nMapping('Jul 27, 2006 1:10:42 PM', 'Jul 27, 2006 at 1:10:42 PM');
+    }
+    assertI18nEquals(
+        'MEDIUM_DATETIME result = ', 'Jul 27, 2006 1:10:42 PM', result);
 
     const fmt1 = new DateTimeFormat(DateTimePatterns.YEAR_FULL);
 
