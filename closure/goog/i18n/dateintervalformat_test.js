@@ -19,6 +19,7 @@ const DateTimeSymbols_en = goog.require('goog.i18n.DateTimeSymbols_en');
 const DateTimeSymbols_fr_CA = goog.require('goog.i18n.DateTimeSymbols_fr_CA');
 const DateTimeSymbols_gl = goog.require('goog.i18n.DateTimeSymbols_gl');
 const DateTimeSymbols_hi = goog.require('goog.i18n.DateTimeSymbols_hi');
+const DateTimeSymbols_vi = goog.require('goog.i18n.DateTimeSymbols_vi');
 const DateTimeSymbols_zh = goog.require('goog.i18n.DateTimeSymbols_zh');
 const GoogDate = goog.require('goog.date.Date');
 const Interval = goog.require('goog.date.Interval');
@@ -30,7 +31,6 @@ const dateIntervalPatterns = goog.require('goog.i18n.dateIntervalPatterns');
 const dateIntervalSymbols = goog.require('goog.i18n.dateIntervalSymbols');
 const object = goog.require('goog.object');
 const testSuite = goog.require('goog.testing.testSuite');
-
 const {addI18nMapping, assertI18nEquals} = goog.require('goog.testing.i18n.asserts');
 const {removeWhitespace} = goog.require('goog.testing.i18n.whitespace');
 
@@ -102,6 +102,10 @@ const localeSymbols = {
   'hi': {
     DateIntervalSymbols: dateIntervalSymbols.DateIntervalSymbols_hi,
     DateTimeSymbols: DateTimeSymbols_hi
+  },
+  'vi': {
+    DateIntervalSymbols: dateIntervalSymbols.DateIntervalSymbols_vi,
+    DateTimeSymbols: DateTimeSymbols_vi
   },
   'zh': {
     DateIntervalSymbols: dateIntervalSymbols.DateIntervalSymbols_zh,
@@ -186,12 +190,14 @@ const formatTestData = [
   new Data('ar_EG', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_ar_EG.MONTH_DAY_ABBR, '١٠ أكتوبر – ١٠ نوفمبر'),
   new Data('ar_EG', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_ar_EG.MONTH_DAY_ABBR, '١٠ أكتوبر، ٢٠٠٧ – ١٠ أكتوبر، ٢٠٠٨'),
 
-  new Data('fr_CA', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 janvier'),
-  new Data('fr_CA', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 janvier'),
-  new Data('fr_CA', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 14, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 janvier'),
-  new Data('fr_CA', [2007, 10, 10, 10, 10, 10], [2007, 10, 20, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 – 20 novembre'),
-  new Data('fr_CA', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 octobre – 10 novembre'),
-  new Data('fr_CA', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 octobre 2007 – 10 octobre 2008'),
+  new Data('vi', [2022, 10, 8, 10, 10, 10],  [2023, 1, 5, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '8 thg 11 2022–5 thg 2 2023'),
+
+  new Data('fr_CA', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 janv.'),
+  new Data('fr_CA', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 janv.'),
+  new Data('fr_CA', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 14, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 janv.'),
+  new Data('fr_CA', [2007, 10, 10, 10, 10, 10], [2007, 10, 20, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 – 20 nov.'),
+  new Data('fr_CA', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 oct. – 10 nov.'),
+  new Data('fr_CA', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.MONTH_DAY_MEDIUM, '10 oct. 2007 – 10 oct. 2008'),
 
   new Data('gl', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_gl.YEAR_MONTH_FULL, 'xaneiro de 2007'),
   new Data('gl', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_gl.YEAR_MONTH_FULL, 'xaneiro de 2007'),
@@ -207,12 +213,12 @@ const formatTestData = [
   new Data('fr_CA', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_fr_CA.YEAR_MONTH_SHORT, '2007-10 – 2007-11'),
   new Data('fr_CA', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_fr_CA.YEAR_MONTH_SHORT, '2007-10 – 2008-10'),
 
-  new Data('hi', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 जनवरी'),
-  new Data('hi', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 जनवरी'),
-  new Data('hi', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 14, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 जनवरी'),
-  new Data('hi', [2007, 10, 10, 10, 10, 10], [2007, 10, 20, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 नवंबर–20'),
-  new Data('hi', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 अक्तूबर – 10 नवंबर'),
-  new Data('hi', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 अक्तूबर 2007 – 10 अक्तूबर 2008'),
+  new Data('hi', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 जन॰'),
+  new Data('hi', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 जन॰'),
+  new Data('hi', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 14, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 जन॰'),
+  new Data('hi', [2007, 10, 10, 10, 10, 10], [2007, 10, 20, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10–20 नव॰'),
+  new Data('hi', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 अक्तू॰ – 10 नव॰'),
+  new Data('hi', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_hi.MONTH_DAY_MEDIUM, '10 अक्तू॰ 2007 – 10 अक्तू॰ 2008'),
 
   new Data('zh', [2007, 0, 10, 10, 10, 10],  [2007, 0, 10, 10, 10, 20],  dateIntervalPatterns.DateIntervalPatterns_zh.WEEKDAY_MONTH_DAY_YEAR_MEDIUM, '2007年1月10日周三'),
   new Data('zh', [2007, 0, 10, 10, 0, 10],   [2007, 0, 10, 10, 20, 10],  dateIntervalPatterns.DateIntervalPatterns_zh.WEEKDAY_MONTH_DAY_YEAR_MEDIUM, '2007年1月10日周三'),
@@ -220,6 +226,7 @@ const formatTestData = [
   new Data('zh', [2007, 10, 10, 10, 10, 10], [2007, 10, 20, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_zh.WEEKDAY_MONTH_DAY_YEAR_MEDIUM, '2007年11月10日周六至20日周二'),
   new Data('zh', [2007, 9, 10, 10, 10, 10],  [2007, 10, 10, 10, 10, 10], dateIntervalPatterns.DateIntervalPatterns_zh.WEEKDAY_MONTH_DAY_YEAR_MEDIUM, '2007年10月10日周三至11月10日周六'),
   new Data('zh', [2007, 9, 10, 10, 10, 10],  [2008, 9, 10, 10, 10, 10],  dateIntervalPatterns.DateIntervalPatterns_zh.WEEKDAY_MONTH_DAY_YEAR_MEDIUM, '2007年10月10日周三至2008年10月10日周五')
+
 ];
 // clang-format on
 
