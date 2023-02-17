@@ -164,8 +164,6 @@ closure_js_library(
     deps = [
         ":cldrversion",
         ":dateintervalsymbols",
-        "//closure/goog/i18n/cldr41:dateintervalpatterns",
-        "//closure/goog/i18n/cldr42:dateintervalpatterns",
     ],
 )
 
@@ -176,9 +174,6 @@ closure_js_library(
     deps = [
         ":cldrversion",
         ":dateintervalpatterns",
-        "//closure/goog/i18n/cldr41:dateintervalpatterns",
-        "//closure/goog/i18n/cldr41:dateintervalpatternsext",
-        "//closure/goog/i18n/cldr42:dateintervalpatternsext",
     ],
 )
 
@@ -186,11 +181,7 @@ closure_js_library(
     name = "dateintervalsymbols",
     srcs = ["dateintervalsymbols.js"],
     lenient = True,
-    deps = [
-        ":cldrversion",
-        "//closure/goog/i18n/cldr41:dateintervalsymbols",
-        "//closure/goog/i18n/cldr42:dateintervalsymbols",
-    ],
+    deps = [":cldrversion"],
 )
 
 closure_js_library(
@@ -200,9 +191,6 @@ closure_js_library(
     deps = [
         ":cldrversion",
         ":dateintervalsymbols",
-        "//closure/goog/i18n/cldr41:dateintervalsymbols",
-        "//closure/goog/i18n/cldr41:dateintervalsymbolsext",
-        "//closure/goog/i18n/cldr42:dateintervalsymbolsext",
     ],
 )
 
@@ -251,8 +239,6 @@ closure_js_library(
     deps = [
         ":cldrversion",
         ":datetimepatternstype",
-        "//closure/goog/i18n/cldr41:datetimepatterns",
-        "//closure/goog/i18n/cldr42:datetimepatterns",
     ],
 )
 
@@ -264,10 +250,6 @@ closure_js_library(
         ":cldrversion",
         ":datetimepatterns",
         ":datetimepatternstype",
-        "//closure/goog/i18n/cldr41:datetimepatterns",
-        "//closure/goog/i18n/cldr41:datetimepatternsext",
-        "//closure/goog/i18n/cldr42:datetimepatterns",
-        "//closure/goog/i18n/cldr42:datetimepatternsext",
     ],
 )
 
@@ -275,11 +257,7 @@ closure_js_library(
     name = "datetimesymbols",
     srcs = ["datetimesymbols.js"],
     lenient = True,
-    deps = [
-        ":cldrversion",
-        "//closure/goog/i18n/cldr41:datetimesymbols",
-        "//closure/goog/i18n/cldr42:datetimesymbols",
-    ],
+    deps = [":cldrversion"],
 )
 
 closure_js_library(
@@ -295,10 +273,6 @@ closure_js_library(
     deps = [
         ":cldrversion",
         ":datetimesymbols",
-        "//closure/goog/i18n/cldr41:datetimesymbols",
-        "//closure/goog/i18n/cldr41:datetimesymbolsext",
-        "//closure/goog/i18n/cldr42:datetimesymbols",
-        "//closure/goog/i18n/cldr42:datetimesymbolsext",
     ],
 )
 
