@@ -458,6 +458,18 @@ goog.labs.net.webChannel.WebChannelBase = function(
       false;
 
   /**
+   * Long polling timeout interval for the server to complete the handing GET.
+   *
+   * @private {number|undefined}
+   */
+  this.longPollingTimeout_ = undefined;
+
+  if (opt_options && opt_options.longPollingTimeout &&
+      opt_options.longPollingTimeout > 0) {
+    this.longPollingTimeout_ = opt_options.longPollingTimeout;
+  }
+
+  /**
    * Callback when all the pending client-sent messages have been flushed.
    *
    * @private {function()|undefined}
@@ -1792,8 +1804,13 @@ WebChannelBase.prototype.startBackChannel_ = function() {
   const uri = this.backChannelUri_.clone();
   uri.setParameterValue('RID', 'rpc');
   uri.setParameterValue('SID', this.sid_);
-  uri.setParameterValue('CI', this.enableStreaming_ ? '0' : '1');
   uri.setParameterValue('AID', this.lastArrayId_);
+
+  uri.setParameterValue('CI', this.enableStreaming_ ? '0' : '1');
+  if (!this.enableStreaming_ && this.longPollingTimeout_) {
+    uri.setParameterValue('TO', this.longPollingTimeout_);
+  }
+
   uri.setParameterValue('TYPE', 'xmlhttp');
 
   this.addAdditionalParams_(uri);

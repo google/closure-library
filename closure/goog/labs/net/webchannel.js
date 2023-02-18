@@ -224,7 +224,7 @@ goog.net.WebChannel.Options.prototype.detectBufferingProxy;
  * ignore this client-configured limit.
  * @type {number|undefined}
  */
-goog.net.WebChannel.Options.prototype.longPollingInterval;
+goog.net.WebChannel.Options.prototype.longPollingTimeout;
 
 /**
  * Enable true 0-RTT message delivery, including
