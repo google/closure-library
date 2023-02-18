@@ -218,10 +218,10 @@ goog.net.WebChannel.Options.prototype.forceLongPolling;
 goog.net.WebChannel.Options.prototype.detectBufferingProxy;
 
 /**
- * This option informs the server the desired maximum interval (in seconds) to
- * terminate a long-polling GET response, e.g. to accommodate the timeout limit
- * configured by a proxy. The WebChannel server may adjust the limit or may
- * ignore this client-configured limit.
+ * This option informs the server the desired maximum timeout interval (in
+ * Milliseconds) to complete a long-polling GET response, e.g. to accommodate
+ * the timeout enforced by a proxy. The WebChannel server may adjust the
+ * specified timeout or may ignore this client-configured timeout.
  * @type {number|undefined}
  */
 goog.net.WebChannel.Options.prototype.longPollingTimeout;
