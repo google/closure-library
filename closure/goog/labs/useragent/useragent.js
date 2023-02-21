@@ -11,6 +11,8 @@
 goog.module('goog.labs.userAgent');
 goog.module.declareLegacyNamespace();
 
+const flags = goog.require('goog.flags');
+
 /**
  * @define {string} Optional runtime override for the USE_CLIENT_HINTS flag.
  * If this is set (for example, to 'foo.bar') then any value of USE_CLIENT_HINTS
@@ -21,8 +23,9 @@ const USE_CLIENT_HINTS_OVERRIDE =
     goog.define('goog.labs.userAgent.USE_CLIENT_HINTS_OVERRIDE', '');
 
 /**
- * @define {boolean} If true, use navigator.userAgentData
- * TODO(user) Flip flag in 2021/12.
+ * @define {boolean} If true, use navigator.userAgentData.  Note: this overrides
+ * the `USE_USER_AGENT_CLIENT_HINTS` runtime flag.  Please prefer the flag when
+ * possible.
  */
 const USE_CLIENT_HINTS =
     goog.define('goog.labs.userAgent.USE_CLIENT_HINTS', false);
@@ -58,6 +61,6 @@ const useClientHintsRuntimeOverride = USE_CLIENT_HINTS_OVERRIDE ?
  * @const {function():boolean}
  */
 exports.useClientHints = () => {
-  return USE_CLIENT_HINTS || useClientHintsRuntimeOverride ||
-      forceClientHintsInTests;
+  return flags.USE_USER_AGENT_CLIENT_HINTS || USE_CLIENT_HINTS ||
+      useClientHintsRuntimeOverride || forceClientHintsInTests;
 };

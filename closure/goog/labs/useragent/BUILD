@@ -110,7 +110,10 @@ closure_js_library(
         "util.js",
     ],
     lenient = True,
-    deps = ["//closure/goog/string:internal"],
+    deps = [
+        "//closure/goog/flags",
+        "//closure/goog/string:internal",
+    ],
 )
 
 closure_js_library(
