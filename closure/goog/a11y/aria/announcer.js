@@ -12,10 +12,6 @@
 
 goog.provide('goog.a11y.aria.Announcer');
 goog.require('goog.Disposable');
-// TODO(user): Fix issue breaking external projects and remove goog.Timer
-// dependency.
-/** @suppress {extraRequire} */
-goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.LivePriority');
 goog.require('goog.a11y.aria.State');

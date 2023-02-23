@@ -16,7 +16,6 @@ closure_js_library(
         "//closure/goog/dom:tagname",
         "//closure/goog/object",
         "//closure/goog/string",
-        "//closure/goog/timer",
     ],
 )
 
