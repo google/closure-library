@@ -443,7 +443,6 @@ closure_js_library(
         ":asserts",
         "//closure/goog/functions",
         "//closure/goog/promise",
-        "//closure/goog/promise:resolver",
     ],
 )
 
