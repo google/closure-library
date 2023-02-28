@@ -35,7 +35,7 @@ const BASE_VECTORS = [
       {input: '#baz', expected: '#baz', safe: true},
       {input: '?:', expected: '?:', safe: true},
       {input: 'not-data:image/png;base64,z\u003D', expected: 'not-data:image/png;base64,z\u003D', safe: true},
-      {input: ' data:image/png;base64,z\u003D', expected: ' data:image/png;base64,z\u003D', safe: true},
+      {input: 'data:image/png;base64,z\u003D', expected: 'data:image/png;base64,z\u003D', safe: true},
       {input: 'tel:+1234567890', expected: 'tel:+1234567890', safe: true},
       {input: 'sms:+1234567890', expected: 'sms:+1234567890', safe: true},
       {input: 'callto:+1234567890', expected: 'callto:+1234567890', safe: true},
