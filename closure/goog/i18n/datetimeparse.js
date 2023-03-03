@@ -237,8 +237,8 @@ goog.i18n.DateTimeParse.prototype.applyPattern_ = function(pattern) {
   for (let i = 0; i < pattern.length; i++) {
     const ch = pattern.charAt(i);
 
-    // handle space, add literal part (if exist), and add space part
-    if (ch == ' ') {
+    // handle whitespace, add literal part (if exist), and add space part
+    if (horizontalWhiteSpacePrefixRegex.test(ch)) {
       if (buf.length > 0) {
         this.patternParts_.push(
             {text: buf, count: 0, abutStart: false, numeric: false});
