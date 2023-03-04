@@ -1092,9 +1092,14 @@ ChannelRequest.prototype.sendCloseRequest = function(uri) {
   let requestSent = false;
 
   if (goog.global.navigator && goog.global.navigator.sendBeacon) {
-    // empty string body to avoid 413 error on chrome < 41
-    requestSent =
-        goog.global.navigator.sendBeacon(this.baseUri_.toString(), '');
+    try {
+      // empty string body to avoid 413 error on chrome < 41
+      requestSent =
+          goog.global.navigator.sendBeacon(this.baseUri_.toString(), '');
+    } catch {
+      // Intentionally left empty; sendBeacon might throw TypeError in certain
+      // unexpected cases.
+    }
   }
 
   if (!requestSent && goog.global.Image) {
