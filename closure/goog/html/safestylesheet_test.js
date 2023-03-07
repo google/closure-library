@@ -58,6 +58,9 @@ testSuite({
     assertCreateRuleEquals(
         '#id{top:0;left:0;}', '#id', {'top': '0', 'left': '0'});
     assertCreateRuleEquals(
+        '#id\\.with\\.punctuation{top:0;left:0;}', '#id\\.with\\.punctuation',
+        {'top': '0', 'left': '0'});
+    assertCreateRuleEquals(
         '.class{margin-left:5px;}', '.class',
         SafeStyle.create({'margin-left': '5px'}));
     assertCreateRuleEquals(

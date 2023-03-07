@@ -91,7 +91,6 @@ closure_js_library(
     lenient = True,
     deps = [
         ":safestyle",
-        "//closure/goog/array",
         "//closure/goog/asserts",
         "//closure/goog/object",
         "//closure/goog/string:const",

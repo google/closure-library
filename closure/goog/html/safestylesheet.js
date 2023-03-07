@@ -124,9 +124,9 @@ class SafeStyleSheet {
         selector.replace(/('|")((?!\1)[^\r\n\f\\]|\\[\s\S])*\1/g, '');
 
     // Check characters allowed in CSS3 selectors.
-    if (!/^[-_a-zA-Z0-9#.:* ,>+~[\]()=^$|]+$/.test(selectorToCheck)) {
+    if (!/^[-_a-zA-Z0-9#.:* ,>+~[\]()=\\^$|]+$/.test(selectorToCheck)) {
       throw new Error(
-          'Selector allows only [-_a-zA-Z0-9#.:* ,>+~[\\]()=^$|] and ' +
+          'Selector allows only [-_a-zA-Z0-9#.:* ,>+~[\\]()=\\^$|] and ' +
           'strings, got: ' + selector);
     }
 
