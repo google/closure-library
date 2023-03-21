@@ -1028,6 +1028,24 @@ goog.net.BrowserChannel.prototype.isBuffered = function() {
 
 
 /**
+ * Sets whether the channel is buffered or not. This state is usually updated in
+ * goog.net.BrowserChannel.testConnectionFinished, but can be set manually here.
+ * This updated status will be reflected in subsequent connections and requests
+ * to the channel.
+ * NOTE: This should ONLY be used by clients that are certain of their
+ * connection status, i.e. that have performed additional test channels. Setting
+ * the wrong buffered status on a client can result in undeliverable responses
+ * from the server.
+ * @param {boolean} isBuffered Whether the channel is buffered.
+ */
+goog.net.BrowserChannel.prototype.setIsBuffered = function(isBuffered) {
+  'use strict';
+  this.useChunked_ = !isBuffered;
+  this.secondTestResults_ = isBuffered;
+};
+
+
+/**
  * Returns whether chunked mode is allowed. In certain debugging situations,
  * it's useful for the application to have a way to disable chunked mode for a
  * user.
@@ -1652,7 +1670,14 @@ goog.net.BrowserChannel.prototype.testConnectionFinished = function(
   'use strict';
   this.channelDebug_.debug('Test Connection Finished');
 
-  this.useChunked_ = this.allowChunkedMode_ && useChunked;
+  // Use the results of the second phase of the test channel if user decided to
+  // override the test results while the test was ongoing.
+  if (this.secondTestResults_ == null) {
+    this.useChunked_ = this.allowChunkedMode_ && useChunked;
+  } else {
+    this.useChunked_ = !this.secondTestResults_;
+  }
+
   this.lastStatusCode_ = testChannel.getLastStatusCode();
   // When using asynchronous test, the channel is already open by connect().
   if (!this.asyncTest_) {
