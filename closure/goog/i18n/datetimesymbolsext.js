@@ -729,14 +729,6 @@ goog.provide('goog.i18n.DateTimeSymbols_zh_Hant_TW');
 goog.provide('goog.i18n.DateTimeSymbols_zu_ZA');
 goog.require('goog.i18n.DateTimeSymbols');
 
-/**
- * This data can sometimes be versioned using the USE_CLDR_NEXT flag defined
- * here.
- * This define is sometimes set on binaries as a compiler flag, and the compiler
- * will complain if the flag is used but not defined. This is a hack to make
- * sure the flag is always defined even if it's not used anywhere.
- * @suppress {extraRequire} */
-goog.require('goog.i18n.cldrversion');
 
 /**
  * Date/time formatting symbols for locale af_NA.

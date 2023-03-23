@@ -146,16 +146,8 @@ goog.provide('goog.i18n.DateTimePatterns_zh_HK');
 goog.provide('goog.i18n.DateTimePatterns_zh_TW');
 goog.provide('goog.i18n.DateTimePatterns_zu');
 
-/**
- * This data can sometimes be versioned using the USE_CLDR_NEXT flag defined
- * here.
- * This define is sometimes set on binaries as a compiler flag, and the compiler
- * will complain if the flag is used but not defined. This is a hack to make
- * sure the flag is always defined even if it's not used anywhere.
- * @suppress {extraRequire} */
-goog.require('goog.i18n.cldrversion');
-
 goog.requireType('goog.i18n.DateTimePatternsType');
+
 
 /**
  * Extended set of localized date/time patterns for locale af.
