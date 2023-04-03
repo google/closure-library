@@ -92,6 +92,13 @@ goog.html.htmlTestVectors.HTML_TEST_VECTORS = [
          "<iframe />",
      ],
      name: "iframe_src"},
+    {input: "<iframe src=\"https://evil.com\">",
+     acceptable: [
+         "",
+         "<iframe></iframe>",
+         "<iframe />",
+     ],
+     name: "iframe_src_https"},
     {input: "<iframe srcdoc=\"&lt;img src&equals;x:x onerror&equals;alert&lpar;xss&rpar;&gt;\" />",
      acceptable: [
          "",
