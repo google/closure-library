@@ -288,7 +288,6 @@ closure_js_library(
 closure_js_library(
     name = "mockmatchers",
     testonly = True,
-    lenient = True,
     exports = [":mock"],
 )
 

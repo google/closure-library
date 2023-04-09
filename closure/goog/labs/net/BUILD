@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "net",
     srcs = [],
-    lenient = True,
     exports = [
         ":image",
         ":webchannel",

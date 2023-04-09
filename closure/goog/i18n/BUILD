@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "jstests_deps",
     testonly = 1,
-    lenient = True,
     exports = [
         ":bidi",
         ":bidiformatter",
