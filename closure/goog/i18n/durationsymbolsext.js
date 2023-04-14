@@ -1,4 +1,3 @@
-
 /**
  * @license
  * Copyright The Closure Library Authors.
@@ -10,19 +9,25 @@
  * File generated from CLDR ver. 42
  *
  * This file covers those locales that are not covered in
- * "DurationSymbols.js".
+ * "durationsymbols.js".
  */
+
 // clang-format off
+
 goog.module('goog.i18n.DurationSymbolsExt');
 const DurationSymbolTypes = goog.require('goog.i18n.DurationSymbolTypes');
 const DurationSymbols = goog.require('goog.i18n.DurationSymbols');
 
 /** @type {!DurationSymbolTypes.DurationSymbols} */
 let defaultSymbols;
+
+
 /** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_af_NA = DurationSymbols.DurationSymbols_af;
+
 /** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_af_ZA = DurationSymbols.DurationSymbols_af;
+
 /** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_agq =  {
   DAY: {
@@ -61,9 +66,11 @@ exports.DurationSymbols_agq =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_agq_CM = exports.DurationSymbols_agq;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ak =  {
   DAY: {
     LONG: "other{# d}",
@@ -101,47 +108,68 @@ exports.DurationSymbols_ak =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ak_GH = exports.DurationSymbols_ak;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_am_ET = DurationSymbols.DurationSymbols_am;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_001 = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_AE = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_BH = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_DJ = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_EH = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_ER = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_IL = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_IQ = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_JO = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_KM = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_KW = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_LB = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_LY = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_MA = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_MR = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_OM = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_PS = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_QA = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_SA =  {
   DAY: {
     LONG: "zero{# يوم}one{يوم}two{يومان}few{# أيام}many{# يومًا}other{# يوم}",
@@ -179,19 +207,26 @@ exports.DurationSymbols_ar_SA =  {
     NARROW: "zero{# سنة}one{سنة}two{سنتان}few{# سنوات}many{# سنة}other{# سنة}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_SD = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_SO = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_SS = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_SY = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_TD = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_TN = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_XB =  {
   DAY: {
     LONG: "zero{# يوم}one{# ؜‮day‬؜}two{يومان}few{# أيام}many{# يومًا}other{# ؜‮days‬؜}",
@@ -229,9 +264,11 @@ exports.DurationSymbols_ar_XB =  {
     NARROW: "zero{# سنة}one{# سنة}two{# سنة}few{# سنة}many{# سنة}other{# سنة}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ar_YE = DurationSymbols.DurationSymbols_ar;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_as =  {
   DAY: {
     LONG: "one{# দিন}other{# দিন}",
@@ -269,9 +306,11 @@ exports.DurationSymbols_as =  {
     NARROW: "one{# বছৰ}other{# বছৰ}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_as_IN = exports.DurationSymbols_as;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_asa =  {
   DAY: {
     LONG: "other{# d}",
@@ -309,9 +348,11 @@ exports.DurationSymbols_asa =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_asa_TZ = exports.DurationSymbols_asa;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ast =  {
   DAY: {
     LONG: "one{# día}other{# díes}",
@@ -349,9 +390,11 @@ exports.DurationSymbols_ast =  {
     NARROW: "one{#añ}other{#añs}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ast_ES = exports.DurationSymbols_ast;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_az_Cyrl =  {
   DAY: {
     LONG: "other{# d}",
@@ -389,7 +432,8 @@ exports.DurationSymbols_az_Cyrl =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_az_Cyrl_AZ =  {
   DAY: {
     LONG: "other{# d}",
@@ -427,11 +471,14 @@ exports.DurationSymbols_az_Cyrl_AZ =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_az_Latn = DurationSymbols.DurationSymbols_az;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_az_Latn_AZ = DurationSymbols.DurationSymbols_az;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bas =  {
   DAY: {
     LONG: "other{# d}",
@@ -469,11 +516,14 @@ exports.DurationSymbols_bas =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bas_CM = exports.DurationSymbols_bas;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_be_BY = DurationSymbols.DurationSymbols_be;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bem =  {
   DAY: {
     LONG: "other{# d}",
@@ -511,9 +561,11 @@ exports.DurationSymbols_bem =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bem_ZM = exports.DurationSymbols_bem;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bez =  {
   DAY: {
     LONG: "other{# d}",
@@ -551,11 +603,98 @@ exports.DurationSymbols_bez =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bez_TZ = exports.DurationSymbols_bez;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bg_BG = DurationSymbols.DurationSymbols_bg;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_bgc =  {
+  DAY: {
+    LONG: "other{# d}",
+    SHORT: "other{# d}",
+    NARROW: "other{# d}",
+  },
+  HOUR: {
+    LONG: "other{# h}",
+    SHORT: "other{# h}",
+    NARROW: "other{# h}",
+  },
+  MINUTE: {
+    LONG: "other{# min}",
+    SHORT: "other{# min}",
+    NARROW: "other{# min}",
+  },
+  MONTH: {
+    LONG: "other{# m}",
+    SHORT: "other{# m}",
+    NARROW: "other{# m}",
+  },
+  SECOND: {
+    LONG: "other{# s}",
+    SHORT: "other{# s}",
+    NARROW: "other{# s}",
+  },
+  WEEK: {
+    LONG: "other{# w}",
+    SHORT: "other{# w}",
+    NARROW: "other{# w}",
+  },
+  YEAR: {
+    LONG: "other{# y}",
+    SHORT: "other{# y}",
+    NARROW: "other{# y}",
+  },
+};
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_bgc_IN = exports.DurationSymbols_bgc;
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_bho =  {
+  DAY: {
+    LONG: "other{# d}",
+    SHORT: "other{# d}",
+    NARROW: "other{# d}",
+  },
+  HOUR: {
+    LONG: "other{# h}",
+    SHORT: "other{# h}",
+    NARROW: "other{# h}",
+  },
+  MINUTE: {
+    LONG: "other{# min}",
+    SHORT: "other{# min}",
+    NARROW: "other{# min}",
+  },
+  MONTH: {
+    LONG: "other{# m}",
+    SHORT: "other{# m}",
+    NARROW: "other{# m}",
+  },
+  SECOND: {
+    LONG: "other{# s}",
+    SHORT: "other{# s}",
+    NARROW: "other{# s}",
+  },
+  WEEK: {
+    LONG: "other{# w}",
+    SHORT: "other{# w}",
+    NARROW: "other{# w}",
+  },
+  YEAR: {
+    LONG: "other{# y}",
+    SHORT: "other{# y}",
+    NARROW: "other{# y}",
+  },
+};
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_bho_IN = exports.DurationSymbols_bho;
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bm =  {
   DAY: {
     LONG: "other{# d}",
@@ -593,13 +732,17 @@ exports.DurationSymbols_bm =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bm_ML = exports.DurationSymbols_bm;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bn_BD = DurationSymbols.DurationSymbols_bn;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bn_IN = DurationSymbols.DurationSymbols_bn;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bo =  {
   DAY: {
     LONG: "other{# d}",
@@ -637,13 +780,17 @@ exports.DurationSymbols_bo =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bo_CN = exports.DurationSymbols_bo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bo_IN = exports.DurationSymbols_bo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_br_FR = DurationSymbols.DurationSymbols_br;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_brx =  {
   DAY: {
     LONG: "one{# सान}other{# सान}",
@@ -681,9 +828,11 @@ exports.DurationSymbols_brx =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_brx_IN = exports.DurationSymbols_brx;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bs_Cyrl =  {
   DAY: {
     LONG: "one{# дан}few{# дана}other{# дана}",
@@ -721,7 +870,8 @@ exports.DurationSymbols_bs_Cyrl =  {
     NARROW: "one{# год}few{# год}other{# год}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bs_Cyrl_BA =  {
   DAY: {
     LONG: "one{# дан}few{# дана}other{# дана}",
@@ -759,19 +909,26 @@ exports.DurationSymbols_bs_Cyrl_BA =  {
     NARROW: "one{# год}few{# год}other{# год}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bs_Latn = DurationSymbols.DurationSymbols_bs;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_bs_Latn_BA = DurationSymbols.DurationSymbols_bs;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ca_AD = DurationSymbols.DurationSymbols_ca;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ca_ES = DurationSymbols.DurationSymbols_ca;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ca_FR = DurationSymbols.DurationSymbols_ca;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ca_IT = DurationSymbols.DurationSymbols_ca;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ccp =  {
   DAY: {
     LONG: "one{# 𑄘𑄨𑄚𑄴}other{# 𑄘𑄨𑄚𑄴}",
@@ -809,11 +966,14 @@ exports.DurationSymbols_ccp =  {
     NARROW: "one{# 𑄝𑄧𑄏𑄧𑄢𑄴}other{# 𑄝𑄧𑄏𑄧𑄢𑄴}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ccp_BD = exports.DurationSymbols_ccp;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ccp_IN = exports.DurationSymbols_ccp;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ce =  {
   DAY: {
     LONG: "one{# де}other{# де}",
@@ -851,9 +1011,11 @@ exports.DurationSymbols_ce =  {
     NARROW: "one{# ш.}other{# ш.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ce_RU = exports.DurationSymbols_ce;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ceb =  {
   DAY: {
     LONG: "one{# ka adlaw}other{# ka mga adlaw}",
@@ -891,9 +1053,11 @@ exports.DurationSymbols_ceb =  {
     NARROW: "one{# ka tuig}other{# ka tuig}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ceb_PH = exports.DurationSymbols_ceb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_cgg =  {
   DAY: {
     LONG: "other{# d}",
@@ -931,11 +1095,14 @@ exports.DurationSymbols_cgg =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_cgg_UG = exports.DurationSymbols_cgg;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_chr_US = DurationSymbols.DurationSymbols_chr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ckb =  {
   DAY: {
     LONG: "other{# d}",
@@ -973,25 +1140,77 @@ exports.DurationSymbols_ckb =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ckb_Arab = exports.DurationSymbols_ckb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ckb_Arab_IQ = exports.DurationSymbols_ckb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ckb_Arab_IR = exports.DurationSymbols_ckb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ckb_IQ = exports.DurationSymbols_ckb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ckb_IR = exports.DurationSymbols_ckb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_cs_CZ = DurationSymbols.DurationSymbols_cs;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_cv =  {
+  DAY: {
+    LONG: "other{# d}",
+    SHORT: "other{# d}",
+    NARROW: "other{# d}",
+  },
+  HOUR: {
+    LONG: "other{# h}",
+    SHORT: "other{# h}",
+    NARROW: "other{# h}",
+  },
+  MINUTE: {
+    LONG: "other{# min}",
+    SHORT: "other{# min}",
+    NARROW: "other{# min}",
+  },
+  MONTH: {
+    LONG: "other{# m}",
+    SHORT: "other{# m}",
+    NARROW: "other{# m}",
+  },
+  SECOND: {
+    LONG: "other{# s}",
+    SHORT: "other{# s}",
+    NARROW: "other{# s}",
+  },
+  WEEK: {
+    LONG: "other{# w}",
+    SHORT: "other{# w}",
+    NARROW: "other{# w}",
+  },
+  YEAR: {
+    LONG: "other{# y}",
+    SHORT: "other{# y}",
+    NARROW: "other{# y}",
+  },
+};
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_cv_RU = exports.DurationSymbols_cv;
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_cy_GB = DurationSymbols.DurationSymbols_cy;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_da_DK = DurationSymbols.DurationSymbols_da;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_da_GL = DurationSymbols.DurationSymbols_da;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dav =  {
   DAY: {
     LONG: "other{# d}",
@@ -1029,19 +1248,26 @@ exports.DurationSymbols_dav =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dav_KE = exports.DurationSymbols_dav;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_de_BE = DurationSymbols.DurationSymbols_de;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_de_DE = DurationSymbols.DurationSymbols_de;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_de_IT = DurationSymbols.DurationSymbols_de;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_de_LI = DurationSymbols.DurationSymbols_de;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_de_LU = DurationSymbols.DurationSymbols_de;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dje =  {
   DAY: {
     LONG: "other{# d}",
@@ -1079,9 +1305,11 @@ exports.DurationSymbols_dje =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dje_NE = exports.DurationSymbols_dje;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_doi =  {
   DAY: {
     LONG: "other{# d}",
@@ -1119,9 +1347,11 @@ exports.DurationSymbols_doi =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_doi_IN = exports.DurationSymbols_doi;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dsb =  {
   DAY: {
     LONG: "one{# źeń}two{# dnja}few{# dny}other{# dnjow}",
@@ -1159,9 +1389,11 @@ exports.DurationSymbols_dsb =  {
     NARROW: "one{# l.}two{# l.}few{# l.}other{# l.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dsb_DE = exports.DurationSymbols_dsb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dua =  {
   DAY: {
     LONG: "other{# d}",
@@ -1199,9 +1431,11 @@ exports.DurationSymbols_dua =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dua_CM = exports.DurationSymbols_dua;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dyo =  {
   DAY: {
     LONG: "other{# d}",
@@ -1239,9 +1473,11 @@ exports.DurationSymbols_dyo =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dyo_SN = exports.DurationSymbols_dyo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dz =  {
   DAY: {
     LONG: "other{ཉིན་ཞག་ #}",
@@ -1279,9 +1515,11 @@ exports.DurationSymbols_dz =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_dz_BT = exports.DurationSymbols_dz;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ebu =  {
   DAY: {
     LONG: "other{# d}",
@@ -1319,9 +1557,11 @@ exports.DurationSymbols_ebu =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ebu_KE = exports.DurationSymbols_ebu;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ee =  {
   DAY: {
     LONG: "one{ŋkeke #}other{ŋkeke #}",
@@ -1359,15 +1599,20 @@ exports.DurationSymbols_ee =  {
     NARROW: "one{ƒe #}other{ƒe #}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ee_GH = exports.DurationSymbols_ee;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ee_TG = exports.DurationSymbols_ee;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_el_CY = DurationSymbols.DurationSymbols_el;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_el_GR = DurationSymbols.DurationSymbols_el;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_001 =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1405,7 +1650,8 @@ exports.DurationSymbols_en_001 =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_150 =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1443,9 +1689,11 @@ exports.DurationSymbols_en_150 =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_AE = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_AG =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1483,7 +1731,8 @@ exports.DurationSymbols_en_AG =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_AI =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1521,9 +1770,11 @@ exports.DurationSymbols_en_AI =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_AS = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_AT =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1561,7 +1812,8 @@ exports.DurationSymbols_en_AT =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_BB =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1599,7 +1851,8 @@ exports.DurationSymbols_en_BB =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_BE =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1637,9 +1890,11 @@ exports.DurationSymbols_en_BE =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_BI = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_BM =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1677,7 +1932,8 @@ exports.DurationSymbols_en_BM =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_BS =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1715,7 +1971,8 @@ exports.DurationSymbols_en_BS =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_BW =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1753,7 +2010,8 @@ exports.DurationSymbols_en_BW =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_BZ =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1791,7 +2049,8 @@ exports.DurationSymbols_en_BZ =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_CC =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1829,7 +2088,8 @@ exports.DurationSymbols_en_CC =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_CH =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1867,7 +2127,8 @@ exports.DurationSymbols_en_CH =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_CK =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1905,7 +2166,8 @@ exports.DurationSymbols_en_CK =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_CM =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1943,7 +2205,8 @@ exports.DurationSymbols_en_CM =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_CX =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -1981,7 +2244,8 @@ exports.DurationSymbols_en_CX =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_CY =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2019,7 +2283,8 @@ exports.DurationSymbols_en_CY =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_DE =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2057,7 +2322,8 @@ exports.DurationSymbols_en_DE =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_DG =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2095,7 +2361,8 @@ exports.DurationSymbols_en_DG =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_DK =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2133,7 +2400,8 @@ exports.DurationSymbols_en_DK =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_DM =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2171,7 +2439,8 @@ exports.DurationSymbols_en_DM =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_ER =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2209,7 +2478,8 @@ exports.DurationSymbols_en_ER =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_FI =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2247,7 +2517,8 @@ exports.DurationSymbols_en_FI =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_FJ =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2285,7 +2556,8 @@ exports.DurationSymbols_en_FJ =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_FK =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2323,7 +2595,8 @@ exports.DurationSymbols_en_FK =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_FM =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2361,7 +2634,8 @@ exports.DurationSymbols_en_FM =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_GD =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2399,7 +2673,8 @@ exports.DurationSymbols_en_GD =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_GG =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2437,7 +2712,8 @@ exports.DurationSymbols_en_GG =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_GH =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2475,7 +2751,8 @@ exports.DurationSymbols_en_GH =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_GI =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2513,7 +2790,8 @@ exports.DurationSymbols_en_GI =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_GM =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2551,9 +2829,11 @@ exports.DurationSymbols_en_GM =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_GU = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_GY =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2591,7 +2871,8 @@ exports.DurationSymbols_en_GY =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_HK =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2629,7 +2910,8 @@ exports.DurationSymbols_en_HK =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_IL =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2667,7 +2949,8 @@ exports.DurationSymbols_en_IL =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_IM =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2705,7 +2988,8 @@ exports.DurationSymbols_en_IM =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_IO =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2743,7 +3027,8 @@ exports.DurationSymbols_en_IO =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_JE =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2781,7 +3066,8 @@ exports.DurationSymbols_en_JE =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_JM =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2819,7 +3105,8 @@ exports.DurationSymbols_en_JM =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_KE =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2857,7 +3144,8 @@ exports.DurationSymbols_en_KE =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_KI =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2895,7 +3183,8 @@ exports.DurationSymbols_en_KI =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_KN =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2933,7 +3222,8 @@ exports.DurationSymbols_en_KN =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_KY =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -2971,7 +3261,8 @@ exports.DurationSymbols_en_KY =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_LC =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3009,7 +3300,8 @@ exports.DurationSymbols_en_LC =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_LR =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3047,7 +3339,8 @@ exports.DurationSymbols_en_LR =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_LS =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3085,7 +3378,8 @@ exports.DurationSymbols_en_LS =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_MG =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3123,9 +3417,11 @@ exports.DurationSymbols_en_MG =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_MH = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_MO =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3163,9 +3459,11 @@ exports.DurationSymbols_en_MO =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_MP = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_MS =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3203,7 +3501,8 @@ exports.DurationSymbols_en_MS =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_MT =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3241,7 +3540,8 @@ exports.DurationSymbols_en_MT =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_MU =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3279,7 +3579,8 @@ exports.DurationSymbols_en_MU =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_MV =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3317,7 +3618,8 @@ exports.DurationSymbols_en_MV =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_MW =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3355,7 +3657,8 @@ exports.DurationSymbols_en_MW =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_MY =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3393,7 +3696,8 @@ exports.DurationSymbols_en_MY =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_NA =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3431,7 +3735,8 @@ exports.DurationSymbols_en_NA =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_NF =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3469,7 +3774,8 @@ exports.DurationSymbols_en_NF =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_NG =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3507,7 +3813,8 @@ exports.DurationSymbols_en_NG =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_NL =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3545,7 +3852,8 @@ exports.DurationSymbols_en_NL =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_NR =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3583,7 +3891,8 @@ exports.DurationSymbols_en_NR =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_NU =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3621,7 +3930,8 @@ exports.DurationSymbols_en_NU =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_NZ =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3659,7 +3969,8 @@ exports.DurationSymbols_en_NZ =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_PG =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3697,9 +4008,11 @@ exports.DurationSymbols_en_PG =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_PH = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_PK =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3737,7 +4050,8 @@ exports.DurationSymbols_en_PK =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_PN =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3775,9 +4089,11 @@ exports.DurationSymbols_en_PN =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_PR = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_PW =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3815,7 +4131,8 @@ exports.DurationSymbols_en_PW =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_RW =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3853,7 +4170,8 @@ exports.DurationSymbols_en_RW =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_SB =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3891,7 +4209,8 @@ exports.DurationSymbols_en_SB =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_SC =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3929,7 +4248,8 @@ exports.DurationSymbols_en_SC =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_SD =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -3967,7 +4287,8 @@ exports.DurationSymbols_en_SD =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_SE =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4005,7 +4326,8 @@ exports.DurationSymbols_en_SE =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_SH =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4043,7 +4365,8 @@ exports.DurationSymbols_en_SH =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_SI =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4081,7 +4404,8 @@ exports.DurationSymbols_en_SI =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_SL =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4119,7 +4443,8 @@ exports.DurationSymbols_en_SL =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_SS =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4157,7 +4482,8 @@ exports.DurationSymbols_en_SS =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_SX =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4195,7 +4521,8 @@ exports.DurationSymbols_en_SX =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_SZ =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4233,7 +4560,8 @@ exports.DurationSymbols_en_SZ =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_TC =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4271,7 +4599,8 @@ exports.DurationSymbols_en_TC =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_TK =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4309,7 +4638,8 @@ exports.DurationSymbols_en_TK =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_TO =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4347,7 +4677,8 @@ exports.DurationSymbols_en_TO =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_TT =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4385,7 +4716,8 @@ exports.DurationSymbols_en_TT =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_TV =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4423,7 +4755,8 @@ exports.DurationSymbols_en_TV =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_TZ =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4461,7 +4794,8 @@ exports.DurationSymbols_en_TZ =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_UG =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4499,11 +4833,14 @@ exports.DurationSymbols_en_UG =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_UM = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_US_POSIX = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_VC =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4541,7 +4878,8 @@ exports.DurationSymbols_en_VC =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_VG =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4579,9 +4917,11 @@ exports.DurationSymbols_en_VG =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_VI = DurationSymbols.DurationSymbols_en;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_VU =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4619,7 +4959,8 @@ exports.DurationSymbols_en_VU =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_WS =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4657,7 +4998,8 @@ exports.DurationSymbols_en_WS =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_XA =  {
   DAY: {
     LONG: "one{[# ðåý one two]}other{[# ðåýš one two]}",
@@ -4695,7 +5037,8 @@ exports.DurationSymbols_en_XA =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_ZM =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4733,7 +5076,8 @@ exports.DurationSymbols_en_ZM =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_en_ZW =  {
   DAY: {
     LONG: "one{# day}other{# days}",
@@ -4771,7 +5115,8 @@ exports.DurationSymbols_en_ZW =  {
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_eo =  {
   DAY: {
     LONG: "other{# d}",
@@ -4809,9 +5154,11 @@ exports.DurationSymbols_eo =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_eo_001 = exports.DurationSymbols_eo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_AR =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -4849,7 +5196,8 @@ exports.DurationSymbols_es_AR =  {
     NARROW: "one{#a.}other{#a.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_BO =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -4887,7 +5235,8 @@ exports.DurationSymbols_es_BO =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_BR =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -4925,7 +5274,8 @@ exports.DurationSymbols_es_BR =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_BZ =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -4963,7 +5313,8 @@ exports.DurationSymbols_es_BZ =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_CL =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5001,7 +5352,8 @@ exports.DurationSymbols_es_CL =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_CO =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5039,7 +5391,8 @@ exports.DurationSymbols_es_CO =  {
     NARROW: "one{# a.}other{# a.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_CR =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5077,7 +5430,8 @@ exports.DurationSymbols_es_CR =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_CU =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5115,7 +5469,8 @@ exports.DurationSymbols_es_CU =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_DO =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5153,9 +5508,11 @@ exports.DurationSymbols_es_DO =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_EA = DurationSymbols.DurationSymbols_es;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_EC =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5193,9 +5550,11 @@ exports.DurationSymbols_es_EC =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_GQ = DurationSymbols.DurationSymbols_es;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_GT =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5233,7 +5592,8 @@ exports.DurationSymbols_es_GT =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_HN =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5271,9 +5631,11 @@ exports.DurationSymbols_es_HN =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_IC = DurationSymbols.DurationSymbols_es;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_NI =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5311,7 +5673,8 @@ exports.DurationSymbols_es_NI =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_PA =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5349,7 +5712,8 @@ exports.DurationSymbols_es_PA =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_PE =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5387,9 +5751,11 @@ exports.DurationSymbols_es_PE =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_PH = DurationSymbols.DurationSymbols_es;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_PR =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5427,7 +5793,8 @@ exports.DurationSymbols_es_PR =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_PY =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5465,7 +5832,8 @@ exports.DurationSymbols_es_PY =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_SV =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5503,7 +5871,8 @@ exports.DurationSymbols_es_SV =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_UY =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5541,7 +5910,8 @@ exports.DurationSymbols_es_UY =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_es_VE =  {
   DAY: {
     LONG: "one{# día}other{# días}",
@@ -5579,11 +5949,14 @@ exports.DurationSymbols_es_VE =  {
     NARROW: "one{#a.}other{#aa.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_et_EE = DurationSymbols.DurationSymbols_et;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_eu_ES = DurationSymbols.DurationSymbols_eu;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ewo =  {
   DAY: {
     LONG: "other{# d}",
@@ -5621,13 +5994,17 @@ exports.DurationSymbols_ewo =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ewo_CM = exports.DurationSymbols_ewo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fa_AF = DurationSymbols.DurationSymbols_fa;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fa_IR = DurationSymbols.DurationSymbols_fa;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff =  {
   DAY: {
     LONG: "other{# d}",
@@ -5665,12 +6042,13 @@ exports.DurationSymbols_ff =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -5685,7 +6063,7 @@ exports.DurationSymbols_ff_Adlm =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -5698,17 +6076,18 @@ exports.DurationSymbols_ff_Adlm =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_BF =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -5723,7 +6102,7 @@ exports.DurationSymbols_ff_Adlm_BF =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -5736,17 +6115,18 @@ exports.DurationSymbols_ff_Adlm_BF =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_CM =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -5761,7 +6141,7 @@ exports.DurationSymbols_ff_Adlm_CM =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -5774,17 +6154,18 @@ exports.DurationSymbols_ff_Adlm_CM =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_GH =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -5799,7 +6180,7 @@ exports.DurationSymbols_ff_Adlm_GH =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -5812,17 +6193,18 @@ exports.DurationSymbols_ff_Adlm_GH =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_GM =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -5837,7 +6219,7 @@ exports.DurationSymbols_ff_Adlm_GM =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -5850,17 +6232,18 @@ exports.DurationSymbols_ff_Adlm_GM =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_GN =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -5875,7 +6258,7 @@ exports.DurationSymbols_ff_Adlm_GN =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -5888,17 +6271,18 @@ exports.DurationSymbols_ff_Adlm_GN =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_GW =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -5913,7 +6297,7 @@ exports.DurationSymbols_ff_Adlm_GW =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -5926,17 +6310,18 @@ exports.DurationSymbols_ff_Adlm_GW =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_LR =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -5951,7 +6336,7 @@ exports.DurationSymbols_ff_Adlm_LR =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -5964,17 +6349,18 @@ exports.DurationSymbols_ff_Adlm_LR =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_MR =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -5989,7 +6375,7 @@ exports.DurationSymbols_ff_Adlm_MR =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -6002,17 +6388,18 @@ exports.DurationSymbols_ff_Adlm_MR =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_NE =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -6027,7 +6414,7 @@ exports.DurationSymbols_ff_Adlm_NE =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -6040,17 +6427,18 @@ exports.DurationSymbols_ff_Adlm_NE =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_NG =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -6065,7 +6453,7 @@ exports.DurationSymbols_ff_Adlm_NG =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -6078,17 +6466,18 @@ exports.DurationSymbols_ff_Adlm_NG =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_SL =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -6103,7 +6492,7 @@ exports.DurationSymbols_ff_Adlm_SL =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -6116,17 +6505,18 @@ exports.DurationSymbols_ff_Adlm_SL =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Adlm_SN =  {
   DAY: {
     LONG: "one{# 𞤻𞤢𞤤𞥆𞤢𞤤}other{# 𞤻𞤢𞤤𞥆𞤫}",
     SHORT: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
-    NARROW: "one{# 𞤻𞤢𞤤.}other{# 𞤻𞤢𞤤.}",
+    NARROW: "one{#𞤻}other{#𞤻}",
   },
   HOUR: {
     LONG: "one{# 𞤲𞤶𞤢𞤥𞤲𞤣𞤭}other{# 𞤲𞤶𞤢𞤥𞤤𞤭}",
@@ -6141,7 +6531,7 @@ exports.DurationSymbols_ff_Adlm_SN =  {
   MONTH: {
     LONG: "one{# 𞤤𞤫𞤱𞤪𞤵}other{# 𞤤𞤫𞤦𞥆𞤭}",
     SHORT: "one{#/𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
-    NARROW: "one{# 𞤤𞤫𞤱}other{# 𞤤𞤫𞤦}",
+    NARROW: "one{# 𞤤}other{# 𞤤}",
   },
   SECOND: {
     LONG: "one{# 𞤳𞤭𞤲𞤰𞤮}other{# 𞤳𞤭𞤲𞤰𞤫}",
@@ -6154,42 +6544,58 @@ exports.DurationSymbols_ff_Adlm_SN =  {
     NARROW: "one{# 𞤴𞤼}other{# 𞤶𞤼}",
   },
   YEAR: {
-    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞥋𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
+    LONG: "one{# 𞤸𞤭𞤼𞤢𞥄𞤲𞤣𞤫}other{# 𞤳𞤭𞤼𞤢𞥄𞤯𞤫}",
     SHORT: "one{# 𞤸𞤭𞤼}other{# 𞤳𞤭𞤼}",
     NARROW: "one{# 𞤳𞤭𞤼}other{#/𞤳𞤭𞤼}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_BF = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_CM = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_GH = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_GM = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_GN = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_GW = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_LR = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_MR = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_NE = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_NG = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_SL = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ff_Latn_SN = exports.DurationSymbols_ff;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fi_FI = DurationSymbols.DurationSymbols_fi;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fil_PH = DurationSymbols.DurationSymbols_fil;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fo =  {
   DAY: {
     LONG: "one{# dagur}other{# dagar}",
@@ -6227,101 +6633,149 @@ exports.DurationSymbols_fo =  {
     NARROW: "one{#ár}other{#ár}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fo_DK = exports.DurationSymbols_fo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fo_FO = exports.DurationSymbols_fo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_BE = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_BF = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_BI = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_BJ = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_BL = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_CD = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_CF = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_CG = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_CH = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_CI = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_CM = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_DJ = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_DZ = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_FR = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_GA = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_GF = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_GN = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_GP = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_GQ = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_HT = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_KM = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_LU = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_MA = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_MC = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_MF = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_MG = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_ML = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_MQ = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_MR = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_MU = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_NC = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_NE = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_PF = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_PM = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_RE = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_RW = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_SC = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_SN = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_SY = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_TD = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_TG = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_TN = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_VU = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_WF = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fr_YT = DurationSymbols.DurationSymbols_fr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fur =  {
   DAY: {
     LONG: "one{# zornade}other{# zornadis}",
@@ -6359,9 +6813,11 @@ exports.DurationSymbols_fur =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fur_IT = exports.DurationSymbols_fur;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fy =  {
   DAY: {
     LONG: "one{# dei}other{# deien}",
@@ -6399,13 +6855,17 @@ exports.DurationSymbols_fy =  {
     NARROW: "one{# jr}other{# jr}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_fy_NL = exports.DurationSymbols_fy;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ga_GB = DurationSymbols.DurationSymbols_ga;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ga_IE = DurationSymbols.DurationSymbols_ga;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_gd =  {
   DAY: {
     LONG: "one{# latha}two{# latha}few{# làithean}other{# latha}",
@@ -6443,19 +6903,26 @@ exports.DurationSymbols_gd =  {
     NARROW: "one{#bl}two{#bl}few{#bl}other{#bl}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_gd_GB = exports.DurationSymbols_gd;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_gl_ES = DurationSymbols.DurationSymbols_gl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_gsw_CH = DurationSymbols.DurationSymbols_gsw;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_gsw_FR = DurationSymbols.DurationSymbols_gsw;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_gsw_LI = DurationSymbols.DurationSymbols_gsw;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_gu_IN = DurationSymbols.DurationSymbols_gu;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_guz =  {
   DAY: {
     LONG: "other{# d}",
@@ -6493,9 +6960,11 @@ exports.DurationSymbols_guz =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_guz_KE = exports.DurationSymbols_guz;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_gv =  {
   DAY: {
     LONG: "other{# d}",
@@ -6533,17 +7002,19 @@ exports.DurationSymbols_gv =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_gv_IM = exports.DurationSymbols_gv;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ha =  {
   DAY: {
     LONG: "one{rana #}other{ranaku #}",
-    SHORT: "one{rana #}other{ranaku #}",
+    SHORT: "one{rana #}other{Rnk. #}",
     NARROW: "one{r#}other{r#}",
   },
   HOUR: {
-    LONG: "one{sa'a #}other{sa'o'i #}",
+    LONG: "one{sa′a #}other{sa′o′i #}",
     SHORT: "one{s #}other{s #}",
     NARROW: "one{s#}other{s#}",
   },
@@ -6573,27 +7044,34 @@ exports.DurationSymbols_ha =  {
     NARROW: "one{shkr #}other{s#}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ha_GH = exports.DurationSymbols_ha;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ha_NE = exports.DurationSymbols_ha;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ha_NG = exports.DurationSymbols_ha;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_haw_US = DurationSymbols.DurationSymbols_haw;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_he_IL = DurationSymbols.DurationSymbols_he;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_hi_IN = DurationSymbols.DurationSymbols_hi;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_hi_Latn =  {
   DAY: {
-    LONG: "one{# day}other{# days}",
-    SHORT: "one{# day}other{# days}",
+    LONG: "one{# din}other{# din}",
+    SHORT: "one{# din}other{# din}",
     NARROW: "one{#d}other{#d}",
   },
   HOUR: {
-    LONG: "one{# hour}other{# hours}",
+    LONG: "one{# ghanta}other{# ghante}",
     SHORT: "one{# hr}other{# hrs}",
     NARROW: "one{#h}other{#h}",
   },
@@ -6618,20 +7096,21 @@ exports.DurationSymbols_hi_Latn =  {
     NARROW: "one{#w}other{#w}",
   },
   YEAR: {
-    LONG: "one{# year}other{# years}",
+    LONG: "one{# saal}other{# saal}",
     SHORT: "one{# yr}other{# yrs}",
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_hi_Latn_IN =  {
   DAY: {
-    LONG: "one{# day}other{# days}",
-    SHORT: "one{# day}other{# days}",
+    LONG: "one{# din}other{# din}",
+    SHORT: "one{# din}other{# din}",
     NARROW: "one{#d}other{#d}",
   },
   HOUR: {
-    LONG: "one{# hour}other{# hours}",
+    LONG: "one{# ghanta}other{# ghante}",
     SHORT: "one{# hr}other{# hrs}",
     NARROW: "one{#h}other{#h}",
   },
@@ -6656,16 +7135,19 @@ exports.DurationSymbols_hi_Latn_IN =  {
     NARROW: "one{#w}other{#w}",
   },
   YEAR: {
-    LONG: "one{# year}other{# years}",
+    LONG: "one{# saal}other{# saal}",
     SHORT: "one{# yr}other{# yrs}",
     NARROW: "one{#y}other{#y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_hr_BA = DurationSymbols.DurationSymbols_hr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_hr_HR = DurationSymbols.DurationSymbols_hr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_hsb =  {
   DAY: {
     LONG: "one{# dźeń}two{# dnjej}few{# dny}other{# dnjow}",
@@ -6703,13 +7185,17 @@ exports.DurationSymbols_hsb =  {
     NARROW: "one{# l.}two{# l.}few{# l.}other{# l.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_hsb_DE = exports.DurationSymbols_hsb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_hu_HU = DurationSymbols.DurationSymbols_hu;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_hy_AM = DurationSymbols.DurationSymbols_hy;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ia =  {
   DAY: {
     LONG: "one{# die}other{# dies}",
@@ -6747,11 +7233,14 @@ exports.DurationSymbols_ia =  {
     NARROW: "one{#an}other{#an}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ia_001 = exports.DurationSymbols_ia;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_id_ID = DurationSymbols.DurationSymbols_id;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ig =  {
   DAY: {
     LONG: "other{# d}",
@@ -6789,9 +7278,11 @@ exports.DurationSymbols_ig =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ig_NG = exports.DurationSymbols_ig;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ii =  {
   DAY: {
     LONG: "other{# d}",
@@ -6829,21 +7320,29 @@ exports.DurationSymbols_ii =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ii_CN = exports.DurationSymbols_ii;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_is_IS = DurationSymbols.DurationSymbols_is;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_it_CH = DurationSymbols.DurationSymbols_it;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_it_IT = DurationSymbols.DurationSymbols_it;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_it_SM = DurationSymbols.DurationSymbols_it;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_it_VA = DurationSymbols.DurationSymbols_it;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ja_JP = DurationSymbols.DurationSymbols_ja;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_jgo =  {
   DAY: {
     LONG: "one{# lɛ́Ꞌ}other{# lɛ́Ꞌ}",
@@ -6881,9 +7380,11 @@ exports.DurationSymbols_jgo =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_jgo_CM = exports.DurationSymbols_jgo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_jmc =  {
   DAY: {
     LONG: "other{# d}",
@@ -6921,9 +7422,11 @@ exports.DurationSymbols_jmc =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_jmc_TZ = exports.DurationSymbols_jmc;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_jv =  {
   DAY: {
     LONG: "other{# dina}",
@@ -6961,11 +7464,14 @@ exports.DurationSymbols_jv =  {
     NARROW: "other{# taun}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_jv_ID = exports.DurationSymbols_jv;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ka_GE = DurationSymbols.DurationSymbols_ka;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kab =  {
   DAY: {
     LONG: "other{# d}",
@@ -7003,9 +7509,11 @@ exports.DurationSymbols_kab =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kab_DZ = exports.DurationSymbols_kab;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kam =  {
   DAY: {
     LONG: "other{# d}",
@@ -7043,9 +7551,11 @@ exports.DurationSymbols_kam =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kam_KE = exports.DurationSymbols_kam;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kde =  {
   DAY: {
     LONG: "other{# d}",
@@ -7083,9 +7593,11 @@ exports.DurationSymbols_kde =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kde_TZ = exports.DurationSymbols_kde;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kea =  {
   DAY: {
     LONG: "other{# dia}",
@@ -7123,9 +7635,11 @@ exports.DurationSymbols_kea =  {
     NARROW: "other{# anu}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kea_CV = exports.DurationSymbols_kea;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kgp =  {
   DAY: {
     LONG: "one{kurã #}other{kurã #}",
@@ -7163,9 +7677,11 @@ exports.DurationSymbols_kgp =  {
     NARROW: "one{# prỹg}other{# prỹg ag}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kgp_BR = exports.DurationSymbols_kgp;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_khq =  {
   DAY: {
     LONG: "other{# d}",
@@ -7203,9 +7719,11 @@ exports.DurationSymbols_khq =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_khq_ML = exports.DurationSymbols_khq;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ki =  {
   DAY: {
     LONG: "other{# d}",
@@ -7243,11 +7761,14 @@ exports.DurationSymbols_ki =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ki_KE = exports.DurationSymbols_ki;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kk_KZ = DurationSymbols.DurationSymbols_kk;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kkj =  {
   DAY: {
     LONG: "other{# d}",
@@ -7285,9 +7806,11 @@ exports.DurationSymbols_kkj =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kkj_CM = exports.DurationSymbols_kkj;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kl =  {
   DAY: {
     LONG: "other{# d}",
@@ -7325,9 +7848,11 @@ exports.DurationSymbols_kl =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kl_GL = exports.DurationSymbols_kl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kln =  {
   DAY: {
     LONG: "other{# d}",
@@ -7365,17 +7890,23 @@ exports.DurationSymbols_kln =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kln_KE = exports.DurationSymbols_kln;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_km_KH = DurationSymbols.DurationSymbols_km;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kn_IN = DurationSymbols.DurationSymbols_kn;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ko_KP = DurationSymbols.DurationSymbols_ko;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ko_KR = DurationSymbols.DurationSymbols_ko;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kok =  {
   DAY: {
     LONG: "other{# दीस}",
@@ -7413,9 +7944,11 @@ exports.DurationSymbols_kok =  {
     NARROW: "other{#व}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kok_IN = exports.DurationSymbols_kok;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ks =  {
   DAY: {
     LONG: "one{# دۄہ}other{# دۄہ}",
@@ -7453,11 +7986,14 @@ exports.DurationSymbols_ks =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ks_Arab = exports.DurationSymbols_ks;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ks_Arab_IN = exports.DurationSymbols_ks;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ks_Deva =  {
   DAY: {
     LONG: "other{# d}",
@@ -7495,7 +8031,8 @@ exports.DurationSymbols_ks_Deva =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ks_Deva_IN =  {
   DAY: {
     LONG: "other{# d}",
@@ -7533,7 +8070,8 @@ exports.DurationSymbols_ks_Deva_IN =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ksb =  {
   DAY: {
     LONG: "other{# d}",
@@ -7571,9 +8109,11 @@ exports.DurationSymbols_ksb =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ksb_TZ = exports.DurationSymbols_ksb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ksf =  {
   DAY: {
     LONG: "other{# d}",
@@ -7611,9 +8151,11 @@ exports.DurationSymbols_ksf =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ksf_CM = exports.DurationSymbols_ksf;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ksh =  {
   DAY: {
     LONG: "zero{# Dääsch}one{# Dääsch}other{# Dääsch}",
@@ -7651,9 +8193,11 @@ exports.DurationSymbols_ksh =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ksh_DE = exports.DurationSymbols_ksh;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ku =  {
   DAY: {
     LONG: "one{# roj}other{# roj}",
@@ -7691,9 +8235,11 @@ exports.DurationSymbols_ku =  {
     NARROW: "one{#sl}other{#sl}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ku_TR = exports.DurationSymbols_ku;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kw =  {
   DAY: {
     LONG: "other{# d}",
@@ -7731,11 +8277,14 @@ exports.DurationSymbols_kw =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_kw_GB = exports.DurationSymbols_kw;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ky_KG = DurationSymbols.DurationSymbols_ky;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lag =  {
   DAY: {
     LONG: "other{# d}",
@@ -7773,9 +8322,11 @@ exports.DurationSymbols_lag =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lag_TZ = exports.DurationSymbols_lag;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lb =  {
   DAY: {
     LONG: "one{# Dag}other{# Deeg}",
@@ -7813,9 +8364,11 @@ exports.DurationSymbols_lb =  {
     NARROW: "one{# J}other{# J}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lb_LU = exports.DurationSymbols_lb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lg =  {
   DAY: {
     LONG: "other{# d}",
@@ -7853,9 +8406,11 @@ exports.DurationSymbols_lg =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lg_UG = exports.DurationSymbols_lg;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lkt =  {
   DAY: {
     LONG: "other{#-čháŋ}",
@@ -7893,19 +8448,26 @@ exports.DurationSymbols_lkt =  {
     NARROW: "other{ómakȟa #}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lkt_US = exports.DurationSymbols_lkt;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ln_AO = DurationSymbols.DurationSymbols_ln;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ln_CD = DurationSymbols.DurationSymbols_ln;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ln_CF = DurationSymbols.DurationSymbols_ln;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ln_CG = DurationSymbols.DurationSymbols_ln;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lo_LA = DurationSymbols.DurationSymbols_lo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lrc =  {
   DAY: {
     LONG: "other{# d}",
@@ -7943,13 +8505,17 @@ exports.DurationSymbols_lrc =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lrc_IQ = exports.DurationSymbols_lrc;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lrc_IR = exports.DurationSymbols_lrc;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lt_LT = DurationSymbols.DurationSymbols_lt;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lu =  {
   DAY: {
     LONG: "other{# d}",
@@ -7987,9 +8553,11 @@ exports.DurationSymbols_lu =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lu_CD = exports.DurationSymbols_lu;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_luo =  {
   DAY: {
     LONG: "other{# d}",
@@ -8027,9 +8595,11 @@ exports.DurationSymbols_luo =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_luo_KE = exports.DurationSymbols_luo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_luy =  {
   DAY: {
     LONG: "other{# d}",
@@ -8067,11 +8637,14 @@ exports.DurationSymbols_luy =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_luy_KE = exports.DurationSymbols_luy;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_lv_LV = DurationSymbols.DurationSymbols_lv;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mai =  {
   DAY: {
     LONG: "other{# d}",
@@ -8109,9 +8682,11 @@ exports.DurationSymbols_mai =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mai_IN = exports.DurationSymbols_mai;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mas =  {
   DAY: {
     LONG: "other{# d}",
@@ -8149,11 +8724,14 @@ exports.DurationSymbols_mas =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mas_KE = exports.DurationSymbols_mas;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mas_TZ = exports.DurationSymbols_mas;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mer =  {
   DAY: {
     LONG: "other{# d}",
@@ -8191,9 +8769,11 @@ exports.DurationSymbols_mer =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mer_KE = exports.DurationSymbols_mer;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mfe =  {
   DAY: {
     LONG: "other{# d}",
@@ -8231,9 +8811,11 @@ exports.DurationSymbols_mfe =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mfe_MU = exports.DurationSymbols_mfe;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mg =  {
   DAY: {
     LONG: "other{# d}",
@@ -8271,9 +8853,11 @@ exports.DurationSymbols_mg =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mg_MG = exports.DurationSymbols_mg;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mgh =  {
   DAY: {
     LONG: "other{# d}",
@@ -8311,9 +8895,11 @@ exports.DurationSymbols_mgh =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mgh_MZ = exports.DurationSymbols_mgh;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mgo =  {
   DAY: {
     LONG: "one{# d}other{# d}",
@@ -8351,9 +8937,11 @@ exports.DurationSymbols_mgo =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mgo_CM = exports.DurationSymbols_mgo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mi =  {
   DAY: {
     LONG: "other{# d}",
@@ -8391,15 +8979,20 @@ exports.DurationSymbols_mi =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mi_NZ = exports.DurationSymbols_mi;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mk_MK = DurationSymbols.DurationSymbols_mk;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ml_IN = DurationSymbols.DurationSymbols_ml;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mn_MN = DurationSymbols.DurationSymbols_mn;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mni =  {
   DAY: {
     LONG: "other{# d}",
@@ -8437,23 +9030,32 @@ exports.DurationSymbols_mni =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mni_Beng = exports.DurationSymbols_mni;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mni_Beng_IN = exports.DurationSymbols_mni;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mr_IN = DurationSymbols.DurationSymbols_mr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ms_BN = DurationSymbols.DurationSymbols_ms;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ms_ID = DurationSymbols.DurationSymbols_ms;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ms_MY = DurationSymbols.DurationSymbols_ms;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ms_SG = DurationSymbols.DurationSymbols_ms;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mt_MT = DurationSymbols.DurationSymbols_mt;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mua =  {
   DAY: {
     LONG: "other{# d}",
@@ -8491,11 +9093,14 @@ exports.DurationSymbols_mua =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mua_CM = exports.DurationSymbols_mua;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_my_MM = DurationSymbols.DurationSymbols_my;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mzn =  {
   DAY: {
     LONG: "other{# روز}",
@@ -8533,9 +9138,11 @@ exports.DurationSymbols_mzn =  {
     NARROW: "other{# سال}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_mzn_IR = exports.DurationSymbols_mzn;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_naq =  {
   DAY: {
     LONG: "other{# d}",
@@ -8573,13 +9180,17 @@ exports.DurationSymbols_naq =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_naq_NA = exports.DurationSymbols_naq;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nb_NO = DurationSymbols.DurationSymbols_nb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nb_SJ = DurationSymbols.DurationSymbols_nb;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nd =  {
   DAY: {
     LONG: "other{# d}",
@@ -8617,27 +9228,38 @@ exports.DurationSymbols_nd =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nd_ZW = exports.DurationSymbols_nd;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ne_IN = DurationSymbols.DurationSymbols_ne;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ne_NP = DurationSymbols.DurationSymbols_ne;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nl_AW = DurationSymbols.DurationSymbols_nl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nl_BE = DurationSymbols.DurationSymbols_nl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nl_BQ = DurationSymbols.DurationSymbols_nl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nl_CW = DurationSymbols.DurationSymbols_nl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nl_NL = DurationSymbols.DurationSymbols_nl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nl_SR = DurationSymbols.DurationSymbols_nl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nl_SX = DurationSymbols.DurationSymbols_nl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nmg =  {
   DAY: {
     LONG: "other{# d}",
@@ -8675,9 +9297,11 @@ exports.DurationSymbols_nmg =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nmg_CM = exports.DurationSymbols_nmg;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nn =  {
   DAY: {
     LONG: "one{# døgn}other{# døgn}",
@@ -8715,9 +9339,11 @@ exports.DurationSymbols_nn =  {
     NARROW: "one{#å}other{#å}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nn_NO = exports.DurationSymbols_nn;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nnh =  {
   DAY: {
     LONG: "other{# d}",
@@ -8755,9 +9381,11 @@ exports.DurationSymbols_nnh =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nnh_CM = exports.DurationSymbols_nnh;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nus =  {
   DAY: {
     LONG: "other{# d}",
@@ -8795,9 +9423,11 @@ exports.DurationSymbols_nus =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nus_SS = exports.DurationSymbols_nus;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nyn =  {
   DAY: {
     LONG: "other{# d}",
@@ -8835,9 +9465,11 @@ exports.DurationSymbols_nyn =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_nyn_UG = exports.DurationSymbols_nyn;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_om =  {
   DAY: {
     LONG: "other{# d}",
@@ -8875,13 +9507,17 @@ exports.DurationSymbols_om =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_om_ET = exports.DurationSymbols_om;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_om_KE = exports.DurationSymbols_om;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_or_IN = DurationSymbols.DurationSymbols_or;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_os =  {
   DAY: {
     LONG: "one{# бон}other{# боны}",
@@ -8919,11 +9555,14 @@ exports.DurationSymbols_os =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_os_GE = exports.DurationSymbols_os;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_os_RU = exports.DurationSymbols_os;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pa_Arab =  {
   DAY: {
     LONG: "other{# d}",
@@ -8961,7 +9600,8 @@ exports.DurationSymbols_pa_Arab =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pa_Arab_PK =  {
   DAY: {
     LONG: "other{# d}",
@@ -8999,11 +9639,14 @@ exports.DurationSymbols_pa_Arab_PK =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pa_Guru = DurationSymbols.DurationSymbols_pa;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pa_Guru_IN = DurationSymbols.DurationSymbols_pa;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pcm =  {
   DAY: {
     LONG: "one{# Dè}other{# Dè}",
@@ -9041,11 +9684,14 @@ exports.DurationSymbols_pcm =  {
     NARROW: "one{#Yiẹ}other{#Yiẹ}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pcm_NG = exports.DurationSymbols_pcm;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pl_PL = DurationSymbols.DurationSymbols_pl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ps =  {
   DAY: {
     LONG: "one{# ورځ}other{# ورځې}",
@@ -9083,9 +9729,11 @@ exports.DurationSymbols_ps =  {
     NARROW: "one{# y}other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ps_AF = exports.DurationSymbols_ps;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ps_PK =  {
   DAY: {
     LONG: "one{# ورځ}other{# ورځے}",
@@ -9123,7 +9771,8 @@ exports.DurationSymbols_ps_PK =  {
     NARROW: "one{# y}other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt_AO =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
@@ -9161,7 +9810,8 @@ exports.DurationSymbols_pt_AO =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt_CH =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
@@ -9199,7 +9849,8 @@ exports.DurationSymbols_pt_CH =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt_CV =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
@@ -9237,7 +9888,8 @@ exports.DurationSymbols_pt_CV =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt_GQ =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
@@ -9275,7 +9927,8 @@ exports.DurationSymbols_pt_GQ =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt_GW =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
@@ -9313,7 +9966,8 @@ exports.DurationSymbols_pt_GW =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt_LU =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
@@ -9351,7 +10005,8 @@ exports.DurationSymbols_pt_LU =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt_MO =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
@@ -9389,7 +10044,8 @@ exports.DurationSymbols_pt_MO =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt_MZ =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
@@ -9427,7 +10083,8 @@ exports.DurationSymbols_pt_MZ =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt_ST =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
@@ -9465,7 +10122,8 @@ exports.DurationSymbols_pt_ST =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt_TL =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
@@ -9503,7 +10161,8 @@ exports.DurationSymbols_pt_TL =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_qu =  {
   DAY: {
     LONG: "other{# punchaw}",
@@ -9541,13 +10200,59 @@ exports.DurationSymbols_qu =  {
     NARROW: "other{# w}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_qu_BO = exports.DurationSymbols_qu;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_qu_EC = exports.DurationSymbols_qu;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_qu_PE = exports.DurationSymbols_qu;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_raj =  {
+  DAY: {
+    LONG: "other{# d}",
+    SHORT: "other{# d}",
+    NARROW: "other{# d}",
+  },
+  HOUR: {
+    LONG: "other{# h}",
+    SHORT: "other{# h}",
+    NARROW: "other{# h}",
+  },
+  MINUTE: {
+    LONG: "other{# min}",
+    SHORT: "other{# min}",
+    NARROW: "other{# min}",
+  },
+  MONTH: {
+    LONG: "other{# m}",
+    SHORT: "other{# m}",
+    NARROW: "other{# m}",
+  },
+  SECOND: {
+    LONG: "other{# s}",
+    SHORT: "other{# s}",
+    NARROW: "other{# s}",
+  },
+  WEEK: {
+    LONG: "other{# w}",
+    SHORT: "other{# w}",
+    NARROW: "other{# w}",
+  },
+  YEAR: {
+    LONG: "other{# y}",
+    SHORT: "other{# y}",
+    NARROW: "other{# y}",
+  },
+};
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_raj_IN = exports.DurationSymbols_raj;
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_rm =  {
   DAY: {
     LONG: "one{# di}other{# dis}",
@@ -9585,9 +10290,11 @@ exports.DurationSymbols_rm =  {
     NARROW: "one{# onns}other{# onns}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_rm_CH = exports.DurationSymbols_rm;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_rn =  {
   DAY: {
     LONG: "other{# d}",
@@ -9625,9 +10332,11 @@ exports.DurationSymbols_rn =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_rn_BI = exports.DurationSymbols_rn;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ro_MD =  {
   DAY: {
     LONG: "one{# zi}few{# zile}other{# de zile}",
@@ -9665,9 +10374,11 @@ exports.DurationSymbols_ro_MD =  {
     NARROW: "one{# an}few{# ani}other{# ani}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ro_RO = DurationSymbols.DurationSymbols_ro;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_rof =  {
   DAY: {
     LONG: "other{# d}",
@@ -9705,21 +10416,29 @@ exports.DurationSymbols_rof =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_rof_TZ = exports.DurationSymbols_rof;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ru_BY = DurationSymbols.DurationSymbols_ru;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ru_KG = DurationSymbols.DurationSymbols_ru;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ru_KZ = DurationSymbols.DurationSymbols_ru;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ru_MD = DurationSymbols.DurationSymbols_ru;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ru_RU = DurationSymbols.DurationSymbols_ru;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ru_UA = DurationSymbols.DurationSymbols_ru;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_rw =  {
   DAY: {
     LONG: "other{# d}",
@@ -9757,9 +10476,11 @@ exports.DurationSymbols_rw =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_rw_RW = exports.DurationSymbols_rw;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_rwk =  {
   DAY: {
     LONG: "other{# d}",
@@ -9797,9 +10518,11 @@ exports.DurationSymbols_rwk =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_rwk_TZ = exports.DurationSymbols_rwk;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sa =  {
   DAY: {
     LONG: "other{# d}",
@@ -9837,9 +10560,11 @@ exports.DurationSymbols_sa =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sa_IN = exports.DurationSymbols_sa;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sah =  {
   DAY: {
     LONG: "other{# күн}",
@@ -9877,9 +10602,11 @@ exports.DurationSymbols_sah =  {
     NARROW: "other{# с.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sah_RU = exports.DurationSymbols_sah;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_saq =  {
   DAY: {
     LONG: "other{# d}",
@@ -9917,9 +10644,11 @@ exports.DurationSymbols_saq =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_saq_KE = exports.DurationSymbols_saq;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sat =  {
   DAY: {
     LONG: "other{# d}",
@@ -9957,11 +10686,14 @@ exports.DurationSymbols_sat =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sat_Olck = exports.DurationSymbols_sat;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sat_Olck_IN = exports.DurationSymbols_sat;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sbp =  {
   DAY: {
     LONG: "other{# d}",
@@ -9999,9 +10731,11 @@ exports.DurationSymbols_sbp =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sbp_TZ = exports.DurationSymbols_sbp;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sc =  {
   DAY: {
     LONG: "one{# die}other{# dies}",
@@ -10039,9 +10773,11 @@ exports.DurationSymbols_sc =  {
     NARROW: "one{#an.}other{#an.}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sc_IT = exports.DurationSymbols_sc;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sd =  {
   DAY: {
     LONG: "one{# ڏينهن}other{# ڏينهن}",
@@ -10079,11 +10815,14 @@ exports.DurationSymbols_sd =  {
     NARROW: "one{# سال}other{# سال}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sd_Arab = exports.DurationSymbols_sd;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sd_Arab_PK = exports.DurationSymbols_sd;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sd_Deva =  {
   DAY: {
     LONG: "other{# d}",
@@ -10121,7 +10860,8 @@ exports.DurationSymbols_sd_Deva =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sd_Deva_IN =  {
   DAY: {
     LONG: "other{# d}",
@@ -10159,7 +10899,8 @@ exports.DurationSymbols_sd_Deva_IN =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_se =  {
   DAY: {
     LONG: "one{# jándor}two{# jándora}other{# jándora}",
@@ -10197,13 +10938,17 @@ exports.DurationSymbols_se =  {
     NARROW: "one{#j}two{#j}other{#j}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_se_FI = exports.DurationSymbols_se;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_se_NO = exports.DurationSymbols_se;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_se_SE = exports.DurationSymbols_se;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_seh =  {
   DAY: {
     LONG: "other{# d}",
@@ -10241,9 +10986,11 @@ exports.DurationSymbols_seh =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_seh_MZ = exports.DurationSymbols_seh;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ses =  {
   DAY: {
     LONG: "other{# d}",
@@ -10281,9 +11028,11 @@ exports.DurationSymbols_ses =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ses_ML = exports.DurationSymbols_ses;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sg =  {
   DAY: {
     LONG: "other{# d}",
@@ -10321,9 +11070,11 @@ exports.DurationSymbols_sg =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sg_CF = exports.DurationSymbols_sg;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_shi =  {
   DAY: {
     LONG: "other{# d}",
@@ -10361,21 +11112,29 @@ exports.DurationSymbols_shi =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_shi_Latn = exports.DurationSymbols_shi;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_shi_Latn_MA = exports.DurationSymbols_shi;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_shi_Tfng = exports.DurationSymbols_shi;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_shi_Tfng_MA = exports.DurationSymbols_shi;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_si_LK = DurationSymbols.DurationSymbols_si;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sk_SK = DurationSymbols.DurationSymbols_sk;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sl_SI = DurationSymbols.DurationSymbols_sl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_smn =  {
   DAY: {
     LONG: "other{# d}",
@@ -10413,9 +11172,11 @@ exports.DurationSymbols_smn =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_smn_FI = exports.DurationSymbols_smn;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sn =  {
   DAY: {
     LONG: "other{# d}",
@@ -10453,9 +11214,11 @@ exports.DurationSymbols_sn =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sn_ZW = exports.DurationSymbols_sn;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_so =  {
   DAY: {
     LONG: "one{# maalin}other{# maalmood}",
@@ -10493,23 +11256,32 @@ exports.DurationSymbols_so =  {
     NARROW: "one{#s}other{#s}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_so_DJ = exports.DurationSymbols_so;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_so_ET = exports.DurationSymbols_so;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_so_KE = exports.DurationSymbols_so;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_so_SO = exports.DurationSymbols_so;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sq_AL = DurationSymbols.DurationSymbols_sq;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sq_MK = DurationSymbols.DurationSymbols_sq;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sq_XK = DurationSymbols.DurationSymbols_sq;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sr_Cyrl = DurationSymbols.DurationSymbols_sr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sr_Cyrl_BA =  {
   DAY: {
     LONG: "one{# дан}few{# дана}other{# дана}",
@@ -10547,13 +11319,53 @@ exports.DurationSymbols_sr_Cyrl_BA =  {
     NARROW: "one{# г}few{# г}other{# г}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
-exports.DurationSymbols_sr_Cyrl_ME = DurationSymbols.DurationSymbols_sr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_sr_Cyrl_ME =  {
+  DAY: {
+    LONG: "one{# dan}few{# dana}other{# dana}",
+    SHORT: "one{# dan}few{# dana}other{# dana}",
+    NARROW: "one{# d}few{# d}other{# d}",
+  },
+  HOUR: {
+    LONG: "one{# sat}few{# sata}other{# sati}",
+    SHORT: "one{# sat}few{# sata}other{# sati}",
+    NARROW: "one{# č}few{# č}other{# č}",
+  },
+  MINUTE: {
+    LONG: "one{# minut}few{# minuta}other{# minuta}",
+    SHORT: "one{# min}few{# min}other{# min}",
+    NARROW: "one{# m}few{# m}other{# m}",
+  },
+  MONTH: {
+    LONG: "one{# mesec}few{# meseca}other{# meseci}",
+    SHORT: "one{# mes.}few{# mes.}other{# mes.}",
+    NARROW: "one{# m}few{# m}other{# m}",
+  },
+  SECOND: {
+    LONG: "one{# sekunda}few{# sekunde}other{# sekundi}",
+    SHORT: "one{# sek}few{# sek}other{# sek}",
+    NARROW: "one{# s}few{# s}other{# s}",
+  },
+  WEEK: {
+    LONG: "one{# nedelja}few{# nedelje}other{# nedelja}",
+    SHORT: "one{# ned.}few{# ned.}other{# ned.}",
+    NARROW: "one{# n}few{# n}other{# n}",
+  },
+  YEAR: {
+    LONG: "one{# godina}few{# godine}other{# godina}",
+    SHORT: "one{# god}few{# god.}other{# god.}",
+    NARROW: "one{# g}few{# g}other{# g}",
+  },
+};
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sr_Cyrl_RS = DurationSymbols.DurationSymbols_sr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sr_Cyrl_XK = DurationSymbols.DurationSymbols_sr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sr_Latn_BA =  {
   DAY: {
     LONG: "one{# dan}few{# dana}other{# dana}",
@@ -10591,7 +11403,8 @@ exports.DurationSymbols_sr_Latn_BA =  {
     NARROW: "one{# g}few{# g}other{# g}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sr_Latn_ME =  {
   DAY: {
     LONG: "one{# dan}few{# dana}other{# dana}",
@@ -10629,7 +11442,8 @@ exports.DurationSymbols_sr_Latn_ME =  {
     NARROW: "one{# g}few{# g}other{# g}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sr_Latn_RS =  {
   DAY: {
     LONG: "one{# dan}few{# dana}other{# dana}",
@@ -10667,7 +11481,8 @@ exports.DurationSymbols_sr_Latn_RS =  {
     NARROW: "one{# g}few{# g}other{# g}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sr_Latn_XK =  {
   DAY: {
     LONG: "one{# dan}few{# dana}other{# dana}",
@@ -10705,7 +11520,8 @@ exports.DurationSymbols_sr_Latn_XK =  {
     NARROW: "one{# g}few{# g}other{# g}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_su =  {
   DAY: {
     LONG: "other{# d}",
@@ -10743,35 +11559,50 @@ exports.DurationSymbols_su =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_su_Latn = exports.DurationSymbols_su;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_su_Latn_ID = exports.DurationSymbols_su;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sv_AX = DurationSymbols.DurationSymbols_sv;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sv_FI = DurationSymbols.DurationSymbols_sv;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sv_SE = DurationSymbols.DurationSymbols_sv;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sw_CD = DurationSymbols.DurationSymbols_sw;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sw_KE = DurationSymbols.DurationSymbols_sw;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sw_TZ = DurationSymbols.DurationSymbols_sw;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_sw_UG = DurationSymbols.DurationSymbols_sw;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ta_IN = DurationSymbols.DurationSymbols_ta;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ta_LK = DurationSymbols.DurationSymbols_ta;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ta_MY = DurationSymbols.DurationSymbols_ta;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ta_SG = DurationSymbols.DurationSymbols_ta;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_te_IN = DurationSymbols.DurationSymbols_te;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_teo =  {
   DAY: {
     LONG: "other{# d}",
@@ -10809,11 +11640,14 @@ exports.DurationSymbols_teo =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_teo_KE = exports.DurationSymbols_teo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_teo_UG = exports.DurationSymbols_teo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_tg =  {
   DAY: {
     LONG: "other{# d}",
@@ -10851,11 +11685,14 @@ exports.DurationSymbols_tg =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_tg_TJ = exports.DurationSymbols_tg;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_th_TH = DurationSymbols.DurationSymbols_th;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ti =  {
   DAY: {
     LONG: "other{# d}",
@@ -10893,11 +11730,14 @@ exports.DurationSymbols_ti =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ti_ER = exports.DurationSymbols_ti;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ti_ET = exports.DurationSymbols_ti;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_tk =  {
   DAY: {
     LONG: "one{# gün}other{# gün}",
@@ -10935,9 +11775,11 @@ exports.DurationSymbols_tk =  {
     NARROW: "one{#ý}other{#ý}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_tk_TM = exports.DurationSymbols_tk;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_to =  {
   DAY: {
     LONG: "other{ʻaho ʻe #}",
@@ -10975,13 +11817,17 @@ exports.DurationSymbols_to =  {
     NARROW: "other{# t}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_to_TO = exports.DurationSymbols_to;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_tr_CY = DurationSymbols.DurationSymbols_tr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_tr_TR = DurationSymbols.DurationSymbols_tr;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_tt =  {
   DAY: {
     LONG: "other{# d}",
@@ -11019,9 +11865,11 @@ exports.DurationSymbols_tt =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_tt_RU = exports.DurationSymbols_tt;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_twq =  {
   DAY: {
     LONG: "other{# d}",
@@ -11059,9 +11907,11 @@ exports.DurationSymbols_twq =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_twq_NE = exports.DurationSymbols_twq;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_tzm =  {
   DAY: {
     LONG: "other{# d}",
@@ -11099,9 +11949,11 @@ exports.DurationSymbols_tzm =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_tzm_MA = exports.DurationSymbols_tzm;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ug =  {
   DAY: {
     LONG: "one{# كۈن}other{# كۈن}",
@@ -11139,15 +11991,20 @@ exports.DurationSymbols_ug =  {
     NARROW: "one{# يىل}other{# يىل}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ug_CN = exports.DurationSymbols_ug;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_uk_UA = DurationSymbols.DurationSymbols_uk;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ur_IN = DurationSymbols.DurationSymbols_ur;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ur_PK = DurationSymbols.DurationSymbols_ur;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_uz_Arab =  {
   DAY: {
     LONG: "other{# d}",
@@ -11185,7 +12042,8 @@ exports.DurationSymbols_uz_Arab =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_uz_Arab_AF =  {
   DAY: {
     LONG: "other{# d}",
@@ -11223,7 +12081,8 @@ exports.DurationSymbols_uz_Arab_AF =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_uz_Cyrl =  {
   DAY: {
     LONG: "one{# кун}other{# кун}",
@@ -11261,7 +12120,8 @@ exports.DurationSymbols_uz_Cyrl =  {
     NARROW: "one{# й}other{# й}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_uz_Cyrl_UZ =  {
   DAY: {
     LONG: "one{# кун}other{# кун}",
@@ -11299,11 +12159,14 @@ exports.DurationSymbols_uz_Cyrl_UZ =  {
     NARROW: "one{# й}other{# й}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_uz_Latn = DurationSymbols.DurationSymbols_uz;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_uz_Latn_UZ = DurationSymbols.DurationSymbols_uz;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_vai =  {
   DAY: {
     LONG: "other{# d}",
@@ -11341,17 +12204,23 @@ exports.DurationSymbols_vai =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_vai_Latn = exports.DurationSymbols_vai;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_vai_Latn_LR = exports.DurationSymbols_vai;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_vai_Vaii = exports.DurationSymbols_vai;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_vai_Vaii_LR = exports.DurationSymbols_vai;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_vi_VN = DurationSymbols.DurationSymbols_vi;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_vun =  {
   DAY: {
     LONG: "other{# d}",
@@ -11389,9 +12258,11 @@ exports.DurationSymbols_vun =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_vun_TZ = exports.DurationSymbols_vun;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_wae =  {
   DAY: {
     LONG: "one{# täg}other{# täg}",
@@ -11429,9 +12300,11 @@ exports.DurationSymbols_wae =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_wae_CH = exports.DurationSymbols_wae;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_wo =  {
   DAY: {
     LONG: "other{# d}",
@@ -11469,9 +12342,11 @@ exports.DurationSymbols_wo =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_wo_SN = exports.DurationSymbols_wo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_xh =  {
   DAY: {
     LONG: "other{# d}",
@@ -11509,9 +12384,11 @@ exports.DurationSymbols_xh =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_xh_ZA = exports.DurationSymbols_xh;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_xog =  {
   DAY: {
     LONG: "other{# d}",
@@ -11549,9 +12426,11 @@ exports.DurationSymbols_xog =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_xog_UG = exports.DurationSymbols_xog;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yav =  {
   DAY: {
     LONG: "other{# d}",
@@ -11589,9 +12468,11 @@ exports.DurationSymbols_yav =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yav_CM = exports.DurationSymbols_yav;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yi =  {
   DAY: {
     LONG: "other{# d}",
@@ -11629,9 +12510,11 @@ exports.DurationSymbols_yi =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yi_001 = exports.DurationSymbols_yi;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yo =  {
   DAY: {
     LONG: "other{ọj #}",
@@ -11669,7 +12552,8 @@ exports.DurationSymbols_yo =  {
     NARROW: "other{# ọd}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yo_BJ =  {
   DAY: {
     LONG: "other{ɔj #}",
@@ -11707,9 +12591,11 @@ exports.DurationSymbols_yo_BJ =  {
     NARROW: "other{# ɔd}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yo_NG = exports.DurationSymbols_yo;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yrl =  {
   DAY: {
     LONG: "one{# ara}other{# ara-ita}",
@@ -11747,13 +12633,17 @@ exports.DurationSymbols_yrl =  {
     NARROW: "one{# akayú}other{# akayú}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yrl_BR = exports.DurationSymbols_yrl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yrl_CO = exports.DurationSymbols_yrl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yrl_VE = exports.DurationSymbols_yrl;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yue =  {
   DAY: {
     LONG: "other{# 天}",
@@ -11791,7 +12681,8 @@ exports.DurationSymbols_yue =  {
     NARROW: "other{# 年}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yue_Hans =  {
   DAY: {
     LONG: "other{# 天}",
@@ -11829,7 +12720,8 @@ exports.DurationSymbols_yue_Hans =  {
     NARROW: "other{# 年}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yue_Hans_CN =  {
   DAY: {
     LONG: "other{# 天}",
@@ -11867,11 +12759,14 @@ exports.DurationSymbols_yue_Hans_CN =  {
     NARROW: "other{# 年}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yue_Hant = exports.DurationSymbols_yue;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_yue_Hant_HK = exports.DurationSymbols_yue;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zgh =  {
   DAY: {
     LONG: "other{# d}",
@@ -11909,13 +12804,17 @@ exports.DurationSymbols_zgh =  {
     NARROW: "other{# y}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zgh_MA = exports.DurationSymbols_zgh;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zh_Hans = DurationSymbols.DurationSymbols_zh;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zh_Hans_CN = DurationSymbols.DurationSymbols_zh;
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zh_Hans_HK =  {
   DAY: {
     LONG: "other{#天}",
@@ -11953,7 +12852,8 @@ exports.DurationSymbols_zh_Hans_HK =  {
     NARROW: "other{#年}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zh_Hans_MO =  {
   DAY: {
     LONG: "other{#天}",
@@ -11991,7 +12891,8 @@ exports.DurationSymbols_zh_Hans_MO =  {
     NARROW: "other{#年}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zh_Hans_SG =  {
   DAY: {
     LONG: "other{#天}",
@@ -12029,7 +12930,8 @@ exports.DurationSymbols_zh_Hans_SG =  {
     NARROW: "other{#年}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zh_Hant =  {
   DAY: {
     LONG: "other{# 天}",
@@ -12067,7 +12969,8 @@ exports.DurationSymbols_zh_Hant =  {
     NARROW: "other{# 年}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zh_Hant_HK =  {
   DAY: {
     LONG: "other{# 日}",
@@ -12105,7 +13008,8 @@ exports.DurationSymbols_zh_Hant_HK =  {
     NARROW: "other{#年}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zh_Hant_MO =  {
   DAY: {
     LONG: "other{# 日}",
@@ -12143,7 +13047,8 @@ exports.DurationSymbols_zh_Hant_MO =  {
     NARROW: "other{#年}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zh_Hant_TW =  {
   DAY: {
     LONG: "other{# 天}",
@@ -12181,8 +13086,10 @@ exports.DurationSymbols_zh_Hant_TW =  {
     NARROW: "other{# 年}",
   },
 };
-/**  @const {!DurationSymbolTypes.DurationSymbols}  */
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_zu_ZA = DurationSymbols.DurationSymbols_zu;
+
 switch (goog.LOCALE) {
   case 'af_NA':
   case 'af-NA':
@@ -12384,6 +13291,20 @@ switch (goog.LOCALE) {
   case 'bg-BG':
     defaultSymbols = exports.DurationSymbols_bg_BG;
     break;
+  case 'bgc':
+    defaultSymbols = exports.DurationSymbols_bgc;
+    break;
+  case 'bgc_IN':
+  case 'bgc-IN':
+    defaultSymbols = exports.DurationSymbols_bgc_IN;
+    break;
+  case 'bho':
+    defaultSymbols = exports.DurationSymbols_bho;
+    break;
+  case 'bho_IN':
+  case 'bho-IN':
+    defaultSymbols = exports.DurationSymbols_bho_IN;
+    break;
   case 'bm':
     defaultSymbols = exports.DurationSymbols_bm;
     break;
@@ -12515,6 +13436,13 @@ switch (goog.LOCALE) {
   case 'cs_CZ':
   case 'cs-CZ':
     defaultSymbols = exports.DurationSymbols_cs_CZ;
+    break;
+  case 'cv':
+    defaultSymbols = exports.DurationSymbols_cv;
+    break;
+  case 'cv_RU':
+  case 'cv-RU':
+    defaultSymbols = exports.DurationSymbols_cv_RU;
     break;
   case 'cy_GB':
   case 'cy-GB':
@@ -14230,6 +15158,13 @@ switch (goog.LOCALE) {
   case 'qu-PE':
     defaultSymbols = exports.DurationSymbols_qu_PE;
     break;
+  case 'raj':
+    defaultSymbols = exports.DurationSymbols_raj;
+    break;
+  case 'raj_IN':
+  case 'raj-IN':
+    defaultSymbols = exports.DurationSymbols_raj_IN;
+    break;
   case 'rm':
     defaultSymbols = exports.DurationSymbols_rm;
     break;
@@ -14853,6 +15788,7 @@ switch (goog.LOCALE) {
     defaultSymbols = exports.DurationSymbols_zu_ZA;
     break;
 }
+
 if (defaultSymbols != null) {
-  DurationSymbols.setDurationSymbolsFromExt(defaultSymbols);
+  DurationSymbols.setDurationSymbols(defaultSymbols);
 }
