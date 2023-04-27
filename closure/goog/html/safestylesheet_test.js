@@ -26,6 +26,12 @@ function assertCreateRuleEquals(expected, selector, style) {
 }
 
 testSuite({
+  testConstructor_throwsOnBadToken() {
+    assertThrows(() => new (/** @type {?} */ (SafeStyleSheet))(''));
+    assertThrows(
+        () => new (/** @type {?} */ (SafeStyleSheet.EMPTY)).constructor(''));
+  },
+
   testSafeStyleSheet() {
     const styleSheet = 'P.special { color:red ; }';
     const safeStyleSheet = SafeStyleSheet.fromConstant(Const.from(styleSheet));

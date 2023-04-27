@@ -54,6 +54,12 @@ testSuite({
     stubs.reset();
   },
 
+  testConstructor_throwsOnBadToken() {
+    assertThrows(() => new (/** @type {?} */ (SafeUrl))(''));
+    assertThrows(
+        () => new (/** @type {?} */ (SafeUrl.ABOUT_BLANK)).constructor(''));
+  },
+
   testSafeUrl() {
     const safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
     const extracted = SafeUrl.unwrap(safeUrl);

@@ -73,14 +73,18 @@ class SafeStyleSheet {
    * @param {!Object} token package-internal implementation detail.
    */
   constructor(value, token) {
+    if (goog.DEBUG && token !== CONSTRUCTOR_TOKEN_PRIVATE) {
+      throw Error('SafeStyleSheet is not meant to be built directly');
+    }
+
     /**
      * The contained value of this SafeStyleSheet.  The field has a purposely
      * ugly name to make (non-compiled) code that attempts to directly access
      * this field stand out.
+     * @const
      * @private {string}
      */
-    this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_ =
-        (token === CONSTRUCTOR_TOKEN_PRIVATE) ? value : '';
+    this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_ = value;
 
     /**
      * @override

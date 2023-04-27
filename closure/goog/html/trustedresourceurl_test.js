@@ -47,6 +47,12 @@ testSuite({
     stubs.reset();
   },
 
+  testConstructor_throwsOnBadToken() {
+    assertThrows(() => new (/** @type {?} */ (TrustedResourceUrl))('', {}));
+    const url = TrustedResourceUrl.fromConstant(Const.from(''));
+    assertThrows(() => new (/** @type {?} */ (url)).constructor('', {}));
+  },
+
   testTrustedResourceUrl() {
     const url = 'javascript:trusted();';
     const trustedResourceUrl = TrustedResourceUrl.fromConstant(Const.from(url));

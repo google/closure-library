@@ -82,18 +82,23 @@ const CONSTRUCTOR_TOKEN_PRIVATE = {};
  */
 class SafeHtml {
   /**
+   * @private
    * @param {!TrustedHTML|string} value
    * @param {!Object} token package-internal implementation detail.
    */
   constructor(value, token) {
+    if (goog.DEBUG && token !== CONSTRUCTOR_TOKEN_PRIVATE) {
+      throw Error('SafeHtml is not meant to be built directly');
+    }
+
     /**
      * The contained value of this SafeHtml.  The field has a purposely ugly
      * name to make (non-compiled) code that attempts to directly access this
      * field stand out.
+     * @const
      * @private {!TrustedHTML|string}
      */
-    this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ =
-        (token === CONSTRUCTOR_TOKEN_PRIVATE) ? value : '';
+    this.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = value;
 
     /**
      * @override

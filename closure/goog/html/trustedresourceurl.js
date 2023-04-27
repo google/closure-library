@@ -50,10 +50,16 @@ goog.require('goog.string.TypedString');
  */
 goog.html.TrustedResourceUrl = class {
   /**
+   * @private
    * @param {!TrustedScriptURL|string} value
    * @param {!Object} token package-internal implementation detail.
    */
   constructor(value, token) {
+    if (goog.DEBUG &&
+        token !== goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_) {
+      throw Error('TrustedResourceUrl is not meant to be built directly');
+    }
+
     /**
      * The contained value of this TrustedResourceUrl.  The field has a
      * purposely ugly name to make (non-compiled) code that attempts to directly
@@ -61,10 +67,7 @@ goog.html.TrustedResourceUrl = class {
      * @const
      * @private {!TrustedScriptURL|string}
      */
-    this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ =
-        (token === goog.html.TrustedResourceUrl.CONSTRUCTOR_TOKEN_PRIVATE_) ?
-        value :
-        '';
+    this.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ = value;
   }
 
   /**
@@ -188,7 +191,8 @@ goog.html.TrustedResourceUrl.unwrapTrustedScriptURL = function(
     return trustedResourceUrl
         .privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_;
   } else {
-    goog.asserts.fail('expected object of type TrustedResourceUrl, got \'' +
+    goog.asserts.fail(
+        'expected object of type TrustedResourceUrl, got \'' +
         trustedResourceUrl + '\' of type ' + goog.typeOf(trustedResourceUrl));
     return 'type_error:TrustedResourceUrl';
   }

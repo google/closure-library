@@ -64,14 +64,18 @@ goog.html.SafeUrl = class {
    * @param {!Object} token package-internal implementation detail.
    */
   constructor(value, token) {
+    if (goog.DEBUG && token !== goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_) {
+      throw Error('SafeUrl is not meant to be built directly');
+    }
+
     /**
      * The contained value of this SafeUrl.  The field has a purposely ugly
      * name to make (non-compiled) code that attempts to directly access this
      * field stand out.
+     * @const
      * @private {string}
      */
-    this.privateDoNotAccessOrElseSafeUrlWrappedValue_ =
-        (token === goog.html.SafeUrl.CONSTRUCTOR_TOKEN_PRIVATE_) ? value : '';
+    this.privateDoNotAccessOrElseSafeUrlWrappedValue_ = value;
   }
 
   /**

@@ -71,14 +71,18 @@ class SafeScript {
    * @param {!Object} token package-internal implementation detail.
    */
   constructor(value, token) {
+    if (goog.DEBUG && token !== CONSTRUCTOR_TOKEN_PRIVATE) {
+      throw Error('SafeScript is not meant to be built directly');
+    }
+
     /**
      * The contained value of this SafeScript.  The field has a purposely ugly
      * name to make (non-compiled) code that attempts to directly access this
      * field stand out.
+     * @const
      * @private {!TrustedScript|string}
      */
-    this.privateDoNotAccessOrElseSafeScriptWrappedValue_ =
-        (token === CONSTRUCTOR_TOKEN_PRIVATE) ? value : '';
+    this.privateDoNotAccessOrElseSafeScriptWrappedValue_ = value;
 
     /**
      * @override

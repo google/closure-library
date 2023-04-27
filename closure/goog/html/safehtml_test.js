@@ -34,6 +34,11 @@ testSuite({
     stubs.reset();
   },
 
+  testConstructor_throwsOnBadToken() {
+    assertThrows(() => new (/** @type {?} */ (SafeHtml))(''));
+    assertThrows(() => new (/** @type {?} */ (SafeHtml.EMPTY)).constructor(''));
+  },
+
   testSafeHtml() {
     // TODO(xtof): Consider using SafeHtmlBuilder instead of newSafeHtmlForTest,
     // when available.

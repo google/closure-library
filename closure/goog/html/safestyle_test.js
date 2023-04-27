@@ -33,6 +33,12 @@ testSuite({
     stubs.reset();
   },
 
+  testConstructor_throwsOnBadToken() {
+    assertThrows(() => new (/** @type {?} */ (SafeStyle))(''));
+    assertThrows(
+        () => new (/** @type {?} */ (SafeStyle.EMPTY)).constructor(''));
+  },
+
   testSafeStyle() {
     const style = 'width: 1em;height: 1em;';
     const safeStyle = SafeStyle.fromConstant(Const.from(style));
