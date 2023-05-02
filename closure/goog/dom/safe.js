@@ -551,6 +551,7 @@ goog.dom.safe.setLinkHrefAndRel = function(link, url, rel) {
  *   objectEl.data = url;
  * The latter can result in loading untrusted code unless setit is ensured that
  * the URL refers to a trustworthy resource.
+ * @deprecated
  *
  * @param {!HTMLObjectElement} object The object element whose data property
  *     is to be assigned to.
