@@ -434,7 +434,7 @@ goog.dom.safe.setEmbedSrc = function(embed, url) {
  *   frameEl.src = url;
  * The latter can result in loading untrusted code unless it is ensured that
  * the URL refers to a trustworthy resource.
- *
+ * @deprecated Use safevalues.dom.safeIframeEl.setSrc instead.
  * @param {!HTMLFrameElement} frame The frame element whose src property
  *     is to be assigned to.
  * @param {!goog.html.TrustedResourceUrl} url The URL to assign.
