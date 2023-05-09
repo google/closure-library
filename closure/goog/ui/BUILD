@@ -1286,6 +1286,7 @@ closure_js_library(
         "//closure/goog/events:eventtype",
         "//closure/goog/events:focushandler",
         "//closure/goog/fx:transition",
+        "//closure/goog/math:size",
         "//closure/goog/string",
         "//closure/goog/style",
         "//closure/goog/timer",
