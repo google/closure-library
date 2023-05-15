@@ -6,7 +6,7 @@
 /**
  * @fileoverview Date/time formatting symbols for all locales.
  *
- * File generated from CLDR ver. 42
+ * File generated from CLDR ver. 43
  *
  * This file covers those locales that are not covered in
  * "datetimesymbols.js".
@@ -728,7 +728,6 @@ goog.provide('goog.i18n.DateTimeSymbols_zh_Hant_MO');
 goog.provide('goog.i18n.DateTimeSymbols_zh_Hant_TW');
 goog.provide('goog.i18n.DateTimeSymbols_zu_ZA');
 goog.require('goog.i18n.DateTimeSymbols');
-
 
 /**
  * Date/time formatting symbols for locale af_NA.
@@ -8824,7 +8823,7 @@ goog.i18n.DateTimeSymbols_fr_ML = {
   AMPMS: ['AM', 'PM'],
   DATEFORMATS: ['EEEE d MMMM y', 'd MMMM y', 'd MMM y', 'dd/MM/y'],
   TIMEFORMATS: ['HH:mm:ss zzzz', 'HH:mm:ss z', 'HH:mm:ss', 'HH:mm'],
-  DATETIMEFORMATS: ['{1} \'à\' {0}', '{1} \'à\' {0}', '{1}, {0}', '{1} {0}'],
+  DATETIMEFORMATS: ['{1} \'à\' {0}', '{1} \'à\' {0}', '{1}, {0}', '{1}, {0}'],
   FIRSTDAYOFWEEK: 0,
   WEEKENDRANGE: [5, 6],
   FIRSTWEEKCUTOFFDAY: 6

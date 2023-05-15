@@ -6,7 +6,7 @@
 /**
  * @fileoverview Compact number formatting symbols.
  *
- * File generated from CLDR ver. 42
+ * File generated from CLDR ver. 43
  *
  * This file covers those locales that are not covered in
  * "compactnumberformatsymbols.js".
@@ -7512,78 +7512,78 @@ goog.i18n.CompactNumberFormatSymbols_hi_IN = goog.i18n.CompactNumberFormatSymbol
 goog.i18n.CompactNumberFormatSymbols_hi_Latn = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0 hazaar'
+      'other': '0T'
     },
     '10000': {
-      'other': '00Th'
+      'other': '00T'
     },
     '100000': {
-      'other': '0 laakh'
+      'other': '0L'
     },
     '1000000': {
-      'other': '00 laakh'
+      'other': '00L'
     },
     '10000000': {
-      'other': '0 ka.'
+      'other': '0Cr'
     },
     '100000000': {
-      'other': '00 ka.'
+      'other': '00Cr'
     },
     '1000000000': {
-      'other': '0 a.'
+      'other': '000Cr'
     },
     '10000000000': {
-      'other': '00 a.'
+      'other': '0TCr'
     },
     '100000000000': {
-      'other': '0 kha.'
+      'other': '00TCr'
     },
     '1000000000000': {
-      'other': '00 kha.'
+      'other': '0LCr'
     },
     '10000000000000': {
-      'other': '000 kha.'
+      'other': '00LCr'
     },
     '100000000000000': {
-      'other': '000kha.'
+      'other': '000LCr'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
     '1000': {
-      'other': '0 hazaar'
+      'other': '0 thousand'
     },
     '10000': {
-      'other': '00 hazaar'
+      'other': '00 thousand'
     },
     '100000': {
-      'other': '0 laakh'
+      'other': '000 thousand'
     },
     '1000000': {
-      'other': '00 laakh'
+      'other': '0 million'
     },
     '10000000': {
-      'other': '0 karod'
+      'other': '00 million'
     },
     '100000000': {
-      'other': '00 karod'
+      'other': '000 million'
     },
     '1000000000': {
-      'other': '0 arab'
+      'other': '0 billion'
     },
     '10000000000': {
-      'other': '00 arab'
+      'other': '00 billion'
     },
     '100000000000': {
-      'other': '0 kharab'
+      'other': '000 billion'
     },
     '1000000000000': {
-      'other': '00 kharab'
+      'other': '0 trillion'
     },
     '10000000000000': {
-      'other': '000 kharab'
+      'other': '00 trillion'
     },
     '100000000000000': {
-      'other': '0000 kharab'
+      'other': '000 trillion'
     }
   }
 };
@@ -7595,78 +7595,78 @@ goog.i18n.CompactNumberFormatSymbols_hi_Latn = {
 goog.i18n.CompactNumberFormatSymbols_hi_Latn_IN = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
     '1000': {
-      'other': '0 hazaar'
+      'other': '0T'
     },
     '10000': {
-      'other': '00Th'
+      'other': '00T'
     },
     '100000': {
-      'other': '0 laakh'
+      'other': '0L'
     },
     '1000000': {
-      'other': '00 laakh'
+      'other': '00L'
     },
     '10000000': {
-      'other': '0 ka.'
+      'other': '0Cr'
     },
     '100000000': {
-      'other': '00 ka.'
+      'other': '00Cr'
     },
     '1000000000': {
-      'other': '0 a.'
+      'other': '000Cr'
     },
     '10000000000': {
-      'other': '00 a.'
+      'other': '0TCr'
     },
     '100000000000': {
-      'other': '0 kha.'
+      'other': '00TCr'
     },
     '1000000000000': {
-      'other': '00 kha.'
+      'other': '0LCr'
     },
     '10000000000000': {
-      'other': '000 kha.'
+      'other': '00LCr'
     },
     '100000000000000': {
-      'other': '000kha.'
+      'other': '000LCr'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {
     '1000': {
-      'other': '0 hazaar'
+      'other': '0 thousand'
     },
     '10000': {
-      'other': '00 hazaar'
+      'other': '00 thousand'
     },
     '100000': {
-      'other': '0 laakh'
+      'other': '000 thousand'
     },
     '1000000': {
-      'other': '00 laakh'
+      'other': '0 million'
     },
     '10000000': {
-      'other': '0 karod'
+      'other': '00 million'
     },
     '100000000': {
-      'other': '00 karod'
+      'other': '000 million'
     },
     '1000000000': {
-      'other': '0 arab'
+      'other': '0 billion'
     },
     '10000000000': {
-      'other': '00 arab'
+      'other': '00 billion'
     },
     '100000000000': {
-      'other': '0 kharab'
+      'other': '000 billion'
     },
     '1000000000000': {
-      'other': '00 kharab'
+      'other': '0 trillion'
     },
     '10000000000000': {
-      'other': '000 kharab'
+      'other': '00 trillion'
     },
     '100000000000000': {
-      'other': '0000 kharab'
+      'other': '000 trillion'
     }
   }
 };
@@ -7885,6 +7885,44 @@ goog.i18n.CompactNumberFormatSymbols_id_ID = goog.i18n.CompactNumberFormatSymbol
  */
 goog.i18n.CompactNumberFormatSymbols_ig = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
+    '1000': {
+      'other': '0K'
+    },
+    '10000': {
+      'other': '00K'
+    },
+    '100000': {
+      'other': '000K'
+    },
+    '1000000': {
+      'other': '0M'
+    },
+    '10000000': {
+      'other': '00M'
+    },
+    '100000000': {
+      'other': '000M'
+    },
+    '1000000000': {
+      'other': '0G'
+    },
+    '10000000000': {
+      'other': '00G'
+    },
+    '100000000000': {
+      'other': '000G'
+    },
+    '1000000000000': {
+      'other': '0T'
+    },
+    '10000000000000': {
+      'other': '00T'
+    },
+    '100000000000000': {
+      'other': '000T'
+    }
+  },
+  COMPACT_DECIMAL_LONG_PATTERN: {
     '1000': {
       'other': '0K'
     },
@@ -13661,6 +13699,24 @@ goog.i18n.CompactNumberFormatSymbols_sn_ZW = goog.i18n.CompactNumberFormatSymbol
  */
 goog.i18n.CompactNumberFormatSymbols_so = {
   COMPACT_DECIMAL_SHORT_PATTERN: {
+    '1000': {
+      'other': '0K'
+    },
+    '10000': {
+      'other': '00K'
+    },
+    '100000': {
+      'other': '000K'
+    },
+    '1000000': {
+      'other': '0M'
+    },
+    '10000000': {
+      'other': '00M'
+    },
+    '100000000': {
+      'other': '000M'
+    },
     '1000000000': {
       'other': '0B'
     },
@@ -13669,6 +13725,15 @@ goog.i18n.CompactNumberFormatSymbols_so = {
     },
     '100000000000': {
       'other': '000B'
+    },
+    '1000000000000': {
+      'other': '0T'
+    },
+    '10000000000000': {
+      'other': '00T'
+    },
+    '100000000000000': {
+      'other': '000T'
     }
   },
   COMPACT_DECIMAL_LONG_PATTERN: {

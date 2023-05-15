@@ -6,7 +6,7 @@
 /**
  * @fileoverview Number formatting symbols.
  *
- * File generated from CLDR ver. 42
+ * File generated from CLDR ver. 43
  *
  * This file covers those locales that are not covered in
  * "numberformatsymbols.js".

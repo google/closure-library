@@ -6,7 +6,7 @@
 /**
  * @fileoverview List of native country and language names.
  *
- * File generated from CLDR ver. 42
+ * File generated from CLDR ver. 43
  */
 
 // clang-format off
@@ -73,6 +73,7 @@ goog.locale.nativeNameConstants = {
     'CN': '中国',
     'CO': 'Colombia',
     'CP': 'Clipperton Island',
+    'CQ': 'Sark',
     'CR': 'Costa Rica',
     'CU': 'Cuba',
     'CV': 'Cabo Verde',

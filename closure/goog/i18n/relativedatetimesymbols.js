@@ -6,7 +6,7 @@
 /**
  * @fileoverview Relative date time formatting symbols.
  *
- * File generated from CLDR ver. 42
+ * File generated from CLDR ver. 43
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -1248,7 +1248,7 @@ exports.RelativeDateTimeSymbols_cy =  {
       F:'few{ymhen # diwrnod}many{ymhen # diwrnod}one{ymhen diwrnod}other{ymhen # diwrnod}two{ymhen deuddydd}zero{ymhen # diwrnod}',
     },
     NARROW:{
-      R:{'-1':'ddoe','-2':'echdoe','0':'heddiw','1':'yfory','2':'drennydd'},
+      R:{'-1':'ddoe','0':'heddiw','1':'yfory'},
       P:'few{# diwrnod yn ôl}many{# diwrnod yn ôl}one{# diwrnod yn ôl}other{# diwrnod yn ôl}two{# ddiwrnod yn ôl}zero{# diwrnod yn ôl}',
       F:'few{ymhen # diwrnod}many{ymhen # diwrnod}one{ymhen # diwrnod}other{ymhen # diwrnod}two{ymhen # diwrnod}zero{ymhen # diwrnod}',
     },
@@ -2970,7 +2970,7 @@ exports.RelativeDateTimeSymbols_et =  {
       F:'one{# päeva pärast}other{# päeva pärast}',
     },
     SHORT:{
-      R:{'-1':'eile','-2':'üleeile','0':'täna','1':'homme','2':'ülehomme'},
+      R:{'-1':'eile','0':'täna','1':'homme'},
       P:'one{# p eest}other{# p eest}',
       F:'one{# p pärast}other{# p pärast}',
     },
@@ -3839,6 +3839,11 @@ exports.RelativeDateTimeSymbols_gl =  {
       P:'one{hai # día}other{hai # días}',
       F:'one{en # día}other{en # días}',
     },
+    SHORT:{
+      R:{'-1':'onte','0':'hoxe','1':'mañá'},
+      P:'one{hai # día}other{hai # días}',
+      F:'one{en # día}other{en # días}',
+    },
   },
   HOUR: {
     LONG:{
@@ -4126,11 +4131,6 @@ exports.RelativeDateTimeSymbols_he =  {
     },
     SHORT:{
       R:{'-1':'אתמול','-2':'שלשום','0':'היום','1':'מחר','2':'מחרתיים'},
-      P:'many{לפני # ימים}one{אתמול}other{לפני # ימים}two{לפני יומיים}',
-      F:'many{בעוד # ימים}one{מחר}other{בעוד # ימים}two{בעוד יומיים}',
-    },
-    NARROW:{
-      R:{'-1':'אתמול','-2':'שלשום','0':'היום','1':'מחר'},
       P:'many{לפני # ימים}one{אתמול}other{לפני # ימים}two{לפני יומיים}',
       F:'many{בעוד # ימים}one{מחר}other{בעוד # ימים}two{בעוד יומיים}',
     },
@@ -4640,12 +4640,7 @@ exports.RelativeDateTimeSymbols_id =  {
       F:'other{dalam # hari}',
     },
     SHORT:{
-      R:{'-2':'selumbari','2':'lusa'},
-      P:'other{# h lalu}',
-      F:'other{dalam # h}',
-    },
-    NARROW:{
-      R:{'2':'lusa'},
+      R:{'-1':'kemarin','-2':'selumbari','0':'hari ini','1':'besok','2':'lusa'},
       P:'other{# h lalu}',
       F:'other{dalam # h}',
     },
@@ -4745,12 +4740,7 @@ exports.RelativeDateTimeSymbols_in =  {
       F:'other{dalam # hari}',
     },
     SHORT:{
-      R:{'-2':'selumbari','2':'lusa'},
-      P:'other{# h lalu}',
-      F:'other{dalam # h}',
-    },
-    NARROW:{
-      R:{'2':'lusa'},
+      R:{'-1':'kemarin','-2':'selumbari','0':'hari ini','1':'besok','2':'lusa'},
       P:'other{# h lalu}',
       F:'other{dalam # h}',
     },
@@ -5051,11 +5041,6 @@ exports.RelativeDateTimeSymbols_iw =  {
     },
     SHORT:{
       R:{'-1':'אתמול','-2':'שלשום','0':'היום','1':'מחר','2':'מחרתיים'},
-      P:'many{לפני # ימים}one{אתמול}other{לפני # ימים}two{לפני יומיים}',
-      F:'many{בעוד # ימים}one{מחר}other{בעוד # ימים}two{בעוד יומיים}',
-    },
-    NARROW:{
-      R:{'-1':'אתמול','-2':'שלשום','0':'היום','1':'מחר'},
       P:'many{לפני # ימים}one{אתמול}other{לפני # ימים}two{לפני יומיים}',
       F:'many{בעוד # ימים}one{מחר}other{בעוד # ימים}two{בעוד יומיים}',
     },
@@ -6050,7 +6035,7 @@ exports.RelativeDateTimeSymbols_lv =  {
       F:'one{pēc # dienas}other{pēc # dienām}zero{pēc # dienām}',
     },
     SHORT:{
-      R:{'-1':'vakar','-2':'aizvakar','0':'šodien','1':'rīt','2':'parīt'},
+      R:{'-1':'vakar','0':'šodien','1':'rīt'},
       P:'one{pirms # d.}other{pirms # d.}zero{pirms # d.}',
       F:'one{pēc # d.}other{pēc # d.}zero{pēc # d.}',
     },
@@ -6859,6 +6844,11 @@ exports.RelativeDateTimeSymbols_my =  {
       P:'other{ပြီးခဲ့သည့် # ရက်}',
       F:'other{# ရက်အတွင်း}',
     },
+    SHORT:{
+      R:{'-1':'မနေ့က','0':'ယနေ့','1':'မနက်ဖြန်'},
+      P:'other{ပြီးခဲ့သည့် # ရက်}',
+      F:'other{# ရက်အတွင်း}',
+    },
   },
   HOUR: {
     LONG:{
@@ -7056,6 +7046,11 @@ exports.RelativeDateTimeSymbols_ne =  {
   DAY: {
     LONG:{
       R:{'-1':'हिजो','-2':'अस्ति','0':'आज','1':'भोलि','2':'पर्सि'},
+      P:'one{# दिन पहिले}other{# दिन पहिले}',
+      F:'one{# दिनमा}other{# दिनमा}',
+    },
+    SHORT:{
+      R:{'-1':'हिजो','0':'आज','1':'भोलि'},
       P:'one{# दिन पहिले}other{# दिन पहिले}',
       F:'one{# दिनमा}other{# दिनमा}',
     },
@@ -7522,11 +7517,6 @@ exports.RelativeDateTimeSymbols_pl =  {
       P:'few{# dni temu}many{# dni temu}one{# dzień temu}other{# dnia temu}',
       F:'few{za # dni}many{za # dni}one{za # dzień}other{za # dnia}',
     },
-    SHORT:{
-      R:{'-2':'przedwczoraj','2':'pojutrze'},
-      P:'few{# dni temu}many{# dni temu}one{# dzień temu}other{# dnia temu}',
-      F:'few{za # dni}many{za # dni}one{za # dzień}other{za # dnia}',
-    },
     NARROW:{
       R:{'-1':'wcz.','-2':'przedwczoraj','0':'dziś','1':'jutro','2':'pojutrze'},
       P:'few{# dni temu}many{# dni temu}one{# dzień temu}other{# dnia temu}',
@@ -7632,11 +7622,6 @@ exports.RelativeDateTimeSymbols_pt =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{em # dia}other{em # dias}',
     },
-    SHORT:{
-      R:{'-2':'anteontem','2':'depois de amanhã'},
-      P:'one{há # dia}other{há # dias}',
-      F:'one{em # dia}other{em # dias}',
-    },
   },
   HOUR: {
     LONG:{
@@ -7725,13 +7710,8 @@ exports.RelativeDateTimeSymbols_pt_PT =  {
       P:'one{há # dia}other{há # dias}',
       F:'one{dentro de # dia}other{dentro de # dias}',
     },
-    SHORT:{
-      R:{'-1':'ontem','0':'hoje','1':'amanhã'},
-      P:'one{há # dia}other{há # dias}',
-      F:'one{dentro de # dia}other{dentro de # dias}',
-    },
     NARROW:{
-      R:{'-1':'ontem','0':'hoje','1':'amanhã'},
+      R:{'-1':'ontem','-2':'anteontem','0':'hoje','1':'amanhã','2':'depois de amanhã'},
       P:'one{-# dia}other{-# dias}',
       F:'one{+# dia}other{+# dias}',
     },
@@ -8242,6 +8222,11 @@ exports.RelativeDateTimeSymbols_si =  {
   DAY: {
     LONG:{
       R:{'-1':'ඊයේ','-2':'පෙරේදා','0':'අද','1':'හෙට','2':'අනිද්දා'},
+      P:'one{දින #කට පෙර}other{දින #කට පෙර}',
+      F:'one{දින #න්}other{දින #න්}',
+    },
+    SHORT:{
+      R:{'-1':'ඊයේ','0':'අද','1':'හෙට'},
       P:'one{දින #කට පෙර}other{දින #කට පෙර}',
       F:'one{දින #න්}other{දින #න්}',
     },
@@ -9890,11 +9875,6 @@ exports.RelativeDateTimeSymbols_vi =  {
       P:'other{# ngày trước}',
       F:'other{sau # ngày nữa}',
     },
-    NARROW:{
-      R:{'-2':'Hôm kia','2':'Ngày kia'},
-      P:'other{# ngày trước}',
-      F:'other{sau # ngày nữa}',
-    },
   },
   HOUR: {
     LONG:{
@@ -10189,7 +10169,7 @@ exports.RelativeDateTimeSymbols_zu =  {
       F:'one{osukwini olungu-# oluzayo}other{ezinsukwini ezingu-# ezizayo}',
     },
     SHORT:{
-      R:{'-1':'izolo','0':'namhlanje','1':'kusasa'},
+      R:{'-1':'izolo','-2':'usuku olwandulela olwayizolo','0':'namhlanje','1':'kusasa','2':'usuku olulandela olwakusasa'},
       P:'one{# usuku olwedlule}other{# izinsuku ezedlule}',
       F:'one{osukwini olungu-# oluzayo}other{ezinsukwini ezingu-# ezizayo}',
     },

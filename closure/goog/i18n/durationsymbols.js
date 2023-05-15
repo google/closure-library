@@ -6,7 +6,7 @@
 /**
  * @fileoverview Duration formatting symbols.
  *
- * File generated from CLDR ver. 42
+ * File generated from CLDR ver. 43
  *
  * To reduce the file size (which may cause issues in some JS
  * developing environments), this file will only contain locales
@@ -2414,7 +2414,7 @@ exports.DurationSymbols_lv =  {
   },
   MINUTE: {
     LONG: "zero{# minūšu}one{# minūte}other{# minūtes}",
-    SHORT: "other{# min}",
+    SHORT: "zero{# min}one{# min}other{# min}",
     NARROW: "zero{# min}one{# min}other{# min}",
   },
   MONTH: {
@@ -3002,8 +3002,8 @@ exports.DurationSymbols_pl =  {
   },
   MINUTE: {
     LONG: "one{# minuta}few{# minuty}many{# minut}other{# minuty}",
-    SHORT: "other{# min}",
-    NARROW: "other{# min}",
+    SHORT: "one{# min}few{# min}many{# min}other{# min}",
+    NARROW: "one{# min}few{# min}many{# min}other{# min}",
   },
   MONTH: {
     LONG: "one{# miesiąc}few{# miesiące}many{# miesięcy}other{# miesiąca}",
@@ -3029,48 +3029,6 @@ exports.DurationSymbols_pl =  {
 
 /** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_pt =  {
-  DAY: {
-    LONG: "one{# dia}other{# dias}",
-    SHORT: "one{# dia}other{# dias}",
-    NARROW: "one{# dia}other{# dias}",
-  },
-  HOUR: {
-    LONG: "one{# hora}other{# horas}",
-    SHORT: "other{# h}",
-    NARROW: "other{# h}",
-  },
-  MINUTE: {
-    LONG: "one{# minuto}other{# minutos}",
-    SHORT: "other{# min}",
-    NARROW: "other{# min}",
-  },
-  MONTH: {
-    LONG: "one{# mês}other{# meses}",
-    SHORT: "one{# mês}other{# meses}",
-    NARROW: "one{# mês}other{# meses}",
-  },
-  SECOND: {
-    LONG: "one{# segundo}other{# segundos}",
-    SHORT: "one{# s}other{# s}",
-    NARROW: "one{# s}other{# s}",
-  },
-  WEEK: {
-    LONG: "one{# semana}other{# semanas}",
-    SHORT: "one{# sem.}other{# sem.}",
-    NARROW: "one{# sem.}other{# sem.}",
-  },
-  YEAR: {
-    LONG: "one{# ano}other{# anos}",
-    SHORT: "one{# ano}other{# anos}",
-    NARROW: "one{# ano}other{# anos}",
-  },
-};
-
-/** @const {!DurationSymbolTypes.DurationSymbols} */
-exports.DurationSymbols_pt_BR = exports.DurationSymbols_pt;
-
-/** @const {!DurationSymbolTypes.DurationSymbols} */
-exports.DurationSymbols_pt_PT =  {
   DAY: {
     LONG: "one{# dia}other{# dias}",
     SHORT: "one{# dia}other{# dias}",
@@ -3107,6 +3065,12 @@ exports.DurationSymbols_pt_PT =  {
     NARROW: "one{# ano}other{# anos}",
   },
 };
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_pt_BR = exports.DurationSymbols_pt;
+
+/** @const {!DurationSymbolTypes.DurationSymbols} */
+exports.DurationSymbols_pt_PT = exports.DurationSymbols_pt;
 
 /** @const {!DurationSymbolTypes.DurationSymbols} */
 exports.DurationSymbols_ro =  {

@@ -6,7 +6,7 @@
 /**
  * @fileoverview Default list of locale specific country and language names.
  *
- * File generated from CLDR ver. 42
+ * File generated from CLDR ver. 43
  */
 
 // clang-format off
@@ -104,6 +104,7 @@ goog.locale.defaultLocaleNameConstants = {
     'CN': 'China',
     'CO': 'Colombia',
     'CP': 'Clipperton Island',
+    'CQ': 'Sark',
     'CR': 'Costa Rica',
     'CU': 'Cuba',
     'CV': 'Cape Verde',
