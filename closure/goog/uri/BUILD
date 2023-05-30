@@ -15,7 +15,6 @@ closure_js_library(
         "//closure/goog/collections:maps",
         "//closure/goog/string",
         "//closure/goog/structs",
-        "//closure/goog/structs:map",
     ],
 )
 
