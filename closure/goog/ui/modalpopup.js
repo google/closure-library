@@ -84,6 +84,14 @@ goog.ui.ModalPopup = function(opt_useIframeMask, opt_domHelper) {
    */
   this.resizeBackgroundTask_ = goog.dom.animationFrame.createTask(
       {mutate: this.resizeBackground_}, this);
+
+  /**
+   * The animation task that update the modal and background, scheduled to run
+   * in the next animation frame.
+   * @private @const {function(...?)}
+   */
+  this.updateModalAndBackgroundTask_ = goog.dom.animationFrame.createTask(
+      {mutate: this.updateModalAndBackground_}, this);
 };
 goog.inherits(goog.ui.ModalPopup, goog.ui.Component);
 
@@ -146,6 +154,14 @@ goog.ui.ModalPopup.prototype.backwardTabWrapInProgress_ = false;
  * @private
  */
 goog.ui.ModalPopup.prototype.centerInsideParent_ = false;
+
+
+/**
+ * An observable to update the modal and background size and position when
+ * centered inside a parent element.
+ * @private {?ResizeObserver}
+ */
+goog.ui.ModalPopup.prototype.parentElementResizeObserver_ = null;
 
 
 /**
@@ -390,6 +406,9 @@ goog.ui.ModalPopup.prototype.exitDocument = function() {
   goog.dom.removeNode(this.bgIframeEl_);
   goog.dom.removeNode(this.bgEl_);
   goog.dom.removeNode(this.tabCatcherElement_);
+  if (this.parentElementResizeObserver_) {
+    this.parentElementResizeObserver_.disconnect();
+  }
 };
 
 
@@ -480,7 +499,6 @@ goog.ui.ModalPopup.prototype.setCenterInsideParentElement = function(
  * @private
  */
 goog.ui.ModalPopup.prototype.show_ = function() {
-  'use strict';
   if (!this.dispatchEvent(goog.ui.PopupBase.EventType.BEFORE_SHOW)) {
     return;
   }
@@ -491,17 +509,27 @@ goog.ui.ModalPopup.prototype.show_ = function() {
     // Focus-related actions often throw exceptions.
     // Sample past issue: https://bugzilla.mozilla.org/show_bug.cgi?id=656283
   }
-  this.resizeBackground_();
-  this.reposition();
+  this.updateModalAndBackground_();
 
-  // Listen for keyboard and resize events while the modal popup is visible.
-  this.getHandler()
-      .listen(
-          this.getDomHelper().getWindow(), goog.events.EventType.RESIZE,
-          this.resizeBackground_)
-      .listen(
-          this.getDomHelper().getWindow(),
-          goog.events.EventType.ORIENTATIONCHANGE, this.resizeBackgroundTask_);
+  if (this.centerInsideParent_ && window.ResizeObserver !== undefined) {
+    this.parentElementResizeObserver_ =
+        new ResizeObserver(() => void this.updateModalAndBackground_());
+    this.parentElementResizeObserver_.observe(
+        goog.asserts.assert(this.getElement().parentElement));
+    this.getHandler().listen(
+        this.getDomHelper().getWindow(),
+        goog.events.EventType.ORIENTATIONCHANGE,
+        this.updateModalAndBackgroundTask_);
+  } else {
+    this.getHandler()
+        .listen(
+            this.getDomHelper().getWindow(), goog.events.EventType.RESIZE,
+            this.resizeBackground_)
+        .listen(
+            this.getDomHelper().getWindow(),
+            goog.events.EventType.ORIENTATIONCHANGE,
+            this.resizeBackgroundTask_);
+  }
 
   this.showPopupElement_(true);
   this.focus();
@@ -516,6 +544,16 @@ goog.ui.ModalPopup.prototype.show_ = function() {
   } else {
     this.onShow();
   }
+};
+
+
+/**
+ * Resizes and positions the modal and background.
+ * @private
+ */
+goog.ui.ModalPopup.prototype.updateModalAndBackground_ = function() {
+  this.resizeBackground_();
+  this.reposition();
 };
 
 
