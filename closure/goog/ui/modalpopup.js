@@ -512,8 +512,9 @@ goog.ui.ModalPopup.prototype.show_ = function() {
   this.updateModalAndBackground_();
 
   if (this.centerInsideParent_ && window.ResizeObserver !== undefined) {
-    this.parentElementResizeObserver_ =
-        new ResizeObserver(() => void this.updateModalAndBackground_());
+    this.parentElementResizeObserver_ = new ResizeObserver(() => {
+      if (this.isVisible()) this.updateModalAndBackground_();
+    });
     this.parentElementResizeObserver_.observe(
         goog.asserts.assert(this.getElement().parentElement));
     this.getHandler().listen(
