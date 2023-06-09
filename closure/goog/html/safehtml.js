@@ -511,6 +511,7 @@ class SafeHtml {
    * @throws {!Error} If invalid attribute name or attribute value is provided.
    *     If attributes  contains the
    *     language, src or text attribute.
+   * @deprecated Use safevalues.scriptToHtml instead.
    */
   static createScript(script, attributes = undefined) {
     for (let attr in attributes) {
