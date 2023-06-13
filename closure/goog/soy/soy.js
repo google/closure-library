@@ -304,6 +304,25 @@ const INVALID_TAG_TO_RENDER =
     /^<(body|caption|col|colgroup|head|html|tr|td|th|tbody|thead|tfoot)>/i;
 
 /**
+ * Renders a Soy template as test.
+ * @param {function(ARG_TYPES, ?CompatibleIj=): *} template The Soy template to
+ *     render.
+ * @param {ARG_TYPES=} templateData The data for the template.
+ * @param {?Object=} injectedData The injected data for the template.
+ * @return {string}
+ * @template ARG_TYPES
+ */
+function renderAsText(
+    template, templateData = undefined, injectedData = undefined) {
+  const result = template(templateData || defaultTemplateData, injectedData);
+  asserts.assertString(
+      result,
+      'renderText was called with a template of kind other than "text"');
+  return String(result);
+}
+exports.renderAsText = renderAsText;
+
+/**
  * Immutable object that is passed into templates that are rendered
  * without any data.
  * @const
