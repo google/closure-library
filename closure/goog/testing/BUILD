@@ -183,6 +183,7 @@ closure_js_library(
     srcs = ["jsunit.js"],
     lenient = True,
     deps = [
+        ":asserts",
         ":testcase",
         ":testrunner",
         "//closure/goog/dom:tagname",
@@ -490,7 +491,6 @@ closure_js_library(
     srcs = ["testcase.js"],
     lenient = True,
     deps = [
-        ":asserts",
         ":cspviolationobserver",
         ":jsunitexception",
         "//closure/goog/array",

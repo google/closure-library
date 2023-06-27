@@ -13,6 +13,7 @@ const PropertyReplacer = goog.require('goog.testing.PropertyReplacer');
 const TestCase = goog.require('goog.testing.TestCase');
 const asserts = goog.require('goog.asserts');
 const testingTestSuite = goog.require('goog.testing.testSuite');
+const {EnvironmentBase} = goog.require('goog.labs.testing.EnvironmentBase');
 
 let testCase = null;
 let mockControl = null;
@@ -30,7 +31,7 @@ const env = new Environment();
 function setUpTestCase() {
   // Clear the activeTestCase_ field to make an instance of Environment create a
   // new EnvironmentTestCase instance.
-  Environment.activeTestCase_ = null;
+  EnvironmentBase.activeTestCase_ = null;
   new Environment();  // Assigns a new value to Environment.activeTestCase_.
   testCase = Environment.getTestCaseIfActive();
 }

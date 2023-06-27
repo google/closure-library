@@ -32,7 +32,6 @@ goog.require('goog.dom.TagName');
 goog.require('goog.object');
 goog.require('goog.testing.CspViolationObserver');
 goog.require('goog.testing.JsUnitException');
-goog.require('goog.testing.asserts');
 goog.require('goog.url');
 
 
@@ -1547,7 +1546,7 @@ goog.testing.TestCase.prototype.setTestObj = function(obj) {
   // Check any previously added (likely auto-discovered) tests, only one source
   // of discovered test and life-cycle methods is allowed.
   if (this.tests_.length > 0) {
-    fail(
+    throw new Error(
         'Test methods have already been configured.\n' +
         'Tests previously found:\n' +
         this.tests_

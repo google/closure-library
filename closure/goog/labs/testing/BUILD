@@ -34,14 +34,12 @@ closure_js_library(
     srcs = ["environment.js"],
     lenient = True,
     deps = [
-        "//closure/goog/asserts",
+        ":environmentbase",
         "//closure/goog/debug:console",
-        "//closure/goog/promise:thenable",
         "//closure/goog/testing:jsunit",
         "//closure/goog/testing:mockclock",
         "//closure/goog/testing:mockcontrol",
         "//closure/goog/testing:propertyreplacer",
-        "//closure/goog/testing:testcase",
     ],
 )
 
@@ -87,6 +85,18 @@ closure_js_library(
         "//closure/goog/asserts",
         "//closure/goog/object",
         "//closure/goog/string",
+    ],
+)
+
+closure_js_library(
+    name = "environmentbase",
+    testonly = True,
+    srcs = ["environmentbase.js"],
+    lenient = True,
+    deps = [
+        "//closure/goog/asserts",
+        "//closure/goog/promise",
+        "//closure/goog/testing:testcase",
     ],
 )
 

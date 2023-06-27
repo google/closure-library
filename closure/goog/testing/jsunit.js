@@ -18,6 +18,7 @@ goog.provide('goog.testing.jsunit');
 goog.require('goog.dom.TagName');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.TestRunner');
+goog.require('goog.testing.asserts');
 
 
 /**
