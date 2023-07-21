@@ -59,6 +59,13 @@ const ALLOW_ORIGIN_TRIAL_FEATURES =
     goog.define('goog.net.webChannel.ALLOW_ORIGIN_TRIAL_FEATURES', false);
 
 /**
+ * @define {boolean} If webchannel should ping google.com for debugging
+ * connectivity issues (that may have caused the channel to abort).
+ */
+const ENABLE_GOOGLE_COM_PING =
+    goog.define('goog.net.webChannel.ENABLE_GOOGLE_COM_PING', true);
+
+/**
  * Gets an internal channel parameter in a type-safe way.
  *
  * @param {string} paramName the key of the parameter to fetch.
@@ -2402,13 +2409,16 @@ WebChannelBase.prototype.signalError_ = function(error) {
   'use strict';
   this.channelDebug_.info('Error code ' + error);
   if (error == WebChannelBase.Error.REQUEST_FAILED) {
-    // Create a separate Internet connection to check
-    // if it's a server error or user's network error.
-    let imageUri = null;
-    if (this.handler_) {
-      imageUri = this.handler_.getNetworkTestImageUri(this);
+    if (ENABLE_GOOGLE_COM_PING) {
+      // Create a separate Internet connection to check
+      // if it's a server error or user's network error.
+      let imageUri = null;
+      if (this.handler_) {
+        imageUri = this.handler_.getNetworkTestImageUri(this);
+      }
+      netUtils.testNetwork(
+          goog.bind(this.testNetworkCallback_, this), imageUri);
     }
-    netUtils.testNetwork(goog.bind(this.testNetworkCallback_, this), imageUri);
   } else {
     requestStats.notifyStatEvent(requestStats.Stat.ERROR_OTHER);
   }
