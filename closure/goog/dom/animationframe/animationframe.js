@@ -167,8 +167,7 @@ goog.dom.animationFrame.createTask = function(spec, opt_context) {
     'use strict';
     // Save args and state.
     if (arguments.length > 0) {
-      // The state argument goes last. That is kinda horrible but compatible
-      // with {@see wiz.async.method}.
+      // The state argument goes last. That is kinda horrible.
       if (!taskSet.args) {
         taskSet.args = [];
       }
