@@ -87,6 +87,7 @@ closure_js_library(
     deps = [
         "//closure/goog/array",
         "//closure/goog/debug:deepfreeze",
+        "//closure/goog/debug:deepfreeze_js",
     ],
 )
 
