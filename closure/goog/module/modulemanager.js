@@ -473,14 +473,10 @@ goog.module.ModuleManager.prototype.preloadModule = function(id, opt_timeout) {
 
 /** @override */
 goog.module.ModuleManager.prototype.prefetchModule = function(id) {
-  if (this.batchModeEnabled_) {
-    throw new Error('Modules prefetching is not supported in batch mode');
-  } else {
-    var idWithDeps = this.getNotYetLoadedTransitiveDepIds_(id);
-    for (var i = 0; i < idWithDeps.length; i++) {
-      const moduleInfoOfDep = this.getModuleInfo(idWithDeps[i]);
-      this.getLoader().prefetchModule(idWithDeps[i], moduleInfoOfDep);
-    }
+  var idWithDeps = this.getNotYetLoadedTransitiveDepIds_(id);
+  for (var i = 0; i < idWithDeps.length; i++) {
+    const moduleInfoOfDep = this.getModuleInfo(idWithDeps[i]);
+    this.getLoader().prefetchModule(idWithDeps[i], moduleInfoOfDep);
   }
 };
 

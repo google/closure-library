@@ -528,8 +528,10 @@ testSuite({
 
   testPrefetchModuleWithBatchModeEnabled() {
     moduleManager.setBatchModeEnabled(true);
+    moduleManager.prefetchModule('modA');
+
     assertThrows('Modules prefetching is not supported in batch mode', () => {
-      moduleManager.prefetchModule('modA');
+      moduleManager.execOnLoad('modB', () => {});
     });
   },
 

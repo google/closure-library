@@ -68,6 +68,13 @@ function ModuleLoader() {
    * @private
    */
   this.loadingModulesStatus_ = {};
+
+  /**
+   * Whether the module loader has prefetched a module.
+   * @type {boolean}
+   * @private
+   */
+  this.hasPrefetched_ = false;
 }
 goog.inherits(ModuleLoader, EventTarget);
 
@@ -258,6 +265,9 @@ ModuleLoader.prototype.usingSourceUrlInjection_ = function() {
 /** @override */
 ModuleLoader.prototype.loadModules = function(
     ids, moduleInfoMap, {forceReload, onError, onSuccess, onTimeout} = {}) {
+  if (this.hasPrefetched_ && ids.length > 1) {
+    throw new Error('Modules prefetching is not supported in batch mode');
+  }
   const loadStatus = this.loadingModulesStatus_[ids] ||
       ModuleLoader.LoadStatus.createForIds_(ids, moduleInfoMap);
   loadStatus.loadRequested = true;
@@ -362,6 +372,7 @@ ModuleLoader.prototype.handleSuccess_ = function(bulkLoader, moduleIds) {
 
 /** @override */
 ModuleLoader.prototype.prefetchModule = function(id, moduleInfo) {
+  this.hasPrefetched_ = true;
   // Do not prefetch in debug mode
   if (this.getDebugMode()) {
     return;
