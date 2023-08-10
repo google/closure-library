@@ -218,7 +218,8 @@ goog.i18n.DateTimeFormat.Format = {
   LONG_DATETIME: 9,
   MEDIUM_DATETIME: 10,
   SHORT_DATETIME: 11,
-  WEEKDAY_MONTH_DAY_FULL: 12  // From FULL_DATE by removing year pattern
+  WEEKDAY_MONTH_DAY_FULL: 12,  // From FULL_DATE by removing year pattern
+  MONTH_DAY_MEDIUM: 13         // From MEDIUM_DATE by removing year pattern
 };
 
 /**
@@ -518,6 +519,10 @@ goog.i18n.DateTimeFormat.prototype.applyStandardEnumNative_ = function(
       options.month = 'long';
       options.day = 'numeric';
       break;
+    case goog.i18n.DateTimeFormat.Format.MONTH_DAY_MEDIUM:
+      options.month = 'short';
+      options.day = 'numeric';
+      break;
   }
 
 
@@ -569,6 +574,10 @@ goog.i18n.DateTimeFormat.prototype.applyStandardPattern_ = function(
     // WEEKDAY_MONTH_DAY_FULL is derived from FULL_DATE removing year patterns
     pattern =
         this.removeYearFormatFromPattern_(this.dateTimeSymbols_.DATEFORMATS[0]);
+  } else if (formatType === goog.i18n.DateTimeFormat.Format.MONTH_DAY_MEDIUM) {
+    // MONTH_DAY_MEDIUM is derived from MEDIUM_DATE removing year patterns
+    pattern =
+        this.removeYearFormatFromPattern_(this.dateTimeSymbols_.DATEFORMATS[2]);
   } else {
     // Default
     this.applyStandardPattern_(goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);

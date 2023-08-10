@@ -26,8 +26,10 @@ const DateTimeFormat = goog.require('goog.i18n.DateTimeFormat');
 const DateTimePatterns = goog.require('goog.i18n.DateTimePatterns');
 const DateTimePatterns_ar_EG = goog.require('goog.i18n.DateTimePatterns_ar_EG');
 const DateTimePatterns_bg = goog.require('goog.i18n.DateTimePatterns_bg');
+const DateTimePatterns_bn = goog.require('goog.i18n.DateTimePatterns_bn');
 const DateTimePatterns_de = goog.require('goog.i18n.DateTimePatterns_de');
 const DateTimePatterns_en = goog.require('goog.i18n.DateTimePatterns_en');
+const DateTimePatterns_en_GB = goog.require('goog.i18n.DateTimePatterns_en');
 const DateTimePatterns_en_XA = goog.require('goog.i18n.DateTimePatterns_en_XA');
 const DateTimePatterns_fa = goog.require('goog.i18n.DateTimePatterns_fa');
 const DateTimePatterns_fr = goog.require('goog.i18n.DateTimePatterns_fr');
@@ -2004,4 +2006,68 @@ testSuite({
       }
     }
   },
+
+  testMonthDayMedium() {
+    // Tests format for MONTH_DAY_MEDIUM, derived from MEDIUM_DATE
+    const july_14 = new Date(2023, 6, 14);
+
+    for (let nativeMode of testECMAScriptOptions) {
+      setNativeMode(nativeMode);
+
+      replacer.replace(goog, 'LOCALE', 'en');
+      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en);
+      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en);
+      const fmt_en = new DateTimeFormat(DateTimeFormat.Format.MONTH_DAY_MEDIUM);
+      const date_en = fmt_en.format(july_14);
+      assertEquals('Native=' + nativeMode, 'Jul 14', date_en);
+
+      replacer.replace(goog, 'LOCALE', 'en_GB');
+      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_en_GB);
+      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_en_GB);
+      const fmt_en_GB =
+          new DateTimeFormat(DateTimeFormat.Format.MONTH_DAY_MEDIUM);
+      const date_en_GB = fmt_en_GB.format(july_14);
+      assertEquals('Native=' + nativeMode, '14 Jul', date_en_GB);
+
+      replacer.replace(goog, 'LOCALE', 'de');
+      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_de);
+      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_de);
+      const fmt_de = new DateTimeFormat(DateTimeFormat.Format.MONTH_DAY_MEDIUM);
+      const date_de = fmt_de.format(july_14);
+      // Handle different versions of resultslet expected1 = "14. Juli";
+      let expected_de1 = '14. Juli';
+      let expected_de2 = '14.07';
+      assertTrue(
+          'Native=' + nativeMode + ' actual=' + date_de,
+          (date_de == expected_de1 || date_de == expected_de2));
+
+      replacer.replace(goog, 'LOCALE', 'bn');
+      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_bn);
+      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_bn);
+      const fmt_bn = new DateTimeFormat(DateTimeFormat.Format.MONTH_DAY_MEDIUM);
+      const date_bn = fmt_bn.format(july_14);
+      let expected_bn1 = '১৪ জুলাই';
+      let expected_bn2 = '১৪ জুল';
+      assertTrue(
+          'Native=' + nativeMode + ' actual=' + date_bn,
+          (date_bn == expected_bn1 || date_bn == expected_bn2));
+
+
+      replacer.replace(goog, 'LOCALE', 'bg');
+      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_bg);
+      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_bg);
+      const fmt_bg = new DateTimeFormat(DateTimeFormat.Format.MONTH_DAY_MEDIUM);
+      const date_bg = fmt_bg.format(july_14);
+      assertEquals('Native=' + nativeMode, '14.07', date_bg);
+
+      replacer.replace(goog, 'LOCALE', 'zh_HK');
+      replacer.replace(goog.i18n, 'DateTimePatterns', DateTimePatterns_zh_HK);
+      replacer.replace(goog.i18n, 'DateTimeSymbols', DateTimeSymbols_zh_HK);
+      const fmt_zh_HK =
+          new DateTimeFormat(DateTimeFormat.Format.MONTH_DAY_MEDIUM);
+      const date_zh_HK = fmt_zh_HK.format(july_14);
+      assertEquals('Native=' + nativeMode, '7月14日', date_zh_HK);
+    }
+  },
+
 });
