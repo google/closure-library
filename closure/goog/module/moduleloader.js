@@ -265,8 +265,10 @@ ModuleLoader.prototype.usingSourceUrlInjection_ = function() {
 /** @override */
 ModuleLoader.prototype.loadModules = function(
     ids, moduleInfoMap, {forceReload, onError, onSuccess, onTimeout} = {}) {
-  if (this.hasPrefetched_ && ids.length > 1) {
-    throw new Error('Modules prefetching is not supported in batch mode');
+  if (this.hasPrefetched_ && !this.getUseScriptTags() && ids.length > 1) {
+    throw new Error(
+        'Modules prefetching is only supported in batch mode when using ' +
+        'script tags.');
   }
   const loadStatus = this.loadingModulesStatus_[ids] ||
       ModuleLoader.LoadStatus.createForIds_(ids, moduleInfoMap);
@@ -280,22 +282,67 @@ ModuleLoader.prototype.loadModules = function(
   }
   loadStatus.errorFn = onError || null;
 
-  if (!this.loadingModulesStatus_[ids]) {
-    // Modules were not prefetched.
-    this.loadingModulesStatus_[ids] = loadStatus;
-    this.downloadModules_(ids);
-    // TODO(user): Need to handle timeouts in the module loading code.
-  } else if (this.getUseScriptTags()) {
-    // We started prefetching but we used <link rel="preload".../> tags, so we
-    // rely on the browser to reconcile the (existing) prefetch request and the
-    // script tag we're about to insert.
-    this.downloadModules_(ids);
-  } else if (loadStatus.responseTexts != null) {
-    // Modules prefetch is complete.
-    this.evaluateCode_(ids);
+  if (!this.getUseScriptTags()) {
+    // Check to see if module was prefetched. This check only happens when we
+    // prefetch via XHR and we load a single module.
+    const prefetchedModuleLoadStatus = this.loadingModulesStatus_[ids];
+    if (!prefetchedModuleLoadStatus) {
+      // Module was not prefetched, we will need to download it.
+      this.loadingModulesStatus_[ids] = loadStatus;
+      this.downloadModules_(ids);
+      return;
+    }
+    if (prefetchedModuleLoadStatus.responseTexts != null) {
+      // Evaluate code for modules that finished prefetching before load is
+      // called. A module will only have response texts if it was downloaded via
+      // XHR.
+      this.evaluateCode_(ids);
+    }
+    // For modules that have not finished loading after being prefetched via
+    // XHR, updating the load status will result in evaluateCode being called
+    // once the module finishes downloading.
+    return;
   }
-  // Otherwise modules prefetch is in progress, and these modules will be
-  // executed after the prefetch is complete.
+
+  if (ids.length > 1) {
+    // Collect success functions of modules prefetched via script tags.
+    const successFunctions = [];
+    for (let i = 0; i < ids.length; i++) {
+      const currentId = ids[i];
+      // A module will have a load status if the module was prefetched. Modules
+      // are always prefetched individually (not batched).
+      const prefetchedModuleLoadStatus =
+          this.loadingModulesStatus_[[currentId]];
+      if (!prefetchedModuleLoadStatus) {
+        // Module was not prefetched, there is no success function to collect.
+        continue;
+      }
+      // We collect the success functions so we can create a loadStatus that
+      // will account for the success functions of all the prefetched modules.
+      if (prefetchedModuleLoadStatus.successFn) {
+        successFunctions.push(prefetchedModuleLoadStatus.successFn);
+      }
+      delete this.loadingModulesStatus_[[currentId]];
+    }
+
+    // Load the modules prefetched using a link tag and any modules that were
+    // not prefetched. Modules prefetched using <link rel="preload".../> will
+    // need to be evaluated by inserting a script tag for the module. The
+    // browser will reconcile the request so that the module is not downloaded
+    // twice.
+    // We need to chain all the success functions of the prefetched modules so
+    // they get called after loading.
+    if (loadStatus.successFn) {
+      successFunctions.push(loadStatus.successFn);
+    }
+    if (successFunctions.length > 0) {
+      loadStatus.successFn = functions.sequence.apply(null, successFunctions);
+    }
+  }
+
+  this.loadingModulesStatus_[ids] = loadStatus;
+  this.downloadModules_(ids);
+  // TODO(user): Need to handle timeouts in the module loading code.
 };
 
 

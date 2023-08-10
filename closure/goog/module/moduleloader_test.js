@@ -382,7 +382,6 @@ testSuite({
   },
 
   testEventError() {
-
     // Modules will throw an exception if this boolean is set to true.
     modA1Loaded = true;
 
@@ -526,13 +525,86 @@ testSuite({
         });
   },
 
-  testPrefetchModuleWithBatchModeEnabled() {
+  testPrefetchModuleAThenLoadModuleBWithBatchEnabled() {
     moduleManager.setBatchModeEnabled(true);
     moduleManager.prefetchModule('modA');
 
-    assertThrows('Modules prefetching is not supported in batch mode', () => {
-      moduleManager.execOnLoad('modB', () => {});
-    });
+    assertThrows(
+        'Modules prefetching is only supported in batch mode when using ' +
+            'script tags',
+        () => {
+          moduleManager.execOnLoad('modB', () => {});
+        });
+  },
+
+  testLoadModulesAAndBWithBatchEnabledAndScriptTagEnabled() {
+    moduleLoader.setUseScriptTags(true);
+    const moduleInfoMap = {
+      'modA': moduleManager.getModuleInfo('modA'),
+      'modB': moduleManager.getModuleInfo('modB')
+    };
+    return new GoogPromise((resolve, reject) => {
+             moduleLoader.loadModules(['modA', 'modB'], moduleInfoMap, {
+               onSuccess: resolve,
+             });
+           })
+        .then(() => {
+          assertLoaded('modA');
+          assertLoaded('modB');
+        });
+  },
+
+  testPrefetchAAndThenLoadModulesAAndBWithBatchEnabledAndScriptTagEnabled() {
+    moduleLoader.setUseScriptTags(true);
+    const moduleInfoMap = {
+      'modA': moduleManager.getModuleInfo('modA'),
+      'modB': moduleManager.getModuleInfo('modB')
+    };
+    moduleLoader.prefetchModule('modA', moduleInfoMap['modA']);
+    return new GoogPromise((resolve, reject) => {
+             moduleLoader.loadModules(['modA', 'modB'], moduleInfoMap, {
+               onSuccess: resolve,
+             });
+           })
+        .then(() => {
+          assertLoaded('modA');
+          assertLoaded('modB');
+        });
+  },
+
+  testPrefetchModuleAThenLoadModuleBWithBatchEnabledAndScriptTagEnabled() {
+    moduleLoader.setUseScriptTags(true);
+    moduleManager.setBatchModeEnabled(true);
+    moduleManager.prefetchModule('modA');
+
+    return new GoogPromise((resolve, reject) => {
+             moduleManager.execOnLoad('modB', resolve);
+           })
+        .then(() => {
+          assertLoaded('modA');
+          assertLoaded('modB');
+        });
+  },
+
+  testLoadModuleBWithBatchEnabled() {
+    moduleManager.setBatchModeEnabled(true);
+
+    return new GoogPromise((resolve, reject) => {
+             moduleManager.execOnLoad('modB', resolve);
+           })
+        .then(() => {
+          assertLoaded('modA');
+          assertLoaded('modB');
+          assertEquals(
+              'REQUEST_SUCCESS', 1,
+              observer.getEvents(EventType.REQUEST_SUCCESS).length);
+          assertArrayEquals(
+              ['modA', 'modB'],
+              observer.getEvents(EventType.REQUEST_SUCCESS)[0].moduleIds);
+          assertEquals(
+              'REQUEST_ERROR', 0,
+              observer.getEvents(EventType.REQUEST_ERROR).length);
+        });
   },
 
   /** @suppress {missingProperties} suppression added to enable type checking */
