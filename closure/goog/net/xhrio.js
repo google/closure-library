@@ -522,7 +522,6 @@ goog.net.XhrIo.prototype.setTrustToken = function(trustToken) {
   'use strict';
   this.trustToken_ = trustToken;
 };
-
 /**
  * Instance send that actually uses XMLHttpRequest to make a server call.
  * @param {string|goog.Uri} url Uri to make request to.

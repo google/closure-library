@@ -998,7 +998,6 @@ testSuite({
     const headers = x.getResponseHeaders();
     assertEquals(0, object.getCount(headers));
   },
-
   testSetTrustTokenHeaderTrustTokenNotSupported() {
     const trustToken = {
       type: 'send-redemption-record',

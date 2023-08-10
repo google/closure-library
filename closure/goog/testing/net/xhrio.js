@@ -313,7 +313,6 @@ goog.testing.net.XhrIo.prototype.getWithCredentials = function() {
   'use strict';
   return this.withCredentials_;
 };
-
 /**
  * Specify a Trust Tokens operation to execute alongside the request.
  * @param {!TrustTokenAttributeType} trustToken a Trust Tokens operation to
