@@ -48,5 +48,6 @@ java -Xmx1G -jar "${JAR_FILE}" \
   --js='!**protractor.conf.js' \
   --js='!**browser_capabilities.js' \
   --js='!./doc/**.js' \
+  --js='!**module/testdata/**' \
   --js='!**debug_loader_integration_tests/testdata/**' \
   --js_output_file="$(mktemp)"

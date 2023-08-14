@@ -9,6 +9,7 @@ closure_js_library(
     testonly = 1,
     srcs = ["modA_1.js"],
     lenient = True,
+    deps = ["//closure/goog/testing:asserts"],
 )
 
 closure_js_library(
@@ -16,13 +17,27 @@ closure_js_library(
     testonly = 1,
     srcs = ["modA_2.js"],
     lenient = True,
-    deps = ["//closure/goog/module:modulemanager"],
+    deps = [
+        "//closure/goog/module:modulemanager",
+        "//closure/goog/testing:asserts",
+    ],
 )
 
 closure_js_library(
     name = "modB_1",
     testonly = 1,
     srcs = ["modB_1.js"],
+    lenient = True,
+    deps = [
+        "//closure/goog/module:modulemanager",
+        "//closure/goog/testing:asserts",
+    ],
+)
+
+closure_js_library(
+    name = "errorMod",
+    testonly = 1,
+    srcs = ["errorMod.js"],
     lenient = True,
     deps = ["//closure/goog/module:modulemanager"],
 )

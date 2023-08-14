@@ -55,6 +55,8 @@ const stubs = new PropertyReplacer();
 const modA1 = TrustedResourceUrl.fromConstant(Const.from('testdata/modA_1.js'));
 const modA2 = TrustedResourceUrl.fromConstant(Const.from('testdata/modA_2.js'));
 const modB1 = TrustedResourceUrl.fromConstant(Const.from('testdata/modB_1.js'));
+const errorMod =
+    TrustedResourceUrl.fromConstant(Const.from('testdata/errorMod.js'));
 
 const EventType = ModuleLoader.EventType;
 let observer;
@@ -124,12 +126,14 @@ testSuite({
     events.listen(moduleLoader, googObject.getValues(EventType), observer);
 
     moduleManager.setLoader(moduleLoader);
-    moduleManager.setAllModuleInfo({'modA': [], 'modB': ['modA']});
+    moduleManager.setAllModuleInfo(
+        {'modA': [], 'modB': ['modA'], 'errorMod': []});
     moduleManager.setModuleTrustedUris(
-        {'modA': [modA1, modA2], 'modB': [modB1]});
+        {'modA': [modA1, modA2], 'modB': [modB1], 'errorMod': [errorMod]});
 
     assertNotLoaded('modA');
     assertNotLoaded('modB');
+    assertNotLoaded('errorMod');
     assertFalse(modA1Loaded);
   },
 
@@ -360,13 +364,10 @@ testSuite({
     // errors on IE plays badly with the simulated errors in the test.
     if (userAgent.IE) return;
 
-    // Modules will throw an exception if this boolean is set to true.
-    modA1Loaded = true;
-
     return new GoogPromise((resolve, reject) => {
       const errorHandler = () => {
         try {
-          assertNotLoaded('modA');
+          assertNotLoaded('errorMod');
         } catch (e) {
           reject(e);
         }
@@ -375,20 +376,17 @@ testSuite({
       moduleManager.registerCallback(
           ModuleManager.CallbackType.ERROR, errorHandler);
 
-      moduleManager.execOnLoad('modA', () => {
-        fail('modA should not load successfully');
+      moduleManager.execOnLoad('errorMod', () => {
+        fail('errorMod should not load successfully');
       });
     });
   },
 
   testEventError() {
-    // Modules will throw an exception if this boolean is set to true.
-    modA1Loaded = true;
-
     return new GoogPromise((resolve, reject) => {
              const errorHandler = () => {
                try {
-                 assertNotLoaded('modA');
+                 assertNotLoaded('errorMod');
                } catch (e) {
                  reject(e);
                }
@@ -397,8 +395,8 @@ testSuite({
              moduleManager.registerCallback(
                  ModuleManager.CallbackType.ERROR, errorHandler);
 
-             moduleManager.execOnLoad('modA', () => {
-               fail('modA should not load successfully');
+             moduleManager.execOnLoad('errorMod', () => {
+               fail('errorMod should not load successfully');
              });
            })
         .then(() => {
@@ -417,7 +415,7 @@ testSuite({
           assertEquals('REQUEST_ERROR', 3, requestErrors.length);
           const requestError = requestErrors[0];
           assertNotNull(requestError.error);
-          const expectedString = 'loaded twice';
+          const expectedString = 'should not load';
           const messageAndStack =
               requestErrors[0].error.message + requestErrors[0].error.stack;
           assertContains(expectedString, messageAndStack);
