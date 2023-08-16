@@ -438,7 +438,11 @@ closure_js_library(
 closure_js_library(
     name = "recordfunction",
     testonly = True,
-    srcs = ["recordfunction.js"],
+    srcs = [
+        "functioncall.js",
+        "recordconstructor.js",
+        "recordfunction.js",
+    ],
     lenient = True,
     deps = [
         ":asserts",
