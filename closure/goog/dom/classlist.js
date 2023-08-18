@@ -24,8 +24,9 @@ goog.require('goog.array');
  * Override this define at build-time if you know your target supports it.
  * @define {boolean} Whether to use the classList property (DOMTokenList).
  */
-goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST =
-    goog.define('goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST', false);
+goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST = goog.define(
+    'goog.dom.classlist.ALWAYS_USE_DOM_TOKEN_LIST',
+    goog.FEATURESET_YEAR >= 2018);
 
 
 /**
