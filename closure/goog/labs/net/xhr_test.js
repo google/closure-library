@@ -16,6 +16,7 @@ const WrapperXmlHttpFactory = goog.require('goog.net.WrapperXmlHttpFactory');
 const XhrLike = goog.require('goog.net.XhrLike');
 const XmlHttp = goog.require('goog.net.XmlHttp');
 const events = goog.require('goog.events');
+const product = goog.require('goog.userAgent.product');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgent = goog.require('goog.userAgent');
 const xhr = goog.require('goog.labs.net.xhr');
@@ -362,6 +363,9 @@ testSuite({
   },
 
   testBadOriginTriggersOnErrorHandler() {
+    // TODO: b/296631792 - xhr.get below consistently hangs.
+    if (product.SAFARI) return;
+
     if (userAgent.EDGE) return;  // failing b/62677027
 
     return xhr.get('http://www.google.com')
