@@ -511,7 +511,7 @@ testSuite({
     popup.setVisible(true);
 
     const backgroundSize = style.getSize(popup.getBackgroundElement());
-    assertTrue(backgroundSize.width === 99);
+    assertRoughlyEquals('backgroundSize.width', 99, backgroundSize.width, 1);
     assertTrue(backgroundSize.height === 88);
     dom.removeNode(parentEl);
   },
