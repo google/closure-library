@@ -60,8 +60,9 @@ testSuite({
     // If the stack trace came from a synthetic Error object created
     // inside the goog.debug.Error constructor, it will have an extra frame
     // at stack[1]. If it came from captureStackTrace or was attached
-    // by IE when the error was caught, it will not.
-    if (!Error.captureStackTrace && !userAgent.IE) {
+    // by IE when the error was caught, it will not. Safari also will not have
+    // an extra frame.
+    if (!Error.captureStackTrace && !userAgent.IE && !product.SAFARI) {
       stack.splice(1, 1);  // Remove stack[1].
     }
 
