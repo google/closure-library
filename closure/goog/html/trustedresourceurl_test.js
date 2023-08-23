@@ -372,6 +372,7 @@ testSuite({
     });
     assertContains(
         'expected object of type TrustedResourceUrl', exception.message);
+    assertContains('of type object', exception.message);
   },
 
   testUnwrapTrustedScriptURL_policyIsNull() {

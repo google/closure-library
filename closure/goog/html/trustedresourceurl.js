@@ -192,8 +192,8 @@ goog.html.TrustedResourceUrl.unwrapTrustedScriptURL = function(
         .privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_;
   } else {
     goog.asserts.fail(
-        'expected object of type TrustedResourceUrl, got \'' +
-        trustedResourceUrl + '\' of type ' + goog.typeOf(trustedResourceUrl));
+        'expected object of type TrustedResourceUrl, got \'%s\' of type %s',
+        trustedResourceUrl, goog.typeOf(trustedResourceUrl));
     return 'type_error:TrustedResourceUrl';
   }
 };
