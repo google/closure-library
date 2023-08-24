@@ -234,6 +234,7 @@ goog.html.SAFE_MIME_TYPE_PATTERN_ = new RegExp(
  * @return {boolean} True if the MIME type is safe and creating a Blob via
  *   `SafeUrl.fromBlob()` with that type will not fail due to the type. False
  *   otherwise.
+ * @package
  */
 goog.html.SafeUrl.isSafeMimeType = function(mimeType) {
   'use strict';
