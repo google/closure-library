@@ -46,6 +46,7 @@ requirement: {
 
   # Allowlist for global names
   value: "CLOSURE_DEFINES"  # Closure Compiler requires this to be a global var
+  value: "CLOSURE_TOGGLE_ORDINALS"  # Closure Compiler requires this to be a global var
   value: "CLOSURE_UNCOMPILED_DEFINES"  # Closure Compiler requires this to be a global var
   value: "CLOSURE_NO_DEPS"  # Closure Compiler requires this to be a global var
 }
