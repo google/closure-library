@@ -1323,9 +1323,10 @@ goog.inherits(goog.fx.DragDropEvent, goog.events.Event);
  *
  * @param {Element|string} element Dom Node, or string representation of node
  *     id, to be used as drag source/drop target.
- * @param {Object=} opt_data Data associated with the source/target.
+ * @param {DRAG_DROP_DATA=} opt_data Data associated with the source/target.
  * @throws Error If no element argument is provided or if the type is invalid
  * @extends {goog.events.EventTarget}
+ * @template DRAG_DROP_DATA
  * @constructor
  * @struct
  */
@@ -1341,7 +1342,7 @@ goog.fx.DragDropItem = function(element, opt_data) {
 
   /**
    * Data associated with element.
-   * @type {Object|undefined}
+   * @type {DRAG_DROP_DATA|undefined}
    */
   this.data = opt_data;
 
@@ -1379,7 +1380,7 @@ goog.inherits(goog.fx.DragDropItem, goog.events.EventTarget);
 
 /**
  * Get the data associated with the source/target.
- * @return {Object|null|undefined} Data associated with the source/target.
+ * @return {DRAG_DROP_DATA|undefined} Data associated with the source/target.
  */
 goog.fx.DragDropItem.prototype.getData = function() {
   'use strict';
