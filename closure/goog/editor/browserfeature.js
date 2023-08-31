@@ -51,7 +51,7 @@ goog.editor.BrowserFeature = {
   // Whether to use mutation event types to detect changes
   // in the field contents.
   /** @const {boolean} */
-  USE_MUTATION_EVENTS: goog.userAgent.GECKO,
+  USE_MUTATION_EVENTS: false,
 
   // Whether the browser has a functional DOMSubtreeModified event.
   // TODO(user): Enable for all FF3 once we're confident this event fires
