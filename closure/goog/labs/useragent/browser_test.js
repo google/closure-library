@@ -15,6 +15,7 @@ const testAgents = goog.require('goog.labs.userAgent.testAgents');
 const testSuite = goog.require('goog.testing.testSuite');
 const userAgentBrowser = goog.require('goog.labs.userAgent.browser');
 const util = goog.require('goog.labs.userAgent.util');
+const {ChromiumRebrand} = goog.require('goog.labs.userAgent.chromiumRebrands');
 const {setUseClientHintsForTesting} = goog.require('goog.labs.userAgent');
 
 /*
@@ -254,8 +255,8 @@ async function assertFullVersionOf(brandVersions, alreadyLoaded = false) {
 /**
  * Assert that fullVersionOf returns a full version that is within the given
  * range.
- * @param {!userAgentBrowser.Brand} brand The brand for which the browser's
- *     version should be checked.
+ * @param {!userAgentBrowser.AllBrands} brand The brand for which
+ *     the browser's version should be checked.
  * @param {string} lowVersion A version that is lower or equal to the browser's
  *     version for this brand.
  * @param {string} highVersion A version that is higher than the browser's
@@ -273,8 +274,8 @@ async function assertFullVersionOfBetween(brand, lowVersion, highVersion) {
 /**
  * Assert that getVersionStringForLogging returns the most complete version
  * string for a given browser brand that is currently synchronously available.
- * @param {!userAgentBrowser.Brand} brand The brand for which the browser's
- *     version should be checked.
+ * @param {!userAgentBrowser.AllBrands} brand The brand for which
+ *     the browser's version should be checked.
  * @param {string} lowEntropy The string that should be returned when only the
  *     major version is available, or the string that should always be returned
  *     (if highEntropy is not specified).
@@ -1191,12 +1192,16 @@ testSuite({
     await assertGetVersionStringForLogging(DEFINITELY_NOT_A_BROWSER, '', '');
   },
 
-  async testChromeUserAgentData() {
+  async testChromiumUserAgentData() {
     // Note: The full versions listed here are fictional, made up by bumping
     // a legitimate version's major version number by 10 (e.g. 91.* -> 101.*).
     const userAgentDataWithVersion = testAgentData.withHighEntropyData(
-        testAgentData.CHROME_USERAGENT_DATA_LINUX,
-        {fullVersionList: [{brand: 'Chromium', version: '101.0.4472.77'}]});
+        testAgentData.CHROME_USERAGENT_DATA_LINUX, {
+          fullVersionList: [
+            {brand: 'Chromium', version: '101.0.4472.77'},
+            {brand: 'Google Chrome', version: '102.0.4472.77'}
+          ]
+        });
     util.setUserAgentData(userAgentDataWithVersion);
 
     // Using only UACH data to get these answers requires enabling
@@ -1428,5 +1433,127 @@ testSuite({
         userAgentBrowser.fullVersionOf(userAgentBrowser.Brand.EDGE)
             .getIfLoaded()
             .toVersionStringForLogging());
+  },
+
+  async testChromeUserAgentDataWithDivergingVersions() {
+    // These versions and scenario are ficticious - as of August 2023 the
+    // versions of 'Google Chrome' and 'Chromium' have been identical.
+    const userAgentDataWithVersion = testAgentData.withHighEntropyData(
+        Object.freeze({
+          brands: [
+            {brand: 'Not; A Brand', version: '0'},
+            {brand: 'Google Chrome', version: '102'},
+            {brand: 'Chromium', version: '101'},
+          ],
+          mobile: false,
+          getHighEntropyValues: () => {
+            throw new Error('high-entropy data not available');
+          },
+          platform: 'Linux',
+        }),
+        {
+          fullVersionList: [
+            {brand: 'Chromium', version: '101.0.4472.77'},
+            {brand: 'Google Chrome', version: '102.0.4472.77'},
+          ]
+        });
+    util.setUserAgentData(userAgentDataWithVersion);
+
+    // Using only UACH data to get these answers requires enabling
+    // useClientHints. Otherwise, this test would try and use userAgent string
+    // data, and we deliberately don't set any for this test to ensure the UACH
+    // codepaths are used and tested.
+    setUseClientHintsForTesting(true);
+
+    assertBrowser(Browser.CHROME);
+    assertTrue(userAgentBrowser.isChrome());
+
+    assertVersionOf([
+      {brand: ChromiumRebrand.GOOGLE_CHROME, version: 102},
+      {brand: userAgentBrowser.Brand.CHROMIUM, version: 101},
+    ]);
+
+    // High-entropy APIs should function even when useClientHints returns false
+    setUseClientHintsForTesting(false);
+
+    await assertGetVersionStringForLogging(
+        ChromiumRebrand.GOOGLE_CHROME, '102', '102.0.4472.77');
+
+    await assertFullVersionOf(
+        [
+          {brand: ChromiumRebrand.GOOGLE_CHROME, version: '102.0.4472.77'},
+          {brand: userAgentBrowser.Brand.CHROMIUM, version: '101.0.4472.77'}
+        ],
+        true);
+    await assertFullVersionOfBetween(
+        ChromiumRebrand.GOOGLE_CHROME, '102.0', '102.1');
+
+    await assertGetVersionStringForLogging(DEFINITELY_NOT_A_BROWSER, '', '');
+  },
+
+
+  async testBraveUserAgentData() {
+    // These versions are ficticious.
+    const userAgentDataWithVersion = testAgentData.withHighEntropyData(
+        {
+          brands: [
+            {brand: 'Not; A Brand', version: '0'},
+            {brand: 'Brave', version: '2'},
+            {brand: 'Chromium', version: '101'},
+          ],
+          mobile: false,
+          getHighEntropyValues: () => {
+            throw new Error('high-entropy values not available');
+          },
+          platform: 'Linux',
+        },
+        {
+          fullVersionList: [
+            {brand: 'Chromium', version: '101.0.4472.77'},
+            {brand: 'Brave', version: '2.0.1'},
+          ]
+        });
+    util.setUserAgentData(userAgentDataWithVersion);
+
+    // Using only UACH data to get these answers requires enabling
+    // useClientHints. Otherwise, this test would try and use userAgent string
+    // data, and we deliberately don't set any for this test to ensure the UACH
+    // codepaths are used and tested.
+    setUseClientHintsForTesting(true);
+
+    assertBrowser(Browser.CHROME);
+    assertTrue(userAgentBrowser.isChrome());
+
+    assertVersionOf([
+      {brand: ChromiumRebrand.BRAVE, version: 2},
+      {brand: userAgentBrowser.Brand.CHROMIUM, version: 101},
+    ]);
+
+    // High-entropy APIs should function even when useClientHints returns false
+    setUseClientHintsForTesting(false);
+
+    await assertGetVersionStringForLogging(ChromiumRebrand.BRAVE, '2', '2.0.1');
+
+    await assertFullVersionOf(
+        [
+          {brand: ChromiumRebrand.BRAVE, version: '2.0.1'},
+          {brand: userAgentBrowser.Brand.CHROMIUM, version: '101.0.4472.77'}
+        ],
+        true);
+    await assertFullVersionOfBetween(ChromiumRebrand.BRAVE, '2.0', '2.1');
+
+    // Check that we can also get this data for Chromium as well as Brave
+    // We need to re-set test state in order to verify the low entropy version
+    // comparison, as once we retrieve the high-entropy versions above those are
+    // the versions returned for logging, not low entropy.
+    userAgentBrowser.resetForTesting();
+    util.setUserAgentData(userAgentDataWithVersion);
+
+    await assertGetVersionStringForLogging(
+        userAgentBrowser.Brand.CHROMIUM, '101', '101.0.4472.77');
+    await assertFullVersionOfBetween(
+        userAgentBrowser.Brand.CHROMIUM, '101.0', '101.1');
+
+    await assertGetVersionStringForLogging(DEFINITELY_NOT_A_BROWSER, '', '');
   },
 });

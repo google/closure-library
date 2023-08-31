@@ -23,12 +23,21 @@ closure_js_library(
     srcs = ["browser.js"],
     lenient = True,
     deps = [
+        ":chromium_rebrands",
         ":util",
         "//closure/goog/asserts",
         "//closure/goog/labs/useragent/highentropy:highentropydata",
         "//closure/goog/labs/useragent/highentropy:highentropyvalue",
         "//closure/goog/string:internal",
     ],
+)
+
+closure_js_library(
+    name = "chromium_rebrands",
+    srcs = [
+        "chromium_rebrands.js",
+    ],
+    lenient = True,
 )
 
 closure_js_library(

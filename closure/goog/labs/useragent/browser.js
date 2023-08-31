@@ -17,6 +17,7 @@ goog.module.declareLegacyNamespace();
 
 const util = goog.require('goog.labs.userAgent.util');
 const {AsyncValue, Version} = goog.require('goog.labs.userAgent.highEntropy.highEntropyValue');
+const {ChromiumRebrand} = goog.require('goog.labs.userAgent.chromiumRebrands');
 const {assert, assertExists} = goog.require('goog.asserts');
 const {compareVersions} = goog.require('goog.string.internal');
 const {fullVersionList} = goog.require('goog.labs.userAgent.highEntropy.highEntropyData');
@@ -86,6 +87,15 @@ const Brand = {
   SILK: 'Silk',
 };
 exports.Brand = Brand;
+
+/** @typedef {(!Brand|!ChromiumRebrand)} */
+let AllBrandsInternal;
+
+/**
+ * All possible valid values to pass to various UACH Brand-accepting functions.
+ * @typedef {(!Brand|!ChromiumRebrand)}
+ */
+exports.AllBrands;
 
 /**
  * @param {boolean=} ignoreClientHintsFlag Iff truthy, the `useClientHints`
@@ -530,7 +540,8 @@ function getFullVersionFromUserAgentString(browser) {
  * browser is specified. The returned value can be used to make browser version
  * comparisons using comparison operators.
  * @private
- * @param {!Brand} browser The brand whose version should be returned.
+ * @param {!AllBrandsInternal} browser The brand whose version should be
+ *     returned.
  * @return {number} The major version number associated with the current
  * browser under the given brand, or NaN if the current browser doesn't match
  * the given brand.
@@ -564,7 +575,7 @@ function versionOf_(browser) {
  * Returns true if the current browser matches the given brand and is at least
  * the given major version. The major version must be a whole number (i.e.
  * decimals should not be used to represent a minor version).
- * @param {!Brand} brand The brand whose version should be returned.
+ * @param {!AllBrandsInternal} brand The brand whose version should be returned.
  * @param {number} majorVersion The major version number to compare against.
  *     This must be a whole number.
  * @return {boolean} Whether the current browser both matches the given brand
@@ -582,7 +593,7 @@ exports.isAtLeast = isAtLeast;
  * Returns true if the current browser matches the given brand and is at most
  * the given version. The major version must be a whole number (i.e. decimals
  * should not be used to represent a minor version).
- * @param {!Brand} brand The brand whose version should be returned.
+ * @param {!AllBrandsInternal} brand The brand whose version should be returned.
  * @param {number} majorVersion The major version number to compare against.
  *     This must be a whole number.
  * @return {boolean} Whether the current browser both matches the given brand
@@ -720,7 +731,8 @@ exports.resetForTesting = () => {
  * the requested browser brand. Note that the full version string is a
  * high-entropy value, and must be asynchronously loaded before it can be
  * accessed synchronously.
- * @param {!Brand} browser The brand whose version should be returned.
+ * @param {!AllBrandsInternal} browser The brand whose version should be
+ *     returned.
  * @return {!AsyncValue<!Version>|undefined} An object that can be used
  *     to get or load the full version string as a high-entropy value, or
  * undefined if the current browser doesn't match the given brand.
@@ -759,7 +771,8 @@ exports.fullVersionOf = fullVersionOf;
  * This value should ONLY be used for logging/debugging purposes. Do not use it
  * to branch code paths. For comparing versions, use isAtLeast()/isAtMost() or
  * fullVersionOf() instead.
- * @param {!Brand} browser The brand whose version should be returned.
+ * @param {!AllBrandsInternal} browser The brand whose version should be
+ *     returned.
  * @return {string} The version as a string.
  */
 function getVersionStringForLogging(browser) {
