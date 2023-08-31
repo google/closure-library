@@ -140,7 +140,6 @@ goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
-goog.require('goog.html.SafeUrl');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.json');
@@ -1189,15 +1188,6 @@ goog.net.IframeIo.prototype.createIframe_ = function() {
   this.iframe_ = dom.createDom(
       goog.dom.TagName.IFRAME,
       {'name': this.iframeName_, 'id': this.iframeName_});
-
-  // Setting the source to javascript:"" is a fix to remove IE6 mixed content
-  // warnings when being used in an https page.
-  if (goog.userAgent.IE && Number(goog.userAgent.VERSION) < 7) {
-    goog.dom.safe.setFormElementAction(
-        this.iframe_,
-        goog.html.SafeUrl.fromConstant(
-            goog.string.Const.from('javascript:""')));
-  }
 
   const s = this.iframe_.style;
   s.visibility = 'hidden';

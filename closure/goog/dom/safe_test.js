@@ -213,13 +213,13 @@ testSuite({
           ...nodeAttributes
         });
 
-    const url = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
+    const url = SafeUrl.fromConstant(Const.from('about:blank'));
     assertThrows(() => {
       safe.setLinkHrefAndRel(mockLink, url, 'foo, stylesheet, bar');
     });
 
     safe.setLinkHrefAndRel(mockLink, url, 'foo, bar');
-    assertEquals('javascript:trusted();', mockLink.href);
+    assertEquals('about:blank', mockLink.href);
   },
 
   testsetLinkHrefAndRel_string() {
@@ -261,9 +261,9 @@ testSuite({
     assertEquals('about:invalid#zClosurez', mockLoc.href);
 
     mockLoc = /** @type {!Location} */ ({'href': 'blarg'});
-    const safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
+    const safeUrl = SafeUrl.fromConstant(Const.from('about:blank'));
     safe.setLocationHref(mockLoc, safeUrl);
-    assertEquals('javascript:trusted();', mockLoc.href);
+    assertEquals('about:blank', mockLoc.href);
 
     // Asserts correct runtime type.
     const ex = assertThrows(() => {
@@ -295,10 +295,10 @@ testSuite({
   },
 
   testReplaceLocationSafeUrl() {
-    const safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
+    const safeUrl = SafeUrl.fromConstant(Const.from('about:blank'));
     /** @type {?} */
     const mockLoc = new googTesting.StrictMock(window.location);
-    mockLoc.replace('javascript:trusted();');
+    mockLoc.replace('about:blank');
     mockLoc.$replay();
     safe.replaceLocation(mockLoc, safeUrl);
     mockLoc.$verify();
@@ -336,9 +336,9 @@ testSuite({
         location = value;
       },
     });
-    const safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
+    const safeUrl = SafeUrl.fromConstant(Const.from('about:blank'));
     safe.assignLocation(fakeLoc, safeUrl);
-    assertEquals(location, 'javascript:trusted();');
+    assertEquals(location, 'about:blank');
   },
 
   testSetAnchorHref() {
@@ -350,9 +350,9 @@ testSuite({
     assertEquals('about:invalid#zClosurez', anchor.href);
 
     anchor = /** @type {!HTMLAnchorElement} */ (document.createElement('A'));
-    let safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
+    let safeUrl = SafeUrl.fromConstant(Const.from('about:blank'));
     safe.setAnchorHref(anchor, safeUrl);
-    assertEquals('javascript:trusted();', anchor.href);
+    assertEquals('about:blank', anchor.href);
 
     // Works with mocks too.
     let mockAnchor = /** @type {!HTMLAnchorElement} */ (
@@ -364,9 +364,9 @@ testSuite({
 
     mockAnchor = /** @type {!HTMLAnchorElement} */ (
         {'href': 'blarg', 'tagName': 'A', ...nodeAttributes});
-    safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
+    safeUrl = SafeUrl.fromConstant(Const.from('about:blank'));
     safe.setAnchorHref(mockAnchor, safeUrl);
-    assertEquals('javascript:trusted();', mockAnchor.href);
+    assertEquals('about:blank', mockAnchor.href);
 
     // Asserts correct runtime type.
     const otherElement = document.createElement('LINK');
@@ -395,8 +395,8 @@ testSuite({
   testSetInputFormActionSafeUrl() {
     const element = dom.createElement(TagName.INPUT);
     safe.setInputFormAction(
-        element, SafeUrl.fromConstant(Const.from('javascript:trusted();')));
-    assertEquals('javascript:trusted();', element.formAction);
+        element, SafeUrl.fromConstant(Const.from('about:blank')));
+    assertEquals('about:blank', element.formAction);
   },
 
   testSetInputFormActionAssertsType() {
@@ -425,8 +425,8 @@ testSuite({
   testSetButtonFormActionSafeUrl() {
     const element = dom.createElement(TagName.BUTTON);
     safe.setButtonFormAction(
-        element, SafeUrl.fromConstant(Const.from('javascript:trusted();')));
-    assertEquals('javascript:trusted();', element.formAction);
+        element, SafeUrl.fromConstant(Const.from('about:blank')));
+    assertEquals('about:blank', element.formAction);
   },
 
   testSetFormElementActionAssertsType() {
@@ -455,8 +455,8 @@ testSuite({
   testSetFormElementActionSafeUrl() {
     const element = dom.createElement(TagName.FORM);
     safe.setFormElementAction(
-        element, SafeUrl.fromConstant(Const.from('javascript:trusted();')));
-    assertEquals('javascript:trusted();', element.action);
+        element, SafeUrl.fromConstant(Const.from('about:blank')));
+    assertEquals('about:blank', element.action);
   },
 
   testSetAudioSrc() {
@@ -475,9 +475,9 @@ testSuite({
 
     mockAudioElement = /** @type {!HTMLAudioElement} */ (
         {'src': 'blarg', 'tagName': 'AUDIO', ...nodeAttributes});
-    safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
+    safeUrl = SafeUrl.fromConstant(Const.from('about:blank'));
     safe.setAudioSrc(mockAudioElement, safeUrl);
-    assertEquals('javascript:trusted();', mockAudioElement.src);
+    assertEquals('about:blank', mockAudioElement.src);
 
     // Asserts correct runtime type.
     const otherElement = document.createElement('SCRIPT');
@@ -514,9 +514,9 @@ testSuite({
 
     mockVideoElement = /** @type {!HTMLVideoElement} */ (
         {'src': 'blarg', 'tagName': 'VIDEO', ...nodeAttributes});
-    safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
+    safeUrl = SafeUrl.fromConstant(Const.from('about:blank'));
     safe.setVideoSrc(mockVideoElement, safeUrl);
-    assertEquals('javascript:trusted();', mockVideoElement.src);
+    assertEquals('about:blank', mockVideoElement.src);
 
     // Asserts correct runtime type.
     const otherElement = document.createElement('SCRIPT');
@@ -769,9 +769,8 @@ testSuite({
     mockWindowOpen.$reset();
     retVal = null;
 
-    const safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
-    mockWindowOpen('javascript:trusted();', 'name', 'specs')
-        .$returns(fakeWindow);
+    const safeUrl = SafeUrl.fromConstant(Const.from('about:blank'));
+    mockWindowOpen('about:blank', 'name', 'specs').$returns(fakeWindow);
     mockWindowOpen.$replay();
     retVal = safe.openInWindow(safeUrl, window, Const.from('name'), 'specs');
     mockWindowOpen.$verify();

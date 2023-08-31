@@ -61,11 +61,11 @@ testSuite({
   },
 
   testSafeUrl() {
-    const safeUrl = SafeUrl.fromConstant(Const.from('javascript:trusted();'));
+    const safeUrl = SafeUrl.fromConstant(Const.from('#'));
     const extracted = SafeUrl.unwrap(safeUrl);
-    assertEquals('javascript:trusted();', extracted);
-    assertEquals('javascript:trusted();', SafeUrl.unwrap(safeUrl));
-    assertEquals('javascript:trusted();', String(safeUrl));
+    assertEquals('#', extracted);
+    assertEquals('#', SafeUrl.unwrap(safeUrl));
+    assertEquals('#', String(safeUrl));
 
     // Interface markers are present.
     assertTrue(safeUrl.implementsGoogStringTypedString);
