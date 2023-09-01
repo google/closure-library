@@ -74,6 +74,9 @@ goog.ui.DragDropDetector = function(opt_filePath) {
     this.root_ = iframe;
   }
 
+  this.mutationObserver_ =
+      new MutationObserver(() => this.handleNodeInserted_());
+
   document.body.appendChild(this.root_);
 };
 goog.inherits(goog.ui.DragDropDetector, goog.events.EventTarget);
@@ -241,6 +244,13 @@ goog.ui.DragDropDetector.prototype.isCoveringScreen_ = false;
  */
 goog.ui.DragDropDetector.prototype.mousePosition_ = null;
 
+/**
+ * Observer for the iframe body to detect node insertions.
+ * @type {!MutationObserver}
+ * @private
+ * @const
+ */
+goog.ui.DragDropDetector.prototype.mutationObserver_;
 
 /**
  * Initialize the iframe after it has loaded.
@@ -294,7 +304,7 @@ goog.ui.DragDropDetector.prototype.initIframe_ = function() {
               // iframe.  We setTimeout so that handleNodeInserted_ is called
               //  after the content is in the document.
               goog.global.setTimeout(
-                  goog.bind(this.handleNodeInserted_, this, e), 0);
+                  goog.bind(this.handleNodeInserted_, this), 0);
               return true;
             })
         .
@@ -330,9 +340,9 @@ goog.ui.DragDropDetector.prototype.initIframe_ = function() {
         .listen(
             this.body_,
             [goog.events.EventType.MOUSEMOVE, goog.events.EventType.KEYPRESS],
-            this.uncoverScreen_)
-        // Detect content insertion.
-        .listen(this.document_, 'DOMNodeInserted', this.handleNodeInserted_);
+            this.uncoverScreen_);
+    // Detect content insertion into the iframe body.
+    this.mutationObserver_.observe(this.body_, {childList: true});
   }
 };
 
@@ -514,10 +524,9 @@ goog.ui.DragDropDetector.prototype.clearContents_ = function() {
 
 /**
  * Event handler called when the content of the iframe changes.
- * @param {goog.events.BrowserEvent} e The event that caused this function call.
  * @private
  */
-goog.ui.DragDropDetector.prototype.handleNodeInserted_ = function(e) {
+goog.ui.DragDropDetector.prototype.handleNodeInserted_ = function() {
   'use strict';
   var uri;
 
@@ -579,6 +588,7 @@ goog.ui.DragDropDetector.prototype.disposeInternal = function() {
   goog.ui.DragDropDetector.base(this, 'disposeInternal');
   this.handler_.dispose();
   this.handler_ = null;
+  this.mutationObserver_.disconnect();
 };
 
 
