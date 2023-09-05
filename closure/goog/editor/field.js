@@ -157,13 +157,6 @@ goog.editor.Field = function(id, opt_doc) {
     this.debouncedEvents_[goog.editor.Field.EventType[key]] = 0;
   }
 
-  if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
-    /** @private */
-    this.changeTimerGecko_ = new goog.async.Delay(
-        this.handleChange, goog.editor.Field.CHANGE_FREQUENCY, this);
-    this.registerDisposable(this.changeTimerGecko_);
-  }
-
   /**
    * @type {goog.events.EventHandler<!goog.editor.Field>}
    * @protected
@@ -850,53 +843,34 @@ goog.editor.Field.prototype.setupChangeListeners_ = function() {
     this.addListener(
         goog.events.EventType.FOCUS, this.dispatchFocusAndBeforeFocus_);
   }
-  this.addListener(
-      goog.events.EventType.BLUR, this.dispatchBlur,
-      goog.editor.BrowserFeature.USE_MUTATION_EVENTS);
+  this.addListener(goog.events.EventType.BLUR, this.dispatchBlur);
 
-  if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
-    // Ways to detect changes in Mozilla:
-    //
-    // keypress - check event.charCode (only typable characters has a
-    //            charCode), but also keyboard commands lile Ctrl+C will
-    //            return a charCode.
-    // dragdrop - fires when the user drops something. This does not necessary
-    //            lead to a change but we cannot detect if it will or not
-    //
-    // Known Issues: We cannot detect cut and paste using menus
-    //               We cannot detect when someone moves something out of the
-    //               field using drag and drop.
-    //
-    this.setupMutationEventHandlersGecko();
-  } else {
-    // Ways to detect that a change is about to happen in other browsers.
-    // (IE and Safari have these events. Opera appears to work, but we haven't
-    //  researched it.)
-    //
-    // onbeforepaste
-    // onbeforecut
-    // ondrop - happens when the user drops something on the editable text
-    //          field the value at this time does not contain the dropped text
-    // ondragleave - when the user drags something from the current document.
-    //               This might not cause a change if the action was copy
-    //               instead of move
-    // onkeypress - IE only fires keypress events if the key will generate
-    //              output. It will not trigger for delete and backspace
-    // onkeydown - For delete and backspace
-    //
-    // known issues: IE triggers beforepaste just by opening the edit menu
-    //               delete at the end should not cause beforechange
-    //               backspace at the beginning should not cause beforechange
-    //               see above in ondragleave
-    // TODO(user): Why don't we dispatchBeforeChange from the
-    // handleDrop event for all browsers?
-    this.addListener(
-        ['beforecut', 'beforepaste', 'drop', 'dragend'],
-        this.dispatchBeforeChange);
-    this.addListener(
-        ['cut', 'paste'], goog.functions.lock(this.dispatchChange));
-    this.addListener('drop', this.handleDrop_);
-  }
+  // Ways to detect that a change is about to happen in other browsers. (IE and
+  // Safari have these events. Opera appears to work, but we haven't researched
+  // it.)
+  //
+  // onbeforepaste
+  // onbeforecut
+  // ondrop - happens when the user drops something on the editable text field
+  //          the value at this time does not contain the dropped text
+  // ondragleave - when the user drags something from the current document. This
+  //               might not cause a change if the action was copy instead of
+  //               move
+  // onkeypress - IE only fires keypress events if the key will generate output.
+  //              It will not trigger for delete and backspace
+  // onkeydown - For delete and backspace
+  //
+  // known issues: IE triggers beforepaste just by opening the edit menu delete
+  //               at the end should not cause beforechange backspace at the
+  //               beginning should not cause beforechange see above in
+  //               ondragleave
+  // TODO(user): Why don't we dispatchBeforeChange from the handleDrop event
+  // for all browsers?
+  this.addListener(
+      ['beforecut', 'beforepaste', 'drop', 'dragend'],
+      this.dispatchBeforeChange);
+  this.addListener(['cut', 'paste'], goog.functions.lock(this.dispatchChange));
+  this.addListener('drop', this.handleDrop_);
 
   // TODO(user): Figure out why we use dragend vs dragdrop and
   // document this better.
@@ -951,10 +925,6 @@ goog.editor.Field.prototype.clearListeners = function() {
     this.eventRegister.removeAll();
   }
 
-
-  if (this.changeTimerGecko_) {
-    this.changeTimerGecko_.stop();
-  }
   this.delayedChangeTimer_.stop();
 };
 
@@ -1030,47 +1000,6 @@ goog.editor.Field.prototype.setFollowLinkInNewWindow = function(
     followLinkInNewWindow) {
   'use strict';
   this.followLinkInNewWindow_ = followLinkInNewWindow;
-};
-
-
-/**
- * List of mutation events in Gecko browsers.
- * @type {Array<string>}
- * @protected
- */
-goog.editor.Field.MUTATION_EVENTS_GECKO = [
-  'DOMNodeInserted', 'DOMNodeRemoved', 'DOMNodeRemovedFromDocument',
-  'DOMNodeInsertedIntoDocument', 'DOMCharacterDataModified'
-];
-
-
-/**
- * Mutation events tell us when something has changed for mozilla.
- * @protected
- */
-goog.editor.Field.prototype.setupMutationEventHandlersGecko = function() {
-  'use strict';
-  // Always use DOMSubtreeModified on Gecko when not using an iframe so that
-  // DOM mutations outside the Field do not trigger handleMutationEventGecko_.
-  if (goog.editor.BrowserFeature.HAS_DOM_SUBTREE_MODIFIED_EVENT ||
-      !this.usesIframe()) {
-    this.eventRegister.listen(
-        this.getElement(), 'DOMSubtreeModified',
-        this.handleMutationEventGecko_);
-  } else {
-    var doc = this.getEditableDomHelper().getDocument();
-    this.eventRegister.listen(
-        doc, goog.editor.Field.MUTATION_EVENTS_GECKO,
-        this.handleMutationEventGecko_, true);
-
-    // DOMAttrModified fires for a lot of events we want to ignore.  This goes
-    // through a different handler so that we can ignore many of these.
-    this.eventRegister.listen(
-        doc, 'DOMAttrModified',
-        goog.bind(
-            this.handleDomAttrChange, this, this.handleMutationEventGecko_),
-        true);
-  }
 };
 
 
@@ -1301,10 +1230,8 @@ goog.editor.Field.prototype.handleKeyDown_ = function(e) {
     this.maybeStartSelectionChangeTimer_(e);
   }
 
-  if (!goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
-    if (!this.handleBeforeChangeKeyEvent_(e)) {
-      return;
-    }
+  if (!this.handleBeforeChangeKeyEvent_(e)) {
+    return;
   }
 
   if (!this.invokeShortCircuitingOp_(goog.editor.PluginImpl.Op.KEYDOWN, e) &&
@@ -1321,17 +1248,11 @@ goog.editor.Field.prototype.handleKeyDown_ = function(e) {
  */
 goog.editor.Field.prototype.handleKeyPress_ = function(e) {
   'use strict';
-  if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
-    if (!this.handleBeforeChangeKeyEvent_(e)) {
-      return;
-    }
-  } else {
-    // In IE only keys that generate output trigger keypress
-    // In Mozilla charCode is set for keys generating content.
-    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
-    this.gotGeneratingKey_ = true;
-    this.dispatchBeforeChange();
-  }
+  // In IE only keys that generate output trigger keypress
+  // In Mozilla charCode is set for keys generating content.
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
+  this.gotGeneratingKey_ = true;
+  this.dispatchBeforeChange();
 
   if (!this.invokeShortCircuitingOp_(goog.editor.PluginImpl.Op.KEYPRESS, e) &&
       !goog.editor.BrowserFeature.USES_KEYDOWN) {
@@ -1348,9 +1269,7 @@ goog.editor.Field.prototype.handleKeyPress_ = function(e) {
  */
 goog.editor.Field.prototype.handleKeyUp_ = function(e) {
   'use strict';
-  if (!goog.editor.BrowserFeature.USE_MUTATION_EVENTS &&
-      (this.gotGeneratingKey_ ||
-       goog.editor.Field.isSpecialGeneratingKey_(e))) {
+  if (this.gotGeneratingKey_ || goog.editor.Field.isSpecialGeneratingKey_(e)) {
     // The special keys won't have set the gotGeneratingKey flag, so we check
     // for them explicitly
     this.handleChange();
@@ -1553,32 +1472,6 @@ goog.editor.Field.prototype.handleDomAttrChange = function(
 
 
 /**
- * Handle a mutation event.
- * @param {goog.events.BrowserEvent|Event} e The browser event.
- * @private
- * @suppress {strictMissingProperties} Added to tighten compiler checks
- */
-goog.editor.Field.prototype.handleMutationEventGecko_ = function(e) {
-  'use strict';
-  if (this.isEventStopped(goog.editor.Field.EventType.CHANGE)) {
-    return;
-  }
-
-  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
-  e = e.getBrowserEvent ? e.getBrowserEvent() : e;
-  // For people with firebug, firebug sets this property on elements it is
-  // inserting into the dom.
-  if (e.target.firebugIgnore) {
-    return;
-  }
-
-  this.isModified_ = true;
-  this.isEverModified_ = true;
-  this.changeTimerGecko_.start();
-};
-
-
-/**
  * Handle drop events. Deal with focus/selection issues and set the document
  * as changed.
  * @param {goog.events.BrowserEvent} e The browser event.
@@ -1589,12 +1482,6 @@ goog.editor.Field.prototype.handleDrop_ = function(e) {
   if (goog.userAgent.IE) {
     // TODO(user): This should really be done in the loremipsum plugin.
     this.execCommand(goog.editor.Command.CLEAR_LOREM, true);
-  }
-
-  // TODO(user): I just moved this code to this location, but I wonder why
-  // it is only done for this case.  Investigate.
-  if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
-    this.dispatchFocusAndBeforeFocus_();
   }
 
   this.dispatchChange();
@@ -1728,10 +1615,6 @@ goog.editor.Field.prototype.stopChangeEvents = function(
     opt_stopChange, opt_stopDelayedChange, opt_cancelPendingDelayedChange) {
   'use strict';
   if (opt_stopChange) {
-    if (this.changeTimerGecko_) {
-      this.changeTimerGecko_.fireIfActive();
-    }
-
     this.stopEvent(goog.editor.Field.EventType.CHANGE);
   }
   if (opt_stopDelayedChange) {
@@ -1757,15 +1640,6 @@ goog.editor.Field.prototype.stopChangeEvents = function(
 goog.editor.Field.prototype.startChangeEvents = function(
     opt_fireChange, opt_fireDelayedChange) {
   'use strict';
-  if (!opt_fireChange && this.changeTimerGecko_) {
-    // In the case where change events were stopped and we're not firing
-    // them on start, the user was trying to suppress all change or delayed
-    // change events. Clear the change timer now while the events are still
-    // stopped so that its firing doesn't fire a stopped change event, or
-    // queue up a delayed change event that we were trying to stop.
-    this.changeTimerGecko_.fireIfActive();
-  }
-
   this.startEvent(goog.editor.Field.EventType.CHANGE);
   this.startEvent(goog.editor.Field.EventType.DELAYEDCHANGE);
   if (opt_fireChange) {
@@ -1919,13 +1793,7 @@ goog.editor.Field.prototype.handleChange = function() {
   if (this.isEventStopped(goog.editor.Field.EventType.CHANGE)) {
     return;
   }
-
-  // Clear the changeTimerGecko_ if it's active, since any manual call to
-  // handle change is equiavlent to changeTimerGecko_.fire().
-  if (this.changeTimerGecko_) {
-    this.changeTimerGecko_.stop();
-  }
-
+  
   this.isModified_ = true;
   this.isEverModified_ = true;
 
@@ -1960,11 +1828,6 @@ goog.editor.Field.prototype.dispatchDelayedChange_ = function() {
  */
 goog.editor.Field.prototype.clearDelayedChange = function() {
   'use strict';
-  // The changeTimerGecko_ will queue up a delayed change so to fully clear
-  // delayed change we must also clear this timer.
-  if (this.changeTimerGecko_) {
-    this.changeTimerGecko_.fireIfActive();
-  }
   this.delayedChangeTimer_.fireIfActive();
 };
 
@@ -1975,11 +1838,6 @@ goog.editor.Field.prototype.clearDelayedChange = function() {
  */
 goog.editor.Field.prototype.stopDelayedChange_ = function() {
   'use strict';
-  // The changeTimerGecko_ will queue up a delayed change so to fully stop
-  // delayed change we must also stop this timer.
-  if (this.changeTimerGecko_) {
-    this.changeTimerGecko_.stop();
-  }
   this.delayedChangeTimer_.stop();
 };
 
@@ -2253,7 +2111,7 @@ goog.editor.Field.prototype.setSafeHtml = function(
   }
 
   // If we don't want change events to fire, we have to turn off change events
-  // before setting the field contents, since that causes mutation events.
+  // before setting the field contents.
   if (opt_dontFireDelayedChange) {
     this.stopChangeEvents(false, true, true);
   }
@@ -2269,18 +2127,6 @@ goog.editor.Field.prototype.setSafeHtml = function(
   // startEvent.
   if (this.isLoaded()) {
     if (opt_dontFireDelayedChange) {  // Turn back on change events
-      // We must fire change timer if necessary before restarting change events!
-      // Otherwise, the change timer firing after we restart events will cause
-      // the delayed change we were trying to stop. Flow:
-      //   Stop delayed change
-      //   setInnerHtml_, this starts the change timer
-      //   start delayed change
-      //   change timer fires
-      //   starts delayed change timer since event was not stopped
-      //   delayed change fires for the delayed change we tried to stop.
-      if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
-        this.changeTimerGecko_.fireIfActive();
-      }
       this.startChangeEvents();
     } else {  // Mark the document as changed and fire change events.
       this.dispatchChange();
@@ -2577,7 +2423,6 @@ goog.editor.Field.prototype.makeUneditable = function(opt_skipRestore) {
   }
 
   // Fire any events waiting on a timeout.
-  // Clearing delayed change also clears changeTimerGecko_.
   this.clearDelayedChange();
   this.selectionChangeTimer_.fireIfActive();
   this.execCommand(goog.editor.Command.CLEAR_LOREM);
