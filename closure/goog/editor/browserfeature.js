@@ -48,19 +48,6 @@ goog.editor.BrowserFeature = {
       (goog.editor.defines.USE_CONTENTEDITABLE_IN_FIREFOX_3 &&
        goog.userAgent.GECKO),
 
-  // Whether to use mutation event types to detect changes
-  // in the field contents.
-  /** @const {boolean} */
-  USE_MUTATION_EVENTS: false,
-
-  // Whether the browser has a functional DOMSubtreeModified event.
-  // TODO(user): Enable for all FF3 once we're confident this event fires
-  // reliably. Currently it's only enabled if using contentEditable in FF as
-  // we have no other choice in that case but to use this event.
-  HAS_DOM_SUBTREE_MODIFIED_EVENT: goog.userAgent.WEBKIT ||
-      (goog.editor.defines.USE_CONTENTEDITABLE_IN_FIREFOX_3 &&
-       goog.userAgent.GECKO),
-
   // Whether nodes can be copied from one document to another
   HAS_DOCUMENT_INDEPENDENT_NODES: goog.userAgent.GECKO,
 
