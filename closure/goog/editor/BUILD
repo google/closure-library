@@ -215,7 +215,6 @@ closure_js_library(
         "//closure/goog/dom:safe",
         "//closure/goog/dom:tagname",
         "//closure/goog/events",
-        "//closure/goog/events:eventtype",
         "//closure/goog/html:safehtml",
         "//closure/goog/log",
         "//closure/goog/style",

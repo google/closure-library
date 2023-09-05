@@ -29,7 +29,6 @@ goog.require('goog.editor.icontent.FieldFormatInfo');
 goog.require('goog.editor.icontent.FieldStyleInfo');
 goog.require('goog.editor.node');
 goog.require('goog.events');
-goog.require('goog.events.EventType');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.log');
 goog.require('goog.style');
@@ -154,19 +153,6 @@ goog.editor.SeamlessField.prototype.autoDetectFixedHeight_ = function() {
           goog.style.getComputedOverflowY(originalElement) == 'auto';
     }
   }
-};
-
-
-/**
- * Resize the iframe in response to the wrapper div changing size.
- * @private
- */
-goog.editor.SeamlessField.prototype.handleOuterDocChange_ = function() {
-  'use strict';
-  if (this.isEventStopped(goog.editor.Field.EventType.CHANGE)) {
-    return;
-  }
-  this.sizeIframeToWrapperGecko_();
 };
 
 
@@ -428,34 +414,6 @@ goog.editor.SeamlessField.prototype.usesIframe = function() {
   // rather than designMode iframe once contentEditable support
   // is less buggy.
   return !goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE;
-};
-
-
-/** @override */
-goog.editor.SeamlessField.prototype.setupMutationEventHandlersGecko =
-    function() {
-  'use strict';
-  goog.editor.SeamlessField.superClass_.setupMutationEventHandlersGecko.call(
-      this);
-
-  if (this.usesIframe()) {
-    var iframe = this.getEditableIframe();
-    var outerDoc = iframe.ownerDocument;
-    this.eventRegister.listen(
-        outerDoc, goog.editor.Field.MUTATION_EVENTS_GECKO,
-        this.handleOuterDocChange_, true);
-
-    // If the images load after we do the initial sizing, then this will
-    // force a field resize.
-    this.listenForIframeLoadEventKey_ = goog.events.listenOnce(
-        this.getEditableDomHelper().getWindow(), goog.events.EventType.LOAD,
-        this.sizeIframeToBodyHeightGecko_, true, this);
-
-    this.eventRegister.listen(
-        outerDoc, 'DOMAttrModified',
-        goog.bind(this.handleDomAttrChange, this, this.handleOuterDocChange_),
-        true);
-  }
 };
 
 

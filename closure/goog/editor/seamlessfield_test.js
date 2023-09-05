@@ -374,43 +374,6 @@ testSuite({
     }
   },
 
-  /** @suppress {visibility} suppression added to enable type checking */
-  testStartChangeEvents() {
-    if (BrowserFeature.USE_MUTATION_EVENTS) {
-      const clock = new MockClock(true);
-
-      let field;
-      try {
-        field = initSeamlessField('&nbsp;', {});
-        field.makeEditable();
-
-        let changeCalled = false;
-        events.listenOnce(field, Field.EventType.CHANGE, () => {
-          changeCalled = true;
-        });
-
-        let delayedChangeCalled = false;
-        events.listenOnce(field, Field.EventType.CHANGE, () => {
-          delayedChangeCalled = true;
-        });
-
-        field.stopChangeEvents(true, true);
-        if (field.changeTimerGecko_) {
-          field.changeTimerGecko_.start();
-        }
-
-        field.startChangeEvents();
-        clock.tick(1000);
-
-        assertFalse(changeCalled);
-        assertFalse(delayedChangeCalled);
-      } finally {
-        clock.dispose();
-        field.dispose();
-      }
-    }
-  },
-
   testManipulateDom() {
     // Test in blended field since that is what fires change events.
     const editableField = initSeamlessField('&nbsp;', {});
@@ -446,9 +409,6 @@ testSuite({
       editableField.manipulateDom(function() {
         this.handleChange();
         this.handleChange();
-        if (this.changeTimerGecko_) {
-          this.changeTimerGecko_.fire();
-        }
 
         this.dispatchDelayedChange_();
         this.delayedChangeTimer_.fire();
