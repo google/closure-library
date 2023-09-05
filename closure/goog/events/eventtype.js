@@ -257,15 +257,6 @@ goog.events.EventType = {
   // LocalStorage event.
   STORAGE: 'storage',
 
-  // DOM Level 2 mutation events (deprecated).
-  DOMSUBTREEMODIFIED: 'DOMSubtreeModified',
-  DOMNODEINSERTED: 'DOMNodeInserted',
-  DOMNODEREMOVED: 'DOMNodeRemoved',
-  DOMNODEREMOVEDFROMDOCUMENT: 'DOMNodeRemovedFromDocument',
-  DOMNODEINSERTEDINTODOCUMENT: 'DOMNodeInsertedIntoDocument',
-  DOMATTRMODIFIED: 'DOMAttrModified',
-  DOMCHARACTERDATAMODIFIED: 'DOMCharacterDataModified',
-
   // Print events.
   BEFOREPRINT: 'beforeprint',
   AFTERPRINT: 'afterprint',
