@@ -248,18 +248,9 @@ goog.editor.plugins.UndoRedo.prototype.enable = function(fieldObject) {
   // now, but it really should be fixed to do so. The cursor position stored in
   // the state should be the cursor position before any changes are made, not
   // the cursor position when the change finishes.
-  //
-  // It also seems like the if check below is just a bad one. We should do this
-  // for browsers that use mutation events as well even though the beforechange
-  // happens too late...maybe not. I don't know about this.
-  if (!goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
-    // We don't listen to beforechange in mutation-event browsers because
-    // there we fire beforechange, then syncronously file change. The point
-    // of before change is to capture before the user has changed anything.
-    eventHandler.listen(
-        fieldObject, goog.editor.Field.EventType.BEFORECHANGE,
-        this.handleBeforeChange_);
-  }
+  eventHandler.listen(
+      fieldObject, goog.editor.Field.EventType.BEFORECHANGE,
+      this.handleBeforeChange_);
   eventHandler.listen(
       fieldObject, goog.editor.Field.EventType.DELAYEDCHANGE,
       this.handleDelayedChange_);
