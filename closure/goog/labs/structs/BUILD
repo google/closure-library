@@ -8,8 +8,5 @@ closure_js_library(
     name = "multimap",
     srcs = ["multimap.js"],
     lenient = True,
-    deps = [
-        "//closure/goog/array",
-        "//closure/goog/object",
-    ],
+    deps = ["//closure/goog/array"],
 )
