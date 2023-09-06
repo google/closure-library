@@ -197,8 +197,11 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
  */
 goog.html.SafeUrl.fromConstant = function(url) {
   'use strict';
-  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
-      goog.string.Const.unwrap(url));
+  const str = goog.string.Const.unwrap(url);
+  if (goog.DEBUG && goog.html.SafeUrl.extractScheme(str) === 'javascript:') {
+    throw Error('Building a SafeUrl with a javascript scheme is not supported');
+  }
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(str);
 };
 
 

@@ -60,6 +60,10 @@ testSuite({
         () => new (/** @type {?} */ (SafeUrl.ABOUT_BLANK)).constructor(''));
   },
 
+  testFromConstant_throwsOnJavaScriptUrl() {
+    assertThrows(() => SafeUrl.fromConstant(Const.from('javascript:foo')));
+  },
+
   testSafeUrl() {
     const safeUrl = SafeUrl.fromConstant(Const.from('#'));
     const extracted = SafeUrl.unwrap(safeUrl);
