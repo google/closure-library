@@ -62,6 +62,9 @@ closure_js_library(
 closure_js_library(
     name = "htmlsanitizer",
     srcs = ["htmlsanitizer.js"],
+    deprecation = "Please use sanitizeHtml, HtmlSanitizer or HtmlSanitizerBuilder from 'safevalues' instead. " +
+                  "Note: We are aware the safevalues sanitizer doesn't support more niche use cases (see b/298325699). " +
+                  "If you believe you fall in this case, please add a clear explanation to the CL adding you to the visibility allowlist so that we can best help you.",
     lenient = True,
     deps = [
         ":attributeallowlists",

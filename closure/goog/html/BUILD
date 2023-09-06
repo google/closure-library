@@ -13,6 +13,7 @@ closure_js_library(
 closure_js_library(
     name = "legacyconversions",
     srcs = ["legacyconversions.js"],
+    deprecation = "Please use 'safevalues/restricted/legacy' instead",
     lenient = True,
     deps = [
         ":safehtml",
@@ -127,6 +128,7 @@ closure_js_library(
     name = "testing",
     testonly = True,
     srcs = ["testing.js"],
+    deprecation = "Please use 'safevalues/testing/conversions' instead",
     lenient = True,
     deps = [
         ":safehtml",
@@ -175,6 +177,7 @@ closure_js_library(
 closure_js_library(
     name = "uncheckedconversions",
     srcs = ["uncheckedconversions.js"],
+    deprecation = "Please use 'safevalues/restricted/reviewed' instead",
     lenient = True,
     deps = [
         ":safehtml",
