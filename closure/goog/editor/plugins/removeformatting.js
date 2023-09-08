@@ -21,6 +21,7 @@ goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.legacyconversions');
+goog.require('goog.labs.userAgent.platform');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 goog.requireType('goog.dom.AbstractRange');
@@ -145,8 +146,11 @@ goog.editor.plugins.RemoveFormatting.prototype.handleKeyboardShortcut =
     return false;
   }
 
-  // Cmd + Space does not work on Mac. Ctrl/Cmd + \ is platform agnostic.
-  if ((!goog.userAgent.MAC && key === ' ') || (key === '\\')) {
+  // Cmd + Space does not work on Mac. Ctrl + Space is reserved for IME
+  // switching on ChromeOs. Ctrl/Cmd + \ is platform agnostic.
+  if ((!(goog.userAgent.MAC || goog.labs.userAgent.platform.isChromeOS()) &&
+       key === ' ') ||
+      (key === '\\')) {
     this.getFieldObject().execCommand(
         goog.editor.plugins.RemoveFormatting.REMOVE_FORMATTING_COMMAND);
     return true;

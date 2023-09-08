@@ -285,6 +285,7 @@ closure_js_library(
         "//closure/goog/editor:range",
         "//closure/goog/html:legacyconversions",
         "//closure/goog/html:safehtml",
+        "//closure/goog/labs/useragent:platform",
         "//closure/goog/string",
         "//closure/goog/useragent",
     ],
