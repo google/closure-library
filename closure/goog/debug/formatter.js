@@ -290,8 +290,7 @@ goog.debug.formatter.HtmlFormatter.createViewSourceUrl_ = function(fileName) {
     fileName = '';
   }
   if (!/^https?:\/\//i.test(fileName)) {
-    return goog.html.SafeUrl.fromConstant(
-        goog.string.Const.from('sanitizedviewsrc'));
+    return goog.html.SafeUrl.sanitize('sanitizedviewsrc');
   }
   var sanitizedFileName = goog.html.SafeUrl.sanitize(fileName);
   return goog.html.uncheckedconversions
