@@ -456,20 +456,18 @@ goog.ui.KeyboardShortcutHandler.prototype.setAllowSpaceKeyOnButtons = function(
  * identifier and the string.
  *
  * Examples:
- *   g               registerShortcut(str, G_KEYCODE)
+ *   up              registerShortcut(str, goog.events.KeyCodes.UP)
  *   Ctrl+g          registerShortcut(str, G_KEYCODE, CTRL)
  *   Ctrl+Shift+g    registerShortcut(str, G_KEYCODE, CTRL | SHIFT)
  *   Ctrl+g a        registerShortcut(str, G_KEYCODE, CTRL, A_KEYCODE)
  *   Ctrl+g Shift+a  registerShortcut(str, G_KEYCODE, CTRL, A_KEYCODE, SHIFT)
- *   g a             registerShortcut(str, G_KEYCODE, NONE, A_KEYCODE)
  *
  * Examples using string representation for shortcuts:
- *   g               registerShortcut(str, 'g')
+ *   up              registerShortcut(str, 'up')
  *   Ctrl+g          registerShortcut(str, 'ctrl+g')
  *   Ctrl+Shift+g    registerShortcut(str, 'ctrl+shift+g')
  *   Ctrl+g a        registerShortcut(str, 'ctrl+g a')
  *   Ctrl+g Shift+a  registerShortcut(str, 'ctrl+g shift+a')
- *   g a             registerShortcut(str, 'g a').
  */
 goog.ui.KeyboardShortcutHandler.prototype.registerShortcut = function(
     identifier, var_args) {
