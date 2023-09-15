@@ -304,7 +304,7 @@ const INVALID_TAG_TO_RENDER =
     /^<(body|caption|col|colgroup|head|html|tr|td|th|tbody|thead|tfoot)>/i;
 
 /**
- * Renders a Soy template as test.
+ * Renders a Soy template as text.
  * @param {function(ARG_TYPES, ?CompatibleIj=): *} template The Soy template to
  *     render.
  * @param {ARG_TYPES=} templateData The data for the template.
