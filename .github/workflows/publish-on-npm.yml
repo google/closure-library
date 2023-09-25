@@ -16,11 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # This action checks out at the commit of the tagged release.
-      - uses: actions/checkout@v4.0.0
+      - uses: actions/3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
       # Install all deps in preparation for creating a release.
       # Unlike publishing, this is done using the normal NPM registry
       # to download deps.
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
         with:
           node-version: current
       # TODO: We should check in a lockfile and use npm ci here instead.
@@ -29,7 +29,7 @@ jobs:
       # Re-setup node using Wombat Dressing Room as the registry
       # The actual NodeJS binaries and such are cached, so doing this
       # twice isn't particularly expensive.
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
         with:
           node-version: current
           registry-url: https://wombat-dressing-room.appspot.com
