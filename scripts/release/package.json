@@ -4,15 +4,18 @@
   "version": "1.0.0",
   "scripts": {
     "start": "ts-node create_closure_releases",
+    "debug": "node --inspect --inspect-brk -r ts-node/register create_closure_releases.ts",
     "test": "ts-node $(npm bin)/jasmine *_test.ts"
   },
   "dependencies": {
     "@octokit/rest": "^18.0.6",
+    "semver": "^7.5.4",
     "simple-git": "^3.16.0"
   },
   "devDependencies": {
     "@types/jasmine": "^3.6.0",
     "@types/node": "^14.11.2",
+    "@types/semver": "^7.5.3",
     "jasmine": "^3.6.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.7.4"
