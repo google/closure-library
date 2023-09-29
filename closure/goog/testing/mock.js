@@ -63,6 +63,21 @@ goog.testing.MockExpectation = function(name) {
 
 
 /**
+ * The maximum number of error messages to record.
+ * @const {number}
+ */
+goog.testing.MockExpectation.MAX_RECORDED_ERRORS = 25;
+
+
+/**
+ * The number of errors attempted to be recorded in excess of
+ * MAX_RECORDED_ERRORS.
+ * @private {number}
+ */
+goog.testing.MockExpectation.prototype.unrecordedErrorCount_ = 0;
+
+
+/**
  * The minimum number of times this method should be called.
  * @type {number}
  */
@@ -126,7 +141,12 @@ goog.testing.MockExpectation.prototype.toDo;
  */
 goog.testing.MockExpectation.prototype.addErrorMessage = function(message) {
   'use strict';
-  this.errorMessages.push(message);
+  if (this.errorMessages.length >=
+      goog.testing.MockExpectation.MAX_RECORDED_ERRORS) {
+    this.unrecordedErrorCount_++;
+  } else {
+    this.errorMessages.push(message);
+  }
 };
 
 
@@ -136,7 +156,13 @@ goog.testing.MockExpectation.prototype.addErrorMessage = function(message) {
  */
 goog.testing.MockExpectation.prototype.getErrorMessage = function() {
   'use strict';
-  return this.errorMessages.join('\n');
+  const recordedMessages = this.errorMessages.join('\n');
+  if (this.unrecordedErrorCount_ > 0) {
+    return recordedMessages + '\nPlus ' + this.unrecordedErrorCount_ +
+        ' more errors discarded to avoid out-of-memory failure.';
+  } else {
+    return recordedMessages;
+  }
 };
 
 
@@ -146,7 +172,7 @@ goog.testing.MockExpectation.prototype.getErrorMessage = function() {
  */
 goog.testing.MockExpectation.prototype.getErrorMessageCount = function() {
   'use strict';
-  return this.errorMessages.length;
+  return this.errorMessages.length + this.unrecordedErrorCount_;
 };
 
 

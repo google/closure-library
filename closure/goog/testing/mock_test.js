@@ -48,6 +48,24 @@ testSuite({
     assertEquals('foo failed\nbar failed', expectation.getErrorMessage());
   },
 
+  testExcessiveMockErrorMessages() {
+    const expectation = new MockExpectation('a');
+    const excessErrors = 5;
+    const totalErrors = MockExpectation.MAX_RECORDED_ERRORS + excessErrors;
+    for (let i = 0; i < totalErrors; i++) {
+      expectation.addErrorMessage('ex' + i);
+    }
+
+    let expectedMessage = '';
+    for (let i = 0; i < MockExpectation.MAX_RECORDED_ERRORS; i++) {
+      expectedMessage += 'ex' + i + '\n';
+    }
+    expectedMessage += 'Plus ' + excessErrors +
+        ' more errors discarded to avoid out-of-memory failure.';
+    assertEquals(expectedMessage, expectation.getErrorMessage());
+    assertEquals(totalErrors, expectation.getErrorMessageCount());
+  },
+
   testVerifyArgumentList() {
     const expectation = new MockExpectation('a');
     assertEquals('', expectation.getErrorMessage());
