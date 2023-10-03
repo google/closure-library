@@ -30,7 +30,6 @@ closure_js_library(
     ],
     lenient = True,
     deps = [
-        "//closure/goog/array",
         "//closure/goog/asserts",
         "//closure/goog/object",
         "//closure/goog/string",
@@ -43,7 +42,6 @@ closure_js_library(
     lenient = True,
     deps = [
         ":fielddescriptor",
-        ":serializer",
         "//closure/goog/asserts",
         "//closure/goog/string",
     ],
@@ -55,8 +53,6 @@ closure_js_library(
     lenient = True,
     deps = [
         ":fielddescriptor",
-        ":lazydeserializer",
-        ":serializer",
         "//closure/goog/asserts",
     ],
 )
@@ -71,12 +67,10 @@ closure_js_library(
     srcs = ["textformatserializer.js"],
     lenient = True,
     deps = [
-        ":fielddescriptor",
         ":message",
-        ":serializer",
-        "//closure/goog/array",
         "//closure/goog/asserts",
         "//closure/goog/math",
+        "//closure/goog/math:long",
         "//closure/goog/object",
         "//closure/goog/string",
     ],

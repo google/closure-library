@@ -34,6 +34,9 @@ function assertTokens(value, tokens, ignoreWhitespace = undefined) {
   while (tokenizer.next()) {
     tokensFound.push(tokenizer.getCurrent());
   }
+  assertEquals(
+      TextFormatSerializer.Tokenizer_.TokenTypes.END,
+      tokenizer.getCurrent().type);
 
   if (!Array.isArray(tokens)) {
     tokens = [tokens];
@@ -43,6 +46,24 @@ function assertTokens(value, tokens, ignoreWhitespace = undefined) {
   for (let i = 0; i < tokens.length; ++i) {
     assertToken(tokens[i], tokensFound[i]);
   }
+}
+
+/**
+ * Asserts that the given string value parses to a list of tokens ending in the
+ * BAD token.
+ * @param {string} value The string value to parse.
+ * @param {boolean=} ignoreWhitespace Whether whitespace tokens should be
+ *     skipped by the tokenizer.
+ */
+function assertEventuallyBadToken(value, ignoreWhitespace = undefined) {
+  /** @suppress {visibility} suppression added to enable type checking */
+  const tokenizer =
+      new TextFormatSerializer.Tokenizer_(value, ignoreWhitespace);
+  while (tokenizer.next()) {
+  }
+  assertEquals(
+      TextFormatSerializer.Tokenizer_.TokenTypes.BAD,
+      tokenizer.getCurrent().type);
 }
 
 function assertToken(expected, found) {
@@ -77,6 +98,16 @@ const floatFormatCases = [
   {given: '1.69e+06', expect: 1.69e+06},
   {given: '1.69e6', expect: 1.69e+06},
   {given: '2.468e-2', expect: 0.02468},
+  {given: '.1', expect: 0.1},
+  {given: '-.1', expect: -0.1},
+  {given: '1.', expect: 1},
+  {given: '-1.', expect: -1},
+  {given: '2e2', expect: 200},
+  {given: '-2e2', expect: -200},
+  {given: '3E002', expect: 300},
+  {given: '-3E002', expect: -300},
+  {given: '.1e2', expect: 10},
+  {given: '-.1e2', expect: -10},
 ];
 
 testSuite({
@@ -287,26 +318,51 @@ testSuite({
     assertIdentifier('infinity');
     assertIdentifier('nan');
 
-    assertNumber(0);
-    assertNumber(10);
-    assertNumber(123);
-    assertNumber(1234);
-    assertNumber(123.56);
-    assertNumber(-124);
-    assertNumber(-1234);
-    assertNumber(-123.56);
-    assertNumber('123f');
-    assertNumber('123.6f');
-    assertNumber('-123f');
-    assertNumber('-123.8f');
-    assertNumber('0x1234');
-    assertNumber('0x12ac34');
-    assertNumber('0x49e281db686fb');
-    // Floating point numbers might be serialized in exponential
-    // notation:
-    assertNumber('1.2345e+3');
-    assertNumber('1.2345e3');
-    assertNumber('1.2345e-2');
+    // Numbers
+    // Octals
+    assertNumber('00');
+    assertNumber('-00');
+    assertNumber('07654321');
+    assertNumber('-07654321');
+    // Hexadecimals
+    assertNumber('0x0');
+    assertNumber('-0x0');
+    assertNumber('0X0');
+    assertNumber('-0X0');
+    assertNumber('0xFea');
+    assertNumber('-0xFea');
+    assertNumber('0XABCDEFabcdef0123456789');
+    assertNumber('-0XABCDEFabcdef0123456789');
+    assertNumber('0x09');
+    assertNumber('-0x09');
+    // Decimals
+    assertNumber('0');
+    assertNumber('-0');
+    assertNumber('1987654321');
+    assertNumber('-1987654321');
+    // Floats that are decimals + f/F.
+    assertNumber('0f');
+    assertNumber('-0F');
+    assertNumber('1987654321f');
+    assertNumber('-1987654321F');
+    // Float literals
+    assertNumber('.0');
+    assertNumber('-.0');
+    assertNumber('.1e+11');
+    assertNumber('-.1E-11');
+    assertNumber('1.');
+    assertNumber('-0.');
+    assertNumber('0.e12');
+    assertNumber('-0.e12F');
+    assertNumber('0.32e003');
+    assertNumber('-1e12f');
+
+    // Non-numbers.
+    assertTokens(
+        '09',
+        [{type: types.NUMBER, value: '0'}, {type: types.NUMBER, value: '9'}]);
+    assertEventuallyBadToken('010f');
+    assertEventuallyBadToken('.f');
 
     assertString('""');
     assertString('"hello world"');
@@ -378,13 +434,25 @@ testSuite({
     assertEquals(255, message.getRepeatedInt32(1));
   },
 
-  testDeserializationOfInt64AsHexadecimalString() {
+  testDeserializationOfInt64AsNonDecimalString() {
     const message = new TestAllTypes();
-    const value = 'optional_int64: 0xf';
+    const value = 'optional_int64: -0xf\n' +
+        'optional_uint64: 0XF\n' +
+        'repeated_int64: -0X1cbe991a14\n' +
+        'repeated_int64: 0x1cBe991a14\n' +
+        'repeated_int64: -01627646215024\n' +
+        'repeated_int64: 01627646215024\n' +
+        'repeated_int64: 1205\n';
 
     new TextFormatSerializer().deserializeTo(message, value);
 
-    assertEquals('0xf', message.getOptionalInt64());
+    assertEquals('-15', message.getOptionalInt64());
+    assertEquals('15', message.getOptionalUint64());
+    assertEquals('-123456789012', message.getRepeatedInt64(0));
+    assertEquals('123456789012', message.getRepeatedInt64(1));
+    assertEquals('-123456789012', message.getRepeatedInt64(2));
+    assertEquals('123456789012', message.getRepeatedInt64(3));
+    assertEquals('1205', message.getRepeatedInt64(4));
   },
 
   testDeserializationOfZeroFalseAndEmptyString() {
@@ -552,7 +620,7 @@ testSuite({
     const value =
         ('repeated_int32: 23\n' +
          'repeated_int32: -3\n' +
-         'repeated_int32: 0xdeadbeef\n' +
+         'repeated_int32: 0xdeAdBeef\n' +
          'repeated_float: 123.0\n' +
          'repeated_float: -3.27\n' +
          'repeated_float: -35.5f\n');
@@ -571,7 +639,7 @@ testSuite({
     const message = new TestAllTypes();
     const value = 'repeated_float: 1.1e5\n' +
         'repeated_float: 1.1e-5\n' +
-        'repeated_double: 1.1e5\n' +
+        'repeated_double: 1.1E5\n' +
         'repeated_double: 1.1e-5\n';
     new TextFormatSerializer().deserializeTo(message, value);
     assertEquals(1.1e5, message.getRepeatedFloat(0));
@@ -665,12 +733,23 @@ testSuite({
 
     assertEquals(3735928559, getNumberFromString('0xdeadbeef'));
     assertEquals(4276215469, getNumberFromString('0xFEE1DEAD'));
+    assertEquals(12, getNumberFromString('014'));
+    assertEquals(-12, getNumberFromString('-014'));
     assertEquals(123.1, getNumberFromString('123.1'));
     assertEquals(123.0, getNumberFromString('123.0'));
     assertEquals(-29.3, getNumberFromString('-29.3f'));
     assertEquals(23, getNumberFromString('23'));
     assertEquals(-3, getNumberFromString('-3'));
     assertEquals(-3.27, getNumberFromString('-3.27'));
+    // These hexadecimal numbers resemble floats.
+    assertEquals(63, getNumberFromString('0x3f'));
+    assertEquals(-63, getNumberFromString('-0x3f'));
+    assertEquals(63, getNumberFromString('0X3F'));
+    assertEquals(-63, getNumberFromString('-0X3F'));
+    assertEquals(15903, getNumberFromString('0x3e1f'));
+    assertEquals(-15903, getNumberFromString('-0x3e1f'));
+    assertEquals(993, getNumberFromString('0X3E1'));
+    assertEquals(-993, getNumberFromString('-0X3E1'));
 
     assertThrows(goog.partial(getNumberFromString, 'cat'));
     assertThrows(goog.partial(getNumberFromString, 'NaN'));

@@ -17,6 +17,7 @@ goog.provide('goog.proto2.TextFormatSerializer');
 
 goog.require('goog.asserts');
 goog.require('goog.math');
+goog.require('goog.math.Long');
 goog.require('goog.object');
 goog.require('goog.proto2.FieldDescriptor');
 goog.require('goog.proto2.Message');
@@ -466,10 +467,23 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.getCurrent = function() {
  * @enum {!RegExp}
  */
 goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes = {
-  END: /---end---/,
+  // Terminal tokens: END if the input data has been exhausted; BAD if not.
+  // Their regexes don't match any string.
+  END: /$ end $/,
+  BAD: /$ bad $/,
   // Leading "-" to identify "-infinity"."
   IDENTIFIER: /^-?[a-zA-Z][a-zA-Z0-9_]*/,
-  NUMBER: /^(0x[0-9a-f]+)|(([-])?[0-9][0-9]*(\.?[0-9]+)?(e[+-]?[0-9]+|[f])?)/,
+  // NOTE: the textproto grammar treats negation as a separate token, so this
+  // serializer accepts a subset language.
+  // From the grammar, a number is -?(FLOAT|DEC_INT|OCT_INT|HEX_INT)
+  // FLOAT | DEC_INT = ( float_lit | dec_lit ), [ "F" | "f" ]
+  // float_lit | dec_lit
+  //  = ".", dec, { dec }, [ exp ]
+  //   | dec_lit, ".", { dec }, [ exp ]
+  //   | dec_lit, exp | dec_lit
+  //  = ( ".", dec, {dec} | dec_lit, [ ".", {dec} ] ) [exp]
+  NUMBER:
+      /^-?(0[0-7]+|0x[0-9a-f]+|([.][0-9]+|(0|[1-9][0-9]*)([.][0-9]*)?)(e[+-]?[0-9]+)?f?)/i,
   COMMENT: /^#.*/,
   OPEN_BRACE: /^{/,
   CLOSE_BRACE: /^}/,
@@ -506,7 +520,7 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.next = function() {
 
   // If we reach this point, set the current token to END.
   this.current_ = {
-    type: goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes.END,
+    type: this.currentData_.length == 0 ? types.END : types.BAD,
     value: null
   };
 
@@ -549,6 +563,12 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.nextInternal_ =
 
   // Advance the index by the length of the token.
   if (next) {
+    // From the textformat spec: There is one edge case that requires special
+    // attention: a number token (FLOAT, DEC_INT, OCT_INT, or HEX_INT) may not
+    // be immediately followed by an IDENT token.
+    if (this.current_.type == types.NUMBER && next.type == types.IDENTIFIER) {
+      return false;
+    }
     this.current_ =
         /** @type {goog.proto2.TextFormatSerializer.Tokenizer_.Token} */ (next);
     this.index_ += next.value.length;
@@ -692,6 +712,23 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeFieldValue_ = function(
   return true;
 };
 
+/**
+ * Detects the radix of a number.
+ * @param {string} num a number.
+ * @return {number} The radix of `num`, or 0 if the number is a float.
+ * @private
+ */
+goog.proto2.TextFormatSerializer.Parser.getRadix_ = function(num) {
+  return /^-?0x/i.test(num) ?
+      16 :
+      /^-?0[0-7]/.test(num) ?
+      8 :
+      // NOTE: hexadecimal literals are already excluded here, so a decimal
+      // point, an "e" (as in 1e3), or an "f" suffix (as in 1f) all indicate
+      // floating point.
+      /[.ef]/i.test(num) ? 0 :
+                           10;
+};
 
 /**
  * Attempts to convert a string to a number.
@@ -701,9 +738,8 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeFieldValue_ = function(
  */
 goog.proto2.TextFormatSerializer.Parser.getNumberFromString_ = function(num) {
   'use strict';
-  var returnValue = goog.string.contains(num, '.') ?
-      parseFloat(num) :           // num is a float.
-      goog.string.parseInt(num);  // num is an int.
+  const radix = goog.proto2.TextFormatSerializer.Parser.getRadix_(num);
+  const returnValue = radix == 0 ? parseFloat(num) : parseInt(num, radix);
 
   goog.asserts.assert(!isNaN(returnValue));
   goog.asserts.assert(isFinite(returnValue));
@@ -786,7 +822,11 @@ goog.proto2.TextFormatSerializer.Parser.prototype.getFieldValue_ = function(
         return goog.proto2.TextFormatSerializer.Parser.getNumberFromString_(
             num);
       }
-
+      // Normalize numeric literals to decimal.
+      const radix = goog.proto2.TextFormatSerializer.Parser.getRadix_(num);
+      if (radix != 10) {
+        num = goog.math.Long.fromString(num, radix).toString(10);
+      }
       return num;  // 64-bit numbers are by default stored as strings.
 
     case goog.proto2.FieldDescriptor.FieldType.BOOL:
