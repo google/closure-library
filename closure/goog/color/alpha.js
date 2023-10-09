@@ -381,10 +381,11 @@ goog.color.alpha.re0_999_ = /(0|[1-9]\d{0,2})/;
 
 /**
  * A pattern capturing [0.0000000000...1.0000000000].
+ * Number before dot is optional.
  * @const {!RegExp}
  * @private
  */
-goog.color.alpha.re0_1_ = /(0|1|0\.\d{1,10}|1\.0{1,10})/;
+goog.color.alpha.re0_1_ = /(0|1|0?\.\d{1,10}|1\.0{1,10})/;
 
 /**
  * Regular expression for matching and capturing RGBA style strings. Helper for

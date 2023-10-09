@@ -50,6 +50,7 @@ testSuite({
       'rGbA(0, 200, 0, 0.123456789)',
       'rgba(255, 0, 0, 1.0)',
       '  rgba(1,\t2,\n3,\r0.2) ',
+      'rgba(255, 0, 0, .2)',
     ];
     const badRgbaColors = [
       '(255, 0, 0)',
