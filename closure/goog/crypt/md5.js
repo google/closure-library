@@ -40,6 +40,7 @@ goog.crypt.Md5 = function() {
   'use strict';
   goog.crypt.Md5.base(this, 'constructor');
 
+  /** @const {number} */
   this.blockSize = 512 / 8;
 
   /**

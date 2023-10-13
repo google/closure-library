@@ -35,6 +35,7 @@ goog.crypt.Sha2 = function(numHashBlocks, initHashBlocks) {
   'use strict';
   goog.crypt.Sha2.base(this, 'constructor');
 
+  /** @const {number} */
   this.blockSize = goog.crypt.Sha2.BLOCKSIZE_;
 
   /**

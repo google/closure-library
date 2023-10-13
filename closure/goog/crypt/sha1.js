@@ -38,6 +38,7 @@ goog.crypt.Sha1 = function() {
   'use strict';
   goog.crypt.Sha1.base(this, 'constructor');
 
+  /** @const {number} */
   this.blockSize = 512 / 8;
 
   /**

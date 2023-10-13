@@ -44,6 +44,7 @@ goog.crypt.Hmac = function(hasher, key, opt_blockSize) {
    */
   this.hasher_ = hasher;
 
+  /** @const {number} */
   this.blockSize = opt_blockSize || hasher.blockSize || 16;
 
   /**
