@@ -812,7 +812,7 @@ goog.i18n.bidi.rtlDetectionThreshold_ = 0.40;
  * @param {string} str The string to be checked.
  * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
  *     Default: false.
- * @return {goog.i18n.bidi.Dir} Estimated overall directionality of `str`.
+ * @return {!goog.i18n.bidi.Dir} Estimated overall directionality of `str`.
  */
 goog.i18n.bidi.estimateDirection = function(str, opt_isHtml) {
   'use strict';
