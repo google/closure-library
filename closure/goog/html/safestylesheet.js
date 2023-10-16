@@ -117,6 +117,8 @@ class SafeStyleSheet {
    *     definition associated with the selector.
    * @return {!SafeStyleSheet}
    * @throws {!Error} If invalid selector is provided.
+   * @deprecated Use `safevalues.safeStyleSheet` or `safevalues.safeStyleRule`
+   *     instead.
    */
   static createRule(selector, style) {
     if (contains(selector, '<')) {
@@ -176,6 +178,7 @@ class SafeStyleSheet {
    * @param {...(!SafeStyleSheet|!Array<!SafeStyleSheet>)}
    *     var_args Values to concatenate.
    * @return {!SafeStyleSheet}
+   * @deprecated Use `safevalues.concatStyleSheets` instead.
    */
   static concat(var_args) {
     let result = '';
@@ -207,6 +210,7 @@ class SafeStyleSheet {
    *     which to create a SafeStyleSheet.
    * @return {!SafeStyleSheet} A SafeStyleSheet object initialized to
    *     `styleSheet`.
+   * @deprecated Use `safevalues.safeStyleSheet` instead.
    */
   static fromConstant(styleSheet) {
     const styleSheetString = Const.unwrap(styleSheet);
@@ -242,6 +246,7 @@ class SafeStyleSheet {
    *
    * @see SafeStyleSheet#unwrap
    * @override
+   * @deprecated Use `toString()` or the String constructor instead.
    */
   getTypedStringValue() {
     return this.privateDoNotAccessOrElseSafeStyleSheetWrappedValue_;
@@ -256,6 +261,8 @@ class SafeStyleSheet {
    *     the run-time type check fails. In that case, `unwrap` returns an
    *     innocuous string, or, if assertions are enabled, throws
    *     `asserts.AssertionError`.
+   * @deprecated Use `safevalues.unwrapStyleSheet` combined with `toString()`
+   *     instead.
    */
   static unwrap(safeStyleSheet) {
     // Perform additional Run-time type-checking to ensure that
@@ -292,6 +299,7 @@ class SafeStyleSheet {
 /**
  * A SafeStyleSheet instance corresponding to the empty string.
  * @const {!SafeStyleSheet}
+ * @deprecated Use `safevalues.safeStyleSheet` instead.
  */
 SafeStyleSheet.EMPTY =
     SafeStyleSheet.createSafeStyleSheetSecurityPrivateDoNotAccessOrElse('');

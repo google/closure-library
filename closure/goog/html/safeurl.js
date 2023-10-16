@@ -142,6 +142,7 @@ goog.html.SafeUrl.prototype.implementsGoogStringTypedString = true;
  *
  * @see goog.html.SafeUrl#unwrap
  * @override
+ * @deprecated Use `toString()` or the String constructor instead.
  */
 goog.html.SafeUrl.prototype.getTypedStringValue = function() {
   'use strict';
@@ -273,6 +274,7 @@ goog.html.SafeUrl.fromBlob = function(blob) {
  * Revokes an object URL created for a safe URL created {@link fromBlob()}.
  * @param {!goog.html.SafeUrl} safeUrl SafeUrl wrapping a blob object.
  * @return {void}
+ * @deprecated Use `URL.revokeObjectURL` instead.
  */
 goog.html.SafeUrl.revokeObjectUrl = function(safeUrl) {
   'use strict';

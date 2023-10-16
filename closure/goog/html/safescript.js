@@ -111,6 +111,8 @@ class SafeScript {
    * @param {!Const} script A compile-time-constant string from which to create
    *     a SafeScript.
    * @return {!SafeScript} A SafeScript object initialized to `script`.
+   * @deprecated Use the `safevalues.safeScript` template literal builder
+   *     instead.
    */
   static fromConstant(script) {
     const scriptString = Const.unwrap(script);
@@ -126,6 +128,7 @@ class SafeScript {
    * to JSON.stringify.
    * @param {*} val
    * @return {!SafeScript}
+   * @deprecated Use `safevalues.valueAsScript` instead.
    */
   static fromJson(val) {
     return SafeScript.createSafeScriptSecurityPrivateDoNotAccessOrElse(
@@ -152,6 +155,7 @@ class SafeScript {
    *
    * @see SafeScript#unwrap
    * @override
+   * @deprecated Use `toString()` or the String constructor instead.
    */
   getTypedStringValue() {
     return this.privateDoNotAccessOrElseSafeScriptWrappedValue_.toString();
@@ -166,6 +170,8 @@ class SafeScript {
    *     the run-time type check fails. In that case, `unwrap` returns an
    *     innocuous string, or, if assertions are enabled, throws
    *     `asserts.AssertionError`.
+   * @deprecated Use `safevalues.unwrapScript` combined with `.toString()`
+   *     instead.
    */
   static unwrap(safeScript) {
     return SafeScript.unwrapTrustedScript(safeScript).toString();
@@ -176,6 +182,7 @@ class SafeScript {
    * @param {!SafeScript} safeScript
    * @return {!TrustedScript|string}
    * @see SafeScript.unwrap
+   * @deprecated Use `safevalues.unwrapScript` instead.
    */
   static unwrapTrustedScript(safeScript) {
     // Perform additional Run-time type-checking to ensure that
@@ -230,6 +237,7 @@ class SafeScript {
 /**
  * A SafeScript instance corresponding to the empty string.
  * @const {!SafeScript}
+ * @deprecated Use `safevalues.EMPTY_SCRIPT` instead.
  */
 SafeScript.EMPTY = /** @type {!SafeScript} */ ({
   // NOTE: this compiles to nothing, but hides the possible side effect of

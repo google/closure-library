@@ -129,6 +129,7 @@ class SafeHtml {
    * @return {string}
    * @see SafeHtml.unwrap
    * @override
+   * @deprecated Use the native `toString` or the `String` constructor instead.
    */
   getTypedStringValue() {
     return this.privateDoNotAccessOrElseSafeHtmlWrappedValue_.toString();
@@ -157,6 +158,7 @@ class SafeHtml {
    *     run-time type check fails. In that case, `unwrap` returns an innocuous
    *     string, or, if assertions are enabled, throws
    *     `asserts.AssertionError`.
+   * @deprecated Use `safevalues.unwrapHtml` combined with `toString()` instead.
    */
   static unwrap(safeHtml) {
     return SafeHtml.unwrapTrustedHTML(safeHtml).toString();
@@ -168,6 +170,7 @@ class SafeHtml {
    * @param {!SafeHtml} safeHtml
    * @return {!TrustedHTML|string}
    * @see SafeHtml.unwrap
+   * @deprecated Use `safevalues.unwrapHtml` instead.
    */
   static unwrapTrustedHTML(safeHtml) {
     // Perform additional run-time type-checking to ensure that safeHtml is
@@ -193,6 +196,7 @@ class SafeHtml {
    *     the parameter is of type SafeHtml it is returned directly (no escaping
    *     is done).
    * @return {!SafeHtml} The escaped text, wrapped as a SafeHtml.
+   * @deprecated Use `safevalues.htmlEscape` instead.
    */
   static htmlEscape(textOrHtml) {
     if (textOrHtml instanceof SafeHtml) {
@@ -219,6 +223,7 @@ class SafeHtml {
    *     the parameter is of type SafeHtml it is returned directly (no escaping
    *     is done).
    * @return {!SafeHtml} The escaped text, wrapped as a SafeHtml.
+   * @deprecated Use `safevalues.htmlEscape` instead.
    */
   static htmlEscapePreservingNewlines(textOrHtml) {
     if (textOrHtml instanceof SafeHtml) {
@@ -238,6 +243,7 @@ class SafeHtml {
    *     the parameter is of type SafeHtml it is returned directly (no escaping
    *     is done).
    * @return {!SafeHtml} The escaped text, wrapped as a SafeHtml.
+   * @deprecated Use `safevalues.htmlEscape` instead.
    */
   static htmlEscapePreservingNewlinesAndSpaces(textOrHtml) {
     if (textOrHtml instanceof SafeHtml) {
@@ -314,8 +320,10 @@ class SafeHtml {
    * @throws {!Error} If invalid tag name, attribute name, or attribute value is
    *     provided.
    * @throws {!asserts.AssertionError} If content for void tag is provided.
-   * @deprecated Use a recommended templating system like Lit instead.
-   *     More information: go/goog.html-readme // LINE-INTERNAL
+   * @deprecated Use a recommended templating system like Lit instead. If this
+   *     is not possible, use `safevalues.createHtml`.
+   * More information:
+   *     go/goog.html-readme // LINE-INTERNAL
    */
   static create(tagName, attributes = undefined, content = undefined) {
     SafeHtml.verifyTagName(String(tagName));
@@ -478,6 +486,7 @@ class SafeHtml {
    * @throws {!Error} If invalid attribute name or value is provided. If
    *     attributes  contains the
    * src attribute.
+   * @deprecated Use `safevalues.scriptUrlToHtml` instead.
    */
   static createScriptSrc(src, attributes = undefined) {
     // TODO(mlourenco): The charset attribute should probably be blocked. If
@@ -511,7 +520,7 @@ class SafeHtml {
    * @throws {!Error} If invalid attribute name or attribute value is provided.
    *     If attributes  contains the
    *     language, src or text attribute.
-   * @deprecated Use safevalues.scriptToHtml instead.
+   * @deprecated Use `safevalues.scriptToHtml` instead.
    */
   static createScript(script, attributes = undefined) {
     for (let attr in attributes) {
@@ -627,6 +636,7 @@ class SafeHtml {
    *     contains an array then each member of this array is also joined with
    * the separator.
    * @return {!SafeHtml}
+   * @deprecated Use `safevalues.joinHtmls` instead.
    */
   static join(separator, parts) {
     const separatorHtml = SafeHtml.htmlEscape(separator);
@@ -656,6 +666,7 @@ class SafeHtml {
    * @param {...(!SafeHtml.TextOrHtml_|
    *     !Array<!SafeHtml.TextOrHtml_>)} var_args Values to concatenate.
    * @return {!SafeHtml}
+   * @deprecated Use `safevalues.concatHtmls` instead.
    */
   static concat(var_args) {
     return SafeHtml.join(SafeHtml.EMPTY, Array.prototype.slice.call(arguments));
@@ -821,6 +832,7 @@ SafeHtml.SUPPORT_STYLE_ATTRIBUTE =
  * or might already be SafeHtml (as SafeHtml is a TypedString).
  * @private
  * @typedef {string|number|boolean|!TypedString}
+ * @deprecated Use an explicit type instead.
  */
 SafeHtml.TextOrHtml_;
 
@@ -872,6 +884,7 @@ const NOT_ALLOWED_TAG_NAMES = googObject.createSet(
 /**
  * @typedef {string|number|!TypedString|
  *     !SafeStyle.PropertyMap|undefined|null}
+ * @deprecated Use an explicit type instead.
  */
 SafeHtml.AttributeValue;
 
@@ -979,6 +992,7 @@ SafeHtml.DOCTYPE_HTML = /** @type {!SafeHtml} */ ({
 /**
  * A SafeHtml instance corresponding to the empty string.
  * @const {!SafeHtml}
+ * @deprecated Use `safevalues.EMPTY_HTML` instead.
  */
 SafeHtml.EMPTY = new SafeHtml(
     (goog.global.trustedTypes && goog.global.trustedTypes.emptyHTML) || '',
@@ -987,6 +1001,7 @@ SafeHtml.EMPTY = new SafeHtml(
 /**
  * A SafeHtml instance corresponding to the <br> tag.
  * @const {!SafeHtml}
+ * @deprecated Use `safevalues.createHtml('br')` instead.
  */
 SafeHtml.BR = /** @type {!SafeHtml} */ ({
   // NOTE: this compiles to nothing, but hides the possible side effect of

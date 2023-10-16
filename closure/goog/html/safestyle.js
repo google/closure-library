@@ -196,6 +196,7 @@ class SafeStyle {
    * @return {string}
    * @see SafeStyle#unwrap
    * @override
+   * @deprecated Use `toString()` or the String constructor instead.
    */
   getTypedStringValue() {
     return this.privateDoNotAccessOrElseSafeStyleWrappedValue_;

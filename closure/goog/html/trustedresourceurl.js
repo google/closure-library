@@ -114,6 +114,7 @@ goog.html.TrustedResourceUrl.prototype.implementsGoogStringTypedString = true;
  *
  * @see goog.html.TrustedResourceUrl#unwrap
  * @override
+ * @deprecated Use `toString()` or the String constructor instead.
  */
 goog.html.TrustedResourceUrl.prototype.getTypedStringValue = function() {
   'use strict';
@@ -133,6 +134,8 @@ goog.html.TrustedResourceUrl.prototype.getTypedStringValue = function() {
  *     to URL. See goog.html.TrustedResourceUrl.stringifyParams_ for exact
  *     format definition.
  * @return {!goog.html.TrustedResourceUrl} New TrustedResourceUrl with params.
+ * @deprecated Use `safevalues.appendParams` and `safevalues.replaceFragment`
+ *     instead.
  */
 goog.html.TrustedResourceUrl.prototype.cloneWithParams = function(
     searchParams, opt_hashParams) {
@@ -162,6 +165,7 @@ goog.html.TrustedResourceUrl.prototype.cloneWithParams = function(
  *     the run-time type check fails. In that case, `unwrap` returns an
  *     innocuous string, or, if assertions are enabled, throws
  *     `goog.asserts.AssertionError`.
+ * @deprecated Use `safevalues.unwrapResourceUrl` and `toString()` instead
  */
 goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
   'use strict';
@@ -175,6 +179,7 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
  * @param {!goog.html.TrustedResourceUrl} trustedResourceUrl
  * @return {!TrustedScriptURL|string}
  * @see goog.html.TrustedResourceUrl.unwrap
+ * @deprecated Use `safevalues.unwrapResourceUrl` instead.
  */
 goog.html.TrustedResourceUrl.unwrapTrustedScriptURL = function(
     trustedResourceUrl) {
@@ -236,6 +241,8 @@ goog.html.TrustedResourceUrl.unwrapTrustedScriptURL = function(
  * @return {!goog.html.TrustedResourceUrl}
  * @throws {!Error} On an invalid format string or if a label used in the
  *     the format string is not present in args.
+ * @deprecated Use the `safevalues.trustedResourceUrl` template string literal
+ *     builder instead.
  */
 goog.html.TrustedResourceUrl.format = function(format, args) {
   'use strict';
@@ -342,6 +349,8 @@ goog.html.TrustedResourceUrl.URL_PARAM_PARSER_ =
  * @return {!goog.html.TrustedResourceUrl}
  * @throws {!Error} On an invalid format string or if a label used in the
  *     the format string is not present in args.
+ * @deprecated Use `safevalues.trustedResourceUrl` and `safevalues.appendParams`
+ *     instead.
  */
 goog.html.TrustedResourceUrl.formatWithParams = function(
     format, args, searchParams, opt_hashParams) {
@@ -361,6 +370,7 @@ goog.html.TrustedResourceUrl.formatWithParams = function(
  *     create a TrustedResourceUrl.
  * @return {!goog.html.TrustedResourceUrl} A TrustedResourceUrl object
  *     initialized to `url`.
+ * @deprecated Use `safevalues.trustedResourceUrl` instead.
  */
 goog.html.TrustedResourceUrl.fromConstant = function(url) {
   'use strict';
@@ -380,6 +390,7 @@ goog.html.TrustedResourceUrl.fromConstant = function(url) {
  *     which to create a TrustedResourceUrl.
  * @return {!goog.html.TrustedResourceUrl} A TrustedResourceUrl object
  *     initialized to concatenation of `parts`.
+ * @deprecated Use `safevalues.trustedResourceUrl` instead.
  */
 goog.html.TrustedResourceUrl.fromConstants = function(parts) {
   'use strict';
@@ -406,6 +417,7 @@ goog.html.TrustedResourceUrl.fromConstants = function(parts) {
  *     TrustedResourceUrl.
  * @return {!goog.html.TrustedResourceUrl} A TrustedResourceUrl object
  *     initialized to a new blob URL.
+ * @deprecated Use `safevalues.objectUrlFromScript` instead.
  */
 goog.html.TrustedResourceUrl.fromSafeScript = function(safeScript) {
   'use strict';
