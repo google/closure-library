@@ -2622,9 +2622,9 @@ WebChannelBase.prototype.createXhrIo = function(hostPrefix, isStreaming) {
     throw new Error('Can\'t create secondary domain capable XhrIo object.');
   }
   let xhr;
-  if (isStreaming && this.usesFetchStreams_ && !this.xmlHttpFactory_) {
+  if (this.usesFetchStreams_ && !this.xmlHttpFactory_) {
     xhr = new goog.net.XhrIo(
-        new goog.net.FetchXmlHttpFactory({streamBinaryChunks: true}));
+        new goog.net.FetchXmlHttpFactory({streamBinaryChunks: isStreaming}));
   } else {
     xhr = new goog.net.XhrIo(this.xmlHttpFactory_);
   }
