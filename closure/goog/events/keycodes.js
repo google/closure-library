@@ -70,6 +70,8 @@ goog.events.KeyCodes = {
   // SINGLE_QUOTE (US keyboard layout) or SEMICOLON (JP keyboard layout in
   // chrome)
   FF_JP_QUOTE: 58,
+  FF_DE_PLUS: 171,    // Firefox (Gecko) fires this for +/* on DE keyboards
+                      // rather than CLOSE_SQUARE_BRACKET (DE layout in Chrome)
   QUESTION_MARK: 63,  // needs localization
   AT_SIGN: 64,
   A: 65,
@@ -402,6 +404,7 @@ goog.events.KeyCodes.isCharacterKey = function(keyCode) {
     case goog.events.KeyCodes.FF_JP_QUOTE:
       return true;
     case goog.events.KeyCodes.FF_DASH:
+    case goog.events.KeyCodes.FF_DE_PLUS:
       return goog.userAgent.GECKO;
     default:
       return false;
