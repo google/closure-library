@@ -18,17 +18,17 @@
 goog.module('goog.html.sanitizer.SafeDomTreeProcessor');
 goog.module.declareLegacyNamespace();
 
-var Const = goog.require('goog.string.Const');
-var ElementWeakMap = goog.require('goog.html.sanitizer.ElementWeakMap');
-var Logger = goog.require('goog.log.Logger');
-var NodeType = goog.require('goog.dom.NodeType');
-var TagName = goog.require('goog.dom.TagName');
-var googDom = goog.require('goog.dom');
-var googLog = goog.require('goog.log');
-var noclobber = goog.require('goog.html.sanitizer.noclobber');
-var safe = goog.require('goog.dom.safe');
-var uncheckedconversions = goog.require('goog.html.uncheckedconversions');
-var userAgent = goog.require('goog.userAgent');
+const Const = goog.require('goog.string.Const');
+const ElementWeakMap = goog.require('goog.html.sanitizer.ElementWeakMap');
+const Logger = goog.require('goog.log.Logger');
+const NodeType = goog.require('goog.dom.NodeType');
+const googDom = goog.require('goog.dom');
+const googLog = goog.require('goog.log');
+const noclobber = goog.require('goog.html.sanitizer.noclobber');
+const safe = goog.require('goog.dom.safe');
+const uncheckedconversions = goog.require('goog.html.uncheckedconversions');
+const userAgent = goog.require('goog.userAgent');
+const {createInertDocument} = goog.require('goog.html.sanitizer.inertDocument');
 
 /** @const {?Logger} */
 var logger = googLog.getLogger('goog.html.sanitizer.SafeDomTreeProcessor');
@@ -88,7 +88,10 @@ function getDomTreeWalker(html) {
  * attributes, etc.
  * @constructor @struct @abstract
  */
-var SafeDomTreeProcessor = function() {};
+const SafeDomTreeProcessor = function() {
+  /** @protected @const {!Document} */
+  this.inertDocument_ = createInertDocument();
+};
 
 /**
  * Parses an HTML string and walks the resulting DOM forest to apply the
@@ -109,7 +112,7 @@ SafeDomTreeProcessor.prototype.processToString = function(html) {
     // attached attributes to it. To do so, we make a new SPAN tag the parent of
     // the existing root span tag, so that the rest of the function will remove
     // that one instead.
-    var newRoot = googDom.createElement(TagName.SPAN);
+    const newRoot = this.inertDocument_.createElement('span');
     newRoot.appendChild(newTree);
     newTree = newRoot;
   }
@@ -130,10 +133,11 @@ SafeDomTreeProcessor.prototype.processToString = function(html) {
  * @protected @final
  */
 SafeDomTreeProcessor.prototype.processToTree = function(html) {
+  const newRoot = /** @type {!HTMLSpanElement} */ (
+      this.inertDocument_.createElement('span'));
   if (!SAFE_PARSING_SUPPORTED) {
-    return googDom.createElement(TagName.SPAN);
+    return newRoot;
   }
-  var newRoot = googDom.createElement(TagName.SPAN);
   // Allow subclasses to attach properties to the root.
   this.processRoot(newRoot);
 

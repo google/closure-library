@@ -400,42 +400,6 @@ testSuite({
     assertContains('url("http://foo.com/a")', output);
   },
 
-  /** @suppress {accessControls} */
-  testInertDocument() {
-    if (!document.implementation.createHTMLDocument) {
-      return;  // skip test
-    }
-
-    /**
-     * @suppress {strictMissingProperties} suppression added to enable type
-     * checking
-     */
-    window.xssFiredInertDocument = false;
-    const doc = CssSanitizer.createInertDocument_();
-    try {
-      doc.write('<script> window.xssFiredInertDocument = true; </script>');
-    } catch (e) {
-      // ignore
-    }
-    assertFalse(window.xssFiredInertDocument);
-  },
-
-  /** @suppress {accessControls} */
-  testInertCustomElements() {
-    if (typeof HTMLTemplateElement != 'function' || !document.registerElement) {
-      return;  // skip test
-    }
-
-    const inertDoc = CssSanitizer.createInertDocument_();
-    const xFooConstructor = document.registerElement('x-foo');
-    const xFooElem =
-        document.implementation.createHTMLDocument('').createElement('x-foo');
-    assertTrue(xFooElem instanceof xFooConstructor);  // sanity check
-
-    const inertXFooElem = inertDoc.createElement('x-foo');
-    assertFalse(inertXFooElem instanceof xFooConstructor);
-  },
-
   testSanitizeStyleSheetString_basic() {
     let input = '';
     assertSanitizedCssEquals(input, input);

@@ -1592,4 +1592,25 @@ testSuite({
         new Builder().allowStyleTag().withStyleContainer().build());
   },
 
+  async testNotLoadSubresources() {
+    // Sanitization by itself should not load subresources.
+    const html = `<img src=ftp://not-load-subresources />`;
+
+    const sanitizer = new Builder()
+                          .withCustomNetworkRequestUrlPolicy(SafeUrl.sanitize)
+                          .build();
+
+    sanitizer.sanitize(html);
+
+    // Give the subresource a little time to load.
+    await new Promise(resolve => {
+      setTimeout(resolve, 200);
+    });
+
+    // Make sure there was no attempt to load the subresource.
+    const entry = performance.getEntries().find(
+        entry => entry.name.startsWith('ftp://not-load-subresources'));
+    assertUndefined(entry);
+  }
+
 });

@@ -34,11 +34,11 @@ closure_js_library(
     lenient = True,
     deps = [
         ":csspropertysanitizer",
+        ":inertdocument",
         ":noclobber",
         "//closure/goog/array",
         "//closure/goog/dom",
         "//closure/goog/dom:safe",
-        "//closure/goog/dom:tagname",
         "//closure/goog/html:cssspecificity",
         "//closure/goog/html:safestyle",
         "//closure/goog/html:safestylesheet",
@@ -75,8 +75,6 @@ closure_js_library(
         ":tagwhitelist",
         "//closure/goog/array",
         "//closure/goog/asserts",
-        "//closure/goog/dom",
-        "//closure/goog/dom:tagname",
         "//closure/goog/functions",
         "//closure/goog/html:safehtml",
         "//closure/goog/html:safestyle",
@@ -101,16 +99,22 @@ closure_js_library(
 )
 
 closure_js_library(
+    name = "inertdocument",
+    srcs = ["inertdocument.js"],
+    lenient = True,
+)
+
+closure_js_library(
     name = "safedomtreeprocessor",
     srcs = ["safedomtreeprocessor.js"],
     lenient = True,
     deps = [
         ":elementweakmap",
+        ":inertdocument",
         ":noclobber",
         "//closure/goog/dom",
         "//closure/goog/dom:nodetype",
         "//closure/goog/dom:safe",
-        "//closure/goog/dom:tagname",
         "//closure/goog/html:uncheckedconversions",
         "//closure/goog/log",
         "//closure/goog/string:const",

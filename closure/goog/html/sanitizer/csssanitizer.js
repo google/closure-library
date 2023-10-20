@@ -13,13 +13,13 @@ goog.provide('goog.html.sanitizer.CssSanitizer');
 
 goog.require('goog.array');
 goog.require('goog.dom');
-goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.html.CssSpecificity');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.sanitizer.CssPropertySanitizer');
+goog.require('goog.html.sanitizer.inertDocument');
 goog.require('goog.html.sanitizer.noclobber');
 goog.require('goog.html.uncheckedconversions');
 goog.require('goog.object');
@@ -279,9 +279,9 @@ goog.html.sanitizer.CssSanitizer.sanitizeInlineStyleString = function(
     return goog.html.SafeStyle.EMPTY;
   }
 
-  var div = goog.html.sanitizer.CssSanitizer
-      .createInertDocument_()
-      .createElement('DIV');
+  const div =
+      goog.html.sanitizer.inertDocument.createInertDocument().createElement(
+          'DIV');
   div.style.cssText = cssText;
   return goog.html.sanitizer.CssSanitizer.sanitizeInlineStyle(
       div.style, opt_uriRewriter);
@@ -391,29 +391,6 @@ goog.html.sanitizer.CssSanitizer.mergeStyleDeclarations_ = function(
         element.style, propName, propValue);
   });
 };
-
-
-/**
- * Creates an DOM Document object that will not execute scripts or make
- * network requests while parsing HTML.
- * @return {!Document}
- * @private
- */
-goog.html.sanitizer.CssSanitizer.createInertDocument_ = function() {
-  'use strict';
-  // Documents created using window.document.implementation.createHTMLDocument()
-  // use the same custom component registry as their parent document. This means
-  // that parsing arbitrary HTML can result in calls to user-defined JavaScript.
-  // This is worked around by creating a template element and its content's
-  // document. See https://github.com/cure53/DOMPurify/issues/47.
-  var doc = document;
-  if (typeof HTMLTemplateElement === 'function') {
-    doc =
-        goog.dom.createElement(goog.dom.TagName.TEMPLATE).content.ownerDocument;
-  }
-  return doc.implementation.createHTMLDocument('');
-};
-
 
 /**
  * Provides a cross-browser way to get a CSS property names.

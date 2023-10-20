@@ -31,8 +31,6 @@ goog.provide('goog.html.sanitizer.HtmlSanitizerUrlPolicy');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
 goog.require('goog.functions');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
@@ -1243,12 +1241,12 @@ goog.html.sanitizer.HtmlSanitizer.prototype.createElementWithoutAttributes =
   }
   if (this.tagWhitelist_[dirtyName]) {
     // If it's whitelisted, keep as is.
-    return document.createElement(dirtyName);
+    return this.inertDocument_.createElement(dirtyName);
   }
   // If it's neither blacklisted nor whitelisted, replace with span. If the
   // relevant builder option is enabled, the tag will bear the original tag
   // name in a data attribute.
-  const spanElement = goog.dom.createElement(goog.dom.TagName.SPAN);
+  const spanElement = this.inertDocument_.createElement('span');
   if (this.shouldAddOriginalTagNames_) {
     goog.html.sanitizer.noclobber.setElementAttribute(
         spanElement, goog.html.sanitizer.HTML_SANITIZER_SANITIZED_ATTR_NAME_,
