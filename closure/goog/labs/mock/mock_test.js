@@ -1322,6 +1322,28 @@ testSuite({
     assertEquals('{"x":<function y>}', mock.formatValue_(obj, false /* id */));
   },
 
+  /** @suppress {visibility} suppression added to enable type checking */
+  testFormatSymbols() {
+    if (typeof window['Symbol'] !== 'function') {
+      return;  // skip browsers without symbols
+    }
+    if (Symbol().toString() !== 'Symbol()') {
+      // skip testing in environments with a likely-polyfilled symbol,
+      // as their Symbol wouldn't have the right typeof value.
+      return;
+    }
+    assertEquals('Symbol()', mock.formatValue_(Symbol()));
+    assertEquals('Symbol(foobar)', mock.formatValue_(Symbol('foobar')));
+  },
+
+  /** @suppress {visibility} suppression added to enable type checking */
+  testFormatBigInts() {
+    if (typeof window['BigInt'] !== 'function') {
+      return;  // skip browsers without bigints
+    }
+    assertEquals('30n', mock.formatValue_(BigInt(30)));
+  },
+
   testGetUid() {
     const obj1 = {};
     const obj2 = {};

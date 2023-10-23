@@ -256,6 +256,10 @@ goog.labs.mock.formatValue_ = function(obj, opt_id) {
         output.push('NULL');
       } else if (typeof obj === 'string') {
         output.push('"' + indentMultiline(obj) + '"');
+      } else if (typeof obj === 'symbol') {
+        output.push(obj.toString());
+      } else if (typeof obj === 'bigint') {
+        output.push(obj.toString(10) + 'n');
       } else if (typeof obj === 'function') {
         const funcName = goog.labs.mock.getFunctionName_(obj);
         output.push('<function ' + funcName + '>');
