@@ -8,9 +8,6 @@
 /**
  * @fileoverview The file contains generated enumerations for ARIA roles
  * as defined by W3C ARIA standard: http://www.w3.org/TR/wai-aria/.
- *
- * This is auto-generated code. Do not manually edit! For more details
- * about how to edit it via the generator check go/closure-ariagen.
  */
 
 goog.provide('goog.a11y.aria.Role');
@@ -19,6 +16,7 @@ goog.provide('goog.a11y.aria.Role');
 /**
  * ARIA role values.
  * @enum {string}
+ * @suppress {lintChecks} TODO b/304590658 - re-enable this during the cleanup
  */
 goog.a11y.aria.Role = {
   // ARIA role for an alert element that doesn't need to be explicitly closed.
@@ -118,11 +116,20 @@ goog.a11y.aria.Role = {
   // ARIA role for menu item elements.
   MENU_ITEM: 'menuitem',
 
+  // ARIA role for menu item elements.
+  MENUITEM: 'menuitem',
+
   // ARIA role for a checkbox box element inside a menu.
   MENU_ITEM_CHECKBOX: 'menuitemcheckbox',
 
+  // ARIA role for a checkbox box element inside a menu.
+  MENUITEMCHECKBOX: 'menuitemcheckbox',
+
   // ARIA role for a radio button element inside a menu.
   MENU_ITEM_RADIO: 'menuitemradio',
+
+  // ARIA role for a radio button element inside a menu.
+  MENUITEMRADIO: 'menuitemradio',
 
   // ARIA landmark role for a collection of navigation links.
   NAVIGATION: 'navigation',
@@ -182,8 +189,14 @@ goog.a11y.aria.Role = {
   // ARIA role for a tab bar (i.e. a list of tab buttons).
   TAB_LIST: 'tablist',
 
+  // ARIA role for a tab bar (i.e. a list of tab buttons).
+  TABLIST: 'tablist',
+
   // ARIA role for a tab page (i.e. the element holding tab contents).
   TAB_PANEL: 'tabpanel',
+
+  // ARIA role for a tab page (i.e. the element holding tab contents).
+  TABPANEL: 'tabpanel',
 
   // ARIA role for a textbox element.
   TEXTBOX: 'textbox',
