@@ -494,17 +494,6 @@ goog.editor.SeamlessField.prototype.dispatchBlur = function() {
 
 
 /** @override */
-goog.editor.SeamlessField.prototype.turnOnDesignModeGecko = function() {
-  'use strict';
-  goog.editor.SeamlessField.superClass_.turnOnDesignModeGecko.call(this);
-  var doc = this.getEditableDomHelper().getDocument();
-
-  doc.execCommand('enableInlineTableEditing', false, 'false');
-  doc.execCommand('enableObjectResizing', false, 'false');
-};
-
-
-/** @override */
 goog.editor.SeamlessField.prototype.installStyles = function() {
   'use strict';
   if (!this.usesIframe()) {
