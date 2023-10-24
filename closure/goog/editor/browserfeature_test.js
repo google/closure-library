@@ -42,8 +42,7 @@ testSuite({
     assertEquals(
         'NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES incorrect for ' +
             navigator.userAgent,
-        BrowserFeature.NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES,
-        textNode.parentNode == null);
+        true, textNode.parentNode == null);
   },
 
   testLeavesPWhenRemovingLists() {
@@ -92,8 +91,7 @@ testSuite({
 
     root.normalize();
 
-    expectedFailures.expectFailureFor(
-        BrowserFeature.NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES);
+    expectedFailures.expectFailureFor(true);
     try {
       assertEquals(
           'text node should not be corrupted', textNode, root.firstChild);

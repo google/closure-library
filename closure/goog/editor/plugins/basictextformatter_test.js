@@ -751,9 +751,7 @@ testSuite({
     HELPER.select('12345', 3);
     FORMATTER.execCommandInternal(Command.LINK);
     HELPER.assertHtmlMatches(
-        BrowserFeature.GETS_STUCK_IN_LINKS ?
-            '123<a href="http://www.x.com/">http://www.x.com/</a>&nbsp;45' :
-            '123<a href="http://www.x.com/">http://www.x.com/</a>45');
+        '123<a href="http://www.x.com/">http://www.x.com/</a>45');
 
     FIELDMOCK.$verify();
     tearDownLinkTests();
@@ -787,10 +785,7 @@ testSuite({
 
     HELPER.select('12345', 1, '12345', 4);
     FORMATTER.execCommandInternal(Command.LINK);
-    HELPER.assertHtmlMatches(
-        BrowserFeature.GETS_STUCK_IN_LINKS ?
-            '1<a href="http://www.x.com/">234</a>&nbsp;5' :
-            '1<a href="http://www.x.com/">234</a>5');
+    HELPER.assertHtmlMatches('1<a href="http://www.x.com/">234</a>5');
 
     FIELDMOCK.$verify();
     tearDownLinkTests();
@@ -873,10 +868,7 @@ testSuite({
     HELPER.select('12345', 1, '12345', 4);
     // To create the link.
     FORMATTER.execCommandInternal(Command.LINK);
-    HELPER.assertHtmlMatches(
-        BrowserFeature.GETS_STUCK_IN_LINKS ?
-            '1<a href="http://www.x.com/">234</a>&nbsp;5' :
-            '1<a href="http://www.x.com/">234</a>5');
+    HELPER.assertHtmlMatches('1<a href="http://www.x.com/">234</a>5');
 
     // To remove the link.
     HELPER.select('234', 2);

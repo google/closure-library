@@ -15,7 +15,6 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
-goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
@@ -186,21 +185,6 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormatting_ = function() {
   // cases where background/fontColor are not removed here.
   var doc = this.getFieldDomHelper().getDocument();
   doc.execCommand('RemoveFormat', false, undefined);
-
-  if (goog.editor.BrowserFeature.ADDS_NBSPS_IN_REMOVE_FORMAT) {
-    // WebKit converts spaces to non-breaking spaces when doing a RemoveFormat.
-    // See: https://bugs.webkit.org/show_bug.cgi?id=14062
-    this.convertSelectedHtmlText_(function(text) {
-      'use strict';
-      // This loses anything that might have legitimately been a non-breaking
-      // space, but that's better than the alternative of only having non-
-      // breaking spaces.
-      // Old versions of WebKit (Safari 3, Chrome 1) incorrectly match /u00A0
-      // and newer versions properly match &nbsp;.
-      var nbspRegExp = /&nbsp;/g;
-      return text.replace(nbspRegExp, ' ');
-    });
-  }
 };
 
 
@@ -239,7 +223,6 @@ goog.editor.plugins.RemoveFormatting.prototype.getTableAncestor_ = function(
  */
 goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
   'use strict';
-  var range = this.getFieldObject().getRange();
 
   var dh = this.getFieldDomHelper();
   // Use markers to set the extent of the selection so that we can reselect it
@@ -252,19 +235,65 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
   var dummyNodeId = goog.string.createUniqueString();
   var dummySpanText = '<span id="' + dummyNodeId + '"></span>';
 
-  if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
-    // IE's selection often doesn't include the outermost tags.
-    // We want to use pasteHTML to replace the range contents with the newly
-    // unformatted text, so we have to check to make sure we aren't just
-    // pasting into some stray tags.  To do this, we first clear out the
-    // contents of the range and then delete all empty nodes parenting the now
-    // empty range. This way, the pasted contents are never re-embedded into
-    // formated nodes. Pasting purely empty html does not work, since IE moves
-    // the selection inside the next node, so we insert a dummy span.
-    var textRange = range.getTextRange(0).getBrowserRangeObject();
-    textRange.pasteHTML(dummySpanText);
-    var parent;
-    while ((parent = textRange.parentElement()) &&
+  let parent = this.getFieldObject().getRange().getContainerElement();
+
+  // When insertImage is used at the start or end of an anchor tag, some
+  // browsers either remove the enclosing anchor tag or insert the image tag
+  // outside of the anchor tag. If the parent element is an anchor tag, we add
+  // dummy content to avoid that scenario, and remove it once we've finished
+  // pasting.
+  const placeholderAnchorContent = goog.string.createUniqueString();
+  if (parent.tagName == goog.dom.TagName.A) {
+    const safePlaceholderAnchorContent =
+        goog.html.SafeHtml.htmlEscape(placeholderAnchorContent);
+    goog.dom.safe.insertAdjacentHtml(
+        parent, goog.dom.safe.InsertAdjacentHtmlPosition.AFTERBEGIN,
+        safePlaceholderAnchorContent);
+    goog.dom.safe.insertAdjacentHtml(
+        parent, goog.dom.safe.InsertAdjacentHtmlPosition.BEFOREEND,
+        safePlaceholderAnchorContent);
+  }
+
+  // insertHtml and range.insertNode don't merge blocks correctly.
+  // (e.g. if your selection spans two paragraphs)
+  dh.getDocument().execCommand('insertImage', false, dummyNodeId);
+  var dummyImageNodePattern = new RegExp('<[^<]*' + dummyNodeId + '[^>]*>');
+  parent = this.getFieldObject().getRange().getContainerElement();
+  if (parent.nodeType == goog.dom.NodeType.TEXT) {
+    // Opera sometimes returns a text node here.
+    // TODO(user): perhaps we should modify getParentContainer?
+    parent = parent.parentNode;
+  }
+
+  // We have to search up the DOM because in some cases, notably when
+  // selecting li's within a list, execCommand('insertImage') actually splits
+  // tags in such a way that parent that used to contain the selection does
+  // not contain inserted image.
+  while (!dummyImageNodePattern.test(parent.innerHTML)) {
+    parent = parent.parentNode;
+  }
+
+  // Like the IE case above, sometimes the selection does not include the
+  // outermost tags.  For Gecko, we have already expanded the range so that
+  // it does, so we can just replace the dummy image with the final html.
+  // For WebKit, we use the same approach as we do with IE  - we
+  // inject a dummy span where we will eventually place the contents, and
+  // remove parentNodes of the span while they are empty.
+
+  if (goog.userAgent.GECKO) {
+    // Escape dollars passed in second argument of String.proto.replace.
+    // And since we're using that to replace, we need to escape those as well,
+    // hence the 2*2 dollar signs.
+    goog.editor.node.replaceInnerHtml(
+        parent,
+        parent.innerHTML.replace(
+            dummyImageNodePattern, html.replace(/\$/g, '$$$$')));
+  } else {
+    goog.editor.node.replaceInnerHtml(
+        parent, parent.innerHTML.replace(dummyImageNodePattern, dummySpanText));
+    var dummySpan = dh.getElement(dummyNodeId);
+    parent = dummySpan;
+    while ((parent = dummySpan.parentNode) &&
            goog.editor.node.isEmpty(parent) &&
            !goog.editor.node.isEditableContainer(parent)) {
       var tag = parent.nodeName;
@@ -274,99 +303,21 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
         break;
       }
 
+      // We can't just remove parent since dummySpan is inside it, and we need
+      // to keep dummy span around for the replacement.  So we move the
+      // dummySpan up as we go.
+      goog.dom.insertSiblingAfter(dummySpan, parent);
       goog.dom.removeNode(parent);
     }
-    textRange.pasteHTML(html);
-    var dummySpan = dh.getElement(dummyNodeId);
-    // If we entered the while loop above, the node has already been removed
-    // since it was a child of parent and parent was removed.
-    if (dummySpan) {
-      goog.dom.removeNode(dummySpan);
-    }
-  } else if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-    let parent = this.getFieldObject().getRange().getContainerElement();
-
-    // When insertImage is used at the start or end of an anchor tag, some
-    // browsers either remove the enclosing anchor tag or insert the image tag
-    // outside of the anchor tag. If the parent element is an anchor tag, we add
-    // dummy content to avoid that scenario, and remove it once we've finished
-    // pasting.
-    const placeholderAnchorContent = goog.string.createUniqueString();
-    if (parent.tagName == goog.dom.TagName.A) {
-      const safePlaceholderAnchorContent =
-          goog.html.SafeHtml.htmlEscape(placeholderAnchorContent);
-      goog.dom.safe.insertAdjacentHtml(
-          parent, goog.dom.safe.InsertAdjacentHtmlPosition.AFTERBEGIN,
-          safePlaceholderAnchorContent);
-      goog.dom.safe.insertAdjacentHtml(
-          parent, goog.dom.safe.InsertAdjacentHtmlPosition.BEFOREEND,
-          safePlaceholderAnchorContent);
-    }
-
-    // insertHtml and range.insertNode don't merge blocks correctly.
-    // (e.g. if your selection spans two paragraphs)
-    dh.getDocument().execCommand('insertImage', false, dummyNodeId);
-    var dummyImageNodePattern = new RegExp('<[^<]*' + dummyNodeId + '[^>]*>');
-    parent = this.getFieldObject().getRange().getContainerElement();
-    if (parent.nodeType == goog.dom.NodeType.TEXT) {
-      // Opera sometimes returns a text node here.
-      // TODO(user): perhaps we should modify getParentContainer?
-      parent = parent.parentNode;
-    }
-
-    // We have to search up the DOM because in some cases, notably when
-    // selecting li's within a list, execCommand('insertImage') actually splits
-    // tags in such a way that parent that used to contain the selection does
-    // not contain inserted image.
-    while (!dummyImageNodePattern.test(parent.innerHTML)) {
-      parent = parent.parentNode;
-    }
-
-    // Like the IE case above, sometimes the selection does not include the
-    // outermost tags.  For Gecko, we have already expanded the range so that
-    // it does, so we can just replace the dummy image with the final html.
-    // For WebKit, we use the same approach as we do with IE  - we
-    // inject a dummy span where we will eventually place the contents, and
-    // remove parentNodes of the span while they are empty.
-
-    if (goog.userAgent.GECKO) {
-      // Escape dollars passed in second argument of String.proto.replace.
-      // And since we're using that to replace, we need to escape those as well,
-      // hence the 2*2 dollar signs.
-      goog.editor.node.replaceInnerHtml(
-          parent, parent.innerHTML.replace(
-                      dummyImageNodePattern, html.replace(/\$/g, '$$$$')));
-    } else {
-      goog.editor.node.replaceInnerHtml(
-          parent,
-          parent.innerHTML.replace(dummyImageNodePattern, dummySpanText));
-      var dummySpan = dh.getElement(dummyNodeId);
-      parent = dummySpan;
-      while ((parent = dummySpan.parentNode) &&
-             goog.editor.node.isEmpty(parent) &&
-             !goog.editor.node.isEditableContainer(parent)) {
-        var tag = parent.nodeName;
-        // We can't remove these table tags as it will invalidate the table dom.
-        if (tag == goog.dom.TagName.TD || tag == goog.dom.TagName.TR ||
-            tag == goog.dom.TagName.TH) {
-          break;
-        }
-
-        // We can't just remove parent since dummySpan is inside it, and we need
-        // to keep dummy span around for the replacement.  So we move the
-        // dummySpan up as we go.
-        goog.dom.insertSiblingAfter(dummySpan, parent);
-        goog.dom.removeNode(parent);
-      }
-      goog.editor.node.replaceInnerHtml(
-          parent,
-          // Escape dollars passed in second argument of String.proto.replace
-          parent.innerHTML.replace(
-              new RegExp(dummySpanText, 'i'), html.replace(/\$/g, '$$$$')));
-    }
     goog.editor.node.replaceInnerHtml(
-        parent, parent.innerHTML.replaceAll(placeholderAnchorContent, ''));
+        parent,
+        // Escape dollars passed in second argument of String.proto.replace
+        parent.innerHTML.replace(
+            new RegExp(dummySpanText, 'i'), html.replace(/\$/g, '$$$$')));
   }
+  goog.editor.node.replaceInnerHtml(
+      parent, parent.innerHTML.replaceAll(placeholderAnchorContent, ''));
+
 
   var startSpan = dh.getElement(startSpanId);
   var endSpan = dh.getElement(endSpanId);
@@ -396,39 +347,8 @@ goog.editor.plugins.RemoveFormatting.prototype.getHtmlText_ = function(range) {
   var div = this.getFieldDomHelper().createDom(goog.dom.TagName.DIV);
   var textRange = range.getBrowserRangeObject();
 
-  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-    // Get the text to convert.
-    div.appendChild(/** @type {!Node} */ (textRange.cloneContents()));
-  } else if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
-    // Trim the whitespace on the ends of the range, so that it the container
-    // will be the container of only the text content that we are changing.
-    // This gets around issues in IE where the spaces are included in the
-    // selection, but ignored sometimes by execCommand, and left orphaned.
-    var rngText = range.getText();
-
-    // BRs get reported as \r\n, but only count as one character for moves.
-    // Adjust the string so our move counter is correct.
-    rngText = rngText.replace(/\r\n/g, '\r');
-
-    var rngTextLength = rngText.length;
-    var left = rngTextLength - goog.string.trimLeft(rngText).length;
-    var right = rngTextLength - goog.string.trimRight(rngText).length;
-
-    textRange.moveStart('character', left);
-    textRange.moveEnd('character', -right);
-
-    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
-    var htmlText = textRange.htmlText;
-    // Check if in pretag and fix up formatting so that new lines are preserved.
-    if (textRange.queryCommandValue('formatBlock') == 'Formatted') {
-      /**
-       * @suppress {strictMissingProperties} Added to tighten compiler checks
-       */
-      htmlText = goog.string.newLineToBr(textRange.htmlText);
-    }
-    goog.dom.safe.setInnerHtml(
-        div, goog.html.legacyconversions.safeHtmlFromString(htmlText));
-  }
+  // Get the text to convert.
+  div.appendChild(/** @type {!Node} */ (textRange.cloneContents()));
 
   // Get the innerHTML of the node instead of just returning the text above
   // so that its properly html escaped.
@@ -750,9 +670,9 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
 
         case String(goog.dom.TagName.A):
           if (node.href && node.href != '') {
-            sb.push("<a href='");
+            sb.push('<a href=\'');
             sb.push(node.getAttribute('href'));
-            sb.push("'>");
+            sb.push('\'>');
             sb.push(this.removeFormattingWorker_(node.innerHTML));
             sb.push('</a>');
             continue;  // Children taken care of.
@@ -761,14 +681,14 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormattingWorker_ =
           }
 
         case String(goog.dom.TagName.IMG):
-          sb.push("<img src='");
+          sb.push('<img src=\'');
           sb.push(node.src);
-          sb.push("'");
+          sb.push('\'');
           // border=0 is a common way to not show a blue border around an image
           // that is wrapped by a link. If we remove that, the blue border will
           // show up, which to the user looks like adding format, not removing.
           if (node.border == '0') {
-            sb.push(" border='0'");
+            sb.push(' border=\'0\'');
           }
           sb.push('>');
           continue;

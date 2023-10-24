@@ -2268,7 +2268,7 @@ goog.editor.Field.prototype.focusAndPlaceCursorAtStart = function() {
   // TODO(user): Refactor the code using this and related methods. We should
   // only mess with the selection in the case where there is not an existing
   // selection in the field.
-  if (goog.editor.BrowserFeature.HAS_IE_RANGES || !goog.userAgent.GECKO) {
+  if (!goog.userAgent.GECKO) {
     this.placeCursorAtStart();
   }
   this.focus();

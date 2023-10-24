@@ -652,16 +652,13 @@ testSuite({
      checking
    */
   testDeleteW3CSimple() {
-    if (BrowserFeature.HAS_W3C_RANGES) {
-      container.innerHTML = '<div>abcd</div>';
-      const range = Range.createFromNodes(
-          container.firstChild.firstChild, 1, container.firstChild.firstChild,
-          3);
-      range.select();
-      EnterHandler.deleteW3cRange_(range);
+    container.innerHTML = '<div>abcd</div>';
+    const range = Range.createFromNodes(
+        container.firstChild.firstChild, 1, container.firstChild.firstChild, 3);
+    range.select();
+    EnterHandler.deleteW3cRange_(range);
 
-      testingDom.assertHtmlContentsMatch('<div>ad</div>', container);
-    }
+    testingDom.assertHtmlContentsMatch('<div>ad</div>', container);
   },
 
   /**
@@ -669,16 +666,13 @@ testSuite({
      checking
    */
   testDeleteW3CAll() {
-    if (BrowserFeature.HAS_W3C_RANGES) {
-      container.innerHTML = '<div>abcd</div>';
-      const range = Range.createFromNodes(
-          container.firstChild.firstChild, 0, container.firstChild.firstChild,
-          4);
-      range.select();
-      EnterHandler.deleteW3cRange_(range);
+    container.innerHTML = '<div>abcd</div>';
+    const range = Range.createFromNodes(
+        container.firstChild.firstChild, 0, container.firstChild.firstChild, 4);
+    range.select();
+    EnterHandler.deleteW3cRange_(range);
 
-      testingDom.assertHtmlContentsMatch('<div>&nbsp;</div>', container);
-    }
+    testingDom.assertHtmlContentsMatch('<div>&nbsp;</div>', container);
   },
 
   /**
@@ -686,16 +680,13 @@ testSuite({
      checking
    */
   testDeleteW3CPartialEnd() {
-    if (BrowserFeature.HAS_W3C_RANGES) {
-      container.innerHTML = '<div>ab</div><div>cd</div>';
-      const range = Range.createFromNodes(
-          container.firstChild.firstChild, 1, container.lastChild.firstChild,
-          1);
-      range.select();
-      EnterHandler.deleteW3cRange_(range);
+    container.innerHTML = '<div>ab</div><div>cd</div>';
+    const range = Range.createFromNodes(
+        container.firstChild.firstChild, 1, container.lastChild.firstChild, 1);
+    range.select();
+    EnterHandler.deleteW3cRange_(range);
 
-      testingDom.assertHtmlContentsMatch('<div>ad</div>', container);
-    }
+    testingDom.assertHtmlContentsMatch('<div>ad</div>', container);
   },
 
   /**
@@ -703,46 +694,39 @@ testSuite({
      checking
    */
   testDeleteW3CNonPartialEnd() {
-    if (BrowserFeature.HAS_W3C_RANGES) {
-      container.innerHTML = '<div>ab</div><div>cd</div>';
-      const range = Range.createFromNodes(
-          container.firstChild.firstChild, 1, container.lastChild.firstChild,
-          2);
-      range.select();
-      EnterHandler.deleteW3cRange_(range);
+    container.innerHTML = '<div>ab</div><div>cd</div>';
+    const range = Range.createFromNodes(
+        container.firstChild.firstChild, 1, container.lastChild.firstChild, 2);
+    range.select();
+    EnterHandler.deleteW3cRange_(range);
 
-      testingDom.assertHtmlContentsMatch('<div>a</div>', container);
-    }
+    testingDom.assertHtmlContentsMatch('<div>a</div>', container);
   },
 
   /** @suppress {visibility} suppression added to enable type checking */
   testIsInOneContainer() {
-    if (BrowserFeature.HAS_W3C_RANGES) {
-      container.innerHTML = '<div><br></div>';
-      const div = container.firstChild;
-      const range = Range.createFromNodes(div, 0, div, 1);
-      range.select();
-      assertTrue(
-          'Selection must be recognized as being in one container',
-          EnterHandler.isInOneContainerW3c_(range));
-    }
+    container.innerHTML = '<div><br></div>';
+    const div = container.firstChild;
+    const range = Range.createFromNodes(div, 0, div, 1);
+    range.select();
+    assertTrue(
+        'Selection must be recognized as being in one container',
+        EnterHandler.isInOneContainerW3c_(range));
   },
 
   /** @suppress {checkTypes} suppression added to enable type checking */
   testDeletingEndNodesWithNoNewLine() {
-    if (BrowserFeature.HAS_W3C_RANGES) {
-      container.innerHTML =
-          'a<div>b</div><div><br></div><div>c</div><div>d</div>';
-      const range = Range.createFromNodes(
-          container.childNodes[2], 0, container.childNodes[4].childNodes[0], 1);
-      range.select();
-      /** @suppress {visibility} suppression added to enable type checking */
-      const newRange = EnterHandler.deleteW3cRange_(range);
-      testingDom.assertHtmlContentsMatch('a<div>b</div>', container);
-      assertTrue(newRange.isCollapsed());
-      assertEquals(container, newRange.getStartNode());
-      assertEquals(2, newRange.getStartOffset());
-    }
+    container.innerHTML =
+        'a<div>b</div><div><br></div><div>c</div><div>d</div>';
+    const range = Range.createFromNodes(
+        container.childNodes[2], 0, container.childNodes[4].childNodes[0], 1);
+    range.select();
+    /** @suppress {visibility} suppression added to enable type checking */
+    const newRange = EnterHandler.deleteW3cRange_(range);
+    testingDom.assertHtmlContentsMatch('a<div>b</div>', container);
+    assertTrue(newRange.isCollapsed());
+    assertEquals(container, newRange.getStartNode());
+    assertEquals(2, newRange.getStartOffset());
   },
 
   /**
@@ -750,9 +734,6 @@ testSuite({
      checking
    */
   testDeleteW3CRemoveEntireLineWithShiftDown() {
-    if (!BrowserFeature.HAS_W3C_RANGES) {
-      return;
-    }
     container.innerHTML = '<div>a</div><div>b</div><div>cc</div><div>d</div>';
     // anchor: |, focus: ||
     // <div>a</div><div>|b</div><div>||cc</div><div>d</div>
@@ -773,9 +754,6 @@ testSuite({
      checking
    */
   testDeleteW3CRemoveEntireFirstLineWithShiftDown() {
-    if (!BrowserFeature.HAS_W3C_RANGES) {
-      return;
-    }
     container.innerHTML = '<div>a</div><div>b</div><div>cc</div><div>d</div>';
     // anchor: |, focus: ||
     // <div>|a</div><div>||b</div><div>cc</div><div>d</div>
@@ -791,27 +769,4 @@ testSuite({
         '<div>b</div><div>cc</div><div>d</div>', container);
   },
 
-  /**
-     @suppress {visibility,checkTypes} suppression added to enable type
-     checking
-   */
-  testDeleteW3CRemoveEntireLineWithPartialSecondLine() {
-    if (BrowserFeature.HAS_W3C_RANGES) {
-      return;
-    }
-    container.innerHTML = '<div>a</div><div>b</div><div>cc</div><div>d</div>';
-    // anchor: |, focus: ||
-    // <div>a</div><div>|b</div><div>c||c</div><div>d</div>
-    const range = Range.createFromNodes(
-        container.children[1].firstChild, 0, container.children[2].firstChild,
-        1);
-    range.select();
-    EnterHandler.deleteW3cRange_(range);
-
-    // Browsers will add a newline between the a and cc lines, but this doesn't
-    // happen in unit tests as we can't trigger the browser's behavior when
-    // editing content-editable divs.
-    testingDom.assertHtmlContentsMatch(
-        '<div>a</div><div>c</div><div>d</div>', container);
-  },
 });

@@ -71,12 +71,6 @@ goog.editor.plugins.EnterHandler.prototype.getTrogClassId = function() {
 goog.editor.plugins.EnterHandler.prototype.enable = function(fieldObject) {
   'use strict';
   goog.editor.plugins.EnterHandler.base(this, 'enable', fieldObject);
-
-  if (goog.editor.BrowserFeature.SUPPORTS_OPERA_DEFAULTBLOCK_COMMAND &&
-      (this.tag == goog.dom.TagName.P || this.tag == goog.dom.TagName.DIV)) {
-    var doc = this.getFieldDomHelper().getDocument();
-    doc.execCommand('opera-defaultBlock', false, this.tag);
-  }
 };
 
 
@@ -501,15 +495,13 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(
 /**
  * Deletes the content at the current cursor position.
  * @return {!Node|!Object} Something representing the current cursor position.
- *    See deleteCursorSelectionIE_ and deleteCursorSelectionW3C_ for details.
+ *    See deleteCursorSelectionW3C_ for details.
  *    Should be passed to releasePositionObject_ when no longer in use.
  * @private
  */
 goog.editor.plugins.EnterHandler.prototype.deleteCursorSelection_ = function() {
   'use strict';
-  return goog.editor.BrowserFeature.HAS_W3C_RANGES ?
-      this.deleteCursorSelectionW3C_() :
-      this.deleteCursorSelectionIE_();
+  return this.deleteCursorSelectionW3C_();
 };
 
 
@@ -521,31 +513,6 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelection_ = function() {
 goog.editor.plugins.EnterHandler.prototype.releasePositionObject_ = function(
     position) {
   'use strict';
-  if (!goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-    goog.dom.removeNode(/** @type {!Node} */ (position));
-  }
-};
-
-
-/**
- * Delete the selection at the current cursor position, then returns a temporary
- * node at the current position.
- * @return {!Node} A temporary node marking the current cursor position. This
- *     node should eventually be removed from the DOM.
- * @private
- * @suppress {strictMissingProperties} Added to tighten compiler checks
- */
-goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionIE_ =
-    function() {
-  'use strict';
-  var doc = this.getFieldDomHelper().getDocument();
-  var range = doc.selection.createRange();
-
-  var id = goog.string.createUniqueString();
-  range.pasteHTML('<span id="' + id + '"></span>');
-  var splitNode = doc.getElementById(id);
-  splitNode.id = '';
-  return splitNode;
 };
 
 

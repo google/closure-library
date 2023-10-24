@@ -1088,15 +1088,8 @@ goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(
 
   if (range.isCollapsed()) {
     var textRange = range.getTextRange(0).getBrowserRangeObject();
-    if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
-      anchor = this.getFieldDomHelper().createElement(goog.dom.TagName.A);
-      textRange.insertNode(anchor);
-    } else if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
-      // TODO: Use goog.dom.AbstractRange's surroundContents
-      textRange.pasteHTML("<a id='newLink'></a>");
-      anchor = this.getFieldDomHelper().getElement('newLink');
-      anchor.removeAttribute('id');
-    }
+    anchor = this.getFieldDomHelper().createElement(goog.dom.TagName.A);
+    textRange.insertNode(anchor);
   } else {
     // Create a unique identifier for the link so we can retrieve it later.
     // execCommand doesn't return the link to us, and we need a way to find

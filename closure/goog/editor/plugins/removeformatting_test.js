@@ -7,7 +7,6 @@
 goog.module('goog.editor.plugins.RemoveFormattingTest');
 goog.setTestOnly();
 
-const BrowserFeature = goog.require('goog.editor.BrowserFeature');
 const ExpectedFailures = goog.require('goog.testing.ExpectedFailures');
 const FieldMock = goog.require('goog.testing.editor.FieldMock');
 const Range = goog.require('goog.dom.Range');
@@ -406,8 +405,7 @@ testSuite({
     // so it isn't sent off to the removeFormattingWorker.
     // Workaround for broken removeFormat in old webkit added an extra
     // <br> to the end of the html.
-    let html = '<div>l </div><br class="GECKO WEBKIT">afoo bar' +
-        (BrowserFeature.ADDS_NBSPS_IN_REMOVE_FORMAT ? '<br>' : '');
+    let html = '<div>l </div><br class="GECKO WEBKIT">afoo bar';
     if (userAgent.EDGE) {  // TODO(sdh): I have no idea where this comes from
       html = html.replace(' class="GECKO WEBKIT"', '');
     }
@@ -508,6 +506,9 @@ testSuite({
                          });
   },
 
+  /**
+   * @suppress {visibility} suppression added to enable type checking
+   */
   testBasicRemoveFormatting() {
     // IE will clobber the editable div.
     // Note: I can't repro this using normal user selections.
@@ -519,24 +520,15 @@ testSuite({
 
     Range.createFromNodeContents(div).select();
 
-    expectedFailures.expectFailureFor(
-        BrowserFeature.ADDS_NBSPS_IN_REMOVE_FORMAT,
-        'The workaround for the nbsp bug adds an extra br at the end.');
-
-    expectedFailures.run(/**
-                            @suppress {visibility} suppression added to enable
-                            type checking
-                          */
-                         () => {
-                           FORMATTER.removeFormatting_();
-                           assertHTMLEquals(
-                               `bolditalic${insertImageBoldGarbage}`,
-                               div.innerHTML);
-                           FIELDMOCK.$verify();
-                         });
+    FORMATTER.removeFormatting_();
+    assertHTMLEquals(`bolditalic${insertImageBoldGarbage}`, div.innerHTML);
+    FIELDMOCK.$verify();
   },
 
-  /** @bug 1480260 */
+  /**
+   * @bug 1480260
+   * @suppress {visibility} suppression added to enable type checking
+   */
   testPartialBasicRemoveFormatting() {
     const div = document.getElementById('html');
     div.innerHTML = '<b>bold<i>italic</i></b>';
@@ -547,18 +539,9 @@ testSuite({
             3)
         .select();
 
-
-    expectedFailures.run(/**
-                            @suppress {visibility} suppression added to enable
-                            type checking
-                          */
-                         () => {
-                           FORMATTER.removeFormatting_();
-                           assertHTMLEquals(
-                               '<b>bo</b>ldita<b><i>lic</i></b>',
-                               div.innerHTML);
-                           FIELDMOCK.$verify();
-                         });
+    FORMATTER.removeFormatting_();
+    assertHTMLEquals('<b>bo</b>ldita<b><i>lic</i></b>', div.innerHTML);
+    FIELDMOCK.$verify();
   },
 
   /**

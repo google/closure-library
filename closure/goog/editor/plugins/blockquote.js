@@ -14,7 +14,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
-goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
@@ -220,9 +219,8 @@ goog.editor.plugins.Blockquote.prototype.isSupportedCommand = function(
  * canceled.
  * @param {string} command The command to execute.
  * @param {...*} var_args Single additional argument representing the current
- *     cursor position. If BrowserFeature.HAS_W3C_RANGES it is an object with a
- *     `node` key and an `offset` key. In other cases (legacy IE)
- *     it is a single node.
+ *     cursor position. It is an object with a
+ *     `node` key and an `offset` key.
  * @return {boolean|undefined} Boolean true when the quoted region has been
  *     split, false or undefined otherwise.
  * @override
@@ -233,9 +231,7 @@ goog.editor.plugins.Blockquote.prototype.execCommandInternal = function(
   var pos = arguments[1];
   if (command == goog.editor.plugins.Blockquote.SPLIT_COMMAND && pos &&
       (this.className_ || !this.requiresClassNameToSplit_)) {
-    return goog.editor.BrowserFeature.HAS_W3C_RANGES ?
-        this.splitQuotedBlockW3C_(pos) :
-        this.splitQuotedBlockIE_(/** @type {Node} */ (pos));
+    return this.splitQuotedBlockW3C_(pos);
   }
 };
 
@@ -360,95 +356,3 @@ goog.editor.plugins.Blockquote.prototype.insertEmptyTextNodeBeforeRange_ =
   return node;
 };
 
-
-/**
- * IE version of splitQuotedBlock_.
- * @param {Node} splitNode The current cursor position.
- * @return {boolean} Whether the blockquote was split.
- * @private
- */
-goog.editor.plugins.Blockquote.prototype.splitQuotedBlockIE_ = function(
-    splitNode) {
-  'use strict';
-  var dh = this.getFieldDomHelper();
-  var quoteNode = goog.editor.node.findTopMostEditableAncestor(
-      splitNode.parentNode, goog.bind(this.isSplittableBlockquote, this));
-
-  if (!quoteNode) {
-    return false;
-  }
-
-  var clone = splitNode.cloneNode(false);
-
-  // Whenever the cursor is just before a BR element (one|<BR>) and the user
-  // presses enter, the second quoted block starts with a BR which appears
-  // to the user as an extra newline. This stems from the fact that the
-  // dummy span that we create (splitNode) occurs before the BR and we split
-  // on that.
-  if (splitNode.nextSibling &&
-      /** @type {!Element} */ (splitNode.nextSibling).tagName ==
-          goog.dom.TagName.BR) {
-    splitNode = splitNode.nextSibling;
-  }
-  var secondHalf = goog.editor.node.splitDomTreeAt(splitNode, clone, quoteNode);
-  goog.dom.insertSiblingAfter(secondHalf, quoteNode);
-
-  // Set insertion point.
-  var tagToInsert = this.getFieldObject().queryCommandValue(
-                        goog.editor.Command.DEFAULT_TAG) ||
-      goog.dom.TagName.DIV;
-  var div = dh.createElement(/** @type {string} */ (tagToInsert));
-  quoteNode.parentNode.insertBefore(div, secondHalf);
-
-  // The div needs non-whitespace contents in order for the insertion point
-  // to get correctly inserted.
-  div.textContent = '\xA0';
-
-  // Moving the range 1 char isn't enough when you have markup.
-  // This moves the range to the end of the nbsp.
-  var range = /** @type {?} */ (dh.getDocument().selection.createRange());
-  range.moveToElementText(splitNode);
-  range.move('character', 2);
-  range.select();
-
-  // Remove the no-longer-necessary nbsp.
-  goog.dom.removeChildren(div);
-
-  // Clear the original selection.
-  range.pasteHTML('');
-
-  // We need to remove clone from the DOM but just removing clone alone will
-  // not suffice. Let's assume we have the following DOM structure and the
-  // cursor is placed after the first numbered list item "one".
-  //
-  // <blockquote class="gmail-quote">
-  //   <div><div>a</div><ol><li>one|</li></ol></div>
-  //   <div>b</div>
-  // </blockquote>
-  //
-  // After pressing enter, we have the following structure.
-  //
-  // <blockquote class="gmail-quote">
-  //   <div><div>a</div><ol><li>one|</li></ol></div>
-  // </blockquote>
-  // <div>&nbsp;</div>
-  // <blockquote class="gmail-quote">
-  //   <div><ol><li><span id=""></span></li></ol></div>
-  //   <div>b</div>
-  // </blockquote>
-  //
-  // The clone is contained in a subtree which should be removed. This stems
-  // from the fact that we invoke splitDomTreeAt with the dummy span
-  // as the starting splitting point and this results in the empty subtree
-  // <div><ol><li><span id=""></span></li></ol></div>.
-  //
-  // We resolve this by walking up the tree till we either reach the
-  // blockquote or till we hit a node with more than one child. The resulting
-  // node is then removed from the DOM.
-  goog.editor.plugins.Blockquote.findAndRemoveSingleChildAncestor_(
-      clone, secondHalf);
-
-  goog.editor.plugins.Blockquote.removeAllWhiteSpaceNodes_(
-      [quoteNode, secondHalf]);
-  return true;
-};

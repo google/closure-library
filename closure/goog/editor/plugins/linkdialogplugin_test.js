@@ -8,7 +8,6 @@ goog.module('goog.ui.editor.plugins.LinkDialogTest');
 goog.setTestOnly();
 
 const AbstractDialog = goog.require('goog.ui.editor.AbstractDialog');
-const BrowserFeature = goog.require('goog.editor.BrowserFeature');
 const Command = goog.require('goog.editor.Command');
 const DomHelper = goog.require('goog.dom.DomHelper');
 const Field = goog.require('goog.editor.Field');
@@ -21,7 +20,6 @@ const NodeType = goog.require('goog.dom.NodeType');
 const SafeHtml = goog.require('goog.html.SafeHtml');
 const TagName = goog.require('goog.dom.TagName');
 const TestHelper = goog.require('goog.testing.editor.TestHelper');
-const Unicode = goog.require('goog.string.Unicode');
 const dom = goog.require('goog.dom');
 const editorDom = goog.require('goog.testing.editor.dom');
 const events = goog.require('goog.testing.events');
@@ -559,11 +557,7 @@ testSuite({
         fieldObj.getRange().getText());
 
     // Test that the caret is placed at the end of the link text.
-    editorDom.assertRangeBetweenText(
-        // If the browser gets stuck in links, an nbsp was added after the
-        // link to avoid that, otherwise we just look for the 5.
-        BrowserFeature.GETS_STUCK_IN_LINKS ? Unicode.NBSP : '5', '',
-        fieldObj.getRange());
+    editorDom.assertRangeBetweenText('5', '', fieldObj.getRange());
 
     // NOTE(user): The functionality to avoid getting stuck in
     // links is tested in editablelink_test.html::testPlaceCursorRightOf().

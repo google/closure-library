@@ -22,12 +22,6 @@ goog.require('goog.userAgent.product');
  * @const
  */
 goog.editor.BrowserFeature = {
-  // Whether this browser uses the IE TextRange object.
-  HAS_IE_RANGES: false,
-
-  // Whether this browser uses the W3C standard Range object.
-  // Assumes IE higher versions will be compliance with W3C standard.
-  HAS_W3C_RANGES: true,
 
   // Has the contentEditable attribute, which makes nodes editable.
   //
@@ -68,14 +62,6 @@ goog.editor.BrowserFeature = {
   FORMAT_BLOCK_WORKS_FOR_BLOCKQUOTES:
       goog.userAgent.GECKO || goog.userAgent.WEBKIT,
 
-  // Whether this browser's "FormatBlock" command may create multiple
-  // blockquotes. This will not occur on currently-supported browsers.
-  CREATES_MULTIPLE_BLOCKQUOTES: false,
-
-  // Whether this browser's "FormatBlock" command will wrap blockquotes
-  // inside of divs, instead of replacing divs with blockquotes.
-  WRAPS_BLOCKQUOTE_IN_DIVS: false,
-
   // Whether the readystatechange event is more reliable than load.
   PREFERS_READY_STATE_CHANGE_EVENT: goog.userAgent.IE,
 
@@ -112,9 +98,6 @@ goog.editor.BrowserFeature = {
   // Whether this browser likes to tab through images in contentEditable mode,
   // and we like to disable this feature.
   TABS_THROUGH_IMAGES: goog.userAgent.IE,
-
-  // Whether this browser unescapes urls when you extract it from the href tag.
-  UNESCAPES_URLS_WITHOUT_ASKING: false,
 
   // Whether this browser supports execCommand("styleWithCSS") to toggle between
   // inserting html tags or inline styling for things like bold, italic, etc.
@@ -153,38 +136,9 @@ goog.editor.BrowserFeature = {
   // Whether this browser moves <style> tags into new <head> elements.
   MOVES_STYLE_TO_HEAD: goog.userAgent.WEBKIT,
 
-  // Whether this browser collapses the selection in a contenteditable when the
-  // mouse is pressed in a non-editable portion of the same frame, even if
-  // Event.preventDefault is called. This field is deprecated and unused -- only
-  // old versions of Opera have this bug.
-  COLLAPSES_SELECTION_ONMOUSEDOWN: false,
-
-  // Whether the user can actually create a selection in this browser with the
-  // caret in the MIDDLE of the selection by double-clicking.
-  CARET_INSIDE_SELECTION: false,
-
-  // Whether the browser focuses <body contenteditable> automatically when
-  // the user clicks on <html>. This field is deprecated and unused -- only old
-  // versions of Opera don't have this behavior.
-  FOCUSES_EDITABLE_BODY_ON_HTML_CLICK: true,
-
   // Whether to use keydown for key listening (uses keypress otherwise). Taken
   // from goog.events.KeyHandler.
   USES_KEYDOWN: true,
-
-  // Whether this browser converts spaces to non-breaking spaces when calling
-  // execCommand's RemoveFormat.
-  // See: https://bugs.webkit.org/show_bug.cgi?id=14062
-  ADDS_NBSPS_IN_REMOVE_FORMAT: false,
-
-  // Whether the browser will get stuck inside a link.  That is, if your cursor
-  // is after a link and you type, does your text go inside the link tag.
-  // Bug: http://bugs.webkit.org/show_bug.cgi?id=17697
-  GETS_STUCK_IN_LINKS: false,
-
-  // Whether the browser corrupts empty text nodes in Node#normalize,
-  // removing them from the Document instead of merging them.
-  NORMALIZE_CORRUPTS_EMPTY_TEXT_NODES: true,
 
   // Whether the browser corrupts all text nodes in Node#normalize,
   // removing them from the Document instead of merging them.
@@ -212,14 +166,6 @@ goog.editor.BrowserFeature = {
   // attr.
   DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR:
       !goog.userAgent.WEBKIT && !goog.userAgent.EDGE,
-
-  // Implements this spec about dragging files from the filesystem to the
-  // browser: http://www.whatwg/org/specs/web-apps/current-work/#dnd
-  SUPPORTS_HTML5_FILE_DRAGGING: true,
-
-  // Historically, some versions of Opera supported the opera-defaultBlock
-  // execCommand to change the default block inserted when [return] is pressed.
-  SUPPORTS_OPERA_DEFAULTBLOCK_COMMAND: false,
 
   SUPPORTS_FILE_PASTING: goog.userAgent.product.CHROME,
 };
