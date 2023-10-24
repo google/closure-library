@@ -101,9 +101,8 @@ if (goog.DEBUG) {
    */
   goog.string.Const.prototype.toString = function() {
     'use strict';
-    return 'Const{' +
-        this.stringConstValueWithSecurityContract__googStringSecurityPrivate_ +
-        '}';
+    return this
+        .stringConstValueWithSecurityContract__googStringSecurityPrivate_;
   };
 }
 

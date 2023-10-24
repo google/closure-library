@@ -18,7 +18,7 @@ testSuite({
     const extracted = Const.unwrap(constString);
     assertEquals('blah', extracted);
     assertEquals('blah', constString.getTypedStringValue());
-    assertEquals('Const{blah}', String(constString));
+    assertEquals('blah', String(constString));
 
     // Interface marker is present.
     assertTrue(constString.implementsGoogStringTypedString);
