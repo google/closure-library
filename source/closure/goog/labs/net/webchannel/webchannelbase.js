@@ -56,7 +56,14 @@ const httpCors = goog.module.get('goog.net.rpc.HttpCors');
  * @define {boolean} If WebChannel should compile with Origin Trial features.
  */
 const ALLOW_ORIGIN_TRIAL_FEATURES =
-    goog.define('goog.net.webChannel.ALLOW_ORIGIN_TRIAL_FEATURES', true);
+    goog.define('goog.net.webChannel.ALLOW_ORIGIN_TRIAL_FEATURES', false);
+
+/**
+ * @define {boolean} If webchannel should ping google.com for debugging
+ * connectivity issues (that may have caused the channel to abort).
+ */
+const ENABLE_GOOGLE_COM_PING =
+    goog.define('goog.net.webChannel.ENABLE_GOOGLE_COM_PING', true);
 
 /**
  * Gets an internal channel parameter in a type-safe way.
@@ -274,10 +281,16 @@ goog.labs.net.webChannel.WebChannelBase = function(
   this.lastPostResponseArrayId_ = -1;
 
   /**
-   * The last status code received (until `State.CLOSED` is reached).
+   * The non-200 status code received that causes the channel to be aborted.
    * @private {number}
    */
-  this.lastStatusCode_ = -1;
+  this.errorResponseStatusCode_ = -1;
+
+  /**
+   * The response headers received along with the non-200 status.
+   * @private {!Object<string, string>|undefined}
+   */
+  this.errorResponseHeaders_ = undefined;
 
   /**
    * Number of times we have retried the current forward channel request.
@@ -450,6 +463,18 @@ goog.labs.net.webChannel.WebChannelBase = function(
       (!this.fastHandshake_ && this.allowStreamingMode_ && opt_options &&
        opt_options.detectBufferingProxy) ||
       false;
+
+  /**
+   * Long polling timeout interval for the server to complete the handing GET.
+   *
+   * @private {number|undefined}
+   */
+  this.longPollingTimeout_ = undefined;
+
+  if (opt_options && opt_options.longPollingTimeout &&
+      opt_options.longPollingTimeout > 0) {
+    this.longPollingTimeout_ = opt_options.longPollingTimeout;
+  }
 
   /**
    * Callback when all the pending client-sent messages have been flushed.
@@ -1205,12 +1230,22 @@ WebChannelBase.prototype.getState = function() {
 
 
 /**
- * @return {number} The last status code received (until `State.CLOSED` is
- * reached).
+ * @return {!Object<string, string>|undefined} The response headers received
+ * along with the non-200 status.
+ */
+WebChannelBase.prototype.getLastResponseHeaders = function() {
+  'use strict';
+  return this.errorResponseHeaders_;
+};
+
+
+/**
+ * @return {number} The non-200 status code received that causes the channel to
+ * be aborted.
  */
 WebChannelBase.prototype.getLastStatusCode = function() {
   'use strict';
-  return this.lastStatusCode_;
+  return this.errorResponseStatusCode_;
 };
 
 
@@ -1776,8 +1811,13 @@ WebChannelBase.prototype.startBackChannel_ = function() {
   const uri = this.backChannelUri_.clone();
   uri.setParameterValue('RID', 'rpc');
   uri.setParameterValue('SID', this.sid_);
-  uri.setParameterValue('CI', this.enableStreaming_ ? '0' : '1');
   uri.setParameterValue('AID', this.lastArrayId_);
+
+  uri.setParameterValue('CI', this.enableStreaming_ ? '0' : '1');
+  if (!this.enableStreaming_ && this.longPollingTimeout_) {
+    uri.setParameterValue('TO', this.longPollingTimeout_);
+  }
+
   uri.setParameterValue('TYPE', 'xmlhttp');
 
   this.addAdditionalParams_(uri);
@@ -1947,6 +1987,7 @@ WebChannelBase.prototype.handlePostResponse_ = function(
  * @param {!ChannelRequest} forwardReq The forward channel request that
  * triggers this function call.
  * @private
+ * @suppress {strictPrimitiveOperators}
  */
 WebChannelBase.prototype.handleBackchannelMissing_ = function(forwardReq) {
   'use strict';
@@ -2060,6 +2101,7 @@ WebChannelBase.isFatalError_ = function(error, statusCode) {
 
 /**
  * @override
+ * @suppress {strictPrimitiveOperators}
  */
 WebChannelBase.prototype.onRequestComplete = function(request) {
   'use strict';
@@ -2084,8 +2126,6 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
     return;
   }
 
-  this.lastStatusCode_ = request.getLastStatusCode();
-
   if (request.getSuccess()) {
     if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
       const size = request.getPostData() ? request.getPostData().length : 0;
@@ -2101,14 +2141,16 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
   }
   // Else unsuccessful. Fall through.
 
+  const lastStatusCode = request.getLastStatusCode();
   const lastError = request.getLastError();
-  if (!WebChannelBase.isFatalError_(lastError, this.lastStatusCode_)) {
+  if (!WebChannelBase.isFatalError_(lastError, lastStatusCode)) {
     // Maybe retry.
     const self = this;
     this.channelDebug_.debug(function() {
       'use strict';
       return 'Maybe retrying, last error: ' +
-          ChannelRequest.errorStringFromCode(lastError, self.lastStatusCode_);
+          ChannelRequest.errorStringFromCode(
+              lastError, self.errorResponseStatusCode_);
     });
     if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
       if (this.maybeRetryForwardChannel_(request)) {
@@ -2125,8 +2167,12 @@ WebChannelBase.prototype.onRequestComplete = function(request) {
   } else {
     // Else fatal error. Fall through and mark the pending maps as failed.
     this.channelDebug_.debug('Not retrying due to error type');
-  }
 
+    if (lastStatusCode > 200) {
+      this.errorResponseStatusCode_ = request.getLastStatusCode();
+      this.errorResponseHeaders_ = request.getErrorResponseHeaders();
+    }
+  }
 
   // Abort the channel now
 
@@ -2225,6 +2271,7 @@ WebChannelBase.prototype.applyControlHeaders_ = function(request) {
  *     by the server.
  * @param {!ChannelRequest} request The underlying request object
  * @private
+ * @suppress {strictPrimitiveOperators}
  */
 WebChannelBase.prototype.onInput_ = function(respArray, request) {
   'use strict';
@@ -2362,13 +2409,16 @@ WebChannelBase.prototype.signalError_ = function(error) {
   'use strict';
   this.channelDebug_.info('Error code ' + error);
   if (error == WebChannelBase.Error.REQUEST_FAILED) {
-    // Create a separate Internet connection to check
-    // if it's a server error or user's network error.
-    let imageUri = null;
-    if (this.handler_) {
-      imageUri = this.handler_.getNetworkTestImageUri(this);
+    if (ENABLE_GOOGLE_COM_PING) {
+      // Create a separate Internet connection to check
+      // if it's a server error or user's network error.
+      let imageUri = null;
+      if (this.handler_) {
+        imageUri = this.handler_.getNetworkTestImageUri(this);
+      }
+      netUtils.testNetwork(
+          goog.bind(this.testNetworkCallback_, this), imageUri);
     }
-    netUtils.testNetwork(goog.bind(this.testNetworkCallback_, this), imageUri);
   } else {
     requestStats.notifyStatEvent(requestStats.Stat.ERROR_OTHER);
   }

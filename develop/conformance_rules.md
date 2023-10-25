@@ -102,11 +102,29 @@ IE's `execScript` is also banned.
 argument are also banned.
 
 {: #throwOfNonErrorTypes}
-### throw 'message' 
+### throwing non-error objects 
 
-`throw` with a string literal can not have a stack trace attached to it, making
-debugging significantly more difficult.  Use `throw new Error('message')`
-instead.
+Thrown objects that don't extend `Error` cannot have a stack trace attached to
+them, making debugging significantly more difficult.
+
+```javascript {.bad}
+throw 'message';
+```
+
+```javascript {.bad}
+throw myObject;
+```
+
+Ensure that all thrown objects either extend `Error` or are passed to the
+`Error` constructor:
+
+```javascript {.good}
+throw new Error('message');
+```
+
+```javascript {.good}
+throw new Error(myObject);
+```
 
 {: #callee}
 ### Arguments.prototype.callee 

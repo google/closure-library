@@ -290,6 +290,13 @@ goog.window.open = function(linkRef, opt_options, opt_parentWin) {
     if (newWin && opt_options['noopener']) {
       newWin.opener = null;
     }
+    // If the caller specified noreferrer and we hit this branch, it means that
+    // we're already running on a modern enough browser that the referrer is
+    // hidden by default. But setting noreferrer implies noopener too, so we
+    // also have to clear the opener here.
+    if (newWin && opt_options['noreferrer']) {
+      newWin.opener = null;
+    }
   }
   // newWin is null if a popup blocker prevented the window open.
   return newWin;

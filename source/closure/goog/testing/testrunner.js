@@ -30,7 +30,6 @@ goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
 goog.require('goog.json');
 goog.require('goog.testing.TestCase');
-goog.require('goog.userAgent');
 
 
 
@@ -94,10 +93,6 @@ goog.testing.TestRunner = function() {
    */
   this.uniqueId_ = ((Math.random() * 1e9) >>> 0) + '-' +
       window.location.pathname.replace(/.*\//, '').replace(/\.html.*$/, '');
-
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(11)) {
-    return;
-  }
 
   var self = this;
   function onPageHide() {

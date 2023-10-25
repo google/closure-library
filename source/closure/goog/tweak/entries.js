@@ -998,6 +998,7 @@ goog.tweak.BooleanGroup.prototype.initialize = function(value) {
 
 /**
  * @override
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.tweak.BooleanGroup.prototype.getNewValueEncoded = function() {
   'use strict';

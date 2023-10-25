@@ -16,17 +16,39 @@ goog.module.declareLegacyNamespace();
 
 const ListSymbols = goog.require('goog.i18n.ListFormatSymbols');
 const LocaleFeature = goog.require('goog.i18n.LocaleFeature');
+const asserts = goog.require('goog.asserts');
 
 /**
  * Choices for options bag 'type' in ListFormat's constructor.
  * @enum {string} ListFormatType
  */
 const ListFormatType = {
-  AND: 'conjunction',
-  OR: 'disjunction'
+  AND: 'conjunction',  // The default type
+  OR: 'disjunction',
+  UNIT: 'unit'
 };
 exports.ListFormatType = ListFormatType;
 
+/**
+ * Choices for options bag 'style' in ListFormat's constructor,
+ * applied for type UNIT.
+ * @enum {string} ListFormatStyle
+ */
+const ListFormatStyle = {
+  LONG: 'long',  // The default style
+  SHORT: 'short',
+  NARROW: 'narrow'
+};
+exports.ListFormatStyle = ListFormatStyle;
+
+/**
+ * Options bag parameter for constructor.
+ * @typedef {{
+ *   type:  (!ListFormatType|undefined),
+ *   style: (!ListFormatStyle|undefined)
+ * }}
+ */
+let ListOptions;
 
 class ListFormat {
   /**
@@ -37,7 +59,7 @@ class ListFormat {
    * or OR ('disjunction'). These gives locale-specific lists formatted
    * using AND / OR respectively.
    *
-   * @param {?{type: !ListFormatType}=} listOptions
+   * @param {?ListOptions=} listOptions
    * @final
    */
   constructor(listOptions) {
@@ -49,24 +71,40 @@ class ListFormat {
     this.intlFormatter_ = null;
 
     /** @const @private @type {string} */
-    this.listType_ = listOptions ? listOptions.type : ListFormatType.AND;
+    this.listType_ = (listOptions && listOptions.type) ? listOptions.type :
+                                                         ListFormatType.AND;
+
+    // TODO(user): Investigate why ?. syntax fails on some targets.
+    /** @const @private @type {string} */
+    this.listStyle_ = (listOptions && listOptions.style) ? listOptions.style :
+                                                           ListFormatStyle.LONG;
 
     if (LocaleFeature.USE_ECMASCRIPT_I18N_LISTFORMAT) {
       // Implement using ECMAScript Intl object.
-      this.intlFormatter_ =
-          new Intl.ListFormat(goog.LOCALE, {type: this.listType_});
+      let options = {type: this.listType_, style: this.listStyle_};
+
+      this.intlFormatter_ = new Intl.ListFormat(goog.LOCALE, options);
     } else {
       // Implement using JavaScript, requiring data and code.
 
       /** @const @private @type {!ListSymbols.ListFormatSymbols} */
-      this.ListSymbols_ = ListSymbols.getListFormatSymbols();
+      this.listSymbols_ = ListSymbols.getListFormatSymbols();
+
+      let styleIndex = 0;  // LONG
+      switch (this.listStyle_) {
+        case ListFormatStyle.SHORT:
+          styleIndex = 1;
+          break;
+        case ListFormatStyle.NARROW:
+          styleIndex = 2;
+          break;
+      }
 
       /**
        * String for lists of exactly two items, containing {0} for the first,
        * and {1} for the second.
        * For instance '{0} and {1}' will give 'black and white'.
-       * @private @type {string}
-       *
+       * @private @type {string|undefined}
        * Example: for "black and white" the pattern is "{0} and {1}"
        * Example: for "black or white" the pattern is "{0} or {1}"
        * While for a longer list we have "cyan, magenta, yellow, and black"
@@ -76,51 +114,21 @@ class ListFormat {
        * Note that the TWO version is usually the same as END.
        */
       this.listTwoPattern_;
-      if (this.listType_ === ListFormatType.AND) {
-        this.listTwoPattern_ = this.ListSymbols_.LIST_TWO ?
-            this.ListSymbols_.LIST_TWO :
-            this.ListSymbols_.LIST_END;
-      } else {
-        this.listTwoPattern_ = this.ListSymbols_.OR_TWO ?
-            this.ListSymbols_.OR_TWO :
-            this.ListSymbols_.OR_END;
-      }
-
       /**
        * String for the start of a list items, containing {0} for the first,
        * and {1} for the rest.
-       * If LIST_START is the same as OR_START, OR_START may be omitted.
-       * @private @type {string}
+       * If AND_START is the same as OR_START, OR_START may be omitted.
+       * @private @type {string|undefined}
        */
       this.listStartPattern_;
-      if (this.listType_ === ListFormatType.AND) {
-        this.listStartPattern_ = this.ListSymbols_.LIST_START;
-      } else {
-        // Get the defined value from either OR_START or LIST_START.
-        this.listStartPattern_ = this.ListSymbols_.OR_START ?
-            this.ListSymbols_.OR_START :
-            this.ListSymbols_.LIST_START;
-      }
-
       /**
        * String for the start of a list items, containing {0} for the first part
        * of the list, and {1} for the rest of the list.
        * Note that the MIDDLE version is usually the same as START.
-       * This value may fall back to OR_START or LIST_START.
-       * @private @type {string}
+       * This value may fall back to OR_START or AND_START.
+       * @private @type {string|undefined}
        */
       this.listMiddlePattern_;
-      if (this.listType_ === ListFormatType.AND) {
-        this.listMiddlePattern_ = this.ListSymbols_.LIST_MIDDLE ?
-            this.ListSymbols_.LIST_MIDDLE :
-            this.ListSymbols_.LIST_START;
-      } else {
-        this.listMiddlePattern_ = this.ListSymbols_.OR_MIDDLE ?
-            this.ListSymbols_.OR_MIDDLE :
-            (this.ListSymbols_.OR_START ? this.ListSymbols_.OR_START :
-                                          this.ListSymbols_.LIST_START);
-      }
-
       /**
        * String for the end of a list items, containing {0} for the first part
        * of the list, and {1} for the last item.
@@ -132,11 +140,49 @@ class ListFormat {
        * patterns are more complex than '{1} someText {1}' and the start pattern
        * is different than the middle one.
        *
-       * @const @private {string}
+       * @private {string|undefined}
        */
-      this.listEndPattern_ = (this.listType_ === ListFormatType.AND) ?
-          this.ListSymbols_.LIST_END :
-          this.ListSymbols_.OR_END;
+      this.listEndPattern_;
+
+      // This might be further optimized to reuse strings.
+      switch (this.listType_) {
+        case ListFormatType.AND:
+          this.listStartPattern_ = this.listSymbols_.AND_START[styleIndex];
+          this.listTwoPattern_ =
+              (this.listSymbols_.AND_TWO ||
+               this.listSymbols_.AND_END)[styleIndex];
+          this.listMiddlePattern_ =
+              (this.listSymbols_.AND_MIDDLE ||
+               this.listSymbols_.AND_START)[styleIndex];
+          this.listEndPattern_ = this.listSymbols_.AND_END[styleIndex];
+          break;
+
+        case ListFormatType.OR:
+          this.listStartPattern_ =
+              (this.listSymbols_.OR_START ||
+               this.listSymbols_.AND_START)[styleIndex];
+          this.listTwoPattern_ =
+              (this.listSymbols_.OR_TWO ||
+               this.listSymbols_.OR_END)[styleIndex];
+          this.listMiddlePattern_ =
+              (this.listSymbols_.OR_MIDDLE ||
+               this.listSymbols_.AND_START)[styleIndex];
+          this.listEndPattern_ = this.listSymbols_.OR_END[styleIndex];
+          break;
+
+        case ListFormatType.UNIT:
+          this.listStartPattern_ =
+              (this.listSymbols_.UNIT_START ||
+               this.listSymbols_.AND_START)[styleIndex];
+          this.listTwoPattern_ =
+              (this.listSymbols_.UNIT_TWO ||
+               this.listSymbols_.UNIT_END)[styleIndex];
+          this.listMiddlePattern_ =
+              (this.listSymbols_.UNIT_MIDDLE ||
+               this.listSymbols_.AND_START)[styleIndex];
+          this.listEndPattern_ = this.listSymbols_.UNIT_END[styleIndex];
+          break;
+      }
     }
   }
 
@@ -160,14 +206,14 @@ class ListFormat {
    * the second parameter respectively, and returns the result.
    * It is a helper function for goog.i18n.listFormat.format.
    *
-   * @param {string} pattern used for formatting.
+   * @param {string|undefined} pattern used for formatting.
    * @param {string} first object to add to list.
    * @param {string} second object to add to list.
    * @return {string} The formatted list string.
    * @private
    */
   patternBasedJoinTwoStrings_(pattern, first, second) {
-    'use strict';
+    asserts.assert(pattern, 'List pattern must be defined');
     return pattern.replace('{0}', first).replace('{1}', second);
   }
 
@@ -181,7 +227,6 @@ class ListFormat {
    * @private
    */
   formatJavaScript(items) {
-    'use strict';
     const count = items.length;
     switch (count) {
       case 0:

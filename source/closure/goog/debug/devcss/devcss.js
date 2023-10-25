@@ -229,6 +229,7 @@ goog.debug.DevCss.prototype.getVersionNumberFromSelectorText_ = function(
  * @return {!Array|undefined} A tuple with the result of the compareVersions
  *     call and the matched ruleVersion.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.debug.DevCss.prototype.getRuleVersionAndCompare_ = function(
     cssRule, token) {
@@ -255,6 +256,7 @@ goog.debug.DevCss.prototype.getRuleVersionAndCompare_ = function(
  * "activating" the selector.
  * @param {CSSRule} cssRule The cssRule to potentially replace.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.debug.DevCss.prototype.replaceBrowserSpecificClassNames_ = function(
     cssRule) {

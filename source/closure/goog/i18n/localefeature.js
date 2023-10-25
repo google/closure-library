@@ -405,3 +405,17 @@ exports.USE_ECMASCRIPT_I18N_LISTFORMAT =
     (goog.FEATURESET_YEAR >= 2022 &&
      exports.ECMASCRIPT_LISTFORMAT_COMMON_LOCALES_2022 &&
      !exports.ECMASCRIPT_INTL_OPT_OUT);
+
+/**
+ * @define {boolean} USE_ECMASCRIPT_I18N_DATEINTERVALFORMAT is evaluated to
+ *     enable
+ * ECMAScript support for Intl.DateFormat support in browsers based on the
+ * locale. As of January 2022, DateFormat formatRange is supported by Chrome,
+ * Edge, Firefox, and Safari.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat
+ */
+exports.USE_ECMASCRIPT_I18N_DATEINTERVALFORMAT =
+    (goog.FEATURESET_YEAR >= 2022 &&
+     exports.ECMASCRIPT_LISTFORMAT_COMMON_LOCALES_2022 &&
+     !exports.ECMASCRIPT_INTL_OPT_OUT);

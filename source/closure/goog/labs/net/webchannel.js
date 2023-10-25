@@ -218,6 +218,15 @@ goog.net.WebChannel.Options.prototype.forceLongPolling;
 goog.net.WebChannel.Options.prototype.detectBufferingProxy;
 
 /**
+ * This option informs the server the desired maximum timeout interval (in
+ * Milliseconds) to complete a long-polling GET response, e.g. to accommodate
+ * the timeout enforced by a proxy. The WebChannel server may adjust the
+ * specified timeout or may ignore this client-configured timeout.
+ * @type {number|undefined}
+ */
+goog.net.WebChannel.Options.prototype.longPollingTimeout;
+
+/**
  * Enable true 0-RTT message delivery, including
  * leveraging QUIC 0-RTT (which requires GET to be used). This option
  * defaults to false. Note it is allowed to send messages before Open event is
@@ -713,7 +722,19 @@ goog.net.WebChannel.RuntimeProperties.prototype.ackCommit = goog.abstractMethod;
 /**
  * Transport-metadata support.
  *
- * TODO: getLastResponseHeaders (only for non-200 status)
+ * Responses from the channel-close (abort) message are not available.
+ *
+ * In future when client-side half-close is supported, its response headers
+ * will be available via this API too.
+ * @return {!Object<string, string>|undefined} The response headers received
+ * with the non-200 HTTP status code that causes the channel to be aborted.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.getLastResponseHeaders =
+    goog.abstractMethod;
+
+/**
+ * Transport-metadata support.
+ *
  * TODO: getInitStatusCode   (handshake)
  * TODO: getInitResponseHeaders  (handshake)
  *

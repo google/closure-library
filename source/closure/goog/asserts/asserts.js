@@ -366,7 +366,7 @@ exports.assertBoolean = function(value, opt_message, var_args) {
  *     enabled.
  * @throws {AssertionError} When the value is not an Element.
  * @closurePrimitive {asserts.matchesReturn}
- * @deprecated Use dom.assertIsElement instead.
+ * @deprecated Use goog.asserts.dom.assertIsElement instead.
  */
 exports.assertElement = function(value, opt_message, var_args) {
   if (exports.ENABLE_ASSERTS &&

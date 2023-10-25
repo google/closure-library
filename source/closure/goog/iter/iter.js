@@ -1190,8 +1190,7 @@ goog.iter.starMap = function(iterable, f, opt_obj) {
         iterator.next());
     if (it.done) return goog.iter.ES6_ITERATOR_DONE;
     const args = goog.iter.toArray(it.value);
-    const value =
-        f.apply(opt_obj, goog.array.concat(args, undefined, iterator));
+    const value = f.apply(opt_obj, [].concat(args, undefined, iterator));
     return goog.iter.createEs6IteratorYield(value);
   };
 

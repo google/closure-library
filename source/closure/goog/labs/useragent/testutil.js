@@ -12,6 +12,9 @@ goog.module('goog.labs.userAgent.testUtil');
 goog.setTestOnly();
 
 const util = goog.require('goog.labs.userAgent.util');
+const {resetForTesting: browserResetForTesting} = goog.require('goog.labs.userAgent.browser');
+const {setUseClientHintsForTesting} = goog.require('goog.labs.userAgent');
+const {version: platformVersion} = goog.require('goog.labs.userAgent.platform');
 
 /**
  * Override the user agent with the given values.
@@ -22,6 +25,7 @@ const util = goog.require('goog.labs.userAgent.util');
 function setUserAgent(userAgent, userAgentData) {
   util.setUserAgent(userAgent);
   util.setUserAgentData(userAgentData);
+  setUseClientHintsForTesting(!!userAgentData);
 }
 exports.setUserAgent = setUserAgent;
 
@@ -32,5 +36,7 @@ exports.setUserAgent = setUserAgent;
 function resetUserAgent() {
   util.setUserAgent(null);
   util.resetUserAgentData();
+  platformVersion.resetForTesting();
+  browserResetForTesting();
 }
 exports.resetUserAgent = resetUserAgent;

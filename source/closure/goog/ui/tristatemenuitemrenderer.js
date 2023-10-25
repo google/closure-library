@@ -55,6 +55,7 @@ goog.ui.TriStateMenuItemRenderer.CSS_CLASS =
  * @param {Element} element Element to decorate.
  * @return {!Element} Decorated element.
  * @override
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  * @suppress {missingRequire} TODO(user): remove this
  */
 goog.ui.TriStateMenuItemRenderer.prototype.decorate = function(item, element) {

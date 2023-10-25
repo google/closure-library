@@ -531,6 +531,7 @@ goog.net.XhrIo.prototype.setTrustToken = function(trustToken) {
  *     opt_content Body data.
  * @param {(?Object|?goog.collections.maps.MapLike<string, string>)=}
  *     opt_headers Map of headers to add to the request.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  * @suppress {deprecated} Use deprecated goog.structs.forEach to allow different
  * types of parameters for opt_headers.
  */
@@ -562,11 +563,15 @@ goog.net.XhrIo.prototype.send = function(
 
   // Set up upload/download progress events, if progress events are supported.
   if (this.getProgressEventsEnabled() && 'onprogress' in this.xhr_) {
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.xhr_.onprogress = goog.bind(function(e) {
       'use strict';
       this.onProgressHandler_(e, true);
     }, this);
     if (this.xhr_.upload) {
+      /**
+       * @suppress {strictMissingProperties} Added to tighten compiler checks
+       */
       this.xhr_.upload.onprogress = goog.bind(this.onProgressHandler_, this);
     }
   }
@@ -646,6 +651,7 @@ goog.net.XhrIo.prototype.send = function(
   // https://bugzilla.mozilla.org/show_bug.cgi?id=736340
   if ('withCredentials' in this.xhr_ &&
       this.xhr_.withCredentials !== this.withCredentials_) {
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.xhr_.withCredentials = this.withCredentials_;
   }
 
@@ -707,7 +713,7 @@ goog.net.XhrIo.prototype.send = function(
  */
 goog.net.XhrIo.shouldUseXhr2Timeout_ = function(xhr) {
   'use strict';
-  return goog.userAgent.IE && goog.userAgent.isVersionOrHigher(9) &&
+  return goog.userAgent.IE &&
       typeof xhr[goog.net.XhrIo.XHR2_TIMEOUT_] === 'number' &&
       xhr[goog.net.XhrIo.XHR2_ON_TIMEOUT_] !== undefined;
 };
@@ -1265,6 +1271,7 @@ goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
  * returned.
  *
  * @return {*} The response.
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.net.XhrIo.prototype.getResponse = function() {
   'use strict';

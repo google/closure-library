@@ -53,10 +53,7 @@ exports = {
    * http://msdn.microsoft.com/en-us/library/ie/hh772103(v=vs.85).aspx
    * http://msdn.microsoft.com/library/hh673557(v=vs.85).aspx
    */
-  MSPOINTER_EVENTS:
-      ('MSPointerEvent' in goog.global &&
-       !!(goog.global['navigator'] &&
-          goog.global['navigator']['msPointerEnabled'])),
+  MSPOINTER_EVENTS: false,
 
   /**
    * Whether addEventListener supports {passive: true}.
@@ -75,8 +72,9 @@ exports = {
       }
     });
     try {
-      goog.global.addEventListener('test', () => {}, options);
-      goog.global.removeEventListener('test', () => {}, options);
+      const nullFunction = () => {};
+      goog.global.addEventListener('test', nullFunction, options);
+      goog.global.removeEventListener('test', nullFunction, options);
     } catch (e) {
     }
 

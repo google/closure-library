@@ -25,7 +25,6 @@ goog.require('goog.i18n.NumberFormatSymbols');
 goog.require('goog.i18n.NumberFormatSymbolsType');
 goog.require('goog.i18n.NumberFormatSymbols_u_nu_latn');
 goog.require('goog.i18n.currency');
-goog.require('goog.i18n.currency.CurrencyInfo');
 goog.require('goog.math');
 goog.require('goog.string');
 
@@ -67,6 +66,8 @@ goog.i18n.NumberFormat = function(
   this.resetSignificantDigits_ = false;
   /** @private {boolean} */
   this.resetFractionDigits_ = false;
+  /** @private {boolean} */
+  this.resetShowTrailingZeros_ = false;
 
   /** @const @private {?string} */
   this.intlCurrencyCode_ = opt_currency ? opt_currency.toUpperCase() : null;
@@ -152,7 +153,11 @@ goog.i18n.NumberFormat = function(
   this.pattern_ = (typeof pattern === 'string') ? pattern : '';
 
   if (goog.i18n.NumberFormat.USE_ECMASCRIPT_I18N_NUMFORMAT &&
-      (typeof pattern === 'number')) {
+      (typeof pattern === 'number')
+      // COMPACT formats re: BUG b/209630094 for Firefox 94.
+      // Do not use ECMAScript mode for compact formatting.
+      && pattern != goog.i18n.NumberFormat.Format.COMPACT_SHORT &&
+      pattern != goog.i18n.NumberFormat.Format.COMPACT_LONG) {
     // Use Native mode for regular patterns
     this.SetUpIntlFormatter_(this.inputPattern_);
   } else {
@@ -206,6 +211,13 @@ goog.i18n.NumberFormat.CompactStyle = {
 
 
 /**
+ * Records if global enforcement of ASCII digits has changed.
+ * type {boolean}
+ * @private
+ */
+goog.i18n.NumberFormat.resetEnforceAsciiDigits_ = false;
+
+/**
  * If the usage of Ascii digits should be enforced.
  * @type {boolean}
  * @private
@@ -221,6 +233,8 @@ goog.i18n.NumberFormat.enforceAsciiDigits_ = false;
  */
 goog.i18n.NumberFormat.setEnforceAsciiDigits = function(doEnforce) {
   'use strict';
+  goog.i18n.NumberFormat.resetEnforceAsciiDigits_ =
+      (doEnforce != goog.i18n.NumberFormat.enforceAsciiDigits_);
   goog.i18n.NumberFormat.enforceAsciiDigits_ = doEnforce;
 };
 
@@ -273,7 +287,8 @@ goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
         'Can\'t combine significant digits and minimum fraction digits');
   }
   // Even if it's the same value, remember the intention to reset the value.
-  this.resetFractionDigits_ = true;
+  this.resetFractionDigits_ =
+      this.resetFractionDigits_ || (min != this.minimumFractionDigits_);
   this.minimumFractionDigits_ = min;
   return this;
 };
@@ -301,7 +316,8 @@ goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
     throw new Error('Unsupported maximum fraction digits: ' + max);
   }
   // Even if it's the same value, remember the intention to reset the value.
-  this.resetFractionDigits_ = true;
+  this.resetFractionDigits_ =
+      this.resetFractionDigits_ || (max != this.maximumFractionDigits_);
   this.maximumFractionDigits_ = max;
   return this;
 };
@@ -330,9 +346,8 @@ goog.i18n.NumberFormat.prototype.setSignificantDigits = function(number) {
     throw new Error(
         'Can\'t combine significant digits and minimum fraction digits');
   }
-  if (number !== this.significantDigits_) {
-    this.resetSignificantDigits_ = true;
-  }
+  this.resetSignificantDigits_ = (number !== this.significantDigits_);
+
   this.significantDigits_ = number;
   return this;
 };
@@ -358,7 +373,7 @@ goog.i18n.NumberFormat.prototype.getSignificantDigits = function() {
 goog.i18n.NumberFormat.prototype.setShowTrailingZeros = function(
     showTrailingZeros) {
   'use strict';
-  this.showTrailingZeros_ = showTrailingZeros;
+  this.showTrailingZeros_ = (showTrailingZeros != this.resetShowTrailingZeros_);
   return this;
 };
 
@@ -695,12 +710,13 @@ goog.i18n.NumberFormat.prototype.SetUpIntlFormatter_ = function(inputPattern) {
     options.signDisplay = 'always';
   }
 
-  if (goog.i18n.NumberFormat.isEnforceAsciiDigits()) {
+  if (goog.i18n.NumberFormat.enforceAsciiDigits_) {
     options.numberingSystem = 'latn';
   }
 
   // If changed from defaults, specify significant or fraction digits.
   if (this.resetSignificantDigits_) {
+    // !!! Should we also set this minimum. No!
     options.minimumSignificantDigits = 1;
     options.maximumSignificantDigits =
         Math.max(1, Math.min(21, this.significantDigits_));
@@ -796,8 +812,10 @@ goog.i18n.NumberFormat.prototype.SetUpIntlFormatter_ = function(inputPattern) {
     this.intlFormatter_ = null;
     throw new Error('ECMAScript NumberFormat error: ' + error);
   }
-  this.resetSignificantDigits_ = false;
-  this.resetFractionDigits_ = false;
+  // Keep track of state.
+  this.resetShowTrailingZeros_ = this.resetSignificantDigits_ =
+      this.resetFractionDigits_ = false;
+  goog.i18n.NumberFormat.resetEnforceAsciiDigits_ = false;
 };
 
 /**
@@ -808,7 +826,8 @@ goog.i18n.NumberFormat.prototype.SetUpIntlFormatter_ = function(inputPattern) {
 goog.i18n.NumberFormat.prototype.NativeOptionsChanged_ = function() {
   return (
       this.resetSignificantDigits_ || this.resetFractionDigits_ ||
-      goog.i18n.NumberFormat.enforceAsciiDigits_);
+      this.resetShowTrailingZeros_ ||
+      goog.i18n.NumberFormat.resetEnforceAsciiDigits_);
 };
 
 /**
@@ -1858,11 +1877,19 @@ goog.i18n.NumberFormat.NULL_UNIT_ = {
  */
 goog.i18n.NumberFormat.prototype.getUnitFor_ = function(base, plurality) {
   'use strict';
+  /**
+   * @suppress {missingProperties} Auto-added to unblock check_level=STRICT
+   * migration
+   */
   let table = this.compactStyle_ == goog.i18n.NumberFormat.CompactStyle.SHORT ?
       goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN :
       goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_LONG_PATTERN;
 
   if (table == null) {
+    /**
+     * @suppress {missingProperties} Auto-added to unblock check_level=STRICT
+     * migration
+     */
     table = goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN;
   }
 

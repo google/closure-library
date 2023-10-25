@@ -12,6 +12,7 @@ goog.require('goog.async.FreeList');
 goog.require('goog.async.run');
 goog.require('goog.async.throwException');
 goog.require('goog.debug.Error');
+goog.require('goog.debug.asyncStackTag');
 goog.require('goog.functions');
 goog.require('goog.promise.Resolver');
 
@@ -909,6 +910,14 @@ goog.Promise.prototype.addCallbackEntry_ = function(callbackEntry) {
 goog.Promise.prototype.addChildPromise_ = function(
     onFulfilled, onRejected, opt_context) {
   'use strict';
+  if (onFulfilled) {
+    onFulfilled =
+        goog.debug.asyncStackTag.wrap(onFulfilled, 'goog.Promise.then');
+  }
+  if (onRejected) {
+    onRejected = goog.debug.asyncStackTag.wrap(onRejected, 'goog.Promise.then');
+  }
+
   /** @type {goog.Promise.CallbackEntry_} */
   var callbackEntry = goog.Promise.getCallbackEntry_(null, null, null);
 

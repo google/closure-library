@@ -208,35 +208,8 @@ exports.startOriginTrials = function(path, logError) {
                                     body: new ReadableStream(),
                                     method: 'POST',
                                   }).headers.has('Content-Type');
-  if (!supportsRequestStreams) {
-    return;
+
+  if (supportsRequestStreams) {
+    logError('OriginTrial unexpected.');
   }
-
-  // 1st req:  path?ot=1
-  // non-streaming upload request
-  goog.global.fetch(`${path}?ot=1`, {method: 'POST', body: 'test\r\n'})
-      .catch(logError);
-
-  // 2nd req:  path?ot=2
-  // h2-only streaming upload request
-  goog.global
-      .fetch(`${path}?ot=2`, {
-        method: 'POST',
-        body: createStream(),
-        allowHTTP1ForStreamingUpload: false,
-      })
-      .catch(logError);
-
-  // 3rd req:  path?ot=3
-  // h1-allowed streaming upload request
-  goog.global
-      .fetch(`${path}?ot=3`, {
-        method: 'POST',
-        body: createStream(),
-        allowHTTP1ForStreamingUpload: true,
-      })
-      .catch(logError);
-
-  // Example calling a Chrome API:
-  // goog.global.chrome.loadTimes().wasFetchedViaSpdy
 };

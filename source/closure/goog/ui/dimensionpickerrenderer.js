@@ -417,7 +417,7 @@ goog.ui.DimensionPickerRenderer.prototype.adjustParentDirection_ = function(
       }
     }
 
-    // When a table is inserted, the containing elemet's position is
+    // When a table is inserted, the containing element's position is
     // recalculated the next time it shows, set left back to '' to prevent
     // extra white space on the left.
     var left = goog.style.getStyle(parentElement, 'left');

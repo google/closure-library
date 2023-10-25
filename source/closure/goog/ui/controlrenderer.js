@@ -227,6 +227,7 @@ goog.ui.ControlRenderer.prototype.getContentElement = function(element) {
 goog.ui.ControlRenderer.prototype.enableClassName = function(
     control, className, enable) {
   'use strict';
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   var element = /** @type {Element} */ (
       control.getElement ? control.getElement() : control);
   if (element) {
@@ -819,7 +820,7 @@ goog.ui.ControlRenderer.prototype.getAppliedCombinedClassNames_ = function(
   'use strict';
   var toAdd = [];
   if (opt_includedClass) {
-    classes = goog.array.concat(classes, [opt_includedClass]);
+    classes = [].concat(classes, [opt_includedClass]);
   }
   this.getIe6ClassCombinations().forEach(function(combo) {
     'use strict';

@@ -202,6 +202,12 @@ goog.history.Html5History.prototype.disposeInternal = function() {
 };
 
 
+/** @return {boolean} Whether the fragment is used to store tokens. */
+goog.history.Html5History.prototype.getUseFragment = function() {
+  return this.useFragment_;
+};
+
+
 /**
  * Sets whether to use the fragment to store tokens.
  * @param {boolean} useFragment Whether to use the fragment.

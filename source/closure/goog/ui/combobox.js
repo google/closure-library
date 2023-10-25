@@ -688,6 +688,7 @@ goog.ui.ComboBox.prototype.clearDismissTimer_ = function() {
  * Event handler for when the combo box area has been clicked.
  * @param {goog.events.BrowserEvent} e The browser event.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.ui.ComboBox.prototype.onComboMouseDown_ = function(e) {
   'use strict';
@@ -914,6 +915,7 @@ goog.ui.ComboBox.prototype.setItemVisibilityFromToken_ = function(token) {
  * Highlights the first token that matches the given token.
  * @param {string} token The token.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.ui.ComboBox.prototype.setItemHighlightFromToken_ = function(token) {
   'use strict';

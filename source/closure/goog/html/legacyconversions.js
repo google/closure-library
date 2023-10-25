@@ -79,7 +79,7 @@ goog.html.legacyconversions.safeHtmlFromString = function(html) {
   'use strict';
   goog.html.legacyconversions.reportCallback_();
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
-      html, null /* dir */);
+      html);
 };
 
 

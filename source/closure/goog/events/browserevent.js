@@ -216,7 +216,9 @@ goog.events.BrowserEvent.USE_LAYER_XY_AS_OFFSET_XY =
 goog.events.BrowserEvent.MouseButton = {
   LEFT: 0,
   MIDDLE: 1,
-  RIGHT: 2
+  RIGHT: 2,
+  BACK: 3,
+  FORWARD: 4,
 };
 
 
@@ -274,6 +276,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   /**
    * On touch devices use the first "changed touch" as the relevant touch.
    * @type {?Touch}
+   * @suppress {strictMissingProperties} Added to tighten compiler checks
    */
   var relevantTouch =
       e.changedTouches && e.changedTouches.length ? e.changedTouches[0] : null;
@@ -333,6 +336,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   this.button = e.button;
 
   this.keyCode = e.keyCode || 0;
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   this.key = e.key || '';
   this.charCode = e.charCode || (type == 'keypress' ? e.keyCode : 0);
   this.ctrlKey = e.ctrlKey;
@@ -340,8 +344,10 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   this.shiftKey = e.shiftKey;
   this.metaKey = e.metaKey;
   this.platformModifierKey = goog.userAgent.MAC ? e.metaKey : e.ctrlKey;
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   this.pointerId = e.pointerId || 0;
   this.pointerType = goog.events.BrowserEvent.getPointerType_(e);
+  /** @suppress {strictMissingProperties} Added to tighten compiler checks */
   this.state = e.state;
   this.event_ = e;
   if (e.defaultPrevented) {

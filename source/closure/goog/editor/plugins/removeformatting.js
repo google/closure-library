@@ -205,6 +205,7 @@ goog.editor.plugins.RemoveFormatting.prototype.removeFormatting_ = function() {
  * @param {Node} nodeToCheck Node to search from.
  * @return {Node} The table, or null if one was not found.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.RemoveFormatting.prototype.getTableAncestor_ = function(
     nodeToCheck) {
@@ -230,6 +231,7 @@ goog.editor.plugins.RemoveFormatting.prototype.getTableAncestor_ = function(
  *
  * @param {string} html The html string to insert into the range.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
   'use strict';
@@ -383,6 +385,7 @@ goog.editor.plugins.RemoveFormatting.prototype.pasteHtml_ = function(html) {
  * @param {goog.dom.AbstractRange} range The selection.
  * @return {string} The html string to format.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.RemoveFormatting.prototype.getHtmlText_ = function(range) {
   'use strict';
@@ -410,9 +413,13 @@ goog.editor.plugins.RemoveFormatting.prototype.getHtmlText_ = function(range) {
     textRange.moveStart('character', left);
     textRange.moveEnd('character', -right);
 
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     var htmlText = textRange.htmlText;
     // Check if in pretag and fix up formatting so that new lines are preserved.
     if (textRange.queryCommandValue('formatBlock') == 'Formatted') {
+      /**
+       * @suppress {strictMissingProperties} Added to tighten compiler checks
+       */
       htmlText = goog.string.newLineToBr(textRange.htmlText);
     }
     goog.dom.safe.setInnerHtml(
@@ -482,8 +489,10 @@ goog.editor.plugins.RemoveFormatting.prototype.putCaretInCave_ = function(
   'use strict';
   var cavedCaret = goog.dom.removeNode(caretRange.getCaret(isStart));
   if (isStart) {
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.startCaretInCave_ = cavedCaret;
   } else {
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.endCaretInCave_ = cavedCaret;
   }
 };
@@ -497,6 +506,7 @@ goog.editor.plugins.RemoveFormatting.prototype.putCaretInCave_ = function(
  * they will be in the editable region.  This should only be used when
  * you don't actually intend to USE the caret again.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.RemoveFormatting.prototype.restoreCaretsFromCave_ =
     function() {
@@ -506,10 +516,12 @@ goog.editor.plugins.RemoveFormatting.prototype.restoreCaretsFromCave_ =
   var field = this.getFieldObject().getElement();
   if (this.startCaretInCave_) {
     field.insertBefore(this.startCaretInCave_, field.firstChild);
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.startCaretInCave_ = null;
   }
   if (this.endCaretInCave_) {
     field.appendChild(this.endCaretInCave_);
+    /** @suppress {strictMissingProperties} Added to tighten compiler checks */
     this.endCaretInCave_ = null;
   }
 };

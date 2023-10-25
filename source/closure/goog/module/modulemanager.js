@@ -131,8 +131,9 @@ goog.module.ModuleManager = function() {
    * manager code), which we set as the loading module so one can
    * register initialization callbacks in the base module.
    *
-   * The base module is considered loaded when #setAllModuleInfo is called or
-   * #setModuleContext is called, whichever comes first.
+   * The base module is considered loaded when #setAllModuleInfo,
+   * #setAllModuleInfoString, or #setModuleContext is called, whichever comes
+   * first.
    *
    * @type {!goog.module.ModuleInfo}
    * @private
@@ -472,16 +473,13 @@ goog.module.ModuleManager.prototype.preloadModule = function(id, opt_timeout) {
 
 /** @override */
 goog.module.ModuleManager.prototype.prefetchModule = function(id) {
-  var moduleInfo = this.getModuleInfo(id);
-  if (moduleInfo.isLoaded() || this.isModuleLoading(id)) {
-    throw new Error('Module load already requested: ' + id);
-  } else if (this.batchModeEnabled_) {
+  if (this.batchModeEnabled_) {
     throw new Error('Modules prefetching is not supported in batch mode');
   } else {
     var idWithDeps = this.getNotYetLoadedTransitiveDepIds_(id);
     for (var i = 0; i < idWithDeps.length; i++) {
-      this.getLoader().prefetchModule(
-          idWithDeps[i], this.moduleInfoMap[idWithDeps[i]]);
+      const moduleInfoOfDep = this.getModuleInfo(idWithDeps[i]);
+      this.getLoader().prefetchModule(idWithDeps[i], moduleInfoOfDep);
     }
   }
 };

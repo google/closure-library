@@ -402,6 +402,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk = function(e) {
  * @param {HTMLAnchorElement} anchor The anchor to set properties on.
  * @param {goog.events.Event} e Event object.
  * @private
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.touchUpAnchorOnOk_ = function(
     anchor, e) {

@@ -41,7 +41,8 @@ goog.string.FORCE_NON_DOM_HTML_UNESCAPING =
  * @enum {string}
  */
 goog.string.Unicode = {
-  NBSP: '\xa0'
+  NBSP: '\xa0',
+  ZERO_WIDTH_SPACE: '\u200b'  // This is equivalent to <wbr>.
 };
 
 

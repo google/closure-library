@@ -135,6 +135,7 @@ goog.graphics.ext.Element.prototype.getGraphics = function() {
  * @return {goog.graphics.AbstractGraphics} The underlying graphics
  *     implementation drawing this element's wrapper.
  * @protected
+ * @suppress {strictMissingProperties} Added to tighten compiler checks
  */
 goog.graphics.ext.Element.prototype.getGraphicsImplementation = function() {
   'use strict';

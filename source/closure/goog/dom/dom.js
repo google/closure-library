@@ -27,6 +27,7 @@ goog.provide('goog.dom.DomHelper');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.asserts.dom');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
@@ -126,7 +127,7 @@ goog.dom.getHTMLElement = function(id) {
   if (!element) {
     return null;
   }
-  return goog.asserts.assertInstanceof(element, HTMLElement);
+  return goog.asserts.dom.assertIsHtmlElement(element);
 };
 
 
@@ -170,8 +171,8 @@ goog.dom.getRequiredElement = function(id) {
  */
 goog.dom.getRequiredHTMLElement = function(id) {
   'use strict'
-  return goog.asserts.assertInstanceof(
-      goog.dom.getRequiredElementHelper_(document, id), HTMLElement);
+  return goog.asserts.dom.assertIsHtmlElement(
+      goog.dom.getRequiredElementHelper_(document, id));
 };
 
 
@@ -188,9 +189,7 @@ goog.dom.getRequiredElementHelper_ = function(doc, id) {
   // To prevent users passing in Elements as is permitted in getElement().
   goog.asserts.assertString(id);
   var element = goog.dom.getElementHelper_(doc, id);
-  element =
-      goog.asserts.assertElement(element, 'No element found with id: ' + id);
-  return element;
+  return goog.asserts.assert(element, 'No element found with id: ' + id);
 };
 
 
@@ -330,7 +329,7 @@ goog.dom.getHTMLElementByClass = function(className, opt_parent) {
   if (!element) {
     return null;
   }
-  return goog.asserts.assertInstanceof(element, HTMLElement);
+  return goog.asserts.dom.assertIsHtmlElement(element);
 };
 
 
@@ -365,9 +364,9 @@ goog.dom.getRequiredElementByClass = function(className, opt_root) {
 goog.dom.getRequiredHTMLElementByClass = function(className, opt_parent) {
   'use strict'
   const retValue = goog.dom.getElementByClass(className, opt_parent);
-  return goog.asserts.assertInstanceof(
-      retValue, HTMLElement,
-      'No HTMLElement found with className: ' + className);
+  goog.asserts.assert(
+      retValue, 'No HTMLElement found with className: ' + className);
+  return goog.asserts.dom.assertIsHtmlElement(retValue);
 };
 
 
@@ -632,7 +631,7 @@ goog.dom.DIRECT_ATTRIBUTE_MAP_ = {
  * docEl.clientWidth  Same as innerWidth.
  * win.innerWidth     Width of viewport excluding scrollbar.
  * win.innerHeight    Height of the viewport including scrollbar.
- * frame.innerHeight  Height of the viewport exluding scrollbar.
+ * frame.innerHeight  Height of the viewport excluding scrollbar.
  *
  * Safari 3 (tested in 522)
  *
@@ -799,8 +798,7 @@ goog.dom.getDocumentScroll_ = function(doc) {
   'use strict';
   var el = goog.dom.getDocumentScrollElement_(doc);
   var win = goog.dom.getWindow_(doc);
-  if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10') &&
-      win.pageYOffset != el.scrollTop) {
+  if (goog.userAgent.IE && win.pageYOffset != el.scrollTop) {
     // The keyboard on IE10 touch devices shifts the page using the pageYOffset
     // without modifying scrollTop. For this case, we want the body scroll
     // offsets.
@@ -1618,16 +1616,9 @@ goog.dom.getParentElement = function(element) {
   'use strict';
   var parent;
   if (goog.dom.BrowserFeature.CAN_USE_PARENT_ELEMENT_PROPERTY) {
-    var isIe9 = goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9') &&
-        !goog.userAgent.isVersionOrHigher('10');
-    // SVG elements in IE9 can't use the parentElement property.
-    // goog.global['SVGElement'] is not defined in IE9 quirks mode.
-    if (!(isIe9 && goog.global['SVGElement'] &&
-          element instanceof goog.global['SVGElement'])) {
-      parent = element.parentElement;
-      if (parent) {
-        return parent;
-      }
+    parent = element.parentElement;
+    if (parent) {
+      return parent;
     }
   }
   parent = element.parentNode;

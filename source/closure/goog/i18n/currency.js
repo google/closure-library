@@ -24,8 +24,6 @@
 
 
 goog.provide('goog.i18n.currency');
-goog.provide('goog.i18n.currency.CurrencyInfo');
-goog.provide('goog.i18n.currency.CurrencyInfoTier2');
 
 
 /**
@@ -550,6 +548,7 @@ goog.i18n.currency.CurrencyInfoTier2 = {
   'SCR': [2, 'SCR', 'SCR'],
   'SDG': [2, 'SDG', 'SDG'],
   'SHP': [2, '£', 'SH£'],
+  'SLE': [0, 'SLE', 'SLE'],
   'SLL': [0, 'SLL', 'SLL'],
   'SOS': [0, 'SOS', 'SOS'],
   'SRD': [2, '$', 'SR$'],

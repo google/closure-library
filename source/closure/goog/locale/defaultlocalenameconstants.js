@@ -6,7 +6,7 @@
 /**
  * @fileoverview Default list of locale specific country and language names.
  *
- * File generated from CLDR ver. 41
+ * File generated from CLDR ver. 43
  */
 
 // clang-format off
@@ -104,6 +104,7 @@ goog.locale.defaultLocaleNameConstants = {
     'CN': 'China',
     'CO': 'Colombia',
     'CP': 'Clipperton Island',
+    'CQ': 'Sark',
     'CR': 'Costa Rica',
     'CU': 'Cuba',
     'CV': 'Cape Verde',
@@ -286,7 +287,7 @@ goog.locale.defaultLocaleNameConstants = {
     'TM': 'Turkmenistan',
     'TN': 'Tunisia',
     'TO': 'Tonga',
-    'TR': 'Turkey',
+    'TR': 'Türkiye',
     'TT': 'Trinidad & Tobago',
     'TV': 'Tuvalu',
     'TW': 'Taiwan',
@@ -376,6 +377,7 @@ goog.locale.defaultLocaleNameConstants = {
     'bfd': 'Bafut',
     'bfq': 'Badaga',
     'bg': 'Bulgarian',
+    'bgc': 'Haryanvi',
     'bgn': 'Western Balochi',
     'bho': 'Bhojpuri',
     'bi': 'Bislama',
@@ -383,7 +385,7 @@ goog.locale.defaultLocaleNameConstants = {
     'bin': 'Bini',
     'bjn': 'Banjar',
     'bkm': 'Kom',
-    'bla': 'Siksika',
+    'bla': 'Siksiká',
     'bm': 'Bambara',
     'bn': 'Bangla',
     'bo': 'Tibetan',
@@ -479,9 +481,9 @@ goog.locale.defaultLocaleNameConstants = {
     'fa_AF': 'Persian (Afghanistan)',
     'fan': 'Fang',
     'fat': 'Fanti',
-    'ff': 'Fulah',
-    'ff_Adlm': 'Fulah (Adlam)',
-    'ff_Latn': 'Fulah (Latin)',
+    'ff': 'Fula',
+    'ff_Adlm': 'Fula (Adlam)',
+    'ff_Latn': 'Fula (Latin)',
     'fi': 'Finnish',
     'fil': 'Filipino',
     'fj': 'Fijian',
@@ -607,7 +609,7 @@ goog.locale.defaultLocaleNameConstants = {
     'la': 'Latin',
     'lad': 'Ladino',
     'lag': 'Langi',
-    'lah': 'Lahnda',
+    'lah': 'Western Panjabi',
     'lam': 'Lamba',
     'lb': 'Luxembourgish',
     'lez': 'Lezghian',
@@ -743,7 +745,7 @@ goog.locale.defaultLocaleNameConstants = {
     'rwk': 'Rwa',
     'sa': 'Sanskrit',
     'sad': 'Sandawe',
-    'sah': 'Sakha',
+    'sah': 'Yakut',
     'sam': 'Samaritan Aramaic',
     'saq': 'Samburu',
     'sas': 'Sasak',

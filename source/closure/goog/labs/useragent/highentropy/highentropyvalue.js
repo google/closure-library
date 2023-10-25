@@ -94,9 +94,7 @@ class HighEntropyValue {
    */
   async load() {
     const userAgentData = util.getUserAgentData();
-    if (!userAgentData) {
-      return undefined;
-    }
+    if (!userAgentData) return undefined;
     if (!this.promise_) {
       this.pending_ = true;
       this.promise_ = (async () => {

@@ -32,7 +32,6 @@ goog.require('goog.dom.TagName');
 goog.require('goog.object');
 goog.require('goog.testing.CspViolationObserver');
 goog.require('goog.testing.JsUnitException');
-goog.require('goog.testing.asserts');
 goog.require('goog.url');
 
 
@@ -1547,7 +1546,7 @@ goog.testing.TestCase.prototype.setTestObj = function(obj) {
   // Check any previously added (likely auto-discovered) tests, only one source
   // of discovered test and life-cycle methods is allowed.
   if (this.tests_.length > 0) {
-    fail(
+    throw new Error(
         'Test methods have already been configured.\n' +
         'Tests previously found:\n' +
         this.tests_
@@ -2107,12 +2106,15 @@ goog.testing.TestCase.Test.prototype.stopped = function() {
 };
 
 /**
- * Returns the runtime for this test function
- * @return {number} milliseconds takenn by the test.
+ * Returns the runtime for this test function in milliseconds.
+ * @return {number}
  */
 goog.testing.TestCase.Test.prototype.getElapsedTime = function() {
   'use strict';
-  return this.stoppedTime_ - this.startTime_;
+  // Round the elapsed time to the closest multiple of 0.1ms (the resolution of
+  // performance.now()) to avoid noise due to floating point rounding errors
+  // when it's printed.
+  return Math.round((this.stoppedTime_ - this.startTime_) * 10) / 10;
 };
 
 /**
