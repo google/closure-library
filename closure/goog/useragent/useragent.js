@@ -253,13 +253,6 @@ goog.userAgent.ASSUME_LINUX = goog.define('goog.userAgent.ASSUME_LINUX', false);
 
 
 /**
- * @define {boolean} Whether the user agent is running on a X11 windowing
- *     system.
- */
-goog.userAgent.ASSUME_X11 = goog.define('goog.userAgent.ASSUME_X11', false);
-
-
-/**
  * @define {boolean} Whether the user agent is running on Android.
  */
 goog.userAgent.ASSUME_ANDROID =
@@ -297,9 +290,8 @@ goog.userAgent.ASSUME_KAIOS = goog.define('goog.userAgent.ASSUME_KAIOS', false);
  */
 goog.userAgent.PLATFORM_KNOWN_ = goog.userAgent.ASSUME_MAC ||
     goog.userAgent.ASSUME_WINDOWS || goog.userAgent.ASSUME_LINUX ||
-    goog.userAgent.ASSUME_X11 || goog.userAgent.ASSUME_ANDROID ||
-    goog.userAgent.ASSUME_IPHONE || goog.userAgent.ASSUME_IPAD ||
-    goog.userAgent.ASSUME_IPOD;
+    goog.userAgent.ASSUME_ANDROID || goog.userAgent.ASSUME_IPHONE ||
+    goog.userAgent.ASSUME_IPAD || goog.userAgent.ASSUME_IPOD;
 
 
 /**
@@ -346,27 +338,6 @@ goog.userAgent.isLegacyLinux_ = function() {
 goog.userAgent.LINUX = goog.userAgent.PLATFORM_KNOWN_ ?
     goog.userAgent.ASSUME_LINUX :
     goog.userAgent.isLegacyLinux_();
-
-
-/**
- * @return {boolean} Whether the user agent is an X11 windowing system.
- * @private
- */
-goog.userAgent.isX11_ = function() {
-  'use strict';
-  var navigator = goog.userAgent.getNavigatorTyped();
-  return !!navigator &&
-      goog.string.internal.contains(navigator['appVersion'] || '', 'X11');
-};
-
-
-/**
- * Whether the user agent is running on a X11 windowing system.
- * @type {boolean}
- */
-goog.userAgent.X11 = goog.userAgent.PLATFORM_KNOWN_ ?
-    goog.userAgent.ASSUME_X11 :
-    goog.userAgent.isX11_();
 
 
 /**

@@ -45,14 +45,10 @@ let testArea;
 
 /** This is used to round pixel values on FF3 Mac. */
 function assertRoundedEquals(a, b, c) {
-  function round(x) {
-    return userAgent.GECKO && (userAgent.MAC || userAgent.X11) ? Math.round(x) :
-                                                                 x;
-  }
   if (arguments.length == 3) {
-    assertRoughlyEquals(a, round(b), round(c), ALLOWED_OFFSET);
+    assertRoughlyEquals(a, b, c, ALLOWED_OFFSET);
   } else {
-    assertRoughlyEquals(round(a), round(b), ALLOWED_OFFSET);
+    assertRoughlyEquals(a, b, ALLOWED_OFFSET);
   }
 }
 
