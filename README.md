@@ -1,45 +1,13 @@
 
 # Closure Library
 
-Closure Library is a powerful, low-level JavaScript library designed
-for building complex and scalable web applications. It is used by many
-Google web applications, such as Google Search, Gmail, Google Docs,
-Google+, Google Maps, and others.
+***Closure Library is currently in maintenance mode and will be sunset over the
+on August 1, 2024. We no longer see it as meeting the needs of modern JavaScript
+development, and we recommend that users look for alternative solutions.***
 
-For more information, visit the
-[Google Developers](https://developers.google.com/closure/library) or
-[GitHub](https://github.com/google/closure-library) sites.
+Please see [#1214](https://github.com/google/closure-library/issues/1214) for
+more details.
 
-Download the latest stable version on our [releases page](https://github.com/google/closure-library/releases).
-
-Developers, please see the
-[Generated API Documentation](https://google.github.io/closure-library/api/).
-
-See also the
-[goog.ui Demos](https://google.github.io/closure-library/source/closure/goog/demos/)
-
-## Using with Node.js
-Install the [official package](https://www.npmjs.com/package/google-closure-library) from npm.
-
-```bash
-npm install google-closure-library
-```
-
-Require the package and use goog.require normally.
-
-```js
-require("google-closure-library");
-
-goog.require("goog.crypt.Sha1");
-
-var sha1 = new goog.crypt.Sha1();
-sha1.update("foobar");
-var hash = sha1.digest();
-```
-
-## Contributing
-Please read the [CONTRIBUTING] for details on how to contribute to this project.
-
-[CONTRIBUTING]: https://github.com/google/closure-library/blob/master/CONTRIBUTING
+[Previous version of this README can be found here.](https://github.com/google/closure-library/blob/a99c1558bb4cdd342fb36bbf3b9296d61b852c33/README.md)
 
 
