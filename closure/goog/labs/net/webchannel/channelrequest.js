@@ -867,7 +867,7 @@ ChannelRequest.prototype.decodeXmlHttpResponse_ = function() {
     responseText += this.fetchResponseState_.textDecoder.decode(
         responseChunks[i], {stream: isLastChunk});
   }
-  responseChunks.splice(0, responseLength);
+  responseChunks.length = 0;  // Empty the `responseChunks` array.
   this.fetchResponseState_.responseBuffer += responseText;
   this.xmlHttpChunkStart_ = 0;
   return this.fetchResponseState_.responseBuffer;
@@ -903,22 +903,6 @@ ChannelRequest.prototype.useFetchStreamsForResponse_ = function() {
   return (
       this.verb_ == 'GET' && this.type_ != ChannelRequest.Type_.CLOSE_REQUEST &&
       this.channel_.usesFetchStreams());
-};
-
-
-/**
- * Resets the response buffer if the saved chunk has been processed.
- * @private
- * @param {string|!Object|undefined} chunkText
- */
-ChannelRequest.prototype.maybeResetBuffer_ = function(chunkText) {
-  'use strict';
-  if (this.useFetchStreamsForResponse_() &&
-      chunkText != ChannelRequest.INCOMPLETE_CHUNK_ &&
-      chunkText != ChannelRequest.INVALID_CHUNK_) {
-    this.fetchResponseState_.responseBuffer = '';
-    this.xmlHttpChunkStart_ = 0;
-  }
 };
 
 
@@ -960,7 +944,12 @@ ChannelRequest.prototype.decodeNextChunks_ = function(
     }
   }
 
-  this.maybeResetBuffer_(chunkText);
+  if (this.useFetchStreamsForResponse_() && this.xmlHttpChunkStart_ != 0) {
+    // Remove processed chunk text from response buffer.
+    this.fetchResponseState_.responseBuffer =
+        this.fetchResponseState_.responseBuffer.slice(this.xmlHttpChunkStart_);
+    this.xmlHttpChunkStart_ = 0;
+  }
 
   if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE &&
       responseText.length == 0 &&
