@@ -310,6 +310,7 @@ closure_js_library(
     name = "mockiframeio",
     srcs = ["mockiframeio.js"],
     lenient = True,
+    testonly = True,
     deps = [
         ":errorcode",
         ":eventtype",

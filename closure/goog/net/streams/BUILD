@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "streams",
     srcs = [],
-    lenient = True,
     exports = [
         ":base64pbstreamparser",
         ":base64streamdecoder",

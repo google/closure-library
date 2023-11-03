@@ -7,7 +7,6 @@ licenses(["notice"])
 closure_js_library(
     name = "webchannel",
     srcs = [],
-    lenient = True,
     exports = [
         ":webchannelbase",
         ":webchannelbasetransport",
