@@ -20,7 +20,7 @@ jobs:
       # Install all deps in preparation for creating a release.
       # Unlike publishing, this is done using the normal NPM registry
       # to download deps.
-      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
+      - uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
         with:
           node-version: current
       # TODO: We should check in a lockfile and use npm ci here instead.
@@ -29,7 +29,7 @@ jobs:
       # Re-setup node using Wombat Dressing Room as the registry
       # The actual NodeJS binaries and such are cached, so doing this
       # twice isn't particularly expensive.
-      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
+      - uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
         with:
           node-version: current
           registry-url: https://wombat-dressing-room.appspot.com
