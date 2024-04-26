@@ -224,8 +224,8 @@ closure.docs.buildToc = function() {
   // Finally add the toc to our toc elements.
   const toc = stack[0];
   closure.docs.forEachElement('nav.toc ul', function(ul) {
-    if (toc && toc.innerHTML) {
-      ul.innerHTML += toc.innerHTML;
+    if (toc && toc.textContent) {
+      ul.textContent += toc.textContent;
     } else {
       ul.parentElement.remove();  // don't bother with TOC if it's empty
     }
