@@ -14,7 +14,7 @@ jobs:
           # We need to fetch the full repository in order to write complete
           # release notes.
           fetch-depth: 0
-      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
           node-version: current
       - name: Run Release Draft Script
